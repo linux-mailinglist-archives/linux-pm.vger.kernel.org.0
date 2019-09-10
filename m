@@ -2,132 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFB1AEF11
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 18:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110DFAF038
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 19:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394014AbfIJQBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Sep 2019 12:01:51 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:42526 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730791AbfIJQBu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Sep 2019 12:01:50 -0400
-Received: by mail-qk1-f193.google.com with SMTP id f13so17538382qkm.9
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 09:01:50 -0700 (PDT)
+        id S2394237AbfIJROj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Sep 2019 13:14:39 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:42550 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387980AbfIJROj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Sep 2019 13:14:39 -0400
+Received: by mail-qt1-f194.google.com with SMTP id c17so2297334qtv.9
+        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 10:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i4GD13AWYtGaucIdPfBacL0HOCS06RwW+OYru26aZGo=;
-        b=bFVqYmBJIFyWISBLSfHrMzHiHbX5do/4cERYQDzWJt+PZeUX0OHsy+TSpRVBXTL+aQ
-         3OvVTAx2WOC9NxGNNC9S6FV8QWMDIDndDSi7jqkc0qtujb/mOjXJc5BbsLL4O7ILwOLl
-         ioI7jRVbci1bxCMndyhJyQ1t7X59S++cBodci18y3HAd1Y/j6ApRGSqlu2EnSogzcaCP
-         NdJyhxsV0XKDKjhdMZ64YeSabZD1Li+xXFb79HCd/3i3LEksxFoU/kzsuLi/8LdbqKR5
-         wi/J4RsiJiLJJHF/ktI1oaePbrpTMpxPq5h6iC2XB1nngjzzPq6YNTUrNxnc3thwBD+/
-         SMlA==
+        h=from:to:cc:subject:date:message-id;
+        bh=HbUIStHt9W/VIVERFYwcoKZrgnGZv23yOnmmJWnfWUc=;
+        b=FjmYkULyMuJcFn7OokF8bYWgJVx6OD7aYCYCSC4Dqpj2ITrv4r5yGTCwjVijbaDYUu
+         We/YcdS0ku60UXpQrNszmQVVnDD79Ay70tiYuCT3+S4VSUQV3DmyKfeifQHF4HU8S03J
+         GD0OaCoNlipM/xrnjeL1Cqxx490vIOr1y3FICsO/9bPIeazxhgb8bRjQOD1SPoNBX2Yc
+         WvY8JpScsb04OvYCiw0AxSgJLN0hPOOVYQuykM1XIBmppbJUdl7xKJs0QlqX2n+pK2xP
+         S1ec721gVt9+qSGz+RiuI42Jjz41w8LxB+2VxEVYOVhytvSgi+CywF8UpAjALOYAZae2
+         GDMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i4GD13AWYtGaucIdPfBacL0HOCS06RwW+OYru26aZGo=;
-        b=faIqxREoIKhE00I8/ppgEswCSdzQzJZD7uVKEJyju3LgVjeuJKkBe1OdXP+agiR7tE
-         5UWdCAD1XORSGoTeYNR0enl6PTB7GO5QRuwnHuZOWhqvmQ7wDs/ODWG+H53j/pSdHVVs
-         6Ux2dGX9Mi1x+Qir94c0ZE7gW6SCJpCAPEPY1T9cGO7XP/PU2yBSwYLsZoT5U6xZy++Y
-         TRqMt38ol21EmV454LPsUudAQKHSvlb0iYYsEKbn/flz4gY4w+FId+COi0su/5p2CRlq
-         0i3GnitX1My2oJW4sW6/6QZcalWU9+AMkOgYn64Fd8LfmJSdDGL0exdmlfPzHrJHjfJl
-         uCkQ==
-X-Gm-Message-State: APjAAAWavauWIJl9ai8E7QY0hQUzsHnvlOUmLPNyaewLdu54xstzIo7K
-        kdCLVJaVQBUAIzvV4ahSAARoAfIflGvHXGuea0ERcA==
-X-Google-Smtp-Source: APXvYqy6SzC7+IGaR6kLfQ1kWlTcyoGFIff7HiG5+P8pj2qyHaCRpqTlB6+sj4xNrcQCndtftJ80ILJGtJ0yn8yaSD4=
-X-Received: by 2002:a37:2784:: with SMTP id n126mr29003422qkn.302.1568131309763;
- Tue, 10 Sep 2019 09:01:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1566907161.git.amit.kucheria@linaro.org>
- <a4666f8afa39471658602e06758b04a991f80828.1566907161.git.amit.kucheria@linaro.org>
- <5D674C35.6060001@linaro.org>
-In-Reply-To: <5D674C35.6060001@linaro.org>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Tue, 10 Sep 2019 21:31:38 +0530
-Message-ID: <CAP245DWkd4RvH1y1E17sCEndNY=xs+69EJ-41ecRL_EE0Vnkug@mail.gmail.com>
-Subject: Re: [PATCH v2 15/15] drivers: thermal: tsens: Add interrupt support
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HbUIStHt9W/VIVERFYwcoKZrgnGZv23yOnmmJWnfWUc=;
+        b=gOOx3ejinjJ3jtj2Jt07NM0dZmTIOuYkMWBnRyd2/vdZ0IiDg5drHUeHq1070qSn8/
+         66jp6jwiIcvfvyztWrqHfxwM3tYbi4eENgQGgUbMMCres3QgVJy5MDTR8sD2reiza5Ao
+         00zDhEvrjBenPFB4B5doFGIPf89M5exArsUOHh3f7+QxpiXeJiq03hf6w0HxesgDAhIL
+         bSS7/07jfRM5buwaey/eLVhiaqPtCYpcBVTRfqxcUUm01MVCIj+gwZOE/7iJ6VZwi0Cz
+         t3GJlqhZLGETgeDUB4FG41Ov9UW9Skr/3u5BXNO1rklCVbntDorjBxTBL9/wMyAwZyPN
+         mKow==
+X-Gm-Message-State: APjAAAUMDvLK7FKfIHghFfmNFRMeAS1r2uiQCdPrrSh6H6oNnt56kVYW
+        dI42V4TBzZAsyGbdzMs70NuxqA==
+X-Google-Smtp-Source: APXvYqygj73ABNv7vOyOOorsAJk5oGGfIsSa/ouC8yqhBl2cKmgH+hBRVUAQ4JHsBlgT4pb76Bt4fg==
+X-Received: by 2002:ac8:647:: with SMTP id e7mr9928642qth.78.1568135678393;
+        Tue, 10 Sep 2019 10:14:38 -0700 (PDT)
+Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.googlemail.com with ESMTPSA id g45sm3400713qtc.9.2019.09.10.10.14.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 10 Sep 2019 10:14:37 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     edubezval@gmail.com, rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, agross@kernel.org
+Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] Introduce Power domain based warming device driver
+Date:   Tue, 10 Sep 2019 13:14:31 -0400
+Message-Id: <1568135676-9328-1-git-send-email-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.1.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thara,
+Certain resources modeled as a generic power domain in linux kernel 
+can be used to warm up the SoC (mx power domain on sdm845)
+if the temperature falls below certain threshold. These power domains
+can be considered as thermal warming devices.
+(opposite of thermal cooling devices).
 
-Thanks for the review. Please find replies below.
+In kernel, these warming devices can be modeled as a 
+thermal cooling device. In fact, since linux kernel today has
+no instance of a resource modeled as a power domain acting as a
+thermal warming device, a generic power domain based thermal warming device
+driver that can be used pan-Socs is the approach taken in this
+patch series. Since thermal warming devices can be thought of as the
+mirror opposite of thermal cooling devices, this patch series re-uses
+thermal cooling device framework. To use these power domains as warming
+devices require further tweaks in the thermal framework which are out of
+scope of this patch series.
 
-On Thu, Aug 29, 2019 at 9:23 AM Thara Gopinath
-<thara.gopinath@linaro.org> wrote:
->
-> Hi Amit,
->
-> On 08/27/2019 08:14 AM, Amit Kucheria wrote:
-> > Depending on the IP version, TSENS supports upper, lower, max, min and
-> > critical threshold interrupts. We only add support for upper and lower
-> > threshold interrupts for now.
-> >
-> > TSENSv2 has an irq [status|clear|mask] bit tuple for each sensor while
-> > earlier versions only have a single bit per sensor to denote status and
-> > clear. At each interrupt, we reprogram the new upper and lower threshold
-> > in the .set_trip callback.
-> >
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > ---
-> >  drivers/thermal/qcom/tsens-common.c | 377 ++++++++++++++++++++++++++--
-> >  drivers/thermal/qcom/tsens-v0_1.c   |  11 +
-> >  drivers/thermal/qcom/tsens-v1.c     |  29 +++
-> >  drivers/thermal/qcom/tsens-v2.c     |  13 +
-> >  drivers/thermal/qcom/tsens.c        |  32 ++-
-> >  drivers/thermal/qcom/tsens.h        | 270 ++++++++++++++++----
-> >  6 files changed, 669 insertions(+), 63 deletions(-)
-> >
-> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> > index 06b44cfd5eab9..c549f8e1488ba 100644
-> > --- a/drivers/thermal/qcom/tsens-common.c
-> > +++ b/drivers/thermal/qcom/tsens-common.c
+The first patch in this series extends the genpd framework to export out
+the performance states of a power domain so that when a power
+domain is modeled as a cooling device, the number of possible states and
+current state of the cooling device can be retrieved from the genpd
+framework.
 
-<snip>
+The second patch implements the newly added genpd callback for Qualcomm
+RPMH power domain driver which hosts the mx power domain.
 
-Please snip liberally when only replying to a small part of the patch. :-)
+The third patch describes the dt binding required for a generic
+power domain based warming device
 
-> > +
-> > +             spin_unlock_irqrestore(&priv->ul_lock, flags);
-> > +
-> > +             if (trigger) {
-> > +                     dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> > +                             hw_id, __func__, temp);
-> > +                     thermal_zone_device_update(priv->sensor[i].tzd,
-> > +                                                THERMAL_EVENT_UNSPECIFIED);
-> Why not use thermal_notify_framework? Or do you want to loop over all
-> registered trips ?
+The fourth patch introduces the generic power domain warming device driver
 
-Mainly so we get a driver call-back to set_trips where we might want
-to change behaviour once we cross certain thresholds.
+The fifth patch introduces the DT entreis for sdm845 to register mx power
+domain as a thermal warming device
 
-> Another comment I have is regarding support for multiple thermal zone.
-> It might not be needed now, but presence of the same sensor can serve
-> multiple zones (one for cooling and one for warming) . I am not sure if
-> you want to put some infrastructure in place for that as well for
-> interrupt handling.
+v1->v2:
+	- Rename the patch series from
+	"qcom: Model RPMH power domains as thermal cooling devices" to
+	"Introduce Power domain based thermal warming devices" as it is
+	more appropriate.
+	- Introduce a new patch(patch 3) describing the dt-bindings for generic power
+	domain warming device.
+	- Patch specific changes mentioned in respective patches.
 
-It is premature to add such infrastructure to the driver until we
-decide how we're going to implement support for this, IMO.
+Thara Gopinath (5):
+  PM/Domains: Add support for retrieving genpd performance states
+    information
+  soc: qcom: rpmhpd: Introduce function to retrieve power domain
+    performance state count
+  dt-bindings: thermal: Add generic power domain warming device binding
+  thermal: Add generic power domain warming device driver.
+  arm64: dts: qcom: Add node for RPMH power domain warming device on
+    sdm845.
 
-<snip>
+ .../bindings/thermal/pwr-domain-warming.txt        |  32 ++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   7 +
+ drivers/base/power/domain.c                        |  37 +++++
+ drivers/soc/qcom/rpmhpd.c                          |   9 ++
+ drivers/thermal/Kconfig                            |  11 ++
+ drivers/thermal/Makefile                           |   2 +
+ drivers/thermal/pwr_domain_warming.c               | 174 +++++++++++++++++++++
+ include/linux/pm_domain.h                          |  13 ++
+ 8 files changed, 285 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/pwr-domain-warming.txt
+ create mode 100644 drivers/thermal/pwr_domain_warming.c
+
+-- 
+2.1.4
+
