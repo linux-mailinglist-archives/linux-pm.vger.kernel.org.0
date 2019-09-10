@@ -2,97 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E593AF048
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 19:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F14AF050
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 19:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437021AbfIJROv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Sep 2019 13:14:51 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34163 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437034AbfIJROp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Sep 2019 13:14:45 -0400
-Received: by mail-qk1-f193.google.com with SMTP id q203so17833220qke.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 10:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=AU+QsjQ4gYWceRGENzlR0Louo13bejD+8gOVOvF6PUY=;
-        b=m/FgOeOkaOKNggzNTPEtFXREeobHykEFFFvTpQDO0RpQvNSHhp2AtqgVHN+UjyG80W
-         WWG3b1uQfUUzTJ0Qo0bdgjfsRy05PbvlFclgN1DETTKoJ7t0Wb5bOc7w1Fpe/jxitCOY
-         p49Ll9S6JRw2bxMrZ9pnvQuhK8+28N+ndBI64dUvqY0TO34orTLL+Rh9f+jACW4cQ2pN
-         SZrMhm6B3WoK9PQjDXnZ9/yDV3xkCZb83uJsXllPYdERjtYsYUDvl3Oh1VG8p8TtRgbv
-         Jire4fF4GaSvB0FgRhk+IkaXFKDd82DB8Q9WOysgl/zMV8MGI+jeCrGm5beLdXCgtnl/
-         t4rw==
+        id S2437078AbfIJRP5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Sep 2019 13:15:57 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:52686 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437012AbfIJRP5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Sep 2019 13:15:57 -0400
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 4E944368E2
+        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 17:15:56 +0000 (UTC)
+Received: by mail-wr1-f72.google.com with SMTP id n6so9222793wrm.20
+        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 10:15:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=AU+QsjQ4gYWceRGENzlR0Louo13bejD+8gOVOvF6PUY=;
-        b=WbgEkK9gqUtwTojbkSRqZplFU3ZCrXehaiPqQ/BK36/Ld1r4dxMP7i6AMgw1ph9TsY
-         5K+r8bGy4rW12Bcmm8JJ4P1hvMV4zf+8EKdKzeCloL0i8XoTpNVQCB06Q/DLH0MTstgU
-         4bs9YQKRtBTK9tfE4SEPBMPugTQbQcXrEGGzWNLWnaAuVrWTRRslEmGq2MMlzhV1TrbM
-         ceBi67OX4FJWFKB61+5b0FTzB/cjJXXyO5xsWeUEu61geYdWPl9bDh16B5wZHTo9NVjy
-         7d5mtUhXtADD9PLmAbDhkINbUSdpx6bmOFE7Oeo9skS5DDzpGkxuJwWhe98FtRQ62xVx
-         fwYA==
-X-Gm-Message-State: APjAAAUtHGvJjyZ46nISwJXinxxOGy0oPqCXjEE7GH4DqQ3JHIgO/qzI
-        No2IomR9ZaKRfZZffmCBt/5HDA==
-X-Google-Smtp-Source: APXvYqw+xpOzKxIVVLJuA0LAVrvCMbzacPqVJ0yzoUiedeQ7QczZNA+XJZNiz9ALbYhsjyobVyeQXw==
-X-Received: by 2002:a37:660c:: with SMTP id a12mr30467195qkc.70.1568135684689;
-        Tue, 10 Sep 2019 10:14:44 -0700 (PDT)
-Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.googlemail.com with ESMTPSA id g45sm3400713qtc.9.2019.09.10.10.14.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 10 Sep 2019 10:14:44 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     edubezval@gmail.com, rui.zhang@intel.com, ulf.hansson@linaro.org,
-        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
-        robh+dt@kernel.org, agross@kernel.org
-Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
-        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] arm64: dts: qcom: Add node for RPMH power domain warming device on sdm845.
-Date:   Tue, 10 Sep 2019 13:14:36 -0400
-Message-Id: <1568135676-9328-6-git-send-email-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1568135676-9328-1-git-send-email-thara.gopinath@linaro.org>
-References: <1568135676-9328-1-git-send-email-thara.gopinath@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eOSlZvBN2Ca83BiWTP8n+uA4/rhpoJrl/QSiHK9ZrVo=;
+        b=GYJi05B8DBBakvWMzpJlsrT3rWB8C2hfg0ilHErdIMoUDOgYfNqCXzhgN7OUo0ULP+
+         qKb9iB4o8ydSSSNHVNoCv6O3MnHjUgDn0X6bmVtEHy6sJgjYguKqvvZAxaaNwh+Yg3BQ
+         LcGPtAtTKxTM4kmPSjpK7sJyJKMexxzuJ+oFxGXvvc9PLAeNLss4WjtpUY+k3kLipEtZ
+         1Or3ZnS3LxhS+iFPYZDEVOSXjdNF61WjhnhCODsJHTfOURDh7M7EL4f9H0tEuyBQBtxH
+         b1h1bU9tKS/wF/7WdZa4ariud9WfsuoC1RCRujXfSfzKgJzRvFrQLlnbrf2aeUGnsMzC
+         +FcA==
+X-Gm-Message-State: APjAAAXQxEk14vhHr1H9KKVdKZh8TSm8eVxbZIjSbHcY8Wn9PCi6+5hq
+        reyhXOgna8SmOD2L4KQ+kWuiF2HzZk0rVtBRcL5rDBGLcrhAlwKIP0Ab4buHXMZUcNWMbgXm1Bt
+        6dSy+Qcph4z0HAHpHEkI=
+X-Received: by 2002:a1c:7414:: with SMTP id p20mr446118wmc.68.1568135754725;
+        Tue, 10 Sep 2019 10:15:54 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzLjatH2HoTUhtKdkw1BHN68vuXVqluXyaYtbmsYYvaw5QPP0gKenYj2w89mEdSi1fEy0k+jw==
+X-Received: by 2002:a1c:7414:: with SMTP id p20mr446104wmc.68.1568135754464;
+        Tue, 10 Sep 2019 10:15:54 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:1435:25df:c911:3338? ([2001:b07:6468:f312:1435:25df:c911:3338])
+        by smtp.gmail.com with ESMTPSA id a190sm477474wme.8.2019.09.10.10.15.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Sep 2019 10:15:53 -0700 (PDT)
+Subject: Re: [PATCH v2] cpuidle-haltpoll: Enable kvm guest polling when
+ dedicated physical CPUs are available
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wanpeng Li <kernellwp@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <1567068597-22419-1-git-send-email-wanpengli@tencent.com>
+ <a70aeec2-1572-ea09-a0c5-299cd70ddc8a@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Openpgp: preference=signencrypt
+Message-ID: <84a0c1b3-4590-6fdb-0b01-915c3f109e65@redhat.com>
+Date:   Tue, 10 Sep 2019 19:15:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <a70aeec2-1572-ea09-a0c5-299cd70ddc8a@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RPMh hosts power domains that can be used to warm up the SoC.
-Add nodes for these domains on sdm845 (mx power
-domain).
+On 04/09/19 11:48, Rafael J. Wysocki wrote:
+> On 8/29/2019 10:49 AM, Wanpeng Li wrote:
+>> From: Wanpeng Li <wanpengli@tencent.com>
+>>
+>> The downside of guest side polling is that polling is performed even
+>> with other runnable tasks in the host. However, even if poll in kvm
+>> can aware whether or not other runnable tasks in the same pCPU, it
+>> can still incur extra overhead in over-subscribe scenario. Now we can
+>> just enable guest polling when dedicated pCPUs are available.
+>>
+>> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Radim Krčmář <rkrcmar@redhat.com>
+>> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> 
+> As stated before, I'm going to queue up this change for 5.4, with the
+> Paolo's ACK.
+> 
+> BTW, in the future please CC power management changes to
+> linux-pm@vger.kernel.org for easier handling.
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
-v1->v2:
-	- Change the dt-entries to reflect the newly introduced
-	generic power domain warming device.
+Thanks.  This patch makes sense to me and I don't know what
+"limitations" are there in KVM_HINTS_REALTIME that Marcelo mentioned.
 
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Any improvements that Marcelo can discuss can be made on top of this
+during the 5.4 merge window, via the KVM tree.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index f406a43..0a83263 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3284,6 +3284,13 @@
- 		};
- 	};
- 
-+	thermal_wdev: rpmhpd_mx_wdev {
-+		compatible = "thermal-power-domain-wdev";
-+		#cooling-cells = <2>;
-+		power-domains =  <&rpmhpd SDM845_MX>;
-+		power-domain-names = "mx";
-+	};
-+
- 	thermal-zones {
- 		cpu0-thermal {
- 			polling-delay-passive = <250>;
--- 
-2.1.4
+Thanks Rafael for handling the reviewing and merging of this series.
+
+Paolo
+
+> 
+>> -- 
+>> v1 -> v2:
+>>   * export kvm_arch_para_hints to fix haltpoll driver build as module
+>> error
+>>   * just disable haltpoll driver instead of both driver and governor
+>>     since KVM_HINTS_REALTIME is not defined in other arches, and governor
+>>     doesn't depend on x86, to fix the warning on powerpc
+>>
+>>   arch/x86/kernel/kvm.c              | 1 +
+>>   drivers/cpuidle/cpuidle-haltpoll.c | 3 ++-
+>>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+>> index f48401b..68463c1 100644
+>> --- a/arch/x86/kernel/kvm.c
+>> +++ b/arch/x86/kernel/kvm.c
+>> @@ -711,6 +711,7 @@ unsigned int kvm_arch_para_hints(void)
+>>   {
+>>       return cpuid_edx(kvm_cpuid_base() | KVM_CPUID_FEATURES);
+>>   }
+>> +EXPORT_SYMBOL_GPL(kvm_arch_para_hints);
+>>     static uint32_t __init kvm_detect(void)
+>>   {
+>> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c
+>> b/drivers/cpuidle/cpuidle-haltpoll.c
+>> index 9ac093d..7aee38a 100644
+>> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+>> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+>> @@ -53,7 +53,8 @@ static int __init haltpoll_init(void)
+>>         cpuidle_poll_state_init(drv);
+>>   -    if (!kvm_para_available())
+>> +    if (!kvm_para_available() ||
+>> +        !kvm_para_has_hint(KVM_HINTS_REALTIME))
+>>           return 0;
+>>         ret = cpuidle_register(&haltpoll_driver, NULL);
+> 
+> 
 
