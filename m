@@ -2,104 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55380AED2D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 16:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFB1AEF11
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 18:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732680AbfIJOgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Sep 2019 10:36:06 -0400
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:50927 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726060AbfIJOgG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Sep 2019 10:36:06 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 5B83D39D;
-        Tue, 10 Sep 2019 10:36:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 10 Sep 2019 10:36:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=CTpkFiirlhlfJdSOyJ+gt7DX6Cy
-        zDZ62hzOsET0mhbo=; b=lkh6dNnA3YhMT+NXx0V2JjxLY7ygwA858KG/TNG82FR
-        l+c0YziEnMJXolVI1m9Y06jNivfKgKPI8B5Z1Y+JDXa6H/7UpdPydIVoHGpBukhR
-        ndb0uDrrTUgJ5pxvb71eV6p84+TdYDaXvm1vuS4zOpwo1uxsoIn3tITv9TsKBsYV
-        VyaJR/07WM0YbsPuBfofcizQp0dqsI44yjNfRggE7QnC7t8sD2WE492HDr0AbPDe
-        sBj0rD8VzwPtv9vPpQmVlXSpH6EZPsgL8PLcj6PF8WjlULjFtwSyg1hFXBEeM1C2
-        VEn3ytXGUkxKgPU316VxQwhqw2NOgULhGe2K5XRKVMw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=CTpkFi
-        irlhlfJdSOyJ+gt7DX6CyzDZ62hzOsET0mhbo=; b=c3dcJSeZEG1PqPZAbXtE0N
-        1hRnC1pV4ZOMXbarctoPPUYS6zQdxGjFCmkKR7SV3892oLJRuujtuPjVlJd3vYoR
-        Tl0rRjQK5Z0767L/PL78VlNvbWzCq45ioIR6PJ94Ux1t9IehrxP7WXZAGTGfAmxT
-        wyw1lRpBTBKRl1LjlmkfR0svmvb6sfMg7bJd35/rZvkvEa+gMuTAeIcFy0aHHTHH
-        XbyOH7BEnAWNwfuvy/qmcat6Cy2odTuoB7D8n+Rm+EHWmNyeYcHvUzOs8R5/Kw9a
-        wUKl0hlaM92sOQpE/P9CLHq0OSbcUEBL2kBGfPmSS/hnbgmK+LHJhh83b9bizGsw
-        ==
-X-ME-Sender: <xms:07R3XYD3YvM0uVfjzS-sGVIlJ-VEfMYImfUF4DfbjfRAkK5c6FdbGg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrtddtgdehhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepvddufedrfedtrdekrdduud
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
-    lhhushhtvghrufhiiigvpedu
-X-ME-Proxy: <xmx:07R3XSozf-BdWF6nTSVNcofSfTsb1ymwvCRI7MjgdeeQWELQCvza-g>
-    <xmx:07R3XbGScT5vv2mtk8uqx05QhjRKJ3sB8gWwFrQRQPpWTItLm4zxuw>
-    <xmx:07R3Xev5vKvi9esoDJ0xfA1WnYASLl26F-ek7FWORmfLhS4q65OXPw>
-    <xmx:1LR3XaYlSxd1KG3afAJf4xBB2ytd8KUbFayK_ZPrdno8OoI8FrYJVg>
-Received: from localhost (110.8.30.213.rev.vodafone.pt [213.30.8.110])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F1F8D8005C;
-        Tue, 10 Sep 2019 10:36:02 -0400 (EDT)
-Date:   Tue, 10 Sep 2019 15:36:01 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [BACKPORT 4.14.y 04/18] usb: dwc3: Allow disabling of
- metastability workaround
-Message-ID: <20190910143601.GD3362@kroah.com>
-References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
- <20190905161759.28036-5-mathieu.poirier@linaro.org>
+        id S2394014AbfIJQBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Sep 2019 12:01:51 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:42526 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730791AbfIJQBu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Sep 2019 12:01:50 -0400
+Received: by mail-qk1-f193.google.com with SMTP id f13so17538382qkm.9
+        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 09:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i4GD13AWYtGaucIdPfBacL0HOCS06RwW+OYru26aZGo=;
+        b=bFVqYmBJIFyWISBLSfHrMzHiHbX5do/4cERYQDzWJt+PZeUX0OHsy+TSpRVBXTL+aQ
+         3OvVTAx2WOC9NxGNNC9S6FV8QWMDIDndDSi7jqkc0qtujb/mOjXJc5BbsLL4O7ILwOLl
+         ioI7jRVbci1bxCMndyhJyQ1t7X59S++cBodci18y3HAd1Y/j6ApRGSqlu2EnSogzcaCP
+         NdJyhxsV0XKDKjhdMZ64YeSabZD1Li+xXFb79HCd/3i3LEksxFoU/kzsuLi/8LdbqKR5
+         wi/J4RsiJiLJJHF/ktI1oaePbrpTMpxPq5h6iC2XB1nngjzzPq6YNTUrNxnc3thwBD+/
+         SMlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i4GD13AWYtGaucIdPfBacL0HOCS06RwW+OYru26aZGo=;
+        b=faIqxREoIKhE00I8/ppgEswCSdzQzJZD7uVKEJyju3LgVjeuJKkBe1OdXP+agiR7tE
+         5UWdCAD1XORSGoTeYNR0enl6PTB7GO5QRuwnHuZOWhqvmQ7wDs/ODWG+H53j/pSdHVVs
+         6Ux2dGX9Mi1x+Qir94c0ZE7gW6SCJpCAPEPY1T9cGO7XP/PU2yBSwYLsZoT5U6xZy++Y
+         TRqMt38ol21EmV454LPsUudAQKHSvlb0iYYsEKbn/flz4gY4w+FId+COi0su/5p2CRlq
+         0i3GnitX1My2oJW4sW6/6QZcalWU9+AMkOgYn64Fd8LfmJSdDGL0exdmlfPzHrJHjfJl
+         uCkQ==
+X-Gm-Message-State: APjAAAWavauWIJl9ai8E7QY0hQUzsHnvlOUmLPNyaewLdu54xstzIo7K
+        kdCLVJaVQBUAIzvV4ahSAARoAfIflGvHXGuea0ERcA==
+X-Google-Smtp-Source: APXvYqy6SzC7+IGaR6kLfQ1kWlTcyoGFIff7HiG5+P8pj2qyHaCRpqTlB6+sj4xNrcQCndtftJ80ILJGtJ0yn8yaSD4=
+X-Received: by 2002:a37:2784:: with SMTP id n126mr29003422qkn.302.1568131309763;
+ Tue, 10 Sep 2019 09:01:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190905161759.28036-5-mathieu.poirier@linaro.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <cover.1566907161.git.amit.kucheria@linaro.org>
+ <a4666f8afa39471658602e06758b04a991f80828.1566907161.git.amit.kucheria@linaro.org>
+ <5D674C35.6060001@linaro.org>
+In-Reply-To: <5D674C35.6060001@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Tue, 10 Sep 2019 21:31:38 +0530
+Message-ID: <CAP245DWkd4RvH1y1E17sCEndNY=xs+69EJ-41ecRL_EE0Vnkug@mail.gmail.com>
+Subject: Re: [PATCH v2 15/15] drivers: thermal: tsens: Add interrupt support
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 10:17:45AM -0600, Mathieu Poirier wrote:
-> From: Roger Quadros <rogerq@ti.com>
-> 
-> commit 42bf02ec6e420e541af9a47437d0bdf961ca2972 upstream
-> 
-> Some platforms (e.g. TI's DRA7 USB2 instance) have more trouble
-> with the metastability workaround as it supports only
-> a High-Speed PHY and the PHY can enter into an Erratic state [1]
-> when the controller is set in SuperSpeed mode as part of
-> the metastability workaround.
-> 
-> This causes upto 2 seconds delay in enumeration on DRA7's USB2
-> instance in gadget mode.
-> 
-> If these platforms can be better off without the workaround,
-> provide a device tree property to suggest that so the workaround
-> is avoided.
-> 
-> [1] Device mode enumeration trace showing PHY Erratic Error.
->      irq/90-dwc3-969   [000] d...    52.323145: dwc3_event: event (00000901): Erratic Error [U0]
->      irq/90-dwc3-969   [000] d...    52.560646: dwc3_event: event (00000901): Erratic Error [U0]
->      irq/90-dwc3-969   [000] d...    52.798144: dwc3_event: event (00000901): Erratic Error [U0]
+Hi Thara,
 
-Does the DT also need to get updated with this new id for this?  Is that
-a separate patch somewhere?
+Thanks for the review. Please find replies below.
 
-thanks,
+On Thu, Aug 29, 2019 at 9:23 AM Thara Gopinath
+<thara.gopinath@linaro.org> wrote:
+>
+> Hi Amit,
+>
+> On 08/27/2019 08:14 AM, Amit Kucheria wrote:
+> > Depending on the IP version, TSENS supports upper, lower, max, min and
+> > critical threshold interrupts. We only add support for upper and lower
+> > threshold interrupts for now.
+> >
+> > TSENSv2 has an irq [status|clear|mask] bit tuple for each sensor while
+> > earlier versions only have a single bit per sensor to denote status and
+> > clear. At each interrupt, we reprogram the new upper and lower threshold
+> > in the .set_trip callback.
+> >
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >  drivers/thermal/qcom/tsens-common.c | 377 ++++++++++++++++++++++++++--
+> >  drivers/thermal/qcom/tsens-v0_1.c   |  11 +
+> >  drivers/thermal/qcom/tsens-v1.c     |  29 +++
+> >  drivers/thermal/qcom/tsens-v2.c     |  13 +
+> >  drivers/thermal/qcom/tsens.c        |  32 ++-
+> >  drivers/thermal/qcom/tsens.h        | 270 ++++++++++++++++----
+> >  6 files changed, 669 insertions(+), 63 deletions(-)
+> >
+> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> > index 06b44cfd5eab9..c549f8e1488ba 100644
+> > --- a/drivers/thermal/qcom/tsens-common.c
+> > +++ b/drivers/thermal/qcom/tsens-common.c
 
-greg k-h
+<snip>
+
+Please snip liberally when only replying to a small part of the patch. :-)
+
+> > +
+> > +             spin_unlock_irqrestore(&priv->ul_lock, flags);
+> > +
+> > +             if (trigger) {
+> > +                     dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> > +                             hw_id, __func__, temp);
+> > +                     thermal_zone_device_update(priv->sensor[i].tzd,
+> > +                                                THERMAL_EVENT_UNSPECIFIED);
+> Why not use thermal_notify_framework? Or do you want to loop over all
+> registered trips ?
+
+Mainly so we get a driver call-back to set_trips where we might want
+to change behaviour once we cross certain thresholds.
+
+> Another comment I have is regarding support for multiple thermal zone.
+> It might not be needed now, but presence of the same sensor can serve
+> multiple zones (one for cooling and one for warming) . I am not sure if
+> you want to put some infrastructure in place for that as well for
+> interrupt handling.
+
+It is premature to add such infrastructure to the driver until we
+decide how we're going to implement support for this, IMO.
+
+<snip>
