@@ -2,140 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F14AF050
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2019 19:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D118AF68A
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 09:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437078AbfIJRP5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Sep 2019 13:15:57 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52686 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437012AbfIJRP5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Sep 2019 13:15:57 -0400
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4E944368E2
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 17:15:56 +0000 (UTC)
-Received: by mail-wr1-f72.google.com with SMTP id n6so9222793wrm.20
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2019 10:15:56 -0700 (PDT)
+        id S1726805AbfIKHQn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 03:16:43 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33099 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725924AbfIKHQm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 03:16:42 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q10so13101658pfl.0
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 00:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=qUxVco5+9ktkoNCi0Mi64R9yup9qLyKawGp7kQ7ed2w=;
+        b=HFGSzct6wcdfRhoSXr4x1ifFQAt+kMTqekWwXS6k2NfgZj9w5KBMQZYa/T2W7mmK28
+         yLrVs/h+VFNkNcx6TtF4LZmHNRuniUy4MX6M0sSCq13mL8WWNlbuBDv3kvKJTm97XvV0
+         zCbE9oQDQfUoC7ezO3TgjdW+MOcv4QsdbIbEjb2ziUMCJDgg9zQmZJ5ImnisNzk9sSVY
+         WiLZAwnvmjbeXimxHb6q7s+bKsDO+MhGyR/TW7A61HtD2qTGgNdQCtndZXgk1MxfZGbJ
+         UFNxJfeRZdgmvBZ00BnmAVgYpKjjHa2rNtCMYmeEWSv1KWKpm59y8cCRwFyoJY0FtnKi
+         Vx7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eOSlZvBN2Ca83BiWTP8n+uA4/rhpoJrl/QSiHK9ZrVo=;
-        b=GYJi05B8DBBakvWMzpJlsrT3rWB8C2hfg0ilHErdIMoUDOgYfNqCXzhgN7OUo0ULP+
-         qKb9iB4o8ydSSSNHVNoCv6O3MnHjUgDn0X6bmVtEHy6sJgjYguKqvvZAxaaNwh+Yg3BQ
-         LcGPtAtTKxTM4kmPSjpK7sJyJKMexxzuJ+oFxGXvvc9PLAeNLss4WjtpUY+k3kLipEtZ
-         1Or3ZnS3LxhS+iFPYZDEVOSXjdNF61WjhnhCODsJHTfOURDh7M7EL4f9H0tEuyBQBtxH
-         b1h1bU9tKS/wF/7WdZa4ariud9WfsuoC1RCRujXfSfzKgJzRvFrQLlnbrf2aeUGnsMzC
-         +FcA==
-X-Gm-Message-State: APjAAAXQxEk14vhHr1H9KKVdKZh8TSm8eVxbZIjSbHcY8Wn9PCi6+5hq
-        reyhXOgna8SmOD2L4KQ+kWuiF2HzZk0rVtBRcL5rDBGLcrhAlwKIP0Ab4buHXMZUcNWMbgXm1Bt
-        6dSy+Qcph4z0HAHpHEkI=
-X-Received: by 2002:a1c:7414:: with SMTP id p20mr446118wmc.68.1568135754725;
-        Tue, 10 Sep 2019 10:15:54 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzLjatH2HoTUhtKdkw1BHN68vuXVqluXyaYtbmsYYvaw5QPP0gKenYj2w89mEdSi1fEy0k+jw==
-X-Received: by 2002:a1c:7414:: with SMTP id p20mr446104wmc.68.1568135754464;
-        Tue, 10 Sep 2019 10:15:54 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:1435:25df:c911:3338? ([2001:b07:6468:f312:1435:25df:c911:3338])
-        by smtp.gmail.com with ESMTPSA id a190sm477474wme.8.2019.09.10.10.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Sep 2019 10:15:53 -0700 (PDT)
-Subject: Re: [PATCH v2] cpuidle-haltpoll: Enable kvm guest polling when
- dedicated physical CPUs are available
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wanpeng Li <kernellwp@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <1567068597-22419-1-git-send-email-wanpengli@tencent.com>
- <a70aeec2-1572-ea09-a0c5-299cd70ddc8a@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <84a0c1b3-4590-6fdb-0b01-915c3f109e65@redhat.com>
-Date:   Tue, 10 Sep 2019 19:15:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <a70aeec2-1572-ea09-a0c5-299cd70ddc8a@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qUxVco5+9ktkoNCi0Mi64R9yup9qLyKawGp7kQ7ed2w=;
+        b=lg2twMURusHtELkjHd9aoCIz8vTRw5T5KGW5lVUw6q6FG4LPyBTPW7teL8ZCAcJ4e3
+         t0Fg/kSkoJfsOm0f70+vOds2UVXVypGgVwVByXzQH2NjOjkTAICNZHnNmyAi9Y082UdB
+         Lrrl5xerR5YJYCrf3Hh2O70+X1EraVl+Q7Pu/ksPNO/kvXOzgg3HmDv7xHY6dTc3JgoR
+         LiUkRW5HXiTv+dbmAGFzYuS1d4OadtAxvpGkhn/1uU6knwgiQqdeVnxq2Vl9n63PZIoR
+         FbONwV0OanG7pqU9xNme9ltA5GIosm6hy6RWS1kJYKm5Hb3TLBkVnEukwEaegkgnnwF9
+         kpJw==
+X-Gm-Message-State: APjAAAX6QQtcUEVIyMHGp12/ftDdeJEknitS24TuC2lsN+lm23CSP2GP
+        SNpn761RxCXbk1YlJ1A0w8GMhw==
+X-Google-Smtp-Source: APXvYqwIwlbCdDcjnWBcmrrRCBki67IYc6HmBfZIKB+VpmUNhcS8cnxox+j8Ctb9q2YUlHKloGPOFw==
+X-Received: by 2002:a17:90a:8509:: with SMTP id l9mr3834867pjn.10.1568186200477;
+        Wed, 11 Sep 2019 00:16:40 -0700 (PDT)
+Received: from localhost ([49.248.201.118])
+        by smtp.gmail.com with ESMTPSA id c2sm21933784pfd.66.2019.09.11.00.16.39
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Sep 2019 00:16:39 -0700 (PDT)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
+        masneyb@onstation.org, swboyd@chromium.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v3 00/15] thermal: qcom: tsens: Add interrupt support
+Date:   Wed, 11 Sep 2019 12:46:17 +0530
+Message-Id: <cover.1568185732.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/09/19 11:48, Rafael J. Wysocki wrote:
-> On 8/29/2019 10:49 AM, Wanpeng Li wrote:
->> From: Wanpeng Li <wanpengli@tencent.com>
->>
->> The downside of guest side polling is that polling is performed even
->> with other runnable tasks in the host. However, even if poll in kvm
->> can aware whether or not other runnable tasks in the same pCPU, it
->> can still incur extra overhead in over-subscribe scenario. Now we can
->> just enable guest polling when dedicated pCPUs are available.
->>
->> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
->> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Cc: Paolo Bonzini <pbonzini@redhat.com>
->> Cc: Radim Krčmář <rkrcmar@redhat.com>
->> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> 
-> As stated before, I'm going to queue up this change for 5.4, with the
-> Paolo's ACK.
-> 
-> BTW, in the future please CC power management changes to
-> linux-pm@vger.kernel.org for easier handling.
+Changes since v2:
+- Addressed Stephen's review comment
+- Moved the dt-bindings to yaml (This throws up some new warnings in various QCOM
+devicetrees. I'll send out a separate series to fix them up)
+- Collected reviews and acks
+- Added the dt-bindings to MAINTAINERS
 
-Thanks.  This patch makes sense to me and I don't know what
-"limitations" are there in KVM_HINTS_REALTIME that Marcelo mentioned.
+Changes since v1:
+- Collected reviews and acks
+- Addressed Stephen's review comments (hopefully I got them all).
+- Completely removed critical interrupt infrastructure from this series.
+  Will post that separately.
+- Fixed a bug in sign-extension of temperature.
+- Fixed DT bindings to use the name of the interrupt e.g. "uplow" and use
+  platform_get_irq_byname().
 
-Any improvements that Marcelo can discuss can be made on top of this
-during the 5.4 merge window, via the KVM tree.
+Add interrupt support to TSENS. The first 6 patches are general fixes and
+cleanups to the driver before interrupt support is introduced.
 
-Thanks Rafael for handling the reviewing and merging of this series.
+This series has been developed against qcs404 and sdm845 and then tested on
+msm8916 and msm8974 (Thanks Brian). Testing on msm8998 would be appreciated since I don't
+have hardware handy.
 
-Paolo
+Amit Kucheria (15):
+  drivers: thermal: tsens: Get rid of id field in tsens_sensor
+  drivers: thermal: tsens: Simplify code flow in tsens_probe
+  drivers: thermal: tsens: Add __func__ identifier to debug statements
+  drivers: thermal: tsens: Add debugfs support
+  arm: dts: msm8974: thermal: Add thermal zones for each sensor
+  arm64: dts: msm8916: thermal: Fixup HW ids for cpu sensors
+  dt-bindings: thermal: tsens: Convert over to a yaml schema
+  arm64: dts: sdm845: thermal: Add interrupt support
+  arm64: dts: msm8996: thermal: Add interrupt support
+  arm64: dts: msm8998: thermal: Add interrupt support
+  arm64: dts: qcs404: thermal: Add interrupt support
+  arm: dts: msm8974: thermal: Add interrupt support
+  arm64: dts: msm8916: thermal: Add interrupt support
+  drivers: thermal: tsens: Create function to return sign-extended
+    temperature
+  drivers: thermal: tsens: Add interrupt support
 
-> 
->> -- 
->> v1 -> v2:
->>   * export kvm_arch_para_hints to fix haltpoll driver build as module
->> error
->>   * just disable haltpoll driver instead of both driver and governor
->>     since KVM_HINTS_REALTIME is not defined in other arches, and governor
->>     doesn't depend on x86, to fix the warning on powerpc
->>
->>   arch/x86/kernel/kvm.c              | 1 +
->>   drivers/cpuidle/cpuidle-haltpoll.c | 3 ++-
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
->> index f48401b..68463c1 100644
->> --- a/arch/x86/kernel/kvm.c
->> +++ b/arch/x86/kernel/kvm.c
->> @@ -711,6 +711,7 @@ unsigned int kvm_arch_para_hints(void)
->>   {
->>       return cpuid_edx(kvm_cpuid_base() | KVM_CPUID_FEATURES);
->>   }
->> +EXPORT_SYMBOL_GPL(kvm_arch_para_hints);
->>     static uint32_t __init kvm_detect(void)
->>   {
->> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c
->> b/drivers/cpuidle/cpuidle-haltpoll.c
->> index 9ac093d..7aee38a 100644
->> --- a/drivers/cpuidle/cpuidle-haltpoll.c
->> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
->> @@ -53,7 +53,8 @@ static int __init haltpoll_init(void)
->>         cpuidle_poll_state_init(drv);
->>   -    if (!kvm_para_available())
->> +    if (!kvm_para_available() ||
->> +        !kvm_para_has_hint(KVM_HINTS_REALTIME))
->>           return 0;
->>         ret = cpuidle_register(&haltpoll_driver, NULL);
-> 
-> 
+ .../bindings/thermal/qcom-tsens.txt           |  55 --
+ .../bindings/thermal/qcom-tsens.yaml          | 174 ++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/qcom-msm8974.dtsi           | 108 +++-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  26 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  60 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  82 +--
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  42 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  88 +--
+ drivers/thermal/qcom/tsens-8960.c             |   4 +-
+ drivers/thermal/qcom/tsens-common.c           | 529 ++++++++++++++++--
+ drivers/thermal/qcom/tsens-v0_1.c             |  11 +
+ drivers/thermal/qcom/tsens-v1.c               |  29 +
+ drivers/thermal/qcom/tsens-v2.c               |  13 +
+ drivers/thermal/qcom/tsens.c                  |  58 +-
+ drivers/thermal/qcom/tsens.h                  | 286 ++++++++--
+ 16 files changed, 1254 insertions(+), 312 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+
+-- 
+2.17.1
 
