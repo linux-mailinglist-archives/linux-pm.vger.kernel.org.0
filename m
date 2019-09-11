@@ -2,181 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2677CB0000
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 17:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701DAB02EA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 19:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbfIKP2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Sep 2019 11:28:18 -0400
-Received: from cmta20.telus.net ([209.171.16.93]:56058 "EHLO cmta20.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728291AbfIKP2S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 11 Sep 2019 11:28:18 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 84XQitur0N5I984XRiixps; Wed, 11 Sep 2019 09:28:16 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1568215696; bh=v8D2rPDU6PdahQ7RbfiTlvx14rI/YQMUQ6aVGSWEsds=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=Z5rICbGyxouZCk7pl+VXHF5V2VQFRPnYCy/8JLdjTCsr5zUexssJFGGINN5MgENtz
-         SINtOytS9ZMXenDgTSDq/tdN+lTy4bww65CgAdwTVJ2rn07uGvsXMLywtRmR5JjFMY
-         UGBKc+xgA8NwfJ9zxKuQyOVCSSahBEUCqYfMwcPoSnxUmh7NE5vYh9pC6GKOLVUwBo
-         IhOl/Qrf7edmQXxejEtdsVweW+uX6EAaiTTkiRDmXBMIZABaNncaI1QTZCo//8PM3i
-         2BlPNdhizuQMdxQt5APX+TykLC134Pg4onOrlHjG6Da0qj1uUFfTttJSnUFyhS2X62
-         eQ38mol6XwkbQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=K/Fc4BeI c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=gu6fZOg2AAAA:8 a=FGbulvE0AAAA:8 a=lz9DfVNvIZjJZHtdJwsA:9
- a=4aULQiveDT1Hf3i8:21 a=N-1LwnyJXRtWHCc1:21 a=CjuIK1q_8ugA:10
- a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
- a=svzTaB3SJmTkU8mK-ULk:22 a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
-Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mgorman@techsingularity.net>,
-        <matt@codeblueprint.co.uk>, <viresh.kumar@linaro.org>,
-        <juri.lelli@redhat.com>, <pjt@google.com>,
-        <vincent.guittot@linaro.org>, <qperret@qperret.net>,
-        <dietmar.eggemann@arm.com>, <srinivas.pandruvada@linux.intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <peterz@infradead.org>,
-        <bp@suse.de>, <lenb@kernel.org>, <rjw@rjwysocki.net>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <20190909024216.5942-1-ggherdovich@suse.cz> <20190909024216.5942-2-ggherdovich@suse.cz>
-In-Reply-To: <20190909024216.5942-2-ggherdovich@suse.cz>
-Subject: RE: [PATCH 1/2] x86,sched: Add support for frequency invariance
-Date:   Wed, 11 Sep 2019 08:28:07 -0700
-Message-ID: <000e01d568b5$87de9be0$979bd3a0$@net>
+        id S1729786AbfIKRrf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 13:47:35 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:10652 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729776AbfIKRrf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 13:47:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568224051;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=OlzypCaQKSjZuhd91T1qjCuJ5hWzxdmcL55w16GN85E=;
+        b=kKYsaa68PUXJPRJW9158ahvxAaOdrNrUvH7MU8uVRAnZHwkAU7pCIxD6eBHIn9HqtI
+        34osH5nvkr9gnoOm5lh+BwdQZ1VV5bKPtd1OzyJsyNiAsAf2ve4jLSJzhQ1y8QxJ5f9L
+        2BQdTF8WStmjJrq3RTLA4NyNmJCLQAbAV6ZZHvFjQ7zRGOU9T0I7L1o91Np2p2GQJ9tz
+        HJ0TwzepXwyEAThCKeSKQgaIo491I7EK6wa9ivf4RtXnuaxkx4qL10tq6iVusyjlRmdd
+        ajGt4h3EdVXmpRhrkSguaCatP6mMGV406wXqpos330BwNp4SfGaIHEQjvQSQ8IJxpYpM
+        5dlQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7Nk1d2C6Y"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
+        with ESMTPSA id u036f9v8BHlE8nq
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Wed, 11 Sep 2019 19:47:14 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/8] OMAP3: convert opp-v1 to opp-v2 and read speed binned / 720MHz grade bits
+Date:   Wed, 11 Sep 2019 19:47:06 +0200
+Message-Id: <cover.1568224032.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdVmt5+Zhvy5aOFESi2j+LaB1JUY0wArmRMw
-X-CMAE-Envelope: MS4wfLn9q8fvJWxdYWagctKLazWVoq84PNjCJrHkNLQQCrAL1YSaFoTAeWY5+AaNzvJ3QaIO24ToTvPLH8F2RnuoI2HH+v1YC3cIlduhfXyH1iZu7Lt/YC06
- VvJJbszIsoV9VihEQiinA/Sk1UX5nIoz9zGSjIfwDMYkCd6vuH/4fIkdoEhJJ+mwQQ/NhTVO9Riuu0VqWjUnkfn4XqB5vG35ZSDQK7D7bR3vh/M75IQYpa1h
- i8Fsk3kovxWCz+oYQ5KW5bGnm6Id4Iqm4TWL9ObNC898DO9tkxvqd9j5nbVmKIYdIyATLTBndJoAL0a2XW4oHTZZ/IhyJWgnjgmlaDvHbC7pO0ZWhKY6K86D
- 3PrG+DTgvQ0KnoifbndshZJW9EOEghx0hLTfoOHmralUip3uFVXxzyO9mT2zOyFxCh7z0UUCHYwCSpcxypwX9z+N/ylWRIVVIW0YahKfSlr/Fq9NsJfO43u8
- 9qSU7WI7+zi0K53VkEcQnKE/ibjdOz7M0ccv43g6fWxY26/C0ws21S5mlm6Dus0+9Oqma98w+2MBJMHWLf++3ccNnvNP0x039xEu6irESYWwVwbP86uf3QOf
- rHPEgGsH4L/EnZzV+h1f9GD7kZU8uWVATgB29qMrCYPybboSoRUVlYngwE4rLKaQhMBJ2VJHo+e1SVHCI8O/z18FxxtsBT5g1LJVtGjkca6iwcQ9mK5f1uSl
- K+8GdNxQU/EJ98qEIuaXgvFf5FFjwtJZrk/x6GiiMv0IrdEpeGsPO40sEqjaQhzSNxrv7LHFGks=
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Giovanni,
+CHANGES V3:
+* make omap36xx control the abb-ldo and properly switch mode
+  (suggested by Adam Ford <aford173@gmail.com>)
+* add a note about enabling the turbo-mode OPPs
 
-Thank you for the great detail and test results you provided.
+PATCH V2 2019-09-07 19:46:58:
+* fix ti-cpufreq to properly describe which compatible string is legacy
+* add some reviewed-by and acked-by Tony Lindgren <tony@atomide.com>
+* include am3517 patches by Adam Ford <aford173@gmail.com>
+* review opp-suspend; and add turbo-mode; opp properties
+* add a note how to disable an OPP in a board.dts file
 
-On 2019.09.08.07:42 Giovanni Gherdovich wrote:
+PATCH V1 2019-09-07 08:56:19:
+* fix typo in omap3-ldp.dts
+  (reported by Tony Lindgren <tony@atomide.com>)
+* extend commit message to describe the bit patterns needed
+  for opp-supported-hw
+* add error check to ioremap()
+  (suggested by Christ van Willegen <cvwillegen@gmail.com>)
+* update Documentation/devicetree/bindings/arm/omap/omap.txt
+* change bulk update to use "ti,omap3430" and "ti,omap3630"
+* update OPP4 of omap3430 to 1275 mV since it was not a valid
+  voltage for the twl4030 driver (reported by Tony Lindgren
+  <tony@atomide.com>)
 
-... [snip]...
+RFC V2 2019-09-04 10:53:43:
+* merge separate patch to remove opp-v1 table from n950-n9 into
+  the general omap3xxx.dtsi patch
+  (suggested by Viresh Kumar <viresh.kumar@linaro.org>)
+* add legacy compatibility to ti,omap3430 and ti,omap3630 for
+  the ti-cpufreq driver
+* make driver and omap3xxx.dtsi patches pass checkpatch
+* add bulk patch to explicitly define compatibility to ti,omap3430
+  and ti,omap36xx in addition to ti,omap3 of all in-tree boards
+  where it was missing
 
-> The test we call "gitsource" (running the git unit test suite, a long-running
-> single-threaded shell script) appears rather spectacular in this table (gains
-> of 30-50% depending on the machine). It is to be noted, however, that
-> gitsource has no adjustable parameters (such as the number of jobs in
-> kernbench, which we average over in order to get a single-number summary
-> score) and is exactly the kind of low-parallelism workload that benefits the
-> most from this patch. When looking at the detailed tables of kernbench or
-> tbench4, at low process or client counts one can see similar numbers.
+RFC V1 2019-09-02 12:55:55:
 
-I think the "gitsource" test, is the one I learned about here two years
-ago, [1]. It is an extremely good (best I know of) example of single
-threaded, high PID consumption (about 400 / second average, my computer
-[3]), performance issues on a multi CPU computer. I.E., this:
+This patch set converts the omap3 opp tables to opp-v2 format
+and extends the ti-cpufreq to support omap3.
 
-Dountil the list of tasks is finished:
-   Start the next task in the list of stuff to do.
-   Wait for it to finish
-Enduntil
+It adds 720 MHz (omap34xx) and 1 GHz (omap36xx) OPPs but
+tells the ti-cpufreq driver to disable them if the speed
+binned / 720MHz grade eFuse bits indicate that the chip
+is not rated for that speed. 
 
-The problem with the test is its run to run variability, which was from
-all the disk I/O, as far as I could determine. At the time,
-I studied this to death [2], and made a more repeatable test, without
-any disk I/O.
+It has been tested (for chip variant detection, not reliability
+of the high speed OPPs) on:
 
-While the challenges with this work flow have tended to be focused
-on the CPU frequency scaling driver, I have always considered
-the root issue here to be a scheduling issue. Excerpt from my notes
-[2]:
+* BeagleBoard C2 (omap3530 600MHz)
+* BeagleBoard XM B (dm3730 800MHz)
+* GTA04A4 (dm3730 800MHz)
+* GTA04A5 (dm3730 1GHz)
 
-> The issue is that performance is much much better if the system is
-> forced to use only 1 CPU rather than relying on the defaults where
-> the CPU scheduler decides what to do.
-> The scheduler seems to not realize that the current CPU has just
-> become free, and assigns the new task to a new CPU. Thus the load
-> on any one CPU is so low that it doesn't ramp up the CPU frequency.
-> It would be better if somehow the scheduler knew that the current
-> active CPU was now able to take on the new task, overall resulting
-> on one fully loaded CPU at the highest CPU frequency.
 
-I do not know if such is practical, and I didn't re-visit the issue.
+Adam Ford (2):
+  cpufreq: ti-cpufreq: Add support for AM3517
+  ARM: dts: Add OPP-V2 table for AM3517
 
-Anyway these are my results:
+H. Nikolaus Schaller (6):
+  cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+  ARM: dts: omap34xx & omap36xx: replace opp-v1 tables by opp-v2 for
+  DTS: bindings: omap: update bindings documentation
+  ARM: dts: omap3: bulk convert compatible to be explicitly ti,omap3430
+    or ti,omap3630 or ti,am3517
+  cpufreq: ti-cpufreq: omap36xx use "cpu0","vbb" if run in
+    multi_regulator mode
+  ARM: dts: omap36xx: using OPP1G needs to control the abb_ldo
 
-Kernel: 5.3-rc8 and + these patches
-Processor: i7-2600K
+ .../devicetree/bindings/arm/omap/omap.txt     |  30 +++--
+ .../bindings/cpufreq/ti-cpufreq.txt           |   6 +-
+ arch/arm/boot/dts/am3517.dtsi                 |  31 +++++
+ arch/arm/boot/dts/am3517_mt_ventoux.dts       |   2 +-
+ .../boot/dts/logicpd-som-lv-35xx-devkit.dts   |   2 +-
+ .../boot/dts/logicpd-torpedo-35xx-devkit.dts  |   2 +-
+ arch/arm/boot/dts/omap3-beagle-xm.dts         |   2 +-
+ arch/arm/boot/dts/omap3-beagle.dts            |   2 +-
+ arch/arm/boot/dts/omap3-cm-t3530.dts          |   2 +-
+ arch/arm/boot/dts/omap3-cm-t3730.dts          |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd43.dts  |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd70.dts  |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000.dts        |   2 +-
+ arch/arm/boot/dts/omap3-gta04.dtsi            |   2 +-
+ arch/arm/boot/dts/omap3-ha-lcd.dts            |   2 +-
+ arch/arm/boot/dts/omap3-ha.dts                |   2 +-
+ arch/arm/boot/dts/omap3-igep0020-rev-f.dts    |   2 +-
+ arch/arm/boot/dts/omap3-igep0020.dts          |   2 +-
+ arch/arm/boot/dts/omap3-igep0030-rev-g.dts    |   2 +-
+ arch/arm/boot/dts/omap3-igep0030.dts          |   2 +-
+ arch/arm/boot/dts/omap3-ldp.dts               |   2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi       |   2 +-
+ arch/arm/boot/dts/omap3-lilly-dbb056.dts      |   2 +-
+ arch/arm/boot/dts/omap3-n9.dts                |   2 +-
+ arch/arm/boot/dts/omap3-n950-n9.dtsi          |   7 --
+ arch/arm/boot/dts/omap3-n950.dts              |   2 +-
+ .../arm/boot/dts/omap3-overo-storm-alto35.dts |   2 +-
+ .../boot/dts/omap3-overo-storm-chestnut43.dts |   2 +-
+ .../boot/dts/omap3-overo-storm-gallop43.dts   |   2 +-
+ .../arm/boot/dts/omap3-overo-storm-palo35.dts |   2 +-
+ .../arm/boot/dts/omap3-overo-storm-palo43.dts |   2 +-
+ .../arm/boot/dts/omap3-overo-storm-summit.dts |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-tobi.dts  |   2 +-
+ .../boot/dts/omap3-overo-storm-tobiduo.dts    |   2 +-
+ arch/arm/boot/dts/omap3-pandora-1ghz.dts      |   2 +-
+ arch/arm/boot/dts/omap3-sbc-t3530.dts         |   2 +-
+ arch/arm/boot/dts/omap3-sbc-t3730.dts         |   2 +-
+ arch/arm/boot/dts/omap3-sniper.dts            |   2 +-
+ arch/arm/boot/dts/omap3-thunder.dts           |   2 +-
+ arch/arm/boot/dts/omap3-zoom3.dts             |   2 +-
+ arch/arm/boot/dts/omap3430-sdp.dts            |   2 +-
+ arch/arm/boot/dts/omap34xx.dtsi               |  66 ++++++++--
+ arch/arm/boot/dts/omap36xx.dtsi               |  65 ++++++++--
+ drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +-
+ drivers/cpufreq/ti-cpufreq.c                  | 119 +++++++++++++++++-
+ 45 files changed, 320 insertions(+), 80 deletions(-)
 
-This is important, at least for the performance governor numbers:
-
-cpu6: MSR_TURBO_RATIO_LIMIT: 0x23242526
-35 * 100.0 = 3500.0 MHz max turbo 4 active cores
-36 * 100.0 = 3600.0 MHz max turbo 3 active cores
-37 * 100.0 = 3700.0 MHz max turbo 2 active cores
-38 * 100.0 = 3800.0 MHz max turbo 1 active cores
-
-For reference against which all other results are compared
-is the forced CPU affinity test run. i.e.:
-
-taskset -c 3 test_script.
-
-Mode		Governor		degradation	Power		Bzy_MHz
-Reference	perf 1 CPU		1.00		reference	3798
--		performance 	1.2		6% worse	3618
-passive	ondemand		2.3
-active	powersave		2.6
-passive	schedutil		2.7				1600
-passive	schedutil-4C	1.68				2515
-
-Where degradation ratio is the time to execute / the reference time for
-the same conditions. The test runs over a wide range of processes per
-second, and the worst ratio has been selected for the above table.
-I have yet to write up this experiment, but the graphs that will
-eventually be used are at [4] and [5] (same data presented two
-different ways).
-
-The energy for the performance cases is worth more detail, as it
-is being wasted with CPUs waking up and going to sleep, and can be
-observed in the IRQ column of turbostat output:
-
-$ sudo turbostat --quiet --Summary --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 60
-Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-12.52   3798    81407   49      22.17   0.12 <<< Forced to CPU 3 only
-12.52   3798    81139   51      22.18   0.12
-12.52   3798    81036   51      22.20   0.12
-11.43   3704    267644  48      21.16   0.12 <<< Change over
-12.56   3618    490994  48      23.43   0.12 <<< Let the scheduler decide
-12.56   3620    491336  47      23.50   0.12
-12.56   3619    491607  47      23.50   0.12
-12.56   3619    491512  48      23.52   0.12
-12.56   3619    490806  47      23.51   0.12
-12.56   3618    491356  49      23.48   0.12
-12.56   3618    491035  48      23.51   0.12
-12.56   3618    491121  48      23.46   0.12
-
-Note also the busy megahertz column, where other active cores
-(constantly waking and sleeping as we rotate through which
-CPUs are used) are limiting the highest frequency.
-
-... Doug
-
-[1] https://marc.info/?l=linux-kernel&m=149181369622980&w=2
-[2] http://www.smythies.com/~doug/linux/single-threaded/index.html
-[3] http://www.smythies.com/~doug/linux/single-threaded/pids_per_second2.png
-[4] http://www.smythies.com/~doug/linux/single-threaded/gg-pidps.png
-[5] http://www.smythies.com/~doug/linux/single-threaded/gg-loops.png
-
+-- 
+2.19.1
 
