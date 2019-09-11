@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D23AF6B2
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 09:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796AAAF6C4
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 09:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727166AbfIKHRJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Sep 2019 03:17:09 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33812 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727140AbfIKHRH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 03:17:07 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n9so11080953pgc.1
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 00:17:07 -0700 (PDT)
+        id S1727300AbfIKHRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 03:17:32 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34087 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727264AbfIKHRc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 03:17:32 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r12so13126140pfh.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 00:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=5U8Xn1q8Z74Mq83nqRSGd/n/boLzuvzoaz5vn7lXR3A=;
-        b=VALWmmTyhWFVGeo1L9W3RX6Rm0TiRbc0V4xIZFeyqY+h1FBE5fd1JcnpYUWlJzsXPy
-         GN6TM8X8BnGUIpjQhpomFsNOfeOrSO+vhhGGK9KtVwEUx6yKOzjWjD3UgBn+1YCKr7WE
-         kuGeXfn54h7EueUtXLRx+XKGYM69e2euYIMd7VDXVwWHJfOCsuR9F30ClsQhIYse2p7H
-         F9BZR0wG2gQ5S4Jb54DX9bih+M7w/wLlX6jhu4mCjLE8Fd1xlCHR/PTKwB32vG+aBXPq
-         UToJQmzMy+4wFO6nvrN62tqAPlTZf8o7sNStlrAuQqxCoiDVrI4rXCw6Q0CXS1hrj49K
-         Cz4g==
+        bh=3XLPlhPImWAomUfs/g8BXhfm3lVXoZB+dL/zQw9KVyY=;
+        b=GJlxsZb21zDn7otYAc58zN7PyahcMkAX7EQUNWffJZs6M0x8PWTmcZ1KKAhmuxa7/v
+         ue70ggqmS5flX5o6oKsh1Yz/o9isB7U1Q3arBhYZJUbO9XqYbFzYbdN35eDe8QaTjGvp
+         tUPhdIgxrboTihBK+X6FS+TpH+nZkcLCRz45g2Mlk3LqqkhmthATiA41Bw20vGxFJbIc
+         MBXQvVkz7jJ0GrBYNYyZOy6cQc9epnmjzyWMhWZ9AMKHyiYXXrk7TZrfRuLmxWtBBz5j
+         i1H1Q4fuYCbQgJ4p+8GfZQLgM5HRg7nrOmYVRS+chWO1JrYsfTnRUS0G5WIPkBXF9PbX
+         z7Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=5U8Xn1q8Z74Mq83nqRSGd/n/boLzuvzoaz5vn7lXR3A=;
-        b=NrJxgakNuKiH+L/jEAtLtzvRguwP+InE29fU+o6NojzvRnthlzKHJFEMNKb4VxM3qR
-         jte2G4epARX5D9hyYSBXGmCTMhfkjXydMWMa6Gb3H1j71nqX8Iqh29EkCrvr7YwWc+4S
-         M7DUsWYQCgxTvadHL3h1GNQWJ4O8W531P3S6dPcpLMazYKpZD97oYqGpB8oKTXBREf72
-         8R/fPHJ66fPTsg5A5w/aQNe9uR7IWirWryUgx16n6nrTllVEGM4ynF9mhxhezDzsrDjH
-         szv4G0haEAKNdflQYPe3WprNI9GKj6uOIMv03H266ua+Bljzztq+sqwjJOxOacG2C+OP
-         mdow==
-X-Gm-Message-State: APjAAAUe7pDEOzj6+ZnnH3dI9JZ0K0YY5MadEIBlw4/CELsXmqh7Cp08
-        QP/m3373cLh4HzcBJtwDZiG8giwv592dDA==
-X-Google-Smtp-Source: APXvYqw2fi/8fgU0kP0Ycov1r/33yfX/bpDUdq44uwHmXgtOV2HSxSXe1cB61Q+fbXSVYS9mz6lgvQ==
-X-Received: by 2002:a65:5cca:: with SMTP id b10mr32444613pgt.365.1568186226553;
-        Wed, 11 Sep 2019 00:17:06 -0700 (PDT)
+        bh=3XLPlhPImWAomUfs/g8BXhfm3lVXoZB+dL/zQw9KVyY=;
+        b=D0cOh+osrpLhNAo3YmuIJrTUosI07qbdj/EoqRnldC4ygjxwFNRUa4I3yL87yLDN5P
+         JE2SCyZuNhJBNpnH1AGpGNPXsnZpY99CezuR+pEOS+EQtLjegvuP5XJcIdXmdKE2tASt
+         WGfSs1gMUpX1olYmUG7paJsh3HZwJxRpgHFhDxtouzjHPb3h6J4l/+32yXsx9z3b2Psy
+         pOMhsotG0CMoVKl9mcXghofoZs2bnQAFkbA18jrhZRFmeq0pxuh7dnQCiPQzun2ZEdGN
+         wDYbA4sIfGnKgxB5WpWBd0VFF9qchx6Ih/ccRt/2Uu62PldNsxZoyCuHMKfPUD7yorO3
+         CliQ==
+X-Gm-Message-State: APjAAAXrcusdrsafOrUIdf8qSv6+AhaHaIJN3qlKHRmeAv+99Eer5jAD
+        D7kf6Q7YneI1gLMNcFwPJQNSRw==
+X-Google-Smtp-Source: APXvYqzN60HuYuLCnJPEkqZsm/s5+WhfDQTCtn2qAVU9cHJ5lsnpY3WrGzuMoIBnXeqqNrV8oFi6FQ==
+X-Received: by 2002:a65:6097:: with SMTP id t23mr31510470pgu.357.1568186251210;
+        Wed, 11 Sep 2019 00:17:31 -0700 (PDT)
 Received: from localhost ([49.248.201.118])
-        by smtp.gmail.com with ESMTPSA id f188sm25569788pfa.170.2019.09.11.00.17.05
+        by smtp.gmail.com with ESMTPSA id h3sm833961pgb.13.2019.09.11.00.17.30
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Sep 2019 00:17:05 -0700 (PDT)
+        Wed, 11 Sep 2019 00:17:30 -0700 (PDT)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
@@ -52,10 +52,10 @@ To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v3 07/15] dt-bindings: thermal: tsens: Convert over to a yaml schema
-Date:   Wed, 11 Sep 2019 12:46:24 +0530
-Message-Id: <933f033298cbd7726a6c0b4b3b6cc7adc81784ba.1568185732.git.amit.kucheria@linaro.org>
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH v3 14/15] drivers: thermal: tsens: Create function to return sign-extended temperature
+Date:   Wed, 11 Sep 2019 12:46:31 +0530
+Message-Id: <a70e3fd63774f87d24374c12f63c2f311d6d4ba5.1568185732.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1568185732.git.amit.kucheria@linaro.org>
 References: <cover.1568185732.git.amit.kucheria@linaro.org>
@@ -66,272 +66,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document interrupt support in the tsens driver by converting over to a
-YAML schema.
+Hide the details of how to convert values read from TSENS HW to mCelsius
+behind a function. All versions of the IP can be supported as a result.
 
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- .../bindings/thermal/qcom-tsens.txt           |  55 ------
- .../bindings/thermal/qcom-tsens.yaml          | 174 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 3 files changed, 175 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+ drivers/thermal/qcom/tsens-common.c | 50 +++++++++++++++++++++--------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-deleted file mode 100644
-index 673cc1831ee9..000000000000
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
--* QCOM SoC Temperature Sensor (TSENS)
--
--Required properties:
--- compatible:
--  Must be one of the following:
--    - "qcom,msm8916-tsens" (MSM8916)
--    - "qcom,msm8974-tsens" (MSM8974)
--    - "qcom,msm8996-tsens" (MSM8996)
--    - "qcom,qcs404-tsens", "qcom,tsens-v1" (QCS404)
--    - "qcom,msm8998-tsens", "qcom,tsens-v2" (MSM8998)
--    - "qcom,sdm845-tsens", "qcom,tsens-v2" (SDM845)
--  The generic "qcom,tsens-v2" property must be used as a fallback for any SoC
--  with version 2 of the TSENS IP. MSM8996 is the only exception because the
--  generic property did not exist when support was added.
--  Similarly, the generic "qcom,tsens-v1" property must be used as a fallback for
--  any SoC with version 1 of the TSENS IP.
--
--- reg: Address range of the thermal registers.
--  New platforms containing v2.x.y of the TSENS IP must specify the SROT and TM
--  register spaces separately, with order being TM before SROT.
--  See Example 2, below.
--
--- #thermal-sensor-cells : Should be 1. See ./thermal.txt for a description.
--- #qcom,sensors: Number of sensors in tsens block
--- Refer to Documentation/devicetree/bindings/nvmem/nvmem.txt to know how to specify
--nvmem cells
--
--Example 1 (legacy support before a fallback tsens-v2 property was introduced):
--tsens: thermal-sensor@900000 {
--		compatible = "qcom,msm8916-tsens";
--		reg = <0x4a8000 0x2000>;
--		nvmem-cells = <&tsens_caldata>, <&tsens_calsel>;
--		nvmem-cell-names = "caldata", "calsel";
--		#thermal-sensor-cells = <1>;
--	};
--
--Example 2 (for any platform containing v2 of the TSENS IP):
--tsens0: thermal-sensor@c263000 {
--		compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
--		reg = <0xc263000 0x1ff>, /* TM */
--			<0xc222000 0x1ff>; /* SROT */
--		#qcom,sensors = <13>;
--		#thermal-sensor-cells = <1>;
--	};
--
--Example 3 (for any platform containing v1 of the TSENS IP):
--tsens: thermal-sensor@4a9000 {
--		compatible = "qcom,qcs404-tsens", "qcom,tsens-v1";
--		reg = <0x004a9000 0x1000>, /* TM */
--		      <0x004a8000 0x1000>; /* SROT */
--		nvmem-cells = <&tsens_caldata>;
--		nvmem-cell-names = "calib";
--		#qcom,sensors = <10>;
--		#thermal-sensor-cells = <1>;
--	};
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-new file mode 100644
-index 000000000000..6784766fe58f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -0,0 +1,174 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+# Copyright 2019 Linaro Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: QCOM SoC Temperature Sensor (TSENS)
-+
-+maintainers:
-+  - Amit Kucheria <amit.kucheria@linaro.org>
-+
-+description: |
-+  QCOM SoCs have TSENS IP to allow temperature measurement. There are currently
-+  three distinct major versions of the IP that is supported by a single driver.
-+  The IP versions are named v0.1, v1 and v2 in the driver, where v0.1 captures
-+  everything before v1 when there was no versioning information.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - description: v0.1 of TSENS
-+        items:
-+          - enum:
-+              - qcom,msm8916-tsens
-+              - qcom,msm8974-tsens
-+          - const: qcom,tsens-v0_1
-+
-+      - description: v1 of TSENS
-+        items:
-+          - enum:
-+              - qcom,qcs404-tsens
-+          - const: qcom,tsens-v1
-+
-+      - description: v2 of TSENS
-+        items:
-+          - enum:
-+              - qcom,msm8996-tsens
-+              - qcom,msm8998-tsens
-+              - qcom,sdm845-tsens
-+          - const: qcom,tsens-v2
-+
-+  reg:
-+    maxItems: 2
-+    items:
-+      - description: TM registers
-+      - description: SROT registers
-+
-+  nvmem-cells:
-+    minItems: 1
-+    maxItems: 2
-+    description:
-+      Reference to an nvmem node for the calibration data
-+
-+  nvmem-cells-names:
-+    items:
-+      - enum:
-+        - caldata
-+        - calsel
-+
-+  "#qcom,sensors":
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32
-+      - minimum: 1
-+      - maximum: 16
-+    description:
-+      Number of sensors enabled on this platform
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+    description:
-+      Number of cells required to uniquely identify the thermal sensors. Since
-+      we have multiple sensors this is set to 1
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8916-tsens
-+              - qcom,msm8974-tsens
-+              - qcom,qcs404-tsens
-+              - qcom,tsens-v0_1
-+              - qcom,tsens-v1
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 1
-+          maxItems: 1
-+          items:
-+            - description: Combined interrupt if upper or lower threshold crossed
-+        interrupt-names:
-+          minItems: 1
-+          maxItems: 1
-+          items:
-+            - const: uplow
-+
-+    else:
-+      properties:
-+        interrupts:
-+          minItems: 2
-+          maxItems: 2
-+          items:
-+            - description: Combined interrupt if upper or lower threshold crossed
-+            - description: Interrupt if critical threshold crossed
-+        interrupt-names:
-+          minItems: 2
-+          maxItems: 2
-+          items:
-+            - const: uplow
-+            - const: critical
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#qcom,sensors"
-+  - interrupts
-+  - interrupt-names
-+  - "#thermal-sensor-cells"
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    // Example 1 (legacy: for pre v1 IP):
-+    tsens1: thermal-sensor@900000 {
-+           compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
-+           reg = <0x4a9000 0x1000>, /* TM */
-+                 <0x4a8000 0x1000>; /* SROT */
-+
-+           nvmem-cells = <&tsens_caldata>, <&tsens_calsel>;
-+           nvmem-cell-names = "caldata", "calsel";
-+
-+           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+           interrupt-names = "uplow";
-+
-+           #qcom,sensors = <5>;
-+           #thermal-sensor-cells = <1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    // Example 2 (for any platform containing v1 of the TSENS IP):
-+    tsens2: thermal-sensor@4a9000 {
-+          compatible = "qcom,qcs404-tsens", "qcom,tsens-v1";
-+          reg = <0x004a9000 0x1000>, /* TM */
-+                <0x004a8000 0x1000>; /* SROT */
-+
-+          nvmem-cells = <&tsens_caldata>;
-+          nvmem-cell-names = "calib";
-+
-+          interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
-+          interrupt-names = "uplow";
-+
-+          #qcom,sensors = <10>;
-+          #thermal-sensor-cells = <1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    // Example 3 (for any platform containing v2 of the TSENS IP):
-+    tsens3: thermal-sensor@c263000 {
-+           compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
-+           reg = <0xc263000 0x1ff>,
-+                 <0xc222000 0x1ff>;
-+
-+           interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
-+                        <GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
-+           interrupt-names = "uplow", "critical";
-+
-+           #qcom,sensors = <13>;
-+           #thermal-sensor-cells = <1>;
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e7a47b5210fd..ff757a4a060c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13360,6 +13360,7 @@ L:	linux-pm@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- F:	drivers/thermal/qcom/
-+F:	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+index ea2c46cc6a66..6b6b3841c2d0 100644
+--- a/drivers/thermal/qcom/tsens-common.c
++++ b/drivers/thermal/qcom/tsens-common.c
+@@ -84,13 +84,46 @@ static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+ 	return degc;
+ }
  
- QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
- M:	Stanimir Varbanov <stanimir.varbanov@linaro.org>
++/**
++ * tsens_hw_to_mC - Return sign-extended temperature in mCelsius.
++ * @s:     Pointer to sensor struct
++ * @field: Index into regmap_field array pointing to temperature data
++ *
++ * This function handles temperature returned in ADC code or deciCelsius
++ * depending on IP version.
++ *
++ * Return: Temperature in milliCelsius on success, a negative errno will
++ * be returned in error cases
++ */
++static int tsens_hw_to_mC(struct tsens_sensor *s, int field)
++{
++	struct tsens_priv *priv = s->priv;
++	u32 resolution;
++	u32 temp = 0;
++	int ret;
++
++	resolution = priv->fields[LAST_TEMP_0].msb -
++		priv->fields[LAST_TEMP_0].lsb;
++
++	ret = regmap_field_read(priv->rf[field], &temp);
++	if (ret)
++		return ret;
++
++	/* Convert temperature from ADC code to milliCelsius */
++	if (priv->feat->adc)
++		return code_to_degc(temp, s) * 1000;
++
++	/* deciCelsius -> milliCelsius along with sign extension */
++	return sign_extend32(temp, resolution) * 100;
++}
++
+ int get_temp_tsens_valid(struct tsens_sensor *s, int *temp)
+ {
+ 	struct tsens_priv *priv = s->priv;
+ 	int hw_id = s->hw_id;
+ 	u32 temp_idx = LAST_TEMP_0 + hw_id;
+ 	u32 valid_idx = VALID_0 + hw_id;
+-	u32 last_temp = 0, valid, mask;
++	u32 valid;
+ 	int ret;
+ 
+ 	ret = regmap_field_read(priv->rf[valid_idx], &valid);
+@@ -108,19 +141,7 @@ int get_temp_tsens_valid(struct tsens_sensor *s, int *temp)
+ 	}
+ 
+ 	/* Valid bit is set, OK to read the temperature */
+-	ret = regmap_field_read(priv->rf[temp_idx], &last_temp);
+-	if (ret)
+-		return ret;
+-
+-	if (priv->feat->adc) {
+-		/* Convert temperature from ADC code to milliCelsius */
+-		*temp = code_to_degc(last_temp, s) * 1000;
+-	} else {
+-		mask = GENMASK(priv->fields[LAST_TEMP_0].msb,
+-			       priv->fields[LAST_TEMP_0].lsb);
+-		/* Convert temperature from deciCelsius to milliCelsius */
+-		*temp = sign_extend32(last_temp, fls(mask) - 1) * 100;
+-	}
++	*temp = tsens_hw_to_mC(s, temp_idx);
+ 
+ 	return 0;
+ }
+@@ -310,6 +331,7 @@ int __init init_common(struct tsens_priv *priv)
+ 			goto err_put_device;
+ 		}
+ 	}
++
+ 	for (i = 0, j = VALID_0; i < priv->feat->max_sensors; i++, j++) {
+ 		priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+ 						      priv->fields[j]);
 -- 
 2.17.1
 
