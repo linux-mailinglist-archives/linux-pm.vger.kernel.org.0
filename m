@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAC4AFD9C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 15:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E0EAFDD0
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 15:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbfIKNUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Sep 2019 09:20:11 -0400
-Received: from 6.mo179.mail-out.ovh.net ([46.105.56.76]:58506 "EHLO
-        6.mo179.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727946AbfIKNUK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 09:20:10 -0400
-X-Greylist: delayed 393 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Sep 2019 09:20:10 EDT
-Received: from player168.ha.ovh.net (unknown [10.108.57.150])
-        by mo179.mail-out.ovh.net (Postfix) with ESMTP id F1115141CCB
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 15:03:51 +0200 (CEST)
+        id S1727373AbfIKNju (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 09:39:50 -0400
+Received: from 2.mo173.mail-out.ovh.net ([178.33.251.49]:33041 "EHLO
+        2.mo173.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726954AbfIKNjt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 09:39:49 -0400
+X-Greylist: delayed 1185 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Sep 2019 09:39:49 EDT
+Received: from player168.ha.ovh.net (unknown [10.108.54.97])
+        by mo173.mail-out.ovh.net (Postfix) with ESMTP id 95A9A1191AC
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 15:03:35 +0200 (CEST)
 Received: from qperret.net (115.ip-51-255-42.eu [51.255.42.115])
         (Authenticated sender: qperret@qperret.net)
-        by player168.ha.ovh.net (Postfix) with ESMTPSA id 7EBCF997FDF2;
-        Wed, 11 Sep 2019 13:03:35 +0000 (UTC)
+        by player168.ha.ovh.net (Postfix) with ESMTPSA id BC049997FD25;
+        Wed, 11 Sep 2019 13:03:18 +0000 (UTC)
 From:   Quentin Perret <qperret@qperret.net>
 To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
         viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
@@ -26,57 +26,65 @@ To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
 Cc:     dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
         mka@chromium.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, qperret@qperret.net
-Subject: [PATCH v8 1/4] arm64: defconfig: Enable CONFIG_ENERGY_MODEL
-Date:   Wed, 11 Sep 2019 15:03:11 +0200
-Message-Id: <20190911130314.29973-2-qperret@qperret.net>
+Subject: [PATCH RESEND v8 0/4] Make IPA use PM_EM
+Date:   Wed, 11 Sep 2019 15:03:10 +0200
+Message-Id: <20190911130314.29973-1-qperret@qperret.net>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190911130314.29973-1-qperret@qperret.net>
-References: <20190911130314.29973-1-qperret@qperret.net>
-X-Ovh-Tracer-Id: 17345332493490281465
+X-Ovh-Tracer-Id: 17340828891127700473
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrtdefgdefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecu
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrtdefgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecu
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Quentin Perret <quentin.perret@arm.com>
+Re-sending this from an email address I can access. For a cover letter,
+see:
+https://lore.kernel.org/lkml/20190812084235.21440-1-quentin.perret@arm.com/
 
-The recently introduced Energy Model (EM) framework manages power cost
-tables for the CPUs of the system. Its only user right now is the
-scheduler, in the context of Energy Aware Scheduling (EAS).
+Changes in v8:
+ - Fixed checkpatch errors (Rui)
 
-However, the EM framework also offers a generic infrastructure that
-could replace subsystem-specific implementations of the same concepts,
-as this is the case in the thermal framework.
+Changes in v7
+ - Added patch 02/04 to fix the build error reported by the kbuild bot
 
-So, in order to prepare the migration of the thermal subsystem to use
-the EM framework, enable it in the default arm64 defconfig, which is the
-most commonly used architecture for IPA. This will also compile-in all
-of the EAS code, although it won't be enabled by default -- EAS requires
-to use the 'schedutil' CPUFreq governor while arm64 defaults to
-'performance'.
+Changes in v6
+ - Added Daniel's and Viresh's Acked-by to all patches
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Quentin Perret <quentin.perret@arm.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v5:
+ - Changed patch 02 to guard IPA-specific code in cpu_cooling.c with
+   appropriate ifdefery (Daniel)
+ - Rebased on 5.2-rc2
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0e58ef02880c..ad0e4944a71f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -71,6 +71,7 @@ CONFIG_COMPAT=y
- CONFIG_RANDOMIZE_BASE=y
- CONFIG_HIBERNATION=y
- CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
-+CONFIG_ENERGY_MODEL=y
- CONFIG_ARM_CPUIDLE=y
- CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_STAT=y
+Changes in v4:
+ - Added Viresh's Acked-by to all 3 patches
+ - Improved commit message of patch 3/3 to explain how it has no
+   functional impact on existing users (Eduardo)
+
+Changes in v3:
+ - Changed warning message for unordered tables to something more
+   explicit (Viresh)
+ - Changed WARN() into a pr_err() for consistency
+
+Changes in v2:
+ - Fixed patch 01/03 to actually enable CONFIG_ENERGY_MODEL
+ - Added "depends on ENERGY_MODEL" to IPA (Daniel)
+ - Added check to bail out if the freq table is unsorted (Viresh)
+
+
+Quentin Perret (4):
+  arm64: defconfig: Enable CONFIG_ENERGY_MODEL
+  PM / EM: Declare EM data types unconditionally
+  thermal: cpu_cooling: Make the power-related code depend on IPA
+  thermal: cpu_cooling: Migrate to using the EM framework
+
+ arch/arm64/configs/defconfig  |   1 +
+ drivers/thermal/Kconfig       |   1 +
+ drivers/thermal/cpu_cooling.c | 427 ++++++++++++++--------------------
+ include/linux/energy_model.h  |   3 +-
+ 4 files changed, 178 insertions(+), 254 deletions(-)
+
 -- 
 2.22.1
 
