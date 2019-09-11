@@ -2,124 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D49F4B02FC
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 19:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A17B03EA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2019 20:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbfIKRri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Sep 2019 13:47:38 -0400
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.120]:21954 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729776AbfIKRrh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 13:47:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568224053;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=zTCjh/MU9k8u84ljc9bm/puUjtHWFUlUpSOaFyAcr/0=;
-        b=tnkGAU/UmATVF9Wp5XK0gX7jg0OfbRxQzvG0qDMtuIkqM6PejexFKtzE9QPnHJO3/s
-        DkLAwl2UEY7Vu7jrL31nLrcKuzfMUERgiW9kGn/Wh3srK6DsECrkOLgGDevC7h8v5xvU
-        FFbJZ/AK0LepcaDY3pAflsaKO4MjuJ0TZtA1WvyGMaXzuCDXjoIt0JJIS/S26ksjjg8V
-        N8GiHECz2p2gHvT/xTaOBeDs3hTV2WVpvYNwNcMS+Lme5aRRfEKniVHcbAzGWhSKkHWY
-        AuA/Ji9AMDV3i5YxVE2IyP3FDklQdiN7yiR5brCHs7dHdVXQPPu2X3rJ9eW7IJEbKHqF
-        7TvQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7Nk1d2C6Y"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v8BHlJ8ny
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Wed, 11 Sep 2019 19:47:19 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
+        id S1730204AbfIKStf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 14:49:35 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:15820 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730050AbfIKStf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 14:49:35 -0400
+X-UUID: 39ff3adccfad45a68dd0489c47847c57-20190912
+X-UUID: 39ff3adccfad45a68dd0489c47847c57-20190912
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 787524690; Thu, 12 Sep 2019 02:49:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 12 Sep 2019 02:49:26 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 12 Sep 2019 02:49:26 +0800
+Message-ID: <1568227767.8481.4.camel@mtkswgap22>
+Subject: Re: [PATCH v7 5/7] power: reset: add driver for mt6323 poweroff
+From:   Sean Wang <sean.wang@mediatek.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+CC:     <linux-mediatek@lists.infradead.org>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        <linux-pm@vger.kernel.org>, Josef Friedl <josef.friedl@speed.at>,
+        <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Teresa Remmet <t.remmet@phytec.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 8/8] ARM: dts: Add OPP-V2 table for AM3517
-Date:   Wed, 11 Sep 2019 19:47:14 +0200
-Message-Id: <6089486dcf1f327aa53348f5434cd57cc964c30f.1568224033.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <cover.1568224032.git.hns@goldelico.com>
-References: <cover.1568224032.git.hns@goldelico.com>
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 12 Sep 2019 02:49:27 +0800
+In-Reply-To: <20190910070446.639-6-frank-w@public-files.de>
+References: <20190910070446.639-1-frank-w@public-files.de>
+         <20190910070446.639-6-frank-w@public-files.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: 40F2DA63D46F5CD798C0546348146FBED6745C18E6A0AE0525103705EBD596C12000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+Hi, Frank
 
-The AM3517 only lists 600MHz @ 1.2V, but the register values for
-0x4830A204 = 1b86 802f, it seems like am3517 might be a derivative
-of the omap36 which OPPs would be OPP50 (300 MHz) and OPP100
-(600 MHz).
+On Tue, 2019-09-10 at 09:04 +0200, Frank Wunderlich wrote:
+> From: Josef Friedl <josef.friedl@speed.at>
+> 
+> add poweroff driver for mt6323 and make Makefile and Kconfig-Entries
+> 
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-This patch sets up the OPP50 and OPP100 tables at 300MHz and 600MHz
-for the AM3517 with each having an operating voltage at 1.2V.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Tested-by: Adam Ford <aford173@gmail.com>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/arm/boot/dts/am3517.dtsi | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+Thanks for your help keep the unfinished driver to upstream
 
-diff --git a/arch/arm/boot/dts/am3517.dtsi b/arch/arm/boot/dts/am3517.dtsi
-index 23ea381d363f..a0f23361d4bc 100644
---- a/arch/arm/boot/dts/am3517.dtsi
-+++ b/arch/arm/boot/dts/am3517.dtsi
-@@ -16,6 +16,37 @@
- 		can = &hecc;
- 	};
- 
-+	cpus {
-+		cpu: cpu@0 {
-+			/* Based on OMAP3630 variants OPP50 and OPP100 */
-+			operating-points-v2 = <&cpu0_opp_table>;
-+
-+			clock-latency = <300000>; /* From legacy driver */
-+		};
-+	};
-+
-+	cpu0_opp_table: opp-table {
-+		compatible = "operating-points-v2-ti-cpu";
-+		syscon = <&scm_conf>;
-+		/*
-+		 * AM3517 TRM only lists 600MHz @ 1.2V, but omap36xx
-+		 * appear to operate at 300MHz as well. Since AM3517 only
-+		 * lists one operating voltage, it will remain fixed at 1.2V
-+		 */
-+		opp50-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-microvolt = <1200000>;
-+			opp-supported-hw = <0xffffffff 0xffffffff>;
-+			opp-suspend;
-+		};
-+
-+		opp100-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt = <1200000>;
-+			opp-supported-hw = <0xffffffff 0xffffffff>;
-+		};
-+	};
-+
- 	ocp@68000000 {
- 		am35x_otg_hs: am35x_otg_hs@5c040000 {
- 			compatible = "ti,omap3-musb";
--- 
-2.19.1
+Acked-by: Sean Wang <sean.wang@mediatek.com>
+
+> ---
+> changes since v6: none
+> changes since v5: split out mfd/mt6397/core.h
+> changes since v4: none
+> changes since v3: none
+> changes since v2: none (=v2 part 5)
+> ---
+>  drivers/power/reset/Kconfig           | 10 +++
+>  drivers/power/reset/Makefile          |  1 +
+>  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
+>  3 files changed, 108 insertions(+)
+>  create mode 100644 drivers/power/reset/mt6323-poweroff.c
+> 
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index a564237278ff..c721939767eb 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -140,6 +140,16 @@ config POWER_RESET_LTC2952
+>  	  This driver supports an external powerdown trigger and board power
+>  	  down via the LTC2952. Bindings are made in the device tree.
+>  
+> +config POWER_RESET_MT6323
+> +       bool "MediaTek MT6323 power-off driver"
+> +       depends on MFD_MT6397
+> +       help
+> +         The power-off driver is responsible for externally shutdown down
+> +         the power of a remote MediaTek SoC MT6323 is connected to through
+> +         controlling a tiny circuit BBPU inside MT6323 RTC.
+> +
+> +         Say Y if you have a board where MT6323 could be found.
+> +
+>  config POWER_RESET_QNAP
+>  	bool "QNAP power-off driver"
+>  	depends on OF_GPIO && PLAT_ORION
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 85da3198e4e0..da37f8b851dc 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
+>  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+>  obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
+> +obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+>  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
+>  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+> new file mode 100644
+> index 000000000000..1caf43d9e46d
+> --- /dev/null
+> +++ b/drivers/power/reset/mt6323-poweroff.c
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Power off through MediaTek PMIC
+> + *
+> + * Copyright (C) 2018 MediaTek Inc.
+> + *
+> + * Author: Sean Wang <sean.wang@mediatek.com>
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/mt6397/core.h>
+> +#include <linux/mfd/mt6397/rtc.h>
+> +
+> +struct mt6323_pwrc {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	u32 base;
+> +};
+> +
+> +static struct mt6323_pwrc *mt_pwrc;
+> +
+> +static void mt6323_do_pwroff(void)
+> +{
+> +	struct mt6323_pwrc *pwrc = mt_pwrc;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
+> +
+> +	ret = regmap_read_poll_timeout(pwrc->regmap,
+> +					pwrc->base + RTC_BBPU, val,
+> +					!(val & RTC_BBPU_CBUSY),
+> +					MTK_RTC_POLL_DELAY_US,
+> +					MTK_RTC_POLL_TIMEOUT);
+> +	if (ret)
+> +		dev_err(pwrc->dev, "failed to write BBPU: %d\n", ret);
+> +
+> +	/* Wait some time until system down, otherwise, notice with a warn */
+> +	mdelay(1000);
+> +
+> +	WARN_ONCE(1, "Unable to power off system\n");
+> +}
+> +
+> +static int mt6323_pwrc_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
+> +	struct mt6323_pwrc *pwrc;
+> +	struct resource *res;
+> +
+> +	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
+> +	if (!pwrc)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	pwrc->base = res->start;
+> +	pwrc->regmap = mt6397_chip->regmap;
+> +	pwrc->dev = &pdev->dev;
+> +	mt_pwrc = pwrc;
+> +
+> +	pm_power_off = &mt6323_do_pwroff;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6323_pwrc_remove(struct platform_device *pdev)
+> +{
+> +	if (pm_power_off == &mt6323_do_pwroff)
+> +		pm_power_off = NULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mt6323_pwrc_dt_match[] = {
+> +	{ .compatible = "mediatek,mt6323-pwrc" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6323_pwrc_dt_match);
+> +
+> +static struct platform_driver mt6323_pwrc_driver = {
+> +	.probe          = mt6323_pwrc_probe,
+> +	.remove         = mt6323_pwrc_remove,
+> +	.driver         = {
+> +		.name   = "mt6323-pwrc",
+> +		.of_match_table = mt6323_pwrc_dt_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(mt6323_pwrc_driver);
+> +
+> +MODULE_DESCRIPTION("Poweroff driver for MT6323 PMIC");
+> +MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
+
 
