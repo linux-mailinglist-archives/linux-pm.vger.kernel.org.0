@@ -2,104 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC49B0C30
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 12:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF16B0C6E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 12:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730971AbfILKDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Sep 2019 06:03:33 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:40108 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730948AbfILKDd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Sep 2019 06:03:33 -0400
-Received: by mail-qt1-f193.google.com with SMTP id g4so28892515qtq.7
-        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2019 03:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aOWYB3DMPBdvSwiXyF/GUh8D7R8BU3JTpRh9eNB50ww=;
-        b=iOQJK+F3Xh4PPUjpY0GaAGDZ7VttfqtZpUaqyZLYJsstBuH+U//r/47PYtwiMrUymC
-         +RIu5KaGmOqoA1BXAMhf03gyhA8+cL0qYtzn5aJ0figtQFVRk8HuwsLfFLYYUh0eQ6UL
-         1fbrbbltTdIxNoBM8syoEnHSUsXhYUYVwThNaIBMPtAVL3kWU8BCWOtARgjIygZZb6zp
-         KINRjXD8yOkUAViAV3oWKxOc0i1Z25Ae+P0kSIFMVVi72gTD//ZHE7mKIdgs9G1Kuawi
-         Ms+M9iHQC3FAnmSmbJUkBRkOFS6S3xbVTYvi5SAIOE8i3NUeQ/Be0soUMZ3ZzjaQVbSi
-         E9uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aOWYB3DMPBdvSwiXyF/GUh8D7R8BU3JTpRh9eNB50ww=;
-        b=n+eV1hF74pM65Th92JY2Fehr7+sK1NpANrwMtihY4/fOuFaS/LAZlRQs6FNDMAg3Ub
-         yDnD2gQOUUB9ECzDpQRN246CYvnitOqce9MwQtzOLBYrnCiDtgDUkECdrQttp/3BL21W
-         ySnI6SwJwAkvuxbW2oX/HVu2/ayzNFJzXYHebxX6mN1CzaXmZM1rkNfdnkvRVJVn/3FG
-         nzGR8gjiUmiBO/ZaVB4SdmPj5FUYUK4vJhdBEAEKczppz1UbLklz2xu9RxzTP/whWFkp
-         pk3VfygFnRQ5d4+FNWWIViXRbC70DN0HHd8jarjtJLfK2TZxBxMKeCDeVE4BH1PKPbte
-         53SQ==
-X-Gm-Message-State: APjAAAXfEzJdwAT081AMYBpME03vzfQc5BD/2I9DTRWsXx1osXEDAlGT
-        ftBPA7V6UtFgQXW5/VX+Y3Yg6E0x+v2Zvd54FoVKcA==
-X-Google-Smtp-Source: APXvYqyYqFVBKfUcLfS+7Te1gAsm+iJfnRQxxrlLXOVJMqmgd4LMC/pVx2XfUktZHZPdRIqzoioVTHAClDoQFNDQUkA=
-X-Received: by 2002:aed:2a3b:: with SMTP id c56mr41859375qtd.343.1568282611921;
- Thu, 12 Sep 2019 03:03:31 -0700 (PDT)
+        id S1730470AbfILKQn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Sep 2019 06:16:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40722 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730454AbfILKQn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Sep 2019 06:16:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CB8ABAE53;
+        Thu, 12 Sep 2019 10:16:41 +0000 (UTC)
+From:   Thomas Renninger <trenn@suse.de>
+To:     Abhishek <huntbag@linux.vnet.ibm.com>
+Cc:     shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Thomas Renninger <trenn@suse.com>
+Subject: Re: [PATCH] cpupower : Handle set and info subcommands for powerpc
+Date:   Thu, 12 Sep 2019 12:16:41 +0200
+Message-ID: <4161437.KdBApSEpf3@skinner.arch.suse.de>
+In-Reply-To: <f43715dd-219b-d3ae-58a9-f343fe745d7d@linux.vnet.ibm.com>
+References: <20190911095424.49605-1-huntbag@linux.vnet.ibm.com> <3326dc53-f8a1-dd7b-5ae8-b86ef5ef8b24@kernel.org> <f43715dd-219b-d3ae-58a9-f343fe745d7d@linux.vnet.ibm.com>
 MIME-Version: 1.0
-References: <cover.1568239378.git.amit.kucheria@linaro.org> <20190912094651.GH2036@sirena.org.uk>
-In-Reply-To: <20190912094651.GH2036@sirena.org.uk>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Thu, 12 Sep 2019 15:33:20 +0530
-Message-ID: <CAP245DXBwwtcbjRQV_bCdYK5SZH9C9oxZJ2rFraJpbd5L0sHvw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Cleanup arm64 driver dependencies
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lists LAKML <linux-arm-kernel@lists.infradead.org>,
-        arm-soc <arm@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 12, 2019 at 3:17 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Sep 12, 2019 at 03:48:44AM +0530, Amit Kucheria wrote:
->
-> > I was using initcall_debugging on a QCOM platform and ran across a bunch of
-> > driver initcalls that are enabled even if their SoC support is disabled.
->
-> What exactly is the problem you're trying to fix here?  For the
-> drivers I looked at these were bog standard register the driver
-> with the subsystem type initcalls on optional drivers so not
-> doing anything particularly disruptive or anything like that.
+On Thursday, September 12, 2019 11:43:40 AM CEST Abhishek wrote:
+> Hi Shuah,
+> 
+> Thanks for the review. Few comments below.
 
-I was trying to prune the defconfig only to drivers that make sense on
-the SoC. e.g. Why should I see a brcmstb_soc_device_early_init() call
-on a QCOM system when I've disabled ARCH_BRCMSTB?
+...
 
-I came across this while trying to figure out how to make thermal and
-cpufreq frameworks initialise as early as possible.
+> Since these two options are not being used by any other architecture
+> except x86, I suggest these options should not even be shown for
+> other architecture. So we can do something like this in cpupower.c :
+> 
+> static struct cmd_struct commands[] = {
+>           .............
+> +#if defined (__x86_64__) || defined (__i386__)
+>          { "set",        cmd_set,        1    },
+>          { "info",        cmd_info,        0    },
+> +#endif
+>          ..............
+> 
+> Is this Okay?
 
-> For any given system that's going to be an issue for the
-> overwhelming majority of drivers on the tree, including those
-> that aren't associated with any particular architecture.
+No, I expected you to add something meaningful for Power case...
 
-Indeed. From a quick check, MFD and GPIO has a bunch of 'generic'
-drivers that aren't SoC-specific. I'm sure there are several such
-drivers in regulator framework too. They don't need to be 'fixed'.
+Just kidding. If this works without any side-effects in not x86 case, this 
+approach seem to be the best solution for now.
 
-I was just trying to ring-fence obvious SoC-specific drivers behind a
-ARCH_FOO dependency since they seemed like low-hanging fruit. Let me
-know if it isn't a good use of everyone's time.
+Thanks.
 
-Regards,
-Amit
+  Thomas
+
+
