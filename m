@@ -2,92 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CAAB05A6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 00:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82787B065E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 03:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729015AbfIKWc7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Sep 2019 18:32:59 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35657 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728421AbfIKWc6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 18:32:58 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n4so12288228pgv.2
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2019 15:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=eHfwVmwRPrvBBQCHCMtELR2XIT6WK3JZDo6MrEMP+JI=;
-        b=iIqmRKYbvavAa/xuuU8kPkn7fxW5tBdl+m37NywaOZtqPeAc9v+0vQMv1An+TbS/lq
-         h2h/lvNN7VuQCP5dJHAqjPqeE84W7DrbhAXAPa7fOnwH4R9zJCBhJcpU2a7J9weR7se0
-         hEZVIg+idKp6P3t3UXVpLxNPkhdMK61ihXOBWZUTZew9Bbo4OYl6lYRkaVfAPVTutAxH
-         eQZS0sGdSY+f2lYxtZWKCQt0ptOk112EhKPbLjHY0UUgyM4Dab/lcE2Ye51VrQVmmeUv
-         ehGxPIHQpkPl2H0jFp3cQpp0pCy3SJodRf64SQUKKyI6xZ8y/JLjVXSIV7XDFh9HHj2Y
-         QQ+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=eHfwVmwRPrvBBQCHCMtELR2XIT6WK3JZDo6MrEMP+JI=;
-        b=OijIhIIMO2sU9AAQuzKzTMHy6YDcydN3gr53upQvwNwaFZ+tppFIMxYHXH2gncudqD
-         EvuvlZ6LwJ9TR9BF/z3mv/fyUlnntB9CMePDHMK/+2PRhv6sBMJCfu+7FZ59IpQxUzNE
-         kudmkFPAP5u0ccJxBdV5d5K8qRLmfzS5ixfTiJjBTXn5sTudkuzFwU7bv0R51Gqxux23
-         zdOOH0d/uaLHCtqJDCjXF3WN2vFT7zHP4YMn8vXRdns6J/n9o3Dlx/Ku+c1kR9g/fFBJ
-         2Ixo7eVKg7Iw2rBjTlqsYmR6NjspdRu8bzivIAInDbyGIPbVK2xICiJEueaxBqqk70Go
-         VxHw==
-X-Gm-Message-State: APjAAAVpKISA9k68g+r9iHrKJ/PioLUx9zl4P+PmJkRLdagOE2NwyaH8
-        KND/XnJyMRSYMd4h2MHY92libA==
-X-Google-Smtp-Source: APXvYqwXpm2pHm8jH8I/tTmio2/EH4EjPAWMxPZdHsmxvodKvWV4WrJTmQONqaYs2sPtqqMgcPT8dw==
-X-Received: by 2002:a17:90a:af8d:: with SMTP id w13mr5333319pjq.141.1568241178117;
-        Wed, 11 Sep 2019 15:32:58 -0700 (PDT)
-Received: from localhost ([49.248.179.160])
-        by smtp.gmail.com with ESMTPSA id t8sm3431343pjq.30.2019.09.11.15.32.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Sep 2019 15:32:57 -0700 (PDT)
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
-        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 5/5] cpufreq: qcom-hw: Move driver initialisation earlier
-Date:   Thu, 12 Sep 2019 04:02:34 +0530
-Message-Id: <b731b713d8738239c26361ece7f5cadea035b353.1568240476.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1568240476.git.amit.kucheria@linaro.org>
-References: <cover.1568240476.git.amit.kucheria@linaro.org>
-In-Reply-To: <cover.1568240476.git.amit.kucheria@linaro.org>
-References: <cover.1568240476.git.amit.kucheria@linaro.org>
+        id S1728462AbfILBD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Sep 2019 21:03:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44270 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727020AbfILBDZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Sep 2019 21:03:25 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DE5220863;
+        Thu, 12 Sep 2019 01:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568250205;
+        bh=DNaLcHjtAram+fHXt9n0Qh+Msw5zL/BxK7rfBfFbCdY=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=WHfcMcEd5siGpnVlhfOi3HeoUu2n1CVCwXugiYRcQOgA5PLidzNvtx5w+bfY/+1wI
+         C/mBQrEqNueP5fBZhnFV1nRdITVQHNm//bZ3IJS0geeKnpEGeMT/ZSf1speT+vj9QB
+         GHbvtbzI6vqWlY6Lm0WmSoelZBYf8laWgucQJCJ8=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f6cefef2bf6b34ec6eb82d3614054734fa5e8dd1.1568239378.git.amit.kucheria@linaro.org>
+References: <cover.1568239378.git.amit.kucheria@linaro.org> <f6cefef2bf6b34ec6eb82d3614054734fa5e8dd1.1568239378.git.amit.kucheria@linaro.org>
+Cc:     linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Will Deacon <will@kernel.org>, arm@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 1/4] arm64: Kconfig: Fix XGENE driver dependencies
+User-Agent: alot/0.8.1
+Date:   Wed, 11 Sep 2019 18:03:24 -0700
+Message-Id: <20190912010325.0DE5220863@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow qcom-hw driver to initialise right after the cpufreq and thermal
-subsystems are initialised in core_initcall so we get earlier access to
-thermal mitigation.
+Quoting Amit Kucheria (2019-09-11 15:18:45)
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 801fa1cd0321..9b2790d3f18a 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -225,7 +225,7 @@ config CLK_QORIQ
+> =20
+>  config COMMON_CLK_XGENE
+>         bool "Clock driver for APM XGene SoC"
+> -       default ARCH_XGENE
+> +       depends on ARCH_XGENE
+>         depends on ARM64 || COMPILE_TEST
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Is ARCH_XGENE supported outside of ARM64? I'd expect to see something
+more like depends on ARCH_XGENE || COMPILE_TEST and default ARCH_XGENE
+so that if the config is supported it becomes the default. Or at least
+depends on ARCH_XGENE && ARM64 || COMPILE_TEST
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 4b0b50403901..04676cc82ba6 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -327,7 +327,7 @@ static int __init qcom_cpufreq_hw_init(void)
- {
- 	return platform_driver_register(&qcom_cpufreq_hw_driver);
- }
--device_initcall(qcom_cpufreq_hw_init);
-+postcore_initcall(qcom_cpufreq_hw_init);
- 
- static void __exit qcom_cpufreq_hw_exit(void)
- {
--- 
-2.17.1
-
+>         ---help---
+>           Sypport for the APM X-Gene SoC reference, PLL, and device clock=
+s.
