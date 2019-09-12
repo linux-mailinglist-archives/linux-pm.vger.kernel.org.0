@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6968B0693
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 03:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B737B0694
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 03:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbfILBfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728854AbfILBfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 11 Sep 2019 21:35:06 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40035 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728815AbfILBfE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 21:35:04 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w10so12498133pgj.7;
-        Wed, 11 Sep 2019 18:35:03 -0700 (PDT)
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44348 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728673AbfILBfF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Sep 2019 21:35:05 -0400
+Received: by mail-pl1-f194.google.com with SMTP id k1so10975769pls.11;
+        Wed, 11 Sep 2019 18:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e0lwGN+LUXDKi5KuFbcc2RGuv/5GribWzP248c589m4=;
-        b=AdGmVzVx2MPHq3lSjRZ8BQGsla6vEamT3K1D6aGbaqHu1NqjC+TD4TwE2LSYbVBi9l
-         teC8nzxpgN3ANQbrIFnyhTpzkxHIm1Kzq2Ga9x9kshjaotxnyE/l6j9xeJ9fgkNHM+Qp
-         tmyLowjmVf+4WmefmJysKNrLRX+CFieoKvAaVGiW20ZGsRJjLjDj1k2wEJ+dzrhLunsi
-         4f6a9tfhGEJNA9aXSUec87WePxq9wfY9yPIW8p3I4O/2ouRhz3JcELoJYZJGQeR+MzRG
-         QROt7vnzm/QXm5mwVIssiaeEQfKNYP0T8vNID2UE+WeDz7mhytBNX5AQj1RhLtOGhtz2
-         cnkw==
+        bh=cWsYbqUsjfWBFB132P+70l3TxUklV7bh1JoltYP6jwg=;
+        b=MyBrC6i6+1kxrLbsnlfDDL0aEm1Fz6LZLVW02g8qpEjAZEbXFhu+a4lUt5nEfn3fSJ
+         C022VdB7gVPIsWueyYSZ2cJ67LaHIrWe/M9mI0isacZYZ3hSYQ385tvAh6IILbIS6h/G
+         YHrxvf+UMUovoXwvmgC4b6q3f6EE144Y4fkdMozx07UFo2fEvcJkGmnt3aMg1HendhGN
+         9fCju6kGaOFWbGslerMN9XUP5ql9RV9cEr6Q5k1PAX8edmdzpigLHPoOnYoIFjxHzLKz
+         QpbH9o74zrX0Dik9n3VyNG7QUjXZQppgJc0rUbnW91i153mK9ekm2ioEgSdFmJYb1MfC
+         2k1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e0lwGN+LUXDKi5KuFbcc2RGuv/5GribWzP248c589m4=;
-        b=U9MFmMS8jdwIEhHJMSeefN1rkoD01ZtyWzhszDnbBgxVpyCqeRckEL8ZztV76bU7HW
-         SgrRC0LihbRySkcgDUdRjoGx96Lob5Ij0FW5L+vKr6Vu5RNyuSwF30Q/TJrL3SAubqI2
-         53324CKto9K2e74Xq+MdTxcBHb0cixs+Y2iTtwhQMVgV/TQ4SvE1yCKqh1NGZ2hUP6VQ
-         Q+QS0qVFy3Ws5Zs8QHudb1R+NBH0odZw+DnQK9+lcbGFalEZSXKyB5X60Betm4ApDEfx
-         Pm/nHsfUl0A7JIECyOiehPrP9EtcCIsYVw7ueD1bfXXtWk7q6ztvz4t4NmxQa4Su9sJW
-         7/rQ==
-X-Gm-Message-State: APjAAAUEqwPcIScUTMc8v84h5+uwgGOApkts9CLGyzTm5hv5DOHjYZN9
-        KHkBpziPpimDKbNGCbPT72w=
-X-Google-Smtp-Source: APXvYqyZKE1SxukxD5sUaq9u3PxLRoLLHIBTVxWdGAOomEDoAlp0u00YX7nGTruOcfYtoef/yMjUTQ==
-X-Received: by 2002:aa7:869a:: with SMTP id d26mr46996259pfo.2.1568252103285;
-        Wed, 11 Sep 2019 18:35:03 -0700 (PDT)
+        bh=cWsYbqUsjfWBFB132P+70l3TxUklV7bh1JoltYP6jwg=;
+        b=Fxzw1AbywGZ/Ij6hDkR/+5d/nvHe35XQMfydjVixZFafk93zGhyuK14dVDdNbUxQJx
+         gXM6BN81Fw5y8R+PuSoyYOTIpKh2/0ths6hEMx5WC1U/g/Xbc98egIlL+lx5Eg3RJ0LA
+         xcfFPVIKoQDyywMxWq4/hae1NgI+OvUNAzq46w/aACdz8cPCsQRdMw6fcrnJ2c2fDr+3
+         jt33+TUoaWCYp1Zd8RyHITkXGHAjJYUIVWqpdiY6JgPOeW/hRpCHRzu3bOx3YGc4u3td
+         zgbcFo2/gXPHVjEqeH6mJaVUKceMp6+ZJ15QxrewGFrG2fmtgGbFc6FWzkwS/0VjELng
+         WtsQ==
+X-Gm-Message-State: APjAAAWDZ+9mlYwJnZ+9QU4ARvMWic/S1QjtHFLIQCkHsSP0gGi5njuO
+        4EbsaaXzP0IqR35gwwcE+Wg=
+X-Google-Smtp-Source: APXvYqxP8kYJiqLOH5C7TMGvcDrnUub31FEEbsJFEjj+MFaxYXeE07zi+1Gc4Vv0muSp00W8t23JLQ==
+X-Received: by 2002:a17:902:b70f:: with SMTP id d15mr40679643pls.285.1568252104542;
+        Wed, 11 Sep 2019 18:35:04 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id b126sm35248236pfa.177.2019.09.11.18.35.01
+        by smtp.gmail.com with ESMTPSA id b126sm35248236pfa.177.2019.09.11.18.35.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2019 18:35:02 -0700 (PDT)
+        Wed, 11 Sep 2019 18:35:03 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Angus Ainslie <angus@akkea.ca>, linux-imx@nxp.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 11/12] thermal_hwmon: Add devres wrapper for thermal_add_hwmon_sysfs()
-Date:   Wed, 11 Sep 2019 18:34:46 -0700
-Message-Id: <20190912013447.2977-5-andrew.smirnov@gmail.com>
+Subject: [PATCH v7 12/12] thermal: qoriq: Add hwmon support
+Date:   Wed, 11 Sep 2019 18:34:47 -0700
+Message-Id: <20190912013447.2977-6-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190912013447.2977-1-andrew.smirnov@gmail.com>
 References: <20190912012920.29601-1-andrew.smirnov@gmail.com>
@@ -67,8 +67,8 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devres wrapper for thermal_add_hwmon_sysfs() to simplify driver
-code.
+Expose thermal readings as a HWMON device, so that it could be
+accessed using lm-sensors.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -82,71 +82,33 @@ Cc: linux-imx@nxp.com
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/thermal/thermal_hwmon.c | 28 ++++++++++++++++++++++++++++
- drivers/thermal/thermal_hwmon.h |  7 +++++++
- 2 files changed, 35 insertions(+)
+ drivers/thermal/qoriq_thermal.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-index dd5d8ee37928..c8d2620f2e42 100644
---- a/drivers/thermal/thermal_hwmon.c
-+++ b/drivers/thermal/thermal_hwmon.c
-@@ -248,3 +248,31 @@ void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
- 	kfree(hwmon);
- }
- EXPORT_SYMBOL_GPL(thermal_remove_hwmon_sysfs);
-+
-+static void devm_thermal_hwmon_release(struct device *dev, void *res)
-+{
-+	thermal_remove_hwmon_sysfs(*(struct thermal_zone_device **)res);
-+}
-+
-+int devm_thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
-+{
-+	struct thermal_zone_device **ptr;
-+	int ret;
-+
-+	ptr = devres_alloc(devm_thermal_hwmon_release, sizeof(*ptr),
-+			   GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+
-+	ret = thermal_add_hwmon_sysfs(tz);
-+	if (ret) {
-+		devres_free(ptr);
-+		return ret;
-+	}
-+
-+	*ptr = tz;
-+	devres_add(&tz->device, ptr);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(devm_thermal_add_hwmon_sysfs);
-diff --git a/drivers/thermal/thermal_hwmon.h b/drivers/thermal/thermal_hwmon.h
-index a160b9d62dd0..1a9d65f6a6a8 100644
---- a/drivers/thermal/thermal_hwmon.h
-+++ b/drivers/thermal/thermal_hwmon.h
-@@ -17,6 +17,7 @@
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 48853192514a..e907f0d2103f 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -13,6 +13,7 @@
+ #include <linux/thermal.h>
  
- #ifdef CONFIG_THERMAL_HWMON
- int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz);
-+int devm_thermal_add_hwmon_sysfs(struct thermal_zone_device *tz);
- void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz);
- #else
- static inline int
-@@ -25,6 +26,12 @@ thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
+ #include "thermal_core.h"
++#include "thermal_hwmon.h"
+ 
+ #define SITES_MAX	16
+ 
+@@ -118,6 +119,11 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+ 			return ret;
+ 		}
++
++		if (devm_thermal_add_hwmon_sysfs(tzd))
++			dev_warn(dev,
++				 "Failed to add hwmon sysfs attributes\n");
++
+ 	}
+ 
  	return 0;
- }
- 
-+static inline int
-+devm_thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
-+{
-+	return 0;
-+}
-+
- static inline void
- thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
- {
 -- 
 2.21.0
 
