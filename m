@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EF8B1465
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 20:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA35B1467
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2019 20:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727122AbfILS00 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Sep 2019 14:26:26 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43614 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727041AbfILS0Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Sep 2019 14:26:25 -0400
-Received: by mail-pf1-f194.google.com with SMTP id d15so16482672pfo.10;
-        Thu, 12 Sep 2019 11:26:25 -0700 (PDT)
+        id S1727175AbfILS0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Sep 2019 14:26:32 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:39549 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727041AbfILS0c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Sep 2019 14:26:32 -0400
+Received: by mail-pg1-f195.google.com with SMTP id u17so13894703pgi.6;
+        Thu, 12 Sep 2019 11:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JzxKcqXd0tvz5LO/KYD3/ViyFB8ewNV3niaA2nj26EY=;
-        b=sICe4ZZruTXL7Q4M72Lf+MAHFS976VA6f0RYw+X0z6F77rJBAUO5Ik0j1UUsfSsYiS
-         o/xbGiQV7itYEVHw9fSmRwmOm8Gb4m0gpvUt2tHAXsFkcEvPcwYjN+W6nrnOxWhw1q1i
-         wxrP4EuO//JoD8yVVkgh+pkSeOT71RzhsA7eI+O0K7yoKi6P42Yy0ciICxTXY5iXLpco
-         oV8Dr5L+T4uqPE7thYaNuXnA6iZLKLlpoJbqQrApr03/wNcQcATt8UgjH3bTLKM75bHh
-         6Dqa+mi1iUrtYV905ktMx6CuA/nY0pPQtIdt0xW/PwgixQWhIGtf5mhx7bsnNsLu8Jin
-         TiiA==
+        bh=16RAWRckcie+V9oI/6PZrjOMSfXV1PuRqJWQkGoociA=;
+        b=Zs/x+6ihUxdRh3Di/Xv7kRptkUwioSJUSmFuHUeFZIyjBnwGf0Ib5R09DisS9N7Zsd
+         zAGTvEBCRbDJCFz2XX1hrCKloqXaTrCRFdkBmhr7jDE8mJEIODyct2x8h4dxxYa9IGFk
+         AMGKx28vk9JNXLqwuwG04jX7AHpPH1cOsOinvDMPYjYXeyEcukmgf507rWGh7UBjIJVR
+         xd2q+PDHIHS9Fbr/S0Xj5Q4y1w/cuwa+CG2gioYwvhBAHNyCLdkuGy/cb8sWIV6W7mV5
+         MYd0ETzbXkl+py7rQw6I0lDaB2opkPUzuGol5DVG7os4mSFDsibN6u2TCrSbEO9bi44H
+         bjeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=JzxKcqXd0tvz5LO/KYD3/ViyFB8ewNV3niaA2nj26EY=;
-        b=Pjgv4nDlGdwCn+8s9MlS+5tpR22EK9ZP/QRzsn40UjHZgXkbWxCwL303RMe1aK93Xf
-         Bw7Jzhw1a59G/Q/BxcmkPgDUWz/ECgxxotkIXjfJaFktXOjUUxFpXlQ4gOrIzm4vW1/y
-         UTm+w2vuJs7ZW9TBqSyHreS8Xp8MHOFCgUJSRhPMgBsPWfqOaWxqX7rr1LJZTBeom49n
-         hqlCdb+h01K0hkioE1YcmXb9xUV2fKxRoAq6AM/bCmrrVBZa3dESKZ9tWGtNIGyd5HEQ
-         UcaFQbHmwv47RfHunNGyhO9f8puoN1pm3Vyitpigj6+yMNu8AmoCuaiZwjfY3caVjWSh
-         JcQg==
-X-Gm-Message-State: APjAAAX567QMSWn2hdOab/yTtRZb7FjEoEWT3piBXq5lmQMWxjMkYTwM
-        dSphg4WNOj2HScWYWSXS2EI=
-X-Google-Smtp-Source: APXvYqyHJkvk7e6quVl6VNg/s9CElz/pCWZM45U+uWxhBcITe6mon2lR4Eog29reeNJWy80K8aXf2Q==
-X-Received: by 2002:a17:90a:26e3:: with SMTP id m90mr64095pje.57.1568312784860;
-        Thu, 12 Sep 2019 11:26:24 -0700 (PDT)
+        bh=16RAWRckcie+V9oI/6PZrjOMSfXV1PuRqJWQkGoociA=;
+        b=DzJGGLNJRBYi8IKpMFV26eyVEawlbQJ5AsSZjalg8o13mQp9FYNQmFlX2XpNWmITsx
+         trTN433qQEJWvHSDlQ+ZtNDp98KRLbxYZ6+9y5FgHgyy+XwMkfaXcg5q6XtgysRr007E
+         gQDVJLOanhhOg5vVRlqd/J8RnFT1w2f3u3bHbigd2PpmAUB0D73KEf5lfRAG9g0Zn0bk
+         G76t+XEhnZhE3lyH25AOH4PuR7HwTSnvwt2RF/aiLR4wUCIvDHuAPDVlOcsbcpAyEt63
+         7LB8IGQ57nbS/57q5fYtgP7qTEzdBW5kARk27vFakzlBGYTXL9jwtYr9P6AZeLEq99ox
+         sT1Q==
+X-Gm-Message-State: APjAAAUzpVwFjnJUJNqE0aUUqV3cGWWwK8lpIQuYlna/wKvq2NtYtSni
+        DGZzmO6BrTdWu0vdyKZmz9Y=
+X-Google-Smtp-Source: APXvYqy5c50GltAl+kKInt13PhiVj7hdgfYsMKoWVysjItsDA5w7rBOLXYV1yajOhJMzqnZplbjCzQ==
+X-Received: by 2002:a63:5754:: with SMTP id h20mr38137589pgm.195.1568312791454;
+        Thu, 12 Sep 2019 11:26:31 -0700 (PDT)
 Received: from localhost.localdomain (61-231-52-128.dynamic-ip.hinet.net. [61.231.52.128])
-        by smtp.gmail.com with ESMTPSA id r1sm20747382pgv.70.2019.09.12.11.26.23
+        by smtp.gmail.com with ESMTPSA id r1sm20747382pgv.70.2019.09.12.11.26.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2019 11:26:24 -0700 (PDT)
+        Thu, 12 Sep 2019 11:26:31 -0700 (PDT)
 From:   lecopzer@gmail.com
 X-Google-Original-From: lecopzer.chen@mediatek.com
 To:     lecopzer@gmail.com, sre@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     yj.chiang@mediatek.com, lecopzer.chen@mediatek.com
-Subject: [PATCH v2 1/2] test_power: Add CHARGE_COUNTER properties
-Date:   Fri, 13 Sep 2019 02:25:59 +0800
-Message-Id: <20190912182600.24211-2-lecopzer.chen@mediatek.com>
+Subject: [PATCH v2 2/2] test_power: Add CURRENT properties
+Date:   Fri, 13 Sep 2019 02:26:00 +0800
+Message-Id: <20190912182600.24211-3-lecopzer.chen@mediatek.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190912182600.24211-1-lecopzer.chen@mediatek.com>
 References: <20190912182600.24211-1-lecopzer.chen@mediatek.com>
@@ -59,54 +59,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CHARGE_COUNTER is really general in other power supply drivers and
-Android also has an interface to monitor CHARGE_COUNTER, so let's
+CURRENT is really general in other battery drivers,
+Android also has an interface to monitor CURRENT, so let's
 add it into test framework.
 
-Set default as -1000 is because the default status is
-POWER_SUPPLY_STATUS_DISCHARGING, which means the counter should be
-negative, and 1000 means not zero but small enough.
+The default value (1.6A) is just a random but reasonable value.
 
 Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
 ---
- drivers/power/supply/test_power.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/power/supply/test_power.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index c3cad2b6daba..70db8d20e138 100644
+index 70db8d20e138..65c23ef6408d 100644
 --- a/drivers/power/supply/test_power.c
 +++ b/drivers/power/supply/test_power.c
-@@ -33,6 +33,7 @@ static int battery_present		= 1; /* true */
- static int battery_technology		= POWER_SUPPLY_TECHNOLOGY_LION;
+@@ -34,6 +34,7 @@ static int battery_technology		= POWER_SUPPLY_TECHNOLOGY_LION;
  static int battery_capacity		= 50;
  static int battery_voltage		= 3300;
-+static int battery_charge_counter	= -1000;
+ static int battery_charge_counter	= -1000;
++static int battery_current		= 1600;
  
  static bool module_initialized;
  
-@@ -100,6 +101,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CHARGE_NOW:
- 		val->intval = battery_capacity;
+@@ -118,6 +119,10 @@ static int test_power_get_battery_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 		val->intval = battery_voltage;
  		break;
-+	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
-+		val->intval = battery_charge_counter;
++	case POWER_SUPPLY_PROP_CURRENT_AVG:
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		val->intval = battery_current;
 +		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
- 	case POWER_SUPPLY_PROP_CHARGE_FULL:
- 		val->intval = 100;
-@@ -135,6 +139,7 @@ static enum power_supply_property test_power_battery_props[] = {
- 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
- 	POWER_SUPPLY_PROP_CHARGE_FULL,
- 	POWER_SUPPLY_PROP_CHARGE_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_COUNTER,
- 	POWER_SUPPLY_PROP_CAPACITY,
- 	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
- 	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
-@@ -447,6 +452,21 @@ static int param_set_battery_voltage(const char *key,
+ 	default:
+ 		pr_info("%s: some properties deliberately report errors.\n",
+ 			__func__);
+@@ -149,6 +154,8 @@ static enum power_supply_property test_power_battery_props[] = {
+ 	POWER_SUPPLY_PROP_SERIAL_NUMBER,
+ 	POWER_SUPPLY_PROP_TEMP,
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_AVG,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
+ };
  
- #define param_get_battery_voltage param_get_int
+ static char *test_power_ac_supplied_to[] = {
+@@ -467,6 +474,21 @@ static int param_set_battery_charge_counter(const char *key,
  
-+static int param_set_battery_charge_counter(const char *key,
+ #define param_get_battery_charge_counter param_get_int
+ 
++static int param_set_battery_current(const char *key,
 +					const struct kernel_param *kp)
 +{
 +	int tmp;
@@ -114,43 +114,42 @@ index c3cad2b6daba..70db8d20e138 100644
 +	if (1 != sscanf(key, "%d", &tmp))
 +		return -EINVAL;
 +
-+	battery_charge_counter = tmp;
++	battery_current = tmp;
 +	signal_power_supply_changed(test_power_supplies[TEST_BATTERY]);
 +	return 0;
 +}
 +
-+#define param_get_battery_charge_counter param_get_int
++#define param_get_battery_current param_get_int
 +
  static const struct kernel_param_ops param_ops_ac_online = {
  	.set = param_set_ac_online,
  	.get = param_get_ac_online,
-@@ -487,6 +507,11 @@ static const struct kernel_param_ops param_ops_battery_voltage = {
- 	.get = param_get_battery_voltage,
+@@ -512,6 +534,11 @@ static const struct kernel_param_ops param_ops_battery_charge_counter = {
+ 	.get = param_get_battery_charge_counter,
  };
  
-+static const struct kernel_param_ops param_ops_battery_charge_counter = {
-+	.set = param_set_battery_charge_counter,
-+	.get = param_get_battery_charge_counter,
++static const struct kernel_param_ops param_ops_battery_current = {
++	.set = param_set_battery_current,
++	.get = param_get_battery_current,
 +};
 +
  #define param_check_ac_online(name, p) __param_check(name, p, void);
  #define param_check_usb_online(name, p) __param_check(name, p, void);
  #define param_check_battery_status(name, p) __param_check(name, p, void);
-@@ -495,6 +520,7 @@ static const struct kernel_param_ops param_ops_battery_voltage = {
- #define param_check_battery_health(name, p) __param_check(name, p, void);
+@@ -521,6 +548,7 @@ static const struct kernel_param_ops param_ops_battery_charge_counter = {
  #define param_check_battery_capacity(name, p) __param_check(name, p, void);
  #define param_check_battery_voltage(name, p) __param_check(name, p, void);
-+#define param_check_battery_charge_counter(name, p) __param_check(name, p, void);
+ #define param_check_battery_charge_counter(name, p) __param_check(name, p, void);
++#define param_check_battery_current(name, p) __param_check(name, p, void);
  
  
  module_param(ac_online, ac_online, 0644);
-@@ -525,6 +551,10 @@ MODULE_PARM_DESC(battery_capacity, "battery capacity (percentage)");
- module_param(battery_voltage, battery_voltage, 0644);
- MODULE_PARM_DESC(battery_voltage, "battery voltage (millivolts)");
+@@ -555,6 +583,9 @@ module_param(battery_charge_counter, battery_charge_counter, 0644);
+ MODULE_PARM_DESC(battery_charge_counter,
+ 	"battery charge counter (microampere-hours)");
  
-+module_param(battery_charge_counter, battery_charge_counter, 0644);
-+MODULE_PARM_DESC(battery_charge_counter,
-+	"battery charge counter (microampere-hours)");
++module_param(battery_current, battery_current, 0644);
++MODULE_PARM_DESC(battery_current, "battery current (milliampere)");
 +
  MODULE_DESCRIPTION("Power supply driver for testing");
  MODULE_AUTHOR("Anton Vorontsov <cbouatmailru@gmail.com>");
