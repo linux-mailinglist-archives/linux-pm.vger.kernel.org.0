@@ -2,81 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB443B224E
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2019 16:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD07B2414
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2019 18:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389868AbfIMOgv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Sep 2019 10:36:51 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:39925 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389605AbfIMOgT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Sep 2019 10:36:19 -0400
-Received: by mail-ot1-f68.google.com with SMTP id n7so29671291otk.6;
-        Fri, 13 Sep 2019 07:36:19 -0700 (PDT)
+        id S2388794AbfIMQ3R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Sep 2019 12:29:17 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53070 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387695AbfIMQ3R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Sep 2019 12:29:17 -0400
+Received: by mail-wm1-f65.google.com with SMTP id x2so3422110wmj.2
+        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2019 09:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to:return-receipt-to;
+        bh=2PxVxyN8dy8eJZlpgMd2HiCZY/NmKglcdJSkpPJRjMg=;
+        b=hobkkVLO5zQqCjqxHU+PUS23RszUwVKD2cVUbHx/aB4b2XfWyeJlw6pyBYajDmHaxH
+         RzDlxRTfrxel/dIrXH8LvV8NekFHfG5j9hVHIym4EBkWDwyleg3nwdZkVqG9jXS3mECD
+         zA7wo9fZJ8aNCnVnPCS2sZjKbjtX9JgJYzu9kUy6hFKK8izUh3a3kbmfA3j9sx6QWyq2
+         uD3/e5+0iZpip5TttYm8dvUocW4dHhskD7dScYt6AEntWBx5HhApFr4H5ACPzBFbhIpq
+         XJaIOx1JNN5I9bGmjhdU8u695F1Lns7uj/4VVsX4JM97/MPZbGpiKEcIcIkyrkYJjnOQ
+         wiKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:subject:references
-         :in-reply-to:mime-version:content-transfer-encoding:cc:cc:to;
-        bh=WQe3sxk7jEHoM6MhJMqflNra51yrlF9TrLwm+43/CtI=;
-        b=OWCXhxcK5z+g0uNmAHPzSMSXxOFIqBSKRIyN/ukd5v5BmAUrBKzEFOTL5oQ5UupNWS
-         7f0idd020ph+o6rpq6DUGkidtCgKOG4PkF4QDEmz+Z/INsZemywq1fDKRHQUqDEqGXKK
-         udPFBH7vPzmWF5Jdp9b0vvi8b8Vsl+P/EmrSoX2smLiF/8QLEOQFW552ae0qe8IMfU6s
-         nLmriI2/rxualgHKIy+Re53yM/NfMope8uG+uDvcee5w6QlIRnqaCFYf3zniS4g94Xp0
-         swTDjP6qLIosZ0K/AlYSmpZMXIGJIOo93zv0rJ03yJo9UEFKhkRGt0LXdvVnmmWkJCPG
-         0cGw==
-X-Gm-Message-State: APjAAAU9VhoMmCjmMr4EWfBZAqxuxdFMfYlABVpmyk2DgD4ER/spdQkr
-        37s+6h+TsRY6TDmWVl+Ddg==
-X-Google-Smtp-Source: APXvYqznYXhUuY9wMJA1kZwpAbctOEANyWf0evGLBf0houriOZBOxRh9w67VoSrSBWRo9z1lP7esoA==
-X-Received: by 2002:a9d:62c3:: with SMTP id z3mr41959312otk.194.1568385378735;
-        Fri, 13 Sep 2019 07:36:18 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e3sm9962835otr.73.2019.09.13.07.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2019 07:36:18 -0700 (PDT)
-Message-ID: <5d7ba962.1c69fb81.eabe3.44bf@mx.google.com>
-Date:   Fri, 13 Sep 2019 15:36:17 +0100
-From:   Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 4/4] DTS: bindings: omap: update bindings documentation
-References: <cover.1567878413.git.hns@goldelico.com> <35e4f219af5f8bff48e89ece7541f4e4ae6f27a0.1567878413.git.hns@goldelico.com>
-In-Reply-To: <35e4f219af5f8bff48e89ece7541f4e4ae6f27a0.1567878413.git.hns@goldelico.com>
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to:return-receipt-to;
+        bh=2PxVxyN8dy8eJZlpgMd2HiCZY/NmKglcdJSkpPJRjMg=;
+        b=Yg2d3tWnEyunhr7kc4ia5U2LyifPou/Bs1ENCcRDYeTX1PGu8pHJ7vKrH2mZuBZ/Qb
+         emBKRVhrpa+hBzNi86/Kyf9cV3j9S5fM0SJ2znU5eZKaheeiwNmKxw+1LnMEiW0aeiDd
+         EytRTtUvGVMA/IwspflchlwxKOnIwc0cVp9Z7HRh8bAAylTpjhrRE0MxZpe6xMFwC4DI
+         YHfPMtFDvICLgtDxT0WBSYJEP85HiOPMTK5yH7b+5h42XCjz5K0Z2Vf5AUB3F4BUOrVQ
+         vwfQlufxkGQab57jajienJ4G9quExkwwnL+d+ritYL1UzZPUs4Q83PJ6i1HEao+MglA/
+         9NUw==
+X-Gm-Message-State: APjAAAW4/3ftcKhs2lTW+IHRV4/GzqBadGsyhocSBG3v0V7sJDOvSglO
+        w3xkiub83s0PmMSd3ZcGYQA=
+X-Google-Smtp-Source: APXvYqx0afPnpgiADHGLn9JNZdizlIaT+Q/7nHocLLmu2YRimAx1RSEMpF6cWnT6ROUgkcb9rmxO1w==
+X-Received: by 2002:a1c:a019:: with SMTP id j25mr4304053wme.63.1568392154593;
+        Fri, 13 Sep 2019 09:29:14 -0700 (PDT)
+Received: from LENOVO-PC.Home ([196.170.223.230])
+        by smtp.gmail.com with ESMTPSA id q124sm5590583wma.5.2019.09.13.09.29.10
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Fri, 13 Sep 2019 09:29:13 -0700 (PDT)
+Message-ID: <5d7bc3d9.1c69fb81.3d53.bcd2@mx.google.com>
+From:   KATIE HIGGINS <georgepanfilo1971@gmail.com>
+X-Google-Original-From: KATIE HIGGINS
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Adam Ford <aford173@gmail.com>,
-        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Teresa Remmet <t.remmet@phytec.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        linux-arm-kernel@lists.infradead.org
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: 
+To:     Recipients <KATIE@vger.kernel.org>
+Date:   Fri, 13 Sep 2019 16:29:02 +0000
+Reply-To: katiehiggins143@gmail.com
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat,  7 Sep 2019 19:46:53 +0200, "H. Nikolaus Schaller" wrote:
-> * clarify that we now need either "ti,omap3430" or "ti,omap3630" or "ti,am3517" for omap3 chips
-> * clarify that "ti,omap3" has no default
-> * clarify that AM33x is not an "ti,omap3"
-> * clarify that the list of boards is incomplete
-> * remove some "ti,am33xx", "ti,omap3"
-> * add some missing "ti,omap4"
-> 
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Acked-by: Tony Lindgren <tony@atomide.com>
-> ---
->  .../devicetree/bindings/arm/omap/omap.txt     | 30 +++++++++++--------
->  1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+bom dia, eu sou Katie. por favor, podemos conversar?
