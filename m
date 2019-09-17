@@ -2,80 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BC7B490E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 10:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4335B4A37
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 11:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730463AbfIQISN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 04:18:13 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38437 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730107AbfIQISN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Sep 2019 04:18:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id h195so1696774pfe.5
-        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2019 01:18:13 -0700 (PDT)
+        id S1727022AbfIQJS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Sep 2019 05:18:58 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:33576 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727010AbfIQJS6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Sep 2019 05:18:58 -0400
+Received: by mail-qk1-f194.google.com with SMTP id x134so3214936qkb.0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2019 02:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ccksZ0DIr5YuOlmKQ56MKQuO6sfHn4/cYWLl1y6ZJss=;
-        b=Os/OjkFdbkxbCMGYZNy/HnlfvRLdNhVDvO3OQ3Tjqp9ysoWyo0oM4s2SSDCAzouHsz
-         gkjFk4cddTJ2rUMcXLsrmoS14Xcns241t9TBp2xl4Ltya+LciRWtEQ58XqrCB+viuEx7
-         Xghm6/lG8f6ZFz2ZU4/8yigRh6Xo6AZmD5tcBL7R/PVjNIiv+hOwCPRttq4vURDrB2U9
-         vVogGNoMgz30xlAJB7P7ThuBYG3OVdHfPB9AqNgQHkt62TSyfWxjkstqzWvMH0v+KetM
-         TDXnzs7rLDW60zjQDKVvTA0qCV9uV+ENswqS425WgupE4mmBCfMyiGcnJRNzzZkvqwea
-         1Xaw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qk1/kEMCc7hdtCl5vveWWjPTyqEJHdmDX9cEtBBSrMo=;
+        b=oNed/+kkOpBqzgWZvc8m2HoCUsR870bim/7U6M6ciIxMGGmQnC551uF2G+T6HjZMHn
+         +tnBXLKaFDx//RH0OvknlYwyJjua5GUILPW76AwekbFW4gPNNHQWqlAH4s5xrNqkwCoB
+         Wey4KwVBY8lZ0wjk/+/+9RyqneCmbw0VT5aIgRFL0GxyzK0CT8F88x3UA3dPNxET1fu/
+         OSZ7kE5axDPfK8IoDCxOgCJNiFdLhCO3p2wFfyEzUsfMeqmW1FsD2p9l9ZGWs/5739Nw
+         OeoXkpjTP/5rN2yaGgIRa81J7wB6isbp9Y8NRB3FNE8afvWkC7TCs+fnOzWO8YMOXpU5
+         cn+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ccksZ0DIr5YuOlmKQ56MKQuO6sfHn4/cYWLl1y6ZJss=;
-        b=Y4bHMuJgJ331W/feyRCWtMTrg3oBTeYawul2u9pFr0JAPeY/Uu1tgusIjxoJhWRNTe
-         QDJs9Yar2jP5cbzWr/JeDyNj8lAK0QLxhNt1nQvo46ZuiQcpr3BNXb5wyJYN0eyRLFm9
-         TEuGKH9ks7oKBpbfASHLCAhqDpT8M0zmqEXLBgV7JJa27FwPEkgtm7++Npwur9RerRal
-         SZHJaoS5Dxe0UgzoswnWjPrFRKqMIWdL+Kx0IGP/J+0kriDkeZ2yRnogcRMczgrGvF+0
-         /8PL0DHgl4foIxhbgr/gqH+c5u2J5XOysu+/ULgupveG5IDXbYFvTGHnHoR9lUrE9kwJ
-         c7/g==
-X-Gm-Message-State: APjAAAUFxUoPoZSH84m4wDtKKcfj/J7vUIfE4IKrH1cHn1ExXoJuxn0f
-        MtwBtTNjRXN4EoK04FNGi/AUDw==
-X-Google-Smtp-Source: APXvYqwpy0WS+QkLpZKa7+H9dnq/Maul15NnA8yNy5WichOtA6IyRwXpsp5wW9igskBRzYgp3hRJ5g==
-X-Received: by 2002:a62:1955:: with SMTP id 82mr2836635pfz.256.1568708292663;
-        Tue, 17 Sep 2019 01:18:12 -0700 (PDT)
-Received: from localhost ([122.172.73.172])
-        by smtp.gmail.com with ESMTPSA id v44sm4392124pgn.17.2019.09.17.01.18.11
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 Sep 2019 01:18:12 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 09:18:05 +0100
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
-        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/5] cpufreq: Initialize cpufreq-dt driver earlier
-Message-ID: <20190917081805.kmhu6zcdo6akbqe3@vireshk-mac-ubuntu>
-References: <cover.1568240476.git.amit.kucheria@linaro.org>
- <23d3ed7edc8b859da8e7640f77cf3028ad5804f3.1568240476.git.amit.kucheria@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qk1/kEMCc7hdtCl5vveWWjPTyqEJHdmDX9cEtBBSrMo=;
+        b=XvlvHWZBUhu4UVxxhloj62S2R2SpuKcf4vNAjsTxDm/fX+cCCSJ24p/7xw/IBbxRVa
+         SdEad/LvQOnDgMzd3OuWsnIYt44x5rpK82y11lLMrPY71AErY90iowmDm/zyljmhvvHK
+         WnM8LAiFKkZrBo6lwTg1i6rmRga/07e4R31MP7MkFPuQIIdYXglkarOlQLO8e0xFBHjb
+         kTrgKtQEJesitZYYJaa5fEISMPJz/NV1rAT2i565r3sQvq+18faNj3u/cZtqm2BKZdPh
+         GLWKClVIfp/dcKLofFprRYNXMoatKkOYR6Gy7bAPqiY7oe8H6eGxbbvYAW+01USd2j+i
+         wH8g==
+X-Gm-Message-State: APjAAAULfz739SdqGZHnL177mJa2t1lz5/nGNH/4+5XV+DGZIBv2NFB+
+        TOiO+JyZptITAMHEcpMkuJv0cuPZf3UFFpoS71aaIw==
+X-Google-Smtp-Source: APXvYqwsTYtRd0bAtTCshwktiNew7SgVScj0W0wJ6hvvFn22AcBW3g9dZ5tlXLrT4/NrL+dTsEI2JmRuYRQSgRLij8o=
+X-Received: by 2002:a37:6d2:: with SMTP id 201mr2596626qkg.106.1568711936825;
+ Tue, 17 Sep 2019 02:18:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23d3ed7edc8b859da8e7640f77cf3028ad5804f3.1568240476.git.amit.kucheria@linaro.org>
-User-Agent: NeoMutt/20170609 (1.8.3)
+References: <cover.1568240476.git.amit.kucheria@linaro.org>
+ <97b6f861e6e6a2ac7b50efb7211f3c8e7fe872b0.1568240476.git.amit.kucheria@linaro.org>
+ <6920d231-73cf-d83d-2cc7-f29e5f73192c@linaro.org>
+In-Reply-To: <6920d231-73cf-d83d-2cc7-f29e5f73192c@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Tue, 17 Sep 2019 14:48:45 +0530
+Message-ID: <CAP245DVOX_x0e-CAzzG2cdpBeMdk=J7Tbgx4hpLXEavQwjRRAg@mail.gmail.com>
+Subject: Re: [PATCH 1/5] thermal: Initialize thermal subsystem earlier
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-09-19, 04:02, Amit Kucheria wrote:
-> This allows HW drivers that depend on cpufreq-dt to initialise earlier.
-> 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Sep 17, 2019 at 1:30 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 12/09/2019 00:32, Amit Kucheria wrote:
+> > From: Lina Iyer <ilina@codeaurora.org>
+> >
+> > Now that the thermal framework is built-in, in order to facilitate
+> > thermal mitigation as early as possible in the boot cycle, move the
+> > thermal framework initialization to core_initcall.
+> >
+> > However, netlink initialization happens only as part of subsys_initcall.
+> > At this time in the boot process, the userspace is not available yet. So
+> > initialize the netlink events later in fs_initcall.
+>
+> Why not kill directly the netlink part, no one is using it in the kernel?
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+That's a good point. I wasn't sure if anybody was using it, but I can
+remove it completely since no driver seems to be using the
+thermal_generate_netlink_event() api.
 
--- 
-viresh
+Regards,
+Amit
+
+$ git grep thermal_generate_netlink_event
+Documentation/thermal/sysfs-api.rst:just need to call
+thermal_generate_netlink_event() with two arguments viz
+drivers/thermal/thermal_core.c:int
+thermal_generate_netlink_event(struct thermal_zone_device *tz,
+drivers/thermal/thermal_core.c:EXPORT_SYMBOL_GPL(thermal_generate_netlink_event);
+include/linux/thermal.h:extern int
+thermal_generate_netlink_event(struct thermal_zone_device *tz,
+include/linux/thermal.h:static inline int
+thermal_generate_netlink_event(struct thermal_zone_device *tz,
