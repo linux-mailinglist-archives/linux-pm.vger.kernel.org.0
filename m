@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31120B503B
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 16:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053FEB5040
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 16:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbfIQOVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 10:21:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50560 "EHLO mx1.suse.de"
+        id S1726307AbfIQOWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Sep 2019 10:22:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50946 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725922AbfIQOVp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Sep 2019 10:21:45 -0400
+        id S1725922AbfIQOWZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Sep 2019 10:22:25 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 544B3AF0D;
-        Tue, 17 Sep 2019 14:21:43 +0000 (UTC)
-Message-ID: <1568730426.3329.3.camel@suse.cz>
+        by mx1.suse.de (Postfix) with ESMTP id A8884B6D9;
+        Tue, 17 Sep 2019 14:22:23 +0000 (UTC)
+Message-ID: <1568730466.3329.4.camel@suse.cz>
 Subject: Re: [PATCH 1/2] x86,sched: Add support for frequency invariance
 From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, peterz@infradead.org,
-        bp@suse.de, lenb@kernel.org, rjw@rjwysocki.net
-Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        matt@codeblueprint.co.uk, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, pjt@google.com, vincent.guittot@linaro.org,
-        qperret@qperret.net, dietmar.eggemann@arm.com
-Date:   Tue, 17 Sep 2019 16:27:06 +0200
-In-Reply-To: <4226d5f460604a8130f8079b74ef3fb1d60009d7.camel@linux.intel.com>
+To:     Quentin Perret <qperret@qperret.net>
+Cc:     srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
+        mingo@redhat.com, peterz@infradead.org, bp@suse.de,
+        lenb@kernel.org, rjw@rjwysocki.net, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mgorman@techsingularity.net, matt@codeblueprint.co.uk,
+        viresh.kumar@linaro.org, juri.lelli@redhat.com, pjt@google.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
+Date:   Tue, 17 Sep 2019 16:27:46 +0200
+In-Reply-To: <20190914105708.GA12877@qperret.net>
 References: <20190909024216.5942-1-ggherdovich@suse.cz>
          <20190909024216.5942-2-ggherdovich@suse.cz>
-         <4226d5f460604a8130f8079b74ef3fb1d60009d7.camel@linux.intel.com>
+         <20190914105708.GA12877@qperret.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
@@ -40,57 +40,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Srinivas,
+Hello Quentin,
 
-On Fri, 2019-09-13 at 15:52 -0700, Srinivas Pandruvada wrote:
-> On Mon, 2019-09-09 at 04:42 +0200, Giovanni Gherdovich wrote:
+On Sat, 2019-09-14 at 12:57 +0200, Quentin Perret wrote:
+> Hi Giovanni
 > 
-> ...
+> On Monday 09 Sep 2019 at 04:42:15 (+0200), Giovanni Gherdovich wrote:
+> > +static inline long arch_scale_freq_capacity(int cpu)
+> > +{
+> > +	if (static_cpu_has(X86_FEATURE_APERFMPERF))
+> > +		return per_cpu(arch_cpu_freq, cpu);
 > 
-> > +
-> > +/*
-> > + * APERF/MPERF frequency ratio computation.
-> > + *
-> > + * The scheduler wants to do frequency invariant accounting and
-> > needs a <1
-> > + * ratio to account for the 'current' frequency, corresponding to
-> > + * freq_curr / freq_max.
+> So, if this is conditional, perhaps you could also add this check in an
+> x86-specific implementation of arch_scale_freq_invariant() ? That would
+> guide sugov in the right path (see get_next_freq()) if APERF/MPERF are
+> unavailable.
 > 
-> I thought this is no longer the restriction and Vincent did some work
-> to remove this restriction. 
+> > +	return 1024 /* SCHED_CAPACITY_SCALE */;
+> > +}
+>
 
-If you're referring to the patch
+Good remark. If the cpu doesn't have APERF/MPERF, the choice here is that
+freq_curr is constantly equal to freq_max, and the scaling factor is 1 all the
+time.
 
-  23127296889f "sched/fair: Update scale invariance of PELT"
+But I'm checking this static_cpu_has() every time I do a frequency update;
+arguably schedutil should be smarter and settle such a case once and for all
+at boot time.
 
-merged in v5.2, I'm familiar with that and from my understanding you still
-want a <1 scaling factor. This is my recalling of the patch:
-
-Vincent was studying some synthetic traces and realized that util_avg reported
-by PELT didn't quite match the result you'd get computing the formula with pen
-and paper (theoretical value). To address this he changed where the scaling
-factor is applied in the PELT formula.
-
-At some point when accumulating the PELT sums, you'll have to measure the time
-'delta' since you last updated PELT. What we have after Vincent's change is
-that this time length 'delta' gets itself scaled by the freq_curr/freq_max
-ratio:
-
-    delta = time since last PELT update
-    delta *= freq_percent
-
-In this way time goes at "wall clock speed" only when you're running at max
-capacitiy, and goes "slower" (from the PELT point of view) if we're running at
-a lower frequency. I don't think Vincent had in mind a faster-than-wall-clock
-PELT time (which you'd get w/ freq_percent>1).
-
-Speaking of which, Srinivas, do you have any opinion and/or requirement about
-this? I confusely remember Peter Zijlstra saying (more than a year ago, now)
-that you would like an unclipped freq_curr/freq_max ratio, and may not be
-happy with this patch clipping it to 1 when freq_curr > 4_cores_turbo. If
-that's the case, could you elaborate on this?
-Ignore that if it doesn't make sense, I may be mis-remembering.
+I'll check what's the cost of static_cpu_has() and if it's non-negligible I'll
+do what you suggest (x86-specific version of arch_scale_freq_invariant().
 
 
-Thanks,
 Giovanni
