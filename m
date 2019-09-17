@@ -2,74 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 053FEB5040
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 16:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BF5B507A
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 16:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfIQOWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 10:22:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50946 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725922AbfIQOWZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Sep 2019 10:22:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A8884B6D9;
-        Tue, 17 Sep 2019 14:22:23 +0000 (UTC)
-Message-ID: <1568730466.3329.4.camel@suse.cz>
-Subject: Re: [PATCH 1/2] x86,sched: Add support for frequency invariance
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Quentin Perret <qperret@qperret.net>
-Cc:     srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
-        mingo@redhat.com, peterz@infradead.org, bp@suse.de,
-        lenb@kernel.org, rjw@rjwysocki.net, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mgorman@techsingularity.net, matt@codeblueprint.co.uk,
-        viresh.kumar@linaro.org, juri.lelli@redhat.com, pjt@google.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
-Date:   Tue, 17 Sep 2019 16:27:46 +0200
-In-Reply-To: <20190914105708.GA12877@qperret.net>
-References: <20190909024216.5942-1-ggherdovich@suse.cz>
-         <20190909024216.5942-2-ggherdovich@suse.cz>
-         <20190914105708.GA12877@qperret.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1728324AbfIQOf1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Sep 2019 10:35:27 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:33219 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728128AbfIQOf1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Sep 2019 10:35:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568730925;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=aDkxVMbY8vRvqozEwY9dfWbrp1yfXlJPYl/GV2fom4s=;
+        b=TEA2P3pdTKwtdTJbORsNcJvcpWV+xP3Cn45HdtSkp5vdIgFyvrkVum+t2l+QQ+yhHf
+        6DvmGvykcNsS+QIfYnoAWtnqROv6k22YHLzUroaUNAqbLMFmTHPBOeYiiq+LgBPHgYsO
+        Yfk8SdGSmMrkzszN1LOhp/JIgjMsb4C2DV5TfCDhV4Q/OkYBW2ltOl8WlqmzgawF629O
+        VsRLLFZfXizeshXSciPKUPgtIvvhaL8HfmQi9sJzjsZweYtL5wOrdEk2Z7pNKRy6Kt2i
+        VnYgKUJiqZpp+Ur3vVLhVZH6zG0obe2yzRJSe4x3k5GNQ5u7ksXbjZhl/dEsjNakPuf0
+        NjfQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCyjDPUnsm74p9bR0nKSw0V7uzbYrtFUHmEd2msW"
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2001:16b8:266f:d200:e9b9:e9c0:8734:b26d]
+        by smtp.strato.de (RZmta 44.27.0 AUTH)
+        with ESMTPSA id u036f9v8HEZ6XP4
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Tue, 17 Sep 2019 16:35:06 +0200 (CEST)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: [PATCH v3 0/8] OMAP3: convert opp-v1 to opp-v2 and read speed binned / 720MHz grade bits
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20190916162816.GF52127@atomide.com>
+Date:   Tue, 17 Sep 2019 16:35:22 +0200
+Cc:     =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-arm-kernel@lists.infradead.org
 Content-Transfer-Encoding: 7bit
+Message-Id: <DAF6ACB4-AD7E-4528-9F4B-C54104B5E260@goldelico.com>
+References: <cover.1568224032.git.hns@goldelico.com> <20190916162816.GF52127@atomide.com>
+To:     Tony Lindgren <tony@atomide.com>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Quentin,
+Hi Tony,
 
-On Sat, 2019-09-14 at 12:57 +0200, Quentin Perret wrote:
-> Hi Giovanni
+> Am 16.09.2019 um 18:28 schrieb Tony Lindgren <tony@atomide.com>:
 > 
-> On Monday 09 Sep 2019 at 04:42:15 (+0200), Giovanni Gherdovich wrote:
-> > +static inline long arch_scale_freq_capacity(int cpu)
-> > +{
-> > +	if (static_cpu_has(X86_FEATURE_APERFMPERF))
-> > +		return per_cpu(arch_cpu_freq, cpu);
+> * H. Nikolaus Schaller <hns@goldelico.com> [190911 17:48]:
+>> CHANGES V3:
+>> * make omap36xx control the abb-ldo and properly switch mode
+>>  (suggested by Adam Ford <aford173@gmail.com>)
+>> * add a note about enabling the turbo-mode OPPs
 > 
-> So, if this is conditional, perhaps you could also add this check in an
-> x86-specific implementation of arch_scale_freq_invariant() ? That would
-> guide sugov in the right path (see get_next_freq()) if APERF/MPERF are
-> unavailable.
-> 
-> > +	return 1024 /* SCHED_CAPACITY_SCALE */;
-> > +}
->
+> Looks good to me, when applying, please provide a
+> minimal immutable branch maybe against v5.3 or v5.4-rc1,
+> that I can also merge in if needed for the dts changes.
 
-Good remark. If the cpu doesn't have APERF/MPERF, the choice here is that
-freq_curr is constantly equal to freq_max, and the scaling factor is 1 all the
-time.
+Should I resend a v4 with your Acked-By added?
 
-But I'm checking this static_cpu_has() every time I do a frequency update;
-arguably schedutil should be smarter and settle such a case once and for all
-at boot time.
+BR and thanks,
+Nikolaus
 
-I'll check what's the cost of static_cpu_has() and if it's non-negligible I'll
-do what you suggest (x86-specific version of arch_scale_freq_invariant().
-
-
-Giovanni
