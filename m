@@ -2,140 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAEAB4D97
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 14:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DEAB4E5C
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2019 14:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbfIQMPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 08:15:02 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40080 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbfIQMPC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Sep 2019 08:15:02 -0400
-Received: by mail-pf1-f193.google.com with SMTP id x127so2056705pfb.7
-        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2019 05:15:02 -0700 (PDT)
+        id S1725901AbfIQMra (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Sep 2019 08:47:30 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46697 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728177AbfIQMr3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Sep 2019 08:47:29 -0400
+Received: by mail-wr1-f65.google.com with SMTP id o18so2965164wrv.13
+        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2019 05:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mmnYpZA3iC+BrJljyl/v54ahbIxfU/8bU9G1qNx5CK8=;
-        b=emONvmBI3xBscuMfk9SV5vH9yD19sCNYwM98+d4Pf5o+1UHPBLdPPx7Fl0lp9S9Rw8
-         9i5WnvRqyOctEtbe3ZgDgnGoQ4aMeMjl068g15qAaXV8Wx7UIpEofycyESs23/iP17si
-         hmxGce71yE8p0VDmBR4tT3fRZz6urkda3ogHRt69Z7oekT5u04Y0wOP2/lEQkzbxSybq
-         nfEZsR96vK0cqvkE1dezz1ShYd6kbG+XuA2UrJ3VN8HSYSoZcsCT719F+yeXCH7WMFlE
-         86Fslf1XiClHLpPWiynJz2T70ClaY86jPiTlmNNedivsJSfsuKlks5UcXpVpgnlXcZUD
-         4rCw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=MDOQM/tpi1Ry3JjZKAOYrYm3dlLQ0VMLRb7G7NjhmtE=;
+        b=MrmTC/Dy8xxx9fTlhGF8YdIUEFYnNYvnsYbxc4bMvJjpjRcsemrRoOH3uhxelihW20
+         gonhqs9pz2RPlt0+SJdKLCbuYiRr3Ylz9K0wuyQf0ZuVWfAeE/aITFNgJCsm5onIcGMG
+         R4DIqIqgAUoI66Ao3aADcqsZr4H8ErslwmCG2sMj3MwfrEWrjlTg9BjCedYxfIzLQJBd
+         y9zVByb6aRqUYxOlPuOh7AaI2fP/qeyzUUiaGyNjC1yYyUgvBea/VNOXA8D2VIDe90Lj
+         8qDdqFWIAwJvjWv8XqP4UgXJ0VewLoYyvYXrDdw82kevHxkdkacOlRO08B0MSu8AShsF
+         b4cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mmnYpZA3iC+BrJljyl/v54ahbIxfU/8bU9G1qNx5CK8=;
-        b=jBUovdPUywlWmhLZmNvCEuaW4FhpkCEZCHDut2dwsJsqIBbmBwPEJbKRBXNM/ScFFQ
-         FmYoFg2Z9akmCezNf5aJXFUQP5OImbaxLG16DdpqegRMuD0O5SkMsM8S4+qmBLBbcdgy
-         EEHUbbChLxo5DuZn5/lkS2R6h25cBa4MiQ1WPFAWdAEtS5lLDH32Q+IwxMJjcP/204qX
-         mbhrU3+pHsQ1DaH29S7UJTmX+xouE44HXidqH8Fu0quDiVT8v2ZOiZxwuakXxdVXdOst
-         z4NZfBYjA1vixMqiq/hWv4v3dA3joKIyxXY57BfOKDWAhEVEKxC4aTUPn77J5Jcb4zJa
-         dr6Q==
-X-Gm-Message-State: APjAAAUIDqQ4LV52dan9h6OLCipxw7PmI+4uaHtwRobdLLdVs0Hhczto
-        0U3xN4M76NYTNy1iuuWTLDpAJljUsNGH77nVQgEJHFOqXf/yRA==
-X-Google-Smtp-Source: APXvYqxU5dmfEBc538s2o8X7Fn6bVPsZE+YcnKXR0FmuLOhuPzosOeFhzvLiVNn/nqwy998ZSQAzYNz3B/N9wNxiBgw=
-X-Received: by 2002:a63:c442:: with SMTP id m2mr3003491pgg.286.1568722501250;
- Tue, 17 Sep 2019 05:15:01 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=MDOQM/tpi1Ry3JjZKAOYrYm3dlLQ0VMLRb7G7NjhmtE=;
+        b=PIUCMJLUyRrFrRJux4jDEcMvVqmWDss3qeEpC60qrG1twFDwGISv+Pzg7BSadUFUsm
+         5HuTNjN1HTp+Ibmh5UAfgI9ktZQi5UO9IWFVe/Sb8/hrYqk+cc+X9xvucxkwMuwBv/Km
+         thlbGU5G1fz8rbd0dpUp/4spfGSIBA2dMXr5JL2cL65n+B+7Z/miAx3CM5SUS8JBvWuw
+         leWFJr1/PvWRJD1DTD9aDMX74MMm/2xdQ3J/T4QBoN1QqMdrcQIRjqTn9NaBoalIY8Aq
+         t1Sp+JQcVX95Apl8Q01bkbAUx/ONmz0ek5c5EBbJ9q5dU9YdRffuY2a+uk+REvgiPInQ
+         zgQg==
+X-Gm-Message-State: APjAAAVMhhaOy1CW9Lj+fSj/bKWYCULzaUkGWLEp5yBvXbwYnEwf9SKK
+        eDtas0VGA2sFPfOrhfX9DgcUWtIHTOk=
+X-Google-Smtp-Source: APXvYqz0GKPaFAWUy3n9gNkJMzrPUuiN6/k83uygdJo1RlO0RSg0OF817+J58QQG4SJ2D7cExhHWpQ==
+X-Received: by 2002:adf:e292:: with SMTP id v18mr2710535wri.232.1568724444517;
+        Tue, 17 Sep 2019 05:47:24 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:58da:8830:e8b1:f180? ([2a01:e34:ed2f:f020:58da:8830:e8b1:f180])
+        by smtp.googlemail.com with ESMTPSA id a10sm2680205wrm.52.2019.09.17.05.47.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 Sep 2019 05:47:23 -0700 (PDT)
+Subject: Re: [PATCH 5/5] cpufreq: qcom-hw: Move driver initialisation earlier
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
+        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+References: <cover.1568240476.git.amit.kucheria@linaro.org>
+ <b731b713d8738239c26361ece7f5cadea035b353.1568240476.git.amit.kucheria@linaro.org>
+ <20190917093412.GA24757@bogus>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <58e60ca4-9615-bbdf-5fe7-2a0e1d7f48d8@linaro.org>
+Date:   Tue, 17 Sep 2019 14:47:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <00000000000044408c0592b00ff5@google.com>
-In-Reply-To: <00000000000044408c0592b00ff5@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 17 Sep 2019 14:14:50 +0200
-Message-ID: <CAAeHK+yssfbaP2UH3EnkRKsYf25j6XnR21kkFjjK61gSB3drJg@mail.gmail.com>
-Subject: Re: KASAN: global-out-of-bounds Read in __pm_runtime_resume
-To:     syzbot <syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        len.brown@intel.com, LKML <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        pavel@ucw.cz, rjw@rjwysocki.net,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190917093412.GA24757@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 8:49 PM syzbot
-<syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10efb5fa600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cd157359d82e8d98c17b
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: global-out-of-bounds in __pm_runtime_resume+0x162/0x180
-> drivers/base/power/runtime.c:1069
-> Read of size 1 at addr ffffffff863d87b1 by task syz-executor.2/13622
->
-> CPU: 0 PID: 13622 Comm: syz-executor.2 Not tainted 5.3.0-rc7+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:618
->   __pm_runtime_resume+0x162/0x180 drivers/base/power/runtime.c:1069
->   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
->   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1709
->   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
->   hid_hw_power include/linux/hid.h:1038 [inline]
->   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
->   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->   do_dentry_open+0x494/0x1120 fs/open.c:797
->   do_last fs/namei.c:3416 [inline]
->   path_openat+0x1430/0x3f50 fs/namei.c:3533
->   do_filp_open+0x1a1/0x280 fs/namei.c:3563
->   do_sys_open+0x3c0/0x580 fs/open.c:1089
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x4137d1
-> Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
-> 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
-> 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
-> RSP: 002b:00007faea59927a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00000000004137d1
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007faea5992850
-> RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00007faea59936d4
-> R13: 00000000004c8cbf R14: 00000000004dfc90 R15: 00000000ffffffff
->
-> The buggy address belongs to the variable:
->   __param_str_xfer_debug+0x91/0x4a0
->
-> Memory state around the buggy address:
->   ffffffff863d8680: fa fa fa fa 00 00 00 02 fa fa fa fa 00 00 00 00
->   ffffffff863d8700: fa fa fa fa 00 00 00 02 fa fa fa fa 00 07 fa fa
-> > ffffffff863d8780: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 07 fa
->                                       ^
->   ffffffff863d8800: fa fa fa fa 00 00 00 00 00 00 fa fa fa fa fa fa
->   ffffffff863d8880: 00 07 fa fa fa fa fa fa 00 00 06 fa fa fa fa fa
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-#syz dup: general protection fault in __pm_runtime_resume
+Hi Sudeep,
+
+On 17/09/2019 11:34, Sudeep Holla wrote:
+> On Thu, Sep 12, 2019 at 04:02:34AM +0530, Amit Kucheria wrote:
+>> Allow qcom-hw driver to initialise right after the cpufreq and thermal
+>> subsystems are initialised in core_initcall so we get earlier access to
+>> thermal mitigation.
+>>
+>> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+>> ---
+>>  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> index 4b0b50403901..04676cc82ba6 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> @@ -327,7 +327,7 @@ static int __init qcom_cpufreq_hw_init(void)
+>>  {
+>>  	return platform_driver_register(&qcom_cpufreq_hw_driver);
+>>  }
+>> -device_initcall(qcom_cpufreq_hw_init);
+>> +postcore_initcall(qcom_cpufreq_hw_init);
+> 
+> I am fine with core framework initcall pushed to earlier initcall levels
+> if required, but for individual/platform specific drivers I am not so
+> happy to see that.
+> 
+> This goes against the grand plan of single common kernel strategy by
+> Android moving all drivers as modules. We might decide to make this
+> a module. 
+
+module = mounted file system = very late initialization
+
+Is that the plan? Force every driver to load too late?
+
+There are core drivers which must be loaded as soon as possible. If the
+qcom driver is one of them, then what is the problem?
+
+"The grand plan" will have to solve this first before doing the module
+move.
+
+> Also there are few cpufreq drivers that are modules. Will
+> they have issues ? If not, why do we need this change at all.
+
+Because some boards don't have thermal issues with the cpufreq drivers
+as module, other boards have.
+
+> Needing
+> thermal mitigation during boot this earlier is still too much of
+> expectation, I would rather boot slowly than relying on this feature.
+
+And what if we want to boot faster? The boot time is one of a key point
+of benchmark.
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
