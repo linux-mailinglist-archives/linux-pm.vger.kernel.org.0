@@ -2,173 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CACB6F31
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 00:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E1AB6FAF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 01:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388268AbfIRWEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Sep 2019 18:04:11 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42821 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730553AbfIRWEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Sep 2019 18:04:10 -0400
-Received: by mail-ot1-f68.google.com with SMTP id c10so1261888otd.9;
-        Wed, 18 Sep 2019 15:04:09 -0700 (PDT)
+        id S1731062AbfIRX3J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Sep 2019 19:29:09 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:36672 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731000AbfIRX3J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Sep 2019 19:29:09 -0400
+Received: by mail-pg1-f193.google.com with SMTP id m29so751967pgc.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2019 16:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xkSAHLojjpoJjVoNc1BW0mr4HJS6Pbtg1jwjCnh3QCI=;
+        b=hAauSUP5UaViSzCRq0EKIC4YzU2nskkSrg4ZGnVbrYp/XXBzJ46HAMnj9EAwu4YtKp
+         E4KIFQ2BKRpP3DO3CyNDa365WBPB47eW6TCcZz3bN4tW+duJrvt3NZtzScga2H9iReAX
+         EGYcbu3JXWAkSMh6SwY7BnXff/BrhjvptGwvM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bJQPPaEQfRujWhva+eG3XWYsZN4JmOiFGTYIBU8GRfQ=;
-        b=pRYjGPKum5sL1wmzZ9BkqD8WS3k+maV7QIjP9a80SpLanQdxpuhayzpRdkmhrZa7Tp
-         lI7wrYSKIr9rz5AhAhuyg50ioxU1QDlWlfmIc/3R4mJB6yN5jQiJnXd5q29TkCGw9DZs
-         NVwCPi6WVfvLjoJ+nUFQ3FKrIK7ofeuo1oYuLhnOwlzWAoQKdzOIfC/XVSiKvI2ke5T6
-         TtjhjurAKAXa8x4Y9CrvuIEfAvds/noLSLEB+kUkZGjBBIkIBpW5s//DHHASaoHD+LXu
-         7NrzbIBqGWR2viBFoYfME+UXeV9dBF66B0xgk3PJ61felxO6/KpyvMK0bNN7WF2/0CkF
-         FKaw==
-X-Gm-Message-State: APjAAAVZSHR66Z20NEGjyWlv/uXrjyYpKrNXM1qCmW0o0+aYMvlgP3SM
-        0vaAoTDIyQDj5cVueIiwlgRs+iyL3MW2GDFdV3I=
-X-Google-Smtp-Source: APXvYqy4t38dZCR52mMACnH8PhL4bjKROen1EQLwOHpraGIwLh95YbB75ppd/j9YGKJ3hGlXh2Xry/BpznO93HaN/dM=
-X-Received: by 2002:a9d:798c:: with SMTP id h12mr4348107otm.167.1568844249341;
- Wed, 18 Sep 2019 15:04:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xkSAHLojjpoJjVoNc1BW0mr4HJS6Pbtg1jwjCnh3QCI=;
+        b=Rx2XZLVBNazTLxvTqyEHD3wFmRxhOEwj5sYTZ44+RrYanY0anf+HhZZKzv4Ikzrtsm
+         YXQh3/v/KxekH8TY/S9QhoK4IH4RMNtaXQBBsmfofmpYeUCuM+kt5gs76sxxY2CZyJh2
+         hzXDyd2GCIVAuEwlCJI9vjZjsPj8dC74eozdXXVote0iDvYZW7g2LTn/sLqs18QddBBX
+         8wjp5h0zTN48WcJJVaGuYMJg8r633YIfv7O1tGceJmk/OlwfHvvxQLKNMYZEnF71o5At
+         pmTxtJ+8jQ+9w6p2AbzCi2LJJADvdSkiEHTF50ZU/9B/OcpRZMhL2A3wBKGVSZj7fdCS
+         GLZw==
+X-Gm-Message-State: APjAAAUQdhW2IAzJ67F+KyZceEy2+zohgQPhLzLkJOtm+pn5sQNnpIGw
+        SebeDvFtbPieV3FOf2rSWjvnZA==
+X-Google-Smtp-Source: APXvYqwCuTM1Y/zo1nM7wFA2UvVoZjRZ/YbI8o0M/84ds1jVpWuIesSxUztoUh6l6JOlD1ZVb8OAyA==
+X-Received: by 2002:a63:211c:: with SMTP id h28mr6301450pgh.372.1568849347203;
+        Wed, 18 Sep 2019 16:29:07 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
+        by smtp.gmail.com with ESMTPSA id k13sm7533807pfa.138.2019.09.18.16.29.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Sep 2019 16:29:06 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 16:29:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/8] PM / devfreq: Move more initialization before
+ registration
+Message-ID: <20190918232904.GP133864@google.com>
+References: <cover.1568764439.git.leonard.crestez@nxp.com>
+ <59bd0d871fad520eb417ca46943fa7f86ef9186a.1568764439.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-References: <1568245353-13787-1-git-send-email-mario.limonciello@dell.com>
- <4858057.cjDlXVALXj@kreacher> <346fd9ced98e40229d0cc0871ad5ed32@AUSX13MPC105.AMER.DELL.COM>
- <10489808.bq04Fa26WH@kreacher> <247e1ed126774d32b0d70092b65adb6a@AUSX13MPC105.AMER.DELL.COM>
-In-Reply-To: <247e1ed126774d32b0d70092b65adb6a@AUSX13MPC105.AMER.DELL.COM>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Sep 2019 00:03:57 +0200
-Message-ID: <CAJZ5v0iwovZtCnnu+CF5Z6DjRsC2a43Jdi+9SEufADAOF8sCcg@mail.gmail.com>
-Subject: Re: [PATCH] nvme-pci: Save PCI state before putting drive into
- deepest state
-To:     Mario Limonciello <Mario.Limonciello@dell.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ryan.Hong@dell.com, Crag.Wang@dell.com, sjg@google.com,
-        Jared.Dominguez@dell.com, Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <59bd0d871fad520eb417ca46943fa7f86ef9186a.1568764439.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 12:00 AM <Mario.Limonciello@dell.com> wrote:
->
-> > -----Original Message-----
-> > From: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Sent: Wednesday, September 18, 2019 4:57 PM
-> > To: Limonciello, Mario
-> > Cc: kbusch@kernel.org; axboe@fb.com; hch@lst.de; sagi@grimberg.me; linux-
-> > nvme@lists.infradead.org; linux-kernel@vger.kernel.org; Hong, Ryan; Wang,
-> > Crag; sjg@google.com; Dominguez, Jared; linux-pci@vger.kernel.org; linux-
-> > pm@vger.kernel.org
-> > Subject: Re: [PATCH] nvme-pci: Save PCI state before putting drive into deepest
-> > state
-> >
-> >
-> > [EXTERNAL EMAIL]
-> >
-> > On Wednesday, September 18, 2019 11:43:28 PM CEST
-> > Mario.Limonciello@dell.com wrote:
-> > > > -----Original Message-----
-> > > > From: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > > > Sent: Wednesday, September 18, 2019 4:31 PM
-> > > > To: Limonciello, Mario
-> > > > Cc: Keith Busch; Jens Axboe; Christoph Hellwig; Sagi Grimberg; linux-
-> > > > nvme@lists.infradead.org; LKML; Hong, Ryan; Wang, Crag; sjg@google.com;
-> > > > Dominguez, Jared; Linux PCI; Linux PM
-> > > > Subject: Re: [PATCH] nvme-pci: Save PCI state before putting drive into
-> > deepest
-> > > > state
-> > > >
-> > > >
-> > > > [EXTERNAL EMAIL]
-> > > >
-> > > > On Thursday, September 12, 2019 1:42:33 AM CEST Mario Limonciello wrote:
-> > > > > The action of saving the PCI state will cause numerous PCI configuration
-> > > > > space reads which depending upon the vendor implementation may cause
-> > > > > the drive to exit the deepest NVMe state.
-> > > > >
-> > > > > In these cases ASPM will typically resolve the PCIe link state and APST
-> > > > > may resolve the NVMe power state.  However it has also been observed
-> > > > > that this register access after quiesced will cause PC10 failure
-> > > > > on some device combinations.
-> > > > >
-> > > > > To resolve this, move the PCI state saving to before SetFeatures has been
-> > > > > called.  This has been proven to resolve the issue across a 5000 sample
-> > > > > test on previously failing disk/system combinations.
-> > > >
-> > > > This sounds reasonable to me, but it would be nice to CC that to linux-pm
-> > > > and/or linux-pci too.
-> > > >
-> > > > > Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
-> > > > > ---
-> > > > >  drivers/nvme/host/pci.c | 13 +++++++------
-> > > > >  1 file changed, 7 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> > > > > index 732d5b6..9b3fed4 100644
-> > > > > --- a/drivers/nvme/host/pci.c
-> > > > > +++ b/drivers/nvme/host/pci.c
-> > > > > @@ -2894,6 +2894,13 @@ static int nvme_suspend(struct device *dev)
-> > > > >         if (ret < 0)
-> > > > >                 goto unfreeze;
-> > > > >
-> > > > > +       /*
-> > > > > +        * A saved state prevents pci pm from generically controlling the
-> > > > > +        * device's power. If we're using protocol specific settings, we don't
-> > > > > +        * want pci interfering.
-> > > > > +        */
-> > > > > +       pci_save_state(pdev);
-> > > > > +
-> > > > >         ret = nvme_set_power_state(ctrl, ctrl->npss);
-> > > > >         if (ret < 0)
-> > > > >                 goto unfreeze;
-> > > > > @@ -2908,12 +2915,6 @@ static int nvme_suspend(struct device *dev)
-> > > >
-> > > > This is the case in which the PCI layer is expected to put the device into
-> > > > D3, so you need
-> > > >
-> > > > pdev->state_saved = 0;
-> > > >
-> > > > at this point, because you have saved the config space already.
-> > > >
-> > > > >                 ret = 0;
-> > > > >                 goto unfreeze;
-> > > >
-> > > > And here you don't need to jump to "unfreeze" any more.
-> > > >
-> > > > >         }
-> > > > > -       /*
-> > > > > -        * A saved state prevents pci pm from generically controlling the
-> > > > > -        * device's power. If we're using protocol specific settings, we don't
-> > > > > -        * want pci interfering.
-> > > > > -        */
-> > > > > -       pci_save_state(pdev);
-> > > > >  unfreeze:
-> > > > >         nvme_unfreeze(ctrl);
-> > > > >         return ret;
-> > > > >
-> > > >
-> > > >
-> > > >
-> > >
-> > > Thanks, I actually followed up with something along that line in a v2 sent out
-> > > today.  My apology you weren't in CC, but here is a weblink to it.
-> > > http://lists.infradead.org/pipermail/linux-nvme/2019-September/027251.html
-> > >
-> >
-> > I don't think that pci_load_saved_state() will work, because it sets
-> > state_saved at the end again (if all goes well).  You simply only need to
-> > clear state_saved here.
->
-> Explicitly calling it with NULL as the saved state to restore seemed to have that effect
-> of clearing state (there is an explicit check in there if it's NULL to just return 0).
+Hi Leonard,
 
-Ah, OK, right.
+On Wed, Sep 18, 2019 at 03:18:22AM +0300, Leonard Crestez wrote:
+> In general it is a better to initialize an object before making it
+> accessible externally (through device_register).
+> 
+> This make it possible to avoid relying on locking a partially
+> initialized object.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/devfreq/devfreq.c | 38 ++++++++++++++++++++------------------
+>  1 file changed, 20 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index a715f27f35fd..57a217fc92de 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -589,10 +589,12 @@ static void devfreq_dev_release(struct device *dev)
+>  
+>  	if (devfreq->profile->exit)
+>  		devfreq->profile->exit(devfreq->dev.parent);
+>  
+>  	mutex_destroy(&devfreq->lock);
+> +	kfree(devfreq->time_in_state);
+> +	kfree(devfreq->trans_table);
+>  	kfree(devfreq);
+>  }
+>  
+>  /**
+>   * devfreq_add_device() - Add devfreq feature to the device
+> @@ -671,44 +673,43 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->max_freq = devfreq->scaling_max_freq;
+>  
+>  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+>  	atomic_set(&devfreq->suspend_count, 0);
+>  
+> -	dev_set_name(&devfreq->dev, "devfreq%d",
+> -				atomic_inc_return(&devfreq_no));
+> -	err = device_register(&devfreq->dev);
+> -	if (err) {
+> -		mutex_unlock(&devfreq->lock);
+> -		put_device(&devfreq->dev);
+> -		goto err_out;
+> -	}
+> -
+> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
+> +	devfreq->trans_table = kzalloc(
+>  			array3_size(sizeof(unsigned int),
+>  				    devfreq->profile->max_state,
+>  				    devfreq->profile->max_state),
+>  			GFP_KERNEL);
+>  	if (!devfreq->trans_table) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -ENOMEM;
+> -		goto err_devfreq;
+> +		goto err_dev;
+>  	}
+>  
+> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
+> -			devfreq->profile->max_state,
+> -			sizeof(unsigned long),
+> -			GFP_KERNEL);
+> +	devfreq->time_in_state = kcalloc(devfreq->profile->max_state,
+> +					 sizeof(unsigned long),
+> +					 GFP_KERNEL);
+>  	if (!devfreq->time_in_state) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -ENOMEM;
+> -		goto err_devfreq;
+> +		goto err_dev;
+>  	}
+>  
+>  	devfreq->last_stat_updated = jiffies;
+>  
+>  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
+>  
+> +	dev_set_name(&devfreq->dev, "devfreq%d",
+> +				atomic_inc_return(&devfreq_no));
+> +	err = device_register(&devfreq->dev);
+> +	if (err) {
+> +		mutex_unlock(&devfreq->lock);
+> +		put_device(&devfreq->dev);
+> +		goto err_out;
 
-I still would rather clear the flag directly, though, as using
-pci_load_saved_state() for that is just more convoluted. :-)
+  		goto err_dev;
+
+> +	}
+> +
+>  	mutex_unlock(&devfreq->lock);
+>  
+>  	mutex_lock(&devfreq_list_lock);
+>  
+>  	governor = try_then_request_governor(devfreq->governor_name);
+> @@ -734,14 +735,15 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	return devfreq;
+>  
+>  err_init:
+>  	mutex_unlock(&devfreq_list_lock);
+> -err_devfreq:
+>  	devfreq_remove_device(devfreq);
+> -	devfreq = NULL;
+> +	return ERR_PTR(err);
+
+The two return paths in the unwind part are unorthodox, but I
+see why they are needed. Maybe add an empty line between the two paths
+to make it a bit more evident that they are separate.
+
+>  err_dev:
+
+This code path should include
+
+	mutex_destroy(&devfreq->lock);
+
+That was already missing in the original code though.
+
+Actually with the later device registration the mutex could be
+initialized later and doesn't need to be held. This would
+obsolete the mutex_unlock() calls in the error paths.
