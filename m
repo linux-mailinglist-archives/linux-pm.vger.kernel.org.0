@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 792C0B58E9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 02:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D37B58EA
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 02:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729008AbfIRASg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 20:18:36 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:43162 "EHLO inva021.nxp.com"
+        id S1728814AbfIRASi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Sep 2019 20:18:38 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:43204 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728814AbfIRASg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Sep 2019 20:18:36 -0400
+        id S1725943AbfIRASi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Sep 2019 20:18:38 -0400
 Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 908D8200726;
-        Wed, 18 Sep 2019 02:18:34 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 37714200864;
+        Wed, 18 Sep 2019 02:18:35 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 826C1200725;
-        Wed, 18 Sep 2019 02:18:34 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 2752A200852;
+        Wed, 18 Sep 2019 02:18:35 +0200 (CEST)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id EC7FD20601;
-        Wed, 18 Sep 2019 02:18:33 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 9218020601;
+        Wed, 18 Sep 2019 02:18:34 +0200 (CEST)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>
@@ -32,9 +32,9 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 7/8] PM / devfreq: Use dev_pm_qos for sysfs min/max_freq
-Date:   Wed, 18 Sep 2019 03:18:26 +0300
-Message-Id: <a80dae0a1aec9932689aaadff68bcabc94a816be.1568764439.git.leonard.crestez@nxp.com>
+Subject: [PATCH 8/8] PM / devfreq: Move opp notifier registration to core
+Date:   Wed, 18 Sep 2019 03:18:27 +0300
+Message-Id: <974c2bd6d6e622e47c85af65a200b4079d25002b.1568764439.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1568764439.git.leonard.crestez@nxp.com>
 References: <cover.1568764439.git.leonard.crestez@nxp.com>
@@ -46,197 +46,232 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Switch the handling of min_freq and max_freq from sysfs to use the
-dev_pm_qos interface.
+An opp notifier can be registered by devfreq in order to respond to OPPs
+being enabled or disabled at runtime (for example by thermal). This is
+currently handled explicitly by drivers.
 
-Since dev_pm_qos handles frequencies as kHz this change reduces the
-precision of min_freq and max_freq. This shouldn't introduce problems
-because frequencies which are not an integer number of kHz are likely
-not an integer number of Hz either.
+Move notifier handling to devfreq_add_device because this shouldn't be
+hardware-specific.
 
-Try to ensure compatibilitity by rounding min values down and rounding
-max values up.
+Handling this inside the core also takes less code.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- drivers/devfreq/devfreq.c | 51 +++++++++++++++++++++++++--------------
- include/linux/devfreq.h   |  9 ++++---
- 2 files changed, 38 insertions(+), 22 deletions(-)
+ drivers/devfreq/devfreq.c    | 84 +++---------------------------------
+ drivers/devfreq/exynos-bus.c |  7 ---
+ drivers/devfreq/rk3399_dmc.c |  6 ---
+ include/linux/devfreq.h      |  8 ----
+ 4 files changed, 6 insertions(+), 99 deletions(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index d8d57318b12c..7977bad93949 100644
+index 7977bad93949..b9177430ae8f 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -132,14 +132,10 @@ static void devfreq_get_freq_range(struct devfreq *devfreq,
- 	*min_freq = max(*min_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
- 				devfreq->dev.parent, DEV_PM_QOS_MIN_FREQUENCY));
- 	*max_freq = min(*max_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
- 				devfreq->dev.parent, DEV_PM_QOS_MAX_FREQUENCY));
+@@ -663,10 +663,11 @@ static void devfreq_dev_release(struct device *dev)
  
--	/* constraints from sysfs: */
--	*min_freq = max(*min_freq, devfreq->min_freq);
--	*max_freq = min(*max_freq, devfreq->max_freq);
--
- 	/* constraints from opp interface: */
- 	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
- 	/* scaling_max_freq can be zero on error */
- 	if (devfreq->scaling_max_freq)
- 		*max_freq = min(*max_freq, devfreq->scaling_max_freq);
-@@ -675,10 +671,12 @@ static void devfreq_dev_release(struct device *dev)
+ 	mutex_lock(&devfreq_list_lock);
+ 	list_del(&devfreq->node);
+ 	mutex_unlock(&devfreq_list_lock);
+ 
++	dev_pm_opp_unregister_notifier(devfreq->dev.parent, &devfreq->nb);
+ 	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
+ 			DEV_PM_QOS_MAX_FREQUENCY);
+ 	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
  			DEV_PM_QOS_MIN_FREQUENCY);
  
- 	if (devfreq->profile->exit)
- 		devfreq->profile->exit(devfreq->dev.parent);
+@@ -728,11 +729,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	devfreq->profile = profile;
+ 	strncpy(devfreq->governor_name, governor_name, DEVFREQ_NAME_LEN);
+ 	devfreq->previous_freq = profile->initial_freq;
+ 	devfreq->last_status.current_frequency = profile->initial_freq;
+ 	devfreq->data = data;
+-	devfreq->nb.notifier_call = devfreq_notifier_call;
  
-+	dev_pm_qos_remove_request(&devfreq->max_freq_req);
-+	dev_pm_qos_remove_request(&devfreq->min_freq_req);
- 	mutex_destroy(&devfreq->lock);
- 	kfree(devfreq->time_in_state);
- 	kfree(devfreq->trans_table);
- 	kfree(devfreq);
- }
-@@ -743,18 +741,28 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
- 	if (!devfreq->scaling_min_freq) {
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
--	devfreq->min_freq = devfreq->scaling_min_freq;
+ 	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
+ 		err = set_freq_table(devfreq);
+ 		if (err < 0)
+ 			goto err_dev;
+@@ -810,10 +810,15 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
+ 				      DEV_PM_QOS_MAX_FREQUENCY);
+ 	if (err)
+ 		goto err_devfreq;
  
- 	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
- 	if (!devfreq->scaling_max_freq) {
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
--	devfreq->max_freq = devfreq->scaling_max_freq;
++	devfreq->nb.notifier_call = devfreq_notifier_call;
++	err = dev_pm_opp_register_notifier(devfreq->dev.parent, &devfreq->nb);
++	if (err)
++		goto err_devfreq;
 +
-+	/* dev_pm_qos requests for min/max freq from sysfs */
-+	err = dev_pm_qos_add_request(dev, &devfreq->min_freq_req,
-+				     DEV_PM_QOS_MIN_FREQUENCY, 0);
-+	if (err < 0) {
-+		goto err_dev;
-+	}
-+	err = dev_pm_qos_add_request(dev, &devfreq->max_freq_req,
-+				     DEV_PM_QOS_MAX_FREQUENCY, S32_MAX);
-+	if (err < 0) {
-+		goto err_dev;
-+	}
+ 	mutex_lock(&devfreq_list_lock);
  
- 	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
- 	atomic_set(&devfreq->suspend_count, 0);
+ 	governor = try_then_request_governor(devfreq->governor_name);
+ 	if (IS_ERR(governor)) {
+ 		dev_err(dev, "%s: Unable to find governor for the device\n",
+@@ -1624,87 +1629,10 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
  
- 	devfreq->trans_table = kzalloc(
-@@ -833,10 +841,14 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	mutex_unlock(&devfreq_list_lock);
- err_devfreq:
- 	devfreq_remove_device(devfreq);
- 	return ERR_PTR(err);
- err_dev:
-+	if (dev_pm_qos_request_active(&devfreq->max_freq_req))
-+		dev_pm_qos_remove_request(&devfreq->max_freq_req);
-+	if (dev_pm_qos_request_active(&devfreq->min_freq_req))
-+		dev_pm_qos_remove_request(&devfreq->min_freq_req);
- 	kfree(devfreq->time_in_state);
- 	kfree(devfreq->trans_table);
- 	kfree(devfreq);
- err_out:
- 	return ERR_PTR(err);
-@@ -1397,14 +1409,17 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
- 
- 	ret = sscanf(buf, "%lu", &value);
- 	if (ret != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&df->lock);
--	df->min_freq = value;
--	update_devfreq(df);
--	mutex_unlock(&df->lock);
-+	/* round down to kHz for dev_pm_qos */
-+	if (value)
-+		value = value / HZ_PER_KHZ;
-+
-+	ret = dev_pm_qos_update_request(&df->min_freq_req, value);
-+	if (ret < 0)
-+		return ret;
- 
- 	return count;
+ 	return opp;
  }
+ EXPORT_SYMBOL(devfreq_recommended_opp);
  
- static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
-@@ -1429,19 +1444,19 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- 
- 	ret = sscanf(buf, "%lu", &value);
- 	if (ret != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&df->lock);
+-/**
+- * devfreq_register_opp_notifier() - Helper function to get devfreq notified
+- *				     for any changes in the OPP availability
+- *				     changes
+- * @dev:	The devfreq user device. (parent of devfreq)
+- * @devfreq:	The devfreq object.
+- */
+-int devfreq_register_opp_notifier(struct device *dev, struct devfreq *devfreq)
+-{
+-	return dev_pm_opp_register_notifier(dev, &devfreq->nb);
+-}
+-EXPORT_SYMBOL(devfreq_register_opp_notifier);
 -
--	/* Interpret zero as "don't care" */
--	if (!value)
--		value = ULONG_MAX;
-+	/* round up to kHz for dev_pm_qos and interpret zero as "don't care" */
-+	if (value)
-+		value = DIV_ROUND_UP(value, HZ_PER_KHZ);
-+	else
-+		value = S32_MAX;
+-/**
+- * devfreq_unregister_opp_notifier() - Helper function to stop getting devfreq
+- *				       notified for any changes in the OPP
+- *				       availability changes anymore.
+- * @dev:	The devfreq user device. (parent of devfreq)
+- * @devfreq:	The devfreq object.
+- *
+- * At exit() callback of devfreq_dev_profile, this must be included if
+- * devfreq_recommended_opp is used.
+- */
+-int devfreq_unregister_opp_notifier(struct device *dev, struct devfreq *devfreq)
+-{
+-	return dev_pm_opp_unregister_notifier(dev, &devfreq->nb);
+-}
+-EXPORT_SYMBOL(devfreq_unregister_opp_notifier);
+-
+-static void devm_devfreq_opp_release(struct device *dev, void *res)
+-{
+-	devfreq_unregister_opp_notifier(dev, *(struct devfreq **)res);
+-}
+-
+-/**
+- * devm_devfreq_register_opp_notifier() - Resource-managed
+- *					  devfreq_register_opp_notifier()
+- * @dev:	The devfreq user device. (parent of devfreq)
+- * @devfreq:	The devfreq object.
+- */
+-int devm_devfreq_register_opp_notifier(struct device *dev,
+-				       struct devfreq *devfreq)
+-{
+-	struct devfreq **ptr;
+-	int ret;
+-
+-	ptr = devres_alloc(devm_devfreq_opp_release, sizeof(*ptr), GFP_KERNEL);
+-	if (!ptr)
+-		return -ENOMEM;
+-
+-	ret = devfreq_register_opp_notifier(dev, devfreq);
+-	if (ret) {
+-		devres_free(ptr);
+-		return ret;
+-	}
+-
+-	*ptr = devfreq;
+-	devres_add(dev, ptr);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL(devm_devfreq_register_opp_notifier);
+-
+-/**
+- * devm_devfreq_unregister_opp_notifier() - Resource-managed
+- *					    devfreq_unregister_opp_notifier()
+- * @dev:	The devfreq user device. (parent of devfreq)
+- * @devfreq:	The devfreq object.
+- */
+-void devm_devfreq_unregister_opp_notifier(struct device *dev,
+-					 struct devfreq *devfreq)
+-{
+-	WARN_ON(devres_release(dev, devm_devfreq_opp_release,
+-			       devm_devfreq_dev_match, devfreq));
+-}
+-EXPORT_SYMBOL(devm_devfreq_unregister_opp_notifier);
+-
+ /**
+  * devfreq_register_notifier() - Register a driver with devfreq
+  * @devfreq:	The devfreq object.
+  * @nb:		The notifier block to register.
+  * @list:	DEVFREQ_TRANSITION_NOTIFIER.
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index c832673273a2..29f422469960 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -356,17 +356,10 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 		dev_err(dev, "failed to add devfreq device\n");
+ 		ret = PTR_ERR(bus->devfreq);
+ 		goto err;
+ 	}
  
--	df->max_freq = value;
--	update_devfreq(df);
--	mutex_unlock(&df->lock);
-+	ret = dev_pm_qos_update_request(&df->max_freq_req, value);
-+	if (ret < 0)
-+		return ret;
+-	/* Register opp_notifier to catch the change of OPP  */
+-	ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to register opp notifier\n");
+-		goto err;
+-	}
+-
+ 	/*
+ 	 * Enable devfreq-event to get raw data which is used to determine
+ 	 * current bus load.
+ 	 */
+ 	ret = exynos_bus_enable_edev(bus);
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 2e65d7279d79..f660d2031e8a 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -454,12 +454,10 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	if (IS_ERR(data->devfreq)) {
+ 		ret = PTR_ERR(data->devfreq);
+ 		goto err_free_opp;
+ 	}
  
- 	return count;
+-	devm_devfreq_register_opp_notifier(dev, data->devfreq);
+-
+ 	data->dev = dev;
+ 	platform_set_drvdata(pdev, data);
+ 
+ 	return 0;
+ 
+@@ -470,14 +468,10 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 
+ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+ {
+ 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
+ 
+-	/*
+-	 * Before remove the opp table we need to unregister the opp notifier.
+-	 */
+-	devm_devfreq_unregister_opp_notifier(dmcfreq->dev, dmcfreq->devfreq);
+ 	dev_pm_opp_of_remove_table(dmcfreq->dev);
+ 
+ 	return 0;
  }
- static DEVICE_ATTR_RW(min_freq);
  
 diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index dac0dffeabb4..4b5cc80abbe3 100644
+index 4b5cc80abbe3..bf6ebfbc1e8a 100644
 --- a/include/linux/devfreq.h
 +++ b/include/linux/devfreq.h
-@@ -11,10 +11,11 @@
- #define __LINUX_DEVFREQ_H__
+@@ -220,18 +220,10 @@ extern void devfreq_resume(void);
+ extern int update_devfreq(struct devfreq *devfreq);
  
- #include <linux/device.h>
- #include <linux/notifier.h>
- #include <linux/pm_opp.h>
-+#include <linux/pm_qos.h>
- 
- #define DEVFREQ_NAME_LEN 16
- 
- /* DEVFREQ governor name */
- #define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
-@@ -121,12 +122,12 @@ struct devfreq_dev_profile {
-  *		devfreq.nb to the corresponding register notifier call chain.
-  * @work:	delayed work for load monitoring.
-  * @previous_freq:	previously configured frequency value.
-  * @data:	Private data of the governor. The devfreq framework does not
-  *		touch this.
-- * @min_freq:	Limit minimum frequency requested by user (0: none)
-- * @max_freq:	Limit maximum frequency requested by user (0: none)
-+ * @min_freq_req:	Limit minimum frequency requested by user (0: none)
-+ * @max_freq_req:	Limit maximum frequency requested by user (0: none)
-  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-  * @scaling_max_freq:	Limit maximum frequency requested by OPP interface
-  * @stop_polling:	 devfreq polling status of a device.
-  * @suspend_freq:	 frequency of a device set during suspend phase.
-  * @resume_freq:	 frequency of a device set in resume phase.
-@@ -161,12 +162,12 @@ struct devfreq {
- 	unsigned long previous_freq;
- 	struct devfreq_dev_status last_status;
- 
- 	void *data; /* private data for governors */
- 
--	unsigned long min_freq;
--	unsigned long max_freq;
-+	struct dev_pm_qos_request min_freq_req;
-+	struct dev_pm_qos_request max_freq_req;
- 	unsigned long scaling_min_freq;
- 	unsigned long scaling_max_freq;
- 	bool stop_polling;
- 
- 	unsigned long suspend_freq;
+ /* Helper functions for devfreq user device driver with OPP. */
+ extern struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+ 					   unsigned long *freq, u32 flags);
+-extern int devfreq_register_opp_notifier(struct device *dev,
+-					 struct devfreq *devfreq);
+-extern int devfreq_unregister_opp_notifier(struct device *dev,
+-					   struct devfreq *devfreq);
+-extern int devm_devfreq_register_opp_notifier(struct device *dev,
+-					      struct devfreq *devfreq);
+-extern void devm_devfreq_unregister_opp_notifier(struct device *dev,
+-						struct devfreq *devfreq);
+ extern int devfreq_register_notifier(struct devfreq *devfreq,
+ 					struct notifier_block *nb,
+ 					unsigned int list);
+ extern int devfreq_unregister_notifier(struct devfreq *devfreq,
+ 					struct notifier_block *nb,
 -- 
 2.17.1
 
