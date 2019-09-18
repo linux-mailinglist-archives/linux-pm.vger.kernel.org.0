@@ -2,54 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AECB59DF
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 04:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3372B5FD8
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 11:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfIRCzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Sep 2019 22:55:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726671AbfIRCzU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Sep 2019 22:55:20 -0400
-Subject: Re: [GIT PULL] Power management updates for v5.4-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568775320;
-        bh=0itgr4Lk43mPwAixc5+dLq8FkdNTHu3fKrvPWWLZAO4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=q1mmcqSTMeQkMIORUxUynvXFL5PjZDU4eOZyauVM7FeYe0cJwfIO9YfeJgd43B5fE
-         obc9g8iSxOY1fLycVLZE9WUgkVB8HYXAceq9otLOosUQ4Q9qhWU2V9nD8cx5nOyMd/
-         TeuN3kgW+MSuJw1q2zkPaiOvY7pni5Kayn+eJ51U=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jrNv=V2oVCNu5HO5akRW1m5Z9tbuW3GxL6H61vqxP7ng@mail.gmail.com>
-References: <CAJZ5v0jrNv=V2oVCNu5HO5akRW1m5Z9tbuW3GxL6H61vqxP7ng@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jrNv=V2oVCNu5HO5akRW1m5Z9tbuW3GxL6H61vqxP7ng@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.4-rc1
-X-PR-Tracked-Commit-Id: fc6763a2d7e0a7f49ccec97a46e92e9fb1f3f9dd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 77dcfe2b9edc98286cf18e03c243c9b999f955d9
-Message-Id: <156877532026.3897.187741978995228674.pr-tracker-bot@kernel.org>
-Date:   Wed, 18 Sep 2019 02:55:20 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1728825AbfIRJJn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Sep 2019 05:09:43 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42997 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727030AbfIRJJm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Sep 2019 05:09:42 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q12so3950759pff.9
+        for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2019 02:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=G4hxKX4C+UwHppyagtwLzLYaYfdx3vbwuhfidaVb/nQ=;
+        b=P4FNd9RhBzPlUfc1CQgYZsdIp18bxRVlkkoZx0inyMmXAe3hlUh8czZiU3x2EXhloM
+         xvD7raK2qEG2tfvU8zA8qkG9bqGM+K9BtXJeoSLDVDCpiWqJcwOx0JVNpFJqD12g0ALM
+         3EVMoKO99I+KmpFFCWKFqTQtlLC9xXOML1tFkkzbnLZDxZev7cUSKP6ICbBh4Dlo54XM
+         O1gfiHx0z+t/QTOgydvUKlpylJGKx1yxBHMv8eUX4a93dnJaj/iwojIWEAcxBh/x7zsR
+         cGujmLM//sZv8mFmZmasmc1fV8975M2mO3BtZHVkgGhL2Qcvd1i9qrgWoLMWkbmv0T5a
+         /eLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=G4hxKX4C+UwHppyagtwLzLYaYfdx3vbwuhfidaVb/nQ=;
+        b=Aqjhlgeer74nJiXmwQr+vx2+fsGVWvvB6S08qFyuxVCiXza1woxu4sPzf5E0kOuizE
+         1+jHWtN2XdQoSDrVVO6wWE18DycpXIz4vQVsifB8Ilf2PqbC9Y7MgMRtkWy2QuyJbr5H
+         6myGhsOQlCLxO4uOKfon4+iXUzsCqPme8xBAyaFaW10oHvNWv5AEeBbqBtM25sI7JDy/
+         JMVkCmyqFnK7CHTLUpuOFOCTMAqwcqztsxHcbRcTaBHXQL3hBsiS+Gi6PkXlQGF3FDWf
+         NoGWIg5SJ1eo1QpGe4EFV07sGLtt8myxuDROgv9O3I+gRhM4oqowCdCH0wmoUNTT+YF6
+         2j/Q==
+X-Gm-Message-State: APjAAAWjLFYH7Yj+VnZDxyxQBnJKt7hmCDvWQBJ/nN6/JlYSdMi1wzRb
+        cYC0MxuHYoHQb8tvGbSNuyYjZQ==
+X-Google-Smtp-Source: APXvYqxuV3bkoKSY6omGfYg+Szis0+eINu6ixhAs6qhxUbtS4C+EJcXtKq6zOKPNR7eTL+V5NLEaCw==
+X-Received: by 2002:a63:465c:: with SMTP id v28mr3046498pgk.310.1568797781919;
+        Wed, 18 Sep 2019 02:09:41 -0700 (PDT)
+Received: from localhost ([122.172.73.172])
+        by smtp.gmail.com with ESMTPSA id v44sm13954434pgn.17.2019.09.18.02.09.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 18 Sep 2019 02:09:40 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 14:39:38 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
+        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 5/5] cpufreq: qcom-hw: Move driver initialisation earlier
+Message-ID: <20190918090938.b2fj5uk3h6t56t2p@vireshk-mac-ubuntu>
+References: <cover.1568240476.git.amit.kucheria@linaro.org>
+ <b731b713d8738239c26361ece7f5cadea035b353.1568240476.git.amit.kucheria@linaro.org>
+ <20190917093412.GA24757@bogus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190917093412.GA24757@bogus>
+User-Agent: NeoMutt/20170609 (1.8.3)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Tue, 17 Sep 2019 12:23:15 +0200:
+On 17-09-19, 10:34, Sudeep Holla wrote:
+> On Thu, Sep 12, 2019 at 04:02:34AM +0530, Amit Kucheria wrote:
+> > -device_initcall(qcom_cpufreq_hw_init);
+> > +postcore_initcall(qcom_cpufreq_hw_init);
+> 
+> I am fine with core framework initcall pushed to earlier initcall levels
+> if required, but for individual/platform specific drivers I am not so
+> happy to see that.
+> 
+> This goes against the grand plan of single common kernel strategy by
+> Android moving all drivers as modules.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.4-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/77dcfe2b9edc98286cf18e03c243c9b999f955d9
-
-Thank you!
+Its been long that I got the opportunity to work on drivers directly, but as far
+as I remember (which should be incorrect based on your reply) we can still build
+a driver as module even if it has some postcore_initcall() declarations. They
+will execute at module insertion. Is that incorrect ? If not, then how is it
+going to affect android effort ?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+viresh
