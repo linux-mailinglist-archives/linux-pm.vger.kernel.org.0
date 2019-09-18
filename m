@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F18B58E1
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 02:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6317BB58E2
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2019 02:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728990AbfIRASd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1725922AbfIRASd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 17 Sep 2019 20:18:33 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:45734 "EHLO inva020.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:45788 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbfIRASc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Sep 2019 20:18:32 -0400
+        id S1726037AbfIRASd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Sep 2019 20:18:33 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C5BA11A06F0;
-        Wed, 18 Sep 2019 02:18:30 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6AEB61A06EA;
+        Wed, 18 Sep 2019 02:18:31 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B8E211A06EA;
-        Wed, 18 Sep 2019 02:18:30 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5E63B1A0700;
+        Wed, 18 Sep 2019 02:18:31 +0200 (CEST)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 2F38720601;
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id C88CB20601;
         Wed, 18 Sep 2019 02:18:30 +0200 (CEST)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -32,9 +32,9 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 1/8] PM / devfreq: Lock devfreq in trans_stat_show
-Date:   Wed, 18 Sep 2019 03:18:20 +0300
-Message-Id: <7d8f4d5c608d45ba19cdd52068fe6ffe30de67c1.1568764439.git.leonard.crestez@nxp.com>
+Subject: [PATCH 2/8] PM / devfreq: Don't fail devfreq_dev_release if not in list
+Date:   Wed, 18 Sep 2019 03:18:21 +0300
+Message-Id: <60f8aa909fe209632734b6c637dffbc7554f996c.1568764439.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1568764439.git.leonard.crestez@nxp.com>
 References: <cover.1568764439.git.leonard.crestez@nxp.com>
@@ -46,73 +46,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no locking in this sysfs show function so stats printing can
-race with a devfreq_update_status called as part of freq switching or
-with initialization.
+Right now devfreq_dev_release will print a warning and abort the rest of
+the cleanup if the devfreq instance is not part of the global
+devfreq_list. But this is a valid scenario, for example it can happen if
+the governor can't be found or on any other init error that happens
+after device_register.
 
-Also add an assert in devfreq_update_status to make it clear that lock
-must be held by caller.
+Initialize devfreq->node to an empty list head in devfreq_add_device so
+that list_del becomes a safe noop inside devfreq_dev_release and we can
+continue the rest of the cleanup.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- drivers/devfreq/devfreq.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/devfreq/devfreq.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 2494ee16f502..665575228c4f 100644
+index 665575228c4f..a715f27f35fd 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -159,10 +159,11 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+@@ -582,15 +582,10 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+ static void devfreq_dev_release(struct device *dev)
  {
- 	int lev, prev_lev, ret = 0;
- 	unsigned long cur_time;
- 
- 	cur_time = jiffies;
-+	lockdep_assert_held(&devfreq->lock);
- 
- 	/* Immediately exit if previous_freq is not initialized yet. */
- 	if (!devfreq->previous_freq)
- 		goto out;
- 
-@@ -1415,15 +1416,20 @@ static ssize_t trans_stat_show(struct device *dev,
  	struct devfreq *devfreq = to_devfreq(dev);
- 	ssize_t len;
- 	int i, j;
- 	unsigned int max_state = devfreq->profile->max_state;
  
-+	mutex_lock(&devfreq->lock);
- 	if (!devfreq->stop_polling &&
--			devfreq_update_status(devfreq, devfreq->previous_freq))
--		return 0;
--	if (max_state == 0)
--		return sprintf(buf, "Not Supported.\n");
-+			devfreq_update_status(devfreq, devfreq->previous_freq)) {
-+		len = 0;
-+		goto out;
-+	}
-+	if (max_state == 0) {
-+		len = sprintf(buf, "Not Supported.\n");
-+		goto out;
-+	}
+ 	mutex_lock(&devfreq_list_lock);
+-	if (IS_ERR(find_device_devfreq(devfreq->dev.parent))) {
+-		mutex_unlock(&devfreq_list_lock);
+-		dev_warn(&devfreq->dev, "releasing devfreq which doesn't exist\n");
+-		return;
+-	}
+ 	list_del(&devfreq->node);
+ 	mutex_unlock(&devfreq_list_lock);
  
- 	len = sprintf(buf, "     From  :   To\n");
- 	len += sprintf(buf + len, "           :");
- 	for (i = 0; i < max_state; i++)
- 		len += sprintf(buf + len, "%10lu",
-@@ -1447,10 +1453,13 @@ static ssize_t trans_stat_show(struct device *dev,
- 			jiffies_to_msecs(devfreq->time_in_state[i]));
- 	}
- 
- 	len += sprintf(buf + len, "Total transition : %u\n",
- 					devfreq->total_trans);
-+
-+out:
-+	mutex_unlock(&devfreq->lock);
- 	return len;
- }
- static DEVICE_ATTR_RO(trans_stat);
- 
- static struct attribute *devfreq_attrs[] = {
+ 	if (devfreq->profile->exit)
+ 		devfreq->profile->exit(devfreq->dev.parent);
+@@ -641,10 +636,11 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	mutex_init(&devfreq->lock);
+ 	mutex_lock(&devfreq->lock);
+ 	devfreq->dev.parent = dev;
+ 	devfreq->dev.class = devfreq_class;
+ 	devfreq->dev.release = devfreq_dev_release;
++	INIT_LIST_HEAD(&devfreq->node);
+ 	devfreq->profile = profile;
+ 	strncpy(devfreq->governor_name, governor_name, DEVFREQ_NAME_LEN);
+ 	devfreq->previous_freq = profile->initial_freq;
+ 	devfreq->last_status.current_frequency = profile->initial_freq;
+ 	devfreq->data = data;
 -- 
 2.17.1
 
