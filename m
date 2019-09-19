@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9311BB8137
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 21:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C33B8143
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 21:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392294AbfISTNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 15:13:01 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38052 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392291AbfISTNB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 15:13:01 -0400
-Received: by mail-pf1-f195.google.com with SMTP id h195so2925233pfe.5
-        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 12:13:01 -0700 (PDT)
+        id S2391048AbfISTRE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 15:17:04 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43069 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726007AbfISTRE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 15:17:04 -0400
+Received: by mail-pg1-f196.google.com with SMTP id u72so2411771pgb.10
+        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 12:17:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=fsOi0SFfSN2yoIxCUiiprAv5GXxCTBdV5Rjzv/QvUC4=;
-        b=Ygfi5PLgvOdlLEUfSsLPZjXG42DiRLdkLAvpYnycAmGDmrUr/TIXlWJAcIxsfn79Bs
-         YBh/r0Wba9QRQLdw5gxXI5Pltq2MPJ+fvVPdlXtvGRtMYKgmz+DmXdqNDUq1ZbxsfYxB
-         W+0CLUNYBHYIdtx1phNl/6TFF/PDM/vFDeWxs=
+        bh=3dlQ6O4U4Y6iTe68DKUl7bDSDWocpATfaoQJw9GaTwA=;
+        b=BEAvPSDMRYZ7psL5CsA0bF0/tyiZdL5Pj4Blz60FpJHTg9+O6iIVTQAikrSRVEtX50
+         jS+ZLqYWO7Qik2WlNNIa2T98BHbLrXnHn9ZZbAJZLxQlr2pVEQ/FMHv+QuOeQ+g4oBDZ
+         9aTq09z4U3DkpRkdfiJcMWFXho8VFmc6AFMn8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fsOi0SFfSN2yoIxCUiiprAv5GXxCTBdV5Rjzv/QvUC4=;
-        b=dsOkinn8xlJzdUyeyVrCx5uUacX1BeUaA+wKhEwB73B4sShNc8qj00St9f/TCrRAOZ
-         nMutZmWXxLYy2U/AjFYM8qOSPvGppkDZfnYsNP5JGIZez2r5UPfXA3KU+pozkYHgS6bY
-         Zsr3GxUn4LbfJ79DQIoFdg4Sto1yE/4AnwTqi27K0IAoB+LPEuqa87cHxkWQQJH1eJMe
-         G2qxmuR+2LXLgaENSYr4tEpxCpwI5vlyljXTIVZeNZgJ/cJ92dNs796Nu1kZpVMuUH5k
-         tsHQ0hBGBof0iva2inGe2Y7rg6VGRWiIbBhDe8FZiHwLWwdUowgY3EbOYQNvWcrt7Ny8
-         mbng==
-X-Gm-Message-State: APjAAAWaBDVi6ohJIIc7X0xPCp8dTFl+nstZK3BC/pw5KzQNfy6eIjLZ
-        yEkmDdixx3YeTf3hh96M/xV0AA==
-X-Google-Smtp-Source: APXvYqzCGWxfh2CHzGuU/6Ulwz6TII5MmWjYtAf1Fq1mgvskK7rVHoYdtG5FhPUFjK9ZNIeMNLYA7Q==
-X-Received: by 2002:a63:9557:: with SMTP id t23mr10546733pgn.236.1568920380569;
-        Thu, 19 Sep 2019 12:13:00 -0700 (PDT)
+        bh=3dlQ6O4U4Y6iTe68DKUl7bDSDWocpATfaoQJw9GaTwA=;
+        b=XQXcypU+WXv3elVrOMKpt/Ejp9X4z5CkzfcZxPJY07P/DGOr7QebcQFsuXEurKILhs
+         YuFGgR/B0orWts357aCtUlC3J/K/nnxubC1NX30pYmttMTEndligZSbaUzIxPhWYafdn
+         caEntKkxWNQi1P81NKs2dyneDB+GaLbVVUDroL+PA+HH1Rfv+s+Jq46EH4RAHSIBw4Je
+         tYL887pXqHPjevNs7h4GFJzdTY2H/mwYk5+U63si5OfPYL7cYumSmx2E5BK5p+9gRqRv
+         aynd8161NpNpp5pefgbnqIaUTJiFNCSuHPiSHmm902sHKANCQoQOlsHbKwPpX9uo8e4Z
+         NeiA==
+X-Gm-Message-State: APjAAAXQ8Q3Cp8fXIicXBi6YOGjTZfS3eJskFKepJY3Thg2QjCaatLoo
+        fL7359TlF6JmSVOXJTp6KjZpPg==
+X-Google-Smtp-Source: APXvYqyw0vY+LzMWyvC/PtDI3LAIIJ38He/wxtDobfuFTls9VDxuKUu1wJ2FE63lnnsle4oR6+aIIg==
+X-Received: by 2002:a65:4002:: with SMTP id f2mr10770258pgp.447.1568920621694;
+        Thu, 19 Sep 2019 12:17:01 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id 22sm11354771pfo.131.2019.09.19.12.12.59
+        by smtp.gmail.com with ESMTPSA id a17sm11919735pfc.26.2019.09.19.12.17.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Sep 2019 12:12:59 -0700 (PDT)
-Date:   Thu, 19 Sep 2019 12:12:58 -0700
+        Thu, 19 Sep 2019 12:17:00 -0700 (PDT)
+Date:   Thu, 19 Sep 2019 12:16:59 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -54,192 +54,157 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 6/8] PM / devfreq: Add dev_pm_qos support
-Message-ID: <20190919191258.GU133864@google.com>
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/8] PM / devfreq: Move more initialization before
+ registration
+Message-ID: <20190919191659.GV133864@google.com>
 References: <cover.1568764439.git.leonard.crestez@nxp.com>
- <feab364d702ba62102f212b7d415d9f768159163.1568764439.git.leonard.crestez@nxp.com>
+ <59bd0d871fad520eb417ca46943fa7f86ef9186a.1568764439.git.leonard.crestez@nxp.com>
+ <20190918232904.GP133864@google.com>
+ <VI1PR04MB702350FA21534747D540C04FEE890@VI1PR04MB7023.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <feab364d702ba62102f212b7d415d9f768159163.1568764439.git.leonard.crestez@nxp.com>
+In-Reply-To: <VI1PR04MB702350FA21534747D540C04FEE890@VI1PR04MB7023.eurprd04.prod.outlook.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 03:18:25AM +0300, Leonard Crestez wrote:
-> Register notifiers with the pm_qos framework in order to respond to
-> requests for MIN_FREQUENCY and MAX_FREQUENCY.
-
-To make it clear that this change on it's own is a NOP maybe add
-something like "No constraints are added for now though.", as in
-67d874c3b2c6 ("cpufreq: Register notifiers with the PM QoS framework")
-
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
->  drivers/devfreq/devfreq.c | 71 +++++++++++++++++++++++++++++++++++++++
->  include/linux/devfreq.h   |  5 +++
->  2 files changed, 76 insertions(+)
+On Thu, Sep 19, 2019 at 06:52:07PM +0000, Leonard Crestez wrote:
+> On 19.09.2019 02:29, Matthias Kaehlcke wrote:
+> > Hi Leonard,
+> > 
+> > On Wed, Sep 18, 2019 at 03:18:22AM +0300, Leonard Crestez wrote:
+> >> In general it is a better to initialize an object before making it
+> >> accessible externally (through device_register).
+> >>
+> >> This make it possible to avoid relying on locking a partially
+> >> initialized object.
+> >>
+> >> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> >> ---
+> >>   drivers/devfreq/devfreq.c | 38 ++++++++++++++++++++------------------
+> >>   1 file changed, 20 insertions(+), 18 deletions(-)
+> >>
+> >> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> >> index a715f27f35fd..57a217fc92de 100644
+> >> --- a/drivers/devfreq/devfreq.c
+> >> +++ b/drivers/devfreq/devfreq.c
+> >> @@ -589,10 +589,12 @@ static void devfreq_dev_release(struct device *dev)
+> >>   
+> >>   	if (devfreq->profile->exit)
+> >>   		devfreq->profile->exit(devfreq->dev.parent);
+> >>   
+> >>   	mutex_destroy(&devfreq->lock);
+> >> +	kfree(devfreq->time_in_state);
+> >> +	kfree(devfreq->trans_table);
+> >>   	kfree(devfreq);
+> >>   }
+> >>   
+> >>   /**
+> >>    * devfreq_add_device() - Add devfreq feature to the device
+> >> @@ -671,44 +673,43 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> >>   	devfreq->max_freq = devfreq->scaling_max_freq;
+> >>   
+> >>   	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+> >>   	atomic_set(&devfreq->suspend_count, 0);
+> >>   
+> >> -	dev_set_name(&devfreq->dev, "devfreq%d",
+> >> -				atomic_inc_return(&devfreq_no));
+> >> -	err = device_register(&devfreq->dev);
+> >> -	if (err) {
+> >> -		mutex_unlock(&devfreq->lock);
+> >> -		put_device(&devfreq->dev);
+> >> -		goto err_out;
+> >> -	}
+> >> -
+> >> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
+> >> +	devfreq->trans_table = kzalloc(
+> >>   			array3_size(sizeof(unsigned int),
+> >>   				    devfreq->profile->max_state,
+> >>   				    devfreq->profile->max_state),
+> >>   			GFP_KERNEL);
+> >>   	if (!devfreq->trans_table) {
+> >>   		mutex_unlock(&devfreq->lock);
+> >>   		err = -ENOMEM;
+> >> -		goto err_devfreq;
+> >> +		goto err_dev;
+> >>   	}
+> >>   
+> >> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
+> >> -			devfreq->profile->max_state,
+> >> -			sizeof(unsigned long),
+> >> -			GFP_KERNEL);
+> >> +	devfreq->time_in_state = kcalloc(devfreq->profile->max_state,
+> >> +					 sizeof(unsigned long),
+> >> +					 GFP_KERNEL);
+> >>   	if (!devfreq->time_in_state) {
+> >>   		mutex_unlock(&devfreq->lock);
+> >>   		err = -ENOMEM;
+> >> -		goto err_devfreq;
+> >> +		goto err_dev;
+> >>   	}
+> >>   
+> >>   	devfreq->last_stat_updated = jiffies;
+> >>   
+> >>   	srcu_init_notifier_head(&devfreq->transition_notifier_list);
+> >>   
+> >> +	dev_set_name(&devfreq->dev, "devfreq%d",
+> >> +				atomic_inc_return(&devfreq_no));
+> >> +	err = device_register(&devfreq->dev);
+> >> +	if (err) {
+> >> +		mutex_unlock(&devfreq->lock);
+> >> +		put_device(&devfreq->dev);
+> >> +		goto err_out;
+> > 
+> >    		goto err_dev;
+> > 
+> >> +	}
+> >> +
+> >>   	mutex_unlock(&devfreq->lock);
+> >>   
+> >>   	mutex_lock(&devfreq_list_lock);
+> >>   
+> >>   	governor = try_then_request_governor(devfreq->governor_name);
+> >> @@ -734,14 +735,15 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> >>   
+> >>   	return devfreq;
+> >>   
+> >>   err_init:
+> >>   	mutex_unlock(&devfreq_list_lock);
+> >> -err_devfreq:
+> >>   	devfreq_remove_device(devfreq);
+> >> -	devfreq = NULL;
+> >> +	return ERR_PTR(err);
+> > 
+> > The two return paths in the unwind part are unorthodox, but I
+> > see why they are needed. Maybe add an empty line between the two paths
+> > to make it a bit more evident that they are separate.
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 51a4179e2c69..d8d57318b12c 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -22,17 +22,20 @@
->  #include <linux/platform_device.h>
->  #include <linux/list.h>
->  #include <linux/printk.h>
->  #include <linux/hrtimer.h>
->  #include <linux/of.h>
-> +#include <linux/pm_qos.h>
->  #include "governor.h"
->  
->  #define HZ_PER_KHZ 1000
->  
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/devfreq.h>
->  
-> +#define HZ_PER_KHZ	1000
-> +
->  static struct class *devfreq_class;
->  
->  /*
->   * devfreq core provides delayed work based load monitoring helper
->   * functions. Governors can use these or can implement their own
-> @@ -123,10 +126,16 @@ static void devfreq_get_freq_range(struct devfreq *devfreq,
->  	} else {
->  		*min_freq = freq_table[devfreq->profile->max_state - 1];
->  		*max_freq = freq_table[0];
->  	}
->  
-> +	/* constraints from dev_pm_qos: */
+> Old code did "devfreq = NULL" just so that the later kfree did nothing. 
+> There were already two unwind paths, it's just that the second one was 
+> less obvious. I will add a comment.
+> 
+> >>   err_dev:
+> > 
+> > This code path should include
+> > 
+> > 	mutex_destroy(&devfreq->lock);
+> > 
+> > That was already missing in the original code though.
+> 
+> Yes, that would be a separate patch.
+> 
+> > Actually with the later device registration the mutex could be
+> > initialized later and doesn't need to be held. This would
+> > obsolete the mutex_unlock() calls in the error paths
+> Next patch already removes mutex_lock before device_register (that's the 
+> purpose of the cleanup). If you're suggesting to move mutex_init around 
+> it's not clear what would be gained?
 
-nit: QoS constraints?
-
-> +	*min_freq = max(*min_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
-> +				devfreq->dev.parent, DEV_PM_QOS_MIN_FREQUENCY));
-> +	*max_freq = min(*max_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
-> +				devfreq->dev.parent, DEV_PM_QOS_MAX_FREQUENCY));
-> +
->  	/* constraints from sysfs: */
->  	*min_freq = max(*min_freq, devfreq->min_freq);
->  	*max_freq = min(*max_freq, devfreq->max_freq);
->  
->  	/* constraints from opp interface: */
-> @@ -605,10 +614,49 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
->  	mutex_unlock(&devfreq->lock);
->  
->  	return ret;
->  }
->  
-> +/**
-> + * devfreq_qos_notifier_call() - Common handler for qos freq changes.
-
-nit: QoS
-
-s/freq/constraint/ ?
-
-> + * @devfreq:    the devfreq instance.
-> + */
-> +static int devfreq_qos_notifier_call(struct devfreq *devfreq)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&devfreq->lock);
-> +	ret = update_devfreq(devfreq);
-> +	mutex_unlock(&devfreq->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * devfreq_qos_min_notifier_call() - Callback for qos min_freq changes.
-
-nit: QoS
-
-> + * @nb:		Should to be devfreq->nb_min
-
-s/to//
-
-> + */
-> +static int devfreq_qos_min_notifier_call(struct notifier_block *nb,
-> +					 unsigned long val, void *ptr)
-> +{
-> +	struct devfreq *devfreq = container_of(nb, struct devfreq, nb_min);
-> +
-> +	return devfreq_qos_notifier_call(devfreq);
-> +}
-> +
-> +/**
-> + * devfreq_qos_max_notifier_call() - Callback for qos min_freq changes.
-
-nit: QoS
-
-s/min/max/
-
-> + * @nb:		Should to be devfreq->nb_max
-
-s/to//
-
-> + */
-> +static int devfreq_qos_max_notifier_call(struct notifier_block *nb,
-> +					 unsigned long val, void *ptr)
-> +{
-> +	struct devfreq *devfreq = container_of(nb, struct devfreq, nb_max);
-> +
-> +	return devfreq_qos_notifier_call(devfreq);
-> +}
-> +
->  /**
->   * devfreq_dev_release() - Callback for struct device to release the device.
->   * @dev:	the devfreq device
->   *
->   * Remove devfreq from the list and release its resources.
-> @@ -619,10 +667,15 @@ static void devfreq_dev_release(struct device *dev)
->  
->  	mutex_lock(&devfreq_list_lock);
->  	list_del(&devfreq->node);
->  	mutex_unlock(&devfreq_list_lock);
->  
-> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
-> +			DEV_PM_QOS_MAX_FREQUENCY);
-> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
-> +			DEV_PM_QOS_MIN_FREQUENCY);
-> +
-
-mega-nit: removing 'max' then 'min' does things in reverse order as
-during initialization, which is common practice. But since the order
-here doesn't really matter I'd stick to the common min/max order,
-might readers save a few milli-seconds wondering why 'max' comes first.
-
->  	if (devfreq->profile->exit)
->  		devfreq->profile->exit(devfreq->dev.parent);
->  
->  	mutex_destroy(&devfreq->lock);
->  	kfree(devfreq->time_in_state);
-> @@ -732,10 +785,27 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  	if (err) {
->  		put_device(&devfreq->dev);
->  		goto err_out;
->  	}
->  
-> +	/*
-> +	 * Register notifiers for updates to min_freq/max_freq after device is
-
-nit: min/max_freq?
-
-> +	 * initialized (and we can handle notifications) but before the governor
-> +	 * is started (which should do an initial enforcement of constraints)
-> +	 */
-> +	devfreq->nb_min.notifier_call = devfreq_qos_min_notifier_call;
-> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
-> +				      DEV_PM_QOS_MIN_FREQUENCY);
-> +	if (err)
-> +		goto err_devfreq;
-
-IIUC you rely on the notifiers being removed by
-devfreq_dev_release(). Does dev_pm_qos_remove_notifier() behave
-gracefully if the notifier is not initialized/added or do we need
-to use BLOCKING_NOTIFIER_INIT() or similar?
+As per my earlier reply to self: I didn't look at the next patch
+before writing this, it's all good, nothing to do here :)
