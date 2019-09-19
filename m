@@ -2,52 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8B0B78AA
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 13:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDE1B7955
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 14:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388406AbfISLqc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 07:46:32 -0400
-Received: from mailbackend.panix.com ([166.84.1.89]:48271 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387977AbfISLqc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 07:46:32 -0400
-Received: from hp-x360n (c-73-241-154-233.hsd1.ca.comcast.net [73.241.154.233])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 46Yw6Y2bv3z1Lfc;
-        Thu, 19 Sep 2019 07:46:28 -0400 (EDT)
-Date:   Thu, 19 Sep 2019 04:46:27 -0700 (PDT)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me help you debug what seems to be an EC resume issue
-In-Reply-To: <CAJZ5v0gYGPkJ0-=HSzFCpMLqky2Q6JN3qnov3c2ZaUAeCeaSag@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1909190444190.2973@hp-x360n>
-References: <alpine.DEB.2.21.1909181742470.2771@hp-x360n> <CAJZ5v0gYGPkJ0-=HSzFCpMLqky2Q6JN3qnov3c2ZaUAeCeaSag@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S2390295AbfISM0P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 08:26:15 -0400
+Received: from mail-sh.amlogic.com ([58.32.228.43]:60540 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389301AbfISM0P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 08:26:15 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Sep 2019 08:26:14 EDT
+Received: from droid13.amlogic.com (116.236.93.172) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Thu, 19 Sep 2019
+ 20:12:05 +0800
+From:   Jianxin Pan <jianxin.pan@amlogic.com>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        <linux-amlogic@lists.infradead.org>
+CC:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: [PATCH 0/3] arm64: meson: add support for A1 Power Domains
+Date:   Thu, 19 Sep 2019 08:11:01 -0400
+Message-ID: <1568895064-4116-1-git-send-email-jianxin.pan@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Originating-IP: [116.236.93.172]
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patchset introduces a "Secure Power Doamin Controller". In A1/C1, power
+controller registers such as PWRCTRL_FOCRSTN, PWRCTRL_PWR_OFF, PWRCTRL_MEM_PD
+and PWRCTRL_ISO_EN, are in the secure domain, and should be accessed from ATF
+by smc.
 
-On Thu, 19 Sep 2019, Rafael J. Wysocki wrote:
+This patchset is based on A1 DTB series at [0].
 
-> You may still be able to use S3 on this machine if that's supported by
-> the platform firmware.
+[0]  https://lore.kernel.org/linux-amlogic/1568276370-54181-1-git-send-email-jianxin.pan@amlogic.com
 
-It's not; I tried "deep" two days after getting it.
+Jianxin Pan (3):
+  dt-bindings: power: add Amlogic secure power domains bindings
+  soc: amlogic: Add support for Secure power domains controller
+  arm64: dts: meson: a1: add secure power domain controller
 
-> I would recommend to try 5.4-rc1 when it's out to see if the problems
-> above are still there.
-
-Well, I'm running Linus' master tip right now and pull and run the latest
-bleeding-edge kernel daily; does this mean you have further patches coming
-down the line later?
-
-	-Kenny
+ .../bindings/power/amlogic,meson-sec-pwrc.yaml     |  32 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   6 +
+ drivers/soc/amlogic/Kconfig                        |  13 ++
+ drivers/soc/amlogic/Makefile                       |   1 +
+ drivers/soc/amlogic/meson-secure-pwrc.c            | 182 +++++++++++++++++++++
+ include/dt-bindings/power/meson-a1-power.h         |  32 ++++
+ 6 files changed, 266 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+ create mode 100644 drivers/soc/amlogic/meson-secure-pwrc.c
+ create mode 100644 include/dt-bindings/power/meson-a1-power.h
 
 -- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+2.7.4
+
