@@ -2,129 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F0AB8235
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 22:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFCAB838F
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 23:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392459AbfISUHL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 16:07:11 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:39170 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390722AbfISUHL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 16:07:11 -0400
-Received: by mail-oi1-f195.google.com with SMTP id w144so3859155oia.6;
-        Thu, 19 Sep 2019 13:07:10 -0700 (PDT)
+        id S2390434AbfISVmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 17:42:25 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:44731 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390391AbfISVmZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 17:42:25 -0400
+Received: by mail-ed1-f67.google.com with SMTP id r16so4488669edq.11;
+        Thu, 19 Sep 2019 14:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6SLgslheBeIIJex/gf/ZVhEBmirzOWHGUduUXl+JfS0=;
-        b=f8nGhVnviG2KbGnxig/mqrpCztbeYB17qB2d4v8zgIMpIo21id++eyGrhRa7Hetlhu
-         1uIaChRD0JXsIkhaEnLlOVilPn+4x4RCBwn4qftOj/Hn1jiDkcWSr9iSRfpGqYg8IPyg
-         p6KZ5T0M5XXE7g4URtoFpVBwAr8qDD1kwXGZhmKQ5TN4D/ZBt9h1HabeDijheKoZ1Hq6
-         Am7QREthxBCAoFRWZlZc9Dn8FvVmj/Ct4TgYQLr4ctdbmmcuJtv86n7ETES+bEZxL1mQ
-         EVg7zzKRiWTN263W8ohXIHHzWdDRk8eIf0Lm/Lzn+chRgIy7X91h9B9AXapeP4UZEFK4
-         1Pqg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rJfVIsuRce4Ai7CJ2QwIU77L829dWEsJGjOrVU8L8gc=;
+        b=kb7nfWMNsLquPqt/dqqfLNokRrDvcnwTlmcQcItBGUJMg2JhJPPqG+owJh8ufb8ALm
+         G7yslkfNg+RyyxJC4I4XZEx9hy/GcpfqQQcgOnDMR6Cj9RWI8JI0b2WDmKvXRBONNbHF
+         Ft1qwsMquwrh7oAVO2Mt/38Xi9829iCZJTSaYPnFEHkGixGiar8sJxGCCl/sDPcvOwmw
+         LKEKTbNjGS7+ANgBwyuLm4gJMR7kiEHlgOyzUUvB5bqB9GQ+YhnyrLel7MbHL8FQUBsQ
+         sz1F40Lke6JEXIPfx88hZYADus/zVX4EGh+Zv2OCRwop4n4EArIPtY67AIZ1k3YZ6mo8
+         0OUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6SLgslheBeIIJex/gf/ZVhEBmirzOWHGUduUXl+JfS0=;
-        b=LRo5IFeo7bCrSGTPwzfrS3V9994tSJ6StNPbYplCww/oZi062QD+1Ceusj+wGxsKTc
-         2S1ZWmHUWjuU7/+GG38QkQ8zFQlUUun4bmwcy73ioa/dbMnMFM5sby0WaCGgbA8EhpfW
-         pUPte2TuX/Z/tWC3hHILfw4liAmCvP4JV75rm/kCPYK4YCFPpVwG0M69vl9ogyUAE1Fh
-         Hj8ODuEtG3JLKpAyzS2mvqr84BBF+UQRbUGq3769TT0vm4LXPokdKWg06XHLkAElbyj7
-         J+1oIHZG0l1QesIKgLM0CvON8ccbM/SQbWZ3uS66kyTD+sdc/XBzv5LhW9+K886WXoqk
-         iYig==
-X-Gm-Message-State: APjAAAUzfXZ6uql9XutpVXopOzfL846dSj/7bH8GtlgN/4KY23ZbsorT
-        8MaLMGXdjmQzJ4AWbSABlQe2Yq0UrmSCuY5ZJPPiDOW5
-X-Google-Smtp-Source: APXvYqxs8KaOnta4oS+qOBnum0sYdK4kwfRs3AjdmxE14hPdeI3PYvm+RSVJQcA/eiB1hLB6FfwDBOgY14u/8HhKXfM=
-X-Received: by 2002:aca:3ad6:: with SMTP id h205mr3915280oia.129.1568923630403;
- Thu, 19 Sep 2019 13:07:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rJfVIsuRce4Ai7CJ2QwIU77L829dWEsJGjOrVU8L8gc=;
+        b=N5vUlzsOUVbX9GsNAQHdDxeRTK9PBMeaz6ueyHQ7fzhQsqu1aFmgHw5dnHzx3KkYTj
+         uEtFElE5UmAFTF+Wp5zyXhEZf3y3EojEYnf/w9Cz4abHqLALIe8/vxl1mbvfW0JwYcPP
+         JTHqw4RLP/CW2uosVU6k29yxvAYZ6yQ9IR0Mdu4fk5y+iI+U0zd9pRL2ilZ70YArWi6u
+         pXEScPrw9Oj+X+dq8X1+OwuoJ8Zh02si/YgcQ4zRs/q5Gs4B6lBtuVUJLgpfdJ+Rlkjy
+         X8gbSMu3Q3gQKuBkHbkQZtFiqhXdG9LK2gaxFQJKZD3wmvJG25pTd3ZvtWQ/r4d1Hs9G
+         2NAQ==
+X-Gm-Message-State: APjAAAUGDxGUpWfe8UsoYO/SOMvlg2fXgNpg9DT7KA583xynsIKw0L8e
+        lD3VS2pTlLWfoQgaZni9tUI=
+X-Google-Smtp-Source: APXvYqx9gTPSHYVZG42FAtLQokBRrvnWgEQkadIYVlD6plPzKR1ppm74O2z0LDngeHPZcqouzrTUag==
+X-Received: by 2002:a17:907:20a2:: with SMTP id pw2mr15933485ejb.163.1568929343201;
+        Thu, 19 Sep 2019 14:42:23 -0700 (PDT)
+Received: from bfk-3-vm8-e4.cs.niisi.ras.ru (t109.niisi.ras.ru. [193.232.173.109])
+        by smtp.gmail.com with ESMTPSA id e39sm1863921edb.69.2019.09.19.14.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 14:42:22 -0700 (PDT)
+From:   Peter Mamonov <pmamonov@gmail.com>
+To:     rui.zhang@intel.com, edubezval@gmail.com, daniel.lezcano@linaro.org
+Cc:     andrew@lunn.ch, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, Peter Mamonov <pmamonov@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH RFC] thermal: Fix broken registration if a sensor OF node is missing
+Date:   Fri, 20 Sep 2019 00:40:58 +0300
+Message-Id: <20190919214058.8243-1-pmamonov@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <1568895064-4116-1-git-send-email-jianxin.pan@amlogic.com> <1568895064-4116-2-git-send-email-jianxin.pan@amlogic.com>
-In-Reply-To: <1568895064-4116-2-git-send-email-jianxin.pan@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 19 Sep 2019 22:06:59 +0200
-Message-ID: <CAFBinCCxeYgso3WQWqNgWUwwCM835uo_6FftVv0YwYTFJV2Ovw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: power: add Amlogic secure power domains bindings
-To:     Jianxin Pan <jianxin.pan@amlogic.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Zhiqiang Liang <zhiqiang.liang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Jian Hu <jian.hu@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jianxin,
+When devm_thermal_zone_of_sensor_register() is called from
+hwmon_thermal_add_sensor() it is possible that the relevant sensor is
+missing an OF node. In this case thermal_zone_of_sensor_register() returns
+-EINVAL which causes hwmon_thermal_add_sensor() to fail as well. This patch
+changes relevant return code of thermal_zone_of_sensor_register() to
+-ENODEV, which is tolerated by hwmon_thermal_add_sensor().
 
-On Thu, Sep 19, 2019 at 2:11 PM Jianxin Pan <jianxin.pan@amlogic.com> wrote:
->
-> Add the bindings for the Amlogic Secure power domains, controlling the
-> secure power domains.
->
-> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
-> power domain registers are in secure world.
->
-> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
-> Signed-off-by: Zhiqiang Liang <zhiqiang.liang@amlogic.com>
-> ---
->  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 32 ++++++++++++++++++++++
->  include/dt-bindings/power/meson-a1-power.h         | 32 ++++++++++++++++++++++
->  2 files changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->  create mode 100644 include/dt-bindings/power/meson-a1-power.h
->
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> new file mode 100644
-> index 00000000..327e0d9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> @@ -0,0 +1,32 @@
-> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +# Copyright (c) 2019 Amlogic, Inc
-> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Amlogic Meson Secure Power Domains
-> +
-> +maintainers:
-> +  - Jianxin Pan <jianxin.pan@amlogic.com>
-> +
-> +description: |+
-> +  A1/C1 series The Secure Power Domains node should be the child of a syscon
-> +  node with the required property.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson-a1-pwrc
-> +
-> +required:
-> +  - compatible
-> +
-> +examples:
-> +  - |
-> +    pwrc: power-controller {
-> +          compatible = "amlogic,meson-a1-pwrc";
-> +    };
-not a comment about this binding but about the secure monitor in general:
-there's a recent discussion about the secure monitor in the nvmem bindings: [0]
+Here is a particular case of such behaviour: the Marvell ethernet PHYs
+driver registers hwmon device for the built-in temperature sensor (see
+drivers/net/phy/marvell.c). Since the sensor doesn't have associated OF
+node devm_hwmon_device_register() returns error which ultimately causes
+failure of the PHY driver's probe function.
 
+Fixes: 4e5e4705bf69 ("thermal: introduce device tree parser")
+Signed-off-by: Peter Mamonov <pmamonov@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Cc: stable@vger.kernel.org
+---
+ drivers/thermal/of-thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Martin
+diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
+index dc5093be553e..34b0cc173f4a 100644
+--- a/drivers/thermal/of-thermal.c
++++ b/drivers/thermal/of-thermal.c
+@@ -493,7 +493,7 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
+ 
+ 	if (!dev || !dev->of_node) {
+ 		of_node_put(np);
+-		return ERR_PTR(-EINVAL);
++		return ERR_PTR(-ENODEV);
+ 	}
+ 
+ 	sensor_np = of_node_get(dev->of_node);
+-- 
+2.23.0
 
-
-[0] https://www.spinics.net/lists/arm-kernel/msg750010.html
