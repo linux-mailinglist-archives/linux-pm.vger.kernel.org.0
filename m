@@ -2,151 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0ECB740C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 09:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F1DB744E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 09:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732034AbfISH2c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 03:28:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728850AbfISH2b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 19 Sep 2019 03:28:31 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35E3121A49;
-        Thu, 19 Sep 2019 07:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568878110;
-        bh=4pZybG6ie1wq7kPEzXnAIhWrkHP0YAIy7EvNqXIs0nk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Hpi/Z6J0YAAbOxVs8ZaWgVSCqvrnR8B7P+/GUdLyupwWwixlPgAcGD61FvCiaJp8C
-         al+551ZPFPd3WOzm1y60AcTOlN8g0hc+qUf41kMC2I+ez+w5cUzQJhwDK2kKA3L993
-         YZahqK7xDgB73pcopGFoZRnJm9SuxVvlD7F/bxOA=
-Received: by mail-oi1-f182.google.com with SMTP id w6so1832859oie.11;
-        Thu, 19 Sep 2019 00:28:30 -0700 (PDT)
-X-Gm-Message-State: APjAAAVGMTNa52RjONtZZXyXp0fHnuYltVR83OxsBDG2TwOWhqcfNYRf
-        JMiUck6PtypxEMyQyI76VTK4LhKhbMmpuDorg8s=
-X-Google-Smtp-Source: APXvYqxcWCabkIkAYweLFABw3mTwh5ueZcYmaLJriDnmtFR+Tcfb38WjBVsL3eNPszwXlF4vNOXyKPu8g8TjuXaQDIc=
-X-Received: by 2002:aca:cf51:: with SMTP id f78mr1302933oig.8.1568878109494;
- Thu, 19 Sep 2019 00:28:29 -0700 (PDT)
+        id S1728879AbfISHkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 03:40:09 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45193 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725320AbfISHkJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 03:40:09 -0400
+Received: by mail-oi1-f196.google.com with SMTP id o205so1852312oib.12
+        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 00:40:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mw1LJt4Z3uk56iea27opFvMoJdnpkJxLw2Qc2lTsIzU=;
+        b=QSUDk2sKLgCwkz8kh0ezlom3ytDAmGg4+r/hMXYXQ7vE3y+xb9WNLAViZSIRdH2U0O
+         8qOle9ElB4TS/4dKgYe+zSpkSxY8v8+RcSeXwoNXzfzODkwF6aeS28VKW+isPcoTcXV5
+         OyIYg3oa7StLoLMkFgakUNu6b8aEQmpTtCByfTMlHGd+qpheWaPeGdxpalsCyd7ztMX2
+         4XL37O3t9yBn5ep8VzAgcC+0J9Lf6ESMKD6K27eshg88swugSu82tjHlklG8Hi7jxLg9
+         roy27arlCJNJWjwnb/EYiNPYlguCrFC6LnINOFPqWDixvV43ynbfWKDJJl2jdUNdPlCL
+         XSUA==
+X-Gm-Message-State: APjAAAXLL234BvUgTNP3oCwRaxpeYfIDbXDPlO38Z/5OC3wtxpkJxbjm
+        4qjkp/5hIVqU3sFKfVojFKg3TkhmHw7wKAGKUd4=
+X-Google-Smtp-Source: APXvYqz/v9iRqGJLaRmhNeAgfrr/Ryoz1JmF+k3DSAJP9hhhQEeozvWwyT7qLI1AJJVpZH3JIuD84WBFIxJXR9tR/Qw=
+X-Received: by 2002:aca:ab84:: with SMTP id u126mr1127066oie.115.1568878808691;
+ Thu, 19 Sep 2019 00:40:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190916100719eucas1p206fe95982b774840b5d6e62ba9c42c79@eucas1p2.samsung.com>
- <20190916100704.26692-1-l.luba@partner.samsung.com> <20190916100704.26692-4-l.luba@partner.samsung.com>
- <CAJKOXPcxG-mMKy5u-b0+xj_sOmrq5yq5-LYJx0Ds6_+yo_=JbA@mail.gmail.com> <4a0d1d2c-cd1d-5df4-d4b1-f2dd1ef3bb72@partner.samsung.com>
-In-Reply-To: <4a0d1d2c-cd1d-5df4-d4b1-f2dd1ef3bb72@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 19 Sep 2019 09:28:18 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfBueaf2UVik8x2L_D_PTxdkvRukuWL3xh_jDiLKtt7pQ@mail.gmail.com>
-Message-ID: <CAJKOXPfBueaf2UVik8x2L_D_PTxdkvRukuWL3xh_jDiLKtt7pQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: ddr: Add bindings for Samsung LPDDR3 memories
-To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org, mark.rutland@arm.com,
-        robh+dt@kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        willy.mh.wolff.ml@gmail.com
+References: <alpine.DEB.2.21.1909181742470.2771@hp-x360n>
+In-Reply-To: <alpine.DEB.2.21.1909181742470.2771@hp-x360n>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 Sep 2019 09:39:56 +0200
+Message-ID: <CAJZ5v0gYGPkJ0-=HSzFCpMLqky2Q6JN3qnov3c2ZaUAeCeaSag@mail.gmail.com>
+Subject: Re: Help me help you debug what seems to be an EC resume issue
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 19 Sep 2019 at 08:49, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+On Thu, Sep 19, 2019 at 3:24 AM Kenneth R. Crudup <kenny@panix.com> wrote:
 >
-> Hi Krzysztof,
 >
-> On 9/18/19 8:51 PM, Krzysztof Kozlowski wrote:
-> > On Mon, 16 Sep 2019 at 12:07, Lukasz Luba <l.luba@partner.samsung.com> wrote:
-> >>
-> >> Add compatible for Samsung k3qf2f20db LPDDR3 memory bindings.
-> >> Introduce minor fixes in the old documentation.
-> >>
-> >> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> >> ---
-> >>   Documentation/devicetree/bindings/ddr/lpddr3.txt | 9 ++++++---
-> >>   1 file changed, 6 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/ddr/lpddr3.txt b/Documentation/devicetree/bindings/ddr/lpddr3.txt
-> >> index 3b2485b84b3f..49afe794daaa 100644
-> >> --- a/Documentation/devicetree/bindings/ddr/lpddr3.txt
-> >> +++ b/Documentation/devicetree/bindings/ddr/lpddr3.txt
-> >> @@ -1,7 +1,9 @@
-> >>   * LPDDR3 SDRAM memories compliant to JEDEC JESD209-3C
-> >>
-> >>   Required properties:
-> >> -- compatible : Should be  - "jedec,lpddr3"
-> >> +- compatible : should be one of the following:
-> >> +       Generic default - "jedec,lpddr3".
-> >
-> > The convention is first compatible, then description. I gave you the
-> > example to base on - at25. Why making it different?
+> I have a 2019-era HP Spectre X360 13". I generally like it, but it's plagued
+> with "Modern Suspend" (s2idle) instead of a genuine S3, and as such I'm doing
+> whatever I (and you and Linux' PM) can to keep the power consumption down during
+> "suspend" (for now, "rfkill block all" before suspending, and removing the
+> XHC[I] as a wakeup source via "/proc/acpi/wakeup" during boot).
+
+You may still be able to use S3 on this machine if that's supported by
+the platform firmware.
+
+If reading from /sys/power/mem_sleep returns something like "[s2idle] deep" do
+
+# echo deep > /sys/power/mem_sleep
+
+(as root) and then it should change to "s2idle [deep]".  In that
+configuration, try to suspend and see if you can wake up etc and if it
+works reliably, you may use it going forward (in which case you'll
+probably want to add mem_sleep_default=deep to the kernel command line
+persistently).
+
+> I bought one of those USB-C inline power meters and I can tell when the system
+> is burning more power than "normal" - on a full-charged battery during s2idle
+> it draws ~30-50 mA @ 20v, and if I see more than that I know something is amiss,
+> even though the laptop (and dmesg) think it's fully suspended.
 >
-> I have checked at25 that you pointed me to and also checked at24, which
-> has a bit longer "compatible" section.
+> I'm running the tip of Linus' tree as of now (b60fe990c6b07) and it's got
+> your latest PM/s2idle fixes in it. Before these commits, I used to set
+> "acpi.ec_no_wakeup=1" because the orientation sensor (at least, and probably
+> other things) would wake up the laptop (then immediately suspend), which
+> I'm sure was using up battery while I'm just walking around.
 >
-> I found that there are many "jedec,spi-nor" compatible devices, which I
-> thought would be a better example for my "jedec,lpddr3".
-> For example, two configurations, where you have a single labels or dual
-> (with specific device)
-> arch/arm/boot/dts/imx6dl-rex-basic.dts:
-> compatible = "sst,sst25vf016b", "jedec,spi-nor";
-> arch/arm/boot/dts/imx6q-ba16.dtsi:
-> compatible = "jedec,spi-nor";
+> I've turned off "ec_no_wakeup" for testing and the good news is the orientation
+> sensor doesn't cause the laptop to draw more power when shaking it.
 >
-> The 'compatible' in documentation for the "jedec,spi-nor" is slightly
-> different (similar to at24).
-> Documentation/devicetree/bindings/mtd/jedec,spi-nor.txt
-> It has a long explanation, which is also OK. So I thought that it is
-> quite flexible what you put in there.
-
-It is flexible but I see clear pattern in existing sources:
-  jedec,spi-nor.txt
-  compatible : May include a device-specific ..
-  ...
-  Supported chip names:
-    at25df321a
-    ...
-
-  at25.txt:
-  - compatible : Should be "<vendor>,<type>", and generic value "atmel,at25".
-    Example "<vendor>,<type>" values:
-      "anvo,anv32e61w"
-      "microchip,25lc040"
-
-In these cases the doc says that "compatible should be" and then you
-have the list of values. Your example says that the compatible should
-be "Generic default" or "For Samsung 542x SoC"... :) The difference is
-slight but putting the value first is a simple and elegant solution.
-In your case one has to go to the end of sentence to find the most
-important information - the compatible value.
-
-> I have also checked Cadance QSPI controller.
-> Documentation/devicetree/bindings/mtd/cadence-quadspi.txt
-> The controller might be built-in into different vendor SoC's
-> and the "compatible" is ready to reflect it in similar fashion but
-> with a short explanation in this section.
-
-I see. I do not find this pattern as much readable as jedec-spi-nor or
-at25 therefore I mentioned them as an example to base on ("Exactly the
-same as AT24 or AT25 EEPROM bindings."). We can avoid also this entire
-discussion with YAML (which also follows approach of at25 - value
-first).
-
-> Therefore, what you see in the patch draw heavily on Cadence's qspi,
-> with a bit of inspiration from jedec,spi-nor usage.
+> However:
 >
-> Should I change it to at25 "compatible" style and send next patch?
+> - Randomly, it'll draw 250-300 mA when suspended, vs. the 30-50 mA
+> - Randomly, if left suspended, nothing other than a hard power off will get
+>   it back (and I can't be sure, but I think current consumption can be normal
+>   when it suspends, but this seems to only happen if I've unplugged the
+>   charger after suspending (so no power meter)).
+>
+> I have pstore set up to catch BUG_*/oopses and save them away on boots, but
+> nothing comes thru, so I'm guessing it's just hanging somewhere either on
+> suspend or resume.
+>
+> What can I do to diagnose where it's getting hung up? It appears my normal
+> "ec_no_wakeup=1" case has no such issues, but I wouldn't mind being able to
+> resume via the lid switch again.
 
-Yes, please. Or go to YAML and make entire discussion obsolete.
+I would recommend to try 5.4-rc1 when it's out to see if the problems
+above are still there.
 
-Best regards,
-Krzysztof
+Cheers,
+Rafael
