@@ -2,71 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE3CB7F6B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 18:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD78EB7FB8
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 19:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732552AbfISQxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 12:53:14 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36255 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbfISQxO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 12:53:14 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 67so3729452oto.3
-        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 09:53:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kZTc9sjZpy2gPmBVd6B4A7rZq/01al/4hqPyP/T6m0c=;
-        b=qIYl0Pvvdxxnu51Lsj7vgi8Nzvz2FsV6hrpusw6Pk5a1PxfDbnzI/dvyYU5UsKKEid
-         gV5w6SuEjoM8SJTfsXR11XUG5+dQYow7U6JvPsOabHDkao1cPiDd5VFHUJnQN8WGsZcR
-         Oyjer2GlyKSkJYIqkgXxM/j4oP2QYrboNjorO+oPvcyN957My83U7RUfuqVKnzj722LF
-         iCDTaAB2Zii8YtLT8NPKQwDYCCzQsmpbms+0JOllbZLXyIBaSSdUakOEqeuQax79+oEF
-         yXwdf9bYvVKU8LchTTJVQHaD4GF62xwpZm/ivphGOO/1sYm2Laf0NmJgRwrhgZGp3Y7J
-         WjGA==
-X-Gm-Message-State: APjAAAVBvdPQWiRJb44tCRPrnCvtOM+tsNbv19+VGnN1DaRdt+Ahq30q
-        9W8y8YIkuksIVQxo9ieYzwVLMMEf6aGW2rTHXdM=
-X-Google-Smtp-Source: APXvYqzpDCPy4j0EnUU7PNnNt1KJKQ+8tSeRLJndMsn+R/SHMFNEa0G+ILxK3XV1RJdrMKR7QUl8a59sKyNSqFhmBLs=
-X-Received: by 2002:a05:6830:9:: with SMTP id c9mr7630302otp.262.1568911993451;
- Thu, 19 Sep 2019 09:53:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.DEB.2.21.1909181742470.2771@hp-x360n> <CAJZ5v0gYGPkJ0-=HSzFCpMLqky2Q6JN3qnov3c2ZaUAeCeaSag@mail.gmail.com>
- <alpine.DEB.2.21.1909190444190.2973@hp-x360n> <CAJZ5v0hvauVP1NsQq8FTTf0_hk4_KujmCJTAE8ry43gu7wQ-GQ@mail.gmail.com>
- <alpine.DEB.2.21.1909190909440.2973@hp-x360n> <alpine.DEB.2.21.1909190930190.2842@hp-x360n>
-In-Reply-To: <alpine.DEB.2.21.1909190930190.2842@hp-x360n>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Sep 2019 18:53:02 +0200
-Message-ID: <CAJZ5v0iQp4MNCY-ksGTaTntnmaARSZaOW4sX49zqavtSUvo=Xw@mail.gmail.com>
-Subject: Re: Help me help you debug what seems to be an EC resume issue
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        id S2391852AbfISRKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 13:10:36 -0400
+Received: from mailbackend.panix.com ([166.84.1.89]:59010 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391584AbfISRKg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 13:10:36 -0400
+Received: from hp-x360n (unknown [12.245.190.214])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 46Z3JW5MsJzstN;
+        Thu, 19 Sep 2019 13:10:35 -0400 (EDT)
+Date:   Thu, 19 Sep 2019 10:10:33 -0700 (PDT)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: Help me help you debug what seems to be an EC resume issue
+In-Reply-To: <CAJZ5v0iQp4MNCY-ksGTaTntnmaARSZaOW4sX49zqavtSUvo=Xw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1909191004300.2842@hp-x360n>
+References: <alpine.DEB.2.21.1909181742470.2771@hp-x360n> <CAJZ5v0gYGPkJ0-=HSzFCpMLqky2Q6JN3qnov3c2ZaUAeCeaSag@mail.gmail.com> <alpine.DEB.2.21.1909190444190.2973@hp-x360n> <CAJZ5v0hvauVP1NsQq8FTTf0_hk4_KujmCJTAE8ry43gu7wQ-GQ@mail.gmail.com>
+ <alpine.DEB.2.21.1909190909440.2973@hp-x360n> <alpine.DEB.2.21.1909190930190.2842@hp-x360n> <CAJZ5v0iQp4MNCY-ksGTaTntnmaARSZaOW4sX49zqavtSUvo=Xw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 6:35 PM Kenneth R. Crudup <kenny@panix.com> wrote:
->
->
-> > BTW, is there any way to determine which devices are still on (out of d3cold)
-> > at the time the kernel relinquishes control to the BIOS/ACPI as the last thing
-> > to happen at suspend?
 
-In the suspend-to-idle case the BIOS doesn't get control at all.
+On Thu, 19 Sep 2019, Rafael J. Wysocki wrote:
 
-I would recommend to read
+> I would recommend to read
+> https://01.org/blogs/qwang59/2018/how-achieve-s0ix-states-linux
+> at this point if you have not done it yet.
 
-https://01.org/blogs/qwang59/2018/how-achieve-s0ix-states-linux
+Yeah, I have ... and I get this after a resume:
 
-at this point if you have not done it yet.
+> intel_pmc_core INT33A1:00: CPU did not enter SLP_S0!!! (S0ix cnt=0)
 
-> So I turned on "DEBUG" at the top of ".../include/linux/acpi.h"
-> I have no idea if I'm reading this correctly, but does this mean that there are
-> devices that will always(?) stay in d3hot during s2idle?
->
-> If this is the case, is there anything I can/should do about it?
+... and this even after multiple suspend/resume cycles:
 
-Not really.  That's just debug output.
+> /sys/kernel/debug/pmc_core/slp_s0_residency_usec:0
+
+I did determine I'm going in to C10 though, but that's a "when powered on"
+issue; I'm trying to maximize the time I get in s2idle- it's the only thing
+infuriating about this laptop. Hibernate works, and I do that when I know
+I won't be using it for a while, but going from a laptop that would give me
+nearly a week in S3 to this one where I can lose ~20-35% overnight sucks and
+I've been pulling at any straw trying to reduce s2idle power draw.
+
+	-Kenny
+
+-- 
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
