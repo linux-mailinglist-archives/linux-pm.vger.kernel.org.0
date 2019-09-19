@@ -2,183 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB38BB7183
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 04:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC68DB725C
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 06:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388317AbfISCSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Sep 2019 22:18:33 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:43535 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388345AbfISCSc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Sep 2019 22:18:32 -0400
-Received: by mail-qt1-f196.google.com with SMTP id c3so2275469qtv.10
-        for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2019 19:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=H7D4s+CkAmLBeZ/6zlhP2G8xuIQDDKxrEeqdqHuDSaE=;
-        b=YilbaR6jBv62EnsBExQZKzQiV2/klUvm9VFz1WjN6yvxoRyUNArOCv19ThV/q2dUji
-         S+8nzP58nrfXl7hAMWWWHjrsALTqpfZ/TIsX9ziepgrgVanl9SnDa/S3yNLgnGMZRgBZ
-         KMld+X7eTF2dvMCg7AqNTCXvetYubo4gUKztyJVRKCvdeD+AM/dga7wURid/ufYhNz+H
-         24iP7Bch7ZDyI8ENMW4xZYkSaaLVeLH1BuILTVq7H9KIxcC7iB2xbLc8imybqDNyHpjJ
-         LOtCrLOrcCKeiIlBlRdkCGCyeTRG7825WQo5/Uv3J/M713IsjmD9U/l1dKn5XmTSGZwU
-         eZkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=H7D4s+CkAmLBeZ/6zlhP2G8xuIQDDKxrEeqdqHuDSaE=;
-        b=qYWQ8bj5Hu1QQb6EpXo0jS5vAJEdFanjNQ9udi8JYAgYJFWctUezRZb3Ez9oIErsfI
-         ++zSBjyc6D7zn/juVyb5rHYbPm5vMW8xQYZOyl3eak1xgP5ZzKsZNO4r+sr+S/OTz+C3
-         tJRiMVDyRKYPcXdT0q2sJ/Ao/2u4T99iFwaEPhCXgimMimoZZ2GMvpx9FOmjVMvqmpmv
-         5ubcRHza6V5OvFx5yB5DMylWNCf5RQJDncroPvQ+yfggmm1ppgwtSOa/oUbw3sZUf1d8
-         MhPnXyO59LxLmjWP7gbS4PF4l9Bq4KtpBFOVKSx2TMkTAfFsjqHqE0d/u9glmL6n8J8J
-         13GQ==
-X-Gm-Message-State: APjAAAX3Zggr2NfJZFc0VZiJ7jxh7hWfhCGj1EpjNNvNUmnFWrwg0ZqA
-        zvJkU8Ce1hPTIs4cbYXYhYFxSQ==
-X-Google-Smtp-Source: APXvYqwXaeBcVyAp1JNYBKDS7In10ssdhrlNkNgEMbkiLJMfzw7ZWi1vOYe4JONKg6yntHxCTwyi0w==
-X-Received: by 2002:ac8:4612:: with SMTP id p18mr886307qtn.94.1568859509919;
-        Wed, 18 Sep 2019 19:18:29 -0700 (PDT)
-Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.googlemail.com with ESMTPSA id o52sm5261275qtf.56.2019.09.18.19.18.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 18 Sep 2019 19:18:29 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, vincent.guittot@linaro.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org
-Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] thermal: step_wise: Extend thermal step-wise governor to monitor falling temperature.
-Date:   Wed, 18 Sep 2019 22:18:23 -0400
-Message-Id: <1568859503-19725-5-git-send-email-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1568859503-19725-1-git-send-email-thara.gopinath@linaro.org>
-References: <1568859503-19725-1-git-send-email-thara.gopinath@linaro.org>
+        id S1731192AbfISEx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 00:53:29 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:38141 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725320AbfISEx3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 00:53:29 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190919045324epoutp01112fbd57e4f3e43012c277a11038be82~Fvd2oF5Hb2053520535epoutp01V
+        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 04:53:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190919045324epoutp01112fbd57e4f3e43012c277a11038be82~Fvd2oF5Hb2053520535epoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1568868804;
+        bh=rWYsy+UNGlR5+0/eqBMs6htpuEB3LmWQnpGlPQZ6M9A=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=Q2UT1pwI9vb3FmPQviv64iYoQtF2FRDgGWut+F951Jz8/IBBrDUE5f0gXrBKKRxx7
+         NMfwxS9H51+j8q51I6Bx1mMbqOJBwn3qCOwCE6pyEFuxpchbWNtSegPEHEfv5c3FxV
+         YC6hQ1UH/3PrcYQAOiwwJk27oNdX/IJmIQskzUnA=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190919045324epcas1p3ef1fe78d8f0f35c70379c9a51a19fd2e~Fvd17j6CC2782027820epcas1p3R;
+        Thu, 19 Sep 2019 04:53:24 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 46Ykxr3VW1zMqYlp; Thu, 19 Sep
+        2019 04:53:20 +0000 (GMT)
+X-AuditID: b6c32a39-cebff70000000ff5-84-5d8309bb5e92
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7D.1F.04085.BB9038D5; Thu, 19 Sep 2019 13:53:15 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH] devfreq: Make log message more explicit when devfreq
+ device already exists
+Reply-To: myungjoo.ham@samsung.com
+From:   MyungJoo Ham <myungjoo.ham@samsung.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20190919000946.158454-1-mka@chromium.org>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190919045314epcms1p178a5f45c964e53f28e55b9bf8ab11d28@epcms1p1>
+Date:   Thu, 19 Sep 2019 13:53:14 +0900
+X-CMS-MailID: 20190919045314epcms1p178a5f45c964e53f28e55b9bf8ab11d28
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SeUiTcRju57fjmzj5NY9eLGx9oKSk26ctt8qotBhltEiiBFkf+jV1Z/um
+        dLMsSeygw0jMK4qkpFudafSHWWFeRVkN84hu0gqnRIfZLtH/Hh6e533eiyQk//gRZK7JxlpN
+        jIESBPIaH8TEx7WIDmXKT38WKV+NfeIruwqHhcrnzRUCpet4G1K6br5DK/nq8/ZnPPWJ+qtI
+        7bodqSEy9MtzWCabtUpZU5Y5O9ekS6bWb9amaBVL5HQcrVImUVITY2STqdQ0TdzaXIM7kpIW
+        MIZ8N6VhOI6SrVhuNefbWGmOmbMlU6wl22BRWeI5xsjlm3TxWWbjUlouT1C4hdv1OdcOnuVZ
+        asldNXUTyI4KhSWIJAEvhreVBSVIREpwE4LrZUYPLcazYaIpxEOHYAZ6bl3h+yQU2J33CR8v
+        g+KhRuTBAhwHDTf7eR4cihfC+z89bj6QJHAPgtejj70GwGIoO/KB58NzwVHb4DWLcBI4ijr9
+        mjBw1o0Ip/D3R9XIh0OhaKDLr5kNQ79a0FSdstJJf8298PLcRaEnGPBhBMfrSv0iGXRWtgs8
+        WIw3QPsLh9fAw1EwfLTPb06F3p+D3mACzwfHSAXhWQSBY+BGs8wnWQB3/1QinyQYvo0f40/N
+        1VT1PsCHo6G15ZK//3nQce6Cv2c1uLr6BJ6SEnwAut6mnUTS8ulNl8/ILZ/OrUHEVRTOWjij
+        juVoi2LmaW8j7+/FqprQo+60VoRJRAWJNbGFmRI+U8DtNrYiIAkqVFyhcFPibGb3HtZq1lrz
+        DSzXihTu8U8REWFZZvcnm2xaWpGQmJioXEwvUdA0NUes1tkzJVjH2Fg9y1pY65QvgBRF2NGq
+        FR9jZT9qd5ZUf4183NBXFX55WenTZQNbNMJtazNzx4NXRg5r9/zdKX2j2bGub6lInuEcXKRZ
+        PeqE9N6U3+lP2DFVj7buzBr1xGTCvpCErVUPxzfKqvVDri8F0RndzgGx7eX+jhZBUHDx5L28
+        vCB6U/jkai7Fead/sK2jPko1a4DicTkMHUtYOeY/4J6gdpEDAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190919000955epcas5p12bff9e26df88da7c0564d55081a0185b
+References: <20190919000946.158454-1-mka@chromium.org>
+        <CGME20190919000955epcas5p12bff9e26df88da7c0564d55081a0185b@epcms1p1>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From the step wise governor point of view, the policy decisions
-that has to taken on a thermal trip point that is defined to be monitored
-for falling temprature is the mirror opposite of the decisions it has
-to take on a trip point that is monitored for rising temperature.
+>Before creating a new devfreq device devfreq_add_device() checks
+>if there is already a devfreq dev associated with the requesting
+>device (parent). If that's the case the function rejects to create
+>another devfreq dev for that parent and logs an error. The error
+>message is very unspecific, make it a bit more explicit.
+>
+>Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+>---
+> drivers/devfreq/devfreq.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>index ab22bf8a12d6..0e2dd734ab58 100644
+>--- a/drivers/devfreq/devfreq.c
+>+++ b/drivers/devfreq/devfreq.c
+>@@ -625,7 +625,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> 	devfreq = find_device_devfreq(dev);
+> 	mutex_unlock(&devfreq_list_lock);
+> 	if (!IS_ERR(devfreq)) {
+>-		dev_err(dev, "%s: Unable to create devfreq for the device.\n",
+>+		dev_err(dev, "%s: devfreq device already exists!\n",
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
- drivers/thermal/step_wise.c | 59 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 44 insertions(+), 15 deletions(-)
+Yes, this is more helpful! Thanks!
 
-diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/step_wise.c
-index 6e051cb..aa8e0a0 100644
---- a/drivers/thermal/step_wise.c
-+++ b/drivers/thermal/step_wise.c
-@@ -35,7 +35,8 @@
-  *       deactivate the thermal instance
-  */
- static unsigned long get_target_state(struct thermal_instance *instance,
--				enum thermal_trend trend, bool throttle)
-+				enum thermal_trend trend, bool throttle,
-+				enum thermal_trip_monitor_type type)
- {
- 	struct thermal_cooling_device *cdev = instance->cdev;
- 	unsigned long cur_state;
-@@ -65,11 +66,21 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 
- 	switch (trend) {
- 	case THERMAL_TREND_RAISING:
--		if (throttle) {
--			next_target = cur_state < instance->upper ?
--				    (cur_state + 1) : instance->upper;
--			if (next_target < instance->lower)
--				next_target = instance->lower;
-+		if (type == THERMAL_TRIP_MONITOR_FALLING) {
-+			if (cur_state <= instance->lower) {
-+				if (!throttle)
-+					next_target = THERMAL_NO_TARGET;
-+			} else {
-+				if (!throttle)
-+					next_target = cur_state - 1;
-+			}
-+		} else {
-+			if (throttle) {
-+				next_target = cur_state < instance->upper ?
-+					    (cur_state + 1) : instance->upper;
-+				if (next_target < instance->lower)
-+					next_target = instance->lower;
-+			}
- 		}
- 		break;
- 	case THERMAL_TREND_RAISE_FULL:
-@@ -77,14 +88,23 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 			next_target = instance->upper;
- 		break;
- 	case THERMAL_TREND_DROPPING:
--		if (cur_state <= instance->lower) {
--			if (!throttle)
--				next_target = THERMAL_NO_TARGET;
-+		if (type == THERMAL_TRIP_MONITOR_FALLING) {
-+			if (throttle) {
-+				next_target = cur_state < instance->upper ?
-+					(cur_state + 1) : instance->upper;
-+				if (next_target < instance->lower)
-+					next_target = instance->lower;
-+			}
- 		} else {
--			if (!throttle) {
--				next_target = cur_state - 1;
--				if (next_target > instance->upper)
--					next_target = instance->upper;
-+			if (cur_state <= instance->lower) {
-+				if (!throttle)
-+					next_target = THERMAL_NO_TARGET;
-+			} else {
-+				if (!throttle) {
-+					next_target = cur_state - 1;
-+					if (next_target > instance->upper)
-+						next_target = instance->upper;
-+				}
- 			}
- 		}
- 		break;
-@@ -117,6 +137,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- {
- 	int trip_temp;
- 	enum thermal_trip_type trip_type;
-+	enum thermal_trip_monitor_type monitor_type =
-+					THERMAL_TRIP_MONITOR_RISING;
- 	enum thermal_trend trend;
- 	struct thermal_instance *instance;
- 	bool throttle = false;
-@@ -130,9 +152,15 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 		tz->ops->get_trip_type(tz, trip, &trip_type);
- 	}
- 
-+	if (tz->ops->get_trip_monitor_type)
-+		tz->ops->get_trip_monitor_type(tz, trip, &monitor_type);
-+
- 	trend = get_tz_trend(tz, trip);
- 
--	if (tz->temperature >= trip_temp) {
-+	if (((monitor_type == THERMAL_TRIP_MONITOR_RISING) &&
-+	      (tz->temperature >= trip_temp)) ||
-+	      ((monitor_type == THERMAL_TRIP_MONITOR_FALLING) &&
-+	      (tz->temperature <= trip_temp))) {
- 		throttle = true;
- 		trace_thermal_zone_trip(tz, trip, trip_type);
- 	}
-@@ -147,7 +175,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 			continue;
- 
- 		old_target = instance->target;
--		instance->target = get_target_state(instance, trend, throttle);
-+		instance->target = get_target_state(instance, trend, throttle,
-+						    monitor_type);
- 		dev_dbg(&instance->cdev->device, "old_target=%d, target=%d\n",
- 					old_target, (int)instance->target);
- 
--- 
-2.1.4
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+
 
