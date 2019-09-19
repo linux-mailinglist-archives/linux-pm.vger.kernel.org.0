@@ -2,98 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFCAB838F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 23:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B98B8848
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 01:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390434AbfISVmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 17:42:25 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:44731 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390391AbfISVmZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 17:42:25 -0400
-Received: by mail-ed1-f67.google.com with SMTP id r16so4488669edq.11;
-        Thu, 19 Sep 2019 14:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rJfVIsuRce4Ai7CJ2QwIU77L829dWEsJGjOrVU8L8gc=;
-        b=kb7nfWMNsLquPqt/dqqfLNokRrDvcnwTlmcQcItBGUJMg2JhJPPqG+owJh8ufb8ALm
-         G7yslkfNg+RyyxJC4I4XZEx9hy/GcpfqQQcgOnDMR6Cj9RWI8JI0b2WDmKvXRBONNbHF
-         Ft1qwsMquwrh7oAVO2Mt/38Xi9829iCZJTSaYPnFEHkGixGiar8sJxGCCl/sDPcvOwmw
-         LKEKTbNjGS7+ANgBwyuLm4gJMR7kiEHlgOyzUUvB5bqB9GQ+YhnyrLel7MbHL8FQUBsQ
-         sz1F40Lke6JEXIPfx88hZYADus/zVX4EGh+Zv2OCRwop4n4EArIPtY67AIZ1k3YZ6mo8
-         0OUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rJfVIsuRce4Ai7CJ2QwIU77L829dWEsJGjOrVU8L8gc=;
-        b=N5vUlzsOUVbX9GsNAQHdDxeRTK9PBMeaz6ueyHQ7fzhQsqu1aFmgHw5dnHzx3KkYTj
-         uEtFElE5UmAFTF+Wp5zyXhEZf3y3EojEYnf/w9Cz4abHqLALIe8/vxl1mbvfW0JwYcPP
-         JTHqw4RLP/CW2uosVU6k29yxvAYZ6yQ9IR0Mdu4fk5y+iI+U0zd9pRL2ilZ70YArWi6u
-         pXEScPrw9Oj+X+dq8X1+OwuoJ8Zh02si/YgcQ4zRs/q5Gs4B6lBtuVUJLgpfdJ+Rlkjy
-         X8gbSMu3Q3gQKuBkHbkQZtFiqhXdG9LK2gaxFQJKZD3wmvJG25pTd3ZvtWQ/r4d1Hs9G
-         2NAQ==
-X-Gm-Message-State: APjAAAUGDxGUpWfe8UsoYO/SOMvlg2fXgNpg9DT7KA583xynsIKw0L8e
-        lD3VS2pTlLWfoQgaZni9tUI=
-X-Google-Smtp-Source: APXvYqx9gTPSHYVZG42FAtLQokBRrvnWgEQkadIYVlD6plPzKR1ppm74O2z0LDngeHPZcqouzrTUag==
-X-Received: by 2002:a17:907:20a2:: with SMTP id pw2mr15933485ejb.163.1568929343201;
-        Thu, 19 Sep 2019 14:42:23 -0700 (PDT)
-Received: from bfk-3-vm8-e4.cs.niisi.ras.ru (t109.niisi.ras.ru. [193.232.173.109])
-        by smtp.gmail.com with ESMTPSA id e39sm1863921edb.69.2019.09.19.14.42.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2019 14:42:22 -0700 (PDT)
-From:   Peter Mamonov <pmamonov@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com, daniel.lezcano@linaro.org
-Cc:     andrew@lunn.ch, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, Peter Mamonov <pmamonov@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH RFC] thermal: Fix broken registration if a sensor OF node is missing
-Date:   Fri, 20 Sep 2019 00:40:58 +0300
-Message-Id: <20190919214058.8243-1-pmamonov@gmail.com>
-X-Mailer: git-send-email 2.23.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2436853AbfISXzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 19:55:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:22723 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436849AbfISXzZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Sep 2019 19:55:25 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Sep 2019 16:55:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,526,1559545200"; 
+   d="scan'208";a="338820974"
+Received: from spandruv-mobl3.jf.intel.com ([10.255.93.177])
+  by orsmga004.jf.intel.com with ESMTP; 19 Sep 2019 16:55:22 -0700
+Message-ID: <f5fde2bc758cc15fdb575f52c2138bb67aa514b7.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] x86,sched: Add support for frequency invariance
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>, tglx@linutronix.de,
+        mingo@redhat.com, peterz@infradead.org, bp@suse.de,
+        lenb@kernel.org, rjw@rjwysocki.net
+Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
+        matt@codeblueprint.co.uk, viresh.kumar@linaro.org,
+        juri.lelli@redhat.com, pjt@google.com, vincent.guittot@linaro.org,
+        qperret@qperret.net, dietmar.eggemann@arm.com
+Date:   Thu, 19 Sep 2019 16:55:22 -0700
+In-Reply-To: <1568730426.3329.3.camel@suse.cz>
+References: <20190909024216.5942-1-ggherdovich@suse.cz>
+         <20190909024216.5942-2-ggherdovich@suse.cz>
+         <4226d5f460604a8130f8079b74ef3fb1d60009d7.camel@linux.intel.com>
+         <1568730426.3329.3.camel@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When devm_thermal_zone_of_sensor_register() is called from
-hwmon_thermal_add_sensor() it is possible that the relevant sensor is
-missing an OF node. In this case thermal_zone_of_sensor_register() returns
--EINVAL which causes hwmon_thermal_add_sensor() to fail as well. This patch
-changes relevant return code of thermal_zone_of_sensor_register() to
--ENODEV, which is tolerated by hwmon_thermal_add_sensor().
+On Tue, 2019-09-17 at 16:27 +0200, Giovanni Gherdovich wrote:
+> Hello Srinivas,
+> 
+> On Fri, 2019-09-13 at 15:52 -0700, Srinivas Pandruvada wrote:
+> > On Mon, 2019-09-09 at 04:42 +0200, Giovanni Gherdovich wrote:
+> > 
+> > ...
+> > 
+> > > +
+> > > +/*
+> > > + * APERF/MPERF frequency ratio computation.
+> > > + *
+> > > + * The scheduler wants to do frequency invariant accounting and
+> > > needs a <1
+> > > + * ratio to account for the 'current' frequency, corresponding
+> > > to
+> > > + * freq_curr / freq_max.
+> > 
+> > I thought this is no longer the restriction and Vincent did some
+> > work
+> > to remove this restriction. 
+> 
+> If you're referring to the patch
+> 
+>   23127296889f "sched/fair: Update scale invariance of PELT"
+> 
+> merged in v5.2, I'm familiar with that and from my understanding you
+> still
+> want a <1 scaling factor. This is my recalling of the patch:
+> 
+> Vincent was studying some synthetic traces and realized that util_avg
+> reported
+> by PELT didn't quite match the result you'd get computing the formula
+> with pen
+> and paper (theoretical value). To address this he changed where the
+> scaling
+> factor is applied in the PELT formula.
+> 
+> At some point when accumulating the PELT sums, you'll have to measure
+> the time
+> 'delta' since you last updated PELT. What we have after Vincent's
+> change is
+> that this time length 'delta' gets itself scaled by the
+> freq_curr/freq_max
+> ratio:
+> 
+>     delta = time since last PELT update
+>     delta *= freq_percent
+> 
+> In this way time goes at "wall clock speed" only when you're running
+> at max
+> capacitiy, and goes "slower" (from the PELT point of view) if we're
+> running at
+> a lower frequency. I don't think Vincent had in mind a faster-than-
+> wall-clock
+> PELT time (which you'd get w/ freq_percent>1).
+> 
+> Speaking of which, Srinivas, do you have any opinion and/or
+> requirement about
+> this? I confusely remember Peter Zijlstra saying (more than a year
+> ago, now)
+> that you would like an unclipped freq_curr/freq_max ratio, and may
+> not be
+> happy with this patch clipping it to 1 when freq_curr >
+> 4_cores_turbo. If
+> that's the case, could you elaborate on this?
+> Ignore that if it doesn't make sense, I may be mis-remembering.
+I was thinking of power efficiency use case particularly for Atom like
+platforms, 1C max as you observed is more efficient.
 
-Here is a particular case of such behaviour: the Marvell ethernet PHYs
-driver registers hwmon device for the built-in temperature sensor (see
-drivers/net/phy/marvell.c). Since the sensor doesn't have associated OF
-node devm_hwmon_device_register() returns error which ultimately causes
-failure of the PHY driver's probe function.
+But now sched deadline code is using  arch_scale_freq_capacity(() to
+calculate dl_se->runtime, where closer to deterministic value with all
+cores, may be better, which will be scaled with base_freq. 
 
-Fixes: 4e5e4705bf69 ("thermal: introduce device tree parser")
-Signed-off-by: Peter Mamonov <pmamonov@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Cc: stable@vger.kernel.org
----
- drivers/thermal/of-thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
-index dc5093be553e..34b0cc173f4a 100644
---- a/drivers/thermal/of-thermal.c
-+++ b/drivers/thermal/of-thermal.c
-@@ -493,7 +493,7 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
- 
- 	if (!dev || !dev->of_node) {
- 		of_node_put(np);
--		return ERR_PTR(-EINVAL);
-+		return ERR_PTR(-ENODEV);
- 	}
- 
- 	sensor_np = of_node_get(dev->of_node);
--- 
-2.23.0
+Thanks,
+Srinivas
 
