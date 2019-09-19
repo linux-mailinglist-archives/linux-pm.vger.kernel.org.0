@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D46DB7C4C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 16:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559B7B7C4E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2019 16:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403771AbfISOX2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Sep 2019 10:23:28 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:46486 "EHLO
+        id S2403924AbfISOY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Sep 2019 10:24:28 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:46487 "EHLO
         mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390520AbfISOX2 (ORCPT
+        with ESMTP id S2403767AbfISOX2 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Sep 2019 10:23:28 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190919142327euoutp01b486b4dc734cc2110f9925a3ade4b0bc~F3Pj_b5jY2191721917euoutp01J
-        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 14:23:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190919142327euoutp01b486b4dc734cc2110f9925a3ade4b0bc~F3Pj_b5jY2191721917euoutp01J
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190919142328euoutp0194ea0e2e32a0e9860f3c3fb5c9ddb242~F3Pk5ZsBL2320923209euoutp01E
+        for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2019 14:23:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190919142328euoutp0194ea0e2e32a0e9860f3c3fb5c9ddb242~F3Pk5ZsBL2320923209euoutp01E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1568903007;
-        bh=w2UfJ6ezBPlUEZnplzVKt++ooGfyIuCYzPhz55Bgqb0=;
+        s=mail20170921; t=1568903008;
+        bh=AnLAppA40BqI8z9CshVPHeubC24brELzTHSPwO597YU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cqg31bnNoolGhUGnzvbS1SsL9Zi1cxq3UBL5UlIBq+Bexfi33Gzvu0nqi7W2/h0qb
-         Vni/KJo6W2l9be2pqs7RR31UhymBlZl5PQTceDyN181y94qRVBa62AeuJRZuiRHH4Q
-         qJ7W47BXvDBtzwroBQJuZObfW6APG9G5lFQDei+8=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        b=Xpv+vFwizO8MF8htiBDmDI6/+MEBOo28EozwPyXQir4HfD8XYVM67AtJD8V+zFTP+
+         BBkURovEhn+GnOFs6L2BR4Ydc0T99DMIJxqTmtpVKHtWz/cPK3XH9mej5KLWEfk1Bk
+         g+g4+o9MPgUOjLkZGU3xnQ91tLKLhs3+H4oDp9Ck=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190919142326eucas1p29743d0d0f6a4c44888d4446079565359~F3PjExPt63079930799eucas1p27;
-        Thu, 19 Sep 2019 14:23:26 +0000 (GMT)
+        20190919142327eucas1p2ed6a1e2c127dd2789af76ab265167b07~F3PkJG0Yp3082530825eucas1p2m;
+        Thu, 19 Sep 2019 14:23:27 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id F8.0C.04469.D5F838D5; Thu, 19
-        Sep 2019 15:23:25 +0100 (BST)
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id A9.1B.04309.F5F838D5; Thu, 19
+        Sep 2019 15:23:27 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190919142325eucas1p28102446c22b1e1c61aae0bad46d079b0~F3PiUCWQt3080630806eucas1p2g;
-        Thu, 19 Sep 2019 14:23:25 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        20190919142326eucas1p204819014fe85716b47e2de4af9102cd5~F3PjKGocO2469524695eucas1p2L;
+        Thu, 19 Sep 2019 14:23:26 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190919142325eusmtrp1bb5ff0307cc675ca3d309dbb76a680b1~F3PiFV8J80555105551eusmtrp1X;
-        Thu, 19 Sep 2019 14:23:25 +0000 (GMT)
-X-AuditID: cbfec7f2-54fff70000001175-0b-5d838f5d6501
+        20190919142326eusmtrp1095ef82681f3c06555d9fdcc527e3361~F3Pi7onA90555105551eusmtrp1a;
+        Thu, 19 Sep 2019 14:23:26 +0000 (GMT)
+X-AuditID: cbfec7f4-afbff700000010d5-56-5d838f5f8266
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 02.1F.04166.D5F838D5; Thu, 19
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id B2.65.04117.D5F838D5; Thu, 19
         Sep 2019 15:23:25 +0100 (BST)
 Received: from AMDC3555.digital.local (unknown [106.120.51.67]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190919142324eusmtip1e21b74ae9efc6b6226bd53e23436627c~F3PhTa9XB3039930399eusmtip1f;
-        Thu, 19 Sep 2019 14:23:24 +0000 (GMT)
+        20190919142325eusmtip10316e90c68f927ac1cd0f37950339202~F3PiEhIDb3226332263eusmtip1B;
+        Thu, 19 Sep 2019 14:23:25 +0000 (GMT)
 From:   =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -54,52 +54,52 @@ Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         inki.dae@samsung.com, sw0312.kim@samsung.com,
         georgi.djakov@linaro.org, leonard.crestez@nxp.com,
         m.szyprowski@samsung.com, b.zolnierkie@samsung.com, krzk@kernel.org
-Subject: [RFC PATCH v2 05/11] interconnect: Export
+Subject: [RFC PATCH v2 06/11] interconnect: Relax requirement in
  of_icc_get_from_provider()
-Date:   Thu, 19 Sep 2019 16:22:30 +0200
-Message-Id: <20190919142236.4071-6-a.swigon@samsung.com>
+Date:   Thu, 19 Sep 2019 16:22:31 +0200
+Message-Id: <20190919142236.4071-7-a.swigon@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190919142236.4071-1-a.swigon@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUhTYRTu3f3YVdq8TsGTZtZAwiAtKHjVsASxawQF/soQnXmZ6aa2m2VG
-        pC6tNE0cmWl+YB8uP1KXio2UmqNRVsMyDVpNKImUlPwqwSK3a+W/5znnPOd5zsvLEAoH5c8c
-        zzzJ6zJVGiXtSfY+XXq1PfGqPnHHmCMCW572SLGzvgjhruoOCo/Nf6Fwg/UVhUcWZmh8vd9E
-        40pnBYnt9k4pNn74TmHTp1EKvzHfpPFcmRXhavuABLdbP0jx+wIjjasNX+l93pyp5TLNOUYf
-        0Zyz1CbhHtw+z3VN90m4J9OPJFx5dwvi5kybDjMJnntSec3xU7wuLCrZM62muwdlv2Vz25rL
-        UT6qk5cghgF2F9xzRJUgT0bBGhG8MA4TIplHUD44vkrmECyOmFeIh1vhbH0uERvNCGxVw9J/
-        koIftcg1RbPRUHlt3N3wZa0IDI0zpIsQ7G0JlNfaCZe7D3sIioZYl4Bkg+HhVCnpKstYDBOz
-        saJbELR2PnY7e7DhMD/QQLqwjPWGZzc+uzGxMqPvqXVHBfYyA7OWGUoUx8DP9iZaxD4waeuW
-        ingjDBmukCIWYOKhkxLF+QhMd62rd0bCoG2YcgUi2BDoMIeJDxYNvdYTIpTDu2/eYgQ5VPZe
-        J8SyDC4VK0SoBPMNubgOoLB1dHU1Bw77BbICbalZc0vNmltq/rs2IqIF+fE5glbNCzsz+dOh
-        gkor5GSqQ49laU1o5c8N/bbN9qGF1ykWxDJIuV62+bQ+UUGpTglntBYEDKH0ld3cXZiokKWq
-        zuTxuqwkXY6GFywogCGVfrKz68aPKli16iSfwfPZvO5vV8J4+OejhPqYoKr4til1lj5w8deR
-        gNoD4xFeDRqNXn7nYkfEwabevVvzvOq45NL7+7UhG5LTiwOJsbmPZulkZPCtcykFztSlGHVj
-        n59huQxK+pWFfd3C6wLjvE9n0sCypv9lRrrOYI07IO2KzY2Xx315nrbYun15aqQ5PabsbpX2
-        7UR4lZIU0lQ7txE6QfUHZYrZam8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMIsWRmVeSWpSXmKPExsVy+t/xu7qx/c2xBuuOsFkcOraV3eL+vFZG
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+3YuOxtNjlPypYvZNKEsu9DlK0UKQw5E0B8FooiuOmikU3a8
+        dIEyzZqXtCaiuTArU1NMXfPSNDMbmUiuZZpQa9W63yS2kKgs57Hyv9/3Ps/zPd8LH0MoHdR8
+        Zr8mnddq1MkqWk623/0+tDK+JDdudWejFPfdbZNiR1Uewq0VzRR+7H5L4QuWIQo/+jZO4/Kb
+        RhrrHWdIbLW2SHG9/SuFjc5RCg+bz9PYddqCcIW1R4KbLHYpfnK8nsYVpe/pLd6csSGf5p6O
+        dtOco7Bfwl2vOca1fumUcLe/dEu4YlMD4lxG/51MjDx8H5+8P5PXropIkCc1ua9SaVbpweY6
+        E5GNzHQBkjHAroPeiTGyAMkZJVuPQNf0ghYPbgTOE0+nXUrWhWDgSvDfROudH0g01SG4NfIS
+        /UsUGhooj4tmt4K+7LnUI/iyFgSl1ePTJQRbI4Fig5XwuHzYODgxPinxMMkuhapKm9TDChZD
+        bXY1IfYthsaW3mmWsZvA3XOBFD3eMHDu1TQTU57cNgPhKQA2j4H75Q8oMbwNDBM5M6v6wId+
+        k1TkhTBYWkSKLMDrGw5KDGcjMNZaZprD4E6/bUpgphqWQbN5lTjeCg/NdolnDKwXjH32Ft/g
+        Bfr2ckIcK0B3UimiCsznvMQgQE7j6MzdHJSV28gzaEnlrGUqZy1T+b+2GhENyI/PEFISeWGt
+        hs8KFdQpQoYmMXRvaooRTX27wcl+dycy/9zTh1gGqeYqArJy45SUOlM4lNKHgCFUvorz63Pi
+        lIp96kOHeW1qvDYjmRf60AKGVPkpjsx5HqtkE9Xp/AGeT+O1f1UJI5ufjdJR1rGEZ2jRYOzy
+        S20V8R1hQ26Z83Jn1MUgve+yNz26qBXxiuGzISFHO9ZF1oVsKGl58uG+entLZLjdPzqMKTTb
+        DVVlAcS9JGKDznSwUPdxx7xPv+/t6g1b9GvjcFGwy2WeiA7cXZuZ+s7WteS607aZ1vfmB5lO
+        xXRFXBMCO0ZYFSkkqdcsJ7SC+g9oiYmgcgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xu7qx/c2xBts2WFscOraV3eL+vFZG
         i40z1rNaXP/ynNVi/pFzrBZXvr5ns5i+dxObxaT7E1gszp/fwG6x4u5HVotNj6+xWlzeNYfN
         4nPvEUaLGef3MVmsPXKX3eJ24wo2ixmTX7I5CHpsWtXJ5nHn2h42j/vdx5k8Ni+p99j4bgeT
         x8F3e5g8+rasYvT4vEkugCNKz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng81srIVEnf
-        ziYlNSezLLVI3y5BL2PWlq2MBVcFKtYs72NsYJzL18XIySEhYCJxf/Uppi5GLg4hgaWMElNu
-        z2GBSEhIfFx/gxXCFpb4c62LDcQWEvjEKNE2LwXEZhNwlJg09QE7SLOIwClGia3Lz7GBOMwC
-        G5gklj99CdYtLOAr0fj6ENhUFgFViZ2vu4FsDg5eAQuJp5/cIBbIS6zecIAZxOYUsJT4sm8+
-        C8QyC4m5j+cygti8AoISJ2c+AWtlFlCXWD9PCCTMDNTavHU28wRGwVlIqmYhVM1CUrWAkXkV
-        o0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYARvO/Zz8w7GSxuDDzEKcDAq8fAqlDfHCrEmlhVX
-        5h5ilOBgVhLhnWPaFCvEm5JYWZValB9fVJqTWnyI0RTos4nMUqLJ+cDkklcSb2hqaG5haWhu
-        bG5sZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgVHo6zWBT5+fnuw03ml2wv9pf+fVGVcL
-        tvHY8zwrEpP81CfDcTNS7NOVVO63Gn8LHlbJOMh825Sy60m8hMacwp/qhqfmzWD48tbrmPpL
-        m7fJX16qu2UKCMr/U43646nY63OVS//Uq4e6HXIKB+0cFhyVfL9B7YNL02HH5y80q9iDC6c6
-        fVjc8leJpTgj0VCLuag4EQBcdGda9gIAAA==
-X-CMS-MailID: 20190919142325eucas1p28102446c22b1e1c61aae0bad46d079b0
+        ziYlNSezLLVI3y5BL2Ptl5WsBefZK9Yv38LcwLiLrYuRk0NCwERi4+HfjF2MXBxCAksZJXYd
+        OsICkZCQ+Lj+BiuELSzx51oXG0TRJ0aJb+fOgyXYBBwlJk19wA6SEBE4xSixdfk5sCpmgQ1M
+        EsufvgSrEhaIlvjzfiMTiM0ioCoxb9ZFdhCbV8BCYlnDAmaIFfISqzccALM5BSwlvuybD3aG
+        EFDN3MdzGSHqBSVOznwCFOcAWqAusX6eEEiYGai1eets5gmMgrOQVM1CqJqFpGoBI/MqRpHU
+        0uLc9NxiI73ixNzi0rx0veT83E2MwCjeduznlh2MXe+CDzEKcDAq8fAqlDfHCrEmlhVX5h5i
+        lOBgVhLhnWPaFCvEm5JYWZValB9fVJqTWnyI0RTotYnMUqLJ+cAEk1cSb2hqaG5haWhubG5s
+        ZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgXHzizM5okftX/LsumzmY9PM/bM/qOKUhq91
+        tXuCfKn5IQmmtEd/FFnu3PCc176Zc8V+1Z3PL4SE3FOt3FTRvFFe9Lz5vKfSiumX5scK7ghe
+        7/Zh9dJTuow7vObyld04cyXytZJR+bbzfGkf2nY6THwQIHQwdhVD4RmXf7LBvVXfLtxgbdGp
+        u6bEUpyRaKjFXFScCAA/QVJ9+AIAAA==
+X-CMS-MailID: 20190919142326eucas1p204819014fe85716b47e2de4af9102cd5
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190919142325eucas1p28102446c22b1e1c61aae0bad46d079b0
+X-RootMTR: 20190919142326eucas1p204819014fe85716b47e2de4af9102cd5
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190919142325eucas1p28102446c22b1e1c61aae0bad46d079b0
+X-CMS-RootMailID: 20190919142326eucas1p204819014fe85716b47e2de4af9102cd5
 References: <20190919142236.4071-1-a.swigon@samsung.com>
-        <CGME20190919142325eucas1p28102446c22b1e1c61aae0bad46d079b0@eucas1p2.samsung.com>
+        <CGME20190919142326eucas1p204819014fe85716b47e2de4af9102cd5@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -107,61 +107,29 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Artur Świgoń <a.swigon@partner.samsung.com>
 
-This patch makes the above function public (for use in exynos-bus devfreq
-driver).
+This patch relaxes the condition in of_icc_get_from_provider() so that it
+is no longer required to set #interconnect-cells = <1> in the DT. In case
+of the devfreq driver for exynos-bus, #interconnect-cells is always zero.
 
 Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/interconnect/core.c           | 3 ++-
- include/linux/interconnect-provider.h | 6 ++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/interconnect/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 7b971228df38..95850700e367 100644
+index 95850700e367..f357c3a78858 100644
 --- a/drivers/interconnect/core.c
 +++ b/drivers/interconnect/core.c
-@@ -279,7 +279,7 @@ EXPORT_SYMBOL_GPL(of_icc_xlate_onecell);
-  * Returns a valid pointer to struct icc_node on success or ERR_PTR()
-  * on failure.
-  */
--static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
-+struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
- {
+@@ -284,7 +284,7 @@ struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
  	struct icc_node *node = ERR_PTR(-EPROBE_DEFER);
  	struct icc_provider *provider;
-@@ -298,6 +298,7 @@ static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
  
- 	return node;
- }
-+EXPORT_SYMBOL_GPL(of_icc_get_from_provider);
+-	if (!spec || spec->args_count != 1)
++	if (!spec)
+ 		return ERR_PTR(-EINVAL);
  
- /**
-  * of_icc_get() - get a path handle from a DT node based on name
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index b16f9effa555..070e411564e1 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -100,6 +100,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider);
- void icc_node_del(struct icc_node *node);
- int icc_provider_add(struct icc_provider *provider);
- int icc_provider_del(struct icc_provider *provider);
-+struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec);
- 
- #else
- 
-@@ -140,6 +141,11 @@ static inline int icc_provider_del(struct icc_provider *provider)
- 	return -ENOTSUPP;
- }
- 
-+struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
-+{
-+	return ERR_PTR(-ENOTSUPP);
-+}
-+
- #endif /* CONFIG_INTERCONNECT */
- 
- #endif /* __LINUX_INTERCONNECT_PROVIDER_H */
+ 	mutex_lock(&icc_lock);
 -- 
 2.17.1
 
