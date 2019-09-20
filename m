@@ -2,174 +2,304 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 554C9B985E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 22:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE189B9921
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 23:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbfITUUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Sep 2019 16:20:43 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43094 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728851AbfITUUn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Sep 2019 16:20:43 -0400
-Received: by mail-pg1-f195.google.com with SMTP id d4so1348920pgd.10
-        for <linux-pm@vger.kernel.org>; Fri, 20 Sep 2019 13:20:42 -0700 (PDT)
+        id S2392783AbfITVnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Sep 2019 17:43:10 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:45459 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392617AbfITVnJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Sep 2019 17:43:09 -0400
+Received: by mail-vs1-f66.google.com with SMTP id d204so5647387vsc.12
+        for <linux-pm@vger.kernel.org>; Fri, 20 Sep 2019 14:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4jEdIuqou/FiebeNFZj3DkFRHq3sTw58SvYggZlIuaw=;
-        b=juTm4bMacMm/1cN6Fh+4WSECDG9qHNe+MvrITHFK/JAs3cC41S9FUpGLPZ+5aN4CJu
-         fyVF9uCiM36zIZmuLOJnI1uZITrpv+/GDoZZsPRJ5b3RnhXWPBO+xtB0uKKIfckGKkE2
-         tXhpEwDyg1/gwJDmQayiHMRP7y8BXCkAaQOCT3LW8jfNgxgSTujhN3TqI2tYoZQ61VKr
-         BiPyQgF2tCQI77E7peINv4XJfmMrfPCFX1EaIJPlcgAWsxmyTIByGQdvqPuGsJNV95Sw
-         +3T8uqLIxI8B2c+kTTM+ZOfI1TE8v0x5w74wRYXN0v2XyebpjicR7z5uGbRR4tx88TAz
-         NjMg==
+        bh=DsLE449MYN0lijunGmoaJH+J0lh52Nq00qDntzefXoo=;
+        b=Y41UWNhXfoaLvFvHT2mK5PnQUDu2rsLdZVpGTzNyuAkQMu8tbTrR/zLCcF2rY4aTZ6
+         lfszb21KlSm+f2/ZQ2WXSn4tmBCbqbPo5kf1qEnnT9gmxwoD6WodV6ekHlj96UWiacrp
+         QpugkSZICRkCQLCUiQ8BP6ekjlj0AwYL0agn5KeiOA9Sf0/VH0SEHoZb/21l1Eqt5pub
+         cJ43PMl4W4FFT+vJAJoO17u9IuNKgx6aK1PZW8jBhWEtXMnzyW2Q68TfpS4BW2BmGFrz
+         BJWz3H0Z7zaAtUvsUf7dwPr3Qvjyxlvt+OYmKzb7Qb1aCzpyDMrW66M2LKk4wZAOWMQ4
+         3Aug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4jEdIuqou/FiebeNFZj3DkFRHq3sTw58SvYggZlIuaw=;
-        b=fsUo4XkIYHqXyfGV/EkQkdwy+yIqqKwS/wS4ugsvkP7K4XXJH6G4+MGpoDnGOOiWsP
-         yqq5UJoC3biwKz6Bbg6ctJbQiTmLbMsQ9RZGOgB8BAOB5AFCRw/9m3X9BfbI9wARt82M
-         Pkb2N/j9pRF3gvGblg5SymBK2vqSyAMTO9GFvh+9TA4nxO5Bfpk3Ud7aFhYmEyOFV6DH
-         dm7zVUvAqpBPcJGJrIK9GY3KqNTIv2IQEgT3PqUKD89/K+ou/IWlFy9KB3qsJUFsA6hK
-         qyuo+sMwl11v1AVMK8AwooxpOicu4DeMu69KiqUvd3kKNqPi3wjNaGLSWHccSwNEPr32
-         vcCg==
-X-Gm-Message-State: APjAAAUtTYmnokfNOpOwC1dsn4WLxccwHBQuC0TuavpqEwRIdVllmIZ8
-        iXjf2EAQQlyYcWjftwlTXEJSrHLulKb/NB/PuEulWg==
-X-Google-Smtp-Source: APXvYqyRc3UYLiS8vXXYMqoSjnlqBODnfNKd4EE2IuClfNzBg5BAuREBQ6pVyPKUw4f3ZvhKwNEl6R5M+W8GKL0lY6o=
-X-Received: by 2002:a63:d1a:: with SMTP id c26mr13159937pgl.286.1569010841781;
- Fri, 20 Sep 2019 13:20:41 -0700 (PDT)
+        bh=DsLE449MYN0lijunGmoaJH+J0lh52Nq00qDntzefXoo=;
+        b=APz0PC+KcnBGS6okiBRVTb1AaHV+KQRvA04ziQjLGq2zHPzfsmG0r/AEL8oLzON2Nz
+         P3xj5FcnQI7LFgIBXQDyvk4mPbBpTCbbyfNpk2VSM41bH0VzkePF1hlKpyU4cFlkGYQa
+         CN7CcFF/yjQ9youcZe7QgkvtBQS+pgJxCvVWPi5v0qEqcB6WnKB4lKvg1xBsv8dx5Oma
+         aBCAxr6tt5WpylcCaNkJ6fc52aOEkrKtVZQJ/ujb3lUTtgYxOG99xg/SYuyGsJG0UBAT
+         ONUjP8UG0RZ15IHLVEITO47H+FCDau9Tr3WS+agWl/FHijsUnKQMa9tdfsQKClnNjm8+
+         +Dng==
+X-Gm-Message-State: APjAAAVHAZTrh79Wv2Yp9rP02sJ9D9mMuNIDxp6VZ4lCIiV/GXx5N2sl
+        QSdo8BmM2w3yTbDQWqekXDgWFdadz3YqdwPUnt92yQ==
+X-Google-Smtp-Source: APXvYqxqwvjtfbTFvURwOAkGiT1FsWywrL0zaIpbPwm+wwJzPOW+clQhLp9/KxIWk3c8VeHdjYcFDVe6vOxn0tYw7GQ=
+X-Received: by 2002:a67:6044:: with SMTP id u65mr3810616vsb.95.1569015788245;
+ Fri, 20 Sep 2019 14:43:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000002ed3ab059300aaf1@google.com>
-In-Reply-To: <0000000000002ed3ab059300aaf1@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 20 Sep 2019 22:20:30 +0200
-Message-ID: <CAAeHK+xFWz=6=sQoayHTuXn66dYX5xCYPh_LH=-0m3nMMW-2BQ@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel paging request in __pm_runtime_resume
-To:     syzbot <syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <cover.1568185732.git.amit.kucheria@linaro.org>
+ <933f033298cbd7726a6c0b4b3b6cc7adc81784ba.1568185732.git.amit.kucheria@linaro.org>
+ <20190917190619.GA9311@bogus>
+In-Reply-To: <20190917190619.GA9311@bogus>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Fri, 20 Sep 2019 14:42:57 -0700
+Message-ID: <CAHLCerMc=+Xyf-KkJ4gn0Cfs8yuTTLetKEuSiKCwK4kAWo7ocw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/15] dt-bindings: thermal: tsens: Convert over to a
+ yaml schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 8:59 PM syzbot
-<syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com> wrote:
+On Tue, Sep 17, 2019 at 12:06 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1670fa55600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=28ecdc146b8e7def92dd
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com
->
-> BUG: unable to handle page fault for address: fffffbfff23530b1
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 21ffef067 P4D 21ffef067 PUD 21ffb2067 PMD 0
-> Oops: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 17297 Comm: syz-executor.5 Not tainted 5.3.0+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:92 [inline]
-> RIP: 0010:memory_is_nonzero mm/kasan/generic.c:109 [inline]
-> RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
-> RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
-> RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
-> RIP: 0010:check_memory_region+0x117/0x190 mm/kasan/generic.c:192
-> Code: 75 2f 49 89 e9 49 29 c1 e9 6c ff ff ff 5b b8 01 00 00 00 5d 41 5c c3
-> 4d 85 c9 74 f1 49 01 d9 eb 09 48 83 c0 01 4c 39 c8 74 e3 <80> 38 00 74 f2
-> eb 92 4d 39 c2 74 4b e8 f8 e7 ff ff 31 c0 5b 5d 41
-> RSP: 0018:ffff8881c7427710 EFLAGS: 00010086
-> RAX: fffffbfff23530b1 RBX: fffffbfff23530b1 RCX: ffffffff8125804b
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff91a98588
-> RBP: fffffbfff23530b2 R08: 0000000000000001 R09: fffffbfff23530b2
-> R10: fffffbfff23530b1 R11: ffffffff91a9858f R12: ba771047467ec365
-> R13: 00000000467ec365 R14: 0000000000000003 R15: ffff8881cbca2078
-> FS:  00007f1c25a58700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: fffffbfff23530b1 CR3: 00000001d664d000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   test_bit include/asm-generic/bitops-instrumented.h:237 [inline]
->   __lock_acquire+0x133b/0x3eb0 kernel/locking/lockdep.c:3925
->   lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4487
->   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->   _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
->   __pm_runtime_resume+0xf5/0x180 drivers/base/power/runtime.c:1077
->   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
->   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1709
->   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
->   hid_hw_power include/linux/hid.h:1038 [inline]
->   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
->   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->   do_dentry_open+0x494/0x1120 fs/open.c:797
->   do_last fs/namei.c:3408 [inline]
->   path_openat+0x1430/0x3f50 fs/namei.c:3525
->   do_filp_open+0x1a1/0x280 fs/namei.c:3555
->   do_sys_open+0x3c0/0x580 fs/open.c:1089
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x4138f1
-> Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
-> 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
-> 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
-> RSP: 002b:00007f1c25a577a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00000000004138f1
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007f1c25a57850
-> RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00007f1c25a586d4
-> R13: 00000000004c8df7 R14: 00000000004dff20 R15: 00000000ffffffff
-> Modules linked in:
-> CR2: fffffbfff23530b1
-> ---[ end trace 839607b5f3b5bbdf ]---
-> RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:92 [inline]
-> RIP: 0010:memory_is_nonzero mm/kasan/generic.c:109 [inline]
-> RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
-> RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
-> RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
-> RIP: 0010:check_memory_region+0x117/0x190 mm/kasan/generic.c:192
-> Code: 75 2f 49 89 e9 49 29 c1 e9 6c ff ff ff 5b b8 01 00 00 00 5d 41 5c c3
-> 4d 85 c9 74 f1 49 01 d9 eb 09 48 83 c0 01 4c 39 c8 74 e3 <80> 38 00 74 f2
-> eb 92 4d 39 c2 74 4b e8 f8 e7 ff ff 31 c0 5b 5d 41
-> RSP: 0018:ffff8881c7427710 EFLAGS: 00010086
-> RAX: fffffbfff23530b1 RBX: fffffbfff23530b1 RCX: ffffffff8125804b
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff91a98588
-> RBP: fffffbfff23530b2 R08: 0000000000000001 R09: fffffbfff23530b2
-> R10: fffffbfff23530b1 R11: ffffffff91a9858f R12: ba771047467ec365
-> R13: 00000000467ec365 R14: 0000000000000003 R15: ffff8881cbca2078
-> FS:  00007f1c25a58700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: fffffbfff23530b1 CR3: 00000001d664d000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> On Wed, Sep 11, 2019 at 12:46:24PM +0530, Amit Kucheria wrote:
+> > Document interrupt support in the tsens driver by converting over to a
+> > YAML schema.
+> >
+> > Suggested-by: Stephen Boyd <swboyd@chromium.org>
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >  .../bindings/thermal/qcom-tsens.txt           |  55 ------
+> >  .../bindings/thermal/qcom-tsens.yaml          | 174 ++++++++++++++++++
+> >  MAINTAINERS                                   |   1 +
+> >  3 files changed, 175 insertions(+), 55 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
 >
 >
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > new file mode 100644
+> > index 000000000000..6784766fe58f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > @@ -0,0 +1,174 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +# Copyright 2019 Linaro Ltd.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: QCOM SoC Temperature Sensor (TSENS)
+> > +
+> > +maintainers:
+> > +  - Amit Kucheria <amit.kucheria@linaro.org>
+> > +
+> > +description: |
+> > +  QCOM SoCs have TSENS IP to allow temperature measurement. There are currently
+> > +  three distinct major versions of the IP that is supported by a single driver.
+> > +  The IP versions are named v0.1, v1 and v2 in the driver, where v0.1 captures
+> > +  everything before v1 when there was no versioning information.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: v0.1 of TSENS
+> > +        items:
+> > +          - enum:
+> > +              - qcom,msm8916-tsens
+> > +              - qcom,msm8974-tsens
+> > +          - const: qcom,tsens-v0_1
+> > +
+> > +      - description: v1 of TSENS
+> > +        items:
+> > +          - enum:
+> > +              - qcom,qcs404-tsens
+> > +          - const: qcom,tsens-v1
+> > +
+> > +      - description: v2 of TSENS
+> > +        items:
+> > +          - enum:
+> > +              - qcom,msm8996-tsens
+> > +              - qcom,msm8998-tsens
+> > +              - qcom,sdm845-tsens
+> > +          - const: qcom,tsens-v2
+> > +
+> > +  reg:
+> > +    maxItems: 2
+> > +    items:
+> > +      - description: TM registers
+> > +      - description: SROT registers
+> > +
+> > +  nvmem-cells:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +    description:
+> > +      Reference to an nvmem node for the calibration data
+> > +
+> > +  nvmem-cells-names:
 >
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> This is going to require 2 items, so you need an explicit minItems and
+> maxItems.
 
-#syz dup: general protection fault in __pm_runtime_resume
+Will fix.
+
+> > +    items:
+> > +      - enum:
+> > +        - caldata
+> > +        - calsel
+> > +
+> > +  "#qcom,sensors":
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#/definitions/uint32
+> > +      - minimum: 1
+> > +      - maximum: 16
+> > +    description:
+> > +      Number of sensors enabled on this platform
+> > +
+> > +  "#thermal-sensor-cells":
+> > +    const: 1
+> > +    description:
+> > +      Number of cells required to uniquely identify the thermal sensors. Since
+> > +      we have multiple sensors this is set to 1
+> > +
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,msm8916-tsens
+> > +              - qcom,msm8974-tsens
+> > +              - qcom,qcs404-tsens
+> > +              - qcom,tsens-v0_1
+> > +              - qcom,tsens-v1
+> > +    then:
+> > +      properties:
+> > +        interrupts:
+>
+> > +          minItems: 1
+> > +          maxItems: 1
+>
+> These can be implicit.
+
+Will remove all of these.
+
+> > +          items:
+> > +            - description: Combined interrupt if upper or lower threshold crossed
+> > +        interrupt-names:
+> > +          minItems: 1
+> > +          maxItems: 1
+>
+> ditto.
+>
+> > +          items:
+> > +            - const: uplow
+> > +
+> > +    else:
+> > +      properties:
+> > +        interrupts:
+> > +          minItems: 2
+> > +          maxItems: 2
+>
+> ditto.
+>
+> > +          items:
+> > +            - description: Combined interrupt if upper or lower threshold crossed
+> > +            - description: Interrupt if critical threshold crossed
+> > +        interrupt-names:
+> > +          minItems: 2
+> > +          maxItems: 2
+>
+> ditto.
+>
+> > +          items:
+> > +            - const: uplow
+> > +            - const: critical
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#qcom,sensors"
+> > +  - interrupts
+> > +  - interrupt-names
+> > +  - "#thermal-sensor-cells"
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    // Example 1 (legacy: for pre v1 IP):
+> > +    tsens1: thermal-sensor@900000 {
+> > +           compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
+> > +           reg = <0x4a9000 0x1000>, /* TM */
+> > +                 <0x4a8000 0x1000>; /* SROT */
+> > +
+> > +           nvmem-cells = <&tsens_caldata>, <&tsens_calsel>;
+> > +           nvmem-cell-names = "caldata", "calsel";
+> > +
+> > +           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+> > +           interrupt-names = "uplow";
+> > +
+> > +           #qcom,sensors = <5>;
+> > +           #thermal-sensor-cells = <1>;
+> > +    };
+> > +
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    // Example 2 (for any platform containing v1 of the TSENS IP):
+> > +    tsens2: thermal-sensor@4a9000 {
+> > +          compatible = "qcom,qcs404-tsens", "qcom,tsens-v1";
+> > +          reg = <0x004a9000 0x1000>, /* TM */
+> > +                <0x004a8000 0x1000>; /* SROT */
+> > +
+> > +          nvmem-cells = <&tsens_caldata>;
+> > +          nvmem-cell-names = "calib";
+> > +
+> > +          interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
+> > +          interrupt-names = "uplow";
+> > +
+> > +          #qcom,sensors = <10>;
+> > +          #thermal-sensor-cells = <1>;
+> > +    };
+> > +
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    // Example 3 (for any platform containing v2 of the TSENS IP):
+> > +    tsens3: thermal-sensor@c263000 {
+> > +           compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
+> > +           reg = <0xc263000 0x1ff>,
+> > +                 <0xc222000 0x1ff>;
+> > +
+> > +           interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
+> > +                        <GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
+> > +           interrupt-names = "uplow", "critical";
+> > +
+> > +           #qcom,sensors = <13>;
+> > +           #thermal-sensor-cells = <1>;
+> > +    };
+> > +...
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index e7a47b5210fd..ff757a4a060c 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -13360,6 +13360,7 @@ L:    linux-pm@vger.kernel.org
+> >  L:   linux-arm-msm@vger.kernel.org
+> >  S:   Maintained
+> >  F:   drivers/thermal/qcom/
+> > +F:   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> >
+> >  QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+> >  M:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> > --
+> > 2.17.1
+> >
