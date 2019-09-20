@@ -2,95 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7AEB9506
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 18:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121ABB9608
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 18:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388389AbfITQPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Sep 2019 12:15:00 -0400
-Received: from cmta19.telus.net ([209.171.16.92]:50410 "EHLO cmta19.telus.net"
+        id S2405438AbfITQyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Sep 2019 12:54:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387607AbfITQPA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 20 Sep 2019 12:15:00 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id BLYcixrqHhFQMBLYfizcmy; Fri, 20 Sep 2019 10:14:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1568996098; bh=aeW5jjgqMzuGpbSTqqcFvfJB2sG1SOju6ifKBt3X4nA=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=ut4W5JlRbBs/LfaCZ0cvUtvvEY12iJlMJTI+gVjI9kT8JIbYEpSWjDUQQc1ryzopi
-         bbZe40MrKhrsvz2xaDpfZTA85WzCb4e+wZglH1dQfZVZrT+YMkK5dWx8b6zu5NzhCe
-         WYplAOXd1Gs6q97qlB7YFwW+WeCrVlKJgyUb/JkPPfiWd5Iyc4dk/kWvKc6q9l4GJS
-         VzRrWG033CFISxNIBUn4BU6Bus2IfOzzl0i/VY13aL1EfX+OxzqKHDRU3rztCjHLUF
-         R/bbE6W+mOv26zkNOwyOKlPcTWVfWvLdSCYDbwDfio3u0iJvIfG2OtdXjTp2/G/WFF
-         Ljbotf6WSDI7w==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=ZPWpZkzb c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=lKRXr2rw8dOSno3372cA:9 a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <4106941.QTENAb3AiO@kreacher>
-In-Reply-To: <4106941.QTENAb3AiO@kreacher>
-Subject: RE: [RFC][PATCH] cpuidle: Use nanoseconds as the unit of time
-Date:   Fri, 20 Sep 2019 09:14:57 -0700
-Message-ID: <000401d56fce$8bcb4bc0$a361e340$@net>
+        id S2405360AbfITQyC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 20 Sep 2019 12:54:02 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B5DB207FC;
+        Fri, 20 Sep 2019 16:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568998442;
+        bh=sLOES0dJNNhN/FCJjlLywq5/50hm54xCZ0l0xpS2B5w=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=cyXCU3VghdUV0JG6NWEgRtcEAqgrtLyVbvntG/u8Qkrni50iNAw3mlEsuRAygnpMf
+         qSNge/z+pOIZFkga6St28xLlcKVkklBXJfIBb0vwLF4rlyZxpi7gtRzdD0cH0p+80J
+         hy7EzuyppwYRx5klrV5IYJvj89lLRR0PV5OulyFQ=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdVkB9p1OMgD49xWTKubfSRhN7dHwQLxMqHQ
-X-CMAE-Envelope: MS4wfEu78SYq01PiaV8mL0V2T30TQXpiU9TA3ipVXHzCMWY7bpW+tCrIZG8nLsi7itIjzDjTUpleMX2fg4yWUSKCoDuWKaIoJ+4fVPH0MHooQlVe/x/l/zqf
- FeqOwszXyyqz43gw7Bjy4jrwnwJl6wSMDAhgIXsyuezUeBeQAowl4GtvI1CozwHt+TbX4aN7nC516mVzYnNu8mjCyQmqbor6PKao1ITLgHl3nbkW8GHFQMZo
- dCLTrOcK9FrKDr3DCldPnhaT/rqxbFoofnnF5/09Csk=
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190920100301.0674a5b6@xps13>
+References: <20190627125245.26788-1-miquel.raynal@bootlin.com> <20190917173154.722CB2171F@mail.kernel.org> <20190920100301.0674a5b6@xps13>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Nadav Haklai <nadavh@marvell.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        <marek.behun@nic.cz>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3 0/4] Prepare Armada 3700 PCIe suspend to RAM support
+User-Agent: alot/0.8.1
+Date:   Fri, 20 Sep 2019 09:54:01 -0700
+Message-Id: <20190920165402.4B5DB207FC@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Quoting Miquel Raynal (2019-09-20 01:03:01)
+> Hi Stephen,
+>=20
+> Stephen Boyd <sboyd@kernel.org> wrote on Tue, 17 Sep 2019 10:31:53
+> -0700:
+>=20
+> > Quoting Miquel Raynal (2019-06-27 05:52:41)
+> > > Hello,
+> > >=20
+> > > As part of an effort to bring suspend to RAM support to the Armada
+> > > 3700 SoC (main target: ESPRESSObin board), there are small things to
+> > > do in the Armada 3700 peripherals clock driver:
+> > >=20
+> > > * On this SoC, the PCIe controller gets fed by a gated clock in the
+> > >   south bridge. This clock is missing in the current driver, patch 1
+> > >   adds it.
+> > >=20
+> > > * Because of a constraint in the PCI core, the resume function of a
+> > >   PCIe controller driver must be run at an early stage
+> > >   (->suspend/resume_noirq()), before the core tries to ->read/write()
+> > >   in the PCIe registers to do more configuration. Hence, the PCIe
+> > >   clock must be resumed before. This is enforced thanks to two
+> > >   changes:
+> > >   1/ Add device links to the clock framework. This enforce order in
+> > >      the PM core: the clocks are resumed before the consumers. Series
+> > >      has been posted, see [1].
+> > >   2/ Even with the above feature, the clock's resume() callback is
+> > >      called after the PCI controller's resume_noirq() callback. The
+> > >      only way to fix this is to change the "priority" of the clock
+> > >      suspend/resume callbacks. This is done in patch 2.
+> > >=20
+> > > * The bindings are updated with the PCI clock in patch 4 while patch 3
+> > >   is just a typo correction in the same file.
+> > >=20
+> > > If there is anything unclear please feel free to ask.
+> > >  =20
+> >=20
+> > Should I drop this patch series?
+> >=20
+>=20
+> No, if it is right for you I would really prefer to have it merged
+> (sorry for the delay in answering though) because it will be still
+> needed, no matter how clock dependencies are handled.
+>=20
+>=20
 
-To be able to try this patch (and the idle disable consolidation one),
-I simply waited until it would apply properly in the main git tree, which it now does.
-
-However it does not compile:
-
-On 2019.09.05 09:35 Rafael J. Wysocki wrote:
-
-...
-
-> In addition to that, change
-> cpuidle_governor_latency_req() to return the idle state exit
-> latency constraint in nanoseconds.
-
-...
-
-> Index: linux-pm/drivers/cpuidle/governors/menu.c
-
-...
-
-> @@ -388,13 +390,13 @@ static int menu_select(struct cpuidle_dr
-> 			 * closest timer event, select this one to avoid getting
-> 			 * stuck in the shallow one for too long.
-> 			 */
-> -			if (drv->states[idx].target_residency < TICK_USEC &&
-> -			    s->target_residency <= ktime_to_us(delta_next))
-> +			if (drv->states[idx].target_residency_ns < TICK_NSEC &&
-> +			    s->target_residency_ns <= delta_next)
-> 				idx = i;
-> 
-> 			return idx;
-> 		}
-> -		if (s->exit_latency > latency_req)
-> +		if (s->exit_latency_ns > latency_req_ns)
-                                     ^^^^^^^^^^^^^^^
-Should be (I think):
-
-+		if (s->exit_latency_ns > latency_req)
-
+Ok. I'll apply it after the merge window. Let me know if it's more
+urgent than that.
 
