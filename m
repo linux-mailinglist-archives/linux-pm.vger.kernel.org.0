@@ -2,173 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B85FB9838
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 22:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C9B985E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Sep 2019 22:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728077AbfITUDv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Sep 2019 16:03:51 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:38293 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726977AbfITUDv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Sep 2019 16:03:51 -0400
-Received: by mail-qk1-f193.google.com with SMTP id u186so8554652qkc.5
-        for <linux-pm@vger.kernel.org>; Fri, 20 Sep 2019 13:03:50 -0700 (PDT)
+        id S1728896AbfITUUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Sep 2019 16:20:43 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43094 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728851AbfITUUn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Sep 2019 16:20:43 -0400
+Received: by mail-pg1-f195.google.com with SMTP id d4so1348920pgd.10
+        for <linux-pm@vger.kernel.org>; Fri, 20 Sep 2019 13:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uwa4EAZC1poPppej+zNVzAUxvGIzsTLI+17C+mtmgsk=;
-        b=YsNojTry/Nt93tlKFnCheF3yiEmyKEjG2+8LifXCmZJPK4E4QsUjCh6XnOJW9de5AW
-         GytnyL9No6uzzc6oYCYdKCR1fG1x52S2/cjszyRqNwLteYDsCaB1iaEVxl0TM0sYy56F
-         jkBQwOBhRZG0tB5VwcByEkqhenKyDlPx3xSfOWJNcIuS2YTxCEFAggWkeS47CB8ys7eO
-         f3vocqpxxwh17D86th2AdSOdm8dgBdoDp9wyBx1MM0Y/x/m4Z5GtiCfWx3+BD8Izx27d
-         lI5SvDWiL3kaMtLRk3NCZW9yqUChIPag64R1/tJJcCC+JaxQD5TLsafnTUZuz9tuvX7E
-         9mXg==
+        bh=4jEdIuqou/FiebeNFZj3DkFRHq3sTw58SvYggZlIuaw=;
+        b=juTm4bMacMm/1cN6Fh+4WSECDG9qHNe+MvrITHFK/JAs3cC41S9FUpGLPZ+5aN4CJu
+         fyVF9uCiM36zIZmuLOJnI1uZITrpv+/GDoZZsPRJ5b3RnhXWPBO+xtB0uKKIfckGKkE2
+         tXhpEwDyg1/gwJDmQayiHMRP7y8BXCkAaQOCT3LW8jfNgxgSTujhN3TqI2tYoZQ61VKr
+         BiPyQgF2tCQI77E7peINv4XJfmMrfPCFX1EaIJPlcgAWsxmyTIByGQdvqPuGsJNV95Sw
+         +3T8uqLIxI8B2c+kTTM+ZOfI1TE8v0x5w74wRYXN0v2XyebpjicR7z5uGbRR4tx88TAz
+         NjMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uwa4EAZC1poPppej+zNVzAUxvGIzsTLI+17C+mtmgsk=;
-        b=NgCTf/t0O/+lSEcOgHEbctvtHxGzRQ0QN+OBmoVbfK0tgMcJsfIxaVpkaGBFjwIi4E
-         7rkP7SUejyo1wQtUFJBeLhc18/bciOm5nwFy1i/X46SG5HfxOr2gCm3ToJcT7JVRw3mY
-         J7EHdo5ujqZfdOvskmHdBouRNnc46NLRYqYRIKCq+ys4GjUsJlLR/BTvnpStWJ1ikPXO
-         TiSUauZ7lwhAFsAJ3oE6pzWToIr1q/Scv8QcrT4FolufynYEfBMmn5Y6rVeN0wouUdJf
-         /In0dwnood7WJ54jxJ/qd29gWjeFza5MZkUKiNGlrtMxD8jtYd85iEW0tg7kLbeFWyE4
-         1Nvw==
-X-Gm-Message-State: APjAAAVStO/yJtIesdB2BbGEAVCeOpW9PfuZ/R62EpV9uGLeK2MtIFwB
-        hM6cRJ7f54EwVxSWMvxCt0vfpM9w7NqXCHBSOWwLvg==
-X-Google-Smtp-Source: APXvYqwzQEWk2WXsSzH0cM+f21LhG2/T3g+JPI6SID+TAjvudvGxccjtSqDO+6NeLBY2Pbv22xx/3k6DAZtMQ/4Xqjc=
-X-Received: by 2002:a37:6d2:: with SMTP id 201mr5583270qkg.106.1569009829829;
- Fri, 20 Sep 2019 13:03:49 -0700 (PDT)
+        bh=4jEdIuqou/FiebeNFZj3DkFRHq3sTw58SvYggZlIuaw=;
+        b=fsUo4XkIYHqXyfGV/EkQkdwy+yIqqKwS/wS4ugsvkP7K4XXJH6G4+MGpoDnGOOiWsP
+         yqq5UJoC3biwKz6Bbg6ctJbQiTmLbMsQ9RZGOgB8BAOB5AFCRw/9m3X9BfbI9wARt82M
+         Pkb2N/j9pRF3gvGblg5SymBK2vqSyAMTO9GFvh+9TA4nxO5Bfpk3Ud7aFhYmEyOFV6DH
+         dm7zVUvAqpBPcJGJrIK9GY3KqNTIv2IQEgT3PqUKD89/K+ou/IWlFy9KB3qsJUFsA6hK
+         qyuo+sMwl11v1AVMK8AwooxpOicu4DeMu69KiqUvd3kKNqPi3wjNaGLSWHccSwNEPr32
+         vcCg==
+X-Gm-Message-State: APjAAAUtTYmnokfNOpOwC1dsn4WLxccwHBQuC0TuavpqEwRIdVllmIZ8
+        iXjf2EAQQlyYcWjftwlTXEJSrHLulKb/NB/PuEulWg==
+X-Google-Smtp-Source: APXvYqyRc3UYLiS8vXXYMqoSjnlqBODnfNKd4EE2IuClfNzBg5BAuREBQ6pVyPKUw4f3ZvhKwNEl6R5M+W8GKL0lY6o=
+X-Received: by 2002:a63:d1a:: with SMTP id c26mr13159937pgl.286.1569010841781;
+ Fri, 20 Sep 2019 13:20:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1568240476.git.amit.kucheria@linaro.org>
- <b731b713d8738239c26361ece7f5cadea035b353.1568240476.git.amit.kucheria@linaro.org>
- <20190917093412.GA24757@bogus> <58e60ca4-9615-bbdf-5fe7-2a0e1d7f48d8@linaro.org>
- <20190917132035.GB30016@bogus>
-In-Reply-To: <20190917132035.GB30016@bogus>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Fri, 20 Sep 2019 13:03:38 -0700
-Message-ID: <CAP245DWSKGgJWkbGhXMazqjsEy7PBumN_r0Do6nhbQRv58R_zw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] cpufreq: qcom-hw: Move driver initialisation earlier
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lina Iyer <ilina@codeaurora.org>,
+References: <0000000000002ed3ab059300aaf1@google.com>
+In-Reply-To: <0000000000002ed3ab059300aaf1@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 20 Sep 2019 22:20:30 +0200
+Message-ID: <CAAeHK+xFWz=6=sQoayHTuXn66dYX5xCYPh_LH=-0m3nMMW-2BQ@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel paging request in __pm_runtime_resume
+To:     syzbot <syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sudeep,
-
-On Tue, Sep 17, 2019 at 6:20 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Fri, Sep 20, 2019 at 8:59 PM syzbot
+<syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com> wrote:
 >
-> On Tue, Sep 17, 2019 at 02:47:22PM +0200, Daniel Lezcano wrote:
-> >
-> > Hi Sudeep,
-> >
-> > On 17/09/2019 11:34, Sudeep Holla wrote:
-> > > On Thu, Sep 12, 2019 at 04:02:34AM +0530, Amit Kucheria wrote:
-> > >> Allow qcom-hw driver to initialise right after the cpufreq and thermal
-> > >> subsystems are initialised in core_initcall so we get earlier access to
-> > >> thermal mitigation.
-> > >>
-> > >> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > >> ---
-> > >>  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
-> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > >> index 4b0b50403901..04676cc82ba6 100644
-> > >> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > >> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > >> @@ -327,7 +327,7 @@ static int __init qcom_cpufreq_hw_init(void)
-> > >>  {
-> > >>    return platform_driver_register(&qcom_cpufreq_hw_driver);
-> > >>  }
-> > >> -device_initcall(qcom_cpufreq_hw_init);
-> > >> +postcore_initcall(qcom_cpufreq_hw_init);
-> > >
-> > > I am fine with core framework initcall pushed to earlier initcall levels
-> > > if required, but for individual/platform specific drivers I am not so
-> > > happy to see that.
-> > >
-> > > This goes against the grand plan of single common kernel strategy by
-> > > Android moving all drivers as modules. We might decide to make this
-> > > a module.
-> >
-> > module = mounted file system = very late initialization
-> >
-> > Is that the plan? Force every driver to load too late?
-> >
+> Hello,
 >
-> Yes. Something similar to what we have on desktops/servers.
+> syzbot found the following crash on:
 >
-> > There are core drivers which must be loaded as soon as possible. If the
-> > qcom driver is one of them, then what is the problem?
-> >
+> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1670fa55600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=28ecdc146b8e7def92dd
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 >
-> I am fine with that if it's really issue but it shouldn't become the
-> defacto trend.
-
-I didn't convert other HW drivers on purpose since it's really up to
-the platform to decide. I have tested with all drivers converted to
-core_initcall and didn't find any boot issues on kernelci.
-
-> > "The grand plan" will have to solve this first before doing the module
-> > move.
-> >
+> Unfortunately, I don't have any reproducer for this crash yet.
 >
-> Sure, I just expressed my view as it looks to be going in different
-> direction for me.
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+28ecdc146b8e7def92dd@syzkaller.appspotmail.com
 >
-> > > Also there are few cpufreq drivers that are modules. Will
-> > > they have issues ? If not, why do we need this change at all.
-> >
-> > Because some boards don't have thermal issues with the cpufreq drivers
-> > as module, other boards have.
-> >
+> BUG: unable to handle page fault for address: fffffbfff23530b1
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 21ffef067 P4D 21ffef067 PUD 21ffb2067 PMD 0
+> Oops: 0000 [#1] SMP KASAN
+> CPU: 1 PID: 17297 Comm: syz-executor.5 Not tainted 5.3.0+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:92 [inline]
+> RIP: 0010:memory_is_nonzero mm/kasan/generic.c:109 [inline]
+> RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
+> RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
+> RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
+> RIP: 0010:check_memory_region+0x117/0x190 mm/kasan/generic.c:192
+> Code: 75 2f 49 89 e9 49 29 c1 e9 6c ff ff ff 5b b8 01 00 00 00 5d 41 5c c3
+> 4d 85 c9 74 f1 49 01 d9 eb 09 48 83 c0 01 4c 39 c8 74 e3 <80> 38 00 74 f2
+> eb 92 4d 39 c2 74 4b e8 f8 e7 ff ff 31 c0 5b 5d 41
+> RSP: 0018:ffff8881c7427710 EFLAGS: 00010086
+> RAX: fffffbfff23530b1 RBX: fffffbfff23530b1 RCX: ffffffff8125804b
+> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff91a98588
+> RBP: fffffbfff23530b2 R08: 0000000000000001 R09: fffffbfff23530b2
+> R10: fffffbfff23530b1 R11: ffffffff91a9858f R12: ba771047467ec365
+> R13: 00000000467ec365 R14: 0000000000000003 R15: ffff8881cbca2078
+> FS:  00007f1c25a58700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: fffffbfff23530b1 CR3: 00000001d664d000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   test_bit include/asm-generic/bitops-instrumented.h:237 [inline]
+>   __lock_acquire+0x133b/0x3eb0 kernel/locking/lockdep.c:3925
+>   lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4487
+>   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>   _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+>   __pm_runtime_resume+0xf5/0x180 drivers/base/power/runtime.c:1077
+>   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+>   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1709
+>   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+>   hid_hw_power include/linux/hid.h:1038 [inline]
+>   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+>   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+>   do_dentry_open+0x494/0x1120 fs/open.c:797
+>   do_last fs/namei.c:3408 [inline]
+>   path_openat+0x1430/0x3f50 fs/namei.c:3525
+>   do_filp_open+0x1a1/0x280 fs/namei.c:3555
+>   do_sys_open+0x3c0/0x580 fs/open.c:1089
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x4138f1
+> Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
+> 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
+> 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+> RSP: 002b:00007f1c25a577a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+> RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00000000004138f1
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007f1c25a57850
+> RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: 00007f1c25a586d4
+> R13: 00000000004c8df7 R14: 00000000004dff20 R15: 00000000ffffffff
+> Modules linked in:
+> CR2: fffffbfff23530b1
+> ---[ end trace 839607b5f3b5bbdf ]---
+> RIP: 0010:bytes_is_nonzero mm/kasan/generic.c:92 [inline]
+> RIP: 0010:memory_is_nonzero mm/kasan/generic.c:109 [inline]
+> RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
+> RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
+> RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
+> RIP: 0010:check_memory_region+0x117/0x190 mm/kasan/generic.c:192
+> Code: 75 2f 49 89 e9 49 29 c1 e9 6c ff ff ff 5b b8 01 00 00 00 5d 41 5c c3
+> 4d 85 c9 74 f1 49 01 d9 eb 09 48 83 c0 01 4c 39 c8 74 e3 <80> 38 00 74 f2
+> eb 92 4d 39 c2 74 4b e8 f8 e7 ff ff 31 c0 5b 5d 41
+> RSP: 0018:ffff8881c7427710 EFLAGS: 00010086
+> RAX: fffffbfff23530b1 RBX: fffffbfff23530b1 RCX: ffffffff8125804b
+> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff91a98588
+> RBP: fffffbfff23530b2 R08: 0000000000000001 R09: fffffbfff23530b2
+> R10: fffffbfff23530b1 R11: ffffffff91a9858f R12: ba771047467ec365
+> R13: 00000000467ec365 R14: 0000000000000003 R15: ffff8881cbca2078
+> FS:  00007f1c25a58700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: fffffbfff23530b1 CR3: 00000001d664d000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 >
-> OK, so this platform boots with default high OPP and needs thermal
-> mitigation that early ? If so, that's fine.
-
-That is indeed the case - 30-40 degree rise in under 50ms can be seen
-on some of these platforms.
-
-> > > Needing
-> > > thermal mitigation during boot this earlier is still too much of
-> > > expectation, I would rather boot slowly than relying on this feature.
-> >
-> > And what if we want to boot faster? The boot time is one of a key point
-> > of benchmark.
-> >
 >
-> I understand the requirement, though for me it's really sounds stupid.
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Is it stupid if the SoC was being used in automotive with a 2s (or
-less) startup requirement? :-)
-
-> As Quentin pointed out, it would be good to get all those benchmark
-> details, and preferably in the commit log so that we can look back
-> whenever someone else take the same approach later.
-
-I'm traveling for Connect this week but will try to post some logs
-with initcall_debug turned on where changing these initcalls shaves
-off several seconds. Just to reassure everyone that GKI isn't
-forgotten, the next set of patches will actually add module support
-for the tsens driver so AOSP can make them modules and things will
-still work.
-
-Regards,
-Amit
+#syz dup: general protection fault in __pm_runtime_resume
