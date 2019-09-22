@@ -2,81 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC4DBA390
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 20:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72289BA4E3
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 20:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388506AbfIVSAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Sep 2019 14:00:16 -0400
-Received: from muru.com ([72.249.23.125]:34172 "EHLO muru.com"
+        id S2407962AbfIVSwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Sep 2019 14:52:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387966AbfIVSAQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:00:16 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 010F6804F;
-        Sun, 22 Sep 2019 18:00:46 +0000 (UTC)
-Date:   Sun, 22 Sep 2019 11:00:12 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
-Subject: Re: [PATCH 2/3] power: supply: cpcap-battery: Check voltage before
- orderly_poweroff
-Message-ID: <20190922180012.GU5610@atomide.com>
-References: <20190917213501.16907-1-tony@atomide.com>
- <20190917213501.16907-3-tony@atomide.com>
- <20190919091434.GB9644@amd>
- <20190920141237.GK5610@atomide.com>
+        id S2407944AbfIVSwh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:52:37 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 134B721479;
+        Sun, 22 Sep 2019 18:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569178356;
+        bh=JynpDT/gW2P7z3FNimWG7u5TDUQgbp30m34PxCe32QM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hTEUvRCDbYRsNJuoCUoDqpj+RJ1jBT6dmfrK/umV5m7HcJdNwGpk8QKfX6XpHmqpz
+         r94M6SilCzg0TNkFk887ZLtetL2ONHvIs5fe+vvrgYZkoonkZ0wZGFTUSezBDkzbk3
+         wS4d8g8LybdNBOFpRP/Htgx1j1xLD5nB49nsjHq4=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kamil Konieczny <k.konieczny@partner.samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 111/185] PM / devfreq: exynos-bus: Correct clock enable sequence
+Date:   Sun, 22 Sep 2019 14:48:09 -0400
+Message-Id: <20190922184924.32534-111-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
+References: <20190922184924.32534-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190920141237.GK5610@atomide.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [190920 14:13]:
-> * Pavel Machek <pavel@ucw.cz> [190919 09:15]:
-> > Plus I see bigger problem: shutdown from mainline seems to leave
-> > something powered in the phone (I believe I seen USB charge pump, for
-> > example), so the battery will be completely empty next time I attempt
-> > to use the phone. (I learned to reboot into stock android and shutdown
-> > there).
-> > 
-> > Phone should last days when powered off, but it seems to only last
-> > hours.
-> > 
-> > Unfortunately I don't know how to debug that :-(.
-> 
-> Yes there's some issue with shutdown. I think it's somehow related
-> to mdm6600 being powered where the poweroff gpio does not allow
-> device to shut down with modem powered. We could try adding a
-> .power_off function to the modem code to see if it helps.
+From: Kamil Konieczny <k.konieczny@partner.samsung.com>
 
-Sorry I mean .shutdown function. But I doubt this is a modem
-issue you're seeing, I already fixed that issue most likely with
-commit 8ead7e817224 ("usb: core: Add PM runtime calls to
-usb_hcd_platform_shutdown"). Well at least things are shutting
-down for me now after checking few times. I recall the symptoms
-of the shut down failing issue is that the also the LCD backlight
-stays on.
+[ Upstream commit 2c2b20e0da89c76759ee28c6824413ab2fa3bfc6 ]
 
-There are some issues left with musb configured as a usb
-gadget, but I have not been able to quite track those down
-so far. It seems that there are some gadget framework kobject
-warnings with the musb controlling device (omap2430) unloaded
-and then doing a shutdown. The device shuts down though.
+Regulators should be enabled before clocks to avoid h/w hang. This
+require change in exynos_bus_probe() to move exynos_bus_parse_of()
+after exynos_bus_parent_parse_of() and change in error handling.
+Similar change is needed in exynos_bus_exit() where clock should be
+disabled before regulators.
 
-> Additionally I've noticed that we leave some PMIC features powered
-> when device is powered off without a modem consuming about 2.5mW
-> while powering off from Android shows power consumption in uW
-> range probably with only RTC being powered.
+Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/devfreq/exynos-bus.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-AFAIK this issue still remains. I'll take a look at adding a
-.shutdown somewhere for cpcap driver(s) so we get it cleared
-for a low-power state.
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index d9f377912c104..7c06df8bd74fe 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -191,11 +191,10 @@ static void exynos_bus_exit(struct device *dev)
+ 	if (ret < 0)
+ 		dev_warn(dev, "failed to disable the devfreq-event devices\n");
+ 
+-	if (bus->regulator)
+-		regulator_disable(bus->regulator);
+-
+ 	dev_pm_opp_of_remove_table(dev);
+ 	clk_disable_unprepare(bus->clk);
++	if (bus->regulator)
++		regulator_disable(bus->regulator);
+ }
+ 
+ /*
+@@ -383,6 +382,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 	struct exynos_bus *bus;
+ 	int ret, max_state;
+ 	unsigned long min_freq, max_freq;
++	bool passive = false;
+ 
+ 	if (!np) {
+ 		dev_err(dev, "failed to find devicetree node\n");
+@@ -396,27 +396,27 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 	bus->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, bus);
+ 
+-	/* Parse the device-tree to get the resource information */
+-	ret = exynos_bus_parse_of(np, bus);
+-	if (ret < 0)
+-		return ret;
+-
+ 	profile = devm_kzalloc(dev, sizeof(*profile), GFP_KERNEL);
+-	if (!profile) {
+-		ret = -ENOMEM;
+-		goto err;
+-	}
++	if (!profile)
++		return -ENOMEM;
+ 
+ 	node = of_parse_phandle(dev->of_node, "devfreq", 0);
+ 	if (node) {
+ 		of_node_put(node);
+-		goto passive;
++		passive = true;
+ 	} else {
+ 		ret = exynos_bus_parent_parse_of(np, bus);
++		if (ret < 0)
++			return ret;
+ 	}
+ 
++	/* Parse the device-tree to get the resource information */
++	ret = exynos_bus_parse_of(np, bus);
+ 	if (ret < 0)
+-		goto err;
++		goto err_reg;
++
++	if (passive)
++		goto passive;
+ 
+ 	/* Initialize the struct profile and governor data for parent device */
+ 	profile->polling_ms = 50;
+@@ -507,6 +507,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ err:
+ 	dev_pm_opp_of_remove_table(dev);
+ 	clk_disable_unprepare(bus->clk);
++err_reg:
++	if (!passive)
++		regulator_disable(bus->regulator);
+ 
+ 	return ret;
+ }
+-- 
+2.20.1
 
-Regards,
-
-Tony
