@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B3FBA604
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 21:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7B7BA60F
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 21:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390590AbfIVSrK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Sep 2019 14:47:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43484 "EHLO mail.kernel.org"
+        id S2390773AbfIVSrX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Sep 2019 14:47:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390571AbfIVSrJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:47:09 -0400
+        id S2390735AbfIVSrW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:47:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4975F2186A;
-        Sun, 22 Sep 2019 18:47:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7DA9214AF;
+        Sun, 22 Sep 2019 18:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178029;
-        bh=Hd313bNn1nwYn7nl2HeoEwQBysegcQMaraVjCkG6hTY=;
+        s=default; t=1569178041;
+        bh=AR8xkLta58mWfwbBEqsTYV291X1xSKFmHu7uqW2tgpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RBCrQVRmJJKJbQwqWpZVF1M91ut7qNRSFpTdIOPhwi8JmpNUv4e+X2j/rGYrNZafq
-         ntZc1P1h02mGFPuLjVRCz/PiN313tPRGRXSgS/PCU/FHimzeJl+GB7ZKLnRznYc+GI
-         nVkMgv+6RPabmJWfFtaAgkki2d5MXWDYjA/oiDzI=
+        b=09RsGzXwm+6KnfspheuweePQyHD6CDuHkMCGW1JLPFUtHRb85vxs7EbWqpws527pa
+         Q8o4Fiu9bfMkRxlXOMggcZ2RQGkGzj5PI8afBe+0mOacU78f+9lH3E5RL1RQjcNz5L
+         fCHiHfy1rv0z4acCe3D1t5yER8kLmrux3JysADFo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anson Huang <Anson.Huang@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 112/203] cpufreq: imx-cpufreq-dt: Add i.MX8MN support
-Date:   Sun, 22 Sep 2019 14:42:18 -0400
-Message-Id: <20190922184350.30563-112-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 121/203] PM / devfreq: passive: Use non-devm notifiers
+Date:   Sun, 22 Sep 2019 14:42:27 -0400
+Message-Id: <20190922184350.30563-121-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -44,65 +44,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
+From: Leonard Crestez <leonard.crestez@nxp.com>
 
-[ Upstream commit 75c000c4bcbe2b0eb82baf90c7dd75c7380cc3fd ]
+[ Upstream commit 0ef7c7cce43f6ecc2b96d447e69b2900a9655f7c ]
 
-i.MX8MN has different speed grading definition as below, it has 4 bits
-to define speed grading, add support for it.
+The devfreq passive governor registers and unregisters devfreq
+transition notifiers on DEVFREQ_GOV_START/GOV_STOP using devm wrappers.
 
- SPEED_GRADE[3:0]    MHz
-    0000            2300
-    0001            2200
-    0010            2100
-    0011            2000
-    0100            1900
-    0101            1800
-    0110            1700
-    0111            1600
-    1000            1500
-    1001            1400
-    1010            1300
-    1011            1200
-    1100            1100
-    1101            1000
-    1110             900
-    1111             800
+If devfreq itself is registered with devm then a warning is triggered on
+rmmod from devm_devfreq_unregister_notifier. Call stack looks like this:
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Reviewed-by: Leonard Crestez <leonard.crestez@nxp.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+	devm_devfreq_unregister_notifier+0x30/0x40
+	devfreq_passive_event_handler+0x4c/0x88
+	devfreq_remove_device.part.8+0x6c/0x9c
+	devm_devfreq_dev_release+0x18/0x20
+	release_nodes+0x1b0/0x220
+	devres_release_all+0x78/0x84
+	device_release_driver_internal+0x100/0x1c0
+	driver_detach+0x4c/0x90
+	bus_remove_driver+0x7c/0xd0
+	driver_unregister+0x2c/0x58
+	platform_driver_unregister+0x10/0x18
+	imx_devfreq_platdrv_exit+0x14/0xd40 [imx_devfreq]
+
+This happens because devres_release_all will first remove all the nodes
+into a separate todo list so the nested devres_release from
+devm_devfreq_unregister_notifier won't find anything.
+
+Fix the warning by calling the non-devm APIS for frequency notification.
+Using devm wrappers is not actually useful for a governor anyway: it
+relies on the devfreq core to correctly match the GOV_START/GOV_STOP
+notifications.
+
+Fixes: 996133119f57 ("PM / devfreq: Add new passive governor")
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/imx-cpufreq-dt.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/devfreq/governor_passive.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
-index 4f85f3112784f..35db14cf31026 100644
---- a/drivers/cpufreq/imx-cpufreq-dt.c
-+++ b/drivers/cpufreq/imx-cpufreq-dt.c
-@@ -16,6 +16,7 @@
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index 58308948b8637..da485477065c5 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -165,12 +165,12 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+ 			p_data->this = devfreq;
  
- #define OCOTP_CFG3_SPEED_GRADE_SHIFT	8
- #define OCOTP_CFG3_SPEED_GRADE_MASK	(0x3 << 8)
-+#define IMX8MN_OCOTP_CFG3_SPEED_GRADE_MASK	(0xf << 8)
- #define OCOTP_CFG3_MKT_SEGMENT_SHIFT    6
- #define OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 6)
- 
-@@ -34,7 +35,12 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	speed_grade = (cell_value & OCOTP_CFG3_SPEED_GRADE_MASK) >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
-+	if (of_machine_is_compatible("fsl,imx8mn"))
-+		speed_grade = (cell_value & IMX8MN_OCOTP_CFG3_SPEED_GRADE_MASK)
-+			      >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
-+	else
-+		speed_grade = (cell_value & OCOTP_CFG3_SPEED_GRADE_MASK)
-+			      >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
- 	mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK) >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
- 
- 	/*
+ 		nb->notifier_call = devfreq_passive_notifier_call;
+-		ret = devm_devfreq_register_notifier(dev, parent, nb,
++		ret = devfreq_register_notifier(parent, nb,
+ 					DEVFREQ_TRANSITION_NOTIFIER);
+ 		break;
+ 	case DEVFREQ_GOV_STOP:
+-		devm_devfreq_unregister_notifier(dev, parent, nb,
+-					DEVFREQ_TRANSITION_NOTIFIER);
++		WARN_ON(devfreq_unregister_notifier(parent, nb,
++					DEVFREQ_TRANSITION_NOTIFIER));
+ 		break;
+ 	default:
+ 		break;
 -- 
 2.20.1
 
