@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B108ABA6BD
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 21:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225CABA7DC
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Sep 2019 21:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407941AbfIVSwg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Sep 2019 14:52:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51692 "EHLO mail.kernel.org"
+        id S2395135AbfIVTAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Sep 2019 15:00:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407937AbfIVSwf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:52:35 -0400
+        id S2395131AbfIVTAT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 22 Sep 2019 15:00:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD20021D7C;
-        Sun, 22 Sep 2019 18:52:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 064B121D81;
+        Sun, 22 Sep 2019 19:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178354;
-        bh=AR8xkLta58mWfwbBEqsTYV291X1xSKFmHu7uqW2tgpM=;
+        s=default; t=1569178818;
+        bh=p68INXkclvLGmBIJXQaku3HvUMATg5Q2YwTxVLJ28T8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HeUmHv4bcEXDVrYOTnyojgEfUxRb0cdgKrzf/XpRG6xyPd9fyDKTHNnJMfrKApyLQ
-         h4ywZOcIiNOKHqaUorg3c+Syv+r/YEN7Kw5ySAms0fgNI/vPzyu72Gnf5jDI0Z3N+F
-         LbqfywaenC8DW0UklnXYUwTPjkHuAcmONlPQF0cQ=
+        b=SsOCLasekDhLNfISphav7gxNoGgKCon+iGcwkkcd0Rf3q0UUq3e0ibGqxyONowLOc
+         yioAIWAyiElmQTNZfTO3GLrPMwYEP6KBCG0hgESiOYaSZx2r7EVhZw4kPEvIQPmkzP
+         F+3lqqppMVd6S0gfa/F77nTZjwV8w6EmOgwOXMwg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 110/185] PM / devfreq: passive: Use non-devm notifiers
-Date:   Sun, 22 Sep 2019 14:48:08 -0400
-Message-Id: <20190922184924.32534-110-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 31/60] PM / devfreq: passive: Use non-devm notifiers
+Date:   Sun, 22 Sep 2019 14:59:04 -0400
+Message-Id: <20190922185934.4305-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
-References: <20190922184924.32534-1-sashal@kernel.org>
+In-Reply-To: <20190922185934.4305-1-sashal@kernel.org>
+References: <20190922185934.4305-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index 58308948b8637..da485477065c5 100644
+index 5be96b2249e72..8e889fd805b58 100644
 --- a/drivers/devfreq/governor_passive.c
 +++ b/drivers/devfreq/governor_passive.c
-@@ -165,12 +165,12 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+@@ -168,12 +168,12 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
  			p_data->this = devfreq;
  
  		nb->notifier_call = devfreq_passive_notifier_call;
