@@ -2,136 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EFCBBA69
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 19:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20C6BBAA5
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 19:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389737AbfIWR15 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Sep 2019 13:27:57 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38473 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389338AbfIWR15 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 13:27:57 -0400
-Received: by mail-lj1-f196.google.com with SMTP id b20so9156916ljj.5;
-        Mon, 23 Sep 2019 10:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ynd2Huq/W1JVW4gwoa1s+Sns1ACUyaWf0IT0B4FOulY=;
-        b=uR4Tos2pgCCsXD8pWPJOv3IBomp+UsSW614q3eidHlx92imCTEi85ptduWUDMapBjc
-         a2kKOefmKPtJYpFtkrpCf+FXC0vt4qjM+GSR00hqupIN/ijRF9VhmTOGazn8K2QH5dp4
-         sqB3o2JWA1qWOl1NHgmgpHRd1OhesrCLgXBxastTwNQ+LD90n/4fv25aziWAQnlFobGU
-         8erPNpVaq7r1zraLzgVqZ4JnJpvgdkofQ6xc6UkhM4UhSOCKtvpGkllc3NmHviWMM3u1
-         aM1Bj/qqfxGVCwn0mf1awhWr0l3xjI2xp3g0N1a187VGjv/VK1G6H7sJzyPFv8PO45RQ
-         aNxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ynd2Huq/W1JVW4gwoa1s+Sns1ACUyaWf0IT0B4FOulY=;
-        b=uRaYwmVkkbL5GuDDPk9T3/l1ZYgAz31RlSlc6kBAP/8PkIQB8fwshi/qLLU/yrHiKR
-         I2J1anatRIAsuZScw96mp7IOzmquOfGDn+s/q9xeJcBEHkVMUV8uKPB2Nsa73FzPwW8N
-         0dEglh+3gu3FighmFvV+OknJEE4x7rsLG2aepPSRYn30sqWOI+fGS2qfKxr5s+Y7TogN
-         J1KDn9xQkBClexHXbzrO7/QQCA9K7YptpZIjk83jPHxCAghMA2I0qtxraY3lJsMgGBQL
-         BYmzdB/ZfQc3J4z6tngdXXpc3ABAaqd5W5IU7B26unkmxFa8qkO3fYtWIfsMXjImCIN3
-         Tk8A==
-X-Gm-Message-State: APjAAAXNAlXslDtKzG3BzAZ6+2UAU/zqGPlrgLsyDGoERYVKK+4slwxj
-        je3E9frhzia7zdTwPkmGlpIgHYn3
-X-Google-Smtp-Source: APXvYqxTC9/fZLOhVSWwi3ml6goC4lcaHDI+ml5SYAhK5B9bK/99xXzQwN3pd1bpWnMfcc6dL2sBfw==
-X-Received: by 2002:a2e:b4c4:: with SMTP id r4mr302405ljm.69.1569259672854;
-        Mon, 23 Sep 2019 10:27:52 -0700 (PDT)
-Received: from [192.168.2.145] (ppp94-29-32-67.pppoe.spdop.ru. [94.29.32.67])
-        by smtp.googlemail.com with ESMTPSA id r5sm2338437lfc.85.2019.09.23.10.27.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Sep 2019 10:27:52 -0700 (PDT)
-Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS
- framework
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>, mka@chromium.org,
-        ulf.hansson@linaro.org, sfr@canb.auug.org.au, pavel@ucw.cz,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
- <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
- <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
- <20190923135654.wcsdl5jdzxqeht3l@vireshk-mac-ubuntu>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <16bfccc5-36d5-3050-fd8d-5bce59e2d7b3@gmail.com>
-Date:   Mon, 23 Sep 2019 20:27:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190923135654.wcsdl5jdzxqeht3l@vireshk-mac-ubuntu>
-Content-Type: text/plain; charset=utf-8
+        id S2407676AbfIWRmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Sep 2019 13:42:50 -0400
+Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:35138
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2394159AbfIWRmu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Sep 2019 13:42:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TZ2kSS+BOvyHG93Zo9qPbTX+65iL2FwwR2Ee6EcMcdo93DlLQj7dHgMsyAOwLjukWQBdD6VA9+NrSoBl+sFA/aCa7ZzbGMsprJROadR4ePtbUUw0H91okYhjYFuRSYV/lrijBSzOEJQ5fWX7IaIjVzc6Ez9azLSlaN7WsMzpUiFfslRleVccN21R/ud7s3nk26hEci12LFTaUvYbwUrESTtlFLDVHhRct3EUXcl8MU/TprDakaeePDmIBEcp7LuyOTBNeLAH4z6TryErDBKQdZH1WVD4+CiV5blezobeAboIlH6+Opdp0TKoW+/998DkR/t1/VkeNpxTqHnWdIDg7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XJOJKN+sgBaEcTrpzkZQWFwbu+adaMmk0WcYQfXqFF0=;
+ b=FPndjIopvvYNJl10VNATxsm//AB7fwYBiimo3nuthjjRpPGfFdAZzbDf72kcOFM54tbO6Ker2UwUANKfqP5B0Y9dbqqjG+tR6W+pAsBcob1+AGZunRqgFDA41wqrbU3/fROXseSHQmjeMpNi84xwDVtkDTPcSriBvNBXf7XX9zWP+fvHmI/3OhPOBf8HKcl1uIT3UoE1Clcp0qksfuiuI+5i6rOidMSmWMMWHzI/VCxp4bEoMtWt33JW+qQr8sBdqxAC+v50HC36KXP6NQ7/9li3NkAv/NHSKGYglJHKWoUJ3QxIWR/2aUTuIHQGt9S6ultVNe/pGP4gGo5Lb0xCfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XJOJKN+sgBaEcTrpzkZQWFwbu+adaMmk0WcYQfXqFF0=;
+ b=FkE6XXS+6gk8Hl7V9MvID47Qj5B9Fw9ePTzpWCfJephtV38u+ONEspVXngr72wJ3Cd7XCTCQ/ekPAf9QBYKeyfJRIf9ekHk6gm8ub1JUbI/goXSQX+xpRT4/0AOjVB4ct4Qcro9cQxFkvl4enP07sHGT1N1MkCEsVspgIkZ7Huo=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB6782.eurprd04.prod.outlook.com (52.133.247.8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.20; Mon, 23 Sep 2019 17:42:46 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::15cd:b6e7:5016:ae8]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::15cd:b6e7:5016:ae8%2]) with mapi id 15.20.2284.023; Mon, 23 Sep 2019
+ 17:42:46 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Rob Herring <robh@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+CC:     =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFCv4 3/7] dt-bindings: devfreq: imx: Describe interconnect
+ properties
+Thread-Topic: [RFCv4 3/7] dt-bindings: devfreq: imx: Describe interconnect
+ properties
+Thread-Index: AQHVWcA+RMYwTA9YVU2r3Zx7nMHKVw==
+Date:   Mon, 23 Sep 2019 17:42:46 +0000
+Message-ID: <VI1PR04MB70237046A8DF88936C7A83F8EE850@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1566570260.git.leonard.crestez@nxp.com>
+ <3f27038292c09c8bf07a086eac759132c100aedb.1566570260.git.leonard.crestez@nxp.com>
+ <20190917201956.GA10780@bogus>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 40eb87d4-953e-4189-061a-08d7404d720b
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB6782;
+x-ms-traffictypediagnostic: VI1PR04MB6782:|VI1PR04MB6782:
+x-ms-exchange-purlcount: 1
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB6782F9B4EF420D96EA4C43A7EE850@VI1PR04MB6782.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0169092318
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(39860400002)(346002)(136003)(199004)(189003)(3846002)(81156014)(8936002)(81166006)(110136005)(54906003)(2906002)(66946007)(66556008)(66476007)(66446008)(64756008)(44832011)(486006)(446003)(86362001)(14444005)(256004)(966005)(8676002)(14454004)(76116006)(91956017)(476003)(66066001)(33656002)(102836004)(74316002)(305945005)(76176011)(7696005)(71190400001)(9686003)(71200400001)(229853002)(6306002)(6436002)(25786009)(55016002)(52536014)(316002)(5660300002)(53546011)(6506007)(4326008)(99286004)(7736002)(7416002)(478600001)(6116002)(186003)(26005)(6246003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6782;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 6lIyBnFfI3J0zxy4jQGH7pkIzn+bMkMW5Q9GBuF7rajQYfq2tIbaoyijLUBW6fl//nehw9ixMMBZAEmz4FBnxsZqKiUib4GRPlNGc2KVTQKwTcr0oKfwhGEaw8ZQVwXQndgrjKahbRcxWhnUdwzTjswJ0TZn0a3e2Ze0gKIgcrz22Grdfaajnuxmryf55qMgqat/SZHKiO/C3PQXfiRIP5/hVzHCXRi2pZp5NoTEbj6jfSxfGCH/LCnvniK04/qVayoP7rd4UxBtZarh84wZRQVTSNQngMct/qHqZ/nr8sP38zDQjLIGan5+k7neJdnNjLAYNuGnKSTUvWBmEreGzHpUSj6HukGW/0ZsbO42f11PU/QjJGZ64fjJzl8XnTBKXy3otJht3/5jGEIWWRvtt4fsG8X5FM0SNpo61Ka7bSA=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40eb87d4-953e-4189-061a-08d7404d720b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2019 17:42:46.4337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kAp2IonbTaGyWFyLosPDlEw7i7W2lY9Ag9nVh38L40J6IjKUtMCWN6M2saeXUy0f3TtN94+/Rg6xj47Dp9jMPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6782
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-23.09.2019 16:56, Viresh Kumar пишет:
-> On 22-09-19, 23:12, Dmitry Osipenko wrote:
->> This patch causes use-after-free on a cpufreq driver module reload. Please take a look, thanks in advance.
->>
->>
->> [   87.952369] ==================================================================
->> [   87.953259] BUG: KASAN: use-after-free in notifier_chain_register+0x4f/0x9c
->> [   87.954031] Read of size 4 at addr e6abbd0c by task modprobe/243
->>
->> [   87.954901] CPU: 1 PID: 243 Comm: modprobe Tainted: G        W
->> 5.3.0-next-20190920-00185-gf61698eab956-dirty #2408
->> [   87.956077] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
->> [   87.956807] [<c0110aad>] (unwind_backtrace) from [<c010bb71>] (show_stack+0x11/0x14)
->> [   87.957709] [<c010bb71>] (show_stack) from [<c0d37b25>] (dump_stack+0x89/0x98)
->> [   87.958616] [<c0d37b25>] (dump_stack) from [<c02937e1>]
->> (print_address_description.constprop.0+0x3d/0x340)
->> [   87.959785] [<c02937e1>] (print_address_description.constprop.0) from [<c0293c6b>]
->> (__kasan_report+0xe3/0x12c)
->> [   87.960907] [<c0293c6b>] (__kasan_report) from [<c014988f>] (notifier_chain_register+0x4f/0x9c)
->> [   87.962001] [<c014988f>] (notifier_chain_register) from [<c01499b5>]
->> (blocking_notifier_chain_register+0x29/0x3c)
->> [   87.963180] [<c01499b5>] (blocking_notifier_chain_register) from [<c06f7ee9>]
->> (dev_pm_qos_add_notifier+0x79/0xf8)
->> [   87.964339] [<c06f7ee9>] (dev_pm_qos_add_notifier) from [<c092927d>] (cpufreq_online+0x5e1/0x8a4)
-> 
-> Hi Dmitry,
-> 
-> Unfortunately I am traveling right now and can't test this stuff, though I may
-> have found the root cause here. Can you please test the below diff for me ?
-> 
-> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-> index 6c90fd7e2ff8..9ac244ee05fe 100644
-> --- a/drivers/base/power/qos.c
-> +++ b/drivers/base/power/qos.c
-> @@ -328,6 +328,8 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
->         spin_unlock_irq(&dev->power.lock);
->  
->         kfree(qos->resume_latency.notifiers);
-> +       kfree(qos->min_frequency.notifiers);
-> +       kfree(qos->max_frequency.notifiers);
->         kfree(qos);
->  
->   out:
-> 
-
-Doesn't help. The use-after-free bugs are usually caused by a missing
-NULL assignment after kfree(), like in this snippet:
-
-	..
-	if (!a)
-		a = kmalloc();
-	..
-	kfree(a);
-	// a = NULL    <-- missing!
-	..
-
-I briefly looked through the code and don't see anything obviously
-wrong. The bug isn't critical since unlikely that somebody reloads
-cpufreq module for a non-development purposes, so it's not a big deal
-and can wait. Please take your time.
-
-I also want to point out that kernel crashes after second module reload,
-hence the KASAN report should be valid.
+On 17.09.2019 23:20, Rob Herring wrote:=0A=
+> On Fri, Aug 23, 2019 at 05:36:56PM +0300, Leonard Crestez wrote:=0A=
+>> The interconnect-node-id property is parsed by the imx interconnect=0A=
+>> driver to find nodes on which frequencies can be adjusted.=0A=
+>>=0A=
+>> Add #interconnect-cells so that device drivers can request paths from=0A=
+>> bus nodes instead of requiring a separate "virtual" node to represent=0A=
+>> the interconnect itself.=0A=
+>>=0A=
+>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>> ---=0A=
+>>   Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml | 5 +++++=0A=
+>>   Documentation/devicetree/bindings/devfreq/imx.yaml      | 5 +++++=0A=
+>>   2 files changed, 10 insertions(+)=0A=
+> =0A=
+> Please combine this with the other series for devfreq support.=0A=
+=0A=
+I understand that having two series which add to the same bindings file =0A=
+is odd but the devfreq and interconnect parts are independent to a very =0A=
+large degree and devfreq can be useful on it's own.=0A=
+=0A=
+The only reason devfreq bindings are updated is to avoid adding a =0A=
+"virtual" node for interconnect. Since DT is a big source of confusion =0A=
+here can you read https://patchwork.kernel.org/cover/11111865/#22883457 =0A=
+and maybe offer some advice?=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
