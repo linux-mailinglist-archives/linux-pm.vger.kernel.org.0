@@ -2,201 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 610F1BBDC3
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 23:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E95BBE14
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 23:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388859AbfIWVWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Sep 2019 17:22:53 -0400
-Received: from mail-eopbgr20084.outbound.protection.outlook.com ([40.107.2.84]:60083
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388117AbfIWVWx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Sep 2019 17:22:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HXBgHV8PT+RgfrFox7fTSVFfHAHcoAiU8KadqMKvMnD31x1SoQDeT0btvmMzt/WB+AwOL+UGDXJZ1IsZk6Pb5EPuDe3sAqZ+XDdT7+aW1m6TL406hSjLGUWuY5r29PLIZX5KBRgBt4XILGs22Hp+iRB7GITShxp8AAQTx2Z60HiMpd+adb6eKUAZMsdi4memQcslEJMd/kLPGdfm6uU8pc1JzHzCgVuuzb6goCkLNFP0sslD7M8ArewTuN4yUm4u/NGPF0IMtsNMP/9VDm87Hys7FMTnj/WvW8INd7HpwvoXTHk6/Q097sMY0w86UXpBC1axDAF6uwFSc+qrKd/BYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7WkgFVCu6l6w0LNhI6zd9HqQOgO0mVRm6PYkVke1oXU=;
- b=AzQrY3oZWTeZeDhRgFrgau3qm1au9XjEQ7rAKnSDn2Zp/nAiAowznBkNGHbhlR2SfsK/1qmnMzAbkCJsHvwHQkOkaAKHFn3kq2juGXljikN/ojVZWHcG+FDXsmvRG5yR0oe5fSpoyyOASHkqz5IEj8U2jJddAEYroJMcWqOpYw43Zag1CtIUWyYr/JBvRj/TJCeVqr8iMA2IBS9cLxHsS6lc+7+umkB+oC1CUIuQLnFloTobxMNZRY1ohGglsQjSY9mkFfqWCTUcPAj5vodK4CjbNMsYqutk7jX62cE5V/Hm5qxDb5NHyvFuwkbYPVHnCBdi46MgYH9+Z+kpyAxDug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7WkgFVCu6l6w0LNhI6zd9HqQOgO0mVRm6PYkVke1oXU=;
- b=jiNKkvAcCsmmlkufZqYP/A0qQjIXi8UBxUXyxKUn30daruYdht0Qff+2MiUy0N7oLraa5d5zIms5Ba6guxn2/qlZqiYRrmKj7RO+C+jjGBa7Zx4WVEhYIFwFG2+I17J0TadntW21i/7AEflC2U3UzYWYkNiyb8Mf6abLGgyZDPI=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB7101.eurprd04.prod.outlook.com (10.186.159.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.20; Mon, 23 Sep 2019 21:22:45 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::15cd:b6e7:5016:ae8]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::15cd:b6e7:5016:ae8%2]) with mapi id 15.20.2284.023; Mon, 23 Sep 2019
- 21:22:45 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Martin Kepplinger <martink@posteo.de>,
-        Jacky Bai <ping.bai@nxp.com>, Anson Huang <anson.huang@nxp.com>
-CC:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        id S2503161AbfIWVmL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Sep 2019 17:42:11 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42613 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389663AbfIWVmL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 17:42:11 -0400
+Received: by mail-pl1-f194.google.com with SMTP id e5so7086750pls.9
+        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2019 14:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LN2jcukuPHy9o4Jb1zZq4UGAS0V2HgpSfI+T3t4oJ94=;
+        b=Ps6OG8v5rRsTroOwDDLZ4nW8gYvFsQQGX4I82xbw3H2OZQIfJNPNUW9kRrR4dvQzzj
+         Y9CW4mV1mP9FL5g4ZkahEmOdq6uuUoHnIwQkOL3FDp9REe3837X6bLaZZVSTN0vuK/F1
+         DrA7GS2LGLQaBYQdhBMYzZG0r9mTckUwbSJ30=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LN2jcukuPHy9o4Jb1zZq4UGAS0V2HgpSfI+T3t4oJ94=;
+        b=i1NCNrL2oA1lP66Qn+uJYXqU2A7k1keTKtWdu+w5mI1qvNSeUN6OEbV0Hwj++XX73M
+         xjShDq0SEbDvpbj8+qB8GrUo0k2sH84NAX+Qs4Axgx+Wd44EnLO6igivOrb25NF1kdY/
+         yKl26XXsPQDFmeVYJaeGEFeLQuRX7+PtUWvMwOneyXEYuMi2p4fEQk6u8IJOnC/VipFD
+         dhKwe8lJCBwPM1I50da2HgJYIIGaJBxokL7JIQ3vkrlZkoGCr1Ps5NT3fSLJ4lYSJJj+
+         JN6XMddSck6cHzsL3z3M7ID95Z3IClROYd4UBK66eyjoVljuxs1oyu4M2V7KgBYWv1pV
+         +DSw==
+X-Gm-Message-State: APjAAAWeCQ+b8skjRcAIGj7s1en87a30vBXg+mJnhZfaSWWwGH/jcs4k
+        YcMPKC4gjPMtR+/Vkis4+O32Fw==
+X-Google-Smtp-Source: APXvYqwUgQI62mHf0qjDK4hdTJErmArRYu2PmE5qeBv5kbgiK8V+DnhYLpDqt6ga3PV3FxYn+pWvdw==
+X-Received: by 2002:a17:902:8484:: with SMTP id c4mr1879668plo.223.1569274930403;
+        Mon, 23 Sep 2019 14:42:10 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
+        by smtp.gmail.com with ESMTPSA id k31sm18848493pjb.14.2019.09.23.14.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Sep 2019 14:42:09 -0700 (PDT)
+Date:   Mon, 23 Sep 2019 14:42:07 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Alexandre Bailon <abailon@baylibre.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [RFCv4 0/7] interconnect: Add imx support via devfreq
-Thread-Topic: [RFCv4 0/7] interconnect: Add imx support via devfreq
-Thread-Index: AQHVWcA7xPiNhLrdqkSG10Lu7U9EhQ==
-Date:   Mon, 23 Sep 2019 21:22:45 +0000
-Message-ID: <VI1PR04MB7023C5382635F6959EAF9330EE850@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1566570260.git.leonard.crestez@nxp.com>
- <4440b392-d968-4a54-2ea0-ffd5beba02d1@posteo.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d9ff94f6-e142-42ec-3549-08d7406c2d36
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB7101;
-x-ms-traffictypediagnostic: VI1PR04MB7101:|VI1PR04MB7101:
-x-ms-exchange-purlcount: 4
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB710123D6905510EEBE2D5376EE850@VI1PR04MB7101.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0169092318
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(199004)(189003)(8676002)(14454004)(6116002)(7696005)(76116006)(64756008)(316002)(102836004)(446003)(66556008)(478600001)(9686003)(26005)(66476007)(99286004)(6246003)(7736002)(305945005)(66446008)(25786009)(110136005)(7416002)(2906002)(476003)(186003)(91956017)(71200400001)(71190400001)(8936002)(5660300002)(256004)(229853002)(76176011)(54906003)(33656002)(4326008)(86362001)(14444005)(44832011)(74316002)(486006)(53546011)(6636002)(6436002)(55016002)(81156014)(66066001)(6506007)(6306002)(3846002)(52536014)(81166006)(66946007)(966005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB7101;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jdy2i6brLVbS6tOAxIC/z0rAv5FlK08RfDi5zvcwrXbxaqvcT+ZTrtyOfTZA4vkQY+cm2baAB1JFK2v6963b6hr0IG7DMluAPwVwppKStpqsQo+eb0/8SaKVoOQA4FbfK/qEHKmC51N0AO7aptfM1BZxtUUWSSNVSZ06jlU1aqkvG6tQGhOz5fXq3YtQkhB3+C6+Rs+2jfLqonH9lWQFdHUHXAI9gmXeRH3ZbAwEjwb+LzSp9ULb5JDb3HIzggx2Woqj7ly49/t7vOtOwgyzMXQ8gIkVOg6l92tCXcYc4C/yP6lQxA4LGE6dq6S6zrgW3cMY/1bJPWKOGuDwr6Hw98P3jpGYsk5fVkFs8Bpn7T3sks85VpOTBEp7ENTYRwoGGw8vGNokYYAuidYNELLSNm+2sxx/F42LRxIWdSYlj38=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 5/6] PM / devfreq: Add PM QoS support
+Message-ID: <20190923214207.GG133864@google.com>
+References: <cover.1569272883.git.leonard.crestez@nxp.com>
+ <e9868310f9543b4f4a6c7bbe5d4d015da9a0e71d.1569272883.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9ff94f6-e142-42ec-3549-08d7406c2d36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2019 21:22:45.3425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MOuS9ilYoZSSLw5cRRHs0clzmYMeNRc3ntRF3PirmclsLjfvAZWKVKZm+OkxlrM6fM99kU0iDgikav956AYShg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7101
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e9868310f9543b4f4a6c7bbe5d4d015da9a0e71d.1569272883.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21.09.2019 09:07, Martin Kepplinger wrote:=0A=
-> On 23.08.19 16:36, Leonard Crestez wrote:=0A=
->> This series add imx support for interconnect via devfreq: the ICC=0A=
->> framework is used to aggregate requests from devices and then those are=
-=0A=
->> converted to DEV_PM_QOS_MIN_FREQUENCY requests for devfreq.=0A=
->>=0A=
->> The devfreq parts are posted separately, this series only intersects in=
-=0A=
->> devicetree.=0A=
->>=0A=
->> Since there is no single devicetree node that can represent the "interco=
-nnect"=0A=
->> new API is added to allow individual devfreq nodes to act as parsing pro=
-xies=0A=
->> all mapping to a single soc-level icc provider. This is still RFC=0A=
->> because this=0A=
->>=0A=
->> The rest of the changes are small and deal with review comments.=0A=
-=0A=
-> on imx8mq, probe() fails:=0A=
-> =0A=
-> [    1.082847] imx-ddrc-devfreq 3d400000.dram-controller: failed to init=
-=0A=
-> firmware freq info: -19=0A=
-> [    1.091434] imx-ddrc-devfreq: probe of 3d400000.dram-controller=0A=
-> rejects match -19=0A=
-> =0A=
-> in imx_ddrc_init_freq_info()'s check:=0A=
-> =0A=
-> if (priv->freq_count <=3D 0 || priv->freq_count > IMX_DDRC_MAX_FREQ_COUNT=
-)=0A=
-> =0A=
-> That would indicate that I'm missing something in ATF? I'm pretty sure=0A=
-> I'm running your tree though.=0A=
-=0A=
-What is your board and uboot version? I tested on imx8mq-evk (SOC Rev =0A=
-B1) with NXP uboot. For example this uboot release works:=0A=
-=0A=
-https://source.codeaurora.org/external/imx/uboot-imx/log/?h=3Dimx_v2019.04_=
-4.19.35_1.0.0=0A=
-=0A=
-It is uboot which trains DDR for multiple frequencies and then passes =0A=
-that info to ATF. I'm not sure about the steps required to enable this =0A=
-for 3rd-party boards, should be same as for busfreq from NXP tree.=0A=
-=0A=
-Getting this to work on a 3rd-party board would be interesting.=0A=
-=0A=
-> Does anything come to your mind what I might be doing wrong? Am I=0A=
-> running your "correct" linux tree? Remember I'm on imx8mq, so I don't=0A=
-> exactly test this RFC of yours.=0A=
-> =0A=
-> Also, how are your plans to rebase / update your ATF tree?=0A=
-=0A=
-The ATF changes will show up in a future release of NXP ATF branch, when =
-=0A=
-that happens I will drop my branch. NXP ATF releases are on CAF:=0A=
-=0A=
-     https://source.codeaurora.org/external/imx/imx-atf/=0A=
-=0A=
-> And since there's a lot in there: what additions are necessary for this=
-=0A=
-> devfreq to work?=0A=
-=0A=
-devfreq imx support here: https://patchwork.kernel.org/cover/11104113/=0A=
-Interconnect support also needs PM QoS support for devfreq:=0A=
-=0A=
-     https://patchwork.kernel.org/cover/11157649/=0A=
-=0A=
-> Lastly, how do you test? Is /sys/class/devfreq supposted to get populated=
-?=0A=
-=0A=
-Yes, and only the devfreq patches are required for that.=0A=
-=0A=
-# cat /sys/class/devfreq/devfreq0/available_frequencies=0A=
-25000000 100000000 800000000=0A=
-# cat /sys/class/devfreq/devfreq0/cur_freq=0A=
-800000000=0A=
-=0A=
-You should be able to control frequencies manually with the userspace =0A=
-governor:=0A=
-# echo "userspace" > /sys/class/devfreq/devfreq0/governor=0A=
-# echo "25000000" > /sys/class/devfreq/devfreq0/userspace/set_freq=0A=
-=0A=
-This series allows devices to request guaranteed bandwidth for =0A=
-themselves through the interconnect subsystem, without it DRAM freq will =
-=0A=
-still switch but you'll have problems like display corruption as it =0A=
-turns on before freq goes up. You can check that probe worked by doing=0A=
-=0A=
-# cat /sys/kernel/debug/interconnect/interconnect_summary=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On Tue, Sep 24, 2019 at 12:10:33AM +0300, Leonard Crestez wrote:
+> Register notifiers with the PM QoS framework in order to respond to
+> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
+> 
+> No notifiers are added by this patch but PM QoS constraints can be
+> imposed externally (for example from other devices).
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/devfreq/devfreq.c | 76 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/devfreq.h   |  5 +++
+>  2 files changed, 81 insertions(+)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 7f152a582e78..9887408f23bb 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -22,17 +22,20 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/list.h>
+>  #include <linux/printk.h>
+>  #include <linux/hrtimer.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_qos.h>
+>  #include "governor.h"
+>  
+>  #define HZ_PER_KHZ 1000
+>  
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/devfreq.h>
+>  
+> +#define HZ_PER_KHZ	1000
+> +
+>  static struct class *devfreq_class;
+>  
+>  /*
+>   * devfreq core provides delayed work based load monitoring helper
+>   * functions. Governors can use these or can implement their own
+> @@ -123,10 +126,16 @@ static void devfreq_get_freq_range(struct devfreq *devfreq,
+>  	} else {
+>  		*min_freq = freq_table[devfreq->profile->max_state - 1];
+>  		*max_freq = freq_table[0];
+>  	}
+>  
+> +	/* constraints from PM QoS */
+> +	*min_freq = max(*min_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
+> +				devfreq->dev.parent, DEV_PM_QOS_MIN_FREQUENCY));
+> +	*max_freq = min(*max_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
+> +				devfreq->dev.parent, DEV_PM_QOS_MAX_FREQUENCY));
+> +
+>  	/* constraints from sysfs */
+>  	*min_freq = max(*min_freq, devfreq->min_freq);
+>  	*max_freq = min(*max_freq, devfreq->max_freq);
+>  
+>  	/* constraints from OPP interface */
+> @@ -605,10 +614,53 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+>  	mutex_unlock(&devfreq->lock);
+>  
+>  	return ret;
+>  }
+>  
+> +/**
+> + * devfreq_qos_notifier_call() - Common handler for QoS constraints.
+> + * @devfreq:    the devfreq instance.
+> + */
+> +static int devfreq_qos_notifier_call(struct devfreq *devfreq)
+> +{
+> +	int err;
+> +
+> +	mutex_lock(&devfreq->lock);
+> +	err = update_devfreq(devfreq);
+> +	mutex_unlock(&devfreq->lock);
+> +	if (err)
+> +		dev_err(&devfreq->dev, "dvfs for QoS constraints"
+> +				" failed with (%d) error\n", err);
+
+nit: DVFS. devfreq_monitor() also uses the lower-case acronym though, so
+you can claim this is consistent :)
+
+I'd prefer to spare you another trivial re-spin, but unfortunately
+breaking the log message into multiple lines is a coding style
+violation:
+
+Documentation/process/coding-style.rst
+  2) Breaking long lines and strings
+
+  However, never break user-visible strings such as printk messages,
+  because that breaks the ability to grep for them.
+
+
+With that fixed:
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
