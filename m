@@ -2,285 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B8DBB34B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 14:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFA4BB5D6
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Sep 2019 15:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731990AbfIWME0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Sep 2019 08:04:26 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:59660 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729725AbfIWME0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 08:04:26 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id B1FCD25AD69;
-        Mon, 23 Sep 2019 22:04:23 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id B6C80944434; Mon, 23 Sep 2019 14:04:21 +0200 (CEST)
-From:   Simon Horman <horms+renesas@verge.net.au>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Simon Horman <horms+renesas@verge.net.au>
-Subject: [PATCH v2] dt-bindings: thermal: rcar-thermal: convert bindings to json-schema
-Date:   Mon, 23 Sep 2019 14:03:48 +0200
-Message-Id: <20190923120348.2908-1-horms+renesas@verge.net.au>
-X-Mailer: git-send-email 2.11.0
+        id S2407269AbfIWN5A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Sep 2019 09:57:00 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40993 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405951AbfIWN5A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 09:57:00 -0400
+Received: by mail-pg1-f196.google.com with SMTP id s1so6947867pgv.8
+        for <linux-pm@vger.kernel.org>; Mon, 23 Sep 2019 06:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vh231WMV2ivWs55DEErMfh8G5ByHHFCoNJUSWzLVISU=;
+        b=cn+X8r4N29tWYhUPaIF9sgpCyWWDn5rzKDhmPhMpd6+EovbrDiKU4kleehawYApRCY
+         fCZijjEsZtcLK+chNOmk0QVamPsXX4shbo1HalDXbsFHMbaGBwYYSjkV/lMIsi+9db4Y
+         EhVBWHBjDfy0Kh1IPA4zbFyitBp9jARKh+Kz5eQPSTsW+f/8c3AXscIc+HQju4X8XDpH
+         +uusOt3917tb0v7Fi/Ia49dbzRcJ1ON2KyjoPFDEybGqNdbzbyyNYRkrAbnihbZd42ul
+         eVHMZLPI3/Zq+V4vvDgt3hltjL9KRupNZOaBYoZN5dA4e0s2Rlimp/5v26DIS4hUsaN3
+         dZvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vh231WMV2ivWs55DEErMfh8G5ByHHFCoNJUSWzLVISU=;
+        b=oGhp5i1yO4ks7V24pDjsAjREEPmc+8PafGTh9WZgimoeVOLvf3jk5GmKZzFzNzzn0v
+         imUaoGmFgXGkGJX7Vls40ChKrA02+P/hFYmAvcirjyPP6+kki/OjgZ3cEcaUALWLGQOg
+         eHCEbqNQviEjQKPLDz9Q9MNA+N/Hx6RNm4CZA4Knack3RQNiwRRatBW/PH5sfRPOwkqP
+         zWyM9JCfNBGBr3YX8mBmPNHzsN2ohcsx+5OGTJHUE5OfFCiiiRJN8HhGUPKjHA6f7knp
+         i8jjR/OvN75x45/T0oafg2hah5cNlxE3MaZPT3lUYRH6mUV5FolL8IDyIs+ZoIFaLdCE
+         IdRw==
+X-Gm-Message-State: APjAAAW5mgRT4c5za0ioP562eIcrJKGSNq/U1z+BCDluv0XktyWXL+nj
+        x+YbEP6dcl+aABev956t4kbq+g==
+X-Google-Smtp-Source: APXvYqy25l2lGHysPit/QeYW2D3xxOswz/kQvKmjC7grygQ6MEygsYLyqXGOeVrHJDihF8TAlwLLkQ==
+X-Received: by 2002:a65:5546:: with SMTP id t6mr59005pgr.441.1569247019584;
+        Mon, 23 Sep 2019 06:56:59 -0700 (PDT)
+Received: from localhost ([12.206.46.61])
+        by smtp.gmail.com with ESMTPSA id 1sm14156061pff.39.2019.09.23.06.56.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 23 Sep 2019 06:56:55 -0700 (PDT)
+Date:   Mon, 23 Sep 2019 19:26:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>, mka@chromium.org,
+        ulf.hansson@linaro.org, sfr@canb.auug.org.au, pavel@ucw.cz,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS
+ framework
+Message-ID: <20190923135654.wcsdl5jdzxqeht3l@vireshk-mac-ubuntu>
+References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
+ <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
+ <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
+User-Agent: NeoMutt/20170609 (1.8.3)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert Renesas R-Car Thermal bindings documentation to json-schema.
-Also name bindings documentation file according to the compat string
-being documented.
+On 22-09-19, 23:12, Dmitry Osipenko wrote:
+> This patch causes use-after-free on a cpufreq driver module reload. Please take a look, thanks in advance.
+> 
+> 
+> [   87.952369] ==================================================================
+> [   87.953259] BUG: KASAN: use-after-free in notifier_chain_register+0x4f/0x9c
+> [   87.954031] Read of size 4 at addr e6abbd0c by task modprobe/243
+> 
+> [   87.954901] CPU: 1 PID: 243 Comm: modprobe Tainted: G        W
+> 5.3.0-next-20190920-00185-gf61698eab956-dirty #2408
+> [   87.956077] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> [   87.956807] [<c0110aad>] (unwind_backtrace) from [<c010bb71>] (show_stack+0x11/0x14)
+> [   87.957709] [<c010bb71>] (show_stack) from [<c0d37b25>] (dump_stack+0x89/0x98)
+> [   87.958616] [<c0d37b25>] (dump_stack) from [<c02937e1>]
+> (print_address_description.constprop.0+0x3d/0x340)
+> [   87.959785] [<c02937e1>] (print_address_description.constprop.0) from [<c0293c6b>]
+> (__kasan_report+0xe3/0x12c)
+> [   87.960907] [<c0293c6b>] (__kasan_report) from [<c014988f>] (notifier_chain_register+0x4f/0x9c)
+> [   87.962001] [<c014988f>] (notifier_chain_register) from [<c01499b5>]
+> (blocking_notifier_chain_register+0x29/0x3c)
+> [   87.963180] [<c01499b5>] (blocking_notifier_chain_register) from [<c06f7ee9>]
+> (dev_pm_qos_add_notifier+0x79/0xf8)
+> [   87.964339] [<c06f7ee9>] (dev_pm_qos_add_notifier) from [<c092927d>] (cpufreq_online+0x5e1/0x8a4)
 
-As a side effect of this change all currently supported/used compat
-strings are listed while no while card compat string is documented.
-This, in my opinion, is desirable as only supported hardware should
-be documented.
+Hi Dmitry,
 
-A possible follow-up is to deprecate renesas,rcar-thermal
-after describing thermal zones in the DT for R-Mobile APE6 and R-Car H1.
+Unfortunately I am traveling right now and can't test this stuff, though I may
+have found the root cause here. Can you please test the below diff for me ?
 
-Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
----
-Based on v5.3
-Tested using:
-  ARCH=arm make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/renesas,rcar-thermal.yaml
+diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+index 6c90fd7e2ff8..9ac244ee05fe 100644
+--- a/drivers/base/power/qos.c
++++ b/drivers/base/power/qos.c
+@@ -328,6 +328,8 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
+        spin_unlock_irq(&dev->power.lock);
+ 
+        kfree(qos->resume_latency.notifiers);
++       kfree(qos->min_frequency.notifiers);
++       kfree(qos->max_frequency.notifiers);
+        kfree(qos);
+ 
+  out:
 
-v2
-* Update compat strings to reflect that:
-  - RZ/G1M and RZ/G1N are not compatible with renesas,rcar-gen2-thermal
-  - R-Car V3M, E3 and D3, and RZ/G2E are not compatible with
-    renesas,rcar-thermal
-* Update reg property
-  - Drop uninformative comment
-  - Do not limit to a maximum of one item
-* Add SPDX tag
----
- .../devicetree/bindings/thermal/rcar-thermal.txt   |  78 --------------
- .../bindings/thermal/renesas,rcar-thermal.yaml     | 116 +++++++++++++++++++++
- 2 files changed, 116 insertions(+), 78 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/rcar-thermal.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/renesas,rcar-thermal.yaml
-
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.txt b/Documentation/devicetree/bindings/thermal/rcar-thermal.txt
-deleted file mode 100644
-index 196112d23b1e..000000000000
---- a/Documentation/devicetree/bindings/thermal/rcar-thermal.txt
-+++ /dev/null
-@@ -1,78 +0,0 @@
--* Renesas R-Car Thermal
--
--Required properties:
--- compatible		: "renesas,thermal-<soctype>",
--			   "renesas,rcar-gen2-thermal" (with thermal-zone) or
--			   "renesas,rcar-thermal" (without thermal-zone) as
--                           fallback except R-Car V3M/E3/D3 and RZ/G2E.
--			  Examples with soctypes are:
--			    - "renesas,thermal-r8a73a4" (R-Mobile APE6)
--			    - "renesas,thermal-r8a7743" (RZ/G1M)
--			    - "renesas,thermal-r8a7744" (RZ/G1N)
--			    - "renesas,thermal-r8a774c0" (RZ/G2E)
--			    - "renesas,thermal-r8a7779" (R-Car H1)
--			    - "renesas,thermal-r8a7790" (R-Car H2)
--			    - "renesas,thermal-r8a7791" (R-Car M2-W)
--			    - "renesas,thermal-r8a7792" (R-Car V2H)
--			    - "renesas,thermal-r8a7793" (R-Car M2-N)
--			    - "renesas,thermal-r8a77970" (R-Car V3M)
--			    - "renesas,thermal-r8a77990" (R-Car E3)
--			    - "renesas,thermal-r8a77995" (R-Car D3)
--- reg			: Address range of the thermal registers.
--			  The 1st reg will be recognized as common register
--			  if it has "interrupts".
--
--Option properties:
--
--- interrupts		: If present should contain 3 interrupts for
--                          R-Car V3M/E3/D3 and RZ/G2E or 1 interrupt otherwise.
--
--Example (non interrupt support):
--
--thermal@ffc48000 {
--	compatible = "renesas,thermal-r8a7779", "renesas,rcar-thermal";
--	reg = <0xffc48000 0x38>;
--};
--
--Example (interrupt support):
--
--thermal@e61f0000 {
--	compatible = "renesas,thermal-r8a73a4", "renesas,rcar-thermal";
--	reg = <0xe61f0000 0x14
--		0xe61f0100 0x38
--		0xe61f0200 0x38
--		0xe61f0300 0x38>;
--	interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
--};
--
--Example (with thermal-zone):
--
--thermal-zones {
--	cpu_thermal: cpu-thermal {
--		polling-delay-passive	= <1000>;
--		polling-delay		= <5000>;
--
--		thermal-sensors = <&thermal>;
--
--		trips {
--			cpu-crit {
--				temperature	= <115000>;
--				hysteresis	= <0>;
--				type		= "critical";
--			};
--		};
--		cooling-maps {
--		};
--	};
--};
--
--thermal: thermal@e61f0000 {
--	compatible =	"renesas,thermal-r8a7790",
--			"renesas,rcar-gen2-thermal",
--			"renesas,rcar-thermal";
--	reg = <0 0xe61f0000 0 0x14>, <0 0xe61f0100 0 0x38>;
--	interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
--	clocks = <&mstp5_clks R8A7790_CLK_THERMAL>;
--	power-domains = <&cpg_clocks>;
--	#thermal-sensor-cells = <0>;
--};
-diff --git a/Documentation/devicetree/bindings/thermal/renesas,rcar-thermal.yaml b/Documentation/devicetree/bindings/thermal/renesas,rcar-thermal.yaml
-new file mode 100644
-index 000000000000..a55c018a3a1f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/renesas,rcar-thermal.yaml
-@@ -0,0 +1,116 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/renesas,rcar-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Thermal
-+
-+maintainers:
-+  - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-+  - Geert Uytterhoeven <geert+renesas@glider.be>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a73a4       # R-Mobile APE6
-+              - renesas,thermal-r8a7779       # R-Car H1
-+          - const: renesas,rcar-thermal       # Without thermal-zone
-+
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a7790       # R-Car H2
-+              - renesas,thermal-r8a7791       # R-Car M2-W
-+              - renesas,thermal-r8a7792       # R-Car V2H
-+              - renesas,thermal-r8a7793       # R-Car M2-N
-+          - const: renesas,rcar-gen2-thermal  # With thermal-zone
-+          - const: renesas,rcar-thermal       # Without thermal-zone
-+
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a7743       # RZ/G1M
-+              - renesas,thermal-r8a7744       # RZ/G1N
-+          - const: renesas,rcar-gen2-thermal  # With thermal-zone
-+
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a774c0      # RZ/G2E
-+              - renesas,thermal-r8a77970      # R-Car V3M
-+              - renesas,thermal-r8a77990      # R-Car E3
-+              - renesas,thermal-r8a77995      # R-Car D3
-+
-+  reg: true
-+    # The 1st reg will be recognized as common register if it has "interrupts".
-+
-+  interrupts:
-+    # If present should contain 3 interrupts for R-Car V3M/E3/D3 and RZ/G2E,
-+    # otherwise 1 interrupt.
-+    minItems: 1
-+    maxItems: 3
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples :
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/r8a7790-clock.h>
-+
-+ # Example (non interrupt support):
-+  - |
-+    thermal@ffc48000 {
-+        compatible = "renesas,thermal-r8a7779", "renesas,rcar-thermal";
-+        reg = <0xffc48000 0x38>;
-+    };
-+
-+  # Example (interrupt support):
-+  - |
-+    thermal@e61f0000 {
-+        compatible = "renesas,thermal-r8a73a4", "renesas,rcar-thermal";
-+        reg = <0xe61f0000 0x14
-+               0xe61f0100 0x38
-+               0xe61f0200 0x38
-+               0xe61f0300 0x38>;
-+        interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+
-+  # Example (with thermal-zone):
-+  - |
-+    thermal-zones {
-+        cpu_thermal: cpu-thermal {
-+            polling-delay-passive = <1000>;
-+            polling-delay = <5000>;
-+
-+            thermal-sensors = <&thermal>;
-+
-+            trips {
-+                cpu-crit {
-+                    temperature = <115000>;
-+                    hysteresis = <0>;
-+                    type = "critical";
-+                };
-+            };
-+            cooling-maps {
-+            };
-+        };
-+    };
-+
-+    thermal: thermal@e61f0000 {
-+        compatible = "renesas,thermal-r8a7790",
-+                     "renesas,rcar-gen2-thermal",
-+                     "renesas,rcar-thermal";
-+        reg = <0 0xe61f0000 0 0x14>, <0 0xe61f0100 0 0x38>;
-+        interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&mstp5_clks R8A7790_CLK_THERMAL>;
-+        power-domains = <&cpg_clocks>;
-+        #thermal-sensor-cells = <0>;
-+    };
 -- 
-2.11.0
-
+viresh
