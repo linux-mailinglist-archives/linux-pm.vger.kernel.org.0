@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19261BC06E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 04:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB71BC09F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 05:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408001AbfIXCwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Sep 2019 22:52:49 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:22049 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728992AbfIXCws (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 22:52:48 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190924025245epoutp04d878bf1dba153cd2afd504b59e9880de~HQC7V0Yjd0216102161epoutp045
-        for <linux-pm@vger.kernel.org>; Tue, 24 Sep 2019 02:52:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190924025245epoutp04d878bf1dba153cd2afd504b59e9880de~HQC7V0Yjd0216102161epoutp045
+        id S2389682AbfIXDJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Sep 2019 23:09:37 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:49320 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389424AbfIXDJg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Sep 2019 23:09:36 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190924030934epoutp01bf5985a46d46586d4a58c5a736578d30~HQRnFFmdc1449414494epoutp01I
+        for <linux-pm@vger.kernel.org>; Tue, 24 Sep 2019 03:09:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190924030934epoutp01bf5985a46d46586d4a58c5a736578d30~HQRnFFmdc1449414494epoutp01I
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1569293565;
-        bh=/qPMK/OTF5WGtIMOzmKQ8hIwnlEGOc40G2TkGFwzCUk=;
+        s=mail20170921; t=1569294574;
+        bh=mJXjiFUB/srxNukytd2vImwQP8kSBRRW/h908Xv64us=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=TOKuO/3gROkRB4JBSfC7Tq2mJBnV1FtlD2/WKYKMibZCSIu/Ilg94VTDghq8Azq5e
-         znRjwWRaPJo/+HMWM4V+Q3QM1wuW078NPfPB14/SXsl72hmsm+B/NEwcDQ2hYkKZgm
-         qeP3uNOgBiE2CB4fVPte1P0ql5Y5XN/rgXbaYRn4=
+        b=lSO3LRVgkccCIWCqBqMON73c95ORuwtRjfXEpgYj9xZWiOGQ3q7vAUNNOeo5A74w7
+         WYJ7CcySnMQuevju0t7qcuZccroTj2h0LHhToz+xKzDzkag4ek0njKAtPmqluPfW+O
+         RPnqU7m1UfGZQCrwCVq8Ea/NAJHe9ljhDFEWd21o=
 Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190924025244epcas1p2cf220417a72b5c5e53a19ff3b35a218c~HQC6rZjkk1894518945epcas1p2w;
-        Tue, 24 Sep 2019 02:52:44 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp6.localdomain (Postfix) with ESMTP id 46cm2L0Bg8zMqYkV; Tue, 24 Sep
-        2019 02:52:42 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CC.C8.04224.9F4898D5; Tue, 24 Sep 2019 11:52:41 +0900 (KST)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190924030933epcas1p49702e4acf7d058d718a3fabaa27be501~HQRmSw1h80069600696epcas1p4c;
+        Tue, 24 Sep 2019 03:09:33 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp6.localdomain (Postfix) with ESMTP id 46cmPl0XShzMqYkX; Tue, 24 Sep
+        2019 03:09:31 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        72.E7.04068.AE8898D5; Tue, 24 Sep 2019 12:09:31 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190924025241epcas1p4f40a8ba5431403351217147b7871b95f~HQC39F9kX2898928989epcas1p4F;
-        Tue, 24 Sep 2019 02:52:41 +0000 (GMT)
+        20190924030930epcas1p40a8ec5b455fda0bdfea49bce09003e45~HQRjT-ywD2442824428epcas1p4B;
+        Tue, 24 Sep 2019 03:09:30 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190924025241epsmtrp272affb67bfeb09cf5002c59eac4f040f~HQC38P54H0339103391epsmtrp2k;
-        Tue, 24 Sep 2019 02:52:41 +0000 (GMT)
-X-AuditID: b6c32a38-d43ff70000001080-6a-5d8984f91f6e
+        20190924030930epsmtrp2556ddba13d2cbbd01e1201e946b93632~HQRjTGniq1481314813epsmtrp2J;
+        Tue, 24 Sep 2019 03:09:30 +0000 (GMT)
+X-AuditID: b6c32a39-f47ff70000000fe4-f1-5d8988ea17a7
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.52.03889.9F4898D5; Tue, 24 Sep 2019 11:52:41 +0900 (KST)
+        EB.43.03889.9E8898D5; Tue, 24 Sep 2019 12:09:29 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190924025241epsmtip27f6bb01389b914fad2940b5ad25ec4fa~HQC3skGiw2476724767epsmtip28;
-        Tue, 24 Sep 2019 02:52:41 +0000 (GMT)
-Subject: Re: [PATCH v7 2/6] PM / devfreq: Move more initialization before
- registration
+        20190924030929epsmtip24e03530731068a4464e1fb3d03f7f56e~HQRjGFgDx0266802668epsmtip2-;
+        Tue, 24 Sep 2019 03:09:29 +0000 (GMT)
+Subject: Re: [PATCH v7 3/6] PM / devfreq: Don't take lock in
+ devfreq_add_device
 To:     Leonard Crestez <leonard.crestez@nxp.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,55 +67,55 @@ Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         linux-arm-kernel@lists.infradead.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <bfa991bf-7155-6294-0595-fc37e3393fdd@samsung.com>
-Date:   Tue, 24 Sep 2019 11:57:05 +0900
+Message-ID: <03c0f372-930c-bb4e-6bc4-27366e20bc52@samsung.com>
+Date:   Tue, 24 Sep 2019 12:13:54 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <bf55208ff3ef868dcee46b52e91f717a6add5606.1569272883.git.leonard.crestez@nxp.com>
+In-Reply-To: <a88e8c73679fa01264732fe163704a0e748b5235.1569272883.git.leonard.crestez@nxp.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxTZxTO23t7Wzq7XaqMY10E7mYWiQjXtuzlyyyZWW6CP0j2w2FEdm1v
-        SkO/1tua4X6sTofAZFnjD7M20ybq0qJuWGErC5XYggYcOB0SRmEzwS1GZ5mWLkOzubZXM/49
-        55znnOc874eS0DyktEqL3S247LyVoVTkt4nNFRUrh7tbqi49qMHxK4MKnLk2gfBXN8cQPh6L
-        UPj69X4Fnvz4DwWe876CQwsP5TiyOCPHPY/DBE73jiI8E/LJcbp/EeHkwRCFz05dpnBP/B8K
-        X8hwbxZyS7OfKLiA9wbJBSMeLtLXTXHzM8MUd/H0R9yFVFTGXU4Ny7jHiSLus4E+xKUjG5te
-        2N1e3ybwJsFVKtiNDpPFbm5gGt9pfavVUF3FVrA1+A2m1M7bhAZmx86mirct1qwjpnQ/b/Vk
-        U028KDKV2+tdDo9bKG1ziO4GRnCarM4a51aRt4keu3mr0WGrZauqthmyxPfa25ZvHiSdfRs/
-        iC0cIrxoCHpQgRJoPSSX54gepFJq6CiCWOYSKQWPEEw86UdS8BeC+75/Fc9bfo/fkEmFGILh
-        +QyRK2joJQRD06ocXku/C0eGjudHraPPIjh8Zj4/iqB7SYj+2kXmWBRdDiN3Z6kcfokug1t/
-        L6IcVtPbYSIwnc+T9CYYe3oyny/KTn10OyGXOIUw/sWd/JwCei/cD4zm1yPoYpi7c1Im4RI4
-        NBggpLV/UcCnk80S3gErwZRMwmvh3tWBZ9a0kE7FKAl/COHxUSq3NNBdCAZGfpRLBR2MnDmW
-        bVZmBTbDN99XSukyGHryJZJ0X4RU5qg8RwFaDV2dGonyKvx0e+GZ7Ho4daSb+hwx/lVu/Ksc
-        +Fc58P8vFkRkH3pZcIo2syCyTv3q646g/HMvx1E0PLUzjmglYtaondGuFo2c3y922OIIlASz
-        Th0p72zRqE18xwHB5Wh1eayCGEeG7GH7CG2R0ZH9PHZ3K2vYptPpsJ6tNrAsU6zmzN4WDW3m
-        3UK7IDgF1/M+mbJA60Vfd15MP3XdWgx3+BpMwcbxpG+sJFB8olLfMTuw6e70azqLeV62ZmU5
-        fP7elKXZ+3odHCtprrsa1ieSD9L73l+urq35c+9MyH/utw1l7C71d72Zo0Fj7Ybi0JKudvKH
-        3Qnn+nOje1QW+rx+8MSeXXWqwp8TB7RE4yl9Wb0xqYpvYUixjWfLCZfI/weUSnC+BAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvO7Pls5Yg2c7RS0OHdvKbvH19ClG
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbZRz16320HdZdOnC/NUbhOv+gCayX0vlhBjFK3E3EBTUmatLhDb0p
+        hL7S2y5jmlCn1NIMVzSKK2M2YVsYLNlaOtMhhKwwdDODbUqD7OEGU4ePEtugZj5iy2WR/875
+        fed8J+d7qAhthtapWhwe0e0QbCy9gfxsoqyi/OdAp9mwfFuBk1NnlHjlq4sIH796HuGesRiN
+        Z2ZOK/Gl/b8o8bzvETxw4zcKxxZTFA7eO0HgbNckwqmBbgpnTy8ifO3tARoPTZ+jcTD5D42j
+        K/zThfzyXIeS7/VdIflIzMvHBjtp/npqlOaHj7bz0XRCwZ9Ljyr4exPF/PvxQcRnY482FLze
+        uqNZFCyiu0R0NDktLQ5rDfv8y43PNpq2G7hyrho/yZY4BLtYw9bVN5Q/12LLNWJL9gg2b27U
+        IEgSu612h9vp9YglzU7JU8OKLovNVe2qkAS75HVYK5qc9qc4g6HSlBO+0dqc8h1Wujp0e6Pz
+        V5APLRUFkVoFTBV82z1KB9EGlZZJIBjbn1gjGQT+2Qglk98RfB6PoPuWuZUvkbwwhmD6m+tr
+        ZBnBoXSIDCKVahPzIgRG6vLzImYIwbvHZBHBdJGQ+C5A5reiGT2M352j83gjUwqzfy6uRmiY
+        Wri57F/VkMwTMB4fVuRxMfMqZG5NULKmEC4curOqUTO7Yenjg8o8JpjNMH/nU4WMH4N3zvQS
+        +WBgFpTQH/qRkjvUwR/DUwoZb4KfvogrZayDbHqMlvGbcOLCJC2bAwji45fXzEYYP/ahIl+T
+        YMrg1Mg2eVwKZ//qQ3LwQ5BeOUDlJcBoIODXypLH4etbN9Zit0D/e510CLHhdXXC6yqE11UI
+        /x8WQeQgelh0SXarKHEu0/r7jqHV966vTqCp6fokYlSIfVDjSgTMWkrYI7XZkwhUBFukien9
+        Zq3GIrTtE93ORrfXJkpJZMqddjehK25y5n6Pw9PImSqNRiOu4rabOI7drOGtPrOWsQoesVUU
+        XaL7vk+hUut8iIrvu/RMF3HkeObfcCZ0+5ONs6cuniS3GrU7nTfrU1toyysZfXu0l+qonTq8
+        Wx3exfW8NNnT7o/2F1y2B6TKpRcO+NXnC/Y6UgtbUf1sn/0at6vU0DfSOnHX5Ow/+Npb36c/
+        Cj2wdPXXv6uyc2VDP5iPniyPcDM9nQvDhUfazn6wkyWlZoHTE25J+A8DvL/uBQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRmVeSWpSXmKPExsWy7bCSvO7Ljs5YgwXTbCwOHdvKbvH19ClG
         i2WXjjJaTN+7ic3i/PkN7BZnm96wW9xqkLFYcfcjq8Wmx9dYLbp+rWS2+Nx7hNHi2oqJrBaf
         NzxmtLjduILNYvW5g2wWXYf+slls/OrhIOjx/kYru8fshossHgs2lXpsWtXJ5nHn2h42j81L
-        6j02vtvB5HHw3R4mj1+HRT36tqxi9Pi8SS6AO4rLJiU1J7MstUjfLoEr48ulRpaCVXIVe+82
-        Mzcw7pToYuTkkBAwkXh26CJTFyMXh5DAbkaJNa0zWSASkhLTLh5l7mLkALKFJQ4fLoaoecso
-        sf//HbAaYYEIifad08FsEYG1jBJzzjuAFDEL9LJINB1cwQ7R8YhR4n/zY0aQKjYBLYn9L26w
-        gdj8AooSV39AxHkF7CROzb4CFmcRUJU4+n8+WFwUaMPhHbOgagQlTs58AraNUyBO4vXsI+wg
-        NrOAusSfeZeYIWxxiVtP5jNB2PISzVtnM09gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz23
-        2LDAKC+1XK84Mbe4NC9dLzk/dxMjOM61tHYwnjgRf4hRgINRiYdXYltHrBBrYllxZe4hRgkO
-        ZiUR3k1abbFCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeeXzj0UKCaQnlqRmp6YWpBbBZJk4OKUa
-        GK33LW/4fcE7nb2072eR3vKH36X/TTY9qZN95Fh40k/HgIKl87L+T1rOu0DgnfH3Y0cU19xU
-        M3k9qShddPusHZqxXI+jL2eriRkudtnJ9otjkvi9rrJvN584bCo9HFdr6stQLjvBt/j84r/v
-        WvwLl3PLbwu2NunRZr3zLMRSgu/hrqm1TyKL5yixFGckGmoxFxUnAgDTjnYu7wIAAA==
-X-CMS-MailID: 20190924025241epcas1p4f40a8ba5431403351217147b7871b95f
+        6j02vtvB5HHw3R4mj1+HRT36tqxi9Pi8SS6AO4rLJiU1J7MstUjfLoEr41rDHPaCVqmKjbcu
+        MjYwvhTpYuTkkBAwkbjx9QQjiC0ksJtRYtFie4i4pMS0i0eZuxg5gGxhicOHi7sYuYBK3jJK
+        TO26ywoSFxYIlOjY5QJSLiKwllFiznkHkBpmgV4WiaaDK9ghGh4xSnStvwy2gE1AS2L/ixts
+        IDa/gKLE1R+PweK8AnYS9963sYDYLAKqEvu3bGYCsUUFIiQO75gFVSMocXLmE7AaToE4iZfT
+        +tlBbGYBdYk/8y4xQ9jiEreezGeCsOUlmrfOZp7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFx
+        bnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcIxrae1gPHEi/hCjAAejEg+vxLaOWCHWxLLiytxD
+        jBIczEoivJu02mKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ88rnH4sUEkhPLEnNTk0tSC2CyTJx
+        cEo1MC7MOvmkWGEF0wSXf4w73rBb7dvNvK0z5k5SYNPk6nm+SzSDM5aGeotWMkT8VPPUufVD
+        5+M7VjFLvjiDsxUbGQ/8WrHjouvMdXXSwuVH4pgfvZ5U+0pzQWacxw+lv5lLGI9WX/ps5rg/
+        4tKcKxcfmM6qnxLbHucUdCG3je1Z9t+MrBVb5pjP36rEUpyRaKjFXFScCACeGl1E7QIAAA==
+X-CMS-MailID: 20190924030930epcas1p40a8ec5b455fda0bdfea49bce09003e45
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190923211044epcas1p406c9e3cbfe6dd9a74e502ab63f321e4b
+X-CMS-RootMailID: 20190923211044epcas5p38cc23699dc8bbb3effee58229d4a19ec
 References: <cover.1569272883.git.leonard.crestez@nxp.com>
-        <CGME20190923211044epcas1p406c9e3cbfe6dd9a74e502ab63f321e4b@epcas1p4.samsung.com>
-        <bf55208ff3ef868dcee46b52e91f717a6add5606.1569272883.git.leonard.crestez@nxp.com>
+        <CGME20190923211044epcas5p38cc23699dc8bbb3effee58229d4a19ec@epcas5p3.samsung.com>
+        <a88e8c73679fa01264732fe163704a0e748b5235.1569272883.git.leonard.crestez@nxp.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -123,130 +123,105 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-I'm not sure that it is necessary. Because, mainline kernel
-provides the resource-managed feature with 'devm_*'
-in order to reduce the memory leak by user.
-
-It's like going back to a time when 'devm_*' feature wasn't there.
-I think just it depends on the coding style of author.
-
-I leave the final decision of this patch to Myungjoo.
-
 On 19. 9. 24. 오전 6:10, Leonard Crestez wrote:
-> In general it is a better to initialize an object before making it
-> accessible externally (through device_register).
+> A device usually doesn't need to lock itself during initialization
+> because it is not yet reachable from other threads.
 > 
-> This makes it possible to avoid relying on locking a partially
-> initialized object.
+> This simplifies the code and helps avoid recursive lock warnings.
 > 
 > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  drivers/devfreq/devfreq.c | 43 +++++++++++++++++++++++----------------
->  1 file changed, 25 insertions(+), 18 deletions(-)
+>  drivers/devfreq/devfreq.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 > 
 > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index f5bea7350f72..8bbcd4efa09f 100644
+> index 8bbcd4efa09f..1cec816d3d00 100644
 > --- a/drivers/devfreq/devfreq.c
 > +++ b/drivers/devfreq/devfreq.c
-> @@ -588,10 +588,12 @@ static void devfreq_dev_release(struct device *dev)
->  	mutex_unlock(&devfreq_list_lock);
+> @@ -634,11 +634,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  		err = -ENOMEM;
+>  		goto err_out;
+>  	}
 >  
->  	if (devfreq->profile->exit)
->  		devfreq->profile->exit(devfreq->dev.parent);
+>  	mutex_init(&devfreq->lock);
+> -	mutex_lock(&devfreq->lock);
+>  	devfreq->dev.parent = dev;
+>  	devfreq->dev.class = devfreq_class;
+>  	devfreq->dev.release = devfreq_dev_release;
+>  	INIT_LIST_HEAD(&devfreq->node);
+>  	devfreq->profile = profile;
+> @@ -647,28 +646,24 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->last_status.current_frequency = profile->initial_freq;
+>  	devfreq->data = data;
+>  	devfreq->nb.notifier_call = devfreq_notifier_call;
 >  
-> +	kfree(devfreq->time_in_state);
-> +	kfree(devfreq->trans_table);
->  	mutex_destroy(&devfreq->lock);
->  	kfree(devfreq);
->  }
+>  	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
+> -		mutex_unlock(&devfreq->lock);
+>  		err = set_freq_table(devfreq);
+>  		if (err < 0)
+>  			goto err_dev;
+> -		mutex_lock(&devfreq->lock);
+>  	}
 >  
->  /**
-> @@ -671,44 +673,43 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
+>  	if (!devfreq->scaling_min_freq) {
+> -		mutex_unlock(&devfreq->lock);
+>  		err = -EINVAL;
+>  		goto err_dev;
+>  	}
+>  	devfreq->min_freq = devfreq->scaling_min_freq;
+>  
+>  	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
+>  	if (!devfreq->scaling_max_freq) {
+> -		mutex_unlock(&devfreq->lock);
+>  		err = -EINVAL;
+>  		goto err_dev;
+>  	}
 >  	devfreq->max_freq = devfreq->scaling_max_freq;
 >  
->  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
->  	atomic_set(&devfreq->suspend_count, 0);
->  
-> -	dev_set_name(&devfreq->dev, "devfreq%d",
-> -				atomic_inc_return(&devfreq_no));
-> -	err = device_register(&devfreq->dev);
-> -	if (err) {
-> -		mutex_unlock(&devfreq->lock);
-> -		put_device(&devfreq->dev);
-> -		goto err_out;
-> -	}
-> -
-> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
-> +	devfreq->trans_table = kzalloc(
+> @@ -679,20 +674,18 @@ struct devfreq *devfreq_add_device(struct device *dev,
 >  			array3_size(sizeof(unsigned int),
 >  				    devfreq->profile->max_state,
 >  				    devfreq->profile->max_state),
 >  			GFP_KERNEL);
 >  	if (!devfreq->trans_table) {
->  		mutex_unlock(&devfreq->lock);
+> -		mutex_unlock(&devfreq->lock);
 >  		err = -ENOMEM;
-> -		goto err_devfreq;
-> +		goto err_dev;
+>  		goto err_dev;
 >  	}
 >  
-> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
-> -			devfreq->profile->max_state,
-> -			sizeof(unsigned long),
-> -			GFP_KERNEL);
-> +	devfreq->time_in_state = kcalloc(devfreq->profile->max_state,
-> +					 sizeof(unsigned long),
-> +					 GFP_KERNEL);
+>  	devfreq->time_in_state = kcalloc(devfreq->profile->max_state,
+>  					 sizeof(unsigned long),
+>  					 GFP_KERNEL);
 >  	if (!devfreq->time_in_state) {
->  		mutex_unlock(&devfreq->lock);
+> -		mutex_unlock(&devfreq->lock);
 >  		err = -ENOMEM;
-> -		goto err_devfreq;
-> +		goto err_dev;
+>  		goto err_dev;
 >  	}
 >  
 >  	devfreq->last_stat_updated = jiffies;
+> @@ -701,17 +694,14 @@ struct devfreq *devfreq_add_device(struct device *dev,
 >  
->  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
+>  	dev_set_name(&devfreq->dev, "devfreq%d",
+>  				atomic_inc_return(&devfreq_no));
+>  	err = device_register(&devfreq->dev);
+>  	if (err) {
+> -		mutex_unlock(&devfreq->lock);
+>  		put_device(&devfreq->dev);
+>  		goto err_out;
+>  	}
 >  
-> +	dev_set_name(&devfreq->dev, "devfreq%d",
-> +				atomic_inc_return(&devfreq_no));
-> +	err = device_register(&devfreq->dev);
-> +	if (err) {
-> +		mutex_unlock(&devfreq->lock);
-> +		put_device(&devfreq->dev);
-> +		goto err_out;
-> +	}
-> +
->  	mutex_unlock(&devfreq->lock);
->  
+> -	mutex_unlock(&devfreq->lock);
+> -
 >  	mutex_lock(&devfreq_list_lock);
 >  
 >  	governor = try_then_request_governor(devfreq->governor_name);
-> @@ -734,14 +735,20 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  
->  	return devfreq;
->  
->  err_init:
->  	mutex_unlock(&devfreq_list_lock);
-> -err_devfreq:
->  	devfreq_remove_device(devfreq);
-> -	devfreq = NULL;
-> +	return ERR_PTR(err);
-> +
->  err_dev:
-> +	/*
-> +	 * Cleanup path for errors that happen before registration.
-> +	 * Otherwise we rely on devfreq_dev_release.
-> +	 */
-> +	kfree(devfreq->time_in_state);
-> +	kfree(devfreq->trans_table);
->  	kfree(devfreq);
->  err_out:
->  	return ERR_PTR(err);
->  }
->  EXPORT_SYMBOL(devfreq_add_device);
+>  	if (IS_ERR(governor)) {
+>  		dev_err(dev, "%s: Unable to find governor for the device\n",
 > 
 
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 -- 
 Best Regards,
