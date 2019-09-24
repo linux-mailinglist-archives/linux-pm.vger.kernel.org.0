@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 923CFBC570
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 12:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4627BC56F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 12:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438527AbfIXKLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2438534AbfIXKLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 24 Sep 2019 06:11:36 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:59224 "EHLO inva020.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:59286 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438464AbfIXKLg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Sep 2019 06:11:36 -0400
+        id S2438527AbfIXKLf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Sep 2019 06:11:35 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2068A1A027B;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D516B1A039F;
         Tue, 24 Sep 2019 12:11:33 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 11FDD1A019F;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C829B1A0192;
         Tue, 24 Sep 2019 12:11:33 +0200 (CEST)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 5F779205E6;
-        Tue, 24 Sep 2019 12:11:32 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 22DCA205E6;
+        Tue, 24 Sep 2019 12:11:33 +0200 (CEST)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -35,111 +35,69 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Lukasz Luba <l.luba@partner.samsung.com>,
         NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v8 0/6] PM / devfreq: Add dev_pm_qos support
-Date:   Tue, 24 Sep 2019 13:11:24 +0300
-Message-Id: <cover.1569319738.git.leonard.crestez@nxp.com>
+Subject: [PATCH v8 1/6] PM / devfreq: Don't fail devfreq_dev_release if not in list
+Date:   Tue, 24 Sep 2019 13:11:25 +0300
+Message-Id: <bdca660b9356993a1ff6e25bee15356205a00de9.1569319738.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1569319738.git.leonard.crestez@nxp.com>
+References: <cover.1569319738.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1569319738.git.leonard.crestez@nxp.com>
+References: <cover.1569319738.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add dev_pm_qos notifiers to devfreq core in order to support frequency
-limits via dev_pm_qos_add_request.
+Right now devfreq_dev_release will print a warning and abort the rest of
+the cleanup if the devfreq instance is not part of the global
+devfreq_list. But this is a valid scenario, for example it can happen if
+the governor can't be found or on any other init error that happens
+after device_register.
 
-Unlike the rest of devfreq the dev_pm_qos frequency is measured in Khz,
-this is consistent with current dev_pm_qos usage for cpufreq and
-allows frequencies above 2Ghz (pm_qos expresses limits as s32).
+Initialize devfreq->node to an empty list head in devfreq_add_device so
+that list_del becomes a safe noop inside devfreq_dev_release and we can
+continue the rest of the cleanup.
 
-Like with cpufreq the handling of min_freq/max_freq is moved to the
-dev_pm_qos mechanism. Constraints from userspace are no longer clamped on
-store, instead all values can be written and we only check against OPPs in a
-new devfreq_get_freq_range function. This is consistent with the design of
-dev_pm_qos.
-
-Notifiers from pm_qos are executed under a single global dev_pm_qos_mtx and
-need to take devfreq->lock. Notifier registration takes the same dev_pm_qos_mtx
-so in order to prevent lockdep warnings it must be done outside devfreq->lock.
-Current devfreq_add_device does all initialization under devfreq->lock and that
-needs to be relaxed.
-
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
-Changes since v7:
-* Only #define HZ_PER_KHZ in patch where it's used.
-* Drop devfreq_ prefix for some internal functions.
-* Improve qos update error message.
-* Remove some unnecessary comments.
-* Collect reviews
-Link to v7: https://patchwork.kernel.org/cover/11157649/
+ drivers/devfreq/devfreq.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Changes since v6:
-* Don't return errno from devfreq_qos_notifier_call, return NOTIFY_DONE
-and print the error.
-* More spelling and punctuation nits
-Link to v6: https://patchwork.kernel.org/cover/11157201/
-
-Changes since v5:
-* Drop patches which are not strictly related to PM QoS.
-* Add a comment explaining why devfreq_add_device needs two cleanup paths.
-* Remove {} for single line.
-* Rename {min,max}_freq_req to user_{min,max}_freq_req
-* Collect reviews
-Link to v5: https://patchwork.kernel.org/cover/11149497/
-
-Sorry for forgetting to properly label v5. I know this is inside the
-merge window but review would still be appreciated.
-
-Changes since v4:
-* Move more devfreq_add_device init ahead of device_register.
-* Make devfreq_dev_release cleanup devices not yet in devfreq_list. This is
-simpler than previous attempt to add to devfreq_list sonner.
-* Take devfreq->lock in trans_stat_show
-* Register dev_pm_opp notifier on devfreq parent dev (which has OPPs)
-Link to v4: https://patchwork.kernel.org/cover/11114657/
-
-Changes since v4:
-* Move more devfreq_add_device init ahead of device_register.
-* Make devfreq_dev_release cleanup devices not yet in devfreq_list. This is
-simpler than previous attempt to add to devfreq_list sonner.
-* Take devfreq->lock in trans_stat_show
-* Register dev_pm_opp notifier on devfreq parent dev (which has OPPs)
-Like to v4: https://patchwork.kernel.org/cover/11114657/
-
-Changes since v3:
-* Cleanup locking and error-handling in devfreq_add_device
-* Register notifiers after device registration but before governor start
-* Keep the initialization of min_req/max_req ahead of device_register
-because it's used for sysfs handling
-* Use HZ_PER_KHZ instead of 1000
-* Add kernel-doc comments
-* Move OPP notifier to core
-Link to v3: https://patchwork.kernel.org/cover/11104061/
-
-Changes since v2:
-* Handle sysfs via dev_pm_qos (in separate patch)
-* Add locking to {min,max}_freq_show
-* Fix checkpatch issues (long lines etc)
-Link to v2: https://patchwork.kernel.org/patch/11084279/
-
-Changes since v1:
-* Add doxygen comments for min_nb/max_nb
-* Remove notifiers on error/cleanup paths. Keep gotos simple by relying on
-dev_pm_qos_remove_notifier ignoring notifiers which were not added.
-Link to v1: https://patchwork.kernel.org/patch/11078475/
-
-Leonard Crestez (6):
-  PM / devfreq: Don't fail devfreq_dev_release if not in list
-  PM / devfreq: Move more initialization before registration
-  PM / devfreq: Don't take lock in devfreq_add_device
-  PM / devfreq: Introduce get_freq_range helper
-  PM / devfreq: Add PM QoS support
-  PM / devfreq: Use PM QoS for sysfs min/max_freq
-
- drivers/devfreq/devfreq.c | 268 +++++++++++++++++++++++++-------------
- include/linux/devfreq.h   |  14 +-
- 2 files changed, 191 insertions(+), 91 deletions(-)
-
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index a2a045e117f0..12c4bcdc1f17 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -582,15 +582,10 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+ static void devfreq_dev_release(struct device *dev)
+ {
+ 	struct devfreq *devfreq = to_devfreq(dev);
+ 
+ 	mutex_lock(&devfreq_list_lock);
+-	if (IS_ERR(find_device_devfreq(devfreq->dev.parent))) {
+-		mutex_unlock(&devfreq_list_lock);
+-		dev_warn(&devfreq->dev, "releasing devfreq which doesn't exist\n");
+-		return;
+-	}
+ 	list_del(&devfreq->node);
+ 	mutex_unlock(&devfreq_list_lock);
+ 
+ 	if (devfreq->profile->exit)
+ 		devfreq->profile->exit(devfreq->dev.parent);
+@@ -641,10 +636,11 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	mutex_init(&devfreq->lock);
+ 	mutex_lock(&devfreq->lock);
+ 	devfreq->dev.parent = dev;
+ 	devfreq->dev.class = devfreq_class;
+ 	devfreq->dev.release = devfreq_dev_release;
++	INIT_LIST_HEAD(&devfreq->node);
+ 	devfreq->profile = profile;
+ 	strncpy(devfreq->governor_name, governor_name, DEVFREQ_NAME_LEN);
+ 	devfreq->previous_freq = profile->initial_freq;
+ 	devfreq->last_status.current_frequency = profile->initial_freq;
+ 	devfreq->data = data;
 -- 
 2.17.1
 
