@@ -2,237 +2,390 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C4CBC19F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 08:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C098BC201
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Sep 2019 08:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438734AbfIXGPe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Sep 2019 02:15:34 -0400
-Received: from mail-eopbgr80073.outbound.protection.outlook.com ([40.107.8.73]:10846
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2438728AbfIXGPd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Sep 2019 02:15:33 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j9iKc5907GqGzBtc9zYmfrMaAfzmaO0tF/r/n+TyQZwNZEjYEQ6rJdE8BXHaxPqxWy4l94rRA7t+5prlVVwoMK6S1EcFifgvC5TFtIvjCOEbqV19KKogYsxaaWxBZjZaUcOcE7KiRLEcKLfokUuS6f7F6VJFSzgAJiJXmxQkj9L29TQsCJGPwa4c80cgl5qIZovxp8rKwkzU6O9iS8khd+FtGq7Z4C9umOb8DcD8V4CXro66Mvo0N27A5k97Pq9lFBTAmBF7xqh/f7ttveqAkPRGkXHZtJ0OGOsgfsAABtcU6PUH++3bUleG8H/ge2yezdFd5QqrzPttD5CAJogrXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ensjIIB16UD0SymcCH/qXfmysPt/QhIT13TpO3cZlJc=;
- b=GnI8RMKjsBjpLLBAProiSV4JOYbO4B57pLlllV3epIXlqXoWdz8Pis7qpFXcD3YY7Y04LNan8xPRg5rd5eOgDLiAVYJfQ7oefplrFRl64yHYL6U9ZNlOzlvlBimTrxjPFjt3ejg3JJ1JLF6pAddknUcwRdRG74Jx7c+Tx29WyAhHOndm9m+JDuY1A1NrmYjXfwWdtCF8XukFjMmflfV6H+27ljlun3kAJfFqpj7rLPMfjFQzYEJOddCZzgON3G59d506yRyx0gMdYf51KlzhZ6zarFsWvvF972IkzYtYQTQIhadlC7cELI7etH5gUI7d20XaH+klnrUWH2l0Ro8rxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ensjIIB16UD0SymcCH/qXfmysPt/QhIT13TpO3cZlJc=;
- b=FAHw6+BwNcLjS25kTDLP7if4f4MY3a6srz2iH2biAgHNAurWH9JSLuvDfLQ8S9JnELOgAi8fuFQnbIcjGmLva2A1jUlnNqc9Zz+zV/yXhfapxArUc0N/TSnOWm1ss+Sstj648FkQxO0pmIVHFTKZupZD+sX0yqoToktm7O0CA7U=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3835.eurprd04.prod.outlook.com (52.134.65.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.18; Tue, 24 Sep 2019 06:15:25 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38%7]) with mapi id 15.20.2284.023; Tue, 24 Sep 2019
- 06:15:25 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Andy Tang <andy.tang@nxp.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>
-CC:     "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Tang <andy.tang@nxp.com>
-Subject: RE: [PATCH v2] thermal: qoriq: add thermal monitor unit version 2
- support
-Thread-Topic: [PATCH v2] thermal: qoriq: add thermal monitor unit version 2
- support
-Thread-Index: AQHVcof1uTmY1EIPmUy0v9WqxjFj+ac6WafA
-Date:   Tue, 24 Sep 2019 06:15:24 +0000
-Message-ID: <DB3PR0402MB3916BF35E6EFEC5B29DB0FDDF5840@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190924031640.3159-1-andy.tang@nxp.com>
-In-Reply-To: <20190924031640.3159-1-andy.tang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 403fd070-61ec-498e-5e2d-08d740b69691
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3835;
-x-ms-traffictypediagnostic: DB3PR0402MB3835:|DB3PR0402MB3835:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3835B3EF4AD69147DD1F9D21F5840@DB3PR0402MB3835.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:989;
-x-forefront-prvs: 0170DAF08C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(13464003)(199004)(189003)(66476007)(110136005)(64756008)(5660300002)(33656002)(478600001)(2906002)(86362001)(2501003)(25786009)(14454004)(7736002)(6506007)(476003)(53546011)(66446008)(26005)(102836004)(99286004)(66946007)(186003)(66556008)(3846002)(6116002)(7696005)(76116006)(2201001)(76176011)(9686003)(446003)(229853002)(52536014)(55016002)(486006)(44832011)(74316002)(11346002)(305945005)(6436002)(4326008)(316002)(54906003)(81166006)(66066001)(71190400001)(71200400001)(81156014)(14444005)(256004)(8936002)(8676002)(6246003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3835;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PylU+DSdNOZ+p7ietaA2yOrJD/4Sh+ZdZsnhRcn86a5PS6WeHRt6v9pOwEXyBVbnL8PD25AiTkcD4DkT/U7rk7ipnHhtte4yPrt8E8Xk/aEt3vZ1/6BSVU6duG5mkk/P3z6mS6gvPYRYIaVMFtQDKY7keQV0brd/R+VuTbxlWwtOmjr4yDMjKVGv5kj25ggul7bvgt3jW1QTNUAtkc8dwzIUa/6XFhkIGzsXcB8ApVgOd68Stf8Nx+LiqbHw590zEYehJd3TfbJvSgy3QzpFhxajhAOoowa2s5SjU8Gn3d1cl6XcmIlzh5dJLfh/eC0w/MlRLlmvspBX0/oWMNk5SvKZ6YCzLv2jXQ30Yso5HB/npz0ltFIzIPNRE05OMVIIq0p3JKwH1G09VWtS38j++5Xh4j6wGq4/4DOphuvGVR4=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727210AbfIXGrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Sep 2019 02:47:53 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:43155 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727043AbfIXGrx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Sep 2019 02:47:53 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190924064750epoutp04057e546a7ba5f802af37518aee6dd376~HTQLwaF1n1344313443epoutp04j
+        for <linux-pm@vger.kernel.org>; Tue, 24 Sep 2019 06:47:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190924064750epoutp04057e546a7ba5f802af37518aee6dd376~HTQLwaF1n1344313443epoutp04j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1569307670;
+        bh=DZV1TxgKw+t8rHFL/30Eqfw7PZJtp9s6p6WlQwPnG0M=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=cZMoiUEVDcDpVSmMR5n4a/jNUBD+JdOIgHZzfVWtflcvqUEUaX8kRo6RZJtswF940
+         5r32uFmPfK7Ei93tjhxgKsN8A2YyXexdcYdl+xy/QeAKr+VzYZxlDVbim2pDQ6wLDM
+         rLTaVB9IcbA7Gcb8pqShtzg33YkPoVRta330n9Gc=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190924064749epcas1p33d7bb5aa1161a8d5fd2085a3ebcb102b~HTQLCnLUJ1621716217epcas1p3j;
+        Tue, 24 Sep 2019 06:47:49 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 46csFZ1t4DzMqYkh; Tue, 24 Sep
+        2019 06:47:46 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E3.B7.04135.21CB98D5; Tue, 24 Sep 2019 15:47:46 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190924064745epcas1p173dda62a954610d36e9549ab1e45bd12~HTQHqnA5_1302613026epcas1p1V;
+        Tue, 24 Sep 2019 06:47:45 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190924064745epsmtrp1ef4d32f913f10fae5f360352d9eebd14~HTQHppidi0398303983epsmtrp1m;
+        Tue, 24 Sep 2019 06:47:45 +0000 (GMT)
+X-AuditID: b6c32a36-7fbff70000001027-8d-5d89bc125b0a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        99.54.03889.11CB98D5; Tue, 24 Sep 2019 15:47:45 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190924064745epsmtip25ad020aecb02f9bbd8cb8e9ed34b1639~HTQHLbg1t1824318243epsmtip2g;
+        Tue, 24 Sep 2019 06:47:45 +0000 (GMT)
+Subject: Re: [PATCH v7 5/6] PM / devfreq: Add PM QoS support
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <3eb36ce6-a9df-7f9a-1492-8747f2648e78@samsung.com>
+Date:   Tue, 24 Sep 2019 15:52:09 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 403fd070-61ec-498e-5e2d-08d740b69691
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 06:15:24.5752
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jO292LXoYc83wgzCStJ2yL2LOISyZwHocAHCHNzIM6yiVFEtZvdkLhkQZvgIGXhDrVVX/MGLCTVzJYX3ayMyEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3835
+In-Reply-To: <e9868310f9543b4f4a6c7bbe5d4d015da9a0e71d.1569272883.git.leonard.crestez@nxp.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMJsWRmVeSWpSXmKPExsWy7bCmnq7Qns5Yg+ZdXBaHjm1lt/h6+hSj
+        xbJLRxktpu/dxGZx/vwGdouzTW/YLW41yFisuPuR1WLT42usFl2/VjJbfO49wmhxbcVEVovP
+        Gx4zWtxuXMFmsfrcQTaLrkN/2Sw2fvVwEPR4f6OV3WN2w0UWjwWbSj02repk87hzbQ+bx+Yl
+        9R4b3+1g8jj4bg+Tx6/Doh59W1YxenzeJBfAHZVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9q
+        ZmCoa2hpYa6kkJeYm2qr5OIToOuWmQP0kZJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1
+        ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAhO6P771ymgukuFS/fHGdrYFxu1sXIySEhYCKx
+        4fYl5i5GLg4hgR2MErsm/WCDcD4xSjy8BpP5xihx4vluFpiWc+ueMEEk9jJKvJ63mRXCec8o
+        cfrzXHaQKmEBG4kTB5aCzRIRWM0o0bL0DiOIwyzQyyKx434H2Cw2AS2J/S9usIHY/AKKEld/
+        PGYEsXkF7CRm7v8PZrMIqEosf7mDFcQWFYiQ+PTgMCtEjaDEyZlPwOZwCsRJrOqYCVbPLCAu
+        cevJfCYIW16ieetssCckBB6xS3zd+4cd4gkXiT+vJrNC2MISr45vgYpLSbzsb4OyqyVWnjzC
+        BtHcwSixZf8FqAZjif1LJwNt4ADaoCmxfpc+RFhRYufvuVBH8Em8+9rDClIiIcAr0dEmBFGi
+        LHH5wV0mCFtSYnF7J9sERqVZSN6ZheSFWUhemIWwbAEjyypGsdSC4tz01GLDAiPkCN/ECE7w
+        WmY7GBed8znEKMDBqMTDW7CjI1aINbGsuDL3EKMEB7OSCO8mrbZYId6UxMqq1KL8+KLSnNTi
+        Q4ymwNCeyCwlmpwPzD55JfGGpkbGxsYWJoZmpoaGSuK87ukNsUIC6YklqdmpqQWpRTB9TByc
+        Ug2Mavv/P5KYxfnqxH6zNrYnCwTsryaF8LeuOlG8LCG18uFJPxvZVcrPmvYXXHvc8H3/a+Pf
+        9nt28JTc8LfxnNDSsi8/hNNA5u9U3ieVVis/pMnvaP/dKPjuf57vSwWvyq8hv7827rDMVav8
+        6D6v9EjfrY4dC3mOrfpzcb1BiS9r4m1H7dwb0XcYlViKMxINtZiLihMB4UC0PAYEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvK7gns5Yg3eT1S0OHdvKbvH19ClG
+        i2WXjjJaTN+7ic3i/PkN7BZnm96wW9xqkLFYcfcjq8Wmx9dYLbp+rWS2+Nx7hNHi2oqJrBaf
+        NzxmtLjduILNYvW5g2wWXYf+slls/OrhIOjx/kYru8fshossHgs2lXpsWtXJ5nHn2h42j81L
+        6j02vtvB5HHw3R4mj1+HRT36tqxi9Pi8SS6AO4rLJiU1J7MstUjfLoEro/vvXKaC6S4VL98c
+        Z2tgXG7WxcjJISFgInFu3ROmLkYuDiGB3YwS12csYoRISEpMu3iUuYuRA8gWljh8uBii5i2j
+        xMQZs5lBaoQFbCROHFjKBmKLCKxllJhz3gGkiFmgl0Wi6eAKdoiOR4wSj09PAZvKJqAlsf/F
+        DbAOfgFFias/HoPFeQXsJGbu/w9mswioSix/uYMVxBYViJA4vGMWVI2gxMmZT1hAbE6BOIlV
+        HTPB4swC6hJ/5l1ihrDFJW49mc8EYctLNG+dzTyBUXgWkvZZSFpmIWmZhaRlASPLKkbJ1ILi
+        3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4DjX0trBeOJE/CFGAQ5GJR5eiW0dsUKsiWXFlbmH
+        GCU4mJVEeDdptcUK8aYkVlalFuXHF5XmpBYfYpTmYFES55XPPxYpJJCeWJKanZpakFoEk2Xi
+        4JRqYNSrVava4LebWWrmssnT3DkPFBxs2bc46qt7zdlDzlfOF21kqu7fILJ/wpRzU2I9b7V+
+        LmNs+3jEWm959coyl+t33X+0v5/IPmXHVfcrOT5zZ780Tlt7OdnKPmeVO6dDZKRqhorh7jdW
+        3AZm63T1Tq/dfoa3axHfW/2+GzP2aLhvrLz2VoFP9qASS3FGoqEWc1FxIgDu23n17wIAAA==
+X-CMS-MailID: 20190924064745epcas1p173dda62a954610d36e9549ab1e45bd12
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190923211052epcas4p2ab1e4a6a1f50048752d2b90274ff6abf
+References: <cover.1569272883.git.leonard.crestez@nxp.com>
+        <CGME20190923211052epcas4p2ab1e4a6a1f50048752d2b90274ff6abf@epcas4p2.samsung.com>
+        <e9868310f9543b4f4a6c7bbe5d4d015da9a0e71d.1569272883.git.leonard.crestez@nxp.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWXVhbnRpYW4gVGFuZyA8
-YW5keS50YW5nQG54cC5jb20+DQo+IFNlbnQ6IFR1ZXNkYXksIFNlcHRlbWJlciAyNCwgMjAxOSAx
-MToxNyBBTQ0KPiBUbzogZWR1YmV6dmFsQGdtYWlsLmNvbTsgcnVpLnpoYW5nQGludGVsLmNvbTsg
-QW5zb24gSHVhbmcNCj4gPGFuc29uLmh1YW5nQG54cC5jb20+DQo+IENjOiBkYW5pZWwubGV6Y2Fu
-b0BsaW5hcm8ub3JnOyBMZW8gTGkgPGxlb3lhbmcubGlAbnhwLmNvbT47IGxpbnV4LQ0KPiBwbUB2
-Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEFuZHkgVGFuZw0K
-PiA8YW5keS50YW5nQG54cC5jb20+DQo+IFN1YmplY3Q6IFtQQVRDSCB2Ml0gdGhlcm1hbDogcW9y
-aXE6IGFkZCB0aGVybWFsIG1vbml0b3IgdW5pdCB2ZXJzaW9uIDINCj4gc3VwcG9ydA0KPiANCj4g
-VGhlcm1hbCBNb25pdG9yIFVuaXQgdjIgaXMgaW50cm9kdWNlZCBvbiBuZXcgTGF5c2NhcGUgU29D
-Lg0KPiBDb21wYXJlZCB0byB2MSwgVE1VdjIgaGFzIGEgbGl0dGxlIGRpZmZlcmVudCByZWdpc3Rl
-ciBsYXlvdXQgYW5kIGRpZ2l0YWwNCj4gb3V0cHV0IGlzIGZhaXJseSBsaW5lYXIuDQo+IA0KPiBT
-aWduZWQtb2ZmLWJ5OiBZdWFudGlhbiBUYW5nIDxhbmR5LnRhbmdAbnhwLmNvbT4NCg0KUmV2aWV3
-ZWQtYnk6IEFuc29uIEh1YW5nIDxBbnNvbi5IdWFuZ0BueHAuY29tPg0KDQo+IC0tLQ0KPiB2MjoN
-Cj4gCS0gcmVmaW5lIHRoZSBjb2RlOiByZW1vdmUgcmVkdW5kYW50IHZhcmlhYmxlLCByZW5hbWUg
-dmFyaWFibGUgZXRjLg0KPiANCj4gIGRyaXZlcnMvdGhlcm1hbC9xb3JpcV90aGVybWFsLmMgfCAx
-MjEgKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA5
-NyBpbnNlcnRpb25zKCspLCAyNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL3RoZXJtYWwvcW9yaXFfdGhlcm1hbC5jDQo+IGIvZHJpdmVycy90aGVybWFsL3FvcmlxX3Ro
-ZXJtYWwuYyBpbmRleCA3YjM2NDkzM2JmYjEuLjQzNjE3ZTUzNTU0Yg0KPiAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy90aGVybWFsL3FvcmlxX3RoZXJtYWwuYw0KPiArKysgYi9kcml2ZXJzL3RoZXJt
-YWwvcW9yaXFfdGhlcm1hbC5jDQo+IEBAIC0xMiw3ICsxMiwxNiBAQA0KPiANCj4gICNpbmNsdWRl
-ICJ0aGVybWFsX2NvcmUuaCINCj4gDQo+IC0jZGVmaW5lIFNJVEVTX01BWAkxNg0KPiArI2RlZmlu
-ZSBTSVRFU19NQVgJCTE2DQo+ICsjZGVmaW5lIFRNUl9ESVNBQkxFCQkweDANCj4gKyNkZWZpbmUg
-VE1SX01FCQkJMHg4MDAwMDAwMA0KPiArI2RlZmluZSBUTVJfQUxQRgkJMHgwYzAwMDAwMA0KPiAr
-I2RlZmluZSBUTVJfQUxQRl9WMgkJMHgwMzAwMDAwMA0KPiArI2RlZmluZSBUTVRNSVJfREVGQVVM
-VAkweDAwMDAwMDBmDQo+ICsjZGVmaW5lIFRJRVJfRElTQUJMRQkweDANCj4gKyNkZWZpbmUgVEVV
-TVIwX1YyCQkweDUxMDA5YzAwDQo+ICsjZGVmaW5lIFRNVV9WRVIxCQkweDENCj4gKyNkZWZpbmUg
-VE1VX1ZFUjIJCTB4Mg0KPiANCj4gIC8qDQo+ICAgKiBRb3JJUSBUTVUgUmVnaXN0ZXJzDQo+IEBA
-IC0yMywxNyArMzIsNTUgQEAgc3RydWN0IHFvcmlxX3RtdV9zaXRlX3JlZ3Mgew0KPiAgCXU4IHJl
-czBbMHg4XTsNCj4gIH07DQo+IA0KPiAtc3RydWN0IHFvcmlxX3RtdV9yZWdzIHsNCj4gK3N0cnVj
-dCBxb3JpcV90bXVfcmVnc192MiB7DQo+ICsJdTMyIHRtcjsJCS8qIE1vZGUgUmVnaXN0ZXIgKi8N
-Cj4gKwl1MzIgdHNyOwkJLyogU3RhdHVzIFJlZ2lzdGVyICovDQo+ICsJdTMyIHRtc3I7CQkvKiBt
-b25pdG9yIHNpdGUgcmVnaXN0ZXIgKi8NCj4gKwl1MzIgdG10bWlyOwkJLyogVGVtcGVyYXR1cmUg
-bWVhc3VyZW1lbnQgaW50ZXJ2YWwNCj4gUmVnaXN0ZXIgKi8NCj4gKwl1OCByZXMwWzB4MTBdOw0K
-PiArCXUzMiB0aWVyOwkJLyogSW50ZXJydXB0IEVuYWJsZSBSZWdpc3RlciAqLw0KPiArCXUzMiB0
-aWRyOwkJLyogSW50ZXJydXB0IERldGVjdCBSZWdpc3RlciAqLw0KPiArCXU4IHJlczFbMHg4XTsN
-Cj4gKwl1MzIgdGlpc2NyOwkJLyogaW50ZXJydXB0IGltbWVkaWF0ZSBzaXRlIGNhcHR1cmUgcmVn
-aXN0ZXINCj4gKi8NCj4gKwl1MzIgdGlhc2NyOwkJLyogaW50ZXJydXB0IGF2ZXJhZ2Ugc2l0ZSBj
-YXB0dXJlIHJlZ2lzdGVyICovDQo+ICsJdTMyIHRpY3NjcjsJCS8qIEludGVycnVwdCBDcml0aWNh
-bCBTaXRlIENhcHR1cmUgUmVnaXN0ZXIgKi8NCj4gKwl1MzIgcmVzMjsNCj4gKwl1MzIgdG1odGNy
-OwkJLyogbW9uaXRvciBoaWdoIHRlbXBlcmF0dXJlIGNhcHR1cmUgcmVnaXN0ZXINCj4gKi8NCj4g
-Kwl1MzIgdG1sdGNyOwkJLyogbW9uaXRvciBsb3cgdGVtcGVyYXR1cmUgY2FwdHVyZSByZWdpc3Rl
-cg0KPiAqLw0KPiArCXUzMiB0bXJ0cmNyOwkvKiBtb25pdG9yIHJpc2luZyB0ZW1wZXJhdHVyZSBy
-YXRlIGNhcHR1cmUgcmVnaXN0ZXINCj4gKi8NCj4gKwl1MzIgdG1mdHJjcjsJLyogbW9uaXRvciBm
-YWxsaW5nIHRlbXBlcmF0dXJlIHJhdGUgY2FwdHVyZSByZWdpc3Rlcg0KPiAqLw0KPiArCXUzMiB0
-bWh0aXRyOwkvKiBIaWdoIFRlbXBlcmF0dXJlIEltbWVkaWF0ZSBUaHJlc2hvbGQgKi8NCj4gKwl1
-MzIgdG1odGF0cjsJLyogSGlnaCBUZW1wZXJhdHVyZSBBdmVyYWdlIFRocmVzaG9sZCAqLw0KPiAr
-CXUzMiB0bWh0YWN0cjsJLyogSGlnaCBUZW1wZXJhdHVyZSBBdmVyYWdlIENyaXQgVGhyZXNob2xk
-ICovDQo+ICsJdTMyIHJlczM7DQo+ICsJdTMyIHRtbHRpdHI7CS8qIG1vbml0b3IgbG93IHRlbXBl
-cmF0dXJlIGltbWVkaWF0ZSB0aHJlc2hvbGQgKi8NCj4gKwl1MzIgdG1sdGF0cjsJLyogbW9uaXRv
-ciBsb3cgdGVtcGVyYXR1cmUgYXZlcmFnZSB0aHJlc2hvbGQNCj4gcmVnaXN0ZXIgKi8NCj4gKwl1
-MzIgdG1sdGFjdHI7CS8qIG1vbml0b3IgbG93IHRlbXBlcmF0dXJlIGF2ZXJhZ2UgY3JpdGljYWwN
-Cj4gdGhyZXNob2xkICovDQo+ICsJdTMyIHJlczQ7DQo+ICsJdTMyIHRtcnRyY3RyOwkvKiBtb25p
-dG9yIHJpc2luZyB0ZW1wZXJhdHVyZSByYXRlIGNyaXRpY2FsIHRocmVzaG9sZA0KPiAqLw0KPiAr
-CXUzMiB0bWZ0cmN0cjsJLyogbW9uaXRvciBmYWxsaW5nIHRlbXBlcmF0dXJlIHJhdGUgY3JpdGlj
-YWwNCj4gdGhyZXNob2xkKi8NCj4gKwl1OCByZXM1WzB4OF07DQo+ICsJdTMyIHR0Y2ZncjsJLyog
-VGVtcGVyYXR1cmUgQ29uZmlndXJhdGlvbiBSZWdpc3RlciAqLw0KPiArCXUzMiB0c2NmZ3I7CS8q
-IFNlbnNvciBDb25maWd1cmF0aW9uIFJlZ2lzdGVyICovDQo+ICsJdTggcmVzNlsweDc4XTsNCj4g
-KwlzdHJ1Y3QgcW9yaXFfdG11X3NpdGVfcmVncyBzaXRlW1NJVEVTX01BWF07DQo+ICsJdTggcmVz
-N1sweDlmOF07DQo+ICsJdTMyIGlwYnJyMDsJCS8qIElQIEJsb2NrIFJldmlzaW9uIFJlZ2lzdGVy
-IDAgKi8NCj4gKwl1MzIgaXBicnIxOwkJLyogSVAgQmxvY2sgUmV2aXNpb24gUmVnaXN0ZXIgMSAq
-Lw0KPiArCXU4IHJlczhbMHgzMDBdOw0KPiArCXUzMiB0ZXVtcjA7DQo+ICsJdTMyIHRldW1yMTsN
-Cj4gKwl1MzIgdGV1bXIyOw0KPiArCXUzMiByZXM5Ow0KPiArCXUzMiB0dHJjcls0XTsJLyogVGVt
-cGVyYXR1cmUgUmFuZ2UgQ29udHJvbCBSZWdpc3RlciAqLw0KPiArfTsNCj4gKw0KPiArc3RydWN0
-IHFvcmlxX3RtdV9yZWdzX3YxIHsNCj4gIAl1MzIgdG1yOwkJLyogTW9kZSBSZWdpc3RlciAqLw0K
-PiAtI2RlZmluZSBUTVJfRElTQUJMRQkweDANCj4gLSNkZWZpbmUgVE1SX01FCQkweDgwMDAwMDAw
-DQo+IC0jZGVmaW5lIFRNUl9BTFBGCTB4MGMwMDAwMDANCj4gIAl1MzIgdHNyOwkJLyogU3RhdHVz
-IFJlZ2lzdGVyICovDQo+ICAJdTMyIHRtdG1pcjsJCS8qIFRlbXBlcmF0dXJlIG1lYXN1cmVtZW50
-IGludGVydmFsDQo+IFJlZ2lzdGVyICovDQo+IC0jZGVmaW5lIFRNVE1JUl9ERUZBVUxUCTB4MDAw
-MDAwMGYNCj4gIAl1OCByZXMwWzB4MTRdOw0KPiAgCXUzMiB0aWVyOwkJLyogSW50ZXJydXB0IEVu
-YWJsZSBSZWdpc3RlciAqLw0KPiAtI2RlZmluZSBUSUVSX0RJU0FCTEUJMHgwDQo+ICAJdTMyIHRp
-ZHI7CQkvKiBJbnRlcnJ1cHQgRGV0ZWN0IFJlZ2lzdGVyICovDQo+ICAJdTMyIHRpc2NyOwkJLyog
-SW50ZXJydXB0IFNpdGUgQ2FwdHVyZSBSZWdpc3RlciAqLw0KPiAgCXUzMiB0aWNzY3I7CQkvKiBJ
-bnRlcnJ1cHQgQ3JpdGljYWwgU2l0ZSBDYXB0dXJlIFJlZ2lzdGVyICovDQo+IEBAIC01MywxMCAr
-MTAwLDcgQEAgc3RydWN0IHFvcmlxX3RtdV9yZWdzIHsNCj4gIAl1MzIgaXBicnIwOwkJLyogSVAg
-QmxvY2sgUmV2aXNpb24gUmVnaXN0ZXIgMCAqLw0KPiAgCXUzMiBpcGJycjE7CQkvKiBJUCBCbG9j
-ayBSZXZpc2lvbiBSZWdpc3RlciAxICovDQo+ICAJdTggcmVzNlsweDMxMF07DQo+IC0JdTMyIHR0
-cjBjcjsJCS8qIFRlbXBlcmF0dXJlIFJhbmdlIDAgQ29udHJvbCBSZWdpc3RlciAqLw0KPiAtCXUz
-MiB0dHIxY3I7CQkvKiBUZW1wZXJhdHVyZSBSYW5nZSAxIENvbnRyb2wgUmVnaXN0ZXIgKi8NCj4g
-LQl1MzIgdHRyMmNyOwkJLyogVGVtcGVyYXR1cmUgUmFuZ2UgMiBDb250cm9sIFJlZ2lzdGVyICov
-DQo+IC0JdTMyIHR0cjNjcjsJCS8qIFRlbXBlcmF0dXJlIFJhbmdlIDMgQ29udHJvbCBSZWdpc3Rl
-ciAqLw0KPiArCXUzMiB0dHJjcls0XTsJCS8qIFRlbXBlcmF0dXJlIFJhbmdlIENvbnRyb2wgUmVn
-aXN0ZXIgKi8NCj4gIH07DQo+IA0KPiAgc3RydWN0IHFvcmlxX3RtdV9kYXRhOw0KPiBAQCAtNzEs
-NyArMTE1LDkgQEAgc3RydWN0IHFvcmlxX3NlbnNvciB7ICB9Ow0KPiANCj4gIHN0cnVjdCBxb3Jp
-cV90bXVfZGF0YSB7DQo+IC0Jc3RydWN0IHFvcmlxX3RtdV9yZWdzIF9faW9tZW0gKnJlZ3M7DQo+
-ICsJaW50IHZlcjsNCj4gKwlzdHJ1Y3QgcW9yaXFfdG11X3JlZ3NfdjEgX19pb21lbSAqcmVnczsN
-Cj4gKwlzdHJ1Y3QgcW9yaXFfdG11X3JlZ3NfdjIgX19pb21lbSAqcmVnc192MjsNCj4gIAlib29s
-IGxpdHRsZV9lbmRpYW47DQo+ICAJc3RydWN0IHFvcmlxX3NlbnNvcgkqc2Vuc29yW1NJVEVTX01B
-WF07DQo+ICB9Ow0KPiBAQCAtMTMwLDEyICsxNzYsMjMgQEAgc3RhdGljIGludCBxb3JpcV90bXVf
-cmVnaXN0ZXJfdG11X3pvbmUoc3RydWN0DQo+IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gIAkJ
-CQlyZXR1cm4gUFRSX0VSUihxZGF0YS0+c2Vuc29yW2lkXS0+dHpkKTsNCj4gIAkJfQ0KPiANCj4g
-LQkJc2l0ZXMgfD0gMHgxIDw8ICgxNSAtIGlkKTsNCj4gKwkJaWYgKHFkYXRhLT52ZXIgPT0gVE1V
-X1ZFUjEpDQo+ICsJCQlzaXRlcyB8PSAweDEgPDwgKDE1IC0gaWQpOw0KPiArCQllbHNlDQo+ICsJ
-CQlzaXRlcyB8PSAweDEgPDwgaWQ7DQo+ICAJfQ0KPiANCj4gIAkvKiBFbmFibGUgbW9uaXRvcmlu
-ZyAqLw0KPiAtCWlmIChzaXRlcyAhPSAwKQ0KPiAtCQl0bXVfd3JpdGUocWRhdGEsIHNpdGVzIHwg
-VE1SX01FIHwgVE1SX0FMUEYsICZxZGF0YS0NCj4gPnJlZ3MtPnRtcik7DQo+ICsJaWYgKHNpdGVz
-ICE9IDApIHsNCj4gKwkJaWYgKHFkYXRhLT52ZXIgPT0gVE1VX1ZFUjEpIHsNCj4gKwkJCXRtdV93
-cml0ZShxZGF0YSwgc2l0ZXMgfCBUTVJfTUUgfCBUTVJfQUxQRiwNCj4gKwkJCQkJJnFkYXRhLT5y
-ZWdzLT50bXIpOw0KPiArCQl9IGVsc2Ugew0KPiArCQkJdG11X3dyaXRlKHFkYXRhLCBzaXRlcywg
-JnFkYXRhLT5yZWdzX3YyLT50bXNyKTsNCj4gKwkJCXRtdV93cml0ZShxZGF0YSwgVE1SX01FIHwg
-VE1SX0FMUEZfVjIsDQo+ICsJCQkJCSZxZGF0YS0+cmVnc192Mi0+dG1yKTsNCj4gKwkJfQ0KPiAr
-CX0NCj4gDQo+ICAJcmV0dXJuIDA7DQo+ICB9DQo+IEBAIC0xNDgsMTYgKzIwNSwyMCBAQCBzdGF0
-aWMgaW50IHFvcmlxX3RtdV9jYWxpYnJhdGlvbihzdHJ1Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpw
-ZGV2KQ0KPiAgCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAgPSBwZGV2LT5kZXYub2Zfbm9kZTsNCj4g
-IAlzdHJ1Y3QgcW9yaXFfdG11X2RhdGEgKmRhdGEgPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2
-KTsNCj4gDQo+IC0JaWYgKG9mX3Byb3BlcnR5X3JlYWRfdTMyX2FycmF5KG5wLCAiZnNsLHRtdS1y
-YW5nZSIsIHJhbmdlLCA0KSkgew0KPiAtCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJtaXNzaW5nIGNh
-bGlicmF0aW9uIHJhbmdlLlxuIik7DQo+IC0JCXJldHVybiAtRU5PREVWOw0KPiArCWxlbiA9IG9m
-X3Byb3BlcnR5X2NvdW50X3UzMl9lbGVtcyhucCwgImZzbCx0bXUtcmFuZ2UiKTsNCj4gKwlpZiAo
-bGVuIDwgMCB8fCBsZW4gPiA0KSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgImludmFsaWQg
-cmFuZ2UgZGF0YS5cbiIpOw0KPiArCQlyZXR1cm4gbGVuOw0KPiArCX0NCj4gKw0KPiArCXZhbCA9
-IG9mX3Byb3BlcnR5X3JlYWRfdTMyX2FycmF5KG5wLCAiZnNsLHRtdS1yYW5nZSIsIHJhbmdlLCBs
-ZW4pOw0KPiArCWlmICh2YWwgIT0gMCkgew0KPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWls
-ZWQgdG8gcmVhZCByYW5nZSBkYXRhLlxuIik7DQo+ICsJCXJldHVybiB2YWw7DQo+ICAJfQ0KPiAN
-Cj4gLQkvKiBJbml0IHRlbXBlcmF0dXJlIHJhbmdlIHJlZ2lzdGVycyAqLw0KPiAtCXRtdV93cml0
-ZShkYXRhLCByYW5nZVswXSwgJmRhdGEtPnJlZ3MtPnR0cjBjcik7DQo+IC0JdG11X3dyaXRlKGRh
-dGEsIHJhbmdlWzFdLCAmZGF0YS0+cmVncy0+dHRyMWNyKTsNCj4gLQl0bXVfd3JpdGUoZGF0YSwg
-cmFuZ2VbMl0sICZkYXRhLT5yZWdzLT50dHIyY3IpOw0KPiAtCXRtdV93cml0ZShkYXRhLCByYW5n
-ZVszXSwgJmRhdGEtPnJlZ3MtPnR0cjNjcik7DQo+ICsJZm9yIChpID0gMDsgaSA8IGxlbjsgaSsr
-KQ0KPiArCQl0bXVfd3JpdGUoZGF0YSwgcmFuZ2VbaV0sICZkYXRhLT5yZWdzLT50dHJjcltpXSk7
-DQo+IA0KPiAgCWNhbGlicmF0aW9uID0gb2ZfZ2V0X3Byb3BlcnR5KG5wLCAiZnNsLHRtdS1jYWxp
-YnJhdGlvbiIsICZsZW4pOw0KPiAgCWlmIChjYWxpYnJhdGlvbiA9PSBOVUxMIHx8IGxlbiAlIDgp
-IHsNCj4gQEAgLTE4MSw3ICsyNDIsMTIgQEAgc3RhdGljIHZvaWQgcW9yaXFfdG11X2luaXRfZGV2
-aWNlKHN0cnVjdA0KPiBxb3JpcV90bXVfZGF0YSAqZGF0YSkNCj4gIAl0bXVfd3JpdGUoZGF0YSwg
-VElFUl9ESVNBQkxFLCAmZGF0YS0+cmVncy0+dGllcik7DQo+IA0KPiAgCS8qIFNldCB1cGRhdGVf
-aW50ZXJ2YWwgKi8NCj4gLQl0bXVfd3JpdGUoZGF0YSwgVE1UTUlSX0RFRkFVTFQsICZkYXRhLT5y
-ZWdzLT50bXRtaXIpOw0KPiArCWlmIChkYXRhLT52ZXIgPT0gVE1VX1ZFUjEpIHsNCj4gKwkJdG11
-X3dyaXRlKGRhdGEsIFRNVE1JUl9ERUZBVUxULCAmZGF0YS0+cmVncy0+dG10bWlyKTsNCj4gKwl9
-IGVsc2Ugew0KPiArCQl0bXVfd3JpdGUoZGF0YSwgVE1UTUlSX0RFRkFVTFQsICZkYXRhLT5yZWdz
-X3YyLQ0KPiA+dG10bWlyKTsNCj4gKwkJdG11X3dyaXRlKGRhdGEsIFRFVU1SMF9WMiwgJmRhdGEt
-PnJlZ3NfdjItPnRldW1yMCk7DQo+ICsJfQ0KPiANCj4gIAkvKiBEaXNhYmxlIG1vbml0b3Jpbmcg
-Ki8NCj4gIAl0bXVfd3JpdGUoZGF0YSwgVE1SX0RJU0FCTEUsICZkYXRhLT5yZWdzLT50bXIpOyBA
-QCAtMTkwLDYNCj4gKzI1Niw3IEBAIHN0YXRpYyB2b2lkIHFvcmlxX3RtdV9pbml0X2RldmljZShz
-dHJ1Y3QgcW9yaXFfdG11X2RhdGEgKmRhdGEpDQo+IHN0YXRpYyBpbnQgcW9yaXFfdG11X3Byb2Jl
-KHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpICB7DQo+ICAJaW50IHJldDsNCj4gKwl1MzIg
-dmVyOw0KPiAgCXN0cnVjdCBxb3JpcV90bXVfZGF0YSAqZGF0YTsNCj4gIAlzdHJ1Y3QgZGV2aWNl
-X25vZGUgKm5wID0gcGRldi0+ZGV2Lm9mX25vZGU7DQo+IA0KPiBAQCAtMjA5LDYgKzI3NiwxMiBA
-QCBzdGF0aWMgaW50IHFvcmlxX3RtdV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlDQo+ICpw
-ZGV2KQ0KPiAgCQlnb3RvIGVycl9pb21hcDsNCj4gIAl9DQo+IA0KPiArCS8qIHZlcnNpb24gcmVn
-aXN0ZXIgb2Zmc2V0IGF0OiAweGJmOCBvbiBib3RoIHYxIGFuZCB2MiAqLw0KPiArCXZlciA9IHRt
-dV9yZWFkKGRhdGEsICZkYXRhLT5yZWdzLT5pcGJycjApOw0KPiArCWRhdGEtPnZlciA9ICh2ZXIg
-Pj4gOCkgJiAweGZmOw0KPiArCWlmIChkYXRhLT52ZXIgPT0gVE1VX1ZFUjIpDQo+ICsJCWRhdGEt
-PnJlZ3NfdjIgPSAodm9pZCBfX2lvbWVtICopZGF0YS0+cmVnczsNCj4gKw0KPiAgCXFvcmlxX3Rt
-dV9pbml0X2RldmljZShkYXRhKTsJLyogVE1VIGluaXRpYWxpemF0aW9uICovDQo+IA0KPiAgCXJl
-dCA9IHFvcmlxX3RtdV9jYWxpYnJhdGlvbihwZGV2KTsJLyogVE1VIGNhbGlicmF0aW9uICovDQo+
-IC0tDQo+IDIuMTcuMQ0KDQo=
+Hi,
+
+On 19. 9. 24. 오전 6:10, Leonard Crestez wrote:
+> Register notifiers with the PM QoS framework in order to respond to
+> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
+> 
+> No notifiers are added by this patch but PM QoS constraints can be
+> imposed externally (for example from other devices).
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/devfreq/devfreq.c | 76 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/devfreq.h   |  5 +++
+>  2 files changed, 81 insertions(+)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 7f152a582e78..9887408f23bb 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -22,17 +22,20 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/list.h>
+>  #include <linux/printk.h>
+>  #include <linux/hrtimer.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_qos.h>
+>  #include "governor.h"
+>  
+>  #define HZ_PER_KHZ 1000
+
+You have to remove it on patch4.
+
+>  
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/devfreq.h>
+>  
+> +#define HZ_PER_KHZ	1000> +
+>  static struct class *devfreq_class;
+>  
+>  /*
+>   * devfreq core provides delayed work based load monitoring helper
+>   * functions. Governors can use these or can implement their own
+> @@ -123,10 +126,16 @@ static void devfreq_get_freq_range(struct devfreq *devfreq,
+>  	} else {
+>  		*min_freq = freq_table[devfreq->profile->max_state - 1];
+>  		*max_freq = freq_table[0];
+>  	}
+>  
+> +	/* constraints from PM QoS */
+
+I think that it is not necessary. But, if you think it is required,
+Please add the detailed comment with consistent comment style.
+
+> +	*min_freq = max(*min_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
+> +				devfreq->dev.parent, DEV_PM_QOS_MIN_FREQUENCY));
+> +	*max_freq = min(*max_freq, HZ_PER_KHZ * (unsigned long)dev_pm_qos_read_value(
+> +				devfreq->dev.parent, DEV_PM_QOS_MAX_FREQUENCY));
+
+If you use the separate variable for getting the value from dev_pm_qos_read_value(),
+you can add this line under 80 char. If there are any special reason,
+I prefer to keep the line under 80 char.
+
+
+> +
+>  	/* constraints from sysfs */
+>  	*min_freq = max(*min_freq, devfreq->min_freq);
+>  	*max_freq = min(*max_freq, devfreq->max_freq);
+>  
+>  	/* constraints from OPP interface */
+> @@ -605,10 +614,53 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+>  	mutex_unlock(&devfreq->lock);
+>  
+>  	return ret;
+>  }
+>  
+> +/**
+> + * devfreq_qos_notifier_call() - Common handler for QoS constraints.
+> + * @devfreq:    the devfreq instance.
+> + */
+> +static int devfreq_qos_notifier_call(struct devfreq *devfreq)
+
+Also, as I commented on patch4, we better to remove 'devfreq' prefix
+for internal function as following:
+	devfreq_qos_notifier_call -> qos_notifier_call
+
+> +{
+> +	int err;
+> +
+> +	mutex_lock(&devfreq->lock);
+> +	err = update_devfreq(devfreq);
+> +	mutex_unlock(&devfreq->lock);
+> +	if (err)
+> +		dev_err(&devfreq->dev, "dvfs for QoS constraints"
+> +				" failed with (%d) error\n", err);
+
+'dvfs' is not full name. Also, the capital letter is more correct.
+But, the devfreq used 'failed to ...' comment style on some points.
+
+I suggest the comment as following:
+
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -628,8 +628,8 @@ static int devfreq_qos_notifier_call(struct devfreq *devfreq)
+        err = update_devfreq(devfreq);
+        mutex_unlock(&devfreq->lock);
+        if (err)
+-               dev_err(&devfreq->dev, "dvfs for QoS constraints"
+-                               " failed with (%d) error\n", err);
++               dev_err(&devfreq->dev,
++                       "failed to update frequency with PMQoS (%d)\n", err);
+ 
+
+
+> +
+> +	/* QoS is best effort - let all notifiers run on error */
+
+Please remove it.
+
+> +	return NOTIFY_OK;
+> +}
+> +
+> +/**
+> + * devfreq_qos_min_notifier_call() - Callback for QoS min_freq changes.
+> + * @nb:		Should be devfreq->nb_min
+> + */
+> +static int devfreq_qos_min_notifier_call(struct notifier_block *nb,
+
+ditto.
+	devfreq_qos_min_notifier_call -> qos_min_notifier_call
+
+> +					 unsigned long val, void *ptr)
+> +{
+> +	struct devfreq *devfreq = container_of(nb, struct devfreq, nb_min);
+> +
+
+nitpick. You can remove this line.
+
+> +	return devfreq_qos_notifier_call(devfreq);
+> +}
+> +
+> +/**
+> + * devfreq_qos_max_notifier_call() - Callback for QoS max_freq changes.
+> + * @nb:		Should be devfreq->nb_max
+> + */
+> +static int devfreq_qos_max_notifier_call(struct notifier_block *nb,
+
+ditto.
+	devfreq_qos_max_notifier_call -> qos_max_notifier_call
+
+
+> +					 unsigned long val, void *ptr)
+> +{
+> +	struct devfreq *devfreq = container_of(nb, struct devfreq, nb_max);
+> +
+
+nitpick. You can remove this line.
+
+> +	return devfreq_qos_notifier_call(devfreq);
+> +}
+> +
+>  /**
+>   * devfreq_dev_release() - Callback for struct device to release the device.
+>   * @dev:	the devfreq device
+>   *
+>   * Remove devfreq from the list and release its resources.
+> @@ -619,10 +671,15 @@ static void devfreq_dev_release(struct device *dev)
+>  
+>  	mutex_lock(&devfreq_list_lock);
+>  	list_del(&devfreq->node);
+>  	mutex_unlock(&devfreq_list_lock);
+>  
+> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
+> +			DEV_PM_QOS_MAX_FREQUENCY);
+> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
+> +			DEV_PM_QOS_MIN_FREQUENCY);
+
+Even if devfreq_dev_release() is called at the end of device driver,
+dev_pm_remove_notifier() have returned the value. Need to check
+the return value for checking the error state.
+
+> +
+>  	if (devfreq->profile->exit)
+>  		devfreq->profile->exit(devfreq->dev.parent);
+>  
+>  	kfree(devfreq->time_in_state);
+>  	kfree(devfreq->trans_table);
+> @@ -732,10 +789,28 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	if (err) {
+>  		put_device(&devfreq->dev);
+>  		goto err_out;
+>  	}
+>  
+> +	/*
+> +	 * Register notifiers for updates to min/max_freq after device is
+> +	 * initialized (and we can handle notifications) but before the
+> +	 * governor is started (which should do an initial enforcement of
+> +	 * constraints).> +	 */
+
+In the devfreq_add_device(), each step has not contained
+the detailed comment. If possible, in order to keep the existing style,
+please remove it. 
+
+> +	devfreq->nb_min.notifier_call = devfreq_qos_min_notifier_call;
+> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
+> +				      DEV_PM_QOS_MIN_FREQUENCY);
+> +	if (err)
+> +		goto err_devfreq;
+> +
+> +	devfreq->nb_max.notifier_call = devfreq_qos_max_notifier_call;
+> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
+> +				      DEV_PM_QOS_MAX_FREQUENCY);
+> +	if (err)
+> +		goto err_devfreq;
+> +
+>  	mutex_lock(&devfreq_list_lock);
+>  
+>  	governor = try_then_request_governor(devfreq->governor_name);
+>  	if (IS_ERR(governor)) {
+>  		dev_err(dev, "%s: Unable to find governor for the device\n",
+> @@ -759,10 +834,11 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	return devfreq;
+>  
+>  err_init:
+>  	mutex_unlock(&devfreq_list_lock);
+> +err_devfreq:
+>  	devfreq_remove_device(devfreq);
+>  	return ERR_PTR(err);
+>  
+>  err_dev:
+>  	/*
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index 2bae9ed3c783..8b92ccbd1962 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -134,10 +134,12 @@ struct devfreq_dev_profile {
+>   * @total_trans:	Number of devfreq transitions
+>   * @trans_table:	Statistics of devfreq transitions
+>   * @time_in_state:	Statistics of devfreq states
+>   * @last_stat_updated:	The last time stat updated
+>   * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
+> + * @nb_min:		Notifier block for DEV_PM_QOS_MIN_FREQUENCY
+> + * @nb_max:		Notifier block for DEV_PM_QOS_MAX_FREQUENCY
+>   *
+>   * This structure stores the devfreq information for a give device.
+>   *
+>   * Note that when a governor accesses entries in struct devfreq in its
+>   * functions except for the context of callbacks defined in struct
+> @@ -176,10 +178,13 @@ struct devfreq {
+>  	unsigned int *trans_table;
+>  	unsigned long *time_in_state;
+>  	unsigned long last_stat_updated;
+>  
+>  	struct srcu_notifier_head transition_notifier_list;
+> +
+> +	struct notifier_block nb_min;
+> +	struct notifier_block nb_max;
+>  };
+>  
+>  struct devfreq_freqs {
+>  	unsigned long old;
+>  	unsigned long new;
+> 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
