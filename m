@@ -2,96 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0AFBDABF
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 11:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF432BDB78
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 11:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfIYJPl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 05:15:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726185AbfIYJPb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Sep 2019 05:15:31 -0400
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C17A020673;
-        Wed, 25 Sep 2019 09:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569402925;
-        bh=Z2Uag+DwW909ph/1HOySpUCCmNKluWCbwO7QFKK6F8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LUAdHLEB0Njr3vPkEeYEnn9UJ65aNeraXjCw8vvFf6X7fzKvIP2kobELTTOGaz+Ai
-         F/6Pk5OGh6G++u9o8W46kH+kpymk6XLNk9oIVvO3P5dgTlNDCS89SC0ZdQYzlIooNS
-         HHynK47zEbah8oMWrSK4ChXXBYoripfPPxhyqVt0=
-Date:   Wed, 25 Sep 2019 11:15:22 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        David Dai <daidavid1@codeaurora.org>
-Subject: Re: [RFC PATCH] interconnect: Replace of_icc_get() with icc_get()
- and reduce DT binding
-Message-ID: <20190925091522.jf5q2jdo6njfkxto@gilmour>
-References: <20190925054133.206992-1-swboyd@chromium.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aomtcuidegtr2wsv"
-Content-Disposition: inline
-In-Reply-To: <20190925054133.206992-1-swboyd@chromium.org>
-User-Agent: NeoMutt/20180716
+        id S1729225AbfIYJwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 05:52:49 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44910 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726363AbfIYJws (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 05:52:48 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q21so3065492pfn.11
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2019 02:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=TV3RT1yNKXy5j0AoE4e6keZibU6Zrl0Z4HmWZXehpjw=;
+        b=va8yIct1jAIbfCuT/3sEP4exm22IQ2TSwWZP2+TsQD7Czgf2QXVgxepvptPTgLoifq
+         5r/FRHyIQOdjDoO5V+eirOa4qQ5m5BXLaK0Jc+RM6BD8Edgv9isDVFsB3SwVDyL/+8mW
+         s6axDG4Eti4ok2rYzMLd/40V9QkKJEHTx+7q/KUEWYKzi84PeWgSjNOMUYp2EGX7VEdn
+         daIsmeq4cDoSg85xqv9HhaCnxKuPz2KJBDNiSb8+6It47l89jyS3m7xe/EhL8qnfHRx7
+         JJnNtE22qP4BEFxoOCaOPhlXs2Wh8b8y8tYKZda6+/4/ZMa0oNQbDPQcjzVrutR+SOFO
+         IuKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TV3RT1yNKXy5j0AoE4e6keZibU6Zrl0Z4HmWZXehpjw=;
+        b=npfS7hP/SuvzpxTXGwqqlVhbv5MzG2UNqHjHh+GOcdoRW2AoDFOXX4Q82L4Pn14u4F
+         plgpH3WzlN34piBPR6N5q2azD9gbyZkwnYUo92OU+GYrzwt/haiettqw7U1aK8Ug3RNY
+         NtknRSP4vVyVOkbEsZPBVKFnfIzOXblej0svy4icNkODoBu9M+Gq63jVPtbfhXo+B3HA
+         xIlRLVYlS6N4bF7X3rgIUnCZI9TJNy10AS1z1gikcOXBlPUgocV95giWsBdCnqalFJop
+         A3ZouFzQw1w1mSTWsMxYK4/kqYgFvdWCnjXvTOyQUvMFH9J1lNXADGPPav3DofyJI7g0
+         opAQ==
+X-Gm-Message-State: APjAAAUiDqX2RvpcToN0vSytCnGfbtniC/5Edt9uAUEVASHVPVNbYQmU
+        nrvr5FFrEnUxPzARTMCAYvGm2w==
+X-Google-Smtp-Source: APXvYqxAi3M7mauapLMsR6LDIGh2upipMbm+6rwiwwDaLqwegdnLSJD1q1FWwqTsxI1Xn5NqnSB2mQ==
+X-Received: by 2002:a63:d908:: with SMTP id r8mr8046960pgg.263.1569405167866;
+        Wed, 25 Sep 2019 02:52:47 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id p20sm4037221pgj.47.2019.09.25.02.52.43
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 25 Sep 2019 02:52:46 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     stable@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        linus.walleij@linaro.org, natechancellor@gmail.com, sre@kernel.org
+Cc:     longman@redhat.com, linux-gpio@vger.kernel.org,
+        david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
+        baolin.wang@linaro.org, orsonzhai@gmail.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
+Subject: [BACKPORT 4.19.y 0/3] Candidates from Spreadtrum 4.14 product kernel
+Date:   Wed, 25 Sep 2019 17:52:26 +0800
+Message-Id: <cover.1569404757.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+With Arnd's script [1] help, I found some bugfixes in Spreadtrum 4.14 product
+kernel, but missing in v4.19.75:
 
---aomtcuidegtr2wsv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+513e1073d52e locking/lockdep: Add debug_locks check in __lock_downgrade()
+957063c92473 pinctrl: sprd: Use define directive for sprd_pinconf_params values
+87a2b65fc855 power: supply: sysfs: ratelimit property read error message
 
-Hi Stephen,
+[1] https://lore.kernel.org/lkml/20190322154425.3852517-19-arnd@arndb.de/T/
 
-On Tue, Sep 24, 2019 at 10:41:33PM -0700, Stephen Boyd wrote:
-> The DT binding could also be simplified somewhat. Currently a path needs
-> to be specified in DT for each and every use case that is possible for a
-> device to want. Typically the path is to memory, which looks to be
-> reserved for in the binding with the "dma-mem" named path, but sometimes
-> the path is from a device to the CPU or more generically from a device
-> to another device which could be a CPU, cache, DMA master, or another
-> device if some sort of DMA to DMA scenario is happening. Let's remove
-> the pair part of the binding so that we just list out a device's
-> possible endpoints on the bus or busses that it's connected to.
->
-> If the kernel wants to figure out what the path is to memory or the CPU
-> or a cache or something else it should be able to do that by finding the
-> node for the "destination" endpoint, extracting that node's
-> "interconnects" property, and deriving the path in software. For
-> example, we shouldn't need to write out each use case path by path in DT
-> for each endpoint node that wants to set a bandwidth to memory. We
-> should just be able to indicate what endpoint(s) a device sits on based
-> on the interconnect provider in the system and then walk the various
-> interconnects to find the path from that source endpoint to the
-> destination endpoint.
+David Lechner (1):
+  power: supply: sysfs: ratelimit property read error message
 
-The dma-mem name is used by the OF core to adjust the mapping of the
-devices as well. So, any solution needs to be generic (or provide a
-generic helper).
+Nathan Chancellor (1):
+  pinctrl: sprd: Use define directive for sprd_pinconf_params values
 
-Maxime
+Waiman Long (1):
+  locking/lockdep: Add debug_locks check in __lock_downgrade()
 
---aomtcuidegtr2wsv
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/pinctrl/sprd/pinctrl-sprd.c       |    6 ++----
+ drivers/power/supply/power_supply_sysfs.c |    3 ++-
+ kernel/locking/lockdep.c                  |    3 +++
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+1.7.9.5
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXYswKgAKCRDj7w1vZxhR
-xe8UAQC3EqIcKg882wsQj/TdlIO/sf9HoBIDnQnVNJ2t2kaPsAD/Qsa+D9ZQUlKc
-qhYx4agifh1/WXVN4H+Wb39VO4vx5wk=
-=Z0s1
------END PGP SIGNATURE-----
-
---aomtcuidegtr2wsv--
