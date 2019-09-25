@@ -2,157 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D09BD7CA
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 07:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE5CBD7D6
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 07:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411745AbfIYFgj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 01:36:39 -0400
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:42060 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404421AbfIYFgj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 01:36:39 -0400
-Received: by mail-qk1-f171.google.com with SMTP id f16so4220305qkl.9
-        for <linux-pm@vger.kernel.org>; Tue, 24 Sep 2019 22:36:37 -0700 (PDT)
+        id S2411764AbfIYFlh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 01:41:37 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40670 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411724AbfIYFlh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 01:41:37 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so2685366pfb.7
+        for <linux-pm@vger.kernel.org>; Tue, 24 Sep 2019 22:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n4OkSaLpNdi0uLSUNENiAT5o+G4P+NMR/tdptF66Z3I=;
-        b=iyRFlBzIrYvGOOWlhqn+rRjFHWu51+wz+sFp2keLvkfA0dK+gopgYcrOdsln3IhuQ5
-         8nzIWwdWs+TJPFwKG3GcFtlkEm+VFC3pjouCpuh5Y7AxL8LWrtxWiuUFCfDzXoTQsAu2
-         aIzdol6kPQ2BeOJehaa89K1/y4awNETENu/sq6nwhr17MUzaMGJ4M/hXNFLhug98AqQ5
-         RelGTWy2nJ4L7H4wXVThA2cfYqlBAwKK0aItnAcRHCyNMrsejG/ZPAtBriIO61FkE9z3
-         dwqlKiSTP+N/pOi4jSe4O8rHlg4LZBhNU2L4uG4I3/ukUbrL4FQiu9O082CaP0oDgyUp
-         qgiA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SMmj88Vr2l+xbZTK/K4atYZIDcxMS64bKPr57HDmIYI=;
+        b=C1NbiwNtjlXTB9x++cXzglb3d3D+ImIUC9JjRVW878u4eONBMNiLKP4MGygGhFo7lK
+         e4x5Iy5yPYX/Kf/e+zMVXtaVw8ACEAHjX8vfNhe9e//vwtRnZw/0lb/NtcirM+inu/To
+         tNXxsXVdTQYs27NFYNmGHD9deK0rNmVktMDU0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n4OkSaLpNdi0uLSUNENiAT5o+G4P+NMR/tdptF66Z3I=;
-        b=fX1OGWjG4CK/C/nAtktuyFbXXOq70Gpi46jDTM3b/ecuzFplzJ8KJo+m3efqmpYsCn
-         TBilxmJaxMAAT8u7WfDNXFe+fS0BBVefA01GMqHQXmneC077OWWSiHJ++fwBvG/r7bdB
-         JBRCOiWZZnAuS+OdDAOqi49XNLuEQ1hnDty6PPa2tew+xM9nbe2HlnyqP94vlcm37Dy0
-         ULJ9rMrTHRSn7VeskykW7jWLC1SUa5CGTMQm06ldY1YhPRaKKD2+ST0j9k5JfLtS3J/W
-         EWiSd5rtmZMQfEWlDRzER+nSbf9s45IiO7g0t2jsz48leNwGsIR8e/YmmZef3i+ZZznc
-         LCPQ==
-X-Gm-Message-State: APjAAAUomgTna3XEuzgb74swRf/qHr1PhFpd5fT75RDGV/b3vP5hH6dz
-        sf1fbg5yksZBmn2ormbIhCwN3mMDGdYZWaRM5o+AFQ==
-X-Google-Smtp-Source: APXvYqxaFV8T/oCBkaikYDBW2cR0TU7jGiBrlEWX4Aqh8n7slYKD1Ubm6p+Bq8NxOtSYcKrxsZn5aRN73s43tyULGPY=
-X-Received: by 2002:a37:a7c5:: with SMTP id q188mr1749753qke.445.1569389796371;
- Tue, 24 Sep 2019 22:36:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SMmj88Vr2l+xbZTK/K4atYZIDcxMS64bKPr57HDmIYI=;
+        b=ms+5gZhiLOt7z14hCp4oeJUXFVA+6VuuDqzPzxmCggoNA3y/RlKAup4/3ODJ32KG8H
+         l/yP1llLWBm5+ltQpHECTIarGDQ3eBedqXxq9aTrxaSG+/mYJq8bq6iyeku2MYVG5DHJ
+         KY3ipfeWbJNxFOkh4rMAByp4iI/G5tiKwtozaPHydI+Qyqn+gsu3b/Ows/sDJmHOoJ9G
+         /Vv+H5wYcnR12zp78iep8A1FBPsMD60IunlMq4c6DK3hK5/f2lZormjyQirfTDaSZOSy
+         /z1J3/xFrKL6akRWIjecwaTTRcXB2ww18lwse3DU/Ee3XPFl67ArQi2elfZx/+3aVaft
+         jAyg==
+X-Gm-Message-State: APjAAAXsQhv+OS+sjmAjfo5KSn+oLDTdPQFEk/fQWrpsE06DA2e2UpRK
+        4TOIvMKZnWoUUhMVIbF5YD783w==
+X-Google-Smtp-Source: APXvYqzIdxtQTexWuejObIPusF+Jq6P2KW0CJO27N8YbknDzpjAq1m179AKDu99+yDB7J9F/5nTCpw==
+X-Received: by 2002:a65:6799:: with SMTP id e25mr7341485pgr.271.1569390095094;
+        Tue, 24 Sep 2019 22:41:35 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g12sm6551472pfb.97.2019.09.24.22.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Sep 2019 22:41:34 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Ripard <mripard@kernel.org>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        David Dai <daidavid1@codeaurora.org>
+Subject: [RFC PATCH] interconnect: Replace of_icc_get() with icc_get() and reduce DT binding
+Date:   Tue, 24 Sep 2019 22:41:33 -0700
+Message-Id: <20190925054133.206992-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
 MIME-Version: 1.0
-References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
- <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
- <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
- <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com>
- <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com>
- <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com> <CAD8Lp47qSte0C6sUFBkXVAHa755R5PnNUSvjRYD=JehYJ2R0pQ@mail.gmail.com>
-In-Reply-To: <CAD8Lp47qSte0C6sUFBkXVAHa755R5PnNUSvjRYD=JehYJ2R0pQ@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Wed, 25 Sep 2019 13:36:25 +0800
-Message-ID: <CAD8Lp4574C4QCA3mBb9iC_3hBj7pZ3kJi-fkg7dONQPjWcF8bQ@mail.gmail.com>
-Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Endless Linux Upstreaming Team <linux@endlessm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 5:10 PM Daniel Drake <drake@endlessm.com> wrote:
-> Unfortunately it's not quite as simple as quirking d3_delay though,
-> because the problem still happens upon resume from s2idle. In that
-> case, pci_dev_d3_sleep() is not called at all.
->
->     if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
->         pci_dev_d3_sleep(dev);
->
-> In the runtime resume case, dev->current_state == PCI_D3hot here (even
-> though pci_set_power_state had been called to put it into D3cold), so
-> the msleep happens.
-> But in the system sleep (s2idle) case, dev->current_state ==
-> PCI_D3cold here, so no sleep happens.
-> That is strangely inconsistent - is it a bug?
+I don't see any users of icc_get() in the kernel today, and adding them
+doesn't make sense. That's because adding calls to that function in a
+driver will make the driver SoC specific given that the arguments are
+some sort of source and destination numbers that would typically be
+listed in DT or come from platform data so they can match a global
+numberspace of interconnect numbers. It would be better to follow the
+approach of other kernel frameworks where the API is the same no matter
+how the platform is described (i.e. platform data, DT, ACPI, etc.) and
+swizzle the result in the framework to match whatever the device is by
+checking for a DT node pointer or a fwnode pointer, etc. Therefore,
+install icc_get() as the defacto API and make drivers use that instead
+of of_icc_get() which implies the driver is DT specific when it doesn't
+need to be.
 
-In more detail:
+The DT binding could also be simplified somewhat. Currently a path needs
+to be specified in DT for each and every use case that is possible for a
+device to want. Typically the path is to memory, which looks to be
+reserved for in the binding with the "dma-mem" named path, but sometimes
+the path is from a device to the CPU or more generically from a device
+to another device which could be a CPU, cache, DMA master, or another
+device if some sort of DMA to DMA scenario is happening. Let's remove
+the pair part of the binding so that we just list out a device's
+possible endpoints on the bus or busses that it's connected to.
 
-During runtime suspend:
+If the kernel wants to figure out what the path is to memory or the CPU
+or a cache or something else it should be able to do that by finding the
+node for the "destination" endpoint, extracting that node's
+"interconnects" property, and deriving the path in software. For
+example, we shouldn't need to write out each use case path by path in DT
+for each endpoint node that wants to set a bandwidth to memory. We
+should just be able to indicate what endpoint(s) a device sits on based
+on the interconnect provider in the system and then walk the various
+interconnects to find the path from that source endpoint to the
+destination endpoint.
 
-pci_set_power_state() is called with state=D3cold
- - This calls pci_raw_set_power_state() with state=D3hot
- -- After transitioning to D3hot, dev->current_state is updated to
-D3hot based on pmcsr readback
+Obviously this patch doesn't compile but I'm sending it out to start
+this discussion so we don't get stuck on the binding or the kernel APIs
+for a long time. It looks like we should be OK in terms of backwards
+compatibility because we can just ignore the second element in an old
+binding, but maybe we'll want to describe paths in different directions
+(e.g. the path from the CPU to the SD controller may be different than
+the path the SD controller takes to the CPU) and that may require
+extending interconnect-names to indicate what direction/sort of path it
+is. I'm basically thinking about master vs. slave ports in AXI land.
 
-acpi_device_set_power() is called with state=D3cold
- - acpi_power_transition() is called with state=D3cold, updates
-adev->power.state to D3cold
- - adev->power.state is updated (again) to D0
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: <linux-pm@vger.kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Evan Green <evgreen@chromium.org>
+Cc: David Dai <daidavid1@codeaurora.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ .../bindings/interconnect/interconnect.txt    | 19 ++++---------------
+ include/linux/interconnect.h                  | 13 ++-----------
+ 2 files changed, 6 insertions(+), 26 deletions(-)
 
-pci_update_current_state() is called
- - platform_pci_get_power_state() returns D3cold
- - dev->current_state is updated to D3cold
+diff --git a/Documentation/devicetree/bindings/interconnect/interconnect.txt b/Documentation/devicetree/bindings/interconnect/interconnect.txt
+index 6f5d23a605b7..f8979186b8a7 100644
+--- a/Documentation/devicetree/bindings/interconnect/interconnect.txt
++++ b/Documentation/devicetree/bindings/interconnect/interconnect.txt
+@@ -11,7 +11,7 @@ The interconnect provider binding is intended to represent the interconnect
+ controllers in the system. Each provider registers a set of interconnect
+ nodes, which expose the interconnect related capabilities of the interconnect
+ to consumer drivers. These capabilities can be throughput, latency, priority
+-etc. The consumer drivers set constraints on interconnect path (or endpoints)
++etc. The consumer drivers set constraints on interconnect paths (or endpoints)
+ depending on the use case. Interconnect providers can also be interconnect
+ consumers, such as in the case where two network-on-chip fabrics interface
+ directly.
+@@ -42,23 +42,12 @@ multiple paths from different providers depending on use case and the
+ components it has to interact with.
+ 
+ Required properties:
+-interconnects : Pairs of phandles and interconnect provider specifier to denote
+-	        the edge source and destination ports of the interconnect path.
+-
+-Optional properties:
+-interconnect-names : List of interconnect path name strings sorted in the same
+-		     order as the interconnects property. Consumers drivers will use
+-		     interconnect-names to match interconnect paths with interconnect
+-		     specifier pairs.
+-
+-                     Reserved interconnect names:
+-			 * dma-mem: Path from the device to the main memory of
+-			            the system
++interconnects : phandle and interconnect provider specifier to denote
++	        the edge source for this node.
+ 
+ Example:
+ 
+ 	sdhci@7864000 {
+ 		...
+-		interconnects = <&pnoc MASTER_SDCC_1 &bimc SLAVE_EBI_CH0>;
+-		interconnect-names = "sdhc-mem";
++		interconnects = <&pnoc MASTER_SDCC_1>;
+ 	};
+diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+index d70a914cba11..e1ae704f5ab1 100644
+--- a/include/linux/interconnect.h
++++ b/include/linux/interconnect.h
+@@ -25,23 +25,14 @@ struct device;
+ 
+ #if IS_ENABLED(CONFIG_INTERCONNECT)
+ 
+-struct icc_path *icc_get(struct device *dev, const int src_id,
+-			 const int dst_id);
+-struct icc_path *of_icc_get(struct device *dev, const char *name);
++struct icc_path *icc_get(struct device *dev, const char *name);
+ void icc_put(struct icc_path *path);
+ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+ void icc_set_tag(struct icc_path *path, u32 tag);
+ 
+ #else
+ 
+-static inline struct icc_path *icc_get(struct device *dev, const int src_id,
+-				       const int dst_id)
+-{
+-	return NULL;
+-}
+-
+-static inline struct icc_path *of_icc_get(struct device *dev,
+-					  const char *name)
++static inline struct icc_path *icc_get(struct device *dev, const char *name)
+ {
+ 	return NULL;
+ }
 
-Observations: everything seems to be in order
+base-commit: b5b3bd898ba99fb0fb6aed3b23ec6353a1724d6f
+-- 
+Sent by a computer through tubes
 
-
-During runtime resume:
-
-pci_update_current_state() is called
- - platform_pci_get_power_state() returns D3cold
- - dev->current_state is updated to D3cold
-
-pci_set_power_state() is called with state=D0
- - Calls pci_platform_power_transition
- -- Calls acpi_pci_set_power_state -> acpi_device_set_power with state=D0 :
- --- acpi_power_transition() updates adev->power.state to D0
- --- adev->power.state is updated (again) to D0
- -- Calls pci_update_current_state
- --- platform_pci_get_power_state() returns D0 (so this is ignored)
- --- dev->current_state is updated to D3 via pmcsr read
- - D3cold delay happens (good)
- - Calls pci_raw_set_power_state() with state=D0
- -- current_state is D3 so the D3 delay happens (good) (I quirked this
-delay to 20ms)
- -- device is transitioned to D0 and dev->current_state is updated to
-D0 from pmcsr read
-
-Observations: everything seems to be in order, USB is working after resume
-
-
-During s2idle suspend:
-
-Exactly the same as runtime suspend above. Device transitions into
-D3cold and dev->current_state ends up as D3cold. Everything seems to
-be in order.
-
-
-During s2idle resume:
-
-acpi_device_set_power() is called with state=D0
- - acpi_power_transition() is called with state=D0, updates
-adev->power.state to D0
- - adev->power.state is updated (again) to D0
-
-pci_raw_set_power_state() is calld with state=D0
- -- dev->current_state is D3cold so no D3 delay happens ***
- -- device fails to transitioned to D0, pmcsr read indicates it's still in D3.
-
-Observations: that's a pretty clear difference between the s2idle
-resume and runtime resume paths.
-The s2idle resume path is arrived at via pci_pm_default_resume_early()
---> pci_power_up().
-
-
-Should the s2idle resume path be modified to call into
-pci_update_current_state() to change the current_state to D3hot based
-on pmcsr (like the runtime resume path does)?
-Or should pci_raw_set_power_state() be modified to also apply the
-d3_delay when transitioning from D3cold to D0?
-
-Thanks
-Daniel
