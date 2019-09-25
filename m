@@ -2,149 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF92BE3AF
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 19:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19515BE4D5
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 20:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727429AbfIYRpr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 13:45:47 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35775 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbfIYRpr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 13:45:47 -0400
-Received: by mail-pg1-f196.google.com with SMTP id a24so265027pgj.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2019 10:45:46 -0700 (PDT)
+        id S2443262AbfIYSn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 14:43:28 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44793 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2443246AbfIYSnU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 14:43:20 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q21so4136465pfn.11
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2019 11:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ZAuGgXVozBxAOyU104EisOA4FjYX9B/ph1VDDQrfSC8=;
-        b=Xn43tYA4vLlz8TCF32HKJSEtg2SCWQgDnM4HWr5KCnJiZ95YwMY/MLHvKYTRH1E1aT
-         PdWtlOrtLmQsFpX6/Nz8oSHu843qAcoL2fmA8n9/w8CcwI/aKHa6pKTlbt2oTljKtHoT
-         5Bpjf0YklXGfTJ+fj8CFCKXk3oYuaYYqf0yGY=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dp/NSvE8NWfdQurQ537pyCkYPqYnLNYFA74Wx6NC3yM=;
+        b=ONhgFHtPOVQf/nU9i+9dQ27S1t5BQHbj2Jt8SoyakVnoyMKuOnFiBnUpAm0uaIWRDB
+         uO+wnpVI2owNRCqsLRvu6G55iu9D/qCrAXRQAkAR8VAX/Yj3Jdv4FgBNmbQoe+uqTJ1P
+         GwRzdh32/2iBGJtzJ/k9keEIcf7jgvTdENxcw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ZAuGgXVozBxAOyU104EisOA4FjYX9B/ph1VDDQrfSC8=;
-        b=VOEHEySDOoVdJNHWrX1vZbmMWdt7A2/JZyAKDvrcPiEZt5qdW9VzIbXLrxCArqafuY
-         /IoHw4yWXILUs8WNgPILkbucLY5wqtAu27UkYTu7Wgl5PHU8eT0OBcPBJ1wY+FKTfv2X
-         zrwwAvcg2WchEGIwIUTzRi/wXzQ6kIfl1Us5Sm3YpcwVIdWWVUZklnSQncQWT2aVReA3
-         vug+LARKC6pgVHNO3JSLm0Sb/SOnFJJ/vJbwkitLosK4l5xV4h4wIh1g8V+y7Wt5n6lL
-         wKgabgfo6gVoqsJaAhWSMaE5vy/VcUs+g27FlJI0lLvhe0WX9eegnZmGBJZs/SevIW3m
-         zw4A==
-X-Gm-Message-State: APjAAAUBNMKzk8NQvJD2NvwOzlcd9qA5mTSGH5fv/wccQwfvI4CWUUz6
-        3uPF1v2TZsg9YlLtKFeDrl11tw==
-X-Google-Smtp-Source: APXvYqxiD1rpTlqHrtU9YEtYSpp4KVbVAbHt0Mb8WqRxgoUa9sqTYMuk4PHPkRwJMeseB+Imz6hTDA==
-X-Received: by 2002:a17:90a:2744:: with SMTP id o62mr7612146pje.139.1569433545789;
-        Wed, 25 Sep 2019 10:45:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dp/NSvE8NWfdQurQ537pyCkYPqYnLNYFA74Wx6NC3yM=;
+        b=bgtoQfWbpXYGS6/WUpy7r1asVzU9KgzkiTwNoFP+Iwt1IafnYTR/IIJqOIEqctqspt
+         R1OCXHwr9VyPtwoYz8hkj/WjVqQACFmRelzN+v4rA4BH4ijaHi91mS1LL7IB6zoGciOo
+         gti9gKXEhhgjy2xn+lL+L0r5tnAn22OWPxk9HRIkdsTkbYZTDMMT1thWloxuEDceKLJq
+         sD982R2vMGVAfHYYHtNT24UJxylt5OSllgMmtRkUbWPuY94jdAVXLR/Ufn0vG45waSwD
+         1Vb2hLPmB7XjtCTwtnOuizfFFdvse4g1UjtG5XB4Esr7725Va97mHU3vYtxny/Ga7OQH
+         mtOQ==
+X-Gm-Message-State: APjAAAVOO6Ic+HoAs5nZKWBRJDIr+ZhtygcIJIhBerV/pii3BCVPOw6W
+        b+Fy1wXeeztDTE5J4vvHBQdm0Q==
+X-Google-Smtp-Source: APXvYqxs+hH1f6mq7/5x/k/mgP3v57zNyo4tQ9YCxWrTOaR7LjdDPeBa2Nq6qrQirdoZK5iQUXD1XA==
+X-Received: by 2002:a17:90a:7f95:: with SMTP id m21mr8343380pjl.73.1569436998108;
+        Wed, 25 Sep 2019 11:43:18 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id b3sm3467917pjp.13.2019.09.25.10.45.44
+        by smtp.gmail.com with ESMTPSA id e65sm4952047pfe.32.2019.09.25.11.43.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Sep 2019 10:45:45 -0700 (PDT)
-Date:   Wed, 25 Sep 2019 10:45:43 -0700
+        Wed, 25 Sep 2019 11:43:17 -0700 (PDT)
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH v2] devfreq: Add tracepoint for frequency changes
-Message-ID: <20190925174543.GN133864@google.com>
-References: <CGME20190919174436epcas4p17bf0528950813d3326237fcc56fd9b21@epcas4p1.samsung.com>
- <20190919174423.105030-1-mka@chromium.org>
- <62b2228b-e198-2558-2afc-e5687935742b@samsung.com>
- <20190924193721.GK133864@google.com>
- <418ddd67-ca8a-3d0e-066c-38d05a7082a8@samsung.com>
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH 1/2] devfreq: Rename devfreq_update_status() to devfreq_update_stats() and viceversa
+Date:   Wed, 25 Sep 2019 11:43:13 -0700
+Message-Id: <20190925184314.30251-1-mka@chromium.org>
+X-Mailer: git-send-email 2.23.0.444.g18eeb5a265-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <418ddd67-ca8a-3d0e-066c-38d05a7082a8@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 10:56:15AM +0900, Chanwoo Choi wrote:
-> On 19. 9. 25. 오전 4:37, Matthias Kaehlcke wrote:
-> > On Fri, Sep 20, 2019 at 10:15:57AM +0900, Chanwoo Choi wrote:
-> >> Hi,
-> > 
-> > sorry for the delayed response, you message got buried in my
-> > mailbox.
-> > 
-> >> On 19. 9. 20. 오전 2:44, Matthias Kaehlcke wrote:
-> >>> Add a tracepoint for frequency changes of devfreq devices and
-> >>> use it.
-> >>>
-> >>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> >>> ---
-> >>> (sending v2 without much delay wrt v1, since the change in devfreq
-> >>>  probably isn't controversial, and I'll be offline a few days)
-> >>>
-> >>> Changes in v2:
-> >>> - included trace_devfreq_frequency_enabled() in the condition
-> >>>   to avoid unnecessary evaluation when the trace point is
-> >>>   disabled
-> >>> ---
-> >>>  drivers/devfreq/devfreq.c      |  3 +++
-> >>>  include/trace/events/devfreq.h | 18 ++++++++++++++++++
-> >>>  2 files changed, 21 insertions(+)
-> >>>
-> >>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> >>> index ab22bf8a12d6..e9f04dcafb01 100644
-> >>> --- a/drivers/devfreq/devfreq.c
-> >>> +++ b/drivers/devfreq/devfreq.c
-> >>> @@ -317,6 +317,9 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
-> >>>  
-> >>>  	devfreq->previous_freq = new_freq;
-> >>>  
-> >>> +	if (trace_devfreq_frequency_enabled() && new_freq != cur_freq)
-> >>> +		trace_devfreq_frequency(devfreq, new_freq);
-> >>
-> >> You can change as following without 'new_freq' variable
-> >> because devfreq->previous_freq is the new frequency.	
-> >> 	trace_devfreq_frequency(devfreq);
-> > 
-> > In general that sounds good.
-> > 
-> > devfreq essentially uses df->previous_freq as df->cur_freq, I think
-> > most code using it would be clearer if we renamed it accordingly.
-> > I'll send a separate patch for this.
-> 
-> Actually, according to reference time of the 'df->previous_freq',
-> 'previous_freq' is proper or 'cur_freq is proper.
-> But, In the comment of 'struct devfreq',
-> it means the configured time as following: 
-> 	* @previous_freq:      previously configured frequency value.
+devfreq has two functions with very similar names, devfreq_update_status()
+and devfreq_update_stats(). _update_status() currently updates
+frequency transitions statistics, while _update_stats() retrieves the
+device 'status'. The function names are inversed with respect to what
+the functions are actually doing, rename devfreq_update_status() to
+devfreq_update_stats() and viceversa.
 
-sure, I wouldn't expect the comment of a variable/field called 'previous_freq'
-say that it's the current frequency.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
+We could also rename the current devfreq_update_stats() to
+devfreq_refresh_status() to make it easier to distinguish it from
+devfreq_update_stats().
+---
+ drivers/devfreq/devfreq.c                 | 12 ++++++------
+ drivers/devfreq/governor.h                |  4 ++--
+ drivers/devfreq/governor_passive.c        |  2 +-
+ drivers/devfreq/governor_simpleondemand.c |  2 +-
+ drivers/devfreq/tegra30-devfreq.c         |  2 +-
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-> I think that it it not big problem to keep the name.
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 446490c9d635..fb4318d59aa9 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -151,11 +151,11 @@ static int set_freq_table(struct devfreq *devfreq)
+ }
+ 
+ /**
+- * devfreq_update_status() - Update statistics of devfreq behavior
++ * devfreq_update_stats() - Update statistics of devfreq behavior
+  * @devfreq:	the devfreq instance
+  * @freq:	the update target frequency
+  */
+-int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
++int devfreq_update_stats(struct devfreq *devfreq, unsigned long freq)
+ {
+ 	int lev, prev_lev, ret = 0;
+ 	unsigned long cur_time;
+@@ -191,7 +191,7 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+ 	devfreq->last_stat_updated = cur_time;
+ 	return ret;
+ }
+-EXPORT_SYMBOL(devfreq_update_status);
++EXPORT_SYMBOL(devfreq_update_stats);
+ 
+ /**
+  * find_devfreq_governor() - find devfreq governor from name
+@@ -311,7 +311,7 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
+ 	freqs.new = new_freq;
+ 	devfreq_notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
+ 
+-	if (devfreq_update_status(devfreq, new_freq))
++	if (devfreq_update_stats(devfreq, new_freq))
+ 		dev_err(&devfreq->dev,
+ 			"Couldn't update frequency transition information.\n");
+ 
+@@ -450,7 +450,7 @@ void devfreq_monitor_suspend(struct devfreq *devfreq)
+ 		return;
+ 	}
+ 
+-	devfreq_update_status(devfreq, devfreq->previous_freq);
++	devfreq_update_stats(devfreq, devfreq->previous_freq);
+ 	devfreq->stop_polling = true;
+ 	mutex_unlock(&devfreq->lock);
+ 	cancel_delayed_work_sync(&devfreq->work);
+@@ -1398,7 +1398,7 @@ static ssize_t trans_stat_show(struct device *dev,
+ 	unsigned int max_state = devfreq->profile->max_state;
+ 
+ 	if (!devfreq->stop_polling &&
+-			devfreq_update_status(devfreq, devfreq->previous_freq))
++			devfreq_update_stats(devfreq, devfreq->previous_freq))
+ 		return 0;
+ 	if (max_state == 0)
+ 		return sprintf(buf, "Not Supported.\n");
+diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+index bbe5ff9fcecf..e11f447be2b5 100644
+--- a/drivers/devfreq/governor.h
++++ b/drivers/devfreq/governor.h
+@@ -64,9 +64,9 @@ extern void devfreq_interval_update(struct devfreq *devfreq,
+ extern int devfreq_add_governor(struct devfreq_governor *governor);
+ extern int devfreq_remove_governor(struct devfreq_governor *governor);
+ 
+-extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
++extern int devfreq_update_stats(struct devfreq *devfreq, unsigned long freq);
+ 
+-static inline int devfreq_update_stats(struct devfreq *df)
++static inline int devfreq_update_status(struct devfreq *df)
+ {
+ 	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
+ }
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index be6eeab9c814..1c746b96d3db 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -110,7 +110,7 @@ static int update_devfreq_passive(struct devfreq *devfreq, unsigned long freq)
+ 		goto out;
+ 
+ 	if (devfreq->profile->freq_table
+-		&& (devfreq_update_status(devfreq, freq)))
++		&& (devfreq_update_stats(devfreq, freq)))
+ 		dev_err(&devfreq->dev,
+ 			"Couldn't update frequency transition information.\n");
+ 
+diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
+index 3d809f228619..2cbf26bdcfd6 100644
+--- a/drivers/devfreq/governor_simpleondemand.c
++++ b/drivers/devfreq/governor_simpleondemand.c
+@@ -25,7 +25,7 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
+ 	unsigned int dfso_downdifferential = DFSO_DOWNDIFFERENCTIAL;
+ 	struct devfreq_simple_ondemand_data *data = df->data;
+ 
+-	err = devfreq_update_stats(df);
++	err = devfreq_update_status(df);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index a6ba75f4106d..536273a811fe 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -526,7 +526,7 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
+ 	unsigned int i;
+ 	int err;
+ 
+-	err = devfreq_update_stats(devfreq);
++	err = devfreq_update_status(devfreq);
+ 	if (err)
+ 		return err;
+ 
+-- 
+2.23.0.444.g18eeb5a265-goog
 
-It's indeed not a big problem, because the code works either way, something
-like 'cur_freq' would just be less confusing.
-
-These are the functions that use 'previous_freq' and how they use it:
-
-devfreq_set_target
-devfreq_monitor_suspend
-cur_freq_show
-target_freq_show
-trans_stat_show
-devfreq_passive_notifier_call
-devfreq_userspace_func
-  cur freq
-
-devfreq_update_status
-  prev freq
-
-More than 85% use the variable as current frequency, which seems like a
-good argument to give it the proper name, instead of having folks wonder
-why the previous frequency is used.
