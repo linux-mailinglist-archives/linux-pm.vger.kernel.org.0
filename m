@@ -2,93 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B16BDB8B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 11:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC7DBDB9A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Sep 2019 12:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfIYJz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 05:55:27 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38988 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732778AbfIYJz1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 05:55:27 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u17so2910739pgi.6
-        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2019 02:55:25 -0700 (PDT)
+        id S1732989AbfIYKBK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 06:01:10 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:41062 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732968AbfIYKBK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 06:01:10 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t10so2195587plr.8
+        for <linux-pm@vger.kernel.org>; Wed, 25 Sep 2019 03:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=DWhbUGv2lQeZO4jYvuR/nIX8VcsQRP/3s99PPL6K370=;
-        b=q10EU45NTJwIJeYfgsOBdN94NNFG3fwiOLyu8Ix7i+TuDo3WIftED76Ja2vnuOZ5rh
-         qgmTU6GXJaHLYtMrF1wV0dwXj61rzxSLCXubwBC3wO2v+J84vvhJoyfkrzkgkLMBDx0P
-         gaNMRxZrXdRvGNO8WCQ2H84Jtw78GxePE1UxWdthzJtNwMbuPhan0oFMKBAbcRLIdqIf
-         wrUOFwSm10824LM2VQZACB2CD0ZR3+oy5SoJtq4pHz/2sAg04gbbi7BWmkpa+GVSafvJ
-         dAuGXkJHykPpnzfplGIaOccK6F41LMCUwyy1T+tSybzxhFYFPWUk4xVrzityIH3k36ZE
-         hRWA==
+        h=from:to:cc:subject:date:message-id;
+        bh=uzZ8DPf6NIW9EBVqRR0XbHjRTYj7wBRwWhdqQxzfdOc=;
+        b=pX0x+D6ebrVJDrq5zD4RO2FtBs2ewMN6Zi/1V5mPNy4/LeQD/H8OU62wxE15vOw03M
+         b1YduOzP5xSt5nCc15YWYBN54koL6AD/dhoDXbsi3wl4KeUwMInH/Vw9KM6lwLVNpeIF
+         f0pazUbc4kvNC0TrMPANcX1bLJhHUa+Kl5wNrD3uSuQu+hg/Dc260ZIBq9Lf0xPwNUyi
+         8AXPHo7/PSDtRLPf8erC0ORT5eDosl7dw0e66r5mBmCRM/QsNGjrgQHQHJ9fSLt+Mqfj
+         yvmyvSF4G4Gnv8SIMRoCZbzz3mcfYmgWut6yahdqK9jrB3ZMCwf1tlUkO+01MmyHHbZN
+         bOnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=DWhbUGv2lQeZO4jYvuR/nIX8VcsQRP/3s99PPL6K370=;
-        b=HLBpjAowfodbAFHjL6I1f/FS+EEqK4TygqeJwGPJ30e6oY6q4utL4RkTq7QS+9hHB8
-         MmAEXKV2jkp8ZOd/rtQogQ07z3L8DGwp14uWSnC5sAy+yiA4yhq1Ay7l+FsEHgUr84o0
-         cWSuKPTuWcQlACUiK6cMB6KOFARzzX1p2ZD7waVvMCZOvb3Crlyw62Xk8U5BGdsCA3B3
-         wr64Ii21M8y7zrRRPoi6VOeGpGhZ3bpVsTlsR81hFqnqShM0xwXRb6smDsxv5+qjg4X9
-         YIafC0wHygy+BWaau6D3Vm5IHfDv+0b28V0C14oM5hpM9RhRSFgiMA8Q6IWkvb9GC/GD
-         Uj6g==
-X-Gm-Message-State: APjAAAUMlSdrCzKVGdI0HDp5X6HRkSFOusmB7nTLrEiTeUykSz+mEdxY
-        fL7Hb3GWQU85BLn+//ZRjW2pSQ==
-X-Google-Smtp-Source: APXvYqwcBxlk43VFAND4HNTUQaO0wlCxMabpoBPf+ntRfhtxngHebErv30Xy5iJzGbAaRXMnyDdICg==
-X-Received: by 2002:a62:f249:: with SMTP id y9mr8759936pfl.147.1569405325359;
-        Wed, 25 Sep 2019 02:55:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=uzZ8DPf6NIW9EBVqRR0XbHjRTYj7wBRwWhdqQxzfdOc=;
+        b=DTdONCsnntcGVFeENvo6Q47VO4pV2/mnMuCt3GHT8AjKP2fud4fyTtdafdpmkkMEWi
+         NuiA5ilvIqhdIAt8d+YIzWZHWACJEpCXxiWG9xrD5RKc48aSLLKokDgSEPWsaPeSe/Nj
+         Ci0L4vpdmGccRLW/WX5HbbCJbdKF60yBI7sOu7o/PazlUoUcJVdOzCGg1nD+n0j2mMrC
+         XcHNrACKXNEl5FwCt0qcdQ8eOM2vceyD+5DEmctdtJdqR5uFKBO5m6oZxj+T7uDqfyBo
+         hTv8eUMguYlbeBfMMyN6JQHjeSLVKuiMGL9I0RSd0WgqhHNLh635oBErORYVKRUvNEaS
+         bNFg==
+X-Gm-Message-State: APjAAAUiS7O3jMAaP0hdxnxk2oHlt7OQz1rSSJcm8K7LwU84n6YExUNd
+        2eeDVUJRgjwmk1lg5Y474ve4gA==
+X-Google-Smtp-Source: APXvYqyZiVNZNLInx8rqubvBh27cWe1x6GJopIyzVDed+DSk7m3a79qaCZlOpAkdTjZ+xXYikJ/O2w==
+X-Received: by 2002:a17:902:d201:: with SMTP id t1mr7842966ply.337.1569405669418;
+        Wed, 25 Sep 2019 03:01:09 -0700 (PDT)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id i7sm2430831pjs.1.2019.09.25.02.55.21
+        by smtp.gmail.com with ESMTPSA id x10sm6348741pfr.44.2019.09.25.03.01.04
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 25 Sep 2019 02:55:24 -0700 (PDT)
+        Wed, 25 Sep 2019 03:01:08 -0700 (PDT)
 From:   Baolin Wang <baolin.wang@linaro.org>
-To:     stable@vger.kernel.org, sre@kernel.org
-Cc:     david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
+To:     stable@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        linus.walleij@linaro.org, natechancellor@gmail.com, sre@kernel.org
+Cc:     longman@redhat.com, linux-gpio@vger.kernel.org,
+        david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
         baolin.wang@linaro.org, orsonzhai@gmail.com,
         vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
-Subject: [BACKPORT 4.19.y 3/3] power: supply: sysfs: ratelimit property read error message
-Date:   Wed, 25 Sep 2019 17:55:03 +0800
-Message-Id: <117b7b2d9bed2a288676f5614d8dd8d09746ab93.1569404757.git.baolin.wang@linaro.org>
+Subject: [BACKPORT 4.14.y v3 0/3] Candidates from Spreadtrum 4.14 product kernel
+Date:   Wed, 25 Sep 2019 18:00:49 +0800
+Message-Id: <cover.1569405445.git.baolin.wang@linaro.org>
 X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1569404757.git.baolin.wang@linaro.org>
-References: <cover.1569404757.git.baolin.wang@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: David Lechner <david@lechnology.com>
+With Arnd's script [1] help, I found some bugfixes in Spreadtrum 4.14 product
+kernel, but missing in v4.14.146:
 
-[Upstream commit 87a2b65fc855e6be50f791c2ebbb492541896827]
+513e1073d52e locking/lockdep: Add debug_locks check in __lock_downgrade()
+957063c92473 pinctrl: sprd: Use define directive for sprd_pinconf_params values
+87a2b65fc855 power: supply: sysfs: ratelimit property read error message
 
-This adds rate limiting to the message that is printed when reading a
-power supply property via sysfs returns an error. This will prevent
-userspace applications from unintentionally dDOSing the system by
-continuously reading a property that returns an error.
+[1] https://lore.kernel.org/lkml/20190322154425.3852517-19-arnd@arndb.de/T/
 
-Signed-off-by: David Lechner <david@lechnology.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
----
+Changes from v2:
+ - Drop 2 unnecessary patches (patch 1 and patch 6) from v2 patch set.
+ - Backport these patches to 4.19.y.
+
+Changes from v1:
+ - Drop 2 unnecessary patches (patch 1 and patch 4) from v1 patch set.
+ - Add upstream commit id in change log for each stable patch.
+
+David Lechner (1):
+  power: supply: sysfs: ratelimit property read error message
+
+Nathan Chancellor (1):
+  pinctrl: sprd: Use define directive for sprd_pinconf_params values
+
+Waiman Long (1):
+  locking/lockdep: Add debug_locks check in __lock_downgrade()
+
+ drivers/pinctrl/sprd/pinctrl-sprd.c       |    6 ++----
  drivers/power/supply/power_supply_sysfs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/locking/lockdep.c                  |    3 +++
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 5a2757a..5358a80 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -131,7 +131,8 @@ static ssize_t power_supply_show_property(struct device *dev,
- 				dev_dbg(dev, "driver has no data for `%s' property\n",
- 					attr->attr.name);
- 			else if (ret != -ENODEV && ret != -EAGAIN)
--				dev_err(dev, "driver failed to report `%s' property: %zd\n",
-+				dev_err_ratelimited(dev,
-+					"driver failed to report `%s' property: %zd\n",
- 					attr->attr.name, ret);
- 			return ret;
- 		}
 -- 
 1.7.9.5
 
