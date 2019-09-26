@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E594BE9E1
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147B7BE9F5
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728384AbfIZBHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 21:07:38 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:18332 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727374AbfIZBHi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:07:38 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190926010733epoutp03be0875197d6b072a0e77b9ab26f7d7f7~H15puWeD10411904119epoutp03M
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:07:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190926010733epoutp03be0875197d6b072a0e77b9ab26f7d7f7~H15puWeD10411904119epoutp03M
+        id S1729865AbfIZBOm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 21:14:42 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:21771 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbfIZBOl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:14:41 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190926011438epoutp01a032568cdd5cb818480542f8e58b406d~H1-1hOA090104501045epoutp01C
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:14:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190926011438epoutp01a032568cdd5cb818480542f8e58b406d~H1-1hOA090104501045epoutp01C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1569460053;
-        bh=02LRQzc3zq1yjJmRI4y3xLH0J6Posi4QJAQSb0tVl7s=;
+        s=mail20170921; t=1569460478;
+        bh=AesaqjDo0YbWP27vWCIaz9cMDJ9+CQh/g3Zywou/rt4=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=a5f8GKDyMbPxMPVYKN+6/FlkL6zFaQ7ApLWJtuiXO2hl4R92ZW1Ua46vDMTQHV4Nc
-         lYsY9q7SShcrCFmy1HK6l5a1dTYqEGCXVaP83J7V9yP/lFcVgTO2mjea9nYOLM2L6O
-         3jiT5s4rGRRkausT+5xCrSxcZoQgJqa7iGZYTlQs=
+        b=EfyEfTVTcD9uXEC/6g/Xh/ISBweQ1JhRHBraPEtQoQlMsb6rxiBRWpsW4FDdGucbO
+         NyuEAy1NEaT3Q5h7h36itf9/6yI1KIYMq5QQb7cS9KyAH/IofwRZpPYVZSYtHpmJHZ
+         3vdpHn3vCcYYXp0jpHU/Y83081I7rIcJL4xU7cg8=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
         epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20190926010732epcas1p3e4701a99601072a165c1ca9cb15d1407~H15o-PdUe1268112681epcas1p3Y;
-        Thu, 26 Sep 2019 01:07:32 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 46dxc22Q7FzMqYkg; Thu, 26 Sep
-        2019 01:07:30 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        20190926011437epcas1p3689c1103b3624d494cfd8f1ec1540295~H1-0uOr8G2749427494epcas1p3g;
+        Thu, 26 Sep 2019 01:14:37 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 46dxmB6w7lzMqYkX; Thu, 26 Sep
+        2019 01:14:34 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
         epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        67.1D.04068.F4F0C8D5; Thu, 26 Sep 2019 10:07:27 +0900 (KST)
+        14.6F.04068.AF01C8D5; Thu, 26 Sep 2019 10:14:34 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010727epcas1p13f39ec7c0046e513397b6e3315d40b7d~H15kJVqen2973229732epcas1p1K;
-        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20190926011434epcas1p4fad14708395e5735db9d9ee09f7b13d0~H1-xiIfbM1342313423epcas1p4L;
+        Thu, 26 Sep 2019 01:14:34 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190926010727epsmtrp19b8a5e165b7490d088e6ea08ea791861~H15kIWp401337013370epsmtrp1h;
-        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
-X-AuditID: b6c32a39-3b9219c000000fe4-90-5d8c0f4fa560
+        20190926011434epsmtrp16dc8cd010679c943b67f56486c17f53f~H1-xgw6cX1961419614epsmtrp1X;
+        Thu, 26 Sep 2019 01:14:34 +0000 (GMT)
+X-AuditID: b6c32a39-f5fff70000000fe4-a5-5d8c10fac2f6
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1B.5D.04081.F4F0C8D5; Thu, 26 Sep 2019 10:07:27 +0900 (KST)
+        93.CD.04081.9F01C8D5; Thu, 26 Sep 2019 10:14:33 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010727epsmtip212f5f43eda3120dbd64939bc91d5f21f~H15j5WGbu2624026240epsmtip2d;
-        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
+        20190926011433epsmtip21b64d1f76168dd7fa8ab3c1188222f4f~H1-xMX7EG2820028200epsmtip2u;
+        Thu, 26 Sep 2019 01:14:33 +0000 (GMT)
 Subject: Re: [PATCH v8 5/6] PM / devfreq: Add PM QoS support
 To:     Leonard Crestez <leonard.crestez@nxp.com>,
         Matthias Kaehlcke <mka@chromium.org>
@@ -67,45 +67,45 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         <linux-arm-kernel@lists.infradead.org>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <5f12931b-92f8-15d8-8498-f02a7c2e999f@samsung.com>
-Date:   Thu, 26 Sep 2019 10:12:09 +0900
+Message-ID: <10b7f567-3d07-d4b0-b555-48c03a26461e@samsung.com>
+Date:   Thu, 26 Sep 2019 10:19:15 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
 In-Reply-To: <VI1PR04MB7023573BA3D5C5D521DB689CEE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfWwTZRzHfXq9azetPJYhPxbEcgYiMxs9Rscz3IhEJGeYsmgIU1LHsV26
-        pa/ptQvIH+swTFYRpsboSowzzkpHJrSMOQnNsq4Op8gYbGMpYKabTohZaWeVlxBoexL33+d5
-        7vO77/O9FzWlnWHy1fU2l+i0CRaWyVX2DKwqLNy64KBR3+MvIpHBUyqS+ulHRPwXv0fkk3CI
-        IcPDJ1Tk531/qUjMs5QcvZagSWhqnCbeOwGKzL0fRWTuxBQiV5qOMuTY+X6GeCP3GBJM8S9g
-        Pj6xX8Uf8Ywo+faQmw91tjD81fEzDH+yo5EPzvYq+P7ZMwr+UHcn4udCyypz3zSX1YlCrejU
-        ibYae229zVTObnm9+sVqQ4meK+RKyTpWZxOsYjm7qaKycHO9JV2E1TUIFnd6q1KQJHb1hjKn
-        3e0SdXV2yVXOio5ai6PUUSQJVsltMxXV2K3rOb1+jSEt7jTX3QgcohwJfnf7sFfhQR3rvShH
-        DXgtBDv8Ki/KVWtxL4J4/A9GXiQR7P+iCWUsLf4HQfCe8+FE55VmhSyFEfx74TotL+IIWu5/
-        S2eshbgM7o8lmAzn4W3w9+8XqQxTeB8NyWhDhhlcAH1/TmSdBXg5jN2ayqZp8AbwpyayvhKv
-        gMHEQNZZhKsgOTlAy84TMNQ2rcxwDjbCyPF+Wr7/YohNf66Q+Wl459QRKnM4wOMq+KF1RClX
-        2ASXj7VRMi+EG2e7VTLnw/XDzf/xXggMRRl5+ACC7r4LtHyhGPq++iidoE4nrILjp1fL28vh
-        u7ufITn4cZhNHaQzCmANHGjWysozcGnymkLmJfDluy1MK2J98+r45lXwzavg+z+sHSk70ZOi
-        Q7KaRIlzGOa/7RDKfuQFpb1o8HxFBGE1Yh/TwBvvGbW00CDtsUYQqCk2T+Nb6jVqNbXCnrdF
-        p73a6baIUgQZ0k/7Ayp/UY09/cvYXNWcYU1xcTFZy5UYOI5drOFNHqMWmwSXaBZFh+h8OKdQ
-        5+R70EuHdd6K8ZUnY+GqV0fdergabby942ag7bdv6BWTT21c1ppTEPn47PBAT0N4++zQjHmX
-        cac/OEhvZneNCo/ejhke+bCEvrT9ly2Jl1/riuub3gpfTlbFzkW+7to2c67Ru+P5cNdY6vTW
-        V54j0ybFs/zETSla0oc+zQskh1aOmos2/soqpTqBK6CckvAAogp0TfoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSvK4/f0+swbaFYhaHjm1lt/h6+hSj
-        xbJLRxktpu/dxGZx/vwGdouzTW/YLW41yFisuPuR1WLT42usFl2/VjJbfO49wmjxecNjRovb
-        jSvYLFafO8hm0XXoL5vFxq8eDgIe72+0snvMbrjI4rFgU6nHplWdbB53ru1h89i8pN5j47sd
-        TB4H3+1h8ujbsorR4/MmuQCuKC6blNSczLLUIn27BK6MVyv7mAs+elQsON/F1MC4xKqLkZND
-        QsBEYtXtNqYuRi4OIYHdjBJ7N/9ihUhISky7eJS5i5EDyBaWOHy4GKLmLaNE06xJbCA1wgI2
-        Ev+vfgSzRQRCJf50LmcFKWIWaGKV6Pp+nRGi4xWTxOGLfWBT2QS0JPa/uAHWwS+gKHH1x2NG
-        EJtXwE5i2dcbzCA2i4CqxLGPh8FqRAUiJA7vmAVVIyhxcuYTFhCbUyBW4uL6g2AzmQXUJf7M
-        u8QMYYtL3HoynwnClpdo3jqbeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnFhgWGeanl
-        esWJucWleel6yfm5mxjBUa2luYPx8pL4Q4wCHIxKPLwHwrpjhVgTy4orcw8xSnAwK4nwzpLp
-        ihXiTUmsrEotyo8vKs1JLT7EKM3BoiTO+zTvWKSQQHpiSWp2ampBahFMlomDU6qBccHDJ7zb
-        0pJsp5xx3HcicGZJx3yrQ0cn/c/uqP0nsHNP+WmHBt6ZxYX9n1fEPmmbs7Xj7PnnBTlfjW05
-        ivf1vN8l+tDMYutj8faJl/q9vnbZBRnsrH98IX/37Vt/ovfZ6iauD54hd9j+ddxE9UlhVcuq
-        Q+1cn+qc0Gx6vP/2zEeb6z9eDU/56aPEUpyRaKjFXFScCAAA7bW85gIAAA==
-X-CMS-MailID: 20190926010727epcas1p13f39ec7c0046e513397b6e3315d40b7d
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKJsWRmVeSWpSXmKPExsWy7bCmnu4vgZ5Yg19zzS0OHdvKbvH19ClG
+        i2WXjjJaTN+7ic3i/PkN7BZnm96wW9xqkLFYcfcjq8Wmx9dYLbp+rWS2+Nx7hNHi84bHjBa3
+        G1ewWaw+d5DNouvQXzaLjV89HAQ83t9oZfeY3XCRxWPBplKPTas62TzuXNvD5rF5Sb3Hxnc7
+        mDwOvtvD5NG3ZRWjx+dNcgFcUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koK
+        eYm5qbZKLj4Bum6ZOUCPKCmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKLAv0ihNz
+        i0vz0vWS83OtDA0MjEyBChOyM9bfuMtU8Mq9Yu7HQywNjPstuxg5OSQETCRu3zrM3MXIxSEk
+        sINRYv2SaWwQzidGiZZt1xlBqoQEvjFK7F3EBdOxZUE7VNFeRomXiw+yQjjvGSUO/LzMClIl
+        LGAj8f/qRzYQW0QgVOLL00vMIDazQBOrxKcjZSA2m4CWxP4XN8Bq+AUUJa7+eAy2jVfATmLZ
+        3V9ANgcHi4CqxNOTUSBhUYEIiU8PDrNClAhKnJz5hAXE5hSIlbi4/iArxHhxiVtP5jNB2PIS
+        zVtng70mIXCNXeLB8qOsIDMlBFwk1j3Th3hGWOLV8S3sELaUxMv+Nii7WmLlySNsEL0djBJb
+        9l9ghUgYS+xfOpkJZA6zgKbE+l1QcxQldv6eywixl0/i3dceqFW8Eh1tQhAlyhKXH9xlgrAl
+        JRa3d7JNYFSaheSbWUg+mIXkg1kIyxYwsqxiFEstKM5NTy02LDBFjutNjOAkrmW5g/HYOZ9D
+        jAIcjEo8vBKR3bFCrIllxZW5hxglOJiVRHhnyXTFCvGmJFZWpRblxxeV5qQWH2I0BYb1RGYp
+        0eR8YIbJK4k3NDUyNja2MDE0MzU0VBLn9UhviBUSSE8sSc1OTS1ILYLpY+LglGpg1A00cPOT
+        cym2SD40V2jy4w+1n74EGr5OWf7f8/Hf72a7Fl0RK/jxbY78tm8MT2WVGipCao0XdlgUM7yc
+        3eu2t/uA1vWb1jlS+94uZhKasXnNciXp6+0qMhJ3j0gmXS56x7Nh23HWPe0aAYme55M5P/K/
+        e8hRmK6ju3s252fm0+KBloyJD+dMU2Ipzkg01GIuKk4EABjinqH4AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRmVeSWpSXmKPExsWy7bCSvO5PgZ5YgyknrS0OHdvKbvH19ClG
+        i2WXjjJaTN+7ic3i/PkN7BZnm96wW9xqkLFYcfcjq8Wmx9dYLbp+rWS2+Nx7hNHi84bHjBa3
+        G1ewWaw+d5DNouvQXzaLjV89HAQ83t9oZfeY3XCRxWPBplKPTas62TzuXNvD5rF5Sb3Hxnc7
+        mDwOvtvD5NG3ZRWjx+dNcgFcUVw2Kak5mWWpRfp2CVwZ62/cZSp45V4x9+MhlgbG/ZZdjJwc
+        EgImElsWtLN1MXJxCAnsZpR4+mcyI0RCUmLaxaPMXYwcQLawxOHDxRA1bxklpt/dxAxSIyxg
+        I/H/6kc2EFtEIFTiT+dyVpAiZoEmVomu79cZITpeMUkcvtjHClLFJqAlsf/FDbAOfgFFias/
+        HoNt4xWwk1h29xcjyDYWAVWJpyejQMKiAhESh3fMgioRlDg58wkLiM0pECtxcf1BsJHMAuoS
+        f+ZdYoawxSVuPZnPBGHLSzRvnc08gVF4FpL2WUhaZiFpmYWkZQEjyypGydSC4tz03GLDAsO8
+        1HK94sTc4tK8dL3k/NxNjOCY1tLcwXh5SfwhRgEORiUe3gNh3bFCrIllxZW5hxglOJiVRHhn
+        yXTFCvGmJFZWpRblxxeV5qQWH2KU5mBREud9mncsUkggPbEkNTs1tSC1CCbLxMEp1cCooPCw
+        1Oxxlo3Ty7g9n1SXvJt+VeFn7TPXHUrvDv86NkH4OZ9EGUek8Hdr21nTb7ocduDQL7poV6Gw
+        ospC9P931dtHL0qxOWyqehS+KMbm2Z2Qi2oiu+ceTnygLWN1kn2JHmtWs1LPiVlrZnm67Dtk
+        Vb/62v9tfBNn7DkQWFq/sDC1zThu+fXFSizFGYmGWsxFxYkA/TvVgeUCAAA=
+X-CMS-MailID: 20190926011434epcas1p4fad14708395e5735db9d9ee09f7b13d0
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
@@ -188,9 +188,6 @@ On 19. 9. 26. 오전 6:18, Leonard Crestez wrote:
 > 
 > Already discussed for another patch; I will modify to "Apply constraints 
 > from PM QoS" instead.
-
-I agree the new comment with 'Apply constraints ... '.
-
 > 
 >> I prefer to use following comments:
 >>
@@ -232,7 +229,12 @@ I agree the new comment with 'Apply constraints ... '.
 >> Is it not over 80 char?
 > 
 > Yes but coding style explicitly forbids breaking strings.
-> 
+
+I want to make it within 80 char. How about following comment?
+
+		dev_err(devfreq->dev.parent,
+			"failed to update frequency from PM QoS (%d)\n",
+
 >>> +				err);
 >>> +
 >>> +	return NOTIFY_OK;
@@ -279,9 +281,6 @@ I agree the new comment with 'Apply constraints ... '.
 >>
 >> I prefer to handle the return value if kernel API provides
 >> the error code.
-
-How about?
-
 >>
 >>>   	if (devfreq->profile->exit)
 >>>   		devfreq->profile->exit(devfreq->dev.parent);
@@ -313,12 +312,6 @@ How about?
 > 
 > This is very likely to result in merge conflicts, maybe wait for my 
 > series to go in first?
-
-I'll send the separate patch after finished the review of these patches.
-So, if you agree, please remove this comment on this patch.
-
-You can review the detailed comments on separate patch when I send.
-
 > 
 >>> +	devfreq->nb_min.notifier_call = qos_min_notifier_call;
 >>> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
