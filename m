@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED26BE9DD
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E594BE9E1
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbfIZBD1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 21:03:27 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:15677 "EHLO
+        id S1728384AbfIZBHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 21:07:38 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:18332 "EHLO
         mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbfIZBD1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:03:27 -0400
+        with ESMTP id S1727374AbfIZBHi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:07:38 -0400
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190926010324epoutp03a5646df08187a725df615e7bbd7bda57~H12Bz1cOf3233432334epoutp03T
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:03:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190926010324epoutp03a5646df08187a725df615e7bbd7bda57~H12Bz1cOf3233432334epoutp03T
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190926010733epoutp03be0875197d6b072a0e77b9ab26f7d7f7~H15puWeD10411904119epoutp03M
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:07:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190926010733epoutp03be0875197d6b072a0e77b9ab26f7d7f7~H15puWeD10411904119epoutp03M
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1569459804;
-        bh=Yqpkx4BCEja08YHcDCpzNi4z57TCOeCeLIIybRZTEyE=;
+        s=mail20170921; t=1569460053;
+        bh=02LRQzc3zq1yjJmRI4y3xLH0J6Posi4QJAQSb0tVl7s=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=MPMNErV2qY1BF4t2pzdLhCBRpqxCDiloREu6f7HWZYItHSbAr2K0063jc2dhv+S8n
-         xIcY3o3oD7cTXNXIUerBGIOxq43q9LAq0J/vXT0/LLhzFIbAWffSOc5f53Ezw1TRjq
-         xhizmkkwJ79Q/UjlYV7JLU0Q3oEjiD66ebJl4HP4=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190926010323epcas1p293ad50585fbf8750f02b64768785c4c3~H12BD7VLe0177201772epcas1p2V;
-        Thu, 26 Sep 2019 01:03:23 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 46dxWF2kbczMqYkZ; Thu, 26 Sep
-        2019 01:03:21 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        55.E3.04085.95E0C8D5; Thu, 26 Sep 2019 10:03:21 +0900 (KST)
+        b=a5f8GKDyMbPxMPVYKN+6/FlkL6zFaQ7ApLWJtuiXO2hl4R92ZW1Ua46vDMTQHV4Nc
+         lYsY9q7SShcrCFmy1HK6l5a1dTYqEGCXVaP83J7V9yP/lFcVgTO2mjea9nYOLM2L6O
+         3jiT5s4rGRRkausT+5xCrSxcZoQgJqa7iGZYTlQs=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190926010732epcas1p3e4701a99601072a165c1ca9cb15d1407~H15o-PdUe1268112681epcas1p3Y;
+        Thu, 26 Sep 2019 01:07:32 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 46dxc22Q7FzMqYkg; Thu, 26 Sep
+        2019 01:07:30 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        67.1D.04068.F4F0C8D5; Thu, 26 Sep 2019 10:07:27 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010320epcas1p4cfb1f724d67da870e657f0a4483c8e3b~H11_etUap1100411004epcas1p4M;
-        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190926010727epcas1p13f39ec7c0046e513397b6e3315d40b7d~H15kJVqen2973229732epcas1p1K;
+        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190926010320epsmtrp15b0d05597ba8c8698e5c5dbb04c422ab~H11_dqJra1220412204epsmtrp1d;
-        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
-X-AuditID: b6c32a37-e31ff70000000ff5-9e-5d8c0e59e369
+        20190926010727epsmtrp19b8a5e165b7490d088e6ea08ea791861~H15kIWp401337013370epsmtrp1h;
+        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
+X-AuditID: b6c32a39-3b9219c000000fe4-90-5d8c0f4fa560
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        78.1D.04081.85E0C8D5; Thu, 26 Sep 2019 10:03:20 +0900 (KST)
+        1B.5D.04081.F4F0C8D5; Thu, 26 Sep 2019 10:07:27 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010320epsmtip2288b7d5cec1706a5df38966fe4465b17~H11_N6lDo2189421894epsmtip2a;
-        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
+        20190926010727epsmtip212f5f43eda3120dbd64939bc91d5f21f~H15j5WGbu2624026240epsmtip2d;
+        Thu, 26 Sep 2019 01:07:27 +0000 (GMT)
 Subject: Re: [PATCH v8 5/6] PM / devfreq: Add PM QoS support
 To:     Leonard Crestez <leonard.crestez@nxp.com>,
         Matthias Kaehlcke <mka@chromium.org>
@@ -67,150 +67,322 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         <linux-arm-kernel@lists.infradead.org>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <48e271f5-58d3-845a-538f-6fb75eb3deb6@samsung.com>
-Date:   Thu, 26 Sep 2019 10:08:02 +0900
+Message-ID: <5f12931b-92f8-15d8-8498-f02a7c2e999f@samsung.com>
+Date:   Thu, 26 Sep 2019 10:12:09 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB7023910B94E4920D329427C8EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB7023573BA3D5C5D521DB689CEE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBJsWRmVeSWpSXmKPExsWy7bCmnm4kX0+swc5XAhaHjm1lt/h6+hSj
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TfWwTZRzHfXq9azetPJYhPxbEcgYiMxs9Rscz3IhEJGeYsmgIU1LHsV26
+        pa/ptQvIH+swTFYRpsboSowzzkpHJrSMOQnNsq4Op8gYbGMpYKabTohZaWeVlxBoexL33+d5
+        7vO77/O9FzWlnWHy1fU2l+i0CRaWyVX2DKwqLNy64KBR3+MvIpHBUyqS+ulHRPwXv0fkk3CI
+        IcPDJ1Tk531/qUjMs5QcvZagSWhqnCbeOwGKzL0fRWTuxBQiV5qOMuTY+X6GeCP3GBJM8S9g
+        Pj6xX8Uf8Ywo+faQmw91tjD81fEzDH+yo5EPzvYq+P7ZMwr+UHcn4udCyypz3zSX1YlCrejU
+        ibYae229zVTObnm9+sVqQ4meK+RKyTpWZxOsYjm7qaKycHO9JV2E1TUIFnd6q1KQJHb1hjKn
+        3e0SdXV2yVXOio5ai6PUUSQJVsltMxXV2K3rOb1+jSEt7jTX3QgcohwJfnf7sFfhQR3rvShH
+        DXgtBDv8Ki/KVWtxL4J4/A9GXiQR7P+iCWUsLf4HQfCe8+FE55VmhSyFEfx74TotL+IIWu5/
+        S2eshbgM7o8lmAzn4W3w9+8XqQxTeB8NyWhDhhlcAH1/TmSdBXg5jN2ayqZp8AbwpyayvhKv
+        gMHEQNZZhKsgOTlAy84TMNQ2rcxwDjbCyPF+Wr7/YohNf66Q+Wl459QRKnM4wOMq+KF1RClX
+        2ASXj7VRMi+EG2e7VTLnw/XDzf/xXggMRRl5+ACC7r4LtHyhGPq++iidoE4nrILjp1fL28vh
+        u7ufITn4cZhNHaQzCmANHGjWysozcGnymkLmJfDluy1MK2J98+r45lXwzavg+z+sHSk70ZOi
+        Q7KaRIlzGOa/7RDKfuQFpb1o8HxFBGE1Yh/TwBvvGbW00CDtsUYQqCk2T+Nb6jVqNbXCnrdF
+        p73a6baIUgQZ0k/7Ayp/UY09/cvYXNWcYU1xcTFZy5UYOI5drOFNHqMWmwSXaBZFh+h8OKdQ
+        5+R70EuHdd6K8ZUnY+GqV0fdergabby942ag7bdv6BWTT21c1ppTEPn47PBAT0N4++zQjHmX
+        cac/OEhvZneNCo/ejhke+bCEvrT9ly2Jl1/riuub3gpfTlbFzkW+7to2c67Ru+P5cNdY6vTW
+        V54j0ybFs/zETSla0oc+zQskh1aOmos2/soqpTqBK6CckvAAogp0TfoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSvK4/f0+swbaFYhaHjm1lt/h6+hSj
         xbJLRxktpu/dxGZx/vwGdouzTW/YLW41yFisuPuR1WLT42usFl2/VjJbfO49wmjxecNjRovb
         jSvYLFafO8hm0XXoL5vFxq8eDgIe72+0snvMbrjI4rFgU6nHplWdbB53ru1h89i8pN5j47sd
-        TB4H3+1h8ujbsorR4/MmuQCuqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWF
-        vMTcVFslF58AXbfMHKBHlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFlgV6xYm5
-        xaV56XrJ+blWhgYGRqZAhQnZGf/v32At+ClV8W7Xb5YGxquiXYycHBICJhJr/qxi7mLk4hAS
-        2MEocWvNMnYI5xOjxMGDn1ggnG+MEltubWCHaTm25ARUYi+jxLpdX5ggnPeMEhf6VrOAVAkL
-        2Ej8v/qRDcQWEQiV+PL0EjOIzSzQxCrx6UgZiM0moCWx/8UNsBp+AUWJqz8eM4LYvAJ2Enu3
-        3GECsVkEVCVm3/wI1isqECHx6cFhVogaQYmTM5+A7eIUiJW48nQ6O8R8cYlbT+YzQdjyEs1b
-        Z4M9JyFwjV1ix57njBAvuEhM2r+aCcIWlnh1fAvUa1ISL/vboOxqiZUnj7BBNHcA/b//AitE
-        wlhi/9LJQM0cQBs0Jdbv0ocIK0rs/D2XEWIxn8S7rz2sICUSArwSHW1CECXKEpcf3IVaKymx
-        uL2TbQKj0iwk78xC8sIsJC/MQli2gJFlFaNYakFxbnpqsWGBMXJ0b2IEp3It8x2MG875HGIU
-        4GBU4uGViOyOFWJNLCuuzD3EKMHBrCTCO0umK1aINyWxsiq1KD++qDQntfgQoykwtCcyS4km
-        5wPzTF5JvKGpkbGxsYWJoZmpoaGSOK9HekOskEB6YklqdmpqQWoRTB8TB6dUA6P4m5u9YhM2
-        ynE9yWzl4LmucWjvHV0vpoqdWlNsJ75sqZaZ+STuQ8vd6INsPh5z9y/e/uPSjelOydZGM2Uv
-        /LY4cqjBZHvxeY8t154ee/F1nuLFZrncQ1uP7v/ZZHpKc07+tVBFm5s/jzMtZ75ulJSyO2Cm
-        cHln6OSWM+pqPUsL/6fb5Osv/vtbiaU4I9FQi7moOBEAAmeKgPsDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSvG4EX0+sweIuXYtDx7ayW3w9fYrR
-        Ytmlo4wW0/duYrM4f34Du8XZpjfsFrcaZCxW3P3IarHp8TVWi65fK5ktPvceYbT4vOExo8Xt
-        xhVsFqvPHWSz6Dr0l81i41cPBwGP9zda2T1mN1xk8ViwqdRj06pONo871/aweWxeUu+x8d0O
-        Jo+D7/YwefRtWcXo8XmTXABXFJdNSmpOZllqkb5dAlfG//s3WAt+SlW82/WbpYHxqmgXIyeH
-        hICJxLElJ1i6GLk4hAR2M0rMmvWIGSIhKTHt4lEgmwPIFpY4fLgYouYto8T9ztUsIDXCAjYS
-        /69+ZAOxRQRCJf50LmcFKWIWaGKV6Pp+nRGi4wmzxJsVd9lBqtgEtCT2v7gB1sEvoChx9cdj
-        RhCbV8BOYu+WO0wgNouAqsTsmx/BrhAViJA4vGMWVI2gxMmZT8A2cwrESlx5Oh1sJrOAusSf
-        eZeYIWxxiVtP5jNB2PISzVtnM09gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz232LDAMC+1
-        XK84Mbe4NC9dLzk/dxMjOKq1NHcwXl4Sf4hRgINRiYf3QFh3rBBrYllxZe4hRgkOZiUR3lky
-        XbFCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZ/mHYsUEkhPLEnNTk0tSC2CyTJxcEo1MPJGFJve
-        EBSqOh2ydN+F//UnBNelFG8x/l1662iuXLUmR9UZLRvLUxbmtS/ruttLqr9/FN68bu7Muy6a
-        1y1dDT7d2LCZe33pn4piV6t/hZOOTrFOTGlN8vx2xPC8Wc9aXunTf7cUvRO7HGbVu6L5q03O
-        zz3HDqkcbBIverVkeWHfJMb9zOfO/ldiKc5INNRiLipOBAAgoGxU5gIAAA==
-X-CMS-MailID: 20190926010320epcas1p4cfb1f724d67da870e657f0a4483c8e3b
+        TB4H3+1h8ujbsorR4/MmuQCuKC6blNSczLLUIn27BK6MVyv7mAs+elQsON/F1MC4xKqLkZND
+        QsBEYtXtNqYuRi4OIYHdjBJ7N/9ihUhISky7eJS5i5EDyBaWOHy4GKLmLaNE06xJbCA1wgI2
+        Ev+vfgSzRQRCJf50LmcFKWIWaGKV6Pp+nRGi4xWTxOGLfWBT2QS0JPa/uAHWwS+gKHH1x2NG
+        EJtXwE5i2dcbzCA2i4CqxLGPh8FqRAUiJA7vmAVVIyhxcuYTFhCbUyBW4uL6g2AzmQXUJf7M
+        u8QMYYtL3HoynwnClpdo3jqbeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnFhgWGeanl
+        esWJucWleel6yfm5mxjBUa2luYPx8pL4Q4wCHIxKPLwHwrpjhVgTy4orcw8xSnAwK4nwzpLp
+        ihXiTUmsrEotyo8vKs1JLT7EKM3BoiTO+zTvWKSQQHpiSWp2ampBahFMlomDU6qBccHDJ7zb
+        0pJsp5xx3HcicGZJx3yrQ0cn/c/uqP0nsHNP+WmHBt6ZxYX9n1fEPmmbs7Xj7PnnBTlfjW05
+        ivf1vN8l+tDMYutj8faJl/q9vnbZBRnsrH98IX/37Vt/ovfZ6iauD54hd9j+ddxE9UlhVcuq
+        Q+1cn+qc0Gx6vP/2zEeb6z9eDU/56aPEUpyRaKjFXFScCAAA7bW85gIAAA==
+X-CMS-MailID: 20190926010727epcas1p13f39ec7c0046e513397b6e3315d40b7d
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190924192429epcas3p196a7de011d3e78508d1e643efd27e717
+X-CMS-RootMailID: 20190924101145epcas4p37f7d25b8743c25520b33fa392cd80d45
 References: <cover.1569319738.git.leonard.crestez@nxp.com>
+        <CGME20190924101145epcas4p37f7d25b8743c25520b33fa392cd80d45@epcas4p3.samsung.com>
         <58fdd2c226a4e76a3d9427baab7dd5c23af842ab.1569319738.git.leonard.crestez@nxp.com>
-        <20190924191124.GJ133864@google.com>
-        <CGME20190924192429epcas3p196a7de011d3e78508d1e643efd27e717@epcas3p1.samsung.com>
-        <VI1PR04MB7023034123415F86CC045CCDEE840@VI1PR04MB7023.eurprd04.prod.outlook.com>
-        <080027a2-d807-5fa4-f148-4469678ce849@samsung.com>
-        <VI1PR04MB7023910B94E4920D329427C8EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
+        <40885624-8f11-4eea-d5bf-d6bb50fa44dd@samsung.com>
+        <VI1PR04MB7023573BA3D5C5D521DB689CEE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 19. 9. 26. 오전 4:40, Leonard Crestez wrote:
-> On 25.09.2019 05:13, Chanwoo Choi wrote:
->> On 19. 9. 25. 오전 4:22, Leonard Crestez wrote:
->>> On 24.09.2019 22:11, Matthias Kaehlcke wrote:
->>>> On Tue, Sep 24, 2019 at 01:11:29PM +0300, Leonard Crestez wrote:
->>>>> Register notifiers with the PM QoS framework in order to respond to
->>>>> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
->>>>>
->>>>> No notifiers are added by this patch but PM QoS constraints can be
->>>>> imposed externally (for example from other devices).
->>>>>
->>>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
->>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->>>>> ---
->>>>>    drivers/devfreq/devfreq.c | 75 +++++++++++++++++++++++++++++++++++++++
->>>>>    include/linux/devfreq.h   |  5 +++
->>>>>    2 files changed, 80 insertions(+)
->>>>>
->>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>>>> index eee403e70c84..784f3e40536a 100644
->>>>> --- a/drivers/devfreq/devfreq.c
->>>>> +++ b/drivers/devfreq/devfreq.c
->>>>> @@ -22,15 +22,18 @@
->>>>>    #include <linux/platform_device.h>
->>>>>    #include <linux/list.h>
->>>>>    #include <linux/printk.h>
->>>>>    #include <linux/hrtimer.h>
->>>>>    #include <linux/of.h>
->>>>> +#include <linux/pm_qos.h>
->>>>>    #include "governor.h"
->>>>>    
->>>>>    #define CREATE_TRACE_POINTS
->>>>>    #include <trace/events/devfreq.h>
->>>>>    
->>>>> +#define HZ_PER_KHZ	1000
->>>>> +
->>>>>    static struct class *devfreq_class;
->>>>>    
->>>>>    /*
->>>>>     * devfreq core provides delayed work based load monitoring helper
->>>>>     * functions. Governors can use these or can implement their own
->>>>> @@ -109,10 +112,11 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
->>>>>    static void get_freq_range(struct devfreq *devfreq,
->>>>>    			   unsigned long *min_freq,
->>>>>    			   unsigned long *max_freq)
->>>>>    {
->>>>>    	unsigned long *freq_table = devfreq->profile->freq_table;
->>>>> +	unsigned long qos_min_freq, qos_max_freq;
->>>>>    
->>>>>    	lockdep_assert_held(&devfreq->lock);
->>>>>    
->>>>>    	/*
->>>>>    	 * Init min/max frequency from freq table.
->>>>> @@ -125,10 +129,18 @@ static void get_freq_range(struct devfreq *devfreq,
->>>>>    	} else {
->>>>>    		*min_freq = freq_table[devfreq->profile->max_state - 1];
->>>>>    		*max_freq = freq_table[0];
->>>>>    	}
->>>>>    
->>>>> +	/* constraints from PM QoS */
->>>>> +	qos_min_freq = dev_pm_qos_read_value(devfreq->dev.parent,
->>>>> +					     DEV_PM_QOS_MIN_FREQUENCY);
->>>>> +	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
->>>>> +					     DEV_PM_QOS_MIN_FREQUENCY); >
->>>> This needs to be DEV_PM_QOS_MAX_FREQUENCY. I missed this in the earlier
->>>> reviews, but stumbled across it when testing.
->>>>
->>>> !Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+On 19. 9. 26. 오전 6:18, Leonard Crestez wrote:
+> On 25.09.2019 05:11, Chanwoo Choi wrote:
+>> On 19. 9. 24. 오후 7:11, Leonard Crestez wrote:
+>>> Register notifiers with the PM QoS framework in order to respond to
+>>> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
 >>>
->>> I broke it in v8 while processing comments. Thanks for catching it.
+>>> No notifiers are added by this patch but PM QoS constraints can be
+>>> imposed externally (for example from other devices).
+>>>
+>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>> ---
+>>>   drivers/devfreq/devfreq.c | 75 +++++++++++++++++++++++++++++++++++++++
+>>>   include/linux/devfreq.h   |  5 +++
+>>>   2 files changed, 80 insertions(+)
+>>>
+>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>>> index eee403e70c84..784f3e40536a 100644
+>>> --- a/drivers/devfreq/devfreq.c
+>>> +++ b/drivers/devfreq/devfreq.c
+>>> @@ -22,15 +22,18 @@
+>>>   #include <linux/platform_device.h>
+>>>   #include <linux/list.h>
+>>>   #include <linux/printk.h>
+>>>   #include <linux/hrtimer.h>
+>>>   #include <linux/of.h>
+>>> +#include <linux/pm_qos.h>
+>>>   #include "governor.h"
+>>>   
+>>>   #define CREATE_TRACE_POINTS
+>>>   #include <trace/events/devfreq.h>
+>>>   
+>>> +#define HZ_PER_KHZ	1000
+>>> +
+>>>   static struct class *devfreq_class;
+>>>   
+>>>   /*
+>>>    * devfreq core provides delayed work based load monitoring helper
+>>>    * functions. Governors can use these or can implement their own
+>>> @@ -109,10 +112,11 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+>>>   static void get_freq_range(struct devfreq *devfreq,
+>>>   			   unsigned long *min_freq,
+>>>   			   unsigned long *max_freq)
+>>>   {
+>>>   	unsigned long *freq_table = devfreq->profile->freq_table;
+>>> +	unsigned long qos_min_freq, qos_max_freq;
+>>>   
+>>>   	lockdep_assert_held(&devfreq->lock);
+>>>   
+>>>   	/*
+>>>   	 * Init min/max frequency from freq table.
+>>> @@ -125,10 +129,18 @@ static void get_freq_range(struct devfreq *devfreq,
+>>>   	} else {
+>>>   		*min_freq = freq_table[devfreq->profile->max_state - 1];
+>>>   		*max_freq = freq_table[0];
+>>>   	}
+>>>   
+>>> +	/* constraints from PM QoS */
 >>
->> Did you test this patchset with v8?
->> Maybe it is not working with this mistake.
+>> As I commented on patch4,
+>> 'constraints' -> 'Constraint' because first verb have to be used
+>> as the sigular verbs.
 > 
-> I ran some scripts which test that min_freq requests work as expected 
-> (using imx interconnect+devfreq). They don't touch max_freq.
+> Already discussed for another patch; I will modify to "Apply constraints 
+> from PM QoS" instead.
 
-We always have to test the code before contributing the patch.
-Please test all cases for these patches.
+I agree the new comment with 'Apply constraints ... '.
 
 > 
-> --
-> Regards,
-> Leonard
+>> I prefer to use following comments:
+>>
+>> 	/* Constraint minimum/maximum frequency from PM QoS constraints */
+>>
+>>> +	qos_min_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+>>> +					     DEV_PM_QOS_MIN_FREQUENCY);
+>>> +	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+>>> +					     DEV_PM_QOS_MIN_FREQUENCY);
+>>> +	*min_freq = max(*min_freq, HZ_PER_KHZ * qos_min_freq);
+>>> +	*max_freq = min(*max_freq, HZ_PER_KHZ * qos_max_freq);
+>>> +
+>>>   	/* constraints from sysfs */
+>>>   	*min_freq = max(*min_freq, devfreq->min_freq);
+>>>   	*max_freq = min(*max_freq, devfreq->max_freq);
+>>>   
+>>>   	/* constraints from OPP interface */
+>>> @@ -606,10 +618,49 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+>>>   	mutex_unlock(&devfreq->lock);
+>>>   
+>>>   	return ret;
+>>>   }
+>>>   
+>>> +/**
+>>> + * qos_notifier_call() - Common handler for QoS constraints.
+>>> + * @devfreq:    the devfreq instance.
+>>> + */
+>>> +static int qos_notifier_call(struct devfreq *devfreq)
+>>> +{
+>>> +	int err;
+>>> +
+>>> +	mutex_lock(&devfreq->lock);
+>>> +	err = update_devfreq(devfreq);
+>>> +	mutex_unlock(&devfreq->lock);
+>>> +	if (err)
+>>> +		dev_err(devfreq->dev.parent,
+>>> +				"failed to update frequency for PM QoS constraints (%d)\n",
+>>
+>> Is it not over 80 char?
+> 
+> Yes but coding style explicitly forbids breaking strings.
+> 
+>>> +				err);
+>>> +
+>>> +	return NOTIFY_OK;
+>>> +}
+>>> +
+>>> +/**
+>>> + * qos_min_notifier_call() - Callback for QoS min_freq changes.
+>>> + * @nb:		Should be devfreq->nb_min
+>>> + */
+>>> +static int qos_min_notifier_call(struct notifier_block *nb,
+>>> +					 unsigned long val, void *ptr)
+>>> +{
+>>> +	return qos_notifier_call(container_of(nb, struct devfreq, nb_min));
+>>> +}
+>>> +
+>>> +/**
+>>> + * qos_max_notifier_call() - Callback for QoS max_freq changes.
+>>> + * @nb:		Should be devfreq->nb_max
+>>> + */
+>>> +static int qos_max_notifier_call(struct notifier_block *nb,
+>>> +					 unsigned long val, void *ptr)
+>>> +{
+>>> +	return qos_notifier_call(container_of(nb, struct devfreq, nb_max));
+>>> +}
+>>> +
+>>>   /**
+>>>    * devfreq_dev_release() - Callback for struct device to release the device.
+>>>    * @dev:	the devfreq device
+>>>    *
+>>>    * Remove devfreq from the list and release its resources.
+>>> @@ -620,10 +671,15 @@ static void devfreq_dev_release(struct device *dev)
+>>>   
+>>>   	mutex_lock(&devfreq_list_lock);
+>>>   	list_del(&devfreq->node);
+>>>   	mutex_unlock(&devfreq_list_lock);
+>>>   
+>>> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
+>>> +			DEV_PM_QOS_MAX_FREQUENCY);
+>>> +	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
+>>> +			DEV_PM_QOS_MIN_FREQUENCY);
+>>> +
+>>
+>> Just print error with dev_err() without stopping the release step.
+>>
+>> I prefer to handle the return value if kernel API provides
+>> the error code.
+
+How about?
+
+>>
+>>>   	if (devfreq->profile->exit)
+>>>   		devfreq->profile->exit(devfreq->dev.parent);
+>>>   
+>>>   	kfree(devfreq->time_in_state);
+>>>   	kfree(devfreq->trans_table);
+>>> @@ -733,10 +789,28 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>>>   	if (err) {
+>>>   		put_device(&devfreq->dev);
+>>>   		goto err_out;
+>>>   	}
+>>>   
+>>> +	/*
+>>> +	 * Register notifiers for updates to min/max_freq after device is
+>>> +	 * initialized (and we can handle notifications) but before the
+>>> +	 * governor is started (which should do an initial enforcement of
+>>> +	 * constraints).
+>>> +	 */
+>>
+>> My previous comment is not enough why I prefer to remove it. Sorry.
+>> Actually, until now, the devfreq_add_device() don't have the detailed
+>> comments because the line code is not too long. But, at the present time,
+>> devfreq_add_device() is too long. It means that the detailed comment
+>> are necessary.
+>>
+>> So, I'll add the detailed comment for each step of devfreq_add_device()
+>> on separate patch to keep the same style. I'll send the patch to you
+>> for the review.
+> 
+> This is very likely to result in merge conflicts, maybe wait for my 
+> series to go in first?
+
+I'll send the separate patch after finished the review of these patches.
+So, if you agree, please remove this comment on this patch.
+
+You can review the detailed comments on separate patch when I send.
+
+> 
+>>> +	devfreq->nb_min.notifier_call = qos_min_notifier_call;
+>>> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
+>>> +				      DEV_PM_QOS_MIN_FREQUENCY);
+>>> +	if (err)
+>>> +		goto err_devfreq;
+>>> +
+>>> +	devfreq->nb_max.notifier_call = qos_max_notifier_call;
+>>> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
+>>> +				      DEV_PM_QOS_MAX_FREQUENCY);
+>>> +	if (err)
+>>> +		goto err_devfreq;
+>>> +
+>>>   	mutex_lock(&devfreq_list_lock);
+>>>   
+>>>   	governor = try_then_request_governor(devfreq->governor_name);
+>>>   	if (IS_ERR(governor)) {
+>>>   		dev_err(dev, "%s: Unable to find governor for the device\n",
+>>> @@ -760,10 +834,11 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>>>   
+>>>   	return devfreq;
+>>>   
+>>>   err_init:
+>>>   	mutex_unlock(&devfreq_list_lock);
+>>> +err_devfreq:
+>>>   	devfreq_remove_device(devfreq);
+>>>   	return ERR_PTR(err);
+>>>   
+>>>   err_dev:
+>>>   	/*
+>>> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+>>> index c3cbc15fdf08..dac0dffeabb4 100644
+>>> --- a/include/linux/devfreq.h
+>>> +++ b/include/linux/devfreq.h
+>>> @@ -134,10 +134,12 @@ struct devfreq_dev_profile {
+>>>    * @total_trans:	Number of devfreq transitions
+>>>    * @trans_table:	Statistics of devfreq transitions
+>>>    * @time_in_state:	Statistics of devfreq states
+>>>    * @last_stat_updated:	The last time stat updated
+>>>    * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
+>>> + * @nb_min:		Notifier block for DEV_PM_QOS_MIN_FREQUENCY
+>>> + * @nb_max:		Notifier block for DEV_PM_QOS_MAX_FREQUENCY
+>>>    *
+>>>    * This structure stores the devfreq information for a give device.
+>>>    *
+>>>    * Note that when a governor accesses entries in struct devfreq in its
+>>>    * functions except for the context of callbacks defined in struct
+>>> @@ -176,10 +178,13 @@ struct devfreq {
+>>>   	unsigned int *trans_table;
+>>>   	unsigned long *time_in_state;
+>>>   	unsigned long last_stat_updated;
+>>>   
+>>>   	struct srcu_notifier_head transition_notifier_list;
+>>> +
+>>> +	struct notifier_block nb_min;
+>>> +	struct notifier_block nb_max;
+>>>   };
+>>>   
+>>>   struct devfreq_freqs {
+>>>   	unsigned long old;
+>>>   	unsigned long new;
+>>>
+>>
+>>
 > 
 
 
