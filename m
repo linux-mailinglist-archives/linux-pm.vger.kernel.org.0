@@ -2,183 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9643BF9CC
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 21:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A626BFAC0
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 22:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbfIZTII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Sep 2019 15:08:08 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38092 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727707AbfIZTIH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Sep 2019 15:08:07 -0400
-Received: by mail-pg1-f196.google.com with SMTP id x10so2057785pgi.5
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 12:08:05 -0700 (PDT)
+        id S1728844AbfIZUvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Sep 2019 16:51:14 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:32805 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728816AbfIZUvO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Sep 2019 16:51:14 -0400
+Received: by mail-qk1-f196.google.com with SMTP id x134so238686qkb.0
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 13:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=F73+uceeMuwpCeg4MV5QzpHw3q82Pex8Nuzkj5F9opo=;
-        b=jG3mOcORe7V8TStUeyIHOoco3/ZswveSY1cOOp7+I6U41pzEdJnFQwWJ98wBGIA2JH
-         ysiJn7mqk0oWBxQ/cx9Ucobt9do5ZcSNfrPnJ8SxX2FJ3OTLpp65IYyr1yVF5s1zn5g1
-         y47d+NB/p0veHoUaA/rMoR7KUvOVtyee6EJUU0sm3hwXuBRVVFS8Z4QnY9/NNrsw5js9
-         557vui3D5YVUp+54ISTnwmbrDt4XS18I/v/hSaT1mpHn3Sp2L4ZUhV/29wqn3bwaNI69
-         A9cjhnRNxswTYp8QBLslLYsx6mHdnviP7NKfIu5cZlTlsiTa5yx+dQJ7UHqFj07JaEeO
-         81MA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UFXRrFau2iJzsurfLrZlI44R9YQ5W58lJvvcXaxbZxI=;
+        b=KfUP2SE/YczAT4JhpCDujik7WoLJGyfqT3XGtzKI3SNB9DXBFNzL5mRonozZ1n2YQP
+         LJr2eSJSaF5hXp3ti/nJwV7A5FTVzR7PfNvyyF6wpTOQaAg3HkdZCJJSZraM5Ec8+pzT
+         whmvG1e7OsMifGARMfI3T70qIMuG5fdAVlS+o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=F73+uceeMuwpCeg4MV5QzpHw3q82Pex8Nuzkj5F9opo=;
-        b=pk9tYMOn67e84AP0hRYXoXmp/MfwgPocYodTd/dgK9mpZCow/5RzlLNJYePggzhPRr
-         dKz/JNL7W8V5qDjipqUJ97Zeh3ewEXYR0DfyQgsCF5LUaiXyymNKRHgxrFfUf+jXpOS7
-         wBzVHiWTEbieyo4Dr5pTMvdyfI4EDe0ilS2pKpzT1UuiUxOnYHCQYwYPWliYFvcJUNFa
-         FQiKZatooYVIrgISkrfa7j9/6NUw9WuWQyKQU7db7wHQ6hQaAtzZFDS9SXVPNmZoeK0C
-         Cocz0fWVBW3Pj9c0subgPUvNZXaY1xmEGfeiCquToqiEXnV5Yhk3cC/cbA3xQi/TqAM0
-         j/yQ==
-X-Gm-Message-State: APjAAAXyArUokiiNIJrKpGDtOnuAHdephaLBoh8Na6HC/+GYz67E8oM1
-        /J7RL0Q9OWv+2ok3aVL5AvwIjBRwph5nhA==
-X-Google-Smtp-Source: APXvYqwcQ3nCA8Z13SSlrZG7RcPrMaxO33BCtRCxeOgnBoi95HRUlE0FcaBHLDCq4saFBcU8qbnZnQ==
-X-Received: by 2002:aa7:8acf:: with SMTP id b15mr5312222pfd.191.1569524885043;
-        Thu, 26 Sep 2019 12:08:05 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id k3sm3221570pgl.9.2019.09.26.12.08.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 26 Sep 2019 12:08:04 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        linux-amlogic@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] soc: amlogic: ee-pwrc: ensure driver state maches HW state
-In-Reply-To: <8936e777-8996-5c7b-ea9d-8e17c8d6c4b1@baylibre.com>
-References: <20190925213528.21515-1-khilman@kernel.org> <20190925213528.21515-3-khilman@kernel.org> <8936e777-8996-5c7b-ea9d-8e17c8d6c4b1@baylibre.com>
-Date:   Thu, 26 Sep 2019 12:08:01 -0700
-Message-ID: <7hwodulvu6.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UFXRrFau2iJzsurfLrZlI44R9YQ5W58lJvvcXaxbZxI=;
+        b=gr/PowmN6amloFbo25y0AkzTPxGBWx9QWvt8osfxkDCHyzrdqP0u1ooHrrQJZwGpSH
+         D9e5FbWmvy3Fc70gNY7fiYG1qQa8N78JJRAcX/jD9pq0GEVUm1z7hN6WguadQUp3g6/C
+         wAuQhYXLGuoRf9jGZ4ZrRa8jcFfXMaTmveQgeV6UFBoA8L+E8gzQzH0BTvmTUMwoAflW
+         dUnbdu8yY/Q0BXNhTr0kUKXPlTk5U/812GHb+q8HcZ7lFdb+gj3F8PykcNpZhRRT7HaX
+         ARO4tRtyuE/KtpqCjfJCfp5wvBugKR0CZ/MC6DdoOkHr0Y8DurvBLptx/caJdEAL2H19
+         E0BQ==
+X-Gm-Message-State: APjAAAVKwHRk62xRk+t5/MRgZBfk4Tpjqn4t4QD9zm1fwYy6l/vqRhPJ
+        gWi0nkRUxDqCZsdJdSlUJchKhiA07NX4/wDVPEia0w==
+X-Google-Smtp-Source: APXvYqyOH46/TFqgHUrRLcD+R2H/hvTOilF7SBW1cOWfI7cZ6m4E2KFuCxu8bdmVWQs6LfcrJZg983Bh2DYShcIK4bE=
+X-Received: by 2002:a37:498f:: with SMTP id w137mr855825qka.419.1569531073398;
+ Thu, 26 Sep 2019 13:51:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CANFp7mX=THOVk-4TgSSscgtm598txqesDZYKE2sFtEVNHjN+-g@mail.gmail.com>
+ <Pine.LNX.4.44L0.1909181442330.1507-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1909181442330.1507-100000@iolanthe.rowland.org>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Thu, 26 Sep 2019 13:51:02 -0700
+Message-ID: <CANFp7mWj8V=Hyo7b0xisYVde2dC9Ju0Rc+ituftnjcqXMuD5GA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Reset realtek bluetooth devices during user suspend
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-bluetooth@vger.kernel.org, linux-usb@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hui Peng <benquike@gmail.com>, linux-pm@vger.kernel.org,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Len Brown <len.brown@intel.com>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mans Rullgard <mans@mansr.com>, Pavel Machek <pavel@ucw.cz>,
+        YueHaibing <yuehaibing@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Neil Armstrong <narmstrong@baylibre.com> writes:
-
-> On 25/09/2019 23:35, Kevin Hilman wrote:
->> From: Kevin Hilman <khilman@baylibre.com>
->> 
->> During init, ensure that the driver on/off state as well as clock and
->> reset state matches the hardware state.  Do this by always calling the
->> drivers 'on' function, and then callling the 'off' function if the
->> HW state was initially detected as off.
-
-[...]
-
-> I don't see what you are trying to solve except simplifying the code.
-
-Simplifying the code is a worthwhile goal on its own, but that's not the
-only thing I'm tring to accomplish.
-
-Part of the goal is make the init less VPU specific and thus make it
-more understandable/maintainable.  But the more important part is to
-ensure that the driver state and HW state is consistent for all the
-domains (not just VPU.)  I've had to debug lots of power-domain issues,
-and inconsistiences between HW state and driver state tend to be the
-primary cause of problems.
-
-Also I'm generally not a fan of the "don't mess with bootloader state"
-approach as that leads to subtle dependencies on specific bootloader
-versions that are also difficult to debug.
-
-Antother equally important goal is to actually be able to power-down the
-VPU when it's not used.  Right now, we'll never power off the VPU if the
-bootloader enabled it, and that seems a bit extreme so I'm looking to
-improve that and be able to power off the VPU when not used.
-
-> And the case is more that "matching the clock state" here, the
-> pm_domain_always_on_gov was is a real case when booting from the Amlogic
-> U-boot.
-
-I'm not understanding what you mean about vendor uboot.  I've done
-testing with vendor uboot too:
-
-I tried on g12a-u200, g12a-x96-max, and sm1-khadas-vim3l all of which
-have vendor uboot, and I tried before and after $SUBJECT patch.
-
-In all cases, I see the vendor uboot splash screen, and I see the
-framebuffer console from linux after kernel boot.  I see the same
-behavior before and after my patch.
-
-I also tried on g12b-odroid-n2 (vendor uboot), and there is _no_ uboot
-spash screen, but I see the linux framebuffer console come up both
-before and after my patch.
-
-What's the specific case you're worried about with vendor uboot?
-
-Also...  note something interesting I noticed on sm1-khadas-vim3l:
-before my patch, the framebuffer console appears, but the background is
-a bluish/green color.  After my patch, the background is black (as
-expected.)  
-
-> The display power domain is complex and as been half solved by using
-> "simple-framebuffer" on gx and is missing on g12a/g12b/sm1.
+On Wed, Sep 18, 2019 at 11:51 AM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> For example, Debian installer runs without the modules, but will use
-> the EFIfb set by U-Boot, but in this precise case :
-> - the DRM driver isn't loaded
-> - we can't hook this power domain with EFIfb
+> On Wed, 18 Sep 2019, Abhishek Pandit-Subedi wrote:
+>
+> > Sorry, last reply went out with HTML. Re-sending in plain text.
+> >
+> > On Wed, Sep 18, 2019 at 7:23 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Tue, 17 Sep 2019, Abhishek Pandit-Subedi wrote:
+> > >
+> > > > On a Realtek USB bluetooth device, I wanted a simple and consistent way
+> > > > to put the device in reset during suspend (2 reasons: to save power and
+> > > > disable BT as a wakeup source). Resetting it in the suspend callback
+> > > > causes a detach and the resume callback is not called. Hence the changes
+> > > > in this series to do the reset in suspend_noirq.
+> > >
+> > > What about people who _want_ BT to be a wakeup source?
+> >
+> > When BT is enabled as a wakeup source, there is no reset.
+> >
+> > > Why does putting the device in reset save power?  That is, a suspended
+> > > device is very strictly limited in the amount of current it's allowed
+> > > to draw from the USB bus; why should it draw significantly less when it
+> > > is reset?
+> >
+> > I don't know that it's significantly less (only that it's OFF). My
+> > greater motivation is to make sure the bluetooth chip isn't
+> > accumulating events while the host is turned off. Sorry, I should have
+> > made that more clear in the cover letter.
+> >
+> > When the host is off, it continues to accumulate events for the host
+> > to process (packets from connected devices, LE advertisements, etc).
+> > At some point, the firmware buffers fill up and no more events can be
+> > stored. When the host is resumed later on, the firmware is in a bad
+> > state and doesn't respond. I had originally just reset in ->resume but
+> > then connected wireless devices wouldn't disconnect from the BT either
+> > and I had trouble getting them to reconnect.
+> >
+> > >
+> > > > I looked into using PERSIST and reset on resume but those seem mainly
+> > > > for misbehaving devices that reset themselves.
+> > >
+> > > They are, but that doesn't mean you can't use them for other things
+> > > too.
+> > >
+> > > > This patch series has been tested with Realtek BT hardware as well as
+> > > > Intel BT (test procedure = disable as wake source, user suspend and
+> > > > observe a detach + reattach on resume).
+> > >
+> > > This series really seems like overkill for a single kind of device.
+> > >
+> > > Is there any way to turn off the device's BT radio during suspend (if
+> > > wakeup is disabled) and then turn it back on during resume?  Wouldn't
+> > > that accomplish what you want just as well?
+> >
+> > Probably (but I couldn't find a way to do that).
+>
+> There's no way to turn off the device's BT radio?  Then what happens
+> when the user turns off Bluetooth from the wireless control panel?
 
-OK, so I agree that this case where we want the display to continue to
-work but linux DRM drivers never loaded is a special case.
+It looks like bluez invokes hci_dev_do_close. This gracefully clears
+any packets in flight, clears any pending actions and disables the
+device as a wakeup source (which for Realtek allows it to enter global
+suspend). This is approximately what I was trying to achieve.
 
-Is there a way to check if efifb is enabled?  Is the the linux driver
-(drivers/video/fbdev/efifb.c) or something else only done by uboot?
+> >  I want to prevent
+> > bluetooth from waking up the host and to reliably be in a good state
+> > when the host resumes. The reset logic I implemented causes the hci
+> > device to disappear and reappear, which userspace seems to handle
+> > gracefully.
+>
+> Have you tried out the persist/reset-on-resume approach?
+>
+> Alan Stern
+>
 
-If we can detect efifb from the kernel (not just whether the domain is
-already on), then a simple addition to my patch like this:
+I think I'll abandon this patch series. The general sentiment seems to
+be "don't do this" and it looks like closing the hci device is better
+in my case.
 
- 	if (is_off)
- 		meson_ee_pwrc_off(&dom->base);
-+	else if (efifb_is_enabled)
-+		dom->base.flags |= GENPD_FLAG_ALWAYS_ON;
+Thanks for the feedback and pointing me this way.
 
-would force the domain always-on in the case of efifb.  
-
-In fact, now that I think of it, simply adding:
-
- 	if (is_off)
- 		meson_ee_pwrc_off(&dom->base);
-+	else
-+		dom->base.flags |= GENPD_FLAG_ALWAYS_ON;
-
-to my current patch would get back to the same behavior of the existing
-driver.  But I still don't like the idea that we can *never* power off
-the VPU if the bootloader enables it. :( I'd rather see patches
-conditionally adding that flag with detailed explanations as to why it's
-needed.
-
-> When *not* in EFIfb, we use simple-framebuffer on GX, using this
-> power domain, but it hasn't been copied to G12A.
-
-I don't quite understand what problem simple-framebuffer is
-solving. Could you explain that in more detail.
-
-Assuming it is solving something, why can't it be used on g12[ab]/sm1 ?
-
-> Personally I'll leave this code until we really tested and checked all
-> uses cases, 
-
-Right, I don't want to break anything on purpose, but I think the
-current state of this driver is fragile and difficult to
-understand/maintain, so I would be grateful for any help in
-understanding the corner cases better, as well as testing them (or
-explaining to me how to reproduce them.)
-
-Generally, with long-term maintenance in mind, if I'm forced to choose
-between understandable/maintainable code and "covers 100% of corner
-cases" I will most often chose the former.
-
-> not only on the sei510/sei610 using mainline u-boot.
-
-See above about all the other boards with vendor uboots also tested.
-
-Kevin
+Abhishek
