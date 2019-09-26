@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A86BE9DB
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED26BE9DD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Sep 2019 03:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbfIZBCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Sep 2019 21:02:07 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:14915 "EHLO
+        id S1726309AbfIZBD1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Sep 2019 21:03:27 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:15677 "EHLO
         mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbfIZBCG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:02:06 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190926010203epoutp0376038398d5d1658a063188e770fcd3c9~H102yYF7Y3143831438epoutp031
-        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:02:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190926010203epoutp0376038398d5d1658a063188e770fcd3c9~H102yYF7Y3143831438epoutp031
+        with ESMTP id S1725768AbfIZBD1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Sep 2019 21:03:27 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190926010324epoutp03a5646df08187a725df615e7bbd7bda57~H12Bz1cOf3233432334epoutp03T
+        for <linux-pm@vger.kernel.org>; Thu, 26 Sep 2019 01:03:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190926010324epoutp03a5646df08187a725df615e7bbd7bda57~H12Bz1cOf3233432334epoutp03T
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1569459723;
-        bh=GxdOq21yZAtQuxibZhaUbRIp7a7SZeXrBBOpYiSeG9k=;
+        s=mail20170921; t=1569459804;
+        bh=Yqpkx4BCEja08YHcDCpzNi4z57TCOeCeLIIybRZTEyE=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Np6iPbwcmu6Yu7+ANXKDuZSQEKCYT3FKQX6UOM+AU32QzZq2f57OF5W53IqXK6vZQ
-         3lJuxZ1ora8tGVy2fwjasyHPdakcG18Yt4x+5LnzHl+JFkwYmmQWjBqNaWcdpKb75+
-         4D6TOX185z7VctqSxZi7F88hLKj/c5cmdT6Yg1wk=
+        b=MPMNErV2qY1BF4t2pzdLhCBRpqxCDiloREu6f7HWZYItHSbAr2K0063jc2dhv+S8n
+         xIcY3o3oD7cTXNXIUerBGIOxq43q9LAq0J/vXT0/LLhzFIbAWffSOc5f53Ezw1TRjq
+         xhizmkkwJ79Q/UjlYV7JLU0Q3oEjiD66ebJl4HP4=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20190926010203epcas1p4a947ad92794a87974afef2da70215bd5~H102LiIvJ0839108391epcas1p4l;
-        Thu, 26 Sep 2019 01:02:03 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 46dxTh613yzMqYkV; Thu, 26 Sep
-        2019 01:02:00 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DA.0B.04068.80E0C8D5; Thu, 26 Sep 2019 10:02:00 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010159epcas1p13094a3dbd4ced250c61d06444e5a24a8~H10zHzhs_1837518375epcas1p1w;
-        Thu, 26 Sep 2019 01:01:59 +0000 (GMT)
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190926010323epcas1p293ad50585fbf8750f02b64768785c4c3~H12BD7VLe0177201772epcas1p2V;
+        Thu, 26 Sep 2019 01:03:23 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 46dxWF2kbczMqYkZ; Thu, 26 Sep
+        2019 01:03:21 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        55.E3.04085.95E0C8D5; Thu, 26 Sep 2019 10:03:21 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20190926010320epcas1p4cfb1f724d67da870e657f0a4483c8e3b~H11_etUap1100411004epcas1p4M;
+        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190926010159epsmtrp21e6bed08826017c7da87dfe64f3885e2~H10zGsVZy3253832538epsmtrp22;
-        Thu, 26 Sep 2019 01:01:59 +0000 (GMT)
-X-AuditID: b6c32a39-3b9219c000000fe4-61-5d8c0e083a7c
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190926010320epsmtrp15b0d05597ba8c8698e5c5dbb04c422ab~H11_dqJra1220412204epsmtrp1d;
+        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
+X-AuditID: b6c32a37-e31ff70000000ff5-9e-5d8c0e59e369
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        34.0D.04081.70E0C8D5; Thu, 26 Sep 2019 10:01:59 +0900 (KST)
+        78.1D.04081.85E0C8D5; Thu, 26 Sep 2019 10:03:20 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190926010159epsmtip276d211487a978ff6ce91b014951135a4~H10y0zR5-2177821778epsmtip2b;
-        Thu, 26 Sep 2019 01:01:59 +0000 (GMT)
-Subject: Re: [PATCH v8 4/6] PM / devfreq: Introduce get_freq_range helper
+        20190926010320epsmtip2288b7d5cec1706a5df38966fe4465b17~H11_N6lDo2189421894epsmtip2a;
+        Thu, 26 Sep 2019 01:03:20 +0000 (GMT)
+Subject: Re: [PATCH v8 5/6] PM / devfreq: Add PM QoS support
 To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         Saravana Kannan <saravanak@google.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Alexandre Bailon <abailon@baylibre.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Lukasz Luba <l.luba@partner.samsung.com>,
         dl-linux-imx <linux-imx@nxp.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
@@ -67,57 +67,59 @@ Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         <linux-arm-kernel@lists.infradead.org>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <e8ec6c2e-8536-b926-c1fc-468f9e9adca7@samsung.com>
-Date:   Thu, 26 Sep 2019 10:06:41 +0900
+Message-ID: <48e271f5-58d3-845a-538f-6fb75eb3deb6@samsung.com>
+Date:   Thu, 26 Sep 2019 10:08:02 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB70235A2C13E47029B3093D33EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB7023910B94E4920D329427C8EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUxbZRTG8/be3hZi4bUMd2w37a7RBAxbO+h8mWMhbppLtimZiYHFBm/g
-        piD9Sm873Uxmh0Ggso0F3bKiwiaSwYiM2k0kNJWCM9NtOJGPADNoSfYR08Y1GNQo3va6yH+/
-        c85zzsnzfqgp7W1Gp65zeAS3g7exTCZ9eSzPWKDOarUYO6aNJHrlkoosf/ctIj0/fI3I6XCQ
-        IRMTF1XkesOvKjLn20DO3/pNSYKxaSXx/9lLkeSxcUSSF2OIzB89z5ALN0YZ4o/+zZDBZa4U
-        c4nZRhXX4btJc11BLxfsa2G4hekRhvu8+21uMD6k4EbjIwrueKgPccngY+WZB+p31Ap8jeA2
-        CI5qZ02dw1rC7nm5aleVeZvRVGAqJs+wBgdvF0rY3XvLC16os0lGWMNB3uaVUuW8KLJbdu5w
-        O70ewVDrFD0lrOCqsbmKXZtF3i56HdbN1U77dpPRuNUsCV+rr/05cIp2neDeXI20K3xoifhR
-        hhpwESTvnEMp1uIhBCNNG/0oU+L7En9xTSkHvyNoHr+GHnRMrZ5VyYUwgsuxAamgloIEgqbS
-        lCYHl0Fo/hiT0qzDkwgWPm6nUgGFG2hYaZMnMTgfIndmmRRn400wtRJL5zV4J8ysLlEppvGT
-        cGG+P825uALuL44pZc3DcPXMEp3iDGyB7n/m0nMovB7mljoVMj8O71zqSC8GPK2C8EA3LVvY
-        DV2JD1Qy58C9b0L/sQ6S8TAj81vQe3WckZubEYQi3yvlQiFEPm1XpCxTOA8GhrfI6U3w5V8f
-        IXlxFsSXW5UpCWANNL+rlSVPwOTiLYXMj8InTS1MG2IDa+wE1lgIrLEQ+H9ZF6L70COCS7Rb
-        BdHkMq+97SBKP/L84iF05cbeKMJqxD6kgcr3LFolf1A8ZI8iUFPsOk1gg9+i1dTwhw4LbmeV
-        22sTxCgyS6d9ktLlVjulL+PwVJnMWwsLC0mRaZvZZGLXazirz6LFVt4j1AuCS3A/6FOoM3Q+
-        NDahM8S6furcjyl9S+K5nudDRxuHge15+nRFxS8zlW3kQ7zxSGPusP7cK4M38/Tel/R73sjK
-        ODHXH+zepRZndXG65NXSA5EjZyqfvXv3fTb7cO+LJ91f7X+9v3i0rPHe8Mq+zuvBzqLsxcnW
-        cKJsKjnzR1GMyvnx+O3Ptgf0CxMNT7G0WMub8im3yP8LxWtfrPoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRmVeSWpSXmKPExsWy7bCSvC47X0+swc1X+haHjm1lt/h6+hSj
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBJsWRmVeSWpSXmKPExsWy7bCmnm4kX0+swc5XAhaHjm1lt/h6+hSj
         xbJLRxktpu/dxGZx/vwGdouzTW/YLW41yFisuPuR1WLT42usFl2/VjJbfO49wmjxecNjRovb
         jSvYLFafO8hm0XXoL5vFxq8eDgIe72+0snvMbrjI4rFgU6nHplWdbB53ru1h89i8pN5j47sd
-        TB4H3+1h8ujbsorR4/MmuQCuKC6blNSczLLUIn27BK6Mh7OmsRT0e1T83z+ZqYHxiUUXIyeH
-        hICJxNX/C9lBbCGB3YwS52bKQ8QlJaZdPMrcxcgBZAtLHD5c3MXIBVTyllHi7/x3LCA1wgKe
-        Eltu97KBJEQErjJKfFh3hR3EYRZoYpFY/KObDWLqKyaJCS+ZQGw2AS2J/S9ugMX5BRQlrv54
-        zAhi8wrYSVz//4QZxGYRUJVYfXsNmC0qECFxeMcsqBpBiZMzn4Bt5hSIlVjy7xbYHGYBdYk/
-        8y4xQ9jiEreezGeCsOUlmrfOZp7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5q
-        uV5xYm5xaV66XnJ+7iZGcExrae5gvLwk/hCjAAejEg/vgbDuWCHWxLLiytxDjBIczEoivLNk
-        umKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ8z7NOxYpJJCeWJKanZpakFoEk2Xi4JRqYDSdpOwy
-        x0hfWNPhzOVeM6aSpeeeXBe5tG/D9/Ybi6L2m/56udkjNH39hxkMAXc4p6zbHLNGiWnmbIm/
-        1xpcLF84m89ZV6c25fqcpX0Je2S/Fhx6Ict8pvmyWZ+p+Ak2/+k3szeJr478rVZ77Vjodvel
-        a5VWzNkRJJ73p6zBv0h2+xrJl4ahIVlKLMUZiYZazEXFiQBwqsgE5QIAAA==
-X-CMS-MailID: 20190926010159epcas1p13094a3dbd4ced250c61d06444e5a24a8
+        TB4H3+1h8ujbsorR4/MmuQCuqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWF
+        vMTcVFslF58AXbfMHKBHlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFlgV6xYm5
+        xaV56XrJ+blWhgYGRqZAhQnZGf/v32At+ClV8W7Xb5YGxquiXYycHBICJhJr/qxi7mLk4hAS
+        2MEocWvNMnYI5xOjxMGDn1ggnG+MEltubWCHaTm25ARUYi+jxLpdX5ggnPeMEhf6VrOAVAkL
+        2Ej8v/qRDcQWEQiV+PL0EjOIzSzQxCrx6UgZiM0moCWx/8UNsBp+AUWJqz8eM4LYvAJ2Enu3
+        3GECsVkEVCVm3/wI1isqECHx6cFhVogaQYmTM5+A7eIUiJW48nQ6O8R8cYlbT+YzQdjyEs1b
+        Z4M9JyFwjV1ix57njBAvuEhM2r+aCcIWlnh1fAvUa1ISL/vboOxqiZUnj7BBNHcA/b//AitE
+        wlhi/9LJQM0cQBs0Jdbv0ocIK0rs/D2XEWIxn8S7rz2sICUSArwSHW1CECXKEpcf3IVaKymx
+        uL2TbQKj0iwk78xC8sIsJC/MQli2gJFlFaNYakFxbnpqsWGBMXJ0b2IEp3It8x2MG875HGIU
+        4GBU4uGViOyOFWJNLCuuzD3EKMHBrCTCO0umK1aINyWxsiq1KD++qDQntfgQoykwtCcyS4km
+        5wPzTF5JvKGpkbGxsYWJoZmpoaGSOK9HekOskEB6YklqdmpqQWoRTB8TB6dUA6P4m5u9YhM2
+        ynE9yWzl4LmucWjvHV0vpoqdWlNsJ75sqZaZ+STuQ8vd6INsPh5z9y/e/uPSjelOydZGM2Uv
+        /LY4cqjBZHvxeY8t154ee/F1nuLFZrncQ1uP7v/ZZHpKc07+tVBFm5s/jzMtZ75ulJSyO2Cm
+        cHln6OSWM+pqPUsL/6fb5Osv/vtbiaU4I9FQi7moOBEAAmeKgPsDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSvG4EX0+sweIuXYtDx7ayW3w9fYrR
+        Ytmlo4wW0/duYrM4f34Du8XZpjfsFrcaZCxW3P3IarHp8TVWi65fK5ktPvceYbT4vOExo8Xt
+        xhVsFqvPHWSz6Dr0l81i41cPBwGP9zda2T1mN1xk8ViwqdRj06pONo871/aweWxeUu+x8d0O
+        Jo+D7/YwefRtWcXo8XmTXABXFJdNSmpOZllqkb5dAlfG//s3WAt+SlW82/WbpYHxqmgXIyeH
+        hICJxLElJ1i6GLk4hAR2M0rMmvWIGSIhKTHt4lEgmwPIFpY4fLgYouYto8T9ztUsIDXCAjYS
+        /69+ZAOxRQRCJf50LmcFKWIWaGKV6Pp+nRGi4wmzxJsVd9lBqtgEtCT2v7gB1sEvoChx9cdj
+        RhCbV8BOYu+WO0wgNouAqsTsmx/BrhAViJA4vGMWVI2gxMmZT8A2cwrESlx5Oh1sJrOAusSf
+        eZeYIWxxiVtP5jNB2PISzVtnM09gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz232LDAMC+1
+        XK84Mbe4NC9dLzk/dxMjOKq1NHcwXl4Sf4hRgINRiYf3QFh3rBBrYllxZe4hRgkOZiUR3lky
+        XbFCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZ/mHYsUEkhPLEnNTk0tSC2CyTJxcEo1MPJGFJve
+        EBSqOh2ydN+F//UnBNelFG8x/l1662iuXLUmR9UZLRvLUxbmtS/ruttLqr9/FN68bu7Muy6a
+        1y1dDT7d2LCZe33pn4piV6t/hZOOTrFOTGlN8vx2xPC8Wc9aXunTf7cUvRO7HGbVu6L5q03O
+        zz3HDqkcbBIverVkeWHfJMb9zOfO/ldiKc5INNRiLipOBAAgoGxU5gIAAA==
+X-CMS-MailID: 20190926010320epcas1p4cfb1f724d67da870e657f0a4483c8e3b
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190924101141epcas4p357c10af190e97f1c77098cd66cb313ab
+X-CMS-RootMailID: 20190924192429epcas3p196a7de011d3e78508d1e643efd27e717
 References: <cover.1569319738.git.leonard.crestez@nxp.com>
-        <CGME20190924101141epcas4p357c10af190e97f1c77098cd66cb313ab@epcas4p3.samsung.com>
-        <674fe91065034083fd7c8c1810305cd01551bb80.1569319738.git.leonard.crestez@nxp.com>
-        <fe6845b9-4e20-3dad-0178-97b216e858e7@samsung.com>
-        <VI1PR04MB70235A2C13E47029B3093D33EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
+        <58fdd2c226a4e76a3d9427baab7dd5c23af842ab.1569319738.git.leonard.crestez@nxp.com>
+        <20190924191124.GJ133864@google.com>
+        <CGME20190924192429epcas3p196a7de011d3e78508d1e643efd27e717@epcas3p1.samsung.com>
+        <VI1PR04MB7023034123415F86CC045CCDEE840@VI1PR04MB7023.eurprd04.prod.outlook.com>
+        <080027a2-d807-5fa4-f148-4469678ce849@samsung.com>
+        <VI1PR04MB7023910B94E4920D329427C8EE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -125,286 +127,91 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On 19. 9. 26. 오전 5:55, Leonard Crestez wrote:
-> On 25.09.2019 04:32, Chanwoo Choi wrote:
->> On 19. 9. 24. 오후 7:11, Leonard Crestez wrote:
->>> Moving handling of min/max freq to a single function and call it from
->>> update_devfreq and for printing min/max freq values in sysfs.
+On 19. 9. 26. 오전 4:40, Leonard Crestez wrote:
+> On 25.09.2019 05:13, Chanwoo Choi wrote:
+>> On 19. 9. 25. 오전 4:22, Leonard Crestez wrote:
+>>> On 24.09.2019 22:11, Matthias Kaehlcke wrote:
+>>>> On Tue, Sep 24, 2019 at 01:11:29PM +0300, Leonard Crestez wrote:
+>>>>> Register notifiers with the PM QoS framework in order to respond to
+>>>>> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
+>>>>>
+>>>>> No notifiers are added by this patch but PM QoS constraints can be
+>>>>> imposed externally (for example from other devices).
+>>>>>
+>>>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+>>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>>>> ---
+>>>>>    drivers/devfreq/devfreq.c | 75 +++++++++++++++++++++++++++++++++++++++
+>>>>>    include/linux/devfreq.h   |  5 +++
+>>>>>    2 files changed, 80 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>>>>> index eee403e70c84..784f3e40536a 100644
+>>>>> --- a/drivers/devfreq/devfreq.c
+>>>>> +++ b/drivers/devfreq/devfreq.c
+>>>>> @@ -22,15 +22,18 @@
+>>>>>    #include <linux/platform_device.h>
+>>>>>    #include <linux/list.h>
+>>>>>    #include <linux/printk.h>
+>>>>>    #include <linux/hrtimer.h>
+>>>>>    #include <linux/of.h>
+>>>>> +#include <linux/pm_qos.h>
+>>>>>    #include "governor.h"
+>>>>>    
+>>>>>    #define CREATE_TRACE_POINTS
+>>>>>    #include <trace/events/devfreq.h>
+>>>>>    
+>>>>> +#define HZ_PER_KHZ	1000
+>>>>> +
+>>>>>    static struct class *devfreq_class;
+>>>>>    
+>>>>>    /*
+>>>>>     * devfreq core provides delayed work based load monitoring helper
+>>>>>     * functions. Governors can use these or can implement their own
+>>>>> @@ -109,10 +112,11 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+>>>>>    static void get_freq_range(struct devfreq *devfreq,
+>>>>>    			   unsigned long *min_freq,
+>>>>>    			   unsigned long *max_freq)
+>>>>>    {
+>>>>>    	unsigned long *freq_table = devfreq->profile->freq_table;
+>>>>> +	unsigned long qos_min_freq, qos_max_freq;
+>>>>>    
+>>>>>    	lockdep_assert_held(&devfreq->lock);
+>>>>>    
+>>>>>    	/*
+>>>>>    	 * Init min/max frequency from freq table.
+>>>>> @@ -125,10 +129,18 @@ static void get_freq_range(struct devfreq *devfreq,
+>>>>>    	} else {
+>>>>>    		*min_freq = freq_table[devfreq->profile->max_state - 1];
+>>>>>    		*max_freq = freq_table[0];
+>>>>>    	}
+>>>>>    
+>>>>> +	/* constraints from PM QoS */
+>>>>> +	qos_min_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+>>>>> +					     DEV_PM_QOS_MIN_FREQUENCY);
+>>>>> +	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+>>>>> +					     DEV_PM_QOS_MIN_FREQUENCY); >
+>>>> This needs to be DEV_PM_QOS_MAX_FREQUENCY. I missed this in the earlier
+>>>> reviews, but stumbled across it when testing.
+>>>>
+>>>> !Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 >>>
->>> This changes the behavior of out-of-range min_freq/max_freq: clamping
->>> is now done at evaluation time. This means that if an out-of-range
->>> constraint is imposed by sysfs and it later becomes valid then it will
->>> be enforced.
->>>
->>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
->>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->>> ---
->>>   drivers/devfreq/devfreq.c | 112 ++++++++++++++++++++++----------------
->>>   1 file changed, 64 insertions(+), 48 deletions(-)
->>>
->>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>> index 4a878baa809e..eee403e70c84 100644
->>> --- a/drivers/devfreq/devfreq.c
->>> +++ b/drivers/devfreq/devfreq.c
->>> @@ -96,10 +96,54 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
->>>   		dev_pm_opp_put(opp);
->>>   
->>>   	return max_freq;
->>>   }
->>>   
->>> +/**
->>> + * get_freq_range() - Get the current freq range
->>> + * @devfreq:	the devfreq instance
->>> + * @min_freq:	the min frequency
->>> + * @max_freq:	the max frequency
->>> + *
->>> + * This takes into consideration all constraints.
->>> + */
->>> +static void get_freq_range(struct devfreq *devfreq,
->>> +			   unsigned long *min_freq,
->>> +			   unsigned long *max_freq)
->>> +{
->>> +	unsigned long *freq_table = devfreq->profile->freq_table;
->>> +
->>> +	lockdep_assert_held(&devfreq->lock);
->>> +
->>> +	/*
->>> +	 * Init min/max frequency from freq table.
+>>> I broke it in v8 while processing comments. Thanks for catching it.
 >>
->> Init -> Initialize
->> min/max -> minimum/maximum
->>
->>> +	 * Drivers can initialize this in either ascending or descending order
->>
->> Drivers -> devfreq drivers
->>
->>> +	 * and devfreq core supports both.
->>> +	 */
->>
->>
->> In result, I prefer to change the comments as following:
->> 	/*
->> 	 * Initialize the minimum/maximum frequency from freq_table.
->>   	 * The devfreq drivers can initialize freq_table in either
->> 	 * ascending or descending order and devfreq core supports both.
->> 	 */
+>> Did you test this patchset with v8?
+>> Maybe it is not working with this mistake.
 > 
-> OK
-> 
->>> +	if (freq_table[0] < freq_table[devfreq->profile->max_state - 1]) {
->>> +		*min_freq = freq_table[0];
->>> +		*max_freq = freq_table[devfreq->profile->max_state - 1];
->>> +	} else {
->>> +		*min_freq = freq_table[devfreq->profile->max_state - 1];
->>> +		*max_freq = freq_table[0];
->>> +	}
->>> +
->>> +	/* constraints from sysfs */
->>
->> 'constraints' -> Constraint because first verb have to be used
->> as the sigular verbs. Also, I think that have to enhance the comments
->> I prefer to use following comments:
->>
->> 	 /* Constraint minimum/maximum frequency from user input via sysfs */
->>
->>
->>
->>> +	*min_freq = max(*min_freq, devfreq->min_freq);
->>> +	*max_freq = min(*max_freq, devfreq->max_freq);
->>> +
->>> +	/* constraints from OPP interface */
->>
->> ditto. I prefer to use following comments:
->>
->> 	/* Constraint minimum/maximum frequency from OPP interface */
->>
->>
->>> +	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
->>> +	/* scaling_max_freq can be zero on error */
->>
->> Please remove it.
->>
->>> +	if (devfreq->scaling_max_freq)
->>
->> As I knew, devfreq->scaling_max_freq is never zero.
->> So, it is always true. This if statement is needed.
-> 
-> It can happen if find_available_max_freq encounters an error when called 
-> from devfreq_notifier_call.
+> I ran some scripts which test that min_freq requests work as expected 
+> (using imx interconnect+devfreq). They don't touch max_freq.
 
-If you are wondering this case, I think that have to fix
-the possible issue on there instead of this point.
+We always have to test the code before contributing the patch.
+Please test all cases for these patches.
 
 > 
-> Maybe that should be separately fixed to set scaling_max_freq to a 
-> neutral value such as "ULONG_MAX" instead?
-
-OK.
-
+> --
+> Regards,
+> Leonard
 > 
-> BTW: the devfreq_notifier_call function returns -EINVAL on error but it 
-> should return one of the NOTIFY_OK/DONE/STOP values instead. The OPP 
-> framework ignores notifier results but (-EINVAL & NOTIFY_STOP) evaluates 
-> as true so other notifiers will be skipped unintentionally.
-
-I agree. It is needed to fix the return value type.
-
-> 
->>> +		*max_freq = min(*max_freq, devfreq->scaling_max_freq);
->>> +
->>> +	/* max_freq takes precedence over min_freq */
->>
->> As I said, almost people know that min_freq have be under than max_freq.
->> Please remove it. And until finishing the discussion on mailing list,
->> please don't send the next version. If you just replied from my comment
->> and then wait my next comment, we can save the time without replying
->> the repetitive and same comment for same point.
-> 
-> This series makes it possible to set a min_freq higher than max_freq 
-> (for example via PM QoS from various devices).
-> 
-> It is not obvious that min_freq takes precedence over max_freq but the 
-> code is self-evident so I will remove the comment.
-> 
->>> +	if (*min_freq > *max_freq)
->>> +		*min_freq = *max_freq;
->>> +}
->>> +
->>>   /**
->>>    * devfreq_get_freq_level() - Lookup freq_table for the frequency
->>>    * @devfreq:	the devfreq instance
->>>    * @freq:	the target frequency
->>>    */
->>> @@ -349,20 +393,11 @@ int update_devfreq(struct devfreq *devfreq)
->>>   
->>>   	/* Reevaluate the proper frequency */
->>>   	err = devfreq->governor->get_target_freq(devfreq, &freq);
->>>   	if (err)
->>>   		return err;
->>> -
->>> -	/*
->>> -	 * Adjust the frequency with user freq, QoS and available freq.
->>> -	 *
->>> -	 * List from the highest priority
->>> -	 * max_freq
->>> -	 * min_freq
->>> -	 */
->>> -	max_freq = min(devfreq->scaling_max_freq, devfreq->max_freq);
->>> -	min_freq = max(devfreq->scaling_min_freq, devfreq->min_freq);
->>> +	get_freq_range(devfreq, &min_freq, &max_freq);
->>>   
->>>   	if (freq < min_freq) {
->>>   		freq = min_freq;
->>>   		flags &= ~DEVFREQ_FLAG_LEAST_UPPER_BOUND; /* Use GLB */
->>>   	}
->>> @@ -1298,40 +1333,28 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
->>>   	ret = sscanf(buf, "%lu", &value);
->>>   	if (ret != 1)
->>>   		return -EINVAL;
->>>   
->>>   	mutex_lock(&df->lock);
->>> -
->>> -	if (value) {
->>> -		if (value > df->max_freq) {
->>> -			ret = -EINVAL;
->>> -			goto unlock;
->>> -		}
->>> -	} else {
->>> -		unsigned long *freq_table = df->profile->freq_table;
->>> -
->>> -		/* Get minimum frequency according to sorting order */
->>> -		if (freq_table[0] < freq_table[df->profile->max_state - 1])
->>> -			value = freq_table[0];
->>> -		else
->>> -			value = freq_table[df->profile->max_state - 1];
->>> -	}
->>> -
->>>   	df->min_freq = value;
->>>   	update_devfreq(df);
->>> -	ret = count;
->>> -unlock:
->>>   	mutex_unlock(&df->lock);
->>> -	return ret;
->>> +
->>> +	return count;
->>>   }
->>>   
->>>   static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
->>>   			     char *buf)
->>>   {
->>>   	struct devfreq *df = to_devfreq(dev);
->>> +	unsigned long min_freq, max_freq;
->>> +
->>> +	mutex_lock(&df->lock);
->>> +	get_freq_range(df, &min_freq, &max_freq);
->>> +	mutex_unlock(&df->lock);
->>>   
->>> -	return sprintf(buf, "%lu\n", max(df->scaling_min_freq, df->min_freq));
->>> +	return sprintf(buf, "%lu\n", min_freq);
->>>   }
->>>   
->>>   static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
->>>   			      const char *buf, size_t count)
->>>   {
->>> @@ -1343,40 +1366,33 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
->>>   	if (ret != 1)
->>>   		return -EINVAL;
->>>   
->>>   	mutex_lock(&df->lock);
->>>   
->>> -	if (value) {
->>> -		if (value < df->min_freq) {
->>> -			ret = -EINVAL;
->>> -			goto unlock;
->>> -		}
->>> -	} else {
->>> -		unsigned long *freq_table = df->profile->freq_table;
->>> -
->>> -		/* Get maximum frequency according to sorting order */
->>> -		if (freq_table[0] < freq_table[df->profile->max_state - 1])
->>> -			value = freq_table[df->profile->max_state - 1];
->>> -		else
->>> -			value = freq_table[0];
->>> -	}
->>> +	/* Interpret zero as "don't care" */
->>
->> Please remove it. Also, the detailed comment for user have to add
->> the documentation file.
-> 
-> OK
-> 
->>
->>> +	if (!value)
->>> +		value = ULONG_MAX;
->>>   
->>>   	df->max_freq = value;
->>>   	update_devfreq(df);
->>> -	ret = count;
->>> -unlock:
->>>   	mutex_unlock(&df->lock);
->>> -	return ret;
->>> +
->>> +	return count;
->>>   }
->>>   static DEVICE_ATTR_RW(min_freq);
->>>   
->>>   static ssize_t max_freq_show(struct device *dev, struct device_attribute *attr,
->>>   			     char *buf)
->>>   {
->>>   	struct devfreq *df = to_devfreq(dev);
->>> +	unsigned long min_freq, max_freq;
->>> +
->>> +	mutex_lock(&df->lock);
->>> +	get_freq_range(df, &min_freq, &max_freq);
->>> +	mutex_unlock(&df->lock);
->>>   
->>> -	return sprintf(buf, "%lu\n", min(df->scaling_max_freq, df->max_freq));
->>> +	return sprintf(buf, "%lu\n", max_freq);
->>>   }
->>>   static DEVICE_ATTR_RW(max_freq);
->>>   
->>>   static ssize_t available_frequencies_show(struct device *d,
->>>   					  struct device_attribute *attr,
 
 
 -- 
