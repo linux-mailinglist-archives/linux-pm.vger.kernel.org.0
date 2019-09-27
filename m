@@ -2,217 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEEBC0160
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 10:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF1EC0188
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 10:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbfI0Imt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Sep 2019 04:42:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47874 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725882AbfI0Imt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Sep 2019 04:42:49 -0400
-Received: from oasis.local.home (unknown [65.39.69.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E4EDD2075D;
-        Fri, 27 Sep 2019 08:42:44 +0000 (UTC)
-Date:   Fri, 27 Sep 2019 04:42:39 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-pm@vger.kernel.org, Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
-Message-ID: <20190927044239.589e7c4c@oasis.local.home>
-In-Reply-To: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
-References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1725956AbfI0IyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Sep 2019 04:54:16 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39745 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfI0IyP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Sep 2019 04:54:15 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r3so1774019wrj.6;
+        Fri, 27 Sep 2019 01:54:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YW69Gs/nZumApetQocA64F9f6OkcL5o8Z3LcVdigjvc=;
+        b=rCJ9PS1DXGNWZMIOYIPNeGsw2OIqoxdHgSWa3nN1Y4lHXBpaPz7aljO3XtKFfklxXs
+         UZTjfzAuW/jOqBoHZy0PlPHbemU3Zmaj2nprs0Wi80JMsxC/9PREHW50naRMJq3lWj99
+         mdsjwKaFXgFhPD/9OjjzMTQHmqKsvUPWahRmbgHSui3jS0YW0pYqg+E+hLLTuMpetxNZ
+         MIy7liK2yISmzbNtVkaXZzPIqP8b4qPA3p92h11FZmY/iHzR7wlX4H7ZeQypsrGN0MjV
+         DmPudK47p+cD448LfyxzALCLkrGvbl9sZfZaIpQDRnSmqdL45sHVzZnAg/cKB1gEcQdz
+         o3IA==
+X-Gm-Message-State: APjAAAU+d2F1lTU3wYIpA7FHsjpmo7tjX8JOeDWlSVPWuK0cgvh0Abjc
+        /0GhZ4JuH8TdKDNCulOH3sQ=
+X-Google-Smtp-Source: APXvYqw32zeeQTuvXuVsep+HUirogNC0QVZEqwyQa06udnJ+HOwPMSz7jgPC+e9bId+phk4DAB4dwg==
+X-Received: by 2002:adf:f2cd:: with SMTP id d13mr2169788wrp.143.1569574452936;
+        Fri, 27 Sep 2019 01:54:12 -0700 (PDT)
+Received: from pi3 ([194.230.155.145])
+        by smtp.googlemail.com with ESMTPSA id l6sm4346315wmg.2.2019.09.27.01.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2019 01:54:12 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 10:53:59 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lukasz Luba <l.luba@partner.samsung.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, b.zolnierkie@samsung.com,
+        kgene@kernel.org, mark.rutland@arm.com, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        robh+dt@kernel.org, willy.mh.wolff.ml@gmail.com
+Subject: Re: [PATCH 1/3] ARM: dts: exynos: Add interrupt to DMC controller in
+ Exynos5422
+Message-ID: <20190927085359.GA19131@pi3>
+References: <20190925161813.21117-1-l.luba@partner.samsung.com>
+ <CGME20190925161842eucas1p271a9cf4f62b3d7af02c0a5d0d1eb9c4f@eucas1p2.samsung.com>
+ <20190925161813.21117-2-l.luba@partner.samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190925161813.21117-2-l.luba@partner.samsung.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 26 Sep 2019 15:04:38 -0700
-Matthias Kaehlcke <mka@chromium.org> wrote:
-
-> Define genpd_power_on/off and genpd_set_performance_state
-> tracepoints and use them.
-
-I agree with Greg about adding a "why" you need this. But, in case
-there's a good reason to have this, I have comments about the code
-below.
-
+On Wed, Sep 25, 2019 at 06:18:11PM +0200, Lukasz Luba wrote:
+> Add interrupt to Dynamic Memory Controller in Exynos5422 and Odroid
+> XU3-family boards. It will be used instead of devfreq polling mode
+> governor. The interrupt is connected to performance counters private
+> for DMC, which might track utilisation of the memory channels.
 > 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
 > ---
+>  arch/arm/boot/dts/exynos5420.dtsi | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->  drivers/base/power/domain.c  | 27 +++++++++++++++++---
->  include/trace/events/power.h | 49 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 72 insertions(+), 4 deletions(-)
+> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+> index ac49373baae7..72738e620d11 100644
+> --- a/arch/arm/boot/dts/exynos5420.dtsi
+> +++ b/arch/arm/boot/dts/exynos5420.dtsi
+> @@ -240,6 +240,8 @@
+>  		dmc: memory-controller@10c20000 {
+>  			compatible = "samsung,exynos5422-dmc";
+>  			reg = <0x10c20000 0x100>, <0x10c30000 0x100>;
+> +			interrupt-parent = <&combiner>;
+> +			interrupts = <16 0>;
+
+You register DMC for DREX0 and DREX1 but take only DREX0 interrupt. Why
+skipping second?
+
+Best regards,
+Krzysztof
+
+
+>  			clocks = <&clock CLK_FOUT_SPLL>,
+>  				 <&clock CLK_MOUT_SCLK_SPLL>,
+>  				 <&clock CLK_FF_DOUT_SPLL2>,
+> -- 
+> 2.17.1
 > 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index cc85e87eaf05..aee988c112e5 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -21,6 +21,7 @@
->  #include <linux/suspend.h>
->  #include <linux/export.h>
->  #include <linux/cpu.h>
-> +#include <trace/events/power.h>
->  
->  #include "power.h"
->  
-> @@ -329,6 +330,9 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
->  		goto err;
->  
->  	genpd->performance_state = state;
-> +
-> +	trace_genpd_set_performance_state(genpd);
-> +
->  	return 0;
->  
->  err:
-> @@ -418,14 +422,21 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->  	if (!genpd->power_on)
->  		return 0;
->  
-> -	if (!timed)
-> -		return genpd->power_on(genpd);
-> +	if (!timed) {
-> +		ret = genpd->power_on(genpd);
-> +		if (!ret)
-> +			trace_genpd_power_on(genpd);
-> +
-> +		return ret;
-> +	}
->  
->  	time_start = ktime_get();
->  	ret = genpd->power_on(genpd);
->  	if (ret)
->  		return ret;
->  
-> +	trace_genpd_power_on(genpd);
-> +
->  	elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
->  	if (elapsed_ns <= genpd->states[state_idx].power_on_latency_ns)
->  		return ret;
-> @@ -448,14 +459,22 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
->  	if (!genpd->power_off)
->  		return 0;
->  
-> -	if (!timed)
-> -		return genpd->power_off(genpd);
-> +	if (!timed) {
-> +		ret = genpd->power_off(genpd);
-> +		if (!ret)
-
-Here
-
-> +			trace_genpd_power_off(genpd);
-> +
-> +		return ret;
-> +	}
->  
->  	time_start = ktime_get();
->  	ret = genpd->power_off(genpd);
->  	if (ret)
->  		return ret;
->  
-> +	if (!ret)
-
-And here add a conditional branch for only a tracepoint. To eliminate
-the branch when tracepoints are not enabled, please do it this way
-instead:
-
-	if (trace_genpd_power_off_enabled() && !ret)
-
-The above is a static branch (nop when disabled, and jmp when enabled),
-and the above should move the conditional branch on !ret into the
-section that is only called when the tracepoint is enabled.
-
-
-> +		trace_genpd_power_off(genpd);
-> +
-
--- Steve
-
->  	elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
->  	if (elapsed_ns <= genpd->states[state_idx].power_off_latency_ns)
->  		return 0;
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index 7457e238e1b7..de56cd1e8d0d 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/cpufreq.h>
->  #include <linux/ktime.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/pm_qos.h>
->  #include <linux/tracepoint.h>
->  #include <linux/trace_events.h>
-> @@ -525,6 +526,54 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
->  
->  	TP_ARGS(name, type, new_value)
->  );
-> +
-> +#ifdef CONFIG_PM_GENERIC_DOMAINS
-> +DECLARE_EVENT_CLASS(genpd_power_on_off,
-> +	TP_PROTO(struct generic_pm_domain *genpd),
-> +
-> +	TP_ARGS(genpd),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, genpd->name)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, genpd->name);
-> +	),
-> +
-> +	TP_printk("name=%s", __get_str(name))
-> +);
-> +
-> +DEFINE_EVENT(genpd_power_on_off, genpd_power_on,
-> +	TP_PROTO(struct generic_pm_domain *genpd),
-> +
-> +	TP_ARGS(genpd)
-> +);
-> +
-> +DEFINE_EVENT(genpd_power_on_off, genpd_power_off,
-> +	TP_PROTO(struct generic_pm_domain *genpd),
-> +
-> +	TP_ARGS(genpd)
-> +);
-> +
-> +TRACE_EVENT(genpd_set_performance_state,
-> +	TP_PROTO(struct generic_pm_domain *genpd),
-> +
-> +	TP_ARGS(genpd),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, genpd->name)
-> +		__field(unsigned int, state)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, genpd->name);
-> +		__entry->state = genpd->performance_state;
-> +	),
-> +
-> +	TP_printk("name=%s state=%u", __get_str(name), __entry->state)
-> +);
-> +#endif /* CONFIG_PM_GENERIC_DOMAINS */
->  #endif /* _TRACE_POWER_H */
->  
->  /* This part must be outside protection */
-
