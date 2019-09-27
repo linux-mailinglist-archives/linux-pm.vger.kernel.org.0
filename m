@@ -2,131 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED39C0C16
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 21:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6CBC0C25
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 21:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbfI0T3v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Sep 2019 15:29:51 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:32912 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725990AbfI0T3v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Sep 2019 15:29:51 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E21F33082137;
-        Fri, 27 Sep 2019 19:29:50 +0000 (UTC)
-Received: from linux-ws.nc.xsintricity.com (ovpn-112-20.rdu2.redhat.com [10.10.112.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 318826061E;
-        Fri, 27 Sep 2019 19:29:50 +0000 (UTC)
-Message-ID: <64d13484950cab570e5f2691d7cdeca292882d95.camel@redhat.com>
-Subject: Re: [GIT PULL] Thermal management updates for v5.4-rc1
-From:   Doug Ledford <dledford@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Fri, 27 Sep 2019 15:29:47 -0400
-In-Reply-To: <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
-References: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
-         <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
-Organization: Red Hat, Inc.
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-8QpI9/NYV64F34cjfsuA"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1727758AbfI0TlY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Sep 2019 15:41:24 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44642 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbfI0TlY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Sep 2019 15:41:24 -0400
+Received: by mail-lf1-f68.google.com with SMTP id q11so2747434lfc.11
+        for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2019 12:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RJBm3wIiTMlbTLXcMDkNDDL26nbs1uDfiv0ETeeEYjs=;
+        b=LeHqucnAee/LJ+EIK96m57dcj0RYG4Sq1r/U0YWxFvxLjIgEJn2YixNR4e9JVnma6W
+         VKwPzGZ5r77StAkDCv5si2HCYWY/ODZzp9MHmduXjdZ92v9zTmg6WzWymIOQkYfSWRu/
+         BprUHgbX5ryJrKBKijJz2olCNHAIiXNvec7VE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RJBm3wIiTMlbTLXcMDkNDDL26nbs1uDfiv0ETeeEYjs=;
+        b=MgTDdIsh2alitEdNHdpaUp3NhdQH0qUVDOV7UKVoec+jtO1gEXFGQ+aJFGqxv3hT07
+         1V3BuhLegTco2o1si3opAFiHHtPOBr7zTE7J+EOq6cub1oTcXvn+yS3I3a6TW6Dvm36K
+         wuwGbpFHpy3XjIUn5Z5cqbB5wg9SZDYfr8oszbxHNYLk5JzTBmcbD5pQC87NORd+uoej
+         3BVnjOoDzJ2f8MrOBHJHaNpgZfXWH9x0svIH9fT/OI85RK9Qul4IBanOnpwT1yy+U47t
+         gYUuY7IEux0yYAKTwCdZTi527ht0wbeahWDvjw5+hGTUwNcxrXkzgP+jbXxZlmDWduur
+         /wog==
+X-Gm-Message-State: APjAAAXc2Igb4Ggx70SG91Ed0po5k5e3dbxi15DW0Weo0z8eJ654JDEi
+        awyA1E/wJpnN32e16OUj8VqX1xQIMME=
+X-Google-Smtp-Source: APXvYqyFVy2InULBZaxcyYTdD/NX5kw7kYUvHcFKTe3mGCRdnz/i+R7J9M49tjKIC2CD1HZZcmiXCA==
+X-Received: by 2002:a19:f817:: with SMTP id a23mr3960211lff.18.1569613281922;
+        Fri, 27 Sep 2019 12:41:21 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id w17sm641909lfl.43.2019.09.27.12.41.21
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2019 12:41:21 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id a22so3644067ljd.0
+        for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2019 12:41:21 -0700 (PDT)
+X-Received: by 2002:a2e:2c02:: with SMTP id s2mr4224670ljs.156.1569613280372;
+ Fri, 27 Sep 2019 12:41:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Fri, 27 Sep 2019 19:29:50 +0000 (UTC)
+References: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
+ <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com> <64d13484950cab570e5f2691d7cdeca292882d95.camel@redhat.com>
+In-Reply-To: <64d13484950cab570e5f2691d7cdeca292882d95.camel@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 27 Sep 2019 12:41:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whwYbKX1AqnOvcdT7T2GofRQqnb6xEJJ6+==ZZN1eEYQA@mail.gmail.com>
+Message-ID: <CAHk-=whwYbKX1AqnOvcdT7T2GofRQqnb6xEJJ6+==ZZN1eEYQA@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal management updates for v5.4-rc1
+To:     Doug Ledford <dledford@redhat.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Sep 27, 2019 at 12:29 PM Doug Ledford <dledford@redhat.com> wrote:
+>
+> Because there are literally thousands of developers working on kernel
+> bits here and there, and you're swatting this particular fly one
+> developer at a time.
 
---=-8QpI9/NYV64F34cjfsuA
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Well, at least these days it's also very clearly spelled out in the
+Documentation directory.
 
-On Fri, 2019-09-27 at 11:34 -0700, Linus Torvalds wrote:
-> On Fri, Sep 27, 2019 at 6:08 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > One thing to mention is that, all the patches have been tested in
-> > linux-next for weeks, but there is a conflict detected, because
-> > upstream has took commit eaf7b46083a7e34 ("docs: thermal: add it to
-> > the
-> > driver API") from jc-docs tree while I'm keeping a wrong version of
-> > the
-> > patch, so I just rebased my tree to fix this.
->=20
-> Why do I have to say this EVERY single release?
+And the "don't rebase" does get posted on the mailing lists each time,
+and I've mentioned it over the years in my release notes too.
 
-Because there are literally thousands of developers working on kernel
-bits here and there, and you're swatting this particular fly one
-developer at a time.
+Besides, I actually only work with about a hundred top-level
+maintainers, not thousands. Yes, we have thousands of developers, but
+doing the stats over the 5.0 releases, there have been "only" 131
+people sending me pull requests. Sure, more than a couple, but at the
+same time it's not like this is a "every developer" kind of thing,
+this is literally subsystem maintainers. We've got a fair number of
+them, but it's definitely not about thousands.
 
-I might suggest that you need to speak with the git people and politely
-ask them to add a warning to the rebase command itself so that it prints
-out something like:
+I feel like I've sent that email out way more than a hundred times
+over the last 15+ years.
 
-----
+.. and I don't think having git warn is right, since rebasing is
+perfectly fine as you are doing development.
 
-If you are doing linux kernel development, and you are doing a rebase,
-please read Documentation/When_Not_To_Rebase.rst before rebasing your
-code and sending it to Linus.  You've been warned.
+It's really just that maintainers shouldn't do it for bad reasons and
+at bad times.
 
-Acknowledge receipt of warning and proceed with rebase? (y/N)
+And "there was a conflict" and "yesterday" is really one of the
+absolute worst reasons/times around.
 
-----
-
-You would have free reign to put one of your more monumental yet funny
-rants in place in the documentation.
-
-You could also have a global git config to turn off the "Don't annoy
-Linus with rebases" warning.  But only mention that global config at the
-end of the kernel documentation so you know people have read it before
-they turn the warning off.
-
-Maybe that would help.
-
-> A conflict is not a reason to rebase. Conflicts happen. They happen a
-> lot. I deal with them, and it's usually trivial.
->=20
-> If you feel it's not trivial, just describe what the resolution is,
-> rather than rebasing. Really.
->=20
-> Rebasing for a random conflict (particularly in documentation, for
-> chrissake!) is like using an atomic bomb to swat a fly.  You have all
-> those downsides, and there are basically _no_ upsides. It only makes
-> for more work for me because I have to re-write this email for the
-> millionth time, and that takes longer and is more aggravating than the
-> conflict would have taken to just sort out.
->=20
->                    Linus
---=20
-Doug Ledford <dledford@redhat.com>
-    GPG KeyID: B826A3330E572FDD
-    Fingerprint =3D AE6B 1BDA 122B 23B4 265B  1274 B826 A333 0E57 2FDD
-
---=-8QpI9/NYV64F34cjfsuA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEErmsb2hIrI7QmWxJ0uCajMw5XL90FAl2OYysACgkQuCajMw5X
-L90VIhAAk4jcZJRijjuESGrODGMdq/AM+xnSTztebqGgWciuhlh2Z/WU30wi0kbF
-XT18gkS8YSPm1bmvBwYy9a0daQu41XLegvOyj+LoeoEbUCmhyxnZpA/SQysfau5v
-eyXhCBZYi36nOtBiOuhncTSyQqP/QpF0ck6Ygs4WYgj04CVGIURg8PTDqR9/nu9L
-u+j3qhtxUGU5VfcAK1CVss2Zm+zZWb7FQIqZDYvpOee6S2AKo793Y0pIykeMScrr
-Xv8qqrOXmC8aPqQBpzwnEtMgN19LgabPpGhFkO4nsiXFBRqK/t1heHNdyZRWqVcv
-Ac6o9+OmNJ7YaVpL61kobwk3v6cZuJlFsGdjD7AMpcLtFYZslRlxA11+OUlreAFV
-A8uWKLtNAvhYmm8GFTKCXJ00DZGj/5/eHoGOaBhFN1bZ43CuDkSyxmM/Q/XM02Ab
-q6ThGcX0/XOj+Ccb4a0Kl5hdG1w8UW8+dwVb1yBVKbDEwFHNx1ntMHLgw+s9eTGT
-7xKtL8tXFEh2Di7L8YS9XeTGciooa8yHo0nhXrh1Awu4MKbWIgf3GkoSat2RiyO2
-NoubaPBUEJaeM3FfgO38aU1cQU8OLnOcUWjMfQlOrVKaivp1os6c8lsDt9OvOWhf
-/t61QnNxiJIkBobNERwBEsUF5LkLX59H5cA4bTD++6ymvHR3VLE=
-=tHNu
------END PGP SIGNATURE-----
-
---=-8QpI9/NYV64F34cjfsuA--
-
+                    Linus
