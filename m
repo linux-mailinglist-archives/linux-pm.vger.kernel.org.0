@@ -2,160 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 523CCC0ABC
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 20:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D93C0B3E
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 20:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfI0SDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Sep 2019 14:03:01 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:32856 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfI0SDB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Sep 2019 14:03:01 -0400
-Received: by mail-io1-f68.google.com with SMTP id z19so18700991ior.0
-        for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2019 11:03:01 -0700 (PDT)
+        id S1728507AbfI0SfQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Sep 2019 14:35:16 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36382 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728484AbfI0SfQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Sep 2019 14:35:16 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v24so3465016ljj.3
+        for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2019 11:35:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=yHxRf8iSSBJVbY2jjeb4CIMSwJyJyDAiK8DXSZBel1Y=;
-        b=xkxfK51Ci8GL1Sha/Z1ZHn31hXasiiDuDy0vbFozf9TSlb0sp5S7Gq69mDmi+AHdAz
-         ZU3oLzGYbj4xxWqwmPdsK8GOJJfmoyASDVgG0VR3osjMBhAS9b5OWFyO3TowNkEMgqKE
-         iWVl0PYTyu9IphYCGnYDCP3aH/DT67m7bD5f7g43TbWmruk7PlYmQ1TUKzTn1h/7RxWC
-         lrkWy0cDF1hLusZ+tsiBZkn/RxxbD8xFN1JCwtzXpkwJECDwTTdFAWY8JoBPXmtIw3Ex
-         a9q84bit+MY27AyVJSAWE5becNKV1HSaCcz1C+d8loB4KWl/yE+gnIRBLLF8YcQ0jLo7
-         H1pg==
+         :cc;
+        bh=vfo/aCWS6InNpF6+CbMoDQhZTwhAvaIIzwPXAG1ON2k=;
+        b=PmjiZGWIuux93oBdsbKTUcDUjOwRzdmDhCW+izQNooViyiY5zi7nNI8gmKybNudXez
+         mSBXzQfHIJMk7J54/kR1Q0FTZiLQo2TdURWv9EPGoNG5dafe9qzlnG0ZSVDkNphLEhzj
+         OpxYIyiGR1+Yl9vS9XQTRr2D9CYcY+0rTw3LI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yHxRf8iSSBJVbY2jjeb4CIMSwJyJyDAiK8DXSZBel1Y=;
-        b=JmOuOBHCi7vqoB9DPbIBhQZHzpbCzJzdJO3ZaVDG7GlCHQSrrtaC8gri1Xn8GyHprk
-         3opnGfPeQLHFtfw4YdjhLh9HK4EkhrMgRqWD6XH6C3t4a+N7e7yD0SpE9I5K/9KCUVFw
-         bF9N90kTlJRrbEgjVaXdV/oJ84BMp2IkNBCYCqVAbCMlBBvwmCpBNnsuUh+byS5VPZjv
-         SSOhBHB9EKwUIVdYJk21q/B1G1sS8CF0ilYr5w3Pu83Mqj931ieWzs7XseDPxuwdna+X
-         /zGj6qTPQvP/qMaPAbIIdeLRLVPO4jATwK1MyOK2/4RjyxflsLd9Ck7B5lNwyQdLGHoP
-         DT6w==
-X-Gm-Message-State: APjAAAXLbOXT8IxYN12ZOcfq9A0yGzctCeonT6gYIg+sQwXWv42Rju6W
-        w9uPVP8g6LIRPzLhDfQ5+STTPces0WDufnCBaYmtxw==
-X-Google-Smtp-Source: APXvYqz+GgYI57ih3KBFENT6isulIJiUTyNks/5H4o2vkl1buRVE0KbLYSWpnU4tr4IeUdcHKjQJ095WkkX2A0QRJ64=
-X-Received: by 2002:a05:6e02:683:: with SMTP id o3mr5918830ils.58.1569607380559;
- Fri, 27 Sep 2019 11:03:00 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=vfo/aCWS6InNpF6+CbMoDQhZTwhAvaIIzwPXAG1ON2k=;
+        b=ET5xDCnuWrNZItYnTraW+PMdyqh0mdrwSelhutPxzejVYD96wrBL0/9Kpbn2ThSkk+
+         xFd6ZDdDEHU0Bedi/pPnBBtL6ma33vRdZsOGnMVX+ECSoQ3mpQrVmgUmolC9fpIPY716
+         KvJlB2KZQwARJxQIwWdvhazyGXc1FVaWAtJbZ0RydpcFEZ78cUtRPv34Mj9hpY15Uunc
+         w0BEnQdAr83vnLzSTul+zv16j9hsTcsvl9CDBWmQHLniULwRf1bEVobY/92lK6eRg7Oi
+         k68s/wleU8dzpLMzc9kPhprgpvudxBfip137OIuyGDZLj0re47VkBvQtrapOTSuD4kpu
+         1KGw==
+X-Gm-Message-State: APjAAAV42RpXGUwhv20LgFs0HOVoSTN4MhSW386daquTGf2RTfZaivts
+        I0LauKDWj4TxRaG3vAE1vGqrKyRzINI=
+X-Google-Smtp-Source: APXvYqxm1ALJIqfDtB270C4+631xISEcSx8ScvGNWWFFDdVhW9tx9pZ+BMyCV9zu1L0iiUM7FtHutg==
+X-Received: by 2002:a2e:2bda:: with SMTP id r87mr3867516ljr.3.1569609313896;
+        Fri, 27 Sep 2019 11:35:13 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id x30sm606611ljd.39.2019.09.27.11.35.12
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2019 11:35:12 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id d17so2633152lfa.7
+        for <linux-pm@vger.kernel.org>; Fri, 27 Sep 2019 11:35:12 -0700 (PDT)
+X-Received: by 2002:a19:2489:: with SMTP id k131mr3700375lfk.52.1569609312334;
+ Fri, 27 Sep 2019 11:35:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190909145015.26317-1-daniel.lezcano@linaro.org>
- <20190909145015.26317-3-daniel.lezcano@linaro.org> <20190918193554.GC24433@xps15>
- <f90bcd0c-e937-54f7-0dae-0e9d9ed45a41@linaro.org>
-In-Reply-To: <f90bcd0c-e937-54f7-0dae-0e9d9ed45a41@linaro.org>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 27 Sep 2019 12:02:49 -0600
-Message-ID: <CANLsYkxK3RzE1V_GwBarocrFHUSNOFmW_AfQn+JraXg3-gXVuw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] powercap/drivers/idle_inject: Specify the idle state
- to inject
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
+In-Reply-To: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 27 Sep 2019 11:34:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
+Message-ID: <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal management updates for v5.4-rc1
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 24 Sep 2019 at 07:02, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
+On Fri, Sep 27, 2019 at 6:08 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
->
-> Hi Mathieu,
->
-> On 18/09/2019 21:35, Mathieu Poirier wrote:
-> > On Mon, Sep 09, 2019 at 04:50:15PM +0200, Daniel Lezcano wrote:
-> >> Currently the idle injection framework only allows to inject the
-> >> deepest idle state available on the system.
-> >>
-> >> Give the opportunity to specify which idle state we want to inject by
-> >> adding a new function helper to set the state and use it when calling
-> >> play_idle().
-> >>
-> >> There is no functional changes, the cpuidle state is the deepest one.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
->
-> [ ... ]
->
-> >> +/**
-> >> + * idle_inject_set_state - set the idle state to inject
-> >> + * @state: an integer for the idle state to inject
-> >> + */
-> >> +void idle_inject_set_state(struct idle_inject_device *ii_dev, int sta=
-te)
-> >> +{
-> >> +    if (state >=3D CPUIDLE_STATE_NOUSE && state < CPUIDLE_STATE_MAX)
-> >> +            WRITE_ONCE(ii_dev->state, state);
-> >> +}
-> >> +
-> >>  /**
-> >>   * idle_inject_start - start idle injections
-> >>   * @ii_dev: idle injection control device structure
-> >> @@ -298,6 +310,7 @@ struct idle_inject_device *idle_inject_register(st=
-ruct cpumask *cpumask)
-> >>      cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
-> >>      hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> >>      ii_dev->timer.function =3D idle_inject_timer_fn;
-> >> +    ii_dev->state =3D cpuidle_find_deepest_state();
-> >>
-> >>      for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
-> >>
-> >> diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-> >> index a445cd1a36c5..e2b26b9ccd34 100644
-> >> --- a/include/linux/idle_inject.h
-> >> +++ b/include/linux/idle_inject.h
-> >> @@ -26,4 +26,7 @@ void idle_inject_set_duration(struct idle_inject_dev=
-ice *ii_dev,
-> >>  void idle_inject_get_duration(struct idle_inject_device *ii_dev,
-> >>                               unsigned int *run_duration_us,
-> >>                               unsigned int *idle_duration_us);
-> >> +
-> >> +void idle_inject_set_state(struct idle_inject_device *ii_dev, int sta=
-te);
-> >> +
-> >
-> > The above function is not used in this patch and as such should be intr=
-oduce as
-> > part of future work.  Otherwise I agree that this patch does not carry =
-any
-> > functional changes.
-> >
-> > Without function idle_inject_set_state():
->
-> I was about to remove the function but actually it may not make sense as
-> the idle_inject is a framework providing the different API to do the
-> idle injection and the function is an helper to set the state value. It
-> comes with the addition of the state number in the structure.
+> One thing to mention is that, all the patches have been tested in
+> linux-next for weeks, but there is a conflict detected, because
+> upstream has took commit eaf7b46083a7e34 ("docs: thermal: add it to the
+> driver API") from jc-docs tree while I'm keeping a wrong version of the
+> patch, so I just rebased my tree to fix this.
 
-I agree with you but there is still no current user of the API.
+Why do I have to say this EVERY single release?
 
->
-> Next patch is the idle cooling device and makes use of it.
+A conflict is not a reason to rebase. Conflicts happen. They happen a
+lot. I deal with them, and it's usually trivial.
 
-Then why not simply introduce it then?
+If you feel it's not trivial, just describe what the resolution is,
+rather than rebasing. Really.
 
->
-> Can I still consider your acked-by valid?
+Rebasing for a random conflict (particularly in documentation, for
+chrissake!) is like using an atomic bomb to swat a fly.  You have all
+those downsides, and there are basically _no_ upsides. It only makes
+for more work for me because I have to re-write this email for the
+millionth time, and that takes longer and is more aggravating than the
+conflict would have taken to just sort out.
 
-Whether the API is introduced here or in the next patchset has no
-effect on the validity of the code and as such my approbation is still
-valid.
-
-Thanks,
-Mathieu
-
->
-> --
->  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
-RM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+                   Linus
