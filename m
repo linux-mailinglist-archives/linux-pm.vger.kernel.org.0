@@ -2,107 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E6CC0C4B
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 21:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCCCC0D6F
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Sep 2019 23:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfI0T5c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Sep 2019 15:57:32 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41704 "EHLO mx1.redhat.com"
+        id S1728097AbfI0Vm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Sep 2019 17:42:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725789AbfI0T5b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Sep 2019 15:57:31 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1725990AbfI0Vm4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 27 Sep 2019 17:42:56 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 88BE318C4270;
-        Fri, 27 Sep 2019 19:57:31 +0000 (UTC)
-Received: from linux-ws.nc.xsintricity.com (ovpn-112-20.rdu2.redhat.com [10.10.112.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96445600C6;
-        Fri, 27 Sep 2019 19:57:30 +0000 (UTC)
-Message-ID: <7689df508569921295851c83bbb6f5fcd2e3f90f.camel@redhat.com>
-Subject: Re: [GIT PULL] Thermal management updates for v5.4-rc1
-From:   Doug Ledford <dledford@redhat.com>
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Fri, 27 Sep 2019 15:57:28 -0400
-In-Reply-To: <CAFLxGvxm77O7JnVeHjk8xMfAO2_5+PxV7QDkihL5q+86Q1xz6Q@mail.gmail.com>
-References: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
-         <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
-         <64d13484950cab570e5f2691d7cdeca292882d95.camel@redhat.com>
-         <CAFLxGvxm77O7JnVeHjk8xMfAO2_5+PxV7QDkihL5q+86Q1xz6Q@mail.gmail.com>
-Organization: Red Hat, Inc.
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-+xwQn8O+V8Vnc687ssdT"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CA2621655;
+        Fri, 27 Sep 2019 21:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569620574;
+        bh=woe0ZidU/l62b9rCpbymA++FhqsxoRS+ZiXvjj9sMeE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bA51B+GY3JK+tXvmbY6GN1FvBXIECJHNatpEzzJbjStASusXSlvaNiwNoX2vTIST/
+         hFmLxZlQt+6FXLDpvWSdX5kwq+dAgthqeEm2fFhAvkbKAPIE0SApGkoR2e1ZEFZmr5
+         WgISIXqeBL0G1IOgIHtFmF1ooPEF4YJ4dSWZMm1E=
+Date:   Fri, 27 Sep 2019 16:42:53 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@intel.com>
+Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
+ states on certain intel bridges
+Message-ID: <20190927214252.GA65801@google.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.62]); Fri, 27 Sep 2019 19:57:31 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190927144421.22608-1-kherbst@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+[+cc Rafael, Mika, linux-pm]
 
---=-+xwQn8O+V8Vnc687ssdT
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Fri, Sep 27, 2019 at 04:44:21PM +0200, Karol Herbst wrote:
+> Fixes runpm breakage mainly on Nvidia GPUs as they are not able to resume.
 
-On Fri, 2019-09-27 at 21:52 +0200, Richard Weinberger wrote:
-> On Fri, Sep 27, 2019 at 9:30 PM Doug Ledford <dledford@redhat.com>
-> wrote:
-> > Because there are literally thousands of developers working on
-> > kernel
-> > bits here and there, and you're swatting this particular fly one
-> > developer at a time.
->=20
-> I strongly disagree. One of the golden rules of kernel development is,
-> read what Linus writes. Especially during the merge window.
->=20
-> Thanks,
-> //richard
+I don't know what runpm is.  Some userspace utility?  Module
+parameter?
 
-Developers come and go.  Your argument is temporally flawed.  A
-developer might start working on the tree, read everything during a
-merge window, and not catch one of Linus' rebase rants prior to
-committing a rebase felony of their own.
+> Works perfectly with this workaround applied.
+> 
+> RFC comment:
+> We are quite sure that there is a higher amount of bridges affected by this,
+> but I was only testing it on my own machine for now.
+> 
+> I've stresstested runpm by doing 5000 runpm cycles with that patch applied
+> and never saw it fail.
+> 
+> I mainly wanted to get a discussion going on if that's a feasable workaround
+> indeed or if we need something better.
+> 
+> I am also sure, that the nouveau driver itself isn't at fault as I am able
+> to reproduce the same issue by poking into some PCI registers on the PCIe
+> bridge to put the GPU into D3cold as it's done in ACPI code.
+> 
+> I've written a little python script to reproduce this issue without the need
+> of loading nouveau:
+> https://raw.githubusercontent.com/karolherbst/pci-stub-runpm/master/nv_runpm_bug_test.py
 
-Besides, I don't think this rule of yours is all that universal.  If
-Linus is off on a thread about arm64 device tree brokenness and someone
-does a rebase and he rants about it, I'm very likely to miss that rant.=20
-I read what I reasonably deem to be relevant to me and my work, or
-sometimes additional stuff that just jumps out at me.  But I never
-learned to speed read so I don't even try to read it all and wouldn't
-agree to a rule that says I have to.
+Nice script, thanks for sharing it :)  I could learn a lot of useful
+python by studying it.
 
---=20
-Doug Ledford <dledford@redhat.com>
-    GPG KeyID: B826A3330E572FDD
-    Fingerprint =3D AE6B 1BDA 122B 23B4 265B  1274 B826 A333 0E57 2FDD
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Cc: linux-pci@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: nouveau@lists.freedesktop.org
+> ---
+>  drivers/pci/pci.c | 39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 088fcdc8d2b4..9dbd29ced1ac 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -799,6 +799,42 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+>  	return pci_platform_pm ? pci_platform_pm->bridge_d3(dev) : false;
+>  }
+>  
+> +/*
+> + * some intel bridges cause serious issues with runpm if the client device
+> + * is put into D1/D2/D3hot before putting the client into D3cold via
+> + * platform means (generally ACPI).
 
---=-+xwQn8O+V8Vnc687ssdT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+You mention Nvidia GPUs above, but I guess the same issue may affect
+other devices?  I would really like to chase this down to a more
+specific issue, e.g., a hardware defect with erratum, an ACPI defect,
+or a Linux defect.  Without the specifics, this is just a band-aid.
 
------BEGIN PGP SIGNATURE-----
+I don't see any relevant requirements in the _OFF description, but I
+don't know much about ACPI power control.
 
-iQIzBAABCAAdFiEErmsb2hIrI7QmWxJ0uCajMw5XL90FAl2OaagACgkQuCajMw5X
-L93QUQ//TacqfC4HVxcoDM1NNCIENpLBhSu9mWsQWzUvr/srTywtJgQNj8z1HFPG
-Z12DIZLWzFL29cPlNXfKglxxYox/sfEHNa6PDhnLkhfz2KrdDgs+Vj0cMxKQHQJa
-GPZt2+aH5Zdn2zUFV/aSt9N3Cx02EwR/Ao+5jYBnoi4DHSN70VcRfXqXwocHkH0R
-BzpqeiCaCyigg6zng4D42mICwNJnmRul7VBv6gEFvpNXCTzSbm2FIluAZHrB5Uho
-CZVcRdb7Gv6uE8/6WJhmh2hYwRk6Nr0yjD9XXvEjt5yfyzeFQqaoELkuApAakSgb
-zOCBbNL3+00ql6PT8f3IujJX0sh66PFbipyq9RB/eoye+8BQ5VH5YpzatMRZCHjE
-mF0bV3DujtNR2WTGKBG52EDJQGVdA26qo4GQ5HrlzI6as7NWVaKw2qgj8M0wm6/5
-W8XOFfwZ82+BDyP1msEARqCt1T0pkE0Qu84PtDyQEQf4XYw3Rc1eIsCxoS42olo4
-uyPQIBx1I8tpz5VLx1DPr96DRUiCkOhoKVltWYVji+t76bRSoKT0BsqQV2kdCpmr
-7hYw9fNifgVdYRFq8Sg69QXUoVv/mxae/HSdzEZ8c1K8AblymrdTOqauO1kwFsX9
-ns3KcxWkGYuiJ4CVRVIHVJz6gVdLiwzIcW3MHQl1Z9ZBRxcDFHk=
-=EL43
------END PGP SIGNATURE-----
+Your script allows several scenarios; I *guess* the one that causes
+the problem is:
 
---=-+xwQn8O+V8Vnc687ssdT--
+  - write 3 (D3hot) to GPU PowerState (PCIE_PM_REG == 0x64, I assume
+    PM Capability Control Register)
+  - write 3 (D3hot) to bridge PowerState (0x84, I assume PM Capability
+    Control Register)
+  - run _OFF on the power resource for the bridge
 
+From your script I assume you do:
+
+  - run _ON on the power resource for the bridge
+  - write 0 (D0) to the bridge PowerState
+
+You do *not* write the GPU PowerState (which we can't do if the GPU is
+in D3cold).  Is there some assumption that it comes out of D3cold via
+some other mechanism, e.g., is the _ON supposed to wake up the GPU?
+
+What exactly is the serious issue?  I guess it's that the rescan
+doesn't detect the GPU, which means it's not responding to config
+accesses?  Is there any timing component here, e.g., maybe we're
+missing some delay like the ones Mika is adding to the reset paths?
+
+> + *
+> + * skipping this makes runpm work perfectly fine on such devices.
+> + *
+> + * As far as we know only skylake and kaby lake SoCs are affected.
+> + */
+> +static unsigned short intel_broken_d3_bridges[] = {
+> +	/* kbl */
+> +	0x1901,
+> +};
+> +
+> +static inline bool intel_broken_pci_pm(struct pci_bus *bus)
+> +{
+> +	struct pci_dev *bridge;
+> +	int i;
+> +
+> +	if (!bus || !bus->self)
+> +		return false;
+> +
+> +	bridge = bus->self;
+> +	if (bridge->vendor != PCI_VENDOR_ID_INTEL)
+> +		return false;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(intel_broken_d3_bridges); i++) {
+> +		if (bridge->device == intel_broken_d3_bridges[i]) {
+> +			pci_err(bridge, "found broken intel bridge\n");
+
+If this ends up being a hardware defect, we should use a quirk to set
+a bit in the pci_dev once, as we do for broken_intx_masking and
+similar bits.
+
+> +			return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  /**
+>   * pci_raw_set_power_state - Use PCI PM registers to set the power state of
+>   *			     given PCI device
+> @@ -827,6 +863,9 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+>  	if (state < PCI_D0 || state > PCI_D3hot)
+>  		return -EINVAL;
+>  
+> +	if (state != PCI_D0 && intel_broken_pci_pm(dev->bus))
+> +		return 0;
+> +
+>  	/*
+>  	 * Validate current state:
+>  	 * Can enter D0 from any state, but if we can only go deeper
+> -- 
+> 2.21.0
+> 
