@@ -2,76 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C132C1214
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2019 22:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8793FC1269
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 01:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728667AbfI1UCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Sep 2019 16:02:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51176 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728617AbfI1UCP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 28 Sep 2019 16:02:15 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8023F20863;
-        Sat, 28 Sep 2019 20:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569700934;
-        bh=iBI4ADUUwpbjA+pmHsEfnTeue1a9adW21YpVKP9WhKE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T2F5ar22dPjflJL9yIU58hu70yONBakpNONVOBBsTvNXDHVVGdyHdS1PDdcN/Q2yB
-         +XUqR8207O4FeHFf1saqEFOAxmexTHTj23wLC9UQ43DmmvdORzZpKjh10ipBAGqLVk
-         YQZea0UROJnoEp41s4cIDmuxBDLTJJx4BDk+yCgo=
-Date:   Sat, 28 Sep 2019 16:02:13 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Baolin Wang <baolin.wang@linaro.org>
-Cc:     stable@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        linus.walleij@linaro.org, natechancellor@gmail.com, sre@kernel.org,
-        longman@redhat.com, linux-gpio@vger.kernel.org,
-        david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
-        orsonzhai@gmail.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BACKPORT 4.19.y 0/3] Candidates from Spreadtrum 4.14 product
- kernel
-Message-ID: <20190927153055.GP8171@sasha-vm>
-References: <cover.1569404757.git.baolin.wang@linaro.org>
+        id S1728877AbfI1XMk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Sep 2019 19:12:40 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41608 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728666AbfI1XMj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Sep 2019 19:12:39 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q7so3468445pfh.8;
+        Sat, 28 Sep 2019 16:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=lNZrzq4ZFFPrX0MTl+M498nYJtUFl4tpzfGqtmJqwcI=;
+        b=I9UDzWtG5ZUny0q4yWYmOR4H8K7qYtcnS7BEFTS7vaeVBSKCGtM+qrPgWEtugKT1mh
+         SwiW15+gci+ED9BjD1M75oWaIzW6N/c4WYwmn9M/+VQxtO5OKq2la7k+kXVA4rkuN0oI
+         PxMAr/z3t/IXwdjUmjr+3IR8nMt8ac3Cmhxh1qkWp1JXd3lfdQ2NuX7X+XFuyqtXSoih
+         KL4/0VCuoC80ALHHCRshcZkMqm2SVSF4rTakNY8aNwRVLE0a9ERlEdA68bWgUL/1Jg3f
+         OBV4L8y3iyUNTECFiwQzuqdOD2i/PNsY0PhS1bEG+gh1mALjWZj3cMQXS2Kn5vldAJP+
+         krCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=lNZrzq4ZFFPrX0MTl+M498nYJtUFl4tpzfGqtmJqwcI=;
+        b=ckCW7t4xj4DgjyOhV41LLxaB6anQz8E7s4Tzp2LzE/AAn8U2NB8w8WdLqerTW7xCAg
+         YvNMlHisp+rLT2zZupqW0HwCxfB1MlKawMDo7sfnyQRDNcWTVhxQiZE9tGQhCWVJfKoz
+         U2XlWIV603ROONNe9eBHuTwLvKp5/4IvCOdy9NbZijmglaSXFez/9uHRnbxLHcKPJ0b6
+         rP50WbVtBm6RYq6X0z28Sj+wVdn85JWU0sbC/fkAeo6x9h+y3dA/kRKiRbTzGT26A5jw
+         9ZhTHgH8WsIqrISTLa65Me49xlyA0OURrNNdQHY9R4oegPy//zcqSfqYMe9NMVDuZb3m
+         HyAw==
+X-Gm-Message-State: APjAAAWvYVDlafhQzD2bwxwU4FvMTkQxGa9wOTe8sXhZMT0ek+jXa+S6
+        UyCkDshBHFzir7lO1pia2EY=
+X-Google-Smtp-Source: APXvYqytmRo7xCnVrcWcE5cZXb/tDBqsxGrous6RdG6Jj7jkX/YY7EFEN1bkHopa4BbpOuqRv0qTCw==
+X-Received: by 2002:a63:4381:: with SMTP id q123mr16706745pga.169.1569712358821;
+        Sat, 28 Sep 2019 16:12:38 -0700 (PDT)
+Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id s17sm14607186pgg.77.2019.09.28.16.12.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 28 Sep 2019 16:12:38 -0700 (PDT)
+Date:   Sat, 28 Sep 2019 16:12:36 -0700
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Rui Zhang <rui.zhang@intel.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] Thermal-SoC management changes for v5.4-rc1
+Message-ID: <20190928231236.GD7360@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1569404757.git.baolin.wang@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 05:52:26PM +0800, Baolin Wang wrote:
->With Arnd's script [1] help, I found some bugfixes in Spreadtrum 4.14 product
->kernel, but missing in v4.19.75:
->
->513e1073d52e locking/lockdep: Add debug_locks check in __lock_downgrade()
->957063c92473 pinctrl: sprd: Use define directive for sprd_pinconf_params values
->87a2b65fc855 power: supply: sysfs: ratelimit property read error message
->
->[1] https://lore.kernel.org/lkml/20190322154425.3852517-19-arnd@arndb.de/T/
->
->David Lechner (1):
->  power: supply: sysfs: ratelimit property read error message
->
->Nathan Chancellor (1):
->  pinctrl: sprd: Use define directive for sprd_pinconf_params values
->
->Waiman Long (1):
->  locking/lockdep: Add debug_locks check in __lock_downgrade()
->
-> drivers/pinctrl/sprd/pinctrl-sprd.c       |    6 ++----
-> drivers/power/supply/power_supply_sysfs.c |    3 ++-
-> kernel/locking/lockdep.c                  |    3 +++
-> 3 files changed, 7 insertions(+), 5 deletions(-)
+Hello Linus,
 
-I've queued these up for 4.19, 4.14 and some for 4.9 and 4.4. Thank you.
+Please consider the following thermal soc changes for v5.4-rc1. This is a really
+small pull in the midst of a lot of pending patches. We are in the middle
+of restructuring how we are maintaining the thermal subsystem, as per
+discussion in our last LPC. For now, I am sending just some changes
+that were pending in my tree. Looking forward to get a more streamlined
+process in the next merge window.
 
---
-Thanks,
-Sasha
+The following changes since commit 56037cadf60461b4a2996b4d8f0057c4d343c17c:
+
+  Merge tag 'regulator-fix-v5.3-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator (2019-09-09 10:58:57 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal linus
+
+for you to fetch changes up to 6c375eccded41df8033ed55a1b785531b304fc67:
+
+  thermal: db8500: Rewrite to be a pure OF sensor (2019-09-24 22:59:22 -0700)
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      thermal: thermal_mmio: remove some dead code
+
+Linus Walleij (3):
+      thermal: db8500: Finalize device tree conversion
+      thermal: db8500: Use dev helper variable
+      thermal: db8500: Rewrite to be a pure OF sensor
+
+ drivers/mfd/db8500-prcmu.c                   |  53 +--
+ drivers/thermal/Kconfig                      |   2 +-
+ drivers/thermal/db8500_thermal.c             | 486 ++++++---------------------
+ drivers/thermal/thermal_mmio.c               |   7 -
+ include/linux/platform_data/db8500_thermal.h |  29 --
+ 5 files changed, 114 insertions(+), 463 deletions(-)
+ delete mode 100644 include/linux/platform_data/db8500_thermal.h
