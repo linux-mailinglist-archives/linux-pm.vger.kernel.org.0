@@ -2,83 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF74C10FD
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2019 16:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C132C1214
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Sep 2019 22:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbfI1OAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Sep 2019 10:00:03 -0400
-Received: from mga14.intel.com ([192.55.52.115]:53799 "EHLO mga14.intel.com"
+        id S1728667AbfI1UCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Sep 2019 16:02:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725957AbfI1OAC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 28 Sep 2019 10:00:02 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Sep 2019 07:00:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,559,1559545200"; 
-   d="scan'208";a="391492522"
-Received: from baoyuyan-mobl.ccr.corp.intel.com ([10.255.31.72])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Sep 2019 07:00:01 -0700
-Message-ID: <64052a03bf5af899574ad81dff9203cfc307901c.camel@intel.com>
-Subject: Re: [GIT PULL] Thermal management updates for v5.4-rc1
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Sat, 28 Sep 2019 22:00:00 +0800
-In-Reply-To: <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
-References: <a9e8e68f34139d5a9abb7f8b7d3fe64ff82c6d96.camel@intel.com>
-         <CAHk-=whua2XSTLd3gtqVHfq5HtGnjhRUv7vA6SUfkbVUebqWJQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728617AbfI1UCP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 28 Sep 2019 16:02:15 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8023F20863;
+        Sat, 28 Sep 2019 20:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569700934;
+        bh=iBI4ADUUwpbjA+pmHsEfnTeue1a9adW21YpVKP9WhKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T2F5ar22dPjflJL9yIU58hu70yONBakpNONVOBBsTvNXDHVVGdyHdS1PDdcN/Q2yB
+         +XUqR8207O4FeHFf1saqEFOAxmexTHTj23wLC9UQ43DmmvdORzZpKjh10ipBAGqLVk
+         YQZea0UROJnoEp41s4cIDmuxBDLTJJx4BDk+yCgo=
+Date:   Sat, 28 Sep 2019 16:02:13 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     stable@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        linus.walleij@linaro.org, natechancellor@gmail.com, sre@kernel.org,
+        longman@redhat.com, linux-gpio@vger.kernel.org,
+        david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
+        orsonzhai@gmail.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [BACKPORT 4.19.y 0/3] Candidates from Spreadtrum 4.14 product
+ kernel
+Message-ID: <20190927153055.GP8171@sasha-vm>
+References: <cover.1569404757.git.baolin.wang@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <cover.1569404757.git.baolin.wang@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Linus,
+On Wed, Sep 25, 2019 at 05:52:26PM +0800, Baolin Wang wrote:
+>With Arnd's script [1] help, I found some bugfixes in Spreadtrum 4.14 product
+>kernel, but missing in v4.19.75:
+>
+>513e1073d52e locking/lockdep: Add debug_locks check in __lock_downgrade()
+>957063c92473 pinctrl: sprd: Use define directive for sprd_pinconf_params values
+>87a2b65fc855 power: supply: sysfs: ratelimit property read error message
+>
+>[1] https://lore.kernel.org/lkml/20190322154425.3852517-19-arnd@arndb.de/T/
+>
+>David Lechner (1):
+>  power: supply: sysfs: ratelimit property read error message
+>
+>Nathan Chancellor (1):
+>  pinctrl: sprd: Use define directive for sprd_pinconf_params values
+>
+>Waiman Long (1):
+>  locking/lockdep: Add debug_locks check in __lock_downgrade()
+>
+> drivers/pinctrl/sprd/pinctrl-sprd.c       |    6 ++----
+> drivers/power/supply/power_supply_sysfs.c |    3 ++-
+> kernel/locking/lockdep.c                  |    3 +++
+> 3 files changed, 7 insertions(+), 5 deletions(-)
 
-I'm really sorry about this.
+I've queued these up for 4.19, 4.14 and some for 4.9 and 4.4. Thank you.
 
-I thought no code change could be a reason that a rebase can be
-accepted, but didn't realize this is exactly the case we should avoid
-it. I wish I could read Documentation/maintainer/rebasing-and-
-merging.rst earlier so that I didn't make this mistake.
-Sorry to bring this trouble.
-
-thanks,
-rui
-
-On Fri, 2019-09-27 at 11:34 -0700, Linus Torvalds wrote:
-> On Fri, Sep 27, 2019 at 6:08 AM Zhang Rui <rui.zhang@intel.com>
-> wrote:
-> > 
-> > One thing to mention is that, all the patches have been tested in
-> > linux-next for weeks, but there is a conflict detected, because
-> > upstream has took commit eaf7b46083a7e34 ("docs: thermal: add it to
-> > the
-> > driver API") from jc-docs tree while I'm keeping a wrong version of
-> > the
-> > patch, so I just rebased my tree to fix this.
-> 
-> Why do I have to say this EVERY single release?
-> 
-> A conflict is not a reason to rebase. Conflicts happen. They happen a
-> lot. I deal with them, and it's usually trivial.
-> 
-> If you feel it's not trivial, just describe what the resolution is,
-> rather than rebasing. Really.
-> 
-> Rebasing for a random conflict (particularly in documentation, for
-> chrissake!) is like using an atomic bomb to swat a fly.  You have all
-> those downsides, and there are basically _no_ upsides. It only makes
-> for more work for me because I have to re-write this email for the
-> millionth time, and that takes longer and is more aggravating than
-> the
-> conflict would have taken to just sort out.
-> 
->                    Linus
-
+--
+Thanks,
+Sasha
