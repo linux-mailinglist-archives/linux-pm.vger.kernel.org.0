@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EBEC18B6
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 20:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76159C18B8
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 20:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729451AbfI2SAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Sep 2019 14:00:20 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:38957 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729421AbfI2SAU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Sep 2019 14:00:20 -0400
-Received: by mail-lj1-f194.google.com with SMTP id y3so7102266ljj.6;
-        Sun, 29 Sep 2019 11:00:18 -0700 (PDT)
+        id S1729471AbfI2SAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Sep 2019 14:00:22 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36380 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729445AbfI2SAV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Sep 2019 14:00:21 -0400
+Received: by mail-lf1-f67.google.com with SMTP id x80so5337212lff.3;
+        Sun, 29 Sep 2019 11:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wIia84ykVHW2WvPfpAR80a4b7Z4klaa99JCqOyNbBA0=;
-        b=eceYAUFZnQZlguFVOYmLI2Hq+jx4RIabIW46ap2erZ9g20+SfUNJj5ZAn6cSVnrbEJ
-         37AzwqyZINAWgFgZA1dTzkkip0EVcwjuZIiPZXkUW5mmcnY4h00zpAz7Wb/GUE/tyQSp
-         zw1nK5pujPo7ZUsd/Xzch98KbDOp8Aw7nfQPRhyciRM8qabnGpXSW9RbcysKuPAoCo5K
-         MeNIwfgsFrWtc4jMBQRrk7zPWjFfFcM4bO86cgKx0tfZw31zHapcEIAzEPIr5/9HviFZ
-         OK0kgRhQdzNgC3+M/RFW83xF27MSTiEfM6tzkR4QUHbSX/y71YcwA2c75Ba/mbzqqWkY
-         fZdQ==
+        bh=FUprcdsgQIcCjuXx7+bJHEM4hFxUfD9RPhaB/mNFrSI=;
+        b=U/N9s7GGO+CUwsUEn6edvJBI9YsAHht+y06AVHFaf3/WndLmxtjG+CRm6Y++EK8TXE
+         SJVbQmIyPjnmPayODAii8e7DkZE3Kju5cgZjws4G0Bb83moSMOZqFakxjXkHdWcvgSfS
+         aCTdaglXOazdSqBoi+V67+MJJPrQCEbJl6oq6zKCyFkpCfaovq4QwqQPQ/0OedwmrGXl
+         DkP2snylLwgU+onbpI9Yc/7Piy0Bw+vrdMwi2baFVV3Sgmg+oXQvubYPobXz6jX+IWVA
+         9O1BG+XmhNNYiv03oqq2UN+MhQmpcoCYoFwPuyKcYxkwVzzNV1izC5VIKB77iBO37Eiu
+         GwmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wIia84ykVHW2WvPfpAR80a4b7Z4klaa99JCqOyNbBA0=;
-        b=MeBtCm0OZ4v5vQoTyErWo6QxLTeIwYHhP7Iv+eHrRFaYMy4PXXJSZ0vzoVgAE3X1tj
-         6X2aNDFlcMRAYm8PPsVfw4iKmCWDJIypsE7pS442kB3TC7wDpUQHwuvieSf1bhbHste+
-         OYCdHAXaAe4bkL/y6pS4h+C2VcyRNrxhOGby9eylQHHnspY7kh8XV6ESXCxs/PwaRaD9
-         H4oUpVM5LWDTlKu2GDuOVFFOGyt/QLtM8sSjCkjh0jbLo5EWME8woAlptoucc6DeLMPq
-         bmQTkGfRrD/9LkbiNaLyKcFXqCevemTN9+ZMLYx+AkH9iLctuVKoRrMWMd3LUpjfBQ1D
-         59DQ==
-X-Gm-Message-State: APjAAAV0WiOf16OyfOmZQy1sxNBYw+7SvVkjpafk1VpdU2m77stO0hBD
-        2eHvnkw8NXgSfO+xcUBflGI=
-X-Google-Smtp-Source: APXvYqw6UggfZZQheTNoMTawFDvoepFSzp7aA54v0PPS0v4pqSpnpEAga3TixNpWMtCVcAKCUpivkA==
-X-Received: by 2002:a2e:810e:: with SMTP id d14mr7703199ljg.160.1569780018198;
-        Sun, 29 Sep 2019 11:00:18 -0700 (PDT)
+        bh=FUprcdsgQIcCjuXx7+bJHEM4hFxUfD9RPhaB/mNFrSI=;
+        b=hopNTyliYmqbRrpt1xzH88WlEO8JS+MeAK/m3jkVSkD2US4s661ZZnT6rgFIdHXLxj
+         mVJvbrtcmkjvO8jRriiuBczOdR1WpHLcXQEOrAlDCRz6tEZzwFTZTraAsoDFX4t+meA6
+         Y6cWaAYHAZWIwtmGqsZUySIV6ROaMyNQc2D8AxKfqirB9lbVanHB0Cjh6/Dqbe87cCC2
+         Vd/5FU9osAQKvH5HDYmJrXAJVF+q0h80KOMWjhs977igzI3R7nP4xPqaoyrMKxrlNr1W
+         QQX4RqFkduyQO7FC5WgtEaG4L5LOtT87mF1IkxQ9QWafFadjmue64rkEfhly/r/XUFw/
+         HMRw==
+X-Gm-Message-State: APjAAAVR3i37hIJyK96C80mwSqcnjkfdujUjnaBghZp4TDXTnYVm//3C
+        DFh4JgnUk2pZPLxw4gknicY=
+X-Google-Smtp-Source: APXvYqwg6ETLEflxh8XdeUiL4/CI3v/ukiUSHL3pcduh2+viBq5yErQpxtXpfV5sENpmMsB0CaZSrQ==
+X-Received: by 2002:a19:7d55:: with SMTP id y82mr8963163lfc.106.1569780019170;
+        Sun, 29 Sep 2019 11:00:19 -0700 (PDT)
 Received: from localhost.localdomain (ppp94-29-32-67.pppoe.spdop.ru. [94.29.32.67])
-        by smtp.gmail.com with ESMTPSA id y3sm2355511lfh.97.2019.09.29.11.00.17
+        by smtp.gmail.com with ESMTPSA id y3sm2355511lfh.97.2019.09.29.11.00.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Sep 2019 11:00:17 -0700 (PDT)
+        Sun, 29 Sep 2019 11:00:18 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 11/14] cpuidle: tegra: Support CPU cluster power-down state on Tegra30
-Date:   Sun, 29 Sep 2019 20:59:49 +0300
-Message-Id: <20190929175952.22690-12-digetx@gmail.com>
+Subject: [PATCH v5 12/14] ARM: tegra: Create simple platform device for cpuidle driver
+Date:   Sun, 29 Sep 2019 20:59:50 +0300
+Message-Id: <20190929175952.22690-13-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190929175952.22690-1-digetx@gmail.com>
 References: <20190929175952.22690-1-digetx@gmail.com>
@@ -65,27 +65,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The new Tegra CPU Idle driver now has a unified code path for the coupled
-LP2/CC6 state, this allows to enable the deepest idling state on Tegra30
-SoC where the whole CPU cluster is power-gated.
+The new CPUIDLE driver now is a proper platform driver, hence it needs
+a platform device in order to be functional. Register the platform device,
+like we do that for the CPUFreq driver. Note that on some Tegra114(124)
+devices PSCI may be used for the CPU hotplugging and CPUIDLE driver
+doesn't support that case, thus CPUIDLE device won't be registered if
+PCSI presents.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/cpuidle/cpuidle-tegra.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/mach-tegra/tegra.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index a926d2781227..a30a5e4fc863 100644
---- a/drivers/cpuidle/cpuidle-tegra.c
-+++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -325,7 +325,6 @@ static int tegra_cpuidle_probe(struct platform_device *pdev)
- 		tegra_idle_driver.states[TEGRA_C7].disabled = true;
- 		break;
- 	case TEGRA30:
--		tegra_idle_driver.states[TEGRA_CC6].disabled = true;
- 		break;
- 	case TEGRA114:
- 	case TEGRA124:
+diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
+index d9237769a37c..f1ce2857a251 100644
+--- a/arch/arm/mach-tegra/tegra.c
++++ b/arch/arm/mach-tegra/tegra.c
+@@ -36,6 +36,7 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/time.h>
+ #include <asm/mach-types.h>
++#include <asm/psci.h>
+ #include <asm/setup.h>
+ 
+ #include "board.h"
+@@ -92,6 +93,9 @@ static void __init tegra_dt_init_late(void)
+ 	if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) &&
+ 	    of_machine_is_compatible("nvidia,tegra20"))
+ 		platform_device_register_simple("tegra20-cpufreq", -1, NULL, 0);
++
++	if (IS_ENABLED(CONFIG_ARM_TEGRA_CPUIDLE) && !psci_smp_available())
++		platform_device_register_simple("tegra-cpuidle", -1, NULL, 0);
+ }
+ 
+ static const char * const tegra_dt_board_compat[] = {
 -- 
 2.23.0
 
