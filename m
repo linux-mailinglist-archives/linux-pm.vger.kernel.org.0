@@ -2,100 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8793FC1269
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 01:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CF2C1600
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 17:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728877AbfI1XMk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Sep 2019 19:12:40 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41608 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728666AbfI1XMj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Sep 2019 19:12:39 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q7so3468445pfh.8;
-        Sat, 28 Sep 2019 16:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=lNZrzq4ZFFPrX0MTl+M498nYJtUFl4tpzfGqtmJqwcI=;
-        b=I9UDzWtG5ZUny0q4yWYmOR4H8K7qYtcnS7BEFTS7vaeVBSKCGtM+qrPgWEtugKT1mh
-         SwiW15+gci+ED9BjD1M75oWaIzW6N/c4WYwmn9M/+VQxtO5OKq2la7k+kXVA4rkuN0oI
-         PxMAr/z3t/IXwdjUmjr+3IR8nMt8ac3Cmhxh1qkWp1JXd3lfdQ2NuX7X+XFuyqtXSoih
-         KL4/0VCuoC80ALHHCRshcZkMqm2SVSF4rTakNY8aNwRVLE0a9ERlEdA68bWgUL/1Jg3f
-         OBV4L8y3iyUNTECFiwQzuqdOD2i/PNsY0PhS1bEG+gh1mALjWZj3cMQXS2Kn5vldAJP+
-         krCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=lNZrzq4ZFFPrX0MTl+M498nYJtUFl4tpzfGqtmJqwcI=;
-        b=ckCW7t4xj4DgjyOhV41LLxaB6anQz8E7s4Tzp2LzE/AAn8U2NB8w8WdLqerTW7xCAg
-         YvNMlHisp+rLT2zZupqW0HwCxfB1MlKawMDo7sfnyQRDNcWTVhxQiZE9tGQhCWVJfKoz
-         U2XlWIV603ROONNe9eBHuTwLvKp5/4IvCOdy9NbZijmglaSXFez/9uHRnbxLHcKPJ0b6
-         rP50WbVtBm6RYq6X0z28Sj+wVdn85JWU0sbC/fkAeo6x9h+y3dA/kRKiRbTzGT26A5jw
-         9ZhTHgH8WsIqrISTLa65Me49xlyA0OURrNNdQHY9R4oegPy//zcqSfqYMe9NMVDuZb3m
-         HyAw==
-X-Gm-Message-State: APjAAAWvYVDlafhQzD2bwxwU4FvMTkQxGa9wOTe8sXhZMT0ek+jXa+S6
-        UyCkDshBHFzir7lO1pia2EY=
-X-Google-Smtp-Source: APXvYqytmRo7xCnVrcWcE5cZXb/tDBqsxGrous6RdG6Jj7jkX/YY7EFEN1bkHopa4BbpOuqRv0qTCw==
-X-Received: by 2002:a63:4381:: with SMTP id q123mr16706745pga.169.1569712358821;
-        Sat, 28 Sep 2019 16:12:38 -0700 (PDT)
-Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id s17sm14607186pgg.77.2019.09.28.16.12.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 28 Sep 2019 16:12:38 -0700 (PDT)
-Date:   Sat, 28 Sep 2019 16:12:36 -0700
-From:   Eduardo Valentin <edubezval@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Rui Zhang <rui.zhang@intel.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Thermal-SoC management changes for v5.4-rc1
-Message-ID: <20190928231236.GD7360@localhost.localdomain>
+        id S1726838AbfI2Pvt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Sep 2019 11:51:49 -0400
+Received: from padbanking.net ([31.220.0.186]:49643 "EHLO
+        slot0.jntechglass.com" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbfI2Pvt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Sep 2019 11:51:49 -0400
+X-Greylist: delayed 609 seconds by postgrey-1.27 at vger.kernel.org; Sun, 29 Sep 2019 11:51:48 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jntechglass.com;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=admin@jntechglass.com;
+ bh=SQLP4om4P2qFu3Jv36hG0y56Qcw=;
+ b=JZ18AeIb/zQMj6fECpSRBehvnm9df7ti5sZtYrVEYXV8cX6D52ASLVDhFubaexuxhG0Tl28bxkzl
+   6kRDnVUNWP+ZYVqyhAqoHJ01tPu+6u7vKNH1z06ZbHYEbiy3TWUdcYieArM3aoebXUPmnkqc2vmx
+   YdnrBPQu8nAmgIqIgbrwIgcbxPgQfDaUrilpOZ0vSv78rTjgPpfVZtH2D4cvFjU5Y8xnaCG4Xcgt
+   zFnGKytdKBbTaP5l2FmOHn/EkyP0yvMD4RHI2k8VTBy5VSeLoX+3wCGXMP4R5Hq/pwDwchjmD/1v
+   kM0afVlAKdAhDZ5kVOyV5TQbdHxHD/EhaSjb9w==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jntechglass.com;
+ b=Yv8LZGFrXNia+19pf+Yoc9xNqcejWPYPU+MmtZLE46icOSbtxtX/2eAkxtvKfUM8aIUXHgRTz4Ws
+   LWN5w7Jm0/VpDTEW0P4RrGLA5DcMjlg9c2emAIlFiVvlHqlAe86kXe+oHB+O7T6SRGrMoYvn6hLj
+   yE1uauLgNToD7nemGUEO9KdH6JOnidT+8dwmI+fXR5Z8k88KAp73qmtTyEItyQfRttkbdeND5zMB
+   VWoR82pcZoE76+lpIoF39ey9tC5vK6TAhaifVLM0HedyAiFX88pwEkI0Ebq24PIbVDtxkZjxQIl5
+   m5ZDsonIbiDEKR8BwlcEtbv+8154CsqfKGswZw==;
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?UmU6IOKCrCAyLDAwMCwwMDAtMDAgRVVS?=
+To:     Recipients <admin@jntechglass.com>
+From:   "Herr Richard Wahl" <admin@jntechglass.com>
+Date:   Sun, 29 Sep 2019 08:31:47 -0700
+Reply-To: unitednationscouncilrefunds@gmail.com
+Message-ID: <0.0.19.5F2.1D576DB01C16F90.0@slot0.jntechglass.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Linus,
+Lieber Freund,
 
-Please consider the following thermal soc changes for v5.4-rc1. This is a really
-small pull in the midst of a lot of pending patches. We are in the middle
-of restructuring how we are maintaining the thermal subsystem, as per
-discussion in our last LPC. For now, I am sending just some changes
-that were pending in my tree. Looking forward to get a more streamlined
-process in the next merge window.
+Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jac=
+kpot spende ich an 5 zuf=C3=A4llige Personen, wenn Sie diese E-Mail erhalte=
+n, dann wurde Ihre E-Mail nach einem Spinball ausgew=C3=A4hlt. Ich habe den=
+ gr=C3=B6=C3=9Ften Teil meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=
+=A4tigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwi=
+llig dazu entschieden, Ihnen den Betrag von =E2=82=AC 2.000.000,00 zu spend=
+en eine der ausgew=C3=A4hlten 5, um meine Gewinne zu =C3=BCberpr=C3=BCfen, =
+finden Sie auf meiner You Tube Seite unten.
 
-The following changes since commit 56037cadf60461b4a2996b4d8f0057c4d343c17c:
+UHR MICH HIER: https://www.youtube.com/watch?v=3Dtne02ExNDrw
 
-  Merge tag 'regulator-fix-v5.3-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator (2019-09-09 10:58:57 -0700)
+Das ist dein Spendencode: [DF00430342018]
 
-are available in the git repository at:
+Antworten Sie mit dem Spendencode auf diese E-Mail: andrebotha@yahoo.com
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal linus
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
 
-for you to fetch changes up to 6c375eccded41df8033ed55a1b785531b304fc67:
+Gr=C3=BC=C3=9Fe
 
-  thermal: db8500: Rewrite to be a pure OF sensor (2019-09-24 22:59:22 -0700)
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      thermal: thermal_mmio: remove some dead code
-
-Linus Walleij (3):
-      thermal: db8500: Finalize device tree conversion
-      thermal: db8500: Use dev helper variable
-      thermal: db8500: Rewrite to be a pure OF sensor
-
- drivers/mfd/db8500-prcmu.c                   |  53 +--
- drivers/thermal/Kconfig                      |   2 +-
- drivers/thermal/db8500_thermal.c             | 486 ++++++---------------------
- drivers/thermal/thermal_mmio.c               |   7 -
- include/linux/platform_data/db8500_thermal.h |  29 --
- 5 files changed, 114 insertions(+), 463 deletions(-)
- delete mode 100644 include/linux/platform_data/db8500_thermal.h
+Herr Richard Wahl
