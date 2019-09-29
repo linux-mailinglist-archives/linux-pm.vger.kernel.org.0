@@ -2,115 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 914CBC186B
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 19:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BC7C18A8
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 19:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729706AbfI2RnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Sep 2019 13:43:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42272 "EHLO mail.kernel.org"
+        id S1729057AbfI2RuX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Sep 2019 13:50:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35856 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729417AbfI2Rbo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:31:44 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6208221D71;
-        Sun, 29 Sep 2019 17:31:42 +0000 (UTC)
+        id S1729197AbfI2RuX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:50:23 -0400
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.4-rc1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778303;
-        bh=IMFn1tzxwb26dMf9wGqGPU6excEbDGy+Ynd8rhWb8Kc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kQBCfKWWfKLDeFRBW58iECTh2eMdyjKU0NpYkBFRQ5t5M9CIOP4eINrWF1NxRb/wu
-         H67JCkHIGjdw3SAwaN60QlBUftz+IomCETtBIKrrv4Ty4y8J+Qed9Wsoub8Uxj8wWw
-         ga3igSLJG4eCbCmWz/gr91gNCh9DPqpiSjHGDeQQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Romain Izard <romain.izard.pro@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 23/49] power: supply: register HWMON devices with valid names
-Date:   Sun, 29 Sep 2019 13:30:23 -0400
-Message-Id: <20190929173053.8400-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173053.8400-1-sashal@kernel.org>
-References: <20190929173053.8400-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        s=default; t=1569779422;
+        bh=bHXIm8Z3qU0UO34CYscDkvZ0mPCZy0QUZD2hU22CW5c=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=k6uf60Sq/6j5t12+qKwBc8d9ZI7mmwmj3V59MX7ZlVmy0mgosZyv6qRFDrTvsGT1x
+         Mo4ksvI05dIA2/XrIE5RByLLOjVgGBry58RndIhHwQq1rqp1m+qgfzQOPt9I0NFb3o
+         7B9N3XzeHQvsdvO3IieAk7MUyHjSvm2iXdgJML0E=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20190928231236.GD7360@localhost.localdomain>
+References: <20190928231236.GD7360@localhost.localdomain>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20190928231236.GD7360@localhost.localdomain>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal
+ linus
+X-PR-Tracked-Commit-Id: 6c375eccded41df8033ed55a1b785531b304fc67
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 939ca9f1751d1d65424f80b9284b6c18e78c7f4e
+Message-Id: <156977942273.28081.7573269007324807343.pr-tracker-bot@kernel.org>
+Date:   Sun, 29 Sep 2019 17:50:22 +0000
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Romain Izard <romain.izard.pro@gmail.com>
+The pull request you sent on Sat, 28 Sep 2019 16:12:36 -0700:
 
-[ Upstream commit f1b937cc86bedf94dbc3478c2c0dc79471081fff ]
+> git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal linus
 
-With the introduction of the HWMON compatibility layer to the power
-supply framework in Linux 5.3, all power supply devices' names can be
-used directly to create HWMON devices with the same names.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/939ca9f1751d1d65424f80b9284b6c18e78c7f4e
 
-But HWMON has rules on allowable names that are different from those
-used in the power supply framework. The dash character is forbidden, as
-it is used by the libsensors library in userspace as a separator,
-whereas this character is used in the device names in more than half of
-the existing power supply drivers. This last case is consistent with the
-typical naming usage with MFD and Device Tree.
+Thank you!
 
-This leads to warnings in the kernel log, with the format:
-
-power_supply gpio-charger: hwmon: \
-	'gpio-charger' is not a valid name attribute, please fix
-
-Add a protection to power_supply_add_hwmon_sysfs() that replaces any
-dash in the device name with an underscore when registering with the
-HWMON framework. Other forbidden characters (star, slash, space, tab,
-newline) are not replaced, as they are not in common use.
-
-Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/power_supply_hwmon.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 51fe60440d125..75cf861ba492d 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -284,6 +284,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 	struct device *dev = &psy->dev;
- 	struct device *hwmon;
- 	int ret, i;
-+	const char *name;
- 
- 	if (!devres_open_group(dev, power_supply_add_hwmon_sysfs,
- 			       GFP_KERNEL))
-@@ -334,7 +335,19 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 		}
- 	}
- 
--	hwmon = devm_hwmon_device_register_with_info(dev, psy->desc->name,
-+	name = psy->desc->name;
-+	if (strchr(name, '-')) {
-+		char *new_name;
-+
-+		new_name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!new_name) {
-+			ret = -ENOMEM;
-+			goto error;
-+		}
-+		strreplace(new_name, '-', '_');
-+		name = new_name;
-+	}
-+	hwmon = devm_hwmon_device_register_with_info(dev, name,
- 						psyhw,
- 						&power_supply_hwmon_chip_info,
- 						NULL);
 -- 
-2.20.1
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
