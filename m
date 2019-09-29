@@ -2,64 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CF2C1600
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 17:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C07C160C
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Sep 2019 18:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfI2Pvt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Sep 2019 11:51:49 -0400
-Received: from padbanking.net ([31.220.0.186]:49643 "EHLO
-        slot0.jntechglass.com" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbfI2Pvt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Sep 2019 11:51:49 -0400
-X-Greylist: delayed 609 seconds by postgrey-1.27 at vger.kernel.org; Sun, 29 Sep 2019 11:51:48 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jntechglass.com;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=admin@jntechglass.com;
- bh=SQLP4om4P2qFu3Jv36hG0y56Qcw=;
- b=JZ18AeIb/zQMj6fECpSRBehvnm9df7ti5sZtYrVEYXV8cX6D52ASLVDhFubaexuxhG0Tl28bxkzl
-   6kRDnVUNWP+ZYVqyhAqoHJ01tPu+6u7vKNH1z06ZbHYEbiy3TWUdcYieArM3aoebXUPmnkqc2vmx
-   YdnrBPQu8nAmgIqIgbrwIgcbxPgQfDaUrilpOZ0vSv78rTjgPpfVZtH2D4cvFjU5Y8xnaCG4Xcgt
-   zFnGKytdKBbTaP5l2FmOHn/EkyP0yvMD4RHI2k8VTBy5VSeLoX+3wCGXMP4R5Hq/pwDwchjmD/1v
-   kM0afVlAKdAhDZ5kVOyV5TQbdHxHD/EhaSjb9w==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jntechglass.com;
- b=Yv8LZGFrXNia+19pf+Yoc9xNqcejWPYPU+MmtZLE46icOSbtxtX/2eAkxtvKfUM8aIUXHgRTz4Ws
-   LWN5w7Jm0/VpDTEW0P4RrGLA5DcMjlg9c2emAIlFiVvlHqlAe86kXe+oHB+O7T6SRGrMoYvn6hLj
-   yE1uauLgNToD7nemGUEO9KdH6JOnidT+8dwmI+fXR5Z8k88KAp73qmtTyEItyQfRttkbdeND5zMB
-   VWoR82pcZoE76+lpIoF39ey9tC5vK6TAhaifVLM0HedyAiFX88pwEkI0Ebq24PIbVDtxkZjxQIl5
-   m5ZDsonIbiDEKR8BwlcEtbv+8154CsqfKGswZw==;
-Content-Type: text/plain; charset="utf-8"
+        id S1725948AbfI2QFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Sep 2019 12:05:06 -0400
+Received: from cmta20.telus.net ([209.171.16.93]:54472 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbfI2QFG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 29 Sep 2019 12:05:06 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id Ebgwiliw2N5I9Ebgxinmno; Sun, 29 Sep 2019 10:05:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1569773104; bh=CJQ87ZzpO9IqG72eA+TgWxmbKOsF+7vh52cSQ42MqWs=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=PMzYdUCepAiTqiZov//Ksvi2NGML2+wILAwPLaBdJvo2eNvhdWkan+E9rgDgsnHr6
+         VdXMUSMA+Y2ab8rWVS6OEdsh/iwIYYlOtZLFpeTW71q8tEqJ5qnSW6tGZ4jAFZxVfn
+         Ti47DSBobw2uikwJAcMTn1BgzZffy5QRI5899hF5uJ7rwlXSqhCKGnw9/9pa6oY7Tq
+         c6fdMCTbMWdZf8eVI+GlqqS2dH51QGPSb6y0+N+QDk3ju5OnGI1IUZRsQ10YseFl3i
+         m5DMu3Zo/5gx/3++dKPgfGjImPxlWrGbMINXeQPu5gGrX4rubbau5e0CoRqZ9WSWo4
+         vH+K5V4yUEd9g==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=K/Fc4BeI c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=I8o6C4CDd1cejXE1t-8A:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19
+ a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Frederic Weisbecker'" <frederic@kernel.org>,
+        "'Mel Gorman'" <mgorman@suse.de>,
+        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
+        "'Chen, Hu'" <hu1.chen@intel.com>,
+        "'Quentin Perret'" <quentin.perret@arm.com>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
+References: WgXvgFd5aBdpLWgY0gWTga <001601d57487$e1029ef0$a307dcd0$@net>
+In-Reply-To: <001601d57487$e1029ef0$a307dcd0$@net>
+Subject: RE: [RFC/RFT][PATCH v8] cpuidle: New timer events oriented governor for tickless systems
+Date:   Sun, 29 Sep 2019 09:04:56 -0700
+Message-ID: <000f01d576df$a6b87a30$f4296e90$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?UmU6IOKCrCAyLDAwMCwwMDAtMDAgRVVS?=
-To:     Recipients <admin@jntechglass.com>
-From:   "Herr Richard Wahl" <admin@jntechglass.com>
-Date:   Sun, 29 Sep 2019 08:31:47 -0700
-Reply-To: unitednationscouncilrefunds@gmail.com
-Message-ID: <0.0.19.5F2.1D576DB01C16F90.0@slot0.jntechglass.com>
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdSRR6W+nknzDAweSJ6DmHc6MWYLQjjLqLuAAJlpaNA=
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfNd4PLcYlWcYTmKMQ0x0mxpaSmVGCF0vsHot2FUBNEc9dQIqHC+IRfibA6ofm8HsHJyzySgJFJguxnbnakarg7/zbJwbYCiTBAG7azFB+lYBfQUfRP8/
+ cDcOliEGEz0tcIBrw9KMOaqM/+wqclTQu7a4llPFMZIsNCP5joCtiSR0EcwbpR4t9CEOqClC32vF/ZYwlaQ6q4RIWfXF6Q+DegCk63VWIpIsuduoCwBXUlEa
+ yOZM5dS5h/8UjGwOQCmQowd9IKW6e6FWL8wXTT9HbOZHXYmJhxI8S8SvvvCekYIOdVUsQS+kJB+Y4VOAnAmVPFFQGAgYmHpbVGqRvuJIoWU1FCW2UJsvItc/
+ XudAcIREMUxewyDV0px+q9AxwuawG9jJeRnuLs1c6SZccgPqTnjyX0b9/XI+zvz7YWHKyUqZiZ3RI8SOuZHoFdcDJ+SgW8Ekk3GSJkBYK6c5I7dzdps0tuUv
+ lAYI7hZyK2BdMP/iAmoPyk1bsrogvnZUbBvtIQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Lieber Freund,
+On 2019.09.26 09:32 Doug Smythies wrote:
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jac=
-kpot spende ich an 5 zuf=C3=A4llige Personen, wenn Sie diese E-Mail erhalte=
-n, dann wurde Ihre E-Mail nach einem Spinball ausgew=C3=A4hlt. Ich habe den=
- gr=C3=B6=C3=9Ften Teil meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=
-=A4tigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwi=
-llig dazu entschieden, Ihnen den Betrag von =E2=82=AC 2.000.000,00 zu spend=
-en eine der ausgew=C3=A4hlten 5, um meine Gewinne zu =C3=BCberpr=C3=BCfen, =
-finden Sie auf meiner You Tube Seite unten.
+> If the deepest idle state is disabled, the system
+> can become somewhat unstable, with anywhere between no problem
+> at all, to the occasional temporary jump using a lot more
+> power for a few seconds, to a permanent jump using a lot more
+> power continuously. I have been unable to isolate the exact
+> test load conditions under which this will occur. However,
+> temporarily disabling and then enabling other idle states
+> seems to make for a somewhat repeatable test. It is important
+> to note that the issue occurs with only ever disabling the deepest
+> idle state, just not reliably.
+>
+> I want to know how you want to proceed before I do a bunch of
+> regression testing.
 
-UHR MICH HIER: https://www.youtube.com/watch?v=3Dtne02ExNDrw
+I did some regression testing anyhow, more to create and debug
+a methodology than anything else.
 
-Das ist dein Spendencode: [DF00430342018]
+> On 2018.12.11 03:50 Rafael J. Wysocki wrote:
+>
+>> v7 -> v8:
+>>  * Apply the selection rules to the idle deepest state as well as to
+>>    the shallower ones (the deepest idle state was treated differently
+>>    before by mistake).
+>>  * Subtract 1/2 of the exit latency from the measured idle duration
+>>    in teo_update() (instead of subtracting the entire exit latency).
+>>    This makes the idle state selection be slightly more performance-
+>>   oriented.
+>
+> I have isolated the issue to a subset of the v7 to v8 changes, however
+> it was not the exit latency changes.
+>
+> The partial revert to V7 changes I made were (on top of 5.3):
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: andrebotha@yahoo.com
+The further testing showed a problem or two with my partial teo-v7 reversion
+(I call it teo-v12) under slightly different testing conditions.
 
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+I also have a 5.3 based kernel with the current teo reverted and the entire
+teo-v7 put in its place. I have yet to find a idle state disabled related issue
+with this kernel.
 
-Gr=C3=BC=C3=9Fe
+I'll come back to this thread at a later date with better details and test results.
 
-Herr Richard Wahl
+... Doug
+
+
