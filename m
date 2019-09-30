@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA56C1CE1
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 10:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C95C1CE6
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 10:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730098AbfI3ITe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 04:19:34 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38406 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730071AbfI3ITd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Sep 2019 04:19:33 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 3so11638727wmi.3
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 01:19:32 -0700 (PDT)
+        id S1730123AbfI3ITq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 04:19:46 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42764 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730122AbfI3ITp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Sep 2019 04:19:45 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n14so10101665wrw.9
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 01:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:openpgp:autocrypt:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=FzGuEynsroAlPwlcf1mpnp1mOJqlEn1piGikRwGOWF0=;
-        b=QRQHC6D/UNVMw7DAdf6nM9bv0qY1O9z5f17TJlTRU3YeVoe0dWtmQIVqIa1uBQGJ4L
-         CAoJYrVsKql8bfjepYvYFzcrQZadWam9SQq9exz786el9pwezjJ83IBrQvdiBaMypkZE
-         P9P0y44WPGWuyQIrDI8pmiCn0Zr0kSnGHJp/Shvv8QWw58JD1ccLQLl++VIuotQW+B11
-         dg27lbFHuUV0xOF6r/kXVGXj9C16M6q2FvOTIkDjNHlbihOp2235aWrzvMm8wq3ZVPOe
-         7LYV7ucHXahKuv6MNYBImVBw/zSDgGcok+dYqik/wMeRXX7eO1Lc2dBV1w4s9gp/q6CZ
-         FDCw==
+        bh=sTtLExAZUDqto9elcG2wBU4oj3KBERgKskP3MU4MTqc=;
+        b=EeIByHWZ+VtCWDzeyWTTU6XMXivxQJsXAL5AkBe08MN9lRMyVO/2xgJzJ85NjrbqpH
+         xS7D60lMFnZmR8wxDu15KZL2fpbpqHJ5wcC3kfo4pvMukW104t1ewwHwLiHtCuVyCkSG
+         lrd4J1PmLyrJlI4R9aibpt3N0mGWrtfGyMbO4d9JFWvGbCxdMs/CgTw/WJzAOvzId/TI
+         sTDLbk09qNugbbK0RywlDaDUI7PTBteL25DP5Oh2ADLs4LkzwlhwtbuXy9znB/6SQxy2
+         AjTz034HqX+v4kRioG2R398qO+lcSONRpbUTcecVnJH4RuT9B2Mrhw4UD8GCLfTCkRMR
+         yIbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=FzGuEynsroAlPwlcf1mpnp1mOJqlEn1piGikRwGOWF0=;
-        b=tfpOQ0xgau8fzLdyoZKmC2DjGDm5rexV0F4ssJDnlhu7BWoYx29UrBByM4pTxxaizD
-         sXjxMx/uyXLOmrMXBsZrGw4qoDyeo8lnPO6HDNagdG0+69mwMf+nce0YynCH44K4Rk3p
-         INgL7KEwDYfUNdrbJ/G//H3zq5RqcoknCkm6fWnKNv1/ceJ+Z10tu/TC7Dd2m69YI0Ax
-         n0ggb117IIYHrxj4wkHwNnDwx29jR7rbqihI6jnMfZUX4ZzfBGHTPft4Z3lImboqA/nA
-         5PiFpkS28X8YwIx4I5O+0SKlodz6F/eMeL/0WDI69IDzjVPHZ+5Omphp5qlw3wDfWjAp
-         RgoQ==
-X-Gm-Message-State: APjAAAX26VHYMBoJxyq6oiubkrSdNzmGtKSkHCWQxrP68c30f53wrTdQ
-        67dkVoxzJgF6gUwV2STti75C9NpXwLblZw==
-X-Google-Smtp-Source: APXvYqwc3t5OdRUt49ls1OKP1iHSP/ETh12Kav8lf+jRQolqfmomCnX7OTx+g2U48yj6XebjIoOZsw==
-X-Received: by 2002:a1c:5fd6:: with SMTP id t205mr15887578wmb.124.1569831570981;
-        Mon, 30 Sep 2019 01:19:30 -0700 (PDT)
+        bh=sTtLExAZUDqto9elcG2wBU4oj3KBERgKskP3MU4MTqc=;
+        b=WzAmRS93FpsQ62SGAnFlp+/Hut/u1GuVRGMTVy72AL7LPeXSzh4dYqgCmSg5GZm8aQ
+         eqktc8fgFF6WYwJ4YHe+b7Rb8L8qIsszvMpg8Un9geT1ZsgMxJiYm1Y4ZFr5btTMtNDV
+         GD6QMrvBwlbVCwjAfbTswleGDV/32I096ca+FHEqrKtfPZrwZj/5j4fJENo5r6ZkqAJb
+         as8KwMM2hMk9niu3egJu8/LBFQYy5ehj8it0IayYBdfCXXSlYntVKmnEGE5d5BBpMuU0
+         B7R7LViXdvsBrKNyOrCYQkFC7V2aK47coqiaDyqTy7XoEU8DHhv5dDdT1UcD8Emvyf9Y
+         YJYA==
+X-Gm-Message-State: APjAAAXS/ZK+fH6osmdgj0VmjsYJVw7LMCjmegC7NgfWj+SLVEPOI/y/
+        2/lEvfoKuF4GabcD/uF/gVa4Ddbts5gPsA==
+X-Google-Smtp-Source: APXvYqxAu+cLZcxrwYT1pH8ucvRwOk+EIGXSlH8Oa9k2FrxuU+RbN+P4DaE/1ynIzhQiOSuT6/v4Jg==
+X-Received: by 2002:adf:dbc6:: with SMTP id e6mr11964509wrj.149.1569831582291;
+        Mon, 30 Sep 2019 01:19:42 -0700 (PDT)
 Received: from [10.1.2.12] (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id g73sm14627507wme.10.2019.09.30.01.19.30
+        by smtp.gmail.com with ESMTPSA id x5sm17914950wrg.69.2019.09.30.01.19.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 01:19:30 -0700 (PDT)
-Subject: Re: [PATCH v6 5/7] arm64: dts: amlogic: g12a: add cooling properties
+        Mon, 30 Sep 2019 01:19:41 -0700 (PDT)
+Subject: Re: [PATCH v6 6/7] arm64: dts: amlogic: g12b: add cooling properties
 To:     Guillaume La Roque <glaroque@baylibre.com>,
         amit.kucheria@linaro.org, rui.zhang@intel.com, edubezval@gmail.com,
         daniel.lezcano@linaro.org
@@ -54,7 +54,7 @@ Cc:     devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
 References: <20190927184352.28759-1-glaroque@baylibre.com>
- <20190927184352.28759-6-glaroque@baylibre.com>
+ <20190927184352.28759-7-glaroque@baylibre.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
@@ -107,12 +107,12 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  VsbXrP9BZ6snXyHfebPnno/te5XRqZTL9aJOytB/1iUna+1MAwBxGFPvqeEUUyT+gx1l3Acl
  ZaTUOEkgIor5losDrePdPgE=
 Organization: Baylibre
-Message-ID: <73f3dc4c-2f3e-2c29-f667-15ce76ebcf3e@baylibre.com>
-Date:   Mon, 30 Sep 2019 10:19:29 +0200
+Message-ID: <e57cd8d9-5174-bd1b-e091-98d6328f7891@baylibre.com>
+Date:   Mon, 30 Sep 2019 10:19:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190927184352.28759-6-glaroque@baylibre.com>
+In-Reply-To: <20190927184352.28759-7-glaroque@baylibre.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -122,21 +122,21 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 27/09/2019 20:43, Guillaume La Roque wrote:
-> Add missing #colling-cells field for G12A SoC
+> Add missing #colling-cells field for G12B SoC
 > Add cooling-map for passive and hot trip point
 > 
 > Tested-by: Christian Hewitt <christianshewitt@gmail.com>
 > Tested-by: Kevin Hilman <khilman@baylibre.com>
 > Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
 > ---
->  arch/arm64/boot/dts/amlogic/meson-g12a.dtsi | 24 +++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+>  arch/arm64/boot/dts/amlogic/meson-g12b.dtsi | 29 +++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-> index 733a9d46fc4b..3ab6497548ca 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-> @@ -18,6 +18,7 @@
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
+> index 98ae8a7c8b41..4bb89bce758f 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
+> @@ -49,6 +49,7 @@
 >  			reg = <0x0 0x0>;
 >  			enable-method = "psci";
 >  			next-level-cache = <&l2>;
@@ -144,31 +144,47 @@ On 27/09/2019 20:43, Guillaume La Roque wrote:
 >  		};
 >  
 >  		cpu1: cpu@1 {
-> @@ -26,6 +27,7 @@
+> @@ -57,6 +58,7 @@
 >  			reg = <0x0 0x1>;
 >  			enable-method = "psci";
 >  			next-level-cache = <&l2>;
 > +			#cooling-cells = <2>;
 >  		};
 >  
->  		cpu2: cpu@2 {
-> @@ -34,6 +36,7 @@
->  			reg = <0x0 0x2>;
+>  		cpu100: cpu@100 {
+> @@ -65,6 +67,7 @@
+>  			reg = <0x0 0x100>;
 >  			enable-method = "psci";
 >  			next-level-cache = <&l2>;
 > +			#cooling-cells = <2>;
 >  		};
 >  
->  		cpu3: cpu@3 {
-> @@ -42,6 +45,7 @@
->  			reg = <0x0 0x3>;
+>  		cpu101: cpu@101 {
+> @@ -73,6 +76,7 @@
+>  			reg = <0x0 0x101>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&l2>;
+> +			#cooling-cells = <2>;
+>  		};
+>  
+>  		cpu102: cpu@102 {
+> @@ -81,6 +85,7 @@
+>  			reg = <0x0 0x102>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&l2>;
+> +			#cooling-cells = <2>;
+>  		};
+>  
+>  		cpu103: cpu@103 {
+> @@ -89,6 +94,7 @@
+>  			reg = <0x0 0x103>;
 >  			enable-method = "psci";
 >  			next-level-cache = <&l2>;
 > +			#cooling-cells = <2>;
 >  		};
 >  
 >  		l2: l2-cache0 {
-> @@ -113,3 +117,23 @@
+> @@ -219,3 +225,26 @@
 >  &sd_emmc_a {
 >  	amlogic,dram-access-quirk;
 >  };
@@ -178,17 +194,20 @@ On 27/09/2019 20:43, Guillaume La Roque wrote:
 > +		map0 {
 > +			trip = <&cpu_passive>;
 > +			cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +					 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu100 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu101 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu102 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu103 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
 > +		};
-> +
 > +		map1 {
 > +			trip = <&cpu_hot>;
 > +			cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +					<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +					 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu100 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu101 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu102 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +					 <&cpu103 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
 > +		};
 > +	};
 > +};
