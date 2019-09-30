@@ -2,108 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7D9C1DFC
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 11:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C076C1E0F
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 11:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbfI3J3j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 05:29:39 -0400
-Received: from mga09.intel.com ([134.134.136.24]:41802 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727469AbfI3J3j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Sep 2019 05:29:39 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 02:29:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,565,1559545200"; 
-   d="scan'208";a="204793408"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 30 Sep 2019 02:29:35 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 30 Sep 2019 12:29:34 +0300
-Date:   Mon, 30 Sep 2019 12:29:34 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
- states on certain intel bridges
-Message-ID: <20190930092934.GT2714@lahna.fi.intel.com>
-References: <20190927144421.22608-1-kherbst@redhat.com>
- <20190927214252.GA65801@google.com>
- <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
- <20190930080534.GS2714@lahna.fi.intel.com>
- <CACO55tuMo1aAA7meGtEey6J6sOS-ZA0ebZeL52i2zfkWtPqe_g@mail.gmail.com>
+        id S1726008AbfI3JfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 05:35:11 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:36932 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727885AbfI3JfL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Sep 2019 05:35:11 -0400
+Received: by mail-vs1-f67.google.com with SMTP id p13so6294667vsr.4
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 02:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QV4x5NHTum/jLzU4cx5C+ZxMnkOgGxMeO6LpanKwV8Q=;
+        b=LZFWjyQ1EhPcpe/hpsLIH/Tabk0U7kboQRvjElnQaSeO8fb6R0xdxk4JfgVcnbizBW
+         96mxggGf0N0DiJ+UuxdB3g3NqOo301Z4YsMUOubGYkHzAmTE7elNh8gQ9zCmBRO6jMSt
+         AKb9ZSZsSWjA2n9JPaorjb42bN4lxFzjiDS6ZdT15+paoV43KMuXz7RkOmmJukcdVkQE
+         tKinjhMracv9Bb4eAZyrJ++gq/kdIqCEX2/z3DtOoK4JBogFf700W7TyS8x8H8s6xUbF
+         uX74t+Lz741V5GFZPFumLzUJJAziOq050GnQfid4NiEgY21kp4fkolg9LF92zfrhoLWX
+         9cGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QV4x5NHTum/jLzU4cx5C+ZxMnkOgGxMeO6LpanKwV8Q=;
+        b=AT+4qi70GCmD6Gkvznp+Z3TrjgIcX8IZmbhA8RqjYu5h9Il9vLqOVH2r/5zqnzAMLp
+         re82ABLMCkhSt4H91gY+qgSOnJ89cBveKSHeqb9YxP1ZBa4tiqwRwnXkAjBfWgA3TUqx
+         4ROZ5agIw3/tARkuVd7TqGgm6yFGN/NTx3g/QMbcMlqgNaTwLHy0tkJutpP9MxzFLMyH
+         tOpv/HCvWYlLJLC1wtzqpPgT/Hga0Yz4ltjU1vxNB6Qxj7GPS5lgip+ZgB5YzNBH1GmO
+         a0Xr7G3eC9sc+PcUg2XEuULILzaWChWOQD8NT3eiuM5NMPIJzMz44gq9Ybl4YVjUkkJm
+         HnZg==
+X-Gm-Message-State: APjAAAVx4SXt8HzAs9ZR9v/V8ajyCTqYy9xWbwRm7fR5BGu6xmbtknVb
+        +EnIJ5edm6QoShaDXJjQi/CRQFll75q3SOKKwVd2iw==
+X-Google-Smtp-Source: APXvYqwMBz5wNpuqunAhTIOtFioIDFII4P4C9O10Q9J5ID9h0IFfwcQ92Xm+Zo1lLTaPpokB531dd4mzAf8FzHenGEU=
+X-Received: by 2002:a67:f058:: with SMTP id q24mr9102100vsm.27.1569836109918;
+ Mon, 30 Sep 2019 02:35:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACO55tuMo1aAA7meGtEey6J6sOS-ZA0ebZeL52i2zfkWtPqe_g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190927184352.28759-1-glaroque@baylibre.com> <20190927184352.28759-2-glaroque@baylibre.com>
+In-Reply-To: <20190927184352.28759-2-glaroque@baylibre.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 30 Sep 2019 15:04:59 +0530
+Message-ID: <CAHLCerPxrGMm98nDC529pYkzEaiDk0p6VTdVzyHx8=U8_PYe_A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/7] dt-bindings: thermal: Add DT bindings
+ documentation for Amlogic Thermal
+To:     Guillaume La Roque <glaroque@baylibre.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-amlogic@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 11:15:48AM +0200, Karol Herbst wrote:
-> On Mon, Sep 30, 2019 at 10:05 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi Karol,
-> >
-> > On Fri, Sep 27, 2019 at 11:53:48PM +0200, Karol Herbst wrote:
-> > > > What exactly is the serious issue?  I guess it's that the rescan
-> > > > doesn't detect the GPU, which means it's not responding to config
-> > > > accesses?  Is there any timing component here, e.g., maybe we're
-> > > > missing some delay like the ones Mika is adding to the reset paths?
-> > >
-> > > When I was checking up on some of the PCI registers of the bridge
-> > > controller, the slot detection told me that there is no device
-> > > recognized anymore. I don't know which register it was anymore, though
-> > > I guess one could read it up in the SoC spec document by Intel.
-> > >
-> > > My guess is, that the bridge controller fails to detect the GPU being
-> > > here or actively threw it of the bus or something. But a normal system
-> > > suspend/resume cycle brings the GPU back online (doing a rescan via
-> > > sysfs gets the device detected again)
-> >
-> > Can you elaborate a bit what kind of scenario the issue happens (e.g
-> > steps how it reproduces)? It was not 100% clear from the changelog. Also
-> > what the result when the failure happens?
-> >
-> 
-> yeah, I already have an updated patch in the works which also does the
-> rework Bjorn suggested. Had no time yet to test if I didn't mess it
-> up.
-> 
-> I am also thinking of adding a kernel parameter to enable this
-> workaround on demand, but not quite sure on that one yet.
-
-Right, I think it would be good to figure out the root cause before
-adding any workarounds ;-) It might very well be that we are just
-missing something the PCIe spec requires but not implemented in Linux.
-
-> > I see there is a script that does something but unfortunately I'm not
-> > fluent in Python so can't extract the steps how the issue can be
-> > reproduced ;-)
-> >
-> > One thing that I'm working on is that Linux PCI subsystem misses certain
-> > delays that are needed after D3cold -> D0 transition, otherwise the
-> > device and/or link may not be ready before we access it. What you are
-> > experiencing sounds similar. I wonder if you could try the following
-> > patch and see if it makes any difference?
-> >
-> > https://patchwork.kernel.org/patch/11106611/
-> 
-> I think I already tried this path. The problem isn't that the device
-> isn't accessible too late, but that it seems that the device
-> completely falls off the bus. But I can retest again just to be sure.
-
-Yes, please try it and share full dmesg if/when the failure still happens.
+On Sat, Sep 28, 2019 at 12:14 AM Guillaume La Roque
+<glaroque@baylibre.com> wrote:
+>
+> Adding the devicetree binding documentation for the Amlogic temperature
+> sensor found in the Amlogic Meson G12A and G12B SoCs.
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> ---
+>  .../bindings/thermal/amlogic,thermal.yaml     | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+> new file mode 100644
+> index 000000000000..f761681e4c0d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/amlogic,thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Thermal
+> +
+> +maintainers:
+> +  - Guillaume La Roque <glaroque@baylibre.com>
+> +
+> +description: Binding for Amlogic Thermal
+> +
+> +properties:
+> +  compatible:
+> +      items:
+> +        - enum:
+> +            - amlogic,g12a-cpu-thermal
+> +            - amlogic,g12a-ddr-thermal
+> +        - const: amlogic,g12a-thermal
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  amlogic,ao-secure:
+> +    description: phandle to the ao-secure syscon
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - amlogic,ao-secure
+> +
+> +examples:
+> +  - |
+> +        cpu_temp: temperature-sensor@ff634800 {
+> +                compatible = "amlogic,g12a-cpu-thermal",
+> +                             "amlogic,g12a-thermal";
+> +                reg = <0xff634800 0x50>;
+> +                interrupts = <0x0 0x24 0x0>;
+> +                clocks = <&clk 164>;
+> +                #thermal-sensor-cells = <0>;
+> +                amlogic,ao-secure = <&sec_AO>;
+> +        };
+> +...
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
