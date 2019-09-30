@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC4AC217C
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 15:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1A1C217E
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 15:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730876AbfI3NJl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 09:09:41 -0400
-Received: from ms.lwn.net ([45.79.88.28]:48828 "EHLO ms.lwn.net"
+        id S1730637AbfI3NJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 09:09:54 -0400
+Received: from ms.lwn.net ([45.79.88.28]:48838 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730637AbfI3NJl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Sep 2019 09:09:41 -0400
+        id S1730296AbfI3NJx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Sep 2019 09:09:53 -0400
 Received: from lwn.net (localhost [127.0.0.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7732555A;
-        Mon, 30 Sep 2019 13:09:40 +0000 (UTC)
-Date:   Mon, 30 Sep 2019 07:09:39 -0600
+        by ms.lwn.net (Postfix) with ESMTPSA id 63129740;
+        Mon, 30 Sep 2019 13:09:53 +0000 (UTC)
+Date:   Mon, 30 Sep 2019 07:09:52 -0600
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     Doug Ledford <dledford@redhat.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
