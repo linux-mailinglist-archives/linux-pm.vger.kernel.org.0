@@ -2,106 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78755C2542
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 18:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43826C25AB
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 19:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732340AbfI3Qg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 12:36:28 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50466 "EHLO mx1.redhat.com"
+        id S1730411AbfI3RHo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 13:07:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:32784 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731459AbfI3QgZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Sep 2019 12:36:25 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        id S1726425AbfI3RHo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Sep 2019 13:07:44 -0400
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8E95FC04B302
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 16:36:24 +0000 (UTC)
-Received: by mail-io1-f69.google.com with SMTP id q18so31228036ios.8
-        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 09:36:24 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 5AC5081DE1
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 17:07:43 +0000 (UTC)
+Received: by mail-wm1-f70.google.com with SMTP id o8so116702wmc.2
+        for <linux-pm@vger.kernel.org>; Mon, 30 Sep 2019 10:07:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n6TZwGZ6BwH01Gtc+GZbV82I7jDbXiJPW011pcYuI0Q=;
-        b=QU4a3l10iJS6xJQOTNZWZs/FLfGuHzQKSsUqrWeUk75dK5I3NQwPpV8LQFuWot55EU
-         eGeUyme9w3fe4PJXI+Xso5xceZJpHiMkoaJlKaNMJGYAwAEGh9XyDIAttATwj3DpGtWl
-         n1hxahBzw+fWQsB3ZVHSvN3gh+KiWYTDnV7H8xIOpWO1A3ZDJC2WAEmGUFVXxiuLXvh7
-         Frlhnyf4YAEzTITrsD67uZ0aGlGezruOUugCrE/fFbp66vscCip1tFGoNcav6XTofSrp
-         IEJrL4Li9HQlETDQeZMTC+A9iZJmfXDkvbi8Rpy0xEm10Z5ULkQ7L7yXM33uzKTDjEtB
-         950w==
-X-Gm-Message-State: APjAAAXew8MbnXlZZSQPgWyypxxafqwjYQU/EVR/SbGL3GTYWgeYV572
-        VUX6QYJVvJn9cm+bvdENLyhFsPtI/Q1YoAzP6QTpIrb2KR0ErZrcS1rhkZGW+aqOYvcdOPAoxKM
-        KIM4f5aT36WRHA39u9bUyXvZodMVIDIDdwTQ=
-X-Received: by 2002:a6b:3804:: with SMTP id f4mr7902605ioa.166.1569861384019;
-        Mon, 30 Sep 2019 09:36:24 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxTi7C+3z1z5gBDBQSyyub19LVPhCynfHDYm5iNSEA04yROLKW+AsLuHu877bWM07L3lw3ItDdT4w5mzyKMATY=
-X-Received: by 2002:a6b:3804:: with SMTP id f4mr7902576ioa.166.1569861383788;
- Mon, 30 Sep 2019 09:36:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190927144421.22608-1-kherbst@redhat.com> <20190927214252.GA65801@google.com>
- <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
- <20190930080534.GS2714@lahna.fi.intel.com> <CACO55tuMo1aAA7meGtEey6J6sOS-ZA0ebZeL52i2zfkWtPqe_g@mail.gmail.com>
- <20190930092934.GT2714@lahna.fi.intel.com> <CACO55tu9M8_TWu2MxNe_NROit+d+rHJP5_Tb+t73q5vr19sd1w@mail.gmail.com>
- <20190930163001.GX2714@lahna.fi.intel.com>
-In-Reply-To: <20190930163001.GX2714@lahna.fi.intel.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :mime-version:content-transfer-encoding;
+        bh=cs776fH4erFtXUSzzVn3rAy9fW72VGqJRx6dq549BTs=;
+        b=bm1IOZo9aeQUJZ0qVqsSbGG/Y9glWOik8LiPNIp4HvrTTEpKQgTcmlrPiBiaBykOrg
+         BRZdzdUSFThur/4UTfwu1QZysOMT8VYLH2ctlPd9NPhYg5T0Igrlf3sNyPewiBs8dfxt
+         SRg/wx6z5YdbgzjQXmF0o5kqE8Ks/UZBDH7Ey4g/N07DvZYvOc3d9OQL1hFGiNycvfrJ
+         dmScwk6Bt0gDWvPxbMkt1DmeVZBOU0z02SkgBeYZWbdglZhx5DeHjUbK5MfmV2BJKUuV
+         ZmX4YQS0NrlH6l5tu4T2H8BpD3NeCcJ6pb2wkgGDjgga/mVzWFgD33iLESpX11nCkrjk
+         WybQ==
+X-Gm-Message-State: APjAAAVmM+HWr1ATFeYgGmS4ICNuaty9CRHO2wo8XQSJxjiLiMOABp6d
+        i6lO2KrrC4FQUR/omJzg3gIEAUDUBCDykqHNz6OFtsgQN9l3Ild5R8MT70u4iGAgQjhCSTdDBvF
+        UGLC6IDCq/TVoIoI97Mg=
+X-Received: by 2002:a7b:c4c9:: with SMTP id g9mr199041wmk.150.1569863262034;
+        Mon, 30 Sep 2019 10:07:42 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzb0zH1A2+zMb9dORMy0r94rwSyu0arMgvSfgbq6H2j091sJVKqDUCQszgUPNoaGIR1IOjP4g==
+X-Received: by 2002:a7b:c4c9:: with SMTP id g9mr199015wmk.150.1569863261784;
+        Mon, 30 Sep 2019 10:07:41 -0700 (PDT)
+Received: from kherbst.pingu.com ([2a02:8308:b0be:6900:7db2:cb58:5fb:97a5])
+        by smtp.gmail.com with ESMTPSA id r12sm12077573wrq.88.2019.09.30.10.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Sep 2019 10:07:40 -0700 (PDT)
 From:   Karol Herbst <kherbst@redhat.com>
-Date:   Mon, 30 Sep 2019 18:36:12 +0200
-Message-ID: <CACO55tuk4SA6-xUtJ-oRePy8MPXYAp2cfmSPxwW3J5nQuX3y2g@mail.gmail.com>
-Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
- states on certain intel bridges
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+To:     linux-kernel@vger.kernel.org
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
+Subject: [RFC PATCH] pci: prevent putting pcie devices into lower device states on certain intel bridges
+Date:   Mon, 30 Sep 2019 19:07:38 +0200
+Message-Id: <20190930170738.20162-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.21.0
+Reply-To: CACO55tuk4SA6-xUtJ-oRePy8MPXYAp2cfmSPxwW3J5nQuX3y2g@mail.gmail.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 6:30 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Mon, Sep 30, 2019 at 06:05:14PM +0200, Karol Herbst wrote:
-> > still happens with your patch applied. The machine simply gets shut down.
-> >
-> > dmesg can be found here:
-> > https://gist.githubusercontent.com/karolherbst/40eb091c7b7b33ef993525de660f1a3b/raw/2380e31f566e93e5ba7c87ef545420965d4c492c/gistfile1.txt
->
-> Looking your dmesg:
->
-> Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: DCB version 4.1
-> Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: MM: using COPY for buffer copies
-> Sep 30 17:24:27 kernel: [drm] Initialized nouveau 1.3.1 20120801 for 0000:01:00.0 on minor 1
->
-> I would assume it runtime suspends here. Then it wakes up because of PCI
-> access from userspace:
->
-> Sep 30 17:24:42 kernel: pci_raw_set_power_state: 56 callbacks suppressed
->
-> and for some reason it does not get resumed properly. There are also few
-> warnings from ACPI that might be relevant:
->
-> Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.GFX0._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
-> Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.PEG0.PEGP._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
->
+Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
+states.
 
-afaik this is the case for essentially every laptop out there.
+v2: convert to pci_dev quirk
+    put a proper technical explenation of the issue as a in-code comment
 
-> This seems to be Dell XPS 9560 which I think has been around some time
-> already so I wonder why we only see issues now. Has it ever worked for
-> you or maybe there is a regression that causes it to happen now?
+RFC comment (copied from last sent):
+We are quite sure that there is a higher amount of bridges affected by this,
+but I was only testing it on my own machine for now.
 
-oh, it's broken since forever, we just tried to get more information
-from Nvidia if they know what this is all about, but we got nothing
-useful.
+I've stresstested runpm by doing 5000 runpm cycles with that patch applied
+and never saw it fail.
 
-We were also hoping to find a reliable fix or workaround we could have
-inside nouveau to fix that as I think nouveau is the only driver
-actually hit by this issue, but nothing turned out to be reliable
-enough.
+I mainly wanted to get a discussion going on if that's a feasable workaround
+indeed or if we need something better.
+
+I am also sure, that the nouveau driver itself isn't at fault as I am able
+to reproduce the same issue by poking into some PCI registers on the PCIe
+bridge to put the GPU into D3cold as it's done in ACPI code.
+
+I've written a little python script to reproduce this issue without the need
+of loading nouveau:
+https://raw.githubusercontent.com/karolherbst/pci-stub-runpm/master/nv_runpm_bug_test.py
+
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Mika Westerberg <mika.westerberg@intel.com>
+Cc: linux-pci@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+---
+ drivers/pci/pci.c    | 11 ++++++++++
+ drivers/pci/quirks.c | 50 ++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pci.h  |  1 +
+ 3 files changed, 62 insertions(+)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 088fcdc8d2b4..65516b024ee5 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -799,6 +799,13 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+ 	return pci_platform_pm ? pci_platform_pm->bridge_d3(dev) : false;
+ }
+ 
++static inline bool parent_broken_child_pm(struct pci_dev *dev)
++{
++	if (!dev->bus || !dev->bus->self)
++		return false;
++	return dev->bus->self->broken_child_pm;
++}
++
+ /**
+  * pci_raw_set_power_state - Use PCI PM registers to set the power state of
+  *			     given PCI device
+@@ -844,6 +851,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+ 	   || (state == PCI_D2 && !dev->d2_support))
+ 		return -EIO;
+ 
++	/* check if the bus controller causes issues */
++	if (state != PCI_D0 && parent_broken_child_pm(dev))
++		return 0;
++
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+ 
+ 	/*
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 0f16acc323c6..2be0deec2c3d 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5198,3 +5198,53 @@ static void quirk_reset_lenovo_thinkpad_p50_nvgpu(struct pci_dev *pdev)
+ DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, 0x13b1,
+ 			      PCI_CLASS_DISPLAY_VGA, 8,
+ 			      quirk_reset_lenovo_thinkpad_p50_nvgpu);
++
++/*
++ * Some Intel PCIe bridges cause devices to disappear from the PCIe bus after
++ * those were put into D3cold state if they were put into a non D0 PCI PM
++ * device state before doing so.
++ *
++ * This leads to various issue different issues which all manifest differently,
++ * but have the same root cause:
++ *  - AIML code execution hits an infinite loop (as the coe waits on device
++ *    memory to change).
++ *  - kernel crashes, as all pci reads return -1, which most code isn't able
++ *    to handle well enough.
++ *  - sudden shutdowns, as the kernel identified an unrecoverable error after
++ *    userspace tries to access the GPU.
++ *
++ * In all cases dmesg will contain at least one line like this:
++ * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3'
++ * followed by a lot of nouveau timeouts.
++ *
++ * ACPI code writes bit 0x80 to the not documented PCI register 0x248 of the
++ * PCIe bridge controller in order to power down the GPU.
++ * Nonetheless, there are other code paths inside the ACPI firmware which use
++ * other registers, which seem to work fine:
++ *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
++ *  - 0xb0 bit 0x10 (link disable)
++ * Changing the conditions inside the firmware by poking into the relevant
++ * addresses does resolve the issue, but it seemed to be ACPI private memory
++ * and not any device accessible memory at all, so there is no portable way of
++ * changing the conditions.
++ *
++ * The only systems where this behavior can be seen are hybrid graphics laptops
++ * with a secondary Nvidia Pascal GPU. It cannot be ruled out that this issue
++ * only occurs in combination with listed Intel PCIe bridge controllers and
++ * the mentioned GPUs or if it's only a hw bug in the bridge controller.
++ *
++ * But because this issue was NOT seen on laptops with an Nvidia Pascal GPU
++ * and an Intel Coffee Lake SoC, there is a higher chance of there being a bug
++ * in the bridge controller rather than in the GPU.
++ *
++ * This issue was not able to be reproduced on non laptop systems.
++ */
++
++static void quirk_broken_child_pm(struct pci_dev *dev)
++{
++	dev->broken_child_pm = 1;
++	printk("applied broken child pm quirk!\n");
++}
++/* kaby lake */
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x1901,
++			quirk_broken_child_pm);
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index dd436da7eccc..01eb0a9e6c13 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -413,6 +413,7 @@ struct pci_dev {
+ 	unsigned int	__aer_firmware_first_valid:1;
+ 	unsigned int	__aer_firmware_first:1;
+ 	unsigned int	broken_intx_masking:1;	/* INTx masking can't be used */
++	unsigned int	broken_child_pm:1;	/* children put into lower PCI PM states won't recover after D3cold transition */
+ 	unsigned int	io_window_1k:1;		/* Intel bridge 1K I/O windows */
+ 	unsigned int	irq_managed:1;
+ 	unsigned int	has_secondary_link:1;
+-- 
+2.21.0
+
