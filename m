@@ -2,81 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB543C2527
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 18:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B03DC252C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 18:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732296AbfI3QaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 12:30:07 -0400
-Received: from mga09.intel.com ([134.134.136.24]:28178 "EHLO mga09.intel.com"
+        id S1732008AbfI3QcN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 12:32:13 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:54770 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732308AbfI3QaH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Sep 2019 12:30:07 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 09:30:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,567,1559545200"; 
-   d="scan'208";a="204868102"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 30 Sep 2019 09:30:02 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 30 Sep 2019 19:30:01 +0300
-Date:   Mon, 30 Sep 2019 19:30:01 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
- states on certain intel bridges
-Message-ID: <20190930163001.GX2714@lahna.fi.intel.com>
-References: <20190927144421.22608-1-kherbst@redhat.com>
- <20190927214252.GA65801@google.com>
- <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
- <20190930080534.GS2714@lahna.fi.intel.com>
- <CACO55tuMo1aAA7meGtEey6J6sOS-ZA0ebZeL52i2zfkWtPqe_g@mail.gmail.com>
- <20190930092934.GT2714@lahna.fi.intel.com>
- <CACO55tu9M8_TWu2MxNe_NROit+d+rHJP5_Tb+t73q5vr19sd1w@mail.gmail.com>
+        id S1727767AbfI3QcN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Sep 2019 12:32:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=qZmq/vZ1uF91H9zblUBrI03dFEWUTL8yzpnf7lGHSRA=; b=1YJGbspzHZXDVLB+IPjixtBnBF
+        78wyiJv87Tac5ug/oS1uaZGWCAAU7IUysBIBn7IfosmXCBnwwLGZv5jV/3fVNxx5pzgcktZZwmvQ8
+        Buks5BBHmGfeAQGLrYVXGcDleNsAXg2DKjDwa/X6PzEOq2cyIvXWW/y5nDWXuj2A1+nI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.92.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1iEyah-0004oW-L2; Mon, 30 Sep 2019 18:32:03 +0200
+Date:   Mon, 30 Sep 2019 18:32:03 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Jamie Lentin <jm@lentin.co.uk>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Igor Opaniuk <igor.opaniuk@toradex.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 0/2] This patch introduces a feature to force
+ gpio-poweroff module
+Message-ID: <20190930163203.GC15343@lunn.ch>
+References: <20190930103531.13764-1-oleksandr.suvorov@toradex.com>
+ <20190930121440.GC13301@lunn.ch>
+ <CAGgjyvEx_F0C2XHDGxf3F0Z8iHF1vQZkoPft3_ZbTswVFv=SJA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACO55tu9M8_TWu2MxNe_NROit+d+rHJP5_Tb+t73q5vr19sd1w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <CAGgjyvEx_F0C2XHDGxf3F0Z8iHF1vQZkoPft3_ZbTswVFv=SJA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 06:05:14PM +0200, Karol Herbst wrote:
-> still happens with your patch applied. The machine simply gets shut down.
+On Mon, Sep 30, 2019 at 02:11:59PM +0000, Oleksandr Suvorov wrote:
+> Hi Andrew,
 > 
-> dmesg can be found here:
-> https://gist.githubusercontent.com/karolherbst/40eb091c7b7b33ef993525de660f1a3b/raw/2380e31f566e93e5ba7c87ef545420965d4c492c/gistfile1.txt
+> On Mon, Sep 30, 2019 at 3:16 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> >
+> > On Mon, Sep 30, 2019 at 10:35:36AM +0000, Oleksandr Suvorov wrote:
+> > > to register its own pm_power_off handler even if someone has registered
+> > > this handler earlier.
+> > > Useful to change a way to power off the system using DT files.
+> >
+> > Hi Oleksandr
+> >
+> > I'm not sure this is a good idea. What happens when there are two
+> > drivers using forced mode? You then get which ever is register last.
+> > Non deterministic behaviour.
+> 
+> You're right, we have to handle a case when gpio-poweroff fails to
+> power the system off. Please look at the
+> 2nd version of the patchset.
+> 
+> There are 3 only drivers that forcibly register its own pm_power_off
+> handler even if it has been registered before.
+> 
+> drivers/firmware/efi/reboot.c - supports chained call of next
+> pm_power_off handler if its own handler fails.
+> 
+> arch/x86/platform/iris/iris.c, drivers/char/ipmi/ipmi_poweroff.c -
+> don't support calling of next pm_power_off handler.
+> Looks like these drivers should be fixed too.
+> 
+> All other drivers don't change already initialized pm_power_off handler.
+> 
+> > What is the other driver which is causing you problems? How is it
+> > getting probed? DT?
+> 
+> There are several PMUs, RTCs, watchdogs that register their own pm_power_off.
+> Most of them, probably not all, are probed from DT.
 
-Looking your dmesg:
+And which specific one is causing you problems.
 
-Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: DCB version 4.1
-Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: MM: using COPY for buffer copies
-Sep 30 17:24:27 kernel: [drm] Initialized nouveau 1.3.1 20120801 for 0000:01:00.0 on minor 1
+I don't like this forced parameter. No other driver is using it.
 
-I would assume it runtime suspends here. Then it wakes up because of PCI
-access from userspace:
+Maybe we should change this driver to support chained pm_power_off
+handlers?
 
-Sep 30 17:24:42 kernel: pci_raw_set_power_state: 56 callbacks suppressed
- 
-and for some reason it does not get resumed properly. There are also few
-warnings from ACPI that might be relevant:
-
-Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.GFX0._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
-Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.PEG0.PEGP._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
-
-This seems to be Dell XPS 9560 which I think has been around some time
-already so I wonder why we only see issues now. Has it ever worked for
-you or maybe there is a regression that causes it to happen now?
+   Andrew
