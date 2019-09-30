@@ -2,71 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DE4C20A3
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 14:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFFCC20C8
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 14:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729649AbfI3Mb1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 08:31:27 -0400
-Received: from mail-eopbgr140070.outbound.protection.outlook.com ([40.107.14.70]:8454
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        id S1729649AbfI3Mnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 08:43:50 -0400
+Received: from mail-eopbgr130048.outbound.protection.outlook.com ([40.107.13.48]:26759
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729603AbfI3Mb1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Sep 2019 08:31:27 -0400
+        id S1728214AbfI3Mnt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Sep 2019 08:43:49 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=acOnNiP0kXQIivQZfmE5c5/rQer1AdNbi0puPBqUSJ5hdfhC2cd7Ye2lbxbUxeh+FbN0uh0B7CE7LlBa4+wmdaLusWfXrrhdn+6431OtPEvguRrwtoKDKN6mQeb18cV12PF3+jh92/NOWuctNrwwHObAxjFcduTG4Ys+h6fb9MmU9JdvJrEtR44g2LTi/jdF+uvIlIevDLlJdOsFcSCHJF8nMExZcYA+CNabHOIf3JKKa9YD/CkCmEaHtvjxLpMovLDF5tReFdoJT2dhO7OYAQrLd5vRuMjY925eNgQbRB2RHCsoCveTpFtXViMyvFzeKda2j5k2I787u+h+yTLk1g==
+ b=X/1cIMl1cDLxZ1VwFcR+1v6RBfwvBewWAaxz9Z7KvRQRQeBW+tn9RBMrY26kyYegiTYtY6gXWlV7IUl+YwTDLe04gVWYQQRuwrfUwJr5WnRMOnFjVIp1+WfIwepB8nTQZJOZy5R8qzTweytJncOkEcVlFMt+exMBQBEAwhcu3uVLq5K6kTGhXP15fCKC5G+OLSVUhS3cxYF+qROaardmntL9+VKeoxF7Rfr1heiFC9raTDXv/S9/qDEgELd2uM9JvDRSMWutb/Ma8WqWgalr98G/lIq6tJJvutNhEDlBMxt7w+AWqbvC/U322ttcN/3b/M0ZQCEsamqBp0VUCYLKaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v0YK9BBMsjkmMIV4HXbw7SWLBrnTFXp4wwng71Bm87g=;
- b=HK2BGHf3+vDfxUe1j8l5MGCO8XIcrAqN417PjBXq2nivey5smptHRBLpH5nLejnrGKWKET3nnWyLMLyROpUi3Y6eH4KU/+8skHNAxpqES2N8Dk2XeG0h8hYMuR5QLLCBSnd7ilbsQhEh1rv5+a1EcHU5rwYqWCSOPRbp5zvuWbW5tEHRrGhRLHKZGBXf+qVQHrkmd/eQ2l64gxigtzkeTw9sWQshi/lexIywIVKQAdn0kHVw3ClLxQCCuYNvxZpWxRBrBuIi6JQuIHWghG4RCzl4FKXCuJ0Rb7/G4ex+ofpNvnDYLHw3ZSuHs4vmeeGa+ogfJgUPkoqLi9vGk55qoA==
+ bh=3s6nN4zx1NfdOs0spRIoGBKRH+IN9YSXwLaURs4wa6Q=;
+ b=PtHhHO2utwJhNS6digCgKc+EOSHt2QVCecEH91GE9x/VFEteXft4Fe7uDAWKziIMSfEFTUUq5Ipx++77RiP/pCxgbj9UVrokFCBoOIxIU7UNT4jCU1JHIHov4NAWjNWH7s6kT2RmXz0AsbvmgOFPjbDIjG26FqX2azl/Z4RCEGUSw+gqWuKyrrsV+PJECDawWCu4gYvmq8CNe1lGwvTptgu07LqeX4F4b0z0IyYm3qOdptYOghBT8C7FHAJSb4dOzjfNjHi/CrJZBQmywNiTPKlBWmbLGZQLY4+vhjttjZU5csrybqZcbaWsC9one7OpJjsxBCLBn/Gu5H41llDLkA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v0YK9BBMsjkmMIV4HXbw7SWLBrnTFXp4wwng71Bm87g=;
- b=sCk4wRHw2L6iWPpr+to887nENynCYKSbeUr3YpdBvQII1UzssXMkATuP8UqNrPc/plptN2Nawv0tTEdC/fTTIx1tCOf9PSLOXXMWcqrw5zzub77L4J9+Y5HlULouSVrUDRsLwGZxYH6/t4ag/KNNUZ1FsmM0+YUQyLUtpjUtPlM=
+ bh=3s6nN4zx1NfdOs0spRIoGBKRH+IN9YSXwLaURs4wa6Q=;
+ b=bWRKl5TaD+h23eX4CE4gFDHi/oMfNBLk61YY64E6eDyOylIgZtKp+NxJBJ2BAo1KP0oqy+58DvIklGYBEz2d9zT9mOPVHghaYZ4y5xrgDH4VtV7rk8ylsdh5t1WN7wIgNAphi25fR2HwttJm+kHdOcM1npy/khELcEx4sakyqgs=
 Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB5295.eurprd04.prod.outlook.com (20.177.51.224) with Microsoft SMTP
+ VI1PR04MB3021.eurprd04.prod.outlook.com (10.170.228.143) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.17; Mon, 30 Sep 2019 12:31:22 +0000
+ 15.20.2305.20; Mon, 30 Sep 2019 12:43:42 +0000
 Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
  ([fe80::2ce6:267:b2a6:9902]) by VI1PR04MB7023.eurprd04.prod.outlook.com
  ([fe80::2ce6:267:b2a6:9902%2]) with mapi id 15.20.2305.017; Mon, 30 Sep 2019
- 12:31:22 +0000
+ 12:43:41 +0000
 From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+CC:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
+        =?utf-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Lukasz Luba <l.luba@partner.samsung.com>,
         dl-linux-imx <linux-imx@nxp.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFCv4 0/7] interconnect: Add imx support via devfreq
-Thread-Topic: [RFCv4 0/7] interconnect: Add imx support via devfreq
-Thread-Index: AQHVWcA7xPiNhLrdqkSG10Lu7U9EhQ==
-Date:   Mon, 30 Sep 2019 12:31:22 +0000
-Message-ID: <VI1PR04MB70230CC67539BC41E08F4956EE820@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1566570260.git.leonard.crestez@nxp.com>
- <VI1PR04MB702373BE28E4404C7F2CE75FEE8C0@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <02d3fe6a-53a6-3290-deab-d79e940978ff@linaro.org>
- <VI1PR04MB7023ADED2210DFCB81E588CFEE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <a1f04769-9547-58e6-2bd0-5b6a5864fbf0@linaro.org>
+Subject: Re: [PATCH v8 5/6] PM / devfreq: Add PM QoS support
+Thread-Topic: [PATCH v8 5/6] PM / devfreq: Add PM QoS support
+Thread-Index: AQHVcsB0h3rfWi61w06V80OWKl85wg==
+Date:   Mon, 30 Sep 2019 12:43:41 +0000
+Message-ID: <VI1PR04MB7023FDB02BCC9E4248F05CF9EE820@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1569319738.git.leonard.crestez@nxp.com>
+ <CGME20190924101145epcas4p37f7d25b8743c25520b33fa392cd80d45@epcas4p3.samsung.com>
+ <58fdd2c226a4e76a3d9427baab7dd5c23af842ab.1569319738.git.leonard.crestez@nxp.com>
+ <40885624-8f11-4eea-d5bf-d6bb50fa44dd@samsung.com>
+ <VI1PR04MB7023573BA3D5C5D521DB689CEE870@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <10b7f567-3d07-d4b0-b555-48c03a26461e@samsung.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -75,203 +70,199 @@ authentication-results: spf=none (sender IP is )
  smtp.mailfrom=leonard.crestez@nxp.com; 
 x-originating-ip: [82.144.34.2]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e72abba1-5040-44fc-fee5-08d745a21a64
+x-ms-office365-filtering-correlation-id: 5b82063b-63d1-4122-7367-08d745a3d31b
 x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: VI1PR04MB5295:|VI1PR04MB5295:
-x-ms-exchange-purlcount: 6
+x-ms-traffictypediagnostic: VI1PR04MB3021:|VI1PR04MB3021:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB52954D75E141EBA4EA10DDACEE820@VI1PR04MB5295.eurprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <VI1PR04MB3021C45C20BC4990FF32120DEE820@VI1PR04MB3021.eurprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(199004)(189003)(256004)(316002)(6246003)(9686003)(33656002)(25786009)(6306002)(186003)(55016002)(229853002)(6436002)(8936002)(26005)(52536014)(7696005)(110136005)(7416002)(99286004)(6506007)(102836004)(76176011)(86362001)(14454004)(71200400001)(66066001)(8676002)(44832011)(5660300002)(81156014)(81166006)(74316002)(53546011)(966005)(486006)(4326008)(54906003)(7736002)(446003)(478600001)(71190400001)(2906002)(6116002)(3846002)(66446008)(305945005)(476003)(64756008)(66556008)(66476007)(91956017)(66946007)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5295;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(39860400002)(136003)(376002)(366004)(199004)(189003)(66476007)(76176011)(186003)(64756008)(102836004)(91956017)(53546011)(71200400001)(71190400001)(6246003)(6506007)(7696005)(476003)(33656002)(446003)(7736002)(74316002)(305945005)(44832011)(486006)(7416002)(256004)(14444005)(66946007)(76116006)(4326008)(26005)(478600001)(66446008)(66556008)(66066001)(5660300002)(52536014)(14454004)(86362001)(81156014)(3846002)(6116002)(8676002)(229853002)(316002)(54906003)(99286004)(8936002)(81166006)(110136005)(6436002)(9686003)(55016002)(2906002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3021;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u6ui7NHeLubAqlbvzcZzWP0wudAWqH4gxofYatZIf8+wthggWvnSx/+ky4Cs7PnCpJ7qfUVp5PkmPuIDp7sDjpAke7zKvid2HpixHgmZw38d0yMKiZ3xEZ6xFSAgJaZQ5LVqVmbBgDkY1Cbdh3bMUFoP6qjuXcfaEjwXadbQ7YflVZUazSxx92kNlJi+OSyOfA3fpnlOz/UXVMiTkRSTG4S4/mytfloCnNxT1cBo+KZlLBXCB0d92wUt20s8vMXnXwpe4HGe7Y8stVugZ4nYYDiesY0whRwaYSW0ICxM4nfzyCi9md66oRu60SfJNfHyRRcsDirLH+5dceQgT3I5jhhSl91Zqu/vEeDcXEkv604ObfLlz2OZ/ECOrr8AlzhoKTOOCkkkIUK2F2QLqxFgBEmc8Kq9hcclDUH5u15oGgtsgkGZDZ3ndx5flH6wre21wHzvHzxAX+PgEPipQZzbNw==
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+x-microsoft-antispam-message-info: L5O3W1Dlagrt6CnZnPSl8hmEcM/trqLqpzuwkBkKMUvg3Htt1i9CGa6GxxHJ1THpGKmLHvLp/Kg62kIDPdXhjegFGCjn0+ekiIuSMGK4MDE6LXIZ6OZQAkb8f5N/AVlAevDpk5stfINXbWCPdYTGHBwLTDpLc4Pkw7V6xr8AAaDAOKf4aLLimWKHZC4rBhpe+oufx//cz4WMoNvpq/Le2S3UqhIcIMQ7t+682lMwcpKVsV3aPH/JioAhNjpDhDvIADR39bw3Wdlscc0XHrts8u7qtIOBPCbkxiMtuE6qRqtq3eV/nDmydnVkj63F8vLte91CG46Ns7V4JbLee5LZqVsEaLsZsJOzHfevDEgmY3/cFxzdASgUgim7BFfktiJJUWnEW46esd95tu1I8R4POH4iJS6+OC+TyWMI6pcGjhg=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e72abba1-5040-44fc-fee5-08d745a21a64
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 12:31:22.4678
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b82063b-63d1-4122-7367-08d745a3d31b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 12:43:41.9031
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vunRFL9t44QpWdgR4U8JXPJc7tf2+QD82dkCZ+O7y9jG4xdI4T8TEEiq77z3Bl4GSkFo4fXUJbnLdCfigsMwyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5295
+X-MS-Exchange-CrossTenant-userprincipalname: bUvd0AsQRGccNQtVn2KxuSIJ8Fkul+0klep7uFFbUanXRTDFVgPVFsTbkFgB9d3DA+5t4Ti9HX9oDiBuQxFnBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3021
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019-09-26 3:52 AM, Georgi Djakov wrote:=0A=
-> On 9/25/19 15:52, Leonard Crestez wrote:=0A=
->> On 25.09.2019 05:38, Georgi Djakov wrote:=0A=
->>> Hi Leonard,=0A=
->>>=0A=
->>> On 9/16/19 05:34, Leonard Crestez wrote:=0A=
->>>> On 23.08.2019 17:37, Leonard Crestez wrote:=0A=
->>>>> This series add imx support for interconnect via devfreq: the ICC=0A=
->>>>> framework is used to aggregate requests from devices and then those a=
-re=0A=
->>>>> converted to DEV_PM_QOS_MIN_FREQUENCY requests for devfreq.=0A=
->>>>>    =0A=
->>>>> Since there is no single devicetree node that can represent the "inte=
-rconnect"=0A=
->>>>> new API is added to allow individual devfreq nodes to act as parsing =
-proxies=0A=
->>>>> all mapping to a single soc-level icc provider. This is still RFC=0A=
->>>>> because of this=0A=
->>>>=0A=
->>>> Any comments? I made a lot of changes relative to previous versions,=
-=0A=
->>>> most of them solely to avoid adding a virtual node in DT bindings.=0A=
->>>>=0A=
->>>> The only current interconnect provider implementation is for qcom and =
-it=0A=
->>>> uses a firmware node as the provider node (with #interconnect-cells).=
-=0A=
->>>> However there is no obvious equivalent of that for imx and many other =
-SOCs.=0A=
->>>=0A=
->>> Not sure if it will help, but have you seen the qcs404 interconnect dri=
-ver?=0A=
->>> There is also mt8183 interconnect provider driver on LKML.=0A=
->>=0A=
->> Yes, but only yesterday. The qcs404 driver involves multiple DT devices=
-=0A=
->> so it seems closer to imx.=0A=
->>=0A=
->> As far as I understand from reading qcs404 source:=0A=
->>=0A=
->> * There is no struct device representing the entire graph.=0A=
->> * There are multiple NOCs and each registers itself as a separate=0A=
->> interconnect provider.=0A=
->> * Each NOC registers multiple icc_nodes of various sorts:=0A=
->>     * Device masters and slaves=0A=
->>     * Some nodes representing NoC ports?=0A=
-> =0A=
-> Well, all nodes are representing ports.=0A=
-> =0A=
->>     * Multiple internal nodes=0A=
->> * There is single per-SOC master list of QNOCs in the qcs404 driver.=0A=
->> * The QNOCs can reference each other between multiple providers.=0A=
->> * Each NOC registers an icc_provider and a subset of the graph.=0A=
->> * The multiple NoC inside a chip are distinguished by compat strings.=0A=
->> This seems strange, aren't they really different instantiations of the=
-=0A=
->> same IP with small config changes?=0A=
-> =0A=
-> No, they are different IPs - ahb, axi or custom based.=0A=
-=0A=
-On IMX some of the buses are just different instantiations.=0A=
-=0A=
-Would it make sense to standardize an "interconnect-node-id" to identify =
-=0A=
-middle nodes? For example if you have nearly identical "audio" "display" =
-=0A=
-"vpu" NICs then this property would make it possible to map from a DT =0A=
-done to an ICC graph node.=0A=
-=0A=
->> This design is still quite odd, what would make sense to me is to=0A=
->> register the "interconnect graph" once and then provide multiple=0A=
->> "interconnect scalers" which handle the aggregated requests for certain=
-=0A=
->> specific nodes.=0A=
->>=0A=
->>>> On imx there are multiple pieces of scalable fabric which can be defin=
-ed=0A=
->>>> in DT as devfreq devices and it sort of makes sense to add=0A=
->>>> #interconnect-cells to those. However when it comes to describing the=
-=0A=
->>>> SOC interconnect graph it's much more convenient to have a single=0A=
->>>> per-SOC platform driver.=0A=
->>>=0A=
->>> Is all the NoC configuration done only by ATF? Are there any NoC relate=
-d memory=0A=
->>> mapped registers?=0A=
->>=0A=
->> Registers are memory-mapped and visible to the A-cores but should only=
-=0A=
->> be accessed through secure transactions. This means that configuration=
-=0A=
->> needs be done by ATF in EL3 (we don't support running linux in secure=0A=
->> world on imx8m). There is no "remote processor" managing this on imx8m.=
-=0A=
-> =0A=
-> Can we create some noc DT node with it's memory mapped address and make=
-=0A=
-> it an interconnect provider? Sounds to me like a more correct representat=
-ion=0A=
-> of the hardware?=0A=
-=0A=
-This is what I did, it's just that the initial binding is in this series:=
-=0A=
-https://patchwork.kernel.org/cover/11104113/=0A=
-https://patchwork.kernel.org/patch/11104137/=0A=
-https://patchwork.kernel.org/patch/11104141/=0A=
-=0A=
-The nodes are scaled via devfreq and interconnect comes "on top" to make =
-=0A=
-device bandwidth requests.=0A=
-=0A=
-I think using devfreq is valuable for example:=0A=
-  * DDRC can support reactive scaling based on performance counters=0A=
-  * The NOC can run at different voltages so it should have it's own OPP =
-=0A=
-table.=0A=
-=0A=
-> Other option would be to bless some PSCI DT node (for example) to be a=0A=
-> provider.=0A=
-=0A=
-I don't think this can be a good fit, I want to support different =0A=
-interconnect nodes with different underlying interfaces on the same SOC.=0A=
-=0A=
-There is no abstraction layer in firmware so abstractions for different =0A=
-interconnect midnodes should be in linux instead.=0A=
-=0A=
->> On older imx6/7 chips we actually have two out-of-tree implementations=
-=0A=
->> of bus freq switching code: An older one in Linux (used when running in=
-=0A=
->> secure world) and a different one in optee for running Linux in=0A=
->> non-secure world.=0A=
->>=0A=
->> NoC registers can be used to control some "transaction priority" bits=0A=
->> but I don't want to expose that part right now.=0A=
-> =0A=
-> This is very similar to some of the Qcom hardware.=0A=
-=0A=
-NoC IP is licensed from Arteris which was bought-out by Qcom. =0A=
-Documentation is not public though and there are likely many differences =
-=0A=
-versus what Qcom has in their own chips.=0A=
->> What determines bandwidth versus power consumption is the NoC clk rate=
-=0A=
->> and clocks are managed by Linux directly.=0A=
-> =0A=
-> So you will need to describe these clocks in the interconnect provider=0A=
-> DT node like on qcs404.=0A=
-=0A=
-I already implemented the nodes as devfreq provider and DDRC even =0A=
-includes ondemand reactive scaling support:=0A=
-=0A=
-https://patchwork.kernel.org/patch/11104139/=0A=
-https://patchwork.kernel.org/patch/11104145/=0A=
-https://patchwork.kernel.org/patch/11104143/=0A=
-=0A=
-I could just pick the "main" NOC and turn than into the "only" =0A=
-interconnect provider. Something like this:=0A=
-=0A=
-if (has_property(noc_device, "#interconnect-cells")) {=0A=
-     register_soc_icc_driver(noc_device);=0A=
-}=0A=
-=0A=
-This would get rid of the icc_proxy stuff but fetching references to =0A=
-other scalable nodes would require some other way to identify them.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+T24gMjAxOS0wOS0yNiA0OjE0IEFNLCBDaGFud29vIENob2kgd3JvdGU6Cj4gT24gMTkuIDkuIDI2
+LiDsmKTsoIQgNjoxOCwgTGVvbmFyZCBDcmVzdGV6IHdyb3RlOgo+PiBPbiAyNS4wOS4yMDE5IDA1
+OjExLCBDaGFud29vIENob2kgd3JvdGU6Cj4+PiBPbiAxOS4gOS4gMjQuIOyYpO2bhCA3OjExLCBM
+ZW9uYXJkIENyZXN0ZXogd3JvdGU6Cj4+Pj4gUmVnaXN0ZXIgbm90aWZpZXJzIHdpdGggdGhlIFBN
+IFFvUyBmcmFtZXdvcmsgaW4gb3JkZXIgdG8gcmVzcG9uZCB0bwo+Pj4+IHJlcXVlc3RzIGZvciBE
+RVZfUE1fUU9TX01JTl9GUkVRVUVOQ1kgYW5kIERFVl9QTV9RT1NfTUFYX0ZSRVFVRU5DWS4KPj4+
+Pgo+Pj4+IE5vIG5vdGlmaWVycyBhcmUgYWRkZWQgYnkgdGhpcyBwYXRjaCBidXQgUE0gUW9TIGNv
+bnN0cmFpbnRzIGNhbiBiZQo+Pj4+IGltcG9zZWQgZXh0ZXJuYWxseSAoZm9yIGV4YW1wbGUgZnJv
+bSBvdGhlciBkZXZpY2VzKS4KPj4+Pgo+Pj4+IFNpZ25lZC1vZmYtYnk6IExlb25hcmQgQ3Jlc3Rl
+eiA8bGVvbmFyZC5jcmVzdGV6QG54cC5jb20+Cj4+Pj4gUmV2aWV3ZWQtYnk6IE1hdHRoaWFzIEth
+ZWhsY2tlIDxta2FAY2hyb21pdW0ub3JnPgo+Pj4+IC0tLQo+Pj4+ICAgIGRyaXZlcnMvZGV2ZnJl
+cS9kZXZmcmVxLmMgfCA3NSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysK
+Pj4+PiAgICBpbmNsdWRlL2xpbnV4L2RldmZyZXEuaCAgIHwgIDUgKysrCj4+Pj4gICAgMiBmaWxl
+cyBjaGFuZ2VkLCA4MCBpbnNlcnRpb25zKCspCj4+Pj4KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9kZXZmcmVxL2RldmZyZXEuYyBiL2RyaXZlcnMvZGV2ZnJlcS9kZXZmcmVxLmMKPj4+PiBpbmRl
+eCBlZWU0MDNlNzBjODQuLjc4NGYzZTQwNTM2YSAxMDA2NDQKPj4+PiAtLS0gYS9kcml2ZXJzL2Rl
+dmZyZXEvZGV2ZnJlcS5jCj4+Pj4gKysrIGIvZHJpdmVycy9kZXZmcmVxL2RldmZyZXEuYwo+Pj4+
+IEBAIC0yMiwxNSArMjIsMTggQEAKPj4+PiAgICAjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2
+aWNlLmg+Cj4+Pj4gICAgI2luY2x1ZGUgPGxpbnV4L2xpc3QuaD4KPj4+PiAgICAjaW5jbHVkZSA8
+bGludXgvcHJpbnRrLmg+Cj4+Pj4gICAgI2luY2x1ZGUgPGxpbnV4L2hydGltZXIuaD4KPj4+PiAg
+ICAjaW5jbHVkZSA8bGludXgvb2YuaD4KPj4+PiArI2luY2x1ZGUgPGxpbnV4L3BtX3Fvcy5oPgo+
+Pj4+ICAgICNpbmNsdWRlICJnb3Zlcm5vci5oIgo+Pj4+ICAgIAo+Pj4+ICAgICNkZWZpbmUgQ1JF
+QVRFX1RSQUNFX1BPSU5UUwo+Pj4+ICAgICNpbmNsdWRlIDx0cmFjZS9ldmVudHMvZGV2ZnJlcS5o
+Pgo+Pj4+ICAgIAo+Pj4+ICsjZGVmaW5lIEhaX1BFUl9LSFoJMTAwMAo+Pj4+ICsKPj4+PiAgICBz
+dGF0aWMgc3RydWN0IGNsYXNzICpkZXZmcmVxX2NsYXNzOwo+Pj4+ICAgIAo+Pj4+ICAgIC8qCj4+
+Pj4gICAgICogZGV2ZnJlcSBjb3JlIHByb3ZpZGVzIGRlbGF5ZWQgd29yayBiYXNlZCBsb2FkIG1v
+bml0b3JpbmcgaGVscGVyCj4+Pj4gICAgICogZnVuY3Rpb25zLiBHb3Zlcm5vcnMgY2FuIHVzZSB0
+aGVzZSBvciBjYW4gaW1wbGVtZW50IHRoZWlyIG93bgo+Pj4+IEBAIC0xMDksMTAgKzExMiwxMSBA
+QCBzdGF0aWMgdW5zaWduZWQgbG9uZyBmaW5kX2F2YWlsYWJsZV9tYXhfZnJlcShzdHJ1Y3QgZGV2
+ZnJlcSAqZGV2ZnJlcSkKPj4+PiAgICBzdGF0aWMgdm9pZCBnZXRfZnJlcV9yYW5nZShzdHJ1Y3Qg
+ZGV2ZnJlcSAqZGV2ZnJlcSwKPj4+PiAgICAJCQkgICB1bnNpZ25lZCBsb25nICptaW5fZnJlcSwK
+Pj4+PiAgICAJCQkgICB1bnNpZ25lZCBsb25nICptYXhfZnJlcSkKPj4+PiAgICB7Cj4+Pj4gICAg
+CXVuc2lnbmVkIGxvbmcgKmZyZXFfdGFibGUgPSBkZXZmcmVxLT5wcm9maWxlLT5mcmVxX3RhYmxl
+Owo+Pj4+ICsJdW5zaWduZWQgbG9uZyBxb3NfbWluX2ZyZXEsIHFvc19tYXhfZnJlcTsKPj4+PiAg
+ICAKPj4+PiAgICAJbG9ja2RlcF9hc3NlcnRfaGVsZCgmZGV2ZnJlcS0+bG9jayk7Cj4+Pj4gICAg
+Cj4+Pj4gICAgCS8qCj4+Pj4gICAgCSAqIEluaXQgbWluL21heCBmcmVxdWVuY3kgZnJvbSBmcmVx
+IHRhYmxlLgo+Pj4+IEBAIC0xMjUsMTAgKzEyOSwxOCBAQCBzdGF0aWMgdm9pZCBnZXRfZnJlcV9y
+YW5nZShzdHJ1Y3QgZGV2ZnJlcSAqZGV2ZnJlcSwKPj4+PiAgICAJfSBlbHNlIHsKPj4+PiAgICAJ
+CSptaW5fZnJlcSA9IGZyZXFfdGFibGVbZGV2ZnJlcS0+cHJvZmlsZS0+bWF4X3N0YXRlIC0gMV07
+Cj4+Pj4gICAgCQkqbWF4X2ZyZXEgPSBmcmVxX3RhYmxlWzBdOwo+Pj4+ICAgIAl9Cj4+Pj4gICAg
+Cj4+Pj4gKwkvKiBjb25zdHJhaW50cyBmcm9tIFBNIFFvUyAqLwo+Pj4KPj4+IEFzIEkgY29tbWVu
+dGVkIG9uIHBhdGNoNCwKPj4+ICdjb25zdHJhaW50cycgLT4gJ0NvbnN0cmFpbnQnIGJlY2F1c2Ug
+Zmlyc3QgdmVyYiBoYXZlIHRvIGJlIHVzZWQKPj4+IGFzIHRoZSBzaWd1bGFyIHZlcmJzLgo+Pgo+
+PiBBbHJlYWR5IGRpc2N1c3NlZCBmb3IgYW5vdGhlciBwYXRjaDsgSSB3aWxsIG1vZGlmeSB0byAi
+QXBwbHkgY29uc3RyYWludHMKPj4gZnJvbSBQTSBRb1MiIGluc3RlYWQuCj4+Cj4+PiBJIHByZWZl
+ciB0byB1c2UgZm9sbG93aW5nIGNvbW1lbnRzOgo+Pj4KPj4+IAkvKiBDb25zdHJhaW50IG1pbmlt
+dW0vbWF4aW11bSBmcmVxdWVuY3kgZnJvbSBQTSBRb1MgY29uc3RyYWludHMgKi8KPj4+Cj4+Pj4g
+Kwlxb3NfbWluX2ZyZXEgPSBkZXZfcG1fcW9zX3JlYWRfdmFsdWUoZGV2ZnJlcS0+ZGV2LnBhcmVu
+dCwKPj4+PiArCQkJCQkgICAgIERFVl9QTV9RT1NfTUlOX0ZSRVFVRU5DWSk7Cj4+Pj4gKwlxb3Nf
+bWF4X2ZyZXEgPSBkZXZfcG1fcW9zX3JlYWRfdmFsdWUoZGV2ZnJlcS0+ZGV2LnBhcmVudCwKPj4+
+PiArCQkJCQkgICAgIERFVl9QTV9RT1NfTUlOX0ZSRVFVRU5DWSk7Cj4+Pj4gKwkqbWluX2ZyZXEg
+PSBtYXgoKm1pbl9mcmVxLCBIWl9QRVJfS0haICogcW9zX21pbl9mcmVxKTsKPj4+PiArCSptYXhf
+ZnJlcSA9IG1pbigqbWF4X2ZyZXEsIEhaX1BFUl9LSFogKiBxb3NfbWF4X2ZyZXEpOwo+Pj4+ICsK
+Pj4+PiAgICAJLyogY29uc3RyYWludHMgZnJvbSBzeXNmcyAqLwo+Pj4+ICAgIAkqbWluX2ZyZXEg
+PSBtYXgoKm1pbl9mcmVxLCBkZXZmcmVxLT5taW5fZnJlcSk7Cj4+Pj4gICAgCSptYXhfZnJlcSA9
+IG1pbigqbWF4X2ZyZXEsIGRldmZyZXEtPm1heF9mcmVxKTsKPj4+PiAgICAKPj4+PiAgICAJLyog
+Y29uc3RyYWludHMgZnJvbSBPUFAgaW50ZXJmYWNlICovCj4+Pj4gQEAgLTYwNiwxMCArNjE4LDQ5
+IEBAIHN0YXRpYyBpbnQgZGV2ZnJlcV9ub3RpZmllcl9jYWxsKHN0cnVjdCBub3RpZmllcl9ibG9j
+ayAqbmIsIHVuc2lnbmVkIGxvbmcgdHlwZSwKPj4+PiAgICAJbXV0ZXhfdW5sb2NrKCZkZXZmcmVx
+LT5sb2NrKTsKPj4+PiAgICAKPj4+PiAgICAJcmV0dXJuIHJldDsKPj4+PiAgICB9Cj4+Pj4gICAg
+Cj4+Pj4gKy8qKgo+Pj4+ICsgKiBxb3Nfbm90aWZpZXJfY2FsbCgpIC0gQ29tbW9uIGhhbmRsZXIg
+Zm9yIFFvUyBjb25zdHJhaW50cy4KPj4+PiArICogQGRldmZyZXE6ICAgIHRoZSBkZXZmcmVxIGlu
+c3RhbmNlLgo+Pj4+ICsgKi8KPj4+PiArc3RhdGljIGludCBxb3Nfbm90aWZpZXJfY2FsbChzdHJ1
+Y3QgZGV2ZnJlcSAqZGV2ZnJlcSkKPj4+PiArewo+Pj4+ICsJaW50IGVycjsKPj4+PiArCj4+Pj4g
+KwltdXRleF9sb2NrKCZkZXZmcmVxLT5sb2NrKTsKPj4+PiArCWVyciA9IHVwZGF0ZV9kZXZmcmVx
+KGRldmZyZXEpOwo+Pj4+ICsJbXV0ZXhfdW5sb2NrKCZkZXZmcmVxLT5sb2NrKTsKPj4+PiArCWlm
+IChlcnIpCj4+Pj4gKwkJZGV2X2VycihkZXZmcmVxLT5kZXYucGFyZW50LAo+Pj4+ICsJCQkJImZh
+aWxlZCB0byB1cGRhdGUgZnJlcXVlbmN5IGZvciBQTSBRb1MgY29uc3RyYWludHMgKCVkKVxuIiwK
+Pj4+Cj4+PiBJcyBpdCBub3Qgb3ZlciA4MCBjaGFyPwo+Pgo+PiBZZXMgYnV0IGNvZGluZyBzdHls
+ZSBleHBsaWNpdGx5IGZvcmJpZHMgYnJlYWtpbmcgc3RyaW5ncy4KPiAKPiBJIHdhbnQgdG8gbWFr
+ZSBpdCB3aXRoaW4gODAgY2hhci4gSG93IGFib3V0IGZvbGxvd2luZyBjb21tZW50Pwo+IAo+IAkJ
+ZGV2X2VycihkZXZmcmVxLT5kZXYucGFyZW50LAo+IAkJCSJmYWlsZWQgdG8gdXBkYXRlIGZyZXF1
+ZW5jeSBmcm9tIFBNIFFvUyAoJWQpXG4iLAoKWWVzLCBzaHJpbmtpbmcgdGhlIGNvbW1lbnQgYW5k
+IGFsaWduaW5nIHdpdGggb3BlbiBwYXJlbnRoZXNpcyBjYW4ga2VlcCAKaXQgdW5kZXIgODAgY2hh
+cnMuIE1heWJlIGl0IGNvdWxkIGJlIHNocnVuayBmdXJ0aGVyIHRvCgogICAgICJmYWlsZWQgdXBk
+YXRlIGZvciBQTSBRb1MiCgo+Pj4+ICsJCQkJZXJyKTsKPj4+PiArCj4+Pj4gKwlyZXR1cm4gTk9U
+SUZZX09LOwo+Pj4+ICt9Cj4+Pj4gKwo+Pj4+ICsvKioKPj4+PiArICogcW9zX21pbl9ub3RpZmll
+cl9jYWxsKCkgLSBDYWxsYmFjayBmb3IgUW9TIG1pbl9mcmVxIGNoYW5nZXMuCj4+Pj4gKyAqIEBu
+YjoJCVNob3VsZCBiZSBkZXZmcmVxLT5uYl9taW4KPj4+PiArICovCj4+Pj4gK3N0YXRpYyBpbnQg
+cW9zX21pbl9ub3RpZmllcl9jYWxsKHN0cnVjdCBub3RpZmllcl9ibG9jayAqbmIsCj4+Pj4gKwkJ
+CQkJIHVuc2lnbmVkIGxvbmcgdmFsLCB2b2lkICpwdHIpCj4+Pj4gK3sKPj4+PiArCXJldHVybiBx
+b3Nfbm90aWZpZXJfY2FsbChjb250YWluZXJfb2YobmIsIHN0cnVjdCBkZXZmcmVxLCBuYl9taW4p
+KTsKPj4+PiArfQo+Pj4+ICsKPj4+PiArLyoqCj4+Pj4gKyAqIHFvc19tYXhfbm90aWZpZXJfY2Fs
+bCgpIC0gQ2FsbGJhY2sgZm9yIFFvUyBtYXhfZnJlcSBjaGFuZ2VzLgo+Pj4+ICsgKiBAbmI6CQlT
+aG91bGQgYmUgZGV2ZnJlcS0+bmJfbWF4Cj4+Pj4gKyAqLwo+Pj4+ICtzdGF0aWMgaW50IHFvc19t
+YXhfbm90aWZpZXJfY2FsbChzdHJ1Y3Qgbm90aWZpZXJfYmxvY2sgKm5iLAo+Pj4+ICsJCQkJCSB1
+bnNpZ25lZCBsb25nIHZhbCwgdm9pZCAqcHRyKQo+Pj4+ICt7Cj4+Pj4gKwlyZXR1cm4gcW9zX25v
+dGlmaWVyX2NhbGwoY29udGFpbmVyX29mKG5iLCBzdHJ1Y3QgZGV2ZnJlcSwgbmJfbWF4KSk7Cj4+
+Pj4gK30KPj4+PiArCj4+Pj4gICAgLyoqCj4+Pj4gICAgICogZGV2ZnJlcV9kZXZfcmVsZWFzZSgp
+IC0gQ2FsbGJhY2sgZm9yIHN0cnVjdCBkZXZpY2UgdG8gcmVsZWFzZSB0aGUgZGV2aWNlLgo+Pj4+
+ICAgICAqIEBkZXY6CXRoZSBkZXZmcmVxIGRldmljZQo+Pj4+ICAgICAqCj4+Pj4gICAgICogUmVt
+b3ZlIGRldmZyZXEgZnJvbSB0aGUgbGlzdCBhbmQgcmVsZWFzZSBpdHMgcmVzb3VyY2VzLgo+Pj4+
+IEBAIC02MjAsMTAgKzY3MSwxNSBAQCBzdGF0aWMgdm9pZCBkZXZmcmVxX2Rldl9yZWxlYXNlKHN0
+cnVjdCBkZXZpY2UgKmRldikKPj4+PiAgICAKPj4+PiAgICAJbXV0ZXhfbG9jaygmZGV2ZnJlcV9s
+aXN0X2xvY2spOwo+Pj4+ICAgIAlsaXN0X2RlbCgmZGV2ZnJlcS0+bm9kZSk7Cj4+Pj4gICAgCW11
+dGV4X3VubG9jaygmZGV2ZnJlcV9saXN0X2xvY2spOwo+Pj4+ICAgIAo+Pj4+ICsJZGV2X3BtX3Fv
+c19yZW1vdmVfbm90aWZpZXIoZGV2ZnJlcS0+ZGV2LnBhcmVudCwgJmRldmZyZXEtPm5iX21heCwK
+Pj4+PiArCQkJREVWX1BNX1FPU19NQVhfRlJFUVVFTkNZKTsKPj4+PiArCWRldl9wbV9xb3NfcmVt
+b3ZlX25vdGlmaWVyKGRldmZyZXEtPmRldi5wYXJlbnQsICZkZXZmcmVxLT5uYl9taW4sCj4+Pj4g
+KwkJCURFVl9QTV9RT1NfTUlOX0ZSRVFVRU5DWSk7Cj4+Pj4gKwo+Pj4KPj4+IEp1c3QgcHJpbnQg
+ZXJyb3Igd2l0aCBkZXZfZXJyKCkgd2l0aG91dCBzdG9wcGluZyB0aGUgcmVsZWFzZSBzdGVwLgo+
+Pj4KPj4+IEkgcHJlZmVyIHRvIGhhbmRsZSB0aGUgcmV0dXJuIHZhbHVlIGlmIGtlcm5lbCBBUEkg
+cHJvdmlkZXMKPj4+IHRoZSBlcnJvciBjb2RlLgo+Pj4KPj4+PiAgICAJaWYgKGRldmZyZXEtPnBy
+b2ZpbGUtPmV4aXQpCj4+Pj4gICAgCQlkZXZmcmVxLT5wcm9maWxlLT5leGl0KGRldmZyZXEtPmRl
+di5wYXJlbnQpOwo+Pj4+ICAgIAo+Pj4+ICAgIAlrZnJlZShkZXZmcmVxLT50aW1lX2luX3N0YXRl
+KTsKPj4+PiAgICAJa2ZyZWUoZGV2ZnJlcS0+dHJhbnNfdGFibGUpOwo+Pj4+IEBAIC03MzMsMTAg
+Kzc4OSwyOCBAQCBzdHJ1Y3QgZGV2ZnJlcSAqZGV2ZnJlcV9hZGRfZGV2aWNlKHN0cnVjdCBkZXZp
+Y2UgKmRldiwKPj4+PiAgICAJaWYgKGVycikgewo+Pj4+ICAgIAkJcHV0X2RldmljZSgmZGV2ZnJl
+cS0+ZGV2KTsKPj4+PiAgICAJCWdvdG8gZXJyX291dDsKPj4+PiAgICAJfQo+Pj4+ICAgIAo+Pj4+
+ICsJLyoKPj4+PiArCSAqIFJlZ2lzdGVyIG5vdGlmaWVycyBmb3IgdXBkYXRlcyB0byBtaW4vbWF4
+X2ZyZXEgYWZ0ZXIgZGV2aWNlIGlzCj4+Pj4gKwkgKiBpbml0aWFsaXplZCAoYW5kIHdlIGNhbiBo
+YW5kbGUgbm90aWZpY2F0aW9ucykgYnV0IGJlZm9yZSB0aGUKPj4+PiArCSAqIGdvdmVybm9yIGlz
+IHN0YXJ0ZWQgKHdoaWNoIHNob3VsZCBkbyBhbiBpbml0aWFsIGVuZm9yY2VtZW50IG9mCj4+Pj4g
+KwkgKiBjb25zdHJhaW50cykuCj4+Pj4gKwkgKi8KPj4+Cj4+PiBNeSBwcmV2aW91cyBjb21tZW50
+IGlzIG5vdCBlbm91Z2ggd2h5IEkgcHJlZmVyIHRvIHJlbW92ZSBpdC4gU29ycnkuCj4+PiBBY3R1
+YWxseSwgdW50aWwgbm93LCB0aGUgZGV2ZnJlcV9hZGRfZGV2aWNlKCkgZG9uJ3QgaGF2ZSB0aGUg
+ZGV0YWlsZWQKPj4+IGNvbW1lbnRzIGJlY2F1c2UgdGhlIGxpbmUgY29kZSBpcyBub3QgdG9vIGxv
+bmcuIEJ1dCwgYXQgdGhlIHByZXNlbnQgdGltZSwKPj4+IGRldmZyZXFfYWRkX2RldmljZSgpIGlz
+IHRvbyBsb25nLiBJdCBtZWFucyB0aGF0IHRoZSBkZXRhaWxlZCBjb21tZW50Cj4+PiBhcmUgbmVj
+ZXNzYXJ5Lgo+Pj4KPj4+IFNvLCBJJ2xsIGFkZCB0aGUgZGV0YWlsZWQgY29tbWVudCBmb3IgZWFj
+aCBzdGVwIG9mIGRldmZyZXFfYWRkX2RldmljZSgpCj4+PiBvbiBzZXBhcmF0ZSBwYXRjaCB0byBr
+ZWVwIHRoZSBzYW1lIHN0eWxlLiBJJ2xsIHNlbmQgdGhlIHBhdGNoIHRvIHlvdQo+Pj4gZm9yIHRo
+ZSByZXZpZXcuCj4+Cj4+IFRoaXMgaXMgdmVyeSBsaWtlbHkgdG8gcmVzdWx0IGluIG1lcmdlIGNv
+bmZsaWN0cywgbWF5YmUgd2FpdCBmb3IgbXkKPj4gc2VyaWVzIHRvIGdvIGluIGZpcnN0Pwo+Pgo+
+Pj4+ICsJZGV2ZnJlcS0+bmJfbWluLm5vdGlmaWVyX2NhbGwgPSBxb3NfbWluX25vdGlmaWVyX2Nh
+bGw7Cj4+Pj4gKwllcnIgPSBkZXZfcG1fcW9zX2FkZF9ub3RpZmllcihkZXZmcmVxLT5kZXYucGFy
+ZW50LCAmZGV2ZnJlcS0+bmJfbWluLAo+Pj4+ICsJCQkJICAgICAgREVWX1BNX1FPU19NSU5fRlJF
+UVVFTkNZKTsKPj4+PiArCWlmIChlcnIpCj4+Pj4gKwkJZ290byBlcnJfZGV2ZnJlcTsKPj4+PiAr
+Cj4+Pj4gKwlkZXZmcmVxLT5uYl9tYXgubm90aWZpZXJfY2FsbCA9IHFvc19tYXhfbm90aWZpZXJf
+Y2FsbDsKPj4+PiArCWVyciA9IGRldl9wbV9xb3NfYWRkX25vdGlmaWVyKGRldmZyZXEtPmRldi5w
+YXJlbnQsICZkZXZmcmVxLT5uYl9tYXgsCj4+Pj4gKwkJCQkgICAgICBERVZfUE1fUU9TX01BWF9G
+UkVRVUVOQ1kpOwo+Pj4+ICsJaWYgKGVycikKPj4+PiArCQlnb3RvIGVycl9kZXZmcmVxOwo+Pj4+
+ICsKPj4+PiAgICAJbXV0ZXhfbG9jaygmZGV2ZnJlcV9saXN0X2xvY2spOwo+Pj4+ICAgIAo+Pj4+
+ICAgIAlnb3Zlcm5vciA9IHRyeV90aGVuX3JlcXVlc3RfZ292ZXJub3IoZGV2ZnJlcS0+Z292ZXJu
+b3JfbmFtZSk7Cj4+Pj4gICAgCWlmIChJU19FUlIoZ292ZXJub3IpKSB7Cj4+Pj4gICAgCQlkZXZf
+ZXJyKGRldiwgIiVzOiBVbmFibGUgdG8gZmluZCBnb3Zlcm5vciBmb3IgdGhlIGRldmljZVxuIiwK
+Pj4+PiBAQCAtNzYwLDEwICs4MzQsMTEgQEAgc3RydWN0IGRldmZyZXEgKmRldmZyZXFfYWRkX2Rl
+dmljZShzdHJ1Y3QgZGV2aWNlICpkZXYsCj4+Pj4gICAgCj4+Pj4gICAgCXJldHVybiBkZXZmcmVx
+Owo+Pj4+ICAgIAo+Pj4+ICAgIGVycl9pbml0Ogo+Pj4+ICAgIAltdXRleF91bmxvY2soJmRldmZy
+ZXFfbGlzdF9sb2NrKTsKPj4+PiArZXJyX2RldmZyZXE6Cj4+Pj4gICAgCWRldmZyZXFfcmVtb3Zl
+X2RldmljZShkZXZmcmVxKTsKPj4+PiAgICAJcmV0dXJuIEVSUl9QVFIoZXJyKTsKPj4+PiAgICAK
+Pj4+PiAgICBlcnJfZGV2Ogo+Pj4+ICAgIAkvKgo+Pj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
+bnV4L2RldmZyZXEuaCBiL2luY2x1ZGUvbGludXgvZGV2ZnJlcS5oCj4+Pj4gaW5kZXggYzNjYmMx
+NWZkZjA4Li5kYWMwZGZmZWFiYjQgMTAwNjQ0Cj4+Pj4gLS0tIGEvaW5jbHVkZS9saW51eC9kZXZm
+cmVxLmgKPj4+PiArKysgYi9pbmNsdWRlL2xpbnV4L2RldmZyZXEuaAo+Pj4+IEBAIC0xMzQsMTAg
+KzEzNCwxMiBAQCBzdHJ1Y3QgZGV2ZnJlcV9kZXZfcHJvZmlsZSB7Cj4+Pj4gICAgICogQHRvdGFs
+X3RyYW5zOglOdW1iZXIgb2YgZGV2ZnJlcSB0cmFuc2l0aW9ucwo+Pj4+ICAgICAqIEB0cmFuc190
+YWJsZToJU3RhdGlzdGljcyBvZiBkZXZmcmVxIHRyYW5zaXRpb25zCj4+Pj4gICAgICogQHRpbWVf
+aW5fc3RhdGU6CVN0YXRpc3RpY3Mgb2YgZGV2ZnJlcSBzdGF0ZXMKPj4+PiAgICAgKiBAbGFzdF9z
+dGF0X3VwZGF0ZWQ6CVRoZSBsYXN0IHRpbWUgc3RhdCB1cGRhdGVkCj4+Pj4gICAgICogQHRyYW5z
+aXRpb25fbm90aWZpZXJfbGlzdDogbGlzdCBoZWFkIG9mIERFVkZSRVFfVFJBTlNJVElPTl9OT1RJ
+RklFUiBub3RpZmllcgo+Pj4+ICsgKiBAbmJfbWluOgkJTm90aWZpZXIgYmxvY2sgZm9yIERFVl9Q
+TV9RT1NfTUlOX0ZSRVFVRU5DWQo+Pj4+ICsgKiBAbmJfbWF4OgkJTm90aWZpZXIgYmxvY2sgZm9y
+IERFVl9QTV9RT1NfTUFYX0ZSRVFVRU5DWQo+Pj4+ICAgICAqCj4+Pj4gICAgICogVGhpcyBzdHJ1
+Y3R1cmUgc3RvcmVzIHRoZSBkZXZmcmVxIGluZm9ybWF0aW9uIGZvciBhIGdpdmUgZGV2aWNlLgo+
+Pj4+ICAgICAqCj4+Pj4gICAgICogTm90ZSB0aGF0IHdoZW4gYSBnb3Zlcm5vciBhY2Nlc3NlcyBl
+bnRyaWVzIGluIHN0cnVjdCBkZXZmcmVxIGluIGl0cwo+Pj4+ICAgICAqIGZ1bmN0aW9ucyBleGNl
+cHQgZm9yIHRoZSBjb250ZXh0IG9mIGNhbGxiYWNrcyBkZWZpbmVkIGluIHN0cnVjdAo+Pj4+IEBA
+IC0xNzYsMTAgKzE3OCwxMyBAQCBzdHJ1Y3QgZGV2ZnJlcSB7Cj4+Pj4gICAgCXVuc2lnbmVkIGlu
+dCAqdHJhbnNfdGFibGU7Cj4+Pj4gICAgCXVuc2lnbmVkIGxvbmcgKnRpbWVfaW5fc3RhdGU7Cj4+
+Pj4gICAgCXVuc2lnbmVkIGxvbmcgbGFzdF9zdGF0X3VwZGF0ZWQ7Cj4+Pj4gICAgCj4+Pj4gICAg
+CXN0cnVjdCBzcmN1X25vdGlmaWVyX2hlYWQgdHJhbnNpdGlvbl9ub3RpZmllcl9saXN0Owo+Pj4+
+ICsKPj4+PiArCXN0cnVjdCBub3RpZmllcl9ibG9jayBuYl9taW47Cj4+Pj4gKwlzdHJ1Y3Qgbm90
+aWZpZXJfYmxvY2sgbmJfbWF4Owo+Pj4+ICAgIH07Cj4+Pj4gICAgCj4+Pj4gICAgc3RydWN0IGRl
+dmZyZXFfZnJlcXMgewo+Pj4+ICAgIAl1bnNpZ25lZCBsb25nIG9sZDsKPj4+PiAgICAJdW5zaWdu
+ZWQgbG9uZyBuZXc7Cj4+Pj4KPj4+Cj4+Pgo+Pgo+IAo+IAoK
