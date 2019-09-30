@@ -2,136 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E11C1C7D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 10:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E34C1C80
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Sep 2019 10:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbfI3IFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Sep 2019 04:05:19 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40311 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbfI3IFS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Sep 2019 04:05:18 -0400
-Received: by mail-wm1-f65.google.com with SMTP id b24so11562968wmj.5;
-        Mon, 30 Sep 2019 01:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iZ0dWjtkkU87tg8tjMyvrTlzm1TZ6zOH1FuVyCPP5js=;
-        b=tku5GvoCac8CgL7RGMTXU7INk87u8sOuwpmY3lag/Yq4KzFoTLiez2kjQCGg1mWQNY
-         L6mDpq0JiB2C6jQZtkDLHdBcGipkHdj8e+iJ2WJD4WpPWRSj8eJQ4UKsGeSfUuZS5RhF
-         RpTyHsRvEd4woeBmQ18sGAmIBEyaswO7gfxsaWSeHSXlnt/poUbZ6LUMwzryy9Cn2Qzc
-         5BoH0pJg8MM2MFNcg4HAr/cDZl+MCGyaP6R/luHsHVQXpD3MCYgtRn5qFVRWbe3knre9
-         KOAXEvg3xeBJ4uKH6uloz6fN4QuQH2Fu+8jh98FgpsJu5okO0cwDkHAsIEP7xP8VLQ6O
-         ON1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iZ0dWjtkkU87tg8tjMyvrTlzm1TZ6zOH1FuVyCPP5js=;
-        b=uBBT2C6v6ylH39KibEjoahku1esBcobU75781Ef/g1RdYVA96nwv3dWFSqoAYTAygg
-         zcpJ8fypr9F4MPntkIyE1l4enwzUk68K1o5emyTW7KCmSwapMXSYkKEWatmDr09xCVdf
-         VpzRHP2l2S9PGEhQxxISv/zQTpu7XfzArFRABYr20/ETMM2YjrRJxD+wjB4TFKrxpixZ
-         /a2GMzEpKrFH28Ry1AiaHVfK9G9yEWfC1F4pm8t6r2D+AfsIQIxbZ2pL6veroHMK+PsF
-         VJtjzQbFwcNdHcLngPDFgdxLpW3FQAfVF77jynalFspwn6hWWEFpR2wSjS3I4WkpMTlO
-         EfJg==
-X-Gm-Message-State: APjAAAWN3oLcJVLbNY7Pa+EGGOXhNGEy4OTStNblidlSG5OtdKgi76D4
-        lt5nOZXTF0Vs/Vbnaw9S3LjKmy5g
-X-Google-Smtp-Source: APXvYqyJx2zrS3qEH/WgV2w4rKIMHxuLttTRAanwdd3xwtU4F7pO/NBuhvIHg0P4DFk3hHRxdSoDnA==
-X-Received: by 2002:a7b:cb8b:: with SMTP id m11mr16507758wmi.145.1569830714359;
-        Mon, 30 Sep 2019 01:05:14 -0700 (PDT)
-Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
-        by smtp.gmail.com with ESMTPSA id y19sm16771530wmi.13.2019.09.30.01.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 01:05:13 -0700 (PDT)
-Date:   Mon, 30 Sep 2019 10:05:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        id S1729738AbfI3IFm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Sep 2019 04:05:42 -0400
+Received: from mga11.intel.com ([192.55.52.93]:26754 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725767AbfI3IFm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Sep 2019 04:05:42 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 01:05:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,565,1559545200"; 
+   d="scan'208";a="204781826"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 30 Sep 2019 01:05:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 30 Sep 2019 11:05:34 +0300
+Date:   Mon, 30 Sep 2019 11:05:34 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 08/14] ARM: tegra: Make outer_disable() open-coded
-Message-ID: <20190930080511.GE1518582@ulmo>
-References: <20190929175952.22690-1-digetx@gmail.com>
- <20190929175952.22690-9-digetx@gmail.com>
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
+ states on certain intel bridges
+Message-ID: <20190930080534.GS2714@lahna.fi.intel.com>
+References: <20190927144421.22608-1-kherbst@redhat.com>
+ <20190927214252.GA65801@google.com>
+ <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4Epv4kl9IRBfg3rk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190929175952.22690-9-digetx@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Karol,
 
---4Epv4kl9IRBfg3rk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Sep 27, 2019 at 11:53:48PM +0200, Karol Herbst wrote:
+> > What exactly is the serious issue?  I guess it's that the rescan
+> > doesn't detect the GPU, which means it's not responding to config
+> > accesses?  Is there any timing component here, e.g., maybe we're
+> > missing some delay like the ones Mika is adding to the reset paths?
+> 
+> When I was checking up on some of the PCI registers of the bridge
+> controller, the slot detection told me that there is no device
+> recognized anymore. I don't know which register it was anymore, though
+> I guess one could read it up in the SoC spec document by Intel.
+> 
+> My guess is, that the bridge controller fails to detect the GPU being
+> here or actively threw it of the bus or something. But a normal system
+> suspend/resume cycle brings the GPU back online (doing a rescan via
+> sysfs gets the device detected again)
 
-On Sun, Sep 29, 2019 at 08:59:46PM +0300, Dmitry Osipenko wrote:
-> The outer_disable() of Tegra's suspend code is open-coded now since
-> that helper produces spurious warning message about secondary CPUs being
-> online. The secondaries are actually halted by the cpuidle driver on
-> entering into LP2 idle-state. This fixes a storm of warnings once LP2
-> idling state is enabled on Tegra30.
+Can you elaborate a bit what kind of scenario the issue happens (e.g
+steps how it reproduces)? It was not 100% clear from the changelog. Also
+what the result when the failure happens?
 
-If the cpuidle driver halts the secondaries, shouldn't it set it offline
-then so that outer_disable() can still work correctly?
+I see there is a script that does something but unfortunately I'm not
+fluent in Python so can't extract the steps how the issue can be
+reproduced ;-)
 
-Thierry
+One thing that I'm working on is that Linux PCI subsystem misses certain
+delays that are needed after D3cold -> D0 transition, otherwise the
+device and/or link may not be ready before we access it. What you are
+experiencing sounds similar. I wonder if you could try the following
+patch and see if it makes any difference?
 
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  arch/arm/mach-tegra/pm.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
-> index 7d9ef26e52a7..16a02937d3da 100644
-> --- a/arch/arm/mach-tegra/pm.c
-> +++ b/arch/arm/mach-tegra/pm.c
-> @@ -146,9 +146,10 @@ static int tegra_sleep_cpu(unsigned long v2p)
->  	 * if any of secondary CPU's is online and this is the LP2-idle
->  	 * code-path only for Tegra20/30.
->  	 */
-> -	if (trusted_foundations_registered())
-> -		outer_disable();
-> -
-> +#ifdef CONFIG_OUTER_CACHE
-> +	if (trusted_foundations_registered() && outer_cache.disable)
-> +		outer_cache.disable();
-> +#endif
->  	/*
->  	 * Note that besides of setting up CPU reset vector this firmware
->  	 * call may also do the following, depending on the FW version:
-> --=20
-> 2.23.0
->=20
-
---4Epv4kl9IRBfg3rk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2RtzUACgkQ3SOs138+
-s6Eq3RAAq+IM3JsJRvcEWa4zVK9I0xB+MNVeoUFLf4YWngs+qR/ozuEMfUGUf8yr
-Zn/lNHPCFdfG905CuOrhlvK8WAuq3XZl7LsXDeAtwv/6/FAEUTn2ZIsDGOAas716
-tCRbTmo1dU5Krs+Ws8NtbnZKqW1HZEck42lOkImjylj+9na7+BCOQJgkFjzX7M/k
-eSpAmE+C+6HaZfJtmFxP5s8ukCCynw92T2S0w4zrruIwNM8aWSziuDgq4NLctbja
-nLgQuvdOSvCIHbtnqJU0aO8DcezDW4UvpI5LD3DUfVaFP3iPsjtvGWfxhjKBy5oo
-9jODrFIUMHoSzv0KXi86NVXHmcWUZS61Ww+YgRZRgFtRBQaKNzCohPwajiNEyZu2
-Ss3AT5UFGSEhHI2fDFXe7YeaYhgHMh/fCKg+FYrsGAz6PmREkf9GSO7p8PFo7cv3
-GxE8qlRjz2CqQA3voW+O38g7QW4bZYTTSVP9VHgwPjocRY300SM4AD7q7bzUraBx
-RGbleDykkPVuwKRsno3Y85pcD2zANq3kx7VEgarc10llSewh7KLI0O3C7JnhR2C3
-Y5M9jGTAF2LHjIj9X/pVz00/vyXdfSreqTQAIMfQYIFXXdQwsUWAdYtRhwOYrRYq
-Z6QefJ+tE/IVq8Cmj7swr3Kc/zXxj1oAYjQbpwLhZXbEnsYbAsY=
-=ZN/o
------END PGP SIGNATURE-----
-
---4Epv4kl9IRBfg3rk--
+https://patchwork.kernel.org/patch/11106611/
