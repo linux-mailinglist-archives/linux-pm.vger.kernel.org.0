@@ -2,116 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA813C3A63
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 18:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52800C3AA1
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 18:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389941AbfJAQVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 12:21:45 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52224 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389953AbfJAQVl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:21:41 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E89A488302
-        for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2019 16:21:40 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id u18so39392305ioc.4
-        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2019 09:21:40 -0700 (PDT)
+        id S1726067AbfJAQfr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 12:35:47 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38447 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726063AbfJAQfr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Oct 2019 12:35:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id h195so8387401pfe.5
+        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2019 09:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=atMkE3+ksZjOVD8COwMqPXYfvUwFAn8HGygWZmnodkw=;
+        b=ddoHkIS2jNwy/leh8M6Pn55XjIVeRT7kNE2CgSfYK6DSixUkq4bdQSVEGIcnY1ua/c
+         0atFBkR3Zfdo0KNu4LUiZAksyy7OtsN2gGLh12BSbhfl7TeVX4HnyKowU+95+gpj8VsS
+         G5EDsbokGIjGKpCp9FGnrFm5A6BSBYfXVOKQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x9XepyaA218QJeUBfPQdn3QeV/2Cs13v78OcqROetO0=;
-        b=mtAevxTKTjrLC01YmYOxmr+1qQ1blDgsnyI4taoE+c4hKBLNlBSPjkPwrHSinrhgKM
-         /AV9TzMBcMDf+H/nU0s9blZc+QQkPsgwJTJiZ7OL4ZhJsuEBcpqkeNk+sJ+bJwipB1qV
-         Y3E+/a5UwrqtJr1X83gJQmE1rL7pXrV05pzW1ebI6KgS1t+hKefFyr10bSKNp6BLbyUq
-         UpwUwfwChPunkqejPOHcKQzOTOEM5HpzgF/S6Ib4eohRiJnYzwpcUXO6dGwHgyauT1on
-         arvkCJKL+AqO7unM6HOykZa/8Qvfp/SBggIHMIwd6oJcIFUrY7BGBvjxRh0NZRUmasRk
-         cFMw==
-X-Gm-Message-State: APjAAAUoYqznc0qPfHweE67YmnS6ZL8yAzzqlsaasqy2x6KiWEQq0EMg
-        V9tdast4YXx0n/Ffgip08ZPUjBpS9jSAgzOJhYTH6GFgfxokDO5m/Cc4FJc90+Aj+yT1fIaWJdx
-        IDIiUOn3kdgAPgIvDVfPkOAvmoRHQdlGyZhg=
-X-Received: by 2002:a92:ca84:: with SMTP id t4mr27014691ilo.171.1569946900251;
-        Tue, 01 Oct 2019 09:21:40 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwtlqLpKQEmRbFAQajrYSquBKr2bsxZFd6EKkYBXsFWdm96/QShaGDSjfsdotkX0LJVFp9IEOIgc19NwrFhxQE=
-X-Received: by 2002:a92:ca84:: with SMTP id t4mr27014658ilo.171.1569946899958;
- Tue, 01 Oct 2019 09:21:39 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=atMkE3+ksZjOVD8COwMqPXYfvUwFAn8HGygWZmnodkw=;
+        b=tF/LOuQXLCEMvk4N0bf3GYnnJHDoZ1I5m514066mrL1GLGDWbxSlIftDeL7FEzzXe7
+         lfe9ygywsD38Mta2GS+ywVJHYWffJx5eO6ptwPXi81a3zlLM3QvxmIo5OfaWyXn0gAbS
+         gKpNPaC8wD0c3rRHbJ76oyqeLttUpVNzMUWS562/uAoIvG+lQmdCJzp6cTbOCdsGbil0
+         6V21MgjrHtSTspfTlrITHb3SDgHrS6WwALoePZ+OiMzcZ89047TsI0OQOtgY/4s1MS10
+         RmdWsvZE/ShtTWlrmSad/Tvq9XDfkSBcbzFAby0VlGsqkN1IoRaOHoS2qFCAFKa+nfz9
+         oHTw==
+X-Gm-Message-State: APjAAAW4+yp6ne7u8sCa70U4Mv9kMHIuUtBlPv7803Dk2uxIgA06sGeD
+        9qUY3AwS/qtauL3Iu6oS1paJ5g==
+X-Google-Smtp-Source: APXvYqwZAmTy3spFW3KEZLKtOByAgOvBEuREAByP0PaoogzwFCJAY2pIj4bQ2yeV4p/lLCpUqSm8rw==
+X-Received: by 2002:a62:e814:: with SMTP id c20mr29298154pfi.209.1569947744868;
+        Tue, 01 Oct 2019 09:35:44 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id q13sm5814074pjq.0.2019.10.01.09.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Oct 2019 09:35:44 -0700 (PDT)
+Date:   Tue, 1 Oct 2019 09:35:42 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
+Message-ID: <20191001163542.GB87296@google.com>
+References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
+ <20190927044239.589e7c4c@oasis.local.home>
 MIME-Version: 1.0
-References: <CACO55tuk4SA6-xUtJ-oRePy8MPXYAp2cfmSPxwW3J5nQuX3y2g@mail.gmail.com>
- <20191001132721.GA46491@google.com>
-In-Reply-To: <20191001132721.GA46491@google.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Tue, 1 Oct 2019 18:21:28 +0200
-Message-ID: <CACO55tvjFPAMgz6DMGmJQ3adtJBX6yYnFRO9gVBEpMVTEBu0og@mail.gmail.com>
-Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
- states on certain intel bridges
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190927044239.589e7c4c@oasis.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 1, 2019 at 3:27 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Mon, Sep 30, 2019 at 06:36:12PM +0200, Karol Herbst wrote:
-> > On Mon, Sep 30, 2019 at 6:30 PM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > >
-> > > On Mon, Sep 30, 2019 at 06:05:14PM +0200, Karol Herbst wrote:
-> > > > still happens with your patch applied. The machine simply gets shut down.
-> > > >
-> > > > dmesg can be found here:
-> > > > https://gist.githubusercontent.com/karolherbst/40eb091c7b7b33ef993525de660f1a3b/raw/2380e31f566e93e5ba7c87ef545420965d4c492c/gistfile1.txt
-> > >
-> > > Looking your dmesg:
-> > >
-> > > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: DCB version 4.1
-> > > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: MM: using COPY for buffer copies
-> > > Sep 30 17:24:27 kernel: [drm] Initialized nouveau 1.3.1 20120801 for 0000:01:00.0 on minor 1
-> > >
-> > > I would assume it runtime suspends here. Then it wakes up because of PCI
-> > > access from userspace:
-> > >
-> > > Sep 30 17:24:42 kernel: pci_raw_set_power_state: 56 callbacks suppressed
-> > >
-> > > and for some reason it does not get resumed properly. There are also few
-> > > warnings from ACPI that might be relevant:
-> > >
-> > > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.GFX0._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
-> > > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.PEG0.PEGP._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
-> >
-> > afaik this is the case for essentially every laptop out there.
->
-> I think we should look into this a little bit.
-> acpi_ns_check_argument_types() checks the argument type and prints
-> this message, but AFAICT it doesn't actually fix anything or prevent
-> execution of the method, so I have no idea what happens when we
-> actually execute the _DSM.
->
+On Fri, Sep 27, 2019 at 04:42:39AM -0400, Steven Rostedt wrote:
+> On Thu, 26 Sep 2019 15:04:38 -0700
+> Matthias Kaehlcke <mka@chromium.org> wrote:
+> 
+> > Define genpd_power_on/off and genpd_set_performance_state
+> > tracepoints and use them.
+> 
+> I agree with Greg about adding a "why" you need this. But, in case
+> there's a good reason to have this, I have comments about the code
+> below.
 
-I can assure you that this warning happens on every single laptop out
-there with dual Nvidia graphics and it's essentially just a firmware
-bug. And it never caused any issues on any of the older laptops (or
-newest one for that matter).
+Thanks Greg and Steven for your comments.
 
-> If we execute this _DSM as part of power management, and the _DSM
-> doesn't work right, it would be no surprise that we have problems.
->
-> Maybe we could learn something by turning on ACPI_DB_PARSE output (see
-> Documentation/firmware-guide/acpi/debug.rst).
->
-> You must have an acpidump already from all your investigation.  Can
-> you put it somewhere, e.g., bugzilla.kernel.org, and include a URL?
+How about this instead:
 
-Will do so later, right now I am traveling to XDC and will have more
-time for that then.
+  Add tracepoints for genpd_power_on, genpd_power_off and
+  genpd_set_performance_state. The tracepoints can help with
+  understanding power domain behavior of a given device, which
+  may be particularly interesting for battery powered devices
+  and suspend/resume.
+
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> >  drivers/base/power/domain.c  | 27 +++++++++++++++++---
+> >  include/trace/events/power.h | 49 ++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 72 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index cc85e87eaf05..aee988c112e5 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/suspend.h>
+> >  #include <linux/export.h>
+> >  #include <linux/cpu.h>
+> > +#include <trace/events/power.h>
+> >  
+> >  #include "power.h"
+> >  
+> > @@ -329,6 +330,9 @@ static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+> >  		goto err;
+> >  
+> >  	genpd->performance_state = state;
+> > +
+> > +	trace_genpd_set_performance_state(genpd);
+> > +
+> >  	return 0;
+> >  
+> >  err:
+> > @@ -418,14 +422,21 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+> >  	if (!genpd->power_on)
+> >  		return 0;
+> >  
+> > -	if (!timed)
+> > -		return genpd->power_on(genpd);
+> > +	if (!timed) {
+> > +		ret = genpd->power_on(genpd);
+> > +		if (!ret)
+> > +			trace_genpd_power_on(genpd);
+> > +
+> > +		return ret;
+> > +	}
+> >  
+> >  	time_start = ktime_get();
+> >  	ret = genpd->power_on(genpd);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	trace_genpd_power_on(genpd);
+> > +
+> >  	elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
+> >  	if (elapsed_ns <= genpd->states[state_idx].power_on_latency_ns)
+> >  		return ret;
+> > @@ -448,14 +459,22 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+> >  	if (!genpd->power_off)
+> >  		return 0;
+> >  
+> > -	if (!timed)
+> > -		return genpd->power_off(genpd);
+> > +	if (!timed) {
+> > +		ret = genpd->power_off(genpd);
+> > +		if (!ret)
+> 
+> Here
+> 
+> > +			trace_genpd_power_off(genpd);
+> > +
+> > +		return ret;
+> > +	}
+> >  
+> >  	time_start = ktime_get();
+> >  	ret = genpd->power_off(genpd);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	if (!ret)
+> 
+> And here add a conditional branch for only a tracepoint. To eliminate
+> the branch when tracepoints are not enabled, please do it this way
+> instead:
+> 
+> 	if (trace_genpd_power_off_enabled() && !ret)
+> 
+> The above is a static branch (nop when disabled, and jmp when enabled),
+> and the above should move the conditional branch on !ret into the
+> section that is only called when the tracepoint is enabled.
+
+ok, will do in future versions.
