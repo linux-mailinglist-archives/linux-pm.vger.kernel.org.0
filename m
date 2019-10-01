@@ -2,115 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0213C4105
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 21:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505D4C411F
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 21:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbfJAT3z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 15:29:55 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38757 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726284AbfJAT3z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Oct 2019 15:29:55 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 3so4485491wmi.3;
-        Tue, 01 Oct 2019 12:29:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Q0iDGc1E9ekhBaWFlBf1LP49ZCDrj5bAJUiHy7EZfQo=;
-        b=OJEsqWCPeV3koRWKNwLNdwiJ+hZaOw3z45FgC0fUt06AXrTwkdRv+B2Un4gb98yCTk
-         54C7MH7n671dH+6eeUX3AGH455+Mg8qY9T7Mr5Y5cBIgBzP7H6iOFCWpbXYkC8o+WZZb
-         ehChgjEVj5BxYp/p7L13qhnZ1MXfTlg0O9Wx+ykMVMCoA73NMC6zNMIH5L5SAAVao9Z8
-         17u55mDdOZ0yukHeMp0ljbtTQr+4htkOxme+y7BtJVMA1bD/+/V13+Kozknl4NxOd1l1
-         TKreACbVJDWuX+p9+7VeqJU43rl7l2ZLUam3k6+S7WdG20nCO7SweK6wbdj1kZF8DYR9
-         s8Jw==
-X-Gm-Message-State: APjAAAVJU+BkQrPDWV8UB7nD45voFEAK3XXqLD5BnTVsPSllR8ryIRY4
-        HJU4ahcdE6Fsa3/zVyWUXiE=
-X-Google-Smtp-Source: APXvYqz8SWAyLJpy57Jibq45aJj30fnZ1zAgPLs0+ck9XS1xtptYz2Won1AlyuNYf/aSOVkTsYP1bw==
-X-Received: by 2002:a05:600c:351:: with SMTP id u17mr5345904wmd.130.1569958192282;
-        Tue, 01 Oct 2019 12:29:52 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.145])
-        by smtp.googlemail.com with ESMTPSA id b186sm6524895wmd.16.2019.10.01.12.29.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 01 Oct 2019 12:29:51 -0700 (PDT)
-Date:   Tue, 1 Oct 2019 21:29:47 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, b.zolnierkie@samsung.com, kgene@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, cw00.choi@samsung.com,
-        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
-        willy.mh.wolff.ml@gmail.com
-Subject: Re: [PATCH v13 0/8] Exynos5 Dynamic Memory Controller driver
-Message-ID: <20191001192947.GA1815@kozik-lap>
-References: <CGME20190821104316eucas1p2ecd715f3105921ec83e0acf1291201f8@eucas1p2.samsung.com>
- <20190821104303.32079-1-l.luba@partner.samsung.com>
+        id S1726551AbfJATea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 15:34:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53834 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726240AbfJATea (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Oct 2019 15:34:30 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EB7020B7C;
+        Tue,  1 Oct 2019 19:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569958469;
+        bh=X0ODSdcm/NVAagYO7ccY+UsMr3yH1nYd7QAe62Cvk1s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=g55px0NQzX8MpOTtfvfb2etHfMWOg3sxn8w/FHf64rDOsoeZP9nBWtFbiC8JWfXmA
+         B6U37pYseJdyozoirhZjl0l6K9O2pJSUV+k2BLC+nFKaRvlbZnNTgawggYkrFslod+
+         oDZFmAwT0dHjVmduL4xiAnV/WWz1VDYFx31vJTCY=
+Date:   Tue, 1 Oct 2019 14:34:27 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
+ states on certain intel bridges
+Message-ID: <20191001193427.GA59137@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190821104303.32079-1-l.luba@partner.samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CACO55tvjFPAMgz6DMGmJQ3adtJBX6yYnFRO9gVBEpMVTEBu0og@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 12:42:55PM +0200, Lukasz Luba wrote:
-> Hi all,
+On Tue, Oct 01, 2019 at 06:21:28PM +0200, Karol Herbst wrote:
+> On Tue, Oct 1, 2019 at 3:27 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Mon, Sep 30, 2019 at 06:36:12PM +0200, Karol Herbst wrote:
+> > > On Mon, Sep 30, 2019 at 6:30 PM Mika Westerberg
+> > > <mika.westerberg@linux.intel.com> wrote:
+> > > >
+> > > > On Mon, Sep 30, 2019 at 06:05:14PM +0200, Karol Herbst wrote:
+> > > > > still happens with your patch applied. The machine simply gets shut down.
+> > > > >
+> > > > > dmesg can be found here:
+> > > > > https://gist.githubusercontent.com/karolherbst/40eb091c7b7b33ef993525de660f1a3b/raw/2380e31f566e93e5ba7c87ef545420965d4c492c/gistfile1.txt
+> > > >
+> > > > Looking your dmesg:
+> > > >
+> > > > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: DCB version 4.1
+> > > > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: MM: using COPY for buffer copies
+> > > > Sep 30 17:24:27 kernel: [drm] Initialized nouveau 1.3.1 20120801 for 0000:01:00.0 on minor 1
+> > > >
+> > > > I would assume it runtime suspends here. Then it wakes up because of PCI
+> > > > access from userspace:
+> > > >
+> > > > Sep 30 17:24:42 kernel: pci_raw_set_power_state: 56 callbacks suppressed
+> > > >
+> > > > and for some reason it does not get resumed properly. There are also few
+> > > > warnings from ACPI that might be relevant:
+> > > >
+> > > > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.GFX0._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
+> > > > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.PEG0.PEGP._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
+> > >
+> > > afaik this is the case for essentially every laptop out there.
+> >
+> > I think we should look into this a little bit.
+> > acpi_ns_check_argument_types() checks the argument type and prints
+> > this message, but AFAICT it doesn't actually fix anything or prevent
+> > execution of the method, so I have no idea what happens when we
+> > actually execute the _DSM.
 > 
-> This is v13 which makes cosmetic changes. It is based on current mainline
-> (v5.3-rc5) with with devfreq/for-next where there is a PPMU patch [1].
-> 
-> The patch set adds support of Dynamic Memory Controller for Exynos5422 SoC.
-> The driver supports Dynamic Voltage and Frequency Scaling
-> for the DMC and DRAM. It also provides needed timings for different
-> speed operations of the DRAM memory.
-> There is also new generic code in of_memory and headers which allows to parse
-> LPDDR3 memories defined in device-tree.
-> 
-> Here are the last changes suggested by Krzysztof during his review.
-> For the previous changes in older revisions please refer to [2], there is
-> more detailed change log.
-> 
-> changes:
-> v13:
-> - skipped patch with chipID changes in DT, since it is not used anymore,
-> - removed license comment in of_memory.c since SPDX has been merged,
-> - aligned comment to the current fields in the structure,
-> - changed printed warning when timings are not found,
-> 
-> Regards,
-> Lukasz Luba
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/commit/?h=for-next&id=b617376df8f01c975dee66802f4da16291f92079
-> [2] https://lkml.org/lkml/2019/7/22/251
-> 
-> 
-> Lukasz Luba (8):
->   dt-bindings: ddr: rename lpddr2 directory
->   dt-bindings: ddr: add LPDDR3 memories
->   drivers: memory: extend of_memory by LPDDR3 support
->   dt-bindings: memory-controllers: add Exynos5422 DMC device description
->   drivers: memory: add DMC driver for Exynos5422
->   ARM: dts: exynos: add syscon to clock compatible
->   ARM: dts: exynos: add DMC device for exynos5422
->   ARM: exynos_defconfig: enable DMC driver
->
+> I can assure you that this warning happens on every single laptop out
+> there with dual Nvidia graphics and it's essentially just a firmware
+> bug. And it never caused any issues on any of the older laptops (or
+> newest one for that matter).
 
-Just to let you know:
+Rafael, do you know anything about this?  If ACPI has some sort of
+workaround so it can execute the method correctly anyway, maybe we
+should remove or reword the warning?
 
-I applied the set some days ago but this did not make to merge window.
-Now, I put it on for-next branch so will appear on linux-next soon. I
-also applied the fixes sent later.
+Or if this does prevent execution of the method, maybe we need to add
+a workaround since the problem is so prevalent in the field?
 
-I'll take also the latest work with interrupt mode for DMC (after minor
-fix in bindings).
-
-Best regards,
-Krzysztof
-
+> > If we execute this _DSM as part of power management, and the _DSM
+> > doesn't work right, it would be no surprise that we have problems.
+> >
+> > Maybe we could learn something by turning on ACPI_DB_PARSE output (see
+> > Documentation/firmware-guide/acpi/debug.rst).
+> >
+> > You must have an acpidump already from all your investigation.  Can
+> > you put it somewhere, e.g., bugzilla.kernel.org, and include a URL?
+> 
+> Will do so later, right now I am traveling to XDC and will have more
+> time for that then.
