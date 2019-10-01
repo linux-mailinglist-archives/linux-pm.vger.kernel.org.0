@@ -2,118 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 704A0C34A8
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 14:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5635C34D6
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 14:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387958AbfJAMqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 08:46:48 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:56157 "EHLO
+        id S2388105AbfJAMyq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 08:54:46 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:59233 "EHLO
         mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387939AbfJAMqs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Oct 2019 08:46:48 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191001124646euoutp01426e9018e6ff1c8ae446d312cb2c7686~JhqlMIfl51795617956euoutp01q
-        for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2019 12:46:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191001124646euoutp01426e9018e6ff1c8ae446d312cb2c7686~JhqlMIfl51795617956euoutp01q
+        with ESMTP id S1732054AbfJAMyq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Oct 2019 08:54:46 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191001125445euoutp01745a19ecdcec9688317072794cbd189b~JhxinpAra2384323843euoutp01w
+        for <linux-pm@vger.kernel.org>; Tue,  1 Oct 2019 12:54:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191001125445euoutp01745a19ecdcec9688317072794cbd189b~JhxinpAra2384323843euoutp01w
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1569934006;
-        bh=g4kxurFt+usEuNVWHXBojGkOdXeORyctrr+zEEwPBu8=;
+        s=mail20170921; t=1569934485;
+        bh=6fXN0I8y0ZNzn54kQADv6X+qpXd/5P7SQSR8WSIWw/8=;
         h=From:To:Cc:Subject:Date:References:From;
-        b=P8/SIVsNjNe/JZMbyaBNZJ8Oqa7+xidf8ZmHQB13IOrdFZiR9eZfSiadHYRPlCc4F
-         KLvOFYVZrf1KhuyOL2m2yz90ds1ccfINns/EXfDPgBv433C5SswU2SEZGe/aLdjUUd
-         HKEOCGLZm9tEHStL7zdP8NQ6pcTRY3dDZ25TiG+I=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191001124646eucas1p17f969e2e45fd7cf51001bfa59319fa21~Jhqk9tmbk1929719297eucas1p1H;
-        Tue,  1 Oct 2019 12:46:46 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 03.B5.04469.6BA439D5; Tue,  1
-        Oct 2019 13:46:46 +0100 (BST)
+        b=LgD+U1V7WbHJbVwqyyjWyG5f7Vc/lJR7l5OsNL/3bnd+C7OF58bJ0ndA4kTKmkxq8
+         1EnKwySVenZhbF7DVWHkBIOrNIbYvzxDKH101Hsk8DCG+zTDBEBK9Sx3fFEZ9LeKcQ
+         3U/i8Ra8KENtsDli1nUH+RCxkpOs0IOOHQaqmLgA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191001125444eucas1p29f1e305772507fe5b01f5e6047a09cd5~JhxiRwXqh2021120211eucas1p2j;
+        Tue,  1 Oct 2019 12:54:44 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 3F.EB.04309.49C439D5; Tue,  1
+        Oct 2019 13:54:44 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191001124646eucas1p2768afab3fc8fbaaf7c2bcf1966b06781~JhqkniZMT1512015120eucas1p2f;
-        Tue,  1 Oct 2019 12:46:46 +0000 (GMT)
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191001125444eucas1p1c31d1492ed64a9417486f471b97eae8c~Jhxh1ILKG2273622736eucas1p1T;
+        Tue,  1 Oct 2019 12:54:44 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191001124646eusmtrp1aab8f1b17880523fae614ca86bb66c11~Jhqkm5lRA0994609946eusmtrp1V;
-        Tue,  1 Oct 2019 12:46:46 +0000 (GMT)
-X-AuditID: cbfec7f2-54fff70000001175-9c-5d934ab63bdb
+        20191001125444eusmtrp1ae92808de1be854f4db3ddb3dac4b765~Jhxh0NMab1469914699eusmtrp1h;
+        Tue,  1 Oct 2019 12:54:44 +0000 (GMT)
+X-AuditID: cbfec7f4-afbff700000010d5-65-5d934c9467ae
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2F.2C.04166.6BA439D5; Tue,  1
-        Oct 2019 13:46:46 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id B4.6D.04166.49C439D5; Tue,  1
+        Oct 2019 13:54:44 +0100 (BST)
+Received: from AMDC3778.digital.local (unknown [106.120.51.20]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191001124645eusmtip1af28125b5d52687f5dcd1fab59205eb7~JhqkIJMge2139721397eusmtip1B;
-        Tue,  1 Oct 2019 12:46:45 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] PM / devfreq: exynos-ppmu: remove useless assignment
-Date:   Tue,  1 Oct 2019 14:46:41 +0200
-Message-Id: <20191001124641.22896-1-m.szyprowski@samsung.com>
+        20191001125443eusmtip1d879ff60059480646f1dd029e9917ff0~JhxhFhv_M2520025200eusmtip1V;
+        Tue,  1 Oct 2019 12:54:43 +0000 (GMT)
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
+        mark.rutland@arm.com, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        robh+dt@kernel.org, willy.mh.wolff.ml@gmail.com,
+        Lukasz Luba <l.luba@partner.samsung.com>
+Subject: [PATCH v2 0/4] Exynos5 DMC interrupt mode
+Date:   Tue,  1 Oct 2019 14:54:32 +0200
+Message-Id: <20191001125436.24086-1-l.luba@partner.samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOIsWRmVeSWpSXmKPExsWy7djPc7rbvCbHGvz/IWOxccZ6VovrX56z
-        Wpw/v4Hd4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7A5cHhsWtXJ5tG3ZRWjx+dNcgHMUVw2
-        Kak5mWWpRfp2CVwZ225+Yys4wlbx/f9+9gbG3axdjJwcEgImEhumTGYBsYUEVjBKrO3w7GLk
-        ArK/MEo8ujKNBcL5zCjxc+sduI412y5DJZYzSjy+f54druXm6o3MIFVsAoYSXW+72LoYOThE
-        BOIl1n+1AgkzCzxklOibYAJiCwu4Skz61g+2mkVAVeLeirtgrbwCthKnpt5mh1gmL7F6wwFm
-        CPsMm8T9RlkI20Xi3JkzUDXCEq+Ob4GyZSROT+4BO05CoJlR4uG5tewQTg+jxOWmGYwQVdYS
-        h49fZAU5jllAU2L9Ln2IsKPEsabZYGEJAT6JG28FIW7mk5i0bTozRJhXoqNNCKJaTWLW8XVw
-        aw9euAR1pofEhM6PYFOEBGIlLjfmTGCUm4WwagEj4ypG8dTS4tz01GLDvNRyveLE3OLSvHS9
-        5PzcTYzA6D/97/inHYxfLyUdYhTgYFTi4bV4PjFWiDWxrLgy9xCjBAezkgivzZ9JsUK8KYmV
-        ValF+fFFpTmpxYcYpTlYlMR5qxkeRAsJpCeWpGanphakFsFkmTg4pRoYBZfxSx89dFXqvaSr
-        wewbXNzHL5Rqq0xKM9+yufhmz+mbO3qezGB4dPvB5ec/7pp/CMm6WfJjwjuZGvl+M6k3c5g+
-        7CmRL5Rd3sgT2dZzhkNmxoo7889LfJTV8D3eX7ZJ6sCmPRtfL9W185q9/vSm+h6RCimJ5RtX
-        BXF9mHuxRlzO6cdkr73GuUosxRmJhlrMRcWJACcpSnn6AgAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrILMWRmVeSWpSXmKPExsVy+t/xu7rbvCbHGuzfwmGxccZ6VovrX56z
-        Wpw/v4Hd4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7A5cHhsWtXJ5tG3ZRWjx+dNcgHMUXo2
-        RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZ225+Yys4
-        wlbx/f9+9gbG3axdjJwcEgImEmu2XWbpYuTiEBJYyiix9+4lZoiEjMTJaQ1QRcISf651sUEU
-        fWKUaG3sZANJsAkYSnS97QKzRQQSJR70PGcHKWIWeMwo0XjuOztIQljAVWLSt34WEJtFQFXi
-        3oq7YBt4BWwlTk29zQ6xQV5i9YYDzBMYeRYwMqxiFEktLc5Nzy021CtOzC0uzUvXS87P3cQI
-        DL5tx35u3sF4aWPwIUYBDkYlHt4JLyfGCrEmlhVX5h5ilOBgVhLhtfkzKVaINyWxsiq1KD++
-        qDQntfgQoynQ8onMUqLJ+cDIyCuJNzQ1NLewNDQ3Njc2s1AS5+0QOBgjJJCeWJKanZpakFoE
-        08fEwSnVwKjFHeiudoBNag5TkVQNy/oNVtO4qvb7OtdbrFj94vUnRp9t85iE+RJ/ZfLdnur4
-        KKjif/BCBoMre/m+5Z8MYbdPbf0uWLCE+c+7KKV/j+423X7Vpn5euVy9wbJlYeadG78Y1Pme
-        CxmIOF371N94aPf+ClNBW7XEDyr8nELeR3uLfb14J5adU2Ipzkg01GIuKk4EAEmDSFRUAgAA
-X-CMS-MailID: 20191001124646eucas1p2768afab3fc8fbaaf7c2bcf1966b06781
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WSeUgUURzHezM7h1sb42r5UjNaELJIUypeKJlgNaCJCPWHB7nlpNJ67ai1
+        HWiHebDesZllpRbqth6tYmpeqalguVrgkYiWRXgklGaZYjmN4X+f9z3e78fj0bi8iLCmwyNj
+        OXWkUqUgpZLazkXT3tveuUH7nqfYo2d5lQQanP9CoIcdvQTKnJjGkclURaE312co9D7RFhkn
+        Bgj0ruE+iebSOwDKMzVjqLxjlEJPBvsxNHKtlERJTR0Uap9JJtBC90dwxJw1PDAAtj5/lGKN
+        +lSSrX6cwL6cbcTYjBo9YOeMdr6Uv9QthFOFx3Nqp8PB0jDtiz4y+rPs4k+dNBEYNqYBmobM
+        fpjS5JgGpLScKQVworWXSANmq4d5AGsKA0VjDsCBxmFSMITCWH0FJholAGb/uLveyGlxFm4l
+        GUdYp48RZEumGMCFdn8hjzO1GBzXL/zLWzAusLd56B9LGHtY9H0JE1jGuMPizjEgDtsBn1a1
+        4kIZMhUUnMy4iYmGJ6z6nUGIbAGnumookW1hT65WIjIPE9ML1y66AicyC9YyrrC9q58QFsUZ
+        B1jZ4CTKHnCgsp8SX2UzHPpqLsj4KubU3sFFWQZTbsnF9C5Yo+1bW2YrLDHo1posnK7DBJQz
+        QVBXap0F7PLXJz0CQA+suDg+IpTjXSK5C468MoKPiwx1PBsVYQSrP6dnpWu+DjQsn2kDDA0U
+        m2RZk9lBckIZz2si2gCkcYWlzG05J0guC1FqLnHqqNPqOBXHtwEbWqKwkl3eMB4gZ0KVsdx5
+        jovm1P9djDazTgQHtxkOfbM54CuR+rh+0iztKV+p/oO2z6uKyattzNEinc4rZrFT9Qp38k7V
+        nosJWChoSu9GXiDshsMvn5OwrCD5dbCFxjN/rHpKMeyh1nneMxj7Zo+5j0jK/E6dsEjoO65I
+        2mk0C9nSYjZXRppiAvG34X7og9TeaNB2a0gWKSR8mNJ5N67mlX8B9KkYQTUDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsVy+t/xu7pTfCbHGmx6wmGxccZ6VovrX56z
+        Wsw/co7Vov/xa2aL8+c3sFucbXrDbnGrQcZi0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbdY
+        ev0ik8XtxhVsFq17j7BbHH7Tzmrx7cQjRgdBjzXz1jB67Jx1l91j06pONo/NS+o9Dr7bw+TR
+        t2UVo8fnTXIB7FF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
+        qUX6dgl6GT27L7AVPOWt+D6Nq4FxDXcXIyeHhICJxP2d65hAbCGBpYwSM/bnQ8TFJCbt284O
+        YQtL/LnWxdbFyAVU84lRonnvA6AGDg42AT2JHasKQeIiAssZJY6tessM4jALHGGSOLr6GiNI
+        t7CAkcS5fTdYQWwWAVWJRZ9+g23jFbCXWHzsPiPEBnmJ1RsOME9g5FnAyLCKUSS1tDg3PbfY
+        UK84Mbe4NC9dLzk/dxMjMOy3Hfu5eQfjpY3BhxgFOBiVeHgnvJwYK8SaWFZcmXuIUYKDWUmE
+        1+bPpFgh3pTEyqrUovz4otKc1OJDjKZAyycyS4km5wNjMq8k3tDU0NzC0tDc2NzYzEJJnLdD
+        4GCMkEB6YklqdmpqQWoRTB8TB6dUA6Py8t6wtXGFaYE/gmSKz+vKsm5TuT0tx9zH5eKLXpag
+        zFl/TKUCqkQ3KgkdCC5ZPIM/KW739u6LSpb133nZxMSuPviZlrM3vu/KibS/1QmXPFTKD3zb
+        ulX9xaOTJ65adGzYWcv00s/IxuZ7msShxzOalB2nBhg0vwtaabrv2LzQ9869mQ2t7EosxRmJ
+        hlrMRcWJAEoWVZORAgAA
+X-CMS-MailID: 20191001125444eucas1p1c31d1492ed64a9417486f471b97eae8c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191001124646eucas1p2768afab3fc8fbaaf7c2bcf1966b06781
+X-RootMTR: 20191001125444eucas1p1c31d1492ed64a9417486f471b97eae8c
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20191001124646eucas1p2768afab3fc8fbaaf7c2bcf1966b06781
-References: <CGME20191001124646eucas1p2768afab3fc8fbaaf7c2bcf1966b06781@eucas1p2.samsung.com>
+X-CMS-RootMailID: 20191001125444eucas1p1c31d1492ed64a9417486f471b97eae8c
+References: <CGME20191001125444eucas1p1c31d1492ed64a9417486f471b97eae8c@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The error code is propagated to the caller, so there is no need to keep
-it additionally in the unused variable.
+Hi all,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/devfreq/event/exynos-ppmu.c | 1 -
- 1 file changed, 1 deletion(-)
+This is a v2 patch set for the Exynos5 Dynamic Memory Controller
+driver which could be found in Krzysztof's tree [1]. It is on top of a
+merge of the two branches [1][2].
 
-diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-index 87b42055e6bc..85c7a77bf3f0 100644
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -673,7 +673,6 @@ static int exynos_ppmu_probe(struct platform_device *pdev)
- 	for (i = 0; i < info->num_events; i++) {
- 		edev[i] = devm_devfreq_event_add_edev(&pdev->dev, &desc[i]);
- 		if (IS_ERR(edev[i])) {
--			ret = PTR_ERR(edev[i]);
- 			dev_err(&pdev->dev,
- 				"failed to add devfreq-event device\n");
- 			return PTR_ERR(edev[i]);
+It adds interrupt mode which does not relay on devfreq polling.
+Instead of checking the device state by the framework, driver uses local
+performance event counters which could trigger interrupt when overflow.
+Thanks to this approach the driver avoids issues present in devfreq framework,
+when default polling check does not occur.
+The algorithm calculates 'busy_time' and 'total_time' needed for devfreq
+governors (simple_ondemand) based on requests transactions traffic.
+
+Changes:
+v2:
+  changes suggested by Krzysztof
+- added interrupt line for the channel 1
+- added desription for bindings with interrupt lines
+- fixed fallback path in probe function
+- added comments, blank lines, removed unneeded dev_dbg() in irq handler
+
+Regards,
+Lukasz Luba
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v5.4-5.5/memory-samsung-dmc
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v5.4-5.5/memory-samsung-dmc-dt
+
+Lukasz Luba (4):
+  dt-bindings: memory-controllers: Add Exynos5422 DMC interrupts
+    description
+  ARM: dts: exynos: Add interrupt to DMC controller in Exynos5422
+  ARM: dts: exynos: map 0x10000 SFR instead of 0x100 in DMC Exynos5422
+  memory: samsung: exynos5422-dmc: Add support for interrupt from
+    performance counters
+
+ .../memory-controllers/exynos5422-dmc.txt     |  10 +
+ arch/arm/boot/dts/exynos5420.dtsi             |   5 +-
+ drivers/memory/samsung/exynos5422-dmc.c       | 345 ++++++++++++++++--
+ 3 files changed, 334 insertions(+), 26 deletions(-)
+
 -- 
 2.17.1
 
