@@ -2,92 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E154FC3DAC
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 19:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E80C3DFB
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 19:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729692AbfJAQkO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 12:40:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51396 "EHLO mail.kernel.org"
+        id S1726284AbfJARDr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 13:03:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729689AbfJAQkN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:40:13 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1731929AbfJARDq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Oct 2019 13:03:46 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 66ED221906;
-        Tue,  1 Oct 2019 16:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948013;
-        bh=lLf2g9KCQK5PoHP2qYZDVggikNw887AYHXv+3PO2oMY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ddKuCXI/HFhP4RQMxzJ8d6U8QvvxwncGAHXFD5nZJPPZrcUiVWKNAR9q1kszqpZ/M
-         WtpGW51gj5/ih3iMr1tWst531ZUn/uiWUjqAMXMlE7JteP2OdM8G0P0l0W8c+qaMX2
-         sStJgZN+zo2UGhkkf1TXptQ0TZedFZAT+XN69aeg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stefan Mavrodiev <stefan@olimex.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 34/71] thermal_hwmon: Sanitize thermal_zone type
-Date:   Tue,  1 Oct 2019 12:38:44 -0400
-Message-Id: <20191001163922.14735-34-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 555DB2086A;
+        Tue,  1 Oct 2019 17:03:45 +0000 (UTC)
+Date:   Tue, 1 Oct 2019 13:03:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
+Message-ID: <20191001130343.4480afe3@gandalf.local.home>
+In-Reply-To: <20191001163542.GB87296@google.com>
+References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
+        <20190927044239.589e7c4c@oasis.local.home>
+        <20191001163542.GB87296@google.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Stefan Mavrodiev <stefan@olimex.com>
+On Tue, 1 Oct 2019 09:35:42 -0700
+Matthias Kaehlcke <mka@chromium.org> wrote:
 
-[ Upstream commit 8c7aa184281c01fc26f319059efb94725012921d ]
+> How about this instead:
+> 
+>   Add tracepoints for genpd_power_on, genpd_power_off and
+>   genpd_set_performance_state. The tracepoints can help with
+>   understanding power domain behavior of a given device, which
+>   may be particularly interesting for battery powered devices
+>   and suspend/resume.
 
-When calling thermal_add_hwmon_sysfs(), the device type is sanitized by
-replacing '-' with '_'. However tz->type remains unsanitized. Thus
-calling thermal_hwmon_lookup_by_type() returns no device. And if there is
-no device, thermal_remove_hwmon_sysfs() fails with "hwmon device lookup
-failed!".
+Do you have a use case example to present?
 
-The result is unregisted hwmon devices in the sysfs.
+Thanks!
 
-Fixes: 409ef0bacacf ("thermal_hwmon: Sanitize attribute name passed to hwmon")
-
-Signed-off-by: Stefan Mavrodiev <stefan@olimex.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/thermal_hwmon.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-index 40c69a533b240..dd5d8ee379287 100644
---- a/drivers/thermal/thermal_hwmon.c
-+++ b/drivers/thermal/thermal_hwmon.c
-@@ -87,13 +87,17 @@ static struct thermal_hwmon_device *
- thermal_hwmon_lookup_by_type(const struct thermal_zone_device *tz)
- {
- 	struct thermal_hwmon_device *hwmon;
-+	char type[THERMAL_NAME_LENGTH];
- 
- 	mutex_lock(&thermal_hwmon_list_lock);
--	list_for_each_entry(hwmon, &thermal_hwmon_list, node)
--		if (!strcmp(hwmon->type, tz->type)) {
-+	list_for_each_entry(hwmon, &thermal_hwmon_list, node) {
-+		strcpy(type, tz->type);
-+		strreplace(type, '-', '_');
-+		if (!strcmp(hwmon->type, type)) {
- 			mutex_unlock(&thermal_hwmon_list_lock);
- 			return hwmon;
- 		}
-+	}
- 	mutex_unlock(&thermal_hwmon_list_lock);
- 
- 	return NULL;
--- 
-2.20.1
-
+-- Steve
