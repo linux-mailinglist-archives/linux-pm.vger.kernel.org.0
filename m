@@ -2,91 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AA6C2E65
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 09:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB92C2F20
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 10:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730464AbfJAHto (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 03:49:44 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:32963 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbfJAHto (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Oct 2019 03:49:44 -0400
-Received: by mail-lf1-f66.google.com with SMTP id y127so9112018lfc.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Oct 2019 00:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3J3ZlzLLxQH6KdthZTflCl0dBhfx+2NJSBcmROTOE8=;
-        b=Tvhc1LvFiBSfoM3WJmjh4og/Lq7C6RhX1GQmIejRYvQDCcopSeDT5/osbewa3mcOOX
-         +B9K75R8rAXtqkwTR7WnmmoieqyKk7rEvfq+1+vK5jIaBcOWmC1ltUhOnj1LdlI4fkIV
-         utfE+RXm9ukZsoKeqhurJxVptb0ClJ47nigwf/njggEcosw6ndae1d2TcEIJRMkzyYEr
-         Kj1Nh3vLBRlNYUWWftukzoy0Aroes5amJsAXaHrCIHOG2pF+4Wra0y5ThYJXXfx3+ra3
-         eWhh2ltGVAKGYgY86mAobSPBx7pdfuZtnNZgzJ2RNEFBQMU1BZhy9kwt5xDfiD56WLq0
-         tzcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3J3ZlzLLxQH6KdthZTflCl0dBhfx+2NJSBcmROTOE8=;
-        b=ua98c8TmV9a/zUdJuhqbLE9O7sNw5aREVf9JxkzPjEpPlVR2aFEJ7W/GbaOtMjkn0T
-         0EPRX4vvytF4rQOfZA8WF9l0Hr6h90cPeAO4VEpDBg3wvQTkwEdvdJ7ybetDE+ts9OY6
-         U26jDL9T5E3+1p0G1N5ifx7vh6Om06sHJ3UM9zqiScc/s3RtV7Ft0ANO8JbLgRgWYvEl
-         RWEVMYrI9yD2j89wSURNniuVjEAiCuR1RBu2ZnSacbFqkWZLNWAgckP9y5fyXqY1dgNP
-         L+ZyNogbQy7+Zb9cfOPOWGKA0/BUQy6EypBrnT2wDE2lzqtvAHS2L1FNLhqB3q2KjkhH
-         3Y/A==
-X-Gm-Message-State: APjAAAVUSPniN/wqBiP0sELAPQXilKqkp0o5x9Jn3lUe2whALHj2Hc1f
-        bbocKJ3g9yc+0iR1sqc4hYk9Ee+2NKJXDw==
-X-Google-Smtp-Source: APXvYqzDtOhNT7x/pbd/PN9TUcFRAUYljAMf35G85Ry2aILhBvVOrrLZ21Fb9D+ZYLrvzBjG93Cg9w==
-X-Received: by 2002:a19:6549:: with SMTP id c9mr13033808lfj.99.1569916180928;
-        Tue, 01 Oct 2019 00:49:40 -0700 (PDT)
-Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id i21sm3714314lfl.44.2019.10.01.00.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 00:49:39 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] thermal: db8500: demote temperature to debug print
-Date:   Tue,  1 Oct 2019 09:49:30 +0200
-Message-Id: <20191001074930.8637-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        id S1729546AbfJAIq5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 04:46:57 -0400
+Received: from mga09.intel.com ([134.134.136.24]:13027 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726148AbfJAIq5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Oct 2019 04:46:57 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 01:46:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
+   d="scan'208";a="205026256"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 01:46:52 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 11:46:51 +0300
+Date:   Tue, 1 Oct 2019 11:46:51 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH] pci: prevent putting pcie devices into lower device
+ states on certain intel bridges
+Message-ID: <20191001084651.GC2714@lahna.fi.intel.com>
+References: <20190927144421.22608-1-kherbst@redhat.com>
+ <20190927214252.GA65801@google.com>
+ <CACO55tuaY1jFXpJPeC9M4PoWEDyy547_tE8MpLaTDb+C+ffsbg@mail.gmail.com>
+ <20190930080534.GS2714@lahna.fi.intel.com>
+ <CACO55tuMo1aAA7meGtEey6J6sOS-ZA0ebZeL52i2zfkWtPqe_g@mail.gmail.com>
+ <20190930092934.GT2714@lahna.fi.intel.com>
+ <CACO55tu9M8_TWu2MxNe_NROit+d+rHJP5_Tb+t73q5vr19sd1w@mail.gmail.com>
+ <20190930163001.GX2714@lahna.fi.intel.com>
+ <CACO55tuk4SA6-xUtJ-oRePy8MPXYAp2cfmSPxwW3J5nQuX3y2g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACO55tuk4SA6-xUtJ-oRePy8MPXYAp2cfmSPxwW3J5nQuX3y2g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no need to print this to the console, just a
-missed informational debug print.
+On Mon, Sep 30, 2019 at 06:36:12PM +0200, Karol Herbst wrote:
+> On Mon, Sep 30, 2019 at 6:30 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Mon, Sep 30, 2019 at 06:05:14PM +0200, Karol Herbst wrote:
+> > > still happens with your patch applied. The machine simply gets shut down.
+> > >
+> > > dmesg can be found here:
+> > > https://gist.githubusercontent.com/karolherbst/40eb091c7b7b33ef993525de660f1a3b/raw/2380e31f566e93e5ba7c87ef545420965d4c492c/gistfile1.txt
+> >
+> > Looking your dmesg:
+> >
+> > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: DCB version 4.1
+> > Sep 30 17:24:27 kernel: nouveau 0000:01:00.0: DRM: MM: using COPY for buffer copies
+> > Sep 30 17:24:27 kernel: [drm] Initialized nouveau 1.3.1 20120801 for 0000:01:00.0 on minor 1
+> >
+> > I would assume it runtime suspends here. Then it wakes up because of PCI
+> > access from userspace:
+> >
+> > Sep 30 17:24:42 kernel: pci_raw_set_power_state: 56 callbacks suppressed
+> >
+> > and for some reason it does not get resumed properly. There are also few
+> > warnings from ACPI that might be relevant:
+> >
+> > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.GFX0._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
+> > Sep 30 17:24:27 kernel: ACPI Warning: \_SB.PCI0.PEG0.PEGP._DSM: Argument #4 type mismatch - Found [Buffer], ACPI requires [Package] (20190509/nsarguments-59)
+> >
+> 
+> afaik this is the case for essentially every laptop out there.
 
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Fixes: 6c375eccded4 ("thermal: db8500: Rewrite to be a pure OF sensor")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/thermal/db8500_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+OK, so they are harmless?
 
-diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index 372dbbaaafb8..21d4d6e6409a 100644
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -152,8 +152,8 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
- 		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
- 					     next_low, next_high);
- 
--		dev_info(&th->tz->device,
--			 "PRCMU set max %ld, min %ld\n", next_high, next_low);
-+		dev_dbg(&th->tz->device,
-+			"PRCMU set max %ld, min %ld\n", next_high, next_low);
- 	} else if (idx == num_points - 1)
- 		/* So we roof out 1 degree over the max point */
- 		th->interpolated_temp = db8500_thermal_points[idx] + 1;
--- 
-2.21.0
+> > This seems to be Dell XPS 9560 which I think has been around some time
+> > already so I wonder why we only see issues now. Has it ever worked for
+> > you or maybe there is a regression that causes it to happen now?
+> 
+> oh, it's broken since forever, we just tried to get more information
+> from Nvidia if they know what this is all about, but we got nothing
+> useful.
+> 
+> We were also hoping to find a reliable fix or workaround we could have
+> inside nouveau to fix that as I think nouveau is the only driver
+> actually hit by this issue, but nothing turned out to be reliable
+> enough.
 
+Can't you just block runtime PM from the nouveau driver until this is
+understood better? That can be done by calling pm_runtime_forbid() (or
+not calling pm_runtime_allow() in the driver). Or in case of PCI driver
+you just don't decrease the reference count when probe() ends.
+
+I think that would be much better than blocking any devices behind
+Kabylake PCIe root ports from entering D3 (I don't really think the
+problem is in the root ports itself but there is something we are
+missing when the NVIDIA GPU is put into D3cold or back from there).
