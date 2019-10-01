@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B233DC3C77
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 18:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF9CC3C07
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Oct 2019 18:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733033AbfJAQns (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Oct 2019 12:43:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55930 "EHLO mail.kernel.org"
+        id S2388351AbfJAQsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Oct 2019 12:48:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732996AbfJAQnr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:43:47 -0400
+        id S2390239AbfJAQpV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:45:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9CBE21855;
-        Tue,  1 Oct 2019 16:43:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0EFBE20B7C;
+        Tue,  1 Oct 2019 16:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948226;
-        bh=Gi9OCBf2zp9pYAtNqckJKhGKm64nq0WQybonBSa/r+s=;
+        s=default; t=1569948319;
+        bh=JlMX2lzPSZonYYQe8neGfCYmIhxJDq7CPBzUWvY4DJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QQtM6/Jwe5G+H7/v3KbA9JuB8k2fInOnphmdBrzQymJQlyRyVicWGzfrGSFHaGlph
-         sTgY5sfE8kVwQxgUPDihNqeP4tc6na+VzCEUrX/Q48L50rlcGsRTii13zj9mV9FPK+
-         kt86EJSJbucBqhFBeBIJ8fbC7ElCNxsv0LDMbCjo=
+        b=aN6+ODPmIYFxTMjm1M0MtcQSD9VxzLQ0/JHi99DbgkZ5lj84FtknYyEQxFK4c+GOu
+         qwW7o6whXffvHDvBe5qyYRkILWJjNQvnHWbeZkrpXaBkvV2M/UtS+0WxHmUvLM55/V
+         RAKH1i3vr2bjO8jwfVQMUHE0i9GyKnCFf2gob9oA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ido Schimmel <idosch@mellanox.com>, Jiri Pirko <jiri@mellanox.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 24/43] thermal: Fix use-after-free when unregistering thermal zone device
-Date:   Tue,  1 Oct 2019 12:42:52 -0400
-Message-Id: <20191001164311.15993-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 11/19] thermal: Fix use-after-free when unregistering thermal zone device
+Date:   Tue,  1 Oct 2019 12:44:57 -0400
+Message-Id: <20191001164505.16708-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001164311.15993-1-sashal@kernel.org>
-References: <20191001164311.15993-1-sashal@kernel.org>
+In-Reply-To: <20191001164505.16708-1-sashal@kernel.org>
+References: <20191001164505.16708-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -157,10 +157,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index bf9721fc2824e..be3eafc7682ba 100644
+index cd82ae34ddfa3..57603be42c507 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -296,7 +296,7 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
+@@ -402,7 +402,7 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
  		mod_delayed_work(system_freezable_wq, &tz->poll_queue,
  				 msecs_to_jiffies(delay));
  	else
