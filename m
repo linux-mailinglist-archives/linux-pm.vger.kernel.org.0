@@ -2,69 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E59C8A4A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 15:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96ADC8A8A
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 16:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfJBNyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 09:54:50 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37216 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfJBNyu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 09:54:50 -0400
-Received: by mail-lf1-f68.google.com with SMTP id w67so12804893lff.4;
-        Wed, 02 Oct 2019 06:54:48 -0700 (PDT)
+        id S1726669AbfJBOGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 10:06:30 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33181 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbfJBOGa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 10:06:30 -0400
+Received: by mail-lj1-f195.google.com with SMTP id a22so17276892ljd.0;
+        Wed, 02 Oct 2019 07:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4QyebvzDhNVZ0Lq/bqD45sBW31/NxHYogWC4c1cktOE=;
-        b=kD/X1jKkfK+81eVMoUWWeT/1LB7qwBONaABVrWWl3O/TWkw1Va3/1/qEcR5IwgZOZL
-         2gPdhvXeAGu2w9FOMJwlS0Fr2mt8/EZxexCAV0dfd0Ko+G0BWtl+gVM1cxoHIPTDjOuC
-         PzTupmEa3hAj31WvcN2rFqR7YWKBLVUt41MAWISevl2yW5KeVRUUJgJXm5ZRPoGknS5U
-         91QYWcaYlKqUoDaORhrTEBo/c7Vpy8OnmUFD1Gcl3ABwJ91mazMee8GjWIUP9N/nJkp2
-         unjJ/IA2mIkZD0niwuagNwO5CshnwAcxOAompGtyI2GsmAhakyqc91Ww9x5UJp3VDQXJ
-         ncCA==
+        bh=f8TmAkt4WsH1N0sba37uvaRLJhu+2pmQZnGHUoAuB7s=;
+        b=cv6gpVhrhqD6vuOLF9pr2k24+yfJTXvbvFdfn97min5Izw2QEfqlwQ1bsd1T+bxWON
+         RoENSTVIx0Z5oMt5gLw+SVhZTTQyEWPEjkBtYKMhVEbwiIExMERN+FrH1rs6fYr6iWdU
+         GUldpvKfz+LhK7qHW5Qt6YiseNn2wklywFRK/Ig0LuOA1YQPAPEj1VYbuWV5LWXLMMAk
+         nf584sEGbJ11rN+Vsa5ZK6EwHdmaIE81A1JRH601xWt6G/oTVRRREu2bJcXDF43WHT5s
+         0obavulZvrK/OadA7FoBHksegibk6T461ZcBsFSCmgbLIogjL8Jif5mfGrYO9z+IfOcA
+         U4aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=4QyebvzDhNVZ0Lq/bqD45sBW31/NxHYogWC4c1cktOE=;
-        b=SwUw3htZTOVDioyK0M6bjVf0LREENvlaFmPXXacrWpOoNgjxAH1JBgNvaC7tNDSSXW
-         DsnBf8y5gowQ+WHGnppl3UHjJi1YSCcHV9jlC6VLnoaZceKUw9XsC4ETtGiGdJghx9P7
-         nxA57UnwHRXH3M2d57ZJQLptE559Of6V1cR2XWOsStDCkgj+tqsDrZ9JwynN4t9n+CSs
-         xDmgq3hGGkhgyuDBe2CkBJJzsxxZpbLLpcnKpwZzoLO4UKDC2SCHezSnJEocetcgux1Q
-         EaND8TMXKd3mmmBTBWw1Wr2nZ+FMaOd3f6asgBgFA9uCXT/m509j2TZs2S02WqAjS5/R
-         kp1g==
-X-Gm-Message-State: APjAAAWJZJ6ceq3zbAEhgvl7ne6ed/uSsgXUlXOQAREwOnyS4UUtbCeh
-        pUPG7o7F53Mep95kxI5V/TqJNTOI
-X-Google-Smtp-Source: APXvYqxKGQbBcReyzTyTCqYNC59U5/IFf2Ux08se0sd7v2guBTEIt15hi5tbJmAekg44nKIO/AVerw==
-X-Received: by 2002:a19:ee02:: with SMTP id g2mr2428220lfb.113.1570024486870;
-        Wed, 02 Oct 2019 06:54:46 -0700 (PDT)
+        bh=f8TmAkt4WsH1N0sba37uvaRLJhu+2pmQZnGHUoAuB7s=;
+        b=GWM3ZRh1fwnrkWiisBcc94AOd5+2n6sVEG0AmHPCgEiNSEgKV5MEhJ4W26ZZFaSWqu
+         7Y7UA87nAToqKKkeiA/mdTrh35BCaizseZy9xNXeXCB0Zssc0h/Zbr3fhpFDnZHK+/p7
+         qPdDDWOqba2LCWVWnBIFjpDNHK0rMHCXuV8ed55KBgo9S4aydyVENQ/DrWFbnSb53tT8
+         n7QpCJ2Vw20MIXb4qaaSodZkwM7L7Q+g8mHDzIhKnuJ3ZrG8o9ZfKi9YxU5/thDF6Il8
+         oVTE48WIhbS/1+uAGY8MzxRNXOAduBHjqbEnzv0CMvHn5zjG3TSubBlH23IYuWbIKQkI
+         OXbA==
+X-Gm-Message-State: APjAAAUKC+X011Mj1H+eeWkHGedkCaAaNO/uSY8N64TZOkPIACHvJVP9
+        f56ja9rY1qpK6RjUMeaqXwhGyfPS
+X-Google-Smtp-Source: APXvYqxk+QHOFXlGClvSMrEIU7hB2ZW8mbYMxhqJVbpQplDjrgxG658UwICFAti9YjGmekJ2v3+lTQ==
+X-Received: by 2002:a2e:442:: with SMTP id 63mr2664436lje.66.1570025186227;
+        Wed, 02 Oct 2019 07:06:26 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.34.231])
-        by smtp.googlemail.com with ESMTPSA id h2sm4798936ljb.11.2019.10.02.06.54.45
+        by smtp.googlemail.com with ESMTPSA id b15sm4683464lfj.84.2019.10.02.07.06.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Oct 2019 06:54:46 -0700 (PDT)
-Subject: Re: [PATCH v6 00/19] More improvements for Tegra30 devfreq driver
+        Wed, 02 Oct 2019 07:06:25 -0700 (PDT)
+Subject: Re: [PATCH v6 11/19] PM / devfreq: tegra30: Use CPUFreq notifier
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20190811212315.12689-1-digetx@gmail.com>
- <CGME20191001211534epcas2p1e5f878969d3f68d4dfcafd82b1538487@epcas2p1.samsung.com>
- <17dabcfc-3351-13a1-b3de-81af88f64d84@gmail.com>
- <503b2ade-ff8e-c354-3886-3b7b511bd07e@samsung.com>
+ <CGME20190811212534epcas4p415e9206019385d2bfb3be2c7a328a8df@epcas4p4.samsung.com>
+ <20190811212315.12689-12-digetx@gmail.com>
+ <2f7a0283-7433-b786-a8c3-7d711aafd721@samsung.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6967777e-b54f-8021-aa6d-8c245e529e10@gmail.com>
-Date:   Wed, 2 Oct 2019 16:54:44 +0300
+Message-ID: <57b2f772-8849-5180-262f-0ef8936e63bc@gmail.com>
+Date:   Wed, 2 Oct 2019 17:06:24 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <503b2ade-ff8e-c354-3886-3b7b511bd07e@samsung.com>
+In-Reply-To: <2f7a0283-7433-b786-a8c3-7d711aafd721@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,165 +73,247 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-02.10.2019 03:25, Chanwoo Choi пишет:
-> Hello Dmitry and Thierry,
+02.10.2019 03:02, Chanwoo Choi пишет:
+> Hi,
 > 
-> On 19. 10. 2. 오전 6:15, Dmitry Osipenko wrote:
->> 12.08.2019 00:22, Dmitry Osipenko пишет:
->>> Hello,
->>>
->>> This series addresses some additional review comments that were made by
->>> Thierry Reding to [1], makes several important changes to the driver,
->>> fixing excessive interrupts activity, and adds new features. In the end
->>> I'm proposing myself as a maintainer for the Tegra devfreq drivers.
->>>
->>> [1] https://lore.kernel.org/lkml/0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com/T/
->>>
->>> Changelog:
->>>
->>> v6:  Addressed review comment that was made by Chanwoo Choi to v5 by
->>>      squashing "Define ACTMON_DEV_CTRL_STOP" patch into the "Use CPUFreq
->>>      notifier" patch.
->>>
->>> v5:  Addressed review comments that were made by Chanwoo Choi to v4 by
->>>      squashing few patches, dropping some questionable patches, rewording
->>>      comments to the code, restructuring the code and etc.
->>>
->>>      These patches are now dropped from the series:
->>>
->>>        PM / devfreq: tegra30: Use tracepoints for debugging
->>>        PM / devfreq: tegra30: Inline all one-line functions
->>>
->>>      The interrupt-optimization patches are squashed into a single patch:
->>>
->>>        PM / devfreq: tegra30: Reduce unnecessary interrupts activity
->>>
->>>      because it's better to keep the optimizations as a separate change and
->>>      this also helps to reduce code churning, since the code changes depend
->>>      on a previous patch in order to stay cleaner.
->>>
->>>      Fixed a lockup bug that I spotted recently, which is caused by a
->>>      clk-notifier->cpufreq_get()->clk_set_rate() sequence. Now a non-blocking
->>>      variant of CPU's frequency retrieving is used, i.e. cpufreq_quick_get().
->>>
->>>      Further optimized the CPUFreq notifier by postponing the delayed
->>>      updating in accordance to the polling interval, this actually uncovered
->>>      the above lockup bug.
->>>
->>>      Implemented new minor driver feature in the new patch:
->>>
->>>        PM / devfreq: tegra30: Support variable polling interval
->>>
->>> v4:  Added two new patches to the series:
->>>
->>>        PM / devfreq: tegra30: Synchronize average count on target's update
->>>        PM / devfreq: tegra30: Increase sampling period to 16ms
->>>
->>>      The first patch addresses problem where governor could get stuck due
->>>      to outdated "average count" value which is snapshoted by ISR and there
->>>      are cases where manual update of the value is required.
->>>
->>>      The second patch is just a minor optimization.
->>>
->>> v3:  Added support for tracepoints, replacing the debug messages.
->>>      Fixed few more bugs with the help of tracepoints.
->>>
->>>      New patches in this version:
->>>
->>>        PM / devfreq: tegra30: Use tracepoints for debugging
->>>        PM / devfreq: tegra30: Optimize CPUFreq notifier
->>>        PM / devfreq: tegra30: Optimize upper consecutive watermark selection
->>>        PM / devfreq: tegra30: Optimize upper average watermark selection
->>>        PM / devfreq: tegra30: Include appropriate header
->>>
->>>      Some of older patches of this series also got some extra minor polish.
->>>
->>> v2:  Added more patches that are cleaning driver's code further and
->>>      squashing another kHz conversion bug.
->>>
->>>      The patch "Rework frequency management logic" of the v1 series is now
->>>      converted to "Set up watermarks properly" because I found some problems
->>>      in the original patch and then realized that there is no need to change
->>>      the logic much. So the logic mostly preserved and only got improvements.
->>>
->>>      The series is based on the today's linux-next (25 Jun) and takes into
->>>      account minor changes that MyungJoo Ham made to the already queued
->>>      patches from the first batch [1].
->>>
->>> Dmitry Osipenko (19):
->>>   PM / devfreq: tegra30: Change irq type to unsigned int
->>>   PM / devfreq: tegra30: Keep interrupt disabled while governor is
->>>     stopped
->>>   PM / devfreq: tegra30: Handle possible round-rate error
->>>   PM / devfreq: tegra30: Drop write-barrier
->>>   PM / devfreq: tegra30: Set up watermarks properly
->>>   PM / devfreq: tegra30: Tune up boosting thresholds
->>>   PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
->>>   PM / devfreq: tegra30: Ensure that target freq won't overflow
->>>   PM / devfreq: tegra30: Use kHz units uniformly in the code
->>>   PM / devfreq: tegra30: Reduce unnecessary interrupts activity
->>>   PM / devfreq: tegra30: Use CPUFreq notifier
->>>   PM / devfreq: tegra30: Move clk-notifier's registration to governor's
->>>     start
->>>   PM / devfreq: tegra30: Reset boosting on startup
->>>   PM / devfreq: tegra30: Don't enable consecutive-down interrupt on
->>>     startup
->>>   PM / devfreq: tegra30: Constify structs
->>>   PM / devfreq: tegra30: Include appropriate header
->>>   PM / devfreq: tegra30: Increase sampling period to 16ms
->>>   PM / devfreq: tegra30: Support variable polling interval
->>>   PM / devfreq: tegra20/30: Add Dmitry as a maintainer
->>>
->>>  MAINTAINERS                       |   9 +
->>>  drivers/devfreq/tegra30-devfreq.c | 706 +++++++++++++++++++++++-------
->>>  2 files changed, 555 insertions(+), 160 deletions(-)
->>>
+> On 19. 8. 12. 오전 6:23, Dmitry Osipenko wrote:
+>> The CPU's client need to take into account that CPUFreq may change
+>> while memory activity not, staying high. Thus an appropriate frequency
+>> notifier should be used in addition to the clk-notifier.
 >>
->> Hello Chanwoo,
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/devfreq/tegra30-devfreq.c | 173 ++++++++++++++++++++++++++----
+>>  1 file changed, 153 insertions(+), 20 deletions(-)
 >>
->> I don't have any more updates in regards to this series, everything is
->> working flawlessly for now. Will be awesome if we could continue the
->> reviewing and then get the patches into linux-next to get some more testing.
->>
->>
+>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>> index a2623de56d20..a260812f7744 100644
+>> --- a/drivers/devfreq/tegra30-devfreq.c
+>> +++ b/drivers/devfreq/tegra30-devfreq.c
+>> @@ -17,6 +17,7 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pm_opp.h>
+>>  #include <linux/reset.h>
+>> +#include <linux/workqueue.h>
+>>  
+>>  #include "governor.h"
+>>  
+>> @@ -34,6 +35,8 @@
+>>  #define ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN		BIT(30)
+>>  #define ACTMON_DEV_CTRL_ENB					BIT(31)
+>>  
+>> +#define ACTMON_DEV_CTRL_STOP					0x00000000
+>> +
+>>  #define ACTMON_DEV_UPPER_WMARK					0x4
+>>  #define ACTMON_DEV_LOWER_WMARK					0x8
+>>  #define ACTMON_DEV_INIT_AVG					0xc
+>> @@ -159,7 +162,10 @@ struct tegra_devfreq {
+>>  
+>>  	struct clk		*emc_clock;
+>>  	unsigned long		max_freq;
+>> -	struct notifier_block	rate_change_nb;
+>> +	struct notifier_block	clk_rate_change_nb;
+>> +
+>> +	struct delayed_work	cpufreq_update_work;
+>> +	struct notifier_block	cpu_rate_change_nb;
+>>  
+>>  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
+>>  
+>> @@ -207,10 +213,10 @@ static unsigned long do_percent(unsigned long val, unsigned int pct)
+>>  	return val * pct / 100;
+>>  }
+>>  
+>> -static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra)
+>> +static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra,
+>> +					    unsigned int cpu_freq)
+>>  {
+>>  	struct tegra_actmon_emc_ratio *ratio = actmon_emc_ratios;
+>> -	unsigned int cpu_freq = cpufreq_quick_get(0);
+>>  	unsigned int i;
+>>  
+>>  	for (i = 0; i < ARRAY_SIZE(actmon_emc_ratios); i++, ratio++) {
+>> @@ -244,7 +250,8 @@ tegra_actmon_account_cpu_freq(struct tegra_devfreq *tegra,
+>>  		return target_freq;
+>>  
+>>  	if (dev->avg_freq > tegra_actmon_dev_avg_dependency_freq(tegra, dev))
+>> -		static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra);
+>> +		static_cpu_emc_freq = actmon_cpu_to_emc_rate(
+>> +						tegra, cpufreq_quick_get(0));
+>>  	else
+>>  		static_cpu_emc_freq = 0;
+>>  
+>> @@ -543,8 +550,8 @@ static irqreturn_t actmon_thread_isr(int irq, void *data)
+>>  	return handled ? IRQ_HANDLED : IRQ_NONE;
+>>  }
+>>  
+>> -static int tegra_actmon_rate_notify_cb(struct notifier_block *nb,
+>> -				       unsigned long action, void *ptr)
+>> +static int tegra_actmon_clk_notify_cb(struct notifier_block *nb,
+>> +				      unsigned long action, void *ptr)
+>>  {
+>>  	struct clk_notifier_data *data = ptr;
+>>  	struct tegra_devfreq_device *dev;
+>> @@ -555,7 +562,7 @@ static int tegra_actmon_rate_notify_cb(struct notifier_block *nb,
+>>  	if (action != POST_RATE_CHANGE)
+>>  		return NOTIFY_OK;
+>>  
+>> -	tegra = container_of(nb, struct tegra_devfreq, rate_change_nb);
+>> +	tegra = container_of(nb, struct tegra_devfreq, clk_rate_change_nb);
+>>  
+>>  	freq = data->new_rate / KHZ;
+>>  
+>> @@ -586,6 +593,94 @@ static int tegra_actmon_rate_notify_cb(struct notifier_block *nb,
+>>  	return NOTIFY_OK;
+>>  }
+>>  
+>> +static void tegra_actmon_delayed_update(struct work_struct *work)
+>> +{
+>> +	struct tegra_devfreq *tegra = container_of(work, struct tegra_devfreq,
+>> +						   cpufreq_update_work.work);
+>> +
+>> +	mutex_lock(&tegra->devfreq->lock);
+>> +	update_devfreq(tegra->devfreq);
+>> +	mutex_unlock(&tegra->devfreq->lock);
+>> +}
+>> +
+>> +static unsigned long
+>> +tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
+>> +				  unsigned int cpu_freq)
+>> +{
+>> +	unsigned long freq, static_cpu_emc_freq;
+>> +
+>> +	/* check whether CPU's freq is taken into account at all */
+>> +	freq = tegra_actmon_dev_avg_dependency_freq(tegra,
+>> +						    &tegra->devices[MCCPU]);
+>> +	if (tegra->devices[MCCPU].avg_freq <= freq)
+>> +		return 0;
+>> +
+>> +	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
+>> +
+>> +	/* compare static CPU-EMC freq with MCALL */
+>> +	freq = tegra->devices[MCALL].avg_freq +
+>> +	       tegra->devices[MCALL].boost_freq;
+>> +
+>> +	freq = tegra_actmon_upper_freq(tegra, freq);
+>> +
+>> +	if (freq == tegra->max_freq || freq >= static_cpu_emc_freq)
+>> +		return 0;
+>> +
+>> +	/* compare static CPU-EMC freq with MCCPU */
+>> +	freq = tegra->devices[MCCPU].avg_freq +
+>> +	       tegra->devices[MCCPU].boost_freq;
+>> +
+>> +	freq = tegra_actmon_upper_freq(tegra, freq);
+>> +
+>> +	if (freq == tegra->max_freq || freq >= static_cpu_emc_freq)
+>> +		return 0;
+>> +
+>> +	return static_cpu_emc_freq;
+>> +}
+>> +
+>> +static int tegra_actmon_cpu_notify_cb(struct notifier_block *nb,
+>> +				      unsigned long action, void *ptr)
+>> +{
+>> +	struct cpufreq_freqs *freqs = ptr;
+>> +	struct tegra_devfreq *tegra;
+>> +	unsigned long old, new, delay;
+>> +
+>> +	if (action != CPUFREQ_POSTCHANGE)
+>> +		return NOTIFY_OK;
+>> +
+>> +	tegra = container_of(nb, struct tegra_devfreq, cpu_rate_change_nb);
+>> +
+>> +	/*
+>> +	 * Quickly check whether CPU frequency should be taken into account
+>> +	 * at all, without blocking CPUFreq's core.
+>> +	 */
+>> +	if (mutex_trylock(&tegra->devfreq->lock)) {
+>> +		old = tegra_actmon_cpufreq_contribution(tegra, freqs->old);
+>> +		new = tegra_actmon_cpufreq_contribution(tegra, freqs->new);
+>> +		mutex_unlock(&tegra->devfreq->lock);
+>> +
+>> +		/*
+>> +		 * If CPU's frequency shouldn't be taken into account at
+>> +		 * the moment, then there is no need to update the devfreq's
+>> +		 * state because ISR will re-check CPU's frequency on the
+>> +		 * next interrupt.
+>> +		 */
+>> +		if (old == new)
+>> +			return NOTIFY_OK;
+>> +	}
+>> +
+>> +	/*
+>> +	 * CPUFreq driver should support CPUFREQ_ASYNC_NOTIFICATION in order
+>> +	 * to allow asynchronous notifications. This means we can't block
+>> +	 * here for too long, otherwise CPUFreq's core will complain with a
+>> +	 * warning splat.
+>> +	 */
+>> +	delay = msecs_to_jiffies(ACTMON_SAMPLING_PERIOD);
+>> +	schedule_delayed_work(&tegra->cpufreq_update_work, delay);
+>> +
+>> +	return NOTIFY_OK;
+>> +}
+>> +
+>>  static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+>>  					  struct tegra_devfreq_device *dev)
+>>  {
+>> @@ -617,9 +712,16 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+>>  	device_writel(dev, val, ACTMON_DEV_CTRL);
+>>  }
+>>  
+>> -static void tegra_actmon_start(struct tegra_devfreq *tegra)
+>> +static void tegra_actmon_stop_device(struct tegra_devfreq_device *dev)
+>> +{
+>> +	device_writel(dev, ACTMON_DEV_CTRL_STOP, ACTMON_DEV_CTRL);
+>> +	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
+>> +}
+>> +
+>> +static int tegra_actmon_start(struct tegra_devfreq *tegra)
+>>  {
+>>  	unsigned int i;
+>> +	int err;
+>>  
+>>  	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
+>>  		      ACTMON_GLB_PERIOD_CTRL);
+>> @@ -627,7 +729,30 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+>>  	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
+>>  		tegra_actmon_configure_device(tegra, &tegra->devices[i]);
+>>  
+>> +	/*
+>> +	 * We are estimating CPU's memory bandwidth requirement based on
+>> +	 * amount of memory accesses and system's load, judging by CPU's
+>> +	 * frequency. We also don't want to receive events about CPU's
+>> +	 * frequency transaction when governor is stopped, hence notifier
+>> +	 * is registered dynamically.
+>> +	 */
+>> +	err = cpufreq_register_notifier(&tegra->cpu_rate_change_nb,
+>> +					CPUFREQ_TRANSITION_NOTIFIER);
+>> +	if (err) {
+>> +		dev_err(tegra->devfreq->dev.parent,
+>> +			"Failed to register rate change notifier: %d\n", err);
+>> +		goto err_stop;
+>> +	}
+>> +
+>>  	enable_irq(tegra->irq);
+>> +
+>> +	return 0;
+>> +
+>> +err_stop:
+>> +	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
+>> +		tegra_actmon_stop_device(&tegra->devices[i]);
 > 
-> Hello Dmitry,
+> nitpick:
+> Why don't you contain this for loop statement in the tegra_actmon_stop_device()?
+> I think that you can make it as following:
 > 
-> I'm sorry for late reply. Except for patch5, I reviewed the patches.
-> Please check my comment. Actually, It is difficult to review the patch5
-> without any testing environment and detailed knowledge of watermark of tegra.
-> It is not familiar with me.
+> 	tegra_actmon_stop_device(struct tegra_devfreq *target);
+> 		for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)> +				
+> 			device_writel(dev, ACTMON_DEV_CTRL_STOP, ACTMON_DEV_CTRL);              
+> 			device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS); 
 
-Thank you very much! I'll go through yours comments and reply to them.
+I'll change that in v7.
 
-I understand that it's not easy for you to review patch5, but probably
-you don't need to go into details and a brief-generic review of the code
-will be enough in that case.
+> Except for this, looks good to me. 
+> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-The hardware is actually very simple, there are watermarks that
-correspond to a memory activity that hardware accounts over a given
-period of time. Once watermark is reached, hardware generates interrupt.
-There are two types of watermarks: average and consecutive. In case of
-the average, the memory activity is collected over a larger window of
-time. For the consecutive case, the memory activity is collected over
-each period (16ms by default in the driver). Memory client may breach
-average watermark very frequently, although that may not affect much the
-average value and for some memory clients (like CPU) it is more
-preferred to not completely ignore those short bursts of memory
-activity. The consecutive watermarks are used in order to detect those
-short bursts, which we account in the driver in a form of boosting. You
-may notice that boost_up_coeff for the CPU's memory client is set to a
-higher value in the driver.
-
-> Hello Thierry,
-> If possible, Could you review the patch5 related to setting up the watermark
-> and other patches?
-> 
-
-Indeed, will be very nice if Thierry could also take a look at this
-series. Although.. I could be wrong here, but it looks to me that
-Thierry also isn't closely familiar with this driver and the hardware.
-
-Thierry, at least please let us know if you're interested in taking a
-look at the patches, I'm pretty sure that you're quite busy with other
-things ;)
+Thanks!
