@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0BCC9245
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 21:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F0EC9246
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 21:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729006AbfJBTZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 15:25:22 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:60054 "EHLO inva021.nxp.com"
+        id S1729012AbfJBTZX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 15:25:23 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:51694 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728612AbfJBTZW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1728903AbfJBTZW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Wed, 2 Oct 2019 15:25:22 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0AC47200809;
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C92FC1A069D;
         Wed,  2 Oct 2019 21:25:20 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F01F82006C7;
-        Wed,  2 Oct 2019 21:25:19 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BB3AE1A0698;
+        Wed,  2 Oct 2019 21:25:20 +0200 (CEST)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 453862060C;
-        Wed,  2 Oct 2019 21:25:19 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 0C4572060C;
+        Wed,  2 Oct 2019 21:25:20 +0200 (CEST)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Matthias Kaehlcke <mka@chromium.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -35,9 +35,9 @@ Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
         Lukasz Luba <l.luba@partner.samsung.com>,
         NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v9 2/8] PM / devfreq: Fix devfreq_notifier_call returning errno
-Date:   Wed,  2 Oct 2019 22:25:05 +0300
-Message-Id: <10b1e5f93e7594852aa5cbfe1309bf486f70ecbb.1570044052.git.leonard.crestez@nxp.com>
+Subject: [PATCH v9 3/8] PM / devfreq: Set scaling_max_freq to max on OPP notifier error
+Date:   Wed,  2 Oct 2019 22:25:06 +0300
+Message-Id: <bee69d4635f83d8812fedbc108beb6c51ac9d4e7.1570044052.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1570044052.git.leonard.crestez@nxp.com>
 References: <cover.1570044052.git.leonard.crestez@nxp.com>
@@ -49,67 +49,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Notifier callbacks shouldn't return negative errno but one of the
-NOTIFY_OK/DONE/BAD values.
+The devfreq_notifier_call functions will update scaling_min_freq and
+scaling_max_freq when the OPP table is updated.
 
-The OPP core will ignore return values from notifiers but returning a
-value that matches NOTIFY_STOP_MASK will stop the notification chain.
-
-Fix by always returning NOTIFY_OK.
+If fetching the maximum frequency fails then scaling_max_freq remains
+set to zero which is confusing. Set to ULONG_MAX instead so we don't
+need special handling for this case in other places.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- drivers/devfreq/devfreq.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ drivers/devfreq/devfreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 7dc899da1172..32bbf6e80380 100644
+index 32bbf6e80380..3e0e936185a3 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -548,30 +548,32 @@ EXPORT_SYMBOL(devfreq_interval_update);
-  */
- static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
- 				 void *devp)
- {
- 	struct devfreq *devfreq = container_of(nb, struct devfreq, nb);
--	int ret;
-+	int err = -EINVAL;
- 
- 	mutex_lock(&devfreq->lock);
- 
+@@ -557,12 +557,14 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
  	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
--	if (!devfreq->scaling_min_freq) {
--		mutex_unlock(&devfreq->lock);
--		return -EINVAL;
--	}
-+	if (!devfreq->scaling_min_freq)
-+		goto out;
+ 	if (!devfreq->scaling_min_freq)
+ 		goto out;
  
  	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
--	if (!devfreq->scaling_max_freq) {
--		mutex_unlock(&devfreq->lock);
--		return -EINVAL;
--	}
-+	if (!devfreq->scaling_max_freq)
-+		goto out;
-+
-+	err = update_devfreq(devfreq);
+-	if (!devfreq->scaling_max_freq)
++	if (!devfreq->scaling_max_freq) {
++		devfreq->scaling_max_freq = ULONG_MAX;
+ 		goto out;
++	}
  
--	ret = update_devfreq(devfreq);
-+out:
+ 	err = update_devfreq(devfreq);
+ 
+ out:
  	mutex_unlock(&devfreq->lock);
-+	if (err)
-+		dev_err(devfreq->dev.parent,
-+			"failed to update frequency from OPP notifier (%d)\n",
-+			err);
- 
--	return ret;
-+	return NOTIFY_OK;
- }
- 
- /**
-  * devfreq_dev_release() - Callback for struct device to release the device.
-  * @dev:	the devfreq device
 -- 
 2.17.1
 
