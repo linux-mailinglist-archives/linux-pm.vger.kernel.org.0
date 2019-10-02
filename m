@@ -2,85 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DE7C90EF
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 20:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9EFC90F6
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 20:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbfJBSfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 14:35:50 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:44262 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfJBSfu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 14:35:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Kff8NFhNWSYdZTeTx86ANdXzbIxamMv6vlbE+DKs0WU=; b=UsUe2khu1wXY5oN8m9YPh4uLm
-        OexM0Ep2yCh1BkyfLeFIH++DBV0GTdS4urxCmLu6bXtDgIZ7tSGB+aqHx9hqQElgMx7HY4i7F/aqY
-        EB19mcnPS+8vP4Y0oJ2fXVr7XYzIVrzNfm5t7gI5U3UZpWt6bdKSVTAiWBfHCuWF8m3pNEQVzuJib
-        SB35uqbp5zp8MZr/M2q2uqR40wA1yOZ8SUaZ8f2ax+K25EQXv5+7XNl6uC1NuWlaG+iQe6kIwrMu4
-        cSzEK7ocSLkaq7X6DednAdP+vI21C8uRnjZeftz2a4HhRSs3ONoubRPNh2T9ge6G+nhmWCVJptW1A
-        j0+nc6M9g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iFjSx-0004UT-6b; Wed, 02 Oct 2019 18:35:11 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 17B399802BF; Wed,  2 Oct 2019 20:35:07 +0200 (CEST)
-Date:   Wed, 2 Oct 2019 20:35:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@suse.de, lenb@kernel.org, rjw@rjwysocki.net,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        matt@codeblueprint.co.uk, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, pjt@google.com, vincent.guittot@linaro.org,
-        qperret@qperret.net, dietmar.eggemann@arm.com
-Subject: Re: [PATCH 1/2] x86,sched: Add support for frequency invariance
-Message-ID: <20191002183507.GE4643@worktop.programming.kicks-ass.net>
-References: <20190909024216.5942-1-ggherdovich@suse.cz>
- <20190909024216.5942-2-ggherdovich@suse.cz>
- <20190924160423.GN2369@hirez.programming.kicks-ass.net>
- <1570019204.22393.1.camel@suse.cz>
+        id S1728808AbfJBShv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 14:37:51 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:46787 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfJBShu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 14:37:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a3so12336097pgm.13
+        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2019 11:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msZHjsSYlLs6Ks/lSk6Cls6E9XwP4bQAmPYAwQ4RSb4=;
+        b=KA9WXGnWyvYQ0+Jk9Id79fcsK7FcOgUmszbFxbn5riioMVv8C5XKkKTwo6SSXpRsEG
+         2WkvbSKkbKi5o1qMgLpv6uO85W7UZhpypbkQF6ZOHs4xGTOf2E9P1gjZEJ3Zv6/X7rWj
+         +KPdK0fJ4QMCONqIQW9nGkyAZ06O4uX0QJ6X8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msZHjsSYlLs6Ks/lSk6Cls6E9XwP4bQAmPYAwQ4RSb4=;
+        b=aDjiTbAAlAgnJK8XCcfNADVRUsdx/3Bk4qQo4c33k1UfRKObzOfdVAx1RVXTWAvqgs
+         hOvSNYTKAOWbRhdi13XldRDaargp1c69ESXKTYps7W8xTiLSThFOWwPZkqqV7RIobgow
+         gRemj9fWiVL7RaXMcGUsuj7sMhnO0UHkoDZTFMR6ovk0yF2sgktOOyeYdbi/a/45Vqnn
+         nM/MzyDM254tCh5YyOhMfiJ2DZG4WrVcxdXM7pPh78WuMS9ngOInMSsIj38U5+/RSDu7
+         WtDrfI3sbVlqVg7PYOYF8UoreVLLak7cC8ZpbQ2ZNsRjQ34mNHXSss8DhJd22P3jahBI
+         N/rA==
+X-Gm-Message-State: APjAAAUZu+sUQdiWhSm++WTYCkFW+flfPKhDsIX+/ti201hjw10rAaYa
+        FFyf+PfFBSqIQCD+NT1lOsACvA==
+X-Google-Smtp-Source: APXvYqxrdq/DjyPBBw0ZZ94XLn4NJoJn104fjLVNvokgfYmb1DzqmGGdeKJUxrjeBhmnAohoGkSJ/Q==
+X-Received: by 2002:a65:4145:: with SMTP id x5mr5131467pgp.321.1570041470068;
+        Wed, 02 Oct 2019 11:37:50 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id o15sm3501pjs.14.2019.10.02.11.37.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Oct 2019 11:37:49 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] PM / Domains: Add genpd_power_on/off trace events
+Date:   Wed,  2 Oct 2019 11:37:42 -0700
+Message-Id: <20191002113736.v2.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
+X-Mailer: git-send-email 2.23.0.444.g18eeb5a265-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570019204.22393.1.camel@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 02:26:44PM +0200, Giovanni Gherdovich wrote:
-> On Tue, 2019-09-24 at 18:04 +0200, Peter Zijlstra wrote:
-> > On Mon, Sep 09, 2019 at 04:42:15AM +0200, Giovanni Gherdovich wrote:
-> > 
-> > > +static void intel_set_cpu_max_freq(void)
-> > > +{
-> > > +	/*
-> > > +	 * TODO: add support for:
-> > > +	 *
-> > > +	 * - Xeon Phi (KNM, KNL)
-> > > +	 * - Xeon Gold/Platinum, Atom Goldmont/Goldmont Plus
-> > > +	 * - Atom Silvermont
-> > 
-> > ISTR I had code for Atom.. what happened with that?
-> 
-> I'm being overly zealous and I wanted to get a Silvermont machine to test that
-> code before sending.
-> 
-> The reason is that your code uses MSR_ATOM_CORE_RATIOS and
-> MSR_ATOM_CORE_TURBO_RATIOS which are not documented in the SDM. I wanted to
-> make sure those have the expected content on at least one machine before using
-> them in my code. I have no doubt you, Srinivas and Len (who uses them in
-> turbostat) have already checked but you know, more eyeballs.
-> 
-> I've talked to Len and Srinivas at LPC, they agreed that those two MSR may not
-> have made it to the SDM but said the turbostat source code is the reference in
-> this case.
+The events can be useful for power analysis/optimization, e.g.
+to track the state of power domains during suspend/resume on
+battery powered devices.
 
-Can you at least include the patch as RFC then? Perhaps other people,
-who have hardware at hand, can then help test it.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
+
+Changes in v2:
+- split original patch in two, one for genpd_power_on/off and
+  one for genpd_set_performance_state
+- use trace_genpd_power_on/off_enabled macros to eliminate
+  branches when the tracepoints are disabled
+- updated commit message (original subject was "PM / Domains:
+  Add tracepoints")
+
+ drivers/base/power/domain.c  | 26 ++++++++++++++++++++++----
+ include/trace/events/power.h | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 584cf7a60f57..88eff9c4e79a 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -20,6 +20,7 @@
+ #include <linux/sched.h>
+ #include <linux/suspend.h>
+ #include <linux/export.h>
++#include <trace/events/power.h>
+ 
+ #include "power.h"
+ 
+@@ -422,14 +423,22 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ 	if (!genpd->power_on)
+ 		return 0;
+ 
+-	if (!timed)
+-		return genpd->power_on(genpd);
++	if (!timed) {
++		ret = genpd->power_on(genpd);
++
++		if (trace_genpd_power_on_enabled() && !ret)
++			trace_genpd_power_on(genpd);
++
++		return ret;
++	}
+ 
+ 	time_start = ktime_get();
+ 	ret = genpd->power_on(genpd);
+ 	if (ret)
+ 		return ret;
+ 
++	trace_genpd_power_on(genpd);
++
+ 	elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
+ 	if (elapsed_ns <= genpd->states[state_idx].power_on_latency_ns)
+ 		return ret;
+@@ -452,14 +461,23 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+ 	if (!genpd->power_off)
+ 		return 0;
+ 
+-	if (!timed)
+-		return genpd->power_off(genpd);
++	if (!timed) {
++		ret = genpd->power_off(genpd);
++
++		if (trace_genpd_power_off_enabled() && !ret)
++			trace_genpd_power_off(genpd);
++
++		return ret;
++	}
+ 
+ 	time_start = ktime_get();
+ 	ret = genpd->power_off(genpd);
+ 	if (ret == -EBUSY)
+ 		return ret;
+ 
++	if (trace_genpd_power_off_enabled() && !ret)
++		trace_genpd_power_off(genpd);
++
+ 	elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
+ 	if (elapsed_ns <= genpd->states[state_idx].power_off_latency_ns)
+ 		return ret;
+diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+index f7aece721aed..d92cb53c20ed 100644
+--- a/include/trace/events/power.h
++++ b/include/trace/events/power.h
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/cpufreq.h>
+ #include <linux/ktime.h>
++#include <linux/pm_domain.h>
+ #include <linux/pm_qos.h>
+ #include <linux/tracepoint.h>
+ #include <linux/trace_events.h>
+@@ -529,6 +530,36 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
+ 
+ 	TP_ARGS(name, type, new_value)
+ );
++
++#ifdef CONFIG_PM_GENERIC_DOMAINS
++DECLARE_EVENT_CLASS(genpd_power_on_off,
++	TP_PROTO(struct generic_pm_domain *genpd),
++
++	TP_ARGS(genpd),
++
++	TP_STRUCT__entry(
++		__string(name, genpd->name)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, genpd->name);
++	),
++
++	TP_printk("name=%s", __get_str(name))
++);
++
++DEFINE_EVENT(genpd_power_on_off, genpd_power_on,
++	TP_PROTO(struct generic_pm_domain *genpd),
++
++	TP_ARGS(genpd)
++);
++
++DEFINE_EVENT(genpd_power_on_off, genpd_power_off,
++	TP_PROTO(struct generic_pm_domain *genpd),
++
++	TP_ARGS(genpd)
++);
++#endif /* CONFIG_PM_GENERIC_DOMAINS */
+ #endif /* _TRACE_POWER_H */
+ 
+ /* This part must be outside protection */
+-- 
+2.23.0.444.g18eeb5a265-goog
+
