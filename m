@@ -2,94 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AE9C8D4B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 17:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BE4C8D21
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 17:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728546AbfJBPsY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 11:48:24 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36481 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfJBPsY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 11:48:24 -0400
-Received: by mail-wm1-f68.google.com with SMTP id m18so7523621wmc.1;
-        Wed, 02 Oct 2019 08:48:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IwKP6bZ0/M/GNRiVw0vgEg5C/Drz9g4f2GY67meqLWE=;
-        b=I3BhUdD05maN4HlqZnHRXQv+3zKf0pTyiwmB4Mc06OW6G4rLDijaeWzUIJTBZIXoXb
-         jxMYFmuz7Xq70ZnDTPscRPkOuKF3za0nwFObjAAeKyJAuP4NLtWcdTgjs0Nx4XRFDQnK
-         DcwKmpmiYn+5p1xVo/uog+5Nm4pZ/BsyKvBijeU0w7XRAG5lnynUXlQSh4fHr76Yzq1+
-         w1PbskxiX8xTZfaP1HXRGZ/0AzFVPcYn49SkXHKYgfAW8IkCUglqNNjZ8IwiuJx8/iit
-         1m4fwtgfoOgc72Y/Us0BhJmM9PORr98twPReAS0t812R/qOMFi/B7b6EvDTtWdr4+K5/
-         S+Tg==
-X-Gm-Message-State: APjAAAVZzehGYvcvEo5z0yAWVmNUqBJEElGiu8lT72vCMcH0o8zg2tZi
-        dNufGlvmnFiexUp5RMLsfqQ=
-X-Google-Smtp-Source: APXvYqxeZ2BmgRha6QvpGjz+C0CN04lAeTAC36faPuMfUtJeANX0YHIp1xp1+lIX7zNyzHcuV9uAvQ==
-X-Received: by 2002:a1c:1d85:: with SMTP id d127mr3638645wmd.14.1570031302235;
-        Wed, 02 Oct 2019 08:48:22 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.145])
-        by smtp.googlemail.com with ESMTPSA id o1sm3159082wrs.78.2019.10.02.08.48.20
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 02 Oct 2019 08:48:21 -0700 (PDT)
-Date:   Wed, 2 Oct 2019 17:48:19 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>, vireshk@kernel.org,
-        robh+dt@kernel.org, kgene@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com
-Subject: Re: [PATCH v4 2/6] dt-bindings: samsung: Update the CHIP ID binding
- documentation
-Message-ID: <20191002154819.GA4072@kozik-lap>
-References: <20190910123618.27985-1-s.nawrocki@samsung.com>
- <CGME20190910123637eucas1p26d2051f9bdd1bdf4510f1908ea98f641@eucas1p2.samsung.com>
- <20190910123618.27985-3-s.nawrocki@samsung.com>
- <20190917181322.GA683@bogus>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190917181322.GA683@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1728885AbfJBPnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 11:43:50 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38754 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725875AbfJBPnu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Oct 2019 11:43:50 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 5296DAC7D;
+        Wed,  2 Oct 2019 15:43:45 +0000 (UTC)
+Message-ID: <1570031352.22393.4.camel@suse.cz>
+Subject: Re: [PATCH v2 1/2] x86,sched: Add support for frequency invariance
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@01.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@qperret.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 02 Oct 2019 17:49:12 +0200
+In-Reply-To: <201910022359.6gxzMDqF%lkp@intel.com>
+References: <20191002122926.385-2-ggherdovich@suse.cz>
+         <201910022359.6gxzMDqF%lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 01:13:22PM -0500, Rob Herring wrote:
-> On Tue, 10 Sep 2019 14:36:14 +0200, Sylwester Nawrocki wrote:
-> > This patch adds documentation of a new optional "samsung,asv-bin"
-> > property in the chipid device node and documents requirement of
-> > "syscon" compatible string.  These additions are needed to support
-> > Exynos ASV (Adaptive Supply Voltage) feature.
-> > 
-> > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> > ---
-> > Changes since v3:
-> >  - none
-> > 
-> > Changes since v2:
-> >  - corrected patch summary line prefix, the patch moved in the
-> >    sequence
-> > 
-> > Changes since v1 (RFC):
-> >  - new patch
-> > ---
-> >  .../devicetree/bindings/arm/samsung/exynos-chipid.txt  | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > 
+On Wed, 2019-10-02 at 23:23 +0800, kbuild test robot wrote:
+> Hi Giovanni,
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on tip/sched/core]
+> [cannot apply to v5.4-rc1 next-20191002]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-Dear Sylwester,
+Noted, thanks.
 
-This will create conflicts with conversion to dt-schema (already picked
-up by Rob).
+Indeed this patch applies to the master branch of the "tip" tree,
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git , and depends on
+5ebb34edbefa8 "x86/intel: Aggregate microserver naming".
 
-Can you convert this patch to dt-schema format and send it for Rob?
+I'll use '--base' in the future.
 
-Best regards,
-Krzysztof
 
+Giovanni
+
+> 
+> url:    https://github.com/0day-ci/linux/commits/Giovanni-Gherdovich/Add-support-for-frequency-invariance-for-some-x86/20191002-221807
+> config: x86_64-defconfig (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-13) 7.4.0
+> reproduce:
+>         # save the attached .config to linux build tree
+>         make ARCH=x86_64 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> > > arch/x86/kernel/smpboot.c:1834:7: error: 'INTEL_FAM6_ATOM_GOLDMONT_D' undeclared here (not in a function); did you mean 'INTEL_FAM6_ATOM_GOLDMONT_X'?
+> 
+>      ICPU(INTEL_FAM6_ATOM_GOLDMONT_D),
+>           ^
+>    arch/x86/kernel/smpboot.c:1824:25: note: in definition of macro 'ICPU'
+>      { X86_VENDOR_INTEL, 6, model, X86_FEATURE_APERFMPERF, 0}
+>                             ^~~~~
+> 
+> vim +1834 arch/x86/kernel/smpboot.c
+> 
+>   1831	
+>   1832	static const struct x86_cpu_id has_turbo_ratio_group_limits[] = {
+>   1833		ICPU(INTEL_FAM6_ATOM_GOLDMONT),
+> > 1834		ICPU(INTEL_FAM6_ATOM_GOLDMONT_D),
+> 
+>   1835		ICPU(INTEL_FAM6_ATOM_GOLDMONT_PLUS),
+>   1836		ICPU(INTEL_FAM6_SKYLAKE_X),
+>   1837		{}
+>   1838	};
+>   1839	
+> 
+> ---
+> 0-DAY kernel test infrastructure                Open Source Technology Center
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
