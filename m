@@ -2,139 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9B0C8D62
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 17:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7B0C8D70
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 17:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728736AbfJBPul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 11:50:41 -0400
-Received: from mx6.ucr.edu ([138.23.62.71]:6401 "EHLO mx6.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726063AbfJBPul (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Oct 2019 11:50:41 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 02 Oct 2019 11:50:40 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1570031441; x=1601567441;
-  h=from:to:cc:subject:date:message-id;
-  bh=Z+EVLw9fpQeyY0pHsne85bY8IJwYorDnDkYoPc67XmY=;
-  b=H6m4hwnOZLhnnJv5JxRZZtI5Ls6kiAtRgQKbFv3neujni0uKwPTgsf2k
-   U5sQJ9ATYDxeyIYKWtS/wI6DODHbcc45IDckAX0XZYx0Nyfk1fe3VZSp9
-   BKGzgX2/j3V388EfSrkDXLeJE2zFngS81jYhiYf1D0aQbWASmdvDjhieh
-   1t3KxWlLGYFsxKVBpOZcckrksP9+TqHfG4eXP+LOOul6+o4OIqEm0JaRH
-   bTwLSWjUtr6jIjwHC80KevEse8RJuhPHPD3z4rsNz7mlFt5GzpODeaXtx
-   6PesFl4VGvKC6aK+FF8dA+cGCBrwmg809RvI1DrUkUVJg38/dha2xSjvp
-   g==;
-IronPort-SDR: HVo5QoxwLRv+PbmR1xJuF9MGSYZW/hWAD422nlZsjGQ/dPOWe1vtloTuHsRr8u9THncf0goEau
- euNbnxEKlC0kLxwcDUALqQJgZsld3vHYHLHeRCKxnsDMdX+SmqLkj4vISNjKvviyJMpXKeh8KO
- 3c7DnCodnxaJwf4DaxwJROWg0B1biqGVEetpDFfjodCMH3Dy9k01gIrUWqt1KspuhK1Y70GyQv
- Aj/Vk7tu3gB+THnUjdlQdGclNlro8gGNBgCtc2DeZRDbduKPbxb9DvjbZXQZ3hUu8zzFSujb0J
- TSc=
-IronPort-PHdr: =?us-ascii?q?9a23=3AvxsSFx0RFlO0Uu8JsmDT+DRfVm0co7zxezQtwd?=
- =?us-ascii?q?8Zse0eKfad9pjvdHbS+e9qxAeQG9mCsLQY1aGH6+jJYi8p2d65qncMcZhBBV?=
- =?us-ascii?q?cuqP49uEgeOvODElDxN/XwbiY3T4xoXV5h+GynYwAOQJ6tL1LdrWev4jEMBx?=
- =?us-ascii?q?7xKRR6JvjvGo7Vks+7y/2+94fcbglVijexe7x/IRS5oQjVqsUdnJdvJLs2xh?=
- =?us-ascii?q?bVuHVDZv5YxXlvJVKdnhb84tm/8Zt++ClOuPwv6tBNX7zic6s3UbJXAjImM3?=
- =?us-ascii?q?so5MLwrhnMURGP5noHXWoIlBdDHhXI4wv7Xpf1tSv6q/Z91SyHNsD4Ubw4RT?=
- =?us-ascii?q?Kv5LpwRRT2lCkIKSI28GDPisxxkq1bpg6hpwdiyILQeY2ZKeZycr/Ycd4cQG?=
- =?us-ascii?q?pBX91RVzdAAoO6YIsEEvQPM/9FpInzplsBsx++ChSxD+/rxDJEmnr60Ksn2O?=
- =?us-ascii?q?ojDA7GxhQtEdIQvnrJotv7N6AcXPupwKXU1zjPc+lb1Svh5IXObxsvoeuMXb?=
- =?us-ascii?q?V1ccfJy0YvFgLEjlWNqYziIjiY0eQMsmmb7+V6VOKjl3Irpg9qrziy2sgskJ?=
- =?us-ascii?q?PFiZwIxVDZ7Ch0xps+K96gSENjf9KoDJ9duzuZOoZ2WM8uXXxktSYgxrEbvZ?=
- =?us-ascii?q?O2fzAGxIkmyhPbcfCLbYaF7xL5WOqPIDp0nnBodb25ih2v60av0Pf8WdOx0F?=
- =?us-ascii?q?tSqypFlcTDuW4V2hzI78iHVuN9/kC82TaTzwzT6v9LIUQzlafDLp4u2L8wlp?=
- =?us-ascii?q?4KvUTbES/6hVz6jKGLekgg+eWk8evnYrLhpp+TM497lBvyPbgpmsy6Geg4Mw?=
- =?us-ascii?q?4OUHaH+emkyrHv4Un0TK9Jg/A2iKXVro3WKMQBqqKkBwJY0Z4v6xOlADen1N?=
- =?us-ascii?q?QYk2MHLFVAeB+fj4noOlHOL+r5Dfujn1ihnixmx+3aMb37GJnCMGXMkKr5cb?=
- =?us-ascii?q?Zn90Fc0BYzzcxY559MDrEBIfTzWlL+tdDBFh85Nhe5w/joCNpjzIMSQ2GPDb?=
- =?us-ascii?q?GDMKPUr1CI4vgjI+6WZI8a637TMf8gss/vn38knhdJbLup1JpPMCuQA/98ZU?=
- =?us-ascii?q?iVfCy/0Z86DW4Ws19mH6TRg1qYXGsWOC6/?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2FAAABRxZRdh8bXVdFmHQEBBQEMBQG?=
- =?us-ascii?q?BVAcBCwGDXUwQjSCGKAaLPnGFeoMLhSeBewEIAQEBDAEBLQIBAYRAgkAjNQg?=
- =?us-ascii?q?OAgMJAQEFAQEBAQEFBAEBAhABAQEIDQkIKYVAgjopgzULFmdWPwEFATUiOYJ?=
- =?us-ascii?q?HAYF2FAWjfIEDPIxYiGcBCQ2BSAkBCIEiAYc0hFmBEIEHhGGEKIM9gkQEgTc?=
- =?us-ascii?q?BAQGVI5ZNAQYCghAUgXiTEieEOok9i0EBLYwNmxgCCgcGDyOBMQOCDU0lgWw?=
- =?us-ascii?q?KgURQEBSBWw4JFY4uITOBCJA8AQ?=
-X-IPAS-Result: =?us-ascii?q?A2FAAABRxZRdh8bXVdFmHQEBBQEMBQGBVAcBCwGDXUwQj?=
- =?us-ascii?q?SCGKAaLPnGFeoMLhSeBewEIAQEBDAEBLQIBAYRAgkAjNQgOAgMJAQEFAQEBA?=
- =?us-ascii?q?QEFBAEBAhABAQEIDQkIKYVAgjopgzULFmdWPwEFATUiOYJHAYF2FAWjfIEDP?=
- =?us-ascii?q?IxYiGcBCQ2BSAkBCIEiAYc0hFmBEIEHhGGEKIM9gkQEgTcBAQGVI5ZNAQYCg?=
- =?us-ascii?q?hAUgXiTEieEOok9i0EBLYwNmxgCCgcGDyOBMQOCDU0lgWwKgURQEBSBWw4JF?=
- =?us-ascii?q?Y4uITOBCJA8AQ?=
-X-IronPort-AV: E=Sophos;i="5.67,574,1566889200"; 
-   d="scan'208";a="79706475"
-Received: from mail-pg1-f198.google.com ([209.85.215.198])
-  by smtpmx6.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Oct 2019 08:43:22 -0700
-Received: by mail-pg1-f198.google.com with SMTP id e15so13607528pgh.19
-        for <linux-pm@vger.kernel.org>; Wed, 02 Oct 2019 08:43:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=N3wwXKf0R7CCR4EOyO31YNISlkUagx3YW+ubBEkjy90=;
-        b=QMv4jGcCXx1URDikgKlNGUTFPVSJO4RCDjXYf6zhQ61B9j4ZD9SGba71X54tQA4kbV
-         7JCHjnSZ1dPQeEq84OuGkA9EnjGzjmNvrU2J1xNR097Lb/Bb+wsYt/tt9nLwICmKLRM0
-         9ZsD/mRt6zc8SCPUTr7vwkyCbuZvHwRdDpbSKkOgTvlBkVWd/qzHaiZyxB8WFUMnbTRo
-         wCHMnTxrTel0vr2JPnRg8+ZsJldqD2gLfkhauSQlRj5FjUiBgJ4KutAfz87/t8o6w/f1
-         jwbUTWzf+HE4303koSjExoqNUQAg2eb9IB5lHC05TSyXraQkKIJv5u6OrcHacwQT0vJE
-         HTVA==
-X-Gm-Message-State: APjAAAX9accEOftYZspe7dOWcIDR/nNWYpfNU8cM0XdhatOkuEZ6yLpa
-        GyqvZ8i7/ewTdflvMOu52ClVrgSlu6P6m+htapl5DhW2PDKkCaNFyhspzgZWXsWdQn3LjKr+ebk
-        CeIM6aB3s6MCzV+mFr/tv
-X-Received: by 2002:a17:90a:7181:: with SMTP id i1mr287702pjk.39.1570031001253;
-        Wed, 02 Oct 2019 08:43:21 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqx5xvAvA3yzxjudCSvj/C3DRFOv+3OVFLDlbq510/C1VN0iXsuolwLESAlE9074I/ysViusjg==
-X-Received: by 2002:a17:90a:7181:: with SMTP id i1mr287657pjk.39.1570031000821;
-        Wed, 02 Oct 2019 08:43:20 -0700 (PDT)
-Received: from Yizhuo.cs.ucr.edu (yizhuo.cs.ucr.edu. [169.235.26.74])
-        by smtp.googlemail.com with ESMTPSA id a23sm13678588pgd.83.2019.10.02.08.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 08:43:20 -0700 (PDT)
-From:   Yizhuo <yzhai003@ucr.edu>
-Cc:     csong@cs.ucr.edu, zhiyunq@cs.ucr.edu, Yizhuo <yzhai003@ucr.edu>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: max17042_battery: fix the potential uninitialized use in max17042_write_verify_reg()
-Date:   Wed,  2 Oct 2019 08:44:06 -0700
-Message-Id: <20191002154406.8875-1-yzhai003@ucr.edu>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1728231AbfJBPyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 11:54:50 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:52496 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbfJBPyu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 11:54:50 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191002155448euoutp020262fd7af84ac69f45b323edafe64525~J34Cjki863143331433euoutp024
+        for <linux-pm@vger.kernel.org>; Wed,  2 Oct 2019 15:54:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191002155448euoutp020262fd7af84ac69f45b323edafe64525~J34Cjki863143331433euoutp024
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1570031688;
+        bh=dO98rwiJ4tvmdexXBQqD68SKjJaPBN1+ST7RvpER/yg=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Rik/3mFaYggaSmisUCEjz6jwDaT5L7pU+idLcipx6RMJhyH/1rTHn+kaev0sFH/6D
+         nNX7o8wl1Jv5dA7PJgQd1ErzWjdTsGpAg5VtNm7pXn1db0n6owuOw7OuCo1QCYTbHP
+         k7kxbqHVv/j3Yd75EAAL730fUxvAYqR1ozQqSt74=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191002155448eucas1p246e67cfa52a412c3d3e41a8f6bd78b71~J34CDIQjb3055930559eucas1p2X;
+        Wed,  2 Oct 2019 15:54:48 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 5B.22.04309.848C49D5; Wed,  2
+        Oct 2019 16:54:48 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191002155447eucas1p27fedafa6277bb3fbff62be76ecec61d3~J34BwhW5d2815328153eucas1p2y;
+        Wed,  2 Oct 2019 15:54:47 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191002155447eusmtrp1994d135604b7ad804df78150467540fc~J34Bv4hwf1558815588eusmtrp1G;
+        Wed,  2 Oct 2019 15:54:47 +0000 (GMT)
+X-AuditID: cbfec7f4-ae1ff700000010d5-92-5d94c8486127
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 77.35.04166.748C49D5; Wed,  2
+        Oct 2019 16:54:47 +0100 (BST)
+Received: from [106.120.51.75] (unknown [106.120.51.75]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191002155447eusmtip2f9fcb187e200c69f7015f72d91c42f9d~J34BOmENe0880708807eusmtip23;
+        Wed,  2 Oct 2019 15:54:47 +0000 (GMT)
+Subject: Re: [PATCH v4 1/6] opp: Handle target/min/max voltage in
+ dev_pm_opp_adjust_voltage()
+To:     Krzysztof Kozlowski <krzk@kernel.org>, vireshk@kernel.org
+Cc:     robh+dt@kernel.org, kgene@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <ada1bb2f-a824-c34e-6561-04a35782a9b8@samsung.com>
+Date:   Wed, 2 Oct 2019 17:54:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20191002143310.GA15898@pi3>
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJKsWRmVeSWpSXmKPExsWy7djP87oeJ6bEGlz5z26xccZ6Vov5R86x
+        WvQ/fs1scf78BnaLTY+vsVpc3jWHzeJz7xFGixnn9zFZrD1yl92ide8RdovND46xOXB7bFrV
+        yeaxeUm9R9+WVYwenzfJBbBEcdmkpOZklqUW6dslcGUsfn+EseAKW8XCpp3MDYxbWbsYOTgk
+        BEwkFu8P6mLk4hASWMEo8X7XcRYI5wujRN/TN4wQzmdGibttd4E6OME6Vq/9ApVYzijx+Osj
+        RpCEkMBbRonzN71BbGGBeIkdkw6wg9giArYSd75OARvLLPCfUeJQ3082kASbgKFE79E+sGZe
+        ATuJH3vngW1gEVCReNa8mAnEFhWIkPj04DArRI2gxMmZT1hAbE4BTYlPl06D1TALiEs0fVnJ
+        CmHLS2x/O4cZZJmEwCl2ia4Ve5ggznaR+LT6HDOELSzx6vgWdghbRuL05B4WiIZmRome3bfZ
+        IZwJjBL3jy9ghKiyljh8/CI4yJiBVq/fpQ8RdpR483w3GyQk+SRuvBWEOIJPYtK26cwQYV6J
+        jjYhiGoVid+rpkOdIyXR/eQ/ywRGpVlIXpuF5J1ZSN6ZhbB3ASPLKkbx1NLi3PTUYqO81HK9
+        4sTc4tK8dL3k/NxNjMAEdfrf8S87GHf9STrEKMDBqMTD2xA0OVaINbGsuDL3EKMEB7OSCO+l
+        9VNihXhTEiurUovy44tKc1KLDzFKc7AoifNWMzyIFhJITyxJzU5NLUgtgskycXBKNTAy7pg2
+        I0eSS11d56nM1L4fBw1m6f78LG6i/SGHdcnN9TWdMmWa6zYVnGEXvGxdXad6lt0o+1m62bvA
+        fTu+cwW92L/2xU5dn+V9U4TXPZSNj/H7pWcQ3XrTPaI0Zf5CpsMruH7clBRu92g6PvcPC8PL
+        2ccep0VYqMlo9SXIMYWof3Gou30vm0uJpTgj0VCLuag4EQC7epL4TAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7ruJ6bEGvxoMbTYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y27RuvcIu8XmB8fYHLg9Nq3q
+        ZPPYvKTeo2/LKkaPz5vkAlii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX0
+        7WxSUnMyy1KL9O0S9DIWvz/CWHCFrWJh007mBsatrF2MnBwSAiYSq9d+Yexi5OIQEljKKHHw
+        wGumLkYOoISUxPwWJYgaYYk/17rYIGpeM0q0d25mA0kIC8RL7Jh0gB3EFhGwlbjzdQoLSBGz
+        wH9Gia6uw1Ad9xglfvQeZAGpYhMwlOg92scIYvMK2En82DsP7AwWARWJZ82LmUBsUYEIicM7
+        ZkHVCEqcnPkErJdTQFPi06XTYDXMAuoSf+ZdYoawxSWavqxkhbDlJba/ncM8gVFoFpL2WUha
+        ZiFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAmNx27OfmHYyXNgYfYhTgYFTi
+        4W0ImhwrxJpYVlyZe4hRgoNZSYT30vopsUK8KYmVValF+fFFpTmpxYcYTYGem8gsJZqcD0wX
+        eSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNITS1KzU1MLUotg+pg4OKUaGC1CLSK/lEy4n5hm
+        Z6xU579LtPlJnDULE/uVW8L3/wbvnmmSyXji8XxDjmmKudfyHrR+it7SfW+7u+nBgvqmYouy
+        azPkwl9sS6yfNveGqZxKX1D0sw8mBbIZS1jky/ayz9ZwZDylcnfHq8K4+giJ+8Ga7/ebtl6R
+        ePleubTsUYmDt6Dil22LlFiKMxINtZiLihMB6R928t8CAAA=
+X-CMS-MailID: 20191002155447eucas1p27fedafa6277bb3fbff62be76ecec61d3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190910123636eucas1p250ec04901f227b947cc38936563f63b2
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190910123636eucas1p250ec04901f227b947cc38936563f63b2
+References: <20190910123618.27985-1-s.nawrocki@samsung.com>
+        <CGME20190910123636eucas1p250ec04901f227b947cc38936563f63b2@eucas1p2.samsung.com>
+        <20190910123618.27985-2-s.nawrocki@samsung.com> <20191002143310.GA15898@pi3>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In function max17042_write_verify_reg(), variable "read_value"
-could be uninitialized if regmap_read() fails. However,
-"read_value" is used to decide the control flow later in the if
-statement, which is potentially unsafe.
+On 10/2/19 16:33, Krzysztof Kozlowski wrote:
+> On Tue, Sep 10, 2019 at 02:36:13PM +0200, Sylwester Nawrocki wrote:
+>> To be squashed with patch "PM / OPP: Support adjusting OPP voltages
+>> at runtime".
+>>
+>> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+>> ---
+>>
+>>  drivers/opp/core.c     | 10 ++++++++--
+>>  include/linux/pm_opp.h |  3 ++-
+>>  2 files changed, 10 insertions(+), 3 deletions(-)
+>
+> I'll take the ASV driver via samsung-soc but I see it depends on this
+> one.  Please provide me a stable tag with it or an Ack.
 
-Signed-off-by: Yizhuo <yzhai003@ucr.edu>
----
- drivers/power/supply/max17042_battery.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+There is further dependency on patch 
+"[PATCH v4 6/8] PM / OPP: Support adjusting OPP voltages at runtime"
+https://lore.kernel.org/linux-arm-kernel/1565703113-31479-7-git-send-email-andrew-sh.cheng@mediatek.com
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 0dfad2cf13fe..e6a2dacaa730 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -486,12 +486,15 @@ static void max17042_external_power_changed(struct power_supply *psy)
- static int max17042_write_verify_reg(struct regmap *map, u8 reg, u32 value)
- {
- 	int retries = 8;
--	int ret;
-+	int ret, err;
- 	u32 read_value;
- 
- 	do {
- 		ret = regmap_write(map, reg, value);
--		regmap_read(map, reg, &read_value);
-+		err = regmap_read(map, reg, &read_value);
-+		if (err)
-+			return err;
-+
- 		if (read_value != value) {
- 			ret = -EIO;
- 			retries--;
+Viresh, what are your plans WRT to those patches?
+
 -- 
-2.17.1
-
+Thanks,
+Sylwester
