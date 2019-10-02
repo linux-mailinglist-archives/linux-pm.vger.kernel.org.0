@@ -2,119 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6AFC919F
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 21:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303C0C9243
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Oct 2019 21:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729866AbfJBTK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Oct 2019 15:10:28 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:47194 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729835AbfJBTK2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Oct 2019 15:10:28 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 45C75802F8; Wed,  2 Oct 2019 21:10:10 +0200 (CEST)
-Date:   Wed, 2 Oct 2019 21:10:23 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-pm@vger.kernel.org, Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
-Message-ID: <20191002191023.GD13492@amd>
-References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
- <20190927044239.589e7c4c@oasis.local.home>
- <20191001163542.GB87296@google.com>
- <20191001130343.4480afe3@gandalf.local.home>
- <20191001174235.GC87296@google.com>
- <20191001140846.65d7866c@gandalf.local.home>
- <20191001193701.GD87296@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="EY/WZ/HvNxOox07X"
-Content-Disposition: inline
-In-Reply-To: <20191001193701.GD87296@google.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1728773AbfJBTZS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Oct 2019 15:25:18 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:60006 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726076AbfJBTZS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Oct 2019 15:25:18 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5000F2006D6;
+        Wed,  2 Oct 2019 21:25:15 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 41DB52006AC;
+        Wed,  2 Oct 2019 21:25:15 +0200 (CEST)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 8D71D2060C;
+        Wed,  2 Oct 2019 21:25:14 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v9 0/8] PM / devfreq: Add dev_pm_qos support
+Date:   Wed,  2 Oct 2019 22:25:03 +0300
+Message-Id: <cover.1570044052.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add dev_pm_qos notifiers to devfreq core in order to support frequency
+limits via dev_pm_qos_add_request.
 
---EY/WZ/HvNxOox07X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Unlike the rest of devfreq the dev_pm_qos frequency is measured in Khz,
+this is consistent with current dev_pm_qos usage for cpufreq and
+allows frequencies above 2Ghz (pm_qos expresses limits as s32).
 
-On Tue 2019-10-01 12:37:01, Matthias Kaehlcke wrote:
-> On Tue, Oct 01, 2019 at 02:08:46PM -0400, Steven Rostedt wrote:
-> > On Tue, 1 Oct 2019 10:42:35 -0700
-> > Matthias Kaehlcke <mka@chromium.org> wrote:
-> >=20
-> > > On Tue, Oct 01, 2019 at 01:03:43PM -0400, Steven Rostedt wrote:
-> > > > On Tue, 1 Oct 2019 09:35:42 -0700
-> > > > Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > >  =20
-> > > > > How about this instead:
-> > > > >=20
-> > > > >   Add tracepoints for genpd_power_on, genpd_power_off and
-> > > > >   genpd_set_performance_state. The tracepoints can help with
-> > > > >   understanding power domain behavior of a given device, which
-> > > > >   may be particularly interesting for battery powered devices
-> > > > >   and suspend/resume. =20
-> > > >=20
-> > > > Do you have a use case example to present? =20
-> > >=20
-> > > TBH I'm not looking into a specific use case right now. While
-> > > peeking around in /sys/kernel/debug/tracing/events to learn more
-> > > about existing tracepoints that might be relevant for my work
-> > > I noticed the absence of genpd ones and it seemed a good idea to
-> > > add them preemptively. Conceptually they seem similar to the
-> > > existing regulator_enable/disable and cpu_idle tracepoints.
-> > >=20
-> > > As an abstract use case I could see power analysis on battery
-> > > powered devices during suspend. genpd_power_on/off allow to see
-> > > which power domains remain on during suspend, and might give
-> > > insights for possible power saving options. Examples could be that
-> > > a power domain stays unexpectedly on due to a misconfiguration, or
-> > > two power domains remain on when it could be only one if you just
-> > > moved that one pin/port over to the other domain in the next
-> > > hardware revision.
-> >=20
-> > If the power management maintainers have no issues with adding these,
-> > then neither do I ;-)  It would be them who would pull them in anyway.
->=20
-> Ok, I'll send a new version with the changes you suggested and some more
-> info in the commit message, unless PM maintainers raise concerns before
-> that.
+Like with cpufreq the handling of min_freq/max_freq is moved to the
+dev_pm_qos mechanism. Constraints from userspace are no longer clamped on
+store, instead all values can be written and we only check against OPPs in a
+new devfreq_get_freq_range function. This is consistent with the design of
+dev_pm_qos.
 
-Dunno. Adding tracepoints because someone might need them for, umm,
-something... I'd wait until they are actually needed.
+Notifiers from pm_qos are executed under a single global dev_pm_qos_mtx and
+need to take devfreq->lock. Notifier registration takes the same dev_pm_qos_mtx
+so in order to prevent lockdep warnings it must be done outside devfreq->lock.
+Current devfreq_add_device does all initialization under devfreq->lock and that
+needs to be relaxed.
 
-Best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+Some of first patches in the series are bugfixes and cleanups, they could be
+applied separately.
 
---EY/WZ/HvNxOox07X
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+---
+Changes since v8:
+* Fix incorrectly reading qos max twice in get_freq_range.
+* Make devfreq_notifier_call set scaling_max_freq to ULONG_MAX instead of 0 on
+error. This avoids special-casing this in get_freq_range.
+* Add a fix for devfreq_notifier_call returning -errno.
+* Replace S32_MAX with PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE. This seems cleaner
+and avoids overflow when multiplying S32_MAX with 1000 on 32bit platforms. It
+overflowed to 0xfffffc18 hz so it was mostly safe anyway.
+* Warn when encountering errors on cleanup (but continue).
+* Incorporate other smaller comment and printk adjustments from review.
+Link to v8:
+https://patchwork.kernel.org/cover/11158383/
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Changes since v7:
+* Only #define HZ_PER_KHZ in patch where it's used.
+* Drop devfreq_ prefix for some internal functions.
+* Improve qos update error message.
+* Remove some unnecessary comments.
+* Collect reviews
+Link to v7: https://patchwork.kernel.org/cover/11157649/
 
-iEUEARECAAYFAl2U9h8ACgkQMOfwapXb+vJlCgCXdBSL7hbDfn+LcSCp5VzPLAl6
-fQCaA5CKSoT22nF69BPs91zdN1eNR6I=
-=lSwj
------END PGP SIGNATURE-----
+Changes since v6:
+* Don't return errno from devfreq_qos_notifier_call, return NOTIFY_DONE
+and print the error.
+* More spelling and punctuation nits
+Link to v6: https://patchwork.kernel.org/cover/11157201/
 
---EY/WZ/HvNxOox07X--
+Changes since v5:
+* Drop patches which are not strictly related to PM QoS.
+* Add a comment explaining why devfreq_add_device needs two cleanup paths.
+* Remove {} for single line.
+* Rename {min,max}_freq_req to user_{min,max}_freq_req
+* Collect reviews
+Link to v5: https://patchwork.kernel.org/cover/11149497/
+
+Changes since v4:
+* Move more devfreq_add_device init ahead of device_register.
+* Make devfreq_dev_release cleanup devices not yet in devfreq_list. This is
+simpler than previous attempt to add to devfreq_list sonner.
+* Take devfreq->lock in trans_stat_show
+* Register dev_pm_opp notifier on devfreq parent dev (which has OPPs)
+Link to v4: https://patchwork.kernel.org/cover/11114657/
+
+Changes since v3:
+* Cleanup locking and error-handling in devfreq_add_device
+* Register notifiers after device registration but before governor start
+* Keep the initialization of min_req/max_req ahead of device_register
+because it's used for sysfs handling
+* Use HZ_PER_KHZ instead of 1000
+* Add kernel-doc comments
+* Move OPP notifier to core
+Link to v3: https://patchwork.kernel.org/cover/11104061/
+
+Changes since v2:
+* Handle sysfs via dev_pm_qos (in separate patch)
+* Add locking to {min,max}_freq_show
+* Fix checkpatch issues (long lines etc)
+Link to v2: https://patchwork.kernel.org/patch/11084279/
+
+Changes since v1:
+* Add doxygen comments for min_nb/max_nb
+* Remove notifiers on error/cleanup paths. Keep gotos simple by relying on
+dev_pm_qos_remove_notifier ignoring notifiers which were not added.
+Link to v1: https://patchwork.kernel.org/patch/11078475/
+
+Leonard Crestez (8):
+  PM / devfreq: Don't fail devfreq_dev_release if not in list
+  PM / devfreq: Fix devfreq_notifier_call returning errno
+  PM / devfreq: Set scaling_max_freq to max on OPP notifier error
+  PM / devfreq: Move more initialization before registration
+  PM / devfreq: Don't take lock in devfreq_add_device
+  PM / devfreq: Introduce get_freq_range helper
+  PM / devfreq: Add PM QoS support
+  PM / devfreq: Use PM QoS for sysfs min/max_freq
+
+ drivers/devfreq/devfreq.c | 310 ++++++++++++++++++++++++++------------
+ include/linux/devfreq.h   |  14 +-
+ 2 files changed, 224 insertions(+), 100 deletions(-)
+
+-- 
+2.17.1
+
