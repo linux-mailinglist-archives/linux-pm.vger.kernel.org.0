@@ -2,239 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07417C9E2C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2019 14:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755F7C9EB9
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2019 14:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729146AbfJCMQC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Oct 2019 08:16:02 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:60754 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728773AbfJCMQB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Oct 2019 08:16:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=KMUClkTO6UWSCzmxIhjPetiD9IE/Gkdvn1kLBeQuxRE=; b=gujkHolU2Wm9Os7tK7ZVubjef
-        gsTC8lV8nD83Z8tvk/iaWR1pT/zljFBk/Fwbe+D41CUwc8WZ2H0s2zn9N9H4o9HpWAG2Uxp+wI480
-        p5qQO12bw2Ogb/az7kxN/rw03iCFGdkRaYJ8kLbibMnWbBY35DaQEjCYS3DOjlvT2Tpy3hFsMZmFh
-        +arwDhukoxSN32C30xaIsJ9StzFiF4fj7G0790HD1ms70cTX8CqSpD3uxRdOX8n9wu0h3/NmRcHQ3
-        6KisWoddR/aAvBjUv50WiBDcEl0/BEVi0If5pzOk/UrH1QeKGAjHuw1svhMxmG/06Ahtq12swgBJI
-        +AMSG1omw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iG01E-00013R-Sw; Thu, 03 Oct 2019 12:15:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59F51301B59;
-        Thu,  3 Oct 2019 14:14:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 82763201DF20D; Thu,  3 Oct 2019 14:15:37 +0200 (CEST)
-Date:   Thu, 3 Oct 2019 14:15:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
-        Len Brown <lenb@kernel.org>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH v2 1/2] x86,sched: Add support for frequency invariance
-Message-ID: <20191003121537.GR4536@hirez.programming.kicks-ass.net>
-References: <20191002122926.385-1-ggherdovich@suse.cz>
- <20191002122926.385-2-ggherdovich@suse.cz>
- <1906426.HDqaVa71mF@kreacher>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1906426.HDqaVa71mF@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729865AbfJCMp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Oct 2019 08:45:56 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38907 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729821AbfJCMpz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Oct 2019 08:45:55 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 3so2200985wmi.3
+        for <linux-pm@vger.kernel.org>; Thu, 03 Oct 2019 05:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=odawl8FFS06ZpSGBB5Pezvvx3lJRWzOpGgq0TcvgjOg=;
+        b=eXzEMFeArLL+ICpbrKdS4nZIvxGIsv9szP47e2Caat9Upd4ahEHkh/EUEGqq0FkWim
+         GkCRNtBWf9mb3jxW2NBD/0xXomLrraOhr5bqHp8jXEkzX+WUSi+TtKS+h4FxXpuNMrOx
+         nSpkoOVSqmtk25a+y2IG5cwf/cvm2GLY1an9u+OuFL/JbQYG3Tq8qxyAfwdPmNjNpWO9
+         doBIs+mnugic49SRHqccja4VtqLEVD12e9EFpyJYu+hyU7Op5/0rYVwWpzmmf6oLdzZA
+         NtBci8rH7XJ5TIymO+Chh+IceKCdvoZoFkmvApWWzROTJv/xLVA1ha0ynVDUf7ybXpH2
+         A5hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=odawl8FFS06ZpSGBB5Pezvvx3lJRWzOpGgq0TcvgjOg=;
+        b=q0sg7V3nOq/0c1PAay4Cm4txwnY9eEfvPvkF7wiqQXnFbWH2TjT8kVhRS0fBB7V4zN
+         NawPFRja5t3qJ4ziVe/qAnTkhcW3AsHlWcoE4RlEUsgqOOxlDYJITFdlYRG/36A8g92j
+         ZgG9j/lAzjvMKTB+nz52RAYSzDPwkPMj8oluvpQrSS3Y4AzQH+cLYEyhbOTYvzqw3HJT
+         EcT+3xvzu9udT8ljnVDS0Wlt7jWPY9PXUFMCOgpz2MsaoA0e96Cdaf1QCWCXWXbLGfSp
+         UPnM8FemTeKjftbqcwjF4tyTZxjm1wbIBgNsuhRKvCP5WDglGxCY44YxxN9VTDjwhYXe
+         k8qw==
+X-Gm-Message-State: APjAAAXgqSzxRRsxcysgWkEBo2ROkfQf1iDY8s7CLvi1Bnqeupm998Da
+        O2abtCLvD1gO3HuCZv07QDzpjA==
+X-Google-Smtp-Source: APXvYqw9d+ege8Jhzjtl7OmV6mrlYg8kMbClHGN3oHAP7HUb3lcxXV6K+oxPWdt4U8xYjQCyPCM8xw==
+X-Received: by 2002:a05:600c:2186:: with SMTP id e6mr7307474wme.154.1570106752320;
+        Thu, 03 Oct 2019 05:45:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:7990:8bfa:5771:282b])
+        by smtp.gmail.com with ESMTPSA id m62sm2453586wmm.35.2019.10.03.05.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2019 05:45:51 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rjw@rjwysocki.net
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-pm@vger.kernel.org (open list:CPU IDLE TIME MANAGEMENT FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH V3 1/3] cpuidle: play_idle: Make play_idle more flexible
+Date:   Thu,  3 Oct 2019 14:45:39 +0200
+Message-Id: <20191003124541.27147-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 12:27:52PM +0200, Rafael J. Wysocki wrote:
-> On Wednesday, October 2, 2019 2:29:25 PM CEST Giovanni Gherdovich wrote:
-> > +static bool turbo_disabled(void)
-> > +{
-> > +	u64 misc_en;
-> > +	int err;
-> > +
-> > +	err = rdmsrl_safe(MSR_IA32_MISC_ENABLE, &misc_en);
-> > +	if (err)
-> > +		return false;
-> > +
-> > +	return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
-> > +}
-> 
-> This setting may be updated by the platform firmware (BIOS) in some cases
-> (see kernel.org BZ 200759, for example), so in general checking it once
-> at the init time is not enough.
+The play_idle function has two users, the intel powerclamp and the
+idle_injection.
 
-Is there anything sane we can do if the BIOS frobs stuff like that under
-our feet? Other than yell bloody murder, that is?
+The idle injection cooling device uses the function via the
+idle_injection powercap's APIs. Unfortunately, play_idle is currently
+limited by the idle state depth: by default the deepest idle state is
+selected. On the ARM[64] platforms, most of the time it is the cluster
+idle state, the exit latency and the residency can be very high. That
+reduces the scope of the idle injection usage because the impact on
+the performances can be very significant.
 
-> > +
-> > +#include <asm/cpu_device_id.h>
-> > +#include <asm/intel-family.h>
-> > +
-> > +#define ICPU(model) \
-> > +	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_APERFMPERF, 0}
-> > +
-> > +static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
-> > +	ICPU(INTEL_FAM6_XEON_PHI_KNL),
-> > +	ICPU(INTEL_FAM6_XEON_PHI_KNM),
-> > +	{}
-> > +};
-> > +
-> > +static const struct x86_cpu_id has_turbo_ratio_group_limits[] = {
-> > +	ICPU(INTEL_FAM6_ATOM_GOLDMONT),
-> > +	ICPU(INTEL_FAM6_ATOM_GOLDMONT_D),
-> > +	ICPU(INTEL_FAM6_ATOM_GOLDMONT_PLUS),
-> > +	ICPU(INTEL_FAM6_SKYLAKE_X),
-> > +	{}
-> > +};
-> > +
-> > +static void core_set_cpu_max_freq(void)
-> > +{
-> > +	u64 ratio, turbo_ratio;
-> > +	int err;
-> > +
-> > +	if (smp_processor_id() != 0)
-> > +		return;
-> > +
-> > +	if (turbo_disabled() ||
-> > +		x86_match_cpu(has_knl_turbo_ratio_limits) ||
-> > +		x86_match_cpu(has_turbo_ratio_group_limits))
-> > +		return;
-> > +
-> 
-> I would move the checks above directly to intel_set_cpu_max_freq().
+If the idle injection cycles can be done with a shallow state like a
+retention state, the cooling effect would eventually give similar
+results than the cpufreq cooling device.
 
-The reason it is here, is that..
+In order to prepare the function to receive an idle state parameter,
+let's replace the 'use_deepest_state' boolean field with 'use_state'
+and use this value to enter the specific idle state.
 
-> > +	err = rdmsrl_safe(MSR_PLATFORM_INFO, &ratio);
-> > +	if (err)
-> > +		return;
-> > +
-> > +	err = rdmsrl_safe(MSR_TURBO_RATIO_LIMIT, &turbo_ratio);
-> > +	if (err)
-> > +		return;
-> > +
-> > +	ratio = (ratio >> 8) & 0xFF;                /* max P state ratio */
-> > +	turbo_ratio = (turbo_ratio >> 24) & 0xFF;   /* 4C turbo ratio */
-> > +
-> > +	arch_max_freq = div_u64(turbo_ratio * SCHED_CAPACITY_SCALE, ratio);
-> > +
-> > +	static_branch_enable(&arch_scale_freq_key);
-> > +}
-> > +
-> > +static void intel_set_cpu_max_freq(void)
-> > +{
-> > +	/*
-> > +	 * TODO: add support for:
-> > +	 *
-> > +	 * - Xeon Phi (KNM, KNL)
-> > +	 * - Xeon Gold/Platinum, Atom Goldmont/Goldmont Plus
-> > +	 * - Atom Silvermont
-> > +	 *
-> > +	 * which all now get by default arch_max_freq = SCHED_CAPACITY_SCALE
-> > +	 */
-> > +	core_set_cpu_max_freq();
+The current code keeps the default behavior which is go to the deepest
+idle state.
 
-This used to read something like:
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+---
+ drivers/cpuidle/cpuidle.c | 21 +++++++++++----------
+ include/linux/cpuidle.h   | 13 ++++++-------
+ kernel/sched/idle.c       | 10 +++++-----
+ 3 files changed, 22 insertions(+), 22 deletions(-)
 
-	if (core_set_cpu_max_freq())
-		return;
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 0895b988fa92..f8b54f277589 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -99,31 +99,31 @@ static int find_deepest_state(struct cpuidle_driver *drv,
+ }
+ 
+ /**
+- * cpuidle_use_deepest_state - Set/clear governor override flag.
+- * @enable: New value of the flag.
++ * cpuidle_use_state - Force the cpuidle framework to enter an idle state.
++ * @state: An integer for an idle state
+  *
+- * Set/unset the current CPU to use the deepest idle state (override governors
+- * going forward if set).
++ * Specify an idle state the cpuidle framework must step in and bypass
++ * the idle state selection process.
+  */
+-void cpuidle_use_deepest_state(bool enable)
++void cpuidle_use_state(int state)
+ {
+ 	struct cpuidle_device *dev;
+ 
+ 	preempt_disable();
+ 	dev = cpuidle_get_device();
+ 	if (dev)
+-		dev->use_deepest_state = enable;
++		dev->use_state = state;
+ 	preempt_enable();
+ }
+ 
+ /**
+  * cpuidle_find_deepest_state - Find the deepest available idle state.
+- * @drv: cpuidle driver for the given CPU.
+- * @dev: cpuidle device for the given CPU.
+  */
+-int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+-			       struct cpuidle_device *dev)
++int cpuidle_find_deepest_state(void)
+ {
++	struct cpuidle_device *dev = cpuidle_get_device();
++	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
++
+ 	return find_deepest_state(drv, dev, UINT_MAX, 0, false);
+ }
+ 
+@@ -554,6 +554,7 @@ static void __cpuidle_unregister_device(struct cpuidle_device *dev)
+ static void __cpuidle_device_init(struct cpuidle_device *dev)
+ {
+ 	memset(dev->states_usage, 0, sizeof(dev->states_usage));
++	dev->use_state = CPUIDLE_STATE_NOUSE;
+ 	dev->last_residency = 0;
+ 	dev->next_hrtimer = 0;
+ }
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index 2dc4c6b19c25..ba0751b26e37 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -15,6 +15,7 @@
+ #include <linux/list.h>
+ #include <linux/hrtimer.h>
+ 
++#define CPUIDLE_STATE_NOUSE	-1
+ #define CPUIDLE_STATE_MAX	10
+ #define CPUIDLE_NAME_LEN	16
+ #define CPUIDLE_DESC_LEN	32
+@@ -80,11 +81,11 @@ struct cpuidle_driver_kobj;
+ struct cpuidle_device {
+ 	unsigned int		registered:1;
+ 	unsigned int		enabled:1;
+-	unsigned int		use_deepest_state:1;
+ 	unsigned int		poll_time_limit:1;
+ 	unsigned int		cpu;
+ 	ktime_t			next_hrtimer;
+ 
++	int			use_state;
+ 	int			last_state_idx;
+ 	int			last_residency;
+ 	u64			poll_limit_ns;
+@@ -203,19 +204,17 @@ static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
+ #endif
+ 
+ #ifdef CONFIG_CPU_IDLE
+-extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+-				      struct cpuidle_device *dev);
++extern int cpuidle_find_deepest_state(void);
+ extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
+ 				struct cpuidle_device *dev);
+-extern void cpuidle_use_deepest_state(bool enable);
++extern void cpuidle_use_state(int state);
+ #else
+-static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+-					     struct cpuidle_device *dev)
++static inline int cpuidle_find_deepest_state(void)
+ {return -ENODEV; }
+ static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
+ 				       struct cpuidle_device *dev)
+ {return -ENODEV; }
+-static inline void cpuidle_use_deepest_state(bool enable)
++static inline void cpuidle_use_state(int state)
+ {
+ }
+ #endif
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index b98283fc6914..17da9cb309e1 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -165,7 +165,8 @@ static void cpuidle_idle_call(void)
+ 	 * until a proper wakeup interrupt happens.
+ 	 */
+ 
+-	if (idle_should_enter_s2idle() || dev->use_deepest_state) {
++	if (idle_should_enter_s2idle() ||
++	    dev->use_state != CPUIDLE_STATE_NOUSE) {
+ 		if (idle_should_enter_s2idle()) {
+ 			rcu_idle_enter();
+ 
+@@ -181,8 +182,7 @@ static void cpuidle_idle_call(void)
+ 		tick_nohz_idle_stop_tick();
+ 		rcu_idle_enter();
+ 
+-		next_state = cpuidle_find_deepest_state(drv, dev);
+-		call_cpuidle(drv, dev, next_state);
++		call_cpuidle(drv, dev, dev->use_state);
+ 	} else {
+ 		bool stop_tick = true;
+ 
+@@ -328,7 +328,7 @@ void play_idle(unsigned long duration_us)
+ 	rcu_sleep_check();
+ 	preempt_disable();
+ 	current->flags |= PF_IDLE;
+-	cpuidle_use_deepest_state(true);
++	cpuidle_use_state(cpuidle_find_deepest_state());
+ 
+ 	it.done = 0;
+ 	hrtimer_init_on_stack(&it.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+@@ -339,7 +339,7 @@ void play_idle(unsigned long duration_us)
+ 	while (!READ_ONCE(it.done))
+ 		do_idle();
+ 
+-	cpuidle_use_deepest_state(false);
++	cpuidle_use_state(CPUIDLE_STATE_NOUSE);
+ 	current->flags &= ~PF_IDLE;
+ 
+ 	preempt_fold_need_resched();
+-- 
+2.17.1
 
-	if (atom_set_cpu_max_freq())
-		return;
-
-	...
-
-and then those checks make sense, because we're failing the 'core' way,
-but another way might work.
-
-But in this version the atom version has gone missing -- I've suggested
-it be put back as an additional patch.
-
-Also, the SKX way still needs to be written..
-
-> > +}
-> > +
-> > +static void init_scale_freq(void *arg)
-> > +{
-> > +	u64 aperf, mperf;
-> > +
-> > +	rdmsrl(MSR_IA32_APERF, aperf);
-> > +	rdmsrl(MSR_IA32_MPERF, mperf);
-> > +
-> > +	this_cpu_write(arch_prev_aperf, aperf);
-> > +	this_cpu_write(arch_prev_mperf, mperf);
-> > +}
-> > +
-> > +static void set_cpu_max_freq(void)
-> > +{
-> > +	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
-> > +		return;
-> > +
-> > +	switch (boot_cpu_data.x86_vendor) {
-> > +	case X86_VENDOR_INTEL:
-> > +		intel_set_cpu_max_freq();
-> > +		break;
-> > +	default:
-> > +		break;
-> > +	}
-> 
-> Why is the switch () needed?
-> 
-> It seems that
-> 
-> 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
-> 		intel_set_cpu_max_freq();
-> 
-> would do the trick.
-
-I was hoping to grow X86_VENDOR_AMD bits..
-
-> > +
-> > +	init_scale_freq(NULL);
-> > +}
-> > +
-> > +DEFINE_PER_CPU(unsigned long, arch_cpu_freq);
-> > +
-> > +static bool tick_disable;
-> > +
-> > +void arch_scale_freq_tick(void)
-> > +{
-> > +	u64 freq;
-> > +	u64 aperf, mperf;
-> > +	u64 acnt, mcnt;
-> > +
-> > +	if (!arch_scale_freq_invariant() || tick_disable)
-> > +		return;
-> > +
-> 
-> This may be a silly question, but can using tick_disable be avoided?
-> 
-> I guess it is there, because disabling the static branch from
-> x86_arch_scale_freq_tick_disable() would be unsafe, but I'm not
-> sure why that would be the case?
-
-There's not enough state -- we can of course fix that.
-
-That is, if you disable it, we don't know if we should enable it again
-later or if it was disabled because we failed to initialize it earlier.
