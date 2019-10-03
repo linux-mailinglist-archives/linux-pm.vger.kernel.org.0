@@ -2,112 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AC5CA013
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2019 16:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F4DCA076
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Oct 2019 16:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729674AbfJCOIf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Oct 2019 10:08:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64806 "EHLO mga03.intel.com"
+        id S1727697AbfJCOiz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Oct 2019 10:38:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48052 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729369AbfJCOIf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Oct 2019 10:08:35 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 07:08:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,252,1566889200"; 
-   d="scan'208";a="191275044"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.174])
-  by fmsmga008.fm.intel.com with SMTP; 03 Oct 2019 07:08:29 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 03 Oct 2019 17:08:28 +0300
-From:   Ville Syrjala <ville.syrjala@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH] cpufreq: Fix RCU reboot regression on x86 PIC machines
-Date:   Thu,  3 Oct 2019 17:08:28 +0300
-Message-Id: <20191003140828.14801-1-ville.syrjala@linux.intel.com>
-X-Mailer: git-send-email 2.21.0
+        id S1726199AbfJCOiz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Oct 2019 10:38:55 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 216F320865;
+        Thu,  3 Oct 2019 14:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570113534;
+        bh=8iDJP4OSCGobLMg+w/PIyt2SvnXlydJll5PC5aK6pUk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=dAnqZUeojGD1ygRt+/5H/4Fp1IPvujZCZGWeW/f1du7O+gw9aHkP7IYvj4Q773k8r
+         wfrnlkKkT9OK26gYsOMyRF6b3PBak4izJHsHWeCDvZhnLztusmCPrHp47LCwj1B0Wq
+         ekNL/6a9kZKkXTY9A4yFVDnFN2nZLOEAMVY2xYac=
+Subject: Re: [PATCH v2] cpupower : Handle set and info subcommands correctly
+To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     trenn@suse.com, ego@linux.vnet.ibm.com, shuah <shuah@kernel.org>
+References: <20190913080712.26383-1-huntbag@linux.vnet.ibm.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <2614b112-5e19-96dc-179b-8d4e3b8c8858@kernel.org>
+Date:   Thu, 3 Oct 2019 08:38:53 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190913080712.26383-1-huntbag@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+On 9/13/19 2:07 AM, Abhishek Goel wrote:
+> Cpupower tool has set and info options which are being used only by
+> x86 machines. This patch removes support for these two subcommands
+> from generic cpupower utility. Thus, these two subcommands will now be
+> available only for intel.
+> This removes the ambiguous error message while using set option in case
+> of using non-intel systems.
+> 
+> Without this patch on a non-intel box:
+> 
+> root@ubuntu:~# cpupower info
+> System does not support Intel's performance bias setting
+> 
+> root@ubuntu:~# cpupower set -b 10
+> Error setting perf-bias value on CPU
+> 
+> With this patch on a non-intel box:
+> 
+> root@ubuntu:~# cpupower info
+> Supported commands are:
+>          frequency-info
+>          frequency-set
+>          idle-info
+>          idle-set
+>          monitor
+>          help
+> 
+> Same result for set subcommand.
+> 
+> This patch does not affect results on a intel box.
+> 
+> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+> Acked-by: Thomas Renninger <trenn@suse.de>
+> ---
+> 
+> changes from v1:
+> 	Instead of bailing out early in set and info commands, in V2, we
+> 	are cutting out support for these two commands for non-intel
+> 	systems.
 
-Since 4.20-rc1 my PIC machines no longer reboot/shutdown.
-I bisected this down to commit 45975c7d21a1 ("rcu: Define RCU-sched
-API in terms of RCU for Tree RCU PREEMPT builds").
+thanks. I will get this in for 5.4-rc3 veru likely. Definitely in 5.4
 
-I traced the hang into
--> cpufreq_suspend()
- -> cpufreq_stop_governor()
-  -> cpufreq_dbs_governor_stop()
-   -> gov_clear_update_util()
-    -> synchronize_sched()
-     -> synchronize_rcu()
-
-Only PREEMPT=y is affected for obvious reasons. The problem
-is limited to PIC machines since they mask off interrupts
-in i8259A_shutdown() (syscore_ops.shutdown() registered
-from device_initcall()).
-
-I reported this long ago but no better fix has surfaced,
-hence sending out my initial workaround which I've been
-carrying around ever since. I just move cpufreq_core_init()
-to late_initcall() so the syscore_ops get registered in the
-oppsite order and thus the .shutdown() hooks get executed
-in the opposite order as well. Not 100% convinced this is
-safe (especially moving the cpufreq_global_kobject creation
-to late_initcall()) but I've not had any problems with it
-at least.
-
-Here's the resulting change in initcall_debug:
-+ PM: Calling cpufreq_suspend+0x0/0x100
-  PM: Calling mce_syscore_shutdown+0x0/0x10
-  PM: Calling i8259A_shutdown+0x0/0x10
-- PM: Calling cpufreq_suspend+0x0/0x100
-+ reboot: Restarting system
-+ reboot: machine restart
-
-Cc: stable@vger.kernel.org
-Cc: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Fixes: 45975c7d21a1 ("rcu: Define RCU-sched API in terms of RCU for Tree RCU PREEMPT builds")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index c52d6fa32aac..6a8fb9b08e33 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2761,4 +2761,4 @@ static int __init cpufreq_core_init(void)
- 	return 0;
- }
- module_param(off, int, 0444);
--core_initcall(cpufreq_core_init);
-+late_initcall(cpufreq_core_init);
--- 
-2.21.0
-
+-- Shuah
