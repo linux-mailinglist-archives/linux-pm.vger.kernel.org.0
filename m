@@ -2,137 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA04CB636
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 10:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DE2CB63F
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 10:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730489AbfJDIct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Oct 2019 04:32:49 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53105 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730703AbfJDIct (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 04:32:49 -0400
-Received: by mail-wm1-f68.google.com with SMTP id r19so4861220wmh.2
-        for <linux-pm@vger.kernel.org>; Fri, 04 Oct 2019 01:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=kEN8tPAT2fA9Rfc8gxL4d7nyWjikV+WP3V/1RcMXwQA=;
-        b=oVFmdVVIc11Zlr4x2tuAKbzp/HjGfsCcy3KvaDNrBP3pQyFmahO5cujD6Dgz/X+32V
-         0AfGj9c9G9TKU7Rl18LwQ/fxFmX/eHgsWxH7xZ2s316BEkEiFDm5WY+NptQv+4UU6Xf3
-         fw8BOki+utT0NRmQbzptfCED2+w9XG5eeJTVNKnQFI22ZOgBB5STQIUHEyJQdqwK05uV
-         14XAqphVXRycHew3AAUXuU/sQGkdEOxBEEDAu4BgoN6GhnQZkN3MiGmZEPJwUYNdIZB6
-         ajCsQCjQ5tsUz9iSyLvQSwFtK9KdT/tv1O9HUg+UB+ezyG9LeaD4F5J2ULOKrQFrfs9B
-         JvBA==
+        id S1727488AbfJDIeJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Oct 2019 04:34:09 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37537 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbfJDIeJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 04:34:09 -0400
+Received: by mail-ot1-f66.google.com with SMTP id k32so4651925otc.4;
+        Fri, 04 Oct 2019 01:34:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=kEN8tPAT2fA9Rfc8gxL4d7nyWjikV+WP3V/1RcMXwQA=;
-        b=ULY2+fxbhZGOg1IP7oEslHqe/0i+34lhSNzauPKRRtPI2DTCjl8RhWaANFv3oQMtTm
-         nTiTugeYiAYxw5ce1kq6h9Hh0pb67UlYNYpiL9Bt2BSXUiETWLc/la6bz0SpxoQ0CtBA
-         4zs9gwLnt/tiY/cKane8bmCW3VehCu11khyMLKAoXFO75wvsIJssxj0DN5BdpgGxEEMv
-         wi/zkXLYHhqblWQM31hUxf0OuphYwRJ8CqFIXy3WTlPMywPRHfhvuchkp/Yq121KU4f3
-         GtK+hcefYAfJgjv+b0J/drb+Xhsn2Eo0LgpKXJNqldwPvsaPkdEq+xIW+nXTnriH4BKD
-         XPQQ==
-X-Gm-Message-State: APjAAAXu3NR1EJQ70R5lp/0t0DYMCUL9Nro++9njZPIn8rfkBYNTR/xo
-        3HmcNBqG58vT0FhoG0tnoLZ0t4owcQk=
-X-Google-Smtp-Source: APXvYqzJFIWMoTzEnQVH74TDRAD+YRGy7EoLnrDhnaHEaPkYov+ye/FVp+PtuZejfYxQPWbE6476Yw==
-X-Received: by 2002:a1c:29c4:: with SMTP id p187mr10545862wmp.28.1570177967088;
-        Fri, 04 Oct 2019 01:32:47 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:15f7:68ed:c037:86e6])
-        by smtp.gmail.com with ESMTPSA id 59sm6488304wrc.23.2019.10.04.01.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 01:32:46 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V4 3/3] powercap/drivers/idle_inject: Specify the idle state to inject
-Date:   Fri,  4 Oct 2019 10:32:05 +0200
-Message-Id: <20191004083205.29302-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191004083205.29302-1-daniel.lezcano@linaro.org>
-References: <20191004083205.29302-1-daniel.lezcano@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ld1X7lbISkCrGFf+99YQWnlVcdBMNf7XxUB1bfdwTh0=;
+        b=saz7H5ZziAdFQkJCa6xbnhPbE3ktONZ7Plf7S1nOvkCukHuKamTryNl9Ccmm73M4xQ
+         6zL1yJQJeQHEKZefSPwpPyk0g1yXq/dFu55nbLxlcELDIRXHSQBpxV2EJiWhRex6EEYc
+         Xbwx94l3mNmECMF2nXcwwHAwp16q4UZn0OzYOjlYqly/x0KSSMxb2HHtCYea5b4H4g0v
+         FR97AuzNc2uXyAZqFHq3nLMZtncbg/l2bHn3XGkRScDIkiUD+/bIQiI/Jm1yoUdMFizx
+         awjTI+Wk7kblvig3Ul4K8O4i6lzFqfnTVDPhjoRo8N8DKMOj/wF4qoNzqkHwl2f1moFR
+         Ru2g==
+X-Gm-Message-State: APjAAAWS5AvL8fMZTegsuvsbAnPBcUSoUSLLxJgmC9+LV2EKS9jlhzZx
+        vkuVRR9GzZPSmutCuvCk3gqKmqB+SH2s9kxcEsc=
+X-Google-Smtp-Source: APXvYqx8NklrAu+r2XhFr/T01+KnxBdUz77nlWB2/6gBhVtJ9QTxszp6uYmvoWNp3lsGyZvLOncbmBs6BQxJuN9ZMzY=
+X-Received: by 2002:a9d:6a16:: with SMTP id g22mr9317222otn.118.1570178046805;
+ Fri, 04 Oct 2019 01:34:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191002122926.385-1-ggherdovich@suse.cz> <20191002122926.385-3-ggherdovich@suse.cz>
+ <13106850.QMtCbivBLn@kreacher> <5d6d601d2647644238fc51621407061e1c29320d.camel@linux.intel.com>
+ <1570177786.30086.1.camel@suse.cz> <CAKfTPtDo_wpGvc+rzJaTYOZc2wVbzMojaSSq0pC_M4ySSaicBw@mail.gmail.com>
+In-Reply-To: <CAKfTPtDo_wpGvc+rzJaTYOZc2wVbzMojaSSq0pC_M4ySSaicBw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Oct 2019 10:33:55 +0200
+Message-ID: <CAJZ5v0gQAxzZeiz2xsBk6bpQFV3dpASa=ZSR3aW0veorbo_5Hw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: intel_pstate: Conditional frequency
+ invariant accounting
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <qperret@qperret.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the idle injection framework only allows to inject the
-deepest idle state available on the system.
+On Fri, Oct 4, 2019 at 10:28 AM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Fri, 4 Oct 2019 at 10:24, Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+> >
+> > On Thu, 2019-10-03 at 20:31 -0700, Srinivas Pandruvada wrote:
+> > > On Thu, 2019-10-03 at 20:05 +0200, Rafael J. Wysocki wrote:
+> > > > On Wednesday, October 2, 2019 2:29:26 PM CEST Giovanni Gherdovich
+> > > > wrote:
+> > > > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > > >
+> > > > > intel_pstate has two operating modes: active and passive. In "active"
+> > > > > mode, the in-built scaling governor is used and in "passive" mode, the
+> > > > > driver can be used with any governor like "schedutil". In "active" mode
+> > > > > the utilization values from schedutil is not used and there is a
+> > > > > requirement from high performance computing use cases, not to readas
+> > > > > well any APERF/MPERF MSRs.
+> > > >
+> > > > Well, this isn't quite convincing.
+> > > >
+> > > > In particular, I don't see why the "don't read APERF/MPERF MSRs" argument
+> > > > applies *only* to intel_pstate in the "active" mode.  What about
+> > > > intel_pstate in the "passive" mode combined with the "performance"
+> > > > governor?  Or any other governor different from "schedutil" for that
+> > > > matter?
+> > > >
+> > > > And what about acpi_cpufreq combined with any governor different from
+> > > > "schedutil"?
+> > > >
+> > > > Scale invariance is not really needed in all of those cases right now
+> > > > AFAICS, or is it?
+> > >
+> > > Correct. This is just part of the patch to disable in active mode
+> > > (particularly in HWP and performance mode).
+> > >
+> > > But this patch is 2 years old. The folks who wanted this, disable
+> > > intel-pstate and use userspace governor with acpi-cpufreq. So may be
+> > > better to address those cases too.
+> >
+> > I disagree with "scale invariance is needed only by the schedutil governor";
+> > the two other users are the CPU's estimated utilization in the wakeup path,
+> > via cpu_util_without(), as well as the load-balance path, via cpu_util() which
+> > is used by update_sg_lb_stats().
+> >
+> > Also remember that scale invariance is applied to both PELT signals util_avg
+> > and load_avg; schedutil uses the former but not the latter.
+>
+> You have been quicker than me to reply. I was about to say the exact
+> same things.
+> scale invariance also helps the scheduler in task placement by
+> stabilizing the metrics whatever the running frequency so a task will
+> not be seen as a big task just because of a CPU running at lower
+> frequency
 
-Give the opportunity to specify which idle state we want to inject by
-adding a new function helper to set the state and use it when calling
-play_idle().
+So avoiding it just in one specific driver/governor configuration
+would be inconsistent at best.
 
-There is no functional changes, the cpuidle state is the deepest one.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/powercap/idle_inject.c | 14 +++++++++++++-
- include/linux/idle_inject.h    |  3 +++
- 2 files changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 233c878cbf46..a612c425d74c 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -66,6 +66,7 @@ struct idle_inject_thread {
-  */
- struct idle_inject_device {
- 	struct hrtimer timer;
-+	int state;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
- 	unsigned long int cpumask[0];
-@@ -140,7 +141,7 @@ static void idle_inject_fn(unsigned int cpu)
- 	iit->should_run = 0;
- 
- 	play_idle(READ_ONCE(ii_dev->idle_duration_us),
--		  cpuidle_find_deepest_state());
-+		  READ_ONCE(ii_dev->state));
- }
- 
- /**
-@@ -171,6 +172,16 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
- }
- 
-+/**
-+ * idle_inject_set_state - set the idle state to inject
-+ * @state: an integer for the idle state to inject
-+ */
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state)
-+{
-+	if (state >= CPUIDLE_STATE_NOUSE && state < CPUIDLE_STATE_MAX)
-+		WRITE_ONCE(ii_dev->state, state);
-+}
-+
- /**
-  * idle_inject_start - start idle injections
-  * @ii_dev: idle injection control device structure
-@@ -299,6 +310,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
- 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	ii_dev->timer.function = idle_inject_timer_fn;
-+	ii_dev->state = cpuidle_find_deepest_state();
- 
- 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
- 
-diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-index a445cd1a36c5..e2b26b9ccd34 100644
---- a/include/linux/idle_inject.h
-+++ b/include/linux/idle_inject.h
-@@ -26,4 +26,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 				 unsigned int *run_duration_us,
- 				 unsigned int *idle_duration_us);
-+
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state);
-+
- #endif /* __IDLE_INJECT_H__ */
--- 
-2.17.1
-
+I guess that leaves us with the impact reduction option, realistically.
