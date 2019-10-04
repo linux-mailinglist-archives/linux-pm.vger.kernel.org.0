@@ -2,170 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEC2CBEDB
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 17:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A8FCC13E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 19:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389390AbfJDPRQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Oct 2019 11:17:16 -0400
-Received: from mga05.intel.com ([192.55.52.43]:59001 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389165AbfJDPRP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Oct 2019 11:17:15 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 08:17:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,256,1566889200"; 
-   d="scan'208";a="205878569"
-Received: from spandruv-mobl3.jf.intel.com ([10.255.229.152])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Oct 2019 08:17:12 -0700
-Message-ID: <56f1e864ed93d45e6328d4d015cfda6406fdda42.camel@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: intel_pstate: Conditional frequency
- invariant accounting
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
+        id S2387593AbfJDREx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Oct 2019 13:04:53 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41067 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387573AbfJDREx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 13:04:53 -0400
+Received: by mail-pg1-f195.google.com with SMTP id s1so4073130pgv.8
+        for <linux-pm@vger.kernel.org>; Fri, 04 Oct 2019 10:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KhkqAIY0k94dgHo1jB/Vv2pJIDzyfrngfxICnM3UhIk=;
+        b=oKDL7vXewTCQ6flY9+GhG6ANFwAYC5RUKT0iI62i33VnnHbij+UaW7lDV/TUjHWVTC
+         19kG6Xk2LgbBP6cwlfRiOVa3CUxh+EbCsZnzqaPNAbSpu4A7PlSAppWqne8EtOt8sa4J
+         W/d/70+j/heKSxOi2CqsWs6j6c+p/3r6Tstc8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KhkqAIY0k94dgHo1jB/Vv2pJIDzyfrngfxICnM3UhIk=;
+        b=lErxerdGPgxbDx7VYZuyxk80bcC+MB24gqkkbzBbuCxqIJLN78rgN6GB0cexZx16OU
+         JSFBUopnewzPMW7PdVuf0rJn7qafRIgGeIFR6DKZr5PEHicMPkEtYj5ayCeu9QvLGlRG
+         0W/Mvra46sMpG/s7Pho4Txpr8D3UllRsNsYDA6rbG5lN2oFZ51H5qbER895iARHthQhl
+         im1e7ShOvSU5w4FdlWvxX7/GjkwR8Z2o2nHoDULlsEjG8M9m1fKn47LsdLXmIbFKiztw
+         6Vd/aH0weTntcNAlQtnRwcGXK40yIdDe7/M7eVJYa/SK5lpbnJUfYxtjiqPWMBoAvjYe
+         mbPg==
+X-Gm-Message-State: APjAAAXOnAo9YNOshEbF3A77h0BsY2aKzrgM1US/Q1kHfInVkNgo1tfQ
+        GPWNus4pVwgQaIsRXd7vU8xCWbC/bjM=
+X-Google-Smtp-Source: APXvYqwuIe0ULUTkIv0WHmr2b0f1ybCo+KvmxqbU1VCA3X3UU+MplnLxh6ZQ29vyCrbjgx1EQjNUMw==
+X-Received: by 2002:a17:90a:25a9:: with SMTP id k38mr18712120pje.12.1570208692216;
+        Fri, 04 Oct 2019 10:04:52 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id b4sm5066197pju.16.2019.10.04.10.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Oct 2019 10:04:51 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 10:04:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Date:   Fri, 04 Oct 2019 08:17:11 -0700
-In-Reply-To: <1570179472.30086.4.camel@suse.cz>
-References: <20191002122926.385-1-ggherdovich@suse.cz>
-         <20191002122926.385-3-ggherdovich@suse.cz> <13106850.QMtCbivBLn@kreacher>
-         <5d6d601d2647644238fc51621407061e1c29320d.camel@linux.intel.com>
-         <1570177786.30086.1.camel@suse.cz>
-         <CAJZ5v0jK1kMjQ3gu8KhQmp2Paq9Rb74NPjMQ1HsVRCD3Fct5TQ@mail.gmail.com>
-         <1570179472.30086.4.camel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v9 7/8] PM / devfreq: Add PM QoS support
+Message-ID: <20191004170449.GL87296@google.com>
+References: <cover.1570044052.git.leonard.crestez@nxp.com>
+ <f538324afaeaef3256b3ea997e67562e940c2e3c.1570044052.git.leonard.crestez@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f538324afaeaef3256b3ea997e67562e940c2e3c.1570044052.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2019-10-04 at 10:57 +0200, Giovanni Gherdovich wrote:
-> On Fri, 2019-10-04 at 10:29 +0200, Rafael J. Wysocki wrote:
-> > On Fri, Oct 4, 2019 at 10:24 AM Giovanni Gherdovich <
-> > ggherdovich@suse.cz> wrote:
-> > > 
-> > > On Thu, 2019-10-03 at 20:31 -0700, Srinivas Pandruvada wrote:
-> > > > On Thu, 2019-10-03 at 20:05 +0200, Rafael J. Wysocki wrote:
-> > > > > On Wednesday, October 2, 2019 2:29:26 PM CEST Giovanni
-> > > > > Gherdovich
-> > > > > wrote:
-> > > > > > From: Srinivas Pandruvada <
-> > > > > > srinivas.pandruvada@linux.intel.com>
-> > > > > > 
-> > > > > > intel_pstate has two operating modes: active and passive.
-> > > > > > In "active"
-> > > > > > mode, the in-built scaling governor is used and in
-> > > > > > "passive" mode, the
-> > > > > > driver can be used with any governor like "schedutil". In
-> > > > > > "active" mode
-> > > > > > the utilization values from schedutil is not used and there
-> > > > > > is a
-> > > > > > requirement from high performance computing use cases, not
-> > > > > > to readas
-> > > > > > well any APERF/MPERF MSRs.
-> > > > > 
-> > > > > Well, this isn't quite convincing.
-> > > > > 
-> > > > > In particular, I don't see why the "don't read APERF/MPERF
-> > > > > MSRs" argument
-> > > > > applies *only* to intel_pstate in the "active" mode.  What
-> > > > > about
-> > > > > intel_pstate in the "passive" mode combined with the
-> > > > > "performance"
-> > > > > governor?  Or any other governor different from "schedutil"
-> > > > > for that
-> > > > > matter?
-> > > > > 
-> > > > > And what about acpi_cpufreq combined with any governor
-> > > > > different from
-> > > > > "schedutil"?
-> > > > > 
-> > > > > Scale invariance is not really needed in all of those cases
-> > > > > right now
-> > > > > AFAICS, or is it?
-> > > > 
-> > > > Correct. This is just part of the patch to disable in active
-> > > > mode
-> > > > (particularly in HWP and performance mode).
-> > > > 
-> > > > But this patch is 2 years old. The folks who wanted this,
-> > > > disable
-> > > > intel-pstate and use userspace governor with acpi-cpufreq. So
-> > > > may be
-> > > > better to address those cases too.
-> > > 
-> > > I disagree with "scale invariance is needed only by the schedutil
-> > > governor";
-> > > the two other users are the CPU's estimated utilization in the
-> > > wakeup path,
-> > > via cpu_util_without(), as well as the load-balance path, via
-> > > cpu_util() which
-> > > is used by update_sg_lb_stats().
-> > 
-> > OK, so there are reasons to run the scale invariance code which are
-> > not related to the cpufreq governor in use.
-> > 
-> > I wonder then why those reasons are not relevant for intel_pstate
-> > in
-> > the "active" mode.
-> > 
-> > > Also remember that scale invariance is applied to both PELT
-> > > signals util_avg
-> > > and load_avg; schedutil uses the former but not the latter.
-> > > 
-> > > I understand Srinivas patch to disable MSR accesses during the
-> > > tick as a
-> > > band-aid solution to address a specific use case he cares about,
-> > > but I don't
-> > > think that extending this approach to any non-schedutil governor
-> > > is a good
-> > > idea -- you'd be killing load balancing in the process.
-> > 
-> > But that is also the case for intel_pstate in the "active" mode,
-> > isn't it?
+On Wed, Oct 02, 2019 at 10:25:10PM +0300, Leonard Crestez wrote:
+> Register notifiers with the PM QoS framework in order to respond to
+> requests for DEV_PM_QOS_MIN_FREQUENCY and DEV_PM_QOS_MAX_FREQUENCY.
 > 
-> Sure it is.
+> No notifiers are added by this patch but PM QoS constraints can be
+> imposed externally (for example from other devices).
 > 
-> Now, what's the performance impact of loosing scale-invariance in
-> PELT signals?
-> And what's the performance impact of accessing two MSRs at the
-> scheduler tick
-> on each CPU?
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/devfreq/devfreq.c | 78 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/devfreq.h   |  5 +++
+>  2 files changed, 83 insertions(+)
 > 
-> I am sporting Srinivas' patch because he expressed the concern that
-> the losses
-> don't justify the gains for a specific class of users
-> (supercomputing),
-> although I don't fully like the idea (and arguably that should be
-> measured).
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 2d63692903ff..46f699b84a22 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -22,15 +22,18 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/list.h>
+>  #include <linux/printk.h>
+>  #include <linux/hrtimer.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_qos.h>
+>  #include "governor.h"
+>  
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/devfreq.h>
+>  
+> +#define HZ_PER_KHZ	1000
+> +
+>  static struct class *devfreq_class;
+>  
+>  /*
+>   * devfreq core provides delayed work based load monitoring helper
+>   * functions. Governors can use these or can implement their own
+> @@ -109,10 +112,11 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+>  static void get_freq_range(struct devfreq *devfreq,
+>  			   unsigned long *min_freq,
+>  			   unsigned long *max_freq)
+>  {
+>  	unsigned long *freq_table = devfreq->profile->freq_table;
+> +	s32 qos_min_freq, qos_max_freq;
+>  
+>  	lockdep_assert_held(&devfreq->lock);
+>  
+>  	/*
+>  	 * Initialize minimum/maximum frequency from freq table.
+> @@ -125,10 +129,20 @@ static void get_freq_range(struct devfreq *devfreq,
+>  	} else {
+>  		*min_freq = freq_table[devfreq->profile->max_state - 1];
+>  		*max_freq = freq_table[0];
+>  	}
+>  
+> +	/* Apply constraints from PM QoS */
+> +	qos_min_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+> +					     DEV_PM_QOS_MIN_FREQUENCY);
+> +	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+> +					     DEV_PM_QOS_MAX_FREQUENCY);
+> +	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
+> +	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
+> +		*max_freq = min(*max_freq,
+> +				(unsigned long)HZ_PER_KHZ * qos_max_freq);
+> +
+>  	/* Apply constraints from sysfs */
+>  	*min_freq = max(*min_freq, devfreq->min_freq);
+>  	*max_freq = min(*max_freq, devfreq->max_freq);
+>  
+>  	/* Apply constraints from OPP interface */
+> @@ -608,24 +622,75 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+>  			err);
+>  
+>  	return NOTIFY_OK;
+>  }
+>  
+> +/**
+> + * qos_notifier_call() - Common handler for QoS constraints.
+> + * @devfreq:    the devfreq instance.
+> + */
+> +static int qos_notifier_call(struct devfreq *devfreq)
+> +{
+> +	int err;
+> +
+> +	mutex_lock(&devfreq->lock);
+> +	err = update_devfreq(devfreq);
+> +	mutex_unlock(&devfreq->lock);
+> +	if (err)
+> +		dev_err(devfreq->dev.parent,
+> +			"failed to update frequency from PM QoS (%d)\n",
+> +			err);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +/**
+> + * qos_min_notifier_call() - Callback for QoS min_freq changes.
+> + * @nb:		Should be devfreq->nb_min
+> + */
+> +static int qos_min_notifier_call(struct notifier_block *nb,
+> +					 unsigned long val, void *ptr)
+> +{
+> +	return qos_notifier_call(container_of(nb, struct devfreq, nb_min));
+> +}
+> +
+> +/**
+> + * qos_max_notifier_call() - Callback for QoS max_freq changes.
+> + * @nb:		Should be devfreq->nb_max
+> + */
+> +static int qos_max_notifier_call(struct notifier_block *nb,
+> +					 unsigned long val, void *ptr)
+> +{
+> +	return qos_notifier_call(container_of(nb, struct devfreq, nb_max));
+> +}
+> +
+>  /**
+>   * devfreq_dev_release() - Callback for struct device to release the device.
+>   * @dev:	the devfreq device
+>   *
+>   * Remove devfreq from the list and release its resources.
+>   */
+>  static void devfreq_dev_release(struct device *dev)
+>  {
+>  	struct devfreq *devfreq = to_devfreq(dev);
+> +	int err;
+>  
+>  	mutex_lock(&devfreq_list_lock);
+>  	list_del(&devfreq->node);
+>  	mutex_unlock(&devfreq_list_lock);
+>  
+> +	err = dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
+> +					 DEV_PM_QOS_MAX_FREQUENCY);
+> +	if (err)
+> +		dev_warn(dev->parent, "Failed to remove DEV_PM_QOS_MAX_FREQUENCY notifier: %d\n",
+> +			 err);
+> +	err = dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
+> +			DEV_PM_QOS_MIN_FREQUENCY);
+> +	if (err)
+> +		dev_warn(dev->parent, "Failed to remove DEV_PM_QOS_MIN_FREQUENCY notifier: %d\n",
+> +			 err);
+> +
+>  	if (devfreq->profile->exit)
+>  		devfreq->profile->exit(devfreq->dev.parent);
+>  
+>  	kfree(devfreq->time_in_state);
+>  	kfree(devfreq->trans_table);
+> @@ -735,10 +800,22 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	if (err) {
+>  		put_device(&devfreq->dev);
+>  		goto err_out;
+>  	}
+>  
+> +	devfreq->nb_min.notifier_call = qos_min_notifier_call;
+> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
+> +				      DEV_PM_QOS_MIN_FREQUENCY);
+> +	if (err)
+> +		goto err_devfreq;
+> +
+> +	devfreq->nb_max.notifier_call = qos_max_notifier_call;
+> +	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
+> +				      DEV_PM_QOS_MAX_FREQUENCY);
+> +	if (err)
+> +		goto err_devfreq;
+> +
+>  	mutex_lock(&devfreq_list_lock);
+>  
+>  	governor = try_then_request_governor(devfreq->governor_name);
+>  	if (IS_ERR(governor)) {
+>  		dev_err(dev, "%s: Unable to find governor for the device\n",
+> @@ -762,10 +839,11 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	return devfreq;
+>  
+>  err_init:
+>  	mutex_unlock(&devfreq_list_lock);
+> +err_devfreq:
+>  	devfreq_remove_device(devfreq);
+>  	return ERR_PTR(err);
+>  
+>  err_dev:
+>  	/*
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index 2bae9ed3c783..8b92ccbd1962 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -134,10 +134,12 @@ struct devfreq_dev_profile {
+>   * @total_trans:	Number of devfreq transitions
+>   * @trans_table:	Statistics of devfreq transitions
+>   * @time_in_state:	Statistics of devfreq states
+>   * @last_stat_updated:	The last time stat updated
+>   * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
+> + * @nb_min:		Notifier block for DEV_PM_QOS_MIN_FREQUENCY
+> + * @nb_max:		Notifier block for DEV_PM_QOS_MAX_FREQUENCY
+>   *
+>   * This structure stores the devfreq information for a give device.
+>   *
+>   * Note that when a governor accesses entries in struct devfreq in its
+>   * functions except for the context of callbacks defined in struct
+> @@ -176,10 +178,13 @@ struct devfreq {
+>  	unsigned int *trans_table;
+>  	unsigned long *time_in_state;
+>  	unsigned long last_stat_updated;
+>  
+>  	struct srcu_notifier_head transition_notifier_list;
+> +
+> +	struct notifier_block nb_min;
+> +	struct notifier_block nb_max;
+>  };
+>  
+>  struct devfreq_freqs {
+>  	unsigned long old;
+>  	unsigned long new;
+> -- 
+> 2.17.1
 > 
-I understand there are other impact of the scale invariance like in
-deadline code, which I didn't see when I submitted this patch.
-You can drop this patch at this time if you like. I can poke HPC folks
-to test a released kernel.
 
-Thanks,
-Srinivas
-
-
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
