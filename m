@@ -2,126 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA90CBB97
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 15:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61272CBC49
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 15:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388478AbfJDNWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Oct 2019 09:22:30 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:34741 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387952AbfJDNWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 09:22:30 -0400
-Received: by mail-io1-f68.google.com with SMTP id q1so13532440ion.1
-        for <linux-pm@vger.kernel.org>; Fri, 04 Oct 2019 06:22:29 -0700 (PDT)
+        id S2388870AbfJDNwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Oct 2019 09:52:34 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37711 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388806AbfJDNwd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 09:52:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id p14so6376670wro.4
+        for <linux-pm@vger.kernel.org>; Fri, 04 Oct 2019 06:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LEJ9dg5xbbVV3C3q2sRRPp0B1uzrgFWed1hhJkYm69Y=;
-        b=vUmqqKfe0iMgqQT1tBxf5L1Tzjr/8LsPzYoTRi5HnnZQi6OPLN+MSrqfkvxFB+KJ8g
-         J9TSTshM2pCNFHqUrXr7VWcEaqbB0zClY5hRVcYS7c2VS3XzldzVcvDZUD/4jUzEglN1
-         L3MxWuOxvJNCHRVQv2ut5Dp0i++aZiOmqPOxf6g80n4QyQWCc9NDVP195xFSbZmFsSw5
-         qSC6svrQG+aRjdCg3/AzDyeO2ufS+lVeOTC8evuIySD7T9s0N44Vh8tGGxGKbex5JbSN
-         xA3mBb26Yj7FdvVCNxGaldGhi0xovY9K+VXUkqFx9sFpxVxMOY6Fln1oLJIdiGCqg6vZ
-         VCmQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=/NvVmuNoOB0cI3exs6clZvUlSAX7Buc7zqODPiW83oc=;
+        b=BAWysBsPte1eDOFAueq6l7aDz/lo8WQ4I00OCGcelbXMKdAaHfz7FnmV8vaWJUtuJl
+         XYSYy9P8BXBhxyBRaFO/SZb6sUBrhWoxzVUhi1BnayfEt6xfB1E5Syt3KiiCXlNIGXav
+         5+xHo8reipGBqmVqZxoa2DV2l3RZ1j6EblIJkMIDZ1ZB4htJ3izRSLbDYNSGJZOzj17V
+         Zcohv/yAKl9kPLc0stlmTD/HEXtMccfj5kHhf2ckYTm4pZ3pE2WiR7NYgy6LLP3LtgWU
+         U4Lh1s3ay5tdxqXImbzaKSLyVkITdDOpt7NFl+N7jVXt3t+/EMW4I3u5+veWBLx/x9wj
+         SNTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LEJ9dg5xbbVV3C3q2sRRPp0B1uzrgFWed1hhJkYm69Y=;
-        b=Ld1xqJtB4RyeCk6HvaemNTYa0xmwPZYBl7VQo8RZuCvgQw89B1nr9nnohheJUiKZ0u
-         BssLWZGSdU6FFryL744M8H92SYlpwzFlGv6+6yRhaBzIK/2vm2S8OUfIl1TjTBiXWTwR
-         ad/+BROf5QqhOtFsBzhVOtVBqbBqW/c6icU2oqyK8nGkZhECnBD3gBWne/wB7MTH42Km
-         lMI389DJXoZROSP6hH0Hx11w7+AcmqSCZKbLIF92ygPOCvz0LYq8LbUpDb/eCMG8s2vW
-         V3hI89W4NYcVda3KEXqvkrDM8CwgfUOrAFN92S1H6AhH+SrQZFqFKhVXsxyJ8C2BApJ6
-         71Ag==
-X-Gm-Message-State: APjAAAU2nSCE5G8Hsvj0+Qj68M4yvwC0GZwfFnb/KCORpH/yKGDkY535
-        nGGI8Mc/jg/HLzIfvgn7dX0ViOeR8Ac4rw==
-X-Google-Smtp-Source: APXvYqwQrXsm+JA/LtxH6GpCLZs4bFRPqRu7If4SldN0S4B5xsUwRTuxEufarPrQTL32YciKOaVH/Q==
-X-Received: by 2002:a02:7f49:: with SMTP id r70mr14623123jac.85.1570195347722;
-        Fri, 04 Oct 2019 06:22:27 -0700 (PDT)
-Received: from [192.168.1.50] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id c65sm3169547ilg.26.2019.10.04.06.22.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Oct 2019 06:22:26 -0700 (PDT)
-Subject: Re: [PATCH 1/2] bdi: Do not use freezable workqueue
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Pavel Machek <pavel@ucw.cz>, Jan Kara <jack@suse.cz>,
-        Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20191004100025.70798-1-mika.westerberg@linux.intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <0002b2f3-d17c-0d49-52f4-b2ce31832e6c@kernel.dk>
-Date:   Fri, 4 Oct 2019 07:22:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=/NvVmuNoOB0cI3exs6clZvUlSAX7Buc7zqODPiW83oc=;
+        b=do1a0l+qfGLO8NPpjorJk6YU5JCY44UuwSKLzp9kVxGGnU6Q6z9B1Ya1p6ZGTZZoIA
+         ezySNHQstRs7cZiUK6fHXG6iwUGQFBwDvm14z1ADvhjOUZYsQASRFS8fAjD/zvVRDYaP
+         DwqTaGBNVaHs1sq7KohINjQQ7Log6idg/EIY0LBG9xjRw0+mg3YWJw4rMjELqfbttNLW
+         ahdCHRxk+OfwaQoi4zs4HQCN/rdS48PAtPd1udoXh0lCP/ZhcT1nM6LRUggSBQh6AkVc
+         ZpjIU6SWdSwXhIJDcbY5QnxO3QXVwTx9IcpM/YMh40jTfUg2X9kn4ZnIQIrdAs8JVsaJ
+         ZCuQ==
+X-Gm-Message-State: APjAAAVFE04x+zBVRW2muUCUPIsekubgcv9M1ztFB5qr8DDXyt6hT+mC
+        gjN0R1BjD4zRXse42sFnLNFwig==
+X-Google-Smtp-Source: APXvYqy2g3UP4Xetnx/eP45GILdnzIptbOKDy3NsV2tZHWR0IcpxUDP5HKAjTn9LSSeZcbJQp0Ux3g==
+X-Received: by 2002:a5d:4a09:: with SMTP id m9mr11842704wrq.93.1570197151233;
+        Fri, 04 Oct 2019 06:52:31 -0700 (PDT)
+Received: from dell ([2.27.167.122])
+        by smtp.gmail.com with ESMTPSA id x5sm5230136wrt.75.2019.10.04.06.52.30
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 04 Oct 2019 06:52:30 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 14:52:29 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH 1/6] dt-bindings: mfd: max77650: convert the binding
+ document to yaml
+Message-ID: <20191004135229.GF18429@dell>
+References: <20190930130246.4860-1-brgl@bgdev.pl>
+ <20190930130246.4860-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-In-Reply-To: <20191004100025.70798-1-mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190930130246.4860-2-brgl@bgdev.pl>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/4/19 4:00 AM, Mika Westerberg wrote:
-> A removable block device, such as NVMe or SSD connected over Thunderbolt
-> can be hot-removed any time including when the system is suspended. When
-> device is hot-removed during suspend and the system gets resumed, kernel
-> first resumes devices and then thaws the userspace including freezable
-> workqueues. What happens in that case is that the NVMe driver notices
-> that the device is unplugged and removes it from the system. This ends
-> up calling bdi_unregister() for the gendisk which then schedules
-> wb_workfn() to be run one more time.
-> 
-> However, since the bdi_wq is still frozen flush_delayed_work() call in
-> wb_shutdown() blocks forever halting system resume process. User sees
-> this as hang as nothing is happening anymore.
-> 
-> Triggering sysrq-w reveals this:
-> 
->    Workqueue: nvme-wq nvme_remove_dead_ctrl_work [nvme]
->    Call Trace:
->     ? __schedule+0x2c5/0x630
->     ? wait_for_completion+0xa4/0x120
->     schedule+0x3e/0xc0
->     schedule_timeout+0x1c9/0x320
->     ? resched_curr+0x1f/0xd0
->     ? wait_for_completion+0xa4/0x120
->     wait_for_completion+0xc3/0x120
->     ? wake_up_q+0x60/0x60
->     __flush_work+0x131/0x1e0
->     ? flush_workqueue_prep_pwqs+0x130/0x130
->     bdi_unregister+0xb9/0x130
->     del_gendisk+0x2d2/0x2e0
->     nvme_ns_remove+0xed/0x110 [nvme_core]
->     nvme_remove_namespaces+0x96/0xd0 [nvme_core]
->     nvme_remove+0x5b/0x160 [nvme]
->     pci_device_remove+0x36/0x90
->     device_release_driver_internal+0xdf/0x1c0
->     nvme_remove_dead_ctrl_work+0x14/0x30 [nvme]
->     process_one_work+0x1c2/0x3f0
->     worker_thread+0x48/0x3e0
->     kthread+0x100/0x140
->     ? current_work+0x30/0x30
->     ? kthread_park+0x80/0x80
->     ret_from_fork+0x35/0x40
-> 
-> This is not limited to NVMes so exactly same issue can be reproduced by
-> hot-removing SSD (over Thunderbolt) while the system is suspended.
-> 
-> Prevent this from happening by removing WQ_FREEZABLE from bdi_wq.
+On Mon, 30 Sep 2019, Bartosz Golaszewski wrote:
 
-This series looks good for me, I don't think there's a reason for
-the workers to be marked freezable.
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> Convert the binding document for max77650 core mfd module to yaml.
+
+MAX77650, MFD, YAML.
+
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  .../devicetree/bindings/mfd/max77650.txt      | 47 +----------
+>  .../devicetree/bindings/mfd/max77650.yaml     | 83 +++++++++++++++++++
+>  2 files changed, 84 insertions(+), 46 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
+
+Looks okay in principle, but needs a DT Ack.  Preferably from someone
+who speaks YAML.
 
 -- 
-Jens Axboe
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
