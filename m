@@ -2,122 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F91CB80D
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 12:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2EACB844
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 12:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388658AbfJDKSK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Oct 2019 06:18:10 -0400
-Received: from mail-vs1-f45.google.com ([209.85.217.45]:42735 "EHLO
-        mail-vs1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388656AbfJDKSJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 06:18:09 -0400
-Received: by mail-vs1-f45.google.com with SMTP id m22so3746636vsl.9;
-        Fri, 04 Oct 2019 03:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=FR8/a0jMod/hGsojz+LGnIr8+PyKD68xBHORYzblMNk=;
-        b=RJmgbSUmpYIPMnsXW4fiFNIs/nVsdpLxuh/2Jl/WgsZA02vC1tEOopTRcwbYPHM5L0
-         r2vkElO9koITv+QRvcZ7eWPw4X/99IQsFa1qglm8P6X6HCy8xXv5WsVfamS72xN5rYMw
-         TzISRhXTwgV1pJXSjocdgc8XLqm8jZ0owy4hJmRMYenI8QXCmerUwPEafvg9lM1tQ8rU
-         Qk/XRRYHCoYpI+Ufi5B0LMqpNs4TCnVpdD8rYcqHCS6I24R+H1Y9wCVsoXmceg1+1g3L
-         r8ijid7u8AvvOR9BsWsNr/+nlo7QPKNheFq4GAPHjhDsRX06CmrmT9PEi5YQJ+EeCMzQ
-         wUmg==
+        id S1728660AbfJDKbH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Oct 2019 06:31:07 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:35641 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfJDKbH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Oct 2019 06:31:07 -0400
+Received: by mail-wr1-f41.google.com with SMTP id v8so6542611wrt.2;
+        Fri, 04 Oct 2019 03:31:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=FR8/a0jMod/hGsojz+LGnIr8+PyKD68xBHORYzblMNk=;
-        b=CXRUz/JmjRamDIHitGw1pwg+vQIjLFV0KEFC+Q5OcaKS6TUY0Fk9fuWDgb+TK/BUN4
-         i5jACOVKdcRgYLcunTZXtfOq8ZpdORgpO3g9NhbJp90hxvXXcMIS+RgqfCv8tXHqCSPr
-         3Y/Xy1OykoE+Jp4pTTDKpvagaALxkZj8s/ltgjhK667SP9giqVvRGdKqUW9xrXBncdWC
-         HAwKREzsx32j8siDms2Psh0F1P0kuSSEjxkAkcSJqDrmd0+iU4BVeYY51sBKnbAg559L
-         9gSSjvVYGqV0AAzpmPjAdpcFkbtzFOT678BB2g4rqbVfRk3qnmz9o/K3FyYFBEhnZ7l/
-         XLTg==
-X-Gm-Message-State: APjAAAXBhVUhOKJGOsPNUva1lxv3bmU+dqRfD4spOCJxdNOY4hcFgir4
-        ZnAslo1inzUrLBPRZ1aYj86yqxRE2oFnJLa2JoY=
-X-Google-Smtp-Source: APXvYqzoJg533BuJP8X9hanZyDP0L9alk4DwLrlKbxlCtR/Dh3mBh8FRwtP02LUsZBLr2AmV84eZG7uiFXxZAQO1QWo=
-X-Received: by 2002:a67:e40a:: with SMTP id d10mr7102858vsf.196.1570184288590;
- Fri, 04 Oct 2019 03:18:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=0sO0rv2WFDM2B56JzJt62DBkoicLCV6GGFXAS4MJE9Q=;
+        b=hBhpYlRQ6HS0Wpe0PpcIvDtmErIyTOaqwtoHN/rgS/uURFfnKWIogM1VpLPpKPlbSx
+         Hl+HUUL3fsym1EaEzGqFChstEznGUB2JON92pLVA6Cawn59hAv1/uqyclnU8ZmKF0i+i
+         8lC+rww/WZ2sdzTpqm84+FMatjne/r5/Wl7i80N/dgpc0kUGGnyBFKmxC3sVqVir/Rzq
+         3kwV8tudxAPXh2VyR5OCLNpVQ+r8xXSmdRyRziovL4Ru0lDlkYCRntbqZJ7xDn+7uqKE
+         DaTxwB4Uda8pNS1k7zT/duEutFqngrsPC4U1wsNNtTwzxtl2VNCGc/KJvOI8eSodudJ7
+         6LJw==
+X-Gm-Message-State: APjAAAX3UtZSyDAb2bLWsPsk1dVytEgtnNHPir4RKJMNaVxmJXvIyErZ
+        ImAwdijswT2vfCEmlIXDjP8=
+X-Google-Smtp-Source: APXvYqwRzwsUGvltETEBhrXSxWhDZg0vSWGhh6uMJ37eqdE3Dm/SZGQk+dOyT+pLpEySMZOIaLqOfw==
+X-Received: by 2002:a5d:4491:: with SMTP id j17mr10537639wrq.257.1570185064934;
+        Fri, 04 Oct 2019 03:31:04 -0700 (PDT)
+Received: from pi3 ([194.230.155.145])
+        by smtp.googlemail.com with ESMTPSA id a13sm13449859wrf.73.2019.10.04.03.31.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 03:31:04 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 12:31:01 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kamil Konieczny <k.konieczny@partner.samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Devfreq looks for unsupported frequencies on Exynos
+Message-ID: <20191004103101.GA9176@pi3>
 MIME-Version: 1.0
-References: <CAOuPNLgH=JQeT3=tZ_AdBsV0e-S_JNEe4CtpFW8Wj5NfYW5PsA@mail.gmail.com>
- <CAOuPNLjqm+Dv5RARP6dzZRKSttCvqoLe7MNYOeChAGUWX1krRA@mail.gmail.com> <CAOuPNLgZ3kjBaCmXkXHZrncYqUxsNYKiXQqptoDBT_EWfjpNqg@mail.gmail.com>
-In-Reply-To: <CAOuPNLgZ3kjBaCmXkXHZrncYqUxsNYKiXQqptoDBT_EWfjpNqg@mail.gmail.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Fri, 4 Oct 2019 15:47:57 +0530
-Message-ID: <CAOuPNLjMFPn5WLcotG26wy_ROhJZn39iywwOYG0imzjqeQ3jeg@mail.gmail.com>
-Subject: Re: imx6: hdmi black screen issue after resume
-To:     p.zabel@pengutronix.de, bob.beckett@collabora.com,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On Sun, Sep 29, 2019 at 10:24 PM Pintu Agarwal <pintu.ping@gmail.com> wrote:
->
-> >
-> > On Mon, Sep 23, 2019 at 1:28 PM Pintu Agarwal <pintu.ping@gmail.com> wrote:
-> > >
-> > > Dear Philipp,
-> > >
-> > > I have a iMX6dl custom board with custom Linux Kernel 4.8.
-> > > I have both LCD and HDMI connected to the board.
-> > > And we are using weston/wayland as the display interface.
-> > > In normal boot, both LCD and HDMI display is working fine.
-> > >
-> > > But, currently, for one of the requirement, I am trying to explore and
-> > > support hibernation image booting on it.
-> > > Currently, we are able to resume the system without display.
-> > > Also, if we make the entire imx-drm as modules, and then install the
-> > > modules after resume, even LCD is also coming up.
-> > > But HDMI display is black out.
-> > >
+Hi All,
 
-I just found the main root cause of the HDMI screen blackout issue
-after system resume.
-* HDMI is trying to get EDID data from the monitor using I2C interface.
-* But its seems i2c_transfer is getting timeout after 5 retries.
-* Thus EDID data is failing, and HDMI could not able to detect the monitor.
+I noticed recently error logs when booting Odroid HC1 (Exynos5422) on
+exynos_defconfig, 5.4.0-rc1-next-20191004:
 
-This is the logs:
+[    5.168786] exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
+[    5.177022] exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
+[    5.184705] exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
+[    5.192903] exynos-bus: new bus device registered: soc:bus_fsys (100000 KHz ~ 200000 KHz)
+[    5.201414] exynos-bus: new bus device registered: soc:bus_fsys2 ( 75000 KHz ~ 150000 KHz)
+[    5.209986] exynos-bus: new bus device registered: soc:bus_mfc ( 96000 KHz ~ 333000 KHz)
+[    5.217931] exynos-bus: new bus device registered: soc:bus_gen ( 89000 KHz ~ 267000 KHz)
+[    5.225222] exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
+[    5.225975] exynos-bus: new bus device registered: soc:bus_peri ( 67000 KHz ~  67000 KHz)
+[    5.238824] exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
+[    5.245719] exynos-bus: new bus device registered: soc:bus_g2d ( 84000 KHz ~ 333000 KHz)
+[    5.252653] exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
+[    5.263518] exynos-bus: new bus device registered: soc:bus_g2d_acp ( 67000 KHz ~ 267000 KHz)
+[    5.280650] exynos-bus: new bus device registered: soc:bus_jpeg ( 75000 KHz ~ 300000 KHz)
+[    5.288827] exynos-bus: new bus device registered: soc:bus_jpeg_apb ( 84000 KHz ~ 167000 KHz)
+[    5.296957] exynos-bus: new bus device registered: soc:bus_disp1_fimd (120000 KHz ~ 200000 KHz)
+[    5.305939] exynos-bus: new bus device registered: soc:bus_disp1 (120000 KHz ~ 300000 KHz)
+[    5.314036] exynos-bus: new bus device registered: soc:bus_gscl_scaler (150000 KHz ~ 300000 KHz)
+[    5.323090] exynos-bus: new bus device registered: soc:bus_mscl ( 84000 KHz ~ 400000 KHz)
 
-[  441.104989] [drm:drm_helper_probe_single_connector_modes]
-[CONNECTOR:29:HDMI-A-1] status updated from unknown to connected
-[  441.116080]: drm_helper_probe_single_connector_modes - inside -
-else override_edid
-[  441.124416]: drm_helper_probe_single_connector_modes - inside -
-else - drm_load_edid_firmware: count: 0
-[  441.134546]: drm_helper_probe_single_connector_modes - calling - get_modes
-[  441.142157]: dw_hdmi_connector_get_modes : called
-[  441.147652]: dw_hdmi_connector_get_modes : called - calling -> drm_get_edid
-[  441.155346]: drm_do_probe_ddc_edid : called!
-[  441.660759]: drm_do_probe_ddc_edid : i2c_transfer: ret: -110, retry: 5
-[  442.170758]: drm_do_probe_ddc_edid : i2c_transfer: ret: -110, retry: 4
-[  442.680755]: drm_do_probe_ddc_edid : i2c_transfer: ret: -110, retry: 3
-[  443.190755]: drm_do_probe_ddc_edid : i2c_transfer: ret: -110, retry: 2
-[  443.700754]: drm_do_probe_ddc_edid : i2c_transfer: ret: -110, retry: 1
-[  443.707989]: drm_get_edid : called - drm_probe_ddc - failed
-[  443.714303] dwhdmi-imx 120000.hdmi: failed to get edid
+You can see that Exynos devfreq was trying to set 532000000 Hz for
+wcore, 111000000 for noc and 222000000 for fsys_apb. These are higher
+frequencies than we have in DTSI.
 
-Is there any clue, how to resolve this i2c failure issue, after resume?
-This does not happen in normal booting case.
+Any ideas why? It does not look normal...
 
-These are the steps I follow:
-* Boot the system normally (without display) and install all imx-drm as modules.
-* Then uninstall the modules in reverse order.
-* Take the snapshot of the system (suspend to disk).
-* Reboot the system and boot with the image.
-* Install all the modules again.
-* Then launch the Weston.
-* During the weston launch in the beginning we observe this error.
-
-
-Regards,
-Pintu
+Best regards,
+Krzysztof
