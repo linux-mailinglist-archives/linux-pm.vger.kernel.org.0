@@ -2,89 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 646D0CC533
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Oct 2019 23:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B3FCC9B2
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2019 13:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728773AbfJDVuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Oct 2019 17:50:17 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:38224 "EHLO gloria.sntech.de"
+        id S1728011AbfJELqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Oct 2019 07:46:23 -0400
+Received: from onstation.org ([52.200.56.107]:53682 "EHLO onstation.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727548AbfJDVuR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Oct 2019 17:50:17 -0400
-Received: from 94.112.246.102.static.b2b.upcbusiness.cz ([94.112.246.102] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <heiko@sntech.de>)
-        id 1iGVSP-0006tk-DS; Fri, 04 Oct 2019 23:49:49 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     miquel.raynal@bootlin.com, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, eric@anholt.net, wahrenst@gmx.net,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        mmayer@broadcom.com, computersforpeace@gmail.com,
-        gregory.0xf0@gmail.com, matthias.bgg@gmail.com, agross@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
-        marc.w.gonzalez@free.fr, mans@mansr.com, talel@amazon.com,
-        jun.nie@linaro.org, shawnguo@kernel.org, phil@raspberrypi.org,
-        gregkh@linuxfoundation.org, david.hernandezsanchez@st.com,
-        horms+renesas@verge.net.au, wsa+renesas@sang-engineering.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH -next 09/15] thermal: rockchip: use devm_platform_ioremap_resource() to simplify code
-Date:   Fri, 04 Oct 2019 23:49:47 +0200
-Message-ID: <6308452.QoXZFhLlpT@phil>
-In-Reply-To: <20190904122939.23780-10-yuehaibing@huawei.com>
-References: <20190904122939.23780-1-yuehaibing@huawei.com> <20190904122939.23780-10-yuehaibing@huawei.com>
+        id S1726198AbfJELqW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 5 Oct 2019 07:46:22 -0400
+Received: from localhost.localdomain (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id 1B3FA3E908;
+        Sat,  5 Oct 2019 11:46:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1570275981;
+        bh=7UxPKfYvF9YC5oNzBjK4nuU5NqyOypj5Ccf17g84yBo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jtatPfXSKH6+snw7ecvIhGDOju9+fHa5Sd2+CyKVrSm2RtlP9USxUfREKdhdPGtsJ
+         TAZNCtqSodvHJZ8Vm7I9Lor0DsKT9S+h2I8lqxoBeYwgcR1PIMeOFj4WDGMzsSZObl
+         8zbNQv+9J5m1Zqc7g0RkA5UlVAZAWuZtAJsnBL6w=
+From:   Brian Masney <masneyb@onstation.org>
+To:     bjorn.andersson@linaro.org, georgi.djakov@linaro.org,
+        robh+dt@kernel.org
+Cc:     agross@kernel.org, mark.rutland@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        jonathan@marek.ca
+Subject: [PATCH v2 0/2] interconnect: qcom: add msm8974 support
+Date:   Sat,  5 Oct 2019 07:46:03 -0400
+Message-Id: <20191005114605.5279-1-masneyb@onstation.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, 4. September 2019, 14:29:33 CEST schrieb YueHaibing:
-> Use devm_platform_ioremap_resource() to simplify the code a bit.
-> This is detected by coccinelle.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Here's a patch series that adds interconnect support for the Qualcomm
+MSM8974, which is needed so that the GPU can be supported upstream.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+I didn't include the changes to arch/arm/boot/dts/qcom-msm8974.dtsi
+since I have some other device tree patches coming. I'll send them
+all out in a single series once rc4 comes out to avoid any merge
+conflicts. Here's the necessary nodes that need to be added to that
+file:
 
-> ---
->  drivers/thermal/rockchip_thermal.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> index 343c2f5..044e6eb 100644
-> --- a/drivers/thermal/rockchip_thermal.c
-> +++ b/drivers/thermal/rockchip_thermal.c
-> @@ -1219,7 +1219,6 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
->  	struct device_node *np = pdev->dev.of_node;
->  	struct rockchip_thermal_data *thermal;
->  	const struct of_device_id *match;
-> -	struct resource *res;
->  	int irq;
->  	int i;
->  	int error;
-> @@ -1245,8 +1244,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
->  	if (!thermal->chip)
->  		return -EINVAL;
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	thermal->regs = devm_ioremap_resource(&pdev->dev, res);
-> +	thermal->regs = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(thermal->regs))
->  		return PTR_ERR(thermal->regs);
->  
-> 
+  #include <dt-bindings/interconnect/qcom,msm8974.h>
 
+  bimc: interconnect@fc380000 {
+          reg = <0xfc380000 0x6a000>;
+          compatible = "qcom,msm8974-bimc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
+                   <&rpmcc RPM_SMD_BIMC_A_CLK>;
+  };
 
+  cnoc: interconnect@fc480000 {
+          reg = <0xfc480000 0x4000>;
+          compatible = "qcom,msm8974-cnoc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
+                   <&rpmcc RPM_SMD_CNOC_A_CLK>;
+  };
 
+  mmssnoc: interconnect@fc478000 {
+          reg = <0xfc478000 0x4000>;
+          compatible = "qcom,msm8974-mmssnoc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&mmcc MMSS_S0_AXI_CLK>,
+                   <&mmcc MMSS_S0_AXI_CLK>;
+  };
+
+  ocmemnoc: interconnect@fc470000 {
+          reg = <0xfc470000 0x4000>;
+          compatible = "qcom,msm8974-ocmemnoc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&rpmcc RPM_SMD_OCMEMGX_CLK>,
+                   <&rpmcc RPM_SMD_OCMEMGX_A_CLK>;
+  };
+
+  pnoc: interconnect@fc468000 {
+          reg = <0xfc468000 0x4000>;
+          compatible = "qcom,msm8974-pnoc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
+                   <&rpmcc RPM_SMD_PNOC_A_CLK>;
+  };
+
+  snoc: interconnect@fc460000 {
+          reg = <0xfc460000 0x4000>;
+          compatible = "qcom,msm8974-snoc";
+          #interconnect-cells = <1>;
+          clock-names = "bus", "bus_a";
+          clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+                   <&rpmcc RPM_SMD_SNOC_A_CLK>;
+  };
+
+Brian Masney (2):
+  dt-bindings: interconnect: qcom: add msm8974 bindings
+  interconnect: qcom: add msm8974 driver
+
+ .../bindings/interconnect/qcom,msm8974.yaml   |  62 ++
+ drivers/interconnect/qcom/Kconfig             |   9 +
+ drivers/interconnect/qcom/Makefile            |   2 +
+ drivers/interconnect/qcom/msm8974.c           | 784 ++++++++++++++++++
+ .../dt-bindings/interconnect/qcom,msm8974.h   | 146 ++++
+ 5 files changed, 1003 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8974.yaml
+ create mode 100644 drivers/interconnect/qcom/msm8974.c
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8974.h
+
+-- 
+2.21.0
 
