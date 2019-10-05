@@ -2,263 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A510CCB1D
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2019 18:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7790CCC0D
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Oct 2019 20:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbfJEQ3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Oct 2019 12:29:53 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:38256 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725826AbfJEQ3x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Oct 2019 12:29:53 -0400
-Received: by mail-qt1-f195.google.com with SMTP id j31so13152308qta.5;
-        Sat, 05 Oct 2019 09:29:52 -0700 (PDT)
+        id S2387884AbfJESh2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Oct 2019 14:37:28 -0400
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:45966 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387477AbfJESh2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Oct 2019 14:37:28 -0400
+Received: by mail-yb1-f178.google.com with SMTP id q143so2004810ybg.12;
+        Sat, 05 Oct 2019 11:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=stUeq6JlpWLFXyg96f1LSeLONzeqiyJLX5utdPTxFBc=;
-        b=Zep7EH8pO7JmpCe1G6r56TuRXPs8YmKTwcXPCZweibMkKiGXZMWHc6qpaIp+5wDNz+
-         EbNm5u6fD0FDeKKxhzIA+j3tNR6X1WNjAre6pmf4PNQvaL41sbiwmkfNucY1ACzskB01
-         mqkKEaeK+uCu9ZjDznOPUUvjtHROgircblQeiLTXb/9owXTCcBnKbdC3WXWPOdnAqMbS
-         XWgKfr4hdLUnL/4QF4mmE86Wofm+QPRCocTJeho/6Jr1T6jbWezdeBrwLmKtBC4xoiU2
-         I7unuYdrSt/Q1On4Az055jSgBRGwh/VGeJ4Bmgxd3P1cJtiVc7kvlI9gezaYlt8L6iW5
-         0RJg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2AJoVgoOlJtCM32LZiMknyZBvbEzY9NtgFLlTHYweRU=;
+        b=PPLqQZGh3VQez+XWSDmGc6lG8dqyfSbgXIRoEBr2NGjzMqAne7AmQ88vPf5DLHjpKJ
+         E/sUeKEJcKebNY7IinPGij6k3zD7bn9OvWM18EE3LS9VLHlmdwBdyuSqe9VqX22+9BU3
+         SdBnpkiV2s9ycDBlTtmHSDRZjh5jlUnbUHhI1Dj4pIw4yhMArxSdZVcnWv2dwngmURXt
+         VPjrwwJQq+Z6cEXTz8YNOOwPlGjwB7onMuVa3afaTr1xsXshL6ELUIS9DbnQY35w/iFV
+         XT02R3W7H2GtkMMrIrxswWk+3R6fIu3Blo0P1++CqXe5uSgOpvjiXInKo3f4jy6aZH8g
+         q6Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=stUeq6JlpWLFXyg96f1LSeLONzeqiyJLX5utdPTxFBc=;
-        b=Ji0k0bvdPPp01oUdvg/d+Pq5xefjfnlNH2n2JC3ANrHnIpI77IPKiM8rXbXIG30O/H
-         t4pAKk7yVqX0Zd9F591O+4xL2Sda/9YVgRZLfG3QzV2YOeZiFv1pwFPDjAY0WSN7PTDJ
-         IbNA+gbmP8qVzJeg3725ekeMXI5EOrbvA7QUmN/OUqkHVspkQNs5H8UfP+SqZ53mT5SE
-         cBCtC8yvIMxI16TkPOUTbVIOY7r7G1nzk13+IENICDaFbibTGQ711Yb+xb+5clY2tdpB
-         NxXa2tUx1dhNpskDpfJ4U5hDWuIfCcCfdKf9aaOsWnkWqEG11hOOE8rY168O4+st1vcZ
-         z6EA==
-X-Gm-Message-State: APjAAAUbJv9gpbOq/rywl4VeAX03hOQLTxe+x1AGTE1oMi2YwyO8hwFf
-        ZHmY9vakx9PY98FtaEo+2FM3xVVDPhieUBcoRIs=
-X-Google-Smtp-Source: APXvYqxNyxoLcySUggUDZfaxP5Da7HAD7Adv9zfmVwgCcVpJM5x3JqZze9SC4wgB358kMmJv8LN2WzAvOoHYVEEY5wc=
-X-Received: by 2002:ac8:3021:: with SMTP id f30mr21994609qte.193.1570292991651;
- Sat, 05 Oct 2019 09:29:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2AJoVgoOlJtCM32LZiMknyZBvbEzY9NtgFLlTHYweRU=;
+        b=FP7JIg6dvEcRTqYvtM4eoWxXmsswkLfmvckeEDhFfuhgZ48e8Zcx+azt6wyjfcQpLY
+         B1mSftZ822R6CaURR6k3f4JWR442TeHi1LUQI/hCf23hbz2OsvJNMnI+aQOEELnLYcsL
+         GtQVbRChgT9/LRcvSpvpnCL73hAlPwJt0ekRPrCJ2sRhQU952iIXnzY84t9wgvgsCJMP
+         Z+Bw52n2WH4XDIu72FArOQFPP2uEBzJGDGLSlbSut67ALOcJ1nd22wveWud1ctgMc3vR
+         doQSDPcHnqoudY653vopkDSjyJnRBrAalBmo3VBgJwUK3jaJSdQfQWZG+iOiVlPPDk70
+         ep4g==
+X-Gm-Message-State: APjAAAUGqI4NN341cpndqsoiS918nyLnItxGqnmrysD/LEDxZLlLj2el
+        KDurWQXZYdBHrc1mz6PRd3I=
+X-Google-Smtp-Source: APXvYqxh+/cWSsKTt6blKzy8HJ0ri4mJ030rKx7xhz++ocPtaTAWBxxq8fumwGmBPXZb0sGsej3elA==
+X-Received: by 2002:a25:2548:: with SMTP id l69mr5910083ybl.159.1570300646571;
+        Sat, 05 Oct 2019 11:37:26 -0700 (PDT)
+Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
+        by smtp.gmail.com with ESMTPSA id g128sm2376654ywb.13.2019.10.05.11.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Oct 2019 11:37:25 -0700 (PDT)
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com
+Cc:     akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        yamada.masahiro@socionext.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
+        sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Subject: [PATCH v15 00/14] Introduce the for_each_set_clump8 macro
+Date:   Sat,  5 Oct 2019 14:36:54 -0400
+Message-Id: <cover.1570299719.git.vilhelm.gray@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <20190811212315.12689-1-digetx@gmail.com> <CGME20191001211534epcas2p1e5f878969d3f68d4dfcafd82b1538487@epcas2p1.samsung.com>
- <17dabcfc-3351-13a1-b3de-81af88f64d84@gmail.com> <503b2ade-ff8e-c354-3886-3b7b511bd07e@samsung.com>
- <6967777e-b54f-8021-aa6d-8c245e529e10@gmail.com>
-In-Reply-To: <6967777e-b54f-8021-aa6d-8c245e529e10@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sat, 5 Oct 2019 12:29:40 -0400
-Message-ID: <CAMdYzYrgvRK49ZhXfy4T6EsRmWOmB+uNK9+rumL1mX032=CdWA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/19] More improvements for Tegra30 devfreq driver
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tested on the Ouya (tegra30).
+Changes in v15:
+  - Move find_next_clump8 to lib/find_bit.c since it requires round_down
+    (I want this to be static inline like the others, but I need help)
+  - Utilize for_each_set_clump8 in pisosr, max3191x, and pca953x
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
+While adding GPIO get_multiple/set_multiple callback support for various
+drivers, I noticed a pattern of looping manifesting that would be useful
+standardized as a macro.
 
-On Wed, Oct 2, 2019 at 9:56 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 02.10.2019 03:25, Chanwoo Choi =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hello Dmitry and Thierry,
-> >
-> > On 19. 10. 2. =EC=98=A4=EC=A0=84 6:15, Dmitry Osipenko wrote:
-> >> 12.08.2019 00:22, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> Hello,
-> >>>
-> >>> This series addresses some additional review comments that were made =
-by
-> >>> Thierry Reding to [1], makes several important changes to the driver,
-> >>> fixing excessive interrupts activity, and adds new features. In the e=
-nd
-> >>> I'm proposing myself as a maintainer for the Tegra devfreq drivers.
-> >>>
-> >>> [1] https://lore.kernel.org/lkml/0fb50eb1-a173-1756-6889-2526a10ac707=
-@gmail.com/T/
-> >>>
-> >>> Changelog:
-> >>>
-> >>> v6:  Addressed review comment that was made by Chanwoo Choi to v5 by
-> >>>      squashing "Define ACTMON_DEV_CTRL_STOP" patch into the "Use CPUF=
-req
-> >>>      notifier" patch.
-> >>>
-> >>> v5:  Addressed review comments that were made by Chanwoo Choi to v4 b=
-y
-> >>>      squashing few patches, dropping some questionable patches, rewor=
-ding
-> >>>      comments to the code, restructuring the code and etc.
-> >>>
-> >>>      These patches are now dropped from the series:
-> >>>
-> >>>        PM / devfreq: tegra30: Use tracepoints for debugging
-> >>>        PM / devfreq: tegra30: Inline all one-line functions
-> >>>
-> >>>      The interrupt-optimization patches are squashed into a single pa=
-tch:
-> >>>
-> >>>        PM / devfreq: tegra30: Reduce unnecessary interrupts activity
-> >>>
-> >>>      because it's better to keep the optimizations as a separate chan=
-ge and
-> >>>      this also helps to reduce code churning, since the code changes =
-depend
-> >>>      on a previous patch in order to stay cleaner.
-> >>>
-> >>>      Fixed a lockup bug that I spotted recently, which is caused by a
-> >>>      clk-notifier->cpufreq_get()->clk_set_rate() sequence. Now a non-=
-blocking
-> >>>      variant of CPU's frequency retrieving is used, i.e. cpufreq_quic=
-k_get().
-> >>>
-> >>>      Further optimized the CPUFreq notifier by postponing the delayed
-> >>>      updating in accordance to the polling interval, this actually un=
-covered
-> >>>      the above lockup bug.
-> >>>
-> >>>      Implemented new minor driver feature in the new patch:
-> >>>
-> >>>        PM / devfreq: tegra30: Support variable polling interval
-> >>>
-> >>> v4:  Added two new patches to the series:
-> >>>
-> >>>        PM / devfreq: tegra30: Synchronize average count on target's u=
-pdate
-> >>>        PM / devfreq: tegra30: Increase sampling period to 16ms
-> >>>
-> >>>      The first patch addresses problem where governor could get stuck=
- due
-> >>>      to outdated "average count" value which is snapshoted by ISR and=
- there
-> >>>      are cases where manual update of the value is required.
-> >>>
-> >>>      The second patch is just a minor optimization.
-> >>>
-> >>> v3:  Added support for tracepoints, replacing the debug messages.
-> >>>      Fixed few more bugs with the help of tracepoints.
-> >>>
-> >>>      New patches in this version:
-> >>>
-> >>>        PM / devfreq: tegra30: Use tracepoints for debugging
-> >>>        PM / devfreq: tegra30: Optimize CPUFreq notifier
-> >>>        PM / devfreq: tegra30: Optimize upper consecutive watermark se=
-lection
-> >>>        PM / devfreq: tegra30: Optimize upper average watermark select=
-ion
-> >>>        PM / devfreq: tegra30: Include appropriate header
-> >>>
-> >>>      Some of older patches of this series also got some extra minor p=
-olish.
-> >>>
-> >>> v2:  Added more patches that are cleaning driver's code further and
-> >>>      squashing another kHz conversion bug.
-> >>>
-> >>>      The patch "Rework frequency management logic" of the v1 series i=
-s now
-> >>>      converted to "Set up watermarks properly" because I found some p=
-roblems
-> >>>      in the original patch and then realized that there is no need to=
- change
-> >>>      the logic much. So the logic mostly preserved and only got impro=
-vements.
-> >>>
-> >>>      The series is based on the today's linux-next (25 Jun) and takes=
- into
-> >>>      account minor changes that MyungJoo Ham made to the already queu=
-ed
-> >>>      patches from the first batch [1].
-> >>>
-> >>> Dmitry Osipenko (19):
-> >>>   PM / devfreq: tegra30: Change irq type to unsigned int
-> >>>   PM / devfreq: tegra30: Keep interrupt disabled while governor is
-> >>>     stopped
-> >>>   PM / devfreq: tegra30: Handle possible round-rate error
-> >>>   PM / devfreq: tegra30: Drop write-barrier
-> >>>   PM / devfreq: tegra30: Set up watermarks properly
-> >>>   PM / devfreq: tegra30: Tune up boosting thresholds
-> >>>   PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-> >>>   PM / devfreq: tegra30: Ensure that target freq won't overflow
-> >>>   PM / devfreq: tegra30: Use kHz units uniformly in the code
-> >>>   PM / devfreq: tegra30: Reduce unnecessary interrupts activity
-> >>>   PM / devfreq: tegra30: Use CPUFreq notifier
-> >>>   PM / devfreq: tegra30: Move clk-notifier's registration to governor=
-'s
-> >>>     start
-> >>>   PM / devfreq: tegra30: Reset boosting on startup
-> >>>   PM / devfreq: tegra30: Don't enable consecutive-down interrupt on
-> >>>     startup
-> >>>   PM / devfreq: tegra30: Constify structs
-> >>>   PM / devfreq: tegra30: Include appropriate header
-> >>>   PM / devfreq: tegra30: Increase sampling period to 16ms
-> >>>   PM / devfreq: tegra30: Support variable polling interval
-> >>>   PM / devfreq: tegra20/30: Add Dmitry as a maintainer
-> >>>
-> >>>  MAINTAINERS                       |   9 +
-> >>>  drivers/devfreq/tegra30-devfreq.c | 706 +++++++++++++++++++++++-----=
---
-> >>>  2 files changed, 555 insertions(+), 160 deletions(-)
-> >>>
-> >>
-> >> Hello Chanwoo,
-> >>
-> >> I don't have any more updates in regards to this series, everything is
-> >> working flawlessly for now. Will be awesome if we could continue the
-> >> reviewing and then get the patches into linux-next to get some more te=
-sting.
-> >>
-> >>
-> >
-> > Hello Dmitry,
-> >
-> > I'm sorry for late reply. Except for patch5, I reviewed the patches.
-> > Please check my comment. Actually, It is difficult to review the patch5
-> > without any testing environment and detailed knowledge of watermark of =
-tegra.
-> > It is not familiar with me.
->
-> Thank you very much! I'll go through yours comments and reply to them.
->
-> I understand that it's not easy for you to review patch5, but probably
-> you don't need to go into details and a brief-generic review of the code
-> will be enough in that case.
->
-> The hardware is actually very simple, there are watermarks that
-> correspond to a memory activity that hardware accounts over a given
-> period of time. Once watermark is reached, hardware generates interrupt.
-> There are two types of watermarks: average and consecutive. In case of
-> the average, the memory activity is collected over a larger window of
-> time. For the consecutive case, the memory activity is collected over
-> each period (16ms by default in the driver). Memory client may breach
-> average watermark very frequently, although that may not affect much the
-> average value and for some memory clients (like CPU) it is more
-> preferred to not completely ignore those short bursts of memory
-> activity. The consecutive watermarks are used in order to detect those
-> short bursts, which we account in the driver in a form of boosting. You
-> may notice that boost_up_coeff for the CPU's memory client is set to a
-> higher value in the driver.
->
-> > Hello Thierry,
-> > If possible, Could you review the patch5 related to setting up the wate=
-rmark
-> > and other patches?
-> >
->
-> Indeed, will be very nice if Thierry could also take a look at this
-> series. Although.. I could be wrong here, but it looks to me that
-> Thierry also isn't closely familiar with this driver and the hardware.
->
-> Thierry, at least please let us know if you're interested in taking a
-> look at the patches, I'm pretty sure that you're quite busy with other
-> things ;)
+This patchset introduces the for_each_set_clump8 macro and utilizes it
+in several GPIO drivers. The for_each_set_clump macro8 facilitates a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
+
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
+
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
+
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+The for_each_set_clump8 macro has four parameters:
+
+    * start: set to the bit offset of the current clump
+    * clump: set to the current clump value
+    * bits: bitmap to search within
+    * size: bitmap size in number of bits
+
+In this version of the patchset, the for_each_set_clump macro has been
+reimplemented and simplified based on the suggestions provided by Rasmus
+Villemoes and Andy Shevchenko in the version 4 submission.
+
+In particular, the function of the for_each_set_clump macro has been
+restricted to handle only 8-bit clumps; the drivers that use the
+for_each_set_clump macro only handle 8-bit ports so a generic
+for_each_set_clump implementation is not necessary. Thus, a solution for
+large clumps (i.e. those larger than the width of a bitmap word) can be
+postponed until a driver appears that actually requires such a generic
+for_each_set_clump implementation.
+
+For what it's worth, a semi-generic for_each_set_clump (i.e. for clumps
+smaller than the width of a bitmap word) can be implemented by simply
+replacing the hardcoded '8' and '0xFF' instances with respective
+variables. I have not yet had a need for such an implementation, and
+since it falls short of a true generic for_each_set_clump function, I
+have decided to forgo such an implementation for now.
+
+In addition, the bitmap_get_value8 and bitmap_set_value8 functions are
+introduced to get and set 8-bit values respectively. Their use is based
+on the behavior suggested in the patchset version 4 review.
+
+William Breathitt Gray (14):
+  bitops: Introduce the for_each_set_clump8 macro
+  lib/test_bitmap.c: Add for_each_set_clump8 test cases
+  gpio: 104-dio-48e: Utilize for_each_set_clump8 macro
+  gpio: 104-idi-48: Utilize for_each_set_clump8 macro
+  gpio: gpio-mm: Utilize for_each_set_clump8 macro
+  gpio: ws16c48: Utilize for_each_set_clump8 macro
+  gpio: pci-idio-16: Utilize for_each_set_clump8 macro
+  gpio: pcie-idio-24: Utilize for_each_set_clump8 macro
+  gpio: uniphier: Utilize for_each_set_clump8 macro
+  gpio: 74x164: Utilize the for_each_set_clump8 macro
+  thermal: intel: intel_soc_dts_iosf: Utilize for_each_set_clump8 macro
+  gpio: pisosr: Utilize the for_each_set_clump8 macro
+  gpio: max3191x: Utilize the for_each_set_clump8 macro
+  gpio: pca953x: Utilize the for_each_set_clump8 macro
+
+ drivers/gpio/gpio-104-dio-48e.c            |  73 ++++----------
+ drivers/gpio/gpio-104-idi-48.c             |  36 ++-----
+ drivers/gpio/gpio-74x164.c                 |  19 ++--
+ drivers/gpio/gpio-gpio-mm.c                |  73 ++++----------
+ drivers/gpio/gpio-max3191x.c               |  19 ++--
+ drivers/gpio/gpio-pca953x.c                |  17 ++--
+ drivers/gpio/gpio-pci-idio-16.c            |  75 +++++---------
+ drivers/gpio/gpio-pcie-idio-24.c           | 109 ++++++++-------------
+ drivers/gpio/gpio-pisosr.c                 |  12 +--
+ drivers/gpio/gpio-uniphier.c               |  16 ++-
+ drivers/gpio/gpio-ws16c48.c                |  73 ++++----------
+ drivers/thermal/intel/intel_soc_dts_iosf.c |  29 +++---
+ drivers/thermal/intel/intel_soc_dts_iosf.h |   2 -
+ include/asm-generic/bitops/find.h          |  50 ++++++++++
+ include/linux/bitops.h                     |   5 +
+ lib/find_bit.c                             |  14 +++
+ lib/test_bitmap.c                          |  65 ++++++++++++
+ 17 files changed, 325 insertions(+), 362 deletions(-)
+
+-- 
+2.23.0
+
