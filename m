@@ -2,115 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7ABCD264
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2019 17:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819D4CD2A9
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2019 17:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbfJFPIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Oct 2019 11:08:49 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39935 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfJFPIt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Oct 2019 11:08:49 -0400
-Received: by mail-oi1-f193.google.com with SMTP id w144so9601655oia.6;
-        Sun, 06 Oct 2019 08:08:47 -0700 (PDT)
+        id S1726439AbfJFPLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Oct 2019 11:11:34 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:39968 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfJFPLe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Oct 2019 11:11:34 -0400
+Received: by mail-yb1-f196.google.com with SMTP id s7so207940ybq.7;
+        Sun, 06 Oct 2019 08:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jbtblgd/jJPBkocI+MwRuPHJhAT10ALT9hQEoN0MCo4=;
+        b=pp0Vss3xZ2x2i3OiesE0HzbYZb1Ba6rMU6p/AmC99WBLaB24DpFCIZ/Pbh5rmUlmgU
+         789dzs9gnGZ4m5nej4eyLhbiAc6b2qi3q0EsI1KIJfRPC3EiOYEhQWv9Me+JICnlFZVI
+         L+cGI086edZssoONImyLsgv1cvGs53NZ83CNYkBuL303hI+X3cCQJ0cwz1uDPpI5MHQp
+         4++e9laTjLX+5C5ofKZej0BCnJWYBwwRdchZs1gHnW1UkFQCHbfSvfeBcENs8l2dNWhi
+         fOQq3sngZWTyUuex7wGfhand7B8AwkmwHZWso8ASQoYIfQQC/gaFSEJJ9SDRAVx+sV3I
+         Dn4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nqvbMIqcq67/i2yVAL0YTUW6apJz4THEkuKthWl5fgE=;
-        b=HyuJR8DjoVRp3FQ/QPDhQ8MWC1olcnGcpYbztk9CrqxZsP36w3DsfPimCpoYbhYxzw
-         gEFmfDsx6EVn2Q3r6FO9wXlWi47XGbuaeKC9B1ZNLTC+4tAaRzaSxUtWAIviov9R6Zhc
-         lnub7hyvPqV5LF0xZH1T5VpS77nuLRAtRVNIWvTyd/4+JndLsdceolILatucNytVd25r
-         XY/FaW+Nv9117xLbyyvN78vw67Adjz+Dp91ntFwoGtAy2jpEvOqyvyA28piRnnd7slkl
-         YP9fuA8H+pho/BdnjlHM5b3no2jMFCtFVdc/H54Lzv9SdA5zhkCWfIv9OvHDc1uEZACa
-         ivRA==
-X-Gm-Message-State: APjAAAVc5B10z/TQwCLK6B1U+/4TDn5tKhGxu1lexambBi+YRuURW1H3
-        Hv0tDKOqSlE+FEPJ5ayEI452liOP72f96Neu8Mw=
-X-Google-Smtp-Source: APXvYqwq60LmDn6AGtgdwDclNIdBSotjYjNaDAYj0L2DIdw3d2KLe0BdN5/cm86sCM6ESSLo3pGS2cGtZt9GawUo8cM=
-X-Received: by 2002:aca:50ca:: with SMTP id e193mr15226415oib.110.1570374526444;
- Sun, 06 Oct 2019 08:08:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jbtblgd/jJPBkocI+MwRuPHJhAT10ALT9hQEoN0MCo4=;
+        b=tcnLSQzwXVWwadZ+iw+mRcMMisolUHTEzbT5BgYdLPVw1+nBwkz8mPMLHd8p5kFYoi
+         bsX2He4hwLTnKPbG70p0Ks1zroRLJ2raBf+xP4FnTobjPIGCsFazgFtrpzYLtDw+eVu/
+         FhYo1qTua0nKNvUEju4xaYNuGiScep9F3qq8zyyic/Rs1QR1oT+jTz66hlI+8XXy/pzs
+         i8zxyg016oCMs0rcQ0DR1qTpEe2Gle7eA2GzMhJvlWh/t5Th2TGgYEQhbCx9DMx4pZoX
+         WWrGiJl7EbEd/qw/WqbCGicRoQR7rlB+fqJnJQmTkgaJomnQvl85xaRvHvQdeVvzxBQU
+         DB8g==
+X-Gm-Message-State: APjAAAXgx/8cSHPKB+FAmsCE4QFReu6TUSJrM57hjPEvcVztq44K0xtl
+        t+NZRhgL74cSWFtemeGsMSY=
+X-Google-Smtp-Source: APXvYqzuLr7tNwFfzVIotQtIQRiBkdOuxRVp0bEL09oY03vVYasfb32PD0Z2/XiXhEWU81GBtjcSng==
+X-Received: by 2002:a25:34d2:: with SMTP id b201mr7985252yba.232.1570374693292;
+        Sun, 06 Oct 2019 08:11:33 -0700 (PDT)
+Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
+        by smtp.gmail.com with ESMTPSA id e82sm2662434ywc.43.2019.10.06.08.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Oct 2019 08:11:32 -0700 (PDT)
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com
+Cc:     akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        yamada.masahiro@socionext.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
+        sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Subject: [PATCH v16 00/14] Introduce the for_each_set_clump8 macro
+Date:   Sun,  6 Oct 2019 11:10:57 -0400
+Message-Id: <cover.1570374078.git.vilhelm.gray@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <20191004100025.70798-1-mika.westerberg@linux.intel.com> <0002b2f3-d17c-0d49-52f4-b2ce31832e6c@kernel.dk>
-In-Reply-To: <0002b2f3-d17c-0d49-52f4-b2ce31832e6c@kernel.dk>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 6 Oct 2019 17:08:31 +0200
-Message-ID: <CAJZ5v0i=rc6DiZfch6J8ZOyj8ksK-2Dyb+qH_o=NQxtSntfnOw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] bdi: Do not use freezable workqueue
-To:     Jens Axboe <axboe@kernel.dk>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Jan Kara <jack@suse.cz>,
-        Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 3:22 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 10/4/19 4:00 AM, Mika Westerberg wrote:
-> > A removable block device, such as NVMe or SSD connected over Thunderbolt
-> > can be hot-removed any time including when the system is suspended. When
-> > device is hot-removed during suspend and the system gets resumed, kernel
-> > first resumes devices and then thaws the userspace including freezable
-> > workqueues. What happens in that case is that the NVMe driver notices
-> > that the device is unplugged and removes it from the system. This ends
-> > up calling bdi_unregister() for the gendisk which then schedules
-> > wb_workfn() to be run one more time.
-> >
-> > However, since the bdi_wq is still frozen flush_delayed_work() call in
-> > wb_shutdown() blocks forever halting system resume process. User sees
-> > this as hang as nothing is happening anymore.
-> >
-> > Triggering sysrq-w reveals this:
-> >
-> >    Workqueue: nvme-wq nvme_remove_dead_ctrl_work [nvme]
-> >    Call Trace:
-> >     ? __schedule+0x2c5/0x630
-> >     ? wait_for_completion+0xa4/0x120
-> >     schedule+0x3e/0xc0
-> >     schedule_timeout+0x1c9/0x320
-> >     ? resched_curr+0x1f/0xd0
-> >     ? wait_for_completion+0xa4/0x120
-> >     wait_for_completion+0xc3/0x120
-> >     ? wake_up_q+0x60/0x60
-> >     __flush_work+0x131/0x1e0
-> >     ? flush_workqueue_prep_pwqs+0x130/0x130
-> >     bdi_unregister+0xb9/0x130
-> >     del_gendisk+0x2d2/0x2e0
-> >     nvme_ns_remove+0xed/0x110 [nvme_core]
-> >     nvme_remove_namespaces+0x96/0xd0 [nvme_core]
-> >     nvme_remove+0x5b/0x160 [nvme]
-> >     pci_device_remove+0x36/0x90
-> >     device_release_driver_internal+0xdf/0x1c0
-> >     nvme_remove_dead_ctrl_work+0x14/0x30 [nvme]
-> >     process_one_work+0x1c2/0x3f0
-> >     worker_thread+0x48/0x3e0
-> >     kthread+0x100/0x140
-> >     ? current_work+0x30/0x30
-> >     ? kthread_park+0x80/0x80
-> >     ret_from_fork+0x35/0x40
-> >
-> > This is not limited to NVMes so exactly same issue can be reproduced by
-> > hot-removing SSD (over Thunderbolt) while the system is suspended.
-> >
-> > Prevent this from happening by removing WQ_FREEZABLE from bdi_wq.
->
-> This series looks good for me, I don't think there's a reason for
-> the workers to be marked freezable.
+Changes in v16:
+  - Fix typo in max3191x patch ('offset' to 'bit' in bitmap_set_value8)
 
-I was a bit concerned that the original idea might be to prevent
-writes to the persistent storage from occurring after creating an
-image during hibernation, but if that's not the case, the series is
-fine from the general power management standpoint, so
+While adding GPIO get_multiple/set_multiple callback support for various
+drivers, I noticed a pattern of looping manifesting that would be useful
+standardized as a macro.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This patchset introduces the for_each_set_clump8 macro and utilizes it
+in several GPIO drivers. The for_each_set_clump macro8 facilitates a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-for both patches.
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
+
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
+
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+The for_each_set_clump8 macro has four parameters:
+
+    * start: set to the bit offset of the current clump
+    * clump: set to the current clump value
+    * bits: bitmap to search within
+    * size: bitmap size in number of bits
+
+In this version of the patchset, the for_each_set_clump macro has been
+reimplemented and simplified based on the suggestions provided by Rasmus
+Villemoes and Andy Shevchenko in the version 4 submission.
+
+In particular, the function of the for_each_set_clump macro has been
+restricted to handle only 8-bit clumps; the drivers that use the
+for_each_set_clump macro only handle 8-bit ports so a generic
+for_each_set_clump implementation is not necessary. Thus, a solution for
+large clumps (i.e. those larger than the width of a bitmap word) can be
+postponed until a driver appears that actually requires such a generic
+for_each_set_clump implementation.
+
+For what it's worth, a semi-generic for_each_set_clump (i.e. for clumps
+smaller than the width of a bitmap word) can be implemented by simply
+replacing the hardcoded '8' and '0xFF' instances with respective
+variables. I have not yet had a need for such an implementation, and
+since it falls short of a true generic for_each_set_clump function, I
+have decided to forgo such an implementation for now.
+
+In addition, the bitmap_get_value8 and bitmap_set_value8 functions are
+introduced to get and set 8-bit values respectively. Their use is based
+on the behavior suggested in the patchset version 4 review.
+
+William Breathitt Gray (14):
+  bitops: Introduce the for_each_set_clump8 macro
+  lib/test_bitmap.c: Add for_each_set_clump8 test cases
+  gpio: 104-dio-48e: Utilize for_each_set_clump8 macro
+  gpio: 104-idi-48: Utilize for_each_set_clump8 macro
+  gpio: gpio-mm: Utilize for_each_set_clump8 macro
+  gpio: ws16c48: Utilize for_each_set_clump8 macro
+  gpio: pci-idio-16: Utilize for_each_set_clump8 macro
+  gpio: pcie-idio-24: Utilize for_each_set_clump8 macro
+  gpio: uniphier: Utilize for_each_set_clump8 macro
+  gpio: 74x164: Utilize the for_each_set_clump8 macro
+  thermal: intel: intel_soc_dts_iosf: Utilize for_each_set_clump8 macro
+  gpio: pisosr: Utilize the for_each_set_clump8 macro
+  gpio: max3191x: Utilize the for_each_set_clump8 macro
+  gpio: pca953x: Utilize the for_each_set_clump8 macro
+
+ drivers/gpio/gpio-104-dio-48e.c            |  73 ++++----------
+ drivers/gpio/gpio-104-idi-48.c             |  36 ++-----
+ drivers/gpio/gpio-74x164.c                 |  19 ++--
+ drivers/gpio/gpio-gpio-mm.c                |  73 ++++----------
+ drivers/gpio/gpio-max3191x.c               |  19 ++--
+ drivers/gpio/gpio-pca953x.c                |  17 ++--
+ drivers/gpio/gpio-pci-idio-16.c            |  75 +++++---------
+ drivers/gpio/gpio-pcie-idio-24.c           | 109 ++++++++-------------
+ drivers/gpio/gpio-pisosr.c                 |  12 +--
+ drivers/gpio/gpio-uniphier.c               |  16 ++-
+ drivers/gpio/gpio-ws16c48.c                |  73 ++++----------
+ drivers/thermal/intel/intel_soc_dts_iosf.c |  29 +++---
+ drivers/thermal/intel/intel_soc_dts_iosf.h |   2 -
+ include/asm-generic/bitops/find.h          |  50 ++++++++++
+ include/linux/bitops.h                     |   5 +
+ lib/find_bit.c                             |  14 +++
+ lib/test_bitmap.c                          |  65 ++++++++++++
+ 17 files changed, 325 insertions(+), 362 deletions(-)
+
+
+base-commit: 8c550e94b8835170593169a45b5ba30d3fc72a70
+-- 
+2.23.0
+
