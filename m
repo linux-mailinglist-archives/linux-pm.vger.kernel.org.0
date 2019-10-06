@@ -2,197 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E2DCD251
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2019 16:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7ABCD264
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Oct 2019 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbfJFOql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Oct 2019 10:46:41 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:51083 "EHLO cmta16.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726134AbfJFOql (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 6 Oct 2019 10:46:41 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id H7nuiZSd0FXoiH7nviqxrG; Sun, 06 Oct 2019 08:46:39 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1570373199; bh=zhiN9/TEQQMAhrEdI04Mweoo96pgSuSYiVmgT7KYVcY=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=YrZNNK5YOVlKE/d1V817uIaBShJjgFlWJG3VJ1BWsOJ3YWAnbdJrrYm3KlNTqZbgh
-         vSoeiRKXTcirSyay2IPRQiUuqAdvyJARNiYEfpt66w3pLa9lRCcL1qrVZYdS27Y2nX
-         4WUmaX5CbIrH+ifEOV0KX6QfSy0ICtKQnNnahuC2xj94mq58FXuAV7dnCLNbfYuIfg
-         rrp+UhMeA42KfrK7GJNOloCz8xUBGFcyr8T5mfsGVKlFGu9dQ1prn22UrfufwizBEo
-         yr5ttnJPmFBP6oVTGUDZCzsY9W9WirUuvAgAu2j4ikqT4to/PXpo4YKMnRK/yr0/Oe
-         pH3JE0aSRqMHQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=HoEI5HbS c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=IkcTkHD0fZMA:10 a=aatUQebYAAAA:8 a=g0t0pkq594qMvyhE6B4A:9
- a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=VAi8dUBDBAXkbsTw:21 a=iXfTAjlW8Ecv3Iz4:21
- a=QEXdDO2ut3YA:10 a=7715FyvI7WU-l6oqrZBK:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>
-Cc:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Frederic Weisbecker'" <frederic@kernel.org>,
-        "'Mel Gorman'" <mgorman@suse.de>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Chen, Hu'" <hu1.chen@intel.com>,
-        "'Quentin Perret'" <quentin.perret@arm.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
-References: <001601d57487$e1029ef0$a307dcd0$@net> <000f01d576df$a6b87a30$f4296e90$@net> <CAJZ5v0gu=rALS9ZLNMDT3cw_sT2m8XCKP6+AW3488x2Q9EXM3g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gu=rALS9ZLNMDT3cw_sT2m8XCKP6+AW3488x2Q9EXM3g@mail.gmail.com>
-Subject: RE: [RFC/RFT][PATCH v8] cpuidle: New timer events oriented governor for tickless systems
-Date:   Sun, 6 Oct 2019 07:46:32 -0700
-Message-ID: <000001d57c54$db31f8c0$9195ea40$@net>
+        id S1725985AbfJFPIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Oct 2019 11:08:49 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39935 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfJFPIt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Oct 2019 11:08:49 -0400
+Received: by mail-oi1-f193.google.com with SMTP id w144so9601655oia.6;
+        Sun, 06 Oct 2019 08:08:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nqvbMIqcq67/i2yVAL0YTUW6apJz4THEkuKthWl5fgE=;
+        b=HyuJR8DjoVRp3FQ/QPDhQ8MWC1olcnGcpYbztk9CrqxZsP36w3DsfPimCpoYbhYxzw
+         gEFmfDsx6EVn2Q3r6FO9wXlWi47XGbuaeKC9B1ZNLTC+4tAaRzaSxUtWAIviov9R6Zhc
+         lnub7hyvPqV5LF0xZH1T5VpS77nuLRAtRVNIWvTyd/4+JndLsdceolILatucNytVd25r
+         XY/FaW+Nv9117xLbyyvN78vw67Adjz+Dp91ntFwoGtAy2jpEvOqyvyA28piRnnd7slkl
+         YP9fuA8H+pho/BdnjlHM5b3no2jMFCtFVdc/H54Lzv9SdA5zhkCWfIv9OvHDc1uEZACa
+         ivRA==
+X-Gm-Message-State: APjAAAVc5B10z/TQwCLK6B1U+/4TDn5tKhGxu1lexambBi+YRuURW1H3
+        Hv0tDKOqSlE+FEPJ5ayEI452liOP72f96Neu8Mw=
+X-Google-Smtp-Source: APXvYqwq60LmDn6AGtgdwDclNIdBSotjYjNaDAYj0L2DIdw3d2KLe0BdN5/cm86sCM6ESSLo3pGS2cGtZt9GawUo8cM=
+X-Received: by 2002:aca:50ca:: with SMTP id e193mr15226415oib.110.1570374526444;
+ Sun, 06 Oct 2019 08:08:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdV4Owr8XxahUTRXTIajgh8M33FLzQDhv/DA
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfEpcRQlwFM8G1qzSL3Ouzs7S24N0pjKPpzXNneH/LTIHjfryfJs+cn98oGSHqWb1VdbRGQGvX64aJIgLt7byk9mmkkZP1fK9Lji79W5utzXEgy1dX9Q7
- dLNQfXL/eI5oQUhXL8zxBrhbMFmcPZYpAt/KEbGoDW2h1t+aolULVGE30ERZxnzeSM6O6znApfrRUqUNwoZH6l4nwdj3tgEawrtUg5HQbVrLB1Mq8cOk2hSK
- u314XxvY9AtU/U+jEEvcdRjiL7mg2m6vQNkaXDeGYb+3PlMgtYcAfaFPGZOKG0SzFWXzohpQSkjtQwhiHIikbQatfbQWD0vkwVF4jlPzg2nepavhQc3xhlRy
- e05SlKwNyLH3Zc8eqh7CqmxF7NDT/CWOdbxptTu8obhkAPorx+mpz/380l+PorTXD3DTq04Mm3eP/n/V9gBIGjg8qQMx5CZM7Vfsk/C6rIwmn8yydiFZevMV
- +9Qm/IBV+Wh1cpiiDwisF/DiYXHoVLGi73QcnqHZla9bxggflg5pLx0Ty+aRhqGdEFESAMA7rThk3eEs
+References: <20191004100025.70798-1-mika.westerberg@linux.intel.com> <0002b2f3-d17c-0d49-52f4-b2ce31832e6c@kernel.dk>
+In-Reply-To: <0002b2f3-d17c-0d49-52f4-b2ce31832e6c@kernel.dk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 6 Oct 2019 17:08:31 +0200
+Message-ID: <CAJZ5v0i=rc6DiZfch6J8ZOyj8ksK-2Dyb+qH_o=NQxtSntfnOw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] bdi: Do not use freezable workqueue
+To:     Jens Axboe <axboe@kernel.dk>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Jan Kara <jack@suse.cz>,
+        Tejun Heo <tj@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        AceLan Kao <acelan.kao@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.10.01 02:32 Rafael J. Wysocki wrote:
-> On Sun, Sep 29, 2019 at 6:05 PM Doug Smythies <dsmythies@telus.net> wrote:
->> On 2019.09.26 09:32 Doug Smythies wrote:
->>
->>> If the deepest idle state is disabled, the system
->>> can become somewhat unstable, with anywhere between no problem
->>> at all, to the occasional temporary jump using a lot more
->>> power for a few seconds, to a permanent jump using a lot more
->>> power continuously. I have been unable to isolate the exact
->>> test load conditions under which this will occur. However,
->>> temporarily disabling and then enabling other idle states
->>> seems to make for a somewhat repeatable test. It is important
->>> to note that the issue occurs with only ever disabling the deepest
->>> idle state, just not reliably.
->>>
->>> I want to know how you want to proceed before I do a bunch of
->>> regression testing.
->>
->> I did some regression testing anyhow, more to create and debug
->> a methodology than anything else.
->>
->>> On 2018.12.11 03:50 Rafael J. Wysocki wrote:
->>>
->>>> v7 -> v8:
->>>>  * Apply the selection rules to the idle deepest state as well as to
->>>>    the shallower ones (the deepest idle state was treated differently
->>>>    before by mistake).
->>>>  * Subtract 1/2 of the exit latency from the measured idle duration
->>>>    in teo_update() (instead of subtracting the entire exit latency).
->>>>    This makes the idle state selection be slightly more performance-
->>>>   oriented.
->>>
->>> I have isolated the issue to a subset of the v7 to v8 changes, however
->>> it was not the exit latency changes.
->>>
->>> The partial revert to V7 changes I made were (on top of 5.3):
->>
->> The further testing showed a problem or two with my partial teo-v7 reversion
->> (I call it teo-v12) under slightly different testing conditions.
-
-Correction:
-There was no problem with my partial reversion kernel (a.k.a. teo-v12). The problem
-was confusion over which kernel I was actually running for whatever test.
-
->>
->> I also have a 5.3 based kernel with the current teo reverted and the entire
->> teo-v7 put in its place. I have yet to find a idle state disabled related issue
->> with this kernel.
->>
->> I'll come back to this thread at a later date with better details and test results.
+On Fri, Oct 4, 2019 at 3:22 PM Jens Axboe <axboe@kernel.dk> wrote:
 >
-> Thanks for this work!
+> On 10/4/19 4:00 AM, Mika Westerberg wrote:
+> > A removable block device, such as NVMe or SSD connected over Thunderbolt
+> > can be hot-removed any time including when the system is suspended. When
+> > device is hot-removed during suspend and the system gets resumed, kernel
+> > first resumes devices and then thaws the userspace including freezable
+> > workqueues. What happens in that case is that the NVMe driver notices
+> > that the device is unplugged and removes it from the system. This ends
+> > up calling bdi_unregister() for the gendisk which then schedules
+> > wb_workfn() to be run one more time.
+> >
+> > However, since the bdi_wq is still frozen flush_delayed_work() call in
+> > wb_shutdown() blocks forever halting system resume process. User sees
+> > this as hang as nothing is happening anymore.
+> >
+> > Triggering sysrq-w reveals this:
+> >
+> >    Workqueue: nvme-wq nvme_remove_dead_ctrl_work [nvme]
+> >    Call Trace:
+> >     ? __schedule+0x2c5/0x630
+> >     ? wait_for_completion+0xa4/0x120
+> >     schedule+0x3e/0xc0
+> >     schedule_timeout+0x1c9/0x320
+> >     ? resched_curr+0x1f/0xd0
+> >     ? wait_for_completion+0xa4/0x120
+> >     wait_for_completion+0xc3/0x120
+> >     ? wake_up_q+0x60/0x60
+> >     __flush_work+0x131/0x1e0
+> >     ? flush_workqueue_prep_pwqs+0x130/0x130
+> >     bdi_unregister+0xb9/0x130
+> >     del_gendisk+0x2d2/0x2e0
+> >     nvme_ns_remove+0xed/0x110 [nvme_core]
+> >     nvme_remove_namespaces+0x96/0xd0 [nvme_core]
+> >     nvme_remove+0x5b/0x160 [nvme]
+> >     pci_device_remove+0x36/0x90
+> >     device_release_driver_internal+0xdf/0x1c0
+> >     nvme_remove_dead_ctrl_work+0x14/0x30 [nvme]
+> >     process_one_work+0x1c2/0x3f0
+> >     worker_thread+0x48/0x3e0
+> >     kthread+0x100/0x140
+> >     ? current_work+0x30/0x30
+> >     ? kthread_park+0x80/0x80
+> >     ret_from_fork+0x35/0x40
+> >
+> > This is not limited to NVMes so exactly same issue can be reproduced by
+> > hot-removing SSD (over Thunderbolt) while the system is suspended.
+> >
+> > Prevent this from happening by removing WQ_FREEZABLE from bdi_wq.
 >
-> Please also note that there is a teo patch in 5.4-rc1 that may make a
-> difference in principle.
+> This series looks good for me, I don't think there's a reason for
+> the workers to be marked freezable.
 
-Yes, actually this saga started from somewhere between kernel 5.3 and 5.4-rc1,
-and did include those teo patches, which actually significantly increases the
-probability of the issue occurring.
+I was a bit concerned that the original idea might be to prevent
+writes to the persistent storage from occurring after creating an
+image during hibernation, but if that's not the case, the series is
+fine from the general power management standpoint, so
 
-When the deepest idle state is disabled, and the all states search loop exits
-normally, it might incorrectly re-evaluate a previous idle state previously
-deemed not worthy of the check. This was introduced between teo development
-versions 7 and 8. The fix is to move the code back inside the loop.
-(I'll submit a patch in a day or two).
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I do not think I stated it clearly before: The problem here is that some CPUs
-seem to get stuck in idle state 0, and when they do power consumption spikes,
-often by several hundred % and often indefinitely.
-
-I made a hack job automated test:
-Kernel	tests		fail rate
-5.4-rc1	 6616		13.45%
-5.3		 2376		 4.50%
-5.3-teov7	12136		 0.00%  <<< teo.c reverted and teov7 put in its place.
-5.4-rc1-ds	11168        0.00%  <<< proposed patch (> 7 hours test time)
-
-Proposed patch (on top of kernel 5.4-rc1):
-
-doug@s15:~/temp-k-git/linux$ git diff
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index b5a0e49..0502aa9 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -276,8 +276,22 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-                if (idx < 0)
-                        idx = i; /* first enabled state */
-
--               if (s->target_residency > duration_us)
-+               if (s->target_residency > duration_us){
-+                       /*
-+                        * If the "hits" metric of the idle state matching the sleep length is
-+                        * greater than its "misses" metric, that is the one to use.  Otherwise,
-+                        * it is more likely that one of the shallower states will match the
-+                        * idle duration observed after wakeup, so take the one with the maximum
-+                        * "early hits" metric, but if that cannot be determined, just use the
-+                        * state selected so far.
-+                        */
-+                       if (cpu_data->states[idx].hits <= cpu_data->states[idx].misses &&
-+                           max_early_idx >= 0) {
-+                               idx = max_early_idx;
-+                               duration_us = drv->states[idx].target_residency;
-+                       }
-                        break;
-+               }
-
-                if (s->exit_latency > latency_req && constraint_idx > i)
-                        constraint_idx = i;
-@@ -293,20 +307,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-        }
-
-        /*
--        * If the "hits" metric of the idle state matching the sleep length is
--        * greater than its "misses" metric, that is the one to use.  Otherwise,
--        * it is more likely that one of the shallower states will match the
--        * idle duration observed after wakeup, so take the one with the maximum
--        * "early hits" metric, but if that cannot be determined, just use the
--        * state selected so far.
--        */
--       if (cpu_data->states[idx].hits <= cpu_data->states[idx].misses &&
--           max_early_idx >= 0) {
--               idx = max_early_idx;
--               duration_us = drv->states[idx].target_residency;
--       }
--
--       /*
-         * If there is a latency constraint, it may be necessary to use a
-         * shallower idle state than the one selected so far.
-         */
-
-
+for both patches.
