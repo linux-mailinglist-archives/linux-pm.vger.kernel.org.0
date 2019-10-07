@@ -2,337 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A02ADCDFFE
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 13:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528D4CE179
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 14:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbfJGLNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Oct 2019 07:13:32 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:58739 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727600AbfJGLNc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 07:13:32 -0400
-X-Greylist: delayed 1390 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Oct 2019 07:13:30 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Type:MIME-Version:Date:Message-ID:Cc:To:Subject:From; bh=uG7lqHneOJV1Of7DmLg6Y0FXG9WLuc/+DFGDNUtPpJg=;
-        b=VpEkLDaKpVpWrSXUhtEy/jv+u8VDMvvQA9wu7wEkQqZ0UVHygQyE4pNbEQ0KIF3FCFdCACjxwhcr6+Pa6rdVHysICOCzqe+SSfwYwdwso+J6WlnAmttSr2nkeoeHzNm+sJfKtGi8zWgiOspDsIGcRSUT+F0gn1uNjS9UH1Fmey4=;
-Received: from anon-42-243.vpn.ipredator.se ([46.246.42.243])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <jonas@freesources.org>)
-        id 1iHQan-0000KY-To; Mon, 07 Oct 2019 10:50:18 +0000
-From:   Jonas Meurer <jonas@freesources.org>
-Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- mQINBEqFXAEBEAC+7gfLht8lDqGH1EPYoctDHvWQ4nk60UFDLfjqHmBGReL/9C7CyxYaqgY4
- V1/DXPCmsO5PvHMSi6VPn3B81alPKMT6syQhxDN6CXETh/mrxRbTPyQVSKYdD/BvA94vgwfy
- iInR0N7K6J/mRxqKug14vXlABvfmyWBnW89d15OWs9qy1Ge1mHaA8UgIoUInR2mMqNHQf0nF
- /TtClN2uPmtv/GeGHfSSCQEjYq9Ih2Z1Re2hnwW1peEc0x7piKUXCXHGyrQdz5IE69SqV1gg
- vafUrWHNPWz5ZtXsihYioNi3ISuoHUjkKdn+t55en5tvWvi+2JQnMCGa/Wr7iA2EOxallR+z
- rQRBDe/6wp1XEz6vN1LqCeaRyVOR6q00PtN/Ot0tzPswrHKE6binqG6FBRbu+zeo87cNbMmH
- IAdIT3ysZCAwA2g310fBByCSiNnfhHg2GyqfC4eDtL/K7uVNqQQEon0yv8lzyUloofKER8eA
- W4PtahGcLLbREnekAwQMpU8y1a++QXdk1ckLoyGuBVpBX8PiRirzYVmYsGRMK2u0yIy73YYM
- gYpt6h+Vaoj5EyPbYuJRm3RItByzE84YBbKfA81Xn8FZWc2qTyTeKRMioTu37E/z46wSHCt9
- UM89/lSz5iplUhnmdrN+u606MDbAdgxR5Lk+1UuhpPgLxIIdPwARAQABtCRKb25hcyBNZXVy
- ZXIgPGpvbmFzQGZyZWVzb3VyY2VzLm9yZz6JAlcEEwEKAEECGwMCHgECF4AFCwkIBwMFFQoJ
- CAsFFgIDAQACGQEWIQQsjNKD0+/fQziQ54NSYuf/SRBJ/gUCXP1HQwUJGBuFwgAKCRBSYuf/
- SRBJ/leqD/wKZ2ltjNmwQ7Mf+F0dATcBoX6dh+0HbgHXbsgZSA6WiVn6qrAYiCgtN0ZLtUeI
- oFpthum/Fi4XRt29067hx5pt81JJtsRg813PETeBQbrr9whpupcgw4z6rjHT9EuACsWLBBbg
- hrWPgYMfe9GQupS6nv+kBEotr1v/L+umLFO8q7sbXaXFnxgxV/h6vvMqTK5nWg9MBjTr3ZwH
- 0k4yGq93mC5Zms921OU8PU1JlPdPnKmU2jaXfReHUDg1fS0NaCapIGksX+ysI4u+NIfujK4T
- eN5RMWtixoFjaPbLJ65kT3XXcp3dzioPTGEaLWQwBkMJtKXAZ5FJols9t3XySYzDYs2hrDny
- ADZIkbI/NeIu2hfo6410Nzh6ztevNbYnL7oUS8yHD38ZNBmA3y03KHlbuEf7K6BUq2CrWxTx
- GhFGNaPk/aDYNb6oYQmllw2m0peCbiCOC1HxYxYznANC//8qh5qgSBy97nLyzP8uJcQINTlS
- G1hQ4JMVE5XLNRdIZm3HOjyr8Kma3i7C2MlFOtdpYxHhzDQS5qZWPlYm5h0JLpIctyzbyXwP
- ta2TVqCv59IR64ClYKXP4OGfp0IzUCynWZTOEpwl4IBaPFh40zSXUpuzXHF5yuL8yFOg01fD
- JGaatwBE+uygh8tndhNvKpRaRXnkbiQkwuaFnCEGR/rjmLkCDQRKhV7yARAAonTShxRdyza6
- 3jK3Jae2js8IPBid/VAMK8qyqZoLCRsDoWzKGkJ+8/yNavvkD0mD9AEdJQySk5CmNV/PZB6W
- 3vDpuWYkJ/wbM8g+NTTNVZnnvTirozlu9ZjJmTZL8JAaY2o3Kp6tgPO6924VSwYNIvs1UM4x
- J+7TjTKqLuUdEgsS2IFnbHWsE5XXS+5pbmzWs+UHCVmkXfbb5yx2aV+rUQSkSDooxcRwLKEf
- eDbGdNjsW4qBQ6mFx9gYtCSWnvvCck0mTAdD0n7CxRwdhLKTDRy5CsBN4cuL6N05wOnZojv3
- v6dXctx55EooSFiiDfmwGgu1qdsGDbGLDHC1QRIbouOWiM/4Nf+qfW+8uL+T21wj2Cfb0MaR
- +TZEJSBSLvoPHavUHUy4/td3lGBE+enhZEyd2kfQIR9Zm/EXty7tBj8CGT+ewzDsb1t8Hovt
- DpK7Eo04XkQoCeAAdhfa+f5/X/mCBadflnHkn2rpL/noj+pItFZLbFwoL+meRURcuNfIhpIN
- GaG3j8QJVLIvimdWSSJgmnQJ40Ym7H55EVslHH9cpIzfDUVxMYLVo047QTgfx7Ju1Jdfx8Pf
- 8nAeXSo+9WpOSZJCMqLp/l9e24zFAjX5bXEnXPhRc8cpCrfPvPUdx+OwtBSp2w69UWJBRdOx
- sTAwifXNlXxtaUxaM9WKKr8AEQEAAYkCPAQYAQoAJgIbDBYhBCyM0oPT799DOJDng1Ji5/9J
- EEn+BQJc/UdrBQkYG4L5AAoJEFJi5/9JEEn+tVEP/i/tFQWivHWQuQANoaCs6CAMVslWZhzc
- +v7Lo4pz0kkA/OI7Hgbgz3gE6O9BDScooPqONyR9Ls7iv3NdvbyxJq7IR3PMb5lTncSlOnR0
- gIvJ0pT+nHWW14mJ44sd4jF6CdehoTS1IEpsEDKBL5j89z9URmmdPHT0ph2OTtvil8uuYdvl
- 8mDiQh2RGz/zDNHz+UulgQpercjQyMw+dijnwZZhONQ1wNdFl41SaZyrqbKIxaqHI7Hg0j5j
- dRTSxUCn8BLicIOmSy9G3mOJdTEu2ChQkz+XdOwUf7Kj5ow+18cWrtjcKeL1JEAVbZyGEZNj
- eEWthr6/P9q6VCaogTUkODoXUfTWaHOE2NOY0WK13iQ3/oJlW38/LPoEeeiSJWa7gY/2xNXY
- Zh8SqVGtwdzPzbFga0Vgwaln7vGmMMr6OYsWweqCh9eedAAjOZuJ7pPfvK/w48ylLia7uVPt
- ClSYWhrlqv5YBNLo029MKn9aXAhDvZ7tN+an4DWNVjwZ3r21b+iXWBMcWcIeIc1ssbj0xMur
- UUCosSYLy+zSr4+M+H82YexoOSmbYRKUn6pgAMsH7jXYJou70OAqF7vgQ7+dj6qU7zJOD+DF
- emCqYSyB99fxsxq9SmnB/UfTtBQQk7pkTTZ3TSQiE2u/ZcGVDDAOs5iuW85NbSRxQ499SoyV
- GrTIuQINBFJzgSIBEADNIxHBVTWw+fyCseGCOjy0NmzCOu5BFmppxeqls9Wu8MmEX06DeBBC
- DfXpDrDOP7tX3wYdSVElMgqlL9tMCWnY5S5akONn4+dcex0yo0fIM1pZSl0vcVj5xmI+RRkD
- Sh+0GL69cl2POiEKeXFIbwDIjE5txio5iKIABMQxQHLsKbJmxGPQKdJvXvp5MUhlMikBws4I
- aihum6/sLZ8vqDn5/OMkzyQBgRhuis9RBaTJy7kvPxqtOXaNO/cvONUODjGhAg0VWejX5yeE
- auzCg/ZWZeZOgwVLd9/NyCqii1+JHMYz85lk4bLF6rYNXlaXB2UGXnlF5MJ3owek4sgV0H5V
- /y/8ddi7tTQTXUhbVX5LHq5x8BFKY7UINjOeZ61cMeA7u/bi4EKxx2bj80rbHFw8NmVdMnOa
- Wklq9kCcizMSkZ3szFLtviY2CQ8UW/VImSJtypqKwkfFJnQTlRWuWl7U1r1MJa6QrmJSlYgw
- DWcEa2JqAGa+NyTCOrt013GDp9BCWGlOV46sEWflxo0f6J8ebfivY0w91knZE5xbmWm9CG+M
- g6Yt0K3dLGoBT27c2M7Wynywot4+MKJagmxUC3UDBQbd0BVJQY+UB0eer3RgS+PJcquTGhon
- rjCHtotZ60IyqNZmnOFr/hEJC6YhmWwyzvokv7GX2Duvpo+Pj957KwARAQABiQIfBCgBCAAJ
- BQJXtGqxAh0DAAoJEFJi5/9JEEn+3D0QAJn9amcJYUmNJkpUesn56/5uec+Jfhknkun1rrbM
- Ufx8Jn8hyiX1jqpU3fdVRy6VGTX4o2O9nM/gx7DfwIhYIclJjn6egJ3WloGO3IVP6z38Qvj0
- BkEJOdyrvHLRyO+dSIQ3ngl0lPFqRqBeieO7O77po3O3iKxZxHqcyeKZvElXTAUWzomXtyVq
- Lub2UIZDqrtff0gYzTRp5Bt5vHF9k7/DvWl163WxNETMvXIHbAeSybGxHZmdZIJpjfXcjaQJ
- LKM5S0Kpb2PEHBJlBvYY1JhlA2tYe/KdgsbnPMPFQ6A7ldn8fvIIiI9vZ4HIhlzclTrte8kx
- VbLR66+g5wu6l30EpX+ONMrDfZM6p+SYukbKJVBH45aPaSJhqyJ5MGqq/AGTHMcS3+vjLHMz
- Iz4xlgpGNM2uN3crFyjdoIFviJH5uLzLSdI6RzfuHBnFUb/aoFePNmWuV/Rk/KoVHGZme3m7
- Q7lqpzLTAga6L/UFIUFfnNRbJkADyfxFhIT31FgadDwv+wYc/l8bjra5MjgYmF5aANivt73N
- L0p3z2fY4N/If9JQljcue1d6C+7SgBwX7uhO9jSzK9pA0q4llanYAgxjtUYudmeBeYRrqS2v
- KLVmnS2f2SuRMa4dkrZG4VIEVddNuuezSv0XpEFJtNXyzylAeHsYRt0bhxj+9k3wW6RliQRE
- BBgBAgAPBQJSc4EiAhsCBQkJZgGAAikJEFJi5/9JEEn+wV0gBBkBAgAGBQJSc4EiAAoJEBvz
- c5c7ZRqnI1UP/0d4D6H2QYgE0O7U3NbS73LG3QHo1uV6BQe1WaZYmiI6P73Q54FZ3Xl/bqdI
- pMsnFGYpKKxPogWh8Izwf/04cr5obXw4XhfWfXfOv/yLRiYr2lsBzWX8Z4OrgzNSJ69E4ECj
- FW05WkoBvF7LmtVD95ruUhPwivu52PzAfIy0L8pxTW5uDDttoBsw465kB+nrQrJwIPj46aLP
- FXX0VhIjWC+yzomQNIaVxgPrhRs3PzhPB17vlggrk2W5awoXgL/gF4ddyJetEt00LHc6ysSC
- Wzh4WNgwFTUL/XC9OSw/Qf7Z+UbdGUSVAyFzFkP0s8tOlXp2EWMUhep/rap7/G7lBLAyLA5E
- QtOYzInFV4KXD8spB5WTHsh/QA30RDpEhq2imAa1F5qTnTbwm3Gh3qbXLv7PI7R/WmqHr43m
- SI+AdJHQsogf8ukdCQhhzDuIUkpa3KFA9ZC8zVyf2IBPqWLkiloOyKvzFSmuF24ooNHEqjAv
- EwbfNUVefKdeen8A7ipDTXQREjowLRBujOxMedWbjBJWjapKBOMep7NbuQ8/0vrDryuJxwQi
- JxYr+q/raDRII/sb9NkUWj4jzDI9NgTlt33c+5ne4dpv++msdxL0rsQ64CFqlpx9nVlsep+I
- 4zTN7+/NsUUbdrBs885gWoc17sZogAWeT9ldsDXzX0S+JFgQTvYP/0/Cwa6eBbw/XlLoHzMs
- 6POlgQy3M27zUfhWWs8p1lN5lahKlxcFjudMtdH66mhpYlQlSjEjUwHIs5vXxckZt2HfSYyg
- hg3Z5yZ8X14NFWbR0J++0G5os1vLFQ+nRM4kwSvn9KnL1txDQ0MwekZ/7VuB5GThYkEiOvgZ
- X7C06ieTtQXoIk3dO+XwnsLl5NcwMlga1sdbM0OQARMKbtKCXRkwWyCaHQI0ei756kUsNCK6
- ZLe3s705sJ77gVwVdUE6Y5255z2r9MH00QdJk7p/5Axa22qda59Vo/7wxXO9M1tI1WUunWQ+
- /xNvnLsCvwVnprx9YDsQ18FaKEX+mc0yOzwKhWpT1IVShck8o1kshaaTmB1u/ZbZBgoFYcrS
- 30kvqVaabEbcuKmkUNTP0h4ewXdpFlx8HoUn/D+etqFR/sdZtzaSYo7F7NAf5ORb5NIyZQTf
- j5MR0b5PT03y/FxsG+LYDhQGxL3ZWtmPYiDT8W3BExwRg4VkRKuPVM/qDhur45CuqwNZXDQX
- ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
- tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
- 2SCIHpzHfm/mpRL2
-Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
-Date:   Mon, 7 Oct 2019 12:50:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727490AbfJGMUN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Oct 2019 08:20:13 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46749 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727536AbfJGMUM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 08:20:12 -0400
+Received: by mail-lf1-f65.google.com with SMTP id t8so9066080lfc.13
+        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2019 05:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Os8LYv3GlllnxFiVD99J7Y92c/T0ucky+2nt+k6FyD8=;
+        b=mR7p6gOhRZycmGgMGM/nfB2/sGvy8dAPH9Cpr7Ms03Nn4uWxNlSKaeP9/QclKqLjRI
+         2B3cMpwOWVIcSb2mNu6wjAKEkbyDoz+5EYo09IMgDN4r9OgckJDd4PPZJ4TRqMPgucVW
+         8bh2Zr0hWxZvzcovM9IHDO1ybwB7MnMlROpybCDAVnu9jIH4+MakavriEv7ahqAZRAZG
+         X4xQJfZaUWearOANKC5IZZmKhhXxhh+pN81QQNfmn1s8lGkoo2XBzb7kcl6QGDdw+6dG
+         TdyHF3SMI86zpi7OgPBk7noyErxatG240L2l0Yl0Dl8HHBgDF57SwjINN2jGoKhowqHa
+         6qIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Os8LYv3GlllnxFiVD99J7Y92c/T0ucky+2nt+k6FyD8=;
+        b=d21Red4CXFxx8t2EOhfHZ6g/FmwCcf8VM7Ee5Zbla3tQt8LYQdzytn3e6M3E6ErCRG
+         aQiNiuaGkCLb3WodqBXpwRy+JmzWpnsGYpF81hWN6+BQW2vUPFUAKBmsnY7rzfhMnW9F
+         XxcsVySElEHIQGKtBCJ56N/kzaBh4kGGAkH5IC5k4A3F+jB4tQojzDLeDpq1nQXHby/Y
+         TbB7ehGcwKzJ4XN/a0jhRbMVbvuZWTdKq3assJiWX6mTN+d2WDXvPfTwrS0SH5hfpMs8
+         fuprGDmm9B2K7f7J4ZAFDlsabMP2tLCKlZHI4L5f/urE/Jbav9AIWKTmK6HAgpn2V5JS
+         K3SA==
+X-Gm-Message-State: APjAAAWKkn8+dCHgnVfKT2tx2+NwDsDfzROmKuzNjanE8HeAiXtrnXdP
+        3/YEi+vymY7cEr4bPjqeMTS9uQzJ+sk4zJKjKQHvaw==
+X-Google-Smtp-Source: APXvYqxf/tMLWirlJUBDHtyLASCbu0L1Io8T6H/E2rHDE5v5FpZsYtBYcnZp9lPm9/POUZ/hSgLnNu9FM9B/M4EK6fs=
+X-Received: by 2002:a05:6512:411:: with SMTP id u17mr6401412lfk.151.1570450809085;
+ Mon, 07 Oct 2019 05:20:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII"
+References: <20191007083051.4820-1-parth@linux.ibm.com> <20191007083051.4820-5-parth@linux.ibm.com>
+In-Reply-To: <20191007083051.4820-5-parth@linux.ibm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 7 Oct 2019 14:19:57 +0200
+Message-ID: <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
+Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
+ background tasks on fewer cores
+To:     Parth Shah <parth@linux.ibm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Doug Smythies <dsmythies@telus.net>,
+        Quentin Perret <quentin.perret@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
-Content-Type: multipart/mixed; boundary="GRH6EAOR51QxsekMaGMKMlm8winrq3Izm";
- protected-headers="v1"
-From: Jonas Meurer <jonas@freesources.org>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, Tim Dittler <tim.dittler@systemli.org>
-Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
-Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
+On Mon, 7 Oct 2019 at 10:31, Parth Shah <parth@linux.ibm.com> wrote:
+>
+> The algorithm finds the first non idle core in the system and tries to
+> place a task in the idle CPU in the chosen core. To maintain
+> cache hotness, work of finding non idle core starts from the prev_cpu,
+> which also reduces task ping-pong behaviour inside of the core.
+>
+> Define a new method to select_non_idle_core which keep tracks of the idle
+> and non-idle CPUs in the core and based on the heuristics determines if the
+> core is sufficiently busy to place the incoming backgroung task. The
+> heuristic further defines the non-idle CPU into either busy (>12.5% util)
+> CPU and overutilized (>80% util) CPU.
+> - The core containing more idle CPUs and no busy CPUs is not selected for
+>   packing
+> - The core if contains more than 1 overutilized CPUs are exempted from
+>   task packing
+> - Pack if there is atleast one busy CPU and overutilized CPUs count is <2
+>
+> Value of 12.5% utilization for busy CPU gives sufficient heuristics for CPU
+> doing enough work and not become idle in nearby timeframe.
+>
+> Signed-off-by: Parth Shah <parth@linux.ibm.com>
+> ---
+>  kernel/sched/core.c |  3 ++
+>  kernel/sched/fair.c | 95 ++++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 97 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 6e1ae8046fe0..7e3aff59540a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -6402,6 +6402,7 @@ static struct kmem_cache *task_group_cache __read_mostly;
+>
+>  DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
+>  DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
+> +DECLARE_PER_CPU(cpumask_var_t, turbo_sched_mask);
+>
+>  void __init sched_init(void)
+>  {
+> @@ -6442,6 +6443,8 @@ void __init sched_init(void)
+>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>                 per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+> +               per_cpu(turbo_sched_mask, i) = (cpumask_var_t)kzalloc_node(
+> +                       cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>         }
+>  #endif /* CONFIG_CPUMASK_OFFSTACK */
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index b798fe7ff7cd..d4a1b6474338 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5353,6 +5353,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>  /* Working cpumask for: load_balance, load_balance_newidle. */
+>  DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
+>  DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
+> +/* A cpumask to find active cores in the system. */
+> +DEFINE_PER_CPU(cpumask_var_t, turbo_sched_mask);
+>
+>  #ifdef CONFIG_NO_HZ_COMMON
+>
+> @@ -5964,6 +5966,76 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, int t
+>         return cpu;
+>  }
+>
+> +#ifdef CONFIG_SCHED_SMT
+> +static inline bool is_background_task(struct task_struct *p)
+> +{
+> +       if (p->flags & PF_CAN_BE_PACKED)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+> +#define busyness_threshold     (100 >> 3)
+> +#define is_cpu_busy(util) ((util) > busyness_threshold)
+> +
+> +/*
+> + * Try to find a non idle core in the system  based on few heuristics:
+> + * - Keep track of overutilized (>80% util) and busy (>12.5% util) CPUs
+> + * - If none CPUs are busy then do not select the core for task packing
+> + * - If atleast one CPU is busy then do task packing unless overutilized CPUs
+> + *   count is < busy/2 CPU count
+> + * - Always select idle CPU for task packing
+> + */
+> +static int select_non_idle_core(struct task_struct *p, int prev_cpu, int target)
+> +{
+> +       struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
+> +       int iter_cpu, sibling;
+> +
+> +       cpumask_and(cpus, cpu_online_mask, p->cpus_ptr);
+> +
+> +       for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
+> +               int idle_cpu_count = 0, non_idle_cpu_count = 0;
+> +               int overutil_cpu_count = 0;
+> +               int busy_cpu_count = 0;
+> +               int best_cpu = iter_cpu;
+> +
+> +               for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
+> +                       __cpumask_clear_cpu(sibling, cpus);
+> +                       if (idle_cpu(iter_cpu)) {
+> +                               idle_cpu_count++;
+> +                               best_cpu = iter_cpu;
+> +                       } else {
+> +                               non_idle_cpu_count++;
+> +                               if (cpu_overutilized(iter_cpu))
+> +                                       overutil_cpu_count++;
+> +                               if (is_cpu_busy(cpu_util(iter_cpu)))
+> +                                       busy_cpu_count++;
+> +                       }
+> +               }
+> +
+> +               /*
+> +                * Pack tasks to this core if
+> +                * 1. Idle CPU count is higher and atleast one is busy
+> +                * 2. If idle_cpu_count < non_idle_cpu_count then ideally do
+> +                * packing but if there are more CPUs overutilized then don't
+> +                * overload it.
 
---GRH6EAOR51QxsekMaGMKMlm8winrq3Izm
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Could you give details about the rationale behind these conditions ?
 
-[Sorry, resending with the correct mailinglist address as recipient]
+> +                */
+> +               if (idle_cpu_count > non_idle_cpu_count) {
+> +                       if (busy_cpu_count)
+> +                               return best_cpu;
+> +               } else {
+> +                       /*
+> +                        * Pack tasks if at max 1 CPU is overutilized
+> +                        */
+> +                       if (overutil_cpu_count < 2)
+> +                               return best_cpu;
+> +               }
+> +       }
+> +
+> +       return select_idle_sibling(p, prev_cpu, target);
+> +}
+> +#endif /* CONFIG_SCHED_SMT */
+> +
+>  /*
+>   * Try and locate an idle core/thread in the LLC cache domain.
+>   */
+> @@ -6418,6 +6490,23 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>         return -1;
+>  }
+>
+> +#ifdef CONFIG_SCHED_SMT
+> +/*
+> + * Select all classified background tasks for task packing
+> + */
+> +static inline int turbosched_select_non_idle_core(struct task_struct *p,
+> +                                                 int prev_cpu, int target)
+> +{
+> +       return select_non_idle_core(p, prev_cpu, target);
+> +}
+> +#else
+> +static inline int turbosched_select_non_idle_core(struct task_struct *p,
+> +                                                 int prev_cpu, int target)
+> +{
+> +       return select_idle_sibling(p, prev_cpu, target);
 
-Hello,
+should be better to make turbosched_select_non_idle_core empty and
+make sure that __turbo_sched_enabled is never enabled if
+CONFIG_SCHED_SMT is disabled
 
-This patch adds a run-time switch at `/sys/power/suspend_sync`.
+> +}
+> +#endif
+> +
+>  /*
+>   * select_task_rq_fair: Select target runqueue for the waking task in domains
+>   * that have the 'sd_flag' flag set. In practice, this is SD_BALANCE_WAKE,
+> @@ -6483,7 +6572,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
+>         } else if (sd_flag & SD_BALANCE_WAKE) { /* XXX always ? */
+>                 /* Fast path */
+>
+> -               new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
+> +               if (is_turbosched_enabled() && unlikely(is_background_task(p)))
+> +                       new_cpu = turbosched_select_non_idle_core(p, prev_cpu,
+> +                                                                 new_cpu);
 
-The switch allows to enable or disable the final sync() from the suspend.=
-c
-Linux Kernel system suspend implementation. This is useful to avoid race
-conditions if block devices have been suspended before. Be aware that you=
-
-have to take care of sync() yourself before suspending the system if you
-disable it here.
-
-Since this is my first patch against the Linux kernel and I don't
-consider it ready for inclusion yet, I decided to send it to pm-linux
-and the PM subsystem maintainers only first. Would be very glad if you
-could take a look and comment on it :)
-
-Some questions:
-
-* There already is a build-time config flag[2] for en- or disabling the
-  sync() in suspend.c. Is it acceptable to have both a build-time *and*
-  a *run-time* switch? Or would a run-time switch have to replace the
-  build-time switch? If so, a direct question to Rafael, as you added
-  the build-time flag: Would that be ok for you?
-* I'm unsure about the naming: since the default is to have the sync
-  enabled, would `suspend_disable_sync` be a better name for the switch,
-  obviously defaulting to 0 then and skipping the sync at value 1?
-
-To give a bit more contect: In Debian, we're currently working[3] on
-support to suspend unlocked dm-crypt devices before system suspend.
-During that work, we realized that the final sync() from Linux Kernel
-system suspend implementation can lead to a dead lock.
-
-I wrote a simple reproducer[4] to cause the dead lock in a reliable way.
-
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/kernel/power/suspend.c?id=3D54ecb8f#n569
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/?id=3D2fd77f
-[3] https://salsa.debian.org/mejo/cryptsetup-suspend
-[4] https://salsa.debian.org/mejo/cryptsetup-suspend/snippets/334
-
-
-Signed-off-by: Jonas Meurer <jonas@freesources.org>
----
- Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
- include/linux/suspend.h               |    2 +
- kernel/power/main.c                   |   35 +++++++++++++++++++++++++++=
-+++++++
- kernel/power/suspend.c                |    2 -
- 4 files changed, 53 insertions(+), 2 deletions(-)
-
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
- 	if (state =3D=3D PM_SUSPEND_TO_IDLE)
- 		s2idle_begin();
-=20
--	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
-+	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && suspend_sync_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
- 		ksys_sync_helper();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
- extern void arch_suspend_enable_irqs(void);
-=20
- extern int pm_suspend(suspend_state_t state);
-+extern bool suspend_sync_enabled;
- #else /* !CONFIG_SUSPEND */
- #define suspend_valid_only_mem	NULL
-=20
-@@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
-=20
- static inline void suspend_set_ops(const struct platform_suspend_ops *op=
-s) {}
- static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-+static inline bool suspend_sync_enabled(void) { return true; }
- static inline bool idle_should_enter_s2idle(void) { return false; }
- static inline void __init pm_states_init(void) {}
- static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops)=
- {}
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
- power_attr(mem_sleep);
- #endif /* CONFIG_SUSPEND */
-=20
-+#ifdef CONFIG_SUSPEND
-+/*
-+ * suspend_sync: invoke ksys_sync_helper() before suspend.
-+ *
-+ * show() returns whether ksys_sync_helper() is invoked before suspend.
-+ * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables =
-it.
-+ */
-+bool suspend_sync_enabled =3D true;
-+
-+static ssize_t suspend_sync_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%d\n", suspend_sync_enabled);
-+}
-+
-+static ssize_t suspend_sync_store(struct kobject *kobj,
-+				    struct kobj_attribute *attr,
-+				    const char *buf, size_t n)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+
-+	if (val > 1)
-+		return -EINVAL;
-+
-+	suspend_sync_enabled =3D !!val;
-+	return n;
-+}
-+
-+power_attr(suspend_sync);
-+#endif /* CONFIG_SUSPEND */
-+
- #ifdef CONFIG_PM_SLEEP_DEBUG
- int pm_test_level =3D TEST_NONE;
-=20
-@@ -769,6 +803,7 @@ static struct attribute * g[] =3D {
- 	&wakeup_count_attr.attr,
- #ifdef CONFIG_SUSPEND
- 	&mem_sleep_attr.attr,
-+	&suspend_sync_attr.attr,
- #endif
- #ifdef CONFIG_PM_AUTOSLEEP
- 	&autosleep_attr.attr,
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -300,4 +300,18 @@ Description:
- 		attempt.
-=20
- 		Using this sysfs file will override any values that were
--		set using the kernel command line for disk offset.
-\ No newline at end of file
-+		set using the kernel command line for disk offset.
-+
-+What:		/sys/power/suspend_sync
-+Date:		October 2019
-+Contact:	Jonas Meurer <jonas@freesources.org>
-+Description:
-+		This file controls the switch to enable or disable the final
-+		sync() before system suspend. This is useful to avoid race
-+		conditions if block devices have been suspended before. Be
-+		aware that you have to take care of sync() yourself before
-+		suspending the system if you disable it here.
-+
-+		Writing a "1" (default) to this file enables the sync() and
-+		writing a "0" disables it. Reads from the file return the
-+		current value.
---=20
-Jonas Meurer
+Could you add turbosched_select_non_idle_core() similarly to
+find_energy_efficient_cpu() ?
+Add it at the beg select_task_rq_fair()
+Return immediately with theCPU if you have found one
+Or let the normal path select a CPU if the
+turbosched_select_non_idle_core() has not been able to find a suitable
+CPU for packing
 
 
-
-
-
-
---GRH6EAOR51QxsekMaGMKMlm8winrq3Izm--
-
---htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEELIzSg9Pv30M4kOeDUmLn/0kQSf4FAl2bGGYACgkQUmLn/0kQ
-Sf4oxA//TR3FPu09y24+FXohp33PUVfkbkm+siSShL5QtJ/D2OqhrKuyNc1VnzZG
-B5O9BvHDC2YqIL+72lJkxg0HGtwJd2nfKqVFYvwHYqS9jHrG7Xb9Btev/jOgmk2r
-Msv7jnwpsxBTMWUEOo6Pio16kBG2LO3b2/Q7oJSTbxVoFEGFv1JkViMNmUty+kKV
-A830zLnAIwCBr7ocpFnhGgCPa1rWHUM6/i8LP3/l+FCia7YzOAvZo3n9Nl46UDqs
-eKPJQDUkWrLKYA8ScTK5ZP4CDTA0ea2F2nzk42CEnLSL7dCrC+lM52O25lCcZOX+
-VEW0LPTqkqzj/szIm3uMVrlDx+XPJvV5BsdTcZ5JqKDq6iv42CaEEXe0yem4/l+w
-tqwh4E6cbQ9CHJIHgDvvjM8JTPFZeqK8yxrePXTEpOEJG+LfTngRX8RGUigMTTCL
-ax4OlAXxsoViOvJgBGpdJFA9usPa6Jp/eXy+SHTs0VVNhsaprhKvruMvz3sIg+0z
-HlmjomhEPwtPKylsfATRRjcdzsM/cgBpQZubX3V9G6IKqrAiLiAJ3TMsnXVjyJe6
-j77UTGrGlzAtWP0azmCsx8/pytcNhxHjGGkEZOPgjsl8ru8fTw9ut3tnPs13i6EV
-ZZJ1ZnH8VrGgXfPLKhxjh4mR0+z4QzbtaXYEKdzD8AbO5KSxa/8=
-=yw+g
------END PGP SIGNATURE-----
-
---htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII--
+> +               else
+> +                       new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
+>
+>                 if (want_affine)
+>                         current->recent_used_cpu = cpu;
+> --
+> 2.17.1
+>
