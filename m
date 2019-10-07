@@ -2,191 +2,336 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED64CE89F
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 18:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64323CE9DB
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 18:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbfJGQHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Oct 2019 12:07:21 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:38983 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727711AbfJGQHV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 12:07:21 -0400
-Received: by mail-ed1-f65.google.com with SMTP id a15so12978210edt.6;
-        Mon, 07 Oct 2019 09:07:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NkOSCy7RY8YMsa1CzUdb6qn+7D24sPQ2vGSBGYLAcmM=;
-        b=M15OPNPR5bfk/4i4QtM0eZsiRxLLD+PgaFOJhibsb3HMman5Wa+Bs4Ft5LKBUNnZcH
-         PkkKwNntFiS53d3RLiyuSc6xkz39Eep3yneI43xmEv+/bMPM4Sx6slZEcAWvb4yfxvjg
-         KFPuReaYulhLv17/StR62VgAuioJsbZGBHEDPeGuiHGrsX4rXPyMj/6Iwrtm5whvwWFD
-         JT/mA+AeG1wDQKN+XZASthsyYOWDYYHphyTgTJKvg7V/MhOWa1mKjA/qNi6e1cAiRI8F
-         9RqUZLCQQ9qASF3SzNvbURAGNhW4JJCfJMTXIVOexP1RiWkhqfdjXV4Eo9/ToJPcxWh4
-         Nr2g==
-X-Gm-Message-State: APjAAAXX8LZ6YTiYevAUz749883YX0dU10PGf6zhwjkY/kZkchVirU/C
-        dbRjrIX5jetcQaSe87kjjyjlx78cuHY=
-X-Google-Smtp-Source: APXvYqyz++kR3+7DzCmTgDLj8RgfpVMZQZUzoljOtxG963IPIwTlnydwl9sRiBm33Zkq/5SqMr5sAA==
-X-Received: by 2002:a17:906:828c:: with SMTP id h12mr24066464ejx.155.1570464438292;
-        Mon, 07 Oct 2019 09:07:18 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id e5sm3466828edl.8.2019.10.07.09.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2019 09:07:18 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id j18so15198643wrq.10;
-        Mon, 07 Oct 2019 09:07:17 -0700 (PDT)
-X-Received: by 2002:adf:e50e:: with SMTP id j14mr23607757wrm.178.1570464437624;
- Mon, 07 Oct 2019 09:07:17 -0700 (PDT)
+        id S1728028AbfJGQyO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Oct 2019 12:54:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50748 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727935AbfJGQyO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 12:54:14 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x97Gksw3137474
+        for <linux-pm@vger.kernel.org>; Mon, 7 Oct 2019 12:54:12 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2vg8eh9w93-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2019 12:54:12 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
+        Mon, 7 Oct 2019 17:54:10 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 7 Oct 2019 17:54:07 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x97Gs6Qf46727528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Oct 2019 16:54:06 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9EC09A405F;
+        Mon,  7 Oct 2019 16:54:06 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61334A405B;
+        Mon,  7 Oct 2019 16:54:00 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.199.48.139])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Oct 2019 16:54:00 +0000 (GMT)
+Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
+ background tasks on fewer cores
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Doug Smythies <dsmythies@telus.net>,
+        Quentin Perret <quentin.perret@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20191007083051.4820-1-parth@linux.ibm.com>
+ <20191007083051.4820-5-parth@linux.ibm.com>
+ <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
+From:   Parth Shah <parth@linux.ibm.com>
+Date:   Mon, 7 Oct 2019 22:23:58 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.0
 MIME-Version: 1.0
-References: <20191002112545.58481-1-icenowy@aosc.io> <20191002112545.58481-3-icenowy@aosc.io>
-In-Reply-To: <20191002112545.58481-3-icenowy@aosc.io>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Tue, 8 Oct 2019 00:07:05 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65MPG=zbKtQk1oXq+TYP=0fPBXEj0fcGA=6mCD2+Smmpg@mail.gmail.com>
-Message-ID: <CAGb2v65MPG=zbKtQk1oXq+TYP=0fPBXEj0fcGA=6mCD2+Smmpg@mail.gmail.com>
-Subject: Re: [linux-sunxi] [PATCH 2/2] power: supply: axp20x_usb_power: add
- applied max Vbus support for AXP813
-To:     Icenowy Zheng <icenowy@aosc.io>, Sebastian Reichel <sre@kernel.org>
-Cc:     "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19100716-0020-0000-0000-00000375E1F7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19100716-0021-0000-0000-000021CBFAD5
+Message-Id: <80bb34ec-6358-f4dc-d20d-cde6c9d7e197@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910070157
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On Wed, Oct 2, 2019 at 7:27 PM Icenowy Zheng <icenowy@aosc.io> wrote:
->
-> AXP813 PMIC has two Vbus maximum value settings -- one is the default
-> value, which is currently the only supported one; the other is the
-> really applied value, which is set according to the default value if the
-> BC detection module detected a charging port, or 500mA if no charging
-> port is detected.
->
-> Add support for reading and writing of the really applied Vbus maxmium
-> value. Interestingly it has a larger range than the default value.
->
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> ---
->  drivers/power/supply/axp20x_usb_power.c | 132 +++++++++++++++++++++++-
->  1 file changed, 129 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-> index 5f0a5722b19e..905668a2727f 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
 
-[...]
+On 10/7/19 5:49 PM, Vincent Guittot wrote:
+> On Mon, 7 Oct 2019 at 10:31, Parth Shah <parth@linux.ibm.com> wrote:
+>>
+>> The algorithm finds the first non idle core in the system and tries to
+>> place a task in the idle CPU in the chosen core. To maintain
+>> cache hotness, work of finding non idle core starts from the prev_cpu,
+>> which also reduces task ping-pong behaviour inside of the core.
+>>
+>> Define a new method to select_non_idle_core which keep tracks of the idle
+>> and non-idle CPUs in the core and based on the heuristics determines if the
+>> core is sufficiently busy to place the incoming backgroung task. The
+>> heuristic further defines the non-idle CPU into either busy (>12.5% util)
+>> CPU and overutilized (>80% util) CPU.
+>> - The core containing more idle CPUs and no busy CPUs is not selected for
+>>   packing
+>> - The core if contains more than 1 overutilized CPUs are exempted from
+>>   task packing
+>> - Pack if there is atleast one busy CPU and overutilized CPUs count is <2
+>>
+>> Value of 12.5% utilization for busy CPU gives sufficient heuristics for CPU
+>> doing enough work and not become idle in nearby timeframe.
+>>
+>> Signed-off-by: Parth Shah <parth@linux.ibm.com>
+>> ---
+>>  kernel/sched/core.c |  3 ++
+>>  kernel/sched/fair.c | 95 ++++++++++++++++++++++++++++++++++++++++++++-
+>>  2 files changed, 97 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 6e1ae8046fe0..7e3aff59540a 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -6402,6 +6402,7 @@ static struct kmem_cache *task_group_cache __read_mostly;
+>>
+>>  DECLARE_PER_CPU(cpumask_var_t, load_balance_mask);
+>>  DECLARE_PER_CPU(cpumask_var_t, select_idle_mask);
+>> +DECLARE_PER_CPU(cpumask_var_t, turbo_sched_mask);
+>>
+>>  void __init sched_init(void)
+>>  {
+>> @@ -6442,6 +6443,8 @@ void __init sched_init(void)
+>>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>>                 per_cpu(select_idle_mask, i) = (cpumask_var_t)kzalloc_node(
+>>                         cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>> +               per_cpu(turbo_sched_mask, i) = (cpumask_var_t)kzalloc_node(
+>> +                       cpumask_size(), GFP_KERNEL, cpu_to_node(i));
+>>         }
+>>  #endif /* CONFIG_CPUMASK_OFFSTACK */
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index b798fe7ff7cd..d4a1b6474338 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -5353,6 +5353,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>>  /* Working cpumask for: load_balance, load_balance_newidle. */
+>>  DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
+>>  DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
+>> +/* A cpumask to find active cores in the system. */
+>> +DEFINE_PER_CPU(cpumask_var_t, turbo_sched_mask);
+>>
+>>  #ifdef CONFIG_NO_HZ_COMMON
+>>
+>> @@ -5964,6 +5966,76 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, int t
+>>         return cpu;
+>>  }
+>>
+>> +#ifdef CONFIG_SCHED_SMT
+>> +static inline bool is_background_task(struct task_struct *p)
+>> +{
+>> +       if (p->flags & PF_CAN_BE_PACKED)
+>> +               return true;
+>> +
+>> +       return false;
+>> +}
+>> +
+>> +#define busyness_threshold     (100 >> 3)
+>> +#define is_cpu_busy(util) ((util) > busyness_threshold)
+>> +
+>> +/*
+>> + * Try to find a non idle core in the system  based on few heuristics:
+>> + * - Keep track of overutilized (>80% util) and busy (>12.5% util) CPUs
+>> + * - If none CPUs are busy then do not select the core for task packing
+>> + * - If atleast one CPU is busy then do task packing unless overutilized CPUs
+>> + *   count is < busy/2 CPU count
+>> + * - Always select idle CPU for task packing
+>> + */
+>> +static int select_non_idle_core(struct task_struct *p, int prev_cpu, int target)
+>> +{
+>> +       struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
+>> +       int iter_cpu, sibling;
+>> +
+>> +       cpumask_and(cpus, cpu_online_mask, p->cpus_ptr);
+>> +
+>> +       for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
+>> +               int idle_cpu_count = 0, non_idle_cpu_count = 0;
+>> +               int overutil_cpu_count = 0;
+>> +               int busy_cpu_count = 0;
+>> +               int best_cpu = iter_cpu;
+>> +
+>> +               for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
+>> +                       __cpumask_clear_cpu(sibling, cpus);
+>> +                       if (idle_cpu(iter_cpu)) {
+>> +                               idle_cpu_count++;
+>> +                               best_cpu = iter_cpu;
+>> +                       } else {
+>> +                               non_idle_cpu_count++;
+>> +                               if (cpu_overutilized(iter_cpu))
+>> +                                       overutil_cpu_count++;
+>> +                               if (is_cpu_busy(cpu_util(iter_cpu)))
+>> +                                       busy_cpu_count++;
+>> +                       }
+>> +               }
+>> +
+>> +               /*
+>> +                * Pack tasks to this core if
+>> +                * 1. Idle CPU count is higher and atleast one is busy
+>> +                * 2. If idle_cpu_count < non_idle_cpu_count then ideally do
+>> +                * packing but if there are more CPUs overutilized then don't
+>> +                * overload it.
+> 
+> Could you give details about the rationale behind these conditions ?
 
-> @@ -354,6 +451,9 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
->                                                                 val->intval);
->                 return axp20x_usb_power_set_current_max(power, val->intval);
->
-> +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +               return axp20x_usb_power_set_input_current_limit(power, val->intval);
-> +
+sure. but first maybe some background is required for busy_cpu.
+Task packing needs to be done across cores minimizing number of busy cores
+in the chip. Hence when picking a core for packing a background task it
+will be good to not select a core which is in deeper idle-states.
 
-So I think there are two things that should be adjusted.
+Usually deeper idle states have target_residency >= 10ms which are really
+power saving states and saved power can be channeled to active cores.
+A CPU with utilization of 12.5% is most probably not going to those deeper
+idle states and picking a CPU with >= 12.5% util seems to be a good
+approximation.
 
-First, we should be using POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT for all PMICs.
-As far as the sysfs documents go, CURRENT_MAX is read-only, and should refer to
-the hard limit the hardware can support, i.e. maximum power ratings.
-INPUT_CURRENT_LIMIT and INPUT_VOLTAGE_LIMIT are for configurable upper and lower
-limits respectively.
+Now going to the _main point_, task packing needs to take care of the
+following scenarios:
+1. Not select a core having all the CPUs idle or <= 12.5% util
+2. Do not select a core with 2 or more CPUs overloaded (>=80% util)
+3. Select a core even if 1 CPU is overloaded as background tasks are
+usually short running and spending time for selecting better alternative is
+not worth the investment here
+4. Select a core if at least one CPU is busy (>=12.5% util)
+5. On selecting a core, select an idle CPU in it.
 
-Sebastian, is my understanding of this correct?
+Hence to satisfy this scenarios for SMT-1/2/4 (POWER9) or 8 (POWER8 has
+8-threads per core/ POWER9 has feature to make fake SMT-8), the approach
+keeps track of idle, non-idle, busy and overloaded CPU count in the core
+and uses above approach to find _sufficiently_ non-idle core, which seems
+to be a good heuristics to do task packing without much of regression on
+CPU intensive threads.
 
-We already use INPUT_CURRENT_LIMIT for the AXP813 in the axp20x-ac driver, and
-it would be nice to have both drivers expose the same attributes.
+So as per the comments in this patch, first point covers the scenario 1 and
+4 (if part in the code), and second point covers scenario 2 and 3 (else
+part in the code).
 
-Second, since the value set in register 0x35 is the one that actually has an
-effect, as opposed to just being a default, we should just use that one.
+>> +                */
+>> +               if (idle_cpu_count > non_idle_cpu_count) {
+>> +                       if (busy_cpu_count)
+>> +                               return best_cpu;
+>> +               } else {
+>> +                       /*
+>> +                        * Pack tasks if at max 1 CPU is overutilized
+>> +                        */
+>> +                       if (overutil_cpu_count < 2)
+>> +                               return best_cpu;
+>> +               }
+>> +       }
+>> +
+>> +       return select_idle_sibling(p, prev_cpu, target);
+>> +}
+>> +#endif /* CONFIG_SCHED_SMT */
+>> +
+>>  /*
+>>   * Try and locate an idle core/thread in the LLC cache domain.
+>>   */
+>> @@ -6418,6 +6490,23 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>>         return -1;
+>>  }
+>>
+>> +#ifdef CONFIG_SCHED_SMT
+>> +/*
+>> + * Select all classified background tasks for task packing
+>> + */
+>> +static inline int turbosched_select_non_idle_core(struct task_struct *p,
+>> +                                                 int prev_cpu, int target)
+>> +{
+>> +       return select_non_idle_core(p, prev_cpu, target);
+>> +}
+>> +#else
+>> +static inline int turbosched_select_non_idle_core(struct task_struct *p,
+>> +                                                 int prev_cpu, int target)
+>> +{
+>> +       return select_idle_sibling(p, prev_cpu, target);
+> 
+> should be better to make turbosched_select_non_idle_core empty and
+> make sure that __turbo_sched_enabled is never enabled if
+> CONFIG_SCHED_SMT is disabled
+> 
 
-Could you restructure the series based on what I described, with a new patch 1
-switching from CURRENT_MAX to INPUT_CURRENT_LIMIT, and then this patch
-as patch 2?
-And both patches should have Fixes tags and possibly CC stable so they
-get backported
-for people that are using stable kernels? And then the original patch
-2 as patch 3.
+Totally agreed. I thought keeping like this so as to not have any "#def.."
+in select_task_rq_fair method.
+So can I do this by adding a new method like __select_idle_sibling() which
+will call turbosched_select_non_idle_core() in case of SCHED_SMT present
+and otherwise will call the regular select_idle_sibling()?
 
-ChenYu
+>> +}
+>> +#endif
+>> +
+>>  /*
+>>   * select_task_rq_fair: Select target runqueue for the waking task in domains
+>>   * that have the 'sd_flag' flag set. In practice, this is SD_BALANCE_WAKE,
+>> @@ -6483,7 +6572,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
+>>         } else if (sd_flag & SD_BALANCE_WAKE) { /* XXX always ? */
+>>                 /* Fast path */
+>>
+>> -               new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
+>> +               if (is_turbosched_enabled() && unlikely(is_background_task(p)))
+>> +                       new_cpu = turbosched_select_non_idle_core(p, prev_cpu,
+>> +                                                                 new_cpu);
+> 
+> Could you add turbosched_select_non_idle_core() similarly to
+> find_energy_efficient_cpu() ?
+> Add it at the beg select_task_rq_fair()
+> Return immediately with theCPU if you have found one
+> Or let the normal path select a CPU if the
+> turbosched_select_non_idle_core() has not been able to find a suitable
+> CPU for packing
+> 
 
->         default:
->                 return -EINVAL;
->         }
-> @@ -365,7 +465,8 @@ static int axp20x_usb_power_prop_writeable(struct power_supply *psy,
->                                            enum power_supply_property psp)
->  {
->         return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN ||
-> -              psp == POWER_SUPPLY_PROP_CURRENT_MAX;
-> +              psp == POWER_SUPPLY_PROP_CURRENT_MAX ||
-> +              psp == POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT;
->  }
->
->  static enum power_supply_property axp20x_usb_power_properties[] = {
-> @@ -386,6 +487,15 @@ static enum power_supply_property axp22x_usb_power_properties[] = {
->         POWER_SUPPLY_PROP_CURRENT_MAX,
->  };
->
-> +static enum power_supply_property axp813_usb_power_properties[] = {
-> +       POWER_SUPPLY_PROP_HEALTH,
-> +       POWER_SUPPLY_PROP_PRESENT,
-> +       POWER_SUPPLY_PROP_ONLINE,
-> +       POWER_SUPPLY_PROP_VOLTAGE_MIN,
-> +       POWER_SUPPLY_PROP_CURRENT_MAX,
-> +       POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> +};
-> +
->  static const struct power_supply_desc axp20x_usb_power_desc = {
->         .name = "axp20x-usb",
->         .type = POWER_SUPPLY_TYPE_USB,
-> @@ -406,6 +516,16 @@ static const struct power_supply_desc axp22x_usb_power_desc = {
->         .set_property = axp20x_usb_power_set_property,
->  };
->
-> +static const struct power_supply_desc axp813_usb_power_desc = {
-> +       .name = "axp20x-usb",
-> +       .type = POWER_SUPPLY_TYPE_USB,
-> +       .properties = axp813_usb_power_properties,
-> +       .num_properties = ARRAY_SIZE(axp813_usb_power_properties),
-> +       .property_is_writeable = axp20x_usb_power_prop_writeable,
-> +       .get_property = axp20x_usb_power_get_property,
-> +       .set_property = axp20x_usb_power_set_property,
-> +};
-> +
->  static int configure_iio_channels(struct platform_device *pdev,
->                                   struct axp20x_usb_power *power)
->  {
-> @@ -487,10 +607,16 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
->                 usb_power_desc = &axp20x_usb_power_desc;
->                 irq_names = axp20x_irq_names;
->         } else if (power->axp20x_id == AXP221_ID ||
-> -                  power->axp20x_id == AXP223_ID ||
-> -                  power->axp20x_id == AXP813_ID) {
-> +                  power->axp20x_id == AXP223_ID) {
->                 usb_power_desc = &axp22x_usb_power_desc;
->                 irq_names = axp22x_irq_names;
-> +       } else if (power->axp20x_id == AXP813_ID) {
-> +               usb_power_desc = &axp813_usb_power_desc;
-> +               irq_names = axp22x_irq_names;
-> +
-> +               /* Enable USB Battery Charging specification detection */
-> +               regmap_update_bits(axp20x->regmap, AXP288_BC_GLOBAL,
-> +                                  AXP813_BC_EN, AXP813_BC_EN);
+of course. I can do that.
+I was just not aware about the effect of wake_affine and so was waiting for
+such comments to be sure of. Thanks for this.
+Maybe I can add just below the sched_energy_present(){...} construct giving
+precedence to EAS? I'm asking this because I remember Patrick telling me to
+leverage task packing for android as well?
 
-This seems like a duplicate of
 
->         } else {
->                 dev_err(&pdev->dev, "Unsupported AXP variant: %ld\n",
->                         axp20x->variant);
-> --
-> 2.21.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "linux-sunxi" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to linux-sunxi+unsubscribe@googlegroups.com.
-> To view this discussion on the web, visit https://groups.google.com/d/msgid/linux-sunxi/20191002112545.58481-3-icenowy%40aosc.io.
+Thank you very much for looking at the patches.
+Parth
+
+> 
+>> +               else
+>> +                       new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
+>>
+>>                 if (want_affine)
+>>                         current->recent_used_cpu = cpu;
+>> --
+>> 2.17.1
+>>
+
