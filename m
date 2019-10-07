@@ -2,117 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAC8CDD5E
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57919CDD88
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 10:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbfJGIbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Oct 2019 04:31:19 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28374 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727587AbfJGIbT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 04:31:19 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x978SM35100554
-        for <linux-pm@vger.kernel.org>; Mon, 7 Oct 2019 04:31:18 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vg097tx49-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2019 04:31:17 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Mon, 7 Oct 2019 09:31:15 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 7 Oct 2019 09:31:11 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x978VAbY40239290
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Oct 2019 08:31:10 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E54A211C050;
-        Mon,  7 Oct 2019 08:31:09 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2C6111C054;
-        Mon,  7 Oct 2019 08:31:07 +0000 (GMT)
-Received: from localhost.in.ibm.com (unknown [9.124.35.220])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Oct 2019 08:31:07 +0000 (GMT)
-From:   Parth Shah <parth@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, patrick.bellasi@matbug.net,
-        valentin.schneider@arm.com, pavel@ucw.cz, dsmythies@telus.net,
-        quentin.perret@arm.com, rafael.j.wysocki@intel.com,
-        tim.c.chen@linux.intel.com, daniel.lezcano@linaro.org
-Subject: [RFC v5 6/6] powerpc: Set turbo domain to NUMA node for task packing
-Date:   Mon,  7 Oct 2019 14:00:51 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007083051.4820-1-parth@linux.ibm.com>
-References: <20191007083051.4820-1-parth@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19100708-0028-0000-0000-000003A6BE4F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100708-0029-0000-0000-00002468CDD2
-Message-Id: <20191007083051.4820-7-parth@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910070088
+        id S1727306AbfJGIog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Oct 2019 04:44:36 -0400
+Received: from mga09.intel.com ([134.134.136.24]:16703 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727258AbfJGIof (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Oct 2019 04:44:35 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Oct 2019 01:44:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,267,1566889200"; 
+   d="scan'208";a="276727970"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2019 01:44:31 -0700
+Received: from andy by smile with local (Exim 4.92.2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1iHOd3-0005O0-Rr; Mon, 07 Oct 2019 11:44:29 +0300
+Date:   Mon, 7 Oct 2019 11:44:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux@rasmusvillemoes.dk, yamada.masahiro@socionext.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
+        sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk
+Subject: Re: [PATCH v16 11/14] thermal: intel: intel_soc_dts_iosf: Utilize
+ for_each_set_clump8 macro
+Message-ID: <20191007084429.GN32742@smile.fi.intel.com>
+References: <cover.1570374078.git.vilhelm.gray@gmail.com>
+ <8e85aa4ccead5c330d7abdbda292f32a0c48902e.1570374078.git.vilhelm.gray@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e85aa4ccead5c330d7abdbda292f32a0c48902e.1570374078.git.vilhelm.gray@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Provide an powerpc architecture specific implementation for defining the
-turbo domain to make searching of the core to be bound within the NUMA.
+On Sun, Oct 06, 2019 at 11:11:08AM -0400, William Breathitt Gray wrote:
+> Utilize for_each_set_clump8 macro, and the bitmap_set_value8 and
+> bitmap_get_value8 functions, where appropriate. In addition, remove the
+> now unnecessary temp_mask and temp_shift members of the
+> intel_soc_dts_sensor_entry structure.
 
-The POWER9 systems have a pair of cores in the LLC domain. Hence to make
-TurboSched more effective, increase the domain space for task packing
-to search within NUMA domain.
+Since it perhaps will be next version, I have few style comments here
+(ignore them if you are not going to send a new version by some other reasons).
 
-Signed-off-by: Parth Shah <parth@linux.ibm.com>
----
- arch/powerpc/include/asm/topology.h | 3 +++
- arch/powerpc/kernel/smp.c           | 7 +++++++
- 2 files changed, 10 insertions(+)
+>  	int status;
+>  	u32 temp_out;
 
-diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-index f85e2b01c3df..b2493bb11653 100644
---- a/arch/powerpc/include/asm/topology.h
-+++ b/arch/powerpc/include/asm/topology.h
-@@ -132,6 +132,9 @@ static inline void shared_proc_topology_init(void) {}
- #define topology_sibling_cpumask(cpu)	(per_cpu(cpu_sibling_map, cpu))
- #define topology_core_cpumask(cpu)	(per_cpu(cpu_core_map, cpu))
- #define topology_core_id(cpu)		(cpu_to_core_id(cpu))
-+#define arch_turbo_domain		powerpc_turbo_domain
-+
-+struct cpumask *powerpc_turbo_domain(int cpu);
- 
- int dlpar_cpu_readd(int cpu);
- #endif
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index ea6adbf6a221..0fc4443a3f27 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1169,6 +1169,13 @@ static void remove_cpu_from_masks(int cpu)
- }
- #endif
- 
-+#ifdef CONFIG_SCHED_SMT
-+inline struct cpumask *powerpc_turbo_domain(int cpu)
-+{
-+	return cpumask_of_node(cpu_to_node(cpu));
-+}
-+#endif
-+
- static inline void add_cpu_to_smallcore_masks(int cpu)
- {
- 	struct cpumask *this_l1_cache_map = per_cpu(cpu_l1_cache_map, cpu);
+> +	unsigned long update_ptps;
+
+I think it's better to put it one line below.
+
+>  	u32 out;
+>  	u32 store_ptps;
+>  	u32 store_ptmc;
+
+> -	out = (store_ptps & ~(0xFF << (thres_index * 8)));
+> -	out |= (temp_out & 0xFF) << (thres_index * 8);
+> +	update_ptps = store_ptps;
+> +	bitmap_set_value8(&update_ptps, temp_out & 0xFF, thres_index * 8);
+> +	out = update_ptps;
+
++ blank line?
+
+After this change it seems we may drop temp_out and use out instead.
+
+> -	out = (out & dts->temp_mask) >> dts->temp_shift;
+> +	temp_raw = out;
+> +	out = bitmap_get_value8(&temp_raw, dts->id * 8);
+
+>  	out -= SOC_DTS_TJMAX_ENCODING;
+>  	*temp = sensors->tj_max - out * 1000;
+
+We may also join these together, though it's up to you.
+
+>  	char name[10];
+>  	int trip_count = 0;
+
+> +	int writable_trip_count = 0;
+
+Perhaps move it after next line, or before previous one.
+
+>  	int trip_mask = 0;
+>  	u32 store_ptps;
+>  	int ret;
+
+> -	int i;
+> +	unsigned long i;
+
+We may skip this change, but if we go with it, better to place before
+'int ret;' line.
+
+> +	unsigned long trip;
+> +	unsigned long ptps;
+
+I would group each of these with relative group of definitions above.
+
+>  	if (notification_support) {
+>  		trip_count = min(SOC_MAX_DTS_TRIPS, trip_cnt);
+> +		writable_trip_count = trip_count - read_only_trip_cnt;
+
+Maybe writable_trip_count -> writable_trip_cnt? (in align with r/o one).
+
+> +		trip_mask = GENMASK(writable_trip_count - 1, 0);
+>  	}
+
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
