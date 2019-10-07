@@ -2,159 +2,337 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4D6CDD9A
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 10:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02ADCDFFE
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 13:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727307AbfJGIqr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Oct 2019 04:46:47 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726010AbfJGIqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 04:46:47 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x978gb7N040005
-        for <linux-pm@vger.kernel.org>; Mon, 7 Oct 2019 04:46:45 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vg1h996e4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Mon, 07 Oct 2019 04:46:45 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Mon, 7 Oct 2019 09:46:43 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 7 Oct 2019 09:46:36 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x978kZKf54853744
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Oct 2019 08:46:35 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A765EA405F;
-        Mon,  7 Oct 2019 08:46:35 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42FC1A4066;
-        Mon,  7 Oct 2019 08:46:32 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.124.35.220])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Oct 2019 08:46:32 +0000 (GMT)
-Subject: Re: [Discussion v2] Usecases for the per-task latency-nice attribute
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "qais.yousef@arm.com" <qais.yousef@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "morten.rasmussen@arm.com" <morten.rasmussen@arm.com>,
-        "pjt@google.com" <pjt@google.com>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "dhaval.giani@oracle.com" <dhaval.giani@oracle.com>,
-        "quentin.perret@arm.com" <quentin.perret@arm.com>,
-        subhra mazumdar <subhra.mazumdar@oracle.com>,
-        "ggherdovich@suse.cz" <ggherdovich@suse.cz>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>
-References: <2bd46086-43ff-f130-8720-8eec694eb55b@linux.ibm.com>
- <9645e7c625a84bfabac001fd6ef35559@AcuMS.aculab.com>
-From:   Parth Shah <parth@linux.ibm.com>
-Date:   Mon, 7 Oct 2019 14:16:31 +0530
+        id S1727395AbfJGLNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Oct 2019 07:13:32 -0400
+Received: from mx3.freesources.org ([195.34.172.217]:58739 "EHLO
+        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727600AbfJGLNc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Oct 2019 07:13:32 -0400
+X-Greylist: delayed 1390 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Oct 2019 07:13:30 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
+        h=Content-Type:MIME-Version:Date:Message-ID:Cc:To:Subject:From; bh=uG7lqHneOJV1Of7DmLg6Y0FXG9WLuc/+DFGDNUtPpJg=;
+        b=VpEkLDaKpVpWrSXUhtEy/jv+u8VDMvvQA9wu7wEkQqZ0UVHygQyE4pNbEQ0KIF3FCFdCACjxwhcr6+Pa6rdVHysICOCzqe+SSfwYwdwso+J6WlnAmttSr2nkeoeHzNm+sJfKtGi8zWgiOspDsIGcRSUT+F0gn1uNjS9UH1Fmey4=;
+Received: from anon-42-243.vpn.ipredator.se ([46.246.42.243])
+        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <jonas@freesources.org>)
+        id 1iHQan-0000KY-To; Mon, 07 Oct 2019 10:50:18 +0000
+From:   Jonas Meurer <jonas@freesources.org>
+Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+ suspend
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
+ 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
+ 2SCIHpzHfm/mpRL2
+Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+Date:   Mon, 7 Oct 2019 12:50:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <9645e7c625a84bfabac001fd6ef35559@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100708-0016-0000-0000-000002B4C146
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100708-0017-0000-0000-00003315D717
-Message-Id: <133845e8-bdad-c0c0-a14b-a511ebb88fd4@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-07_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910070091
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
+Content-Type: multipart/mixed; boundary="GRH6EAOR51QxsekMaGMKMlm8winrq3Izm";
+ protected-headers="v1"
+From: Jonas Meurer <jonas@freesources.org>
+To: linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Tim Dittler <tim.dittler@systemli.org>
+Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+ suspend
+
+--GRH6EAOR51QxsekMaGMKMlm8winrq3Izm
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+[Sorry, resending with the correct mailinglist address as recipient]
+
+Hello,
+
+This patch adds a run-time switch at `/sys/power/suspend_sync`.
+
+The switch allows to enable or disable the final sync() from the suspend.=
+c
+Linux Kernel system suspend implementation. This is useful to avoid race
+conditions if block devices have been suspended before. Be aware that you=
+
+have to take care of sync() yourself before suspending the system if you
+disable it here.
+
+Since this is my first patch against the Linux kernel and I don't
+consider it ready for inclusion yet, I decided to send it to pm-linux
+and the PM subsystem maintainers only first. Would be very glad if you
+could take a look and comment on it :)
+
+Some questions:
+
+* There already is a build-time config flag[2] for en- or disabling the
+  sync() in suspend.c. Is it acceptable to have both a build-time *and*
+  a *run-time* switch? Or would a run-time switch have to replace the
+  build-time switch? If so, a direct question to Rafael, as you added
+  the build-time flag: Would that be ok for you?
+* I'm unsure about the naming: since the default is to have the sync
+  enabled, would `suspend_disable_sync` be a better name for the switch,
+  obviously defaulting to 0 then and skipping the sync at value 1?
+
+To give a bit more contect: In Debian, we're currently working[3] on
+support to suspend unlocked dm-crypt devices before system suspend.
+During that work, we realized that the final sync() from Linux Kernel
+system suspend implementation can lead to a dead lock.
+
+I wrote a simple reproducer[4] to cause the dead lock in a reliable way.
 
 
-On 10/2/19 9:41 PM, David Laight wrote:
-> From: Parth Shah
->> Sent: 30 September 2019 11:44
-> ...
->> 5> Separating AVX512 tasks and latency sensitive tasks on separate cores
->> ( -Tim Chen )
->> ===========================================================================
->> Another usecase we are considering is to segregate those workload that will
->> pull down core cpu frequency (e.g. AVX512) from workload that are latency
->> sensitive. There are certain tasks that need to provide a fast response
->> time (latency sensitive) and they are best scheduled on cpu that has a
->> lighter load and not have other tasks running on the sibling cpu that could
->> pull down the cpu core frequency.
->>
->> Some users are running machine learning batch tasks with AVX512, and have
->> observed that these tasks affect the tasks needing a fast response.  They
->> have to rely on manual CPU affinity to separate these tasks.  With
->> appropriate latency hint on task, the scheduler can be taught to separate them.
-> 
-> Has this been diagnosed properly?
-> I can't really see how the frequency drop from AVX512 significantly affects latency.
-> Most tasks that require low latency probably don't do a lot of work.
-> It is much more likely that the latency issues happen because the AVX512 tasks
-> are doing very few system calls so can't be pre-empted even by a high priority task.> This 'feature' is hinted by this:
->> 2> TurboSched
->> ( -Parth Shah )
->> ====================
->> TurboSched [2] tries to minimize the number of active cores in a socket by
->> packing an un-important and low-utilization (named jitter) task on an
->> already active core and thus refrains from waking up of a new core if
->> possible.
-> 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/kernel/power/suspend.c?id=3D54ecb8f#n569
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?id=3D2fd77f
+[3] https://salsa.debian.org/mejo/cryptsetup-suspend
+[4] https://salsa.debian.org/mejo/cryptsetup-suspend/snippets/334
 
-You are correct as both approach contradict each other in some sense.
-But what TurboSched tried to achieve is doing task packing only for the
-tasks classified by user as *latency in-sensitive*. Whereas, IIUC, what Tim
-proposes here is to not pack *latency sensitive* tasks and I guess that
-align with the TurboSched approach as well, isn't it?
 
-Probably @Tim can throw some light on this for better clarification?
+Signed-off-by: Jonas Meurer <jonas@freesources.org>
+---
+ Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
+ include/linux/suspend.h               |    2 +
+ kernel/power/main.c                   |   35 +++++++++++++++++++++++++++=
++++++++
+ kernel/power/suspend.c                |    2 -
+ 4 files changed, 53 insertions(+), 2 deletions(-)
 
-> Consider this example of a process that requires low latency (sub 1ms would be good):
-> - A hardware interrupt (or timer interrupt) wakes up on thread.
-> - When that thread wakes it wakes up other threads that are sleeping.
-> - All the threads 'beaver away' for a few ms (processing RTP and other audio).
-> - They all sleep for the rest of a 10ms period.
-> 
-> The affinities are set so each thread runs on a separate cpu, and all are SCHED_RR.
-> Now loop all the cpus in userspace (run: while :; do :; done) and see what happens to the latencies.
-> You really want the SCHED_RR threads to immediately pre-empt the running processes.
-> But I suspect nothing happens until a timer interrupt to the target cpu.
-> 
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
+ 	if (state =3D=3D PM_SUSPEND_TO_IDLE)
+ 		s2idle_begin();
+=20
+-	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
++	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && suspend_sync_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+ 		ksys_sync_helper();
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
+ extern void arch_suspend_enable_irqs(void);
+=20
+ extern int pm_suspend(suspend_state_t state);
++extern bool suspend_sync_enabled;
+ #else /* !CONFIG_SUSPEND */
+ #define suspend_valid_only_mem	NULL
+=20
+@@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
+=20
+ static inline void suspend_set_ops(const struct platform_suspend_ops *op=
+s) {}
+ static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
++static inline bool suspend_sync_enabled(void) { return true; }
+ static inline bool idle_should_enter_s2idle(void) { return false; }
+ static inline void __init pm_states_init(void) {}
+ static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops)=
+ {}
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
+ power_attr(mem_sleep);
+ #endif /* CONFIG_SUSPEND */
+=20
++#ifdef CONFIG_SUSPEND
++/*
++ * suspend_sync: invoke ksys_sync_helper() before suspend.
++ *
++ * show() returns whether ksys_sync_helper() is invoked before suspend.
++ * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables =
+it.
++ */
++bool suspend_sync_enabled =3D true;
++
++static ssize_t suspend_sync_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", suspend_sync_enabled);
++}
++
++static ssize_t suspend_sync_store(struct kobject *kobj,
++				    struct kobj_attribute *attr,
++				    const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	if (val > 1)
++		return -EINVAL;
++
++	suspend_sync_enabled =3D !!val;
++	return n;
++}
++
++power_attr(suspend_sync);
++#endif /* CONFIG_SUSPEND */
++
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ int pm_test_level =3D TEST_NONE;
+=20
+@@ -769,6 +803,7 @@ static struct attribute * g[] =3D {
+ 	&wakeup_count_attr.attr,
+ #ifdef CONFIG_SUSPEND
+ 	&mem_sleep_attr.attr,
++	&suspend_sync_attr.attr,
+ #endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -300,4 +300,18 @@ Description:
+ 		attempt.
+=20
+ 		Using this sysfs file will override any values that were
+-		set using the kernel command line for disk offset.
+\ No newline at end of file
++		set using the kernel command line for disk offset.
++
++What:		/sys/power/suspend_sync
++Date:		October 2019
++Contact:	Jonas Meurer <jonas@freesources.org>
++Description:
++		This file controls the switch to enable or disable the final
++		sync() before system suspend. This is useful to avoid race
++		conditions if block devices have been suspended before. Be
++		aware that you have to take care of sync() yourself before
++		suspending the system if you disable it here.
++
++		Writing a "1" (default) to this file enables the sync() and
++		writing a "0" disables it. Reads from the file return the
++		current value.
+--=20
+Jonas Meurer
 
-This is a good corner case where scheduler can be optimized further, and
-the per-task attribute like the latency-nice can be of some help. Maybe we
-can reduce the vslice of a task not having any latency constraints in the
-time when any RR/RT tasks are present.
 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
 
+
+
+
+--GRH6EAOR51QxsekMaGMKMlm8winrq3Izm--
+
+--htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEELIzSg9Pv30M4kOeDUmLn/0kQSf4FAl2bGGYACgkQUmLn/0kQ
+Sf4oxA//TR3FPu09y24+FXohp33PUVfkbkm+siSShL5QtJ/D2OqhrKuyNc1VnzZG
+B5O9BvHDC2YqIL+72lJkxg0HGtwJd2nfKqVFYvwHYqS9jHrG7Xb9Btev/jOgmk2r
+Msv7jnwpsxBTMWUEOo6Pio16kBG2LO3b2/Q7oJSTbxVoFEGFv1JkViMNmUty+kKV
+A830zLnAIwCBr7ocpFnhGgCPa1rWHUM6/i8LP3/l+FCia7YzOAvZo3n9Nl46UDqs
+eKPJQDUkWrLKYA8ScTK5ZP4CDTA0ea2F2nzk42CEnLSL7dCrC+lM52O25lCcZOX+
+VEW0LPTqkqzj/szIm3uMVrlDx+XPJvV5BsdTcZ5JqKDq6iv42CaEEXe0yem4/l+w
+tqwh4E6cbQ9CHJIHgDvvjM8JTPFZeqK8yxrePXTEpOEJG+LfTngRX8RGUigMTTCL
+ax4OlAXxsoViOvJgBGpdJFA9usPa6Jp/eXy+SHTs0VVNhsaprhKvruMvz3sIg+0z
+HlmjomhEPwtPKylsfATRRjcdzsM/cgBpQZubX3V9G6IKqrAiLiAJ3TMsnXVjyJe6
+j77UTGrGlzAtWP0azmCsx8/pytcNhxHjGGkEZOPgjsl8ru8fTw9ut3tnPs13i6EV
+ZZJ1ZnH8VrGgXfPLKhxjh4mR0+z4QzbtaXYEKdzD8AbO5KSxa/8=
+=yw+g
+-----END PGP SIGNATURE-----
+
+--htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII--
