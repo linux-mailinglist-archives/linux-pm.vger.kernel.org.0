@@ -2,116 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B80CDD2F
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 10:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128D1CDD4A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Oct 2019 10:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727243AbfJGIYe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Oct 2019 04:24:34 -0400
-Received: from mga11.intel.com ([192.55.52.93]:56608 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727028AbfJGIYd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Oct 2019 04:24:33 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Oct 2019 01:24:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,267,1566889200"; 
-   d="scan'208";a="222841357"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Oct 2019 01:24:28 -0700
-Received: from andy by smile with local (Exim 4.92.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iHOJf-00059c-CT; Mon, 07 Oct 2019 11:24:27 +0300
-Date:   Mon, 7 Oct 2019 11:24:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        akpm@linux-foundation.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux@rasmusvillemoes.dk, yamada.masahiro@socionext.com,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
-        sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v16 10/14] gpio: 74x164: Utilize the for_each_set_clump8
- macro
-Message-ID: <20191007082427.GM32742@smile.fi.intel.com>
-References: <cover.1570374078.git.vilhelm.gray@gmail.com>
- <13f5d24820e5e3a17a64d025f09efc37eda77739.1570374078.git.vilhelm.gray@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13f5d24820e5e3a17a64d025f09efc37eda77739.1570374078.git.vilhelm.gray@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727493AbfJGI2W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Oct 2019 04:28:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60402 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727103AbfJGI2W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Oct 2019 04:28:22 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9164AACC6;
+        Mon,  7 Oct 2019 08:28:19 +0000 (UTC)
+Message-ID: <1570437230.13764.1.camel@suse.cz>
+Subject: Re: [PATCH v2 2/2] cpufreq: intel_pstate: Conditional frequency
+ invariant accounting
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@qperret.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Mon, 07 Oct 2019 10:33:50 +0200
+In-Reply-To: <56f1e864ed93d45e6328d4d015cfda6406fdda42.camel@linux.intel.com>
+References: <20191002122926.385-1-ggherdovich@suse.cz>
+         <20191002122926.385-3-ggherdovich@suse.cz> <13106850.QMtCbivBLn@kreacher>
+         <5d6d601d2647644238fc51621407061e1c29320d.camel@linux.intel.com>
+         <1570177786.30086.1.camel@suse.cz>
+         <CAJZ5v0jK1kMjQ3gu8KhQmp2Paq9Rb74NPjMQ1HsVRCD3Fct5TQ@mail.gmail.com>
+         <1570179472.30086.4.camel@suse.cz>
+         <56f1e864ed93d45e6328d4d015cfda6406fdda42.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Oct 06, 2019 at 11:11:07AM -0400, William Breathitt Gray wrote:
-> Replace verbose implementation in set_multiple callback with
-> for_each_set_clump8 macro to simplify code and improve clarity.
-
-I can test it somewhat later.
-
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Phil Reid <preid@electromag.com.au>
-> Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> ---
->  drivers/gpio/gpio-74x164.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
+On Fri, 2019-10-04 at 08:17 -0700, Srinivas Pandruvada wrote:
+> On Fri, 2019-10-04 at 10:57 +0200, Giovanni Gherdovich wrote:
+> > On Fri, 2019-10-04 at 10:29 +0200, Rafael J. Wysocki wrote:
+> > > On Fri, Oct 4, 2019 at 10:24 AM Giovanni Gherdovich <
+> > > ggherdovich@suse.cz> wrote:
+> > > > 
+> > > > On Thu, 2019-10-03 at 20:31 -0700, Srinivas Pandruvada wrote:
+> > > > > On Thu, 2019-10-03 at 20:05 +0200, Rafael J. Wysocki wrote:
+> > > > > > On Wednesday, October 2, 2019 2:29:26 PM CEST Giovanni Gherdovich
+> > > > > > wrote:
+> > > > > > > From: Srinivas Pandruvada < srinivas.pandruvada@linux.intel.com>
+> > > > > > > 
+> > > > > > > intel_pstate has two operating modes: active and passive.  In
+> > > > > > > "active" mode, the in-built scaling governor is used and in
+> > > > > > > "passive" mode, the driver can be used with any governor like
+> > > > > > > "schedutil". In "active" mode the utilization values from
+> > > > > > > schedutil is not used and there is a requirement from high
+> > > > > > > performance computing use cases, not to readas well any
+> > > > > > > APERF/MPERF MSRs.
+> > > > > > 
+> > > > > > Well, this isn't quite convincing.
+> > > > > > 
+> > > > > > In particular, I don't see why the "don't read APERF/MPERF MSRs"
+> > > > > > argument applies *only* to intel_pstate in the "active" mode.
+> > > > > > What about intel_pstate in the "passive" mode combined with the
+> > > > > > "performance" governor?  Or any other governor different from
+> > > > > > "schedutil" for that matter?
+> > > > > > 
+> > > > > > And what about acpi_cpufreq combined with any governor different
+> > > > > > from "schedutil"?
+> > > > > > 
+> > > > > > Scale invariance is not really needed in all of those cases right
+> > > > > > now AFAICS, or is it?
+> > > > > 
+> > > > > Correct. This is just part of the patch to disable in active mode
+> > > > > (particularly in HWP and performance mode).
+> > > > > 
+> > > > > But this patch is 2 years old. The folks who wanted this, disable
+> > > > > intel-pstate and use userspace governor with acpi-cpufreq. So may be
+> > > > > better to address those cases too.
+> > > > 
+> > > > I disagree with "scale invariance is needed only by the schedutil
+> > > > governor"; the two other users are the CPU's estimated utilization in
+> > > > the wakeup path, via cpu_util_without(), as well as the load-balance
+> > > > path, via cpu_util() which is used by update_sg_lb_stats().
+> > > 
+> > > OK, so there are reasons to run the scale invariance code which are
+> > > not related to the cpufreq governor in use.
+> > > 
+> > > I wonder then why those reasons are not relevant for intel_pstate in the
+> > > "active" mode.
+> > > 
+> > > > Also remember that scale invariance is applied to both PELT signals
+> > > > util_avg and load_avg; schedutil uses the former but not the latter.
+> > > > 
+> > > > I understand Srinivas patch to disable MSR accesses during the tick as
+> > > > a band-aid solution to address a specific use case he cares about, but
+> > > > I don't think that extending this approach to any non-schedutil
+> > > > governor is a good idea -- you'd be killing load balancing in the
+> > > > process.
+> > > 
+> > > But that is also the case for intel_pstate in the "active" mode,
+> > > isn't it?
+> > 
+> > Sure it is.
+> > 
+> > Now, what's the performance impact of loosing scale-invariance in PELT
+> > signals?  And what's the performance impact of accessing two MSRs at the
+> > scheduler tick on each CPU?
+> > 
+> > I am sporting Srinivas' patch because he expressed the concern that the
+> > losses don't justify the gains for a specific class of users
+> > (supercomputing), although I don't fully like the idea (and arguably that
+> > should be measured).
+> > 
 > 
-> diff --git a/drivers/gpio/gpio-74x164.c b/drivers/gpio/gpio-74x164.c
-> index e81307f9754e..05637d585152 100644
-> --- a/drivers/gpio/gpio-74x164.c
-> +++ b/drivers/gpio/gpio-74x164.c
-> @@ -6,6 +6,7 @@
->   *  Copyright (C) 2010 Miguel Gaio <miguel.gaio@efixo.com>
->   */
->  
-> +#include <linux/bitops.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/gpio/driver.h>
->  #include <linux/module.h>
-> @@ -72,20 +73,18 @@ static void gen_74x164_set_multiple(struct gpio_chip *gc, unsigned long *mask,
->  				    unsigned long *bits)
->  {
->  	struct gen_74x164_chip *chip = gpiochip_get_data(gc);
-> -	unsigned int i, idx, shift;
-> -	u8 bank, bankmask;
-> +	unsigned long offset;
-> +	unsigned long bankmask;
-> +	size_t bank;
-> +	unsigned long bitmask;
->  
->  	mutex_lock(&chip->lock);
-> -	for (i = 0, bank = chip->registers - 1; i < chip->registers;
-> -	     i++, bank--) {
-> -		idx = i / sizeof(*mask);
-> -		shift = i % sizeof(*mask) * BITS_PER_BYTE;
-> -		bankmask = mask[idx] >> shift;
-> -		if (!bankmask)
-> -			continue;
-> +	for_each_set_clump8(offset, bankmask, mask, chip->registers * 8) {
-> +		bank = chip->registers - 1 - offset / 8;
-> +		bitmask = bitmap_get_value8(bits, offset) & bankmask;
->  
->  		chip->buffer[bank] &= ~bankmask;
-> -		chip->buffer[bank] |= bankmask & (bits[idx] >> shift);
-> +		chip->buffer[bank] |= bitmask;
->  	}
->  	__gen_74x164_write_config(chip);
->  	mutex_unlock(&chip->lock);
-> -- 
-> 2.23.0
-> 
+> I understand there are other impact of the scale invariance like in
+> deadline code, which I didn't see when I submitted this patch.
+> You can drop this patch at this time if you like. I can poke HPC folks
+> to test a released kernel.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks Srinivas, in v3 I'll drop the tick_disable mechanism for now.
 
 
+Giovanni
