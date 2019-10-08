@@ -2,167 +2,297 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BBED039B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 00:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5FFD0400
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 01:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725908AbfJHWyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Oct 2019 18:54:50 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35420 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfJHWyu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 18:54:50 -0400
-Received: by mail-oi1-f194.google.com with SMTP id x3so171586oig.2;
-        Tue, 08 Oct 2019 15:54:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SggbRRKNXqQlH49P3KzPfRoT4FOY8o89Xl8C5FlY+KA=;
-        b=SPc7Wo/xlhNBDSK+mjqXICQ8FyFQMeZ29jL29NzY1ngXkmv2/8vxP99YnTZzZ2Y9tF
-         uS6y/MXBEIBquJW9zKQzNi3pRI9WjbqTeAPQIqNYLg9XftTR8TRpuU6EvNsnk/0DcgE9
-         u9zJaVfNBEy9urK/XXrPKZANeoEKO3eJ2hl5Z1SRROu4jszB8HEwEcEbijmJuvnTPcHF
-         brmnGa6sEyLgq6eZEeMsd4VV9cAsj4o3kSDVhlKwuEhMg/26wBNYfOD2K/CnJO2r6dA5
-         8lXKryPt1IbMABOiIH+kCJ7XjVRZdW2IQtRkcLslronRC9QGpCy8K0ShqWUM8ltnVJSN
-         KkMA==
-X-Gm-Message-State: APjAAAUwy+rF4zejMQRlDW7ml/F2chTEVw0kn3fW1sIPb+i81uywfRGs
-        iI4k18ndyWjx3q7+FT/QWigKh7uidJus9ki2VHY=
-X-Google-Smtp-Source: APXvYqzAHIWDALJmWxny85y+zNIHc6fYu7ABhv0L9fiH6TsA/vMVV+jisYkSGZMtPlgYlfymiNkZrvEQvyEMSGQl7Vo=
-X-Received: by 2002:aca:d706:: with SMTP id o6mr7215oig.57.1570575288501; Tue,
- 08 Oct 2019 15:54:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJZ5v0iL4Rv=AQ-Qnma=wWaqBBbOdfRqu9uS9Gesa-G75oQpzQ@mail.gmail.com>
- <20191008211656.GA163302@google.com>
-In-Reply-To: <20191008211656.GA163302@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Oct 2019 00:54:37 +0200
-Message-ID: <CAJZ5v0j-uSM2gheHViommWcrSaLVfzbwV3M7OOWz3GyzhHSwRA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] PCI: PCIe: ASPM: Introduce pcie_aspm_enabled()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
+        id S1727769AbfJHXT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Oct 2019 19:19:58 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55537 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726579AbfJHXT6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 19:19:58 -0400
+Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id c4f09adb8ea881e8; Wed, 9 Oct 2019 01:19:51 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Chen, Hu" <hu1.chen@intel.com>,
+        Quentin Perret <quentin.perret@arm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [RFC/RFT][PATCH v8] cpuidle: New timer events oriented governor for tickless systems
+Date:   Wed, 09 Oct 2019 01:19:51 +0200
+Message-ID: <1574317.FFykgJKpNH@kreacher>
+In-Reply-To: <CAJZ5v0jvusVBcKECBueDHk5KQGda=GGuSGPO3F4wCvk3cro56A@mail.gmail.com>
+References: <001601d57487$e1029ef0$a307dcd0$@net> <CAJZ5v0gRSpNtwDXrRr9GW2O9ZQpM0yBdKfQDXLwsZua5692yUQ@mail.gmail.com> <CAJZ5v0jvusVBcKECBueDHk5KQGda=GGuSGPO3F4wCvk3cro56A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Tue, Oct 08, 2019 at 11:27:51AM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Oct 8, 2019 at 12:34 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Thu, Aug 08, 2019 at 11:55:07PM +0200, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Add a function checking whether or not PCIe ASPM has been enabled for
-> > > > a given device.
-> > > >
-> > > > It will be used by the NVMe driver to decide how to handle the
-> > > > device during system suspend.
-> > > >
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >
-> > > > v2 -> v3:
-> > > >   * Make the new function return bool.
-> > > >   * Change its name back to pcie_aspm_enabled().
-> > > >   * Fix kerneldoc comment formatting.
-> > > >
-> > > > -> v2:
-> > > >   * Move the PCI/PCIe ASPM changes to a separate patch.
-> > > >   * Add the _mask suffix to the new function name.
-> > > >   * Add EXPORT_SYMBOL_GPL() to the new function.
-> > > >   * Avoid adding an unnecessary blank line.
-> > > >
-> > > > ---
-> > > >  drivers/pci/pcie/aspm.c |   20 ++++++++++++++++++++
-> > > >  include/linux/pci.h     |    3 +++
-> > > >  2 files changed, 23 insertions(+)
-> > > >
-> > > > Index: linux-pm/drivers/pci/pcie/aspm.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/pci/pcie/aspm.c
-> > > > +++ linux-pm/drivers/pci/pcie/aspm.c
-> > > > @@ -1170,6 +1170,26 @@ static int pcie_aspm_get_policy(char *bu
-> > > >  module_param_call(policy, pcie_aspm_set_policy, pcie_aspm_get_policy,
-> > > >       NULL, 0644);
-> > > >
-> > > > +/**
-> > > > + * pcie_aspm_enabled - Check if PCIe ASPM has been enabled for a device.
-> > > > + * @pci_device: Target device.
-> > > > + */
-> > > > +bool pcie_aspm_enabled(struct pci_dev *pci_device)
-> > > > +{
-> > > > +     struct pci_dev *bridge = pci_upstream_bridge(pci_device);
-> > > > +     bool ret;
-> > > > +
-> > > > +     if (!bridge)
-> > > > +             return false;
-> > > > +
-> > > > +     mutex_lock(&aspm_lock);
-> > > > +     ret = bridge->link_state ? !!bridge->link_state->aspm_enabled : false;
-> > > > +     mutex_unlock(&aspm_lock);
-> > >
-> > > Why do we need to acquire aspm_lock here?  We aren't modifying
-> > > anything, and I don't think we're preventing a race.  If this races
-> > > with another thread that changes aspm_enabled, we'll return either the
-> > > old state or the new one, and I think that's still the case even if we
-> > > don't acquire aspm_lock.
+On Tuesday, October 8, 2019 12:49:01 PM CEST Rafael J. Wysocki wrote:
+> On Tue, Oct 8, 2019 at 11:51 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 > >
-> > Well, if we can guarantee that pci_remove_bus_device() will never be
-> > called in parallel with this helper, then I agree, but can we
-> > guarantee that?
->
-> Hmm, yeah, I guess that's the question.  It's not a race with another
-> thread changing aspm_enabled; the potential race is with another
-> thread removing the last child of "bridge", which will free the
-> link_state and set bridge->link_state = NULL.
->
-> I think it should be safe to call device-related PCI interfaces if
-> you're holding a reference to the device, e.g., from a driver bound to
-> the device or a sysfs accessor.  Since we call pcie_aspm_enabled(dev)
-> from a driver bound to "dev", another thread should not be able to
-> remove "dev" while we're using it.
->
-> I know that's a little hand-wavey, but if it weren't true, I think
-> we'd have a lot more locking sprinkled everywhere in the PCI core than
-> we do.
->
-> This has implications for Heiner's ASPM sysfs patches because we're
-> currently doing this in sysfs accessors:
->
->   static ssize_t aspm_attr_show_common(struct device *dev, ...)
->   {
->     ...
->     link = pcie_aspm_get_link(pdev);
->
->     mutex_lock(&aspm_lock);
->     enabled = link->aspm_enabled & state;
->     mutex_unlock(&aspm_lock);
->     ...
->   }
->
-> I assume sysfs must be holding a reference that guarantees "dev" is
-> valid througout this code, and therefore we should not need to hold
-> aspm_lock.
+> > On Tue, Oct 8, 2019 at 8:20 AM Doug Smythies <dsmythies@telus.net> wrote:
+> > >
+> > > On 2019.10.06 08:34 Rafael J. Wysocki wrote:
+> > > > On Sun, Oct 6, 2019 at 4:46 PM Doug Smythies <dsmythies@telus.net> wrote:
+> > > >> On 2019.10.01 02:32 Rafael J. Wysocki wrote:
+> > > >>> On Sun, Sep 29, 2019 at 6:05 PM Doug Smythies <dsmythies@telus.net> wrote:
+> > > >>>> On 2019.09.26 09:32 Doug Smythies wrote:
+> > > >>>>
+> > > >>>>> If the deepest idle state is disabled, the system
+> > > >>>>> can become somewhat unstable, with anywhere between no problem
+> > > >>>>> at all, to the occasional temporary jump using a lot more
+> > > >>>>> power for a few seconds, to a permanent jump using a lot more
+> > > >>>>> power continuously. I have been unable to isolate the exact
+> > > >>>>> test load conditions under which this will occur. However,
+> > > >>>>> temporarily disabling and then enabling other idle states
+> > > >>>>> seems to make for a somewhat repeatable test. It is important
+> > > >>>>> to note that the issue occurs with only ever disabling the deepest
+> > > >>>>> idle state, just not reliably.
+> > > >>>>>
+> > > >>>>> I want to know how you want to proceed before I do a bunch of
+> > > >>>>> regression testing.
+> > > >>>>
+> > > >> I do not think I stated it clearly before: The problem here is that some CPUs
+> > > >> seem to get stuck in idle state 0, and when they do power consumption spikes,
+> > > >> often by several hundred % and often indefinitely.
+> > > >
+> > > > That indeed has not been clear to me, thanks for the clarification!
+> > >
+> > > >
+> > > >> I made a hack job automated test:
+> > > >> Kernel  tests                 fail rate
+> > > >> 5.4-rc1                6616           13.45%
+> > > >> 5.3              2376            4.50%
+> > > >> 5.3-teov7       12136            0.00%  <<< teo.c reverted and teov7 put in its place.
+> > > >> 5.4-rc1-ds      11168        0.00%  <<< [old] proposed patch (> 7 hours test time)
+> > >
+> > >
+> > >    5.4-rc1-ds12   4224          0.005 <<< new proposed patch
+> > >
+> > > >>
+> > > >> [old] Proposed patch (on top of kernel 5.4-rc1): [deleted]
+> > >
+> > > > This change may cause the deepest state to be selected even if its
+> > > > "hits" metric is less than the "misses" one AFAICS, in which case the
+> > > > max_early_index state should be selected instead.
+> > > >
+> > > > It looks like the max_early_index computation is broken when the
+> > > > deepest state is disabled.
+> > >
+> > > O.K. Thanks for your quick reply, and insight.
+> > >
+> > > I think long durations always need to be counted, but currently if
+> > > the deepest idle state is disabled, they are not.
+> > > How about this?:
+> > > (test results added above, more tests pending if this might be a path forward.)
+> > >
+> > > diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+> > > index b5a0e49..a970d2c 100644
+> > > --- a/drivers/cpuidle/governors/teo.c
+> > > +++ b/drivers/cpuidle/governors/teo.c
+> > > @@ -155,10 +155,12 @@ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+> > >
+> > >                 cpu_data->states[i].early_hits -= early_hits >> DECAY_SHIFT;
+> > >
+> > > -               if (drv->states[i].target_residency <= sleep_length_us) {
+> > > -                       idx_timer = i;
+> > > -                       if (drv->states[i].target_residency <= measured_us)
+> > > -                               idx_hit = i;
+> > > +               if (!(drv->states[i].disabled || dev->states_usage[i].disable)){
+> > > +                       if (drv->states[i].target_residency <= sleep_length_us) {
+> > > +                               idx_timer = i;
+> > > +                               if (drv->states[i].target_residency <= measured_us)
+> > > +                                       idx_hit = i;
+> > > +                       }
+> >
+> > What if the state is enabled again after some time?
+> 
+> Actually, the states are treated as "bins" here, so for the metrics it
+> doesn't matter whether or not they are enabled at the moment.
+> 
+> > >                 }
+> > >         }
+> > >
+> > > @@ -256,39 +258,25 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+> > >                 struct cpuidle_state *s = &drv->states[i];
+> > >                 struct cpuidle_state_usage *su = &dev->states_usage[i];
+> > >
+> > > -               if (s->disabled || su->disable) {
+> > > -                       /*
+> > > -                        * If the "early hits" metric of a disabled state is
+> > > -                        * greater than the current maximum, it should be taken
+> > > -                        * into account, because it would be a mistake to select
+> > > -                        * a deeper state with lower "early hits" metric.  The
+> > > -                        * index cannot be changed to point to it, however, so
+> > > -                        * just increase the max count alone and let the index
+> > > -                        * still point to a shallower idle state.
+> > > -                        */
+> > > -                       if (max_early_idx >= 0 &&
+> > > -                           count < cpu_data->states[i].early_hits)
+> > > -                               count = cpu_data->states[i].early_hits;
+> > > -
+> > > -                       continue;
+> >
+> > AFAICS, adding early_hits to count is not a mistake if there are still
+> > enabled states deeper than the current one.
+> 
+> And the mistake appears to be that the "hits" and "misses" metrics
+> aren't handled in analogy with the "early_hits" one when the current
+> state is disabled.
+> 
+> Let me try to cut a patch to address that.
 
-In principle, pcie_aspm_enabled() need not be called via sysfs.
+Appended below, not tested.
 
-In the particular NVMe use case, it is called from the driver's own PM
-callback, so it would be safe without the locking AFAICS.
+It is meant to address two problems, one of which is that the "hits" and
+"misses" metrics of disabled states need to be taken into account too in
+some cases, and the other is an issue with the handling of "early hits"
+which may lead to suboptimal state selection if some states are disabled.
 
-I guess it is safe to drop the locking from there, but then it would
-be good to mention in the kerneldoc that calling it is only safe under
-the assumption that the link_state object cannot go away while it is
-running.
+---
+ drivers/cpuidle/governors/teo.c |   71 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 52 insertions(+), 19 deletions(-)
+
+Index: linux-pm/drivers/cpuidle/governors/teo.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/governors/teo.c
++++ linux-pm/drivers/cpuidle/governors/teo.c
+@@ -233,7 +233,7 @@ static int teo_select(struct cpuidle_dri
+ {
+ 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+ 	int latency_req = cpuidle_governor_latency_req(dev->cpu);
+-	unsigned int duration_us, count;
++	unsigned int duration_us, hits, misses, early_hits;
+ 	int max_early_idx, constraint_idx, idx, i;
+ 	ktime_t delta_tick;
+ 
+@@ -247,7 +247,9 @@ static int teo_select(struct cpuidle_dri
+ 	cpu_data->sleep_length_ns = tick_nohz_get_sleep_length(&delta_tick);
+ 	duration_us = ktime_to_us(cpu_data->sleep_length_ns);
+ 
+-	count = 0;
++	hits = 0;
++	misses = 0;
++	early_hits = 0;
+ 	max_early_idx = -1;
+ 	constraint_idx = drv->state_count;
+ 	idx = -1;
+@@ -258,23 +260,54 @@ static int teo_select(struct cpuidle_dri
+ 
+ 		if (s->disabled || su->disable) {
+ 			/*
+-			 * If the "early hits" metric of a disabled state is
+-			 * greater than the current maximum, it should be taken
+-			 * into account, because it would be a mistake to select
+-			 * a deeper state with lower "early hits" metric.  The
+-			 * index cannot be changed to point to it, however, so
+-			 * just increase the max count alone and let the index
+-			 * still point to a shallower idle state.
++			 * If the "hits" metric of a disabled state is greater
++			 * than its "misses" metric, it needs to be taken into
++			 * account, because the closest shallower enabled state
++			 * "represents" it in that case.
+ 			 */
+-			if (max_early_idx >= 0 &&
+-			    count < cpu_data->states[i].early_hits)
+-				count = cpu_data->states[i].early_hits;
++			if (cpu_data->states[i].hits > cpu_data->states[i].misses) {
++				hits = cpu_data->states[i].hits;
++				misses = cpu_data->states[i].misses;
++			}
++
++			if (early_hits >= cpu_data->states[i].early_hits ||
++			    idx < 0)
++				continue;
++
++			/*
++			 * If the current candidate state has been the one with
++			 * the maximum "early hits" metric so far, the "early
++			 * hits" metric of the disabled state replaces the
++			 * current "early hits" count to avoid selecting a
++			 * deeper state with lower "early hits" metric.
++			 */
++			if (max_early_idx == idx) {
++				early_hits = cpu_data->states[i].early_hits;
++				continue;
++			}
++
++			/*
++			 * The current candidate state is closer to the disabled
++			 * one than the current maximum "early hits" state, so
++			 * replace the latter with it, but in case the maximum
++			 * "early hits" state index has not been set so far,
++			 * check if the current candidate state is not too
++			 * shallow for that role.
++			 */
++			if (!(tick_nohz_tick_stopped() &&
++			      drv->states[idx].target_residency < TICK_USEC)) {
++				early_hits = cpu_data->states[i].early_hits;
++				max_early_idx = idx;
++			}
+ 
+ 			continue;
+ 		}
+ 
+-		if (idx < 0)
++		if (idx < 0) {
+ 			idx = i; /* first enabled state */
++			hits = cpu_data->states[i].hits;
++			misses = cpu_data->states[i].misses;
++		}
+ 
+ 		if (s->target_residency > duration_us)
+ 			break;
+@@ -283,11 +316,13 @@ static int teo_select(struct cpuidle_dri
+ 			constraint_idx = i;
+ 
+ 		idx = i;
++		hits = cpu_data->states[i].hits;
++		misses = cpu_data->states[i].misses;
+ 
+-		if (count < cpu_data->states[i].early_hits &&
++		if (early_hits < cpu_data->states[i].early_hits &&
+ 		    !(tick_nohz_tick_stopped() &&
+ 		      drv->states[i].target_residency < TICK_USEC)) {
+-			count = cpu_data->states[i].early_hits;
++			early_hits = cpu_data->states[i].early_hits;
+ 			max_early_idx = i;
+ 		}
+ 	}
+@@ -300,8 +335,7 @@ static int teo_select(struct cpuidle_dri
+ 	 * "early hits" metric, but if that cannot be determined, just use the
+ 	 * state selected so far.
+ 	 */
+-	if (cpu_data->states[idx].hits <= cpu_data->states[idx].misses &&
+-	    max_early_idx >= 0) {
++	if (hits <= misses && max_early_idx >= 0) {
+ 		idx = max_early_idx;
+ 		duration_us = drv->states[idx].target_residency;
+ 	}
+@@ -316,10 +350,9 @@ static int teo_select(struct cpuidle_dri
+ 	if (idx < 0) {
+ 		idx = 0; /* No states enabled. Must use 0. */
+ 	} else if (idx > 0) {
++		unsigned int count = 0;
+ 		u64 sum = 0;
+ 
+-		count = 0;
+-
+ 		/*
+ 		 * Count and sum the most recent idle duration values less than
+ 		 * the current expected idle duration value.
+
+
+
