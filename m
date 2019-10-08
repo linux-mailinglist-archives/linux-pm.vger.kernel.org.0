@@ -2,130 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C531FD019E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 21:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E28D01EA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 22:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730664AbfJHTz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:27 -0400
-Received: from mail-ed1-f52.google.com ([209.85.208.52]:37884 "EHLO
-        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730823AbfJHTzX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 15:55:23 -0400
-Received: by mail-ed1-f52.google.com with SMTP id r4so16836391edy.4
-        for <linux-pm@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
+        id S1729935AbfJHULH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Oct 2019 16:11:07 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46651 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729436AbfJHULH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 16:11:07 -0400
+Received: by mail-wr1-f65.google.com with SMTP id o18so20831142wrv.13
+        for <linux-pm@vger.kernel.org>; Tue, 08 Oct 2019 13:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zRkRhcx1S5ZqWKlDmiJVwEoGZ+yDHNmQqx+oKN4Jgv8=;
+        b=AtOd3TWDRf/o/4Bk21hI1q1YaTWWdaG3kfNytZ/qPPqQn0JmyK/rui2r0EuMm8vE2N
+         Np/9eOnnhAfrOMxdeGVmpMNNUITk/jZ0GxMsHDhFh98bjdETUHvlBY2H2yWdhLUbI3W5
+         vOw1QD0teRf5YvXCnUOhW96QuhDy8himtKuUpNv4e8Cbmhg7SsZTzok5JiGonwy3xyCF
+         F5Ed/T8RqitQMrGPS8M9hZq/uA/ExeBWPyxPR4ynWQ+mri6r3sRTW7Pq+bKlCVlSkT7+
+         AmUR5uR3NbMZ6Yc37l6ZxQyjo9BNg3wNZWoK0wGtnUY7GBdQj5t/AJWTt9Ft4SABFuL4
+         uzbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=na+T+83CcoMo03aJOiycL7foKIYz8dr8IetyJNGWw1lJMYeErqm+0hBFNwR9Mnjh0W
-         hmx7lQ2PUYFbS3n7ofRoL9Q3L1lsu9+v30V5whPzvNHHiKQz12U0522uTQv3MBpTg2eM
-         iBoPiOLLChWSJCrHpyFzt1clWAPC1e8Ci3FrDqeNvZNF5T2liDfTI4FveUZ33qBk9TVu
-         ZsppwVXClX/zPemGtAkvALasfuq7wJRJ6lK6GXR3iJkQoz9/Ljj3cTZfFkjqm2lr8D/S
-         l8INCT9Qvs3SaftRVvje+fkR2N66/HyVrPWxQKmVRXGEvffcS6BQhb9rGTipfRz2ubZv
-         0jfg==
-X-Gm-Message-State: APjAAAWUVS2k8TFaw5SF2FUo40/D3RG8IlFeZz+gnUpU1tq5RJ7kjzwN
-        V0mMeumjOYsVUShBEwTHeRXjZOHSF9BlgQYvndA=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zRkRhcx1S5ZqWKlDmiJVwEoGZ+yDHNmQqx+oKN4Jgv8=;
+        b=jGHmztQ40/lQ3Da1hGa64Rpk0CP0XWImLTv3wvS26lsXDgtJpRC0iGe+HzbZ376wLT
+         aOLyRGXUI7cDXAjRWmNZIdMPWaV6KpoRVWMP86JJYjQYPYPckuC0CK3mzs1fMMFmnKNt
+         6/TITCfrNhjjXRlZSRi/oQI+S6PGfTxruMspWfWhITM6pV0w0/hDKDeTURRAPe50vgtx
+         ktBSUH67kxkIu/0xA+ESaJnxBabJ9siYfDDFGOz6bf1R7qRUdYLvY7JtzFjgFmpyeTAP
+         KH/mXk7XpkZu5gxQT4BSjoa9Pa5O6gWu3/WfFAqUWNyzRFsfrYBL4i0v7LiDJoE6vrIR
+         sWgw==
+X-Gm-Message-State: APjAAAUIuyjiY0QAFvjZQ5IXS1hTE3kUXIncsa7ranWZHUJNbUDWWB3n
+        Gl5ZMXz8qDSJM3JlIw3OVGaIRbgYUYv1KmWmAPZ+Ug==
+X-Google-Smtp-Source: APXvYqwecQ8I1R5sloUUyTYf0HUKBV5L5CNFDnDEzLhwHMC1MDTm+0cieCjDImMOjidyvRvF2c1VqO+N08z5SbZTKEw=
+X-Received: by 2002:adf:f7ce:: with SMTP id a14mr15752442wrq.239.1570565464249;
+ Tue, 08 Oct 2019 13:11:04 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
+References: <CAA25o9T6C4VCVbqzS0hJgmvpJb6h+htFpH3OUY30E2VtuG8fxQ@mail.gmail.com>
+ <56319808-87dc-76ed-c1e0-9f60108e94a6@arm.com> <CAA25o9TpBm+LNwVccTaUng4vQ1Q9_Wz2QftGho7DG_+26CCYoA@mail.gmail.com>
+ <CAJZ5v0jCb5jLVQ2Oj0bSNf987apxi7SHx4duX9eALMD6QQXB+w@mail.gmail.com> <CAA25o9SUnwc908Grh8qYMDi_tnyhov00Y11RT69MuK8gXcrN4A@mail.gmail.com>
+In-Reply-To: <CAA25o9SUnwc908Grh8qYMDi_tnyhov00Y11RT69MuK8gXcrN4A@mail.gmail.com>
+From:   Luigi Semenzato <semenzato@google.com>
+Date:   Tue, 8 Oct 2019 13:10:52 -0700
+Message-ID: <CAA25o9TWrLh0o17Epqimsvwe8GoW682jVh_4u2KtjJ7SqKGbsQ@mail.gmail.com>
+Subject: Re: hibernation memory usage
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Bas Nowaira <bassem@google.com>, Geoff Pike <gpike@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
+Actually, I think we only need to change the MM watermarks before
+hibernation and after resume.  There's a patch that will do just that:
 
-Attn: Beneficiary,
+https://lkml.org/lkml/2013/2/17/210
 
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
+It didn't make it into mainline (which seems kind of unreasonable,
+since the watermarks themselves are based on heuristics) but shouldn't
+be difficult to apply.  Or are there simpler solutions?
 
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
-
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
-
-Below is the information of today track it in our
-
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
-
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
+On Tue, Oct 8, 2019 at 9:18 AM Luigi Semenzato <semenzato@google.com> wrote:
+>
+> Yes, that makes sense, thank you.  Use separate partitions for swap
+> and hibernation.
+>
+> Normally the kernel starts swapping out when there's no reclaimable
+> memory, so anon usage will be high.  Do you think cranking up
+> /proc/vm/swappiness would be enough to ensure that file pages stay
+> over 50%?  Or would you use some tricks, such as running a
+> high-priority process which allocates >50% of RAM, thus forcing other
+> anon pages to be swapped out, then killing that process and quickly
+> hibernating before too many pages are brought back in?  Or changing
+> the kernel so that in the first part of hibernation we'll just swap
+> stuff out?
+>
+> On Tue, Oct 8, 2019 at 8:39 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Oct 8, 2019 at 5:26 PM Luigi Semenzato <semenzato@google.com> wrote:
+> > >
+> > > Thank you for your reply!
+> > >
+> > > I understand the need for saving all state, not just process/task
+> > > state.  But for many of the systems that could benefit from
+> > > hibernation, the majority of RAM is taken by user processes (I am
+> > > thinking laptops).  It should be possible to copy their anonymous
+> > > pages to disk more or less directly, without making an extra copy like
+> > > it's done for all other pages.  I am not sure what happens with kernel
+> > > tasks, but they don't have anonymous pages (that I know).
+> > >
+> > > I am curious to know how/if hibernation is currently used in practice.
+> > > It doesn't seem practical to require that user processes take less
+> > > than 50% of RAM at all times.  There may be special cases in which the
+> > > restriction can be achieved by terminating non-essential processes
+> > > before hibernating, but I don't know of any.
+> > >
+> > > I would also like to know how much work it might take to avoid the
+> > > extra copy of the anonymous pages of frozen processes.
+> >
+> > Whatever doesn't fit into 50% of RAM needs to be swapped out before
+> > hibernation.  The efficiency of that depends on the swap handling code
+> > and the underlying hardware.  If that is efficient enough overall,
+> > trying to avoid it altogether isn't going to make much of a
+> > difference.
