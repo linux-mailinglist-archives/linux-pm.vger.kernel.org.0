@@ -2,142 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A72FCF7AD
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE2ACF8C5
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 13:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729790AbfJHLAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Oct 2019 07:00:25 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:47730 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729876AbfJHLAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 07:00:25 -0400
-Received: from bigeasy by Galois.linutronix.de with local (Exim 4.80)
-        (envelope-from <bigeasy@linutronix.de>)
-        id 1iHnE5-0007jn-QI; Tue, 08 Oct 2019 13:00:21 +0200
-Date:   Tue, 8 Oct 2019 13:00:21 +0200
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Clark Williams <williams@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S1730317AbfJHLpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Oct 2019 07:45:44 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:41826 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730316AbfJHLpo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Oct 2019 07:45:44 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id C7E77790C5E923CB0200;
+        Tue,  8 Oct 2019 19:45:41 +0800 (CST)
+Received: from localhost (10.202.226.61) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 8 Oct 2019
+ 19:45:37 +0800
+Date:   Tue, 8 Oct 2019 12:45:20 +0100
+From:   Jonathan Cameron <jonathan.cameron@huawei.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Subject: [PATCH] thermal/x86_pkg_temp: Make pkg_temp_lock a raw_spinlock_t
-Message-ID: <20191008110021.2j44ayunal7fkb7i@linutronix.de>
+        lkml <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] thermal-generic-adc: Silent error message for
+ EPROBE_DEFER
+Message-ID: <20191008124520.000009c7@huawei.com>
+In-Reply-To: <CAJMQK-jawP2+Ba0AkquqU16vVnq_yGJN=Bepk7kLRusp_zdq2A@mail.gmail.com>
+References: <20190910075907.132200-1-hsinyi@chromium.org>
+        <CAJMQK-jawP2+Ba0AkquqU16vVnq_yGJN=Bepk7kLRusp_zdq2A@mail.gmail.com>
+Organization: Huawei
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.61]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Clark Williams <williams@redhat.com>
+On Mon, 7 Oct 2019 10:07:22 -0700
+Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 
-The spinlock pkg_temp_lock has the potential of being taken in atomic
-context because it can be acquired from the thermal IRQ vector.
-It's static and limited scope so go ahead and make it a raw spinlock.
+> On Tue, Sep 10, 2019 at 12:59 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > If devm_iio_channel_get() or devm_thermal_zone_of_sensor_register()
+> > fail with EPROBE_DEFER, we shouldn't print an error message, as the
+> > device will be probed again later.
+> >
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > ---  
+> 
+> Ping on the thread. Any suggestion for this patch?
+> Thanks
 
-Signed-off-by: Clark Williams <williams@redhat.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+Looks sensible to me.
 
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -63,7 +63,7 @@ static int max_id __read_mostly;
- /* Array of zone pointers */
- static struct zone_device **zones;
- /* Serializes interrupt notification, work and hotplug */
--static DEFINE_SPINLOCK(pkg_temp_lock);
-+static DEFINE_RAW_SPINLOCK(pkg_temp_lock);
- /* Protects zone operation in the work function against hotplug removal */
- static DEFINE_MUTEX(thermal_zone_mutex);
- 
-@@ -266,12 +266,12 @@ static void pkg_temp_thermal_threshold_w
- 	u64 msr_val, wr_val;
- 
- 	mutex_lock(&thermal_zone_mutex);
--	spin_lock_irq(&pkg_temp_lock);
-+	raw_spin_lock_irq(&pkg_temp_lock);
- 	++pkg_work_cnt;
- 
- 	zonedev = pkg_temp_thermal_get_dev(cpu);
- 	if (!zonedev) {
--		spin_unlock_irq(&pkg_temp_lock);
-+		raw_spin_unlock_irq(&pkg_temp_lock);
- 		mutex_unlock(&thermal_zone_mutex);
- 		return;
- 	}
-@@ -285,7 +285,7 @@ static void pkg_temp_thermal_threshold_w
- 	}
- 
- 	enable_pkg_thres_interrupt();
--	spin_unlock_irq(&pkg_temp_lock);
-+	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/*
- 	 * If tzone is not NULL, then thermal_zone_mutex will prevent the
-@@ -310,7 +310,7 @@ static int pkg_thermal_notify(u64 msr_va
- 	struct zone_device *zonedev;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&pkg_temp_lock, flags);
-+	raw_spin_lock_irqsave(&pkg_temp_lock, flags);
- 	++pkg_interrupt_cnt;
- 
- 	disable_pkg_thres_interrupt();
-@@ -322,7 +322,7 @@ static int pkg_thermal_notify(u64 msr_va
- 		pkg_thermal_schedule_work(zonedev->cpu, &zonedev->work);
- 	}
- 
--	spin_unlock_irqrestore(&pkg_temp_lock, flags);
-+	raw_spin_unlock_irqrestore(&pkg_temp_lock, flags);
- 	return 0;
- }
- 
-@@ -368,9 +368,9 @@ static int pkg_temp_thermal_device_add(u
- 	      zonedev->msr_pkg_therm_high);
- 
- 	cpumask_set_cpu(cpu, &zonedev->cpumask);
--	spin_lock_irq(&pkg_temp_lock);
-+	raw_spin_lock_irq(&pkg_temp_lock);
- 	zones[id] = zonedev;
--	spin_unlock_irq(&pkg_temp_lock);
-+	raw_spin_unlock_irq(&pkg_temp_lock);
- 	return 0;
- }
- 
-@@ -407,7 +407,7 @@ static int pkg_thermal_cpu_offline(unsig
- 	}
- 
- 	/* Protect against work and interrupts */
--	spin_lock_irq(&pkg_temp_lock);
-+	raw_spin_lock_irq(&pkg_temp_lock);
- 
- 	/*
- 	 * Check whether this cpu was the current target and store the new
-@@ -439,9 +439,9 @@ static int pkg_thermal_cpu_offline(unsig
- 		 * To cancel the work we need to drop the lock, otherwise
- 		 * we might deadlock if the work needs to be flushed.
- 		 */
--		spin_unlock_irq(&pkg_temp_lock);
-+		raw_spin_unlock_irq(&pkg_temp_lock);
- 		cancel_delayed_work_sync(&zonedev->work);
--		spin_lock_irq(&pkg_temp_lock);
-+		raw_spin_lock_irq(&pkg_temp_lock);
- 		/*
- 		 * If this is not the last cpu in the package and the work
- 		 * did not run after we dropped the lock above, then we
-@@ -452,7 +452,7 @@ static int pkg_thermal_cpu_offline(unsig
- 			pkg_thermal_schedule_work(target, &zonedev->work);
- 	}
- 
--	spin_unlock_irq(&pkg_temp_lock);
-+	raw_spin_unlock_irq(&pkg_temp_lock);
- 
- 	/* Final cleanup if this is the last cpu */
- 	if (lastcpu)
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
