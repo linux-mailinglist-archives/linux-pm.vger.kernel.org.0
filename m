@@ -2,297 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5FFD0400
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 01:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1B0D041D
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 01:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727769AbfJHXT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Oct 2019 19:19:58 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55537 "EHLO
+        id S1728792AbfJHX3O convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 8 Oct 2019 19:29:14 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:63300 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726579AbfJHXT6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 19:19:58 -0400
+        with ESMTP id S1726068AbfJHX3O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 19:29:14 -0400
 Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id c4f09adb8ea881e8; Wed, 9 Oct 2019 01:19:51 +0200
+ id d20e51580ea3c8fa; Wed, 9 Oct 2019 01:29:11 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Chen, Hu" <hu1.chen@intel.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: Re: [RFC/RFT][PATCH v8] cpuidle: New timer events oriented governor for tickless systems
-Date:   Wed, 09 Oct 2019 01:19:51 +0200
-Message-ID: <1574317.FFykgJKpNH@kreacher>
-In-Reply-To: <CAJZ5v0jvusVBcKECBueDHk5KQGda=GGuSGPO3F4wCvk3cro56A@mail.gmail.com>
-References: <001601d57487$e1029ef0$a307dcd0$@net> <CAJZ5v0gRSpNtwDXrRr9GW2O9ZQpM0yBdKfQDXLwsZua5692yUQ@mail.gmail.com> <CAJZ5v0jvusVBcKECBueDHk5KQGda=GGuSGPO3F4wCvk3cro56A@mail.gmail.com>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] cpufreq: Avoid cpufreq_suspend() deadlock on system shutdown
+Date:   Wed, 09 Oct 2019 01:29:10 +0200
+Message-ID: <10202295.pfq90QWH5T@kreacher>
+In-Reply-To: <CAJZ5v0hsiyKfVcDFbnJKqDkCKWhbSfNrmm7yVhudONuS0SWALw@mail.gmail.com>
+References: <20191003140828.14801-1-ville.syrjala@linux.intel.com> <20191004123026.GU1208@intel.com> <CAJZ5v0hsiyKfVcDFbnJKqDkCKWhbSfNrmm7yVhudONuS0SWALw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, October 8, 2019 12:49:01 PM CEST Rafael J. Wysocki wrote:
-> On Tue, Oct 8, 2019 at 11:51 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Oct 8, 2019 at 8:20 AM Doug Smythies <dsmythies@telus.net> wrote:
-> > >
-> > > On 2019.10.06 08:34 Rafael J. Wysocki wrote:
-> > > > On Sun, Oct 6, 2019 at 4:46 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > >> On 2019.10.01 02:32 Rafael J. Wysocki wrote:
-> > > >>> On Sun, Sep 29, 2019 at 6:05 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > >>>> On 2019.09.26 09:32 Doug Smythies wrote:
-> > > >>>>
-> > > >>>>> If the deepest idle state is disabled, the system
-> > > >>>>> can become somewhat unstable, with anywhere between no problem
-> > > >>>>> at all, to the occasional temporary jump using a lot more
-> > > >>>>> power for a few seconds, to a permanent jump using a lot more
-> > > >>>>> power continuously. I have been unable to isolate the exact
-> > > >>>>> test load conditions under which this will occur. However,
-> > > >>>>> temporarily disabling and then enabling other idle states
-> > > >>>>> seems to make for a somewhat repeatable test. It is important
-> > > >>>>> to note that the issue occurs with only ever disabling the deepest
-> > > >>>>> idle state, just not reliably.
-> > > >>>>>
-> > > >>>>> I want to know how you want to proceed before I do a bunch of
-> > > >>>>> regression testing.
-> > > >>>>
-> > > >> I do not think I stated it clearly before: The problem here is that some CPUs
-> > > >> seem to get stuck in idle state 0, and when they do power consumption spikes,
-> > > >> often by several hundred % and often indefinitely.
-> > > >
-> > > > That indeed has not been clear to me, thanks for the clarification!
-> > >
-> > > >
-> > > >> I made a hack job automated test:
-> > > >> Kernel  tests                 fail rate
-> > > >> 5.4-rc1                6616           13.45%
-> > > >> 5.3              2376            4.50%
-> > > >> 5.3-teov7       12136            0.00%  <<< teo.c reverted and teov7 put in its place.
-> > > >> 5.4-rc1-ds      11168        0.00%  <<< [old] proposed patch (> 7 hours test time)
-> > >
-> > >
-> > >    5.4-rc1-ds12   4224          0.005 <<< new proposed patch
-> > >
-> > > >>
-> > > >> [old] Proposed patch (on top of kernel 5.4-rc1): [deleted]
-> > >
-> > > > This change may cause the deepest state to be selected even if its
-> > > > "hits" metric is less than the "misses" one AFAICS, in which case the
-> > > > max_early_index state should be selected instead.
-> > > >
-> > > > It looks like the max_early_index computation is broken when the
-> > > > deepest state is disabled.
-> > >
-> > > O.K. Thanks for your quick reply, and insight.
-> > >
-> > > I think long durations always need to be counted, but currently if
-> > > the deepest idle state is disabled, they are not.
-> > > How about this?:
-> > > (test results added above, more tests pending if this might be a path forward.)
-> > >
-> > > diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> > > index b5a0e49..a970d2c 100644
-> > > --- a/drivers/cpuidle/governors/teo.c
-> > > +++ b/drivers/cpuidle/governors/teo.c
-> > > @@ -155,10 +155,12 @@ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-> > >
-> > >                 cpu_data->states[i].early_hits -= early_hits >> DECAY_SHIFT;
-> > >
-> > > -               if (drv->states[i].target_residency <= sleep_length_us) {
-> > > -                       idx_timer = i;
-> > > -                       if (drv->states[i].target_residency <= measured_us)
-> > > -                               idx_hit = i;
-> > > +               if (!(drv->states[i].disabled || dev->states_usage[i].disable)){
-> > > +                       if (drv->states[i].target_residency <= sleep_length_us) {
-> > > +                               idx_timer = i;
-> > > +                               if (drv->states[i].target_residency <= measured_us)
-> > > +                                       idx_hit = i;
-> > > +                       }
-> >
-> > What if the state is enabled again after some time?
-> 
-> Actually, the states are treated as "bins" here, so for the metrics it
-> doesn't matter whether or not they are enabled at the moment.
-> 
-> > >                 }
-> > >         }
-> > >
-> > > @@ -256,39 +258,25 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> > >                 struct cpuidle_state *s = &drv->states[i];
-> > >                 struct cpuidle_state_usage *su = &dev->states_usage[i];
-> > >
-> > > -               if (s->disabled || su->disable) {
-> > > -                       /*
-> > > -                        * If the "early hits" metric of a disabled state is
-> > > -                        * greater than the current maximum, it should be taken
-> > > -                        * into account, because it would be a mistake to select
-> > > -                        * a deeper state with lower "early hits" metric.  The
-> > > -                        * index cannot be changed to point to it, however, so
-> > > -                        * just increase the max count alone and let the index
-> > > -                        * still point to a shallower idle state.
-> > > -                        */
-> > > -                       if (max_early_idx >= 0 &&
-> > > -                           count < cpu_data->states[i].early_hits)
-> > > -                               count = cpu_data->states[i].early_hits;
-> > > -
-> > > -                       continue;
-> >
-> > AFAICS, adding early_hits to count is not a mistake if there are still
-> > enabled states deeper than the current one.
-> 
-> And the mistake appears to be that the "hits" and "misses" metrics
-> aren't handled in analogy with the "early_hits" one when the current
-> state is disabled.
-> 
-> Let me try to cut a patch to address that.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Appended below, not tested.
+It is incorrect to set the cpufreq syscore shutdown callback pointer
+to cpufreq_suspend(), because that function cannot be run in the
+syscore stage of system shutdown for two reasons: (a) it may attempt
+to carry out actions depending on devices that have already been shut
+down at that point and (b) the RCU synchronization carried out by it
+may not be able to make progress then.
 
-It is meant to address two problems, one of which is that the "hits" and
-"misses" metrics of disabled states need to be taken into account too in
-some cases, and the other is an issue with the handling of "early hits"
-which may lead to suboptimal state selection if some states are disabled.
+The latter issue has been present since commit 45975c7d21a1 ("rcu:
+Define RCU-sched API in terms of RCU for Tree RCU PREEMPT builds"),
+but the former one has always been there regardless.
 
+Fix that by dropping cpufreq_syscore_ops altogether and making
+device_shutdown() call cpufreq_suspend() directly before shutting
+down devices, which is along the lines of what system-wide power
+management does.
+
+Fixes: 45975c7d21a1 ("rcu: Define RCU-sched API in terms of RCU for Tree RCU PREEMPT builds")
+Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Tested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |   71 +++++++++++++++++++++++++++++-----------
- 1 file changed, 52 insertions(+), 19 deletions(-)
+ drivers/base/core.c       |    3 +++
+ drivers/cpufreq/cpufreq.c |   10 ----------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-Index: linux-pm/drivers/cpuidle/governors/teo.c
+Index: linux-pm/drivers/cpufreq/cpufreq.c
 ===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/teo.c
-+++ linux-pm/drivers/cpuidle/governors/teo.c
-@@ -233,7 +233,7 @@ static int teo_select(struct cpuidle_dri
- {
- 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
- 	int latency_req = cpuidle_governor_latency_req(dev->cpu);
--	unsigned int duration_us, count;
-+	unsigned int duration_us, hits, misses, early_hits;
- 	int max_early_idx, constraint_idx, idx, i;
- 	ktime_t delta_tick;
+--- linux-pm.orig/drivers/cpufreq/cpufreq.c
++++ linux-pm/drivers/cpufreq/cpufreq.c
+@@ -2737,14 +2737,6 @@ int cpufreq_unregister_driver(struct cpu
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
  
-@@ -247,7 +247,9 @@ static int teo_select(struct cpuidle_dri
- 	cpu_data->sleep_length_ns = tick_nohz_get_sleep_length(&delta_tick);
- 	duration_us = ktime_to_us(cpu_data->sleep_length_ns);
- 
--	count = 0;
-+	hits = 0;
-+	misses = 0;
-+	early_hits = 0;
- 	max_early_idx = -1;
- 	constraint_idx = drv->state_count;
- 	idx = -1;
-@@ -258,23 +260,54 @@ static int teo_select(struct cpuidle_dri
- 
- 		if (s->disabled || su->disable) {
- 			/*
--			 * If the "early hits" metric of a disabled state is
--			 * greater than the current maximum, it should be taken
--			 * into account, because it would be a mistake to select
--			 * a deeper state with lower "early hits" metric.  The
--			 * index cannot be changed to point to it, however, so
--			 * just increase the max count alone and let the index
--			 * still point to a shallower idle state.
-+			 * If the "hits" metric of a disabled state is greater
-+			 * than its "misses" metric, it needs to be taken into
-+			 * account, because the closest shallower enabled state
-+			 * "represents" it in that case.
- 			 */
--			if (max_early_idx >= 0 &&
--			    count < cpu_data->states[i].early_hits)
--				count = cpu_data->states[i].early_hits;
-+			if (cpu_data->states[i].hits > cpu_data->states[i].misses) {
-+				hits = cpu_data->states[i].hits;
-+				misses = cpu_data->states[i].misses;
-+			}
-+
-+			if (early_hits >= cpu_data->states[i].early_hits ||
-+			    idx < 0)
-+				continue;
-+
-+			/*
-+			 * If the current candidate state has been the one with
-+			 * the maximum "early hits" metric so far, the "early
-+			 * hits" metric of the disabled state replaces the
-+			 * current "early hits" count to avoid selecting a
-+			 * deeper state with lower "early hits" metric.
-+			 */
-+			if (max_early_idx == idx) {
-+				early_hits = cpu_data->states[i].early_hits;
-+				continue;
-+			}
-+
-+			/*
-+			 * The current candidate state is closer to the disabled
-+			 * one than the current maximum "early hits" state, so
-+			 * replace the latter with it, but in case the maximum
-+			 * "early hits" state index has not been set so far,
-+			 * check if the current candidate state is not too
-+			 * shallow for that role.
-+			 */
-+			if (!(tick_nohz_tick_stopped() &&
-+			      drv->states[idx].target_residency < TICK_USEC)) {
-+				early_hits = cpu_data->states[i].early_hits;
-+				max_early_idx = idx;
-+			}
- 
- 			continue;
- 		}
- 
--		if (idx < 0)
-+		if (idx < 0) {
- 			idx = i; /* first enabled state */
-+			hits = cpu_data->states[i].hits;
-+			misses = cpu_data->states[i].misses;
-+		}
- 
- 		if (s->target_residency > duration_us)
- 			break;
-@@ -283,11 +316,13 @@ static int teo_select(struct cpuidle_dri
- 			constraint_idx = i;
- 
- 		idx = i;
-+		hits = cpu_data->states[i].hits;
-+		misses = cpu_data->states[i].misses;
- 
--		if (count < cpu_data->states[i].early_hits &&
-+		if (early_hits < cpu_data->states[i].early_hits &&
- 		    !(tick_nohz_tick_stopped() &&
- 		      drv->states[i].target_residency < TICK_USEC)) {
--			count = cpu_data->states[i].early_hits;
-+			early_hits = cpu_data->states[i].early_hits;
- 			max_early_idx = i;
- 		}
- 	}
-@@ -300,8 +335,7 @@ static int teo_select(struct cpuidle_dri
- 	 * "early hits" metric, but if that cannot be determined, just use the
- 	 * state selected so far.
- 	 */
--	if (cpu_data->states[idx].hits <= cpu_data->states[idx].misses &&
--	    max_early_idx >= 0) {
-+	if (hits <= misses && max_early_idx >= 0) {
- 		idx = max_early_idx;
- 		duration_us = drv->states[idx].target_residency;
- 	}
-@@ -316,10 +350,9 @@ static int teo_select(struct cpuidle_dri
- 	if (idx < 0) {
- 		idx = 0; /* No states enabled. Must use 0. */
- 	} else if (idx > 0) {
-+		unsigned int count = 0;
- 		u64 sum = 0;
- 
--		count = 0;
+-/*
+- * Stop cpufreq at shutdown to make sure it isn't holding any locks
+- * or mutexes when secondary CPUs are halted.
+- */
+-static struct syscore_ops cpufreq_syscore_ops = {
+-	.shutdown = cpufreq_suspend,
+-};
 -
- 		/*
- 		 * Count and sum the most recent idle duration values less than
- 		 * the current expected idle duration value.
+ struct kobject *cpufreq_global_kobject;
+ EXPORT_SYMBOL(cpufreq_global_kobject);
+ 
+@@ -2756,8 +2748,6 @@ static int __init cpufreq_core_init(void
+ 	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
+ 	BUG_ON(!cpufreq_global_kobject);
+ 
+-	register_syscore_ops(&cpufreq_syscore_ops);
+-
+ 	return 0;
+ }
+ module_param(off, int, 0444);
+Index: linux-pm/drivers/base/core.c
+===================================================================
+--- linux-pm.orig/drivers/base/core.c
++++ linux-pm/drivers/base/core.c
+@@ -9,6 +9,7 @@
+  */
+ 
+ #include <linux/acpi.h>
++#include <linux/cpufreq.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/fwnode.h>
+@@ -3179,6 +3180,8 @@ void device_shutdown(void)
+ 	wait_for_device_probe();
+ 	device_block_probing();
+ 
++	cpufreq_suspend();
++
+ 	spin_lock(&devices_kset->list_lock);
+ 	/*
+ 	 * Walk the devices list backward, shutting down each in turn.
 
 
 
