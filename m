@@ -2,130 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC134CFF49
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 18:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C531FD019E
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Oct 2019 21:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbfJHQwk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Oct 2019 12:52:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:41300 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbfJHQwj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 8 Oct 2019 12:52:39 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 424301570;
-        Tue,  8 Oct 2019 09:52:39 -0700 (PDT)
-Received: from [192.168.0.9] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AAC23F6C4;
-        Tue,  8 Oct 2019 09:52:37 -0700 (PDT)
-Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
- background tasks on fewer cores
-To:     Parth Shah <parth@linux.ibm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Doug Smythies <dsmythies@telus.net>,
-        Quentin Perret <qperret@qperret.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20191007083051.4820-1-parth@linux.ibm.com>
- <20191007083051.4820-5-parth@linux.ibm.com>
- <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
- <80bb34ec-6358-f4dc-d20d-cde6c9d7e197@linux.ibm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <d55c593d-af8e-c8ba-cc0e-c9917df5d593@arm.com>
-Date:   Tue, 8 Oct 2019 18:52:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730664AbfJHTz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Oct 2019 15:55:27 -0400
+Received: from mail-ed1-f52.google.com ([209.85.208.52]:37884 "EHLO
+        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730823AbfJHTzX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Oct 2019 15:55:23 -0400
+Received: by mail-ed1-f52.google.com with SMTP id r4so16836391edy.4
+        for <linux-pm@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
+         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
+         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
+         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
+         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
+         wXZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=na+T+83CcoMo03aJOiycL7foKIYz8dr8IetyJNGWw1lJMYeErqm+0hBFNwR9Mnjh0W
+         hmx7lQ2PUYFbS3n7ofRoL9Q3L1lsu9+v30V5whPzvNHHiKQz12U0522uTQv3MBpTg2eM
+         iBoPiOLLChWSJCrHpyFzt1clWAPC1e8Ci3FrDqeNvZNF5T2liDfTI4FveUZ33qBk9TVu
+         ZsppwVXClX/zPemGtAkvALasfuq7wJRJ6lK6GXR3iJkQoz9/Ljj3cTZfFkjqm2lr8D/S
+         l8INCT9Qvs3SaftRVvje+fkR2N66/HyVrPWxQKmVRXGEvffcS6BQhb9rGTipfRz2ubZv
+         0jfg==
+X-Gm-Message-State: APjAAAWUVS2k8TFaw5SF2FUo40/D3RG8IlFeZz+gnUpU1tq5RJ7kjzwN
+        V0mMeumjOYsVUShBEwTHeRXjZOHSF9BlgQYvndA=
+X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
+X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
+ Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <80bb34ec-6358-f4dc-d20d-cde6c9d7e197@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
+ -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   MONEY GRAM <currency1000000@gmail.com>
+Date:   Tue, 8 Oct 2019 20:55:16 +0100
+Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
+Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[- Quentin Perret <quentin.perret@arm.com>]
-[+ Quentin Perret <qperret@qperret.net>]
+HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
+M.T.C.N:78393135
 
-See commit c193a3ffc282 ("mailmap: Update email address for Quentin Perret")
+Attn: Beneficiary,
 
-On 07/10/2019 18:53, Parth Shah wrote:
-> 
-> 
-> On 10/7/19 5:49 PM, Vincent Guittot wrote:
->> On Mon, 7 Oct 2019 at 10:31, Parth Shah <parth@linux.ibm.com> wrote:
->>>
->>> The algorithm finds the first non idle core in the system and tries to
->>> place a task in the idle CPU in the chosen core. To maintain
->>> cache hotness, work of finding non idle core starts from the prev_cpu,
->>> which also reduces task ping-pong behaviour inside of the core.
->>>
->>> Define a new method to select_non_idle_core which keep tracks of the idle
->>> and non-idle CPUs in the core and based on the heuristics determines if the
->>> core is sufficiently busy to place the incoming backgroung task. The
->>> heuristic further defines the non-idle CPU into either busy (>12.5% util)
->>> CPU and overutilized (>80% util) CPU.
->>> - The core containing more idle CPUs and no busy CPUs is not selected for
->>>   packing
->>> - The core if contains more than 1 overutilized CPUs are exempted from
->>>   task packing
->>> - Pack if there is atleast one busy CPU and overutilized CPUs count is <2
->>>
->>> Value of 12.5% utilization for busy CPU gives sufficient heuristics for CPU
->>> doing enough work an
+This is to inform you that the America Embassy office was instructed
+to transfer your fund $980,000.00 U.S Dollars compensating all the
+SCAM VICTIMS and your email was found as one of the VICTIMS. by
+America security leading team and America representative officers so
+between today the 8th of October till 1ST Of December 2019 you will
+be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
+that we have already sent the $6,000 dollars this morning to avoid
+cancellation of your payment, remain the total sum of $980,000.00.
 
-[...]
+You have only six hours to call this office upon the receipt of this
+email the maximum amount you will be receiving per a day starting from
+today's $6,000 and the Money Transfer Control Number of today is
+below.
 
->>> @@ -6483,7 +6572,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
->>>         } else if (sd_flag & SD_BALANCE_WAKE) { /* XXX always ? */
->>>                 /* Fast path */
->>>
->>> -               new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
->>> +               if (is_turbosched_enabled() && unlikely(is_background_task(p)))
->>> +                       new_cpu = turbosched_select_non_idle_core(p, prev_cpu,
->>> +                                                                 new_cpu);
->>
->> Could you add turbosched_select_non_idle_core() similarly to
->> find_energy_efficient_cpu() ?
->> Add it at the beg select_task_rq_fair()
->> Return immediately with theCPU if you have found one
->> Or let the normal path select a CPU if the
->> turbosched_select_non_idle_core() has not been able to find a suitable
->> CPU for packing
->>
-> 
-> of course. I can do that.
-> I was just not aware about the effect of wake_affine and so was waiting for
-> such comments to be sure of. Thanks for this.
-> Maybe I can add just below the sched_energy_present(){...} construct giving
-> precedence to EAS? I'm asking this because I remember Patrick telling me to
-> leverage task packing for android as well?
+NOTE; The sent $6,000 is on hold because of the instruction from IMF
+office, they asked us to place it on hold by requesting the (Clean
+Bill Record Certificate) which will cost you $25 in order to fulfill
+all the necessary obligation to avoid any hitches while sending you
+the payment through MONEY GRAM money transfer, the necessary
+obligation I mean here is to obtain the (Clean Bill Record
+Certificate)
 
-I have a hard time imaging that Turbosched will be used in Android next
-to EAS in the foreseeable future.
+Below is the information of today track it in our
 
-First of all, EAS provides task packing already on Performance Domain
-(PD) level (a.k.a. as cluster on traditional 2-cluster Arm/Arm64
-big.LITTLE or DynamIQ (with Phantom domains (out of tree solution)).
-This is where we can safe energy without harming latency.
+websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
+to see is available to pick up by the receiver, but if we didn't here
+from you soon we'll pickup it up from line for security reason to
+avoid hackers stealing the money online.
 
-See the tests results under '2.1 Energy test case' in
+Money Transfer Control Number M.T.C.N)::78393135
+SENDERS FIRST NAME: John
+SENDERS LAST NAME: Chun
+SENDERS COUNTRY...BENIN REPUBLIC
+TEXT QUESTION: A
+ANSWER: B
+AMOUNT: $6,000
 
-https://lore.kernel.org/r/20181203095628.11858-1-quentin.perret@arm.com
+We need the below details from you, to enable us place the payment to
+your name and transfer the fund to you.
 
-There are 10 to 50 small (classified solely by task utilization) tasks
-per test case and EAS shows an effect on energy consumption by packing
-them onto the PD (cluster) of the small CPUs.
+(Full Receivers name)...................
+(You're Country)................................
+(Address)......................................
+(Phone NuMBER-...............................
+(You're Age)............................
+(OCCUPATION)..REAL ESTATE..................
+(A Copy of Your ID CARD).SEE ATTACHMENTS.............
 
-And second, the CPU supported topology is different to the one you're
-testing on.
+HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
+AND THAT IS ALL YOU HAVE TO DO ASAP.
 
-[...]
+The payment will be sending to below information, such as:
+
+Receiver.............. ALAN UDE
+Country................Benin Republic
+Amount: ....................$25
+Question: .....................A
+Answer:................... B
+Sender...............Name:
+MTCN :..............
+
+According to the instruction and order we received from IMF the their
+requested $25 must be made directly to the above info's.
+
+Furthermore you are advised to call us as the instruction was passed
+that within 6hours without hearing from you, Count your payment
+canceled. Number to call is below listed manager director office of
+release order:
+DR.ALAN UDE
+Director MONEY GRAM-Benin
