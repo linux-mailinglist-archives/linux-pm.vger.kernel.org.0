@@ -2,125 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D148D112B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 16:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517DBD1276
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 17:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729865AbfJIO0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 10:26:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:35562 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727769AbfJIO0Q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Oct 2019 10:26:16 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19D451576;
-        Wed,  9 Oct 2019 07:26:15 -0700 (PDT)
-Received: from [192.168.0.9] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB8103F71A;
-        Wed,  9 Oct 2019 07:26:12 -0700 (PDT)
-Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
- background tasks on fewer cores
-To:     Parth Shah <parth@linux.ibm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Doug Smythies <dsmythies@telus.net>,
-        Quentin Perret <qperret@qperret.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20191007083051.4820-1-parth@linux.ibm.com>
- <20191007083051.4820-5-parth@linux.ibm.com>
- <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
- <80bb34ec-6358-f4dc-d20d-cde6c9d7e197@linux.ibm.com>
- <d55c593d-af8e-c8ba-cc0e-c9917df5d593@arm.com>
- <86dc25e4-9f19-627f-9581-d74608b7f20c@linux.ibm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <eef32b9e-1f24-e8a9-cd91-dcc6546a636f@arm.com>
-Date:   Wed, 9 Oct 2019 16:26:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731226AbfJIP1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 11:27:32 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:43599 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731173AbfJIP1c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 11:27:32 -0400
+Received: by mail-yb1-f196.google.com with SMTP id y204so855295yby.10;
+        Wed, 09 Oct 2019 08:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QSdPkLvnnsMdiZ+6XfR6tWFXWqzKs2oliNxvPIoDunQ=;
+        b=eNviB35I7i63+r1g+2iDyKbCH56ABSueAeX/QFiRyX1Veje41eJbUiLkr6ugAfNFo1
+         uLANxIbk7WiyFJT9Ri8QIrsHeBQW39EwsLKzC3iylHW7tnmwEPUdXw41MmOBJ/GJ0Jmo
+         hOXq/hWVVsyK7K+/kIx33X0jkkphbou9C6O4lCHo+b3Uo8stCJehY2a94z9Wx0YDxn2Z
+         k4HgdR3pTepYvq1w6pd0mK1QPuaMiVAfevFknU+Jc+FZvxHFadGcUbiF09XXGiBXyaDQ
+         qTvrQVDF4gZs92snLr5h9QKmKn3npTOBwoRnGZmS5TOOVA9adwYm3PuK9ixc6q1WjlVQ
+         uGeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QSdPkLvnnsMdiZ+6XfR6tWFXWqzKs2oliNxvPIoDunQ=;
+        b=N5/55FiYNln4Dt/ORQlv5zwpGaN/Qwu1WUcawBMsd/fRtXRWipG+0B78zxlQ3lj0fv
+         NA4N8UtAsakO9j/bIMdxDWoaIfJwYRCxQQSEKh0O/ZeK55hArXJqmH/UKPThbqDBeMdr
+         C+XNCKCx1lC0l1TMEvYHjTGV6Ta8lUlEpUOH/RTCHH3TK0tUGvPsmxH+ueURAS2+g+HE
+         Dfe+00cdfFIcJRZMOGd+0VWKASR+ErVIFv24c04nt9jtOlR2prNAi4btCipfCNy2+VhS
+         lJaGS17O33DooXP0k6xLEnAgxKRJsIDD69TSB/uywx6qJTQSDaEuVqtnogxj7oKc/SPk
+         P89Q==
+X-Gm-Message-State: APjAAAXySnjTsgmGSUFx4A7+BcVb+qDR/nRZRFIx98isfM9kUWmBmFAl
+        Z0m8MmJj+CLjDn2NR+rqRd8=
+X-Google-Smtp-Source: APXvYqzbYaOJ/4RGKB2EynkFqV+aKl+67zvtQakjDDx6Y9Kun1tIgsnf9lipFkBfOWSYYIcKG4itUA==
+X-Received: by 2002:a25:830b:: with SMTP id s11mr2317054ybk.230.1570634850866;
+        Wed, 09 Oct 2019 08:27:30 -0700 (PDT)
+Received: from localhost.localdomain (072-189-084-142.res.spectrum.com. [72.189.84.142])
+        by smtp.gmail.com with ESMTPSA id g40sm611863ywk.14.2019.10.09.08.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2019 08:27:29 -0700 (PDT)
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        akpm@linux-foundation.org
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, yamada.masahiro@socionext.com,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        geert@linux-m68k.org, preid@electromag.com.au, lukas@wunner.de,
+        sean.nyekjaer@prevas.dk, morten.tiljeset@prevas.dk,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Subject: [PATCH v17 00/14] Introduce the for_each_set_clump8 macro
+Date:   Wed,  9 Oct 2019 11:26:58 -0400
+Message-Id: <cover.1570633189.git.vilhelm.gray@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <86dc25e4-9f19-627f-9581-d74608b7f20c@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/10/2019 10:57, Parth Shah wrote:
+Changes in v17:
+  - Move bitmap_get_value8/bitmap_set_value8 to include/linux/bitmap.h
+  - add style changes suggested by Andy Shevchenko to intel_soc_dts_iosf
 
-[...]
+While adding GPIO get_multiple/set_multiple callback support for various
+drivers, I noticed a pattern of looping manifesting that would be useful
+standardized as a macro.
 
->> On 07/10/2019 18:53, Parth Shah wrote:
->>>
->>>
->>> On 10/7/19 5:49 PM, Vincent Guittot wrote:
->>>> On Mon, 7 Oct 2019 at 10:31, Parth Shah <parth@linux.ibm.com> wrote:
+This patchset introduces the for_each_set_clump8 macro and utilizes it
+in several GPIO drivers. The for_each_set_clump macro8 facilitates a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-[...]
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
 
->>> Maybe I can add just below the sched_energy_present(){...} construct giving
->>> precedence to EAS? I'm asking this because I remember Patrick telling me to
->>> leverage task packing for android as well?
->>
->> I have a hard time imaging that Turbosched will be used in Android next
->> to EAS in the foreseeable future.
->>
->> First of all, EAS provides task packing already on Performance Domain
->> (PD) level (a.k.a. as cluster on traditional 2-cluster Arm/Arm64
->> big.LITTLE or DynamIQ (with Phantom domains (out of tree solution)).
->> This is where we can safe energy without harming latency.
->>
->> See the tests results under '2.1 Energy test case' in
->>
->> https://lore.kernel.org/r/20181203095628.11858-1-quentin.perret@arm.com
->>
->> There are 10 to 50 small (classified solely by task utilization) tasks
->> per test case and EAS shows an effect on energy consumption by packing
->> them onto the PD (cluster) of the small CPUs.
->>
->> And second, the CPU supported topology is different to the one you're
->> testing on.
->>
-> 
-> cool. I was just keeping in mind the following quote
-> " defining a generic spread-vs-pack wakeup policy which is something
-> Android also could benefit from " (https://lkml.org/lkml/2019/6/28/628)
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
 
-The main thing is that in case we want to introduce a new functionality
-into CFS, we should try hard to use existing infrastructure (or
-infrastructure there is agreement on that we'll need it) as much as
-possible.
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
 
-If I understand Patrick here correctly, he suggested not to use uclamp
-but the task latency nice approach. There is agreement that we would
-need something like this as infrastructure:
+The for_each_set_clump8 macro has four parameters:
 
-https://lore.kernel.org/r/20190830174944.21741-1-subhra.mazumdar@oracle.com
+    * start: set to the bit offset of the current clump
+    * clump: set to the current clump value
+    * bits: bitmap to search within
+    * size: bitmap size in number of bits
 
-So p->latency_nice is suitable to include your p->flags |=
-PF_CAN_BE_PACKED concept nicely.
+In this version of the patchset, the for_each_set_clump macro has been
+reimplemented and simplified based on the suggestions provided by Rasmus
+Villemoes and Andy Shevchenko in the version 4 submission.
 
-> 
-> BTW, IIUC that does task consolidation only on single CPU unless
-> rd->overload is set, right?
+In particular, the function of the for_each_set_clump macro has been
+restricted to handle only 8-bit clumps; the drivers that use the
+for_each_set_clump macro only handle 8-bit ports so a generic
+for_each_set_clump implementation is not necessary. Thus, a solution for
+large clumps (i.e. those larger than the width of a bitmap word) can be
+postponed until a driver appears that actually requires such a generic
+for_each_set_clump implementation.
 
-Task consolidation on Performance Domains (PDs) w/ multiple CPUs (e.g.
-on a per-cluster PD big.LITTLE system) only works when the system is not
-overutilized:
+For what it's worth, a semi-generic for_each_set_clump (i.e. for clumps
+smaller than the width of a bitmap word) can be implemented by simply
+replacing the hardcoded '8' and '0xFF' instances with respective
+variables. I have not yet had a need for such an implementation, and
+since it falls short of a true generic for_each_set_clump function, I
+have decided to forgo such an implementation for now.
 
-6326 int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-6327 {
-...
-6337         if (!pd || *READ_ONCE(rd->overutilized)*)
-6338                 goto fail;
-...
+In addition, the bitmap_get_value8 and bitmap_set_value8 functions are
+introduced to get and set 8-bit values respectively. Their use is based
+on the behavior suggested in the patchset version 4 review.
 
-[...]
+William Breathitt Gray (14):
+  bitops: Introduce the for_each_set_clump8 macro
+  lib/test_bitmap.c: Add for_each_set_clump8 test cases
+  gpio: 104-dio-48e: Utilize for_each_set_clump8 macro
+  gpio: 104-idi-48: Utilize for_each_set_clump8 macro
+  gpio: gpio-mm: Utilize for_each_set_clump8 macro
+  gpio: ws16c48: Utilize for_each_set_clump8 macro
+  gpio: pci-idio-16: Utilize for_each_set_clump8 macro
+  gpio: pcie-idio-24: Utilize for_each_set_clump8 macro
+  gpio: uniphier: Utilize for_each_set_clump8 macro
+  gpio: 74x164: Utilize the for_each_set_clump8 macro
+  thermal: intel: intel_soc_dts_iosf: Utilize for_each_set_clump8 macro
+  gpio: pisosr: Utilize the for_each_set_clump8 macro
+  gpio: max3191x: Utilize the for_each_set_clump8 macro
+  gpio: pca953x: Utilize the for_each_set_clump8 macro
+
+ drivers/gpio/gpio-104-dio-48e.c            |  73 ++++----------
+ drivers/gpio/gpio-104-idi-48.c             |  36 ++-----
+ drivers/gpio/gpio-74x164.c                 |  19 ++--
+ drivers/gpio/gpio-gpio-mm.c                |  73 ++++----------
+ drivers/gpio/gpio-max3191x.c               |  19 ++--
+ drivers/gpio/gpio-pca953x.c                |  17 ++--
+ drivers/gpio/gpio-pci-idio-16.c            |  75 +++++---------
+ drivers/gpio/gpio-pcie-idio-24.c           | 109 ++++++++-------------
+ drivers/gpio/gpio-pisosr.c                 |  12 +--
+ drivers/gpio/gpio-uniphier.c               |  16 ++-
+ drivers/gpio/gpio-ws16c48.c                |  73 ++++----------
+ drivers/thermal/intel/intel_soc_dts_iosf.c |  31 +++---
+ drivers/thermal/intel/intel_soc_dts_iosf.h |   2 -
+ include/asm-generic/bitops/find.h          |  17 ++++
+ include/linux/bitmap.h                     |  35 +++++++
+ include/linux/bitops.h                     |   5 +
+ lib/find_bit.c                             |  14 +++
+ lib/test_bitmap.c                          |  65 ++++++++++++
+ 18 files changed, 328 insertions(+), 363 deletions(-)
+
+
+base-commit: 8c550e94b8835170593169a45b5ba30d3fc72a70
+-- 
+2.23.0
+
