@@ -2,99 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6FED17D6
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 20:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E535FD17E2
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 20:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731655AbfJISyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 14:54:18 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34027 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731413AbfJISyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 14:54:18 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 83so2706269oii.1;
-        Wed, 09 Oct 2019 11:54:16 -0700 (PDT)
+        id S1729535AbfJIS4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 14:56:17 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:41373 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728804AbfJIS4Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 14:56:16 -0400
+Received: by mail-ed1-f68.google.com with SMTP id f20so3048868edv.8
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 11:56:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g4TKfxF3gSMTnw+PLh+f5IO7ohcFZfJBiF2mQGYqIL4=;
-        b=fvCnyWfI7u+yI6IGvLa4nR6xWk1rE3qmo/Wy7gk62edUIx8BrWvyoOJ0JXTVNTSGGF
-         9U9a+qpFdgbmPu+a19P3pHfZT9BPiFfXPZtuhYqpBG0u6LTgKfoOLPKPb1DcLW2thKNz
-         agaGNOSFsttv5vVbobHct8H9S8ZSmr+LSXl9MfvsWOVkivCRAmw00DgUN2O4UmauWxNH
-         PEP/cthXvKWmKRHESGR29+204halSdE5tINsKeIiUCPd1bgQNaordS/pwRde+2aFZQMi
-         o9wqpOzEi8A5lNHWlcVfkuKUkPZ/BI7fLynYde6YvIa+gSBv2vBCIIZ3QUQO5DlWsph8
-         sPGg==
-X-Gm-Message-State: APjAAAUyVKF4XkGsM32VrFaH2QL3qr/CTBlpwz08SBbNoC0NzholPNCR
-        ezUu65sLX8LnRpz/ikQ2LXdzZu/h9gYijf+z2us=
-X-Google-Smtp-Source: APXvYqw1BKM4Cuxi1XA4HvctbF2Di+fHjDb86RAW85kLS3qGwPX1DixF1UEOVf5VBTH09sOtqCksZO8jSoTChcOkEKs=
-X-Received: by 2002:a05:6808:3b4:: with SMTP id n20mr3648987oie.131.1570647255651;
- Wed, 09 Oct 2019 11:54:15 -0700 (PDT)
+        bh=ME4SGdezP8EuNZKcuKCFfTPKlUcPKl6rwZfU4amJBUk=;
+        b=lrlbQQawNwPg7jjxNah+7CukeDtqzZPgpkPwB7EtLFlJuNmoRYZuTNBi0/DgagO3CB
+         zoSKq/pjdgGOrobdD+g7fEpFSICFYuh1lqrjn2r5xgEdQ4787LGBXNS8smPYZk3d3ha9
+         Ei17+bT1T57dCZ7qP1czub5y3yhEbKCW9BhWPcxgaIvYBu2V6GhW+djGj9JmLhuGZX5t
+         RGDZ4818NUVDm1splPgzVNUWFJkPotglmenMjZCYiUgp+5si4xRf15iTcD0jYKT1yNna
+         4F6QwtxmxrJP9CQOd+vMtXcbEnwymVwmfEOiFDFw9ZUPYSir32trB1cBif6a/hS96w0a
+         oa9A==
+X-Gm-Message-State: APjAAAXnW75lbrMOAid3cseMa4gqGHZkaNIMma0oTyO7VfkI/88KMcZ8
+        o7EmQX3fcLTtQMOgVCep77+iozPrZaGijTd9zC2Z0A==
+X-Google-Smtp-Source: APXvYqyi9hZ7+EUv1ogH09bGu3J7WFLkxjN39fKCneOb/s/VOq7c+I99nkxjpLEVhiDBpDjQQk+xmfywxExUrWXNgZE=
+X-Received: by 2002:a17:906:4a8d:: with SMTP id x13mr4132553eju.317.1570647375351;
+ Wed, 09 Oct 2019 11:56:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1570633189.git.vilhelm.gray@gmail.com> <893c3b4f03266c9496137cc98ac2b1bd27f92c73.1570633189.git.vilhelm.gray@gmail.com>
- <CAK7LNATgW7bXUmqV=3QAaJ0Qu73Kox-TgDCQJb=s0=mwewSCUg@mail.gmail.com> <20191009170917.GG32742@smile.fi.intel.com>
-In-Reply-To: <20191009170917.GG32742@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Oct 2019 20:54:04 +0200
-Message-ID: <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
-Subject: Re: [PATCH v17 01/14] bitops: Introduce the for_each_set_clump8 macro
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Phil Reid <preid@electromag.com.au>,
-        Lukas Wunner <lukas@wunner.de>, sean.nyekjaer@prevas.dk,
-        morten.tiljeset@prevas.dk, Arnd Bergmann <arnd@arndb.de>
+References: <20190919190912.8386-1-todd.e.brandt@linux.intel.com>
+In-Reply-To: <20190919190912.8386-1-todd.e.brandt@linux.intel.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Wed, 9 Oct 2019 14:56:04 -0400
+Message-ID: <CAJvTdKkUR1FVrfaboRB=Yan-XtQrBjr8P-6tEBffBONfdVqrUA@mail.gmail.com>
+Subject: Re: [PATCH] pm-graph info added to MAINTAINERS
+To:     Todd Brandt <todd.e.brandt@linux.intel.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, todd.e.brandt@intel.com,
+        "Brown, Len" <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andy,
-
-On Wed, Oct 9, 2019 at 7:09 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Thu, Oct 10, 2019 at 01:28:08AM +0900, Masahiro Yamada wrote:
-> > On Thu, Oct 10, 2019 at 12:27 AM William Breathitt Gray
-> > <vilhelm.gray@gmail.com> wrote:
-> > >
-> > > This macro iterates for each 8-bit group of bits (clump) with set bits,
-> > > within a bitmap memory region. For each iteration, "start" is set to the
-> > > bit offset of the found clump, while the respective clump value is
-> > > stored to the location pointed by "clump". Additionally, the
-> > > bitmap_get_value8 and bitmap_set_value8 functions are introduced to
-> > > respectively get and set an 8-bit value in a bitmap memory region.
->
-> > Why is the return type "unsigned long" where you know
-> > it return the 8-bit value ?
->
-> Because bitmap API operates on unsigned long type. This is not only
-> consistency, but for sake of flexibility in case we would like to introduce
-> more calls like clump16 or so.
-
-TBH, that doesn't convince me: those functions explicitly take/return an
-8-bit value, and have "8" in their name.  The 8-bit value is never
-really related to, retrieved from, or stored in a full "unsigned long"
-element of a bitmap, only to/from/in a part (byte) of it.
-
-Following your rationale, all of iowrite{8,16,32,64}*() should take an
-"unsigned long" value, too.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Len Brown <len.brown@intel.com>
