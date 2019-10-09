@@ -2,103 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F662D1A30
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 22:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE46D1A66
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 23:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730490AbfJIU5E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 16:57:04 -0400
-Received: from muru.com ([72.249.23.125]:36442 "EHLO muru.com"
+        id S1731593AbfJIVBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 17:01:55 -0400
+Received: from muru.com ([72.249.23.125]:36454 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731158AbfJIU5E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Oct 2019 16:57:04 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 9D2518140;
-        Wed,  9 Oct 2019 20:57:36 +0000 (UTC)
-Date:   Wed, 9 Oct 2019 13:56:59 -0700
+        id S1731103AbfJIVBz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 9 Oct 2019 17:01:55 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 6C1038140;
+        Wed,  9 Oct 2019 21:02:28 +0000 (UTC)
 From:   Tony Lindgren <tony@atomide.com>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>
-Subject: Re: [PATCH] power: supply: cpcap-charger: Limit voltage to 4.2V for
- battery
-Message-ID: <20191009205659.GR5610@atomide.com>
-References: <20191009203355.5622-1-tony@atomide.com>
+        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
+Subject: [PATCHv2 0/2] cpcap charger and battery changes to deal with dropped voltage
+Date:   Wed,  9 Oct 2019 14:01:39 -0700
+Message-Id: <20191009210141.10037-1-tony@atomide.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191009203355.5622-1-tony@atomide.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [191009 13:34]:
-> This is against v5.3 so it can be easily picked for earlier kernels as
-> needed. If no changes needed, this is best applied on v5.3 and then merged
-> into v5.4-rc based branch as this will cause a minor merge conflict with
-> v5.4-rc because of 7f7378618b41 ("power: supply: cpcap-charger: Enable vbus
-> boost voltage").
+Hi,
 
-And below is the merge resolution I used for reference.
+Here are the changes for v5.5 merge window to optionally allow reconfiguring the
+charge voltage if folks want to do that.
+
+These depend on v5.3 + [PATCH] power: supply: cpcap-charger: Limit voltage to 4.2V
+for battery merged into v5.4-rc1 so we can keep the 4.2V fix usable for earlier
+kernels as needed.
 
 Regards,
 
 Tony
 
-8< ---------------------
-diff --cc drivers/power/supply/cpcap-charger.c
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@@ -447,9 -515,48 +531,49 @@@ static void cpcap_usb_detect(struct wor
-  	if (error)
-  		return;
-  
-+ 	/* Just init the state if a charger is connected with no chrg_det set */
-+ 	if (!s.chrg_det && s.chrgcurr1 && s.vbusvld) {
-+ 		cpcap_charger_update_state(ddata, CPCAP_CHARGER_DETECTING);
-+ 
-+ 		return;
-+ 	}
-+ 
-+ 	/*
-+ 	 * If battery voltage is higher than charge voltage, it may have been
-+ 	 * charged to 3.51V by Android. Try again in 10 minutes.
-+ 	 */
-+ 	if (cpcap_charger_get_charge_voltage(ddata) > ddata->voltage) {
-+ 		cpcap_charger_disconnect(ddata, CPCAP_CHARGER_DETECTING,
-+ 					 HZ * 60 * 10);
-+ 
-+ 		return;
-+ 	}
-+ 
-+ 	/* Throttle chrgcurr2 interrupt for charger done and retry */
-+ 	switch (ddata->state) {
-+ 	case CPCAP_CHARGER_CHARGING:
-+ 		if (s.chrgcurr2)
-+ 			break;
-+ 		if (s.chrgcurr1 && s.vbusvld) {
-+ 			cpcap_charger_disconnect(ddata, CPCAP_CHARGER_DONE,
-+ 						 HZ * 5);
-+ 			return;
-+ 		}
-+ 		break;
-+ 	case CPCAP_CHARGER_DONE:
-+ 		if (!s.chrgcurr2)
-+ 			break;
-+ 		cpcap_charger_disconnect(ddata, CPCAP_CHARGER_DETECTING,
-+ 					 HZ * 5);
-+ 		return;
-+ 	default:
-+ 		break;
-+ 	}
-+ 
- -	if (cpcap_charger_vbus_valid(ddata) && s.chrgcurr1) {
- +	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
- +	    s.chrgcurr1) {
-  		int max_current;
-+ 		int vchrg;
-  
-  		if (cpcap_charger_battery_found(ddata))
-  			max_current = CPCAP_REG_CRM_ICHRG_1A596;
+Changes since v1:
+
+- Sent the 4.2V charger change separately as a fix
+
+Tony Lindgren (2):
+  power: supply: cpcap-battery: Fix handling of lowered charger voltage
+  power: supply: cpcap-charger: Allow changing constant charge voltage
+
+ drivers/power/supply/cpcap-battery.c | 86 +++++++++++++++++++++++++---
+ drivers/power/supply/cpcap-charger.c | 83 +++++++++++++++++++++++++++
+ 2 files changed, 162 insertions(+), 7 deletions(-)
+
+-- 
+2.23.0
