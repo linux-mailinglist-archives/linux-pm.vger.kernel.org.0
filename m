@@ -2,49 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E535FD17E2
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 20:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63FCD1944
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 21:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729535AbfJIS4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 14:56:17 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:41373 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbfJIS4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 14:56:16 -0400
-Received: by mail-ed1-f68.google.com with SMTP id f20so3048868edv.8
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 11:56:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ME4SGdezP8EuNZKcuKCFfTPKlUcPKl6rwZfU4amJBUk=;
-        b=lrlbQQawNwPg7jjxNah+7CukeDtqzZPgpkPwB7EtLFlJuNmoRYZuTNBi0/DgagO3CB
-         zoSKq/pjdgGOrobdD+g7fEpFSICFYuh1lqrjn2r5xgEdQ4787LGBXNS8smPYZk3d3ha9
-         Ei17+bT1T57dCZ7qP1czub5y3yhEbKCW9BhWPcxgaIvYBu2V6GhW+djGj9JmLhuGZX5t
-         RGDZ4818NUVDm1splPgzVNUWFJkPotglmenMjZCYiUgp+5si4xRf15iTcD0jYKT1yNna
-         4F6QwtxmxrJP9CQOd+vMtXcbEnwymVwmfEOiFDFw9ZUPYSir32trB1cBif6a/hS96w0a
-         oa9A==
-X-Gm-Message-State: APjAAAXnW75lbrMOAid3cseMa4gqGHZkaNIMma0oTyO7VfkI/88KMcZ8
-        o7EmQX3fcLTtQMOgVCep77+iozPrZaGijTd9zC2Z0A==
-X-Google-Smtp-Source: APXvYqyi9hZ7+EUv1ogH09bGu3J7WFLkxjN39fKCneOb/s/VOq7c+I99nkxjpLEVhiDBpDjQQk+xmfywxExUrWXNgZE=
-X-Received: by 2002:a17:906:4a8d:: with SMTP id x13mr4132553eju.317.1570647375351;
- Wed, 09 Oct 2019 11:56:15 -0700 (PDT)
+        id S1730708AbfJITzK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 15:55:10 -0400
+Received: from muru.com ([72.249.23.125]:36342 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730490AbfJITzK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 9 Oct 2019 15:55:10 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 1D6228140;
+        Wed,  9 Oct 2019 19:55:43 +0000 (UTC)
+Date:   Wed, 9 Oct 2019 12:55:06 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM / runtime: Add support for wake-up reason for wakeirqs
+Message-ID: <20191009195506.GO5610@atomide.com>
+References: <20191009182803.63742-1-tony@atomide.com>
+ <Pine.LNX.4.44L0.1910091447510.1603-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20190919190912.8386-1-todd.e.brandt@linux.intel.com>
-In-Reply-To: <20190919190912.8386-1-todd.e.brandt@linux.intel.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Wed, 9 Oct 2019 14:56:04 -0400
-Message-ID: <CAJvTdKkUR1FVrfaboRB=Yan-XtQrBjr8P-6tEBffBONfdVqrUA@mail.gmail.com>
-Subject: Re: [PATCH] pm-graph info added to MAINTAINERS
-To:     Todd Brandt <todd.e.brandt@linux.intel.com>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, todd.e.brandt@intel.com,
-        "Brown, Len" <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1910091447510.1603-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reviewed-by: Len Brown <len.brown@intel.com>
+* Alan Stern <stern@rowland.harvard.edu> [191009 18:51]:
+> On Wed, 9 Oct 2019, Tony Lindgren wrote:
+> 
+> > With generic wakeirqs we can wake a device, but do not know if the
+> > device woke to a wakeirq. Let's add pm_runtime_wakeup_is_wakeirq() so
+> > a device can check the wake-up reason.
+> 
+> People have tried many times over the years to do something like this.  
+> It's never right.
+> 
+> The problem is simple: It's impossible to know for certain why the
+> system woke up from suspend.  In fact, there may be many wakeup sources
+> all active at the same time, and any of them could be the one
+> responsible for actually waking the system.
+
+Hmm yeah good point. Even with dedicated wakeirq it could race
+against a timer for the wake-up event.
+
+> All you can do is check to see whether a particular wakeup source is
+> active at the present moment.  You can't tell whether it was active in
+> the past (while the system was suspended) or whether it caused the
+> system to resume.
+
+We can actually do more than that now though :)
+
+With handle_threaded_wake_irq() we could optionally call a handler
+before we call pm_runtime_resume() and let the consumer device
+driver figure out what the state is.
+
+Regards,
+
+Tony
