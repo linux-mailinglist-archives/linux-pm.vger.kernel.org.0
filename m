@@ -2,304 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92538D0B59
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 11:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28668D0DBE
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 13:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbfJIJfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 05:35:22 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:29956 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725942AbfJIJfW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 05:35:22 -0400
-X-UUID: 747c342f1ff34ecb9c796a7a033aff24-20191009
-X-UUID: 747c342f1ff34ecb9c796a7a033aff24-20191009
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 992297874; Wed, 09 Oct 2019 17:35:13 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 9 Oct 2019 17:35:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 9 Oct 2019 17:35:04 +0800
-From:   <michael.kao@mediatek.com>
-To:     <michael.kao@mediatek.com>, Zhang Rui <rui.zhang@intel.com>,
-        "Eduardo Valentin" <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Louis Yu <louis.yu@mediatek.com>
-Subject: [RESEND PATCH] thermal: mediatek: add suspend/resume callback
-Date:   Wed, 9 Oct 2019 17:35:04 +0800
-Message-ID: <1570613704-16609-1-git-send-email-michael.kao@mediatek.com>
-X-Mailer: git-send-email 1.9.1
+        id S1729575AbfJILeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 07:34:20 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46809 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfJILeU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 07:34:20 -0400
+Received: by mail-lf1-f67.google.com with SMTP id t8so1353386lfc.13
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 04:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EG9v3kTZ0STByqKzP1n2q6Lh+2OqkwymViAjwK7ZPds=;
+        b=kH+IeUMBfwMkv+Uo4/4m6ZmUuhDopta5OobVSgramulhVEyCCZxL5T5iTJOdzm2ikl
+         viyWRm8qzrngXIFOEtvhZyR3IqmVVW2GF9QmXLIJgbTUyymNdFCnG0qJ4WhHUlH09bZv
+         h2xcgZVPD2u3UzlBpuO2zP5Hl7+jNW5mCu13+X0Y/hE3OATs5Mwrjqk40NwJUBP+2n6i
+         m76Al2ZrYxWeyVpS28DnybxabAHASJg4GFrrYQ8x7oTSsGiAyqCltQZz7Kne5lV28xfp
+         RFj3OwzWPIxsZcRAmtCpYaWSMdzpoXO2EJAz9dCO1akwjDH/mC+W/blXsAhj0wn+HrN3
+         TKKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EG9v3kTZ0STByqKzP1n2q6Lh+2OqkwymViAjwK7ZPds=;
+        b=jMzD1Nwg82qRbxrNxpycTaYuXvTcbMBasvPVFjtLVIEltwUIp+OrC2wd340MGUCtlA
+         s0tZd3XnlRHkN4ArvLIgGTOXxHkotJnIb8kzHRZTmW/lzfy7qwxp0du+n2r+7XLslR8o
+         r8NWDJKJxSc7Pbs55yVc5esl3Dy1wfIzfTlrMFcd9bvd6fawqE0jvuaiUfBDpyS4cWzl
+         8jSOIR47KIdxtwHvRMMStiYD41CCJpLihYzmzAHvwSv2LYDxnc12lvc9JVUbfNem9uqm
+         esxSPdPyDvwRrAM9ZrFSBGRPDJoPpAWjJlGLcvjET0gMrQlYhyy5LUVPQdUOALKsg19K
+         hsjQ==
+X-Gm-Message-State: APjAAAXEo3SQ21656Y0h0YTB8OEYt/8gRYBuVaC9i4H+vKDFjPWqckvY
+        zxJ3j8DQp/tHuRo19RBdN+7KRFu4cvMNmLmxXHnJmw==
+X-Google-Smtp-Source: APXvYqyE36EyOAEHFvFyThIKdgVAP3t6Zlig8jOB79kkG650s6dVZXW5xCuGRLueBvJWlgkFNY0EbbJ3Zw9MdV2E4aI=
+X-Received: by 2002:a19:4f06:: with SMTP id d6mr1847743lfb.15.1570620858079;
+ Wed, 09 Oct 2019 04:34:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20191007083051.4820-1-parth@linux.ibm.com> <20191008132842.6612-1-hdanton@sina.com>
+ <d4c936d9-c99f-e50d-95c9-0732ae45d1b9@linux.ibm.com>
+In-Reply-To: <d4c936d9-c99f-e50d-95c9-0732ae45d1b9@linux.ibm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 9 Oct 2019 13:34:06 +0200
+Message-ID: <CAKfTPtDghQrjK=4Pd0RbvwbQTU1SP88nVp6NLkNitk+07UfadA@mail.gmail.com>
+Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
+ background tasks on fewer cores
+To:     Parth Shah <parth@linux.ibm.com>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Doug Smythies <dsmythies@telus.net>,
+        Quentin Perret <qperret@qperret.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Louis Yu <louis.yu@mediatek.com>
+On Wed, 9 Oct 2019 at 11:23, Parth Shah <parth@linux.ibm.com> wrote:
+>
+>
+>
+> On 10/8/19 6:58 PM, Hillf Danton wrote:
+> >
+> > On Mon,  7 Oct 2019 14:00:49 +0530 Parth Shah wrote:
+> >> +/*
+> >> + * Try to find a non idle core in the system  based on few heuristics:
+> >> + * - Keep track of overutilized (>80% util) and busy (>12.5% util) CPUs
+> >> + * - If none CPUs are busy then do not select the core for task packing
+> >> + * - If atleast one CPU is busy then do task packing unless overutilized CPUs
+> >> + *   count is < busy/2 CPU count
+> >> + * - Always select idle CPU for task packing
+> >> + */
+> >> +static int select_non_idle_core(struct task_struct *p, int prev_cpu, int target)
+> >> +{
+> >> +    struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
+> >> +    int iter_cpu, sibling;
+> >> +
+> >> +    cpumask_and(cpus, cpu_online_mask, p->cpus_ptr);
+> >> +
+> >> +    for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
+> >> +            int idle_cpu_count = 0, non_idle_cpu_count = 0;
+> >> +            int overutil_cpu_count = 0;
+> >> +            int busy_cpu_count = 0;
+> >> +            int best_cpu = iter_cpu;
+> >> +
+> >> +            for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
+> >> +                    __cpumask_clear_cpu(sibling, cpus);
+> >> +                    if (idle_cpu(iter_cpu)) {
+> >
+> > Would you please elaborate the reasons that the iter cpu is checked idle
+> > more than once for finding a busy core?
+> >
+>
+> Thanks for looking at the patches.
+> Could you please point me out where iter_cpu is checked more than once?
 
-Add suspend/resume callback to disable/enable Mediatek thermal sensor
-respectively. Since thermal power domain is off in suspend, thermal driver
-needs re-initialization during resume.
+I think that point is that you have a sibling that there is
+for_each_cpu(sibling, cpu_smt_mask(iter_cpu) but you never use sibling
+in the loop except for clearing it on the cpumask cpus
+All the tests are done with iter_cpu so you will test several time
+iter_cpus but never the other sibling
+Should you use sibling instead ?
 
-Signed-off-by: Louis Yu <louis.yu@mediatek.com>
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
----
-This patch series base on these patches [1][2].
 
-[1]thermal: mediatek: mt8183: fix bank number settings (https://patchwork.kernel.org/patch/10938817/)
-[2]thermal: mediatek: add another get_temp ops for thermal sensors (https://patchwork.kernel.org/patch/10938829/)
-
- drivers/thermal/mtk_thermal.c | 134 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 125 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 6bdd9c2..22ff2cf 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -22,6 +22,7 @@
- #include <linux/thermal.h>
- #include <linux/reset.h>
- #include <linux/types.h>
-+#include <linux/iopoll.h>
- 
- /* AUXADC Registers */
- #define AUXADC_CON1_SET_V	0x008
-@@ -31,6 +32,8 @@
- 
- #define APMIXED_SYS_TS_CON1	0x604
- 
-+#define APMIXED_SYS_TS_CON1_BUFFER_OFF	0x30
-+
- /* Thermal Controller Registers */
- #define TEMP_MONCTL0		0x000
- #define TEMP_MONCTL1		0x004
-@@ -38,6 +41,7 @@
- #define TEMP_MONIDET0		0x014
- #define TEMP_MONIDET1		0x018
- #define TEMP_MSRCTL0		0x038
-+#define TEMP_MSRCTL1		0x03c
- #define TEMP_AHBPOLL		0x040
- #define TEMP_AHBTO		0x044
- #define TEMP_ADCPNP0		0x048
-@@ -87,6 +91,9 @@
- #define TEMP_ADCVALIDMASK_VALID_HIGH		BIT(5)
- #define TEMP_ADCVALIDMASK_VALID_POS(bit)	(bit)
- 
-+#define TEMP_MSRCTL1_BUS_STA	(BIT(0) | BIT(7))
-+#define TEMP_MSRCTL1_SENSING_POINTS_PAUSE	0x10E
-+
- /* MT8173 thermal sensors */
- #define MT8173_TS1	0
- #define MT8173_TS2	1
-@@ -258,6 +265,10 @@ struct mtk_thermal_data {
- struct mtk_thermal {
- 	struct device *dev;
- 	void __iomem *thermal_base;
-+	void __iomem *apmixed_base;
-+	void __iomem *auxadc_base;
-+	u64 apmixed_phys_base;
-+	u64 auxadc_phys_base;
- 
- 	struct clk *clk_peri_therm;
- 	struct clk *clk_auxadc;
-@@ -787,6 +798,42 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 	mtk_thermal_put_bank(bank);
- }
- 
-+static int mtk_thermal_disable_sensing(struct mtk_thermal *mt, int num)
-+{
-+	struct mtk_thermal_bank *bank = &mt->banks[num];
-+	u32 val;
-+	unsigned long timeout;
-+	void __iomem *addr;
-+	int ret = 0;
-+
-+	bank->id = num;
-+	bank->mt = mt;
-+
-+	mtk_thermal_get_bank(bank);
-+
-+	val = readl(mt->thermal_base + TEMP_MSRCTL1);
-+	/* pause periodic temperature measurement for sensing points */
-+	writel(val | TEMP_MSRCTL1_SENSING_POINTS_PAUSE,
-+	       mt->thermal_base + TEMP_MSRCTL1);
-+
-+	/* wait until temperature measurement bus idle */
-+	timeout = jiffies + HZ;
-+	addr = mt->thermal_base + TEMP_MSRCTL1;
-+
-+	ret = readl_poll_timeout(addr, val, (val & TEMP_MSRCTL1_BUS_STA) == 0x0,
-+				 0, timeout);
-+	if (ret < 0)
-+		goto out;
-+
-+	/* disable periodic temperature meausrement on sensing points */
-+	writel(0x0, mt->thermal_base + TEMP_MONCTL0);
-+
-+out:
-+	mtk_thermal_put_bank(bank);
-+
-+	return ret;
-+}
-+
- static u64 of_get_phys_base(struct device_node *np)
- {
- 	u64 size64;
-@@ -909,7 +956,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
- 	struct mtk_thermal *mt;
- 	struct resource *res;
--	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	struct mtk_thermal_zone *tz;
- 
-@@ -946,11 +992,11 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	auxadc_phys_base = of_get_phys_base(auxadc);
-+	mt->auxadc_phys_base = of_get_phys_base(auxadc);
- 
- 	of_node_put(auxadc);
- 
--	if (auxadc_phys_base == OF_BAD_ADDR) {
-+	if (mt->auxadc_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
- 		return -EINVAL;
- 	}
-@@ -961,11 +1007,12 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	apmixed_phys_base = of_get_phys_base(apmixedsys);
-+	mt->apmixed_phys_base = of_get_phys_base(apmixedsys);
-+	mt->apmixed_base = of_iomap(apmixedsys, 0);
- 
- 	of_node_put(apmixedsys);
- 
--	if (apmixed_phys_base == OF_BAD_ADDR) {
-+	if (mt->apmixed_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
- 		return -EINVAL;
- 	}
-@@ -977,19 +1024,19 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(mt->clk_auxadc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+		goto err_disable_clk_auxadc;
- 	}
- 
- 	ret = clk_prepare_enable(mt->clk_peri_therm);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
--		goto err_disable_clk_auxadc;
-+		goto err_disable_clk_peri_therm;
- 	}
- 
- 	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
- 		for (i = 0; i < mt->conf->num_banks; i++)
--			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
--					      auxadc_phys_base, ctrl_id);
-+			mtk_thermal_init_bank(mt, i, mt->apmixed_phys_base,
-+					      mt->auxadc_phys_base, ctrl_id);
- 
- 	platform_set_drvdata(pdev, mt);
- 
-@@ -1033,11 +1080,80 @@ static int mtk_thermal_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int __maybe_unused mtk_thermal_suspend(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct mtk_thermal *mt = platform_get_drvdata(pdev);
-+	int i, ret;
-+
-+	for (i = 0; i < mt->conf->num_banks; i++) {
-+		ret = mtk_thermal_disable_sensing(mt, i);
-+		if (ret)
-+			goto out;
-+	}
-+
-+	/* disable buffer */
-+	writel(readl(mt->apmixed_base + APMIXED_SYS_TS_CON1) |
-+	       APMIXED_SYS_TS_CON1_BUFFER_OFF,
-+	       mt->apmixed_base + APMIXED_SYS_TS_CON1);
-+
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+	clk_disable_unprepare(mt->clk_auxadc);
-+
-+	return 0;
-+
-+out:
-+	dev_err(&pdev->dev, "Failed to wait until bus idle\n");
-+
-+	return ret;
-+}
-+
-+static int __maybe_unused mtk_thermal_resume(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct mtk_thermal *mt = platform_get_drvdata(pdev);
-+	int i, ret, ctrl_id;
-+
-+	ret = device_reset(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(mt->clk_auxadc);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
-+		goto err_disable_clk_auxadc;
-+	}
-+
-+	ret = clk_prepare_enable(mt->clk_peri_therm);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't enable peri clk: %d\n", ret);
-+		goto err_disable_clk_peri_therm;
-+	}
-+
-+	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ; ctrl_id++)
-+		for (i = 0; i < mt->conf->num_banks; i++)
-+			mtk_thermal_init_bank(mt, i, mt->apmixed_phys_base,
-+					      mt->auxadc_phys_base, ctrl_id);
-+
-+	return 0;
-+
-+err_disable_clk_peri_therm:
-+	clk_disable_unprepare(mt->clk_peri_therm);
-+err_disable_clk_auxadc:
-+	clk_disable_unprepare(mt->clk_auxadc);
-+
-+	return ret;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(mtk_thermal_pm_ops,
-+			 mtk_thermal_suspend, mtk_thermal_resume);
-+
- static struct platform_driver mtk_thermal_driver = {
- 	.probe = mtk_thermal_probe,
- 	.remove = mtk_thermal_remove,
- 	.driver = {
- 		.name = "mtk-thermal",
-+		.pm = &mtk_thermal_pm_ops,
- 		.of_match_table = mtk_thermal_of_match,
- 	},
- };
--- 
-1.9.1
-
+>
+> >> +                            idle_cpu_count++;
+> >> +                            best_cpu = iter_cpu;
+> >> +                    } else {
+> >> +                            non_idle_cpu_count++;
+> >> +                            if (cpu_overutilized(iter_cpu))
+> >> +                                    overutil_cpu_count++;
+> >> +                            if (is_cpu_busy(cpu_util(iter_cpu)))
+> >> +                                    busy_cpu_count++;
+> >> +                    }
+> >> +            }
+> >> +
+> >
+>
