@@ -2,52 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36461D14AE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 18:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15956D14C5
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 19:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731780AbfJIQzj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 12:55:39 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28988 "EHLO
+        id S1731173AbfJIRCu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 13:02:50 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47746 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730546AbfJIQzj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 12:55:39 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x99GjbPf100532
-        for <linux-pm@vger.kernel.org>; Wed, 9 Oct 2019 12:55:37 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vhjdkjgnk-1
+        by vger.kernel.org with ESMTP id S1730546AbfJIRCu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 13:02:50 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x99H1Zs3110365
+        for <linux-pm@vger.kernel.org>; Wed, 9 Oct 2019 13:02:48 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vhk6rgwda-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 12:55:37 -0400
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 13:02:48 -0400
 Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Wed, 9 Oct 2019 17:55:35 +0100
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Wed, 9 Oct 2019 18:02:46 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 9 Oct 2019 17:55:29 +0100
+        Wed, 9 Oct 2019 18:02:41 +0100
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x99GtTWv45220108
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x99H2eUi19464206
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Oct 2019 16:55:29 GMT
+        Wed, 9 Oct 2019 17:02:40 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF22A4C050;
-        Wed,  9 Oct 2019 16:55:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 549C84C044;
+        Wed,  9 Oct 2019 17:02:40 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61EBF4C044;
-        Wed,  9 Oct 2019 16:55:24 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3727B4C050;
+        Wed,  9 Oct 2019 17:02:36 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.85.75.123])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Oct 2019 16:55:24 +0000 (GMT)
+        Wed,  9 Oct 2019 17:02:35 +0000 (GMT)
 Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
  background tasks on fewer cores
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Hillf Danton <hdanton@sina.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
 Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Patrick Bellasi <patrick.bellasi@matbug.net>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Pavel Machek <pavel@ucw.cz>,
@@ -57,23 +56,26 @@ Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         Tim Chen <tim.c.chen@linux.intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 References: <20191007083051.4820-1-parth@linux.ibm.com>
- <20191008132842.6612-1-hdanton@sina.com>
- <d4c936d9-c99f-e50d-95c9-0732ae45d1b9@linux.ibm.com>
- <CAKfTPtDghQrjK=4Pd0RbvwbQTU1SP88nVp6NLkNitk+07UfadA@mail.gmail.com>
+ <20191007083051.4820-5-parth@linux.ibm.com>
+ <CAKfTPtCgoTJXxbYyza1W55ayw9QeM7fue2e91Xpt804sL9GQWA@mail.gmail.com>
+ <80bb34ec-6358-f4dc-d20d-cde6c9d7e197@linux.ibm.com>
+ <d55c593d-af8e-c8ba-cc0e-c9917df5d593@arm.com>
+ <86dc25e4-9f19-627f-9581-d74608b7f20c@linux.ibm.com>
+ <eef32b9e-1f24-e8a9-cd91-dcc6546a636f@arm.com>
 From:   Parth Shah <parth@linux.ibm.com>
-Date:   Wed, 9 Oct 2019 22:25:23 +0530
+Date:   Wed, 9 Oct 2019 22:32:35 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.0
 MIME-Version: 1.0
-In-Reply-To: <CAKfTPtDghQrjK=4Pd0RbvwbQTU1SP88nVp6NLkNitk+07UfadA@mail.gmail.com>
+In-Reply-To: <eef32b9e-1f24-e8a9-cd91-dcc6546a636f@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 19100916-0012-0000-0000-000003568EB5
+x-cbid: 19100917-0028-0000-0000-000003A88AF8
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100916-0013-0000-0000-0000219194CD
-Message-Id: <24b07842-1770-13b9-8182-8dcf4f0a28fa@linux.ibm.com>
+x-cbparentid: 19100917-0029-0000-0000-0000246A9081
+Message-Id: <0ee8052e-e7fb-83cb-bf70-3c4855ccca8e@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-09_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
@@ -88,148 +90,91 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 10/9/19 5:04 PM, Vincent Guittot wrote:
-> On Wed, 9 Oct 2019 at 11:23, Parth Shah <parth@linux.ibm.com> wrote:
->>
->>
->>
->> On 10/8/19 6:58 PM, Hillf Danton wrote:
->>>
->>> On Mon,  7 Oct 2019 14:00:49 +0530 Parth Shah wrote:
->>>> +/*
->>>> + * Try to find a non idle core in the system  based on few heuristics:
->>>> + * - Keep track of overutilized (>80% util) and busy (>12.5% util) CPUs
->>>> + * - If none CPUs are busy then do not select the core for task packing
->>>> + * - If atleast one CPU is busy then do task packing unless overutilized CPUs
->>>> + *   count is < busy/2 CPU count
->>>> + * - Always select idle CPU for task packing
->>>> + */
->>>> +static int select_non_idle_core(struct task_struct *p, int prev_cpu, int target)
->>>> +{
->>>> +    struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
->>>> +    int iter_cpu, sibling;
->>>> +
->>>> +    cpumask_and(cpus, cpu_online_mask, p->cpus_ptr);
->>>> +
->>>> +    for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
->>>> +            int idle_cpu_count = 0, non_idle_cpu_count = 0;
->>>> +            int overutil_cpu_count = 0;
->>>> +            int busy_cpu_count = 0;
->>>> +            int best_cpu = iter_cpu;
->>>> +
->>>> +            for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
->>>> +                    __cpumask_clear_cpu(sibling, cpus);
->>>> +                    if (idle_cpu(iter_cpu)) {
->>>
->>> Would you please elaborate the reasons that the iter cpu is checked idle
->>> more than once for finding a busy core?
->>>
->>
->> Thanks for looking at the patches.
->> Could you please point me out where iter_cpu is checked more than once?
+On 10/9/19 7:56 PM, Dietmar Eggemann wrote:
+> On 09/10/2019 10:57, Parth Shah wrote:
 > 
-> I think that point is that you have a sibling that there is
-> for_each_cpu(sibling, cpu_smt_mask(iter_cpu) but you never use sibling
-> in the loop except for clearing it on the cpumask cpus
-> All the tests are done with iter_cpu so you will test several time
-> iter_cpus but never the other sibling
-> Should you use sibling instead ?
+> [...]
+> 
+>>> On 07/10/2019 18:53, Parth Shah wrote:
+>>>>
+>>>>
+>>>> On 10/7/19 5:49 PM, Vincent Guittot wrote:
+>>>>> On Mon, 7 Oct 2019 at 10:31, Parth Shah <parth@linux.ibm.com> wrote:
+> 
+> [...]
+> 
+>>>> Maybe I can add just below the sched_energy_present(){...} construct giving
+>>>> precedence to EAS? I'm asking this because I remember Patrick telling me to
+>>>> leverage task packing for android as well?
+>>>
+>>> I have a hard time imaging that Turbosched will be used in Android next
+>>> to EAS in the foreseeable future.
+>>>
+>>> First of all, EAS provides task packing already on Performance Domain
+>>> (PD) level (a.k.a. as cluster on traditional 2-cluster Arm/Arm64
+>>> big.LITTLE or DynamIQ (with Phantom domains (out of tree solution)).
+>>> This is where we can safe energy without harming latency.
+>>>
+>>> See the tests results under '2.1 Energy test case' in
+>>>
+>>> https://lore.kernel.org/r/20181203095628.11858-1-quentin.perret@arm.com
+>>>
+>>> There are 10 to 50 small (classified solely by task utilization) tasks
+>>> per test case and EAS shows an effect on energy consumption by packing
+>>> them onto the PD (cluster) of the small CPUs.
+>>>
+>>> And second, the CPU supported topology is different to the one you're
+>>> testing on.
+>>>
+>>
+>> cool. I was just keeping in mind the following quote
+>> " defining a generic spread-vs-pack wakeup policy which is something
+>> Android also could benefit from " (https://lkml.org/lkml/2019/6/28/628)
+> 
+> The main thing is that in case we want to introduce a new functionality
+> into CFS, we should try hard to use existing infrastructure (or
+> infrastructure there is agreement on that we'll need it) as much as
+> possible.
+> 
+> If I understand Patrick here correctly, he suggested not to use uclamp
+> but the task latency nice approach. There is agreement that we would
+> need something like this as infrastructure:
+> 
+> https://lore.kernel.org/r/20190830174944.21741-1-subhra.mazumdar@oracle.com
 > 
 
-oh got it. it was unintentional here, my bad.
-good find
+got it.
 
-I did s/iter_cpu/sibling/ at required places:
+> So p->latency_nice is suitable to include your p->flags |=
+> PF_CAN_BE_PACKED concept nicely.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4a1b6474338..a75c2b382771 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6001,14 +6001,14 @@ static int select_non_idle_core(struct task_struct
-*p, int prev_cpu, int target)
+yeah, I'm working on that part too as a bigger goal.
 
-                for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
-                        __cpumask_clear_cpu(sibling, cpus);
--                       if (idle_cpu(iter_cpu)) {
-+                       if (idle_cpu(sibling)) {
-                                idle_cpu_count++;
--                               best_cpu = iter_cpu;
-+                               best_cpu = sibling;
-                        } else {
-                                non_idle_cpu_count++;
--                               if (cpu_overutilized(iter_cpu))
-+                               if (cpu_overutilized(sibling))
-                                        overutil_cpu_count++;
--                               if (is_cpu_busy(cpu_util(iter_cpu)))
-+                               if (is_cpu_busy(cpu_util(sibling)))
-                                        busy_cpu_count++;
-                        }
-                }
+> 
+>>
+>> BTW, IIUC that does task consolidation only on single CPU unless
+>> rd->overload is set, right?
+> 
+> Task consolidation on Performance Domains (PDs) w/ multiple CPUs (e.g.
+> on a per-cluster PD big.LITTLE system) only works when the system is not
+> overutilized:
+> 
+> 6326 int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> 6327 {
+> ...
+> 6337         if (!pd || *READ_ONCE(rd->overutilized)*)
+> 6338                 goto fail;
+> ...
 
-and the took the results again to see functionality changes.
-Results are still within the bounds with maximum of 15% gain in performance
-and <2% of regression.
+ok. so does that mean TurboSched can still do some good in such systems as
+well ?
+I mean save energy even when rd->overutilized==1 by not waking user
+classified bg tasks on idle core.
 
-		Frequency benefit of TurboSched w.r.t. CFS
-   +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+
-20 +-+ + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + +-+
-   |                                      Frequency benefit in %         |
-   |                    **                                               |
-15 +-+        * * **    ******                                         +-+
-   |          * * ************                                           |
-   |       ** * * ************ *                                         |
-10 +-+     ** * * ************ *                                       +-+
-   |       ** * * ************ * * ****                                  |
-   |     **** * * ************ * * ****                                  |
- 5 +-+ ****** * * ************ * * ******                              +-+
-   |   ****** * * ************ * * **********                            |
- 0 +-******** * * ************ * * ************ * * * ********** * * * **+
-   |                                                                     |
-   |                                                                     |
--5 +-+                                                                 +-+
-   | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |
-   +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+
-     0 1 2 3  4 5 6 7 8 91011 1213141516171819 2021222324252627 28293031
-                           No. of workload threads
-
-		 Performance benefit of TurboSched w.r.t. CFS
-20 +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+
-   | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |
-   |                                    Performance benefit in %         |
-15 +-+                    **                                           +-+
-   |                      **                                             |
-   |                  ******** *                                         |
-10 +-+                ******** *   **                                  +-+
-   |                  ******** * * **                                    |
-   |                  ******** * * **                                    |
- 5 +-+              ********** * * ******                              +-+
-   |                ********** * * **********                            |
-   |              ************ * * **********   *       **               |
- 0 +-******** * * ************ * * ************ * * * ********** * * * **+
-   | ******** *                                                          |
-   |                                                                     |
--5 +-+                                                                 +-+
-   | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |
-   +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+
-     0 1 2 3  4 5 6 7 8 91011 1213141516171819 2021222324252627 28293031
-                           No. of workload threads
+> 
+> [...]
+> 
 
 Thanks,
 Parth
-
-> 
->>
->>>> +                            idle_cpu_count++;
->>>> +                            best_cpu = iter_cpu;
->>>> +                    } else {
->>>> +                            non_idle_cpu_count++;
->>>> +                            if (cpu_overutilized(iter_cpu))
->>>> +                                    overutil_cpu_count++;
->>>> +                            if (is_cpu_busy(cpu_util(iter_cpu)))
->>>> +                                    busy_cpu_count++;
->>>> +                    }
->>>> +            }
->>>> +
->>>
->>
 
