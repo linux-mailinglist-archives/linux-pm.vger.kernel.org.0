@@ -2,169 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9FFD0F24
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 14:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0C7D0F37
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 14:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730606AbfJIMtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 08:49:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729784AbfJIMtl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Oct 2019 08:49:41 -0400
-Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9C2C920B7C;
-        Wed,  9 Oct 2019 12:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570625380;
-        bh=BS4jso9hypNio5lXJwUJxoGbh/2wvN6PY7GhM+KUNGo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jH2fwKYGgUAT3yvVwlPaj40RpZcpMd28Pv1P0XTRASzDbfUec6elVvevVNgQPnl5L
-         SUolQjQLJky2IL2PxOIjStpZNm3Mnb717g61/tSzlO+i2tTIQjv1Iuy6WMQv+h9rJA
-         n0oJqlQTsS8MU9UPyPVj6ija2LN0Ad0y9AwzM7es=
-Date:   Wed, 9 Oct 2019 07:49:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v3 1/2] PCI: PCIe: ASPM: Introduce pcie_aspm_enabled()
-Message-ID: <20191009124938.GA67585@google.com>
+        id S1731216AbfJIMyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 08:54:39 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:36872 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731214AbfJIMyj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 08:54:39 -0400
+Received: by mail-qt1-f195.google.com with SMTP id l51so2956127qtc.4
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 05:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=TgY7kPmBZqnecD8fmdALLpGAi+Y1sBS44TN0W3OZTbI=;
+        b=Ieth1LzWB3tqDdxRYS6TrTDImdY44X93i3yUuyswKh9NjwTJ9MG4I2p3ASCGRBbhIi
+         EN685xkM080/OSbNL3HVipQhMTiUC3wCskwGs71Fi0G583KGpAhgDjb9VZTSwNOizajq
+         KjMDn74QgrW5rjxwCxpxgHrztK5XKLYGw7Ptb6Dzw2Um68uQEEtb9QD58DgmCL+djw5x
+         hvj6SPb+jQ8H91BafRWYx9bXKeCGoUZ3pYmo9zaWEqj9Hbxyx5PkknrLQpIrt+b6pPv2
+         UWqyEnjMQk6gtxIgsg+zv6Xm7CfObViLTHWCh+F8QEAs8uzXv+iWzUnHp4NYkK8A+eno
+         2GbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=TgY7kPmBZqnecD8fmdALLpGAi+Y1sBS44TN0W3OZTbI=;
+        b=BuzsJW207BFIV7IVxWJMLwZ//nCD5W+QVH8lmL2s8gsErHIsK4fpP37H2z14F5s88b
+         Ru3IHizUztwLAV1swYLJ3PHQ8CHeV9oXmb0MrWSzV9/3R8BZULFgPjZpB7LZObSdlyLb
+         mQzj1LeUml/v93CmwgLWUs7OoR1a5CZFHNtsuD3NLxiLqf7vsIaAKUm7UVmhiGw4tHFx
+         HYvteLwdAEi5Sakm15aK9Aq6Y25n3NTQYIxgZq3at9BTifMIY1G5gi5NXf8UZb44Ck6+
+         ulWYb5Wt6HNIO31omV185gBYq/gNzEKH9hRhnqWVYw7wqGx71PMNQQAJqplCq04gKGIZ
+         Wr2A==
+X-Gm-Message-State: APjAAAWVuxiUlkUiWlZH0rXumkQTHE6DIsH+dgWmLM/VfcATe1KWmy90
+        47qH1iuyixmgzEE+/xqjf9gJHg==
+X-Google-Smtp-Source: APXvYqxDRTRnNCFB3xzy90ZREa6zqiTGq9G4A+t6sp3p4WDaJF1dHGjJKNb5yoJjpKhBQP6sEqhRHA==
+X-Received: by 2002:a0c:ef85:: with SMTP id w5mr3460733qvr.159.1570625678531;
+        Wed, 09 Oct 2019 05:54:38 -0700 (PDT)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id c201sm890854qke.128.2019.10.09.05.54.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Oct 2019 05:54:37 -0700 (PDT)
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: Introduce monitor-falling
+ parameter to thermal trip point binding
+To:     Rob Herring <robh@kernel.org>
+References: <1568859503-19725-1-git-send-email-thara.gopinath@linaro.org>
+ <1568859503-19725-2-git-send-email-thara.gopinath@linaro.org>
+ <5d93ce86.1c69fb81.70b0d.ba56@mx.google.com>
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, vincent.guittot@linaro.org,
+        bjorn.andersson@linaro.org, amit.kucheria@verdurent.com,
+        mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5D9DD88C.7090804@linaro.org>
+Date:   Wed, 9 Oct 2019 08:54:36 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j-uSM2gheHViommWcrSaLVfzbwV3M7OOWz3GyzhHSwRA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5d93ce86.1c69fb81.70b0d.ba56@mx.google.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 09, 2019 at 12:54:37AM +0200, Rafael J. Wysocki wrote:
-> On Tue, Oct 8, 2019 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > On Tue, Oct 08, 2019 at 11:27:51AM +0200, Rafael J. Wysocki wrote:
-> > > On Tue, Oct 8, 2019 at 12:34 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Thu, Aug 08, 2019 at 11:55:07PM +0200, Rafael J. Wysocki wrote:
-> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > >
-> > > > > Add a function checking whether or not PCIe ASPM has been enabled for
-> > > > > a given device.
-> > > > >
-> > > > > It will be used by the NVMe driver to decide how to handle the
-> > > > > device during system suspend.
-> > > > >
-> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > ---
-> > > > >
-> > > > > v2 -> v3:
-> > > > >   * Make the new function return bool.
-> > > > >   * Change its name back to pcie_aspm_enabled().
-> > > > >   * Fix kerneldoc comment formatting.
-> > > > >
-> > > > > -> v2:
-> > > > >   * Move the PCI/PCIe ASPM changes to a separate patch.
-> > > > >   * Add the _mask suffix to the new function name.
-> > > > >   * Add EXPORT_SYMBOL_GPL() to the new function.
-> > > > >   * Avoid adding an unnecessary blank line.
-> > > > >
-> > > > > ---
-> > > > >  drivers/pci/pcie/aspm.c |   20 ++++++++++++++++++++
-> > > > >  include/linux/pci.h     |    3 +++
-> > > > >  2 files changed, 23 insertions(+)
-> > > > >
-> > > > > Index: linux-pm/drivers/pci/pcie/aspm.c
-> > > > > ===================================================================
-> > > > > --- linux-pm.orig/drivers/pci/pcie/aspm.c
-> > > > > +++ linux-pm/drivers/pci/pcie/aspm.c
-> > > > > @@ -1170,6 +1170,26 @@ static int pcie_aspm_get_policy(char *bu
-> > > > >  module_param_call(policy, pcie_aspm_set_policy, pcie_aspm_get_policy,
-> > > > >       NULL, 0644);
-> > > > >
-> > > > > +/**
-> > > > > + * pcie_aspm_enabled - Check if PCIe ASPM has been enabled for a device.
-> > > > > + * @pci_device: Target device.
-> > > > > + */
-> > > > > +bool pcie_aspm_enabled(struct pci_dev *pci_device)
-> > > > > +{
-> > > > > +     struct pci_dev *bridge = pci_upstream_bridge(pci_device);
-> > > > > +     bool ret;
-> > > > > +
-> > > > > +     if (!bridge)
-> > > > > +             return false;
-> > > > > +
-> > > > > +     mutex_lock(&aspm_lock);
-> > > > > +     ret = bridge->link_state ? !!bridge->link_state->aspm_enabled : false;
-> > > > > +     mutex_unlock(&aspm_lock);
-> > > >
-> > > > Why do we need to acquire aspm_lock here?  We aren't modifying
-> > > > anything, and I don't think we're preventing a race.  If this races
-> > > > with another thread that changes aspm_enabled, we'll return either the
-> > > > old state or the new one, and I think that's still the case even if we
-> > > > don't acquire aspm_lock.
-> > >
-> > > Well, if we can guarantee that pci_remove_bus_device() will never be
-> > > called in parallel with this helper, then I agree, but can we
-> > > guarantee that?
-> >
-> > Hmm, yeah, I guess that's the question.  It's not a race with another
-> > thread changing aspm_enabled; the potential race is with another
-> > thread removing the last child of "bridge", which will free the
-> > link_state and set bridge->link_state = NULL.
-> >
-> > I think it should be safe to call device-related PCI interfaces if
-> > you're holding a reference to the device, e.g., from a driver bound to
-> > the device or a sysfs accessor.  Since we call pcie_aspm_enabled(dev)
-> > from a driver bound to "dev", another thread should not be able to
-> > remove "dev" while we're using it.
-> >
-> > I know that's a little hand-wavey, but if it weren't true, I think
-> > we'd have a lot more locking sprinkled everywhere in the PCI core than
-> > we do.
-> >
-> > This has implications for Heiner's ASPM sysfs patches because we're
-> > currently doing this in sysfs accessors:
-> >
-> >   static ssize_t aspm_attr_show_common(struct device *dev, ...)
-> >   {
-> >     ...
-> >     link = pcie_aspm_get_link(pdev);
-> >
-> >     mutex_lock(&aspm_lock);
-> >     enabled = link->aspm_enabled & state;
-> >     mutex_unlock(&aspm_lock);
-> >     ...
-> >   }
-> >
-> > I assume sysfs must be holding a reference that guarantees "dev" is
-> > valid througout this code, and therefore we should not need to hold
-> > aspm_lock.
+Hi Rob,
+Thanks for the review.
+
+On 10/01/2019 06:09 PM, Rob Herring wrote:
+> On Wed, Sep 18, 2019 at 10:18:20PM -0400, Thara Gopinath wrote:
+>> Introduce a new binding parameter to thermal trip point description
+>> to indicate whether the temperature level specified by the trip point
+>> is monitored for a rise or fall in temperature.
 > 
-> In principle, pcie_aspm_enabled() need not be called via sysfs.
+> What if it is both?
 > 
-> In the particular NVMe use case, it is called from the driver's own PM
-> callback, so it would be safe without the locking AFAICS.
+> When do you need this? Seems like you'd always want to monitor both 
+> directions to undo any action done on rising temp. Unless you want a 
+> hysteresis, but this doesn't seem like the best way to implement that.
+> 
 
-Right, pcie_aspm_enabled() is only used by drivers (actually only by
-the nvme driver so far).  And aspm_attr_show_common() is only used via
-new sysfs code being added by Heiner.
+The thermal framework is designed in such a manner that I cannot think
+of a use case for both.
+The framework takes care of removing the warming/cooling action when the
+trip point is crossed in the opposite direction. It only needs an
+indication on when to start implementing the
+action.
+For eg. When the temperature crosses/increases above 90 degree, the
+framework will start the cooling action and will continue monitoring
+till the temperature falls below 90 and the cooling action is removed.
+Vice versa when the temperature decreases below say 5 degree, the
+framework should  initiate the warming action and monitor till the
+temperature rises above and remove the warming action.
 
-> I guess it is safe to drop the locking from there, but then it would
-> be good to mention in the kerneldoc that calling it is only safe under
-> the assumption that the link_state object cannot go away while it is
-> running.
+So the trip point is really an indication of the temperature crossing a
+threshold in the specified direction.
 
-I'll post a patch to that effect.  Thanks!
+Now this parameter is needed to indicate whether the thermal framework
+has to start implementing the warming/cooling action when the
+temperature  rises above the trip point or falls below the trip point.
 
-Bjorn
+Till now the framework was always assuming that the cooling action had
+to be implemented when temperature rises above the trip point.
+
+-- 
+Warm Regards
+Thara
