@@ -2,128 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E6DD0B00
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 11:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B1FD0B12
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Oct 2019 11:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727228AbfJIJXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 05:23:08 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60582 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726765AbfJIJXI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 05:23:08 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x999DsDD146067
-        for <linux-pm@vger.kernel.org>; Wed, 9 Oct 2019 05:23:06 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vhb2sbt3v-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 05:23:05 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Wed, 9 Oct 2019 10:23:03 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 9 Oct 2019 10:22:58 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x999Mv7K59703298
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Oct 2019 09:22:57 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 63B854203F;
-        Wed,  9 Oct 2019 09:22:57 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 024C342045;
-        Wed,  9 Oct 2019 09:22:55 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.124.35.210])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Oct 2019 09:22:54 +0000 (GMT)
-Subject: Re: [RFC v5 4/6] sched/fair: Tune task wake-up logic to pack small
- background tasks on fewer cores
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, patrick.bellasi@matbug.net,
-        valentin.schneider@arm.com, pavel@ucw.cz, dsmythies@telus.net,
-        Quentin Perret <qperret@qperret.net>,
-        rafael.j.wysocki@intel.com, tim.c.chen@linux.intel.com,
-        daniel.lezcano@linaro.org
-References: <20191007083051.4820-1-parth@linux.ibm.com>
- <20191008132842.6612-1-hdanton@sina.com>
-From:   Parth Shah <parth@linux.ibm.com>
-Date:   Wed, 9 Oct 2019 14:52:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
+        id S1730378AbfJIJ0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 05:26:13 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:39974 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729616AbfJIJ0M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 05:26:12 -0400
+Received: by mail-lf1-f68.google.com with SMTP id d17so1096326lfa.7
+        for <linux-pm@vger.kernel.org>; Wed, 09 Oct 2019 02:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SD+HI02CKBBsUnBjBS8AONRJ3UqoWuFlv1/fGBB0L+4=;
+        b=Yp/ezDTokXabk02kHZS4Q9Zcrip4udpQ7qThrEB8fA+oF5/YBaD2Q+THIO35uJ3kfM
+         ijAdu971Sc0u1iXVcq8FmBzJx92WFKIL13rYfNLHAFEcAcABM/XNEWuxdcFUR630+oKt
+         EhOBtNE8brRBt6vUfGQkuPeYH0wO5CD9zsgK8XTxtLlluYKde8xrN7DJnQGKvtMGqrQb
+         301v9yPx51H2ueQoUMiDBqmPbWS6qbm39fIrpFjEigHHHzEF4FAtjiFlUyKtyHYy4pFZ
+         eyTC9foJ37+QThE5FPa4048amnHh8m0WuErFx7J6r28IzNf5kcGpC7qLDNVSqenrhhXu
+         UeXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SD+HI02CKBBsUnBjBS8AONRJ3UqoWuFlv1/fGBB0L+4=;
+        b=UXNUoWHi6JTPwpp9QxOZEyTcQNCl9knwV7v+AgKkiyG7s42LgnbXtHGDjhpa7xwWSc
+         gSa6Osa3WCD+IX3j4Pdqt03Lrz5xZqSDC0hiF5XBcsp2nShKy/uE6XyyFxTGwvBbOhB6
+         GeXsM5JHEfSau5hXgqCRTRztuUUtC4mELoPh5ldisAH86K3znXe9Hoxk6401aSLTlebV
+         SPrjql/L498enwfWlZ1YXk90jmSHya0xLHnHhpsqPO9T+2TmAlTZOOt9yRLRWmCGeLef
+         FEBtdgJHnJL8I0OVEjyITTb/rTH+3RNGf6c1ph0snjZhUD5/6+o/wq6K/nEjbxZgff08
+         soAg==
+X-Gm-Message-State: APjAAAXhrF/t5l8s7f2fxpgaEv9rGBAC0/ZphagKCQpt4Qb/wt6W82Qn
+        norWabeFOgnyqUf4Sfs0+r63bHggKdO2qzQvUD/XIQ==
+X-Google-Smtp-Source: APXvYqzFG7lDdH9uA0MTciR+6xdQMm6jmgxkQ3KIBmF6lJi9ASjDpky3Ev/tMd6UZRmclpoRgOMzubjoi2Xc5yZYX5w=
+X-Received: by 2002:a19:c505:: with SMTP id w5mr1439629lfe.115.1570613170790;
+ Wed, 09 Oct 2019 02:26:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191008132842.6612-1-hdanton@sina.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100909-0008-0000-0000-00000320633E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100909-0009-0000-0000-00004A3F6726
-Message-Id: <d4c936d9-c99f-e50d-95c9-0732ae45d1b9@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-09_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910090087
+References: <cover.1570299719.git.vilhelm.gray@gmail.com> <be63fa49f036b9168f223152648307a63056f4ee.1570299719.git.vilhelm.gray@gmail.com>
+In-Reply-To: <be63fa49f036b9168f223152648307a63056f4ee.1570299719.git.vilhelm.gray@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Oct 2019 11:25:59 +0200
+Message-ID: <CACRpkdbEszHr3zzVBTinVFQXU+sjOu9YbWC-554+7PYgupYJBA@mail.gmail.com>
+Subject: Re: [PATCH v15 01/14] bitops: Introduce the for_each_set_clump8 macro
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Phil Reid <preid@electromag.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Sean Nyekjaer <sean.nyekjaer@prevas.dk>,
+        morten.tiljeset@prevas.dk,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sat, Oct 5, 2019 at 8:37 PM William Breathitt Gray
+<vilhelm.gray@gmail.com> wrote:
 
+> This macro iterates for each 8-bit group of bits (clump) with set bits,
+> within a bitmap memory region. For each iteration, "start" is set to the
+> bit offset of the found clump, while the respective clump value is
+> stored to the location pointed by "clump". Additionally, the
+> bitmap_get_value8 and bitmap_set_value8 functions are introduced to
+> respectively get and set an 8-bit value in a bitmap memory region.
+>
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-On 10/8/19 6:58 PM, Hillf Danton wrote:
-> 
-> On Mon,  7 Oct 2019 14:00:49 +0530 Parth Shah wrote:
->> +/*
->> + * Try to find a non idle core in the system  based on few heuristics:
->> + * - Keep track of overutilized (>80% util) and busy (>12.5% util) CPUs
->> + * - If none CPUs are busy then do not select the core for task packing
->> + * - If atleast one CPU is busy then do task packing unless overutilized CPUs
->> + *   count is < busy/2 CPU count
->> + * - Always select idle CPU for task packing
->> + */
->> +static int select_non_idle_core(struct task_struct *p, int prev_cpu, int target)
->> +{
->> +	struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
->> +	int iter_cpu, sibling;
->> +
->> +	cpumask_and(cpus, cpu_online_mask, p->cpus_ptr);
->> +
->> +	for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
->> +		int idle_cpu_count = 0, non_idle_cpu_count = 0;
->> +		int overutil_cpu_count = 0;
->> +		int busy_cpu_count = 0;
->> +		int best_cpu = iter_cpu;
->> +
->> +		for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
->> +			__cpumask_clear_cpu(sibling, cpus);
->> +			if (idle_cpu(iter_cpu)) {
-> 
-> Would you please elaborate the reasons that the iter cpu is checked idle
-> more than once for finding a busy core?
-> 
+As usual I am happy to merge all this but I would need
+Andrew Morton's ACK, as I don't feel like a maintainer for
+the bitops.
 
-Thanks for looking at the patches.
-Could you please point me out where iter_cpu is checked more than once?
-
->> +				idle_cpu_count++;
->> +				best_cpu = iter_cpu;
->> +			} else {
->> +				non_idle_cpu_count++;
->> +				if (cpu_overutilized(iter_cpu))
->> +					overutil_cpu_count++;
->> +				if (is_cpu_busy(cpu_util(iter_cpu)))
->> +					busy_cpu_count++;
->> +			}
->> +		}
->> +
-> 
-
+Yours,
+Linus Walleij
