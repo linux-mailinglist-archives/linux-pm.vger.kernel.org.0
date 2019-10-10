@@ -2,618 +2,289 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB732D3251
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E5AD326F
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfJJUah (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 16:30:37 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:38057 "EHLO
+        id S1726898AbfJJUd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 16:33:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:33765 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbfJJUah (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:30:37 -0400
+        with ESMTP id S1726132AbfJJUd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:33:58 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MxHLs-1huNxE3fke-00xbqf; Thu, 10 Oct 2019 22:28:13 +0200
+ 1MMH2M-1iYg741pdG-00JLSO; Thu, 10 Oct 2019 22:33:44 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 00/36] ARM: samsung platform cleanup
-Date:   Thu, 10 Oct 2019 22:28:02 +0200
-Message-Id: <20191010202802.1132272-1-arnd@arndb.de>
+        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Pankaj Dubey <pankaj.dubey@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 07/36] ARM: exynos: use private samsung_cpu_id copy
+Date:   Thu, 10 Oct 2019 22:29:51 +0200
+Message-Id: <20191010203043.1241612-7-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20191010203043.1241612-1-arnd@arndb.de>
+References: <20191010202802.1132272-1-arnd@arndb.de>
+ <20191010203043.1241612-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4NLjuMdb8mgxLE9JaRTfEDDtl5wr18+E4LuqPnkAwfZI2ORC29a
- cE+IxMC6LiP13EXLbYN4hRrfDgp1z1s/vUN/R3Dccj867Av5jZg54NmFpOUdOMZtbbm+JH1
- lOmf0E2aUl1Uwe52zLiZHVv8rlB8ovDSvfcVZq3zZf7rlshzeFYtrQzf7XFWz//+r+9WWRD
- Ussw3RH5OSWljboNTRdvw==
+X-Provags-ID: V03:K1:b9MxJc22ojVV03aQI4g1hMswAIJMjso6s4GXVBlN9VbVcHoYTRb
+ 3iyu7CbnJMT89XlWCnf8frmgACQN5evtlWJNiWG9bv1OfVvg8CWfOEUoXb37stRSawInWlj
+ il+ob82bzA9kWe0gsTRifNAcl5Hltr5UOTzagnmvdFbza5tGwszZbH+0RLrBAEU9kKI1rhm
+ hNIJXKtEmwVVKqI47CEkQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t7Qjtml0gHw=:OfgStiEe0A11zaXTTFIs1e
- Sd5u2yXWnLLZVGs9bF/Z99FDcg8dP23tfW4MoozLlku9mYgxQGKfuML+Afcpn/eBFQDFOGEp8
- 0P8zSiICii8ln6kEjHrft3DxH1jZ66Dg9blWwQjOFRU0Um/BeyIuUVDoGJdYnqUi39PHYBtPW
- kmsbxmx8QUtegXqZIknnK8EUv+9SSYO+pj0mVOP0juDoiskbo10exX1H94RlYIJDUICu/UNg6
- ujoWH5LaKdT7pcn2U6QBrePzAooYvajFPv4Dg/lBean6blNfi61CdlvvmyQ1Y0xGm5r/rVzsy
- AFXsUb0212B4g7zjJSck8grvFBoPrj5vjFNTzWoL7AneWcLaSbIeO6MpiTcsvVIVD4kSGSVay
- SAJgqDjQMryGY6e5HHruhTY8SmMnvZMLsGq5PFS+2buh9BY1rnXrzcXUKNQwefJaatSLkaJyp
- 21qoriXOlKiRrzct80c4BqZMeRA4Y1H7a8pfRjXMe6VAZFJCcUlqqRlX4kYqzgKbm/+RnNWKW
- vM8FwSFp+/9PF14I93Zx/aIXWfnS2rPXMPkOL7oiexYACXO+nxtViBdWoWn/rh6nyPeGFKxZl
- /GT29uyzkggA7Oxf9m07lRkEDnbtJ+Nw2CegrjUyGBbZIbEE9jsTCYAK4XTMY9CuR7HjN8FmY
- Gv8DJvJWklLwW2tg/YwSikMFzx512hpTjBRCkru3Zyg0EP1BfNynR5vXqifDU8Pvi2V0wcl9o
- 3QMpGGY/RQX1Mn6OeQcO0YywfEMDcrnOkuRjKXEyBq74B6n6eUBFglAvLofOib8lASEIuq50C
- r1XzkHgCKPZ5A2YudidZHd4ka/5kUHQFnavqQN3DzHHsCr2cxmU/tOdXKe/6WNsV3kyv2S8CC
- /1CSV5CAtrWtyem4vjZA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fzD7h19igLg=:BKV1tvTl03vsepORG2YJDW
+ WGR1yUsjoYM1tqLeBmQ8pfxD5vzhyBF/yBVWAdPzmQaxGmF92k4I5ENC0pZTUckTXLwJEGcAv
+ TQkN/6B3KdXq4w9XLOny0nWJGTSzOghmwZ3jUkfR7UBNs2uHH9+A7KUJW52dSaLmXJo3VY63b
+ lHZQsVz1ne3EMXpGbXulp9hgUhIKR+tTDaw2zUJUAfKuakc3bSNElMoKPCokVlrHN2iXFsWLL
+ ZR/zeGWMHH6wvc9WM6HZIT8z701yt7ew9A68Y6BF3OoDw5gGNpvefztsI+Z7VBcFVS1u8GA8/
+ OOM9HrFuQCB+jDXKXIIwkuKPwxV5ZlDmHdO+QpIc7DHcnUJswwoGDBO5srlBbheBTC7j4mehH
+ HO9SYGE/bzjTw2KI45pB1GFbgWH/2EEwpzdMgh0S/bc+3eg6H+tKYfBkghOKNpGG24w3D+Dit
+ 1iTLWVF7mYHzOjqNSOktdGykKRzsHkBdADmafS3KgacIaSJdY8ClcP0A+nNCgsCdGIF03ejn5
+ FJtlIERVEebgwYFMQbiNtsRk/mE/J3JusTbtCkfxjbxSU3e3pFWAUlxUj89pM404Rk95JstwP
+ kl7vqd/eXaXuL1h8CGy2bdNQiOAQjOY5kKMjH4SKZeAH3eKEGX3pRLVMEgK9LFGaKf7529Np3
+ Wx2WVplAQrvCw9lMAqk+l0torrBmOkXmZpd5MamLA0r/h3BQM2u8RtUQAFKsQR3+uYb56KKbd
+ 8xWnd8fTK4CUZIvrEANU2osUQEZ42pUnAvEoQApd4tcIrNUG9nD6wZP4TWSrrr4oNIhhFyFEP
+ q4J1ceIE/R4DEORzKFFThwuAXNL00e/0sYHXZYJ7bAYvZEdMw4ahqVH+KdI6GP6mIidhw+d3y
+ 7i0qi3j5RNMWVeTChflg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I've spent some time looking at the remaining ARMv4/ARMv5 platforms
-that are not part of ARCH_MULTIPLATFORM, and tried to get them closer
-to that. Here is what came out of that for the samsung platforms:
+The only part of plat-samsung that is shared with arch-exynos
+is the CPU identification code.
 
-* Exynos and s5pv210 are made independent of plat-samsung
-* device drivers stop using mach/*.h headers for s3c24xx
-  (and other platforms not in this series)
-* s3c24xx and s3c64xx get merged into mach-s3c, removing
-  the need for plat-samsung (I have other patches for the
-  remaining plat-* directories)
-* mach/io.h gets cleaned up to only be needed for BAST
-  PC104 mode (looking for ideas to proceed)
-* mach/irqs.h remains for now, this still needs to be converted
-  to sparse IRQs.
+Having a separate exynos_cpu_id variable makes the two completely
+independent and is actually a bit less code in total.
 
-Some bits are a little ugly, but overall I think this a big
-improvement.
-
-The contents are available for testing in
-
-git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
-
-Given the overall size of the series I expect that there will
-be bugs, so at this points I'm looking for reviews, acks and
-testing from anyone who still has the hardware, in particular
-s3c24xx, but also the other samsung platforms I'm touching.
-
-      Arnd
-
-Arnd Bergmann (36):
-  ARM: samsung: make S3C24XX_MISCCR access indirect
-  ARM: s3c: simplify mach/io.h
-  usb: gadget: s3c: use platform resources
-  usb: gadget: s3c-hsudc: remove platform header dependency
-  ARM: samsung: make pm-debug platform independent
-  ARM: samsung: move CONFIG_DEBUG_S3C_UART to Kconfig.debug
-  ARM: exynos: use private samsung_cpu_id copy
-  ARM: exynos: stop selecting PLAT_SAMSUNG
-  ARM: samsung: move pm check code to drivers/soc
-  ARM: s5pv210: use private pm save/restore
-  ARM: s5pv210: split from plat-samsung
-  ARM: s3c64xx: remove mach/hardware.h
-  ARM: s3c: move regs-spi.h into spi driver
-  ARM: s3c: move irqchip driver back into platform
-  ARM: s3c: adc: move header to linux/soc/samsung
-  ARM: s3c: move spi fiq handler into platform
-  ARM: s3c: h1940-audio: turn into platform driver
-  ARM: s3c: gta02-audio: turn into platform driver
-  ARM: s3c: rx1950: turn into platform driver
-  ASoC: samsung: s3c2412-i2s: avoid hardcoded S3C2410_PA_IIS
-  ARM: s3c: move iis pinctrl config into boards
-  ARM: s3c: leds: move setpull() calls into board files
-  ARM: s3c: move s3cmci pinctrl handling into board files
-  ARM: s3c: include mach/irqs.h where needed
-  ARM: s3c: spi: avoid hardcoding fiq number in driver
-  ARM: s3c: bast: avoid irq_desc array usage
-  ARM: s3c: fix mmc gpio lookup tables
-  fbdev: s3c2410fb: remove mach header dependency
-  ARM: s3c: cpufreq: split out registers
-  ARM: s3c: remove cpufreq header dependencies
-  ARM: s3c: cpufreq: use global s3c2412_cpufreq_setrefresh
-  ARM: s3c: iotiming: make functions static
-  ARM: s3c: move low-level clk reg access into platform code
-  ARM: s3c: stop including mach/hardware.h from mach/io.h
-  ARM: s3c: move into a common directory
-  ARM: s3c: make headers local if possible
-
- MAINTAINERS                                   |  16 +-
- arch/arm/Kconfig                              |   5 +-
- arch/arm/Kconfig.debug                        |  18 +-
- arch/arm/Makefile                             |   7 +-
- arch/arm/mach-exynos/Makefile                 |   4 -
- arch/arm/mach-exynos/common.h                 |   6 +-
- arch/arm/mach-exynos/exynos.c                 |  19 +-
- arch/arm/mach-exynos/include/mach/map.h       |  18 --
- arch/arm/mach-exynos/platsmp.c                |   4 +-
- arch/arm/mach-exynos/pm.c                     |   8 +-
- arch/arm/{plat-samsung => mach-s3c}/Kconfig   |  62 +----
- .../Kconfig => mach-s3c/Kconfig.s3c24xx}      |   0
- .../Kconfig => mach-s3c/Kconfig.s3c64xx}      |   0
- arch/arm/{plat-samsung => mach-s3c}/Makefile  |  15 +-
- .../{mach-s3c24xx => mach-s3c}/Makefile.boot  |   0
- .../Makefile => mach-s3c/Makefile.s3c24xx}    |  15 +-
- .../Makefile => mach-s3c/Makefile.s3c64xx}    |  14 +-
- .../include/plat => mach-s3c}/adc-core.h      |   0
- arch/arm/{plat-samsung => mach-s3c}/adc.c     |   4 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/anubis.h  |   0
- .../arm/{mach-s3c64xx => mach-s3c}/ata-core.h |   0
- .../{mach-s3c64xx => mach-s3c}/backlight.h    |   0
- .../arm/{mach-s3c24xx => mach-s3c}/bast-ide.c |   3 +-
- .../arm/{mach-s3c24xx => mach-s3c}/bast-irq.c |   8 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/bast.h    |   0
- .../{mach-s3c24xx => mach-s3c}/common-smdk.c  |  17 +-
- .../{mach-s3c24xx => mach-s3c}/common-smdk.h  |   0
- arch/arm/{plat-samsung => mach-s3c}/cpu.c     |  21 +-
- .../include/plat => mach-s3c}/cpu.h           |  11 -
- .../cpufreq-utils.c                           |  38 +++-
- arch/arm/{mach-s3c64xx => mach-s3c}/cpuidle.c |   4 +-
- .../arm/{mach-s3c64xx => mach-s3c}/crag6410.h |   2 +-
- .../{mach-s3c64xx => mach-s3c}/dev-audio.c    |   9 +-
- .../dev-backlight.c                           |   4 +-
- .../dev-uart-s3c64xx.c}                       |   5 +-
- .../arm/{plat-samsung => mach-s3c}/dev-uart.c |   2 +-
- arch/arm/{plat-samsung => mach-s3c}/devs.c    |  56 +++--
- .../include/plat => mach-s3c}/devs.h          |   0
- .../mach/dma.h => mach-s3c/dma-s3c24xx.h}     |   0
- .../mach/dma.h => mach-s3c/dma-s3c64xx.h}     |   0
- arch/arm/mach-s3c/dma.h                       |   7 +
- arch/arm/{mach-s3c24xx => mach-s3c}/fb-core.h |   0
- .../include/plat => mach-s3c}/fb.h            |   0
- .../plat => mach-s3c}/gpio-cfg-helpers.h      |   0
- .../include/plat => mach-s3c}/gpio-cfg.h      |   0
- .../include/plat => mach-s3c}/gpio-core.h     |   2 +-
- .../gpio-samsung-s3c24xx.h}                   |   2 +
- .../gpio-samsung-s3c64xx.h}                   |   0
- .../{plat-samsung => mach-s3c}/gpio-samsung.c |  18 +-
- arch/arm/mach-s3c/gpio-samsung.h              |   7 +
- arch/arm/{mach-s3c24xx => mach-s3c}/gta02.h   |   2 +-
- .../h1940-bluetooth.c                         |   7 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/h1940.h   |   0
- .../include/mach => mach-s3c}/hardware.h      |   7 -
- .../include/plat => mach-s3c}/iic-core.h      |   0
- arch/arm/mach-s3c/include/mach/io.h           |  50 +++++
- .../include/mach/irqs-s3c24xx.h}              |   0
- .../include/mach/irqs-s3c64xx.h}              |   0
- arch/arm/mach-s3c/include/mach/irqs.h         |   7 +
- .../plat => mach-s3c/include/mach}/map-base.h |   0
- arch/arm/{plat-samsung => mach-s3c}/init.c    |   4 +-
- .../iotiming-s3c2410.c                        |  12 +-
- .../iotiming-s3c2412.c                        |   6 +-
- .../irq-pm.c => mach-s3c/irq-pm-s3c24xx.c}    |  16 +-
- .../irq-pm.c => mach-s3c/irq-pm-s3c64xx.c}    |   8 +-
- arch/arm/mach-s3c/irq-s3c24xx-fiq-exports.c   |   9 +
- .../arm/mach-s3c/irq-s3c24xx-fiq.S            |  10 +-
- .../arm/mach-s3c}/irq-s3c24xx.c               |  23 +-
- .../arm/{mach-s3c64xx => mach-s3c}/irq-uart.h |   0
- .../include/plat => mach-s3c}/keypad.h        |   0
- .../mach-amlm5900.c                           |  37 ++-
- .../{mach-s3c24xx => mach-s3c}/mach-anubis.c  |  14 +-
- .../{mach-s3c64xx => mach-s3c}/mach-anw6410.c |  17 +-
- .../mach-at2440evb.c                          |  28 ++-
- .../{mach-s3c24xx => mach-s3c}/mach-bast.c    |  22 +-
- .../mach-crag6410-module.c                    |   2 +-
- .../mach-crag6410.c                           |  27 ++-
- .../{mach-s3c24xx => mach-s3c}/mach-gta02.c   |  57 ++++-
- .../{mach-s3c24xx => mach-s3c}/mach-h1940.c   |  65 ++++--
- .../arm/{mach-s3c64xx => mach-s3c}/mach-hmt.c |  15 +-
- .../{mach-s3c24xx => mach-s3c}/mach-jive.c    |  27 ++-
- .../mach-mini2440.c                           |  48 ++--
- .../mach-mini6410.c                           |  22 +-
- .../arm/{mach-s3c24xx => mach-s3c}/mach-n30.c |  40 +++-
- .../arm/{mach-s3c64xx => mach-s3c}/mach-ncp.c |  13 +-
- .../mach-nexcoder.c                           |  20 +-
- .../mach-osiris-dvs.c                         |   4 +-
- .../{mach-s3c24xx => mach-s3c}/mach-osiris.c  |  22 +-
- .../{mach-s3c24xx => mach-s3c}/mach-otom.c    |  17 +-
- .../{mach-s3c24xx => mach-s3c}/mach-qt2410.c  |  37 ++-
- .../mach-real6410.c                           |  18 +-
- .../{mach-s3c24xx => mach-s3c}/mach-rx1950.c  |  57 +++--
- .../{mach-s3c24xx => mach-s3c}/mach-rx3715.c  |  26 ++-
- .../mach-s3c2416-dt.c                         |   8 +-
- .../mach-s3c64xx-dt.c                         |   6 +-
- .../{mach-s3c64xx => mach-s3c}/mach-smartq.c  |  18 +-
- .../{mach-s3c64xx => mach-s3c}/mach-smartq.h  |   0
- .../{mach-s3c64xx => mach-s3c}/mach-smartq5.c |  18 +-
- .../{mach-s3c64xx => mach-s3c}/mach-smartq7.c |  18 +-
- .../mach-smdk2410.c                           |  14 +-
- .../mach-smdk2413.c                           |  21 +-
- .../mach-smdk2416.c                           |  23 +-
- .../mach-smdk2440.c                           |  25 ++-
- .../mach-smdk2443.c                           |  14 +-
- .../mach-smdk6400.c                           |  13 +-
- .../mach-smdk6410.c                           |  23 +-
- .../mach-tct_hammer.c                         |  24 +-
- .../{mach-s3c24xx => mach-s3c}/mach-vr1000.c  |  20 +-
- .../{mach-s3c24xx => mach-s3c}/mach-vstms.c   |  20 +-
- .../include/plat => mach-s3c}/map-s3c.h       |  12 +-
- .../mach/map.h => mach-s3c/map-s3c24xx.h}     |   6 +-
- .../mach/map.h => mach-s3c/map-s3c64xx.h}     |   4 +-
- .../include/plat => mach-s3c}/map-s5p.h       |   4 +-
- arch/arm/mach-s3c/map.h                       |   7 +
- .../{mach-s3c24xx => mach-s3c}/nand-core.h    |   0
- .../{mach-s3c64xx => mach-s3c}/onenand-core.h |   0
- arch/arm/{mach-s3c24xx => mach-s3c}/osiris.h  |   0
- arch/arm/{mach-s3c24xx => mach-s3c}/otom.h    |   0
- arch/arm/{mach-s3c64xx => mach-s3c}/pl080.c   |   4 +-
- .../{plat-samsung => mach-s3c}/platformdata.c |   4 +-
- .../{mach-s3c24xx => mach-s3c}/pll-s3c2410.c  |   4 +-
- .../pll-s3c2440-12000000.c                    |   4 +-
- .../pll-s3c2440-16934400.c                    |   4 +-
- .../{plat-samsung => mach-s3c}/pm-common.c    |   2 +-
- arch/arm/mach-s3c/pm-common.h                 |  40 ++++
- .../pm-core.h => mach-s3c/pm-core-s3c24xx.h}  |   8 +-
- .../pm-core.h => mach-s3c/pm-core-s3c64xx.h}  |  50 +----
- arch/arm/mach-s3c/pm-core.h                   |   7 +
- arch/arm/{plat-samsung => mach-s3c}/pm-gpio.c |   6 +-
- .../arm/{mach-s3c24xx => mach-s3c}/pm-h1940.S |   5 +-
- .../{mach-s3c24xx => mach-s3c}/pm-s3c2410.c   |  11 +-
- .../{mach-s3c24xx => mach-s3c}/pm-s3c2412.c   |  11 +-
- .../{mach-s3c24xx => mach-s3c}/pm-s3c2416.c   |   6 +-
- .../pm.c => mach-s3c/pm-s3c24xx.c}            |  12 +-
- .../pm.c => mach-s3c/pm-s3c64xx.c}            |  66 +++++-
- arch/arm/{plat-samsung => mach-s3c}/pm.c      |  20 +-
- .../include/plat => mach-s3c}/pm.h            |   2 +-
- .../include/plat => mach-s3c}/pwm-core.h      |   0
- .../include/plat => mach-s3c}/regs-adc.h      |   0
- .../regs-clock-s3c24xx.h}                     |   2 +
- .../regs-clock-s3c64xx.h}                     |   0
- arch/arm/mach-s3c/regs-clock.h                |   7 +
- .../arm/{mach-s3c24xx => mach-s3c}/regs-dsc.h |   0
- .../regs-gpio-memport.h                       |   0
- .../regs-gpio-s3c24xx.h}                      |   2 +
- .../regs-gpio-s3c64xx.h}                      |   0
- arch/arm/mach-s3c/regs-gpio.h                 |   7 +
- .../regs-irq-s3c24xx.h}                       |   2 +
- .../regs-irq-s3c64xx.h}                       |   0
- arch/arm/mach-s3c/regs-irq.h                  |   7 +
- .../include/plat => mach-s3c}/regs-irqtype.h  |   0
- .../arm/{mach-s3c24xx => mach-s3c}/regs-mem.h |   2 +
- .../{mach-s3c64xx => mach-s3c}/regs-modem.h   |   0
- .../mach => mach-s3c}/regs-s3c2443-clock.h    |  50 +++++
- .../{mach-s3c64xx => mach-s3c}/regs-srom.h    |   0
- .../arm/{mach-s3c64xx => mach-s3c}/regs-sys.h |   0
- .../regs-syscon-power.h                       |   0
- .../regs-usb-hsotg-phy.h                      |   0
- .../include/mach => mach-s3c}/rtc-core.h      |   0
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2410.c |  21 +-
- .../s3c2412-power.h                           |   0
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2412.c |  16 +-
- .../include/mach => mach-s3c}/s3c2412.h       |   2 +
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2416.c |  28 +--
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2440.c |  17 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2442.c |  17 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c2443.c |  21 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/s3c244x.c |  16 +-
- .../common.c => mach-s3c/s3c24xx.c}           |  21 +-
- .../common.h => mach-s3c/s3c24xx.h}           |   1 +
- arch/arm/{mach-s3c64xx => mach-s3c}/s3c6400.c |  14 +-
- arch/arm/{mach-s3c64xx => mach-s3c}/s3c6410.c |  17 +-
- .../common.c => mach-s3c/s3c64xx.c}           |  24 +-
- .../common.h => mach-s3c/s3c64xx.h}           |   0
- .../include/plat => mach-s3c}/samsung-time.h  |   0
- .../include/plat => mach-s3c}/sdhci.h         |   2 +-
- .../{mach-s3c24xx => mach-s3c}/setup-camif.c  |   4 +-
- .../setup-fb-24bpp.c                          |   6 +-
- .../{mach-s3c24xx => mach-s3c}/setup-i2c.c    |   7 +-
- .../{mach-s3c64xx => mach-s3c}/setup-i2c0.c   |   4 +-
- .../{mach-s3c64xx => mach-s3c}/setup-i2c1.c   |   4 +-
- .../{mach-s3c64xx => mach-s3c}/setup-ide.c    |   8 +-
- .../{mach-s3c64xx => mach-s3c}/setup-keypad.c |   6 +-
- .../setup-sdhci-gpio-s3c24xx.c}               |   6 +-
- .../setup-sdhci-gpio-s3c64xx.c}               |   6 +-
- .../setup-spi-s3c24xx.c}                      |   6 +-
- .../setup-spi-s3c64xx.c}                      |   4 +-
- .../arm/{mach-s3c24xx => mach-s3c}/setup-ts.c |   5 +-
- .../setup-usb-phy.c                           |   6 +-
- .../{mach-s3c24xx => mach-s3c}/simtec-audio.c |  11 +-
- .../{mach-s3c24xx => mach-s3c}/simtec-nor.c   |   2 +-
- .../{mach-s3c24xx => mach-s3c}/simtec-pm.c    |   8 +-
- .../{mach-s3c24xx => mach-s3c}/simtec-usb.c   |   6 +-
- arch/arm/{mach-s3c24xx => mach-s3c}/simtec.h  |   0
- .../sleep-s3c2410.S                           |   7 +-
- .../sleep-s3c2412.S                           |   5 +-
- .../sleep.S => mach-s3c/sleep-s3c24xx.S}      |   7 +-
- .../sleep.S => mach-s3c/sleep-s3c64xx.S}      |   4 +-
- .../arm/{mach-s3c24xx => mach-s3c}/spi-core.h |   0
- .../include/plat => mach-s3c}/usb-phy.h       |   0
- arch/arm/{mach-s3c24xx => mach-s3c}/vr1000.h  |   0
- .../{plat-samsung => mach-s3c}/wakeup-mask.c  |   4 +-
- .../include/plat => mach-s3c}/wakeup-mask.h   |   0
- .../watchdog-reset.c                          |   0
- .../watchdog-reset.h                          |   0
- arch/arm/mach-s3c24xx/include/mach/fb.h       |   2 -
- arch/arm/mach-s3c24xx/include/mach/io.h       | 212 ------------------
- arch/arm/mach-s3c64xx/include/mach/hardware.h |  17 --
- arch/arm/mach-s5pv210/Kconfig                 |   1 +
- arch/arm/mach-s5pv210/Makefile                |   7 -
- arch/arm/mach-s5pv210/pm.c                    |  51 ++++-
- arch/arm/mach-s5pv210/regs-clock.h            |   2 +-
- arch/arm/mach-s5pv210/s5pv210.c               |   2 -
- drivers/clk/samsung/clk-s3c2410-dclk.c        |  10 +-
- drivers/cpufreq/s3c2410-cpufreq.c             |  10 +-
- drivers/cpufreq/s3c2412-cpufreq.c             |  44 ++--
- drivers/cpufreq/s3c2440-cpufreq.c             |  29 ++-
- drivers/cpufreq/s3c24xx-cpufreq-debugfs.c     |   2 +-
- drivers/cpufreq/s3c24xx-cpufreq.c             |  14 +-
- drivers/hwmon/s3c-hwmon.c                     |   2 +-
- drivers/input/touchscreen/s3c2410_ts.c        |  37 ++-
- drivers/irqchip/Makefile                      |   1 -
- drivers/leds/leds-s3c24xx.c                   |   7 -
- drivers/mmc/host/Kconfig                      |   2 +-
- drivers/mmc/host/s3cmci.c                     |  72 ++----
- drivers/power/supply/s3c_adc_battery.c        |   2 +-
- drivers/pwm/Kconfig                           |   2 +-
- drivers/soc/samsung/Kconfig                   |  48 +++-
- drivers/soc/samsung/Makefile                  |   3 +
- .../soc/samsung/s3c-pm-check.c                |   2 +-
- .../soc/samsung/s3c-pm-debug.c                |  26 +--
- drivers/spi/Kconfig                           |   2 +-
- drivers/spi/Makefile                          |   1 -
- .../spi/spi-s3c24xx-regs.h                    |   3 +-
- drivers/spi/spi-s3c24xx.c                     |  28 +--
- drivers/tty/serial/Kconfig                    |   2 +-
- drivers/usb/gadget/udc/s3c-hsudc.c            |  55 +----
- drivers/usb/gadget/udc/s3c2410_udc.c          |  31 +--
- drivers/usb/gadget/udc/s3c2410_udc.h          |   1 +
- .../usb/gadget/udc/s3c2410_udc_regs.h         |   2 +
- .../video/fbdev/s3c2410fb-regs-lcd.h          |  28 +--
- drivers/video/fbdev/s3c2410fb.c               |  16 +-
- .../linux/platform_data}/fb-s3c2410.h         |  33 ++-
- include/linux/platform_data/mmc-s3cmci.h      |   2 +
- include/linux/platform_data/s3c-hsudc.h       |   2 +
- .../linux/soc/samsung/s3c-adc.h               |   0
- .../linux/soc/samsung/s3c-cpu-freq.h          |   0
- .../linux/soc/samsung/s3c-cpufreq-core.h      |  10 +-
- .../linux/soc/samsung/s3c-pm.h                |  69 +++---
- .../linux/spi/s3c24xx-fiq.h                   |   5 +
- include/linux/spi/s3c24xx.h                   |   2 +-
- sound/soc/samsung/Kconfig                     |   2 +-
- sound/soc/samsung/h1940_uda1380.c             |  71 ++----
- sound/soc/samsung/neo1973_wm8753.c            |  85 +++----
- sound/soc/samsung/rx1950_uda1380.c            |  72 ++----
- sound/soc/samsung/s3c-i2s-v2.c                |   3 +-
- sound/soc/samsung/s3c-i2s-v2.h                |   3 +-
- sound/soc/samsung/s3c2412-i2s.c               |   9 +-
- sound/soc/samsung/s3c24xx-i2s.c               |   7 -
- 259 files changed, 1716 insertions(+), 1648 deletions(-)
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/mach-exynos/common.h                |  6 +++---
+ arch/arm/mach-exynos/exynos.c                | 19 +++++++++++++++----
+ arch/arm/mach-exynos/include/mach/map.h      | 18 ------------------
+ arch/arm/mach-exynos/platsmp.c               |  4 +---
+ arch/arm/mach-exynos/pm.c                    |  8 ++++----
+ arch/arm/plat-samsung/cpu.c                  | 17 -----------------
+ arch/arm/plat-samsung/include/plat/cpu.h     |  2 --
+ arch/arm/plat-samsung/include/plat/map-s5p.h |  2 --
+ 8 files changed, 23 insertions(+), 53 deletions(-)
  delete mode 100644 arch/arm/mach-exynos/include/mach/map.h
- rename arch/arm/{plat-samsung => mach-s3c}/Kconfig (73%)
- rename arch/arm/{mach-s3c24xx/Kconfig => mach-s3c/Kconfig.s3c24xx} (100%)
- rename arch/arm/{mach-s3c64xx/Kconfig => mach-s3c/Kconfig.s3c64xx} (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/Makefile (67%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/Makefile.boot (100%)
- rename arch/arm/{mach-s3c24xx/Makefile => mach-s3c/Makefile.s3c24xx} (86%)
- rename arch/arm/{mach-s3c64xx/Makefile => mach-s3c/Makefile.s3c64xx} (83%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/adc-core.h (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/adc.c (99%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/anubis.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/ata-core.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/backlight.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/bast-ide.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/bast-irq.c (95%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/bast.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/common-smdk.c (93%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/common-smdk.h (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/cpu.c (62%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/cpu.h (91%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/cpufreq-utils.c (70%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/cpuidle.c (96%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/crag6410.h (95%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/dev-audio.c (97%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/dev-backlight.c (98%)
- rename arch/arm/{mach-s3c64xx/dev-uart.c => mach-s3c/dev-uart-s3c64xx.c} (95%)
- rename arch/arm/{plat-samsung => mach-s3c}/dev-uart.c (97%)
- rename arch/arm/{plat-samsung => mach-s3c}/devs.c (96%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/devs.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach/dma.h => mach-s3c/dma-s3c24xx.h} (100%)
- rename arch/arm/{mach-s3c64xx/include/mach/dma.h => mach-s3c/dma-s3c64xx.h} (100%)
- create mode 100644 arch/arm/mach-s3c/dma.h
- rename arch/arm/{mach-s3c24xx => mach-s3c}/fb-core.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/fb.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/gpio-cfg-helpers.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/gpio-cfg.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/gpio-core.h (99%)
- rename arch/arm/{mach-s3c24xx/include/mach/gpio-samsung.h => mach-s3c/gpio-samsung-s3c24xx.h} (99%)
- rename arch/arm/{mach-s3c64xx/include/mach/gpio-samsung.h => mach-s3c/gpio-samsung-s3c64xx.h} (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/gpio-samsung.c (99%)
- create mode 100644 arch/arm/mach-s3c/gpio-samsung.h
- rename arch/arm/{mach-s3c24xx => mach-s3c}/gta02.h (94%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/h1940-bluetooth.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/h1940.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach => mach-s3c}/hardware.h (76%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/iic-core.h (100%)
- create mode 100644 arch/arm/mach-s3c/include/mach/io.h
- rename arch/arm/{mach-s3c24xx/include/mach/irqs.h => mach-s3c/include/mach/irqs-s3c24xx.h} (100%)
- rename arch/arm/{mach-s3c64xx/include/mach/irqs.h => mach-s3c/include/mach/irqs-s3c64xx.h} (100%)
- create mode 100644 arch/arm/mach-s3c/include/mach/irqs.h
- rename arch/arm/{plat-samsung/include/plat => mach-s3c/include/mach}/map-base.h (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/init.c (98%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/iotiming-s3c2410.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/iotiming-s3c2412.c (98%)
- rename arch/arm/{mach-s3c24xx/irq-pm.c => mach-s3c/irq-pm-s3c24xx.c} (93%)
- rename arch/arm/{mach-s3c64xx/irq-pm.c => mach-s3c/irq-pm-s3c64xx.c} (97%)
- create mode 100644 arch/arm/mach-s3c/irq-s3c24xx-fiq-exports.c
- rename drivers/spi/spi-s3c24xx-fiq.S => arch/arm/mach-s3c/irq-s3c24xx-fiq.S (94%)
- rename {drivers/irqchip => arch/arm/mach-s3c}/irq-s3c24xx.c (99%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/irq-uart.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/keypad.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-amlm5900.c (84%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-anubis.c (97%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-anw6410.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-at2440evb.c (88%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-bast.c (98%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-crag6410-module.c (99%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-crag6410.c (98%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-gta02.c (90%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-h1940.c (92%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-hmt.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-jive.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-mini2440.c (93%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-mini6410.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-n30.c (93%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-ncp.c (92%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-nexcoder.c (92%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-osiris-dvs.c (98%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-osiris.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-otom.c (89%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-qt2410.c (88%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-real6410.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-rx1950.c (93%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-rx3715.c (90%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-s3c2416-dt.c (92%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-s3c64xx-dt.c (95%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smartq.c (97%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smartq.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smartq5.c (93%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smartq7.c (94%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-smdk2410.c (89%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-smdk2413.c (90%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-smdk2416.c (95%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-smdk2440.c (89%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-smdk2443.c (93%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smdk6400.c (92%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/mach-smdk6410.c (98%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-tct_hammer.c (82%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-vr1000.c (95%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/mach-vstms.c (90%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/map-s3c.h (87%)
- rename arch/arm/{mach-s3c24xx/include/mach/map.h => mach-s3c/map-s3c24xx.h} (97%)
- rename arch/arm/{mach-s3c64xx/include/mach/map.h => mach-s3c/map-s3c64xx.h} (98%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/map-s5p.h (85%)
- create mode 100644 arch/arm/mach-s3c/map.h
- rename arch/arm/{mach-s3c24xx => mach-s3c}/nand-core.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/onenand-core.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/osiris.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/otom.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/pl080.c (99%)
- rename arch/arm/{plat-samsung => mach-s3c}/platformdata.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pll-s3c2410.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pll-s3c2440-12000000.c (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pll-s3c2440-16934400.c (98%)
- rename arch/arm/{plat-samsung => mach-s3c}/pm-common.c (98%)
- create mode 100644 arch/arm/mach-s3c/pm-common.h
- rename arch/arm/{mach-s3c24xx/include/mach/pm-core.h => mach-s3c/pm-core-s3c24xx.h} (95%)
- rename arch/arm/{mach-s3c64xx/include/mach/pm-core.h => mach-s3c/pm-core-s3c64xx.h} (58%)
- create mode 100644 arch/arm/mach-s3c/pm-core.h
- rename arch/arm/{plat-samsung => mach-s3c}/pm-gpio.c (99%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pm-h1940.S (80%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pm-s3c2410.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pm-s3c2412.c (95%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/pm-s3c2416.c (95%)
- rename arch/arm/{mach-s3c24xx/pm.c => mach-s3c/pm-s3c24xx.c} (94%)
- rename arch/arm/{mach-s3c64xx/pm.c => mach-s3c/pm-s3c64xx.c} (83%)
- rename arch/arm/{plat-samsung => mach-s3c}/pm.c (94%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/pm.h (98%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/pwm-core.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/regs-adc.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach/regs-clock.h => mach-s3c/regs-clock-s3c24xx.h} (99%)
- rename arch/arm/{mach-s3c64xx/include/mach/regs-clock.h => mach-s3c/regs-clock-s3c64xx.h} (100%)
- create mode 100644 arch/arm/mach-s3c/regs-clock.h
- rename arch/arm/{mach-s3c24xx => mach-s3c}/regs-dsc.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-gpio-memport.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach/regs-gpio.h => mach-s3c/regs-gpio-s3c24xx.h} (99%)
- rename arch/arm/{mach-s3c64xx/include/mach/regs-gpio.h => mach-s3c/regs-gpio-s3c64xx.h} (100%)
- create mode 100644 arch/arm/mach-s3c/regs-gpio.h
- rename arch/arm/{mach-s3c24xx/include/mach/regs-irq.h => mach-s3c/regs-irq-s3c24xx.h} (98%)
- rename arch/arm/{mach-s3c64xx/include/mach/regs-irq.h => mach-s3c/regs-irq-s3c64xx.h} (100%)
- create mode 100644 arch/arm/mach-s3c/regs-irq.h
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/regs-irqtype.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/regs-mem.h (98%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-modem.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach => mach-s3c}/regs-s3c2443-clock.h (81%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-srom.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-sys.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-syscon-power.h (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/regs-usb-hsotg-phy.h (100%)
- rename arch/arm/{mach-s3c24xx/include/mach => mach-s3c}/rtc-core.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2410.c (90%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2412-power.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2412.c (94%)
- rename arch/arm/{mach-s3c24xx/include/mach => mach-s3c}/s3c2412.h (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2416.c (88%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2440.c (85%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2442.c (82%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c2443.c (89%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/s3c244x.c (93%)
- rename arch/arm/{mach-s3c24xx/common.c => mach-s3c/s3c24xx.c} (98%)
- rename arch/arm/{mach-s3c24xx/common.h => mach-s3c/s3c24xx.h} (99%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/s3c6400.c (89%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/s3c6410.c (89%)
- rename arch/arm/{mach-s3c64xx/common.c => mach-s3c/s3c64xx.c} (97%)
- rename arch/arm/{mach-s3c64xx/common.h => mach-s3c/s3c64xx.h} (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/samsung-time.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/sdhci.h (99%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/setup-camif.c (95%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-fb-24bpp.c (86%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/setup-i2c.c (79%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-i2c0.c (90%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-i2c1.c (90%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-ide.c (89%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-keypad.c (86%)
- rename arch/arm/{mach-s3c24xx/setup-sdhci-gpio.c => mach-s3c/setup-sdhci-gpio-s3c24xx.c} (90%)
- rename arch/arm/{mach-s3c64xx/setup-sdhci-gpio.c => mach-s3c/setup-sdhci-gpio-s3c64xx.c} (95%)
- rename arch/arm/{mach-s3c24xx/setup-spi.c => mach-s3c/setup-spi-s3c24xx.c} (85%)
- rename arch/arm/{mach-s3c64xx/setup-spi.c => mach-s3c/setup-spi-s3c64xx.c} (89%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/setup-ts.c (88%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/setup-usb-phy.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/simtec-audio.c (86%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/simtec-nor.c (98%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/simtec-pm.c (92%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/simtec-usb.c (96%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/simtec.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/sleep-s3c2410.S (92%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/sleep-s3c2412.S (93%)
- rename arch/arm/{mach-s3c24xx/sleep.S => mach-s3c/sleep-s3c24xx.S} (92%)
- rename arch/arm/{mach-s3c64xx/sleep.S => mach-s3c/sleep-s3c64xx.S} (97%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/spi-core.h (100%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/usb-phy.h (100%)
- rename arch/arm/{mach-s3c24xx => mach-s3c}/vr1000.h (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/wakeup-mask.c (94%)
- rename arch/arm/{plat-samsung/include/plat => mach-s3c}/wakeup-mask.h (100%)
- rename arch/arm/{plat-samsung => mach-s3c}/watchdog-reset.c (100%)
- rename arch/arm/{mach-s3c64xx => mach-s3c}/watchdog-reset.h (100%)
- delete mode 100644 arch/arm/mach-s3c24xx/include/mach/fb.h
- delete mode 100644 arch/arm/mach-s3c24xx/include/mach/io.h
- delete mode 100644 arch/arm/mach-s3c64xx/include/mach/hardware.h
- rename arch/arm/plat-samsung/pm-check.c => drivers/soc/samsung/s3c-pm-check.c (99%)
- rename arch/arm/plat-samsung/pm-debug.c => drivers/soc/samsung/s3c-pm-debug.c (78%)
- rename arch/arm/plat-samsung/include/plat/regs-spi.h => drivers/spi/spi-s3c24xx-regs.h (95%)
- rename arch/arm/plat-samsung/include/plat/regs-udc.h => drivers/usb/gadget/udc/s3c2410_udc_regs.h (99%)
- rename arch/arm/mach-s3c24xx/include/mach/regs-lcd.h => drivers/video/fbdev/s3c2410fb-regs-lcd.h (84%)
- rename {arch/arm/plat-samsung/include/plat => include/linux/platform_data}/fb-s3c2410.h (57%)
- rename arch/arm/plat-samsung/include/plat/adc.h => include/linux/soc/samsung/s3c-adc.h (100%)
- rename arch/arm/plat-samsung/include/plat/cpu-freq.h => include/linux/soc/samsung/s3c-cpu-freq.h (100%)
- rename arch/arm/plat-samsung/include/plat/cpu-freq-core.h => include/linux/soc/samsung/s3c-cpufreq-core.h (96%)
- rename arch/arm/plat-samsung/include/plat/pm-common.h => include/linux/soc/samsung/s3c-pm.h (55%)
- rename drivers/spi/spi-s3c24xx-fiq.h => include/linux/spi/s3c24xx-fiq.h (78%)
 
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: patches@opensource.cirrus.com
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-clk@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Cc: linux-leds@vger.kernel.org
-Cc: linux-mmc@vger.kernel.org
-Cc: linux-pwm@vger.kernel.org
-Cc: linux-spi@vger.kernel.org
-Cc: linux-serial@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: alsa-devel@alsa-project.org
+diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
+index 56411bb63d45..adf7db9c0885 100644
+--- a/arch/arm/mach-exynos/common.h
++++ b/arch/arm/mach-exynos/common.h
+@@ -24,12 +24,12 @@
+ #define EXYNOS5800_SOC_ID	0xE5422000
+ #define EXYNOS5_SOC_MASK	0xFFFFF000
+ 
+-extern unsigned long samsung_cpu_id;
++extern unsigned long exynos_cpu_id;
+ 
+ #define IS_SAMSUNG_CPU(name, id, mask)		\
+ static inline int is_samsung_##name(void)	\
+ {						\
+-	return ((samsung_cpu_id & mask) == (id & mask));	\
++	return ((exynos_cpu_id & mask) == (id & mask));	\
+ }
+ 
+ IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
+@@ -147,7 +147,7 @@ extern struct cpuidle_exynos_data cpuidle_coupled_exynos_data;
+ 
+ extern void exynos_set_delayed_reset_assertion(bool enable);
+ 
+-extern unsigned int samsung_rev(void);
++extern unsigned int exynos_rev(void);
+ extern void exynos_core_restart(u32 core_id);
+ extern int exynos_set_boot_addr(u32 core_id, unsigned long boot_addr);
+ extern int exynos_get_boot_addr(u32 core_id, unsigned long *boot_addr);
+diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
+index 9aa483366ebc..da9300d655c6 100644
+--- a/arch/arm/mach-exynos/exynos.c
++++ b/arch/arm/mach-exynos/exynos.c
+@@ -19,11 +19,10 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
+ 
+-#include <mach/map.h>
+-#include <plat/cpu.h>
+-
+ #include "common.h"
+ 
++#define S5P_VA_CHIPID	((void __iomem __force *)0xF8000000)
++
+ static struct platform_device exynos_cpuidle = {
+ 	.name              = "exynos_cpuidle",
+ #ifdef CONFIG_ARM_EXYNOS_CPUIDLE
+@@ -36,6 +35,14 @@ void __iomem *sysram_base_addr __ro_after_init;
+ phys_addr_t sysram_base_phys __ro_after_init;
+ void __iomem *sysram_ns_base_addr __ro_after_init;
+ 
++unsigned long exynos_cpu_id;
++static unsigned int exynos_cpu_rev;
++
++unsigned int exynos_rev(void)
++{
++	return exynos_cpu_rev;
++}
++
+ void __init exynos_sysram_init(void)
+ {
+ 	struct device_node *node;
+@@ -86,7 +93,11 @@ static void __init exynos_init_io(void)
+ 	of_scan_flat_dt(exynos_fdt_map_chipid, NULL);
+ 
+ 	/* detect cpu id and rev. */
+-	s5p_init_cpu(S5P_VA_CHIPID);
++	exynos_cpu_id = readl_relaxed(S5P_VA_CHIPID);
++	exynos_cpu_rev = exynos_cpu_id & 0xFF;
++
++	pr_info("Samsung CPU ID: 0x%08lx\n", exynos_cpu_id);
++
+ }
+ 
+ /*
+diff --git a/arch/arm/mach-exynos/include/mach/map.h b/arch/arm/mach-exynos/include/mach/map.h
+deleted file mode 100644
+index 22ebe3654633..000000000000
+--- a/arch/arm/mach-exynos/include/mach/map.h
++++ /dev/null
+@@ -1,18 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
+- *		http://www.samsung.com/
+- *
+- * EXYNOS - Memory map definitions
+- */
+-
+-#ifndef __ASM_ARCH_MAP_H
+-#define __ASM_ARCH_MAP_H __FILE__
+-
+-#include <plat/map-base.h>
+-
+-#include <plat/map-s5p.h>
+-
+-#define EXYNOS_PA_CHIPID		0x10000000
+-
+-#endif /* __ASM_ARCH_MAP_H */
+diff --git a/arch/arm/mach-exynos/platsmp.c b/arch/arm/mach-exynos/platsmp.c
+index 0cbbae8bf1f8..d7fedbb2eefe 100644
+--- a/arch/arm/mach-exynos/platsmp.c
++++ b/arch/arm/mach-exynos/platsmp.c
+@@ -22,8 +22,6 @@
+ #include <asm/smp_scu.h>
+ #include <asm/firmware.h>
+ 
+-#include <mach/map.h>
+-
+ #include "common.h"
+ 
+ extern void exynos4_secondary_startup(void);
+@@ -188,7 +186,7 @@ void exynos_scu_enable(void)
+ 
+ static void __iomem *cpu_boot_reg_base(void)
+ {
+-	if (soc_is_exynos4210() && samsung_rev() == EXYNOS4210_REV_1_1)
++	if (soc_is_exynos4210() && exynos_rev() == EXYNOS4210_REV_1_1)
+ 		return pmu_base_addr + S5P_INFORM5;
+ 	return sysram_base_addr;
+ }
+diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
+index 48e7fb38613e..624585641a9c 100644
+--- a/arch/arm/mach-exynos/pm.c
++++ b/arch/arm/mach-exynos/pm.c
+@@ -26,18 +26,18 @@
+ 
+ static inline void __iomem *exynos_boot_vector_addr(void)
+ {
+-	if (samsung_rev() == EXYNOS4210_REV_1_1)
++	if (exynos_rev() == EXYNOS4210_REV_1_1)
+ 		return pmu_base_addr + S5P_INFORM7;
+-	else if (samsung_rev() == EXYNOS4210_REV_1_0)
++	else if (exynos_rev() == EXYNOS4210_REV_1_0)
+ 		return sysram_base_addr + 0x24;
+ 	return pmu_base_addr + S5P_INFORM0;
+ }
+ 
+ static inline void __iomem *exynos_boot_vector_flag(void)
+ {
+-	if (samsung_rev() == EXYNOS4210_REV_1_1)
++	if (exynos_rev() == EXYNOS4210_REV_1_1)
+ 		return pmu_base_addr + S5P_INFORM6;
+-	else if (samsung_rev() == EXYNOS4210_REV_1_0)
++	else if (exynos_rev() == EXYNOS4210_REV_1_0)
+ 		return sysram_base_addr + 0x20;
+ 	return pmu_base_addr + S5P_INFORM1;
+ }
+diff --git a/arch/arm/plat-samsung/cpu.c b/arch/arm/plat-samsung/cpu.c
+index e1ba88ba31d8..8acba21bbf4b 100644
+--- a/arch/arm/plat-samsung/cpu.c
++++ b/arch/arm/plat-samsung/cpu.c
+@@ -14,13 +14,6 @@
+ #include <plat/cpu.h>
+ 
+ unsigned long samsung_cpu_id;
+-static unsigned int samsung_cpu_rev;
+-
+-unsigned int samsung_rev(void)
+-{
+-	return samsung_cpu_rev;
+-}
+-EXPORT_SYMBOL(samsung_rev);
+ 
+ void __init s3c64xx_init_cpu(void)
+ {
+@@ -34,15 +27,5 @@ void __init s3c64xx_init_cpu(void)
+ 		samsung_cpu_id = readl_relaxed(S3C_VA_SYS + 0xA1C);
+ 	}
+ 
+-	samsung_cpu_rev = 0;
+-
+-	pr_info("Samsung CPU ID: 0x%08lx\n", samsung_cpu_id);
+-}
+-
+-void __init s5p_init_cpu(const void __iomem *cpuid_addr)
+-{
+-	samsung_cpu_id = readl_relaxed(cpuid_addr);
+-	samsung_cpu_rev = samsung_cpu_id & 0xFF;
+-
+ 	pr_info("Samsung CPU ID: 0x%08lx\n", samsung_cpu_id);
+ }
+diff --git a/arch/arm/plat-samsung/include/plat/cpu.h b/arch/arm/plat-samsung/include/plat/cpu.h
+index fadcddbea064..02d7f991d5a3 100644
+--- a/arch/arm/plat-samsung/include/plat/cpu.h
++++ b/arch/arm/plat-samsung/include/plat/cpu.h
+@@ -111,8 +111,6 @@ extern void s3c24xx_init_io(struct map_desc *mach_desc, int size);
+ extern void s3c64xx_init_cpu(void);
+ extern void s5p_init_cpu(const void __iomem *cpuid_addr);
+ 
+-extern unsigned int samsung_rev(void);
+-
+ extern void s3c24xx_init_uarts(struct s3c2410_uartcfg *cfg, int no);
+ 
+ extern void s3c24xx_init_clocks(int xtal);
+diff --git a/arch/arm/plat-samsung/include/plat/map-s5p.h b/arch/arm/plat-samsung/include/plat/map-s5p.h
+index d69a0ca09fb5..3812085f8761 100644
+--- a/arch/arm/plat-samsung/include/plat/map-s5p.h
++++ b/arch/arm/plat-samsung/include/plat/map-s5p.h
+@@ -9,8 +9,6 @@
+ #ifndef __ASM_PLAT_MAP_S5P_H
+ #define __ASM_PLAT_MAP_S5P_H __FILE__
+ 
+-#define S5P_VA_CHIPID		S3C_ADDR(0x02000000)
+-
+ #define VA_VIC(x)		(S3C_VA_IRQ + ((x) * 0x10000))
+ #define VA_VIC0			VA_VIC(0)
+ #define VA_VIC1			VA_VIC(1)
 -- 
 2.20.0
 
