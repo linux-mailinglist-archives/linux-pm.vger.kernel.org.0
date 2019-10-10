@@ -2,96 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AF6D2733
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 12:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6852FD276E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 12:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbfJJKbC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 06:31:02 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:45441 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbfJJKbC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 06:31:02 -0400
-Received: by mail-pl1-f195.google.com with SMTP id u12so2554651pls.12
-        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2019 03:31:02 -0700 (PDT)
+        id S1727489AbfJJKp0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 06:45:26 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37947 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbfJJKpZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 06:45:25 -0400
+Received: by mail-pf1-f195.google.com with SMTP id h195so3637506pfe.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2019 03:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HkxBDeI13PS/unHL1Nr+Sh+9tXf4QbZkcMWKpQOyoZs=;
-        b=A3Ccp5m0GI0vf9vINUCaNgrXVyXgcdJaG3xHrIHMVAavr6PGkGIk2Rnv8iPDi14niy
-         DeIrUZ5K3Q1T7ubCWBcWkWX8JmKwbimhiuLo0lm4549GDL1CKjT06RlAALVfrRDR5u7n
-         FJ+AGVq+D276MDy6CMC86mTU+GOmxPFdikGggsEMOufzYdp5kj2OID/tuyMnSKV8Iikj
-         c4hhdJW6rUhKvSG89tn4nMcBIbT54aJbpI5/7GZeJCjtchMX7zI0INRAYVWCOtTBxQob
-         ZScd8nGDewPTjXDz4bzQ9r8eT/lyHZ7WcKtDsJiRlvjMmq8NMc2aTO+NmaEbxMel79G1
-         aycw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YeFYhKm4PJo5d1ZlY/G1oQFiqY2ifkLQAS5VyiJD2kA=;
+        b=cG3q9551YC42aPOxOY7I1S4iCUNQ+FiNULJWSzr2B6bjMy036gzBA007+gLvAx5def
+         X2UCn8VpNQkf5PrY1dSf/jLn9ogdqFQ05qumhkMbpH0aXYl/3zaFCkbBWWsx/m9EcTJN
+         EGPWiespyxve8xlsh9sSSV0IC3TnlyP2SHIz++ugv6fir6w4NoPrYuJN5eiHRl9Pq0jU
+         6q1jsNvySYH+umo3d7rqbZPwL4Z7qbGyQiZ2va1gssLuCcIlCVWy/qRkR1M7XkimuCKF
+         H155NqnphhFljtBZEkZGQ2DM7KWh+8rYmfRFXVzFCmdy+vLllLmQEdfJc/kvo1u+9+0P
+         ZVwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HkxBDeI13PS/unHL1Nr+Sh+9tXf4QbZkcMWKpQOyoZs=;
-        b=qWgAYrWmon6a1/060NrTSwrRnnqa7edJgaBmx3lToPVWJjB5ScVf1Q6DI6y+fPogcq
-         WmRm3QWveZ5S9blWA2Z2RvqG2T9RlQhoVCVgMgFZH0ePYr89uaR76/hkvWYdX7rVQBfz
-         WLKUF6eFRyxNkCJ+/VMDiuFx0kisCRn776yCFM9Dj9A8fHhyOoffMcLrAEz3EIJs1lNC
-         tFCcMtXjGS/zLVJJTgCfLpWE8GwMWwA1PrSpVfoX+nCgCKbtu8fCazrJQZBSTLHWhyYe
-         IwlSdtHxhwMnSO/bHVwC+RLxPW0uxe4muMhtflzFIGEMCdwmPVlN/iuDf09QdXG/Fs0K
-         hWMg==
-X-Gm-Message-State: APjAAAUG5WmSNEKKllRoNLK9vZvBNYNdOLBzz3YMaShlyV4NpkK9hlcE
-        C5KXvCI8mDqCmNPg24VgYijtbw==
-X-Google-Smtp-Source: APXvYqzGw7DVSkGCo0+oVtm1TNRkmmIhKzdkzTs6guJGLgP3WTdjGG4hUW7yUT6AdCBxVIDYb7hllQ==
-X-Received: by 2002:a17:902:9a01:: with SMTP id v1mr8899294plp.132.1570703461455;
-        Thu, 10 Oct 2019 03:31:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YeFYhKm4PJo5d1ZlY/G1oQFiqY2ifkLQAS5VyiJD2kA=;
+        b=ZaBLIDG1yxIRUHOnfyKQSOJTh4n+cd7xV1+pCBFGp+KtOYUfmuXKaccyXxjp2mwIxr
+         XbSwbzPAyGuQEosxEUUZh04528xIdc66373M94Bjbi4IuUW86sXiSZFSgLuNbxEu9aC3
+         BCf8SLmkwrUngfxwxJQKNserWki74BMbrerQ7h8nf5ByE6AXtmSWnRx+IoBJg81gOjTM
+         W2SSokCO3XYgxPde5RooK7QILwmaW8tmPYZA7Hf9ecVad/78zVXHHPY/xXOBN2qlr9bN
+         XPvLwVs2RyXjbR5yE5B3PTA3GCvTGycA89h8kFnp/JGbqEaV9K0bwxin/rlAB9I0qn94
+         FrPw==
+X-Gm-Message-State: APjAAAWAD/hB2Q3AhzIyNVX9COv3lX/Bofyh3DoVTjJdqWQXqfi8EVpC
+        A0yWbSwNSymmnHc2rlARceDenA==
+X-Google-Smtp-Source: APXvYqwYM9M/m3MClMu4Z8S007xBWdkHJrU/NyiZs+nhmdbjrvkkM8AQQUaF3lEebzVejNsXRxT5JA==
+X-Received: by 2002:a17:90a:c383:: with SMTP id h3mr10552761pjt.122.1570704323312;
+        Thu, 10 Oct 2019 03:45:23 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id q13sm10056498pjq.0.2019.10.10.03.30.59
+        by smtp.gmail.com with ESMTPSA id z13sm6824122pfq.121.2019.10.10.03.45.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Oct 2019 03:31:00 -0700 (PDT)
+        Thu, 10 Oct 2019 03:45:22 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 16:15:20 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "v5 . 0+" <stable@vger.kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: of: drop incorrect lockdep_assert_held()
-Date:   Thu, 10 Oct 2019 16:00:52 +0530
-Message-Id: <6306e18beab9deff6ee6b32f489390908495fe14.1570703431.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        =?utf-8?B?QW5kcsOp?= Roth <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/8] OMAP3: convert opp-v1 to opp-v2 and read speed
+ binned / 720MHz grade bits
+Message-ID: <20191010104520.n77wxxyxvyeo2i4u@vireshk-i7>
+References: <cover.1568224032.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1568224032.git.hns@goldelico.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-_find_opp_of_np() doesn't traverse the list of OPP tables but instead
-just the entries within an OPP table and so only requires to lock the
-OPP table itself.
+On 11-09-19, 19:47, H. Nikolaus Schaller wrote:
+> CHANGES V3:
+> * make omap36xx control the abb-ldo and properly switch mode
+>   (suggested by Adam Ford <aford173@gmail.com>)
+> * add a note about enabling the turbo-mode OPPs
 
-The lockdep_assert_held() was added there by mistake and isn't really
-required.
+Applied the series to cpufreq/arm tree.
 
-Fixes: 5d6d106fa455 ("OPP: Populate required opp tables from "required-opps" property")
-Cc: v5.0+ <stable@vger.kernel.org> # v5.0+
-Reported-by: Niklas Cassel <niklas.cassel@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/of.c | 2 --
- 1 file changed, 2 deletions(-)
+Also shared a branch for you Tony: cpufreq/ti/oppv2.
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 1813f5ad5fa2..6dc41faf74b5 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -77,8 +77,6 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
- {
- 	struct dev_pm_opp *opp;
- 
--	lockdep_assert_held(&opp_table_lock);
--
- 	mutex_lock(&opp_table->lock);
- 
- 	list_for_each_entry(opp, &opp_table->opp_list, node) {
 -- 
-2.21.0.rc0.269.g1a574e7a288b
-
+viresh
