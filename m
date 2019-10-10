@@ -2,170 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF535D1EEB
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 05:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E4AD2080
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 07:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732679AbfJJDbi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 23:31:38 -0400
-Received: from mail-sh.amlogic.com ([58.32.228.43]:21232 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbfJJDbh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 23:31:37 -0400
-Received: from [10.18.29.227] (10.18.29.227) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 10 Oct
- 2019 11:31:39 +0800
-Subject: Re: [PATCH 1/3] dt-bindings: power: add Amlogic secure power domains
- bindings
-To:     Rob Herring <robh@kernel.org>
-CC:     Kevin Hilman <khilman@baylibre.com>,
-        <linux-amlogic@lists.infradead.org>,
-        Zhiqiang Liang <zhiqiang.liang@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1568895064-4116-1-git-send-email-jianxin.pan@amlogic.com>
- <1568895064-4116-2-git-send-email-jianxin.pan@amlogic.com>
- <5d93ce88.1c69fb81.aec64.6b1b@mx.google.com>
-From:   Jianxin Pan <jianxin.pan@amlogic.com>
-Message-ID: <3152a4ac-5059-502b-3bf3-71f7e2d8118a@amlogic.com>
-Date:   Thu, 10 Oct 2019 11:31:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726664AbfJJFtX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 01:49:23 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33959 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbfJJFtX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 01:49:23 -0400
+Received: by mail-pg1-f193.google.com with SMTP id y35so2952415pgl.1;
+        Wed, 09 Oct 2019 22:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RhxY1MPKMW6WR/zUFAC74xJM92OHmjB+kj8GPP9wIlw=;
+        b=rN9RRE7cIrRHiqRZYHnHSbHLkLn8sEliKdKOykE1BAiQd6iUPmf/oYzt2zGUIJLtc1
+         J/Hv96bumBiGBFwkKfJnzTskhdi2HR4zk98z5zCQoBtcrgdsvi4YEfsu8ALTj07La0Z2
+         y5DSQdzRYQybpa8QuuYByRSJxvy99ZC+pOqw1RuDAryOAY9qmzzrEwX1sEvhtMP8mKu9
+         Wn0659AVEQs+A8IfAtiI13X+kXbgHTJuPiITwSKFjVxmcEh8gBVFsbX9Dn7NegnpBsx5
+         cBDj4qkHToVxQk92I5PH9cOFLPLVKWoqKmLZHyR3XAXJDbJ7Fw31c/i5VvJ2MaY8KCxQ
+         A9Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RhxY1MPKMW6WR/zUFAC74xJM92OHmjB+kj8GPP9wIlw=;
+        b=F7nj+6YmpxvPdixuRntqvQz5inOmXb0mIoPiIzl1s8ayXxHPKynffNnJFCAgTRLjOP
+         eq5X+vs8ZfEnOYrhRg0S6F0u7rXOhohTf1j6kEi/51d4QTD1nNtNWnMh2qoFq+LO+1G8
+         bW8528f/+sgZIp/iJK3ToYwQVmQFKxhZTkPTxhitnJiNGI2Hm5CY5EOqyW4IrnF/mz/C
+         32WAr/0uyYq/TkQLZYf4de9ZxhZbLmDfRxKMkEXTzZ9mJS71MPd39cSZ3kGAYmnYYXDp
+         5IM1LEoLlnoIPUhZzMteeO886OXYCta7UVzPWmRz+/52WUaJdAlMKWjWsK1QjaicsW8v
+         2Hhg==
+X-Gm-Message-State: APjAAAVSK7r0LrdGueHgyXHvb0hHXvgpSXmg/exA0UZzjAFCU/UDwmaK
+        p3HKKOxpdN/p7nZfLKpCoQd9/3z10d21jWssoSs=
+X-Google-Smtp-Source: APXvYqxTWGaHrxna/RW71KUqM4PD44f4t6P+cJUv3cQo53Tkjbf14ZESvxDMrwfIJKmfQGqBt7rE4hOcImn0K/p+Em0=
+X-Received: by 2002:a17:90a:db4a:: with SMTP id u10mr9179621pjx.30.1570686562156;
+ Wed, 09 Oct 2019 22:49:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5d93ce88.1c69fb81.aec64.6b1b@mx.google.com>
+References: <cover.1570633189.git.vilhelm.gray@gmail.com> <893c3b4f03266c9496137cc98ac2b1bd27f92c73.1570633189.git.vilhelm.gray@gmail.com>
+ <CAK7LNATgW7bXUmqV=3QAaJ0Qu73Kox-TgDCQJb=s0=mwewSCUg@mail.gmail.com>
+ <20191009170917.GG32742@smile.fi.intel.com> <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
+ <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+In-Reply-To: <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 10 Oct 2019 08:49:10 +0300
+Message-ID: <CAHp75VeLkfNZkqhD8tedJdav81L+VA3Z50Kwcd9h4R7zMwjtvA@mail.gmail.com>
+Subject: Re: [PATCH v17 01/14] bitops: Introduce the for_each_set_clump8 macro
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Phil Reid <preid@electromag.com.au>,
+        Lukas Wunner <lukas@wunner.de>, sean.nyekjaer@prevas.dk,
+        morten.tiljeset@prevas.dk, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.227]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob，
+On Thu, Oct 10, 2019 at 5:31 AM Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+> On Thu, Oct 10, 2019 at 3:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Wed, Oct 9, 2019 at 7:09 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Thu, Oct 10, 2019 at 01:28:08AM +0900, Masahiro Yamada wrote:
+> > > > On Thu, Oct 10, 2019 at 12:27 AM William Breathitt Gray
+> > > > <vilhelm.gray@gmail.com> wrote:
+> > > > >
+> > > > > This macro iterates for each 8-bit group of bits (clump) with set bits,
+> > > > > within a bitmap memory region. For each iteration, "start" is set to the
+> > > > > bit offset of the found clump, while the respective clump value is
+> > > > > stored to the location pointed by "clump". Additionally, the
+> > > > > bitmap_get_value8 and bitmap_set_value8 functions are introduced to
+> > > > > respectively get and set an 8-bit value in a bitmap memory region.
+> > >
+> > > > Why is the return type "unsigned long" where you know
+> > > > it return the 8-bit value ?
+> > >
+> > > Because bitmap API operates on unsigned long type. This is not only
+> > > consistency, but for sake of flexibility in case we would like to introduce
+> > > more calls like clump16 or so.
+> >
+> > TBH, that doesn't convince me: those functions explicitly take/return an
+> > 8-bit value, and have "8" in their name.  The 8-bit value is never
+> > really related to, retrieved from, or stored in a full "unsigned long"
+> > element of a bitmap, only to/from/in a part (byte) of it.
+> >
+> > Following your rationale, all of iowrite{8,16,32,64}*() should take an
+> > "unsigned long" value, too.
+> >
+>
+> +1
+>
+> Using u8/u16/u32/u64 looks more consistent with other bitmap helpers.
+>
+> void bitmap_from_arr32(unsigned long *bitmap, const u32 *buf, unsigned
+> int nbits);
+> void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap, unsigned int nbits);
+> static inline void bitmap_from_u64(unsigned long *dst, u64 mask);
+>
+>
+>
+> If you want to see more examples from other parts,
 
-Thanks for your review.
+Geert's and yours examples both are not related. They are about
+fixed-width properies when we know that is the part of protocol.
+Here we have no protocol which stricts us to the mentioned fixed-width types.
 
-I'm sorry to reply so late, for I've been on vacation in the last week.
+So, I can tell an opposite, your arguments didn't convince me.
 
-On 2019/10/2 6:09, Rob Herring wrote:
-> On Thu, Sep 19, 2019 at 08:11:02AM -0400, Jianxin Pan wrote:
->> Add the bindings for the Amlogic Secure power domains, controlling the
->> secure power domains.
->>
->> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
->> power domain registers are in secure world.
->>
->> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
->> Signed-off-by: Zhiqiang Liang <zhiqiang.liang@amlogic.com>
->> ---
->>  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 32 ++++++++++++++++++++++
->>  include/dt-bindings/power/meson-a1-power.h         | 32 ++++++++++++++++++++++
->>  2 files changed, 64 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->>  create mode 100644 include/dt-bindings/power/meson-a1-power.h
->>
->> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> new file mode 100644
->> index 00000000..327e0d9
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> @@ -0,0 +1,32 @@
->> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +# Copyright (c) 2019 Amlogic, Inc
->> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Amlogic Meson Secure Power Domains
->> +
->> +maintainers:
->> +  - Jianxin Pan <jianxin.pan@amlogic.com>
->> +
->> +description: |+
->> +  A1/C1 series The Secure Power Domains node should be the child of a syscon
->> +  node with the required property.
-> 
-> 'a syscon node' is not specific enough. It must be a specific node.
-> 
-I will fix this.
-In A1/C1, power control is in secure domain, and syscon parent is not needed.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - amlogic,meson-a1-pwrc
->> +
->> +required:
->> +  - compatible
->> +
->> +examples:
->> +  - |
->> +    pwrc: power-controller {
->> +          compatible = "amlogic,meson-a1-pwrc";
-> 
-> But why do you need this node? It has no resources.
-> 
-> #power-domain-cells needed?
-I will add #power-domain-cells and secure-monitor here.
-Thank you for the review.
-> 
->> +    };
->> +
->> +
->> diff --git a/include/dt-bindings/power/meson-a1-power.h b/include/dt-bindings/power/meson-a1-power.h
->> new file mode 100644
->> index 00000000..6cf50bf
->> --- /dev/null
->> +++ b/include/dt-bindings/power/meson-a1-power.h
->> @@ -0,0 +1,32 @@
->> +/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
->> +/*
->> + * Copyright (c) 2019 Amlogic, Inc.
->> + * Author: Jianxin Pan <jianxin.pan@amlogic.com>
->> + */
->> +
->> +#ifndef _DT_BINDINGS_MESON_A1_POWER_H
->> +#define _DT_BINDINGS_MESON_A1_POWER_H
->> +
->> +#define PWRC_DSPA_ID	8
->> +#define PWRC_DSPB_ID	9
->> +#define PWRC_UART_ID	10
->> +#define PWRC_DMC_ID	11
->> +#define PWRC_I2C_ID	12
->> +#define PWRC_PSRAM_ID	13
->> +#define PWRC_ACODEC_ID	14
->> +#define PWRC_AUDIO_ID	15
->> +#define PWRC_OTP_ID	16
->> +#define PWRC_DMA_ID	17
->> +#define PWRC_SD_EMMC_ID	18
->> +#define PWRC_RAMA_ID	19
->> +#define PWRC_RAMB_ID	20
->> +#define PWRC_IR_ID	21
->> +#define PWRC_SPICC_ID	22
->> +#define PWRC_SPIFC_ID	23
->> +#define PWRC_USB_ID	24
->> +#define PWRC_NIC_ID	25
->> +#define PWRC_PDMIN_ID	26
->> +#define PWRC_RSA_ID	27
->> +#define PWRC_MAX_ID	28
->> +
->> +#endif
->> -- 
->> 2.7.4
->>
-> 
-> .
-> 
+Imagine the function which does an or / and / xor operation on bitmap.
+Now, when I supply unsigned long, I will see
+operations on one type in _one_ function independently of the size.
+Your proposal will make an unneded churn.
 
+-- 
+With Best Regards,
+Andy Shevchenko
