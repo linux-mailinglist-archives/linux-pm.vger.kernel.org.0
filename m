@@ -2,289 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E5AD326F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B37D3297
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbfJJUd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 16:33:58 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:33765 "EHLO
+        id S1726678AbfJJUmI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 16:42:08 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:58907 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbfJJUd6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:33:58 -0400
+        with ESMTP id S1726423AbfJJUmI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:42:08 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MMH2M-1iYg741pdG-00JLSO; Thu, 10 Oct 2019 22:33:44 +0200
+ 1M1JJC-1iFv9w3tso-002m0W; Thu, 10 Oct 2019 22:41:35 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Kukjin Kim <kgene@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>
 Cc:     linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Pankaj Dubey <pankaj.dubey@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 07/36] ARM: exynos: use private samsung_cpu_id copy
-Date:   Thu, 10 Oct 2019 22:29:51 +0200
-Message-Id: <20191010203043.1241612-7-arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 15/36] ARM: s3c: adc: move header to linux/soc/samsung
+Date:   Thu, 10 Oct 2019 22:29:59 +0200
+Message-Id: <20191010203043.1241612-15-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20191010203043.1241612-1-arnd@arndb.de>
 References: <20191010202802.1132272-1-arnd@arndb.de>
  <20191010203043.1241612-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:b9MxJc22ojVV03aQI4g1hMswAIJMjso6s4GXVBlN9VbVcHoYTRb
- 3iyu7CbnJMT89XlWCnf8frmgACQN5evtlWJNiWG9bv1OfVvg8CWfOEUoXb37stRSawInWlj
- il+ob82bzA9kWe0gsTRifNAcl5Hltr5UOTzagnmvdFbza5tGwszZbH+0RLrBAEU9kKI1rhm
- hNIJXKtEmwVVKqI47CEkQ==
+X-Provags-ID: V03:K1:FpoNJIc3itWORZoaPFv25Myx/M15oG1YjGqTAt4YFRfspCrSprG
+ guybCXrWrn5DkwrIim8Muc6xFZJqDY8H2WUkjdhc2hKBJD/HhrV3FJR1cK/+F3/MY3xZDRs
+ sLAxAWd2nFXpNgUgLIyTuHVUUPRKsEDCtc0q2yZyjUrS/S5ERXfJlNHDAk1BCZNchhX2tMr
+ VdmRUNgNJjoIWO3yrlYVA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fzD7h19igLg=:BKV1tvTl03vsepORG2YJDW
- WGR1yUsjoYM1tqLeBmQ8pfxD5vzhyBF/yBVWAdPzmQaxGmF92k4I5ENC0pZTUckTXLwJEGcAv
- TQkN/6B3KdXq4w9XLOny0nWJGTSzOghmwZ3jUkfR7UBNs2uHH9+A7KUJW52dSaLmXJo3VY63b
- lHZQsVz1ne3EMXpGbXulp9hgUhIKR+tTDaw2zUJUAfKuakc3bSNElMoKPCokVlrHN2iXFsWLL
- ZR/zeGWMHH6wvc9WM6HZIT8z701yt7ew9A68Y6BF3OoDw5gGNpvefztsI+Z7VBcFVS1u8GA8/
- OOM9HrFuQCB+jDXKXIIwkuKPwxV5ZlDmHdO+QpIc7DHcnUJswwoGDBO5srlBbheBTC7j4mehH
- HO9SYGE/bzjTw2KI45pB1GFbgWH/2EEwpzdMgh0S/bc+3eg6H+tKYfBkghOKNpGG24w3D+Dit
- 1iTLWVF7mYHzOjqNSOktdGykKRzsHkBdADmafS3KgacIaSJdY8ClcP0A+nNCgsCdGIF03ejn5
- FJtlIERVEebgwYFMQbiNtsRk/mE/J3JusTbtCkfxjbxSU3e3pFWAUlxUj89pM404Rk95JstwP
- kl7vqd/eXaXuL1h8CGy2bdNQiOAQjOY5kKMjH4SKZeAH3eKEGX3pRLVMEgK9LFGaKf7529Np3
- Wx2WVplAQrvCw9lMAqk+l0torrBmOkXmZpd5MamLA0r/h3BQM2u8RtUQAFKsQR3+uYb56KKbd
- 8xWnd8fTK4CUZIvrEANU2osUQEZ42pUnAvEoQApd4tcIrNUG9nD6wZP4TWSrrr4oNIhhFyFEP
- q4J1ceIE/R4DEORzKFFThwuAXNL00e/0sYHXZYJ7bAYvZEdMw4ahqVH+KdI6GP6mIidhw+d3y
- 7i0qi3j5RNMWVeTChflg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:igCCi1hi5O0=:wNKDceOyAM1WB1Zn34ZQdp
+ UV1jKwBqIyc07z3xcE54DHVZTJrjbNxuq9Wh6mXT7OPklWo5AsZZpwWUr1PBXXV2UNnsWjzKO
+ iocaE4sRUw7Wj96sYq42ZUDaTwg7yz9EvTP69XjPWlq/nKQ0or/Qdl4kBSOMsnP01th8K0nYK
+ o08NO8CoQYu+R3Dai6Qp5OYMZwtXTTFqOrzt1EJaqgiklhpo8qjtFX1Q7HYGUGJM/G/8o/3Hg
+ LUqnqldNtFfJoCnvzAqDO8UVCMhn30shQkkeayOhuNFoUKUP43WQc1xIp7ihGh9siOksCUWii
+ Z5OBhbPZgD31M/uWKFc1R0PSt/PVft+8ZOtg5g2hVKdGOiKYLr7+gANz/Ebu5xnbKpDxv497U
+ lgsAh4Nrt/qM9ftwTomvyy9Hgw1HG1WAV69mbeEhEYhsK+4Ni1ebdK/oLuqCnohzB/A9OAC8b
+ aMDuTwhTxhAvWWCokFOdJWU7L2I78HqpSu8UyHPe8oNL2fQp+K0D3yqyX938WW5rFliEtFpns
+ l1naLMQ2E//wqeXx5yqwDL4odxqHMmpTb0mChd1QgreLoDjz+Mxott7V1d/WQT41oO8Z3qJzR
+ hLb8qJBXwNKflHRNnM0fgJOiObczYpZ89ILnWmBXUPNhp3/337ATFa/Xv0Te3Y7Blrxu5Jd1e
+ js0U6/loxVpWvJpsO2/JtJkKzZkBDyteKlvqOBGt99tHFxoh3jcHTLYdgFw6eb7vSun3aj3zH
+ BtkwI/fjKp5crny1NjvJrvtcWAotPweYvE7lyZZ7zbG4Tpgc5PoauHz2zFqhYp8ibatk6ab2P
+ muAkM5IsSkjN8KRxIUHt+pSzTp+5ze6DjRTINrzW4wP6OiL/wuffsPo/3I3XDyaLYPsDYJKSp
+ SfP5kAzgidVrbZI3DnNw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The only part of plat-samsung that is shared with arch-exynos
-is the CPU identification code.
+There are multiple drivers using the private adc interface.
+It seems unlikely that they would ever get converted to iio,
+so make the current state official by making the header file
+global.
 
-Having a separate exynos_cpu_id variable makes the two completely
-independent and is actually a bit less code in total.
+The s3c2410_ts driver needs a couple of register definitions
+as well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-exynos/common.h                |  6 +++---
- arch/arm/mach-exynos/exynos.c                | 19 +++++++++++++++----
- arch/arm/mach-exynos/include/mach/map.h      | 18 ------------------
- arch/arm/mach-exynos/platsmp.c               |  4 +---
- arch/arm/mach-exynos/pm.c                    |  8 ++++----
- arch/arm/plat-samsung/cpu.c                  | 17 -----------------
- arch/arm/plat-samsung/include/plat/cpu.h     |  2 --
- arch/arm/plat-samsung/include/plat/map-s5p.h |  2 --
- 8 files changed, 23 insertions(+), 53 deletions(-)
- delete mode 100644 arch/arm/mach-exynos/include/mach/map.h
+ arch/arm/mach-s3c64xx/mach-crag6410.c         |  2 +-
+ arch/arm/mach-s3c64xx/mach-mini6410.c         |  2 +-
+ arch/arm/mach-s3c64xx/mach-real6410.c         |  2 +-
+ arch/arm/mach-s3c64xx/mach-smdk6410.c         |  2 +-
+ arch/arm/plat-samsung/adc.c                   |  2 +-
+ arch/arm/plat-samsung/devs.c                  |  2 +-
+ drivers/hwmon/s3c-hwmon.c                     |  2 +-
+ drivers/input/touchscreen/s3c2410_ts.c        | 37 ++++++++++++++++++-
+ drivers/power/supply/s3c_adc_battery.c        |  2 +-
+ .../linux/soc/samsung/s3c-adc.h               |  0
+ 10 files changed, 43 insertions(+), 10 deletions(-)
+ rename arch/arm/plat-samsung/include/plat/adc.h => include/linux/soc/samsung/s3c-adc.h (100%)
 
-diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
-index 56411bb63d45..adf7db9c0885 100644
---- a/arch/arm/mach-exynos/common.h
-+++ b/arch/arm/mach-exynos/common.h
-@@ -24,12 +24,12 @@
- #define EXYNOS5800_SOC_ID	0xE5422000
- #define EXYNOS5_SOC_MASK	0xFFFFF000
- 
--extern unsigned long samsung_cpu_id;
-+extern unsigned long exynos_cpu_id;
- 
- #define IS_SAMSUNG_CPU(name, id, mask)		\
- static inline int is_samsung_##name(void)	\
- {						\
--	return ((samsung_cpu_id & mask) == (id & mask));	\
-+	return ((exynos_cpu_id & mask) == (id & mask));	\
- }
- 
- IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
-@@ -147,7 +147,7 @@ extern struct cpuidle_exynos_data cpuidle_coupled_exynos_data;
- 
- extern void exynos_set_delayed_reset_assertion(bool enable);
- 
--extern unsigned int samsung_rev(void);
-+extern unsigned int exynos_rev(void);
- extern void exynos_core_restart(u32 core_id);
- extern int exynos_set_boot_addr(u32 core_id, unsigned long boot_addr);
- extern int exynos_get_boot_addr(u32 core_id, unsigned long *boot_addr);
-diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
-index 9aa483366ebc..da9300d655c6 100644
---- a/arch/arm/mach-exynos/exynos.c
-+++ b/arch/arm/mach-exynos/exynos.c
-@@ -19,11 +19,10 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/map.h>
- 
--#include <mach/map.h>
--#include <plat/cpu.h>
--
- #include "common.h"
- 
-+#define S5P_VA_CHIPID	((void __iomem __force *)0xF8000000)
-+
- static struct platform_device exynos_cpuidle = {
- 	.name              = "exynos_cpuidle",
- #ifdef CONFIG_ARM_EXYNOS_CPUIDLE
-@@ -36,6 +35,14 @@ void __iomem *sysram_base_addr __ro_after_init;
- phys_addr_t sysram_base_phys __ro_after_init;
- void __iomem *sysram_ns_base_addr __ro_after_init;
- 
-+unsigned long exynos_cpu_id;
-+static unsigned int exynos_cpu_rev;
-+
-+unsigned int exynos_rev(void)
-+{
-+	return exynos_cpu_rev;
-+}
-+
- void __init exynos_sysram_init(void)
- {
- 	struct device_node *node;
-@@ -86,7 +93,11 @@ static void __init exynos_init_io(void)
- 	of_scan_flat_dt(exynos_fdt_map_chipid, NULL);
- 
- 	/* detect cpu id and rev. */
--	s5p_init_cpu(S5P_VA_CHIPID);
-+	exynos_cpu_id = readl_relaxed(S5P_VA_CHIPID);
-+	exynos_cpu_rev = exynos_cpu_id & 0xFF;
-+
-+	pr_info("Samsung CPU ID: 0x%08lx\n", exynos_cpu_id);
-+
- }
- 
- /*
-diff --git a/arch/arm/mach-exynos/include/mach/map.h b/arch/arm/mach-exynos/include/mach/map.h
-deleted file mode 100644
-index 22ebe3654633..000000000000
---- a/arch/arm/mach-exynos/include/mach/map.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
-- *		http://www.samsung.com/
-- *
-- * EXYNOS - Memory map definitions
-- */
--
--#ifndef __ASM_ARCH_MAP_H
--#define __ASM_ARCH_MAP_H __FILE__
--
--#include <plat/map-base.h>
--
--#include <plat/map-s5p.h>
--
--#define EXYNOS_PA_CHIPID		0x10000000
--
--#endif /* __ASM_ARCH_MAP_H */
-diff --git a/arch/arm/mach-exynos/platsmp.c b/arch/arm/mach-exynos/platsmp.c
-index 0cbbae8bf1f8..d7fedbb2eefe 100644
---- a/arch/arm/mach-exynos/platsmp.c
-+++ b/arch/arm/mach-exynos/platsmp.c
-@@ -22,8 +22,6 @@
- #include <asm/smp_scu.h>
- #include <asm/firmware.h>
- 
--#include <mach/map.h>
--
- #include "common.h"
- 
- extern void exynos4_secondary_startup(void);
-@@ -188,7 +186,7 @@ void exynos_scu_enable(void)
- 
- static void __iomem *cpu_boot_reg_base(void)
- {
--	if (soc_is_exynos4210() && samsung_rev() == EXYNOS4210_REV_1_1)
-+	if (soc_is_exynos4210() && exynos_rev() == EXYNOS4210_REV_1_1)
- 		return pmu_base_addr + S5P_INFORM5;
- 	return sysram_base_addr;
- }
-diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
-index 48e7fb38613e..624585641a9c 100644
---- a/arch/arm/mach-exynos/pm.c
-+++ b/arch/arm/mach-exynos/pm.c
-@@ -26,18 +26,18 @@
- 
- static inline void __iomem *exynos_boot_vector_addr(void)
- {
--	if (samsung_rev() == EXYNOS4210_REV_1_1)
-+	if (exynos_rev() == EXYNOS4210_REV_1_1)
- 		return pmu_base_addr + S5P_INFORM7;
--	else if (samsung_rev() == EXYNOS4210_REV_1_0)
-+	else if (exynos_rev() == EXYNOS4210_REV_1_0)
- 		return sysram_base_addr + 0x24;
- 	return pmu_base_addr + S5P_INFORM0;
- }
- 
- static inline void __iomem *exynos_boot_vector_flag(void)
- {
--	if (samsung_rev() == EXYNOS4210_REV_1_1)
-+	if (exynos_rev() == EXYNOS4210_REV_1_1)
- 		return pmu_base_addr + S5P_INFORM6;
--	else if (samsung_rev() == EXYNOS4210_REV_1_0)
-+	else if (exynos_rev() == EXYNOS4210_REV_1_0)
- 		return sysram_base_addr + 0x20;
- 	return pmu_base_addr + S5P_INFORM1;
- }
-diff --git a/arch/arm/plat-samsung/cpu.c b/arch/arm/plat-samsung/cpu.c
-index e1ba88ba31d8..8acba21bbf4b 100644
---- a/arch/arm/plat-samsung/cpu.c
-+++ b/arch/arm/plat-samsung/cpu.c
-@@ -14,13 +14,6 @@
+diff --git a/arch/arm/mach-s3c64xx/mach-crag6410.c b/arch/arm/mach-s3c64xx/mach-crag6410.c
+index da5b50981a14..133453562d23 100644
+--- a/arch/arm/mach-s3c64xx/mach-crag6410.c
++++ b/arch/arm/mach-s3c64xx/mach-crag6410.c
+@@ -57,7 +57,7 @@
+ #include <plat/keypad.h>
+ #include <plat/devs.h>
  #include <plat/cpu.h>
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <linux/platform_data/i2c-s3c2410.h>
+ #include <plat/pm.h>
+ #include <plat/samsung-time.h>
+diff --git a/arch/arm/mach-s3c64xx/mach-mini6410.c b/arch/arm/mach-s3c64xx/mach-mini6410.c
+index 0dd36ae49e6a..c7140300bd3f 100644
+--- a/arch/arm/mach-s3c64xx/mach-mini6410.c
++++ b/arch/arm/mach-s3c64xx/mach-mini6410.c
+@@ -27,7 +27,7 @@
+ #include <mach/regs-gpio.h>
+ #include <mach/gpio-samsung.h>
  
- unsigned long samsung_cpu_id;
--static unsigned int samsung_cpu_rev;
--
--unsigned int samsung_rev(void)
--{
--	return samsung_cpu_rev;
--}
--EXPORT_SYMBOL(samsung_rev);
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <plat/cpu.h>
+ #include <plat/devs.h>
+ #include <plat/fb.h>
+diff --git a/arch/arm/mach-s3c64xx/mach-real6410.c b/arch/arm/mach-s3c64xx/mach-real6410.c
+index 0ff88b6859c4..f55097fde94c 100644
+--- a/arch/arm/mach-s3c64xx/mach-real6410.c
++++ b/arch/arm/mach-s3c64xx/mach-real6410.c
+@@ -29,7 +29,7 @@
+ #include <mach/gpio-samsung.h>
+ #include <mach/irqs.h>
  
- void __init s3c64xx_init_cpu(void)
- {
-@@ -34,15 +27,5 @@ void __init s3c64xx_init_cpu(void)
- 		samsung_cpu_id = readl_relaxed(S3C_VA_SYS + 0xA1C);
- 	}
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <plat/cpu.h>
+ #include <plat/devs.h>
+ #include <plat/fb.h>
+diff --git a/arch/arm/mach-s3c64xx/mach-smdk6410.c b/arch/arm/mach-s3c64xx/mach-smdk6410.c
+index 95bdcfe95a53..3042f6cbffd9 100644
+--- a/arch/arm/mach-s3c64xx/mach-smdk6410.c
++++ b/arch/arm/mach-s3c64xx/mach-smdk6410.c
+@@ -60,7 +60,7 @@
  
--	samsung_cpu_rev = 0;
--
--	pr_info("Samsung CPU ID: 0x%08lx\n", samsung_cpu_id);
--}
--
--void __init s5p_init_cpu(const void __iomem *cpuid_addr)
--{
--	samsung_cpu_id = readl_relaxed(cpuid_addr);
--	samsung_cpu_rev = samsung_cpu_id & 0xFF;
--
- 	pr_info("Samsung CPU ID: 0x%08lx\n", samsung_cpu_id);
- }
-diff --git a/arch/arm/plat-samsung/include/plat/cpu.h b/arch/arm/plat-samsung/include/plat/cpu.h
-index fadcddbea064..02d7f991d5a3 100644
---- a/arch/arm/plat-samsung/include/plat/cpu.h
-+++ b/arch/arm/plat-samsung/include/plat/cpu.h
-@@ -111,8 +111,6 @@ extern void s3c24xx_init_io(struct map_desc *mach_desc, int size);
- extern void s3c64xx_init_cpu(void);
- extern void s5p_init_cpu(const void __iomem *cpuid_addr);
+ #include <plat/devs.h>
+ #include <plat/cpu.h>
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <linux/platform_data/touchscreen-s3c2410.h>
+ #include <plat/keypad.h>
+ #include <plat/samsung-time.h>
+diff --git a/arch/arm/plat-samsung/adc.c b/arch/arm/plat-samsung/adc.c
+index ee3d5c989a76..623a9774cc52 100644
+--- a/arch/arm/plat-samsung/adc.c
++++ b/arch/arm/plat-samsung/adc.c
+@@ -20,7 +20,7 @@
+ #include <linux/regulator/consumer.h>
  
--extern unsigned int samsung_rev(void);
--
- extern void s3c24xx_init_uarts(struct s3c2410_uartcfg *cfg, int no);
+ #include <plat/regs-adc.h>
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
  
- extern void s3c24xx_init_clocks(int xtal);
-diff --git a/arch/arm/plat-samsung/include/plat/map-s5p.h b/arch/arm/plat-samsung/include/plat/map-s5p.h
-index d69a0ca09fb5..3812085f8761 100644
---- a/arch/arm/plat-samsung/include/plat/map-s5p.h
-+++ b/arch/arm/plat-samsung/include/plat/map-s5p.h
-@@ -9,8 +9,6 @@
- #ifndef __ASM_PLAT_MAP_S5P_H
- #define __ASM_PLAT_MAP_S5P_H __FILE__
+ /* This driver is designed to control the usage of the ADC block between
+  * the touchscreen and any other drivers that may need to use it, such as
+diff --git a/arch/arm/plat-samsung/devs.c b/arch/arm/plat-samsung/devs.c
+index fd94a35e22f8..ddd90f0bb380 100644
+--- a/arch/arm/plat-samsung/devs.c
++++ b/arch/arm/plat-samsung/devs.c
+@@ -44,7 +44,7 @@
  
--#define S5P_VA_CHIPID		S3C_ADDR(0x02000000)
--
- #define VA_VIC(x)		(S3C_VA_IRQ + ((x) * 0x10000))
- #define VA_VIC0			VA_VIC(0)
- #define VA_VIC1			VA_VIC(1)
+ #include <plat/cpu.h>
+ #include <plat/devs.h>
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <linux/platform_data/ata-samsung_cf.h>
+ #include <plat/fb.h>
+ #include <plat/fb-s3c2410.h>
+diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
+index b490fe3d2ee8..f2703c5460d0 100644
+--- a/drivers/hwmon/s3c-hwmon.c
++++ b/drivers/hwmon/s3c-hwmon.c
+@@ -20,7 +20,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+ 
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <linux/platform_data/hwmon-s3c.h>
+ 
+ struct s3c_hwmon_attr {
+diff --git a/drivers/input/touchscreen/s3c2410_ts.c b/drivers/input/touchscreen/s3c2410_ts.c
+index b346e7cafd62..1a5a178ea286 100644
+--- a/drivers/input/touchscreen/s3c2410_ts.c
++++ b/drivers/input/touchscreen/s3c2410_ts.c
+@@ -21,10 +21,43 @@
+ #include <linux/clk.h>
+ #include <linux/io.h>
+ 
+-#include <plat/adc.h>
+-#include <plat/regs-adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ #include <linux/platform_data/touchscreen-s3c2410.h>
+ 
++#define	S3C2410_ADCCON			(0x00)
++#define	S3C2410_ADCTSC			(0x04)
++#define	S3C2410_ADCDLY			(0x08)
++#define	S3C2410_ADCDAT0			(0x0C)
++#define	S3C2410_ADCDAT1			(0x10)
++#define	S3C64XX_ADCUPDN			(0x14)
++#define	S3C2443_ADCMUX			(0x18)
++#define	S3C64XX_ADCCLRINT		(0x18)
++#define	S5P_ADCMUX			(0x1C)
++#define	S3C64XX_ADCCLRINTPNDNUP		(0x20)
++
++/* ADCTSC Register Bits */
++#define S3C2443_ADCTSC_UD_SEN		(1 << 8)
++#define S3C2410_ADCTSC_YM_SEN		(1<<7)
++#define S3C2410_ADCTSC_YP_SEN		(1<<6)
++#define S3C2410_ADCTSC_XM_SEN		(1<<5)
++#define S3C2410_ADCTSC_XP_SEN		(1<<4)
++#define S3C2410_ADCTSC_PULL_UP_DISABLE	(1<<3)
++#define S3C2410_ADCTSC_AUTO_PST		(1<<2)
++#define S3C2410_ADCTSC_XY_PST(x)	(((x)&0x3)<<0)
++
++/* ADCDAT0 Bits */
++#define S3C2410_ADCDAT0_UPDOWN		(1<<15)
++#define S3C2410_ADCDAT0_AUTO_PST	(1<<14)
++#define S3C2410_ADCDAT0_XY_PST		(0x3<<12)
++#define S3C2410_ADCDAT0_XPDATA_MASK	(0x03FF)
++
++/* ADCDAT1 Bits */
++#define S3C2410_ADCDAT1_UPDOWN		(1<<15)
++#define S3C2410_ADCDAT1_AUTO_PST	(1<<14)
++#define S3C2410_ADCDAT1_XY_PST		(0x3<<12)
++#define S3C2410_ADCDAT1_YPDATA_MASK	(0x03FF)
++
++
+ #define TSC_SLEEP  (S3C2410_ADCTSC_PULL_UP_DISABLE | S3C2410_ADCTSC_XY_PST(0))
+ 
+ #define INT_DOWN	(0)
+diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
+index 3d00b35cafc9..60b7f41ab063 100644
+--- a/drivers/power/supply/s3c_adc_battery.c
++++ b/drivers/power/supply/s3c_adc_battery.c
+@@ -22,7 +22,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ 
+-#include <plat/adc.h>
++#include <linux/soc/samsung/s3c-adc.h>
+ 
+ #define BAT_POLL_INTERVAL		10000 /* ms */
+ #define JITTER_DELAY			500 /* ms */
+diff --git a/arch/arm/plat-samsung/include/plat/adc.h b/include/linux/soc/samsung/s3c-adc.h
+similarity index 100%
+rename from arch/arm/plat-samsung/include/plat/adc.h
+rename to include/linux/soc/samsung/s3c-adc.h
 -- 
 2.20.0
 
