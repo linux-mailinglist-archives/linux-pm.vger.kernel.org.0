@@ -2,89 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EECD1CCE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 01:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ECFD1E72
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 04:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731751AbfJIX0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Oct 2019 19:26:55 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:40348 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730815AbfJIX0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 19:26:55 -0400
-Received: by mail-io1-f68.google.com with SMTP id h144so9379642iof.7;
-        Wed, 09 Oct 2019 16:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=cuZx9RP/Z6zGQW6F5i1QUaqw4xzxwrwMbDsySq/JWK8=;
-        b=h1Wrsd2Ovnm+i9lUFgexhIjnqKzCMoGjbrQFLRN2t+CKoEACRrNnQMWzDYrduxF15G
-         +5J3EEG1VKVSZ2Jtzt8P8jCvyL8im8hr+thoGq+jhJ6tcUPqaXQuf/spbgKriPtCyoCA
-         D+M1c+OExkEeJfPwW2eMUb3TwyXcfIvArdQ+ZcrIyENCFiZObv+8SpTRqDcbiiU3gwr4
-         SWdsc9H1g6CcDVYUt2LYCAbbgKcIRjJxlrlVC7yanqjqU1F00/6NnUYTI/a4QK7BRrJ3
-         eKdk6UPgC2nLdoo2lmhNQyHKyEjzLANSyrG0oaVNx6Jp1d8QkrALorMWiAg51pStjumx
-         wKxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cuZx9RP/Z6zGQW6F5i1QUaqw4xzxwrwMbDsySq/JWK8=;
-        b=jY+5gge9eK4h3JYsEdhz/INyuKeSoSPKhCJZyYX5a31SVp9mFwrUNJ6zS2CMahROgu
-         6gxESVLx2hP6QlUd9+K4ap/l1WuO+Qbvcxa8OhE9xyMRJlvj+URNg5jkDR04ls/rdYuW
-         H6f3cVKCJa6EAbKt+rl3NJlys/Gg6wxidl4vxyrfn12EoMA9ia19lLuULQ5aqUvbuYyV
-         p56pHbABQ9CONSN6AreCjTiDNy3pZs8cWcP+e3d+kG9Yr3l2rnXlY1XK4tQ3KrCs2bsX
-         F2yZiptICjDfhQytthxyHw/g/uzMV3Ol4TEhbPPyahFYliV9gB9siAghd4IVlJLc9zu2
-         PtDw==
-X-Gm-Message-State: APjAAAVlBPLQspzIHfw/yyIFu+GLu+gpoN+XeUnxGiOtNnLW2mYt9ZWH
-        EWM7OkPBLyUYZ56ToUdrubYUPr7aQqw=
-X-Google-Smtp-Source: APXvYqyDOI3fJ+Ic0Otb3zXX9izzJREPTdGeMIsHs2hq629IvbPg+pE+OGxvCxk5sGcGR8StaNMmhQ==
-X-Received: by 2002:a02:741a:: with SMTP id o26mr6492816jac.48.1570663614527;
-        Wed, 09 Oct 2019 16:26:54 -0700 (PDT)
-Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
-        by smtp.googlemail.com with ESMTPSA id s201sm3286852ios.83.2019.10.09.16.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2019 16:26:53 -0700 (PDT)
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-Cc:     emamd001@umn.edu, kjlu@umn.edu, smccaman@umn.edu,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq/cpufreq_governor: Fix memory leak in cpufreq_dbs_governor_init
-Date:   Wed,  9 Oct 2019 18:26:42 -0500
-Message-Id: <20191009232643.20427-1-navid.emamdoost@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1732682AbfJJC3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Oct 2019 22:29:36 -0400
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:47106 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbfJJC3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Oct 2019 22:29:36 -0400
+X-Greylist: delayed 35730 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Oct 2019 22:29:34 EDT
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id x9A2TQrh010258;
+        Thu, 10 Oct 2019 11:29:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x9A2TQrh010258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1570674567;
+        bh=Q7utFN6RzuE8eM4XqhBr6De112exitRV2SZcLvRw+/Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lfR7F1noQwk6SX0ADbu5hKqkv67oZZhkBR8M6ERsWbkWf/LBefvJB7MvjzmMX3W0Q
+         7L83VrJkxM1N+VrTTE4fgeC7YZcwg+yEC6YHciTFMF7TegJxQpPGoMoz8PmTaVxIyr
+         +M8Zy5Fu94jMJYGO9Xv//G91R47IMsjmMAXaGmxZnLQq64JxF9yZfADZo5HMTn1OJp
+         7V5g5Gy99M56A5Z0VFjxSkNCpDWYaB86VII91VcMNjRcvyhn9NikZboIxHeEYyL/q1
+         XSK4qnIPuNqb61MSha+vSHUboZB28OxPNNruQmr1ebGCD2Zat3JKE5DWtAFja4OVoa
+         WHnGEk3JR445Q==
+X-Nifty-SrcIP: [209.85.222.53]
+Received: by mail-ua1-f53.google.com with SMTP id w7so1446634uag.4;
+        Wed, 09 Oct 2019 19:29:27 -0700 (PDT)
+X-Gm-Message-State: APjAAAX1QGhuxHrQAYuy+NsIKjkrzCraAou8bec8dD4x0BNrBUl69egu
+        t1bH4nOZSdR/HWbV/lT8XKrusc9cdFYkTHWU5Jg=
+X-Google-Smtp-Source: APXvYqxJHdHRSk8iJK5J8OgjOjbFblWwYJs3YgddSOljJ0wgWwB7NP2b6e2SsoVqJmZZ8fJTYDM1o8iI6Lmnx9UQtLs=
+X-Received: by 2002:a9f:31c5:: with SMTP id w5mr3361388uad.40.1570674566294;
+ Wed, 09 Oct 2019 19:29:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1570633189.git.vilhelm.gray@gmail.com> <893c3b4f03266c9496137cc98ac2b1bd27f92c73.1570633189.git.vilhelm.gray@gmail.com>
+ <CAK7LNATgW7bXUmqV=3QAaJ0Qu73Kox-TgDCQJb=s0=mwewSCUg@mail.gmail.com>
+ <20191009170917.GG32742@smile.fi.intel.com> <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Thu, 10 Oct 2019 11:28:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+Message-ID: <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
+Subject: Re: [PATCH v17 01/14] bitops: Introduce the for_each_set_clump8 macro
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Phil Reid <preid@electromag.com.au>,
+        Lukas Wunner <lukas@wunner.de>, sean.nyekjaer@prevas.dk,
+        morten.tiljeset@prevas.dk, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the implementation of cpufreq_dbs_governor_init(), dbs_data is
-allocated and later is assigned to governor_data. But before that
-assignment, if gov->init() fails this allocation is not released.
-dbs_data should be released in case if gov->init() failure.
+On Thu, Oct 10, 2019 at 3:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Andy,
+>
+> On Wed, Oct 9, 2019 at 7:09 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Oct 10, 2019 at 01:28:08AM +0900, Masahiro Yamada wrote:
+> > > On Thu, Oct 10, 2019 at 12:27 AM William Breathitt Gray
+> > > <vilhelm.gray@gmail.com> wrote:
+> > > >
+> > > > This macro iterates for each 8-bit group of bits (clump) with set bits,
+> > > > within a bitmap memory region. For each iteration, "start" is set to the
+> > > > bit offset of the found clump, while the respective clump value is
+> > > > stored to the location pointed by "clump". Additionally, the
+> > > > bitmap_get_value8 and bitmap_set_value8 functions are introduced to
+> > > > respectively get and set an 8-bit value in a bitmap memory region.
+> >
+> > > Why is the return type "unsigned long" where you know
+> > > it return the 8-bit value ?
+> >
+> > Because bitmap API operates on unsigned long type. This is not only
+> > consistency, but for sake of flexibility in case we would like to introduce
+> > more calls like clump16 or so.
+>
+> TBH, that doesn't convince me: those functions explicitly take/return an
+> 8-bit value, and have "8" in their name.  The 8-bit value is never
+> really related to, retrieved from, or stored in a full "unsigned long"
+> element of a bitmap, only to/from/in a part (byte) of it.
+>
+> Following your rationale, all of iowrite{8,16,32,64}*() should take an
+> "unsigned long" value, too.
+>
 
-Fixes: 714a2d9c8792 ("cpufreq: governor: split cpufreq_governor_dbs()")
-Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
----
- drivers/cpufreq/cpufreq_governor.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
++1
 
-diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index 4bb054d0cb43..deb099d36266 100644
---- a/drivers/cpufreq/cpufreq_governor.c
-+++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -428,8 +428,10 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
- 	gov_attr_set_init(&dbs_data->attr_set, &policy_dbs->list);
- 
- 	ret = gov->init(dbs_data);
--	if (ret)
-+	if (ret) {
-+		kfree(dbs_data);
- 		goto free_policy_dbs_info;
-+	}
- 
- 	/*
- 	 * The sampling interval should not be less than the transition latency
+Using u8/u16/u32/u64 looks more consistent with other bitmap helpers.
+
+void bitmap_from_arr32(unsigned long *bitmap, const u32 *buf, unsigned
+int nbits);
+void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap, unsigned int nbits);
+static inline void bitmap_from_u64(unsigned long *dst, u64 mask);
+
+
+
+If you want to see more examples from other parts,
+
+
+int of_property_read_u8(const struct device_node *np,
+                        const char *propname,
+                        u8 *out_value)
+
+
+int of_property_read_u16(const struct device_node *np,
+                         const char *propname,
+                         u16 *out_value)
+
+
 -- 
-2.17.1
-
+Best Regards
+Masahiro Yamada
