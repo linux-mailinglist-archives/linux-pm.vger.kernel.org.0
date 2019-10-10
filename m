@@ -2,244 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B37D3297
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3115D32EE
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 22:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbfJJUmI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 16:42:08 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:58907 "EHLO
+        id S1726595AbfJJUv6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 16:51:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:43081 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbfJJUmI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:42:08 -0400
+        with ESMTP id S1725867AbfJJUv6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 16:51:58 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1M1JJC-1iFv9w3tso-002m0W; Thu, 10 Oct 2019 22:41:35 +0200
+ 1MElhb-1iK3Fg1ttL-00GGXZ; Thu, 10 Oct 2019 22:51:47 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Kukjin Kim <kgene@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 15/36] ARM: s3c: adc: move header to linux/soc/samsung
-Date:   Thu, 10 Oct 2019 22:29:59 +0200
-Message-Id: <20191010203043.1241612-15-arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 29/36] ARM: s3c: cpufreq: split out registers
+Date:   Thu, 10 Oct 2019 22:30:13 +0200
+Message-Id: <20191010203043.1241612-29-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20191010203043.1241612-1-arnd@arndb.de>
 References: <20191010202802.1132272-1-arnd@arndb.de>
  <20191010203043.1241612-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:FpoNJIc3itWORZoaPFv25Myx/M15oG1YjGqTAt4YFRfspCrSprG
- guybCXrWrn5DkwrIim8Muc6xFZJqDY8H2WUkjdhc2hKBJD/HhrV3FJR1cK/+F3/MY3xZDRs
- sLAxAWd2nFXpNgUgLIyTuHVUUPRKsEDCtc0q2yZyjUrS/S5ERXfJlNHDAk1BCZNchhX2tMr
- VdmRUNgNJjoIWO3yrlYVA==
+X-Provags-ID: V03:K1:bYQlhXWih+C+Vcg6wO+eWmRG6N2NRKtj6W4Hj2uqCeTtCslL0ZM
+ 9F8De2sKc7IKBqRY2Nooec09SugipJalqwYSBuom/M0Q7jMOU80rbBavRj/rupElvHljI9R
+ 7wVD6N+xlArvPcXU7uItBt/J/DMkMKw+rjtCrZ6Dvks52NCAIf/R/bydDOuefGky+4kj3uG
+ 5FzyYB+d0Q7IUdCX/eR3w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:igCCi1hi5O0=:wNKDceOyAM1WB1Zn34ZQdp
- UV1jKwBqIyc07z3xcE54DHVZTJrjbNxuq9Wh6mXT7OPklWo5AsZZpwWUr1PBXXV2UNnsWjzKO
- iocaE4sRUw7Wj96sYq42ZUDaTwg7yz9EvTP69XjPWlq/nKQ0or/Qdl4kBSOMsnP01th8K0nYK
- o08NO8CoQYu+R3Dai6Qp5OYMZwtXTTFqOrzt1EJaqgiklhpo8qjtFX1Q7HYGUGJM/G/8o/3Hg
- LUqnqldNtFfJoCnvzAqDO8UVCMhn30shQkkeayOhuNFoUKUP43WQc1xIp7ihGh9siOksCUWii
- Z5OBhbPZgD31M/uWKFc1R0PSt/PVft+8ZOtg5g2hVKdGOiKYLr7+gANz/Ebu5xnbKpDxv497U
- lgsAh4Nrt/qM9ftwTomvyy9Hgw1HG1WAV69mbeEhEYhsK+4Ni1ebdK/oLuqCnohzB/A9OAC8b
- aMDuTwhTxhAvWWCokFOdJWU7L2I78HqpSu8UyHPe8oNL2fQp+K0D3yqyX938WW5rFliEtFpns
- l1naLMQ2E//wqeXx5yqwDL4odxqHMmpTb0mChd1QgreLoDjz+Mxott7V1d/WQT41oO8Z3qJzR
- hLb8qJBXwNKflHRNnM0fgJOiObczYpZ89ILnWmBXUPNhp3/337ATFa/Xv0Te3Y7Blrxu5Jd1e
- js0U6/loxVpWvJpsO2/JtJkKzZkBDyteKlvqOBGt99tHFxoh3jcHTLYdgFw6eb7vSun3aj3zH
- BtkwI/fjKp5crny1NjvJrvtcWAotPweYvE7lyZZ7zbG4Tpgc5PoauHz2zFqhYp8ibatk6ab2P
- muAkM5IsSkjN8KRxIUHt+pSzTp+5ze6DjRTINrzW4wP6OiL/wuffsPo/3I3XDyaLYPsDYJKSp
- SfP5kAzgidVrbZI3DnNw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2I5d1BQgx7M=:/O1F8DhCPGZVpo6kO5MbB/
+ qMPymzDv9efv3DZA3gPjkQK1K3WnXOpZs8B/HcC7sj9w95ARoeV5v//SqkJ/2bc0oxufpc4uV
+ Udphzs7KpKDwHAQaSUw8X7PcsBoIjtBencMvhaDlS0ac+pqCSoHLx81VaNagzEnjlGR466nyo
+ Y7BT3EJ3TnYITjiEYYhD9N1ikODxKBNDCopdUAVhSY+ljf5ecCiQf9SM0us40TuIQ8y2k6ENf
+ UWacDF3jEYZfZIBnFX1pUOKWQYUA3ogZ22s0JCT9m0RBW6IHejwo9Q3Gl8EGZpoUdFLryWLqU
+ Cl1dzvkaQ59rkGl+LgVqZF/67QhRhp1qaZQuJyIcvi4ooCmZ2efq3JY4HMAijLAf4jY9soaAz
+ sP9PIhvkudaX1CfiRIjwiovnkg2HtpVt8Z6w9kpEZzQolrzZff/strXT7rRG6OiWa/Qhude6O
+ gW3ahYATIlh4MsukJGXTxDN/GdjzuaYyr9pP7OEpMIYPqAldBUXZHH3yRKvbyCII27zAW2SBR
+ yjIylHgLS98O67iGjD6hLQLgRWMd4CxH12bJXckcZwwco9rbVtOKblDUlFH3bExyPj+5+bmAq
+ LbbUSesRDUasSBaaJcs/R+LOAmGiUjX7tJQQ26drw9NqRu0D3AaB1v1b4KnswjhV63TBmIrqv
+ lEeEiEStguiEVr218efJgCJu9BsJAopwwmhq4hh3JYwurzqeXQ2zVd/0DpW48FzAS61Z3IdRs
+ NPKMd2BAn+/iM/8I7XmpPAEtQHrgXC9r0f422rSDMG4thRdLPiAFpk66T/cAQuZonxIRLUR86
+ vZOOG31X8p5OoyumdQtQIEpd3ef2mVWOHU2KCwOURMkByefla25RlWmrS4bSwVMHFXxAGEhUJ
+ 1lpOGF9ABUlW1DKygohw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are multiple drivers using the private adc interface.
-It seems unlikely that they would ever get converted to iio,
-so make the current state official by making the header file
-global.
-
-The s3c2410_ts driver needs a couple of register definitions
-as well.
+Each of the cpufreq drivers uses a fixed set of register
+bits, copy those definitions into the drivers to avoid
+including mach/regs-clock.h.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-s3c64xx/mach-crag6410.c         |  2 +-
- arch/arm/mach-s3c64xx/mach-mini6410.c         |  2 +-
- arch/arm/mach-s3c64xx/mach-real6410.c         |  2 +-
- arch/arm/mach-s3c64xx/mach-smdk6410.c         |  2 +-
- arch/arm/plat-samsung/adc.c                   |  2 +-
- arch/arm/plat-samsung/devs.c                  |  2 +-
- drivers/hwmon/s3c-hwmon.c                     |  2 +-
- drivers/input/touchscreen/s3c2410_ts.c        | 37 ++++++++++++++++++-
- drivers/power/supply/s3c_adc_battery.c        |  2 +-
- .../linux/soc/samsung/s3c-adc.h               |  0
- 10 files changed, 43 insertions(+), 10 deletions(-)
- rename arch/arm/plat-samsung/include/plat/adc.h => include/linux/soc/samsung/s3c-adc.h (100%)
+ drivers/cpufreq/s3c2410-cpufreq.c | 11 +++++++++--
+ drivers/cpufreq/s3c2412-cpufreq.c | 20 +++++++++++++++++++-
+ drivers/cpufreq/s3c2440-cpufreq.c | 24 ++++++++++++++++++++++--
+ drivers/cpufreq/s3c24xx-cpufreq.c |  4 +++-
+ 4 files changed, 53 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/mach-s3c64xx/mach-crag6410.c b/arch/arm/mach-s3c64xx/mach-crag6410.c
-index da5b50981a14..133453562d23 100644
---- a/arch/arm/mach-s3c64xx/mach-crag6410.c
-+++ b/arch/arm/mach-s3c64xx/mach-crag6410.c
-@@ -57,7 +57,7 @@
- #include <plat/keypad.h>
- #include <plat/devs.h>
+diff --git a/drivers/cpufreq/s3c2410-cpufreq.c b/drivers/cpufreq/s3c2410-cpufreq.c
+index 0c4f2ccd7e22..5c6cb590b63f 100644
+--- a/drivers/cpufreq/s3c2410-cpufreq.c
++++ b/drivers/cpufreq/s3c2410-cpufreq.c
+@@ -20,11 +20,18 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
+ 
+-#include <mach/regs-clock.h>
+-
  #include <plat/cpu.h>
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <linux/platform_data/i2c-s3c2410.h>
- #include <plat/pm.h>
- #include <plat/samsung-time.h>
-diff --git a/arch/arm/mach-s3c64xx/mach-mini6410.c b/arch/arm/mach-s3c64xx/mach-mini6410.c
-index 0dd36ae49e6a..c7140300bd3f 100644
---- a/arch/arm/mach-s3c64xx/mach-mini6410.c
-+++ b/arch/arm/mach-s3c64xx/mach-mini6410.c
-@@ -27,7 +27,7 @@
- #include <mach/regs-gpio.h>
- #include <mach/gpio-samsung.h>
+ #include <plat/cpu-freq-core.h>
  
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <plat/cpu.h>
- #include <plat/devs.h>
- #include <plat/fb.h>
-diff --git a/arch/arm/mach-s3c64xx/mach-real6410.c b/arch/arm/mach-s3c64xx/mach-real6410.c
-index 0ff88b6859c4..f55097fde94c 100644
---- a/arch/arm/mach-s3c64xx/mach-real6410.c
-+++ b/arch/arm/mach-s3c64xx/mach-real6410.c
-@@ -29,7 +29,7 @@
- #include <mach/gpio-samsung.h>
- #include <mach/irqs.h>
++#include <mach/map.h>
++
++#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
++
++#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
++
++#define S3C2410_CLKDIVN_PDIVN	     (1<<0)
++#define S3C2410_CLKDIVN_HDIVN	     (1<<1)
++
+ /* Note, 2410A has an extra mode for 1:4:4 ratio, bit 2 of CLKDIV */
  
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <plat/cpu.h>
- #include <plat/devs.h>
- #include <plat/fb.h>
-diff --git a/arch/arm/mach-s3c64xx/mach-smdk6410.c b/arch/arm/mach-s3c64xx/mach-smdk6410.c
-index 95bdcfe95a53..3042f6cbffd9 100644
---- a/arch/arm/mach-s3c64xx/mach-smdk6410.c
-+++ b/arch/arm/mach-s3c64xx/mach-smdk6410.c
-@@ -60,7 +60,7 @@
+ static void s3c2410_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
+diff --git a/drivers/cpufreq/s3c2412-cpufreq.c b/drivers/cpufreq/s3c2412-cpufreq.c
+index 53385a9ab957..d922d0d47c80 100644
+--- a/drivers/cpufreq/s3c2412-cpufreq.c
++++ b/drivers/cpufreq/s3c2412-cpufreq.c
+@@ -23,12 +23,30 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
  
- #include <plat/devs.h>
- #include <plat/cpu.h>
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <linux/platform_data/touchscreen-s3c2410.h>
- #include <plat/keypad.h>
- #include <plat/samsung-time.h>
-diff --git a/arch/arm/plat-samsung/adc.c b/arch/arm/plat-samsung/adc.c
-index ee3d5c989a76..623a9774cc52 100644
---- a/arch/arm/plat-samsung/adc.c
-+++ b/arch/arm/plat-samsung/adc.c
-@@ -20,7 +20,7 @@
- #include <linux/regulator/consumer.h>
- 
- #include <plat/regs-adc.h>
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- 
- /* This driver is designed to control the usage of the ADC block between
-  * the touchscreen and any other drivers that may need to use it, such as
-diff --git a/arch/arm/plat-samsung/devs.c b/arch/arm/plat-samsung/devs.c
-index fd94a35e22f8..ddd90f0bb380 100644
---- a/arch/arm/plat-samsung/devs.c
-+++ b/arch/arm/plat-samsung/devs.c
-@@ -44,7 +44,7 @@
+-#include <mach/regs-clock.h>
+ #include <mach/s3c2412.h>
  
  #include <plat/cpu.h>
- #include <plat/devs.h>
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <linux/platform_data/ata-samsung_cf.h>
- #include <plat/fb.h>
- #include <plat/fb-s3c2410.h>
-diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
-index b490fe3d2ee8..f2703c5460d0 100644
---- a/drivers/hwmon/s3c-hwmon.c
-+++ b/drivers/hwmon/s3c-hwmon.c
-@@ -20,7 +20,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
+ #include <plat/cpu-freq-core.h>
  
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <linux/platform_data/hwmon-s3c.h>
- 
- struct s3c_hwmon_attr {
-diff --git a/drivers/input/touchscreen/s3c2410_ts.c b/drivers/input/touchscreen/s3c2410_ts.c
-index b346e7cafd62..1a5a178ea286 100644
---- a/drivers/input/touchscreen/s3c2410_ts.c
-+++ b/drivers/input/touchscreen/s3c2410_ts.c
-@@ -21,10 +21,43 @@
- #include <linux/clk.h>
- #include <linux/io.h>
- 
--#include <plat/adc.h>
--#include <plat/regs-adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
- #include <linux/platform_data/touchscreen-s3c2410.h>
- 
-+#define	S3C2410_ADCCON			(0x00)
-+#define	S3C2410_ADCTSC			(0x04)
-+#define	S3C2410_ADCDLY			(0x08)
-+#define	S3C2410_ADCDAT0			(0x0C)
-+#define	S3C2410_ADCDAT1			(0x10)
-+#define	S3C64XX_ADCUPDN			(0x14)
-+#define	S3C2443_ADCMUX			(0x18)
-+#define	S3C64XX_ADCCLRINT		(0x18)
-+#define	S5P_ADCMUX			(0x1C)
-+#define	S3C64XX_ADCCLRINTPNDNUP		(0x20)
++#include <mach/map.h>
 +
-+/* ADCTSC Register Bits */
-+#define S3C2443_ADCTSC_UD_SEN		(1 << 8)
-+#define S3C2410_ADCTSC_YM_SEN		(1<<7)
-+#define S3C2410_ADCTSC_YP_SEN		(1<<6)
-+#define S3C2410_ADCTSC_XM_SEN		(1<<5)
-+#define S3C2410_ADCTSC_XP_SEN		(1<<4)
-+#define S3C2410_ADCTSC_PULL_UP_DISABLE	(1<<3)
-+#define S3C2410_ADCTSC_AUTO_PST		(1<<2)
-+#define S3C2410_ADCTSC_XY_PST(x)	(((x)&0x3)<<0)
++#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
 +
-+/* ADCDAT0 Bits */
-+#define S3C2410_ADCDAT0_UPDOWN		(1<<15)
-+#define S3C2410_ADCDAT0_AUTO_PST	(1<<14)
-+#define S3C2410_ADCDAT0_XY_PST		(0x3<<12)
-+#define S3C2410_ADCDAT0_XPDATA_MASK	(0x03FF)
++#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
 +
-+/* ADCDAT1 Bits */
-+#define S3C2410_ADCDAT1_UPDOWN		(1<<15)
-+#define S3C2410_ADCDAT1_AUTO_PST	(1<<14)
-+#define S3C2410_ADCDAT1_XY_PST		(0x3<<12)
-+#define S3C2410_ADCDAT1_YPDATA_MASK	(0x03FF)
++#define S3C2412_CLKDIVN_PDIVN		(1<<2)
++#define S3C2412_CLKDIVN_HDIVN_MASK	(3<<0)
++#define S3C2412_CLKDIVN_ARMDIVN		(1<<3)
++#define S3C2412_CLKDIVN_DVSEN		(1<<4)
++#define S3C2412_CLKDIVN_HALFHCLK	(1<<5)
++#define S3C2412_CLKDIVN_USB48DIV	(1<<6)
++#define S3C2412_CLKDIVN_UARTDIV_MASK	(15<<8)
++#define S3C2412_CLKDIVN_UARTDIV_SHIFT	(8)
++#define S3C2412_CLKDIVN_I2SDIV_MASK	(15<<12)
++#define S3C2412_CLKDIVN_I2SDIV_SHIFT	(12)
++#define S3C2412_CLKDIVN_CAMDIV_MASK	(15<<16)
++#define S3C2412_CLKDIVN_CAMDIV_SHIFT	(16)
 +
-+
- #define TSC_SLEEP  (S3C2410_ADCTSC_PULL_UP_DISABLE | S3C2410_ADCTSC_XY_PST(0))
+ /* our clock resources. */
+ static struct clk *xtal;
+ static struct clk *fclk;
+diff --git a/drivers/cpufreq/s3c2440-cpufreq.c b/drivers/cpufreq/s3c2440-cpufreq.c
+index 3f772ba8896e..5fe7a891fa13 100644
+--- a/drivers/cpufreq/s3c2440-cpufreq.c
++++ b/drivers/cpufreq/s3c2440-cpufreq.c
+@@ -24,11 +24,31 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
  
- #define INT_DOWN	(0)
-diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
-index 3d00b35cafc9..60b7f41ab063 100644
---- a/drivers/power/supply/s3c_adc_battery.c
-+++ b/drivers/power/supply/s3c_adc_battery.c
-@@ -22,7 +22,7 @@
- #include <linux/init.h>
- #include <linux/module.h>
+-#include <mach/regs-clock.h>
+-
+ #include <plat/cpu.h>
+ #include <plat/cpu-freq-core.h>
  
--#include <plat/adc.h>
-+#include <linux/soc/samsung/s3c-adc.h>
++#include <mach/map.h>
++
++#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
++#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
++#define S3C2440_CAMDIVN	    S3C2410_CLKREG(0x18)
++
++#define S3C2440_CLKDIVN_PDIVN	     (1<<0)
++#define S3C2440_CLKDIVN_HDIVN_MASK   (3<<1)
++#define S3C2440_CLKDIVN_HDIVN_1      (0<<1)
++#define S3C2440_CLKDIVN_HDIVN_2      (1<<1)
++#define S3C2440_CLKDIVN_HDIVN_4_8    (2<<1)
++#define S3C2440_CLKDIVN_HDIVN_3_6    (3<<1)
++#define S3C2440_CLKDIVN_UCLK         (1<<3)
++
++#define S3C2440_CAMDIVN_CAMCLK_MASK  (0xf<<0)
++#define S3C2440_CAMDIVN_CAMCLK_SEL   (1<<4)
++#define S3C2440_CAMDIVN_HCLK3_HALF   (1<<8)
++#define S3C2440_CAMDIVN_HCLK4_HALF   (1<<9)
++#define S3C2440_CAMDIVN_DVSEN        (1<<12)
++
++#define S3C2442_CAMDIVN_CAMCLK_DIV3  (1<<5)
++
+ static struct clk *xtal;
+ static struct clk *fclk;
+ static struct clk *hclk;
+diff --git a/drivers/cpufreq/s3c24xx-cpufreq.c b/drivers/cpufreq/s3c24xx-cpufreq.c
+index ed0e713b1b57..c786e1197d3c 100644
+--- a/drivers/cpufreq/s3c24xx-cpufreq.c
++++ b/drivers/cpufreq/s3c24xx-cpufreq.c
+@@ -28,9 +28,11 @@
+ #include <plat/cpu.h>
+ #include <plat/cpu-freq-core.h>
  
- #define BAT_POLL_INTERVAL		10000 /* ms */
- #define JITTER_DELAY			500 /* ms */
-diff --git a/arch/arm/plat-samsung/include/plat/adc.h b/include/linux/soc/samsung/s3c-adc.h
-similarity index 100%
-rename from arch/arm/plat-samsung/include/plat/adc.h
-rename to include/linux/soc/samsung/s3c-adc.h
+-#include <mach/regs-clock.h>
++#include <mach/map.h>
+ 
+ /* note, cpufreq support deals in kHz, no Hz */
++#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
++#define S3C2410_MPLLCON     S3C2410_CLKREG(0x04)
+ 
+ static struct cpufreq_driver s3c24xx_driver;
+ static struct s3c_cpufreq_config cpu_cur;
 -- 
 2.20.0
 
