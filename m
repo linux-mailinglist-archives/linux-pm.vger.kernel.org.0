@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BBAD282B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 13:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BC0D282F
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 13:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732928AbfJJLkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 07:40:24 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40055 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732923AbfJJLkY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 07:40:24 -0400
-Received: by mail-lj1-f195.google.com with SMTP id 7so5835469ljw.7
-        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2019 04:40:23 -0700 (PDT)
+        id S1726659AbfJJLk0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 07:40:26 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36979 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732931AbfJJLk0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 07:40:26 -0400
+Received: by mail-lj1-f193.google.com with SMTP id l21so5851290lje.4
+        for <linux-pm@vger.kernel.org>; Thu, 10 Oct 2019 04:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xwB/tavfIMYf7rxHdkrDdviMkDSYXD3kklyLW60B66Q=;
-        b=y5fnfZfzF20HGrbuklXhoX4IRAb3sw2pVHlyIgINlkZsqTCt4OVzOnIglZ5AC79CtD
-         DsNOJpfSilfGfXZtv/tEgCB3gQiuhIGvs1zshF7zwNcTf2qOF8Fc/rMwNcZXiZTL+kw6
-         Yzr2TdiZrnORg1wGpq19yH9Xcs0CIUPV2lm1fsXVYSjXlq+ZlST41yjYA2oN1KG7fjS6
-         5gBBGJP6W0zkh27WfEp5bCy2cXFBBYwBVSQxDFzIbvzoUWu2TihJdw0pV2UQGtwkzvsY
-         tHxQK36pjsfWSB57iJO/4O/taNsevtQefN+dNqFOeyJ3soL1660gFAXKDgtQIhwhU66S
-         B0UQ==
+        bh=i3G8ogm8QKvXwM8+rijht3ULF4gYpDZkzueQGi7751M=;
+        b=S1K49Am4kSDehLMFo+y+aCn++SGdGyNEXyDKQRhsyEPFb1U+Qix4b9k4PUVRkwMwNo
+         H1Drcbx+EDc2EDWjdPplZZWExubE/UfjqHL/TFs1EpwMdzjNtIKS46NPjhea/SBAVuq0
+         ayS5Uvhu+BLV2F9mmm/wYqmAwVyQLTTLhdmXercedrMYUeL842KegEAPuu1HoOsC5IYo
+         wCEzh1VrCwNsmAM5iFSLdMYtQZX5h9kLTbBXKGX6RsmAHRa+SZp3SSXIEoYZ89kE7QUv
+         Ygj6ExCVVuMj5lOyunwckLd0vQXnx7AbRGLkFUfRtC+bX6wI8fQg8yvPZKfW/oaWQgOe
+         QXPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=xwB/tavfIMYf7rxHdkrDdviMkDSYXD3kklyLW60B66Q=;
-        b=fTC416As53r5yhuknTSKjlst5E7dDcNdQqRbQfIUiR4jhuJTLEDySc6nbb1BvbEUIq
-         4TzBR7nQK+/NOp0UZmdFH8ld+fm372p2aLjKJPivVN7XuPyYpm1iI7TS1ALSNQmT7UmP
-         4MKjXaSm2l/fWWILDsNM50t+TY+NiVU40g282Sm7+CfUQCIiIQaqTRqppu7YBUOTQXLY
-         ID/9A0CCqmdVpbEFODQCCjMkvpW20GpeHLt6i0jiTqkLyhCS2Rh8Zkpzomkg+DppYlk3
-         Bg0gGLUUjdkqgVMZArcPZc2LBiadnpdXks9R6eLjzLzCIg2XzcLG7qHa6fjUhryg+xvo
-         Q2lQ==
-X-Gm-Message-State: APjAAAVO7pwLmztVNHyyeFvNO7URKBtUx5UQiBTrYbD9ZpcnBDYnrVlC
-        Ncv4D08FyMJDRQAXnulympdHDg==
-X-Google-Smtp-Source: APXvYqx9XzUujAF/LwxrlZOzoBs1q0AvlrOroFuQxRIn7MA18US1H4Ia1dTMLsrPBuGfqUBKeebXeA==
-X-Received: by 2002:a2e:9f4d:: with SMTP id v13mr6239064ljk.226.1570707622756;
-        Thu, 10 Oct 2019 04:40:22 -0700 (PDT)
+        bh=i3G8ogm8QKvXwM8+rijht3ULF4gYpDZkzueQGi7751M=;
+        b=fTY/UWflDmxpHJDyaoHthhm40BsngCL1TW/979767za6jXYxtwBUNJqMEJewKcrojw
+         7MSzizPEu52UDT0YoKrbZQGyt2E2eYL6Zi/MwzTYN2epjrBhdyMNuB85jDuyLADf8J8T
+         Qtqp6u6qR+dluqWf9o7kW38qqyJcaa73kz0d+01jWxWZm2mLG3no9yzN+Ah7CxFi+hFJ
+         FwyC6TJn61lyMUk1xIsyhilCL4+T43E89vI9JaBSEDH7pvaBHhRXeBWAcbXVk8fLfXpW
+         b0PoT2qBvpgeHvoJZ/I+cIzcrnwiMas4vrS27MfvDXVgq6h71vjWkmacfhs5Rp3B/xPu
+         +ItQ==
+X-Gm-Message-State: APjAAAVpDDv5kA2Dt0hXUTPXNynd5UOPq123Y8CyEuEeW6zJRDSvgV9d
+        SLMSEKvcdms+YCXI4/bamA0uzg==
+X-Google-Smtp-Source: APXvYqwOX8ItiDZEA+kQQBb68Jv+sNmaYtISkfDtd1UlzUU+vXQj3Y0mD4hDx6nLR//tbqlRlepYnA==
+X-Received: by 2002:a2e:8310:: with SMTP id a16mr177041ljh.48.1570707624283;
+        Thu, 10 Oct 2019 04:40:24 -0700 (PDT)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id p3sm1168937ljn.78.2019.10.10.04.40.21
+        by smtp.gmail.com with ESMTPSA id p3sm1168937ljn.78.2019.10.10.04.40.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 04:40:22 -0700 (PDT)
+        Thu, 10 Oct 2019 04:40:23 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -57,9 +57,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 11/13] cpuidle: psci: Attach CPU devices to their PM domains
-Date:   Thu, 10 Oct 2019 13:39:35 +0200
-Message-Id: <20191010113937.15962-12-ulf.hansson@linaro.org>
+Subject: [PATCH 12/13] cpuidle: psci: Manage runtime PM in the idle path
+Date:   Thu, 10 Oct 2019 13:39:36 +0200
+Message-Id: <20191010113937.15962-13-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191010113937.15962-1-ulf.hansson@linaro.org>
 References: <20191010113937.15962-1-ulf.hansson@linaro.org>
@@ -68,76 +68,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to enable a CPU to be power managed through its PM domain, let's
-try to attach it by calling psci_dt_attach_cpu() during the cpuidle
-initialization.
+In case we have succeeded to attach a CPU to its PM domain, let's deploy
+runtime PM support for the corresponding attached device, to allow the CPU
+to be powered-managed accordingly.
 
-psci_dt_attach_cpu() returns a pointer to the attached struct device, which
-later should be used for runtime PM, hence we need to store it somewhere.
-Rather than adding yet another per CPU variable, let's create a per CPU
-struct to collect the relevant per CPU variables.
+To set the triggering point for when runtime PM reference counting should
+be done, let's store the index of deepest idle state for the CPU in the per
+CPU struct. Then use this index to compare the selected idle state index
+when entering idle, as to understand whether runtime PM reference counting
+is needed or not.
+
+Note that, from the hierarchical point view, there may be good reasons to
+do runtime PM reference counting even on shallower idle states, but at this
+point this isn't supported, mainly due to limitations set by the generic PM
+domain.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpuidle/cpuidle-psci.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ drivers/cpuidle/cpuidle-psci.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index a16467daf99d..1510422c7a53 100644
+index 1510422c7a53..0919b40c1a85 100644
 --- a/drivers/cpuidle/cpuidle-psci.c
 +++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -23,7 +23,12 @@
- #include "cpuidle-psci.h"
- #include "dt_idle_states.h"
+@@ -16,6 +16,7 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/psci.h>
++#include <linux/pm_runtime.h>
+ #include <linux/slab.h>
  
--static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-+struct psci_cpuidle_data {
-+	u32 *psci_states;
-+	struct device *dev;
-+};
-+
-+static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
- static DEFINE_PER_CPU(u32, domain_state);
+ #include <asm/cpuidle.h>
+@@ -25,6 +26,7 @@
  
- void psci_set_domain_state(u32 state)
-@@ -45,7 +50,7 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
+ struct psci_cpuidle_data {
+ 	u32 *psci_states;
++	u32 rpm_state_id;
+ 	struct device *dev;
+ };
+ 
+@@ -50,14 +52,28 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
  				struct cpuidle_driver *drv, int idx)
  {
  	int ret;
--	u32 *states = __this_cpu_read(psci_power_state);
-+	u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
- 	u32 state = psci_get_domain_state();
+-	u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
+-	u32 state = psci_get_domain_state();
++	struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
++	u32 *states = data->psci_states;
++	struct device *pd_dev = data->dev;
++	bool runtime_pm = (pd_dev && data->rpm_state_id == idx);
++	u32 state;
  
++	/*
++	 * Do runtime PM if we are using the hierarchical CPU toplogy, but only
++	 * when cpuidle have selected the deepest idle state for the CPU.
++	 */
++	if (runtime_pm)
++		pm_runtime_put_sync_suspend(pd_dev);
++
++	state = psci_get_domain_state();
  	if (!state && idx)
-@@ -103,7 +108,9 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
- {
- 	int i, ret = 0;
- 	u32 *psci_states;
-+	struct device *dev;
- 	struct device_node *state_node;
-+	struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
+ 		state = states[idx - 1];
  
- 	psci_states = kcalloc(state_nodes, sizeof(*psci_states), GFP_KERNEL);
- 	if (!psci_states)
-@@ -128,8 +135,16 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
- 		goto free_mem;
+ 	ret = __psci_enter_idle_state(idx, state);
+ 
++	if (runtime_pm)
++		pm_runtime_get_sync(pd_dev);
++
+ 	/* Clear the domain state to start fresh when back from idle. */
+ 	psci_set_domain_state(0);
+ 	return ret;
+@@ -142,6 +158,7 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
  	}
  
--	/* Idle states parsed correctly, initialize per-cpu pointer */
--	per_cpu(psci_power_state, cpu) = psci_states;
-+	dev = psci_dt_attach_cpu(cpu);
-+	if (IS_ERR(dev)) {
-+		ret = PTR_ERR(dev);
-+		goto free_mem;
-+	}
-+
-+	data->dev = dev;
-+
-+	/* Idle states parsed correctly, store them in the per-cpu struct. */
-+	data->psci_states = psci_states;
- 	return 0;
+ 	data->dev = dev;
++	data->rpm_state_id = state_nodes;
  
- free_mem:
+ 	/* Idle states parsed correctly, store them in the per-cpu struct. */
+ 	data->psci_states = psci_states;
 -- 
 2.17.1
 
