@@ -2,161 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10699D229A
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 10:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BF5D237E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Oct 2019 10:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733309AbfJJIV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 04:21:58 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36118 "EHLO
+        id S2388687AbfJJInM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 04:43:12 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:44904 "EHLO
         mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733269AbfJJIV6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 04:21:58 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k20so4177793oih.3;
-        Thu, 10 Oct 2019 01:21:57 -0700 (PDT)
+        with ESMTP id S2388682AbfJJInK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Oct 2019 04:43:10 -0400
+Received: by mail-oi1-f195.google.com with SMTP id w6so4183917oie.11;
+        Thu, 10 Oct 2019 01:43:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dc5RA2BPKZVYGXJLYtKKxLVdHq6Dac4u37aEDEUkLQM=;
-        b=DHfArRrkuDjQXYob8Lw47pqT7FpGLO3GzFoGIG4uahhSnTK01APmr63DFxVyPUMF9M
-         3KekuOiGOLQGQlsHJPINfnYMaEoO8oH7vvDSQ3D782Eu6QJIzQw+ZOESPV165k1suM/q
-         mCdDvgFn+N0YWjiOO4vd5HUQbEB0dtvmpES5TLEoCGNSc8ALolmKN+AgmzyzeiYTCYwx
-         qBmmg6x3JMY9fy5oh6/4I38nDvR2DSakyqXIg091/+7T6cEulp95VbPTY1oxPC5Ulmvf
-         FDXcVa96udIjaf9nWPrv6JUBXiq6yXBqdxqWAk5WxCZ9VCsMzjeplrVSKMkaNISJA5wU
-         cgZw==
-X-Gm-Message-State: APjAAAXhxIECF093MrNyvztttwiNc+b31SFLnrqLH48n+NJfQSb6E56L
-        a9xoCW8l/YiZQsc6h1HiDgQm9G+i20VvtnUFiv0=
-X-Google-Smtp-Source: APXvYqxtgx03+B0HB6RKN9jHyeCpS8CcGrjyRFWnknFz7FyEGnnntki6sJN+xgX/b9Aj5CRhCziqQeixZ7YTrOe0LG8=
-X-Received: by 2002:aca:4bd2:: with SMTP id y201mr6665365oia.102.1570695716750;
- Thu, 10 Oct 2019 01:21:56 -0700 (PDT)
+        bh=rTlYYOGkqgnD6Zh5iPOqbNdyFEWm7e54SIBJvDOHe+w=;
+        b=L8cq/6MB/aSeowfUY/dL6sM10ZJ2U9Kyr3+4I8WVPA3rULP1tPA0g/uDb0Jscpma7Z
+         zBC13ezJ8wkCa4VVy2yRofS/0APYkxnNJ9/1jCet67vDV7rQfLdZnpZwpihteON0O7bY
+         zgqI2lsgo0ddSL0ydxRID8Y0k7j+zB+wsl1euM3WCreRQaIc8dVyxwURF7zGbKpXFwn4
+         SbmH7cEUp1XWL1f7ddHdclcynO2ZVzt7bQ2YkMCNLh932fx6RHVdeModKDHv0oz82UbG
+         3vBZPd9PCZ/+zwSDvTSsgQI7nD9AeGLjcBA3e39jQBl2psES5oK5OdGw5wxy9ZpMuwS0
+         hbBg==
+X-Gm-Message-State: APjAAAUD+32Px12lYnJvQp8QJW0qIvPhIZ0WHCypRfk6meJYkfAK7A4L
+        6cTZxj9cezlSlPXjbEvl3uxkI1khlrfM5a7/wd8=
+X-Google-Smtp-Source: APXvYqxZxVEkCcvoHeYoneF0Gm7l+ZPEmDyvwN/Ft4cT9xsNTutEE5bv0px9c0e97RY7vXWtCfWrgZJ27ep0hauNnZo=
+X-Received: by 2002:aca:d706:: with SMTP id o6mr6702363oig.57.1570696989666;
+ Thu, 10 Oct 2019 01:43:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1570633189.git.vilhelm.gray@gmail.com> <893c3b4f03266c9496137cc98ac2b1bd27f92c73.1570633189.git.vilhelm.gray@gmail.com>
- <CAK7LNATgW7bXUmqV=3QAaJ0Qu73Kox-TgDCQJb=s0=mwewSCUg@mail.gmail.com>
- <20191009170917.GG32742@smile.fi.intel.com> <CAMuHMdXyyrL4ibKvjMV6r8TuxpmK73=JxsWNEfcRk1NjwsnOjA@mail.gmail.com>
- <CAK7LNASVdqU_6+_iinWStb9ALqLw494pnZKr46fLW+WJ9nUo6A@mail.gmail.com>
- <CAHp75VeLkfNZkqhD8tedJdav81L+VA3Z50Kwcd9h4R7zMwjtvA@mail.gmail.com>
- <CAMuHMdVs=PgET6=-fKgznETOye_Bxqt6h16Ok0nu6J2vXG-r_w@mail.gmail.com>
- <CAHp75Vc8HX=hs2F2R_wOaFM7cFjaX0k_kENybdxSh742PpVkjw@mail.gmail.com>
- <CAMuHMdVrQyt=VJ8outiGEXW78-cY=YUWyeVXN-_MFg75erJ=Yg@mail.gmail.com> <20191010080750.GN32742@smile.fi.intel.com>
-In-Reply-To: <20191010080750.GN32742@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Oct 2019 10:21:45 +0200
-Message-ID: <CAMuHMdVv_pYq7rVLvjAPhkoADLgXF-AFGWUBNqLjaumDPBYGaQ@mail.gmail.com>
-Subject: Re: [PATCH v17 01/14] bitops: Introduce the for_each_set_clump8 macro
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Phil Reid <preid@electromag.com.au>,
-        Lukas Wunner <lukas@wunner.de>, sean.nyekjaer@prevas.dk,
-        morten.tiljeset@prevas.dk, Arnd Bergmann <arnd@arndb.de>
+References: <001601d57487$e1029ef0$a307dcd0$@net> <CAJZ5v0jvusVBcKECBueDHk5KQGda=GGuSGPO3F4wCvk3cro56A@mail.gmail.com>
+ <1574317.FFykgJKpNH@kreacher> <3490479.2dnHFFeJIp@kreacher> <000b01d57f39$11868670$34939350$@net>
+In-Reply-To: <000b01d57f39$11868670$34939350$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Oct 2019 10:42:58 +0200
+Message-ID: <CAJZ5v0g+dQKTDMPPf-iP1oTCWhrLk7N2+PVbBZB5mKQN4Qb6zg@mail.gmail.com>
+Subject: Re: [RFC/RFT][PATCH v8] cpuidle: New timer events oriented governor
+ for tickless systems
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Chen, Hu" <hu1.chen@intel.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andy,
-
-On Thu, Oct 10, 2019 at 10:08 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, Oct 10, 2019 at 09:49:51AM +0200, Geert Uytterhoeven wrote:
-> > On Thu, Oct 10, 2019 at 9:42 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Thu, Oct 10, 2019 at 9:29 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Thu, Oct 10, 2019 at 7:49 AM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > On Thu, Oct 10, 2019 at 5:31 AM Masahiro Yamada
-> > > > > <yamada.masahiro@socionext.com> wrote:
-> > > > > > On Thu, Oct 10, 2019 at 3:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > > > On Wed, Oct 9, 2019 at 7:09 PM Andy Shevchenko
-> > > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > > On Thu, Oct 10, 2019 at 01:28:08AM +0900, Masahiro Yamada wrote:
-> > > > > > > > > On Thu, Oct 10, 2019 at 12:27 AM William Breathitt Gray
-> > > > > > > > > <vilhelm.gray@gmail.com> wrote:
+On Thu, Oct 10, 2019 at 9:05 AM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> > > > > > > > > Why is the return type "unsigned long" where you know
-> > > > > > > > > it return the 8-bit value ?
-> > > > > > > >
-> > > > > > > > Because bitmap API operates on unsigned long type. This is not only
-> > > > > > > > consistency, but for sake of flexibility in case we would like to introduce
-> > > > > > > > more calls like clump16 or so.
-> > > > > > >
-> > > > > > > TBH, that doesn't convince me: those functions explicitly take/return an
-> > > > > > > 8-bit value, and have "8" in their name.  The 8-bit value is never
-> > > > > > > really related to, retrieved from, or stored in a full "unsigned long"
-> > > > > > > element of a bitmap, only to/from/in a part (byte) of it.
-> > > > > > >
-> > > > > > > Following your rationale, all of iowrite{8,16,32,64}*() should take an
-> > > > > > > "unsigned long" value, too.
-> > > > > >
-> > > > > > Using u8/u16/u32/u64 looks more consistent with other bitmap helpers.
-> > > > > >
-> > > > > > void bitmap_from_arr32(unsigned long *bitmap, const u32 *buf, unsigned
-> > > > > > int nbits);
-> > > > > > void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap, unsigned int nbits);
-> > > > > > static inline void bitmap_from_u64(unsigned long *dst, u64 mask);
-> > > > > >
-> > > > > > If you want to see more examples from other parts,
-> > > > >
-> > > > > Geert's and yours examples both are not related. They are about
-> > > > > fixed-width properies when we know that is the part of protocol.
-> > > > > Here we have no protocol which stricts us to the mentioned fixed-width types.
-> > > >
-> > > > Yes you have: they are functions to store/retrieve an 8-bit value from
-> > > > the middle of the bitmap, which is reflected in their names ("clump8",
-> > > > "value8").
-> > > > The input/output value is clearly separated from the actual bitmap,
-> > > > which is referenced by the "unsigned long *".
-> > > >
-> > > > If you add new "value16" functions, they will be intended to store/retrieve
-> > > > 16-bit values.
-> > >
-> > > And if I add 4-bit, 12-bit or 24-bit values, what should I use?
-> >
-> > Whatever is needed to store that?
-> > I agree "unsigned long" is appropriate for a generic function to extract a
-> > bit field of 1 to BITS_PER_LONG bits.
-> >
-> > > > Besides, if retrieving an 8-bit value requires passing an
-> > > > "unsigned long *", the caller needs two variables: one unsigned long to
-> > > > pass the address of, and one u8 to copy the returned value into.
-> > >
-> > > Why do you need a temporary variable? In some cases it might make
-> > > sense, but in general simple cases I don't see what you may achieve
-> > > with it.
-> >
-> > Because find_next_clump8() takes a pointer to store the output value.
+> On 2019.10.09 06:37 Rafael J. Wysocki wrote:
+> > On Wednesday, October 9, 2019 1:19:51 AM CEST Rafael J. Wysocki wrote:
+> >> On Tuesday, October 8, 2019 12:49:01 PM CEST Rafael J. Wysocki wrote:
+> >>> On Tue, Oct 8, 2019 at 11:51 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>>> On Tue, Oct 8, 2019 at 8:20 AM Doug Smythies <dsmythies@telus.net> wrote:
+> >>>>> O.K. Thanks for your quick reply, and insight.
+> >>>>>
+> >>>>> I think long durations always need to be counted, but currently if
+> >>>>> the deepest idle state is disabled, they are not.
+> ...
+> >>>> AFAICS, adding early_hits to count is not a mistake if there are still
+> >>>> enabled states deeper than the current one.
+> >>>
+> >>> And the mistake appears to be that the "hits" and "misses" metrics
+> >>> aren't handled in analogy with the "early_hits" one when the current
+> >>> state is disabled.
 >
-> So does regmap_read().
+> I only know how to exploit and test the "hits" and "misses" path
+> that should use the deepest available idle state upon transition
+> to an idle system. Even so, the test has a low probability of
+> failing, and so needs to be run many times.
+>
+> I do not know how to demonstrate and/or test any "early_hits" path
+> to confirm that an issue exists or that it is fixed.
+>
+> >>>
+> >>> Let me try to cut a patch to address that.
+> >>
+> >> Appended below, not tested.
+>
+> Reference as: rjw1
+>
+> >>
+> >> It is meant to address two problems, one of which is that the "hits" and
+> >> "misses" metrics of disabled states need to be taken into account too in
+> >> some cases, and the other is an issue with the handling of "early hits"
+> >> which may lead to suboptimal state selection if some states are disabled.
+> >
+> > Well, it still misses a couple of points.
+> >
+> > First, disable states that are too deep should not be taken into consideration
+> > at all.
+> >
+> > Second, the "hits" and "misses" metrics of disabled states need to be used for
+> > idle duration ranges corresponding to them regardless of whether or not the
+> > "hits" value is greater than the "misses" one.
+> >
+> > Updated patch is below (still not tested), but it tries to do too much in one
+> > go, so I need to split it into a series of smaller changes.
+>
+> Thanks for your continued look at this.
+>
+> Reference as: rjw2
+>
+> Test 1, hack job statistical test (old tests re-stated):
+>
+> Kernel  tests            fail rate
+> 5.4-rc1          6616           13.45%
+> 5.3                      2376            4.50%
+> 5.3-teov7               12136            0.00%  <<< teo.c reverted and teov7 put in its place.
+> 5.4-rc1-ds              11168            0.00%  <<< [old] ds proposed patch (> 7 hours test time)
+> 5.4-rc1-ds12     4224            0.00% <<< [old] new ds proposed patch
+> 5.4-rc2-rjw1    11280            0.00%
+> 5.4-rc2-rjw2      640            0.00%  <<< Will be run again, for longer.
+>
+> Test 2: I also looked at every possible enable/disable idle combination,
+> and they all seemed O.K.
+>
+> No other tests have been run yet.
+>
+> System:
+> Processor: i7-2600K
+> Deepest idle state: 4 (C6)
 
-I believe that one is different, as it is a generic function, and the
-width of the
-returned value depends on the regmap config.
+Thanks a lot for sharing the results!
 
-> 8 appeared there during review when it has been proposed to optimize to 8-bit
-> clumps as most of the current users utilize it. The initial idea was to be
-> bit-width agnostic. And with current API it's possible to easy convert to other
-> formats later if we need.
-
-"optimized for 8-bit clumps" and "out-of-line function that takes an
-unsigned long pointer for an output parameter" don't match well, IMHO.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Rafael
