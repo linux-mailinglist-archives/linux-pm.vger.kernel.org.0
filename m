@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0764D41AE
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 15:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C71B4D41B1
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 15:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728594AbfJKNpm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Oct 2019 09:45:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:60928 "EHLO foss.arm.com"
+        id S1728701AbfJKNpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Oct 2019 09:45:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:60958 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728684AbfJKNpm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Oct 2019 09:45:42 -0400
+        id S1728684AbfJKNpp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 11 Oct 2019 09:45:45 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 237C21597;
-        Fri, 11 Oct 2019 06:45:42 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAD1C337;
+        Fri, 11 Oct 2019 06:45:44 -0700 (PDT)
 Received: from e107049-lin.arm.com (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 733BF3F68E;
-        Fri, 11 Oct 2019 06:45:40 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 16AFF3F68E;
+        Fri, 11 Oct 2019 06:45:42 -0700 (PDT)
 From:   Douglas RAILLARD <douglas.raillard@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
@@ -24,9 +24,9 @@ Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
         vincent.guittot@linaro.org, douglas.raillard@arm.com,
         dietmar.eggemann@arm.com, qperret@qperret.net,
         patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: [RFC PATCH v3 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
-Date:   Fri, 11 Oct 2019 14:44:58 +0100
-Message-Id: <20191011134500.235736-5-douglas.raillard@arm.com>
+Subject: [RFC PATCH v3 5/6] sched/cpufreq: Boost schedutil frequency ramp up
+Date:   Fri, 11 Oct 2019 14:44:59 +0100
+Message-Id: <20191011134500.235736-6-douglas.raillard@arm.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191011134500.235736-1-douglas.raillard@arm.com>
 References: <20191011134500.235736-1-douglas.raillard@arm.com>
@@ -37,108 +37,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the utilization signals dynamic to detect when the utilization of a
-set of tasks starts increasing because of a change in tasks' behavior.
-This allows detecting when spending extra power for faster frequency
-ramp up response would be beneficial to the reactivity of the system.
+In some situations, it can be interesting to spend temporarily more
+power if that can give a useful frequency boost.
 
-This ramp boost is computed as the difference
-util_avg-util_est_enqueued. This number somehow represents a lower bound
-of how much extra utilization this tasks is actually using, compared to
-our best current stable knowledge of it (which is util_est_enqueued).
+Use the new sugov_cpu_ramp_boost() function to drive an energy-aware
+boost, on top of the minimal required frequency.
 
-When the set of runnable tasks changes, the boost is disabled as the
-impact of blocked utilization on util_avg will make the delta with
-util_est_enqueued not very informative.
+As that boost number is not accurate (and cannot be without a crystal
+ball), we only use it in a way that allows direct control over the power
+it is going to cost. This allows keeping a platform-independent level of
+control over the average power, while allowing for frequency bursts when
+we know a (set of) tasks can make use of it.
+
+In shared policies, the maximum of all CPU's boost is used. Since the
+extra power expenditure is bounded, it cannot skyrocket even on
+platforms with a large number of cores in the same frequency domain
+and/or very high ratio between lowest and highest OPP cost.
 
 Signed-off-by: Douglas RAILLARD <douglas.raillard@arm.com>
 ---
- kernel/sched/cpufreq_schedutil.c | 44 ++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ kernel/sched/cpufreq_schedutil.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index aab8c0498dd1..c118f85d1f3d 100644
+index c118f85d1f3d..7c1a749fb6ef 100644
 --- a/kernel/sched/cpufreq_schedutil.c
 +++ b/kernel/sched/cpufreq_schedutil.c
-@@ -61,6 +61,10 @@ struct sugov_cpu {
- 	unsigned long		bw_dl;
- 	unsigned long		max;
- 
-+	unsigned long		ramp_boost;
-+	unsigned long		util_est_enqueued;
-+	unsigned long		util_avg;
-+
- 	/* The field below is for single-CPU policies only: */
- #ifdef CONFIG_NO_HZ_COMMON
- 	unsigned long		saved_idle_calls;
-@@ -181,6 +185,42 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
- 	}
- }
- 
-+static unsigned long sugov_cpu_ramp_boost(struct sugov_cpu *sg_cpu)
-+{
-+	return READ_ONCE(sg_cpu->ramp_boost);
-+}
-+
-+static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
-+{
-+	struct rq *rq = cpu_rq(sg_cpu->cpu);
-+	unsigned long util_est_enqueued;
-+	unsigned long util_avg;
-+	unsigned long boost = 0;
-+
-+	util_est_enqueued = READ_ONCE(rq->cfs.avg.util_est.enqueued);
-+	util_avg = READ_ONCE(rq->cfs.avg.util_avg);
-+
-+	/*
-+	 * Boost when util_avg becomes higher than the previous stable
-+	 * knowledge of the enqueued tasks' set util, which is CPU's
-+	 * util_est_enqueued.
-+	 *
-+	 * We try to spot changes in the workload itself, so we want to
-+	 * avoid the noise of tasks being enqueued/dequeued. To do that,
-+	 * we only trigger boosting when the "amount of work' enqueued
-+	 * is stable.
-+	 */
-+	if (util_est_enqueued == sg_cpu->util_est_enqueued &&
-+	    util_avg >= sg_cpu->util_avg &&
-+	    util_avg > util_est_enqueued)
-+		boost = util_avg - util_est_enqueued;
-+
-+	sg_cpu->util_est_enqueued = util_est_enqueued;
-+	sg_cpu->util_avg = util_avg;
-+	WRITE_ONCE(sg_cpu->ramp_boost, boost);
-+	return boost;
-+}
-+
- /**
-  * get_next_freq - Compute a new frequency for a given cpufreq policy.
+@@ -226,6 +226,9 @@ static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
   * @sg_policy: schedutil policy object to compute the new frequency for.
-@@ -512,6 +552,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+  * @util: Current CPU utilization.
+  * @max: CPU capacity.
++ * @boost: Extra power that can be spent on top of the minimum amount of power
++ *	required to meet capacity requirements, as a percentage between 0 and
++ *	EM_COST_MARGIN_SCALE.
+  *
+  * If the utilization is frequency-invariant, choose the new frequency to be
+  * proportional to it, that is
+@@ -244,7 +247,8 @@ static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
+  * cpufreq driver limitations.
+  */
+ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+-				  unsigned long util, unsigned long max)
++				  unsigned long util, unsigned long max,
++				  unsigned long boost)
+ {
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+ 	unsigned int freq = arch_scale_freq_invariant() ?
+@@ -257,7 +261,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 	 * Try to get a higher frequency if one is available, given the extra
+ 	 * power we are ready to spend.
+ 	 */
+-	freq = em_pd_get_higher_freq(pd, freq, 0);
++	freq = em_pd_get_higher_freq(pd, freq, boost);
+ 
+ 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+ 		return sg_policy->next_freq;
+@@ -539,6 +543,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+ 	unsigned long util, max;
+ 	unsigned int next_f;
+ 	bool busy;
++	unsigned long ramp_boost = 0;
+ 
+ 	sugov_iowait_boost(sg_cpu, time, flags);
+ 	sg_cpu->last_update = time;
+@@ -552,10 +557,10 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
  	busy = !sg_policy->need_freq_update && sugov_cpu_is_busy(sg_cpu);
  
  	util = sugov_get_util(sg_cpu);
-+	sugov_cpu_ramp_boost_update(sg_cpu);
+-	sugov_cpu_ramp_boost_update(sg_cpu);
++	ramp_boost = sugov_cpu_ramp_boost_update(sg_cpu);
  	max = sg_cpu->max;
  	util = sugov_iowait_apply(sg_cpu, time, util, max);
- 	next_f = get_next_freq(sg_policy, util, max);
-@@ -552,6 +593,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 		unsigned long j_util, j_max;
+-	next_f = get_next_freq(sg_policy, util, max);
++	next_f = get_next_freq(sg_policy, util, max, ramp_boost);
+ 	/*
+ 	 * Do not reduce the frequency if the CPU has not been idle
+ 	 * recently, as the reduction is likely to be premature then.
+@@ -587,6 +592,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+ 	unsigned long util = 0, max = 1;
+ 	unsigned int j;
++	unsigned long ramp_boost = 0;
++	unsigned long j_ramp_boost = 0;
+ 
+ 	for_each_cpu(j, policy->cpus) {
+ 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+@@ -594,7 +601,11 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
  
  		j_util = sugov_get_util(j_sg_cpu);
-+		if (j_sg_cpu == sg_cpu)
-+			sugov_cpu_ramp_boost_update(sg_cpu);
+ 		if (j_sg_cpu == sg_cpu)
+-			sugov_cpu_ramp_boost_update(sg_cpu);
++			j_ramp_boost = sugov_cpu_ramp_boost_update(sg_cpu);
++		else
++			j_ramp_boost = sugov_cpu_ramp_boost(j_sg_cpu);
++		ramp_boost = max(ramp_boost, j_ramp_boost);
++
  		j_max = j_sg_cpu->max;
  		j_util = sugov_iowait_apply(j_sg_cpu, time, j_util, j_max);
  
-@@ -561,6 +604,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 		}
+@@ -605,7 +616,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
  	}
  
-+
- 	return get_next_freq(sg_policy, util, max);
+ 
+-	return get_next_freq(sg_policy, util, max);
++	return get_next_freq(sg_policy, util, max, ramp_boost);
  }
  
+ static void
 -- 
 2.23.0
 
