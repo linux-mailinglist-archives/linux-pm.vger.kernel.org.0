@@ -2,197 +2,725 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1768AD3E88
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 13:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8652BD3F07
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 13:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727198AbfJKLd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Oct 2019 07:33:58 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:49126 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727226AbfJKLd5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 07:33:57 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191011113355euoutp01135aed32cd0cc2d85472331e5e5de2a1~MlH0YGEJK0778907789euoutp01P
-        for <linux-pm@vger.kernel.org>; Fri, 11 Oct 2019 11:33:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191011113355euoutp01135aed32cd0cc2d85472331e5e5de2a1~MlH0YGEJK0778907789euoutp01P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1570793635;
-        bh=4ZYRzf6XeFviC24JG3kc+6eo4xAoGOrUhYOqB4a0MZc=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=AXVdnsFS+UnP18yoy2NrwZ4s+czvJHklYPMz9cA3QL1qSh3DFSTF0py5ncO4lIroR
-         ePxxM5LCUVBNmx84kXEgV+30KVU54eWpJp8vQS4KiWhknyvDN7mPuGCJ0SoP1K/BuC
-         ejyGLdWpZogtAEgIebD29Q4xZCjNQ8aY14ggSaL4=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191011113354eucas1p14d4a819a030bba87cbecc0a6f4bb24f2~MlH0BB75m1526815268eucas1p16;
-        Fri, 11 Oct 2019 11:33:54 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 7A.62.04374.2A860AD5; Fri, 11
-        Oct 2019 12:33:54 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191011113354eucas1p219e79f62d780540027a1350ea3a016ea~MlHzrtVVx0387903879eucas1p2G;
-        Fri, 11 Oct 2019 11:33:54 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191011113354eusmtrp2deb37900f27cecd2eded4d8c644dd6ba~MlHzrEwdA0746607466eusmtrp2g;
-        Fri, 11 Oct 2019 11:33:54 +0000 (GMT)
-X-AuditID: cbfec7f5-4ddff70000001116-93-5da068a2d7ba
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 64.A3.04117.2A860AD5; Fri, 11
-        Oct 2019 12:33:54 +0100 (BST)
-Received: from [106.120.51.15] (unknown [106.120.51.15]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191011113353eusmtip1e76cf8e6c1eea71f16851db13000461b~MlHzEpiRd3093230932eusmtip15;
-        Fri, 11 Oct 2019 11:33:53 +0000 (GMT)
-Subject: Re: [PATCH] devfreq: exynos-bus: workaround dev_pm_opp_set_rate()
- errors on Exynos5422/5800 SoCs
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        k.konieczny@partner.samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <0ce56e65-d989-18f8-af84-2fbd74ba20aa@samsung.com>
-Date:   Fri, 11 Oct 2019 13:33:53 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S1728415AbfJKLxL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Oct 2019 07:53:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33104 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727198AbfJKLvP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 11 Oct 2019 07:51:15 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A2EDBB430;
+        Fri, 11 Oct 2019 11:51:12 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     bp@alien8.de
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>, jpoimboe@redhat.com,
+        Juergen Gross <jgross@suse.com>,
+        Len Brown <len.brown@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        xen-devel@lists.xenproject.org
+Subject: [PATCH v9 01/28] linkage: Introduce new macros for assembler symbols
+Date:   Fri, 11 Oct 2019 13:50:41 +0200
+Message-Id: <20191011115108.12392-2-jslaby@suse.cz>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191011115108.12392-1-jslaby@suse.cz>
+References: <20191011115108.12392-1-jslaby@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <4f14d3af-e455-d05b-fc03-cba58e001f41@samsung.com>
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7djP87qLMhbEGrycrWKxccZ6VovrX56z
-        WvTt+89o0f/4NbPF+fMb2C3ONr1ht9j0+BqrxeVdc9gsPvceYbSYcX4fk8XtxhVsDtwem1Z1
-        snlsXlLvcfDdHiaPvi2rGD0+b5ILYI3isklJzcksSy3St0vgyjg8dSNjwSq5it73P5gbGM9L
-        dDFyckgImEjcuPGSrYuRi0NIYAWjxIFd/cwQzhdGibXt5xkhnM+MEg93nWOEaWlb+YcJIrEc
-        qOrWWmaQhJDAW0aJZf8sQWxhgWyJb6eXgcVFBDwl/n6YwwLSwCxwm0mi99MvFpAEm4ChRNfb
-        LjYQm1fATmLp7k9MIDaLgKpE65Hf7CC2qECsxL0fx5khagQlTs58AtbLKWAv8aPpEFg9s4C8
-        RPPW2cwQtrjErSfzwa6TELjELnH+wmaos10kWk/1M0HYwhKvjm9hh7BlJP7vhGloBvrz3Fp2
-        CKeHUeJy0wyobmuJw8cvsnYxcgCt0JRYv0sfIuwo8fb+ZUaQsIQAn8SNt4IQR/BJTNo2nRki
-        zCvR0SYEUa0mMev4Ori1By9cYp7AqDQLyWuzkLwzC8k7sxD2LmBkWcUonlpanJueWmycl1qu
-        V5yYW1yal66XnJ+7iRGYrE7/O/51B+O+P0mHGAU4GJV4eGfIz48VYk0sK67MPcQowcGsJMK7
-        aNacWCHelMTKqtSi/Pii0pzU4kOM0hwsSuK81QwPooUE0hNLUrNTUwtSi2CyTBycUg2MR7pr
-        3gXpBere2WKZKzPtmfUeGclLe032i4Vob+gqm23w1c1vIbfF/xl/fEM8Iy60C5d+tWwU1fnd
-        p2d+w/WCXOb7PaVNyg4lO5/pn/hfeEXwh0WE1MNOK4+HF69Uy16Ouhl0lL3nAdcK265ZUa4J
-        TckVzyb8itbcwMDMHpAlpG7Vt6z8d6ASS3FGoqEWc1FxIgAnZEJLUgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIIsWRmVeSWpSXmKPExsVy+t/xu7qLMhbEGrzZxWexccZ6VovrX56z
-        WvTt+89o0f/4NbPF+fMb2C3ONr1ht9j0+BqrxeVdc9gsPvceYbSYcX4fk8XtxhVsDtwem1Z1
-        snlsXlLvcfDdHiaPvi2rGD0+b5ILYI3SsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaP
-        tTIyVdK3s0lJzcksSy3St0vQyzg8dSNjwSq5it73P5gbGM9LdDFyckgImEi0rfzD1MXIxSEk
-        sJRRYtqhZ0wQCRmJk9MaWCFsYYk/17rYIIpeM0r8XT2JHSQhLJAt8e30MmYQW0TAU+Lvhzks
-        IEXMAneZJNZ9+wA19iyjxIN5MxlBqtgEDCW63oKM4uTgFbCTWLr7E9g6FgFVidYjv4GmcnCI
-        CsRKbNprBlEiKHFy5hMWEJtTwF7iR9MhsHJmATOJeZsfMkPY8hLNW2dD2eISt57MZ5rAKDQL
-        SfssJC2zkLTMQtKygJFlFaNIamlxbnpusZFecWJucWleul5yfu4mRmB0bjv2c8sOxq53wYcY
-        BTgYlXh4Z8jPjxViTSwrrsw9xCjBwawkwrto1pxYId6UxMqq1KL8+KLSnNTiQ4ymQL9NZJYS
-        Tc4HJo68knhDU0NzC0tDc2NzYzMLJXHeDoGDMUIC6YklqdmpqQWpRTB9TBycUg2Mh082Vy59
-        HWMUWpPRlPXXqMqwNW6vVfM8h0OTGLkj7KMiN//wl6uKvr9q6YdFWT3zTYvY5KSC7yzJNvEM
-        OVP36vnju0qmh9ZZNW2ZbqnlNpfz+0G+26w+/TKR7VWMXr5PSo88MfZTlxHZXDNn1rlDoSn/
-        zZxP6Mr8YDL5aX7YNf2q8lW2a8+VWIozEg21mIuKEwF9HHsT5AIAAA==
-X-CMS-MailID: 20191011113354eucas1p219e79f62d780540027a1350ea3a016ea
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b
-References: <CGME20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b@eucas1p1.samsung.com>
-        <20191008134923.30123-1-k.konieczny@partner.samsung.com>
-        <4f14d3af-e455-d05b-fc03-cba58e001f41@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+Introduce new C macros for annotations of functions and data in
+assembly. There is a long-standing mess in macros like ENTRY, END,
+ENDPROC and similar. They are used in different manners and sometimes
+incorrectly.
 
-On 10.10.2019 04:50, Chanwoo Choi wrote:
-> On 2019년 10월 08일 22:49, k.konieczny@partner.samsung.com wrote:
->> Commit 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use
->> dev_pm_opp_set_rate()") introduced errors:
->> exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
->> exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
->> exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
->> ...
->> exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
->> exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
->> exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
->>
->> They are caused by incorrect PLL assigned to clock source, which results
->> in clock rate outside of OPP range. Add workaround for this in
->> exynos_bus_parse_of() by adjusting clock rate to those present in OPP.
-> If the clock caused this issue, you can set the initial clock on DeviceTree
-> with assigned-clock-* properties. Because the probe time of clock driver
-> is early than the any device drivers.
->
-> It is not proper to fix the clock issue on other device driver.
-> I think you can fix it by using the supported clock properties.
+So introduce macros with clear use to annotate assembly as follows:
 
-This issue is about something completely different. The OPPs defined in 
-DT cannot be applied, because it is not possible to derive the needed 
-clock rate from the bootloader-configured clock topology (mainly due to 
-lack of common divisor values for some of the parent clocks). Some time 
-ago Lukasz tried initially to redefine this clock topology using 
-assigned-clock-rates/parents properties (see 
-https://lkml.org/lkml/2019/7/15/276), but it has limitations and some 
-such changes has to be done in bootloader. Until this is resolved, 
-devfreq simply cannot set some of the defined OPPs.
+a) Support macros for the ones below
+   SYM_T_FUNC -- type used by assembler to mark functions
+   SYM_T_OBJECT -- type used by assembler to mark data
+   SYM_T_NONE -- type used by assembler to mark entries of unknown type
 
-This issue was there from the beginning, recent Kamil's patch only 
-revealed it. In fact it was even worse - devfreq and common clock 
-framework silently set lower clock than the given OPP defined.
+   They are defined as STT_FUNC, STT_OBJECT, and STT_NOTYPE
+   respectively. According to the gas manual, this is the most portable
+   way. I am not sure about other assemblers, so this can be switched
+   back to %function and %object if this turns into a problem.
+   Architectures can also override them by something like ", @function"
+   if they need.
 
->> Fixes: 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use dev_pm_opp_set_rate()")
->> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
->> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
->> ---
->>   drivers/devfreq/exynos-bus.c | 14 +++++++++++---
->>   1 file changed, 11 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->> index c832673273a2..37bd34d5625b 100644
->> --- a/drivers/devfreq/exynos-bus.c
->> +++ b/drivers/devfreq/exynos-bus.c
->> @@ -243,7 +243,7 @@ static int exynos_bus_parse_of(struct device_node *np,
->>   {
->>   	struct device *dev = bus->dev;
->>   	struct dev_pm_opp *opp;
->> -	unsigned long rate;
->> +	unsigned long rate, opp_rate;
->>   	int ret;
->>   
->>   	/* Get the clock to provide each bus with source clock */
->> @@ -267,13 +267,21 @@ static int exynos_bus_parse_of(struct device_node *np,
->>   	}
->>   
->>   	rate = clk_get_rate(bus->clk);
->> -
->> -	opp = devfreq_recommended_opp(dev, &rate, 0);
->> +	opp_rate = rate;
->> +	opp = devfreq_recommended_opp(dev, &opp_rate, 0);
->>   	if (IS_ERR(opp)) {
->>   		dev_err(dev, "failed to find dev_pm_opp\n");
->>   		ret = PTR_ERR(opp);
->>   		goto err_opp;
->>   	}
->> +	/*
->> +	 * FIXME: U-boot leaves clock source at incorrect PLL, this results
->> +	 * in clock rate outside defined OPP rate. Work around this bug by
->> +	 * setting clock rate to recommended one.
->> +	 */
->> +	if (rate > opp_rate)
->> +		clk_set_rate(bus->clk, opp_rate);
->> +
->>   	bus->curr_freq = dev_pm_opp_get_freq(opp);
->>   	dev_pm_opp_put(opp);
->>   
->>
->
-Best regards
+   SYM_A_ALIGN, SYM_A_NONE -- align the symbol?
+   SYM_L_GLOBAL, SYM_L_WEAK, SYM_L_LOCAL -- linkage of symbols
+
+b) Mostly internal annotations, used by the ones below
+   SYM_ENTRY -- use only if you have to (for non-paired symbols)
+   SYM_START -- use only if you have to (for paired symbols)
+   SYM_END -- use only if you have to (for paired symbols)
+
+c) Annotations for code
+   SYM_INNER_LABEL_ALIGN -- only for labels in the middle of code
+   SYM_INNER_LABEL -- only for labels in the middle of code
+
+   SYM_FUNC_START_LOCAL_ALIAS -- use where there are two local names for
+	one function
+   SYM_FUNC_START_ALIAS -- use where there are two global names for one
+	function
+   SYM_FUNC_END_ALIAS -- the end of LOCAL_ALIASed or ALIASed function
+
+   SYM_FUNC_START -- use for global functions
+   SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment
+   SYM_FUNC_START_LOCAL -- use for local functions
+   SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o
+	alignment
+   SYM_FUNC_START_WEAK -- use for weak functions
+   SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment
+   SYM_FUNC_END -- the end of SYM_FUNC_START_LOCAL, SYM_FUNC_START,
+	SYM_FUNC_START_WEAK, ...
+
+   For functions with special (non-C) calling conventions:
+   SYM_CODE_START -- use for non-C (special) functions
+   SYM_CODE_START_NOALIGN -- use for non-C (special) functions, w/o
+	alignment
+   SYM_CODE_START_LOCAL -- use for local non-C (special) functions
+   SYM_CODE_START_LOCAL_NOALIGN -- use for local non-C (special)
+	functions, w/o alignment
+   SYM_CODE_END -- the end of SYM_CODE_START_LOCAL or SYM_CODE_START
+
+d) For data
+   SYM_DATA_START -- global data symbol
+   SYM_DATA_START_LOCAL -- local data symbol
+   SYM_DATA_END -- the end of the SYM_DATA_START symbol
+   SYM_DATA_END_LABEL -- the labeled end of SYM_DATA_START symbol
+   SYM_DATA -- start+end wrapper around simple global data
+   SYM_DATA_LOCAL -- start+end wrapper around simple local data
+
+==========
+
+The macros allow to pair starts and ends of functions and mark functions
+correctly in the output ELF objects.
+
+All users of the old macros in x86 are converted to use these in further
+patches.
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: hpa@zytor.com
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: jpoimboe@redhat.com
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: mingo@redhat.com
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: xen-devel@lists.xenproject.org
+Cc: x86@kernel.org
+---
+
+Notes:
+    [v2]
+    * use SYM_ prefix and sane names
+    * add SYM_START and SYM_END and parametrize all the macros
+    
+    [v3]
+    * add SYM_DATA, SYM_DATA_LOCAL, and SYM_DATA_END_LABEL
+    
+    [v4]
+    * add _NOALIGN versions of some macros
+    * add _CODE_ derivates of _FUNC_ macros
+    
+    [v5]
+    * drop "SIMPLE" from data annotations
+    * switch NOALIGN and ALIGN variants of inner labels
+    * s/visibility/linkage/; s@SYM_V_@SYM_L_@
+    * add Documentation
+    
+    [v6]
+    * fixed typos found by Randy Dunlap
+    * remove doubled INNER_LABEL macros, one pair was unused
+    
+    [v8]
+    * use lkml.kernel.org for links
+    * link the docs from index.rst (by Boris)
+    * fixed typos on the docs
+    
+    [v9]
+    * updated the docs as requested by Boris
+
+ Documentation/asm-annotations.rst | 216 ++++++++++++++++++++++++++
+ Documentation/index.rst           |   8 +
+ arch/x86/include/asm/linkage.h    |  10 +-
+ include/linux/linkage.h           | 245 +++++++++++++++++++++++++++++-
+ 4 files changed, 468 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/asm-annotations.rst
+
+diff --git a/Documentation/asm-annotations.rst b/Documentation/asm-annotations.rst
+new file mode 100644
+index 000000000000..29ccd6e61fe5
+--- /dev/null
++++ b/Documentation/asm-annotations.rst
+@@ -0,0 +1,216 @@
++Assembler Annotations
++=====================
++
++Copyright (c) 2017-2019 Jiri Slaby
++
++This document describes the new macros for annotation of data and code in
++assembly. In particular, it contains information about ``SYM_FUNC_START``,
++``SYM_FUNC_END``, ``SYM_CODE_START``, and similar.
++
++Rationale
++---------
++Some code like entries, trampolines, or boot code needs to be written in
++assembly. The same as in C, such code is grouped into functions and
++accompanied with data. Standard assemblers do not force users into precisely
++marking these pieces as code, data, or even specifying their length.
++Nevertheless, assemblers provide developers with such annotations to aid
++debuggers throughout assembly. On top of that, developers also want to mark
++some functions as *global* in order to be visible outside of their translation
++units.
++
++Over time, the Linux kernel has adopted macros from various projects (like
++``binutils``) to facilitate such annotations. So for historic reasons,
++developers have been using ``ENTRY``, ``END``, ``ENDPROC``, and other
++annotations in assembly.  Due to the lack of their documentation, the macros
++are used in rather wrong contexts at some locations. Clearly, ``ENTRY`` was
++intended to denote the beginning of global symbols (be it data or code).
++``END`` used to mark the end of data or end of special functions with
++*non-standard* calling convention. In contrast, ``ENDPROC`` should annotate
++only ends of *standard* functions.
++
++When these macros are used correctly, they help assemblers generate a nice
++object with both sizes and types set correctly. For example, the result of
++``arch/x86/lib/putuser.S``::
++
++   Num:    Value          Size Type    Bind   Vis      Ndx Name
++    25: 0000000000000000    33 FUNC    GLOBAL DEFAULT    1 __put_user_1
++    29: 0000000000000030    37 FUNC    GLOBAL DEFAULT    1 __put_user_2
++    32: 0000000000000060    36 FUNC    GLOBAL DEFAULT    1 __put_user_4
++    35: 0000000000000090    37 FUNC    GLOBAL DEFAULT    1 __put_user_8
++
++This is not only important for debugging purposes. When there are properly
++annotated objects like this, tools can be run on them to generate more useful
++information. In particular, on properly annotated objects, ``objtool`` can be
++run to check and fix the object if needed. Currently, ``objtool`` can report
++missing frame pointer setup/destruction in functions. It can also
++automatically generate annotations for :doc:`ORC unwinder <x86/orc-unwinder>`
++for most code. Both of these are especially important to support reliable
++stack traces which are in turn necessary for :doc:`Kernel live patching
++<livepatch/livepatch>`.
++
++Caveat and Discussion
++---------------------
++As one might realize, there were only three macros previously. That is indeed
++insufficient to cover all the combinations of cases:
++
++* standard/non-standard function
++* code/data
++* global/local symbol
++
++There was a discussion_ and instead of extending the current ``ENTRY/END*``
++macros, it was decided that brand new macros should be introduced instead::
++
++    So how about using macro names that actually show the purpose, instead
++    of importing all the crappy, historic, essentially randomly chosen
++    debug symbol macro names from the binutils and older kernels?
++
++.. _discussion: https://lkml.kernel.org/r/20170217104757.28588-1-jslaby@suse.cz
++
++Macros Description
++------------------
++
++The new macros are prefixed with the ``SYM_`` prefix and can be divided into
++three main groups:
++
++1. ``SYM_FUNC_*`` -- to annotate C-like functions. This means functions with
++   standard C calling conventions, i.e. the stack contains a return address at
++   the predefined place and a return from the function can happen in a
++   standard way. When frame pointers are enabled, save/restore of frame
++   pointer shall happen at the start/end of a function, respectively, too.
++
++   Checking tools like ``objtool`` should ensure such marked functions conform
++   to these rules. The tools can also easily annotate these functions with
++   debugging information (like *ORC data*) automatically.
++
++2. ``SYM_CODE_*`` -- special functions called with special stack. Be it
++   interrupt handlers with special stack content, trampolines, or startup
++   functions.
++
++   Checking tools mostly ignore checking of these functions. But some debug
++   information still can be generated automatically. For correct debug data,
++   this code needs hints like ``UNWIND_HINT_REGS`` provided by developers.
++
++3. ``SYM_DATA*`` -- obviously data belonging to ``.data`` sections and not to
++   ``.text``. Data do not contain instructions, so they have to be treated
++   specially by the tools: they should not treat the bytes as instructions,
++   nor assign any debug information to them.
++
++Instruction Macros
++~~~~~~~~~~~~~~~~~~
++This section covers ``SYM_FUNC_*`` and ``SYM_CODE_*`` enumerated above.
++
++* ``SYM_FUNC_START`` and ``SYM_FUNC_START_LOCAL`` are supposed to be **the
++  most frequent markings**. They are used for functions with standard calling
++  conventions -- global and local. Like in C, they both align the functions to
++  architecture specific ``__ALIGN`` bytes. There are also ``_NOALIGN`` variants
++  for special cases where developers do not want this implicit alignment.
++
++  ``SYM_FUNC_START_WEAK`` and ``SYM_FUNC_START_WEAK_NOALIGN`` markings are
++  also offered as an assembler counterpart to the *weak* attribute known from
++  C.
++
++  All of these **shall** be coupled with ``SYM_FUNC_END``. First, it marks
++  the sequence of instructions as a function and computes its size to the
++  generated object file. Second, it also eases checking and processing such
++  object files as the tools can trivially find exact function boundaries.
++
++  So in most cases, developers should write something like in the following
++  example, having some asm instructions in between the macros, of course::
++
++    SYM_FUNC_START(function_hook)
++        ... asm insns ...
++    SYM_FUNC_END(function_hook)
++
++  In fact, this kind of annotation corresponds to the now deprecated ``ENTRY``
++  and ``ENDPROC`` macros.
++
++* ``SYM_FUNC_START_ALIAS`` and ``SYM_FUNC_START_LOCAL_ALIAS`` serve for those
++  who decided to have two or more names for one function. The typical use is::
++
++    SYM_FUNC_START_ALIAS(__memset)
++    SYM_FUNC_START(memset)
++        ... asm insns ...
++    SYM_FUNC_END(memset)
++    SYM_FUNC_END_ALIAS(__memset)
++
++  In this example, one can call ``__memset`` or ``memset`` with the same
++  result, except the debug information for the instructions is generated to
++  the object file only once -- for the non-``ALIAS`` case.
++
++* ``SYM_CODE_START`` and ``SYM_CODE_START_LOCAL`` should be used only in
++  special cases -- if you know what you are doing. This is used exclusively
++  for interrupt handlers and similar where the calling convention is not the C
++  one. ``_NOALIGN`` variants exist too. The use is the same as for the ``FUNC``
++  category above::
++
++    SYM_CODE_START_LOCAL(bad_put_user)
++        ... asm insns ...
++    SYM_CODE_END(bad_put_user)
++
++  Again, every ``SYM_CODE_START*`` **shall** be coupled by ``SYM_CODE_END``.
++
++  To some extent, this category corresponds to deprecated ``ENTRY`` and
++  ``END``. Except ``END`` had several other meanings too.
++
++* ``SYM_INNER_LABEL*`` is used to denote a label inside some
++  ``SYM_{CODE,FUNC}_START`` and ``SYM_{CODE,FUNC}_END``.  They are very similar
++  to C labels, except they can be made global. An example of use::
++
++    SYM_CODE_START(ftrace_caller)
++        /* save_mcount_regs fills in first two parameters */
++        ...
++
++    SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
++        /* Load the ftrace_ops into the 3rd parameter */
++        ...
++
++    SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
++        call ftrace_stub
++        ...
++        retq
++    SYM_CODE_END(ftrace_caller)
++
++Data Macros
++~~~~~~~~~~~
++Similar to instructions, there is a couple of macros to describe data in the
++assembly.
++
++* ``SYM_DATA_START`` and ``SYM_DATA_START_LOCAL`` mark the start of some data
++  and shall be used in conjunction with either ``SYM_DATA_END``, or
++  ``SYM_DATA_END_LABEL``. The latter adds also a label to the end, so that
++  people can use ``lstack`` and (local) ``lstack_end`` in the following
++  example::
++
++    SYM_DATA_START_LOCAL(lstack)
++        .skip 4096
++    SYM_DATA_END_LABEL(lstack, SYM_L_LOCAL, lstack_end)
++
++* ``SYM_DATA`` and ``SYM_DATA_LOCAL`` are variants for simple, mostly one-line
++  data::
++
++    SYM_DATA(HEAP,     .long rm_heap)
++    SYM_DATA(heap_end, .long rm_stack)
++
++  In the end, they expand to ``SYM_DATA_START`` with ``SYM_DATA_END``
++  internally.
++
++Support Macros
++~~~~~~~~~~~~~~
++All the above reduce themselves to some invocation of ``SYM_START``,
++``SYM_END``, or ``SYM_ENTRY`` at last. Normally, developers should avoid using
++these.
++
++Further, in the above examples, one could see ``SYM_L_LOCAL``. There are also
++``SYM_L_GLOBAL`` and ``SYM_L_WEAK``. All are intended to denote linkage of a
++symbol marked by them. They are used either in ``_LABEL`` variants of the
++earlier macros, or in ``SYM_START``.
++
++
++Overriding Macros
++~~~~~~~~~~~~~~~~~
++Architecture can also override any of the macros in their own
++``asm/linkage.h``, including macros specifying the type of a symbol
++(``SYM_T_FUNC``, ``SYM_T_OBJECT``, and ``SYM_T_NONE``).  As every macro
++described in this file is surrounded by ``#ifdef`` + ``#endif``, it is enough
++to define the macros differently in the aforementioned architecture-dependent
++header.
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index b843e313d2f2..2ceab197246f 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -135,6 +135,14 @@ needed).
+    mic/index
+    scheduler/index
+ 
++Architecture-agnostic documentation
++-----------------------------------
++
++.. toctree::
++   :maxdepth: 2
++
++   asm-annotations
++
+ Architecture-specific documentation
+ -----------------------------------
+ 
+diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.h
+index 14caa9d9fb7f..e07188e8d763 100644
+--- a/arch/x86/include/asm/linkage.h
++++ b/arch/x86/include/asm/linkage.h
+@@ -13,9 +13,13 @@
+ 
+ #ifdef __ASSEMBLY__
+ 
+-#define GLOBAL(name)	\
+-	.globl name;	\
+-	name:
++/*
++ * GLOBAL is DEPRECATED
++ *
++ * use SYM_DATA_START, SYM_FUNC_START, SYM_INNER_LABEL, SYM_CODE_START, or
++ * similar
++ */
++#define GLOBAL(name)	SYM_ENTRY(name, SYM_L_GLOBAL, SYM_A_NONE)
+ 
+ #if defined(CONFIG_X86_64) || defined(CONFIG_X86_ALIGNMENT_16)
+ #define __ALIGN		.p2align 4, 0x90
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index 7e020782ade2..f3ae8f3dea2c 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -75,32 +75,58 @@
+ 
+ #ifdef __ASSEMBLY__
+ 
++/* SYM_T_FUNC -- type used by assembler to mark functions */
++#ifndef SYM_T_FUNC
++#define SYM_T_FUNC				STT_FUNC
++#endif
++
++/* SYM_T_OBJECT -- type used by assembler to mark data */
++#ifndef SYM_T_OBJECT
++#define SYM_T_OBJECT				STT_OBJECT
++#endif
++
++/* SYM_T_NONE -- type used by assembler to mark entries of unknown type */
++#ifndef SYM_T_NONE
++#define SYM_T_NONE				STT_NOTYPE
++#endif
++
++/* SYM_A_* -- align the symbol? */
++#define SYM_A_ALIGN				ALIGN
++#define SYM_A_NONE				/* nothing */
++
++/* SYM_L_* -- linkage of symbols */
++#define SYM_L_GLOBAL(name)			.globl name
++#define SYM_L_WEAK(name)			.weak name
++#define SYM_L_LOCAL(name)			/* nothing */
++
+ #ifndef LINKER_SCRIPT
+ #define ALIGN __ALIGN
+ #define ALIGN_STR __ALIGN_STR
+ 
++/* === DEPRECATED annotations === */
++
+ #ifndef GLOBAL
++/* deprecated, use SYM_DATA*, SYM_ENTRY, or similar */
+ #define GLOBAL(name) \
+ 	.globl name ASM_NL \
+ 	name:
+ #endif
+ 
+ #ifndef ENTRY
++/* deprecated, use SYM_FUNC_START */
+ #define ENTRY(name) \
+-	.globl name ASM_NL \
+-	ALIGN ASM_NL \
+-	name:
++	SYM_FUNC_START(name)
+ #endif
+ #endif /* LINKER_SCRIPT */
+ 
+ #ifndef WEAK
++/* deprecated, use SYM_FUNC_START_WEAK* */
+ #define WEAK(name)	   \
+-	.weak name ASM_NL   \
+-	ALIGN ASM_NL \
+-	name:
++	SYM_FUNC_START_WEAK(name)
+ #endif
+ 
+ #ifndef END
++/* deprecated, use SYM_FUNC_END, SYM_DATA_END, or SYM_END */
+ #define END(name) \
+ 	.size name, .-name
+ #endif
+@@ -110,11 +136,214 @@
+  * static analysis tools such as stack depth analyzer.
+  */
+ #ifndef ENDPROC
++/* deprecated, use SYM_FUNC_END */
+ #define ENDPROC(name) \
+-	.type name, @function ASM_NL \
+-	END(name)
++	SYM_FUNC_END(name)
++#endif
++
++/* === generic annotations === */
++
++/* SYM_ENTRY -- use only if you have to for non-paired symbols */
++#ifndef SYM_ENTRY
++#define SYM_ENTRY(name, linkage, align...)		\
++	linkage(name) ASM_NL				\
++	align ASM_NL					\
++	name:
++#endif
++
++/* SYM_START -- use only if you have to */
++#ifndef SYM_START
++#define SYM_START(name, linkage, align...)		\
++	SYM_ENTRY(name, linkage, align)
++#endif
++
++/* SYM_END -- use only if you have to */
++#ifndef SYM_END
++#define SYM_END(name, sym_type)				\
++	.type name sym_type ASM_NL			\
++	.size name, .-name
++#endif
++
++/* === code annotations === */
++
++/*
++ * FUNC -- C-like functions (proper stack frame etc.)
++ * CODE -- non-C code (e.g. irq handlers with different, special stack etc.)
++ *
++ * Objtool validates stack for FUNC, but not for CODE.
++ * Objtool generates debug info for both FUNC & CODE, but needs special
++ * annotations for each CODE's start (to describe the actual stack frame).
++ *
++ * ALIAS -- does not generate debug info -- the aliased function will
++ */
++
++/* SYM_INNER_LABEL_ALIGN -- only for labels in the middle of code */
++#ifndef SYM_INNER_LABEL_ALIGN
++#define SYM_INNER_LABEL_ALIGN(name, linkage)	\
++	.type name SYM_T_NONE ASM_NL			\
++	SYM_ENTRY(name, linkage, SYM_A_ALIGN)
++#endif
++
++/* SYM_INNER_LABEL -- only for labels in the middle of code */
++#ifndef SYM_INNER_LABEL
++#define SYM_INNER_LABEL(name, linkage)		\
++	.type name SYM_T_NONE ASM_NL			\
++	SYM_ENTRY(name, linkage, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_FUNC_START_LOCAL_ALIAS -- use where there are two local names for one
++ * function
++ */
++#ifndef SYM_FUNC_START_LOCAL_ALIAS
++#define SYM_FUNC_START_LOCAL_ALIAS(name)		\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_FUNC_START_ALIAS -- use where there are two global names for one
++ * function
++ */
++#ifndef SYM_FUNC_START_ALIAS
++#define SYM_FUNC_START_ALIAS(name)			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/* SYM_FUNC_START -- use for global functions */
++#ifndef SYM_FUNC_START
++/*
++ * The same as SYM_FUNC_START_ALIAS, but we will need to distinguish these two
++ * later.
++ */
++#define SYM_FUNC_START(name)				\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
++#ifndef SYM_FUNC_START_NOALIGN
++#define SYM_FUNC_START_NOALIGN(name)			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
++#endif
++
++/* SYM_FUNC_START_LOCAL -- use for local functions */
++#ifndef SYM_FUNC_START_LOCAL
++/* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
++#define SYM_FUNC_START_LOCAL(name)			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
++/* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
++#ifndef SYM_FUNC_START_LOCAL_NOALIGN
++#define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+ #endif
+ 
++/* SYM_FUNC_START_WEAK -- use for weak functions */
++#ifndef SYM_FUNC_START_WEAK
++#define SYM_FUNC_START_WEAK(name)			\
++	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
+ #endif
++
++/* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
++#ifndef SYM_FUNC_START_WEAK_NOALIGN
++#define SYM_FUNC_START_WEAK_NOALIGN(name)		\
++	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)
++#endif
++
++/* SYM_FUNC_END_ALIAS -- the end of LOCAL_ALIASed or ALIASed function */
++#ifndef SYM_FUNC_END_ALIAS
++#define SYM_FUNC_END_ALIAS(name)			\
++	SYM_END(name, SYM_T_FUNC)
++#endif
++
++/*
++ * SYM_FUNC_END -- the end of SYM_FUNC_START_LOCAL, SYM_FUNC_START,
++ * SYM_FUNC_START_WEAK, ...
++ */
++#ifndef SYM_FUNC_END
++/* the same as SYM_FUNC_END_ALIAS, see comment near SYM_FUNC_START */
++#define SYM_FUNC_END(name)				\
++	SYM_END(name, SYM_T_FUNC)
++#endif
++
++/* SYM_CODE_START -- use for non-C (special) functions */
++#ifndef SYM_CODE_START
++#define SYM_CODE_START(name)				\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/* SYM_CODE_START_NOALIGN -- use for non-C (special) functions, w/o alignment */
++#ifndef SYM_CODE_START_NOALIGN
++#define SYM_CODE_START_NOALIGN(name)			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
++#endif
++
++/* SYM_CODE_START_LOCAL -- use for local non-C (special) functions */
++#ifndef SYM_CODE_START_LOCAL
++#define SYM_CODE_START_LOCAL(name)			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_CODE_START_LOCAL_NOALIGN -- use for local non-C (special) functions,
++ * w/o alignment
++ */
++#ifndef SYM_CODE_START_LOCAL_NOALIGN
++#define SYM_CODE_START_LOCAL_NOALIGN(name)		\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/* SYM_CODE_END -- the end of SYM_CODE_START_LOCAL, SYM_CODE_START, ... */
++#ifndef SYM_CODE_END
++#define SYM_CODE_END(name)				\
++	SYM_END(name, SYM_T_NONE)
++#endif
++
++/* === data annotations === */
++
++/* SYM_DATA_START -- global data symbol */
++#ifndef SYM_DATA_START
++#define SYM_DATA_START(name)				\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
++#endif
++
++/* SYM_DATA_START -- local data symbol */
++#ifndef SYM_DATA_START_LOCAL
++#define SYM_DATA_START_LOCAL(name)			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/* SYM_DATA_END -- the end of SYM_DATA_START symbol */
++#ifndef SYM_DATA_END
++#define SYM_DATA_END(name)				\
++	SYM_END(name, SYM_T_OBJECT)
++#endif
++
++/* SYM_DATA_END_LABEL -- the labeled end of SYM_DATA_START symbol */
++#ifndef SYM_DATA_END_LABEL
++#define SYM_DATA_END_LABEL(name, linkage, label)	\
++	linkage(label) ASM_NL				\
++	.type label SYM_T_OBJECT ASM_NL			\
++	label:						\
++	SYM_END(name, SYM_T_OBJECT)
++#endif
++
++/* SYM_DATA -- start+end wrapper around simple global data */
++#ifndef SYM_DATA
++#define SYM_DATA(name, data...)				\
++	SYM_DATA_START(name) ASM_NL				\
++	data ASM_NL						\
++	SYM_DATA_END(name)
++#endif
++
++/* SYM_DATA_LOCAL -- start+end wrapper around simple local data */
++#ifndef SYM_DATA_LOCAL
++#define SYM_DATA_LOCAL(name, data...)			\
++	SYM_DATA_START_LOCAL(name) ASM_NL			\
++	data ASM_NL						\
++	SYM_DATA_END(name)
++#endif
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _LINUX_LINKAGE_H */
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.23.0
 
