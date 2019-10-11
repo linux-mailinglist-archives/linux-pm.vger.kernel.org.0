@@ -2,234 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EED7D3D3C
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 12:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DC7D3DCC
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 12:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbfJKKW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Oct 2019 06:22:27 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41466 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726710AbfJKKW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 06:22:27 -0400
-Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 7153c49c969fdc92; Fri, 11 Oct 2019 12:22:24 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Jonas Meurer <jonas@freesources.org>
-Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before suspend
-Date:   Fri, 11 Oct 2019 12:22:24 +0200
-Message-ID: <2847488.TR0R5COpHM@kreacher>
-In-Reply-To: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
-References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+        id S1727364AbfJKK4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Oct 2019 06:56:52 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:47702 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726885AbfJKK4w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 06:56:52 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9BAs0BL019686;
+        Fri, 11 Oct 2019 06:56:49 -0400
+Received: from nam01-sn1-obe.outbound.protection.outlook.com (mail-sn1nam01lp2056.outbound.protection.outlook.com [104.47.32.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 2ver39trhe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Oct 2019 06:56:49 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D6ZgBArBOSLTOh4t2s+VHI7slN9oow2zTbVfPW/PFrvEYQ2MlxDjEqJ6ZJedcfdnttMUSGVtPgVBp53u9gETXhfvtAv9ITL498gepmCiycxY91UHhPGRwPzjvBm8gYzFUM9sNYPnBio/SunL7f4pqGxanc/luq50Lexqpvs9AiDAS83pKxG4+pRY6WtdQqpS9NlnXt4RL0moPc8xY1RLi86WkXUECiZ68OMGAqiN2AWPxWBS6LpX6uhhbAcDC0NhCc3IxGelCwvhGFpTxbhNQjxE9ulpl6LNRm8goM7drQkhkKugvkl+4oi8emL35pspTVUAz4UVGW5E3lpE2aSMpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BUz0Mgj6pHxFSPib/25TdciWnwYws0TeatnCKS5FZvw=;
+ b=jPLjAk0xPu771UzVmrsbnDcqT6zb9nWVeeSLgQnjmCdYJkYjUS1iWixukSnW5Snk1IpYxMF9Xt1hZ7dbwN0jytk/mphMIY0FQLIgOAZ8Mxw+Y1vqt3FoZwjsOGFpD2ZNcr+nfyiyBe59YDwGIGKZ7cWfVoEyMP+nGPUu5kAnu4cNwI0qWe2R1UkiXvCPJgIe/lnEcw8gWeca7wga0WCfpqs2fxNlixbYOy6hIAYliqx7YxhIhrKqTxE8huovfcWL6bWBXloVVkKCB2l1hvdLsqMWaqTigSsqSe80sQ9uIdDH0SNU4br5T0e8hMClq7RkraQacQ6xpexr4/g9jrkCkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.55) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BUz0Mgj6pHxFSPib/25TdciWnwYws0TeatnCKS5FZvw=;
+ b=N6pkXLkXJeCZWa/61I4TP70i2xF044kNyws+counfk56IBNkoZzXAI2wzuNpd52zIkTYplGeuX5+G+Ea7ue27XoWxLvHHaBlvahQUQdoiYnDxCsxA73NKAj8nv5d9pMrg+VFPYWHwC4jMw8oLqT6mDhy7sMkWb6cWya5+fIPV98=
+Received: from MWHPR03CA0019.namprd03.prod.outlook.com (2603:10b6:300:117::29)
+ by DM6PR03MB4713.namprd03.prod.outlook.com (2603:10b6:5:181::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.16; Fri, 11 Oct
+ 2019 10:56:46 +0000
+Received: from CY1NAM02FT013.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::207) by MWHPR03CA0019.outlook.office365.com
+ (2603:10b6:300:117::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.16 via Frontend
+ Transport; Fri, 11 Oct 2019 10:56:46 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ CY1NAM02FT013.mail.protection.outlook.com (10.152.75.162) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2347.16
+ via Frontend Transport; Fri, 11 Oct 2019 10:56:46 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x9BAudfA031229
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Fri, 11 Oct 2019 03:56:39 -0700
+Received: from saturn.ad.analog.com (10.48.65.112) by
+ NWD2HUBCAS7.ad.analog.com (10.64.69.107) with Microsoft SMTP Server id
+ 14.3.408.0; Fri, 11 Oct 2019 06:56:45 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <sre@kernel.org>, Stefan Popa <stefan.popa@analog.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH v3][RESEND] adp5061: Add support for battery charging enable
+Date:   Fri, 11 Oct 2019 13:56:49 +0300
+Message-ID: <20191011105649.22357-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <1523459436-31746-1-git-send-email-stefan.popa@analog.com>
+References: <1523459436-31746-1-git-send-email-stefan.popa@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(376002)(346002)(396003)(136003)(189003)(199004)(316002)(70206006)(246002)(305945005)(14444005)(8676002)(11346002)(44832011)(426003)(446003)(2616005)(76176011)(48376002)(7636002)(336012)(476003)(86362001)(70586007)(126002)(486006)(106002)(50466002)(2906002)(186003)(356004)(107886003)(51416003)(1076003)(36756003)(478600001)(47776003)(4326008)(50226002)(110136005)(54906003)(5660300002)(8936002)(2870700001)(26005)(7696005);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR03MB4713;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4f27307-987a-4bba-a439-08d74e39b59e
+X-MS-TrafficTypeDiagnostic: DM6PR03MB4713:
+X-Microsoft-Antispam-PRVS: <DM6PR03MB4713CD26F5C5D19E15777856F9970@DM6PR03MB4713.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 0187F3EA14
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FR+bRtLr0a21OujitWy73ewFdyfba3+z4icA+jf7zYNk7W91y5oBOz6qwqXXdZrbn81gB2W6xya1BBq6/qgTigElb5rzbl+H7vHzcaxYLSVDkzoYyyNCUVgRcc+AOMaU87l8WsdUP4E0fwl2QMi3GQHXExC4E3FHX+s+BF+zhNpNcQYMrtzA6DjoUBoASo/OENgrsHm35l0R/SeQG5xMxrceQFliL1ZDo76/A4I0AVOxo/QsRrvlp/ybqjJEyPalipYIDtdDIhE2vSWC4psClSBDz4vLBSkt1xV2fa8H8QUVJEhbMVWMJG8Ievq3RlCBp14tnPyGIsDHPuV+dSxYpdbGhm+NBhpmZaqR2VNOQn5GXN2EPVgcz5mu3oykfp6H+CLQQmWnPu8/TlNPLSei6YaPrIiKpGSbkitKHPjPnoQ=
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2019 10:56:46.2128
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4f27307-987a-4bba-a439-08d74e39b59e
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB4713
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-11_07:2019-10-10,2019-10-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 spamscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910110104
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, October 7, 2019 12:50:14 PM CEST Jonas Meurer wrote:
->  This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
-> --htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
-> Content-Type: multipart/mixed; boundary="GRH6EAOR51QxsekMaGMKMlm8winrq3Izm";
->  protected-headers="v1"
-> From: Jonas Meurer <jonas@freesources.org>
-> To: linux-pm@vger.kernel.org
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Pavel Machek <pavel@ucw.cz>,
->  Len Brown <len.brown@intel.com>, Tim Dittler <tim.dittler@systemli.org>
-> Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
-> Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
->  suspend
-> 
-> --GRH6EAOR51QxsekMaGMKMlm8winrq3Izm
-> Content-Type: text/plain; charset=utf-8
-> Content-Language: de-DE
-> Content-Transfer-Encoding: quoted-printable
-> 
-> [Sorry, resending with the correct mailinglist address as recipient]
-> 
-> Hello,
-> 
-> This patch adds a run-time switch at `/sys/power/suspend_sync`.
+From: Stefan Popa <stefan.popa@analog.com>
 
-I'd prefer "sync_on_suspend".
+This patch adds the option to enable/disable battery charging. This
+option is not configurable via the power_supply properties, therefore,
+access via sysfs was provided to examine and modify this attribute on the
+fly.
 
-> The switch allows to enable or disable the final sync() from the suspend.=
-> c
-> Linux Kernel system suspend implementation. This is useful to avoid race
-> conditions if block devices have been suspended before. Be aware that you=
-> 
-> have to take care of sync() yourself before suspending the system if you
-> disable it here.
-> 
-> Since this is my first patch against the Linux kernel and I don't
-> consider it ready for inclusion yet, I decided to send it to pm-linux
-> and the PM subsystem maintainers only first. Would be very glad if you
-> could take a look and comment on it :)
-> 
-> Some questions:
-> 
-> * There already is a build-time config flag[2] for en- or disabling the
->   sync() in suspend.c. Is it acceptable to have both a build-time *and*
->   a *run-time* switch? Or would a run-time switch have to replace the
->   build-time switch? If so, a direct question to Rafael, as you added
->   the build-time flag: Would that be ok for you?
+Signed-off-by: Stefan Popa <stefan.popa@analog.com>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
 
-If there is a run-time knob to disable the syncing, the only reason for
-the config option to be there will be to set the default value of that.
+I could not find any traces about this patch being denied and why.
+So this is a RESEND to [re]trigger a discussion if needed.
 
-> * I'm unsure about the naming: since the default is to have the sync
->   enabled, would `suspend_disable_sync` be a better name for the switch,
->   obviously defaulting to 0 then and skipping the sync at value 1?
+ .../ABI/testing/sysfs-class-power-adp5061     | 10 +++
+ drivers/power/supply/adp5061.c                | 63 +++++++++++++++++++
+ 2 files changed, 73 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-adp5061
 
-The default is just the initial value of the new knob, the naming need not
-be related to that.
-
-> To give a bit more contect: In Debian, we're currently working[3] on
-> support to suspend unlocked dm-crypt devices before system suspend.
-> During that work, we realized that the final sync() from Linux Kernel
-> system suspend implementation can lead to a dead lock.
-
-That's also true for FUSE filesystems I think and please note that this isn't
-going to work with hibernation (in which case filesystems are synced
-regardless).
-
-> I wrote a simple reproducer[4] to cause the dead lock in a reliable way.
-> 
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-> ee/kernel/power/suspend.c?id=3D54ecb8f#n569
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-> mmit/?id=3D2fd77f
-> [3] https://salsa.debian.org/mejo/cryptsetup-suspend
-> [4] https://salsa.debian.org/mejo/cryptsetup-suspend/snippets/334
-> 
-> 
-> Signed-off-by: Jonas Meurer <jonas@freesources.org>
-> ---
->  Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
->  include/linux/suspend.h               |    2 +
->  kernel/power/main.c                   |   35 +++++++++++++++++++++++++++=
-> +++++++
->  kernel/power/suspend.c                |    2 -
->  4 files changed, 53 insertions(+), 2 deletions(-)
-> 
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
->  	if (state =3D=3D PM_SUSPEND_TO_IDLE)
->  		s2idle_begin();
-> =20
-> -	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
-> +	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && suspend_sync_enabled) {
->  		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
->  		ksys_sync_helper();
->  		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
->  extern void arch_suspend_enable_irqs(void);
-> =20
->  extern int pm_suspend(suspend_state_t state);
-> +extern bool suspend_sync_enabled;
->  #else /* !CONFIG_SUSPEND */
->  #define suspend_valid_only_mem	NULL
-> =20
-> @@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
-> =20
->  static inline void suspend_set_ops(const struct platform_suspend_ops *op=
-> s) {}
->  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-> +static inline bool suspend_sync_enabled(void) { return true; }
->  static inline bool idle_should_enter_s2idle(void) { return false; }
->  static inline void __init pm_states_init(void) {}
->  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops)=
->  {}
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
->  power_attr(mem_sleep);
->  #endif /* CONFIG_SUSPEND */
-> =20
-> +#ifdef CONFIG_SUSPEND
-> +/*
-> + * suspend_sync: invoke ksys_sync_helper() before suspend.
-> + *
-> + * show() returns whether ksys_sync_helper() is invoked before suspend.
-> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables =
-> it.
-> + */
-> +bool suspend_sync_enabled =3D true;
-> +
-> +static ssize_t suspend_sync_show(struct kobject *kobj,
-> +				   struct kobj_attribute *attr, char *buf)
-> +{
-> +	return sprintf(buf, "%d\n", suspend_sync_enabled);
-> +}
-> +
-> +static ssize_t suspend_sync_store(struct kobject *kobj,
-> +				    struct kobj_attribute *attr,
-> +				    const char *buf, size_t n)
-> +{
-> +	unsigned long val;
-> +
-> +	if (kstrtoul(buf, 10, &val))
-> +		return -EINVAL;
-> +
-> +	if (val > 1)
-> +		return -EINVAL;
-> +
-> +	suspend_sync_enabled =3D !!val;
-> +	return n;
-> +}
-> +
-> +power_attr(suspend_sync);
-> +#endif /* CONFIG_SUSPEND */
-> +
->  #ifdef CONFIG_PM_SLEEP_DEBUG
->  int pm_test_level =3D TEST_NONE;
-> =20
-> @@ -769,6 +803,7 @@ static struct attribute * g[] =3D {
->  	&wakeup_count_attr.attr,
->  #ifdef CONFIG_SUSPEND
->  	&mem_sleep_attr.attr,
-> +	&suspend_sync_attr.attr,
->  #endif
->  #ifdef CONFIG_PM_AUTOSLEEP
->  	&autosleep_attr.attr,
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -300,4 +300,18 @@ Description:
->  		attempt.
-> =20
->  		Using this sysfs file will override any values that were
-> -		set using the kernel command line for disk offset.
-> \ No newline at end of file
-> +		set using the kernel command line for disk offset.
-> +
-> +What:		/sys/power/suspend_sync
-> +Date:		October 2019
-> +Contact:	Jonas Meurer <jonas@freesources.org>
-> +Description:
-> +		This file controls the switch to enable or disable the final
-> +		sync() before system suspend. This is useful to avoid race
-> +		conditions if block devices have been suspended before. Be
-> +		aware that you have to take care of sync() yourself before
-> +		suspending the system if you disable it here.
-> +
-> +		Writing a "1" (default) to this file enables the sync() and
-> +		writing a "0" disables it. Reads from the file return the
-> +		current value.
-> --=20
-
-The changes look reasonable to me.
-
-Thanks,
-Rafael
-
-
+diff --git a/Documentation/ABI/testing/sysfs-class-power-adp5061 b/Documentation/ABI/testing/sysfs-class-power-adp5061
+new file mode 100644
+index 000000000000..0d056aa103b5
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-power-adp5061
+@@ -0,0 +1,10 @@
++What: /sys/class/power_supply/adp5061/charging_enabled
++Description:
++	Enable/disable battery charging.
++
++	The ADP5061 charging function can be enabled by setting
++	this attribute to 1. See device datasheet for details.
++
++	Valid values:
++		- 1: enabled
++		- 0: disabled
+diff --git a/drivers/power/supply/adp5061.c b/drivers/power/supply/adp5061.c
+index 003557043ab3..6e09a6b710e8 100644
+--- a/drivers/power/supply/adp5061.c
++++ b/drivers/power/supply/adp5061.c
+@@ -74,6 +74,10 @@
+ #define ADP5061_CHG_STATUS_2_RCH_LIM_INFO(x)	(((x) >> 3) & 0x1)
+ #define ADP5061_CHG_STATUS_2_BAT_STATUS(x)	(((x) >> 0) & 0x7)
+ 
++/* ADP5061_FUNC_SET_1 */
++#define ADP5061_FUNC_SET_1_EN_CHG_MSK		BIT(0)
++#define ADP5061_FUNC_SET_1_EN_CHG_MODE(x)	(((x) & 0x01) << 0)
++
+ /* ADP5061_IEND */
+ #define ADP5061_IEND_IEND_MSK			GENMASK(7, 5)
+ #define ADP5061_IEND_IEND_MODE(x)		(((x) & 0x07) << 5)
+@@ -691,11 +695,64 @@ static const struct power_supply_desc adp5061_desc = {
+ 	.num_properties		= ARRAY_SIZE(adp5061_props),
+ };
+ 
++static int adp5061_get_charging_enabled(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	struct power_supply *psy = dev_get_drvdata(dev);
++	struct adp5061_state *st = power_supply_get_drvdata(psy);
++	unsigned int regval;
++	int ret;
++
++	ret = regmap_read(st->regmap, ADP5061_FUNC_SET_1, &regval);
++	if (ret < 0)
++		return ret;
++
++	regval &= ADP5061_FUNC_SET_1_EN_CHG_MSK;
++	return sprintf(buf, "%d\n", regval);
++}
++
++static int adp5061_set_charging_enabled(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	struct power_supply *psy = dev_get_drvdata(dev);
++	struct adp5061_state *st = power_supply_get_drvdata(psy);
++	u8 chg_en;
++	int ret;
++
++	ret = kstrtou8(buf, 0, &chg_en);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(st->regmap, ADP5061_FUNC_SET_1,
++				 ADP5061_FUNC_SET_1_EN_CHG_MSK,
++				 ADP5061_FUNC_SET_1_EN_CHG_MODE(!!chg_en));
++
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
++static DEVICE_ATTR(charging_enabled, 0644, adp5061_get_charging_enabled,
++		   adp5061_set_charging_enabled);
++
++static struct attribute *adp5061_attributes[] = {
++	&dev_attr_charging_enabled.attr,
++	NULL
++};
++
++static const struct attribute_group adp5061_attr_group = {
++	.attrs = adp5061_attributes,
++};
++
+ static int adp5061_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+ 	struct power_supply_config psy_cfg = {};
+ 	struct adp5061_state *st;
++	int ret;
+ 
+ 	st = devm_kzalloc(&client->dev, sizeof(*st), GFP_KERNEL);
+ 	if (!st)
+@@ -721,6 +778,12 @@ static int adp5061_probe(struct i2c_client *client,
+ 		return PTR_ERR(st->psy);
+ 	}
+ 
++	ret = sysfs_create_group(&st->psy->dev.kobj, &adp5061_attr_group);
++	if (ret < 0) {
++		dev_err(&client->dev, "failed to create sysfs group\n");
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
