@@ -2,142 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B79DED41B3
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 15:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA22D42EF
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 16:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbfJKNps (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Oct 2019 09:45:48 -0400
-Received: from foss.arm.com ([217.140.110.172]:60978 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728713AbfJKNps (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Oct 2019 09:45:48 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFDE51000;
-        Fri, 11 Oct 2019 06:45:47 -0700 (PDT)
-Received: from e107049-lin.arm.com (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 16B923F68E;
-        Fri, 11 Oct 2019 06:45:45 -0700 (PDT)
-From:   Douglas RAILLARD <douglas.raillard@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, douglas.raillard@arm.com,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: [RFC PATCH v3 6/6] sched/cpufreq: Add schedutil_em_tp tracepoint
-Date:   Fri, 11 Oct 2019 14:45:00 +0100
-Message-Id: <20191011134500.235736-7-douglas.raillard@arm.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191011134500.235736-1-douglas.raillard@arm.com>
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
+        id S1728341AbfJKOcW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Oct 2019 10:32:22 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38724 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728270AbfJKOcV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 10:32:21 -0400
+Received: by mail-wr1-f66.google.com with SMTP id y18so2729191wrn.5
+        for <linux-pm@vger.kernel.org>; Fri, 11 Oct 2019 07:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iYexqz0FzzeBcACpXJj9rv8j2IGNM+xCt9V+7rfrg6M=;
+        b=japAvBjYqyrLyvPG1EKdUAzZkPPHtSGrtgz/sii0yYJC3ahTNF2y8EBur+BVbMDWgp
+         ux3UvQa5sCFyCi/ADQ0B05Zx+xRYxxImah+CYYpu6mkr+tcWb8WnRp0Y4fsE3vWG4qaX
+         hS9CCSyiulFLjEm0RL4E6hLFUsiZHk3bujk1JUmthvBsJNeuXbuxWe3fj/Fa7FQznMt+
+         o5NcqFsNEgz1jIBGBYse4eyaDTLxxpS3dy3IxBHzRzBx4TenZCmcDR9RZSsa3RIwdl6G
+         VIZtAL8zHxyJYHt/FvLljqlYEU3oDt5W7QffMcGyKEXUv22TVPh1jxkLT721hsl9IwT0
+         w2Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=iYexqz0FzzeBcACpXJj9rv8j2IGNM+xCt9V+7rfrg6M=;
+        b=e7Q1GgEwxLCwJcKv2SN/YTTp+XEUnOEfMCFamuNaVDxytJId1VX2rvbxdfCgGH5F87
+         rlmSuUk549StD6SNO+Ue5O+B4i8hJgL7/4x4175nplzEFydwuSzuIKjIXhDrSqyeAOiV
+         ReouIzgjxuUe/wOHHoh3giobfNCMN/CLaeLpPTRnY3l+FoZrjq8kjaOcuNJ3e9JvRSi6
+         PCFmkNsu4Ap6do5EHWZBp/lrCK73Q/IruDFe1DF+pHCJ6HldLn0flF96GZ9t8eYhHDvM
+         9OPVHjK6G10W2gbgE/5XOV4c3fyZa54LyL0k+bzLVXXlqjF7y/K7eIViAQz3rmlqQz0Z
+         SbJQ==
+X-Gm-Message-State: APjAAAUJxHUs5R130oV5fPsUvFn/miYHHqGVmBhKIhQmXrkEUOluMkAw
+        LmmdxOlBkIYtTSLedr0JPTuwiw==
+X-Google-Smtp-Source: APXvYqz8MPVnamoOPCYqT/WRvi5hy1NVl6o7ZCsGgxrK/p1O1Cb6Mp0lRQNWZuoKByzAWwOe14K2kw==
+X-Received: by 2002:adf:f145:: with SMTP id y5mr2775527wro.330.1570804337676;
+        Fri, 11 Oct 2019 07:32:17 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f840:3acc:6034:53f4? ([2a01:e34:ed2f:f020:f840:3acc:6034:53f4])
+        by smtp.googlemail.com with ESMTPSA id l13sm9579581wmj.25.2019.10.11.07.32.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 11 Oct 2019 07:32:17 -0700 (PDT)
+Subject: Re: [PATCH v3] thermal: qoriq: add thermal monitor unit version 2
+ support
+To:     Yuantian Tang <andy.tang@nxp.com>, edubezval@gmail.com,
+        rui.zhang@intel.com, anson.huang@nxp.com
+Cc:     leoyang.li@nxp.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191011020534.334-1-andy.tang@nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <d981c4e8-9d80-aec2-b804-38435e256629@linaro.org>
+Date:   Fri, 11 Oct 2019 16:32:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20191011020534.334-1-andy.tang@nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce a new tracepoint reporting the effect of using the Energy
-Model inside get_next_freq() in schedutil.
+On 11/10/2019 04:05, Yuantian Tang wrote:
+> Thermal Monitor Unit v2 is introduced on new Layscape SoC.
+> Compared to v1, TMUv2 has a little different register layout
+> and digital output is fairly linear.
+> 
+> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+> Reviewed-by: Anson Huang <Anson.Huang@nxp.com>
 
-Signed-off-by: Douglas RAILLARD <douglas.raillard@arm.com>
----
- include/trace/events/power.h     |  9 +++++++++
- kernel/sched/cpufreq_schedutil.c | 20 ++++++++++++++------
- 2 files changed, 23 insertions(+), 6 deletions(-)
+Hi Yuantian,
 
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index f7aece721aed..87a14f5208a7 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -529,6 +529,15 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
- 
- 	TP_ARGS(name, type, new_value)
- );
-+
-+DECLARE_TRACE(schedutil_em_tp,
-+	TP_PROTO(unsigned int cpu, unsigned long util,
-+		unsigned int cost_margin, unsigned int policy_cost_margin,
-+		unsigned int base_freq, unsigned int boosted_freq),
-+	TP_ARGS(cpu, util, cost_margin, policy_cost_margin, base_freq,
-+		boosted_freq)
-+);
-+
- #endif /* _TRACE_POWER_H */
- 
- /* This part must be outside protection */
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 7c1a749fb6ef..076bbb69ff42 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -14,6 +14,8 @@
- #include <linux/sched/cpufreq.h>
- #include <trace/events/power.h>
- 
-+EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_em_tp);
-+
- #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
- 
- struct sugov_tunables {
-@@ -223,7 +225,7 @@ static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
- 
- /**
-  * get_next_freq - Compute a new frequency for a given cpufreq policy.
-- * @sg_policy: schedutil policy object to compute the new frequency for.
-+ * @sg_cpu: schedutil CPU object to compute the new frequency for.
-  * @util: Current CPU utilization.
-  * @max: CPU capacity.
-  * @boost: Extra power that can be spent on top of the minimum amount of power
-@@ -246,22 +248,28 @@ static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
-  * next_freq (as calculated above) is returned, subject to policy min/max and
-  * cpufreq driver limitations.
-  */
--static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-+static unsigned int get_next_freq(struct sugov_cpu *sg_cpu,
- 				  unsigned long util, unsigned long max,
- 				  unsigned long boost)
- {
-+	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	struct cpufreq_policy *policy = sg_policy->policy;
- 	unsigned int freq = arch_scale_freq_invariant() ?
- 				policy->cpuinfo.max_freq : policy->cur;
- 	struct em_perf_domain *pd = sugov_policy_get_pd(sg_policy);
-+	unsigned int base_freq;
- 
--	freq = map_util_freq(util, freq, max);
-+	base_freq = map_util_freq(util, freq, max);
- 
- 	/*
- 	 * Try to get a higher frequency if one is available, given the extra
- 	 * power we are ready to spend.
- 	 */
--	freq = em_pd_get_higher_freq(pd, freq, boost);
-+	freq = em_pd_get_higher_freq(pd, base_freq, boost);
-+
-+	trace_schedutil_em_tp(sg_cpu->cpu, util,
-+				 sugov_cpu_ramp_boost(sg_cpu), boost,
-+				 base_freq, freq);
- 
- 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
- 		return sg_policy->next_freq;
-@@ -560,7 +568,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	ramp_boost = sugov_cpu_ramp_boost_update(sg_cpu);
- 	max = sg_cpu->max;
- 	util = sugov_iowait_apply(sg_cpu, time, util, max);
--	next_f = get_next_freq(sg_policy, util, max, ramp_boost);
-+	next_f = get_next_freq(sg_cpu, util, max, ramp_boost);
- 	/*
- 	 * Do not reduce the frequency if the CPU has not been idle
- 	 * recently, as the reduction is likely to be premature then.
-@@ -616,7 +624,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 	}
- 
- 
--	return get_next_freq(sg_policy, util, max, ramp_boost);
-+	return get_next_freq(sg_cpu, util, max, ramp_boost);
- }
- 
- static void
+I've applied the patch to the 'testing' branch [1]. If everything is
+fine, it should be applied to thermal/next branch by Eduardo/Rui.
+
+Thanks
+
+  -- Daniel
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=testing
+
+
 -- 
-2.23.0
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
