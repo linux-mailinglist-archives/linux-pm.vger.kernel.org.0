@@ -2,289 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF73D340D
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 00:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CCDD3770
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 04:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbfJJWol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Oct 2019 18:44:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47022 "EHLO mail.kernel.org"
+        id S1727750AbfJKCQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Oct 2019 22:16:28 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:43746 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbfJJWol (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Oct 2019 18:44:41 -0400
-Received: from earth.universe (unknown [185.62.205.105])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8ECE82067B;
-        Thu, 10 Oct 2019 22:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570747479;
-        bh=aUY+2G6kw97wxWvRNj1wmuIasli7uRNKLfj987xjrJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t2wzh37US8FDUoIZ+weJd1nfSJpeQ6euxNPQpUSQ8xARX4Z6GRdippaRKdLUgC/r6
-         inne3V2YM0oNlAQ3zkqvVccRTdpgVSPkEgQMDSRAK2FFuWJ/f+OKMC8m+qed6Wmv3w
-         rUBHZji9sEdCAyQZkPg+66BMXFjpxS1aLIBfQEeY=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 586633C0CA1; Fri, 11 Oct 2019 00:44:36 +0200 (CEST)
-Date:   Fri, 11 Oct 2019 00:44:36 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 15/36] ARM: s3c: adc: move header to linux/soc/samsung
-Message-ID: <20191010224436.t6gwb5fassr2dymp@earth.universe>
-References: <20191010202802.1132272-1-arnd@arndb.de>
- <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-15-arnd@arndb.de>
- <da32e8a3-cbb3-ea08-1c55-55980b3dc53e@roeck-us.net>
- <20191010222955.GB229325@dtor-ws>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mopqc6x4c2h7s3hb"
-Content-Disposition: inline
-In-Reply-To: <20191010222955.GB229325@dtor-ws>
-User-Agent: NeoMutt/20180716
+        id S1727369AbfJKCQ2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Oct 2019 22:16:28 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 496E91A04D3;
+        Fri, 11 Oct 2019 04:16:25 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 308A91A01F0;
+        Fri, 11 Oct 2019 04:16:21 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 18C5140299;
+        Fri, 11 Oct 2019 10:16:16 +0800 (SGT)
+From:   Yuantian Tang <andy.tang@nxp.com>
+To:     edubezval@gmail.com, rui.zhang@intel.com, anson.huang@nxp.com
+Cc:     daniel.lezcano@linaro.org, leoyang.li@nxp.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuantian Tang <andy.tang@nxp.com>
+Subject: [PATCH v3] thermal: qoriq: add thermal monitor unit version 2 support
+Date:   Fri, 11 Oct 2019 10:05:34 +0800
+Message-Id: <20191011020534.334-1-andy.tang@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Thermal Monitor Unit v2 is introduced on new Layscape SoC.
+Compared to v1, TMUv2 has a little different register layout
+and digital output is fairly linear.
 
---mopqc6x4c2h7s3hb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+Reviewed-by: Anson Huang <Anson.Huang@nxp.com>
+---
+v3:
+	- rebase to v5.4-rc1
 
-Hi,
+ drivers/thermal/qoriq_thermal.c | 120 ++++++++++++++++++++++++++------
+ 1 file changed, 97 insertions(+), 23 deletions(-)
 
-On Thu, Oct 10, 2019 at 03:29:55PM -0700, Dmitry Torokhov wrote:
-> On Thu, Oct 10, 2019 at 03:20:32PM -0700, Guenter Roeck wrote:
-> > On 10/10/19 1:29 PM, Arnd Bergmann wrote:
-> > > There are multiple drivers using the private adc interface.
-> > > It seems unlikely that they would ever get converted to iio,
-> > > so make the current state official by making the header file
-> > > global.
-> > >=20
-> > > The s3c2410_ts driver needs a couple of register definitions
-> > > as well.
-> > >=20
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >=20
-> > For hwmon:
-> >=20
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
->=20
-> For input:
->=20
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 39542c670301..45e9fcb172cc 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -13,7 +13,16 @@
+ 
+ #include "thermal_core.h"
+ 
+-#define SITES_MAX	16
++#define SITES_MAX		16
++#define TMR_DISABLE		0x0
++#define TMR_ME			0x80000000
++#define TMR_ALPF		0x0c000000
++#define TMR_ALPF_V2		0x03000000
++#define TMTMIR_DEFAULT	0x0000000f
++#define TIER_DISABLE	0x0
++#define TEUMR0_V2		0x51009c00
++#define TMU_VER1		0x1
++#define TMU_VER2		0x2
+ 
+ /*
+  * QorIQ TMU Registers
+@@ -24,17 +33,12 @@ struct qoriq_tmu_site_regs {
+ 	u8 res0[0x8];
+ };
+ 
+-struct qoriq_tmu_regs {
++struct qoriq_tmu_regs_v1 {
+ 	u32 tmr;		/* Mode Register */
+-#define TMR_DISABLE	0x0
+-#define TMR_ME		0x80000000
+-#define TMR_ALPF	0x0c000000
+ 	u32 tsr;		/* Status Register */
+ 	u32 tmtmir;		/* Temperature measurement interval Register */
+-#define TMTMIR_DEFAULT	0x0000000f
+ 	u8 res0[0x14];
+ 	u32 tier;		/* Interrupt Enable Register */
+-#define TIER_DISABLE	0x0
+ 	u32 tidr;		/* Interrupt Detect Register */
+ 	u32 tiscr;		/* Interrupt Site Capture Register */
+ 	u32 ticscr;		/* Interrupt Critical Site Capture Register */
+@@ -54,10 +58,50 @@ struct qoriq_tmu_regs {
+ 	u32 ipbrr0;		/* IP Block Revision Register 0 */
+ 	u32 ipbrr1;		/* IP Block Revision Register 1 */
+ 	u8 res6[0x310];
+-	u32 ttr0cr;		/* Temperature Range 0 Control Register */
+-	u32 ttr1cr;		/* Temperature Range 1 Control Register */
+-	u32 ttr2cr;		/* Temperature Range 2 Control Register */
+-	u32 ttr3cr;		/* Temperature Range 3 Control Register */
++	u32 ttrcr[4];		/* Temperature Range Control Register */
++};
++
++struct qoriq_tmu_regs_v2 {
++	u32 tmr;		/* Mode Register */
++	u32 tsr;		/* Status Register */
++	u32 tmsr;		/* monitor site register */
++	u32 tmtmir;		/* Temperature measurement interval Register */
++	u8 res0[0x10];
++	u32 tier;		/* Interrupt Enable Register */
++	u32 tidr;		/* Interrupt Detect Register */
++	u8 res1[0x8];
++	u32 tiiscr;		/* interrupt immediate site capture register */
++	u32 tiascr;		/* interrupt average site capture register */
++	u32 ticscr;		/* Interrupt Critical Site Capture Register */
++	u32 res2;
++	u32 tmhtcr;		/* monitor high temperature capture register */
++	u32 tmltcr;		/* monitor low temperature capture register */
++	u32 tmrtrcr;	/* monitor rising temperature rate capture register */
++	u32 tmftrcr;	/* monitor falling temperature rate capture register */
++	u32 tmhtitr;	/* High Temperature Immediate Threshold */
++	u32 tmhtatr;	/* High Temperature Average Threshold */
++	u32 tmhtactr;	/* High Temperature Average Crit Threshold */
++	u32 res3;
++	u32 tmltitr;	/* monitor low temperature immediate threshold */
++	u32 tmltatr;	/* monitor low temperature average threshold register */
++	u32 tmltactr;	/* monitor low temperature average critical threshold */
++	u32 res4;
++	u32 tmrtrctr;	/* monitor rising temperature rate critical threshold */
++	u32 tmftrctr;	/* monitor falling temperature rate critical threshold*/
++	u8 res5[0x8];
++	u32 ttcfgr;	/* Temperature Configuration Register */
++	u32 tscfgr;	/* Sensor Configuration Register */
++	u8 res6[0x78];
++	struct qoriq_tmu_site_regs site[SITES_MAX];
++	u8 res7[0x9f8];
++	u32 ipbrr0;		/* IP Block Revision Register 0 */
++	u32 ipbrr1;		/* IP Block Revision Register 1 */
++	u8 res8[0x300];
++	u32 teumr0;
++	u32 teumr1;
++	u32 teumr2;
++	u32 res9;
++	u32 ttrcr[4];	/* Temperature Range Control Register */
+ };
+ 
+ struct qoriq_tmu_data;
+@@ -72,7 +116,9 @@ struct qoriq_sensor {
+ };
+ 
+ struct qoriq_tmu_data {
+-	struct qoriq_tmu_regs __iomem *regs;
++	int ver;
++	struct qoriq_tmu_regs_v1 __iomem *regs;
++	struct qoriq_tmu_regs_v2 __iomem *regs_v2;
+ 	struct clk *clk;
+ 	bool little_endian;
+ 	struct qoriq_sensor	*sensor[SITES_MAX];
+@@ -132,12 +178,23 @@ static int qoriq_tmu_register_tmu_zone(struct platform_device *pdev)
+ 				return PTR_ERR(qdata->sensor[id]->tzd);
+ 		}
+ 
+-		sites |= 0x1 << (15 - id);
++		if (qdata->ver == TMU_VER1)
++			sites |= 0x1 << (15 - id);
++		else
++			sites |= 0x1 << id;
+ 	}
+ 
+ 	/* Enable monitoring */
+-	if (sites != 0)
+-		tmu_write(qdata, sites | TMR_ME | TMR_ALPF, &qdata->regs->tmr);
++	if (sites != 0) {
++		if (qdata->ver == TMU_VER1) {
++			tmu_write(qdata, sites | TMR_ME | TMR_ALPF,
++					&qdata->regs->tmr);
++		} else {
++			tmu_write(qdata, sites, &qdata->regs_v2->tmsr);
++			tmu_write(qdata, TMR_ME | TMR_ALPF_V2,
++					&qdata->regs_v2->tmr);
++		}
++	}
+ 
+ 	return 0;
+ }
+@@ -150,16 +207,21 @@ static int qoriq_tmu_calibration(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct qoriq_tmu_data *data = platform_get_drvdata(pdev);
+ 
+-	if (of_property_read_u32_array(np, "fsl,tmu-range", range, 4)) {
+-		dev_err(&pdev->dev, "missing calibration range.\n");
+-		return -ENODEV;
++	len = of_property_count_u32_elems(np, "fsl,tmu-range");
++	if (len < 0 || len > 4) {
++		dev_err(&pdev->dev, "invalid range data.\n");
++		return len;
++	}
++
++	val = of_property_read_u32_array(np, "fsl,tmu-range", range, len);
++	if (val != 0) {
++		dev_err(&pdev->dev, "failed to read range data.\n");
++		return val;
+ 	}
+ 
+ 	/* Init temperature range registers */
+-	tmu_write(data, range[0], &data->regs->ttr0cr);
+-	tmu_write(data, range[1], &data->regs->ttr1cr);
+-	tmu_write(data, range[2], &data->regs->ttr2cr);
+-	tmu_write(data, range[3], &data->regs->ttr3cr);
++	for (i = 0; i < len; i++)
++		tmu_write(data, range[i], &data->regs->ttrcr[i]);
+ 
+ 	calibration = of_get_property(np, "fsl,tmu-calibration", &len);
+ 	if (calibration == NULL || len % 8) {
+@@ -183,7 +245,12 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+ 	tmu_write(data, TIER_DISABLE, &data->regs->tier);
+ 
+ 	/* Set update_interval */
+-	tmu_write(data, TMTMIR_DEFAULT, &data->regs->tmtmir);
++	if (data->ver == TMU_VER1) {
++		tmu_write(data, TMTMIR_DEFAULT, &data->regs->tmtmir);
++	} else {
++		tmu_write(data, TMTMIR_DEFAULT, &data->regs_v2->tmtmir);
++		tmu_write(data, TEUMR0_V2, &data->regs_v2->teumr0);
++	}
+ 
+ 	/* Disable monitoring */
+ 	tmu_write(data, TMR_DISABLE, &data->regs->tmr);
+@@ -192,6 +259,7 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+ static int qoriq_tmu_probe(struct platform_device *pdev)
+ {
+ 	int ret;
++	u32 ver;
+ 	struct qoriq_tmu_data *data;
+ 	struct device_node *np = pdev->dev.of_node;
+ 
+@@ -220,6 +288,12 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	/* version register offset at: 0xbf8 on both v1 and v2 */
++	ver = tmu_read(data, &data->regs->ipbrr0);
++	data->ver = (ver >> 8) & 0xff;
++	if (data->ver == TMU_VER2)
++		data->regs_v2 = (void __iomem *)data->regs;
++
+ 	qoriq_tmu_init_device(data);	/* TMU initialization */
+ 
+ 	ret = qoriq_tmu_calibration(pdev);	/* TMU calibration */
+-- 
+2.17.1
 
-For power-supply:
-
-Acked-by: Sebastian Reichel <sre@kernel.org>
-
--- Sebastian
-
-> > > ---
-> > >   arch/arm/mach-s3c64xx/mach-crag6410.c         |  2 +-
-> > >   arch/arm/mach-s3c64xx/mach-mini6410.c         |  2 +-
-> > >   arch/arm/mach-s3c64xx/mach-real6410.c         |  2 +-
-> > >   arch/arm/mach-s3c64xx/mach-smdk6410.c         |  2 +-
-> > >   arch/arm/plat-samsung/adc.c                   |  2 +-
-> > >   arch/arm/plat-samsung/devs.c                  |  2 +-
-> > >   drivers/hwmon/s3c-hwmon.c                     |  2 +-
-> > >   drivers/input/touchscreen/s3c2410_ts.c        | 37 ++++++++++++++++=
-++-
-> > >   drivers/power/supply/s3c_adc_battery.c        |  2 +-
-> > >   .../linux/soc/samsung/s3c-adc.h               |  0
-> > >   10 files changed, 43 insertions(+), 10 deletions(-)
-> > >   rename arch/arm/plat-samsung/include/plat/adc.h =3D> include/linux/=
-soc/samsung/s3c-adc.h (100%)
-> > >=20
-> > > diff --git a/arch/arm/mach-s3c64xx/mach-crag6410.c b/arch/arm/mach-s3=
-c64xx/mach-crag6410.c
-> > > index da5b50981a14..133453562d23 100644
-> > > --- a/arch/arm/mach-s3c64xx/mach-crag6410.c
-> > > +++ b/arch/arm/mach-s3c64xx/mach-crag6410.c
-> > > @@ -57,7 +57,7 @@
-> > >   #include <plat/keypad.h>
-> > >   #include <plat/devs.h>
-> > >   #include <plat/cpu.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <linux/platform_data/i2c-s3c2410.h>
-> > >   #include <plat/pm.h>
-> > >   #include <plat/samsung-time.h>
-> > > diff --git a/arch/arm/mach-s3c64xx/mach-mini6410.c b/arch/arm/mach-s3=
-c64xx/mach-mini6410.c
-> > > index 0dd36ae49e6a..c7140300bd3f 100644
-> > > --- a/arch/arm/mach-s3c64xx/mach-mini6410.c
-> > > +++ b/arch/arm/mach-s3c64xx/mach-mini6410.c
-> > > @@ -27,7 +27,7 @@
-> > >   #include <mach/regs-gpio.h>
-> > >   #include <mach/gpio-samsung.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <plat/cpu.h>
-> > >   #include <plat/devs.h>
-> > >   #include <plat/fb.h>
-> > > diff --git a/arch/arm/mach-s3c64xx/mach-real6410.c b/arch/arm/mach-s3=
-c64xx/mach-real6410.c
-> > > index 0ff88b6859c4..f55097fde94c 100644
-> > > --- a/arch/arm/mach-s3c64xx/mach-real6410.c
-> > > +++ b/arch/arm/mach-s3c64xx/mach-real6410.c
-> > > @@ -29,7 +29,7 @@
-> > >   #include <mach/gpio-samsung.h>
-> > >   #include <mach/irqs.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <plat/cpu.h>
-> > >   #include <plat/devs.h>
-> > >   #include <plat/fb.h>
-> > > diff --git a/arch/arm/mach-s3c64xx/mach-smdk6410.c b/arch/arm/mach-s3=
-c64xx/mach-smdk6410.c
-> > > index 95bdcfe95a53..3042f6cbffd9 100644
-> > > --- a/arch/arm/mach-s3c64xx/mach-smdk6410.c
-> > > +++ b/arch/arm/mach-s3c64xx/mach-smdk6410.c
-> > > @@ -60,7 +60,7 @@
-> > >   #include <plat/devs.h>
-> > >   #include <plat/cpu.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <linux/platform_data/touchscreen-s3c2410.h>
-> > >   #include <plat/keypad.h>
-> > >   #include <plat/samsung-time.h>
-> > > diff --git a/arch/arm/plat-samsung/adc.c b/arch/arm/plat-samsung/adc.c
-> > > index ee3d5c989a76..623a9774cc52 100644
-> > > --- a/arch/arm/plat-samsung/adc.c
-> > > +++ b/arch/arm/plat-samsung/adc.c
-> > > @@ -20,7 +20,7 @@
-> > >   #include <linux/regulator/consumer.h>
-> > >   #include <plat/regs-adc.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   /* This driver is designed to control the usage of the ADC block be=
-tween
-> > >    * the touchscreen and any other drivers that may need to use it, s=
-uch as
-> > > diff --git a/arch/arm/plat-samsung/devs.c b/arch/arm/plat-samsung/dev=
-s.c
-> > > index fd94a35e22f8..ddd90f0bb380 100644
-> > > --- a/arch/arm/plat-samsung/devs.c
-> > > +++ b/arch/arm/plat-samsung/devs.c
-> > > @@ -44,7 +44,7 @@
-> > >   #include <plat/cpu.h>
-> > >   #include <plat/devs.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <linux/platform_data/ata-samsung_cf.h>
-> > >   #include <plat/fb.h>
-> > >   #include <plat/fb-s3c2410.h>
-> > > diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
-> > > index b490fe3d2ee8..f2703c5460d0 100644
-> > > --- a/drivers/hwmon/s3c-hwmon.c
-> > > +++ b/drivers/hwmon/s3c-hwmon.c
-> > > @@ -20,7 +20,7 @@
-> > >   #include <linux/hwmon.h>
-> > >   #include <linux/hwmon-sysfs.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <linux/platform_data/hwmon-s3c.h>
-> > >   struct s3c_hwmon_attr {
-> > > diff --git a/drivers/input/touchscreen/s3c2410_ts.c b/drivers/input/t=
-ouchscreen/s3c2410_ts.c
-> > > index b346e7cafd62..1a5a178ea286 100644
-> > > --- a/drivers/input/touchscreen/s3c2410_ts.c
-> > > +++ b/drivers/input/touchscreen/s3c2410_ts.c
-> > > @@ -21,10 +21,43 @@
-> > >   #include <linux/clk.h>
-> > >   #include <linux/io.h>
-> > > -#include <plat/adc.h>
-> > > -#include <plat/regs-adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #include <linux/platform_data/touchscreen-s3c2410.h>
-> > > +#define	S3C2410_ADCCON			(0x00)
-> > > +#define	S3C2410_ADCTSC			(0x04)
-> > > +#define	S3C2410_ADCDLY			(0x08)
-> > > +#define	S3C2410_ADCDAT0			(0x0C)
-> > > +#define	S3C2410_ADCDAT1			(0x10)
-> > > +#define	S3C64XX_ADCUPDN			(0x14)
-> > > +#define	S3C2443_ADCMUX			(0x18)
-> > > +#define	S3C64XX_ADCCLRINT		(0x18)
-> > > +#define	S5P_ADCMUX			(0x1C)
-> > > +#define	S3C64XX_ADCCLRINTPNDNUP		(0x20)
-> > > +
-> > > +/* ADCTSC Register Bits */
-> > > +#define S3C2443_ADCTSC_UD_SEN		(1 << 8)
-> > > +#define S3C2410_ADCTSC_YM_SEN		(1<<7)
-> > > +#define S3C2410_ADCTSC_YP_SEN		(1<<6)
-> > > +#define S3C2410_ADCTSC_XM_SEN		(1<<5)
-> > > +#define S3C2410_ADCTSC_XP_SEN		(1<<4)
-> > > +#define S3C2410_ADCTSC_PULL_UP_DISABLE	(1<<3)
-> > > +#define S3C2410_ADCTSC_AUTO_PST		(1<<2)
-> > > +#define S3C2410_ADCTSC_XY_PST(x)	(((x)&0x3)<<0)
-> > > +
-> > > +/* ADCDAT0 Bits */
-> > > +#define S3C2410_ADCDAT0_UPDOWN		(1<<15)
-> > > +#define S3C2410_ADCDAT0_AUTO_PST	(1<<14)
-> > > +#define S3C2410_ADCDAT0_XY_PST		(0x3<<12)
-> > > +#define S3C2410_ADCDAT0_XPDATA_MASK	(0x03FF)
-> > > +
-> > > +/* ADCDAT1 Bits */
-> > > +#define S3C2410_ADCDAT1_UPDOWN		(1<<15)
-> > > +#define S3C2410_ADCDAT1_AUTO_PST	(1<<14)
-> > > +#define S3C2410_ADCDAT1_XY_PST		(0x3<<12)
-> > > +#define S3C2410_ADCDAT1_YPDATA_MASK	(0x03FF)
-> > > +
-> > > +
-> > >   #define TSC_SLEEP  (S3C2410_ADCTSC_PULL_UP_DISABLE | S3C2410_ADCTSC=
-_XY_PST(0))
-> > >   #define INT_DOWN	(0)
-> > > diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/s=
-upply/s3c_adc_battery.c
-> > > index 3d00b35cafc9..60b7f41ab063 100644
-> > > --- a/drivers/power/supply/s3c_adc_battery.c
-> > > +++ b/drivers/power/supply/s3c_adc_battery.c
-> > > @@ -22,7 +22,7 @@
-> > >   #include <linux/init.h>
-> > >   #include <linux/module.h>
-> > > -#include <plat/adc.h>
-> > > +#include <linux/soc/samsung/s3c-adc.h>
-> > >   #define BAT_POLL_INTERVAL		10000 /* ms */
-> > >   #define JITTER_DELAY			500 /* ms */
-> > > diff --git a/arch/arm/plat-samsung/include/plat/adc.h b/include/linux=
-/soc/samsung/s3c-adc.h
-> > > similarity index 100%
-> > > rename from arch/arm/plat-samsung/include/plat/adc.h
-> > > rename to include/linux/soc/samsung/s3c-adc.h
-> > >=20
-> >=20
->=20
-> --=20
-> Dmitry
-
---mopqc6x4c2h7s3hb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2ftFAACgkQ2O7X88g7
-+ppCxxAAn15YlBwsqaGwUaYchBuBq14qU4EobExBzZbw8oYHQL4I5oAbH2t+3oOa
-UrhNrvHnWWftmlq/2ycEzWRk4NOQ8ZES1AD/4r7q56i4QxyV/zk/cRiAjRjcCm5w
-IRJEAVVSxyADbMTxK0omr0GW2cIqUlJcRmW5JyqQvXKC5wOXVz3+0C613tQCm0o2
-JBSC+HqZkoDAlcBF/6IDcDfy1K+3FEhCEYkvFTPNeh+7I48u7qdLFS6Xf66+kLPW
-ccKaSTBw6WV9KLrwf4+sEukRP5QfA0ehVuaV447SiH2n1uzSQlju4w5pRleAwlps
-umOd1n1rFcrxBf+TEQS0XsRJ7Oa/h11DXkkLWPtCtA84FXO1IvHGLmkSx3yxRxSz
-JIszIsYHyTWwJJNKorhB2PjpSGZoaciwgOE/lt8mgPc5I64MZXvHosV2nlAMsFhJ
-LMKyxh69aShi8ylCFBy+ukiC8yXM4CzRNh1chazvB2cjNNB1p6BS/4zAxlTmIvGo
-9lUxde12J325Z9peeP6OInu1h1/v+fRfrg2wxsblwCQmdC6eQoWTPTynH9t+WADr
-ka6XkZvcoAEoaPji8fyGfY6DUkhiRwSkDpn3bk1zg7nmm5jAlH1MCoMBVrUOKylv
-Xp2bULDZLS6KD5LBn+s3bsZ1hatAJpU2746uE4Afal2lgcAnqb4=
-=0aUK
------END PGP SIGNATURE-----
-
---mopqc6x4c2h7s3hb--
