@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB7AD3D11
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 12:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EED7D3D3C
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Oct 2019 12:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbfJKKOE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Oct 2019 06:14:04 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64034 "EHLO
+        id S1726757AbfJKKW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Oct 2019 06:22:27 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41466 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726458AbfJKKOE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 06:14:04 -0400
+        with ESMTP id S1726710AbfJKKW1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Oct 2019 06:22:27 -0400
 Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id bbdde877b9a3fecb; Fri, 11 Oct 2019 12:14:01 +0200
+ id 7153c49c969fdc92; Fri, 11 Oct 2019 12:22:24 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     rafael@kernel.org, bhelgaas@google.com,
-        mathias.nyman@linux.intel.com, linux@endlessm.com,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI: also apply D3 delay when leaving D3cold
-Date:   Fri, 11 Oct 2019 12:14:01 +0200
-Message-ID: <261805141.5tZyQaKU0z@kreacher>
-In-Reply-To: <20190927090202.1468-1-drake@endlessm.com>
-References: <20190927090202.1468-1-drake@endlessm.com>
+To:     Jonas Meurer <jonas@freesources.org>
+Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>
+Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before suspend
+Date:   Fri, 11 Oct 2019 12:22:24 +0200
+Message-ID: <2847488.TR0R5COpHM@kreacher>
+In-Reply-To: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,152 +32,204 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, September 27, 2019 11:02:02 AM CEST Daniel Drake wrote:
-> This delay is needed to fix resume from s2idle of the XHCI controller on
-> AMD Ryzen SoCs, where a 20ms delay is required (this will be quirked
-> in a followup patch), to avoid this failure:
+On Monday, October 7, 2019 12:50:14 PM CEST Jonas Meurer wrote:
+>  This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+> --htRCyOoJ9Xv4BLXLNYp8X0x6Nr6crRDII
+> Content-Type: multipart/mixed; boundary="GRH6EAOR51QxsekMaGMKMlm8winrq3Izm";
+>  protected-headers="v1"
+> From: Jonas Meurer <jonas@freesources.org>
+> To: linux-pm@vger.kernel.org
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Pavel Machek <pavel@ucw.cz>,
+>  Len Brown <len.brown@intel.com>, Tim Dittler <tim.dittler@systemli.org>
+> Message-ID: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+> Subject: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+>  suspend
 > 
->   xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
->   xhci_hcd 0000:03:00.4: PCI post-resume error -110!
+> --GRH6EAOR51QxsekMaGMKMlm8winrq3Izm
+> Content-Type: text/plain; charset=utf-8
+> Content-Language: de-DE
+> Content-Transfer-Encoding: quoted-printable
 > 
-> The D3 delay is already being performed in a runtime resume from D3cold,
-> through the following sequence of events:
+> [Sorry, resending with the correct mailinglist address as recipient]
 > 
->      pci_pm_runtime_resume
->   -> pci_restore_standard_config
->   -> pci_set_power_state(D0)
->   -> __pci_start_power_transition
->   -> pci_platform_power_transition
->   -> pci_update_current_state
+> Hello,
 > 
-> At this point, the device has been set to D0 at the platform level,
-> so pci_update_current_state() reads pmcsr and updates dev->current_state
-> to D3hot. Now when we reach pci_raw_set_power_state() the D3 delay will
-> be applied.
+> This patch adds a run-time switch at `/sys/power/suspend_sync`.
+
+I'd prefer "sync_on_suspend".
+
+> The switch allows to enable or disable the final sync() from the suspend.=
+> c
+> Linux Kernel system suspend implementation. This is useful to avoid race
+> conditions if block devices have been suspended before. Be aware that you=
 > 
-> However, the D3cold resume from s2idle path is somewhat different, and
-> we arrive at the same function without hitting pci_update_current_state()
-> along the way:
->      pci_pm_resume_noirq
->   -> pci_pm_default_resume_early
->   -> pci_power_up
->   -> pci_raw_set_power_state
+> have to take care of sync() yourself before suspending the system if you
+> disable it here.
 > 
-> As dev->current_state is D3cold, the D3 delay is skipped and the XHCI
-> controllers fail to be powered up.
+> Since this is my first patch against the Linux kernel and I don't
+> consider it ready for inclusion yet, I decided to send it to pm-linux
+> and the PM subsystem maintainers only first. Would be very glad if you
+> could take a look and comment on it :)
 > 
-> Apply the D3 delay in the s2idle resume case too, in order to fix
-> USB functionality after resume.
+> Some questions:
 > 
-> Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
-> Signed-off-by: Daniel Drake <drake@endlessm.com>
+> * There already is a build-time config flag[2] for en- or disabling the
+>   sync() in suspend.c. Is it acceptable to have both a build-time *and*
+>   a *run-time* switch? Or would a run-time switch have to replace the
+>   build-time switch? If so, a direct question to Rafael, as you added
+>   the build-time flag: Would that be ok for you?
+
+If there is a run-time knob to disable the syncing, the only reason for
+the config option to be there will be to set the default value of that.
+
+> * I'm unsure about the naming: since the default is to have the sync
+>   enabled, would `suspend_disable_sync` be a better name for the switch,
+>   obviously defaulting to 0 then and skipping the sync at value 1?
+
+The default is just the initial value of the new knob, the naming need not
+be related to that.
+
+> To give a bit more contect: In Debian, we're currently working[3] on
+> support to suspend unlocked dm-crypt devices before system suspend.
+> During that work, we realized that the final sync() from Linux Kernel
+> system suspend implementation can lead to a dead lock.
+
+That's also true for FUSE filesystems I think and please note that this isn't
+going to work with hibernation (in which case filesystems are synced
+regardless).
+
+> I wrote a simple reproducer[4] to cause the dead lock in a reliable way.
+> 
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+> ee/kernel/power/suspend.c?id=3D54ecb8f#n569
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+> mmit/?id=3D2fd77f
+> [3] https://salsa.debian.org/mejo/cryptsetup-suspend
+> [4] https://salsa.debian.org/mejo/cryptsetup-suspend/snippets/334
+> 
+> 
+> Signed-off-by: Jonas Meurer <jonas@freesources.org>
 > ---
->  drivers/pci/pci.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
+>  include/linux/suspend.h               |    2 +
+>  kernel/power/main.c                   |   35 +++++++++++++++++++++++++++=
+> +++++++
+>  kernel/power/suspend.c                |    2 -
+>  4 files changed, 53 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index e7982af9a5d8..ab15fa5eda2c 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -883,7 +883,8 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
->  	 * Mandatory power management transition delays; see PCI PM 1.1
->  	 * 5.6.1 table 18
->  	 */
-> -	if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-> +	if (state == PCI_D3hot || dev->current_state == PCI_D3hot
-> +			|| dev->current_state == PCI_D3cold)
->  		pci_dev_d3_sleep(dev);
->  	else if (state == PCI_D2 || dev->current_state == PCI_D2)
->  		udelay(PCI_PM_D2_DELAY);
-> 
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
+>  	if (state =3D=3D PM_SUSPEND_TO_IDLE)
+>  		s2idle_begin();
+> =20
+> -	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
+> +	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && suspend_sync_enabled) {
+>  		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+>  		ksys_sync_helper();
+>  		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
+>  extern void arch_suspend_enable_irqs(void);
+> =20
+>  extern int pm_suspend(suspend_state_t state);
+> +extern bool suspend_sync_enabled;
+>  #else /* !CONFIG_SUSPEND */
+>  #define suspend_valid_only_mem	NULL
+> =20
+> @@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
+> =20
+>  static inline void suspend_set_ops(const struct platform_suspend_ops *op=
+> s) {}
+>  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
+> +static inline bool suspend_sync_enabled(void) { return true; }
+>  static inline bool idle_should_enter_s2idle(void) { return false; }
+>  static inline void __init pm_states_init(void) {}
+>  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops)=
+>  {}
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
+>  power_attr(mem_sleep);
+>  #endif /* CONFIG_SUSPEND */
+> =20
+> +#ifdef CONFIG_SUSPEND
+> +/*
+> + * suspend_sync: invoke ksys_sync_helper() before suspend.
+> + *
+> + * show() returns whether ksys_sync_helper() is invoked before suspend.
+> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables =
+> it.
+> + */
+> +bool suspend_sync_enabled =3D true;
+> +
+> +static ssize_t suspend_sync_show(struct kobject *kobj,
+> +				   struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%d\n", suspend_sync_enabled);
+> +}
+> +
+> +static ssize_t suspend_sync_store(struct kobject *kobj,
+> +				    struct kobj_attribute *attr,
+> +				    const char *buf, size_t n)
+> +{
+> +	unsigned long val;
+> +
+> +	if (kstrtoul(buf, 10, &val))
+> +		return -EINVAL;
+> +
+> +	if (val > 1)
+> +		return -EINVAL;
+> +
+> +	suspend_sync_enabled =3D !!val;
+> +	return n;
+> +}
+> +
+> +power_attr(suspend_sync);
+> +#endif /* CONFIG_SUSPEND */
+> +
+>  #ifdef CONFIG_PM_SLEEP_DEBUG
+>  int pm_test_level =3D TEST_NONE;
+> =20
+> @@ -769,6 +803,7 @@ static struct attribute * g[] =3D {
+>  	&wakeup_count_attr.attr,
+>  #ifdef CONFIG_SUSPEND
+>  	&mem_sleep_attr.attr,
+> +	&suspend_sync_attr.attr,
+>  #endif
+>  #ifdef CONFIG_PM_AUTOSLEEP
+>  	&autosleep_attr.attr,
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -300,4 +300,18 @@ Description:
+>  		attempt.
+> =20
+>  		Using this sysfs file will override any values that were
+> -		set using the kernel command line for disk offset.
+> \ No newline at end of file
+> +		set using the kernel command line for disk offset.
+> +
+> +What:		/sys/power/suspend_sync
+> +Date:		October 2019
+> +Contact:	Jonas Meurer <jonas@freesources.org>
+> +Description:
+> +		This file controls the switch to enable or disable the final
+> +		sync() before system suspend. This is useful to avoid race
+> +		conditions if block devices have been suspended before. Be
+> +		aware that you have to take care of sync() yourself before
+> +		suspending the system if you disable it here.
+> +
+> +		Writing a "1" (default) to this file enables the sync() and
+> +		writing a "0" disables it. Reads from the file return the
+> +		current value.
+> --=20
 
-So I think that we can use pci_restore_standard_config() in the system resume
-patch too, which should address the issue as well.
+The changes look reasonable to me.
 
-Basically, there is no reason for the PM-runtime and system-wide resume code
-paths to be different in that respect.
-
-Something like this (untested):
-
----
- drivers/pci/pci-driver.c |   11 ++---------
- drivers/pci/pci.c        |   13 -------------
- drivers/pci/pci.h        |    1 -
- 3 files changed, 2 insertions(+), 23 deletions(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -521,13 +521,6 @@ static int pci_restore_standard_config(s
- 
- #ifdef CONFIG_PM_SLEEP
- 
--static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
--{
--	pci_power_up(pci_dev);
--	pci_restore_state(pci_dev);
--	pci_pme_restore(pci_dev);
--}
--
- /*
-  * Default "suspend" method for devices that have no driver provided suspend,
-  * or not even a driver at all (second part).
-@@ -938,7 +931,7 @@ static int pci_pm_resume_noirq(struct de
- 	 * pointless, so avoid doing that.
- 	 */
- 	if (!(pci_dev->skip_bus_pm && pm_suspend_no_platform()))
--		pci_pm_default_resume_early(pci_dev);
-+		pci_restore_standard_config(pci_dev);
- 
- 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
- 
-@@ -1213,7 +1206,7 @@ static int pci_pm_restore_noirq(struct d
- 			return error;
- 	}
- 
--	pci_pm_default_resume_early(pci_dev);
-+	pci_restore_standard_config(pci_dev);
- 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
- 
- 	if (pci_has_legacy_pm_support(pci_dev))
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -959,19 +959,6 @@ void pci_refresh_power_state(struct pci_
- }
- 
- /**
-- * pci_power_up - Put the given device into D0 forcibly
-- * @dev: PCI device to power up
-- */
--void pci_power_up(struct pci_dev *dev)
--{
--	if (platform_pci_power_manageable(dev))
--		platform_pci_set_power_state(dev, PCI_D0);
--
--	pci_raw_set_power_state(dev, PCI_D0);
--	pci_update_current_state(dev, PCI_D0);
--}
--
--/**
-  * pci_platform_power_transition - Use platform to change device power state
-  * @dev: PCI device to handle.
-  * @state: State to put the device into.
-Index: linux-pm/drivers/pci/pci.h
-===================================================================
---- linux-pm.orig/drivers/pci/pci.h
-+++ linux-pm/drivers/pci/pci.h
-@@ -85,7 +85,6 @@ struct pci_platform_pm_ops {
- int pci_set_platform_pm(const struct pci_platform_pm_ops *ops);
- void pci_update_current_state(struct pci_dev *dev, pci_power_t state);
- void pci_refresh_power_state(struct pci_dev *dev);
--void pci_power_up(struct pci_dev *dev);
- void pci_disable_enabled_device(struct pci_dev *dev);
- int pci_finish_runtime_suspend(struct pci_dev *dev);
- void pcie_clear_root_pme_status(struct pci_dev *dev);
-
+Thanks,
+Rafael
 
 
 
