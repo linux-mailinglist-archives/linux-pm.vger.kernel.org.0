@@ -2,187 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CF6D4E49
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2019 10:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9707DD4F36
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Oct 2019 13:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbfJLIam (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Oct 2019 04:30:42 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56442 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728060AbfJLIam (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Oct 2019 04:30:42 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9C8TRJK195161;
-        Sat, 12 Oct 2019 08:30:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2019-08-05;
- bh=DvkPmvgpRjxjpBe2LUXihgz5mIyBG+fGwIcFtLVc8eU=;
- b=V1+TiLL44U75vKOu80qTolOC/DwuMA6XIKiPLz1FDZwLQgtSk59XPg4xVOJpr9hpNFl7
- 7LXvHwanJyO8aFIOVMNfRDUcyPG30Bb8pbqIjZ9YgvaT/inxOllqBfaL2hzGstTukEFh
- 7GW+sOnwKLrEzZtwQjY8zo/uk0F5p1X2uUnKWhxaaSmEtAzjxdy2yotLfWfY/LAMtxvq
- K5KH4MloQgbtqcQ/eYYKl4pDxmBlNce7XddW+6P+g33eXTbynmWkjYP2mSqKHJC+LglY
- ep48K3KfodpNQMEUBWqMwODPSFK5ncFuVsTgvdfn7t1nLYF5C2v7dpPzngccl/wvDN7M 0Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2vk6sq0nh3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 12 Oct 2019 08:30:24 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9C8SDuu038208;
-        Sat, 12 Oct 2019 08:30:24 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2vk4vr903r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 12 Oct 2019 08:30:24 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9C8ULk9000414;
-        Sat, 12 Oct 2019 08:30:21 GMT
-Received: from z2.cn.oracle.com (/10.182.71.205)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 12 Oct 2019 01:30:21 -0700
-From:   Zhenzhong Duan <zhenzhong.duan@oracle.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mtosatti@redhat.com,
-        Zhenzhong Duan <zhenzhong.duan@oracle.com>
-Subject: [PATCH] cpuidle: cpu hotplug support
-Date:   Fri, 11 Oct 2019 16:34:59 +0800
-Message-Id: <1570782899-31455-1-git-send-email-zhenzhong.duan@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9407 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910120079
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9407 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910120079
+        id S1728111AbfJLLAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Oct 2019 07:00:46 -0400
+Received: from onstation.org ([52.200.56.107]:39942 "EHLO onstation.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726555AbfJLLAq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 12 Oct 2019 07:00:46 -0400
+Received: from localhost (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id E714D3E88D;
+        Sat, 12 Oct 2019 11:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1570878045;
+        bh=RKEyGbpvgWtwHv8UHOurWHkaxTHUsbMgak77d33UolU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=inOMyMioapH/dHJS9M7XNIdUmPxozcHiRqJ0lNduxURkpo+/iLn9/d7wAyigCB8ZI
+         gYR/uXByl8UsSNdGbbksuAa0YEUvu8+K68Sr5h9tX/9bkb26U6W8NKI4FsAPBAU0Qk
+         1ehSKMsZzLefA2hwou0q5RSjhw1g3vAVMtSR3YJM=
+Date:   Sat, 12 Oct 2019 07:00:44 -0400
+From:   Brian Masney <masneyb@onstation.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     georgi.djakov@linaro.org, robh+dt@kernel.org, agross@kernel.org,
+        mark.rutland@arm.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, jonathan@marek.ca
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: add msm8974 driver
+Message-ID: <20191012110044.GA19009@onstation.org>
+References: <20191005114605.5279-1-masneyb@onstation.org>
+ <20191005114605.5279-3-masneyb@onstation.org>
+ <20191011170506.GD571@minitux>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191011170506.GD571@minitux>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently cpuidle driver doesn't support cpu hotplug. When
-cpus != maxcpus cpuidle_register() will fail to register all cpus
-past the online ones and thus fail to register the idle driver.
-This is because cpuidle_add_sysfs() will return with -ENODEV as a
-consequence from get_cpu_device() return no device for a non-existing
-CPU.
+On Fri, Oct 11, 2019 at 10:05:06AM -0700, Bjorn Andersson wrote:
+> On Sat 05 Oct 04:46 PDT 2019, Brian Masney wrote:
+> > diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
+> [..]
+> > +static void msm8974_icc_rpm_smd_send(struct device *dev, int rsc_type,
+> > +				     char *name, int id, u64 val)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (id == -1)
+> > +		return;
+> > +
+> > +	/*
+> > +	 * Setting the bandwidth requests for some nodes fails and this same
+> > +	 * behavior occurs on the downstream MSM 3.4 kernel sources based on
+> > +	 * errors like this in that kernel:
+> > +	 *
+> > +	 *   msm_rpm_get_error_from_ack(): RPM NACK Unsupported resource
+> > +	 *   AXI: msm_bus_rpm_req(): RPM: Ack failed
+> > +	 *   AXI: msm_bus_rpm_commit_arb(): RPM: Req fail: mas:32, bw:240000000
+> > +	 *
+> > +	 * Since there's no publicly available documentation for this hardware,
+> > +	 * and the bandwidth for some nodes in the path can be set properly,
+> > +	 * let's not return an error.
+> > +	 */
+> 
+> So presumably all that matters for paths including these endpoints is
+> the clk_set_rate() on the bus itself.
 
-At least cpuidle-haltpoll and intel_idle are making their own custom
-code to support cpu hotplug.
+That's the case for the GPU at the very least.
 
-This patch ease the work if we need to write a cpuidle driver with cpu
-hotplug support in the future.
+> But I prefer that we merge it like you propose and then swing back to
+> work out the details.
 
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
----
- drivers/cpuidle/cpuidle.c | 76 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 52 insertions(+), 24 deletions(-)
+Thanks,
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 0895b98..3ce6d2d 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -558,6 +558,51 @@ static void __cpuidle_device_init(struct cpuidle_device *dev)
- 	dev->next_hrtimer = 0;
- }
- 
-+static int cpuidle_cpu_online(unsigned int cpu)
-+{
-+	int ret;
-+	struct cpuidle_device *device;
-+	struct cpuidle_driver *drv;
-+
-+	device = &per_cpu(cpuidle_dev, cpu);
-+	device->cpu = cpu;
-+
-+	drv = cpuidle_get_cpu_driver(device);
-+	if (!drv || !cpumask_test_cpu(cpu, drv->cpumask))
-+		return 0;
-+
-+#ifdef CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED
-+	/*
-+	 * On multiplatform for ARM, the coupled idle states could be
-+	 * enabled in the kernel even if the cpuidle driver does not
-+	 * use it. Note, coupled_cpus is a struct copy.
-+	 */
-+	if (coupled_cpus)
-+		device->coupled_cpus = *coupled_cpus;
-+#endif
-+	ret = cpuidle_register_device(device);
-+	if (ret)
-+		pr_err("Failed to register cpuidle device for cpu%d\n", cpu);
-+
-+	return ret;
-+}
-+
-+static int cpuidle_cpu_offline(unsigned int cpu)
-+{
-+	struct cpuidle_device *device;
-+	struct cpuidle_driver *drv;
-+
-+	device = &per_cpu(cpuidle_dev, cpu);
-+
-+	drv = cpuidle_get_cpu_driver(device);
-+	if (!drv || !cpumask_test_cpu(cpu, drv->cpumask))
-+		return 0;
-+
-+	cpuidle_unregister_device(device);
-+
-+	return 0;
-+}
-+
- /**
-  * __cpuidle_register_device - internal register function called before register
-  * and enable routines
-@@ -690,8 +735,8 @@ void cpuidle_unregister(struct cpuidle_driver *drv)
- int cpuidle_register(struct cpuidle_driver *drv,
- 		     const struct cpumask *const coupled_cpus)
- {
--	int ret, cpu;
--	struct cpuidle_device *device;
-+	int ret;
-+	char cb_name[64];
- 
- 	ret = cpuidle_register_driver(drv);
- 	if (ret) {
-@@ -699,28 +744,11 @@ int cpuidle_register(struct cpuidle_driver *drv,
- 		return ret;
- 	}
- 
--	for_each_cpu(cpu, drv->cpumask) {
--		device = &per_cpu(cpuidle_dev, cpu);
--		device->cpu = cpu;
--
--#ifdef CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED
--		/*
--		 * On multiplatform for ARM, the coupled idle states could be
--		 * enabled in the kernel even if the cpuidle driver does not
--		 * use it. Note, coupled_cpus is a struct copy.
--		 */
--		if (coupled_cpus)
--			device->coupled_cpus = *coupled_cpus;
--#endif
--		ret = cpuidle_register_device(device);
--		if (!ret)
--			continue;
--
--		pr_err("Failed to register cpuidle device for cpu%d\n", cpu);
--
--		cpuidle_unregister(drv);
--		break;
--	}
-+	sprintf(cb_name, "cpuidle/%s:online", drv->name);
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, cb_name,
-+				cpuidle_cpu_online, cpuidle_cpu_offline);
-+	if (ret < 0)
-+		cpuidle_unregister_driver(drv);
- 
- 	return ret;
- }
--- 
-1.8.3.1
+Brian
 
+
+> 
+> > +	ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE, rsc_type, id,
+> > +				    val);
+> > +	if (ret)
+> > +		dev_dbg(dev, "Cannot set bandwidth for node %s (%d): %d\n",
+> > +			name, id, ret);
+> > +}
+> > +
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Regards,
+> Bjorn
