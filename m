@@ -2,79 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B03CD683B
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F35D689E
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388285AbfJNRTD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 13:19:03 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40867 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729997AbfJNRTD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:19:03 -0400
-Received: by mail-ot1-f66.google.com with SMTP id y39so14446447ota.7;
-        Mon, 14 Oct 2019 10:19:02 -0700 (PDT)
+        id S1730527AbfJNRjD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 13:39:03 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46475 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730466AbfJNRjD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:39:03 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k25so14405212oiw.13;
+        Mon, 14 Oct 2019 10:39:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Oawtn+ZtULQjiLVim+vckZa5eaPMWsScI+Ob1030FAs=;
-        b=lPbImLFcLWmJa7pEc6i+5n62mB+Ph+vqCpAL2oHYX6RgvTIOAsRi0QUVsfhDYdc8+L
-         6VYI4vWJsqTUXw00lamV4DfIzHNuYqAYg6KRiqAn8MORFiGmj5WETFLgrdENFTDKhTUl
-         RkGCZHuJYLlBw0/XdrEhFu4Cuv5GCPULV2I9YPZxggODsaDHABsyLcSy0pgvcW8ZU28a
-         hiccvEzpN9HCdKNXsneSS3i2GLPQW8L2WVZCdLMUFAs+/MMx0Z+/f3jZCmcIYOm8oUgg
-         WknN6Pgs2xvcVCZgfNdZSfYjx7J8iecwwmWlFtnPewM5ivTWjrO5KFux24y06cbrItRn
-         5moA==
-X-Gm-Message-State: APjAAAVTk7rjllK2lGLztOU1/2hOX3kOr+j/I3Ym3hLRUwAzmXi8mD6x
-        GcM4eqN4ExT24jsJLKDdTN7We7M=
-X-Google-Smtp-Source: APXvYqyPtnEO4APY3yw1HpmCGICMIlAbQFIjbEAo3JeIS6WLqjZNALfT21r09YAL7iS9fjzlr9BLKQ==
-X-Received: by 2002:a9d:7993:: with SMTP id h19mr4679414otm.226.1571073542158;
-        Mon, 14 Oct 2019 10:19:02 -0700 (PDT)
+        bh=WreGjKNejizDLrH2DJ0lAxbkyZ+jrNSgTeuzICqx9Z4=;
+        b=Ps+BXYSncxtbGCQ/GHAeLojTLAhVtin33gIyD+TrRbs37kMSMo2NurG7cCWFw79dKM
+         R4uIkUu+wSZofGcOljMq78mPQ0C15PEh6rK/0LJaXHxagVn+Paw9+5T0/ybMBcc6WhXM
+         9ekXSjbiCNLoHLQUxvb7FsWMQ3h1jG4i7njjq1U3+V6ccixmwXjKRn+Bq/3kHrnvOdcn
+         bsMVCQ6EPRndVRmW/PaBWjRWeJENPPU6NIAcOsYogRO5myerD0RSlWs01Mx11aLQ1Jws
+         p5e86swtgGsFdNXfmfHhwg/zI4eUgzGOsdxv0nv00K6DIPpIzGEy6m5845COWIxhpbiu
+         3Ghg==
+X-Gm-Message-State: APjAAAURg4u9TZjnm+g91+opGlQ9xE84rw4vRTj1DS4c1ztlOmmnC+QP
+        JZITTjVPtJDZ85xzdqjMPw==
+X-Google-Smtp-Source: APXvYqwdJv5xXQGlATBAH3wK/IT/WCXKxGy8SwE92PGPwmCT2Qv3DTyiAPc8LtnULM3NF1dE3Xu3gQ==
+X-Received: by 2002:aca:da41:: with SMTP id r62mr24442959oig.47.1571074742140;
+        Mon, 14 Oct 2019 10:39:02 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id c19sm5576940oib.21.2019.10.14.10.19.01
+        by smtp.gmail.com with ESMTPSA id u141sm5690928oie.40.2019.10.14.10.39.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 10:19:01 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 12:19:00 -0500
+        Mon, 14 Oct 2019 10:39:01 -0700 (PDT)
+Date:   Mon, 14 Oct 2019 12:39:00 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, alexandre.torgue@st.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v3] dt-bindings: thermal: Convert stm32 thermal bindings
- to json-schema
-Message-ID: <20191014171900.GA8680@bogus>
-References: <20191014092200.24179-1-benjamin.gaignard@st.com>
+To:     Jianxin Pan <jianxin.pan@amlogic.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH RESEND v2 1/4] dt-bindings: power: add Amlogic secure
+ power domains bindings
+Message-ID: <20191014173900.GA6886@bogus>
+References: <1570695678-42623-1-git-send-email-jianxin.pan@amlogic.com>
+ <1570695678-42623-2-git-send-email-jianxin.pan@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191014092200.24179-1-benjamin.gaignard@st.com>
+In-Reply-To: <1570695678-42623-2-git-send-email-jianxin.pan@amlogic.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 14 Oct 2019 11:22:00 +0200, Benjamin Gaignard wrote:
-> Convert the STM32 thermal binding to DT schema format using json-schema
+On Thu, Oct 10, 2019 at 04:21:15AM -0400, Jianxin Pan wrote:
+> Add the bindings for the Amlogic Secure power domains, controlling the
+> secure power domains.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
+> power domain registers are in secure world.
+> 
+> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
 > ---
-> changes in v3:
-> - use (GPL-2.0-only OR BSD-2-Clause) license
-> - fix indentation
-> - add additionalProperties: false
-> - add #thermal-sensor-cells property 
+>  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 42 ++++++++++++++++++++++
+>  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>  create mode 100644 include/dt-bindings/power/meson-a1-power.h
 > 
->  .../bindings/thermal/st,stm32-thermal.yaml         | 79 ++++++++++++++++++++++
->  .../devicetree/bindings/thermal/stm32-thermal.txt  | 61 -----------------
->  2 files changed, 79 insertions(+), 61 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
->  delete mode 100644 Documentation/devicetree/bindings/thermal/stm32-thermal.txt
-> 
+> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> new file mode 100644
+> index 00000000..88d8261
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +# Copyright (c) 2019 Amlogic, Inc
+> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Amlogic Meson Secure Power Domains
+> +
+> +maintainers:
+> +  - Jianxin Pan <jianxin.pan@amlogic.com>
+> +
+> +description: |+
+> +  Meson Secure Power Domains used in A1/C1 SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amlogic,meson-a1-pwrc
+> +
+> +  "#power-domain-cells":
+> +    const: 1
+> +
+> +  secure-monitor:
+> +    description: phandle to the secure-monitor node
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-Applied, thanks.
+Why not just a child node of this node?
 
 Rob
