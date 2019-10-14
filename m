@@ -2,115 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F35D689E
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B615ED68C6
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730527AbfJNRjD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 13:39:03 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46475 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730466AbfJNRjD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:39:03 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k25so14405212oiw.13;
-        Mon, 14 Oct 2019 10:39:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WreGjKNejizDLrH2DJ0lAxbkyZ+jrNSgTeuzICqx9Z4=;
-        b=Ps+BXYSncxtbGCQ/GHAeLojTLAhVtin33gIyD+TrRbs37kMSMo2NurG7cCWFw79dKM
-         R4uIkUu+wSZofGcOljMq78mPQ0C15PEh6rK/0LJaXHxagVn+Paw9+5T0/ybMBcc6WhXM
-         9ekXSjbiCNLoHLQUxvb7FsWMQ3h1jG4i7njjq1U3+V6ccixmwXjKRn+Bq/3kHrnvOdcn
-         bsMVCQ6EPRndVRmW/PaBWjRWeJENPPU6NIAcOsYogRO5myerD0RSlWs01Mx11aLQ1Jws
-         p5e86swtgGsFdNXfmfHhwg/zI4eUgzGOsdxv0nv00K6DIPpIzGEy6m5845COWIxhpbiu
-         3Ghg==
-X-Gm-Message-State: APjAAAURg4u9TZjnm+g91+opGlQ9xE84rw4vRTj1DS4c1ztlOmmnC+QP
-        JZITTjVPtJDZ85xzdqjMPw==
-X-Google-Smtp-Source: APXvYqwdJv5xXQGlATBAH3wK/IT/WCXKxGy8SwE92PGPwmCT2Qv3DTyiAPc8LtnULM3NF1dE3Xu3gQ==
-X-Received: by 2002:aca:da41:: with SMTP id r62mr24442959oig.47.1571074742140;
-        Mon, 14 Oct 2019 10:39:02 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u141sm5690928oie.40.2019.10.14.10.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 10:39:01 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 12:39:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jianxin Pan <jianxin.pan@amlogic.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jian Hu <jian.hu@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH RESEND v2 1/4] dt-bindings: power: add Amlogic secure
- power domains bindings
-Message-ID: <20191014173900.GA6886@bogus>
-References: <1570695678-42623-1-git-send-email-jianxin.pan@amlogic.com>
- <1570695678-42623-2-git-send-email-jianxin.pan@amlogic.com>
+        id S1729973AbfJNRqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 13:46:23 -0400
+Received: from mx3.freesources.org ([195.34.172.217]:37766 "EHLO
+        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729776AbfJNRqX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:46:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=dJfxNHNnlsUDn8K/FsMwSL5SjVmol/ntlIse2l79Gaw=;
+        b=BIs+9bdeqx9T049n+iFRDDTsfpNGFBLSpiDOPPQPrx1w0+6AwjA76QOCvfqvArRkn31YTYvPmyHUZyf1/JKoHY4vyI3FOan5qDiJdLEXSwJNd4hoZIV5FXpAaYdKZmiYtRv5iyQ3xugUSDYD+xeB4yRVOROtoGqCu+wU37hue7U=;
+Received: from anon-34-247.vpn.ipredator.se ([46.246.34.247])
+        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <jonas@freesources.org>)
+        id 1iK4QD-0004hT-JE; Mon, 14 Oct 2019 17:46:17 +0000
+From:   Jonas Meurer <jonas@freesources.org>
+Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+ suspend
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>
+References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+ <2847488.TR0R5COpHM@kreacher>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
+ 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
+ 2SCIHpzHfm/mpRL2
+Message-ID: <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
+Date:   Mon, 14 Oct 2019 19:46:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570695678-42623-2-git-send-email-jianxin.pan@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <2847488.TR0R5COpHM@kreacher>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 04:21:15AM -0400, Jianxin Pan wrote:
-> Add the bindings for the Amlogic Secure power domains, controlling the
-> secure power domains.
-> 
-> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
-> power domain registers are in secure world.
-> 
-> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
-> ---
->  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 42 ++++++++++++++++++++++
->  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
->  2 files changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->  create mode 100644 include/dt-bindings/power/meson-a1-power.h
-> 
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> new file mode 100644
-> index 00000000..88d8261
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +# Copyright (c) 2019 Amlogic, Inc
-> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Amlogic Meson Secure Power Domains
-> +
-> +maintainers:
-> +  - Jianxin Pan <jianxin.pan@amlogic.com>
-> +
-> +description: |+
-> +  Meson Secure Power Domains used in A1/C1 SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson-a1-pwrc
-> +
-> +  "#power-domain-cells":
-> +    const: 1
-> +
-> +  secure-monitor:
-> +    description: phandle to the secure-monitor node
-> +    $ref: /schemas/types.yaml#/definitions/phandle
+Hi Rafael and linux-pm maintainers,
 
-Why not just a child node of this node?
+thanks a lot for your feedback, it's much appreciated!
 
-Rob
+Rafael J. Wysocki:
+>> This patch adds a run-time switch at `/sys/power/suspend_sync`.
+> 
+> I'd prefer "sync_on_suspend".
+
+Agreed and changed.
+
+>> The switch allows to enable or disable the final sync() from the suspend.=
+>> c
+>> Linux Kernel system suspend implementation. This is useful to avoid race
+>> conditions if block devices have been suspended before. Be aware that you=
+>>
+>> have to take care of sync() yourself before suspending the system if you
+>> disable it here.
+>>
+>> Since this is my first patch against the Linux kernel and I don't
+>> consider it ready for inclusion yet, I decided to send it to pm-linux
+>> and the PM subsystem maintainers only first. Would be very glad if you
+>> could take a look and comment on it :)
+>>
+>> Some questions:
+>>
+>> * There already is a build-time config flag[2] for en- or disabling the
+>>   sync() in suspend.c. Is it acceptable to have both a build-time *and*
+>>   a *run-time* switch? Or would a run-time switch have to replace the
+>>   build-time switch? If so, a direct question to Rafael, as you added
+>>   the build-time flag: Would that be ok for you?
+> 
+> If there is a run-time knob to disable the syncing, the only reason for
+> the config option to be there will be to set the default value of that.
+
+Makes sense. I changed the meaning of the build-time flag accordingly.
+
+>> To give a bit more contect: In Debian, we're currently working[3] on
+>> support to suspend unlocked dm-crypt devices before system suspend.
+>> During that work, we realized that the final sync() from Linux Kernel
+>> system suspend implementation can lead to a dead lock.
+> 
+> That's also true for FUSE filesystems I think and please note that this isn't
+> going to work with hibernation (in which case filesystems are synced
+> regardless).
+
+In my opinion, hibernation doesn't matter much. Since the memory is
+powered off on hibernation anyway, there's no reason to luksSuspend the
+devices beforehands, don't you think so?
+
+> The changes look reasonable to me.
+
+Glad to read. I'll send a second version of the patches as replies soon
+after this mail. How do we go on from here? Could you imagine to review
+them again and sign them afterwards? Or am I supposed to send them to
+the lkml and wait for feedback before getting more signers? As written,
+I'm new to the Linux Kernel development process and not sure what's the
+logical next step to get the patches merged.
+
+Thanks again for your help!
+
+Cheers
+ jonas
+
+
