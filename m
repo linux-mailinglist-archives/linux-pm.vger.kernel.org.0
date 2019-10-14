@@ -2,81 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD176D67DA
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 18:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B03CD683B
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388319AbfJNQ7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 12:59:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:49128 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727083AbfJNQ7A (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Oct 2019 12:59:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9300E28;
-        Mon, 14 Oct 2019 09:59:00 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E22063F718;
-        Mon, 14 Oct 2019 09:58:59 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 17:58:51 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Sujeet Kumar Baranwal <sbaranwal@marvell.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [EXT] Re: SCMI & Devfreq
-Message-ID: <20191014165832.GA323@bogus>
-References: <BYAPR18MB24387C9DDE32067F1763B6DEAFB00@BYAPR18MB2438.namprd18.prod.outlook.com>
- <20190913102304.GC2559@bogus>
- <BYAPR18MB2438723658EF1F0586170CDDAF8C0@BYAPR18MB2438.namprd18.prod.outlook.com>
- <20190916101505.GB6109@bogus>
- <BYAPR18MB2438DC4E8CA4E90455F0345BAF8C0@BYAPR18MB2438.namprd18.prod.outlook.com>
- <BYAPR18MB2438047B622951C6EFE92FABAF8E0@BYAPR18MB2438.namprd18.prod.outlook.com>
- <20190919152300.GA11801@bogus>
- <BYAPR18MB2438ADA20039CFF8F62DFF11AF9B0@BYAPR18MB2438.namprd18.prod.outlook.com>
+        id S2388285AbfJNRTD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 13:19:03 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40867 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729997AbfJNRTD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:19:03 -0400
+Received: by mail-ot1-f66.google.com with SMTP id y39so14446447ota.7;
+        Mon, 14 Oct 2019 10:19:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Oawtn+ZtULQjiLVim+vckZa5eaPMWsScI+Ob1030FAs=;
+        b=lPbImLFcLWmJa7pEc6i+5n62mB+Ph+vqCpAL2oHYX6RgvTIOAsRi0QUVsfhDYdc8+L
+         6VYI4vWJsqTUXw00lamV4DfIzHNuYqAYg6KRiqAn8MORFiGmj5WETFLgrdENFTDKhTUl
+         RkGCZHuJYLlBw0/XdrEhFu4Cuv5GCPULV2I9YPZxggODsaDHABsyLcSy0pgvcW8ZU28a
+         hiccvEzpN9HCdKNXsneSS3i2GLPQW8L2WVZCdLMUFAs+/MMx0Z+/f3jZCmcIYOm8oUgg
+         WknN6Pgs2xvcVCZgfNdZSfYjx7J8iecwwmWlFtnPewM5ivTWjrO5KFux24y06cbrItRn
+         5moA==
+X-Gm-Message-State: APjAAAVTk7rjllK2lGLztOU1/2hOX3kOr+j/I3Ym3hLRUwAzmXi8mD6x
+        GcM4eqN4ExT24jsJLKDdTN7We7M=
+X-Google-Smtp-Source: APXvYqyPtnEO4APY3yw1HpmCGICMIlAbQFIjbEAo3JeIS6WLqjZNALfT21r09YAL7iS9fjzlr9BLKQ==
+X-Received: by 2002:a9d:7993:: with SMTP id h19mr4679414otm.226.1571073542158;
+        Mon, 14 Oct 2019 10:19:02 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c19sm5576940oib.21.2019.10.14.10.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2019 10:19:01 -0700 (PDT)
+Date:   Mon, 14 Oct 2019 12:19:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, alexandre.torgue@st.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH v3] dt-bindings: thermal: Convert stm32 thermal bindings
+ to json-schema
+Message-ID: <20191014171900.GA8680@bogus>
+References: <20191014092200.24179-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR18MB2438ADA20039CFF8F62DFF11AF9B0@BYAPR18MB2438.namprd18.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191014092200.24179-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 06:20:40PM +0000, Sujeet Kumar Baranwal wrote:
-> Hi Sudeep,
->
-> Per SCMI perf protocol, the MAX_OPPS macro which is 16, means that at max
-> there could be only 16 OPPs. In my platform implementation, I tried with 16
-> OPPs but  when OPPs info came linux perf.c file from SCP, it only showed 12
-> OPPs only.
->
-> Suspecting the rx buffer size, I increased the size to 256 and now the
-> message for all 16 OPPs were reliably received.
->
+On Mon, 14 Oct 2019 11:22:00 +0200, Benjamin Gaignard wrote:
+> Convert the STM32 thermal binding to DT schema format using json-schema
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+> changes in v3:
+> - use (GPL-2.0-only OR BSD-2-Clause) license
+> - fix indentation
+> - add additionalProperties: false
+> - add #thermal-sensor-cells property 
+> 
+>  .../bindings/thermal/st,stm32-thermal.yaml         | 79 ++++++++++++++++++++++
+>  .../devicetree/bindings/thermal/stm32-thermal.txt  | 61 -----------------
+>  2 files changed, 79 insertions(+), 61 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/stm32-thermal.txt
+> 
 
-OK, but is there any reason why firmware can't use num_levels[31:16]
-i.e Number of remaining performance levels and [11:00] i.e.Number of
-performance levels that are returned by this call to break and send in
-2 calls ? The interface was designed to work with minimum shmem size.
+Applied, thanks.
 
-
-> *****************
-> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-> index 449f713..737d675 100644 (file)
-> --- a/drivers/firmware/arm_scmi/driver.c
-> +++ b/drivers/firmware/arm_scmi/driver.c
-> @@ -612,7 +612,7 @@ int scmi_handle_put(const struct scmi_handle *handle)
->  static const struct scmi_desc scmi_generic_desc = {
->         .max_rx_timeout_ms = 30,        /* We may increase this if required */
->         .max_msg = 20,          /* Limited by MBOX_TX_QUEUE_LEN */
-> -       .max_msg_size = 128,
-> +       .max_msg_size = 256,
-
-If you need this, I prefer to introduce new compatible for the platform
-scmi and add it as platform specific scmi_desc to start with.
-
---
-Regards,
-Sudeep
+Rob
