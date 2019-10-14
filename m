@@ -2,127 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53145D6B3E
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 23:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F531D6B2D
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 23:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388026AbfJNV0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 17:26:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33766 "EHLO mail.kernel.org"
+        id S1730002AbfJNVXQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 17:23:16 -0400
+Received: from mga18.intel.com ([134.134.136.126]:21982 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387750AbfJNV0t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Oct 2019 17:26:49 -0400
-Received: from earth.universe (eth-west-pareq2-46-193-2-41.wb.wifirst.net [46.193.2.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BC19121721;
-        Mon, 14 Oct 2019 21:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571088408;
-        bh=Rz8xhmL935mXLtSudYn8Yr1PvTUCjNWwAoCjj8yI2QU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RtIJQllrBy84L7sEf7yZJPleBJieDdrmJp+JZFafMLwgj1hir8qaGHMg7mLI57x7b
-         feOHpfR8QSh2iK5kyt430OLvgPI9KQNfF+dBkXYBfQaenzFnRWbda/23AWQXGn2Uyw
-         xmB8qrjCC2yS7grSoCGzYdRaD4lOSwxi5njohQ0U=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 1147F3C0CAA; Mon, 14 Oct 2019 08:59:13 +0200 (CEST)
-Date:   Mon, 14 Oct 2019 08:59:13 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: reset: at91-poweroff: lookup for proper PMC DT
- node
-Message-ID: <20191014065913.k244l6gdgfiu4jsk@earth.universe>
-References: <1569493537-7612-1-git-send-email-claudiu.beznea@microchip.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d46ovw6gybmflark"
-Content-Disposition: inline
-In-Reply-To: <1569493537-7612-1-git-send-email-claudiu.beznea@microchip.com>
-User-Agent: NeoMutt/20180716
+        id S1729708AbfJNVXQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Oct 2019 17:23:16 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Oct 2019 14:23:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,296,1566889200"; 
+   d="scan'208";a="194328026"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Oct 2019 14:23:15 -0700
+Message-ID: <e7e89cd85fb5d367338491651b36cc912967edab.camel@linux.intel.com>
+Subject: Re: Frequency not returning to fixed value after AVX workload
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Hernandez Lopez, Fabiola" <fabiola.hernandez.lopez@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Date:   Mon, 14 Oct 2019 14:23:15 -0700
+In-Reply-To: <67737C20FC7E4D44B44817ABFA5B1DCE6EC020E9@CRSMSX104.amr.corp.intel.com>
+References: <67737C20FC7E4D44B44817ABFA5B1DCE6EC01C77@CRSMSX104.amr.corp.intel.com>
+         <3340378.NBreQbsDsf@kreacher>
+         <67737C20FC7E4D44B44817ABFA5B1DCE6EC020E9@CRSMSX104.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 2019-10-14 at 21:11 +0000, Hernandez Lopez, Fabiola wrote:
+> How do you measure the frequency?
+Do whatever you are doing to get to your problem state and while doing
+the test run in another window:
 
---d46ovw6gybmflark
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+#turbostat
 
-Hi,
+Attach the output.
 
-On Thu, Sep 26, 2019 at 01:25:37PM +0300, Claudiu Beznea wrote:
-> Driver has been enabled also for SAM9X60. At the moment the patch which d=
-id
-> this has been sent to mainline the PMC for SAM9X60 wasn't integrated.
-> SAM9X60 has a new PMC compatible (see commit 01e2113de9a5
-> ("clk: at91: add sam9x60 pmc driver")). Do to this we have to
-> look for proper PMC compatible here, in SHDWC driver.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
+Thanks,
+Srinivas
 
-Thanks, queued.
+> With lscpu.
+> 
+> What exactly do you do to get the expected frequency back?
+> A script is used that sets the frequency with
+> /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed
+> 
+> Is the target frequency in the turbo range?
+> No, the target frequency is the same as the base processor frequency:
+> 2.4GHz. The max turbo frequency for this CPU si 3.9 GHz.
+> This has been tested with turbo boost enabled and disabled. 
+> 
+> This behavior is very sporadic: < 10%
+> 
+> Thanks,
+> Fabiola
+> 
+> -----Original Message-----
+> From: Rafael J. Wysocki [mailto:rjw@rjwysocki.net] 
+> Sent: Monday, October 14, 2019 4:45 AM
+> To: Hernandez Lopez, Fabiola <fabiola.hernandez.lopez@intel.com>
+> Cc: linux-pm@vger.kernel.org; Srinivas Pandruvada <
+> srinivas.pandruvada@linux.intel.com>
+> Subject: Re: Frequency not returning to fixed value after AVX
+> workload
+> 
+> On Friday, October 11, 2019 7:45:55 PM CEST Hernandez Lopez, Fabiola
+> wrote:
+> > Hi,
+> > 
+> > We are seeing an unexpected behavior after applying AVX workloads. 
+> > After setting the CPU frequency to a fixed value with CPU Freq - 
+> > userspace governor and applying heavy AVX workloads, the CPU
+> > frequency 
+> > is decreased (as expected) but it never returns to the previously
+> > established value.
+> 
+> How do you measure the frequency?
+> 
+> > This does not happen on all cores, only on a single core. The only
+> > way 
+> > to return to the desired frequency is by setting it through the 
+> > command line again.
+> 
+> What exactly do you do to get the expected frequency back?
+> 
+> > We are wondering how can this change in frequency happen.
+> 
+> Is the target frequency in the turbo range?
+> 
+> 
+> 
 
--- Sebastian
-
->  drivers/power/reset/at91-sama5d2_shdwc.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/res=
-et/at91-sama5d2_shdwc.c
-> index e341cc5c0ea6..1c18f465a245 100644
-> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -269,6 +269,12 @@ static const struct of_device_id at91_shdwc_of_match=
-[] =3D {
->  };
->  MODULE_DEVICE_TABLE(of, at91_shdwc_of_match);
-> =20
-> +static const struct of_device_id at91_pmc_ids[] =3D {
-> +	{ .compatible =3D "atmel,sama5d2-pmc" },
-> +	{ .compatible =3D "microchip,sam9x60-pmc" },
-> +	{ /* Sentinel. */ }
-> +};
-> +
->  static int __init at91_shdwc_probe(struct platform_device *pdev)
->  {
->  	struct resource *res;
-> @@ -313,7 +319,7 @@ static int __init at91_shdwc_probe(struct platform_de=
-vice *pdev)
-> =20
->  	at91_shdwc_dt_configure(pdev);
-> =20
-> -	np =3D of_find_compatible_node(NULL, NULL, "atmel,sama5d2-pmc");
-> +	np =3D of_find_matching_node(NULL, at91_pmc_ids);
->  	if (!np) {
->  		ret =3D -ENODEV;
->  		goto clk_disable;
-> --=20
-> 2.7.4
->=20
-
---d46ovw6gybmflark
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2kHMAACgkQ2O7X88g7
-+pq7ohAAmySmtlvTEoMtu+Eg6ZkyLhWE91QzJjC093TI4eHPf9Qq1kRKpJvzf7w4
-ft7/1dtdHaMh3WZ7QnzcqTRvYWuHqjWQn3vF/gNuuXkCbo0LBUI+zuJozc6+83Xp
-XMRehD0muqSMEEPaceJAXw1uUiTn2oygLr5mDYBZpZtShk5qF5aNBRWccf8V1Npj
-ZeZOj/whAqHAR5ixz3XaKOYuC9w5LWn63IrmTCtbWeJkuR3pfcjSJJkOH9MH3TYR
-TipTLYjdsMGfrT6YWAFH/ay5dKKUALWYnyxkAwyis/BZuaxtUuJwLuEpXAd2WO6Q
-qBrAI3XMeWvf2csWXiJ/o6Dp1TnPWh4bNwaBM3McBNbgWdPNpfYZxH1db/GpXbds
-ipP/ntBN/DKtQ07VfK/2JziQ3D+bR7fi5aTueLo+5+WtzlV/poBLooTWVMRWfRQn
-ljaAUWw4EkIy2W97u1/u4ZRQHbNw8FUT2zn/zlOaDDA+HGMYU0etfb7aaY45QCUe
-nzQaC+QkMvKLFJe+LYnkN7ZP+Aj28pP+A4Bejc14qN4p7PHwqPWHTHF7v/SfKS5T
-xXc5lezAd+uBvTZkUpXEFBw/lW3RJFgF4HbiOaU6soNYW6IhXOgKrn57GYPuOuZE
-XYk2VReN/wl+jhjh96z3rM51pdkSJT9eOOxNhOQTs3diaOvsPBY=
-=lBa6
------END PGP SIGNATURE-----
-
---d46ovw6gybmflark--
