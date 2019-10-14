@@ -2,126 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A058D6652
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 17:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E6D6685
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 17:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731484AbfJNPnZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 11:43:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56924 "EHLO mail.kernel.org"
+        id S1730430AbfJNPu1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 11:50:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:47468 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731441AbfJNPnZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Oct 2019 11:43:25 -0400
-Received: from localhost (odyssey.drury.edu [64.22.249.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCE0921848;
-        Mon, 14 Oct 2019 15:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571067804;
-        bh=ogA0vV9jKYkujrE+XcGevuyHNLI9AnE4kf2je8GMmOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WQgZ8mYT63jkCOewpVr2XBTJgsYL8Un/tkLweTDniCh3HCsx3KaVEYOvxfOj3Wll5
-         APp05yihO1GEw4gLAfZIjFgx2Pe2IM/kHVizYZRuyFJvmml0On7oQDhHM8iY+oAklI
-         qgKsJrBiJ2iTTYaHi6EJVEgbaJ3OYcTRN/QlRvgM=
-Date:   Mon, 14 Oct 2019 10:43:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Message-ID: <20191014154322.GA190693@google.com>
+        id S1730429AbfJNPu1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Oct 2019 11:50:27 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7854428;
+        Mon, 14 Oct 2019 08:50:26 -0700 (PDT)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 060BA3F718;
+        Mon, 14 Oct 2019 08:50:24 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, qperret@qperret.net,
+        patrick.bellasi@matbug.net, dh.han@samsung.com
+References: <20191011134500.235736-1-douglas.raillard@arm.com>
+ <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
+Date:   Mon, 14 Oct 2019 16:50:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191014061355.29072-1-drake@endlessm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Mika]
+Hi Peter,
 
-On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
-> On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
-> the XHCI controller fails to resume from runtime suspend or s2idle,
-> and USB becomes unusable from that point.
+On 10/14/19 3:53 PM, Peter Zijlstra wrote:
+> On Fri, Oct 11, 2019 at 02:44:54PM +0100, Douglas RAILLARD wrote:
+>> This has been ligthly tested with a rtapp task ramping from 10% to 75%
+>> utilisation on a big core. Results are improved by fast ramp-up
+>> EWMA [1], since it greatly reduces the oscillation in frequency at first
+>> idle when ramping up.
+>>
+>> [1] [PATCH] sched/fair: util_est: fast ramp-up EWMA on utilization increases
+>>      Message-ID: <20190620150555.15717-1-patrick.bellasi@arm.com>
+>>      https://lore.kernel.org/lkml/20190620150555.15717-1-patrick.bellasi@arm.com/
 > 
-> xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-> xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-> xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
-> xhci_hcd 0000:03:00.4: PCI post-resume error -110!
-> xhci_hcd 0000:03:00.4: HC died; cleaning up
 > 
-> The D3-to-D0 transition is successful if the D3 delay is increased
-> to 20ms. Add an appropriate quirk for the affected hardware.
+> I don't really see anything fundamentally weird here. Any actual numbers
+> or other means of quantifying the improvement these patches bring?
 > 
-> Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
-> Signed-off-by: Daniel Drake <drake@endlessm.com>
 
-Can you tell if this is because the Ryzen7 XHCI controller is out of
-spec, or is the Linux PCI core missing some delay?  If the latter,
-fixing the core might fix other devices as well.
+I posted some numbers based on a similar experiment on the v2 of that series that
+are still applicable:
 
-Mika has this patch:
-https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
-for similar issues, but I think that patch fixes D3cold->D0
-transitions, and your patch appears to be concerned with D3hot->D0
-transitions.
+TL;DR the rt-app negative slack is divided by 1.75 by this series, with an
+increase of 3% in total energy consumption. There is a burst every 0.6s, and
+the average power consumption increase is proportional to the average number
+of bursts.
 
-> ---
->  drivers/pci/quirks.c | 30 +++++++++++++++++++++++-------
->  1 file changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 320255e5e8f8..4570439a6a6c 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -1871,19 +1871,35 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x2609, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260a, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260b, quirk_intel_pcie_pm);
->  
-> +static void quirk_d3_delay(struct pci_dev *dev, unsigned int delay)
-> +{
-> +	if (dev->d3_delay >= delay)
-> +		return;
-> +
-> +	dev->d3_delay = delay;
-> +	pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
-> +		 dev->d3_delay);
-> +}
-> +
->  static void quirk_radeon_pm(struct pci_dev *dev)
->  {
->  	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
-> -	    dev->subsystem_device == 0x00e2) {
-> -		if (dev->d3_delay < 20) {
-> -			dev->d3_delay = 20;
-> -			pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
-> -				 dev->d3_delay);
-> -		}
-> -	}
-> +	    dev->subsystem_device == 0x00e2)
-> +		quirk_d3_delay(dev, 20);
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
->  
-> +/*
-> + * Ryzen7 XHCI controllers fail upon resume from runtime suspend or s2idle
-> + * unless an extended D3 delay is used.
-> + */
-> +static void quirk_ryzen_xhci_d3(struct pci_dev *dev)
-> +{
-> +	quirk_d3_delay(dev, 20);
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3);
-> +
->  #ifdef CONFIG_X86_IO_APIC
->  static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
->  {
-> -- 
-> 2.20.1
-> 
+
+The workload is an rt-app task ramping up from 5% to 75% util in one big step,
+pinned on a big core. The whole cycle is 0.6s long (0.3s at 5% followed by 0.3s at 75%).
+This cycle is repeated 20 times and the average of boosting is taken.
+
+The test device is a Google Pixel 3 (Qcom Snapdragon 845) phone.
+It has a lot more OPPs than a hikey 960, so gradations in boosting
+are better reflected on frequency selection.
+
+avg slack (higher=better):
+     Average time between task sleep and its next periodic activation.
+     See rt-app doc: https://github.com/scheduler-tools/rt-app/blob/9a50d76f726d7c325c82ac8c7ed9ed70e1c97937/doc/tutorial.txt#L631
+
+avg negative slack (lower in absolute value=better):
+     Same as avg slack, but only taking into account negative values.
+     Negative slack means a task activation did not have enough time to complete before the next
+     periodic activation fired, which is what we want to avoid.
+
+boost energy overhead (lower=better):
+     Extra power consumption induced by ramp boost, assuming continuous OPP space (infinite number of OPP)
+     and single-CPU policies. In practice, fixed number of OPP decrease this value, and more CPU per policy increases it,
+     since boost(policy) = max(boost(cpu) foreach cpu of policy)).
+
+Without ramp boost:
++--------------------+--------------------+
+|avg slack (us)      |avg negative slack  |
+|                    |(us)                |
++--------------------+--------------------+
+|6598.72             |-10217.13           |
+|6595.49             |-10200.13           |
+|6613.72             |-10401.06           |
+|6600.29             |-9860.872           |
+|6605.53             |-10057.64           |
+|6612.05             |-10267.50           |
+|6599.01             |-9939.60            |
+|6593.79             |-9445.633           |
+|6613.56             |-10276.75           |
+|6595.44             |-9751.770           |
++--------------------+--------------------+
+|average                                  |
++--------------------+--------------------+
+|6602.76             |-10041.81           |
++--------------------+--------------------+
+
+
+With ramp boost enabled:
++--------------------+--------------------+--------------------+
+|boost energy        |avg slack (us)      |avg negative slack  |
+|overhead (%)        |                    |(us)                |
++--------------------+--------------------+--------------------+
+|3.05                |7148.93             |-5664.26            |
+|3.04                |7144.69             |-5667.77            |
+|3.05                |7149.05             |-5698.31            |
+|2.97                |7126.71             |-6040.23            |
+|3.02                |7140.28             |-5826.78            |
+|3.03                |7135.11             |-5749.62            |
+|3.05                |7140.24             |-5750.0             |
+|3.05                |7144.84             |-5667.04            |
+|3.07                |7157.30             |-5656.65            |
+|3.06                |7154.65             |-5653.76            |
++--------------------+--------------------+--------------------+
+|average                                                       |
++--------------------+--------------------+--------------------+
+|3.039000            |7144.18             |-5737.44            |
++--------------------+--------------------+--------------------+
+
+
+The negative slack is due to missed activations while the utilization signals
+increase during the big utilization step. Ramp boost is designed to boost frequency during
+that phase, which materializes in 1.75 less negative slack, for an extra power
+consumption under 3%.
+
+
+Regards,
+Douglas
