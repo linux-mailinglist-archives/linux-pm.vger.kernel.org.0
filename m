@@ -2,115 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54740D6136
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 13:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2583D61E1
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 14:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728816AbfJNLZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 07:25:03 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54842 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726573AbfJNLZD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 07:25:03 -0400
-Received: from 79.184.254.38.ipv4.supernova.orange.pl (79.184.254.38) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 4617d267eb5b2597; Mon, 14 Oct 2019 13:25:01 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>,
-        Daniel Drake <drake@endlessm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] PCI: PM: Fix pci_power_up()
-Date:   Mon, 14 Oct 2019 13:25:00 +0200
-Message-ID: <5720276.eiOaOx1Qyb@kreacher>
-In-Reply-To: <3118349.722IRLjr4b@kreacher>
-References: <20190927090202.1468-1-drake@endlessm.com> <CAD8Lp44TYxrMgPLkHCqF9hv6smEurMXvmmvmtyFhZ6Q4SE+dig@mail.gmail.com> <3118349.722IRLjr4b@kreacher>
+        id S1730314AbfJNMAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 08:00:31 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:44124 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731350AbfJNMAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 08:00:31 -0400
+Received: by mail-vs1-f65.google.com with SMTP id w195so10600775vsw.11
+        for <linux-pm@vger.kernel.org>; Mon, 14 Oct 2019 05:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=q3Z94p1QpfVDQmQzfMLX7QdnwsxrmF1FNh4SNTp11No=;
+        b=j7dnd3cshRg21qbTKeGhRhs8AR4hopUwJTkIpcv7BdDzllmZg7aFB/f/dKbCOIThX4
+         KFOlM/xk/qSgvhX/hqhHMthzmwU4zIbg9YAWG0MxBmZiHh7GxO3lPRp2PDCvPimp1y5b
+         uDQUkvBZHWamvbwfmmplfVDvjCIaSvJSfmVTv4s0DzfHnDQo5uv4F7BgXxEDcIEEzlNi
+         lhhQ5CGrRxD7C31wSfDa3wIQouhLqcoAqqvzqyBxDtNVF4COhr4wreww+JQYPBe9OuSe
+         +GNmCO5tsm6fSPjBcxy9I0IWl2SJEybfNC31TPZ3ccnQw6JWkR6xcGkJa5o1UQXwGeX0
+         j4Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=q3Z94p1QpfVDQmQzfMLX7QdnwsxrmF1FNh4SNTp11No=;
+        b=dKlyF97AOVUoRis5kcOBKIySTJa2j7MDVKx82T5YAQ2ZcmfIG7tYv1+Qyo9wKM9pq2
+         h5dsofX8odNFMDe9Xxj6P9G/CxEsB8Q3N8iPJkfko3rs0xuVxlOXuNZ3nPRA1c4bO9Zn
+         TNLkEnX5SNqWQuXGcU6c2DDQeQZQ8fxjesyw9mByDfY0+qJdtMZ6PPARm1SM8fmCfWQ9
+         qbev4eeFWJNRH3xFeLYti86SL5kWd9SYfiGYXSy40SlgDaCod/I1rRoQajJhLY1ralf9
+         fQOIVa9u7lPChanYyoHBzxeQoabF7iNkIk7fWMTlxOfFhv1duLAn+JGl49K60l3az9k9
+         1WJw==
+X-Gm-Message-State: APjAAAWja2iUx2u1cmR1jjkhZ1sd1Z259gzmwYSFW9UYLSIi6V5aCR1d
+        ro59EY58AsY706Piqjg2O3ZgdDx9X7qpbbDxVUk=
+X-Google-Smtp-Source: APXvYqxDbE/QqYTt7+CvqTHvzu4tUq4qt9Jm+OmFLTbJIooY373G1EtLgzYKGUEjSvG4zLV8+1EOqdray+gVDvx6g2o=
+X-Received: by 2002:a67:fb0c:: with SMTP id d12mr16119458vsr.201.1571054430821;
+ Mon, 14 Oct 2019 05:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Received: by 2002:a67:1546:0:0:0:0:0 with HTTP; Mon, 14 Oct 2019 05:00:30
+ -0700 (PDT)
+Reply-To: kossid60@yahoo.com
+From:   "Dr.Phillip B. Kossi" <missrb2015@gmail.com>
+Date:   Mon, 14 Oct 2019 12:00:30 +0000
+Message-ID: <CAG_pZkfXzStrMp9yGihEyPuiDvOYOkJZ9nOuXuJq5tDC_NVjOQ@mail.gmail.com>
+Subject: Looking forward to your prompt response.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hello,
 
-There is an arbitrary difference between the system resume and
-runtime resume code paths for PCI devices regarding the delay to
-apply when switching the devices from D3cold to D0.
+My name is Mr Phillip Kossi, I am a manager with finance bank. I'm
+writing following an opportunity in my office that will be of great
+benefit to us. Valued at 10.5M US. We will share in the Ratio of
+discussion at the end of this deal. All i require is your honest
+cooperation.
 
-Namely, pci_restore_standard_config() used in the runtime resume
-code path calls pci_set_power_state() which in turn invokes
-__pci_start_power_transition() to power up the device through the
-platform firmware and that function applies the transition delay
-(as per PCI Express Base Specification Revision 2.0, Section 6.6.1).
-However, pci_pm_default_resume_early() used in the system resume
-code path calls pci_power_up() which doesn't apply the delay at
-all and that causes issues to occur during resume from
-suspend-to-idle on some systems where the delay is required.
+I'll send you details of this proposal to proceed for your better
+understanding as soon as I hear from you.
 
-Since there is no reason for that difference to exist, modify
-pci_power_up() to follow pci_set_power_state() more closely and
-invoke __pci_start_power_transition() from there to call the
-platform firmware to power up the device (in case that's necessary).
-
-Fixes: db288c9c5f9d ("PCI / PM: restore the original behavior of pci_set_power_state()")
-Reported-by: Daniel Drake <drake@endlessm.com> 
-Link: https://lore.kernel.org/linux-pm/CAD8Lp44TYxrMgPLkHCqF9hv6smEurMXvmmvmtyFhZ6Q4SE+dig@mail.gmail.com/T/#m21be74af263c6a34f36e0fc5c77c5449d9406925
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Daniel, please test this one.
-
----
- drivers/pci/pci.c |   24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -959,19 +959,6 @@ void pci_refresh_power_state(struct pci_
- }
- 
- /**
-- * pci_power_up - Put the given device into D0 forcibly
-- * @dev: PCI device to power up
-- */
--void pci_power_up(struct pci_dev *dev)
--{
--	if (platform_pci_power_manageable(dev))
--		platform_pci_set_power_state(dev, PCI_D0);
--
--	pci_raw_set_power_state(dev, PCI_D0);
--	pci_update_current_state(dev, PCI_D0);
--}
--
--/**
-  * pci_platform_power_transition - Use platform to change device power state
-  * @dev: PCI device to handle.
-  * @state: State to put the device into.
-@@ -1154,6 +1141,17 @@ int pci_set_power_state(struct pci_dev *
- EXPORT_SYMBOL(pci_set_power_state);
- 
- /**
-+ * pci_power_up - Put the given device into D0 forcibly
-+ * @dev: PCI device to power up
-+ */
-+void pci_power_up(struct pci_dev *dev)
-+{
-+	__pci_start_power_transition(dev, PCI_D0);
-+	pci_raw_set_power_state(dev, PCI_D0);
-+	pci_update_current_state(dev, PCI_D0);
-+}
-+
-+/**
-  * pci_choose_state - Choose the power state of a PCI device
-  * @dev: PCI device to be suspended
-  * @state: target sleep state for the whole system. This is the value
-
-
-
+Sincerely
+Dr Phillip Kossi.
