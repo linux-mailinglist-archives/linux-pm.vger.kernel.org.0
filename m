@@ -2,86 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3465BD6620
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 17:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A058D6652
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 17:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728931AbfJNPcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 11:32:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:47000 "EHLO foss.arm.com"
+        id S1731484AbfJNPnZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 11:43:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728905AbfJNPcP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Oct 2019 11:32:15 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42C9C28;
-        Mon, 14 Oct 2019 08:32:14 -0700 (PDT)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA39D3F68E;
-        Mon, 14 Oct 2019 08:32:12 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-5-douglas.raillard@arm.com>
- <20191014143321.GH2328@hirez.programming.kicks-ass.net>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <65bfb1eb-2348-e36c-9ba1-31e59a9afc96@arm.com>
-Date:   Mon, 14 Oct 2019 16:32:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1731441AbfJNPnZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Oct 2019 11:43:25 -0400
+Received: from localhost (odyssey.drury.edu [64.22.249.253])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DCE0921848;
+        Mon, 14 Oct 2019 15:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571067804;
+        bh=ogA0vV9jKYkujrE+XcGevuyHNLI9AnE4kf2je8GMmOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WQgZ8mYT63jkCOewpVr2XBTJgsYL8Un/tkLweTDniCh3HCsx3KaVEYOvxfOj3Wll5
+         APp05yihO1GEw4gLAfZIjFgx2Pe2IM/kHVizYZRuyFJvmml0On7oQDhHM8iY+oAklI
+         qgKsJrBiJ2iTTYaHi6EJVEgbaJ3OYcTRN/QlRvgM=
+Date:   Mon, 14 Oct 2019 10:43:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
+        linux@endlessm.com, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191014154322.GA190693@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20191014143321.GH2328@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191014061355.29072-1-drake@endlessm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peter,
+[+cc Mika]
 
-On 10/14/19 3:33 PM, Peter Zijlstra wrote:
-> On Fri, Oct 11, 2019 at 02:44:58PM +0100, Douglas RAILLARD wrote:
->> Use the utilization signals dynamic to detect when the utilization of a
->> set of tasks starts increasing because of a change in tasks' behavior.
->> This allows detecting when spending extra power for faster frequency
->> ramp up response would be beneficial to the reactivity of the system.
->>
->> This ramp boost is computed as the difference
->> util_avg-util_est_enqueued. This number somehow represents a lower bound
+On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
+> On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
+> the XHCI controller fails to resume from runtime suspend or s2idle,
+> and USB becomes unusable from that point.
 > 
-> That reads funny, maybe 'as the difference between util_avg and
-> util_est_enqueued' ?
+> xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
+> xhci_hcd 0000:03:00.4: PCI post-resume error -110!
+> xhci_hcd 0000:03:00.4: HC died; cleaning up
+> 
+> The D3-to-D0 transition is successful if the D3 delay is increased
+> to 20ms. Add an appropriate quirk for the affected hardware.
+> 
+> Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
+> Signed-off-by: Daniel Drake <drake@endlessm.com>
 
-Indeed, it was not clear that it was a formula. Talking about formulas, I remember laying down
-the relations between the various flavors of util signals in the v2 thread. This could be
-turned rather easily into a doc page for PELT, along with a signal-processing-friendly
-accurate description of how the PELT signals are built. Would such a patch be of any
-interest the kernel tree ?
+Can you tell if this is because the Ryzen7 XHCI controller is out of
+spec, or is the Linux PCI core missing some delay?  If the latter,
+fixing the core might fix other devices as well.
 
->> of how much extra utilization this tasks is actually using, compared to
->> our best current stable knowledge of it (which is util_est_enqueued).
->>
->> When the set of runnable tasks changes, the boost is disabled as the
->> impact of blocked utilization on util_avg will make the delta with
->> util_est_enqueued not very informative.
-> 
->> @@ -561,6 +604,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->>   		}
->>   	}
->>   
->> +
->>   	return get_next_freq(sg_policy, util, max);
->>   }
-> 
-> Surely we can do without this extra whitespace? :-)
-> 
-woops ...
+Mika has this patch:
+https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
+for similar issues, but I think that patch fixes D3cold->D0
+transitions, and your patch appears to be concerned with D3hot->D0
+transitions.
 
-Cheers,
-Douglas
+> ---
+>  drivers/pci/quirks.c | 30 +++++++++++++++++++++++-------
+>  1 file changed, 23 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 320255e5e8f8..4570439a6a6c 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -1871,19 +1871,35 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x2609, quirk_intel_pcie_pm);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260a, quirk_intel_pcie_pm);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260b, quirk_intel_pcie_pm);
+>  
+> +static void quirk_d3_delay(struct pci_dev *dev, unsigned int delay)
+> +{
+> +	if (dev->d3_delay >= delay)
+> +		return;
+> +
+> +	dev->d3_delay = delay;
+> +	pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
+> +		 dev->d3_delay);
+> +}
+> +
+>  static void quirk_radeon_pm(struct pci_dev *dev)
+>  {
+>  	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
+> -	    dev->subsystem_device == 0x00e2) {
+> -		if (dev->d3_delay < 20) {
+> -			dev->d3_delay = 20;
+> -			pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
+> -				 dev->d3_delay);
+> -		}
+> -	}
+> +	    dev->subsystem_device == 0x00e2)
+> +		quirk_d3_delay(dev, 20);
+>  }
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
+>  
+> +/*
+> + * Ryzen7 XHCI controllers fail upon resume from runtime suspend or s2idle
+> + * unless an extended D3 delay is used.
+> + */
+> +static void quirk_ryzen_xhci_d3(struct pci_dev *dev)
+> +{
+> +	quirk_d3_delay(dev, 20);
+> +}
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3);
+> +
+>  #ifdef CONFIG_X86_IO_APIC
+>  static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
+>  {
+> -- 
+> 2.20.1
+> 
