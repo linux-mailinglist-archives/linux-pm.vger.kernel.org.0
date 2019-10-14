@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B615ED68C6
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE4ED68CB
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbfJNRqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 13:46:23 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:37766 "EHLO
+        id S1729990AbfJNRst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 13:48:49 -0400
+Received: from mx3.freesources.org ([195.34.172.217]:37774 "EHLO
         mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729776AbfJNRqX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:46:23 -0400
+        with ESMTP id S1729776AbfJNRst (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:48:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=dJfxNHNnlsUDn8K/FsMwSL5SjVmol/ntlIse2l79Gaw=;
-        b=BIs+9bdeqx9T049n+iFRDDTsfpNGFBLSpiDOPPQPrx1w0+6AwjA76QOCvfqvArRkn31YTYvPmyHUZyf1/JKoHY4vyI3FOan5qDiJdLEXSwJNd4hoZIV5FXpAaYdKZmiYtRv5iyQ3xugUSDYD+xeB4yRVOROtoGqCu+wU37hue7U=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=vzl4N+0VDGdO6GFcScjv6iayQDRTauM3FPaO6PUS5UE=;
+        b=gtLvolXr4nVBsdD4vU/i5IeMtW9MkHiyBvbX7C6doVvHPRqqm15t4Ugbud/uVzaOgbjR1mitrWNd4IfBjMqpys1TtKbhas6GcAhBuOSxSf/AoGn2sHwpCvX0VMHPrMejkSS2nvThwxAnntS0NU6BCAI5/GITRtC3Cp8YarTi2UU=;
 Received: from anon-34-247.vpn.ipredator.se ([46.246.34.247])
         by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <jonas@freesources.org>)
-        id 1iK4QD-0004hT-JE; Mon, 14 Oct 2019 17:46:17 +0000
+        id 1iK4Sb-0004iO-62; Mon, 14 Oct 2019 17:48:45 +0000
 From:   Jonas Meurer <jonas@freesources.org>
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+Subject: [PATCH v2 1/2] PM: Add a switch for disabling/enabling sync() before
  suspend
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
@@ -28,6 +28,7 @@ Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
         Tim Dittler <tim.dittler@systemli.org>
 References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
  <2847488.TR0R5COpHM@kreacher>
+ <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  mQINBEqFXAEBEAC+7gfLht8lDqGH1EPYoctDHvWQ4nk60UFDLfjqHmBGReL/9C7CyxYaqgY4
@@ -113,12 +114,12 @@ Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
  tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
  2SCIHpzHfm/mpRL2
-Message-ID: <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
-Date:   Mon, 14 Oct 2019 19:46:14 +0200
+Message-ID: <04291c9e-714f-09b2-680b-fd8ce5b079cf@freesources.org>
+Date:   Mon, 14 Oct 2019 19:48:42 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <2847488.TR0R5COpHM@kreacher>
+In-Reply-To: <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: 7bit
@@ -127,68 +128,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael and linux-pm maintainers,
+The switch allows to enable or disable the final sync() from the suspend.c
+Linux Kernel system suspend implementation. This is useful to avoid race
+conditions if block devices have been suspended before. Be aware that you
+have to take care of sync() yourself before suspending the system if you
+disable it here.
 
-thanks a lot for your feedback, it's much appreciated!
+Signed-off-by: Jonas Meurer <jonas@freesources.org>
+---
+ Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
+ include/linux/suspend.h               |    2 +
+ kernel/power/main.c                   |   35 ++++++++++++++++++++++++++++++++++
+ kernel/power/suspend.c                |    2 -
+ 4 files changed, 53 insertions(+), 2 deletions(-)
 
-Rafael J. Wysocki:
->> This patch adds a run-time switch at `/sys/power/suspend_sync`.
-> 
-> I'd prefer "sync_on_suspend".
-
-Agreed and changed.
-
->> The switch allows to enable or disable the final sync() from the suspend.=
->> c
->> Linux Kernel system suspend implementation. This is useful to avoid race
->> conditions if block devices have been suspended before. Be aware that you=
->>
->> have to take care of sync() yourself before suspending the system if you
->> disable it here.
->>
->> Since this is my first patch against the Linux kernel and I don't
->> consider it ready for inclusion yet, I decided to send it to pm-linux
->> and the PM subsystem maintainers only first. Would be very glad if you
->> could take a look and comment on it :)
->>
->> Some questions:
->>
->> * There already is a build-time config flag[2] for en- or disabling the
->>   sync() in suspend.c. Is it acceptable to have both a build-time *and*
->>   a *run-time* switch? Or would a run-time switch have to replace the
->>   build-time switch? If so, a direct question to Rafael, as you added
->>   the build-time flag: Would that be ok for you?
-> 
-> If there is a run-time knob to disable the syncing, the only reason for
-> the config option to be there will be to set the default value of that.
-
-Makes sense. I changed the meaning of the build-time flag accordingly.
-
->> To give a bit more contect: In Debian, we're currently working[3] on
->> support to suspend unlocked dm-crypt devices before system suspend.
->> During that work, we realized that the final sync() from Linux Kernel
->> system suspend implementation can lead to a dead lock.
-> 
-> That's also true for FUSE filesystems I think and please note that this isn't
-> going to work with hibernation (in which case filesystems are synced
-> regardless).
-
-In my opinion, hibernation doesn't matter much. Since the memory is
-powered off on hibernation anyway, there's no reason to luksSuspend the
-devices beforehands, don't you think so?
-
-> The changes look reasonable to me.
-
-Glad to read. I'll send a second version of the patches as replies soon
-after this mail. How do we go on from here? Could you imagine to review
-them again and sign them afterwards? Or am I supposed to send them to
-the lkml and wait for feedback before getting more signers? As written,
-I'm new to the Linux Kernel development process and not sure what's the
-logical next step to get the patches merged.
-
-Thanks again for your help!
-
-Cheers
- jonas
-
-
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
+ 	if (state == PM_SUSPEND_TO_IDLE)
+ 		s2idle_begin();
+ 
+-	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
++	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+ 		ksys_sync_helper();
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
+ extern void arch_suspend_enable_irqs(void);
+ 
+ extern int pm_suspend(suspend_state_t state);
++extern bool sync_on_suspend_enabled;
+ #else /* !CONFIG_SUSPEND */
+ #define suspend_valid_only_mem	NULL
+ 
+@@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
+ 
+ static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
+ static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
++static inline bool sync_on_suspend_enabled(void) { return true; }
+ static inline bool idle_should_enter_s2idle(void) { return false; }
+ static inline void __init pm_states_init(void) {}
+ static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
+ power_attr(mem_sleep);
+ #endif /* CONFIG_SUSPEND */
+ 
++#ifdef CONFIG_SUSPEND
++/*
++ * sync_on_suspend: invoke ksys_sync_helper() before suspend.
++ *
++ * show() returns whether ksys_sync_helper() is invoked before suspend.
++ * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
++ */
++bool sync_on_suspend_enabled = true;
++
++static ssize_t sync_on_suspend_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
++}
++
++static ssize_t sync_on_suspend_store(struct kobject *kobj,
++				    struct kobj_attribute *attr,
++				    const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	if (val > 1)
++		return -EINVAL;
++
++	sync_on_suspend_enabled = !!val;
++	return n;
++}
++
++power_attr(sync_on_suspend);
++#endif /* CONFIG_SUSPEND */
++
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ int pm_test_level = TEST_NONE;
+ 
+@@ -769,6 +803,7 @@ static struct attribute * g[] = {
+ 	&wakeup_count_attr.attr,
+ #ifdef CONFIG_SUSPEND
+ 	&mem_sleep_attr.attr,
++	&sync_on_suspend_attr.attr,
+ #endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -300,4 +300,18 @@ Description:
+ 		attempt.
+ 
+ 		Using this sysfs file will override any values that were
+-		set using the kernel command line for disk offset.
+\ No newline at end of file
++		set using the kernel command line for disk offset.
++
++What:		/sys/power/sync_on_suspend
++Date:		October 2019
++Contact:	Jonas Meurer <jonas@freesources.org>
++Description:
++		This file controls the switch to enable or disable the final
++		sync() before system suspend. This is useful to avoid race
++		conditions if block devices have been suspended before. Be
++		aware that you have to take care of sync() yourself before
++		suspending the system if you disable it here.
++
++		Writing a "1" (default) to this file enables the sync() and
++		writing a "0" disables it. Reads from the file return the
++		current value.
