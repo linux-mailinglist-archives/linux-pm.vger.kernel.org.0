@@ -2,104 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CD2D6B19
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 23:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D21BD6B39
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 23:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732525AbfJNVMB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 14 Oct 2019 17:12:01 -0400
-Received: from mga17.intel.com ([192.55.52.151]:26571 "EHLO mga17.intel.com"
+        id S1732458AbfJNV0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 17:26:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730627AbfJNVMB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Oct 2019 17:12:01 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Oct 2019 14:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,296,1566889200"; 
-   d="scan'208";a="189143213"
-Received: from fmsmsx104.amr.corp.intel.com ([10.18.124.202])
-  by orsmga008.jf.intel.com with ESMTP; 14 Oct 2019 14:12:00 -0700
-Received: from fmsmsx112.amr.corp.intel.com (10.18.116.6) by
- fmsmsx104.amr.corp.intel.com (10.18.124.202) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 14 Oct 2019 14:12:00 -0700
-Received: from crsmsx151.amr.corp.intel.com (172.18.7.86) by
- FMSMSX112.amr.corp.intel.com (10.18.116.6) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 14 Oct 2019 14:12:00 -0700
-Received: from crsmsx104.amr.corp.intel.com ([169.254.6.181]) by
- CRSMSX151.amr.corp.intel.com ([169.254.3.114]) with mapi id 14.03.0439.000;
- Mon, 14 Oct 2019 15:11:58 -0600
-From:   "Hernandez Lopez, Fabiola" <fabiola.hernandez.lopez@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: RE: Frequency not returning to fixed value after AVX workload
-Thread-Topic: Frequency not returning to fixed value after AVX workload
-Thread-Index: AdWAW7g0RYwhbvwkQrq2viRm3SLyeQCSpKyAAAtq94A=
-Date:   Mon, 14 Oct 2019 21:11:57 +0000
-Message-ID: <67737C20FC7E4D44B44817ABFA5B1DCE6EC020E9@CRSMSX104.amr.corp.intel.com>
-References: <67737C20FC7E4D44B44817ABFA5B1DCE6EC01C77@CRSMSX104.amr.corp.intel.com>
- <3340378.NBreQbsDsf@kreacher>
-In-Reply-To: <3340378.NBreQbsDsf@kreacher>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiYTdhNThmOGItMmJhNy00NDM1LWE0ZGQtYmQxYzIxZjE4YWI0IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoibWd2eFAxOXdIUUJ4OG1EVTFOVE40Vk1LbGhaN0VVYzVIZnBGVWpTRVZtZ2IydllnMzllczR3RnhOOFhET2l6SiJ9
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [172.18.205.10]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1732162AbfJNV0r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Oct 2019 17:26:47 -0400
+Received: from earth.universe (eth-west-pareq2-46-193-2-41.wb.wifirst.net [46.193.2.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD39221882;
+        Mon, 14 Oct 2019 21:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571088406;
+        bh=cClK9PHRvWEw2NnVf5d1dnRD7hL2dOCyNw4YrCukU5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tZuAWbu/9a5PfOaBOSQrzHQd82Vi90vTr4xLvxZKvwwpTqsyh8UxPFN4lVqAaDYFx
+         ic04FfU1JUbUbXB8yGTgMBbjfcHwDylifYQbAaNLV2Wl9VLb9px40Lo5QvCTPxypMa
+         uW8mFSK669v8CVPdJRZLia6mX+Vq1oqOaoHqAx3k=
+Received: by earth.universe (Postfix, from userid 1000)
+        id DEAE03C0CA1; Mon, 14 Oct 2019 06:22:20 +0200 (CEST)
+Date:   Mon, 14 Oct 2019 06:22:20 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH 1/2] power: supply: axp20x_usb_power: enable USB BC
+ detection on AXP813
+Message-ID: <20191014042220.ic6gt7koyr23iq26@earth.universe>
+References: <20191002112545.58481-1-icenowy@aosc.io>
+ <20191002112545.58481-2-icenowy@aosc.io>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pglfpajxaav525ss"
+Content-Disposition: inline
+In-Reply-To: <20191002112545.58481-2-icenowy@aosc.io>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-How do you measure the frequency?
-With lscpu.
 
-What exactly do you do to get the expected frequency back?
-A script is used that sets the frequency with /sys/devices/system/cpu/cpu*/cpufreq/scaling_setspeed
+--pglfpajxaav525ss
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is the target frequency in the turbo range?
-No, the target frequency is the same as the base processor frequency: 2.4GHz. The max turbo frequency for this CPU si 3.9 GHz.
-This has been tested with turbo boost enabled and disabled. 
+Hi,
 
-This behavior is very sporadic: < 10%
+On Wed, Oct 02, 2019 at 07:25:44PM +0800, Icenowy Zheng wrote:
+> The AXP813 PMIC has support for detection of USB Battery Charging
+> specification, and it will limit the current to 500mA by default when
+> the detection is not enabled or the detection result is SDP.
+>=20
+> Enable the BC detection to allow correctly selection of the current.
+>=20
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
 
-Thanks,
-Fabiola
+Thanks, queued to power-supply-next.
 
------Original Message-----
-From: Rafael J. Wysocki [mailto:rjw@rjwysocki.net] 
-Sent: Monday, October 14, 2019 4:45 AM
-To: Hernandez Lopez, Fabiola <fabiola.hernandez.lopez@intel.com>
-Cc: linux-pm@vger.kernel.org; Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: Frequency not returning to fixed value after AVX workload
+-- Sebastian
 
-On Friday, October 11, 2019 7:45:55 PM CEST Hernandez Lopez, Fabiola wrote:
-> Hi,
-> 
-> We are seeing an unexpected behavior after applying AVX workloads. 
-> After setting the CPU frequency to a fixed value with CPU Freq - 
-> userspace governor and applying heavy AVX workloads, the CPU frequency 
-> is decreased (as expected) but it never returns to the previously established value.
+>  drivers/power/supply/axp20x_usb_power.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
+ly/axp20x_usb_power.c
+> index dc4c316eff81..5f0a5722b19e 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -48,6 +48,8 @@
+> =20
+>  #define AXP20X_VBUS_MON_VBUS_VALID	BIT(3)
+> =20
+> +#define AXP813_BC_EN		BIT(0)
+> +
+>  /*
+>   * Note do not raise the debounce time, we must report Vusb high within
+>   * 100ms otherwise we get Vbus errors in musb.
+> @@ -495,6 +497,12 @@ static int axp20x_usb_power_probe(struct platform_de=
+vice *pdev)
+>  		return -EINVAL;
+>  	}
+> =20
+> +	if (power->axp20x_id =3D=3D AXP813_ID) {
+> +		/* Enable USB Battery Charging specification detection */
+> +		regmap_update_bits(axp20x->regmap, AXP288_BC_GLOBAL,
+> +				   AXP813_BC_EN, AXP813_BC_EN);
+> +	}
+> +
+>  	psy_cfg.of_node =3D pdev->dev.of_node;
+>  	psy_cfg.drv_data =3D power;
+> =20
+> --=20
+> 2.21.0
+>=20
 
-How do you measure the frequency?
+--pglfpajxaav525ss
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> This does not happen on all cores, only on a single core. The only way 
-> to return to the desired frequency is by setting it through the 
-> command line again.
+-----BEGIN PGP SIGNATURE-----
 
-What exactly do you do to get the expected frequency back?
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2j9/kACgkQ2O7X88g7
++ppnbA/9HJLSlyVCAOVgH1vjxftYlXar5opquvDiYU3g7jIrQ0Ql3STydP7e5fKk
+ZrYBeS2lVmvsvUQzdcv/7SMds0XdO5EbMV5IctPgcwQ7+CQ7ywIKgxMLhcUSxQVc
+HhIKTOqCeuQxwKcMyginSjagatc5hlG9bOKA5UzScAjuAsvBMCSS+Q55Mr/mnXI5
+QEPFLGoAW63p3ZeW1bZj1kLBSUkTUtVtJF5JuGHAOTjnbbnQkFDnW7/lTifQFQ04
+S1IXiYj8eNSHjrUI/NQvg5wEsAzgp/Xuk166ipB/LM6SCsPSMdb79YYV47dy6UVi
+nW4yflK5s16Db0e8YjWogLrkZHrgdZsrmwhkn9oTDRDnsnlmjcIKdVUPvlkbVaXO
+LAAsfrlMpuC3zcz/MVbSqob4JgHoQG+mc29DtBfLddhQ8TbY6kTPna5NSMnimNja
+/eT0/DQTnGtmGarh3vq1fLUZkkEhg2AkLA1U+7nv+PUAzM9vQkGHbtaEbRvzzW5h
+FrAXkvEp1gaF5CPY6VdJkCBJvCDtFPpKvWKaty2WGA+fsstbPfm45xLh47TJLGT9
+DTfsRPN7xpUplveKk+CabYJz0F/H/3W5ne8TYXQc5cZlEdj9Fqowxmw8cdqgVrhl
+soSVCZoV6bmUEMJWUO0Q+t5IKRYhNGkUOD67pR/CsA7MSziB5iA=
+=hHc+
+-----END PGP SIGNATURE-----
 
-> We are wondering how can this change in frequency happen.
-
-Is the target frequency in the turbo range?
-
-
-
+--pglfpajxaav525ss--
