@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE4ED68CB
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB1FD68D3
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Oct 2019 19:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbfJNRst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Oct 2019 13:48:49 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:37774 "EHLO
+        id S1731462AbfJNRt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Oct 2019 13:49:59 -0400
+Received: from mx3.freesources.org ([195.34.172.217]:37779 "EHLO
         mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729776AbfJNRst (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:48:49 -0400
+        with ESMTP id S1731355AbfJNRt7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Oct 2019 13:49:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=vzl4N+0VDGdO6GFcScjv6iayQDRTauM3FPaO6PUS5UE=;
-        b=gtLvolXr4nVBsdD4vU/i5IeMtW9MkHiyBvbX7C6doVvHPRqqm15t4Ugbud/uVzaOgbjR1mitrWNd4IfBjMqpys1TtKbhas6GcAhBuOSxSf/AoGn2sHwpCvX0VMHPrMejkSS2nvThwxAnntS0NU6BCAI5/GITRtC3Cp8YarTi2UU=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject; bh=SOv5jY+9x+31iLxxtsBtRuk8u7DrQckiC8O0jGPOKTU=;
+        b=AS613JZYZ32o7ouuTNv2QLrqeOr+IraYmlRG5Xkc8mEVi0sgvqJAFQ++wvnLkimLGvYZLeLS6wStad5tyQXgdJ10ycuPZHTDFBIKPq/bm/jqyb+qY27vKXDRPtC8nBHHJwQYpDSmCOtAckEO06Q+YYWuDagO7fWLkLR+kRZUA9Y=;
 Received: from anon-34-247.vpn.ipredator.se ([46.246.34.247])
         by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <jonas@freesources.org>)
-        id 1iK4Sb-0004iO-62; Mon, 14 Oct 2019 17:48:45 +0000
+        id 1iK4Tj-0004kK-W7; Mon, 14 Oct 2019 17:49:56 +0000
+Subject: [PATCH v2 2/2] PM: Change CONFIG_SUSPEND_SKIP_SYNC to
+ CONFIG_SKIP_SYNC_ON_SUSPEND
 From:   Jonas Meurer <jonas@freesources.org>
-Subject: [PATCH v2 1/2] PM: Add a switch for disabling/enabling sync() before
- suspend
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
         Len Brown <len.brown@intel.com>,
@@ -114,8 +114,8 @@ Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
  tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
  2SCIHpzHfm/mpRL2
-Message-ID: <04291c9e-714f-09b2-680b-fd8ce5b079cf@freesources.org>
-Date:   Mon, 14 Oct 2019 19:48:42 +0200
+Message-ID: <7f6b9ec9-b26f-8c13-6b0b-1d697bc1a7a9@freesources.org>
+Date:   Mon, 14 Oct 2019 19:49:53 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
@@ -128,19 +128,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The switch allows to enable or disable the final sync() from the suspend.c
-Linux Kernel system suspend implementation. This is useful to avoid race
-conditions if block devices have been suspended before. Be aware that you
-have to take care of sync() yourself before suspending the system if you
-disable it here.
+Rename the build-time switch CONFIG_SUSPEND_SKIP_SYNC to
+CONFIG_SKIP_SYNC_ON_SUSPEND and slightly change its behaviour. Make it
+configure the default for '/sys/power/sync_on_suspend', now that we have
+a run-time switch for it.
 
 Signed-off-by: Jonas Meurer <jonas@freesources.org>
 ---
- Documentation/ABI/testing/sysfs-power |   16 ++++++++++++++-
- include/linux/suspend.h               |    2 +
- kernel/power/main.c                   |   35 ++++++++++++++++++++++++++++++++++
- kernel/power/suspend.c                |    2 -
- 4 files changed, 53 insertions(+), 2 deletions(-)
+ Documentation/ABI/testing/sysfs-power |    7 ++++---
+ kernel/power/Kconfig                  |    7 +++++--
+ kernel/power/main.c                   |    2 +-
+ kernel/power/suspend.c                |    2 +-
+ 4 files changed, 11 insertions(+), 7 deletions(-)
 
 --- a/kernel/power/suspend.c
 +++ b/kernel/power/suspend.c
@@ -148,100 +147,55 @@ Signed-off-by: Jonas Meurer <jonas@freesources.org>
  	if (state == PM_SUSPEND_TO_IDLE)
  		s2idle_begin();
  
--	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
-+	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && sync_on_suspend_enabled) {
+-	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && sync_on_suspend_enabled) {
++	if (sync_on_suspend_enabled) {
  		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
  		ksys_sync_helper();
  		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -328,6 +328,7 @@ extern void arch_suspend_disable_irqs(vo
- extern void arch_suspend_enable_irqs(void);
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -19,7 +19,7 @@ config SUSPEND_FREEZER
  
- extern int pm_suspend(suspend_state_t state);
-+extern bool sync_on_suspend_enabled;
- #else /* !CONFIG_SUSPEND */
- #define suspend_valid_only_mem	NULL
+ 	  Turning OFF this setting is NOT recommended! If in doubt, say Y.
  
-@@ -340,6 +341,7 @@ static inline bool pm_suspend_via_s2idle
+-config SUSPEND_SKIP_SYNC
++config SKIP_SYNC_ON_SUSPEND
+ 	bool "Skip kernel's sys_sync() on suspend to RAM/standby"
+ 	depends on SUSPEND
+ 	depends on EXPERT
+@@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
+ 	  Skip the kernel sys_sync() before freezing user processes.
+ 	  Some systems prefer not to pay this cost on every invocation
+ 	  of suspend, or they are content with invoking sync() from
+-	  user-space before invoking suspend.  Say Y if that's your case.
++	  user-space before invoking suspend.  There's a run-time switch
++	  at '/sys/power/sync_on_suspend' to configure this behaviour.
++	  This setting changes the default for the run-tim switch. Say Y
++	  to change the default to disable the kernel sys_sync().
  
- static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
- static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-+static inline bool sync_on_suspend_enabled(void) { return true; }
- static inline bool idle_should_enter_s2idle(void) { return false; }
- static inline void __init pm_states_init(void) {}
- static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+ config HIBERNATE_CALLBACKS
+ 	bool
 --- a/kernel/power/main.c
 +++ b/kernel/power/main.c
-@@ -191,6 +191,40 @@ static ssize_t mem_sleep_store(struct ko
- power_attr(mem_sleep);
- #endif /* CONFIG_SUSPEND */
+@@ -198,7 +198,7 @@ power_attr(mem_sleep);
+  * show() returns whether ksys_sync_helper() is invoked before suspend.
+  * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
+  */
+-bool sync_on_suspend_enabled = true;
++bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SKIP_SYNC_ON_SUSPEND);
  
-+#ifdef CONFIG_SUSPEND
-+/*
-+ * sync_on_suspend: invoke ksys_sync_helper() before suspend.
-+ *
-+ * show() returns whether ksys_sync_helper() is invoked before suspend.
-+ * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
-+ */
-+bool sync_on_suspend_enabled = true;
-+
-+static ssize_t sync_on_suspend_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-+}
-+
-+static ssize_t sync_on_suspend_store(struct kobject *kobj,
-+				    struct kobj_attribute *attr,
-+				    const char *buf, size_t n)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+
-+	if (val > 1)
-+		return -EINVAL;
-+
-+	sync_on_suspend_enabled = !!val;
-+	return n;
-+}
-+
-+power_attr(sync_on_suspend);
-+#endif /* CONFIG_SUSPEND */
-+
- #ifdef CONFIG_PM_SLEEP_DEBUG
- int pm_test_level = TEST_NONE;
- 
-@@ -769,6 +803,7 @@ static struct attribute * g[] = {
- 	&wakeup_count_attr.attr,
- #ifdef CONFIG_SUSPEND
- 	&mem_sleep_attr.attr,
-+	&sync_on_suspend_attr.attr,
- #endif
- #ifdef CONFIG_PM_AUTOSLEEP
- 	&autosleep_attr.attr,
+ static ssize_t sync_on_suspend_show(struct kobject *kobj,
+ 				   struct kobj_attribute *attr, char *buf)
 --- a/Documentation/ABI/testing/sysfs-power
 +++ b/Documentation/ABI/testing/sysfs-power
-@@ -300,4 +300,18 @@ Description:
- 		attempt.
+@@ -312,6 +312,7 @@ Description:
+ 		aware that you have to take care of sync() yourself before
+ 		suspending the system if you disable it here.
  
- 		Using this sysfs file will override any values that were
--		set using the kernel command line for disk offset.
-\ No newline at end of file
-+		set using the kernel command line for disk offset.
-+
-+What:		/sys/power/sync_on_suspend
-+Date:		October 2019
-+Contact:	Jonas Meurer <jonas@freesources.org>
-+Description:
-+		This file controls the switch to enable or disable the final
-+		sync() before system suspend. This is useful to avoid race
-+		conditions if block devices have been suspended before. Be
-+		aware that you have to take care of sync() yourself before
-+		suspending the system if you disable it here.
-+
-+		Writing a "1" (default) to this file enables the sync() and
-+		writing a "0" disables it. Reads from the file return the
-+		current value.
+-		Writing a "1" (default) to this file enables the sync() and
+-		writing a "0" disables it. Reads from the file return the
+-		current value.
++		Writing a "1" to this file enables the sync() and writing a
++		"0" disables it. Reads from the file return the current value.
++		The default is "1" but can be configured with the build-time
++		config flag "SKIP_SYNC_ON_SUSPEND".
