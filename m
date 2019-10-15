@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9766AD7B32
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 18:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007DCD7B3E
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 18:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387930AbfJOQXM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 12:23:12 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53596 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387911AbfJOQXM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 12:23:12 -0400
-Received: by mail-wm1-f68.google.com with SMTP id i16so21547829wmd.3
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 09:23:10 -0700 (PDT)
+        id S2387928AbfJOQXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 12:23:15 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36750 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387936AbfJOQXO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 12:23:14 -0400
+Received: by mail-wr1-f66.google.com with SMTP id y19so24647845wrd.3
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 09:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j5B5AkAQGi4DNKyHv7fhvAOLB86h889/P7BfszQY5c4=;
-        b=eZOy7J2IO2HWDqq09vENTThSZi5vPpMlD7l5AKRvV+cYtbJ1ZcMswyrzdSm86HC42s
-         jJyPjN99mftKfl1KK53lNJPl9dDdXq90BMed/I6d7tdIJHLtcYu5eNzFnvN+uXE7i+lD
-         YqQ9kHqlp5eh97O/cqk5jL/bJ8Y2qanAgPRhOhZIwmG9QrIUZLJlsb7tiddKDdMpKeTf
-         ks0ISe77XXkeGFPrXoq+BxHN+bEgRhkL5KdKbNey2Gls8+QUQVjZwnH0LntE1w56TTPj
-         eZJ2xQ+d/sRURoZ/MZ+ls7i378TmmHLD0Fg8Q2Ef40Lf1trRCIepaVAPSYLHvjH7b5Xa
-         kIQg==
+        bh=Oyfsjm/f/3cTPX8e+fB49AEmLNgnRiE4f3MBNPIF/lE=;
+        b=Etexy0V/KEWqggN7u8UaCF7I5tKAimc+kwBrSf/NWGcg/m0KxHUQ13yF0cGQgKRZsQ
+         7LCtVyLDWNzFgZ7MQPvYrBu2bqkhX04dsPGcDJt29gEz1VivuN9p08c/mgoWzIkGaA0u
+         6i99xQu3M87Oi+ojjpUuL4BVUirCPgSQaxTEEFBd6LCIgkZL4aP0JH4q+epKO9XkUopM
+         6rvaP1Ay/Du21cRj2YpAc6LU3lPQX6Mt1fejEScmeTuptV4pN3Pl9Icpq/ZN7qB7gypm
+         m38p/d8NfQe9Ho7274BzmHoHwmPK7m7H99R9rcMDPTM0Hh3QMIErAQPR7k+mmE0UCFE2
+         Wj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j5B5AkAQGi4DNKyHv7fhvAOLB86h889/P7BfszQY5c4=;
-        b=s/5gsUCrn7EXwi2/qpKXBXQYQ86Vbj0cv6TnuxbEYwVX0lOoF6V2MUPAi2+6G3ZjH2
-         vFPUclO6OUTc3xvLzV1Tt6M3cC/pKmg3wulCj6DfYCJ8N5qfiGLfvOxlPQhgMYB0fywE
-         c8rrLgbrQevgveb2fwivwmUggPZTX9tMrkHzZlz24/agEpzP/PTr6UeFSZJ+qR8YkPiR
-         aqXBdwUMmpGMuclP4v7X+teXtLAx3fP0n8h8+Yir9N6KgXiTCPfNNrlZSbFtCZL5LiCJ
-         whUESl4z5stMbibPPG28gzDCMn6vuyKO/RJu6ws2dN/MQim4dF6Vq1R98vHCZBt6o7Et
-         beDA==
-X-Gm-Message-State: APjAAAVP1vE6IbJTshpWS4SPk1QJ3jLCpzOPI+qWGtIGADoZQqtgpU/A
-        aHScucYlDJlLdlfXmIp+YwGpaQ==
-X-Google-Smtp-Source: APXvYqyHK5TFwV9xIejPU5dtBpGW5WxVyh8AU6LufLjB7nMCfCxfgYwQacJucrroFYP9OyvU2koHMg==
-X-Received: by 2002:a1c:7219:: with SMTP id n25mr19497225wmc.33.1571156590048;
-        Tue, 15 Oct 2019 09:23:10 -0700 (PDT)
+        bh=Oyfsjm/f/3cTPX8e+fB49AEmLNgnRiE4f3MBNPIF/lE=;
+        b=rtsefgR3WxwEBs2ndeHeB2lN6Q2cDwIy6e0eCQaiqr2GaubKBkiBgAD4DAyvpBBlQ5
+         Vr7cqtatD0Gnq54WOKeCs9vTnm81gfVGjHEcTogAucNJ/CJC1gLxIVtn0i6k14C3jkLq
+         9j0J1Ifa56nyUayTC3s7RIp4xkITBa3EN4Ua+6IMQxLdRF3ArZ0GzEk/WnPrRTAW1kvi
+         xyQlKL2Ox+XVwKwxy6XrzmlKg/AgWip+GGiQ98nu5Nv3Y3Ghj1Wf+c/lA29RvJBXVFz2
+         /JxNstrWt5JqsSKM+/9yTjYpKc0TOWoLxpJYeGYNbeSeQe7/eqYXqjclxvz+D+dOcXcw
+         14pQ==
+X-Gm-Message-State: APjAAAXzU2R3MRzsNRuyQDxabO7SfvZGd3vwQ0MREODkERxBEcrCFyEt
+        sq3LDjp9kjYwrRAqIfjLyPwFsA==
+X-Google-Smtp-Source: APXvYqxbKT9NYUCfzBHzh/67remSXoazRB0t8uyVEUGS4m1bVu0z9bJo3dDsrplJ9mEwDa0WUktFeQ==
+X-Received: by 2002:a5d:4fcd:: with SMTP id h13mr28487052wrw.307.1571156591430;
+        Tue, 15 Oct 2019 09:23:11 -0700 (PDT)
 Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id x129sm41427605wmg.8.2019.10.15.09.23.08
+        by smtp.gmail.com with ESMTPSA id x129sm41427605wmg.8.2019.10.15.09.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 09:23:09 -0700 (PDT)
+        Tue, 15 Oct 2019 09:23:10 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -58,9 +58,9 @@ Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v2 3/6] dt-bindings: regulator: max77650: convert the binding document to yaml
-Date:   Tue, 15 Oct 2019 18:22:57 +0200
-Message-Id: <20191015162300.22024-4-brgl@bgdev.pl>
+Subject: [PATCH v2 4/6] dt-bindings: power: max77650: convert the binding document to yaml
+Date:   Tue, 15 Oct 2019 18:22:58 +0200
+Message-Id: <20191015162300.22024-5-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191015162300.22024-1-brgl@bgdev.pl>
 References: <20191015162300.22024-1-brgl@bgdev.pl>
@@ -73,75 +73,62 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Convert the binding document for MAX77650 regulator module to YAML.
+Convert the binding document for MAX77650 charger module to YAML.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- .../bindings/regulator/max77650-regulator.txt | 42 +--------------
- .../regulator/max77650-regulator.yaml         | 51 +++++++++++++++++++
- 2 files changed, 52 insertions(+), 41 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+ .../power/supply/max77650-charger.txt         | 29 +------------
+ .../power/supply/max77650-charger.yaml        | 42 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/max77650-charger.yaml
 
-diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.txt b/Documentation/devicetree/bindings/regulator/max77650-regulator.txt
-index f1cbe813c30f..39686610589c 100644
---- a/Documentation/devicetree/bindings/regulator/max77650-regulator.txt
-+++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.txt
-@@ -1,41 +1 @@
--Regulator driver for MAX77650 PMIC from Maxim Integrated.
+diff --git a/Documentation/devicetree/bindings/power/supply/max77650-charger.txt b/Documentation/devicetree/bindings/power/supply/max77650-charger.txt
+index e6d0fb6ff94e..fbab7d3ac8e3 100644
+--- a/Documentation/devicetree/bindings/power/supply/max77650-charger.txt
++++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.txt
+@@ -1,28 +1 @@
+-Battery charger driver for MAX77650 PMIC from Maxim Integrated.
 -
 -This module is part of the MAX77650 MFD device. For more details
 -see Documentation/devicetree/bindings/mfd/max77650.txt.
 -
--The regulator controller is represented as a sub-node of the PMIC node
--on the device tree.
--
--The device has a single LDO regulator and a SIMO buck-boost regulator with
--three independent power rails.
+-The charger is represented as a sub-node of the PMIC node on the device tree.
 -
 -Required properties:
 ---------------------
--- compatible:		Must be "maxim,max77650-regulator"
+-- compatible:		Must be "maxim,max77650-charger"
 -
--Each rail must be instantiated under the regulators subnode of the top PMIC
--node. Up to four regulators can be defined. For standard regulator properties
--refer to Documentation/devicetree/bindings/regulator/regulator.txt.
--
--Available regulator compatible strings are: "ldo", "sbb0", "sbb1", "sbb2".
+-Optional properties:
+---------------------
+-- input-voltage-min-microvolt:	Minimum CHGIN regulation voltage. Must be one
+-				of: 4000000, 4100000, 4200000, 4300000,
+-				4400000, 4500000, 4600000, 4700000.
+-- input-current-limit-microamp:	CHGIN input current limit (in microamps). Must
+-				be one of: 95000, 190000, 285000, 380000,
+-				475000.
 -
 -Example:
 ---------
 -
--	regulators {
--		compatible = "maxim,max77650-regulator";
--
--		max77650_ldo: regulator@0 {
--			regulator-compatible = "ldo";
--			regulator-name = "max77650-ldo";
--			regulator-min-microvolt = <1350000>;
--			regulator-max-microvolt = <2937500>;
--		};
--
--		max77650_sbb0: regulator@1 {
--			regulator-compatible = "sbb0";
--			regulator-name = "max77650-sbb0";
--			regulator-min-microvolt = <800000>;
--			regulator-max-microvolt = <1587500>;
--		};
+-	charger {
+-		compatible = "maxim,max77650-charger";
+-		input-voltage-min-microvolt = <4200000>;
+-		input-current-limit-microamp = <285000>;
 -	};
-+This file has been moved to max77650-regulator.yaml.
-diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
++This file was moved to max77650-charger.yaml.
+diff --git a/Documentation/devicetree/bindings/power/supply/max77650-charger.yaml b/Documentation/devicetree/bindings/power/supply/max77650-charger.yaml
 new file mode 100644
-index 000000000000..c0d986948ac8
+index 000000000000..9dd0dad0f948
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
-@@ -0,0 +1,51 @@
++++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.yaml
+@@ -0,0 +1,42 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/regulator/max77650-regulator.yaml#
++$id: http://devicetree.org/schemas/power/supply/max77650-charger.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Regulator driver for MAX77650 PMIC from Maxim Integrated.
++title: Battery charger driver for MAX77650 PMIC from Maxim Integrated.
 +
 +maintainers:
 +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
@@ -150,41 +137,32 @@ index 000000000000..c0d986948ac8
 +  This module is part of the MAX77650 MFD device. For more details
 +  see Documentation/devicetree/bindings/mfd/max77650.txt.
 +
-+  The regulator controller is represented as a sub-node of the PMIC node
-+  on the device tree.
-+
-+  The device has a single LDO regulator and a SIMO buck-boost regulator with
-+  three independent power rails.
++  The charger is represented as a sub-node of the PMIC node on the device tree.
 +
 +properties:
 +  compatible:
-+    const: maxim,max77650-regulator
++    const: maxim,max77650-charger
 +
-+patternProperties:
-+  "^regulator@[0-3]$":
-+    $ref: "regulator.yaml#"
++  input-voltage-min-microvolt:
++    description:
++      Minimum CHGIN regulation voltage.
++    enum: [ 4000000, 4100000, 4200000, 4300000,
++            4400000, 4500000, 4600000, 4700000 ]
++
++  input-current-limit-microamp:
++    description:
++      CHGIN input current limit (in microamps).
++    enum: [ 95000, 190000, 285000, 380000, 475000 ]
 +
 +required:
 +  - compatible
 +
 +examples:
 +  - |
-+    regulators {
-+        compatible = "maxim,max77650-regulator";
-+
-+        max77650_ldo: regulator@0 {
-+            regulator-compatible = "ldo";
-+            regulator-name = "max77650-ldo";
-+            regulator-min-microvolt = <1350000>;
-+            regulator-max-microvolt = <2937500>;
-+        };
-+
-+        max77650_sbb0: regulator@1 {
-+            regulator-compatible = "sbb0";
-+            regulator-name = "max77650-sbb0";
-+            regulator-min-microvolt = <800000>;
-+            regulator-max-microvolt = <1587500>;
-+        };
++    charger {
++        compatible = "maxim,max77650-charger";
++        input-voltage-min-microvolt = <4200000>;
++        input-current-limit-microamp = <285000>;
 +    };
 -- 
 2.23.0
