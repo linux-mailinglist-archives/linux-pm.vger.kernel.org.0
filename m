@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 322E2D81CD
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45312D81C2
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389521AbfJOVSJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 17:18:09 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40163 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389439AbfJOVRM (ORCPT
+        id S2389552AbfJOVRN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 17:17:13 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45341 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389488AbfJOVRM (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 17:17:12 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 7so21753044ljw.7;
-        Tue, 15 Oct 2019 14:17:08 -0700 (PDT)
+Received: by mail-lj1-f196.google.com with SMTP id q64so21730191ljb.12;
+        Tue, 15 Oct 2019 14:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=40MTszG3atQ4WGlY18YWAe6XPjiAZd4Si2W063emoiw=;
-        b=NzTDsfrhbRs6+yzUzdu4WxiLkjpn7WNQUH63MPH+vW+EDRI9CeT2xj96FY355wnEoa
-         yy0bpx8k/LfucqgwN+1zkTZT6vKIfEyneyaeKDKIZQbuOoLxasKyxGH5TVlkC3EcuDmo
-         S+wZO7Fi7UfX5Cw25llld/oe/E3tlvVTWcq9Zn+RZP5RzZ8Ohps4NLs7+7X+wXOq/AJt
-         FoMaWKsxIA9hzEK9IPATAertWPgJ9v5RKbieHrZ8lF3EQTIv4lw9h57RfA2c8yJZ4CIH
-         EUnMkPUyRjbLwURHRjcM1XaOL8MJuSC5Fg/YXKasPmXzjJkKs10B2W2T8sKEEnIofWZ5
-         aFbQ==
+        bh=vbmgm7OZfiZxyZLfjm0hUKkhnp/cuwLR/94MZqB3XDg=;
+        b=PEmBmzivr4vdO1ukmj7/9imiP/go62le6oa2wkWDLPNe8Sm4maosdmMPGb60KJP6jn
+         hShlZ+7Wf3cs8YTDJGAR3J2wt40o9e4co/rF+rqI/GfcsaSf6T2gAyQZw/9yIpXo8NG9
+         Dz7FgzoqM48w32jM2i7KXjB3+qEpBC68RMBb+QuJNgy3PNLimV5XmG3JsHf7TDF3tgPd
+         Y3IqbypFypW8wGXL+JuV3Z3dslpUGtcpGZuRsuA772cZ7wtnD+zkXvRy7XnAEJwIDR/E
+         BE3hXBEWbwzCSi5Y7eMXbYG6m1OyBzRkv+HbAk+T/+7j4kv0Vax1f3Ogjvqxu+O6WuB3
+         7C3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=40MTszG3atQ4WGlY18YWAe6XPjiAZd4Si2W063emoiw=;
-        b=d2AUO/3ucUe/0+lFFoqh6T8na6b1Nqyv5rQOyj2ICHRopUZaOoSv/MTrO1SETuVWJA
-         mUvKwfT2AZgijFI6ZbBPf5NU5wO1JgkxOXoM8IyFjkLo1Do1MPWPyQYEyGNQ3rnRvfVe
-         zJ3sKZyGILz/T8pc91o+W+iN33R/Q5YokwpFhvAjZ6obbGf79U7B1M5XpzVyabVyiDE0
-         4rwO/Mq62Ni3oaSypWRvJILEFeco60NyxmfRf97VDsbqztOLeF9obWEtEoJ2Ru6yeaWs
-         /mWVp6Mu5I3LVzKXl/VsB5d4zMT9ssumwuGgyWBYdUp2GMlY/h6wuWoPh0v+AnT0Qa0e
-         a/AA==
-X-Gm-Message-State: APjAAAXXYVK/OXo3mZfbhcQWUbFSC6LOt3Ghduo7ITsoZwevVrYl13Or
-        P9a0QQtPtz15uVG+VeZaFv8=
-X-Google-Smtp-Source: APXvYqx6kL0SJA0AlLHuw7Q3ZI6N7gNYRZfzv5rHjCKIzr98PRvurqY5gtM4+fjB7yUbwve4UCnGgg==
-X-Received: by 2002:a2e:9f08:: with SMTP id u8mr1698412ljk.124.1571174227989;
-        Tue, 15 Oct 2019 14:17:07 -0700 (PDT)
+        bh=vbmgm7OZfiZxyZLfjm0hUKkhnp/cuwLR/94MZqB3XDg=;
+        b=kXtqNSb+CHLLyqYjsrmRBPzT77qnkWtXsDvVRb936z50Ag7IjZn4HwmFf3qD2u9RWS
+         Y55fWtssojvijPVJhESLs2ffFFTOzTysuIUHR6nnnUGn+e5mMQInssqn4iNBdSK72iXY
+         HpeSFGJJw5KXB1GEjDBfbyHvdnUm3C5vDiQbkvRMAvYx6clz4ENpPCALj+x05BgQ5Y/6
+         JvfEpwTVlZc8knvhrR/y5/tp73YaoB2EhM618w/YSmqeh/Q7Zulthtqpqis5tvQr3oyY
+         mk31CRGVYsVZ5nXIlDri6n1nUJZNCYTnenqbtE4Jc5wX2CKznW3FLY1zZ3kWJ8t5hrET
+         HhnA==
+X-Gm-Message-State: APjAAAUms4b5hN0UxUzAa4zPF4w+3KWMXgAaoqP3D8qYA6e3nNTo8eP+
+        hCAIJrK1yq1VXyq5o78TwXU=
+X-Google-Smtp-Source: APXvYqw8584qilRFbOi6yNHhZld6QF0W4drtX9MgIzFCJqKwcA+HbwfdRVd/rYdMN/APQZawf0StWg==
+X-Received: by 2002:a05:651c:113b:: with SMTP id e27mr22947516ljo.125.1571174229197;
+        Tue, 15 Oct 2019 14:17:09 -0700 (PDT)
 Received: from localhost.localdomain ([94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id t16sm5269186ljj.29.2019.10.15.14.17.06
+        by smtp.gmail.com with ESMTPSA id t16sm5269186ljj.29.2019.10.15.14.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 14:17:07 -0700 (PDT)
+        Tue, 15 Oct 2019 14:17:08 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,9 +60,9 @@ Cc:     Peter Geis <pgwipeout@gmail.com>,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 08/17] ARM: tegra: Remove tegra20-cpufreq platform device creation
-Date:   Wed, 16 Oct 2019 00:16:09 +0300
-Message-Id: <20191015211618.20758-9-digetx@gmail.com>
+Subject: [PATCH v1 09/17] ARM: dts: tegra20: Add CPU clock
+Date:   Wed, 16 Oct 2019 00:16:10 +0300
+Message-Id: <20191015211618.20758-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191015211618.20758-1-digetx@gmail.com>
 References: <20191015211618.20758-1-digetx@gmail.com>
@@ -73,29 +73,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The tegra20-cpufreq now instantiates cpufreq-dt and tegra20-cpufreq is not
-a platform driver anymore.
+All CPU cores share the same CPU clock.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/tegra.c | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/arm/boot/dts/tegra20.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
-index e512e606eabd..29972b44eba7 100644
---- a/arch/arm/mach-tegra/tegra.c
-+++ b/arch/arm/mach-tegra/tegra.c
-@@ -91,10 +91,6 @@ static void __init tegra_dt_init_late(void)
- 	if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) &&
- 	    of_machine_is_compatible("compal,paz00"))
- 		tegra_paz00_wifikill_init();
--
--	if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) &&
--	    of_machine_is_compatible("nvidia,tegra20"))
--		platform_device_register_simple("tegra20-cpufreq", -1, NULL, 0);
- }
+diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
+index 8c942e60703e..9c58e7fcf5c0 100644
+--- a/arch/arm/boot/dts/tegra20.dtsi
++++ b/arch/arm/boot/dts/tegra20.dtsi
+@@ -851,12 +851,14 @@
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a9";
+ 			reg = <0>;
++			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
+ 		};
  
- static const char * const tegra_dt_board_compat[] = {
+ 		cpu@1 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a9";
+ 			reg = <1>;
++			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
+ 		};
+ 	};
+ 
 -- 
 2.23.0
 
