@@ -2,354 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2579D72F5
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 12:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6B4D756A
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 13:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727704AbfJOKPg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 06:15:36 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52328 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727700AbfJOKPf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 06:15:35 -0400
-Received: by mail-wm1-f65.google.com with SMTP id r19so20204462wmh.2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 03:15:31 -0700 (PDT)
+        id S1729157AbfJOLqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 07:46:43 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41927 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729009AbfJOLqn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 07:46:43 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q7so12311831pfh.8
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 04:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:from:to:cc:references:openpgp:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dsTN37zqLPbHqWUNaQt3DZge8bkuIetBxQBrj56qdws=;
-        b=PkZ7vh3QFYqGkdLdYVLHzTELeuKMP1XgaFXLFli9A9Frgsl+dy5L3G/7w9qBuyHYc0
-         WUZXlKXXyJum9iqw9SuhkY8hVwmqr552hYCMJLAo7/9UeKpCPaEQkyjqE1mxBXVJx7Dz
-         dYx9Tymlq8OMWVZQasJ3Z/DAPmL4tAKEtwUcWYh+CT3OUHhURw2wyVRanXYpFZUhOxBI
-         oGIuaTwqIAaCbp3nj2Pdswb4tHzdusjJxQIh/QKY0gIIDdrPa2v5MgwHtpeRkDlNDReY
-         H/k1reXk21EZsq+FmFQqpCGcf9ZDroa7QnSIPhp0eh54JIXJNSj/2Set4reSUrZdawY5
-         CngQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7nxz6zGMrO8KEWQH3HeYGqaLsVZGUP/TEpFv7v6lvxs=;
+        b=zvSGZhiOtHdGvy14s6GyHZuv88yUqPbQwJpWSzfbMYO5X9dWo5YYuHa6rNSQRvD+So
+         gQqpIGP5TbYKTxYrAaCidrqfnNq0975PPFG+AhBp5OL22ab8iRsCR4gYyxixRlxbL69N
+         ssAf4NW0g2tZmUBkUmujAHGpHMb6+WfP4J8z5bmZT8fe4Pit9+XMbFzXSqnf/4KpgFpT
+         7gZ4fLKI89TDHttIkcS/qIKANqSXF4n+rTDvJkWKO34sz/OO5A1m86i8ZpfWJXfnANN0
+         8TsSdz2p4rGez9OJseuDXbHApFTnFax32bcky64+HFr7AX4kTvxfPfzmDLYEuWed5e55
+         BXQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=dsTN37zqLPbHqWUNaQt3DZge8bkuIetBxQBrj56qdws=;
-        b=CuuoyRqtvf9BiKU3znVJ8cCBL05UWuhVxhO6LIHeMB7N7g5f/jD3MJrKyaictV7pYr
-         bI56lfGGe1tVr73fnBv9P8IcJ6e7jh/xKF+GLL5m+xJoauYQ9WJki9XK4NptcSqfpzYa
-         xLKLwnxwrKckdg91tmduN9of0+HoUr+g35n192qCUol60yKJBXc7mGtlIUeE+nvr+ELM
-         X/JbGNMBU0TE3uAXsdDUbwUWtcs6SAPjvea+QfhxaMPF1WUft+LzU3h25Ut8Qz/rz+EW
-         k160ePJ7n5bhN0LRjLGcU4qiRFuJs/2GbwBkGQlDBypKwnl0hN99CUaIaZWmAjvhLrbX
-         LK8g==
-X-Gm-Message-State: APjAAAWBdV0K2Qy4bUxvBulLAilrcIT0eU1lKJWwEH3zdnvMX+uCGBXR
-        g6aUiEhY2L/ofTPiu3FYDUfvY4cIZgo=
-X-Google-Smtp-Source: APXvYqyLDmlu02Tb7cVNegMrohZZIT4o75IgH8mj4B1UNrja8PRCTfIpRVH457Tt+YQ+lB/GkWWpag==
-X-Received: by 2002:a1c:7401:: with SMTP id p1mr17912443wmc.144.1571134530075;
-        Tue, 15 Oct 2019 03:15:30 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:2d16:691b:1fc4:c4bb? ([2a01:e34:ed2f:f020:2d16:691b:1fc4:c4bb])
-        by smtp.googlemail.com with ESMTPSA id z9sm22826433wrp.26.2019.10.15.03.15.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7nxz6zGMrO8KEWQH3HeYGqaLsVZGUP/TEpFv7v6lvxs=;
+        b=hY3gs0TAJl5vGcXOK9f4UzaReBYQunpPiQ2bh/X37aesq1drMKnDn14PgF2E3u2VNi
+         bJDdyPRPZVBHwNj/Czv8we7jNGrapYfJssEmMTy1GDvL8Og9W1QUG0wDuRjhSxSrcWdX
+         ah2ppS+DYfC1ydKhDSutWEXw8zOuloN+6T2rzoE1/Su8ozryAsPPrguvudFYcG2/HpmU
+         hNfi0MVCtatt4UumsCrAm6HQOUQijd4Y96suV3td5uQBh0lFLuhGL5y+P4TRMKoGO5qC
+         hjKn+8ua5oKYg0d6Fnx/WePbi3qTOf+hDkJTjzzk6pnuDIYQ1vi/WtwpTvvRC1ZKjw0J
+         uDQw==
+X-Gm-Message-State: APjAAAXDvLLSZue3zxC4FZhjqV5XvUEzGRc9T55VK8M/rR3BCR3HSs4J
+        p5urzAUCMIkfHo8hEhGxR+Nt5omVR7U=
+X-Google-Smtp-Source: APXvYqx57AELHzxiNgpMzoxeCvv9cjy2XscqdyIxlwGe5Q3KNTjsdl/RhoTDUKUsXGBSzws2Bo9sCw==
+X-Received: by 2002:a63:9255:: with SMTP id s21mr39408310pgn.325.1571140002251;
+        Tue, 15 Oct 2019 04:46:42 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id q2sm24373495pfg.144.2019.10.15.04.46.40
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Oct 2019 03:15:29 -0700 (PDT)
-Subject: Re: [PATCH V4 1/3] cpuidle: play_idle: Make play_idle more flexible
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20191004083205.29302-1-daniel.lezcano@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <d2058797-5b31-326c-34ad-6d7b9bd01f19@linaro.org>
-Date:   Tue, 15 Oct 2019 12:15:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 15 Oct 2019 04:46:40 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 17:16:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>, mka@chromium.org,
+        ulf.hansson@linaro.org, sfr@canb.auug.org.au, pavel@ucw.cz,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS
+ framework
+Message-ID: <20191015114637.pcdbs2ctxl4xoxdo@vireshk-i7>
+References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
+ <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
+ <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191004083205.29302-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22-09-19, 23:12, Dmitry Osipenko wrote:
+> Hello Viresh,
+> 
+> This patch causes use-after-free on a cpufreq driver module reload. Please take a look, thanks in advance.
+> 
+> 
+> [   87.952369] ==================================================================
+> [   87.953259] BUG: KASAN: use-after-free in notifier_chain_register+0x4f/0x9c
+> [   87.954031] Read of size 4 at addr e6abbd0c by task modprobe/243
+> 
+> [   87.954901] CPU: 1 PID: 243 Comm: modprobe Tainted: G        W
+> 5.3.0-next-20190920-00185-gf61698eab956-dirty #2408
+> [   87.956077] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> [   87.956807] [<c0110aad>] (unwind_backtrace) from [<c010bb71>] (show_stack+0x11/0x14)
+> [   87.957709] [<c010bb71>] (show_stack) from [<c0d37b25>] (dump_stack+0x89/0x98)
+> [   87.958616] [<c0d37b25>] (dump_stack) from [<c02937e1>]
+> (print_address_description.constprop.0+0x3d/0x340)
+> [   87.959785] [<c02937e1>] (print_address_description.constprop.0) from [<c0293c6b>]
+> (__kasan_report+0xe3/0x12c)
+> [   87.960907] [<c0293c6b>] (__kasan_report) from [<c014988f>] (notifier_chain_register+0x4f/0x9c)
+> [   87.962001] [<c014988f>] (notifier_chain_register) from [<c01499b5>]
+> (blocking_notifier_chain_register+0x29/0x3c)
+> [   87.963180] [<c01499b5>] (blocking_notifier_chain_register) from [<c06f7ee9>]
+> (dev_pm_qos_add_notifier+0x79/0xf8)
+> [   87.964339] [<c06f7ee9>] (dev_pm_qos_add_notifier) from [<c092927d>] (cpufreq_online+0x5e1/0x8a4)
+> [   87.965351] [<c092927d>] (cpufreq_online) from [<c09295c9>] (cpufreq_add_dev+0x79/0x80)
+> [   87.966247] [<c09295c9>] (cpufreq_add_dev) from [<c06eb9d3>] (subsys_interface_register+0xc3/0x100)
+> [   87.967297] [<c06eb9d3>] (subsys_interface_register) from [<c0926e53>]
+> (cpufreq_register_driver+0x13b/0x1ec)
+> [   87.968476] [<c0926e53>] (cpufreq_register_driver) from [<bf800435>]
+> (tegra20_cpufreq_probe+0x165/0x1a8 [tegra20_cpufreq])
 
-Hi Rafael,
+Hi Dmitry,
 
-can we consider this series for the next kernel version ?
+Thanks for the bug report and I was finally able to reproduce it at my end and
+this was quite an interesting debugging exercise :)
 
-Thanks
+When a cpufreq driver gets registered, we register with the subsys interface and
+it calls cpufreq_add_dev() for each CPU, starting from CPU0. And so the QoS
+notifiers get added to the first CPU of the policy, i.e. CPU0 in common cases.
 
+When the cpufreq driver gets unregistered, we unregister with the subsys
+interface and it calls cpufreq_remove_dev() for each CPU, starting from CPU0
+(should have been in reverse order I feel). We remove the QoS notifier only when
+cpufreq_remove_dev() gets called for the last CPU of the policy, lets call it
+CPUx. Now this has a different notifier list as compared to CPU0.
 
-On 04/10/2019 10:32, Daniel Lezcano wrote:
-> The play_idle function has two users, the intel powerclamp and the
-> idle_injection.
-> 
-> The idle injection cooling device uses the function via the
-> idle_injection powercap's APIs. Unfortunately, play_idle is currently
-> limited by the idle state depth: by default the deepest idle state is
-> selected. On the ARM[64] platforms, most of the time it is the cluster
-> idle state, the exit latency and the residency can be very high. That
-> reduces the scope of the idle injection usage because the impact on
-> the performances can be very significant.
-> 
-> If the idle injection cycles can be done with a shallow state like a
-> retention state, the cooling effect would eventually give similar
-> results than the cpufreq cooling device.
-> 
-> In order to prepare the function to receive an idle state parameter,
-> let's replace the 'use_deepest_state' boolean field with 'use_state'
-> and use this value to enter the specific idle state.
-> 
-> The current code keeps the default behavior which is go to the deepest
-> idle state.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> ---
->  drivers/cpuidle/cpuidle.c | 21 +++++++++++----------
->  include/linux/cpuidle.h   | 13 ++++++-------
->  kernel/sched/idle.c       | 10 +++++-----
->  3 files changed, 22 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 0895b988fa92..f8b54f277589 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -99,31 +99,31 @@ static int find_deepest_state(struct cpuidle_driver *drv,
->  }
->  
->  /**
-> - * cpuidle_use_deepest_state - Set/clear governor override flag.
-> - * @enable: New value of the flag.
-> + * cpuidle_use_state - Force the cpuidle framework to enter an idle state.
-> + * @state: An integer for an idle state
->   *
-> - * Set/unset the current CPU to use the deepest idle state (override governors
-> - * going forward if set).
-> + * Specify an idle state the cpuidle framework must step in and bypass
-> + * the idle state selection process.
->   */
-> -void cpuidle_use_deepest_state(bool enable)
-> +void cpuidle_use_state(int state)
->  {
->  	struct cpuidle_device *dev;
->  
->  	preempt_disable();
->  	dev = cpuidle_get_device();
->  	if (dev)
-> -		dev->use_deepest_state = enable;
-> +		dev->use_state = state;
->  	preempt_enable();
->  }
->  
->  /**
->   * cpuidle_find_deepest_state - Find the deepest available idle state.
-> - * @drv: cpuidle driver for the given CPU.
-> - * @dev: cpuidle device for the given CPU.
->   */
-> -int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -			       struct cpuidle_device *dev)
-> +int cpuidle_find_deepest_state(void)
->  {
-> +	struct cpuidle_device *dev = cpuidle_get_device();
-> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-> +
->  	return find_deepest_state(drv, dev, UINT_MAX, 0, false);
->  }
->  
-> @@ -554,6 +554,7 @@ static void __cpuidle_unregister_device(struct cpuidle_device *dev)
->  static void __cpuidle_device_init(struct cpuidle_device *dev)
->  {
->  	memset(dev->states_usage, 0, sizeof(dev->states_usage));
-> +	dev->use_state = CPUIDLE_STATE_NOUSE;
->  	dev->last_residency = 0;
->  	dev->next_hrtimer = 0;
->  }
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index 2dc4c6b19c25..ba0751b26e37 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -15,6 +15,7 @@
->  #include <linux/list.h>
->  #include <linux/hrtimer.h>
->  
-> +#define CPUIDLE_STATE_NOUSE	-1
->  #define CPUIDLE_STATE_MAX	10
->  #define CPUIDLE_NAME_LEN	16
->  #define CPUIDLE_DESC_LEN	32
-> @@ -80,11 +81,11 @@ struct cpuidle_driver_kobj;
->  struct cpuidle_device {
->  	unsigned int		registered:1;
->  	unsigned int		enabled:1;
-> -	unsigned int		use_deepest_state:1;
->  	unsigned int		poll_time_limit:1;
->  	unsigned int		cpu;
->  	ktime_t			next_hrtimer;
->  
-> +	int			use_state;
->  	int			last_state_idx;
->  	int			last_residency;
->  	u64			poll_limit_ns;
-> @@ -203,19 +204,17 @@ static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
->  #endif
->  
->  #ifdef CONFIG_CPU_IDLE
-> -extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -				      struct cpuidle_device *dev);
-> +extern int cpuidle_find_deepest_state(void);
->  extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->  				struct cpuidle_device *dev);
-> -extern void cpuidle_use_deepest_state(bool enable);
-> +extern void cpuidle_use_state(int state);
->  #else
-> -static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -					     struct cpuidle_device *dev)
-> +static inline int cpuidle_find_deepest_state(void)
->  {return -ENODEV; }
->  static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->  				       struct cpuidle_device *dev)
->  {return -ENODEV; }
-> -static inline void cpuidle_use_deepest_state(bool enable)
-> +static inline void cpuidle_use_state(int state)
->  {
->  }
->  #endif
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index b98283fc6914..17da9cb309e1 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -165,7 +165,8 @@ static void cpuidle_idle_call(void)
->  	 * until a proper wakeup interrupt happens.
->  	 */
->  
-> -	if (idle_should_enter_s2idle() || dev->use_deepest_state) {
-> +	if (idle_should_enter_s2idle() ||
-> +	    dev->use_state != CPUIDLE_STATE_NOUSE) {
->  		if (idle_should_enter_s2idle()) {
->  			rcu_idle_enter();
->  
-> @@ -181,8 +182,7 @@ static void cpuidle_idle_call(void)
->  		tick_nohz_idle_stop_tick();
->  		rcu_idle_enter();
->  
-> -		next_state = cpuidle_find_deepest_state(drv, dev);
-> -		call_cpuidle(drv, dev, next_state);
-> +		call_cpuidle(drv, dev, dev->use_state);
->  	} else {
->  		bool stop_tick = true;
->  
-> @@ -328,7 +328,7 @@ void play_idle(unsigned long duration_us)
->  	rcu_sleep_check();
->  	preempt_disable();
->  	current->flags |= PF_IDLE;
-> -	cpuidle_use_deepest_state(true);
-> +	cpuidle_use_state(cpuidle_find_deepest_state());
->  
->  	it.done = 0;
->  	hrtimer_init_on_stack(&it.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> @@ -339,7 +339,7 @@ void play_idle(unsigned long duration_us)
->  	while (!READ_ONCE(it.done))
->  		do_idle();
->  
-> -	cpuidle_use_deepest_state(false);
-> +	cpuidle_use_state(CPUIDLE_STATE_NOUSE);
->  	current->flags &= ~PF_IDLE;
->  
->  	preempt_fold_need_resched();
-> 
+In short, we are adding the cpufreq notifiers to CPU0 and removing them from
+CPUx. When we try to add it again by inserting the module for second time, we
+find a node in the notifier list which is already freed but still in the list as
+we removed it from CPUx's list (which doesn't do anything as the node wasn't
+there in the first place).
 
+@Rafael: How do you see we solve this problem ? Here are the options I could
+think of:
+
+- Update subsys layer to reverse the order of devices while unregistering (this
+  will fix the current problem, but we will still have corner cases hanging
+  around, like if the CPU0 is hotplugged out, etc).
+
+- Update QoS framework with the knowledge of related CPUs, this has been pending
+  until now from my side. And this is the thing we really need to do. Eventually
+  we shall have only a single notifier list for all CPUs of a policy, at least
+  for MIN/MAX frequencies.
+
+- ??
 
 -- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+viresh
