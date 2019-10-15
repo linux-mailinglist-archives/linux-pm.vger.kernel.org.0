@@ -2,112 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C4AD7D50
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B18D7D77
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730713AbfJORTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 13:19:42 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45859 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730706AbfJORTl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:19:41 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y72so12878557pfb.12
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 10:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TWtOdLU950qO44gtWRI1EevokHAunCwQ1TaUeaOgpXk=;
-        b=awoHS9eVotcWQ2gbtqYURIscmftRO0hnxBkikpia+e0TsfNOnDMM3fOzVNuX5Ehopo
-         uebssmp/dLs6BBLFKoi04U1jAnQnHV4oiLzvt/DmQZrPeeec1Kw5VWPem+vi+yrWn0ZX
-         gXuxpxVFvn1J4rubjdujIthIBrBKUR2U9szVQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TWtOdLU950qO44gtWRI1EevokHAunCwQ1TaUeaOgpXk=;
-        b=Shy2rvKICC6AD0DYpUXqEof5aXh2xM4FAwLP3diuuH1xFSitNWdJsFbUJj5gKdLbys
-         8b+k3/sRp/zsYgA7ie3SFYbsrA/KxrNa3KIvepd6CyUBOdJlyaywPJAYlKXp3rpcOTZV
-         48ogvWkAkcY10lhkuD273O9+xbUXHjBfkrXq54HQKOGHZXfniesIkXxElz+kTrPSctZX
-         /W1Ue7LXLclBehWhZ5uhAyhcvO5SuZHqBrPQmxK0WC6ZixBasHUkcjp7lLdBQTL+ki/P
-         cWTwg5aTkOwZ8ZMDl12pPDiZJgcUh7KDseSo6vF+SnHAj4cgQocDx7bamGTPNFQes04L
-         ZE+Q==
-X-Gm-Message-State: APjAAAUi1AdkhAQmH2AYMskoPAw6EAEiqZl+7k2TRu3zLh0l5d11mnTw
-        jFZEGWrRvYO3s1MxaqV4GU1x3Q==
-X-Google-Smtp-Source: APXvYqwgk66PcBDs4wpLLZVJPG/VI50z6RsUr748jWOgPSQEjjgVW/mRJuA6zAgAaY2oFXrP0Je05g==
-X-Received: by 2002:aa7:924f:: with SMTP id 15mr40455528pfp.194.1571159981109;
-        Tue, 15 Oct 2019 10:19:41 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id s36sm22990237pgk.84.2019.10.15.10.19.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Oct 2019 10:19:40 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 10:19:37 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
-Message-ID: <20191015171937.GO87296@google.com>
-References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
- <20190927044239.589e7c4c@oasis.local.home>
- <20191001163542.GB87296@google.com>
- <CAPDyKFrYqeoiSG5-KaBDt_G4kPtCxRO7+5fRa-HSWjuPPmAheQ@mail.gmail.com>
+        id S1731608AbfJORW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 13:22:28 -0400
+Received: from muru.com ([72.249.23.125]:37368 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726125AbfJORW2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Oct 2019 13:22:28 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 0E9178108;
+        Tue, 15 Oct 2019 17:23:00 +0000 (UTC)
+Date:   Tue, 15 Oct 2019 10:22:23 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Merlijn Wajer <merlijn@wizzup.org>
+Subject: Re: [PATCH] power: supply: cpcap-charger: Limit voltage to 4.2V for
+ battery
+Message-ID: <20191015172223.GZ5610@atomide.com>
+References: <20191009203355.5622-1-tony@atomide.com>
+ <20191013112714.GA5653@amd>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFrYqeoiSG5-KaBDt_G4kPtCxRO7+5fRa-HSWjuPPmAheQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191013112714.GA5653@amd>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
-
-On Tue, Oct 15, 2019 at 02:37:42PM +0200, Ulf Hansson wrote:
-> On Tue, 1 Oct 2019 at 18:35, Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > On Fri, Sep 27, 2019 at 04:42:39AM -0400, Steven Rostedt wrote:
-> > > On Thu, 26 Sep 2019 15:04:38 -0700
-> > > Matthias Kaehlcke <mka@chromium.org> wrote:
-> > >
-> > > > Define genpd_power_on/off and genpd_set_performance_state
-> > > > tracepoints and use them.
-> > >
-> > > I agree with Greg about adding a "why" you need this. But, in case
-> > > there's a good reason to have this, I have comments about the code
-> > > below.
-> >
-> > Thanks Greg and Steven for your comments.
-> >
-> > How about this instead:
-> >
-> >   Add tracepoints for genpd_power_on, genpd_power_off and
-> >   genpd_set_performance_state. The tracepoints can help with
-> >   understanding power domain behavior of a given device, which
-> >   may be particularly interesting for battery powered devices
-> >   and suspend/resume.
+* Pavel Machek <pavel@ucw.cz> [191013 11:27]:
+> Hi!
 > 
-> Apologize for the delay, no excuse!
+> > There have been some cases of droid4 battery bulging that seem to be
+> > related to being left connected to the charger for several weeks.
+> > 
+> > It is suspected that the 4.35V charge voltage configured for the battery
+> > is too much in the long run, so lets limit the charge voltage to 4.2V.
+> > It could also be that the batteries are just getting old.
+> > 
+> > We don't really want to just change the charge voltage to 4.2V as Android
+> > may have charged the battery to 3.51.V as pointed out by Pavel
+> > Machek.
 > 
-> I don't mind adding trace events, as long as it's for good reasons -
-> and to me, that seems a bit questionable here.
+> Now I'm confused. What is 3.51V? Is it typo for 4.35V?
 > 
-> According to the above, I believe the information you need is already
-> available via genpd's debugfs interface, no?
+> > +	/*
+> > +	 * If battery voltage is higher than charge voltage, it may have been
+> > +	 * charged to 3.51V by Android. Try again in 10 minutes.
+> > +	 */
+> 
+> Ok, so maybe it is not a typo. I'm confused.
 
-Not in all cases, e.g. you can't peek at sysfs while the device is
-suspended. Also sysfs doesn't help much with seeing that a PD is
-toggling between on an off for some (possibly legitimate) reason.
+Hmm a long mistake.. No idea what I was thinking with 3.51..
+Yeah both should be 4.35V.
 
-At this point I don't need this information badly, just thought it
-could be useful. No problem if it is decided to hold back on it for
-now.
+> Note that I'd prefer not to see this in -stable.
+
+OK. In that case I'll send a new version with the typos
+fixed against v5.4-rc cycle instead of v5.3.
+
+Regards,
+
+Tony
+
