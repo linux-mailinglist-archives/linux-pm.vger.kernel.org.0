@@ -2,199 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC49D81F2
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB4CD82F4
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbfJOVT5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 17:19:57 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:39208 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbfJOVT5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 17:19:57 -0400
-Received: by mail-ot1-f67.google.com with SMTP id s22so18257509otr.6;
-        Tue, 15 Oct 2019 14:19:56 -0700 (PDT)
+        id S2388905AbfJOVuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 17:50:40 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39445 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726719AbfJOVuk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 17:50:40 -0400
+Received: by mail-oi1-f196.google.com with SMTP id w144so18223540oia.6;
+        Tue, 15 Oct 2019 14:50:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NwSWuftbUgGHTdFPApJuvKNyN7XsdaW8Fit8ZchKBoY=;
-        b=f9mdMu/W313556x+fpQGwusdUAWLKUf7ag+Le16N/FkC3BX8AQPFPgX3N2TAffD3Cz
-         b9hV1rBClNFOyieg8joIOQZZLNoJyH+PXNOSehLgVvyN0bM2TzBwujtdybgR5cEBbWt7
-         OsKoHYmYjufEkMoTuTIjhztta5SVGTkflPr+iJ9KJ7s6flyDzNRLLmApOAgiw4MG5tXg
-         FOCiiYJoRt0STgmk0pebJmiad+PMq+KktxF2YodtOkOr2sEsa49i3SxVRawze6cv/qJD
-         ZNqj+YyunKDyiXltSUu8aBtN6bTJB4RVukspFsPRFQh6VyJCGFQ003MOJZYWkurBMUjE
-         u4Kg==
-X-Gm-Message-State: APjAAAVsUsUukcI1A0kYrL8uZl731GHquztMi/NW4SaDC9pqLxoIXb3K
-        QBY2KbC3tBwecvAShRGcdLdZFSUzWRMYgDLD+LOTJK4x
-X-Google-Smtp-Source: APXvYqyLsJtoxGgofhwR5hK08b0Hi0cbUYi2KdDemnuwKHLLcBnxJN18buv98ShZJEGWZ/HnpNdz0w6c/YNNOgjXIs4=
-X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr31684717oth.266.1571174396197;
- Tue, 15 Oct 2019 14:19:56 -0700 (PDT)
+        bh=6Rbg3GlsCZMY2PYzwlKYN6U3Hys/GlUE/N1CGmM1+mk=;
+        b=umRVsOqGggFxreCANJTaxO9NJm0LhK+1fTpp6xV7MRdjr9plnVt8m2pyzAVU2miLeM
+         MsjOJ65fKkLLKXIKoC0KBVc0DpB7Zn5tbEKKY93I7xzxc2tweH41kohYFNCdQ0ONfwIk
+         p+WQWkvgMyYbVXVl+5N/Jef9IyBirAdVKCNPW3tsM/sowMKu2aqM4aNQjZCG1gS2mTLG
+         jGhrT31h94uqvb2VaDj/ldThsciGboA0H74tDhwG0Eb5XLV3Wxy+EbJfDu/GVSzE7RkZ
+         vfWQd2b2/qogVQNPUILIjiQMs1GDCZjNnBFvZmwC21NDWQhFVoSlRMrEsrDzA1T0B6UJ
+         Gm2w==
+X-Gm-Message-State: APjAAAWoLUwkdIcu10lUGxX7nUitNshDCTawhOdiV2OdnafYEC8ko+qa
+        JHHdHdiIF1g5raWRybQxZrQn2EbyBu8vvLae9fAggDcm
+X-Google-Smtp-Source: APXvYqwSdEONq2xTT80HSQuU+UMOReflhaKoGASTVXaLwjVs7H5aEpsz5B6O64BQDIT2HvPpOWEtr8ZZKM6ngr86wl8=
+X-Received: by 2002:aca:d405:: with SMTP id l5mr582341oig.115.1571176238841;
+ Tue, 15 Oct 2019 14:50:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <5720276.eiOaOx1Qyb@kreacher> <20191015192013.GA115182@google.com>
-In-Reply-To: <20191015192013.GA115182@google.com>
+References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
+ <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
+ <a1c503a7-6136-a405-369c-596a680183f2@gmail.com> <20191015114637.pcdbs2ctxl4xoxdo@vireshk-i7>
+ <CAJZ5v0g3kRfa2WXy=xz3Mj15Pwb5tm1xg=uPODoifnv70O1ORA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g3kRfa2WXy=xz3Mj15Pwb5tm1xg=uPODoifnv70O1ORA@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Oct 2019 23:19:44 +0200
-Message-ID: <CAJZ5v0jFSML6cf5Z6ot2vZs9b3QomYLM3SaDMvooTmngeSCcBQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: PM: Fix pci_power_up()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Daniel Drake <drake@endlessm.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
+Date:   Tue, 15 Oct 2019 23:50:27 +0200
+Message-ID: <CAJZ5v0hxsy3ZKFvtWULHAVog4=3rYQfd3-61A9dNaKeUbiDtrg@mail.gmail.com>
+Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS framework
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 9:20 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Tue, Oct 15, 2019 at 5:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Mon, Oct 14, 2019 at 01:25:00PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> On Tue, Oct 15, 2019 at 1:46 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > There is an arbitrary difference between the system resume and
-> > runtime resume code paths for PCI devices regarding the delay to
-> > apply when switching the devices from D3cold to D0.
+> > On 22-09-19, 23:12, Dmitry Osipenko wrote:
+> > > Hello Viresh,
+> > >
+> > > This patch causes use-after-free on a cpufreq driver module reload. Please take a look, thanks in advance.
+> > >
+> > >
+> > > [   87.952369] ==================================================================
+> > > [   87.953259] BUG: KASAN: use-after-free in notifier_chain_register+0x4f/0x9c
+> > > [   87.954031] Read of size 4 at addr e6abbd0c by task modprobe/243
+> > >
+> > > [   87.954901] CPU: 1 PID: 243 Comm: modprobe Tainted: G        W
+> > > 5.3.0-next-20190920-00185-gf61698eab956-dirty #2408
+> > > [   87.956077] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> > > [   87.956807] [<c0110aad>] (unwind_backtrace) from [<c010bb71>] (show_stack+0x11/0x14)
+> > > [   87.957709] [<c010bb71>] (show_stack) from [<c0d37b25>] (dump_stack+0x89/0x98)
+> > > [   87.958616] [<c0d37b25>] (dump_stack) from [<c02937e1>]
+> > > (print_address_description.constprop.0+0x3d/0x340)
+> > > [   87.959785] [<c02937e1>] (print_address_description.constprop.0) from [<c0293c6b>]
+> > > (__kasan_report+0xe3/0x12c)
+> > > [   87.960907] [<c0293c6b>] (__kasan_report) from [<c014988f>] (notifier_chain_register+0x4f/0x9c)
+> > > [   87.962001] [<c014988f>] (notifier_chain_register) from [<c01499b5>]
+> > > (blocking_notifier_chain_register+0x29/0x3c)
+> > > [   87.963180] [<c01499b5>] (blocking_notifier_chain_register) from [<c06f7ee9>]
+> > > (dev_pm_qos_add_notifier+0x79/0xf8)
+> > > [   87.964339] [<c06f7ee9>] (dev_pm_qos_add_notifier) from [<c092927d>] (cpufreq_online+0x5e1/0x8a4)
+> > > [   87.965351] [<c092927d>] (cpufreq_online) from [<c09295c9>] (cpufreq_add_dev+0x79/0x80)
+> > > [   87.966247] [<c09295c9>] (cpufreq_add_dev) from [<c06eb9d3>] (subsys_interface_register+0xc3/0x100)
+> > > [   87.967297] [<c06eb9d3>] (subsys_interface_register) from [<c0926e53>]
+> > > (cpufreq_register_driver+0x13b/0x1ec)
+> > > [   87.968476] [<c0926e53>] (cpufreq_register_driver) from [<bf800435>]
+> > > (tegra20_cpufreq_probe+0x165/0x1a8 [tegra20_cpufreq])
 > >
-> > Namely, pci_restore_standard_config() used in the runtime resume
-> > code path calls pci_set_power_state() which in turn invokes
-> > __pci_start_power_transition() to power up the device through the
-> > platform firmware and that function applies the transition delay
-> > (as per PCI Express Base Specification Revision 2.0, Section 6.6.1).
-> > However, pci_pm_default_resume_early() used in the system resume
-> > code path calls pci_power_up() which doesn't apply the delay at
-> > all and that causes issues to occur during resume from
-> > suspend-to-idle on some systems where the delay is required.
+> > Hi Dmitry,
 > >
-> > Since there is no reason for that difference to exist, modify
-> > pci_power_up() to follow pci_set_power_state() more closely and
-> > invoke __pci_start_power_transition() from there to call the
-> > platform firmware to power up the device (in case that's necessary).
+> > Thanks for the bug report and I was finally able to reproduce it at my end and
+> > this was quite an interesting debugging exercise :)
 > >
-> > Fixes: db288c9c5f9d ("PCI / PM: restore the original behavior of pci_set_power_state()")
-> > Reported-by: Daniel Drake <drake@endlessm.com>
-> > Link: https://lore.kernel.org/linux-pm/CAD8Lp44TYxrMgPLkHCqF9hv6smEurMXvmmvmtyFhZ6Q4SE+dig@mail.gmail.com/T/#m21be74af263c6a34f36e0fc5c77c5449d9406925
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
+> > When a cpufreq driver gets registered, we register with the subsys interface and
+> > it calls cpufreq_add_dev() for each CPU, starting from CPU0. And so the QoS
+> > notifiers get added to the first CPU of the policy, i.e. CPU0 in common cases.
 > >
-> > Daniel, please test this one.
-> >
-> > ---
-> >  drivers/pci/pci.c |   24 +++++++++++-------------
-> >  1 file changed, 11 insertions(+), 13 deletions(-)
-> >
-> > Index: linux-pm/drivers/pci/pci.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/pci/pci.c
-> > +++ linux-pm/drivers/pci/pci.c
-> > @@ -959,19 +959,6 @@ void pci_refresh_power_state(struct pci_
-> >  }
-> >
-> >  /**
-> > - * pci_power_up - Put the given device into D0 forcibly
-> > - * @dev: PCI device to power up
-> > - */
-> > -void pci_power_up(struct pci_dev *dev)
-> > -{
-> > -     if (platform_pci_power_manageable(dev))
-> > -             platform_pci_set_power_state(dev, PCI_D0);
-> > -
-> > -     pci_raw_set_power_state(dev, PCI_D0);
-> > -     pci_update_current_state(dev, PCI_D0);
-> > -}
-> > -
-> > -/**
-> >   * pci_platform_power_transition - Use platform to change device power state
-> >   * @dev: PCI device to handle.
-> >   * @state: State to put the device into.
-> > @@ -1154,6 +1141,17 @@ int pci_set_power_state(struct pci_dev *
-> >  EXPORT_SYMBOL(pci_set_power_state);
-> >
-> >  /**
-> > + * pci_power_up - Put the given device into D0 forcibly
+> > When the cpufreq driver gets unregistered, we unregister with the subsys
+> > interface and it calls cpufreq_remove_dev() for each CPU, starting from CPU0
+> > (should have been in reverse order I feel). We remove the QoS notifier only when
+> > cpufreq_remove_dev() gets called for the last CPU of the policy, lets call it
+> > CPUx. Now this has a different notifier list as compared to CPU0.
 >
-> Not specifically for this patch, but what does "forcibly" mean?
+> The same problem will appear if the original policy CPU goes offline, won't it?
 >
-> > + * @dev: PCI device to power up
-> > + */
-> > +void pci_power_up(struct pci_dev *dev)
-> > +{
-> > +     __pci_start_power_transition(dev, PCI_D0);
-> > +     pci_raw_set_power_state(dev, PCI_D0);
-> > +     pci_update_current_state(dev, PCI_D0);
+> > In short, we are adding the cpufreq notifiers to CPU0 and removing them from
+> > CPUx. When we try to add it again by inserting the module for second time, we
+> > find a node in the notifier list which is already freed but still in the list as
+> > we removed it from CPUx's list (which doesn't do anything as the node wasn't
+> > there in the first place).
+> >
+> > @Rafael: How do you see we solve this problem ? Here are the options I could
+> > think of:
+> >
+> > - Update subsys layer to reverse the order of devices while unregistering (this
+> >   will fix the current problem, but we will still have corner cases hanging
+> >   around, like if the CPU0 is hotplugged out, etc).
 >
-> There's not very much difference between:
+> This isn't sufficient for the offline case.
 >
->   pci_power_up(dev);
+> > - Update QoS framework with the knowledge of related CPUs, this has been pending
+> >   until now from my side. And this is the thing we really need to do. Eventually
+> >   we shall have only a single notifier list for all CPUs of a policy, at least
+> >   for MIN/MAX frequencies.
 >
-> and
->
->   pci_set_power_state(dev, PCI_D0);
->
-> It looks like the main difference is that pci_set_power_state() calls
-> __pci_complete_power_transition(), which ultimately calls
-> acpi_pci_set_power_state() (for ACPI systems).
+> - Move the PM QoS requests and notifiers to the new policy CPU on all
+> changes of that.  That is, when cpufreq_offline() nominates the new
+> "leader", all of the QoS stuff for the policy needs to go to this one.
 
-Yes, it does, for power states deeper than D0, which is not the case here.
+Alas, that still will not work, because things like
+acpi_processor_ppc_init() only work accidentally for one-CPU policies.
+Generally, adding such a PM QoS request to a non-policy CPU simply has
+no effect until it becomes a policy CPU which may be never.
 
-The main difference is the dev->current_state == state check in
-pci_set_power_state(), but in the resume case specifically
-dev->current_state == PCI_D0 doesn't matter, because the real power
-state of the device may be different.
+It looks like using device PM QoS for cpufreq is a mistake in general
+and what is needed is a struct pm_qos_constraints member in struct
+cpufreq_policy and something like
 
-> So maybe "forcibly" means something like "ignoring any platform power
-> management methods"?
+struct freq_pm_qos_request {
+        enum freq_pm_qos_req_type type; /* min or max */
+        struct plist_node pnode;
+        struct cpufreq_policy *policy;
+};
 
-It means "go into D0 no matter what the current cached value is".
-
->  It's not obvious to me when we should skip the
-> platform stuff or whether the skipping should be done at the high
-> level (like calling either pci_power_up() or pci_set_power_state()) or
-> at a lower level (e.g., if everybody called pci_set_power_state() and
-> it could internally tell whether we're skipping the platform part).
-
-For transitions into D0 __pci_start_power_transition() is the platform
-stuff, so we don't skip it and the other things that are present in
-pci_set_power_state() and are not there in pci_power_up() are simply
-unnecessary for transitions to D0.
-
-> If we could unify the paths as much as possible, that would be nice,
-> but if it's not feasible, it's not feasible.
-
-It kind of is, but I'd prefer to do it on top of this patch.
-
-First, the pci_update_current_state() in pci_power_up() can be moved
-to pci_pm_default_resume_early() which is the only caller of
-pci_power_up(). [The role of that pci_update_current_state() is to
-change the current_state value to D3cold if the device is not
-accessible (or the platform firmware says that it is D3cold, which may
-be the case after a failing attempt to use it to switch the device
-over to D0).]  Next, if pci_power_up() is modified to return the
-return value of pci_raw_set_power_state(), pci_set_power_state() can
-be implemented (roughly) as
-
-sanitize the state argument
-
-if (dev->current_state == state)
-        return 0;
-
-if (state == PCI_D0)
-        return pci_power_up();
-
-carry out a transition into a deeper power state.
-
-And so pci_power_up() will be used by pci_set_power_state(), for
-transitions into D0, and (directly) by pci_pm_default_resume_early().
-
-How does that sound?
-
-> If you'd like me to push this for v5.4, let me know, otherwise you
-> can apply my:
->
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-I will, thanks!
+Then, pm_qos_update_target() can be used for adding, updating and
+removing requests.
