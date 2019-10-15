@@ -2,88 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 228EFD7DA6
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879BBD7DE7
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388751AbfJOR0b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 15 Oct 2019 13:26:31 -0400
-Received: from muru.com ([72.249.23.125]:37380 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730981AbfJOR0b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Oct 2019 13:26:31 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 34E9D8108;
-        Tue, 15 Oct 2019 17:27:04 +0000 (UTC)
-Date:   Tue, 15 Oct 2019 10:26:27 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
-Subject: Re: [PATCH 1/2] power: supply: cpcap-battery: Check voltage before
- orderly_poweroff
-Message-ID: <20191015172627.GA5610@atomide.com>
-References: <20191009205252.9510-1-tony@atomide.com>
- <20191009205252.9510-2-tony@atomide.com>
- <20191013112810.GB5653@amd>
+        id S1730780AbfJORfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 13:35:22 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42382 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728653AbfJORfW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:35:22 -0400
+Received: from 79.184.254.38.ipv4.supernova.orange.pl (79.184.254.38) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 8d7bb3b42b8b2d72; Tue, 15 Oct 2019 19:35:20 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH] ACPI: processor: Avoid NULL pointer dereferences at init time
+Date:   Tue, 15 Oct 2019 19:35:20 +0200
+Message-ID: <9765491.cFa8AugBjT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20191013112810.GB5653@amd>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Pavel Machek <pavel@ucw.cz> [191013 11:28]:
-> On Wed 2019-10-09 13:52:51, Tony Lindgren wrote:
-> > We can get the low voltage interrupt trigger sometimes way too early,
-> > maybe because of CPU load spikes. This causes orderly_poweroff() be
-> > called too easily.
-> > 
-> > Let's check the voltage before orderly_poweroff in case it was not
-> > yet a permanent condition. We will be getting more interrupts anyways
-> > if the condition persists.
-> > 
-> > Let's also show the measured voltages for low battery and battery
-> > empty warnings since we have them.
-> 
-> > +++ b/drivers/power/supply/cpcap-battery.c
-> > @@ -562,12 +562,15 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
-> >  	switch (d->action) {
-> >  	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
-> >  		if (latest->current_ua >= 0)
-> > -			dev_warn(ddata->dev, "Battery low at 3.3V!\n");
-> > +			dev_warn(ddata->dev, "Battery low at %imV!\n",
-> > +				latest->voltage / 1000);
-> >  		break;
-> >  	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
-> > -		if (latest->current_ua >= 0) {
-> > +		if (latest->current_ua >= 0 && latest->voltage >= 0 &&
-> > +		    latest->voltage <= 3100000) {
-> >  			dev_emerg(ddata->dev,
-> > -				  "Battery empty at 3.1V, powering off\n");
-> > +				  "Battery empty at %imV, powering off\n",
-> > +				  latest->voltage / 1000);
-> >  			orderly_poweroff(true);
-> >  		}
-> 
-> Hmm.
-> 
-> So if latest->voltage is < 0, I'd preffer to shut down the machine,
-> too.
+rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hmm I need to recheck if that is needed or not when booting without
-a battery on a power supply.
+If there are neither processor objects nor processor device objects
+in the ACPI tables, the per-CPU processors table will not be
+initialized and attempting to dereference pointers from there will
+cause the kernel to crash.  This happens in acpi_processor_ppc_init()
+and acpi_thermal_cpufreq_init() after commit d15ce412737a ("ACPI:
+cpufreq: Switch to QoS requests instead of cpufreq notifier")
+which didn't add the requisite NULL pointer checks in there.
 
-> Actually, if we got POWEROFF irq, and voltage is close to 3.1V (like
-> maybe < 3.2V), maybe it would be good to shutdown anyway?
+Add the NULL pointer checks to acpi_processor_ppc_init() and
+acpi_thermal_cpufreq_init(), and to the corresponding "exit"
+routines.
 
-No, this is some spurious interrupt issue that I've seen triggering
-at way higher voltages than it should be happening at.
+While at it, drop redundant return instructions from
+acpi_processor_ppc_init() and acpi_thermal_cpufreq_init().
 
-Regards,
+Fixes: d15ce412737a ("ACPI: cpufreq: Switch to QoS requests instead of cpufreq notifier")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/processor_perflib.c |   10 ++++++----
+ drivers/acpi/processor_thermal.c |   10 ++++++----
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-Tony
+Index: linux-pm/drivers/acpi/processor_perflib.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_perflib.c
++++ linux-pm/drivers/acpi/processor_perflib.c
+@@ -162,21 +162,23 @@ void acpi_processor_ppc_init(int cpu)
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 	int ret;
+ 
++	if (!pr)
++		return;
++
+ 	ret = dev_pm_qos_add_request(get_cpu_device(cpu),
+ 				     &pr->perflib_req, DEV_PM_QOS_MAX_FREQUENCY,
+ 				     INT_MAX);
+-	if (ret < 0) {
++	if (ret < 0)
+ 		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
+ 		       ret);
+-		return;
+-	}
+ }
+ 
+ void acpi_processor_ppc_exit(int cpu)
+ {
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-	dev_pm_qos_remove_request(&pr->perflib_req);
++	if (pr)
++		dev_pm_qos_remove_request(&pr->perflib_req);
+ }
+ 
+ static int acpi_processor_get_performance_control(struct acpi_processor *pr)
+Index: linux-pm/drivers/acpi/processor_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_thermal.c
++++ linux-pm/drivers/acpi/processor_thermal.c
+@@ -130,21 +130,23 @@ void acpi_thermal_cpufreq_init(int cpu)
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 	int ret;
+ 
++	if (!pr)
++		return;
++
+ 	ret = dev_pm_qos_add_request(get_cpu_device(cpu),
+ 				     &pr->thermal_req, DEV_PM_QOS_MAX_FREQUENCY,
+ 				     INT_MAX);
+-	if (ret < 0) {
++	if (ret < 0)
+ 		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
+ 		       ret);
+-		return;
+-	}
+ }
+ 
+ void acpi_thermal_cpufreq_exit(int cpu)
+ {
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-	dev_pm_qos_remove_request(&pr->thermal_req);
++	if (pr)
++		dev_pm_qos_remove_request(&pr->thermal_req);
+ }
+ #else				/* ! CONFIG_CPU_FREQ */
+ static int cpufreq_get_max_state(unsigned int cpu)
+
+
 
