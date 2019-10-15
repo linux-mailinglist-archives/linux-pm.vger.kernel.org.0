@@ -2,135 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38762D7D1E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C4AD7D50
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbfJORPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 13:15:50 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41103 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726277AbfJORPu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:15:50 -0400
-Received: from 79.184.254.38.ipv4.supernova.orange.pl (79.184.254.38) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 167685bb2f0fdbb3; Tue, 15 Oct 2019 19:15:46 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>, olaf@aepfle.de,
-        apw@canonical.com, jasowang@redhat.com, vkuznets@redhat.com,
-        marcelo.cerri@canonical.com, jackm@mellanox.com,
-        linux-pci@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        driverdev-devel@linuxdriverproject.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 1/7] PCI/PM: Always return devices to D0 when thawing
-Date:   Tue, 15 Oct 2019 19:15:46 +0200
-Message-ID: <15877028.U7HUqG5fmY@kreacher>
-In-Reply-To: <20191014230016.240912-2-helgaas@kernel.org>
-References: <20191014230016.240912-1-helgaas@kernel.org> <20191014230016.240912-2-helgaas@kernel.org>
+        id S1730713AbfJORTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 13:19:42 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45859 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730706AbfJORTl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:19:41 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y72so12878557pfb.12
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 10:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TWtOdLU950qO44gtWRI1EevokHAunCwQ1TaUeaOgpXk=;
+        b=awoHS9eVotcWQ2gbtqYURIscmftRO0hnxBkikpia+e0TsfNOnDMM3fOzVNuX5Ehopo
+         uebssmp/dLs6BBLFKoi04U1jAnQnHV4oiLzvt/DmQZrPeeec1Kw5VWPem+vi+yrWn0ZX
+         gXuxpxVFvn1J4rubjdujIthIBrBKUR2U9szVQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TWtOdLU950qO44gtWRI1EevokHAunCwQ1TaUeaOgpXk=;
+        b=Shy2rvKICC6AD0DYpUXqEof5aXh2xM4FAwLP3diuuH1xFSitNWdJsFbUJj5gKdLbys
+         8b+k3/sRp/zsYgA7ie3SFYbsrA/KxrNa3KIvepd6CyUBOdJlyaywPJAYlKXp3rpcOTZV
+         48ogvWkAkcY10lhkuD273O9+xbUXHjBfkrXq54HQKOGHZXfniesIkXxElz+kTrPSctZX
+         /W1Ue7LXLclBehWhZ5uhAyhcvO5SuZHqBrPQmxK0WC6ZixBasHUkcjp7lLdBQTL+ki/P
+         cWTwg5aTkOwZ8ZMDl12pPDiZJgcUh7KDseSo6vF+SnHAj4cgQocDx7bamGTPNFQes04L
+         ZE+Q==
+X-Gm-Message-State: APjAAAUi1AdkhAQmH2AYMskoPAw6EAEiqZl+7k2TRu3zLh0l5d11mnTw
+        jFZEGWrRvYO3s1MxaqV4GU1x3Q==
+X-Google-Smtp-Source: APXvYqwgk66PcBDs4wpLLZVJPG/VI50z6RsUr748jWOgPSQEjjgVW/mRJuA6zAgAaY2oFXrP0Je05g==
+X-Received: by 2002:aa7:924f:: with SMTP id 15mr40455528pfp.194.1571159981109;
+        Tue, 15 Oct 2019 10:19:41 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id s36sm22990237pgk.84.2019.10.15.10.19.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Oct 2019 10:19:40 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 10:19:37 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
+Message-ID: <20191015171937.GO87296@google.com>
+References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
+ <20190927044239.589e7c4c@oasis.local.home>
+ <20191001163542.GB87296@google.com>
+ <CAPDyKFrYqeoiSG5-KaBDt_G4kPtCxRO7+5fRa-HSWjuPPmAheQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrYqeoiSG5-KaBDt_G4kPtCxRO7+5fRa-HSWjuPPmAheQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, October 15, 2019 1:00:10 AM CEST Bjorn Helgaas wrote:
-> From: Dexuan Cui <decui@microsoft.com>
-> 
-> pci_pm_thaw_noirq() is supposed to return the device to D0 and restore its
-> configuration registers, but previously it only did that for devices whose
-> drivers implemented the new power management ops.
-> 
-> Hibernation, e.g., via "echo disk > /sys/power/state", involves freezing
-> devices, creating a hibernation image, thawing devices, writing the image,
-> and powering off.  The fact that thawing did not return devices with legacy
-> power management to D0 caused errors, e.g., in this path:
-> 
->   pci_pm_thaw_noirq
->     if (pci_has_legacy_pm_support(pci_dev)) # true for Mellanox VF driver
->       return pci_legacy_resume_early(dev)   # ... legacy PM skips the rest
->     pci_set_power_state(pci_dev, PCI_D0)
->     pci_restore_state(pci_dev)
->   pci_pm_thaw
->     if (pci_has_legacy_pm_support(pci_dev))
->       pci_legacy_resume
-> 	drv->resume
-> 	  mlx4_resume
-> 	    ...
-> 	      pci_enable_msix_range
-> 	        ...
-> 		  if (dev->current_state != PCI_D0)  # <---
-> 		    return -EINVAL;
-> 
-> which caused these warnings:
-> 
->   mlx4_core a6d1:00:02.0: INTx is not supported in multi-function mode, aborting
->   PM: dpm_run_callback(): pci_pm_thaw+0x0/0xd7 returns -95
->   PM: Device a6d1:00:02.0 failed to thaw: error -95
-> 
-> Return devices to D0 and restore config registers for all devices, not just
-> those whose drivers support new power management.
-> 
-> [bhelgaas: also call pci_restore_state() before pci_legacy_resume_early(),
-> update comment, add stable tag, commit log]
-> Link: https://lore.kernel.org/r/KU1P153MB016637CAEAD346F0AA8E3801BFAD0@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: stable@vger.kernel.org	# v4.13+
+Hi Ulf,
 
-No issues found, so
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-> ---
->  drivers/pci/pci-driver.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
+On Tue, Oct 15, 2019 at 02:37:42PM +0200, Ulf Hansson wrote:
+> On Tue, 1 Oct 2019 at 18:35, Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > On Fri, Sep 27, 2019 at 04:42:39AM -0400, Steven Rostedt wrote:
+> > > On Thu, 26 Sep 2019 15:04:38 -0700
+> > > Matthias Kaehlcke <mka@chromium.org> wrote:
+> > >
+> > > > Define genpd_power_on/off and genpd_set_performance_state
+> > > > tracepoints and use them.
+> > >
+> > > I agree with Greg about adding a "why" you need this. But, in case
+> > > there's a good reason to have this, I have comments about the code
+> > > below.
+> >
+> > Thanks Greg and Steven for your comments.
+> >
+> > How about this instead:
+> >
+> >   Add tracepoints for genpd_power_on, genpd_power_off and
+> >   genpd_set_performance_state. The tracepoints can help with
+> >   understanding power domain behavior of a given device, which
+> >   may be particularly interesting for battery powered devices
+> >   and suspend/resume.
 > 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index a8124e47bf6e..d4ac8ce8c1f9 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -1076,17 +1076,22 @@ static int pci_pm_thaw_noirq(struct device *dev)
->  			return error;
->  	}
->  
-> -	if (pci_has_legacy_pm_support(pci_dev))
-> -		return pci_legacy_resume_early(dev);
-> -
->  	/*
-> -	 * pci_restore_state() requires the device to be in D0 (because of MSI
-> -	 * restoration among other things), so force it into D0 in case the
-> -	 * driver's "freeze" callbacks put it into a low-power state directly.
-> +	 * Both the legacy ->resume_early() and the new pm->thaw_noirq()
-> +	 * callbacks assume the device has been returned to D0 and its
-> +	 * config state has been restored.
-> +	 *
-> +	 * In addition, pci_restore_state() restores MSI-X state in MMIO
-> +	 * space, which requires the device to be in D0, so return it to D0
-> +	 * in case the driver's "freeze" callbacks put it into a low-power
-> +	 * state.
->  	 */
->  	pci_set_power_state(pci_dev, PCI_D0);
->  	pci_restore_state(pci_dev);
->  
-> +	if (pci_has_legacy_pm_support(pci_dev))
-> +		return pci_legacy_resume_early(dev);
-> +
->  	if (drv && drv->pm && drv->pm->thaw_noirq)
->  		error = drv->pm->thaw_noirq(dev);
->  
+> Apologize for the delay, no excuse!
 > 
+> I don't mind adding trace events, as long as it's for good reasons -
+> and to me, that seems a bit questionable here.
+> 
+> According to the above, I believe the information you need is already
+> available via genpd's debugfs interface, no?
 
+Not in all cases, e.g. you can't peek at sysfs while the device is
+suspended. Also sysfs doesn't help much with seeing that a PD is
+toggling between on an off for some (possibly legitimate) reason.
 
-
-
+At this point I don't need this information badly, just thought it
+could be useful. No problem if it is decided to hold back on it for
+now.
