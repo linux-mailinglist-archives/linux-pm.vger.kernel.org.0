@@ -2,93 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AF9D7E23
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4DFD800A
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 21:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729641AbfJORwz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 13:52:55 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41078 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbfJORwz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:52:55 -0400
-Received: by mail-ot1-f67.google.com with SMTP id g13so17708036otp.8;
-        Tue, 15 Oct 2019 10:52:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0awkrNAPcXWo+Wm8QfkD5O17YbDc9wlliWJjxDTQPl4=;
-        b=A09rzlzGFg3ApjtfQolUx0XxOId8zdCTpVL2fhgTgcmL2qNYTJQ/QAPwTMzYOdBUGL
-         hEyn0wRe4hq7oOBqHLpQcDSZtrfPx+RlkUI1S2q4eGu2Z+UI3zKXcs/hT9IImrtprId7
-         Rp4GFSbYrFYi/obgIQJuuqA+TwHAQLsdG28Yl5lwKDRjY6VSmop9DGTiWrVCFOnJnz2D
-         p6om/04m9zyYrBpV2Y9BnwwCFUE4I1TXwmEED5T+jjItUEFgjFLW38cNPrrc3milLAdE
-         f6/cM+AbqwfoRr9557VnAtLKkj6wY9UXpQe0bhpF8OGsOfP83L18r4z5SWWrrfefrWq5
-         VgXw==
-X-Gm-Message-State: APjAAAUkOenZSVnnQJsYj/klZkQKtFwSn0Lk8ZhvEDW/eOfP5RkASYBZ
-        2BvYMylx+pzZDHLvGfSBGj3CvRbmqqeKS23p+qA=
-X-Google-Smtp-Source: APXvYqy+z2640pLWXA/n52YLsdwhV9kHXEIfBefEfzEG0gR7AIhD1qLPwhn/HydFH/9RJQz2Qf4j1X31ihVGYH3jcuA=
-X-Received: by 2002:a05:6830:1e69:: with SMTP id m9mr1431970otr.262.1571161972801;
- Tue, 15 Oct 2019 10:52:52 -0700 (PDT)
+        id S1730562AbfJOTUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 15:20:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389382AbfJOTSl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Oct 2019 15:18:41 -0400
+Received: from earth.universe (eth-west-pareq2-46-193-2-41.wb.wifirst.net [46.193.2.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2499920854;
+        Tue, 15 Oct 2019 19:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571167120;
+        bh=3VW3nI+C8AV/pn0tLd1hom0tfVBcQeY8vKH6rm2SlyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cnX5nhBNBOkPiickEeDv73BH7AJSwxU5DzeCYKhyqo7HLp58cTBbHcyuedxGTRfFF
+         zjCBGym+BMmC5jH49x3l6nmZBIFC/CrGynmKu2dwMe3Y9i7a5z74TeTWFqjlCEtje9
+         f/NIODiCutdaXX7nobHbAj9HeMAsy3cllhSk7WYY=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 9C91E3C0CA1; Tue, 15 Oct 2019 21:18:37 +0200 (CEST)
+Date:   Tue, 15 Oct 2019 21:18:37 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: power: max77650: convert the binding
+ document to yaml
+Message-ID: <20191015191837.jd6lbk3qbsmzuwfu@earth.universe>
+References: <20191015162300.22024-1-brgl@bgdev.pl>
+ <20191015162300.22024-5-brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20191014061355.29072-1-drake@endlessm.com> <20191014154322.GA190693@google.com>
- <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
-In-Reply-To: <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Oct 2019 19:52:41 +0200
-Message-ID: <CAJZ5v0jCh87azmBuhj1T_M+OV8tu7v7Y7WV_zaf56+fxhXU3KQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qh5r3wj6smdvdc4t"
+Content-Disposition: inline
+In-Reply-To: <20191015162300.22024-5-brgl@bgdev.pl>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 7:31 AM Daniel Drake <drake@endlessm.com> wrote:
->
-> On Mon, Oct 14, 2019 at 11:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > Can you tell if this is because the Ryzen7 XHCI controller is out of
-> > spec, or is the Linux PCI core missing some delay?  If the latter,
-> > fixing the core might fix other devices as well.
-> >
-> > Mika has this patch:
-> > https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
-> > for similar issues, but I think that patch fixes D3cold->D0
-> > transitions, and your patch appears to be concerned with D3hot->D0
-> > transitions.
->
-> It's actually coming out of D3cold here, however what happens right
-> before this is that __pci_start_power_transition() calls
-> pci_platform_power_transition(D0) to leave D3cold state, then
-> pci_update_current_state() reads PMCSR and updates dev->current_state
-> to D3hot.
 
-Which pci_update_current_state() do you mean, exactly?
+--qh5r3wj6smdvdc4t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note that pci_platform_power_transition() itself contains one, which
-triggers after a successful change of the ACPI power state of the
-device (which should be the case here).
+Hi,
 
-Then, there is one in pci_power_up(), but before that the device's
-PMCSR is read from and written to in pci_raw_set_power_state().
+On Tue, Oct 15, 2019 at 06:22:58PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>=20
+> Convert the binding document for MAX77650 charger module to YAML.
+>=20
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
 
-It looks like the reads from it after the ACPI power state change are
-all successful, but the write isn't unless there is the delay between
-it and the former platform_pci_set_power_state().
+Looks sensible to me. Assuming this goes through Rob:
 
-> The 20ms delay for these XHCI controllers is needed precisely at this
-> point - after writing PMCSR to move to D0, and before reading it back
-> to check the result.
-> I tried moving the delay immediately before writing PMCSR, but that
-> doesn't work. Based on that, it seems like it's just a little out of
-> spec.
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-That I agree with and the platform firmware doesn't compensate for
-that (which it could do, arguably).
+-- Sebastian
+
+>  .../power/supply/max77650-charger.txt         | 29 +------------
+>  .../power/supply/max77650-charger.yaml        | 42 +++++++++++++++++++
+>  2 files changed, 43 insertions(+), 28 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/max776=
+50-charger.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/max77650-char=
+ger.txt b/Documentation/devicetree/bindings/power/supply/max77650-charger.t=
+xt
+> index e6d0fb6ff94e..fbab7d3ac8e3 100644
+> --- a/Documentation/devicetree/bindings/power/supply/max77650-charger.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.txt
+> @@ -1,28 +1 @@
+> -Battery charger driver for MAX77650 PMIC from Maxim Integrated.
+> -
+> -This module is part of the MAX77650 MFD device. For more details
+> -see Documentation/devicetree/bindings/mfd/max77650.txt.
+> -
+> -The charger is represented as a sub-node of the PMIC node on the device =
+tree.
+> -
+> -Required properties:
+> ---------------------
+> -- compatible:		Must be "maxim,max77650-charger"
+> -
+> -Optional properties:
+> ---------------------
+> -- input-voltage-min-microvolt:	Minimum CHGIN regulation voltage. Must be=
+ one
+> -				of: 4000000, 4100000, 4200000, 4300000,
+> -				4400000, 4500000, 4600000, 4700000.
+> -- input-current-limit-microamp:	CHGIN input current limit (in microamps)=
+=2E Must
+> -				be one of: 95000, 190000, 285000, 380000,
+> -				475000.
+> -
+> -Example:
+> ---------
+> -
+> -	charger {
+> -		compatible =3D "maxim,max77650-charger";
+> -		input-voltage-min-microvolt =3D <4200000>;
+> -		input-current-limit-microamp =3D <285000>;
+> -	};
+> +This file was moved to max77650-charger.yaml.
+> diff --git a/Documentation/devicetree/bindings/power/supply/max77650-char=
+ger.yaml b/Documentation/devicetree/bindings/power/supply/max77650-charger.=
+yaml
+> new file mode 100644
+> index 000000000000..9dd0dad0f948
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/max77650-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Battery charger driver for MAX77650 PMIC from Maxim Integrated.
+> +
+> +maintainers:
+> +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> +
+> +description: |
+> +  This module is part of the MAX77650 MFD device. For more details
+> +  see Documentation/devicetree/bindings/mfd/max77650.txt.
+> +
+> +  The charger is represented as a sub-node of the PMIC node on the devic=
+e tree.
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77650-charger
+> +
+> +  input-voltage-min-microvolt:
+> +    description:
+> +      Minimum CHGIN regulation voltage.
+> +    enum: [ 4000000, 4100000, 4200000, 4300000,
+> +            4400000, 4500000, 4600000, 4700000 ]
+> +
+> +  input-current-limit-microamp:
+> +    description:
+> +      CHGIN input current limit (in microamps).
+> +    enum: [ 95000, 190000, 285000, 380000, 475000 ]
+> +
+> +required:
+> +  - compatible
+> +
+> +examples:
+> +  - |
+> +    charger {
+> +        compatible =3D "maxim,max77650-charger";
+> +        input-voltage-min-microvolt =3D <4200000>;
+> +        input-current-limit-microamp =3D <285000>;
+> +    };
+> --=20
+> 2.23.0
+>=20
+
+--qh5r3wj6smdvdc4t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2mG4QACgkQ2O7X88g7
++pr7Tg/+IMEVM9QSOBaEnCwYZYyzGFLriJJdzib9Cy6UMd80ujaTVa/BRf95ctlx
+SWLlkmQd8I6BsF9CxMulgyhatN0GA+/C0Q2Dr8eSvvWtDtQu5DY6W0LjKQzXr/W5
+UVM1OzqO9FDQsF7x0jaLfgTt+0AOdtiDBz+kKO2SnAytJkqjtlxj4vLAI9Gl9u6z
+dlaTeMxs7eO0qir3L47jLBbtsnoXuKq5QmWn2SI+j/D//tmlVPqodLbNPKqKpcV0
+hNgmRdBCMSYTXFGEV9d6jgkZ17QaXU8dGumr2w8DIeLDKj3blCU7gEIw1wiIdnkG
+c1SX+Kzw+Q8ejaD4tn0vxYrHl0G+H6x/vR948BZvlgH6eO/5iMaf8dRyp7BsqItV
+xE8Ii9ZepDr5Ny0a7UjKXXelujrAHdnaEWnV4AXGiPcatePsdYElz0PI4e99JLLa
+TWrtDsvmlFRDlMmcmGd+JJ5waj/RSaHg8fA+A4BDUBGkzQQFIrg6pFouvj81N/4v
+8mcFQ+S1X0kqQSXQnsvWlIl5XGO+0oThjlBOKoy2Sla+q5G37DvIqUE3FOJAOiUk
+Vk1RRM6PkM1dObjiYHaAzVK+qZBkWsIYLSa5FcS93efcTKHumN0HueGYTb/8zG0J
+2PiUCu20PdEbRYgrsRMaa/b2YusDP+ZPssYgqKJR7aN5fH0lpnU=
+=m1Mo
+-----END PGP SIGNATURE-----
+
+--qh5r3wj6smdvdc4t--
