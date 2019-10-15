@@ -2,153 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7479D8444
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 01:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8417D8462
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 01:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732799AbfJOXNX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 19:13:23 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39236 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729325AbfJOXNX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 19:13:23 -0400
-Received: by mail-pf1-f194.google.com with SMTP id v4so13440105pff.6
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 16:13:21 -0700 (PDT)
+        id S2390207AbfJOXUo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 19:20:44 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:36263 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726990AbfJOXUo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 19:20:44 -0400
+Received: by mail-vs1-f66.google.com with SMTP id v19so14368754vsv.3
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 16:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=AkK1IUD9itHRJl3qrEDn5W76PGecDNNhAPPx6TQzzz8=;
-        b=AvW3ElfqMmv+CbwmItArkaa8Rnz/cRp/ZjdTku9q8Ee33KpjYuWQFNgI+dHLaI+BKQ
-         g8ZAmo2OSohykJP7k51g8OEWglMNLi3t7Xtt4yO0UjuRrXaJI/rhAUrYQBxf1xNCXfdA
-         MzIDfjz0+GUt/sETI1G27w2IX9E6rDBVIuRXfTd7xFYwcorAP0ndQHDKk927gOOnTc8E
-         vvGhjl5G0Vhfr1Ld0z9UPChshknavZ7V9hN3cDWJCIBnmyRDyhrXuj91SlVJkoZx5WKi
-         E4ww6h3XOzqRdgesiRhI5pXXwaeWGMy/P2glv8rSQVIAO6Yh5XlPnrnskfOTwGp7AWIn
-         W9FQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Luzeu61JUpCQk5lttonbL70KSFby5OvdNNxzg/MFQ8=;
+        b=eDOzDhVMybk0i/+feqo0X+49gsS5JqJW8Ry8hE/JpXVc3WdVLD8WqJn9dDxRuwCehy
+         QvBk66yW4mH2kDlYuzMBwPUkP7IEFj9ZOCyD/4jTGGzyqm14Z6beV+SiRvogqh3bul4S
+         iB5C2XFuK7HRXnTP1fLCtCvORAdxwIVNNPgEfK7/yPQBrFJLj5U8IlVLAnGbma2My+bA
+         WBSOGcGHMJNm8DROoKh3HDAVOdcniv422vxJwA1eHO+j7o/CCl3KJUcbsWYelqWlID+T
+         ADHbasV+eQpUbByIGOW8dLaZ/+35eAnKAiGRw80ERMmbEtCmUY0OfB7tcC1PPQ9bI1JZ
+         KYPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=AkK1IUD9itHRJl3qrEDn5W76PGecDNNhAPPx6TQzzz8=;
-        b=pjIK3gQ8WWMSsnh0VuUFDXsit04wumkGWUQ5K1MChegY+orjdtp1wVCHeHgbdq1JSB
-         K2Ctmsg6ltSMdCR4cFtYW/xY6Vn3rW8rmKfCUGNKXAPDQwnhazcPj0zUm94Z9go2cbKb
-         7OT81ig0EG1CZ4rLCST3KwTiIVLxlpMulraPqnIsx8fhpc5X90Qot9PiqZpf7y0DPpvT
-         ls9tmywmcdK8MAyC3wcMukOc3bSAColmo+DvU0stXTLPd1dmf8lF/MvSnErfYDcQWrUp
-         Ht68dw9v3LAFejuvIwmDebyQ5CZmIvxoE0bVFWpVDluhC6kzCUUY9/mO7v39sySf/+vA
-         oaVQ==
-X-Gm-Message-State: APjAAAXzB4px9REE9L5ppVej5nfbXKEasM+PotGl96qJaqxSdM2lvnLi
-        tHqoLNZQgDDoKATuJOrJDxNhGg==
-X-Google-Smtp-Source: APXvYqzOZGdubxtAq2JsWsYxt64pPyHv8XCfZGohaoG/tQzF1DNtUISZxE5TDhW8OrwjjxOl+XU9/w==
-X-Received: by 2002:a62:6d81:: with SMTP id i123mr20789870pfc.57.1571181200905;
-        Tue, 15 Oct 2019 16:13:20 -0700 (PDT)
-Received: from localhost ([49.248.193.232])
-        by smtp.gmail.com with ESMTPSA id m102sm352863pje.5.2019.10.15.16.13.19
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 15 Oct 2019 16:13:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Luzeu61JUpCQk5lttonbL70KSFby5OvdNNxzg/MFQ8=;
+        b=RlWn+4WUF2F0aUqFiuWrsAv/tM23+8cSBoGvexx/VAxtOsrqteecLLD270iR8OMexa
+         rPKX8BeNDO31xo4KCSha+sXgUvJSGj02Jjc60FgSTCgrt63SVNi1zWrfPjNUvzz72seZ
+         vKqfOSL3QMXzUf4ANJfPkx4PBQKP/ymrTA39HtwYCEESwEZloGgI6I9G4xMOVRnkmoS+
+         mC8deHTB+fGP+nr066BxEddcmxnw6VkWtYNwnG/GO2G9+YBiGGQ0xnfS3je2kNoBUkAM
+         Pgr1wY8ZHa1D4yo/8l+Mw4r5VPbR4elr0IIlCq4bz1HN18MoAnvb7iTlT0j40JcDz3wO
+         EU2Q==
+X-Gm-Message-State: APjAAAVyMNGUnlWkdB5uY4QoELvoVkwSTBEgUkfnW/zogJ6K/PurytGt
+        xvFPvuYDbx1w4PgNSfekHLUMBC8Gn+jbztXd1Ic/0A==
+X-Google-Smtp-Source: APXvYqygrun7u9zevVDKfu0sa7amxsriNbVYF4wbVRpuSP6Re4yc+jB0Mmyyr6iQQ2WpPrkisEClAIRglX6AbvGsZDk=
+X-Received: by 2002:a67:dc16:: with SMTP id x22mr1767729vsj.159.1571181642542;
+ Tue, 15 Oct 2019 16:20:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191004090114.30694-1-glaroque@baylibre.com> <20191004090114.30694-5-glaroque@baylibre.com>
+In-Reply-To: <20191004090114.30694-5-glaroque@baylibre.com>
 From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, Zhang Rui <rui.zhang@intel.com>,
+Date:   Wed, 16 Oct 2019 04:50:31 +0530
+Message-ID: <CAHLCerOzZ6kc0nrGL+XMi37WuBKUv6E0yzE26wUZ5XoRMS8q6w@mail.gmail.com>
+Subject: Re: [PATCH v7 4/7] arm64: dts: meson: g12: Add minimal thermal zone
+To:     Guillaume La Roque <glaroque@baylibre.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH] of-thermal: Disable polling when interrupt property is found in DT
-Date:   Wed, 16 Oct 2019 04:43:16 +0530
-Message-Id: <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1571181041.git.amit.kucheria@linaro.org>
-References: <cover.1571181041.git.amit.kucheria@linaro.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, in order to enable interrupt-only mode, one must set
-polling-delay-passive and polling-delay properties in the DT to 0,
-otherwise the thermal framework will continue to setup a periodic timers
-to monitor the thermal zones.
+On Fri, Oct 4, 2019 at 2:31 PM Guillaume La Roque <glaroque@baylibre.com> wrote:
+>
+> Add minimal thermal zone for two temperature sensor
+> One is located close to the DDR and the other one is
+> located close to the PLLs (between the CPU and GPU)
+>
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> ---
+>  .../boot/dts/amlogic/meson-g12-common.dtsi    | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> index 0660d9ef6a86..a98c16e163c2 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> @@ -12,6 +12,7 @@
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/reset/amlogic,meson-axg-audio-arb.h>
+>  #include <dt-bindings/reset/amlogic,meson-g12a-reset.h>
+> +#include <dt-bindings/thermal/thermal.h>
+>
+>  / {
+>         interrupt-parent = <&gic>;
+> @@ -94,6 +95,61 @@
+>                 #size-cells = <2>;
+>                 ranges;
+>
+> +               thermal-zones {
+> +                       cpu_thermal: cpu-thermal {
+> +                               polling-delay = <1000>;
+> +                               polling-delay-passive = <100>;
 
-Change the behaviour, so that on DT-based systems, we no longer have to
-set the properties to zero if we find an 'interrupt' property in the
-sensor.
+Ordinarily, you would need to set these delays to 0 in interrupt mode
+to prevent polling overhead. I've just submitted a patch to of-thermal
+that should fix this requirement. Could you check if it works for you?
 
-Following data shows the number of times
-thermal_zone_device_set_polling() is invoked with and without this
-patch. So the patch achieves the same behaviour as setting the delay
-properties to 0.
-
-Current behaviour (without setting delay properties to 0):
-  FUNC                              COUNT
-  thermal_zone_device_update          302
-  thermal_zone_device_set_pollin     7911
-
-Current behaviour (with delay properties set to 0):
-  FUNC                              COUNT
-  thermal_zone_device_update            3
-  thermal_zone_device_set_pollin        6
-
-With this patch (without setting delay properties to 0):
-  FUNC                              COUNT
-  thermal_zone_device_update            3
-  thermal_zone_device_set_pollin        6
-
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
----
- drivers/thermal/of-thermal.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
-index dc5093be553e..79ad587462b1 100644
---- a/drivers/thermal/of-thermal.c
-+++ b/drivers/thermal/of-thermal.c
-@@ -412,7 +412,8 @@ static struct thermal_zone_device_ops of_thermal_ops = {
- static struct thermal_zone_device *
- thermal_zone_of_add_sensor(struct device_node *zone,
- 			   struct device_node *sensor, void *data,
--			   const struct thermal_zone_of_device_ops *ops)
-+			   const struct thermal_zone_of_device_ops *ops,
-+			   bool force_interrupts)
- {
- 	struct thermal_zone_device *tzd;
- 	struct __thermal_zone *tz;
-@@ -433,6 +434,11 @@ thermal_zone_of_add_sensor(struct device_node *zone,
- 	tzd->ops->get_temp = of_thermal_get_temp;
- 	tzd->ops->get_trend = of_thermal_get_trend;
- 
-+	if (force_interrupts) {
-+		tz->passive_delay = 0;
-+		tz->polling_delay = 0;
-+	}
-+
- 	/*
- 	 * The thermal zone core will calculate the window if they have set the
- 	 * optional set_trips pointer.
-@@ -486,6 +492,7 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
- {
- 	struct device_node *np, *child, *sensor_np;
- 	struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
-+	bool force_interrupts = false;
- 
- 	np = of_find_node_by_name(NULL, "thermal-zones");
- 	if (!np)
-@@ -498,6 +505,9 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
- 
- 	sensor_np = of_node_get(dev->of_node);
- 
-+	if (of_find_property(sensor_np, "interrupts", NULL))
-+		force_interrupts = true;
-+
- 	for_each_available_child_of_node(np, child) {
- 		struct of_phandle_args sensor_specs;
- 		int ret, id;
-@@ -520,7 +530,8 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
- 
- 		if (sensor_specs.np == sensor_np && id == sensor_id) {
- 			tzd = thermal_zone_of_add_sensor(child, sensor_np,
--							 data, ops);
-+							 data, ops,
-+							 force_interrupts);
- 			if (!IS_ERR(tzd))
- 				tzd->ops->set_mode(tzd, THERMAL_DEVICE_ENABLED);
- 
--- 
-2.17.1
-
+> +                               thermal-sensors = <&cpu_temp>;
+> +
+> +                               trips {
+> +                                       cpu_passive: cpu-passive {
+> +                                               temperature = <85000>; /* millicelsius */
+> +                                               hysteresis = <2000>; /* millicelsius */
+> +                                               type = "passive";
+> +                                       };
+> +
+> +                                       cpu_hot: cpu-hot {
+> +                                               temperature = <95000>; /* millicelsius */
+> +                                               hysteresis = <2000>; /* millicelsius */
+> +                                               type = "hot";
+> +                                       };
+> +
+> +                                       cpu_critical: cpu-critical {
+> +                                               temperature = <110000>; /* millicelsius */
+> +                                               hysteresis = <2000>; /* millicelsius */
+> +                                               type = "critical";
+> +                                       };
+> +                               };
+> +                       };
+> +
+> +                       ddr_thermal: ddr-thermal {
+> +                               polling-delay = <1000>;
+> +                               polling-delay-passive = <100>;
+> +                               thermal-sensors = <&ddr_temp>;
+> +
+> +                               trips {
+> +                                       ddr_passive: ddr-passive {
+> +                                               temperature = <85000>; /* millicelsius */
+> +                                               hysteresis = <2000>; /* millicelsius */
+> +                                               type = "passive";
+> +                                       };
+> +
+> +                                       ddr_critical: ddr-critical {
+> +                                               temperature = <110000>; /* millicelsius */
+> +                                               hysteresis = <2000>; /* millicelsius */
+> +                                               type = "critical";
+> +                                       };
+> +                               };
+> +
+> +                               cooling-maps {
+> +                                       map {
+> +                                               trip = <&ddr_passive>;
+> +                                               cooling-device = <&mali THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +                                       };
+> +                               };
+> +                       };
+> +               };
+> +
+>                 ethmac: ethernet@ff3f0000 {
+>                         compatible = "amlogic,meson-axg-dwmac",
+>                                      "snps,dwmac-3.70a",
+> @@ -2412,6 +2468,7 @@
+>                         assigned-clock-rates = <0>, /* Do Nothing */
+>                                                <800000000>,
+>                                                <0>; /* Do Nothing */
+> +                       #cooling-cells = <2>;
+>                 };
+>         };
+>
+> --
+> 2.17.1
+>
