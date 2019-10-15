@@ -2,69 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B18D7D77
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228EFD7DA6
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731608AbfJORW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 13:22:28 -0400
-Received: from muru.com ([72.249.23.125]:37368 "EHLO muru.com"
+        id S2388751AbfJOR0b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 15 Oct 2019 13:26:31 -0400
+Received: from muru.com ([72.249.23.125]:37380 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726125AbfJORW2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Oct 2019 13:22:28 -0400
+        id S1730981AbfJOR0b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Oct 2019 13:26:31 -0400
 Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 0E9178108;
-        Tue, 15 Oct 2019 17:23:00 +0000 (UTC)
-Date:   Tue, 15 Oct 2019 10:22:23 -0700
+        by muru.com (Postfix) with ESMTPS id 34E9D8108;
+        Tue, 15 Oct 2019 17:27:04 +0000 (UTC)
+Date:   Tue, 15 Oct 2019 10:26:27 -0700
 From:   Tony Lindgren <tony@atomide.com>
 To:     Pavel Machek <pavel@ucw.cz>
 Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>
-Subject: Re: [PATCH] power: supply: cpcap-charger: Limit voltage to 4.2V for
- battery
-Message-ID: <20191015172223.GZ5610@atomide.com>
-References: <20191009203355.5622-1-tony@atomide.com>
- <20191013112714.GA5653@amd>
+        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
+Subject: Re: [PATCH 1/2] power: supply: cpcap-battery: Check voltage before
+ orderly_poweroff
+Message-ID: <20191015172627.GA5610@atomide.com>
+References: <20191009205252.9510-1-tony@atomide.com>
+ <20191009205252.9510-2-tony@atomide.com>
+ <20191013112810.GB5653@amd>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191013112714.GA5653@amd>
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191013112810.GB5653@amd>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Pavel Machek <pavel@ucw.cz> [191013 11:27]:
-> Hi!
-> 
-> > There have been some cases of droid4 battery bulging that seem to be
-> > related to being left connected to the charger for several weeks.
+* Pavel Machek <pavel@ucw.cz> [191013 11:28]:
+> On Wed 2019-10-09 13:52:51, Tony Lindgren wrote:
+> > We can get the low voltage interrupt trigger sometimes way too early,
+> > maybe because of CPU load spikes. This causes orderly_poweroff() be
+> > called too easily.
 > > 
-> > It is suspected that the 4.35V charge voltage configured for the battery
-> > is too much in the long run, so lets limit the charge voltage to 4.2V.
-> > It could also be that the batteries are just getting old.
+> > Let's check the voltage before orderly_poweroff in case it was not
+> > yet a permanent condition. We will be getting more interrupts anyways
+> > if the condition persists.
 > > 
-> > We don't really want to just change the charge voltage to 4.2V as Android
-> > may have charged the battery to 3.51.V as pointed out by Pavel
-> > Machek.
+> > Let's also show the measured voltages for low battery and battery
+> > empty warnings since we have them.
 > 
-> Now I'm confused. What is 3.51V? Is it typo for 4.35V?
+> > +++ b/drivers/power/supply/cpcap-battery.c
+> > @@ -562,12 +562,15 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
+> >  	switch (d->action) {
+> >  	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
+> >  		if (latest->current_ua >= 0)
+> > -			dev_warn(ddata->dev, "Battery low at 3.3V!\n");
+> > +			dev_warn(ddata->dev, "Battery low at %imV!\n",
+> > +				latest->voltage / 1000);
+> >  		break;
+> >  	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
+> > -		if (latest->current_ua >= 0) {
+> > +		if (latest->current_ua >= 0 && latest->voltage >= 0 &&
+> > +		    latest->voltage <= 3100000) {
+> >  			dev_emerg(ddata->dev,
+> > -				  "Battery empty at 3.1V, powering off\n");
+> > +				  "Battery empty at %imV, powering off\n",
+> > +				  latest->voltage / 1000);
+> >  			orderly_poweroff(true);
+> >  		}
 > 
-> > +	/*
-> > +	 * If battery voltage is higher than charge voltage, it may have been
-> > +	 * charged to 3.51V by Android. Try again in 10 minutes.
-> > +	 */
+> Hmm.
 > 
-> Ok, so maybe it is not a typo. I'm confused.
+> So if latest->voltage is < 0, I'd preffer to shut down the machine,
+> too.
 
-Hmm a long mistake.. No idea what I was thinking with 3.51..
-Yeah both should be 4.35V.
+Hmm I need to recheck if that is needed or not when booting without
+a battery on a power supply.
 
-> Note that I'd prefer not to see this in -stable.
+> Actually, if we got POWEROFF irq, and voltage is close to 3.1V (like
+> maybe < 3.2V), maybe it would be good to shutdown anyway?
 
-OK. In that case I'll send a new version with the typos
-fixed against v5.4-rc cycle instead of v5.3.
+No, this is some spurious interrupt issue that I've seen triggering
+at way higher voltages than it should be happening at.
 
 Regards,
 
