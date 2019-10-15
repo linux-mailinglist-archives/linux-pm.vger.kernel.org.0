@@ -2,71 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5480CD7D15
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38762D7D1E
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 19:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730121AbfJORL0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 13:11:26 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:33261 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728152AbfJORL0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:11:26 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 60so17611395otu.0;
-        Tue, 15 Oct 2019 10:11:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VxDGjraqfzXc9uftKDsuNClpdLGxHQLLKEDl6Bl0yGY=;
-        b=CX3EbGPaNtb84+kXycX8EEIWm4qZtW8+PM90DNg86GyWWgI+RMpiW/oTxgjqgQPIYW
-         pWSu0c0kwwNNR2mzi2W9jdGWrqIM8qyoS4DvMfoKzEFBSdO1Ssazthj/fq5mDKPExnic
-         i7Pmo5rQcR+VQyxeh8n1afcKHZ316xLh+8WM6MivSj3V8Lv4tSwGHnobNkDYF7O1gRIB
-         j3w8C7BVfzfut+Yaysv3nI4I8LYDNda3/EhYDZdTcY4fwuCNVgyqAM9qDLw5opiBbfkv
-         oUMad9iRREQc/cujKn1I6gNT1KcZ3+CT6WLJ/63/lHqSrn3pN6yXninb2l/Ydpe/v9i8
-         J91g==
-X-Gm-Message-State: APjAAAV36mhGCsVAwowDExcjzUXBWhm5VeNswXUI1n/W1xxW8GIUedJr
-        1Xme3VDlDXap2ICYaI80pR9097Q=
-X-Google-Smtp-Source: APXvYqy4sZEG/+W6xEOtw6Rd/8zS/h+KMn+CPYcc4g5SttNj/xXlDflbSBhC8AEgrAAvxTNzzBDmEw==
-X-Received: by 2002:a9d:2a88:: with SMTP id e8mr30901276otb.188.1571159484997;
-        Tue, 15 Oct 2019 10:11:24 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x6sm6874566ote.69.2019.10.15.10.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 10:11:24 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 12:11:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: iio: adc: exynos: Use defines instead
- of clock numbers
-Message-ID: <20191015171123.GA11947@bogus>
-References: <20191002160744.11307-1-krzk@kernel.org>
- <20191002160744.11307-4-krzk@kernel.org>
+        id S1726335AbfJORPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 13:15:50 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41103 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbfJORPu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 13:15:50 -0400
+Received: from 79.184.254.38.ipv4.supernova.orange.pl (79.184.254.38) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 167685bb2f0fdbb3; Tue, 15 Oct 2019 19:15:46 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>, olaf@aepfle.de,
+        apw@canonical.com, jasowang@redhat.com, vkuznets@redhat.com,
+        marcelo.cerri@canonical.com, jackm@mellanox.com,
+        linux-pci@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        driverdev-devel@linuxdriverproject.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 1/7] PCI/PM: Always return devices to D0 when thawing
+Date:   Tue, 15 Oct 2019 19:15:46 +0200
+Message-ID: <15877028.U7HUqG5fmY@kreacher>
+In-Reply-To: <20191014230016.240912-2-helgaas@kernel.org>
+References: <20191014230016.240912-1-helgaas@kernel.org> <20191014230016.240912-2-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002160744.11307-4-krzk@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed,  2 Oct 2019 18:07:44 +0200, Krzysztof Kozlowski wrote:
-> Make the examples in Exynos ADC bindings more readable and bring them
-> closer to real DTS by using defines for clocks.
+On Tuesday, October 15, 2019 1:00:10 AM CEST Bjorn Helgaas wrote:
+> From: Dexuan Cui <decui@microsoft.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> pci_pm_thaw_noirq() is supposed to return the device to D0 and restore its
+> configuration registers, but previously it only did that for devices whose
+> drivers implemented the new power management ops.
+> 
+> Hibernation, e.g., via "echo disk > /sys/power/state", involves freezing
+> devices, creating a hibernation image, thawing devices, writing the image,
+> and powering off.  The fact that thawing did not return devices with legacy
+> power management to D0 caused errors, e.g., in this path:
+> 
+>   pci_pm_thaw_noirq
+>     if (pci_has_legacy_pm_support(pci_dev)) # true for Mellanox VF driver
+>       return pci_legacy_resume_early(dev)   # ... legacy PM skips the rest
+>     pci_set_power_state(pci_dev, PCI_D0)
+>     pci_restore_state(pci_dev)
+>   pci_pm_thaw
+>     if (pci_has_legacy_pm_support(pci_dev))
+>       pci_legacy_resume
+> 	drv->resume
+> 	  mlx4_resume
+> 	    ...
+> 	      pci_enable_msix_range
+> 	        ...
+> 		  if (dev->current_state != PCI_D0)  # <---
+> 		    return -EINVAL;
+> 
+> which caused these warnings:
+> 
+>   mlx4_core a6d1:00:02.0: INTx is not supported in multi-function mode, aborting
+>   PM: dpm_run_callback(): pci_pm_thaw+0x0/0xd7 returns -95
+>   PM: Device a6d1:00:02.0 failed to thaw: error -95
+> 
+> Return devices to D0 and restore config registers for all devices, not just
+> those whose drivers support new power management.
+> 
+> [bhelgaas: also call pci_restore_state() before pci_legacy_resume_early(),
+> update comment, add stable tag, commit log]
+> Link: https://lore.kernel.org/r/KU1P153MB016637CAEAD346F0AA8E3801BFAD0@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: stable@vger.kernel.org	# v4.13+
+
+No issues found, so
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
 > ---
->  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml     | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/pci/pci-driver.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index a8124e47bf6e..d4ac8ce8c1f9 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -1076,17 +1076,22 @@ static int pci_pm_thaw_noirq(struct device *dev)
+>  			return error;
+>  	}
+>  
+> -	if (pci_has_legacy_pm_support(pci_dev))
+> -		return pci_legacy_resume_early(dev);
+> -
+>  	/*
+> -	 * pci_restore_state() requires the device to be in D0 (because of MSI
+> -	 * restoration among other things), so force it into D0 in case the
+> -	 * driver's "freeze" callbacks put it into a low-power state directly.
+> +	 * Both the legacy ->resume_early() and the new pm->thaw_noirq()
+> +	 * callbacks assume the device has been returned to D0 and its
+> +	 * config state has been restored.
+> +	 *
+> +	 * In addition, pci_restore_state() restores MSI-X state in MMIO
+> +	 * space, which requires the device to be in D0, so return it to D0
+> +	 * in case the driver's "freeze" callbacks put it into a low-power
+> +	 * state.
+>  	 */
+>  	pci_set_power_state(pci_dev, PCI_D0);
+>  	pci_restore_state(pci_dev);
+>  
+> +	if (pci_has_legacy_pm_support(pci_dev))
+> +		return pci_legacy_resume_early(dev);
+> +
+>  	if (drv && drv->pm && drv->pm->thaw_noirq)
+>  		error = drv->pm->thaw_noirq(dev);
+>  
 > 
 
-Applied, thanks.
 
-Rob
+
+
