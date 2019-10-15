@@ -2,111 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77048D797E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 17:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29429D7A8E
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 17:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732845AbfJOPMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 11:12:54 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:9818 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726523AbfJOPMy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 11:12:54 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9FFAkqQ021745;
-        Tue, 15 Oct 2019 17:12:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=Dz/82zOXMhfMmklzqpL72vLdKWuedjy+hvTqhAoCBe0=;
- b=UcLs1Mq9WYwpkYMT5Yq7HM/zidaf654mUbnTN7jf3CJG7H/Cmz5LpcYbevsCsbeeBcsx
- Qs+BDE1EZtLgyPWPp97mYe1+/LnJQnw2yoVX/Lj7u3MMwDVX6/IYG88Y10Gl1Uzl/5N7
- 7+jbqlFj0LlQRWUbgUiGv9mc60vO9yQx9gPuiy46/U5nlpVSTj/wXirwxZ4AWycOnxjw
- 1tbqK4ysBLXKsH7s6j/Nbhi1JpPHTDM5HLvls1rbJnOj0kXQIxMU+2Nys3OAK84VkM6y
- mPcMOMHN/78HMfD1hSVZDxOuoUIlxh2PAP73jH0uJKK0z7Iqn1iSYxz7nhfE9AY7nb93 TQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2vk4a18xk6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Oct 2019 17:12:27 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9D19C100038;
-        Tue, 15 Oct 2019 17:12:26 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 83C452C0B1D;
-        Tue, 15 Oct 2019 17:12:26 +0200 (CEST)
-Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 15 Oct
- 2019 17:12:26 +0200
-Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
- SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
- 15.00.1347.000; Tue, 15 Oct 2019 17:12:26 +0200
-From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
-To:     Ben Dooks <ben.dooks@codethink.co.uk>,
-        "linux-kernel@lists.codethink.co.uk" 
-        <linux-kernel@lists.codethink.co.uk>
-CC:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [Linux-stm32] [PATCH] thermal: stm32: make stm_thermal_pm_ops
- static
-Thread-Topic: [Linux-stm32] [PATCH] thermal: stm32: make stm_thermal_pm_ops
- static
-Thread-Index: AQHVg2LySKg+3iRMIESRd33erHyNMqdbrZeA
-Date:   Tue, 15 Oct 2019 15:12:26 +0000
-Message-ID: <b5e353bc-1171-1559-351f-2e54ef6749fe@st.com>
-References: <20191015141454.15402-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20191015141454.15402-1-ben.dooks@codethink.co.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.45]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C885B1D9DAA4E145A7287A236169A642@st.com>
-Content-Transfer-Encoding: base64
+        id S1733169AbfJOPxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 11:53:17 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36774 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728197AbfJOPxR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 11:53:17 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k20so17249017oih.3;
+        Tue, 15 Oct 2019 08:53:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HQGfwuekQUm5qu2Iq5zcCEmyQysEr3kA0t1xqwqEraM=;
+        b=TlepmLlpM9Jd3ffyLx3CPA/GO9JoEmyxX0GIDdm1gB2ydxrrr0fG4jPyniogEnl5MC
+         zg/P04LLFvLDP2vE+MRaCdMTTeaFHhzt3jFF+Zw9H5/9iJ64EGTo4nHbwJDgfx77pb4X
+         1PzIsMhUOjSlkg7Y6m500OiWW0gSWcxKg/MDZiqlMvNyWwmpdTL73wI5iz8ptCB0hexw
+         c4EyWDOVDPtrrHpmreKMuQjhPV69Pc5im4KptcZt8HZkDMHAQONUYm1UEmqnEcm82lFC
+         G/lkXWp0v0oFF8QfyO2Yv4CNcuCzS07ZKROD12qzmE3k9duo5Otf8We8GRVj0mhZHHVo
+         Nbag==
+X-Gm-Message-State: APjAAAW2G6GxFaeY4XdOwy1MAF0QUmrc4JHsZ2UNCvvYu194d5yQsTNV
+        AMTjQqc9Dg9rZfYQBuTzH26r6VpPdFICdj1xy8k=
+X-Google-Smtp-Source: APXvYqwAPAiLrrKrG6De9PVsPAtUAe4bcIZK4gviFL4DMJU9g/dW9moQ62OyjRXSXxzs+9Wl5yiAOzBEW4Req4f92vA=
+X-Received: by 2002:a05:6808:917:: with SMTP id w23mr28492241oih.68.1571154796338;
+ Tue, 15 Oct 2019 08:53:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-15_05:2019-10-15,2019-10-15 signatures=0
+References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
+ <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
+ <a1c503a7-6136-a405-369c-596a680183f2@gmail.com> <20191015114637.pcdbs2ctxl4xoxdo@vireshk-i7>
+In-Reply-To: <20191015114637.pcdbs2ctxl4xoxdo@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 15 Oct 2019 17:53:04 +0200
+Message-ID: <CAJZ5v0g3kRfa2WXy=xz3Mj15Pwb5tm1xg=uPODoifnv70O1ORA@mail.gmail.com>
+Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS framework
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQpPbiAxMC8xNS8xOSA0OjE0IFBNLCBCZW4gRG9va3Mgd3JvdGU6DQo+IFRoZSBzdG1fdGhlcm1h
-bF9wbV9vcHMgc3RydWN0IGlzIG5vdCBleHBvcnRlZCB0byBhbnkNCj4gb3RoZXIgdW5pdHMsIHNv
-IG1ha2UgaXQgc3RhdGljIHRvIGF2b2lkIHRoZSBmb2xsb3dpbmcNCj4gc3BhcnNlIHdhcm5pbmc6
-DQo+DQo+IGRyaXZlcnMvdGhlcm1hbC9zdC9zdG1fdGhlcm1hbC5jOjU5OToxOiB3YXJuaW5nOiBz
-eW1ib2wgJ3N0bV90aGVybWFsX3BtX29wcycgd2FzIG5vdCBkZWNsYXJlZC4gU2hvdWxkIGl0IGJl
-IHN0YXRpYz8NCg0KUmV2aWV3ZWQtYnk6IEJlbmphbWluIEdhaWduYXJkIDxiZW5qYW1pbi5nYWln
-bmFyZEBzdC5jb20+DQoNClRoYW5rcywNCg0KQmVuamFtaW4NCg0KPg0KPiBTaWduZWQtb2ZmLWJ5
-OiBCZW4gRG9va3MgPGJlbi5kb29rc0Bjb2RldGhpbmsuY28udWs+DQo+IC0tLQ0KPiBDYzogWmhh
-bmcgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPg0KPiBDYzogRGFuaWVsIExlemNhbm8gPGRhbmll
-bC5sZXpjYW5vQGxpbmFyby5vcmc+DQo+IENjOiBBbWl0IEt1Y2hlcmlhIDxhbWl0Lmt1Y2hlcmlh
-QHZlcmR1cmVudC5jb20+DQo+IENjOiBNYXhpbWUgQ29xdWVsaW4gPG1jb3F1ZWxpbi5zdG0zMkBn
-bWFpbC5jb20+DQo+IENjOiBBbGV4YW5kcmUgVG9yZ3VlIDxhbGV4YW5kcmUudG9yZ3VlQHN0LmNv
-bT4NCj4gQ2M6IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGludXgtc3RtMzJAc3Qt
-bWQtbWFpbG1hbi5zdG9ybXJlcGx5LmNvbQ0KPiBDYzogbGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
-bmZyYWRlYWQub3JnDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IC0tLQ0K
-PiAgIGRyaXZlcnMvdGhlcm1hbC9zdC9zdG1fdGhlcm1hbC5jIHwgMiArLQ0KPiAgIDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy90aGVybWFsL3N0L3N0bV90aGVybWFsLmMgYi9kcml2ZXJzL3RoZXJtYWwvc3Qvc3Rt
-X3RoZXJtYWwuYw0KPiBpbmRleCBjZjlkZGM1MmYzMGUuLjQwYmMxM2M2OGZiYSAxMDA2NDQNCj4g
-LS0tIGEvZHJpdmVycy90aGVybWFsL3N0L3N0bV90aGVybWFsLmMNCj4gKysrIGIvZHJpdmVycy90
-aGVybWFsL3N0L3N0bV90aGVybWFsLmMNCj4gQEAgLTU5Niw3ICs1OTYsNyBAQCBzdGF0aWMgaW50
-IHN0bV90aGVybWFsX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ICAgfQ0KPiAgICNlbmRp
-ZiAvKiBDT05GSUdfUE1fU0xFRVAgKi8NCj4gICANCj4gLVNJTVBMRV9ERVZfUE1fT1BTKHN0bV90
-aGVybWFsX3BtX29wcywgc3RtX3RoZXJtYWxfc3VzcGVuZCwgc3RtX3RoZXJtYWxfcmVzdW1lKTsN
-Cj4gK3N0YXRpYyBTSU1QTEVfREVWX1BNX09QUyhzdG1fdGhlcm1hbF9wbV9vcHMsIHN0bV90aGVy
-bWFsX3N1c3BlbmQsIHN0bV90aGVybWFsX3Jlc3VtZSk7DQo+ICAgDQo+ICAgc3RhdGljIGNvbnN0
-IHN0cnVjdCB0aGVybWFsX3pvbmVfb2ZfZGV2aWNlX29wcyBzdG1fdHpfb3BzID0gew0KPiAgIAku
-Z2V0X3RlbXAJPSBzdG1fdGhlcm1hbF9nZXRfdGVtcCw=
+On Tue, Oct 15, 2019 at 1:46 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 22-09-19, 23:12, Dmitry Osipenko wrote:
+> > Hello Viresh,
+> >
+> > This patch causes use-after-free on a cpufreq driver module reload. Please take a look, thanks in advance.
+> >
+> >
+> > [   87.952369] ==================================================================
+> > [   87.953259] BUG: KASAN: use-after-free in notifier_chain_register+0x4f/0x9c
+> > [   87.954031] Read of size 4 at addr e6abbd0c by task modprobe/243
+> >
+> > [   87.954901] CPU: 1 PID: 243 Comm: modprobe Tainted: G        W
+> > 5.3.0-next-20190920-00185-gf61698eab956-dirty #2408
+> > [   87.956077] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> > [   87.956807] [<c0110aad>] (unwind_backtrace) from [<c010bb71>] (show_stack+0x11/0x14)
+> > [   87.957709] [<c010bb71>] (show_stack) from [<c0d37b25>] (dump_stack+0x89/0x98)
+> > [   87.958616] [<c0d37b25>] (dump_stack) from [<c02937e1>]
+> > (print_address_description.constprop.0+0x3d/0x340)
+> > [   87.959785] [<c02937e1>] (print_address_description.constprop.0) from [<c0293c6b>]
+> > (__kasan_report+0xe3/0x12c)
+> > [   87.960907] [<c0293c6b>] (__kasan_report) from [<c014988f>] (notifier_chain_register+0x4f/0x9c)
+> > [   87.962001] [<c014988f>] (notifier_chain_register) from [<c01499b5>]
+> > (blocking_notifier_chain_register+0x29/0x3c)
+> > [   87.963180] [<c01499b5>] (blocking_notifier_chain_register) from [<c06f7ee9>]
+> > (dev_pm_qos_add_notifier+0x79/0xf8)
+> > [   87.964339] [<c06f7ee9>] (dev_pm_qos_add_notifier) from [<c092927d>] (cpufreq_online+0x5e1/0x8a4)
+> > [   87.965351] [<c092927d>] (cpufreq_online) from [<c09295c9>] (cpufreq_add_dev+0x79/0x80)
+> > [   87.966247] [<c09295c9>] (cpufreq_add_dev) from [<c06eb9d3>] (subsys_interface_register+0xc3/0x100)
+> > [   87.967297] [<c06eb9d3>] (subsys_interface_register) from [<c0926e53>]
+> > (cpufreq_register_driver+0x13b/0x1ec)
+> > [   87.968476] [<c0926e53>] (cpufreq_register_driver) from [<bf800435>]
+> > (tegra20_cpufreq_probe+0x165/0x1a8 [tegra20_cpufreq])
+>
+> Hi Dmitry,
+>
+> Thanks for the bug report and I was finally able to reproduce it at my end and
+> this was quite an interesting debugging exercise :)
+>
+> When a cpufreq driver gets registered, we register with the subsys interface and
+> it calls cpufreq_add_dev() for each CPU, starting from CPU0. And so the QoS
+> notifiers get added to the first CPU of the policy, i.e. CPU0 in common cases.
+>
+> When the cpufreq driver gets unregistered, we unregister with the subsys
+> interface and it calls cpufreq_remove_dev() for each CPU, starting from CPU0
+> (should have been in reverse order I feel). We remove the QoS notifier only when
+> cpufreq_remove_dev() gets called for the last CPU of the policy, lets call it
+> CPUx. Now this has a different notifier list as compared to CPU0.
+
+The same problem will appear if the original policy CPU goes offline, won't it?
+
+> In short, we are adding the cpufreq notifiers to CPU0 and removing them from
+> CPUx. When we try to add it again by inserting the module for second time, we
+> find a node in the notifier list which is already freed but still in the list as
+> we removed it from CPUx's list (which doesn't do anything as the node wasn't
+> there in the first place).
+>
+> @Rafael: How do you see we solve this problem ? Here are the options I could
+> think of:
+>
+> - Update subsys layer to reverse the order of devices while unregistering (this
+>   will fix the current problem, but we will still have corner cases hanging
+>   around, like if the CPU0 is hotplugged out, etc).
+
+This isn't sufficient for the offline case.
+
+> - Update QoS framework with the knowledge of related CPUs, this has been pending
+>   until now from my side. And this is the thing we really need to do. Eventually
+>   we shall have only a single notifier list for all CPUs of a policy, at least
+>   for MIN/MAX frequencies.
+
+- Move the PM QoS requests and notifiers to the new policy CPU on all
+changes of that.  That is, when cpufreq_offline() nominates the new
+"leader", all of the QoS stuff for the policy needs to go to this one.
+
+Of course, the reverse order of unregistration in the subsys layer
+would help to avoid some useless churn related to that.
