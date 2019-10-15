@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C08D8192
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A7DD81D7
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Oct 2019 23:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389500AbfJOVRK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 17:17:10 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42891 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388655AbfJOVRJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 17:17:09 -0400
-Received: by mail-lj1-f195.google.com with SMTP id y23so21723682lje.9;
-        Tue, 15 Oct 2019 14:17:05 -0700 (PDT)
+        id S2389466AbfJOVRJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Oct 2019 17:17:09 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44047 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388648AbfJOVRI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 17:17:08 -0400
+Received: by mail-lj1-f194.google.com with SMTP id m13so21709349ljj.11;
+        Tue, 15 Oct 2019 14:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AaxOcHNCQgBOcrm4biyt/yiqExX0IF895chwfdoXUTo=;
-        b=V2VM4SqY7RgcY6We78OfYm81HgBDfTjrRsWNAfdkuHXgCWmNC1pUDCWaYGvlFYV7es
-         r/IsNHJnhtqIL3b6xMuDOxlaJf++g6ELXC4DxTJ5jE+PefeFTLYc6LfdpkDN7E9iwxUO
-         JZdahwxTCgoRD91Goa/5+MKV+KYfSyVRl8lAc+8V9JRgyIgZ2BURLq/mUiiiu5hHv9qR
-         xxsOyk7tsLMV0j27MgoRy4Hwq4nyz1P6LvfoPt0aR+FDhOmVSL6l853aDk3dq5jaGdBk
-         stV9NaOBKxCKCsj6xaOEyLgvQV6M4Aosrsyohdf75gUdAHOPwQ98MKqUlBmAz7IBqcz5
-         8rzw==
+        bh=wentp7FFll65K1llUGqB9K42nqf09O9M82PtyoqU4C8=;
+        b=lIzH0Mlz0MdjUT2f0/sVwJF9Kj4s88ea9jJwObSq29uh/p9BT0qKaZZ25HhnctIMOg
+         jBSzlV5SdpwczxJGKQUjPQUbPLFec1SbuxNvNGdvyaSuIVBZxFDpPNOzCA0m+S7OBIea
+         6C6kKEG0ow0WoA5QWS+wDTZdTOunGANiTYAjE5rJvsPAz9/iyV98zh5WvBabusx5Xi/I
+         f3Wv4Kl3lr2asOVVsaibKAB9cjFO5bf64NAoH3wPeVWTENN1WcxcR/GEfcbAXeyfesnW
+         EkLemn03I7RCcC5NfHnfl3SD2MSOnT0EtoDO/4km/xE46Tbrwd/ywNT3VhIKxHeTE8lL
+         6J5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AaxOcHNCQgBOcrm4biyt/yiqExX0IF895chwfdoXUTo=;
-        b=RYsAn4NKYhilRcT03PLJDZubMYyKcWN2BaTDDuZq/7kPQJuZJmBJCEp/3zckVG+/sR
-         saLaYtGbOA9eJnvJYLnElq84HJWcA0EZh46gyozE2fsrdJPSRcWDSclnwBPFmYCilQ60
-         4PRxMITpLPijPIDfCi9dz/OJ8kKYlWnPUAl8SjKW6d1nOo+DVDPcc5KRJdurkysRc94/
-         UoiyHq2lK9iOt+8fY0c7mtVh0gJMpOfVSjW3wjNt98nn46w3Cz9FKaodXRy3oFuhD9w5
-         I+G98lUzox3iBrE4d+77nj1bk11Twn/LpQmB7JjQR+YKXX54Gj01PPjxRS2n2Xp9s6hS
-         jrCw==
-X-Gm-Message-State: APjAAAVIf2SdhVUm4edNApOWgvL0RtcDrusBMNVsfTL7MItYgn4eEBJj
-        pIKqLvDRLXxPyFy3I9VjO3g=
-X-Google-Smtp-Source: APXvYqzV+EsRixS1BoknqxIzc/TDegZGH4tQ4ybkn7q80zhNSsYYo7kTqqdwCD7pHHj2v67UvRdY7A==
-X-Received: by 2002:a2e:9848:: with SMTP id e8mr17279325ljj.148.1571174224563;
-        Tue, 15 Oct 2019 14:17:04 -0700 (PDT)
+        bh=wentp7FFll65K1llUGqB9K42nqf09O9M82PtyoqU4C8=;
+        b=q4+9NQfXow0q7lP+1d7WwbNQyFnfSm6wWonI0PrP+MKHV2cceWmm0vRvLaAKb/kYBj
+         EMyobK9UZkZrWjYgYCzZQiAskDY9dSHhUGsrc03abPTa/Gp+SiEyWuTstxiXJ+8uBUig
+         CRYLvzYpjlAscNlx0xdS+8t/CdwI+XW9UqKbgFrKDA0pBDsu+SQtNSDltmqZGHQxwgUD
+         5ie78Ml25FKjVH1UzqbZfwy5JMu4BAeEMaUq31lLtMWpHleYy5VRC5KrdMcNC48XeugQ
+         vrGWj6HFe0AsbPc8mTFvHYdN2VOcF9Jbc28WAmDEg9WdmbmHSx8yUsVLz46m+a8a8lFb
+         y0Tg==
+X-Gm-Message-State: APjAAAVZ94YkoAbvLO7L7nB+wviiG6Nvm571FHM6uEqoUclK6HhuX08z
+        n0hx1F4EI4x9uBo0jXlKwnM=
+X-Google-Smtp-Source: APXvYqw/jKUk2M6TLUii+Jp447FpsmXx1/s99l2ZBbA91XttDU+nzbMQtRxQj6Yf/Nb7FWSV0t8y6w==
+X-Received: by 2002:a2e:420a:: with SMTP id p10mr13183152lja.16.1571174225657;
+        Tue, 15 Oct 2019 14:17:05 -0700 (PDT)
 Received: from localhost.localdomain ([94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id t16sm5269186ljj.29.2019.10.15.14.17.03
+        by smtp.gmail.com with ESMTPSA id t16sm5269186ljj.29.2019.10.15.14.17.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 14:17:04 -0700 (PDT)
+        Tue, 15 Oct 2019 14:17:05 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,9 +60,9 @@ Cc:     Peter Geis <pgwipeout@gmail.com>,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 05/17] clk: tegra30: Support custom CCLK implementation
-Date:   Wed, 16 Oct 2019 00:16:06 +0300
-Message-Id: <20191015211618.20758-6-digetx@gmail.com>
+Subject: [PATCH v1 06/17] dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
+Date:   Wed, 16 Oct 2019 00:16:07 +0300
+Message-Id: <20191015211618.20758-7-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191015211618.20758-1-digetx@gmail.com>
 References: <20191015211618.20758-1-digetx@gmail.com>
@@ -73,43 +73,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We're going to switch to the generic cpufreq-dt driver on Tegra30 and
-thus CCLK intermediate re-parenting will be performed by the clock driver.
-There is now special CCLK implementation that supports all CCLK quirks,
-this patch makes Tegra30 SoCs to use that implementation.
+Add device-tree binding that describes CPU frequency-scaling hardware
+found on NVIDIA Tegra20/30 SoCs.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/clk/tegra/clk-tegra30.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../cpufreq/nvidia,tegra20-cpufreq.txt        | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
 
-diff --git a/drivers/clk/tegra/clk-tegra30.c b/drivers/clk/tegra/clk-tegra30.c
-index 95b0e4a16dd5..ad545803af42 100644
---- a/drivers/clk/tegra/clk-tegra30.c
-+++ b/drivers/clk/tegra/clk-tegra30.c
-@@ -499,6 +499,8 @@ static struct tegra_clk_pll_params pll_x_params __ro_after_init = {
- 	.freq_table = pll_x_freq_table,
- 	.flags = TEGRA_PLL_HAS_CPCON | TEGRA_PLL_SET_DCCON |
- 		 TEGRA_PLL_USE_LOCK | TEGRA_PLL_HAS_LOCK_ENABLE,
-+	.pre_rate_change = tegra_cclk_pre_pllx_rate_change,
-+	.post_rate_change = tegra_cclk_post_pllx_rate_change,
- };
- 
- static struct tegra_clk_pll_params pll_e_params __ro_after_init = {
-@@ -932,11 +934,11 @@ static void __init tegra30_super_clk_init(void)
- 	clk_register_clkdev(clk, "pll_p_out4_cclkg", NULL);
- 
- 	/* CCLKG */
--	clk = tegra_clk_register_super_mux("cclk_g", cclk_g_parents,
-+	clk = tegra_clk_register_super_cclk("cclk_g", cclk_g_parents,
- 				  ARRAY_SIZE(cclk_g_parents),
- 				  CLK_SET_RATE_PARENT,
- 				  clk_base + CCLKG_BURST_POLICY,
--				  0, 4, 0, 0, NULL);
-+				  0, NULL);
- 	clks[TEGRA30_CLK_CCLK_G] = clk;
- 
- 	/*
+diff --git a/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+new file mode 100644
+index 000000000000..daeca6ae6b76
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+@@ -0,0 +1,56 @@
++Binding for NVIDIA Tegra20 CPUFreq
++==================================
++
++Required properties:
++- clocks: Must contain an entry for the CPU clock.
++  See ../clocks/clock-bindings.txt for details.
++- operating-points-v2: See ../bindings/opp/opp.txt for details.
++- #cooling-cells: Should be 2. See ../thermal/thermal.txt for details.
++
++For each opp entry in 'operating-points-v2' table:
++- opp-supported-hw: Two bitfields indicating:
++	On Tegra20:
++	1. CPU process ID mask
++	2. SoC speedo ID mask
++
++	On Tegra30:
++	1. CPU process ID mask
++	2. CPU speedo ID mask
++
++	A bitwise AND is performed against these values and if any bit
++	matches, the OPP gets enabled.
++
++- opp-microvolt: CPU voltage triplet.
++
++Optional properties:
++- cpu-supply: Phandle to the CPU power supply.
++
++Example:
++	regulators {
++		cpu_reg: regulator0 {
++			regulator-name = "vdd_cpu";
++		};
++	};
++
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++
++		opp@456000000 {
++			clock-latency-ns = <125000>;
++			opp-microvolt = <825000 825000 1125000>;
++			opp-supported-hw = <0x03 0x0001>;
++			opp-hz = /bits/ 64 <456000000>;
++		};
++
++		...
++	};
++
++	cpus {
++		cpu@0 {
++			compatible = "arm,cortex-a9";
++			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			cpu-supply = <&cpu_reg>;
++			#cooling-cells = <2>;
++		};
++	};
 -- 
 2.23.0
 
