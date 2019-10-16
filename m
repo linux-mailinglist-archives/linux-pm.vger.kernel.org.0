@@ -2,116 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 014C3D96CB
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 18:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509E0D9799
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 18:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388530AbfJPQQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 12:16:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60570 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728316AbfJPQQ5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 12:16:57 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9BFB02168B;
-        Wed, 16 Oct 2019 16:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571242616;
-        bh=NDlN1NhoxOUb6sQg78if7MeDpGfgM15YqoKkPUVkIOc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BPCNecFFtHLJh8YGydUcErcc9GHraZuwNukQ3UMRUO2pxiNWCiPqiTmtFhlKsk/dp
-         JFax8Yiqgy+0IVhI2mxBFa5iv5SJtJNtA0kFEHnc86CRGZc91g56stXYM9C9BZGSfQ
-         9IFgMowfJDceUeRB9g9lP8B/Rmr49u71VLZpZIxM=
-Received: by mail-lj1-f182.google.com with SMTP id y23so24599585lje.9;
-        Wed, 16 Oct 2019 09:16:56 -0700 (PDT)
-X-Gm-Message-State: APjAAAU6G5JT3s4+0UAy+NDaUhHouuV5llj8bKAQOuDgFmpNkZN2LNL7
-        pvRexXObQduIojV8atT0PQ3akiRKqqxJEwU3dW0=
-X-Google-Smtp-Source: APXvYqwCOKkrXmNKQSP499CXhlqBMZpMhDnOgQ3rTLtNunGGURcys1oCywZ9m+kRVId/EhZGWzjROCb4rQ5GKxsDtwg=
-X-Received: by 2002:a2e:1b52:: with SMTP id b79mr26755456ljb.225.1571242614784;
- Wed, 16 Oct 2019 09:16:54 -0700 (PDT)
+        id S2406388AbfJPQjF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 12:39:05 -0400
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:43446 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406386AbfJPQjE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 12:39:04 -0400
+Received: by mail-pf1-f169.google.com with SMTP id a2so15052590pfo.10
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 09:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=uj62At7arnilFOJJbl5N7a5EkMRk8gmjDj29tsswWIE=;
+        b=rBya5PBO6sZHChGDQpT99l/deboFxP1XaW8i/9Ff0L5lelkWO7f2RuzRS3/wLiXWVb
+         XjdRwrYeSFsiAoPnxaDseJgPW0UZlbFWO5u33OaphuTGKfM2k7rEFGs8wPKGYjYIE49h
+         dORi5YyWTorA+d6D6zuQRS+tX15uEph0kH8P5A2mxeJLAIjUm3w6yQJ6yGrHKsH+OVDE
+         TlP3iEvahZXKpwACmvuRDomjXkvEREPVhWSABCM+nEe2wRs+zIvkicRGDPQep9OMWLF9
+         YI3u2S5W/FmHu/LpjWTcKfjs+P2CCCQ4Hqi4PYUuRYqGerDiMmRFcFHJDVsMeWEGscu6
+         C3bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uj62At7arnilFOJJbl5N7a5EkMRk8gmjDj29tsswWIE=;
+        b=lUia1sJtw4cXwb1xrog1E+tRh8OSDxfKtsZj40RA+T/1i4bhHD9RgTuP5dbxwHpcwX
+         zuoLAQJEN8/P2x28rdjEqbpmZNI+SsYya1ewFnj/4npEJN8pr6g+NsIJHQy8+egmT0FC
+         PS631Rep0uSDav4FyqFFvrwtWDE64x5gxdAh0LBqVp13S73YHlal850Sh7rvO0C7ZTJ7
+         fjJmavGg1sgGUS8l3UTsooROZrHcGqYmyO24MxQy6qa9w3k8BFxBiTJhMQfZL6NP0uij
+         IeioJs214Yj+oDm1KFfMAyKeQtKTZj87+IewkzoNjrlIWQByyvzpqCRMwL3uPkWyeW4M
+         dOFw==
+X-Gm-Message-State: APjAAAV5nzwp5COAOgfaByeKEXUIDybNM6+XbJrzz2oFdnK0E0gyU1Om
+        X1OpHgO5R4btWKdRXV3FjoLy+Q==
+X-Google-Smtp-Source: APXvYqy7cm/gQHTfBaihNUxg/kpuNUjJHhY1iUPuIbJzt/XJ4Le3qA+lNeFhKinPwgh0xJasS1A49w==
+X-Received: by 2002:a17:90a:2ec5:: with SMTP id h5mr6266957pjs.87.1571243941981;
+        Wed, 16 Oct 2019 09:39:01 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id z4sm29661708pfn.45.2019.10.16.09.39.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 16 Oct 2019 09:39:01 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     edubezval@gmail.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        amit.kucheria@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org
+Subject: Re: [PATCH v7 0/7] Add support of New Amlogic temperature sensor for G12 SoCs
+In-Reply-To: <20191004090114.30694-1-glaroque@baylibre.com>
+References: <20191004090114.30694-1-glaroque@baylibre.com>
+Date:   Wed, 16 Oct 2019 09:39:00 -0700
+Message-ID: <7hwod4fxwb.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <CGME20191016145812eucas1p1a3cf3f44a2cff4c32a2270334630c4a2@eucas1p1.samsung.com>
- <20191016145756.16004-1-s.nawrocki@samsung.com> <20191016145756.16004-3-s.nawrocki@samsung.com>
-In-Reply-To: <20191016145756.16004-3-s.nawrocki@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 16 Oct 2019 19:16:41 +0300
-X-Gmail-Original-Message-ID: <CAJKOXPeagcSRUm2Qwwby=NHfWGdQ6KVZ2htb3UmnU2GfX+Ckcg@mail.gmail.com>
-Message-ID: <CAJKOXPeagcSRUm2Qwwby=NHfWGdQ6KVZ2htb3UmnU2GfX+Ckcg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: arm: samsung: Update the CHIPID
- binding for ASV
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     vireshk@kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
-        roger.lu@mediatek.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, devicetree@vger.kernel.org,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Oct 2019 at 17:58, Sylwester Nawrocki <s.nawrocki@samsung.com> wrote:
->
-> This patch adds documentation of new optional "samsung,asv-bin"
-> property in the chipid device node and documents requirement of
-> "syscon" compatible string.  These additions are needed to support
-> Exynos ASV (Adaptive Supply Voltage) feature.
->
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Depends on patch ("8d0daa4c89c9 dt-bindings: arm: samsung: Convert
-> Exynos Chipid bindings to json-schema") already applied to Rob's
-> dt/next.
->
-> Changes since v4:
->  - converted to YAML
->
-> Changes since v3:
->  - none
->
-> Changes since v2:
->  - corrected patch summary line prefix, the patch moved in the
->    sequence
->
-> Changes since v1 (RFC):
->  - new patch
->
->  .../bindings/arm/samsung/exynos-chipid.yaml   | 31 +++++++++++++++++--
->  1 file changed, 28 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> index 9c573ad7dc7d..df84d9e9f4c2 100644
-> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> @@ -9,17 +9,42 @@ title: Samsung Exynos SoC series Chipid driver
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
->
-> +# Custom select to avoid matching all nodes with 'syscon'
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: samsung,exynos4210-chipid
-> +  required:
-> +    - compatible
-> +
->  properties:
->    compatible:
-> -    items:
-> -      - const: samsung,exynos4210-chipid
-> +    allOf:
+Eduardo,
 
-I think it was my mistake to use allOf in other Exynos bindings. It
-should not be needed.
+Guillaume La Roque <glaroque@baylibre.com> writes:
 
-Rest looks good so with allOf removal:
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> This patchs series add support of New Amlogic temperature sensor and minimal
+> thermal zone for SEI510 and ODROID-N2 boards.
 
-Best regards,
-Krzysztof
+[...]
+
+> Guillaume La Roque (7):
+>   dt-bindings: thermal: Add DT bindings documentation for Amlogic
+>     Thermal
+>   thermal: amlogic: Add thermal driver to support G12 SoCs
+>   arm64: dts: amlogic: g12: add temperature sensor
+>   arm64: dts: meson: g12: Add minimal thermal zone
+>   arm64: dts: amlogic: g12a: add cooling properties
+>   arm64: dts: amlogic: g12b: add cooling properties
+>   MAINTAINERS: add entry for Amlogic Thermal driver
+
+This has now been thorougly reviewed/tested.
+
+I've queued all the "arm64: dts:" patches via my amlogic tree for v5.5.
+Can you please queue up the driver, bindings and MAINTAINERS patch?
+
+Thanks,
+
+Kevin
