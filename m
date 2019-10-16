@@ -2,340 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37504D9460
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 16:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66237D947E
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 16:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388982AbfJPOyT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 10:54:19 -0400
-Received: from mail-eopbgr130072.outbound.protection.outlook.com ([40.107.13.72]:64865
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728706AbfJPOyT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 10:54:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KAhzv3cBnwJS8GPitITbe1rDXqfh70/FzfUuXvBqHx7dfGGbzIyGWd6kioUhrxgKgtIqIlrn/cCctJVBMjahBe8YEAh2N4jMLMQvdACNNDlfpuxWAZnCPLLrLYeDyLTtc6L1kcCdjAQp/rrt3XI32dMku8f++aPOAy2t59ltfM9Ll/nPn3IFwkrDOjj7fw9Mgm+ciLjQMTXhoi84+29KpxJrrE6fKpS6UVHMcNUd6g3VJy/ohUl2BT6ebJ/7EB1grv1pVwrFKa94iB7PGz9AZpT4Owl5VtDik2KW/RM0oaTh5/dOsm3xSooBt39+NSa8DtQBYtL8K/ku4La+Yg85NQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B7xY2qTlUkOZ0GIt1piKGZRU7xdQTlq8EWnuIn6zbhs=;
- b=lFsjzMyOFY5aP2iFtnV1Vf/y251lN/vHu0uVygRnWSYiFbZdtDtQPgngNpi9fRGUQTT+dcmpxhPRYqRM/OjhFgaGPyar70qx/dL0l+4yZeSHbLnl2j4Pu9GZG55qKUqV7gb5utq47wRB6vwyU8jujv64xPtFnA/cjD1x8e+yHt9rIwy/+cZjUgXanSe6r1oh49sLy4lcPRkUOzsWHP/X9haST4KT1D8RuMtbbwwVAg4vgvZzRRGECrd5CPNwtDhKyPtr4rCwKBpQOp3cXAhcNXjsme7Ep4rscklreSOH9zYaeT8uaz6H5OiEW60F5B3CUhrM/trMuauM/zF3VzcP2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B7xY2qTlUkOZ0GIt1piKGZRU7xdQTlq8EWnuIn6zbhs=;
- b=spze4qOd8j24TURUJWpu7tIomAfcAfbr3Xw/ktH7Lwfpukdjb8QNPIgti0668Vj907aDoSNfbIdVMxg+Ztr9sOtrAfZVjWvAevn81eRKZICKxgaKmg45Rg2Ps1bXH2lYIezKpNUxyIdFYxm3G7Pzv/Ye4OykQXydY+bAI/b4nl0=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4109.eurprd04.prod.outlook.com (52.133.15.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16; Wed, 16 Oct 2019 14:54:12 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::58d9:b0f7:b31:c05a]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::58d9:b0f7:b31:c05a%7]) with mapi id 15.20.2347.023; Wed, 16 Oct 2019
- 14:54:12 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Angus Ainslie <angus@akkea.ca>
-CC:     Jacky Bai <ping.bai@nxp.com>, Mark Rutland <mark.rutland@arm.com>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Martin Kepplinger <martink@posteo.de>,
-        "linux-pm-owner@vger.kernel.org" <linux-pm-owner@vger.kernel.org>
-Subject: Re: [RFCv3 3/3] interconnect: imx: Add platform driver for imx8mm
-Thread-Topic: [RFCv3 3/3] interconnect: imx: Add platform driver for imx8mm
-Thread-Index: AQHVTEWKNFF2Yqu6YU66bS83yX49og==
-Date:   Wed, 16 Oct 2019 14:54:12 +0000
-Message-ID: <VI1PR04MB7023A7ECF8FD6BFA1D8E0F26EE920@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1565088423.git.leonard.crestez@nxp.com>
- <cf265add1502a75c4d6e6261ab1570c665e82c83.1565088423.git.leonard.crestez@nxp.com>
- <a2e09a9b-574f-8410-423e-0b0d8ea5c2ab@posteo.de>
- <VI1PR04MB7023E441FEE0D9288CAC0F44EEAA0@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <be41481b-5184-7878-b25e-41b7a1e1b2d5@posteo.de>
- <7c1452f3d8c13aeadcabf7807049092c@akkea.ca>
- <VI1PR04MB70231CD1535CBCB699F045D4EE930@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <68e456574e2072740f41fac8c9c2377b@akkea.ca>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 79d59e76-800c-4e34-c306-08d75248b540
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: VI1PR04MB4109:|VI1PR04MB4109:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4109FDF55319C0261746CFACEE920@VI1PR04MB4109.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1850;
-x-forefront-prvs: 0192E812EC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(199004)(189003)(305945005)(9686003)(186003)(55016002)(71200400001)(6916009)(7736002)(26005)(6436002)(33656002)(71190400001)(53546011)(6506007)(6246003)(446003)(102836004)(7416002)(8936002)(2906002)(14454004)(86362001)(52536014)(66476007)(66066001)(66446008)(64756008)(66556008)(76116006)(74316002)(478600001)(7696005)(4326008)(66946007)(99286004)(4001150100001)(486006)(91956017)(14444005)(229853002)(256004)(81166006)(81156014)(476003)(8676002)(3846002)(76176011)(54906003)(316002)(5660300002)(44832011)(6116002)(25786009)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4109;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MiriHFKvWkG7tOXwJjaHfbvliqsSwcpVpjyucP4F2n0dGrUYKINUXzrsyJ/Ovnm+hVOjj592zb1U1OBiUXcPYjYyKbihpbPuIv8PnxsZ+ynJ4VX4Vc2UPNkxCaTkBM04umZwtXQqiym3j5FbMrEO97IsbwEPCEv5/ewo3I0VwrguDTWN+ZP/QjSK/IMhMgaqsu0wrXqxkPisS7xESbELWeuVU5qZ5IHaW+oIl7iEoBQxrHw1L2rELiVBWOu9PyjwDvclVVL06EntKKNzFvgmYFM2f94j074PI6QcUzwQIZyfxqftrvWYB8YWkxINddRhgtWZbQfLkZ+0yGk76AB2RLavr1GC8iZ5cMMFi4G+xl9VTe5JV6iUmQ/b2srl20G416oTzFJu4HbLYvGcyb/8ps+XZgEQMwuTjMcT5Jb3aws=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79d59e76-800c-4e34-c306-08d75248b540
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2019 14:54:12.5758
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cPufE3yRPtCnMTDsyci4jhsK6CBBBiEXmjDvdwyboysPbgb1WEdRrjJrdNtPMy6PY64HN88/hZSTE4hWniKIhg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4109
+        id S2403856AbfJPO6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 10:58:09 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:60026 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403824AbfJPO6J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 10:58:09 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191016145807euoutp01750ddfc0617c7606ab610d4365c8487a~OKIizG8Pf2498824988euoutp01L
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 14:58:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191016145807euoutp01750ddfc0617c7606ab610d4365c8487a~OKIizG8Pf2498824988euoutp01L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1571237887;
+        bh=JoncVjC24KKiQlne8enrxBMTgaWnwTqTsB0Y6vkF3D4=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=W1mLcDpAkTbhx7u3RSLkQsdair8sLShVUbYO2GGrwHwlJDMykV/jh8j7JtEshyxdC
+         cGcifTJ/zeTb02W4J9luoPWQ/TgZKc9946PjdDONyHlibTj1+UKvzMaj9Pqv5MNwCM
+         SD0SJ7PSXbl9yUYFmREFjeALsHqH3OMn+xR0ifHk=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191016145807eucas1p2fcf58664104fe0626ed54bacb5cb2724~OKIidPp332484024840eucas1p2n;
+        Wed, 16 Oct 2019 14:58:07 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 66.FF.04309.FFF27AD5; Wed, 16
+        Oct 2019 15:58:07 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191016145806eucas1p2d522901fc79e1ca6e03f1bb516a81370~OKIiOa-_n2480624806eucas1p2s;
+        Wed, 16 Oct 2019 14:58:06 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191016145806eusmtrp285c288b5253066094ea66dc8d39dd4a2~OKIiNqFVL2395523955eusmtrp2X;
+        Wed, 16 Oct 2019 14:58:06 +0000 (GMT)
+X-AuditID: cbfec7f4-ae1ff700000010d5-1b-5da72fff42c1
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 11.0E.04166.EFF27AD5; Wed, 16
+        Oct 2019 15:58:06 +0100 (BST)
+Received: from AMDC3061.DIGITAL.local (unknown [106.120.51.75]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191016145806eusmtip2d2c6d98211d8ee8d35793b9b4aeed72a~OKIhro0oC0671206712eusmtip2g;
+        Wed, 16 Oct 2019 14:58:06 +0000 (GMT)
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+To:     krzk@kernel.org, vireshk@kernel.org, robh+dt@kernel.org
+Cc:     sboyd@kernel.org, roger.lu@mediatek.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v5 0/4] Exynos Adaptive Supply Voltage support
+Date:   Wed, 16 Oct 2019 16:57:52 +0200
+Message-Id: <20191016145756.16004-1-s.nawrocki@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleLIzCtJLcpLzFFi42LZduznOd3/+stjDW4/57bYOGM9q8X8I+dY
+        Lc6f38BusenxNVaLz71HGC1mnN/HZLH2yF12i9a9R9gtLj/eyGZx+E07q8W/axtZLDY/OMbm
+        wOOxaVUnm8fmJfUeLSf3s3j0bVnF6PF5k1wAaxSXTUpqTmZZapG+XQJXxur1q1gKrgtUrJg7
+        m72BsYm3i5GTQ0LAROL45SeMXYxcHEICKxgl+h6+ZoFwvjBKtDzbxwrhfGaU6N0yn62LkQOs
+        ZWaXEUR8OaPE9+5OVpBRYB2rbhWD2GwChhK9R/sYQepFBKwlPp0UA6lnFpjIJPFidhc7SI2w
+        gJ3Ey+Mb2UBsFgFViYmz77GA2LxA9Y9+9LFAnCcvsXrDAWaQZgmB/2wSUxpfsEMkXCS+nWln
+        grCFJV4d3wIVl5H4v3M+E0RDM6NEz+7b7BDOBEaJ+8cXMEJUWUscPn6RFeQ8ZgFNifW79CHC
+        jhLX23pYIb7kk7jxVhAkzAxkTto2nRkizCvR0SYEUa0i8XvVdKgTpCS6n/yHutlDYsXGbWyQ
+        MImV+PToDtsERrlZCLsWMDKuYhRPLS3OTU8tNspLLdcrTswtLs1L10vOz93ECEwdp/8d/7KD
+        cdefpEOMAhyMSjy8L5iXxwqxJpYVV+YeYpTgYFYS4Z3fsiRWiDclsbIqtSg/vqg0J7X4EKM0
+        B4uSOG81w4NoIYH0xJLU7NTUgtQimCwTB6dUA2PhhqnXDCR3sT1bkarn0nEt/XBs2nWB3L2d
+        dg7JwrzlvscWhWzcHLbvw4FdK4OeyS8yn+yftWS1shRDwd62b1Pad2y5IluwdFO6yePJnDEt
+        ac4bLD+lzaq2W1iwrex5dqfaco/KxI4Yp69PpnivY1ZPKhXcVznZIWy73D/lE98t5tjaipbP
+        3qPEUpyRaKjFXFScCADnQN0DGQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFLMWRmVeSWpSXmKPExsVy+t/xe7r/9JfHGnx9Z26xccZ6Vov5R86x
+        Wpw/v4HdYtPja6wWn3uPMFrMOL+PyWLtkbvsFq17j7BbXH68kc3i8Jt2Vot/1zayWGx+cIzN
+        gcdj06pONo/NS+o9Wk7uZ/Ho27KK0ePzJrkA1ig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMT
+        Sz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jNXrV7EUXBeoWDF3NnsDYxNvFyMHh4SAicTMLqMu
+        Ri4OIYGljBLP/+xghYhLScxvUepi5AQyhSX+XOtiA7GFBD4xSrw+Yw5iswkYSvQe7WMEKRcR
+        sJfY/k0EZAyzwGwmiTO/ellBaoQF7CReHt8I1ssioCoxcfY9FhCbV8Ba4tGPPhaI+fISqzcc
+        YJ7AyLOAkWEVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYLhuO/Zz8w7GSxuDDzEKcDAq8fBO
+        YFweK8SaWFZcmXuIUYKDWUmEd37Lklgh3pTEyqrUovz4otKc1OJDjKZAyycyS4km5wNjKa8k
+        3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA2PL988WC/bahO/qFnLe
+        f0iCQyuXRXpCpUrKg2bfvifBbXMC66o3blQ4ekmw+M/3fosbxyufTd30ryT9zL3uH6e2i766
+        bN3/b8lB75NvrZ4YTr7ykavg8TWNs5cYOb9LR35REDwQusj/jUjFLiY7Nfu5ez65L6qQU47a
+        G+J/bXn4F8PTby9c4DytxFKckWioxVxUnAgAMsEoIm0CAAA=
+X-CMS-MailID: 20191016145806eucas1p2d522901fc79e1ca6e03f1bb516a81370
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191016145806eucas1p2d522901fc79e1ca6e03f1bb516a81370
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191016145806eucas1p2d522901fc79e1ca6e03f1bb516a81370
+References: <CGME20191016145806eucas1p2d522901fc79e1ca6e03f1bb516a81370@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16.10.2019 17:09, Angus Ainslie wrote:=0A=
-> On 2019-10-15 07:05, Leonard Crestez wrote:=0A=
->> On 10.10.2019 17:43, Angus Ainslie wrote:=0A=
->>>=0A=
->>> I've integrated your u-boot and ATF on our board and I have a couple=0A=
->>> of questions. Our board is running imx8mq B0 (Rev 2.0) silicon.=0A=
->>>=0A=
->>> It looks like this line limits the training frequencies to 800 MHz and=
-=0A=
->>> 166 MHz=0A=
->>=0A=
->> Yes! This is due to a hardware errata which was solved in B1: DRAM pll=
-=0A=
->> can't be disabled. This means that instead of 25/100/800 freqs are=0A=
->> 166/800, and this requires code changes.=0A=
->>=0A=
->>> Does 100 MHz and 25 MHz not work on B0 ?=0A=
->>=0A=
->> No, lower rates require dram clk from a composite slice (dram_alt_root)=
-=0A=
->>=0A=
->>> I added the ddrc_and noc opp as well as the 166MHz opp=0A=
->>>=0A=
->>> I also added the interconnects ( do we need them on imx8mq ? )=0A=
->>=0A=
->> The interconnect stuff is not required to switch dram frequency, it's=0A=
->> for device to make minimum bandwidth requests. It an additional feature=
-=0A=
->> on top.=0A=
->>=0A=
->> As a hack I configured FEC to do so but a saner example would be to=0A=
->> request bandwidth based on display resolution and color depth.=0A=
->>=0A=
->>> I had to add a hack as the PM QoS was limiting the bus speed to 399MHz,=
-=0A=
->>> if you have any ideas why that would be appreciated.=0A=
->>=0A=
->> You probably need to set ethernet down (which is awkward) or better=0A=
->> just drop the interconnect properties and test using the devfreq userspa=
-ce=0A=
->> governor.=0A=
->>=0A=
->>> The driver is probing=0A=
->>>=0A=
->>> [   12.136537] bus: 'platform': driver_probe_device: matched device=0A=
->>> 3d400000.dram-controller with driver imx-ddrc-devfrq=0A=
->>> [   12.147259] bus: 'platform': really_probe: probing driver=0A=
->>> imx-ddrc-devfreq with device 3d400000.dram-controller=0A=
->>> [   12.157382] imx-ddrc-devfreq 3d400000.dram-controller: no pinctrl=0A=
->>> handle=0A=
->>> [   12.164197] arm_smcc rate 0 800000000=0A=
->>> [   12.167880] arm_smcc rate 1 166750000=0A=
->>> [   12.171778] of: _opp_add_static_v2: turbo:0 rate:25000000 uv:0=0A=
->>> uvmin:0 uvmax:0 latency:0=0A=
->>> [   12.179994] of: _opp_add_static_v2: turbo:0 rate:100000000 uv:0=0A=
->>> uvmin:0 uvmax:0 latency:0=0A=
->>> [   12.188311] of: _opp_add_static_v2: turbo:0 rate:166750000 uv:0=0A=
->>> uvmin:0 uvmax:0 latency:0=0A=
->>> [   12.196606] of: _opp_add_static_v2: turbo:0 rate:800000000 uv:0=0A=
->>> uvmin:0 uvmax:0 latency:0=0A=
->>> [   12.204930] imx-ddrc-devfreq 3d400000.dram-controller: events from=
-=0A=
->>> pmu imx8_ddr0=0A=
->>> [   12.212403] Added freq 0 25000000=0A=
->>> [   12.215742] Added freq 1 100000000=0A=
->>> [   12.219177] Added freq 2 166750000=0A=
->>> [   12.222648] Added freq 3 800000000=0A=
->>> [   12.226105] device: 'devfreq0': device_add=0A=
->>> [   12.230287] PM: Adding info for No Bus:devfreq0=0A=
->>> [   12.234864] driver: 'imx-ddrc-devfreq': driver_bound: bound to=0A=
->>> device=0A=
->>> '3d400000.dram-controller'=0A=
->>> [   12.243699] bus: 'platform': really_probe: bound device=0A=
->>> 3d400000.dram-controller to driver imx-ddrc-devfreq=0A=
->>>=0A=
->>> Add seems to run correctly until it tries to adjust the clock to=0A=
->>> 166MHz=0A=
->>>=0A=
->>> [   19.555482] ddrc checking rate 800000000 166750000=0A=
->>> [   19.555489] ddrc checking rate 166750000 166750000=0A=
->>> [   19.560442] bus: 'usb-serial': really_probe: bound device ttyUSB0=0A=
->>> to=0A=
->>> driver option1=0A=
->>> [   19.568751] imx-ddrc-devfreq 3d400000.dram-controller: ddrc about=0A=
->>> to=0A=
->>> change freq 800000000 to 166750000=0A=
->>>=0A=
->>> And the board hangs there. Any ideas on how to get past this ?=0A=
->>=0A=
->> Please try this ATF patch:=0A=
-> =0A=
-> Ok applied this to the tree we're using=0A=
-> =0A=
->> I tested switching on imx8mq-evk with B0 SoC but a few additional=0A=
->> changes are required in kernel to support switching between rates which=
-=0A=
->> are both backed by PLL:=0A=
->>=0A=
->> * Mark the PLL CLK_GET_RATE_NOCACHE=0A=
-> =0A=
-> Is this what you meant ?=0A=
-> =0A=
-> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c=
-=0A=
-> index 2813884f69c1..e5f50cf8a264 100644=0A=
-> --- a/drivers/clk/imx/clk-imx8mq.c=0A=
-> +++ b/drivers/clk/imx/clk-imx8mq.c=0A=
-> @@ -345,7 +345,7 @@ static int imx8mq_clocks_probe(struct=0A=
-> platform_device *pdev)=0A=
->           clks[IMX8MQ_SYS1_PLL_OUT] =3D imx_clk_sccg_pll("sys1_pll_out",=
-=0A=
-> sys1_pll_out_sels, ARRAY_SIZE(sys1_pll_out_sels), 0, 0, 0, base + 0x30,=
-=0A=
-> CLK_IS_CRITICAL);=0A=
->           clks[IMX8MQ_SYS2_PLL_OUT] =3D imx_clk_sccg_pll("sys2_pll_out",=
-=0A=
-> sys2_pll_out_sels, ARRAY_SIZE(sys2_pll_out_sels), 0, 0, 1, base + 0x3c,=
-=0A=
-> CLK_IS_CRITICAL);=0A=
->           clks[IMX8MQ_SYS3_PLL_OUT] =3D imx_clk_sccg_pll("sys3_pll_out",=
-=0A=
-> sys3_pll_out_sels, ARRAY_SIZE(sys3_pll_out_sels), 0, 0, 1, base + 0x48,=
-=0A=
-> CLK_IS_CRITICAL);=0A=
-> -       clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out",=0A=
-> dram_pll_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60,=
-=0A=
-> CLK_IS_CRITICAL);=0A=
-> +       clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out",=0A=
-> dram_pll_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60,=
-=0A=
-> CLK_IS_CRITICAL|CLK_GET_RATE_NOCACHE);=0A=
-=0A=
-Yes.=0A=
-=0A=
->> * Set the rate to 166935483 exactly (to match clk_get_rate)=0A=
-> =0A=
-> Okay I hacked that in=0A=
-> =0A=
-> diff --git a/drivers/devfreq/imx-ddrc.c b/drivers/devfreq/imx-ddrc.c=0A=
-> index 4eed6f50bb8d..a832768a865f 100644=0A=
-> --- a/drivers/devfreq/imx-ddrc.c=0A=
-> +++ b/drivers/devfreq/imx-ddrc.c=0A=
-> @@ -436,6 +436,10 @@ static int imx_ddrc_init_freq_info(struct device=0A=
-> *dev)=0A=
->                           return -ENODEV;=0A=
->                   }=0A=
-> =0A=
-> +               /* B0 hack */=0A=
-> +               if ( freq->rate =3D=3D 166750000 )=0A=
-> +                       freq->rate =3D 166935483;=0A=
-> +inserting =0A=
->                   pr_err( "arm_smcc rate %d %lu\n", index, freq->rate );=
-=0A=
->           }=0A=
-=0A=
-A nicer solution would be to keep imx_ddrc_freq.rate in MT/s as reported =
-=0A=
-by firmware and divide by 25000 in imx_ddrc_find_freq instead.=0A=
-=0A=
-> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi=0A=
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi=0A=
-> @@ -211,7 +211,7 @@=0A=
->                           opp-hz =3D /bits/ 64 <100000000>;=0A=
->                   };=0A=
->                   opp-166M {=0A=
-> -                       opp-hz =3D /bits/ 64 <166750000>;=0A=
-> +                       opp-hz =3D /bits/ 64 <166935483>;=0A=
->                   };=0A=
->                   opp-800M {=0A=
->                           opp-hz =3D /bits/ 64 <800000000>;=0A=
-=0A=
-Yes, this is the precise clock rate in Hz.=0A=
-=0A=
->> * Make the rounding in imx-ddrc more generous.=0A=
-> =0A=
-> Sorry I don't understand what you mean by this=0A=
-=0A=
-I meant to make imx_ddrc_find_freq find 667 MT/s for an OPP of 166935483:=
-=0A=
-=0A=
-         /*=0A=
-          * Firmware reports values in MT/s, so we round-down from Hz=0A=
-          * Rounding is extra generous to ensure a match.=0A=
-          */=0A=
-         rate =3D DIV_ROUND_CLOSEST(rate, 250000);=0A=
-         for (i =3D 0; i < priv->freq_count; ++i) {=0A=
-                 struct imx_ddrc_freq *freq =3D &priv->freq_table[i];=0A=
-                 if (freq->rate =3D=3D rate ||=0A=
-                                 freq->rate + 1 =3D=3D rate ||=0A=
-                                 freq->rate - 1 =3D=3D rate)=0A=
-                         return freq;=0A=
-         }=0A=
-=0A=
-But your B0 hack above should also work.=0A=
-=0A=
-> Adding the other changes the board no longer hangs when trying to change=
-=0A=
-> frequencies but it also doesn't seem to actually change the frequency.=0A=
-> =0A=
-> [    3.076426] ddrc checking rate 800000000 166935483=0A=
-> [    3.081290] ddrc checking rate 166935483 166935483=0A=
-> [    3.086225] imx-ddrc-devfreq 3d400000.dram-controller: ddrc about to=
-=0A=
-> change freq 800000000 to 166935483=0A=
-> [    3.086891] imx-ddrc-devfreq 3d400000.dram-controller: ddrc changed=0A=
-> freq 800000000 to 166935483=0A=
-> =0A=
-> root@pureos:~# cat /sys/class/devfreq/devfreq0/cur_freq=0A=
-> 800000000=0A=
-> root@pureos:~# cat /sys/class/devfreq/devfreq0/target_freq=0A=
-> 166935483=0A=
-=0A=
-The target_freq value is from clk_get_rate(dram_core) but it is =0A=
-dram_core's parent which gets updated. It seems that a clk mux ignores =0A=
-CLK_GET_RATE_NOCACHE on the parent.=0A=
-=0A=
-An update can be forced by adding `clk_get_rate(new_dram_core_parent);` =0A=
-at the end of imx_ddrc_set_freq.=0A=
-=0A=
-You should also be able to check by looking at clk_summary or=0A=
-/sys/kernel/debug/clk/dram_core_clk/clk_rate=0A=
-/sys/kernel/debug/clk/dram_pll_out/clk_rate=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+This patch series adds ASV (Adaptive Supply Voltage) support
+for Exynos SoCs. Previous version can be found at:
+https://lore.kernel.org/linux-arm-kernel/20190917181322.GA683@bogus/t/
+
+The first one is a patch for drivers/opp adding support for adjusting
+OPP voltage at runtime [1], including my update to also handle OPP min/max
+voltage.
+
+The dt-bindings patch has been converted to YAML and needs to be aplied
+to Rob's tree as it depends on a patch already applied there
+("daa629cdba21 dt-bindings: arm: samsung: Convert Exynos Chipid bindings
+to json-schema").
+
+Already applied dts patches were dropped from the series.
+
+The patch set is based on for-next branch,
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git
+
+Tested on Odroid XU3, XU3 Lite, XU4.
+
+[1] "[PATCH v4 6/8] PM / OPP: Support adjusting OPP voltages at runtime"
+    https://lore.kernel.org/linux-arm-kernel/1565703113-31479-7-git-send-email-andrew-sh.cheng@mediatek.com
+
+Stephen Boyd (1):
+  PM / OPP: Support adjusting OPP voltages at runtime
+
+Sylwester Nawrocki (3):
+  dt-bindings: arm: samsung: Update the CHIPID binding for ASV
+  soc: samsung: Add Exynos Adaptive Supply Voltage driver
+  ARM: EXYNOS: Enable exynos-asv driver for ARCH_EXYNOS
+
+ .../bindings/arm/samsung/exynos-chipid.yaml   |  31 +-
+ arch/arm/mach-exynos/Kconfig                  |   1 +
+ drivers/opp/core.c                            |  69 +++
+ drivers/soc/samsung/Kconfig                   |  10 +
+ drivers/soc/samsung/Makefile                  |   3 +
+ drivers/soc/samsung/exynos-asv.c              | 179 ++++++
+ drivers/soc/samsung/exynos-asv.h              |  82 +++
+ drivers/soc/samsung/exynos5422-asv.c          | 509 ++++++++++++++++++
+ drivers/soc/samsung/exynos5422-asv.h          |  25 +
+ include/linux/pm_opp.h                        |  13 +
+ 10 files changed, 919 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/soc/samsung/exynos-asv.c
+ create mode 100644 drivers/soc/samsung/exynos-asv.h
+ create mode 100644 drivers/soc/samsung/exynos5422-asv.c
+ create mode 100644 drivers/soc/samsung/exynos5422-asv.h
+
+--
+2.17.1
+
