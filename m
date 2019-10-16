@@ -2,113 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4793D87FD
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 07:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83D6D8806
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 07:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbfJPFSI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 01:18:08 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43065 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbfJPFSI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 01:18:08 -0400
-Received: by mail-pf1-f194.google.com with SMTP id a2so13920952pfo.10
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 22:18:07 -0700 (PDT)
+        id S1727350AbfJPFXB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 01:23:01 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:38133 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbfJPFXB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 01:23:01 -0400
+Received: by mail-ua1-f65.google.com with SMTP id 107so6831527uau.5
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 22:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=w5jeTAUu2dH6eGAGHgWEVYzVkyO/taLa8UG7PTgaHwM=;
-        b=lsfUVd6lfFzRxgUM1e6spyrH2erNtW01SmzxvvBajKsw0oHxA6MS9+Z5qae8eQsVt0
-         FxCgEsf12c5Bff/Bk1m2wgcz3razz6j/knebeJkEjP0q/TE+7BCiAKbzmXGiacNOhRNH
-         TcILPGhc1VP+9J/LpEly0hgLXFmaAkYPkWS/NjL8w2tEgKOVJU4kZ+k2bzstrQAoKUD9
-         fxPHtdIO0pxxClysn5INWq5XdfspoFfGGCF/mWBRNj3JARrUY6e+zIq7rXPD3M15B0qe
-         eveBJjXQimtRcXKPwtZ/m3gc+DLcOxJi23y+E1WpBjJsi2Ak3sv5/20dkhXbEtnOb1Ff
-         UjnA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x84fnYes++VeBDbIo6qHMe1U6I3n9DWg2uJuSL1+ZRo=;
+        b=mVVE9XDy13ZeRTLAxh6diSwqxs5+pFC+8NzUM1/Iufrxc92V1mff6IQ2f/lQ+SlJDn
+         fwhahz8Fp0dOAM18EHJt+dW4hfdej+c/FrMv/bl+glt1rMaW7kwirXGR8+cTc4ngppJJ
+         0NxASLZI6vL0oVsWKPbq4MKeyJZDk3DgC4I9XmM70t2nlAeoWwG6l/1kFVWI8Kn9d62l
+         WGBmEd8F40veGIoAv7Rm/nx//5XTO3cI/HK2xVtXcniixv1LkJXgu5BQwuXNoCqzFRFX
+         pRgdKV4oNe/IMGQB/OMGwh1dwjKnPXrePkBBF7btoaRH20gL0zeB3Bj0MpSNFwumrv6s
+         IDTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=w5jeTAUu2dH6eGAGHgWEVYzVkyO/taLa8UG7PTgaHwM=;
-        b=JTMEwwqFGxJddeLVhTkIdOI4x5+K4XdT6YsKtHo2KIPO7rTZA7+OuEe/QFq73CXbsu
-         Tpha8ohu4YhKHcXwS87HLKknE4cq+evJ+as7d6y3Z5ai+kMtOP4RlE2vzZwbwL/Ovkp8
-         7vWCd59vBGYjTK0fM5j+JxALxyY3/JSuyiEWLTH7rVPkUuw2ESQA5cuoMMP/0i3EZr8b
-         kS+iTEiwDtxepnwI7AYVpE6LAykMuqn+JueWgJnw4ydvF1OFJTsz4tr1CRoA8THpyxso
-         RTjMq1NaQYqluXEYDeEyGDR7+SdJBtfciTVgWgdK7VrtkSmFRkxdk7FG1TveBvB5twTh
-         9h1g==
-X-Gm-Message-State: APjAAAUM5eqRPJXMQG+UjhxpHQgyVk/VIU49aL/fW6JKk/MfYtW22/HT
-        amB6+9d4/KBwbEsAVJyUaZev1tpj3BE=
-X-Google-Smtp-Source: APXvYqwZd98KfNQiPy1wPqFgM+lyEQ66XIK1EdhyW1Uau66q2f9IzajjqN3rjHJYvgacazg4RXji5w==
-X-Received: by 2002:a17:90a:b391:: with SMTP id e17mr2746680pjr.132.1571203087074;
-        Tue, 15 Oct 2019 22:18:07 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id ev20sm1018738pjb.19.2019.10.15.22.18.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Oct 2019 22:18:05 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 10:48:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/17] cpufreq: tegra20: Use generic cpufreq-dt driver
- (Tegra30 supported now)
-Message-ID: <20191016051802.rrxv56vtvxfm6qqe@vireshk-i7>
-References: <20191015211618.20758-1-digetx@gmail.com>
- <20191015211618.20758-8-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x84fnYes++VeBDbIo6qHMe1U6I3n9DWg2uJuSL1+ZRo=;
+        b=HuAjr047rzEzrXupjPKAf6hb91rY2wwcdReXPVwNIwDuaFaeDYATJ+jPViVuJXx+Tu
+         wjjbicj76o9Tv9NZDYc/vVmg/MyYOd/nED+yXzEKSaWkkpQdn/WSf1ZfM75AFHHNwcIa
+         BmL3jdMDoMZfF9ZSIG5Obm/fdgAEQAqUm8khzjBncaI2qe4LuvrCYoBDfFWIWDUpu14d
+         yKt+Eagn8iQ9atNLxLWxKurNYc+DuBCk5c1hdwLkFcglc+XtjdzGNr1zvcNW3lj2olhm
+         Hf4mkWBDM+jnZERUPdyyufezzmPZCpdm72N4RjfLtPDWAVSRR6GN0Cl7/eA/JD72wIPR
+         DVRQ==
+X-Gm-Message-State: APjAAAWTN+RLzW8uUTLHvyP7p4hTZg0rLOTDNvb1dO5Z1fpTNfKbiABN
+        5RJ62tm9s1cq40MHaQOxhKdlrTMRhd/o0SA+JvAelA==
+X-Google-Smtp-Source: APXvYqys7H0IirmGn56W5Al1VbtX5v5sS8hQcM6/P5+54uaG3iq1JZw5FIQ3v0csjEffNlOhceV9HZ7UmmMXVsD17Tk=
+X-Received: by 2002:a9f:364c:: with SMTP id s12mr15532433uad.77.1571203379780;
+ Tue, 15 Oct 2019 22:22:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191015211618.20758-8-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <cover.1571181041.git.amit.kucheria@linaro.org>
+ <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
+ <5da6a33b.1c69fb81.64cc.6834@mx.google.com>
+In-Reply-To: <5da6a33b.1c69fb81.64cc.6834@mx.google.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Wed, 16 Oct 2019 10:52:48 +0530
+Message-ID: <CAHLCerOe=Cx0+uyLG1S9B297BbUFdqaAFKFCUVrjfy=p+qRuSQ@mail.gmail.com>
+Subject: Re: [PATCH] of-thermal: Disable polling when interrupt property is
+ found in DT
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-10-19, 00:16, Dmitry Osipenko wrote:
-> Re-parenting to intermediate clock is supported now by the clock driver
-> and thus there is no need in a customized CPUFreq driver, all that code
-> is common for both Tegra20 and Tegra30. The available CPU freqs are now
-> specified in device-tree in a form of OPPs, all users should update their
-> device-trees.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/cpufreq/Kconfig.arm          |   4 +-
->  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
->  drivers/cpufreq/tegra20-cpufreq.c    | 236 ++++++---------------------
->  3 files changed, 55 insertions(+), 187 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index a905796f7f85..2118c45d0acd 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -301,8 +301,8 @@ config ARM_TANGO_CPUFREQ
->  	default y
->  
->  config ARM_TEGRA20_CPUFREQ
-> -	tristate "Tegra20 CPUFreq support"
-> -	depends on ARCH_TEGRA
-> +	bool "Tegra20 CPUFreq support"
+On Wed, Oct 16, 2019 at 10:27 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Amit Kucheria (2019-10-15 16:13:16)
+> > Currently, in order to enable interrupt-only mode, one must set
+> > polling-delay-passive and polling-delay properties in the DT to 0,
+> > otherwise the thermal framework will continue to setup a periodic timers
+> > to monitor the thermal zones.
+> >
+> > Change the behaviour, so that on DT-based systems, we no longer have to
+> > set the properties to zero if we find an 'interrupt' property in the
+> > sensor.
+> >
+> > Following data shows the number of times
+> > thermal_zone_device_set_polling() is invoked with and without this
+> > patch. So the patch achieves the same behaviour as setting the delay
+> > properties to 0.
+> >
+> > Current behaviour (without setting delay properties to 0):
+> >   FUNC                              COUNT
+> >   thermal_zone_device_update          302
+> >   thermal_zone_device_set_pollin     7911
+>
+> thermal_zone_device_set_polling?
 
-Google is currently working on the GKI (generic kernel image) project where they
-want to use a single kernel image with modules for all kind of android devices.
-And for that they need all such drivers to be built as module. Since this is
-already an module, I would ask you to keep it as is instead of moving it to bool
-here. Else some google guy will switch it back as module later on.
+Yes, the script I was using restricted the width of the fn name while printing.
 
-LGTM otherwise. Nice work. Thanks.
-
--- 
-viresh
+>
+> >
+> > Current behaviour (with delay properties set to 0):
+> >   FUNC                              COUNT
+> >   thermal_zone_device_update            3
+> >   thermal_zone_device_set_pollin        6
+> >
+> > With this patch (without setting delay properties to 0):
+> >   FUNC                              COUNT
+> >   thermal_zone_device_update            3
+> >   thermal_zone_device_set_pollin        6
+> >
+> > Suggested-by: Stephen Boyd <swboyd@chromium.org>
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>
