@@ -2,127 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE90D98ED
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 20:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D846D9904
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 20:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389841AbfJPSNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 14:13:24 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37073 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbfJPSNX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 14:13:23 -0400
-Received: by mail-pg1-f196.google.com with SMTP id p1so14753967pgi.4
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 11:13:21 -0700 (PDT)
+        id S2389331AbfJPSTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 14:19:44 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34063 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732498AbfJPSTn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 14:19:43 -0400
+Received: by mail-lj1-f194.google.com with SMTP id j19so25048057lja.1;
+        Wed, 16 Oct 2019 11:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2Wk3hvOL8LxJ403Uu8ih4ctFo+HR4RFi1ji6yQZRZrc=;
-        b=Up4tCXps8fEJXhg3ptr4mnd5E+6YUCp8JTpF1K3zztrikjaOVy65TuMzCHSBHNV6mo
-         UIK6sLQSzZV9hyc9gSWkrYcOAr+yNtSi9CQKQRfk2YASsSivWkYBrjBWH7FT+KqGvxdz
-         0yuoSEoOVx15VDosuM8chSZZ+GBqrCjGp1b5A=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wPowFu6H3nOXwpA2SAGf8+Ty4xoSESLjQljnj6+VTvY=;
+        b=PRiX8SNuyKlCxJxEtvTHgnt3YZN5FzALlfYjrf3LzguNTrX6Hx1Bc6k3/r7hM84h60
+         swXGAi7Wefb/K+/7reCOQ313MhBK/vYVjvJjbVPWC4nVvcVu7/+E+KO5sbgSnI9hZvoN
+         CxSYNmtOJ4b0zTRj9j0Cx/dM66UBF3O5+BhnwXNePiUk+Q77zSovIU8q2L+h+oJrI3hb
+         rhj9lGNCpUYmfWXLPZXW/ppFQg4B/rIWR/hNU+C7+hwcDOcZfIHvzquehGGG2zKH7BDC
+         CDxhmzjrZn86xruVmB5e9JAg3Poz1R4ukjgcZ4aAoWJcNTc0z+F2J5Ky2z14dyol0Koz
+         ppbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2Wk3hvOL8LxJ403Uu8ih4ctFo+HR4RFi1ji6yQZRZrc=;
-        b=MDDiQoSs9VgZt7dtLJuvyGfc76ZgjL+Tar0mWOmzKzEdKGoY66MYMQGaNQ8OXxl286
-         ii0zfj94mI7kAH1HbwG+fQz7agMOGGcpIJYHlK00Ws9Pu6LM9ja+8ZsrMgYtIL2fs/Sd
-         97HxkzhWcG0a3QcKuemWJHUuyWaambSFWDdygy1AqcixUY8BkiKI/wmaJH+6NjD68emr
-         i6X+8mdroAb+EB4AhszxioBPC/rtOJ4ePeejePiNdfY8sm667la8BQeE2kPt+gwLBNcB
-         hpCTaDE2EmLgaEDDFO54G90IHtJm8jss7ul7Et5L4IxRuAagbSdrHrauO01edmIsRcRX
-         P3CA==
-X-Gm-Message-State: APjAAAXTUOT4DcNQcDsI7LyqoxcuyRzWm6t2BeoY+9bre5hUVeaLn72a
-        qQbDBwq3anTutfTmdPbiqo16Tw==
-X-Google-Smtp-Source: APXvYqx7apK+WUTs5X4UNquaQO/4GTaUMXKIUkyWCbK/F6iBsGmHob40rFdKOAjYyLlaCE+33joEUw==
-X-Received: by 2002:aa7:86cb:: with SMTP id h11mr47417728pfo.59.1571249601340;
-        Wed, 16 Oct 2019 11:13:21 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id x10sm9929361pgl.53.2019.10.16.11.13.19
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wPowFu6H3nOXwpA2SAGf8+Ty4xoSESLjQljnj6+VTvY=;
+        b=FUWvTUIJLC6RnnJCj74Furh0UozixeocIB3I1VstObuzs8oPQQfyda/74nLuctj46Q
+         vepFQmQi46pPW4wi+owFmtXUwTfAQSvtoW8BRKYreoOvWsVi1gAPn9uisF5WS9YbnNSM
+         yfE96u9z8O6ykyPFKDOqXpKKlyzOH67hMwYG9+rdi9YB54NbWXXkLQr1L2rY7cbIiImO
+         Bjm8i3xDpgauGw6ntGiaAWWe4oI7UG+k7JMbgVuHZtSPWPmR7t3HPo9Ys6R5YkhTWwzp
+         uPw+r+A8EQOqqExSMQ19vZmg/SA2ez+H0K2Ht9YqUxOI77sI5hqju4DHfVyJGSnKLeAf
+         8uXQ==
+X-Gm-Message-State: APjAAAWOqD6VX/JQmB9WPd9ZXs52AiS8RDgVpD7NA2xwS8Kfx1b7iHSU
+        LaPcLAnQn5uXs+/2CkpPe7bL8tq4
+X-Google-Smtp-Source: APXvYqxoJ/NW8A7QBs/GSZGE2wRbJU36T6N4cFKKZYlqR1WkN283xHFFSDChw09XU4/z7SP1mxVjfA==
+X-Received: by 2002:a2e:9e85:: with SMTP id f5mr23834443ljk.235.1571249980609;
+        Wed, 16 Oct 2019 11:19:40 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id x25sm6846332ljb.60.2019.10.16.11.19.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2019 11:13:19 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 11:13:17 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] PM / Domains: Add tracepoints
-Message-ID: <20191016181317.GP87296@google.com>
-References: <20190926150406.v1.1.I07a769ad7b00376777c9815fb169322cde7b9171@changeid>
- <20190927044239.589e7c4c@oasis.local.home>
- <20191001163542.GB87296@google.com>
- <CAPDyKFrYqeoiSG5-KaBDt_G4kPtCxRO7+5fRa-HSWjuPPmAheQ@mail.gmail.com>
- <20191015171937.GO87296@google.com>
- <CAPDyKFpE0LoxXAR=2JvPi8pvb-6_q4rgs-A4D6OU7XuP1XEtbg@mail.gmail.com>
+        Wed, 16 Oct 2019 11:19:39 -0700 (PDT)
+Subject: Re: [PATCH v1 07/17] cpufreq: tegra20: Use generic cpufreq-dt driver
+ (Tegra30 supported now)
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191015211618.20758-8-digetx@gmail.com>
+ <20191016051802.rrxv56vtvxfm6qqe@vireshk-i7>
+ <13a9ebd6-8dce-0217-d306-defb8eb6fb96@gmail.com>
+ <CAMdYzYoasuEobJLC4RLW_5WCNGnaKtTth0xKov0tUQuDhkX3EA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b4eca03d-f86c-8e07-e04a-612e02820bd0@gmail.com>
+Date:   Wed, 16 Oct 2019 21:19:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
+In-Reply-To: <CAMdYzYoasuEobJLC4RLW_5WCNGnaKtTth0xKov0tUQuDhkX3EA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpE0LoxXAR=2JvPi8pvb-6_q4rgs-A4D6OU7XuP1XEtbg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 03:47:44PM +0200, Ulf Hansson wrote:
-> On Tue, 15 Oct 2019 at 19:19, Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > Hi Ulf,
-> >
-> > On Tue, Oct 15, 2019 at 02:37:42PM +0200, Ulf Hansson wrote:
-> > > On Tue, 1 Oct 2019 at 18:35, Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > >
-> > > > On Fri, Sep 27, 2019 at 04:42:39AM -0400, Steven Rostedt wrote:
-> > > > > On Thu, 26 Sep 2019 15:04:38 -0700
-> > > > > Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > > >
-> > > > > > Define genpd_power_on/off and genpd_set_performance_state
-> > > > > > tracepoints and use them.
-> > > > >
-> > > > > I agree with Greg about adding a "why" you need this. But, in case
-> > > > > there's a good reason to have this, I have comments about the code
-> > > > > below.
-> > > >
-> > > > Thanks Greg and Steven for your comments.
-> > > >
-> > > > How about this instead:
-> > > >
-> > > >   Add tracepoints for genpd_power_on, genpd_power_off and
-> > > >   genpd_set_performance_state. The tracepoints can help with
-> > > >   understanding power domain behavior of a given device, which
-> > > >   may be particularly interesting for battery powered devices
-> > > >   and suspend/resume.
-> > >
-> > > Apologize for the delay, no excuse!
-> > >
-> > > I don't mind adding trace events, as long as it's for good reasons -
-> > > and to me, that seems a bit questionable here.
-> > >
-> > > According to the above, I believe the information you need is already
-> > > available via genpd's debugfs interface, no?
-> >
-> > Not in all cases, e.g. you can't peek at sysfs while the device is
-> > suspended.
+16.10.2019 17:58, Peter Geis пишет:
+> On Wed, Oct 16, 2019 at 9:29 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 16.10.2019 08:18, Viresh Kumar пишет:
+>>> On 16-10-19, 00:16, Dmitry Osipenko wrote:
+>>>> Re-parenting to intermediate clock is supported now by the clock driver
+>>>> and thus there is no need in a customized CPUFreq driver, all that code
+>>>> is common for both Tegra20 and Tegra30. The available CPU freqs are now
+>>>> specified in device-tree in a form of OPPs, all users should update their
+>>>> device-trees.
+>>>>
+>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>> ---
+>>>>  drivers/cpufreq/Kconfig.arm          |   4 +-
+>>>>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+>>>>  drivers/cpufreq/tegra20-cpufreq.c    | 236 ++++++---------------------
+>>>>  3 files changed, 55 insertions(+), 187 deletions(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+>>>> index a905796f7f85..2118c45d0acd 100644
+>>>> --- a/drivers/cpufreq/Kconfig.arm
+>>>> +++ b/drivers/cpufreq/Kconfig.arm
+>>>> @@ -301,8 +301,8 @@ config ARM_TANGO_CPUFREQ
+>>>>      default y
+>>>>
+>>>>  config ARM_TEGRA20_CPUFREQ
+>>>> -    tristate "Tegra20 CPUFreq support"
+>>>> -    depends on ARCH_TEGRA
+>>>> +    bool "Tegra20 CPUFreq support"
+>>>
+>>> Google is currently working on the GKI (generic kernel image) project where they
+>>> want to use a single kernel image with modules for all kind of android devices.
+>>> And for that they need all such drivers to be built as module. Since this is
+>>> already an module, I would ask you to keep it as is instead of moving it to bool
+>>> here. Else some google guy will switch it back as module later on.
+>>>
+>>> LGTM otherwise. Nice work. Thanks.
+>>>
+>>
+>> Okay, I'll keep the modularity in v2.
+>>
+>> Although, tegra20-cpufreq isn't a driver anymore because now it merely
+>> prepares OPP table for the cpufreq-dt driver, which is really a one-shot
+>> action that is enough to do during boot and thus modularity is a bit
+>> redundant here.
 > 
-> Not sure I get this right. If a device that is attached to a genpd
-> that is runtime suspended, for sure you can have a look at the genpd
-> debugfs to see its current status.
+> I doubt Google will care much, since Android has moved on to aarch64.
+> Do they even support arm32 any more?
 
-Sorry, I used an ambiguous terminology by talking about 'the device',
-I was referring to system suspend.
-
-> > Also sysfs doesn't help much with seeing that a PD is
-> > toggling between on an off for some (possibly legitimate) reason.
-> 
-> Well, you could look at the "active_time" and the "total_idle_time"
-> nodes for the genpd in question. Those should change accordingly.
-
-Ok, thanks for the pointer!
+Yes, I don't think there is a real need to care about Google. They won't
+use pure upstream and won't care about older hardware any ways.
