@@ -2,97 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AA9D922E
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 15:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFEED922F
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 15:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727501AbfJPNQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 09:16:30 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40216 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfJPNQa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 09:16:30 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 7so23985688ljw.7
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 06:16:28 -0700 (PDT)
+        id S1728464AbfJPNQe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 09:16:34 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38868 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727397AbfJPNQe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 09:16:34 -0400
+Received: by mail-lj1-f194.google.com with SMTP id b20so24007436ljj.5;
+        Wed, 16 Oct 2019 06:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=zwcPtwWQF6liVN+zYzdJWAttHhAVvs66PzaVZNVn+cw=;
-        b=Dvr+4U2iGye8PwQvS9auZPByIhigKBPwgqTMaVL25rrzhMnxujo74IWXzkz9PvOnrT
-         kvZST1KOBOXRVVvfcdQfLqr4zgVA0OGd397GOX6LE93ttKv7Y8TCpf70xk7yCpMUaLOB
-         tyUFO6tUmWi9i1drghLKs2arwRbpV6HjcZdKmiq1v0zn2h/sB9RLnC5B/SH8Vr0SYG9V
-         p2ziDUB0e3n+wReOMDubHRKJlLSMPz6HZWVaP1Y6UEDLbTKpj45/OkT7GTby3zlilY2j
-         I2lGoV5HOVaH+EioMIxr5e5saj2W1f1kPMl566SBDeUCbu44Cel69n1pIdUOJVBOfY/x
-         Sl/g==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2eaJx/OyqQZZTAm5CsVFp16VmzPO10Nk4o0s0ZEsAbE=;
+        b=L5HWQ7i77HCMSkrt+9MBCEIdM82oyxiO56FPQ4V3yuINQD7Bb0RPXG52TTouiLOMxW
+         1SbxmWqaWiXG2jPJB0ZOZ/lXqPBmk3ybN0zcrvyRcDxZg35c4UuPA9mBfaTDL+WxtW2V
+         PqxIhB2Z9tjHnD+Yj/pOvGBl46PUNlhH77QoTB2LG6z6u2Ro1Uq8qWly+wGjKSYpkvdu
+         A3DITIXXAswEdW3GgsF4+ZG6hPQaOgxMhr4SFIbbCIDy64ZObuIypKVTGQPPImIeMI3S
+         X4rdl/yRlhDMjY9MUNwhpeBWde3RHKyElIZ4RLPeSr4zfVc+Epr5eAdvkNmg5W2ALqii
+         FPew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zwcPtwWQF6liVN+zYzdJWAttHhAVvs66PzaVZNVn+cw=;
-        b=YKctAJb4tXkSLj2Yu5BkA4+nzjXioEVnR4wn07TlQdw3uaUlery8KF4qoqNfNX5Be+
-         adE0PnYO7NcZ7snlrvQcDuGFGfN98MYV83Onla4jIJZc1BNv/tT7aEsc4n/fkvkMvCtq
-         Yhbl/vguBfCsBAGzbZT996bh8+0Prifx+6dc/vf/nnwl7khanQAaMfKCw5H8vusTd0XT
-         P/2xjBbtKdXJe9adLYFdvE9ltze8xP3nU8Ul70DnMOZEroyfXwyAsGeKHr1hgX1oc86Z
-         6c0FWjfSLFhUzxe3OBd+CsPGbLhUXXnwwT+Y3pxn8sEyKGd1EX8DhuFZm4W/UwPTYz6m
-         grqQ==
-X-Gm-Message-State: APjAAAVk0zYJ4RME+Ys5XKbd1eDP7mKOjYzdEs2dE6/nwMP/FLO4Qojs
-        kxWnAsm7evehWyaTUVm6zP/JnQ==
-X-Google-Smtp-Source: APXvYqyoH9MQbW8BVPPDIOi4iBgbLqiYtqm6XR1J9gGq8SXdHH51QB1ilbfdS+SKrh56ecUB0gzTKw==
-X-Received: by 2002:a2e:9ec2:: with SMTP id h2mr22570726ljk.85.1571231787847;
-        Wed, 16 Oct 2019 06:16:27 -0700 (PDT)
-Received: from uffe-XPS-13-9360.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id q19sm10215746lfj.9.2019.10.16.06.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2019 06:16:27 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Niklas Soderlund <niklas.soderlund@ragnatech.se>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>
-Subject: [PATCH 2/3] PM / Domains: Implement the ->start() callback for genpd
-Date:   Wed, 16 Oct 2019 15:16:24 +0200
-Message-Id: <20191016131624.15832-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2eaJx/OyqQZZTAm5CsVFp16VmzPO10Nk4o0s0ZEsAbE=;
+        b=GpPws1sP2kra8nWWf7r9aKq6bLseC0pgOZK28zfwdbWPWXgQXneniUMyishwIb82VA
+         LDeyghuq+WWPJCPJvU8Sc5wp5ZLCgO7Oi8rN2ZuJObtP0pSnpk895GbrhlDwgY3mUWPI
+         fmsCsGi5BCLFnNEILq+EeNwQeNyfNR8mIM1hTOu2crP7ZapVzGeddO1MKZ6s5YCgwJpW
+         NkZuoprJiimeV1piIAo3hES9Ymi3PO2K14lYYzPR56oCIKTi3AbrQxBkcTELwqCdm56v
+         YpwAnabqJh4y+bmP/fuMevPe0PZkQeHmiP2CDOjQzl6Ju6YUKIcSZNDbbXkGdj9/201Q
+         HWqg==
+X-Gm-Message-State: APjAAAWXyYB4hAoVJZZ9ghXIKOy1MCLFU/2f5nB4yuU8NDA0mzgtRvCm
+        EOyIqJZhiYwK7hR1sGlO9uqo9KuI
+X-Google-Smtp-Source: APXvYqwLPxmgwfFTEd8ELrVAVxO3Sr1h1NF0s2EVJlAjvaMb778NDDAG/JFViNEb+c3Tu7tEFOTw2w==
+X-Received: by 2002:a2e:8593:: with SMTP id b19mr26008676lji.34.1571231789792;
+        Wed, 16 Oct 2019 06:16:29 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id m17sm9866003lje.0.2019.10.16.06.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Oct 2019 06:16:29 -0700 (PDT)
+Subject: Re: [PATCH v1 00/17] NVIDIA Tegra20 CPUFreq driver major update
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191016052716.yipztnpg7bcuzhfn@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <8cf055a3-57fd-c275-9e74-a9fb5d284866@gmail.com>
+Date:   Wed, 16 Oct 2019 16:16:27 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191016052716.yipztnpg7bcuzhfn@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To allow a subsystem/driver to explicitly start its device from genpd's
-point view, let's implement the ->start() callback in the struct
-dev_pm_domain that corresponds to the genpd.
+16.10.2019 08:27, Viresh Kumar пишет:
+> On 16-10-19, 00:16, Dmitry Osipenko wrote:
+>> Hello,
+>>
+>> This series moves intermediate-clk handling from tegra20-cpufreq into
+>> tegra-clk driver, this allows us to switch to generic cpufreq-dt driver
+>> which brings voltage scaling, per-hardware OPPs and Tegra30 support out
+>> of the box. All boards need to adopt CPU OPPs in their device-trees in
+>> order to get cpufreq support. This series adds OPPs only to selective
+>> boards because there is assumption in a current device-trees that CPU
+>> voltage is set for 1GHz freq and this won't work for those CPUs that
+>> can go over 1GHz and thus require voltage regulators to be set up for
+>> voltage scaling support (CC'ed Marcel for Toradex boards). We could
+>> probably add delete-node for OPPs over 1GHz if there are not actively
+>> maintained boards.
+> 
+> How do you want to get these patches merged ? Can I just pick the cpufreq bits
+> alone ?
+> 
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+The cpufreq bits strictly depend on the clk patches and the regulators
+coupler/balancer series. Hence all patches in this series should collect
+acks from relevant maintainers and then Thierry will pick up the
+patchsets in a correct order via tegra tree, at least that's my vision.
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index cc85e87eaf05..2adf0661fa3e 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -634,6 +634,13 @@ static int genpd_power_on(struct generic_pm_domain *genpd, unsigned int depth)
- 	return ret;
- }
- 
-+static int genpd_dev_pm_start(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd = dev_to_genpd(dev);
-+
-+	return genpd_start_dev(genpd, dev);
-+}
-+
- static int genpd_dev_pm_qos_notifier(struct notifier_block *nb,
- 				     unsigned long val, void *ptr)
- {
-@@ -1805,6 +1812,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 	genpd->domain.ops.poweroff_noirq = genpd_poweroff_noirq;
- 	genpd->domain.ops.restore_noirq = genpd_restore_noirq;
- 	genpd->domain.ops.complete = genpd_complete;
-+	genpd->domain.start = genpd_dev_pm_start;
- 
- 	if (genpd->flags & GENPD_FLAG_PM_CLK) {
- 		genpd->dev_ops.stop = pm_clk_suspend;
--- 
-2.17.1
-
+Thierry, are you okay with that approach?
