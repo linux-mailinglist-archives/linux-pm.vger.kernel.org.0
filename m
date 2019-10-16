@@ -2,73 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEAEDA189
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 00:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307A0DA196
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 00:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389828AbfJPWaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 18:30:12 -0400
-Received: from muru.com ([72.249.23.125]:37650 "EHLO muru.com"
+        id S2391855AbfJPWgN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 18:36:13 -0400
+Received: from muru.com ([72.249.23.125]:37664 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726743AbfJPWaM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 18:30:12 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 20D6B8198;
-        Wed, 16 Oct 2019 22:30:46 +0000 (UTC)
+        id S1726743AbfJPWgN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Oct 2019 18:36:13 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id D0BC08107;
+        Wed, 16 Oct 2019 22:36:46 +0000 (UTC)
+Date:   Wed, 16 Oct 2019 15:36:09 -0700
 From:   Tony Lindgren <tony@atomide.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
-        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH 2/2] power: supply: cpcap-charger: Improve battery detection
-Date:   Wed, 16 Oct 2019 15:30:05 -0700
-Message-Id: <20191016223005.9246-3-tony@atomide.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016223005.9246-1-tony@atomide.com>
-References: <20191016223005.9246-1-tony@atomide.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
+Subject: Re: [PATCH 1/2] power: supply: cpcap-battery: Fix handling of
+ lowered charger voltage
+Message-ID: <20191016223609.GH5610@atomide.com>
+References: <20191009210141.10037-1-tony@atomide.com>
+ <20191009210141.10037-2-tony@atomide.com>
+ <20191013113017.GC5653@amd>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191013113017.GC5653@amd>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We are currently using a wrong ADC range for the battery detection.
-The ADC returns the battery temperature if connected.
+* Pavel Machek <pavel@ucw.cz> [191013 11:30]:
+> > +static int cpcap_battery_set_property(struct power_supply *psy,
+> > +				      enum power_supply_property psp,
+> > +				      const union power_supply_propval *val)
+> > +{
+> > +	struct cpcap_battery_ddata *ddata = power_supply_get_drvdata(psy);
+> > +
+> > +	switch (psp) {
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> > +		if (val->intval < ddata->config.info.voltage_min_design)
+> > +			return -EINVAL;
+> 
+> Is minimum design applicable here? I believe that's the lowest voltage
+> battery is discharged to...
+> 
+> I guess we can use it if there's no more suitable limit?
 
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/power/supply/cpcap-charger.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Yeah so it seems, and can be changed if we find something bettter.
 
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -176,20 +176,21 @@ static enum power_supply_property cpcap_charger_props[] = {
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- };
- 
-+/* No battery always shows temperature of -40000 */
- static bool cpcap_charger_battery_found(struct cpcap_charger_ddata *ddata)
- {
- 	struct iio_channel *channel;
--	int error, value;
-+	int error, temperature;
- 
- 	channel = ddata->channels[CPCAP_CHARGER_IIO_BATTDET];
--	error = iio_read_channel_raw(channel, &value);
-+	error = iio_read_channel_processed(channel, &temperature);
- 	if (error < 0) {
- 		dev_warn(ddata->dev, "%s failed: %i\n", __func__, error);
- 
- 		return false;
- 	}
- 
--	return value == 1;
-+	return temperature > -20000 && temperature < 60000;
- }
- 
- static int cpcap_charger_get_charge_voltage(struct cpcap_charger_ddata *ddata)
--- 
-2.23.0
+> > +		ddata->config.bat.constant_charge_voltage_max_uv = val->intval;
+> > +
+> > +		return cpcap_battery_update_charger(ddata, val->intval);
+> > +	break;
+> 
+> Delete the break.
+
+Sure thanks.
+
+Tony
