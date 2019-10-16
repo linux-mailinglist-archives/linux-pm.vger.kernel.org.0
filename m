@@ -2,91 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C41D9A40
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE4DD9A64
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394496AbfJPThl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 15:37:41 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:39548 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394492AbfJPThk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 15:37:40 -0400
-Received: by mail-qk1-f194.google.com with SMTP id 4so23910543qki.6
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 12:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=97s95T4wB8D9WrZ0/COnoxS/a+SRIAWB8dyFC3vn+tQ=;
-        b=GlwUaK9975uKLB3Il8iCJWGw/WsurZbpXrfmvB0+cOiSlTw33tqB9UabOx9UJXv+Py
-         Ysh/dTg6ZIn4vamzHcJM6xAi+ICquA2136RhPwyUOL8hSeVjsNtkt7Sl7oRNq6Xpm7OZ
-         fsofHsRW4JP2sDrS9ml6JUy5xcCUNdSnzWE+RwqfZYdptSJEF9AvxmqycZAFKSflbzNd
-         /HKCAjlNMVxg1QsA7M4yAJyT0hrPGZ1lc89+aXpqKYp7sJ/p7JNvrSqYz7DKG3yclS6O
-         YNjQ6KcDd7F1Yxc0kARpql5np+oJ3Nj+EhLex92Qsd2OkJm1dXy7GUXDMMDIuH2X3Wdq
-         jfxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=97s95T4wB8D9WrZ0/COnoxS/a+SRIAWB8dyFC3vn+tQ=;
-        b=D8ffu7OLrx45wpe+ET4iYxsr2L3XZzDAK+QMtAh+mZHKWzGqdyQVnYp4/zmxqNKk/b
-         qxfhba9VF91u1qKNPLC0UBpuTOiNGxccVq0zmOTluXxYHQkTujALFdzekQd45d9xkMbw
-         J9tcb8SPc8pVFLSwU8cel+iJKGTdwEphV+RfgJ4M7pd4mAPd3zd3rhNE0MsWxuC8JH//
-         N8uSaVHWvmNHb6NfQzK8SPQ3oaC98Pa3kSAygG8ZWymYG3A2oocdzJaAItpiVAu+Y8ts
-         yeK1iI1xbI6wSejRIa7+aEz+HsaCCikjG9somddEqqMqp5DYva5QbLUv/bCZjU2S9Iy7
-         of+w==
-X-Gm-Message-State: APjAAAWLO4vi3nte3cLT1QwmFuJl8GWhK6orvx4MC3/h7iM0CQjBbpGU
-        QclRsiulIXHmehjXpdq7wqHM5hYuBAPcnA==
-X-Google-Smtp-Source: APXvYqxix4EGuSLyW4lz+Vd5S9/hkoP/Kwx8aDCIGHmO8XLmv+D/JG/TETbJaTMwknuMZ1ioIcVHig==
-X-Received: by 2002:a37:4146:: with SMTP id o67mr28594780qka.23.1571254659370;
-        Wed, 16 Oct 2019 12:37:39 -0700 (PDT)
-Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.googlemail.com with ESMTPSA id 54sm16246030qts.75.2019.10.16.12.37.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 16 Oct 2019 12:37:38 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     edubezval@gmail.com, rui.zhang@intel.com, ulf.hansson@linaro.org,
-        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
-        agross@kernel.org
-Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
-        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/7] arm64: dts: qcom: Add mx power domain as thermal warming device.
-Date:   Wed, 16 Oct 2019 15:37:21 -0400
-Message-Id: <1571254641-13626-8-git-send-email-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
-References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
+        id S1729672AbfJPToz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 15:44:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46124 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727148AbfJPToy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Oct 2019 15:44:54 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E780421835;
+        Wed, 16 Oct 2019 19:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571255094;
+        bh=a+eVuLrgzrO9drVaHfvt7ADhX2JYoreKzv/cchTKdcQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N7P7XmA4fIAb2RTDSN/3aFMogQqqQYvmq9gt37Rv/aOR0GWsQTKokBBvpo/sQQeD1
+         OK/EANIGdGZswaeiowWddtw470RJdK4eCZvHVLb7V0ogRRv55L1XD+kfXGDKZ86bHi
+         IsAZDhY6XXrvSAjz7KwohX/b5JXXggeJL1k6O9DI=
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] PCI/PM: Note that PME can be generated from D0
+Date:   Wed, 16 Oct 2019 14:44:50 -0500
+Message-Id: <20191016194450.68959-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RPMh hosts mx power domain that can be used to warm up the SoC.
-Add sub-node to rpmhpd node for mx to be recognized
-as thermal warming device on sdm845.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+Per PCIe r5.0 sec 7.5.2.1, PME may be generated from D0, so update
+Documentation/power/pci.rst to reflect that.
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/power/pci.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 0222f48..0671c8a 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3788,6 +3788,11 @@
- 						opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
- 					};
- 				};
-+
-+				mx_cdev: mx {
-+					#cooling-cells = <2>;
-+					.name = "mx";
-+				};
- 			};
+diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
+index db41a770a2f5..a90e82c70a3b 100644
+--- a/Documentation/power/pci.rst
++++ b/Documentation/power/pci.rst
+@@ -130,8 +130,8 @@ a full power-on reset sequence and the power-on defaults are restored to the
+ device by hardware just as at initial power up.
  
- 			rsc_hlos: interconnect {
+ PCI devices supporting the PCI PM Spec can be programmed to generate PMEs
+-while in a low-power state (D1-D3), but they are not required to be capable
+-of generating PMEs from all supported low-power states.  In particular, the
++while in any power state (D0-D3), but they are not required to be capable
++of generating PMEs from all supported power states.  In particular, the
+ capability of generating PMEs from D3cold is optional and depends on the
+ presence of additional voltage (3.3Vaux) allowing the device to remain
+ sufficiently active to generate a wakeup signal.
 -- 
-2.1.4
+2.23.0.700.g56cf767bdb-goog
 
