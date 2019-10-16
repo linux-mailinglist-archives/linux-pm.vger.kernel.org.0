@@ -2,203 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAFCD9B39
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 22:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3DED9BAC
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 22:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733122AbfJPUOM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 16:14:12 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46288 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727796AbfJPUOM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 16:14:12 -0400
-Received: by mail-lf1-f65.google.com with SMTP id t8so18483722lfc.13;
-        Wed, 16 Oct 2019 13:14:10 -0700 (PDT)
+        id S2388081AbfJPUXF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 16:23:05 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33144 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727794AbfJPUXF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 16:23:05 -0400
+Received: by mail-pg1-f194.google.com with SMTP id i76so14964764pgc.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 13:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l8ORRK6Z/tj+ennQWyvTLEJTSnUGYUzseJnIAFJK54Y=;
-        b=WIUbKfkXB4bVekL2BhsU6rbjzRPObA8ejEHTjr3PD5CNbirFmMWzYqgPe6CWX7VhBH
-         P2nIu3x9UdtBoeXpOhkL6h5FxrmlivAOUVg+UVXdnjf8747OaJHzP31eTNHDbJyCmvUF
-         Vv5RAwio9wOy01S4tQkrPlueSoPxgbOQRqd22RjL85D2Xq8DAqKUMlPQngAIYcYshUqX
-         3/tv1MjZG061TU60EE5QsDs9ryn2uGImGZDhZkQiPrPrSy4ehG38kkmNoXgeaiFJAkFt
-         quVJPwfmyg509ZkHJAu5lja8z42HohChbqlKUm/cvOMavHkMFB/XXP14ntD7D9AQx6u1
-         PdoQ==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:from:to:cc:subject:user-agent:date;
+        bh=Qrm1NvsXrsFrJaiaktnNZJoOxKRyRjdaoTo5U5Izuk8=;
+        b=Ahh+DqSyKQU4I8H524JcL1PIUJqZCf9a35VJVicjcCCqn06nJAx24r1keCachP6WYS
+         fk1t2w6sSlc2muk8MBj7Olqfe3BNATOJBd6R7srgvDSqvC26FQO6rIpRWqZRIGN/9neN
+         7JZadWQ29Ssk8xRdKOzc/YlYYSJ/1raV59+DU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l8ORRK6Z/tj+ennQWyvTLEJTSnUGYUzseJnIAFJK54Y=;
-        b=Zo8l0w3C90qRD1CzYcSO2XTsGwRPdGZfMmXMhCQ9xfPT6JWyaXIQpMg5MV2kjusGkU
-         otelJg8ikvhX6seqtI1IcRfBo3PwVKf+LQQlxU1tDr8ByzC0IK5DrhJGORqaJYhF6gzw
-         e8/Gew6pLIqA16XhG+gpgRsh7vXufh23FyBC0v9aeb6XhrwGw+e9mIoj0ho47KIXJUAL
-         hDXpMJaiTsYvqrtO0YAgZU/67eWKXk8vUFvEFVlP16enFtiwOenRaAgeOFwK3IR+UxIy
-         52Znpw/ozKRRdnF1jOna32sS7Nu0oDJaF6r2JeVDbkZGsTvUcxpD1WnZ6Dz83HXVhKSk
-         v+GQ==
-X-Gm-Message-State: APjAAAX0qoDxJ0yNVIq7MiG0hwRMQFoooj4jgJjdQeuPrO+1EEAYYDt9
-        lTKTfV3bh9VmbVSdjeUfXedFsxTn
-X-Google-Smtp-Source: APXvYqz7gf96qvageIl96eIHyaGg0JllPJJaszitr7b0cxr6gT0o6PK4A+iEn9lyZdRx58b286zm2g==
-X-Received: by 2002:a19:6759:: with SMTP id e25mr6031339lfj.80.1571256849142;
-        Wed, 16 Oct 2019 13:14:09 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id 21sm6420332ljq.15.2019.10.16.13.14.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2019 13:14:08 -0700 (PDT)
-Subject: Re: [PATCH v6 00/18] Consolidate and improve NVIDIA Tegra CPUIDLE
- driver(s)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191015170015.1135-1-digetx@gmail.com>
- <20191016192133.GB26038@pdeschrijver-desktop.Nvidia.com>
- <72636eb3-5354-eea3-3a51-4975a04186b2@gmail.com>
-Message-ID: <53ee8bd3-5c53-f0aa-175c-7fa3024d0af5@gmail.com>
-Date:   Wed, 16 Oct 2019 23:14:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
+         :user-agent:date;
+        bh=Qrm1NvsXrsFrJaiaktnNZJoOxKRyRjdaoTo5U5Izuk8=;
+        b=k3Fw9EQHhd/OQlL9GWhPTyM1uYz3Pq0jA7zmYBfQ6BhaB/ReN6AJMr/XbHHmDt35lM
+         dfXZKS8HMK/jL5/mV5ffh/fRSpmlnZjJwKKICSWfCGQfOuSNNPjVdsYlC62cBqWqziTW
+         dALAr5UBCHlK95niATmAj9Ps7qZoQ0EjvUrS4AcT6SCp3r6vYLkh3Bo1AQy+oZctQVch
+         aev60Wzgb9s0QVXoztQo/3cOkg4mvoPeoLBurcuicGpRa+iSZPlzQgq5WjKYzhh8YtIc
+         BrElC3H4iv1trcMyMTlOTPSQ1SWd/5tiptirdGlcPxEvYIdeZuEZcRmGZEK8CCW68Mbp
+         vC9w==
+X-Gm-Message-State: APjAAAX/mGbm3j4xxKY/4zkFRJIcxXj8uvF3mk+x913tXMGwkQ1SLJFW
+        qqnfs0zACYEV3c0SjeFL8nr58A==
+X-Google-Smtp-Source: APXvYqyYjQEWTnhtfIJtx+HVP/qsBdKLByhTQ5WcY+ad6SCiP1cjGC6S1RKDWb2/HMy0APgi43ph6w==
+X-Received: by 2002:a62:a104:: with SMTP id b4mr35615699pff.239.1571257384523;
+        Wed, 16 Oct 2019 13:23:04 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id p68sm33732397pfp.9.2019.10.16.13.23.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 13:23:03 -0700 (PDT)
+Message-ID: <5da77c27.1c69fb81.b45e2.8b99@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <72636eb3-5354-eea3-3a51-4975a04186b2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191009001159.27761-1-saravanak@google.com>
+References: <5d978bf9.1c69fb81.7b927.b6ac@mx.google.com> <20191009001159.27761-1-saravanak@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     bjorn.andersson@linaro.org, daidavid1@codeaurora.org,
+        devicetree@vger.kernel.org, evgreen@chromium.org,
+        georgi.djakov@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, mripard@kernel.org, robh+dt@kernel.org,
+        saravanak@google.com, kernel-team@android.com
+Subject: Re: [RFC PATCH] interconnect: Replace of_icc_get() with icc_get() and reduce DT binding
+User-Agent: alot/0.8.1
+Date:   Wed, 16 Oct 2019 13:23:02 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16.10.2019 22:47, Dmitry Osipenko пишет:
-> 16.10.2019 22:21, Peter De Schrijver пишет:
->> On Tue, Oct 15, 2019 at 07:59:57PM +0300, Dmitry Osipenko wrote:
->>> Hello,
->>>
->>> This series does the following:
->>>
->>>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
->>>      into common drivers/cpuidle/ directory.
->>>
->>>   2. Enables CPU cluster power-down idling state on Tegra30.
->>>
->>> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
->>> and of the Tegra's arch code in general. Please review, thanks!
->>>
->>> Changelog:
->>>
->>> v6: - Addressed request from Thierry Reding to change the way patches are
->>>       organized by making changes in a more incremental manner.
->>>
->>>     - tegra_sleep_cpu() now checks for the secondary CPUs to be offline
->>>       in the "Make outer_disable() open-coded" patch.
->>>
->>> v5: - Rebased on a recent linux-next, fixed one minor conflict in Kconfig.
->>>
->>>     - Improved commit's message of the "Support CPU cluster power-down state
->>>       on Tegra30" patch.
->>>
->>>     - The "Support CPU cluster power-down state on Tegra30" patch is also
->>>       got split and now there is additional "Make outer_disable() open-coded"
->>>       patch.
->>>
->>>     - Made minor cosmetic changes to the "Introduce unified driver for
->>>       NVIDIA Tegra SoCs" patch by improving error message and renaming
->>>       one variable.
->>>
->>> v4: - Fixed compilation with !CONFIG_CACHE_L2X0 (and tested that it still
->>>       works).
->>>
->>>     - Replaced ktime_compare() with ktime_before() in the new driver,
->>>       for consistency.
->>>
->>> v3: - Addressed review comments that were made by Jon Hunter to v2 by
->>>       splitting patches into smaller (and simpler) chunks, better
->>>       documenting changes in the commit messages and using proper error
->>>       codes in the code.
->>>
->>>       Warnings are replaced with a useful error messages in the code of
->>>       "Introduce unified driver for NVIDIA Tegra SoCs" patch.
->>>
->>>       Secondary CPUs parking timeout increased to 100ms because I found
->>>       that it actually may happen to take more than 1ms if CPU is running
->>>       on a *very* low frequency.
->>>
->>>       Added diagnostic messages that are reporting Flow Controller state
->>>       when CPU parking fails.
->>>
->>>       Further polished cpuidle driver's code.
->>>
->>>       The coupled state entering is now aborted if there is a pending SGI
->>>       (Software Generated Interrupt) because it will be lost after GIC's
->>>       power-cycling. Like it was done by the old Tegra20 CPUIDLE driver.
->>>
->>> v2: - Added patches to enable the new cpuidle driver in the defconfigs:
->>>
->>>         ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
->>>         ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
->>>
->>>     - Dropped patches that removed CPUIDLE_FLAG_TIMER_STOP from the idling
->>>       states because that flag actually doesn't have any negative effects,
->>>       but still is correct for the case of a local CPU timer on older Tegra
->>>       SoCs:
->>>
->>>         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from Tegra114/124 idle-state
->>>         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from all states
->>>
->>>     - The "Add unified driver for NVIDIA Tegra SoCs" patch got more polish.
->>>       Tegra30 and Terga114 states are now squashed into a single common C7
->>>       state (following Parker TRM terminology, see 17.2.2.2 Power Management
->>>       States), more comments added, etc minor changes.
->>
->> It would be useful to switch the power state terminology to the one used
->> for later chips:
->>
->> LP0 becomes SC7
->> LP1 becomes C1
->> LP2 becomes CC7
->>
->> Meaning of these states is as follows
->>
->> C is a core state:
->>
->> C1 clock gating
->> C2 not defined
->> C3 not defined
->> C4 not defined
->> C5 not defined
->> C6 not defined for ARM cores
->> C7 power-gating
->>
->> CC is a CPU cluster C state:
->>
->> CC1 cluster clock gated
->> CC2 not defined
->> CC3 fmax@Vmin: not used prior to Tegra186
->> CC4: cluster retention: no longer supported
->> CC5: not defined
->> CC6: cluster power gating
->> CC7: cluster rail gating
->>
->> SC is a System C state:
->>
->> SC1: not defined
->> SC2: not defined
->> SC3: not defined
->> SC4: not defined
->> SC5: not defined
->> SC6: not defined
->> SC7: VDD_SOC off
-> 
-> Hello Peter,
-> 
-> But new "drivers/cpuidle/cpuidle-tegra.c" uses exactly that terminology,
-> please see "cpuidle: Refactor and move NVIDIA Tegra20 driver into
-> drivers/cpuidle/" and further patches. Am I missing something? Or do you
-> want the renaming to be a separate patch?
-> 
+Quoting Saravana Kannan (2019-10-08 17:11:59)
+> Quoting Stephen Boyd:
+> > The property would describe what's going to this device and how it's
+> > integrated into the SoC. This is similar to how we describe what port is
+> > connected to a device with the of graph binding or how we only list the
+> > clk or regulator that goes to a device and not the whole path to the
+> > root of the respective tree.
+> >=20
+> > There can be a driver API that gets these port numbers out and
+> > constructs a path to another struct device or struct device_node. I
+> > imagine that 90% of the time a driver is going to request some bandwidth
+> > from their master port (or ports) to the DDR controller. We could either
+> > make the DDR controller a device that can be globally acquired or
+> > integrate it deeply into the API to the point that it looks for a DDR
+> > controller somewhere or relies on interconnect providers to tell the
+> > framework about the controller.
+> >=20
+> > TL;DR is that I don't want to have to specify paths in each and every
+> > node to say that some port on this device here is connected to some port
+> > on the DDR controller and that we want to adjust the bandwidth or QoS
+> > across this path. I'd like to describe a device "hermetically" by
+> > listing out the ports the device has. Then we can rely on the OS to
+> > figure out what paths to construct and change. If we need to constrain
+> > or tweak those paths then we can do that with the existing interconnects
+> > binding, but let's worry about that when we get there.
+>=20
+> I think I understand what you are trying to do here. Correct me if my
+> understanding is wrong. Each device just lists what interconnects (and th=
+eir
+> ports) it's connected to -- let's call this device endpoints.
 
-Or maybe you're suggesting to change the names everywhere and not only
-in the cpuidle driver? Please clarify :)
+Yes this is the ideal case.
+
+>=20
+> If a device is making bandwidth votes from itself to some other device, i=
+t just
+> specifies the other end point (as a device? path name?) in icc_get(). The
+> interconnect framework can then figure out what two interconnect ports the
+> icc_get() is about (by looking at the device endpoints info) and then con=
+struct
+> the path.
+>=20
+> But it's not clear how you'll handle the case where a Device-A wants to m=
+ake a
+> bandwidth vote from a Device-B to Device-C. This is necessary for multiple
+> scenarios. Eg: booting a remote proc where the CPU needs to make sure the
+> remote proc has its path to DDR active. icc_get() can't always assume the
+> source is the device making the request. So, I don't think you can omit t=
+he
+> source of the path in the DT binding.
+
+This is one scenario, not various scenarios. For a remote proc why
+wouldn't we list the endpoint for the remote processor in the remote
+proc node in DT? That makes sense to me so I'm not following this
+scenario.
+
+>=20
+> If we take the above into account, would the only change in your proposal=
+ be to
+> list the source and destination device in DT instead of their interconnec=
+t and
+> ports?  I don't have a strong opinion on whether this is necessary, but w=
+ant to
+> make sure that we are all talking about the same thing.
+
+What does this mean? I would assume that if device A is using another
+device B, either that would be expressed in DT via a phandle property or
+userspace would be connecting the two devices up with each other with
+something like dma_buf so the driver would know the other side of the
+path they want to scale bandwidth on.
+
+>=20
+> Another way to look at this: There's one crucial difference between clock=
+s and
+> interconnects. Given a clock controller and it's "output port", the clock=
+ that
+> you referring to doesn't change irrespective of what device is asking for=
+ it.
+> But in the case of an interconnect, if you specify just a destination
+> interconnect and it's port, the path that you are referring to changes ba=
+sed on
+> which device is requesting it. And if you want a device independent of
+> referring to a path, you need to specify the source and destination expli=
+citly.
+
+Yes but those are use-cases that don't need to be expressed in DT. We
+should be able to get by with just listing the endpoints and then build
+the layer in the kernel to get the other side of the endpoint if it's
+something like DDR or another device that we want to connect the
+endpoint to.
+
+>=20
+> Also, if a firmware isn't used, how do you see your icc_get() proposal wo=
+rking
+> with just the "name"? In what way is it better than the current icc_get()=
+ API?
+
+If there isn't firmware and we're using platform data then I imagine we
+would have to have data tables listing out the endpoints of various
+devices, endpoint names, and the device names associated with those
+endpoints so we could match them up in the framework.
+
