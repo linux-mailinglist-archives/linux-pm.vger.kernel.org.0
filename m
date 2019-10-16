@@ -2,212 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF778D8E81
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 12:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7B2D8ED7
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 13:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390479AbfJPKsG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 06:48:06 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52840 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731877AbfJPKsG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 06:48:06 -0400
-Received: from 79.184.255.51.ipv4.supernova.orange.pl (79.184.255.51) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id aa54f32a6c5ccca0; Wed, 16 Oct 2019 12:48:02 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: [RFT][PATCH 3/3] PM: QoS: Drop frequency QoS types from device PM QoS
-Date:   Wed, 16 Oct 2019 12:47:53 +0200
-Message-ID: <3223584.6srSoYZK3A@kreacher>
-In-Reply-To: <2811202.iOFZ6YHztY@kreacher>
-References: <2811202.iOFZ6YHztY@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S2404806AbfJPLDv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 07:03:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:36546 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726083AbfJPLDv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 16 Oct 2019 07:03:51 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8818428;
+        Wed, 16 Oct 2019 04:03:50 -0700 (PDT)
+Received: from usa.arm.com (unknown [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 97F8C3F6C4;
+        Wed, 16 Oct 2019 04:03:49 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] cpufreq: merge arm_big_little and vexpress-spc
+Date:   Wed, 16 Oct 2019 12:03:41 +0100
+Message-Id: <20191016110344.15259-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi,
 
-There are no more active users of DEV_PM_QOS_MIN_FREQUENCY and
-DEV_PM_QOS_MAX_FREQUENCY device PM QoS request types, so drop them
-along with the code supporting them.
+Since vexpress-spc is the sole user of arm_big_little cpufreq driver,
+there's no point in keeping it separate anymore. I wanted to post these
+patches for ages but kept postponing for no reason.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/qos.c |   70 +----------------------------------------------
- include/linux/pm_qos.h   |    8 -----
- 2 files changed, 2 insertions(+), 76 deletions(-)
+Regards,
+Sudeep
 
-Index: linux-pm/include/linux/pm_qos.h
-===================================================================
---- linux-pm.orig/include/linux/pm_qos.h
-+++ linux-pm/include/linux/pm_qos.h
-@@ -34,8 +34,6 @@ enum pm_qos_flags_status {
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
- #define PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE	0
--#define PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE	0
--#define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE	(-1)
- #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
- 
- #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
-@@ -54,8 +52,6 @@ struct pm_qos_flags_request {
- enum dev_pm_qos_req_type {
- 	DEV_PM_QOS_RESUME_LATENCY = 1,
- 	DEV_PM_QOS_LATENCY_TOLERANCE,
--	DEV_PM_QOS_MIN_FREQUENCY,
--	DEV_PM_QOS_MAX_FREQUENCY,
- 	DEV_PM_QOS_FLAGS,
- };
- 
-@@ -97,14 +93,10 @@ struct pm_qos_flags {
- struct dev_pm_qos {
- 	struct pm_qos_constraints resume_latency;
- 	struct pm_qos_constraints latency_tolerance;
--	struct pm_qos_constraints min_frequency;
--	struct pm_qos_constraints max_frequency;
- 	struct pm_qos_flags flags;
- 	struct dev_pm_qos_request *resume_latency_req;
- 	struct dev_pm_qos_request *latency_tolerance_req;
- 	struct dev_pm_qos_request *flags_req;
--	struct dev_pm_qos_request *min_frequency_req;
--	struct dev_pm_qos_request *max_frequency_req;
- };
- 
- /* Action requested to pm_qos_update_target */
-Index: linux-pm/drivers/base/power/qos.c
-===================================================================
---- linux-pm.orig/drivers/base/power/qos.c
-+++ linux-pm/drivers/base/power/qos.c
-@@ -115,20 +115,10 @@ s32 dev_pm_qos_read_value(struct device
- 
- 	spin_lock_irqsave(&dev->power.lock, flags);
- 
--	switch (type) {
--	case DEV_PM_QOS_RESUME_LATENCY:
-+	if (type == DEV_PM_QOS_RESUME_LATENCY) {
- 		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_RESUME_LATENCY_NO_CONSTRAINT
- 			: pm_qos_read_value(&qos->resume_latency);
--		break;
--	case DEV_PM_QOS_MIN_FREQUENCY:
--		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE
--			: pm_qos_read_value(&qos->min_frequency);
--		break;
--	case DEV_PM_QOS_MAX_FREQUENCY:
--		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
--			: pm_qos_read_value(&qos->max_frequency);
--		break;
--	default:
-+	} else {
- 		WARN_ON(1);
- 		ret = 0;
- 	}
-@@ -169,14 +159,6 @@ static int apply_constraint(struct dev_p
- 			req->dev->power.set_latency_tolerance(req->dev, value);
- 		}
- 		break;
--	case DEV_PM_QOS_MIN_FREQUENCY:
--		ret = pm_qos_update_target(&qos->min_frequency,
--					   &req->data.pnode, action, value);
--		break;
--	case DEV_PM_QOS_MAX_FREQUENCY:
--		ret = pm_qos_update_target(&qos->max_frequency,
--					   &req->data.pnode, action, value);
--		break;
- 	case DEV_PM_QOS_FLAGS:
- 		ret = pm_qos_update_flags(&qos->flags, &req->data.flr,
- 					  action, value);
-@@ -227,24 +209,6 @@ static int dev_pm_qos_constraints_alloca
- 	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
- 	c->type = PM_QOS_MIN;
- 
--	c = &qos->min_frequency;
--	plist_head_init(&c->list);
--	c->target_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
--	c->default_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
--	c->no_constraint_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
--	c->type = PM_QOS_MAX;
--	c->notifiers = ++n;
--	BLOCKING_INIT_NOTIFIER_HEAD(n);
--
--	c = &qos->max_frequency;
--	plist_head_init(&c->list);
--	c->target_value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
--	c->default_value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
--	c->no_constraint_value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
--	c->type = PM_QOS_MIN;
--	c->notifiers = ++n;
--	BLOCKING_INIT_NOTIFIER_HEAD(n);
--
- 	INIT_LIST_HEAD(&qos->flags.list);
- 
- 	spin_lock_irq(&dev->power.lock);
-@@ -305,18 +269,6 @@ void dev_pm_qos_constraints_destroy(stru
- 		memset(req, 0, sizeof(*req));
- 	}
- 
--	c = &qos->min_frequency;
--	plist_for_each_entry_safe(req, tmp, &c->list, data.pnode) {
--		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE);
--		memset(req, 0, sizeof(*req));
--	}
--
--	c = &qos->max_frequency;
--	plist_for_each_entry_safe(req, tmp, &c->list, data.pnode) {
--		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
--		memset(req, 0, sizeof(*req));
--	}
--
- 	f = &qos->flags;
- 	list_for_each_entry_safe(req, tmp, &f->list, data.flr.node) {
- 		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
-@@ -428,8 +380,6 @@ static int __dev_pm_qos_update_request(s
- 	switch(req->type) {
- 	case DEV_PM_QOS_RESUME_LATENCY:
- 	case DEV_PM_QOS_LATENCY_TOLERANCE:
--	case DEV_PM_QOS_MIN_FREQUENCY:
--	case DEV_PM_QOS_MAX_FREQUENCY:
- 		curr_value = req->data.pnode.prio;
- 		break;
- 	case DEV_PM_QOS_FLAGS:
-@@ -557,14 +507,6 @@ int dev_pm_qos_add_notifier(struct devic
- 		ret = blocking_notifier_chain_register(dev->power.qos->resume_latency.notifiers,
- 						       notifier);
- 		break;
--	case DEV_PM_QOS_MIN_FREQUENCY:
--		ret = blocking_notifier_chain_register(dev->power.qos->min_frequency.notifiers,
--						       notifier);
--		break;
--	case DEV_PM_QOS_MAX_FREQUENCY:
--		ret = blocking_notifier_chain_register(dev->power.qos->max_frequency.notifiers,
--						       notifier);
--		break;
- 	default:
- 		WARN_ON(1);
- 		ret = -EINVAL;
-@@ -604,14 +546,6 @@ int dev_pm_qos_remove_notifier(struct de
- 		ret = blocking_notifier_chain_unregister(dev->power.qos->resume_latency.notifiers,
- 							 notifier);
- 		break;
--	case DEV_PM_QOS_MIN_FREQUENCY:
--		ret = blocking_notifier_chain_unregister(dev->power.qos->min_frequency.notifiers,
--							 notifier);
--		break;
--	case DEV_PM_QOS_MAX_FREQUENCY:
--		ret = blocking_notifier_chain_unregister(dev->power.qos->max_frequency.notifiers,
--							 notifier);
--		break;
- 	default:
- 		WARN_ON(1);
- 		ret = -EINVAL;
+Sudeep Holla (3):
+  cpufreq: scpi: remove stale/outdated comment about the driver
+  cpufreq: merge arm_big_little and vexpress-spc
+  cpufreq: simplify and remove lots of debug messages
 
+ MAINTAINERS                            |   5 +-
+ drivers/cpufreq/Kconfig.arm            |  12 +-
+ drivers/cpufreq/Makefile               |   2 -
+ drivers/cpufreq/arm_big_little.c       | 658 -------------------------
+ drivers/cpufreq/arm_big_little.h       |  43 --
+ drivers/cpufreq/scpi-cpufreq.c         |   2 -
+ drivers/cpufreq/vexpress-spc-cpufreq.c | 559 ++++++++++++++++++++-
+ 7 files changed, 539 insertions(+), 742 deletions(-)
+ delete mode 100644 drivers/cpufreq/arm_big_little.c
+ delete mode 100644 drivers/cpufreq/arm_big_little.h
 
+--
+2.17.1
 
