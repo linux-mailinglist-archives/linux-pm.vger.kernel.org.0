@@ -2,207 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F321D99D8
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C398D99E9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390839AbfJPTSq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 15:18:46 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44960 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731055AbfJPTSq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 15:18:46 -0400
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 181AA81F0D
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 19:18:46 +0000 (UTC)
-Received: by mail-qk1-f200.google.com with SMTP id g65so24780039qkf.19
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 12:18:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/80yb/oOmyIBcoEfrbikH3HGafwnqok36b0yp7q1QSw=;
-        b=YDV85ZYKckSRc6D7mLWQXrgMeHmi4I80/YlbtFdDpdTqdWpSgz4hehRgWEIe6Kzpt2
-         HxuBOoNZR9U7s+9yRmEsTlF6RWZdpHvKnvBFdTbbgKQ3P8i3RXOa8pl9/nNAeuJmjGmi
-         jkFofFa8FpiUzr/CQ19B9C8eD4+W5btvYzP8uWI3y4blnGt81zclWJsQign/ZfZ01gLC
-         KgVWug0YZXibpPzh31UTBSkWUuc5u6RvQwujyljz1VTTt+7xb7dlpTxCqRGJ76gLU/6q
-         SV7vec3otb3Ch0kAgXJOO10eQEZ3vrbyUsPJbXchXj8aWXgOXsRTKcOhJjE1Wd0dF/g4
-         /6eg==
-X-Gm-Message-State: APjAAAUX3ZnaJe2z2iAxD0vpSjfW4CwArOcqJxyynnb+6gCK0Dhjg7Nm
-        +E9oJaiIFTQnK0hNnHvqp1gY9xNHv0IMraF+sTzZS3glzvCWrSprZCR+muogSQEpDasYQvFjJrP
-        vcWlvTHmYCQzAiOEy7BGbzGwHAEkRoiNKGfU=
-X-Received: by 2002:ac8:2fe5:: with SMTP id m34mr45948270qta.254.1571253525365;
-        Wed, 16 Oct 2019 12:18:45 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqw/3HiT7nhi/MzRf4Tbd+P+DknuXiO46xBf/PXguJN8MQOF7K/dZdL2WHTaARMthMC+YIiwVL37F9mvrRVS8PQ=
-X-Received: by 2002:ac8:2fe5:: with SMTP id m34mr45948248qta.254.1571253525032;
- Wed, 16 Oct 2019 12:18:45 -0700 (PDT)
+        id S2436628AbfJPTVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 15:21:37 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:3226 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403782AbfJPTVh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 15:21:37 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5da76dc50000>; Wed, 16 Oct 2019 12:21:41 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 16 Oct 2019 12:21:36 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 16 Oct 2019 12:21:36 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 16 Oct
+ 2019 19:21:36 +0000
+Received: from tbergstrom-lnx.Nvidia.com (10.124.1.5) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3; Wed, 16 Oct 2019 19:21:35 +0000
+Received: by tbergstrom-lnx.Nvidia.com (Postfix, from userid 1000)
+        id 9AE2542807; Wed, 16 Oct 2019 22:21:33 +0300 (EEST)
+Date:   Wed, 16 Oct 2019 22:21:33 +0300
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/18] Consolidate and improve NVIDIA Tegra CPUIDLE
+ driver(s)
+Message-ID: <20191016192133.GB26038@pdeschrijver-desktop.Nvidia.com>
+References: <20191015170015.1135-1-digetx@gmail.com>
 MIME-Version: 1.0
-References: <20191016144449.24646-1-kherbst@redhat.com> <20191016191424.GA59381@google.com>
-In-Reply-To: <20191016191424.GA59381@google.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Wed, 16 Oct 2019 21:18:32 +0200
-Message-ID: <CACO55ttOJaXKWmKQQbMAQRJHLXF-VtNn58n4BZhFKYmAdfiJjA@mail.gmail.com>
-Subject: Re: [PATCH v3] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191015170015.1135-1-digetx@gmail.com>
+X-NVConfidentiality: public
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1571253701; bh=nroN3FHoFwV3XA6q1YkfsgkTextLKDHjNycGp27ezdc=;
+        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+         X-NVConfidentiality:User-Agent:X-Originating-IP:X-ClientProxiedBy;
+        b=rAGYy4mB0DojFGY14D9t5hauU3YDyjKaDWJhazpYwapaylHOMWi9QJXublk3LJA2O
+         mVVV+r0Nq5wtadsbN1yC5THHsPkRxV35P/1gPPkEIEPBOajMwjafab7MIb4yzvq7CK
+         jzO2SzAWmwc5A+siqUD9bwWi5vFAyksQzsIQqveEFNBY8R3/g6+VYn2MbGHxR1sZ0l
+         55Tp5fjEsm4JXY9dyaXXsVGONqefshME6VNEKE7aJtww7vBcV6hg3LbJA49bg+qf5f
+         yHFE9vIT1X92IxipB6xxW8M1yZxMP93Ih8okg1l5odob8/z+SOI/qGlDLUXb8zJk98
+         H4FzTWA6TrQwA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-but setting the PCI_DEV_FLAGS_NO_D3 flag does prevent using the
-platform means of putting the device into D3cold, right? That's
-actually what should still happen, just the D3hot step should be
-skipped.
+On Tue, Oct 15, 2019 at 07:59:57PM +0300, Dmitry Osipenko wrote:
+> Hello,
+> 
+> This series does the following:
+> 
+>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
+>      into common drivers/cpuidle/ directory.
+> 
+>   2. Enables CPU cluster power-down idling state on Tegra30.
+> 
+> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
+> and of the Tegra's arch code in general. Please review, thanks!
+> 
+> Changelog:
+> 
+> v6: - Addressed request from Thierry Reding to change the way patches are
+>       organized by making changes in a more incremental manner.
+> 
+>     - tegra_sleep_cpu() now checks for the secondary CPUs to be offline
+>       in the "Make outer_disable() open-coded" patch.
+> 
+> v5: - Rebased on a recent linux-next, fixed one minor conflict in Kconfig.
+> 
+>     - Improved commit's message of the "Support CPU cluster power-down state
+>       on Tegra30" patch.
+> 
+>     - The "Support CPU cluster power-down state on Tegra30" patch is also
+>       got split and now there is additional "Make outer_disable() open-coded"
+>       patch.
+> 
+>     - Made minor cosmetic changes to the "Introduce unified driver for
+>       NVIDIA Tegra SoCs" patch by improving error message and renaming
+>       one variable.
+> 
+> v4: - Fixed compilation with !CONFIG_CACHE_L2X0 (and tested that it still
+>       works).
+> 
+>     - Replaced ktime_compare() with ktime_before() in the new driver,
+>       for consistency.
+> 
+> v3: - Addressed review comments that were made by Jon Hunter to v2 by
+>       splitting patches into smaller (and simpler) chunks, better
+>       documenting changes in the commit messages and using proper error
+>       codes in the code.
+> 
+>       Warnings are replaced with a useful error messages in the code of
+>       "Introduce unified driver for NVIDIA Tegra SoCs" patch.
+> 
+>       Secondary CPUs parking timeout increased to 100ms because I found
+>       that it actually may happen to take more than 1ms if CPU is running
+>       on a *very* low frequency.
+> 
+>       Added diagnostic messages that are reporting Flow Controller state
+>       when CPU parking fails.
+> 
+>       Further polished cpuidle driver's code.
+> 
+>       The coupled state entering is now aborted if there is a pending SGI
+>       (Software Generated Interrupt) because it will be lost after GIC's
+>       power-cycling. Like it was done by the old Tegra20 CPUIDLE driver.
+> 
+> v2: - Added patches to enable the new cpuidle driver in the defconfigs:
+> 
+>         ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+>         ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+> 
+>     - Dropped patches that removed CPUIDLE_FLAG_TIMER_STOP from the idling
+>       states because that flag actually doesn't have any negative effects,
+>       but still is correct for the case of a local CPU timer on older Tegra
+>       SoCs:
+> 
+>         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from Tegra114/124 idle-state
+>         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from all states
+> 
+>     - The "Add unified driver for NVIDIA Tegra SoCs" patch got more polish.
+>       Tegra30 and Terga114 states are now squashed into a single common C7
+>       state (following Parker TRM terminology, see 17.2.2.2 Power Management
+>       States), more comments added, etc minor changes.
 
-On Wed, Oct 16, 2019 at 9:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Oct 16, 2019 at 04:44:49PM +0200, Karol Herbst wrote:
-> > Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
-> > states.
-> >
-> > v2: convert to pci_dev quirk
-> >     put a proper technical explanation of the issue as a in-code comment
-> > v3: disable it only for certain combinations of intel and nvidia hardware
-> >
-> > Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: Lyude Paul <lyude@redhat.com>
-> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Cc: Mika Westerberg <mika.westerberg@intel.com>
-> > Cc: linux-pci@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: nouveau@lists.freedesktop.org
-> > ---
-> >  drivers/pci/pci.c    | 11 ++++++++++
-> >  drivers/pci/quirks.c | 52 ++++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/pci.h  |  1 +
-> >  3 files changed, 64 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index b97d9e10c9cc..8e056eb7e6ff 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -805,6 +805,13 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
-> >       return pci_platform_pm ? pci_platform_pm->bridge_d3(dev) : false;
-> >  }
-> >
-> > +static inline bool parent_broken_child_pm(struct pci_dev *dev)
-> > +{
-> > +     if (!dev->bus || !dev->bus->self)
-> > +             return false;
-> > +     return dev->bus->self->broken_nv_runpm && dev->broken_nv_runpm;
-> > +}
-> > +
-> >  /**
-> >   * pci_raw_set_power_state - Use PCI PM registers to set the power state of
-> >   *                        given PCI device
-> > @@ -850,6 +857,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-> >          || (state == PCI_D2 && !dev->d2_support))
-> >               return -EIO;
-> >
-> > +     /* check if the bus controller causes issues */
-> > +     if (state != PCI_D0 && parent_broken_child_pm(dev))
-> > +             return 0;
-> > +
-> >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >
-> >       /*
-> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> > index 44c4ae1abd00..c2f20b745dd4 100644
-> > --- a/drivers/pci/quirks.c
-> > +++ b/drivers/pci/quirks.c
-> > @@ -5268,3 +5268,55 @@ static void quirk_reset_lenovo_thinkpad_p50_nvgpu(struct pci_dev *pdev)
-> >  DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, 0x13b1,
-> >                             PCI_CLASS_DISPLAY_VGA, 8,
-> >                             quirk_reset_lenovo_thinkpad_p50_nvgpu);
-> > +
-> > +/*
-> > + * Some Intel PCIe bridges cause devices to disappear from the PCIe bus after
-> > + * those were put into D3cold state if they were put into a non D0 PCI PM
-> > + * device state before doing so.
-> > + *
-> > + * This leads to various issue different issues which all manifest differently,
-> > + * but have the same root cause:
-> > + *  - AIML code execution hits an infinite loop (as the coe waits on device
-> > + *    memory to change).
-> > + *  - kernel crashes, as all pci reads return -1, which most code isn't able
-> > + *    to handle well enough.
-> > + *  - sudden shutdowns, as the kernel identified an unrecoverable error after
-> > + *    userspace tries to access the GPU.
-> > + *
-> > + * In all cases dmesg will contain at least one line like this:
-> > + * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3'
-> > + * followed by a lot of nouveau timeouts.
-> > + *
-> > + * ACPI code writes bit 0x80 to the not documented PCI register 0x248 of the
-> > + * PCIe bridge controller in order to power down the GPU.
-> > + * Nonetheless, there are other code paths inside the ACPI firmware which use
-> > + * other registers, which seem to work fine:
-> > + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
-> > + *  - 0xb0 bit 0x10 (link disable)
-> > + * Changing the conditions inside the firmware by poking into the relevant
-> > + * addresses does resolve the issue, but it seemed to be ACPI private memory
-> > + * and not any device accessible memory at all, so there is no portable way of
-> > + * changing the conditions.
-> > + *
-> > + * The only systems where this behavior can be seen are hybrid graphics laptops
-> > + * with a secondary Nvidia Pascal GPU. It cannot be ruled out that this issue
-> > + * only occurs in combination with listed Intel PCIe bridge controllers and
-> > + * the mentioned GPUs or if it's only a hw bug in the bridge controller.
-> > + *
-> > + * But because this issue was NOT seen on laptops with an Nvidia Pascal GPU
-> > + * and an Intel Coffee Lake SoC, there is a higher chance of there being a bug
-> > + * in the bridge controller rather than in the GPU.
-> > + *
-> > + * This issue was not able to be reproduced on non laptop systems.
-> > + */
-> > +
-> > +static void quirk_broken_nv_runpm(struct pci_dev *dev)
-> > +{
-> > +     dev->broken_nv_runpm = 1;
->
-> Can you use the existing PCI_DEV_FLAGS_NO_D3 flag for this instead of
-> adding a new flag?
->
-> I would put the parent_broken_child_pm() logic here, if possible,
-> e.g., something like:
->
->   struct pci_dev *bridge = pci_upstream_bridge(dev);
->
->   if (bridge &&
->       bridge->vendor == PCI_VENDOR_ID_INTEL && bridge->device == 0x1901)
->         dev->dev_flags |= PCI_DEV_FLAGS_NO_D3;
->
-> > +}
-> > +DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
-> > +                           PCI_BASE_CLASS_DISPLAY, 16,
-> > +                           quirk_broken_nv_runpm);
-> > +/* kaby lake */
-> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x1901,
-> > +                     quirk_broken_nv_runpm);
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index ac8a6c4e1792..903a0b3a39ec 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -416,6 +416,7 @@ struct pci_dev {
-> >       unsigned int    __aer_firmware_first_valid:1;
-> >       unsigned int    __aer_firmware_first:1;
-> >       unsigned int    broken_intx_masking:1;  /* INTx masking can't be used */
-> > +     unsigned int    broken_nv_runpm:1;      /* some combinations of intel bridge controller and nvidia GPUs break rtd3 */
-> >       unsigned int    io_window_1k:1;         /* Intel bridge 1K I/O windows */
-> >       unsigned int    irq_managed:1;
-> >       unsigned int    has_secondary_link:1;
-> > --
-> > 2.21.0
-> >
+It would be useful to switch the power state terminology to the one used
+for later chips:
+
+LP0 becomes SC7
+LP1 becomes C1
+LP2 becomes CC7
+
+Meaning of these states is as follows
+
+C is a core state:
+
+C1 clock gating
+C2 not defined
+C3 not defined
+C4 not defined
+C5 not defined
+C6 not defined for ARM cores
+C7 power-gating
+
+CC is a CPU cluster C state:
+
+CC1 cluster clock gated
+CC2 not defined
+CC3 fmax@Vmin: not used prior to Tegra186
+CC4: cluster retention: no longer supported
+CC5: not defined
+CC6: cluster power gating
+CC7: cluster rail gating
+
+SC is a System C state:
+
+SC1: not defined
+SC2: not defined
+SC3: not defined
+SC4: not defined
+SC5: not defined
+SC6: not defined
+SC7: VDD_SOC off
+
+Cheers,
+
+Peter.
