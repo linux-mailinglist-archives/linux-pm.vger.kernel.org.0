@@ -2,118 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A86D8AEA
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 10:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C22BD8B01
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 10:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391668AbfJPI1v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 04:27:51 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37325 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391658AbfJPI1v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 04:27:51 -0400
-Received: by mail-pg1-f195.google.com with SMTP id p1so13842683pgi.4
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 01:27:50 -0700 (PDT)
+        id S2388497AbfJPIbb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 04:31:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34114 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726092AbfJPIba (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 04:31:30 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m19so19447098otp.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 01:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZBU8KtWqaPlvm9aGAuLUyV54XDJ4T42xfnXwt2IbHm8=;
-        b=jaTe+Z9SL0l41r3xbeeskPOYmc7zKJ2qW2CcVNLyMJ+gQLe4dCAo4PkjkWGbaL+c0m
-         i+syX0nJ5qzIDEwxSgnMC4xZ5aGfqFF8XIEn3FFlFy4gbRwv0eFQ+3dSlAIVSMq7G4ZP
-         rYHk54WTHVtVLS1SIdW65A58XjG7vn9VQ9JgP2ot90BjseIpHPsmduKA6Lnt4OLFuq3v
-         TmYp9mUdp8GmOSLbVZ17GsE44I+w8D9qQM0PgsoGOBcNzurEN+0JdUM9fIfOXgRBc1Vi
-         tRQicfje5MGgwtZ9e/Nflt0Bx8rP+pq/KtBkHECpDJEjmrBkGJgNQK8AKrW/jMw8xTa3
-         nrTA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TaAko0rHRb4gyBH2lBWVYnJuZHP/kcOSHoWKD/0YW+0=;
+        b=uqwzsV6OK3KphoWbeGbFhcWhYjV9Jubd8rt5VmBD5qSpRmrGE/3/lstncLn/ole9qk
+         j0iwCAs3bdFZeO79+dh2d+v1jLnSkh4ZqDXFOWimb6GQP4pQ4fMiIvbDciukoNihRaIz
+         44kzIDO1nkMbOK9JHJ7CQkkvLHFqk3sXb7/swrQqkv6ZPZvrz6dMvy2Q6FaIRTDOUo7H
+         cNpQD2NKK3jyfPuZUa0bxTCVNQYQlw2zhBKt0kuIOExdefo7hkSiof5+XpOu/aY/Tdck
+         D2gERzMdFQrJsrqYbmF+uudNRJkZHa8oNdDBCU0SQUs9Oi5t6fQTSoA9oWl57XDqapqE
+         Ivjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZBU8KtWqaPlvm9aGAuLUyV54XDJ4T42xfnXwt2IbHm8=;
-        b=PCpxaY1rruyoDyVRygFgFmNb1HePqhLqgc0uEA2MTWEIRLLZOSmnhLoOryk9tzy+7l
-         lvKKrPS5Mdr9IkCdHPbjnZ087bTOKUegAAYYEMA4JSMfBvUREVirSBAt1IjeJ56bkjO8
-         np2Fs3x9sil9GpMpEd4C5y7nMndhMuCE9hMF9EDJ/g7LUosEHrqebaJXbtf7o1jcl7Ss
-         Q/GP0ym2Oz3kPQrxMw4frwsqQjq+gFAVHHw2yKQ7pbv866hshiBFXQvOd2FQkQXq2TaT
-         1jkLra8nUu5t+2Dz0WZY0dX70D+ecpGlMepswGktxJggs/0Ao263qT8jk2B8So5lBEh/
-         BEvw==
-X-Gm-Message-State: APjAAAVSiSevgNMWlpByk1T1tVed4kJx6CO4rsF0+eTxawEJBirRHuwy
-        Lxa+njjqze4W5QEVZwQnX59K2A==
-X-Google-Smtp-Source: APXvYqw2HuEJr6hFR0qslv2UzEWwBhoszStKl4ceu9NlZWQejXp2FiWt/eWTKHoyvc3xDCv3gvPwKA==
-X-Received: by 2002:a17:90a:2425:: with SMTP id h34mr3519628pje.113.1571214469897;
-        Wed, 16 Oct 2019 01:27:49 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id x11sm9580112pja.3.2019.10.16.01.27.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Oct 2019 01:27:49 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 13:57:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH V7 5/7] cpufreq: Register notifiers with the PM QoS
- framework
-Message-ID: <20191016082742.nttzuofes6uds4pu@vireshk-i7>
-References: <5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org>
- <2c7a751a58adb4ce6f345dab9714b924504009b6.1562583394.git.viresh.kumar@linaro.org>
- <a1c503a7-6136-a405-369c-596a680183f2@gmail.com>
- <20191015114637.pcdbs2ctxl4xoxdo@vireshk-i7>
- <CAJZ5v0g3kRfa2WXy=xz3Mj15Pwb5tm1xg=uPODoifnv70O1ORA@mail.gmail.com>
- <CAJZ5v0hxsy3ZKFvtWULHAVog4=3rYQfd3-61A9dNaKeUbiDtrg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TaAko0rHRb4gyBH2lBWVYnJuZHP/kcOSHoWKD/0YW+0=;
+        b=ai7ob8EqMwPINmAlOWd0O70vCjgdLd8Aa8VxR0zdAJxJT7AMLk7AC2DPUKQrZEs5ZH
+         4GP8TEMW+MbZKw9/fN4z2N0SCnWLCHqI3gcM1XLQ05kRDQxFHQ24PIDYp8QATCbpnQqi
+         nZKiHOnsH/Vq3ZMCDCYDER+FEqP4E2wF0gvM4FbFt9O9GelsFuG21JCDXEB0fBYuiU28
+         8921pxqpd+MR7thhASYn3Fkcj/yufs8MLTNvb8qhQOrPO3/QK/gBVymdO8g5XOGjrTO5
+         li86sdfWwJiWNpZUT7wEppkLZeBYGhm5WdXETskivazu61MAOHi/nk51cfjDMy9RRSTn
+         VClQ==
+X-Gm-Message-State: APjAAAXiG1HhY82DKki2zW/zSaOE4PXVbyK2Izd6wGhKYqtWVP+hpEm5
+        SG/ldJeSMm3V5jzlQnQsQN38G5YhAa78xr6b/bnyKROG
+X-Google-Smtp-Source: APXvYqzjLLdNQ3WjVdvOT/4N0uavAJR6Mv4Jgxn5lrygES8vBTMlSZ0M5fHGe1wdjBwZwcW06xlKs32f4hJ3sJgiAfQ=
+X-Received: by 2002:a9d:344a:: with SMTP id v68mr33650170otb.85.1571214688147;
+ Wed, 16 Oct 2019 01:31:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hxsy3ZKFvtWULHAVog4=3rYQfd3-61A9dNaKeUbiDtrg@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20191015162300.22024-1-brgl@bgdev.pl> <20191015162300.22024-5-brgl@bgdev.pl>
+ <20191015191837.jd6lbk3qbsmzuwfu@earth.universe>
+In-Reply-To: <20191015191837.jd6lbk3qbsmzuwfu@earth.universe>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 16 Oct 2019 10:31:17 +0200
+Message-ID: <CAMpxmJXH6k7PqEE_VfRZ-k1eL+7NSPRuZY8yP8XbYzgVdOAvJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: power: max77650: convert the binding
+ document to yaml
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-10-19, 23:50, Rafael J. Wysocki wrote:
-> On Tue, Oct 15, 2019 at 5:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-
-> > > - Update QoS framework with the knowledge of related CPUs, this has been pending
-> > >   until now from my side. And this is the thing we really need to do. Eventually
-> > >   we shall have only a single notifier list for all CPUs of a policy, at least
-> > >   for MIN/MAX frequencies.
+wt., 15 pa=C5=BA 2019 o 21:18 Sebastian Reichel <sre@kernel.org> napisa=C5=
+=82(a):
+>
+> Hi,
+>
+> On Tue, Oct 15, 2019 at 06:22:58PM +0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > >
-> > - Move the PM QoS requests and notifiers to the new policy CPU on all
-> > changes of that.  That is, when cpufreq_offline() nominates the new
-> > "leader", all of the QoS stuff for the policy needs to go to this one.
-> 
-> Alas, that still will not work, because things like
-> acpi_processor_ppc_init() only work accidentally for one-CPU policies.
+> > Convert the binding document for MAX77650 charger module to YAML.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > ---
+>
+> Looks sensible to me. Assuming this goes through Rob:
+>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
 
-I am not sure what problem you see here ? Can you please explain a bit more.
+Oops, I added your ack for v1 to the leds patch in v2 by mistake.
+There'll be a v3 though so no worries.
 
-> Generally, adding such a PM QoS request to a non-policy CPU simply has
-> no effect until it becomes a policy CPU which may be never.
+Thanks!
+Bart
 
-I was thinking maybe we can read the constraints for all CPUs in the
-policy->cpus mask in cpufreq_set_policy() and so this part of the problem will
-just go away. The only part that would be left is to remove the QoS constraints
-properly.
-
-> It looks like using device PM QoS for cpufreq is a mistake in general
-> and what is needed is a struct pm_qos_constraints member in struct
-> cpufreq_policy and something like
-> 
-> struct freq_pm_qos_request {
->         enum freq_pm_qos_req_type type; /* min or max */
->         struct plist_node pnode;
->         struct cpufreq_policy *policy;
-> };
-> 
-> Then, pm_qos_update_target() can be used for adding, updating and
-> removing requests.
-
--- 
-viresh
+>
+> -- Sebastian
+>
+> >  .../power/supply/max77650-charger.txt         | 29 +------------
+> >  .../power/supply/max77650-charger.yaml        | 42 +++++++++++++++++++
+> >  2 files changed, 43 insertions(+), 28 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/power/supply/max7=
+7650-charger.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/supply/max77650-ch=
+arger.txt b/Documentation/devicetree/bindings/power/supply/max77650-charger=
+.txt
+> > index e6d0fb6ff94e..fbab7d3ac8e3 100644
+> > --- a/Documentation/devicetree/bindings/power/supply/max77650-charger.t=
+xt
+> > +++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.t=
+xt
+> > @@ -1,28 +1 @@
+> > -Battery charger driver for MAX77650 PMIC from Maxim Integrated.
+> > -
+> > -This module is part of the MAX77650 MFD device. For more details
+> > -see Documentation/devicetree/bindings/mfd/max77650.txt.
+> > -
+> > -The charger is represented as a sub-node of the PMIC node on the devic=
+e tree.
+> > -
+> > -Required properties:
+> > ---------------------
+> > -- compatible:                Must be "maxim,max77650-charger"
+> > -
+> > -Optional properties:
+> > ---------------------
+> > -- input-voltage-min-microvolt:       Minimum CHGIN regulation voltage.=
+ Must be one
+> > -                             of: 4000000, 4100000, 4200000, 4300000,
+> > -                             4400000, 4500000, 4600000, 4700000.
+> > -- input-current-limit-microamp:      CHGIN input current limit (in mic=
+roamps). Must
+> > -                             be one of: 95000, 190000, 285000, 380000,
+> > -                             475000.
+> > -
+> > -Example:
+> > ---------
+> > -
+> > -     charger {
+> > -             compatible =3D "maxim,max77650-charger";
+> > -             input-voltage-min-microvolt =3D <4200000>;
+> > -             input-current-limit-microamp =3D <285000>;
+> > -     };
+> > +This file was moved to max77650-charger.yaml.
+> > diff --git a/Documentation/devicetree/bindings/power/supply/max77650-ch=
+arger.yaml b/Documentation/devicetree/bindings/power/supply/max77650-charge=
+r.yaml
+> > new file mode 100644
+> > index 000000000000..9dd0dad0f948
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/supply/max77650-charger.y=
+aml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/supply/max77650-charger.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Battery charger driver for MAX77650 PMIC from Maxim Integrated.
+> > +
+> > +maintainers:
+> > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > +
+> > +description: |
+> > +  This module is part of the MAX77650 MFD device. For more details
+> > +  see Documentation/devicetree/bindings/mfd/max77650.txt.
+> > +
+> > +  The charger is represented as a sub-node of the PMIC node on the dev=
+ice tree.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: maxim,max77650-charger
+> > +
+> > +  input-voltage-min-microvolt:
+> > +    description:
+> > +      Minimum CHGIN regulation voltage.
+> > +    enum: [ 4000000, 4100000, 4200000, 4300000,
+> > +            4400000, 4500000, 4600000, 4700000 ]
+> > +
+> > +  input-current-limit-microamp:
+> > +    description:
+> > +      CHGIN input current limit (in microamps).
+> > +    enum: [ 95000, 190000, 285000, 380000, 475000 ]
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +examples:
+> > +  - |
+> > +    charger {
+> > +        compatible =3D "maxim,max77650-charger";
+> > +        input-voltage-min-microvolt =3D <4200000>;
+> > +        input-current-limit-microamp =3D <285000>;
+> > +    };
+> > --
+> > 2.23.0
+> >
