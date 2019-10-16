@@ -2,96 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A486D86CF
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 05:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01404D87A9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 06:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfJPDiQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Oct 2019 23:38:16 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44850 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727688AbfJPDiN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Oct 2019 23:38:13 -0400
-Received: by mail-pg1-f196.google.com with SMTP id e10so9416748pgd.11
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 20:38:13 -0700 (PDT)
+        id S2389672AbfJPE5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 00:57:33 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40912 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389475AbfJPE5d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 00:57:33 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x127so13897522pfb.7
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 21:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xDw1E+VxBs/5UND1mf/klt16slydi9JotBXF01e+CRk=;
-        b=kyDL16WHaN2o9selPh6MHGPHfV+X7wEq0FllVlq4/AMM/N0LVOftGKRuCwqzhga1Hd
-         cdN+t0MyQmeFRJ5bf/XbDXmItS0ZWVX7UiLiUci5QgPuJ0pmI/mAIAOhsVOExjXSLXDk
-         WCFFMMunb9/gDv9fzRuwcEBPTAfrgn2BIMd7bsPFc9ZEvqcn3DgN99CzDKWE1tGebs5x
-         6vF/R0l5IS2cpf/QJz71tCyEslIqkHo+nXy2rjOCY8UdaKI5fPfbIO9owHZ/WIva3dDB
-         ++BCPIgmNCv0Mm2uFmWjsB7CWPUdt7AcPg514jBVxgt4Lt/OWXlHaApJAdDUsRfJPF9d
-         J/LA==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:from:to:cc:subject:user-agent:date;
+        bh=FkcYsvQW9DCuO8FIIta+BX8R8j3WmMX3n+DnEou1u9g=;
+        b=NoX42E5tQHVBX2OTb84UT4yoQagDGL6lXFej+SixelM0Ct41ZVJI1RMIC/j+1lUZNa
+         lnxJvH2oF61wdUQigS9UL5pQrhOOINYGTmxZzVz9TYtn4wiFPvzBmWfkitgiOMtFwrd7
+         z5NVofZHgl4NFe3uoZOyIcfHbz8IO2dAjIT6E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xDw1E+VxBs/5UND1mf/klt16slydi9JotBXF01e+CRk=;
-        b=IPR+wa/LOEhD4tHtipbLHB9L5Xmf1SkO71W/0NkpoB70krORIvZ2/jCPDddQ7fJXNy
-         1SFYldYMyl3pLXGxJkaw5I/NKCxd5THBek3IqTQs+m3hXXox5JZ76miGBGAYQyPGk78m
-         3pVl5Px0Oru3cjBGiLzaF3kuey5HtQg/q1tishZNp+NRIAGmDtEizKyS0/8frfQPbGZR
-         TWlYYhsWtXIgoxvsiHS4cxHE2X6ihPTwwpul9h7909blC6Yp0Bctqvv6QsZIVcT3x5bv
-         1o6/NzrxOhdAcJXXnxmEOnzj9i9PyRK1ZqjncK+aW6vimrSfjXwV/LvG0773pJFzkKJO
-         Cqjw==
-X-Gm-Message-State: APjAAAXRDrRuw60AweWDB0BMxLC2jLunRU6bw3zrNrvTstm7uouY06Z8
-        KEMg7hOq63JuXq7Kej7FbmPegw==
-X-Google-Smtp-Source: APXvYqxIMFWNe/yMHUCIaIMu64JgM3ECcEsbE/RT/QAxjCKzVVSrI8MfKrdZOI2NiD63SyqLmhqvNQ==
-X-Received: by 2002:aa7:9ed2:: with SMTP id r18mr41382466pfq.1.1571197092543;
-        Tue, 15 Oct 2019 20:38:12 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id y17sm32299937pfo.171.2019.10.15.20.38.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Oct 2019 20:38:10 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 09:08:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH] ACPI: processor: Avoid NULL pointer dereferences at init
- time
-Message-ID: <20191016033808.uqgc4ss6xcg4ta5v@vireshk-i7>
-References: <9765491.cFa8AugBjT@kreacher>
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
+         :user-agent:date;
+        bh=FkcYsvQW9DCuO8FIIta+BX8R8j3WmMX3n+DnEou1u9g=;
+        b=XEdY5sL4wpagise/PDHjgteBtgqrHPSonWVjouvArMX1BXNikYK2ahahMeelwWMfLA
+         0iF3pevY5Gst1DDNlpVvzej0yb0XXhAUpDkPEMfd7PPJC2+1KTkAPJy95+S5FROCQfVs
+         Z9oQjlOyo9ZxorXa37HXIgvN8JU0OPUUvRi3CtG6xU5rfLpi16xOuWzylxD9swSJN7ah
+         eRkOfI2PGhCYutIeLRv4wKTaYc9aN0onicrjlogVpAUSKo0ZGxOEHaaXFn/7TQQOEc8d
+         SBqUjXn1DS+iWZCTjiA3dtBbo7hA9ZzcUOo3/BThk6aVAV8axThJGFAYRwXUSdEszeWo
+         nSxw==
+X-Gm-Message-State: APjAAAVqSiHpSNGMNcUx9IoG9bzquOOUa/REipgF0vd5CJA4VjauMC7v
+        vBOmNw7YmHcW0y81wR3RcQ9EmQ==
+X-Google-Smtp-Source: APXvYqxpDxQimqJ2TytuIDDL1ryHC0bnU/A4itgozpPrv7HJksahoeyOtkc6JvrgH5YBZC/kupezMA==
+X-Received: by 2002:a63:6a03:: with SMTP id f3mr1856640pgc.167.1571201852446;
+        Tue, 15 Oct 2019 21:57:32 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id k23sm25002741pgi.49.2019.10.15.21.57.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 21:57:31 -0700 (PDT)
+Message-ID: <5da6a33b.1c69fb81.64cc.6834@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9765491.cFa8AugBjT@kreacher>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
+References: <cover.1571181041.git.amit.kucheria@linaro.org> <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH] of-thermal: Disable polling when interrupt property is found in DT
+User-Agent: alot/0.8.1
+Date:   Tue, 15 Oct 2019 21:57:30 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-10-19, 19:35, Rafael J. Wysocki wrote:
-> rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If there are neither processor objects nor processor device objects
-> in the ACPI tables, the per-CPU processors table will not be
-> initialized and attempting to dereference pointers from there will
-> cause the kernel to crash.  This happens in acpi_processor_ppc_init()
-> and acpi_thermal_cpufreq_init() after commit d15ce412737a ("ACPI:
-> cpufreq: Switch to QoS requests instead of cpufreq notifier")
-> which didn't add the requisite NULL pointer checks in there.
-> 
-> Add the NULL pointer checks to acpi_processor_ppc_init() and
-> acpi_thermal_cpufreq_init(), and to the corresponding "exit"
-> routines.
-> 
-> While at it, drop redundant return instructions from
-> acpi_processor_ppc_init() and acpi_thermal_cpufreq_init().
-> 
-> Fixes: d15ce412737a ("ACPI: cpufreq: Switch to QoS requests instead of cpufreq notifier")
-> Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Quoting Amit Kucheria (2019-10-15 16:13:16)
+> Currently, in order to enable interrupt-only mode, one must set
+> polling-delay-passive and polling-delay properties in the DT to 0,
+> otherwise the thermal framework will continue to setup a periodic timers
+> to monitor the thermal zones.
+>=20
+> Change the behaviour, so that on DT-based systems, we no longer have to
+> set the properties to zero if we find an 'interrupt' property in the
+> sensor.
+>=20
+> Following data shows the number of times
+> thermal_zone_device_set_polling() is invoked with and without this
+> patch. So the patch achieves the same behaviour as setting the delay
+> properties to 0.
+>=20
+> Current behaviour (without setting delay properties to 0):
+>   FUNC                              COUNT
+>   thermal_zone_device_update          302
+>   thermal_zone_device_set_pollin     7911
+
+thermal_zone_device_set_polling?
+
+>=20
+> Current behaviour (with delay properties set to 0):
+>   FUNC                              COUNT
+>   thermal_zone_device_update            3
+>   thermal_zone_device_set_pollin        6
+>=20
+> With this patch (without setting delay properties to 0):
+>   FUNC                              COUNT
+>   thermal_zone_device_update            3
+>   thermal_zone_device_set_pollin        6
+>=20
+> Suggested-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  drivers/acpi/processor_perflib.c |   10 ++++++----
->  drivers/acpi/processor_thermal.c |   10 ++++++----
->  2 files changed, 12 insertions(+), 8 deletions(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
--- 
-viresh
