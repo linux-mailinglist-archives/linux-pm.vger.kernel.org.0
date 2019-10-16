@@ -2,103 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01404D87A9
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 06:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4D6D87D3
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 07:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389672AbfJPE5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 00:57:33 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40912 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389475AbfJPE5d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 00:57:33 -0400
-Received: by mail-pf1-f193.google.com with SMTP id x127so13897522pfb.7
-        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 21:57:33 -0700 (PDT)
+        id S1726842AbfJPFNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 01:13:42 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42245 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726298AbfJPFNm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 01:13:42 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f14so8424493pgi.9
+        for <linux-pm@vger.kernel.org>; Tue, 15 Oct 2019 22:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:from:to:cc:subject:user-agent:date;
-        bh=FkcYsvQW9DCuO8FIIta+BX8R8j3WmMX3n+DnEou1u9g=;
-        b=NoX42E5tQHVBX2OTb84UT4yoQagDGL6lXFej+SixelM0Ct41ZVJI1RMIC/j+1lUZNa
-         lnxJvH2oF61wdUQigS9UL5pQrhOOINYGTmxZzVz9TYtn4wiFPvzBmWfkitgiOMtFwrd7
-         z5NVofZHgl4NFe3uoZOyIcfHbz8IO2dAjIT6E=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=w+Rj9dDSu4Prlbf7aohHd+8lxC4U2wt8p6F4POWRpt8=;
+        b=qJMe9z87QwXlwlOeBABdBYMVJvXMNjg8iOqa73HijnEX8AuDrSIp1A6WWgQDbiS4N6
+         /xRt5gqnGLLUJHcPK1EHNb9U/G8bv9WDNNUSrfATjZqSf/wuOaI2IuRrlTnneAVlBlSv
+         1mW9oCAnlRrsEmfNf6MN0WlqIBhmmWZ5AGgX8hbwka6xRHrormrpqzhVBKVJAWe+G3x2
+         uY4R96H4PT8tSdVFYSzTvPCI+QH6rM6n5aLW2OQvvneC2/+hdkygZhj5bKXaOYNKbl0P
+         wOu/rnuRHiqokIMAI5B8hAS2jyptFyVjrJYj97V7iq+0/l+iSkdo5WBsotUxB/UC05nf
+         m8Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
-         :user-agent:date;
-        bh=FkcYsvQW9DCuO8FIIta+BX8R8j3WmMX3n+DnEou1u9g=;
-        b=XEdY5sL4wpagise/PDHjgteBtgqrHPSonWVjouvArMX1BXNikYK2ahahMeelwWMfLA
-         0iF3pevY5Gst1DDNlpVvzej0yb0XXhAUpDkPEMfd7PPJC2+1KTkAPJy95+S5FROCQfVs
-         Z9oQjlOyo9ZxorXa37HXIgvN8JU0OPUUvRi3CtG6xU5rfLpi16xOuWzylxD9swSJN7ah
-         eRkOfI2PGhCYutIeLRv4wKTaYc9aN0onicrjlogVpAUSKo0ZGxOEHaaXFn/7TQQOEc8d
-         SBqUjXn1DS+iWZCTjiA3dtBbo7hA9ZzcUOo3/BThk6aVAV8axThJGFAYRwXUSdEszeWo
-         nSxw==
-X-Gm-Message-State: APjAAAVqSiHpSNGMNcUx9IoG9bzquOOUa/REipgF0vd5CJA4VjauMC7v
-        vBOmNw7YmHcW0y81wR3RcQ9EmQ==
-X-Google-Smtp-Source: APXvYqxpDxQimqJ2TytuIDDL1ryHC0bnU/A4itgozpPrv7HJksahoeyOtkc6JvrgH5YBZC/kupezMA==
-X-Received: by 2002:a63:6a03:: with SMTP id f3mr1856640pgc.167.1571201852446;
-        Tue, 15 Oct 2019 21:57:32 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id k23sm25002741pgi.49.2019.10.15.21.57.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 21:57:31 -0700 (PDT)
-Message-ID: <5da6a33b.1c69fb81.64cc.6834@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
-References: <cover.1571181041.git.amit.kucheria@linaro.org> <1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=w+Rj9dDSu4Prlbf7aohHd+8lxC4U2wt8p6F4POWRpt8=;
+        b=ME5rI2V5lreaC6PJOsrUEkyjN0vSCWQf7orYTK7M+Up8OJTkNnSu6e5onS8Axu5gSz
+         RH91wbAMja6nSJX9UbcNiafmKjCnKXqvNZ7qaGgqKZdVOcmuQ3ziQWWfBupluL8RPyLj
+         LAFOQd5dub++j9bjKYoo/OoBKwuRVuiEuHcesHSXJdk42w0SRY5NNptfy02kM1Xa1rOr
+         Yct746lFQhRikkfpTA34HSEXcvJ0zMIRKx0lBVmU1u67GM1lMacE1xwZv1k/maEilFzz
+         96bExP/q7bKG3c13sNsGE2WYlawx2nxe7KNkOCnhcEcgCgG0y9JtiJaa7gTLrgAzGin9
+         boUQ==
+X-Gm-Message-State: APjAAAXsRcT7M9YGDPWuvSyalLioyom3bJqbEo+bgSCMKTjTncDBA5+a
+        BM9bRDWrlO799Pa960NONtGTmQ==
+X-Google-Smtp-Source: APXvYqxuNTGN2Dq2fak0p1ansmU90Xg0vdIQGYqqBDnCMBnDUbyxkrVukendgHwS0p5cV7WGoEEDjw==
+X-Received: by 2002:a17:90a:6346:: with SMTP id v6mr2652941pjs.4.1571202819923;
+        Tue, 15 Oct 2019 22:13:39 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id o11sm20085141pgp.13.2019.10.15.22.13.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Oct 2019 22:13:38 -0700 (PDT)
+Date:   Wed, 16 Oct 2019 10:43:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH] of-thermal: Disable polling when interrupt property is found in DT
-User-Agent: alot/0.8.1
-Date:   Tue, 15 Oct 2019 21:57:30 -0700
+Subject: Re: [PATCH v1 06/17] dt-bindings: cpufreq: Add binding for NVIDIA
+ Tegra20/30
+Message-ID: <20191016051336.oeyz56sdh3cae5yn@vireshk-i7>
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191015211618.20758-7-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015211618.20758-7-digetx@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Amit Kucheria (2019-10-15 16:13:16)
-> Currently, in order to enable interrupt-only mode, one must set
-> polling-delay-passive and polling-delay properties in the DT to 0,
-> otherwise the thermal framework will continue to setup a periodic timers
-> to monitor the thermal zones.
->=20
-> Change the behaviour, so that on DT-based systems, we no longer have to
-> set the properties to zero if we find an 'interrupt' property in the
-> sensor.
->=20
-> Following data shows the number of times
-> thermal_zone_device_set_polling() is invoked with and without this
-> patch. So the patch achieves the same behaviour as setting the delay
-> properties to 0.
->=20
-> Current behaviour (without setting delay properties to 0):
->   FUNC                              COUNT
->   thermal_zone_device_update          302
->   thermal_zone_device_set_pollin     7911
-
-thermal_zone_device_set_polling?
-
->=20
-> Current behaviour (with delay properties set to 0):
->   FUNC                              COUNT
->   thermal_zone_device_update            3
->   thermal_zone_device_set_pollin        6
->=20
-> With this patch (without setting delay properties to 0):
->   FUNC                              COUNT
->   thermal_zone_device_update            3
->   thermal_zone_device_set_pollin        6
->=20
-> Suggested-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+On 16-10-19, 00:16, Dmitry Osipenko wrote:
+> Add device-tree binding that describes CPU frequency-scaling hardware
+> found on NVIDIA Tegra20/30 SoCs.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
+>  .../cpufreq/nvidia,tegra20-cpufreq.txt        | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> new file mode 100644
+> index 000000000000..daeca6ae6b76
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> @@ -0,0 +1,56 @@
+> +Binding for NVIDIA Tegra20 CPUFreq
+> +==================================
+> +
+> +Required properties:
+> +- clocks: Must contain an entry for the CPU clock.
+> +  See ../clocks/clock-bindings.txt for details.
+> +- operating-points-v2: See ../bindings/opp/opp.txt for details.
+> +- #cooling-cells: Should be 2. See ../thermal/thermal.txt for details.
+> +
+> +For each opp entry in 'operating-points-v2' table:
+> +- opp-supported-hw: Two bitfields indicating:
+> +	On Tegra20:
+> +	1. CPU process ID mask
+> +	2. SoC speedo ID mask
+> +
+> +	On Tegra30:
+> +	1. CPU process ID mask
+> +	2. CPU speedo ID mask
+> +
+> +	A bitwise AND is performed against these values and if any bit
+> +	matches, the OPP gets enabled.
+> +
+> +- opp-microvolt: CPU voltage triplet.
+> +
+> +Optional properties:
+> +- cpu-supply: Phandle to the CPU power supply.
+> +
+> +Example:
+> +	regulators {
+> +		cpu_reg: regulator0 {
+> +			regulator-name = "vdd_cpu";
+> +		};
+> +	};
+> +
+> +	cpu0_opp_table: opp_table0 {
+> +		compatible = "operating-points-v2";
+> +
+> +		opp@456000000 {
+> +			clock-latency-ns = <125000>;
+> +			opp-microvolt = <825000 825000 1125000>;
+> +			opp-supported-hw = <0x03 0x0001>;
+> +			opp-hz = /bits/ 64 <456000000>;
+> +		};
+> +
+> +		...
+> +	};
+> +
+> +	cpus {
+> +		cpu@0 {
+> +			compatible = "arm,cortex-a9";
+> +			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
+> +			operating-points-v2 = <&cpu0_opp_table>;
+> +			cpu-supply = <&cpu_reg>;
+> +			#cooling-cells = <2>;
+> +		};
+> +	};
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+LGTM.
 
+-- 
+viresh
