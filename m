@@ -2,92 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 509E0D9799
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 18:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2F6D97A3
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 18:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406388AbfJPQjF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 12:39:05 -0400
-Received: from mail-pf1-f169.google.com ([209.85.210.169]:43446 "EHLO
-        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406386AbfJPQjE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 12:39:04 -0400
-Received: by mail-pf1-f169.google.com with SMTP id a2so15052590pfo.10
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 09:39:02 -0700 (PDT)
+        id S2391515AbfJPQkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 12:40:25 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:55899 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388542AbfJPQkZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 12:40:25 -0400
+Received: by mail-qt1-f201.google.com with SMTP id o34so25449677qtf.22
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 09:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=uj62At7arnilFOJJbl5N7a5EkMRk8gmjDj29tsswWIE=;
-        b=rBya5PBO6sZHChGDQpT99l/deboFxP1XaW8i/9Ff0L5lelkWO7f2RuzRS3/wLiXWVb
-         XjdRwrYeSFsiAoPnxaDseJgPW0UZlbFWO5u33OaphuTGKfM2k7rEFGs8wPKGYjYIE49h
-         dORi5YyWTorA+d6D6zuQRS+tX15uEph0kH8P5A2mxeJLAIjUm3w6yQJ6yGrHKsH+OVDE
-         TlP3iEvahZXKpwACmvuRDomjXkvEREPVhWSABCM+nEe2wRs+zIvkicRGDPQep9OMWLF9
-         YI3u2S5W/FmHu/LpjWTcKfjs+P2CCCQ4Hqi4PYUuRYqGerDiMmRFcFHJDVsMeWEGscu6
-         C3bQ==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=KmHAeCmiFOkBGaykqemUU3bu3MBT3SFq3fZo9SBLQA0=;
+        b=tx1xZc+0ttcNVyH6dgx0gO8wsgU0mihhPb+RiRKk+HcpECEXVmWlY8ozvaLkS0c50k
+         Ywlq/bCBFMCPCSHKDA3Z6Y64vl8kk+svg+xx2YbIoTMUOOCat0suCVcNT5sXBIm8XwaF
+         HMHDlRDKFfqAY/4KYZorMk9ujRtgRT51qri49NfKncCMyk0qoZwZHw2lG6ixBpFh4229
+         ntO0JrbnM9BZLlJo2W0Mt3yzCkWcTJDcF7JBRyG6IVOVOQN+CieokpQikeA+vCV4mDfI
+         THn6AsxJVslMxe+YSBK42QP4GY37vFyKPhH7U5rfE41zqzo70nu9aOd1M7KBi0DPcsR/
+         Arkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=uj62At7arnilFOJJbl5N7a5EkMRk8gmjDj29tsswWIE=;
-        b=lUia1sJtw4cXwb1xrog1E+tRh8OSDxfKtsZj40RA+T/1i4bhHD9RgTuP5dbxwHpcwX
-         zuoLAQJEN8/P2x28rdjEqbpmZNI+SsYya1ewFnj/4npEJN8pr6g+NsIJHQy8+egmT0FC
-         PS631Rep0uSDav4FyqFFvrwtWDE64x5gxdAh0LBqVp13S73YHlal850Sh7rvO0C7ZTJ7
-         fjJmavGg1sgGUS8l3UTsooROZrHcGqYmyO24MxQy6qa9w3k8BFxBiTJhMQfZL6NP0uij
-         IeioJs214Yj+oDm1KFfMAyKeQtKTZj87+IewkzoNjrlIWQByyvzpqCRMwL3uPkWyeW4M
-         dOFw==
-X-Gm-Message-State: APjAAAV5nzwp5COAOgfaByeKEXUIDybNM6+XbJrzz2oFdnK0E0gyU1Om
-        X1OpHgO5R4btWKdRXV3FjoLy+Q==
-X-Google-Smtp-Source: APXvYqy7cm/gQHTfBaihNUxg/kpuNUjJHhY1iUPuIbJzt/XJ4Le3qA+lNeFhKinPwgh0xJasS1A49w==
-X-Received: by 2002:a17:90a:2ec5:: with SMTP id h5mr6266957pjs.87.1571243941981;
-        Wed, 16 Oct 2019 09:39:01 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id z4sm29661708pfn.45.2019.10.16.09.39.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Oct 2019 09:39:01 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     edubezval@gmail.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        amit.kucheria@linaro.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org
-Subject: Re: [PATCH v7 0/7] Add support of New Amlogic temperature sensor for G12 SoCs
-In-Reply-To: <20191004090114.30694-1-glaroque@baylibre.com>
-References: <20191004090114.30694-1-glaroque@baylibre.com>
-Date:   Wed, 16 Oct 2019 09:39:00 -0700
-Message-ID: <7hwod4fxwb.fsf@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=KmHAeCmiFOkBGaykqemUU3bu3MBT3SFq3fZo9SBLQA0=;
+        b=ZLSdvvxBC/rz5OYHBbUwRRpMne0zr6gk5Q76eLDhWxzcSXtQMIYWo66PAH4SUtnGxK
+         R/HJ634LGUqlOyIGCiVc/PvBAC5+8Cg3o5CXwgi2TcETDYRY9pVboNWgWlSx2s9SnKPZ
+         goGPZYqZL/rVTjneloV4qXFKJ0YYU0ngYRbnmKZkDj+kBl01nosp1rEnuHFlc7sfqaS3
+         b6Eysa3LdmtfXFuZttHnXNKM4AB3X9fT6gRatIUCnqIHz1vIaZdEkB9iozDCQQq/x1oK
+         fIunKdO45MS5x1uHAAtzQsKiWlhjYtDud1f81cpgrjUH6iqAuHGCeNYw+B2pzWh1GrSA
+         98rg==
+X-Gm-Message-State: APjAAAU2v4rmPm7FkBbC6zDXm4IRZkUrmGvucTzTpTy3oZwMjGhLjdr/
+        DgqrjEMu0G3QSYFvWOlEEZ4fGaQ=
+X-Google-Smtp-Source: APXvYqwGTx11wWIRQ2TebiUDv/eQwz/FhNoBpywwJ2gXee0Ud1aGImugAy/hl95BaQVi8snymnd9ldk=
+X-Received: by 2002:ad4:4448:: with SMTP id l8mr20707050qvt.102.1571244023109;
+ Wed, 16 Oct 2019 09:40:23 -0700 (PDT)
+Date:   Wed, 16 Oct 2019 09:40:07 -0700
+Message-Id: <20191016164014.146868-1-wvw@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
+Subject: [PATCH] thermal: update header and documentation
+From:   Wei Wang <wvw@google.com>
+Cc:     wei.vince.wang@gmail.com, Wei Wang <wvw@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Eduardo,
+The commit commit f991de53a8ab ("thermal: make device_register's type
+argument const") changed APIs, but only when CONFIG_THERMAL enabled case.
 
-Guillaume La Roque <glaroque@baylibre.com> writes:
+This patch is partial from https://lkml.org/lkml/2019/5/14/631 which
+tries to address the same concern,
 
-> This patchs series add support of New Amlogic temperature sensor and minimal
-> thermal zone for SEI510 and ODROID-N2 boards.
+Signed-off-by: Wei Wang <wvw@google.com>
+---
+ Documentation/driver-api/thermal/sysfs-api.rst | 4 ++--
+ include/linux/thermal.h                        | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-[...]
+diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+index fab2c9b36d08..0ef337417922 100644
+--- a/Documentation/driver-api/thermal/sysfs-api.rst
++++ b/Documentation/driver-api/thermal/sysfs-api.rst
+@@ -39,7 +39,7 @@ temperature) and throttle appropriate devices.
+     ::
+ 
+ 	struct thermal_zone_device
+-	*thermal_zone_device_register(char *type,
++	*thermal_zone_device_register(const char *type,
+ 				      int trips, int mask, void *devdata,
+ 				      struct thermal_zone_device_ops *ops,
+ 				      const struct thermal_zone_params *tzp,
+@@ -221,7 +221,7 @@ temperature) and throttle appropriate devices.
+     ::
+ 
+ 	struct thermal_cooling_device
+-	*thermal_cooling_device_register(char *name,
++	*thermal_cooling_device_register(const char *name,
+ 			void *devdata, struct thermal_cooling_device_ops *)
+ 
+     This interface function adds a new thermal cooling device (fan/processor/...)
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index e45659c75920..ee235a29294e 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -501,12 +501,12 @@ static inline void thermal_zone_device_update(struct thermal_zone_device *tz,
+ static inline void thermal_zone_set_trips(struct thermal_zone_device *tz)
+ { }
+ static inline struct thermal_cooling_device *
+-thermal_cooling_device_register(char *type, void *devdata,
++thermal_cooling_device_register(const char *type, void *devdata,
+ 	const struct thermal_cooling_device_ops *ops)
+ { return ERR_PTR(-ENODEV); }
+ static inline struct thermal_cooling_device *
+-thermal_of_cooling_device_register(struct device_node *np,
+-	char *type, void *devdata, const struct thermal_cooling_device_ops *ops)
++thermal_of_cooling_device_register(struct device_node *np, const char *type,
++	void *devdata, const struct thermal_cooling_device_ops *ops)
+ { return ERR_PTR(-ENODEV); }
+ static inline struct thermal_cooling_device *
+ devm_thermal_of_cooling_device_register(struct device *dev,
+-- 
+2.23.0.700.g56cf767bdb-goog
 
-> Guillaume La Roque (7):
->   dt-bindings: thermal: Add DT bindings documentation for Amlogic
->     Thermal
->   thermal: amlogic: Add thermal driver to support G12 SoCs
->   arm64: dts: amlogic: g12: add temperature sensor
->   arm64: dts: meson: g12: Add minimal thermal zone
->   arm64: dts: amlogic: g12a: add cooling properties
->   arm64: dts: amlogic: g12b: add cooling properties
->   MAINTAINERS: add entry for Amlogic Thermal driver
-
-This has now been thorougly reviewed/tested.
-
-I've queued all the "arm64: dts:" patches via my amlogic tree for v5.5.
-Can you please queue up the driver, bindings and MAINTAINERS patch?
-
-Thanks,
-
-Kevin
