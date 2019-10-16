@@ -2,276 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1AED92F5
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 15:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64533D9339
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 16:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405570AbfJPNvV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 09:51:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405567AbfJPNvV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 09:51:21 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5235A21848;
-        Wed, 16 Oct 2019 13:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571233879;
-        bh=HCdRDuHYzMBbEO0nrbpBojXNDkZQrE3bThDnWnyflKg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hOWQm9ByS5ZORydHhQKZjVIUuZvxknqO/TwgDkO2NBEqM65WZlnKiWY8VjhFhVIs8
-         mL6HWiIAubrubhLSrrA6za5k4qFm4R6RNxX5NzVe38k3lJ32ceoQru8mgMNem/gfAr
-         pipS/Lzlmn0CI0rsl9rQs87gPXuAMAwgHmYZqUIo=
-Received: by mail-qk1-f173.google.com with SMTP id u184so22808767qkd.4;
-        Wed, 16 Oct 2019 06:51:19 -0700 (PDT)
-X-Gm-Message-State: APjAAAVgJJL3X9w7PqNEJGGjjiHpsDcOt9sMj7s5Ao5T/UwvffGYiByb
-        htH2C8SQut4eIMwXv5EUhW6YaDzAOeB/uOhH3w==
-X-Google-Smtp-Source: APXvYqx7BlcygeKrIYBNjMW/BUKQN2ZxX5edXsFDWH7JF43qkfOVAIHn+CnzgtR4eQlWfHy/eyt61P4z/30Axgg7KSo=
-X-Received: by 2002:a37:2f81:: with SMTP id v123mr41956355qkh.254.1571233878318;
- Wed, 16 Oct 2019 06:51:18 -0700 (PDT)
+        id S2393751AbfJPOB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 10:01:28 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50273 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393750AbfJPOB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 10:01:28 -0400
+Received: by mail-wm1-f68.google.com with SMTP id 5so3071951wmg.0;
+        Wed, 16 Oct 2019 07:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5tkwolCFpRKx5qnqNxGR6We20ScAxiOW+QzsdK04jT4=;
+        b=K0NeTObnG71lXifvS94m4TId7eL58ETa2T/GnPUYyqbCUBGXmDXHSPOKY6IYR/bF91
+         Qq0KQsRo1HOV6JDWiRhUmxITUnexlMjNH07gFq0AL6852pAnsw5tpRrms2uMDw1aH3AY
+         gnA0dvo9MujjDYxmytQ0G0TuVQdobcSzybGhJ2J8YhGLdjL9lMCDEjvKECmBsjzl6tx7
+         ry8aZs38gaX4lcix+cNWHPx3fMNr4ufNCh1YSMsrjOgWufpA7saBAxcc6FfA/VSYdYKP
+         eRyVSGWBU5v/qSMPJzXeUuljW5QEi18nRpENWRIwRRn/ixwH+WoVyEkMA2Ww2R99p26q
+         Grbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5tkwolCFpRKx5qnqNxGR6We20ScAxiOW+QzsdK04jT4=;
+        b=SeI2DOQxOvO89orNryvKpub1yF9ubLRmJ4g9pQMKDV87cy4/8wj2U3roqwY4gvCjRM
+         XHxeuwl1M1cuGv5f2No5EY6LMFxVGVdNI7J1wn7nPdG3JWUSqEo8JwN4w59jmzcG6nFj
+         QKlLhyKbUPbKR9xObWRF3RmtWRnxaOCHaJwiGdYUrBvQ/+Pxji8t27X4gw3F03LLd7vE
+         Dz43t+D8SKuUOzSzF6qNjqTqlS/+Shz5ji6P78nD3SZEVh1fAgj7UoTRetRYRYE3p+2w
+         blNZRH8LB704BoVCaATRNl3jGOPdikcJnjDn7aTu9sXBRaYLwKuqT10KjOnW2A0OrWsb
+         ytdw==
+X-Gm-Message-State: APjAAAUZ3fwdnUaNOfur4/O7H/KpkXPgFLcxCY1M1Mf6meQafzUbO1mg
+        4v0YcQ+85dVmUilCB3NvmoI=
+X-Google-Smtp-Source: APXvYqz3fMJ3QIVHe9ejYBeq2FoKIVagsDUuq0HAJ3lgCd2RE2GNj2OiV2pOouE2sFRNYWoY0LhsSg==
+X-Received: by 2002:a05:600c:1088:: with SMTP id e8mr3633948wmd.27.1571234485934;
+        Wed, 16 Oct 2019 07:01:25 -0700 (PDT)
+Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
+        by smtp.gmail.com with ESMTPSA id p85sm2930949wme.23.2019.10.16.07.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 07:01:22 -0700 (PDT)
+Date:   Wed, 16 Oct 2019 16:01:21 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 00/17] NVIDIA Tegra20 CPUFreq driver major update
+Message-ID: <20191016140121.GA1862769@ulmo>
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191016052716.yipztnpg7bcuzhfn@vireshk-i7>
+ <8cf055a3-57fd-c275-9e74-a9fb5d284866@gmail.com>
 MIME-Version: 1.0
-References: <20191015162300.22024-1-brgl@bgdev.pl> <20191015162300.22024-2-brgl@bgdev.pl>
- <CAL_JsqKhGr6QDWZFR6cq6MH-0vghb9oSgkCCdi7bhiKmvrkY_w@mail.gmail.com> <CAMRc=Mdb7T6p7xXWJBS2UXq0E-FD4WRtaP7H-AvRH0s6-MyJ8A@mail.gmail.com>
-In-Reply-To: <CAMRc=Mdb7T6p7xXWJBS2UXq0E-FD4WRtaP7H-AvRH0s6-MyJ8A@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 16 Oct 2019 08:51:06 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJZ9myO3Uwb6j_R3W8EpVtOaCZV6_tDfNAXwoaUZO+kNQ@mail.gmail.com>
-Message-ID: <CAL_JsqJZ9myO3Uwb6j_R3W8EpVtOaCZV6_tDfNAXwoaUZO+kNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: max77650: convert the binding
- document to yaml
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+Content-Disposition: inline
+In-Reply-To: <8cf055a3-57fd-c275-9e74-a9fb5d284866@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 7:55 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> wt., 15 pa=C5=BA 2019 o 23:17 Rob Herring <robh+dt@kernel.org> napisa=C5=
-=82(a):
-> >
-> > On Tue, Oct 15, 2019 at 11:23 AM Bartosz Golaszewski <brgl@bgdev.pl> wr=
-ote:
-> > >
-> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > >
-> > > Convert the binding document for MAX77650 core MFD module to YAML.
-> > >
-> > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > ---
-> > >  .../devicetree/bindings/mfd/max77650.txt      | 47 +----------
-> > >  .../devicetree/bindings/mfd/max77650.yaml     | 83 +++++++++++++++++=
-++
-> > >  2 files changed, 84 insertions(+), 46 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.ya=
-ml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/mfd/max77650.txt b/Doc=
-umentation/devicetree/bindings/mfd/max77650.txt
-> > > index b529d8d19335..080871686b3b 100644
-> > > --- a/Documentation/devicetree/bindings/mfd/max77650.txt
-> > > +++ b/Documentation/devicetree/bindings/mfd/max77650.txt
-> > > @@ -1,46 +1 @@
-> > > -MAX77650 ultra low-power PMIC from Maxim Integrated.
-> > > -
-> > > -Required properties:
-> > > --------------------
-> > > -- compatible:          Must be "maxim,max77650"
-> > > -- reg:                 I2C device address.
-> > > -- interrupts:          The interrupt on the parent the controller is
-> > > -                       connected to.
-> > > -- interrupt-controller: Marks the device node as an interrupt contro=
-ller.
-> > > -- #interrupt-cells:    Must be <2>.
-> > > -
-> > > -- gpio-controller:     Marks the device node as a gpio controller.
-> > > -- #gpio-cells:         Must be <2>. The first cell is the pin number=
- and
-> > > -                       the second cell is used to specify the gpio a=
-ctive
-> > > -                       state.
-> > > -
-> > > -Optional properties:
-> > > ---------------------
-> > > -gpio-line-names:       Single string containing the name of the GPIO=
- line.
-> > > -
-> > > -The GPIO-controller module is represented as part of the top-level P=
-MIC
-> > > -node. The device exposes a single GPIO line.
-> > > -
-> > > -For device-tree bindings of other sub-modules (regulator, power supp=
-ly,
-> > > -LEDs and onkey) refer to the binding documents under the respective
-> > > -sub-system directories.
-> > > -
-> > > -For more details on GPIO bindings, please refer to the generic GPIO =
-DT
-> > > -binding document <devicetree/bindings/gpio/gpio.txt>.
-> > > -
-> > > -Example:
-> > > ---------
-> > > -
-> > > -       pmic@48 {
-> > > -               compatible =3D "maxim,max77650";
-> > > -               reg =3D <0x48>;
-> > > -
-> > > -               interrupt-controller;
-> > > -               interrupt-parent =3D <&gpio2>;
-> > > -               #interrupt-cells =3D <2>;
-> > > -               interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
-> > > -
-> > > -               gpio-controller;
-> > > -               #gpio-cells =3D <2>;
-> > > -               gpio-line-names =3D "max77650-charger";
-> > > -       };
-> > > +This file has been moved to max77650.yaml.
-> > > diff --git a/Documentation/devicetree/bindings/mfd/max77650.yaml b/Do=
-cumentation/devicetree/bindings/mfd/max77650.yaml
-> > > new file mode 100644
-> > > index 000000000000..5186ad287ec7
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/mfd/max77650.yaml
-> > > @@ -0,0 +1,83 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/mfd/max77650.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: MAX77650 ultra low-power PMIC from Maxim Integrated.
-> > > +
-> > > +maintainers:
-> > > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > +
-> > > +description: |
-> > > +  This document describes the DT properties of the core MFD controll=
-er.
-> > > +
-> > > +  The GPIO-controller module is represented as part of the top-level=
- PMIC
-> > > +  node. The device exposes a single GPIO line.
-> > > +
-> > > +  For device-tree bindings of other sub-modules (regulator, power su=
-pply,
-> > > +  LEDs and onkey) refer to the binding documents under the respectiv=
-e
-> > > +  sub-system directories.
-> > > +
-> > > +  For more details on GPIO bindings, please refer to the generic GPI=
-O DT
-> > > +  binding document <devicetree/bindings/gpio/gpio.txt>.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: maxim,max77650
-> > > +
-> > > +  reg:
-> > > +    description:
-> > > +      I2C device address.
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    description:
-> > > +      The interrupt on the parent the controller is connected to.
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupt-controller: true
-> > > +
-> > > +  "#interrupt-cells":
-> > > +    const: 2
-> > > +    description:
-> > > +      The first cell is the IRQ number, the second cell is the trigg=
-er type.
-> > > +
-> > > +  gpio-controller: true
-> > > +
-> > > +  "#gpio-cells":
-> > > +    const: 2
-> > > +    description:
-> > > +      The first cell is the pin number and the second cell is used t=
-o specify
-> > > +      the gpio active state.
-> > > +
-> > > +  gpio-line-names:
-> > > +    $ref: '/schemas/types.yaml#/definitions/string-array'
-> > > +    maxItems: 1
-> > > +    description:
-> > > +      Single string containing the name of the GPIO line.
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +  - interrupt-controller
-> > > +  - "#interrupt-cells"
-> > > +  - gpio-controller
-> > > +  - "#gpio-cells"
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    pmic@48 {
-> > > +        compatible =3D "maxim,max77650";
-> > > +        reg =3D <0x48>;
-> > > +
-> > > +        interrupt-controller;
-> > > +        interrupt-parent =3D <&gpio2>;
-> > > +        #interrupt-cells =3D <2>;
-> > > +        interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
-> >
-> > Examples are built now. Run 'make dt_binding_check' on bindings before
-> > sending them:
-> >
-> > Error: Documentation/devicetree/bindings/mfd/max77650.example.dts:24.29=
--30
-> > syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > scripts/Makefile.lib:321: recipe for target
-> > 'Documentation/devicetree/bindings/mfd/max77650.example.dt.yaml'
-> > failed
-> > make[1]: *** [Documentation/devicetree/bindings/mfd/max77650.example.dt=
-.yaml]
-> > Error 1
-> >
-> > You need to include any includes that you use.
-> >
-> > Rob
->
-> Hi Rob,
->
-> thanks for the review.
->
-> I'm on v5.4-rc3 and when running dt_binding_check, the error I'm
-> getting is this:
->
-> # make dt_binding_check
-> DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/mfd/max77650.yaml
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.yaml
->   CHKDT   Documentation/devicetree/bindings/mfd/max77650.yaml
-> make[1]: *** No rule to make target
-> 'Documentation/devicetree/bindings/mfd/max77650.example.dt.yaml',
-> needed by '__build'.  Stop.
-> make: *** [Makefile:1263: dt_binding_check] Error 2
->
-> Is this caused by the same issue or am I missing something?
 
-I believe that's because dtc needs to be built with libyaml support.
+--fdj2RfSjLxBAspz7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Wed, Oct 16, 2019 at 04:16:27PM +0300, Dmitry Osipenko wrote:
+> 16.10.2019 08:27, Viresh Kumar =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On 16-10-19, 00:16, Dmitry Osipenko wrote:
+> >> Hello,
+> >>
+> >> This series moves intermediate-clk handling from tegra20-cpufreq into
+> >> tegra-clk driver, this allows us to switch to generic cpufreq-dt driver
+> >> which brings voltage scaling, per-hardware OPPs and Tegra30 support out
+> >> of the box. All boards need to adopt CPU OPPs in their device-trees in
+> >> order to get cpufreq support. This series adds OPPs only to selective
+> >> boards because there is assumption in a current device-trees that CPU
+> >> voltage is set for 1GHz freq and this won't work for those CPUs that
+> >> can go over 1GHz and thus require voltage regulators to be set up for
+> >> voltage scaling support (CC'ed Marcel for Toradex boards). We could
+> >> probably add delete-node for OPPs over 1GHz if there are not actively
+> >> maintained boards.
+> >=20
+> > How do you want to get these patches merged ? Can I just pick the cpufr=
+eq bits
+> > alone ?
+> >=20
+>=20
+> The cpufreq bits strictly depend on the clk patches and the regulators
+> coupler/balancer series. Hence all patches in this series should collect
+> acks from relevant maintainers and then Thierry will pick up the
+> patchsets in a correct order via tegra tree, at least that's my vision.
+>=20
+> Thierry, are you okay with that approach?
+
+Works for me. I already have a set of clock patches that I'd like to
+merge via the Tegra tree because of a runtime dependency, so it'd be
+easy to apply these on top of that.
+
+Thierry
+
+--fdj2RfSjLxBAspz7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2nIq8ACgkQ3SOs138+
+s6GKPg//XbFKPZrgCH3A4swB3MFOPVjalYqN2cVsMYZH/R73AJYSjqvMPnj44UM1
+ecM/LKBu0RC/xZ9C6mU2DDKEbRDDLDSVIrNLhjh9tulMl267gWIqyCE5tqrkVnjy
+3S50icwwg+Sxs4mgdnox6ZoPPWiCQrfq4bvv+03OMMZqgXISEKzegvOETGziIhaL
+FANIUKkpZ8Kv+9+egwIcjCM32611IfpNAub/KuRpmZghvib1SV/SxgpLZ1hc3jND
+ZkpzmUmAuwZbB/sco/f17FlfZ16+cIRE5D0NSlWH1cTt9YHfhuD1Rv/o4C9HLHly
+rpXCJC/WHmevNz7RqheqKwXMc8ixqTcWeNoRpKFDiYfscGB0rR73uzmTMlRXdbch
+JDD+Xa5BYBZrneP6GfIVHdouiDD3DhPkHoDvXdmyWmnrpZwQG6465b4+TAgEpR/o
+uXmaYn4HtjGic6mYpbPUopYCg5awM7u4Of4PQdJLZcDI45UJzlpNVTXMS+pRpbkZ
+YHPbcvPDL+jRE9Jnbl/rxHu+KQV/UmmKV5JPIEyoQKSaVkw/cFnXSyqARqaWds56
+QJ2vZ7kZ2O08MkWzMamVcVqbdx8U1FX//09377bHHFbWhRsrAMcAX6keNq7hz7ZM
+/a2zZszFLhQnisBXpX9RMUW37jiFYFn4rZYFM1feQZ/E+rtvIJ8=
+=td2z
+-----END PGP SIGNATURE-----
+
+--fdj2RfSjLxBAspz7--
