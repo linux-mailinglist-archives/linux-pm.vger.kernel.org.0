@@ -2,142 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B2DD8919
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 09:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01592D8957
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 09:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbfJPHMl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 03:12:41 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:34946 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726405AbfJPHMk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Oct 2019 03:12:40 -0400
-Received: from zn.tnic (p200300EC2F093900E460E23B12F7A6AE.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:3900:e460:e23b:12f7:a6ae])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A47CF1EC0CA8;
-        Wed, 16 Oct 2019 09:12:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1571209958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=hCMIEpQo2zZVtw+c7T27PQGWxK9R4yH4oLgjyYmdmEs=;
-        b=jBjaAwnWbMtQO5KJkx8Ds4V597Vk3RcnpH9z7AXPZBtVtzOME4gu6KPFZ3LOB+4xl79+Lj
-        8kPodzuqb3NA7rSD0JFdUgz7ajO/9BH8XZe+Q1k900RYstacd4xK+1KOE2EULuWK9npP7U
-        hYwBeygUc058xRGplSLnZm1PpMuZkH8=
-Date:   Wed, 16 Oct 2019 09:12:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jiri Slaby <jslaby@suse.cz>, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Juergen Gross <jgross@suse.com>, linux-crypto@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v9 24/28] x86_64/asm: Change all ENTRY+ENDPROC to
- SYM_FUNC_*
-Message-ID: <20191016071230.GD1138@zn.tnic>
-References: <20191011115108.12392-1-jslaby@suse.cz>
- <20191011115108.12392-25-jslaby@suse.cz>
+        id S1727447AbfJPHYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 03:24:09 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33153 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbfJPHYJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 03:24:09 -0400
+Received: by mail-qt1-f193.google.com with SMTP id r5so34732069qtd.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 00:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7/kqUGL2RuhU3S60UdPu4y8clUQwY+VPaSSrwpbmgO0=;
+        b=E6CSpufjtD3JGknIx0r1OwKl8d/peQZ5ZUvYmVDjKJ85JqPi7S5P6RtcCs8+ciTzko
+         x3C0s2N2v+HNM5R4jLGcQee/zx3JFZZTh9fV7UvnLMr9YGbzHkxaEScpEy32+Sq7uFE3
+         A+15MosWrZHsrV0Tv/yqCDHhhyGBHG16BqIZd8tenP7CnwA+e9joGCSwVRskdX4FhIQr
+         tuzmrcNUMAj6IfcY7D/Ph9V4Mp0l8Gz9jazC8W0h0av/efR/8QKvIVWUrftrJOkZknV7
+         6LeAWuZQ0GTC/S4r1TTttOzZwWAarjfjsykv/LlNzZ2POlQgIEOrBDLevIYXEim73v9K
+         kYgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7/kqUGL2RuhU3S60UdPu4y8clUQwY+VPaSSrwpbmgO0=;
+        b=RTfscFoGEfGxtU0F+1bMuv3oBEXRndOFUnKSae2pupptmZUq6dJChSyB57RujNZIaX
+         3XrhPXjPMk3+uHFgn1LnU4KHYhKrXwuLghy95xYcitklvWZOcD/g1Q2VYuWt6U7KjPH3
+         KCb3tKcN3kMl8ximSgo5tmJFN7ukr5jvv1cpcqtnFwPAmJshgADe9k5Ky7G28N8fDqUk
+         +rDPOqJyBadSsjXk3GpY8B8KwhValJT8smkPx8npUgACvl+Y+Mw2K/eeQs+pFy0ryuNF
+         hTvDv3zifSF+SuslEnVul4wynHP9LSckvHxHAhnhXRniotA/Pp8Wr2ZuwJocwRDeN8yl
+         Co6g==
+X-Gm-Message-State: APjAAAVlVqYKN+ZsdYHjJZ/xx15dL1aY1Q1rOP5QumkQhJQl+ZRz0Knx
+        aTp8POzvbs2d2HIpVx1VwDGihX9Gadu7ENdBE+06rA==
+X-Google-Smtp-Source: APXvYqy51zkLCTO2KlvsJEzJJFKY46jnl45N81gIEG3DdMwbZeqsL9d89eQ2HFc6D2ejCsrjEsx19pTUKBmd09i1qBo=
+X-Received: by 2002:ac8:3021:: with SMTP id f30mr42357999qte.80.1571210648136;
+ Wed, 16 Oct 2019 00:24:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191011115108.12392-25-jslaby@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+In-Reply-To: <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Wed, 16 Oct 2019 15:23:56 +0800
+Message-ID: <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chunming Zhou <David1.Zhou@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, Oct 16, 2019 at 2:43 AM Alex Deucher <alexdeucher@gmail.com> wrote:
+> Is s2idle actually powering down the GPU?
 
-On Fri, Oct 11, 2019 at 01:51:04PM +0200, Jiri Slaby wrote:
-> These are all functions which are invoked from elsewhere, so annotate
-> them as global using the new SYM_FUNC_START. And their ENDPROC's by
-> SYM_FUNC_END.
-> 
-> And make sure ENTRY/ENDPROC is not defined on X86_64, given these were
-> the last users.
-> 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> [hibernate]
-> Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com> [xen bits]
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: x86@kernel.org
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Matt Fleming <matt@codeblueprint.co.uk>
-> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-efi@vger.kernel.org
-> Cc: xen-devel@lists.xenproject.org
-> ---
->  arch/x86/boot/compressed/efi_thunk_64.S      |  4 +-
->  arch/x86/boot/compressed/head_64.S           | 16 +++---
->  arch/x86/boot/compressed/mem_encrypt.S       |  8 +--
->  arch/x86/crypto/aegis128-aesni-asm.S         | 28 ++++-----
->  arch/x86/crypto/aes_ctrby8_avx-x86_64.S      | 12 ++--
->  arch/x86/crypto/aesni-intel_asm.S            | 60 ++++++++++----------
->  arch/x86/crypto/aesni-intel_avx-x86_64.S     | 32 +++++------
->  arch/x86/crypto/blowfish-x86_64-asm_64.S     | 16 +++---
->  arch/x86/crypto/camellia-aesni-avx-asm_64.S  | 24 ++++----
->  arch/x86/crypto/camellia-aesni-avx2-asm_64.S | 24 ++++----
->  arch/x86/crypto/camellia-x86_64-asm_64.S     | 16 +++---
->  arch/x86/crypto/cast5-avx-x86_64-asm_64.S    | 16 +++---
->  arch/x86/crypto/cast6-avx-x86_64-asm_64.S    | 24 ++++----
->  arch/x86/crypto/chacha-avx2-x86_64.S         | 12 ++--
->  arch/x86/crypto/chacha-avx512vl-x86_64.S     | 12 ++--
->  arch/x86/crypto/chacha-ssse3-x86_64.S        | 12 ++--
->  arch/x86/crypto/crc32-pclmul_asm.S           |  4 +-
->  arch/x86/crypto/crc32c-pcl-intel-asm_64.S    |  4 +-
->  arch/x86/crypto/crct10dif-pcl-asm_64.S       |  4 +-
->  arch/x86/crypto/des3_ede-asm_64.S            |  8 +--
->  arch/x86/crypto/ghash-clmulni-intel_asm.S    |  8 +--
->  arch/x86/crypto/nh-avx2-x86_64.S             |  4 +-
->  arch/x86/crypto/nh-sse2-x86_64.S             |  4 +-
->  arch/x86/crypto/poly1305-avx2-x86_64.S       |  4 +-
->  arch/x86/crypto/poly1305-sse2-x86_64.S       |  8 +--
->  arch/x86/crypto/serpent-avx-x86_64-asm_64.S  | 24 ++++----
->  arch/x86/crypto/serpent-avx2-asm_64.S        | 24 ++++----
->  arch/x86/crypto/serpent-sse2-x86_64-asm_64.S |  8 +--
->  arch/x86/crypto/sha1_avx2_x86_64_asm.S       |  4 +-
->  arch/x86/crypto/sha1_ni_asm.S                |  4 +-
->  arch/x86/crypto/sha1_ssse3_asm.S             |  4 +-
->  arch/x86/crypto/sha256-avx-asm.S             |  4 +-
->  arch/x86/crypto/sha256-avx2-asm.S            |  4 +-
->  arch/x86/crypto/sha256-ssse3-asm.S           |  4 +-
->  arch/x86/crypto/sha256_ni_asm.S              |  4 +-
->  arch/x86/crypto/sha512-avx-asm.S             |  4 +-
->  arch/x86/crypto/sha512-avx2-asm.S            |  4 +-
->  arch/x86/crypto/sha512-ssse3-asm.S           |  4 +-
->  arch/x86/crypto/twofish-avx-x86_64-asm_64.S  | 24 ++++----
->  arch/x86/crypto/twofish-x86_64-asm_64-3way.S |  8 +--
->  arch/x86/crypto/twofish-x86_64-asm_64.S      |  8 +--
+My understanding is that s2idle (at a high level) just calls all
+devices suspend routines and then puts the CPU into its deepest
+running state.
+So if there is something special to be done to power off the GPU, I
+believe that amdgpu is responsible for making arrangements for that to
+happen.
+In this case the amdgpu code already does:
 
-I could use an ACK for the crypto bits...
+        pci_disable_device(dev->pdev);
+        pci_set_power_state(dev->pdev, PCI_D3hot);
 
-Thx.
+And the PCI layer will call through to any appropriate ACPI methods
+related to that low power state.
 
--- 
-Regards/Gruss,
-    Boris.
+> Do you see a difference in power usage?  I think you are just working around the fact that the
+> GPU never actually gets powered down.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I ran a series of experiments.
+
+Base setup: no UI running, ran "setterm -powersave 1; setterm -blank
+1" and waited 1 minute for screen to turn off.
+Base power usage in this state is 4.7W as reported by BAT0/power_now
+
+1. Run amdgpu_device_suspend(ddev, true, true); before my change
+--> Power usage increases to 6.1W
+
+2. Run amdgpu_device_suspend(ddev, true, true); with my change applied
+--> Power usage increases to 6.0W
+
+3. Put amdgpu device in runtime suspend
+--> Power usage increases to 6.2W
+
+4. Try unmodified suspend path but d3cold instead of d3hot
+--> Power usage increases to 6.1W
+
+So, all of the suspend schemes actually increase the power usage by
+roughly the same amount, reset or not, with and without my patch :/
+Any ideas?
+
+Thanks,
+Daniel
