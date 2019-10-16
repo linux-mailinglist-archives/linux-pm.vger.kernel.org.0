@@ -2,186 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C398D99E9
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8C5D9A50
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Oct 2019 21:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436628AbfJPTVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 15:21:37 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:3226 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403782AbfJPTVh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 15:21:37 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5da76dc50000>; Wed, 16 Oct 2019 12:21:41 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 16 Oct 2019 12:21:36 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 16 Oct 2019 12:21:36 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 16 Oct
- 2019 19:21:36 +0000
-Received: from tbergstrom-lnx.Nvidia.com (10.124.1.5) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3; Wed, 16 Oct 2019 19:21:35 +0000
-Received: by tbergstrom-lnx.Nvidia.com (Postfix, from userid 1000)
-        id 9AE2542807; Wed, 16 Oct 2019 22:21:33 +0300 (EEST)
-Date:   Wed, 16 Oct 2019 22:21:33 +0300
-From:   Peter De Schrijver <pdeschrijver@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 00/18] Consolidate and improve NVIDIA Tegra CPUIDLE
- driver(s)
-Message-ID: <20191016192133.GB26038@pdeschrijver-desktop.Nvidia.com>
-References: <20191015170015.1135-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191015170015.1135-1-digetx@gmail.com>
-X-NVConfidentiality: public
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571253701; bh=nroN3FHoFwV3XA6q1YkfsgkTextLKDHjNycGp27ezdc=;
-        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-         X-NVConfidentiality:User-Agent:X-Originating-IP:X-ClientProxiedBy;
-        b=rAGYy4mB0DojFGY14D9t5hauU3YDyjKaDWJhazpYwapaylHOMWi9QJXublk3LJA2O
-         mVVV+r0Nq5wtadsbN1yC5THHsPkRxV35P/1gPPkEIEPBOajMwjafab7MIb4yzvq7CK
-         jzO2SzAWmwc5A+siqUD9bwWi5vFAyksQzsIQqveEFNBY8R3/g6+VYn2MbGHxR1sZ0l
-         55Tp5fjEsm4JXY9dyaXXsVGONqefshME6VNEKE7aJtww7vBcV6hg3LbJA49bg+qf5f
-         yHFE9vIT1X92IxipB6xxW8M1yZxMP93Ih8okg1l5odob8/z+SOI/qGlDLUXb8zJk98
-         H4FzTWA6TrQwA==
+        id S2394443AbfJPThb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 15:37:31 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44209 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728779AbfJPThb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 15:37:31 -0400
+Received: by mail-qt1-f194.google.com with SMTP id u40so37844375qth.11
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 12:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=mJHOakKVvshLG3Rzud38KEbOaNx+SThGCVNUUHA+c8k=;
+        b=w5G4rO6cnoFzj2kF84Hr/GZtHT1Zve5j9WyjVpVK9JFX1mk/AvbZfE6glsJsrQ2bHZ
+         d5BOsKSptJU5C1rkmoLn0qoBb/KDjamoVhNZQGaVK8YXrI5KcY4G4SHD3Y4lnNwXm4zd
+         NmfTkknFJgHcYV9nVtUW8GTl+JrglpLjDPrfw5xC5bCBkIMICrkq32IqMFGPeZ+Rzc7t
+         VZrraGhKRx+Z7vFexQpkgnUDhj+9WXA2uS/1/4J+kd1U2cQhs9M1HOwkxln44HNgMUiW
+         GJ/mMZoochmYSU5FNxeRWPETGriXjfl6QqyVWhLFx8gwcRWSDYZb6/Wn+LJrVuDrsRtW
+         /v7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mJHOakKVvshLG3Rzud38KEbOaNx+SThGCVNUUHA+c8k=;
+        b=Zn8ecp6KNiLCuBwmc0T28JURQX+zonPSwgqN/utcip9tuFVc9qlV85mnHGTRbxqmyR
+         drfPfV48u3FcmHLwPPI4k0WUmGVMSEE4nBgsCgfUT5BTXhrkExTGoL7zqwo4DCGdpdTS
+         BWlx+Lt4X7N/H6fRq9qOJc5WlVsNoCrYcX7NuCgHti9VyAJEYJCPSnnr+GNA6tHMEjcd
+         gr4R3t3alPNzwaa1PF6nKIHKWgt6s4SMRvQXskYOJ3Uqdt7O3xXdA8VY5KGu1c24BOex
+         sYMoUvRV+1LiANvtXEB4kzs4yFMmo1x4UNkTcUk3Aiqpo0HQEqmWRxU8uGphmb+ZSoQ9
+         BJTw==
+X-Gm-Message-State: APjAAAVmGlYSfGcksmeMPlzQzy6NMveJS9MUeBTCvz06l3TwZtPySwr+
+        4eDypnmJZlhxoXHGVTTwISDfN9cb9joeag==
+X-Google-Smtp-Source: APXvYqxksfg5j666p6bPfX8pfqyE2zz9v/AOGwzl9RkscOjeUr/PexA0qh0wHbZrIjzQkfl9oeTToQ==
+X-Received: by 2002:a0c:c10d:: with SMTP id f13mr44317850qvh.88.1571254648443;
+        Wed, 16 Oct 2019 12:37:28 -0700 (PDT)
+Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.googlemail.com with ESMTPSA id 54sm16246030qts.75.2019.10.16.12.37.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 16 Oct 2019 12:37:27 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     edubezval@gmail.com, rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org
+Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7]Introduce Power domain based warming device driver
+Date:   Wed, 16 Oct 2019 15:37:14 -0400
+Message-Id: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.1.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 07:59:57PM +0300, Dmitry Osipenko wrote:
-> Hello,
-> 
-> This series does the following:
-> 
->   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
->      into common drivers/cpuidle/ directory.
-> 
->   2. Enables CPU cluster power-down idling state on Tegra30.
-> 
-> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
-> and of the Tegra's arch code in general. Please review, thanks!
-> 
-> Changelog:
-> 
-> v6: - Addressed request from Thierry Reding to change the way patches are
->       organized by making changes in a more incremental manner.
-> 
->     - tegra_sleep_cpu() now checks for the secondary CPUs to be offline
->       in the "Make outer_disable() open-coded" patch.
-> 
-> v5: - Rebased on a recent linux-next, fixed one minor conflict in Kconfig.
-> 
->     - Improved commit's message of the "Support CPU cluster power-down state
->       on Tegra30" patch.
-> 
->     - The "Support CPU cluster power-down state on Tegra30" patch is also
->       got split and now there is additional "Make outer_disable() open-coded"
->       patch.
-> 
->     - Made minor cosmetic changes to the "Introduce unified driver for
->       NVIDIA Tegra SoCs" patch by improving error message and renaming
->       one variable.
-> 
-> v4: - Fixed compilation with !CONFIG_CACHE_L2X0 (and tested that it still
->       works).
-> 
->     - Replaced ktime_compare() with ktime_before() in the new driver,
->       for consistency.
-> 
-> v3: - Addressed review comments that were made by Jon Hunter to v2 by
->       splitting patches into smaller (and simpler) chunks, better
->       documenting changes in the commit messages and using proper error
->       codes in the code.
-> 
->       Warnings are replaced with a useful error messages in the code of
->       "Introduce unified driver for NVIDIA Tegra SoCs" patch.
-> 
->       Secondary CPUs parking timeout increased to 100ms because I found
->       that it actually may happen to take more than 1ms if CPU is running
->       on a *very* low frequency.
-> 
->       Added diagnostic messages that are reporting Flow Controller state
->       when CPU parking fails.
-> 
->       Further polished cpuidle driver's code.
-> 
->       The coupled state entering is now aborted if there is a pending SGI
->       (Software Generated Interrupt) because it will be lost after GIC's
->       power-cycling. Like it was done by the old Tegra20 CPUIDLE driver.
-> 
-> v2: - Added patches to enable the new cpuidle driver in the defconfigs:
-> 
->         ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
->         ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
-> 
->     - Dropped patches that removed CPUIDLE_FLAG_TIMER_STOP from the idling
->       states because that flag actually doesn't have any negative effects,
->       but still is correct for the case of a local CPU timer on older Tegra
->       SoCs:
-> 
->         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from Tegra114/124 idle-state
->         cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from all states
-> 
->     - The "Add unified driver for NVIDIA Tegra SoCs" patch got more polish.
->       Tegra30 and Terga114 states are now squashed into a single common C7
->       state (following Parker TRM terminology, see 17.2.2.2 Power Management
->       States), more comments added, etc minor changes.
+Certain resources modeled as a generic power domain in linux kernel
+can be used to warm up the SoC (mx power domain on sdm845)
+if the temperature falls below certain threshold. These power domains
+can be considered as thermal warming devices.
+(opposite of thermal cooling devices).
 
-It would be useful to switch the power state terminology to the one used
-for later chips:
+In kernel, these warming devices can be modeled as a
+thermal cooling device. Since linux kernel today has
+no instance of a resource modeled as a power domain acting as a
+thermal warming device, a generic power domain based thermal warming device
+driver that can be used pan-Socs is the approach taken in this
+patch series. Since thermal warming devices can be thought of as the
+mirror opposite of thermal cooling devices, this patch series re-uses
+thermal cooling device framework. To use these power domains as warming
+devices require further tweaks in the thermal framework which are out of
+scope of this patch series. These tweaks have been posted as a separate
+series[1].
 
-LP0 becomes SC7
-LP1 becomes C1
-LP2 becomes CC7
+The first patch in this series extends the genpd framework to export out
+the performance states of a power domain so that when a power
+domain is modeled as a cooling device, the number of possible states and
+current state of the cooling device can be retrieved from the genpd
+framework.
 
-Meaning of these states is as follows
+The second patch implements the newly added genpd callback for Qualcomm
+RPMH power domain driver which hosts the mx power domain.
 
-C is a core state:
+The third patch introduces late init ops for thermal cooling device that
+is called after the cooling device is created and registered but before
+binding it to a thermal zone for specific initializations.
 
-C1 clock gating
-C2 not defined
-C3 not defined
-C4 not defined
-C5 not defined
-C6 not defined for ARM cores
-C7 power-gating
+The fourth patch introduces the generic power domain warming device driver.
 
-CC is a CPU cluster C state:
+The fifth patch extends Qualcomm RPMh power controller driver to register
+mx power domain as a thermal warming device in the kernel.
 
-CC1 cluster clock gated
-CC2 not defined
-CC3 fmax@Vmin: not used prior to Tegra186
-CC4: cluster retention: no longer supported
-CC5: not defined
-CC6: cluster power gating
-CC7: cluster rail gating
+The sixth patch describes the dt binding extensions for mx power domain to
+be a thermal warming device.
 
-SC is a System C state:
+The seventh patch introduces the DT entreis for sdm845 to register mx power
+domain as a thermal warming device.
 
-SC1: not defined
-SC2: not defined
-SC3: not defined
-SC4: not defined
-SC5: not defined
-SC6: not defined
-SC7: VDD_SOC off
+v1->v2:
+        - Rename the patch series from
+        "qcom: Model RPMH power domains as thermal cooling devices" to
+        "Introduce Power domain based thermal warming devices" as it is
+        more appropriate.
+        - Introduce a new patch(patch 3) describing the dt-bindings for
+	generic power domain warming device.
+        - Patch specific changes mentioned in respective patches.
 
-Cheers,
+v2->v3:
+	- Changed power domain warming device from a virtual device node
+	entry in DT to being a subnode of power domain controller binding
+	following Rob's review comments.
+	- Implemented Ulf's review comments.
+	- The changes above introduced two new patches (patch 3 and 4)
 
-Peter.
+1. https://lkml.org/lkml/2019/9/18/1180
+Thara Gopinath (7):
+  PM/Domains: Add support for retrieving genpd performance states
+    information
+  soc: qcom: rpmhpd: Introduce function to retrieve power domain
+    performance state count
+  thermal: core: Add late init hook to cooling device ops
+  thermal: Add generic power domain warming device driver.
+  soc: qcom: Extend RPMh power controller driver to register warming
+    devices.
+  dt-bindings: soc: qcom: Extend RPMh power controller binding to
+    describe thermal warming device
+  arm64: dts: qcom: Add mx power domain as thermal warming device.
+
+ .../devicetree/bindings/power/qcom,rpmpd.txt       |  10 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   5 +
+ drivers/base/power/domain.c                        |  37 ++++++
+ drivers/soc/qcom/rpmhpd.c                          |  30 ++++-
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   2 +
+ drivers/thermal/pwr_domain_warming.c               | 136 +++++++++++++++++++++
+ drivers/thermal/thermal_core.c                     |  13 ++
+ include/linux/pm_domain.h                          |  13 ++
+ include/linux/pwr_domain_warming.h                 |  31 +++++
+ include/linux/thermal.h                            |   1 +
+ 11 files changed, 287 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/thermal/pwr_domain_warming.c
+ create mode 100644 include/linux/pwr_domain_warming.h
+
+-- 
+2.1.4
+
