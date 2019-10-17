@@ -2,116 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36862DA7FF
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E2CDA81C
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439364AbfJQJEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 05:04:46 -0400
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:33394 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439363AbfJQJEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 05:04:46 -0400
-Received: by mail-vk1-f194.google.com with SMTP id s21so348032vkm.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 02:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3YEZ6kmrwj0jmNEINZ5DrxfXAkCY+f5snursTVbXw/Q=;
-        b=W2e51Z687HKzqeEUxw8//AMcHGkkuFOP8XPRGjOfymWxiy5Zp1IsFw7JpdMcbsWu2b
-         3XRp9hda4U35V3m4NBdsGLbwORsP7M6z6hcLgkBMeNdc6Kv9H54zl1XG8UyqG3oVaiRA
-         uYXbj1yTpmGTc5+j3xXkUibu704TmnkPoO2sjQNeCRQIL58QuDsOIAezBG7b14OxBFv6
-         5FbrylzIeAFhCyolzRmA8yt6ll3bpHI/fYR97EcEQ3jn9UGLTrm83xRCCHz8AS86pmze
-         m1mdnFdbPnS0BElbdxvOVcKomZv+rfTKsUOZ1i3MKBNxnh2hdw7vJ49G7aVlAm37710n
-         WkLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3YEZ6kmrwj0jmNEINZ5DrxfXAkCY+f5snursTVbXw/Q=;
-        b=dRJ5NTSwkIFRJUwLTgs5mw2SEEjOyWOxjCyVkZyHQS+OG2SDisNqQQxs1BKJN2+D7n
-         UpUNKKXHqLczrGOP8bZiWggWZUIiO1HHr3QkLekomPAi+K3gR+PnnaYiPLfGubFzMsAa
-         aF5Jrb7v8TB9IUFqk/IdFxtslqDmQJ9ihm0BXK+e+e0tT7r0UqaQZ4IHrh1u30Z1S+53
-         z0FEFisOaQBVncz/a58tDuzldVcGfzq/4bFZcjRhl/DPKZW+V6Dt5ERA/Q8BfyilKFc7
-         /kNS8+QBsSqnF7uRnsfHzyyGoMx8O00WzYM3CAki27zEttOGdjDHav96MFHJGOhQABrO
-         4K8w==
-X-Gm-Message-State: APjAAAX1wQCKQFC+XH64Lm0KbrnPC7GoQIZjsIFc2JicZl5BsyDfUCAH
-        NpLKVNGYJXSCqJxj7gaweAte0G76zKt5MBjXTgphvQ==
-X-Google-Smtp-Source: APXvYqyt8CM8fHUNAOrVRVddOgQGQx8mRNb41o6lI3llgLFlyRzgA5YeS309L///NMZr8TxyMVq1MEKf6S7M8tbxb2E=
-X-Received: by 2002:a1f:b202:: with SMTP id b2mr1313280vkf.59.1571303083600;
- Thu, 17 Oct 2019 02:04:43 -0700 (PDT)
+        id S2390004AbfJQJOp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 05:14:45 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:36276 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1733113AbfJQJOp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 05:14:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E2101684;
+        Thu, 17 Oct 2019 02:14:19 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50EE33F718;
+        Thu, 17 Oct 2019 02:14:18 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 10:14:16 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH 3/3] cpufreq: simplify and remove lots of debug messages
+Message-ID: <20191017091416.GC8978@bogus>
+References: <20191016110344.15259-1-sudeep.holla@arm.com>
+ <20191016110344.15259-4-sudeep.holla@arm.com>
+ <20191017024200.3hhak2wx7yvjifqh@vireshk-i7>
 MIME-Version: 1.0
-References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org> <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
-In-Reply-To: <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Oct 2019 11:04:07 +0200
-Message-ID: <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
- controller binding to describe thermal warming device
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017024200.3hhak2wx7yvjifqh@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+On Thu, Oct 17, 2019 at 08:12:00AM +0530, Viresh Kumar wrote:
+> On 16-10-19, 12:03, Sudeep Holla wrote:
+> > cpufreq_arm_bL_ops is no longer needed after merging the generic
+> > arm_big_little and vexpress-spc driver. Remove cpufreq_arm_bL_ops
+> > and rename all the bL_* function names to ve_spc_*.
+> >
+> > This driver have been used for year now and the extensive debug
+> > messages in the driver are not really required anymore.
 >
-> RPMh power controller hosts mx domain that can be used as thermal
-> warming device. Add a sub-node to specify this.
->
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> index eb35b22..fff695d 100644
-> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> @@ -18,6 +18,16 @@ Required Properties:
->  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
->  various OPPs for different platforms as well as Power domain indexes
->
-> += SUBNODES
-> +RPMh alsp hosts power domains that can behave as thermal warming device.
-> +These are expressed as subnodes of the RPMh. The name of the node is used
-> +to identify the power domain and must therefor be "mx".
-> +
-> +- #cooling-cells:
-> +       Usage: optional
-> +       Value type: <u32>
-> +       Definition: must be 2
-> +
-
-Just wanted to express a minor thought about this. In general we use
-subnodes of PM domain providers to represent the topology of PM
-domains (subdomains), this is something different, which I guess is
-fine.
-
-I assume the #cooling-cells is here tells us this is not a PM domain
-provider, but a "cooling device provider"?
-
-Also, I wonder if it would be fine to specify "power-domains" here,
-rather than using "name" as I think that is kind of awkward!?
-
->  Example: rpmh power domain controller and OPP table
->
->  #include <dt-bindings/power/qcom-rpmhpd.h>
-> --
-> 2.1.4
+> This does lots of cleanup in this patch and not strictly what the commit log
+> says. Can you please create separate patches for remove ops, debug messages and
+> other formatting things ?
 >
 
-Kind regards
-Uffe
+Yes I did notice just after posting. These patches were sitting in my tree
+for long time and didn't look at them in detail before posting. I will
+split the patch accordingly.
+
+--
+Regards,
+Sudeep
