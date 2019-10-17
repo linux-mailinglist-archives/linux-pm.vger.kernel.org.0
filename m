@@ -2,123 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C447DB6D3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 21:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAFFDB715
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 21:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503364AbfJQTH2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 15:07:28 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:56398 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503363AbfJQTH2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 15:07:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=+iW1UtqQMUkClFUP9OfZlGcJ+KCRuTpNF/TmgYgEt/U=; b=qDpcNx0MrDAxV3GnJa1A1QBrl
-        LL68RwtKOpen/rD5D+jpGbpw5+hc1x2D026QEBabOT0ees4y12rAy5nSS4GP3BnW8tpN4LUj18pnJ
-        IVqQ37CIMfGDNo2TZhFN2UWA/07SrsI7pR4lOoChHRVT5XOYFuZKPhD9JldIfu02/DxU2UsbZnksd
-        VKIbAJfH1RbOzLJ1ei+g2SazqlbY1h0nndbWi5c2cUV0cIB54q7U8sCmlarmns6F8gZUuPv3nFfxS
-        IV/l4I53sLlRnjnrtLG8p+RsPJLa2P90vxBWcIdkoQ/nt4ZWc2kF5HI5e9BMtoCSw9mRHqPucTXen
-        NtMDFjJIg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iLB7A-0005Tu-9Y; Thu, 17 Oct 2019 19:07:12 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BCD86980D8F; Thu, 17 Oct 2019 21:07:08 +0200 (CEST)
-Date:   Thu, 17 Oct 2019 21:07:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20191017190708.GF22902@worktop.programming.kicks-ass.net>
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
- <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
- <20191017095015.GI2311@hirez.programming.kicks-ass.net>
- <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
+        id S2441479AbfJQTL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 15:11:56 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46355 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727646AbfJQTLz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 15:11:55 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 89so2832044oth.13;
+        Thu, 17 Oct 2019 12:11:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VfE4pHkEB0q49RVPM0ZsYNB/wm/zHNekWOHlQdV2NzA=;
+        b=h53hc919+OW05u0DILT0VltiM+EeOYyRBSPpdh5FUWwIxdNFDb375AGuKuS7UxGq1A
+         BQYyqowXplnd5svsCKifezkxgGtx4lTrNoAoaCqL1QFrqoYJedpI4HDpioih7cyhfpYc
+         hkVtOeUzdgoN6W1z0v9gtR+9WUbEon6ZW0uZeCpBA2Sz/ieKd//cy2/DwpukRnP8hO1y
+         QbrCLhb/hU2aU3iqy0WwQZknu+xxxnbtnkLqgHRn+/anIaFCtylm6lMQzDX1ZRpxn5Sy
+         bgJX05pDcJ5o4+RJnkmbaWDEZmLzPeSq1cb3JnLnMv8ybM6kALlxXbfCqUXyKbpQD6c9
+         lXNw==
+X-Gm-Message-State: APjAAAVCPYevpQ5AAVCyn5PdzYm/cxqGGhj3beLIoYa6VNaH9WQe+7J6
+        NQwYZe16wA0CewUDwNiCLxDW62rIsIMhpUyS4xw=
+X-Google-Smtp-Source: APXvYqydr6smfx+tDiMQxWxqDxB06hSqqxbKElnCI8osB6kbMr16aaHPV2O8ujoYLv0xdf3M9Rs3nqRDSIyG+R+mEy8=
+X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr4515073oth.266.1571339514744;
+ Thu, 17 Oct 2019 12:11:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1571314830.git.amit.kucheria@linaro.org> <f1d7214951e4b2caa394c722b4d8aaca9cc2c4c4.1571314830.git.amit.kucheria@linaro.org>
+In-Reply-To: <f1d7214951e4b2caa394c722b4d8aaca9cc2c4c4.1571314830.git.amit.kucheria@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Oct 2019 21:11:42 +0200
+Message-ID: <CAJZ5v0gAyaXHrWe5x6ctz_zawFvudgpTVFCuwieBM5s=FMXysQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] cpufreq: Initialise the governors in core_initcall
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>, agross@kernel.org,
+        Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 03:23:04PM +0100, Douglas Raillard wrote:
-> On 10/17/19 10:50 AM, Peter Zijlstra wrote:
+On Thu, Oct 17, 2019 at 2:28 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
+>
+> Initialise the cpufreq governors earlier to allow for earlier
+> performance control during the boot process.
+>
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> > I'm still thinking about the exact means you're using to raise C; that
-> > is, the 'util - util_est' as cost_margin. It hurts my brain still.
-> 
-> util_est is currently the best approximation of the actual portion of the CPU the task needs:
-> 1) for periodic tasks, it's not too far from the duty cycle, and is always higher
-> 
-> 2) for aperiodic tasks, it (indirectly) takes into account the total time it took
->   to complete the previous activation, so the signal is not 100% composed of logical signals
->   only relevant for periodic tasks (although it's a big part of it).
-> 
-> 3) Point 1) and 2) together allows util_est to adapt to periodic tasks that changes
-> their duty cycle over time, without needing a very long history (the last task period
-> is sufficient).
-> 
-> For periodic tasks, the distance between instantaneous util_avg and the actual task
-> duty cycle indicates somehow what is our best guess of the (potential) change in the task
-> duty cycle.
-> 
-> util_est is the threshold (assuming util_avg increasing) for util_avg after which we know
-> for sure that even if the task stopped right now, its duty cycle would be higher than
-> during the previous period.
-> This means for a given task and with (util >= util_est):
-> 
-> 1) util - util_est == 0 means the task duty cycle will be equal to the one during
->   during the previous activation, if the tasks stopped executing right now.
-> 
-> 2) util - util_est > 0 means the task duty cycle will be higher to the one during
->   during the previous activation, if the tasks stopped executing right now.
+You also want to do that for the schedutil governor I think.
 
-So far I can follow, 2) is indeed a fairly sane indication that
-utilization is growing.
-
-> Using the difference (util - util_est) will therefore give these properties to the boost signal:
-> * no boost will be applied as long as the task has a constant or decreasing duty cycle.
-> 
-> * when we can detect that the duty cycle increases, we temporarily increase the frequency.
->   We start with a slight increase, and the longer we wait for the current period to finish,
->   the more we boost, since the more likely it is that the task has a much larger duty cycle
->   than anticipated. More specifically, the evaluation of "how much more" is done the exact
->   same way as it is done for PELT, since the dynamic of the boost is "inherited" from PELT.
-
-Right, because as long it keeps running, util_est will not be changed,
-so the difference will continue to increase.
-
-What I don't see is how that that difference makes sense as input to:
-
-  cost(x) : (1 + x) * cost_j
-
-I suppose that limits the additional OPP to twice the previously
-selected cost / efficiency (see the confusion from that other email).
-But given that efficency drops (or costs rise) for higher OPPs that
-still doesn't really make sense..
-
-> Now if the task is aperiodic, the boost will allow reaching the highest frequency faster,
-> which may or may not be desired. Ultimately, it's not more or less wrong than just picking
-> the freq based on util_est alone, since util_est is already somewhat meaningless for aperiodic
-> tasks. It just allows reaching the max freq at some point without waiting for too long, which is
-> all what we can do without more info on the task.
-> 
-> When applying these boosting rules on the runqueue util signals, we are able to detect if at least one
-> task needs boosting according to these rules. That only holds as long as the history we look at is
-> the result of a stable set of tasks, i.e. no tasks added or removed from the rq.
-
-So while I agree that 2) is a reasonable signal to work from, everything
-that comes after is still much confusing me.
-
+> ---
+>  drivers/cpufreq/cpufreq_conservative.c | 2 +-
+>  drivers/cpufreq/cpufreq_ondemand.c     | 2 +-
+>  drivers/cpufreq/cpufreq_performance.c  | 2 +-
+>  drivers/cpufreq/cpufreq_powersave.c    | 2 +-
+>  drivers/cpufreq/cpufreq_userspace.c    | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+> index b66e81c06a57..737ff3b9c2c0 100644
+> --- a/drivers/cpufreq/cpufreq_conservative.c
+> +++ b/drivers/cpufreq/cpufreq_conservative.c
+> @@ -346,7 +346,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>         return CPU_FREQ_GOV_CONSERVATIVE;
+>  }
+>
+> -fs_initcall(cpufreq_gov_dbs_init);
+> +core_initcall(cpufreq_gov_dbs_init);
+>  #else
+>  module_init(cpufreq_gov_dbs_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> index dced033875bf..82a4d37ddecb 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -483,7 +483,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>         return CPU_FREQ_GOV_ONDEMAND;
+>  }
+>
+> -fs_initcall(cpufreq_gov_dbs_init);
+> +core_initcall(cpufreq_gov_dbs_init);
+>  #else
+>  module_init(cpufreq_gov_dbs_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_performance.c b/drivers/cpufreq/cpufreq_performance.c
+> index aaa04dfcacd9..def9afe0f5b8 100644
+> --- a/drivers/cpufreq/cpufreq_performance.c
+> +++ b/drivers/cpufreq/cpufreq_performance.c
+> @@ -50,5 +50,5 @@ MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
+>  MODULE_DESCRIPTION("CPUfreq policy governor 'performance'");
+>  MODULE_LICENSE("GPL");
+>
+> -fs_initcall(cpufreq_gov_performance_init);
+> +core_initcall(cpufreq_gov_performance_init);
+>  module_exit(cpufreq_gov_performance_exit);
+> diff --git a/drivers/cpufreq/cpufreq_powersave.c b/drivers/cpufreq/cpufreq_powersave.c
+> index c143dc237d87..1ae66019eb83 100644
+> --- a/drivers/cpufreq/cpufreq_powersave.c
+> +++ b/drivers/cpufreq/cpufreq_powersave.c
+> @@ -43,7 +43,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>         return &cpufreq_gov_powersave;
+>  }
+>
+> -fs_initcall(cpufreq_gov_powersave_init);
+> +core_initcall(cpufreq_gov_powersave_init);
+>  #else
+>  module_init(cpufreq_gov_powersave_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+> index cbd81c58cb8f..b43e7cd502c5 100644
+> --- a/drivers/cpufreq/cpufreq_userspace.c
+> +++ b/drivers/cpufreq/cpufreq_userspace.c
+> @@ -147,7 +147,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>         return &cpufreq_gov_userspace;
+>  }
+>
+> -fs_initcall(cpufreq_gov_userspace_init);
+> +core_initcall(cpufreq_gov_userspace_init);
+>  #else
+>  module_init(cpufreq_gov_userspace_init);
+>  #endif
+> --
+> 2.17.1
+>
