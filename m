@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE965DB1F6
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 18:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D364DB202
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 18:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440108AbfJQQKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 12:10:19 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33937 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439844AbfJQQKT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 12:10:19 -0400
-Received: by mail-qt1-f193.google.com with SMTP id 3so4416599qta.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 09:10:18 -0700 (PDT)
+        id S2406399AbfJQQLU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 12:11:20 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:40938 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405983AbfJQQLU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 12:11:20 -0400
+Received: by mail-qt1-f194.google.com with SMTP id m61so4366383qte.7
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 09:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:references:cc:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding;
-        bh=Ny/2VRd+nYPZUv6lS3IfSjlpgoq8xpi9csSapod3I6s=;
-        b=l6pUbq9ZGqeQIvaa+cnqcCYOZi3/jNJwbPMtbnUlqNj5QrnM7UA5gdH8mg31AIVZw7
-         xbDPlG5/P/SVpJ9MZJuRe5wCTxjXPIoTALKfEwdgVOUU2bOqWVeNWrb4KMd+gwGckI0w
-         wsFgaQ19vhES8njgHStqgeVRteJmqB8m7rfbo9PPz3Ntl/JoqGDsLYq31epfCFEonk/4
-         bU0kmkmCDnUxhGPOcmSg4klgOzFoTMIWpdzpvFEzAU+h0INKwg9Gz8Gj5GpjqKVf66VF
-         5j+Su/AzFBvV1tpBywTqzx7NbzMKjLHaKwZuDVUyNBAPtDB8/d2ze4SAhyy+Zr4/57kn
-         mtJw==
+        bh=L9pt9Z55SHz6CG8upac+m8pqudIdzOY9Z9V3JtoTFX8=;
+        b=CWD0eZJmqBiH2XE8MyKfBza0dcM0g01SotBgRXr/jbjJ/BOwr06jeARYbxsc/fJ4k/
+         TReD3Pbkg3ynJIY2bI/So7Q7DG5+/WASBbvlAiMhoGHBHrXWD4m4AFPXTkOF6Hvofd4m
+         OH3eI2jzaBfJx3R8k4uds85G6pKmgdUVzAr5zwjcxExp3qjxJkfqYcKLR5Zq5Ohyy3aE
+         g0fXnM0cjyILXWCs0x0XCoRZ+5yJHf7IIx1+mZoGhm8YQvXiKKt82frSAiBaATeT8D4M
+         sBi4OR+8isHHgHJQfzVq64qsVtKCfCfrKm8iD5Sawsj96w1w0kaklB3kcanvbcmHX11w
+         IbNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:cc:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=Ny/2VRd+nYPZUv6lS3IfSjlpgoq8xpi9csSapod3I6s=;
-        b=FseRWILEkWVUipO8mLN0iuKplbUBzag0tAw4zUupRiWMmIUMXLfcF646Ju1ssxnY6q
-         YVLSXCcQrhE1N3qnc0Y5ChT67I9j32n0y21vLcbEC+oP302vRdgJsqmngfc+NkECYGLd
-         eyiGaikyMpIVnN4UaZwLR726Y58zJj3MYx8yPEXE7WLZbk2xda58emK/Q6g3e6qsP/91
-         Vfp/mY44f8UDQQf5/GZ0Cxmi8xRELnQWqjwG7n9cDhD47uAKfcYmcdC+dU6PbxTxrYX+
-         TXHeJPdTf+BfotI/HY8HXgD302ouZhugp38gBSKpbBuEnQJ0Qi2IHhFHyOir6TyhenpJ
-         Ss2w==
-X-Gm-Message-State: APjAAAX68CrKSYEJ6iJUVZ4ZKoZc+zYLVspQx5hqNrbBx1qZ2YzSRIND
-        WxR5Lajpvn9fFCP9LDSiE50ugw==
-X-Google-Smtp-Source: APXvYqx7+OyfLaAXGwBd1NAptH2mQwrN3MtccpUFsF1to9AWMls4vwHB38FXDo1TgrgbkHExtFCy9A==
-X-Received: by 2002:ac8:3ac6:: with SMTP id x64mr4619046qte.51.1571328618066;
-        Thu, 17 Oct 2019 09:10:18 -0700 (PDT)
+        bh=L9pt9Z55SHz6CG8upac+m8pqudIdzOY9Z9V3JtoTFX8=;
+        b=KSOZVhTS9rNpHSN38jHHo/Rw7t9N/GwT47gV1+8zHrg4t3e7dwIUQHdVlWJf+0LCLH
+         Hd4uKoQP7Z5JEON310XA9X950okZbqvDkq9vIiRRKDzTPhkYBpjZrO0tixbkAMBUdyq+
+         7tPMpomv3HPqwucyrOQ13Fw8g/sqf4+u/dBsS1arQGOHQC+/ZMbD+nTcwxclHwq8+0G4
+         iv/irUdY502pqCiuTxVpVAzsO0LuaClMmotoLhh3rcH9f/OwYcfucvlk6QqN0MSf7uSe
+         qFvSyl9/vhHJt2fOs9anBLFDVEDtKcSbjY8O/tJucD+XHg0mf2C2WIbfHFsw3grjPfhC
+         nrgg==
+X-Gm-Message-State: APjAAAXPVp5zkdW4kr6A/J4MsaY8UXP+kfbIDm9+68DX/y0wcJaucBY5
+        tcasJAJEGZAFLzC0vJ8YiVJVJw==
+X-Google-Smtp-Source: APXvYqxYhvCvZWcFbwrydpNgASDDloMQUYWOtz8vH+NDsrbwUIQjGAXIfppyoDcdfl0T4JGQ5gT6+Q==
+X-Received: by 2002:a05:6214:2c:: with SMTP id b12mr4686466qvr.10.1571328679237;
+        Thu, 17 Oct 2019 09:11:19 -0700 (PDT)
 Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id m15sm984714qka.104.2019.10.17.09.10.15
+        by smtp.gmail.com with ESMTPSA id g3sm1219423qkb.117.2019.10.17.09.11.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 09:10:16 -0700 (PDT)
-Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
- controller binding to describe thermal warming device
+        Thu, 17 Oct 2019 09:11:18 -0700 (PDT)
+Subject: Re: [PATCH v3 1/7] PM/Domains: Add support for retrieving genpd
+ performance states information
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
- <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
- <5DA88892.5000408@linaro.org>
- <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
+ <1571254641-13626-2-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFr76VHypqGxYL-1HS3uu3_KYeO+dGJ7q1Nj=uXiQgY98A@mail.gmail.com>
 Cc:     Eduardo Valentin <edubezval@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -64,12 +62,12 @@ Cc:     Eduardo Valentin <edubezval@gmail.com>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5DA89267.30806@linaro.org>
-Date:   Thu, 17 Oct 2019 12:10:15 -0400
+Message-ID: <5DA892A5.5070007@linaro.org>
+Date:   Thu, 17 Oct 2019 12:11:17 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
  Thunderbird/38.5.1
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
+In-Reply-To: <CAPDyKFr76VHypqGxYL-1HS3uu3_KYeO+dGJ7q1Nj=uXiQgY98A@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -77,90 +75,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/17/2019 11:43 AM, Ulf Hansson wrote:
-> On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+On 10/17/2019 04:49 AM, Ulf Hansson wrote:
+> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
 >>
->> Hello Ulf,
->> Thanks for the review!
+>> Add two new APIs in the genpd framework,
+>> dev_pm_genpd_get_performance_state to return the current performance
+>> state of a power domain and dev_pm_genpd_performance_state_count to
+>> return the total number of performance states supported by a
+>> power domain. Since the genpd framework does not maintain
+>> a count of number of performance states supported by a power domain,
+>> introduce a new callback(.get_performance_state_count) that can be used
+>> to retrieve this information from power domain drivers.
 >>
->> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
->>> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
->>>>
->>>> RPMh power controller hosts mx domain that can be used as thermal
->>>> warming device. Add a sub-node to specify this.
->>>>
->>>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
->>>>  1 file changed, 10 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>> index eb35b22..fff695d 100644
->>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>> @@ -18,6 +18,16 @@ Required Properties:
->>>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
->>>>  various OPPs for different platforms as well as Power domain indexes
->>>>
->>>> += SUBNODES
->>>> +RPMh alsp hosts power domains that can behave as thermal warming device.
->>>> +These are expressed as subnodes of the RPMh. The name of the node is used
->>>> +to identify the power domain and must therefor be "mx".
->>>> +
->>>> +- #cooling-cells:
->>>> +       Usage: optional
->>>> +       Value type: <u32>
->>>> +       Definition: must be 2
->>>> +
->>>
->>> Just wanted to express a minor thought about this. In general we use
->>> subnodes of PM domain providers to represent the topology of PM
->>> domains (subdomains), this is something different, which I guess is
->>> fine.
->>>
->>> I assume the #cooling-cells is here tells us this is not a PM domain
->>> provider, but a "cooling device provider"?
->> Yep.
->>>
->>> Also, I wonder if it would be fine to specify "power-domains" here,
->>> rather than using "name" as I think that is kind of awkward!?
->> Do you mean "power-domain-names" ? I am using this to match against the
->> genpd names defined in the provider driver.
+>> These APIs are added to aid the implementation of a power domain as
+>> a warming device. Linux kernel cooling device framework(into which
+>> warming device can be plugged in) requires during initialization to be
+>> provided with the maximum number of states that can be supported. When
+>> a power domain acts as a warming device, the max state is the max number
+>> of perfomrance states supported by the power domain. The cooling
+>> device framework implements API to retrieve the current state of the
+>> cooling device. This in turn translates to the current performance
+>> state of the power domain.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 > 
-> No. If you are using "power-domains" it means that you allow to
-> describe the specifier for the provider.
-Yep. But won't this look funny in DT ? The provider node will have a sub
-node with a power domain referencing to itself Like below: Is this ok ?
-
-rpmhpd: power-controller {
-                                compatible = "qcom,sdm845-rpmhpd";
-                                #power-domain-cells = <1>;
-
-			...
-			...
-				mx_cdev: mx {
-                                        #cooling-cells = <2>;
-                                        power-domains = <&rpmhpd	SDM845_MX>;
-                                };
-				
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > 
-> From Linux point of view, it means you can use dev_pm_domain_attach()
-> to hook up the corresponding device with the PM domain.
-
-Yes. Only the thermal framework does not populate cdev->dev->of_node.
-But it should be a trivial thing to fix it. Also if I end up creating a
-separate device, it should not matter.
-> 
-> Using "power-domain-names" is just to allow to specify a name rather
-> than an index, which makes sense if there is more than one index.
-> Perhaps you can state that the "power-domain-names" should be there
-> anyway, to be a little bit future proof if ever multiple index
-> (multiple PM domains).
-> 
-> Kind regards
-> Uffe
-> 
-
+Thanks Ulf! Do you think this patch be merged separate from the series.
+Then I can drop it from the series.
 
 -- 
 Warm Regards
