@@ -2,188 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6AEDAFA5
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 16:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6A3DAFAE
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437563AbfJQOQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 10:16:55 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42042 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727314AbfJQOQz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 10:16:55 -0400
-Received: by mail-ot1-f67.google.com with SMTP id c10so2005874otd.9;
-        Thu, 17 Oct 2019 07:16:54 -0700 (PDT)
+        id S1727314AbfJQOTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 10:19:00 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44031 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389074AbfJQOS7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 10:18:59 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t84so2256794oih.10;
+        Thu, 17 Oct 2019 07:18:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ONhbG1YIvRehChglKAzYSee1XpDEhwyMKjBcNaf717M=;
-        b=izYqhpkanZhv6t0j6kpBClORLQTasyQsD+0Gzo76AmET09Nwz3oCwVeKVvCnWqcK3E
-         TyNOXkW5dT3P6CGt/Rx+x8sB1Ik3a4xLeZxeJ4iothxjWl1AZzK4fOylTazICZ6zKUf8
-         aNBuum4P1RUU3bwxE7c5fd37wXj5rq9hNiUlNyDy5ygC2p10LL8nAoNPbMfqPWMIenHM
-         baUab7D5jGKyK8itXAroeTcFaJO7fVzcKzHRWvIg9h6oWQY4M30FiSKKRfmhXAkuMIlO
-         zPlxiix8uiprFHAQTLcWR7KUHqBkxfMy+eliO50LAOeCbyf73Jfhr277xi1qg8xmaudT
-         edSQ==
-X-Gm-Message-State: APjAAAUnML6+NPnhv4RauepLt73ZKemZOIaPGtPZrT5Um9P/0GMzRlCy
-        LQP/KMTVXoJC39QM0VEkM/pNzkvkmeVdIVr/XYA=
-X-Google-Smtp-Source: APXvYqzlXzT4lVsF0ANUd+lX83vr0WuCNqKjpz6umKGU8BvwxubmHWkCKI4rEx3LdKJ9XXFDb/fKsYOCW85mZdBE59w=
-X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr3351385oth.266.1571321813586;
- Thu, 17 Oct 2019 07:16:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vBnB+M7MeMjHtBV/3UgIfk1bQ4OQXkYxZtSD9bLiIiw=;
+        b=BFM68eQVeXPT24RYF+GS6ZktmxxxJOlLTmUi4vFMDqp2D3A3XrfvAsuOCpWJsK669D
+         mw36lgw5jyXs6g1xhUWa0ZQ1p0f7pgzcknF3Iu7gPDaZFTaW1EKRzGMf+KUE5Mn8EDJm
+         JvcCdDObfh8lOV/+5FMXiqpPpUdG3yRLPL27cskeFjb29cTdKjpan+6f3kVw0amAidYg
+         x3ONbhW0v+g8V7zyo1uKrCfbt9qkDZb2sg+P62pukFaFeRv4K/JeK+P7IayxGXZseFW/
+         g0zqb9c7kH76wLBA+Hsxn0fH0XbLpl/5PhoB3AGmsWclxBBF/DsJrccvpm8Sz54XDdRe
+         /KrQ==
+X-Gm-Message-State: APjAAAWEGgVgoE1UV72BDk9iFQJfy2i7PswpTVxOznt5aLmUiURg5A8e
+        egacdEyPJDJJ1RDdq0oP9Q==
+X-Google-Smtp-Source: APXvYqwaOguDWjHAKjE7AWREkIBbr2Yeq2vvJPgI6fWhcE6lyU2zTIaG3F0EzOUbwG9aXEHyckG1Aw==
+X-Received: by 2002:aca:370b:: with SMTP id e11mr3318457oia.96.1571321938730;
+        Thu, 17 Oct 2019 07:18:58 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i4sm620307otc.37.2019.10.17.07.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 07:18:57 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 09:18:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     robh+dt@kernel.org, krzk@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: Re: [PATCH v6] dt-bindings: arm: samsung: Update the CHIPID binding
+ for  ASV
+Message-ID: <20191017141857.GA8828@bogus>
+References: <CGME20191017092953eucas1p259c1e03eb2cb4d19aa48eaa2e3cca2dc@eucas1p2.samsung.com>
+ <20191017092939.25899-1-s.nawrocki@samsung.com>
 MIME-Version: 1.0
-References: <2811202.iOFZ6YHztY@kreacher> <4551555.oysnf1Sd0E@kreacher> <20191017094143.fhmhgltv6ujccxlp@vireshk-i7>
-In-Reply-To: <20191017094143.fhmhgltv6ujccxlp@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Oct 2019 16:16:40 +0200
-Message-ID: <CAJZ5v0hDhJrCWnPxbV54yWAB=DKCLz33Sq8J4kXtqH4+mJn2eQ@mail.gmail.com>
-Subject: Re: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017092939.25899-1-s.nawrocki@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 11:41 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 16-10-19, 12:41, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Introduce frequency QoS, based on the "raw" low-level PM QoS, to
-> > represent min and max frequency requests and aggregate constraints.
-> >
-> > The min and max frequency requests are to be represented by
-> > struct freq_qos_request objects and the aggregate constraints are to
-> > be represented by struct freq_constraints objects.  The latter are
-> > expected to be initialized with the help of freq_constraints_init().
-> >
-> > The freq_qos_read_value() helper is defined to retrieve the aggregate
-> > constraints values from a given struct freq_constraints object and
-> > there are the freq_qos_add_request(), freq_qos_update_request() and
-> > freq_qos_remove_request() helpers to manipulate the min and max
-> > frequency requests.  It is assumed that the the helpers will not
-> > run concurrently with each other for the same struct freq_qos_request
-> > object, so if that may be the case, their uses must ensure proper
-> > synchronization between them (e.g. through locking).
-> >
-> > In addition, freq_qos_add_notifier() and freq_qos_remove_notifier()
-> > are provided to add and remove notifiers that will trigger on aggregate
-> > constraint changes to and from a given struct freq_constraints object,
-> > respectively.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  include/linux/pm_qos.h |   44 ++++++++
-> >  kernel/power/qos.c     |  240 +++++++++++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 284 insertions(+)
-> >
-> > Index: linux-pm/include/linux/pm_qos.h
-> > ===================================================================
-> > --- linux-pm.orig/include/linux/pm_qos.h
-> > +++ linux-pm/include/linux/pm_qos.h
-> > @@ -267,4 +267,48 @@ static inline s32 dev_pm_qos_raw_resume_
-> >  }
-> >  #endif
-> >
-> > +#define FREQ_QOS_MIN_DEFAULT_VALUE   0
-> > +#define FREQ_QOS_MAX_DEFAULT_VALUE   (-1)
-> > +
-> > +enum freq_qos_req_type {
-> > +     FREQ_QOS_MIN = 1,
-> > +     FREQ_QOS_MAX,
-> > +};
-> > +
-> > +struct freq_constraints {
-> > +     struct pm_qos_constraints min_freq;
-> > +     struct blocking_notifier_head min_freq_notifiers;
-> > +     struct pm_qos_constraints max_freq;
-> > +     struct blocking_notifier_head max_freq_notifiers;
-> > +};
-> > +
-> > +struct freq_qos_request {
-> > +     enum freq_qos_req_type type;
-> > +     struct plist_node pnode;
-> > +     struct freq_constraints *qos;
-> > +};
-> > +
-> > +static inline int freq_qos_request_active(struct freq_qos_request *req)
-> > +{
-> > +     return !IS_ERR_OR_NULL(req->qos);
-> > +}
-> > +
-> > +void freq_constraints_init(struct freq_constraints *qos);
-> > +
-> > +s32 freq_qos_read_value(struct freq_constraints *qos,
-> > +                     enum freq_qos_req_type type);
-> > +
-> > +int freq_qos_add_request(struct freq_constraints *qos,
-> > +                      struct freq_qos_request *req,
-> > +                      enum freq_qos_req_type type, s32 value);
-> > +int freq_qos_update_request(struct freq_qos_request *req, s32 new_value);
-> > +int freq_qos_remove_request(struct freq_qos_request *req);
-> > +
-> > +int freq_qos_add_notifier(struct freq_constraints *qos,
-> > +                       enum freq_qos_req_type type,
-> > +                       struct notifier_block *notifier);
-> > +int freq_qos_remove_notifier(struct freq_constraints *qos,
-> > +                          enum freq_qos_req_type type,
-> > +                          struct notifier_block *notifier);
-> > +
-> >  #endif
-> > Index: linux-pm/kernel/power/qos.c
-> > ===================================================================
-> > --- linux-pm.orig/kernel/power/qos.c
-> > +++ linux-pm/kernel/power/qos.c
-> > @@ -650,3 +650,243 @@ static int __init pm_qos_power_init(void
-> >  }
-> >
-> >  late_initcall(pm_qos_power_init);
-> > +
-> > +/* Definitions related to the frequency QoS below. */
-> > +
-> > +/**
-> > + * freq_constraints_init - Initialize frequency QoS constraints.
-> > + * @qos: Frequency QoS constraints to initialize.
-> > + */
-> > +void freq_constraints_init(struct freq_constraints *qos)
-> > +{
-> > +     struct pm_qos_constraints *c;
-> > +
-> > +     c = &qos->min_freq;
-> > +     plist_head_init(&c->list);
-> > +     c->target_value = FREQ_QOS_MIN_DEFAULT_VALUE;
-> > +     c->default_value = FREQ_QOS_MIN_DEFAULT_VALUE;
-> > +     c->no_constraint_value = FREQ_QOS_MIN_DEFAULT_VALUE;
-> > +     c->type = PM_QOS_MAX;
->
-> should this be MIN ?
+On Thu, 17 Oct 2019 11:29:39 +0200, Sylwester Nawrocki wrote:
+> This patch adds documentation of new optional "samsung,asv-bin"
+> property in the chipid device node and documents requirement of
+> "syscon" compatible string.  These additions are needed to support
+> Exynos ASV (Adaptive Supply Voltage) feature.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
+> Depends on patch ("8d0daa4c89c9 dt-bindings: arm: samsung: Convert
+> Exynos Chipid bindings to json-schema") already applied to Rob's
+> dt/next.
+> 
+> Changes since v5:
+>  - removed uneeded allOf from 'compatible' property section
+> 
+> Changes since v4:
+>  - converted to YAML
+> 
+> Changes since v3:
+>  - none
+> 
+> Changes since v2:
+>  - corrected patch summary line prefix, the patch moved in the
+>    sequence
+> 
+> Changes since v1 (RFC):
+>  - new patch
+> ---
+>  .../bindings/arm/samsung/exynos-chipid.yaml   | 26 ++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
 
-No, it shouldn't.
+Applied, thanks.
 
-For the min frequency, the effective constraint needs to be the
-maximum of all requests, because that satisfies all of them (each
-request means "the frequency cannot be less than this").
+I dropped 'select' because I fixed the tooling to ignore 'syscon'.
 
-> > +     c->notifiers = &qos->min_freq_notifiers;
-> > +     BLOCKING_INIT_NOTIFIER_HEAD(c->notifiers);
-> > +
-> > +     c = &qos->max_freq;
-> > +     plist_head_init(&c->list);
-> > +     c->target_value = FREQ_QOS_MAX_DEFAULT_VALUE;
-> > +     c->default_value = FREQ_QOS_MAX_DEFAULT_VALUE;
-> > +     c->no_constraint_value = FREQ_QOS_MAX_DEFAULT_VALUE;
-> > +     c->type = PM_QOS_MIN;
->
-> and this MAX ?
-
-Likewise, for the max frequency, the effective constraint needs to be
-the minimum of all requests, as each of them means "the frequency
-cannot be more than this").
-
-[Also note that the current code in device PM QoS uses MIN and MAX
-here in the same way. :-)]
+Rob
