@@ -2,118 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B5ADAAED
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B206DAAF5
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502005AbfJQLKF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 07:10:05 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:39476 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2405285AbfJQLKF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:10:05 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68ED71BA8;
-        Thu, 17 Oct 2019 04:09:40 -0700 (PDT)
-Received: from [10.1.195.43] (unknown [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C98223F718;
-        Thu, 17 Oct 2019 04:09:38 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 1/6] PM: Introduce em_pd_get_higher_freq()
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, qperret@qperret.net,
+        id S2392327AbfJQLLY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 07:11:24 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34184 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394164AbfJQLLX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 07:11:23 -0400
+Received: by mail-wr1-f66.google.com with SMTP id j11so1887429wrp.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 04:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+zYZA+RgbruuoZvP4gkp7U+7iA9beMBCPXED1O6rxro=;
+        b=Ojv0y5NOzDLkEhMe+JvYEQ5b68BsGM46pvx0kl7Scs0gXDS6BmgeIZuqZb6REC5csc
+         0LcdLYiFote/zJL4TQLOI4dlimKEvU2jxYwSf94j9n3z5kai++Y8KXpmEonGdnTGL13B
+         gbro3mPG58ZggyTYyTfR6lH9gJrtmZCgdfAS/xATycYBeY1i383OgUhjqRu9wOip/ukr
+         pqhy4pFxZ3b8ekWCqV7UKacLskxCValbHEeCU9VDeD6Zps3jfQLxHL+VRFclSQJdEOAD
+         BUz/q2ec1vg60IAstc9b7rz5USv1l+a5CkH3RrnuhzoJy5n9oLFghrylBWxxDtQD3mPp
+         axTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+zYZA+RgbruuoZvP4gkp7U+7iA9beMBCPXED1O6rxro=;
+        b=EtkQaist+oCmy8h+FyeBdsrO4lQKitq/DOyeYUkmWnw7tIarcJLovRcAfS+hj1JJHT
+         pUuAxua51J2x8uIrl0EtiOc0q9AmmAGFeIxHCgD79FkE38/u7gnQRgucDWnYSAr5lWmd
+         GqriyWM+ys0xxnXP4sx9yV2oY0s+G9DeK+kpJDneAmJ81ejVZVSQScpPIwnjAT62guBa
+         eDT6TNOlJ7Pnbxy7OdVvHplxBiEW81vlfa4UbfburcVldamcxLYUppC5UQdn01DFx5+Y
+         b/nQahEdXzK6S5MSW8S8Y8IWWN3dr9XKL1+CqLfGMt66Fvb9RHQiBxZ0qjPZC8W9pyWw
+         KhWA==
+X-Gm-Message-State: APjAAAUTB4SCxvJu+3SXtkknTmW9cldhH0wfsmY078JhlrRQxjgK8n8s
+        5mySbFR6h+566TAprtlEhrRR1w==
+X-Google-Smtp-Source: APXvYqzL2rz8o/7HAh35iFK8WOl7olxFOTAEgWWsnB008UBi/LWdcLZvpXnwlj6NQC5/VD0TIl7kBQ==
+X-Received: by 2002:adf:df05:: with SMTP id y5mr2740030wrl.84.1571310680779;
+        Thu, 17 Oct 2019 04:11:20 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:7687:11a4:4657:121d])
+        by smtp.gmail.com with ESMTPSA id a204sm2447892wmh.21.2019.10.17.04.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 04:11:20 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 12:11:16 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Douglas Raillard <douglas.raillard@arm.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, qperret@qperret.net,
         patrick.bellasi@matbug.net, dh.han@samsung.com
+Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
+Message-ID: <20191017111116.GA27006@google.com>
 References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-2-douglas.raillard@arm.com>
- <5aa79534-7059-09e7-00b8-752f6699f9d4@arm.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <9cb03bd7-af7c-df8b-e9d0-cd5db3ddda0b@arm.com>
-Date:   Thu, 17 Oct 2019 12:09:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+ <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
+ <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
+ <20191017095015.GI2311@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <5aa79534-7059-09e7-00b8-752f6699f9d4@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017095015.GI2311@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dietmar,
-
-On 10/17/19 10:58 AM, Dietmar Eggemann wrote:
-> On 11/10/2019 15:44, Douglas RAILLARD wrote:
+On Thursday 17 Oct 2019 at 11:50:15 (+0200), Peter Zijlstra wrote:
+> Now, the thing is, we use map_util_freq() in more places, and should we
+> not reflect this increase in C for all of them? That is, why is this
+> patch changing get_next_freq() and not map_util_freq().
 > 
-> [...]
+> I don't think that question is answered in the Changelogs.
 > 
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index d249b88a4d5a..dd6a35f099ea 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -159,6 +159,53 @@ static inline int em_pd_nr_cap_states(struct em_perf_domain *pd)
->>   	return pd->nr_cap_states;
->>   }
->>   
->> +#define EM_COST_MARGIN_SCALE 1024U
->> +
->> +/**
->> + * em_pd_get_higher_freq() - Get the highest frequency that does not exceed the
->> + * given cost margin compared to min_freq
->> + * @pd		: performance domain for which this must be done
->> + * @min_freq	: minimum frequency to return
->> + * @cost_margin	: allowed margin compared to min_freq, on the
->> + *		  EM_COST_MARGIN_SCALE scale.
->> + *
->> + * Return: the chosen frequency, guaranteed to be at least as high as min_freq.
->> + */
->> +static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
->> +	unsigned long min_freq, unsigned long cost_margin)
->> +{
->> +	unsigned long max_cost = 0;
->> +	struct em_cap_state *cs;
->> +	int i;
->> +
->> +	if (!pd)
->> +		return min_freq;
->> +
->> +	/* Compute the maximum allowed cost */
->> +	for (i = 0; i < pd->nr_cap_states; i++) {
->> +		cs = &pd->table[i];
->> +		if (cs->frequency >= min_freq) {
->> +			max_cost = cs->cost +
->> +				(cs->cost * cost_margin) / EM_COST_MARGIN_SCALE;
-> 
-> Maybe you could mention in the header that this is the place where the
-> algorithm could be tuned. (even though it doesn't offer any tuning
-> interface, which is a good thing).
+> Exactly because it does change the energy consumption (it must) should
+> that not also be reflected in the EAS logic?
 
-I'm not sure what you mean, the patch "title" contains "em_pd_get_higher_freq()", should it
-also mention where exactly inside the function the margin logic is implemented ?
+Right that shouldn't hurt and keep things consistent. That probably
+won't have a huge impact in practice (the boost should be != 0 only when
+the util signals haven't converged IIUC, which is a case where the EAS
+calculation is already 'wrong' anyway), but that still feels like the
+right thing to do.
 
->> +			break;
->> +		}
->> +	}
->> +
->> +	/* Find the highest frequency that will not exceed the cost margin */
->> +	for (i = pd->nr_cap_states-1; i >= 0; i--) {
->> +		cs = &pd->table[i];
->> +		if (cs->cost <= max_cost)
->> +			return cs->frequency;
->> +	}
->> +
->> +	/*
->> +	 * We should normally never reach here, unless min_freq was higher than
->> +	 * the highest available frequency, which is not expected to happen.
->> +	 */
-> 
-> Maybe add a WARN_ONCE(1, "foobar"); here to indicate this unlikely event
-> (CPUfreq and EM framwork out of sync)?
+> I'm still thinking about the exact means you're using to raise C; that
+> is, the 'util - util_est' as cost_margin. It hurts my brain still.
 
-Will do.
++1 ...
 
-> [...]
-> 
+Thanks,
+Quentin
