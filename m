@@ -2,130 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9A7DA9DA
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 12:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9F2DA9F3
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 12:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392708AbfJQKWo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 06:22:44 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:38356 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbfJQKWn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 06:22:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D70DC1BF7;
-        Thu, 17 Oct 2019 03:22:18 -0700 (PDT)
-Received: from [10.1.195.43] (unknown [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65DB13F718;
-        Thu, 17 Oct 2019 03:22:17 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 2/6] sched/cpufreq: Attach perf domain to sugov
- policy
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        id S2408817AbfJQK2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 06:28:47 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:42988 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405805AbfJQK2r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 06:28:47 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191017102844euoutp01de421b9e5ca201eac9741c20b90808db~OaGoTvEUz2792227922euoutp01l
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 10:28:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191017102844euoutp01de421b9e5ca201eac9741c20b90808db~OaGoTvEUz2792227922euoutp01l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1571308124;
+        bh=iRCzuB8y77uwfElmExl0r6Se4rQgS/Q62RZNDHvwRto=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=DOVB/Q4AWQpZ7d3dCv9C3snrSob/qJBoRidXkL5Zsx27c5bSs3bgcbQK7SwZaWoZt
+         slc0pPlfW1siD0pS/HELYwrwhoj+U6oe7X1Pp4fAoCoOytHstVl1DoV7AzOfmDPzLR
+         HF0RrVmaeeoJ23xK1KjNGuvPFi3vwLaq5ylQhX8E=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191017102844eucas1p2bee1c8122997d8a01a80d763b0bef90e~OaGn19DRh1118711187eucas1p2b;
+        Thu, 17 Oct 2019 10:28:44 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 5A.00.04374.C5248AD5; Thu, 17
+        Oct 2019 11:28:44 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191017102843eucas1p164993b3644d006481fb041e36175eebe~OaGnYvAvr2840828408eucas1p1b;
+        Thu, 17 Oct 2019 10:28:43 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191017102843eusmtrp2d58a7d10f4a48b53240821211d2f0e9c~OaGnXm8t71361913619eusmtrp2K;
+        Thu, 17 Oct 2019 10:28:43 +0000 (GMT)
+X-AuditID: cbfec7f5-4f7ff70000001116-1a-5da8425c3687
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 75.49.04117.B5248AD5; Thu, 17
+        Oct 2019 11:28:43 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191017102843eusmtip2154fff2e728f839a3ab68c2c7c7c59b3~OaGm3D8PH0361203612eusmtip2R;
+        Thu, 17 Oct 2019 10:28:43 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-3-douglas.raillard@arm.com>
- <4ebf6419-c8e0-3998-41e0-3f7b49b34084@arm.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <686407a7-3074-0fa2-e041-a9931f467aea@arm.com>
-Date:   Thu, 17 Oct 2019 11:22:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
-MIME-Version: 1.0
-In-Reply-To: <4ebf6419-c8e0-3998-41e0-3f7b49b34084@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Kamil Konieczny <k.konieczny@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] opp: core: Revert "add regulators enable and disable"
+Date:   Thu, 17 Oct 2019 12:27:58 +0200
+Message-Id: <20191017102758.8104-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VSa0hTYRj229k5Ow6nx03yw8RyUZDiTLI4pISG5X4E9UOEyqEzDzp0Uzav
+        XcDNTDetlmQtExWTpvM+RVPcKBNnic1LlgijaV4gEtJpmIq1ebT+Pe9zeZ+PjxdHuCWoHy6R
+        ZVNymTiDj7GZPcO/rSEJFxpFp3498iI7de0oWTm3gJHNq98AWbemQ0mrtYNFTvVXY6TjwRAg
+        dVYzg2wdsrHIH5tjDHL3cyeT7LIPY1Eewr4qG0toNKgx4cNuAxBaZnoZQocx4Cp6nR2ZQmVI
+        cil56Pkkdprukx1kqb3ze1fWkEJQ7akB7jgkwqHVNoBpABvnEo0AjlRtM10Cl1gHcHnOnxYc
+        ADqGOpgHidmBSSYt6AFcrKxH6MGZUJumMJcLI8KgZkXjxDjuQyTC9o1zLg9CLDHgY1M36uJ5
+        xCVo3LzisjOJ43Bh0bQX5RCRsMX2E6PLjsDmjjd7+yGxjcGlmi5ACzGwqKwcpTEPfrd0s2js
+        D//01TLoQBGAcx9bWfRQDuCUSrefjoDvLBN7r0CIk7C9P5Smo2GbdgRx0ZDwhDMr3i4accKK
+        nmf7NAeW3ufS7hOwytL2r/bt+CRCYyEcXdsC9C+KoNrWhGlBQNX/rjoADMCXylFIUynFaRmV
+        J1CIpYocWargZqbUCJznMbpr2XgNzDvJg4DAAd+Do53Xi7ioOFdRIB0EEEf4Ppzaew0iLidF
+        XHCLkmcmynMyKMUgOIwz+b6c2272G1wiVZxNpVNUFiU/UBm4u18h4NUnFZPrxWZlgl3y1WaI
+        VCl3DNrn6i2UnfWl5kleCVBNBIOLZXERAgwTSA/FKk3zsbKj0dMt+mQsyEsPYu7a03VRi5dV
+        XXNPz7o5QvIb3nOaX77aKh2/VtFUHl8pQYLHbOYXy3f6JwJXZ3c+KNHpitJAnk9ZY3j8mbhj
+        BXymIk0cFoTIFeK/ti3q0hoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsVy+t/xe7rRTitiDZ4u0LfYOGM9q8XUh0/Y
+        LFZ/fMxoseDTDFaL8+c3sFtc3jWHzeJz7xFGixnn9zFZrD1yl93izY+zTBb/rm1ksdj84Bib
+        A4/Hzll32T02repk8+jbsorR4/iN7UwenzfJBbBG6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZ
+        mVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GXMuPKAsaBTsGL720/MDYxz+LoYOTkkBEwkbu25
+        xNLFyMUhJLCUUWLOm+lsEAkZiZPTGlghbGGJP9e6wOJCAp8YJV72BoLYbAKGEl1vIeIiAokS
+        D3qes4MMYhZ4wyRx6NEjoAQHh7CAm8SmH/4gNSwCqhJPnu4Fq+cVsJFYc/cD1C55idUbDjBP
+        YORZwMiwilEktbQ4Nz232EivODG3uDQvXS85P3cTIzBotx37uWUHY9e74EOMAhyMSjy8L5iX
+        xwqxJpYVV+YeYpTgYFYS4Z3fsiRWiDclsbIqtSg/vqg0J7X4EKMp0PKJzFKiyfnAiMoriTc0
+        NTS3sDQ0NzY3NrNQEuftEDgYIySQnliSmp2aWpBaBNPHxMEp1cC439in8vI6hZDl5/45P9kv
+        /utM8qUFUrcaahzvGd0rfHjFweLVxDCDxu+vpLcb7Nv6vT9AYO3HN8dfn37dY3+a1TXz2GaH
+        A5wTI/ZFJ87pLvxtLtkts3XdWc3IHdkb23+w/f385uL0XEc9q1W3noT8EF2YJbhi48NbBWvz
+        VKN2X2GQrxWYkjClRomlOCPRUIu5qDgRAFRkTDxwAgAA
+X-CMS-MailID: 20191017102843eucas1p164993b3644d006481fb041e36175eebe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191017102843eucas1p164993b3644d006481fb041e36175eebe
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191017102843eucas1p164993b3644d006481fb041e36175eebe
+References: <CGME20191017102843eucas1p164993b3644d006481fb041e36175eebe@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dietmar,
+All the drivers, which use the OPP framework control regulators, which
+are already enabled. Typically those regulators are also system critical,
+due to providing power to CPU core or system buses. It turned out that
+there are cases, where calling regulator_enable() on such boot-enabled
+regulator has side-effects and might change its initial voltage due to
+performing initial voltage balancing without all restrictions from the
+consumers. Until this issue becomes finally solved in regulator core,
+avoid calling regulator_enable()/disable() from the OPP framework.
 
-On 10/17/19 9:57 AM, Dietmar Eggemann wrote:
-> On 11/10/2019 15:44, Douglas RAILLARD wrote:
-> 
-> [...]
-> 
->> @@ -66,6 +70,38 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
->>   
->>   /************************ Governor internals ***********************/
->>   
->> +#ifdef CONFIG_ENERGY_MODEL
->> +static void sugov_policy_attach_pd(struct sugov_policy *sg_policy)
->> +{
->> +	struct em_perf_domain *pd;
->> +	struct cpufreq_policy *policy = sg_policy->policy;
-> 
-> Shouldn't always order local variable declarations from longest to
-> shortest line?
+This reverts commit 7f93ff73f7c8c8bfa6be33bcc16470b0b44682aa.
 
-Can't find any reference to that rule in the coding style, although I'm happy to change order
-if that's deemed useful.
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+This is a follow-up from the following discussion:
+https://lkml.org/lkml/2019/10/9/541
+---
+ drivers/opp/core.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-> 
->> +
->> +	sg_policy->pd = NULL;
->> +	pd = em_cpu_get(policy->cpu);
->> +	if (!pd)
->> +		return;
->> +
->> +	if (cpumask_equal(policy->related_cpus, to_cpumask(pd->cpus)))
->> +		sg_policy->pd = pd;
->> +	else
->> +		pr_warn("%s: Not all CPUs in schedutil policy %u share the same perf domain, no perf domain for that policy will be registered\n",
->> +			__func__, policy->cpu);
-> 
-> Maybe {} because of 2 lines?
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 3b7ffd0234e9..9ff0538ee83a 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1626,12 +1626,6 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 			goto free_regulators;
+ 		}
+ 
+-		ret = regulator_enable(reg);
+-		if (ret < 0) {
+-			regulator_put(reg);
+-			goto free_regulators;
+-		}
+-
+ 		opp_table->regulators[i] = reg;
+ 	}
+ 
+@@ -1645,10 +1639,8 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 	return opp_table;
+ 
+ free_regulators:
+-	while (i--) {
+-		regulator_disable(opp_table->regulators[i]);
+-		regulator_put(opp_table->regulators[i]);
+-	}
++	while (i != 0)
++		regulator_put(opp_table->regulators[--i]);
+ 
+ 	kfree(opp_table->regulators);
+ 	opp_table->regulators = NULL;
+@@ -1674,10 +1666,8 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+ 	/* Make sure there are no concurrent readers while updating opp_table */
+ 	WARN_ON(!list_empty(&opp_table->opp_list));
+ 
+-	for (i = opp_table->regulator_count - 1; i >= 0; i--) {
+-		regulator_disable(opp_table->regulators[i]);
++	for (i = opp_table->regulator_count - 1; i >= 0; i--)
+ 		regulator_put(opp_table->regulators[i]);
+-	}
+ 
+ 	_free_set_opp_data(opp_table);
+ 
+-- 
+2.17.1
 
-+1
-
->> +}
->> +
->> +static struct em_perf_domain *sugov_policy_get_pd(
->> +						struct sugov_policy *sg_policy)
-> 
-> 
-> Maybe this way? This format is already used in this file.
-> 
-> static struct em_perf_domain *
-> sugov_policy_get_pd(struct sugov_policy *sg_policy)
-> 
-
-I also prefer this kind of non-indented form that always stays indented across renames :)
-
->> +{
->> +	return sg_policy->pd;
->> +}
->> +#else /* CONFIG_ENERGY_MODEL */
->> +static void sugov_policy_attach_pd(struct sugov_policy *sg_policy) {}
->> +static struct em_perf_domain *sugov_policy_get_pd(
->> +						struct sugov_policy *sg_policy)
->> +{
->> +	return NULL;
->> +}
->> +#endif /* CONFIG_ENERGY_MODEL */
->> +
->>   static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
->>   {
->>   	s64 delta_ns;
->> @@ -859,6 +895,9 @@ static int sugov_start(struct cpufreq_policy *policy)
->>   							sugov_update_shared :
->>   							sugov_update_single);
->>   	}
->> +
->> +	sugov_policy_attach_pd(sg_policy);
->> +
->>   	return 0;
->>   }
-> 
-> A sugov_policy_detach_pd() called from sugov_stop() (doing for instance
-> the g_policy->pd = NULL) is not needed?
-
- From what I could see, sugov_stop() will always be followed by sugov_start() before
-it's used again, so that does not seem more risky than not de-initializing sg_cpu's
-for example.
