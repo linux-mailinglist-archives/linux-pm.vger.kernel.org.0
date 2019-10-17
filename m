@@ -2,98 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F11DA831
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BC0DA840
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408475AbfJQJVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 05:21:49 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:36454 "EHLO foss.arm.com"
+        id S2408482AbfJQJ0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 05:26:55 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:36650 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1731152AbfJQJVt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 05:21:49 -0400
+        id S1732676AbfJQJ0z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 05:26:55 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 059EF1684;
-        Thu, 17 Oct 2019 02:21:24 -0700 (PDT)
-Received: from [192.168.0.9] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A9B13F718;
-        Thu, 17 Oct 2019 02:21:22 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 5/6] sched/cpufreq: Boost schedutil frequency ramp
- up
-To:     Douglas RAILLARD <douglas.raillard@arm.com>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3A3D1993;
+        Thu, 17 Oct 2019 02:26:30 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D84F3F718;
+        Thu, 17 Oct 2019 02:26:30 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 10:26:28 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-6-douglas.raillard@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <4235a01d-26ee-418c-b78a-6c6109deda1d@arm.com>
-Date:   Thu, 17 Oct 2019 11:21:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+Subject: Re: [PATCH 2/3] cpufreq: merge arm_big_little and vexpress-spc
+Message-ID: <20191017092628.GD8978@bogus>
+References: <20191016110344.15259-1-sudeep.holla@arm.com>
+ <20191016110344.15259-3-sudeep.holla@arm.com>
+ <20191017023936.vgkdfnyaz3r4k74z@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <20191011134500.235736-6-douglas.raillard@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017023936.vgkdfnyaz3r4k74z@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/10/2019 15:44, Douglas RAILLARD wrote:
+On Thu, Oct 17, 2019 at 08:09:36AM +0530, Viresh Kumar wrote:
+> On 16-10-19, 12:03, Sudeep Holla wrote:
+> > arm_big_little cpufreq driver was designed as a generic big little
+> > driver that could be used by any platform and make use of bL switcher.
+> > Over years alternate solutions have be designed and merged to deal with
+> > bL/HMP systems like EAS.
+> >
+> > Also since no other driver made use of generic arm_big_little cpufreq
+> > driver except Vexpress SPC, we can merge them together as vexpress-spc
+> > driver used only on Vexpress TC2(CA15_CA7) platform.
+> >
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >  MAINTAINERS                            |   5 +-
+> >  drivers/cpufreq/Kconfig.arm            |  12 +-
+> >  drivers/cpufreq/Makefile               |   2 -
+> >  drivers/cpufreq/arm_big_little.c       | 658 ------------------------
+> >  drivers/cpufreq/arm_big_little.h       |  43 --
+> >  drivers/cpufreq/vexpress-spc-cpufreq.c | 661 ++++++++++++++++++++++++-
+> >  6 files changed, 652 insertions(+), 729 deletions(-)
+> >  delete mode 100644 drivers/cpufreq/arm_big_little.c
+> >  delete mode 100644 drivers/cpufreq/arm_big_little.h
+>
+> The delta produced here is enormous probably because you copy/pasted things. I
+> am wondering if using git mv to rename arm_big_little.c and then move spc bits
+> into it will make this delta smaller to review ?
+>
 
-[...]
+Yes, I did a quick try but slightly different order. As I need the final
+driver to be vexpress-spc-cpufreq.c, I am thinking of first merging
+vexpress-spc-cpufreq.c into arm_big_little.c and then renaming it back
+later. Does that sound good ?
 
-> @@ -539,6 +543,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
->  	unsigned long util, max;
->  	unsigned int next_f;
->  	bool busy;
-> +	unsigned long ramp_boost = 0;
+drivers/cpufreq/arm_big_little.c       | 78 ++++++++++++++++++++------
+drivers/cpufreq/arm_big_little.h       | 43 --------------
+drivers/cpufreq/vexpress-spc-cpufreq.c | 71 -----------------------
+6 files changed, 68 insertions(+), 145 deletions(-)
+delete mode 100644 drivers/cpufreq/arm_big_little.h
+delete mode 100644 drivers/cpufreq/vexpress-spc-cpufreq.c
 
-Shouldn't always order local variable declarations from longest to
-shortest line?
+If we first rename arm_big_little.c, then we need change the final name
+otherwise we end up with same delta as the new name file will be merged
+into vexpress-spc-cpufreq.c
 
->  	sugov_iowait_boost(sg_cpu, time, flags);
->  	sg_cpu->last_update = time;
-> @@ -552,10 +557,10 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
->  	busy = !sg_policy->need_freq_update && sugov_cpu_is_busy(sg_cpu);
->  
->  	util = sugov_get_util(sg_cpu);
-> -	sugov_cpu_ramp_boost_update(sg_cpu);
-> +	ramp_boost = sugov_cpu_ramp_boost_update(sg_cpu);
->  	max = sg_cpu->max;
->  	util = sugov_iowait_apply(sg_cpu, time, util, max);
-> -	next_f = get_next_freq(sg_policy, util, max);
-> +	next_f = get_next_freq(sg_policy, util, max, ramp_boost);
->  	/*
->  	 * Do not reduce the frequency if the CPU has not been idle
->  	 * recently, as the reduction is likely to be premature then.
-> @@ -587,6 +592,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->  	struct cpufreq_policy *policy = sg_policy->policy;
->  	unsigned long util = 0, max = 1;
->  	unsigned int j;
-> +	unsigned long ramp_boost = 0;
-> +	unsigned long j_ramp_boost = 0;
-
-Shouldn't always order local variable declarations from longest to
-shortest line?
-
->  	for_each_cpu(j, policy->cpus) {
->  		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> @@ -594,7 +601,11 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->  
->  		j_util = sugov_get_util(j_sg_cpu);
->  		if (j_sg_cpu == sg_cpu)
-> -			sugov_cpu_ramp_boost_update(sg_cpu);
-> +			j_ramp_boost = sugov_cpu_ramp_boost_update(sg_cpu);
-> +		else
-> +			j_ramp_boost = sugov_cpu_ramp_boost(j_sg_cpu);
-> +		ramp_boost = max(ramp_boost, j_ramp_boost);
-
-Ah, that's why you call sugov_cpu_ramp_boost_update() from
-sugov_next_freq_shared() in 4/6. So sugov_cpu_ramp_boost_update() is
-more a sugov_cpu_ramp_boost(..., int update)? Minor detail though.
-
-[...]
+--
+Regards,
+Sudeep
