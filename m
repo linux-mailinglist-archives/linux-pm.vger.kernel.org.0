@@ -2,100 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38988DA619
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 09:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9628EDA7B5
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 10:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407998AbfJQHMt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 03:12:49 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34971 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407972AbfJQHMt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 03:12:49 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l10so596835wrb.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 00:12:48 -0700 (PDT)
+        id S2408307AbfJQIrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 04:47:49 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:41352 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408209AbfJQIrs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 04:47:48 -0400
+Received: by mail-ua1-f67.google.com with SMTP id l13so409968uap.8
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 01:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=02ptUi820rtgb1rVywdXHHVh+A6FBo6gb2V5cVn00l4=;
-        b=TMCOuFGslVYaietD3Npaye2HNfQyRxbQihRWW/0tacQLD/VcOtmBgnO21eTt/nyM+f
-         yeNG7TvCKABshRGXDI5Lh5arQn0Rg5ZRQE5owPHB9yWQZLU0viVX5zHNHY4jcFe+saPl
-         pEK3jQ+5P5JVqc9u9OA2ZcUDiIvr6Idfwl7muzVO905/jq7CpQZtc2KBiV37gTLZlydL
-         5IAmyx/D6uHUKZ3xbK1cV/TOSFS+NTjsy/4Bc6bnDTRP8+CHeB5ebrSPm1kfJd5QNGWg
-         +xgi0+y9lDv6DKi1IZOa0kmWI4BW3HjJlvWhPyjjVepYpEb6sis1TRBIgFN/BxVlINeZ
-         bUow==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=paqFDTtdY3M8Ln3kvS2sgcbv9f/ilylyzRvaduM2VsY=;
+        b=VC+bz3qt6il9V5qrADuSCMdBWfzwaxRUScgGnlDsNHERQWfLKSR2Bxszm+EkQ6jXXD
+         3nx7yN/G8ujuN794/Ej/j2SFHBU5W9H32gRcN3NFh2y5zsrNw1nPIZJf55cVcFnRu0BP
+         TeeukIDKYJF1RYwC+cZmKLhQN+OJz0gzV5MlKgGUtQFDSVX+m5vYHKL3d0NLTmm+uee3
+         gdKDqwBVu9qln9Rx8gaIbwB/tyB01lAaaELk7bklckQW0qidsuZpLO1MQg7uv4DqrYxg
+         AewZ/U+sNxK/GmtPC9Sl4hp77at+xOiCv++zS2LhMdbJJz1FTZ5uhZiJwEzxK7SXdxjC
+         Ci9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=02ptUi820rtgb1rVywdXHHVh+A6FBo6gb2V5cVn00l4=;
-        b=DG35OVetOTB8D1O0y41DvYMbEqlfCWGJ2eJiRe6ZFQpxe0sse7mNy5Dm7NlxlAwIa0
-         pbjQx+GmTURHS50ULPhBJNr0bW8a1A0C0hT0ajC380BYuglozPZcGWl8taTADmqKErzu
-         FLfkAWe3R6RnisLJxaFovXvtZ3E6TXVuUtc033jL1qqV8QNESzDBpudd3gdm/9x7lsBC
-         LKGwEA/TPwoOh1PMW0A5L85w0O4c49bNUbexLfLl9ET8mtJ/YD3k6/Td5/VitApMnHnV
-         zqHdv0JGajWZ6pWHkWzJjTkubVk/q8zhE++FarPhXe8DQyyZkS6GkcyqCECkI9JgcwmD
-         k85Q==
-X-Gm-Message-State: APjAAAUo8Ao7qyOC2khx5/sIVaseewl4+mXsxmI7SQ0/OkuTmif2dnHy
-        mhIlCdRIF24HGPENBj2PIjT+Sg==
-X-Google-Smtp-Source: APXvYqwavR8cAD6sd1m49Q97NupEKTiiZz7QIevjs5S9SSkZYg8tuEDju8swtsi9FLS3lhJYAoVutg==
-X-Received: by 2002:a5d:4a8d:: with SMTP id o13mr1666117wrq.227.1571296367586;
-        Thu, 17 Oct 2019 00:12:47 -0700 (PDT)
-Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id n22sm1156689wmk.19.2019.10.17.00.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 00:12:47 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v3 6/6] MAINTAINERS: update the list of maintained files for max77650
-Date:   Thu, 17 Oct 2019 09:12:34 +0200
-Message-Id: <20191017071234.8719-7-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191017071234.8719-1-brgl@bgdev.pl>
-References: <20191017071234.8719-1-brgl@bgdev.pl>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=paqFDTtdY3M8Ln3kvS2sgcbv9f/ilylyzRvaduM2VsY=;
+        b=CnfPOtUJsPuN5qsymE0SCw/18236mkL85GRHXt0lEM2vxOCFg9iO7Nbr9jJmiuwoN0
+         C3+faaJQtY3bosXfGHVNm2SVZf8JoqJprYt0h7QEH5PYiJHFY3q8tJOcZm66U3aUEHqg
+         FmZ2e2wYykD0eVUfdVJu/1fhNk7ipBkKe1/OlpFOkLRDfG0MCjvUX/rtqYzAW5V1sVNq
+         Tkt1HU+mDm6qf+h5H6vEBs7H5LW/rRmd0tF95RnEhIamruS/+CdOn6YE9Tf7IcNzZ0M4
+         0Z7ux9o6KBCc7EzKVZnIaXMsKYTAfs835EGxVGF8xzCwPS7tCrmVlZ+R9Y2L1OM49eM2
+         n2sA==
+X-Gm-Message-State: APjAAAW3BYNCyR0xQNstPzJ5EFuYr0YUpuWkAPiHPjFJ46Kj6mN4kEdz
+        K8YTtVqrJ7LJoeFiaY+Fx3gBH7ppPLJVQHkaeuJBPA==
+X-Google-Smtp-Source: APXvYqxd6dQcGbSpCKxJAN7cuzTjKDPHr8BOJ/ritWtbU7r/7bPdSmety13gO9Mj4sTiUij+G5xrdaUjYdN0Z/Ytw8o=
+X-Received: by 2002:ab0:5a97:: with SMTP id w23mr1633617uae.129.1571302067047;
+ Thu, 17 Oct 2019 01:47:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org> <1571254641-13626-5-git-send-email-thara.gopinath@linaro.org>
+In-Reply-To: <1571254641-13626-5-git-send-email-thara.gopinath@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 17 Oct 2019 10:47:11 +0200
+Message-ID: <CAPDyKFoOpxWWhbr0ZSmuKEoqx=qoZ2ksLO9QodyhWU35tPVX6w@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] thermal: Add generic power domain warming device driver.
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>
+> Resources modeled as power domains in linux kenrel
+> can  be used to warm the SoC(eg. mx power domain on sdm845).
+> To support this feature, introduce a generic power domain
+> warming device driver that can be plugged into the thermal framework
+> (The thermal framework itself requires further modifiction to
+> support a warming device in place of a cooling device.
+> Those extensions are not introduced in this patch series).
+>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  drivers/thermal/Kconfig              |  10 +++
+>  drivers/thermal/Makefile             |   2 +
+>  drivers/thermal/pwr_domain_warming.c | 136 +++++++++++++++++++++++++++++++++++
+>  include/linux/pwr_domain_warming.h   |  31 ++++++++
+>  4 files changed, 179 insertions(+)
+>  create mode 100644 drivers/thermal/pwr_domain_warming.c
+>  create mode 100644 include/linux/pwr_domain_warming.h
+>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 001a21a..0c5c93e 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -187,6 +187,16 @@ config DEVFREQ_THERMAL
+>
+>           If you want this support, you should say Y here.
+>
+> +config PWR_DOMAIN_WARMING_THERMAL
+> +       bool "Power Domain based warming device"
+> +       depends on PM_GENERIC_DOMAINS_OF
+> +       help
+> +         This implements the generic power domain based warming
+> +         mechanism through increasing the performance state of
+> +         a power domain.
+> +
+> +         If you want this support, you should say Y here.
+> +
+>  config THERMAL_EMULATION
+>         bool "Thermal emulation mode support"
+>         help
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 74a37c7..382c64a 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -27,6 +27,8 @@ thermal_sys-$(CONFIG_CLOCK_THERMAL)   += clock_cooling.o
+>  # devfreq cooling
+>  thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+>
+> +thermal_sys-$(CONFIG_PWR_DOMAIN_WARMING_THERMAL)       += pwr_domain_warming.o
+> +
+>  # platform thermal drivers
+>  obj-y                          += broadcom/
+>  obj-$(CONFIG_THERMAL_MMIO)             += thermal_mmio.o
+> diff --git a/drivers/thermal/pwr_domain_warming.c b/drivers/thermal/pwr_domain_warming.c
+> new file mode 100644
+> index 0000000..60fae3e
+> --- /dev/null
+> +++ b/drivers/thermal/pwr_domain_warming.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019, Linaro Ltd
+> + */
+> +#include <linux/err.h>
+> +#include <linux/kernel.h>
+> +#include <linux/init.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +#include <linux/pwr_domain_warming.h>
+> +
+> +struct pd_warming_device {
+> +       struct thermal_cooling_device *cdev;
+> +       struct generic_pm_domain *gpd;
 
-The DT bindings for MAX77650 MFD have now been converted to YAML.
-Update the MAINTAINERS entry for this set of drivers.
+No, this isn't a genpd provider and thus we should not need to carry
+the above pointer in the struct pd_warming_device.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +       struct device *dev;
+> +       int max_state;
+> +       int cur_state;
+> +       bool runtime_resumed;
+> +};
+> +
+> +static int pd_wdev_get_max_state(struct thermal_cooling_device *cdev,
+> +                                unsigned long *state)
+> +{
+> +       struct pd_warming_device *pd_wdev = cdev->devdata;
+> +
+> +       *state = pd_wdev->max_state;
+> +       return 0;
+> +}
+> +
+> +static int pd_wdev_get_cur_state(struct thermal_cooling_device *cdev,
+> +                                unsigned long *state)
+> +{
+> +       struct pd_warming_device *pd_wdev = cdev->devdata;
+> +
+> +       *state = dev_pm_genpd_get_performance_state(pd_wdev->dev);
+> +
+> +       return 0;
+> +}
+> +
+> +static int pd_wdev_set_cur_state(struct thermal_cooling_device *cdev,
+> +                                unsigned long state)
+> +{
+> +       struct pd_warming_device *pd_wdev = cdev->devdata;
+> +       struct device *dev = pd_wdev->dev;
+> +       int ret;
+> +
+> +       ret = dev_pm_genpd_set_performance_state(dev, state);
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (state && !pd_wdev->runtime_resumed) {
+> +               ret = pm_runtime_get_sync(dev);
+> +               pd_wdev->runtime_resumed = true;
+> +       } else if (!state && pd_wdev->runtime_resumed) {
+> +               ret = pm_runtime_put(dev);
+> +               pd_wdev->runtime_resumed = false;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int pd_wdev_late_init(struct thermal_cooling_device *cdev)
+> +{
+> +       struct pd_warming_device *pd_wdev = cdev->devdata;
+> +       struct device *dev = &cdev->device;
+> +       int state_count, ret;
+> +
+> +       ret = pm_genpd_add_device(pd_wdev->gpd, dev);
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a69e6db80c79..c05e6fd6aedb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9903,8 +9903,8 @@ MAXIM MAX77650 PMIC MFD DRIVER
- M:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/*/*max77650.txt
--F:	Documentation/devicetree/bindings/*/max77650*.txt
-+F:	Documentation/devicetree/bindings/*/*max77650.yaml
-+F:	Documentation/devicetree/bindings/*/max77650*.yaml
- F:	include/linux/mfd/max77650.h
- F:	drivers/mfd/max77650.c
- F:	drivers/regulator/max77650-regulator.c
--- 
-2.23.0
+The pm_genpd_add_device() is a legacy interface and we are striving to
+remove it. I think there are two better options for you to use to deal
+with the attach thingy.
 
+1. The easiest one is probably just to convert into using
+of_genpd_add_device() instead. I think you already have the
+information that you need in the ->cdev pointer to do that. However,
+that also means you need to add the ->late_init() callback to the
+struct thermal_cooling_device_ops, like what you do here.
+
+2. Maybe the most correct solution is, rather than attaching
+&cdev->device to the PM domain, to register a separate new device
+(device_register()) and assign it the corresponding OF node as the
+genpd provider's subnode and then attach this one instead. If
+"power-domains" can be specified in the subnode, you can even use
+dev_pm_domain_attach() to attach the device to the PM domain, else
+of_genpd_add_device() should work. In the second step, when
+registering the cooling device, the new device above should be
+assigned as parent to the device that is about to be registered via
+thermal_of_cooling_device_register(). In other words, the
+thermal_of_cooling_device_register() needs to be extended to cope with
+receiving a parent device as an in-parameter, but that should be
+doable I think. In this way, you don't need to add the ->late_init()
+callback at all, but you can instead just use the parent device when
+operating on the PM domain.
+
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       state_count = dev_pm_genpd_performance_state_count(dev);
+> +       if (state_count < 0)
+> +               return state_count;
+> +
+> +       pm_runtime_enable(dev);
+> +
+> +       pd_wdev->dev = dev;
+> +       pd_wdev->max_state = state_count - 1;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct thermal_cooling_device_ops pd_warming_device_ops = {
+> +       .late_init      = pd_wdev_late_init,
+> +       .get_max_state  = pd_wdev_get_max_state,
+> +       .get_cur_state  = pd_wdev_get_cur_state,
+> +       .set_cur_state  = pd_wdev_set_cur_state,
+> +};
+
+[...]
+
+Kind regards
+Uffe
