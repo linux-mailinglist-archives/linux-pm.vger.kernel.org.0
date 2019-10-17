@@ -2,119 +2,410 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAB5DA851
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1392DA8AD
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405468AbfJQJa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 05:30:28 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46895 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393479AbfJQJa2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 05:30:28 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q5so1248141pfg.13
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 02:30:28 -0700 (PDT)
+        id S2408607AbfJQJlt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 05:41:49 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41727 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408597AbfJQJls (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 05:41:48 -0400
+Received: by mail-pg1-f195.google.com with SMTP id t3so1017216pga.8
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 02:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=BhmzWijDe5yao7vgl7kT7tSRmrdD456yMAPTwvVZ6aE=;
-        b=ON5RjH0pSpZU2Cd7Fz0YbphH0L/Em2TGlv7YnZJBvpgopaCB/FKNcHBXq8HKwYUg7P
-         9zkm0CUSDi8v7DL/pyzSsR88zRdT+gXAfP2h3/W5kvOKlunjpsrKxnUOTDwT80UUeo50
-         4D6r0R0NHfCVid/eMA8W/jEIqrs+6PGfUdVEPeKkuRyFGFdx81pc41weawhWqG27vqEO
-         ueMpeFIhp2mICDuxVZfklOTuQxnr12o48mmafzWwEBS3QILVhVMTtY6n5DI3On4w/GId
-         e3zbFJ3f17wCZh5HFUOnvhEslPT7wGccw26PeqA8E36a8zrcusugKBnVc2c7y91AH2U3
-         ZCNA==
+        bh=Y42TivkNMfetbxPGlFDe/PapDuIuV8Zv/0BU9JPv/Sw=;
+        b=x4IY9lhRWJKpuUcTJmCu4HwELtwtgqIXa/MqsOgleEc4A/1PgUfGyU2PCXBgc4pmWs
+         FPYWR7u92W3RSinCOBRUq5MeGtJqWATdgogW4hUe5VMWopjQGoc6MsaylQIqHOoXQTa9
+         2IxlG/fLRLQMQuw9xTQKFiRf+F/AB6OoUASmeBlXmHP5I84cU597Kd2ajqncPHGgpzR/
+         cPO9p3JavSs3mBZaIpsBXp0F7lldyPKCDuMIUAKxcriR8hW2+7zg76IR81fX1feZaAL8
+         sw/Yvv6JW1p8OCiU4vO+BQFAYd8NJfrH3S6DRT3IaW3aHCTJHgMBHmrmpnKqieLgQH/u
+         8xJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BhmzWijDe5yao7vgl7kT7tSRmrdD456yMAPTwvVZ6aE=;
-        b=LmLFB41dH/BEK6QEhH5s4zzCIab2n5NpvBJJCLuQkk3lvvdohHq5oTcsodIluPGcQQ
-         XUXURM916H5TF+ke/3xxugV92ZVSdCjX4PNukomnB/1ofVXdlp2LbbTa+hsrFfRd+oyo
-         7vNJtISingMTxJcdCtIHZ9/YoiPzbHbxbWxlNpfE9NwuX/Zk+SVTnziwl60weXBJo2L2
-         RqQbHcraCYQEdMMW8RdIfehjwo7zMMVDA8/yTx5FTeMUWIgXV4MuOA2dqf0XuNy31FCj
-         PPu20gt3tnVSYg4/GDX04VpPmTggKjqabVXdWooQSAspaNsuK+uDol2dGcTsgDfbAYdf
-         bn5w==
-X-Gm-Message-State: APjAAAWjPNfEmRWUzwt2NzgxXJamuRAMmUR+I4zFqEbhdfQJUK+qVDrB
-        NAyCNCUERCuQOIjmQdfB5bmSkg==
-X-Google-Smtp-Source: APXvYqzE6ySNtpyo3AA5URWU3jKLTzHmlb++gJiGHbo4eEfHZNF4YHTd0p39zwIlMfLoeZpK1XK1eg==
-X-Received: by 2002:a63:1c47:: with SMTP id c7mr2994536pgm.265.1571304627200;
-        Thu, 17 Oct 2019 02:30:27 -0700 (PDT)
+        bh=Y42TivkNMfetbxPGlFDe/PapDuIuV8Zv/0BU9JPv/Sw=;
+        b=RMvjL8Dp/Uok6xgM85wg0T1lV3HWdHxgNxoUYU2VIY0wmsN7u70t1csruDASBcwgIj
+         VPfM/Z+87c50KAzat7xJXc+QY+IO52RIm5nLl+aldk7kXTD8X3x5eJgRa/n+6N5apUtl
+         IpacI0u9MTbJYiAVzlcpQ5hEC39Z5CkRDH4BbP49EjgNXnYL1OTZ2mR+Ga8J9/Xp2r8K
+         85hoFTaIhZewnDqGJ+5VLbL2p5cuk9rkvgA+c9kscMe0UgIrO8DB0xh18TNxX/6gqEnW
+         0sV9OslDCSCdjb7Mt0/NOnTNz+PIn0QmWYO8iq3H1brscXFxzFPM5+Qkr7EhV7U00YE4
+         DHSg==
+X-Gm-Message-State: APjAAAU2sGd4Pfty8kWCMLkVhz2MmFoDhMibz385Famo3XuZ4N6rt7TS
+        EEpWWhMUoLpsnvj6rVyQy7hzVg==
+X-Google-Smtp-Source: APXvYqyB8RFSVWz8vGu6//urFkfMwFxB3+cTUymMIqmME0nH8iTOeICrBAJR5KkvNSpjhktRZyuxVA==
+X-Received: by 2002:aa7:9715:: with SMTP id a21mr2775707pfg.144.1571305306934;
+        Thu, 17 Oct 2019 02:41:46 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id a17sm1897804pfi.178.2019.10.17.02.30.25
+        by smtp.gmail.com with ESMTPSA id ep10sm14612289pjb.2.2019.10.17.02.41.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 02:30:26 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 15:00:22 +0530
+        Thu, 17 Oct 2019 02:41:45 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 15:11:43 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] cpufreq: merge arm_big_little and vexpress-spc
-Message-ID: <20191017093022.du76n64kwzqibqhs@vireshk-i7>
-References: <20191016110344.15259-1-sudeep.holla@arm.com>
- <20191016110344.15259-3-sudeep.holla@arm.com>
- <20191017023936.vgkdfnyaz3r4k74z@vireshk-i7>
- <20191017092628.GD8978@bogus>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
+Message-ID: <20191017094143.fhmhgltv6ujccxlp@vireshk-i7>
+References: <2811202.iOFZ6YHztY@kreacher>
+ <4551555.oysnf1Sd0E@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191017092628.GD8978@bogus>
+In-Reply-To: <4551555.oysnf1Sd0E@kreacher>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-10-19, 10:26, Sudeep Holla wrote:
-> On Thu, Oct 17, 2019 at 08:09:36AM +0530, Viresh Kumar wrote:
-> > On 16-10-19, 12:03, Sudeep Holla wrote:
-> > > arm_big_little cpufreq driver was designed as a generic big little
-> > > driver that could be used by any platform and make use of bL switcher.
-> > > Over years alternate solutions have be designed and merged to deal with
-> > > bL/HMP systems like EAS.
-> > >
-> > > Also since no other driver made use of generic arm_big_little cpufreq
-> > > driver except Vexpress SPC, we can merge them together as vexpress-spc
-> > > driver used only on Vexpress TC2(CA15_CA7) platform.
-> > >
-> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > ---
-> > >  MAINTAINERS                            |   5 +-
-> > >  drivers/cpufreq/Kconfig.arm            |  12 +-
-> > >  drivers/cpufreq/Makefile               |   2 -
-> > >  drivers/cpufreq/arm_big_little.c       | 658 ------------------------
-> > >  drivers/cpufreq/arm_big_little.h       |  43 --
-> > >  drivers/cpufreq/vexpress-spc-cpufreq.c | 661 ++++++++++++++++++++++++-
-> > >  6 files changed, 652 insertions(+), 729 deletions(-)
-> > >  delete mode 100644 drivers/cpufreq/arm_big_little.c
-> > >  delete mode 100644 drivers/cpufreq/arm_big_little.h
-> >
-> > The delta produced here is enormous probably because you copy/pasted things. I
-> > am wondering if using git mv to rename arm_big_little.c and then move spc bits
-> > into it will make this delta smaller to review ?
-> >
+On 16-10-19, 12:41, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Yes, I did a quick try but slightly different order. As I need the final
-> driver to be vexpress-spc-cpufreq.c, I am thinking of first merging
-> vexpress-spc-cpufreq.c into arm_big_little.c and then renaming it back
-> later. Does that sound good ?
-
-Maybe git can produce short diff even if you do this in a single patch. But two
-would be fine if that makes me review lesss stuff :)
-
+> Introduce frequency QoS, based on the "raw" low-level PM QoS, to
+> represent min and max frequency requests and aggregate constraints.
 > 
-> drivers/cpufreq/arm_big_little.c       | 78 ++++++++++++++++++++------
-> drivers/cpufreq/arm_big_little.h       | 43 --------------
-> drivers/cpufreq/vexpress-spc-cpufreq.c | 71 -----------------------
-> 6 files changed, 68 insertions(+), 145 deletions(-)
-> delete mode 100644 drivers/cpufreq/arm_big_little.h
-> delete mode 100644 drivers/cpufreq/vexpress-spc-cpufreq.c
+> The min and max frequency requests are to be represented by
+> struct freq_qos_request objects and the aggregate constraints are to
+> be represented by struct freq_constraints objects.  The latter are
+> expected to be initialized with the help of freq_constraints_init().
 > 
-> If we first rename arm_big_little.c, then we need change the final name
-> otherwise we end up with same delta as the new name file will be merged
-> into vexpress-spc-cpufreq.c
+> The freq_qos_read_value() helper is defined to retrieve the aggregate
+> constraints values from a given struct freq_constraints object and
+> there are the freq_qos_add_request(), freq_qos_update_request() and
+> freq_qos_remove_request() helpers to manipulate the min and max
+> frequency requests.  It is assumed that the the helpers will not
+> run concurrently with each other for the same struct freq_qos_request
+> object, so if that may be the case, their uses must ensure proper
+> synchronization between them (e.g. through locking).
+> 
+> In addition, freq_qos_add_notifier() and freq_qos_remove_notifier()
+> are provided to add and remove notifiers that will trigger on aggregate
+> constraint changes to and from a given struct freq_constraints object,
+> respectively.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm_qos.h |   44 ++++++++
+>  kernel/power/qos.c     |  240 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 284 insertions(+)
+> 
+> Index: linux-pm/include/linux/pm_qos.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm_qos.h
+> +++ linux-pm/include/linux/pm_qos.h
+> @@ -267,4 +267,48 @@ static inline s32 dev_pm_qos_raw_resume_
+>  }
+>  #endif
+>  
+> +#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+> +#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+> +
+> +enum freq_qos_req_type {
+> +	FREQ_QOS_MIN = 1,
+> +	FREQ_QOS_MAX,
+> +};
+> +
+> +struct freq_constraints {
+> +	struct pm_qos_constraints min_freq;
+> +	struct blocking_notifier_head min_freq_notifiers;
+> +	struct pm_qos_constraints max_freq;
+> +	struct blocking_notifier_head max_freq_notifiers;
+> +};
+> +
+> +struct freq_qos_request {
+> +	enum freq_qos_req_type type;
+> +	struct plist_node pnode;
+> +	struct freq_constraints *qos;
+> +};
+> +
+> +static inline int freq_qos_request_active(struct freq_qos_request *req)
+> +{
+> +	return !IS_ERR_OR_NULL(req->qos);
+> +}
+> +
+> +void freq_constraints_init(struct freq_constraints *qos);
+> +
+> +s32 freq_qos_read_value(struct freq_constraints *qos,
+> +			enum freq_qos_req_type type);
+> +
+> +int freq_qos_add_request(struct freq_constraints *qos,
+> +			 struct freq_qos_request *req,
+> +			 enum freq_qos_req_type type, s32 value);
+> +int freq_qos_update_request(struct freq_qos_request *req, s32 new_value);
+> +int freq_qos_remove_request(struct freq_qos_request *req);
+> +
+> +int freq_qos_add_notifier(struct freq_constraints *qos,
+> +			  enum freq_qos_req_type type,
+> +			  struct notifier_block *notifier);
+> +int freq_qos_remove_notifier(struct freq_constraints *qos,
+> +			     enum freq_qos_req_type type,
+> +			     struct notifier_block *notifier);
+> +
+>  #endif
+> Index: linux-pm/kernel/power/qos.c
+> ===================================================================
+> --- linux-pm.orig/kernel/power/qos.c
+> +++ linux-pm/kernel/power/qos.c
+> @@ -650,3 +650,243 @@ static int __init pm_qos_power_init(void
+>  }
+>  
+>  late_initcall(pm_qos_power_init);
+> +
+> +/* Definitions related to the frequency QoS below. */
+> +
+> +/**
+> + * freq_constraints_init - Initialize frequency QoS constraints.
+> + * @qos: Frequency QoS constraints to initialize.
+> + */
+> +void freq_constraints_init(struct freq_constraints *qos)
+> +{
+> +	struct pm_qos_constraints *c;
+> +
+> +	c = &qos->min_freq;
+> +	plist_head_init(&c->list);
+> +	c->target_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> +	c->default_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> +	c->no_constraint_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> +	c->type = PM_QOS_MAX;
 
+should this be MIN ?
 
+> +	c->notifiers = &qos->min_freq_notifiers;
+> +	BLOCKING_INIT_NOTIFIER_HEAD(c->notifiers);
+> +
+> +	c = &qos->max_freq;
+> +	plist_head_init(&c->list);
+> +	c->target_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> +	c->default_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> +	c->no_constraint_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> +	c->type = PM_QOS_MIN;
+
+and this MAX ?
+
+> +	c->notifiers = &qos->max_freq_notifiers;
+> +	BLOCKING_INIT_NOTIFIER_HEAD(c->notifiers);
+> +}
+> +
+> +/**
+> + * freq_qos_read_value - Get frequency QoS constraint for a given list.
+> + * @qos: Constraints to evaluate.
+> + * @type: QoS request type.
+> + */
+> +s32 freq_qos_read_value(struct freq_constraints *qos,
+> +			enum freq_qos_req_type type)
+> +{
+> +	s32 ret;
+> +
+> +	switch (type) {
+> +	case FREQ_QOS_MIN:
+> +		ret = IS_ERR_OR_NULL(qos) ?
+> +			FREQ_QOS_MIN_DEFAULT_VALUE :
+> +			pm_qos_read_value(&qos->min_freq);
+> +		break;
+> +	case FREQ_QOS_MAX:
+> +		ret = IS_ERR_OR_NULL(qos) ?
+> +			FREQ_QOS_MAX_DEFAULT_VALUE :
+> +			pm_qos_read_value(&qos->max_freq);
+> +		break;
+> +	default:
+> +		WARN_ON(1);
+> +		ret = 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * freq_qos_apply - Add/modify/remove frequency QoS request.
+> + * @req: Constraint request to apply.
+> + * @action: Action to perform (add/update/remove).
+> + * @value: Value to assign to the QoS request.
+> + */
+> +static int freq_qos_apply(struct freq_qos_request *req,
+> +			  enum pm_qos_req_action action, s32 value)
+> +{
+> +	int ret;
+> +
+> +	switch(req->type) {
+> +	case FREQ_QOS_MIN:
+> +		ret = pm_qos_update_target(&req->qos->min_freq, &req->pnode,
+> +					   action, value);
+> +		break;
+> +	case FREQ_QOS_MAX:
+> +		ret = pm_qos_update_target(&req->qos->max_freq, &req->pnode,
+> +					   action, value);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * freq_qos_add_request - Insert new frequency QoS request into a given list.
+> + * @qos: Constraints to update.
+> + * @req: Preallocated request object.
+> + * @type: Request type.
+> + * @value: Request value.
+> + *
+> + * Insert a new entry into the @qos list of requests, recompute the effective
+> + * QoS constraint value for that list and initialize the @req object.  The
+> + * caller needs to save that object for later use in updates and removal.
+> + *
+> + * Return 1 if the effective constraint value has changed, 0 if the effective
+> + * constraint value has not changed, or a negative error code on failures.
+> + */
+> +int freq_qos_add_request(struct freq_constraints *qos,
+> +			 struct freq_qos_request *req,
+> +			 enum freq_qos_req_type type, s32 value)
+> +{
+> +	int ret;
+> +
+> +	if (IS_ERR_OR_NULL(qos) || !req)
+> +		return -EINVAL;
+> +
+> +	if (WARN(freq_qos_request_active(req),
+> +		 "%s() called for active request\n", __func__))
+> +		return -EINVAL;
+> +
+> +	req->qos = qos;
+> +	req->type = type;
+> +	ret = freq_qos_apply(req, PM_QOS_ADD_REQ, value);
+> +	if (ret < 0) {
+> +		req->qos = NULL;
+> +		req->type = 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(freq_qos_add_request);
+> +
+> +/**
+> + * freq_qos_update_request - Modify existing frequency QoS request.
+> + * @req: Request to modify.
+> + * @new_value: New request value.
+> + *
+> + * Update an existing frequency QoS request along with the effective constraint
+> + * value for the list of requests it belongs to.
+> + *
+> + * Return 1 if the effective constraint value has changed, 0 if the effective
+> + * constraint value has not changed, or a negative error code on failures.
+> + */
+> +int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+> +{
+> +	if (!req)
+> +		return -EINVAL;
+> +
+> +	if (WARN(!freq_qos_request_active(req),
+> +		 "%s() called for unknown object\n", __func__))
+> +		return -EINVAL;
+> +
+> +	if (req->pnode.prio == new_value)
+> +		return 0;
+> +
+> +	return freq_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);
+> +}
+> +EXPORT_SYMBOL_GPL(freq_qos_update_request);
+> +
+> +/**
+> + * freq_qos_remove_request - Remove frequency QoS request from its list.
+> + * @req: Request to remove.
+> + *
+> + * Remove the given frequency QoS request from the list of constraints it
+> + * belongs to and recompute the effective constraint value for that list.
+> + *
+> + * Return 1 if the effective constraint value has changed, 0 if the effective
+> + * constraint value has not changed, or a negative error code on failures.
+> + */
+> +int freq_qos_remove_request(struct freq_qos_request *req)
+> +{
+> +	if (!req)
+> +		return -EINVAL;
+> +
+> +	if (WARN(!freq_qos_request_active(req),
+> +		 "%s() called for unknown object\n", __func__))
+> +		return -EINVAL;
+> +
+> +	return freq_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+> +}
+> +EXPORT_SYMBOL_GPL(freq_qos_remove_request);
+> +
+> +/**
+> + * freq_qos_add_notifier - Add frequency QoS change notifier.
+> + * @qos: List of requests to add the notifier to.
+> + * @type: Request type.
+> + * @notifier: Notifier block to add.
+> + */
+> +int freq_qos_add_notifier(struct freq_constraints *qos,
+> +			  enum freq_qos_req_type type,
+> +			  struct notifier_block *notifier)
+> +{
+> +	int ret;
+> +
+> +	if (IS_ERR_OR_NULL(qos) || !notifier)
+> +		return -EINVAL;
+> +
+> +	switch (type) {
+> +	case FREQ_QOS_MIN:
+> +		ret = blocking_notifier_chain_register(qos->min_freq.notifiers,
+> +						       notifier);
+> +		break;
+> +	case FREQ_QOS_MAX:
+> +		ret = blocking_notifier_chain_register(qos->max_freq.notifiers,
+> +						       notifier);
+> +		break;
+> +	default:
+> +		WARN_ON(1);
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(freq_qos_add_notifier);
+> +
+> +/**
+> + * freq_qos_remove_notifier - Remove frequency QoS change notifier.
+> + * @qos: List of requests to remove the notifier from.
+> + * @type: Request type.
+> + * @notifier: Notifier block to remove.
+> + */
+> +int freq_qos_remove_notifier(struct freq_constraints *qos,
+> +			     enum freq_qos_req_type type,
+> +			     struct notifier_block *notifier)
+> +{
+> +	int ret;
+> +
+> +	if (IS_ERR_OR_NULL(qos) || !notifier)
+> +		return -EINVAL;
+> +
+> +	switch (type) {
+> +	case FREQ_QOS_MIN:
+> +		ret = blocking_notifier_chain_unregister(qos->min_freq.notifiers,
+> +							 notifier);
+> +		break;
+> +	case FREQ_QOS_MAX:
+> +		ret = blocking_notifier_chain_unregister(qos->max_freq.notifiers,
+> +							 notifier);
+> +		break;
+> +	default:
+> +		WARN_ON(1);
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(freq_qos_remove_notifier);
+> 
+> 
 
 -- 
 viresh
