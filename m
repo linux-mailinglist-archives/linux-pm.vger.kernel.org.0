@@ -2,147 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7DADBA66
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 02:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD4ADBAB2
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 02:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441828AbfJRAEn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 20:04:43 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:3840 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441811AbfJRAEn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 20:04:43 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5da901a60000>; Thu, 17 Oct 2019 17:04:54 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 17 Oct 2019 17:04:42 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 17 Oct 2019 17:04:42 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Oct
- 2019 00:04:42 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 18 Oct 2019 00:04:42 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5da9019a0000>; Thu, 17 Oct 2019 17:04:42 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Preeti U Murthy <preeti@linux.vnet.ibm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        <linux-pm@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH] cpufreq: powernv: fix stack bloat and NR_CPUS limitation
-Date:   Thu, 17 Oct 2019 17:04:31 -0700
-Message-ID: <20191018000431.1675281-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.23.0
+        id S2503944AbfJRAU2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 20:20:28 -0400
+Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 20:20:27 -0400
+X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by usrv.lan (Postfix) with SMTP id E44FB186481;
+        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
+Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
+Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
+From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+To:     linux-nvme@lists.infradead.org
+Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
+Date:   Thu, 17 Oct 19 10:59:51 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571357094; bh=jMIVMS2k3nt+KBSFjXMj5e0P3S6l8dH7Zx0lZXXcpko=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=jG+wp7iHF0RN5Tn/nZDD4xJriVKb5DiI5acvhritKAZypir3iuZnXHppODrfo1kdX
-         hABXN5bOYSgzMQ6qiuADHLmVo/eJsdldhda46dDKKqWNBXa6BSSWBeggxjkJ+hoJmQ
-         XKlYnzLP+dXh7+EiIVlO17gtQZM6dpCs53U0WwySjpngtZzhB8k85+sq45N7HQKc3k
-         kk0yIkUz9j4PWXLn9+66jbovHjoQIy3aJjW7UmkfZ63aHn7dGwfnFfI4fGqiTMvoUI
-         wV+sd9odwKKDD1xlDIA8JrL3mAWof1mnmZsHHyChaQQyBCrIgi54fg61Vxywik3Scc
-         UTCqawVY+jwCw==
+Content-Type: multipart/alternative;
+        boundary="EFA7_FB09FAD2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following build warning occurred on powerpc 64-bit builds:
 
-drivers/cpufreq/powernv-cpufreq.c: In function 'init_chip_info':
-drivers/cpufreq/powernv-cpufreq.c:1070:1: warning: the frame size of 1040 b=
-ytes is larger than 1024 bytes [-Wframe-larger-than=3D]
+--EFA7_FB09FAD2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-This is due to putting 1024 bytes on the stack:
+Dear Sir / Madam
 
-    unsigned int chip[256];
 
-...and while looking at this, it also has a bug: it fails with a stack
-overrun, if CONFIG_NR_CPUS > 256.
 
-Fix both problems by dynamically allocating based on CONFIG_NR_CPUS.
+Since ever we left your country back to Canada , we have gotten Government=
+ approval and we have been busying planning for the less privilege Childre=
+n projects.
 
-Fixes: 053819e0bf840 ("cpufreq: powernv: Handle throttling due to Pmax capp=
-ing at chip level")
-Cc: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Cc: Preeti U Murthy <preeti@linux.vnet.ibm.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: linux-pm@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
+We are planning to release first batch of the funds $2,990,000.00 within 1=
+4 days for building an estate for motherless children in your city.
 
-Hi,
+I want you to use my mother;s company name to register this charity projec=
+t in your country after receiving the project funds.
 
-I have only compile-tested this, so I would appreciate if anyone
-could do a basic runtime test on it. But (famous last words) it
-seems simple enough that I'm confident it's correct. oh boy. :)
+It must be registered as { Bayraktar Group Homeless Children Ltd }.
 
-thanks,
-John Hubbard
-NVIDIA
 
- drivers/cpufreq/powernv-cpufreq.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+Can you handle and supervise this big project ?
+Can you manager all the workers as a senior supervisor ?
+We want to be sure you can handle it before we proceed with this project.
 
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cp=
-ufreq.c
-index 6061850e59c9..78e04402125f 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -1041,9 +1041,14 @@ static struct cpufreq_driver powernv_cpufreq_driver =
-=3D {
-=20
- static int init_chip_info(void)
- {
--	unsigned int chip[256];
-+	unsigned int *chip;
- 	unsigned int cpu, i;
- 	unsigned int prev_chip_id =3D UINT_MAX;
-+	int ret =3D 0;
-+
-+	chip =3D kcalloc(CONFIG_NR_CPUS, sizeof(int), GFP_KERNEL);
-+	if (!chips)
-+		return -ENOMEM;
-=20
- 	for_each_possible_cpu(cpu) {
- 		unsigned int id =3D cpu_to_chip_id(cpu);
-@@ -1055,8 +1060,10 @@ static int init_chip_info(void)
- 	}
-=20
- 	chips =3D kcalloc(nr_chips, sizeof(struct chip), GFP_KERNEL);
--	if (!chips)
--		return -ENOMEM;
-+	if (!chips) {
-+		ret =3D -ENOMEM;
-+		goto free_and_return;
-+	}
-=20
- 	for (i =3D 0; i < nr_chips; i++) {
- 		chips[i].id =3D chip[i];
-@@ -1066,7 +1073,9 @@ static int init_chip_info(void)
- 			per_cpu(chip_info, cpu) =3D  &chips[i];
- 	}
-=20
--	return 0;
-+free_and_return:
-+	kfree(chip);
-+	return ret;
- }
-=20
- static inline void clean_chip_info(void)
---=20
-2.23.0
+
+Please call me if you want to hear from us + 1-917 580 4919.
+Please can you manage such project please Kindly reply for further details=
+.
+
+Your full names-----------
+
+
+
+Ekrem Bayraktar.
+Bayraktar Shipping Group
+
+--EFA7_FB09FAD2--
 
