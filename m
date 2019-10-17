@@ -2,140 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A505DA7F2
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36862DA7FF
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 11:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729109AbfJQJDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 05:03:06 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:43329 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbfJQJDG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 05:03:06 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191017090303euoutp029143e2225baa20cf50fda1ff1ba9cd60~OY70R76qi2647126471euoutp02f
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 09:03:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191017090303euoutp029143e2225baa20cf50fda1ff1ba9cd60~OY70R76qi2647126471euoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1571302983;
-        bh=3z0Meifbwr5zG+mE7LdzyRuTTfPqBg1Ea+yb3WOdQ6M=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=B6RpQs+3bIbxe5nbrqwo/7TX6yFC91J3iDB/9DHDOMpf5JJlvIHBnKx6UAhVUGJwA
-         GQH02JYtVURBOxWSAN+Z1ii0SW/e2PT/PGrVrqQMt9zzd5PGeMdITi47G917JDeUv/
-         Nws3WxjY76mtQVJbamXa+GBQRH7gpJalcsCQJlIY=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191017090303eucas1p16b2cb435692005c820b1b5d9b745397a~OY7z7wYCy2584825848eucas1p1t;
-        Thu, 17 Oct 2019 09:03:03 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 24.13.04374.74E28AD5; Thu, 17
-        Oct 2019 10:03:03 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191017090302eucas1p17cbcaea2d7e2479d19a60205fe7ba69f~OY7zh1K0b0112301123eucas1p1p;
-        Thu, 17 Oct 2019 09:03:02 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191017090302eusmtrp2a9e9214e2871787b5e86381e36dafc57~OY7zgzBm52488524885eusmtrp2e;
-        Thu, 17 Oct 2019 09:03:02 +0000 (GMT)
-X-AuditID: cbfec7f5-4ddff70000001116-65-5da82e475026
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 03.B9.04166.64E28AD5; Thu, 17
-        Oct 2019 10:03:02 +0100 (BST)
-Received: from [106.120.51.75] (unknown [106.120.51.75]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191017090302eusmtip2c6d402ce73ee18fe5039249704c2f539~OY7y-COjD1289712897eusmtip2_;
-        Thu, 17 Oct 2019 09:03:02 +0000 (GMT)
-Subject: Re: [PATCH v5 2/4] dt-bindings: arm: samsung: Update the CHIPID
- binding for ASV
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-pm@vger.kernel.org,
-        sboyd@kernel.org, vireshk@kernel.org,
-        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>, roger.lu@mediatek.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Message-ID: <e5f441af-a21c-292b-b6ba-7e1e6550f091@samsung.com>
-Date:   Thu, 17 Oct 2019 11:03:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S2439364AbfJQJEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 05:04:46 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:33394 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439363AbfJQJEq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 05:04:46 -0400
+Received: by mail-vk1-f194.google.com with SMTP id s21so348032vkm.0
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 02:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3YEZ6kmrwj0jmNEINZ5DrxfXAkCY+f5snursTVbXw/Q=;
+        b=W2e51Z687HKzqeEUxw8//AMcHGkkuFOP8XPRGjOfymWxiy5Zp1IsFw7JpdMcbsWu2b
+         3XRp9hda4U35V3m4NBdsGLbwORsP7M6z6hcLgkBMeNdc6Kv9H54zl1XG8UyqG3oVaiRA
+         uYXbj1yTpmGTc5+j3xXkUibu704TmnkPoO2sjQNeCRQIL58QuDsOIAezBG7b14OxBFv6
+         5FbrylzIeAFhCyolzRmA8yt6ll3bpHI/fYR97EcEQ3jn9UGLTrm83xRCCHz8AS86pmze
+         m1mdnFdbPnS0BElbdxvOVcKomZv+rfTKsUOZ1i3MKBNxnh2hdw7vJ49G7aVlAm37710n
+         WkLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3YEZ6kmrwj0jmNEINZ5DrxfXAkCY+f5snursTVbXw/Q=;
+        b=dRJ5NTSwkIFRJUwLTgs5mw2SEEjOyWOxjCyVkZyHQS+OG2SDisNqQQxs1BKJN2+D7n
+         UpUNKKXHqLczrGOP8bZiWggWZUIiO1HHr3QkLekomPAi+K3gR+PnnaYiPLfGubFzMsAa
+         aF5Jrb7v8TB9IUFqk/IdFxtslqDmQJ9ihm0BXK+e+e0tT7r0UqaQZ4IHrh1u30Z1S+53
+         z0FEFisOaQBVncz/a58tDuzldVcGfzq/4bFZcjRhl/DPKZW+V6Dt5ERA/Q8BfyilKFc7
+         /kNS8+QBsSqnF7uRnsfHzyyGoMx8O00WzYM3CAki27zEttOGdjDHav96MFHJGOhQABrO
+         4K8w==
+X-Gm-Message-State: APjAAAX1wQCKQFC+XH64Lm0KbrnPC7GoQIZjsIFc2JicZl5BsyDfUCAH
+        NpLKVNGYJXSCqJxj7gaweAte0G76zKt5MBjXTgphvQ==
+X-Google-Smtp-Source: APXvYqyt8CM8fHUNAOrVRVddOgQGQx8mRNb41o6lI3llgLFlyRzgA5YeS309L///NMZr8TxyMVq1MEKf6S7M8tbxb2E=
+X-Received: by 2002:a1f:b202:: with SMTP id b2mr1313280vkf.59.1571303083600;
+ Thu, 17 Oct 2019 02:04:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPeagcSRUm2Qwwby=NHfWGdQ6KVZ2htb3UmnU2GfX+Ckcg@mail.gmail.com>
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJKsWRmVeSWpSXmKPExsWy7djPc7rueitiDbZvErLYOGM9q8X8I+dY
-        Lc6f38BusenxNVaLz71HGC1mnN/HZLH2yF12i9a9R9gtLj/eyGbx79pGFovND46xOXB7bFrV
-        yeaxeUm9R8vJ/SwefVtWMXp83iQXwBrFZZOSmpNZllqkb5fAlTFz1ha2gs/sFd9/ZTcwzmXr
-        YuTkkBAwkfj5s52xi5GLQ0hgBaPE3ssfmUASQgJfGCW+/fOEsD8zSrQtz4FpmPe6jQmiYTmj
-        xIt7Cxkhit4ySrxuMQGxhQWiJA68W8oCYosIaEpc//udFaSBWaCJWeL0qvVgq9kEDCV6j/aB
-        NfMK2Em0n78CZrMIqEpMaP0OZHNwiApESJz+mghRIihxcuYTsJmcAoESN3fOYgWxmQXEJZq+
-        rISy5SW2v53DDHHoJXaJiWskQcZICLhI/N1tDxEWlnh1fAs7hC0j8X/nfLBfJASaGSV6dt9m
-        h3AmMErcP76AEaLKWuLw8YusIIOYgZ5Zv0sfIuwo8eHrckaI+XwSN94KQpzAJzFp23RmiDCv
-        REebEES1isTvVdOZIGwpie4n/1kmMCrNQvLYLCTPzELyzCyEvQsYWVYxiqeWFuempxYb56WW
-        6xUn5haX5qXrJefnbmIEJqjT/45/3cG470/SIUYBDkYlHt4Jj5bHCrEmlhVX5h5ilOBgVhLh
-        nd+yJFaINyWxsiq1KD++qDQntfgQozQHi5I4bzXDg2ghgfTEktTs1NSC1CKYLBMHpxQwyVxR
-        DOdVWvtWibnFamlkh0Dux09eXtOMmEJW/9S9PPFl+numUyF+3oJt+xuPXu5ujy/KmitWv34P
-        r5X5ylXVGxIWXmk+3bCJddPTg1o/jlhfuXjUTcnu4POalNZjZyfqC5WtLvleGiOy+GxOQf4q
-        /yXyfTMFzTW3/18yh3f5PRG2tW5TrwW9V2Ipzkg01GIuKk4EAEcrwptMAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xe7pueitiDU680rfYOGM9q8X8I+dY
-        Lc6f38BusenxNVaLz71HGC1mnN/HZLH2yF12i9a9R9gtLj/eyGbx79pGFovND46xOXB7bFrV
-        yeaxeUm9R8vJ/SwefVtWMXp83iQXwBqlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwe
-        a2VkqqRvZ5OSmpNZllqkb5eglzFz1ha2gs/sFd9/ZTcwzmXrYuTkkBAwkZj3uo2pi5GLQ0hg
-        KaPEtkO32LsYOYASUhLzW5QgaoQl/lzrYoOoec0oMf9RLytIQlggSuLAu6UsILaIgKbE9b/f
-        WUGKmAWamCX+dRxjhujoYJJYvqOFHaSKTcBQovdoHyOIzStgJ9F+/gqYzSKgKjGh9TuYLSoQ
-        IfF8+w2oGkGJkzOfgG3gFAiUuLlzFthmZgF1iT/zLjFD2OISTV9WQsXlJba/ncM8gVFoFpL2
-        WUhaZiFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzA2Nx27OfmHYyXNgYfYhTg
-        YFTi4Z3AuDxWiDWxrLgy9xCjBAezkgjv/JYlsUK8KYmVValF+fFFpTmpxYcYTYGem8gsJZqc
-        D0wbeSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNITS1KzU1MLUotg+pg4OKUaGKe5rl31wVaC
-        M/B6ZqrV8X+xdsKm2pIHmBOatWbtFgh4vMuqodYt/ntHdGy8SkzsgVnqnaun3ls4x32W0g7Z
-        1fN/7jUrkjjmvN+N++6ehrtX65orfm/eeT3Ci9NNTG39/IVyv16c/L/ot0jJuvN/l8YdlQwr
-        5YxJ5jj/9GfKzCxl0XWntpYZ8SuxFGckGmoxFxUnAgCOd6+r4wIAAA==
-X-CMS-MailID: 20191017090302eucas1p17cbcaea2d7e2479d19a60205fe7ba69f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191016145812eucas1p1a3cf3f44a2cff4c32a2270334630c4a2
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191016145812eucas1p1a3cf3f44a2cff4c32a2270334630c4a2
-References: <CGME20191016145812eucas1p1a3cf3f44a2cff4c32a2270334630c4a2@eucas1p1.samsung.com>
-        <20191016145756.16004-1-s.nawrocki@samsung.com>
-        <20191016145756.16004-3-s.nawrocki@samsung.com>
-        <CAJKOXPeagcSRUm2Qwwby=NHfWGdQ6KVZ2htb3UmnU2GfX+Ckcg@mail.gmail.com>
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org> <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
+In-Reply-To: <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 17 Oct 2019 11:04:07 +0200
+Message-ID: <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
+ controller binding to describe thermal warming device
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/16/19 18:16, Krzysztof Kozlowski wrote:
->> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
->> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
->> @@ -9,17 +9,42 @@ title: Samsung Exynos SoC series Chipid driver
-
-BTW, I think we should rename the above title to talk about IP block/device
-rather than driver, e.g.
-
--SAMSUNG Exynos SoCs Chipid driver.
-+SAMSUNG Exynos SoC series CHIPID subsystem
-
->> +# Custom select to avoid matching all nodes with 'syscon'
->> +select:
->> +  properties:
->> +    compatible:
->> +      contains:
->> +        const: samsung,exynos4210-chipid
->> +  required:
->> +    - compatible
->> +
->>  properties:
->>    compatible:
->> -    items:
->> -      - const: samsung,exynos4210-chipid
->> +    allOf:
+On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
 >
-> I think it was my mistake to use allOf in other Exynos bindings. It
-> should not be needed.
+> RPMh power controller hosts mx domain that can be used as thermal
+> warming device. Add a sub-node to specify this.
+>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> index eb35b22..fff695d 100644
+> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> @@ -18,6 +18,16 @@ Required Properties:
+>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
+>  various OPPs for different platforms as well as Power domain indexes
+>
+> += SUBNODES
+> +RPMh alsp hosts power domains that can behave as thermal warming device.
+> +These are expressed as subnodes of the RPMh. The name of the node is used
+> +to identify the power domain and must therefor be "mx".
+> +
+> +- #cooling-cells:
+> +       Usage: optional
+> +       Value type: <u32>
+> +       Definition: must be 2
+> +
 
-Indeed it seems to work well without allOf, I was wondering why we
-needed the custom select above AND allOf.
+Just wanted to express a minor thought about this. In general we use
+subnodes of PM domain providers to represent the topology of PM
+domains (subdomains), this is something different, which I guess is
+fine.
+
+I assume the #cooling-cells is here tells us this is not a PM domain
+provider, but a "cooling device provider"?
+
+Also, I wonder if it would be fine to specify "power-domains" here,
+rather than using "name" as I think that is kind of awkward!?
+
+>  Example: rpmh power domain controller and OPP table
+>
+>  #include <dt-bindings/power/qcom-rpmhpd.h>
+> --
+> 2.1.4
+>
+
+Kind regards
+Uffe
