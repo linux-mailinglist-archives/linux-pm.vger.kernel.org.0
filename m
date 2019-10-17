@@ -2,110 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33452DB319
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 19:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84C0DB5C3
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 20:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440629AbfJQRPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 13:15:00 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:41934 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1728639AbfJQRO7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 13:14:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E266328;
-        Thu, 17 Oct 2019 10:14:38 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8ADDE3F718;
-        Thu, 17 Oct 2019 10:14:37 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 18:14:32 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [RFT][PATCH 0/3] cpufreq / PM: QoS: Introduce frequency QoS and
- use it in cpufreq
-Message-ID: <20191017171432.GA32485@bogus>
-References: <2811202.iOFZ6YHztY@kreacher>
- <20191016142343.GB5330@bogus>
+        id S2441277AbfJQSTr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 14:19:47 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:36430 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438684AbfJQSTq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 14:19:46 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 30A02612DA; Thu, 17 Oct 2019 18:19:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571336385;
+        bh=ISREP9AdfrC/XBTqeSZtr9AtlAJSpsRIKnn3uhj7a2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=NoQk3EY5Fi3RTLyfxJOP0YdSkLMj09IBDDHT862HNhCev/CM7BYuZu92TW0xZV4pK
+         2BDNC8zCQ9VcQHkR3QwSVmTnVSd1rh/Bw+c4EoWiFepOONBJS9gFt2srWcbD2CgOwv
+         Ihgw43nljE9JOKjFt/cqBmLbho7kAur3D/kvemmY=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.79.160.38] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CCD09612DA;
+        Thu, 17 Oct 2019 18:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571336382;
+        bh=ISREP9AdfrC/XBTqeSZtr9AtlAJSpsRIKnn3uhj7a2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jGm5emnd+w0KN6atBSypyQEio+9ce3SGjLMnDCAeH6Pk8Z5TViJY2V0Cn2BnNxBbz
+         beCJk/IvQyZT/qXEdu7QGXiwxeMdz1oLal6a6x6PPLzp687bW7GpthfQK3E/npbBV6
+         mNaErygg/uHN9RRnwWbxUm5Udny085SyvEDSbmSU=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CCD09612DA
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v3 6/6] cpufreq: qcom-hw: Move driver initialisation
+ earlier
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
+        edubezval@gmail.com, agross@kernel.org, swboyd@chromium.org,
+        ilina@codeaurora.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org
+References: <cover.1571314830.git.amit.kucheria@linaro.org>
+ <3468b8cf9c764ea139296ee149d33cd7a9d79e3e.1571314830.git.amit.kucheria@linaro.org>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <b7f7061b-6dc3-eb3e-c6bf-fe582c2c2e3b@codeaurora.org>
+Date:   Thu, 17 Oct 2019 23:49:34 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016142343.GB5330@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <3468b8cf9c764ea139296ee149d33cd7a9d79e3e.1571314830.git.amit.kucheria@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 03:23:43PM +0100, Sudeep Holla wrote:
-> On Wed, Oct 16, 2019 at 12:37:58PM +0200, Rafael J. Wysocki wrote:
-> > Hi All,
-> >
-> > The motivation for this series is to address the problem discussed here:
-> >
-> > https://lore.kernel.org/linux-pm/5ad2624194baa2f53acc1f1e627eb7684c577a19.1562210705.git.viresh.kumar@linaro.org/T/#md2d89e95906b8c91c15f582146173dce2e86e99f
-> >
-> > and also reported here:
-> >
-> > https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
-> >
-> > Plus, generally speaking, using the policy CPU as a proxy for the policy
-> > with respect to PM QoS does not feel particularly straightforward to me
-> > and adds extra complexity.
-> >
-> > Anyway, the first patch adds frequency QoS that is based on "raw" PM QoS (kind
-> > of in analogy with device PM QoS) and is just about min and max frequency
-> > requests (no direct relationship to devices).
-> >
-> > The second patch switches over cpufreq and its users to the new frequency QoS.
-> > [The Fixes: tag has been tentatively added to it.]
-> >
-> > The third one removes frequency request types from device PM QoS.
-> >
-> > Unfortunately, the patches are rather big, but also they are quite
-> > straightforward.
-> >
-> > I didn't have the time to test this series, so giving it a go would be much
-> > appreciated.
->
-> Thanks for the spinning these patches so quickly.
->
-For the record, I thought of providing the crash that this series fixes.
-After applying [1] which fixes the boot issue I was seeing on TC2, I started
-seeing the below crash, which this series fixes.
 
-FWIW,
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+
+On 10/17/2019 5:57 PM, Amit Kucheria wrote:
+> Allow qcom-hw driver to initialise right after the cpufreq and thermal
+> subsystems are initialised in core_initcall so we get earlier access to
+> thermal mitigation.
+> 
+> Signed-off-by: Amit Kucheria<amit.kucheria@linaro.org>
+> Acked-by: Daniel Lezcano<daniel.lezcano@linaro.org>
+> ---
+
+Acked-by: Taniya Das<tdas@codeaurora.org>
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
 
 --
-
-Unable to handle kernel paging request at virtual address 31b2c303
-pgd = 772b96e1
-[31b2c303] *pgd=a4050003, *pmd=00000000
-Internal error: Oops: 206 [#1] SMP THUMB2
-Modules linked in:
-CPU: 1 PID: 518 Comm: bash Not tainted 5.4.0-rc3-00062-g6e3a7fd7a87e-dirty #123
-Hardware name: ARM-Versatile Express
-PC is at blocking_notifier_chain_unregister+0x2a/0x78
-LR is at blocking_notifier_chain_unregister+0x1b/0x78
-Flags: NzCv  IRQs on  FIQs off  Mode SVC_32  ISA Thumb  Segment user
-Control: 70c5387d  Table: a57b08c0  DAC: 55555555
-Process bash (pid: 518, stack limit = 0x018ebe57)
-(blocking_notifier_chain_unregister) from (dev_pm_qos_remove_notifier+0x5d/0xb4)
-(dev_pm_qos_remove_notifier) from (cpufreq_policy_free+0x77/0xc8)
-(cpufreq_policy_free) from (subsys_interface_unregister+0x4f/0x80)
-(subsys_interface_unregister) from (cpufreq_unregister_driver+0x29/0x6c)
-(cpufreq_unregister_driver) from (bL_cpufreq_switcher_notifier+0x41/0x4c)
-(bL_cpufreq_switcher_notifier) from (notifier_call_chain+0x3d/0x58)
-(notifier_call_chain) from (blocking_notifier_call_chain+0x29/0x38)
-(blocking_notifier_call_chain) from (bL_activation_notify+0x13/0x40)
-(bL_activation_notify) from (bL_switcher_active_store+0x59/0x190)
-(bL_switcher_active_store) from (kernfs_fop_write+0x85/0x12c)
-(kernfs_fop_write) from (__vfs_write+0x21/0x130)
-(__vfs_write) from (vfs_write+0x6b/0xfc)
-(vfs_write) from (ksys_write+0x6d/0x90)
-(ksys_write) from (ret_fast_syscall+0x1/0x5a)
