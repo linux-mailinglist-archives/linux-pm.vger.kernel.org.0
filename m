@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD861DB647
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 20:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FC8DB68F
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 20:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438873AbfJQSfr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 14:35:47 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34632 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438870AbfJQSfq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 14:35:46 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m19so2801629otp.1;
-        Thu, 17 Oct 2019 11:35:45 -0700 (PDT)
+        id S2406827AbfJQSvV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 14:51:21 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:33312 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388823AbfJQSvV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 14:51:21 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 60so2836784otu.0;
+        Thu, 17 Oct 2019 11:51:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rLXeE5tDWR528aYmAdtQR/tQKMyidpkE7QGnDFQ38Io=;
-        b=IcFJY0gnT0UBrPh6/Cy32lwDFrIAMwNa2l/ci9KluKFFRFA6SWoGKaKhUDcoVsX9Ou
-         Ai/ss2cbSHiuri++vruETpVOrxtXd34lBUyk/bhjf7M8dVceYrLlzviSRe7wal9h47mT
-         oMAjhr0S0kZIcABStm9kT9QElbGVIe9rip74s6nfNRxq095rQK0FB7t2b4su1jyUvltJ
-         NBkCO2jCqUHXmvi+/Y+suodU74/3txTHzObDKByvOuZzQ3TJJEzUjnhedqD2fIkbo/q6
-         3ogRz3EouCAELh+ViJOTbvjdetnTIp3exaizxpAU1fSUp5Lnb8ZtXvV6Pbpo6PilLezO
-         NSTg==
-X-Gm-Message-State: APjAAAUiKQgCWMhuQp2Aumq5JkLmHLapAeAhxJ8I3vJgPsfPVrlfHf3J
-        1GjYuH0nqGQR13b4Tc+f+g==
-X-Google-Smtp-Source: APXvYqx1QhuF+1Hdzlmm+RA+5TKr7r6oHJCWnwtex4XEqDWWEc7Ao9vjGEquEZQuo0+tlgF0u4VyvA==
-X-Received: by 2002:a9d:6a0c:: with SMTP id g12mr4020150otn.141.1571337345362;
-        Thu, 17 Oct 2019 11:35:45 -0700 (PDT)
+        bh=uQYP/0Fr9W3z7AH2U3KxlY2QC+oTwq0Ok9HJ6oW23Oo=;
+        b=kqifvuy1xpTCrGsb6usx5RT1exc91YnpZaw9jsX5hPADI2pTFo15hc9jmfzKAdgB6f
+         xy172VOkSmUqp2jnWmsaY+PTxTM/tiM8m98bbCUBkhDJI+QKOPORAszA0XZOVY2dPz9V
+         bBK6u0HkXZyLJQ/Blx76hsBYGRTmob/Siy/sckcY5JeAVZy+dB8H3b0G2zy1p7XYr6Lr
+         iV3yeSFkGm74BOIORldvyYYeiZl2LbhV6QltFkBU56pBelg/+CuMVtBoAFozweOcM/bV
+         gIu3X8mjZIO0TW3KBxU5gfd5RWwh+00AlA+Zm+MzpmUzgxP/eW2UcuWham6hH3B+6xDc
+         yVOw==
+X-Gm-Message-State: APjAAAW+2I7B8BhrLmMppGp9/LI0FKdxqzIfHETF7rfdTYSxrQ9DsLFt
+        oCAMXTH9bkdIKoORP+d62UhosM0=
+X-Google-Smtp-Source: APXvYqxHWeIp566bMef8Qjtvxkh468x/vVId7yRzAFfnsxxaEdu+fAz577HEprAedk4SvNVjed19yA==
+X-Received: by 2002:a9d:6e92:: with SMTP id a18mr4130227otr.313.1571338279403;
+        Thu, 17 Oct 2019 11:51:19 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q14sm790999otc.50.2019.10.17.11.35.44
+        by smtp.gmail.com with ESMTPSA id w25sm816876oth.39.2019.10.17.11.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 11:35:44 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 13:35:43 -0500
+        Thu, 17 Oct 2019 11:51:18 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 13:51:17 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Mark Rutland <mark.rutland@arm.com>,
@@ -47,94 +47,110 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v3 3/6] dt-bindings: regulator: max77650: convert the
- binding document to yaml
-Message-ID: <20191017183543.GA28403@bogus>
+Subject: Re: [PATCH v3 5/6] dt-bindings: leds: max77650: convert the binding
+ document to yaml
+Message-ID: <20191017185117.GA30431@bogus>
 References: <20191017071234.8719-1-brgl@bgdev.pl>
- <20191017071234.8719-4-brgl@bgdev.pl>
+ <20191017071234.8719-6-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191017071234.8719-4-brgl@bgdev.pl>
+In-Reply-To: <20191017071234.8719-6-brgl@bgdev.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 09:12:31AM +0200, Bartosz Golaszewski wrote:
+On Thu, Oct 17, 2019 at 09:12:33AM +0200, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > 
-> Convert the binding document for MAX77650 regulator module to YAML.
+> Convert the binding document for MAX77650 LED module to YAML.
 > 
 > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > ---
->  .../bindings/regulator/max77650-regulator.txt | 41 -------------------
->  .../regulator/max77650-regulator.yaml         | 31 ++++++++++++++
->  2 files changed, 31 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/regulator/max77650-regulator.txt
->  create mode 100644 Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+>  .../bindings/leds/leds-max77650.txt           | 57 ------------------
+>  .../bindings/leds/leds-max77650.yaml          | 58 +++++++++++++++++++
+>  2 files changed, 58 insertions(+), 57 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/leds/leds-max77650.txt
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-max77650.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.txt b/Documentation/devicetree/bindings/regulator/max77650-regulator.txt
+> diff --git a/Documentation/devicetree/bindings/leds/leds-max77650.txt b/Documentation/devicetree/bindings/leds/leds-max77650.txt
 > deleted file mode 100644
-> index f1cbe813c30f..000000000000
-> --- a/Documentation/devicetree/bindings/regulator/max77650-regulator.txt
+> index 3a67115cc1da..000000000000
+> --- a/Documentation/devicetree/bindings/leds/leds-max77650.txt
 > +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -Regulator driver for MAX77650 PMIC from Maxim Integrated.
+> @@ -1,57 +0,0 @@
+> -LED driver for MAX77650 PMIC from Maxim Integrated.
 > -
 > -This module is part of the MAX77650 MFD device. For more details
 > -see Documentation/devicetree/bindings/mfd/max77650.txt.
 > -
-> -The regulator controller is represented as a sub-node of the PMIC node
-> -on the device tree.
+> -The LED controller is represented as a sub-node of the PMIC node on
+> -the device tree.
 > -
-> -The device has a single LDO regulator and a SIMO buck-boost regulator with
-> -three independent power rails.
+> -This device has three current sinks.
 > -
 > -Required properties:
 > ---------------------
-> -- compatible:		Must be "maxim,max77650-regulator"
+> -- compatible:		Must be "maxim,max77650-led"
+> -- #address-cells:	Must be <1>.
+> -- #size-cells:		Must be <0>.
 > -
-> -Each rail must be instantiated under the regulators subnode of the top PMIC
-> -node. Up to four regulators can be defined. For standard regulator properties
-> -refer to Documentation/devicetree/bindings/regulator/regulator.txt.
+> -Each LED is represented as a sub-node of the LED-controller node. Up to
+> -three sub-nodes can be defined.
 > -
-> -Available regulator compatible strings are: "ldo", "sbb0", "sbb1", "sbb2".
+> -Required properties of the sub-node:
+> -------------------------------------
+> -
+> -- reg:			Must be <0>, <1> or <2>.
+> -
+> -Optional properties of the sub-node:
+> -------------------------------------
+> -
+> -- label:		See Documentation/devicetree/bindings/leds/common.txt
+> -- linux,default-trigger: See Documentation/devicetree/bindings/leds/common.txt
+> -
+> -For more details, please refer to the generic GPIO DT binding document
+> -<devicetree/bindings/gpio/gpio.txt>.
 > -
 > -Example:
 > ---------
 > -
-> -	regulators {
-> -		compatible = "maxim,max77650-regulator";
+> -	leds {
+> -		compatible = "maxim,max77650-led";
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
 > -
-> -		max77650_ldo: regulator@0 {
-> -			regulator-compatible = "ldo";
-> -			regulator-name = "max77650-ldo";
-> -			regulator-min-microvolt = <1350000>;
-> -			regulator-max-microvolt = <2937500>;
+> -		led@0 {
+> -			reg = <0>;
+> -			label = "blue:usr0";
 > -		};
 > -
-> -		max77650_sbb0: regulator@1 {
-> -			regulator-compatible = "sbb0";
-> -			regulator-name = "max77650-sbb0";
-> -			regulator-min-microvolt = <800000>;
-> -			regulator-max-microvolt = <1587500>;
+> -		led@1 {
+> -			reg = <1>;
+> -			label = "red:usr1";
+> -			linux,default-trigger = "heartbeat";
+> -		};
+> -
+> -		led@2 {
+> -			reg = <2>;
+> -			label = "green:usr2";
 > -		};
 > -	};
-> diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+> diff --git a/Documentation/devicetree/bindings/leds/leds-max77650.yaml b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
 > new file mode 100644
-> index 000000000000..a8770742836d
+> index 000000000000..5a1e256185bd
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
-> @@ -0,0 +1,31 @@
+> +++ b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
+> @@ -0,0 +1,58 @@
 > +# SPDX-License-Identifier: GPL-2.0
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/regulator/max77650-regulator.yaml#
+> +$id: http://devicetree.org/schemas/leds/leds-max77650.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Regulator driver for MAX77650 PMIC from Maxim Integrated.
+> +title: LED driver for MAX77650 PMIC from Maxim Integrated.
 > +
 > +maintainers:
 > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
@@ -142,26 +158,65 @@ On Thu, Oct 17, 2019 at 09:12:31AM +0200, Bartosz Golaszewski wrote:
 > +description: |
 > +  This module is part of the MAX77650 MFD device. For more details
 > +  see Documentation/devicetree/bindings/mfd/max77650.txt.
-
-.yaml?
-
 > +
-> +  The regulator controller is represented as a sub-node of the PMIC node
-> +  on the device tree.
+> +  The LED controller is represented as a sub-node of the PMIC node on
+> +  the device tree.
 > +
-> +  The device has a single LDO regulator and a SIMO buck-boost regulator with
-> +  three independent power rails.
+> +  This device has three current sinks.
 > +
 > +properties:
 > +  compatible:
-> +    const: maxim,max77650-regulator
+> +    const: maxim,max77650-led
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
 > +
 > +patternProperties:
-> +  "^regulator@[0-3]$":
-> +    $ref: "regulator.yaml#"
+> +  "^led@[0-2]$":
+> +    type: object
+> +    description: |
+> +      Properties for a single LED.
+> +
+> +    properties:
+> +      reg:
+> +        description:
+> +          Index of the LED.
+> +        maxItems: 1
+> +        minimum: 0
+> +        maximum: 2
+
+Mixing array and scalar constraints. Just need (dropping maxItems):
+
+items:
+  - minimum: 0
+    maximum: 2
+
+> +
+> +      label:
+> +        $ref: "/schemas/types.yaml#/definitions/string"
+
+Globally defined as a string already.
+
+> +        description:
+> +          The label of this LED.
+> +
+> +      linux,default-trigger:
+> +        $ref: "/schemas/types.yaml#/definitions/string"
+
+Assume this gets a common binding.
+
+So just 'true' is sufficient for both of these.
+
+> +        description:
+> +          String defining the default trigger assigned to this LED.
 > +
 > +required:
 > +  - compatible
+> +  - "#address-cells"
+> +  - "#size-cells"
 > -- 
 > 2.23.0
 > 
