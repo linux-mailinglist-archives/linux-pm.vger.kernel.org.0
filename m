@@ -2,100 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6E1DB2A7
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 18:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237EFDB2DA
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 18:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409222AbfJQQmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 12:42:43 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:41286 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1729529AbfJQQmm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 12:42:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15D4A328;
-        Thu, 17 Oct 2019 09:42:22 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 127E23F6C4;
-        Thu, 17 Oct 2019 09:42:20 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 17:42:15 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: [RFT][PATCH 0/3] cpufreq / PM: QoS: Introduce frequency QoS and
- use it in cpufreq
-Message-ID: <20191017164215.GA32531@bogus>
-References: <2811202.iOFZ6YHztY@kreacher>
- <20191016142343.GB5330@bogus>
- <20191017095725.izchzl7enfylvpf3@vireshk-i7>
- <20191017095942.GF8978@bogus>
- <CAJZ5v0ixS8ZS93Fgj8XGUMGcLdAy+Fgwp5z3QirccNSiiwLtDA@mail.gmail.com>
+        id S2436683AbfJQQyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 12:54:16 -0400
+Received: from pb-smtp2.pobox.com ([64.147.108.71]:54566 "EHLO
+        pb-smtp2.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732079AbfJQQyQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 12:54:16 -0400
+Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id D036F1DBBA;
+        Thu, 17 Oct 2019 12:54:13 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=G5aHzmHaUkRm2oU/9Hp88mBL02A=; b=s8OZIK
+        Kxu7zVHzA0gpPI71YqZ1Nb3102iFK6Ph0ldrvo+nlU4/S089eRHZx/C04/58hQa6
+        U1z9KuO9BxQJd3ni7FrZ4xyH2ylx2M7YY/frYgWXAC+wm0WnnaJOquL2m2F3VSfE
+        wio6wdmye6ZZr5/5IXgJZ4mkWee3bHarEX3ks=
+Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id C77571DBB9;
+        Thu, 17 Oct 2019 12:54:13 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=CLxvPSIC8jPU2KnOPJODvLDpaApaYkrwUGkHaLxpMzk=; b=IYGFsxPsGCoU0wTKMPo0TtpuqzTxuKOgDd+ai0KFLbx3w+zob9LJppJiifVeD9qgry4mkum6NIibk4FThNIpO9XQJgHekOAFBAaRzxlbh+/Jg56AuckgCNjTvwdEF+lhiojrYv60kKF9QrAO6pnqFHVOzA9w05Y1HEzvb/q9Vv4=
+Received: from yoda.home (unknown [24.203.50.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 4C82E1DBB8;
+        Thu, 17 Oct 2019 12:54:13 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 5C2EF2DA01D7;
+        Thu, 17 Oct 2019 12:54:12 -0400 (EDT)
+Date:   Thu, 17 Oct 2019 12:54:12 -0400 (EDT)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] cpufreq: merge arm big.LITTLE and vexpress-spc
+ drivers
+In-Reply-To: <20191017123508.26130-1-sudeep.holla@arm.com>
+Message-ID: <nycvar.YSQ.7.76.1910171251370.1546@knanqh.ubzr>
+References: <20191017123508.26130-1-sudeep.holla@arm.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0ixS8ZS93Fgj8XGUMGcLdAy+Fgwp5z3QirccNSiiwLtDA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: BF4C0582-F0FE-11E9-B71D-D1361DBA3BAF-78420484!pb-smtp2.pobox.com
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 06:34:28PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Oct 17, 2019 at 12:00 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Thu, Oct 17, 2019 at 03:27:25PM +0530, Viresh Kumar wrote:
-> > > On 16-10-19, 15:23, Sudeep Holla wrote:
-> > > > Thanks for the spinning these patches so quickly.
-> > > >
-> > > > I did give it a spin, but unfortunately it doesn't fix the bug I reported.
-> > > > So I looked at my bug report in detail and looks like the cpufreq_driver
-> > > > variable is set to NULL at that point and it fails to dereference it
-> > > > while trying to execute:
-> > > >     ret = cpufreq_driver->verify(new_policy);
-> > > > (Hint verify is at offset 0x1c/28)
-> > > >
-> > > > So I suspect some race as this platform with bL switcher tries to
-> > > > unregister and re-register the cpufreq driver during the boot.
-> > > >
-> > > > I need to spend more time on this as reverting the initial PM QoS patch
-> > > > to cpufreq.c makes the issue disappear.
->
-> I guess you mean commit 67d874c3b2c6 ("cpufreq: Register notifiers
-> with the PM QoS framework")?
->
+On Thu, 17 Oct 2019, Sudeep Holla wrote:
 
-Correct.
+> Hi,
+> 
+> Since vexpress-spc is the sole user of arm_big_little cpufreq driver,
+> there's no point in keeping it separate anymore. I wanted to post these
+> patches for ages but kept postponing for no reason.
 
-> That would make sense, because it added the cpufreq_notifier_min() and
-> cpufreq_notifier_max() that trigger handle_update() via
-> schedule_work().
->
+For these patches:
 
-Yes, it was not clear as I didn't trace to handle_update earlier. After
-looking at depth today afternoon, I arrived at the same conclusion.
+Acked-by: Nicolas Pitre <nico@fluxnic.net>
 
-> [BTW, Viresh, it looks like cpufreq_set_policy() should still ensure
-> that the new min is less than the new max, because the QoS doesn't do
-> that.]
->
-> > > Is this easily reproducible ? cpufreq_driver == NULL shouldn't be the case, it
-> > > get updated only once while registering/unregistering cpufreq drivers. That is
-> > > the last thing which can go wrong from my point of view :)
-> > >
-> >
-> > Yes, if I boot my TC2 with bL switcher enabled, it always crashes on boot.
->
-> It does look like handle_update() races with
-> cpufreq_unregister_driver() and cpufreq_remove_dev (called from there
-> indirectly) does look racy.
 
-Indeed, we just crossed the mails. I just found that and posted a patch.
-
---
-Regards,
-Sudeep
+Nicolas
