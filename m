@@ -2,125 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3826FDAB10
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFCDDABD3
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 14:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390847AbfJQLUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 07:20:25 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:39708 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1728143AbfJQLUZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:20:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A73C1BB2;
-        Thu, 17 Oct 2019 04:19:58 -0700 (PDT)
-Received: from [10.1.195.43] (unknown [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEB5F3F718;
-        Thu, 17 Oct 2019 04:19:56 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-5-douglas.raillard@arm.com>
- <87e6ce4f-af41-c585-7b48-81b5c7f45ef0@arm.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <18a910f3-261e-18fb-931e-e024b2a20f0b@arm.com>
-Date:   Thu, 17 Oct 2019 12:19:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S2393407AbfJQMSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 08:18:11 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:42376 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731634AbfJQMSK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 08:18:10 -0400
+Received: by mail-ua1-f68.google.com with SMTP id r19so580372uap.9
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 05:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D4W/LUm+J8OxNKkDBXKqSGiLQb0w0oPg2mn0tFVhPes=;
+        b=aUrV05JDeAStB20D0EX8t5S/U35e9v3DZtU8XmQCMwCu+E1mzgEFvRAaT62RK8LVhN
+         0+gx3U0i+AMedaIcGuc7NNcHMTX2Ebp3L0dUnVqrKUSh4UZ8reHpCt8o5Pw7fmTgz8Uk
+         PfGmF7U49F4uO8Qt7u44Ny9Pe+Tn/RCw/fo1+Zi5F2aDqEQhIVdck+z/PwbRCxMW+Zyu
+         tfgxkaq0lGWgKKhhl69S5UOUTLfIxxNkF8Mc+AhjYtBftcvck8Q+uIiesqmy7pJ0DH8Y
+         KJVkC2wh2eSWJ0mHB+pP3ssfzdAgfY+U0ZgyhYVjSgFKMBnTl7635nW0HUn5rWHnVgLF
+         +5Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D4W/LUm+J8OxNKkDBXKqSGiLQb0w0oPg2mn0tFVhPes=;
+        b=avMcmC5XjeJDUx2cNf5qd5Y6MYIpcfWX6fi4rHIhXhi7nsMhheqW41ueNXsAuCnL2J
+         zwLJ9VD8ULbx1y6USoRWNqQgXutitYMVLAKmUENQxcxi0K/W1k5IaMfuy169rKFEeah8
+         /cDIANOm9oYMJEE4EdBREqoIbKxVCQrNX9ydu3B0YX1d2QNL4FQV8dIYogwHUt1ggJIs
+         T66J3ObrfCTzzeo2FQxmuODbP8W/ZK5r/ZI5VQBFvZ4LEsHqimsNTjodGJXQ6GvLz4jF
+         ETQqeHdD1s5YqvKuIU/KaExy8gC8YX0PRGdIHbHBs9eueZFP47fzGdyDh/NU7JZ4D6AG
+         t//Q==
+X-Gm-Message-State: APjAAAW1YvzSXCQTZ8FgZ7g2Bi+HdGlHoXu14KfCPlFvbhZw2fuo6wJx
+        kodiJfOWQ7JQc61yWPFH5Baq68Tq9SKEdIhIu8IkWw==
+X-Google-Smtp-Source: APXvYqwtJORCUbSCwLJQHhNVBn6YlmaEa3VkSkslE27JU8UAlyFstCIC0GKWyqQLWVsobv/VC7fukLjO0zgVnbI+QwY=
+X-Received: by 2002:ab0:4704:: with SMTP id h4mr2115415uac.67.1571314689598;
+ Thu, 17 Oct 2019 05:18:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87e6ce4f-af41-c585-7b48-81b5c7f45ef0@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+References: <cover.1571307382.git.amit.kucheria@linaro.org>
+In-Reply-To: <cover.1571307382.git.amit.kucheria@linaro.org>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Thu, 17 Oct 2019 17:47:57 +0530
+Message-ID: <CAHLCerOrMjG0JqBEUf3NqQijPwzjYkiq7Kkstrh+p91rvF9_Bg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] Initialise thermal framework and cpufreq earlier
+ during boot
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This is embarassing. I generated this series incorrectly. It is
+missing a patch removing netlink support. v3 coming right up.
 
+Sorry for the noise.
 
-On 10/17/19 9:57 AM, Dietmar Eggemann wrote:
-> On 11/10/2019 15:44, Douglas RAILLARD wrote:
-> 
-> [...]
-> 
->> @@ -181,6 +185,42 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
->>   	}
->>   }
->>   
->> +static unsigned long sugov_cpu_ramp_boost(struct sugov_cpu *sg_cpu)
->> +{
->> +	return READ_ONCE(sg_cpu->ramp_boost);
->> +}
->> +
->> +static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
->> +{
->> +	struct rq *rq = cpu_rq(sg_cpu->cpu);
->> +	unsigned long util_est_enqueued;
->> +	unsigned long util_avg;
->> +	unsigned long boost = 0;
->> +
->> +	util_est_enqueued = READ_ONCE(rq->cfs.avg.util_est.enqueued);
->> +	util_avg = READ_ONCE(rq->cfs.avg.util_avg);
->> +
->> +	/*
->> +	 * Boost when util_avg becomes higher than the previous stable
->> +	 * knowledge of the enqueued tasks' set util, which is CPU's
->> +	 * util_est_enqueued.
->> +	 *
->> +	 * We try to spot changes in the workload itself, so we want to
->> +	 * avoid the noise of tasks being enqueued/dequeued. To do that,
->> +	 * we only trigger boosting when the "amount of work' enqueued
-> 
-> s/"amount of work'/"amount of work" or 'amount of work'
-> 
-> [...]
-> 
->> @@ -552,6 +593,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->>   		unsigned long j_util, j_max;
->>   
->>   		j_util = sugov_get_util(j_sg_cpu);
->> +		if (j_sg_cpu == sg_cpu)
->> +			sugov_cpu_ramp_boost_update(sg_cpu);
-> 
-> Can you not call this already in sugov_update_shared(), like in the
-> sugov_update_single() case?
-
-The next commit in the series needs to aggregate the ramp_boost of all CPUs in the policy,
-so this call will end up here anyway, unless we want to set the value at previous level and
-query it back again in the loop. I don't mind either way, but since no option seem
-faster than the other, I went for clustering the ramp boost code rather than spreading it at
-all levels.
-
-
-> diff --git a/kernel/sched/cpufreq_schedutil.c
-> b/kernel/sched/cpufreq_schedutil.c
-> index e35c20b42780..4c53f63a537d 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -595,8 +595,6 @@ static unsigned int sugov_next_freq_shared(struct
-> sugov_cpu *sg_cpu, u64 time)
->                  unsigned long j_util, j_max;
-> 
->                  j_util = sugov_get_util(j_sg_cpu);
-> -               if (j_sg_cpu == sg_cpu)
-> -                       sugov_cpu_ramp_boost_update(sg_cpu);
->                  j_max = j_sg_cpu->max;
->                  j_util = sugov_iowait_apply(j_sg_cpu, time, j_util, j_max);
-> 
-> @@ -625,6 +623,7 @@ sugov_update_shared(struct update_util_data *hook,
-> u64 time, unsigned int flags)
->          ignore_dl_rate_limit(sg_cpu, sg_policy);
-> 
->          if (sugov_should_update_freq(sg_policy, time)) {
-> +               sugov_cpu_ramp_boost_update(sg_cpu);
->                  next_f = sugov_next_freq_shared(sg_cpu, time);
-> 
-> [...]
-> 
+On Thu, Oct 17, 2019 at 4:00 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
+>
+> Changes since v1:
+> - Completely get rid of netlink support in the thermal framework.
+> - This changes the early init patch to a single line - change to
+>   core_initcall. Changed authorship of patch since it is nothing like the
+>   original. Lina, let me know if you feel otherwise.
+> - I've tested to make sure that the qcom-cpufreq-hw driver continues to
+>   work correctly as a module so this won't impact Android's GKI plans.
+> - Collected Acks
+>
+> Device boot needs to be as fast as possible while keeping under the thermal
+> envelope. Now that thermal framework is built-in to the kernel, we can
+> initialize it earlier to enable thermal mitigation during boot.
+>
+> We also need the cpufreq HW drivers to be initialised earlier to act as the
+> cooling devices. This series only converts over the qcom-hw driver to
+> initialize earlier but can be extended to other platforms as well.
+>
+> Amit Kucheria (5):
+>   thermal: Initialize thermal subsystem earlier
+>   cpufreq: Initialise the governors in core_initcall
+>   cpufreq: Initialize cpufreq-dt driver earlier
+>   clk: qcom: Initialise clock drivers earlier
+>   cpufreq: qcom-hw: Move driver initialisation earlier
+>
+>  drivers/clk/qcom/clk-rpmh.c            | 2 +-
+>  drivers/clk/qcom/gcc-qcs404.c          | 2 +-
+>  drivers/clk/qcom/gcc-sdm845.c          | 2 +-
+>  drivers/cpufreq/cpufreq-dt-platdev.c   | 2 +-
+>  drivers/cpufreq/cpufreq_conservative.c | 2 +-
+>  drivers/cpufreq/cpufreq_ondemand.c     | 2 +-
+>  drivers/cpufreq/cpufreq_performance.c  | 2 +-
+>  drivers/cpufreq/cpufreq_powersave.c    | 2 +-
+>  drivers/cpufreq/cpufreq_userspace.c    | 2 +-
+>  drivers/cpufreq/qcom-cpufreq-hw.c      | 2 +-
+>  drivers/thermal/thermal_core.c         | 3 ++-
+>  11 files changed, 12 insertions(+), 11 deletions(-)
+>
+> --
+> 2.17.1
+>
