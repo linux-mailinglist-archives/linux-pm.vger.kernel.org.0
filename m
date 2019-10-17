@@ -2,142 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECFADAF44
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 16:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6AEDAFA5
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 16:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394721AbfJQOLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 10:11:35 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:53812 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727429AbfJQOLf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 10:11:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Th37Qhz4w+8rDn8hj1nGSF7iCLduKVxIPDbgodx/X/4=; b=wHx9JLYh7xxzrCE7aqoGH3Fua
-        QJwrcFlGlCUohbrngB+NjEyamPTc7mGtxcwvweVcZtx/XIKutLSD2ogm5yfjvxwOlExfn1Jw57DVr
-        BS0TKGjt2rZ5Rgyas5jzkO/yfFW5tINKeBYMjxXRkVzaw6P8983Uzaxf3YDokJ6nowjkD7N6Xhpgh
-        pfHLicvC/usacRbdA5TZ0xLZmgSTWep4okwXXMs3ltxeu4QKVaH0H83SAR/RIzeQhQnO/kJbKFkmj
-        56DsB87diY/jsLgpZ2wu2DAM5jknuVIeO2NHFsgBo+OtModaz001PH25OyaDS0p5l4YImq0V4KSST
-        YHSUK7p+Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iL6Ug-0000JA-Qc; Thu, 17 Oct 2019 14:11:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 295513032F8;
-        Thu, 17 Oct 2019 16:10:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7FF8D203BFA9E; Thu, 17 Oct 2019 16:11:07 +0200 (CEST)
-Date:   Thu, 17 Oct 2019 16:11:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Douglas Raillard <douglas.raillard@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20191017141107.GJ2311@hirez.programming.kicks-ass.net>
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
- <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
- <20191017095015.GI2311@hirez.programming.kicks-ass.net>
- <20191017111116.GA27006@google.com>
+        id S2437563AbfJQOQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 10:16:55 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42042 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727314AbfJQOQz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 10:16:55 -0400
+Received: by mail-ot1-f67.google.com with SMTP id c10so2005874otd.9;
+        Thu, 17 Oct 2019 07:16:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ONhbG1YIvRehChglKAzYSee1XpDEhwyMKjBcNaf717M=;
+        b=izYqhpkanZhv6t0j6kpBClORLQTasyQsD+0Gzo76AmET09Nwz3oCwVeKVvCnWqcK3E
+         TyNOXkW5dT3P6CGt/Rx+x8sB1Ik3a4xLeZxeJ4iothxjWl1AZzK4fOylTazICZ6zKUf8
+         aNBuum4P1RUU3bwxE7c5fd37wXj5rq9hNiUlNyDy5ygC2p10LL8nAoNPbMfqPWMIenHM
+         baUab7D5jGKyK8itXAroeTcFaJO7fVzcKzHRWvIg9h6oWQY4M30FiSKKRfmhXAkuMIlO
+         zPlxiix8uiprFHAQTLcWR7KUHqBkxfMy+eliO50LAOeCbyf73Jfhr277xi1qg8xmaudT
+         edSQ==
+X-Gm-Message-State: APjAAAUnML6+NPnhv4RauepLt73ZKemZOIaPGtPZrT5Um9P/0GMzRlCy
+        LQP/KMTVXoJC39QM0VEkM/pNzkvkmeVdIVr/XYA=
+X-Google-Smtp-Source: APXvYqzlXzT4lVsF0ANUd+lX83vr0WuCNqKjpz6umKGU8BvwxubmHWkCKI4rEx3LdKJ9XXFDb/fKsYOCW85mZdBE59w=
+X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr3351385oth.266.1571321813586;
+ Thu, 17 Oct 2019 07:16:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191017111116.GA27006@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <2811202.iOFZ6YHztY@kreacher> <4551555.oysnf1Sd0E@kreacher> <20191017094143.fhmhgltv6ujccxlp@vireshk-i7>
+In-Reply-To: <20191017094143.fhmhgltv6ujccxlp@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Oct 2019 16:16:40 +0200
+Message-ID: <CAJZ5v0hDhJrCWnPxbV54yWAB=DKCLz33Sq8J4kXtqH4+mJn2eQ@mail.gmail.com>
+Subject: Re: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 12:11:16PM +0100, Quentin Perret wrote:
-> On Thursday 17 Oct 2019 at 11:50:15 (+0200), Peter Zijlstra wrote:
-> > Now, the thing is, we use map_util_freq() in more places, and should we
-> > not reflect this increase in C for all of them? That is, why is this
-> > patch changing get_next_freq() and not map_util_freq().
-> > 
-> > I don't think that question is answered in the Changelogs.
-> > 
-> > Exactly because it does change the energy consumption (it must) should
-> > that not also be reflected in the EAS logic?
-> 
-> Right that shouldn't hurt and keep things consistent. That probably
-> won't have a huge impact in practice (the boost should be != 0 only when
-> the util signals haven't converged IIUC, which is a case where the EAS
-> calculation is already 'wrong' anyway), but that still feels like the
-> right thing to do.
+On Thu, Oct 17, 2019 at 11:41 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 16-10-19, 12:41, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Introduce frequency QoS, based on the "raw" low-level PM QoS, to
+> > represent min and max frequency requests and aggregate constraints.
+> >
+> > The min and max frequency requests are to be represented by
+> > struct freq_qos_request objects and the aggregate constraints are to
+> > be represented by struct freq_constraints objects.  The latter are
+> > expected to be initialized with the help of freq_constraints_init().
+> >
+> > The freq_qos_read_value() helper is defined to retrieve the aggregate
+> > constraints values from a given struct freq_constraints object and
+> > there are the freq_qos_add_request(), freq_qos_update_request() and
+> > freq_qos_remove_request() helpers to manipulate the min and max
+> > frequency requests.  It is assumed that the the helpers will not
+> > run concurrently with each other for the same struct freq_qos_request
+> > object, so if that may be the case, their uses must ensure proper
+> > synchronization between them (e.g. through locking).
+> >
+> > In addition, freq_qos_add_notifier() and freq_qos_remove_notifier()
+> > are provided to add and remove notifiers that will trigger on aggregate
+> > constraint changes to and from a given struct freq_constraints object,
+> > respectively.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  include/linux/pm_qos.h |   44 ++++++++
+> >  kernel/power/qos.c     |  240 +++++++++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 284 insertions(+)
+> >
+> > Index: linux-pm/include/linux/pm_qos.h
+> > ===================================================================
+> > --- linux-pm.orig/include/linux/pm_qos.h
+> > +++ linux-pm/include/linux/pm_qos.h
+> > @@ -267,4 +267,48 @@ static inline s32 dev_pm_qos_raw_resume_
+> >  }
+> >  #endif
+> >
+> > +#define FREQ_QOS_MIN_DEFAULT_VALUE   0
+> > +#define FREQ_QOS_MAX_DEFAULT_VALUE   (-1)
+> > +
+> > +enum freq_qos_req_type {
+> > +     FREQ_QOS_MIN = 1,
+> > +     FREQ_QOS_MAX,
+> > +};
+> > +
+> > +struct freq_constraints {
+> > +     struct pm_qos_constraints min_freq;
+> > +     struct blocking_notifier_head min_freq_notifiers;
+> > +     struct pm_qos_constraints max_freq;
+> > +     struct blocking_notifier_head max_freq_notifiers;
+> > +};
+> > +
+> > +struct freq_qos_request {
+> > +     enum freq_qos_req_type type;
+> > +     struct plist_node pnode;
+> > +     struct freq_constraints *qos;
+> > +};
+> > +
+> > +static inline int freq_qos_request_active(struct freq_qos_request *req)
+> > +{
+> > +     return !IS_ERR_OR_NULL(req->qos);
+> > +}
+> > +
+> > +void freq_constraints_init(struct freq_constraints *qos);
+> > +
+> > +s32 freq_qos_read_value(struct freq_constraints *qos,
+> > +                     enum freq_qos_req_type type);
+> > +
+> > +int freq_qos_add_request(struct freq_constraints *qos,
+> > +                      struct freq_qos_request *req,
+> > +                      enum freq_qos_req_type type, s32 value);
+> > +int freq_qos_update_request(struct freq_qos_request *req, s32 new_value);
+> > +int freq_qos_remove_request(struct freq_qos_request *req);
+> > +
+> > +int freq_qos_add_notifier(struct freq_constraints *qos,
+> > +                       enum freq_qos_req_type type,
+> > +                       struct notifier_block *notifier);
+> > +int freq_qos_remove_notifier(struct freq_constraints *qos,
+> > +                          enum freq_qos_req_type type,
+> > +                          struct notifier_block *notifier);
+> > +
+> >  #endif
+> > Index: linux-pm/kernel/power/qos.c
+> > ===================================================================
+> > --- linux-pm.orig/kernel/power/qos.c
+> > +++ linux-pm/kernel/power/qos.c
+> > @@ -650,3 +650,243 @@ static int __init pm_qos_power_init(void
+> >  }
+> >
+> >  late_initcall(pm_qos_power_init);
+> > +
+> > +/* Definitions related to the frequency QoS below. */
+> > +
+> > +/**
+> > + * freq_constraints_init - Initialize frequency QoS constraints.
+> > + * @qos: Frequency QoS constraints to initialize.
+> > + */
+> > +void freq_constraints_init(struct freq_constraints *qos)
+> > +{
+> > +     struct pm_qos_constraints *c;
+> > +
+> > +     c = &qos->min_freq;
+> > +     plist_head_init(&c->list);
+> > +     c->target_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> > +     c->default_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> > +     c->no_constraint_value = FREQ_QOS_MIN_DEFAULT_VALUE;
+> > +     c->type = PM_QOS_MAX;
+>
+> should this be MIN ?
 
-It only boosts when 'rq->cfs.avg.util' increases while
-'rq->cfs.avg.util_est.enqueued' remains unchanged (and util > util_est
-obv).
+No, it shouldn't.
 
-This condition can be true for select_task_rq_fair(), because that is
-ran before we do enqueue_task_fair() (for obvious raisins).
+For the min frequency, the effective constraint needs to be the
+maximum of all requests, because that satisfies all of them (each
+request means "the frequency cannot be less than this").
 
-> > I'm still thinking about the exact means you're using to raise C; that
-> > is, the 'util - util_est' as cost_margin. It hurts my brain still.
-> 
-> +1 ...
+> > +     c->notifiers = &qos->min_freq_notifiers;
+> > +     BLOCKING_INIT_NOTIFIER_HEAD(c->notifiers);
+> > +
+> > +     c = &qos->max_freq;
+> > +     plist_head_init(&c->list);
+> > +     c->target_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> > +     c->default_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> > +     c->no_constraint_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> > +     c->type = PM_QOS_MIN;
+>
+> and this MAX ?
 
-cost_i = capacity_i / power_i ; for the i-th OPP
+Likewise, for the max frequency, the effective constraint needs to be
+the minimum of all requests, as each of them means "the frequency
+cannot be more than this").
 
-We then do: 'x = util - util_avg' and use that on the first
-OPP >= min_freq:
-
-	cost(x) = cost_j + cost_j * x ; freq_j >= min_freq
-	        = cost_j * (1 + x)
-
-And then we find the highest OPP that has:
-
-	cost_k <= cost(x)
-
-Now, 'P = C*V^2*f', which under 'V ~ f' turns into 'P ~ f^3'.
-
-(this assumption is important because we don't have V_i, but know that
-when f increases, V also increases and the linear relation is the
-simplest)
-
-This then gives us:
-
-	capacity_i = f_i / f_max
-	power_i ~ f_i ^ 3
-	cost_i = capacity_i / power_i
-	       ~ (f_i / f_max) / f_i^3
-	       ~ 1 / (f_max * f_i^2)
-
-(your changelog already called if efficiency, but then went on calling
-it cost; as per the above, you see that higher frequencies have lower
-efficiency, as expected)
-
-cost(x) then turns into something like:
-
-	cost(x) = cost_j * (1 + x)
-	        ~ (1 + x) / (f_max * f_j^2)
-
-We then get the following equation (assuming inf. OPPs):
-
-	cost_k = cost(x)
-
-	1 / (f_max * f_k^2) = (1 + x) / (f_max * f_j^2)
-
-From which we can solve f_k:
-
-	f_k = f_j / sqrt(1 + x) ; x = util - util_est
-
-Which, given positive 'x' results in f_k < f_j, IOW. we're selecting a
-lower frequency.
-
-Given that 'cost' really is efficiency, and we've made the equations
-about selecting a higher efficiency, that makes sense in so far that it
-would always end up at the knee in the graph (our most efficient OPP).
-
-Is this really what we're wanting to do?
+[Also note that the current code in device PM QoS uses MIN and MAX
+here in the same way. :-)]
