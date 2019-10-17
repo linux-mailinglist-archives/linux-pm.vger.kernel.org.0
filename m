@@ -2,93 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B206DAAF5
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3826FDAB10
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392327AbfJQLLY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 07:11:24 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34184 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394164AbfJQLLX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 07:11:23 -0400
-Received: by mail-wr1-f66.google.com with SMTP id j11so1887429wrp.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 04:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+zYZA+RgbruuoZvP4gkp7U+7iA9beMBCPXED1O6rxro=;
-        b=Ojv0y5NOzDLkEhMe+JvYEQ5b68BsGM46pvx0kl7Scs0gXDS6BmgeIZuqZb6REC5csc
-         0LcdLYiFote/zJL4TQLOI4dlimKEvU2jxYwSf94j9n3z5kai++Y8KXpmEonGdnTGL13B
-         gbro3mPG58ZggyTYyTfR6lH9gJrtmZCgdfAS/xATycYBeY1i383OgUhjqRu9wOip/ukr
-         pqhy4pFxZ3b8ekWCqV7UKacLskxCValbHEeCU9VDeD6Zps3jfQLxHL+VRFclSQJdEOAD
-         BUz/q2ec1vg60IAstc9b7rz5USv1l+a5CkH3RrnuhzoJy5n9oLFghrylBWxxDtQD3mPp
-         axTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+zYZA+RgbruuoZvP4gkp7U+7iA9beMBCPXED1O6rxro=;
-        b=EtkQaist+oCmy8h+FyeBdsrO4lQKitq/DOyeYUkmWnw7tIarcJLovRcAfS+hj1JJHT
-         pUuAxua51J2x8uIrl0EtiOc0q9AmmAGFeIxHCgD79FkE38/u7gnQRgucDWnYSAr5lWmd
-         GqriyWM+ys0xxnXP4sx9yV2oY0s+G9DeK+kpJDneAmJ81ejVZVSQScpPIwnjAT62guBa
-         eDT6TNOlJ7Pnbxy7OdVvHplxBiEW81vlfa4UbfburcVldamcxLYUppC5UQdn01DFx5+Y
-         b/nQahEdXzK6S5MSW8S8Y8IWWN3dr9XKL1+CqLfGMt66Fvb9RHQiBxZ0qjPZC8W9pyWw
-         KhWA==
-X-Gm-Message-State: APjAAAUTB4SCxvJu+3SXtkknTmW9cldhH0wfsmY078JhlrRQxjgK8n8s
-        5mySbFR6h+566TAprtlEhrRR1w==
-X-Google-Smtp-Source: APXvYqzL2rz8o/7HAh35iFK8WOl7olxFOTAEgWWsnB008UBi/LWdcLZvpXnwlj6NQC5/VD0TIl7kBQ==
-X-Received: by 2002:adf:df05:: with SMTP id y5mr2740030wrl.84.1571310680779;
-        Thu, 17 Oct 2019 04:11:20 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:7687:11a4:4657:121d])
-        by smtp.gmail.com with ESMTPSA id a204sm2447892wmh.21.2019.10.17.04.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 04:11:20 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 12:11:16 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Douglas Raillard <douglas.raillard@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
+        id S2390847AbfJQLUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 07:20:25 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:39708 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1728143AbfJQLUZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 07:20:25 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A73C1BB2;
+        Thu, 17 Oct 2019 04:19:58 -0700 (PDT)
+Received: from [10.1.195.43] (unknown [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEB5F3F718;
+        Thu, 17 Oct 2019 04:19:56 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, qperret@qperret.net,
         patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20191017111116.GA27006@google.com>
 References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
- <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
- <20191017095015.GI2311@hirez.programming.kicks-ass.net>
+ <20191011134500.235736-5-douglas.raillard@arm.com>
+ <87e6ce4f-af41-c585-7b48-81b5c7f45ef0@arm.com>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <18a910f3-261e-18fb-931e-e024b2a20f0b@arm.com>
+Date:   Thu, 17 Oct 2019 12:19:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191017095015.GI2311@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87e6ce4f-af41-c585-7b48-81b5c7f45ef0@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday 17 Oct 2019 at 11:50:15 (+0200), Peter Zijlstra wrote:
-> Now, the thing is, we use map_util_freq() in more places, and should we
-> not reflect this increase in C for all of them? That is, why is this
-> patch changing get_next_freq() and not map_util_freq().
+
+
+On 10/17/19 9:57 AM, Dietmar Eggemann wrote:
+> On 11/10/2019 15:44, Douglas RAILLARD wrote:
 > 
-> I don't think that question is answered in the Changelogs.
+> [...]
 > 
-> Exactly because it does change the energy consumption (it must) should
-> that not also be reflected in the EAS logic?
+>> @@ -181,6 +185,42 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
+>>   	}
+>>   }
+>>   
+>> +static unsigned long sugov_cpu_ramp_boost(struct sugov_cpu *sg_cpu)
+>> +{
+>> +	return READ_ONCE(sg_cpu->ramp_boost);
+>> +}
+>> +
+>> +static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
+>> +{
+>> +	struct rq *rq = cpu_rq(sg_cpu->cpu);
+>> +	unsigned long util_est_enqueued;
+>> +	unsigned long util_avg;
+>> +	unsigned long boost = 0;
+>> +
+>> +	util_est_enqueued = READ_ONCE(rq->cfs.avg.util_est.enqueued);
+>> +	util_avg = READ_ONCE(rq->cfs.avg.util_avg);
+>> +
+>> +	/*
+>> +	 * Boost when util_avg becomes higher than the previous stable
+>> +	 * knowledge of the enqueued tasks' set util, which is CPU's
+>> +	 * util_est_enqueued.
+>> +	 *
+>> +	 * We try to spot changes in the workload itself, so we want to
+>> +	 * avoid the noise of tasks being enqueued/dequeued. To do that,
+>> +	 * we only trigger boosting when the "amount of work' enqueued
+> 
+> s/"amount of work'/"amount of work" or 'amount of work'
+> 
+> [...]
+> 
+>> @@ -552,6 +593,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>>   		unsigned long j_util, j_max;
+>>   
+>>   		j_util = sugov_get_util(j_sg_cpu);
+>> +		if (j_sg_cpu == sg_cpu)
+>> +			sugov_cpu_ramp_boost_update(sg_cpu);
+> 
+> Can you not call this already in sugov_update_shared(), like in the
+> sugov_update_single() case?
 
-Right that shouldn't hurt and keep things consistent. That probably
-won't have a huge impact in practice (the boost should be != 0 only when
-the util signals haven't converged IIUC, which is a case where the EAS
-calculation is already 'wrong' anyway), but that still feels like the
-right thing to do.
+The next commit in the series needs to aggregate the ramp_boost of all CPUs in the policy,
+so this call will end up here anyway, unless we want to set the value at previous level and
+query it back again in the loop. I don't mind either way, but since no option seem
+faster than the other, I went for clustering the ramp boost code rather than spreading it at
+all levels.
 
-> I'm still thinking about the exact means you're using to raise C; that
-> is, the 'util - util_est' as cost_margin. It hurts my brain still.
 
-+1 ...
-
-Thanks,
-Quentin
+> diff --git a/kernel/sched/cpufreq_schedutil.c
+> b/kernel/sched/cpufreq_schedutil.c
+> index e35c20b42780..4c53f63a537d 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -595,8 +595,6 @@ static unsigned int sugov_next_freq_shared(struct
+> sugov_cpu *sg_cpu, u64 time)
+>                  unsigned long j_util, j_max;
+> 
+>                  j_util = sugov_get_util(j_sg_cpu);
+> -               if (j_sg_cpu == sg_cpu)
+> -                       sugov_cpu_ramp_boost_update(sg_cpu);
+>                  j_max = j_sg_cpu->max;
+>                  j_util = sugov_iowait_apply(j_sg_cpu, time, j_util, j_max);
+> 
+> @@ -625,6 +623,7 @@ sugov_update_shared(struct update_util_data *hook,
+> u64 time, unsigned int flags)
+>          ignore_dl_rate_limit(sg_cpu, sg_policy);
+> 
+>          if (sugov_should_update_freq(sg_policy, time)) {
+> +               sugov_cpu_ramp_boost_update(sg_cpu);
+>                  next_f = sugov_next_freq_shared(sg_cpu, time);
+> 
+> [...]
+> 
