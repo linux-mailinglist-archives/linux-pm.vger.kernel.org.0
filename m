@@ -2,94 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7783DAA18
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 12:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B5ADAAED
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 13:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502001AbfJQKbU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 06:31:20 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39035 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2501997AbfJQKbT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 06:31:19 -0400
-Received: by mail-pl1-f195.google.com with SMTP id s17so922377plp.6
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 03:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=smRwPgvncTjnAR1YtPvLb1bA4/kxUscSlcxDGMtB+pk=;
-        b=DDQW0dW0reHs8t1GXSVyT9VgUmlnBcjxefVEiiSkhjqDBKk6/6035Yl+3gAe3iREvz
-         aEfAlmZCgqggMlR75cYhw+NRjIvUTX3lNVXQaue09BQetHpE9/mVW5+bwVYmASPpCUCg
-         VMiBx7zjSopPB1lPhYghf7lylEASdwn+lDyZlX8eQoajYOkkQEjL3P0oebZJ6/uTY02u
-         RcEl7YAv7sTaoQm6kcNNyFyUE2y6HJuT4r+UCVJLimmo39wSX5IPtjB7oNJvysjqpL0J
-         OZiN61pd5RMvEfFfpAULYiMAeW0j7gMu9I9ZyY8z490J2vX9UEWcA1DdQBqobPtpq2Bc
-         hM6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=smRwPgvncTjnAR1YtPvLb1bA4/kxUscSlcxDGMtB+pk=;
-        b=PrPFx4FFJ/gn0nwMwnJ2mD9/rG40oQOVjjq4wbFugrE3zHT2oeSdt4AjJy5/2PaOVh
-         lrDM/UrUVBvIyeE1lLO1RK0UCA49bJVENG/MdcjeC01ruWeUxUJMWldqXC4LVwGORvJw
-         Td+Yk8/VJKFUUeRQcILJmZ4kYtuDffn6llWbmOmqKTJ8ayqzpbBgPNxaeh26DCFJmxTh
-         3gTCJdqVvUfaLemR+M38GCoOf6gl1wGGDmMNPb0aDpCDgEe7tSNJuJucCrq5Gnwkw4d0
-         vlRwhfaHYt80SU45KzWpYJiBxTSWxJBiWH/xFGNNzE8o94SeIw9FkCGy3AnwPKl8ZVc+
-         rf0w==
-X-Gm-Message-State: APjAAAWfk9bz0C8p/aEk8GYyjtYdDHhDHF0SNbLiP37E8XoaVTOWNpSA
-        Yx6bHcyQN+kSokI3qDJTowpglw==
-X-Google-Smtp-Source: APXvYqwGQKQHsOV8uBmheqM16mQRxnhppIgWy5oZkoWCLezI/u2DUJJPCreCJsUc0l3q9jmUg1xGrA==
-X-Received: by 2002:a17:902:bd47:: with SMTP id b7mr3278948plx.28.1571308278241;
-        Thu, 17 Oct 2019 03:31:18 -0700 (PDT)
-Received: from localhost ([49.248.54.231])
-        by smtp.gmail.com with ESMTPSA id p189sm2040225pfp.163.2019.10.17.03.31.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 17 Oct 2019 03:31:17 -0700 (PDT)
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
-        edubezval@gmail.com, agross@kernel.org, tdas@codeaurora.org,
-        swboyd@chromium.org, ilina@codeaurora.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH v2 5/5] cpufreq: qcom-hw: Move driver initialisation earlier
-Date:   Thu, 17 Oct 2019 16:00:54 +0530
-Message-Id: <3468b8cf9c764ea139296ee149d33cd7a9d79e3e.1571307382.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1571307382.git.amit.kucheria@linaro.org>
-References: <cover.1571307382.git.amit.kucheria@linaro.org>
-In-Reply-To: <cover.1571307382.git.amit.kucheria@linaro.org>
-References: <cover.1571307382.git.amit.kucheria@linaro.org>
+        id S2502005AbfJQLKF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 07:10:05 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:39476 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S2405285AbfJQLKF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 07:10:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68ED71BA8;
+        Thu, 17 Oct 2019 04:09:40 -0700 (PDT)
+Received: from [10.1.195.43] (unknown [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C98223F718;
+        Thu, 17 Oct 2019 04:09:38 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 1/6] PM: Introduce em_pd_get_higher_freq()
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, qperret@qperret.net,
+        patrick.bellasi@matbug.net, dh.han@samsung.com
+References: <20191011134500.235736-1-douglas.raillard@arm.com>
+ <20191011134500.235736-2-douglas.raillard@arm.com>
+ <5aa79534-7059-09e7-00b8-752f6699f9d4@arm.com>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <9cb03bd7-af7c-df8b-e9d0-cd5db3ddda0b@arm.com>
+Date:   Thu, 17 Oct 2019 12:09:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
+MIME-Version: 1.0
+In-Reply-To: <5aa79534-7059-09e7-00b8-752f6699f9d4@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow qcom-hw driver to initialise right after the cpufreq and thermal
-subsystems are initialised in core_initcall so we get earlier access to
-thermal mitigation.
+Hi Dietmar,
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 10/17/19 10:58 AM, Dietmar Eggemann wrote:
+> On 11/10/2019 15:44, Douglas RAILLARD wrote:
+> 
+> [...]
+> 
+>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+>> index d249b88a4d5a..dd6a35f099ea 100644
+>> --- a/include/linux/energy_model.h
+>> +++ b/include/linux/energy_model.h
+>> @@ -159,6 +159,53 @@ static inline int em_pd_nr_cap_states(struct em_perf_domain *pd)
+>>   	return pd->nr_cap_states;
+>>   }
+>>   
+>> +#define EM_COST_MARGIN_SCALE 1024U
+>> +
+>> +/**
+>> + * em_pd_get_higher_freq() - Get the highest frequency that does not exceed the
+>> + * given cost margin compared to min_freq
+>> + * @pd		: performance domain for which this must be done
+>> + * @min_freq	: minimum frequency to return
+>> + * @cost_margin	: allowed margin compared to min_freq, on the
+>> + *		  EM_COST_MARGIN_SCALE scale.
+>> + *
+>> + * Return: the chosen frequency, guaranteed to be at least as high as min_freq.
+>> + */
+>> +static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
+>> +	unsigned long min_freq, unsigned long cost_margin)
+>> +{
+>> +	unsigned long max_cost = 0;
+>> +	struct em_cap_state *cs;
+>> +	int i;
+>> +
+>> +	if (!pd)
+>> +		return min_freq;
+>> +
+>> +	/* Compute the maximum allowed cost */
+>> +	for (i = 0; i < pd->nr_cap_states; i++) {
+>> +		cs = &pd->table[i];
+>> +		if (cs->frequency >= min_freq) {
+>> +			max_cost = cs->cost +
+>> +				(cs->cost * cost_margin) / EM_COST_MARGIN_SCALE;
+> 
+> Maybe you could mention in the header that this is the place where the
+> algorithm could be tuned. (even though it doesn't offer any tuning
+> interface, which is a good thing).
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index a9ae2f84a4ef..fc92a8842e25 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -334,7 +334,7 @@ static int __init qcom_cpufreq_hw_init(void)
- {
- 	return platform_driver_register(&qcom_cpufreq_hw_driver);
- }
--device_initcall(qcom_cpufreq_hw_init);
-+postcore_initcall(qcom_cpufreq_hw_init);
- 
- static void __exit qcom_cpufreq_hw_exit(void)
- {
--- 
-2.17.1
+I'm not sure what you mean, the patch "title" contains "em_pd_get_higher_freq()", should it
+also mention where exactly inside the function the margin logic is implemented ?
 
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>> +	/* Find the highest frequency that will not exceed the cost margin */
+>> +	for (i = pd->nr_cap_states-1; i >= 0; i--) {
+>> +		cs = &pd->table[i];
+>> +		if (cs->cost <= max_cost)
+>> +			return cs->frequency;
+>> +	}
+>> +
+>> +	/*
+>> +	 * We should normally never reach here, unless min_freq was higher than
+>> +	 * the highest available frequency, which is not expected to happen.
+>> +	 */
+> 
+> Maybe add a WARN_ONCE(1, "foobar"); here to indicate this unlikely event
+> (CPUfreq and EM framwork out of sync)?
+
+Will do.
+
+> [...]
+> 
