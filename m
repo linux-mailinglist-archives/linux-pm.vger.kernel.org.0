@@ -2,23 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0994DA7E5
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC74DA7E4
 	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 10:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408398AbfJQI5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 04:57:44 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:35926 "EHLO foss.arm.com"
+        id S2408411AbfJQI5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 04:57:47 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:35942 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2408397AbfJQI5o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Oct 2019 04:57:44 -0400
+        id S2408397AbfJQI5r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Oct 2019 04:57:47 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF68B15BF;
-        Thu, 17 Oct 2019 01:57:23 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0970B165C;
+        Thu, 17 Oct 2019 01:57:26 -0700 (PDT)
 Received: from [192.168.0.9] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E296E3F718;
-        Thu, 17 Oct 2019 01:57:21 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 2/6] sched/cpufreq: Attach perf domain to sugov
- policy
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BF2B3F718;
+        Thu, 17 Oct 2019 01:57:24 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
 To:     Douglas RAILLARD <douglas.raillard@arm.com>,
         linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
@@ -26,14 +25,14 @@ Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
         vincent.guittot@linaro.org, qperret@qperret.net,
         patrick.bellasi@matbug.net, dh.han@samsung.com
 References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191011134500.235736-3-douglas.raillard@arm.com>
+ <20191011134500.235736-5-douglas.raillard@arm.com>
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <4ebf6419-c8e0-3998-41e0-3f7b49b34084@arm.com>
-Date:   Thu, 17 Oct 2019 10:57:16 +0200
+Message-ID: <87e6ce4f-af41-c585-7b48-81b5c7f45ef0@arm.com>
+Date:   Thu, 17 Oct 2019 10:57:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20191011134500.235736-3-douglas.raillard@arm.com>
+In-Reply-To: <20191011134500.235736-5-douglas.raillard@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -46,69 +45,69 @@ On 11/10/2019 15:44, Douglas RAILLARD wrote:
 
 [...]
 
-> @@ -66,6 +70,38 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
->  
->  /************************ Governor internals ***********************/
->  
-> +#ifdef CONFIG_ENERGY_MODEL
-> +static void sugov_policy_attach_pd(struct sugov_policy *sg_policy)
-> +{
-> +	struct em_perf_domain *pd;
-> +	struct cpufreq_policy *policy = sg_policy->policy;
-
-Shouldn't always order local variable declarations from longest to
-shortest line?
-
-> +
-> +	sg_policy->pd = NULL;
-> +	pd = em_cpu_get(policy->cpu);
-> +	if (!pd)
-> +		return;
-> +
-> +	if (cpumask_equal(policy->related_cpus, to_cpumask(pd->cpus)))
-> +		sg_policy->pd = pd;
-> +	else
-> +		pr_warn("%s: Not all CPUs in schedutil policy %u share the same perf domain, no perf domain for that policy will be registered\n",
-> +			__func__, policy->cpu);
-
-Maybe {} because of 2 lines?
-
-> +}
-> +
-> +static struct em_perf_domain *sugov_policy_get_pd(
-> +						struct sugov_policy *sg_policy)
-
-
-Maybe this way? This format is already used in this file.
-
-static struct em_perf_domain *
-sugov_policy_get_pd(struct sugov_policy *sg_policy)
-
-
-> +{
-> +	return sg_policy->pd;
-> +}
-> +#else /* CONFIG_ENERGY_MODEL */
-> +static void sugov_policy_attach_pd(struct sugov_policy *sg_policy) {}
-> +static struct em_perf_domain *sugov_policy_get_pd(
-> +						struct sugov_policy *sg_policy)
-> +{
-> +	return NULL;
-> +}
-> +#endif /* CONFIG_ENERGY_MODEL */
-> +
->  static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
->  {
->  	s64 delta_ns;
-> @@ -859,6 +895,9 @@ static int sugov_start(struct cpufreq_policy *policy)
->  							sugov_update_shared :
->  							sugov_update_single);
+> @@ -181,6 +185,42 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
 >  	}
-> +
-> +	sugov_policy_attach_pd(sg_policy);
-> +
->  	return 0;
 >  }
+>  
+> +static unsigned long sugov_cpu_ramp_boost(struct sugov_cpu *sg_cpu)
+> +{
+> +	return READ_ONCE(sg_cpu->ramp_boost);
+> +}
+> +
+> +static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
+> +{
+> +	struct rq *rq = cpu_rq(sg_cpu->cpu);
+> +	unsigned long util_est_enqueued;
+> +	unsigned long util_avg;
+> +	unsigned long boost = 0;
+> +
+> +	util_est_enqueued = READ_ONCE(rq->cfs.avg.util_est.enqueued);
+> +	util_avg = READ_ONCE(rq->cfs.avg.util_avg);
+> +
+> +	/*
+> +	 * Boost when util_avg becomes higher than the previous stable
+> +	 * knowledge of the enqueued tasks' set util, which is CPU's
+> +	 * util_est_enqueued.
+> +	 *
+> +	 * We try to spot changes in the workload itself, so we want to
+> +	 * avoid the noise of tasks being enqueued/dequeued. To do that,
+> +	 * we only trigger boosting when the "amount of work' enqueued
 
-A sugov_policy_detach_pd() called from sugov_stop() (doing for instance
-the g_policy->pd = NULL) is not needed?
+s/"amount of work'/"amount of work" or 'amount of work'
+
+[...]
+
+> @@ -552,6 +593,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>  		unsigned long j_util, j_max;
+>  
+>  		j_util = sugov_get_util(j_sg_cpu);
+> +		if (j_sg_cpu == sg_cpu)
+> +			sugov_cpu_ramp_boost_update(sg_cpu);
+
+Can you not call this already in sugov_update_shared(), like in the
+sugov_update_single() case?
+
+diff --git a/kernel/sched/cpufreq_schedutil.c
+b/kernel/sched/cpufreq_schedutil.c
+index e35c20b42780..4c53f63a537d 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -595,8 +595,6 @@ static unsigned int sugov_next_freq_shared(struct
+sugov_cpu *sg_cpu, u64 time)
+                unsigned long j_util, j_max;
+
+                j_util = sugov_get_util(j_sg_cpu);
+-               if (j_sg_cpu == sg_cpu)
+-                       sugov_cpu_ramp_boost_update(sg_cpu);
+                j_max = j_sg_cpu->max;
+                j_util = sugov_iowait_apply(j_sg_cpu, time, j_util, j_max);
+
+@@ -625,6 +623,7 @@ sugov_update_shared(struct update_util_data *hook,
+u64 time, unsigned int flags)
+        ignore_dl_rate_limit(sg_cpu, sg_policy);
+
+        if (sugov_should_update_freq(sg_policy, time)) {
++               sugov_cpu_ramp_boost_update(sg_cpu);
+                next_f = sugov_next_freq_shared(sg_cpu, time);
+
+[...]
