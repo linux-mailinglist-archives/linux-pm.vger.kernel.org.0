@@ -2,55 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBC9DA3C0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 04:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3569BDA3C7
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 04:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389111AbfJQCcO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Oct 2019 22:32:14 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43048 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732113AbfJQCcO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 22:32:14 -0400
-Received: by mail-pf1-f193.google.com with SMTP id a2so591565pfo.10
-        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 19:32:14 -0700 (PDT)
+        id S2406977AbfJQCc2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Oct 2019 22:32:28 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33192 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407014AbfJQCc1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Oct 2019 22:32:27 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i76so407219pgc.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Oct 2019 19:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=X6tAGv7Xz958wWNHO8Bq64KdhKc5wOL6Vmp5Zs/f1LQ=;
-        b=RoGFrF8CxXw6l3KRULwiAKo4CcCIvLMii/JVsVD7bQjijehEko5h7HIW5ws5tpRsLn
-         k4uFFJYB2b4/Jo3YHMn7rIn2CJTiPXBQTpKun+gnprs0VObBH4ZXp0ohNA1VbKJNUsN2
-         CVuxt2wtZombnBTgLJ/Lvu4ZZvKo0YFTIrFv0BU19bafe9nhQNFuvdkhKj6wPsXKlSxG
-         +vWOZAfh87/ny1Pvy+iCA/46sORy+Yr/YNrOsCiwV9os9JCSvzMxsHsX6HhTAUvcyaUE
-         vd9iTuvj1F5mQYM2wf4Ce+N7+TGjXldWbDlgJtOf3zWKDQ1vXgr2ksSZVD9F4vRfXFdf
-         E8KA==
+         :content-disposition:in-reply-to:user-agent;
+        bh=NPAr1Y/6RmmsLEQ10dbAoa3w6mNhq7l8B4FyO36+FNg=;
+        b=bANEqDbTdQk9HYMVNTeTQeijBkzkQEDgI/vM8EDRaIJAHyCDzT88KvjeRnxfKGVEQJ
+         8wAphIUcOo9MHxknHt6ssKGh9pdSBaGHplHuOFZ4yl3v2RYXratVXrKa6NioyO4GZeet
+         FAGgMY2x5adUb8+9KHiMXszAeYyVZZi9eYfnpL3zFjbF/luP+bMQGWeSaESiFDSBvUIF
+         svuCq8juseqK7d1ntvF03psEetQ9DzqTSaNhvk1WdbKWj4nH7bZ+olNAVGUNUSvjByMf
+         ggikUfF3dPv4hZ4EuGcZBedEur7sCnsZnBA3L4OTYRKFcFfDou+bCXkFIriXWnv8t1hF
+         NP6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=X6tAGv7Xz958wWNHO8Bq64KdhKc5wOL6Vmp5Zs/f1LQ=;
-        b=B2QDfshhmzp4KjGvN2Yz/DaWF2ehTq5tN/ZhCvt5/gwQHkUSUpfuOCmB2zGSKCfeyQ
-         E3uj1o8lbfp1BK4aFQ177sYHRg4VF4FXRDbs2CyUsL4u7CnWI2kLtuCgi6qQwLCYgewz
-         fJte1EJILObjYBUpFF3CPnHsI5LjfMQPoYVE15UoMwJclZtXTp/EP1Y3HX0kbmp1T4zM
-         b3yH5YCMCIWZu6yKI0eBDJ7f/UVTTsupN+Lj0fO8Mi4anbyMH2Gsptw3p4NlumipJ4bD
-         IBc+A/xaCqXRNZTh53V59AITn9QTWQpt8+GD5e2xivDqk6BMC04vyU++uAX2M3iR9flW
-         xPjg==
-X-Gm-Message-State: APjAAAXC2lrUoe7oK8Q1DHNQi9JWh03g5lN5s1u+2FI4HVv0btgs3Nwc
-        i9iWE5kuWZFqSXn4pl4yDsb1lg==
-X-Google-Smtp-Source: APXvYqy7ws3cNv9Ac3aA6W8EqM60vbSd5fn0dl5fR0g/r08zv/z7EMVvkW8HP3i7QE/yNMauN7v89Q==
-X-Received: by 2002:a17:90a:8508:: with SMTP id l8mr1387293pjn.15.1571279533556;
-        Wed, 16 Oct 2019 19:32:13 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NPAr1Y/6RmmsLEQ10dbAoa3w6mNhq7l8B4FyO36+FNg=;
+        b=uXjkNK+wagdWmxNJY6GQ6UrgIFTKBAlbl+OKIJZN4IUSFj99Hl30PdYQtwhpNDlVZX
+         t/DVN9kphMaSQAmeqJxFjMtvYO7VtGaYxQ4HbpQ7HByuPYwBx4LOZNSIuM0rdYifPFP8
+         vuupjER/U7ExqOFgqaOoAvi5uCAZ0UXO9bqjIEGT8Z1qnEE6w3aAwTL5R0M8P5udsknU
+         OGectdiv6uNcBEW2sHcjSJaQ+yeDuRtf5oDMxoEgJW81GVEk6zCihTlhob9aOu8B3u/K
+         wHbpB/x0h/UDnq6n1DrK4/wJLo7tCvHYkYdGyNAXfdhLOBqI+eZ+UKze6JtnYane4LG/
+         ZvGg==
+X-Gm-Message-State: APjAAAW/KtQljwh18lxC2uelqtTD/GZPApxQCByEpG/QiawUfD48wUZl
+        +vaWB/Uvhy1EnUGntmcq1SivXw==
+X-Google-Smtp-Source: APXvYqz5shTMozOO+le27yYCcEjZyQNN1/1kuVMtaMcV30IXLdT/kFc0mJ/04wjSjLtPONjZzySKIA==
+X-Received: by 2002:a63:18d:: with SMTP id 135mr1472362pgb.326.1571279545065;
+        Wed, 16 Oct 2019 19:32:25 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id w6sm488958pfj.17.2019.10.16.19.32.11
+        by smtp.gmail.com with ESMTPSA id n66sm517724pfn.90.2019.10.16.19.32.23
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Oct 2019 19:32:12 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 08:02:10 +0530
+        Wed, 16 Oct 2019 19:32:24 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 08:02:22 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         Prashant Gaikwad <pgaikwad@nvidia.com>,
@@ -58,91 +55,101 @@ Cc:     Peter Geis <pgwipeout@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
         Nicolas Chauvet <kwizart@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/17] cpufreq: tegra20: Use generic cpufreq-dt driver
- (Tegra30 supported now)
-Message-ID: <20191017023210.x5vavl542hdkrivw@vireshk-i7>
+Subject: Re: [PATCH v1 06/17] dt-bindings: cpufreq: Add binding for NVIDIA
+ Tegra20/30
+Message-ID: <20191017023222.krufquqemad4kmbv@vireshk-i7>
 References: <20191015211618.20758-1-digetx@gmail.com>
- <20191015211618.20758-8-digetx@gmail.com>
- <20191016051802.rrxv56vtvxfm6qqe@vireshk-i7>
- <13a9ebd6-8dce-0217-d306-defb8eb6fb96@gmail.com>
- <CAMdYzYoasuEobJLC4RLW_5WCNGnaKtTth0xKov0tUQuDhkX3EA@mail.gmail.com>
- <b4eca03d-f86c-8e07-e04a-612e02820bd0@gmail.com>
+ <20191015211618.20758-7-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4eca03d-f86c-8e07-e04a-612e02820bd0@gmail.com>
+In-Reply-To: <20191015211618.20758-7-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-10-19, 21:19, Dmitry Osipenko wrote:
-> 16.10.2019 17:58, Peter Geis пишет:
-> > On Wed, Oct 16, 2019 at 9:29 AM Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 16.10.2019 08:18, Viresh Kumar пишет:
-> >>> On 16-10-19, 00:16, Dmitry Osipenko wrote:
-> >>>> Re-parenting to intermediate clock is supported now by the clock driver
-> >>>> and thus there is no need in a customized CPUFreq driver, all that code
-> >>>> is common for both Tegra20 and Tegra30. The available CPU freqs are now
-> >>>> specified in device-tree in a form of OPPs, all users should update their
-> >>>> device-trees.
-> >>>>
-> >>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>>> ---
-> >>>>  drivers/cpufreq/Kconfig.arm          |   4 +-
-> >>>>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
-> >>>>  drivers/cpufreq/tegra20-cpufreq.c    | 236 ++++++---------------------
-> >>>>  3 files changed, 55 insertions(+), 187 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> >>>> index a905796f7f85..2118c45d0acd 100644
-> >>>> --- a/drivers/cpufreq/Kconfig.arm
-> >>>> +++ b/drivers/cpufreq/Kconfig.arm
-> >>>> @@ -301,8 +301,8 @@ config ARM_TANGO_CPUFREQ
-> >>>>      default y
-> >>>>
-> >>>>  config ARM_TEGRA20_CPUFREQ
-> >>>> -    tristate "Tegra20 CPUFreq support"
-> >>>> -    depends on ARCH_TEGRA
-> >>>> +    bool "Tegra20 CPUFreq support"
-> >>>
-> >>> Google is currently working on the GKI (generic kernel image) project where they
-> >>> want to use a single kernel image with modules for all kind of android devices.
-> >>> And for that they need all such drivers to be built as module. Since this is
-> >>> already an module, I would ask you to keep it as is instead of moving it to bool
-> >>> here. Else some google guy will switch it back as module later on.
-> >>>
-> >>> LGTM otherwise. Nice work. Thanks.
-> >>>
-> >>
-> >> Okay, I'll keep the modularity in v2.
-> >>
-> >> Although, tegra20-cpufreq isn't a driver anymore because now it merely
-> >> prepares OPP table for the cpufreq-dt driver, which is really a one-shot
-> >> action that is enough to do during boot and thus modularity is a bit
-> >> redundant here.
-> > 
-> > I doubt Google will care much, since Android has moved on to aarch64.
-> > Do they even support arm32 any more?
+On 16-10-19, 00:16, Dmitry Osipenko wrote:
+> Add device-tree binding that describes CPU frequency-scaling hardware
+> found on NVIDIA Tegra20/30 SoCs.
 > 
-> Yes, I don't think there is a real need to care about Google. They won't
-> use pure upstream and won't care about older hardware any ways.
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../cpufreq/nvidia,tegra20-cpufreq.txt        | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> new file mode 100644
+> index 000000000000..daeca6ae6b76
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+> @@ -0,0 +1,56 @@
+> +Binding for NVIDIA Tegra20 CPUFreq
+> +==================================
+> +
+> +Required properties:
+> +- clocks: Must contain an entry for the CPU clock.
+> +  See ../clocks/clock-bindings.txt for details.
+> +- operating-points-v2: See ../bindings/opp/opp.txt for details.
+> +- #cooling-cells: Should be 2. See ../thermal/thermal.txt for details.
+> +
+> +For each opp entry in 'operating-points-v2' table:
+> +- opp-supported-hw: Two bitfields indicating:
+> +	On Tegra20:
+> +	1. CPU process ID mask
+> +	2. SoC speedo ID mask
+> +
+> +	On Tegra30:
+> +	1. CPU process ID mask
+> +	2. CPU speedo ID mask
+> +
+> +	A bitwise AND is performed against these values and if any bit
+> +	matches, the OPP gets enabled.
+> +
+> +- opp-microvolt: CPU voltage triplet.
+> +
+> +Optional properties:
+> +- cpu-supply: Phandle to the CPU power supply.
+> +
+> +Example:
+> +	regulators {
+> +		cpu_reg: regulator0 {
+> +			regulator-name = "vdd_cpu";
+> +		};
+> +	};
+> +
+> +	cpu0_opp_table: opp_table0 {
+> +		compatible = "operating-points-v2";
+> +
+> +		opp@456000000 {
+> +			clock-latency-ns = <125000>;
+> +			opp-microvolt = <825000 825000 1125000>;
+> +			opp-supported-hw = <0x03 0x0001>;
+> +			opp-hz = /bits/ 64 <456000000>;
+> +		};
+> +
+> +		...
+> +	};
+> +
+> +	cpus {
+> +		cpu@0 {
+> +			compatible = "arm,cortex-a9";
+> +			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
+> +			operating-points-v2 = <&cpu0_opp_table>;
+> +			cpu-supply = <&cpu_reg>;
+> +			#cooling-cells = <2>;
+> +		};
+> +	};
 
-Well, using (almost) pure upstream is the idea I believe. And the thing is they
-want to use a single multi-platform image which should be as small as possible
-in size. So it won't have any drivers or platform stuff (if possible) and
-everything is module.
-
-I am not sure about arm32/64 thing though. And it is okay if you don't want to
-care about Google right now. That was just some side knowledge I had :)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
