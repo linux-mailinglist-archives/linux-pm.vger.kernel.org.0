@@ -2,89 +2,302 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B84C0DB5C3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 20:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6160CDB62A
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 20:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441277AbfJQSTr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 14:19:47 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:36430 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438684AbfJQSTq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 14:19:46 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 30A02612DA; Thu, 17 Oct 2019 18:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1571336385;
-        bh=ISREP9AdfrC/XBTqeSZtr9AtlAJSpsRIKnn3uhj7a2A=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=NoQk3EY5Fi3RTLyfxJOP0YdSkLMj09IBDDHT862HNhCev/CM7BYuZu92TW0xZV4pK
-         2BDNC8zCQ9VcQHkR3QwSVmTnVSd1rh/Bw+c4EoWiFepOONBJS9gFt2srWcbD2CgOwv
-         Ihgw43nljE9JOKjFt/cqBmLbho7kAur3D/kvemmY=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.79.160.38] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CCD09612DA;
-        Thu, 17 Oct 2019 18:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1571336382;
-        bh=ISREP9AdfrC/XBTqeSZtr9AtlAJSpsRIKnn3uhj7a2A=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jGm5emnd+w0KN6atBSypyQEio+9ce3SGjLMnDCAeH6Pk8Z5TViJY2V0Cn2BnNxBbz
-         beCJk/IvQyZT/qXEdu7QGXiwxeMdz1oLal6a6x6PPLzp687bW7GpthfQK3E/npbBV6
-         mNaErygg/uHN9RRnwWbxUm5Udny085SyvEDSbmSU=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CCD09612DA
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
-Subject: Re: [PATCH v3 6/6] cpufreq: qcom-hw: Move driver initialisation
- earlier
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
-        edubezval@gmail.com, agross@kernel.org, swboyd@chromium.org,
-        ilina@codeaurora.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org
-References: <cover.1571314830.git.amit.kucheria@linaro.org>
- <3468b8cf9c764ea139296ee149d33cd7a9d79e3e.1571314830.git.amit.kucheria@linaro.org>
-From:   Taniya Das <tdas@codeaurora.org>
-Message-ID: <b7f7061b-6dc3-eb3e-c6bf-fe582c2c2e3b@codeaurora.org>
-Date:   Thu, 17 Oct 2019 23:49:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2392066AbfJQSbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 14:31:10 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38160 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731227AbfJQSbJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 14:31:09 -0400
+Received: by mail-ot1-f68.google.com with SMTP id e11so2764206otl.5;
+        Thu, 17 Oct 2019 11:31:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OnxgCaPx91Saoqy8npEJzvJj20RILVf3jGePsqx/d+Y=;
+        b=axB+eSX3ohxhK8SK+y0s66fYpluc3IXt3xtes8L0Q8x+n/R9ljjy10vtYr4T8+iwos
+         CDLd5mzkv/m/G7O9zvQw4+FxwKLCOhpSvF8376VBBs/DiEn1EIwWLg0XcYijEnB0Vhsz
+         ArCFfrhzybk7uXc9rIBD/dLaN1qqGAHmkR0Xf1fZcBEL01oDGxaa50nLTFlhktaPyG1j
+         0ltHm0sk4gfnY2rdek3tutzuZwwT5iN8ImYX7l+Mb92FVxa6bsRWm+58bfqdkc1E0zvL
+         eGK9Vp2aVsQi1OEYdmj0wmMALds9HDX8XzsWuFm5RSZj343tDP7Jq5CP7HIpwNwyClye
+         LM4w==
+X-Gm-Message-State: APjAAAVJOoKF2q8VOwjBO/qMvT4FveyDg3NN6Arm3wyIdj3vgeoGq7OP
+        uNpmeobodXFok2S3symwyg==
+X-Google-Smtp-Source: APXvYqzLK+ftRPrSCHWviqWQFqjBZcgp7MpXsGy8NEdBzpkgNxxRyOnRAPZEAr7eo9Ro2kqizxeUfw==
+X-Received: by 2002:a9d:7398:: with SMTP id j24mr4392143otk.287.1571337068346;
+        Thu, 17 Oct 2019 11:31:08 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y137sm718064oie.53.2019.10.17.11.31.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 11:31:07 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 13:31:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: max77650: convert the binding
+ document to yaml
+Message-ID: <20191017183106.GA11667@bogus>
+References: <20191017071234.8719-1-brgl@bgdev.pl>
+ <20191017071234.8719-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-In-Reply-To: <3468b8cf9c764ea139296ee149d33cd7a9d79e3e.1571314830.git.amit.kucheria@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017071234.8719-2-brgl@bgdev.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10/17/2019 5:57 PM, Amit Kucheria wrote:
-> Allow qcom-hw driver to initialise right after the cpufreq and thermal
-> subsystems are initialised in core_initcall so we get earlier access to
-> thermal mitigation.
+On Thu, Oct 17, 2019 at 09:12:29AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > 
-> Signed-off-by: Amit Kucheria<amit.kucheria@linaro.org>
-> Acked-by: Daniel Lezcano<daniel.lezcano@linaro.org>
+> Convert the binding document for MAX77650 core MFD module to YAML.
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > ---
+>  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
+>  .../devicetree/bindings/mfd/max77650.yaml     | 151 ++++++++++++++++++
+>  2 files changed, 151 insertions(+), 46 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/max77650.txt b/Documentation/devicetree/bindings/mfd/max77650.txt
+> deleted file mode 100644
+> index b529d8d19335..000000000000
+> --- a/Documentation/devicetree/bindings/mfd/max77650.txt
+> +++ /dev/null
+> @@ -1,46 +0,0 @@
+> -MAX77650 ultra low-power PMIC from Maxim Integrated.
+> -
+> -Required properties:
+> --------------------
+> -- compatible:		Must be "maxim,max77650"
+> -- reg:			I2C device address.
+> -- interrupts:		The interrupt on the parent the controller is
+> -			connected to.
+> -- interrupt-controller: Marks the device node as an interrupt controller.
+> -- #interrupt-cells:	Must be <2>.
+> -
+> -- gpio-controller:	Marks the device node as a gpio controller.
+> -- #gpio-cells:		Must be <2>. The first cell is the pin number and
+> -			the second cell is used to specify the gpio active
+> -			state.
+> -
+> -Optional properties:
+> ---------------------
+> -gpio-line-names:	Single string containing the name of the GPIO line.
+> -
+> -The GPIO-controller module is represented as part of the top-level PMIC
+> -node. The device exposes a single GPIO line.
+> -
+> -For device-tree bindings of other sub-modules (regulator, power supply,
+> -LEDs and onkey) refer to the binding documents under the respective
+> -sub-system directories.
+> -
+> -For more details on GPIO bindings, please refer to the generic GPIO DT
+> -binding document <devicetree/bindings/gpio/gpio.txt>.
+> -
+> -Example:
+> ---------
+> -
+> -	pmic@48 {
+> -		compatible = "maxim,max77650";
+> -		reg = <0x48>;
+> -
+> -		interrupt-controller;
+> -		interrupt-parent = <&gpio2>;
+> -		#interrupt-cells = <2>;
+> -		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> -
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		gpio-line-names = "max77650-charger";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/mfd/max77650.yaml b/Documentation/devicetree/bindings/mfd/max77650.yaml
+> new file mode 100644
+> index 000000000000..66a447e1cf56
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/max77650.yaml
+> @@ -0,0 +1,151 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/max77650.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MAX77650 ultra low-power PMIC from Maxim Integrated.
+> +
+> +maintainers:
+> +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> +
+> +description: |
+> +  This document describes the DT properties of the core MFD controller.
 
-Acked-by: Taniya Das<tdas@codeaurora.org>
+So does every file in this directory.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation.
+Describe what this chip is.
 
---
+> +
+> +  The GPIO-controller module is represented as part of the top-level PMIC
+> +  node. The device exposes a single GPIO line.
+> +
+> +  For device-tree bindings of other sub-modules (regulator, power supply,
+> +  LEDs and onkey) refer to the binding documents under the respective
+> +  sub-system directories.
+> +
+> +  For more details on GPIO bindings, please refer to the generic GPIO DT
+> +  binding document <devicetree/bindings/gpio/gpio.txt>.
+
+Also fairly useless and another reference to maintain...
+
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77650
+> +
+> +  reg:
+> +    description:
+> +      I2C device address.
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +    description:
+> +      The first cell is the IRQ number, the second cell is the trigger type.
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +    description:
+> +      The first cell is the pin number and the second cell is used to specify
+> +      the gpio active state.
+> +
+> +  gpio-line-names:
+> +    maxItems: 1
+> +    description:
+> +      Single string containing the name of the GPIO line.
+> +
+> +  regulators:
+> +    $ref: ../regulator/max77650-regulator.yaml
+
+Not bisectable... This patch needs to come last.
+
+> +
+> +  charger:
+> +    $ref: ../power/supply/max77650-charger.yaml
+> +
+> +  leds:
+> +    $ref: ../leds/leds-max77650.yaml
+> +
+> +  onkey:
+> +    $ref: ../input/max77650-onkey.yaml
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +  - gpio-controller
+> +  - "#gpio-cells"
+
+None of the child nodes are required?
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/input/linux-event-codes.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@48 {
+> +            compatible = "maxim,max77650";
+> +            reg = <0x48>;
+> +
+> +            interrupt-controller;
+> +            interrupt-parent = <&gpio2>;
+> +            #interrupt-cells = <2>;
+> +            interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +            gpio-line-names = "max77650-charger";
+> +
+> +            regulators {
+> +                compatible = "maxim,max77650-regulator";
+> +
+> +                max77650_ldo: regulator@0 {
+> +                    regulator-compatible = "ldo";
+> +                    regulator-name = "max77650-ldo";
+> +                    regulator-min-microvolt = <1350000>;
+> +                    regulator-max-microvolt = <2937500>;
+> +                };
+> +
+> +                max77650_sbb0: regulator@1 {
+> +                    regulator-compatible = "sbb0";
+> +                    regulator-name = "max77650-sbb0";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <1587500>;
+> +                };
+> +            };
+> +
+> +            charger {
+> +                compatible = "maxim,max77650-charger";
+> +                input-voltage-min-microvolt = <4200000>;
+> +                input-current-limit-microamp = <285000>;
+> +            };
+> +
+> +            leds {
+> +                compatible = "maxim,max77650-led";
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                led@0 {
+> +                    reg = <0>;
+> +                    label = "blue:usr0";
+> +                };
+> +
+> +                led@1 {
+> +                    reg = <1>;
+> +                    label = "red:usr1";
+> +                    linux,default-trigger = "heartbeat";
+> +                };
+> +
+> +                led@2 {
+> +                    reg = <2>;
+> +                    label = "green:usr2";
+> +                };
+> +            };
+> +
+> +            onkey {
+> +                compatible = "maxim,max77650-onkey";
+> +                linux,code = <KEY_END>;
+> +                maxim,onkey-slide;
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.23.0
+> 
