@@ -2,101 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D04DB082
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 16:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8FDDB115
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 17:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406259AbfJQOxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 10:53:33 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38210 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731768AbfJQOxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 10:53:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=7F6OpUKlT4qeQmBMlD88GzzQdfEEND1LjxCnJ2E6AiE=; b=FDCRFT/JUi2E5d+W+sSV/sHxa
-        Krw4npq0tKpYLGgHh+1EnFo9j3vTkJA9gotYSGMKvzIffDjHnFG0DuHYdO0IUQYVuXHTZdcOz7TiP
-        CvKWtpnds5nAeIc/V7U51V989ngI5hze90BsE/6iBJfekmJin81f0p8Vb5Th4M4GvLkVqtlainVQT
-        k0kQz+xFC14XvzXmbUV0pSuHqjz1K+M+ApB6BtzoB1MzF19F1cltTI3EGnc2XVhLE1s5PF1dMDwrd
-        R8HIC/Mn5hps/tOAUOrjmXpTQNVml0C8eDWDG5F2Ad8vRamOzTrnLoPv78+gxVDVjTK0qZ4iv+qDN
-        QCYlJB7kg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iL79Z-0002bq-C0; Thu, 17 Oct 2019 14:53:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2A44F3032F8;
-        Thu, 17 Oct 2019 16:52:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 63B2229A4A2C2; Thu, 17 Oct 2019 16:53:22 +0200 (CEST)
-Date:   Thu, 17 Oct 2019 16:53:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@qperret.net,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20191017145322.GK2311@hirez.programming.kicks-ass.net>
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
- <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
- <20191017095015.GI2311@hirez.programming.kicks-ass.net>
- <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
+        id S2392174AbfJQP2V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 11:28:21 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36982 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391285AbfJQP2V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 11:28:21 -0400
+Received: by mail-qk1-f196.google.com with SMTP id u184so2257275qkd.4
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 08:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=HxxMlxSnOHFXolbR3XOteHFHB5Y0fMxkCzdRoCJf6PE=;
+        b=xgGpKj4TXIiDL2Gz1GlKIH2KXJ8E6eseq0BY8b2KgfYyfK58FKJ11SlPKH8K1smi82
+         L35ggCBPhbbXjWHssTvzJuk2pRSddXo67qbvFKhD+7P7wfVM9p3w003AYYu8QtKBaLJz
+         2SJRD9C4OCcncGkLr7jZ2LP3TOFI8Sp+9Xk2N2oJ+ONxCVLOy74EoTgOEUOE+XXMxYRa
+         ISeYQhHPojhyy3MYnhOZ0R3NAvNFbQSY0iurBuFneYei4WRR+xP9dr2kzGnCDdO6RPm7
+         XLA9Vf5fWpP8i8KPY1PnpPutVSmCO3oIC/2fxPyaK+tVs2q+0oPxB5/iKp+Q8A+wOtjT
+         MxBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=HxxMlxSnOHFXolbR3XOteHFHB5Y0fMxkCzdRoCJf6PE=;
+        b=JLlq+H+IYi9NLm7MHl/dv5AuKRTb1w+h1DzVp6D4iunRO91oph3YioZ9qPqPxOSBrW
+         fS/B9VUlcC8panYkLQvyNwv764MoLB7UQz8HnufP6CpvZxt2Oj2mUmmLr0avmUdOJgjQ
+         NrXq6Ytkg4Ppm23tsKs1LC1qRp99PVRUoUdYANYw4ApJGJt/usx8pY80CieS+18Ycbxw
+         1ACa5PktTUgNtDc1L8oofoNAVcrIRrbS0aYvjMl8JkvT0KL6Cnm6WBqa26Dchu2Kvc1n
+         rGCviNN8OLSGtHOGXy21Xq7VfYlc0xyohucwRVMCqB20oMXk2k8XHmIKi3W4j4ZGmJl6
+         xcJA==
+X-Gm-Message-State: APjAAAWuAKiEVA1BQqcZNbwoJ+lkGChX4Cqg2iJfGxoYqxcBVep0NBcn
+        14s/rLPQCL+6L979GBV5OJZ+fA==
+X-Google-Smtp-Source: APXvYqyp4wRR1ov3vJ/c6kD326l229dgP5IfCEwdoMk3qpE+kXLbkjhLaTm41gj0At0tLw14+faOlw==
+X-Received: by 2002:a37:98c1:: with SMTP id a184mr3628260qke.119.1571326100082;
+        Thu, 17 Oct 2019 08:28:20 -0700 (PDT)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id q200sm1230672qke.114.2019.10.17.08.28.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 08:28:19 -0700 (PDT)
+Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
+ controller binding to describe thermal warming device
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
+ <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5DA88892.5000408@linaro.org>
+Date:   Thu, 17 Oct 2019 11:28:18 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 03:23:04PM +0100, Douglas Raillard wrote:
-> On 10/17/19 10:50 AM, Peter Zijlstra wrote:
-> > Now, the thing is, we use map_util_freq() in more places, and should we
-> > not reflect this increase in C for all of them? That is, why is this
-> > patch changing get_next_freq() and not map_util_freq().
-> > 
-> > I don't think that question is answered in the Changelogs.
-> > 
-> > Exactly because it does change the energy consumption (it must) should
-> > that not also be reflected in the EAS logic?
+Hello Ulf,
+Thanks for the review!
+
+On 10/17/2019 05:04 AM, Ulf Hansson wrote:
+> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>>
+>> RPMh power controller hosts mx domain that can be used as thermal
+>> warming device. Add a sub-node to specify this.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+>> index eb35b22..fff695d 100644
+>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+>> @@ -18,6 +18,16 @@ Required Properties:
+>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
+>>  various OPPs for different platforms as well as Power domain indexes
+>>
+>> += SUBNODES
+>> +RPMh alsp hosts power domains that can behave as thermal warming device.
+>> +These are expressed as subnodes of the RPMh. The name of the node is used
+>> +to identify the power domain and must therefor be "mx".
+>> +
+>> +- #cooling-cells:
+>> +       Usage: optional
+>> +       Value type: <u32>
+>> +       Definition: must be 2
+>> +
 > 
-> map_util_freq() is only used in schedutil and in EAS by compute_energy(), so
-> I retarget the question at compute_energy(). It is supposed to compute
-> the energy consumed by a given CPU if a given task was migrated on it.
-> This implies some assumptions on util signals:
-> 1) util(_est.enqueued) of the task is representative of the task's
->    duty cycle (the semantic of util is somehow blurry for aperiodic tasks
->    AFAIK).
-> 2) util of the task is CPU-invariant
-
-( we know this to be false, but do indeed make this assumption because
-simplicity, taking IPC differences into account would just complicate
-things more )
-
-> 3) task util + target CPU util = new target CPU util for the
->    foreseeable future, i.e. the amount of future we can predict with
->    reasonable accuracy. Otherwise we would end up moving things around
->    all the time.
+> Just wanted to express a minor thought about this. In general we use
+> subnodes of PM domain providers to represent the topology of PM
+> domains (subdomains), this is something different, which I guess is
+> fine.
 > 
-> Since ramp boost is designed to be transient, integrating it
-> (indirectly) in "target CPU util" will add some noise to the placement
-> decision, potentially rendering it obsolete as soon as the boosting
-> stops. Basing a costly decision on that does not sound like a good
-> idea IMHO.
+> I assume the #cooling-cells is here tells us this is not a PM domain
+> provider, but a "cooling device provider"?
+Yep.
+> 
+> Also, I wonder if it would be fine to specify "power-domains" here,
+> rather than using "name" as I think that is kind of awkward!?
+Do you mean "power-domain-names" ? I am using this to match against the
+genpd names defined in the provider driver.
 
-Well, we _hope_ recent past is a reasonable predictor for the near
-future. We of course know it'll be complete crap every so often, but
-hope that on average it is true more than false :-)
+Warm Regards
+Thara
 
-Anyway, the above seems like a sensible enough argument, and seems
-worthy of being part of the Changelog. Also maybe a comment in schedutil
-as to why there is a map_util_freq() modifier there.
