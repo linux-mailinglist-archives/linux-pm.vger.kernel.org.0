@@ -2,132 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DF0DB159
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 17:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE53DB154
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Oct 2019 17:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407809AbfJQPnr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 11:43:47 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:35861 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407757AbfJQPnq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 11:43:46 -0400
-Received: by mail-vk1-f196.google.com with SMTP id w3so628945vkm.3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 08:43:45 -0700 (PDT)
+        id S2407690AbfJQPnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Oct 2019 11:43:45 -0400
+Received: from mail-pf1-f178.google.com ([209.85.210.178]:46336 "EHLO
+        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727291AbfJQPno (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 11:43:44 -0400
+Received: by mail-pf1-f178.google.com with SMTP id q5so1888878pfg.13
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 08:43:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9cPCkoWUtN/mgY5EDGDopreFb0szGU5fkwoJ47zwfPo=;
-        b=MTHKy8u0XqikOxEYya8246NAjzWcNntEUXhTxkxFVqzTMaYoVEBeZXjNk0FHbzdnKN
-         0N3Whx01EUOQi+X52WYuVqZziQ3loO+xUt0O+Bu+bc3wIyCqlFh3X0TC2udeTOyEeDX8
-         pGdXdUlSP1FE3aG9PtQ6bgrL5EdUzHXyyMn19xZF9SJ40XnSYyFk3LDzqCiey7VfEYD0
-         rng6yXn7zCmTS6aMr67NSuUztzm2JInboiuigxcYTTwP4a49QrjaPeC8bkHSRiTLId6p
-         XLpmHTegDAIezM4pqQOuSz0h0+43h9CdDvXoxOPWia4qV8yznSGdO8TZgSWYvZheZfZC
-         Ie+g==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=VOvV2/r2ynt55cnuM6fNik0rL8EihZtai79HG+PQGYs=;
+        b=epCRTxPcIzW1JK1hav0kYxQFV4/KtoeRzGuJPSEcPwm+07F5s+hclMNoXvQqf4/Xn1
+         PHRKmwonpyafnqMNOi9dcJPoPWnD3ya7CTnu9Qry/TzAB4HpaKOrbK0R0qaDDbOiEQuc
+         NAMjpGaz/LGOeUnEU04tjxWY9G5Za9Eys1QYmuHKt94WBRAaXPRhFZjOql8+NYkH3ors
+         UfFt5ENN2F9lK41nMVEmg+Mu/70pL+aDZgePCLsFDjUW2Ci+iy3EgWg4J7mRQpCA0hge
+         OOvt2UsggArcB7npbmFQA0cehGx67F4L0qjr14Beidi0Rt1MqMZm6SjLMBOoC32THmyd
+         CsDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9cPCkoWUtN/mgY5EDGDopreFb0szGU5fkwoJ47zwfPo=;
-        b=SmjowNGQaRCZyoEguZz3IRjmfKYPYrxeaPYCrEAGC9zcgPsfGc9RYDmBkO3JSy5ps8
-         dXrmz9/Jq8ACTi94Q361EHY24pILfj/508oLcq8K4mttXxtQMmvFWJ6+wqOK1Xv1LZb0
-         l+OUk5mopvlUUg96XrxfvkODqITWEeVSQmPfhbqr+RV0Slg2pWZx3rHXWofmVZQdI9kH
-         BnFKV5C8t3O900ZFsR5fKOPDw8MtNeFztx/dLRpNNmysr1NGi5Iww8Hzw+04RTvBpPvF
-         SesVYZNtiRUNmtAO0S0QGku0CEgq++yL4dRXT1UOC6DslZdvj5y6cKlxIIynT/LSIouI
-         Khjw==
-X-Gm-Message-State: APjAAAUjOihiiIXTxdBaGa3iwRTy6cIR+/rA/5n90r8rEUuentkJWHLe
-        PKLUKWh467AQN4PIPXT862Vc30cqil092P825dushg==
-X-Google-Smtp-Source: APXvYqzCMxkr3FQElBCVQfH8au6MF/yRHYSwhLVuExQHapPedkdyeqQ70PUUZ9KNUkOTqzAiQVBqcfLfYi3jP+lvsIc=
-X-Received: by 2002:a1f:b202:: with SMTP id b2mr2307071vkf.59.1571327024388;
- Thu, 17 Oct 2019 08:43:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=VOvV2/r2ynt55cnuM6fNik0rL8EihZtai79HG+PQGYs=;
+        b=j7zSvErXehVrcuc9Qkw7Jgx1JiFg46yvRqAz+JWUkDj+bhehCokJS59asTQPmsC1p9
+         1kk32+FBUebt+IPGxn2aAcjUL6BlD2PXvIo9rDdET4867LyC5XSC6oJ6xUgIgM/3Y8OF
+         eEs2MGkaSR5KmIYofhFYQdqnpeh7k7YYyJOgHggZ8oDoWECErI5i5Uxv2vFJMjHb+H3f
+         SIC6axoSK1VRe0zb4JbWaXw8fvUqX0/KnrQY7XTXR2nFqX5ZyP4ZT3CtIu/61vZV0YYc
+         igIWKgQ2E8G+cam+j9kdoypd9pHHrri/2vjod5f7zcvuk6fiyR+CBhB+h7LGPxr90AdK
+         eOYQ==
+X-Gm-Message-State: APjAAAVVs4gPl5XLGpKL71lXx2oky8cr2R5rcixNXMArWvBAgH+ftE4V
+        hNRP8PdeNDWzXqPfb/42+VYvNw==
+X-Google-Smtp-Source: APXvYqwBC3rv9yHdPPniodMnf3ve5F6d/VBydNViIQXvnFmqx0IoTgB6MJOo2TPQ1KZma6BcLkaNWA==
+X-Received: by 2002:a17:90a:3608:: with SMTP id s8mr5226930pjb.44.1571327022410;
+        Thu, 17 Oct 2019 08:43:42 -0700 (PDT)
+Received: from localhost ([2601:602:9200:a1a5:d8f2:392e:5b44:157d])
+        by smtp.gmail.com with ESMTPSA id f14sm3987624pfq.187.2019.10.17.08.43.41
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 17 Oct 2019 08:43:41 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, edubezval@gmail.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        amit.kucheria@linaro.org, rui.zhang@intel.com
+Subject: Re: [PATCH v7 0/7] Add support of New Amlogic temperature sensor for G12 SoCs
+In-Reply-To: <9ade0e3e-1bd7-c49b-44b1-2361f1e3a7b1@linaro.org>
+References: <20191004090114.30694-1-glaroque@baylibre.com> <7hwod4fxwb.fsf@baylibre.com> <9ade0e3e-1bd7-c49b-44b1-2361f1e3a7b1@linaro.org>
+Date:   Thu, 17 Oct 2019 08:43:41 -0700
+Message-ID: <7h36frcr82.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
- <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com> <5DA88892.5000408@linaro.org>
-In-Reply-To: <5DA88892.5000408@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Oct 2019 17:43:08 +0200
-Message-ID: <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
- controller binding to describe thermal warming device
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+Hi Daniel,
+
+Daniel Lezcano <daniel.lezcano@linaro.org> writes:
+
+> On 16/10/2019 18:39, Kevin Hilman wrote:
+>> Eduardo,
+>> 
+>> Guillaume La Roque <glaroque@baylibre.com> writes:
+>> 
+>>> This patchs series add support of New Amlogic temperature sensor and minimal
+>>> thermal zone for SEI510 and ODROID-N2 boards.
+>> 
+>> [...]
+>> 
+>>> Guillaume La Roque (7):
+>>>   dt-bindings: thermal: Add DT bindings documentation for Amlogic
+>>>     Thermal
+>>>   thermal: amlogic: Add thermal driver to support G12 SoCs
+>>>   arm64: dts: amlogic: g12: add temperature sensor
+>>>   arm64: dts: meson: g12: Add minimal thermal zone
+>>>   arm64: dts: amlogic: g12a: add cooling properties
+>>>   arm64: dts: amlogic: g12b: add cooling properties
+>>>   MAINTAINERS: add entry for Amlogic Thermal driver
+>> 
+>> This has now been thorougly reviewed/tested.
+>> 
+>> I've queued all the "arm64: dts:" patches via my amlogic tree for v5.5.
+>> Can you please queue up the driver, bindings and MAINTAINERS patch?
 >
-> Hello Ulf,
-> Thanks for the review!
->
-> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
-> > On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
-> >>
-> >> RPMh power controller hosts mx domain that can be used as thermal
-> >> warming device. Add a sub-node to specify this.
-> >>
-> >> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> >> ---
-> >>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
-> >>  1 file changed, 10 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >> index eb35b22..fff695d 100644
-> >> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >> @@ -18,6 +18,16 @@ Required Properties:
-> >>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
-> >>  various OPPs for different platforms as well as Power domain indexes
-> >>
-> >> += SUBNODES
-> >> +RPMh alsp hosts power domains that can behave as thermal warming device.
-> >> +These are expressed as subnodes of the RPMh. The name of the node is used
-> >> +to identify the power domain and must therefor be "mx".
-> >> +
-> >> +- #cooling-cells:
-> >> +       Usage: optional
-> >> +       Value type: <u32>
-> >> +       Definition: must be 2
-> >> +
-> >
-> > Just wanted to express a minor thought about this. In general we use
-> > subnodes of PM domain providers to represent the topology of PM
-> > domains (subdomains), this is something different, which I guess is
-> > fine.
-> >
-> > I assume the #cooling-cells is here tells us this is not a PM domain
-> > provider, but a "cooling device provider"?
-> Yep.
-> >
-> > Also, I wonder if it would be fine to specify "power-domains" here,
-> > rather than using "name" as I think that is kind of awkward!?
-> Do you mean "power-domain-names" ? I am using this to match against the
-> genpd names defined in the provider driver.
+> 1, 2, 7 right?
 
-No. If you are using "power-domains" it means that you allow to
-describe the specifier for the provider.
+Correct.
 
-From Linux point of view, it means you can use dev_pm_domain_attach()
-to hook up the corresponding device with the PM domain.
+Thanks,
 
-Using "power-domain-names" is just to allow to specify a name rather
-than an index, which makes sense if there is more than one index.
-Perhaps you can state that the "power-domain-names" should be there
-anyway, to be a little bit future proof if ever multiple index
-(multiple PM domains).
-
-Kind regards
-Uffe
+Kevin
