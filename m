@@ -2,98 +2,342 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA960DBD7C
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 08:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD645DBDD0
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 08:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395314AbfJRGGD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 02:06:03 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41725 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392198AbfJRGGD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 02:06:03 -0400
-Received: by mail-pl1-f194.google.com with SMTP id t10so2315857plr.8
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 23:06:03 -0700 (PDT)
+        id S2409473AbfJRGoX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 02:44:23 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40121 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393594AbfJRGoV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 02:44:21 -0400
+Received: by mail-ot1-f65.google.com with SMTP id y39so4065467ota.7
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 23:44:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AkfYmQ4O8U9nyTFe9h6GxC4H3eeJ0+Nwd0lHpM483sk=;
-        b=yeLsMwtATcgUDkbIWuxXlpKdBXQt/BL/j4xWz7fVqIGu9xF7SDWWEMZe2pc8JNqzLX
-         eJCtVxdAJVIpvpmrPA3AbYZp0tzr5grKIjN2DZLe5dtNcsz0E51dOwSKtfhuwUeFYqoo
-         HSzmjKEp5USI7dQm7HMT+up9L9+zsqPK1EYeq66CJqlCaznPrHF8KwpLcVK3P5VFCiD7
-         h585OJIM/3Tfyl05WxrbtDvfysJ4orlblNIWTh3kO1H4o1v8qZefPlMzyIw/GFkszk9G
-         yjYUKIzrVlHNs00QVm7pvU46RpokVMUOA9iynKTkHJFki22hRxg0RL4Q1Pt17b9R9lbu
-         YtWg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PqrHMEru6U7zAeRhmkEeGaUX7eyVnHwu6NVw9nt+5n4=;
+        b=X642gj4nqUg9O16iP8e6WyArE8LA8pUVECviq0/UcImbNqxGdjgPAlZIELXUUwhoGk
+         JEy6vlFzYV1e4zjFjrotawnyNEqBJoUELB9mhoLsyG+o5JmbkK7xafoNf44NIbRe7eiq
+         INgYICoOVclkvpuAlaWAJniume/jz29is7UUiFQZzcuBDdg6g76tK5ulCnP3o/wQV8Vi
+         LmNODRkFB1hmny/qPqT4yW2YTxpbh4pkm3pFxbWbJYUkCQ3tBqVyNalduMrepdKIc0h9
+         L8tcO0hgfz3i8EUJEytIhhQgfq68fd+sHa//Zy4yOWEVOYcRRtuj1qo6eXOkHM+GYHVM
+         Pm1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AkfYmQ4O8U9nyTFe9h6GxC4H3eeJ0+Nwd0lHpM483sk=;
-        b=prh5WXU75inHn1PG5Zri5Ess33EHK7HTTGCVTOAuItswEvEIthIyTXQQ172X+Ty2/N
-         3017K2lTnnbGbAHfmtTQ4hwnVXxrORHyYHgyTNdIF6Zhz+2NdMNuEBivIsEWf+0BGLnd
-         W/DhcevtKU546trlz/vequtwKK/hHbzha6Z+v6MAJcWCQNIkDN8vdoYyu5iT2YNVXf1/
-         uo9HGdnEw/yK+mGJwhOGSoMgUMysfmhoJjlD5515dIZID34bVkAk5Bl1GTSV5expCTsi
-         /Up8gq7YkELgPVb2w2xt2IunGRKQCR3UpBNVkj6pHFnPuQsTAKNwtxe+eCk3Jl9rOV8Z
-         ywyg==
-X-Gm-Message-State: APjAAAWt6biVa8+qUWtZ7ooOsHU2DAHYY0iSinuH3t9oKVEjp7GFs/Dq
-        tlF3P85G9ol+dXF0c6gRhWn3fQ==
-X-Google-Smtp-Source: APXvYqyIeMk/6fgcaKyyWcE1FRzggciXB8Tu1b3UIpQMT8AD6ItcKTlnNIAQezURE45XM2AFqCLWnQ==
-X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr8053142plr.277.1571378762778;
-        Thu, 17 Oct 2019 23:06:02 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id b16sm7929986pfb.54.2019.10.17.23.06.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 23:06:02 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 11:36:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        daniel.lezcano@linaro.org, sudeep.holla@arm.com,
-        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
-        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] thermal: Initialize thermal subsystem earlier
-Message-ID: <20191018060600.oj2qf5tuqu5agfmb@vireshk-i7>
-References: <cover.1571314830.git.amit.kucheria@linaro.org>
- <cc2aa18e2e6004ba099e69b41d0d505a4361443c.1571314830.git.amit.kucheria@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PqrHMEru6U7zAeRhmkEeGaUX7eyVnHwu6NVw9nt+5n4=;
+        b=Edn0XLWiFGI6MOv1MHtYUEkFp54OGSdk3UWRU2kNEZWN/lNF6h8DsG1zEEcgid1T1y
+         PWgmH8WpqwCRrOwp/nt77e13QkLYIJDGXgN5gD0Uuh0GJnZvMXRy7EX9tWy0O+FyA1qT
+         0ef8Pt/ynUCz26VTVJmRWWUiH/FUzhSWC9rC+L6uqc4TZql1wkN2qy/IviAl/NSavqBe
+         WhNe2Pj/38eLFmKIRM4f/DKaqgt9QEqF7HOI2ncTAHzcgHQxDcB2ObV/zxTGdwl7Qowp
+         sEEvEJKB/jxsrmx6vqOrDeSPPwoDsNr0+LbLPSnVqLEIW67cXmOr5ZcPmKcmiGXuEwCs
+         rsYg==
+X-Gm-Message-State: APjAAAXUpsDAVyfmcn3+79bav2tXBZjLS62QuY+tEDpNI7V9EghTeDxh
+        na7/Ycg4imMTULTGTQCFJIRekuSKYzs6ma25TnCWNA==
+X-Google-Smtp-Source: APXvYqypuBiJnTlXuHGNsWMdVVjE2C9cyf1zOybXwkR8VjvVS0geUtcMoLmLtbul1PMl5xKFQTj18h1q6nMas8C698w=
+X-Received: by 2002:a9d:7dd6:: with SMTP id k22mr6185960otn.256.1571381058667;
+ Thu, 17 Oct 2019 23:44:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc2aa18e2e6004ba099e69b41d0d505a4361443c.1571314830.git.amit.kucheria@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20191017071234.8719-1-brgl@bgdev.pl> <20191017071234.8719-2-brgl@bgdev.pl>
+ <20191017183106.GA11667@bogus>
+In-Reply-To: <20191017183106.GA11667@bogus>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 18 Oct 2019 08:44:07 +0200
+Message-ID: <CAMpxmJXoA2GW9s9r0KZetfUjMKPxWMa5MDFSLchfZ-3gnE+JvA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: max77650: convert the binding
+ document to yaml
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-10-19, 17:57, Amit Kucheria wrote:
-> Now that the thermal framework is built-in, in order to facilitate
-> thermal mitigation as early as possible in the boot cycle, move the
-> thermal framework initialization to core_initcall.
-> 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  drivers/thermal/thermal_core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index d21b754baee2..d8251d723459 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1537,4 +1537,5 @@ static int __init thermal_init(void)
->  	mutex_destroy(&poweroff_lock);
->  	return result;
->  }
-> -fs_initcall(thermal_init);
-> +
+czw., 17 pa=C5=BA 2019 o 20:31 Rob Herring <robh@kernel.org> napisa=C5=82(a=
+):
+>
+> On Thu, Oct 17, 2019 at 09:12:29AM +0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > Convert the binding document for MAX77650 core MFD module to YAML.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
+> >  .../devicetree/bindings/mfd/max77650.yaml     | 151 ++++++++++++++++++
+> >  2 files changed, 151 insertions(+), 46 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mfd/max77650.txt b/Docum=
+entation/devicetree/bindings/mfd/max77650.txt
+> > deleted file mode 100644
+> > index b529d8d19335..000000000000
+> > --- a/Documentation/devicetree/bindings/mfd/max77650.txt
+> > +++ /dev/null
+> > @@ -1,46 +0,0 @@
+> > -MAX77650 ultra low-power PMIC from Maxim Integrated.
+> > -
+> > -Required properties:
+> > --------------------
+> > -- compatible:                Must be "maxim,max77650"
+> > -- reg:                       I2C device address.
+> > -- interrupts:                The interrupt on the parent the controlle=
+r is
+> > -                     connected to.
+> > -- interrupt-controller: Marks the device node as an interrupt controll=
+er.
+> > -- #interrupt-cells:  Must be <2>.
+> > -
+> > -- gpio-controller:   Marks the device node as a gpio controller.
+> > -- #gpio-cells:               Must be <2>. The first cell is the pin nu=
+mber and
+> > -                     the second cell is used to specify the gpio activ=
+e
+> > -                     state.
+> > -
+> > -Optional properties:
+> > ---------------------
+> > -gpio-line-names:     Single string containing the name of the GPIO lin=
+e.
+> > -
+> > -The GPIO-controller module is represented as part of the top-level PMI=
+C
+> > -node. The device exposes a single GPIO line.
+> > -
+> > -For device-tree bindings of other sub-modules (regulator, power supply=
+,
+> > -LEDs and onkey) refer to the binding documents under the respective
+> > -sub-system directories.
+> > -
+> > -For more details on GPIO bindings, please refer to the generic GPIO DT
+> > -binding document <devicetree/bindings/gpio/gpio.txt>.
+> > -
+> > -Example:
+> > ---------
+> > -
+> > -     pmic@48 {
+> > -             compatible =3D "maxim,max77650";
+> > -             reg =3D <0x48>;
+> > -
+> > -             interrupt-controller;
+> > -             interrupt-parent =3D <&gpio2>;
+> > -             #interrupt-cells =3D <2>;
+> > -             interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
+> > -
+> > -             gpio-controller;
+> > -             #gpio-cells =3D <2>;
+> > -             gpio-line-names =3D "max77650-charger";
+> > -     };
+> > diff --git a/Documentation/devicetree/bindings/mfd/max77650.yaml b/Docu=
+mentation/devicetree/bindings/mfd/max77650.yaml
+> > new file mode 100644
+> > index 000000000000..66a447e1cf56
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/max77650.yaml
+> > @@ -0,0 +1,151 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mfd/max77650.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MAX77650 ultra low-power PMIC from Maxim Integrated.
+> > +
+> > +maintainers:
+> > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > +
+> > +description: |
+> > +  This document describes the DT properties of the core MFD controller=
+.
+>
+> So does every file in this directory.
+>
+> Describe what this chip is.
+>
+> > +
+> > +  The GPIO-controller module is represented as part of the top-level P=
+MIC
+> > +  node. The device exposes a single GPIO line.
+> > +
+> > +  For device-tree bindings of other sub-modules (regulator, power supp=
+ly,
+> > +  LEDs and onkey) refer to the binding documents under the respective
+> > +  sub-system directories.
+> > +
+> > +  For more details on GPIO bindings, please refer to the generic GPIO =
+DT
+> > +  binding document <devicetree/bindings/gpio/gpio.txt>.
+>
+> Also fairly useless and another reference to maintain...
+>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: maxim,max77650
+> > +
+> > +  reg:
+> > +    description:
+> > +      I2C device address.
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  interrupt-controller: true
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 2
+> > +    description:
+> > +      The first cell is the IRQ number, the second cell is the trigger=
+ type.
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +    description:
+> > +      The first cell is the pin number and the second cell is used to =
+specify
+> > +      the gpio active state.
+> > +
+> > +  gpio-line-names:
+> > +    maxItems: 1
+> > +    description:
+> > +      Single string containing the name of the GPIO line.
+> > +
+> > +  regulators:
+> > +    $ref: ../regulator/max77650-regulator.yaml
+>
+> Not bisectable... This patch needs to come last.
+>
+> > +
+> > +  charger:
+> > +    $ref: ../power/supply/max77650-charger.yaml
+> > +
+> > +  leds:
+> > +    $ref: ../leds/leds-max77650.yaml
+> > +
+> > +  onkey:
+> > +    $ref: ../input/max77650-onkey.yaml
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - interrupt-controller
+> > +  - "#interrupt-cells"
+> > +  - gpio-controller
+> > +  - "#gpio-cells"
+>
+> None of the child nodes are required?
+>
 
-remove the blank line please.
+Technically no, and now when I think about it, neither are the
+following two properties really:
 
-> +core_initcall(thermal_init);
+  - gpio-controller
+  - "#gpio-cells"
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+You can define an empty device, it's just going to be useless. For
+practical purposes you can use any combination of modules, so I
+wouldn't make any of them required.
 
--- 
-viresh
+Bart
+
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    #include <dt-bindings/input/linux-event-codes.h>
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        pmic@48 {
+> > +            compatible =3D "maxim,max77650";
+> > +            reg =3D <0x48>;
+> > +
+> > +            interrupt-controller;
+> > +            interrupt-parent =3D <&gpio2>;
+> > +            #interrupt-cells =3D <2>;
+> > +            interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
+> > +
+> > +            gpio-controller;
+> > +            #gpio-cells =3D <2>;
+> > +            gpio-line-names =3D "max77650-charger";
+> > +
+> > +            regulators {
+> > +                compatible =3D "maxim,max77650-regulator";
+> > +
+> > +                max77650_ldo: regulator@0 {
+> > +                    regulator-compatible =3D "ldo";
+> > +                    regulator-name =3D "max77650-ldo";
+> > +                    regulator-min-microvolt =3D <1350000>;
+> > +                    regulator-max-microvolt =3D <2937500>;
+> > +                };
+> > +
+> > +                max77650_sbb0: regulator@1 {
+> > +                    regulator-compatible =3D "sbb0";
+> > +                    regulator-name =3D "max77650-sbb0";
+> > +                    regulator-min-microvolt =3D <800000>;
+> > +                    regulator-max-microvolt =3D <1587500>;
+> > +                };
+> > +            };
+> > +
+> > +            charger {
+> > +                compatible =3D "maxim,max77650-charger";
+> > +                input-voltage-min-microvolt =3D <4200000>;
+> > +                input-current-limit-microamp =3D <285000>;
+> > +            };
+> > +
+> > +            leds {
+> > +                compatible =3D "maxim,max77650-led";
+> > +                #address-cells =3D <1>;
+> > +                #size-cells =3D <0>;
+> > +
+> > +                led@0 {
+> > +                    reg =3D <0>;
+> > +                    label =3D "blue:usr0";
+> > +                };
+> > +
+> > +                led@1 {
+> > +                    reg =3D <1>;
+> > +                    label =3D "red:usr1";
+> > +                    linux,default-trigger =3D "heartbeat";
+> > +                };
+> > +
+> > +                led@2 {
+> > +                    reg =3D <2>;
+> > +                    label =3D "green:usr2";
+> > +                };
+> > +            };
+> > +
+> > +            onkey {
+> > +                compatible =3D "maxim,max77650-onkey";
+> > +                linux,code =3D <KEY_END>;
+> > +                maxim,onkey-slide;
+> > +            };
+> > +        };
+> > +    };
+> > --
+> > 2.23.0
+> >
