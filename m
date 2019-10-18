@@ -2,90 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 341E8DC71D
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF7CDC7AA
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 16:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408437AbfJROR4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 10:17:56 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40320 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392990AbfJRORz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 10:17:55 -0400
-Received: by mail-wr1-f66.google.com with SMTP id o28so6465416wro.7
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 07:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fTm5JH2L5agfNTgSt6jIVduSEI+HxSv62N1+6WMd74s=;
-        b=R67W02Lz1HjMvW2zQm++LCIQ21AzasDaKd9lyBCAv1JTy32UMXliPR+K+neuS3KxxR
-         IUeID/8BP/H7qC61bBPYfLeuuDOgQW5c0Zy1VjzZOg8ma8zsEgdQWKWyDTgPXxEFuMo/
-         u89cpWHzeoHBCkfqK4kNCh7bWGZbVn6bQXYwsCT9Pe1VLMF1poeq9qEDdVppr9uRBiQ9
-         SI5F/BQTW2j+V2QP4q/fnGgWM+dHfAoG1MErow6uLKvK35S134x5sL0grP0Jr9pBta62
-         uxcOEkzrKXdQMiimnSkNOCeiq8CyB0i+YwhoP+ex01NdUEh4koGBpt/zSeavD5Bqv7ps
-         kSZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fTm5JH2L5agfNTgSt6jIVduSEI+HxSv62N1+6WMd74s=;
-        b=YsYjlEQ+liM51p34Uw2yFx4BO2jK4MqLF1tNArQ9WdqE5do9FW5Awzk5vi8uEuDuEQ
-         T5jgtgTX5kigt+GFrTf/tK96pyDnZqa9b2linoZCQ2lZqYZ34nfhLxk5EPMiiri8QDII
-         XpU4Ok2R9Z2A5X0jHE3N0PsmHNwfTgvQ6aWq4r3MDjDpDJUXenfrKQyQV9Fd4kFNZ5Vk
-         DQw/MZDUeM6UV7dEvkSjayUCSDnUShNhL/5zxfrjHecxgA1MaCOlmAIa21Z96J2wAr0+
-         Xc4pJ5kGvq5ZCxgAUrCtTOken+iVq5CekQtBj7Ty0omNS8NuM+Hzk/h+aDCfbaoYYYtw
-         KrEw==
-X-Gm-Message-State: APjAAAUhtQWVAZyXCys1z1B199sMWPWRSxebWD75SBQ4o17oXyu/ftkk
-        UkUb9d+b8BhE5BlVSb2v0C0q4W4LHGmA5w==
-X-Google-Smtp-Source: APXvYqyXvXy8m4FlfE3Ivxs8/mhlAHKkQr/uz8IZ5NCsVUpgWET0v8kN7+RJAAD51s81jOaWspyCQg==
-X-Received: by 2002:a5d:490e:: with SMTP id x14mr8607219wrq.340.1571408272158;
-        Fri, 18 Oct 2019 07:17:52 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id r13sm7110988wra.74.2019.10.18.07.17.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 18 Oct 2019 07:17:51 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org, evgreen@chromium.org,
-        daidavid1@codeaurora.org
-Cc:     vincent.guittot@linaro.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [PATCH] interconnect: Add locking in icc_set_tag()
-Date:   Fri, 18 Oct 2019 17:17:50 +0300
-Message-Id: <20191018141750.17032-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.23.0
+        id S2405485AbfJROpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 10:45:08 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:41430 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S2405365AbfJROpI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 18 Oct 2019 10:45:08 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8439B57;
+        Fri, 18 Oct 2019 07:44:44 -0700 (PDT)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F5B13F718;
+        Fri, 18 Oct 2019 07:44:43 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, qperret@google.com,
+        patrick.bellasi@matbug.net, dh.han@samsung.com
+References: <20191011134500.235736-1-douglas.raillard@arm.com>
+ <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
+ <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
+ <20191017095015.GI2311@hirez.programming.kicks-ass.net>
+ <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
+ <20191017190708.GF22902@worktop.programming.kicks-ass.net>
+ <0b807cb3-6a88-1138-dc66-9a32d9bba7ea@arm.com>
+ <20191018120719.GH2328@hirez.programming.kicks-ass.net>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <32d07c51-847d-9d51-480c-c8836f1aedc7@arm.com>
+Date:   Fri, 18 Oct 2019 15:44:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191018120719.GH2328@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We must ensure that the tag is not changed while we aggregate the
-requests. Currently the icc_set_tag() is not using any locks and this
-may cause the values to be aggregated incorrectly. Fix this by acquiring
-the icc_lock while we set the tag.
 
-Fixes: 127ab2cc5f19 ("interconnect: Add support for path tags")
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/core.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index e24092558c29..4940c0741d40 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -408,8 +408,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
- 	if (!path)
- 		return;
- 
-+	mutex_lock(&icc_lock);
-+
- 	for (i = 0; i < path->num_nodes; i++)
- 		path->reqs[i].tag = tag;
-+
-+	mutex_unlock(&icc_lock);
- }
- EXPORT_SYMBOL_GPL(icc_set_tag);
- 
+On 10/18/19 1:07 PM, Peter Zijlstra wrote:
+> On Fri, Oct 18, 2019 at 12:46:25PM +0100, Douglas Raillard wrote:
+> 
+>>> What I don't see is how that that difference makes sense as input to:
+>>>
+>>>     cost(x) : (1 + x) * cost_j
+>>
+>> The actual input is:
+>> x = (EM_COST_MARGIN_SCALE/SCHED_CAPACITY_SCALE) * (util - util_est)
+>>
+>> Since EM_COST_MARGIN_SCALE == SCHED_CAPACITY_SCALE == 1024, this factor of 1
+>> is not directly reflected in the code but is important for units
+>> consistency.
+> 
+> But completely irrelevant for the actual math and conceptual
+> understanding.
+
+ > how that that difference makes sense as input to
+I was unsure if you referred to the units being inconsistent or the 
+actual way of computing values being strange, so I provided some 
+justification for both.
+
+> Just because computers suck at real numbers, and floats
+> are expensive, doesn't mean we have to burden ourselves with fixed point
+> when writing equations.
+> 
+> Also, as a physicist I'm prone to normalizing everything to 1, because
+> that's lazy.
+> 
+>>> I suppose that limits the additional OPP to twice the previously
+>>> selected cost / efficiency (see the confusion from that other email).
+>>> But given that efficency drops (or costs rise) for higher OPPs that
+>>> still doesn't really make sense..
+> 
+>> Yes, this current limit to +100% freq boosting is somehow arbitrary and
+>> could probably benefit from being tunable in some way (Kconfig option
+>> maybe). When (margin > 0), we end up selecting an OPP that has a higher cost
+>> than the one strictly required, which is expected. The goal is to speed
+>> things up at the expense of more power consumed to achieve the same work,
+>> hence at a lower efficiency (== higher cost).
+> 
+> No, no Kconfig knobs.
+> 
+>> That's the main reason why this boosting apply a margin on the cost of the
+>> selected OPP rather than just inflating the util. This allows controlling
+>> directly how much more power (battery life) we are going to spend to achieve
+>> some work that we know could be achieved with less power.
+> 
+> But you're not; the margin is relative to the OPP, it is not absolute.
+
+Considering a CPU with 1024 max capacity (since we are not talking about 
+migrations here, we can ignore CPU invariance):
+
+work = normalized number of iterations of a given busy loop
+# Thanks to freq invariance
+work = util (between 0 and 1)
+util = f/f_max
+
+# f(work) is the min freq that is admissible for "work", which we will
+# abbreviate as "f"
+f(work) = work * f_max
+
+# from struct em_cap_state doc in energy_model.h
+cost(f) = power(f) * f_max / f
+cost(f) = power(f) / util
+cost(f) = power(f) / work
+power(f) = cost(f) * work
+
+boosted_cost(f) = cost(f) + x
+boosted_power(f) = boosted_cost(f) * work
+boosted_power(f) = (cost(f) + x) * work
+
+# Let's normalize cost() so we can forget about f and deal only with work.
+cost'(work) = cost(f)/cost(f_max)
+x' = x/cost(f_max)
+boosted_power'(work) = (cost'(work) + x') * work
+boosted_power'(work) = cost'(work) * work + x' * work
+boosted_power'(work) = power'(work) + x' * work
+boosted_power'(work) = power'(work) + A(work)
+
+# Over a duration T, spend an extra B unit of energy
+B(work) = A(work) * T
+lost_battery_percent(work) = 100 * B(work)/total_battery_energy
+lost_battery_percent(work) = 100 * T * x' * work /total_battery_energy
+lost_battery_percent(work) =
+  (100 * T / cost(f_max) / total_battery_energy) * x * work
+
+This means that the effect of boosting on battery life is proportional 
+to "x" unless I made a mistake somewhere.
+
+> 
+> Or rather, the only actual limit is in relation to the max OPP. So you
+> have very little actual control over how much more energy you're
+> spending.
+> 
+>>> So while I agree that 2) is a reasonable signal to work from, everything
+>>> that comes after is still much confusing me.
+> 
+>> "When applying these boosting rules on the runqueue util signals ...":
+>> Assuming the set of enqueued tasks stays the same between 2 observations
+>> from schedutil, if we see the rq util_avg increase above its
+>> util_est.enqueued, that means that at least one task had its util_avg go
+>> above util_est.enqueued. We might miss some boosting opportunities if some
+>> (util - util_est) compensates:
+>> TASK_1(util - util_est) = - TASK_2(util - util_est)
+>> but working on the aggregated value is much easier in schedutil, to avoid
+>> crawling the list of entities.
+> 
+> That still does not explain why 'util - util_est', when >0, makes for a
+> sensible input into an OPP relative function > I agree that 'util - util_est', when >0, indicates utilization is
+> increasing (for the aperiodic blah blah blah). But after that I'm still
+> confused.
+
+For the same reason PELT makes a sensible input for OPP selection.
+Currently, OPP selection is based on max(util_avg, util_est.enqueued) 
+(from cpu_util_cfs in sched.h), so as soon as we have
+(util - util_est > 0), the OPP will be selected according to util_avg. 
+In a way, using util_avg there is already some kind of boosting.
+
+Since the boosting is essentially (util - constant), it grows the same 
+way as util. If we think of (util - util_est) as being some estimation 
+of how wrong we were in the estimation of the task "true" utilization of 
+the CPU, then it makes sense to feed that to the boost. The wronger we 
+were, the more we want to boost, because the more time passes, the more 
+the scheduler realizes it actually does not know what the task needs. In 
+doubt, provide a higher freq than usual until we get to know this task 
+better. When that happens (at the next period), boosting is disabled and 
+we revert to the usual behavior (aka margin=0).
+
+Hope we are converging to some wording that makes sense.
