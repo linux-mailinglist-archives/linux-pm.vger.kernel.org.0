@@ -2,81 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CADDC0B5
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDDADC0D2
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405776AbfJRJS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 05:18:56 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45355 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390499AbfJRJSz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:18:55 -0400
-Received: by mail-oi1-f194.google.com with SMTP id o205so4605329oib.12;
-        Fri, 18 Oct 2019 02:18:55 -0700 (PDT)
+        id S2409681AbfJRJYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 05:24:53 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38101 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409678AbfJRJYx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:24:53 -0400
+Received: by mail-pf1-f194.google.com with SMTP id h195so3504028pfe.5
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 02:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=v3de0Qp2dEG4v6wLtc+9wSifLlx04TUsULf8ZNOAzfo=;
+        b=W4GJ3YysV76ngGFa9Q/MKPTCmrRuklBK8Sig/JFoWCS/GdY4XsthMBFYsf2fazxszF
+         078CVXdccd/fbVCPk6zvLKGm0yKvZ5GJmZz0mqTHOX6UvQNT0PNPCvJIawWtuTYFp/qB
+         RulOH4AyHToa+0aEtHN3ZzMK3uOaV4aZ34akTt1ZDPXQyurQkSgngCFi5+24L0SG8fCF
+         XFMX5fmEw56bqXBuDxlojv1muVzT6HR6by4OV/kDQc9Lo5kbqE3j/+6mlQjSH7Lpw4Ru
+         4bZzBUNT3sTopm4+O75Q2Q8kZi6x630VLZLbdGcb+G5JQELAfOL8aiV1qXHBGrKh/HZA
+         Yyew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=yTS+cmXgJUMIzlgHO4090rAX20R9LMZN47qkA+zl3mQ=;
-        b=qLfffHjEEO54LWsMuqsUOFoUb/j9gabQdM+xDtPpLMRMhUqEvOL+pqEcCUSzIXbDp/
-         iexOIZv0NjVJqK4K473eMHeSTUCbLpU9bZd1lrsGySEsKT6ThEuwVjEBBcIOp12agfLD
-         jvZrHd/fbbooXek+Ym3f+fOIy2BYM20T4RfVeWNI2RGc+nScqfsWSURzr+neptOX4ud3
-         911dg2U8O9fdDKo2wqgkmyMeyPjjiAYk/WCdyK8bX6dr2JBYz5NSPbAfpJ+DjCYV+b/z
-         VGBbkG8MGC0HR7mIRcgtCcq9J92FUbVrfpxwzmt1InyOJ3X+9/At3S4SrXnwdToMrOCR
-         DlVw==
-X-Gm-Message-State: APjAAAUNopiFJhYj0QrcmgH4fqWYnRJWPpeR+mi3h3uFNQjca9lx+Xqt
-        1uIzENBRjogzY1MBfMS+LTRyUoKrqbw2sDOlis0=
-X-Google-Smtp-Source: APXvYqwB+NtokmhbLo9+mcq8n2p32alBAWd/fffeN1NJeNpDxjiPZ4q0ZHxNUQG4vVrDocgNw5CJTRby4bfxkFDew2w=
-X-Received: by 2002:a05:6808:917:: with SMTP id w23mr6816796oih.68.1571390335017;
- Fri, 18 Oct 2019 02:18:55 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 18 Oct 2019 11:18:44 +0200
-Message-ID: <CAJZ5v0gG82GLvm45hvwuZGVVhD4cSLpOREaK6Y-QwYs-ymstqA@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v5.4-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=v3de0Qp2dEG4v6wLtc+9wSifLlx04TUsULf8ZNOAzfo=;
+        b=FBa8BqmZbjjQQ6Gw1Gj8gS9H8L2jNZgMBBItjmh9MzfIMLhgisNQ7JqXrgdkJag1Bs
+         kL6Qf04XPyvgeSxsS88FOqHpObvZSYliEpAHEi2ByJQUj5C/sij6pcfav9ZgyJNhnvQb
+         Uo6eWFxhh6SefrJGtObqxDTxfROpouIqa7SV+HTY460YsbGUPamN+H7GWoEwN7odXJze
+         n0pnbwZDFUw92XGJtGK9Xh7+QZSsD47VSt1YhtBZE9OT23egbmHvwzR0hHDIGufjm3ts
+         I8VboYhsWLt/0YoAjo2kggse6FTtfJQuM/sFZwJ7vF/ZA4dYLrj5ayVFIuSkVt1cmNTw
+         RA6w==
+X-Gm-Message-State: APjAAAWRu++de88BeVu2JrWlrCq1HS0pAiXGoFRCFtVWIx4dwc2En/Z2
+        l/fBoCuSDiYxhBJsMY6OK17SNA==
+X-Google-Smtp-Source: APXvYqwkH7aDyKc+7ed+bwZ6rBwWDlzPlXO9W/aj0PKz4MD3W9HH+2tq3+dXWpID2Rv3H10HgXzj3A==
+X-Received: by 2002:a17:90a:9306:: with SMTP id p6mr9751961pjo.68.1571390692245;
+        Fri, 18 Oct 2019 02:24:52 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id f13sm5441333pgr.6.2019.10.18.02.24.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 02:24:50 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 14:54:47 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [RFT][PATCH 0/3] cpufreq / PM: QoS: Introduce frequency QoS and
+ use it in cpufreq
+Message-ID: <20191018092447.2utqazqfob65x4k2@vireshk-i7>
+References: <2811202.iOFZ6YHztY@kreacher>
+ <20191016142343.GB5330@bogus>
+ <20191017095725.izchzl7enfylvpf3@vireshk-i7>
+ <20191017095942.GF8978@bogus>
+ <CAJZ5v0ixS8ZS93Fgj8XGUMGcLdAy+Fgwp5z3QirccNSiiwLtDA@mail.gmail.com>
+ <20191018054433.tq2euue675xk4o63@vireshk-i7>
+ <CAJZ5v0hpfvy5iELVRWFA3HS8NoAH0=py0cE+fLaUq2hDReCrnQ@mail.gmail.com>
+ <20191018082745.3zr6tc3yqmbydkrw@vireshk-i7>
+ <CAJZ5v0gR45YNwqrc8JQ_2qQBnYrxPeCHTnvQtEELD8VpXJrxLA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gR45YNwqrc8JQ_2qQBnYrxPeCHTnvQtEELD8VpXJrxLA@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 18-10-19, 10:30, Rafael J. Wysocki wrote:
+> On Fri, Oct 18, 2019 at 10:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 18-10-19, 10:24, Rafael J. Wysocki wrote:
+> > > On Fri, Oct 18, 2019 at 7:44 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >
+> > > > On 17-10-19, 18:34, Rafael J. Wysocki wrote:
+> > > > > [BTW, Viresh, it looks like cpufreq_set_policy() should still ensure
+> > > > > that the new min is less than the new max, because the QoS doesn't do
+> > > > > that.]
+> > > >
+> > > > The ->verify() callback does that for us I believe.
+> > >
+> > > It does in practice AFAICS, but in theory it may assume the right
+> > > ordering between the min and the max and just test the boundaries, may
+> > > it not?
+> >
+> > I think cpufreq_verify_within_limits() gets called for sure from
+> > within ->verify() for all platforms
+> 
+> That's why I mean by "in practice". :-)
 
-Please pull from the tag
+Hmm, I am not sure if we should really add another min <= max check in
+cpufreq_set_policy() as in practice it will never hit :)
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.4-rc4
-
-with top-most commit ffba17bb335d6598de613791f8997a5774455068
-
- Merge branch 'acpi-tables'
-
-on top of commit 4f5cafb5cb8471e54afdc9054d973535614f7675
-
- Linux 5.4-rc3
-
-to receive ACPI fixes for 5.4-rc4.
-
-These fix possible use-after-free in the ACPI CPPC support code (John
-Garry) and prevent the ACPI HMAT parsing code from using possibly
-incorrect data coming from the platform firmware (Daniel Black).
-
-Thanks!
-
-
----------------
-
-Daniel Black (1):
-      ACPI: HMAT: ACPI_HMAT_MEMORY_PD_VALID is deprecated since ACPI-6.3
-
-John Garry (1):
-      ACPI: CPPC: Set pcc_data[pcc_ss_id] to NULL in acpi_cppc_processor_exit()
-
----------------
-
- drivers/acpi/cppc_acpi.c | 2 +-
- drivers/acpi/hmat/hmat.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+-- 
+viresh
