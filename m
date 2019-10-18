@@ -2,90 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA93DC0DD
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2370DC0E4
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409706AbfJRJ1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 05:27:06 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40286 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390443AbfJRJ1G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:27:06 -0400
-Received: by mail-ot1-f65.google.com with SMTP id y39so4390078ota.7;
-        Fri, 18 Oct 2019 02:27:04 -0700 (PDT)
+        id S2405230AbfJRJ2t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 05:28:49 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36802 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390021AbfJRJ2s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:28:48 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y22so3517015pfr.3
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 02:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2zQ3DdxsRN52jblb9zywIzl2Di+YG8z5hUSeV7sQqSs=;
+        b=ImarxruyGPcwgA9Yix4GV5gpXFGRncXMe/xRmupDsGnKBimIErWSuO8uyKPDZSuHob
+         DEAH+b/+q4XTL/ZSBfhQRQA8qnTG4ZjNTHR4EHFLWcT9G+AOeZVtPZhmQBegmnSFN/rv
+         uBB2CdZTqg+poL/mTnw/4VjuU+6H2/RnRejKeIlFdYVBS/AfJ51SkRX4c6lmP56xVXrv
+         PuStzbPXk7SGBb27qGgj2OV/skRhExknMmrSvYbGJjAq0ti4hyv4NuA+j/HO/zWULrNd
+         wlYWesKPXGn/leAFYT2rFNWQdNO9EyadIk6puXp15eos45MknjY9QiVZNRMLtXLbpr0j
+         d7CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WFCHWMpuOvk4Jfe0cTEExOuAzfZ+RF4o0B7Uope7Uy8=;
-        b=q/eHwS61dV5wCG71vH8/Dz/Gt/tearl3+Uik1DP0mWR+2k2s3FgRAdN48biaFyRcjT
-         tMf/AuFCHqxsPgUz9y+AfiiTaj7wValxNNx1Pj5vUNjiztPBcoRNnCKggcasXaaC/reS
-         m2MNf27dv1DgLiHOv8DaUje9S+7IjXb0CUdRuF9TWOJA8vEY/59SGmGMS2xV3ndsG6i8
-         QLZp4I91UYvPV8qHDNj2N8xRjxI8M/qRqqiMuq5Sb0Lg6LVFn/THJlls2a9Y69WOmOzn
-         Fem+1tjau55y+0rdfXHq0Vb97QQ7UDl8W0lVifNpY1kuJsMfHlKsNeCWn4MW83KqPCB7
-         uWuw==
-X-Gm-Message-State: APjAAAWX5DBDH2GoFzYmCH0CvgOnjhJ5ZkltHyb8tukez14dzj3UlHTB
-        RrrEy6b9hd4IxHIwbLElRwVEZjGCVHhWSoNwmp1XpQ==
-X-Google-Smtp-Source: APXvYqya815uon46X6ZdQgw//057c7fKahm7VPCQTdOF2gkg3Gt2kr4c6a0k71jx5wPq06RXRMuVpt5Z3mVkg0JKRQ8=
-X-Received: by 2002:a9d:664:: with SMTP id 91mr414823otn.189.1571390823637;
- Fri, 18 Oct 2019 02:27:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2zQ3DdxsRN52jblb9zywIzl2Di+YG8z5hUSeV7sQqSs=;
+        b=YxCr7FJZ6OUQisIOQSjCtNcBkm4uRWB7eOT67GNotACQ8rdC2JlyTGbx9LiRg7g7wN
+         lfZdx+nVE9ySL/nKeZAixENzDNjhT3MUWhbdlVUmGKKjsLbki7Q21BLj4zz6EByyoHGn
+         sllnebQ/8ENTgiO95lvTc54DDzwYM+ymhVUPE6Tp3YnEjGm0rVZCrPWx+OuB4DxYH7lx
+         EGbX+dElXOM2sTr4vXHHlTbXCdvYfh41VeLwwGWKfW6ZoBboqaPqDFuEPLHBtXNHWjYj
+         JAcsaAx8Jr73AzCPtlr+F1+FQZR2ta9MtmvQkTprV9ELjrmNJ815E3PTOJcwa9NNwdx7
+         iBNw==
+X-Gm-Message-State: APjAAAXNqrOHKENGyGHc5zerCsnqEJMlAXvT9tu7SxKw94hNUA/6u0TP
+        T1OJYYufX8wYkfypFdFsWoB0TQ==
+X-Google-Smtp-Source: APXvYqy0BNqn4Vykv9sLgst5ckU45MRFvYZM791coX9D1UtMgpzWaE6W15f54ZBKZb93uc6qHeC1Ew==
+X-Received: by 2002:a63:1f4e:: with SMTP id q14mr9167259pgm.144.1571390927910;
+        Fri, 18 Oct 2019 02:28:47 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id z25sm5929736pfn.7.2019.10.18.02.28.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 02:28:47 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] opp: Reinitialize the list_kref before adding the static OPPs again
+Date:   Fri, 18 Oct 2019 14:58:41 +0530
+Message-Id: <2700308706c0d46ca06eeb973079a1f18bf553dd.1571390916.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 MIME-Version: 1.0
-References: <2811202.iOFZ6YHztY@kreacher> <20191016142343.GB5330@bogus>
- <20191017095725.izchzl7enfylvpf3@vireshk-i7> <20191017095942.GF8978@bogus>
- <CAJZ5v0ixS8ZS93Fgj8XGUMGcLdAy+Fgwp5z3QirccNSiiwLtDA@mail.gmail.com>
- <20191018054433.tq2euue675xk4o63@vireshk-i7> <CAJZ5v0hpfvy5iELVRWFA3HS8NoAH0=py0cE+fLaUq2hDReCrnQ@mail.gmail.com>
- <20191018082745.3zr6tc3yqmbydkrw@vireshk-i7> <CAJZ5v0gR45YNwqrc8JQ_2qQBnYrxPeCHTnvQtEELD8VpXJrxLA@mail.gmail.com>
- <20191018092447.2utqazqfob65x4k2@vireshk-i7>
-In-Reply-To: <20191018092447.2utqazqfob65x4k2@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 18 Oct 2019 11:26:52 +0200
-Message-ID: <CAJZ5v0hZc5g+AUDSJUkaGSA92mKNSXGyHLd5Qxuf88wP1i4AdA@mail.gmail.com>
-Subject: Re: [RFT][PATCH 0/3] cpufreq / PM: QoS: Introduce frequency QoS and
- use it in cpufreq
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 11:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 18-10-19, 10:30, Rafael J. Wysocki wrote:
-> > On Fri, Oct 18, 2019 at 10:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 18-10-19, 10:24, Rafael J. Wysocki wrote:
-> > > > On Fri, Oct 18, 2019 at 7:44 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > >
-> > > > > On 17-10-19, 18:34, Rafael J. Wysocki wrote:
-> > > > > > [BTW, Viresh, it looks like cpufreq_set_policy() should still ensure
-> > > > > > that the new min is less than the new max, because the QoS doesn't do
-> > > > > > that.]
-> > > > >
-> > > > > The ->verify() callback does that for us I believe.
-> > > >
-> > > > It does in practice AFAICS, but in theory it may assume the right
-> > > > ordering between the min and the max and just test the boundaries, may
-> > > > it not?
-> > >
-> > > I think cpufreq_verify_within_limits() gets called for sure from
-> > > within ->verify() for all platforms
-> >
-> > That's why I mean by "in practice". :-)
->
-> Hmm, I am not sure if we should really add another min <= max check in
-> cpufreq_set_policy() as in practice it will never hit :)
+The list_kref reaches a count of 0 when all the static OPPs are removed,
+for example when dev_pm_opp_of_cpumask_remove_table() is called, though
+the actual OPP table may not get freed as it may still be referenced by
+other parts of the kernel, like from a call to
+dev_pm_opp_set_supported_hw(). And if we call
+dev_pm_opp_of_cpumask_add_table() again at this point, we must
+reinitialize the list_kref otherwise the kernel will hit a WARN() in
+kref infrastructure for incrementing a kref with value 0.
 
-Fair enough, but adding a comment regarding that in there would be prudent IMO.
+Fixes: 11e1a1648298 ("opp: Don't decrement uninitialized list_kref")
+Reported-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/of.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 6dc41faf74b5..1cbb58240b80 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -663,6 +663,13 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 		return 0;
+ 	}
+ 
++	/*
++	 * Re-initialize list_kref every time we add static OPPs to the OPP
++	 * table as the reference count may be 0 after the last tie static OPPs
++	 * were removed.
++	 */
++	kref_init(&opp_table->list_kref);
++
+ 	/* We have opp-table node now, iterate over it and add OPPs */
+ 	for_each_available_child_of_node(opp_table->np, np) {
+ 		opp = _opp_add_static_v2(opp_table, dev, np);
+-- 
+2.21.0.rc0.269.g1a574e7a288b
 
->
-> --
-> viresh
