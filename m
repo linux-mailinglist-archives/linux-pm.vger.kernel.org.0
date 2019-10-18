@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97312DC83A
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 17:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60178DC84F
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 17:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442736AbfJRPQI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 11:16:08 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40711 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727297AbfJRPQI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 11:16:08 -0400
-Received: by mail-lf1-f67.google.com with SMTP id f23so5008540lfk.7
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 08:16:05 -0700 (PDT)
+        id S2389654AbfJRPVK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 11:21:10 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37193 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732165AbfJRPVK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 11:21:10 -0400
+Received: by mail-lj1-f195.google.com with SMTP id l21so6639574lje.4
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 08:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Lo3UvlHYtf4ozZndPQfhjiOJN5mXwv6pqPJDrdrIjCk=;
-        b=FQZ+RwORMJC9WyV8NBFN7wS7R70Z+eklM8epYvWnfuOhY4hOptUVCRR+2RwWBTQjgN
-         uEe6sb1E7VbCJfU+eax3BCwMdDosw9yzpBIww2FeGk2BVSlMElvb6m6uWahKChlZGZ3/
-         pHSuaBCeuqm23il1Jsc6Gov6B00nO5Ya/rmKGp7HuRZs/+/mme4QePARw9Ez2AtM96ue
-         23hC/GryyO1YfPlILLmjgm9TlIqXbqL3Kl0hAWNt8cXQKM87FNWu6QRCE5QO9vF6D+Nz
-         isAEE8YA5etqNB4fVKHrGjojTc2La+Goy3rNzXYOVB451dhV6Ek0nCg90L0aK3qDkTPz
-         iDyA==
+        bh=yLLmFOSm8HttUwzcA55yirZl/vYaKzUHayfsFn/aSKw=;
+        b=ENDlG38cJuub/7j/v0Rk3VPnVnnPDhPE1t/OdMIQBWilYVRbNguMx/WSjX1uY2RfI8
+         vD4ES6JgbzxSTPk8KQNPRgDo7LFw4Yg4W2plBYQJrQAM3Ju76KUvpBfLJlScuqhoHJ9U
+         cvsEpqnDWXakoF+30bCaS/6BzwGKGe0HNDJmA1/refOgDMxevJ6uFmLW+QK8dTiyLaCz
+         M64lky6fzJho9x5cV4tKntKJ2qXppel0FgLaSS7WioUq42gYFQrC+TnoUc1Xw9uzRV3A
+         EjbR3+ts5ypcUuBFxFd91FxTj72yHcY5TzVxE14dw5tuGgYTyyZnm2mDScbUsxL5VR/A
+         vrmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Lo3UvlHYtf4ozZndPQfhjiOJN5mXwv6pqPJDrdrIjCk=;
-        b=NEkXK2RwRVzHDC9BqBJxiPSVNP1eH0QJYjtL/2pVyUluWBk64pTW2aGQNpOAAeUK0J
-         1jYEZ3oJ5IrHYTn3fr8ZrAW+NFyzW2P2VP5sHxJRB2oXGkwI4QJeVPbi1xJRCxMrWDr5
-         Kbf2lluEq1PrPWP+KeRIltZuUremkjirPt8ZjTXdHz16OXkwYUV3Rb0Wj788qiLDj7Em
-         /tNGhwxCrSWsh/86suU31vfk366v38PcvYIWzc8WQBZS5F73AWOPxy9T0Ze75hhrMN5i
-         wLRWmsXVEnnR7RkYi/cxs33xogf3It0UVPnHnwtE7KdpEVB1bQJjn2qcFjdSMq2NDhld
-         sIcA==
-X-Gm-Message-State: APjAAAUKRy7R4jDHvRx4GEOX03QTcWeRYVeWI8oWVAAjcj95XxSVRQSK
-        UYpaqDq8Hfs1tmQlYZrZDjdovR1d8in9AzRjZRXNjA==
-X-Google-Smtp-Source: APXvYqy9vhf+OFbOy3GAZCCKcRW3SIGbxO9fNuuHbBaa05VMMBCUMuPllHcKwYHKIgdfmPJNsE9DvaQw3h0oPZyTQew=
-X-Received: by 2002:a19:ca13:: with SMTP id a19mr5345113lfg.133.1571411764719;
- Fri, 18 Oct 2019 08:16:04 -0700 (PDT)
+        bh=yLLmFOSm8HttUwzcA55yirZl/vYaKzUHayfsFn/aSKw=;
+        b=UCPnEOG7WyQevtV8+en9lVPZ7/YXYbcU3W4DQ3/hUt6/bU7uT05Gi0mNXhT9svJS93
+         70PtOIXRZZJu1RIS+ZgnNsXeYfm72so3IGEAW+MWrX2mm5xS9+n51SPywEcp42mv+yba
+         Ds0TokT9hxL4wcIbL0YLoAZOI3YNKz1UI37Z+c2YJqrEr1LBK0xA905uoYpi5C5etBng
+         JzHKxzMO0+9KTsKsQR8er/CvFEQL+ALqUpVpDzNBoAX1jVG21qTYcXJ3LYSOgKHuv7yJ
+         zwYeHiAH9+u6BHChET26c400l+T+vucOFJSbEqxRyjyLqqYz9dCYu9IN29A0PNEsWjpR
+         +tOg==
+X-Gm-Message-State: APjAAAXUwCDmJOtT75ljC5tz2YsZUMp7am4fs3Y3b9EYutNLxIE5Kl9Y
+        Ny13ZWa/bREswIMCGNvP78lHq4uVHFDWROWvViPg7Q==
+X-Google-Smtp-Source: APXvYqz4Wv3AkrCfOh8oziWK3sALJRx+kVJ83dMavDz796ZdwqqTDdu/P/JvbNY53ztyQ6M3c1B+qT9VQinwMDCoWt0=
+X-Received: by 2002:a2e:978e:: with SMTP id y14mr6233454lji.206.1571412067347;
+ Fri, 18 Oct 2019 08:21:07 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191011134500.235736-1-douglas.raillard@arm.com>
  <20191014145315.GZ2311@hirez.programming.kicks-ass.net> <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
@@ -49,8 +49,8 @@ References: <20191011134500.235736-1-douglas.raillard@arm.com>
  <32d07c51-847d-9d51-480c-c8836f1aedc7@arm.com>
 In-Reply-To: <32d07c51-847d-9d51-480c-c8836f1aedc7@arm.com>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 18 Oct 2019 17:15:53 +0200
-Message-ID: <CAKfTPtATv+TaLus3ggijLWf0KAkexHgpHOTq++iqxaB4jeo-=w@mail.gmail.com>
+Date:   Fri, 18 Oct 2019 17:20:55 +0200
+Message-ID: <CAKfTPtCECmWy9rTE1rgKd6uXcQCixZ3G7OLAM=Q=T5EM2414ZQ@mail.gmail.com>
 Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
 To:     Douglas Raillard <douglas.raillard@arm.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -143,10 +143,6 @@ On Fri, 18 Oct 2019 at 16:44, Douglas Raillard <douglas.raillard@arm.com> wrote:
 > power(f) = cost(f) * work
 >
 > boosted_cost(f) = cost(f) + x
-
-In em_pd_get_higher_freq, the boost is a % of cost(f)  so it should be
-boosted_cost(f)=cost(f)1+ cost(f)*x
-
 > boosted_power(f) = boosted_cost(f) * work
 > boosted_power(f) = (cost(f) + x) * work
 >
@@ -167,6 +163,10 @@ boosted_cost(f)=cost(f)1+ cost(f)*x
 >
 > This means that the effect of boosting on battery life is proportional
 > to "x" unless I made a mistake somewhere.
+
+Because the boost is relative to cost(f) and cost is not linear to the
+frequency, I don't think that it's is a linear relation.
+
 >
 > >
 > > Or rather, the only actual limit is in relation to the max OPP. So you
