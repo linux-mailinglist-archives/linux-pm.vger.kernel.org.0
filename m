@@ -2,87 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6A2DC420
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 13:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D670DC42D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 13:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442649AbfJRLmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 07:42:19 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:47584 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390948AbfJRLmT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 07:42:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=bxQ3oNa0TABOgDWBQ/9ale8vMQAfpMYiyrwn8aMjqW4=; b=PmMLrwSRB9YtHzgtZKWC6wq1G
-        G6wEOmkUGjj2wW5IUTNTKz9PkS2LYcKQuYVfZNb7Bh1Ziq9f/zs5b3wwx75SGVHd0ixGaqAAA2k/O
-        hefo7LXmBJcbXisZs+d0fDw4Kql6wiN5ifU4awYoCNtBXJHth1T9tahzZ/hMdGigxW64k=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iLQe4-0003Sm-Rt; Fri, 18 Oct 2019 11:42:12 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 057342741DEA; Fri, 18 Oct 2019 12:42:11 +0100 (BST)
-Date:   Fri, 18 Oct 2019 12:42:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Kamil Konieczny <k.konieczny@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH] opp: core: Revert "add regulators enable and disable"
-Message-ID: <20191018114211.GA4828@sirena.co.uk>
-References: <CGME20191017102843eucas1p164993b3644d006481fb041e36175eebe@eucas1p1.samsung.com>
- <20191017102758.8104-1-m.szyprowski@samsung.com>
+        id S2407749AbfJRLqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 07:46:49 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:36432 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S2389397AbfJRLqt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 18 Oct 2019 07:46:49 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2506CA3;
+        Fri, 18 Oct 2019 04:46:27 -0700 (PDT)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 810263F6C4;
+        Fri, 18 Oct 2019 04:46:26 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, qperret@google.com,
+        patrick.bellasi@matbug.net, dh.han@samsung.com
+References: <20191011134500.235736-1-douglas.raillard@arm.com>
+ <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
+ <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
+ <20191017095015.GI2311@hirez.programming.kicks-ass.net>
+ <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
+ <20191017190708.GF22902@worktop.programming.kicks-ass.net>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <0b807cb3-6a88-1138-dc66-9a32d9bba7ea@arm.com>
+Date:   Fri, 18 Oct 2019 12:46:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ikeVEW9yuYc//A+q"
-Content-Disposition: inline
-In-Reply-To: <20191017102758.8104-1-m.szyprowski@samsung.com>
-X-Cookie: Smear the road with a runner!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191017190708.GF22902@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ikeVEW9yuYc//A+q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Thu, Oct 17, 2019 at 12:27:58PM +0200, Marek Szyprowski wrote:
-> All the drivers, which use the OPP framework control regulators, which
-> are already enabled. Typically those regulators are also system critical,
-> due to providing power to CPU core or system buses. It turned out that
-> there are cases, where calling regulator_enable() on such boot-enabled
-> regulator has side-effects and might change its initial voltage due to
-> performing initial voltage balancing without all restrictions from the
-> consumers. Until this issue becomes finally solved in regulator core,
-> avoid calling regulator_enable()/disable() from the OPP framework.
+On 10/17/19 8:07 PM, Peter Zijlstra wrote:
+> On Thu, Oct 17, 2019 at 03:23:04PM +0100, Douglas Raillard wrote:
+>> On 10/17/19 10:50 AM, Peter Zijlstra wrote:
+> 
+>>> I'm still thinking about the exact means you're using to raise C; that
+>>> is, the 'util - util_est' as cost_margin. It hurts my brain still.
+>>
+>> util_est is currently the best approximation of the actual portion of the CPU the task needs:
+>> 1) for periodic tasks, it's not too far from the duty cycle, and is always higher
+>>
+>> 2) for aperiodic tasks, it (indirectly) takes into account the total time it took
+>>    to complete the previous activation, so the signal is not 100% composed of logical signals
+>>    only relevant for periodic tasks (although it's a big part of it).
+>>
+>> 3) Point 1) and 2) together allows util_est to adapt to periodic tasks that changes
+>> their duty cycle over time, without needing a very long history (the last task period
+>> is sufficient).
+>>
+>> For periodic tasks, the distance between instantaneous util_avg and the actual task
+>> duty cycle indicates somehow what is our best guess of the (potential) change in the task
+>> duty cycle.
+>>
+>> util_est is the threshold (assuming util_avg increasing) for util_avg after which we know
+>> for sure that even if the task stopped right now, its duty cycle would be higher than
+>> during the previous period.
+>> This means for a given task and with (util >= util_est):
+>>
+>> 1) util - util_est == 0 means the task duty cycle will be equal to the one during
+>>    during the previous activation, if the tasks stopped executing right now.
+>>
+>> 2) util - util_est > 0 means the task duty cycle will be higher to the one during
+>>    during the previous activation, if the tasks stopped executing right now.
+> 
+> So far I can follow, 2) is indeed a fairly sane indication that
+> utilization is growing.
+> 
+>> Using the difference (util - util_est) will therefore give these properties to the boost signal:
+>> * no boost will be applied as long as the task has a constant or decreasing duty cycle.
+>>
+>> * when we can detect that the duty cycle increases, we temporarily increase the frequency.
+>>    We start with a slight increase, and the longer we wait for the current period to finish,
+>>    the more we boost, since the more likely it is that the task has a much larger duty cycle
+>>    than anticipated. More specifically, the evaluation of "how much more" is done the exact
+>>    same way as it is done for PELT, since the dynamic of the boost is "inherited" from PELT.
+> 
+> Right, because as long it keeps running, util_est will not be changed,
+> so the difference will continue to increase.
+> 
+> What I don't see is how that that difference makes sense as input to:
+> 
+>    cost(x) : (1 + x) * cost_j
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+The actual input is:
+x = (EM_COST_MARGIN_SCALE/SCHED_CAPACITY_SCALE) * (util - util_est)
 
---ikeVEW9yuYc//A+q
-Content-Type: application/pgp-signature; name="signature.asc"
+Since EM_COST_MARGIN_SCALE == SCHED_CAPACITY_SCALE == 1024, this factor 
+of 1 is not directly reflected in the code but is important for units 
+consistency.
 
------BEGIN PGP SIGNATURE-----
+Non-zero x means that we are going to allow spending more energy than 
+what schedutil currently thinks of being the minimal energy.
+(it's actually not that minimal, since we have this 1.25 factor, plus 
+the fact that we use util_est.enqueued, which will always over-estimate 
+the actual util of the task).
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2ppRMACgkQJNaLcl1U
-h9AQ0Qf/YJW+4sFCOojivciJSSqs/v5S0eCBH3F74e648ET8wW+lGP6d7Wabk09w
-lkvEnfxTqHUbDCKBN9GqkOKINxccWUlw4iSlPh24Z0J90Z/jXq0WpnzIxLyviQJh
-J0mDFLrAO1TU7Bu8Hq0qnjA9TFVL7ZtBJS4ShzCgTWzIZAa02VbIDYzE3sC3YhT1
-JJpkMq76noTi2LW9Rb6gsO+WXkDYrWxf9s3PKCkEyrVqRas+l01sYed8YQ/X4doW
-D6tb542gwAIlCEu7QM+XU3Gkdi3a/h3t0RM/SW4cMifuWlcXndcApzsmtslwfQSx
-dRCApMxr2BQbuHDWW3uWdE9VIk8Wow==
-=PYPe
------END PGP SIGNATURE-----
+> 
+> I suppose that limits the additional OPP to twice the previously
+> selected cost / efficiency (see the confusion from that other email).
+> But given that efficency drops (or costs rise) for higher OPPs that
+> still doesn't really make sense..
+Yes, this current limit to +100% freq boosting is somehow arbitrary and 
+could probably benefit from being tunable in some way (Kconfig option 
+maybe). When (margin > 0), we end up selecting an OPP that has a higher 
+cost than the one strictly required, which is expected. The goal is to 
+speed things up at the expense of more power consumed to achieve the 
+same work, hence at a lower efficiency (== higher cost).
 
---ikeVEW9yuYc//A+q--
+That's the main reason why this boosting apply a margin on the cost of 
+the selected OPP rather than just inflating the util. This allows 
+controlling directly how much more power (battery life) we are going to 
+spend to achieve some work that we know could be achieved with less 
+power. This "how much more" is the margin. A policy for such boosting 
+must obviously be quite picky in when it decides to boost (not boosting 
+all the time). Decreasing the amount of negative slack is one situation 
+where spending a bit more power to ensure the work is done in time can 
+be more important than just efficiency, within reasonable limits. (the 
+eternal efficiency vs throughput vs latency trade-off).
+
+> 
+>> Now if the task is aperiodic, the boost will allow reaching the highest frequency faster,
+>> which may or may not be desired. Ultimately, it's not more or less wrong than just picking
+>> the freq based on util_est alone, since util_est is already somewhat meaningless for aperiodic
+>> tasks. It just allows reaching the max freq at some point without waiting for too long, which is
+>> all what we can do without more info on the task.
+>>
+>> When applying these boosting rules on the runqueue util signals, we are able to detect if at least one
+>> task needs boosting according to these rules. That only holds as long as the history we look at is
+>> the result of a stable set of tasks, i.e. no tasks added or removed from the rq.
+> 
+> So while I agree that 2) is a reasonable signal to work from, everything
+> that comes after is still much confusing me.
+
+
+"Now if the task is aperiodic ...": What I mean by that is that AFAIK, 
+there isn't really any fundamentally right or wrong way of choosing 
+frequencies if the tasks we are dealing with are not periodic, unless 
+you add more constraints to the problem. We currently base the decision 
+on an overestimation of some kind of average running time per second of 
+the task. The average being the EWMA implemented by PELT, not to be 
+confused with util_est.ewma that adds an extra EWMA on top.
+
+What "window" of time used for that average (or EWMA half life in our 
+case) will change the value of the average for aperiodic tasks. The 
+choice of that half life is driven by how much of the task history we 
+want to take into account. That is driven by how often we expect tasks 
+to change their "execution profile" on average so to speak (a thread 
+pool picking disparate work items at random would change its profile 
+very often for example).
+
+Once this window or half life is chosen, we can ensure that the CPU will 
+use a frequency high enough to avoid work piling up more than what can 
+be computed using a simple proportional controller. The goal of the 
+schedutil controller is to make sure that:
+current CPU capa == current util * 1.25
+
+All that to say that in the aperiodic case, some pieces of the setup are 
+directly provided by the policy (PELT half life), which are empirically 
+determined to perform well, without any way of computing an provably 
+optimal value (unless we know for sure exactly when a task is going to 
+change its workload and CPU share it will require). For periodic tasks, 
+we can compute the exact frequency that will lead to using 100% of the 
+CPU just by looking at the duty cycle of the tasks, and that's more or 
+less what schedutil does.
+
+
+"When applying these boosting rules on the runqueue util signals ...":
+Assuming the set of enqueued tasks stays the same between 2 observations 
+from schedutil, if we see the rq util_avg increase above its 
+util_est.enqueued, that means that at least one task had its util_avg go 
+above util_est.enqueued. We might miss some boosting opportunities if 
+some (util - util_est) compensates:
+TASK_1(util - util_est) = - TASK_2(util - util_est)
+but working on the aggregated value is much easier in schedutil, to 
+avoid crawling the list of entities.
