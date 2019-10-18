@@ -2,108 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5ADC203
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 12:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B228DC2A5
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 12:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442378AbfJRKDf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 06:03:35 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:60546 "EHLO foss.arm.com"
+        id S1726728AbfJRKTy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 06:19:54 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:33568 "EHLO foss.arm.com"
         rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2389081AbfJRKDf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 06:03:35 -0400
+        id S2387890AbfJRKTy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 18 Oct 2019 06:19:54 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E944494;
-        Fri, 18 Oct 2019 03:03:10 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (unknown [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE8F43F6C4;
-        Fri, 18 Oct 2019 03:03:08 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 11:03:04 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1B0BAB6;
+        Fri, 18 Oct 2019 03:19:31 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4C6C3F6C4;
+        Fri, 18 Oct 2019 03:19:30 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 11:19:24 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 01/13] cpuidle: psci: Fix potential access to unmapped
- memory
-Message-ID: <20191018100304.GA28830@e121166-lin.cambridge.arm.com>
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-2-ulf.hansson@linaro.org>
- <20191018093839.GB25918@e121166-lin.cambridge.arm.com>
- <CAPDyKFqcHY6+Eq9d6xTPYMDrUOtGs+64YuwZ1EbFtqQZe0+xEw@mail.gmail.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
+ before freeing
+Message-ID: <20191018101924.GA25540@bogus>
+References: <20191017163503.30791-1-sudeep.holla@arm.com>
+ <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
+ <CAJZ5v0h0ioEZqLuaW1jz_8jRuGYZLQS3fbpv9ctyV9ucXb1WiA@mail.gmail.com>
+ <20191018055533.GC31836@e107533-lin.cambridge.arm.com>
+ <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqcHY6+Eq9d6xTPYMDrUOtGs+64YuwZ1EbFtqQZe0+xEw@mail.gmail.com>
+In-Reply-To: <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 11:51:11AM +0200, Ulf Hansson wrote:
-> On Fri, 18 Oct 2019 at 11:38, Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com> wrote:
-> >
-> > On Thu, Oct 10, 2019 at 01:39:25PM +0200, Ulf Hansson wrote:
-> > > When the WFI state have been selected, the in-parameter idx to
-> > > psci_enter_idle_state() is zero. In this case, we must not index the state
-> > > array as "state[idx - 1]", as it means accessing data outside the array.
-> > > Fix the bug by pre-checking if idx is zero.
-> > >
-> > > Fixes: 9ffeb6d08c3a ("PSCI: cpuidle: Refactor CPU suspend power_state parameter handling")
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >  drivers/cpuidle/cpuidle-psci.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > index f3c1a2396f98..2e91c8d6c211 100644
-> > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > @@ -27,10 +27,10 @@ static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> > >  static int psci_enter_idle_state(struct cpuidle_device *dev,
-> > >                               struct cpuidle_driver *drv, int idx)
-> > >  {
-> > > -     u32 *state = __this_cpu_read(psci_power_state);
-> > > +     u32 *states = __this_cpu_read(psci_power_state);
-> > > +     u32 state = idx ? states[idx - 1] : 0;
-> > >
-> > > -     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
-> > > -                                        idx, state[idx - 1]);
-> > > +     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
-> >
-> > Technically we don't dereference that array entry but I agree this
-> > is ugly and potentially broken.
+On Fri, Oct 18, 2019 at 11:32:47AM +0530, Viresh Kumar wrote:
+> On 18-10-19, 06:55, Sudeep Holla wrote:
+> > On Thu, Oct 17, 2019 at 11:26:54PM +0200, Rafael J. Wysocki wrote:
+> > > On Thu, Oct 17, 2019 at 9:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > >
+> > > > > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
+> > > > > which schedule policy update work. It may end up racing with the freeing
+> > > > > the policy and unregistering the driver.
+> > > > >
+> > > > > One possible race is as below where the cpufreq_driver is unregistered
+> > > > > but the scheduled work gets executed at later stage when cpufreq_driver
+> > > > > is NULL(i.e. after freeing the policy and driver)
+> > > > >
+> > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
+> > > > > pgd = (ptrval)
+> > > > > [0000001c] *pgd=80000080204003, *pmd=00000000
+> > > > > Internal error: Oops: 206 [#1] SMP THUMB2
+> > > > > Modules linked in:
+> > > > > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
+> > > > > Hardware name: ARM-Versatile Express
+> > > > > Workqueue: events handle_update
+> > > > > PC is at cpufreq_set_policy+0x58/0x228
+> > > > > LR is at dev_pm_qos_read_value+0x77/0xac
+> > > > > Control: 70c5387d  Table: 80203000  DAC: fffffffd
+> > > > > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
+> > > > >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
+> > > > >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
+> > > > >         (handle_update) from (process_one_work+0x16d/0x3cc)
+> > > > >         (process_one_work) from (worker_thread+0xff/0x414)
+> > > > >         (worker_thread) from (kthread+0xff/0x100)
+> > > > >         (kthread) from (ret_from_fork+0x11/0x28)
+> > > > >
+> > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > > > ---
+> > > > >  drivers/cpufreq/cpufreq.c | 3 +++
+> > > > >  1 file changed, 3 insertions(+)
+> > > > >
+> > > > > Hi Rafael, Viresh,
+> > > > >
+> > > > > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
+> > > > > I have based this patch on -rc3 and not on top of your patches. This
+> > > > > only fixes the boot issue but I hit the other crashes while continuously
+> > > > > switching on and off the bL switcher that register/unregister the driver
+> > > > > Your patch series fixes them. I can based this on top of those if you
+> > > > > prefer.
+> > > > >
+> > > > > Regards,
+> > > > > Sudeep
+> > > > >
+> > > > > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
+> > > > >
+> > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > > > index c52d6fa32aac..b703c29a84be 100644
+> > > > > --- a/drivers/cpufreq/cpufreq.c
+> > > > > +++ b/drivers/cpufreq/cpufreq.c
+> > > > > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> > > > >         }
+> > > > >
+> > > > >         dev_pm_qos_remove_request(policy->min_freq_req);
+> > > > > +       /* flush the pending policy->update work before freeing the policy */
+> > > > > +       if (work_pending(&policy->update))
+> > > >
+> > > > Isn't this racy?
+> > > >
+> > > > It still may be running if the pending bit is clear and we still need
+> > > > to wait for it then, don't we?
+> > > >
+> > > > Why don't you do an unconditional flush_work() here?
+> > > 
+> > > You may as well do a cancel_work_sync() here, because whether or not
+> > > the last update of the policy happens before it goes away is a matter
+> > > of timing in any case
+> > 
+> > In fact that's the first thing I tried to fix the issue I was seeing.
+> > But I then thought it would be better to complete the update as the PM
+> > QoS were getting updated back to DEFAULT values for the device. Even
+> > this works.
+> > 
+> > What is your preference ? flush_work or cancel_work_sync ? I will
+> > update accordingly. I may need to do some more testing with
+> > cancel_work_sync as I just checked that quickly to confirm the race.
 > 
-> No sure understand the non-deference part.
-> 
-> If the governor selects WFI, the idx will be 0 - and thus we end up
-> using state[-1], doesn't that dereference an invalid address, no?
+> As I said in the other email, this work didn't come as a result of
+> removal of the qos request from cpufreq core and so must have come
+> from other thermal or similar events.
 
-No because CPU_PM_CPU_IDLE_ENTER_PARAM is a macro, the code it
-preprocesses to won't dereference state[idx - 1] if idx == 0.
+I don't think so. For sure not because of any thermal events. I didn't
+have log handy and hence had to wait till I was next to hardware.
 
-I agree it is *very* ugly but technically code is not broken.
+This is log:
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
+ cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
+ cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
+ cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
+ cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
+ cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
 
-> > My preference is aligning it with ACPI code and allocate one more
-> > entry in the psci_power_state array (useless for wfi, agreed but
-> > at least we remove this (-1) handling from the code).
-> 
-> I can do that, but sounds like a slightly bigger change. Are you fine
-> if I do that on top, so we can get this sent as fix for v5.4-rc[n]?
+So if I move the call above, it still crashes as the work is getting
+scheduled later.
 
-Technically we are not fixing anything; it is not such a big
-change, we need to allocate one entry more and update the array
-indexing.
-
-Lorenzo
+--
+Regards,
+Sudeep
