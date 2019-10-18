@@ -2,101 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C8ADBC1E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 06:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD64DBC1C
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 06:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406837AbfJREzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2407142AbfJREzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 18 Oct 2019 00:55:47 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37961 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbfJREzq (ORCPT
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:2690 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392808AbfJREzq (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 00:55:46 -0400
-Received: by mail-qt1-f195.google.com with SMTP id j31so7329265qta.5
-        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 21:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4JOjG0QUc189P6/WaRSOoK29dlyby423TPDBlUfjjUI=;
-        b=Lziqmfp58ruDPDlAnaXX9i3ImvrJ8f7RhL0uRY6ovTLudo2mORUTvpbSWzM8/XTFPO
-         dFk8WHRs3OF1tEwWHvb5wuKYHlZxMfAclM17/kR0QbxAuHs7cADgAJjT9R1tHPgjrTnM
-         xjiO0KIFnQ7x6SlBm+hzBJRqmoyBnMOnImt+wR3FFhuS3wSEn1dLHiMzmktM4NPZVdRN
-         WbHdFR3JDDRHZdjoaQCCVz0Dk1C3wyUMSqNmcQKVoe8DL4xYTP5PfAInbys6MErXbD63
-         XO4rlKOJ4DA9Rc1pmJIHasULYT7aZfsuszsQdsQl1QMr6HTEFVABmCyYEKW7g+GaCzgO
-         pYOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4JOjG0QUc189P6/WaRSOoK29dlyby423TPDBlUfjjUI=;
-        b=U8khALNINWM9a+CHDHoG6UGwI5PcGJvcPeJkT1gtOF/U0b4Z8sbswvs/aYndy3Wslx
-         xZX3PouR/5qmKAFfVdEYAh5EZQFwglnIT8Pwg5xZ8mmCeRepHXslaLuKAPX5oUAb4ubJ
-         DtMu4EkgnckIrhEzK+dqOLUPXoCyu+qppSkjNCtqzHA4ZfEXTeHaYmB1dQ/yxxLtPN5c
-         wedTldOdAy7TJl1kBBr8lkNRgADMarYJqIdRbk3WXMHSewdO6HAFceE4N0xJ/sNITC+i
-         68Jyez5cTau28FVqADGAJvEGFZddnwt456bFJu6fdIjrWBFL2KNiaVbz6b6GMSkncROq
-         qCnA==
-X-Gm-Message-State: APjAAAU4wQ8ioVmgJSC8AM3+X+/bq3Wlfg+s5JRzJCUOVOX86FeJnjof
-        VukEkjs13s8uzP9ZpnNcfrIayql50F4=
-X-Google-Smtp-Source: APXvYqyuPtcqnmg+CxjS4b/CVJ38AAAsq1UNlBTr0YiXF/SJVY0vvLvaK1ceDkGa1t8Y8jOOs66R6w==
-X-Received: by 2002:a63:3d41:: with SMTP id k62mr7844596pga.129.1571374241418;
-        Thu, 17 Oct 2019 21:50:41 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id q2sm8125639pfg.144.2019.10.17.21.50.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 21:50:40 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 10:20:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] cpufreq: powernv: fix stack bloat and NR_CPUS limitation
-Message-ID: <20191018045038.cytb46msqzmu4age@vireshk-i7>
-References: <20191018000431.1675281-1-jhubbard@nvidia.com>
- <20191018042715.f76bawmoyk66isap@vireshk-i7>
- <c3f16019-5724-a181-8068-8dda60fb67fa@nvidia.com>
- <20191018043856.srvgft6jhqw62bx3@vireshk-i7>
- <a4a1467f-2c92-34f2-a8bf-718feaa17da7@nvidia.com>
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5da945d60000>; Thu, 17 Oct 2019 21:55:50 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 17 Oct 2019 21:55:45 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 17 Oct 2019 21:55:45 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Oct
+ 2019 04:55:45 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 18 Oct 2019 04:55:45 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5da945d10003>; Thu, 17 Oct 2019 21:55:45 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Preeti U Murthy <preeti@linux.vnet.ibm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        <linux-pm@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: [PATCH v2] cpufreq: powernv: fix stack bloat and NR_CPUS limitation
+Date:   Thu, 17 Oct 2019 21:55:39 -0700
+Message-ID: <20191018045539.3765565-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4a1467f-2c92-34f2-a8bf-718feaa17da7@nvidia.com>
-User-Agent: NeoMutt/20180716-391-311a52
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1571374550; bh=df18Gs5j3cwrHl5PwObGl2FSzw7tZwBe+5B9upV/qmU=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=WlTqEoi5Gs0evA3sLhhGZhfcxwx3m/vSQElv4bqkxcVwKpJJr19qDRntWBEMKxukr
+         pvDQ8O0f8J0Y0ueNopFf/SiMkUxcKJWUMbyucxzHNsumK+iBvAMwN6k1LFlyMgKhuK
+         QMB93N+E2Rz3FittCdYokclkYTAA7YRoW0o6AkQhwCI8n6HZADPwqGZSl55kv/oQN7
+         /7avi+Xqhrt8s/39ZIs70NEca9ePo3eccO4OhblbWS3XWTaSNG6KO1GAZa0A52UTRO
+         hU0PkUcGepqdlRb1NlIKtyGwVnfJiWQWKNqFRQBisPvefqIsZNaxio6Y6pAl9kPvTf
+         /92RK4C9M0l3Q==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-10-19, 21:41, John Hubbard wrote:
-> On 10/17/19 9:38 PM, Viresh Kumar wrote:
-> > On 17-10-19, 21:34, John Hubbard wrote:
-> >> On 10/17/19 9:27 PM, Viresh Kumar wrote:
-> >>> On 17-10-19, 17:04, John Hubbard wrote:
-> >>>> The following build warning occurred on powerpc 64-bit builds:
-> >>>>
-> >>>> drivers/cpufreq/powernv-cpufreq.c: In function 'init_chip_info':
-> >>>> drivers/cpufreq/powernv-cpufreq.c:1070:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> >>>
-> >>> How come we are catching this warning after 4 years ?
-> >>>
-> >>
-> >> Newer compilers. And btw, I don't spend a lot of time in powerpc
-> >> code, so I just recently ran this, and I guess everyone has been on less
-> >> new compilers so far, it seems.
-> >>
-> >> I used a gcc 8.1 cross compiler in this case:
-> > 
-> > Hmm, okay.
-> > 
-> > I hope you haven't missed my actual review comments on your patch,
-> > just wanted to make sure we don't end up waiting for each other
-> > indefinitely here :)
-> > 
-> 
-> Ha, I did overlook those. It's late around here, I guess. :)
+The following build warning occurred on powerpc 64-bit builds:
 
-Good that I reminded you then :)
+drivers/cpufreq/powernv-cpufreq.c: In function 'init_chip_info':
+drivers/cpufreq/powernv-cpufreq.c:1070:1: warning: the frame size of 1040 b=
+ytes is larger than 1024 bytes [-Wframe-larger-than=3D]
 
--- 
-viresh
+This is due to putting 1024 bytes on the stack:
+
+    unsigned int chip[256];
+
+...and while looking at this, it also has a bug: it fails with a stack
+overrun, if CONFIG_NR_CPUS > 256.
+
+Fix both problems by dynamically allocating based on CONFIG_NR_CPUS.
+
+Fixes: 053819e0bf840 ("cpufreq: powernv: Handle throttling due to Pmax capp=
+ing at chip level")
+Cc: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Cc: Preeti U Murthy <preeti@linux.vnet.ibm.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: linux-pm@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+
+Changes since v1: includes Viresh's review commit fixes.
+
+ drivers/cpufreq/powernv-cpufreq.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cp=
+ufreq.c
+index 6061850e59c9..5b2e968cb5ea 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -1041,9 +1041,14 @@ static struct cpufreq_driver powernv_cpufreq_driver =
+=3D {
+=20
+ static int init_chip_info(void)
+ {
+-	unsigned int chip[256];
++	unsigned int *chip;
+ 	unsigned int cpu, i;
+ 	unsigned int prev_chip_id =3D UINT_MAX;
++	int ret =3D 0;
++
++	chip =3D kcalloc(CONFIG_NR_CPUS, sizeof(*chip), GFP_KERNEL);
++	if (!chip)
++		return -ENOMEM;
+=20
+ 	for_each_possible_cpu(cpu) {
+ 		unsigned int id =3D cpu_to_chip_id(cpu);
+@@ -1055,8 +1060,10 @@ static int init_chip_info(void)
+ 	}
+=20
+ 	chips =3D kcalloc(nr_chips, sizeof(struct chip), GFP_KERNEL);
+-	if (!chips)
+-		return -ENOMEM;
++	if (!chips) {
++		ret =3D -ENOMEM;
++		goto free_and_return;
++	}
+=20
+ 	for (i =3D 0; i < nr_chips; i++) {
+ 		chips[i].id =3D chip[i];
+@@ -1066,7 +1073,9 @@ static int init_chip_info(void)
+ 			per_cpu(chip_info, cpu) =3D  &chips[i];
+ 	}
+=20
+-	return 0;
++free_and_return:
++	kfree(chip);
++	return ret;
+ }
+=20
+ static inline void clean_chip_info(void)
+--=20
+2.23.0
+
