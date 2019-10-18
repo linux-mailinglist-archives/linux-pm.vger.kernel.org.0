@@ -2,174 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C26E4DCF10
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 21:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B234ADCF51
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 21:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443268AbfJRTJA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 15:09:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59168 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2443216AbfJRTI7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 15:08:59 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD7F2222C9;
-        Fri, 18 Oct 2019 19:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571425738;
-        bh=GmnsYtHJlL/5yxZfKlw6PRpT4uy/4qUReZoxvsBsi1A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Yzkb7O7kToMr9ftoJIsljRgPzqeY2SH+sT26HuU4kIKWFrb7ilYaeEZRB+M/FrexE
-         MEZ21PsBxIZ12PSDEx0CTVd+lU+RIc+As8k86sYzqoxW/lMHMMx+o17Yq1/qTabGIG
-         MPkvil9K++tYpUbqFk9N8tfSNy7Gz9RCledj00r0=
-Received: by mail-qk1-f182.google.com with SMTP id 71so2430896qkl.0;
-        Fri, 18 Oct 2019 12:08:57 -0700 (PDT)
-X-Gm-Message-State: APjAAAWPTGVIErsQpV9L5ULLQxS7fJPsfviO5YoaqomYYv5JvXN77GKk
-        WOZEGGhkQS0+TkwdpFWfXnD+i2N4olAwskpABg==
-X-Google-Smtp-Source: APXvYqzvveMwPyNyUPS6FKiuGC/+W7xzJ9dudNA/QUPWCwfDT6mTtkpqAPxNed471TqkRHs19WUG0vAz2nR9XcZAlYU=
-X-Received: by 2002:a05:620a:12b4:: with SMTP id x20mr6347242qki.254.1571425736980;
- Fri, 18 Oct 2019 12:08:56 -0700 (PDT)
+        id S2437634AbfJRTc6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 15:32:58 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:37369 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394807AbfJRTc6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 15:32:58 -0400
+Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1N5UoU-1hx1rB0p0k-016tR7; Fri, 18 Oct 2019 21:32:55 +0200
+Received: by mail-qk1-f179.google.com with SMTP id u184so6377750qkd.4;
+        Fri, 18 Oct 2019 12:32:54 -0700 (PDT)
+X-Gm-Message-State: APjAAAWOMUseeQAnmf5ePLjWA4QTqPmO0TGTh8vzYVIg+mSZ45wpLuT4
+        58u8s2senhYMMa3qH1GwOLEUY2VGgyDQeT6vYe0=
+X-Google-Smtp-Source: APXvYqzndIi4+lrEFsQAJTvDSAykrBEjXYWBlihPsFokm/QiIqztK3NntxmM4iVAVoSe7PNdrIRvDpgwbQhfLS5cKrs=
+X-Received: by 2002:a37:db0a:: with SMTP id e10mr10369877qki.3.1571427173049;
+ Fri, 18 Oct 2019 12:32:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191017071234.8719-1-brgl@bgdev.pl> <20191017071234.8719-4-brgl@bgdev.pl>
- <20191017183543.GA28403@bogus> <CAMpxmJUMgqocphdPhS_zCYX3ib_hnwhnhBfQEVaY8hnpi4vxQg@mail.gmail.com>
-In-Reply-To: <CAMpxmJUMgqocphdPhS_zCYX3ib_hnwhnhBfQEVaY8hnpi4vxQg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 18 Oct 2019 14:08:45 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKCbFWsozuaUbz5nBYUUT_jUtP03qRQ8Y9eGVs1knf77A@mail.gmail.com>
-Message-ID: <CAL_JsqKCbFWsozuaUbz5nBYUUT_jUtP03qRQ8Y9eGVs1knf77A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] dt-bindings: regulator: max77650: convert the
- binding document to yaml
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
+References: <20191018154052.1276506-1-arnd@arndb.de> <87v9slg9k5.fsf@belgarion.home>
+ <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 18 Oct 2019 21:32:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+Message-ID: <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
+To:     Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:x6rjh/SYhkhVXFY7sn38XpS2jNl7mZ+ZSAgBlTmeuBIEAqo8moQ
+ ZloY0yHOr0VObCTuKLP4a+2rBvJkW653ZyzZa/eWVN3/Ovj/BNRg9Ewp1Qf7rCBMO8Hhk1D
+ iwosZq0hvegBArF9MtuUzikr1dATmDPGh2GE3ojjjAh3L/xbOPWehNtgUykguhtLo25ub3e
+ Gh9uYlRVvIqPMYEpjyOxg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xqW7pTXOCNI=:B+AiqXxm34TeJktaofJfOW
+ XqUjplt4t0CUZ2O55g6B1bgZZacd+rT+JuPTFvuaVx1dQM1GrEbNii30aJz0qTY/9r2GHRVUi
+ OvSlVnq3juFgtcY+5TmDRWP+EjFL1/t5QgjdUXDpsAc1iUjtxFwuDKrEFw+SMqJFj+Evb4M8L
+ 7wbYHomgQQY+uoWcF9O5DLciqMHlDIzbauOi8Lb8bts8RuWV8MWXNKV6pySMZBfkvYKfVY6Id
+ dRjDuhZDsgP5jWCbtzO12OqzKnxMnZUkvtuNqE907owCD6DW0lhUjJdXJhyg1DtnUR53aLxXm
+ uyT/qud2H90oWDD31hBeJ6MHXUOHppefVXVH9rJMm26ZRkgxdiioxTD1OTJ3EFcBSYEbMiSdD
+ m5KrdOruT25lSFB4y/FukEE5zBpl7S+BgJvHFF6Lpzaci4tD8YF/Hro/LlSi2jylbMPpLzp0o
+ KFXy7N7zXVPStE+nf8LQ+jE3PgkeG0V+cB2bFyTkuUjr3n3f0q/2MDNhY0CG1kmgrpZlzzT3C
+ nFqWmIbnG7sOILmVeWRjrQKFkoHeOzeRBURJlkJHZ3Gutmq6dZJlxibBGXhwRR/y/DLzj1lOO
+ nJSr90gM3rzdbOXgkUqkX6zqSQRolgGoHmR78xCiWTiTij+CXnBDpAbXF7ph7vNR8G4br9z3F
+ 7GSqCWBHVQSTXQR8mPCBUBGRHGWz00P0gLcFNQnu04PqT8bERSnbgL6kj6jQEO2gPIvxVswEo
+ KaV2YTmOgsEA8o5SRMsZ1yI0YtaDQ+9tFZs7P8kssy4pBkyQoodTbi6OXh3O/ve4sCf1oXpS0
+ hLIQTF7A215Fx0yevnxC4Wa+lLYgROb6ZPDKBCkqsk9/rn4KMZ6nxOo4JptuWrj4WMJY71M9w
+ TgvMufS3940rCabHvzVQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 1:45 AM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
+On Fri, Oct 18, 2019 at 9:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Fri, Oct 18, 2019 at 9:04 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
+> > Arnd Bergmann <arnd@arndb.de> writes:
+> >
+> > > Hi PXA maintainers,
+> > >
+> > > I'm in the process of getting the old ARM platforms to all build
+> > > in a single kernel. The largest part of that work is changing all
+> > > the device drivers to no longer require mach/*.h header files.
+> > >
+> > > This series does it for arch/pxa/.
+> > >
+> > > As with the omap1 and s3c24xx series I sent before, I don't
+> > > expect this all to be correct in the first version, though
+> > > a lot of the patches are fairly simple and I did exhaustive
+> > > compile-time testing on them.
+> > >
+> > > Please test if you have the hardware, or review!
+> >
+> > Hi Arnd,
+> >
+> > Would you have a git tree I can pull from ?
+> > That would make my life easier than applying manually 46 patches...
 >
-> czw., 17 pa=C5=BA 2019 o 20:35 Rob Herring <robh@kernel.org> napisa=C5=82=
-(a):
-> >
-> > On Thu, Oct 17, 2019 at 09:12:31AM +0200, Bartosz Golaszewski wrote:
-> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > >
-> > > Convert the binding document for MAX77650 regulator module to YAML.
-> > >
-> > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > ---
-> > >  .../bindings/regulator/max77650-regulator.txt | 41 -----------------=
---
-> > >  .../regulator/max77650-regulator.yaml         | 31 ++++++++++++++
-> > >  2 files changed, 31 insertions(+), 41 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/regulator/max77=
-650-regulator.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/regulator/max77=
-650-regulator.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/regulator/max77650-reg=
-ulator.txt b/Documentation/devicetree/bindings/regulator/max77650-regulator=
-.txt
-> > > deleted file mode 100644
-> > > index f1cbe813c30f..000000000000
-> > > --- a/Documentation/devicetree/bindings/regulator/max77650-regulator.=
-txt
-> > > +++ /dev/null
-> > > @@ -1,41 +0,0 @@
-> > > -Regulator driver for MAX77650 PMIC from Maxim Integrated.
-> > > -
-> > > -This module is part of the MAX77650 MFD device. For more details
-> > > -see Documentation/devicetree/bindings/mfd/max77650.txt.
-> > > -
-> > > -The regulator controller is represented as a sub-node of the PMIC no=
-de
-> > > -on the device tree.
-> > > -
-> > > -The device has a single LDO regulator and a SIMO buck-boost regulato=
-r with
-> > > -three independent power rails.
-> > > -
-> > > -Required properties:
-> > > ---------------------
-> > > -- compatible:                Must be "maxim,max77650-regulator"
-> > > -
-> > > -Each rail must be instantiated under the regulators subnode of the t=
-op PMIC
-> > > -node. Up to four regulators can be defined. For standard regulator p=
-roperties
-> > > -refer to Documentation/devicetree/bindings/regulator/regulator.txt.
-> > > -
-> > > -Available regulator compatible strings are: "ldo", "sbb0", "sbb1", "=
-sbb2".
-> > > -
-> > > -Example:
-> > > ---------
-> > > -
-> > > -     regulators {
-> > > -             compatible =3D "maxim,max77650-regulator";
-> > > -
-> > > -             max77650_ldo: regulator@0 {
-> > > -                     regulator-compatible =3D "ldo";
-> > > -                     regulator-name =3D "max77650-ldo";
-> > > -                     regulator-min-microvolt =3D <1350000>;
-> > > -                     regulator-max-microvolt =3D <2937500>;
-> > > -             };
-> > > -
-> > > -             max77650_sbb0: regulator@1 {
-> > > -                     regulator-compatible =3D "sbb0";
-> > > -                     regulator-name =3D "max77650-sbb0";
-> > > -                     regulator-min-microvolt =3D <800000>;
-> > > -                     regulator-max-microvolt =3D <1587500>;
-> > > -             };
-> > > -     };
-> > > diff --git a/Documentation/devicetree/bindings/regulator/max77650-reg=
-ulator.yaml b/Documentation/devicetree/bindings/regulator/max77650-regulato=
-r.yaml
-> > > new file mode 100644
-> > > index 000000000000..a8770742836d
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.=
-yaml
-> > > @@ -0,0 +1,31 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/regulator/max77650-regulator.yaml=
-#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Regulator driver for MAX77650 PMIC from Maxim Integrated.
-> > > +
-> > > +maintainers:
-> > > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > +
-> > > +description: |
-> > > +  This module is part of the MAX77650 MFD device. For more details
-> > > +  see Documentation/devicetree/bindings/mfd/max77650.txt.
-> >
-> > .yaml?
-> >
+> I've now pushed it to
 >
-> Is there any better way of referencing the main document than
-> mentioning it in the description?
+> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
+> pxa-multiplatform
 
-No.
+Sorry for the duplication, I had some problems with email configuration
+so my reply got rejected, let's see if it goes through this time.
 
-Rob
+       Arnd
