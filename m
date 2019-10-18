@@ -2,128 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B12DBD51
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 07:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EC3DBD56
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 07:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392030AbfJRF4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 01:56:11 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:55370 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1733227AbfJRF4L (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 01:56:11 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D34B329;
-        Thu, 17 Oct 2019 22:55:46 -0700 (PDT)
-Received: from e107533-lin.cambridge.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCD643F68E;
-        Thu, 17 Oct 2019 22:58:30 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 06:55:33 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
- before freeing
-Message-ID: <20191018055533.GC31836@e107533-lin.cambridge.arm.com>
-References: <20191017163503.30791-1-sudeep.holla@arm.com>
- <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
- <CAJZ5v0h0ioEZqLuaW1jz_8jRuGYZLQS3fbpv9ctyV9ucXb1WiA@mail.gmail.com>
+        id S2404124AbfJRF5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 01:57:24 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:44724 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389894AbfJRF5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 01:57:24 -0400
+Received: by mail-pl1-f195.google.com with SMTP id q15so2301987pll.11
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 22:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=yQsGhR9ZGml3wjFEwG0ewcRolEFUUyRHabzESZwufR0=;
+        b=L3LhpGdf5pG0gSoA+vMGqs42dgW5Xj0gFs2q1JmiT4zdXa66VUDh3cq0F6whgWX542
+         aa1L2JPpCuGkqopFEjwrzviWP9iRDxmakcHM66C9gPX9SUjyEFcpN+4VHoy1Kmm827zs
+         oaq/qkpGrL/SLHikRsdpwKmTSMXBlSB7Q7xDspkX70nN5q75CKdJUQ2Iyt0aoDMWxa5J
+         sFBxHg0z07uRza1XeGgG3OD7pPd5C8WIzpPv+Rw/HCd+Fwe30kiCCs4b2ES4iTMB9zcf
+         3g83yd7uGce12d6YmTM5qcpvHUFIcmMUynW/9hnlKHZPh0bxrJutMczcegOui83MvbyY
+         kmaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yQsGhR9ZGml3wjFEwG0ewcRolEFUUyRHabzESZwufR0=;
+        b=cp2lPQyoNkhb1LtV94PQlkcsHB1kKnQaGiRNqmjpBqmHAJixxfBiFJmPDli4vScxCr
+         OXPYgqRue7OMq/bMmbrOFt3JzUYKTeD9y0mRkME5EawethmaPzmYNxRzw0wNoBdLfgIL
+         axsvO9Lh6Ogh6DpKFjauvW7hWhhwOSTBMN/Rp6jHArFx20RVamCJ6Y8fr4kRyFRm1mpX
+         WGzgQTxkajAf0m/hCctQSj9pdOFpUglBZUWNlN/vdxJCkPnTUtuvr446eaOtnYjPAZ8j
+         Exq2ycuiZirs5ArMNwDk7JT9dOUKkmuW38Qcj4/4Slm1P8/MeWbAm0FkNCDO2bSETFpZ
+         UAMQ==
+X-Gm-Message-State: APjAAAWNa3dZo8FXwGJboG93DQeOok3grCBFwAo2asHBBINva5SmTdeV
+        i1zh1/kHMSg6DdSrAHFKXPTqBg==
+X-Google-Smtp-Source: APXvYqxbEOwe/5sQAtSoS3rk+tKMk5HUg8RZtXjN50F3higpS/vY7FadtxLS4YCI1meSGWtbAk06qA==
+X-Received: by 2002:a17:902:9896:: with SMTP id s22mr8101703plp.2.1571378243286;
+        Thu, 17 Oct 2019 22:57:23 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id r18sm6263453pfc.3.2019.10.17.22.57.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 22:57:22 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 11:27:20 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nico@fluxnic.net
+Subject: Re: [PATCH v2 4/5] cpufreq: vexpress-spc: remove lots of debug
+ messages
+Message-ID: <20191018055720.za3a5zeqdzcupc4h@vireshk-i7>
+References: <20191017123508.26130-1-sudeep.holla@arm.com>
+ <20191017123508.26130-5-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h0ioEZqLuaW1jz_8jRuGYZLQS3fbpv9ctyV9ucXb1WiA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191017123508.26130-5-sudeep.holla@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 11:26:54PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Oct 17, 2019 at 9:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
-> > > which schedule policy update work. It may end up racing with the freeing
-> > > the policy and unregistering the driver.
-> > >
-> > > One possible race is as below where the cpufreq_driver is unregistered
-> > > but the scheduled work gets executed at later stage when cpufreq_driver
-> > > is NULL(i.e. after freeing the policy and driver)
-> > >
-> > > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
-> > > pgd = (ptrval)
-> > > [0000001c] *pgd=80000080204003, *pmd=00000000
-> > > Internal error: Oops: 206 [#1] SMP THUMB2
-> > > Modules linked in:
-> > > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
-> > > Hardware name: ARM-Versatile Express
-> > > Workqueue: events handle_update
-> > > PC is at cpufreq_set_policy+0x58/0x228
-> > > LR is at dev_pm_qos_read_value+0x77/0xac
-> > > Control: 70c5387d  Table: 80203000  DAC: fffffffd
-> > > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
-> > >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
-> > >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
-> > >         (handle_update) from (process_one_work+0x16d/0x3cc)
-> > >         (process_one_work) from (worker_thread+0xff/0x414)
-> > >         (worker_thread) from (kthread+0xff/0x100)
-> > >         (kthread) from (ret_from_fork+0x11/0x28)
-> > >
-> > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > ---
-> > >  drivers/cpufreq/cpufreq.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > Hi Rafael, Viresh,
-> > >
-> > > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
-> > > I have based this patch on -rc3 and not on top of your patches. This
-> > > only fixes the boot issue but I hit the other crashes while continuously
-> > > switching on and off the bL switcher that register/unregister the driver
-> > > Your patch series fixes them. I can based this on top of those if you
-> > > prefer.
-> > >
-> > > Regards,
-> > > Sudeep
-> > >
-> > > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index c52d6fa32aac..b703c29a84be 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > >         }
-> > >
-> > >         dev_pm_qos_remove_request(policy->min_freq_req);
-> > > +       /* flush the pending policy->update work before freeing the policy */
-> > > +       if (work_pending(&policy->update))
-> >
-> > Isn't this racy?
-> >
-> > It still may be running if the pending bit is clear and we still need
-> > to wait for it then, don't we?
-> >
-> > Why don't you do an unconditional flush_work() here?
+On 17-10-19, 13:35, Sudeep Holla wrote:
+> This driver have been used and tested for year now and the extensive
+> debug/log messages in the driver are not really required anymore.
+> Get rid of those unnecessary log messages.
 > 
-> You may as well do a cancel_work_sync() here, because whether or not
-> the last update of the policy happens before it goes away is a matter
-> of timing in any case
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/cpufreq/vexpress-spc-cpufreq.c | 72 +++++---------------------
+>  1 file changed, 13 insertions(+), 59 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
+>  static void put_cluster_clk_and_freq_table(struct device *cpu_dev,
+> @@ -324,11 +296,9 @@ static void put_cluster_clk_and_freq_table(struct device *cpu_dev,
+>  
+>  	for_each_present_cpu(i) {
+>  		struct device *cdev = get_cpu_device(i);
+> -		if (!cdev) {
+> -			pr_err("%s: failed to get cpu%d device\n", __func__, i);
+> -			return;
+> -		}
+>  
+> +		if (!cdev)
+> +			return;
 
-In fact that's the first thing I tried to fix the issue I was seeing.
-But I then thought it would be better to complete the update as the PM
-QoS were getting updated back to DEFAULT values for the device. Even
-this works.
+We had a blank line after this, which isn't there in your version
+anymore. Please keep that here and few more places below.
 
-What is your preference ? flush_work or cancel_work_sync ? I will
-update accordingly. I may need to do some more testing with
-cancel_work_sync as I just checked that quickly to confirm the race.
+>  		_put_cluster_clk_and_freq_table(cdev, cpumask);
+>  	}
+>  
+> @@ -354,19 +324,12 @@ static int _get_cluster_clk_and_freq_table(struct device *cpu_dev,
+>  		goto out;
+>  
+>  	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &freq_table[cluster]);
+> -	if (ret) {
+> -		dev_err(cpu_dev, "%s: failed to init cpufreq table, cpu: %d, err: %d\n",
+> -				__func__, cpu_dev->id, ret);
+> +	if (ret)
+>  		goto out;
+> -	}
+>  
+>  	clk[cluster] = clk_get(cpu_dev, NULL);
+> -	if (!IS_ERR(clk[cluster])) {
+> -		dev_dbg(cpu_dev, "%s: clk: %p & freq table: %p, cluster: %d\n",
+> -				__func__, clk[cluster], freq_table[cluster],
+> -				cluster);
+> +	if (!IS_ERR(clk[cluster]))
+>  		return 0;
+> -	}
+>  
+>  	dev_err(cpu_dev, "%s: Failed to get clk for cpu: %d, cluster: %d\n",
+>  			__func__, cpu_dev->id, cluster);
+> @@ -401,11 +364,9 @@ static int get_cluster_clk_and_freq_table(struct device *cpu_dev,
+>  	 */
+>  	for_each_present_cpu(i) {
+>  		struct device *cdev = get_cpu_device(i);
+> -		if (!cdev) {
+> -			pr_err("%s: failed to get cpu%d device\n", __func__, i);
+> -			return -ENODEV;
+> -		}
+>  
+> +		if (!cdev)
+> +			return -ENODEV;
+>  		ret = _get_cluster_clk_and_freq_table(cdev, cpumask);
+>  		if (ret)
+>  			goto put_clusters;
+> @@ -419,19 +380,14 @@ static int get_cluster_clk_and_freq_table(struct device *cpu_dev,
+>  	clk_big_min = get_table_min(freq_table[0]);
+>  	clk_little_max = VIRT_FREQ(1, get_table_max(freq_table[1]));
+>  
+> -	pr_debug("%s: cluster: %d, clk_big_min: %d, clk_little_max: %d\n",
+> -			__func__, cluster, clk_big_min, clk_little_max);
+> -
+>  	return 0;
+>  
+>  put_clusters:
+>  	for_each_present_cpu(i) {
+>  		struct device *cdev = get_cpu_device(i);
+> -		if (!cdev) {
+> -			pr_err("%s: failed to get cpu%d device\n", __func__, i);
+> -			return -ENODEV;
+> -		}
+>  
+> +		if (!cdev)
+> +			return -ENODEV;
+>  		_put_cluster_clk_and_freq_table(cdev, cpumask);
+>  	}
+>  
+> @@ -500,8 +456,6 @@ static int ve_spc_cpufreq_exit(struct cpufreq_policy *policy)
+>  	}
+>  
+>  	put_cluster_clk_and_freq_table(cpu_dev, policy->related_cpus);
+> -	dev_dbg(cpu_dev, "%s: Exited, cpu: %d\n", __func__, policy->cpu);
+> -
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.17.1
 
---
-Regards,
-Sudeep
+-- 
+viresh
