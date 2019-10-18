@@ -2,132 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E258DBE7F
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 09:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B62DBE62
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 09:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389954AbfJRHhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 03:37:40 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:37236 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728302AbfJRHhk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 03:37:40 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.89 #2 (Debian))
-        id 1iLMoG-0004PG-JE; Fri, 18 Oct 2019 18:36:29 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 18 Oct 2019 18:36:16 +1100
-Date:   Fri, 18 Oct 2019 17:56:23 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Slaby <jslaby@suse.cz>, tglx@linutronix.de,
-        mingo@redhat.com, hpa@zytor.com, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Juergen Gross <jgross@suse.com>, linux-crypto@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v9 24/28] x86_64/asm: Change all ENTRY+ENDPROC to
- SYM_FUNC_*
-Message-ID: <20191018065623.GA15199@gondor.apana.org.au>
-References: <20191011115108.12392-1-jslaby@suse.cz>
- <20191011115108.12392-25-jslaby@suse.cz>
- <20191016071230.GD1138@zn.tnic>
+        id S2504642AbfJRHcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 03:32:19 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38776 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394031AbfJRHcT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 03:32:19 -0400
+Received: by mail-oi1-f193.google.com with SMTP id d140so107680oib.5;
+        Fri, 18 Oct 2019 00:32:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z4xqOeM1YeUE2INYqT11uITzrVuWoTUfm8bOzhEZ/mY=;
+        b=jJRqrneVn/Onz2K3aMMimxKiRNo5MGjJybA0dseLJ9k6lxteJX8nFqCxQSyGNwIyNQ
+         UaP1KkDLAvJfWzCsg82vLJD+Ztb7A56lx70k81SlmexQB3qKtbf5Yv2rBJVgYIH76Thg
+         yioGVR9ALfE+R0HcAlZXGFSX+vV6pEShZocCZ5RqL6Y4R/9kwi1vQirWByIpQRyMz0Ld
+         i9epHPvcWTtpvLlZMd0Q51GxhTHfBq4dMD77CFzU24TpQjitRUB/E0zKGc4A+iP6iET5
+         yw4MkF8OWOmXk1kQ+6t0K53ZjvuooK3hWy3IndFl7b1MvSKIXygdaJYampxUuE4xqRug
+         QSNA==
+X-Gm-Message-State: APjAAAVaswvPjw8hOtt4to2I+/MlsVdj59dtI0e2ri/L3Tjy/d0y205X
+        J88XYBjhcHMFucTw8t5NEuryBilLbMdcI7mxh5M=
+X-Google-Smtp-Source: APXvYqxdFvDgt95Tzyq9b603RSO/NBOLxoNSFfckU1680dG9VNFBUqPiu4wuKPbLwLUdPqYpW/PzUKRy+W8ijyGu4/0=
+X-Received: by 2002:aca:5885:: with SMTP id m127mr7009246oib.110.1571383937445;
+ Fri, 18 Oct 2019 00:32:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016071230.GD1138@zn.tnic>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191017163503.30791-1-sudeep.holla@arm.com> <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
+ <CAJZ5v0h0ioEZqLuaW1jz_8jRuGYZLQS3fbpv9ctyV9ucXb1WiA@mail.gmail.com>
+ <20191018055533.GC31836@e107533-lin.cambridge.arm.com> <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
+In-Reply-To: <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Oct 2019 09:32:06 +0200
+Message-ID: <CAJZ5v0h0vY9OBYg-_pR-hu_TJkE0odf5Nnd8qnJc17+8NQo=7w@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
+ before freeing
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 09:12:30AM +0200, Borislav Petkov wrote:
-> Hi,
-> 
-> On Fri, Oct 11, 2019 at 01:51:04PM +0200, Jiri Slaby wrote:
-> > These are all functions which are invoked from elsewhere, so annotate
-> > them as global using the new SYM_FUNC_START. And their ENDPROC's by
-> > SYM_FUNC_END.
-> > 
-> > And make sure ENTRY/ENDPROC is not defined on X86_64, given these were
-> > the last users.
-> > 
-> > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> [hibernate]
-> > Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com> [xen bits]
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: x86@kernel.org
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Matt Fleming <matt@codeblueprint.co.uk>
-> > Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-> > Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> > Cc: Juergen Gross <jgross@suse.com>
-> > Cc: linux-crypto@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-efi@vger.kernel.org
-> > Cc: xen-devel@lists.xenproject.org
-> > ---
-> >  arch/x86/boot/compressed/efi_thunk_64.S      |  4 +-
-> >  arch/x86/boot/compressed/head_64.S           | 16 +++---
-> >  arch/x86/boot/compressed/mem_encrypt.S       |  8 +--
-> >  arch/x86/crypto/aegis128-aesni-asm.S         | 28 ++++-----
-> >  arch/x86/crypto/aes_ctrby8_avx-x86_64.S      | 12 ++--
-> >  arch/x86/crypto/aesni-intel_asm.S            | 60 ++++++++++----------
-> >  arch/x86/crypto/aesni-intel_avx-x86_64.S     | 32 +++++------
-> >  arch/x86/crypto/blowfish-x86_64-asm_64.S     | 16 +++---
-> >  arch/x86/crypto/camellia-aesni-avx-asm_64.S  | 24 ++++----
-> >  arch/x86/crypto/camellia-aesni-avx2-asm_64.S | 24 ++++----
-> >  arch/x86/crypto/camellia-x86_64-asm_64.S     | 16 +++---
-> >  arch/x86/crypto/cast5-avx-x86_64-asm_64.S    | 16 +++---
-> >  arch/x86/crypto/cast6-avx-x86_64-asm_64.S    | 24 ++++----
-> >  arch/x86/crypto/chacha-avx2-x86_64.S         | 12 ++--
-> >  arch/x86/crypto/chacha-avx512vl-x86_64.S     | 12 ++--
-> >  arch/x86/crypto/chacha-ssse3-x86_64.S        | 12 ++--
-> >  arch/x86/crypto/crc32-pclmul_asm.S           |  4 +-
-> >  arch/x86/crypto/crc32c-pcl-intel-asm_64.S    |  4 +-
-> >  arch/x86/crypto/crct10dif-pcl-asm_64.S       |  4 +-
-> >  arch/x86/crypto/des3_ede-asm_64.S            |  8 +--
-> >  arch/x86/crypto/ghash-clmulni-intel_asm.S    |  8 +--
-> >  arch/x86/crypto/nh-avx2-x86_64.S             |  4 +-
-> >  arch/x86/crypto/nh-sse2-x86_64.S             |  4 +-
-> >  arch/x86/crypto/poly1305-avx2-x86_64.S       |  4 +-
-> >  arch/x86/crypto/poly1305-sse2-x86_64.S       |  8 +--
-> >  arch/x86/crypto/serpent-avx-x86_64-asm_64.S  | 24 ++++----
-> >  arch/x86/crypto/serpent-avx2-asm_64.S        | 24 ++++----
-> >  arch/x86/crypto/serpent-sse2-x86_64-asm_64.S |  8 +--
-> >  arch/x86/crypto/sha1_avx2_x86_64_asm.S       |  4 +-
-> >  arch/x86/crypto/sha1_ni_asm.S                |  4 +-
-> >  arch/x86/crypto/sha1_ssse3_asm.S             |  4 +-
-> >  arch/x86/crypto/sha256-avx-asm.S             |  4 +-
-> >  arch/x86/crypto/sha256-avx2-asm.S            |  4 +-
-> >  arch/x86/crypto/sha256-ssse3-asm.S           |  4 +-
-> >  arch/x86/crypto/sha256_ni_asm.S              |  4 +-
-> >  arch/x86/crypto/sha512-avx-asm.S             |  4 +-
-> >  arch/x86/crypto/sha512-avx2-asm.S            |  4 +-
-> >  arch/x86/crypto/sha512-ssse3-asm.S           |  4 +-
-> >  arch/x86/crypto/twofish-avx-x86_64-asm_64.S  | 24 ++++----
-> >  arch/x86/crypto/twofish-x86_64-asm_64-3way.S |  8 +--
-> >  arch/x86/crypto/twofish-x86_64-asm_64.S      |  8 +--
-> 
-> I could use an ACK for the crypto bits...
+On Fri, Oct 18, 2019 at 8:02 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 18-10-19, 06:55, Sudeep Holla wrote:
+> > On Thu, Oct 17, 2019 at 11:26:54PM +0200, Rafael J. Wysocki wrote:
+> > > On Thu, Oct 17, 2019 at 9:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > >
+> > > > > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
+> > > > > which schedule policy update work. It may end up racing with the freeing
+> > > > > the policy and unregistering the driver.
+> > > > >
+> > > > > One possible race is as below where the cpufreq_driver is unregistered
+> > > > > but the scheduled work gets executed at later stage when cpufreq_driver
+> > > > > is NULL(i.e. after freeing the policy and driver)
+> > > > >
+> > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
+> > > > > pgd = (ptrval)
+> > > > > [0000001c] *pgd=80000080204003, *pmd=00000000
+> > > > > Internal error: Oops: 206 [#1] SMP THUMB2
+> > > > > Modules linked in:
+> > > > > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
+> > > > > Hardware name: ARM-Versatile Express
+> > > > > Workqueue: events handle_update
+> > > > > PC is at cpufreq_set_policy+0x58/0x228
+> > > > > LR is at dev_pm_qos_read_value+0x77/0xac
+> > > > > Control: 70c5387d  Table: 80203000  DAC: fffffffd
+> > > > > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
+> > > > >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
+> > > > >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
+> > > > >         (handle_update) from (process_one_work+0x16d/0x3cc)
+> > > > >         (process_one_work) from (worker_thread+0xff/0x414)
+> > > > >         (worker_thread) from (kthread+0xff/0x100)
+> > > > >         (kthread) from (ret_from_fork+0x11/0x28)
+> > > > >
+> > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > > > ---
+> > > > >  drivers/cpufreq/cpufreq.c | 3 +++
+> > > > >  1 file changed, 3 insertions(+)
+> > > > >
+> > > > > Hi Rafael, Viresh,
+> > > > >
+> > > > > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
+> > > > > I have based this patch on -rc3 and not on top of your patches. This
+> > > > > only fixes the boot issue but I hit the other crashes while continuously
+> > > > > switching on and off the bL switcher that register/unregister the driver
+> > > > > Your patch series fixes them. I can based this on top of those if you
+> > > > > prefer.
+> > > > >
+> > > > > Regards,
+> > > > > Sudeep
+> > > > >
+> > > > > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
+> > > > >
+> > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > > > index c52d6fa32aac..b703c29a84be 100644
+> > > > > --- a/drivers/cpufreq/cpufreq.c
+> > > > > +++ b/drivers/cpufreq/cpufreq.c
+> > > > > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> > > > >         }
+> > > > >
+> > > > >         dev_pm_qos_remove_request(policy->min_freq_req);
+> > > > > +       /* flush the pending policy->update work before freeing the policy */
+> > > > > +       if (work_pending(&policy->update))
+> > > >
+> > > > Isn't this racy?
+> > > >
+> > > > It still may be running if the pending bit is clear and we still need
+> > > > to wait for it then, don't we?
+> > > >
+> > > > Why don't you do an unconditional flush_work() here?
+> > >
+> > > You may as well do a cancel_work_sync() here, because whether or not
+> > > the last update of the policy happens before it goes away is a matter
+> > > of timing in any case
+> >
+> > In fact that's the first thing I tried to fix the issue I was seeing.
+> > But I then thought it would be better to complete the update as the PM
+> > QoS were getting updated back to DEFAULT values for the device. Even
+> > this works.
+> >
+> > What is your preference ? flush_work or cancel_work_sync ? I will
+> > update accordingly. I may need to do some more testing with
+> > cancel_work_sync as I just checked that quickly to confirm the race.
+>
+> As I said in the other email, this work didn't come as a result of
+> removal of the qos request from cpufreq core and so must have come
+> from other thermal or similar events. In that case maybe doing
+> flush_work() is better before we remove the cpufreq driver. Though
+> Rafael's timing related comment makes sense as well, but now that we
+> have received the work before policy is removed, I will rather
+> complete the work and quit.
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Well, the policy is going away, so the governor has been stopped for
+it already.  Even if the limit is updated, it will not be used anyway,
+so why bother with updating it?
