@@ -2,101 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6F4DBB02
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 02:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A494CDBC23
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 06:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408807AbfJRAuE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Oct 2019 20:50:04 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:47822 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409035AbfJRAuE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Oct 2019 20:50:04 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9I0nTs9071784;
-        Fri, 18 Oct 2019 00:49:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2019-08-05;
- bh=+vwT+5KKYBbhbI7WHloSzb4suphzKe7v/mQR2yYzwfU=;
- b=MvFua4TkOjApWPLtYD2KnpMfwnJfhr3+ZFJfqKnUAjZ78Er9g7ji7tb8M1Opf5JBl2n+
- jox1IMVarjVuN7luOrLb5djtEd9S4RbZVdJ4VlyTs7eLKiK/dzzklGTKSwzQShxJ08ij
- 7ZiodKS3kvV7vk8jANlomTgycSiwYf396gVLSGyALkWzVXG26OLSIF2sWJvQoXUzDN6T
- 9fN4q7uEKsuiKolL7qiCFNw7HyqxllLlLbO9Bnvn33yQQLY+eXTtT1fcTLZof+yY6+w5
- 9zEz4laGZ1F9OSZa/aaBNG8WQGqDrFFt/DXqZm+0owD51gLm5ML0yUwVBsJAgzFjjklc 5A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2vq0q48g89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Oct 2019 00:49:49 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9I0mXMm074602;
-        Fri, 18 Oct 2019 00:49:48 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2vq0ev1g7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Oct 2019 00:49:48 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9I0nl0n027845;
-        Fri, 18 Oct 2019 00:49:47 GMT
-Received: from z2.cn.oracle.com (/10.182.70.159)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 18 Oct 2019 00:49:46 +0000
-From:   Zhenzhong Duan <zhenzhong.duan@oracle.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mtosatti@redhat.com,
-        Zhenzhong Duan <zhenzhong.duan@oracle.com>,
-        Joao Martins <joao.m.martins@oracle.com>
-Subject: [PATCH v2] cpuidle-haltpoll: make haltpoll aware of 'idle=' override
-Date:   Fri, 18 Oct 2019 08:49:29 +0800
-Message-Id: <1571359769-32040-1-git-send-email-zhenzhong.duan@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=854
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910180005
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=941 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910180005
+        id S1726597AbfJRE4U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 00:56:20 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36123 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392808AbfJRE4U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 00:56:20 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y22so3078436pfr.3
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 21:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tfGt3fWr1kwumbPQFxe11qp25uq0tySIsvg724aDQmA=;
+        b=KGFuI8CR3x3LxE3B6tHHY82iaAVS9aFWFJQHPc+YDlC6ws2OgEqL2mZavAKH21Hx+N
+         urFDi/fRju5x2WB1BQ8XO1R+jhVlMWSksN/B4/UY9zRT3GTIcsTPoK6OGJbzVh6MkCSn
+         dWSfodppq81ggRbPJUAJlDxbG0cLFaVUy8WsN3qlimvn6ycSFTD5JwLQ3CNuPKBMSrph
+         vIPwi1Lc8Bs1jCYz0FoGNy+3P+Dc3DVtB/zJtA5q6eF7nIiOnVVVaayioIwtLC7GhW5g
+         EoIGr7xKR0+i4AplYvDAQaua3auhBQQw/9I4V00lXjVImKCm2cQvEpKgzvUDqgTf6iup
+         /P7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tfGt3fWr1kwumbPQFxe11qp25uq0tySIsvg724aDQmA=;
+        b=XQ8ogv8OZ+R2OB147c164JpO+CziMDd/v91SZWR7OcurB7D2OZstSjp455wjB7ieV3
+         kYnYGXjOxunUON0SM3UTti33GVvn+a16AdUwtBJMc5t+hHFqSKGjt6dlMwI+O7YO8nz/
+         1S33ivPpPf8ufyc1r+7OX0G4mUSmHXp4dL1y3tkNwRp/6bQB1ICj6Y0A0DXTxcS0SkU4
+         ANv5ffNgBYK6NA4yA5UCL3nKYPgrg4ynbynjo5xp20bdloC7GeeqPucDk/l5p2jVLcWT
+         b/sJrALm7ZtnIrGx2U98jKk4k+1kF7yIytAvhS8yfZQkeqz2ysz31ZfRO68rjj0COCss
+         hAlw==
+X-Gm-Message-State: APjAAAUdWbzPaJTY5tztnk3/hNkwS8Npr1rLSDBsCGnvljUKEEOQ6lwA
+        kbfS4FDcMv9l8ZgB/FzFm63HmIcZORE=
+X-Google-Smtp-Source: APXvYqxXUTl/qqRC2TrizgbN8R5z7HfGkcGAOE67XLCu4N491ssVlmnv2H4qbY7PTZNpiYtxuCM64Q==
+X-Received: by 2002:aa7:93de:: with SMTP id y30mr4189899pff.98.1571373029465;
+        Thu, 17 Oct 2019 21:30:29 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id i184sm4192692pge.5.2019.10.17.21.30.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 21:30:28 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 10:00:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Kamil Konieczny <k.konieczny@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] opp: core: Revert "add regulators enable and disable"
+Message-ID: <20191018043026.xm7a6emczm6w7bck@vireshk-i7>
+References: <CGME20191017102843eucas1p164993b3644d006481fb041e36175eebe@eucas1p1.samsung.com>
+ <20191017102758.8104-1-m.szyprowski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017102758.8104-1-m.szyprowski@samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currenly haltpoll isn't aware of the 'idle=' override, the priority is
-'idle=poll' > haltpoll > 'idle=halt'. When 'idle=poll' is used, cpuidle
-driver is bypassed but current_driver in sys still shows 'haltpoll'.
+On 17-10-19, 12:27, Marek Szyprowski wrote:
+> All the drivers, which use the OPP framework control regulators, which
+> are already enabled. Typically those regulators are also system critical,
+> due to providing power to CPU core or system buses. It turned out that
+> there are cases, where calling regulator_enable() on such boot-enabled
+> regulator has side-effects and might change its initial voltage due to
+> performing initial voltage balancing without all restrictions from the
+> consumers. Until this issue becomes finally solved in regulator core,
+> avoid calling regulator_enable()/disable() from the OPP framework.
+> 
+> This reverts commit 7f93ff73f7c8c8bfa6be33bcc16470b0b44682aa.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+> This is a follow-up from the following discussion:
+> https://lkml.org/lkml/2019/10/9/541
 
-When 'idle=halt' is used, haltpoll take precedence and make 'idle=halt'
-no effect.
+I suppose this must go the v5.4-rcs, right ?
 
-Add a check to not load haltpoll driver if there is 'idle='.
-
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
-Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
----
-v2: remove #if guard per Rafael
-
- drivers/cpuidle/cpuidle-haltpoll.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index 932390b..b0ce9bc 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -95,6 +95,10 @@ static int __init haltpoll_init(void)
- 	int ret;
- 	struct cpuidle_driver *drv = &haltpoll_driver;
- 
-+	/* Do not load haltpoll if idle= is passed */
-+	if (boot_option_idle_override != IDLE_NO_OVERRIDE)
-+		return -ENODEV;
-+
- 	cpuidle_poll_state_init(drv);
- 
- 	if (!kvm_para_available() ||
 -- 
-1.8.3.1
-
+viresh
