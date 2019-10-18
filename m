@@ -2,118 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FEBDC1C9
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65237DC1CD
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 11:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392484AbfJRJvt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 05:51:49 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:35496 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728971AbfJRJvt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:51:49 -0400
-Received: by mail-vs1-f67.google.com with SMTP id s7so3635277vsl.2
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 02:51:48 -0700 (PDT)
+        id S1730808AbfJRJvu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 05:51:50 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36381 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2632961AbfJRJvu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 05:51:50 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y22so3554930pfr.3
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 02:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=knD6IYh1XTlD/ibBcWNI8K/BimIHANG2UXS26q595lM=;
-        b=ajfJ/X3Xn9ixrvBV5r5b5vdMwo992Y4/lgGjzTZi7bhDn1x3Sb8Meb6nx9MEBrDluM
-         wrhnsG55M0SzjMG4AsohoOtMMJJoL9p6nTpAtsmnQLjNOoZsheONg2DowRT1K493JMbS
-         AcPCbyAW2qjy+PAii2wOQsKFZdkcGbOW3ImYp8HBYWnkDEEqeYubSNKfXGMw+g8MMdgO
-         spHUtMIvhhodOch4AZKB1PpBRQ4Z7rOfrmx1Sml7fiQlIgxA/TpCTFSY6Tvk64HXG41m
-         kQ5PHiNOkVNqKevQXoTaUDcyOW8JcDP2dgYULeJFd9y3SuLWc6fu6WFxljo+kb0wboJl
-         7aYQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=B1DJCyKm+S5XN5LjovT0twn7TgHW8lL5z4RVqMp1tlM=;
+        b=V/FFYf/OuXCokyuYNICYTsOvDfHT2yoEM0xGfhHD0pEItrFk646z79oIUBDZPOYTBf
+         FYFIA4K2n4IkuiyRgvs8Kui0DycUEheMtqBVWIiWlBZrHByWyG2UXLJPiJi+Ayh+6lO1
+         YGgpnYDX21HkyArYX8kEhSlQqrotkzPmxk8jaLmd4ts2Wiepepys9WI+wNNnSvlilEAR
+         QfkMNGklic/SUXOnvSmRPYpNpg4f1wVdIX87t22MfotD4805dB5R+QQ4PrRMB6gxULiC
+         NMFMhmB5X1M1rzOoumdzXMuTjCdq18bYFHsORPSOt3Qgvfj7z+8H+4wULIo3HFoo0Wcl
+         KjFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=knD6IYh1XTlD/ibBcWNI8K/BimIHANG2UXS26q595lM=;
-        b=HBr+uMTqvqDGblulyoVinxAqeAOPysZ/klaTxSmZ0jnBleRq9HIr8/RWv1I/oQqKZt
-         7N/s+41zvEPxSgbArvGKZr+uxXYhtub8rqrTS+1Dl1Mgaf4inlL0SZVMUfDAAU7T6Rrq
-         ULRXNiOu0GAExMfQOnv1nlqMxxIZdj8zhNK3SvOfxVqOVVM3zis5eNKJyCzwVs8LB5MY
-         s+/bNmLkBTpwnDJSFa2YmhZe0hcADUD33jLclswvHybiGJnnmRcH1wyNJPQDJgTDrXtq
-         Qh5Kvg6zCCttksZzvn/NXHwPTitYaIZpqfcRex0YmRTcTy8D/JX3chjXe/IqzaKeeBJ9
-         gJOg==
-X-Gm-Message-State: APjAAAWROWk8U0/TecMy1e8UuGy0lqTexVV0I18bVfNFID7Elw30vwr7
-        a2NaWmfNLJyCUCROGli6qcXmwdPQStTfdDPcleopeg==
-X-Google-Smtp-Source: APXvYqxFUTnsVUqOPYGTlBe0WnXNlxQEuh5mYZupJcL1UOwQvgkbBN4IMB7XRxQVNzi9OdZCe0CRpSW7L61xE1ZxYCo=
-X-Received: by 2002:a67:ebc2:: with SMTP id y2mr4847513vso.191.1571392308109;
- Fri, 18 Oct 2019 02:51:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-2-ulf.hansson@linaro.org> <20191018093839.GB25918@e121166-lin.cambridge.arm.com>
-In-Reply-To: <20191018093839.GB25918@e121166-lin.cambridge.arm.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 18 Oct 2019 11:51:11 +0200
-Message-ID: <CAPDyKFqcHY6+Eq9d6xTPYMDrUOtGs+64YuwZ1EbFtqQZe0+xEw@mail.gmail.com>
-Subject: Re: [PATCH 01/13] cpuidle: psci: Fix potential access to unmapped memory
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=B1DJCyKm+S5XN5LjovT0twn7TgHW8lL5z4RVqMp1tlM=;
+        b=JkVT8mWm31UwG4nqaY+W+DKpM6y8JpclZc/ZPYP6lFd2lYQ8r9/x5Ngg9UUqKWw6Rz
+         lEpkqQjLI0au3IHGmYMvfLBzhlPZB2k7tdunMNV30AFHnrVAbS0FzZRPqYkYT/NwMXgM
+         Hrvqzw6Qiir+ZB3SMbh3K5Dps2vljlYqKuwooPLWrwBM0gBs66dSPI7qM6jeqZjjfrrj
+         hbo95EfC6xIA/pgp5xW9iBmq8BPNUuoyUAUWXcMsTw886uqMTjafLo7g/umx+lUi0pM5
+         OeNrkgFuzU9XOwa/mXod9cOlnWdQxR0OtV87g7/Le15Us1ufyJ4KrYjqW1OZL0TSenDw
+         4LiQ==
+X-Gm-Message-State: APjAAAVJoPTsAzxJFdmKhz5//TC90w6sHsJgMjAa3YTgbjuIy1CPcXei
+        DS74wcHyq/Y282DAFaLMMw2KEw==
+X-Google-Smtp-Source: APXvYqyNFkRvnZmGknv26Wp3KPaMZo7qL0J/v5oMpgC4CJHep/qjBswXaNrsjN566/STEj+4OQukbA==
+X-Received: by 2002:a62:cf45:: with SMTP id b66mr5530793pfg.150.1571392308876;
+        Fri, 18 Oct 2019 02:51:48 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id a13sm6722689pfg.10.2019.10.18.02.51.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 02:51:48 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 15:21:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, sudeep.holla@arm.com,
+        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
+        tdas@codeaurora.org, swboyd@chromium.org, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] cpufreq: qcom-hw: Move driver initialisation
+ earlier
+Message-ID: <20191018095145.tdlozkz7qlb5z4r3@vireshk-i7>
+References: <cover.1571387352.git.amit.kucheria@linaro.org>
+ <3d367762ba72fa1cbd6391dc55d94b3284f6c00c.1571387352.git.amit.kucheria@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d367762ba72fa1cbd6391dc55d94b3284f6c00c.1571387352.git.amit.kucheria@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 18 Oct 2019 at 11:38, Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
->
-> On Thu, Oct 10, 2019 at 01:39:25PM +0200, Ulf Hansson wrote:
-> > When the WFI state have been selected, the in-parameter idx to
-> > psci_enter_idle_state() is zero. In this case, we must not index the state
-> > array as "state[idx - 1]", as it means accessing data outside the array.
-> > Fix the bug by pre-checking if idx is zero.
-> >
-> > Fixes: 9ffeb6d08c3a ("PSCI: cpuidle: Refactor CPU suspend power_state parameter handling")
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index f3c1a2396f98..2e91c8d6c211 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -27,10 +27,10 @@ static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> >  static int psci_enter_idle_state(struct cpuidle_device *dev,
-> >                               struct cpuidle_driver *drv, int idx)
-> >  {
-> > -     u32 *state = __this_cpu_read(psci_power_state);
-> > +     u32 *states = __this_cpu_read(psci_power_state);
-> > +     u32 state = idx ? states[idx - 1] : 0;
-> >
-> > -     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
-> > -                                        idx, state[idx - 1]);
-> > +     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
->
-> Technically we don't dereference that array entry but I agree this
-> is ugly and potentially broken.
+On 18-10-19, 14:22, Amit Kucheria wrote:
+> Allow qcom-hw driver to initialise right after the cpufreq and thermal
+> subsystems are initialised in core_initcall so we get earlier access to
+> thermal mitigation.
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Taniya Das <tdas@codeaurora.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index a9ae2f84a4efc..fc92a8842e252 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -334,7 +334,7 @@ static int __init qcom_cpufreq_hw_init(void)
+>  {
+>  	return platform_driver_register(&qcom_cpufreq_hw_driver);
+>  }
+> -device_initcall(qcom_cpufreq_hw_init);
+> +postcore_initcall(qcom_cpufreq_hw_init);
+>  
+>  static void __exit qcom_cpufreq_hw_exit(void)
+>  {
 
-No sure understand the non-deference part.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-If the governor selects WFI, the idx will be 0 - and thus we end up
-using state[-1], doesn't that dereference an invalid address, no?
-
->
-> My preference is aligning it with ACPI code and allocate one more
-> entry in the psci_power_state array (useless for wfi, agreed but
-> at least we remove this (-1) handling from the code).
-
-I can do that, but sounds like a slightly bigger change. Are you fine
-if I do that on top, so we can get this sent as fix for v5.4-rc[n]?
-
-Kind regards
-Uffe
+-- 
+viresh
