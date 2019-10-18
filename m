@@ -2,97 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7485DDCBDE
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 18:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACF1DCC04
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 18:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502750AbfJRQtI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 12:49:08 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37511 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502176AbfJRQtH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 12:49:07 -0400
-Received: by mail-pl1-f196.google.com with SMTP id u20so3124740plq.4
-        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 09:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=v+xlH4n34GpIF8eBLaea0CeqXTV/EF6VBM7h/r2d6pw=;
-        b=De5hTX3JBN8Q7ACyfo1u7clSDEwrCzdRy5Xr7tZu8/ZEeYl2SDXKBq4FZZE8ONBzRk
-         tcHVTQhRFPYHeu0d0KYiDxfy3e598jTbMP8P+/D3K0XMBANSO28aweiVBVROm35frY39
-         7giwoc/mPVGMlgwGf30B9JImNpcjDajzm1X/6QzVlEX2sSg+lCxyXjSgWDkk5YPCwGp1
-         uLDTfR1vR5mG8EmKPbKIg282L12cq9MLmC20Srn8H78b6g5Qejh8GAyqu4Ovg/iIOzqj
-         c5GHP7ZizTZX3/pxkTgAnEddZN6iBSO0AUuRd9xspOBOTo/jeNFSCsBF+BiNmex6gBF+
-         tXFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=v+xlH4n34GpIF8eBLaea0CeqXTV/EF6VBM7h/r2d6pw=;
-        b=PM0L8KZeZdwMrokap6VN0silcXp6juOyxNfBu/aRCeY8qzdVRuhX7zesRKMmLC+W9N
-         L1cvhUs5mZHF149Ny7qEP45OHsBaorYm8aqSxcc2NnteY44Fp5yYNAAjY+ZSLAxKlvQu
-         uEISJ1ryf6fgq9HrPQVUUjXDncllGSamkDtcKtfg9JCzhEGF/ONKPaG4+iW1zZAfl8IB
-         GZKYBkJahhCnScBTgTx3bpNoQiHJRZ03QLzwzkRArXOqm+MkbMayYeCDRJ9j/Vpu6pB0
-         nHXCdV59BXbTdlxLKuAvHFQMQ+EjHJJLYxSZAsbP57yQMcQ9L2M8+AHzhm3FePNU1dPv
-         KpCA==
-X-Gm-Message-State: APjAAAVlRD0kxVI5TNTmmXkoFmWRmzGybxRppoKDE3gcgcWDTFnbgnpu
-        j0brcfYYyD/eUiNMTW0jhi/9Fm0RqL0=
-X-Google-Smtp-Source: APXvYqxcNsgzf2s/TfKOdaEkn8qjpyFxXzFsL7/C6GIu4VsQgmDpxPUNU6tXa+mQfuPC/9jtCWUQ8g==
-X-Received: by 2002:a17:902:d915:: with SMTP id c21mr3169206plz.264.1571417345139;
-        Fri, 18 Oct 2019 09:49:05 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id v19sm7239550pff.46.2019.10.18.09.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 09:49:04 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 09:49:01 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org, evgreen@chromium.org,
-        daidavid1@codeaurora.org, vincent.guittot@linaro.org,
+        id S2408819AbfJRQzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 12:55:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48416 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405642AbfJRQzx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 18 Oct 2019 12:55:53 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56FE620854;
+        Fri, 18 Oct 2019 16:55:52 +0000 (UTC)
+Date:   Fri, 18 Oct 2019 12:55:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
+        mingo@redhat.com, vincent.guittot@linaro.org,
+        daidavid1@codeaurora.org, okukatla@codeaurora.org,
+        evgreen@chromium.org, mka@chromium.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: Add locking in icc_set_tag()
-Message-ID: <20191018164901.GC1669@tuxbook-pro>
-References: <20191018141750.17032-1-georgi.djakov@linaro.org>
+Subject: Re: [PATCH] interconnect: Add basic tracepoints
+Message-ID: <20191018125550.0ad0eefa@gandalf.local.home>
+In-Reply-To: <20191018164403.GB1669@tuxbook-pro>
+References: <20191018140224.15087-1-georgi.djakov@linaro.org>
+        <20191018164403.GB1669@tuxbook-pro>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018141750.17032-1-georgi.djakov@linaro.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 18 Oct 07:17 PDT 2019, Georgi Djakov wrote:
+On Fri, 18 Oct 2019 09:44:03 -0700
+Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
 
-> We must ensure that the tag is not changed while we aggregate the
-> requests. Currently the icc_set_tag() is not using any locks and this
-> may cause the values to be aggregated incorrectly. Fix this by acquiring
-> the icc_lock while we set the tag.
+> > @@ -449,6 +452,9 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> >  
+> >  		/* aggregate requests for this node */
+> >  		aggregate_requests(node);
+> > +
+> > +		trace_icc_set_bw(node, dev_name(path->reqs[i].dev),
+> > +				 avg_bw, peak_bw);  
 > 
-> Fixes: 127ab2cc5f19 ("interconnect: Add support for path tags")
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> ---
->  drivers/interconnect/core.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> When I've been debugging interconnect things I've added a
+> kstrdup_const() of "name" in of_icc_get() and then included that here.
 > 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index e24092558c29..4940c0741d40 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -408,8 +408,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
->  	if (!path)
->  		return;
->  
-> +	mutex_lock(&icc_lock);
-> +
->  	for (i = 0; i < path->num_nodes; i++)
->  		path->reqs[i].tag = tag;
-> +
-> +	mutex_unlock(&icc_lock);
->  }
->  EXPORT_SYMBOL_GPL(icc_set_tag);
->  
+> I find including the path name quite useful for devices with multiple
+> paths.
+> 
+> >  	}
+> >  
+> >  	ret = apply_constraints(path);
+> > @@ -461,6 +467,9 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> >  			path->reqs[i].avg_bw = old_avg;
+> >  			path->reqs[i].peak_bw = old_peak;
+> >  			aggregate_requests(node);
+> > +
+> > +			trace_icc_set_bw(node, dev_name(path->reqs[i].dev),
+> > +					 old_avg, old_peak);
+> >  		}
+> >  		apply_constraints(path);  
+> 
+> And analog to e.g. the clock traces I would suggest that you trace
+> device, path and "ret" here.
+
+If you are going to switch to device name and path, please just pass in
+the path to the trace point. Then have the TP_fast_assign() do the rest
+of the work.
+
+Thanks!
+
+-- Steve
