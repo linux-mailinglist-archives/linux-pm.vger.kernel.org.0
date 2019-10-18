@@ -2,156 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B228DC2A5
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 12:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A3ADC2B1
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 12:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbfJRKTy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 06:19:54 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:33568 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2387890AbfJRKTy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 06:19:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1B0BAB6;
-        Fri, 18 Oct 2019 03:19:31 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4C6C3F6C4;
-        Fri, 18 Oct 2019 03:19:30 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 11:19:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
- before freeing
-Message-ID: <20191018101924.GA25540@bogus>
-References: <20191017163503.30791-1-sudeep.holla@arm.com>
- <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
- <CAJZ5v0h0ioEZqLuaW1jz_8jRuGYZLQS3fbpv9ctyV9ucXb1WiA@mail.gmail.com>
- <20191018055533.GC31836@e107533-lin.cambridge.arm.com>
- <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
+        id S2405250AbfJRKWM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 06:22:12 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61869 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728989AbfJRKWM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 06:22:12 -0400
+Received: from 79.184.255.51.ipv4.supernova.orange.pl (79.184.255.51) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 6ce2739a0f04cd0d; Fri, 18 Oct 2019 12:22:10 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
+        edubezval@gmail.com, agross@kernel.org, tdas@codeaurora.org,
+        swboyd@chromium.org, ilina@codeaurora.org,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] cpufreq: Initialise the governors in core_initcall
+Date:   Fri, 18 Oct 2019 12:22:09 +0200
+Message-ID: <1627245.O3FKD7HvXP@kreacher>
+In-Reply-To: <aa02366951fb174077a945761a7cda03d08acab5.1571387352.git.amit.kucheria@linaro.org>
+References: <cover.1571387352.git.amit.kucheria@linaro.org> <aa02366951fb174077a945761a7cda03d08acab5.1571387352.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 11:32:47AM +0530, Viresh Kumar wrote:
-> On 18-10-19, 06:55, Sudeep Holla wrote:
-> > On Thu, Oct 17, 2019 at 11:26:54PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, Oct 17, 2019 at 9:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > >
-> > > > > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
-> > > > > which schedule policy update work. It may end up racing with the freeing
-> > > > > the policy and unregistering the driver.
-> > > > >
-> > > > > One possible race is as below where the cpufreq_driver is unregistered
-> > > > > but the scheduled work gets executed at later stage when cpufreq_driver
-> > > > > is NULL(i.e. after freeing the policy and driver)
-> > > > >
-> > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
-> > > > > pgd = (ptrval)
-> > > > > [0000001c] *pgd=80000080204003, *pmd=00000000
-> > > > > Internal error: Oops: 206 [#1] SMP THUMB2
-> > > > > Modules linked in:
-> > > > > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
-> > > > > Hardware name: ARM-Versatile Express
-> > > > > Workqueue: events handle_update
-> > > > > PC is at cpufreq_set_policy+0x58/0x228
-> > > > > LR is at dev_pm_qos_read_value+0x77/0xac
-> > > > > Control: 70c5387d  Table: 80203000  DAC: fffffffd
-> > > > > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
-> > > > >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
-> > > > >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
-> > > > >         (handle_update) from (process_one_work+0x16d/0x3cc)
-> > > > >         (process_one_work) from (worker_thread+0xff/0x414)
-> > > > >         (worker_thread) from (kthread+0xff/0x100)
-> > > > >         (kthread) from (ret_from_fork+0x11/0x28)
-> > > > >
-> > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > > > ---
-> > > > >  drivers/cpufreq/cpufreq.c | 3 +++
-> > > > >  1 file changed, 3 insertions(+)
-> > > > >
-> > > > > Hi Rafael, Viresh,
-> > > > >
-> > > > > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
-> > > > > I have based this patch on -rc3 and not on top of your patches. This
-> > > > > only fixes the boot issue but I hit the other crashes while continuously
-> > > > > switching on and off the bL switcher that register/unregister the driver
-> > > > > Your patch series fixes them. I can based this on top of those if you
-> > > > > prefer.
-> > > > >
-> > > > > Regards,
-> > > > > Sudeep
-> > > > >
-> > > > > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
-> > > > >
-> > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > > index c52d6fa32aac..b703c29a84be 100644
-> > > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > > > >         }
-> > > > >
-> > > > >         dev_pm_qos_remove_request(policy->min_freq_req);
-> > > > > +       /* flush the pending policy->update work before freeing the policy */
-> > > > > +       if (work_pending(&policy->update))
-> > > >
-> > > > Isn't this racy?
-> > > >
-> > > > It still may be running if the pending bit is clear and we still need
-> > > > to wait for it then, don't we?
-> > > >
-> > > > Why don't you do an unconditional flush_work() here?
-> > > 
-> > > You may as well do a cancel_work_sync() here, because whether or not
-> > > the last update of the policy happens before it goes away is a matter
-> > > of timing in any case
-> > 
-> > In fact that's the first thing I tried to fix the issue I was seeing.
-> > But I then thought it would be better to complete the update as the PM
-> > QoS were getting updated back to DEFAULT values for the device. Even
-> > this works.
-> > 
-> > What is your preference ? flush_work or cancel_work_sync ? I will
-> > update accordingly. I may need to do some more testing with
-> > cancel_work_sync as I just checked that quickly to confirm the race.
+On Friday, October 18, 2019 10:52:00 AM CEST Amit Kucheria wrote:
+> Initialise the cpufreq governors earlier to allow for earlier
+> performance control during the boot process.
 > 
-> As I said in the other email, this work didn't come as a result of
-> removal of the qos request from cpufreq core and so must have come
-> from other thermal or similar events.
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I don't think so. For sure not because of any thermal events. I didn't
-have log handy and hence had to wait till I was next to hardware.
+No more issues found, so
 
-This is log:
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
- cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
- cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
- cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
- cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
- cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-So if I move the call above, it still crashes as the work is getting
-scheduled later.
+> ---
+>  drivers/cpufreq/cpufreq_conservative.c | 2 +-
+>  drivers/cpufreq/cpufreq_ondemand.c     | 2 +-
+>  drivers/cpufreq/cpufreq_performance.c  | 2 +-
+>  drivers/cpufreq/cpufreq_powersave.c    | 2 +-
+>  drivers/cpufreq/cpufreq_userspace.c    | 2 +-
+>  kernel/sched/cpufreq_schedutil.c       | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+> index b66e81c06a575..737ff3b9c2c09 100644
+> --- a/drivers/cpufreq/cpufreq_conservative.c
+> +++ b/drivers/cpufreq/cpufreq_conservative.c
+> @@ -346,7 +346,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>  	return CPU_FREQ_GOV_CONSERVATIVE;
+>  }
+>  
+> -fs_initcall(cpufreq_gov_dbs_init);
+> +core_initcall(cpufreq_gov_dbs_init);
+>  #else
+>  module_init(cpufreq_gov_dbs_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> index dced033875bf8..82a4d37ddecb3 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -483,7 +483,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>  	return CPU_FREQ_GOV_ONDEMAND;
+>  }
+>  
+> -fs_initcall(cpufreq_gov_dbs_init);
+> +core_initcall(cpufreq_gov_dbs_init);
+>  #else
+>  module_init(cpufreq_gov_dbs_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_performance.c b/drivers/cpufreq/cpufreq_performance.c
+> index aaa04dfcacd9d..def9afe0f5b86 100644
+> --- a/drivers/cpufreq/cpufreq_performance.c
+> +++ b/drivers/cpufreq/cpufreq_performance.c
+> @@ -50,5 +50,5 @@ MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
+>  MODULE_DESCRIPTION("CPUfreq policy governor 'performance'");
+>  MODULE_LICENSE("GPL");
+>  
+> -fs_initcall(cpufreq_gov_performance_init);
+> +core_initcall(cpufreq_gov_performance_init);
+>  module_exit(cpufreq_gov_performance_exit);
+> diff --git a/drivers/cpufreq/cpufreq_powersave.c b/drivers/cpufreq/cpufreq_powersave.c
+> index c143dc237d878..1ae66019eb835 100644
+> --- a/drivers/cpufreq/cpufreq_powersave.c
+> +++ b/drivers/cpufreq/cpufreq_powersave.c
+> @@ -43,7 +43,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>  	return &cpufreq_gov_powersave;
+>  }
+>  
+> -fs_initcall(cpufreq_gov_powersave_init);
+> +core_initcall(cpufreq_gov_powersave_init);
+>  #else
+>  module_init(cpufreq_gov_powersave_init);
+>  #endif
+> diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
+> index cbd81c58cb8f0..b43e7cd502c58 100644
+> --- a/drivers/cpufreq/cpufreq_userspace.c
+> +++ b/drivers/cpufreq/cpufreq_userspace.c
+> @@ -147,7 +147,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+>  	return &cpufreq_gov_userspace;
+>  }
+>  
+> -fs_initcall(cpufreq_gov_userspace_init);
+> +core_initcall(cpufreq_gov_userspace_init);
+>  #else
+>  module_init(cpufreq_gov_userspace_init);
+>  #endif
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 86800b4d5453f..322ca8860f548 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -915,7 +915,7 @@ static int __init sugov_register(void)
+>  {
+>  	return cpufreq_register_governor(&schedutil_gov);
+>  }
+> -fs_initcall(sugov_register);
+> +core_initcall(sugov_register);
+>  
+>  #ifdef CONFIG_ENERGY_MODEL
+>  extern bool sched_energy_update;
+> 
 
---
-Regards,
-Sudeep
+
+
+
