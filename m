@@ -2,119 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A65A5DBD39
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 07:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6786DBD37
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 07:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442086AbfJRFrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 01:47:47 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:55190 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1727823AbfJRFrp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 18 Oct 2019 01:47:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F18CA329;
-        Thu, 17 Oct 2019 22:47:21 -0700 (PDT)
-Received: from e107533-lin.cambridge.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 383BE3F68E;
-        Thu, 17 Oct 2019 22:50:07 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 06:47:06 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
- before freeing
-Message-ID: <20191018054706.GA31836@e107533-lin.cambridge.arm.com>
-References: <20191017163503.30791-1-sudeep.holla@arm.com>
- <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
+        id S2442074AbfJRFrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 01:47:43 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40027 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391949AbfJRFrn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 01:47:43 -0400
+Received: by mail-pg1-f195.google.com with SMTP id e13so2715137pga.7
+        for <linux-pm@vger.kernel.org>; Thu, 17 Oct 2019 22:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TiE6mrXNG7EqkcZ/U+Q35uelbhpLaDsgu+uQOO85Zos=;
+        b=GT5coTqMgC0RpqXd7gG3yW2ilpPm5cZzvkTxi6FzIbbY4la707DrP5/nepX/YIM/bv
+         GNro45KaBJKsI5YcmWVrWhP6svfuswi+XwUiuyZ7OEekpNi7yQjuK+6jsfJrnmOlkDGS
+         9Dgd2fc4GS5TWS2CSTSqyZCJMhPQrEMqtmMpeWTk3qmIrrIevK9laoksrPssfgcYfFNa
+         TekjbitHqxjwfjC2KyUWsW2pTDXKdvxxZOY29ROPr6m0oQsZSYd96kDGL9GQoj3WGIuR
+         TRITWtWwpnRTHiXrarQOP9xfJFptIyyOQvxXnifzplyJ8r9hDJPMu56oQq6bv/3OVRax
+         oPWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TiE6mrXNG7EqkcZ/U+Q35uelbhpLaDsgu+uQOO85Zos=;
+        b=KXkapE+WM4TxEymRzwPzJYPZNJvsJe+KLnoPBBaHtAcAXbGgOK4zUu4z3Bp4Hxzhfu
+         EuSto9mvWF5H0S9Ew28ncmD7AYzdzMsGYWD8mwjviIvmHLdavOFXCh2KeCv7ortXm2tw
+         XV1WPdb9i2LYFksaIHvNmLy0BAhwypMxD1Ti+XKA9lMlTupVfCcXR+13ZOaI/r2XTOF0
+         xeApZQZ16RnbqFHL7eya4hsUH5IZDzEun3JZi2q8azY8OqysnC/azw9YONEDxxFeXhBI
+         ILGC7oS5AdT3DR/AgOvJq/T/oLsox5WsA0gQasA2WUsBvvQR6J9ZWxeSEv0SYUvzeUBR
+         /AkQ==
+X-Gm-Message-State: APjAAAXLduIyrd/BWwdehD4sYC70tex1tKIQ699jXXQ8ppQyXJ3IzFLz
+        fxdmlWt5CAttie7I1ru9pib35Q==
+X-Google-Smtp-Source: APXvYqw0u5pU/YJB1pLyMOrYy32vfv7QWsaj3jE6gcSYufUNISW7CLe9bQeAT3MtxfOTk99PbjIt1g==
+X-Received: by 2002:aa7:96ba:: with SMTP id g26mr4667261pfk.132.1571377662879;
+        Thu, 17 Oct 2019 22:47:42 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id c11sm5741274pfj.114.2019.10.17.22.47.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 22:47:42 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 11:17:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nico@fluxnic.net
+Subject: Re: [PATCH v2 2/5] cpufreq: merge arm_big_little and vexpress-spc
+Message-ID: <20191018054740.maqbzbk7secgpc2r@vireshk-i7>
+References: <20191017123508.26130-1-sudeep.holla@arm.com>
+ <20191017123508.26130-3-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gTpK0cJhsWGVvs-=Sbgcia0jz2j5QNYRL+1wOz=2xkJQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191017123508.26130-3-sudeep.holla@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 09:36:30PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
-> > which schedule policy update work. It may end up racing with the freeing
-> > the policy and unregistering the driver.
-> >
-> > One possible race is as below where the cpufreq_driver is unregistered
-> > but the scheduled work gets executed at later stage when cpufreq_driver
-> > is NULL(i.e. after freeing the policy and driver)
-> >
-> > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
-> > pgd = (ptrval)
-> > [0000001c] *pgd=80000080204003, *pmd=00000000
-> > Internal error: Oops: 206 [#1] SMP THUMB2
-> > Modules linked in:
-> > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
-> > Hardware name: ARM-Versatile Express
-> > Workqueue: events handle_update
-> > PC is at cpufreq_set_policy+0x58/0x228
-> > LR is at dev_pm_qos_read_value+0x77/0xac
-> > Control: 70c5387d  Table: 80203000  DAC: fffffffd
-> > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
-> >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
-> >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
-> >         (handle_update) from (process_one_work+0x16d/0x3cc)
-> >         (process_one_work) from (worker_thread+0xff/0x414)
-> >         (worker_thread) from (kthread+0xff/0x100)
-> >         (kthread) from (ret_from_fork+0x11/0x28)
-> >
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > Hi Rafael, Viresh,
-> >
-> > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
-> > I have based this patch on -rc3 and not on top of your patches. This
-> > only fixes the boot issue but I hit the other crashes while continuously
-> > switching on and off the bL switcher that register/unregister the driver
-> > Your patch series fixes them. I can based this on top of those if you
-> > prefer.
-> >
-> > Regards,
-> > Sudeep
-> >
-> > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index c52d6fa32aac..b703c29a84be 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> >         }
-> >
-> >         dev_pm_qos_remove_request(policy->min_freq_req);
-> > +       /* flush the pending policy->update work before freeing the policy */
-> > +       if (work_pending(&policy->update))
->
-> Isn't this racy?
->
-> It still may be running if the pending bit is clear and we still need
-> to wait for it then, don't we?
->
+On 17-10-19, 13:35, Sudeep Holla wrote:
+> diff --git a/drivers/cpufreq/arm_big_little.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
+> similarity index 90%
+> rename from drivers/cpufreq/arm_big_little.c
+> rename to drivers/cpufreq/vexpress-spc-cpufreq.c
+> index 7fe52fcddcf1..b7e1aa000c80 100644
+> --- a/drivers/cpufreq/arm_big_little.c
+> +++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
+> @@ -1,20 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * ARM big.LITTLE Platforms CPUFreq support
+> + * Versatile Express SPC CPUFreq Interface driver
+>   *
+> - * Copyright (C) 2013 ARM Ltd.
+> - * Sudeep KarkadaNagesha <sudeep.karkadanagesha@arm.com>
+> + * Copyright (C) 2019 ARM Ltd.
 
-Yes, we could end up in such situation.
+Should this be 2013-2019 instead ?
 
-> Why don't you do an unconditional flush_work() here?
->
+> + * Sudeep Holla <sudeep.holla@arm.com>
+>   *
+>   * Copyright (C) 2013 Linaro.
+>   * Viresh Kumar <viresh.kumar@linaro.org>
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License version 2 as
+> - * published by the Free Software Foundation.
+> - *
+> - * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+> - * kind, whether express or implied; without even the implied warranty
+> - * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+> - * GNU General Public License for more details.
+>   */
 
-Yes that should be fine.
-
---
-Regards,
-Sudeep
+-- 
+viresh
