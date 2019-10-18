@@ -2,126 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF60DC462
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 14:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3661DC6C7
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Oct 2019 16:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409959AbfJRMHg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Oct 2019 08:07:36 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:36532 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407893AbfJRMHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 08:07:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ld3ezfhAeRAVMvme4hYBgPVlITvE7jdd02JDmyHHw5E=; b=K4yx40Wue8PpFsluPTTZOLS/Z
-        o1YGDCxVGg8GF6+6OKbofSckHJprqRpAv97h1IraU011eeT3rolFn6XjXvSlbtGJAp9jULVKr5dFM
-        vksiGf6Giu7IthRFtNmHcePYWYiP5DqpjF3XHOav5VEHL5/UiTzEPeYI6DtuGsLkDFUI2axD8UOd9
-        a0Wsnl/hiRSu9AT+EM1UE55J6RVwrb0cgmTz28F12QvyywuUV315ldsmXLwfONk1cXg76pJJKHLEs
-        1UxLWBcxwcv402iGXRGgRQoTYqMgNKYvCqrbwxAVC75iZXad0Ckb7VMbzIa+uo7QsxOgoE+viBoQU
-        QM6AF/EOQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iLR2Q-0003jS-TS; Fri, 18 Oct 2019 12:07:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 89523301124;
-        Fri, 18 Oct 2019 14:06:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4E0A9200DE9E2; Fri, 18 Oct 2019 14:07:19 +0200 (CEST)
-Date:   Fri, 18 Oct 2019 14:07:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, qperret@google.com,
-        patrick.bellasi@matbug.net, dh.han@samsung.com
-Subject: Re: [RFC PATCH v3 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20191018120719.GH2328@hirez.programming.kicks-ass.net>
-References: <20191011134500.235736-1-douglas.raillard@arm.com>
- <20191014145315.GZ2311@hirez.programming.kicks-ass.net>
- <a1ce67d7-62c3-b78b-1d87-23ef4dbc2274@arm.com>
- <20191017095015.GI2311@hirez.programming.kicks-ass.net>
- <7edb1b73-54e7-5729-db5d-6b3b1b616064@arm.com>
- <20191017190708.GF22902@worktop.programming.kicks-ass.net>
- <0b807cb3-6a88-1138-dc66-9a32d9bba7ea@arm.com>
+        id S2408689AbfJROCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Oct 2019 10:02:30 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38083 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393987AbfJROC3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Oct 2019 10:02:29 -0400
+Received: by mail-wm1-f67.google.com with SMTP id 3so6227544wmi.3
+        for <linux-pm@vger.kernel.org>; Fri, 18 Oct 2019 07:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RDn754hJYJ5LXSqXyPnQWWQyanYkEGiwZFxOe9DtcOE=;
+        b=AH91Q1XfnZCl/d/15l+fjFcQuHg1w75bjEGEkukNimRFUCp87vXsuwuSrKVy4gmdUQ
+         uaTBX6DuofdOwaI6pOsr3HL4lwXbYY4+CFY4NMtyKFas4QTX9j/GRY28MFHpm6dV6hTW
+         oZ7K0OtoHtM0rVADGSP1taKaliCFr1hNV0Qiu1F9HSyr1IZiwZM0Ayq+xcM77jaHpswu
+         vkGlwvlCNm3NkWS0P0NFZk1aRYlnwtCOGd+32EmH5l7tPNxzIMIu4dTiacvpNH1bP4fH
+         vl2VJ8b2XJb4ppVtXE/cqed1xOFVA/zKgW6J12DyOlZjboI5BYS1hb+0I/U297mmEl1n
+         spZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RDn754hJYJ5LXSqXyPnQWWQyanYkEGiwZFxOe9DtcOE=;
+        b=Df6ZOk7Fs25kpNYlNI6uF5ooNySfrAmb+8S7uzB1AS/jaksshKN54G+GIndSi+YeBR
+         ZiVrfoa1TB4ACEoblLdTH6kTxKsIPVFk+lcytO8Sa1Byp8cRDgOLcAqqO3ha2GTphcJk
+         R9fDXv3i0XgOLTJ7HiG277KhR85mOvz9VM2sjaio8J2ZGyxFi6nt8Xo/A7rlEuvW86DD
+         y4WcVf87HMCy0s8KossacrXk+33Ymkw3qe+lBIliMdKhabWnRYYZ0pxeVaDf5Capjfb4
+         YizC20ChxDfLGnFJmMAGJ+nXesR0qgjwHZOK5JzFXufKkO75V84/Xe28JXZkbCLYLiiz
+         8f3Q==
+X-Gm-Message-State: APjAAAWOwWpEj872Zu/r9eoCbPh+cQ9rFP9BAKQ6raU7hhw0hw1DfxLG
+        TR6gJUe+khyE4oF/gWoBdMeFh6Rvkt07Uw==
+X-Google-Smtp-Source: APXvYqy8C8A1yxjB9QJGBZ5lZGdFU4Ebb9IrYpQS+iwsus9/jn/K+GzPf78khldHJMvnhkTEoCROEA==
+X-Received: by 2002:a7b:c44f:: with SMTP id l15mr7774951wmi.121.1571407346358;
+        Fri, 18 Oct 2019 07:02:26 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id 26sm5192909wmf.20.2019.10.18.07.02.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 18 Oct 2019 07:02:25 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com
+Cc:     bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
+        daidavid1@codeaurora.org, okukatla@codeaurora.org,
+        evgreen@chromium.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: [PATCH] interconnect: Add basic tracepoints
+Date:   Fri, 18 Oct 2019 17:02:24 +0300
+Message-Id: <20191018140224.15087-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b807cb3-6a88-1138-dc66-9a32d9bba7ea@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 12:46:25PM +0100, Douglas Raillard wrote:
+The tracepoints can help with understanding the system behavior of a
+given interconnect path when the consumer drivers change their bandwidth
+demands. This might be interesting when we want to monitor the requested
+interconnect bandwidth for each client driver. The paths may share the
+same nodes and this will help to understand "who and when is requesting
+what". All this is useful for subsystem drivers developers and may also
+provide hints when optimizing the power and performance profile of the
+system.
 
-> > What I don't see is how that that difference makes sense as input to:
-> > 
-> >    cost(x) : (1 + x) * cost_j
-> 
-> The actual input is:
-> x = (EM_COST_MARGIN_SCALE/SCHED_CAPACITY_SCALE) * (util - util_est)
-> 
-> Since EM_COST_MARGIN_SCALE == SCHED_CAPACITY_SCALE == 1024, this factor of 1
-> is not directly reflected in the code but is important for units
-> consistency.
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
+ MAINTAINERS                         |  1 +
+ drivers/interconnect/core.c         |  9 +++++
+ include/trace/events/interconnect.h | 52 +++++++++++++++++++++++++++++
+ 3 files changed, 62 insertions(+)
+ create mode 100644 include/trace/events/interconnect.h
 
-But completely irrelevant for the actual math and conceptual
-understanding. Just because computers suck at real numbers, and floats
-are expensive, doesn't mean we have to burden ourselves with fixed point
-when writing equations.
-
-Also, as a physicist I'm prone to normalizing everything to 1, because
-that's lazy.
-
-> > I suppose that limits the additional OPP to twice the previously
-> > selected cost / efficiency (see the confusion from that other email).
-> > But given that efficency drops (or costs rise) for higher OPPs that
-> > still doesn't really make sense..
-
-> Yes, this current limit to +100% freq boosting is somehow arbitrary and
-> could probably benefit from being tunable in some way (Kconfig option
-> maybe). When (margin > 0), we end up selecting an OPP that has a higher cost
-> than the one strictly required, which is expected. The goal is to speed
-> things up at the expense of more power consumed to achieve the same work,
-> hence at a lower efficiency (== higher cost).
-
-No, no Kconfig knobs.
-
-> That's the main reason why this boosting apply a margin on the cost of the
-> selected OPP rather than just inflating the util. This allows controlling
-> directly how much more power (battery life) we are going to spend to achieve
-> some work that we know could be achieved with less power.
-
-But you're not; the margin is relative to the OPP, it is not absolute.
-
-Or rather, the only actual limit is in relation to the max OPP. So you
-have very little actual control over how much more energy you're
-spending.
-
-> > So while I agree that 2) is a reasonable signal to work from, everything
-> > that comes after is still much confusing me.
-
-> "When applying these boosting rules on the runqueue util signals ...":
-> Assuming the set of enqueued tasks stays the same between 2 observations
-> from schedutil, if we see the rq util_avg increase above its
-> util_est.enqueued, that means that at least one task had its util_avg go
-> above util_est.enqueued. We might miss some boosting opportunities if some
-> (util - util_est) compensates:
-> TASK_1(util - util_est) = - TASK_2(util - util_est)
-> but working on the aggregated value is much easier in schedutil, to avoid
-> crawling the list of entities.
-
-That still does not explain why 'util - util_est', when >0, makes for a
-sensible input into an OPP relative function.
-
-I agree that 'util - util_est', when >0, indicates utilization is
-increasing (for the aperiodic blah blah blah). But after that I'm still
-confused.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 55199ef7fa74..c307c4b8f677 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8526,6 +8526,7 @@ F:	drivers/interconnect/
+ F:	include/dt-bindings/interconnect/
+ F:	include/linux/interconnect-provider.h
+ F:	include/linux/interconnect.h
++F:	include/trace/events/interconnect.h
+ 
+ INVENSENSE MPU-3050 GYROSCOPE DRIVER
+ M:	Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 7b971228df38..e24092558c29 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -24,6 +24,9 @@ static LIST_HEAD(icc_providers);
+ static DEFINE_MUTEX(icc_lock);
+ static struct dentry *icc_debugfs_dir;
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/interconnect.h>
++
+ /**
+  * struct icc_req - constraints that are attached to each node
+  * @req_node: entry in list of requests for the particular @node
+@@ -449,6 +452,9 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 
+ 		/* aggregate requests for this node */
+ 		aggregate_requests(node);
++
++		trace_icc_set_bw(node, dev_name(path->reqs[i].dev),
++				 avg_bw, peak_bw);
+ 	}
+ 
+ 	ret = apply_constraints(path);
+@@ -461,6 +467,9 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 			path->reqs[i].avg_bw = old_avg;
+ 			path->reqs[i].peak_bw = old_peak;
+ 			aggregate_requests(node);
++
++			trace_icc_set_bw(node, dev_name(path->reqs[i].dev),
++					 old_avg, old_peak);
+ 		}
+ 		apply_constraints(path);
+ 	}
+diff --git a/include/trace/events/interconnect.h b/include/trace/events/interconnect.h
+new file mode 100644
+index 000000000000..8e001382e9b0
+--- /dev/null
++++ b/include/trace/events/interconnect.h
+@@ -0,0 +1,52 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2019, Linaro Ltd.
++ * Author: Georgi Djakov <georgi.djakov@linaro.org>
++ */
++
++#if !defined(_TRACE_INTERCONNECT_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_INTERCONNECT_H
++
++#include <linux/tracepoint.h>
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM interconnect
++
++struct icc_node;
++
++TRACE_EVENT(icc_set_bw,
++
++	TP_PROTO(struct icc_node *n, const char *cdev, u32 avg_bw, u32 peak_bw),
++
++	TP_ARGS(n, cdev, avg_bw, peak_bw),
++
++	TP_STRUCT__entry(
++		__string(node_name, n->name)
++		__field(u32, node_avg_bw)
++		__field(u32, node_peak_bw)
++		__string(cdev, cdev)
++		__field(u32, avg_bw)
++		__field(u32, peak_bw)
++	),
++
++	TP_fast_assign(
++		__assign_str(node_name, n->name);
++		__entry->node_avg_bw = n->avg_bw;
++		__entry->node_peak_bw = n->peak_bw;
++		__assign_str(cdev, cdev);
++		__entry->avg_bw = avg_bw;
++		__entry->peak_bw = peak_bw;
++	),
++
++	TP_printk("%s avg_bw=%u peak_bw=%u cdev=%s avg_bw=%u peak_bw=%u",
++		__get_str(node_name),
++		__entry->node_avg_bw,
++		__entry->node_peak_bw,
++		__get_str(cdev),
++		__entry->avg_bw,
++		__entry->peak_bw)
++);
++#endif /* _TRACE_INTERCONNECT_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
