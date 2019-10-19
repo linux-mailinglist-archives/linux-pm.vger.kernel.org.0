@@ -2,87 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F80DD807
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2019 12:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B052DD815
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Oct 2019 12:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbfJSKJz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Oct 2019 06:09:55 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:57501 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbfJSKJy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Oct 2019 06:09:54 -0400
-Received: from mail-qk1-f175.google.com ([209.85.222.175]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Md66H-1hmA0q38lP-00aBTh; Sat, 19 Oct 2019 12:09:52 +0200
-Received: by mail-qk1-f175.google.com with SMTP id u184so7726616qkd.4;
-        Sat, 19 Oct 2019 03:09:50 -0700 (PDT)
-X-Gm-Message-State: APjAAAV6BC7+dJNdNnbp0uBhqhWjVJbpXA0P+NWDqHRQrLjjeNPea+9O
-        UsfK6mxzuQugSbt2MHqE8UxQN6gKkEIDC4IrnOw=
-X-Google-Smtp-Source: APXvYqxDnkD1LGxVOqOKBA1bv73+2FIM7aUPofN3DdgTjR6MZneEs/uqd6EIDns9KMja9p9yGzmHvgB/h9FVcJa5zrw=
-X-Received: by 2002:a37:a614:: with SMTP id p20mr4599817qke.352.1571479789607;
- Sat, 19 Oct 2019 03:09:49 -0700 (PDT)
+        id S1725802AbfJSKZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Oct 2019 06:25:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725616AbfJSKZR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 19 Oct 2019 06:25:17 -0400
+Received: from earth.universe (cust-west-pareq2-46-193-15-226.wb.wifirst.net [46.193.15.226])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 86B9F2082F;
+        Sat, 19 Oct 2019 10:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571480716;
+        bh=PB+8+CFcDHC/V7gHrHpJW0e3lzRlDYz1TNKgcBj6Q9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l0isxqp9B78/lE8vC/fJDaHKBdUiWN6ku3lQbKdzAx/1lbA9jFBOrTbLiFMWBxGBd
+         bng60wmXO3bL5eEdPsGA7IHfmWN9AIYKUMpH5JsynjnMODWYqeqgPKUUZceF9Sppmr
+         GvBCNAhSFug6zfm6DogFxTm3nMMjbkPN30TKqCzo=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 74E4A3C09B1; Sat, 19 Oct 2019 12:25:14 +0200 (CEST)
+Date:   Sat, 19 Oct 2019 12:25:14 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Yizhuo <yzhai003@ucr.edu>
+Cc:     zhiyunq@cs.ucr.edu, csong@cs.ucr.edu, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: rt5033_battery: Fix the usage of
+ potential uninitialized variable
+Message-ID: <20191019102514.e7py77cl5uynjbqj@earth.universe>
+References: <20191015165737.658-1-yzhai003@ucr.edu>
 MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <803f6fa5-b929-007c-5302-4a2d5042241c@roeck-us.net>
-In-Reply-To: <803f6fa5-b929-007c-5302-4a2d5042241c@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 19 Oct 2019 12:09:33 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0t-P_w705z0BSXxzj8MmmKVCagLtidiP+NX51zGce0ag@mail.gmail.com>
-Message-ID: <CAK8P3a0t-P_w705z0BSXxzj8MmmKVCagLtidiP+NX51zGce0ag@mail.gmail.com>
-Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:JoUK9zIsRwlckwxRsQPyrjTR+CJ+e1NzjrnywlpJZpvLQsrki/O
- 6oqUixG3wGmHbC1gSpDeC2OejM6V4LXMb9u1x0OmYrMxGcagKms+P8T/tjhy15NahnZvLsx
- 1gNVUhsGYzHMtoVbEaqcMjalLGwbYPFfNThqwVnR8BgbXGDhRMK7Adn2Vavriz2ulAIvmZU
- H5PZHrbqDUGaqIhXvsl4Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pA8x/njXmAI=:U9yaOvxfltjLDDMpfRuSsq
- 3HS+Uk5OMnTj7jXsSqT09WlnY5kJE4lyndiUAbmRhkwH8a1mpWaZtSeNW5l9XHblbovqqlFen
- I2hdy64SanS7+hdxQClxrj9MOTCMH+jQ/guAzqyyIS+ZJghWWRA96XK07WeYTSksO3Z3wi4PL
- oeUQfeMOmonDkSFZQJSU0pUDf5ibRuBWvHgYEqc4ZFCtQoMh4HxHg4DcDHz0GcvNIW8zWcUi+
- kGvUwPLgDOL+yFjxr4/A3kz9Dyp14ontGslHGkjqxAOAVjxv5J33fiBooNoR5GvtvGscuR2lq
- suA01emt1k4nZL14WT/4N/ifAN322ft1kJa84NI7AHbBVjq+Ty7vVxQJynTFU9qV2TtVeePTh
- z6LuoYpDlFdSQRZE9ZHsyb7Zbahb2icMEExmeS1b+ZHYjPQQSvKmuopKiOnFdVjBzVpbAs7Sq
- OWKgo9HdQ3faFXmP1ql0IgKuQZAqcUuGMxzZ3qQRC6iZ+w6Fjnw74/gf6IBz3WfI6QsztRmxr
- IChwQdXXDBnXtNhHmN5s+cYfz3SB5+3akBzydwjYiFDmkVYlrVsdsXPNkFi5WLrKvEs+jRXnT
- 7x949r2gXzMwOU6maKqn9s+IqzNassNQF5qaczd5/st4LlH7WfivxkcQH4ofJColsHPGPKZh8
- iktcGfmOnhb78/0TpIR8Pj7ulZJkGfkCzLvPJIWmyicG65izSidWtbu0o4peBVdS3AWBMLVL+
- RO1hs5zPp4BOBWIHL0DmrFqHNsNyUF9ne462ySkT6FJvnaVrgtoV5lzoQCIgWh5yfmbR3zfdh
- +cJJ58BOZyJDYKmZfk9jV62B7juGiiPu74mnB7POA41ONooMvzSSBTNUZFPGnif+VoMzuLyEz
- 8oK7rdh0sSaKcju6RlWA==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o5s3jpimr5xy5gox"
+Content-Disposition: inline
+In-Reply-To: <20191015165737.658-1-yzhai003@ucr.edu>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 19, 2019 at 3:03 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 10/18/19 8:40 AM, Arnd Bergmann wrote:
->
-> I don't get very far.
->
-> $ make-arm pxa_defconfig
-> arch/arm/Kconfig:677: can't open file "arch/arm/plat-pxa/Kconfig"
-> scripts/kconfig/Makefile:90: recipe for target 'pxa_defconfig' failed
 
->
-> Did I pick the wrong tree ?
+--o5s3jpimr5xy5gox
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It seems that one line got lost in a rebase and ended up in a different patch
-that was not part of the series. I updated the git tree now.
+Hi,
 
-        Arnd
+On Tue, Oct 15, 2019 at 09:57:37AM -0700, Yizhuo wrote:
+> In function rt5033_battery_get_present(), variable "val" could be
+> uninitialized if regmap_read() returns -EINVAL. However, "val" is
+> used to decide the return value, which is potentially unsafe.
+>=20
+> Signed-off-by: Yizhuo <yzhai003@ucr.edu>
+> ---
+
+The patch looks good, but your name in author and Signed-off-by line
+look incomplete (only one name). Please resend with full name as
+patch author and Signed-off-by.
+
+Thanks,
+
+-- Sebastian
+
+>  drivers/power/supply/rt5033_battery.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply=
+/rt5033_battery.c
+> index d8667a9fc49b..6a617531698c 100644
+> --- a/drivers/power/supply/rt5033_battery.c
+> +++ b/drivers/power/supply/rt5033_battery.c
+> @@ -26,8 +26,14 @@ static int rt5033_battery_get_present(struct i2c_clien=
+t *client)
+>  {
+>  	struct rt5033_battery *battery =3D i2c_get_clientdata(client);
+>  	u32 val;
+> +	int ret;
+> =20
+> -	regmap_read(battery->regmap, RT5033_FUEL_REG_CONFIG_L, &val);
+> +	ret =3D regmap_read(battery->regmap, RT5033_FUEL_REG_CONFIG_L, &val);
+> +	if (ret) {
+> +		dev_err(&client->dev,
+> +			"Failed to read RT5033_FUEL_REG_CONFIG_L.\n");
+> +		return false;
+> +	}
+> =20
+>  	return (val & RT5033_FUEL_BAT_PRESENT) ? true : false;
+>  }
+> --=20
+> 2.17.1
+>=20
+
+--o5s3jpimr5xy5gox
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2q5IYACgkQ2O7X88g7
++pqWkA/9EvJuyA5llGhAfOExXzXgaxzubn86saokf5/orrEYW2if8tGz46fvwESL
+CaZlv1xJFzyg38MQEmQN++fgVm5R+IsvsmRRHFgi13eM5G5xf0ZDaowHLEOb1HV1
+Q+hG9tXk2QGrp3piiZ1NQuW23ExE8+qQdajUrzPnD0+hdHtZnw6eoflnHxLpuXlI
+ja7ggV2wTC8lkM1ak3Qc/mbtauAOGYMokgVc0eHf79obcRl58IQ8hgi8HGbYCUw8
+smnxBpyfB7YKojOsn/50NxPU6kfGnHNo+uRmn0fzSq3wEiiMcf5rq4jju0mORArJ
+YPLxClG6Yb95sKnN/a7cwPydv9qH38I5eZ2q/xhPex/9MLJW3jl3a/++Ebtx8iub
+aT4CjLwhpfOCH4mWF3U1TVDjh4C9/Oma3lbkc3Yz+AyjbvrySp0i21iWKspB+1y4
+ZR6rbFzb6IiPipQEf0IneNndxFQVbLMaDQGKXiFNOBtvzHm8fwAXybP/Rh6VWGjD
+5tdw9Jc7QefH+q/FbqWIJHjf8c1JZlvvdYCNezoxulGkZWaFyFDMEQb1ER7iECcH
+bVC8r7XDetMMUgJxl+f3Bed4eb+EH2ytmdzG08sl/tNscU7kws7arMIfJ3whMW/8
++/KCNGZbz4i6uAbESUg4h338By2CEKY52ntDat2ySS8os69GJkw=
+=t/Cr
+-----END PGP SIGNATURE-----
+
+--o5s3jpimr5xy5gox--
