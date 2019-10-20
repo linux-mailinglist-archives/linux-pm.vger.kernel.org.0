@@ -2,118 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DA5DE0A3
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 23:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D44DDE0E1
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 00:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfJTVP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Oct 2019 17:15:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59416 "EHLO mail.kernel.org"
+        id S1726610AbfJTWVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Oct 2019 18:21:13 -0400
+Received: from mga11.intel.com ([192.55.52.93]:56363 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726301AbfJTVP4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 20 Oct 2019 17:15:56 -0400
-Received: from earth.universe (cust-west-pareq2-46-193-15-226.wb.wifirst.net [46.193.15.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7BF021928;
-        Sun, 20 Oct 2019 21:15:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571606156;
-        bh=tte/sBnIuHSqFUj7METw8OCBnma6Bu9TdJjj9VE6aFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CE1T6S4FRlUGeNzuEmYs5bwhJKmlCmh/XFk1nKSJj/b9M1uxmY8tS4vBnt+CabvC5
-         um3MGzeABGtQwTDIhLWit2WJghI8eAyiPrXYyRlv5iMjlsN6gHoExsqTl8+FPTdQJy
-         4aVub/3iSELPtCHczXt/cHfEP9Db5moLQ3XT/kDs=
-Received: by earth.universe (Postfix, from userid 1000)
-        id EBE0B3C0CA0; Sun, 20 Oct 2019 23:15:53 +0200 (CEST)
-Date:   Sun, 20 Oct 2019 23:15:53 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v1] power: supply: ltc2941-battery-gauge: fix
- use-after-free
-Message-ID: <20191020211553.cjfdpvhyqilhsbh4@earth.universe>
-References: <20190919151137.9960-1-TheSven73@gmail.com>
+        id S1726537AbfJTWVN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 20 Oct 2019 18:21:13 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Oct 2019 15:21:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,320,1566889200"; 
+   d="scan'208";a="203188658"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Oct 2019 15:21:11 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iMJZX-0006Md-59; Mon, 21 Oct 2019 06:21:11 +0800
+Date:   Mon, 21 Oct 2019 06:20:51 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     kbuild-all@lists.01.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [power-supply:for-next 18/29]
+ drivers/power/supply/cpcap-charger.c:481:5: sparse: sparse: symbol
+ 'cpcap_charger_voltage_to_regval' was not declared. Should it be static?
+Message-ID: <201910210600.WlHJI3rO%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3swbex74wzskpsoz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190919151137.9960-1-TheSven73@gmail.com>
-User-Agent: NeoMutt/20180716
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+head:   722f20d707b77bc7e3d241a3600b46b995474087
+commit: d4ee021c410f72bf2aacc61069ad6305120d2127 [18/29] power: supply: cpcap-charger: Limit voltage to 4.2V for battery
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-dirty
+        git checkout d4ee021c410f72bf2aacc61069ad6305120d2127
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
---3swbex74wzskpsoz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Hi,
 
-On Thu, Sep 19, 2019 at 11:11:37AM -0400, Sven Van Asbroeck wrote:
-> This driver's remove path calls cancel_delayed_work().
-> However, that function does not wait until the work function
-> finishes. This could mean that the work function is still
-> running after the driver's remove function has finished,
-> which would result in a use-after-free.
->=20
-> Fix by calling cancel_delayed_work_sync(), which ensures that
-> that the work is properly cancelled, no longer running, and
-> unable to re-schedule itself.
->=20
-> This issue was detected with the help of Coccinelle.
->=20
-> Cc: stable <stable@vger.kernel.org>
-> Signed-off-by: Sven Van Asbroeck <TheSven73@gmail.com>
-> ---
+sparse warnings: (new ones prefixed by >>)
 
-Thanks, queued.
+>> drivers/power/supply/cpcap-charger.c:481:5: sparse: sparse: symbol 'cpcap_charger_voltage_to_regval' was not declared. Should it be static?
 
--- Sebastian
+Please review and possibly fold the followup patch.
 
->  drivers/power/supply/ltc2941-battery-gauge.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/ltc2941-battery-gauge.c b/drivers/power=
-/supply/ltc2941-battery-gauge.c
-> index da49436176cd..30a9014b2f95 100644
-> --- a/drivers/power/supply/ltc2941-battery-gauge.c
-> +++ b/drivers/power/supply/ltc2941-battery-gauge.c
-> @@ -449,7 +449,7 @@ static int ltc294x_i2c_remove(struct i2c_client *clie=
-nt)
->  {
->  	struct ltc294x_info *info =3D i2c_get_clientdata(client);
-> =20
-> -	cancel_delayed_work(&info->work);
-> +	cancel_delayed_work_sync(&info->work);
->  	power_supply_unregister(info->supply);
->  	return 0;
->  }
-> --=20
-> 2.17.1
->=20
-
---3swbex74wzskpsoz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2szokACgkQ2O7X88g7
-+pqaChAApkJ+IwkcPqnt9sjPKSq0gxzC0zCQD2pFm+XFbAVmLBUEFHOX+cwcZWDi
-CjlDRncen3sw9x29akza1mCaiQ0DxFbNVjZOswhRjkxkl5AcfMJZfv+QuhdRVeO2
-6MvpGeS4rhrLNL/HGnNILMrkIc/92FxTluxf+gcwO4XV4C6G7wGm3gmC9oTYi9MK
-zoRj+ucWdhP2/7TN4KzGt2ki7qnOQ2X1wzhqwZCzgeGnxWKaMx3bovrLW+bfFF9P
-BTlovcmOAmKssbBOJxNLoQE1F3+rjcx+QDaS4bzGbVfyLNoPYNsDgRSBzm6J6qHW
-cfshuVENlDUiqF1olQLBsBnlJPBgB/KH1QzTJQH6NWHTfx/sNO85xv8c2rGzIa8v
-8P0zxSFpBcmKPVbvgfNS0MoyxX39AmfTzy7bsJ855rL+wyvZmavI1vNZ8Sr0nTTY
-3IytCA3E5PSt2anm/Q/v+/1xzGHOygQbM1UrZg3pED4Ytt+SA3hwMx/f3lVfZa9y
-PPSJTgzXMA1LhwjAuKDKyoblJ6J1ZqBud0Q91W0rDJI71ci3LZgdfj/NxN2GPrr1
-Ge0J/jNEtpUOzpTuCz8NOIHGuOKoYpjLY1j1sCD8enc47MA8PVLBoCYk0VKE7wu6
-7IqwsYkATfXhAp0zz/G7bOqXGFSBrYUlnJkwMu8BSj38OjJ5oYc=
-=3Vuq
------END PGP SIGNATURE-----
-
---3swbex74wzskpsoz--
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
