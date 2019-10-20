@@ -2,42 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F26CDDE77
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 14:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A17DDE81
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 14:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfJTMnm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Oct 2019 08:43:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56000 "EHLO mail.kernel.org"
+        id S1726296AbfJTM5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Oct 2019 08:57:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726289AbfJTMnm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 20 Oct 2019 08:43:42 -0400
+        id S1726295AbfJTM5u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 20 Oct 2019 08:57:50 -0400
 Received: from earth.universe (tmo-104-243.customers.d1-online.com [80.187.104.243])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E98C921744;
-        Sun, 20 Oct 2019 12:43:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F33620640;
+        Sun, 20 Oct 2019 12:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571575421;
-        bh=Mkt4V0ubKfu0vpl/nX8DPcWJKgzBgQDUxIY7+f3r7k0=;
+        s=default; t=1571576269;
+        bh=a4cIo6o/+l6MkZI3kV4/Qt6TYtKNFU41pnysG7BhNLE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AUj7Ga4ToHdEPVacR8j30ucKTOjDvGAuxGGoC/Yg5zfk3ID4ORDrMI2Wl9tKacB0z
-         fcdP9S/x7lIzUM0lvKkbZEdslYexRTVy+AA/qLnM2WBKWqfxTWw9LcyKJ3R0mONym7
-         6/ZGWNabsvZEOBKCqzgQnLRQ365sP00G3t3v39cE=
+        b=v1FjeWn5SBJeVRD2R9oZ/FgQSCB2L8VZ2hrOLgLrKlgCzlkL1k3ELGFGSR36OB15G
+         NUQgyUo7xENX9ro6WV+FPiKPFiZBi7VOufshihqPfwBfxDsB7E0H5DukzE6AGNZUf9
+         SNvbvbadbi0ruBS5aJ+ss6wglmJI31pweTp4Qr2A=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 43D153C09B1; Sun, 20 Oct 2019 14:43:35 +0200 (CEST)
-Date:   Sun, 20 Oct 2019 14:43:35 +0200
+        id CAF6D3C09B1; Sun, 20 Oct 2019 14:57:37 +0200 (CEST)
+Date:   Sun, 20 Oct 2019 14:57:37 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] power: supply: bq2515x: Introduce the bq2515x family
-Message-ID: <20191020124335.gssoiyjmdtpygwqy@earth.universe>
-References: <20190930143137.21624-1-dmurphy@ti.com>
- <20190930143137.21624-3-dmurphy@ti.com>
+To:     madhuparnabhowmik04@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] Power: supply: abx500_chargalg.c: Fixed a code
+ indentation error
+Message-ID: <20191020125737.t4lx6nshoszojbtx@earth.universe>
+References: <20191015161341.26868-1-madhuparnabhowmik04@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pug62zvjsqlqwju4"
+        protocol="application/pgp-signature"; boundary="tlbqmfvintztvz3z"
 Content-Disposition: inline
-In-Reply-To: <20190930143137.21624-3-dmurphy@ti.com>
+In-Reply-To: <20191015161341.26868-1-madhuparnabhowmik04@gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -45,100 +46,84 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---pug62zvjsqlqwju4
-Content-Type: text/plain; charset=iso-8859-1
+--tlbqmfvintztvz3z
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Here are some more notes.
-
-On Mon, Sep 30, 2019 at 09:31:37AM -0500, Dan Murphy wrote:
-> Introduce the bq25150 and bq25155 supply chargers.
+On Tue, Oct 15, 2019 at 09:43:41PM +0530, madhuparnabhowmik04@gmail.com wro=
+te:
+> From: Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>
 >=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> Fixed Code indentation error caused due to using spaces
+> instead of tabs.
+> The error reported by checkpatch.pl is:
+>  ERROR: code indent should use tabs where possible
+> The warning reported by checkpatch.pl is:
+>  WARNING: please, no spaces at the start of a line
+>=20
+> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>
 > ---
 
-[...]
-
-> +/* initial field values, converted to register values */
-> +struct bq2515x_init_data {
-> +	u8 ichg;	/* charge current		*/
-> +	u8 vreg;	/* regulation voltage		*/
-
-The following 4 entries seem to be unused.
-
-> +	u8 iterm;	/* termination current		*/
-> +	u8 iprechg;	/* precharge current		*/
-> +	u8 sysvmin;	/* minimum system voltage limit */
-> +	u8 ilim;	/* ILIM current contol		*/
-> +};
-
-[...]
-
-> +static int get_const_charge_current(struct bq2515x_device *bq2515x)
-> +{
-> +	int ret;
-> +	int intval;
-> +	int iin_msb;
-> +	int iin_lsb;
-> +	u16 ichg_measurement;
-> +	int ilim_val, ichg_multiplier;
-> +
-> +	if (!bq2515x_is_ps_online(bq2515x))
-> +		return -ENODATA;
-> +
-> +	ret =3D regmap_read(bq2515x->regmap, BQ2515X_ADC_IIN_M, &iin_msb);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret =3D regmap_read(bq2515x->regmap, BQ2515X_ADC_IIN_L, &iin_lsb);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ichg_measurement =3D (iin_msb << 8) | iin_lsb;
-> +	ret =3D regmap_read(bq2515x->regmap, BQ2515X_ILIMCTRL, &ilim_val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ilim_val >=3D BQ2515X_ILIM_150MA)
-> +		ichg_multiplier =3D 350;
-> +	else
-> +		ichg_multiplier =3D 750;
-> +
-> +	intval =3D (ichg_measurement * 100 / BQ2515X_DIVISOR) * ichg_multiplier;
-> +	return intval / 100;
-> +}
-> [...]
-
-I just checked the calculation and you return mA. This is incorrect,
-since the power-supply ABI uses =B5A. Please also re-check the other
-calculations. You can find some information about the power-supply
-subsystem here:
-
-Documentation/power/power_supply_class.rst
+Thanks, queued to power-supply's for-next branch.
 
 -- Sebastian
 
---pug62zvjsqlqwju4
+>  drivers/power/supply/abx500_chargalg.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/abx500_chargalg.c b/drivers/power/suppl=
+y/abx500_chargalg.c
+> index 23757fb10479..e6e37d4f20e4 100644
+> --- a/drivers/power/supply/abx500_chargalg.c
+> +++ b/drivers/power/supply/abx500_chargalg.c
+> @@ -354,13 +354,13 @@ static int abx500_chargalg_check_charger_enable(str=
+uct abx500_chargalg *di)
+> =20
+>  	if (di->chg_info.charger_type & USB_CHG) {
+>  		return di->usb_chg->ops.check_enable(di->usb_chg,
+> -                         di->bm->bat_type[di->bm->batt_id].normal_vol_lv=
+l,
+> -                         di->bm->bat_type[di->bm->batt_id].normal_cur_lv=
+l);
+> +			di->bm->bat_type[di->bm->batt_id].normal_vol_lvl,
+> +			di->bm->bat_type[di->bm->batt_id].normal_cur_lvl);
+>  	} else if ((di->chg_info.charger_type & AC_CHG) &&
+>  		   !(di->ac_chg->external)) {
+>  		return di->ac_chg->ops.check_enable(di->ac_chg,
+> -                         di->bm->bat_type[di->bm->batt_id].normal_vol_lv=
+l,
+> -                         di->bm->bat_type[di->bm->batt_id].normal_cur_lv=
+l);
+> +			di->bm->bat_type[di->bm->batt_id].normal_vol_lvl,
+> +			di->bm->bat_type[di->bm->batt_id].normal_cur_lvl);
+>  	}
+>  	return 0;
+>  }
+> --=20
+> 2.17.1
+>=20
+
+--tlbqmfvintztvz3z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sVnQACgkQ2O7X88g7
-+poKkQ//Ul4FyYqJe7GL08pax4RATZxfc9jZlRJqwfOfzHzwZlDSG9VAIP/IqySU
-DMZ3uD1qbjNpJYzGzvDJ4Wtr6n0nwoaiGRMnzgEzWNXRjF+mZMTZX/PyZZ2Kvnww
-G4xdqz5QgcdVnvdy52qYTlM0f7YKKFdvHKSmEtQCsGTEU0/A9K3bibpAttyCYQGU
-Z/LbuuWJfIYCPBi3oYktvO0mtRmD8rK991EeihVuThJ8urtg60/UjQPfgVtBJ9Nz
-LNf8dNe/cOS5pKyzrKCr7/5yalLlt5ekAX1INwS3roML6agn+EunkZ/gtE2gxotx
-6xG132LE/0o5S/3P10ghlAdb0gVNxSMvA48FA96A4slKgO5W8potHCiR2n56Sedk
-MiM6jTyXSjK1c3c7SxJM1B7lsFA+Sr2TDGBdoT6QIzisTo1LlpIbYa6dDavEPLbZ
-HrST846Pw7LBPfQzbUI9g+OGJx1n6GHsQLN/MSs/MsVxufl5S5xAbLehwMdae+Ir
-3Z2M3uSgtC8v5vpBccHCutfgnd/pYhPeX1hvOQIv2CHQfPBTk6jwb3BMR/bO4GU/
-7+x1a/Bsak2jOis2hXQi0QoWP4jjBh1venLqt2QtWxKGCR1zejd3/9wU52rS9x7/
-KO7JXiraWHwxCPGdSLL7tJkppc4c8zN4CoYNgR3eFpnrwXKQjsE=
-=8M8k
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sWb4ACgkQ2O7X88g7
++po7UA/7ByxXHbLl3FPKRDFfRH9tDLdQeF9MUepCzmywVN5jpt4CULuUhoFmkKvz
+6uQOQLN52Nm2NlLL2WbvKBtdmuMCuJn4EpiWG0R7er85lpAJJQoP7U0GWB0PDCfe
+g7BSrYEWqYCs3S8GV+xPJNVCoefg6gnWDcorBluP0z6PZnp4wJq8KV6nX9O5Pdzw
+8qkw5ZVyWvuhwvPpvVpK9vFS+e2NE5T9sCa4dlmJZWgWBzJjoaU6VY/aXspJMZim
+K1ZFwriD4SmDKtgu1BvQ1eZuYL1my2dxf1R0QkgweEVBUeCID+SzSFoFCHQEB2of
+jfTFJocQL7xA3YYZ9DzcibzXqBWB0AeQpd9RklVoHPLdNL3S79tZVYd8lwZpNU9V
+6ZgWGAG/+23ir6flUS+lNK60AnhAN7NIrhIDCZ5+WSxcjIZ8EY+l2jvrRcRPA4yx
+/gPoCQqVKckivRyEgQvSWX/3hkh+i4bOXavpZUj6Io5Z2vXwXE8ohq1lN1couO+2
+4aZItc0r54y5WdIoCLpDj5TtHclomfSHEX3Z5HYOwnqbwf4GjV572nl0OPd0PkIM
+jzQkCZJwc9L1VlwPmNbMMt6LfYs0J9Fp73zEV9XulnBfVlCRrSuYYWI42BpiMMIb
+OlbGtE4oF55v9JnttA0YvvCyg1UcBIaBZMcmCLs300nJyfLaIEM=
+=ROpJ
 -----END PGP SIGNATURE-----
 
---pug62zvjsqlqwju4--
+--tlbqmfvintztvz3z--
