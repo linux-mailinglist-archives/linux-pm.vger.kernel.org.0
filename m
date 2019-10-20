@@ -2,43 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 613DBDE074
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 22:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EDCDE076
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 22:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbfJTUft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Oct 2019 16:35:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52798 "EHLO mail.kernel.org"
+        id S1726424AbfJTUgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Oct 2019 16:36:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52852 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726424AbfJTUfs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 20 Oct 2019 16:35:48 -0400
+        id S1726415AbfJTUgH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 20 Oct 2019 16:36:07 -0400
 Received: from earth.universe (cust-west-pareq2-46-193-15-226.wb.wifirst.net [46.193.15.226])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D927121928;
-        Sun, 20 Oct 2019 20:35:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EBBB220640;
+        Sun, 20 Oct 2019 20:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571603748;
-        bh=gIyQJ9nxmVz8oDzGR+U8BzX4oXoQvuwbzMgyFA2XsAY=;
+        s=default; t=1571603767;
+        bh=ifCajNv4Ohgf7WSyNQAWLBIiQvg/bJhJ/UazM3U8rzU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GCV9O6M/m1vYckWDVH4mnnMlPoAXdSBaBYH2RTxFhPnPDebFJeRBCqcDTnxYhB7VL
-         NyQiNHfzxSCg+KqC7XZ9Tfr/poSLFgleKNtopixgVX8MjQkl2oiYRly1bQp9hehemN
-         W7ITgVSQeoFAzpQdoflESxDikzI7kbsWfl2zgXNg=
+        b=nDJ2Y6CDL9Y9t69vLhoFkm2O8D1e01eN9P46Hyk94gOTdIn5m/EuXKg0Ru6aktPrE
+         hKJUJTSx9dp1eGr3k4OGE8Q0peytV5WAJWBPScqWzfxbEsrwKq9/QzftiZxqjXH8HW
+         75WOl7ItDEmODZk5lTwDPfvqh1nja3eDFPBfYJHg=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 2765A3C0CA0; Sun, 20 Oct 2019 22:35:46 +0200 (CEST)
-Date:   Sun, 20 Oct 2019 22:35:46 +0200
+        id 0CDBC3C0CA0; Sun, 20 Oct 2019 22:36:05 +0200 (CEST)
+Date:   Sun, 20 Oct 2019 22:36:05 +0200
 From:   Sebastian Reichel <sre@kernel.org>
 To:     Tony Lindgren <tony@atomide.com>
 Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
         Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCHv3 0/2] cpcap charger and battery changes to deal with
- dropped voltage
-Message-ID: <20191020203546.vjrbv3hm2c6kob4r@earth.universe>
-References: <20191016224122.10126-1-tony@atomide.com>
+Subject: Re: [PATCH 0/5] cpcap battery simplification and calibrate support
+Message-ID: <20191020203605.gt5in2dvvtpgtafm@earth.universe>
+References: <20191009210621.10522-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zaz5h3axnegm4ilg"
+        protocol="application/pgp-signature"; boundary="d675tyaz4w6hwbuw"
 Content-Disposition: inline
-In-Reply-To: <20191016224122.10126-1-tony@atomide.com>
+In-Reply-To: <20191009210621.10522-1-tony@atomide.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -46,69 +45,61 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zaz5h3axnegm4ilg
+--d675tyaz4w6hwbuw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Oct 16, 2019 at 03:41:20PM -0700, Tony Lindgren wrote:
+On Wed, Oct 09, 2019 at 02:06:16PM -0700, Tony Lindgren wrote:
 > Hi,
 >=20
-> Here are the changes for v5.5 merge window to optionally allow reconfigur=
-ing the
-> charge voltage if folks want to do that.
->=20
-> These depend on v5.3 + [PATCH] power: supply: cpcap-charger: Limit voltag=
-e to 4.2V
-> for battery merged into v5.4-rc1 so we can keep the 4.2V fix usable for e=
-arlier
-> kernels as needed.
+> This set of changes simplifies the coulomb counter code for cpcap-battery.
+> And the last patch in the series add support for coulomb counter calibrat=
+ion
+> on probe.
 >=20
 > Regards,
 >=20
 > Tony
 >=20
+> Tony Lindgren (5):
+>   power: supply: cpcap-battery: Move coulomb counter units per lsb to
+>     ddata
+>   power: supply: cpcap-battery: Simplify coulomb counter calculation
+>     with div_s64
+>   power: supply: cpcap-battery: Simplify short term power average
+>     calculation
+>   power: supply: cpcap-battery: Read and save integrator register CCI
+>   power: supply: cpcap-battery: Add basic coulomb counter calibrate
+>     support
 >=20
-> Changes since v2:
->=20
-> - Fix up typo for 4.1V spotted by Pavel
->=20
-> Changes since v1:
->=20
-> - Sent the 4.2V charger change separately as a fix
->=20
-> Tony Lindgren (2):
->   power: supply: cpcap-battery: Fix handling of lowered charger voltage
->   power: supply: cpcap-charger: Allow changing constant charge voltage
->=20
->  drivers/power/supply/cpcap-battery.c | 85 +++++++++++++++++++++++++---
->  drivers/power/supply/cpcap-charger.c | 83 +++++++++++++++++++++++++++
->  2 files changed, 161 insertions(+), 7 deletions(-)
+>  drivers/power/supply/cpcap-battery.c | 178 +++++++++++++++++++--------
+>  1 file changed, 125 insertions(+), 53 deletions(-)
 
 Thanks, queued.
 
 -- Sebastian
 
---zaz5h3axnegm4ilg
+--d675tyaz4w6hwbuw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sxSEACgkQ2O7X88g7
-+prZ4A//WE9hpZiyBQxiyru2Tt3VzUKORclzuCyVGApgEYy3BPB4QnX1930aongw
-xibHblO/fjFOk431702hOZntu8+nnglWOSfVyujNH/b7mmB9jAvxTyVwif0AGA0j
-5TP66ogdXgcBbofbJK+13niuMz7HC38y0HBOpCqEhsaQkrCOHPTg3+jSZTdJ04/h
-joFGV1JYIIWpCR6Y70fL71rxz3I+E0GnWpJXPxVMkN/nd9j+HtJVqDbZc59TM/Ld
-akNw/2ivWdTA7zmT3A2o+EV8GH7Ukm+AVkYKfnfrrL4cRrOG0u0mbCpvuPDeyugQ
-OILcWgB7EuSHY+dVUOKbRABl6d5vNtkT5ojYz19YDo3IwZfC57yrIKyY4OZ514JS
-qc0ewTjFOYj65qCqCRuKEDT78URJUIf6g1JevuRRZNCi35tcwEQ/yQtOc/avQe6o
-oJzVa/aAh8WdGwCl4PpvjjBD+s1d/u0yTSJDHWJNdPmF0ZZhX3tuXmO32GaZK1dH
-IQRDR0DfcEU02sSX2VVxYjwylYo8c0RziGJVcXa+szzlcNTL1O4NNqA1AJjGl8YW
-gBLxfQDvYk148q/v7KNHs/fGQPJHfGD8UB+t6loIDt1VTTyNyQ1jxHC2CfOsFit0
-WqIJGLuh1iCJBMG1NI4c5FJqCS1HctQ/FtkD6Xv9I+rSwG6HD/Q=
-=PNPs
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sxTQACgkQ2O7X88g7
++prG5w//eJ+MxklCTFUIwDNuQf/C9rQzoQ4sz0mri4m1Sptd9FJQ/wq4/cvIV0iA
+/jYL/W7NDyXNvJCgIUFP+2VtfnTMCeuQfRuzdMI8Yq+Vj6QD84gCVxf8k6cRHF+Z
+ynQ06U6I7d6968mAqEGUPr60NrN381X75L7ZWZJwD80FUapYsNGGkhxgUCZjORT8
+4J/GxNNbyv1O4m2utSFFyjISJ1it3c53z3veEomnDj6utJT1n/txt7vZY+0nBN5q
+Dcrj2LdDgUi4ZAJEKrnqj9fU2/oLOh9XlMEASiF/4GKOly5Nk9zjJFfLnH1BsxEZ
+YZFX42bRJXF46lZ9mATZxyyhWCEQ4jmhij94Dh646G7PAlHMGBTSy4JBzVx/DvrJ
+VHwTOE/m0fVXRCu/ZpzwQDMskgaYIreTTBWub0CP0oIX8bNgKzRFzNJHKU0pRF4E
+hKJXmYoK0tSz4REICA8PN4QqFwdPz7jidtLmqmEVmO5+bJ2jZfWo7CkXoW9PQNSE
+tU4PEcSYHpeuUNvTLa0N5KeS/4VWM9EOJfeiKOzXqv4hz1/aAAQgc1iKnVpDCLOS
+zhW3oDpIFHq4BqEob8BYbFNwD2JmccLN9QENCT6jL5JkO30vO6BsvDDjCBodwsEX
+WqFNYOBOv7vKnc4qC6/aVXkRc2EuX11ZLV+hl6XcA+cK5R/V3IA=
+=O6Kq
 -----END PGP SIGNATURE-----
 
---zaz5h3axnegm4ilg--
+--d675tyaz4w6hwbuw--
