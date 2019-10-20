@@ -2,45 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68856DDE9C
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 15:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97FEDE071
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Oct 2019 22:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfJTNYC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Oct 2019 09:24:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33928 "EHLO mail.kernel.org"
+        id S1726152AbfJTUfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Oct 2019 16:35:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726298AbfJTNYC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 20 Oct 2019 09:24:02 -0400
-Received: from earth.universe (tmo-104-243.customers.d1-online.com [80.187.104.243])
+        id S1725941AbfJTUfT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 20 Oct 2019 16:35:19 -0400
+Received: from earth.universe (cust-west-pareq2-46-193-15-226.wb.wifirst.net [46.193.15.226])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6989218BA;
-        Sun, 20 Oct 2019 13:23:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 28A7121928;
+        Sun, 20 Oct 2019 20:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571577841;
-        bh=JUeyhbY4XLPzl8wkAxz5gj6htNnsDXVN8k8a2GTjy1A=;
+        s=default; t=1571603718;
+        bh=0BZCTVybFYdutIhAdoTAhNwvf9adyvA5o/4WyUSSLCI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u5296DppeCP7gcRjsD5Ko3IbgyouQOgb9XoB8emX153V/EMvyLDkFDoGUYxh7LwB8
-         xTqZ2yCcAfeo4GfEPMurOZ80hpOZmt7vt7trMvqd0gKqtcBE79LmUEWuvzjzpFh1fw
-         T1Tfo8h9cnf4okIUkT8g8bsIzDeENCn6jxLgH49A=
+        b=Es/t6OJrm5fYKS/AjdcXrChXRJd+I0JtwjaBfZmeJVWJtHkMJ2N4ZOL0ER263TBKh
+         zblhD3wmlYg0lqLsB0KLTd/PU9Wpk5VRd7ezp4oJfBo4g9PJram7Wd1m4abQaVz41C
+         OQMi3mGQIuHpsqQXCSUezP/bE8nrzKKLfcS3nWl0=
 Received: by earth.universe (Postfix, from userid 1000)
-        id ADA5B3C09B1; Sun, 20 Oct 2019 15:23:52 +0200 (CEST)
-Date:   Sun, 20 Oct 2019 15:23:52 +0200
+        id 70EB63C0CA0; Sun, 20 Oct 2019 22:35:16 +0200 (CEST)
+Date:   Sun, 20 Oct 2019 22:35:16 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFT 1/3] power: supply: ab8500: Cleanup probe in reverse order
-Message-ID: <20191020132352.seo2seahsq2k32mb@earth.universe>
-References: <20191004150738.6542-1-krzk@kernel.org>
- <CACRpkdYSnnOJomJi=Db2nkrrdNQmBnNKny1c7ZpDj6KdmKD9Mg@mail.gmail.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Merlijn Wajer <merlijn@wizzup.org>
+Subject: Re: [PATCHv2] power: supply: cpcap-charger: Limit voltage to 4.2V
+ for battery
+Message-ID: <20191020203516.sp2vafrvb2pi3hp6@earth.universe>
+References: <20191016221817.8501-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bpnqgwqyh5qys2js"
+        protocol="application/pgp-signature"; boundary="3thxzith3uiedyki"
 Content-Disposition: inline
-In-Reply-To: <CACRpkdYSnnOJomJi=Db2nkrrdNQmBnNKny1c7ZpDj6KdmKD9Mg@mail.gmail.com>
+In-Reply-To: <20191016221817.8501-1-tony@atomide.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -48,68 +47,74 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bpnqgwqyh5qys2js
+--3thxzith3uiedyki
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Tony,
 
-On Wed, Oct 16, 2019 at 10:33:12AM +0200, Linus Walleij wrote:
-> On Fri, Oct 4, 2019 at 5:07 PM Krzysztof Kozlowski <krzk@kernel.org> wrot=
-e:
+On Wed, Oct 16, 2019 at 03:18:17PM -0700, Tony Lindgren wrote:
+> There have been some cases of droid4 battery bulging that seem to be
+> related to being left connected to the charger for several weeks.
 >=20
-> > It is logical to cleanup in probe's error path in reverse order to
-> > previous actions.  It also makes easier to add additional goto labels
-> > within this error path.
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> It is suspected that the 4.35V charge voltage configured for the battery
+> is too much in the long run, so lets limit the charge voltage to 4.2V.
+> It could also be that the batteries are just getting old.
 >=20
-> For all 3 patches:
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> We don't really want to just change the charge voltage to 4.2V as Android
+> may have charged the battery to 4.35V as pointed out by Pavel Machek.
 >=20
-> The battery charging code is currently disabled on ux500 simply
-> because no platforms with batteries were available for testing
-> or supported by any device trees.
+> To add checks for battery voltage, the driver needs to understand the
+> voltage it's charging at, and also needs to better understand it's
+> charger state. Right now it only understands connect and disconnect,
+> while now we need to know also a connected state but not charging.
 >=20
-> This is getting fix: PostmarketOS is brewing patches for enabling
-> all Ux500-based Samsung phones, all with batteries. So we will
-> soon be able to test and turn this on.
+> So let's add better charger state handling with help of chrgcurr2 interru=
+pt
+> for detecting charge full and retry, and add a check for battery voltage
+> before we start charging. And then we finally can lower the charge voltage
+> to 4.2V.
 >=20
-> The patches are fine to merge, however notice that we are
-> refactoring all drivers using ADC through the IIO tree:
-> https://lore.kernel.org/linux-iio/20191011071805.5554-4-linus.walleij@lin=
-aro.org/
-> https://lore.kernel.org/linux-iio/20191011071805.5554-2-linus.walleij@lin=
-aro.org/
-> https://lore.kernel.org/linux-iio/20191011071805.5554-3-linus.walleij@lin=
-aro.org/
+> Note that we've been using the same register values as the Android distros
+> on droid4, so it is suspected that the same problem also exists in Androi=
+d.
 >=20
-> It would be nice if we could avoid colissions.
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Reported-by: Merlijn Wajer <merlijn@wizzup.org>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>=20
+> If this looks OK, I would appreciate an immutable branch against v5.4-rc1
+> with just this patch in it for merge conflicts with v5.5 dts changes.
 
-Thanks, I merged your immutable branch for the ADC work
-and this patchset.
+Thanks, I queued this to power-supply's for-next branch using the following
+signed immutable branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/=
+tag/?h=3Dpsy-cpcap-charge-volt-limit-signed
 
 -- Sebastian
 
---bpnqgwqyh5qys2js
+--3thxzith3uiedyki
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sX+UACgkQ2O7X88g7
-+poy/w/8DMZnLieBPLWUCwhIO5fbuByhIgR2X4Aa8sgjZMXRD5ZyreiZNY5HopAV
-5NhV18pa8YcqWLaZO5uar+snOyI959yctBrTSU0ddwt+WAflTxR/sS3d49pNwZDY
-OPz6j85seXjYVqlwSjv+FlN3oBBOoAt2dC0F688OZKyoRQ2+rGoVMasNcG3hIeLm
-XtJ1Snmb05Jbky8j2YD9WJ/6txAMdoy1xYRpLQxM2J6W6ekZ+DBfFkQc2MPYnuBm
-hNKQHvm3wiZ/wXr33UumZc/qJ0ZJx6qzASF9zeiyThn7lGbXMRCyTY1Gow+ECo39
-ZxboDpTt7bGbhcDDjl1mAFeDhC7ceZh1iimq6s5n4dgz8Kg3/uPGacMn+ilZnh8a
-Ab021CnrZzpwDw2+hgfkJfc7GwgkmwfJ5WwvW37iu/0FITDAvIDZMbsAlRLv6c/d
-amB+4VwuA8GXziINCde7f362Gvd0XDJzqSt7ZD3NMR4YNNeYaGd1NZYxd/ox3k6X
-KFrF6Wyl8oQlSkGjBAgSCkh9zqjUv6AN8XtLFzd0G+YnyVqC7WzjPxco+ZA95Aft
-kASFujCAFOBtyU4q1mwIcHhbcZUPHSD9WJ7uzrbH7lx8lrwbs87XV2iIPRCJN66s
-CoCbsUz4ryxNbUcd9xQaAXp9e4wPVb/6rfhBNr+iYVVCjd4agAk=
-=rfQl
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2sxQQACgkQ2O7X88g7
++ppfug/+OwZrst7R7Pe1ieMe0cpXbAWsTLzZJhIOWOQQ6ow8ppg0m6HaEIOFT+9y
+NzE0OBG0FrLRCHa00bMDt+zUllueb9HRNxeEBeIGU3bahJz+CVmZ1n8WKYjHFwIw
+ZGE+5fM+ouGGsM4j+1m+Ls/BCYlzMDV7OCcxZW/In3SYpP5LbWZevAzaQ4B7Ahvb
+c3lNftMELx6ngiHJ0CSJ+lBhTNTxdpIlHn04yYtuPMLLogycHa4ldMZk/VlzKZF5
+KoEDDP5lEhVIOBCRMidcbyY+Va7wT6zZtpzV0YahvW65GFNkhYAAH6mL2nI4HxAH
+TvE7AjVq34amkS6WG45sgJYVELVUV5fDLrUpKtgU4bR+ixUYvDwicHV4yqkL+LQI
+Hsku/sz4EBDJY6CMUXtgzSHkyQncI76/G+bXBlBHMLNIImE2rFJ4tsNsR7REbTc9
+fyrwNWfiYV8+HbqSKpurQteHH6vee5jFjqzOFHIxRbNOsrM4omCzPN13Gq+alooa
+ryjWgdUAoryzGxEYrzI2yT9Wy8BxlcNGTa3nW/tFehwMN60C9briGEFu8y35dgPx
+gSCPL2Zdngz6fwRWtLrMm9xJTmHhxDcjMJwt8pfvQex6iwtT8kDMQQna0m+QEObX
+edmwk+LsXCb9MqAyY+2v6mQPKDf4PauFmLVwoC1ND4PsZF3eJZs=
+=bf+f
 -----END PGP SIGNATURE-----
 
---bpnqgwqyh5qys2js--
+--3thxzith3uiedyki--
