@@ -2,66 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44127DE0DE
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 00:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA18FDE14F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 01:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbfJTWVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Oct 2019 18:21:13 -0400
-Received: from mga05.intel.com ([192.55.52.43]:9616 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726374AbfJTWVN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 20 Oct 2019 18:21:13 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Oct 2019 15:21:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,320,1566889200"; 
-   d="scan'208";a="195950107"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Oct 2019 15:21:11 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iMJZW-0006LL-UI; Mon, 21 Oct 2019 06:21:10 +0800
-Date:   Mon, 21 Oct 2019 06:20:52 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     kbuild-all@lists.01.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH power-supply] power: supply: cpcap-charger:
- cpcap_charger_voltage_to_regval() can be static
-Message-ID: <20191020222052.hud2r3jx2rvrrip3@4978f4969bb8>
-References: <201910210600.WlHJI3rO%lkp@intel.com>
+        id S1726597AbfJTXut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Oct 2019 19:50:49 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36107 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbfJTXut (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Oct 2019 19:50:49 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k20so9555295oih.3;
+        Sun, 20 Oct 2019 16:50:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8n+CfgHrVlYbOyIx7HIFqyuXutdrrSkrZVWKO7njL/U=;
+        b=GrwmHQz0f40MJAeUj/wIKLRj5Mz7fn/NsFx3fMu2aAgRuN7qEK8gG0l6k+Eqm0ke7g
+         ZfGuDGfNgRWV5iW+rieqwjPnvn1SC3te/SciTo38PmH8pl5/2W+dw1RjhM+vr38J8TXY
+         vWWhYxkC6qBgjxjYiG6MyaQktmQq6ISOc7Y5bJ3bKi+H/2q0OE2qqrHJpK1AR3mvj3TD
+         S4LgUYCe9MhPdAr/HMeySGrtypf7ZNAgJmN8+sniSNOY2xRpGJ57GJB4tJTnojv6+v81
+         uEKmp5tiX6RdSDUyO7XUPvhkTum4lijGLljQOPTkdXKq21emgJ8CBSIQV6JpDWgFdwso
+         3rNA==
+X-Gm-Message-State: APjAAAWk26aQRchz9AQgrCDDg9dJmWh/scFAKjcRgEw4N68zhQtkTg9N
+        IaaGWjYtH9sxImflZbk9Lo3p4flsmyhQtrmTV7k=
+X-Google-Smtp-Source: APXvYqwJx6/icv4b9V0nQ9H9QSSDWXq0NSOsNklvjxlbkPf67XhAPTbo2vI/mzE/NWRT6ZOgAV7MbbCSRpOpOp/dWO0=
+X-Received: by 2002:a05:6808:917:: with SMTP id w23mr16026275oih.68.1571615447361;
+ Sun, 20 Oct 2019 16:50:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201910210600.WlHJI3rO%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20191018105815.5714-1-sudeep.holla@arm.com>
+In-Reply-To: <20191018105815.5714-1-sudeep.holla@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 21 Oct 2019 01:50:36 +0200
+Message-ID: <CAJZ5v0hBP4Zitd+V0s3zohd=gd6fKRHKN5RnwAPyfNXv3VX+iQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: cancel any pending policy update work
+ scheduled before freeing
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Oct 18, 2019 at 12:59 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Schedules policy update work may end up racing with the freeing of the
+> policy and unregistering the driver.
+>
+> One possible race is as below where the cpufreq_driver is unregistered
+> but the scheduled work gets executed at later stage when cpufreq_driver
+> is NULL(i.e. after freeing the policy and driver)
+>
+> Unable to handle kernel NULL pointer dereference at virtual address 0000001c
+> pgd = (ptrval)
+> [0000001c] *pgd=80000080204003, *pmd=00000000
+> Internal error: Oops: 206 [#1] SMP THUMB2
+> Modules linked in:
+> CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
+> Hardware name: ARM-Versatile Express
+> Workqueue: events handle_update
+> PC is at cpufreq_set_policy+0x58/0x228
+> LR is at dev_pm_qos_read_value+0x77/0xac
+> Control: 70c5387d  Table: 80203000  DAC: fffffffd
+> Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
+>         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
+>         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
+>         (handle_update) from (process_one_work+0x16d/0x3cc)
+>         (process_one_work) from (worker_thread+0xff/0x414)
+>         (worker_thread) from (kthread+0xff/0x100)
+>         (kthread) from (ret_from_fork+0x11/0x28)
+>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> v1->v2:
+>         - Dropped check for work_pending as it can still be racy
+>         - Changed from flush_work to cancel_work_sync
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e93cba29fbb2..8ad9c2859841 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1279,6 +1279,8 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>         }
+>
+>         dev_pm_qos_remove_request(policy->min_freq_req);
+> +       /* cancel any pending policy->update work before freeing the policy */
+> +       cancel_work_sync(&policy->update);
+>         kfree(policy->min_freq_req);
+>
+>         cpufreq_policy_put_kobj(policy);
+> --
 
-Fixes: d4ee021c410f ("power: supply: cpcap-charger: Limit voltage to 4.2V for battery")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- cpcap-charger.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
-index 88bbab6e62f07..b4b7f9dc6c4ea 100644
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -478,7 +478,7 @@ static void cpcap_charger_update_state(struct cpcap_charger_ddata *ddata,
- 	dev_dbg(ddata->dev, "state: %s\n", status);
- }
- 
--int cpcap_charger_voltage_to_regval(int voltage)
-+static int cpcap_charger_voltage_to_regval(int voltage)
- {
- 	int offset;
- 
+Applying as a fix for 5.4, thanks!
