@@ -2,90 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20409DF3C4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 19:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0B6DF4E4
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 20:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfJUREV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 13:04:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726276AbfJUREV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Oct 2019 13:04:21 -0400
-Received: from earth.universe (cust-west-pareq2-46-193-15-226.wb.wifirst.net [46.193.15.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05B552086D;
-        Mon, 21 Oct 2019 17:04:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571677460;
-        bh=hnMFoVLDueryhj//1FWCAlGZBq3X8HrGcADBOK6nEmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zmZo2ukhBPXROHUEjWugx1CunYxMORuICc8s8lBWc0tzyhx/jm/lyUgaPXB0591ta
-         lOnqU63FoDfrRArNfYF/Z4OmSHoA/tQwGyhq5q9LPrJSb/LSL1MbFUpiZza4907O1/
-         ti5iIUq3zlKb5De7+hDkpMmiQ2RV9qNOVJwoVyG8=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 005A93C0CA0; Mon, 21 Oct 2019 19:04:17 +0200 (CEST)
-Date:   Mon, 21 Oct 2019 19:04:17 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     zhong jiang <zhongjiang@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: cpcap-charger: Make
- cpcap_charger_voltage_to_regval static
-Message-ID: <20191021170417.ycoavur3bdje67ya@earth.universe>
-References: <1571672407-58950-1-git-send-email-zhongjiang@huawei.com>
+        id S1727953AbfJUSLG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 14:11:06 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.72]:23426 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727171AbfJUSLF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 14:11:05 -0400
+X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Oct 2019 14:11:04 EDT
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 25381934715
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 12:49:48 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id MboSiaaQcBnGaMboSicNa6; Mon, 21 Oct 2019 12:49:48 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mnkunLEF23UbiKstBGeBSKdC/co/nIvZTCOX/NZlbww=; b=tUM3lE38Ag01bD4YI89LCWIkMh
+        /iA+bY0K0sithlPdbdStN0PDu25sb/avL8AlbdrA32oPewpKZicCe4GhwAOG7fwAZEtZmCsezatIF
+        bZ5nqIaQPnizANZDFU8wAyREhzMsQ9wPRBWwyOIF8NdSzpjuHWFmKV9DQEfwttUkp9HcdpeFSvgBZ
+        NJi9+/i6Wyw1eOEdwaurDIFIty0dbIzxr+nkiWFzLDWo/Xlp5xaP3T+juJprPiSUdJEkNertbINah
+        RRGHv/GlKgUW/Bu5z5c3i6m6wilxdZdv/W19BR6RZlIn6i6eB3PyQTA7kcbvzDpb+MAbaiTwPULqt
+        WTr+a2YA==;
+Received: from [187.192.22.73] (port=33626 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1iMboQ-000AL9-QC; Mon, 21 Oct 2019 12:49:47 -0500
+Date:   Mon, 21 Oct 2019 12:49:37 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] power: supply: ab8500_charger: Fix inconsistent IS_ERR and
+ PTR_ERR
+Message-ID: <20191021174937.GA17424@embeddedor>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ec4ro7gh4ewxksot"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1571672407-58950-1-git-send-email-zhongjiang@huawei.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.22.73
+X-Source-L: No
+X-Exim-ID: 1iMboQ-000AL9-QC
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.22.73]:33626
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Fix inconsistent IS_ERR and PTR_ERR in ab8500_charger_probe().
 
---ec4ro7gh4ewxksot
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The proper pointer to be passed as argument is di->adc_main_charger_c
 
-Hi,
+This bug was detected with the help of Coccinelle.
 
-On Mon, Oct 21, 2019 at 11:40:07PM +0800, zhong jiang wrote:
-> The GCC complains the following case when compiling kernel.
->=20
-> drivers/power/supply/cpcap-charger.c:563:5: warning: symbol 'cpcap_charge=
-r_voltage_to_regval' was not declared. Should it be static?
->=20
-> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
-> ---
+Fixes: 97ab78bac5d0 ("power: supply: ab8500_charger: Convert to IIO ADC")
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/power/supply/ab8500_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, but Intel's kbuild test robot was faster than you:
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index ff2bb4411a22..8a0f9d769690 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -3393,7 +3393,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
+ 		if (PTR_ERR(di->adc_main_charger_c) == -ENODEV)
+ 			return -EPROBE_DEFER;
+ 		dev_err(&pdev->dev, "failed to get ADC main charger current\n");
+-		return PTR_ERR(di->adc_main_charger_v);
++		return PTR_ERR(di->adc_main_charger_c);
+ 	}
+ 	di->adc_vbus_v = devm_iio_channel_get(&pdev->dev, "vbus_v");
+ 	if (IS_ERR(di->adc_vbus_v)) {
+-- 
+2.23.0
 
-https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/=
-commit/?h=3Dfor-next
-
--- Sebastian
-
---ec4ro7gh4ewxksot
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2t5Q4ACgkQ2O7X88g7
-+prVVg/+NBqfVKL1EG1o+wY4BZzlq8xUKpHg2TV3jb9rbk3sZjKWm/Rqmu45CrCE
-/m0LPaOxIGp0vZcZcmTxEshpSOFRsd46jTT4+K/9ZKuKufz5tBqhFhm5O2VgBiB7
-o8+bYkP0aB7ElieikSNCSUMApUU2b10B6Xa0sEHvOofuDs4QtucVNUh3BN0urMNM
-z4IqPpOAGLXZxTUJxf7ghoKFm+AH0CI5g5tMNlp/aZhdqM/1dfQJQzfLn6W/H239
-gFG+qbOTrUDMBFN7SQTR2v1B7qXJRgpEcqf795TI8EACZOeA3mM/HOC9MOj4m5sx
-l4vm28UNKnrYZ84bTGI06iUecilCCX46KZEQCpRzIlpDrVK9QABQEPWV/FMyhBal
-LjmK009WaNq0mAeAL+kHRWUEuf6bxI79T++r8CHDkPYLPlDK9UQhI2KAGhzzO8LP
-ZtwPiIe5oSrFdlOWZIy4pgyPfhB9mic6b0FN4D7kAYy2xFO8PRSh6kkFLqt5XnML
-XpBWejsFDUTs2wGTVPSo1XD9LNqoTBnOX28kZC+VoDN1SFulNCG8sejp3jltqdu7
-BWR94Fmcckw6aFVj7P+VWRat0ArbrI1n1eZS0wdiukcNwgBn0AmyJRDP1ZyY5cvL
-VwClqz3mxgy4Db6LC6BJEIRRHc+TsmiClhQY/V0/8vS4pIQ+YBQ=
-=Yr1v
------END PGP SIGNATURE-----
-
---ec4ro7gh4ewxksot--
