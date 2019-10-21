@@ -2,207 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 776C8DEA04
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEAEDEA19
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727433AbfJUKrw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 06:47:52 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:44467 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfJUKrw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:47:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject; bh=smwaZxFAXIzjE+Z5eyv3gt9YML7zW8Go/knn59KXMio=;
-        b=kVuaB5c884fgJscRyGJwrS97j7avwSmDPDQ710P/UeL7q5QLgbFfJlmp9+MqX+2j1IeHISITe9efrtYNGsJmRbu7e2NQhKRQscaPsVsLGpr6NigwgMt30xyz/s/wrQfdAX4UOdDXosBRbG50Is1PSamxYD7n8nWfhp9bC0SrNJ8=;
-Received: from anon-45-115.vpn.ipredator.se ([46.246.45.115])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <jonas@freesources.org>)
-        id 1iMVE1-0002x4-P1; Mon, 21 Oct 2019 10:47:45 +0000
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
-From:   Jonas Meurer <jonas@freesources.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
- <2847488.TR0R5COpHM@kreacher>
- <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- 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
- 2SCIHpzHfm/mpRL2
-Message-ID: <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
-Date:   Mon, 21 Oct 2019 12:47:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728042AbfJUKyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 06:54:25 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41652 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfJUKyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:54:25 -0400
+Received: by mail-pg1-f193.google.com with SMTP id t3so7575543pga.8
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 03:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=H2t4PKG/eZU3aPmwrkuhhD8Hh2tscnAFAhHGGRBX4YM=;
+        b=qfF24aXttATO4K858iDxMOlawG2W88V2Efd1HhVKFd7Tq7BO/h2cM7JmXZTa5Mwa0n
+         GfyvpWvUQn8jaJqHg2hK8cPDRim5U8SNXlsjoSYVCtedIJMyrVyTmGNQ0sF8JqGcfXhY
+         9u2btxLWxsUmAVw6n8IDr6kds1pz3kXtxNMITR3vegl3bNMahBUcZzG3LfY4wKJ2124X
+         6QJ5n3buU28VZAiUjoyec1z37S4prkbnEpWx5UQm5GS0KfWbdVPaouRS92IGfOU4VNJl
+         NJ1IXxGMZo7fBioOuzrNEe4FnMeYHuB88Jb8a6Kwphhz6o+p5N8Bm2GRX+CUlu7DuCf1
+         wQRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H2t4PKG/eZU3aPmwrkuhhD8Hh2tscnAFAhHGGRBX4YM=;
+        b=HfJfbQq48K+CDTx6avPGz9/V7+7Xs3jjOMUdfEi9zpQ4bZwbPLQ5V4FbD143Yhkl4o
+         aWjU2OscqQEKeZZEpAqEIh/gid/WvFGP1Zh672YPVMg5OeNhvDAJ7ZHfhAf5REpZyx30
+         q0DhFKQUZtNVMuLUgFZKGoxP7PtpSKPT/MQJfHpXI/mUpA0GOB+oMWPw+tLt2QEtPk2b
+         yAVhHt+QmdCIWDw6eo6sf/biyn2Q1KaFyHC1X+VPB4+9Zl7rhYXwROWC2t6z2B064iwC
+         HqrcZ1BRzouLk9nQMr6Z8+4EEAVMqZAwsoAz87zfjo4qLXOEIP3w80qVa6HfqKZiuqxt
+         7Pjw==
+X-Gm-Message-State: APjAAAXGzTldfU0stKT+r9vsWtyFqSG5dK/VLVi1k/C+nOaKSyiTRRPq
+        Uw93qGzjXBtKtVW5U1HiLkw4sQ==
+X-Google-Smtp-Source: APXvYqzc+VIvFaAIr1m5192kISlYR+tFNl07KgG0K9Am2YZM+hvPaKnDaJ6T+4BBNOPsidRHUzrl9w==
+X-Received: by 2002:a63:3044:: with SMTP id w65mr24426425pgw.384.1571655264745;
+        Mon, 21 Oct 2019 03:54:24 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id o60sm15848553pje.21.2019.10.21.03.54.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Oct 2019 03:54:23 -0700 (PDT)
+Date:   Mon, 21 Oct 2019 16:24:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nico@fluxnic.net
+Subject: Re: [PATCH v3 0/5] cpufreq: merge arm big.LITTLE and vexpress-spc
+ drivers
+Message-ID: <20191021105419.ud7he23j2icrwo4w@vireshk-i7>
+References: <20191018103749.11226-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018103749.11226-1-sudeep.holla@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael and linux-pm maintainers,
+On 18-10-19, 11:37, Sudeep Holla wrote:
+> Hi,
+> 
+> Since vexpress-spc is the sole user of arm_big_little cpufreq driver,
+> there's no point in keeping it separate anymore. I wanted to post these
+> patches for ages but kept postponing for no reason.
+> 
+> Regards,
+> Sudeep
+> 
+> v1->v2:
+> 	- generated the patch using -B that helps to keep delta short
+> 	  for review
+> 	- Split the last patch into 3 different patches to deal with
+> 	  removing bL_ops, debug messages and other code formatting
+> 	  separately
+> 
+> v2->v3:
+> 	- Added Nico's ack
+> 	- Added back blank lines and extra braces as suggested by Viresh
+> 	- Updated copyright year correctly
 
-sorry for the noise, but again: is there a chance to get a brief review
-of my patchset?
+Applied. Thanks.
 
-Probably it was a bad idea to rename the build-time flag, right? Should
-I revert that part of the patch?
-
-Cheers,
- jonas
-
-Jonas Meurer:
-> Hi Rafael and linux-pm maintainers,
-> 
-> thanks a lot for your feedback, it's much appreciated!
-> 
-> Rafael J. Wysocki:
->>> This patch adds a run-time switch at `/sys/power/suspend_sync`.
->>
->> I'd prefer "sync_on_suspend".
-> 
-> Agreed and changed.
-> 
->>> The switch allows to enable or disable the final sync() from the suspend.=
->>> c
->>> Linux Kernel system suspend implementation. This is useful to avoid race
->>> conditions if block devices have been suspended before. Be aware that you=
->>>
->>> have to take care of sync() yourself before suspending the system if you
->>> disable it here.
->>>
->>> Since this is my first patch against the Linux kernel and I don't
->>> consider it ready for inclusion yet, I decided to send it to pm-linux
->>> and the PM subsystem maintainers only first. Would be very glad if you
->>> could take a look and comment on it :)
->>>
->>> Some questions:
->>>
->>> * There already is a build-time config flag[2] for en- or disabling the
->>>   sync() in suspend.c. Is it acceptable to have both a build-time *and*
->>>   a *run-time* switch? Or would a run-time switch have to replace the
->>>   build-time switch? If so, a direct question to Rafael, as you added
->>>   the build-time flag: Would that be ok for you?
->>
->> If there is a run-time knob to disable the syncing, the only reason for
->> the config option to be there will be to set the default value of that.
-> 
-> Makes sense. I changed the meaning of the build-time flag accordingly.
-> 
->>> To give a bit more contect: In Debian, we're currently working[3] on
->>> support to suspend unlocked dm-crypt devices before system suspend.
->>> During that work, we realized that the final sync() from Linux Kernel
->>> system suspend implementation can lead to a dead lock.
->>
->> That's also true for FUSE filesystems I think and please note that this isn't
->> going to work with hibernation (in which case filesystems are synced
->> regardless).
-> 
-> In my opinion, hibernation doesn't matter much. Since the memory is
-> powered off on hibernation anyway, there's no reason to luksSuspend the
-> devices beforehands, don't you think so?
-> 
->> The changes look reasonable to me.
-> 
-> Glad to read. I'll send a second version of the patches as replies soon
-> after this mail. How do we go on from here? Could you imagine to review
-> them again and sign them afterwards? Or am I supposed to send them to
-> the lkml and wait for feedback before getting more signers? As written,
-> I'm new to the Linux Kernel development process and not sure what's the
-> logical next step to get the patches merged.
-> 
-> Thanks again for your help!
-> 
-> Cheers
->  jonas
-> 
-> 
-
+-- 
+viresh
