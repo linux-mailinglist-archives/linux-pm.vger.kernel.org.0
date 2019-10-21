@@ -2,84 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A9CDF076
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 16:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AC6DF1D9
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 17:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbfJUOwi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 10:52:38 -0400
-Received: from andre.telenet-ops.be ([195.130.132.53]:43168 "EHLO
-        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728937AbfJUOwM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 10:52:12 -0400
-Received: from ramsan ([84.194.98.4])
-        by andre.telenet-ops.be with bizsmtp
-        id GErr2100E05gfCL01Erri3; Mon, 21 Oct 2019 16:52:09 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iMZ2F-000767-52; Mon, 21 Oct 2019 16:51:51 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iMZ2F-0008Fi-1d; Mon, 21 Oct 2019 16:51:51 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     =?UTF-8?q?Breno=20Leit=C3=A3o?= <leitao@debian.org>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David@rox.of.borg, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Casey Leedom <leedom@chelsio.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 5/5] ionic: Use debugfs_create_bool() to export bool
-Date:   Mon, 21 Oct 2019 16:51:49 +0200
-Message-Id: <20191021145149.31657-6-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191021145149.31657-1-geert+renesas@glider.be>
-References: <20191021145149.31657-1-geert+renesas@glider.be>
+        id S1727680AbfJUPoH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 11:44:07 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:49026 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726289AbfJUPoH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 21 Oct 2019 11:44:07 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 4C2A82344871C2782850;
+        Mon, 21 Oct 2019 23:44:02 +0800 (CST)
+Received: from linux-ibm.site (10.175.102.37) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 21 Oct 2019 23:43:53 +0800
+From:   zhong jiang <zhongjiang@huawei.com>
+To:     <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhongjiang@huawei.com>
+Subject: [PATCH] power: supply: cpcap-charger: Make cpcap_charger_voltage_to_regval static
+Date:   Mon, 21 Oct 2019 23:40:07 +0800
+Message-ID: <1571672407-58950-1-git-send-email-zhongjiang@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.102.37]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently bool ionic_cq.done_color is exported using
-debugfs_create_u8(), which requires a cast, preventing further compiler
-checks.
+The GCC complains the following case when compiling kernel.
 
-Fix this by switching to debugfs_create_bool(), and dropping the cast.
+drivers/power/supply/cpcap-charger.c:563:5: warning: symbol 'cpcap_charger_voltage_to_regval' was not declared. Should it be static?
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: zhong jiang <zhongjiang@huawei.com>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_debugfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/power/supply/cpcap-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c b/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
-index bc03cecf80cc9eb4..5beba915f69d12dd 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
-@@ -170,8 +170,7 @@ void ionic_debugfs_add_qcq(struct ionic_lif *lif, struct ionic_qcq *qcq)
- 	debugfs_create_x64("base_pa", 0400, cq_dentry, &cq->base_pa);
- 	debugfs_create_u32("num_descs", 0400, cq_dentry, &cq->num_descs);
- 	debugfs_create_u32("desc_size", 0400, cq_dentry, &cq->desc_size);
--	debugfs_create_u8("done_color", 0400, cq_dentry,
--			  (u8 *)&cq->done_color);
-+	debugfs_create_bool("done_color", 0400, cq_dentry, &cq->done_color);
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
+index 40d96b8..c0d452e 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -560,7 +560,7 @@ static void cpcap_charger_update_state(struct cpcap_charger_ddata *ddata,
+ 	dev_dbg(ddata->dev, "state: %s\n", status);
+ }
  
- 	debugfs_create_file("tail", 0400, cq_dentry, cq, &cq_tail_fops);
+-int cpcap_charger_voltage_to_regval(int voltage)
++static int cpcap_charger_voltage_to_regval(int voltage)
+ {
+ 	int offset;
  
 -- 
-2.17.1
+1.7.12.4
 
