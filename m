@@ -2,89 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD493DF1EF
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 17:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A0CDF339
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 18:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729747AbfJUPqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 11:46:25 -0400
-Received: from mga06.intel.com ([134.134.136.31]:15381 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727101AbfJUPqY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Oct 2019 11:46:24 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 08:46:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,324,1566889200"; 
-   d="scan'208";a="209463506"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 21 Oct 2019 08:46:07 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 21 Oct 2019 18:46:06 +0300
-Date:   Mon, 21 Oct 2019 18:46:06 +0300
-From:   Mika Westerberg <mika.westerberg@intel.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Linux ACPI Mailing List <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v3] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-Message-ID: <20191021154606.GT2819@lahna.fi.intel.com>
-References: <CACO55ttOJaXKWmKQQbMAQRJHLXF-VtNn58n4BZhFKYmAdfiJjA@mail.gmail.com>
- <20191016213722.GA72810@google.com>
- <CACO55tuXck7vqGVLmMBGFg6A2pr3h8koRuvvWHLNDH8XvBVxew@mail.gmail.com>
- <20191021133328.GI2819@lahna.fi.intel.com>
- <CACO55tujUZr+rKkyrkfN+wkNOJWdNEVhVc-eZ3RCXJD+G1z=7A@mail.gmail.com>
- <20191021140852.GM2819@lahna.fi.intel.com>
- <CACO55tvp6n2ahizwhc70xRJ1uTohs2ep962vwtHGQK-MkcLmsw@mail.gmail.com>
+        id S1729473AbfJUQfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 12:35:10 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42995 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729406AbfJUQfH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 12:35:07 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q12so8744522pff.9
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 09:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=YQ2SYzDjclp6+UMcXfMKe/dCfkknHxuiGOrHRSVn0cA=;
+        b=ZvioHrwPqgA32sqk/ZfXl+AIKFsddUO2tNAqbJtu4tCcRANhGvReU9J0qCrPtBX4dr
+         XyEFxDF3rI4Skd8uu+tW37bMnIbIfeVll6YP9QPsiv1m3u9UI7Hz50C/EOmQGDDvJxjt
+         MNnpf3ALOQX+wn100d4q49rWpqL/dLYkEvAbPydL+TGXqu4wUlet2YAblmsMtkne7qnv
+         mFnrVk537e3SRZLOSIfp5DZTMcRh1T3I7huUyEOh7iplVBe4IuwO1byLK+LTz8AIzALW
+         g8HnTvBYEWL7IAty6Tx+yooX0qDMEelsrde2cgdpkGApf9pCWxxWG6Loqrv6o3ZIrYoi
+         o0cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=YQ2SYzDjclp6+UMcXfMKe/dCfkknHxuiGOrHRSVn0cA=;
+        b=iJI1g5vkbeS0631gd2epYju/Jwpg1z7oQIlDuRjw7nVfk1/YGOj7VVQeVnKTPphG/X
+         MDFu8SuCQIDD3Ne9YiTb1gXbHtqNo6rzslFMagMnMRVDJEW4U2asQ/X8YJGMAaxScPk7
+         BtGhGyGYxcbvyomKmrgUuDZ7ko/ld5+j9EK2/PjN9gq1K/OQ3QgFPxPhMlhHKTv2tB5w
+         +igBgp4bgBrdHLeuAxS8oBzHpsQuWQ5VoH88K40GAj9KM1mbKEpMTLXvNzjAd3nxOm8+
+         ukITCOCGmpsXLNwirvNpb/g+IYgXpAuNpa8DNRcq5jSTmeUGYMh/IsVRdltTqR1FYZVi
+         YwBw==
+X-Gm-Message-State: APjAAAVr097rMhgaNyMFLgFLAAW7is992L5prNdHTuTp7HL9pIpEdEJv
+        1lPzv0YeNN9FvLgJ1sJ/GAsGbw==
+X-Google-Smtp-Source: APXvYqwmyNu50+FxrTO6V6IulFup1S67xnT8cj+dbepaT4niD1qSPIKhFvBy+c/p26nJk53uezcFig==
+X-Received: by 2002:a63:ad0d:: with SMTP id g13mr26250877pgf.407.1571675706632;
+        Mon, 21 Oct 2019 09:35:06 -0700 (PDT)
+Received: from Shannons-MacBook-Pro.local (static-50-53-47-17.bvtn.or.frontiernet.net. [50.53.47.17])
+        by smtp.gmail.com with ESMTPSA id e4sm16610297pff.22.2019.10.21.09.35.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Oct 2019 09:35:05 -0700 (PDT)
+Subject: Re: [PATCH 5/5] ionic: Use debugfs_create_bool() to export bool
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Breno_Leit=c3=a3o?= <leitao@debian.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David@rox.of.borg, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Casey Leedom <leedom@chelsio.com>,
+        Pensando Drivers <drivers@pensando.io>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191021145149.31657-1-geert+renesas@glider.be>
+ <20191021145149.31657-6-geert+renesas@glider.be>
+From:   Shannon Nelson <snelson@pensando.io>
+Message-ID: <aeebbd5f-6100-2780-ef1c-6b1c261c9d23@pensando.io>
+Date:   Mon, 21 Oct 2019 09:35:03 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
+ Gecko/20100101 Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACO55tvp6n2ahizwhc70xRJ1uTohs2ep962vwtHGQK-MkcLmsw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191021145149.31657-6-geert+renesas@glider.be>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 04:49:09PM +0200, Karol Herbst wrote:
-> On Mon, Oct 21, 2019 at 4:09 PM Mika Westerberg
-> <mika.westerberg@intel.com> wrote:
-> >
-> > On Mon, Oct 21, 2019 at 03:54:09PM +0200, Karol Herbst wrote:
-> > > > I really would like to provide you more information about such
-> > > > workaround but I'm not aware of any ;-) I have not seen any issues like
-> > > > this when D3cold is properly implemented in the platform.  That's why
-> > > > I'm bit skeptical that this has anything to do with specific Intel PCIe
-> > > > ports. More likely it is some power sequence in the _ON/_OFF() methods
-> > > > that is run differently on Windows.
-> > >
-> > > yeah.. maybe. I really don't know what's the actual root cause. I just
-> > > know that with this workaround it works perfectly fine on my and some
-> > > other systems it was tested on. Do you know who would be best to
-> > > approach to get proper documentation about those methods and what are
-> > > the actual prerequisites of those methods?
-> >
-> > Those should be documented in the ACPI spec. Chapter 7 should explain
-> > power resources and the device power methods in detail.
-> 
-> either I looked up the wrong spec or the documentation isn't really
-> saying much there.
+On 10/21/19 7:51 AM, Geert Uytterhoeven wrote:
+> Currently bool ionic_cq.done_color is exported using
+> debugfs_create_u8(), which requires a cast, preventing further compiler
+> checks.
+>
+> Fix this by switching to debugfs_create_bool(), and dropping the cast.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Well it explains those methods, _PSx, _PRx and _ON()/_OFF(). In case of
-PCIe device you also want to check PCIe spec. PCIe 5.0 section 5.8 "PCI
-Function Power State Transitions" has a picture about the supported
-power state transitions and there we can find that function must be in
-D3hot before it can be transitioned into D3cold so if the _OFF() for
-example blindly assumes that the device is in D0 when it is called, it
-is a bug in the BIOS.
+Acked-by: Shannon Nelson <snelson@pensando.io>
 
-BTW, where can I find acpidump of such system?
+> ---
+>   drivers/net/ethernet/pensando/ionic/ionic_debugfs.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c b/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
+> index bc03cecf80cc9eb4..5beba915f69d12dd 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_debugfs.c
+> @@ -170,8 +170,7 @@ void ionic_debugfs_add_qcq(struct ionic_lif *lif, struct ionic_qcq *qcq)
+>   	debugfs_create_x64("base_pa", 0400, cq_dentry, &cq->base_pa);
+>   	debugfs_create_u32("num_descs", 0400, cq_dentry, &cq->num_descs);
+>   	debugfs_create_u32("desc_size", 0400, cq_dentry, &cq->desc_size);
+> -	debugfs_create_u8("done_color", 0400, cq_dentry,
+> -			  (u8 *)&cq->done_color);
+> +	debugfs_create_bool("done_color", 0400, cq_dentry, &cq->done_color);
+>   
+>   	debugfs_create_file("tail", 0400, cq_dentry, cq, &cq_tail_fops);
+>   
+
