@@ -2,112 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6FBDEA22
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849EFDEAC2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 13:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbfJUK4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 06:56:04 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:32990 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727831AbfJUK4D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:56:03 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so8224593pfl.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 03:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wF1+8YZQPASjCzMnoxagVtf09QEbjdj0mZoAlrVP5Cs=;
-        b=LMChVAZfWEwWAiP/W1Lpr/Cx13RyxCKmAavy8ARHSE4X1bKwsHSOjkhCrrk7dHU5uK
-         MCnnOrefKvNyBpX1eeKrTQF+yTBqFuHYojitYoMR56/2y8GZhU8/zWMgweVVc873sN9N
-         1vEQMgvMCqicCakx/fhau0P2MFX2vzXWq3jkcu4taXakMKDfvp5OlA9Wzmt2f+D9Xkx4
-         f1TjJZfyHyWrvvN3X0wx2BOOzi/o3DydEymPA2Y/LynPyBatfsmGoTCP1PV5iplm0rrx
-         aiu2+O1aHTKTv9MbqnKXQr3LbUw2fvIZ996Q+YyrTm7X4kW9D61ycInxcVzyk1Hvg/Np
-         km3g==
+        id S1727840AbfJULYB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 07:24:01 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:33454 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727433AbfJULYB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 07:24:01 -0400
+Received: by mail-ed1-f67.google.com with SMTP id c4so9725449edl.0;
+        Mon, 21 Oct 2019 04:23:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wF1+8YZQPASjCzMnoxagVtf09QEbjdj0mZoAlrVP5Cs=;
-        b=QIUGtjt3OOfWZ0RKAVgjUZn4DsrKa55cggMgZT6TGUFzzt9nvcWMWVe62/FATDC5nr
-         cIMRDY3qD5uFp35kGvmrgIoFBKuJw545jajhk0w0zQX3bG6Agee9xtwIfx78pgfYXfEG
-         NAckF+D/Giy0xeIs2CUHluGtsLgP6Kcrg31o6MqJ11T26K37xdFt79h/9LF4lcoV0CVE
-         nGRywXnCfe4YtYdav/BAtI/BWWCa3erE0qg10No8vicGR0pCwYamCjo3ghUVFonj7H+f
-         vwbyeAGu8czbXV70uUul4dp+hq8emPrwbi7eeATK5Z/eGcRbts3eeqY2kMkFQ3T9QjDr
-         MmIQ==
-X-Gm-Message-State: APjAAAX2YD37cSVhNitSDBXy46zy5tMeELTAplGMsyg5EBsylOu4khtP
-        Ntd0m0PqIDmlMOYElo6/bK4o9Q==
-X-Google-Smtp-Source: APXvYqxtkhlEHrd59Xgs4FPY7IgW8ANyk/EGhMAMJhBaYKDI8tISB5wQrYi5RgTUkoGiQD3QnsJCmQ==
-X-Received: by 2002:a17:90a:35a5:: with SMTP id r34mr26976603pjb.40.1571655362925;
-        Mon, 21 Oct 2019 03:56:02 -0700 (PDT)
-Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id y17sm22150159pfo.171.2019.10.21.03.56.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 03:56:02 -0700 (PDT)
-Date:   Mon, 21 Oct 2019 16:25:59 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
- before freeing
-Message-ID: <20191021105559.fqmf3pcvxxeh2ote@vireshk-i7>
-References: <20191017163503.30791-1-sudeep.holla@arm.com>
- <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
- <20191018101924.GA25540@bogus>
- <4881906.zjS51fuFuv@kreacher>
- <20191018110632.GB25540@bogus>
- <20191021021551.bjhf74zeyuqcl4w3@vireshk-i7>
- <20191021102730.GA21581@bogus>
+        bh=BVlXhkUOcHB+M6im4W80bsAnmThctBDhzXi/Z0FpqPM=;
+        b=S0V90N+JCrqNnp2dnTE9DRbdC6LfHTIezwPuiDSdPk9RbPLwEEUOEbiFij3ksnRY2a
+         swl+mXCUjqpoKfnsWigLH9jUEeSsPrT0lCqz8jCv7zNaIXiaLang8ux+zBMrAa3Qs4Nt
+         kp31ZpRZo4UKtPx0fVtYp3aNoAIrKXrponiD8ZcvD69VEoPoR8sE8pN07ncfgT4X193B
+         zQdaTLgcfzuQAxb/kLKTBR0mxJQ16NlSI/9qI0886GSxDDd3X+TN78j0NdMyECFn3C1I
+         Sy6gBcvIXCu0v4KWHD4rzxzC3jDfVqGvfeyCv70vGmPk2mQfJegvcJJ5KhiquzID1jfo
+         g2Bw==
+X-Gm-Message-State: APjAAAXrbCYpLnbKDqwO1D4j1d9hml48eaRfvQmKs39b65Ew0Ee9QVHv
+        bOc1/7IME92xRvKKsm1DwEM=
+X-Google-Smtp-Source: APXvYqwff/GiwAwp/7TONncf6a2J4jtHzGlSJbceQ9C74FUOcOXZ54eJ4FoTQ+a8fgD2rHnjfyIlmQ==
+X-Received: by 2002:a17:906:5292:: with SMTP id c18mr21356043ejm.129.1571657037596;
+        Mon, 21 Oct 2019 04:23:57 -0700 (PDT)
+Received: from pi3 ([194.230.155.217])
+        by smtp.googlemail.com with ESMTPSA id w16sm579189edd.93.2019.10.21.04.23.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2019 04:23:56 -0700 (PDT)
+Date:   Mon, 21 Oct 2019 13:23:54 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>, vireshk@kernel.org,
+        robh+dt@kernel.org, sboyd@kernel.org, roger.lu@mediatek.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        Stephen Boyd <sboyd@codeaurora.org>
+Subject: Re: [PATCH v5 1/4] PM / OPP: Support adjusting OPP voltages at
+ runtime
+Message-ID: <20191021112354.GA2262@pi3>
+References: <20191016145756.16004-1-s.nawrocki@samsung.com>
+ <CGME20191016145810eucas1p1b31400c9b2e7f30cdf6deeb4ccee2788@eucas1p1.samsung.com>
+ <20191016145756.16004-2-s.nawrocki@samsung.com>
+ <20191017064258.yfbh7iz3pbzfhdvr@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191021102730.GA21581@bogus>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20191017064258.yfbh7iz3pbzfhdvr@vireshk-i7>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-10-19, 11:27, Sudeep Holla wrote:
-> I just tested now with today's linux-pm/bleeding-edge branch.
-> And even if I move cancel_work_sync just after freq_qos_remove_notifier,
-> it works fine now. It was not the case on Friday.
+On Thu, Oct 17, 2019 at 12:12:58PM +0530, Viresh Kumar wrote:
+> On 16-10-19, 16:57, Sylwester Nawrocki wrote:
+> > From: Stephen Boyd <sboyd@codeaurora.org>
+> > 
+> > On some SoCs the Adaptive Voltage Scaling (AVS) technique is
+> > employed to optimize the operating voltage of a device. At a
+> > given frequency, the hardware monitors dynamic factors and either
+> > makes a suggestion for how much to adjust a voltage for the
+> > current frequency, or it automatically adjusts the voltage
+> > without software intervention. Add an API to the OPP library for
+> > the former case, so that AVS type devices can update the voltages
+> > for an OPP when the hardware determines the voltage should
+> > change. The assumption is that drivers like CPUfreq or devfreq
+> > will register for the OPP notifiers and adjust the voltage
+> > according to suggestions that AVS makes.
+> > 
+> > This patch is derived from [1] submitted by Stephen.
+> > [1] https://lore.kernel.org/patchwork/patch/599279/
+> > 
+> > Signed-off-by: Stephen Boyd <sboyd@codeaurora.org>
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > [s.nawrocki@samsung.com: added handling of OPP min/max voltage]
+> > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> > ---
+> >  drivers/opp/core.c     | 69 ++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/pm_opp.h | 13 ++++++++
+> >  2 files changed, 82 insertions(+)
 > 
-> Is that what you wanted to check or something else ?
-> 
-> Regards,
-> Sudeep
-> 
-> -->8
-> 
-> diff --git i/drivers/cpufreq/cpufreq.c w/drivers/cpufreq/cpufreq.c
-> index 829a3764df1b..48a224a6b178 100644
-> --- i/drivers/cpufreq/cpufreq.c
-> +++ w/drivers/cpufreq/cpufreq.c
-> @@ -1268,6 +1268,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->         freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
->                                  &policy->nb_min);
-> 
-> +       /* Cancel any pending policy->update work before freeing the policy. */
-> +       cancel_work_sync(&policy->update);
-> +
->         if (policy->max_freq_req) {
->                 /*
->                  * CPUFREQ_CREATE_POLICY notification is sent only after
-> @@ -1279,8 +1282,6 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->         }
-> 
->         freq_qos_remove_request(policy->min_freq_req);
-> -       /* Cancel any pending policy->update work before freeing the policy. */
-> -       cancel_work_sync(&policy->update);
->         kfree(policy->min_freq_req);
-> 
->         cpufreq_policy_put_kobj(policy);
+> Applied. Thanks.
 
-Yes, send a incremental patch for that. Thanks.
+Hi Viresh,
 
--- 
-viresh
+Can you provide a stable tag with this patch so I can take soc/samsung
+driver?
+
+Best regards,
+Krzysztof
+
