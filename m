@@ -2,84 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E10FDEFA1
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 16:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC64BDF051
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 16:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727309AbfJUOc0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Oct 2019 10:32:26 -0400
-Received: from muru.com ([72.249.23.125]:38404 "EHLO muru.com"
+        id S1728983AbfJUOtW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 10:49:22 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35582 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726915AbfJUOc0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Oct 2019 10:32:26 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id CC39E810A;
-        Mon, 21 Oct 2019 14:33:00 +0000 (UTC)
-Date:   Mon, 21 Oct 2019 07:32:23 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>
-Subject: Re: [PATCHv2] power: supply: cpcap-charger: Limit voltage to 4.2V
- for battery
-Message-ID: <20191021143223.GU5610@atomide.com>
-References: <20191016221817.8501-1-tony@atomide.com>
- <20191020203516.sp2vafrvb2pi3hp6@earth.universe>
+        id S1727406AbfJUOtW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 21 Oct 2019 10:49:22 -0400
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id BD68586663
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 14:49:21 +0000 (UTC)
+Received: by mail-qt1-f198.google.com with SMTP id x50so3132812qth.4
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 07:49:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qoM05916f2iOKQ8k9NQo94DTKSXVJOYaaX8pIUuRDvI=;
+        b=Bp1jsICALKLYvXx4kgBM4Pn23Cep7zC2taHiPozbNy3WNBKe/qZpWmPDNKXcbxGtKi
+         HR/lpl4a+qGNQPImc7bSpN7+jUodLDBHYFdfZJuKaJslQZ26kf4trCcxGIsNYrFmSUJp
+         UenbOqQlhPQbwkIpxUDAcj5KQfDvr4g7oanPRr9R+XLNp8hO1/AnuLHLelFC75pZ0xNi
+         7Q6EmMHtFDW9Hla295zi3tQ4Jfe/Qg62sjtdn2JlnvKl7AhgFZ9RHx8z+RmeRQUHbKFy
+         9kpQujRVGfJmFCq+OsR2sCPzJ8nLHeZlb+3TIdBVRERqM1ivRgAJZqauvSJE396lo1KQ
+         S7pA==
+X-Gm-Message-State: APjAAAUr8XpK32s7EbUrT8/IS3cCYQfjiQdyMaDLVRnFUXbwlehtSSTT
+        ATcxFpA+gc5tnlCeBDsKpbFHXJwTWPmMdFMX4uHwAD/vVZiV6e8nF5gVvHNRFIGWyvxxDH0vlU+
+        +jOAN8KWp8pRkZy+zzDO5kZKRtsTP2bn7A6E=
+X-Received: by 2002:a05:620a:a9c:: with SMTP id v28mr1773196qkg.381.1571669361065;
+        Mon, 21 Oct 2019 07:49:21 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxd+SAXdjO3y4S1oIDF06DXEmDuqtYz9U6zcL462CpXUBB9ua/mW5nvAsl4Exz5hHeQUwEuYJSw0QkJYkjPK+k=
+X-Received: by 2002:a05:620a:a9c:: with SMTP id v28mr1773179qkg.381.1571669360782;
+ Mon, 21 Oct 2019 07:49:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20191020203516.sp2vafrvb2pi3hp6@earth.universe>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <CACO55ttOJaXKWmKQQbMAQRJHLXF-VtNn58n4BZhFKYmAdfiJjA@mail.gmail.com>
+ <20191016213722.GA72810@google.com> <CACO55tuXck7vqGVLmMBGFg6A2pr3h8koRuvvWHLNDH8XvBVxew@mail.gmail.com>
+ <20191021133328.GI2819@lahna.fi.intel.com> <CACO55tujUZr+rKkyrkfN+wkNOJWdNEVhVc-eZ3RCXJD+G1z=7A@mail.gmail.com>
+ <20191021140852.GM2819@lahna.fi.intel.com>
+In-Reply-To: <20191021140852.GM2819@lahna.fi.intel.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Mon, 21 Oct 2019 16:49:09 +0200
+Message-ID: <CACO55tvp6n2ahizwhc70xRJ1uTohs2ep962vwtHGQK-MkcLmsw@mail.gmail.com>
+Subject: Re: [PATCH v3] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+To:     Mika Westerberg <mika.westerberg@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Linux ACPI Mailing List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Sebastian Reichel <sre@kernel.org> [191020 20:35]:
-> Hi Tony,
-> 
-> On Wed, Oct 16, 2019 at 03:18:17PM -0700, Tony Lindgren wrote:
-> > There have been some cases of droid4 battery bulging that seem to be
-> > related to being left connected to the charger for several weeks.
-> > 
-> > It is suspected that the 4.35V charge voltage configured for the battery
-> > is too much in the long run, so lets limit the charge voltage to 4.2V.
-> > It could also be that the batteries are just getting old.
-> > 
-> > We don't really want to just change the charge voltage to 4.2V as Android
-> > may have charged the battery to 4.35V as pointed out by Pavel Machek.
-> > 
-> > To add checks for battery voltage, the driver needs to understand the
-> > voltage it's charging at, and also needs to better understand it's
-> > charger state. Right now it only understands connect and disconnect,
-> > while now we need to know also a connected state but not charging.
-> > 
-> > So let's add better charger state handling with help of chrgcurr2 interrupt
-> > for detecting charge full and retry, and add a check for battery voltage
-> > before we start charging. And then we finally can lower the charge voltage
-> > to 4.2V.
-> > 
-> > Note that we've been using the same register values as the Android distros
-> > on droid4, so it is suspected that the same problem also exists in Android.
-> > 
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Reported-by: Merlijn Wajer <merlijn@wizzup.org>
-> > Signed-off-by: Tony Lindgren <tony@atomide.com>
-> > ---
-> > 
-> > If this looks OK, I would appreciate an immutable branch against v5.4-rc1
-> > with just this patch in it for merge conflicts with v5.5 dts changes.
-> 
-> Thanks, I queued this to power-supply's for-next branch using the following
-> signed immutable branch:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/tag/?h=psy-cpcap-charge-volt-limit-signed
+On Mon, Oct 21, 2019 at 4:09 PM Mika Westerberg
+<mika.westerberg@intel.com> wrote:
+>
+> On Mon, Oct 21, 2019 at 03:54:09PM +0200, Karol Herbst wrote:
+> > > I really would like to provide you more information about such
+> > > workaround but I'm not aware of any ;-) I have not seen any issues like
+> > > this when D3cold is properly implemented in the platform.  That's why
+> > > I'm bit skeptical that this has anything to do with specific Intel PCIe
+> > > ports. More likely it is some power sequence in the _ON/_OFF() methods
+> > > that is run differently on Windows.
+> >
+> > yeah.. maybe. I really don't know what's the actual root cause. I just
+> > know that with this workaround it works perfectly fine on my and some
+> > other systems it was tested on. Do you know who would be best to
+> > approach to get proper documentation about those methods and what are
+> > the actual prerequisites of those methods?
+>
+> Those should be documented in the ACPI spec. Chapter 7 should explain
+> power resources and the device power methods in detail.
 
-Thanks and sorry about that sparse issue it caused.
-
-Regards,
-
-Tony
-
+either I looked up the wrong spec or the documentation isn't really
+saying much there.
