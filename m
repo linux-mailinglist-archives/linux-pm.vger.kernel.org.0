@@ -2,119 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EBEDE588
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 09:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D83DE5EE
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 10:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727406AbfJUHw0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 03:52:26 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:40277 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbfJUHw0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 03:52:26 -0400
-Received: by mail-ed1-f65.google.com with SMTP id p59so860302edp.7
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 00:52:24 -0700 (PDT)
+        id S1727122AbfJUIIR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 04:08:17 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36378 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725972AbfJUIIR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 04:08:17 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w18so12179749wrt.3;
+        Mon, 21 Oct 2019 01:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lshseq5695iLMWS2/yTnU4q4phMFdnGbVyLcqMyDgNw=;
-        b=f4plsD5OF7QI01+J/daaDJeoz3LkteQ6BQB7+jftsCG7vHACEuYAS0/ifg1VOZ+2bv
-         DVnIY34EwF6RV/LyAIkxxcICf5gDAB5lJnzvHZwPiIbqUNd0/Lda6KhsIL7Vv666qS53
-         0dm2LtJmUWVBz3Z6INSe5m7WXyh7OwRPV6IN4=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LqSjagznmreorQh4WjtYpX4/TXXxQLyl2wI57WLhs1A=;
+        b=IEObjFEXPGDUd6z6XzvVnqEHSgIsFRosOJro49cIUoX025/yU3BHzQyoRhB8McUc9g
+         37//D6S9DWMqzE8ubub6JVVlvDb2EYpTMAognN+RYhZj80wSnK2XW9rQPSNZxeVf12vj
+         VvNGfioGWLyc71UCltavgH9wSgQhoKm3zHNAD3/qPlUIxprjqMdpENnHedvx3QYNlHJD
+         okFSUpCIald8gd1We+TxS61p2CywAiqnyC4f9VJNoR/lG7KTOzEzOKN8gMI6wMdPPd0H
+         0rsi6CRQuNxdVSU486VLG5TJvXgjhW3hOE7ZGDlKCqFvY+DdYvb87APeYreYukWHBn6h
+         Y5KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lshseq5695iLMWS2/yTnU4q4phMFdnGbVyLcqMyDgNw=;
-        b=bs8cg6EUgeR4xW2fXVDeZB5uMGNfur1ySPIvR4ACxMy8Wtf8yL7K9HKQSQgjEBKWhX
-         0SkCE5jH1T4hDsGnyYDrfvrWRI8hZg+mWrQs0ITOLPzq8LjEfN89F4A/NWCVM3OGVMR3
-         22E/QeUN//bbmUnA0jZBcKObvW3bA0W74uojjirpTz4CDTmWlsZ67kLICrorZQbf8CZr
-         o5A1vJbFYzshAbIZr4BZ9wu/uAKdHx2DHg3HUtzlUEcyCjdfyzuIrZhFUKpzg4Y60Ok1
-         PIPtjMz1TKbJQwnwO+CvkM6bmgKr2AdTEhr2fjkGvlhLpy2eWHyJiRp96sYtBPqsHODN
-         D4/Q==
-X-Gm-Message-State: APjAAAUiw/pk7XtN5PJ1br/Sj0TEp8d7hDrZL/BK9DhNYIi4jCkGp/P1
-        p8nUP+CgPA2lh8gh1WpsYKHLANeqhd/23LXwOmM+9A==
-X-Google-Smtp-Source: APXvYqzlkUpYGQn2syS3ZLVsVWF/tTk0yVfY4fQyTuFCwfaWNooQm7u2tuJVHYSsQtBTu3rWlHNporZiD288c1BLvm4=
-X-Received: by 2002:aa7:d8c6:: with SMTP id k6mr23548337eds.87.1571644344157;
- Mon, 21 Oct 2019 00:52:24 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LqSjagznmreorQh4WjtYpX4/TXXxQLyl2wI57WLhs1A=;
+        b=VszkjsNlOK5pn5XgUTI2BhzNrKYP+btWeYFz147Om2SNM2pRK/vvlBrL+jaz5bV/aj
+         7U/0ySHq/ysWcdBJE5y6LgYb4iDTbgMOt0E17DVFDylxc21f89YOR6lGzqUZW+zr71bu
+         SMfRkds8udcbk5AMxbXIUB/1meQ3tkMJUOcoonS3WVBk8UVAS2jgKKg+ZDKMTQRhgX72
+         rSmwk+hv7eyLGIYmuzC2wT304xmjVmbm28QbABZD5deO5WppCvfQWfuAOUq1BqdqEUZR
+         8f1pDZVuS/LNLGZkgUZ5BKAV5qNtMljFlfB3qA9ZzcZo/hGYQtu8KPdI4/pptJmZqnUp
+         0+UQ==
+X-Gm-Message-State: APjAAAUu8N6sK/s8DkQt4x9XBiWcdjv/xWoVkNB8DK5PvStDTNCzZPVI
+        Hy6mzLPGAV1D43Ezq0b/Ykc=
+X-Google-Smtp-Source: APXvYqzTRUrh18jX3Gno07y4/ixRibHCySgpY4CHIq82WdkkdE6OsHf3FKF6NG3ZbwYGYrzrHZND6A==
+X-Received: by 2002:adf:ee81:: with SMTP id b1mr17098306wro.58.1571645295114;
+        Mon, 21 Oct 2019 01:08:15 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id u2sm11702169wml.44.2019.10.21.01.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2019 01:08:14 -0700 (PDT)
+Date:   Mon, 21 Oct 2019 10:08:11 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
+        edubezval@gmail.com, agross@kernel.org, tdas@codeaurora.org,
+        swboyd@chromium.org, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] cpufreq: Initialize cpufreq-dt driver earlier
+Message-ID: <20191021080811.GA54219@gmail.com>
+References: <cover.1571387352.git.amit.kucheria@linaro.org>
+ <66d8ae593ce7936a5f492d0c6855c1ac225b64ee.1571387352.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-References: <20190906100514.30803-1-roger.lu@mediatek.com> <20190906100514.30803-4-roger.lu@mediatek.com>
-In-Reply-To: <20190906100514.30803-4-roger.lu@mediatek.com>
-From:   Pi-Hsun Shih <pihsun@chromium.org>
-Date:   Mon, 21 Oct 2019 15:51:48 +0800
-Message-ID: <CANdKZ0dAWWy7QMMZhNHAha5ZpcBo1GHebPc5_FRu5gvBc569QA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] PM / AVS: SVS: Introduce SVS engine
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>, yt.lee@mediatek.com,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nishanth Menon <nm@ti.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66d8ae593ce7936a5f492d0c6855c1ac225b64ee.1571387352.git.amit.kucheria@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Roger,
 
-On Fri, Sep 6, 2019 at 6:06 PM Roger Lu <roger.lu@mediatek.com> wrote:
-> ...
-> +static int svs_resource_setup(struct mtk_svs *svs)
-> ...
-> +               for (i = 0, freq = (u32)-1; i < svsb->opp_count; i++, freq--) {
-> +                       opp = dev_pm_opp_find_freq_floor(svsb->dev, &freq);
-> +                       if (IS_ERR(opp)) {
-> +                               pr_err("%s: error opp entry!!, err = %ld\n",
-> +                                      svsb->name, PTR_ERR(opp));
-> +                               return PTR_ERR(opp);
-> +                       }
-> +
-> +                       svsb->opp_freqs[i] = freq;
-> +                       svsb->opp_volts[i] = dev_pm_opp_get_voltage(opp);
-> +                       svsb->freqs_pct[i] = percent(svsb->opp_freqs[i],
-> +                                                    svsb->freq_base) & 0xff;
+* Amit Kucheria <amit.kucheria@linaro.org> wrote:
 
-Should have dev_pm_opp_put(opp); here.
+> This allows HW drivers that depend on cpufreq-dt to initialise earlier.
 
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> ...
-> +static int svs_status_proc_show(struct seq_file *m, void *v)
-> ...
-> +       for (i = 0, freq = (u32)-1; i < svsb->opp_count; i++, freq--) {
-> +               opp = dev_pm_opp_find_freq_floor(svsb->dev, &freq);
-> +               if (IS_ERR(opp)) {
-> +                       seq_printf(m, "%s: error opp entry!!, err = %ld\n",
-> +                                  svsb->name, PTR_ERR(opp));
-> +                       return PTR_ERR(opp);
-> +               }
-> +
-> +               seq_printf(m, "opp_freqs[%02u]: %lu, volts[%02u]: %lu, ",
-> +                          i, freq, i, dev_pm_opp_get_voltage(opp));
-> +               seq_printf(m, "svsb_volts[%02u]: 0x%x, freqs_pct[%02u]: %u\n",
-> +                          i, svsb->volts[i], i, svsb->freqs_pct[i]);
+My obsessive-compulsive in-brain spellchecker noticed that the title says 
+'initialize' (US spelling), while the comment uses 'initialise' (UK 
+spelling). Just in case this is not some post-Brexit expression of 
+cross-Atlantic friendliness you might want to fix it. :)
 
-Same here.
+Thanks,
 
-> +       }
-> +
-> +       return 0;
-> +}
-> ...
+	Ingo
