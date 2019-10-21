@@ -2,195 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A9CDE988
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B607DE9A8
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbfJUKeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 06:34:02 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:48434 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726725AbfJUKeC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Oct 2019 06:34:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F1FA493;
-        Mon, 21 Oct 2019 03:33:32 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1D673F718;
-        Mon, 21 Oct 2019 03:33:31 -0700 (PDT)
-Date:   Mon, 21 Oct 2019 11:33:29 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
- before freeing
-Message-ID: <20191021103329.GB21581@bogus>
-References: <20191017163503.30791-1-sudeep.holla@arm.com>
- <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
- <20191018101924.GA25540@bogus>
- <4881906.zjS51fuFuv@kreacher>
- <20191018110632.GB25540@bogus>
- <CAJZ5v0hnvahJ6bu6SEVvavb1kRe=X0wP_JUS26h_d019u5z7PA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hnvahJ6bu6SEVvavb1kRe=X0wP_JUS26h_d019u5z7PA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1728185AbfJUKfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 06:35:43 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:47071 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfJUKfn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:35:43 -0400
+Received: by mail-pg1-f195.google.com with SMTP id e15so7529782pgu.13
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 03:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=v5rSAq2borwkfdHAyZMADzr7MniIhk00515PFzb4hhs=;
+        b=qNCGI/YFahR+e+ynFc4x6ppds1OgEZc/KVjTCu/G9Rfk2zBv6ffdW8NjL3KKoCa7hx
+         nKTV+6WosWRgpFq0H/GVKTHPFTpC23IxGh5uTNTx1gehiLHnfJKbgo9spmNmrWV8KX+i
+         9zKH4p7xyjOjiGjzfkpdXLNW4Qsx8vBlwE6e1du1LTQE8UPQMVt2JM6FLajol4MkkBs7
+         vQv+eCgAuyKxsRWSPxePcELmZOlgF2XB0SpGvF8mdFatArXeHCsIGeOVT2+ppkF65jWJ
+         gmXA2yuygVrS+uvwCWqkMEksJfB2h0Eh1K7OnSBE4Vd6Q83oyifcOzE6PjznoSLJneGF
+         u1dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=v5rSAq2borwkfdHAyZMADzr7MniIhk00515PFzb4hhs=;
+        b=h79LduHDEnBzcuQzTHMpOxuXn2aMVAA/0N+gwKCnHilq2K4ZZ/IOIiVPPWVeoFtN8y
+         GapVaeNl8+l3/Rjq5qc5a6mPKdEBcOPhkYQH2BUpINJ9LEVG/SzOK4O/tF/WHlisAuWr
+         ExqvyWpzTA6M6smPFF/4DRiJvUuDmutcS2cdvdl2Z7ojcsoJqA9gnKpVQ7KddVN9a2u8
+         +3IM90MXy5yi6NU0lp04nlJO94/ODyT47YRr8QRtxK7G5FO8pH6Scqjd7V9ltjG1/ygF
+         03AciAJtGBVga687ddkqNrMWB0B41CN6Ik7W0PbZunvJqHmvk1rnys9N8hJMDTrEIK9c
+         zaGQ==
+X-Gm-Message-State: APjAAAWlFa/ooUWsdPdajqgG168D5UhDTFZ9ecawXmAJYT0JksSqX8c8
+        TRxSHo5WckXVr10fW0TVGhAPKg==
+X-Google-Smtp-Source: APXvYqwS1rliMo/RIgidg2INxRP2DpDCXVKjrkCgeOeyh0IAjfJKjPgEHgBuaTYwuYuj33lXEDVIOA==
+X-Received: by 2002:a63:e00e:: with SMTP id e14mr25438983pgh.146.1571654142113;
+        Mon, 21 Oct 2019 03:35:42 -0700 (PDT)
+Received: from localhost ([49.248.62.222])
+        by smtp.gmail.com with ESMTPSA id w65sm16716070pfb.106.2019.10.21.03.35.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 21 Oct 2019 03:35:41 -0700 (PDT)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
+        masneyb@onstation.org, swboyd@chromium.org, julia.lawall@lip6.fr,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v6 00/15] thermal: qcom: tsens: Add interrupt support
+Date:   Mon, 21 Oct 2019 16:05:19 +0530
+Message-Id: <cover.1571652874.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 02:14:51AM +0200, Rafael J. Wysocki wrote:
-> On Fri, Oct 18, 2019 at 1:06 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Fri, Oct 18, 2019 at 12:37:51PM +0200, Rafael J. Wysocki wrote:
-> > > On Friday, October 18, 2019 12:19:24 PM CEST Sudeep Holla wrote:
-> > > > On Fri, Oct 18, 2019 at 11:32:47AM +0530, Viresh Kumar wrote:
-> > > > > On 18-10-19, 06:55, Sudeep Holla wrote:
-> > > > > > On Thu, Oct 17, 2019 at 11:26:54PM +0200, Rafael J. Wysocki wrote:
-> > > > > > > On Thu, Oct 17, 2019 at 9:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > On Thu, Oct 17, 2019 at 6:35 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > > > > > >
-> > > > > > > > > dev_pm_qos_remove_request ends calling {max,min}_freq_req QoS notifiers
-> > > > > > > > > which schedule policy update work. It may end up racing with the freeing
-> > > > > > > > > the policy and unregistering the driver.
-> > > > > > > > >
-> > > > > > > > > One possible race is as below where the cpufreq_driver is unregistered
-> > > > > > > > > but the scheduled work gets executed at later stage when cpufreq_driver
-> > > > > > > > > is NULL(i.e. after freeing the policy and driver)
-> > > > > > > > >
-> > > > > > > > > Unable to handle kernel NULL pointer dereference at virtual address 0000001c
-> > > > > > > > > pgd = (ptrval)
-> > > > > > > > > [0000001c] *pgd=80000080204003, *pmd=00000000
-> > > > > > > > > Internal error: Oops: 206 [#1] SMP THUMB2
-> > > > > > > > > Modules linked in:
-> > > > > > > > > CPU: 0 PID: 34 Comm: kworker/0:1 Not tainted 5.4.0-rc3-00006-g67f5a8081a4b #86
-> > > > > > > > > Hardware name: ARM-Versatile Express
-> > > > > > > > > Workqueue: events handle_update
-> > > > > > > > > PC is at cpufreq_set_policy+0x58/0x228
-> > > > > > > > > LR is at dev_pm_qos_read_value+0x77/0xac
-> > > > > > > > > Control: 70c5387d  Table: 80203000  DAC: fffffffd
-> > > > > > > > > Process kworker/0:1 (pid: 34, stack limit = 0x(ptrval))
-> > > > > > > > >         (cpufreq_set_policy) from (refresh_frequency_limits.part.24+0x37/0x48)
-> > > > > > > > >         (refresh_frequency_limits.part.24) from (handle_update+0x2f/0x38)
-> > > > > > > > >         (handle_update) from (process_one_work+0x16d/0x3cc)
-> > > > > > > > >         (process_one_work) from (worker_thread+0xff/0x414)
-> > > > > > > > >         (worker_thread) from (kthread+0xff/0x100)
-> > > > > > > > >         (kthread) from (ret_from_fork+0x11/0x28)
-> > > > > > > > >
-> > > > > > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > > > > > > > > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > > > > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > > > > > > > ---
-> > > > > > > > >  drivers/cpufreq/cpufreq.c | 3 +++
-> > > > > > > > >  1 file changed, 3 insertions(+)
-> > > > > > > > >
-> > > > > > > > > Hi Rafael, Viresh,
-> > > > > > > > >
-> > > > > > > > > This fixed the boot issue I reported[1] on TC2 with bL switcher enabled.
-> > > > > > > > > I have based this patch on -rc3 and not on top of your patches. This
-> > > > > > > > > only fixes the boot issue but I hit the other crashes while continuously
-> > > > > > > > > switching on and off the bL switcher that register/unregister the driver
-> > > > > > > > > Your patch series fixes them. I can based this on top of those if you
-> > > > > > > > > prefer.
-> > > > > > > > >
-> > > > > > > > > Regards,
-> > > > > > > > > Sudeep
-> > > > > > > > >
-> > > > > > > > > [1] https://lore.kernel.org/linux-pm/20191015155735.GA29105@bogus/
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > > > > > > index c52d6fa32aac..b703c29a84be 100644
-> > > > > > > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > > > > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > > > > > > @@ -1278,6 +1278,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > > > > > > > >         }
-> > > > > > > > >
-> > > > > > > > >         dev_pm_qos_remove_request(policy->min_freq_req);
-> > > > > > > > > +       /* flush the pending policy->update work before freeing the policy */
-> > > > > > > > > +       if (work_pending(&policy->update))
-> > > > > > > >
-> > > > > > > > Isn't this racy?
-> > > > > > > >
-> > > > > > > > It still may be running if the pending bit is clear and we still need
-> > > > > > > > to wait for it then, don't we?
-> > > > > > > >
-> > > > > > > > Why don't you do an unconditional flush_work() here?
-> > > > > > >
-> > > > > > > You may as well do a cancel_work_sync() here, because whether or not
-> > > > > > > the last update of the policy happens before it goes away is a matter
-> > > > > > > of timing in any case
-> > > > > >
-> > > > > > In fact that's the first thing I tried to fix the issue I was seeing.
-> > > > > > But I then thought it would be better to complete the update as the PM
-> > > > > > QoS were getting updated back to DEFAULT values for the device. Even
-> > > > > > this works.
-> > > > > >
-> > > > > > What is your preference ? flush_work or cancel_work_sync ? I will
-> > > > > > update accordingly. I may need to do some more testing with
-> > > > > > cancel_work_sync as I just checked that quickly to confirm the race.
-> > > > >
-> > > > > As I said in the other email, this work didn't come as a result of
-> > > > > removal of the qos request from cpufreq core and so must have come
-> > > > > from other thermal or similar events.
-> > > >
-> > > > I don't think so. For sure not because of any thermal events. I didn't
-> > > > have log handy and hence had to wait till I was next to hardware.
-> > > >
-> > > > This is log:
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
-> > > >  cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
-> > > >  cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max before
-> > > >  cpufreq: cpufreq_notifier_max: schedule_work(&policy->update)
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request max after
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min before
-> > > >  cpufreq: cpufreq_notifier_min: schedule_work(&policy->update)
-> > > >  cpufreq: cpufreq_policy_free: dev_pm_qos_remove_request min after
-> > > >
-> > > > So if I move the call above, it still crashes as the work is getting
-> > > > scheduled later.
-> > >
-> > > OK, please cancel the work after dropping the last request.
-> > >
-> > > We still need to understand what is going on here, but the crash needs to be
-> > > prevented from occurring in the first place IMO.
-> > >
-> > Callstack is:
-> >
-> > (cpufreq_notifier_max)
-> > (notifier_call_chain)
-> > (blocking_notifier_call_chain)
-> > (pm_qos_update_target)
-> > (freq_qos_apply)
-> > (freq_qos_remove_request)
-> > (cpufreq_policy_free)
-> > (subsys_interface_unregister)
-> > (cpufreq_unregister_driver)
->
-> That may be due to a bug in one of my patches (it's adding one of the
-> notifiers to a wrong list).
->
+Daniel, only patch 15 needs to be changed in the tree being submitted
+to linux-next. But here is the entire series for completeness.
 
-Ah that explains, I was wondering what changed as it's working now but
-was not the case when I tried earlier and I had to keep cancel_work_sync
-after dev_pm_qos_remove_request
+Hi Thermal and MSM maintainers,
 
-> Please re-test with the current linux-next branch that I've just pushed.
+I believe this series is now ready to be merged. The DT bindings and driver
+changes should go through the thermal tree and the changes to the DT files
+themselves should go through the MSM tree. There is no hard ordering
+dependency because we're adding a new property to the driver. It would help
+to soak in linux-next for a few weeks to catch anything on kernelci.org.
 
-Yes, it did that and it now works fine even if I move the cancel_work_sync
-call earlier just after freq_qos_remove_notifier.
+1-4, 7, 14, 15 => thermal tree
+5, 6, 8-13 => msm tree
 
-If you/Viresh prefer the call to cancel_work_sync to be moved up, that
-should be fine now. I have sent the delta for reference in other reply.
-
---
 Regards,
-Sudeep
+Amit
+
+Changes since v5:
+- Julia found a missing put_device() call in the success path of
+  tsens_register() while baking in linux-next. A single line change to
+  allow the error and success path to use the call to put_device(). Thanks
+  Julia and LKP.
+
+Changes since v4:
+- Change to of-thermal core[1] to force interrupts w/o changing polling-delay DT
+  parameter
+- Corresponding changes to DT files to remove the hunks setting the values
+  to 0
+- Collected reviews and acks
+
+Changes since v3:
+- Fix up the YAML definitions based on Rob's review
+
+Changes since v2:
+- Addressed Stephen's review comment
+- Moved the dt-bindings to yaml (This throws up some new warnings in various QCOM
+devicetrees. I'll send out a separate series to fix them up)
+- Collected reviews and acks
+- Added the dt-bindings to MAINTAINERS
+
+Changes since v1:
+- Collected reviews and acks
+- Addressed Stephen's review comments (hopefully I got them all).
+- Completely removed critical interrupt infrastructure from this series.
+  Will post that separately.
+- Fixed a bug in sign-extension of temperature.
+- Fixed DT bindings to use the name of the interrupt e.g. "uplow" and use
+  platform_get_irq_byname().
+
+Add interrupt support to TSENS. The first 6 patches are general fixes and
+cleanups to the driver before interrupt support is introduced.
+
+[1] https://lore.kernel.org/linux-arm-msm/1b53ef537203e629328285b4597a09e4a586d688.1571181041.git.amit.kucheria@linaro.org/
+
+Amit Kucheria (15):
+  drivers: thermal: tsens: Get rid of id field in tsens_sensor
+  drivers: thermal: tsens: Simplify code flow in tsens_probe
+  drivers: thermal: tsens: Add __func__ identifier to debug statements
+  drivers: thermal: tsens: Add debugfs support
+  arm: dts: msm8974: thermal: Add thermal zones for each sensor
+  arm64: dts: msm8916: thermal: Fixup HW ids for cpu sensors
+  dt-bindings: thermal: tsens: Convert over to a yaml schema
+  arm64: dts: sdm845: thermal: Add interrupt support
+  arm64: dts: msm8996: thermal: Add interrupt support
+  arm64: dts: msm8998: thermal: Add interrupt support
+  arm64: dts: qcs404: thermal: Add interrupt support
+  arm: dts: msm8974: thermal: Add interrupt support
+  arm64: dts: msm8916: thermal: Add interrupt support
+  drivers: thermal: tsens: Create function to return sign-extended
+    temperature
+  drivers: thermal: tsens: Add interrupt support
+
+ .../bindings/thermal/qcom-tsens.txt           |  55 --
+ .../bindings/thermal/qcom-tsens.yaml          | 168 ++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/qcom-msm8974.dtsi           |  92 +++
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |   6 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |   6 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |   2 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   4 +
+ drivers/thermal/qcom/tsens-8960.c             |   4 +-
+ drivers/thermal/qcom/tsens-common.c           | 529 ++++++++++++++++--
+ drivers/thermal/qcom/tsens-v0_1.c             |  11 +
+ drivers/thermal/qcom/tsens-v1.c               |  29 +
+ drivers/thermal/qcom/tsens-v2.c               |  13 +
+ drivers/thermal/qcom/tsens.c                  |  59 +-
+ drivers/thermal/qcom/tsens.h                  | 286 ++++++++--
+ 16 files changed, 1102 insertions(+), 167 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+
+-- 
+2.17.1
+
