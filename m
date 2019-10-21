@@ -2,90 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEAEDEA19
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6FBDEA22
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Oct 2019 12:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbfJUKyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 06:54:25 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41652 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfJUKyZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:54:25 -0400
-Received: by mail-pg1-f193.google.com with SMTP id t3so7575543pga.8
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 03:54:25 -0700 (PDT)
+        id S1728042AbfJUK4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 06:56:04 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:32990 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727831AbfJUK4D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 06:56:03 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q10so8224593pfl.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 03:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=H2t4PKG/eZU3aPmwrkuhhD8Hh2tscnAFAhHGGRBX4YM=;
-        b=qfF24aXttATO4K858iDxMOlawG2W88V2Efd1HhVKFd7Tq7BO/h2cM7JmXZTa5Mwa0n
-         GfyvpWvUQn8jaJqHg2hK8cPDRim5U8SNXlsjoSYVCtedIJMyrVyTmGNQ0sF8JqGcfXhY
-         9u2btxLWxsUmAVw6n8IDr6kds1pz3kXtxNMITR3vegl3bNMahBUcZzG3LfY4wKJ2124X
-         6QJ5n3buU28VZAiUjoyec1z37S4prkbnEpWx5UQm5GS0KfWbdVPaouRS92IGfOU4VNJl
-         NJ1IXxGMZo7fBioOuzrNEe4FnMeYHuB88Jb8a6Kwphhz6o+p5N8Bm2GRX+CUlu7DuCf1
-         wQRw==
+        bh=wF1+8YZQPASjCzMnoxagVtf09QEbjdj0mZoAlrVP5Cs=;
+        b=LMChVAZfWEwWAiP/W1Lpr/Cx13RyxCKmAavy8ARHSE4X1bKwsHSOjkhCrrk7dHU5uK
+         MCnnOrefKvNyBpX1eeKrTQF+yTBqFuHYojitYoMR56/2y8GZhU8/zWMgweVVc873sN9N
+         1vEQMgvMCqicCakx/fhau0P2MFX2vzXWq3jkcu4taXakMKDfvp5OlA9Wzmt2f+D9Xkx4
+         f1TjJZfyHyWrvvN3X0wx2BOOzi/o3DydEymPA2Y/LynPyBatfsmGoTCP1PV5iplm0rrx
+         aiu2+O1aHTKTv9MbqnKXQr3LbUw2fvIZ996Q+YyrTm7X4kW9D61ycInxcVzyk1Hvg/Np
+         km3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H2t4PKG/eZU3aPmwrkuhhD8Hh2tscnAFAhHGGRBX4YM=;
-        b=HfJfbQq48K+CDTx6avPGz9/V7+7Xs3jjOMUdfEi9zpQ4bZwbPLQ5V4FbD143Yhkl4o
-         aWjU2OscqQEKeZZEpAqEIh/gid/WvFGP1Zh672YPVMg5OeNhvDAJ7ZHfhAf5REpZyx30
-         q0DhFKQUZtNVMuLUgFZKGoxP7PtpSKPT/MQJfHpXI/mUpA0GOB+oMWPw+tLt2QEtPk2b
-         yAVhHt+QmdCIWDw6eo6sf/biyn2Q1KaFyHC1X+VPB4+9Zl7rhYXwROWC2t6z2B064iwC
-         HqrcZ1BRzouLk9nQMr6Z8+4EEAVMqZAwsoAz87zfjo4qLXOEIP3w80qVa6HfqKZiuqxt
-         7Pjw==
-X-Gm-Message-State: APjAAAXGzTldfU0stKT+r9vsWtyFqSG5dK/VLVi1k/C+nOaKSyiTRRPq
-        Uw93qGzjXBtKtVW5U1HiLkw4sQ==
-X-Google-Smtp-Source: APXvYqzc+VIvFaAIr1m5192kISlYR+tFNl07KgG0K9Am2YZM+hvPaKnDaJ6T+4BBNOPsidRHUzrl9w==
-X-Received: by 2002:a63:3044:: with SMTP id w65mr24426425pgw.384.1571655264745;
-        Mon, 21 Oct 2019 03:54:24 -0700 (PDT)
+        bh=wF1+8YZQPASjCzMnoxagVtf09QEbjdj0mZoAlrVP5Cs=;
+        b=QIUGtjt3OOfWZ0RKAVgjUZn4DsrKa55cggMgZT6TGUFzzt9nvcWMWVe62/FATDC5nr
+         cIMRDY3qD5uFp35kGvmrgIoFBKuJw545jajhk0w0zQX3bG6Agee9xtwIfx78pgfYXfEG
+         NAckF+D/Giy0xeIs2CUHluGtsLgP6Kcrg31o6MqJ11T26K37xdFt79h/9LF4lcoV0CVE
+         nGRywXnCfe4YtYdav/BAtI/BWWCa3erE0qg10No8vicGR0pCwYamCjo3ghUVFonj7H+f
+         vwbyeAGu8czbXV70uUul4dp+hq8emPrwbi7eeATK5Z/eGcRbts3eeqY2kMkFQ3T9QjDr
+         MmIQ==
+X-Gm-Message-State: APjAAAX2YD37cSVhNitSDBXy46zy5tMeELTAplGMsyg5EBsylOu4khtP
+        Ntd0m0PqIDmlMOYElo6/bK4o9Q==
+X-Google-Smtp-Source: APXvYqxtkhlEHrd59Xgs4FPY7IgW8ANyk/EGhMAMJhBaYKDI8tISB5wQrYi5RgTUkoGiQD3QnsJCmQ==
+X-Received: by 2002:a17:90a:35a5:: with SMTP id r34mr26976603pjb.40.1571655362925;
+        Mon, 21 Oct 2019 03:56:02 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id o60sm15848553pje.21.2019.10.21.03.54.22
+        by smtp.gmail.com with ESMTPSA id y17sm22150159pfo.171.2019.10.21.03.56.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 03:54:23 -0700 (PDT)
-Date:   Mon, 21 Oct 2019 16:24:19 +0530
+        Mon, 21 Oct 2019 03:56:02 -0700 (PDT)
+Date:   Mon, 21 Oct 2019 16:25:59 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nico@fluxnic.net
-Subject: Re: [PATCH v3 0/5] cpufreq: merge arm big.LITTLE and vexpress-spc
- drivers
-Message-ID: <20191021105419.ud7he23j2icrwo4w@vireshk-i7>
-References: <20191018103749.11226-1-sudeep.holla@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: flush any pending policy update work scheduled
+ before freeing
+Message-ID: <20191021105559.fqmf3pcvxxeh2ote@vireshk-i7>
+References: <20191017163503.30791-1-sudeep.holla@arm.com>
+ <20191018060247.g5asfuh3kncoj7kl@vireshk-i7>
+ <20191018101924.GA25540@bogus>
+ <4881906.zjS51fuFuv@kreacher>
+ <20191018110632.GB25540@bogus>
+ <20191021021551.bjhf74zeyuqcl4w3@vireshk-i7>
+ <20191021102730.GA21581@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191018103749.11226-1-sudeep.holla@arm.com>
+In-Reply-To: <20191021102730.GA21581@bogus>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-10-19, 11:37, Sudeep Holla wrote:
-> Hi,
+On 21-10-19, 11:27, Sudeep Holla wrote:
+> I just tested now with today's linux-pm/bleeding-edge branch.
+> And even if I move cancel_work_sync just after freq_qos_remove_notifier,
+> it works fine now. It was not the case on Friday.
 > 
-> Since vexpress-spc is the sole user of arm_big_little cpufreq driver,
-> there's no point in keeping it separate anymore. I wanted to post these
-> patches for ages but kept postponing for no reason.
+> Is that what you wanted to check or something else ?
 > 
 > Regards,
 > Sudeep
 > 
-> v1->v2:
-> 	- generated the patch using -B that helps to keep delta short
-> 	  for review
-> 	- Split the last patch into 3 different patches to deal with
-> 	  removing bL_ops, debug messages and other code formatting
-> 	  separately
+> -->8
 > 
-> v2->v3:
-> 	- Added Nico's ack
-> 	- Added back blank lines and extra braces as suggested by Viresh
-> 	- Updated copyright year correctly
+> diff --git i/drivers/cpufreq/cpufreq.c w/drivers/cpufreq/cpufreq.c
+> index 829a3764df1b..48a224a6b178 100644
+> --- i/drivers/cpufreq/cpufreq.c
+> +++ w/drivers/cpufreq/cpufreq.c
+> @@ -1268,6 +1268,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>         freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
+>                                  &policy->nb_min);
+> 
+> +       /* Cancel any pending policy->update work before freeing the policy. */
+> +       cancel_work_sync(&policy->update);
+> +
+>         if (policy->max_freq_req) {
+>                 /*
+>                  * CPUFREQ_CREATE_POLICY notification is sent only after
+> @@ -1279,8 +1282,6 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>         }
+> 
+>         freq_qos_remove_request(policy->min_freq_req);
+> -       /* Cancel any pending policy->update work before freeing the policy. */
+> -       cancel_work_sync(&policy->update);
+>         kfree(policy->min_freq_req);
+> 
+>         cpufreq_policy_put_kobj(policy);
 
-Applied. Thanks.
+Yes, send a incremental patch for that. Thanks.
 
 -- 
 viresh
