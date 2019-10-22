@@ -2,112 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD42DFB91
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 04:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87934DFB98
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 04:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727264AbfJVCXu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 22:23:50 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44584 "EHLO
+        id S1730271AbfJVCZO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Oct 2019 22:25:14 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42513 "EHLO
         mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730271AbfJVCXt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 22:23:49 -0400
-Received: by mail-pg1-f196.google.com with SMTP id e10so8969482pgd.11
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 19:23:48 -0700 (PDT)
+        with ESMTP id S1727264AbfJVCZO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 22:25:14 -0400
+Received: by mail-pg1-f196.google.com with SMTP id f14so8967492pgi.9
+        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 19:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=AT7Vp+yACQ0gxVA6T92L6+q4sc2TtEu5B2tW7M476fE=;
-        b=wAGpi/i7ToUnIHcgrBtOEeq9mKLemYp/7q8F4wQ/P1xghZ3Y/qiLVkjGKKUF2gZX2Q
-         pJoV0/cyU1QmMb5z1/vwfhE/rUxstwDIpHLgS/6MU8e/4artDj0yGxvvhCoRZbyLjbqh
-         uQ46+srG8EwwfpDLEILPDreo9TJu4K7WQmN+rDN5NoS1TRv10eQ/1WkenUw9cXcZLKVM
-         ayb82Zy28qa7/4Gyptku1v1M9M71FlhQzs7Vx2tWtcKicL+gR6y5AMRX9rMHLKLTHRT3
-         0Flf5YUfHgKm3tRu00ElqgxLV7OZW8AEPfCf/kFOXYdAZYRcHxTWNBK/nQKKYYyse3Jv
-         KQKA==
+        bh=b7R0jpCoBOrrhcXAwPBls/opcu6DyfBOiyKCvmQcYDE=;
+        b=dgXXAXc8wmNKaoX7CcLHcKCDDs9zfWHGkc/6P1imYO+MGf7tIvzuw9JIpK2ov9CviP
+         iTGZ3tqodJ0Db7qDp0fM3DdYhL6vFNdaOrQAifq86gC7d3drgOxzIb6kZwqWytkgXBjd
+         HPMDGIEF7itXwQLx0byCjhjOrLEiMtzIHliMSfLzQthLg0Za+aI8Zp27SFUZT/qxSIew
+         NGHtJP3sx/9vRyJQIB7sp+LfEkyJL9RdJ++r9zUn+buoQEzD1sPAAB28WMODHIaYN44M
+         TJsOGMcqVCFrRD44PLtxdd5hFF66zpSkkudVxDpF7W5Kj4K1PmqvpZN+PqWFpLSdOf8K
+         0NPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AT7Vp+yACQ0gxVA6T92L6+q4sc2TtEu5B2tW7M476fE=;
-        b=L+96KMyXVSY1QJVIN/pkbkkCVbQvluDM5+XVLc4HdSmlubKEQkE6Xjzppk18y0p2CF
-         rAUWUDbWxG55Q6u+SMe4VsddIqkpN6bFZmEblDtTGDYKbG6KcM7694hXpIUW3rUlr3sE
-         RNeQ/MS/afMT3PuBnsYuixbx59KM4x34n4CxU6nIvHUoe9MCQJKhmlaAzr4X8nQxrorH
-         1LN+YaT/zxdUnfb5Q7uadg1+fw/5244zfOYPrOAjYUV7+s1ubV5JZxbKxTbZywp+vCsc
-         aR6lA0bAwlG/+dbfsEyG4sVsiAk2IR/I1DqRgPLoPmWsjDj0gmmhwyFC7XdCXryhPWqj
-         5gWA==
-X-Gm-Message-State: APjAAAWuqKEmF8KtczdKkFrdcsnqL8x4nK4ZvUHI+vX0LWd4uwrrqEVy
-        DO9IIiX72LA/iEd6g5uFX7PfBw==
-X-Google-Smtp-Source: APXvYqwD3LLESW9dtqRG9tRzGlNIUWLCdXMmmkM+V9LqAW0lYd0ou/d6RHGdRS4wqzKpk402x4m9pQ==
-X-Received: by 2002:a65:67d0:: with SMTP id b16mr1165736pgs.64.1571711027447;
-        Mon, 21 Oct 2019 19:23:47 -0700 (PDT)
+        bh=b7R0jpCoBOrrhcXAwPBls/opcu6DyfBOiyKCvmQcYDE=;
+        b=pZxIVrfLIuxkOAXSp2BVtsXyoMarV8n3hIkxDPb16hwjSNIkQcaC+7WF6fqe1qegok
+         Agxrva+79oV2NNQ05Lz0KV0gYQXhwkvGKK/DKAukdm3m0XOXKaJTvHY/IUj/hJVGZ1o9
+         jZFWPPYuOgM68Dd0KJgOCvKMopF0oU2KbaNk2EBetQLOh3U+CaCH9eiPz+93UKeum5t0
+         pepyqOswl45wmCQJf6zSqQR/eglfoSGCDECdc4w3Qu5tyh16kdQK+EGVw1L+8QBMIegO
+         uQN7G1griCs5zCYisorOkliXQgqfjPowfwV0Vk7hoHAW6gqASfOYMx6KgQhyrLlasDN0
+         /laA==
+X-Gm-Message-State: APjAAAXHDABKyNkvO0sDCVqNgQ4hpk+q3AfMZloZ/Hj4vDsxHl6r2cRV
+        e8vSpGSkKhnNvWlJMx8XwnJl4g==
+X-Google-Smtp-Source: APXvYqwjG41aQ/fTp5pO2rwcXW53d2nGOCIiy8oYaqL7cNokUf4ZeukAPzrmF0wibT2tb3+2MMg3Cg==
+X-Received: by 2002:a62:6404:: with SMTP id y4mr219786pfb.170.1571711113584;
+        Mon, 21 Oct 2019 19:25:13 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id 62sm16643422pfg.164.2019.10.21.19.23.45
+        by smtp.gmail.com with ESMTPSA id k23sm15980776pgi.49.2019.10.21.19.25.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 19:23:45 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 07:53:41 +0530
+        Mon, 21 Oct 2019 19:25:12 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 07:55:08 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>, vireshk@kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, roger.lu@mediatek.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        Stephen Boyd <sboyd@codeaurora.org>
-Subject: Re: [PATCH v5 1/4] PM / OPP: Support adjusting OPP voltages at
- runtime
-Message-ID: <20191022022341.yd6ykeszsuprmop2@vireshk-i7>
-References: <20191016145756.16004-1-s.nawrocki@samsung.com>
- <CGME20191016145810eucas1p1b31400c9b2e7f30cdf6deeb4ccee2788@eucas1p1.samsung.com>
- <20191016145756.16004-2-s.nawrocki@samsung.com>
- <20191017064258.yfbh7iz3pbzfhdvr@vireshk-i7>
- <20191021112354.GA2262@pi3>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rjw@rjwysocki.net
+Subject: Re: [PATCH] cpufreq: Move cancelling of policy update work just
+ after removing notifiers
+Message-ID: <20191022022508.g3ar735237haybxe@vireshk-i7>
+References: <20191021132818.23787-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191021112354.GA2262@pi3>
+In-Reply-To: <20191021132818.23787-1-sudeep.holla@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-10-19, 13:23, Krzysztof Kozlowski wrote:
-> On Thu, Oct 17, 2019 at 12:12:58PM +0530, Viresh Kumar wrote:
-> > On 16-10-19, 16:57, Sylwester Nawrocki wrote:
-> > > From: Stephen Boyd <sboyd@codeaurora.org>
-> > > 
-> > > On some SoCs the Adaptive Voltage Scaling (AVS) technique is
-> > > employed to optimize the operating voltage of a device. At a
-> > > given frequency, the hardware monitors dynamic factors and either
-> > > makes a suggestion for how much to adjust a voltage for the
-> > > current frequency, or it automatically adjusts the voltage
-> > > without software intervention. Add an API to the OPP library for
-> > > the former case, so that AVS type devices can update the voltages
-> > > for an OPP when the hardware determines the voltage should
-> > > change. The assumption is that drivers like CPUfreq or devfreq
-> > > will register for the OPP notifiers and adjust the voltage
-> > > according to suggestions that AVS makes.
-> > > 
-> > > This patch is derived from [1] submitted by Stephen.
-> > > [1] https://lore.kernel.org/patchwork/patch/599279/
-> > > 
-> > > Signed-off-by: Stephen Boyd <sboyd@codeaurora.org>
-> > > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > > [s.nawrocki@samsung.com: added handling of OPP min/max voltage]
-> > > Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> > > ---
-> > >  drivers/opp/core.c     | 69 ++++++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/pm_opp.h | 13 ++++++++
-> > >  2 files changed, 82 insertions(+)
-> > 
-> > Applied. Thanks.
+On 21-10-19, 14:28, Sudeep Holla wrote:
+> Commit 099967699ad9 ("cpufreq: Cancel policy update work scheduled before freeing")
+> added cancel_work_sync(policy->update) after the frequency QoS were
+> removed. We can cancel the work just after taking the last CPU in the
+> policy offline and unregistering the notifiers as policy->update cannot
+> be scheduled from anywhere at this point.
 > 
-> Hi Viresh,
+> However, due to other bugs, doing so still triggered the race between
+> freeing of policy and scheduled policy update work. Now that all those
+> issues are resolved, we can move this cancelling of any scheduled policy
+> update work just after removing min/max notifiers.
 > 
-> Can you provide a stable tag with this patch so I can take soc/samsung
-> driver?
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> Hi Rafael,
+> 
+> Based on Viresh's suggestion, I am posting a patch to move this
+> cancel_work_sync earlier though it's not a must have change.
 
-opp-5.4-support-adjust-voltages
+For me it is :)
+
+> I will leave it up to your preference.
+> 
+> Regards,
+> Sudeep
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 829a3764df1b..48a224a6b178 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1268,6 +1268,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>  	freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
+>  				 &policy->nb_min);
+>  
+> +	/* Cancel any pending policy->update work before freeing the policy. */
+> +	cancel_work_sync(&policy->update);
+> +
+>  	if (policy->max_freq_req) {
+>  		/*
+>  		 * CPUFREQ_CREATE_POLICY notification is sent only after
+> @@ -1279,8 +1282,6 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>  	}
+>  
+>  	freq_qos_remove_request(policy->min_freq_req);
+> -	/* Cancel any pending policy->update work before freeing the policy. */
+> -	cancel_work_sync(&policy->update);
+>  	kfree(policy->min_freq_req);
+>  
+>  	cpufreq_policy_put_kobj(policy);
+
+Thanks for doing this.
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
