@@ -2,71 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2207ADFBD2
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 04:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A98DFCCB
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 06:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730876AbfJVCkN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Oct 2019 22:40:13 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34178 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730835AbfJVCkN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Oct 2019 22:40:13 -0400
-Received: by mail-qk1-f193.google.com with SMTP id f18so14268134qkm.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Oct 2019 19:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SIowe0bvkHyBTDNYswHiN88YcAkwm5TEoGgNVc+ix4o=;
-        b=yhS0mblUe4lpDgYbM0BYodLWFiF5NLD9Cxu2+enOIr1JMeSWrqM+cJHIPn8N22L9cB
-         AbIcn3cuVt04kjm0tnB2WRcJfhrlrToE8vSO0E90jB8c+3DHVFqv+ORQg3KJKxUX4uZK
-         bCZ308HjL0kKBBF7T36IDsDI358//mnD6bPLPAtVoYyceh0h0cXiCoh59mHTJQq4nTwF
-         NrhKwrKl7NmdDDbcKPZBhCTVMzjln4MNfHxU5YJJ35QYHJjix/dZArIyE24Q/imiZkCh
-         n4LuazaotEhmaOOo9FN2EJgjVaG/uFAC2NxZh5sv39z4u1V88Dk7Zm4C5gbgKUuK4Koi
-         huDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SIowe0bvkHyBTDNYswHiN88YcAkwm5TEoGgNVc+ix4o=;
-        b=juJrNdwuvJ0ILXSyhnpRYZRqq8Z/SVCEETQFO90FejQo4mX4qKH4gsyOHEB1Wn+5u1
-         LyC8YzgexIeTuoEWKozsZjnq5AU2XWtgjfBZNWBKwOKPJXmZCriIRHPRSn2TAyWbLV5x
-         ZnGJz1rHK3cyApd/xILnxOsyuFBv51gFAWItJqsoCuFZQdiapwVCc1g2eXGxhIec+8Q4
-         WJRTi4Vx0lktUKePz1GSWk5+dDtakfTxWFMlj+LC19Tpu+XfjHzqWtdy/hxuNlV/yTFW
-         EQSGSfSdC7wrsbs6WDZDfFZZRgtQcAcRGBmF02LhOYh1DIjLVOpeYzHajZoywfReNNx+
-         BQ9g==
-X-Gm-Message-State: APjAAAVKOV+1SfLs/dRyNNcXtj7K9NJ2aAQYiaXpy/mM+OCJS74Xma75
-        vIIzxEFDRfVwkO1+4lTJrwcJXicUuGjhaiva/c2Pjg==
-X-Google-Smtp-Source: APXvYqyJqwIc2HQvSj7J7mTROit0ZAcQaeAa0civsjE+Zv3qI8E4qn47LBa4G2/EeuJ6QM+0Vj+WsxDzSknWbW7695A=
-X-Received: by 2002:a37:71c7:: with SMTP id m190mr947918qkc.478.1571712011915;
- Mon, 21 Oct 2019 19:40:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191014061355.29072-1-drake@endlessm.com> <20191014154322.GA190693@google.com>
- <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com> <20191021113353.GX2819@lahna.fi.intel.com>
-In-Reply-To: <20191021113353.GX2819@lahna.fi.intel.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Tue, 22 Oct 2019 10:40:00 +0800
-Message-ID: <CAD8Lp47dmOD0jRZC2Y_Q_Gqfy9X5zbPAoXFJ=2Dadq0W89EC=Q@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2387463AbfJVEml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 00:42:41 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:44002 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387462AbfJVEmk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Oct 2019 00:42:40 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 984DD1A030A;
+        Tue, 22 Oct 2019 06:42:38 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1A2D81A0009;
+        Tue, 22 Oct 2019 06:42:34 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 46DBA40245;
+        Tue, 22 Oct 2019 12:42:28 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rafael.j.wysocki@intel.com, viresh.kumar@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH] cpufreq: imx-cpufreq-dt: Correct i.MX8MN's default speed grade value
+Date:   Tue, 22 Oct 2019 12:39:39 +0800
+Message-Id: <1571719179-23316-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 7:33 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
-> Just to be sure, did you try the patch or just looked at it? Because
-> what the patch does is that it does the delay when the downstream/root
-> port is resumed, not the xHCI itself.
+i.MX8MN has different speed grade definition compared to
+i.MX8MQ/i.MX8MM, when fuses are NOT written, the default
+speed_grade should be set to minimum available OPP defined
+in DT which is 1.2GHz, the corresponding speed_grade value
+should be 0xb.
 
-I tried it, it didn't fix the problem.
+Fixes: 5b8010ba70d5 ("cpufreq: imx-cpufreq-dt: Add i.MX8MN support")
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ drivers/cpufreq/imx-cpufreq-dt.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Daniel
+diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
+index 35db14c..26531f0 100644
+--- a/drivers/cpufreq/imx-cpufreq-dt.c
++++ b/drivers/cpufreq/imx-cpufreq-dt.c
+@@ -44,19 +44,19 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
+ 	mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK) >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
+ 
+ 	/*
+-	 * Early samples without fuses written report "0 0" which means
+-	 * consumer segment and minimum speed grading.
+-	 *
+-	 * According to datasheet minimum speed grading is not supported for
+-	 * consumer parts so clamp to 1 to avoid warning for "no OPPs"
++	 * Early samples without fuses written report "0 0" which may NOT
++	 * match any OPP defined in DT. So clamp to minimum OPP defined in
++	 * DT to avoid warning for "no OPPs".
+ 	 *
+ 	 * Applies to i.MX8M series SoCs.
+ 	 */
+-	if (mkt_segment == 0 && speed_grade == 0 && (
+-			of_machine_is_compatible("fsl,imx8mm") ||
+-			of_machine_is_compatible("fsl,imx8mn") ||
+-			of_machine_is_compatible("fsl,imx8mq")))
+-		speed_grade = 1;
++	if (mkt_segment == 0 && speed_grade == 0) {
++		if (of_machine_is_compatible("fsl,imx8mm") ||
++			of_machine_is_compatible("fsl,imx8mq"))
++			speed_grade = 1;
++		if (of_machine_is_compatible("fsl,imx8mn"))
++			speed_grade = 0xb;
++	}
+ 
+ 	supported_hw[0] = BIT(speed_grade);
+ 	supported_hw[1] = BIT(mkt_segment);
+-- 
+2.7.4
+
