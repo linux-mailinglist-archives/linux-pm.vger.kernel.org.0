@@ -2,137 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D9AE0196
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 12:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202EEE01E4
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 12:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729388AbfJVKHq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 06:07:46 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33056 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfJVKHp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 06:07:45 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k11so218458pgt.0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 03:07:43 -0700 (PDT)
+        id S1730405AbfJVKSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 06:18:04 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45215 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731753AbfJVKSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 06:18:03 -0400
+Received: by mail-pf1-f195.google.com with SMTP id b4so1436368pfr.12
+        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 03:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hcL7Y1mIHrv+zJufdm/7tWW0i/5Ngmwav5YR6aEz2Qo=;
-        b=ivO5b5vurvQ9LA8qtn3cHbpPoRX2yjkgwkpDqqE16TH42wJwB/6rdZXhctRQpTwQx6
-         czMO6XZbFR5LH5YX3sED3ZKy4lVOZ8gG+ofEZCZC6jYUG771VczXQdj7a0pHIU921xch
-         SBCzpsI3iWnHkfjRuLfKoGDjcXy+gyp5qaifnvDGYwHlb1rPeFGrk5d0NpD5ZAW3u375
-         yjcFyeEzpkEZWryMfTAJa3ESs4NpHE/ez/nJKblHqDc0Wpf6QBraSlP18+ciPX2IBcnH
-         8Kj7RDbw4qttl+056hF9Z4oEHQBJ5SXmnLEito4He527Qfw/auwXy1JFfgdoaynnaPb7
-         FgFQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HpkkrItQ+QjSSXD1R7+2N7PNQALjVcaxdlDmgQHtPgg=;
+        b=wxMNbwKNAg8unVy4Cmds8Y8rrdJW1Z1gcgp6tTY6kM95cEY36ArDfsIgK+Y2Jdq59T
+         Cng5f1tYOjcoF9LcXV6lZjlbK8jZMEaqxzu8N/7BWcRXrmFyFrbR8+aEIWoHoHmwaB6Y
+         bSIvhA6jGg0xOoeOpSZSbenFJRa+6oe+xdWVXY5hq9ohDZFDBHJAIndIax1UKZJ/goh1
+         igUNe0mMij128BRtJjS7101BcDstkxo9OZJWIcTBpYr3XOT+le4jUomGT7EWXZuBfvAB
+         7g+cWJpwZM70TmEx3crq0dmzvT58vZvbC4R26e3gdKYfQw1vBMw0Ki8LgUTMu/3T3oaG
+         WtMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hcL7Y1mIHrv+zJufdm/7tWW0i/5Ngmwav5YR6aEz2Qo=;
-        b=SigRAo2HQEdN2OsIJ9GVLWMsgY85c0tfZc1g0cS+ZLwVfTOZ0BleDhYp97lxSixryk
-         qs2XSbhxm3chUfmQCl6khkX9H1U5+7TJze+BzGl5hN35HH9mLmZdzstHKwNQ2PEhjye7
-         X7PUY2l9Sr4Zja8Lzuh1pRdXu3ev0qggxolcfx+VH4g0HcF9XmJpvraMmiLetSX16oas
-         CI8OiOfqZ3RQeRjD8QY9p6sB+HtUURF7NYd1t49cWz8cMYu7bRykWnDa7NDU9qIOUfx7
-         ZF1/IAD4z6fXoDH+GfPJcLhIklJHvPnNBtJa9+k+JveVNi58sYT7mmKcucwpqWGTPc77
-         h7Rg==
-X-Gm-Message-State: APjAAAVbFEZNYDDLkIGtRh9uTwmknBtNLullAkOiM4X2jiMD89VtL1AW
-        xJLMpxwgJtQ0Fb2SdZM3CRqKZA==
-X-Google-Smtp-Source: APXvYqxRKGAwKo0zopfJjMo09GhkRf6idef1XrBcgk7k+D4HJD/XZ9UndPzm9f1Mpn9zihgU/3EKZg==
-X-Received: by 2002:a63:1e1f:: with SMTP id e31mr2816686pge.303.1571738863006;
-        Tue, 22 Oct 2019 03:07:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HpkkrItQ+QjSSXD1R7+2N7PNQALjVcaxdlDmgQHtPgg=;
+        b=oqHwAqBQWLBG+RGUujlHvOW0eSKaQFTA16IVyC+c02izSSZ0RxUanK9MFyMGYj2zNy
+         rvhEIf5lax2N0lPUEjWQ30TcZ03eB7zvRhvwU6u47us5KrwHTcZFRbFa+EDUkq3NXiBL
+         RiN90OjFo6VYEZIPGdMMKGCYbVEAr92v/BEaIh9oJLCKnHt+stzXLc5nCoB1cTeCTIw8
+         AHVc/5eULjVL9hoE57HLzwNmv1JsJ78RzelkBseKBFIM8ElFBn/BSczIn6vzfZdDuPYF
+         MXBS/K8paZgi/5zmgAqEZLM1OhZI2jFefiWwJwmB1a7wwG51WFrWH1P3XLiEoUmaIFvZ
+         bncg==
+X-Gm-Message-State: APjAAAWqg2mQoi/QbcQfNX2HHgQT/U45meu32O3dhECXT7hwBk90mEUB
+        fThN4L6vRDHYBQU4V3Iw5xzqWg==
+X-Google-Smtp-Source: APXvYqxxS7C5M1bbbiLvBiO65w9OYYjtwGCoFToXiUXy0Muvbi4jLCDYUlfsuwKf5/QZLrpWlV3j5g==
+X-Received: by 2002:aa7:8ece:: with SMTP id b14mr3399428pfr.205.1571739482892;
+        Tue, 22 Oct 2019 03:18:02 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id h186sm22715430pfb.63.2019.10.22.03.07.39
+        by smtp.gmail.com with ESMTPSA id q143sm19247365pfq.103.2019.10.22.03.18.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 03:07:39 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 15:37:36 +0530
+        Tue, 22 Oct 2019 03:18:01 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH] cpufreq: Move cancelling of policy update work just
- after removing notifiers
-Message-ID: <20191022100736.sguepyp2t56peqfr@vireshk-i7>
-References: <20191021132818.23787-1-sudeep.holla@arm.com>
- <20191022022508.g3ar735237haybxe@vireshk-i7>
- <CAJZ5v0gEbiyjpT4+RG5ytDHOgcyCHFqOgD59bK6h=Fhbqvv7Tw@mail.gmail.com>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: Clarify the comment in cpufreq_set_policy()
+Date:   Tue, 22 Oct 2019 15:47:57 +0530
+Message-Id: <ec3e8e001b35c9244f6406932335d7156b611373.1571739473.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gEbiyjpT4+RG5ytDHOgcyCHFqOgD59bK6h=Fhbqvv7Tw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-10-19, 11:46, Rafael J. Wysocki wrote:
-> On Tue, Oct 22, 2019 at 4:25 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 21-10-19, 14:28, Sudeep Holla wrote:
-> > > Commit 099967699ad9 ("cpufreq: Cancel policy update work scheduled before freeing")
-> > > added cancel_work_sync(policy->update) after the frequency QoS were
-> > > removed. We can cancel the work just after taking the last CPU in the
-> > > policy offline and unregistering the notifiers as policy->update cannot
-> > > be scheduled from anywhere at this point.
-> > >
-> > > However, due to other bugs, doing so still triggered the race between
-> > > freeing of policy and scheduled policy update work. Now that all those
-> > > issues are resolved, we can move this cancelling of any scheduled policy
-> > > update work just after removing min/max notifiers.
-> > >
-> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > ---
-> > >  drivers/cpufreq/cpufreq.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > Hi Rafael,
-> > >
-> > > Based on Viresh's suggestion, I am posting a patch to move this
-> > > cancel_work_sync earlier though it's not a must have change.
-> >
-> > For me it is :)
-> >
-> > > I will leave it up to your preference.
-> > >
-> > > Regards,
-> > > Sudeep
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index 829a3764df1b..48a224a6b178 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -1268,6 +1268,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > >       freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
-> > >                                &policy->nb_min);
-> > >
-> > > +     /* Cancel any pending policy->update work before freeing the policy. */
-> > > +     cancel_work_sync(&policy->update);
-> > > +
-> > >       if (policy->max_freq_req) {
-> > >               /*
-> > >                * CPUFREQ_CREATE_POLICY notification is sent only after
-> > > @@ -1279,8 +1282,6 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> > >       }
-> > >
-> > >       freq_qos_remove_request(policy->min_freq_req);
-> > > -     /* Cancel any pending policy->update work before freeing the policy. */
-> > > -     cancel_work_sync(&policy->update);
-> > >       kfree(policy->min_freq_req);
-> > >
-> > >       cpufreq_policy_put_kobj(policy);
-> >
-> > Thanks for doing this.
-> >
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
-> Folded into the previous patch and applied.
-> 
-> Please double check the result in the current linux-next branch in my tree.
+One of the responsibility of the ->verify() callback is to make sure
+that the policy's min frequency is <= max frequency as this isn't
+guaranteed by the QoS framework which gave us those values.
 
-I would have kept the blank line after cancel_work_sync() which isn't
-there anymore.
+Update the comment in cpufreq_set_policy() to clarify that.
 
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 2e698b5f0f80..b4b5f11c2f1e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2384,7 +2384,10 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
+ 	new_policy->min = freq_qos_read_value(&policy->constraints, FREQ_QOS_MIN);
+ 	new_policy->max = freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX);
+ 
+-	/* verify the cpu speed can be set within this limit */
++	/*
++	 * Verify that the cpu speed can be set within this limit and make sure
++	 * min <= max.
++	 */
+ 	ret = cpufreq_driver->verify(new_policy);
+ 	if (ret)
+ 		return ret;
 -- 
-viresh
+2.21.0.rc0.269.g1a574e7a288b
+
