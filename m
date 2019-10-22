@@ -2,131 +2,267 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B14E007B
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 11:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE71E0089
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 11:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388108AbfJVJQ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 05:16:27 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36300 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388244AbfJVJQ1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Oct 2019 05:16:27 -0400
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 748123688E
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 09:16:26 +0000 (UTC)
-Received: by mail-qt1-f199.google.com with SMTP id x50so5756539qth.4
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 02:16:26 -0700 (PDT)
+        id S1730312AbfJVJSc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 05:18:32 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37248 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730247AbfJVJSc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 05:18:32 -0400
+Received: by mail-oi1-f195.google.com with SMTP id i16so13568285oie.4;
+        Tue, 22 Oct 2019 02:18:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1NaftjpZ7q0/7FUFVe9FC7tfQH1ZMRLJsGxSpJEAYR0=;
-        b=hlamxGb3fhYQJPNpgJV2CuCshR2XQe3/c18KiRBv4A824/BBwVFx6DovtVRLH7Q3Gy
-         9BI3sUzpAhDvFcM6dYOuOz0FGNYBBoYVeCbG6VUh3oQqtYsdfrX2wqnvirDKkV8mgb87
-         xA/9M0oirHVt5NCBagH14t70Hps74r23lwnoc0xjpTPBjvLdqcP2GxmPWS/s6AOtwGFf
-         V2o2aCqa2spdgrKYOE+YPs/QqLFjFkgu4c5TzGJy1crmczeOuTwmB4R4cZXGbc53gnN6
-         q94i/Aj8bA7bTB4VB1mhd7Q4Y1v1O4dECTDwHpYsdK31TWGDhi7z3yQDd+Ue16J2WP4A
-         94xA==
-X-Gm-Message-State: APjAAAUypQD9CZaa8lGoyyPlhzyk0wzQCiCgppFZQ+BBokrcFm1I5ndK
-        7gpCQUA/jzKp8Tvkk6YhbCTk/B2pyQXPq+mGatQqp+jkMsGND2S4SOsTSlqVs7T4Ujl7A2gNAgp
-        eKNIQ2Z7mHi/v6nKfxAv6qLZussg7+M7u+iI=
-X-Received: by 2002:ac8:664b:: with SMTP id j11mr2246843qtp.137.1571735785693;
-        Tue, 22 Oct 2019 02:16:25 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxh+htVaSt1EHk6f2pMjctNRL+6dMevykS1gSHbmTJ7kc2awbIl5sahcS8cpGCaPnstRND7kRjzMbWgqOesrio=
-X-Received: by 2002:ac8:664b:: with SMTP id j11mr2246814qtp.137.1571735785316;
- Tue, 22 Oct 2019 02:16:25 -0700 (PDT)
+        bh=nuz84DmbVNqkBwZM2dSH7bNPNbMKWhjIIPtW7H0YPbs=;
+        b=MPDm7Fm3Eo027By8vapjzYhqtuUXysOvIwesTAILCwGG2gFBzdgQ8UIqRz4UJdoCGk
+         OlMafMdWO9SgJabIhzuRAz76bQUKnFc1rL7kJNJzLJGNXYXu/Pv3elElVjgp+sP+QMC/
+         RAOqnxJwMIDxtP3yjHMDLmP3q8geZ8FosHPZ4agcP1mRnQQC2Obsj7/VESs9kaFwGyF2
+         embbeL291r5NDxr73hnWyiYyQmEQeXCawpaQRIm23tEhMISvNmAswvj9fdI7rE94orFI
+         ggUMGEfakkJnC+L0mB0V3FByvsm9r0IRPLMxO8YB8GHukA2ErPDoFnh5E+3L2CSjeF6i
+         p/ow==
+X-Gm-Message-State: APjAAAXqW6aFb1oNHuZ98UgMqSugMkWwhYlUIxtRSXsvowFVTXP7BZey
+        Br3bJNWc0AURP70W8VBJHO6amtdLx4fs4OC2rJA=
+X-Google-Smtp-Source: APXvYqwwDlsgGkAn9HrCd8VV+9jpvEy0YfjvtOplz9BjtCnFCm2kwmx5+01G/UWl5wByWCylJuSaEQxiHp/YzPN/6bE=
+X-Received: by 2002:aca:b6c5:: with SMTP id g188mr2084579oif.103.1571735910539;
+ Tue, 22 Oct 2019 02:18:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <CACO55ttOJaXKWmKQQbMAQRJHLXF-VtNn58n4BZhFKYmAdfiJjA@mail.gmail.com>
- <20191016213722.GA72810@google.com> <CACO55tuXck7vqGVLmMBGFg6A2pr3h8koRuvvWHLNDH8XvBVxew@mail.gmail.com>
- <20191021133328.GI2819@lahna.fi.intel.com> <CACO55tujUZr+rKkyrkfN+wkNOJWdNEVhVc-eZ3RCXJD+G1z=7A@mail.gmail.com>
- <20191021140852.GM2819@lahna.fi.intel.com> <CACO55tvp6n2ahizwhc70xRJ1uTohs2ep962vwtHGQK-MkcLmsw@mail.gmail.com>
- <20191021154606.GT2819@lahna.fi.intel.com> <CACO55tsGhvG1qapRkdu_j7R534cFa5o=Gv2s4VZDrWUrxjBFwA@mail.gmail.com>
-In-Reply-To: <CACO55tsGhvG1qapRkdu_j7R534cFa5o=Gv2s4VZDrWUrxjBFwA@mail.gmail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Tue, 22 Oct 2019 11:16:14 +0200
-Message-ID: <CACO55ts7hivYgN7=3bcAjWx2h8FfbR5UiKiOOExYY9m-TGRNfw@mail.gmail.com>
-Subject: Re: [PATCH v3] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Mika Westerberg <mika.westerberg@intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Linux ACPI Mailing List <linux-acpi@vger.kernel.org>
+References: <20191022075123.17057-1-ran.wang_1@nxp.com> <20191022075123.17057-3-ran.wang_1@nxp.com>
+In-Reply-To: <20191022075123.17057-3-ran.wang_1@nxp.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Oct 2019 11:18:18 +0200
+Message-ID: <CAJZ5v0jdy+4ZRci2LWsb7vPTQ8Yyb7S0CF2C92zhBXg_xe67ug@mail.gmail.com>
+Subject: Re: [PATCH 3/3] soc: fsl: add RCPM driver
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
+        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I think there is something I totally forgot about:
-
-When there was never a driver bound to the GPU, and if runtime power
-management gets enabled on that device, runtime suspend/resume works
-as expected (I am not 100% sure on if that always works, but I will
-recheck that).
-In the past I know that at some point I "bisected" the nouveau driver
-to figure out what actually breaks it and found out that some script
-executed with the help of an on-chip engine (signed script, signed
-firmware, both vbios provided) makes it break. Debugging the script
-lead me to the PCIe link speed changes done inside the script breaking
-it.
-
-But as "reverting" the speed change didn't make it work reliably
-again, I think I need to get back on that and check if it's something
-else. I will try to convert the script into C or python code to make
-it more accessible to debug and hopefully I'll find something I
-overlooked the last time.
-
-On Mon, Oct 21, 2019 at 6:40 PM Karol Herbst <kherbst@redhat.com> wrote:
+On Tue, Oct 22, 2019 at 9:52 AM Ran Wang <ran.wang_1@nxp.com> wrote:
 >
-> On Mon, Oct 21, 2019 at 5:46 PM Mika Westerberg
-> <mika.westerberg@intel.com> wrote:
-> >
-> > On Mon, Oct 21, 2019 at 04:49:09PM +0200, Karol Herbst wrote:
-> > > On Mon, Oct 21, 2019 at 4:09 PM Mika Westerberg
-> > > <mika.westerberg@intel.com> wrote:
-> > > >
-> > > > On Mon, Oct 21, 2019 at 03:54:09PM +0200, Karol Herbst wrote:
-> > > > > > I really would like to provide you more information about such
-> > > > > > workaround but I'm not aware of any ;-) I have not seen any issues like
-> > > > > > this when D3cold is properly implemented in the platform.  That's why
-> > > > > > I'm bit skeptical that this has anything to do with specific Intel PCIe
-> > > > > > ports. More likely it is some power sequence in the _ON/_OFF() methods
-> > > > > > that is run differently on Windows.
-> > > > >
-> > > > > yeah.. maybe. I really don't know what's the actual root cause. I just
-> > > > > know that with this workaround it works perfectly fine on my and some
-> > > > > other systems it was tested on. Do you know who would be best to
-> > > > > approach to get proper documentation about those methods and what are
-> > > > > the actual prerequisites of those methods?
-> > > >
-> > > > Those should be documented in the ACPI spec. Chapter 7 should explain
-> > > > power resources and the device power methods in detail.
-> > >
-> > > either I looked up the wrong spec or the documentation isn't really
-> > > saying much there.
-> >
-> > Well it explains those methods, _PSx, _PRx and _ON()/_OFF(). In case of
-> > PCIe device you also want to check PCIe spec. PCIe 5.0 section 5.8 "PCI
-> > Function Power State Transitions" has a picture about the supported
-> > power state transitions and there we can find that function must be in
-> > D3hot before it can be transitioned into D3cold so if the _OFF() for
-> > example blindly assumes that the device is in D0 when it is called, it
-> > is a bug in the BIOS.
-> >
-> > BTW, where can I find acpidump of such system?
+> The NXP's QorIQ Processors based on ARM Core have RCPM module
+> (Run Control and Power Management), which performs system level
+> tasks associated with power management such as wakeup source control.
 >
-> I am sure it's uploaded somewhere already. But it's not an issue of
-> just one system. It's essentially hitting every single laptop with a
-> skylake or kaby lake CPU + Nvidia GPU. I didn't see any system where
-> it's actually working right now (and we are pestering nvidia about
-> this issue for over a year already with no solution)
+> This driver depends on PM wakeup source framework which help to
+> collect wake information.
 >
-> I've attached an acpidump from my system.
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+> Change in v8:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>         - Add sanity checking for the case of ws->dev or ws->dev->parent
+>           is null.
+>
+> Change in v7:
+>         - Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
+>         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
+>         - Remove '+obj-y += ftm_alarm.o' since it is wrong.
+>         - Cosmetic work.
+>
+> Change in v6:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>
+> Change in v5:
+>         - Fix v4 regression of the return value of wakeup_source_get_next()
+>         didn't pass to ws in while loop.
+>         - Rename wakeup_source member 'attached_dev' to 'dev'.
+>         - Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
+>         please see https://lore.kernel.org/patchwork/patch/1101022/
+>
+> Change in v4:
+>         - Remove extra ',' in author line of rcpm.c
+>         - Update usage of wakeup_source_get_next() to be less confusing to the
+> reader, code logic remain the same.
+>
+> Change in v3:
+>         - Some whitespace ajdustment.
+>
+> Change in v2:
+>         - Rebase Kconfig and Makefile update to latest mainline.
+>
+>  drivers/soc/fsl/Kconfig  |   8 +++
+>  drivers/soc/fsl/Makefile |   1 +
+>  drivers/soc/fsl/rcpm.c   | 133 +++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 142 insertions(+)
+>  create mode 100644 drivers/soc/fsl/rcpm.c
+>
+> diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
+> index f9ad8ad..4918856 100644
+> --- a/drivers/soc/fsl/Kconfig
+> +++ b/drivers/soc/fsl/Kconfig
+> @@ -40,4 +40,12 @@ config DPAA2_CONSOLE
+>           /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
+>           which can be used to dump the Management Complex and AIOP
+>           firmware logs.
+> +
+> +config FSL_RCPM
+> +       bool "Freescale RCPM support"
+> +       depends on PM_SLEEP
+> +       help
+> +         The NXP QorIQ Processors based on ARM Core have RCPM module
+> +         (Run Control and Power Management), which performs all device-level
+> +         tasks associated with power management, such as wakeup source control.
+>  endmenu
+> diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
+> index 71dee8d..906f1cd 100644
+> --- a/drivers/soc/fsl/Makefile
+> +++ b/drivers/soc/fsl/Makefile
+> @@ -6,6 +6,7 @@
+>  obj-$(CONFIG_FSL_DPAA)                 += qbman/
+>  obj-$(CONFIG_QUICC_ENGINE)             += qe/
+>  obj-$(CONFIG_CPM)                      += qe/
+> +obj-$(CONFIG_FSL_RCPM)                 += rcpm.o
+>  obj-$(CONFIG_FSL_GUTS)                 += guts.o
+>  obj-$(CONFIG_FSL_MC_DPIO)              += dpio/
+>  obj-$(CONFIG_DPAA2_CONSOLE)            += dpaa2-console.o
+> diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
+> new file mode 100644
+> index 0000000..3ed135e
+> --- /dev/null
+> +++ b/drivers/soc/fsl/rcpm.c
+> @@ -0,0 +1,133 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// rcpm.c - Freescale QorIQ RCPM driver
+> +//
+> +// Copyright 2019 NXP
+> +//
+> +// Author: Ran Wang <ran.wang_1@nxp.com>
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/slab.h>
+> +#include <linux/suspend.h>
+> +#include <linux/kernel.h>
+> +
+> +#define RCPM_WAKEUP_CELL_MAX_SIZE      7
+> +
+> +struct rcpm {
+> +       unsigned int    wakeup_cells;
+> +       void __iomem    *ippdexpcr_base;
+> +       bool            little_endian;
+> +};
+> +
+
+Please add a kerneldoc comment describing this routine.
+
+> +static int rcpm_pm_prepare(struct device *dev)
+> +{
+> +       int i, ret, idx;
+> +       void __iomem *base;
+> +       struct wakeup_source    *ws;
+> +       struct rcpm             *rcpm;
+> +       struct device_node      *np = dev->of_node;
+> +       u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1], tmp;
+> +
+> +       rcpm = dev_get_drvdata(dev);
+> +       if (!rcpm)
+> +               return -EINVAL;
+> +
+> +       base = rcpm->ippdexpcr_base;
+> +       idx = wakeup_sources_read_lock();
+> +
+> +       /* Begin with first registered wakeup source */
+> +       for_each_wakeup_source(ws) {
+> +
+> +               /* skip object which is not attached to device */
+> +               if (!ws->dev || !ws->dev->parent)
+> +                       continue;
+> +
+> +               ret = device_property_read_u32_array(ws->dev->parent,
+> +                               "fsl,rcpm-wakeup", value,
+> +                               rcpm->wakeup_cells + 1);
+> +
+> +               /*  Wakeup source should refer to current rcpm device */
+> +               if (ret || (np->phandle != value[0])) {
+> +                       dev_info(dev, "%s doesn't refer to this rcpm\n",
+> +                                       ws->name);
+
+IMO printing this message is not useful in general, because it looks
+like you just want to skip wakeup sources that aren't associated with
+rcpm devices.
+
+Maybe use pr_debug() to print it?  Or maybe use pr_debug() to print a
+message if you have found a suitable device?  Wouldn't that be more
+useful?
+
+> +                       continue;
+> +               }
+> +
+
+It would be good to add a comment explaining what the code below does
+here.  Or explain that in the function's kerneldoc comment.
+
+> +               for (i = 0; i < rcpm->wakeup_cells; i++) {
+
+It looks like 'tmp' can be defined in this block.
+
+And I would store the value of value[i+1] in tmp upfront, that is
+
+u32 tmp = value[i+1];
+
+> +                       /* We can only OR related bits */
+> +                       if (value[i + 1]) {
+
+Also I would do
+
+if (!tmp)
+        continue;
+
+to reduce the indentation level.
+
+> +                               if (rcpm->little_endian) {
+> +                                       tmp = ioread32(base + i * 4);
+> +                                       tmp |= value[i + 1];
+> +                                       iowrite32(tmp, base + i * 4);
+
+So it is sufficient to do
+
+tmp |= ioread32(base + i * 4);
+iowrite32(tmp, base + i * 4);
+
+here and analogously below.
+
+You may as well define
+
+void __iomem *address = base + i * 4;
+
+and use it everywhere in this block instead of the (base + I * 4) expression.
+
+> +                               } else {
+> +                                       tmp = ioread32be(base + i * 4);
+> +                                       tmp |= value[i + 1];
+> +                                       iowrite32be(tmp, base + i * 4);
+> +                               }
+> +                       }
+> +               }
+> +       }
+> +
+> +       wakeup_sources_read_unlock(idx);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops rcpm_pm_ops = {
+> +       .prepare =  rcpm_pm_prepare,
+> +};
+> +
