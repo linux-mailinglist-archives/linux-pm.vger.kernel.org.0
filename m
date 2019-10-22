@@ -2,117 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0F8E0658
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 16:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D599FE085D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 18:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727154AbfJVO1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 10:27:22 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:34229 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbfJVO1W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 10:27:22 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1Mzhax-1i9dMY3aYT-00vdGx; Tue, 22 Oct 2019 16:27:07 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Lukasz Luba <l.luba@partner.samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: events: fix excessive stack usage
-Date:   Tue, 22 Oct 2019 16:26:48 +0200
-Message-Id: <20191022142703.1789898-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1727309AbfJVQLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 12:11:39 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36930 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727152AbfJVQLj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 12:11:39 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 53so3067961otv.4;
+        Tue, 22 Oct 2019 09:11:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qlFpjPqwrKm9MJZBKWrL3lYlnTOZRR36fjtod+pxjlg=;
+        b=O+SlIIEXrfPtzBr2MXZifvBbDYjiea20aWCfdAVXjEhNDCF3IJw27ilT/w942x02fm
+         z7KhWKEv5RNnjN5lHxNeLByEU47w8cZEk7mdf5khyegd3yQ3b/4YwqCTVo26dgZlUZd3
+         urcytFmbjr5irvMT4bIrw3TWReGMyi/jNRBIN7vyU+xBv5iyekDTPwQ4/lBC35GRDIrZ
+         94u+wl3Le8st4+O4UZSnD26pwO1M/MKfSqSrEdHA/KiGDHRkaRWN5S/lp6PnfzRBMTA9
+         OWgRPJE2bdSXwpS5srG2TdtVCwnjhPxoXSsliyk8skDJcXMHX6HO2hdgYbji3TJilWn3
+         DkuA==
+X-Gm-Message-State: APjAAAU/VJB7D8jsirZIktpUQXdZBYB34tHxCTSYGWI6H03xPJLNBeBs
+        3yBnL7OEIzp0wf13M7OT2oi1vXnxCmtc/cv0iTM=
+X-Google-Smtp-Source: APXvYqx3r0pg5wNHcKf52wGFqqCCeQDWDahFYAHD22kHuprsjU3b/z6v6JTbTtf3YhD6d7CiotdExo3lW5b2H2fZNvc=
+X-Received: by 2002:a9d:459b:: with SMTP id x27mr3235413ote.167.1571760698020;
+ Tue, 22 Oct 2019 09:11:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:qh/RvLmjzDt8CUVV7ACatn1skvYcyfu5E28VkIq7AS6tttHZlMz
- TIjAjlq//c4oE0S7pk2+qn3TwWn+zIIDE+irKrPdUQkLSm9C+UMARBbwSYsXjmQ3A4Vj4+m
- WaYPiiDoSMGCRXT0S2+joZKLny6x7/4mgNiuXorMgIEGEcbqw0dHAFpnjrAPOburAvNGWF+
- 9WZ22K4YeTldC144O2aUQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sL01PcIlAAs=:AntrFvxzg3D8JTrZICKrqN
- 1ZPcU53wnTXZaTpk0RQYe0TbS0a4kx0bLi2NKVF//lAiil22BuvuewyWdDVifb017uCRjc23M
- a8bn7moO7kXmW24pWlqE+VddKGpvytQMyzEzzGqKZPCHhUe7IErLHu6/FsS0GZj+qI3WiMuSj
- sdZrCdC+hXXvm+yDqnzpqzQ2PNTiGqUeYncWNojpuimzpwSVNBkd6ZUhaGp/ffsVMRA3ndliV
- P8ePYjyBGCeEOiCGk+WSL4mIsAJhFgopmppPVrLN4Y/L40+8DVKFXHJu4njXeEZxz7S4flg/H
- syJEdRIGPIpMeBIqzfhtr/YfVMRuiey+q6s4j9ibCcz3HZlDAxgHjM1USfC1qKlLiD2F/qTKL
- 2aB6GnHIJ/n8MqcKJBN6LcVOklxnFb62hwn0IF7mB9i4ZbUgwuQMoZJn7iq2S+uC86BA77rSZ
- 77t2x1ygZ+fNSEP2Qdee08lDS4Q9N7qkcUKrm7JPIK9meUfMzOgsnSwAPbc9pFIxAsJgD73El
- HN8hbnxKcaHLSKXN4RFXBMka2+4KtDTCQPqISfbeWJyEkUZY8Q1lNdsTIxtR80lVCL0XxtP33
- gx9qE9CPg0iYSV8AbwAggbQ3Aag0BfGSnPClLTRIhOY3NcISc7LnCzvryq8hmcpPpqLDOQDLW
- DBb4COdvFcGH+wED2mv5Rp4f/jkAz7Rj8f2re+ij6KoQuU34ryYMH6VA9pTnVqAQx2W/Bek+H
- iJqeYhoXUFR47tPo3Xo1uxkr+oYSmEzHbP/4WCDejGwmlioTth7WUFtwvbv/pYbZ3nCbst2bv
- zwbdwYn6oSVjStsGxfOWHEX4D4miVBlCvShwv//yhKuL0HP/BCDhx3o5UrU8O2YXXRBPlIu61
- ZV8Swi1xkpPum25vukVg==
+References: <20191021132818.23787-1-sudeep.holla@arm.com> <20191022022508.g3ar735237haybxe@vireshk-i7>
+ <CAJZ5v0gEbiyjpT4+RG5ytDHOgcyCHFqOgD59bK6h=Fhbqvv7Tw@mail.gmail.com> <20191022100736.sguepyp2t56peqfr@vireshk-i7>
+In-Reply-To: <20191022100736.sguepyp2t56peqfr@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Oct 2019 18:11:26 +0200
+Message-ID: <CAJZ5v0g0e7NAb74h565sxnfzeYdDJOzcEiS9NyuNEvtdpL3hUA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Move cancelling of policy update work just after
+ removing notifiers
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Putting a 'struct devfreq_event_dev' object on the stack is generally
-a bad idea and here it leads to a warnig about potential stack overflow:
+On Tue, Oct 22, 2019 at 12:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 22-10-19, 11:46, Rafael J. Wysocki wrote:
+> > On Tue, Oct 22, 2019 at 4:25 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 21-10-19, 14:28, Sudeep Holla wrote:
+> > > > Commit 099967699ad9 ("cpufreq: Cancel policy update work scheduled before freeing")
+> > > > added cancel_work_sync(policy->update) after the frequency QoS were
+> > > > removed. We can cancel the work just after taking the last CPU in the
+> > > > policy offline and unregistering the notifiers as policy->update cannot
+> > > > be scheduled from anywhere at this point.
+> > > >
+> > > > However, due to other bugs, doing so still triggered the race between
+> > > > freeing of policy and scheduled policy update work. Now that all those
+> > > > issues are resolved, we can move this cancelling of any scheduled policy
+> > > > update work just after removing min/max notifiers.
+> > > >
+> > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > > ---
+> > > >  drivers/cpufreq/cpufreq.c | 5 +++--
+> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > >
+> > > > Hi Rafael,
+> > > >
+> > > > Based on Viresh's suggestion, I am posting a patch to move this
+> > > > cancel_work_sync earlier though it's not a must have change.
+> > >
+> > > For me it is :)
+> > >
+> > > > I will leave it up to your preference.
+> > > >
+> > > > Regards,
+> > > > Sudeep
+> > > >
+> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > > index 829a3764df1b..48a224a6b178 100644
+> > > > --- a/drivers/cpufreq/cpufreq.c
+> > > > +++ b/drivers/cpufreq/cpufreq.c
+> > > > @@ -1268,6 +1268,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> > > >       freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
+> > > >                                &policy->nb_min);
+> > > >
+> > > > +     /* Cancel any pending policy->update work before freeing the policy. */
+> > > > +     cancel_work_sync(&policy->update);
+> > > > +
+> > > >       if (policy->max_freq_req) {
+> > > >               /*
+> > > >                * CPUFREQ_CREATE_POLICY notification is sent only after
+> > > > @@ -1279,8 +1282,6 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> > > >       }
+> > > >
+> > > >       freq_qos_remove_request(policy->min_freq_req);
+> > > > -     /* Cancel any pending policy->update work before freeing the policy. */
+> > > > -     cancel_work_sync(&policy->update);
+> > > >       kfree(policy->min_freq_req);
+> > > >
+> > > >       cpufreq_policy_put_kobj(policy);
+> > >
+> > > Thanks for doing this.
+> > >
+> > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> >
+> > Folded into the previous patch and applied.
+> >
+> > Please double check the result in the current linux-next branch in my tree.
+>
+> I would have kept the blank line after cancel_work_sync() which isn't
+> there anymore.
 
-drivers/devfreq/event/exynos-ppmu.c:643:12: error: stack frame size of 1040 bytes in function 'exynos_ppmu_probe' [-Werror,-Wframe-larger-than=]
-
-There is no real need for the device structure, only the string inside
-it, so add an internal helper function that simply takes the string
-as its argument and remove the device structure.
-
-Fixes: 1dd62c66d345 ("PM / devfreq: events: extend events by type of counted data")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/devfreq/event/exynos-ppmu.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-index 87b42055e6bc..302e466549d3 100644
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -101,17 +101,22 @@ static struct __exynos_ppmu_events {
- 	PPMU_EVENT(dmc1_1),
- };
- 
--static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
-+static int __exynos_ppmu_find_ppmu_id(const char *edev_name)
- {
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(ppmu_events); i++)
--		if (!strcmp(edev->desc->name, ppmu_events[i].name))
-+		if (!strcmp(edev_name, ppmu_events[i].name))
- 			return ppmu_events[i].id;
- 
- 	return -EINVAL;
- }
- 
-+static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
-+{
-+	return __exynos_ppmu_find_ppmu_id(edev->desc->name);
-+}
-+
- /*
-  * The devfreq-event ops structure for PPMU v1.1
-  */
-@@ -556,13 +561,11 @@ static int of_get_devfreq_events(struct device_node *np,
- 			 * use default if not.
- 			 */
- 			if (info->ppmu_type == EXYNOS_TYPE_PPMU_V2) {
--				struct devfreq_event_dev edev;
- 				int id;
- 				/* Not all registers take the same value for
- 				 * read+write data count.
- 				 */
--				edev.desc = &desc[j];
--				id = exynos_ppmu_find_ppmu_id(&edev);
-+				id = __exynos_ppmu_find_ppmu_id(desc->name);
- 
- 				switch (id) {
- 				case PPMU_PMNCNT0:
--- 
-2.20.0
-
+OK, it looks better with the extra blank line, so updated.  Thanks!
