@@ -2,86 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A98DFCCB
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 06:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF93DFEB2
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 09:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387463AbfJVEml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 00:42:41 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:44002 "EHLO inva020.nxp.com"
+        id S2387946AbfJVHvx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 03:51:53 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:57982 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387462AbfJVEmk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Oct 2019 00:42:40 -0400
+        id S2387938AbfJVHvt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Oct 2019 03:51:49 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 984DD1A030A;
-        Tue, 22 Oct 2019 06:42:38 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id AE2E91A0C08;
+        Tue, 22 Oct 2019 09:51:43 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1A2D81A0009;
-        Tue, 22 Oct 2019 06:42:34 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 46DBA40245;
-        Tue, 22 Oct 2019 12:42:28 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     rafael.j.wysocki@intel.com, viresh.kumar@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH] cpufreq: imx-cpufreq-dt: Correct i.MX8MN's default speed grade value
-Date:   Tue, 22 Oct 2019 12:39:39 +0800
-Message-Id: <1571719179-23316-1-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 04A3A1A0E2F;
+        Tue, 22 Oct 2019 09:51:37 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id D4A7D40249;
+        Tue, 22 Oct 2019 15:51:28 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>
+Cc:     Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: [PATCH 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
+Date:   Tue, 22 Oct 2019 15:51:21 +0800
+Message-Id: <20191022075123.17057-1-ran.wang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-i.MX8MN has different speed grade definition compared to
-i.MX8MQ/i.MX8MM, when fuses are NOT written, the default
-speed_grade should be set to minimum available OPP defined
-in DT which is 1.2GHz, the corresponding speed_grade value
-should be 0xb.
+Some user might want to go through all registered wakeup sources
+and doing things accordingly. For example, SoC PM driver might need to
+do HW programming to prevent powering down specific IP which wakeup
+source depending on. So add this API to help walk through all registered
+wakeup source objects on that list and return them one by one.
 
-Fixes: 5b8010ba70d5 ("cpufreq: imx-cpufreq-dt: Add i.MX8MN support")
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+Tested-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- drivers/cpufreq/imx-cpufreq-dt.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Change in v8
+	- Rename wakeup_source_get_next() to wakeup_sources_walk_next().
+	- Add wakeup_sources_read_lock() to take over locking job of
+	  wakeup_source_get_star().
+	- Rename wakeup_source_get_start() to wakeup_sources_walk_start().
+	- Replace wakeup_source_get_stop() with wakeup_sources_read_unlock().
+	- Define macro for_each_wakeup_source(ws).
 
-diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
-index 35db14c..26531f0 100644
---- a/drivers/cpufreq/imx-cpufreq-dt.c
-+++ b/drivers/cpufreq/imx-cpufreq-dt.c
-@@ -44,19 +44,19 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
- 	mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK) >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
+Change in v7:
+	- Remove define of member *dev in wake_irq to fix conflict with commit 
+	c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs"), user 
+	will use ws->dev->parent instead.
+	- Remove '#include <linux/of_device.h>' because it is not used.
+
+Change in v6:
+	- Add wakeup_source_get_star() and wakeup_source_get_stop() to aligned 
+	with wakeup_sources_stats_seq_start/nex/stop.
+
+Change in v5:
+	- Update commit message, add decription of walk through all wakeup
+	source objects.
+	- Add SCU protection in function wakeup_source_get_next().
+	- Rename wakeup_source member 'attached_dev' to 'dev' and move it up
+	(before wakeirq).
+
+Change in v4:
+	- None.
+
+Change in v3:
+	- Adjust indentation of *attached_dev;.
+
+Change in v2:
+	- None.
+
+ drivers/base/power/wakeup.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_wakeup.h   |  9 +++++++++
+ 2 files changed, 51 insertions(+)
+
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 5817b51..8c7a5f9 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -248,6 +248,48 @@ void wakeup_source_unregister(struct wakeup_source *ws)
+ EXPORT_SYMBOL_GPL(wakeup_source_unregister);
  
- 	/*
--	 * Early samples without fuses written report "0 0" which means
--	 * consumer segment and minimum speed grading.
--	 *
--	 * According to datasheet minimum speed grading is not supported for
--	 * consumer parts so clamp to 1 to avoid warning for "no OPPs"
-+	 * Early samples without fuses written report "0 0" which may NOT
-+	 * match any OPP defined in DT. So clamp to minimum OPP defined in
-+	 * DT to avoid warning for "no OPPs".
- 	 *
- 	 * Applies to i.MX8M series SoCs.
- 	 */
--	if (mkt_segment == 0 && speed_grade == 0 && (
--			of_machine_is_compatible("fsl,imx8mm") ||
--			of_machine_is_compatible("fsl,imx8mn") ||
--			of_machine_is_compatible("fsl,imx8mq")))
--		speed_grade = 1;
-+	if (mkt_segment == 0 && speed_grade == 0) {
-+		if (of_machine_is_compatible("fsl,imx8mm") ||
-+			of_machine_is_compatible("fsl,imx8mq"))
-+			speed_grade = 1;
-+		if (of_machine_is_compatible("fsl,imx8mn"))
-+			speed_grade = 0xb;
-+	}
+ /**
++ * wakeup_sources_read_lock - Lock wakeup source list for read.
++ */
++int wakeup_sources_read_lock(void)
++{
++	return srcu_read_lock(&wakeup_srcu);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_read_lock);
++
++/**
++ * wakeup_sources_read_unlock - Unlock wakeup source list.
++ */
++void wakeup_sources_read_unlock(int idx)
++{
++	srcu_read_unlock(&wakeup_srcu, idx);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
++
++/**
++ * wakeup_sources_walk_start - Begin a walk on wakeup source list
++ */
++struct wakeup_source *wakeup_sources_walk_start(void)
++{
++	struct list_head *ws_head = &wakeup_sources;
++
++	return list_entry_rcu(ws_head->next, struct wakeup_source, entry);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
++
++/**
++ * wakeup_sources_walk_next - Get next wakeup source from the list
++ * @ws: Previous wakeup source object
++ */
++struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws)
++{
++	struct list_head *ws_head = &wakeup_sources;
++
++	return list_next_or_null_rcu(ws_head, &ws->entry,
++				struct wakeup_source, entry);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_walk_next);
++
++/**
+  * device_wakeup_attach - Attach a wakeup source object to a device object.
+  * @dev: Device to handle.
+  * @ws: Wakeup source object to attach to @dev.
+diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+index 661efa0..aa3da66 100644
+--- a/include/linux/pm_wakeup.h
++++ b/include/linux/pm_wakeup.h
+@@ -63,6 +63,11 @@ struct wakeup_source {
+ 	bool			autosleep_enabled:1;
+ };
  
- 	supported_hw[0] = BIT(speed_grade);
- 	supported_hw[1] = BIT(mkt_segment);
++#define for_each_wakeup_source(ws) \
++	for ((ws) = wakeup_sources_walk_start();	\
++	     (ws);					\
++	     (ws) = wakeup_sources_walk_next((ws)))
++
+ #ifdef CONFIG_PM_SLEEP
+ 
+ /*
+@@ -92,6 +97,10 @@ extern void wakeup_source_remove(struct wakeup_source *ws);
+ extern struct wakeup_source *wakeup_source_register(struct device *dev,
+ 						    const char *name);
+ extern void wakeup_source_unregister(struct wakeup_source *ws);
++extern int wakeup_sources_read_lock(void);
++extern void wakeup_sources_read_unlock(int idx);
++extern struct wakeup_source *wakeup_sources_walk_start(void);
++extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
+ extern int device_wakeup_enable(struct device *dev);
+ extern int device_wakeup_disable(struct device *dev);
+ extern void device_set_wakeup_capable(struct device *dev, bool capable);
 -- 
 2.7.4
 
