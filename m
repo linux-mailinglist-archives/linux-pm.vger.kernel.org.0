@@ -2,102 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCA8E0603
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 16:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0F8E0658
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 16:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728346AbfJVOIw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 10:08:52 -0400
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:46985 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727582AbfJVOIw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 10:08:52 -0400
-Received: by mail-wr1-f51.google.com with SMTP id n15so7450886wrw.13
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 07:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:from:subject:openpgp:cc:message-id:date:mime-version
-         :content-language:content-transfer-encoding;
-        bh=gZd1p6fUssdVq9L3/zQnlWDjkbzH5VjZcJqBdDJdR9g=;
-        b=keHs2RpNHJdPkb6uEUy9aPA5uOwZGIgiKzr7hjcHSht944XIqlyXIkEh36Z5ImF2ut
-         FGfc24+pz7Tyb0U62ZJG24ULnyNDZmzkUa8ISCWjuvq2d4RdMaPSasnDnSDZu1HrdTtA
-         F1GnjDJ5bm5zioxzlrNME5nNCnCc+kc/dcT0SE/V743y6KuMzj7mJigk00Z+VmREl/cY
-         HKqelj9dHtjLwLswgJaAW1N6YNb/eBpUDeHzrgvjCERb6xiSpSd0XkYjNPUKuEqV0KAd
-         yMqCsAfGiu2biHYzaFn/J3R60/sPcpKj5/IYWv14xo5XCTsS+I7LlmQbPCuocLSG8A6H
-         U3Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:openpgp:cc:message-id:date
-         :mime-version:content-language:content-transfer-encoding;
-        bh=gZd1p6fUssdVq9L3/zQnlWDjkbzH5VjZcJqBdDJdR9g=;
-        b=Z14EiyMTheGgiI1TgiqrwjxbZITaecASdjUVsGt4k+hnNWL9KyUWxX9SYeT1338mpL
-         ojljnGYIvWQkxc+IauZkx+GfRCUBxRhiSMNimOUosn2NgLNuwkELGjyiZ6gLXhqJvR9P
-         THM8wXwLUvALK36OHd5/A5kIS2TVLa5Zgjw9DIjaZJRwxR8GPZkYTOF74j5LdGO1O6ty
-         7LolR/FZk6ALNzr+5q00I97+o0UTyF5j5B747PCWXAXTVHI/lFQHYTORzZmUW2cFvyE0
-         SLHndeSGS9nUwDCMEWFCR34FzIE7htgJLchXpfnni2MWyytux81nVqzZh7no2swFrA/T
-         f1iQ==
-X-Gm-Message-State: APjAAAW//sgTbV8iPcDH3IssHh8MIc12E/MelmxbLpxdfg21Jg5BEuT6
-        p3Sy9qPAbyiEjLu196z68HMZqQ==
-X-Google-Smtp-Source: APXvYqxWclLCiBW43xRG3JowpwK/J4RNacQW5rqIrov9rEu/uBMIJkFGUQGH6Wt42JWQOxSi3n5P2A==
-X-Received: by 2002:adf:d84c:: with SMTP id k12mr3945170wrl.235.1571753330819;
-        Tue, 22 Oct 2019 07:08:50 -0700 (PDT)
-Received: from [192.168.27.135] ([37.157.136.206])
-        by smtp.googlemail.com with ESMTPSA id l8sm787765wru.22.2019.10.22.07.08.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 07:08:49 -0700 (PDT)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [GIT PULL] interconnect fixes for 5.4
-Openpgp: preference=signencrypt
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <f9c1befb-9170-5189-6383-3311773c02f2@linaro.org>
-Date:   Tue, 22 Oct 2019 17:08:49 +0300
+        id S1727154AbfJVO1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 10:27:22 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:34229 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725887AbfJVO1W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 10:27:22 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1Mzhax-1i9dMY3aYT-00vdGx; Tue, 22 Oct 2019 16:27:07 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PM / devfreq: events: fix excessive stack usage
+Date:   Tue, 22 Oct 2019 16:26:48 +0200
+Message-Id: <20191022142703.1789898-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:qh/RvLmjzDt8CUVV7ACatn1skvYcyfu5E28VkIq7AS6tttHZlMz
+ TIjAjlq//c4oE0S7pk2+qn3TwWn+zIIDE+irKrPdUQkLSm9C+UMARBbwSYsXjmQ3A4Vj4+m
+ WaYPiiDoSMGCRXT0S2+joZKLny6x7/4mgNiuXorMgIEGEcbqw0dHAFpnjrAPOburAvNGWF+
+ 9WZ22K4YeTldC144O2aUQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sL01PcIlAAs=:AntrFvxzg3D8JTrZICKrqN
+ 1ZPcU53wnTXZaTpk0RQYe0TbS0a4kx0bLi2NKVF//lAiil22BuvuewyWdDVifb017uCRjc23M
+ a8bn7moO7kXmW24pWlqE+VddKGpvytQMyzEzzGqKZPCHhUe7IErLHu6/FsS0GZj+qI3WiMuSj
+ sdZrCdC+hXXvm+yDqnzpqzQ2PNTiGqUeYncWNojpuimzpwSVNBkd6ZUhaGp/ffsVMRA3ndliV
+ P8ePYjyBGCeEOiCGk+WSL4mIsAJhFgopmppPVrLN4Y/L40+8DVKFXHJu4njXeEZxz7S4flg/H
+ syJEdRIGPIpMeBIqzfhtr/YfVMRuiey+q6s4j9ibCcz3HZlDAxgHjM1USfC1qKlLiD2F/qTKL
+ 2aB6GnHIJ/n8MqcKJBN6LcVOklxnFb62hwn0IF7mB9i4ZbUgwuQMoZJn7iq2S+uC86BA77rSZ
+ 77t2x1ygZ+fNSEP2Qdee08lDS4Q9N7qkcUKrm7JPIK9meUfMzOgsnSwAPbc9pFIxAsJgD73El
+ HN8hbnxKcaHLSKXN4RFXBMka2+4KtDTCQPqISfbeWJyEkUZY8Q1lNdsTIxtR80lVCL0XxtP33
+ gx9qE9CPg0iYSV8AbwAggbQ3Aag0BfGSnPClLTRIhOY3NcISc7LnCzvryq8hmcpPpqLDOQDLW
+ DBb4COdvFcGH+wED2mv5Rp4f/jkAz7Rj8f2re+ij6KoQuU34ryYMH6VA9pTnVqAQx2W/Bek+H
+ iJqeYhoXUFR47tPo3Xo1uxkr+oYSmEzHbP/4WCDejGwmlioTth7WUFtwvbv/pYbZ3nCbst2bv
+ zwbdwYn6oSVjStsGxfOWHEX4D4miVBlCvShwv//yhKuL0HP/BCDhx3o5UrU8O2YXXRBPlIu61
+ ZV8Swi1xkpPum25vukVg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+Putting a 'struct devfreq_event_dev' object on the stack is generally
+a bad idea and here it leads to a warnig about potential stack overflow:
 
-This is a tiny pull request with interconnect fixes for 5.4-rc. Could you please
-take them into char-misc for the next possible rc.
+drivers/devfreq/event/exynos-ppmu.c:643:12: error: stack frame size of 1040 bytes in function 'exynos_ppmu_probe' [-Werror,-Wframe-larger-than=]
 
-Thanks,
-Georgi
+There is no real need for the device structure, only the string inside
+it, so add an internal helper function that simply takes the string
+as its argument and remove the device structure.
 
-The following changes since commit 4f5cafb5cb8471e54afdc9054d973535614f7675:
+Fixes: 1dd62c66d345 ("PM / devfreq: events: extend events by type of counted data")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/devfreq/event/exynos-ppmu.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-  Linux 5.4-rc3 (2019-10-13 16:37:36 -0700)
+diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
+index 87b42055e6bc..302e466549d3 100644
+--- a/drivers/devfreq/event/exynos-ppmu.c
++++ b/drivers/devfreq/event/exynos-ppmu.c
+@@ -101,17 +101,22 @@ static struct __exynos_ppmu_events {
+ 	PPMU_EVENT(dmc1_1),
+ };
+ 
+-static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
++static int __exynos_ppmu_find_ppmu_id(const char *edev_name)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ppmu_events); i++)
+-		if (!strcmp(edev->desc->name, ppmu_events[i].name))
++		if (!strcmp(edev_name, ppmu_events[i].name))
+ 			return ppmu_events[i].id;
+ 
+ 	return -EINVAL;
+ }
+ 
++static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
++{
++	return __exynos_ppmu_find_ppmu_id(edev->desc->name);
++}
++
+ /*
+  * The devfreq-event ops structure for PPMU v1.1
+  */
+@@ -556,13 +561,11 @@ static int of_get_devfreq_events(struct device_node *np,
+ 			 * use default if not.
+ 			 */
+ 			if (info->ppmu_type == EXYNOS_TYPE_PPMU_V2) {
+-				struct devfreq_event_dev edev;
+ 				int id;
+ 				/* Not all registers take the same value for
+ 				 * read+write data count.
+ 				 */
+-				edev.desc = &desc[j];
+-				id = exynos_ppmu_find_ppmu_id(&edev);
++				id = __exynos_ppmu_find_ppmu_id(desc->name);
+ 
+ 				switch (id) {
+ 				case PPMU_PMNCNT0:
+-- 
+2.20.0
 
-are available in the Git repository at:
-
-  https://git.linaro.org/people/georgi.djakov/linux.git tags/icc-5.4-rc5
-
-for you to fetch changes up to a8dfe193a60c6db7c54e03e3f1b96e0aa7244990:
-
-  interconnect: Add locking in icc_set_tag() (2019-10-20 12:14:41 +0300)
-
-----------------------------------------------------------------
-interconnect fixes for 5.4
-
-Two tiny fixes for the current release:
-
-- Fix memory allocation size in a driver.
-- Add missing mutex.
-
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-
-----------------------------------------------------------------
-Georgi Djakov (1):
-      interconnect: Add locking in icc_set_tag()
-
-Leonard Crestez (1):
-      interconnect: qcom: Fix icc_onecell_data allocation
-
- drivers/interconnect/core.c        | 4 ++++
- drivers/interconnect/qcom/qcs404.c | 3 ++-
- drivers/interconnect/qcom/sdm845.c | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
