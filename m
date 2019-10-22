@@ -2,101 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4C3E03F9
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 14:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016BBE0412
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Oct 2019 14:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730945AbfJVMj4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 08:39:56 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:32864 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbfJVMj4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 08:39:56 -0400
-Received: by mail-wr1-f68.google.com with SMTP id s1so9142011wro.0;
-        Tue, 22 Oct 2019 05:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IEqiM8atHxIH0UKIQukfFYbPpj8bV/qswpYiJzDBnHM=;
-        b=Yuptn+Xp3pzaviOf1YxWnObsNNLNBlUMB5/hGbYF3C52rbNCi4WDbPc3AhB/Za6yJF
-         a1IsjGOP5g6s2UrUYasbp1X2Eo7KBDE6vA9bmTPf1EuIct5L475O6LV6BynQz90AozVx
-         XSbq6sQd2Ol2yPAWOy8rRYdBh4d/TOgkwe35GEm7DMKLnJTWcEY1t9KIsDstZBWqrnpg
-         J9f8d2jkRCR/+vXXxPfC8iTGQ98sHlOLyoNgXCEFO03/K76nENZDkX+eZdDlCM25vxjJ
-         VhRQNsPh1LqUKaNasvMpJAJ+UiAnNTv62rMisyFtCtrL/XiO5Hpy8txCAG0V4vZa11gg
-         dXqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IEqiM8atHxIH0UKIQukfFYbPpj8bV/qswpYiJzDBnHM=;
-        b=lkw2hroA+QEKZOIpXDfCtCYF2ZPhUf+d/M4m3EgoRCqUX9rKmKbMBvqYPdn/e2j/3h
-         shwHiiKQD/cP4jOZ/8mdgmy7JWjUhpPTDaFefJADS4kB9q3DRVzVaNoaqNyU+MGUypR8
-         fuooqsMsN5NRqSpeOnuqOWmlOz4Vk/pVWgEK+PfFtm2YL/EtfkPsWLq0uZX53n5utPkK
-         64ES9MiCVimGieOWruA0BxsMaanHIGLd5dXtoLBaTL8MbW1A4kbaYF17SSRLAf5R8ZCO
-         hiUWG0O3u0+tZbmfQPnQfrThl7qTHORDu2X5hr/TwTBcH+UoNp/UxKHw9IEC2iyMUUIh
-         kk+g==
-X-Gm-Message-State: APjAAAVgwmHZz+USx9wRcDY8zzb+stq8EunP0nNtE8+dQpkp8GPgnXHB
-        t1cSlaU52/k9q2C74KICAqARmnv3lh0sA/+ReRI=
-X-Google-Smtp-Source: APXvYqzmx0gQXGcCYVFgILHBvA3ZLu3gjr/gPD4qkrCi98W3sz9AeZuH2TREtsOFsdfX9mKCmYxiaees0zzNDltevIs=
-X-Received: by 2002:adf:ecc7:: with SMTP id s7mr3298507wro.305.1571747993646;
- Tue, 22 Oct 2019 05:39:53 -0700 (PDT)
+        id S2387571AbfJVMo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 08:44:58 -0400
+Received: from mga14.intel.com ([192.55.52.115]:45612 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387479AbfJVMo6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Oct 2019 08:44:58 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 05:44:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,327,1566889200"; 
+   d="scan'208";a="209665685"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 22 Oct 2019 05:44:54 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 22 Oct 2019 15:44:54 +0300
+Date:   Tue, 22 Oct 2019 15:44:53 +0300
+From:   Mika Westerberg <mika.westerberg@intel.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Linux ACPI Mailing List <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v3] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+Message-ID: <20191022124453.GK2819@lahna.fi.intel.com>
+References: <CACO55ttOJaXKWmKQQbMAQRJHLXF-VtNn58n4BZhFKYmAdfiJjA@mail.gmail.com>
+ <20191016213722.GA72810@google.com>
+ <CACO55tuXck7vqGVLmMBGFg6A2pr3h8koRuvvWHLNDH8XvBVxew@mail.gmail.com>
+ <20191021133328.GI2819@lahna.fi.intel.com>
+ <CACO55tujUZr+rKkyrkfN+wkNOJWdNEVhVc-eZ3RCXJD+G1z=7A@mail.gmail.com>
+ <20191021140852.GM2819@lahna.fi.intel.com>
+ <CACO55tvp6n2ahizwhc70xRJ1uTohs2ep962vwtHGQK-MkcLmsw@mail.gmail.com>
+ <20191021154606.GT2819@lahna.fi.intel.com>
+ <CACO55tsGhvG1qapRkdu_j7R534cFa5o=Gv2s4VZDrWUrxjBFwA@mail.gmail.com>
+ <CACO55ts7hivYgN7=3bcAjWx2h8FfbR5UiKiOOExYY9m-TGRNfw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20191022111806.23143-1-colin.king@canonical.com>
-In-Reply-To: <20191022111806.23143-1-colin.king@canonical.com>
-From:   AngeloGioacchino Del Regno <kholk11@gmail.com>
-Date:   Tue, 22 Oct 2019 14:39:42 +0200
-Message-ID: <CAK7fi1a8CiX=HVqhZSmQJdcjF1X_kdHFDwJhEpYJUcdPTcbMQA@mail.gmail.com>
-Subject: Re: [PATCH][next] thermal: qcom: tsens-v1: fix kfree of a non-pointer value
-To:     Colin King <colin.king@canonical.com>
-Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, MSM <linux-arm-msm@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACO55ts7hivYgN7=3bcAjWx2h8FfbR5UiKiOOExYY9m-TGRNfw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il giorno mar 22 ott 2019 alle ore 13:18 Colin King
-<colin.king@canonical.com> ha scritto:
->
-> From: Colin Ian King <colin.king@canonical.com>
->
-> Currently the kfree of pointer qfprom_cdata is kfreeing an
-> error value that has been cast to a pointer rather than a
-> valid address.  Fix this by removing the kfree.
->
-> Fixes: 95ededc17e4e ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/thermal/qcom/tsens-v1.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-> index 2d1077b64887..bd2ddb684a45 100644
-> --- a/drivers/thermal/qcom/tsens-v1.c
-> +++ b/drivers/thermal/qcom/tsens-v1.c
-> @@ -240,10 +240,8 @@ static int calibrate_8976(struct tsens_priv *priv)
->         u32 *qfprom_cdata;
->
->         qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
-> -       if (IS_ERR(qfprom_cdata)) {
-> -               kfree(qfprom_cdata);
-> +       if (IS_ERR(qfprom_cdata))
->                 return PTR_ERR(qfprom_cdata);
-> -       }
->
->         mode = (qfprom_cdata[4] & MSM8976_CAL_SEL_MASK);
->         dev_dbg(priv->dev, "calibration mode is %d\n", mode);
-> --
-> 2.20.1
->
+On Tue, Oct 22, 2019 at 11:16:14AM +0200, Karol Herbst wrote:
+> I think there is something I totally forgot about:
+> 
+> When there was never a driver bound to the GPU, and if runtime power
+> management gets enabled on that device, runtime suspend/resume works
+> as expected (I am not 100% sure on if that always works, but I will
+> recheck that).
 
-I confirm that was one stupid mistake. I was about to send the same patch, and I
-can confirm that this fix is working. Tested on my Xperia X Compact.
+AFAIK, if there is no driver bound to the PCI device it is left to D0
+regardless of the runtime PM state which could explain why it works in
+that case (it is never put into D3hot).
 
-Tested-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+I looked at the acpidump you sent and there is one thing that may
+explain the differences between Windows and Linux. Not sure if you were
+aware of this already, though. The power resource PGOF() method has
+this:
+
+   If (((OSYS <= 0x07D9) || ((OSYS == 0x07DF) && (_REV == 0x05)))) {
+      ...
+   }  
+
+If I read it right, the later condition tries to detect Linux which
+fails nowadays but if you have acpi_rev_override in the command line (or
+the machine is listed in acpi_rev_dmi_table) this check passes and does
+some magic which is not clear to me. There is similar in PGON() side
+which is used to turn the device back on.
+
+You can check what actually happens when _ON()/_OFF() is called by
+passing something like below to the kernel command line:
+
+  acpi.trace_debug_layer=0x80 acpi.trace_debug_level=0x10 acpi.trace_method_name=\_SB.PCI0.PEG0.PG00._ON acpi.trace_state=method
+
+(See also Documentation/firmware-guide/acpi/method-tracing.rst).
+
+Trace goes to system dmesg.
