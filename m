@@ -2,127 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31560E0EEE
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 02:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB69E0FDA
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 03:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732016AbfJWAKD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 20:10:03 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44539 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731191AbfJWAKC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 20:10:02 -0400
-Received: by mail-oi1-f195.google.com with SMTP id s71so2958580oih.11;
-        Tue, 22 Oct 2019 17:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a9ez2CAEDRsC1P3a7h5jUoJezRgAM3yxFgvxTfyLf90=;
-        b=T3tUit6hFzPMxQcFoOw91I2XHrgvbQxAGlDhYZb88r//APvhau+Ehsfgl3PwA4YF5I
-         XKhDUIfof4etfnzaAu13fri4XmDIX6qXZjBcNGCrmS64gqkRYZ4r6rwBhCrFdhhesPXs
-         EcFaIbWfY1WQ8HqOLyflznj4gEPaiZmWfhTK2ApJcZbb61DPAUJ8Yz8FkBpeD+/mIrw0
-         fml0gc9uvgJlLCLAbTby1FhiT3o9tf6h2lIz7fYUqv7jfVsQsj1Nfczb9iuj7qx3J/Rc
-         YMe58qxU/FYQ6+lsx0lj/SAZUTRoTbVV0loIbJIr2cH7uCsuvAB+I93f+OAHbTqWv3IP
-         kRVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a9ez2CAEDRsC1P3a7h5jUoJezRgAM3yxFgvxTfyLf90=;
-        b=uJy00T4mraCTgzNd3TMVir3ajz8yGZAbXtqDSGX4Mz9t367ylhVGv//ONfbVOpfdj1
-         FcOeKDvIVK1tTK9jQc9YBCC0Q3hOdPagIkE6jRGy5qY5vK9gFTRNsQBD7B7b12CtWKN0
-         9bUMkwlhtCep7Y4LPSyyOUOi79fc78Ch+eusKdYgPoEXNWZlQhXueLXFZ9aSjYjeyBME
-         id4JpXI8S4mnxS/guERn9l5Tx0zkpzINQoiPtRxRrK77AKG1BsYLarigol9FtZDCJWVF
-         Yc7+CF9407uKtwZ9nV0HZM4dbDRZcPdSO8/SMtbAdHofdF1g8fxJXjeesdlDbpiCQqzb
-         Z2yw==
-X-Gm-Message-State: APjAAAVXvbZRFGgVe52vBX/DhB2lHkAfx/Vy53TxO7Ip4JimgzKpxL6K
-        CDFdKNo86gisC8E67YN2JJE=
-X-Google-Smtp-Source: APXvYqzAnJ15V0N/LujMFPCRBVS4/v+jPKDC+SHq1MB28Z0T1cc/2/2vwIysgNZqqLSZQ8K9ay+6mw==
-X-Received: by 2002:aca:180e:: with SMTP id h14mr5339099oih.142.1571789399995;
-        Tue, 22 Oct 2019 17:09:59 -0700 (PDT)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id t18sm5637527otd.60.2019.10.22.17.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2019 17:09:59 -0700 (PDT)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH] cpufreq: s3c64xx: Remove pointless NULL check in s3c64xx_cpufreq_driver_init
-Date:   Tue, 22 Oct 2019 17:09:06 -0700
-Message-Id: <20191023000906.14374-1-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.23.0
-MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+        id S1730032AbfJWB7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 21:59:38 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:38032 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727582AbfJWB7i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 21:59:38 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9N1t6RI028643;
+        Wed, 23 Oct 2019 01:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=vumlNhIDpEfgHxXgVPRZJkF7ivtI8M5hQwk1p8n3CZg=;
+ b=Q97sViVSujkG1sGSwXzfEd1u5r0ZEV1JPXEvOzhGXss/yMBx6dOe80WT9QT1CXozWkNZ
+ cm7m6AI8A1xFAztt1FTrgDUR5PUmCXTCweyHZh6JZI55TIFWQEQgaT0S3VCiDOyO53jH
+ sQlWdRvkafHU1w/l+8EEGtTDI1uh9+Fm3UMiaVlima3+t2f415DdCAqLRO/mRL7QZrkj
+ Ifu8AnNswKFrI8gamOPcXpyZASodvOeHqDHcNoUebYFZFsi3TYCHFiXfF0e1AOLhDIEV
+ OmEgcUI4bXkktMjPXColBm92/lW9XztDPR7jBNzOyzMrfUCGOYunOhDod5ZkJPkcc0vF /A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2vqswtjcdr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Oct 2019 01:59:19 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9N1sGPI043034;
+        Wed, 23 Oct 2019 01:59:19 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2vsp40wrt4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Oct 2019 01:59:18 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9N1xFLZ011819;
+        Wed, 23 Oct 2019 01:59:17 GMT
+Received: from z2.cn.oracle.com (/10.182.71.218)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 22 Oct 2019 18:59:14 -0700
+From:   Zhenzhong Duan <zhenzhong.duan@oracle.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, mtosatti@redhat.com,
+        Zhenzhong Duan <zhenzhong.duan@oracle.com>
+Subject: [PATCH v2] cpuidle: not unset the driver if it already exist
+Date:   Wed, 23 Oct 2019 09:57:14 +0800
+Message-Id: <1571795834-2027-1-git-send-email-zhenzhong.duan@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9418 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910230017
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9418 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910230017
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When building with Clang + -Wtautological-pointer-compare:
+__cpuidle_set_driver() check if there is an already exist driver and
+unset it before return with -EBUSY. The next call will succeed as it's
+just unset.
 
-drivers/cpufreq/s3c64xx-cpufreq.c:152:6: warning: comparison of array
-'s3c64xx_freq_table' equal to a null pointer is always false
-[-Wtautological-pointer-compare]
-        if (s3c64xx_freq_table == NULL) {
-            ^~~~~~~~~~~~~~~~~~    ~~~~
-1 warning generated.
+check if any of the CPUs in the mask have a driver different from drv
+already and if so return -EBUSY before updating any cpuidle_drivers
+per-CPU pointers.
 
-The definition of s3c64xx_freq_table is surrounded by an ifdef
-directive for CONFIG_CPU_S3C6410, which is always true for this driver
-because it depends on it in drivers/cpufreq/Kconfig.arm (and if it
-weren't, there would be a build error because s3c64xx_freq_table would
-not be a defined symbol).
-
-Resolve this warning by removing the unnecessary NULL check because it
-is always false as Clang notes. While we are at it, remove the
-unnecessary ifdef conditional because it is always true.
-
-Fixes: b3748ddd8056 ("[ARM] S3C64XX: Initial support for DVFS")
-Link: https://github.com/ClangBuiltLinux/linux/issues/748
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
 ---
- drivers/cpufreq/s3c64xx-cpufreq.c | 7 -------
- 1 file changed, 7 deletions(-)
+v2: update code logic per Rafael
 
-diff --git a/drivers/cpufreq/s3c64xx-cpufreq.c b/drivers/cpufreq/s3c64xx-cpufreq.c
-index af0c00dabb22..c6bdfc308e99 100644
---- a/drivers/cpufreq/s3c64xx-cpufreq.c
-+++ b/drivers/cpufreq/s3c64xx-cpufreq.c
-@@ -19,7 +19,6 @@
- static struct regulator *vddarm;
- static unsigned long regulator_latency;
+ drivers/cpuidle/driver.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+index 80c1a83..acfce04 100644
+--- a/drivers/cpuidle/driver.c
++++ b/drivers/cpuidle/driver.c
+@@ -62,24 +62,23 @@ static inline void __cpuidle_unset_driver(struct cpuidle_driver *drv)
+  * __cpuidle_set_driver - set per CPU driver variables for the given driver.
+  * @drv: a valid pointer to a struct cpuidle_driver
+  *
+- * For each CPU in the driver's cpumask, unset the registered driver per CPU
+- * to @drv.
+- *
+- * Returns 0 on success, -EBUSY if the CPUs have driver(s) already.
++ * Returns 0 on success, -EBUSY if any CPU in the cpumask have a driver
++ * different from drv already.
+  */
+ static inline int __cpuidle_set_driver(struct cpuidle_driver *drv)
+ {
+ 	int cpu;
  
--#ifdef CONFIG_CPU_S3C6410
- struct s3c64xx_dvfs {
- 	unsigned int vddarm_min;
- 	unsigned int vddarm_max;
-@@ -48,7 +47,6 @@ static struct cpufreq_frequency_table s3c64xx_freq_table[] = {
- 	{ 0, 4, 800000 },
- 	{ 0, 0, CPUFREQ_TABLE_END },
- };
--#endif
+ 	for_each_cpu(cpu, drv->cpumask) {
++		struct cpuidle_driver *old_drv;
  
- static int s3c64xx_cpufreq_set_target(struct cpufreq_policy *policy,
- 				      unsigned int index)
-@@ -149,11 +147,6 @@ static int s3c64xx_cpufreq_driver_init(struct cpufreq_policy *policy)
- 	if (policy->cpu != 0)
- 		return -EINVAL;
+-		if (__cpuidle_get_cpu_driver(cpu)) {
+-			__cpuidle_unset_driver(drv);
++		old_drv = __cpuidle_get_cpu_driver(cpu);
++		if (old_drv && old_drv != drv)
+ 			return -EBUSY;
+-		}
++	}
  
--	if (s3c64xx_freq_table == NULL) {
--		pr_err("No frequency information for this CPU\n");
--		return -ENODEV;
++	for_each_cpu(cpu, drv->cpumask)
+ 		per_cpu(cpuidle_drivers, cpu) = drv;
 -	}
--
- 	policy->clk = clk_get(NULL, "armclk");
- 	if (IS_ERR(policy->clk)) {
- 		pr_err("Unable to obtain ARMCLK: %ld\n",
+ 
+ 	return 0;
+ }
 -- 
-2.23.0
+1.8.3.1
 
