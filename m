@@ -2,112 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E70FE1AD4
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 14:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BA5E1BDE
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390366AbfJWMiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 08:38:08 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:40571 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732361AbfJWMiH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 08:38:07 -0400
-Received: from mail-qt1-f169.google.com ([209.85.160.169]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mn1iT-1hhMMc3M5n-00k6vh; Wed, 23 Oct 2019 14:38:06 +0200
-Received: by mail-qt1-f169.google.com with SMTP id c21so31952994qtj.12;
-        Wed, 23 Oct 2019 05:38:05 -0700 (PDT)
-X-Gm-Message-State: APjAAAXa28NtFAEFUW6SnidXpofqPNF4Vxq07h1T5G20hKnVJn9RCcnm
-        VQ1U5HsgteSTYPDpSzvDm0zIgf5l5wQ1Don9OFU=
-X-Google-Smtp-Source: APXvYqwrU0Hm/ARLCRvhVBlRdvPlDJSDNuHcJN6+Uj7yxLvAwd8RMgOaHRybpcUhDTeeF+G9vHKE5/Q8Jj1UKOdkvPU=
-X-Received: by 2002:ac8:33d4:: with SMTP id d20mr8762581qtb.204.1571834284536;
- Wed, 23 Oct 2019 05:38:04 -0700 (PDT)
+        id S2405591AbfJWNK5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 23 Oct 2019 09:10:57 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35592 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbfJWNK4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:10:56 -0400
+Received: by mail-ed1-f68.google.com with SMTP id k2so5018362edx.2;
+        Wed, 23 Oct 2019 06:10:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=lzwXfyhUE7yc9zrzbjqMe71sKuHvjq9U3aqm0Bd1AoI=;
+        b=S/A3aIGnph7/r49FdcX/+rOROLnuReURWi9z5AaaiFgwNDyHNguoHy2jLTKIg0AobS
+         Ii8Aob7iyqUE9px3EJl+QbMXPlHqS2i4AJjUkEXgVYMOpJB5ylqfR28AxSRz0LGrE0oN
+         dz0N+b0G4A1+WoZyqXNpZC27TiMgZrwh3OQIocjQVBgN+3XtOoyCaMvlIaqATpBbxqeb
+         aH+TRLRapqnj+ldkTcAZ0Bi9oR73bzEGJ0oLBkEdJwU7OEXluqUoH1Bhl4rcsWPwWDMa
+         DGF3xhA2WaMsusqyac2NzMIPJnBzhBlKnq/yDYu7/oI4+szOWAtVn2bNxBf1GiYtQfaY
+         jRtQ==
+X-Gm-Message-State: APjAAAXIBu2F0LkRRidZBYch85DAr88A/27wF1+klG85knTLuwFmQPUI
+        Ki2dfON5MI5tkKTRGbG4ylA=
+X-Google-Smtp-Source: APXvYqyft44OcCGb0xN0+fC1gmfK8usNRgvA/I5KY4vuTv2zLifQ5kptU9qNo1AQahi2rM4m7Aa/dg==
+X-Received: by 2002:aa7:c595:: with SMTP id g21mr36717915edq.79.1571836252860;
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
+Received: from pi3 ([194.230.155.217])
+        by smtp.googlemail.com with ESMTPSA id b12sm785479edq.75.2019.10.23.06.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 15:10:49 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Lihua Yao <ylhuajnu@163.com>,
+        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
+        Lihua Yao <ylhuajnu@outlook.com>,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
+Message-ID: <20191023131049.GG11048@pi3>
+References: <20191010202802.1132272-1-arnd@arndb.de>
 MIME-Version: 1.0
-References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-7-arnd@arndb.de> <20191023105443.GE10630@pi3>
-In-Reply-To: <20191023105443.GE10630@pi3>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Oct 2019 14:37:47 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3wxaUR4Nx9a6JBu3DjtJ90ZRH6+-V8-g=6mcEih34Qnw@mail.gmail.com>
-Message-ID: <CAK8P3a3wxaUR4Nx9a6JBu3DjtJ90ZRH6+-V8-g=6mcEih34Qnw@mail.gmail.com>
-Subject: Re: [PATCH 07/36] ARM: exynos: use private samsung_cpu_id copy
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pankaj Dubey <pankaj.dubey@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ydxnAjczRmpEVHq9idE6IIO5Ej74MDqmZQw7G5DlncMTbmGMrcr
- JfyhtiMv30n8LnAoYiPIW7tRiMLy51xoMz+B90Fd14MwTGmkr4ilBeAimPgenfwk+IgswFK
- auecWimxODnbLHGGJ9YSxlSVT4DRPGws24B61Z2s+QRxlNT57V2k5jTddK8cIX0mfs4Df7D
- MGhg1A8uU+BXr/J/L+p8Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0jIMjzDYtd8=:mmWobkF0pZBTW9//Ghoukl
- 8LHZtqSsbhdWzriGBFYIaKCOA7otOJU8eN/MfI5ePJV4ONU/NrF+Yy2k12ICenxo0TDIU1NU2
- On/9XpSncyWEJkgODJHbambCjSl/658WE68BWn9hIsQkxTkh+weetSUxZIzeR/EvU8TpoM/1T
- CD3PpfkZ4HnCAPxlKTJp9M4+wsLD1N+M5IOjO+kzIV6sa9ZXozgFGgJTdOhS3GAGm/hnxozt2
- YRSFQCk0AST4HIWV0Y6jjebA7wAH+zKiQTeoQ30s2wUNF41Zw8pS5WR+eUL+qfAR15DuX72XN
- pgH7hHDX2evyZyxUKz0CugH3cMXSlQgWQiTQKTP47T+CNCJIHhVUkfs1WyDBrEufebQbedk9/
- lk1GSbQMpQF7sV/wVEDVmWLg1zQdi+dN1qqa9fBzmIjJM7xXB7+oPjyfde+7/l7K0g61Hh0Un
- Wt1v4iJkYQs8uB8dNf5CEHtg3TZGsGwIaLWPDtLKI8XPTHbsscJmfmdipM0bNzW8NWiZEbVwC
- GrxatzcXG03VJH361SdxJVsIMdgQO6iqGCR4JPdcl2Rce5OBqedbpyyW3kw2gCrGERo58517+
- tfBdScGffh1JhwESgBE8X8q3NrMeOvd6wJVf39hEqYv851my4p8x03h/SJOkX3/2zdL+W552L
- HZjmSeXpLJGHCyyHXV9N/WEpE5hShkG8Hx/O9IXwhnIHpxSU4Q1FqbrRqGUzAuQYFQucIDVIb
- wZxAGprE9f5Z82IMgJgJ4DXYvp4jWJ5PaXOUzso2oEwmHYimpWn7id7xnM1zwyMM9uXMGtdKs
- 8I2yJieNafyZZEq5uCWtNruV+ej0794JkDlqRSEySa5uupgdZuxeQ1r6OZ/aQv0ZJYLlUcvtk
- QeHyn9auaEx7Px/OIcKw==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191010202802.1132272-1-arnd@arndb.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 12:56 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Thu, Oct 10, 2019 at 10:29:51PM +0200, Arnd Bergmann wrote:
-> > diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
-> > index 9aa483366ebc..da9300d655c6 100644
-> > --- a/arch/arm/mach-exynos/exynos.c
-> > +++ b/arch/arm/mach-exynos/exynos.c
-> >
-> > +#define S5P_VA_CHIPID        ((void __iomem __force *)0xF8000000)
->
-> How about keeping the S3C_VA and S3C_ADDR_BASE macros/defines and using
-> them?
+On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
+> I've spent some time looking at the remaining ARMv4/ARMv5 platforms
+> that are not part of ARCH_MULTIPLATFORM, and tried to get them closer
+> to that. Here is what came out of that for the samsung platforms:
+> 
+> * Exynos and s5pv210 are made independent of plat-samsung
+> * device drivers stop using mach/*.h headers for s3c24xx
+>   (and other platforms not in this series)
+> * s3c24xx and s3c64xx get merged into mach-s3c, removing
+>   the need for plat-samsung (I have other patches for the
+>   remaining plat-* directories)
+> * mach/io.h gets cleaned up to only be needed for BAST
+>   PC104 mode (looking for ideas to proceed)
+> * mach/irqs.h remains for now, this still needs to be converted
+>   to sparse IRQs.
+> 
+> Some bits are a little ugly, but overall I think this a big
+> improvement.
+> 
+> The contents are available for testing in
+> 
+> git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
 
-Ok, done now.
+When sending v2, can you Cc:
 
-> They still appear in arch/arm/include/debug/exynos.S so they could
-> be integrated into one header, unless you plan to remove it in further
-> patches.
+Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+Lihua Yao <ylhuajnu@outlook.com>
+(or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
+Sergio Prado <sergio.prado@e-labworks.com>
+Sylwester Nawrocki <s.nawrocki@samsung.com>
 
-I don't think it actually helps, but it doesn't hurt either:
+These are folks which to my knowledge had working S3C and S5P boards
+so maybe they could provide testing.
 
-arch/arm/include/debug/exynos.S cannot #include any mach/*.h header files,
-so the definition has to remain duplicated, unless I'm missing something.
+Best regards,
+Krzysztof
 
-Also, the addresses should be completely independent, as long as the virtual
-address for the uart does not overlap with the virtual address for the chipid.
-
-One possible cleanup here would be to completely remove the S5P_VA_CHIPID
-static map and use ioremap(), but doing that requires that the first call to
-soc_is_exynosXXXX() happens after the ioremap.
-
-> > diff --git a/arch/arm/plat-samsung/include/plat/cpu.h b/arch/arm/plat-samsung/include/plat/cpu.h
-> > index fadcddbea064..02d7f991d5a3 100644
-> > --- a/arch/arm/plat-samsung/include/plat/cpu.h
-> > +++ b/arch/arm/plat-samsung/include/plat/cpu.h
-> > @@ -111,8 +111,6 @@ extern void s3c24xx_init_io(struct map_desc *mach_desc, int size);
-> >  extern void s3c64xx_init_cpu(void);
-> >  extern void s5p_init_cpu(const void __iomem *cpuid_addr);
->
-> You can remove it as well.
-
-Ok, removed.
-
-        Thanks,
