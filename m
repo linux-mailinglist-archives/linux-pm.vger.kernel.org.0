@@ -2,118 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8659E1C0A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF623E1C6F
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391235AbfJWNNe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 09:13:34 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:47540 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391166AbfJWNNd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:13:33 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9ND9KoV145856;
-        Wed, 23 Oct 2019 13:13:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=/V+jrEbYQL21SB6hbLXZllu4Hk/oxIkJfbhRlkAi2W4=;
- b=NFT/60ctEzC6gSf6EJTLvuNaagzoje6qdDZXFh+OVlyBlRuhkaIeFPJdZf4Svtgkg7y8
- fkKajPprtUgmRIIcj26Zdn9ZspcsqR6jqz10oilSxJT+MdUd8Pna2AWbHI8cLAg/4vW1
- Cz2bVtgAi4dmhkYi1ATvrM1ff9vZsVhZccXaqnVAnJqbGb3RvOGg4a23hy2M30V5VYNH
- MbTV+H9I/uUYVizqf6wpimuxg9HMTNsccCef2yjt9M+Wy3lSpgxqNjJ7qowWzXmqFQUZ
- uoC3rVhl8xZ0sqIrDQ/BJgc9WMEsip2mFzeoqchzdoYHnYHhvIHhzKwr1c3toW2Bcwm0 pA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2vqu4qw2h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Oct 2019 13:13:31 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9ND4euJ091848;
-        Wed, 23 Oct 2019 13:11:30 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2vtm2252fh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Oct 2019 13:11:30 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9NDBTlx009289;
-        Wed, 23 Oct 2019 13:11:29 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 23 Oct 2019 06:11:29 -0700
-Date:   Wed, 23 Oct 2019 16:11:19 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kholk11@gmail.com
-Cc:     linux-pm@vger.kernel.org
-Subject: [bug report] thermal: qcom: tsens-v1: Add support for MSM8956 and
- MSM8976
-Message-ID: <20191023131119.GA3987@mwanda>
+        id S2405833AbfJWNXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 09:23:44 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:58323 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405812AbfJWNXo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:23:44 -0400
+Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MpDVx-1hf9pS47iR-00qfp4; Wed, 23 Oct 2019 15:23:42 +0200
+Received: by mail-qt1-f178.google.com with SMTP id w14so32197503qto.9;
+        Wed, 23 Oct 2019 06:23:41 -0700 (PDT)
+X-Gm-Message-State: APjAAAUOEer4RSyYJoTiziHt8cYel+67LG9wADwnk7kk+F0IuyC1ktQY
+        QG1Ro0Qn/r+hOJoQLOSWGVIi/mOzQpv60MzBVto=
+X-Google-Smtp-Source: APXvYqwU3y5YqkOIsK2y7eYvy0ctJhOflxSMk/EdUo4ryq/EKaRqLWAAN8gOEJgyL2Cd6mKUElnaT6RSKuR35fFlkXE=
+X-Received: by 2002:a0c:c70a:: with SMTP id w10mr8851889qvi.222.1571837020471;
+ Wed, 23 Oct 2019 06:23:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9418 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=933
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910230134
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9418 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910230135
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-15-arnd@arndb.de> <20191023123722.GD11048@pi3>
+In-Reply-To: <20191023123722.GD11048@pi3>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Oct 2019 15:23:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a13UWnsnTeDQPTDdAXjnwT+-UZchKqezqG+npEuFNK2vg@mail.gmail.com>
+Message-ID: <CAK8P3a13UWnsnTeDQPTDdAXjnwT+-UZchKqezqG+npEuFNK2vg@mail.gmail.com>
+Subject: Re: [PATCH 15/36] ARM: s3c: adc: move header to linux/soc/samsung
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:giqxSs+A+LAWYj0Sxj5nusxA8wHxPgN5F7tmxIao8ABk3bArcf2
+ zUzbNsCh/ELi1K0kYEtEHgESjQs8HH8mRSfd6UfgD6VoJILtQhIurqpPVu/Y7ppYgCxdeBO
+ +KPW8WQc+3tYNDu+wtPaWzmF1d5joeNw55Bk/kXIYjEbT2M7JIc++gbj3x+D9b2+YVUHKmD
+ CGd/U+YvZsxVeqmRKKhmQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c23PmR9jg7U=:6laGSqdsRzet9T20EG8mhj
+ lZQ2S+7Lre/1Kzv6tJnOjdHHK8EXjc/R15mmPPfPm5h+MuuAwjf1KuercXzl/j5MPe7UzUoo1
+ C63FU6HnEhpnPHPYXb0KDFIlRTu9uAGEZC+XPCSGfbQEmEPYhQqHi/vgYSYfmYXIfzSDPpLN3
+ f3cvZ13VuNbUM4x1o1VxHQ327ejTmy8a+Uf/oFKDLRsLl3qjxb+TxwMu0L2G63Sfr+ahQiHe1
+ aJ852JJkqrYYBGDGft9v4qKqE2gmq6zGKoMVmFhc3hL2jC4I3GKFyufrGApIxZDOoJhCNjYmx
+ OAFKxQB5OJDc4y6PMADDKi5eIUA2dJ5nI6F+Fvq9Y33vABOubg2B+kZgDjs6DrgNgLC1/LQNp
+ 5OhBo0KjulvjcuGLeXq9FHG6rzYEFhsQp8nX7/Z9SMlXOhDszKiI6ksfZrl4r4nnXErAPCJQP
+ OM0F6N7qjKmaeeE++LrBmfw3YHyvGs3i+ITKviJOiAdL9cIGDI6Itw3jrbwftAbf64tA033LD
+ gaFdIIOYwk40PqVyx4ETW/tTJ8EuPAseG17aDzKz8zDxIO5vA8+ubHKCfiONgh6P1oyHOLL6x
+ uAmOBPPyB+e4uGE5Zz6LpAj7LOTsfo1gdm/iJMnqPEyfJjOXqwwdOaD3zvv6f1f3mzrt5Zx3b
+ KaXpf7+ujMKJBRmpkAprsHhO42e0jXZQJnxNSei2NARCRKJ0Hi2hTtZNzLxPBOwaI3iSqX1Jc
+ srxZWs+TDPV0QWZYr3puP+6ixTN95m/CXe0vJ34uuR42GfSxSvdmDFuaz0abdbvy8HQiPB2wA
+ y72Fdtkd/7Dz81LMb3+g/uP4lwPBAX6bRtWRxXe0iklXLSqImDosSqnK/QmOlhVi5TG1Wkq13
+ XXob4cq0+k4U7jH5cCPA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello AngeloGioacchino Del Regno,
+On Wed, Oct 23, 2019 at 2:41 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-The patch 95ededc17e4e: "thermal: qcom: tsens-v1: Add support for
-MSM8956 and MSM8976" from Oct 5, 2019, leads to the following static
-checker warning:
+> > diff --git a/arch/arm/plat-samsung/include/plat/adc.h b/include/linux/soc/samsung/s3c-adc.h
+> > similarity index 100%
+> > rename from arch/arm/plat-samsung/include/plat/adc.h
+> > rename to include/linux/soc/samsung/s3c-adc.h
+>
+> Can you update the name of header guard? __LINUX_SOC_SAMSUNG_S3C_ADC_H?
 
-	drivers/thermal/qcom/tsens-v1.c:253 calibrate_8976()
-	warn: mask and shift to zero
+Ok, done.
 
-drivers/thermal/qcom/tsens-v1.c
-   235  static int calibrate_8976(struct tsens_priv *priv)
-   236  {
-   237          int base0 = 0, base1 = 0, i;
-   238          u32 p1[11], p2[11];
-   239          int mode = 0, tmp = 0;
-   240          u32 *qfprom_cdata;
-   241  
-   242          qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
-   243          if (IS_ERR(qfprom_cdata)) {
-   244                  kfree(qfprom_cdata);
-   245                  return PTR_ERR(qfprom_cdata);
-   246          }
-   247  
-   248          mode = (qfprom_cdata[4] & MSM8976_CAL_SEL_MASK);
-   249          dev_dbg(priv->dev, "calibration mode is %d\n", mode);
-   250  
-   251          switch (mode) {
-   252          case TWO_PT_CALIB:
-   253                  base1 = (qfprom_cdata[2] & MSM8976_BASE1_MASK) >> MSM8976_BASE1_SHIFT;
-                                                   ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^
-                                                   0xff                >> 8
-base1 is always going to be zero.
-
-   254                  p2[0] = (qfprom_cdata[0] & MSM8976_S0_P2_MASK) >> MSM8976_S0_P2_SHIFT;
-   255                  p2[1] = (qfprom_cdata[0] & MSM8976_S1_P2_MASK) >> MSM8976_S1_P2_SHIFT;
-   256                  p2[2] = (qfprom_cdata[1] & MSM8976_S2_P2_MASK) >> MSM8976_S2_P2_SHIFT;
-   257                  p2[3] = (qfprom_cdata[1] & MSM8976_S3_P2_MASK) >> MSM8976_S3_P2_SHIFT;
-   258                  p2[4] = (qfprom_cdata[2] & MSM8976_S4_P2_MASK) >> MSM8976_S4_P2_SHIFT;
-   259                  p2[5] = (qfprom_cdata[2] & MSM8976_S5_P2_MASK) >> MSM8976_S5_P2_SHIFT;
-   260                  p2[6] = (qfprom_cdata[3] & MSM8976_S6_P2_MASK) >> MSM8976_S6_P2_SHIFT;
-   261                  p2[7] = (qfprom_cdata[3] & MSM8976_S7_P2_MASK) >> MSM8976_S7_P2_SHIFT;
-   262                  p2[8] = (qfprom_cdata[4] & MSM8976_S8_P2_MASK) >> MSM8976_S8_P2_SHIFT;
-   263                  p2[9] = (qfprom_cdata[4] & MSM8976_S9_P2_MASK) >> MSM8976_S9_P2_SHIFT;
-   264                  p2[10] = (qfprom_cdata[5] & MSM8976_S10_P2_MASK) >> MSM8976_S10_P2_SHIFT;
-   265  
-   266                  for (i = 0; i < priv->num_sensors; i++)
-   267                          p2[i] = ((base1 + p2[i]) << 2);
-   268                  /* Fall through */
-
-regards,
-dan carpenter
+       Arnd
