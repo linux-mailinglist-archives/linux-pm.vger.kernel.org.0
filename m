@@ -2,93 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 303EDE1D45
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7976EE1D66
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405972AbfJWNuC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 09:50:02 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:35299 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405956AbfJWNuB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:50:01 -0400
-Received: by mail-ed1-f66.google.com with SMTP id k2so5124780edx.2;
-        Wed, 23 Oct 2019 06:50:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8qBb291IPE2og/l7u8OiTDfQtbzmiVhAHgv1m3GbkfM=;
-        b=PvPI2OUUIth0m6/ElRXyVRuYu9Qan/98GzjzGOkXBd5cUTPBNeyC1CjvIPtKtn1VQ5
-         XKg24pqbXlp81cqT943pHDULu5qqNhSXr4hBAgj2CDhVOJH7/mXkV5DrDzXGFcaaJBDt
-         ZGKnQgdBi5kir79+dSPmTkQkTjIGr4tgkGseYYxVe4ftNGu7nnicwoKW5yPfEAC5Rcpp
-         TPmH/cRd861xPiqBiQs/ddK6b/aWKL7ews//H/01vvFLLpeSFQF4+U4MIMFCB8DiGroD
-         EpUu7x4ieX+082Qqc4KklTZ/+cPk8k1g93bFxeyStPMNI3Nrzc/WeiY7wzvBff9Cu8QZ
-         4+hA==
-X-Gm-Message-State: APjAAAWm0xBPohVFjCswQjmCU2VAy7SOnr8jTJvWg6J4mEC3jUJmF25S
-        2WdqDNAqQbmZLSmIeZ+v38k=
-X-Google-Smtp-Source: APXvYqwjWvPU2P28o+R/0H7qCyJXE4W8hZoo+hrDHIsqBv9q1Xi6Hyp0zb62g4wWhOXMSl17h7J2Hw==
-X-Received: by 2002:a50:ff19:: with SMTP id a25mr9916560edu.181.1571838599737;
-        Wed, 23 Oct 2019 06:49:59 -0700 (PDT)
-Received: from pi3 ([194.230.155.217])
-        by smtp.googlemail.com with ESMTPSA id j43sm734313eda.19.2019.10.23.06.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 06:49:58 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 15:49:56 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+        id S2391927AbfJWNys (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 09:54:48 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:57373 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390181AbfJWNys (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:54:48 -0400
+Received: from mail-qk1-f170.google.com ([209.85.222.170]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1M1pfy-1iPSxS12ro-002GC9; Wed, 23 Oct 2019 15:54:46 +0200
+Received: by mail-qk1-f170.google.com with SMTP id q70so12255704qke.12;
+        Wed, 23 Oct 2019 06:54:45 -0700 (PDT)
+X-Gm-Message-State: APjAAAWoErbG2vVzPG1ASGwUqNjiigXVXCYO+CmCrM6ASujv85zjVmHg
+        7Zy4mtB+bKS5nRP2wftma5HH0gWUaO+zaFufcK8=
+X-Google-Smtp-Source: APXvYqwg1GMH8QdNiqBQrXGE6tBmtG4ranjbu2NqBzx98xXXHvxcSSud6NSUY0ZDvcAUkWXJquc0IymGFTx7V0wKlHc=
+X-Received: by 2002:a05:620a:4f:: with SMTP id t15mr8358153qkt.286.1571838884945;
+ Wed, 23 Oct 2019 06:54:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-33-arnd@arndb.de> <20191023134956.GK11048@pi3>
+In-Reply-To: <20191023134956.GK11048@pi3>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Oct 2019 15:54:28 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LVo0vfngK_7z-a0nC_t_v85OE8epke2XAFYH9EW821g@mail.gmail.com>
+Message-ID: <CAK8P3a1LVo0vfngK_7z-a0nC_t_v85OE8epke2XAFYH9EW821g@mail.gmail.com>
 Subject: Re: [PATCH 33/36] ARM: s3c: move low-level clk reg access into
  platform code
-Message-ID: <20191023134956.GK11048@pi3>
-References: <20191010202802.1132272-1-arnd@arndb.de>
- <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-33-arnd@arndb.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191010203043.1241612-33-arnd@arndb.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:+Av+xoFVIkh4CH56GsaW7ZCFUxfyKXmDxn17ZfHzj78Rnv6BbZe
+ nJvEfDkynb539c2dyFovr3KbiR2lWvNrB8g5Fj7aCvYtcecZUc+0sFg5Li/AdrRd4v6oswI
+ tdrE2af8rwgXT8xZQBFNBPiJ4RKVCZIPz+NXib65BSX1NQQbaAXsK2i74vScoVBZ3UQT3w2
+ Za92BQERlqrCdnzlroQvw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g8zyAMASZJ4=:kXtUw3vCqlR/mK6YThXKVO
+ j3EmAzd9kPfheebOTnhxgjXHq/tsW7rigG3saHPvB8QzySep4Bw+UZigTU9VHQN+pWiCPYr5V
+ 0AYfXtpnmqpwbhv9fNZwhN8qL/bdVI7hsqzktH9yo9sQlDVTLr/otE+9bD7GYvNS3MHfuC8fl
+ +N1raW8tBfOTSPlF+XniHCze/ZHEZ1zjFZMzteJxfSz7INtF9ibDmG0JVkjQOJ/95WVcWjTmG
+ ieb7/r/ee/NTXYCWeV41VH7P9SRQFjO9C7Aq6upS3ftkugo+77SGoZ1o0/2B4gcCsLfZ6liRg
+ anwSOO8W+HiddRPOyIKef33OTZvY0o5WJj8fIzOglGl/3waHbALPn0E5RzgzijvCI70BofE+j
+ 7bw7MYPYgGakZ9qh8+la67Z8H12Ls4raiMvfKOSUmDlmWzxEiSFPZyb0O2Unie3q92w6v64DT
+ vH0rN98PKLQuqdv+lA4VYl+lwEZUSo2w7vJGqoTB1QFUQl2+4abu3pSEBFSP1PFzW5tSnTXEN
+ zca5NgGuWTuCeGWqVvTid9s+U9QJJnlJKDcd+4vuOt+qY6Q2bKeOO8FJykEZKdP8butsSLD6B
+ p7sfc1zyepXdFlJ2SVjSS652JLZRIXL9wD8azwcfP4BsAgw0URclfuSqVFqciVQffhZvCdj37
+ AAJewUrfVBjuuDpZkvie+ey2IcMsb3Mfth7mMaz530MFuYMdhybbKRK4alfkCLQAEf7/EyVFH
+ hLrdDblzJwZmcNF1CQaUqZTi8QlEr4fzgNyQoVgvRoGiy+cmVtPwWAEfRf73IwKnLRqZ3SGRv
+ tUCTeuGo7/pmeZRvVEA1urNZbw+I0mduroQA3pes9YrNrjLdIFNdgJi9QUPmuVU59k4WNs/Za
+ qVc91JR4CXDYlKyaYv4Q==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:30:17PM +0200, Arnd Bergmann wrote:
-> Rather than have the cpufreq drivers touch include the
-> common headers to get the constants, add a small indirection.
-> This is still not the proper way that would do this through
-> the common clk API, but it lets us kill off the header file
-> usage.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/mach-s3c24xx/Makefile               |  2 +-
->  arch/arm/mach-s3c24xx/cpufreq-utils.c        | 32 ++++++++++++++++++++
->  drivers/cpufreq/s3c2410-cpufreq.c            |  8 +----
->  drivers/cpufreq/s3c2412-cpufreq.c            | 10 ++----
->  drivers/cpufreq/s3c2440-cpufreq.c            | 16 +++-------
->  drivers/cpufreq/s3c24xx-cpufreq.c            | 11 ++-----
->  include/linux/soc/samsung/s3c-cpufreq-core.h |  7 +++++
->  7 files changed, 51 insertions(+), 35 deletions(-)
-> 
-> diff --git a/arch/arm/mach-s3c24xx/Makefile b/arch/arm/mach-s3c24xx/Makefile
-> index 695573df00b1..195a4cb23ecb 100644
-> --- a/arch/arm/mach-s3c24xx/Makefile
-> +++ b/arch/arm/mach-s3c24xx/Makefile
-> @@ -38,7 +38,7 @@ obj-$(CONFIG_PM_SLEEP)		+= irq-pm.o sleep.o
->  
->  # common code
->  
-> -obj-$(CONFIG_S3C2410_CPUFREQ_UTILS) += cpufreq-utils.o
-> +obj-$(CONFIG_ARM_S3C24XX_CPUFREQ) += cpufreq-utils.o
+On Wed, Oct 23, 2019 at 3:50 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-Drop also here S3C2410_CPUFREQ_UTILS entirely.
+> >  # common code
+> >
+> > -obj-$(CONFIG_S3C2410_CPUFREQ_UTILS) += cpufreq-utils.o
+> > +obj-$(CONFIG_ARM_S3C24XX_CPUFREQ) += cpufreq-utils.o
+>
+> Drop also here S3C2410_CPUFREQ_UTILS entirely.
+>
 
-Best regards,
-Krzysztof
+Ok, done.
 
+      Arnd
