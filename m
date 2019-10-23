@@ -2,108 +2,325 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB45DE2681
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 00:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13927E2695
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 00:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390278AbfJWWkF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 18:40:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56724 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389112AbfJWWkF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:40:05 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 39A77205F4;
-        Wed, 23 Oct 2019 22:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571870404;
-        bh=Mvc796uh7XdGeYEf88nGaaIFTmKKJuc15645rrTX+T8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CaKDo0ra+NoXHBObmBxTilzzkUjyfFexh4UhQkrkGTAhGpcwL+LsvDCOLnCiXalVj
-         foE/IXg6310WUDiwe0NUxwjN2zZTr5YAzXv524UtMkLT42q4RZz7WYYzUKP3ReFsb5
-         um/bTnDT9P4vNxFa01l5Q78bRo9k8lGj7JTFoK7w=
-Date:   Wed, 23 Oct 2019 17:40:03 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Daniel Drake <drake@endlessm.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Message-ID: <20191023224003.GA31692@google.com>
+        id S2407852AbfJWWsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 18:48:13 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:40367 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406216AbfJWWsN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 18:48:13 -0400
+Received: by mail-oi1-f194.google.com with SMTP id b25so7263832oib.7;
+        Wed, 23 Oct 2019 15:48:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5rO+uc1ILY9OMG2v2SNvpBcmRQmpBzHDB/LO32aNzZk=;
+        b=AFwErGSLrYGobTrDvc4ak66z3eI5uVBsCrhMFkGaRv57vS6giS9IIqqzhSH1vSdtVg
+         gUOOxvna4y8L83UAOwd298/QqHJWWDOkjpl5Oo3eEeFg9TZHnDbP1SC+iFbwhp5aGcoR
+         ef1SNE8mp7xdmr19+0dy5tqvshjFZdLwy8Jhj7YOi1dePxkiF3eSk2arAvO+Oh/pN5ds
+         aCxygLhFO9CqFeHciVBiaYf9nQ9//7Cw9DW7NkGKRo57FYFW2WmNw/MndxwSld3teoD6
+         zi81SEdlQUXBR7tTN8ff7yR+V+FRZJJFxnBViP237hbAyizcV6DwIbRisEfKIxileKRy
+         DCiQ==
+X-Gm-Message-State: APjAAAUNZ8p0YeFi/K7MMojQN7r0PH6ss9WFeU8eb75BLMVF8HWFlESJ
+        w+VKCfMjRsrQuDFSK4QZOqBcc9RMvdY=
+X-Google-Smtp-Source: APXvYqw7YIlLXT+3gf1USNvjMkhOekidJ1vR7tkFdzzR84Xqp+m/hfz5iZxFZU+5aNzk3uj/0vSo9w==
+X-Received: by 2002:a54:418c:: with SMTP id 12mr2017573oiy.154.1571870891151;
+        Wed, 23 Oct 2019 15:48:11 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id c21sm6518688otp.15.2019.10.23.15.48.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Oct 2019 15:48:10 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id g13so18904906otp.8;
+        Wed, 23 Oct 2019 15:48:10 -0700 (PDT)
+X-Received: by 2002:a05:6830:22d6:: with SMTP id q22mr5171244otc.74.1571870889734;
+ Wed, 23 Oct 2019 15:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191022093349.GC2819@lahna.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191023082423.12569-1-ran.wang_1@nxp.com> <20191023082423.12569-3-ran.wang_1@nxp.com>
+In-Reply-To: <20191023082423.12569-3-ran.wang_1@nxp.com>
+From:   Li Yang <leoyang.li@nxp.com>
+Date:   Wed, 23 Oct 2019 17:47:58 -0500
+X-Gmail-Original-Message-ID: <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
+Message-ID: <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
+Subject: Re: [PATCH v9 3/3] soc: fsl: add RCPM driver
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
+        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 12:33:49PM +0300, Mika Westerberg wrote:
-> On Tue, Oct 22, 2019 at 10:40:00AM +0800, Daniel Drake wrote:
-> > On Mon, Oct 21, 2019 at 7:33 PM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > > Just to be sure, did you try the patch or just looked at it? Because
-> > > what the patch does is that it does the delay when the downstream/root
-> > > port is resumed, not the xHCI itself.
-> > 
-> > I tried it, it didn't fix the problem.
-> 
-> :(
-> 
-> It may very well be that this particular xHCI controller needs more than
-> that 10ms from D3hot -> D0 transition. Again the PCIe spec says the 10ms
-> is the minimum time system software needs to delay but it does not say
-> what would be the maximum time the function absolutely must be properly
-> in D0.
+On Wed, Oct 23, 2019 at 3:24 AM Ran Wang <ran.wang_1@nxp.com> wrote:
+>
+> The NXP's QorIQ Processors based on ARM Core have RCPM module
 
-Hmm, PCIe r5.0, sec 2.3.1, says devices are permitted to return
-Configuration Request Retry Status (CRS) after a "reset initiated in
-response to a D3hot to D0uninitialized" transition.
+Actually not just ARM based QorIQ processors are having RCPM, PowerPC
+based QorIQ SoCs also have RCPM.  Does this driver also work with the
+PowerPC SoCs?  Please clarify in the commit message and Kconfig
+description.
 
-I think that applies to this device because your lspci [1] shows:
+> (Run Control and Power Management), which performs system level
+> tasks associated with power management such as wakeup source control.
+>
+> This driver depends on PM wakeup source framework which help to
+> collect wake information.
+>
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+> Change in v9:
+>         - Add kerneldoc for rcpm_pm_prepare().
+>         - Use pr_debug() to replace dev_info(), to print message when decide
+>           skip current wakeup object, this is mainly for debugging (in order
+>           to detect potential improper implementation on device tree which
+>           might cause this skip).
+>         - Refactor looping implementation in rcpm_pm_prepare(), add more
+>           comments to help clarify.
+>
+> Change in v8:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>         - Add sanity checking for the case of ws->dev or ws->dev->parent
+>           is null.
+>
+> Change in v7:
+>         - Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
+>         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
+>         - Remove '+obj-y += ftm_alarm.o' since it is wrong.
+>         - Cosmetic work.
+>
+> Change in v6:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>
+> Change in v5:
+>         - Fix v4 regression of the return value of wakeup_source_get_next()
+>         didn't pass to ws in while loop.
+>         - Rename wakeup_source member 'attached_dev' to 'dev'.
+>         - Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
+>         please see https://lore.kernel.org/patchwork/patch/1101022/
+>
+> Change in v4:
+>         - Remove extra ',' in author line of rcpm.c
+>         - Update usage of wakeup_source_get_next() to be less confusing to the
+> reader, code logic remain the same.
+>
+> Change in v3:
+>         - Some whitespace ajdustment.
+>
+> Change in v2:
+>         - Rebase Kconfig and Makefile update to latest mainline.
+>
+>  drivers/soc/fsl/Kconfig  |   8 +++
+>  drivers/soc/fsl/Makefile |   1 +
+>  drivers/soc/fsl/rcpm.c   | 148 +++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 157 insertions(+)
+>  create mode 100644 drivers/soc/fsl/rcpm.c
+>
+> diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
+> index f9ad8ad..4918856 100644
+> --- a/drivers/soc/fsl/Kconfig
+> +++ b/drivers/soc/fsl/Kconfig
+> @@ -40,4 +40,12 @@ config DPAA2_CONSOLE
+>           /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
+>           which can be used to dump the Management Complex and AIOP
+>           firmware logs.
+> +
+> +config FSL_RCPM
+> +       bool "Freescale RCPM support"
+> +       depends on PM_SLEEP
 
-	Capabilities: [50] Power Management version 3
-		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
-		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+If this is only for ARM, probably add more dependency here?
 
-so No_Soft_Reset is clear, which means the D3hot to D0 transition goes
-to D0uninitialized.
+> +       help
+> +         The NXP QorIQ Processors based on ARM Core have RCPM module
+> +         (Run Control and Power Management), which performs all device-level
+> +         tasks associated with power management, such as wakeup source control.
+>  endmenu
+> diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
+> index 71dee8d..906f1cd 100644
+> --- a/drivers/soc/fsl/Makefile
+> +++ b/drivers/soc/fsl/Makefile
+> @@ -6,6 +6,7 @@
+>  obj-$(CONFIG_FSL_DPAA)                 += qbman/
+>  obj-$(CONFIG_QUICC_ENGINE)             += qe/
+>  obj-$(CONFIG_CPM)                      += qe/
+> +obj-$(CONFIG_FSL_RCPM)                 += rcpm.o
+>  obj-$(CONFIG_FSL_GUTS)                 += guts.o
+>  obj-$(CONFIG_FSL_MC_DPIO)              += dpio/
+>  obj-$(CONFIG_DPAA2_CONSOLE)            += dpaa2-console.o
+> diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
+> new file mode 100644
+> index 0000000..9378073
+> --- /dev/null
+> +++ b/drivers/soc/fsl/rcpm.c
+> @@ -0,0 +1,148 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// rcpm.c - Freescale QorIQ RCPM driver
+> +//
+> +// Copyright 2019 NXP
+> +//
+> +// Author: Ran Wang <ran.wang_1@nxp.com>
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/slab.h>
+> +#include <linux/suspend.h>
+> +#include <linux/kernel.h>
+> +
+> +#define RCPM_WAKEUP_CELL_MAX_SIZE      7
+> +
+> +struct rcpm {
+> +       unsigned int    wakeup_cells;
+> +       void __iomem    *ippdexpcr_base;
+> +       bool            little_endian;
+> +};
+> +
+> +/**
+> + * rcpm_pm_prepare - performs device-level tasks associated with power
+> + * management, such as programming related to the wakeup source control.
+> + * @dev: Device to handle.
+> + *
+> + */
+> +static int rcpm_pm_prepare(struct device *dev)
+> +{
+> +       int i, ret, idx;
+> +       void __iomem *base;
+> +       struct wakeup_source    *ws;
+> +       struct rcpm             *rcpm;
+> +       struct device_node      *np = dev->of_node;
+> +       u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1];
+> +
+> +       rcpm = dev_get_drvdata(dev);
+> +       if (!rcpm)
+> +               return -EINVAL;
+> +
+> +       base = rcpm->ippdexpcr_base;
+> +       idx = wakeup_sources_read_lock();
+> +
+> +       /* Begin with first registered wakeup source */
+> +       for_each_wakeup_source(ws) {
+> +
+> +               /* skip object which is not attached to device */
+> +               if (!ws->dev || !ws->dev->parent)
+> +                       continue;
+> +
+> +               ret = device_property_read_u32_array(ws->dev->parent,
+> +                               "fsl,rcpm-wakeup", value,
+> +                               rcpm->wakeup_cells + 1);
+> +
+> +               /*  Wakeup source should refer to current rcpm device */
+> +               if (ret || (np->phandle != value[0])) {
+> +                       pr_debug("%s doesn't refer to this rcpm\n", ws->name);
 
-pci_raw_set_power_state() *does* delay, generally for 10ms:
+I agree with Rafael that this looks a little bit weird.
 
-  pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-  if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-    pci_dev_d3_sleep(dev);
-  pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> +                       continue;
+> +               }
+> +
+> +               /* Property "#fsl,rcpm-wakeup-cells" of rcpm node defines the
+> +                * number of IPPDEXPCR register cells, and "fsl,rcpm-wakeup"
+> +                * of wakeup source IP contains an integer array: <phandle to
+> +                * RCPM node, IPPDEXPCR0 setting, IPPDEXPCR1 setting,
+> +                * IPPDEXPCR2 setting, etc>.
+> +                *
+> +                * So we will go thought them and do programming accordngly.
+> +                */
+> +               for (i = 0; i < rcpm->wakeup_cells; i++) {
+> +                       u32 tmp = value[i + 1];
+> +                       void __iomem *address = base + i * 4;
+> +
+> +                       if (!tmp)
+> +                               continue;
+> +
+> +                       /* We can only OR related bits */
+> +                       if (rcpm->little_endian) {
+> +                               tmp |= ioread32(address);
+> +                               iowrite32(tmp, address);
+> +                       } else {
+> +                               tmp |= ioread32be(address);
+> +                               iowrite32be(tmp, address);
+> +                       }
 
-but there's no mention of CRS, so I think that config read is liable
-to fail with CRS if the device isn't ready, and we won't notice.
+Can we do read once at the beginning and write once at the end,
+instead of doing IO read/write for every wakeup source?
 
-I think we need something like the patch below.  We already do
-basically the same thing in pci_pm_reset().
-
-[1] https://gist.github.com/dsd/bd9370b35defdf43680b81ecb34381d5
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index e7982af9a5d8..e8702388830f 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -883,9 +883,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
- 	 * Mandatory power management transition delays; see PCI PM 1.1
- 	 * 5.6.1 table 18
- 	 */
--	if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-+	if (state == PCI_D3hot || dev->current_state == PCI_D3hot) {
- 		pci_dev_d3_sleep(dev);
--	else if (state == PCI_D2 || dev->current_state == PCI_D2)
-+		pci_dev_wait(dev, "D3 transition", PCIE_RESET_READY_POLL_MS);
-+	} else if (state == PCI_D2 || dev->current_state == PCI_D2)
- 		udelay(PCI_PM_D2_DELAY);
- 
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> +               }
+> +       }
+> +
+> +       wakeup_sources_read_unlock(idx);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops rcpm_pm_ops = {
+> +       .prepare =  rcpm_pm_prepare,
+> +};
+> +
+> +static int rcpm_probe(struct platform_device *pdev)
+> +{
+> +       struct device   *dev = &pdev->dev;
+> +       struct resource *r;
+> +       struct rcpm     *rcpm;
+> +       int ret;
+> +
+> +       rcpm = devm_kzalloc(dev, sizeof(*rcpm), GFP_KERNEL);
+> +       if (!rcpm)
+> +               return -ENOMEM;
+> +
+> +       r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       if (!r)
+> +               return -ENODEV;
+> +
+> +       rcpm->ippdexpcr_base = devm_ioremap_resource(&pdev->dev, r);
+> +       if (IS_ERR(rcpm->ippdexpcr_base)) {
+> +               ret =  PTR_ERR(rcpm->ippdexpcr_base);
+> +               return ret;
+> +       }
+> +
+> +       rcpm->little_endian = device_property_read_bool(
+> +                       &pdev->dev, "little-endian");
+> +
+> +       ret = device_property_read_u32(&pdev->dev,
+> +                       "#fsl,rcpm-wakeup-cells", &rcpm->wakeup_cells);
+> +       if (ret)
+> +               return ret;
+> +
+> +       dev_set_drvdata(&pdev->dev, rcpm);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id rcpm_of_match[] = {
+> +       { .compatible = "fsl,qoriq-rcpm-2.1+", },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, rcpm_of_match);
+> +
+> +static struct platform_driver rcpm_driver = {
+> +       .driver = {
+> +               .name = "rcpm",
+> +               .of_match_table = rcpm_of_match,
+> +               .pm     = &rcpm_pm_ops,
+> +       },
+> +       .probe = rcpm_probe,
+> +};
+> +
+> +module_platform_driver(rcpm_driver);
+> --
+> 2.7.4
+>
