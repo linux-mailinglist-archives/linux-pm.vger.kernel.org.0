@@ -2,136 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B49D4E107C
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 05:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B22E1088
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 05:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732173AbfJWDXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 23:23:08 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45091 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732090AbfJWDXH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 23:23:07 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b4so3051081pfr.12
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 20:23:06 -0700 (PDT)
+        id S1732590AbfJWD0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Oct 2019 23:26:12 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38853 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731772AbfJWD0M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 23:26:12 -0400
+Received: by mail-pg1-f194.google.com with SMTP id w3so11247999pgt.5
+        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 20:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=vG1wlSoVjAH3TslkWdryreWfIFyS6PFtkukPqp6iu6k=;
-        b=LXsEOBqKOd15Ki+pYR61bVtYMBRigi5yBLP9kWdnCjKN1Swh9GjKCUwx0e3QhP41oi
-         f6UJc+sH3LzMZoN5qWZvLMzAjEU16NRk8kTsJPTu7URZghySrGM6OTxY9fqqjuAyt3uB
-         HxfziLk4zNdgSGfMY3vn4D+fHbIQTuh2zDQX0+0jzinbdY/BmlbbGmqBiBOcegI/b0tJ
-         ojhMWWAwm3fDesTkzWreV/gkOS+mhpjHcAcqoqKZc4aFnm+M4kBRGIj5lV0WwPW/N7Pj
-         2xkTKceWyv4TxlJ6s5uVbJ7Pb8+aahzzhlR9yxioAT2pJFcOEdxw0J2tRmXjARLs2pFt
-         whlA==
+        bh=/UlXYMZppBsSqe1vUiYDqERsW7xBrjIEOgZPw2HevXQ=;
+        b=Of993IQqMLC66eF00w8dmizT/a6HT3ZI87pGzsxKyvSWD+kCvdW4DiBN4LmAPwUc06
+         IxuBFUqjFceVK5QoPCC8AGawzgTctgoOMQeMdOGiLUG8e96xxVu9xODLI6bade4ALOq5
+         UpgTGh5csfvIeadwi9tSJXsYtXMAOqcrW7QUGlPUIKgOa4T4g3vBv2JBh01ORZyabaTX
+         8Kq4npb/1KrvUN7ZRyB2kgXtod30n4cYXnFQf7IXLRQ2XGYKQS6V0wLRhz9oJsfyOPp9
+         LQwI+7HhvF4fxvXGDdB04OmFg0Y+yUoHcJT7fKdNR8sSSrrelmRi7YvX8+dNTTEkbzvs
+         gbaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vG1wlSoVjAH3TslkWdryreWfIFyS6PFtkukPqp6iu6k=;
-        b=XvQSHR2RBkQ/0YI19WFyAbkU53JB3/WR+iACfkHrniFmCwzO7Ii9J99sLOREieL9Qs
-         /+50KVF+OyFEHcAjDo0qSUeS/5ePjV6aZuv6ilWbINEnQBjznPHCYFv4C0zEOiKemn6p
-         bi3d2b6kOXgv8sgSmwhJCHxscJ2+RA1gPodCmxZ3/7yVLOmGlsZKuEByo/qaNVwtDr96
-         phuq+Nm8w9iAqsoQGlWdBgj6tzu3xWDClHgNRrH5/PJypkPO0RL7pkCgK/QvXpVezITP
-         HAEYSoPiqFZJ7L4cq3t7HpNdtMFZmOXn8fZKx3xE8pA36gl945adXx4S0DueComsNLpu
-         8dGA==
-X-Gm-Message-State: APjAAAV9ol5yx9uxJWnrmKiE2POuL4L+GreVKc5VJ9B+hjT7qXkQqMYW
-        8aHCtq98Nk0Mz4zWysLLCaFqZA==
-X-Google-Smtp-Source: APXvYqzL207UMotVVbLIBySCNyQniimBEc7wiboiIj6T8IbhYFht01SBvULx1tt1kgQWqReZqGRDrQ==
-X-Received: by 2002:a17:90a:ac12:: with SMTP id o18mr8782943pjq.93.1571800985488;
-        Tue, 22 Oct 2019 20:23:05 -0700 (PDT)
+        bh=/UlXYMZppBsSqe1vUiYDqERsW7xBrjIEOgZPw2HevXQ=;
+        b=cVOHXZ4LhJjEk2vQWB61p4ccRVEVVWMuETTBd+DJa4UvFszF0X93WCgDL5VHYiiFrn
+         /PCIGxUea7fKMQQ3/MyboWl9v8QokjS2/3y7Fksb7g+KJTUrcZR9GsvefmJG7mmSlO2G
+         BJ0TaL0NK8iza8JIUG1jaiIJmctmL/tXo/+jXa+kN8MnR0xZaZiHnb84rHyjVFtmS0DC
+         9pGAK2SUTARaaq33pMmELdjV1Tb4ruLB3XrB3ypMKpNTzs0n9x8+RvSDAHP0AcxCA3ZV
+         4JMwqD/WHQ5Ipu3zjGbbx4VoFy/6ziDKQt1K18R2NBEhdNeg5BR14erTwfnjVvRmaHjZ
+         M5nQ==
+X-Gm-Message-State: APjAAAU/FzSfJo72rEfX3XthA9kXa5ZwoMJQ4uJfTNcvrdjQt/DP/uDM
+        AwBqv/3PDOQLyFy6jM/wSWd3vQ==
+X-Google-Smtp-Source: APXvYqynLoFjILHM41lE+4jb0UI2aJV2uE0h4ShZERIOG33lA0L4lJ6LJkceyIhhirWA25OIYT9srQ==
+X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr8926771pjj.27.1571801171251;
+        Tue, 22 Oct 2019 20:26:11 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id f15sm19700257pfd.141.2019.10.22.20.23.04
+        by smtp.gmail.com with ESMTPSA id a20sm16271438pjs.30.2019.10.22.20.26.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 20:23:04 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 08:53:02 +0530
+        Tue, 22 Oct 2019 20:26:10 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 08:56:08 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>, broonie@kernel.org
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] cpufreq: s3c64xx: Remove pointless NULL check in
- s3c64xx_cpufreq_driver_init
-Message-ID: <20191023032302.tu5nkvulo2yoctgr@vireshk-i7>
-References: <20191023000906.14374-1-natechancellor@gmail.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] cpufreq: mark duplicate frequencies as invalid and
+ continue as normal
+Message-ID: <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
+References: <20191022173215.13350-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191023000906.14374-1-natechancellor@gmail.com>
+In-Reply-To: <20191022173215.13350-1-sudeep.holla@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-10-19, 17:09, Nathan Chancellor wrote:
-> When building with Clang + -Wtautological-pointer-compare:
+On 22-10-19, 18:32, Sudeep Holla wrote:
+> Currently if we encounter duplicate frequency table entries, we abort
+> the validation and return error immediately. Instead of failing, we
+> can mark the entry as invalid and continue to function normal.
 > 
-> drivers/cpufreq/s3c64xx-cpufreq.c:152:6: warning: comparison of array
-> 's3c64xx_freq_table' equal to a null pointer is always false
-> [-Wtautological-pointer-compare]
->         if (s3c64xx_freq_table == NULL) {
->             ^~~~~~~~~~~~~~~~~~    ~~~~
-> 1 warning generated.
-> 
-> The definition of s3c64xx_freq_table is surrounded by an ifdef
-> directive for CONFIG_CPU_S3C6410, which is always true for this driver
-> because it depends on it in drivers/cpufreq/Kconfig.arm (and if it
-> weren't, there would be a build error because s3c64xx_freq_table would
-> not be a defined symbol).
-> 
-> Resolve this warning by removing the unnecessary NULL check because it
-> is always false as Clang notes. While we are at it, remove the
-> unnecessary ifdef conditional because it is always true.
-> 
-> Fixes: b3748ddd8056 ("[ARM] S3C64XX: Initial support for DVFS")
-
-+broonie, who wrote this patch to see his views on why he kept it like
-this.
-
-> Link: https://github.com/ClangBuiltLinux/linux/issues/748
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 > ---
->  drivers/cpufreq/s3c64xx-cpufreq.c | 7 -------
->  1 file changed, 7 deletions(-)
+>  drivers/cpufreq/freq_table.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/s3c64xx-cpufreq.c b/drivers/cpufreq/s3c64xx-cpufreq.c
-> index af0c00dabb22..c6bdfc308e99 100644
-> --- a/drivers/cpufreq/s3c64xx-cpufreq.c
-> +++ b/drivers/cpufreq/s3c64xx-cpufreq.c
-> @@ -19,7 +19,6 @@
->  static struct regulator *vddarm;
->  static unsigned long regulator_latency;
+> Hi Viresh,
+> 
+> Since commit da0c6dc00c69 ("cpufreq: Handle sorted frequency tables more
+> efficiently"), I seem to have modified the firmware entry on my TC2 to
+> drop 500MHz and had not seen the issue with duplicate entries and had
+> totally forgotten about it.
+> 
+> Recently I reverted back to original setting as I corrupted it and
+> started seeing this issues. I don't know the background for raising
+> duplicates as fatal error but we did allow it when we add arm_big_little.c
+> and hence this RFC. If there are known issues with this approach, I can
+> continue with changed firmware config.
+> 
+> With switcher, we have:
+> (little cluster)
+> Virt: 175 MHz, 200 MHz, 250 MHz, 300 MHz, 350 MHz, 400 MHz, 450 MHz, 500 MHz
+> Actu: 350 MHz, 400 MHz, 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz
+> (big cluster)
+> 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz, 1.10 GHz, 1.20 GHz
+> 
+> with 500 MHz duplicate in merged table.
+> 
+> Regards,
+> Sudeep
+> 
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index ded427e0a488..e9bf287846d6 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -305,9 +305,10 @@ static int set_freq_table_sorted(struct cpufreq_policy *policy)
+>  		}
 >  
-> -#ifdef CONFIG_CPU_S3C6410
->  struct s3c64xx_dvfs {
->  	unsigned int vddarm_min;
->  	unsigned int vddarm_max;
-> @@ -48,7 +47,6 @@ static struct cpufreq_frequency_table s3c64xx_freq_table[] = {
->  	{ 0, 4, 800000 },
->  	{ 0, 0, CPUFREQ_TABLE_END },
->  };
-> -#endif
+>  		if (pos->frequency == prev->frequency) {
+> -			pr_warn("Duplicate freq-table entries: %u\n",
+> +			pr_warn("Duplicate freq-table entries: %u marking it invalid\n,",
+>  				pos->frequency);
+> -			return -EINVAL;
+> +			pos->frequency = CPUFREQ_ENTRY_INVALID;
+> +			continue;
+>  		}
 >  
->  static int s3c64xx_cpufreq_set_target(struct cpufreq_policy *policy,
->  				      unsigned int index)
-> @@ -149,11 +147,6 @@ static int s3c64xx_cpufreq_driver_init(struct cpufreq_policy *policy)
->  	if (policy->cpu != 0)
->  		return -EINVAL;
->  
-> -	if (s3c64xx_freq_table == NULL) {
-> -		pr_err("No frequency information for this CPU\n");
-> -		return -ENODEV;
-> -	}
-> -
->  	policy->clk = clk_get(NULL, "armclk");
->  	if (IS_ERR(policy->clk)) {
->  		pr_err("Unable to obtain ARMCLK: %ld\n",
-> -- 
-> 2.23.0
+>  		/* Frequency increased from prev to pos */
+
+Of course we can do this, but I don't see why we shouldn't force
+people to fix the freq-tables instead. What's the point of allowing
+people to have duplicate entries instead ? This shouldn't happen with
+OPP tables as we check for duplicate entries there as well.
 
 -- 
 viresh
