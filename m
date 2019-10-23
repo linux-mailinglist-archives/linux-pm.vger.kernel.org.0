@@ -2,215 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C85CCE1542
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE737E154B
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390639AbfJWJG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 05:06:57 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35470 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390231AbfJWJG5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 05:06:57 -0400
-Received: by mail-oi1-f195.google.com with SMTP id x3so16753894oig.2;
+        id S2390751AbfJWJHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 05:07:24 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:45300 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S2390394AbfJWJHX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Oct 2019 05:07:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A1D9332;
         Wed, 23 Oct 2019 02:06:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FBj8GLla1LYyB2CdUTD0DNJdp/9JV1zJyBmNqUMEb5E=;
-        b=WKqYHFw5AwFrCKmX0JvRtKLaJtV+hWtTJKPbzpU2XBeWIlORfVgUbHinz7gZgCG7Mj
-         D933jqJO6uNqjHL8a2XsPe3QZIA88ZcTL2u72PJedae/QhRl7+TRF+BGFbQopTP29x3V
-         yX5ZuFCmid8Fw4uEXNuR3meru3UCcZjeGzmqdsbMi8Ao3K7xHIvGi0qK/v/AJ2kNOrfX
-         6GyzKSs9ynTD2Tt0KyvkqczndRKVIUsfGquOcCZpcDL93Cq6LmYKGJDGT0TtFQ8Ttqyq
-         XAvFZ70Rm3l1pnO4IQ7wrccwoL1FXSY5sI2xACddbqjhzCFR2j2K6+1IRP4AxCKEj8WP
-         X3Bw==
-X-Gm-Message-State: APjAAAXzr4DWklBOu0sZIpiCARzAr5o1q0gddF/qCoNpuWOGEcSi4IPZ
-        GlTIHmH8+AZeRov+dCKaWcPkzyEOpIdnvR1DpAo=
-X-Google-Smtp-Source: APXvYqyTirHnxPx9RjJnt0t5BfWKP5pSpiJnq+2XRPKiTpfW8z3VJ5oCRR5WKfiwapiGyf/vUU3yqd6A2ed8cyxSsVw=
-X-Received: by 2002:aca:5885:: with SMTP id m127mr6878786oib.110.1571821614375;
- Wed, 23 Oct 2019 02:06:54 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97BBD3F718;
+        Wed, 23 Oct 2019 02:06:53 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 10:06:47 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [RFC PATCH] cpufreq: mark duplicate frequencies as invalid and
+ continue as normal
+Message-ID: <20191023090647.GA29654@bogus>
+References: <20191022173215.13350-1-sudeep.holla@arm.com>
+ <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
 MIME-Version: 1.0
-References: <20191023082423.12569-1-ran.wang_1@nxp.com>
-In-Reply-To: <20191023082423.12569-1-ran.wang_1@nxp.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Oct 2019 11:06:43 +0200
-Message-ID: <CAJZ5v0jvQaREhg94f-COdYTt58gMP7YvqdEH0oYiS9Z56tg-XQ@mail.gmail.com>
-Subject: Re: [PATCH v9 1/3] PM: wakeup: Add routine to help fetch wakeup
- source object.
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
-        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 10:24 AM Ran Wang <ran.wang_1@nxp.com> wrote:
+On Wed, Oct 23, 2019 at 08:56:08AM +0530, Viresh Kumar wrote:
+> On 22-10-19, 18:32, Sudeep Holla wrote:
+> > Currently if we encounter duplicate frequency table entries, we abort
+> > the validation and return error immediately. Instead of failing, we
+> > can mark the entry as invalid and continue to function normal.
+> >
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >  drivers/cpufreq/freq_table.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > Hi Viresh,
+> >
+> > Since commit da0c6dc00c69 ("cpufreq: Handle sorted frequency tables more
+> > efficiently"), I seem to have modified the firmware entry on my TC2 to
+> > drop 500MHz and had not seen the issue with duplicate entries and had
+> > totally forgotten about it.
+> >
+> > Recently I reverted back to original setting as I corrupted it and
+> > started seeing this issues. I don't know the background for raising
+> > duplicates as fatal error but we did allow it when we add arm_big_little.c
+> > and hence this RFC. If there are known issues with this approach, I can
+> > continue with changed firmware config.
+> >
+> > With switcher, we have:
+> > (little cluster)
+> > Virt: 175 MHz, 200 MHz, 250 MHz, 300 MHz, 350 MHz, 400 MHz, 450 MHz, 500 MHz
+> > Actu: 350 MHz, 400 MHz, 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz
+> > (big cluster)
+> > 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz, 1.10 GHz, 1.20 GHz
+> >
+> > with 500 MHz duplicate in merged table.
+> >
+> > Regards,
+> > Sudeep
+> >
+> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> > index ded427e0a488..e9bf287846d6 100644
+> > --- a/drivers/cpufreq/freq_table.c
+> > +++ b/drivers/cpufreq/freq_table.c
+> > @@ -305,9 +305,10 @@ static int set_freq_table_sorted(struct cpufreq_policy *policy)
+> >  		}
+> >
+> >  		if (pos->frequency == prev->frequency) {
+> > -			pr_warn("Duplicate freq-table entries: %u\n",
+> > +			pr_warn("Duplicate freq-table entries: %u marking it invalid\n,",
+> >  				pos->frequency);
+> > -			return -EINVAL;
+> > +			pos->frequency = CPUFREQ_ENTRY_INVALID;
+> > +			continue;
+> >  		}
+> >
+> >  		/* Frequency increased from prev to pos */
 >
-> Some user might want to go through all registered wakeup sources
-> and doing things accordingly. For example, SoC PM driver might need to
-> do HW programming to prevent powering down specific IP which wakeup
-> source depending on. So add this API to help walk through all registered
-> wakeup source objects on that list and return them one by one.
->
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> Tested-by: Leonard Crestez <leonard.crestez@nxp.com>
+> Of course we can do this, but I don't see why we shouldn't force
+> people to fix the freq-tables instead.
 
-OK, thanks for making all of the requested changes:
+Agreed. We still have warning :)
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> What's the point of allowing people to have duplicate entries instead ?
 
-and please feel free to push this through the appropriate
-arch/platform tree.  Alternatively, please let me know if you want me
-to take this series, but then I need an ACK from the appropriate
-maintainer(s) on patch 3.
+I agree, we shouldn't. But this is in IKS which is built in the merged
+table by the driver. We can fix that, but found this easier and simple.
+And since it was allowed when the driver was merged, just thought of
+checking the details with you.
 
-> ---
-> Change in v9:
->         - Supplement comments for wakeup_sources_read_lock(),
->           wakeup_sources_read_unlock, wakeup_sources_walk_start and
->           wakeup_sources_walk_next().
+> This shouldn't happen with OPP tables as we check for duplicate entries
+> there as well.
 >
-> Change in v8:
->         - Rename wakeup_source_get_next() to wakeup_sources_walk_next().
->         - Add wakeup_sources_read_lock() to take over locking job of
->           wakeup_source_get_star().
->         - Rename wakeup_source_get_start() to wakeup_sources_walk_start().
->         - Replace wakeup_source_get_stop() with wakeup_sources_read_unlock().
->         - Define macro for_each_wakeup_source(ws).
->
-> Change in v7:
->         - Remove define of member *dev in wake_irq to fix conflict with commit
->         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs"), user
->         will use ws->dev->parent instead.
->         - Remove '#include <linux/of_device.h>' because it is not used.
->
-> Change in v6:
->         - Add wakeup_source_get_star() and wakeup_source_get_stop() to aligned
->         with wakeup_sources_stats_seq_start/nex/stop.
->
-> Change in v5:
->         - Update commit message, add decription of walk through all wakeup
->         source objects.
->         - Add SCU protection in function wakeup_source_get_next().
->         - Rename wakeup_source member 'attached_dev' to 'dev' and move it up
->         (before wakeirq).
->
-> Change in v4:
->         - None.
->
-> Change in v3:
->         - Adjust indentation of *attached_dev;.
->
-> Change in v2:
->         - None.
->
->  drivers/base/power/wakeup.c | 54 +++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_wakeup.h   |  9 ++++++++
->  2 files changed, 63 insertions(+)
->
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 5817b51..70a9edb 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -248,6 +248,60 @@ void wakeup_source_unregister(struct wakeup_source *ws)
->  EXPORT_SYMBOL_GPL(wakeup_source_unregister);
->
->  /**
-> + * wakeup_sources_read_lock - Lock wakeup source list for read.
-> + *
-> + * Returns an index of srcu lock for struct wakeup_srcu.
-> + * This index must be passed to the matching wakeup_sources_read_unlock().
-> + */
-> +int wakeup_sources_read_lock(void)
-> +{
-> +       return srcu_read_lock(&wakeup_srcu);
-> +}
-> +EXPORT_SYMBOL_GPL(wakeup_sources_read_lock);
-> +
-> +/**
-> + * wakeup_sources_read_unlock - Unlock wakeup source list.
-> + * @idx: return value from corresponding wakeup_sources_read_lock()
-> + */
-> +void wakeup_sources_read_unlock(int idx)
-> +{
-> +       srcu_read_unlock(&wakeup_srcu, idx);
-> +}
-> +EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
-> +
-> +/**
-> + * wakeup_sources_walk_start - Begin a walk on wakeup source list
-> + *
-> + * Returns first object of the list of wakeup sources.
-> + *
-> + * Note that to be safe, wakeup sources list needs to be locked by calling
-> + * wakeup_source_read_lock() for this.
-> + */
-> +struct wakeup_source *wakeup_sources_walk_start(void)
-> +{
-> +       struct list_head *ws_head = &wakeup_sources;
-> +
-> +       return list_entry_rcu(ws_head->next, struct wakeup_source, entry);
-> +}
-> +EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
-> +
-> +/**
-> + * wakeup_sources_walk_next - Get next wakeup source from the list
-> + * @ws: Previous wakeup source object
-> + *
-> + * Note that to be safe, wakeup sources list needs to be locked by calling
-> + * wakeup_source_read_lock() for this.
-> + */
-> +struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws)
-> +{
-> +       struct list_head *ws_head = &wakeup_sources;
-> +
-> +       return list_next_or_null_rcu(ws_head, &ws->entry,
-> +                               struct wakeup_source, entry);
-> +}
-> +EXPORT_SYMBOL_GPL(wakeup_sources_walk_next);
-> +
-> +/**
->   * device_wakeup_attach - Attach a wakeup source object to a device object.
->   * @dev: Device to handle.
->   * @ws: Wakeup source object to attach to @dev.
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 661efa0..aa3da66 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -63,6 +63,11 @@ struct wakeup_source {
->         bool                    autosleep_enabled:1;
->  };
->
-> +#define for_each_wakeup_source(ws) \
-> +       for ((ws) = wakeup_sources_walk_start();        \
-> +            (ws);                                      \
-> +            (ws) = wakeup_sources_walk_next((ws)))
-> +
->  #ifdef CONFIG_PM_SLEEP
->
->  /*
-> @@ -92,6 +97,10 @@ extern void wakeup_source_remove(struct wakeup_source *ws);
->  extern struct wakeup_source *wakeup_source_register(struct device *dev,
->                                                     const char *name);
->  extern void wakeup_source_unregister(struct wakeup_source *ws);
-> +extern int wakeup_sources_read_lock(void);
-> +extern void wakeup_sources_read_unlock(int idx);
-> +extern struct wakeup_source *wakeup_sources_walk_start(void);
-> +extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
->  extern int device_wakeup_enable(struct device *dev);
->  extern int device_wakeup_disable(struct device *dev);
->  extern void device_set_wakeup_capable(struct device *dev, bool capable);
-> --
-> 2.7.4
->
+
+Yes, but OPPs are per cpu cluster and they don't have duplicates in this
+case.
+
+--
+Regards,
+Sudeep
