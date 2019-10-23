@@ -2,102 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6456E11B3
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 07:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FECE11B6
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 07:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731374AbfJWFaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 01:30:11 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38061 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732167AbfJWFaK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 01:30:10 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c13so954825pfp.5
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 22:30:09 -0700 (PDT)
+        id S1725796AbfJWFfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 01:35:22 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37895 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfJWFfV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 01:35:21 -0400
+Received: by mail-pl1-f193.google.com with SMTP id w8so9515886plq.5
+        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 22:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2rDF05/6n06417wlJVscVUcvibGyzQU00P9mXQIXKPI=;
-        b=unyYhVkChYE/uDac0HDbcWN0G8GoHP0zxWY0fxtb/LUoGEbwhJnX7Hq4/MHWxVy0GI
-         55H5/ynS1xRqnl675xUK6TOKQbmqdwH403PiCwfecCtzIWLiuQ0Hih64KGKiQcs1moN4
-         rmaSUaxUfu1MBS/4nKdguaTTHWlr/AE2gAnOFCZoCY+k2yxizr5uv3QofF1JssrjF177
-         g0msVuAH6XdCkxKodaYqaow5W6ZPZTpLu3b1pJ8yn7bKa19VfzWEM/XHUj7yb7uI99f8
-         kJFdIJIE2CC7nT7/TqQGv0aN1DbEeoFYAwp9A9K9g8BBGzMVTNqZKZT6sIMOoi6GS7dE
-         kD7g==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=0WH9bZEqSCmBlUnIay8PI2Apec3Jt+76dMNWpxlS9u8=;
+        b=mIIm2xEf3LQspDuyPfTQbkLRccKi8vi7Dx6wHjhjjZsDONrj0LjOfKoN9xE+hnI0uf
+         7ijvsWhdgHxMC59hGR7bjc2c2GjeHYRZIa0w6M5X8wDj5Y+HkC33pxlDEBYLSpeNJaDP
+         JTB6Pr6RSyItz3ISDVYl4+CV8Pzc9mTxnZn+zVmH3ytwsO7DK+A0x2EjiAGs2+ZMykVz
+         LUSFKJFBZADAewss6Px2Nq/w9ajLr2CifHZvABju1snUOiDUfqH30S+5nVjQEi6/nN7o
+         WiihxD1qIPhcWVHBR6fQVU8pv2NERgck+8ZC5g5Zs6qWBWsSfeIXzqxYOd61C81DK+uy
+         vwfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2rDF05/6n06417wlJVscVUcvibGyzQU00P9mXQIXKPI=;
-        b=aeF3By1Gg++USbKWwsiAmCYDgevVFuci6buNwgJalzRU8dDVkHHrByxJ706Z1/EvN6
-         X0dZmtha4lnaywYiCVZK93wn2UJvsQR8JXrtDFHVgMuj8cEtHMqGK6BNthhNGEW5u04B
-         iXW2DQbu7HdUsgFq55hvXalsNeNpicO5Nx7omAAkSaNKzF1DUpk/jTmzEWvLxTXYUzNm
-         dotcQLbyGDYWQjx/u2LLfT/NbRGgT0tbbpuo76jtOKhizNYl7JEudqmucOZqTPwJ7Vbz
-         pURapToUb4JlIXGTxhhTQAuLqzRlor0I73FpQgNDW7cLmeUfBTV1TzbFx5/hEUPsFAMM
-         h8eQ==
-X-Gm-Message-State: APjAAAW5STQFIW9ex98+6EYiGC9vklCK+qI3NmUI9F7nBuOY3of/g0rB
-        2aW4iMmPNauknwJjc3E0LqX2Bw==
-X-Google-Smtp-Source: APXvYqxRwNayP0aERsMuW4AmJWpia1ARqwMiw0nTvlpYpmTN1wiwajanp5beDtUvou4COtPyjAqQnw==
-X-Received: by 2002:a63:d450:: with SMTP id i16mr7822345pgj.126.1571808608951;
-        Tue, 22 Oct 2019 22:30:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=0WH9bZEqSCmBlUnIay8PI2Apec3Jt+76dMNWpxlS9u8=;
+        b=I1FJVhq1yPfrbl6aBZ3vtf54RUDBHgRZ1tYQ8b34AhW1E2KKtPKH+ZC/2FKrxpz3n+
+         ZLZbmRTM04n8pvvkqvBaUZwULxWcWr80euA4QXcezbok0LglOswKjL0qeEaFpxJE1tHV
+         h8OdRnM6mbNdeAcNzUk2VKCLR/CEoUPv8VWjYzqu2UToGpNpjSEAYcQNo7ywvfPBAhMa
+         GANeXRbU2VgrmagVVBYarZ8cE9wU0DXD+ez5V+tvhVneD1LDfHhhLxsIF5ZS8/6K2BFr
+         Dqxks/byiwf/OGi/n9iTMDv1Q1z4Pezbfb0futYM1JKT0dbOj1ufmfSmHmR0zcKoMhYm
+         u/Mg==
+X-Gm-Message-State: APjAAAUAfRHTY7K+wO4Go3noXgodX270w28ZtAFbn6qJjI1FHSZGafRG
+        ZwQce9haqWNk73EmLi4W0R6lLw==
+X-Google-Smtp-Source: APXvYqwpmhmr7WaqGyp1H8svEPGzdM4fVLR4myzWbkBxCSWCAM4xT6q3MeKScdDEgf3M1C0V7vTH4A==
+X-Received: by 2002:a17:902:9f83:: with SMTP id g3mr7803705plq.168.1571808919839;
+        Tue, 22 Oct 2019 22:35:19 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id v1sm20270144pjd.22.2019.10.22.22.30.07
+        by smtp.gmail.com with ESMTPSA id n23sm19817868pff.137.2019.10.22.22.35.18
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 22:30:07 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 11:00:05 +0530
+        Tue, 22 Oct 2019 22:35:19 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 11:05:17 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "v5 . 0+" <stable@vger.kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: of: drop incorrect lockdep_assert_held()
-Message-ID: <20191023053005.m4y4bcebgi4km35q@vireshk-i7>
-References: <6306e18beab9deff6ee6b32f489390908495fe14.1570703431.git.viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] opp/fixes for 5.4-rc
+Message-ID: <20191023053517.aa7not4zqjt5tvtw@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6306e18beab9deff6ee6b32f489390908495fe14.1570703431.git.viresh.kumar@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-10-19, 16:00, Viresh Kumar wrote:
-> _find_opp_of_np() doesn't traverse the list of OPP tables but instead
-> just the entries within an OPP table and so only requires to lock the
-> OPP table itself.
-> 
-> The lockdep_assert_held() was added there by mistake and isn't really
-> required.
-> 
-> Fixes: 5d6d106fa455 ("OPP: Populate required opp tables from "required-opps" property")
-> Cc: v5.0+ <stable@vger.kernel.org> # v5.0+
-> Reported-by: Niklas Cassel <niklas.cassel@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/of.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 1813f5ad5fa2..6dc41faf74b5 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -77,8 +77,6 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
->  {
->  	struct dev_pm_opp *opp;
->  
-> -	lockdep_assert_held(&opp_table_lock);
-> -
->  	mutex_lock(&opp_table->lock);
->  
->  	list_for_each_entry(opp, &opp_table->opp_list, node) {
+Hi Rafael,
 
-@Niklas, any inputs from your side  here would be appreciated :)
+This pull request contains:
 
--- 
+- Patch to revert addition of regulator enable/disable in OPP core
+  (Marek).
+- Remove incorrect lockdep assert (Viresh).
+- Fix a kref counting issue (Viresh).
+
+--
 viresh
+
+-------------------------8<-------------------------
+
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
+
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/fixes
+
+for you to fetch changes up to b19c23551be8de0d4e59fe6af70f10763e3cc595:
+
+  opp: Reinitialize the list_kref before adding the static OPPs again (2019-10-23 10:58:44 +0530)
+
+----------------------------------------------------------------
+Marek Szyprowski (1):
+      opp: core: Revert "add regulators enable and disable"
+
+Viresh Kumar (2):
+      opp: of: drop incorrect lockdep_assert_held()
+      opp: Reinitialize the list_kref before adding the static OPPs again
+
+ drivers/opp/core.c | 16 +++-------------
+ drivers/opp/of.c   |  9 +++++++--
+ 2 files changed, 10 insertions(+), 15 deletions(-)
