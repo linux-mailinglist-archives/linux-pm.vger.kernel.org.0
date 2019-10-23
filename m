@@ -2,116 +2,255 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE737E154B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19739E1575
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390751AbfJWJHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 05:07:24 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:45300 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2390394AbfJWJHX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Oct 2019 05:07:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A1D9332;
-        Wed, 23 Oct 2019 02:06:54 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97BBD3F718;
-        Wed, 23 Oct 2019 02:06:53 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 10:06:47 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [RFC PATCH] cpufreq: mark duplicate frequencies as invalid and
- continue as normal
-Message-ID: <20191023090647.GA29654@bogus>
-References: <20191022173215.13350-1-sudeep.holla@arm.com>
- <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
+        id S2390394AbfJWJM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 05:12:27 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:34942 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390367AbfJWJM1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 05:12:27 -0400
+Received: by mail-oi1-f193.google.com with SMTP id x3so16766099oig.2;
+        Wed, 23 Oct 2019 02:12:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I9e2tdyJ+jhbraDazF6LVEdNxXM3+pxi8NuZ/Hugb5E=;
+        b=CFV88bdroy+2KUZjHY6VhCpG56wodcezcPl/bW9DT8Z1CEcSEWEXGjdsONzjjqtnk4
+         78xo08eo5srv1PsOWdUBilG39AUbBi4tQr50c3X/ElxG8sa+Kdz/sFULVuZUTHLW43kY
+         3q9fXna7TUK1YqJKPsxppcrnSNGRnxa/Zvmhffv6bZplzDN19tFSHMedHw6AXjX7S05g
+         +7jiPKkJsnVMszR1TgG0TiO+uvuBMFKDlkf+b9u8BXvzF+UphiUCzz/vU+ddVBS0ItUQ
+         k/lT/Tt2W46tkLMHWndfP8GAV1m7xa42cPbWKwblK13uttip9RTwcj68b5wdWbT/mpQm
+         x4fg==
+X-Gm-Message-State: APjAAAV/jJEatnVTRehPqRQQxpZzfMp7NbiS/LKeSugHAMksOKBilGq4
+        OHHa6O+iS2HkrIW3HZ/IORmIh6v36P/OtQ6ZlwY=
+X-Google-Smtp-Source: APXvYqzrTSVIDKeg/LSwHPg4nLGUyfseJPmnQLFNA0oSLGOXU5LmtkriLGk3+XW6wYlrIk86X4PP9mA+eeDYjX+jZKw=
+X-Received: by 2002:aca:b6c5:: with SMTP id g188mr6925323oif.103.1571821944448;
+ Wed, 23 Oct 2019 02:12:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20191023082423.12569-1-ran.wang_1@nxp.com> <20191023082423.12569-3-ran.wang_1@nxp.com>
+In-Reply-To: <20191023082423.12569-3-ran.wang_1@nxp.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Oct 2019 11:12:13 +0200
+Message-ID: <CAJZ5v0i-gfRTzbDL5SBp_XfOYCkJPENpOjU+Pd3wi5aOjZd1HQ@mail.gmail.com>
+Subject: Re: [PATCH v9 3/3] soc: fsl: add RCPM driver
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
+        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 08:56:08AM +0530, Viresh Kumar wrote:
-> On 22-10-19, 18:32, Sudeep Holla wrote:
-> > Currently if we encounter duplicate frequency table entries, we abort
-> > the validation and return error immediately. Instead of failing, we
-> > can mark the entry as invalid and continue to function normal.
-> >
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/cpufreq/freq_table.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > Hi Viresh,
-> >
-> > Since commit da0c6dc00c69 ("cpufreq: Handle sorted frequency tables more
-> > efficiently"), I seem to have modified the firmware entry on my TC2 to
-> > drop 500MHz and had not seen the issue with duplicate entries and had
-> > totally forgotten about it.
-> >
-> > Recently I reverted back to original setting as I corrupted it and
-> > started seeing this issues. I don't know the background for raising
-> > duplicates as fatal error but we did allow it when we add arm_big_little.c
-> > and hence this RFC. If there are known issues with this approach, I can
-> > continue with changed firmware config.
-> >
-> > With switcher, we have:
-> > (little cluster)
-> > Virt: 175 MHz, 200 MHz, 250 MHz, 300 MHz, 350 MHz, 400 MHz, 450 MHz, 500 MHz
-> > Actu: 350 MHz, 400 MHz, 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz
-> > (big cluster)
-> > 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz, 1.10 GHz, 1.20 GHz
-> >
-> > with 500 MHz duplicate in merged table.
-> >
-> > Regards,
-> > Sudeep
-> >
-> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> > index ded427e0a488..e9bf287846d6 100644
-> > --- a/drivers/cpufreq/freq_table.c
-> > +++ b/drivers/cpufreq/freq_table.c
-> > @@ -305,9 +305,10 @@ static int set_freq_table_sorted(struct cpufreq_policy *policy)
-> >  		}
-> >
-> >  		if (pos->frequency == prev->frequency) {
-> > -			pr_warn("Duplicate freq-table entries: %u\n",
-> > +			pr_warn("Duplicate freq-table entries: %u marking it invalid\n,",
-> >  				pos->frequency);
-> > -			return -EINVAL;
-> > +			pos->frequency = CPUFREQ_ENTRY_INVALID;
-> > +			continue;
-> >  		}
-> >
-> >  		/* Frequency increased from prev to pos */
+On Wed, Oct 23, 2019 at 10:24 AM Ran Wang <ran.wang_1@nxp.com> wrote:
 >
-> Of course we can do this, but I don't see why we shouldn't force
-> people to fix the freq-tables instead.
-
-Agreed. We still have warning :)
-
-> What's the point of allowing people to have duplicate entries instead ?
-
-I agree, we shouldn't. But this is in IKS which is built in the merged
-table by the driver. We can fix that, but found this easier and simple.
-And since it was allowed when the driver was merged, just thought of
-checking the details with you.
-
-> This shouldn't happen with OPP tables as we check for duplicate entries
-> there as well.
+> The NXP's QorIQ Processors based on ARM Core have RCPM module
+> (Run Control and Power Management), which performs system level
+> tasks associated with power management such as wakeup source control.
 >
+> This driver depends on PM wakeup source framework which help to
+> collect wake information.
+>
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+> Change in v9:
+>         - Add kerneldoc for rcpm_pm_prepare().
+>         - Use pr_debug() to replace dev_info(), to print message when decide
+>           skip current wakeup object, this is mainly for debugging (in order
+>           to detect potential improper implementation on device tree which
+>           might cause this skip).
+>         - Refactor looping implementation in rcpm_pm_prepare(), add more
+>           comments to help clarify.
+>
+> Change in v8:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>         - Add sanity checking for the case of ws->dev or ws->dev->parent
+>           is null.
+>
+> Change in v7:
+>         - Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
+>         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
+>         - Remove '+obj-y += ftm_alarm.o' since it is wrong.
+>         - Cosmetic work.
+>
+> Change in v6:
+>         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
+>
+> Change in v5:
+>         - Fix v4 regression of the return value of wakeup_source_get_next()
+>         didn't pass to ws in while loop.
+>         - Rename wakeup_source member 'attached_dev' to 'dev'.
+>         - Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
+>         please see https://lore.kernel.org/patchwork/patch/1101022/
+>
+> Change in v4:
+>         - Remove extra ',' in author line of rcpm.c
+>         - Update usage of wakeup_source_get_next() to be less confusing to the
+> reader, code logic remain the same.
+>
+> Change in v3:
+>         - Some whitespace ajdustment.
+>
+> Change in v2:
+>         - Rebase Kconfig and Makefile update to latest mainline.
+>
+>  drivers/soc/fsl/Kconfig  |   8 +++
+>  drivers/soc/fsl/Makefile |   1 +
+>  drivers/soc/fsl/rcpm.c   | 148 +++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 157 insertions(+)
+>  create mode 100644 drivers/soc/fsl/rcpm.c
+>
+> diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
+> index f9ad8ad..4918856 100644
+> --- a/drivers/soc/fsl/Kconfig
+> +++ b/drivers/soc/fsl/Kconfig
+> @@ -40,4 +40,12 @@ config DPAA2_CONSOLE
+>           /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
+>           which can be used to dump the Management Complex and AIOP
+>           firmware logs.
+> +
+> +config FSL_RCPM
+> +       bool "Freescale RCPM support"
+> +       depends on PM_SLEEP
+> +       help
+> +         The NXP QorIQ Processors based on ARM Core have RCPM module
+> +         (Run Control and Power Management), which performs all device-level
+> +         tasks associated with power management, such as wakeup source control.
+>  endmenu
+> diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
+> index 71dee8d..906f1cd 100644
+> --- a/drivers/soc/fsl/Makefile
+> +++ b/drivers/soc/fsl/Makefile
+> @@ -6,6 +6,7 @@
+>  obj-$(CONFIG_FSL_DPAA)                 += qbman/
+>  obj-$(CONFIG_QUICC_ENGINE)             += qe/
+>  obj-$(CONFIG_CPM)                      += qe/
+> +obj-$(CONFIG_FSL_RCPM)                 += rcpm.o
+>  obj-$(CONFIG_FSL_GUTS)                 += guts.o
+>  obj-$(CONFIG_FSL_MC_DPIO)              += dpio/
+>  obj-$(CONFIG_DPAA2_CONSOLE)            += dpaa2-console.o
+> diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
+> new file mode 100644
+> index 0000000..9378073
+> --- /dev/null
+> +++ b/drivers/soc/fsl/rcpm.c
+> @@ -0,0 +1,148 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// rcpm.c - Freescale QorIQ RCPM driver
+> +//
+> +// Copyright 2019 NXP
+> +//
+> +// Author: Ran Wang <ran.wang_1@nxp.com>
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/slab.h>
+> +#include <linux/suspend.h>
+> +#include <linux/kernel.h>
+> +
+> +#define RCPM_WAKEUP_CELL_MAX_SIZE      7
+> +
+> +struct rcpm {
+> +       unsigned int    wakeup_cells;
+> +       void __iomem    *ippdexpcr_base;
+> +       bool            little_endian;
+> +};
+> +
+> +/**
+> + * rcpm_pm_prepare - performs device-level tasks associated with power
+> + * management, such as programming related to the wakeup source control.
+> + * @dev: Device to handle.
+> + *
+> + */
+> +static int rcpm_pm_prepare(struct device *dev)
+> +{
+> +       int i, ret, idx;
+> +       void __iomem *base;
+> +       struct wakeup_source    *ws;
+> +       struct rcpm             *rcpm;
+> +       struct device_node      *np = dev->of_node;
+> +       u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1];
+> +
+> +       rcpm = dev_get_drvdata(dev);
+> +       if (!rcpm)
+> +               return -EINVAL;
+> +
+> +       base = rcpm->ippdexpcr_base;
+> +       idx = wakeup_sources_read_lock();
+> +
+> +       /* Begin with first registered wakeup source */
+> +       for_each_wakeup_source(ws) {
+> +
+> +               /* skip object which is not attached to device */
+> +               if (!ws->dev || !ws->dev->parent)
+> +                       continue;
+> +
+> +               ret = device_property_read_u32_array(ws->dev->parent,
+> +                               "fsl,rcpm-wakeup", value,
+> +                               rcpm->wakeup_cells + 1);
+> +
+> +               /*  Wakeup source should refer to current rcpm device */
+> +               if (ret || (np->phandle != value[0])) {
+> +                       pr_debug("%s doesn't refer to this rcpm\n", ws->name);
 
-Yes, but OPPs are per cpu cluster and they don't have duplicates in this
-case.
+I'm still quite unsure why it is useful to print this message instead
+of printing one when the wakeup source does match (there may be many
+wakeup source objects you don't care about in principle), but
+whatever.
 
---
-Regards,
-Sudeep
+> +                       continue;
+> +               }
+> +
+> +               /* Property "#fsl,rcpm-wakeup-cells" of rcpm node defines the
+> +                * number of IPPDEXPCR register cells, and "fsl,rcpm-wakeup"
+> +                * of wakeup source IP contains an integer array: <phandle to
+> +                * RCPM node, IPPDEXPCR0 setting, IPPDEXPCR1 setting,
+> +                * IPPDEXPCR2 setting, etc>.
+> +                *
+> +                * So we will go thought them and do programming accordngly.
+> +                */
+> +               for (i = 0; i < rcpm->wakeup_cells; i++) {
+> +                       u32 tmp = value[i + 1];
+> +                       void __iomem *address = base + i * 4;
+> +
+> +                       if (!tmp)
+> +                               continue;
+> +
+> +                       /* We can only OR related bits */
+> +                       if (rcpm->little_endian) {
+> +                               tmp |= ioread32(address);
+> +                               iowrite32(tmp, address);
+> +                       } else {
+> +                               tmp |= ioread32be(address);
+> +                               iowrite32be(tmp, address);
+> +                       }
+> +               }
+> +       }
+> +
+> +       wakeup_sources_read_unlock(idx);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops rcpm_pm_ops = {
+> +       .prepare =  rcpm_pm_prepare,
+> +};
+
+For the above:
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
