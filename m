@@ -2,98 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E245E214A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 19:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A773E2277
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 20:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfJWRDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 13:03:06 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38820 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbfJWRDG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 13:03:06 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e11so18045694otl.5;
-        Wed, 23 Oct 2019 10:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LNIlo875oLUnbVBAslOcAnj59hqK1kHx858TCXge7cA=;
-        b=N4mOPS98IWbZY/2/KBp62o4U8DpmiY8K/DxEPJzcpUxxxheeFNhUu7vukEldTwgqYR
-         rHqct06pgkkgI7CxlYFrLPVZFWX0enc8m766N5KPfidbuNpOhSlOnf7lUm4GpzbTXhqi
-         mKxKG1Y07F9CS+p9fzQ9CFIozlQSEzIVJiYzQjPfo6BpMzEDSObuiZoB7x9je0fp6S0/
-         DyL2E/W6hxxWsJfr0QGpj9uWjDA0V25V2YCZx82kOEZYyAZ8gLMmecgtPLXiTgUOyeY+
-         X9ZQcx5xLJl2//NB9fL0WDdd6hfY1K67a98OMzhy12qY9cFN8oW7zGfw3Oiphk5MZUXX
-         LNyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LNIlo875oLUnbVBAslOcAnj59hqK1kHx858TCXge7cA=;
-        b=MNvc3Vph9kmIvuS0C8x2xUpu81uNJgC/oeQ3V5vx/tpkXM4PwilMxsxQgS2X2Drg+1
-         jOU3bc2yEHqHM4s97HW3IF4E200n3kXt1+nUzcNHo2Njrsq9VBAzaC2OCio8Vgt0egge
-         nb63icvMU5Bui6SsPTco4uGpixoY1LDqqj0RkgegvJDX1Mpb2C6F1jNaa0hv/eIZHk4w
-         8KhX/tphdeM6WPEG8XlJO7hpipgh7Rgow0ZB6eMxBi35vdwOUrj8prrwLygckeW0Qewm
-         BwX6vfzIAyfS6H0eTUuUF/IyF6s5GwpK8PoBaqGkA463UTDceAubckB037kX/6+bGmhI
-         Rk5g==
-X-Gm-Message-State: APjAAAVavtALCw53b/h//ReV5tJXX0OzBvasy3cYEOYqzF/TOsmalBm+
-        2icab+bE7uWmuJ1+DLTFKoQ=
-X-Google-Smtp-Source: APXvYqyr+KOjBV2W0qrTz7k8vKZIZRshNryK06zDkLhWk6XYcHe9LOVkSReS/D2+RnKymZPKRqgmvQ==
-X-Received: by 2002:a9d:6ace:: with SMTP id m14mr8170163otq.11.1571850184682;
-        Wed, 23 Oct 2019 10:03:04 -0700 (PDT)
-Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id r26sm5705285oij.46.2019.10.23.10.03.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 23 Oct 2019 10:03:04 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 10:03:02 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] cpufreq: s3c64xx: Remove pointless NULL check in
- s3c64xx_cpufreq_driver_init
-Message-ID: <20191023170302.GA45373@ubuntu-m2-xlarge-x86>
-References: <20191023000906.14374-1-natechancellor@gmail.com>
- <20191023032302.tu5nkvulo2yoctgr@vireshk-i7>
- <20191023104304.GA5723@sirena.co.uk>
- <20191023162628.GA10997@ubuntu-m2-xlarge-x86>
- <20191023163656.GH5723@sirena.co.uk>
- <20191023165417.GA15082@ubuntu-m2-xlarge-x86>
- <20191023165923.GL5723@sirena.co.uk>
+        id S2388300AbfJWS0R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 14:26:17 -0400
+Received: from mga03.intel.com ([134.134.136.65]:15020 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732810AbfJWS0Q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Oct 2019 14:26:16 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 11:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,221,1569308400"; 
+   d="scan'208";a="210121302"
+Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
+  by orsmga002.jf.intel.com with ESMTP; 23 Oct 2019 11:26:15 -0700
+Received: from fmsmsx114.amr.corp.intel.com (10.18.116.8) by
+ FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Wed, 23 Oct 2019 11:26:15 -0700
+Received: from crsmsx102.amr.corp.intel.com (172.18.63.137) by
+ FMSMSX114.amr.corp.intel.com (10.18.116.8) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Wed, 23 Oct 2019 11:26:15 -0700
+Received: from crsmsx104.amr.corp.intel.com ([169.254.6.181]) by
+ CRSMSX102.amr.corp.intel.com ([169.254.2.18]) with mapi id 14.03.0439.000;
+ Wed, 23 Oct 2019 12:26:13 -0600
+From:   "Hernandez Lopez, Fabiola" <fabiola.hernandez.lopez@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: Frequency not returning to fixed value after AVX workload
+Thread-Topic: Frequency not returning to fixed value after AVX workload
+Thread-Index: AdWAW7g0RYwhbvwkQrq2viRm3SLyeQCSpKyAAAtq94AADPq1gAGx0Kww
+Date:   Wed, 23 Oct 2019 18:26:12 +0000
+Message-ID: <67737C20FC7E4D44B44817ABFA5B1DCE6EC0331D@CRSMSX104.amr.corp.intel.com>
+References: <67737C20FC7E4D44B44817ABFA5B1DCE6EC01C77@CRSMSX104.amr.corp.intel.com>
+         <3340378.NBreQbsDsf@kreacher>
+         <67737C20FC7E4D44B44817ABFA5B1DCE6EC020E9@CRSMSX104.amr.corp.intel.com>
+ <e7e89cd85fb5d367338491651b36cc912967edab.camel@linux.intel.com>
+In-Reply-To: <e7e89cd85fb5d367338491651b36cc912967edab.camel@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiYzk2Zjc3NzEtZDcxMC00MDY3LTkyMGQtZTY2OWRmNWYxMzEwIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiSkhuZXh5M045dEdZeVB5M2dQRUM0XC9yeDNFQTE0eUg0XC9zeG9qblA4VDdLc3QwNytkNkNBc3JlcmRKaXZPVUdGIn0=
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [172.18.205.10]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191023165923.GL5723@sirena.co.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 05:59:23PM +0100, Mark Brown wrote:
-> On Wed, Oct 23, 2019 at 09:54:17AM -0700, Nathan Chancellor wrote:
-> > On Wed, Oct 23, 2019 at 05:36:56PM +0100, Mark Brown wrote:
-> > > On Wed, Oct 23, 2019 at 09:26:28AM -0700, Nathan Chancellor wrote:
-> > > > On Wed, Oct 23, 2019 at 11:43:04AM +0100, Mark Brown wrote:
-> 
-> > > > > The driver should also have supported s3c6400 as well.
-> 
-> > > > Kconfig says otherwise, unless I am missing something.
-> 
-> > > Note the XX in the config option.
-> 
-> > But what about the depends and the help text?
-> 
-> Viresh asked why the driver was written with s3c6410 support optional.
-> I explained that the reason that it was written this way was to
-> accomodate s3c6400 support.
-
-Ah understood, thanks for the clarification and sorry for the
-misunderstanding!
-
-Cheers,
-Nathan
+VGhhbmtzLCBvdXIgZW5naW5lZXIgaXMgdHJ5aW5nIHRvIGNvbGxlY3QgdGhlIGluZm8uDQpJJ2xs
+IHdyaXRlIGJhY2sgd2l0aCB0aGUgZGF0YS4gDQoNCkZhYmlvbGENCi0tLS0tT3JpZ2luYWwgTWVz
+c2FnZS0tLS0tDQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIFttYWlsdG86c3Jpbml2YXMucGFu
+ZHJ1dmFkYUBsaW51eC5pbnRlbC5jb21dIA0KU2VudDogTW9uZGF5LCBPY3RvYmVyIDE0LCAyMDE5
+IDQ6MjMgUE0NClRvOiBIZXJuYW5kZXogTG9wZXosIEZhYmlvbGEgPGZhYmlvbGEuaGVybmFuZGV6
+LmxvcGV6QGludGVsLmNvbT47IFJhZmFlbCBKLiBXeXNvY2tpIDxyandAcmp3eXNvY2tpLm5ldD4N
+CkNjOiBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBGcmVxdWVuY3kgbm90
+IHJldHVybmluZyB0byBmaXhlZCB2YWx1ZSBhZnRlciBBVlggd29ya2xvYWQNCg0KT24gTW9uLCAy
+MDE5LTEwLTE0IGF0IDIxOjExICswMDAwLCBIZXJuYW5kZXogTG9wZXosIEZhYmlvbGEgd3JvdGU6
+DQo+IEhvdyBkbyB5b3UgbWVhc3VyZSB0aGUgZnJlcXVlbmN5Pw0KRG8gd2hhdGV2ZXIgeW91IGFy
+ZSBkb2luZyB0byBnZXQgdG8geW91ciBwcm9ibGVtIHN0YXRlIGFuZCB3aGlsZSBkb2luZyB0aGUg
+dGVzdCBydW4gaW4gYW5vdGhlciB3aW5kb3c6DQoNCiN0dXJib3N0YXQNCg0KQXR0YWNoIHRoZSBv
+dXRwdXQuDQoNClRoYW5rcywNClNyaW5pdmFzDQoNCj4gV2l0aCBsc2NwdS4NCj4gDQo+IFdoYXQg
+ZXhhY3RseSBkbyB5b3UgZG8gdG8gZ2V0IHRoZSBleHBlY3RlZCBmcmVxdWVuY3kgYmFjaz8NCj4g
+QSBzY3JpcHQgaXMgdXNlZCB0aGF0IHNldHMgdGhlIGZyZXF1ZW5jeSB3aXRoIA0KPiAvc3lzL2Rl
+dmljZXMvc3lzdGVtL2NwdS9jcHUqL2NwdWZyZXEvc2NhbGluZ19zZXRzcGVlZA0KPiANCj4gSXMg
+dGhlIHRhcmdldCBmcmVxdWVuY3kgaW4gdGhlIHR1cmJvIHJhbmdlPw0KPiBObywgdGhlIHRhcmdl
+dCBmcmVxdWVuY3kgaXMgdGhlIHNhbWUgYXMgdGhlIGJhc2UgcHJvY2Vzc29yIGZyZXF1ZW5jeToN
+Cj4gMi40R0h6LiBUaGUgbWF4IHR1cmJvIGZyZXF1ZW5jeSBmb3IgdGhpcyBDUFUgc2kgMy45IEdI
+ei4NCj4gVGhpcyBoYXMgYmVlbiB0ZXN0ZWQgd2l0aCB0dXJibyBib29zdCBlbmFibGVkIGFuZCBk
+aXNhYmxlZC4gDQo+IA0KPiBUaGlzIGJlaGF2aW9yIGlzIHZlcnkgc3BvcmFkaWM6IDwgMTAlDQo+
+IA0KPiBUaGFua3MsDQo+IEZhYmlvbGENCj4gDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
+DQo+IEZyb206IFJhZmFlbCBKLiBXeXNvY2tpIFttYWlsdG86cmp3QHJqd3lzb2NraS5uZXRdDQo+
+IFNlbnQ6IE1vbmRheSwgT2N0b2JlciAxNCwgMjAxOSA0OjQ1IEFNDQo+IFRvOiBIZXJuYW5kZXog
+TG9wZXosIEZhYmlvbGEgPGZhYmlvbGEuaGVybmFuZGV6LmxvcGV6QGludGVsLmNvbT4NCj4gQ2M6
+IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsgU3Jpbml2YXMgUGFuZHJ1dmFkYSA8IA0KPiBzcmlu
+aXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4NCj4gU3ViamVjdDogUmU6IEZyZXF1ZW5j
+eSBub3QgcmV0dXJuaW5nIHRvIGZpeGVkIHZhbHVlIGFmdGVyIEFWWCB3b3JrbG9hZA0KPiANCj4g
+T24gRnJpZGF5LCBPY3RvYmVyIDExLCAyMDE5IDc6NDU6NTUgUE0gQ0VTVCBIZXJuYW5kZXogTG9w
+ZXosIEZhYmlvbGENCj4gd3JvdGU6DQo+ID4gSGksDQo+ID4gDQo+ID4gV2UgYXJlIHNlZWluZyBh
+biB1bmV4cGVjdGVkIGJlaGF2aW9yIGFmdGVyIGFwcGx5aW5nIEFWWCB3b3JrbG9hZHMuIA0KPiA+
+IEFmdGVyIHNldHRpbmcgdGhlIENQVSBmcmVxdWVuY3kgdG8gYSBmaXhlZCB2YWx1ZSB3aXRoIENQ
+VSBGcmVxIC0gDQo+ID4gdXNlcnNwYWNlIGdvdmVybm9yIGFuZCBhcHBseWluZyBoZWF2eSBBVlgg
+d29ya2xvYWRzLCB0aGUgQ1BVIA0KPiA+IGZyZXF1ZW5jeSBpcyBkZWNyZWFzZWQgKGFzIGV4cGVj
+dGVkKSBidXQgaXQgbmV2ZXIgcmV0dXJucyB0byB0aGUgDQo+ID4gcHJldmlvdXNseSBlc3RhYmxp
+c2hlZCB2YWx1ZS4NCj4gDQo+IEhvdyBkbyB5b3UgbWVhc3VyZSB0aGUgZnJlcXVlbmN5Pw0KPiAN
+Cj4gPiBUaGlzIGRvZXMgbm90IGhhcHBlbiBvbiBhbGwgY29yZXMsIG9ubHkgb24gYSBzaW5nbGUg
+Y29yZS4gVGhlIG9ubHkgDQo+ID4gd2F5IHRvIHJldHVybiB0byB0aGUgZGVzaXJlZCBmcmVxdWVu
+Y3kgaXMgYnkgc2V0dGluZyBpdCB0aHJvdWdoIHRoZSANCj4gPiBjb21tYW5kIGxpbmUgYWdhaW4u
+DQo+IA0KPiBXaGF0IGV4YWN0bHkgZG8geW91IGRvIHRvIGdldCB0aGUgZXhwZWN0ZWQgZnJlcXVl
+bmN5IGJhY2s/DQo+IA0KPiA+IFdlIGFyZSB3b25kZXJpbmcgaG93IGNhbiB0aGlzIGNoYW5nZSBp
+biBmcmVxdWVuY3kgaGFwcGVuLg0KPiANCj4gSXMgdGhlIHRhcmdldCBmcmVxdWVuY3kgaW4gdGhl
+IHR1cmJvIHJhbmdlPw0KPiANCj4gDQo+IA0KDQo=
