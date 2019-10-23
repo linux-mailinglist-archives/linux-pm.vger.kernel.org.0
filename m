@@ -2,35 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7976EE1D66
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A36E1D7D
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391927AbfJWNys (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 09:54:48 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:57373 "EHLO
+        id S2390570AbfJWN6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 09:58:10 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:53931 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390181AbfJWNys (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:54:48 -0400
-Received: from mail-qk1-f170.google.com ([209.85.222.170]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M1pfy-1iPSxS12ro-002GC9; Wed, 23 Oct 2019 15:54:46 +0200
-Received: by mail-qk1-f170.google.com with SMTP id q70so12255704qke.12;
-        Wed, 23 Oct 2019 06:54:45 -0700 (PDT)
-X-Gm-Message-State: APjAAAWoErbG2vVzPG1ASGwUqNjiigXVXCYO+CmCrM6ASujv85zjVmHg
-        7Zy4mtB+bKS5nRP2wftma5HH0gWUaO+zaFufcK8=
-X-Google-Smtp-Source: APXvYqwg1GMH8QdNiqBQrXGE6tBmtG4ranjbu2NqBzx98xXXHvxcSSud6NSUY0ZDvcAUkWXJquc0IymGFTx7V0wKlHc=
-X-Received: by 2002:a05:620a:4f:: with SMTP id t15mr8358153qkt.286.1571838884945;
- Wed, 23 Oct 2019 06:54:44 -0700 (PDT)
+        with ESMTP id S2389290AbfJWN6K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:58:10 -0400
+Received: from mail-qt1-f171.google.com ([209.85.160.171]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MIdS1-1iBStx1SNx-00EfYE; Wed, 23 Oct 2019 15:58:08 +0200
+Received: by mail-qt1-f171.google.com with SMTP id r5so32455894qtd.0;
+        Wed, 23 Oct 2019 06:58:07 -0700 (PDT)
+X-Gm-Message-State: APjAAAUHBPMl9EohyXysWVLlzPzmvA3N+ajd/VQgQgL7DaGBNk85mXW4
+        r7KjOcR/woMY3MxVJRSjygb2m018NHGsMDX2tnk=
+X-Google-Smtp-Source: APXvYqxJH+IQGSDqFR3s406c31Lil6nKN+3+UehR3Vy6jXtDo7t9tSTK3nMWgp2PtcXo9B5NCXhOUradIyavMq47Rwo=
+X-Received: by 2002:ac8:729a:: with SMTP id v26mr9069953qto.18.1571839087129;
+ Wed, 23 Oct 2019 06:58:07 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-33-arnd@arndb.de> <20191023134956.GK11048@pi3>
-In-Reply-To: <20191023134956.GK11048@pi3>
+ <20191010203043.1241612-31-arnd@arndb.de> <20191023134420.GJ11048@pi3>
+In-Reply-To: <20191023134420.GJ11048@pi3>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Oct 2019 15:54:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1LVo0vfngK_7z-a0nC_t_v85OE8epke2XAFYH9EW821g@mail.gmail.com>
-Message-ID: <CAK8P3a1LVo0vfngK_7z-a0nC_t_v85OE8epke2XAFYH9EW821g@mail.gmail.com>
-Subject: Re: [PATCH 33/36] ARM: s3c: move low-level clk reg access into
- platform code
+Date:   Wed, 23 Oct 2019 15:57:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3qTgBkWnuVRa-90b1d6grGhm7R2ef92YdkVmUr0Fw23g@mail.gmail.com>
+Message-ID: <CAK8P3a3qTgBkWnuVRa-90b1d6grGhm7R2ef92YdkVmUr0Fw23g@mail.gmail.com>
+Subject: Re: [PATCH 31/36] ARM: s3c: cpufreq: use global s3c2412_cpufreq_setrefresh
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
         <linux-samsung-soc@vger.kernel.org>,
@@ -42,40 +41,45 @@ Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
         Kukjin Kim <kgene@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:+Av+xoFVIkh4CH56GsaW7ZCFUxfyKXmDxn17ZfHzj78Rnv6BbZe
- nJvEfDkynb539c2dyFovr3KbiR2lWvNrB8g5Fj7aCvYtcecZUc+0sFg5Li/AdrRd4v6oswI
- tdrE2af8rwgXT8xZQBFNBPiJ4RKVCZIPz+NXib65BSX1NQQbaAXsK2i74vScoVBZ3UQT3w2
- Za92BQERlqrCdnzlroQvw==
+X-Provags-ID: V03:K1:Pt6bOUMjlCPyImjCF7eJom9dRlD7n5jtt69gWPmGMzLglUM60aB
+ obddhwUAS6nfjeo0KsSCRIZ2/JNNZHIszYuHeIEY1E0s8IkQthznVylnvumY6wRAv3bJCxj
+ I9kzymYjyixCwm2EZXAFXAIChLFeDi50rSADx8zQM8xYg1utThex7JJSHMO3dTO4QReG6cL
+ lRMG6oxjn/S8N9mYA33ZA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:g8zyAMASZJ4=:kXtUw3vCqlR/mK6YThXKVO
- j3EmAzd9kPfheebOTnhxgjXHq/tsW7rigG3saHPvB8QzySep4Bw+UZigTU9VHQN+pWiCPYr5V
- 0AYfXtpnmqpwbhv9fNZwhN8qL/bdVI7hsqzktH9yo9sQlDVTLr/otE+9bD7GYvNS3MHfuC8fl
- +N1raW8tBfOTSPlF+XniHCze/ZHEZ1zjFZMzteJxfSz7INtF9ibDmG0JVkjQOJ/95WVcWjTmG
- ieb7/r/ee/NTXYCWeV41VH7P9SRQFjO9C7Aq6upS3ftkugo+77SGoZ1o0/2B4gcCsLfZ6liRg
- anwSOO8W+HiddRPOyIKef33OTZvY0o5WJj8fIzOglGl/3waHbALPn0E5RzgzijvCI70BofE+j
- 7bw7MYPYgGakZ9qh8+la67Z8H12Ls4raiMvfKOSUmDlmWzxEiSFPZyb0O2Unie3q92w6v64DT
- vH0rN98PKLQuqdv+lA4VYl+lwEZUSo2w7vJGqoTB1QFUQl2+4abu3pSEBFSP1PFzW5tSnTXEN
- zca5NgGuWTuCeGWqVvTid9s+U9QJJnlJKDcd+4vuOt+qY6Q2bKeOO8FJykEZKdP8butsSLD6B
- p7sfc1zyepXdFlJ2SVjSS652JLZRIXL9wD8azwcfP4BsAgw0URclfuSqVFqciVQffhZvCdj37
- AAJewUrfVBjuuDpZkvie+ey2IcMsb3Mfth7mMaz530MFuYMdhybbKRK4alfkCLQAEf7/EyVFH
- hLrdDblzJwZmcNF1CQaUqZTi8QlEr4fzgNyQoVgvRoGiy+cmVtPwWAEfRf73IwKnLRqZ3SGRv
- tUCTeuGo7/pmeZRvVEA1urNZbw+I0mduroQA3pes9YrNrjLdIFNdgJi9QUPmuVU59k4WNs/Za
- qVc91JR4CXDYlKyaYv4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ehGwi5ZwG4c=:o3eO2yHm2fIGZUhPLpnvIc
+ bcY7UzggDnlnFFlkHNic0/SKpmLLMHdZX71RfQ9XcC9D1GaDCiMiV1UxXt/ggufpGwk1z7dzT
+ nQEFr6BS5oQ0v8JszAg0BXR9d1050UXr/RXgcjK2VnyuR5bvo8wNjw0rsuby8fY0MPjrTHThW
+ RJpFnypCPT6AiQvm1typpUWTuuI8FSU6mvpG9mFl+5xsbt0pdVr42muUFlBpV8OvqN6K8pBj1
+ 06s7qlex/nd7I6MaE/duNmCzpFXwVojea6uvxaSEP6c+PLFddwSOpSXYp53stEnU5EAssaIVF
+ 63w311r5wdqWzt4+6+vSS0lMUj/4uoV1mCZCLJasEfH7yOSyZefhwfw1zqw7v63eoj4ZD336Z
+ vhCF6MFI/0VmRK5bgd9ZsJ9NtpgXhIOgglLAkV5Lv5X75jERdO+NoEu/Jw0O8BrQh53cJznh+
+ paqDCeVlNF5VOzht2rAdMBEuKW81sRbWwCD30jAPEuzLRxco3ZRZyQQAR3r2Ua+CKch0vNOu4
+ BF/slqK/5v5wNiJSYLbn+dCwsFX4tX2iiO00Sn1TXw3gYgriY21Hcb1ZI5amj4x9FHnI2N/Fy
+ 5wxdmOUdkdHZrb0j1djNZPdlIDXFPUy1ZlDWdPT6HBCA8wYR5uIbmvu907beiHZpYwjNHO8ju
+ 5a/v8+IpTHlV8TZMFsZkmicfMJ5HnNVI1XGWR9K+3r1tWinAQWBpwEg21075fxVXqxcyoFNuq
+ vAMlX6eIHln4uf7fU0cigFhiG8oXrbOU6KUdD+TB9W0U81cn3I6vC7ZmoFUZwgIDgTwEpKOqq
+ lb+R9dN1WhHTNbV8LlbLmjuIPfHcu92Y7+pjt3shAqvyAM4Ot31pURYMk1ac+VLYGjfZvzCZq
+ TwVu89sty67GZBMzoqZA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 3:50 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Wed, Oct 23, 2019 at 3:44 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Thu, Oct 10, 2019 at 10:30:15PM +0200, Arnd Bergmann wrote:
 
-> >  # common code
+> > @@ -246,6 +246,7 @@ extern int s3c2412_iotiming_calc(struct s3c_cpufreq_config *cfg,
 > >
-> > -obj-$(CONFIG_S3C2410_CPUFREQ_UTILS) += cpufreq-utils.o
-> > +obj-$(CONFIG_ARM_S3C24XX_CPUFREQ) += cpufreq-utils.o
+> >  extern void s3c2412_iotiming_set(struct s3c_cpufreq_config *cfg,
+> >                                struct s3c_iotimings *iot);
+> > +extern void s3c2412_cpufreq_setrefresh(struct s3c_cpufreq_config *cfg);
 >
-> Drop also here S3C2410_CPUFREQ_UTILS entirely.
->
+> I think that it does not cover the !CONFIG_S3C2412_IOTIMING case.
+> Either you need to provide also the empty stub or add default=y to
+> S3C2412_IOTIMING. Otherwise cpufreq driver might end up without this.
 
-Ok, done.
+S3C2412_IOTIMING is not currently optional, it always gets selected
+by ARM_S3C2412_CPUFREQ, unlike S3C2410_IOTIMING which is
+only selected by specific boards for reasons I don't understand.
 
-      Arnd
+        Arnd
