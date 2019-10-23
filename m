@@ -2,132 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AADE1D09
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626FAE1D35
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 15:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405980AbfJWNo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 09:44:26 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:42880 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405903AbfJWNoZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:44:25 -0400
-Received: by mail-ed1-f68.google.com with SMTP id s20so9794877edq.9;
-        Wed, 23 Oct 2019 06:44:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hBKYE+zy7+DFfvyH7A7knU3GB9ufsS1mx+vP5bbzBP0=;
-        b=h+15i4clnO21Zx9dM+73o0B2yXXTJmzRzBHqEXYW1uCb4maysbPf2EpfP2y/jWyQpF
-         dPvd08udhWwotPD3HLTKBt6ka5b8X6qI8s7tw7xdywZdR4Yb8bxND5lh2DssOkrU6Ul8
-         mLGSJr9FhVXlEIaEN1WsXBd9OWKgQUMPP80dpqiP6M/+wCOclGQsx9iq34DMoVgaAo3/
-         9MXE5+GytSW5N2/wpTToUWXSMg1Hv3dGsd8t+8CtROektv8v4vjw1mXRxYE4pLavN8jW
-         ZCR9HtoIC2kuTE7UgWFcZgFwxkPvl5Go4zqgNO8jlgagNCxzLfFmzjCqbcPO2c5GAb5G
-         4xIQ==
-X-Gm-Message-State: APjAAAVFaWR9/NRMnCEZ0p4XQBLa+d4Lc1+wAc3uYx6kbbP2vbRexzIW
-        1h/TPwmJ4kL9MtlTX9saKiiodoaI2YE=
-X-Google-Smtp-Source: APXvYqw1ctMopj1G34EABDvNktzYOL72/P1RYQagEEVZr6sIwqcab9NGrf4osslw7kr0sYn6k43JVw==
-X-Received: by 2002:a17:906:c801:: with SMTP id cx1mr33598956ejb.266.1571838263609;
-        Wed, 23 Oct 2019 06:44:23 -0700 (PDT)
-Received: from pi3 ([194.230.155.217])
-        by smtp.googlemail.com with ESMTPSA id z65sm848736ede.86.2019.10.23.06.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 06:44:22 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 15:44:20 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 31/36] ARM: s3c: cpufreq: use global
- s3c2412_cpufreq_setrefresh
-Message-ID: <20191023134420.GJ11048@pi3>
-References: <20191010202802.1132272-1-arnd@arndb.de>
- <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-31-arnd@arndb.de>
+        id S2406085AbfJWNrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 09:47:11 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:43823 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403782AbfJWNrK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 09:47:10 -0400
+Received: from mail-qt1-f182.google.com ([209.85.160.182]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MvryJ-1i7fje0dbr-00syHi; Wed, 23 Oct 2019 15:47:09 +0200
+Received: by mail-qt1-f182.google.com with SMTP id u22so32282921qtq.13;
+        Wed, 23 Oct 2019 06:47:08 -0700 (PDT)
+X-Gm-Message-State: APjAAAXQMkDTl5SzJEHRA5lvIiBqcow04DQFAp/XrQqc7G9JAJBz1QzK
+        1n/8rsJHTxIc2QUXJp1jhrEdTRrFhnpISuuaFoA=
+X-Google-Smtp-Source: APXvYqz7PbcGsXeFYyvGyowaDFHTfI5KDbWhAt9grIvHRgmEgVC0Li/OGC7C/Oouqywkf4gr90cygIgYwHI1sOkpne0=
+X-Received: by 2002:ac8:33d4:: with SMTP id d20mr9129615qtb.204.1571838427927;
+ Wed, 23 Oct 2019 06:47:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191010203043.1241612-31-arnd@arndb.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-30-arnd@arndb.de> <20191023133800.GI11048@pi3>
+In-Reply-To: <20191023133800.GI11048@pi3>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Oct 2019 15:46:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a10MkTdStasKjGF9OBOoW3ZJ8RVD4-SxML2qhKXXciH+Q@mail.gmail.com>
+Message-ID: <CAK8P3a10MkTdStasKjGF9OBOoW3ZJ8RVD4-SxML2qhKXXciH+Q@mail.gmail.com>
+Subject: Re: [PATCH 30/36] ARM: s3c: remove cpufreq header dependencies
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:nU8GhVag8mG546m44yMwzxz+Fai6rwpvNgJIJnooaWq/qk2Kp4m
+ cYlVRv/Qa4A0ZefusI/j+8naTS9nf45I4IkphOXAXNbY7JauQXMBNSPiTa+cT3k358CzmJS
+ xPDI4yADbs/NtN4WFo8wTTqA5U2s2A+nOlm6cJWfaszDeg5GNa265lvXpTge4U8PCyVal/+
+ b5Kk9xR4joDVxm0/Rbyuw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:G5/qfliTrb4=:k2bkVflhpLLuILcjMFYz+m
+ 9mdNPgOGtQ44XLqjHpL7SmznTu+7/QP1F3bH9Z8brIdcW1bb7vn043Co8rrK0wEt+Vl6Gn4pw
+ JDw9HpaUYaZaXz3HYntahMEwB39HfyWXr2jON5dbkyUaBi2ESKX+GZ2Q5Sai9FbFEL4+zOtVf
+ wujOK/SpxiUAwUxXJ6INj5AzOb1Sv9xh22uf3mLgJPYYN6/AKrMbqJd2SM8d5cRWw/AkTrm62
+ oBzWy1Ts4koa53mz4tlsJguiNQOAxZNJoQn+d5MHnYxzngd6Zur1eA5fwhrGVkYGIFRJX9TG8
+ as5s8xUukb7VwU5eirR7m5r7cBn1w/t97za9x7/CKpnySgG6kL+nL+Z9VEsCW3hWDIL2icM+y
+ a1Pl9Yt+L8Ne9NM+d1cmEBJCsedFAtaubdsRh8OprKSFmk0pjs31jxN/5HiZCgNA3w/iSwi4G
+ g+lmxUqrHvacv9ipKLCnkvNgfhSoixgmzHY4uG2gkMEyaRdNv3Pcep9K/uI1XOx3tzs786EIx
+ fjvmviXCBXvKo2clufuPwmGr6WYJYKMHmmmKXEu5jGVT0CA5mcTh8dWez6LRKB5Yee1gGAt8i
+ e05Qh2DFanCxF+GpOnkRVbDyF+TyquHd56gJFmI/m++nL/J9++n6sD2pS5uxrkcGXP6GnbKSW
+ C/lpO2BjT7Hx1js8a7R7McLGy23VEF0qpw7o27y78zr27P7gXRSlmeyEOsS/Ntx9AmJngUuzh
+ kgNgviwfExrP5pKXGcpEHY8Fx7SlVyizLbgrLCnTgaVq342qjUC4V+r78TdJ06ilPIgU2sPUF
+ 1ty23GMfuUbbFB4Nvep20D3GBbH0J4UdQ8mDhr2N5m5kUXB03oCVuoTFeyCg7yQ77rbyiYCgi
+ 4PJMfwgsTS1LXasvmA4A==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:30:15PM +0200, Arnd Bergmann wrote:
-> There are two identical copies of the s3c2412_cpufreq_setrefresh
-> function: a static one in the cpufreq driver and a global
-> version in iotiming-s3c2412.c.
-> 
-> As the function requires the use of a hardcoded register address
-> from a header that we want to not be visible to drivers, just
-> move the existing global function and add a declaration in
-> one of the cpufreq header files.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/cpufreq/s3c2412-cpufreq.c            | 23 --------------------
->  include/linux/soc/samsung/s3c-cpufreq-core.h |  1 +
->  2 files changed, 1 insertion(+), 23 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/s3c2412-cpufreq.c b/drivers/cpufreq/s3c2412-cpufreq.c
-> index 38dc9e6db633..a77c63e92e1a 100644
-> --- a/drivers/cpufreq/s3c2412-cpufreq.c
-> +++ b/drivers/cpufreq/s3c2412-cpufreq.c
-> @@ -25,8 +25,6 @@
->  #include <asm/mach/arch.h>
->  #include <asm/mach/map.h>
->  
-> -#include <mach/s3c2412.h>
-> -
->  #include <mach/map.h>
->  
->  #define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
-> @@ -156,27 +154,6 @@ static void s3c2412_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
->  	clk_set_parent(armclk, cfg->divs.dvs ? hclk : fclk);
->  }
->  
-> -static void s3c2412_cpufreq_setrefresh(struct s3c_cpufreq_config *cfg)
-> -{
-> -	struct s3c_cpufreq_board *board = cfg->board;
-> -	unsigned long refresh;
-> -
-> -	s3c_freq_dbg("%s: refresh %u ns, hclk %lu\n", __func__,
-> -		     board->refresh, cfg->freq.hclk);
-> -
-> -	/* Reduce both the refresh time (in ns) and the frequency (in MHz)
-> -	 * by 10 each to ensure that we do not overflow 32 bit numbers. This
-> -	 * should work for HCLK up to 133MHz and refresh period up to 30usec.
-> -	 */
-> -
-> -	refresh = (board->refresh / 10);
-> -	refresh *= (cfg->freq.hclk / 100);
-> -	refresh /= (1 * 1000 * 1000);	/* 10^6 */
-> -
-> -	s3c_freq_dbg("%s: setting refresh 0x%08lx\n", __func__, refresh);
-> -	__raw_writel(refresh, S3C2412_REFRESH);
-> -}
-> -
->  /* set the default cpu frequency information, based on an 200MHz part
->   * as we have no other way of detecting the speed rating in software.
->   */
-> diff --git a/include/linux/soc/samsung/s3c-cpufreq-core.h b/include/linux/soc/samsung/s3c-cpufreq-core.h
-> index 4d22be1031b9..eca942559014 100644
-> --- a/include/linux/soc/samsung/s3c-cpufreq-core.h
-> +++ b/include/linux/soc/samsung/s3c-cpufreq-core.h
-> @@ -246,6 +246,7 @@ extern int s3c2412_iotiming_calc(struct s3c_cpufreq_config *cfg,
->  
->  extern void s3c2412_iotiming_set(struct s3c_cpufreq_config *cfg,
->  				 struct s3c_iotimings *iot);
-> +extern void s3c2412_cpufreq_setrefresh(struct s3c_cpufreq_config *cfg);
+On Wed, Oct 23, 2019 at 3:38 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Thu, Oct 10, 2019 at 10:30:14PM +0200, Arnd Bergmann wrote:
+> > diff --git a/arch/arm/plat-samsung/include/plat/cpu-freq.h b/include/linux/soc/samsung/s3c-cpu-freq.h
+> > similarity index 100%
+> > rename from arch/arm/plat-samsung/include/plat/cpu-freq.h
+> > rename to include/linux/soc/samsung/s3c-cpu-freq.h
+> > diff --git a/arch/arm/plat-samsung/include/plat/cpu-freq-core.h b/include/linux/soc/samsung/s3c-cpufreq-core.h
+> > similarity index 99%
+> > rename from arch/arm/plat-samsung/include/plat/cpu-freq-core.h
+> > rename to include/linux/soc/samsung/s3c-cpufreq-core.h
+> > index 2c7cf2665634..4d22be1031b9 100644
+>
+> Can you also update the header guard names to match new location?
 
-I think that it does not cover the !CONFIG_S3C2412_IOTIMING case.
-Either you need to provide also the empty stub or add default=y to
-S3C2412_IOTIMING. Otherwise cpufreq driver might end up without this.
+Neither of those files had header guards, added them now.
 
-Best regards,
-Krzysztof
+        Arnd
