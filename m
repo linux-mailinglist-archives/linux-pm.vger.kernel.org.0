@@ -2,255 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19739E1575
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D41E1581
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 11:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390394AbfJWJM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 05:12:27 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34942 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390367AbfJWJM1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 05:12:27 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x3so16766099oig.2;
-        Wed, 23 Oct 2019 02:12:25 -0700 (PDT)
+        id S1732361AbfJWJOZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 05:14:25 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38631 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403786AbfJWJOZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 05:14:25 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w3so11774478pgt.5
+        for <linux-pm@vger.kernel.org>; Wed, 23 Oct 2019 02:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=l84ELQ0Fr0mHj8nmaOnwifn/jrsao3RvAgYSFfKcX7g=;
+        b=gVMQLtBQBK7IIrkm0TTOcIQPjkZVDEp7rlqt1n6w+6jCdRLP4YUxUy5GGEY118OMyu
+         4FUpu+qTKCvmiAf7TgPGw+lkTO6mo6Byo1M0l+AUHvPfIPybiIiWEqpiz5tBq7GHeuhz
+         f52EM0Qq3sHQd7eB0nJXh5vJ0a4/yHmn/MEBYlVrbp4WgBpVi63nMftA6ttB9eMC6WqA
+         uBmLPaB1ogUmVQbFfhYjm0ctk9oKEZgps60hBCWZjmfVG55FVorkKXzrTklZ9HjTgP/i
+         wn+XYn7jefHOAmQ2Nj43Eajy8aoDxpJbcF5MqpomWkKnQRxW6vj2WyNLvslw4sfzdeu9
+         e1Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I9e2tdyJ+jhbraDazF6LVEdNxXM3+pxi8NuZ/Hugb5E=;
-        b=CFV88bdroy+2KUZjHY6VhCpG56wodcezcPl/bW9DT8Z1CEcSEWEXGjdsONzjjqtnk4
-         78xo08eo5srv1PsOWdUBilG39AUbBi4tQr50c3X/ElxG8sa+Kdz/sFULVuZUTHLW43kY
-         3q9fXna7TUK1YqJKPsxppcrnSNGRnxa/Zvmhffv6bZplzDN19tFSHMedHw6AXjX7S05g
-         +7jiPKkJsnVMszR1TgG0TiO+uvuBMFKDlkf+b9u8BXvzF+UphiUCzz/vU+ddVBS0ItUQ
-         k/lT/Tt2W46tkLMHWndfP8GAV1m7xa42cPbWKwblK13uttip9RTwcj68b5wdWbT/mpQm
-         x4fg==
-X-Gm-Message-State: APjAAAV/jJEatnVTRehPqRQQxpZzfMp7NbiS/LKeSugHAMksOKBilGq4
-        OHHa6O+iS2HkrIW3HZ/IORmIh6v36P/OtQ6ZlwY=
-X-Google-Smtp-Source: APXvYqzrTSVIDKeg/LSwHPg4nLGUyfseJPmnQLFNA0oSLGOXU5LmtkriLGk3+XW6wYlrIk86X4PP9mA+eeDYjX+jZKw=
-X-Received: by 2002:aca:b6c5:: with SMTP id g188mr6925323oif.103.1571821944448;
- Wed, 23 Oct 2019 02:12:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=l84ELQ0Fr0mHj8nmaOnwifn/jrsao3RvAgYSFfKcX7g=;
+        b=S2cTFKngUO8j4uEL+cMUVXxAWuIMeKgwqFTNprzVwLMu+osm1fg6/QVmmrBbvaXRfa
+         PLiHlRwr3Kyxt8fzWGytLjwZmzsz73qXY/uP2zCQebR+UCnpLWvoKg5+GewY836jvtaa
+         TMH0jDByaDVcwk6OAwjofI/yryXSktt1FN0Vh57rRzEz8E+2XTiBjHEOuGXPUEG+xqt8
+         ID5iaP1LmBEy90OYjdUi3HPJTcxvH8qImdrofAKAqORPN+vdeGIovCOGeEEyUkPq6WuC
+         +LTYGwc9OFZbMAy9sEEDiF5BeAotKvANfCKL6PTTnRetGnyKtU8T58ytZ4Bo8e9Im8ZY
+         bIWg==
+X-Gm-Message-State: APjAAAUoeo+I6y37LbhyZMFj5q1d5oGVt8+uvO1kbr5S94HuTQHyqpxq
+        Cww3pndys+ibBHDYHLxc3hg1Ow==
+X-Google-Smtp-Source: APXvYqw26VrnRd97k7d2ae9qxgmVMV7loEybaduTFil8oEH5qzT6ucM4ihQw8jZOhUNec1Zaca5A9g==
+X-Received: by 2002:a17:90a:fa0d:: with SMTP id cm13mr10421182pjb.114.1571822062926;
+        Wed, 23 Oct 2019 02:14:22 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id w2sm24517101pfn.57.2019.10.23.02.14.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 02:14:22 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 14:44:20 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] cpufreq: mark duplicate frequencies as invalid and
+ continue as normal
+Message-ID: <20191023091420.t7urr6lxejhtzaww@vireshk-i7>
+References: <20191022173215.13350-1-sudeep.holla@arm.com>
+ <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
+ <20191023090647.GA29654@bogus>
 MIME-Version: 1.0
-References: <20191023082423.12569-1-ran.wang_1@nxp.com> <20191023082423.12569-3-ran.wang_1@nxp.com>
-In-Reply-To: <20191023082423.12569-3-ran.wang_1@nxp.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Oct 2019 11:12:13 +0200
-Message-ID: <CAJZ5v0i-gfRTzbDL5SBp_XfOYCkJPENpOjU+Pd3wi5aOjZd1HQ@mail.gmail.com>
-Subject: Re: [PATCH v9 3/3] soc: fsl: add RCPM driver
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
-        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023090647.GA29654@bogus>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 10:24 AM Ran Wang <ran.wang_1@nxp.com> wrote:
->
-> The NXP's QorIQ Processors based on ARM Core have RCPM module
-> (Run Control and Power Management), which performs system level
-> tasks associated with power management such as wakeup source control.
->
-> This driver depends on PM wakeup source framework which help to
-> collect wake information.
->
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> ---
-> Change in v9:
->         - Add kerneldoc for rcpm_pm_prepare().
->         - Use pr_debug() to replace dev_info(), to print message when decide
->           skip current wakeup object, this is mainly for debugging (in order
->           to detect potential improper implementation on device tree which
->           might cause this skip).
->         - Refactor looping implementation in rcpm_pm_prepare(), add more
->           comments to help clarify.
->
-> Change in v8:
->         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
->         - Add sanity checking for the case of ws->dev or ws->dev->parent
->           is null.
->
-> Change in v7:
->         - Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
->         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
->         - Remove '+obj-y += ftm_alarm.o' since it is wrong.
->         - Cosmetic work.
->
-> Change in v6:
->         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
->
-> Change in v5:
->         - Fix v4 regression of the return value of wakeup_source_get_next()
->         didn't pass to ws in while loop.
->         - Rename wakeup_source member 'attached_dev' to 'dev'.
->         - Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
->         please see https://lore.kernel.org/patchwork/patch/1101022/
->
-> Change in v4:
->         - Remove extra ',' in author line of rcpm.c
->         - Update usage of wakeup_source_get_next() to be less confusing to the
-> reader, code logic remain the same.
->
-> Change in v3:
->         - Some whitespace ajdustment.
->
-> Change in v2:
->         - Rebase Kconfig and Makefile update to latest mainline.
->
->  drivers/soc/fsl/Kconfig  |   8 +++
->  drivers/soc/fsl/Makefile |   1 +
->  drivers/soc/fsl/rcpm.c   | 148 +++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 157 insertions(+)
->  create mode 100644 drivers/soc/fsl/rcpm.c
->
-> diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
-> index f9ad8ad..4918856 100644
-> --- a/drivers/soc/fsl/Kconfig
-> +++ b/drivers/soc/fsl/Kconfig
-> @@ -40,4 +40,12 @@ config DPAA2_CONSOLE
->           /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
->           which can be used to dump the Management Complex and AIOP
->           firmware logs.
-> +
-> +config FSL_RCPM
-> +       bool "Freescale RCPM support"
-> +       depends on PM_SLEEP
-> +       help
-> +         The NXP QorIQ Processors based on ARM Core have RCPM module
-> +         (Run Control and Power Management), which performs all device-level
-> +         tasks associated with power management, such as wakeup source control.
->  endmenu
-> diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
-> index 71dee8d..906f1cd 100644
-> --- a/drivers/soc/fsl/Makefile
-> +++ b/drivers/soc/fsl/Makefile
-> @@ -6,6 +6,7 @@
->  obj-$(CONFIG_FSL_DPAA)                 += qbman/
->  obj-$(CONFIG_QUICC_ENGINE)             += qe/
->  obj-$(CONFIG_CPM)                      += qe/
-> +obj-$(CONFIG_FSL_RCPM)                 += rcpm.o
->  obj-$(CONFIG_FSL_GUTS)                 += guts.o
->  obj-$(CONFIG_FSL_MC_DPIO)              += dpio/
->  obj-$(CONFIG_DPAA2_CONSOLE)            += dpaa2-console.o
-> diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
-> new file mode 100644
-> index 0000000..9378073
-> --- /dev/null
-> +++ b/drivers/soc/fsl/rcpm.c
-> @@ -0,0 +1,148 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// rcpm.c - Freescale QorIQ RCPM driver
-> +//
-> +// Copyright 2019 NXP
-> +//
-> +// Author: Ran Wang <ran.wang_1@nxp.com>
-> +
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of_address.h>
-> +#include <linux/slab.h>
-> +#include <linux/suspend.h>
-> +#include <linux/kernel.h>
-> +
-> +#define RCPM_WAKEUP_CELL_MAX_SIZE      7
-> +
-> +struct rcpm {
-> +       unsigned int    wakeup_cells;
-> +       void __iomem    *ippdexpcr_base;
-> +       bool            little_endian;
-> +};
-> +
-> +/**
-> + * rcpm_pm_prepare - performs device-level tasks associated with power
-> + * management, such as programming related to the wakeup source control.
-> + * @dev: Device to handle.
-> + *
-> + */
-> +static int rcpm_pm_prepare(struct device *dev)
-> +{
-> +       int i, ret, idx;
-> +       void __iomem *base;
-> +       struct wakeup_source    *ws;
-> +       struct rcpm             *rcpm;
-> +       struct device_node      *np = dev->of_node;
-> +       u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1];
-> +
-> +       rcpm = dev_get_drvdata(dev);
-> +       if (!rcpm)
-> +               return -EINVAL;
-> +
-> +       base = rcpm->ippdexpcr_base;
-> +       idx = wakeup_sources_read_lock();
-> +
-> +       /* Begin with first registered wakeup source */
-> +       for_each_wakeup_source(ws) {
-> +
-> +               /* skip object which is not attached to device */
-> +               if (!ws->dev || !ws->dev->parent)
-> +                       continue;
-> +
-> +               ret = device_property_read_u32_array(ws->dev->parent,
-> +                               "fsl,rcpm-wakeup", value,
-> +                               rcpm->wakeup_cells + 1);
-> +
-> +               /*  Wakeup source should refer to current rcpm device */
-> +               if (ret || (np->phandle != value[0])) {
-> +                       pr_debug("%s doesn't refer to this rcpm\n", ws->name);
+On 23-10-19, 10:06, Sudeep Holla wrote:
+> I agree, we shouldn't. But this is in IKS which is built in the merged
+> table by the driver. We can fix that, but found this easier and simple.
+> And since it was allowed when the driver was merged, just thought of
+> checking the details with you.
 
-I'm still quite unsure why it is useful to print this message instead
-of printing one when the wakeup source does match (there may be many
-wakeup source objects you don't care about in principle), but
-whatever.
+That was 7 years back :)
 
-> +                       continue;
-> +               }
-> +
-> +               /* Property "#fsl,rcpm-wakeup-cells" of rcpm node defines the
-> +                * number of IPPDEXPCR register cells, and "fsl,rcpm-wakeup"
-> +                * of wakeup source IP contains an integer array: <phandle to
-> +                * RCPM node, IPPDEXPCR0 setting, IPPDEXPCR1 setting,
-> +                * IPPDEXPCR2 setting, etc>.
-> +                *
-> +                * So we will go thought them and do programming accordngly.
-> +                */
-> +               for (i = 0; i < rcpm->wakeup_cells; i++) {
-> +                       u32 tmp = value[i + 1];
-> +                       void __iomem *address = base + i * 4;
-> +
-> +                       if (!tmp)
-> +                               continue;
-> +
-> +                       /* We can only OR related bits */
-> +                       if (rcpm->little_endian) {
-> +                               tmp |= ioread32(address);
-> +                               iowrite32(tmp, address);
-> +                       } else {
-> +                               tmp |= ioread32be(address);
-> +                               iowrite32be(tmp, address);
-> +                       }
-> +               }
-> +       }
-> +
-> +       wakeup_sources_read_unlock(idx);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct dev_pm_ops rcpm_pm_ops = {
-> +       .prepare =  rcpm_pm_prepare,
-> +};
+Yeah, lets fix IKS tables then instead of adding that to the core.
 
-For the above:
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+-- 
+viresh
