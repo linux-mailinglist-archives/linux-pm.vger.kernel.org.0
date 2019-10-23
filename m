@@ -2,126 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B22E1088
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 05:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6456E11B3
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Oct 2019 07:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732590AbfJWD0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Oct 2019 23:26:12 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38853 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731772AbfJWD0M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Oct 2019 23:26:12 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w3so11247999pgt.5
-        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 20:26:11 -0700 (PDT)
+        id S1731374AbfJWFaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 01:30:11 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38061 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732167AbfJWFaK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 01:30:10 -0400
+Received: by mail-pf1-f195.google.com with SMTP id c13so954825pfp.5
+        for <linux-pm@vger.kernel.org>; Tue, 22 Oct 2019 22:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=/UlXYMZppBsSqe1vUiYDqERsW7xBrjIEOgZPw2HevXQ=;
-        b=Of993IQqMLC66eF00w8dmizT/a6HT3ZI87pGzsxKyvSWD+kCvdW4DiBN4LmAPwUc06
-         IxuBFUqjFceVK5QoPCC8AGawzgTctgoOMQeMdOGiLUG8e96xxVu9xODLI6bade4ALOq5
-         UpgTGh5csfvIeadwi9tSJXsYtXMAOqcrW7QUGlPUIKgOa4T4g3vBv2JBh01ORZyabaTX
-         8Kq4npb/1KrvUN7ZRyB2kgXtod30n4cYXnFQf7IXLRQ2XGYKQS6V0wLRhz9oJsfyOPp9
-         LQwI+7HhvF4fxvXGDdB04OmFg0Y+yUoHcJT7fKdNR8sSSrrelmRi7YvX8+dNTTEkbzvs
-         gbaw==
+        bh=2rDF05/6n06417wlJVscVUcvibGyzQU00P9mXQIXKPI=;
+        b=unyYhVkChYE/uDac0HDbcWN0G8GoHP0zxWY0fxtb/LUoGEbwhJnX7Hq4/MHWxVy0GI
+         55H5/ynS1xRqnl675xUK6TOKQbmqdwH403PiCwfecCtzIWLiuQ0Hih64KGKiQcs1moN4
+         rmaSUaxUfu1MBS/4nKdguaTTHWlr/AE2gAnOFCZoCY+k2yxizr5uv3QofF1JssrjF177
+         g0msVuAH6XdCkxKodaYqaow5W6ZPZTpLu3b1pJ8yn7bKa19VfzWEM/XHUj7yb7uI99f8
+         kJFdIJIE2CC7nT7/TqQGv0aN1DbEeoFYAwp9A9K9g8BBGzMVTNqZKZT6sIMOoi6GS7dE
+         kD7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/UlXYMZppBsSqe1vUiYDqERsW7xBrjIEOgZPw2HevXQ=;
-        b=cVOHXZ4LhJjEk2vQWB61p4ccRVEVVWMuETTBd+DJa4UvFszF0X93WCgDL5VHYiiFrn
-         /PCIGxUea7fKMQQ3/MyboWl9v8QokjS2/3y7Fksb7g+KJTUrcZR9GsvefmJG7mmSlO2G
-         BJ0TaL0NK8iza8JIUG1jaiIJmctmL/tXo/+jXa+kN8MnR0xZaZiHnb84rHyjVFtmS0DC
-         9pGAK2SUTARaaq33pMmELdjV1Tb4ruLB3XrB3ypMKpNTzs0n9x8+RvSDAHP0AcxCA3ZV
-         4JMwqD/WHQ5Ipu3zjGbbx4VoFy/6ziDKQt1K18R2NBEhdNeg5BR14erTwfnjVvRmaHjZ
-         M5nQ==
-X-Gm-Message-State: APjAAAU/FzSfJo72rEfX3XthA9kXa5ZwoMJQ4uJfTNcvrdjQt/DP/uDM
-        AwBqv/3PDOQLyFy6jM/wSWd3vQ==
-X-Google-Smtp-Source: APXvYqynLoFjILHM41lE+4jb0UI2aJV2uE0h4ShZERIOG33lA0L4lJ6LJkceyIhhirWA25OIYT9srQ==
-X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr8926771pjj.27.1571801171251;
-        Tue, 22 Oct 2019 20:26:11 -0700 (PDT)
+        bh=2rDF05/6n06417wlJVscVUcvibGyzQU00P9mXQIXKPI=;
+        b=aeF3By1Gg++USbKWwsiAmCYDgevVFuci6buNwgJalzRU8dDVkHHrByxJ706Z1/EvN6
+         X0dZmtha4lnaywYiCVZK93wn2UJvsQR8JXrtDFHVgMuj8cEtHMqGK6BNthhNGEW5u04B
+         iXW2DQbu7HdUsgFq55hvXalsNeNpicO5Nx7omAAkSaNKzF1DUpk/jTmzEWvLxTXYUzNm
+         dotcQLbyGDYWQjx/u2LLfT/NbRGgT0tbbpuo76jtOKhizNYl7JEudqmucOZqTPwJ7Vbz
+         pURapToUb4JlIXGTxhhTQAuLqzRlor0I73FpQgNDW7cLmeUfBTV1TzbFx5/hEUPsFAMM
+         h8eQ==
+X-Gm-Message-State: APjAAAW5STQFIW9ex98+6EYiGC9vklCK+qI3NmUI9F7nBuOY3of/g0rB
+        2aW4iMmPNauknwJjc3E0LqX2Bw==
+X-Google-Smtp-Source: APXvYqxRwNayP0aERsMuW4AmJWpia1ARqwMiw0nTvlpYpmTN1wiwajanp5beDtUvou4COtPyjAqQnw==
+X-Received: by 2002:a63:d450:: with SMTP id i16mr7822345pgj.126.1571808608951;
+        Tue, 22 Oct 2019 22:30:08 -0700 (PDT)
 Received: from localhost ([122.172.151.112])
-        by smtp.gmail.com with ESMTPSA id a20sm16271438pjs.30.2019.10.22.20.26.10
+        by smtp.gmail.com with ESMTPSA id v1sm20270144pjd.22.2019.10.22.22.30.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 20:26:10 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 08:56:08 +0530
+        Tue, 22 Oct 2019 22:30:07 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 11:00:05 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        "v5 . 0+" <stable@vger.kernel.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] cpufreq: mark duplicate frequencies as invalid and
- continue as normal
-Message-ID: <20191023032608.v7lgqirvpbwgsyz4@vireshk-i7>
-References: <20191022173215.13350-1-sudeep.holla@arm.com>
+Subject: Re: [PATCH] opp: of: drop incorrect lockdep_assert_held()
+Message-ID: <20191023053005.m4y4bcebgi4km35q@vireshk-i7>
+References: <6306e18beab9deff6ee6b32f489390908495fe14.1570703431.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191022173215.13350-1-sudeep.holla@arm.com>
+In-Reply-To: <6306e18beab9deff6ee6b32f489390908495fe14.1570703431.git.viresh.kumar@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-10-19, 18:32, Sudeep Holla wrote:
-> Currently if we encounter duplicate frequency table entries, we abort
-> the validation and return error immediately. Instead of failing, we
-> can mark the entry as invalid and continue to function normal.
+On 10-10-19, 16:00, Viresh Kumar wrote:
+> _find_opp_of_np() doesn't traverse the list of OPP tables but instead
+> just the entries within an OPP table and so only requires to lock the
+> OPP table itself.
 > 
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> The lockdep_assert_held() was added there by mistake and isn't really
+> required.
+> 
+> Fixes: 5d6d106fa455 ("OPP: Populate required opp tables from "required-opps" property")
+> Cc: v5.0+ <stable@vger.kernel.org> # v5.0+
+> Reported-by: Niklas Cassel <niklas.cassel@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/cpufreq/freq_table.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/opp/of.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> Hi Viresh,
-> 
-> Since commit da0c6dc00c69 ("cpufreq: Handle sorted frequency tables more
-> efficiently"), I seem to have modified the firmware entry on my TC2 to
-> drop 500MHz and had not seen the issue with duplicate entries and had
-> totally forgotten about it.
-> 
-> Recently I reverted back to original setting as I corrupted it and
-> started seeing this issues. I don't know the background for raising
-> duplicates as fatal error but we did allow it when we add arm_big_little.c
-> and hence this RFC. If there are known issues with this approach, I can
-> continue with changed firmware config.
-> 
-> With switcher, we have:
-> (little cluster)
-> Virt: 175 MHz, 200 MHz, 250 MHz, 300 MHz, 350 MHz, 400 MHz, 450 MHz, 500 MHz
-> Actu: 350 MHz, 400 MHz, 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz
-> (big cluster)
-> 500 MHz, 600 MHz, 700 MHz, 800 MHz, 900 MHz, 1000 MHz, 1.10 GHz, 1.20 GHz
-> 
-> with 500 MHz duplicate in merged table.
-> 
-> Regards,
-> Sudeep
-> 
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index ded427e0a488..e9bf287846d6 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -305,9 +305,10 @@ static int set_freq_table_sorted(struct cpufreq_policy *policy)
->  		}
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 1813f5ad5fa2..6dc41faf74b5 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -77,8 +77,6 @@ static struct dev_pm_opp *_find_opp_of_np(struct opp_table *opp_table,
+>  {
+>  	struct dev_pm_opp *opp;
 >  
->  		if (pos->frequency == prev->frequency) {
-> -			pr_warn("Duplicate freq-table entries: %u\n",
-> +			pr_warn("Duplicate freq-table entries: %u marking it invalid\n,",
->  				pos->frequency);
-> -			return -EINVAL;
-> +			pos->frequency = CPUFREQ_ENTRY_INVALID;
-> +			continue;
->  		}
+> -	lockdep_assert_held(&opp_table_lock);
+> -
+>  	mutex_lock(&opp_table->lock);
 >  
->  		/* Frequency increased from prev to pos */
+>  	list_for_each_entry(opp, &opp_table->opp_list, node) {
 
-Of course we can do this, but I don't see why we shouldn't force
-people to fix the freq-tables instead. What's the point of allowing
-people to have duplicate entries instead ? This shouldn't happen with
-OPP tables as we check for duplicate entries there as well.
+@Niklas, any inputs from your side  here would be appreciated :)
 
 -- 
 viresh
