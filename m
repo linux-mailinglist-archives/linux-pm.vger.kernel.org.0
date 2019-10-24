@@ -2,304 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5F6E2D40
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 11:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F4AE2EF2
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 12:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438466AbfJXJ0y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 05:26:54 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:53020 "EHLO inva021.nxp.com"
+        id S2405949AbfJXKbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 06:31:05 -0400
+Received: from onstation.org ([52.200.56.107]:37172 "EHLO onstation.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438182AbfJXJ0s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Oct 2019 05:26:48 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 386F5200869;
-        Thu, 24 Oct 2019 11:26:45 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8BFFB20087C;
-        Thu, 24 Oct 2019 11:26:38 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 45639402D3;
-        Thu, 24 Oct 2019 17:26:30 +0800 (SGT)
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>
-Cc:     Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ran Wang <ran.wang_1@nxp.com>
-Subject: [PATCH v10 3/3] soc: fsl: add RCPM driver
-Date:   Thu, 24 Oct 2019 17:26:44 +0800
-Message-Id: <20191024092644.26583-3-ran.wang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191024092644.26583-1-ran.wang_1@nxp.com>
-References: <20191024092644.26583-1-ran.wang_1@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2404801AbfJXKbF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Oct 2019 06:31:05 -0400
+Received: from localhost.localdomain (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id 29D713E951;
+        Thu, 24 Oct 2019 10:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1571913064;
+        bh=yJXhW2YAvxRlZip0bP5m7RlkRR4+fexngI8FBQ676yw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fQTpJKMtXW2dbjwt6j5ka6YgqbZ1crOJ375u/XDBlX+E3kEubIOEidtWfTGO8gd3X
+         EmvSEIkaN/JB0j3agUtqEoA36nv91bryIQ4T43hjD0IiWEWLRRNbBKjBXJH6M7WjrF
+         AYEZSF7Qb4NU/FGWVajkoWPnVmvHvBZLWGs5bjWw=
+From:   Brian Masney <masneyb@onstation.org>
+To:     bjorn.andersson@linaro.org, georgi.djakov@linaro.org
+Cc:     robh+dt@kernel.org, agross@kernel.org, mark.rutland@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        jonathan@marek.ca
+Subject: [PATCH v3 0/2] interconnect: qcom: add msm8974 support
+Date:   Thu, 24 Oct 2019 06:30:52 -0400
+Message-Id: <20191024103054.9770-1-masneyb@onstation.org>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The NXP's QorIQ processors based on ARM Core have RCPM module
-(Run Control and Power Management), which performs system level
-tasks associated with power management such as wakeup source control.
+Here's a patch series that adds interconnect support for the Qualcomm
+MSM8974, which is needed so that the GPU can be supported upstream.
 
-Note that this driver will not support PowerPC based QorIQ processors,
-and it depends on PM wakeup source framework which provide collect
-wake information.
+The only change in this series is support for more paths that were
+hardcoded in the downstream drivers. See patch #2 for details.
 
-Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-Change in v10:
-	- Add 'Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>'
-	  to commit message.
-	- Supplement commit message to clarify that this RCPM driver is for
-	  Arm based QorIQ processors only, will not support PowerPC based
-	  QorIQ.
-	- Add ARM dependency for 'config FSL_RCPM'
-	- Remove 'pr_debug("%s doesn't refer to this rcpm\n", ws->name);'
-	- Move IPPDEXPCRn accessing out of for_each_wakeup_source(ws) loop,
-	  do it once.
+Brian Masney (2):
+  dt-bindings: interconnect: qcom: add msm8974 bindings
+  interconnect: qcom: add msm8974 driver
 
-Change in v9:
-	- Add kerneldoc for rcpm_pm_prepare().
-	- Use pr_debug() to replace dev_info(), to print message when decide
-	  skip current wakeup object, this is mainly for debugging (in order
-	  to detect potential improper implementation on device tree which
-	  might cause this skip).
-	- Refactor looping implementation in rcpm_pm_prepare(), add more
-	  comments to help clarify.
+ .../bindings/interconnect/qcom,msm8974.yaml   |  62 ++
+ drivers/interconnect/qcom/Kconfig             |   9 +
+ drivers/interconnect/qcom/Makefile            |   2 +
+ drivers/interconnect/qcom/msm8974.c           | 784 ++++++++++++++++++
+ .../dt-bindings/interconnect/qcom,msm8974.h   | 146 ++++
+ 5 files changed, 1003 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8974.yaml
+ create mode 100644 drivers/interconnect/qcom/msm8974.c
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8974.h
 
-Change in v8:
-	- Adjust related API usage to meet wakeup.c's update in patch 1/3.
-	- Add sanity checking for the case of ws->dev or ws->dev->parent
-	  is null.
-
-Change in v7:
-	- Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
-	c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
-	- Remove '+obj-y += ftm_alarm.o' since it is wrong.
-	- Cosmetic work.
-
-Change in v6:
-	- Adjust related API usage to meet wakeup.c's update in patch 1/3.
-
-Change in v5:
-	- Fix v4 regression of the return value of wakeup_source_get_next()
-	didn't pass to ws in while loop.
-	- Rename wakeup_source member 'attached_dev' to 'dev'.
-	- Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
-	please see https://lore.kernel.org/patchwork/patch/1101022/
-
-Change in v4:
-	- Remove extra ',' in author line of rcpm.c
-	- Update usage of wakeup_source_get_next() to be less confusing to the
-reader, code logic remain the same.
-
-Change in v3:
-	- Some whitespace ajdustment.
-
-Change in v2:
-	- Rebase Kconfig and Makefile update to latest mainline.
-
- drivers/soc/fsl/Kconfig  |  10 ++++
- drivers/soc/fsl/Makefile |   1 +
- drivers/soc/fsl/rcpm.c   | 151 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 162 insertions(+)
- create mode 100644 drivers/soc/fsl/rcpm.c
-
-diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
-index f9ad8ad..4df32bc 100644
---- a/drivers/soc/fsl/Kconfig
-+++ b/drivers/soc/fsl/Kconfig
-@@ -40,4 +40,14 @@ config DPAA2_CONSOLE
- 	  /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
- 	  which can be used to dump the Management Complex and AIOP
- 	  firmware logs.
-+
-+config FSL_RCPM
-+	bool "Freescale RCPM support"
-+	depends on PM_SLEEP && (ARM || ARM64)
-+	help
-+	  The NXP QorIQ Processors based on ARM Core have RCPM module
-+	  (Run Control and Power Management), which performs all device-level
-+	  tasks associated with power management, such as wakeup source control.
-+	  Note that currently this driver will not support PowerPC based
-+	  QorIQ processor.
- endmenu
-diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
-index 71dee8d..906f1cd 100644
---- a/drivers/soc/fsl/Makefile
-+++ b/drivers/soc/fsl/Makefile
-@@ -6,6 +6,7 @@
- obj-$(CONFIG_FSL_DPAA)                 += qbman/
- obj-$(CONFIG_QUICC_ENGINE)		+= qe/
- obj-$(CONFIG_CPM)			+= qe/
-+obj-$(CONFIG_FSL_RCPM)			+= rcpm.o
- obj-$(CONFIG_FSL_GUTS)			+= guts.o
- obj-$(CONFIG_FSL_MC_DPIO) 		+= dpio/
- obj-$(CONFIG_DPAA2_CONSOLE)		+= dpaa2-console.o
-diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
-new file mode 100644
-index 0000000..a093dbe
---- /dev/null
-+++ b/drivers/soc/fsl/rcpm.c
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// rcpm.c - Freescale QorIQ RCPM driver
-+//
-+// Copyright 2019 NXP
-+//
-+// Author: Ran Wang <ran.wang_1@nxp.com>
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/of_address.h>
-+#include <linux/slab.h>
-+#include <linux/suspend.h>
-+#include <linux/kernel.h>
-+
-+#define RCPM_WAKEUP_CELL_MAX_SIZE	7
-+
-+struct rcpm {
-+	unsigned int	wakeup_cells;
-+	void __iomem	*ippdexpcr_base;
-+	bool		little_endian;
-+};
-+
-+/**
-+ * rcpm_pm_prepare - performs device-level tasks associated with power
-+ * management, such as programming related to the wakeup source control.
-+ * @dev: Device to handle.
-+ *
-+ */
-+static int rcpm_pm_prepare(struct device *dev)
-+{
-+	int i, ret, idx;
-+	void __iomem *base;
-+	struct wakeup_source	*ws;
-+	struct rcpm		*rcpm;
-+	struct device_node	*np = dev->of_node;
-+	u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1];
-+	u32 setting[RCPM_WAKEUP_CELL_MAX_SIZE] = {0};
-+
-+	rcpm = dev_get_drvdata(dev);
-+	if (!rcpm)
-+		return -EINVAL;
-+
-+	base = rcpm->ippdexpcr_base;
-+	idx = wakeup_sources_read_lock();
-+
-+	/* Begin with first registered wakeup source */
-+	for_each_wakeup_source(ws) {
-+
-+		/* skip object which is not attached to device */
-+		if (!ws->dev || !ws->dev->parent)
-+			continue;
-+
-+		ret = device_property_read_u32_array(ws->dev->parent,
-+				"fsl,rcpm-wakeup", value,
-+				rcpm->wakeup_cells + 1);
-+
-+		/*  Wakeup source should refer to current rcpm device */
-+		if (ret || (np->phandle != value[0]))
-+			continue;
-+
-+		/* Property "#fsl,rcpm-wakeup-cells" of rcpm node defines the
-+		 * number of IPPDEXPCR register cells, and "fsl,rcpm-wakeup"
-+		 * of wakeup source IP contains an integer array: <phandle to
-+		 * RCPM node, IPPDEXPCR0 setting, IPPDEXPCR1 setting,
-+		 * IPPDEXPCR2 setting, etc>.
-+		 *
-+		 * So we will go thought them to collect setting data.
-+		 */
-+		for (i = 0; i < rcpm->wakeup_cells; i++)
-+			setting[i] |= value[i + 1];
-+	}
-+
-+	wakeup_sources_read_unlock(idx);
-+
-+	/* Program all IPPDEXPCRn once */
-+	for (i = 0; i < rcpm->wakeup_cells; i++) {
-+		u32 tmp = setting[i];
-+		void __iomem *address = base + i * 4;
-+
-+		if (!tmp)
-+			continue;
-+
-+		/* We can only OR related bits */
-+		if (rcpm->little_endian) {
-+			tmp |= ioread32(address);
-+			iowrite32(tmp, address);
-+		} else {
-+			tmp |= ioread32be(address);
-+			iowrite32be(tmp, address);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops rcpm_pm_ops = {
-+	.prepare =  rcpm_pm_prepare,
-+};
-+
-+static int rcpm_probe(struct platform_device *pdev)
-+{
-+	struct device	*dev = &pdev->dev;
-+	struct resource *r;
-+	struct rcpm	*rcpm;
-+	int ret;
-+
-+	rcpm = devm_kzalloc(dev, sizeof(*rcpm), GFP_KERNEL);
-+	if (!rcpm)
-+		return -ENOMEM;
-+
-+	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!r)
-+		return -ENODEV;
-+
-+	rcpm->ippdexpcr_base = devm_ioremap_resource(&pdev->dev, r);
-+	if (IS_ERR(rcpm->ippdexpcr_base)) {
-+		ret =  PTR_ERR(rcpm->ippdexpcr_base);
-+		return ret;
-+	}
-+
-+	rcpm->little_endian = device_property_read_bool(
-+			&pdev->dev, "little-endian");
-+
-+	ret = device_property_read_u32(&pdev->dev,
-+			"#fsl,rcpm-wakeup-cells", &rcpm->wakeup_cells);
-+	if (ret)
-+		return ret;
-+
-+	dev_set_drvdata(&pdev->dev, rcpm);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rcpm_of_match[] = {
-+	{ .compatible = "fsl,qoriq-rcpm-2.1+", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, rcpm_of_match);
-+
-+static struct platform_driver rcpm_driver = {
-+	.driver = {
-+		.name = "rcpm",
-+		.of_match_table = rcpm_of_match,
-+		.pm	= &rcpm_pm_ops,
-+	},
-+	.probe = rcpm_probe,
-+};
-+
-+module_platform_driver(rcpm_driver);
 -- 
-2.7.4
+2.21.0
 
