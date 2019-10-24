@@ -2,123 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CA8E38F4
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 18:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A011DE3913
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 19:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409958AbfJXQ41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 12:56:27 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:39805 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409921AbfJXQ41 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 12:56:27 -0400
-Received: by mail-vs1-f68.google.com with SMTP id y129so16664619vsc.6
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 09:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rD0W5k6f2ID7q7g4hwunZTETm45udsFKDrCjL00gegQ=;
-        b=WJ7HqMq2UBUeER1U+qXYYcrUZXUr1aZKzL6BM8wsVvhAnTX2/9EpzTEV0OAwdxKpjT
-         4XxQP2j2BOoOmA7Kcr73hQjR534p1UVbpMP2mgd0A0H4Mnzwkf38ON9qkZ3ug7kUsfNL
-         JsaiuIhqC5hKpiBUnvYGbo0BOQJdcpw9FN9/kgt+ASAQ9WIm5gK9AI6ozSlLcgaUzXsJ
-         AMjX44WEvLZNLvq0f7PIb2uXLvOOpWiQKJZ6dGySm0ueoFN1kQPV0+UoCKMukUzRJJtu
-         IzvNtipgrD59PKNainry4UQAL2N9UFPpfBHcLUz0yY+Ak8UtBiIUXcwn5VHPVxo1zpLy
-         Dt7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rD0W5k6f2ID7q7g4hwunZTETm45udsFKDrCjL00gegQ=;
-        b=Gak/TMHWPCVuLEHDwPP+PCkwlBUgMwY3aWav/nNZZsM58IxDQN6hJLaQfquR5gcPTe
-         BwBNm+ejWpT7PhFGUXNQ80UBiSpaNz7ehNyr5p8w5VSWbMl2Fh1hooSahMWW4v4pIXLB
-         Ams58O22R01WUtBHD+GV6ve8qERB5+auA3ttLlCiGbraqq56XgHKu2PZ5rCbyF0oAPV9
-         ZB8zi+kZgE4vLfMs9mhmRuOkpgMQad5U7nKJCuDROgRspNNyDmwEOqYYLw2jxDV8wbfj
-         uN7ynNn1wgad6lVxwxCYid5D+bJEztDmDFiFciYQqB+o6Wp88SOeumAeqelAxkCrgZrv
-         iaPQ==
-X-Gm-Message-State: APjAAAX9M1xL1rKHMkbU9zhIsBRdEcl9o+0BT8YLjyTDNJZZrCeeJcVb
-        3DBHBZ3kCRR1wz2oeUa4wQFZwUcmg7l1KPPLOmc3Hw==
-X-Google-Smtp-Source: APXvYqydNX3XdNyNTLcuW9pCNacVJGVnjYiuRC2HH8+frArbLOyWb8AStR5DMWrrX/BK4AfRo9niEvGq44yPGjL/tnA=
-X-Received: by 2002:a67:ebc2:: with SMTP id y2mr9732656vso.191.1571936186556;
- Thu, 24 Oct 2019 09:56:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-12-ulf.hansson@linaro.org> <20191024163515.GD22036@bogus>
-In-Reply-To: <20191024163515.GD22036@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 24 Oct 2019 18:55:50 +0200
-Message-ID: <CAPDyKFq43XrGLDOVZmOeBTLKG0BBvTji6c0Z+cT8uc6PPyp8YA@mail.gmail.com>
-Subject: Re: [PATCH 11/13] cpuidle: psci: Attach CPU devices to their PM domains
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
+        id S2409949AbfJXRA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 13:00:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405976AbfJXRAZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Oct 2019 13:00:25 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8CA620650;
+        Thu, 24 Oct 2019 17:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571936425;
+        bh=UDrL7Eh7U+eVIgDXosqXMSMhduI5UY6yvtzf3Iu2KLo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=K/FZbRWQuMpqS+6cyL7g0IqL6xVs2eJwzYG2NRs4oNg5To1xEo5ukILSYaTLiSpsB
+         gTjRi8KiCTnsnVyTDrajfuPx/rOBbF2ogQmOwgcwlKMt0knR8C/sZU/m3iefvTHHUp
+         XQ5kVHp8GJkqHHrcjhOEkPw7HiBABTr/deI+2Kd0=
+Date:   Thu, 24 Oct 2019 12:00:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191024170023.GA135695@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD8Lp46KZmTzxjYN6T7u1xH0AODr38hFcCgR-COtvduK9ZuANQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Oct 2019 at 18:35, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Oct 10, 2019 at 01:39:35PM +0200, Ulf Hansson wrote:
-> > In order to enable a CPU to be power managed through its PM domain, let's
-> > try to attach it by calling psci_dt_attach_cpu() during the cpuidle
-> > initialization.
+On Thu, Oct 24, 2019 at 11:28:59AM +0800, Daniel Drake wrote:
+> On Thu, Oct 24, 2019 at 6:40 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > I think we need something like the patch below.  We already do
+> > basically the same thing in pci_pm_reset().
 > >
-> > psci_dt_attach_cpu() returns a pointer to the attached struct device, which
-> > later should be used for runtime PM, hence we need to store it somewhere.
-> > Rather than adding yet another per CPU variable, let's create a per CPU
-> > struct to collect the relevant per CPU variables.
+> > [1] https://gist.github.com/dsd/bd9370b35defdf43680b81ecb34381d5
 > >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 23 +++++++++++++++++++----
-> >  1 file changed, 19 insertions(+), 4 deletions(-)
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index e7982af9a5d8..e8702388830f 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -883,9 +883,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+> >          * Mandatory power management transition delays; see PCI PM 1.1
+> >          * 5.6.1 table 18
+> >          */
+> > -       if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
+> > +       if (state == PCI_D3hot || dev->current_state == PCI_D3hot) {
+> >                 pci_dev_d3_sleep(dev);
+> > -       else if (state == PCI_D2 || dev->current_state == PCI_D2)
+> > +               pci_dev_wait(dev, "D3 transition", PCIE_RESET_READY_POLL_MS);
+> > +       } else if (state == PCI_D2 || dev->current_state == PCI_D2)
+> >                 udelay(PCI_PM_D2_DELAY);
 > >
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index a16467daf99d..1510422c7a53 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -23,7 +23,12 @@
-> >  #include "cpuidle-psci.h"
-> >  #include "dt_idle_states.h"
-> >
-> > -static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> > +struct psci_cpuidle_data {
-> > +     u32 *psci_states;
-> > +     struct device *dev;
-> > +};
-> > +
-> > +static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
-> >  static DEFINE_PER_CPU(u32, domain_state);
-> >
->
-> /me just thinking still: If it make sense to keep psci_states separate
-> and domain_state and only other things needed for RPM/OSI in the
-> structure. I do understand that we modify domain_state and hence
-> we can't use READ_MOSTLY then. Let's see, for now keep it as is, thought
-> I will think out aloud.
+> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> 
+> You also need to move the pci_dev_wait function definition higher up
+> in the file.
 
-I believe we are striving towards the same goal, which likely means to
-separate the non-OSI path vs OSI path, as much as possible. Simply to
-avoid any unnecessary operation being done in the non-OSI path. Right?
+OK, that would need a little tweaking.  Also, we should only need this
+for the D3hot->D0 transition and probably only when No_Soft_Reset is
+clear.  We shouldn't need it for the D0->D3hot transition, since
+that's not a reset.
 
-However, while I was trying to address that, I realized that it would
-probably introduce even more changes to the series. Therefore, it
-thought it may be better to address these kind of changes on top, as
-improvements.
+> Tested and that doesn't help this case unfortunately. pci_dev_wait
+> doesn't do anything since PCI_COMMAND value at this point is 0x100403
 
-Does it make sense?
+That's really strange.  Your original message showed:
 
-Kind regards
-Uffe
+  xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+  xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+
+The first line is from pci_raw_set_power_state() reading PCI_PM_CTRL,
+but we can't tell whether the read failed and we got ~0, or it
+succeeded and we got something with just the low two bits set.  Can
+you print out the whole value so we can see what happened?
+
+The second line is from pci_enable_resources() reading PCI_COMMAND,
+and it got *0*, not 0x0403 as you got from the CRS experiment.
