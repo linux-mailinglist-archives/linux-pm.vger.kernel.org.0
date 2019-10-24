@@ -2,913 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A73E2EFE
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 12:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E68E3482
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 15:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405435AbfJXKbM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 06:31:12 -0400
-Received: from onstation.org ([52.200.56.107]:37194 "EHLO onstation.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405590AbfJXKbH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Oct 2019 06:31:07 -0400
-Received: from localhost.localdomain (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: masneyb)
-        by onstation.org (Postfix) with ESMTPSA id 15F873F234;
-        Thu, 24 Oct 2019 10:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
-        s=default; t=1571913065;
-        bh=uLWsn+BtftS1R8MMtnOvafJ0Y1UJ9wgyKHKZx0Kdzok=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ape9d6Ib4m3TmvdrqWlumd5geMxK109i3V7pKyxqFn/BBDz/do0Bp8m5YdZVY+Nzm
-         LmOrLxL+ZzCybkX2tHffiDkLWojeOsRhSJW3wOocwGxk/mv1ZUwaFs/cHf/qt8G11G
-         hm2+QGX/+q6nMrK6ppeRHaFpDZwu7pQqjV6ymt7o=
-From:   Brian Masney <masneyb@onstation.org>
-To:     bjorn.andersson@linaro.org, georgi.djakov@linaro.org
-Cc:     robh+dt@kernel.org, agross@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jonathan@marek.ca
-Subject: [PATCH v3 2/2] interconnect: qcom: add msm8974 driver
-Date:   Thu, 24 Oct 2019 06:30:54 -0400
-Message-Id: <20191024103054.9770-3-masneyb@onstation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191024103054.9770-1-masneyb@onstation.org>
-References: <20191024103054.9770-1-masneyb@onstation.org>
+        id S2390578AbfJXNmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 09:42:22 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45816 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389598AbfJXNmW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 09:42:22 -0400
+Received: by mail-oi1-f196.google.com with SMTP id o205so20614251oib.12;
+        Thu, 24 Oct 2019 06:42:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v65XPmSdUFz0UF1/zSSxF9xHx4d8boMDUd5sPcsrtTM=;
+        b=jq2e11mWxEKjHzMIMBF8msiMPeh3H22H7ciTPWsXCuiGN3Bk1l0ms1ll5X5sT6t3vf
+         0MzSSTaH6bP+SqDfXQeU3cr2vXnY5Flud6gSxCQ2i+tYKP/vgmPul61J1n/7gAxnTw6o
+         4Zh4j447X49NHpuNVyFfkW0G3+rYBT8Mve+jZyNs3gUvcU6BZfPHv+ttKQVil43iFQcl
+         5HJ2VQvJPq5/pEWcumpXuXt3DYpIRBUY80GhMj0Zfl0PVmGyY8slRT6WCIM+E+4N5qqJ
+         W/3E6+i7V7GdlsQWHgLgj5Soq/CsXPRESsxcGdUD/pzTsx3bGZ8nhEjoYqGikAQ3vX2A
+         Ay0w==
+X-Gm-Message-State: APjAAAXNy04mMaXMIb5ZwH09omNbazfuoaOmykttP4TzvPFx9Pt7w0e+
+        FxaMrha/sPPusXwLAABH63b+t/1skHIz3iCQzsg=
+X-Google-Smtp-Source: APXvYqzd4wT1azyXt+q32xSzopKpw/cc4FtOrJDZxZYX0NqyfkMvvUQAkyNWcy3oJLJ58d1cIF8rWJVNSF4luMyQUtQ=
+X-Received: by 2002:aca:b6c5:: with SMTP id g188mr4807663oif.103.1571924540858;
+ Thu, 24 Oct 2019 06:42:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <CAJZ5v0g-hTOhVJOz28CGmpcxUiiTrYyV=ARwNCN9w4doeRcCRw@mail.gmail.com>
+ <VI1PR04MB7023808153A1FD2740FACF01EE6B0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <CAJZ5v0gWdFVbvPobLic7F+bRrz-QUoV3GPhpawdFT0MVjAhuOQ@mail.gmail.com> <AM7PR04MB7015D5B0C6952BF6B04C140CEE6B0@AM7PR04MB7015.eurprd04.prod.outlook.com>
+In-Reply-To: <AM7PR04MB7015D5B0C6952BF6B04C140CEE6B0@AM7PR04MB7015.eurprd04.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 24 Oct 2019 15:42:09 +0200
+Message-ID: <CAJZ5v0iY4QScdQJW4xzJEMcfxkB2QDjBkR2oo3zBRL7x70PmnQ@mail.gmail.com>
+Subject: Re: [RFT][PATCH 0/3] cpufreq / PM: QoS: Introduce frequency QoS and
+ use it in cpufreq
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Saravana Kannan <saravanak@google.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add driver for the Qualcomm MSM8974 interconnect providers that support
-setting system bandwidth requirements between various network-on-chip
-fabrics.
+On Wed, Oct 23, 2019 at 3:33 PM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+>
+> On 2019-10-23 11:54 AM, Rafael J. Wysocki wrote:
+> > On Wed, Oct 23, 2019 at 4:20 AM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+> >> On 2019-10-23 1:48 AM, Rafael J. Wysocki wrote:
 
-Signed-off-by: Brian Masney <masneyb@onstation.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
-Changes since v2:
-- Add support for additional paths found in the downstream MSM 3.4
-  sources:
+[cut]
 
-  MNOC_MAS_MDP_PORT0 <-> BIMC_SLV_EBI_CH0
-  MNOC_MAS_JPEG <-> BIMC_SLV_EBI_CH0
-  MNOC_MAS_VFE <-> BIMC_SLV_EBI_CH0
+> >>> But combining the lists of requests for all the CPUs in a policy
+> >>> defeats the idea of automatic aggregation of requests which really is
+> >>> what PM QoS is about.
+> >>
+> >> My primary interest is the "dev" part of dev_pm_qos: making pm_qos
+> >> requests tied to a specific device.
+> >
+> > The list of requests needs to be associated with the user of the
+> > effective constraint.  If that is the device, it is all good.
+>
+> The phrase "user of the effective constraint" is somewhat unclear.
 
-  This just required adding a link to MSM8974_MNOC_TO_BIMC to the
-  first node. Previously, when determining which paths were used, I
-  only looked in device tree for the qcom,msm-bus,vectors-KBps
-  property in that kernel. These are other paths hardcoded in drivers
-  and I found them by grepping for 'struct msm_bus_vectors'.
+Fair enough, so let me elaborate.
 
-Chages since v1:
-- Introduce msm8974_icc_rpm_smd_send(). Ignore error if setting the
-  bandwidth for a single node fails to match downstream behavior. See
-  inline comment for more details.
-- Ignore 80-character too long message for DEFINE_QNODES() to improve
-  code readability
-- Add err_disable_clks label in probe function.
-- Use msm8974_icc_ prefix for symbols
-- Set the bandwidth on the source and the destination node
-- Use devm_kzalloc() instead of devm_kcalloc() in probe function based
-  on patch that was sent on 2019-09-24: interconnect: qcom: Fix
-  icc_onecell_data allocation.
+The effective constraint (ie. the one resulting from taking all of the
+requests in the relevant QoS list into account) affects the selection
+of an OPP, so it is natural to associate the QoS list producing it
+with a list of OPPs to select.  In the cpufreq case, the policy holds
+the list of OPPs and so it also should hold the corresponding QoS
+lists (for the min and max frequency limits).  It "uses" the effective
+constraints produced by those QoS lists by preventing the OPPs out of
+the between the min and max values  from being selected.
 
- drivers/interconnect/qcom/Kconfig   |   9 +
- drivers/interconnect/qcom/Makefile  |   2 +
- drivers/interconnect/qcom/msm8974.c | 784 ++++++++++++++++++++++++++++
- 3 files changed, 795 insertions(+)
- create mode 100644 drivers/interconnect/qcom/msm8974.c
+Essentially, the policy represents a power (clock/voltage) domain with
+multiple components (it doesn't matter what they are at this level of
+abstraction). While there can be multiple sources of QoS requests
+associated with each component, all of these requests ultimately need
+to be passed to the domain for aggregation, because that's where the
+frequency selection decisions are made and so that's where the
+effective constraint value needs to be known. Now, the natural way to
+allow requests from multiple sources to be passed for aggregation is
+to provide a QoS list that they can be added to. That really is what
+PM QoS is for.
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index 6ab4012a059a..ecf057d7e240 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -14,6 +14,15 @@ config INTERCONNECT_QCOM_QCS404
- 	  This is a driver for the Qualcomm Network-on-Chip on qcs404-based
- 	  platforms.
- 
-+config INTERCONNECT_QCOM_MSM8974
-+       tristate "Qualcomm MSM8974 interconnect driver"
-+       depends on INTERCONNECT_QCOM
-+       depends on QCOM_SMD_RPM
-+       select INTERCONNECT_QCOM_SMD_RPM
-+       help
-+         This is a driver for the Qualcomm Network-on-Chip on msm8974-based
-+         platforms.
-+
- config INTERCONNECT_QCOM_SDM845
- 	tristate "Qualcomm SDM845 interconnect driver"
- 	depends on INTERCONNECT_QCOM
-diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-index 67dafb783dec..9adf9e380545 100644
---- a/drivers/interconnect/qcom/Makefile
-+++ b/drivers/interconnect/qcom/Makefile
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+qnoc-msm8974-objs			:= msm8974.o
- qnoc-qcs404-objs			:= qcs404.o
- qnoc-sdm845-objs			:= sdm845.o
- icc-smd-rpm-objs			:= smd-rpm.o
- 
-+obj-$(CONFIG_INTERCONNECT_QCOM_MSM8974) += qnoc-msm8974.o
- obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
-diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
-new file mode 100644
-index 000000000000..c70ac5838b9f
---- /dev/null
-+++ b/drivers/interconnect/qcom/msm8974.c
-@@ -0,0 +1,784 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Brian Masney <masneyb@onstation.org>
-+ *
-+ * Based on MSM bus code from downstream MSM kernel sources.
-+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
-+ *
-+ * Based on qcs404.c
-+ * Copyright (C) 2019 Linaro Ltd
-+ *
-+ * Here's a rough representation that shows the various buses that form the
-+ * Network On Chip (NOC) for the msm8974:
-+ *
-+ *                         Multimedia Subsystem (MMSS)
-+ *         |----------+-----------------------------------+-----------|
-+ *                    |                                   |
-+ *                    |                                   |
-+ *        Config      |                     Bus Interface | Memory Controller
-+ *       |------------+-+-----------|        |------------+-+-----------|
-+ *                      |                                   |
-+ *                      |                                   |
-+ *                      |             System                |
-+ *     |--------------+-+---------------------------------+-+-------------|
-+ *                    |                                   |
-+ *                    |                                   |
-+ *        Peripheral  |                           On Chip | Memory (OCMEM)
-+ *       |------------+-------------|        |------------+-------------|
-+ */
-+
-+#include <dt-bindings/interconnect/qcom,msm8974.h>
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include "smd-rpm.h"
-+
-+enum {
-+	MSM8974_BIMC_MAS_AMPSS_M0 = 1,
-+	MSM8974_BIMC_MAS_AMPSS_M1,
-+	MSM8974_BIMC_MAS_MSS_PROC,
-+	MSM8974_BIMC_TO_MNOC,
-+	MSM8974_BIMC_TO_SNOC,
-+	MSM8974_BIMC_SLV_EBI_CH0,
-+	MSM8974_BIMC_SLV_AMPSS_L2,
-+	MSM8974_CNOC_MAS_RPM_INST,
-+	MSM8974_CNOC_MAS_RPM_DATA,
-+	MSM8974_CNOC_MAS_RPM_SYS,
-+	MSM8974_CNOC_MAS_DEHR,
-+	MSM8974_CNOC_MAS_QDSS_DAP,
-+	MSM8974_CNOC_MAS_SPDM,
-+	MSM8974_CNOC_MAS_TIC,
-+	MSM8974_CNOC_SLV_CLK_CTL,
-+	MSM8974_CNOC_SLV_CNOC_MSS,
-+	MSM8974_CNOC_SLV_SECURITY,
-+	MSM8974_CNOC_SLV_TCSR,
-+	MSM8974_CNOC_SLV_TLMM,
-+	MSM8974_CNOC_SLV_CRYPTO_0_CFG,
-+	MSM8974_CNOC_SLV_CRYPTO_1_CFG,
-+	MSM8974_CNOC_SLV_IMEM_CFG,
-+	MSM8974_CNOC_SLV_MESSAGE_RAM,
-+	MSM8974_CNOC_SLV_BIMC_CFG,
-+	MSM8974_CNOC_SLV_BOOT_ROM,
-+	MSM8974_CNOC_SLV_PMIC_ARB,
-+	MSM8974_CNOC_SLV_SPDM_WRAPPER,
-+	MSM8974_CNOC_SLV_DEHR_CFG,
-+	MSM8974_CNOC_SLV_MPM,
-+	MSM8974_CNOC_SLV_QDSS_CFG,
-+	MSM8974_CNOC_SLV_RBCPR_CFG,
-+	MSM8974_CNOC_SLV_RBCPR_QDSS_APU_CFG,
-+	MSM8974_CNOC_TO_SNOC,
-+	MSM8974_CNOC_SLV_CNOC_ONOC_CFG,
-+	MSM8974_CNOC_SLV_CNOC_MNOC_MMSS_CFG,
-+	MSM8974_CNOC_SLV_CNOC_MNOC_CFG,
-+	MSM8974_CNOC_SLV_PNOC_CFG,
-+	MSM8974_CNOC_SLV_SNOC_MPU_CFG,
-+	MSM8974_CNOC_SLV_SNOC_CFG,
-+	MSM8974_CNOC_SLV_EBI1_DLL_CFG,
-+	MSM8974_CNOC_SLV_PHY_APU_CFG,
-+	MSM8974_CNOC_SLV_EBI1_PHY_CFG,
-+	MSM8974_CNOC_SLV_RPM,
-+	MSM8974_CNOC_SLV_SERVICE_CNOC,
-+	MSM8974_MNOC_MAS_GRAPHICS_3D,
-+	MSM8974_MNOC_MAS_JPEG,
-+	MSM8974_MNOC_MAS_MDP_PORT0,
-+	MSM8974_MNOC_MAS_VIDEO_P0,
-+	MSM8974_MNOC_MAS_VIDEO_P1,
-+	MSM8974_MNOC_MAS_VFE,
-+	MSM8974_MNOC_TO_CNOC,
-+	MSM8974_MNOC_TO_BIMC,
-+	MSM8974_MNOC_SLV_CAMERA_CFG,
-+	MSM8974_MNOC_SLV_DISPLAY_CFG,
-+	MSM8974_MNOC_SLV_OCMEM_CFG,
-+	MSM8974_MNOC_SLV_CPR_CFG,
-+	MSM8974_MNOC_SLV_CPR_XPU_CFG,
-+	MSM8974_MNOC_SLV_MISC_CFG,
-+	MSM8974_MNOC_SLV_MISC_XPU_CFG,
-+	MSM8974_MNOC_SLV_VENUS_CFG,
-+	MSM8974_MNOC_SLV_GRAPHICS_3D_CFG,
-+	MSM8974_MNOC_SLV_MMSS_CLK_CFG,
-+	MSM8974_MNOC_SLV_MMSS_CLK_XPU_CFG,
-+	MSM8974_MNOC_SLV_MNOC_MPU_CFG,
-+	MSM8974_MNOC_SLV_ONOC_MPU_CFG,
-+	MSM8974_MNOC_SLV_SERVICE_MNOC,
-+	MSM8974_OCMEM_NOC_TO_OCMEM_VNOC,
-+	MSM8974_OCMEM_MAS_JPEG_OCMEM,
-+	MSM8974_OCMEM_MAS_MDP_OCMEM,
-+	MSM8974_OCMEM_MAS_VIDEO_P0_OCMEM,
-+	MSM8974_OCMEM_MAS_VIDEO_P1_OCMEM,
-+	MSM8974_OCMEM_MAS_VFE_OCMEM,
-+	MSM8974_OCMEM_MAS_CNOC_ONOC_CFG,
-+	MSM8974_OCMEM_SLV_SERVICE_ONOC,
-+	MSM8974_OCMEM_VNOC_TO_SNOC,
-+	MSM8974_OCMEM_VNOC_TO_OCMEM_NOC,
-+	MSM8974_OCMEM_VNOC_MAS_GFX3D,
-+	MSM8974_OCMEM_SLV_OCMEM,
-+	MSM8974_PNOC_MAS_PNOC_CFG,
-+	MSM8974_PNOC_MAS_SDCC_1,
-+	MSM8974_PNOC_MAS_SDCC_3,
-+	MSM8974_PNOC_MAS_SDCC_4,
-+	MSM8974_PNOC_MAS_SDCC_2,
-+	MSM8974_PNOC_MAS_TSIF,
-+	MSM8974_PNOC_MAS_BAM_DMA,
-+	MSM8974_PNOC_MAS_BLSP_2,
-+	MSM8974_PNOC_MAS_USB_HSIC,
-+	MSM8974_PNOC_MAS_BLSP_1,
-+	MSM8974_PNOC_MAS_USB_HS,
-+	MSM8974_PNOC_TO_SNOC,
-+	MSM8974_PNOC_SLV_SDCC_1,
-+	MSM8974_PNOC_SLV_SDCC_3,
-+	MSM8974_PNOC_SLV_SDCC_2,
-+	MSM8974_PNOC_SLV_SDCC_4,
-+	MSM8974_PNOC_SLV_TSIF,
-+	MSM8974_PNOC_SLV_BAM_DMA,
-+	MSM8974_PNOC_SLV_BLSP_2,
-+	MSM8974_PNOC_SLV_USB_HSIC,
-+	MSM8974_PNOC_SLV_BLSP_1,
-+	MSM8974_PNOC_SLV_USB_HS,
-+	MSM8974_PNOC_SLV_PDM,
-+	MSM8974_PNOC_SLV_PERIPH_APU_CFG,
-+	MSM8974_PNOC_SLV_PNOC_MPU_CFG,
-+	MSM8974_PNOC_SLV_PRNG,
-+	MSM8974_PNOC_SLV_SERVICE_PNOC,
-+	MSM8974_SNOC_MAS_LPASS_AHB,
-+	MSM8974_SNOC_MAS_QDSS_BAM,
-+	MSM8974_SNOC_MAS_SNOC_CFG,
-+	MSM8974_SNOC_TO_BIMC,
-+	MSM8974_SNOC_TO_CNOC,
-+	MSM8974_SNOC_TO_PNOC,
-+	MSM8974_SNOC_TO_OCMEM_VNOC,
-+	MSM8974_SNOC_MAS_CRYPTO_CORE0,
-+	MSM8974_SNOC_MAS_CRYPTO_CORE1,
-+	MSM8974_SNOC_MAS_LPASS_PROC,
-+	MSM8974_SNOC_MAS_MSS,
-+	MSM8974_SNOC_MAS_MSS_NAV,
-+	MSM8974_SNOC_MAS_OCMEM_DMA,
-+	MSM8974_SNOC_MAS_WCSS,
-+	MSM8974_SNOC_MAS_QDSS_ETR,
-+	MSM8974_SNOC_MAS_USB3,
-+	MSM8974_SNOC_SLV_AMPSS,
-+	MSM8974_SNOC_SLV_LPASS,
-+	MSM8974_SNOC_SLV_USB3,
-+	MSM8974_SNOC_SLV_WCSS,
-+	MSM8974_SNOC_SLV_OCIMEM,
-+	MSM8974_SNOC_SLV_SNOC_OCMEM,
-+	MSM8974_SNOC_SLV_SERVICE_SNOC,
-+	MSM8974_SNOC_SLV_QDSS_STM,
-+};
-+
-+#define RPM_BUS_MASTER_REQ	0x73616d62
-+#define RPM_BUS_SLAVE_REQ	0x766c7362
-+
-+#define to_msm8974_icc_provider(_provider) \
-+	container_of(_provider, struct msm8974_icc_provider, provider)
-+
-+static const struct clk_bulk_data msm8974_icc_bus_clocks[] = {
-+	{ .id = "bus" },
-+	{ .id = "bus_a" },
-+};
-+
-+/**
-+ * struct msm8974_icc_provider - Qualcomm specific interconnect provider
-+ * @provider: generic interconnect provider
-+ * @bus_clks: the clk_bulk_data table of bus clocks
-+ * @num_clks: the total number of clk_bulk_data entries
-+ */
-+struct msm8974_icc_provider {
-+	struct icc_provider provider;
-+	struct clk_bulk_data *bus_clks;
-+	int num_clks;
-+};
-+
-+#define MSM8974_ICC_MAX_LINKS	3
-+
-+/**
-+ * struct msm8974_icc_node - Qualcomm specific interconnect nodes
-+ * @name: the node name used in debugfs
-+ * @id: a unique node identifier
-+ * @links: an array of nodes where we can go next while traversing
-+ * @num_links: the total number of @links
-+ * @buswidth: width of the interconnect between a node and the bus (bytes)
-+ * @mas_rpm_id:	RPM ID for devices that are bus masters
-+ * @slv_rpm_id:	RPM ID for devices that are bus slaves
-+ * @rate: current bus clock rate in Hz
-+ */
-+struct msm8974_icc_node {
-+	unsigned char *name;
-+	u16 id;
-+	u16 links[MSM8974_ICC_MAX_LINKS];
-+	u16 num_links;
-+	u16 buswidth;
-+	int mas_rpm_id;
-+	int slv_rpm_id;
-+	u64 rate;
-+};
-+
-+struct msm8974_icc_desc {
-+	struct msm8974_icc_node **nodes;
-+	size_t num_nodes;
-+};
-+
-+#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,	\
-+		     ...)						\
-+		static struct msm8974_icc_node _name = {		\
-+		.name = #_name,						\
-+		.id = _id,						\
-+		.buswidth = _buswidth,					\
-+		.mas_rpm_id = _mas_rpm_id,				\
-+		.slv_rpm_id = _slv_rpm_id,				\
-+		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
-+		.links = { __VA_ARGS__ },				\
-+	}
-+
-+DEFINE_QNODE(mas_ampss_m0, MSM8974_BIMC_MAS_AMPSS_M0, 8, 0, -1);
-+DEFINE_QNODE(mas_ampss_m1, MSM8974_BIMC_MAS_AMPSS_M1, 8, 0, -1);
-+DEFINE_QNODE(mas_mss_proc, MSM8974_BIMC_MAS_MSS_PROC, 8, 1, -1);
-+DEFINE_QNODE(bimc_to_mnoc, MSM8974_BIMC_TO_MNOC, 8, 2, -1, MSM8974_BIMC_SLV_EBI_CH0);
-+DEFINE_QNODE(bimc_to_snoc, MSM8974_BIMC_TO_SNOC, 8, 3, 2, MSM8974_SNOC_TO_BIMC, MSM8974_BIMC_SLV_EBI_CH0, MSM8974_BIMC_MAS_AMPSS_M0);
-+DEFINE_QNODE(slv_ebi_ch0, MSM8974_BIMC_SLV_EBI_CH0, 8, -1, 0);
-+DEFINE_QNODE(slv_ampss_l2, MSM8974_BIMC_SLV_AMPSS_L2, 8, -1, 1);
-+
-+static struct msm8974_icc_node *msm8974_bimc_nodes[] = {
-+	[BIMC_MAS_AMPSS_M0] = &mas_ampss_m0,
-+	[BIMC_MAS_AMPSS_M1] = &mas_ampss_m1,
-+	[BIMC_MAS_MSS_PROC] = &mas_mss_proc,
-+	[BIMC_TO_MNOC] = &bimc_to_mnoc,
-+	[BIMC_TO_SNOC] = &bimc_to_snoc,
-+	[BIMC_SLV_EBI_CH0] = &slv_ebi_ch0,
-+	[BIMC_SLV_AMPSS_L2] = &slv_ampss_l2,
-+};
-+
-+static struct msm8974_icc_desc msm8974_bimc = {
-+	.nodes = msm8974_bimc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_bimc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_rpm_inst, MSM8974_CNOC_MAS_RPM_INST, 8, 45, -1);
-+DEFINE_QNODE(mas_rpm_data, MSM8974_CNOC_MAS_RPM_DATA, 8, 46, -1);
-+DEFINE_QNODE(mas_rpm_sys, MSM8974_CNOC_MAS_RPM_SYS, 8, 47, -1);
-+DEFINE_QNODE(mas_dehr, MSM8974_CNOC_MAS_DEHR, 8, 48, -1);
-+DEFINE_QNODE(mas_qdss_dap, MSM8974_CNOC_MAS_QDSS_DAP, 8, 49, -1);
-+DEFINE_QNODE(mas_spdm, MSM8974_CNOC_MAS_SPDM, 8, 50, -1);
-+DEFINE_QNODE(mas_tic, MSM8974_CNOC_MAS_TIC, 8, 51, -1);
-+DEFINE_QNODE(slv_clk_ctl, MSM8974_CNOC_SLV_CLK_CTL, 8, -1, 47);
-+DEFINE_QNODE(slv_cnoc_mss, MSM8974_CNOC_SLV_CNOC_MSS, 8, -1, 48);
-+DEFINE_QNODE(slv_security, MSM8974_CNOC_SLV_SECURITY, 8, -1, 49);
-+DEFINE_QNODE(slv_tcsr, MSM8974_CNOC_SLV_TCSR, 8, -1, 50);
-+DEFINE_QNODE(slv_tlmm, MSM8974_CNOC_SLV_TLMM, 8, -1, 51);
-+DEFINE_QNODE(slv_crypto_0_cfg, MSM8974_CNOC_SLV_CRYPTO_0_CFG, 8, -1, 52);
-+DEFINE_QNODE(slv_crypto_1_cfg, MSM8974_CNOC_SLV_CRYPTO_1_CFG, 8, -1, 53);
-+DEFINE_QNODE(slv_imem_cfg, MSM8974_CNOC_SLV_IMEM_CFG, 8, -1, 54);
-+DEFINE_QNODE(slv_message_ram, MSM8974_CNOC_SLV_MESSAGE_RAM, 8, -1, 55);
-+DEFINE_QNODE(slv_bimc_cfg, MSM8974_CNOC_SLV_BIMC_CFG, 8, -1, 56);
-+DEFINE_QNODE(slv_boot_rom, MSM8974_CNOC_SLV_BOOT_ROM, 8, -1, 57);
-+DEFINE_QNODE(slv_pmic_arb, MSM8974_CNOC_SLV_PMIC_ARB, 8, -1, 59);
-+DEFINE_QNODE(slv_spdm_wrapper, MSM8974_CNOC_SLV_SPDM_WRAPPER, 8, -1, 60);
-+DEFINE_QNODE(slv_dehr_cfg, MSM8974_CNOC_SLV_DEHR_CFG, 8, -1, 61);
-+DEFINE_QNODE(slv_mpm, MSM8974_CNOC_SLV_MPM, 8, -1, 62);
-+DEFINE_QNODE(slv_qdss_cfg, MSM8974_CNOC_SLV_QDSS_CFG, 8, -1, 63);
-+DEFINE_QNODE(slv_rbcpr_cfg, MSM8974_CNOC_SLV_RBCPR_CFG, 8, -1, 64);
-+DEFINE_QNODE(slv_rbcpr_qdss_apu_cfg, MSM8974_CNOC_SLV_RBCPR_QDSS_APU_CFG, 8, -1, 65);
-+DEFINE_QNODE(cnoc_to_snoc, MSM8974_CNOC_TO_SNOC, 8, 52, 75);
-+DEFINE_QNODE(slv_cnoc_onoc_cfg, MSM8974_CNOC_SLV_CNOC_ONOC_CFG, 8, -1, 68);
-+DEFINE_QNODE(slv_cnoc_mnoc_mmss_cfg, MSM8974_CNOC_SLV_CNOC_MNOC_MMSS_CFG, 8, -1, 58);
-+DEFINE_QNODE(slv_cnoc_mnoc_cfg, MSM8974_CNOC_SLV_CNOC_MNOC_CFG, 8, -1, 66);
-+DEFINE_QNODE(slv_pnoc_cfg, MSM8974_CNOC_SLV_PNOC_CFG, 8, -1, 69);
-+DEFINE_QNODE(slv_snoc_mpu_cfg, MSM8974_CNOC_SLV_SNOC_MPU_CFG, 8, -1, 67);
-+DEFINE_QNODE(slv_snoc_cfg, MSM8974_CNOC_SLV_SNOC_CFG, 8, -1, 70);
-+DEFINE_QNODE(slv_ebi1_dll_cfg, MSM8974_CNOC_SLV_EBI1_DLL_CFG, 8, -1, 71);
-+DEFINE_QNODE(slv_phy_apu_cfg, MSM8974_CNOC_SLV_PHY_APU_CFG, 8, -1, 72);
-+DEFINE_QNODE(slv_ebi1_phy_cfg, MSM8974_CNOC_SLV_EBI1_PHY_CFG, 8, -1, 73);
-+DEFINE_QNODE(slv_rpm, MSM8974_CNOC_SLV_RPM, 8, -1, 74);
-+DEFINE_QNODE(slv_service_cnoc, MSM8974_CNOC_SLV_SERVICE_CNOC, 8, -1, 76);
-+
-+static struct msm8974_icc_node *msm8974_cnoc_nodes[] = {
-+	[CNOC_MAS_RPM_INST] = &mas_rpm_inst,
-+	[CNOC_MAS_RPM_DATA] = &mas_rpm_data,
-+	[CNOC_MAS_RPM_SYS] = &mas_rpm_sys,
-+	[CNOC_MAS_DEHR] = &mas_dehr,
-+	[CNOC_MAS_QDSS_DAP] = &mas_qdss_dap,
-+	[CNOC_MAS_SPDM] = &mas_spdm,
-+	[CNOC_MAS_TIC] = &mas_tic,
-+	[CNOC_SLV_CLK_CTL] = &slv_clk_ctl,
-+	[CNOC_SLV_CNOC_MSS] = &slv_cnoc_mss,
-+	[CNOC_SLV_SECURITY] = &slv_security,
-+	[CNOC_SLV_TCSR] = &slv_tcsr,
-+	[CNOC_SLV_TLMM] = &slv_tlmm,
-+	[CNOC_SLV_CRYPTO_0_CFG] = &slv_crypto_0_cfg,
-+	[CNOC_SLV_CRYPTO_1_CFG] = &slv_crypto_1_cfg,
-+	[CNOC_SLV_IMEM_CFG] = &slv_imem_cfg,
-+	[CNOC_SLV_MESSAGE_RAM] = &slv_message_ram,
-+	[CNOC_SLV_BIMC_CFG] = &slv_bimc_cfg,
-+	[CNOC_SLV_BOOT_ROM] = &slv_boot_rom,
-+	[CNOC_SLV_PMIC_ARB] = &slv_pmic_arb,
-+	[CNOC_SLV_SPDM_WRAPPER] = &slv_spdm_wrapper,
-+	[CNOC_SLV_DEHR_CFG] = &slv_dehr_cfg,
-+	[CNOC_SLV_MPM] = &slv_mpm,
-+	[CNOC_SLV_QDSS_CFG] = &slv_qdss_cfg,
-+	[CNOC_SLV_RBCPR_CFG] = &slv_rbcpr_cfg,
-+	[CNOC_SLV_RBCPR_QDSS_APU_CFG] = &slv_rbcpr_qdss_apu_cfg,
-+	[CNOC_TO_SNOC] = &cnoc_to_snoc,
-+	[CNOC_SLV_CNOC_ONOC_CFG] = &slv_cnoc_onoc_cfg,
-+	[CNOC_SLV_CNOC_MNOC_MMSS_CFG] = &slv_cnoc_mnoc_mmss_cfg,
-+	[CNOC_SLV_CNOC_MNOC_CFG] = &slv_cnoc_mnoc_cfg,
-+	[CNOC_SLV_PNOC_CFG] = &slv_pnoc_cfg,
-+	[CNOC_SLV_SNOC_MPU_CFG] = &slv_snoc_mpu_cfg,
-+	[CNOC_SLV_SNOC_CFG] = &slv_snoc_cfg,
-+	[CNOC_SLV_EBI1_DLL_CFG] = &slv_ebi1_dll_cfg,
-+	[CNOC_SLV_PHY_APU_CFG] = &slv_phy_apu_cfg,
-+	[CNOC_SLV_EBI1_PHY_CFG] = &slv_ebi1_phy_cfg,
-+	[CNOC_SLV_RPM] = &slv_rpm,
-+	[CNOC_SLV_SERVICE_CNOC] = &slv_service_cnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_cnoc = {
-+	.nodes = msm8974_cnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_cnoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_graphics_3d, MSM8974_MNOC_MAS_GRAPHICS_3D, 16, 6, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_jpeg, MSM8974_MNOC_MAS_JPEG, 16, 7, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_mdp_port0, MSM8974_MNOC_MAS_MDP_PORT0, 16, 8, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_video_p0, MSM8974_MNOC_MAS_VIDEO_P0, 16, 9, -1);
-+DEFINE_QNODE(mas_video_p1, MSM8974_MNOC_MAS_VIDEO_P1, 16, 10, -1);
-+DEFINE_QNODE(mas_vfe, MSM8974_MNOC_MAS_VFE, 16, 11, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mnoc_to_cnoc, MSM8974_MNOC_TO_CNOC, 16, 4, -1);
-+DEFINE_QNODE(mnoc_to_bimc, MSM8974_MNOC_TO_BIMC, 16, -1, 16, MSM8974_BIMC_TO_MNOC);
-+DEFINE_QNODE(slv_camera_cfg, MSM8974_MNOC_SLV_CAMERA_CFG, 16, -1, 3);
-+DEFINE_QNODE(slv_display_cfg, MSM8974_MNOC_SLV_DISPLAY_CFG, 16, -1, 4);
-+DEFINE_QNODE(slv_ocmem_cfg, MSM8974_MNOC_SLV_OCMEM_CFG, 16, -1, 5);
-+DEFINE_QNODE(slv_cpr_cfg, MSM8974_MNOC_SLV_CPR_CFG, 16, -1, 6);
-+DEFINE_QNODE(slv_cpr_xpu_cfg, MSM8974_MNOC_SLV_CPR_XPU_CFG, 16, -1, 7);
-+DEFINE_QNODE(slv_misc_cfg, MSM8974_MNOC_SLV_MISC_CFG, 16, -1, 8);
-+DEFINE_QNODE(slv_misc_xpu_cfg, MSM8974_MNOC_SLV_MISC_XPU_CFG, 16, -1, 9);
-+DEFINE_QNODE(slv_venus_cfg, MSM8974_MNOC_SLV_VENUS_CFG, 16, -1, 10);
-+DEFINE_QNODE(slv_graphics_3d_cfg, MSM8974_MNOC_SLV_GRAPHICS_3D_CFG, 16, -1, 11);
-+DEFINE_QNODE(slv_mmss_clk_cfg, MSM8974_MNOC_SLV_MMSS_CLK_CFG, 16, -1, 12);
-+DEFINE_QNODE(slv_mmss_clk_xpu_cfg, MSM8974_MNOC_SLV_MMSS_CLK_XPU_CFG, 16, -1, 13);
-+DEFINE_QNODE(slv_mnoc_mpu_cfg, MSM8974_MNOC_SLV_MNOC_MPU_CFG, 16, -1, 14);
-+DEFINE_QNODE(slv_onoc_mpu_cfg, MSM8974_MNOC_SLV_ONOC_MPU_CFG, 16, -1, 15);
-+DEFINE_QNODE(slv_service_mnoc, MSM8974_MNOC_SLV_SERVICE_MNOC, 16, -1, 17);
-+
-+static struct msm8974_icc_node *msm8974_mnoc_nodes[] = {
-+	[MNOC_MAS_GRAPHICS_3D] = &mas_graphics_3d,
-+	[MNOC_MAS_JPEG] = &mas_jpeg,
-+	[MNOC_MAS_MDP_PORT0] = &mas_mdp_port0,
-+	[MNOC_MAS_VIDEO_P0] = &mas_video_p0,
-+	[MNOC_MAS_VIDEO_P1] = &mas_video_p1,
-+	[MNOC_MAS_VFE] = &mas_vfe,
-+	[MNOC_TO_CNOC] = &mnoc_to_cnoc,
-+	[MNOC_TO_BIMC] = &mnoc_to_bimc,
-+	[MNOC_SLV_CAMERA_CFG] = &slv_camera_cfg,
-+	[MNOC_SLV_DISPLAY_CFG] = &slv_display_cfg,
-+	[MNOC_SLV_OCMEM_CFG] = &slv_ocmem_cfg,
-+	[MNOC_SLV_CPR_CFG] = &slv_cpr_cfg,
-+	[MNOC_SLV_CPR_XPU_CFG] = &slv_cpr_xpu_cfg,
-+	[MNOC_SLV_MISC_CFG] = &slv_misc_cfg,
-+	[MNOC_SLV_MISC_XPU_CFG] = &slv_misc_xpu_cfg,
-+	[MNOC_SLV_VENUS_CFG] = &slv_venus_cfg,
-+	[MNOC_SLV_GRAPHICS_3D_CFG] = &slv_graphics_3d_cfg,
-+	[MNOC_SLV_MMSS_CLK_CFG] = &slv_mmss_clk_cfg,
-+	[MNOC_SLV_MMSS_CLK_XPU_CFG] = &slv_mmss_clk_xpu_cfg,
-+	[MNOC_SLV_MNOC_MPU_CFG] = &slv_mnoc_mpu_cfg,
-+	[MNOC_SLV_ONOC_MPU_CFG] = &slv_onoc_mpu_cfg,
-+	[MNOC_SLV_SERVICE_MNOC] = &slv_service_mnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_mnoc = {
-+	.nodes = msm8974_mnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_mnoc_nodes),
-+};
-+
-+DEFINE_QNODE(ocmem_noc_to_ocmem_vnoc, MSM8974_OCMEM_NOC_TO_OCMEM_VNOC, 16, 54, 78, MSM8974_OCMEM_SLV_OCMEM);
-+DEFINE_QNODE(mas_jpeg_ocmem, MSM8974_OCMEM_MAS_JPEG_OCMEM, 16, 13, -1);
-+DEFINE_QNODE(mas_mdp_ocmem, MSM8974_OCMEM_MAS_MDP_OCMEM, 16, 14, -1);
-+DEFINE_QNODE(mas_video_p0_ocmem, MSM8974_OCMEM_MAS_VIDEO_P0_OCMEM, 16, 15, -1);
-+DEFINE_QNODE(mas_video_p1_ocmem, MSM8974_OCMEM_MAS_VIDEO_P1_OCMEM, 16, 16, -1);
-+DEFINE_QNODE(mas_vfe_ocmem, MSM8974_OCMEM_MAS_VFE_OCMEM, 16, 17, -1);
-+DEFINE_QNODE(mas_cnoc_onoc_cfg, MSM8974_OCMEM_MAS_CNOC_ONOC_CFG, 16, 12, -1);
-+DEFINE_QNODE(slv_service_onoc, MSM8974_OCMEM_SLV_SERVICE_ONOC, 16, -1, 19);
-+DEFINE_QNODE(slv_ocmem, MSM8974_OCMEM_SLV_OCMEM, 16, -1, 18);
-+
-+/* Virtual NoC is needed for connection to OCMEM */
-+DEFINE_QNODE(ocmem_vnoc_to_onoc, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC, 16, 56, 79, MSM8974_OCMEM_NOC_TO_OCMEM_VNOC);
-+DEFINE_QNODE(ocmem_vnoc_to_snoc, MSM8974_OCMEM_VNOC_TO_SNOC, 8, 57, 80);
-+DEFINE_QNODE(mas_v_ocmem_gfx3d, MSM8974_OCMEM_VNOC_MAS_GFX3D, 8, 55, -1, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC);
-+
-+static struct msm8974_icc_node *msm8974_onoc_nodes[] = {
-+	[OCMEM_NOC_TO_OCMEM_VNOC] = &ocmem_noc_to_ocmem_vnoc,
-+	[OCMEM_MAS_JPEG_OCMEM] = &mas_jpeg_ocmem,
-+	[OCMEM_MAS_MDP_OCMEM] = &mas_mdp_ocmem,
-+	[OCMEM_MAS_VIDEO_P0_OCMEM] = &mas_video_p0_ocmem,
-+	[OCMEM_MAS_VIDEO_P1_OCMEM] = &mas_video_p1_ocmem,
-+	[OCMEM_MAS_VFE_OCMEM] = &mas_vfe_ocmem,
-+	[OCMEM_MAS_CNOC_ONOC_CFG] = &mas_cnoc_onoc_cfg,
-+	[OCMEM_SLV_SERVICE_ONOC] = &slv_service_onoc,
-+	[OCMEM_VNOC_TO_SNOC] = &ocmem_vnoc_to_snoc,
-+	[OCMEM_VNOC_TO_OCMEM_NOC] = &ocmem_vnoc_to_onoc,
-+	[OCMEM_VNOC_MAS_GFX3D] = &mas_v_ocmem_gfx3d,
-+	[OCMEM_SLV_OCMEM] = &slv_ocmem,
-+};
-+
-+static struct msm8974_icc_desc msm8974_onoc = {
-+	.nodes = msm8974_onoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_onoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_pnoc_cfg, MSM8974_PNOC_MAS_PNOC_CFG, 8, 43, -1);
-+DEFINE_QNODE(mas_sdcc_1, MSM8974_PNOC_MAS_SDCC_1, 8, 33, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_3, MSM8974_PNOC_MAS_SDCC_3, 8, 34, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_4, MSM8974_PNOC_MAS_SDCC_4, 8, 36, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_2, MSM8974_PNOC_MAS_SDCC_2, 8, 35, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_tsif, MSM8974_PNOC_MAS_TSIF, 8, 37, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_bam_dma, MSM8974_PNOC_MAS_BAM_DMA, 8, 38, -1);
-+DEFINE_QNODE(mas_blsp_2, MSM8974_PNOC_MAS_BLSP_2, 8, 39, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_usb_hsic, MSM8974_PNOC_MAS_USB_HSIC, 8, 40, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_blsp_1, MSM8974_PNOC_MAS_BLSP_1, 8, 41, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_usb_hs, MSM8974_PNOC_MAS_USB_HS, 8, 42, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(pnoc_to_snoc, MSM8974_PNOC_TO_SNOC, 8, 44, 45, MSM8974_SNOC_TO_PNOC, MSM8974_PNOC_SLV_PRNG);
-+DEFINE_QNODE(slv_sdcc_1, MSM8974_PNOC_SLV_SDCC_1, 8, -1, 31);
-+DEFINE_QNODE(slv_sdcc_3, MSM8974_PNOC_SLV_SDCC_3, 8, -1, 32);
-+DEFINE_QNODE(slv_sdcc_2, MSM8974_PNOC_SLV_SDCC_2, 8, -1, 33);
-+DEFINE_QNODE(slv_sdcc_4, MSM8974_PNOC_SLV_SDCC_4, 8, -1, 34);
-+DEFINE_QNODE(slv_tsif, MSM8974_PNOC_SLV_TSIF, 8, -1, 35);
-+DEFINE_QNODE(slv_bam_dma, MSM8974_PNOC_SLV_BAM_DMA, 8, -1, 36);
-+DEFINE_QNODE(slv_blsp_2, MSM8974_PNOC_SLV_BLSP_2, 8, -1, 37);
-+DEFINE_QNODE(slv_usb_hsic, MSM8974_PNOC_SLV_USB_HSIC, 8, -1, 38);
-+DEFINE_QNODE(slv_blsp_1, MSM8974_PNOC_SLV_BLSP_1, 8, -1, 39);
-+DEFINE_QNODE(slv_usb_hs, MSM8974_PNOC_SLV_USB_HS, 8, -1, 40);
-+DEFINE_QNODE(slv_pdm, MSM8974_PNOC_SLV_PDM, 8, -1, 41);
-+DEFINE_QNODE(slv_periph_apu_cfg, MSM8974_PNOC_SLV_PERIPH_APU_CFG, 8, -1, 42);
-+DEFINE_QNODE(slv_pnoc_mpu_cfg, MSM8974_PNOC_SLV_PNOC_MPU_CFG, 8, -1, 43);
-+DEFINE_QNODE(slv_prng, MSM8974_PNOC_SLV_PRNG, 8, -1, 44, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(slv_service_pnoc, MSM8974_PNOC_SLV_SERVICE_PNOC, 8, -1, 46);
-+
-+static struct msm8974_icc_node *msm8974_pnoc_nodes[] = {
-+	[PNOC_MAS_PNOC_CFG] = &mas_pnoc_cfg,
-+	[PNOC_MAS_SDCC_1] = &mas_sdcc_1,
-+	[PNOC_MAS_SDCC_3] = &mas_sdcc_3,
-+	[PNOC_MAS_SDCC_4] = &mas_sdcc_4,
-+	[PNOC_MAS_SDCC_2] = &mas_sdcc_2,
-+	[PNOC_MAS_TSIF] = &mas_tsif,
-+	[PNOC_MAS_BAM_DMA] = &mas_bam_dma,
-+	[PNOC_MAS_BLSP_2] = &mas_blsp_2,
-+	[PNOC_MAS_USB_HSIC] = &mas_usb_hsic,
-+	[PNOC_MAS_BLSP_1] = &mas_blsp_1,
-+	[PNOC_MAS_USB_HS] = &mas_usb_hs,
-+	[PNOC_TO_SNOC] = &pnoc_to_snoc,
-+	[PNOC_SLV_SDCC_1] = &slv_sdcc_1,
-+	[PNOC_SLV_SDCC_3] = &slv_sdcc_3,
-+	[PNOC_SLV_SDCC_2] = &slv_sdcc_2,
-+	[PNOC_SLV_SDCC_4] = &slv_sdcc_4,
-+	[PNOC_SLV_TSIF] = &slv_tsif,
-+	[PNOC_SLV_BAM_DMA] = &slv_bam_dma,
-+	[PNOC_SLV_BLSP_2] = &slv_blsp_2,
-+	[PNOC_SLV_USB_HSIC] = &slv_usb_hsic,
-+	[PNOC_SLV_BLSP_1] = &slv_blsp_1,
-+	[PNOC_SLV_USB_HS] = &slv_usb_hs,
-+	[PNOC_SLV_PDM] = &slv_pdm,
-+	[PNOC_SLV_PERIPH_APU_CFG] = &slv_periph_apu_cfg,
-+	[PNOC_SLV_PNOC_MPU_CFG] = &slv_pnoc_mpu_cfg,
-+	[PNOC_SLV_PRNG] = &slv_prng,
-+	[PNOC_SLV_SERVICE_PNOC] = &slv_service_pnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_pnoc = {
-+	.nodes = msm8974_pnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_pnoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_lpass_ahb, MSM8974_SNOC_MAS_LPASS_AHB, 8, 18, -1);
-+DEFINE_QNODE(mas_qdss_bam, MSM8974_SNOC_MAS_QDSS_BAM, 8, 19, -1);
-+DEFINE_QNODE(mas_snoc_cfg, MSM8974_SNOC_MAS_SNOC_CFG, 8, 20, -1);
-+DEFINE_QNODE(snoc_to_bimc, MSM8974_SNOC_TO_BIMC, 8, 21, 24, MSM8974_BIMC_TO_SNOC);
-+DEFINE_QNODE(snoc_to_cnoc, MSM8974_SNOC_TO_CNOC, 8, 22, 25);
-+DEFINE_QNODE(snoc_to_pnoc, MSM8974_SNOC_TO_PNOC, 8, 29, 28, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(snoc_to_ocmem_vnoc, MSM8974_SNOC_TO_OCMEM_VNOC, 8, 53, 77, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC);
-+DEFINE_QNODE(mas_crypto_core0, MSM8974_SNOC_MAS_CRYPTO_CORE0, 8, 23, -1, MSM8974_SNOC_TO_BIMC);
-+DEFINE_QNODE(mas_crypto_core1, MSM8974_SNOC_MAS_CRYPTO_CORE1, 8, 24, -1);
-+DEFINE_QNODE(mas_lpass_proc, MSM8974_SNOC_MAS_LPASS_PROC, 8, 25, -1, MSM8974_SNOC_TO_OCMEM_VNOC);
-+DEFINE_QNODE(mas_mss, MSM8974_SNOC_MAS_MSS, 8, 26, -1);
-+DEFINE_QNODE(mas_mss_nav, MSM8974_SNOC_MAS_MSS_NAV, 8, 27, -1);
-+DEFINE_QNODE(mas_ocmem_dma, MSM8974_SNOC_MAS_OCMEM_DMA, 8, 28, -1);
-+DEFINE_QNODE(mas_wcss, MSM8974_SNOC_MAS_WCSS, 8, 30, -1);
-+DEFINE_QNODE(mas_qdss_etr, MSM8974_SNOC_MAS_QDSS_ETR, 8, 31, -1);
-+DEFINE_QNODE(mas_usb3, MSM8974_SNOC_MAS_USB3, 8, 32, -1, MSM8974_SNOC_TO_BIMC);
-+DEFINE_QNODE(slv_ampss, MSM8974_SNOC_SLV_AMPSS, 8, -1, 20);
-+DEFINE_QNODE(slv_lpass, MSM8974_SNOC_SLV_LPASS, 8, -1, 21);
-+DEFINE_QNODE(slv_usb3, MSM8974_SNOC_SLV_USB3, 8, -1, 22);
-+DEFINE_QNODE(slv_wcss, MSM8974_SNOC_SLV_WCSS, 8, -1, 23);
-+DEFINE_QNODE(slv_ocimem, MSM8974_SNOC_SLV_OCIMEM, 8, -1, 26);
-+DEFINE_QNODE(slv_snoc_ocmem, MSM8974_SNOC_SLV_SNOC_OCMEM, 8, -1, 27);
-+DEFINE_QNODE(slv_service_snoc, MSM8974_SNOC_SLV_SERVICE_SNOC, 8, -1, 29);
-+DEFINE_QNODE(slv_qdss_stm, MSM8974_SNOC_SLV_QDSS_STM, 8, -1, 30);
-+
-+static struct msm8974_icc_node *msm8974_snoc_nodes[] = {
-+	[SNOC_MAS_LPASS_AHB] = &mas_lpass_ahb,
-+	[SNOC_MAS_QDSS_BAM] = &mas_qdss_bam,
-+	[SNOC_MAS_SNOC_CFG] = &mas_snoc_cfg,
-+	[SNOC_TO_BIMC] = &snoc_to_bimc,
-+	[SNOC_TO_CNOC] = &snoc_to_cnoc,
-+	[SNOC_TO_PNOC] = &snoc_to_pnoc,
-+	[SNOC_TO_OCMEM_VNOC] = &snoc_to_ocmem_vnoc,
-+	[SNOC_MAS_CRYPTO_CORE0] = &mas_crypto_core0,
-+	[SNOC_MAS_CRYPTO_CORE1] = &mas_crypto_core1,
-+	[SNOC_MAS_LPASS_PROC] = &mas_lpass_proc,
-+	[SNOC_MAS_MSS] = &mas_mss,
-+	[SNOC_MAS_MSS_NAV] = &mas_mss_nav,
-+	[SNOC_MAS_OCMEM_DMA] = &mas_ocmem_dma,
-+	[SNOC_MAS_WCSS] = &mas_wcss,
-+	[SNOC_MAS_QDSS_ETR] = &mas_qdss_etr,
-+	[SNOC_MAS_USB3] = &mas_usb3,
-+	[SNOC_SLV_AMPSS] = &slv_ampss,
-+	[SNOC_SLV_LPASS] = &slv_lpass,
-+	[SNOC_SLV_USB3] = &slv_usb3,
-+	[SNOC_SLV_WCSS] = &slv_wcss,
-+	[SNOC_SLV_OCIMEM] = &slv_ocimem,
-+	[SNOC_SLV_SNOC_OCMEM] = &slv_snoc_ocmem,
-+	[SNOC_SLV_SERVICE_SNOC] = &slv_service_snoc,
-+	[SNOC_SLV_QDSS_STM] = &slv_qdss_stm,
-+};
-+
-+static struct msm8974_icc_desc msm8974_snoc = {
-+	.nodes = msm8974_snoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_snoc_nodes),
-+};
-+
-+static int msm8974_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				 u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	*agg_avg += avg_bw;
-+	*agg_peak = max(*agg_peak, peak_bw);
-+
-+	return 0;
-+}
-+
-+static void msm8974_icc_rpm_smd_send(struct device *dev, int rsc_type,
-+				     char *name, int id, u64 val)
-+{
-+	int ret;
-+
-+	if (id == -1)
-+		return;
-+
-+	/*
-+	 * Setting the bandwidth requests for some nodes fails and this same
-+	 * behavior occurs on the downstream MSM 3.4 kernel sources based on
-+	 * errors like this in that kernel:
-+	 *
-+	 *   msm_rpm_get_error_from_ack(): RPM NACK Unsupported resource
-+	 *   AXI: msm_bus_rpm_req(): RPM: Ack failed
-+	 *   AXI: msm_bus_rpm_commit_arb(): RPM: Req fail: mas:32, bw:240000000
-+	 *
-+	 * Since there's no publicly available documentation for this hardware,
-+	 * and the bandwidth for some nodes in the path can be set properly,
-+	 * let's not return an error.
-+	 */
-+	ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE, rsc_type, id,
-+				    val);
-+	if (ret)
-+		dev_dbg(dev, "Cannot set bandwidth for node %s (%d): %d\n",
-+			name, id, ret);
-+}
-+
-+static int msm8974_icc_set(struct icc_node *src, struct icc_node *dst)
-+{
-+	struct msm8974_icc_node *src_qn, *dst_qn;
-+	struct msm8974_icc_provider *qp;
-+	u64 sum_bw, max_peak_bw, rate;
-+	u32 agg_avg = 0, agg_peak = 0;
-+	struct icc_provider *provider;
-+	struct icc_node *n;
-+	int ret, i;
-+
-+	src_qn = src->data;
-+	dst_qn = dst->data;
-+	provider = src->provider;
-+	qp = to_msm8974_icc_provider(provider);
-+
-+	list_for_each_entry(n, &provider->nodes, node_list)
-+		msm8974_icc_aggregate(n, 0, n->avg_bw, n->peak_bw,
-+				   &agg_avg, &agg_peak);
-+
-+	sum_bw = icc_units_to_bps(agg_avg);
-+	max_peak_bw = icc_units_to_bps(agg_peak);
-+
-+	/* Set bandwidth on source node */
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_MASTER_REQ,
-+				 src_qn->name, src_qn->mas_rpm_id, sum_bw);
-+
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_SLAVE_REQ,
-+				 src_qn->name, src_qn->slv_rpm_id, sum_bw);
-+
-+	/* Set bandwidth on destination node */
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_MASTER_REQ,
-+				 dst_qn->name, dst_qn->mas_rpm_id, sum_bw);
-+
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_SLAVE_REQ,
-+				 dst_qn->name, dst_qn->slv_rpm_id, sum_bw);
-+
-+	rate = max(sum_bw, max_peak_bw);
-+
-+	do_div(rate, src_qn->buswidth);
-+
-+	if (src_qn->rate == rate)
-+		return 0;
-+
-+	for (i = 0; i < qp->num_clks; i++) {
-+		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
-+		if (ret) {
-+			dev_err(provider->dev, "%s clk_set_rate error: %d\n",
-+				qp->bus_clks[i].id, ret);
-+			ret = 0;
-+		}
-+	}
-+
-+	src_qn->rate = rate;
-+
-+	return 0;
-+}
-+
-+static int msm8974_icc_probe(struct platform_device *pdev)
-+{
-+	const struct msm8974_icc_desc *desc;
-+	struct msm8974_icc_node **qnodes;
-+	struct msm8974_icc_provider *qp;
-+	struct device *dev = &pdev->dev;
-+	struct icc_onecell_data *data;
-+	struct icc_provider *provider;
-+	struct icc_node *node;
-+	size_t num_nodes, i;
-+	int ret;
-+
-+	/* wait for the RPM proxy */
-+	if (!qcom_icc_rpm_smd_available())
-+		return -EPROBE_DEFER;
-+
-+	desc = of_device_get_match_data(dev);
-+	if (!desc)
-+		return -EINVAL;
-+
-+	qnodes = desc->nodes;
-+	num_nodes = desc->num_nodes;
-+
-+	qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
-+	if (!qp)
-+		return -ENOMEM;
-+
-+	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
-+			    GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	qp->bus_clks = devm_kmemdup(dev, msm8974_icc_bus_clocks,
-+				    sizeof(msm8974_icc_bus_clocks), GFP_KERNEL);
-+	if (!qp->bus_clks)
-+		return -ENOMEM;
-+
-+	qp->num_clks = ARRAY_SIZE(msm8974_icc_bus_clocks);
-+	ret = devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_bulk_prepare_enable(qp->num_clks, qp->bus_clks);
-+	if (ret)
-+		return ret;
-+
-+	provider = &qp->provider;
-+	INIT_LIST_HEAD(&provider->nodes);
-+	provider->dev = dev;
-+	provider->set = msm8974_icc_set;
-+	provider->aggregate = msm8974_icc_aggregate;
-+	provider->xlate = of_icc_xlate_onecell;
-+	provider->data = data;
-+
-+	ret = icc_provider_add(provider);
-+	if (ret) {
-+		dev_err(dev, "error adding interconnect provider: %d\n", ret);
-+		goto err_disable_clks;
-+	}
-+
-+	for (i = 0; i < num_nodes; i++) {
-+		size_t j;
-+
-+		node = icc_node_create(qnodes[i]->id);
-+		if (IS_ERR(node)) {
-+			ret = PTR_ERR(node);
-+			goto err_del_icc;
-+		}
-+
-+		node->name = qnodes[i]->name;
-+		node->data = qnodes[i];
-+		icc_node_add(node, provider);
-+
-+		dev_dbg(dev, "registered node %s\n", node->name);
-+
-+		/* populate links */
-+		for (j = 0; j < qnodes[i]->num_links; j++)
-+			icc_link_create(node, qnodes[i]->links[j]);
-+
-+		data->nodes[i] = node;
-+	}
-+	data->num_nodes = num_nodes;
-+
-+	platform_set_drvdata(pdev, qp);
-+
-+	return 0;
-+
-+err_del_icc:
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		icc_node_del(node);
-+		icc_node_destroy(node->id);
-+	}
-+	icc_provider_del(provider);
-+
-+err_disable_clks:
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+
-+	return ret;
-+}
-+
-+static int msm8974_icc_remove(struct platform_device *pdev)
-+{
-+	struct msm8974_icc_provider *qp = platform_get_drvdata(pdev);
-+	struct icc_provider *provider = &qp->provider;
-+	struct icc_node *n;
-+
-+	list_for_each_entry(n, &provider->nodes, node_list) {
-+		icc_node_del(n);
-+		icc_node_destroy(n->id);
-+	}
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+
-+	return icc_provider_del(provider);
-+}
-+
-+static const struct of_device_id msm8974_noc_of_match[] = {
-+	{ .compatible = "qcom,msm8974-bimc", .data = &msm8974_bimc},
-+	{ .compatible = "qcom,msm8974-cnoc", .data = &msm8974_cnoc},
-+	{ .compatible = "qcom,msm8974-mmssnoc", .data = &msm8974_mnoc},
-+	{ .compatible = "qcom,msm8974-ocmemnoc", .data = &msm8974_onoc},
-+	{ .compatible = "qcom,msm8974-pnoc", .data = &msm8974_pnoc},
-+	{ .compatible = "qcom,msm8974-snoc", .data = &msm8974_snoc},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, msm8974_noc_of_match);
-+
-+static struct platform_driver msm8974_noc_driver = {
-+	.probe = msm8974_icc_probe,
-+	.remove = msm8974_icc_remove,
-+	.driver = {
-+		.name = "qnoc-msm8974",
-+		.of_match_table = msm8974_noc_of_match,
-+	},
-+};
-+module_platform_driver(msm8974_noc_driver);
-+MODULE_DESCRIPTION("Qualcomm MSM8974 NoC driver");
-+MODULE_AUTHOR("Brian Masney <masneyb@onstation.org>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.21.0
+> I'm using the target device as dev for dev_pm_qos, not the requestor.
+> This is consistent with how it was used for cpufreq: thermal called a
+> dev_pm_qos_add_request on with dev = cpu_dev not a thermal sensor or
+> anything else.
 
+Not really, but close. :-)
+
+Without my series (that is 5.4-rc4, say), the cpu_cooling driver adds
+its constraint to the device PM QoS of cpufreq_cdev which is a special
+device created by that driver.  That would be fine, except that the
+cpufreq core doesn't use that QoS.  It uses the device PM QoS of the
+policy->cpu device instead.  That is, that's where it adds its
+notifiers (see cpufreq_policy_alloc()), that's where user space
+requests are added (see cpufreq_online()), and (most important) that's
+where the effective constraint value is read from (see
+cpufreq_set_policy()).  That turns out to be problematic (in addition
+to the cpu_cooling driver's QoS requests going nowhere), because
+confusion ensues if the current policy->cpu goes away.
+
+> However looking at other dev_pm_qos users there are instances of a
+> driver calling dev_pm_qos_add_request on it's own device but this is not
+> a strict requirement, correct?
+
+No, it isn't.
+
+> >>> There have to be two lists of requests per policy, one for the max and
+> >>> one for the min frequency >
+> >>>> If cpufreq needs a group of CPUs to run at the same frequency then it
+> >>>> should deal with this by doing dev_pm_qos_read_frequency on each CPU
+> >>>> device and picking a frequency that attempts to satisfy all constraints.
+> >>>
+> >>> No, that would be combining the requests by hand.
+> >>
+> >> It's just a loop though.
+> >
+> > Yes, it is, and needs to be run on every change of an effective
+> > constraint for any CPU even if the total effective constraint doesn't
+> > change.  And, of course, the per-policy user space limits would need
+> > to be combined with that by hand.
+> >
+> > Not particularly straightforward if you asked me.
+>
+> Well, this cpu-to-policy aggregation could also use a pm_qos_constraint
+> object instead of looping.
+
+Yes, it could, but then somebody would need to add those
+"intermediate" requests to a proper policy-level QoS and it would need
+an extra notifier invocation to update each of them on a "component"
+QoS change.
+
+This is an interesting idea in case we ever need to improve the
+scalability of the QoS lists, but I'd rather use the simpler approach
+for now.
+
+[cut]
+
+> >>> Well, the cpufreq sysfs is per-policy and not per-CPU and we really
+> >>> need a per-policy min and max frequency in cpufreq, for governors etc.
+> >>
+> >> Aggregation could be performed at two levels:
+> >>
+> >> 1) Per cpu device (by dev_pm_qos)
+> >> 2) Per policy (inside cpufreq)
+> >>
+> >> The per-cpu dev_pm_qos notifier would just update a per-policy
+> >> pm_qos_constraints object. The second step could even be done strictly
+> >> inside the cpufreq core using existing pm_qos, no need to invent new
+> >> frameworks.
+> >>
+> >> Maybe dev_pm_qos is not a very good fit for cpufreq because of these
+> >> "cpu device versus cpufreq_policy" issues but it makes a ton of sense
+> >> for devfreq. Can you maybe hold PATCH 3 from this series pending further
+> >> discussion?
+> >
+> > It can be reverted at any time if need be and in 5.4 that would be dead code.
+>
+> I guess I can post v10 of my "devfreq pm qos" which starts by reverting
+> "PATCH 3" of this series?
+
+You may do that, but I would consider adding a struct freq_constraints
+pointer directly to struct dev_pm_info and using the new frequency QoS
+helpers to manage it.
+
+Arguably, there is no need to bundle that with the rest of device PM
+QoS and doing the above would help to avoid some code duplication too.
+
+Thanks!
