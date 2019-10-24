@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C78BE3F01
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 00:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B18E3EFD
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 00:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730820AbfJXWR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 18:17:57 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34808 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730772AbfJXWR4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 18:17:56 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 139so176510ljf.1;
-        Thu, 24 Oct 2019 15:17:54 -0700 (PDT)
+        id S1730954AbfJXWSK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 18:18:10 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34813 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730801AbfJXWR5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 18:17:57 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 139so176571ljf.1;
+        Thu, 24 Oct 2019 15:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8N97qQTC+6XrG8bUfxHlYQEAtBQiZweZkcpA8OraE+o=;
-        b=Zuln4PF99RumN7y2yHDLvAytC1Bjo1+VWFZCYG/Xx25lto0cj4XN7olK/s5fXeRTmw
-         JSnFHGX8kE6zd/FGvFRgSwRulkQN0ma0Dqg6oYEhYSfJMhmJNXag1r3hYrxVNHB9fLOu
-         c1X/hi1TfL9mj0ZXqdyDDvSb6yam7g7jPdpq12cTpcvb2OCnU7b1gVANKlflmoVj24Ta
-         lRCtkYNs80X58WA5O5xMSZn+5jv7uPTLTnteh/zBGxewHQKyPvRKeYUFsVGFJiRn26+y
-         xvkpeNfhQdAiKr0UfpZVPkmWHXer054NAmmaQ+p/cIk0xEkVQU0BdTYvCLJVGRKSJBI4
-         l3eQ==
+        bh=MLnPwIcCcepxh+b7YPRNDobkVHJOYTd9LBCVyPpFgVU=;
+        b=cbeaOY0oaLsDTVIZ/6C+RqIgv0/rE7X29KAeqc+sVWXkqs+vr5A/WoKunP6zj98qXk
+         Djnfa5/OA9RLLNsSbesPu2Au+fya/SWTIqW5TDVGLKcA5vz+P7Atdzv0FrZbQ4OP2JLl
+         qCUartiLSG0HhyZW1MreztG2mvf6KAGgYkw+5nOSqqGJQxKdCMgCGx5CZODgCzrNLH5S
+         UhNfLGntbAu2k7dyWclaIbSKxBJCmUcPp9HnyC8QRrz3t6rWKVgN6+hcwIQWdGG8gUDo
+         6F019JvKYP/RSQDYlf0WSo2NJB+99J9szcnqAw86lrg4/PIXH9kd08o4zyZ0n/0yeoot
+         MHjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8N97qQTC+6XrG8bUfxHlYQEAtBQiZweZkcpA8OraE+o=;
-        b=iBwZXGQr+NkOzdQTbY2I+kKXjl6COXztiVwZH4eEN0wbPLWmIWzAYBzBvR6SxcJgn5
-         YNBBobJtvO4WRYW1nu6qORsj0EvNcTXkrp/W7O3cO3jUiTBJAXa05akUuveGgpzlN7rT
-         Maymc2+W0VZGM84dVcsMqUMwCjykfD1WiJ3UteTL/QzS3X6/b4s+zL0SGbNd6a/ZUly/
-         VYOZPmG4BNqfFuuLGxQ555+33TRv0M6Aw+9834E9i8gbU3AaTcydCZNqIRSOtgBhS6y8
-         OHQ6X2rFIb7bjWVlwys3xHtdM1qPXFvImD7VIvjGah8JTwR5FnO0333k6rNGjLCyck70
-         sFng==
-X-Gm-Message-State: APjAAAVGABINJsEQIiGmTIb8idvgrZfAs+JcOozy/EUDPolE4kegjn6Q
-        ENnLoX1TVUAHdrkxDeV9hEE=
-X-Google-Smtp-Source: APXvYqy/vcg/TIZtag8K/q71ytHrRoLfgvwU3ibLV8j1c/f21I1gG36sjHNODftbGHZZJiPiIaOKqw==
-X-Received: by 2002:a2e:7312:: with SMTP id o18mr60702ljc.32.1571955473681;
-        Thu, 24 Oct 2019 15:17:53 -0700 (PDT)
+        bh=MLnPwIcCcepxh+b7YPRNDobkVHJOYTd9LBCVyPpFgVU=;
+        b=oz+CmfVxTA24XkLLQXABVEiOpnDRjRkW/twXxSSGJ4Le0BrRD21JqKZgEpJwNjwzRg
+         0TpWFs7sCnTj/A7tmM5Q4OK87Qn+EVJp7NDn1aoVPUH09bQgY1Yox+eAx657wPJbWJiB
+         CBhk2igEvd2xxuBgUMHBYXJcEUt+oleVAWX4D9i4vH1wKYkRkgqx/SEWjjLKKr7wVu8l
+         oSRh5QLUalpsko+1nnhDm4Mz/w0GhhmQToPs/xfc8qU9tgfI/YcGQgm2FVpTqEqKoZCs
+         54KRy2rkUBQhCwM93EqpYl6Ihl7fb0E7zqUOBiPt7o225npBaTla4l0c5I7RxmbznSQc
+         a3PA==
+X-Gm-Message-State: APjAAAWPDWKw7dOjrAMrkvOXOsH9V4b96+xTgMxespSWRbKEhs2qJhD8
+        NGlgSFMyBoBOkimCXpOKiAU=
+X-Google-Smtp-Source: APXvYqwGW8i4xEA9dfVPi6DpqEFEKcLGsmKJ5pShWapvEkEy57MedrNQSM5pZR7hSo4iOtEexpluFg==
+X-Received: by 2002:a2e:9655:: with SMTP id z21mr43753ljh.252.1571955474929;
+        Thu, 24 Oct 2019 15:17:54 -0700 (PDT)
 Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id i6sm11338765lfo.83.2019.10.24.15.17.52
+        by smtp.gmail.com with ESMTPSA id i6sm11338765lfo.83.2019.10.24.15.17.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 15:17:52 -0700 (PDT)
+        Thu, 24 Oct 2019 15:17:54 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,9 +60,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 15/17] ARM: dts: tegra20: trimslice: Add CPU Operating Performance Points
-Date:   Fri, 25 Oct 2019 01:14:14 +0300
-Message-Id: <20191024221416.14197-16-digetx@gmail.com>
+Subject: [PATCH v2 16/17] ARM: dts: tegra30: cardhu-a04: Set up voltage regulators for DVFS
+Date:   Fri, 25 Oct 2019 01:14:15 +0300
+Message-Id: <20191024221416.14197-17-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191024221416.14197-1-digetx@gmail.com>
 References: <20191024221416.14197-1-digetx@gmail.com>
@@ -73,39 +73,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Utilize common Tegra20 CPU OPP table. CPU voltage scaling is available now
-on TrimSlice.
+Set min/max voltage and couple CPU/CORE regulators.
 
-Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra20-trimslice.dts | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm/boot/dts/tegra30-cardhu-a04.dts | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra20-trimslice.dts b/arch/arm/boot/dts/tegra20-trimslice.dts
-index 3e5ac096d85e..8debd3d3c20d 100644
---- a/arch/arm/boot/dts/tegra20-trimslice.dts
-+++ b/arch/arm/boot/dts/tegra20-trimslice.dts
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/input/input.h>
- #include "tegra20.dtsi"
-+#include "tegra20-cpu-opp.dtsi"
- 
- / {
- 	model = "Compulab TrimSlice board";
-@@ -471,4 +472,14 @@
- 			 <&tegra_car TEGRA20_CLK_CDEV1>;
- 		clock-names = "pll_a", "pll_a_out0", "mclk";
+diff --git a/arch/arm/boot/dts/tegra30-cardhu-a04.dts b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
+index 4dbd4af679f0..0d71925d4f0b 100644
+--- a/arch/arm/boot/dts/tegra30-cardhu-a04.dts
++++ b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
+@@ -103,4 +103,28 @@
+ 			gpio = <&gpio TEGRA_GPIO(DD, 0) GPIO_ACTIVE_HIGH>;
+ 		};
  	};
 +
-+	cpus {
-+		cpu0: cpu@0 {
-+			operating-points-v2 = <&cpu0_opp_table>;
++	i2c@7000d000 {
++		pmic: tps65911@2d {
++			regulators {
++				vddctrl_reg: vddctrl {
++					regulator-min-microvolt = <800000>;
++					regulator-max-microvolt = <1125000>;
++					regulator-coupled-with = <&vddcore_reg>;
++					regulator-coupled-max-spread = <300000>;
++					regulator-max-step-microvolt = <100000>;
++
++					nvidia,tegra-cpu-regulator;
++				};
++			};
 +		};
 +
-+		cpu@1 {
-+			operating-points-v2 = <&cpu0_opp_table>;
++		vddcore_reg: tps62361@60 {
++			regulator-coupled-with = <&vddctrl_reg>;
++			regulator-coupled-max-spread = <300000>;
++			regulator-max-step-microvolt = <100000>;
++
++			nvidia,tegra-core-regulator;
 +		};
 +	};
  };
