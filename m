@@ -2,162 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7345EE2BF3
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 10:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB7E2D38
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 11:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438078AbfJXITs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 04:19:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36374 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726841AbfJXITs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 04:19:48 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9O8GMhx053168
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 04:19:47 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2vu74m2t2v-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 04:19:47 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Thu, 24 Oct 2019 09:19:45 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 24 Oct 2019 09:19:40 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9O8Jdef23134452
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Oct 2019 08:19:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1962E4C04A;
-        Thu, 24 Oct 2019 08:19:39 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85EA54C04E;
-        Thu, 24 Oct 2019 08:19:35 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.124.35.94])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 24 Oct 2019 08:19:35 +0000 (GMT)
-Subject: Re: [Discussion v2] Usecases for the per-task latency-nice attribute
-From:   Parth Shah <parth@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, patrick.bellasi@matbug.net,
-        tim.c.chen@linux.intel.com, valentin.schneider@arm.com,
-        qais.yousef@arm.com, linux-pm@vger.kernel.org
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org, pavel@ucw.cz,
-        David.Laight@ACULAB.COM, mingo@redhat.com,
-        morten.rasmussen@arm.com, pjt@google.com, dietmar.eggemann@arm.com,
-        tj@kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, dhaval.giani@oracle.com,
-        qperret@qperret.net, ggherdovich@suse.cz, viresh.kumar@linaro.org,
-        Doug Smythies <dsmythies@telus.net>
-References: <2bd46086-43ff-f130-8720-8eec694eb55b@linux.ibm.com>
-Date:   Thu, 24 Oct 2019 13:49:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
-MIME-Version: 1.0
-In-Reply-To: <2bd46086-43ff-f130-8720-8eec694eb55b@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19102408-0020-0000-0000-0000037DADA7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102408-0021-0000-0000-000021D3F2E8
-Message-Id: <376e1a37-8f7d-3cbc-9d9d-dd349afb9b3b@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-24_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=838 adultscore=1 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910240079
+        id S2408873AbfJXJ0p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 05:26:45 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:34544 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408862AbfJXJ0p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Oct 2019 05:26:45 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1B8E61A019B;
+        Thu, 24 Oct 2019 11:26:42 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 70F8D1A0755;
+        Thu, 24 Oct 2019 11:26:35 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 38581402BC;
+        Thu, 24 Oct 2019 17:26:27 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>
+Cc:     Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: [PATCH v10 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
+Date:   Thu, 24 Oct 2019 17:26:42 +0800
+Message-Id: <20191024092644.26583-1-ran.wang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Some user might want to go through all registered wakeup sources
+and doing things accordingly. For example, SoC PM driver might need to
+do HW programming to prevent powering down specific IP which wakeup
+source depending on. So add this API to help walk through all registered
+wakeup source objects on that list and return them one by one.
 
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+Tested-by: Leonard Crestez <leonard.crestez@nxp.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+Change in v10:
+	- Add 'Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>'
+	  to commit message.
 
-On 9/30/19 4:13 PM, Parth Shah wrote:
-> Hello everyone,
-> 
-> This is the v2 of the discussion started for introducing per-task
-> latency-nice attribute for providing scheduler hints.
-> 
-> v1: https://lkml.org/lkml/2019/9/18/555
-> 
-> In brief, we face two challenges with the introduction of such attr.
-> 
-> 1. Name:
-> ==============
-> ( Should be relevant to all the possible usecases, not confuse end-user and
-> reflect the functionality it provides to the scheduler behaviour )
-> 
-> Curated list of proposed names:
-> 
-> 1. latency-nice:
->    should have a better understanding based on pre-existing concepts
-> 
-> - But poses two interpretation ambiguity
->   a) -20 (least nice to latency, i.e. sacrifice latency for throughput)
->      +19 (most nice to latency, i.e. sacrifice throughput for latency)
->   b) -20 (least nice to other task in terms of sacrificing latency, i.e.
-> 	  latency-sensitive)
->      +19 (most nice to other tasks in terms of sacrificing latency, i.e.
-> 	  latency-forgoing)
-> 
-> 2. latency-tolerant:
->    decouples a bit its meaning from the niceness thus giving maybe a bit
->    more freedom in its complete definition and perhaps avoid any
->    possible interpretation confusion
-> 
-> 3. latency-nasty
-> 
-> 4. latency-sensible
+Change in v9:
+	- Supplement comments for wakeup_sources_read_lock(),
+	  wakeup_sources_read_unlock, wakeup_sources_walk_start and
+	  wakeup_sources_walk_next().
 
-+ 5. temper
-     -20 (short temper, angry tasks, i.e., requires least latency)
-     +19 (calm tasks, i.e., sacrifice latency for throughput)
+Change in v8:
+	- Rename wakeup_source_get_next() to wakeup_sources_walk_next().
+	- Add wakeup_sources_read_lock() to take over locking job of
+	  wakeup_source_get_star().
+	- Rename wakeup_source_get_start() to wakeup_sources_walk_start().
+	- Replace wakeup_source_get_stop() with wakeup_sources_read_unlock().
+	- Define macro for_each_wakeup_source(ws).
 
-> 
-> 
-> 
-> 2. Value(s):
-> ==============
-> ( Boolean/Ternary, Range of values, profile tagging )
-> 
-> - Recent discussion plots the range of [-20, 19] to be the most agreed upon.
-> 
-> 1. Range:
-> - [-20, 19]:
->     Which has similarities with the niceness concept and gives a minimal
->     continuous range. This can be on hand for things like scaling the
->     vruntime normalization [3]
-> 
-> 2. Profile tagging:
-> - Can be used just like a flag attribute
->   e.g., Background, foreground, latency-sensible, reduce-idle-search, etc.
-> 
-> 3. Binary:
-> - 0 for: Latency sensitive/sensible/in-tolerant/hungry...
-> - 1 for Latency insensitive/insensible/tolerant/nice-to-others/...
-> 
->   Ternary:
-> -  0: no effect
-> - -1: require least latency
-> - +1: no restrictions in terms of lower/higher latency
-> 
-> [...]
+Change in v7:
+	- Remove define of member *dev in wake_irq to fix conflict with commit 
+	c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs"), user 
+	will use ws->dev->parent instead.
+	- Remove '#include <linux/of_device.h>' because it is not used.
 
-I guess the latency-tolerant name seems to be more relevant and the range
-[-20,19] will suit all the discussed usecases.
-( ( ( tomatoes target here ) ) )
+Change in v6:
+	- Add wakeup_source_get_star() and wakeup_source_get_stop() to aligned 
+	with wakeup_sources_stats_seq_start/nex/stop.
 
-If this seems alright then I am thinking of writing out some patches to
-introduce p->latency-tolerant with the use of "sched_setattr" syscall.
+Change in v5:
+	- Update commit message, add decription of walk through all wakeup
+	source objects.
+	- Add SCU protection in function wakeup_source_get_next().
+	- Rename wakeup_source member 'attached_dev' to 'dev' and move it up
+	(before wakeirq).
 
+Change in v4:
+	- None.
 
-Thanks,
-Parth
+Change in v3:
+	- Adjust indentation of *attached_dev;.
+
+Change in v2:
+	- None.
+
+ drivers/base/power/wakeup.c | 54 +++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_wakeup.h   |  9 ++++++++
+ 2 files changed, 63 insertions(+)
+
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 5817b51..70a9edb 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -248,6 +248,60 @@ void wakeup_source_unregister(struct wakeup_source *ws)
+ EXPORT_SYMBOL_GPL(wakeup_source_unregister);
+ 
+ /**
++ * wakeup_sources_read_lock - Lock wakeup source list for read.
++ *
++ * Returns an index of srcu lock for struct wakeup_srcu.
++ * This index must be passed to the matching wakeup_sources_read_unlock().
++ */
++int wakeup_sources_read_lock(void)
++{
++	return srcu_read_lock(&wakeup_srcu);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_read_lock);
++
++/**
++ * wakeup_sources_read_unlock - Unlock wakeup source list.
++ * @idx: return value from corresponding wakeup_sources_read_lock()
++ */
++void wakeup_sources_read_unlock(int idx)
++{
++	srcu_read_unlock(&wakeup_srcu, idx);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
++
++/**
++ * wakeup_sources_walk_start - Begin a walk on wakeup source list
++ *
++ * Returns first object of the list of wakeup sources.
++ *
++ * Note that to be safe, wakeup sources list needs to be locked by calling
++ * wakeup_source_read_lock() for this.
++ */
++struct wakeup_source *wakeup_sources_walk_start(void)
++{
++	struct list_head *ws_head = &wakeup_sources;
++
++	return list_entry_rcu(ws_head->next, struct wakeup_source, entry);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
++
++/**
++ * wakeup_sources_walk_next - Get next wakeup source from the list
++ * @ws: Previous wakeup source object
++ *
++ * Note that to be safe, wakeup sources list needs to be locked by calling
++ * wakeup_source_read_lock() for this.
++ */
++struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws)
++{
++	struct list_head *ws_head = &wakeup_sources;
++
++	return list_next_or_null_rcu(ws_head, &ws->entry,
++				struct wakeup_source, entry);
++}
++EXPORT_SYMBOL_GPL(wakeup_sources_walk_next);
++
++/**
+  * device_wakeup_attach - Attach a wakeup source object to a device object.
+  * @dev: Device to handle.
+  * @ws: Wakeup source object to attach to @dev.
+diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+index 661efa0..aa3da66 100644
+--- a/include/linux/pm_wakeup.h
++++ b/include/linux/pm_wakeup.h
+@@ -63,6 +63,11 @@ struct wakeup_source {
+ 	bool			autosleep_enabled:1;
+ };
+ 
++#define for_each_wakeup_source(ws) \
++	for ((ws) = wakeup_sources_walk_start();	\
++	     (ws);					\
++	     (ws) = wakeup_sources_walk_next((ws)))
++
+ #ifdef CONFIG_PM_SLEEP
+ 
+ /*
+@@ -92,6 +97,10 @@ extern void wakeup_source_remove(struct wakeup_source *ws);
+ extern struct wakeup_source *wakeup_source_register(struct device *dev,
+ 						    const char *name);
+ extern void wakeup_source_unregister(struct wakeup_source *ws);
++extern int wakeup_sources_read_lock(void);
++extern void wakeup_sources_read_unlock(int idx);
++extern struct wakeup_source *wakeup_sources_walk_start(void);
++extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
+ extern int device_wakeup_enable(struct device *dev);
+ extern int device_wakeup_disable(struct device *dev);
+ extern void device_set_wakeup_capable(struct device *dev, bool capable);
+-- 
+2.7.4
 
