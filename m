@@ -2,96 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30902E365E
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 17:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98517E3697
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 17:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405432AbfJXPS6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 11:18:58 -0400
-Received: from foss.arm.com ([217.140.110.172]:54144 "EHLO foss.arm.com"
+        id S2503188AbfJXP0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 11:26:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:54312 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403837AbfJXPS6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Oct 2019 11:18:58 -0400
+        id S2503092AbfJXP0j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Oct 2019 11:26:39 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A444131F;
-        Thu, 24 Oct 2019 08:18:42 -0700 (PDT)
-Received: from usa.arm.com (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BBFE93F71F;
-        Thu, 24 Oct 2019 08:18:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6950031F;
+        Thu, 24 Oct 2019 08:26:24 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 66B193F71F;
+        Thu, 24 Oct 2019 08:26:22 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 16:26:16 +0100
 From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     ulf.hansson@linaro.org
-Cc:     Lorenzo.Pieralisi@arm.com, bjorn.andersson@linaro.org,
-        daniel.lezcano@linaro.org, ilina@codeaurora.org,
-        khilman@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        mark.rutland@arm.com, rjw@rjwysocki.net, robh+dt@kernel.org,
-        sboyd@kernel.org, sudeep.holla@arm.com, vincent.guittot@linaro.org
-Subject: [PATCH] cpuidle: psci: Align psci_power_state count with idle state count
-Date:   Thu, 24 Oct 2019 16:18:34 +0100
-Message-Id: <20191024151834.17036-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191010113937.15962-2-ulf.hansson@linaro.org>
-References: <20191010113937.15962-2-ulf.hansson@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
+Subject: Re: [PATCH 02/13] dt: psci: Update DT bindings to support
+ hierarchical PSCI states
+Message-ID: <20191024152504.GA11467@bogus>
+References: <20191010113937.15962-1-ulf.hansson@linaro.org>
+ <20191010113937.15962-3-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010113937.15962-3-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Instead of allocating 'n-1' states in psci_power_state to manage 'n'
-idle states which include "ARM WFI" state, it would be simpler to have
-1:1 mapping between psci_power_state and cpuidle driver states.
+On Thu, Oct 10, 2019 at 01:39:26PM +0200, Ulf Hansson wrote:
+> Update PSCI DT bindings to allow to represent idle states for CPUs and the
+> CPU topology, by using a hierarchical layout. Primarily this is done by
+> re-using the existing power domain description [1] and the domain idle
+> state description [2].
+>
+> Let's also take the opportunity to update the examples to clarify the
+> difference between the currently supported flattened layout vs the new
+> hierarchical layout.
+>
 
-ARM WFI state(i.e. idx == 0) is handled specially in the generic macro
-CPU_PM_CPU_IDLE_ENTER_PARAM and hence state[-1] is not possible. However
-for sake of code readability, it is better to have 1:1 mapping and not
-use [idx - 1] to access psci_power_state corresponding to driver cpuidle
-state for idx.
+This looks fine to me. FWIW:
 
-psci_power_state[0] is default initialised to 0 and is never accessed
-while entering WFI state.
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/cpuidle/cpuidle-psci.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+But before this gets merged, I would like to add another but "the golden"
+example Qcom *always* referred during ACPI LPI discussions. Ofcourse, it
+can be addition patch and if I get time, I can write this but no promise
+ATM.
 
-Hi Ulf, Lorenzo,
+Hierarchical Representation:
+System
+1. SYSTEM_RET
+2. SYSTEM_PG
 
-Just to avoid confusion, I thought I will just write this patch as I was
-about to make reference to this in my review.
+	Cluster#0
+	1. CLUSTER_RET
+	2. CLUSTER_PG
 
-Regards,
-Sudeep
+		Core#0
+		1. CORE_CG
+		2. CORE_RET
+		3. CORE_PG
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index f3c1a2396f98..361985f52ddd 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -30,7 +30,7 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
- 	u32 *state = __this_cpu_read(psci_power_state);
+		Core#1
+		1. CORE_CG
+		2. CORE_RET
+		3. CORE_PG
+	Cluster#1 (ditto)
 
- 	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
--					   idx, state[idx - 1]);
-+					   idx, state[idx]);
- }
+Flattened Representation:
 
- static struct cpuidle_driver psci_idle_driver __initdata = {
-@@ -89,12 +89,14 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node, int cpu)
- 	if (!count)
- 		return -ENODEV;
+Core#0
+	1 CORE_CG
+	2 CORE_RET
+	3 CORE_RET + CLUSTER_RET
+	4 CORE_RET + CLUSTER_RET + SYSTEM_RET
+	5 CORE_PG
+	6 CORE_PG  + CLUSTER_RET
+	7 CORE_PG  + CLUSTER_RET + SYSTEM_RET
+	8 CORE_PG  + CLUSTER_PG
+	9 CORE_PG  + CLUSTER_PG  + SYSTEM_RET
+       10 CORE_PG  + CLUSTER_PG  + SYSTEM_PG
 
-+	count++; /* Add WFI state too */
- 	psci_states = kcalloc(count, sizeof(*psci_states), GFP_KERNEL);
- 	if (!psci_states)
- 		return -ENOMEM;
-
--	for (i = 0; i < count; i++) {
--		state_node = of_parse_phandle(cpu_node, "cpu-idle-states", i);
-+	for (i = 1; i < count; i++) {
-+		state_node = of_parse_phandle(cpu_node, "cpu-idle-states",
-+					      i - 1);
- 		ret = psci_dt_parse_state_node(state_node, &psci_states[i]);
- 		of_node_put(state_node);
+Though we may not implement everything needed to support this, but
+we must ensure we don't have to end up in a situation breaking backward
+compatibility trying to support the same.
 
 --
-2.17.1
-
+Regards,
+Sudeep
