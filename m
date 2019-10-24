@@ -2,325 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13927E2695
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 00:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6F3E2850
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 04:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407852AbfJWWsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Oct 2019 18:48:13 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:40367 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406216AbfJWWsN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Oct 2019 18:48:13 -0400
-Received: by mail-oi1-f194.google.com with SMTP id b25so7263832oib.7;
-        Wed, 23 Oct 2019 15:48:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5rO+uc1ILY9OMG2v2SNvpBcmRQmpBzHDB/LO32aNzZk=;
-        b=AFwErGSLrYGobTrDvc4ak66z3eI5uVBsCrhMFkGaRv57vS6giS9IIqqzhSH1vSdtVg
-         gUOOxvna4y8L83UAOwd298/QqHJWWDOkjpl5Oo3eEeFg9TZHnDbP1SC+iFbwhp5aGcoR
-         ef1SNE8mp7xdmr19+0dy5tqvshjFZdLwy8Jhj7YOi1dePxkiF3eSk2arAvO+Oh/pN5ds
-         aCxygLhFO9CqFeHciVBiaYf9nQ9//7Cw9DW7NkGKRo57FYFW2WmNw/MndxwSld3teoD6
-         zi81SEdlQUXBR7tTN8ff7yR+V+FRZJJFxnBViP237hbAyizcV6DwIbRisEfKIxileKRy
-         DCiQ==
-X-Gm-Message-State: APjAAAUNZ8p0YeFi/K7MMojQN7r0PH6ss9WFeU8eb75BLMVF8HWFlESJ
-        w+VKCfMjRsrQuDFSK4QZOqBcc9RMvdY=
-X-Google-Smtp-Source: APXvYqw7YIlLXT+3gf1USNvjMkhOekidJ1vR7tkFdzzR84Xqp+m/hfz5iZxFZU+5aNzk3uj/0vSo9w==
-X-Received: by 2002:a54:418c:: with SMTP id 12mr2017573oiy.154.1571870891151;
-        Wed, 23 Oct 2019 15:48:11 -0700 (PDT)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
-        by smtp.gmail.com with ESMTPSA id c21sm6518688otp.15.2019.10.23.15.48.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2019 15:48:10 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id g13so18904906otp.8;
-        Wed, 23 Oct 2019 15:48:10 -0700 (PDT)
-X-Received: by 2002:a05:6830:22d6:: with SMTP id q22mr5171244otc.74.1571870889734;
- Wed, 23 Oct 2019 15:48:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191023082423.12569-1-ran.wang_1@nxp.com> <20191023082423.12569-3-ran.wang_1@nxp.com>
-In-Reply-To: <20191023082423.12569-3-ran.wang_1@nxp.com>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Wed, 23 Oct 2019 17:47:58 -0500
-X-Gmail-Original-Message-ID: <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
-Message-ID: <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
-Subject: Re: [PATCH v9 3/3] soc: fsl: add RCPM driver
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S2437128AbfJXCiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Oct 2019 22:38:10 -0400
+Received: from mail-eopbgr30048.outbound.protection.outlook.com ([40.107.3.48]:50154
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390493AbfJXCiK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Oct 2019 22:38:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mats4tHcEribEfhwa3cejJIE7LnCzNLIJx0Geh9I77c3bF2S7RdsgwydLTBD1qQoUafD/qp1HhTYNYcDlmuW+2fqEphl5xug+9ZStK9w+uVgj8wOTFtusEafHKm463GSPEbQAQzROEgl3UwWOmPBxtF9Vyu88/6oWKyTy6daoqe7/bZHRvlUgieiXLxkIZHjNaDH+2Wj4SflsWOEg4vNw9Yp1KGLsj+99MVMF4fkRLd3TtzLQbRdmivJ70Gz4xpim1a37vO7vcSm8KUfRPHd1LgcgTv1axqA6dzfx0kRF/RYRCcZ1sDoN6g0xdcS8G999D4fWs5ABnDr+TJNiFWohA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZJGQLsVW14rviXsg+uMKs1LtLtkXxZwwRQhaSx9OVw4=;
+ b=BZCwkTIcRfRg9QARc/h52gPz48e9zTP5BUoHsK2YyXj0YWGpzZHiJPJwTZS1S/eLwjyYNioK4GBzc959vbMjqngnyHX2ZL29/+OY/WzFWs+6qjKyvknoqDI3UtH2b63f1IbKu74J5Uvgy4tFazKqsMkptlYLh2RUEDE6Z9iKerf8ZGo2UtQ0LuauexqBgE/KmcNvFZ3qIa4P86BB/Hng3nXsWAbxPvj/MQlav+yaI2OWyhjyGJzOuxt/013T+tDEJjD+mYT3OZqvOtJbU4EoiOFpXccArtu+K9B5QTh/7GSu8BdNHGun356HR5feRRgko2lBoNHVCmn8XLASJCWRXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZJGQLsVW14rviXsg+uMKs1LtLtkXxZwwRQhaSx9OVw4=;
+ b=g3vh8tnNSDftoFuNozq9mANgRfx41UTDlyp9yb/i2gFseIXD2mskiJp6yYRExxd3PFDbv0Xymkif6lcxs2l9cl/jHr7jVE39WIZiZbfLzEsiNKYsKGL0l+h5bUVXMHjC26dfiUGydJ1ltJjS1Fi1DewALLKjX8w5cNbzhQ0eJRM=
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.243.14) by
+ DB8PR04MB6650.eurprd04.prod.outlook.com (20.179.251.30) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.18; Thu, 24 Oct 2019 02:38:04 +0000
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::bcee:92dc:277f:6a78]) by DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::bcee:92dc:277f:6a78%7]) with mapi id 15.20.2387.021; Thu, 24 Oct 2019
+ 02:38:04 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Leo Li <leoyang.li@nxp.com>
+CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>, Huang Anson <anson.huang@nxp.com>,
-        Li Biwen <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Anson Huang <anson.huang@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v9 3/3] soc: fsl: add RCPM driver
+Thread-Topic: [PATCH v9 3/3] soc: fsl: add RCPM driver
+Thread-Index: AQHViXs93WsdxAf3IEa22DXFaDvA7Kdo1N4AgAA8rOA=
+Date:   Thu, 24 Oct 2019 02:38:03 +0000
+Message-ID: <DB8PR04MB6826B681CB2CC116D4ECA6D1F16A0@DB8PR04MB6826.eurprd04.prod.outlook.com>
+References: <20191023082423.12569-1-ran.wang_1@nxp.com>
+ <20191023082423.12569-3-ran.wang_1@nxp.com>
+ <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
+In-Reply-To: <CADRPPNTwzz8M-Gi-371ROmYLrzXUAyxc+2_u6uUp0Fwd1dggLA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [92.121.36.198]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d724f0c2-989b-4262-9780-08d7582b31ed
+x-ms-traffictypediagnostic: DB8PR04MB6650:|DB8PR04MB6650:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB665013824DE0D0CF4F54BC36F16A0@DB8PR04MB6650.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1148;
+x-forefront-prvs: 0200DDA8BE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(199004)(189003)(66556008)(14454004)(4326008)(64756008)(476003)(71200400001)(66946007)(81166006)(74316002)(66066001)(478600001)(6636002)(8676002)(6862004)(76116006)(66446008)(7416002)(81156014)(5660300002)(71190400001)(66476007)(486006)(3846002)(86362001)(11346002)(6116002)(446003)(229853002)(305945005)(6436002)(8936002)(25786009)(53546011)(54906003)(52536014)(7696005)(5024004)(14444005)(2906002)(102836004)(76176011)(55016002)(33656002)(99286004)(9686003)(256004)(186003)(26005)(7736002)(6246003)(316002)(6506007);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB6650;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BJyf/fbqtELDtoZRQCdCbuFiNLEuAxxynkZsnAsN2rc3JgTxdLO8pWgS9TkuyAgpbkKJViYEDzTJSKm5KQ+AoRm7esk5jclxIAWOg8XGxoAs6rPXK8jLojEh/98dfxQSGssi/c88A7kE8g/Ef9hj0+aBgLogTFoBtzBlrHXn5srDB1lfSNdzijuAWNShYgpcy0myloBWvx1OGgf/k22iVruKlbmTEIt2hIM2xpSJz6Pa64BGjPM1GA8HCKJrZO6zjf5wkWq1NYhvZ2CNggh1aEmaswv17tSGwDZGOH6WPJlJggR+urVEZTiS5LQU1YAA8vumhn9qYziUfUpZ45W6rv8mD7+ycOeCkxVTySbjXAXaCOgCiNiFmkS25dtQZHE3Maa+QvFTiulVXu4t3gdmaqyMt/zcKGg/q2+EBxc9ElI=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d724f0c2-989b-4262-9780-08d7582b31ed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2019 02:38:03.9771
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CBFm3rubJMpM3mYuMAPYFUHupIMjqJT0rN4SNYDez4Auh5gCq9jdMYj0iLLi/NwFVe74xMP4U8adO8y+LijDaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6650
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 3:24 AM Ran Wang <ran.wang_1@nxp.com> wrote:
->
-> The NXP's QorIQ Processors based on ARM Core have RCPM module
-
-Actually not just ARM based QorIQ processors are having RCPM, PowerPC
-based QorIQ SoCs also have RCPM.  Does this driver also work with the
-PowerPC SoCs?  Please clarify in the commit message and Kconfig
-description.
-
-> (Run Control and Power Management), which performs system level
-> tasks associated with power management such as wakeup source control.
->
-> This driver depends on PM wakeup source framework which help to
-> collect wake information.
->
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> ---
-> Change in v9:
->         - Add kerneldoc for rcpm_pm_prepare().
->         - Use pr_debug() to replace dev_info(), to print message when decide
->           skip current wakeup object, this is mainly for debugging (in order
->           to detect potential improper implementation on device tree which
->           might cause this skip).
->         - Refactor looping implementation in rcpm_pm_prepare(), add more
->           comments to help clarify.
->
-> Change in v8:
->         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
->         - Add sanity checking for the case of ws->dev or ws->dev->parent
->           is null.
->
-> Change in v7:
->         - Replace 'ws->dev' with 'ws->dev->parent' to get aligned with
->         c8377adfa781 ("PM / wakeup: Show wakeup sources stats in sysfs")
->         - Remove '+obj-y += ftm_alarm.o' since it is wrong.
->         - Cosmetic work.
->
-> Change in v6:
->         - Adjust related API usage to meet wakeup.c's update in patch 1/3.
->
-> Change in v5:
->         - Fix v4 regression of the return value of wakeup_source_get_next()
->         didn't pass to ws in while loop.
->         - Rename wakeup_source member 'attached_dev' to 'dev'.
->         - Rename property 'fsl,#rcpm-wakeup-cells' to '#fsl,rcpm-wakeup-cells'.
->         please see https://lore.kernel.org/patchwork/patch/1101022/
->
-> Change in v4:
->         - Remove extra ',' in author line of rcpm.c
->         - Update usage of wakeup_source_get_next() to be less confusing to the
-> reader, code logic remain the same.
->
-> Change in v3:
->         - Some whitespace ajdustment.
->
-> Change in v2:
->         - Rebase Kconfig and Makefile update to latest mainline.
->
->  drivers/soc/fsl/Kconfig  |   8 +++
->  drivers/soc/fsl/Makefile |   1 +
->  drivers/soc/fsl/rcpm.c   | 148 +++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 157 insertions(+)
->  create mode 100644 drivers/soc/fsl/rcpm.c
->
-> diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
-> index f9ad8ad..4918856 100644
-> --- a/drivers/soc/fsl/Kconfig
-> +++ b/drivers/soc/fsl/Kconfig
-> @@ -40,4 +40,12 @@ config DPAA2_CONSOLE
->           /dev/dpaa2_mc_console and /dev/dpaa2_aiop_console,
->           which can be used to dump the Management Complex and AIOP
->           firmware logs.
-> +
-> +config FSL_RCPM
-> +       bool "Freescale RCPM support"
-> +       depends on PM_SLEEP
-
-If this is only for ARM, probably add more dependency here?
-
-> +       help
-> +         The NXP QorIQ Processors based on ARM Core have RCPM module
-> +         (Run Control and Power Management), which performs all device-level
-> +         tasks associated with power management, such as wakeup source control.
->  endmenu
-> diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
-> index 71dee8d..906f1cd 100644
-> --- a/drivers/soc/fsl/Makefile
-> +++ b/drivers/soc/fsl/Makefile
-> @@ -6,6 +6,7 @@
->  obj-$(CONFIG_FSL_DPAA)                 += qbman/
->  obj-$(CONFIG_QUICC_ENGINE)             += qe/
->  obj-$(CONFIG_CPM)                      += qe/
-> +obj-$(CONFIG_FSL_RCPM)                 += rcpm.o
->  obj-$(CONFIG_FSL_GUTS)                 += guts.o
->  obj-$(CONFIG_FSL_MC_DPIO)              += dpio/
->  obj-$(CONFIG_DPAA2_CONSOLE)            += dpaa2-console.o
-> diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
-> new file mode 100644
-> index 0000000..9378073
-> --- /dev/null
-> +++ b/drivers/soc/fsl/rcpm.c
-> @@ -0,0 +1,148 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// rcpm.c - Freescale QorIQ RCPM driver
-> +//
-> +// Copyright 2019 NXP
-> +//
-> +// Author: Ran Wang <ran.wang_1@nxp.com>
-> +
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of_address.h>
-> +#include <linux/slab.h>
-> +#include <linux/suspend.h>
-> +#include <linux/kernel.h>
-> +
-> +#define RCPM_WAKEUP_CELL_MAX_SIZE      7
-> +
-> +struct rcpm {
-> +       unsigned int    wakeup_cells;
-> +       void __iomem    *ippdexpcr_base;
-> +       bool            little_endian;
-> +};
-> +
-> +/**
-> + * rcpm_pm_prepare - performs device-level tasks associated with power
-> + * management, such as programming related to the wakeup source control.
-> + * @dev: Device to handle.
-> + *
-> + */
-> +static int rcpm_pm_prepare(struct device *dev)
-> +{
-> +       int i, ret, idx;
-> +       void __iomem *base;
-> +       struct wakeup_source    *ws;
-> +       struct rcpm             *rcpm;
-> +       struct device_node      *np = dev->of_node;
-> +       u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1];
-> +
-> +       rcpm = dev_get_drvdata(dev);
-> +       if (!rcpm)
-> +               return -EINVAL;
-> +
-> +       base = rcpm->ippdexpcr_base;
-> +       idx = wakeup_sources_read_lock();
-> +
-> +       /* Begin with first registered wakeup source */
-> +       for_each_wakeup_source(ws) {
-> +
-> +               /* skip object which is not attached to device */
-> +               if (!ws->dev || !ws->dev->parent)
-> +                       continue;
-> +
-> +               ret = device_property_read_u32_array(ws->dev->parent,
-> +                               "fsl,rcpm-wakeup", value,
-> +                               rcpm->wakeup_cells + 1);
-> +
-> +               /*  Wakeup source should refer to current rcpm device */
-> +               if (ret || (np->phandle != value[0])) {
-> +                       pr_debug("%s doesn't refer to this rcpm\n", ws->name);
-
-I agree with Rafael that this looks a little bit weird.
-
-> +                       continue;
-> +               }
-> +
-> +               /* Property "#fsl,rcpm-wakeup-cells" of rcpm node defines the
-> +                * number of IPPDEXPCR register cells, and "fsl,rcpm-wakeup"
-> +                * of wakeup source IP contains an integer array: <phandle to
-> +                * RCPM node, IPPDEXPCR0 setting, IPPDEXPCR1 setting,
-> +                * IPPDEXPCR2 setting, etc>.
-> +                *
-> +                * So we will go thought them and do programming accordngly.
-> +                */
-> +               for (i = 0; i < rcpm->wakeup_cells; i++) {
-> +                       u32 tmp = value[i + 1];
-> +                       void __iomem *address = base + i * 4;
-> +
-> +                       if (!tmp)
-> +                               continue;
-> +
-> +                       /* We can only OR related bits */
-> +                       if (rcpm->little_endian) {
-> +                               tmp |= ioread32(address);
-> +                               iowrite32(tmp, address);
-> +                       } else {
-> +                               tmp |= ioread32be(address);
-> +                               iowrite32be(tmp, address);
-> +                       }
-
-Can we do read once at the beginning and write once at the end,
-instead of doing IO read/write for every wakeup source?
-
-> +               }
-> +       }
-> +
-> +       wakeup_sources_read_unlock(idx);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct dev_pm_ops rcpm_pm_ops = {
-> +       .prepare =  rcpm_pm_prepare,
-> +};
-> +
-> +static int rcpm_probe(struct platform_device *pdev)
-> +{
-> +       struct device   *dev = &pdev->dev;
-> +       struct resource *r;
-> +       struct rcpm     *rcpm;
-> +       int ret;
-> +
-> +       rcpm = devm_kzalloc(dev, sizeof(*rcpm), GFP_KERNEL);
-> +       if (!rcpm)
-> +               return -ENOMEM;
-> +
-> +       r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       if (!r)
-> +               return -ENODEV;
-> +
-> +       rcpm->ippdexpcr_base = devm_ioremap_resource(&pdev->dev, r);
-> +       if (IS_ERR(rcpm->ippdexpcr_base)) {
-> +               ret =  PTR_ERR(rcpm->ippdexpcr_base);
-> +               return ret;
-> +       }
-> +
-> +       rcpm->little_endian = device_property_read_bool(
-> +                       &pdev->dev, "little-endian");
-> +
-> +       ret = device_property_read_u32(&pdev->dev,
-> +                       "#fsl,rcpm-wakeup-cells", &rcpm->wakeup_cells);
-> +       if (ret)
-> +               return ret;
-> +
-> +       dev_set_drvdata(&pdev->dev, rcpm);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id rcpm_of_match[] = {
-> +       { .compatible = "fsl,qoriq-rcpm-2.1+", },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, rcpm_of_match);
-> +
-> +static struct platform_driver rcpm_driver = {
-> +       .driver = {
-> +               .name = "rcpm",
-> +               .of_match_table = rcpm_of_match,
-> +               .pm     = &rcpm_pm_ops,
-> +       },
-> +       .probe = rcpm_probe,
-> +};
-> +
-> +module_platform_driver(rcpm_driver);
-> --
-> 2.7.4
->
+SGkgTGVvLA0KDQoNCk9uIFRodXJzZGF5LCBPY3RvYmVyIDI0LCAyMDE5IDA2OjQ4LCBMaSBZYW5n
+IHdyb3RlOg0KPiANCj4gT24gV2VkLCBPY3QgMjMsIDIwMTkgYXQgMzoyNCBBTSBSYW4gV2FuZyA8
+cmFuLndhbmdfMUBueHAuY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoZSBOWFAncyBRb3JJUSBQcm9j
+ZXNzb3JzIGJhc2VkIG9uIEFSTSBDb3JlIGhhdmUgUkNQTSBtb2R1bGUNCj4gDQo+IEFjdHVhbGx5
+IG5vdCBqdXN0IEFSTSBiYXNlZCBRb3JJUSBwcm9jZXNzb3JzIGFyZSBoYXZpbmcgUkNQTSwgUG93
+ZXJQQyBiYXNlZA0KPiBRb3JJUSBTb0NzIGFsc28gaGF2ZSBSQ1BNLiAgRG9lcyB0aGlzIGRyaXZl
+ciBhbHNvIHdvcmsgd2l0aCB0aGUgUG93ZXJQQyBTb0NzPw0KPiBQbGVhc2UgY2xhcmlmeSBpbiB0
+aGUgY29tbWl0IG1lc3NhZ2UgYW5kIEtjb25maWcgZGVzY3JpcHRpb24uDQo+IA0KPiA+IChSdW4g
+Q29udHJvbCBhbmQgUG93ZXIgTWFuYWdlbWVudCksIHdoaWNoIHBlcmZvcm1zIHN5c3RlbSBsZXZl
+bCB0YXNrcw0KPiA+IGFzc29jaWF0ZWQgd2l0aCBwb3dlciBtYW5hZ2VtZW50IHN1Y2ggYXMgd2Fr
+ZXVwIHNvdXJjZSBjb250cm9sLg0KPiA+DQo+ID4gVGhpcyBkcml2ZXIgZGVwZW5kcyBvbiBQTSB3
+YWtldXAgc291cmNlIGZyYW1ld29yayB3aGljaCBoZWxwIHRvDQo+ID4gY29sbGVjdCB3YWtlIGlu
+Zm9ybWF0aW9uLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUmFuIFdhbmcgPHJhbi53YW5nXzFA
+bnhwLmNvbT4NCg0KPHNuaXA+DQoNCg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NvYy9mc2wv
+S2NvbmZpZyBiL2RyaXZlcnMvc29jL2ZzbC9LY29uZmlnIGluZGV4DQo+ID4gZjlhZDhhZC4uNDkx
+ODg1NiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3NvYy9mc2wvS2NvbmZpZw0KPiA+ICsrKyBi
+L2RyaXZlcnMvc29jL2ZzbC9LY29uZmlnDQo+ID4gQEAgLTQwLDQgKzQwLDEyIEBAIGNvbmZpZyBE
+UEFBMl9DT05TT0xFDQo+ID4gICAgICAgICAgIC9kZXYvZHBhYTJfbWNfY29uc29sZSBhbmQgL2Rl
+di9kcGFhMl9haW9wX2NvbnNvbGUsDQo+ID4gICAgICAgICAgIHdoaWNoIGNhbiBiZSB1c2VkIHRv
+IGR1bXAgdGhlIE1hbmFnZW1lbnQgQ29tcGxleCBhbmQgQUlPUA0KPiA+ICAgICAgICAgICBmaXJt
+d2FyZSBsb2dzLg0KPiA+ICsNCj4gPiArY29uZmlnIEZTTF9SQ1BNDQo+ID4gKyAgICAgICBib29s
+ICJGcmVlc2NhbGUgUkNQTSBzdXBwb3J0Ig0KPiA+ICsgICAgICAgZGVwZW5kcyBvbiBQTV9TTEVF
+UA0KPiANCj4gSWYgdGhpcyBpcyBvbmx5IGZvciBBUk0sIHByb2JhYmx5IGFkZCBtb3JlIGRlcGVu
+ZGVuY3kgaGVyZT8NCg0KT0suDQogDQo+ID4gKyAgICAgICBoZWxwDQo+ID4gKyAgICAgICAgIFRo
+ZSBOWFAgUW9ySVEgUHJvY2Vzc29ycyBiYXNlZCBvbiBBUk0gQ29yZSBoYXZlIFJDUE0gbW9kdWxl
+DQo+ID4gKyAgICAgICAgIChSdW4gQ29udHJvbCBhbmQgUG93ZXIgTWFuYWdlbWVudCksIHdoaWNo
+IHBlcmZvcm1zIGFsbCBkZXZpY2UtbGV2ZWwNCj4gPiArICAgICAgICAgdGFza3MgYXNzb2NpYXRl
+ZCB3aXRoIHBvd2VyIG1hbmFnZW1lbnQsIHN1Y2ggYXMgd2FrZXVwIHNvdXJjZQ0KPiBjb250cm9s
+Lg0KPiA+ICBlbmRtZW51DQoNCjxzbmlwPg0KDQo+ID4gKw0KPiA+ICsvKioNCj4gPiArICogcmNw
+bV9wbV9wcmVwYXJlIC0gcGVyZm9ybXMgZGV2aWNlLWxldmVsIHRhc2tzIGFzc29jaWF0ZWQgd2l0
+aA0KPiA+ICtwb3dlcg0KPiA+ICsgKiBtYW5hZ2VtZW50LCBzdWNoIGFzIHByb2dyYW1taW5nIHJl
+bGF0ZWQgdG8gdGhlIHdha2V1cCBzb3VyY2UgY29udHJvbC4NCj4gPiArICogQGRldjogRGV2aWNl
+IHRvIGhhbmRsZS4NCj4gPiArICoNCj4gPiArICovDQo+ID4gK3N0YXRpYyBpbnQgcmNwbV9wbV9w
+cmVwYXJlKHN0cnVjdCBkZXZpY2UgKmRldikgew0KPiA+ICsgICAgICAgaW50IGksIHJldCwgaWR4
+Ow0KPiA+ICsgICAgICAgdm9pZCBfX2lvbWVtICpiYXNlOw0KPiA+ICsgICAgICAgc3RydWN0IHdh
+a2V1cF9zb3VyY2UgICAgKndzOw0KPiA+ICsgICAgICAgc3RydWN0IHJjcG0gICAgICAgICAgICAg
+KnJjcG07DQo+ID4gKyAgICAgICBzdHJ1Y3QgZGV2aWNlX25vZGUgICAgICAqbnAgPSBkZXYtPm9m
+X25vZGU7DQo+ID4gKyAgICAgICB1MzIgdmFsdWVbUkNQTV9XQUtFVVBfQ0VMTF9NQVhfU0laRSAr
+IDFdOw0KPiA+ICsNCj4gPiArICAgICAgIHJjcG0gPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4g
+PiArICAgICAgIGlmICghcmNwbSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7
+DQo+ID4gKw0KPiA+ICsgICAgICAgYmFzZSA9IHJjcG0tPmlwcGRleHBjcl9iYXNlOw0KPiA+ICsg
+ICAgICAgaWR4ID0gd2FrZXVwX3NvdXJjZXNfcmVhZF9sb2NrKCk7DQo+ID4gKw0KPiA+ICsgICAg
+ICAgLyogQmVnaW4gd2l0aCBmaXJzdCByZWdpc3RlcmVkIHdha2V1cCBzb3VyY2UgKi8NCj4gPiAr
+ICAgICAgIGZvcl9lYWNoX3dha2V1cF9zb3VyY2Uod3MpIHsNCj4gPiArDQo+ID4gKyAgICAgICAg
+ICAgICAgIC8qIHNraXAgb2JqZWN0IHdoaWNoIGlzIG5vdCBhdHRhY2hlZCB0byBkZXZpY2UgKi8N
+Cj4gPiArICAgICAgICAgICAgICAgaWYgKCF3cy0+ZGV2IHx8ICF3cy0+ZGV2LT5wYXJlbnQpDQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQo+ID4gKw0KPiA+ICsgICAgICAg
+ICAgICAgICByZXQgPSBkZXZpY2VfcHJvcGVydHlfcmVhZF91MzJfYXJyYXkod3MtPmRldi0+cGFy
+ZW50LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgImZzbCxyY3BtLXdha2V1
+cCIsIHZhbHVlLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmNwbS0+d2Fr
+ZXVwX2NlbGxzICsgMSk7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICAvKiAgV2FrZXVwIHNv
+dXJjZSBzaG91bGQgcmVmZXIgdG8gY3VycmVudCByY3BtIGRldmljZSAqLw0KPiA+ICsgICAgICAg
+ICAgICAgICBpZiAocmV0IHx8IChucC0+cGhhbmRsZSAhPSB2YWx1ZVswXSkpIHsNCj4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICBwcl9kZWJ1ZygiJXMgZG9lc24ndCByZWZlciB0byB0aGlzIHJj
+cG1cbiIsDQo+ID4gKyB3cy0+bmFtZSk7DQo+IA0KPiBJIGFncmVlIHdpdGggUmFmYWVsIHRoYXQg
+dGhpcyBsb29rcyBhIGxpdHRsZSBiaXQgd2VpcmQuDQoNCk9LLCBsZXQgbWUgcmVtb3ZlIHRoaXMg
+cHJpbnQgaW4gbmV4dCB2ZXJzaW9uLg0KDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgY29u
+dGludWU7DQo+ID4gKyAgICAgICAgICAgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAg
+IC8qIFByb3BlcnR5ICIjZnNsLHJjcG0td2FrZXVwLWNlbGxzIiBvZiByY3BtIG5vZGUgZGVmaW5l
+cyB0aGUNCj4gPiArICAgICAgICAgICAgICAgICogbnVtYmVyIG9mIElQUERFWFBDUiByZWdpc3Rl
+ciBjZWxscywgYW5kICJmc2wscmNwbS13YWtldXAiDQo+ID4gKyAgICAgICAgICAgICAgICAqIG9m
+IHdha2V1cCBzb3VyY2UgSVAgY29udGFpbnMgYW4gaW50ZWdlciBhcnJheTogPHBoYW5kbGUgdG8N
+Cj4gPiArICAgICAgICAgICAgICAgICogUkNQTSBub2RlLCBJUFBERVhQQ1IwIHNldHRpbmcsIElQ
+UERFWFBDUjEgc2V0dGluZywNCj4gPiArICAgICAgICAgICAgICAgICogSVBQREVYUENSMiBzZXR0
+aW5nLCBldGM+Lg0KPiA+ICsgICAgICAgICAgICAgICAgKg0KPiA+ICsgICAgICAgICAgICAgICAg
+KiBTbyB3ZSB3aWxsIGdvIHRob3VnaHQgdGhlbSBhbmQgZG8gcHJvZ3JhbW1pbmcgYWNjb3Jkbmds
+eS4NCj4gPiArICAgICAgICAgICAgICAgICovDQo+ID4gKyAgICAgICAgICAgICAgIGZvciAoaSA9
+IDA7IGkgPCByY3BtLT53YWtldXBfY2VsbHM7IGkrKykgew0KPiA+ICsgICAgICAgICAgICAgICAg
+ICAgICAgIHUzMiB0bXAgPSB2YWx1ZVtpICsgMV07DQo+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgdm9pZCBfX2lvbWVtICphZGRyZXNzID0gYmFzZSArIGkgKiA0Ow0KPiA+ICsNCj4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICBpZiAoIXRtcCkNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGNvbnRpbnVlOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAv
+KiBXZSBjYW4gb25seSBPUiByZWxhdGVkIGJpdHMgKi8NCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICBpZiAocmNwbS0+bGl0dGxlX2VuZGlhbikgew0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgdG1wIHw9IGlvcmVhZDMyKGFkZHJlc3MpOw0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgaW93cml0ZTMyKHRtcCwgYWRkcmVzcyk7DQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgfSBlbHNlIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHRtcCB8PSBpb3JlYWQzMmJlKGFkZHJlc3MpOw0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgaW93cml0ZTMyYmUodG1wLCBhZGRyZXNzKTsNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICB9DQo+IA0KPiBDYW4gd2UgZG8gcmVhZCBvbmNlIGF0IHRoZSBiZWdpbm5pbmcg
+YW5kIHdyaXRlIG9uY2UgYXQgdGhlIGVuZCwgaW5zdGVhZCBvZg0KPiBkb2luZyBJTyByZWFkL3dy
+aXRlIGZvciBldmVyeSB3YWtldXAgc291cmNlPw0KDQpTdXJlLCBidXQgYW5vdGhlciBsb29wIG1p
+Z2h0IG5lZWQgdG8gYmUgYWRkZWQgYWZ0ZXIgdGhlIG9uZSBvZiB3YWtldXAgc291cmNlIHdhbGsN
+CnRocm91Z2gsIHRvIHByb2dyYW0gYWxsIElQUERFWFBDUiByZWdpc3RlcnMuIElzIHRoYXQgT0s/
+DQoNClJlZ2FyZHMsDQpSYW4NCg0KIA0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gKyAgICAg
+ICB9DQo+ID4gKw0KPiA+ICsgICAgICAgd2FrZXVwX3NvdXJjZXNfcmVhZF91bmxvY2soaWR4KTsN
+Cj4gPiArDQo+ID4gKyAgICAgICByZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGlj
+IGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIHJjcG1fcG1fb3BzID0gew0KPiA+ICsgICAgICAgLnBy
+ZXBhcmUgPSAgcmNwbV9wbV9wcmVwYXJlLA0KPiA+ICt9Ow0KPiA+ICsNCg==
