@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69106E3918
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 19:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F019E391C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 19:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409984AbfJXRBP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 13:01:15 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:41700 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405976AbfJXRBP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 13:01:15 -0400
-Received: by mail-vk1-f193.google.com with SMTP id 70so5468646vkz.8
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 10:01:15 -0700 (PDT)
+        id S2405976AbfJXRB6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 13:01:58 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:39269 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730622AbfJXRB5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 13:01:57 -0400
+Received: by mail-vs1-f67.google.com with SMTP id y129so16677373vsc.6
+        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 10:01:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RBmI5ndT/rdjwDOXYP/KFIiToDnQR4EfL3VmkBr9f70=;
-        b=Wcd9I4prVPt4pYBLuTiHtwoyObyHOOGRcl8I/PVau5xjSltxf1UCTiShSh7x7Ut7Fb
-         aN+J0Mj4B6gkiMTpaPFrpQXBN+YVE4Oz3TQQsKZcTSa2ScfGr5tNBqBwCR1QZiQ3Iw+e
-         S1fRUgWXU7iQNp8v1lYtOXzEoLH4eOy6XsJzmERHxti4Gha0JzMyw1UaVj5iMnk43kVF
-         hBWL4IFKXA3/8uo6PyRfJ9ElUvyRpqv7I8v6kAdJTss1w2XXm6yvGmlndEgMjgM6v/1T
-         5G00/ReE+jhWY68vblefAAtmIyJ2qsmIco8KyuK8Rw7jdwDRYOQmoadjXoBt8EfsAUSo
-         iJFA==
+        bh=NtQVfUVz2FV0gTSPzMm+cpXFmzct1iFbD6hJDcVtKUA=;
+        b=t77I8kGwdUnaDJulyJxolE1Luw8F7JqtXHn7quj7/fUKnmi2K2rRZgTah11TU7kgPF
+         7PmziGtitlWlatAceURR8G10nlYdBfzZ8Q5HvVUYWCwu4cH+ANF96V8FO+45ffUkDnxT
+         RmTpNtrF8OAACZev9ZvchjpdwWLA0KBBBTeD8uGFbv1hBaRgmZTrL05hJOKbMrY0ZheS
+         /8k8YMx7PjONZjEteNbEQdtoCmW2oBNTfcvFz1xXmsPJeN5EQG6D74BwzKpyEZX6Cvob
+         SW6/kSweOfZDbkHWcspOdN7/bxo3hHqEqYSVfi+TJ0u7BG7ThMludvlAPJyxwTgR9nHx
+         x6ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RBmI5ndT/rdjwDOXYP/KFIiToDnQR4EfL3VmkBr9f70=;
-        b=Njpea5BwbCzUXnm+qFpoeRzVA8YgLotdY15ZKUNeKcW4LRAhelyq2TeEl2vW4ylVms
-         AEV38N4AUfC3CPr8IXZy2sErGfcYElaBumMiFi1Nzv0bevaz+U0hj8OrXDIgkL84l3SA
-         bu/YkSgjgDyYtXSD2f0W2GkndLN36qOa0shIJPt4q/N4EQWWNI2uS/YrDe56qF1amsVs
-         jbldLCc9UjTc8NYH5paUZa5zbaI43XrLtvlA1wzJGlf1PpDkbVWZ3EXMVSdnT4fw7XRw
-         GqwPasgEhmiKmevuPvCy48O+5j13SC93EV/42RZyiHxU0k3B8l/0PXVwJsdeLCrtaTBZ
-         WEoA==
-X-Gm-Message-State: APjAAAXXqr02POxJSoybWMP5Jq2TGrrYXZo+Uo6nDGmS4Co/ZBi16q9D
-        7bcuEEfhE4212xIFRDAfKpkcAWg5CjQs85Prsn9mDBdK
-X-Google-Smtp-Source: APXvYqx+/WMjFqRZHQ6kYItgeBnM23srHiuZcapnsvjGB1wwOdbVBEo6wgMMItlmMC3G3Y4sUiCAGzrvEtO6ZLyJml4=
-X-Received: by 2002:a1f:7381:: with SMTP id o123mr9587850vkc.53.1571936474341;
- Thu, 24 Oct 2019 10:01:14 -0700 (PDT)
+        bh=NtQVfUVz2FV0gTSPzMm+cpXFmzct1iFbD6hJDcVtKUA=;
+        b=mgy6Osgrloz6O7/e3VUmjuDRcGrSb/P1JoFlx8I3SB6vMWHI9JU/N/bEK5CMBOrWoX
+         RCde7nS4FiR+HYTGGyC+LoP7d2yrBl4Sn0YDZcoOaPB4t154nKN8GCX4V5/r69Znpmqn
+         ptAuEHXCnSEL5y7hYmnJKwRKYOFAgvsoWpPAJbNdVrgVam/e+A8rV/dp8MwLUS+wwgoq
+         LbXbPFFIOALKtvHTpetN8WuyRx8H+xkgy/KpM3zwWnl+aAFCarLh3syo1LpbmFilsSbH
+         tLibrJlC0mCD5baIvtD/10wFl3HewP29gI1Ez1NF0n7ecNXY8sX74dAwPSy09qdRldc8
+         MfgA==
+X-Gm-Message-State: APjAAAWOftWFxxJZe38DvuV17sHiCxxTd9g+ReBfLXY1mMcbARpR/GlK
+        5q4GMfR2dr0r/D6ybf55DI9IAxGu5OjwlNY2Njb43A==
+X-Google-Smtp-Source: APXvYqwEQrfMYEQUWIJNCSq021TdmBydPjq8g8NeoBcj8NbB+JWZn8Qj6wMLt4Lhu5OVOw9XhknTHcJMharuO317lxE=
+X-Received: by 2002:a67:ead4:: with SMTP id s20mr7390409vso.165.1571936516180;
+ Thu, 24 Oct 2019 10:01:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-13-ulf.hansson@linaro.org> <20191024163257.GC22036@bogus>
-In-Reply-To: <20191024163257.GC22036@bogus>
+ <20191010113937.15962-9-ulf.hansson@linaro.org> <20191024154204.GB21622@bogus>
+In-Reply-To: <20191024154204.GB21622@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 24 Oct 2019 19:00:38 +0200
-Message-ID: <CAPDyKFpwrfHj-az5x5dW92VAxi887FgWW6GKhfPv_kuj14TDjQ@mail.gmail.com>
-Subject: Re: [PATCH 12/13] cpuidle: psci: Manage runtime PM in the idle path
+Date:   Thu, 24 Oct 2019 19:01:20 +0200
+Message-ID: <CAPDyKFpd2d8RSa5dg1Ry94rdtCgose-+46ywXu=n7XH86D5msQ@mail.gmail.com>
+Subject: Re: [PATCH 08/13] cpuidle: psci: Prepare to use OS initiated suspend
+ mode via PM domains
 To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -61,76 +62,121 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Kevin Hilman <khilman@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 24 Oct 2019 at 18:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Thu, 24 Oct 2019 at 17:42, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Thu, Oct 10, 2019 at 01:39:36PM +0200, Ulf Hansson wrote:
-> > In case we have succeeded to attach a CPU to its PM domain, let's deploy
-> > runtime PM support for the corresponding attached device, to allow the CPU
-> > to be powered-managed accordingly.
+> On Thu, Oct 10, 2019 at 01:39:32PM +0200, Ulf Hansson wrote:
+> > The per CPU variable psci_power_state, contains an array of fixed values,
+> > which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> > each of the available CPU idle states.
 > >
-> > To set the triggering point for when runtime PM reference counting should
-> > be done, let's store the index of deepest idle state for the CPU in the per
-> > CPU struct. Then use this index to compare the selected idle state index
-> > when entering idle, as to understand whether runtime PM reference counting
-> > is needed or not.
+> > This isn't sufficient when using the hierarchical CPU topology in DT, in
+> > combination with having PSCI OS initiated (OSI) mode enabled. More
+> > precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> > idle state the cluster (a group of CPUs) should enter, while in PSCI
+> > Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> > state of the cluster.
 > >
-> > Note that, from the hierarchical point view, there may be good reasons to
-> > do runtime PM reference counting even on shallower idle states, but at this
-> > point this isn't supported, mainly due to limitations set by the generic PM
-> > domain.
+> > For this reason, introduce a per CPU variable called domain_state and
+> > implement two helper functions to read/write its value. Then let the
+> > domain_state take precedence over the regular selected state, when idling
+> > the CPU in psci_enter_idle_state().
 > >
+> > This allows subsequent patches that implements support for PM domains for
+> > cpuidle-psci, to write the selected idle state parameter for the cluster
+> > into the domain_state variable. Furthermore, let's share the needed
+> > functions in a header file, to enable the support for PM domains to be
+> > implemented in a separate c-file.
+> >
+> > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+> > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
 > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 21 +++++++++++++++++++--
-> >  1 file changed, 19 insertions(+), 2 deletions(-)
+> >  drivers/cpuidle/cpuidle-psci.c | 31 ++++++++++++++++++++++++++++---
+> >  drivers/cpuidle/cpuidle-psci.h | 11 +++++++++++
+> >  2 files changed, 39 insertions(+), 3 deletions(-)
+> >  create mode 100644 drivers/cpuidle/cpuidle-psci.h
 > >
 > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index 1510422c7a53..0919b40c1a85 100644
+> > index 5c30f23a8a7b..a16467daf99d 100644
 > > --- a/drivers/cpuidle/cpuidle-psci.c
 > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/psci.h>
-> > +#include <linux/pm_runtime.h>
-> >  #include <linux/slab.h>
+> > @@ -20,17 +20,42 @@
 > >
 > >  #include <asm/cpuidle.h>
-> > @@ -25,6 +26,7 @@
 > >
-> >  struct psci_cpuidle_data {
-> >       u32 *psci_states;
-> > +     u32 rpm_state_id;
-> >       struct device *dev;
-> >  };
+> > +#include "cpuidle-psci.h"
+> >  #include "dt_idle_states.h"
 > >
-> > @@ -50,14 +52,28 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
+> >  static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
+> > +static DEFINE_PER_CPU(u32, domain_state);
+> > +
+>
+> [nit] for me name 'domain_state' is per domain and for one each in the
+> hierarchical topology. But here it's per cpu, just wondering if we can
+> rename it to provide implicit meaning ?
+
+Feel free to suggest something. I couldn't find any better. :-)
+
+>
+> > +void psci_set_domain_state(u32 state)
+> > +{
+> > +     __this_cpu_write(domain_state, state);
+> > +}
+> > +
+> > +static inline u32 psci_get_domain_state(void)
+> > +{
+> > +     return __this_cpu_read(domain_state);
+> > +}
+> > +
+> > +static int __psci_enter_idle_state(int idx, u32 state)
+> > +{
+> > +     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
+> > +}
+> >
+> >  static int psci_enter_idle_state(struct cpuidle_device *dev,
 > >                               struct cpuidle_driver *drv, int idx)
 > >  {
-> >       int ret;
-> > -     u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
-> > -     u32 state = psci_get_domain_state();
-> > +     struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
-> > +     u32 *states = data->psci_states;
-> > +     struct device *pd_dev = data->dev;
-> > +     bool runtime_pm = (pd_dev && data->rpm_state_id == idx);
-> > +     u32 state;
+> > +     int ret;
+> >       u32 *states = __this_cpu_read(psci_power_state);
+> > -     u32 state = idx ? states[idx - 1] : 0;
+> > +     u32 state = psci_get_domain_state();
+> >
+> > -     return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
+> > +     if (!state && idx)
+> > +             state = states[idx - 1];
 >
-> Wonder if we can have separate psci_enter_idle_state for OSI mode so
-> that all these runtime extra check can be reduced ? It will also make
-> sure there's no additional latency for PC mode because of OSI.
+> This can go as mentioned earlier once we have entry for WFI also.
+>
+> > +
+> > +     ret = __psci_enter_idle_state(idx, state);
+> > +
+> > +     /* Clear the domain state to start fresh when back from idle. */
+> > +     psci_set_domain_state(0);
+> > +     return ret;
+> >  }
+> >
+> >  static struct cpuidle_driver psci_idle_driver __initdata = {
+> > @@ -56,7 +81,7 @@ static const struct of_device_id psci_idle_state_match[] __initconst = {
+> >       { },
+> >  };
+> >
+> > -static int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
+> > +int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
+>
+> Can this me made part of patch that uses it instead of here ?
 
-Good idea, that's the plan. See previous answer.
+Sure, just wanted to keep the all the preparations for the PM domains
+support together.
 
-Perhaps if I add a patch on top, implementing your suggestion, would
-you be happy with that?
+But you have a point, let me move this part to the patch that needs it.
 
 Kind regards
 Uffe
