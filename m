@@ -2,54 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B71AE3C97
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 21:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D80E3D8C
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 22:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393094AbfJXTzO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 15:55:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408340AbfJXTzG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Oct 2019 15:55:06 -0400
-Subject: Re: [GIT PULL] Power management fixes for v5.4-rc5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571946906;
-        bh=etzCMheFwraUGu+Vf2rDZYhj89yY5OJSUu02blmI1F4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=QAYNMvs6LQV+C5ssCOpnkyim28h0+JW4hTVqGbfdd7qD+kn318fhqIMmzHqliwb8n
-         55sYYLruk04B15qT6hIpWaidN/kZZ56IGdoRYIRsK7DYqGtsSAQjXvWibowa81Nti9
-         7c/ruDuOwgvGI/cmdsxYuXii0fgGJhjgvc6M3ksg=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jJ_hWQKH0FNoTk+EtzLS=y3ovC4+pXPq+NWB1vPZU9pg@mail.gmail.com>
-References: <CAJZ5v0jJ_hWQKH0FNoTk+EtzLS=y3ovC4+pXPq+NWB1vPZU9pg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jJ_hWQKH0FNoTk+EtzLS=y3ovC4+pXPq+NWB1vPZU9pg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.4-rc5
-X-PR-Tracked-Commit-Id: 767d2d710e9066c47919a4e5f05a21e1ad40ddc4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5fa2845fd794419fbeaf240aaa0c6d62ce6191cc
-Message-Id: <157194690604.28436.15553776591358377680.pr-tracker-bot@kernel.org>
-Date:   Thu, 24 Oct 2019 19:55:06 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1727331AbfJXUuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 16:50:06 -0400
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:35935 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727335AbfJXUuG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 16:50:06 -0400
+Received: from belgarion ([90.76.41.223])
+        by mwinf5d87 with ME
+        id HYps210044otT8A03Ypz5w; Thu, 24 Oct 2019 22:50:03 +0200
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Thu, 24 Oct 2019 22:50:03 +0200
+X-ME-IP: 90.76.41.223
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        "open list\:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
+References: <20191018154052.1276506-1-arnd@arndb.de>
+        <87v9slg9k5.fsf@belgarion.home>
+        <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+        <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+        <87r239f2g8.fsf@belgarion.home>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Thu, 24 Oct 2019 22:49:51 +0200
+In-Reply-To: <87r239f2g8.fsf@belgarion.home> (Robert Jarzmik's message of
+        "Sat, 19 Oct 2019 12:35:03 +0200")
+Message-ID: <87eez1rhqo.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 24 Oct 2019 19:28:58 +0200:
+Robert Jarzmik <robert.jarzmik@free.fr> writes:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.4-rc5
+>>> I've now pushed it to
+>>>
+>>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
+>>> pxa-multiplatform
+>>
+>> Sorry for the duplication, I had some problems with email configuration
+>> so my reply got rejected, let's see if it goes through this time.
+> I have it now, thanks, I'll test and review as soon as I can.
+>
+> Cheers.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5fa2845fd794419fbeaf240aaa0c6d62ce6191cc
+Ok Arnd, I have a preliminary test report.
 
-Thank you!
+I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
+only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
+the regulator framework (which is a known issue [1]), your version seems
+equivalent so far in terms of runtime to Linux 5.4-rc3).
+
+The sound and RTC seem broken, but not by you ...
+
+I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
+time, and try to review as well the mach-pxa part.
+
+Cheers.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Robert
+
+[1] https://lore.kernel.org/patchwork/patch/1130436/
