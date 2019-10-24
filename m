@@ -2,119 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03136E392E
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 19:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6F4E3A04
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Oct 2019 19:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410061AbfJXREF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 13:04:05 -0400
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:37936 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410047AbfJXREF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 13:04:05 -0400
-Received: by mail-ua1-f67.google.com with SMTP id u99so2159868uau.5
-        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 10:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dzIZOdfZOm9/tczR85zTnpbzPA2Dr5D7KrkOTuOLCMQ=;
-        b=pIlGYlwHvtHqaHlxQfDr0+75g9uN4+rdyZh81DemB0rBcak8UrgQ+FyY/pPMLvkjKX
-         baoSN4HgwIIshTRvEC+0DlfgTvd9pFnAoiFvQVRMbeDOmDOlDM5eKZYM67BQSogtCsX0
-         LbrnqE319qj1A0n3q+dKnGM5wG4GztlgYSvivE4nF5ONzddS2i8kEDuv2nEY+yVejdNs
-         42Fu1Lsqo4ex/EIhAH9ZjXXhe+EcWVBQJJik8eGD8lMZOLkqns1yS/zcbys8/wFC+Je6
-         B/FciVafCNEoRUYobQSP8ffCI6kHqESXVDdk50gcw+FbYsOmjKTbwT18Pgq916TWKH8K
-         zzwA==
+        id S2394031AbfJXR3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 13:29:12 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43738 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439987AbfJXR3M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 13:29:12 -0400
+Received: by mail-oi1-f195.google.com with SMTP id s5so5934237oie.10;
+        Thu, 24 Oct 2019 10:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dzIZOdfZOm9/tczR85zTnpbzPA2Dr5D7KrkOTuOLCMQ=;
-        b=j264B0dAF1+oLrz59iZserK7q8hh70Qk05SXkm4sC5AAfJL0VBtJPIeF/YbusUVmNS
-         k/pp5wib9rcPO2TS8vJ0HL3GT8MaWsUU1inYlHFKAGCTvedhHNTNC4jWMceeGscwuW9r
-         MuDDWbV4N/iWh3mbDxwELve38xxGVJS4woG6CXKp3hl5SOx+9gmZs2gxSTKMaZKnu8id
-         E8AvKvquBRgDAlTIJaj+H4Xd2fxveSnIn2PU3YdsdXHBKTmglkdAYronNBPlrqeHVvbr
-         ejPnZqLd4K+Hs6ipCx23c3kOT83w7VrKsKJ+Z23LXklujVHYdY0aaTa4Jpn3/5hTUb/r
-         G66A==
-X-Gm-Message-State: APjAAAUkDr9Qnk4UFtz2FcJKu5VtxNlHQjBXz/OM0xTU/byhx6lqZSBx
-        avdjh1BMcyP9wzer4rmMx8BWXha9FlOaw2Xk3tyFng==
-X-Google-Smtp-Source: APXvYqzkr6vzJLu1qnQfTtAWGkrgV+rK9emrmymKXieNlDnMIIeTryB5+UQZjsnWebYgfKxZq8M5lsS16aVzuXCyxTE=
-X-Received: by 2002:ab0:5a97:: with SMTP id w23mr9528899uae.129.1571936644649;
- Thu, 24 Oct 2019 10:04:04 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=n5/rr+7Iw1y1Xy/3+ehYuCjVxFwNY/p/xnADvXnbRFY=;
+        b=lm+1av40snF4o1Dg9GOrsscwEm9vWqOelQ9oiOTU2Eg8UhS1LTu579EjBSmHtA6MkT
+         iy0bO9EA4PioKW0qs9a5oZ4veyp/T7a6qxGMdEhGp0RwmYBrFZQr7HK9AbSQPHFEtx4u
+         Wzq84YYaCiWyjJaXxIJethv1VKF9nNL26jh1a6ht5dzFigrsv7qxukGEeDQXvLWSJCSw
+         YZh5WjClpE1HbF9RtZ7+JGpPGlWwjR99Vo2y8SCOC3f2dbUX92DO6eoJLtW083Apf/6Z
+         Utp9UWHG4P3WzQLrAGahS15CNIi2olpFNfvbkJpWQ5QLTFjnuQR6DZM/xGGyDceFq0l0
+         MgOA==
+X-Gm-Message-State: APjAAAW2Tq/+vYBRqSfajQ2i/jGOBOi5ZJG04kEpkMd6wQZvf6+c4aOC
+        9EXOQvnM76U2VUVilkOgaLMK8GVvQHpZBsj5FbGNJEG6
+X-Google-Smtp-Source: APXvYqz8XiDgEsBH3NsG0Lt5ZM8CfElOkevsns8Tg3fMEbRsL5nkTur+76lw9j2XQO1yTyx9DWZGsas3wYd0G717TKA=
+X-Received: by 2002:aca:d706:: with SMTP id o6mr5915677oig.57.1571938149356;
+ Thu, 24 Oct 2019 10:29:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-14-ulf.hansson@linaro.org> <20191024164106.GA24887@bogus>
-In-Reply-To: <20191024164106.GA24887@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 24 Oct 2019 19:03:28 +0200
-Message-ID: <CAPDyKFoWTqORFGSe0TwMuRh5wUunm2fDu-uHPZR9xRyT6UjmFQ@mail.gmail.com>
-Subject: Re: [PATCH 13/13] arm64: dts: Convert to the hierarchical CPU
- topology layout for MSM8916
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Lina Iyer <lina.iyer@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 24 Oct 2019 19:28:58 +0200
+Message-ID: <CAJZ5v0jJ_hWQKH0FNoTk+EtzLS=y3ovC4+pXPq+NWB1vPZU9pg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.4-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-- Andy
+Hi Linus,
 
-On Thu, 24 Oct 2019 at 18:41, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Oct 10, 2019 at 01:39:37PM +0200, Ulf Hansson wrote:
-> > To enable the OS to better support PSCI OS initiated CPU suspend mode,
-> > let's convert from the flattened layout to the hierarchical layout.
-> >
-> > In the hierarchical layout, let's create a power domain provider per CPU
-> > and describe the idle states for each CPU inside the power domain provider
-> > node. To group the CPUs into a cluster, let's add another power domain
-> > provider and make it act as the master domain. Note that, the CPU's idle
-> > states remains compatible with "arm,idle-state", while the cluster's idle
-> > state becomes compatible with "domain-idle-state".
-> >
-> > Cc: Andy Gross <andy.gross@linaro.org>
-> > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-> > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/msm8916.dtsi | 57 +++++++++++++++++++++++++--
-> >  1 file changed, 53 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> > index 5ea9fb8f2f87..1ece0c763592 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> > @@ -102,10 +102,11 @@
-> >                       reg = <0x0>;
-> >                       next-level-cache = <&L2_0>;
-> >                       enable-method = "psci";
-> > -                     cpu-idle-states = <&CPU_SLEEP_0>;
-> >                       clocks = <&apcs>;
-> >                       operating-points-v2 = <&cpu_opp_table>;
-> >                       #cooling-cells = <2>;
-> > +                     power-domains = <&CPU_PD0>;
-> > +                     power-domain-names = "psci";
->
-> As mentioned in the patch: Do we really need to make power-domain-names
-> compulsory ?
+Please pull from the tag
 
-Yes, I think that is a good idea. However, let's discuss in the other
-thread instead.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.4-rc5
 
-Again, thanks a lot for reviewing!
+with top-most commit 767d2d710e9066c47919a4e5f05a21e1ad40ddc4
 
-Kind regards
-Uffe
+ Merge branches 'pm-cpuidle' and 'pm-opp'
+
+on top of commit 7d194c2100ad2a6dded545887d02754948ca5241
+
+ Linux 5.4-rc4
+
+to receive power management fixes for 5.4-rc5.
+
+These fix problems related to frequency limits management in
+cpufreq that were introduced during the 5.3 cycle (when PM QoS
+had started to be used for that), fix a few issues in the OPP
+(operating performance points) library code and fix up the
+recently added haltpoll cpuidle driver.
+
+The cpufreq changes are somewhat bigger that I would like them
+to be at this stage of the cycle, but the problems fixed by them
+include crashes on boot and shutdown in some cases (among other
+things) and in my view it is better to address the root of the
+issue right away.
+
+Specifics:
+
+ - Using device PM QoS of CPU devices for managing frequency limits
+   in cpufreq does not work, so introduce frequency QoS (based on the
+   original low-level PM QoS) for this purpose, switch cpufreq and
+   related code over to using it and fix a race involving deferred
+   updates of frequency limits on top of that (Rafael Wysocki, Sudeep
+   Holla).
+
+ - Avoid calling regulator_enable()/disable() from the OPP framework
+   to avoid side-effects on boot-enabled regulators that may change their
+   initial voltage due to performing initial voltage balancing without
+   all restrictions from the consumers (Marek Szyprowski).
+
+ - Avoid a kref management issue in the OPP library code and drop an
+   incorrectly added lockdep_assert_held() from it (Viresh Kumar).
+
+ - Make the recently added haltpoll cpuidle driver take the 'idle='
+   override into account as appropriate (Zhenzhong Duan).
+
+Thanks!
+
+
+---------------
+
+Marek Szyprowski (1):
+      opp: core: Revert "add regulators enable and disable"
+
+Rafael J. Wysocki (3):
+      PM: QoS: Introduce frequency QoS
+      cpufreq: Use per-policy frequency QoS
+      PM: QoS: Drop frequency QoS types from device PM QoS
+
+Sudeep Holla (1):
+      cpufreq: Cancel policy update work scheduled before freeing
+
+Viresh Kumar (2):
+      opp: of: drop incorrect lockdep_assert_held()
+      opp: Reinitialize the list_kref before adding the static OPPs again
+
+Zhenzhong Duan (1):
+      cpuidle: haltpoll: Take 'idle=' override into account
+
+---------------
+
+ drivers/acpi/processor_driver.c            |   9 +-
+ drivers/acpi/processor_perflib.c           |  18 +--
+ drivers/acpi/processor_thermal.c           |  18 +--
+ drivers/base/power/qos.c                   |  70 +--------
+ drivers/cpufreq/cpufreq.c                  |  62 ++++----
+ drivers/cpufreq/intel_pstate.c             |  30 ++--
+ drivers/cpufreq/ppc_cbe_cpufreq_pmi.c      |  15 +-
+ drivers/cpuidle/cpuidle-haltpoll.c         |   4 +
+ drivers/macintosh/windfarm_cpufreq_clamp.c |  38 +++--
+ drivers/opp/core.c                         |  16 +-
+ drivers/opp/of.c                           |   9 +-
+ drivers/thermal/cpu_cooling.c              |  14 +-
+ include/acpi/processor.h                   |  20 +--
+ include/linux/cpufreq.h                    |   7 +-
+ include/linux/pm_qos.h                     |  56 +++++--
+ kernel/power/qos.c                         | 240 +++++++++++++++++++++++++++++
+ 16 files changed, 417 insertions(+), 209 deletions(-)
