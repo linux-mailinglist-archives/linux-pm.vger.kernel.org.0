@@ -2,99 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBC6E4429
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 09:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDFBE456F
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 10:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406602AbfJYHMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Oct 2019 03:12:02 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:40374 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406597AbfJYHMB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Oct 2019 03:12:01 -0400
-Received: by mail-qt1-f193.google.com with SMTP id o49so1793748qta.7
-        for <linux-pm@vger.kernel.org>; Fri, 25 Oct 2019 00:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y7vqZokkWR7+GS48fmUuYPLXAvMVfo/8O1D4NDWeFmk=;
-        b=pUUaQH/DWoTBzQnNWB49dUdGsOItZ8Aw3Z1dpyC4yDjlb3YPs0Vlt1zYm7jMKzhU+1
-         tD/wEqY6JXtuNzmgznccgw8Ws7Kza/6M00d6PL6nYmeDrSldcurPwryoWtCGOBmNUcy3
-         LJ+klXQDEQQ0BE9k3X5GECDYO5L+VDT0uaX/zNJtm5SIDSqBoElQGlT6pIpJJlbDsXBw
-         aYT4FYxp5z7ZU1qRBbQq4MKS56NMl0GiqMqat4OdwC+dNLOt3DdLmaZH1771NfKHCdbO
-         PrxOC3oLuCzWLYipExuIFT+BqpWbB4kfm7yq1dc6NDBdyDWICDx+Qluy247SFdZAA6dn
-         9dTg==
+        id S2407695AbfJYIRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Oct 2019 04:17:49 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45612 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405453AbfJYIRt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Oct 2019 04:17:49 -0400
+Received: by mail-oi1-f193.google.com with SMTP id o205so969670oib.12;
+        Fri, 25 Oct 2019 01:17:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y7vqZokkWR7+GS48fmUuYPLXAvMVfo/8O1D4NDWeFmk=;
-        b=IG0uTpXMGkMYpNbVPWaDn/p4BHyOLMD8cg1ORXc6pZNdeO7FE9KTEIGbMAtTuURvAU
-         hjXazIEuNR/4fxTGHAGX2YhqDG9uuR6aFjFWgB8wqiFwYjnZBt5hhJw74zg7Pc5EcyHm
-         Pc9KHF3Ka+/Kr3LJYb1NQgtAWRlIxgnO6rMcRUX1y0k/x2pSc9Zu6YSXW76D5HUCXR9Z
-         Nnn6Sy2x9ftJfzY/vy/DaTYNIL+Rl/pk6ygArCtLQxP2sMSTK7rDns42+yV2QWfUnscH
-         AjzKJDLX2fTb61BYd0cQIGG/7sCo48+NihKPpNhEmq5/bicTGEyu7dBjiHDhS+8HXhfn
-         vIPg==
-X-Gm-Message-State: APjAAAXyvxM8PrTxAZZD8buHWfztlnwcWx3p3RzTPWolgGJN8YpCwcVm
-        YhhCsKlljdsrhQbAxyXdum9YvykvX0qJCYT+52DS0w==
-X-Google-Smtp-Source: APXvYqxi0EwTymF9nPtPsY0B3bV61Maul6DeZgSQS9AcKD6MolLYaJRmKgrwOZcedSJQ5182NorU5pc7KvYAJ3TWejs=
-X-Received: by 2002:ac8:4508:: with SMTP id q8mr1655147qtn.110.1571987520725;
- Fri, 25 Oct 2019 00:12:00 -0700 (PDT)
+        bh=SfnbCnGC7bfHOPS0ndKHFbRPzpZx17Z/G8hlBOm+gDw=;
+        b=SzKm8X5kDdzGk2IaVp/Lq25RtzTxxFCl+gs9SXSCVtLukCzgCp3ep9o9wG7PljhWSX
+         RQCEfRoMjfXh7O3qEUdHXhQqbafpO3KRRzzgsuHuTsKqm+iLwaPyCI/3oIwxBnaZOAHR
+         a2THVIJxco3+nc7wvhIoPnT/42OK7KbOvFYdModD3xuUnahgdEhWZN2/yLlpT/RWQ0hW
+         FJmdxw4emPDFBVRdYFoKmZJyzPj87tyZ9huR2es8Int8WqOQe7yd3yWnR6Q1C6JmROr7
+         MvydLZOiQfdp87dKPfN7j/dRFKF+rJaAMHaLPNxC1rZ6VQgQ6e2woNkMa0jJ4g1PGBR7
+         i8Hg==
+X-Gm-Message-State: APjAAAUQ8qISP2O49SbC0DGgDNdnqr48ZWZrORro+pfrEWZ712BOToiX
+        nzNxjM1TZaopwRTecAlxGaRvkPeecs5b71EMKHiA6ROx
+X-Google-Smtp-Source: APXvYqy8cLx1sSZoK5TmfzZ9Fq2zyzJe1nqJrBJBeOYFMnzoCQUbQKbV2BtvN5+jfRQs36i5xBnTlOAQNSQe/C70Bo8=
+X-Received: by 2002:aca:5885:: with SMTP id m127mr1963800oib.110.1571991468336;
+ Fri, 25 Oct 2019 01:17:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAD8Lp46KZmTzxjYN6T7u1xH0AODr38hFcCgR-COtvduK9ZuANQ@mail.gmail.com>
- <20191024170023.GA135695@google.com>
-In-Reply-To: <20191024170023.GA135695@google.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Fri, 25 Oct 2019 15:11:49 +0800
-Message-ID: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
+References: <2435090.1mJ0fSsrDY@kreacher> <20191025025343.tyihliza45os3e4r@vireshk-i7>
+In-Reply-To: <20191025025343.tyihliza45os3e4r@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Oct 2019 10:17:37 +0200
+Message-ID: <CAJZ5v0hyAX6zpr+2EzURg7ACmaXhbTAc7mBnr9ep11LkF1EBOg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: processor: Add QoS requests for all CPUs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 1:00 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> That's really strange.  Your original message showed:
+On Fri, Oct 25, 2019 at 4:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
->   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
->   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> On 25-10-19, 02:41, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The _PPC change notifications from the platform firmware are per-CPU,
+> > so acpi_processor_ppc_init() needs to add a frequency QoS request
+> > for each CPU covered by a cpufreq policy to take all of them into
+> > account.
+> >
+> > Even though ACPI thermal control of CPUs sets frequency limits
+> > per processor package, it also needs a frequency QoS request for each
+> > CPU in a cpufreq policy in case some of them are taken offline and
+> > the frequency limit needs to be set through the remaining online
+> > ones (this is slightly excessive, because all CPUs covered by one
+> > cpufreq policy will set the same frequency limit through their QoS
+> > requests, but it is not incorrect).
+> >
+> > Modify the code in accordance with the above observations.
 >
-> The first line is from pci_raw_set_power_state() reading PCI_PM_CTRL,
-> but we can't tell whether the read failed and we got ~0, or it
-> succeeded and we got something with just the low two bits set.  Can
-> you print out the whole value so we can see what happened?
+> I am not sure if I understood everything you just said, but I don't
+> see how things can break with the current code we have.
 >
-> The second line is from pci_enable_resources() reading PCI_COMMAND,
-> and it got *0*, not 0x0403 as you got from the CRS experiment.
+> Both acpi_thermal_cpufreq_init() and acpi_processor_ppc_init() are
+> called from acpi_processor_notifier() which is registered as a policy
+> notifier and is called when a policy is created or removed. Even if
+> some CPUs of a policy go offline, it won't matter as the request for
+> the policy stays and it will be dropped only when all the CPUs of a
+> policy go offline.
+>
+> What am I missing ?
 
-Thanks for persisting here. In more detail:
+The way the request is used.
 
-pci_pm_resume_noirq
-- pci_pm_default_resume_early
--- pci_raw_set_power_state(D0)
+Say there are two CPUs, A and B, in the same policy.  A is
+policy->cpu, so acpi_processor_ppc_init() adds a QoS request for A
+only (note that the B's QoS request, B->perflib_req, remains
+inactive).
 
-At this point, pci_dev_wait() reads PCI_COMMAND to be 0x100403 (32-bit
-read) - so no wait.
-pci_raw_set_power_state writes to PM_CTRL and then reads it back with value 0x3.
->   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+Now, some time later, the platform firmware notifies the OS of a _PPC
+change for B.  That means acpi_processor_notify() is called and it
+calls acpi_processor_ppc_has_changed(B) and that invokes
+acpi_processor_get_platform_limit(B), which in turn looks at the B's
+QoS request (B->perflib_req) and sees that it is inactive, so 0 is
+returned without doing anything.  However, *some* QoS request should
+be updated then.
 
-At the point of return from pci_pm_resume_noirq, an extra check I
-added shows that PCI_COMMAND has value 0x403 (16-bit read).
-35ms later, pci_pm_resume is entered, and I checked that at this
-point, PCI_COMMAND has value 0.
-It then goes on to reach pci_enable_resources().
->   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+Would it be correct to update the A's QoS request in that case?  No,
+because the _PPC limit for A may be different that the _PPC limit for
+B in principle.
 
-The change in PCI_COMMAND value is just down to timing.
-At the end of pci_pm_resume_noirq(), if I log PCI_COMMAND, wait 10ms,
-and log PCI_COMMAND again, I see it transition from 0x403 to 0.
-
-Daniel
+The thermal case is not completely analogous, because
+cpufreq_set_cur_state() finds online CPUs in the same package as the
+target one and tries to update the QoS request for each of them, which
+will include the original policy->cpu, whose QoS request has been
+registered by acpi_thermal_cpufreq_init(), as long as it is online.
+If it is offline, it will be skipped and there is no easy way to find
+a "previous policy->cpu".  It is possible to do that, but IMO it is
+more straightforward to have a request for each CPU added.
