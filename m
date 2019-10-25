@@ -2,125 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 546EDE3EF7
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 00:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C2BE40A8
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 02:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730893AbfJXWSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 18:18:03 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:36583 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730812AbfJXWR7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 18:17:59 -0400
-Received: by mail-lf1-f65.google.com with SMTP id u16so20423259lfq.3;
-        Thu, 24 Oct 2019 15:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SRZiQeucNCGBdlqwTzaIYE1CEk27ias9lFSKqU/IIKA=;
-        b=uHHM44aNEYLJJSFeNN2LlFdNV8YVJN9NHQlXwaQT/IaV7a0m94/bLaBIqRiNdZEzaG
-         EtEbkh6KBT1RczvbjjYpzXtjqE1yj/5qDp0zXLmrAkS8cs5JzIeJkacM7UJkisaFQlGI
-         bUDau8ubRT28Cdg9O/mNm/U/Y/8Z82dC26aSYPIXP9wWKlpoV2CAsp4ofMsqsMaHwzUC
-         DO3j+rkQACBCJSY4FJrWaIv9vRWdwgQMpiZrmp1L6R3dZUXYwpshZCXDCFdQg+xqyYhA
-         OOKw+QbN1PDozRWwrA4ISYZMdPXFsvXaOYm5wUM09BvkbiojW0uD+f7NBG5i4sOqTJ3m
-         akAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SRZiQeucNCGBdlqwTzaIYE1CEk27ias9lFSKqU/IIKA=;
-        b=iz4utn+oX7F/wbwjlG+letCmU9S8PF9Rw1RD9xZ1GWHNxDtIy8bQ7SLHtQxLSCn18y
-         YzIccrK3jXV3dR0ClVgFDB34WHnfKiSAGDUO4p1r+jcrNsQiZPCkAo+Y1rBBrVThrfKD
-         AwweSdan7IlBVDfQlZ3y++u82B+EdbztLutA/YnUlyvRm2TmnoEN/qHkus0heaGdJKi/
-         yAcWZiqM4nOqma6LbhP2OemzghIyLRVpGFK4H0Z5TQuqpjjWr43iweKR9wP2uncUWT0p
-         Qpp56SCiWxewr9lHGcYH5+MUk4Iw6Ypse/6eriW2qc0hrNwhl9OczV0nuAKlEvvRL5m7
-         7HOA==
-X-Gm-Message-State: APjAAAWVvPGZLcph0OciloVQv3GfAzmX4u8I9gg1MSCUVuCgZaSY8v4p
-        xgvH05lxDOgs9mJwDpX4U84=
-X-Google-Smtp-Source: APXvYqwZ82ySmk2BMPumPLP/kcKQAnUR5TxNVS4XlEzxyTJb6KeVq3x+/jSGnWqc0xQbCSfpt6YQGg==
-X-Received: by 2002:a19:640c:: with SMTP id y12mr328182lfb.78.1571955476117;
-        Thu, 24 Oct 2019 15:17:56 -0700 (PDT)
-Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id i6sm11338765lfo.83.2019.10.24.15.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 15:17:55 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S2387705AbfJYAlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 20:41:44 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:65441 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726164AbfJYAlo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 20:41:44 -0400
+Received: from 79.184.254.57.ipv4.supernova.orange.pl (79.184.254.57) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 3d5b083a06540a5e; Fri, 25 Oct 2019 02:41:41 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 17/17] ARM: dts: tegra30: cardhu-a04: Add CPU Operating Performance Points
-Date:   Fri, 25 Oct 2019 01:14:16 +0300
-Message-Id: <20191024221416.14197-18-digetx@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191024221416.14197-1-digetx@gmail.com>
-References: <20191024221416.14197-1-digetx@gmail.com>
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ACPI: processor: Add QoS requests for all CPUs
+Date:   Fri, 25 Oct 2019 02:41:40 +0200
+Message-ID: <2435090.1mJ0fSsrDY@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Utilize common Tegra30 CPU OPP table. CPU DVFS is available now on
-cardhu-a04.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+The _PPC change notifications from the platform firmware are per-CPU,
+so acpi_processor_ppc_init() needs to add a frequency QoS request
+for each CPU covered by a cpufreq policy to take all of them into
+account.
+
+Even though ACPI thermal control of CPUs sets frequency limits
+per processor package, it also needs a frequency QoS request for each
+CPU in a cpufreq policy in case some of them are taken offline and
+the frequency limit needs to be set through the remaining online
+ones (this is slightly excessive, because all CPUs covered by one
+cpufreq policy will set the same frequency limit through their QoS
+requests, but it is not incorrect).
+
+Modify the code in accordance with the above observations.
+
+Fixes: d15ce412737a ("ACPI: cpufreq: Switch to QoS requests instead of cpufreq notifier")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- arch/arm/boot/dts/tegra30-cardhu-a04.dts | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/acpi/processor_perflib.c |   38 +++++++++++++++++++++++---------------
+ drivers/acpi/processor_thermal.c |   38 +++++++++++++++++++++++---------------
+ 2 files changed, 46 insertions(+), 30 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra30-cardhu-a04.dts b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-index 0d71925d4f0b..9234988624ec 100644
---- a/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-+++ b/arch/arm/boot/dts/tegra30-cardhu-a04.dts
-@@ -2,6 +2,8 @@
- /dts-v1/;
+Index: linux-pm/drivers/acpi/processor_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_thermal.c
++++ linux-pm/drivers/acpi/processor_thermal.c
+@@ -127,26 +127,34 @@ static int cpufreq_set_cur_state(unsigne
  
- #include "tegra30-cardhu.dtsi"
-+#include "tegra30-cpu-opp.dtsi"
-+#include "tegra30-cpu-opp-microvolt.dtsi"
+ void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy)
+ {
+-	int cpu = policy->cpu;
+-	struct acpi_processor *pr = per_cpu(processors, cpu);
+-	int ret;
+-
+-	if (!pr)
+-		return;
+-
+-	ret = freq_qos_add_request(&policy->constraints, &pr->thermal_req,
+-				   FREQ_QOS_MAX, INT_MAX);
+-	if (ret < 0)
+-		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
+-		       ret);
++	unsigned int cpu;
++
++	for_each_cpu(cpu, policy->related_cpus) {
++		struct acpi_processor *pr = per_cpu(processors, cpu);
++		int ret;
++
++		if (!pr)
++			continue;
++
++		ret = freq_qos_add_request(&policy->constraints,
++					   &pr->thermal_req,
++					   FREQ_QOS_MAX, INT_MAX);
++		if (ret < 0)
++			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
++			       cpu, ret);
++	}
+ }
  
- /* This dts file support the cardhu A04 and later versions of board */
+ void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+ {
+-	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
++	unsigned int cpu;
++
++	for_each_cpu(cpu, policy->related_cpus) {
++		struct acpi_processor *pr = per_cpu(processors, policy->cpu);
  
-@@ -127,4 +129,26 @@
- 			nvidia,tegra-core-regulator;
- 		};
- 	};
+-	if (pr)
+-		freq_qos_remove_request(&pr->thermal_req);
++		if (pr)
++			freq_qos_remove_request(&pr->thermal_req);
++	}
+ }
+ #else				/* ! CONFIG_CPU_FREQ */
+ static int cpufreq_get_max_state(unsigned int cpu)
+Index: linux-pm/drivers/acpi/processor_perflib.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_perflib.c
++++ linux-pm/drivers/acpi/processor_perflib.c
+@@ -159,26 +159,34 @@ void acpi_processor_ignore_ppc_init(void
+ 
+ void acpi_processor_ppc_init(struct cpufreq_policy *policy)
+ {
+-	int cpu = policy->cpu;
+-	struct acpi_processor *pr = per_cpu(processors, cpu);
+-	int ret;
+-
+-	if (!pr)
+-		return;
+-
+-	ret = freq_qos_add_request(&policy->constraints, &pr->perflib_req,
+-				   FREQ_QOS_MAX, INT_MAX);
+-	if (ret < 0)
+-		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
+-		       ret);
++	unsigned int cpu;
 +
-+	cpus {
-+		cpu0: cpu@0 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
++	for_each_cpu(cpu, policy->related_cpus) {
++		struct acpi_processor *pr = per_cpu(processors, cpu);
++		int ret;
 +
-+		cpu@1 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
++		if (!pr)
++			continue;
 +
-+		cpu@2 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
++		ret = freq_qos_add_request(&policy->constraints,
++					   &pr->perflib_req,
++					   FREQ_QOS_MAX, INT_MAX);
++		if (ret < 0)
++			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
++			       cpu, ret);
++	}
+ }
+ 
+ void acpi_processor_ppc_exit(struct cpufreq_policy *policy)
+ {
+-	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
++	unsigned int cpu;
 +
-+		cpu@3 {
-+			cpu-supply = <&vddctrl_reg>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+		};
-+	};
- };
--- 
-2.23.0
++	for_each_cpu(cpu, policy->related_cpus) {
++		struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-	if (pr)
+-		freq_qos_remove_request(&pr->perflib_req);
++		if (pr)
++			freq_qos_remove_request(&pr->perflib_req);
++	}
+ }
+ 
+ static int acpi_processor_get_performance_control(struct acpi_processor *pr)
+
+
 
