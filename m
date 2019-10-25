@@ -2,71 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9334E51E0
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 19:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0548CE52E0
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 20:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409603AbfJYRCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Oct 2019 13:02:43 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39481 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726511AbfJYRCm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Oct 2019 13:02:42 -0400
-Received: by mail-oi1-f196.google.com with SMTP id v138so2076611oif.6;
-        Fri, 25 Oct 2019 10:02:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1je0vidW0gA9BZC2ySQZiimdAJyw9gnUzbO+i+g1658=;
-        b=KCeXTwkCz++8iwpIr3e9q93eTyEjUk5Sf4ZjnGalCRdLPvncK0CBwVVwMbywMSslMf
-         xvQdURrvZnCBZiQwsmk+/JYw3eWfchltSFIPt0rbaBKgzh5kPxtHbNZriFTMZxKmcWbd
-         c4QU5YFKfM2L2i1M9rzrsIjV6KC9n0YOxhXeFxw9cbE/yMO8Kn41qx4cBilgGX/GrN80
-         CFLOJnVyMGUPFWoivbuLOo3HxO+iHcrXuwxr8yQY+FKLVWBAzL8fooEMepXZ/y9eIQtz
-         ctegwMO0qFyZwh4KleRRViEh8ggMNCpxm3Ht/15qhDiCHWr5jA987r//VMyWDri9rora
-         uLog==
-X-Gm-Message-State: APjAAAXMKRxe+JqOzJ+kW32h7MRVfdtPNwVIqujrUVpU7MPwSGJNMH6+
-        WdCScLdvLsnT6A0chQwhZQ==
-X-Google-Smtp-Source: APXvYqxSd3WRuomUGEAUJ8aEqH2FmnEDdcA7sgomWRVtFipQ4J6+Yd869cRA6aUPe1Xixkib9ypHCw==
-X-Received: by 2002:aca:d882:: with SMTP id p124mr3788390oig.44.1572022961666;
-        Fri, 25 Oct 2019 10:02:41 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t18sm871763otm.8.2019.10.25.10.02.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 10:02:40 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 12:02:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v4 5/6] dt-bindings: mfd: max77650: convert the binding
- document to yaml
-Message-ID: <20191025170240.GA7951@bogus>
-References: <20191021124428.2541-1-brgl@bgdev.pl>
- <20191021124428.2541-6-brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021124428.2541-6-brgl@bgdev.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1731203AbfJYSAy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Oct 2019 14:00:54 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:54222 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730926AbfJYSAy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 25 Oct 2019 14:00:54 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 036091A0A2A;
+        Fri, 25 Oct 2019 20:00:52 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E9A371A081F;
+        Fri, 25 Oct 2019 20:00:51 +0200 (CEST)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 88405205DB;
+        Fri, 25 Oct 2019 20:00:51 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: [PATCH 0/3] PM: QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+Date:   Fri, 25 Oct 2019 21:00:46 +0300
+Message-Id: <cover.1572025364.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 21 Oct 2019 14:44:27 +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> 
-> Convert the binding document for MAX77650 core MFD module to YAML.
-> 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
->  .../devicetree/bindings/mfd/max77650.yaml     | 149 ++++++++++++++++++
->  2 files changed, 149 insertions(+), 46 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
-> 
+Support for frequency limits in dev_pm_qos was removed when cpufreq was
+switched to freq_qos, this series attempts to restore it by
+reimplementing top of freq_qos.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Previous discussion here:
+
+https://lore.kernel.org/linux-pm/VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com/T/#u
+
+The cpufreq core switched away because it needs contraints at the level
+of a "cpufreq_policy" which cover multiple cpus so dev_pm_qos coupling
+to struct device was not useful (and was incorrectly handling). Cpufreq
+could only use dev_pm_qos by implementing an additional layer of
+aggregation from CPU to policy.
+
+However the devfreq subsystem scaling is always performed for each
+device so dev_pm_qos is a very good match. Support for dev_pm_qos
+inside devfreq is implemented by this series:
+
+	https://patchwork.kernel.org/cover/11171807/
+
+Rafael: If this makes sense to you I could incorporate the restoration
+of DEV_PM_QOS_MIN/MAX_FREQUENCY in v10 of the devfreq qos series.
+
+In theory if freq_qos is extended to handle conflicting min/max values then
+this sharing would be useful. Right now freq_qos just ties two unrelated
+pm_qos aggregations for min/max freq.
+
+---
+This is implemented by embeding a freq_qos_request inside dev_pm_qos_request:
+the data field was already an union in order to deal with flag requests.
+
+The internal _freq_qos_apply is exported so that it can be called from
+dev_pm_qos apply_constraints.
+
+The dev_pm_qos_constraints_destroy function has no obvious equivalent in
+freq_qos but really the whole approach of "removing requests" is somewhat dubios:
+request objects should be owned by consumers and the list of qos requests
+should be empty when the target device is deleted. Clearing the request
+list and would likely result in a WARN next time "update_request" is
+called by the requestor.
+
+Leonard Crestez (3):
+  PM: QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+  PM: QoS: Export _freq_qos_apply
+  PM: QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+
+ drivers/base/power/qos.c | 69 +++++++++++++++++++++++++++++---
+ include/linux/pm_qos.h   | 86 +++++++++++++++++++++++-----------------
+ kernel/power/qos.c       | 11 ++---
+ 3 files changed, 119 insertions(+), 47 deletions(-)
+
+-- 
+2.17.1
+
