@@ -2,156 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAC0E41AA
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 04:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CD1E41DF
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Oct 2019 04:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389762AbfJYCkq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Oct 2019 22:40:46 -0400
-Received: from mail-eopbgr80084.outbound.protection.outlook.com ([40.107.8.84]:60066
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389800AbfJYCkp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 24 Oct 2019 22:40:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TJJXzXYYrLBL7sB8BgZgnYnF0cXdopUs/whhylUl15KyFHO2wSAeAe4JAO2LIHmJR1u9VoVXsTWdIub9jnV5ipA/7jRSrf/MMSKnExb6939eeqt4Fd3OnGyPJssr0NTqs18JKYmX5ro1tBfR3wasyfxUe2DlAxknPv/LAlRQMJC5UK7R+5ae7Es85yUAxfhfPPYjBMdRbv3no/HtfzVbv1SsSkt5YdOjLlxrDnFD1WYoQqxU3YjBhTcfiqDcpGyWhoHPq8NfXQMFXfBtYKpp8fYCG1RSqzhsK0n4iC+x0j54GdeE+UMvM0zELOfklIMn/2cH1u4ONXyAVKJOYYGE+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uSWoqekBoJFxipWx7pBtbSi+MgF30N5GkW0AtJ94YAU=;
- b=XMDyM7zfUFs47/ks3qbfWUq5Leya/3tbLm+mP83QFq2Ir89KWwz597e007uDVgqNFSzgOxteNYBbQ//DJD3ptAhI2mFGYzCjfjRX2dJ2h4fxVHVLNzBXYOo8DcxK/WcqVX1sxzo/VIeNwSldipJQCF5fjc3dD0BEcdukMT9ZdEedRtyCuC0uJiHl3aqFHi5LSf5DqTzTJUr4ZBG5zb0sCj+/HTmxidfCZbGngm5VGVjuRsIL3by/YmISMuVVFUu9epXUXG+jF5Mrz68t0GiQjT0r2ZMKhalhE7T/Pbo7G2r5yXqs1BLVQFZfJDVKBjZgBvrTKRPm/dstBMx4MJLxCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uSWoqekBoJFxipWx7pBtbSi+MgF30N5GkW0AtJ94YAU=;
- b=nJzFM3zoHADTAKdwT7hElslU1H8Tc95UUEn7iFrwHU4jWX9Zcn3W+RKPG7R86l2XF5yDXH3dgKWfmoQ7ZHNcwwrWZu4eb3bdREuA/vaFQTMgi1aW7L7WtBjJV7+goVEUr6Kgdo+9EFO1iiL6KFYaoX2XLtLOduUpFvSFJExCfyY=
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.243.14) by
- DB8PR04MB6796.eurprd04.prod.outlook.com (52.133.243.71) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.22; Fri, 25 Oct 2019 02:40:39 +0000
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::bcee:92dc:277f:6a78]) by DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::bcee:92dc:277f:6a78%7]) with mapi id 15.20.2387.021; Fri, 25 Oct 2019
- 02:40:39 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Scott Wood <oss@buserror.net>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>
-CC:     Biwen Li <biwen.li@nxp.com>, Len Brown <len.brown@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v7 2/3] Documentation: dt: binding: fsl: Add
- 'little-endian' and update Chassis define
-Thread-Topic: [PATCH v7 2/3] Documentation: dt: binding: fsl: Add
- 'little-endian' and update Chassis define
-Thread-Index: AQHVh8KDiZwukWRsl0e9N0zfXu13A6dqI52AgAB/RaA=
-Date:   Fri, 25 Oct 2019 02:40:39 +0000
-Message-ID: <DB8PR04MB682628E310F7106322174DE7F1650@DB8PR04MB6826.eurprd04.prod.outlook.com>
-References: <20191021034927.19300-1-ran.wang_1@nxp.com>
-         <20191021034927.19300-2-ran.wang_1@nxp.com>
- <ef150e9eb155eff410194ba5362ef404ce117c4a.camel@buserror.net>
-In-Reply-To: <ef150e9eb155eff410194ba5362ef404ce117c4a.camel@buserror.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: af15b91c-2320-482f-6e3d-08d758f4b910
-x-ms-traffictypediagnostic: DB8PR04MB6796:|DB8PR04MB6796:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB8PR04MB679672C3CB19791F239CBB29F1650@DB8PR04MB6796.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 02015246A9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(199004)(189003)(4326008)(476003)(5660300002)(66066001)(11346002)(8936002)(7696005)(446003)(102836004)(81156014)(52536014)(186003)(99286004)(81166006)(6506007)(76176011)(8676002)(26005)(15650500001)(4001150100001)(66476007)(7416002)(66556008)(64756008)(66446008)(486006)(110136005)(54906003)(66946007)(76116006)(2906002)(55016002)(9686003)(14454004)(6306002)(966005)(316002)(256004)(3846002)(6246003)(33656002)(6116002)(86362001)(6436002)(71200400001)(71190400001)(305945005)(25786009)(74316002)(7736002)(229853002)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB6796;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /x03iGZlTKDjaj4z0NpbIuhJCz11VRffsLHuws+5HX4dn6Hhpvp6XxT4RrFroigzZbFI+Xv7uYCdTU9bv59j4KuhNnNSuoK1Bwe2w6WVKmzIBhGsxwBqP4R2RPxPH3f5D41XDDzeJ/G1wGpmEi04i5SAYdOtAOJO1K4r1n02ODCWVJYNRMCe+RdpHVlZPLWveZKPltAYPG7/uXZaW8ATqvBWptHRR/6lL2TdIvCJxqT9KZAAxOODC1gs1HGyAF5E2w29/sMk5YYGi2sTdPUiYBRxrKfYuvjwbHORvobbIK7wBREWB0wsVRFEVRG1X9jdP111Z/AdAv7FRcj+w9IWyNCBKnnZmj2ANcqhFHlKvcwz/xkdcQaPZdYKWu6uaET43qzT0tD90NS8EepeaGp/j8arb+GxbRFfTNKUbMgC23jNpXYSuewqDtbZrGj3qn1d0AoDTd4ey7E8vg/L6kHNHOsHAHZvsUZNOGb34rhkEzg=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2391411AbfJYCxx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Oct 2019 22:53:53 -0400
+Received: from mail-pf1-f177.google.com ([209.85.210.177]:39867 "EHLO
+        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389230AbfJYCxx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Oct 2019 22:53:53 -0400
+Received: by mail-pf1-f177.google.com with SMTP id v4so554992pff.6
+        for <linux-pm@vger.kernel.org>; Thu, 24 Oct 2019 19:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LIAxzZdUB/yYNUMYUR2KW+Y1d8eGDKKE+QAPPE4WwsY=;
+        b=Vz7o7lQSTD6qHd8pLVTzTEbjC3I5zYa86pniTc6E8MwTONeHhHKlqf9rq+Iniayq4x
+         QuxjKOVu3+KCRr/GpbvTRqba9Cm+o+aa8CQo89l8JfaCutV5qrAvKWQ/xt1sNqbHZqp9
+         Mkcp1qd/TLYt+odIYQb1Lh7gKcSnRu+SriiDu3NSZYv1lbI944GPXRgD3z7mx+E5UOqa
+         pej0kWb1PQSK8A7e+1AtvSm3jNGi6510Tb/zdjFj1c0FiugBs2nTj6vuWARJh+/jHYpZ
+         BtGzS0J3f/hi/saT+EcgO59Yta52WpgIqIGAjDTwXJyIG0bPtxlikXRcpG9wkTZ+EMIM
+         w92g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LIAxzZdUB/yYNUMYUR2KW+Y1d8eGDKKE+QAPPE4WwsY=;
+        b=huXjJjWiGee4toMzQd8EKIdALX6kqXhjqKmlCfdLn5CztuhPzqs4WNTjmuYj3m2h+I
+         eImgNYSM4TFOK7AvrodzIyZ+8Cpf28+u3V5IBggdBofRqGGomaKUCI+59jqqb7B4KbA4
+         vizOTy1QI6mStAoYN5zpLUIk0glwr/d5v+OV+xQFShZlaiuVAHY4Wz/9GPLHN1Uf7XLM
+         JznkYMPdaL1d1dLbSJ+3jkTDaVE+IvbZE31VeVIZEnd16Kzc5ULR9T6hfOuQF5qZ1qTp
+         5dozI21jg4rtah8mktComdfo8nRXAYbfBJ5UXIS4neE6lHG6N8pCkYphAt/gZcpEwYo4
+         KNyg==
+X-Gm-Message-State: APjAAAXi0U1KLt1PNTsE8UJm/9OeDg7EBM8+8orrKZQxy3AV74oCSBiT
+        sXQsXHS4oAwgYrWCaEH32OKr+vufWyc=
+X-Google-Smtp-Source: APXvYqw6+uxpZOQ1bKlEOo2fMWZXsuQqMpl1CAftf0fRvSZKWwcW1De5GpA5fGKl8LGe6rGoWu23rA==
+X-Received: by 2002:a65:62d1:: with SMTP id m17mr1482308pgv.284.1571972030760;
+        Thu, 24 Oct 2019 19:53:50 -0700 (PDT)
+Received: from localhost ([122.172.151.112])
+        by smtp.gmail.com with ESMTPSA id m65sm4232784pje.3.2019.10.24.19.53.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Oct 2019 19:53:49 -0700 (PDT)
+Date:   Fri, 25 Oct 2019 08:23:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ACPI: processor: Add QoS requests for all CPUs
+Message-ID: <20191025025343.tyihliza45os3e4r@vireshk-i7>
+References: <2435090.1mJ0fSsrDY@kreacher>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af15b91c-2320-482f-6e3d-08d758f4b910
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2019 02:40:39.5753
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h9XjnYMrg1oRS1aHpjF9j8JphTnGR62+JG8RJXhE5kZWtMVumKKrjlYgEKXL5EEnGu7DUMHdAzkrS7Vw4MXm6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6796
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2435090.1mJ0fSsrDY@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgU2NvdHQsDQoNCk9uIEZyaWRheSwgT2N0b2JlciAyNSwgMjAxOSAwMjozNCwgU2NvdHQgV29v
-ZCB3cm90ZQ0KPiANCj4gT24gTW9uLCAyMDE5LTEwLTIxIGF0IDExOjQ5ICswODAwLCBSYW4gV2Fu
-ZyB3cm90ZToNCj4gPiBCeSBkZWZhdWx0LCBRb3JJUSBTb0MncyBSQ1BNIHJlZ2lzdGVyIGJsb2Nr
-IGlzIEJpZyBFbmRpYW4uIEJ1dCB0aGVyZQ0KPiA+IGFyZSBzb21lIGV4Y2VwdGlvbnMsIHN1Y2gg
-YXMgTFMxMDg4QSBhbmQgTFMyMDg4QSwgYXJlIExpdHRsZSBFbmRpYW4uDQo+ID4gU28gYWRkIHRo
-aXMgb3B0aW9uYWwgcHJvcGVydHkgdG8gaGVscCBpZGVudGlmeSB0aGVtLg0KPiA+DQo+ID4gQWN0
-dWFsbHkgTFMyMDIxQSBhbmQgb3RoZXIgTGF5ZXJzY2FwZXMgd29uJ3QgdG90YWxseSBmb2xsb3cg
-Q2hhc3Npcw0KPiA+IDIuMSwgc28gc2VwYXJhdGUgdGhlbSBmcm9tIHBvd2VycGMgU29DLg0KPiAN
-Cj4gRGlkIHlvdSBtZWFuIExTMTAyMUEgYW5kICJkb24ndCIgaW5zdGVhZCBvZiAid29uJ3QiLCBn
-aXZlbiB0aGUgY2hhbmdlIHRvIHRoZQ0KPiBleGFtcGxlcz8NCg0KT0ssIEkgd2lsbCBjaGFuZ2Ug
-aXQgdG8gZG9uJ3QgdG8ganVzdCB0ZWwgY3VycmVudCBzaXR1YXRpb24uDQogDQo+ID4gQ2hhbmdl
-IGluIHY1Og0KPiA+IAktIEFkZCAnUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5l
-bC5vcmc+JyB0byBjb21taXQNCj4gbWVzc2FnZS4NCj4gPiAJLSBSZW5hbWUgcHJvcGVydHkgJ2Zz
-bCwjcmNwbS13YWtldXAtY2VsbHMnIHRvICcjZnNsLHJjcG0td2FrZXVwLQ0KPiA+IGNlbGxzJy4N
-Cj4gPiAJcGxlYXNlIHNlZSBodHRwczovL2xvcmUua2VybmVsLm9yZy9wYXRjaHdvcmsvcGF0Y2gv
-MTEwMTAyMi8NCj4gDQo+IEknbSBub3Qgc3VyZSB3aHkgUm9iIGNvbnNpZGVycyB0aGlzIHRoZSAi
-Y29ycmVjdCBmb3JtIiAtLSB0aGVyZSBhcmUgb3RoZXINCj4gZXhhbXBsZXMgb2YgdGhlIGN1cnJl
-bnQgZm9ybSwgc3VjaCBhcyBpYm0sI2RtYS1hZGRyZXNzLWNlbGxzIGFuZCB0aSwjdGxiLQ0KPiBl
-bnRyaWVzLCBhbmQgdGhlIGN1cnJlbnQgZm9ybSBtYWtlcyBtb3JlIGxvZ2ljYWwgc2Vuc2UgKCMg
-aXMgcGFydCBvZiB0aGUgcHJvcGVydHkNCj4gbmFtZSwgbm90IHRoZSB2ZW5kb3IpLiAgT2ggd2Vs
-bC4NCj4gDQo+ID4gUmVxdWlyZWQgcHJvcGVyaXRlczoNCj4gPiAgICAtIHJlZyA6IE9mZnNldCBh
-bmQgbGVuZ3RoIG9mIHRoZSByZWdpc3RlciBzZXQgb2YgdGhlIFJDUE0gYmxvY2suDQo+ID4gLSAg
-LSBmc2wsI3JjcG0td2FrZXVwLWNlbGxzIDogVGhlIG51bWJlciBvZiBJUFBERVhQQ1IgcmVnaXN0
-ZXIgY2VsbHMNCj4gPiBpbiB0aGUNCj4gPiArICAtICNmc2wscmNwbS13YWtldXAtY2VsbHMgOiBU
-aGUgbnVtYmVyIG9mIElQUERFWFBDUiByZWdpc3RlciBjZWxscw0KPiA+ICsgaW4gdGhlDQo+ID4g
-IAlmc2wscmNwbS13YWtldXAgcHJvcGVydHkuDQo+ID4gICAgLSBjb21wYXRpYmxlIDogTXVzdCBj
-b250YWluIGEgY2hpcC1zcGVjaWZpYyBSQ1BNIGJsb2NrIGNvbXBhdGlibGUgc3RyaW5nDQo+ID4g
-IAlhbmQgKGlmIGFwcGxpY2FibGUpIG1heSBjb250YWluIGEgY2hhc3Npcy12ZXJzaW9uIFJDUE0g
-Y29tcGF0aWJsZSBAQA0KPiA+IC0yMCw2ICsyMCw3IEBAIFJlcXVpcmVkIHByb3Blcml0ZXM6DQo+
-ID4gIAkqICJmc2wscW9yaXEtcmNwbS0xLjAiOiBmb3IgY2hhc3NpcyAxLjAgcmNwbQ0KPiA+ICAJ
-KiAiZnNsLHFvcmlxLXJjcG0tMi4wIjogZm9yIGNoYXNzaXMgMi4wIHJjcG0NCj4gPiAgCSogImZz
-bCxxb3JpcS1yY3BtLTIuMSI6IGZvciBjaGFzc2lzIDIuMSByY3BtDQo+ID4gKwkqICJmc2wscW9y
-aXEtcmNwbS0yLjErIjogZm9yIGNoYXNzaXMgMi4xKyByY3BtDQo+IA0KPiBJcyB0aGVyZSBzb21l
-dGhpbmcgYWN0dWFsbHkgY2FsbGVkICIyLjErIj8gIEl0IGxvb2tzIGEgYml0IGxpa2UgYW4gYXR0
-ZW1wdCB0byBjbGFpbQ0KPiBjb21wYXRpYmlsaXR5IHdpdGggYWxsIGZ1dHVyZSB2ZXJzaW9ucy4g
-IElmIHRoZSBmb3JtZXIsIGlzIGl0IGEgbmFtZSB0aGF0IGNvbWVzDQo+IGZyb20gdGhlIGhhcmR3
-YXJlIHNpZGUgd2l0aCBhbiBpbnRlbnQgZm9yIGl0IHRvIGRlc2NyaWJlIGEgc3RhYmxlIGludGVy
-ZmFjZSwgb3IgYXJlDQo+IHdlIGxhdGVyIGdvaW5nIHRvIHNlZSBhIHBhdGNoIGNoYW5naW5nIHNv
-bWUgYnktdGhlbi1leGlzdGluZyBkZXZpY2UgdHJlZXMgZnJvbQ0KPiAiMi4xKyIgdG8gIjIuMSsr
-IiB3aGVuIHNvbWUgbmV3IGluY29tcGF0aWJpbGl0eSBpcyBmb3VuZD8NCj4NCj4gUGVyaGFwcyBp
-dCB3b3VsZCBiZSBiZXR0ZXIgdG8gYmluZCB0byB0aGUgc3BlY2lmaWMgY2hpcCBjb21wYXRpYmxl
-cy4NCg0KQWNjb3JkaW5nIHRvIFNvQyBkYXRhIHNoZWV0cywgcG93ZXJQQyBTb0MgVDEwNDAgYW5k
-IGN1cnJlbnQgQVJNIGJhc2VkIExheWVyc2NhcGUNClNvQ3MgKExTMTAyMUEsIExTMTAxMkEsIExT
-MTA0M0EsIGV0YykncyBhcmNoIGRlc2lnbnMgYXJlIGJvdGggYmFzaW5nIG9uIENoYXNzaXMgc3Bl
-YyAyLjEuDQpIb3dldmVyLCBmb3IgTGF5ZXJzY2FwZSwgdGhlaXIgZGF0YSBzaGVldHMgYXJlIGFs
-c28gZXhwbGljaXRseSB0ZWxsaW5nIHRoYXQgc29tZSBtaW5vcg0KY2hhbmdlcyBoYXZlIGJlZW4g
-bWFkZShiYXNpbmcgb24gQ2hhc3NpcyAyLjEgc3BlYykuIEFuZCBpbiBwYXJhbGxlbCwgdGhlIFNX
-IGFyY2ggZGVzaWducw0KYmV0d2VlbiBUMTA0MCBhbmQgTGF5ZXJzY2FwZSBmYW1pbHkgYXJlIGFs
-c28gZGlmZmVyZW50OiBGb3IgTGF5ZXJzY2FwZSwgcGFydCBvZiBSQ1BNDQpwcm9ncmFtbWluZyBq
-b2IgaGFzIGJlZW4gbW92ZWQgZnJvbSBrZXJuZWwgZHJpdmVyIHRvIGZpcm13YXJlL2Jvb3Rsb2Fk
-ZXIgKHRocm91Z2gNClBTQ0kgaW50ZXJmYWNlKS4gVGhhdCdzIHdoeSBJIGhhdmUgdG8gbmFtZSBh
-IG5ldyBjb21wYXRpYmxlIHN0cmluZyB0byBkaXN0aW5ndWlzaCB0aGVtLg0KVGhleSBjYW5ub3Qg
-dXNlIHRoZSBzYW1lIGRyaXZlci4gSSBkb27igJl0IHRoaW5rIHdlIHdpbGwgYWRkIGFub3RoZXIg
-c3RpbmcgbGlrZSAyLjErKyBpbiB0aGUNCmZ1dHVyZS4gSWYgdGhlIENoYXNzaXMgc3BlYyBrZWVw
-IGV2b2x2aW5nIGFuZCByZXF1aXJpbmcgZGlmZmVyZW50IHByb2dyYW1taW5nIGxvZ2ljLA0Kd2Ug
-Y2FuIGFkZCBtb3JlIGxpa2UgMy4wLCA0LjAsIC4uLiwgSSB0aGluay4NCg0KUmVnYXJkcywNClJh
-biANCg0K
+On 25-10-19, 02:41, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The _PPC change notifications from the platform firmware are per-CPU,
+> so acpi_processor_ppc_init() needs to add a frequency QoS request
+> for each CPU covered by a cpufreq policy to take all of them into
+> account.
+> 
+> Even though ACPI thermal control of CPUs sets frequency limits
+> per processor package, it also needs a frequency QoS request for each
+> CPU in a cpufreq policy in case some of them are taken offline and
+> the frequency limit needs to be set through the remaining online
+> ones (this is slightly excessive, because all CPUs covered by one
+> cpufreq policy will set the same frequency limit through their QoS
+> requests, but it is not incorrect).
+> 
+> Modify the code in accordance with the above observations.
+
+I am not sure if I understood everything you just said, but I don't
+see how things can break with the current code we have.
+
+Both acpi_thermal_cpufreq_init() and acpi_processor_ppc_init() are
+called from acpi_processor_notifier() which is registered as a policy
+notifier and is called when a policy is created or removed. Even if
+some CPUs of a policy go offline, it won't matter as the request for
+the policy stays and it will be dropped only when all the CPUs of a
+policy go offline.
+
+What am I missing ?
+
+-- 
+viresh
