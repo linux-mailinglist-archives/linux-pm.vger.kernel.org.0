@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD856E6936
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2019 22:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40690E695F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2019 22:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729526AbfJ0VfD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Oct 2019 17:35:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54650 "EHLO mail.kernel.org"
+        id S1728212AbfJ0VgF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Oct 2019 17:36:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728768AbfJ0Ve7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 27 Oct 2019 17:34:59 -0400
+        id S1728076AbfJ0VgE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:36:04 -0400
 Received: from earth.universe (unknown [46.218.74.72])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 91270205C9;
-        Sun, 27 Oct 2019 21:34:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 32427205C9;
+        Sun, 27 Oct 2019 21:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572212098;
-        bh=RNWo0D53+Ntp+KRQWTyoCRiC9k2qRRWGq+MSH31Tp+E=;
+        s=default; t=1572212163;
+        bh=8gXctTboVSnMqMtZlXRkBfoUYNqf/4y3OKkcNN3kbPY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zDO/NDQeRNXDOSTjnzbTopEGwJHX6e2tM/JHpA2cK22ceN8lfqgCP9+J9K+nb7N3H
-         DWf1h6Ze8xkvjiaYhrfc4nf68Z7qkz10voMFmyJQtpQNrvQJUbQzFNDjiSPqPzfWJ2
-         WyJ9jatKVLxliYhBxA1zOiBSgd/O+sJOhHmYZtrw=
+        b=xVYez2nM3fw/fNROG2R4WqCelxumB7QxQmwPCBFVI4P5heyusrH7lCquSpgcm5MZN
+         WYcuDWCzBn77Trxgj6Dno/3k9un918Rq8O1I7brUJ/G96k3xBMCMIlxPqQqrDp56EO
+         iAjUhxmOYsv+UrziHsUcbQkWT7iQQKfOoFhx+2cw=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 27A243C09B2; Sun, 27 Oct 2019 22:34:56 +0100 (CET)
-Date:   Sun, 27 Oct 2019 22:34:56 +0100
+        id 18F8F3C09B2; Sun, 27 Oct 2019 22:36:01 +0100 (CET)
+Date:   Sun, 27 Oct 2019 22:36:01 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] power: supply: ab8500_charger: Fix wrong pointer
- passed to PTR_ERR()
-Message-ID: <20191027213456.yexbg6kzgt7vl5fm@earth.universe>
-References: <20191022111856.44118-1-weiyongjun1@huawei.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bd70528: Add MODULE_ALIAS to allow module
+ auto loading
+Message-ID: <20191027213601.tcnw4cyqoaq3ps64@earth.universe>
+References: <20191023123453.GA2918@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ayrkqrrimiyumc6c"
+        protocol="application/pgp-signature"; boundary="u7ek4ubl4x4mue4i"
 Content-Disposition: inline
-In-Reply-To: <20191022111856.44118-1-weiyongjun1@huawei.com>
+In-Reply-To: <20191023123453.GA2918@localhost.localdomain>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -46,67 +46,78 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ayrkqrrimiyumc6c
+--u7ek4ubl4x4mue4i
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Oct 22, 2019 at 11:18:56AM +0000, Wei Yongjun wrote:
-> PTR_ERR should access the value just tested by IS_ERR, otherwise
-> the wrong error code will be returned.
+On Wed, Oct 23, 2019 at 03:35:24PM +0300, Matti Vaittinen wrote:
+> The bd70528 charger driver is probed by MFD driver. Add MODULE_ALIAS
+> in order to allow udev to load the module when MFD sub-device cell for
+> charger is added.
 >=20
-> Fixes: 97ab78bac5d0 ("power: supply: ab8500_charger: Convert to IIO ADC")
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Fixes: f8c7f7ddd8ef0 ("power: supply: Initial support for ROHM BD70528 PM=
+IC charger block")
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 > ---
 
-Thanks for the patch. Gustavo A. R. Silva send an identical patch
-one day earlier, so I applied his patch and added an Reviewed-by
-=66rom you.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/ab8500_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
-/ab8500_charger.c
-> index ff2bb4411a22..8a0f9d769690 100644
-> --- a/drivers/power/supply/ab8500_charger.c
-> +++ b/drivers/power/supply/ab8500_charger.c
-> @@ -3393,7 +3393,7 @@ static int ab8500_charger_probe(struct platform_dev=
-ice *pdev)
->  		if (PTR_ERR(di->adc_main_charger_c) =3D=3D -ENODEV)
->  			return -EPROBE_DEFER;
->  		dev_err(&pdev->dev, "failed to get ADC main charger current\n");
-> -		return PTR_ERR(di->adc_main_charger_v);
-> +		return PTR_ERR(di->adc_main_charger_c);
->  	}
->  	di->adc_vbus_v =3D devm_iio_channel_get(&pdev->dev, "vbus_v");
->  	if (IS_ERR(di->adc_vbus_v)) {
+> Not sure if this should be bugfix or new feature. I don't think Fixes
+> tag is a problem though.
+>=20
+>  drivers/power/supply/bd70528-charger.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/power/supply/bd70528-charger.c b/drivers/power/suppl=
+y/bd70528-charger.c
+> index 1bb32b7226d7..b8e1ec106627 100644
+> --- a/drivers/power/supply/bd70528-charger.c
+> +++ b/drivers/power/supply/bd70528-charger.c
+> @@ -741,3 +741,4 @@ module_platform_driver(bd70528_power);
+>  MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+>  MODULE_DESCRIPTION("BD70528 power-supply driver");
+>  MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:bd70528-power");
+> --=20
+> 2.21.0
 >=20
 >=20
+> --=20
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
 >=20
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =3D]=20
 
---ayrkqrrimiyumc6c
+--u7ek4ubl4x4mue4i
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl22DX8ACgkQ2O7X88g7
-+pq3AA//XlhQ9Z3XbxQL2ENPtxj3Z9vncXBd8iNpcPAupduu4bIVpeAQosMIz7i9
-1BmohV6r5Sp9tw5R0h4wN5GjZ3GCQlky9ok1XdV0P/Y3OvyKcnZVR6EIRbK+3zrn
-meSAlWvZgr8VSoXyDSKPI5s0bJmRXV8q2sGQ2pRZwHNcazTF4d43wKgEEt162CD5
-YSvS1KqRBPNA7RGE9/cupoaPzkUIG18wWvrRFQKAz3iAOyZW2j+t6KPRs7pJ4HY+
-Th0+9WW2PPt97XzGJR4Ys51M41nVJK71lgf2V5Ip2PNVVSVKhbxWkp/IVK1HeeZI
-hgjvVHqN/r132gLl3RdEeWqCIulM4349flTeR4hVLzIo2oAF+qOAb9+xMQqOwsDs
-xqyDqt656efjpPy66FNM1LbJSf35I0snX5Ca4z6xIIXmRDe+sn7WgP7hULAulYty
-SOCdmyAWJEpV8CcOQQizUldjn4vAVM7vfdaOrqRitP8dDRVJvFGGdF2AIDwWHTTQ
-xRWd0I8t2JJn9Wyvphr15UiVzh1AdcoboSPsD27GXq8cmmnE9qegYVLsMa5T9rfl
-YaroIPHc+vFYFnSwYLxaKAhWYVB4PDIeR6/aGixC9qexfMHKNuz+LLpeVbvoEvpS
-IrfO/S+9H1cxY/szm+JSNudSx+bBa4wVFq9AKO3Vwp9AH7M0yYY=
-=Rqe6
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl22DcAACgkQ2O7X88g7
++pryuA/9G3U2slYrkWhOdE4sZk/YK82oNLgoHStSfBw/wzQWhDojXcVvqrKLcH4J
+G4I4P/+q6FQFDVez2cG0GZLDYdvsDg+ivTk/cpgmGiMNag9eeesD6TtBoi5yvxhD
+8MhSoWdJ6NCRWUq5Q7MvJaIOd/d3heGmRR0WZ6ih6Go+R2SJAu0OLX54ZqwbcysN
+4TZL5CnnWxKQLQxgbcFrjI5XAI0TpxpPsaZ9FJ2d9hYaMMzl7XjySQF+Wxlwi5Gp
+iCY4MV7QR7IsFZ2oh3t+ZW1QncRub/30EwBMSR7+rOSdJ3M32jRZErXqAnt4F5Lf
+CJRksQSB+CVmNEbOziDg6yHecPqDiMzADiWQKzg8Tw/UadGWaTfAlpFx0TfOy4Bv
+KFeDi1OIJ/kopx5FhOzlddGcUE7b302xqTKZoW3TleBGf4noBZBo0CwmPyHHlpWx
+mfpTCYbN/MiijecaCAUdkzBOL6hZ9hQAjtdT/BOcPgWLxGzjYL4nVL2ZrA7gsF+N
+t0O5pMxFkenTwMioj05qNu3zbROLmYq/YnBqu7Zq7RTF5vK4x/SKvGcR+ZI8R6Xr
+LlXk6LtHejc8nw2lpIX332fz6x6lPiaY1HaZdtnJBjzcW9lGnfLckzr4teJGxEm0
+e8C8c7eRSGJeHpV6LDXzHB4jm+uyu+9ZoxV8j7hosOcv+/X3+28=
+=TPBa
 -----END PGP SIGNATURE-----
 
---ayrkqrrimiyumc6c--
+--u7ek4ubl4x4mue4i--
