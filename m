@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 927C0E6045
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2019 03:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF3E6049
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Oct 2019 03:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfJ0Cc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Oct 2019 22:32:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:53672 "EHLO foss.arm.com"
+        id S1726614AbfJ0Cea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Oct 2019 22:34:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:53724 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726600AbfJ0Cc0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 26 Oct 2019 22:32:26 -0400
+        id S1726592AbfJ0Cea (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 26 Oct 2019 22:34:30 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4864E1FB;
-        Sat, 26 Oct 2019 19:32:25 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B27421FB;
+        Sat, 26 Oct 2019 19:34:29 -0700 (PDT)
 Received: from e107533-lin.cambridge.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3417A3F6C4;
-        Sat, 26 Oct 2019 19:32:17 -0700 (PDT)
-Date:   Sun, 27 Oct 2019 02:32:13 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AF503F6C4;
+        Sat, 26 Oct 2019 19:34:22 -0700 (PDT)
+Date:   Sun, 27 Oct 2019 02:34:14 +0000
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -33,79 +33,88 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 11/13] cpuidle: psci: Attach CPU devices to their PM
- domains
-Message-ID: <20191027023213.GD18111@e107533-lin.cambridge.arm.com>
+Subject: Re: [PATCH 12/13] cpuidle: psci: Manage runtime PM in the idle path
+Message-ID: <20191027023414.GE18111@e107533-lin.cambridge.arm.com>
 References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-12-ulf.hansson@linaro.org>
- <20191024163515.GD22036@bogus>
- <CAPDyKFq43XrGLDOVZmOeBTLKG0BBvTji6c0Z+cT8uc6PPyp8YA@mail.gmail.com>
+ <20191010113937.15962-13-ulf.hansson@linaro.org>
+ <20191024163257.GC22036@bogus>
+ <CAPDyKFpwrfHj-az5x5dW92VAxi887FgWW6GKhfPv_kuj14TDjQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFq43XrGLDOVZmOeBTLKG0BBvTji6c0Z+cT8uc6PPyp8YA@mail.gmail.com>
+In-Reply-To: <CAPDyKFpwrfHj-az5x5dW92VAxi887FgWW6GKhfPv_kuj14TDjQ@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 06:55:50PM +0200, Ulf Hansson wrote:
-> On Thu, 24 Oct 2019 at 18:35, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Thu, Oct 24, 2019 at 07:00:38PM +0200, Ulf Hansson wrote:
+> On Thu, 24 Oct 2019 at 18:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > >
-> > On Thu, Oct 10, 2019 at 01:39:35PM +0200, Ulf Hansson wrote:
-> > > In order to enable a CPU to be power managed through its PM domain, let's
-> > > try to attach it by calling psci_dt_attach_cpu() during the cpuidle
-> > > initialization.
+> > On Thu, Oct 10, 2019 at 01:39:36PM +0200, Ulf Hansson wrote:
+> > > In case we have succeeded to attach a CPU to its PM domain, let's deploy
+> > > runtime PM support for the corresponding attached device, to allow the CPU
+> > > to be powered-managed accordingly.
 > > >
-> > > psci_dt_attach_cpu() returns a pointer to the attached struct device, which
-> > > later should be used for runtime PM, hence we need to store it somewhere.
-> > > Rather than adding yet another per CPU variable, let's create a per CPU
-> > > struct to collect the relevant per CPU variables.
+> > > To set the triggering point for when runtime PM reference counting should
+> > > be done, let's store the index of deepest idle state for the CPU in the per
+> > > CPU struct. Then use this index to compare the selected idle state index
+> > > when entering idle, as to understand whether runtime PM reference counting
+> > > is needed or not.
+> > >
+> > > Note that, from the hierarchical point view, there may be good reasons to
+> > > do runtime PM reference counting even on shallower idle states, but at this
+> > > point this isn't supported, mainly due to limitations set by the generic PM
+> > > domain.
 > > >
 > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > > > ---
-> > >  drivers/cpuidle/cpuidle-psci.c | 23 +++++++++++++++++++----
-> > >  1 file changed, 19 insertions(+), 4 deletions(-)
+> > >  drivers/cpuidle/cpuidle-psci.c | 21 +++++++++++++++++++--
+> > >  1 file changed, 19 insertions(+), 2 deletions(-)
 > > >
 > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > index a16467daf99d..1510422c7a53 100644
+> > > index 1510422c7a53..0919b40c1a85 100644
 > > > --- a/drivers/cpuidle/cpuidle-psci.c
 > > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > @@ -23,7 +23,12 @@
-> > >  #include "cpuidle-psci.h"
-> > >  #include "dt_idle_states.h"
+> > > @@ -16,6 +16,7 @@
+> > >  #include <linux/of.h>
+> > >  #include <linux/of_device.h>
+> > >  #include <linux/psci.h>
+> > > +#include <linux/pm_runtime.h>
+> > >  #include <linux/slab.h>
 > > >
-> > > -static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> > > +struct psci_cpuidle_data {
-> > > +     u32 *psci_states;
-> > > +     struct device *dev;
-> > > +};
-> > > +
-> > > +static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
-> > >  static DEFINE_PER_CPU(u32, domain_state);
+> > >  #include <asm/cpuidle.h>
+> > > @@ -25,6 +26,7 @@
 > > >
+> > >  struct psci_cpuidle_data {
+> > >       u32 *psci_states;
+> > > +     u32 rpm_state_id;
+> > >       struct device *dev;
+> > >  };
+> > >
+> > > @@ -50,14 +52,28 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
+> > >                               struct cpuidle_driver *drv, int idx)
+> > >  {
+> > >       int ret;
+> > > -     u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
+> > > -     u32 state = psci_get_domain_state();
+> > > +     struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
+> > > +     u32 *states = data->psci_states;
+> > > +     struct device *pd_dev = data->dev;
+> > > +     bool runtime_pm = (pd_dev && data->rpm_state_id == idx);
+> > > +     u32 state;
 > >
-> > /me just thinking still: If it make sense to keep psci_states separate
-> > and domain_state and only other things needed for RPM/OSI in the
-> > structure. I do understand that we modify domain_state and hence
-> > we can't use READ_MOSTLY then. Let's see, for now keep it as is, thought
-> > I will think out aloud.
+> > Wonder if we can have separate psci_enter_idle_state for OSI mode so
+> > that all these runtime extra check can be reduced ? It will also make
+> > sure there's no additional latency for PC mode because of OSI.
 > 
-> I believe we are striving towards the same goal, which likely means to
-> separate the non-OSI path vs OSI path, as much as possible. Simply to
-> avoid any unnecessary operation being done in the non-OSI path. Right?
->
+> Good idea, that's the plan. See previous answer.
+> 
+> Perhaps if I add a patch on top, implementing your suggestion, would
+> you be happy with that?
 
-Yes
-
-> However, while I was trying to address that, I realized that it would
-> probably introduce even more changes to the series. Therefore, it
-> thought it may be better to address these kind of changes on top, as
-> improvements.
->
-
-If possible better to amend this unless it's too complicated.
+No, I prefer to amend this itself to keep it easy to be able to bisect.
 
 --
 Regards,
