@@ -2,185 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE0FE6F4F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 10:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD90E7027
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 12:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388053AbfJ1JqA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 05:46:00 -0400
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:44220 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730486AbfJ1JqA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 05:46:00 -0400
-Received: by mail-vk1-f195.google.com with SMTP id o198so1863525vko.11
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 02:45:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=btYix3IdrJNB5gEyT9IUZnBEGRsFJ06rPcd/IaHvtYA=;
-        b=WOvmwPn8meRrSqFpG/lsDCcNXCS+791X6249lEVxP6HA04HyZzmPuXZMV8W6QmC/Cv
-         jkBfKE5Xvv4z0WuqN+VUvHwvFx0H5obp4mQIZw08mS3TH/ri3qiH4mW1W2hDxlbAkkdk
-         rXms9xV4ZB8naUDYOhIPWyE/BXbP1msVJgtCUR6N+0rHsSp6V+FoFt6YmwR3a8blC65l
-         kFABc+C7pqUVwgv16+TovMMESOTpmyO8J9DdBx1LwFY4umZDRxsE4rbSuts0zi6y7jLe
-         uXknk4lrhsAP4w0JZj6AhAjlVNbyxxU8FsiNGgbbwBmvjbOx8/n2rHSwZyFzv7tYpuE7
-         QO9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=btYix3IdrJNB5gEyT9IUZnBEGRsFJ06rPcd/IaHvtYA=;
-        b=CKuKTeOkv2fzpUroDdMf46Lg9qsAUCbQ6LNHCqgzvTqLxeiZKBWRAcYY9eklb/7q8m
-         zoOGpv7kt5JIIy87VVffINqYkiYzmLI2WBZOzvsxPYHa/4/wIEWXxbbJDucIKdhG/zQy
-         0ESpsQ12yuY039wuDQL/79GQqK+jE6Ik4kZjKk/ZduZ3jLPQweWw9A3dGDbDjdAvXTgv
-         aV3dtK3qtS60N05kvS2d67DbUAKPWHcxwPVz9flmJmRAvY5ThCsEYEvpmS7u1lzh5EjB
-         gD6wPbwx/yZsgdTFhy4x39+Kd0wELgc0XKyOI/mVtcx3djbnWJ/TMKZyx0donlQm4m/X
-         UqVA==
-X-Gm-Message-State: APjAAAWYUlU/CCSxdzwh2g2yDnx1x/CSB8QDmocXBJ2XsAQnpCk0iSDf
-        Ri5Dp7ftxg3f/qsc0BO2a4sVbhJ1cnUpQkbwneqFyQ==
-X-Google-Smtp-Source: APXvYqxxDoBsOggXvi/NfltsouZmSzBhSgFw0BY23NWbbL5r1xNf9xelh+nv0Uy3xLFn3th6v699PljsXwPNDD76yL0=
-X-Received: by 2002:a1f:b202:: with SMTP id b2mr8145258vkf.59.1572255958316;
- Mon, 28 Oct 2019 02:45:58 -0700 (PDT)
+        id S1726315AbfJ1LLC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 07:11:02 -0400
+Received: from mail-sh.amlogic.com ([58.32.228.43]:8678 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfJ1LLC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 07:11:02 -0400
+Received: from [10.18.29.227] (10.18.29.227) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 28 Oct
+ 2019 19:11:13 +0800
+Subject: Re: [PATCH RESEND v2 1/4] dt-bindings: power: add Amlogic secure
+ power domains bindings
+To:     Rob Herring <robh@kernel.org>
+CC:     Kevin Hilman <khilman@baylibre.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1570695678-42623-1-git-send-email-jianxin.pan@amlogic.com>
+ <1570695678-42623-2-git-send-email-jianxin.pan@amlogic.com>
+ <20191014173900.GA6886@bogus>
+ <622c7785-8254-5473-6b35-7287830f3c60@amlogic.com>
+ <CAL_Jsq+F9EGv2jEWw2BrmH0NDKMRt6=pG6LSHL8UYH9G+-OeMw@mail.gmail.com>
+From:   Jianxin Pan <jianxin.pan@amlogic.com>
+Message-ID: <730e5611-6dc0-5bf0-0489-4091bda18c9e@amlogic.com>
+Date:   Mon, 28 Oct 2019 19:11:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-11-ulf.hansson@linaro.org> <20191024163117.GB22036@bogus>
- <CAPDyKFo2Fma1_JMSd39bmQ3X1PV4SmQ0AfEuKyX5KLLe83ycmA@mail.gmail.com>
- <20191027023023.GC18111@e107533-lin.cambridge.arm.com> <CAPDyKFr1LJ_HP1kcfMh7LE5j7nUT9KzH4vhdCSEE9wg6RfYErQ@mail.gmail.com>
- <20191028074905.GA27884@e107533-lin.cambridge.arm.com>
-In-Reply-To: <20191028074905.GA27884@e107533-lin.cambridge.arm.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 28 Oct 2019 10:45:22 +0100
-Message-ID: <CAPDyKFotv0Fu5jXqhv7tCqYb44HaAnOjWnQS0B3nS04sUmTrUg@mail.gmail.com>
-Subject: Re: [PATCH 10/13] cpuidle: psci: Add a helper to attach a CPU to its
- PM domain
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAL_Jsq+F9EGv2jEWw2BrmH0NDKMRt6=pG6LSHL8UYH9G+-OeMw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.18.29.227]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+ Niklas
+Hi Rob,
 
-On Mon, 28 Oct 2019 at 08:49, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Mon, Oct 28, 2019 at 08:35:55AM +0100, Ulf Hansson wrote:
-> > On Sun, 27 Oct 2019 at 03:30, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Thu, Oct 24, 2019 at 06:47:43PM +0200, Ulf Hansson wrote:
-> > > > On Thu, 24 Oct 2019 at 18:31, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > >
-> > > > > On Thu, Oct 10, 2019 at 01:39:34PM +0200, Ulf Hansson wrote:
-> > > > > > Introduce a PSCI DT helper function, psci_dt_attach_cpu(), which takes a
-> > > > > > CPU number as an in-parameter and tries to attach the CPU's struct device
-> > > > > > to its corresponding PM domain.
-> > > > > >
-> > > > > > Let's makes use of dev_pm_domain_attach_by_name(), as it allows us to
-> > > > > > specify "psci" as the "name" of the PM domain to attach to. Additionally,
-> > > > > > let's also prepare the attached device to be power managed via runtime PM.
-> > > > > >
-> > > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > > ---
-> > > > > >  drivers/cpuidle/cpuidle-psci-domain.c | 21 +++++++++++++++++++++
-> > > > > >  drivers/cpuidle/cpuidle-psci.h        |  6 ++++++
-> > > > > >  2 files changed, 27 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > index 3f5143ccc3e0..7429fd7626a1 100644
-> > > > > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > @@ -9,9 +9,11 @@
-> > > > > >
-> > > > > >  #define pr_fmt(fmt) "CPUidle PSCI: " fmt
-> > > > > >
-> > > > > > +#include <linux/cpu.h>
-> > > > > >  #include <linux/device.h>
-> > > > > >  #include <linux/kernel.h>
-> > > > > >  #include <linux/pm_domain.h>
-> > > > > > +#include <linux/pm_runtime.h>
-> > > > > >  #include <linux/psci.h>
-> > > > > >  #include <linux/slab.h>
-> > > > > >  #include <linux/string.h>
-> > > > > > @@ -279,3 +281,22 @@ static int __init psci_idle_init_domains(void)
-> > > > > >       return ret;
-> > > > > >  }
-> > > > > >  subsys_initcall(psci_idle_init_domains);
-> > > > > > +
-> > > > > > +struct device *psci_dt_attach_cpu(int cpu)
-> > > > > > +{
-> > > > > > +     struct device *dev;
-> > > > > > +
-> > > > > > +     /* Currently limit the hierarchical topology to be used in OSI mode. */
-> > > > > > +     if (!psci_has_osi_support())
-> > > > > > +             return NULL;
-> > > > > > +
-> > > > > > +     dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
-> > > > >
-> > > > > This clarifies the need for the fixed name. But why not just go by index 0
-> > > > > as the consumer of these psci power-domains will have only one power domain
-> > > > > entry. Why do we need this name compulsory ?
-> > > >
-> > > > The idea is to be future proof. If I recall correctly, the CPU node on
-> > > > some QCOM SoCs may also have "CPR" PM domain specified, thus
-> > > > "multiple" power-domains could be specified.
-> > > >
-> > >
-> > > I am sure we don't want to mx-n-match any power domain provider with
-> > > psci. And also I expect in these above mentioned cases, there won't be any
-> > > psci power domains.
-> > >
-> > > > In any case, using "psci" doesn't really hurt, right?
-> > > >
-> > >
-> > > Doesn't but I don't see need for one as only one should exist, as mentioned
-> > > above we don't want mix-n-match with psci ever.
-> >
-> > Not sure I get your point, sorry.
-> >
-> > The CPU could very well be attached to more than one power-domain. Of
-> > course not multiple "PSCI power-domains". One could be an PSCI power
-> > domain and another one could be the QCOM CPR (Core power reduction)
-> > power domain.
-> >
->
-> And who controls QCOM CPR ? If it's OSPM, this model is broken.
-> I mean OSPM can vote, but the control *has* to be in PSCI firmware to
-> change any CPU power state.
->
-> If it's firmware controlled, then there's no need to explicitly specify
-> both to OSPM.
+On 2019/10/26 4:19, Rob Herring wrote:
+> On Wed, Oct 16, 2019 at 6:26 AM Jianxin Pan <jianxin.pan@amlogic.com> wrote:
+>>
+>> Hi Rob,
+>>
+>> On 2019/10/15 1:39, Rob Herring wrote:
+>>> On Thu, Oct 10, 2019 at 04:21:15AM -0400, Jianxin Pan wrote:
+>>>> Add the bindings for the Amlogic Secure power domains, controlling the
+>>>> secure power domains.
+>>>>
+>>>> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
+>>>> power domain registers are in secure world.
+>>>>
+>>>> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+>>>> ---
+>>>>  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 42 ++++++++++++++++++++++
+>>>>  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
+>>>>  2 files changed, 74 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>>>> +
+>>>> +  secure-monitor:
+>>>> +    description: phandle to the secure-monitor node
+>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>>
+>>> Why not just a child node of this node?
+>>>
+>> Thanks for the review.
+>>
+>> I followed the style of the previous series of meson：
+>>
+>>   46         efuse: efuse {
+>>   47                 compatible = "amlogic,meson-gxbb-efuse";
+>>   48                 clocks = <&clkc CLKID_EFUSE>;
+>>   49                 #address-cells = <1>;
+>>   50                 #size-cells = <1>;
+>>   51                 read-only;
+>>   52                 secure-monitor = <&sm>;
+>>   53         };
+> 
+> Looks like that was not reviewed by me and is only in linux-next.
+> Please make functions exposed by secure world a child of the secure
+> firmware node.
+> 
+> Really for power domains, you only need to add a '#power-domain-cells'
+> property to the secure monitor node.
+> 
+OK, I will update them in the next version. 
+Thanks for the review.
+> Rob
+> 
+> .
+> 
 
-This is about OPP and CPUFreq, so it has nothing to do with PSCI.
-
->
-> > Have a look at these binding, there are already upstream, perhaps that
-> > clarifies this?
-> > Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-> >
->
-> OK, I will have a look.
-
-Great.
-
-I have looped in Niklas Casell, he should be able to answer any more
-detailed questions in regards to QCOM CPR, if that is needed.
-
-In any case, we are discussing whether we should require a
-power-domain-names set to "psci" for the CPU node - and I don't see
-how that could hurt. Right?
-
-Kind regards
-Uffe
