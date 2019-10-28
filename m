@@ -2,75 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14960E7507
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 16:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED961E7568
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 16:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfJ1P0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 11:26:19 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:43828 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbfJ1P0S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 11:26:18 -0400
-Received: from cust-east-parth2-46-193-72-114.wb.wifirst.net (46.193.72.114) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id b9bc03ccfbeada10; Mon, 28 Oct 2019 16:26:16 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Preeti U Murthy <preeti@linux.vnet.ibm.com>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] cpufreq: powernv: fix stack bloat and NR_CPUS limitation
-Date:   Mon, 28 Oct 2019 16:26:16 +0100
-Message-ID: <3664438.dB2cPXlXpS@kreacher>
-In-Reply-To: <20191018050712.qr2axffmbms5h4xb@vireshk-i7>
-References: <20191018045539.3765565-1-jhubbard@nvidia.com> <20191018050712.qr2axffmbms5h4xb@vireshk-i7>
+        id S1726104AbfJ1Prh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 11:47:37 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42906 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfJ1Prh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 11:47:37 -0400
+Received: by mail-ed1-f65.google.com with SMTP id s20so8230032edq.9;
+        Mon, 28 Oct 2019 08:47:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xeouFKeqxI+jBZsGSFG26F9cl2bzWdfbTz7OAnsdkHs=;
+        b=ly8VR/WjJnSt5FKIMjmSxgeiEyfHjaZBJIPr3KXRDNZP+Rk9KncOG6HNq1ZIQgKPBO
+         t9Vf8p/2kQvKoBFZeqYyLhwFSfUgHaeVUdh7Uhs++CuvpGNrvmmjXWUkiW+etlxTbQ2z
+         wAozUNltofNAjeeEAwJq5Ktncklgu4fokspK6Yek/PtIjzuTA1AcmiseDSSy1RgI3Kqg
+         n9XA6kUh2f/8JAFTif+Oz+wMjKUeo/Hwzhl4DZx13IvFcMz4DGhmw5cKt3P1E8FycJXo
+         i3mfuH3lBtdcDxzQY9CuHsZCa3kti4rt1RksqncnzHhKZB1vdlFOIEB5+CRn3pXj5EbI
+         V9qA==
+X-Gm-Message-State: APjAAAV9FZCl50uHXqOYLEagfMzH/pm14bVpZ1MXTrPqZWcRN8ZshT8B
+        EmSAzw7BtQGY8KfCRMFObrM=
+X-Google-Smtp-Source: APXvYqzb5eJY5x6+xEfLs30NbzaiquwQRVOIdigZyIXD5gUp8DH2McCek9vsaaleRlSYLLP4jx4E1Q==
+X-Received: by 2002:aa7:d0c9:: with SMTP id u9mr19737617edo.217.1572277655066;
+        Mon, 28 Oct 2019 08:47:35 -0700 (PDT)
+Received: from pi3 ([194.230.155.180])
+        by smtp.googlemail.com with ESMTPSA id g43sm567693edb.14.2019.10.28.08.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2019 08:47:34 -0700 (PDT)
+Date:   Mon, 28 Oct 2019 16:47:32 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org, vireshk@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com
+Subject: Re: [PATCH 3/3] dt-bindings: arm: samsung: Drop syscon compatible
+ from CHIPID binding
+Message-ID: <20191028154732.GA3746@pi3>
+References: <20191028152050.10220-1-s.nawrocki@samsung.com>
+ <CGME20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a@eucas1p2.samsung.com>
+ <20191028152050.10220-3-s.nawrocki@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191028152050.10220-3-s.nawrocki@samsung.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, October 18, 2019 7:07:12 AM CET Viresh Kumar wrote:
-> On 17-10-19, 21:55, John Hubbard wrote:
-> > The following build warning occurred on powerpc 64-bit builds:
-> > 
-> > drivers/cpufreq/powernv-cpufreq.c: In function 'init_chip_info':
-> > drivers/cpufreq/powernv-cpufreq.c:1070:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> > 
-> > This is due to putting 1024 bytes on the stack:
-> > 
-> >     unsigned int chip[256];
-> > 
-> > ...and while looking at this, it also has a bug: it fails with a stack
-> > overrun, if CONFIG_NR_CPUS > 256.
-> > 
-> > Fix both problems by dynamically allocating based on CONFIG_NR_CPUS.
-> > 
-> > Fixes: 053819e0bf840 ("cpufreq: powernv: Handle throttling due to Pmax capping at chip level")
-> > Cc: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-> > Cc: Preeti U Murthy <preeti@linux.vnet.ibm.com>
-> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linuxppc-dev@lists.ozlabs.org
-> > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> > ---
-> > 
-> > Changes since v1: includes Viresh's review commit fixes.
-> > 
-> >  drivers/cpufreq/powernv-cpufreq.c | 17 +++++++++++++----
-> >  1 file changed, 13 insertions(+), 4 deletions(-)
+On Mon, Oct 28, 2019 at 04:20:50PM +0100, Sylwester Nawrocki wrote:
+> The "syscon" compatible string was introduced mainly to allow sharing
+> of the CHIPID IO region between multiple drivers. However, such sharing
+> can be also done without an additional compatible so remove "syscon".
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Best regards,
+Krzysztof
+
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
+>  .../devicetree/bindings/arm/samsung/exynos-chipid.yaml         | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> index 53c29d567789..afcd70803c12 100644
+> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> @@ -13,7 +13,6 @@ properties:
+>    compatible:
+>      items:
+>        - const: samsung,exynos4210-chipid
+> -      - const: syscon
+>  
+>    reg:
+>      maxItems: 1
+> @@ -34,7 +33,7 @@ required:
+>  examples:
+>    - |
+>      chipid@10000000 {
+> -        compatible = "samsung,exynos4210-chipid", "syscon";
+> +        compatible = "samsung,exynos4210-chipid";
+>          reg = <0x10000000 0x100>;
+>          samsung,asv-bin = <2>;
+>      };
+> -- 
+> 2.17.1
 > 
-
-Applying as 5.5 material, thanks!
-
-
-
-
