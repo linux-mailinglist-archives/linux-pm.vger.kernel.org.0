@@ -2,147 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF03E6C2D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 07:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B79E6C76
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 07:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730490AbfJ1GHZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 02:07:25 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:53470 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731635AbfJ1GHZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 28 Oct 2019 02:07:25 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B2C5E200161;
-        Mon, 28 Oct 2019 07:07:22 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 67BDB2006FD;
-        Mon, 28 Oct 2019 07:07:09 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 324304029E;
-        Mon, 28 Oct 2019 14:06:55 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, leonard.crestez@nxp.com,
-        abel.vesa@nxp.com, ping.bai@nxp.com, daniel.baluta@nxp.com,
-        jun.li@nxp.com, bjorn.andersson@linaro.org, olof@lixom.net,
-        mripard@kernel.org, vkoul@kernel.org, jagan@amarulasolutions.com,
-        dinguyen@kernel.org, marcin.juszkiewicz@linaro.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH RESEND 4/4] arm64: dts: imx8mm: Add thermal zone support
-Date:   Mon, 28 Oct 2019 14:03:38 +0800
-Message-Id: <1572242618-18806-4-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1572242618-18806-1-git-send-email-Anson.Huang@nxp.com>
-References: <1572242618-18806-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1731959AbfJ1GdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 02:33:11 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:43905 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731955AbfJ1GdL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 02:33:11 -0400
+Received: by mail-qt1-f196.google.com with SMTP id l15so6491736qtr.10
+        for <linux-pm@vger.kernel.org>; Sun, 27 Oct 2019 23:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lBkTGYoh/dOHNRRQTZGhwrY47goGSYR9X3f3Vf7/wZ0=;
+        b=QkosWSF+r3d5jg2253fy6vTFba9J4jp+Ph5Iv28eSEiQlmjM1xSzxuvthU95MvasWE
+         lIDZEjoryrs9wRTdgRo6pGVUj0KN1wBPBz2wgc59FqasJsItT8LKCAG6mdPu3Pss0XL8
+         +CQliuHjFrU936KorGh4C32aHd+mFWnYPn31InjSDPJx3gnKwQMUUTt6HOPmKfZv/8Ge
+         DlH3qrIAT0QYev+pUHo+atX54N29gx3/buN381rP9xGJRuXnQL3KyQv3YKaqsxQBV0nD
+         FCK5VQz0sL+AN2M4giWyd5+2DYyPVThmWOlW1W9FMWJiXgJ3qo9raJHDocIqzm1Bv8W3
+         //bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lBkTGYoh/dOHNRRQTZGhwrY47goGSYR9X3f3Vf7/wZ0=;
+        b=iSug1mW8ex2U/A780VdSWt89lyam2BO5ss8H3lpvA5+2Gdaq1cUICrKQsgGxXFBaI2
+         C6a+xCUHTMLIRhRiDepHxvp376SsQn3hwOegmkvmM/nLYmXR4pIQebRg8xfN7IXE75q4
+         KnHXgszUunshP/CTl8wXE4zH0HzSIyk+SVyWBww/ygZqD/CV4ug1JuZHCF+KwdmVGsZg
+         pAhp5zC0jV/lj9+ckTKGjeHH+837q8uPG9MYHaBFfDJGBJi7J+KW5vip/YLFnFYgR5GE
+         Xqh4CmVNfSAI4nhIICHlBK4t7zFXyO2HmoJ1hCfchfruhLeSMtveyGzJGaz6BP1At/tx
+         WGBw==
+X-Gm-Message-State: APjAAAW7cqXJX0g9on1b0yNIwXrl1Ybxd1/ilnHLhMSjC8Ll3PcjBsK6
+        96VGT11k3C45I9tC6SwhQK9xf7If+gaJt7bl2XaHWA==
+X-Google-Smtp-Source: APXvYqzPor6wJQL+hzLzCj6MGVuYSQods0VnQsSXp4V2tO4HqC8rbMhZixpIuLpQRZpbscdmohaKliWvUq29L/2fg3c=
+X-Received: by 2002:ac8:70c3:: with SMTP id g3mr15549995qtp.391.1572244388347;
+ Sun, 27 Oct 2019 23:33:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
+ <20191025162814.GA130180@google.com>
+In-Reply-To: <20191025162814.GA130180@google.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Mon, 28 Oct 2019 14:32:57 +0800
+Message-ID: <CAD8Lp44f9EQS93VkYUfnZYPjHMpOVCPuGoKD+dZ+=+tfyZHU5w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add thermal zone and tmu node to support i.MX8MM thermal
-driver, ONLY cpu thermal zone is supported, and cpu cooling
-is also added.
+On Sat, Oct 26, 2019 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > pci_pm_resume_noirq
+> > - pci_pm_default_resume_early
+> > -- pci_raw_set_power_state(D0)
+> >
+> > At this point, pci_dev_wait() reads PCI_COMMAND to be 0x100403 (32-bit
+> > read) - so no wait.
+>
+> Just thinking out loud here: This is before writing PCI_PM_CTRL. The
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+It's not - it's after writing PCI_PM_CTRL, but before reading it back.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 5ff9b6b..ade930f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -68,6 +68,7 @@
- 			nvmem-cells = <&cpu_speed_grade>;
- 			nvmem-cell-names = "speed_grade";
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_1: cpu@1 {
-@@ -80,6 +81,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_2: cpu@2 {
-@@ -92,6 +94,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_3: cpu@3 {
-@@ -104,6 +107,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_L2: l2-cache0 {
-@@ -209,6 +213,38 @@
- 		arm,no-tick-in-suspend;
- 	};
- 
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <2000>;
-+			thermal-sensors = <&tmu>;
-+			trips {
-+				cpu_alert0: trip0 {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu_crit0: trip1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_alert0>;
-+					cooling-device =
-+						<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
-+
- 	usbphynop1: usbphynop1 {
- 		compatible = "usb-nop-xceiv";
- 		clocks = <&clk IMX8MM_CLK_USB_PHY_REF>;
-@@ -368,6 +404,13 @@
- 				gpio-ranges = <&iomuxc 0 119 30>;
- 			};
- 
-+			tmu: tmu@30260000 {
-+				compatible = "fsl,imx8mm-tmu";
-+				reg = <0x30260000 0x10000>;
-+				clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
-+				#thermal-sensor-cells = <0>;
-+			};
-+
- 			wdog1: watchdog@30280000 {
- 				compatible = "fsl,imx8mm-wdt", "fsl,imx21-wdt";
- 				reg = <0x30280000 0x10000>;
--- 
-2.7.4
+> device should be in D3hot and 0x100403 is PCI_COMMAND_IO |
+> PCI_COMMAND_MEMORY | PCI_COMMAND_INTX_DISABLE (and
+> PCI_STATUS_CAP_LIST), which mostly matches your lspci (it's missing
+> PCI_COMMAND_MASTER, but maybe that got turned off during suspend).
+> It's a little strange that PCI_COMMAND_IO is set because 03:00.3 has
+> no I/O BARs, but maybe that was set by BIOS at boot-time.
 
+I also checked PCI_COMMAND before writing PCI_PM_CTRL, it's the same
+value 0x403.
+Immediately after writing PCI_PM_CTRL, it holds the same value.
+10ms later (after pci_dev_d3_sleep()), it holds the same value.
+Another 10ms later, it has value 0.
+
+> > pci_raw_set_power_state writes to PM_CTRL and then reads it back
+> > with value 0x3.
+>
+> When you write D0 to PCI_PM_CTRL the device does a soft reset, so
+> pci_raw_set_power_state() delays before the next access.
+>
+> When you read PCI_PM_CTRL again, I think you *should* get either
+> 0x0000 (indicating that the device is in D0) or 0xffff (if the read
+> failed with a Config Request Retry Status (CRS) because the device
+> wasn't ready yet).
+
+PCI_PM_CTRL stats with value 0x103.
+Then 0 is written and pci_dev_d3_sleep() delays 10ms.
+At this point it has value 0x3.
+After an additional 10ms delay, it has value 0.
+
+> I can't explain why you would read 0x0003 (not 0xffff) from
+> PCI_PM_CTRL.
+>
+> What happens if you do a dword read from PCI_VENDOR_ID here (after the
+> delay but before pci_dev_wait() or reading PCI_PM_CTRL)?
+
+Vendor ID remains 0x1022 at all points.
+
+> You might also try changing pci_enable_crs() to disable
+> PCI_EXP_RTCTL_CRSSVE instead of enabling it to see if that makes any
+> difference.  CRS SV has kind of a checkered history and I'm a little
+> dubious about whether it buys us anything.
+
+I stubbed out that register write which would have otherwise applied
+to 8 PCI devices (but not the XHCI controllers), it still fails in the
+same way unless the delay is increased.
+
+> > >   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> >
+> > At the point of return from pci_pm_resume_noirq, an extra check I
+> > added shows that PCI_COMMAND has value 0x403 (16-bit read).
+>
+> If PCI_COMMAND is non-zero at that point, I think something's wrong.
+> It should be zero by the time pci_raw_set_power_state() reads
+> PCI_PM_CTRL after the D3 delay.  By that time, we assume the reset has
+> happened and the device is in D0uninitialized and fully accessible.
+
+It looks like we can detect that the reset has failed (or more
+precisely, not quite completed) by reading PCI_COMMAND (value not yet
+0) or PCI_PM_CTRL (doesn't yet indicate D0 state, we already log a
+warning for this case).
+
+From that angle, another workaround possibility is to catch that case
+and then retry the PCI_PM_CTRL write and delay once more.
+
+Daniel
