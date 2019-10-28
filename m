@@ -2,241 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48607E6DF8
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 09:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19259E6EA9
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 10:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733250AbfJ1IWK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 04:22:10 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37613 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731507AbfJ1IWJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 04:22:09 -0400
-Received: by mail-lf1-f65.google.com with SMTP id b20so7099232lfp.4
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 01:22:07 -0700 (PDT)
+        id S1732150AbfJ1JGE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 05:06:04 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44581 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728850AbfJ1JGE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 05:06:04 -0400
+Received: by mail-wr1-f68.google.com with SMTP id z11so8921126wro.11
+        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 02:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wIXlgbuERO/r+OjB+yKUqeYDRiwYPjVnkieIgWyt76w=;
-        b=B38VAYDz7qc5eZ8v5Iut7ThwwndNb99Ya5qXU0gbehUWiTYDZMTxGBEaCnMWoZoPsh
-         ajRnJG99o6njVwv897rCPyDYuHmsbqcOHtZqXWOB/LlogIMJzbJeKn3ZwBL/HQ0lcdBm
-         0+FCMDnwHdGcVN1XympRw//aUoeIT+T2HJRv+isUqnMGMTcS7Q5Z36qZz+2UhedKIPlT
-         XJcC2dH7zTgQf0YxajYl8HCAoEd1U1k02bDlpn6X9GO34T85epiOLZsCXJFJQOd/P9iP
-         forqXjz5VBEi/G76JrQ9Gwb4d2exLLq8u52qb+U0GOQgGkFb/8MqakYjBpiNSJ/n4huK
-         OrkA==
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0JfYefgLcK4r4N8jLX5MrmXR1OarzLPaNnrV2+3TIRc=;
+        b=Uyhd8ONPH34Sa5wAOgRGCPb4aZXcjq7XWNzyEdKcgy3OVM4vFOaJ6tv6VBr1HU7/q+
+         rnJUFW7xgPYqwpzeVWoskU6vsg3Czh/n3ejMyYj1g++MQ9/JsMh3WxweMSma0HjpHaln
+         h47OPtUn1qTP9J4qbdloSna0CfJJyNEFd9lLr9EeMVxTTRgkoiy8kGLDcmQLLXXg++9f
+         lGtU0ZxRjXcntUFPVNmq5cE2PQ4GlfCCtm7/32dRIkaAtDPi6gG51QpKjrP+fJaQk1Mv
+         QVKV3NzDKDW86gZSr4oF8haG1LYBmsodvTtXNxqyE2/y65yOmDV2kJIfRpL6YE4+ON2q
+         6MXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wIXlgbuERO/r+OjB+yKUqeYDRiwYPjVnkieIgWyt76w=;
-        b=c4BrSDKq2MCBDWbYZQ836+kN67XME1lRNogizGmwQDinvjs/T7vE0vzzcn4omu+rPy
-         dN5eJePWru3WTAca8d2PXhwI0tGk9qQQ8Ip+7gSnyFvsJcMufRV9mBPsma2o0c+R1yv8
-         HnC/NPgNBwp+Mp46tQvJnHJbA4E+jVdXLDyj2BmJWt0+pXdszLkKKavvaa7RiR354WES
-         lKCYuaDLqeKr4On/INe1sO3gD0+ICyqjNqiNzZ9b2221KLWnj7ZkT9UAYfsxmzv2BnLk
-         B6ixxXxoIBThsTL9SHqH12XFLCvYRjjMVKXAzJqYEf9rR7XZS9bDuQi34vmv6vjbwa5p
-         K7uw==
-X-Gm-Message-State: APjAAAUnOIdQwdK/cex6DMk7XJY6xRomGenJSmjekKV+LcurJx/0SgxO
-        IOfRbSjv40rQ3kxu4sHjDZZ8A8++VHT4BHHIJ6h5Cg==
-X-Google-Smtp-Source: APXvYqza5pTaS++YI4hlLxfxykVGNaV2Fn1clU+Uo5Dt9cYfwofGwz5UP5QFaU5rW1I/qlKWV/BS+j95kSnH2jGyXSU=
-X-Received: by 2002:ac2:5dc1:: with SMTP id x1mr3255017lfq.177.1572250926616;
- Mon, 28 Oct 2019 01:22:06 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0JfYefgLcK4r4N8jLX5MrmXR1OarzLPaNnrV2+3TIRc=;
+        b=EYUC5Mi1CXTiWyuP8yHA3InjB20yXv3/4JfhtmB8UY/hrmd9rvdgEaf95qkV/MMpKG
+         BQ0cTfhuUsgvxMT2gNDbh3Rg81dh1e9z34BmFqu5DMH0glqW9JLfiQjs4pT0NMu00whp
+         Zi/XkFklKTtoPsyrx6PYYJyTGLRB4lXYauepo6VeIyPVdzQ5DSZJ67HwPg+BCmKShT7T
+         d1QScMdqI6xtH3wlAtwxEfd6oDX3anmA1Edja77apr+JWi4+1SpAVU6vgtvXr9lIoaL2
+         uKRcbu4mA7TPHazgep64iIL5TerzIoAcNemQ1/EWyGbO6mbmTIJ6w6dHywPsadMxX03N
+         MhKw==
+X-Gm-Message-State: APjAAAXS49rFXU/OoF2/zTYzaqv+Eopj40JWv8TkebLXs4P2i2nc0Ftz
+        YVuaSNEFbXh6NQs3wLxRfnrIuQ==
+X-Google-Smtp-Source: APXvYqyBJ30wFcaE2aqiyU3mSiKzKtxpZZfHS1vob/UEgjuVWW268IHOamvjzethBRsSVpgGSPTMvg==
+X-Received: by 2002:a5d:5401:: with SMTP id g1mr14325874wrv.54.1572253559482;
+        Mon, 28 Oct 2019 02:05:59 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4cbe:8b0:a455:812e? ([2a01:e34:ed2f:f020:4cbe:8b0:a455:812e])
+        by smtp.googlemail.com with ESMTPSA id w8sm13444446wrr.44.2019.10.28.02.05.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Oct 2019 02:05:58 -0700 (PDT)
+Subject: Re: [EXT] Re: [PATCH v3] thermal: qoriq: add thermal monitor unit
+ version 2 support
+To:     Andy Tang <andy.tang@nxp.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        Anson Huang <anson.huang@nxp.com>
+Cc:     Leo Li <leoyang.li@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191011020534.334-1-andy.tang@nxp.com>
+ <d981c4e8-9d80-aec2-b804-38435e256629@linaro.org>
+ <VI1PR04MB433343FC044316EE12F9678DF3650@VI1PR04MB4333.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <1f9052cd-a696-1d24-ddd7-a1d2ea5add34@linaro.org>
+Date:   Mon, 28 Oct 2019 10:05:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <1572018904-5234-1-git-send-email-dsmythies@telus.net>
- <CAKfTPtDFAS3TiNaaPoEXFZbqdMt_-tfGm9ffVcQAN=Mu_KbRdQ@mail.gmail.com> <000c01d58bca$f5709b30$e051d190$@net>
-In-Reply-To: <000c01d58bca$f5709b30$e051d190$@net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 28 Oct 2019 09:21:55 +0100
-Message-ID: <CAKfTPtDx6nu7YtYN=JLRAseZS3Q6Nt-QdMQuG_XoUtmtR_101A@mail.gmail.com>
-Subject: Re: [PATCH] Revert "sched/fair: Fix O(nr_cgroups) in the load
- balancing path"
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
-        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Rik van Riel <riel@surriel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <VI1PR04MB433343FC044316EE12F9678DF3650@VI1PR04MB4333.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 26 Oct 2019 at 08:59, Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Vincent,
->
-> Thank you for your quick reply.
->
-> On 2010.10.25 09:51 Vincent Guittot wrote:
-> > On Fri, 25 Oct 2019 at 17:55, Doug Smythies <doug.smythies@gmail.com> wrote:
-> >>
-> >> This reverts commit 039ae8bcf7a5f4476f4487e6bf816885fb3fb617,
-> >> which, in turn, was a re-apply of
-> >> commit a9e7f6544b9c ("sched/fair: Fix O(nr_cgroups) in load balance path")
-> >> after it was reverted via
-> >> commit c40f7d74c741 ("sched/fair: Fix infinite loop in update_blocked_averages() by reverting a9e7f6544b9c")
-> >>
-> >> For an idle system, the cfs_rq_is_decayed function components can underflow to 0 and
-> >> incorrectly return TRUE, when the item should not be deleted from the list.
-> >
-> > The patch from Rik solves the problem of cfs_rq_is_decayed wrongly returns true
-> > https://lore.kernel.org/lkml/20190906191237.27006-6-riel@surriel.com/
->
-> Not for my use case.
->
-> I applied Rik's patch to kernel 5.4-rc2 (since all my other reference
-> test data had been acquired against a base of 5.4-rc2). Tests results
-> are similar to the non-reverted kernel (results added in-line
-> below).
 
-Ok.
+Hi Andy,
 
-I have studied a bit more your results below and IIUC your problem,
-some periodic wakes up (every 4sec) are missing with kernel 5.4-rc2
-that helps cpuidle to enters deeper idle state after each new wake up
-until reaching the deepest state, isn't it ?
-My 1st point is that this code doesn't use timer or hrtimer to wake up
-the system but only take advantage of the wake up of something else to
-update the blocked load. So I don't see how this patch could remove
-the 4sec periodic wakeup of the watchdog timer that you are
-mentioning.
-Then, when a system is idle and not used, the load should obviously be
-null most of the time and the update of decayed load should not happen
-anyway. It looks like you take advantage of some spurious and
-un-necessary wake up to help cpuidle to reach deeper idle state. Is
-this understanding correct ?
+On 25/10/2019 10:55, Andy Tang wrote:
+> Hi,
+> 
+>> -----Original Message-----
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Sent: 2019年10月11日 22:32
+>> To: Andy Tang <andy.tang@nxp.com>; edubezval@gmail.com;
+>> rui.zhang@intel.com; Anson Huang <anson.huang@nxp.com>
+>> Cc: Leo Li <leoyang.li@nxp.com>; linux-pm@vger.kernel.org;
+>> linux-kernel@vger.kernel.org
+>> Subject: [EXT] Re: [PATCH v3] thermal: qoriq: add thermal monitor unit
+>> version 2 support
+>>
+>> Caution: EXT Email
+>>
+>> On 11/10/2019 04:05, Yuantian Tang wrote:
+>>> Thermal Monitor Unit v2 is introduced on new Layscape SoC.
+>>> Compared to v1, TMUv2 has a little different register layout and
+>>> digital output is fairly linear.
+>>>
+>>> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+>>> Reviewed-by: Anson Huang <Anson.Huang@nxp.com>
+>>
+>> Hi Yuantian,
+>>
+>> I've applied the patch to the 'testing' branch [1]. If everything is fine, it should
+>> be applied to thermal/next branch by Eduardo/Rui.
+> I have not seen the patch applied.
+> May I know if this patch has been applied?
 
-Then, without or without removing the cfs_rq from the list, we should
-end up with rq->has_blocked_load == 0 and nohz.has_blocked == 0 too.
-The only main impact will be the duration of the loop that can be
-significantly shorter when you have a lot of rqs and cgroups.
+The patch is in linux-next thermal's branch [1].
 
->
-> >>
-> >> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> >> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> >> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> >> Cc: Ingo Molnar <mingo@kernel.org>
-> >> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> >> Cc: Peter Zijlstra <peterz@infradead.org>
-> >> Cc: Thomas Gleixner <tglx@linutronix.de>
-> >> Cc: sargun@sargun.me
-> >> Cc: tj@kernel.org
-> >> Cc: xiexiuqi@huawei.com
-> >> Cc: xiezhipeng1@huawei.com
-> >> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> >>
-> >> ---
-> >> Note 1: Both this reversion and just deleting the cfs_rq_is_decayed function
-> >> and it's call and leaving the other changes have been tested. I do not know
-> >> which solution is better. (ie for the "list_for_each_entry_rcu" part of it.)
-> >>
-> >> Note 2: Previous controversy over this patch was based on heavy workloads,
-> >> but this is based on minimal or no workload, or "idle".
-> >> Where "idle" on my test server, with no gui and many services disabled,
-> >> tends to mean more "idle" than most systems.
-> >>
-> >> Note 3: While this supporting data only involves the intel_pstate CPU
-> >> frequency scaling driver as a casualty, it is beyond my capabilities
-> >> to determine what other tasks that should be running might be omitted.
-> >>
-> >> Use case example 1:
-> >> System Idle: The intel pstate CPU frequency scaling driver:
-> >> Mode: Active, non-hwp, powersave governor.
-> >> Expected behaviour: There is never ever a duration (time between calls to
-> >> the driver / per CPU) longer than 4 seconds (the watchdog time, I think).
-> >> Actual behaviour: There are long long gaps between calls to the driver:
-> >>
-> >> Kernel: 5.4-rc2 CPU:7
-> >> duration: 327.17 Seconds. (this is one of many hundreds of examples.)
-> >> mpref: 44023326
-> >> apref: 20716861
-> >> tsc: 1.11604E+12
-> >> load: 0
-> >> CPU frequency: 1.6053 GHz (average over this 327 second sample period).
-> >> old pstate: 16 (the lowest for my processor)
-> >> new pstate: 16
-> >>
-> >> Kernel: 5.4-rc2 + reversion (either method)
-> >> After several hours of testing, maximum durations were never more
-> >> than 4 seconds (well plus some jitter).
-> >> reversion method: max=4.07908 seconds
-> >> CPU:7
-> >> mperf: 492578
-> >> apref: 231813 (56,829 per second average is consistent with other tests)
-> >> tsc: 13914264074
-> >> load: 0
-> >> CPU frequency: 1.6052 GHz
-> >> old pstate: 16 (the lowest for my precessor)
-> >> new pstate: 16
-> >>
-> >> On average, the non-reverted kernel executes the driver 25% less
-> >> than the reverted kernel during idle.
->
-> On (shorter)average, the Rik patched kernel executes the driver
-> 14% less than the reverted kernel during idle.
->
-> Longer and repeated testing would be required to determine if
-> this is a trend or simply non-repeatable noise.
->
-> >> O.K. so who cares, the requested pstate doesn't change?
-> >> First, one wonders if the math could overflow.
-> >> (although 7180ddd suggests maybe it won't)
-> >> Second, the sample is largely dominated by obsolete information.
-> >> Third, this can be problematic, and potentially wastes energy,
-> >> for the busy to idle transition.
-> >>
-> >> Use case example 2:
-> >> The busy to idle transition:
-> >>
-> >> Typically, the pstate request response to a busy to idle transition
-> >> is very slow because the duration suddenly goes from, typically,
-> >> 10 milliseconds to much much longer, up to 4 seconds. Transition
-> >> times to the system being fully idle, with all requested pstates
-> >> being at minimum, takes around 8 seconds with this reversion,
-> >> and, potentially, a very very long time (over 100 seconds has been
-> >> measured) without.
-> >>
-> >> Again, so who cares, if the processor is in a deep idle state anyway,
-> >> not consuming much energy? O.K. but what if it is in an idle state
-> >> where energy consumption is a function of the requested pstate?
-> >> For example, for my processor (i7-2600K), idle state 1, then processor
-> >> package energy can be over double what it should be for many 10s of
-> >> seconds.
-> >>
-> >> Experiment method:
-> >>
-> >> enable only idle state 1
-> >> Dountil stopped
-> >>   apply a 100% load (all CPUs)
-> >>   after awhile (about 50 seconds) remove the load.
-> >>   allow a short transient delay (1 second).
-> >>   measure the processor package joules used over the next 149 seconds.
-> >> Enduntil
-> >>
-> >> Kernel k5.4-rc2 + reversion (this method)
-> >> Average processor package power: 9.148 watts (128 samples, > 7 hours)
-> >> Minimum: 9.02 watts
-> >> Maximum: 9.29 watts
-> >> Note: outlyer data point group removed, as it was assumed the computer
-> >> had something to do and wasn't actually "idle".
-> >>
-> >> Kernel 5.4-rc2:
-> >> Average processor package power: 9.969 watts (150 samples, > 8 hours)
-> >> Or 9% more energy for the idle phases of the work load.
-> >> Minimum: 9.15 watts
-> >> Maximum: 13.79 watts (51% more power)
->
-> Kernel 5.4-rc2 + Rik-patch:
-> Average processor package power: 9.85 watts (53 samples, < 3 hours)
-> Or 7.7% more energy for the idle phases of the work load.
-> Minimum: 9.23 watts
-> Maximum: 12.79 watts (40% more power)
->
->
->
+Eduardo should merge this branch in thermal/next [2] for the pull request.
+
+  -- Daniel
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/linux-next&id=04910e267b2da9723f4b675b71e81359894a7b1f
+
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/next
+
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
