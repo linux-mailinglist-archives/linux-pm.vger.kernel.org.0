@@ -2,159 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B061AE7C75
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 23:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADFAE7D31
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 00:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729407AbfJ1Wkx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 18:40:53 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:46904 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfJ1Wkx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 18:40:53 -0400
-Received: by mail-vs1-f65.google.com with SMTP id o21so3266830vsq.13
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 15:40:52 -0700 (PDT)
+        id S1727476AbfJ1Xsg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 19:48:36 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44176 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfJ1Xsg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 19:48:36 -0400
+Received: by mail-lf1-f65.google.com with SMTP id v4so5695295lfd.11;
+        Mon, 28 Oct 2019 16:48:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LbHWlc0+nebJGqRHkft0So8Qf87tbPWPZEk2OCB5L7k=;
-        b=uoJWfdHBg4e2UJvDhf80dB6X0XM296yPXsBBn8t1aMMhnV0Pg6grSjQP1tA43WMskh
-         XQL+YEgY9PWdYNA1/44uXNmZpLiQr74EbBMO0kd4dmU5U+IMpLd1+M+CgII+vKGdSZIH
-         EDAKM20nlfrWO8zLEv5ssqfvicW1SKpoIuDbY7b2aCpX5r7Gz5u0Kl1CCXQKITvU3wRY
-         LnXwkWgTpdCHvBd5UHWQAv9i0MUNv5KXskdLGafGW4I8h6IZ7tRji4sYIqBgdXXAhzlO
-         NoHAqlkiHMqh86odCWrKAgptg42lB75m5wUj+Ri3GHzOgBlnKT6RxbEoY9O/Z0/Hyt0U
-         P8FA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q6EMHyEMqasbwBZsEfT0R2vQ55XJFS+NFj3xXGhBU+s=;
+        b=m9j6/Cg7tRFSSZ5FB1BdpF4D3YkwLwZcDlIfc2zybuOfGLo4Wig0UzhBj7VsS2NDyg
+         SY6OyxIMkF/B/mmXClhsCErc3tSLtefxSrida05uMRPigObCfa+8ZO5F88ZfgbGchoz7
+         uIzmoOKBFtPrDMo5B8MFPG2zn22pjUw00ToGZ+BSCnxqgxTeRPS7lM2JTXMs5aBONfMO
+         ygvIOOQ0fEVU79JLJ4scSqDg7Gfp3d1FfboVv1ZdJ25CQ1AOI2omufsqP+0XoCALEEEH
+         39ZULvucVQRxJi/oG1fMqKeIKmCERLUa/dTdFa9bN0cnX+u2hfQGab+76lnzi8M7gphz
+         XFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LbHWlc0+nebJGqRHkft0So8Qf87tbPWPZEk2OCB5L7k=;
-        b=fRHZT5LfOanHvq/C/8B/ZkkzjfZxnPhY7i6NYB1gXXiVN9nXl21Fz8zb/l75XEC1WJ
-         RbPjLGOKl06Isv2y3pQ28Cdak3TpByAqxILxn4AzIlVAHANdAcLiX/hgMGvUpeXfXd0A
-         HsSFgHyHABoIET5yJ1H0IWAEw8TzeKmp+7n1tk1XZ8RFVKwpKxQYiL8Pu/XSGGjEs7yb
-         m7dSzGNAhWXzxTCtpnLuBGIWQfhwyyoaEWKPiNpzHKdRgHHEuvh73whgCYCKqj019PsG
-         QnICh3vEXUd5keApqmjOJsKdQPW/arb5K4knUYcVxNdp3CLA9iPuZSXiAP4uSzHtvtcx
-         p8+Q==
-X-Gm-Message-State: APjAAAVnEcr6+t30zdD9cSh36s6Q2MyCW/oXzkzS68f08DyJwI+0Ukuf
-        KQ969YZ4TKsG+wu512QLRePlMoTIwzKyGmw8ySqj1g==
-X-Google-Smtp-Source: APXvYqwvgrSKNvgD0SzVjUsiTobckOY2eSt0wr5gmUCcZBLHvL1zQq+ew7oqw1cZhVYfkSqkHRRumj6qS7VkI+zjNOo=
-X-Received: by 2002:a67:fb5a:: with SMTP id e26mr6327260vsr.200.1572302452026;
- Mon, 28 Oct 2019 15:40:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191010113937.15962-1-ulf.hansson@linaro.org>
- <20191010113937.15962-13-ulf.hansson@linaro.org> <20191024163257.GC22036@bogus>
- <CAPDyKFpwrfHj-az5x5dW92VAxi887FgWW6GKhfPv_kuj14TDjQ@mail.gmail.com> <20191027023414.GE18111@e107533-lin.cambridge.arm.com>
-In-Reply-To: <20191027023414.GE18111@e107533-lin.cambridge.arm.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 28 Oct 2019 23:40:16 +0100
-Message-ID: <CAPDyKFoyEY+bwYnekXV=DuL5rqbRVDPiYUUL0cTeVAa8xE7n4A@mail.gmail.com>
-Subject: Re: [PATCH 12/13] cpuidle: psci: Manage runtime PM in the idle path
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q6EMHyEMqasbwBZsEfT0R2vQ55XJFS+NFj3xXGhBU+s=;
+        b=R7o8WLQjL6L9xLMV5Ql2jBWq1G+qah7uIszLrnYPWe69SOEwrxBBJar0OI5l8rSJKT
+         2oqc0U4ebXpeyEXEsDQD2mpRsahNd/VyjTTh7FYz/2tsIj65UkbCZBHlW5174k4nRMMw
+         l7/F+zUmmb4LUxWAAsDCZXaq9FA0SDGMitsLgEK+4LudZOpOVSWdHp1bhNVbRZbbAKRV
+         +7Pxb2xSXSubqdIMwtTLqxEq2q/ZsabdJd+Qm37f9cNokYt4PYZyK5CKAt8OxIUwOykP
+         GXhc6EN7i+sikJ4BNHVlbx3Z3jeqfdstZa6vKygWdLkiE78D+5cBsykjbds2Lr9GD2ES
+         S6Gg==
+X-Gm-Message-State: APjAAAXhbBrKBm89GBF/yyZIUpZ0jZfD/h6lDUcbIgyrVZCOzynTegJu
+        AHMYldqZfR3oR/VgCw93nuYAXyTK
+X-Google-Smtp-Source: APXvYqzEriIIo84/gTbWsLp4g6q3Dbr2B3JSuhaWyOO/FZUxl+8+KJhf/3hDABF6A4ann3gIJgdFng==
+X-Received: by 2002:a19:e017:: with SMTP id x23mr257683lfg.88.1572306513365;
+        Mon, 28 Oct 2019 16:48:33 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id b4sm4260809ljp.84.2019.10.28.16.48.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2019 16:48:32 -0700 (PDT)
+Subject: Re: [PATCH v1 01/17] clk: tegra: Add custom CCLK implementation
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191015211618.20758-2-digetx@gmail.com>
+ <20191028145706.GF27141@pdeschrijver-desktop.Nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <2e35c210-8d76-c096-69b6-91b6ed577605@gmail.com>
+Date:   Tue, 29 Oct 2019 02:48:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191028145706.GF27141@pdeschrijver-desktop.Nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 27 Oct 2019 at 03:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Oct 24, 2019 at 07:00:38PM +0200, Ulf Hansson wrote:
-> > On Thu, 24 Oct 2019 at 18:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Thu, Oct 10, 2019 at 01:39:36PM +0200, Ulf Hansson wrote:
-> > > > In case we have succeeded to attach a CPU to its PM domain, let's deploy
-> > > > runtime PM support for the corresponding attached device, to allow the CPU
-> > > > to be powered-managed accordingly.
-> > > >
-> > > > To set the triggering point for when runtime PM reference counting should
-> > > > be done, let's store the index of deepest idle state for the CPU in the per
-> > > > CPU struct. Then use this index to compare the selected idle state index
-> > > > when entering idle, as to understand whether runtime PM reference counting
-> > > > is needed or not.
-> > > >
-> > > > Note that, from the hierarchical point view, there may be good reasons to
-> > > > do runtime PM reference counting even on shallower idle states, but at this
-> > > > point this isn't supported, mainly due to limitations set by the generic PM
-> > > > domain.
-> > > >
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > ---
-> > > >  drivers/cpuidle/cpuidle-psci.c | 21 +++++++++++++++++++--
-> > > >  1 file changed, 19 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > > index 1510422c7a53..0919b40c1a85 100644
-> > > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > > @@ -16,6 +16,7 @@
-> > > >  #include <linux/of.h>
-> > > >  #include <linux/of_device.h>
-> > > >  #include <linux/psci.h>
-> > > > +#include <linux/pm_runtime.h>
-> > > >  #include <linux/slab.h>
-> > > >
-> > > >  #include <asm/cpuidle.h>
-> > > > @@ -25,6 +26,7 @@
-> > > >
-> > > >  struct psci_cpuidle_data {
-> > > >       u32 *psci_states;
-> > > > +     u32 rpm_state_id;
-> > > >       struct device *dev;
-> > > >  };
-> > > >
-> > > > @@ -50,14 +52,28 @@ static int psci_enter_idle_state(struct cpuidle_device *dev,
-> > > >                               struct cpuidle_driver *drv, int idx)
-> > > >  {
-> > > >       int ret;
-> > > > -     u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
-> > > > -     u32 state = psci_get_domain_state();
-> > > > +     struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
-> > > > +     u32 *states = data->psci_states;
-> > > > +     struct device *pd_dev = data->dev;
-> > > > +     bool runtime_pm = (pd_dev && data->rpm_state_id == idx);
-> > > > +     u32 state;
-> > >
-> > > Wonder if we can have separate psci_enter_idle_state for OSI mode so
-> > > that all these runtime extra check can be reduced ? It will also make
-> > > sure there's no additional latency for PC mode because of OSI.
-> >
-> > Good idea, that's the plan. See previous answer.
-> >
-> > Perhaps if I add a patch on top, implementing your suggestion, would
-> > you be happy with that?
->
-> No, I prefer to amend this itself to keep it easy to be able to bisect.
+28.10.2019 17:57, Peter De Schrijver пишет:
+> On Wed, Oct 16, 2019 at 12:16:02AM +0300, Dmitry Osipenko wrote:
+>> CCLK stands for "CPU Clock", CPU core is running off CCLK. CCLK supports
+>> multiple parents and it has internal clock divider which uses clock
+>> skipping technique, meaning that CPU's voltage should correspond to the
+>> parent clock rate and not CCLK. PLLX is the main CCLK parent that provides
+>> clock rates above 1GHz and it has special property such that the CCLK's
+>> internal divider is set into bypass mode when PLLX is set as a parent for
+>> CCLK.
+>>
+>> This patch forks generic Super Clock into CCLK implementation which takes
+>> into account all CCLK specifics. The proper CCLK implementation is needed
+>> by the upcoming Tegra20 CPUFreq driver update that will allow to utilize
+>> the generic cpufreq-dt driver by moving intermediate clock handling into
+>> the clock driver. Note that technically this all could be squashed into
+>> clk-super, but result will be messier.
+>>
+>> Note that currently all CCLKLP bits are left in the clk-super.c and only
+>> CCLKG is supported by clk-tegra-super-cclk. It shouldn't be difficult
+>> to move the CCLKLP bits, but CCLKLP is not used by anything in kernel
+>> and thus better not to touch it for now.
+> 
+> ..
+> 
+>> +	super->reg = reg;
+>> +	super->lock = lock;
+>> +	super->width = 4;
+>> +	super->flags = clk_super_flags;
+>> +	super->frac_div.reg = reg + 4;
+>> +	super->frac_div.shift = 16;
+>> +	super->frac_div.width = 8;
+>> +	super->frac_div.frac_width = 1;
+>> +	super->frac_div.lock = lock;
+>> +	super->frac_div.flags = TEGRA_DIVIDER_SUPER;
+>> +	super->div_ops = &tegra_clk_frac_div_ops;
+>> +
+> 
+> This is not right. The super clock divider is not a divider, it's a
+> pulse skipper.
 
-Alright!
-
-So I explored this a little bit more - and it actually forced me to
-re-order some of the patches in the series, but it seems to have
-turned out well.
-
-In the new approach I have taken, I haven't replaced the actual
-callback for the idle state, but instead make an early decision in
-psci_enter_idle_state(), based on one single read of a per CPU
-variable/struct. This tell what path to go.
-
-I am running some final test, but should be able to post a new version
-tomorrow. Although, if you still don't think the new approach is good
-enough, we can always invent a callback, that we can assign when the
-CPU is attached to PM domain. In any case, you will have to tell what
-you think, after I posted the new version, just wanted to give you a
-heads up.
-
-Kind regards
-Uffe
+For the reference: on #tegra Peter explained to me in a more details
+what was meant here. Turned out that T30+ has a real CCLK divider and we
+won't use the pulse skipper for T20 nor for T30+, I'll update clk
+patches accordingly in the next revision.
