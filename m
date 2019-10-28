@@ -2,27 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5427E74F8
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 16:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843EE74FC
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 16:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729424AbfJ1PWF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 11:22:05 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42632 "EHLO
+        id S1729297AbfJ1PXb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 11:23:31 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57551 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726789AbfJ1PWF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 11:22:05 -0400
+        with ESMTP id S1728522AbfJ1PXb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 11:23:31 -0400
 Received: from cust-east-parth2-46-193-72-114.wb.wifirst.net (46.193.72.114) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 5e1bbc9d50f66428; Mon, 28 Oct 2019 16:22:02 +0100
+ id c030794400d0e802; Mon, 28 Oct 2019 16:23:29 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Zhenzhong Duan <zhenzhong.duan@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mtosatti@redhat.com
-Subject: Re: [PATCH v2] cpuidle: not unset the driver if it already exist
-Date:   Mon, 28 Oct 2019 16:22:02 +0100
-Message-ID: <3207655.LvExCM5pf1@kreacher>
-In-Reply-To: <1571795834-2027-1-git-send-email-zhenzhong.duan@oracle.com>
-References: <1571795834-2027-1-git-send-email-zhenzhong.duan@oracle.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Clarify the comment in cpufreq_set_policy()
+Date:   Mon, 28 Oct 2019 16:23:28 +0100
+Message-ID: <3398893.vxru0tI2Zt@kreacher>
+In-Reply-To: <ec3e8e001b35c9244f6406932335d7156b611373.1571739473.git.viresh.kumar@linaro.org>
+References: <ec3e8e001b35c9244f6406932335d7156b611373.1571739473.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -31,61 +33,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 23, 2019 3:57:14 AM CET Zhenzhong Duan wrote:
-> __cpuidle_set_driver() check if there is an already exist driver and
-> unset it before return with -EBUSY. The next call will succeed as it's
-> just unset.
+On Tuesday, October 22, 2019 12:17:57 PM CET Viresh Kumar wrote:
+> One of the responsibility of the ->verify() callback is to make sure
+> that the policy's min frequency is <= max frequency as this isn't
+> guaranteed by the QoS framework which gave us those values.
 > 
-> check if any of the CPUs in the mask have a driver different from drv
-> already and if so return -EBUSY before updating any cpuidle_drivers
-> per-CPU pointers.
+> Update the comment in cpufreq_set_policy() to clarify that.
 > 
-> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
-> v2: update code logic per Rafael
+>  drivers/cpufreq/cpufreq.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
->  drivers/cpuidle/driver.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-> index 80c1a83..acfce04 100644
-> --- a/drivers/cpuidle/driver.c
-> +++ b/drivers/cpuidle/driver.c
-> @@ -62,24 +62,23 @@ static inline void __cpuidle_unset_driver(struct cpuidle_driver *drv)
->   * __cpuidle_set_driver - set per CPU driver variables for the given driver.
->   * @drv: a valid pointer to a struct cpuidle_driver
->   *
-> - * For each CPU in the driver's cpumask, unset the registered driver per CPU
-> - * to @drv.
-> - *
-> - * Returns 0 on success, -EBUSY if the CPUs have driver(s) already.
-> + * Returns 0 on success, -EBUSY if any CPU in the cpumask have a driver
-> + * different from drv already.
->   */
->  static inline int __cpuidle_set_driver(struct cpuidle_driver *drv)
->  {
->  	int cpu;
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 2e698b5f0f80..b4b5f11c2f1e 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2384,7 +2384,10 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
+>  	new_policy->min = freq_qos_read_value(&policy->constraints, FREQ_QOS_MIN);
+>  	new_policy->max = freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX);
 >  
->  	for_each_cpu(cpu, drv->cpumask) {
-> +		struct cpuidle_driver *old_drv;
->  
-> -		if (__cpuidle_get_cpu_driver(cpu)) {
-> -			__cpuidle_unset_driver(drv);
-> +		old_drv = __cpuidle_get_cpu_driver(cpu);
-> +		if (old_drv && old_drv != drv)
->  			return -EBUSY;
-> -		}
-> +	}
->  
-> +	for_each_cpu(cpu, drv->cpumask)
->  		per_cpu(cpuidle_drivers, cpu) = drv;
-> -	}
->  
->  	return 0;
->  }
+> -	/* verify the cpu speed can be set within this limit */
+> +	/*
+> +	 * Verify that the cpu speed can be set within this limit and make sure
+> +	 * min <= max.
+> +	 */
+>  	ret = cpufreq_driver->verify(new_policy);
+>  	if (ret)
+>  		return ret;
 > 
 
-Applied as 5.5 material, thanks!
+Applying for 5.5, thanks!
+
 
 
 
