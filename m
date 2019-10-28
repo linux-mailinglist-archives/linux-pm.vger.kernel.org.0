@@ -2,73 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBE9E77B0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 18:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5387EE77EF
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 18:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730479AbfJ1RgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 13:36:11 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43220 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbfJ1RgL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 13:36:11 -0400
-Received: by mail-ed1-f65.google.com with SMTP id f25so3157456edw.10;
-        Mon, 28 Oct 2019 10:36:10 -0700 (PDT)
+        id S2404218AbfJ1R4m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 13:56:42 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43044 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730395AbfJ1R4m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 13:56:42 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n1so3411426wra.10;
+        Mon, 28 Oct 2019 10:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yAgZMtf/VMvYmjG/BeZrCrg9OryuwBnaN7WoS0QCndo=;
+        b=lsYd+IrBzjmG3qfteumSThkMdXzznfqx5E28vX8HNjBNCvlLPm2zTiCTD9/dTnIovI
+         GzciN/1SNDxwcb3dI4c7inPDt3Hn1zePT9aEjzauaWC4X4XHzeI3iOssBTzebbmSBYbK
+         iw9dq7cMOa+QfqT6oq7EeynrMbkg0UTIa0UaHj8aoHhyrOud3GUr+5wKjq+B52SUinmq
+         rU2NppWWK8r0eepPXqrNWMhh2Byfl47OLXgNpnkgEHVaX8DxEXdrD26CeeGKb+5UpCaz
+         +79sOdQIF+WoGFbd5JS8021/3NKCotJ6B/r3XblTC5bxhsVGT8XqxqSRJP6Tz2mgeWMp
+         jECA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OAsEaZPXZx2ykx4Hduijb09lsGu9L40MOJoDfA4h76I=;
-        b=NqVUKe8AAwg3/e5kY88622dMhzzgUlYS3DU25SnI7zBTMDf43TCbzIhHX88RPpV9Co
-         BC/htzXURJuAnrnpn8jHBmR1oFdL4UJnyf2I4JL5scEz9AnMeRPXAWTgVZovILxy7kj3
-         fUetDNdRoRBszQZhxiH/rjmwlgTHW5Gvx8ZWdF7GDjCRfIGPYeam5ivheDIYk5Pf46el
-         hHkFPQLWFHxChN7ERyypWsO887L5d4rocM6iroJemBbQGq4Smt/8DSknmH5ke4GlBTvH
-         r47ySri5vkhrF4qk3K24cz3rT+jNh2pwAjWSnOsvd1pChMJ+++515ArC9GDNyZkuiyKH
-         NfzA==
-X-Gm-Message-State: APjAAAWcwWDffOVYGwHzRlx7qgtYm5cjFQYWywP+1Unn18zYQBpzBNU2
-        tS35N/RgyXz9jLwPutNkeOM=
-X-Google-Smtp-Source: APXvYqwJ3rGCTA5Ugojohtfi7BCoIjiTdyuBPtySkjGp2LNe5eVrME1DaNBUpbKCPFdjUbhwuwe2Nw==
-X-Received: by 2002:a50:ec0e:: with SMTP id g14mr20955345edr.274.1572284169385;
-        Mon, 28 Oct 2019 10:36:09 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.180])
-        by smtp.googlemail.com with ESMTPSA id rp21sm84757ejb.17.2019.10.28.10.36.08
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Oct 2019 10:36:08 -0700 (PDT)
-Date:   Mon, 28 Oct 2019 18:36:06 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     vireshk@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com,
-        m.szyprowski@samsung.com
-Subject: Re: [PATCH v6 2/2] ARM: EXYNOS: Enable exynos-asv driver for
- ARCH_EXYNOS
-Message-ID: <20191028173606.GC14395@kozik-lap>
-References: <20191028151534.9920-1-s.nawrocki@samsung.com>
- <CGME20191028151555eucas1p2178f1a2cfe9e09c5c03c39f0896ab289@eucas1p2.samsung.com>
- <20191028151534.9920-2-s.nawrocki@samsung.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yAgZMtf/VMvYmjG/BeZrCrg9OryuwBnaN7WoS0QCndo=;
+        b=uSXAEKjdn14PZ8nluHJaL3b5vkAGGnv6NgfAPfW6vc3UuWlcFxG2wav9CQkbjrxwtw
+         CoLjEJoErGwVU2KXWYAHPZP0HBNjqQPTY7hl7kw7+ZAiPxLgw7YBNpxCcaElvbM33/W3
+         ASvqCf2cmoqqgxZ0k7viZNRhg3dnoM30L4EtyxV4w8IeDobBfqNnIFAI9uFqFBS1ovWO
+         +T/PMzTOtS0yRdLoGAy8RGNjfmRFyTG8jq+d26Wb/t3NZLYkHHQeNZjixSVUL2GKm4cG
+         epj3uiizpRy7PBX7FJxTk0BnFAo/CxyCYSuWTgy+wJ5EI/t4ArpOlqQhNcZG8HILJZxB
+         Lv+w==
+X-Gm-Message-State: APjAAAVO4S6qrItEd4vdqoU9f4FwEgQ13kSyrMII3GMz0BYLbiaSb5mB
+        hQ6UTAOvok1X3w642fAMSpgNRPfAv4neD36BWp8=
+X-Google-Smtp-Source: APXvYqxnORJpDwc4s1jCy3Q5X+6OC0fEfKMsIR8ZweCFnT0Pjd7LJxMWaOSFSH1x4BZ/57s6J/Kd17r2Xg5+gEdaz8Q=
+X-Received: by 2002:adf:ed02:: with SMTP id a2mr15784221wro.11.1572285399932;
+ Mon, 28 Oct 2019 10:56:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191028151534.9920-2-s.nawrocki@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20191021145149.31657-1-geert+renesas@glider.be> <20191021145149.31657-4-geert+renesas@glider.be>
+In-Reply-To: <20191021145149.31657-4-geert+renesas@glider.be>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 28 Oct 2019 13:56:26 -0400
+Message-ID: <CADnq5_Mcs1EzvETV=+XjWZcbJff-bfLycYZ3N+SVE9-KA7U-Sw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] drm/amdgpu: Remove superfluous void * cast in
+ debugfs_create_file() call
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     =?UTF-8?Q?Breno_Leit=C3=A3o?= <leitao@debian.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        David@rox.of.borg, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Casey Leedom <leedom@chelsio.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, linux-crypto@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 28, 2019 at 04:15:34PM +0100, Sylwester Nawrocki wrote:
-> Enable exynos-asv driver for Exynos 32-bit SoCs.
-> 
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+On Mon, Oct 21, 2019 at 6:23 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> There is no need to cast a typed pointer to a void pointer when calling
+> a function that accepts the latter.  Remove it, as the cast prevents
+> further compiler checks.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Applied.  Thanks!
+
+Alex
+
 > ---
-> Changes since v1 (RFC):
->  - none
-> 
->  arch/arm/mach-exynos/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-
-Thanks, applied.
-
-Best regards,
-Krzysztof
-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> index 5652cc72ed3a9b3a..b97a38b1e089b3d6 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> @@ -1090,8 +1090,8 @@ int amdgpu_debugfs_init(struct amdgpu_device *adev)
+>  {
+>         adev->debugfs_preempt =
+>                 debugfs_create_file("amdgpu_preempt_ib", 0600,
+> -                                   adev->ddev->primary->debugfs_root,
+> -                                   (void *)adev, &fops_ib_preempt);
+> +                                   adev->ddev->primary->debugfs_root, adev,
+> +                                   &fops_ib_preempt);
+>         if (!(adev->debugfs_preempt)) {
+>                 DRM_ERROR("unable to create amdgpu_preempt_ib debugsfs file\n");
+>                 return -EIO;
+> --
+> 2.17.1
+>
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
