@@ -2,135 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FE4E73BF
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 15:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ADDE7431
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 15:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390172AbfJ1Oei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 10:34:38 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34838 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390130AbfJ1Oed (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 10:34:33 -0400
-Received: by mail-wr1-f65.google.com with SMTP id l10so10146870wrb.2
-        for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 07:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=jIb0znJW8mP39K4r84V/kqqf7AJDYmG+b4HzDQKU0ZQ=;
-        b=TXQEWSsIxMhEel2/32mRMXyje9EVV48QhKGMmTjMsQ5lsi7y+YfS/jKhZ8RxLZ05wb
-         pXtrqB2aTjtTnkduKY8R7WtD7Cttq4bWYFlICHLu9nKL4IVYq4DSURApuzhj63LqHkN1
-         Rx0bva1eRDRZY+J0Hf2iUINh2p/aPPzb19R+FZpbPBZWI6kc5z6Rkr/SVS/72QJpTvln
-         j8LRpMIjJNm1jlKwbM0wzfx27krdk8jiOhxqeO7pb5NmjFS0LpQtYgzpE5tQA5Xkj3rS
-         px+7uXDWhBop4VZu0+dPCDLOTJeaeEntAljci9rFRXtsLkZpvYUrdqjkYQoaVLeQICHL
-         9JUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=jIb0znJW8mP39K4r84V/kqqf7AJDYmG+b4HzDQKU0ZQ=;
-        b=Jeig7RZStiBmFK/s9pG6cBw6EPC5A3arItJTNdd4K0r/MtCHbyR79YSnLdzD2yaoci
-         j0HNLGK1afDZAFB2I5e8A0BJbsWiTfU9zOExmrBGkU93UhQebBZ43lUq9FSYEC+k+dtz
-         6Wu3KzKEtgvF/6XWk2BJUpfEQaFgk1Cx0FHUFxHxsbjHujMxe/ppSu4E8kog2djQbhA7
-         PeI6bD+SN8NguvWevAGWXoM8D9UIHMIXlfgNicC4hSDxBznt4BOrzdmD3F1R825MRgUx
-         jJKiYeXP64jQCqA6BUH8cm7CnvuGHo/Rmg2mdzSVdutWb3J3VogGqBNdpRynP3voEE29
-         UiqQ==
-X-Gm-Message-State: APjAAAUniDu5XnpemyTO8p4WIb1r/nZtVyCOvPyd/hokiWBMPcBOYf2F
-        zQ2T9QpfwqXYu/s9OAce73vp6w==
-X-Google-Smtp-Source: APXvYqxpp/1GKFQaoddFzjPOeh5D5pudsLSOWKNgvPiu2elWA5y+RTACLTyjjBfpW6ZHoMDlWTtLJg==
-X-Received: by 2002:a5d:44c5:: with SMTP id z5mr14560159wrr.252.1572273270013;
-        Mon, 28 Oct 2019 07:34:30 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:d48d:c917:1f3e:4a87])
-        by smtp.gmail.com with ESMTPSA id g5sm14166144wmg.12.2019.10.28.07.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 07:34:29 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     mathieu.poirier@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ulf.hansson@linaro.org
-Subject: [PATCH V5 3/3] powercap/drivers/idle_inject: Specify the idle state to inject
-Date:   Mon, 28 Oct 2019 15:34:19 +0100
-Message-Id: <20191028143419.16236-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191028143419.16236-1-daniel.lezcano@linaro.org>
-References: <20191028143419.16236-1-daniel.lezcano@linaro.org>
+        id S2390518AbfJ1O5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 10:57:10 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:16617 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390461AbfJ1O5K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 10:57:10 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5db701cd0001>; Mon, 28 Oct 2019 07:57:17 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 28 Oct 2019 07:57:09 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 28 Oct 2019 07:57:09 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 28 Oct
+ 2019 14:57:08 +0000
+Received: from tbergstrom-lnx.Nvidia.com (10.124.1.5) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3; Mon, 28 Oct 2019 14:57:08 +0000
+Received: by tbergstrom-lnx.Nvidia.com (Postfix, from userid 1000)
+        id C8DA543032; Mon, 28 Oct 2019 16:57:06 +0200 (EET)
+Date:   Mon, 28 Oct 2019 16:57:06 +0200
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        "Nicolas Chauvet" <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 01/17] clk: tegra: Add custom CCLK implementation
+Message-ID: <20191028145706.GF27141@pdeschrijver-desktop.Nvidia.com>
+References: <20191015211618.20758-1-digetx@gmail.com>
+ <20191015211618.20758-2-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191015211618.20758-2-digetx@gmail.com>
+X-NVConfidentiality: public
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1572274637; bh=a3iQGGwz0Ivg7sfs0KItL4POFuee26IhkUhjou3eb4M=;
+        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+         X-NVConfidentiality:User-Agent:X-Originating-IP:X-ClientProxiedBy;
+        b=ltTYQgdfMjWQKG2jN1sK+ylYqIivDrD90MVQgPlGFVpj2Sp27DCwSzppeJbib+j0j
+         CLEn+3hwOL3Fvb3JPx5nmrIeLBJuGCOGjdGnF196NJippTqXGkyD45hQ3XydK2WOZ5
+         w3afkvcQ2jUpA188B3DIQoik5OX2/feYlEqZdf68hVJ0iu4IbVBq4t+pArmqjBeCxH
+         UctsgV6EGdwyyuaaQJSo4clSL9PAzOHwIW16j96+H21FqJGnv4J8JcSDkmNQO4zH+n
+         toCpLsBLEgVUD3to458/C7zcPfhcz9Xu/xwUfqsIYqWMlPkP1Vsn27NJTdzaVxmVAV
+         Rbi+wn2KM9YWg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the idle injection framework only allows to inject the
-deepest idle state available on the system.
+On Wed, Oct 16, 2019 at 12:16:02AM +0300, Dmitry Osipenko wrote:
+> CCLK stands for "CPU Clock", CPU core is running off CCLK. CCLK supports
+> multiple parents and it has internal clock divider which uses clock
+> skipping technique, meaning that CPU's voltage should correspond to the
+> parent clock rate and not CCLK. PLLX is the main CCLK parent that provides
+> clock rates above 1GHz and it has special property such that the CCLK's
+> internal divider is set into bypass mode when PLLX is set as a parent for
+> CCLK.
+> 
+> This patch forks generic Super Clock into CCLK implementation which takes
+> into account all CCLK specifics. The proper CCLK implementation is needed
+> by the upcoming Tegra20 CPUFreq driver update that will allow to utilize
+> the generic cpufreq-dt driver by moving intermediate clock handling into
+> the clock driver. Note that technically this all could be squashed into
+> clk-super, but result will be messier.
+> 
+> Note that currently all CCLKLP bits are left in the clk-super.c and only
+> CCLKG is supported by clk-tegra-super-cclk. It shouldn't be difficult
+> to move the CCLKLP bits, but CCLKLP is not used by anything in kernel
+> and thus better not to touch it for now.
 
-Give the opportunity to specify which idle state we want to inject by
-adding a new function helper to set the state and use it when calling
-play_idle().
+..
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/powercap/idle_inject.c | 14 +++++++++++++-
- include/linux/idle_inject.h    |  3 +++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+> +	super->reg = reg;
+> +	super->lock = lock;
+> +	super->width = 4;
+> +	super->flags = clk_super_flags;
+> +	super->frac_div.reg = reg + 4;
+> +	super->frac_div.shift = 16;
+> +	super->frac_div.width = 8;
+> +	super->frac_div.frac_width = 1;
+> +	super->frac_div.lock = lock;
+> +	super->frac_div.flags = TEGRA_DIVIDER_SUPER;
+> +	super->div_ops = &tegra_clk_frac_div_ops;
+> +
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 233c878cbf46..5e1efc71ed1c 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -66,6 +66,7 @@ struct idle_inject_thread {
-  */
- struct idle_inject_device {
- 	struct hrtimer timer;
-+	int state;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
- 	unsigned long int cpumask[0];
-@@ -140,7 +141,7 @@ static void idle_inject_fn(unsigned int cpu)
- 	iit->should_run = 0;
- 
- 	play_idle(READ_ONCE(ii_dev->idle_duration_us),
--		  cpuidle_find_deepest_state());
-+		  READ_ONCE(ii_dev->state));
- }
- 
- /**
-@@ -171,6 +172,16 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
- }
- 
-+/**
-+ * idle_inject_set_state - set the idle state to inject
-+ * @state: an integer for the idle state to inject
-+ */
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state)
-+{
-+	if (state >= CPUIDLE_STATE_NOUSE && state < CPUIDLE_STATE_MAX)
-+		WRITE_ONCE(ii_dev->state, state);
-+}
-+
- /**
-  * idle_inject_start - start idle injections
-  * @ii_dev: idle injection control device structure
-@@ -299,6 +310,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
- 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	ii_dev->timer.function = idle_inject_timer_fn;
-+	ii_dev->state = 0;
- 
- 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
- 
-diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-index a445cd1a36c5..e2b26b9ccd34 100644
---- a/include/linux/idle_inject.h
-+++ b/include/linux/idle_inject.h
-@@ -26,4 +26,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 				 unsigned int *run_duration_us,
- 				 unsigned int *idle_duration_us);
-+
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state);
-+
- #endif /* __IDLE_INJECT_H__ */
--- 
-2.17.1
+This is not right. The super clock divider is not a divider, it's a
+pulse skipper.
 
+> +	/* Data in .init is copied by clk_register(), so stack variable OK */
+> +	super->hw.init = &init;
+> +
+> +	clk = clk_register(NULL, &super->hw);
+> +	if (IS_ERR(clk))
+> +		kfree(super);
+> +
+> +	return clk;
+> +}
+> diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+> index f81c10654aa9..095595a5b8a8 100644
+> --- a/drivers/clk/tegra/clk.h
+> +++ b/drivers/clk/tegra/clk.h
+> @@ -699,6 +699,10 @@ struct clk *tegra_clk_register_super_clk(const char *name,
+>  		const char * const *parent_names, u8 num_parents,
+>  		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
+>  		spinlock_t *lock);
+> +struct clk *tegra_clk_register_super_cclk(const char *name,
+> +		const char * const *parent_names, u8 num_parents,
+> +		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
+> +		spinlock_t *lock);
+>  
+>  /**
+>   * struct tegra_sdmmc_mux - switch divider with Low Jitter inputs for SDMMC
+> -- 
+> 2.23.0
+> 
