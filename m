@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1374CE74EB
+	by mail.lfdr.de (Postfix) with ESMTP id 224FFE74ED
 	for <lists+linux-pm@lfdr.de>; Mon, 28 Oct 2019 16:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbfJ1PVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 11:21:01 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:58413 "EHLO
+        id S1727866AbfJ1PVC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 11:21:02 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:58428 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728254AbfJ1PVB (ORCPT
+        with ESMTP id S1728676AbfJ1PVB (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 11:21:01 -0400
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191028152100euoutp02445888376aa4977504b0f35ecd5c51da~R2L8VbDFJ2321623216euoutp02e
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191028152100euoutp027ab0c64f549d031bcbe4ed62dd319322~R2L9BAu2a2321623216euoutp02h
         for <linux-pm@vger.kernel.org>; Mon, 28 Oct 2019 15:21:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191028152100euoutp02445888376aa4977504b0f35ecd5c51da~R2L8VbDFJ2321623216euoutp02e
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191028152100euoutp027ab0c64f549d031bcbe4ed62dd319322~R2L9BAu2a2321623216euoutp02h
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1572276060;
-        bh=wJ9m7VVZ4WFJVI4+6XzPvBgxm09HzDNGI/DagvZj8nw=;
+        bh=lXMeZ01ghQeHmCsSwEVMKWRaGGkM3U274LWFnpK7UoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h2if/0/BRVOO3pKBDS+hf7wyxd+Eq0zVZigj253m+sVHjz5f79opy36zQ9aivpv77
-         RJ2/PES9IzfvUYeembneaN/bLG5YNMaqo1629ZLVutR8GdWWDHBFSD6MTElpwLduKq
-         OCinUUrSPo4V8Z5bhSBOOdfuiRIFum6fswTUR0Es=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191028152059eucas1p18784affb3c15e45baba16a2ab069ef75~R2L71p8oz0793307933eucas1p13;
-        Mon, 28 Oct 2019 15:20:59 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 4D.CC.04309.B5707BD5; Mon, 28
-        Oct 2019 15:20:59 +0000 (GMT)
+        b=BY6kGvBwxoSTaxPjhnMfy/GuNH/Wo/iZUuNM/i7ZIV70vxbP/onreRRSeZj2Xc0E+
+         XRhm33cCOXrrLqGzGAFYabhK4e1GTRMSwKvnpzgGecxI01/Nfn7RqYiq1fLIiaj4OM
+         dzbU/TSihY1IybVqHIs7sm6RdS5AKrgJVju2oeLU=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191028152100eucas1p29c77ac596acabc7349198dc04ce7f100~R2L8vQcic3137231372eucas1p2p;
+        Mon, 28 Oct 2019 15:21:00 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id C2.A6.04469.C5707BD5; Mon, 28
+        Oct 2019 15:21:00 +0000 (GMT)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee~R2L7YwrbH1157011570eucas1p2v;
-        Mon, 28 Oct 2019 15:20:59 +0000 (GMT)
+        20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a~R2L8aZU_31159211592eucas1p2B;
+        Mon, 28 Oct 2019 15:21:00 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191028152059eusmtrp165e9b8a3df6b40dab7c05e0d5730406d~R2L7YGTFy1764317643eusmtrp1X;
-        Mon, 28 Oct 2019 15:20:59 +0000 (GMT)
-X-AuditID: cbfec7f4-afbff700000010d5-fc-5db7075bfa06
+        20191028152100eusmtrp1e1c07902410602e98b5156bf00403e6b~R2L8Zttme1762917629eusmtrp1k;
+        Mon, 28 Oct 2019 15:21:00 +0000 (GMT)
+X-AuditID: cbfec7f2-569ff70000001175-5e-5db7075cfc84
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 0D.25.04166.A5707BD5; Mon, 28
-        Oct 2019 15:20:58 +0000 (GMT)
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 1E.25.04166.C5707BD5; Mon, 28
+        Oct 2019 15:21:00 +0000 (GMT)
 Received: from AMDC3061.DIGITAL.local (unknown [106.120.51.75]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191028152058eusmtip14f3fd8a44c7001a1e2b3d97c5128c652~R2L60_fzs2501825018eusmtip1l;
-        Mon, 28 Oct 2019 15:20:58 +0000 (GMT)
+        20191028152059eusmtip14f53975fead772ca216a54535ba9d21c~R2L78gDK02140421404eusmtip1n;
+        Mon, 28 Oct 2019 15:20:59 +0000 (GMT)
 From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
 To:     krzk@kernel.org, robh+dt@kernel.org
 Cc:     devicetree@vger.kernel.org, vireshk@kernel.org,
@@ -52,77 +52,83 @@ Cc:     devicetree@vger.kernel.org, vireshk@kernel.org,
         linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com,
         m.szyprowski@samsung.com,
         Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH 2/3] ARM: dts: exynos: Remove syscon compatible from chipid
- node on Exynos5
-Date:   Mon, 28 Oct 2019 16:20:49 +0100
-Message-Id: <20191028152050.10220-2-s.nawrocki@samsung.com>
+Subject: [PATCH 3/3] dt-bindings: arm: samsung: Drop syscon compatible from
+ CHIPID binding
+Date:   Mon, 28 Oct 2019 16:20:50 +0100
+Message-Id: <20191028152050.10220-3-s.nawrocki@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191028152050.10220-1-s.nawrocki@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplleLIzCtJLcpLzFFi42LZduznOd1o9u2xBkeWKFhsnLGe1WL+kXOs
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplleLIzCtJLcpLzFFi42LZduzned0Y9u2xBucfy1psnLGe1WL+kXOs
         FufPb2C32PT4GqvF594jjBYzzu9jslh75C67ReveI+wWh9+0s1psfnCMzYHLY9OqTjaPzUvq
-        Pfq2rGL0+LxJLoAlissmJTUnsyy1SN8ugSvj1seLLAVb2SseNvo1ME5n62Lk5JAQMJE49nE6
-        YxcjF4eQwApGiXtnZ0A5XxglpmyczQrhfGaUOPlpP1zLwVO/2SASyxkl5s/ezAzX0vLvAhNI
-        FZuAoUTv0T5GEFtEQF2ie88UdpAiZoE/jBKtWyYwgySEBWIlPn6byw5iswioSpzY0McKYvMK
-        WEv8vnSAHWKdvMTqDQfA6jkFbCQWT2xnhYj/ZpP43+ACYbtI3L81kwXCFpZ4dXwLVK+MxOnJ
-        PSwgiyUEmhklenbfZodwJjBK3D++gBGiylri8PGLQFM5gM7TlFi/Sx8i7Chx/eRBNpCwhACf
-        xI23giBhZiBz0rbpzBBhXomONiGIahWJ36umM0HYUhLdT/5DneMhcWnVP2iY9jNKdP1dyjiB
-        UX4WwrIFjIyrGMVTS4tz01OLjfJSy/WKE3OLS/PS9ZLzczcxAhPH6X/Hv+xg3PUn6RCjAAej
-        Eg/vi6vbYoVYE8uKK3MPMUpwMCuJ8F48AxTiTUmsrEotyo8vKs1JLT7EKM3BoiTOW83wIFpI
-        ID2xJDU7NbUgtQgmy8TBKdXAuMyQUYUnKrtRxmvqMr2Ejtl+P89afP2u/jJ2tt+xvXXrX22N
-        FVC80FwxP4Rtxg5+CYW1N+8XfTAIe/t2+9S3ORtzHgbo3J2gfGLiKu8P+Ye7cwx4TlgcmzTp
-        4w1v5s0/ehbtnqNn32zfxvHi030d3aXv9N+8bbha/29vqseE/p0cn8Mb8p1XeimxFGckGmox
-        FxUnAgB+QupwGAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsVy+t/xu7pR7NtjDX69tbHYOGM9q8X8I+dY
+        Pfq2rGL0+LxJLoAlissmJTUnsyy1SN8ugStj9s5VLAWnOStez/7C3sD4iL2LkZNDQsBEYuvq
+        hUA2F4eQwApGiUP/1jGBJIQEvjBKLJwbCZH4zCjx6MIDuI6mQz0sEInljBKX5z9jgnCAOi6t
+        P8QIUsUmYCjRe7QPzBYRUJfo3jMFbAezwB9GidYtE5hBEsICMRL/Lk4FG8sioCqxfPFTFhCb
+        V8Ba4nPHC6h18hKrNxwAq+cUsJFYPLGdFSL+n03i/hk7CNtF4v7xSVBxYYlXx7dA9cpInJ4M
+        caqEQDOjRM/u2+wQzgRGoI4FjBBV1hKHj18E6uYAOk9TYv0ufYiwo8TWrx+ZQMISAnwSN94K
+        goSZgcxJ26YzQ4R5JTrahCCqVSR+r5rOBGFLSXQ/+c8CYXtIbL62FRpA/YwSO6ZOYpvAKD8L
+        YdkCRsZVjOKppcW56anFhnmp5XrFibnFpXnpesn5uZsYgYnj9L/jn3Ywfr2UdIhRgINRiYd3
+        wuVtsUKsiWXFlbmHGCU4mJVEeC+eAQrxpiRWVqUW5ccXleakFh9ilOZgURLnrWZ4EC0kkJ5Y
+        kpqdmlqQWgSTZeLglGpgXPc2Mf911a6NN0snned7Wp82c2/0UpU7rK1/H3QkGbctiJo4szEt
+        yrY6PF/D5dbZOMUgq76cKj3fzSmzKic1XVrvOPPPXcmbX+eEqrXohj0z3XNxYvSEz0Vf/C8d
+        OtaUE2FjarjloXES29rUnKsH9FmW7GlceJCDQXZ9JdfERi5bGd9jHdxXlViKMxINtZiLihMB
+        JIi3nBgDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsVy+t/xu7ox7NtjDY6c47TYOGM9q8X8I+dY
         Lc6f38BusenxNVaLz71HGC1mnN/HZLH2yF12i9a9R9gtDr9pZ7XY/OAYmwOXx6ZVnWwem5fU
         e/RtWcXo8XmTXABLlJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpO
-        Zllqkb5dgl7GrY8XWQq2slc8bPRrYJzO1sXIySEhYCJx8NRvIJuLQ0hgKaNEw4z7QA4HUEJK
-        Yn6LEkSNsMSfa11QNZ8YJRb9u8UCkmATMJToPdrHCFIvIqApcW6hGUiYWaCFSWLdUUcQW1gg
-        WmLKo6Vg5SwCqhInNvSxgti8AtYSvy8dYIeYLy+xesMBZhCbU8BGYvHEdrAaIaCa7xcWsExg
-        5FvAyLCKUSS1tDg3PbfYUK84Mbe4NC9dLzk/dxMjMIC3Hfu5eQfjpY3BhxgFOBiVeHgnXN4W
-        K8SaWFZcmXuIUYKDWUmE9+IZoBBvSmJlVWpRfnxRaU5q8SFGU6CjJjJLiSbnA6MrryTe0NTQ
-        3MLS0NzY3NjMQkmct0PgYIyQQHpiSWp2ampBahFMHxMHp1QDY82MXt7KNSxXKyc3Bvy4PXv1
-        smznVZcWH9x+8vzP1aeuTTbJ9RY/xt/SuiVd5Y97m2Gpbqnae9l332vzzx01+VG75rVjTOOZ
-        HXUS2T1TtaQUrwTHty+OP75lhTP3VfsZYbZMPzRcBdZUGU+Y/N2BPfPCQu/Y0vyb7+88lP95
-        7Vpe9pYvlw/PnKbEUpyRaKjFXFScCADqr5qtdgIAAA==
-X-CMS-MailID: 20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee
+        Zllqkb5dgl7G7J2rWApOc1a8nv2FvYHxEXsXIyeHhICJRNOhHpYuRi4OIYGljBKXTrcwdzFy
+        ACWkJOa3KEHUCEv8udbFBmILCXxilHjyvR7EZhMwlOg92scIUi4ioClxbqEZSJhZoIVJYt1R
+        RxBbWCBK4sPRhSwgNouAqsTyxU/BbF4Ba4nPHS+gTpCXWL3hADOIzSlgI7F4YjsrxCprie8X
+        FrBMYORbwMiwilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzCAtx37uXkH46WNwYcYBTgYlXh4
+        J1zeFivEmlhWXJl7iFGCg1lJhPfiGaAQb0piZVVqUX58UWlOavEhRlOgoyYyS4km5wOjK68k
+        3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA6O1ad7n/z4nfvO+3De9
+        IvuSUMmGT928DaZvmTuupTj8mHiz+u6BuHsHZi69xfmZ4dqB7Iv8/959yZyr16Q2+/ayIyuk
+        X366qMb3kePCVdZbe9+rCNUfZ+JZm3//yLxQh4dZG9e7Ttq+6EVwQoSOWORPrjcmReZSSv7i
+        02cl7T6gvTN4xqprb185KrEUZyQaajEXFScCAI7cKDF2AgAA
+X-CMS-MailID: 20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee
+X-RootMTR: 20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee
+X-CMS-RootMailID: 20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a
 References: <20191028152050.10220-1-s.nawrocki@samsung.com>
-        <CGME20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee@eucas1p2.samsung.com>
+        <CGME20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The "syscon" compatible string was introduced in commit ("cdcce1ee977b
-ARM: dts: exynos: Add "syscon" compatible string to chipid node on Exynos5")
-to allow sharing of the CHIPID IO region between multiple drivers.
-However, such sharing can be also done without an additional compatible
-so remove the syscon entry.
+The "syscon" compatible string was introduced mainly to allow sharing
+of the CHIPID IO region between multiple drivers. However, such sharing
+can be also done without an additional compatible so remove "syscon".
 
 Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 ---
- arch/arm/boot/dts/exynos5.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/arm/samsung/exynos-chipid.yaml         | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/exynos5.dtsi b/arch/arm/boot/dts/exynos5.dtsi
-index 4801ca759feb..22eb951c614c 100644
---- a/arch/arm/boot/dts/exynos5.dtsi
-+++ b/arch/arm/boot/dts/exynos5.dtsi
-@@ -36,7 +36,7 @@
- 		ranges;
+diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+index 53c29d567789..afcd70803c12 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+@@ -13,7 +13,6 @@ properties:
+   compatible:
+     items:
+       - const: samsung,exynos4210-chipid
+-      - const: syscon
  
- 		chipid: chipid@10000000 {
--			compatible = "samsung,exynos4210-chipid", "syscon";
-+			compatible = "samsung,exynos4210-chipid";
- 			reg = <0x10000000 0x100>;
- 		};
- 
+   reg:
+     maxItems: 1
+@@ -34,7 +33,7 @@ required:
+ examples:
+   - |
+     chipid@10000000 {
+-        compatible = "samsung,exynos4210-chipid", "syscon";
++        compatible = "samsung,exynos4210-chipid";
+         reg = <0x10000000 0x100>;
+         samsung,asv-bin = <2>;
+     };
 -- 
 2.17.1
 
