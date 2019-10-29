@@ -2,847 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E5CE908A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 21:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6036E90A8
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 21:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbfJ2UDQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 16:03:16 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:41282 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbfJ2UDP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 16:03:15 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TK3DfJ111200;
-        Tue, 29 Oct 2019 15:03:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572379393;
-        bh=ua/77+a8WbLEYWO6cN9jOrx2EFxdcKAljeWUX0SRZUc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=TJzrfXgzV4rOxsmkAlX1YQHWwWH0x3ffr1WKTWz4l5M/0TPgsCViC8B7FJh3M9z8A
-         frpZbJfpXw9BazIUvEb0mq/yGxJEtT7qqERJmTgRK2NosmP5oVp3elXyvg36brJ+D0
-         BjKwhqEX7MhrdYIJAm+3G8+KHrN4WSDlBtNEfP4U=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TK3D3O068858;
-        Tue, 29 Oct 2019 15:03:13 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
- Oct 2019 15:03:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 29 Oct 2019 15:03:01 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TK3DJY033591;
-        Tue, 29 Oct 2019 15:03:13 -0500
-From:   Dan Murphy <dmurphy@ti.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v2 3/3] power: supply: bq2515x: Introduce the bq2515x family
-Date:   Tue, 29 Oct 2019 15:02:01 -0500
-Message-ID: <20191029200201.24483-3-dmurphy@ti.com>
-X-Mailer: git-send-email 2.22.0.214.g8dca754b1e
-In-Reply-To: <20191029200201.24483-1-dmurphy@ti.com>
-References: <20191029200201.24483-1-dmurphy@ti.com>
+        id S1725922AbfJ2UQZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 16:16:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725840AbfJ2UQZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Oct 2019 16:16:25 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF96C21721;
+        Tue, 29 Oct 2019 20:16:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572380183;
+        bh=mzrl9420Ovx3lQJ1vhZxCQsXwonFelXckxIqNI5fnYU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bzs0JsLJXxLNGTSfA3dRdgUWooXO3sHsJpKlHKkRlMTj+DU4za3swy8FwTd63nH1z
+         jsd9x+mUuzHXUv1o3wCebCtqHdnF3TdZ/fDF0CM+U5Rs1eaAApmFcCRl7K5eZgUl+y
+         rQpDDkwkkAcchWbuljHc9iSYc4QMzr13Adf6Vj7s=
+Received: by mail-qt1-f169.google.com with SMTP id x21so4981511qto.12;
+        Tue, 29 Oct 2019 13:16:23 -0700 (PDT)
+X-Gm-Message-State: APjAAAXciRC8z1znzvw+ESjsoiFgvNJl81T3c2+OS07yuqiJh2vasOvg
+        QpcknAZj4aVAyAb6tun/T8Jhd98lN+PiJGpRWA==
+X-Google-Smtp-Source: APXvYqw2bPo/mXUkmXIpei4kFmXMxOacUC63F3raNseUkPz2342X9y6B6fHT0p2dhZ4pVJPYLGheLckku0HHO05Qz90=
+X-Received: by 2002:ac8:741a:: with SMTP id p26mr1062486qtq.143.1572380182705;
+ Tue, 29 Oct 2019 13:16:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
+ <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
+ <5DA88892.5000408@linaro.org> <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
+ <5DA89267.30806@linaro.org> <20191029013648.GB27045@bogus> <CAPDyKFpiyvGg0+bXDVCbfr+yW0SOH6DhVgAiav8ZnE8TSF6EHQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFpiyvGg0+bXDVCbfr+yW0SOH6DhVgAiav8ZnE8TSF6EHQ@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 29 Oct 2019 15:16:11 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
+Message-ID: <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
+ controller binding to describe thermal warming device
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce the bq25150 and bq25155 supply chargers.
+On Tue, Oct 29, 2019 at 5:07 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Tue, 29 Oct 2019 at 02:36, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Thu, Oct 17, 2019 at 12:10:15PM -0400, Thara Gopinath wrote:
+> > > On 10/17/2019 11:43 AM, Ulf Hansson wrote:
+> > > > On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+> > > >>
+> > > >> Hello Ulf,
+> > > >> Thanks for the review!
+> > > >>
+> > > >> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
+> > > >>> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+> > > >>>>
+> > > >>>> RPMh power controller hosts mx domain that can be used as thermal
+> > > >>>> warming device. Add a sub-node to specify this.
+> > > >>>>
+> > > >>>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> > > >>>> ---
+> > > >>>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
+> > > >>>>  1 file changed, 10 insertions(+)
+> > > >>>>
+> > > >>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > >>>> index eb35b22..fff695d 100644
+> > > >>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > >>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > >>>> @@ -18,6 +18,16 @@ Required Properties:
+> > > >>>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
+> > > >>>>  various OPPs for different platforms as well as Power domain indexes
+> > > >>>>
+> > > >>>> += SUBNODES
+> > > >>>> +RPMh alsp hosts power domains that can behave as thermal warming device.
+> > > >>>> +These are expressed as subnodes of the RPMh. The name of the node is used
+> > > >>>> +to identify the power domain and must therefor be "mx".
+> > > >>>> +
+> > > >>>> +- #cooling-cells:
+> > > >>>> +       Usage: optional
+> > > >>>> +       Value type: <u32>
+> > > >>>> +       Definition: must be 2
+> > > >>>> +
+> > > >>>
+> > > >>> Just wanted to express a minor thought about this. In general we use
+> > > >>> subnodes of PM domain providers to represent the topology of PM
+> > > >>> domains (subdomains), this is something different, which I guess is
+> > > >>> fine.
+> > > >>>
+> > > >>> I assume the #cooling-cells is here tells us this is not a PM domain
+> > > >>> provider, but a "cooling device provider"?
+> > > >> Yep.
+> > > >>>
+> > > >>> Also, I wonder if it would be fine to specify "power-domains" here,
+> > > >>> rather than using "name" as I think that is kind of awkward!?
+> > > >> Do you mean "power-domain-names" ? I am using this to match against the
+> > > >> genpd names defined in the provider driver.
+> > > >
+> > > > No. If you are using "power-domains" it means that you allow to
+> > > > describe the specifier for the provider.
+> > > Yep. But won't this look funny in DT ? The provider node will have a sub
+> > > node with a power domain referencing to itself Like below: Is this ok ?
+> > >
+> > > rpmhpd: power-controller {
+> > >                                 compatible = "qcom,sdm845-rpmhpd";
+> > >                                 #power-domain-cells = <1>;
+> > >
+> > >                       ...
+> > >                       ...
+> > >                               mx_cdev: mx {
+> > >                                         #cooling-cells = <2>;
+> > >                                         power-domains = <&rpmhpd      SDM845_MX>;
+> > >                                 };
+> > >
+> >
+> > The whole concept here seems all wrong to me. Isn't it what's in the
+> > power domain that's the cooling device. A CPU power domain is not a
+> > cooling device, the CPU is. Or we wouldn't make a clock a cooling
+> > device, but what the clock drives.
+>
+> Well, I don't think that's entirely correct description either.
+>
+> As I see it, it's really the actual PM domain (that manages voltages
+> for a power island), that needs to stay in full power state and
+> increase its voltage level, as to warm up some of the silicon. It's
+> not a regular device, but more a characteristics of how the PM domain
+> can be used.
 
-Signed-off-by: Dan Murphy <dmurphy@ti.com>
----
+First I've heard of Si needing warming...
 
-v2 - Made associated changes from DT changes, change conversions to uV as opposed
-to mV, and change OVERHEAT reporting to HOT.
+I think I'd just expect the power domain provider to know which
+domains to power on then.
 
- drivers/power/supply/Kconfig           |   8 +
- drivers/power/supply/Makefile          |   1 +
- drivers/power/supply/bq2515x_charger.c | 739 +++++++++++++++++++++++++
- 3 files changed, 748 insertions(+)
- create mode 100644 drivers/power/supply/bq2515x_charger.c
-
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index c84a7b1caeb6..d6228516fc70 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -589,6 +589,14 @@ config CHARGER_BQ24735
- 	help
- 	  Say Y to enable support for the TI BQ24735 battery charger.
- 
-+config CHARGER_BQ2515X
-+	tristate "TI BQ2515X battery charger family"
-+	depends on I2C
-+	depends on GPIOLIB || COMPILE_TEST
-+	select REGMAP_I2C
-+	help
-+	  Say Y to enable support for the TI BQ2515X battery charger.
-+
- config CHARGER_BQ25890
- 	tristate "TI BQ25890 battery charger driver"
- 	depends on I2C
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 6c7da920ea83..8fcc175a7e22 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -80,6 +80,7 @@ obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
- obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
- obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
- obj-$(CONFIG_CHARGER_BQ24735)	+= bq24735-charger.o
-+obj-$(CONFIG_CHARGER_BQ2515X)	+= bq2515x_charger.o
- obj-$(CONFIG_CHARGER_BQ25890)	+= bq25890_charger.o
- obj-$(CONFIG_CHARGER_SMB347)	+= smb347-charger.o
- obj-$(CONFIG_CHARGER_TPS65090)	+= tps65090-charger.o
-diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/supply/bq2515x_charger.c
-new file mode 100644
-index 000000000000..a1ad071bffe2
---- /dev/null
-+++ b/drivers/power/supply/bq2515x_charger.c
-@@ -0,0 +1,739 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// BQ2515X Battery Charger Driver
-+// Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com/
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_gpio.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+#include <linux/types.h>
-+
-+#define BQ2515X_MANUFACTURER "Texas Instruments"
-+
-+#define BQ2515X_STAT0		0x00
-+#define BQ2515X_STAT1		0x01
-+#define BQ2515X_STAT2		0x02
-+#define BQ2515X_FLAG0		0x03
-+#define BQ2515X_FLAG1		0x04
-+#define BQ2515X_FLAG2		0x05
-+#define BQ2515X_FLAG3		0x06
-+#define BQ2515X_MASK0		0x07
-+#define BQ2515X_MASK1		0x08
-+#define BQ2515X_MASK2		0x09
-+#define BQ2515X_MASK3		0x0a
-+#define BQ2515X_VBAT_CTRL	0x12
-+#define BQ2515X_ICHG_CTRL	0x13
-+#define BQ2515X_PCHRGCTRL	0x14
-+#define BQ2515X_TERMCTRL	0x15
-+#define BQ2515X_BUVLO		0x16
-+#define BQ2515X_CHARGERCTRL0	0x17
-+#define BQ2515X_CHARGERCTRL1	0x18
-+#define BQ2515X_ILIMCTRL	0x19
-+#define BQ2515X_LDOCTRL		0x1d
-+#define BQ2515X_MRCTRL		0x30
-+#define BQ2515X_ICCTRL0		0x35
-+#define BQ2515X_ICCTRL1		0x36
-+#define BQ2515X_ICCTRL2		0x37
-+#define BQ2515X_ADCCTRL0	0x40
-+#define BQ2515X_ADCCTRL1	0x41
-+#define BQ2515X_ADC_VBAT_M	0x42
-+#define BQ2515X_ADC_VBAT_L	0x43
-+#define BQ2515X_ADC_TS_M	0x44
-+#define BQ2515X_ADC_TS_L	0x45
-+#define BQ2515X_ADC_ICHG_M	0x46
-+#define BQ2515X_ADC_ICHG_L	0x47
-+#define BQ2515X_ADC_ADCIN_M	0x48
-+#define BQ2515X_ADC_ADCIN_L	0x49
-+#define BQ2515X_ADC_VIN_M	0x4a
-+#define BQ2515X_ADC_VIN_L	0x4b
-+#define BQ2515X_ADC_PMID_M	0x4c
-+#define BQ2515X_ADC_PMID_L	0x4d
-+#define BQ2515X_ADC_IIN_M	0x4e
-+#define BQ2515X_ADC_IIN_L	0x4f
-+#define BQ2515X_ADC_COMP1_M	0x52
-+#define BQ2515X_ADC_COMP1_L	0X53
-+#define BQ2515X_ADC_COMP2_M	0X54
-+#define BQ2515X_ADC_COMP2_L	0x55
-+#define BQ2515X_ADC_COMP3_M	0x56
-+#define BQ2515X_ADC_COMP3_L	0x57
-+#define BQ2515X_ADC_READ_EN	0x58
-+#define BQ2515X_TS_FASTCHGCTRL	0x61
-+#define BQ2515X_TS_COLD		0x62
-+#define BQ2515X_TS_COOL		0x63
-+#define BQ2515X_TS_WARM		0x64
-+#define BQ2515X_TS_HOT		0x65
-+#define BQ2515X_DEVICE_ID	0x6f
-+
-+#define BQ2515X_DIVISOR		65536
-+#define BQ2515X_VBAT_BASE_VOLT	3600000
-+#define BQ2515X_VBAT_REG_MAX	4600000
-+#define BQ2515X_VBAT_REG_MIN	3600000
-+#define BQ2515X_UV_FACTOR	10000
-+
-+#define BQ2515X_ILIM_150MA	0x2
-+#define BQ2515X_ILIM_MASK	0x7
-+#define BQ2515X_HEALTH_MASK	0xf
-+#define BQ2515X_OVERVOLT_MASK	0x80
-+
-+#define BQ2515X_HOT_FLAG	BIT(0)
-+#define BQ2515X_WARM_FLAG	BIT(1)
-+#define BQ2515X_COOL_FLAG	BIT(2)
-+#define BQ2515X_COLD_FLAG	BIT(3)
-+#define BQ2515X_SAFETY_TIMER_EXP	BIT(5)
-+
-+#define BQ2515X_VIN_GOOD	BIT(0)
-+#define BQ2515X_CHRG_DONE	BIT(5)
-+#define BQ2515X_CV_CHRG_MODE	BIT(6)
-+
-+static const int bq2515x_ilim_lvl_values[] = {
-+	50000, 100000, 150000, 200000, 300000, 400000, 500000, 600000
-+};
-+
-+/* initial field values, converted to register values */
-+struct bq2515x_init_data {
-+	int ichg;	/* charge current */
-+	int vreg;	/* regulation voltage */
-+};
-+
-+struct bq2515x_device {
-+	struct power_supply *mains;
-+	struct power_supply *battery;
-+	struct i2c_client *client;
-+	struct regmap *regmap;
-+	struct device *dev;
-+	struct mutex lock;
-+
-+	struct gpio_desc *reset_gpio;
-+	struct gpio_desc *lp_gpio;
-+	struct gpio_desc *pg_gpio;
-+	struct gpio_desc *ce_gpio;
-+
-+	char model_name[I2C_NAME_SIZE];
-+	int mains_online;
-+
-+	uint32_t voltage_min_design;
-+	uint32_t voltage_max_design;
-+	uint32_t charge_full_design;
-+
-+	struct bq2515x_init_data init_data;
-+};
-+
-+static struct reg_default bq2515x_reg_defs[] = {
-+	{BQ2515X_STAT0, 0xff},
-+	{BQ2515X_STAT1, 0x0},
-+	{BQ2515X_STAT2, 0x0},
-+	{BQ2515X_FLAG0, 0x0},
-+	{BQ2515X_FLAG1, 0x0},
-+	{BQ2515X_FLAG2, 0x0},
-+	{BQ2515X_FLAG3, 0x0},
-+	{BQ2515X_MASK0, 0x0},
-+	{BQ2515X_MASK1, 0x0},
-+	{BQ2515X_MASK2, 0x0},
-+	{BQ2515X_MASK3, 0x0},
-+};
-+
-+static bool bq2515x_is_ps_online(struct bq2515x_device *bq2515x)
-+{
-+	return bq2515x->mains_online;
-+}
-+
-+static int bq2515x_wake_up(struct bq2515x_device *bq2515x)
-+{
-+	int ret;
-+	int val;
-+
-+	/* Read the STAT register if we can read it then the device is out
-+	 * of ship mode.  If the register cannot be read then attempt to wake
-+	 * it up and enable the ADC.
-+	 */
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &val);
-+	if (!ret)
-+		return ret;
-+
-+	/* Need to toggle LP and MR here */
-+	if (bq2515x->lp_gpio)
-+		gpiod_direction_output(bq2515x->lp_gpio, 1);
-+
-+	if (bq2515x->reset_gpio) {
-+		gpiod_direction_output(bq2515x->lp_gpio, 0);
-+		mdelay(2000);
-+		gpiod_direction_output(bq2515x->lp_gpio, 1);
-+	}
-+
-+	return regmap_write(bq2515x->regmap, BQ2515X_ADC_READ_EN, BIT(3));
-+}
-+
-+static int bq2515x_update_ps_status(struct bq2515x_device *bq2515x)
-+{
-+	bool dc = false;
-+	unsigned int val;
-+	int ret;
-+
-+	if (bq2515x->pg_gpio)
-+		val = gpiod_get_value(bq2515x->pg_gpio);
-+	else {
-+		ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &val);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	dc = val & BQ2515X_VIN_GOOD;
-+
-+	ret = bq2515x->mains_online != dc;
-+
-+	bq2515x->mains_online = dc;
-+
-+	return ret;
-+}
-+
-+static int get_const_charge_current(struct bq2515x_device *bq2515x)
-+{
-+	int ret;
-+	int iin_msb;
-+	int iin_lsb;
-+	u16 ichg_measurement;
-+	int ilim_val, ichg_multiplier;
-+
-+	if (!bq2515x_is_ps_online(bq2515x))
-+		return -ENODATA;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_IIN_M, &iin_msb);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_IIN_L, &iin_lsb);
-+	if (ret < 0)
-+		return ret;
-+
-+	ichg_measurement = (iin_msb << 8) | iin_lsb;
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ILIMCTRL, &ilim_val);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ilim_val >= BQ2515X_ILIM_150MA)
-+		ichg_multiplier = 350;
-+	else
-+		ichg_multiplier = 750;
-+
-+	return (ichg_measurement * 100 / BQ2515X_DIVISOR) * ichg_multiplier;
-+}
-+
-+static int get_const_charge_voltage(struct bq2515x_device *bq2515x)
-+{
-+	int ret;
-+	int vin_msb;
-+	int vin_lsb;
-+	u16 vbat_measurement;
-+
-+	if (!bq2515x_is_ps_online(bq2515x))
-+		bq2515x_wake_up(bq2515x);
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_VBAT_M, &vin_msb);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_VBAT_L, &vin_lsb);
-+	if (ret)
-+		return ret;
-+
-+	vbat_measurement = (vin_msb << 8) | vin_lsb;
-+	return ((vbat_measurement * BQ2515X_UV_FACTOR) / BQ2515X_DIVISOR) * 6;
-+}
-+
-+static int bq2515x_charging_status(struct bq2515x_device *bq2515x,
-+				   union power_supply_propval *val)
-+{
-+	unsigned int status;
-+	int ret;
-+
-+	if (!bq2515x_is_ps_online(bq2515x))
-+		return 0;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &status);
-+	if (ret) {
-+		val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
-+		return ret;
-+	}
-+
-+	if (status & BQ2515X_CV_CHRG_MODE && status & BQ2515X_VIN_GOOD)
-+		val->intval = POWER_SUPPLY_STATUS_CHARGING;
-+	else if (status & BQ2515X_CHRG_DONE)
-+		val->intval = POWER_SUPPLY_STATUS_FULL;
-+	else if (status & BQ2515X_VIN_GOOD)
-+		val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+	else
-+		val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
-+
-+	return ret;
-+}
-+
-+static int bq2515x_get_batt_reg(struct bq2515x_device *bq2515x)
-+{
-+	int vbat_reg_code;
-+	int ret;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_VBAT_CTRL, &vbat_reg_code);
-+	if (ret)
-+		return ret;
-+
-+	return BQ2515X_VBAT_BASE_VOLT + vbat_reg_code * BQ2515X_UV_FACTOR;
-+}
-+
-+static int bq2515x_set_batt_reg(struct bq2515x_device *bq2515x, int val)
-+{
-+	int vbat_reg_code;
-+
-+	if (val > BQ2515X_VBAT_REG_MAX || val < BQ2515X_VBAT_REG_MIN)
-+		return -EINVAL;
-+
-+	vbat_reg_code = (val - BQ2515X_VBAT_BASE_VOLT) / BQ2515X_UV_FACTOR;
-+
-+	return regmap_write(bq2515x->regmap, BQ2515X_VBAT_CTRL, vbat_reg_code);
-+}
-+
-+static int bq2515x_get_ilim_lvl(struct bq2515x_device *bq2515x)
-+{
-+	int ret;
-+	int val;
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_ILIMCTRL, &val);
-+	if (ret)
-+		return ret;
-+
-+	return bq2515x_ilim_lvl_values[val & BQ2515X_ILIM_MASK];
-+}
-+
-+static int bq2515x_set_ilim_lvl(struct bq2515x_device *bq2515x, int val)
-+{
-+	int i;
-+
-+	for (i = 0; i <= ARRAY_SIZE(bq2515x_ilim_lvl_values); i++) {
-+		if (val == bq2515x_ilim_lvl_values[i])
-+			break;
-+
-+		if (val > bq2515x_ilim_lvl_values[i - 1] &&
-+		    val < bq2515x_ilim_lvl_values[i]) {
-+			if (val - bq2515x_ilim_lvl_values[i - 1] <
-+			    bq2515x_ilim_lvl_values[i] - val) {
-+				i = i - 1;
-+				break;
-+			}
-+		}
-+	}
-+
-+	return regmap_write(bq2515x->regmap, BQ2515X_ILIMCTRL, i);
-+}
-+
-+static int bq2515x_power_supply_property_is_writeable(struct power_supply *psy,
-+					enum power_supply_property prop)
-+{
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static int bq2515x_charger_get_health(struct bq2515x_device *bq2515x,
-+				      union power_supply_propval *val)
-+{
-+	int health;
-+	int ret;
-+	int v;
-+
-+	if (!bq2515x_is_ps_online(bq2515x))
-+		bq2515x_wake_up(bq2515x);
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_FLAG1, &v);
-+	if (ret)
-+		return -EIO;
-+
-+	if (v & BQ2515X_HEALTH_MASK) {
-+		switch (v & BQ2515X_HEALTH_MASK) {
-+		case BQ2515X_HOT_FLAG:
-+			health = POWER_SUPPLY_HEALTH_HOT;
-+			break;
-+		case BQ2515X_WARM_FLAG:
-+			health = POWER_SUPPLY_HEALTH_WARM;
-+			break;
-+		case BQ2515X_COOL_FLAG:
-+			health = POWER_SUPPLY_HEALTH_COOL;
-+			break;
-+		case BQ2515X_COLD_FLAG:
-+			health = POWER_SUPPLY_HEALTH_COLD;
-+			break;
-+		default:
-+			health = POWER_SUPPLY_HEALTH_UNKNOWN;
-+		}
-+	} else if (v & BQ2515X_OVERVOLT_MASK) {
-+		health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
-+	} else {
-+		health = POWER_SUPPLY_HEALTH_GOOD;
-+	}
-+
-+	ret = regmap_read(bq2515x->regmap, BQ2515X_FLAG3, &v);
-+	if (v & BQ2515X_SAFETY_TIMER_EXP)
-+		health = POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE;
-+
-+	val->intval = health;
-+
-+	return 0;
-+}
-+
-+static int bq2515x_set_charge_enable(struct bq2515x_device *bq2515x, int val)
-+{
-+	if (bq2515x->ce_gpio)
-+		gpiod_set_value(bq2515x->ce_gpio, val);
-+
-+	return 0;
-+}
-+
-+static int bq2515x_get_charge_enable(struct bq2515x_device *bq2515x)
-+{
-+	int charge_value;
-+
-+	if (bq2515x->ce_gpio)
-+		charge_value = gpiod_get_value(bq2515x->ce_gpio);
-+	else
-+		return -EINVAL;
-+
-+	return charge_value;
-+}
-+
-+static int bq2515x_mains_set_property(struct power_supply *psy,
-+		enum power_supply_property prop,
-+		const union power_supply_propval *val)
-+{
-+	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = bq2515x_set_ilim_lvl(bq2515x, val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = bq2515x_set_batt_reg(bq2515x, val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		ret = bq2515x_set_charge_enable(bq2515x, val->intval);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int bq2515x_mains_get_property(struct power_supply *psy,
-+				     enum power_supply_property prop,
-+				     union power_supply_propval *val)
-+{
-+	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = bq2515x->mains_online;
-+		break;
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		ret = get_const_charge_current(bq2515x);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = ret;
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = bq2515x_get_ilim_lvl(bq2515x);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = ret;
-+		break;
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-+		ret = bq2515x_get_batt_reg(bq2515x);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = ret;
-+		break;
-+	case POWER_SUPPLY_PROP_MODEL_NAME:
-+		val->strval = bq2515x->model_name;
-+		ret = 0;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURER:
-+		val->strval = BQ2515X_MANUFACTURER;
-+		ret = 0;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-+		val->intval = BQ2515X_VBAT_REG_MAX;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN:
-+		val->intval = BQ2515X_VBAT_REG_MIN;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		ret = bq2515x_get_charge_enable(bq2515x);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = ret;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int bq2515x_battery_get_property(struct power_supply *psy,
-+				       enum power_supply_property prop,
-+				       union power_supply_propval *val)
-+{
-+	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	ret = bq2515x_update_ps_status(bq2515x);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		if (!bq2515x_is_ps_online(bq2515x)) {
-+			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+			break;
-+		}
-+
-+		ret = bq2515x_charging_status(bq2515x, val);
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		ret = get_const_charge_voltage(bq2515x);
-+		if (ret < 0)
-+			return ret;
-+
-+		val->intval = ret;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-+		val->intval = bq2515x->voltage_min_design;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-+		val->intval = bq2515x->voltage_max_design;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+		val->intval = bq2515x->charge_full_design;
-+		break;
-+	case POWER_SUPPLY_PROP_HEALTH:
-+		ret = bq2515x_charger_get_health(bq2515x, val);
-+		if (ret)
-+			val->intval = POWER_SUPPLY_HEALTH_UNKNOWN;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static enum power_supply_property bq2515x_battery_properties[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+};
-+
-+static enum power_supply_property bq2515x_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+};
-+
-+static struct power_supply_desc bq2515x_mains_desc = {
-+	.name			= "bq2515x-mains",
-+	.type			= POWER_SUPPLY_TYPE_MAINS,
-+	.get_property		= bq2515x_mains_get_property,
-+	.set_property		= bq2515x_mains_set_property,
-+	.properties		= bq2515x_charger_properties,
-+	.num_properties		= ARRAY_SIZE(bq2515x_charger_properties),
-+	.property_is_writeable = bq2515x_power_supply_property_is_writeable,
-+
-+};
-+
-+static struct power_supply_desc bq2515x_battery_desc = {
-+	.name			= "bq2515x-battery",
-+	.type			= POWER_SUPPLY_TYPE_BATTERY,
-+	.get_property		= bq2515x_battery_get_property,
-+	.properties		= bq2515x_battery_properties,
-+	.num_properties		= ARRAY_SIZE(bq2515x_battery_properties),
-+};
-+
-+
-+static int bq2515x_power_supply_register(struct bq2515x_device *bq2515x)
-+{
-+	struct power_supply_config psy_cfg = { .drv_data = bq2515x, };
-+
-+	bq2515x->mains = devm_power_supply_register(bq2515x->dev,
-+						    &bq2515x_mains_desc,
-+						    &psy_cfg);
-+	if (IS_ERR(bq2515x->mains))
-+		return -EINVAL;
-+
-+	bq2515x->battery = devm_power_supply_register(bq2515x->dev,
-+						      &bq2515x_battery_desc,
-+						      &psy_cfg);
-+	if (IS_ERR(bq2515x->battery))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int bq2515x_hw_init(struct bq2515x_device *bq2515x)
-+{
-+	int ret = 0;
-+
-+	if (bq2515x->init_data.ichg)
-+		ret = bq2515x_set_ilim_lvl(bq2515x, bq2515x->init_data.ichg);
-+
-+	if (ret)
-+		goto err_out;
-+
-+	if (bq2515x->init_data.vreg)
-+		ret = bq2515x_set_batt_reg(bq2515x, bq2515x->init_data.vreg);
-+
-+err_out:
-+	return ret;
-+}
-+
-+static int bq2515x_read_properties(struct bq2515x_device *bq2515x)
-+{
-+	int ret;
-+
-+	ret = device_property_read_u32(bq2515x->dev,
-+				      "constant-charge-current-max-microamp",
-+				      &bq2515x->init_data.ichg);
-+	if (ret)
-+		bq2515x->init_data.ichg = bq2515x_ilim_lvl_values[1];
-+
-+	ret = device_property_read_u32(bq2515x->dev,
-+				      "voltage-max-design-microvolt",
-+				      &bq2515x->init_data.vreg);
-+	if (ret)
-+		bq2515x->init_data.vreg = 4200000;
-+
-+
-+	bq2515x->pg_gpio = devm_gpiod_get_optional(bq2515x->dev,
-+						   "pg", GPIOD_IN);
-+	if (IS_ERR(bq2515x->pg_gpio))
-+		dev_info(bq2515x->dev, "PG GPIO not defined");
-+
-+	bq2515x->reset_gpio = devm_gpiod_get_optional(bq2515x->dev,
-+						   "reset", GPIOD_OUT_LOW);
-+
-+	if (PTR_ERR(bq2515x->reset_gpio) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	bq2515x->lp_gpio = devm_gpiod_get_optional(bq2515x->dev, "low-power",
-+						   GPIOD_OUT_LOW);
-+	if (PTR_ERR(bq2515x->lp_gpio) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	bq2515x->ce_gpio = devm_gpiod_get_optional(bq2515x->dev,
-+						   "charge-enable",
-+						   GPIOD_OUT_HIGH);
-+	if (PTR_ERR(bq2515x->ce_gpio) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	return ret;
-+}
-+
-+static const struct regmap_config bq2515x_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.max_register = BQ2515X_DEVICE_ID,
-+	.reg_defaults     = bq2515x_reg_defs,
-+	.num_reg_defaults = ARRAY_SIZE(bq2515x_reg_defs),
-+	.cache_type	  = REGCACHE_RBTREE,
-+};
-+
-+static int bq2515x_probe(struct i2c_client *client,
-+			 const struct i2c_device_id *id)
-+{
-+	struct device *dev = &client->dev;
-+	struct bq2515x_device *bq;
-+	int ret;
-+
-+	bq = devm_kzalloc(dev, sizeof(*bq), GFP_KERNEL);
-+	if (!bq)
-+		return -ENOMEM;
-+
-+	bq->client = client;
-+	bq->dev = dev;
-+
-+	mutex_init(&bq->lock);
-+
-+	bq->regmap = devm_regmap_init_i2c(client, &bq2515x_regmap_config);
-+	if (IS_ERR(bq->regmap)) {
-+		dev_err(dev, "failed to allocate register map\n");
-+		return PTR_ERR(bq->regmap);
-+	}
-+
-+	strncpy(bq->model_name, id->name, I2C_NAME_SIZE);
-+
-+	i2c_set_clientdata(client, bq);
-+
-+	ret = bq2515x_read_properties(bq);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to register power supply %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = bq2515x_hw_init(bq);
-+	if (ret < 0) {
-+		dev_err(dev, "Cannot initialize the chip.\n");
-+		return ret;
-+	}
-+
-+	return bq2515x_power_supply_register(bq);
-+}
-+
-+static const struct i2c_device_id bq2515x_i2c_ids[] = {
-+	{ "bq25150", 0 },
-+	{ "bq25155", 1 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, bq2515x_i2c_ids);
-+
-+static const struct of_device_id bq2515x_of_match[] = {
-+	{ .compatible = "ti,bq25150", },
-+	{ .compatible = "ti,bq25155", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, bq2515x_of_match);
-+
-+static struct i2c_driver bq2515x_driver = {
-+	.driver = {
-+		.name = "bq2515x-charger",
-+		.of_match_table = bq2515x_of_match,
-+	},
-+	.probe = bq2515x_probe,
-+	.id_table = bq2515x_i2c_ids,
-+};
-+module_i2c_driver(bq2515x_driver);
-+
-+MODULE_AUTHOR("Dan Murphy <dmurphy@ti.com>");
-+MODULE_DESCRIPTION("BQ2515X charger driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.22.0.214.g8dca754b1e
-
+Rob
