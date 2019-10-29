@@ -2,47 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 013B5E9086
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 21:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DD0E9088
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 21:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbfJ2UDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 16:03:01 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:41256 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbfJ2UDA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 16:03:00 -0400
+        id S1726510AbfJ2UDF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 16:03:05 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:60056 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbfJ2UDF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 16:03:05 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TK2w4E111113;
-        Tue, 29 Oct 2019 15:02:58 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TK338K088307;
+        Tue, 29 Oct 2019 15:03:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572379378;
-        bh=ka5ha/Tzt+vFQfCRNPrMeCS7n3mWeBklbHZMPqoPqP0=;
-        h=From:To:CC:Subject:Date;
-        b=y/w8ui+0jTGaRe5VY5J0+15q/yTkW0pETDpYv51cW3auUUEajIpokgBqRNfnrgjbq
-         7wQhAEKQn7VjWSoIp6BYXKuJJz+4VAQeej6wIm6CnLXhJjKPuFON3Is6CPG/oqKX5Z
-         H1WkTRAM+S2/lPQRvyBDAcn8xPR2pf1YHZ8I2tOo=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9TK2wm6021244
+        s=ti-com-17Q1; t=1572379383;
+        bh=y49m7ZpWcPJRbHzJ5NyQ2rYAhLlPDo7yM8vHzQkdWVM=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=afrHLPweEXrdOEpyTD99KiKCeKtVttg2g+CvasU7FwiUw++SEWz3evJIdVSY8/5+U
+         uSM4STsNBX4rtoEE1XLtcNhJfki1OBquicZXq2lKwIEYt+LlbaQWgZkLGHnNqVqC/6
+         NPxUoot6Tde0cuzzwAkGJCTu72BSc4qqlgXXgpg4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9TK33ZS021582
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Oct 2019 15:02:58 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 29 Oct 2019 15:03:03 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
- Oct 2019 15:02:45 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2019 15:02:50 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 29 Oct 2019 15:02:45 -0500
+ Frontend Transport; Tue, 29 Oct 2019 15:02:50 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TK2vVt124135;
-        Tue, 29 Oct 2019 15:02:57 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TK33Jb033223;
+        Tue, 29 Oct 2019 15:03:03 -0500
 From:   Dan Murphy <dmurphy@ti.com>
 To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v2 1/3] power_supply: Add additional health properties to the header
-Date:   Tue, 29 Oct 2019 15:01:59 -0500
-Message-ID: <20191029200201.24483-1-dmurphy@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 2/3] dt-bindings: power: Add the bq2515x family dt bindings
+Date:   Tue, 29 Oct 2019 15:02:00 -0500
+Message-ID: <20191029200201.24483-2-dmurphy@ti.com>
 X-Mailer: git-send-email 2.22.0.214.g8dca754b1e
+In-Reply-To: <20191029200201.24483-1-dmurphy@ti.com>
+References: <20191029200201.24483-1-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -52,30 +55,115 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+Add the bindings for the bq25150 and bq25155 500mA
+charging ICs from Texas Instruments.
+
+Datasheet:
+http://www.ti.com/lit/ds/symlink/bq25150.pdf
+http://www.ti.com/lit/ds/symlink/bq25155.pdf
 
 Signed-off-by: Dan Murphy <dmurphy@ti.com>
+CC: Rob Herring <robh@kernel.org>
 ---
 
-v2 - No changes
+v2 - Converted to yaml format and removed ti,* properties for already defined
+properties
 
- include/linux/power_supply.h | 3 +++
- 1 file changed, 3 insertions(+)
+ .../bindings/power/supply/bq2515x.yaml        | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 28413f737e7d..bd0d3225f245 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -61,6 +61,9 @@ enum {
- 	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
- 	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
- 	POWER_SUPPLY_HEALTH_OVERCURRENT,
-+	POWER_SUPPLY_HEALTH_WARM,
-+	POWER_SUPPLY_HEALTH_COOL,
-+	POWER_SUPPLY_HEALTH_HOT,
- };
- 
- enum {
+diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+new file mode 100644
+index 000000000000..4e6225056f45
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2019 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq2515x.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: TI bq2515x 500-mA Linear charger family
++
++maintainers:
++  - Dan Murphy <dmurphy@ti.com>
++
++description: |
++  The BQ2515x family is a highly integrated battery charge management IC that
++  integrates the most common functions for wearable devices, namely a charger,
++  an output voltage rail, ADC for battery and system monitoring, and
++  push-button controller.
++
++  Specifications about the charger can be found at:
++    http://www.ti.com/lit/ds/symlink/bq25150.pdf
++    http://www.ti.com/lit/ds/symlink/bq25155.pdf
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25150
++      - ti,bq25155
++
++  reg:
++    maxItems: 1
++
++  pg-gpios:
++    description: |
++       GPIO used for connecting the bq2515x device PG (Power Good)
++       pin.  This pin should be used if possible as this is the
++       recommended way to obtain the charger's input PG state.
++       If this pin is not specified a software-based approach for PG
++       detection is used.
++
++  reset-gpios:
++    description: |
++       GPIO used for hardware reset.
++
++  low-power-gpios:
++    description: |
++       GPIO used for low power mode of IC.
++
++  charge-enable-gpios:
++    description: |
++       GPIO used to turn on and off charging.
++
++  constant-charge-current-max-microamp:
++    description: |
++       Maximum charging current in micro Amps.
++    minimum: 50000
++    maximum: 600000
++
++  voltage-max-design-microvolt:
++    description: |
++       Maximum charging voltage in micro volts.
++    minimum: 3600000
++    maximum: 4600000
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      charger@6b {
++          compatible = "ti,bq25150";
++          reg = <0x6b>;
++
++          pg-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
++          reset-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
++          low-power-gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
++          charge-enable-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
++          constant-charge-current-max-microamp = <300000>;
++          voltage-max-design-microvolt = <4200000>;
++      };
++    };
 -- 
 2.22.0.214.g8dca754b1e
 
