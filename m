@@ -2,66 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1C7E8E21
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 18:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAA6E8E27
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 18:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbfJ2ReI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 13:34:08 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:37516 "EHLO
+        id S1727671AbfJ2ReZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 13:34:25 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52387 "EHLO
         mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727671AbfJ2ReH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 13:34:07 -0400
-Received: by mail-wm1-f68.google.com with SMTP id q130so3321322wme.2
-        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2019 10:34:03 -0700 (PDT)
+        with ESMTP id S1728121AbfJ2ReW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 13:34:22 -0400
+Received: by mail-wm1-f68.google.com with SMTP id p21so3536828wmg.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2019 10:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=96w2dzfTRVYhxtpmysIMVp5R//097wsFBHWIwR4IIVo=;
-        b=L2Ux0FBszqSEPU0Go7wCMkFu6MAIwHtl7G9CVTGJwzncwV1Nmno1Z1yAIFiup0UHP5
-         CJ63jwv3gJSJ3BxB0HgkBEgmo569yMFty7jHvuzFnZ/bqp69FN6XwWi1mz6z6D0yGjXY
-         baXb2ftwfehPBnscLhB9pAiCzgt4XSirDOjNqm7RvFpuNIdjlLC/tB7EeYyPffWybjrj
-         1092cg60X4dD0HnfH1WEH6vR2/8MqQWqLEvAEiivGytQ9uABGmXEY7EpAXp19POcKnUk
-         KbNY/96GrDEOlqFx20daq3ryInKraw9c8IxMSe0BlLcizgVwNbV1zLZ4N1CT+bJxBpey
-         WSzw==
+        bh=GX1gOKzKV+EnrAFpaJFs5ZBMdSDwazW4wnKz52ri1Hc=;
+        b=a2LUVbdYPHdwR9i68R2xV9KK+bE+EO6PaojUC7PDpapvANJuOWlBHDGx6czpiNh7fK
+         fx3sHksQhTVBKzhee0/XKldV4xJjvQmY+AoVC3K4vFaHk81m5YF1vrgvhgKcYCnoOWtI
+         oXDzX+EiWUKKUlwes4UTQQ34T21sqC7NaRtwsay7AtApqwYutlEiDBbmcFqHSUTeXir2
+         M0lfUg3oG5k1AmuLndyB4mOwAqIAPWhuSlmFNeq62A00J8e8qpVv3zGsc+6UCS6Pi8uO
+         zlHGt9NwVswB/kWBDMw8uCP25L+MSHCV2aWZA6QHtqY506fQsB8p4Zjah6y/69BXLRWu
+         x+OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=96w2dzfTRVYhxtpmysIMVp5R//097wsFBHWIwR4IIVo=;
-        b=XIGoqxUhKkZSLc1LSG73dIxowk+XIzQPc3mdyOw2LDzWUlO6HaU6QXqrMPa6ZfKiwh
-         LD+mua5K/UDx38mtI0REI8OnzKfifzVDKT6eElwAfX7cbIwUfPzl4wuirFO95AthkfSX
-         aKzgDe+DBxr7QPDE07666hUqwJe1esPwX0ZTmpaOYNiHiL22Wen9LqBUPKv/5gmj2rAt
-         ZnKGGgeyKU3m5ldxvaXVOeMh8BJYdQ5HwX5AOshzNidl+1OCaDp8jJMYxOs8Y8TxUG8W
-         ERuAN/3sGtLWbhfded0KPZV8K/fH+sB1yOr5Y07zafDw43Ij/eTZ5+qPiXmnNroGAmj3
-         2Nlw==
-X-Gm-Message-State: APjAAAXa5dP4eU2ngzvZ19kn4WGaZis+TZqDG2pKM7+5VEcVcsXCwnS4
-        7tdon7mGib01FEh1wY0mPPSFwA==
-X-Google-Smtp-Source: APXvYqwpqvya2KY9lPmFPtxEfiK4pcEq4AiggrcI/0x483wqTyFrOpifuSEBRCnZHhlClrriS1UWBA==
-X-Received: by 2002:a05:600c:21d3:: with SMTP id x19mr5141533wmj.121.1572370442694;
-        Tue, 29 Oct 2019 10:34:02 -0700 (PDT)
+        bh=GX1gOKzKV+EnrAFpaJFs5ZBMdSDwazW4wnKz52ri1Hc=;
+        b=G/Ik4PEjRjEbxmTFiG7MtjnSo4Pp8Dwrsbo2tle1MD0SWE1rrC7EoCcrVm01Fk+Ar8
+         baNQhHw5rdF6pMXBrzSd8FqMqs1NwaLL1kLBOZQqRIpBQaPwNf1B49buq+uNW1cWiI6k
+         Sday1XM+nZ8QiOUL3vVRs3kWo/85sLzO7gXniV8uhKk6hRXxUo9LEAmvwbD4ForbV8GG
+         vBP0jGCO1bO/XLIitQiQDM89zbf3B91VZrJxwt+MiLem6pjKM1WtZUyCqgWziLATpOxH
+         OO3gQCgzlCycKlpNqpgQMl0ikd+W3q8if0U40JRQhncwztl6kZekl8O3KiqhxKFCizje
+         GsWg==
+X-Gm-Message-State: APjAAAUABGToDaEVk/CDVOStny6sJw0v6mU4ZAZArUvSB6tRwCcnUrAt
+        cE/sVn2/O4zNQyq+aV4ewlEw2pmu/io=
+X-Google-Smtp-Source: APXvYqyau6el3ecqUtNnw+Ju+EM5hxWdbFWLBOzOnMu2T7sDKFazP1lzEtB2pcwonEVlxiWChMcUnA==
+X-Received: by 2002:a1c:38c3:: with SMTP id f186mr5338801wma.58.1572370459385;
+        Tue, 29 Oct 2019 10:34:19 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:7037:cc11:eb05:9c6a? ([2a01:e34:ed2f:f020:7037:cc11:eb05:9c6a])
-        by smtp.googlemail.com with ESMTPSA id q12sm9529657wrw.91.2019.10.29.10.34.00
+        by smtp.googlemail.com with ESMTPSA id e24sm4270948wme.26.2019.10.29.10.34.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Oct 2019 10:34:02 -0700 (PDT)
-Subject: Re: [PATCH 2/4] thermal: stm32: fix IRQ flood on low threshold
-To:     Joe Perches <joe@perches.com>, Pascal Paillet <p.paillet@st.com>,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, rui.zhang@intel.com,
-        edubezval@gmail.com, amit.kucheria@verdurent.com,
-        david.hernandezsanchez@st.com, wsa+renesas@sang-engineering.com,
+        Tue, 29 Oct 2019 10:34:18 -0700 (PDT)
+Subject: Re: [PATCH 1/4] thermal: stm32: implement set_trips callback
+To:     Pascal Paillet <p.paillet@st.com>, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        rui.zhang@intel.com, edubezval@gmail.com,
+        amit.kucheria@verdurent.com, david.hernandezsanchez@st.com,
+        wsa+renesas@sang-engineering.com,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Andy Whitcroft <apw@canonical.com>
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20191029164537.1561-1-p.paillet@st.com>
- <20191029164537.1561-3-p.paillet@st.com>
- <8952e975-3bad-4b7d-49ff-b74af942008c@linaro.org>
- <f668de19e156bd7a1bf599d9ce1f9d4f4fca4095.camel@perches.com>
- <026e676e-0a6c-81ca-3af4-2832118b9ddf@linaro.org>
- <9dd814577107edc42c4469ee7c923e062a2b5368.camel@perches.com>
+ <20191029164537.1561-2-p.paillet@st.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -152,12 +147,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  y0s5uI05ZSXhqFs9iLlh3zNU1i6J1cdzA8BReoa3cKz4UiGKEffT857iMvT/ZmgSdYY57EgV
  UWm57SN2ok2Ii8AXlanH5SJPkbwJZhiB7kO0cjebmoA/1SA+5yTc3zEKKFuxcpfiXxt0d/OJ
  om6jCJ5/uKB5Cz9bJj0WdlvS2Xb11Jrs90MoVa74H5me4jOw7m9Yyg3qExOFOXUPFL6N
-Message-ID: <f9376dfb-c20a-59ce-f00e-4f89fed3c341@linaro.org>
-Date:   Tue, 29 Oct 2019 18:34:00 +0100
+Message-ID: <36759c01-7f1b-ef50-621d-7e239f7554b0@linaro.org>
+Date:   Tue, 29 Oct 2019 18:34:17 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <9dd814577107edc42c4469ee7c923e062a2b5368.camel@perches.com>
+In-Reply-To: <20191029164537.1561-2-p.paillet@st.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -166,43 +161,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/10/2019 18:24, Joe Perches wrote:
-> On Tue, 2019-10-29 at 18:21 +0100, Daniel Lezcano wrote:
->> On 29/10/2019 18:15, Joe Perches wrote:
->>> On Tue, 2019-10-29 at 18:11 +0100, Daniel Lezcano wrote:
->>>> On 29/10/2019 17:45, Pascal Paillet wrote:
->>>>> Fix IRQ flood on low threshold by too ways:
->>>>
->>>> Can you state the issue first ?
->>>>
->>>>> - improve temperature reading resolution,
->>>>> - add an hysteresis to the low threshold: on low threshold interrupt,
->>>>> it is not possible to get the temperature value that has fired the
->>>>> interrupt. The time to acquire a new value is enough for the CPU to
->>>>> become hotter than the current low threshold.
->>> []
->>>>> Signed-off-by: Pascal Paillet <p.paillet@st.com>
->>>>> Change-Id: I3b63b8aab38fd651a165c4e69a2d090b3c6f5db3
->>>>
->>>> Please remove the Change-Id tag.
->>>>
->>>> Joe, Andy? checkpatch does not see the Change-Id, is it the expected
->>>> behavior?
->>>
->>> Yes.  It's after a sign-off so checkpatch doesn't care.
->>
->> Ah, I guess it is for Gerrit but we don't want those Change-Id in the
->> kernel history, right?
-> 
-> So remove it from the patch.
+On 29/10/2019 17:45, Pascal Paillet wrote:
+> Implement set_trips() so that the trip points are managed by the thermal
+> framework. The user is free to define any trip points he needs.
+> Simplify interrupt handling.
 
-It was not a sarcastic question. I just wanted to be sure the Change-Id
-is something we always want to remove. There are some of them in the
-kernel log and I got a doubt.
+The patch is touching too many things at the same time and the change
+description does not help to understand the changes.
 
-checkpatch is perfectly fine for me.
+> Signed-off-by: Pascal Paillet <p.paillet@st.com>
+> Change-Id: I2929d4fa5b4c5dca45cec7cb3b93fffc277394d2
 
-  -- Daniel
+Remove Change-Id
+
+[ ... ]
 
 
 -- 
