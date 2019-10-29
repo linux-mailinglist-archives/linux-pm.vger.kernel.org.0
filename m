@@ -2,100 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD38E857D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 11:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A83AE85F2
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 11:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730271AbfJ2K01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 06:26:27 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:45768 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727875AbfJ2K00 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 06:26:26 -0400
-Received: by mail-lj1-f175.google.com with SMTP id q64so14594167ljb.12;
-        Tue, 29 Oct 2019 03:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XXJ4yTre3lT2Hw451DHGum9ZE/PvKC28ALSpkKaZpzQ=;
-        b=PVtNfW4XijiPFaMmyDWiKYevJ8Rnb+AuMPalMz+XGKSUUDzZGmB19dF+OPd+Cf7t8x
-         AM5X/2XYgMyjwp1lINKaoqB70YPe+4nr9+G+nSi3wK+NxVo1uxLjvDxnqy3yKeBM3Yeb
-         ietayrCkXZH7jE7r/YWqQ2Sb1zpm4jLfOWjwK4Y735P+vNEmyMgeSeT53ClgCeWNojIp
-         m6zx9kwbh1Un8/jIDXYwUJnRnERjsZ5+G1SJRdPGNXWjRIIXM5aLubj8jIm/u9iRUcDW
-         qL6IjUtTSOPdNq8laPS5fNErXTA8OZWpjNE8PQSwFIYEJhNawPFo18szPVc5JR6Bh3Dx
-         slfQ==
+        id S1727778AbfJ2KnF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 06:43:05 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:39711 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbfJ2KnF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 06:43:05 -0400
+Received: by mail-oi1-f194.google.com with SMTP id v138so8507207oif.6;
+        Tue, 29 Oct 2019 03:43:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XXJ4yTre3lT2Hw451DHGum9ZE/PvKC28ALSpkKaZpzQ=;
-        b=ddiPlUOQwXODtON3W8ExhpOWSAvenqmgkaBLRDitcoTkyTD96BoX772uiGE0TZV1ru
-         3xyiiMVgubAQeDoe6v2uT1S95eK81XPB7ptTa5b+200KSMtsIupElRC0gG+TVbG04tAA
-         TEMPFoEzPpu8I3683FHi57DT1RHP5kgSjSQyuHViMq+itFfY1fvZ0xeMZXc48sl84ozw
-         AIU1EtEUqPDtRf5Q0437mZvaqQLUlkDgCMD6tnsJfr/yBWvqKEsdri+lfwQXCcYtmac4
-         Zgu8porYCWSf31QNnBqkVxWmFrAYQFQCFAOS+8lLPSDoG7HpdPqM16lkDTBqS3mzz1sP
-         ++Uw==
-X-Gm-Message-State: APjAAAV63r3GSQ2yRGyLIrRB0mB/4fo+Qcmx67YBXynGgzr+8Vd2j7ys
-        mWZoTylcpOX6Sf+pNqf8Q6ONvOx510FAcU1UIos=
-X-Google-Smtp-Source: APXvYqzvkDNma91N0/j+LId1P0ave935Z1civdg7iP4tElQePFdC576p1UJ9upQws10oWtEnYzB9oLjay/5hPxgilts=
-X-Received: by 2002:a2e:819a:: with SMTP id e26mr2054650ljg.26.1572344784090;
- Tue, 29 Oct 2019 03:26:24 -0700 (PDT)
+        bh=WSjPNv90mxoa4Qm6nfEtDVRJH8OLwkZxWcgMkuqr8yo=;
+        b=bGxNvv0I7soLyaU5RO3amJ8UY4P89c8UoLbIQFC8q965tXolSK1ftj4zirr/CGRlA1
+         5MS6HF+1hByzBdb/Y3u99ivirCq+WerZVFPSbV7YX0YFzXVbAyGIhUbTuJvzX8vD2pJn
+         Q68h8y6hLKU2TLp9tDbc++GyNOS9xbtxsjqSswA/bKYLjm1HNgPvZqHJbqD0ye1fRV45
+         MWViArvUau9meYlU+AUAWlbHQeVT8xLGvE3D7FuMLDXpCmIpotcta3l0Vm3u0ZWi00k3
+         ihq3gc0uys5yl+gckypOnvF26QKTuqL6rnYWqroJNNKkBL88jXtqwa25nexyecyGuq3W
+         Kgbg==
+X-Gm-Message-State: APjAAAVBV/xCMJ738VF2TNJ75iauPibhbPUHLJ5/0zqI4VezmGHJJoMt
+        fsSiMfmsiZ1wR/rvhLbcw674JhKZdtAdC1f9DDg=
+X-Google-Smtp-Source: APXvYqzEI7Zev2Tj6Q3I2HWITMkXefnJLlyQjGXMoQC961y0B0n88iefi/CLfKVtZiYMOV/Mt2ZrHOzKRLY7NZFaPAw=
+X-Received: by 2002:aca:d4c6:: with SMTP id l189mr3312579oig.68.1572345784471;
+ Tue, 29 Oct 2019 03:43:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <1572242618-18806-1-git-send-email-Anson.Huang@nxp.com> <1572242618-18806-2-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1572242618-18806-2-git-send-email-Anson.Huang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 29 Oct 2019 07:26:25 -0300
-Message-ID: <CAOMZO5AfyyqaAgn5enaW=Cncxinrp=TBAc+E_jWAWDLkYwA0=w@mail.gmail.com>
-Subject: Re: [PATCH RESEND 2/4] thermal: imx8mm: Add support for i.MX8MM
- thermal monitoring unit
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     "rui.zhang" <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Catalin Marinas <catalin.marinas@arm.com>, will@kernel.org,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Ping Bai <ping.bai@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Olof Johansson <olof@lixom.net>, mripard@kernel.org,
-        Vinod <vkoul@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <Linux-imx@nxp.com>
+References: <187a1a7d-80bd-a0e9-a0d9-7fc53bff8907@linux.intel.com> <20191022125950.GA133170@google.com>
+In-Reply-To: <20191022125950.GA133170@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 29 Oct 2019 11:42:53 +0100
+Message-ID: <CAJZ5v0jdxR4roEUC_Hs3puCzGY4ThdLsi_XcxfBUUxqruP4z7A@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure pcie link
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dilip Kota <eswara.kota@linux.intel.com>,
+        Andrew Murray <andrew.murray@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        gustavo.pimentel@synopsys.com,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        martin.blumenstingl@googlemail.com,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Shevchenko, Andriy" <andriy.shevchenko@intel.com>,
+        cheol.yong.kim@intel.com, chuanhua.lei@linux.intel.com,
+        qi-ming.wu@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi  Anson,
+On Tue, Oct 22, 2019 at 2:59 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Rafael, linux-pm, beginning of discussion at
+> https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
+>
+> On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
+> > On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
+> > > On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
+> > > > On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
+> > > > > PCIe RC driver on Intel Gateway SoCs have a requirement
+> > > > > of changing link width and speed on the fly.
+> > > Please add more details about why this is needed.  Since you're adding
+> > > sysfs files, it sounds like it's not actually the *driver* that needs
+> > > this; it's something in userspace?
+>
+> > We have use cases to change the link speed and width on the fly.
+> > One is EMI check and other is power saving.  Some battery backed
+> > applications have to switch PCIe link from higher GEN to GEN1 and
+> > width to x1. During the cases like external power supply got
+> > disconnected or broken. Once external power supply is connected then
+> > switch PCIe link to higher GEN and width.
+>
+> That sounds plausible, but of course nothing there is specific to the
+> Intel Gateway, so we should implement this generically so it would
+> work on all hardware.
+>
+> I'm not sure what the interface should look like -- should it be a
+> low-level interface as you propose where userspace would have to
+> identify each link of interest, or is there some system-wide
+> power/performance knob that could tune all links?  Cc'd Rafael and
+> linux-pm in case they have ideas.
 
-On Mon, Oct 28, 2019 at 3:07 AM Anson Huang <Anson.Huang@nxp.com> wrote:
+Frankly, I need some time to think about this and, in case you are
+wondering about whether or not it has been discussed with me already,
+it hasn't.
 
-> +       ret = clk_prepare_enable(tmu->clk);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "failed to enable tmu clock: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       tmu->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev, 0,
-> +                                                       tmu, &tmu_tz_ops);
-> +       if (IS_ERR(tmu->tzd)) {
-> +               dev_err(&pdev->dev,
-> +                       "failed to register thermal zone sensor: %d\n", ret);
+At this point I can only say that since we have an ASPM interface,
+which IMO is not fantastic, it may be good to come up with a common
+link management interface.
 
-You should disable the tmu clock in the error path.
-
-> +               return PTR_ERR(tmu->tzd);
+Cheers!
