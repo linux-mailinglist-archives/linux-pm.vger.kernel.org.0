@@ -2,142 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0A1E7E10
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 02:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359B0E7E55
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 03:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729378AbfJ2Bgu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Oct 2019 21:36:50 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34657 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727703AbfJ2Bgu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 21:36:50 -0400
-Received: by mail-ot1-f67.google.com with SMTP id m19so8432328otp.1;
-        Mon, 28 Oct 2019 18:36:49 -0700 (PDT)
+        id S1728753AbfJ2CB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Oct 2019 22:01:28 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33447 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728489AbfJ2CB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Oct 2019 22:01:28 -0400
+Received: by mail-ot1-f66.google.com with SMTP id u13so8470280ote.0;
+        Mon, 28 Oct 2019 19:01:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cUdKKEZxRPnFHu2QVFPMIhJT0tZzKagr6VomA8Jxo6Y=;
-        b=RF8uAzXmfQbjN12wUWCrpaKS4OJClaip3oXx0EohDaWN5vPfUgWq/6ebBWU+JQ0giA
-         R9dyBFFU9FirWgOjoFYvCnZdEPemQ+54XbAkEtdUKE7+Lp8xYkJm1vMLBck65l/ANzGE
-         iEWSXop7qAKBXFMysDhcS3pkfIFtAgT1MA62t296QUI8PcMY4r+w6bxkZgZB9wPzXHi2
-         Jvcr5OPokbVjHkI/ziWjfiXDN2cFduH9utiq77SMBICiws+WDNImnYWqX/WPuyNQ2Kia
-         HWVUZY9fKseQbq6H+UCHgLDBvTGmi3g8KGfpagq6fM3WRlA+gpq+QFGHX0lSwWDdJntL
-         SG2A==
-X-Gm-Message-State: APjAAAXIldZGjYqKVl79gfsDkjixAkqhLlwMgAHiPDI1I+oBAflOBMfd
-        O6fbh8f6lD5rmwmuYEcPBQ==
-X-Google-Smtp-Source: APXvYqwxn84pDfRZOnEp1z2t14ueJoGhKjtzuewBpLvrfQbeO2MKZOGKV9rs31NSOa3Nb7V+31MQrg==
-X-Received: by 2002:a9d:620c:: with SMTP id g12mr6225748otj.11.1572313009351;
-        Mon, 28 Oct 2019 18:36:49 -0700 (PDT)
+        bh=9BL3Z1A/tEWwa5UAepvAQv367j/DZhoKZ8WMU7Awauw=;
+        b=FMo/udJcoTk0koZYwYsmVgGNItWh8z0WloKRvpMwU5KFk4L4iPkw3Qc0HNe9lpJaSu
+         BMjvVmJftHpWpRJfB5j5LG5sqqaVZmsFTQBIiHULUvnHQYPMFMM4KxsqXV2lWrxePXYz
+         fX2kmpJNUqiBjr/+k0FfEyQhR5tiejdter/ZORVWZDjanxVwqFENknL1mynh4YoZ7K/c
+         l49KSl/WqrrIKWbmaItuykfg0gD0P6iL26Kn6q8JCFA6Jip3bPA74v64LufYJ46BrRCa
+         09c2MuzaUcGqs0jiMhJ5rlx0MvvYTYSW4Ck1s0ix4GCRSTaaAflZosIsiZpGc1euLgXb
+         TMPw==
+X-Gm-Message-State: APjAAAUZLtYBtTmd9WQB9qwSR9VYGUxhKu2va6g+Rzx5eGIInGbyB09n
+        0+Da3203XYbcI0gFZVBeHQ==
+X-Google-Smtp-Source: APXvYqxTMdckI8FQ4OvetDPaspVzeYA6kfan5ggpGK9XdwPtUCWnW0VVdmXnlKq6EvrM8Js1EYCC2Q==
+X-Received: by 2002:a9d:538d:: with SMTP id w13mr15641639otg.184.1572314486742;
+        Mon, 28 Oct 2019 19:01:26 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s3sm3377053otq.76.2019.10.28.18.36.48
+        by smtp.gmail.com with ESMTPSA id h17sm2203144otr.53.2019.10.28.19.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 18:36:48 -0700 (PDT)
-Date:   Mon, 28 Oct 2019 20:36:48 -0500
+        Mon, 28 Oct 2019 19:01:26 -0700 (PDT)
+Date:   Mon, 28 Oct 2019 21:01:25 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, amit.kucheria@verdurent.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
- controller binding to describe thermal warming device
-Message-ID: <20191029013648.GB27045@bogus>
-References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
- <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
- <5DA88892.5000408@linaro.org>
- <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
- <5DA89267.30806@linaro.org>
+To:     Jianxin Pan <jianxin.pan@amlogic.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: power: add Amlogic secure power
+ domains bindings
+Message-ID: <20191029020125.GA11182@bogus>
+References: <1571391167-79679-1-git-send-email-jianxin.pan@amlogic.com>
+ <1571391167-79679-2-git-send-email-jianxin.pan@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5DA89267.30806@linaro.org>
+In-Reply-To: <1571391167-79679-2-git-send-email-jianxin.pan@amlogic.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 12:10:15PM -0400, Thara Gopinath wrote:
-> On 10/17/2019 11:43 AM, Ulf Hansson wrote:
-> > On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
-> >>
-> >> Hello Ulf,
-> >> Thanks for the review!
-> >>
-> >> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
-> >>> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
-> >>>>
-> >>>> RPMh power controller hosts mx domain that can be used as thermal
-> >>>> warming device. Add a sub-node to specify this.
-> >>>>
-> >>>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> >>>> ---
-> >>>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
-> >>>>  1 file changed, 10 insertions(+)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >>>> index eb35b22..fff695d 100644
-> >>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-> >>>> @@ -18,6 +18,16 @@ Required Properties:
-> >>>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
-> >>>>  various OPPs for different platforms as well as Power domain indexes
-> >>>>
-> >>>> += SUBNODES
-> >>>> +RPMh alsp hosts power domains that can behave as thermal warming device.
-> >>>> +These are expressed as subnodes of the RPMh. The name of the node is used
-> >>>> +to identify the power domain and must therefor be "mx".
-> >>>> +
-> >>>> +- #cooling-cells:
-> >>>> +       Usage: optional
-> >>>> +       Value type: <u32>
-> >>>> +       Definition: must be 2
-> >>>> +
-> >>>
-> >>> Just wanted to express a minor thought about this. In general we use
-> >>> subnodes of PM domain providers to represent the topology of PM
-> >>> domains (subdomains), this is something different, which I guess is
-> >>> fine.
-> >>>
-> >>> I assume the #cooling-cells is here tells us this is not a PM domain
-> >>> provider, but a "cooling device provider"?
-> >> Yep.
-> >>>
-> >>> Also, I wonder if it would be fine to specify "power-domains" here,
-> >>> rather than using "name" as I think that is kind of awkward!?
-> >> Do you mean "power-domain-names" ? I am using this to match against the
-> >> genpd names defined in the provider driver.
-> > 
-> > No. If you are using "power-domains" it means that you allow to
-> > describe the specifier for the provider.
-> Yep. But won't this look funny in DT ? The provider node will have a sub
-> node with a power domain referencing to itself Like below: Is this ok ?
+On Fri, Oct 18, 2019 at 05:32:44PM +0800, Jianxin Pan wrote:
+> Add the bindings for the Amlogic Secure power domains, controlling the
+> secure power domains.
 > 
-> rpmhpd: power-controller {
->                                 compatible = "qcom,sdm845-rpmhpd";
->                                 #power-domain-cells = <1>;
+> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
+> power domain registers are in secure world.
 > 
-> 			...
-> 			...
-> 				mx_cdev: mx {
->                                         #cooling-cells = <2>;
->                                         power-domains = <&rpmhpd	SDM845_MX>;
->                                 };
-> 				
+> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+> ---
+>  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 42 ++++++++++++++++++++++
+>  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>  create mode 100644 include/dt-bindings/power/meson-a1-power.h
+> 
+> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> new file mode 100644
+> index 00000000..88d8261
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +# Copyright (c) 2019 Amlogic, Inc
+> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Amlogic Meson Secure Power Domains
+> +
+> +maintainers:
+> +  - Jianxin Pan <jianxin.pan@amlogic.com>
+> +
+> +description: |+
+> +  Meson Secure Power Domains used in A1/C1 SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amlogic,meson-a1-pwrc
+> +
+> +  "#power-domain-cells":
+> +    const: 1
+> +
+> +  secure-monitor:
+> +    description: phandle to the secure-monitor node
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-The whole concept here seems all wrong to me. Isn't it what's in the 
-power domain that's the cooling device. A CPU power domain is not a 
-cooling device, the CPU is. Or we wouldn't make a clock a cooling 
-device, but what the clock drives.
+Like the watchdog, make this a child or the secure firmware node. Or 
+just add '#power-domain-cells' to it. You don't really need a child node 
+here if there's not other resources in DT for this.
 
 Rob
