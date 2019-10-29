@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4054EE92B8
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 23:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61595E92B6
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 23:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbfJ2WGV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 18:06:21 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:41301 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728078AbfJ2WGU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 18:06:20 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m9so331890ljh.8;
+        id S1725978AbfJ2WHO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 18:07:14 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:41923 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728152AbfJ2WGW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 18:06:22 -0400
+Received: by mail-lf1-f66.google.com with SMTP id j14so6772820lfb.8;
         Tue, 29 Oct 2019 15:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pRymNhrJUhLlZEEx42xq+S6wejhNhQ6tSpFG1qtRzpw=;
-        b=WW7Hhztj6pmwQMcH+VCKDTuj8IIqqw0olGTUziZ2j/ED6oLrlxCqH7Zbl3Hhk615W2
-         rDC8y78xeKET7BCxmy5slZu3bv1TvM99heaeOCgPj0btDXFRr2HFGFAYeV/Q3/4/IOv7
-         o5lmscIQangfXboAcDIrnTyQbPWuVIPJ89fZadhgeZkrv4NEIYNjwYYqP/M+wa3upO1e
-         /QLSLsG+oODUDfy68v034zq2o+k0f572jcoR+iHT0zCa5jfx4/NLdFphziomxWN9/QDk
-         UA4m/rNhYvX5fdRKRBlo5p8qKV+elE4Hjt1maGXuy+U8OI9SR5xxoQvoxWRF70MJTHAQ
-         MpyA==
+        bh=NjtBEPOF4XbVe+GmLN7lt3oHWVo/ez1Q/5iY5o1k9lo=;
+        b=IBTo1jvkbjvGXpJRGG14Z58KiP+5J01AFzxhzNglk2gPwzqMKtnfB62PBri9ZPSmWQ
+         21qCykXYRVA/BuneaGPskG/5QlCxluxLAn1Fw4XgMOLLu8acU9ZL3a4lmbMmNQD2FdqS
+         KlZTjZecVeV4kfqc92WtohtDAMyOmH3DfUqlu++rz6JKLfKeDbtd0pWLnIaAsIhliSYo
+         MFYESbwLllWNsaBPMfO8Nya+k89u3xFQ6j+7SdAoZ7tDh6fu9kNchHGQsLZyqj8vIgRf
+         QJFrD5HjXddslQ2B3x/zDZUz7oCeOht2Mxc0AJyAvCVB9klwnC29L3CH7qSqu/nHg0Hc
+         0fag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pRymNhrJUhLlZEEx42xq+S6wejhNhQ6tSpFG1qtRzpw=;
-        b=c53T+zDXalw9633Zy9SihEPZpUrMpoflK0shyUy3+UcVZLX3W+bZkn48D/Fsy8wGpK
-         0Pfw2EzGJKOfcUbf5TKe/kxRsoJN0iqcchkWXBFzEiGDQSHTyRpuB6aKSgVISXf7VYdB
-         NXHaPpJ5brpoNtFNRqKv2qq6Z6271WfqvN+P6+u6517ktIftBqhXHG4usY3/wU9gNxgv
-         Hu84cw5u1Bwc6yHrIuy5ci4ZDJB10ktkxALGT1SpDRxOs3IAU4RYT41DWxQSJIKorNra
-         auQfhQo11ZT1IJch1LKobpvPx+m80kGyFRti1qgTagWGn01SPE5G0OIWhggZmYDtBI5S
-         rWxg==
-X-Gm-Message-State: APjAAAWULEInxAN/xtrwtwSOPpr6C10IYXLr5mNWjL6bNOaMko/R301v
-        07I1Tmqj6gvdxJXfH4FSvS4=
-X-Google-Smtp-Source: APXvYqzShsW7xQ8Y5tOH8hiVPhNxSCTFpx7CFzlYNz2ytysZ6qP0Vw1ASdCGTKYCIoQJnWfU1ll0Sg==
-X-Received: by 2002:a2e:87c9:: with SMTP id v9mr4026803ljj.65.1572386778343;
-        Tue, 29 Oct 2019 15:06:18 -0700 (PDT)
+        bh=NjtBEPOF4XbVe+GmLN7lt3oHWVo/ez1Q/5iY5o1k9lo=;
+        b=hJeqdafhafQV/nAPQVVhIFtjNV4Dz2/w7H4UOcoaeFPfsrv1j/eUJDUrLC89ZflwD0
+         6HqEa26HgGqR++SJcCDNdeBP3pkNm5IAbGpMAsDBjJ2yF8UJ6BiHp3ODfowi57V7LsAO
+         uERpn13GSNQXx4SwiVwvPy7cPU61Sh+DeKFN59nFVLbhJKHSfZgWnyWrbPHJ0XcgxQXM
+         95CqiXfF/yaWzvIT364niWJHYx2YgtUdp/vIhdy7mB91SE7FUp4DhgS0k542Woff4QSY
+         L5695PFOnjWQ7DPxRRcl0VWCVxKR12C2beecmvOWPKhWnWe01mTUzBPiNm1aAuUiMUTA
+         vrwA==
+X-Gm-Message-State: APjAAAXp5Yg61aZP+DrOM3icNae8NvAm4+5+ksUOZ0Ueanroc1Ir5F0P
+        bbuKIn90P/Aj+2hYJWY+VfM=
+X-Google-Smtp-Source: APXvYqwzGkr1pqdaiAoBOGPoFu0qbrG/moOR9RIjKczyiaaJln/Z1KWQ7j5j8RPdi+KR+RecKJXT5Q==
+X-Received: by 2002:ac2:5442:: with SMTP id d2mr3834303lfn.161.1572386779255;
+        Tue, 29 Oct 2019 15:06:19 -0700 (PDT)
 Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id 12sm51536lje.92.2019.10.29.15.06.17
+        by smtp.gmail.com with ESMTPSA id 12sm51536lje.92.2019.10.29.15.06.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 15:06:17 -0700 (PDT)
+        Tue, 29 Oct 2019 15:06:18 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -54,9 +54,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 09/19] PM / devfreq: tegra30: Reset boosting on startup
-Date:   Wed, 30 Oct 2019 01:00:09 +0300
-Message-Id: <20191029220019.26773-10-digetx@gmail.com>
+Subject: [PATCH v7 10/19] PM / devfreq: tegra30: Don't enable consecutive-down interrupt on startup
+Date:   Wed, 30 Oct 2019 01:00:10 +0300
+Message-Id: <20191029220019.26773-11-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191029220019.26773-1-digetx@gmail.com>
 References: <20191029220019.26773-1-digetx@gmail.com>
@@ -67,31 +67,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Governor could be stopped while boosting is active. We have assumption
-that everything is reset on governor's restart, including the boosting
-value, which was missed.
+The consecutive-down event tells that we should perform frequency
+de-boosting, but boosting is in a reset state on start and hence the
+event won't do anything useful for us and it will be just a dummy
+interrupt request.
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 Tested-by: Peter Geis <pgwipeout@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/devfreq/tegra30-devfreq.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 1934b4eb4e78..fb1163aaaae7 100644
+index fb1163aaaae7..e9cb0ea54ee7 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -467,6 +467,9 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
- {
- 	u32 val = 0;
+@@ -490,7 +490,6 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+ 		<< ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_NUM_SHIFT;
+ 	val |= ACTMON_DEV_CTRL_AVG_ABOVE_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_AVG_BELOW_WMARK_EN;
+-	val |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_ENB;
  
-+	/* reset boosting on governor's restart */
-+	dev->boost_freq = 0;
-+
- 	dev->target_freq = tegra->cur_freq;
- 
- 	dev->avg_count = tegra->cur_freq * ACTMON_SAMPLING_PERIOD;
 -- 
 2.23.0
 
