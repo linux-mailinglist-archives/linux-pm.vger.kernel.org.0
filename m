@@ -2,108 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FD1E884A
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 13:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD23E8944
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 14:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbfJ2MgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 08:36:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728004AbfJ2MgL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Oct 2019 08:36:11 -0400
-Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67FEF214B2;
-        Tue, 29 Oct 2019 12:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572352569;
-        bh=QMnsZceNxEcrN9tSFrRt4Xg3wuFc/x194NzA1aT85TE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=w7aeQo1gk4oNam6lA+XYvRDr51NU3KISOEbXw/o1Y528ZLW/pEAeRNptnu8aIvH1G
-         otckF6bUBfLsqHmH199BEfwPJjrc89B5U1NQn+IyzSuB7qZbiEJYH8CXhhg3qirGZp
-         oYq1n4+lXs/VPTKhwqYV1MmY8eX2gxxyUAq313o4=
-Date:   Tue, 29 Oct 2019 07:36:07 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dilip Kota <eswara.kota@linux.intel.com>,
-        Andrew Murray <andrew.murray@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        gustavo.pimentel@synopsys.com,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        martin.blumenstingl@googlemail.com,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Shevchenko, Andriy" <andriy.shevchenko@intel.com>,
-        cheol.yong.kim@intel.com, chuanhua.lei@linux.intel.com,
-        qi-ming.wu@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure
- pcie link
-Message-ID: <20191029123607.GA33916@google.com>
+        id S2388225AbfJ2NTU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 09:19:20 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34685 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388119AbfJ2NTU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 09:19:20 -0400
+Received: by mail-wm1-f68.google.com with SMTP id v3so1979497wmh.1;
+        Tue, 29 Oct 2019 06:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kdxUMNyvrqmNDL+Yjr/LEjpSdNLrL+LPXt7veHoTwW4=;
+        b=b3wSn23Z4i+0IrRlbFOcNoWAIP/x9vHeXOi8LxwEGCEA/ONEmNtnfL7pRIn2SkrKvr
+         7mg2RR9IVPf7mxxXUsz27+YUEs/jiL9mroJN2miG+VYnEzEr/5nlO32gkKu1+r+okF7w
+         nWJpkzZtTHi+K768tIS1ObSpSTU7Okmcp7/J3JoryOgg/degccm9PWwWlWBtmL9Blhsg
+         8ZT6E1GF1Zpp4XNLDjD8rnJqlr6a068cnIhw8iAZfTeeWNaISiJs/voLdFBpZZtd56cR
+         Pju3LuYMwo3XqjoaBus4UgTyaVadHgUU69C/zYsjwiZ8Cr1az95HK4N8AuPS2Lr3GCwo
+         JIHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kdxUMNyvrqmNDL+Yjr/LEjpSdNLrL+LPXt7veHoTwW4=;
+        b=uR06uwASJruwRdivIeREkQnDq/NH8lu8K3sp+BpuIr9NPqp9H5sxzPrxJGIlpAMucZ
+         f9vIKJZOkeWD/fjkyQ0krHwvepq8HBMBgAbSGLbGkcir/rJ9YLysU7tuY49W2xK3T4Jg
+         MLszml8xECSw70SsAXsQXszncs+qStFd25Iys0uNzkDxpuvlknhLYT3yJStLyLm+hRdC
+         crDKR9nBJqHvbuLcDQ7fNbl4GQLdowxRxmExLDxTROizfUuTGPWzrnxGYRniUOI90BFy
+         CZPvHceN8Hrnukldt52CxITlPBnjaHksqAdsdwqHEokRfQKbRnboqtEikk8oRvYSuCfD
+         SLIA==
+X-Gm-Message-State: APjAAAVbKwYq1aEVfT8RrqcRdSZ2SoKVOLfn11sj8RCdDjUMk9hn8Nox
+        zsaNnc9yhyB/kptxhttYB4btGX5A
+X-Google-Smtp-Source: APXvYqxZTORaJEUXE+fRevzkoDHJ0mmVXxjMng546tuGAb05XITEMi0ysWfNJUsxW/dkz4mBlx57Iw==
+X-Received: by 2002:a1c:a90f:: with SMTP id s15mr4115278wme.100.1572355157476;
+        Tue, 29 Oct 2019 06:19:17 -0700 (PDT)
+Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
+        by smtp.gmail.com with ESMTPSA id 200sm3330915wme.32.2019.10.29.06.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2019 06:19:16 -0700 (PDT)
+Date:   Tue, 29 Oct 2019 14:19:15 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 09/18] clk: tegra: Add missing stubs for the case of
+ !CONFIG_PM_SLEEP
+Message-ID: <20191029131915.GE508460@ulmo>
+References: <20191015170015.1135-1-digetx@gmail.com>
+ <20191015170015.1135-10-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Rgf3q3z9SdmXC6oT"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jdxR4roEUC_Hs3puCzGY4ThdLsi_XcxfBUUxqruP4z7A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191015170015.1135-10-digetx@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Heiner for ASPM conversation]
 
-On Tue, Oct 29, 2019 at 11:42:53AM +0100, Rafael J. Wysocki wrote:
-> On Tue, Oct 22, 2019 at 2:59 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > [+cc Rafael, linux-pm, beginning of discussion at
-> > https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
-> >
-> > On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
-> > > On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
-> > > > On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
-> > > > > On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
-> > > > > > PCIe RC driver on Intel Gateway SoCs have a requirement
-> > > > > > of changing link width and speed on the fly.
-> > > > Please add more details about why this is needed.  Since you're adding
-> > > > sysfs files, it sounds like it's not actually the *driver* that needs
-> > > > this; it's something in userspace?
-> >
-> > > We have use cases to change the link speed and width on the fly.
-> > > One is EMI check and other is power saving.  Some battery backed
-> > > applications have to switch PCIe link from higher GEN to GEN1 and
-> > > width to x1. During the cases like external power supply got
-> > > disconnected or broken. Once external power supply is connected then
-> > > switch PCIe link to higher GEN and width.
-> >
-> > That sounds plausible, but of course nothing there is specific to the
-> > Intel Gateway, so we should implement this generically so it would
-> > work on all hardware.
-> >
-> > I'm not sure what the interface should look like -- should it be a
-> > low-level interface as you propose where userspace would have to
-> > identify each link of interest, or is there some system-wide
-> > power/performance knob that could tune all links?  Cc'd Rafael and
-> > linux-pm in case they have ideas.
-> 
-> Frankly, I need some time to think about this and, in case you are
-> wondering about whether or not it has been discussed with me already,
-> it hasn't.
-> 
-> At this point I can only say that since we have an ASPM interface,
-> which IMO is not fantastic, it may be good to come up with a common
-> link management interface.
+--Rgf3q3z9SdmXC6oT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The ASPM interface hasn't been merged yet, so if you have better
-ideas, now is the time.  That one is definitely very low-level, partly
-because the first use case is working around defects in a specific
-device.
+On Tue, Oct 15, 2019 at 08:00:06PM +0300, Dmitry Osipenko wrote:
+> The new CPUIDLE driver uses the Tegra's CLK API and that driver won't
+> strictly depend on CONFIG_PM_SLEEP, hence add the required stubs in
+> order to allow compiling of the new driver with the CONFIG_PM_SLEEP=3Dn.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  include/linux/clk/tegra.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-Some sort of unification of link management does sound like a good
-idea.
+Applied to for-5.5/clk, thanks.
 
-Bjorn
+Thierry
+
+--Rgf3q3z9SdmXC6oT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl24PFIACgkQ3SOs138+
+s6GpQA/+ObhDGFKfUw2kmzmVofglBZKfac9iUKEOtJRjpACY1HQzbddmh7XDV0kz
+x3ZpXS/64v2SYFT1MEDg+P0HIE9VEMhn0gTuht4eH6koVffOmKQW0mMcnmNXA0vT
+Xz4DSqpdEa+1povmLaifTj6FAGsuT2FQXuK+eWA0UFkW3407KhhazMuwuJvlQ77J
+0bq78zIdwRH33kP6MgZvTF94dggX02TsRt8x3FQxGjo6lxan5qe18h06/sTUGW4j
+QvshCliwMiCaSskcQCULJYuRX9f54Iu6HkcmqURzP1LohAM4o7NnFboxKorGQAbY
+76j6WB6i7O5isg5Ng0wV3YH/xHTuptMzX12iniF3BqwYWXab2J2qyNQ7ipnFlDvY
+Y9m2caM4cPfILsUozrjvQqGWOkg8EujGzDhEOkqwGI1zj2rE0QzSTZbYFLYNp2ka
+jHVMR+TN2Q4pwBTOPmJ4r2hPoy9KvTTEfLMU6T931lPPjNSKONvlr0oNz7fxVE2H
+1adqcQRShR6hM1UzuFA3J9mjP8bqYFPYRIMVazpM6nQMwHTDSq9j/IIHp7LpFuVr
+uDxLZYmA+mP7Sbo2eBAK3qwrR2Hgnyv4+tyLquKGuns+1mdP2B3+Nkw8Xrpf8b5c
+RRWen5QU639f+YV7G6qxSxhljZri59qMYqGoQojtUZxIvMdNtyo=
+=lnmo
+-----END PGP SIGNATURE-----
+
+--Rgf3q3z9SdmXC6oT--
