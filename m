@@ -2,217 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F63E9064
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 20:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013B5E9086
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 21:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfJ2T7u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 15:59:50 -0400
-Received: from mga06.intel.com ([134.134.136.31]:39895 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbfJ2T7u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Oct 2019 15:59:50 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 12:59:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,245,1569308400"; 
-   d="scan'208";a="399912802"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Oct 2019 12:59:49 -0700
-Message-ID: <f13946cfc3f6f57230df7d0c2aad860940826148.camel@linux.intel.com>
-Subject: Re: [PATCH] Revert "sched/fair: Fix O(nr_cgroups) in the load
- balancing path"
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <doug.smythies@gmail.com>, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Doug Smythies <dsmythies@telus.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, sargun@sargun.me,
-        tj@kernel.org, xiexiuqi@huawei.com, xiezhipeng1@huawei.com
-Date:   Tue, 29 Oct 2019 12:59:49 -0700
-In-Reply-To: <10eef14e434375ef4bb7cf23ecb987b3591064a6.camel@linux.intel.com>
-References: <1572018904-5234-1-git-send-email-dsmythies@telus.net>
-         <10eef14e434375ef4bb7cf23ecb987b3591064a6.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726594AbfJ2UDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 16:03:01 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:41256 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbfJ2UDA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 16:03:00 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TK2w4E111113;
+        Tue, 29 Oct 2019 15:02:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572379378;
+        bh=ka5ha/Tzt+vFQfCRNPrMeCS7n3mWeBklbHZMPqoPqP0=;
+        h=From:To:CC:Subject:Date;
+        b=y/w8ui+0jTGaRe5VY5J0+15q/yTkW0pETDpYv51cW3auUUEajIpokgBqRNfnrgjbq
+         7wQhAEKQn7VjWSoIp6BYXKuJJz+4VAQeej6wIm6CnLXhJjKPuFON3Is6CPG/oqKX5Z
+         H1WkTRAM+S2/lPQRvyBDAcn8xPR2pf1YHZ8I2tOo=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9TK2wm6021244
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Oct 2019 15:02:58 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
+ Oct 2019 15:02:45 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 29 Oct 2019 15:02:45 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TK2vVt124135;
+        Tue, 29 Oct 2019 15:02:57 -0500
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Dan Murphy <dmurphy@ti.com>
+Subject: [PATCH v2 1/3] power_supply: Add additional health properties to the header
+Date:   Tue, 29 Oct 2019 15:01:59 -0500
+Message-ID: <20191029200201.24483-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.22.0.214.g8dca754b1e
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2019-10-29 at 12:34 -0700, Srinivas Pandruvada wrote:
-> On Fri, 2019-10-25 at 08:55 -0700, Doug Smythies wrote:
-> 
-> [...]
-> 
-> > Experiment method:
-> > 
-> > enable only idle state 1
-> > Dountil stopped
-> >   apply a 100% load (all CPUs)
-> >   after awhile (about 50 seconds) remove the load.
-> >   allow a short transient delay (1 second).
-> >   measure the processor package joules used over the next 149
-> > seconds.
-> > Enduntil
-> > 
-> > Kernel k5.4-rc2 + reversion (this method)
-> > Average processor package power: 9.148 watts (128 samples, > 7
-> > hours)
-> > Minimum: 9.02 watts
-> > Maximum: 9.29 watts
-> > Note: outlyer data point group removed, as it was assumed the
-> > computer
-> > had something to do and wasn't actually "idle".
-> > 
-> > Kernel 5.4-rc2:
-> > Average processor package power: 9.969 watts (150 samples, > 8
-> > hours)
-> > Or 9% more energy for the idle phases of the work load.
-> > Minimum: 9.15 watts
-> > Maximum: 13.79 watts (51% more power)
-> 
-> Hi Doug,
-> 
-> Do you have intel_pstate_tracer output? I guess that when started
-> request to measure the measure joules, it started at higher P-state
-> without revert.
-> Other way is check by fixing the max and min scaling frequency to
-> some
-> frequency, then we shouldn't see power difference.
-I mean not significant power difference. Also to get real numbers, need
-to use some power meter measuring CPU power. If I can get your script,
-I may be able to measure that.
+Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
 
-Thanks,
-Srinivas
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
+---
 
-> 
-> Thanks,
-> Srinivas
-> 
-> 
-> > 
-> > ---
-> >  kernel/sched/fair.c | 43 +++++++++------------------------------
-> > ----
-> >  1 file changed, 9 insertions(+), 34 deletions(-)
-> > 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 83ab35e..51625b8 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -381,10 +381,9 @@ static inline void
-> > assert_list_leaf_cfs_rq(struct rq *rq)
-> >  	SCHED_WARN_ON(rq->tmp_alone_branch != &rq->leaf_cfs_rq_list);
-> >  }
-> >  
-> > -/* Iterate thr' all leaf cfs_rq's on a runqueue */
-> > -#define for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos)			
-> > \
-> > -	list_for_each_entry_safe(cfs_rq, pos, &rq->leaf_cfs_rq_list,	
-> > \
-> > -				 leaf_cfs_rq_list)
-> > +/* Iterate through all cfs_rq's on a runqueue in bottom-up order
-> > */
-> > +#define for_each_leaf_cfs_rq(rq, cfs_rq) \
-> > +	list_for_each_entry_rcu(cfs_rq, &rq->leaf_cfs_rq_list,
-> > leaf_cfs_rq_list)
-> >  
-> >  /* Do the two (enqueued) entities belong to the same group ? */
-> >  static inline struct cfs_rq *
-> > @@ -481,8 +480,8 @@ static inline void
-> > assert_list_leaf_cfs_rq(struct
-> > rq *rq)
-> >  {
-> >  }
-> >  
-> > -#define for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos)	\
-> > -		for (cfs_rq = &rq->cfs, pos = NULL; cfs_rq; cfs_rq =
-> > pos)
-> > +#define for_each_leaf_cfs_rq(rq, cfs_rq)	\
-> > +		for (cfs_rq = &rq->cfs; cfs_rq; cfs_rq = NULL)
-> >  
-> >  static inline struct sched_entity *parent_entity(struct
-> > sched_entity
-> > *se)
-> >  {
-> > @@ -7502,27 +7501,10 @@ static inline void
-> > update_blocked_load_status(struct rq *rq, bool has_blocked) {
-> >  
-> >  #ifdef CONFIG_FAIR_GROUP_SCHED
-> >  
-> > -static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-> > -{
-> > -	if (cfs_rq->load.weight)
-> > -		return false;
-> > -
-> > -	if (cfs_rq->avg.load_sum)
-> > -		return false;
-> > -
-> > -	if (cfs_rq->avg.util_sum)
-> > -		return false;
-> > -
-> > -	if (cfs_rq->avg.runnable_load_sum)
-> > -		return false;
-> > -
-> > -	return true;
-> > -}
-> > -
-> >  static void update_blocked_averages(int cpu)
-> >  {
-> >  	struct rq *rq = cpu_rq(cpu);
-> > -	struct cfs_rq *cfs_rq, *pos;
-> > +	struct cfs_rq *cfs_rq;
-> >  	const struct sched_class *curr_class;
-> >  	struct rq_flags rf;
-> >  	bool done = true;
-> > @@ -7534,7 +7516,7 @@ static void update_blocked_averages(int cpu)
-> >  	 * Iterates the task_group tree in a bottom up fashion, see
-> >  	 * list_add_leaf_cfs_rq() for details.
-> >  	 */
-> > -	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
-> > +	for_each_leaf_cfs_rq(rq, cfs_rq) {
-> >  		struct sched_entity *se;
-> >  
-> >  		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq),
-> > cfs_rq))
-> > @@ -7545,13 +7527,6 @@ static void update_blocked_averages(int cpu)
-> >  		if (se && !skip_blocked_update(se))
-> >  			update_load_avg(cfs_rq_of(se), se, 0);
-> >  
-> > -		/*
-> > -		 * There can be a lot of idle CPU cgroups.  Don't let
-> > fully
-> > -		 * decayed cfs_rqs linger on the list.
-> > -		 */
-> > -		if (cfs_rq_is_decayed(cfs_rq))
-> > -			list_del_leaf_cfs_rq(cfs_rq);
-> > -
-> >  		/* Don't need periodic decay once load/util_avg are
-> > null */
-> >  		if (cfs_rq_has_blocked(cfs_rq))
-> >  			done = false;
-> > @@ -10444,10 +10419,10 @@ const struct sched_class fair_sched_class
-> > =
-> > {
-> >  #ifdef CONFIG_SCHED_DEBUG
-> >  void print_cfs_stats(struct seq_file *m, int cpu)
-> >  {
-> > -	struct cfs_rq *cfs_rq, *pos;
-> > +	struct cfs_rq *cfs_rq;
-> >  
-> >  	rcu_read_lock();
-> > -	for_each_leaf_cfs_rq_safe(cpu_rq(cpu), cfs_rq, pos)
-> > +	for_each_leaf_cfs_rq(cpu_rq(cpu), cfs_rq)
-> >  		print_cfs_rq(m, cpu, cfs_rq);
-> >  	rcu_read_unlock();
-> >  }
-> 
-> 
+v2 - No changes
+
+ include/linux/power_supply.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 28413f737e7d..bd0d3225f245 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -61,6 +61,9 @@ enum {
+ 	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_OVERCURRENT,
++	POWER_SUPPLY_HEALTH_WARM,
++	POWER_SUPPLY_HEALTH_COOL,
++	POWER_SUPPLY_HEALTH_HOT,
+ };
+ 
+ enum {
+-- 
+2.22.0.214.g8dca754b1e
 
