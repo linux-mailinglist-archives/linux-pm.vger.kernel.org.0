@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAA6E8E27
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 18:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050B9E8E3A
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 18:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbfJ2ReZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 13:34:25 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52387 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728121AbfJ2ReW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 13:34:22 -0400
-Received: by mail-wm1-f68.google.com with SMTP id p21so3536828wmg.2
-        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2019 10:34:20 -0700 (PDT)
+        id S1727827AbfJ2Rgd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 13:36:33 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43677 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727688AbfJ2Rgd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Oct 2019 13:36:33 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n1so7141258wra.10
+        for <linux-pm@vger.kernel.org>; Tue, 29 Oct 2019 10:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GX1gOKzKV+EnrAFpaJFs5ZBMdSDwazW4wnKz52ri1Hc=;
-        b=a2LUVbdYPHdwR9i68R2xV9KK+bE+EO6PaojUC7PDpapvANJuOWlBHDGx6czpiNh7fK
-         fx3sHksQhTVBKzhee0/XKldV4xJjvQmY+AoVC3K4vFaHk81m5YF1vrgvhgKcYCnoOWtI
-         oXDzX+EiWUKKUlwes4UTQQ34T21sqC7NaRtwsay7AtApqwYutlEiDBbmcFqHSUTeXir2
-         M0lfUg3oG5k1AmuLndyB4mOwAqIAPWhuSlmFNeq62A00J8e8qpVv3zGsc+6UCS6Pi8uO
-         zlHGt9NwVswB/kWBDMw8uCP25L+MSHCV2aWZA6QHtqY506fQsB8p4Zjah6y/69BXLRWu
-         x+OA==
+        bh=Nni/liqzdhkVu64Xrr57xeVzvsQgWp9LNCb4tgbLMKc=;
+        b=vuwYwZIn1L7kvgkpckncO5Fj5cKcM7xG9WcDDS97ux4CeoMOzxVQWQpJmVTyWzXCzG
+         DOGEKEDDfcn+EKIpp2kOdNAeFI3OunxkbeEjgN2VCbMk45GH9rO9vFqo5oijIVBQ6WIq
+         886pan8LKMC3WpAaXGMJ3jvlUOrxf6j21p9usPCV4UVwxNj8vsYokkfMwfwKwfjjFBQE
+         fr6RHeUB2l+qjoQWn2vDggtb1mrXTL1hBDCjtSso9aCgraArwopX2qd2lUqh+c3JpTEM
+         UG6J8U+nyB9vhOvRakqjoAxdhiR+fL9mvtNn9ekJ4ZiJtZQwvCN4xMPhiGpLKTQU1YfA
+         TswQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=GX1gOKzKV+EnrAFpaJFs5ZBMdSDwazW4wnKz52ri1Hc=;
-        b=G/Ik4PEjRjEbxmTFiG7MtjnSo4Pp8Dwrsbo2tle1MD0SWE1rrC7EoCcrVm01Fk+Ar8
-         baNQhHw5rdF6pMXBrzSd8FqMqs1NwaLL1kLBOZQqRIpBQaPwNf1B49buq+uNW1cWiI6k
-         Sday1XM+nZ8QiOUL3vVRs3kWo/85sLzO7gXniV8uhKk6hRXxUo9LEAmvwbD4ForbV8GG
-         vBP0jGCO1bO/XLIitQiQDM89zbf3B91VZrJxwt+MiLem6pjKM1WtZUyCqgWziLATpOxH
-         OO3gQCgzlCycKlpNqpgQMl0ikd+W3q8if0U40JRQhncwztl6kZekl8O3KiqhxKFCizje
-         GsWg==
-X-Gm-Message-State: APjAAAUABGToDaEVk/CDVOStny6sJw0v6mU4ZAZArUvSB6tRwCcnUrAt
-        cE/sVn2/O4zNQyq+aV4ewlEw2pmu/io=
-X-Google-Smtp-Source: APXvYqyau6el3ecqUtNnw+Ju+EM5hxWdbFWLBOzOnMu2T7sDKFazP1lzEtB2pcwonEVlxiWChMcUnA==
-X-Received: by 2002:a1c:38c3:: with SMTP id f186mr5338801wma.58.1572370459385;
-        Tue, 29 Oct 2019 10:34:19 -0700 (PDT)
+        bh=Nni/liqzdhkVu64Xrr57xeVzvsQgWp9LNCb4tgbLMKc=;
+        b=rWvtlIx6UAOEtQ1mgkSWQBan++kA8S1iWK6o0/ouGQOi2jLoaIUtclp1GBPItkikLw
+         FaqI5b931qkU9IxPL0yN7bYFFj2QXGlPSFhjmtQ6+Z5vdoAbV7jpSFIPRQpH1vd+FGrf
+         m8R7aMgiek+RPO82VNZ60c4BAyGCbshCMHoDGW8U3NqC8Po97oKyuuK1mZmhiNEp8sCv
+         6+Jdm4aNO5FcnNc25504aUWiSC0bukZNA282lthFjr75C9ht6oRK1Qkj5u934Zm4nsHT
+         /Nrsl/PZXTcv96Tyq1pBT3JOFD1i0Dh0IZJbUfxJ+WgKp3jL+M9sM9N4VX9dYydtL2P3
+         YfdQ==
+X-Gm-Message-State: APjAAAWTXxB4gOsQ4JzCTLuu5YT5Wpd8whT7Itrka1ACVUTNIWTfbMcG
+        lVdtmKxrA5J1o526hylcYDy3FB0Lj6g=
+X-Google-Smtp-Source: APXvYqzkHaMKmClLbsQXI1rFV5iv4EsMZvg9up3Y4GP7WbK7GcZ2h2CqwsGeY0jfD61MpkQHCENYHw==
+X-Received: by 2002:adf:f0cc:: with SMTP id x12mr10457126wro.326.1572370590048;
+        Tue, 29 Oct 2019 10:36:30 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:7037:cc11:eb05:9c6a? ([2a01:e34:ed2f:f020:7037:cc11:eb05:9c6a])
-        by smtp.googlemail.com with ESMTPSA id e24sm4270948wme.26.2019.10.29.10.34.17
+        by smtp.googlemail.com with ESMTPSA id b196sm4433204wmd.24.2019.10.29.10.36.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Oct 2019 10:34:18 -0700 (PDT)
-Subject: Re: [PATCH 1/4] thermal: stm32: implement set_trips callback
+        Tue, 29 Oct 2019 10:36:29 -0700 (PDT)
+Subject: Re: [PATCH 4/4] ARM: dts: stm32: remove thermal passive trip point on
+ stm32mp157c
 To:     Pascal Paillet <p.paillet@st.com>, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com, robh+dt@kernel.org, mark.rutland@arm.com,
         rui.zhang@intel.com, edubezval@gmail.com,
@@ -56,7 +57,7 @@ To:     Pascal Paillet <p.paillet@st.com>, mcoquelin.stm32@gmail.com,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20191029164537.1561-1-p.paillet@st.com>
- <20191029164537.1561-2-p.paillet@st.com>
+ <20191029164537.1561-5-p.paillet@st.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -147,12 +148,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  y0s5uI05ZSXhqFs9iLlh3zNU1i6J1cdzA8BReoa3cKz4UiGKEffT857iMvT/ZmgSdYY57EgV
  UWm57SN2ok2Ii8AXlanH5SJPkbwJZhiB7kO0cjebmoA/1SA+5yTc3zEKKFuxcpfiXxt0d/OJ
  om6jCJ5/uKB5Cz9bJj0WdlvS2Xb11Jrs90MoVa74H5me4jOw7m9Yyg3qExOFOXUPFL6N
-Message-ID: <36759c01-7f1b-ef50-621d-7e239f7554b0@linaro.org>
-Date:   Tue, 29 Oct 2019 18:34:17 +0100
+Message-ID: <a690f5a6-b9ba-a190-598e-0f05e54c8511@linaro.org>
+Date:   Tue, 29 Oct 2019 18:36:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20191029164537.1561-2-p.paillet@st.com>
+In-Reply-To: <20191029164537.1561-5-p.paillet@st.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -162,19 +163,37 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 29/10/2019 17:45, Pascal Paillet wrote:
-> Implement set_trips() so that the trip points are managed by the thermal
-> framework. The user is free to define any trip points he needs.
-> Simplify interrupt handling.
+> Remove thermal passive trip point.
 
-The patch is touching too many things at the same time and the change
-description does not help to understand the changes.
+Why?
 
 > Signed-off-by: Pascal Paillet <p.paillet@st.com>
-> Change-Id: I2929d4fa5b4c5dca45cec7cb3b93fffc277394d2
+> Change-Id: I494313cf467eea491236e73bd2fbe1803345586f
 
 Remove Change-Id
 
-[ ... ]
+> ---
+>  arch/arm/boot/dts/stm32mp157c.dtsi | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
+> index 9b11654a0a39..799b2aedd2c9 100644
+> --- a/arch/arm/boot/dts/stm32mp157c.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp157c.dtsi
+> @@ -91,12 +91,6 @@
+>  			thermal-sensors = <&dts>;
+>  
+>  			trips {
+> -				cpu_alert1: cpu-alert1 {
+> -					temperature = <85000>;
+> -					hysteresis = <0>;
+> -					type = "passive";
+> -				};
+> -
+>  				cpu-crit {
+>  					temperature = <120000>;
+>  					hysteresis = <0>;
+> 
 
 
 -- 
