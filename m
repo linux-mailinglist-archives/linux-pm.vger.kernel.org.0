@@ -2,101 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA26E92F0
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 23:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABF3E92FC
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Oct 2019 23:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbfJ2WPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Oct 2019 18:15:18 -0400
-Received: from mga12.intel.com ([192.55.52.136]:20625 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbfJ2WPS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Oct 2019 18:15:18 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 15:15:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,245,1569308400"; 
-   d="diff'?scan'208";a="225127666"
-Received: from spandruv-mobl3.jf.intel.com ([10.255.229.217])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Oct 2019 15:15:16 -0700
-Message-ID: <aaff9d379a325e5500651ca2f2e2ec7e21c245e3.camel@linux.intel.com>
-Subject: Re: "Force HWP min perf before offline" triggers unchecked MSR
- access errors
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Qian Cai <cai@lca.pw>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Chen Yu <yu.c.chen@intel.com>, Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Tue, 29 Oct 2019 15:15:16 -0700
-In-Reply-To: <53fc01bf9ef25012a1a43b87954b62a02101d85c.camel@linux.intel.com>
-References: <CAJZ5v0g6_-HBEKfHtfe8LFG9PKosGeUW3-gwTBW6F32OwFwO3g@mail.gmail.com>
-         <A94C23C3-E6B9-4390-B380-C49D87731D81@lca.pw>
-         <53fc01bf9ef25012a1a43b87954b62a02101d85c.camel@linux.intel.com>
-Content-Type: multipart/mixed; boundary="=-EbG5otTQwJdOLYnc5Foy"
-X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
-Mime-Version: 1.0
+        id S1726102AbfJ2WVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Oct 2019 18:21:30 -0400
+Received: from mail-eopbgr730079.outbound.protection.outlook.com ([40.107.73.79]:6655
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725870AbfJ2WVa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Oct 2019 18:21:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ogeX8tNkoxqdFLrLDONgUCszspluyqhW40Qdq7kdO1XeLbcJ0x53Zvcprcu5wCBM4k+brzHFQNAFPYca3FvHdpR+uOaAT0n4aTCwgK1wKSwcPK5N6J292+w1qlqyppXrtzRcPsQBpt9B9B+NmQI4a8lsLwslzzAqM1mBXMb6hzIeLHLSFf1Le9h7pUWaGh4q71oeU2gQGRf+C2pw/RqnsUEjjEKzLoVd5kubuMhOj6OgVLgoWoDRvrTb1UT1byG/JJM7tpQao2UpQbGLaHDvm/im55rz6lH2pWdHzVIHSIZoOgjv6GLJ7glB/NBb/A8Qh2oiE+0ckldoj68deo4+Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OQg2+ClM/8ea/P8kFQrRTnCZltiWEtatT7zySZCXYTQ=;
+ b=DEHqsMACt6Il24JClGe25keUCSHW8ktcd7xGKLy9g0LvfChmwGidN+PfB01KeSd2Y7OLEzuV/Gk2tak0C0uehFg3TadqoM0Pu3cNpGpKk34EcQCVB/jPklzidhG449M/tMKcm/1W/ZHp5tvMycnHNcMrR9wVPmyFvuQdPa9uYVBD4qyU7DTOGcgM+S/9gFm0/tzwg2mfZmCB7H+8CQrch+3JX5214A1Do5/5AFWG+aAICNhvjpyctgDG6zz68s0G7dcjUky2PwCfLBd2N/plzwgtuoHCcZ2Ycjjg9xuJcW+1zlvXCvmGJAlLGqCJkuzjViWoOOfhf6YtkhHJLTeSBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OQg2+ClM/8ea/P8kFQrRTnCZltiWEtatT7zySZCXYTQ=;
+ b=CF7rgPq6Y4FW0z07G4IEDxH8070CACt9m5618zYTlqTiLKo3KrBwKKJKY2BsI63wNkcX1NXM5P26yxWaDu9x5Xcj4+mqWJkIB0rmwL1Mr0UmDjfp3n77vtPhQdJK1mBzdNCF+O7112xWGKM3pLwlYETCZpvSRvtMi1ceHNuBUg4=
+Received: from SN6PR12MB2736.namprd12.prod.outlook.com (52.135.107.27) by
+ SN6PR12MB2847.namprd12.prod.outlook.com (52.135.104.33) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.24; Tue, 29 Oct 2019 22:21:24 +0000
+Received: from SN6PR12MB2736.namprd12.prod.outlook.com
+ ([fe80::b1e3:1867:e650:796c]) by SN6PR12MB2736.namprd12.prod.outlook.com
+ ([fe80::b1e3:1867:e650:796c%6]) with mapi id 15.20.2387.027; Tue, 29 Oct 2019
+ 22:21:24 +0000
+From:   "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
+To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+        "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
+Subject: [PATCH] Update ToDo with ideas for per_cpu_schedule handling
+Thread-Topic: [PATCH] Update ToDo with ideas for per_cpu_schedule handling
+Thread-Index: AQHVjqcyPJ6FVY/x+0GlDNczus3zcg==
+Date:   Tue, 29 Oct 2019 22:21:24 +0000
+Message-ID: <20191029222112.43040-1-Janakarajan.Natarajan@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: SN6PR04CA0059.namprd04.prod.outlook.com
+ (2603:10b6:805:2a::36) To SN6PR12MB2736.namprd12.prod.outlook.com
+ (2603:10b6:805:77::27)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Janakarajan.Natarajan@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [165.204.78.2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: aacf3d0f-b9eb-4a1c-2d19-08d75cbe5528
+x-ms-traffictypediagnostic: SN6PR12MB2847:
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SN6PR12MB284779B2C03962A38D16237CE7610@SN6PR12MB2847.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0205EDCD76
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(6029001)(4636009)(136003)(346002)(376002)(39860400002)(366004)(396003)(199004)(189003)(3846002)(1076003)(52116002)(6512007)(71190400001)(66066001)(71200400001)(486006)(305945005)(316002)(7736002)(15650500001)(8936002)(25786009)(6486002)(2906002)(6436002)(50226002)(36756003)(476003)(110136005)(54906003)(4326008)(2616005)(6506007)(66946007)(66476007)(386003)(64756008)(26005)(66556008)(14454004)(8676002)(66446008)(99286004)(81166006)(186003)(81156014)(5660300002)(86362001)(478600001)(6116002)(2501003)(256004)(102836004);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2847;H:SN6PR12MB2736.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Uly/PAy41Wv006HScuBaGYALPTmAuSiaKhPtOV2SFDcKzQsdIy8WV4zJ88Jx6YRhjnG+qnqnwsDUK8wJVqMQHqHsQ7djPrKHs6Qdvi0QKACBNX+M2S3u5RuHVOzM0qEq857+FTLBfmEouT4wi/IerVExIOMZ3w8zWxdC9ruPe01KpIC3qxE8pJ8qB4sXXwFksXLWisA8Dvh/wqhnjwhICE9imzyPpWv/ajZIidYQ+GF2GL0ydaDfdFgJx8r9fngMNQVpRRdhXNShrfXQqF5g6dQMW8KqF1ZzPE0hTyLPZuuXoNZwGb3PWnOT8KxW4XNW1dmTFxj1Hpdwr79OO8dD+LEbY29IINBK7yoPkIgJxQAGSnD/feEB32xcvUe9msSbYEl0kbTCK+dZxVnYIlkRLWhRSLWdaEagLgTpJXGhiyqYQNJNFzPRHOJY3YOVUKtt
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aacf3d0f-b9eb-4a1c-2d19-08d75cbe5528
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2019 22:21:24.1031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cbnUz0tOHOL8/qq9g2QElC4gPMeqGUV0mTo377/b0Hit+iRsyXFr8n3EC9vfFOPkKPeo2mPWBFFtoAi5/Fi0nQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2847
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Re-structure the code to better handle the per_cpu_schedule mechanism,
+which was introduced when updating cpupower for AMD Zen based processors.
 
---=-EbG5otTQwJdOLYnc5Foy
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Based on Thomas Renninger's feedback/ideas.
 
-On Tue, 2019-10-29 at 15:13 -0700, Srinivas Pandruvada wrote:
-> On Tue, 2019-10-29 at 18:01 -0400, Qian Cai wrote:
-> > > On Oct 29, 2019, at 5:47 PM, Rafael J. Wysocki <rafael@kernel.org
-> > > >
-> > > wrote:
-> > > 
-> > > The MSR_IA32_ENERGY_PERF_BIAS MSR appears to be not present,
-> > > which
-> > > should be caught by the X86_FEATURE_EPB check in
-> > > intel_pstate_set_epb().
-> > > 
-> > > Do you run this in a guest perchance?
-> > 
-> > No, it is a baremetal HPE server. The dmesg does say something like
-> > energy perf bias changed from performance to normal, and the
-> > cpuflag
-> > contains epb which I thought that would pass the feature check? I
-> > could upload the whole dmesg a bit later if that helps.
-> 
-> Try the attached change. You have a Skylake server with no EPP
-> support.
-> This is odd.
-> 
-Sorry.
-Ignore the previous one. It had some unrelated change.
+Signed-off-by: Janakarajan Natarajan <Janakarajan.Natarajan@amd.com>
+---
+ tools/power/cpupower/ToDo | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-> Thanks,
-> Srinivas
-> 
-
---=-EbG5otTQwJdOLYnc5Foy
-Content-Disposition: attachment; filename="epb_power.diff"
-Content-Type: text/x-patch; name="epb_power.diff"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyBiL2RyaXZlcnMvY3B1
-ZnJlcS9pbnRlbF9wc3RhdGUuYwppbmRleCA5ZjAyZGU5YTFiNDcuLmVhYjhiMDQ4ZGM5ZiAxMDA2
-NDQKLS0tIGEvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCisrKyBiL2RyaXZlcnMvY3B1
-ZnJlcS9pbnRlbF9wc3RhdGUuYwpAQCAtODUxLDcgKzg1MSw3IEBAIHN0YXRpYyB2b2lkIGludGVs
-X3BzdGF0ZV9od3BfZm9yY2VfbWluX3BlcmYoaW50IGNwdSkKIAlpZiAoYm9vdF9jcHVfaGFzKFg4
-Nl9GRUFUVVJFX0hXUF9FUFApKQogCQl2YWx1ZSB8PSBIV1BfRU5FUkdZX1BFUkZfUFJFRkVSRU5D
-RShIV1BfRVBQX1BPV0VSU0FWRSk7CiAJZWxzZQotCQlpbnRlbF9wc3RhdGVfc2V0X2VwYihjcHUs
-IEhXUF9FUFBfQkFMQU5DRV9QT1dFUlNBVkUpOworCQlpbnRlbF9wc3RhdGVfc2V0X2VwYihjcHUs
-IDB4MEYpOwogCiAJd3Jtc3JsX29uX2NwdShjcHUsIE1TUl9IV1BfUkVRVUVTVCwgdmFsdWUpOwog
-fQo=
-
-
---=-EbG5otTQwJdOLYnc5Foy--
+diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/ToDo
+index 6e8b89f282e6..3f12ee451403 100644
+--- a/tools/power/cpupower/ToDo
++++ b/tools/power/cpupower/ToDo
+@@ -8,3 +8,17 @@ ToDos sorted by priority:
+ - Add another c1e debug idle monitor
+   -> Is by design racy with BIOS, but could be added
+      with a --force option and some "be careful" messages
++- Add cpu_start()/cpu_stop() callbacks for monitor
++  -> This is to move the per_cpu_schedule logic from inside
++     the monitor to outside it. This can be given higher
++     priority in fork_it. The per_cpu logic allows the
++     cpupower process to move to each cpu before taking
++     measurements.
++- Fork as many processes as there are CPUs in case the
++  per_cpu_schedule flag is set.
++  -> Bind forked processes to each cpu.
++  -> Execute start measures via the forked processes on
++     each cpu.
++  -> Run test executable in a forked process.
++  -> Execute stop measures via the forked processes on
++     each cpu.
+--=20
+2.17.1
 
