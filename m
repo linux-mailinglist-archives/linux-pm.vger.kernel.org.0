@@ -2,90 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1E3E9B08
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 12:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D5EE9BDA
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 13:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbfJ3LpE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 07:45:04 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:53624 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbfJ3LpE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 07:45:04 -0400
-Received: by mail-wm1-f66.google.com with SMTP id n7so1756608wmc.3
-        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 04:45:02 -0700 (PDT)
+        id S1726555AbfJ3Mw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 08:52:56 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:44989 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726088AbfJ3Mwz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 08:52:55 -0400
+Received: by mail-vs1-f65.google.com with SMTP id j85so1527576vsd.11
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 05:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ONBAlPsK9csKDOSK3QHrotYDGYKCfVT4Ykd7rd79HM8=;
-        b=gmU44ve39exVNhQpXl7TfaUIJe/F+7uLpvMD+Qq1VCL9morsfXsd6hTisukoNCpR2f
-         CbDatasQp6znjKaW5Kb59JvO/+om2qX/axgU4OwtaTGhQH5SS5wMC14t9DQQojI3+vsZ
-         WQcv3Rzql54PRX7i/s2ti23taKMyr+FghOml9b2jWEMYpsUUP8TnKVFWJyv09y+crFaM
-         MuxKEfAlru5dg9AU5tsggf+09+OO7nzO8vPyZUZvvYWXcMzZUiPGaYz3O2c3wm91ODYF
-         QH5YS5fxdyWLFXbxF6DDgS9Lgu3e2HU/Y+filyu/OBvgrfi83PuMZEUr2Ura3+NMKBkh
-         yQsw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BchOSg6wnAs4oKRFihXNzsMJLvwqYQWlHqnAgNcHqY8=;
+        b=TY3HOcZXz3quEBuy7fHsMjhrFE0WkkI7EiCmK49VpTfpnIsZOpSHpopNmfwVkz8Loh
+         j7WR7bpjzfPHFNOhi4AvUlT5fkpWGB5a2+blG9sqLaQ0qLlAmRE/YKYUe80eFDTMfmdS
+         eQ1kQYm3whnddeyBwN1hufnAu6Ylyygm8FNZ9mvx5DKuZ1NRJwaWg4ODXSSb6WSfrFTT
+         tg3X8+ZU6lo7iuYKitQ6sS68cPTcOCCoCEVcrBARr8RcYMJhBJ5VZgPWinNSZizGujWE
+         i0cNwm0CPsjCf6cWj8NulOk/tWGveONmIaK6fo91j/mFiKcbIa4noDvXNifRGP/EPDfz
+         O83w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ONBAlPsK9csKDOSK3QHrotYDGYKCfVT4Ykd7rd79HM8=;
-        b=Wh63yjZfniucSGyeAEUuZbNEVzN9uaL0snhR4afTjz4qkVG01wjfemmAq5JI5ctKlG
-         v679MjleLSkzZ4b9H3HwXwW0x7bA0lA++cjQjRcqh9TEidYGIOdFKM7aTs38myaQYALj
-         NNG8dnUqCRZYQsV9yetLHQy75xkOcRQUPPD+MyVbIYFe3xkZ1q7b7NlGiyFHpq9V8VVP
-         frdK388Iuu0+RWdbyfaa8Wz8BMWaw+cu1B5AEhtaU+JAi5PbJ086xyT/59ycy25Hj+ia
-         kMUk3+kWXREwoeb+y9lsLNpY+AGFcxVNHMRS1YWTxW0tH9A5kY1czm9fzmHeDjXnQEIb
-         Pd2A==
-X-Gm-Message-State: APjAAAV4eu4UY3bbVZoW4ewvc07Y8szt894yIoBzwiz6FI9zEsLWmPyN
-        tF0Qid4bSkC7igAQ3jRRT9LWxw==
-X-Google-Smtp-Source: APXvYqzddIaarF/u2d62io5E/bzukrep248eN6mp0JlB9gjWWg7XGxuTQrXTJ38TCdccclBs+Ezfpw==
-X-Received: by 2002:a05:600c:2204:: with SMTP id z4mr8411889wml.67.1572435901834;
-        Wed, 30 Oct 2019 04:45:01 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id n22sm1752077wmk.19.2019.10.30.04.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 04:45:00 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 11:44:57 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Quentin Perret <qperret@qperret.net>, edubezval@gmail.com,
-        rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        catalin.marinas@arm.com, will@kernel.org, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v8 0/4] Make IPA use PM_EM
-Message-ID: <20191030114457.GA22605@google.com>
-References: <20190911130314.29973-1-qperret@qperret.net>
- <1fab36a5-25cf-abd2-ee25-23d8c8d673ac@linaro.org>
- <CAPwzONkaUmZuw7W1w=D11G55DVmj8fxmLwZ4hEYGdGEJbpsqHg@mail.gmail.com>
- <f4ac89b8-32dc-e929-696d-7dfebfbfb3a0@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BchOSg6wnAs4oKRFihXNzsMJLvwqYQWlHqnAgNcHqY8=;
+        b=XK2EbMS//nBF+29F/T/3Ti5a1iDBElriysMSeboiCsurc1QLgqV7dXsa8RFCtL38AT
+         e/1q2ecZH40Sxx/3OqA9kA1ZA5Ks5QG6NJt0Qn7bP6PgDPRb0oTwQMmWLJjKXeuv9wB7
+         TgcSkd/+TuZ+qOKcvCRP3mK57pOOyR06xOaEMKKcbQjx8fDWJ51caj5AxVtGiCJJ7/QD
+         KKZGA/6IbAwzVi4hWmCH+heBCRo3IT3sFj528tULsHpR+yFLt6sGNPTt67rj3ZGQ+Rzr
+         dj3Cu9hXTgAgIJjdZA0QD6PZe0uRb4cZUN2ydMp5COXqfLfvJD/sqP8rNzo7/nJUDTp/
+         X5gQ==
+X-Gm-Message-State: APjAAAXF6MvZWL+eYTv/AoXB5nSs1VYVe6tScWaUuDcPIeeK537ojjAm
+        7YNOvVtf6sXgBW35flyVB521WeGf0rvojKNNez3Qmg==
+X-Google-Smtp-Source: APXvYqxVw//+Wgw8nFkhN3PD2FIEz9ZpIotZHS4tQoRA6wZN9M1ZQ5BvDlHzy+Peb34DIK5RTHEG3BZHeIhnPS3zorU=
+X-Received: by 2002:a67:f5c1:: with SMTP id t1mr4971361vso.9.1572439974693;
+ Wed, 30 Oct 2019 05:52:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4ac89b8-32dc-e929-696d-7dfebfbfb3a0@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191022114910.652-1-colin.king@canonical.com> <cc9ea171-dfdc-f28e-59a4-26ab55155b8b@linaro.org>
+In-Reply-To: <cc9ea171-dfdc-f28e-59a4-26ab55155b8b@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Wed, 30 Oct 2019 18:22:43 +0530
+Message-ID: <CAHLCerNvsZDT-FF4a+wsCqi4Fwf04e-rzaVq0qwsUtEWQL6kSQ@mail.gmail.com>
+Subject: Re: [PATCH][next] drivers: thermal: tsens: fix potential integer
+ overflow on multiply
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Colin King <colin.king@canonical.com>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 30 Oct 2019 at 11:54:30 (+0100), Daniel Lezcano wrote:
-> Hi Quentin,
-> 
-> On 07/10/2019 15:37, Quentin Perret wrote:
-> > Hi Daniel,
-> > 
-> > On Mon, Oct 7, 2019 at 6:35 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >> the series does no longer apply, do you think it is possible to give it
-> >> a respin?
-> > 
-> > Right, I'll try to fix the conflicts and post a v9 shortly.
-> 
-> we are getting close to the merge window, did you have time to respin
-> the series?
+On Wed, Oct 30, 2019 at 1:10 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 22/10/2019 13:49, Colin King wrote:
+> > From: Colin Ian King <colin.king@canonical.com>
+> >
+> > Currently a multiply operation is being performed on two int values
+> > and the result is being assigned to a u64, presumably because the
+> > end result is expected to be probably larger than an int. However,
+> > because the multiply is an int multiply one can get overflow. Avoid
+> > the overflow by casting degc to a u64 to force a u64 multiply.
+> >
+> > Addresses-Coverity: ("Unintentional integer overflow")
+> > Fixes: fbfe1a042cfd ("drivers: thermal: tsens: Add interrupt support")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> > ---
+> >  drivers/thermal/qcom/tsens-common.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> > index 03bf1b8133ea..3d7855106ecd 100644
+> > --- a/drivers/thermal/qcom/tsens-common.c
+> > +++ b/drivers/thermal/qcom/tsens-common.c
+> > @@ -92,7 +92,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+> >
+> >  static inline u32 degc_to_code(int degc, const struct tsens_sensor *s)
+> >  {
+> > -     u64 code = (degc * s->slope + s->offset) / SLOPE_FACTOR;
+> > +     u64 code = ((u64)degc * s->slope + s->offset) / SLOPE_FACTOR;
+>
+>
+> -       u64 code = ((u64)degc * s->slope + s->offset) / SLOPE_FACTOR;
+> +       u64 code = div_u64(((u64)degc * s->slope + s->offset),
+> SLOPE_FACTOR);
 
-Yes, sorry for the delay, but I have a 5.4-rc4-based branch that seems
-to work. I'll push that ASAP.
+This implementation should handle 32-bit architectures too. Colin,
+could you respin?
 
-Thanks,
-Quentin
+Regards,
+Amit
