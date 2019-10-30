@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7EDEA333
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 19:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B43EA335
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 19:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbfJ3SWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 14:22:11 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45806 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbfJ3SWL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 14:22:11 -0400
-Received: by mail-pg1-f193.google.com with SMTP id r1so1990118pgj.12;
-        Wed, 30 Oct 2019 11:22:10 -0700 (PDT)
+        id S1727983AbfJ3SWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 14:22:17 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45819 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbfJ3SWR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 14:22:17 -0400
+Received: by mail-pg1-f196.google.com with SMTP id r1so1990304pgj.12;
+        Wed, 30 Oct 2019 11:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3+WJZITHEScydX2UgU8wnfwVYy4vjzlr7uIujJK9hic=;
-        b=NsVh2jqs6cpcVXqN9XUwDu1LIbUb3xENxLQxoDG8mViO2A+agXwhe3aS8BkRHjsJXB
-         4KBEsZpbOHk1zIGNcYVbmNNGZr8XnI40pHE1AXOSFZ/OO/cILBs3zRmRjrdj1JBaRgqs
-         E0jA2lh0I+mjtxSUWzDmaEh650tqvNt2nx1bmPhuZ0zGXYNNzLLFi7P8tEqFbzKjdFPd
-         BUenvIwxxSjReMry8lJXaZVnQ7SxX8m0ZMXgYxA/NuKokUCbG+Jx9ajKgtRvtqkRBWOZ
-         //Vp4Bk0EmsPOum7+O3P61sILtb/8fvCqYP1tkAnDGqqKIItX8Sobqbdld7o4Wc+s9Z7
-         fhkg==
+        bh=otlqAInALZr2P9dty8XUUL6zB6HI1wPTVfKnXgrgDz0=;
+        b=pEEW2f30nRHch1s2EgqqRpTUyvDRjLA9w9GBytO7Iw7WGg74ykAWtVnXm+1cP6BNtm
+         1mZF181hfY9IbKuci1v4a3VeACfmv4FpXcXMcwSypF1tBsNJWotuP7sN+4Wdojq3NzFM
+         lkGzXXf5YVCclaf7qH/X2d2FAFMTbvvJD7hCPoZnx6o8FzriL3hBjpsiEO1a/bXJKcG+
+         s5kFzBta7vgBbyXUtBcw2om6ScDUWrSGvn2l+eKVoMlBYEg+OVu9h30wNIM2EdTZq1Vw
+         ISn/w/OD8N0iGySp/i2MduBFT/UipcSQXv80fKEpxchF7keX0MXQ7ricV0tlvH5gyYmd
+         mdpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3+WJZITHEScydX2UgU8wnfwVYy4vjzlr7uIujJK9hic=;
-        b=HbUi9J9m/or94Z8pH1Xwklo5UYkc7suhmnanlK2Rr+G51ZHNjS53l/d9RBdDP13yph
-         3GnOVsdblnNL+f7p3eX+SsnbDW/CeaG9rkJDiCtSt2uwlFyzdPcGJq1w3Bgyo3uYSs1U
-         SiWjLNMEY8TL3YagVdqfK/0gtkJtbBp7/eexjHDS6nKZyYFcG22frsenFkYWGgOGXc+U
-         dI9DvylqmUQ5V6THN5KdfYwHwYUHCQBh0ne00YcJySX4tme5alHDcLpvikNhEuAFhAij
-         zrZnTntCU1sUE4UfhNBSd0wf/louN378BAVNs3x1Et0C9OBvkCjAtHYuPRvjQEay1wkp
-         YOWQ==
-X-Gm-Message-State: APjAAAV/S9fadddL6f4KRhOw5lvt7KIUa1dEFb4Jr7Rp69Z0YeMRM9QT
-        1wYsNRI1JwyNYRg7e/zTl5K9yZj5
-X-Google-Smtp-Source: APXvYqzEOJDvlRsEdpaIpz0TiH5s2gJTnqNYLuN/D1JJ4h+Rh3lygNNSMKzWVm0azoAsKFm3sj/ubg==
-X-Received: by 2002:a65:628e:: with SMTP id f14mr943359pgv.114.1572459729662;
-        Wed, 30 Oct 2019 11:22:09 -0700 (PDT)
+        bh=otlqAInALZr2P9dty8XUUL6zB6HI1wPTVfKnXgrgDz0=;
+        b=ZqGbI16HhNlUBdISNq+BfewS/TcYIDMyy1S4UfqTcDyDBbXp/Ts6hP904SffOtm8aC
+         XmNkZGyHpNAnbAUP7TAeJ+6j7y1TZLytodRmmEcgx+EBrSs6BspReLT6a5U5CE58k0Sj
+         raTg0y5nKfmvR9PtxKL36bjXV+KiwpFI6LW0D0xSCsVKekFs0ikpIOm13Pfh5zypqGY7
+         M25MjCtaRlMucjXT3IQaxtCmHISfbdD5fNWU49Z+uD367w5tPzjGn2GR1EplU89Gq002
+         EOCJ4AtNlMc6wBR5fRknOaWTz85Z6snVw5yq80/5WEG1Jix3QZ/4jguaGSWlryjYxKO6
+         m2uw==
+X-Gm-Message-State: APjAAAUmfL97ZUXKILi5PxfZKSRBSykvBuH4Oedg+B6hmr2Bd7eQHz07
+        90geYE4aBwXk69MMqywtktbBWIis
+X-Google-Smtp-Source: APXvYqxk/HB2PwWsDYa2sz7k6NPxepTRZ9yjvxvqoyqYJW22soLktVzEJMlRx6lO+FPLQKHqV+cFoQ==
+X-Received: by 2002:a63:4081:: with SMTP id n123mr888165pga.444.1572459735810;
+        Wed, 30 Oct 2019 11:22:15 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z5sm521637pgi.19.2019.10.30.11.22.03
+        by smtp.gmail.com with ESMTPSA id z5sm521637pgi.19.2019.10.30.11.22.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 11:22:09 -0700 (PDT)
+        Wed, 30 Oct 2019 11:22:15 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -59,9 +59,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         DEVICE TREE BINDINGS),
         linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
         ARM ARCHITECTURE)
-Subject: [PATCH 4/6] thermal: brcmstb_thermal: Add 16nm process thermal parameters
-Date:   Wed, 30 Oct 2019 11:21:30 -0700
-Message-Id: <20191030182132.25763-5-f.fainelli@gmail.com>
+Subject: [PATCH 5/6] thermal: brcmstb_thermal: Restructure interrupt registration
+Date:   Wed, 30 Oct 2019 11:21:31 -0700
+Message-Id: <20191030182132.25763-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191030182132.25763-1-f.fainelli@gmail.com>
 References: <20191030182132.25763-1-f.fainelli@gmail.com>
@@ -70,37 +70,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Match the 7216 compatible string in order to derive the correct 16nm
-process thermal parameters to obtain correct readings.
+If we are successful grabbing the interrupt resource, then register an
+interrupt handler, this makes it easier to support the interrupt as
+being optional, which is it for 7216.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/thermal/broadcom/brcmstb_thermal.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/thermal/broadcom/brcmstb_thermal.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
-index 2ad4eeb79f9c..41d4a142707c 100644
+index 41d4a142707c..64f715053ce9 100644
 --- a/drivers/thermal/broadcom/brcmstb_thermal.c
 +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
-@@ -283,12 +283,18 @@ static const struct thermal_zone_of_device_ops of_ops = {
- 	.set_trips	= brcmstb_set_trips,
- };
+@@ -339,16 +339,15 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ 	priv->thermal = thermal;
  
-+static const struct brcmstb_thermal_params brcmstb_16nm_params = {
-+	.offset	= 457829,
-+	.mult	= 557,
-+};
-+
- static const struct brcmstb_thermal_params brcmstb_28nm_params = {
- 	.offset	= 410040,
- 	.mult	= 487,
- };
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(&pdev->dev, "could not get IRQ\n");
+-		return irq;
+-	}
+-	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+-					brcmstb_tmon_irq_thread, IRQF_ONESHOT,
+-					DRV_NAME, priv);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "could not request IRQ: %d\n", ret);
+-		return ret;
++	if (irq >= 0) {
++		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++						brcmstb_tmon_irq_thread,
++						IRQF_ONESHOT,
++						DRV_NAME, priv);
++		if (ret < 0) {
++			dev_err(&pdev->dev, "could not request IRQ: %d\n", ret);
++			return ret;
++		}
+ 	}
  
- static const struct of_device_id brcmstb_thermal_id_table[] = {
-+	{ .compatible = "brcm,avs-tmon-bcm7216", .data = &brcmstb_16nm_params },
- 	{ .compatible = "brcm,avs-tmon", .data = &brcmstb_28nm_params },
- 	{},
- };
+ 	dev_info(&pdev->dev, "registered AVS TMON of-sensor driver\n");
 -- 
 2.17.1
 
