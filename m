@@ -2,140 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 936E1E9768
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 08:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A097CE98EB
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 10:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725953AbfJ3Hvx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 03:51:53 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36808 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbfJ3Hvx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 03:51:53 -0400
-Received: by mail-wr1-f67.google.com with SMTP id w18so1126502wrt.3
-        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 00:51:51 -0700 (PDT)
+        id S1726109AbfJ3JL2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 05:11:28 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40066 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfJ3JL2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 05:11:28 -0400
+Received: by mail-wm1-f65.google.com with SMTP id w9so1236374wmm.5
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 02:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SOlAXQwY6HSBzz+49x3YKRvdsvjSPYyd9t/VUL7Sm7I=;
-        b=Mwjrt6aT79QE65NzwTdFB425qwP+EQeE3I3yelYdNaqhngfedaIz18+aJHlqYXj8dn
-         vz9zZjona3aDwbRk5A6RrcZTAmcJ9qrBhuliqmc8Th2wmdC4tTEltpAi2r1CJgywWmgR
-         SGqcHpfqHxmRokw2lM6I7hzqddEoB4xN91Rn7JvaIOGR4tF0DixCKQbhgCjsOC2FpV9x
-         JKTM18/W0DSz7qx/yAczRQgyatHNrkv2l+lRElje2ZyUkUl7fKGx/6mdr15WLstIwln2
-         dr7VF0gjL/q2vhMJidvQMp5V/yNxeAMCLRgX5U1NGGWc5uLX5HGbYX7PtA/cueLpnPO4
-         +YoQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=bOJ34PW9YadKMWVy7Lq7RFshOmanpmOaFJ0/LQDvOqk=;
+        b=cPwCZVCovU/2CggOdtlONW+HZ6vJ7trmhL6nPvJqYuw/oD1PyHK17o3Tz6pwRytnQ8
+         CrPypUXTHXlG8BoCEPtuwAzA9U1uWgHRJQwmCInvns67XnF+kWFy0hMm3NOG5UyoT/cq
+         0ycPALIj/Vgu//Ye9inmkdYDNjuKDw+Hrd34RhvLlFEbc/kSbr/R3mRY1RMC4gZiT9rN
+         EhnO++bBeYFzwPbTyiwXLJy9yvyiFFpxsBU07mk+fw/ft6vj7n0T73TZxecfbyBi6YRG
+         vHcwmIrVz1R9pDf4v4cEcKi7LrjFnFzQ2c9pm5tvv48nHEtON21c7C45Avw6axIGDOI3
+         6ZSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=SOlAXQwY6HSBzz+49x3YKRvdsvjSPYyd9t/VUL7Sm7I=;
-        b=DlAcg31lgZHZg9BJ9PbiX84JXIiHDb875sNFiMiGVxuPXqnGkWZiKISx/Xr7z7RFqg
-         pz7Y0roGbU+xjmEnAuWDXOttUlUMKlggrL6+taZLjOpvO/UTDeD9fIH+cb1cmnpp+oun
-         H8WG5mIlfUDwlCJwDYrgYSTZdsFVO1Lgl/J4/x+muz8MuZV6k8YCM5SHtx+ANuzDkbcQ
-         odjZvEyFDOmCm8PSVwn//nIul9Cw857nKR6sHE028LbJvdlIm01VXtXEtOn3gDGDv//S
-         ZJRsEVvLGxFdp8sMBg/mD1sc51g2ahQDnwCV7LqpGg+KVvJob4xv+6MxoG9B2Szq05jc
-         OoKw==
-X-Gm-Message-State: APjAAAW8kWjDkoXrftTYmLKZRDermTFUM0rl6ha6dJUHiee7L00rukuT
-        4xaogahPnqE4QzAkmjAqJifhQFcaAxs=
-X-Google-Smtp-Source: APXvYqw9AMwLfWTFG6RqKgk4L/ax+3b+3JHKQ59fZbAtV35gkAxrJCYY73B4LtShkKb5C+k6m+WWXg==
-X-Received: by 2002:adf:e9c7:: with SMTP id l7mr7084881wrn.57.1572421910196;
-        Wed, 30 Oct 2019 00:51:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bOJ34PW9YadKMWVy7Lq7RFshOmanpmOaFJ0/LQDvOqk=;
+        b=YcywIc4iaZgazfM7T5cJbEH4O4dgneUc7rBLw1SiI3D84CiPw4Ar9QMf51zVkxGj/l
+         q9hJV5Iy9m70SnUmk781iNMSOqV+LDgnmqo/VCT1YStAuWfbheaUh5n3XDtNnqQ86CSl
+         DU1owaUd4QynspLUrij1J+7N1LMBU31kAqPIOozFGE/OgvjMYae4AysYA6ixjhGuUelQ
+         /z8LcaWUs/Bn/q4cqJ3VJKFtyknAr+wgZbcUX0DUAlYwR2jIsiVgz0CYTTrS9NMpef/b
+         Ttfl55RYRYooIP5cSNHTfdPAPzqzsbzHz4p82l1wSA0wlZmT+8cTruT14k19tY17uGLM
+         SUvg==
+X-Gm-Message-State: APjAAAX/keDBrnXdbCRTsk964TypOQpEsK/JM4t+NqVE1+tIKbPsuuc6
+        76qii2JmjnwplnZA4JZzXSgE9Q==
+X-Google-Smtp-Source: APXvYqy0w7naVwNgnhQ/SgNL4RSoXuzbGVisLCeRIfRNlMZSRXD/MvlZHZRncQDBE1MAoEA51vnfOg==
+X-Received: by 2002:a7b:c94f:: with SMTP id i15mr8250697wml.8.1572426686603;
+        Wed, 30 Oct 2019 02:11:26 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:2c7f:2fc:5551:ee55])
-        by smtp.gmail.com with ESMTPSA id q11sm1114387wmq.21.2019.10.30.00.51.49
+        by smtp.gmail.com with ESMTPSA id t24sm2608394wra.55.2019.10.30.02.11.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 00:51:49 -0700 (PDT)
+        Wed, 30 Oct 2019 02:11:26 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     mathieu.poirier@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ulf.hansson@linaro.org
-Subject: [PATCH V6 3/3] powercap/drivers/idle_inject: Specify the idle state to inject
-Date:   Wed, 30 Oct 2019 08:51:41 +0100
-Message-Id: <20191030075141.1039-3-daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL/CPU_COOLING),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] thermal: cpu_cooling: Remove pointless dependency on CONFIG_OF
+Date:   Wed, 30 Oct 2019 10:10:36 +0100
+Message-Id: <20191030091038.678-1-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030075141.1039-1-daniel.lezcano@linaro.org>
-References: <20191030075141.1039-1-daniel.lezcano@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the idle injection framework only allows to inject the
-deepest idle state available on the system.
+The option CONFIG_CPU_THERMAL depends on CONFIG_OF in the Kconfig.
 
-Give the opportunity to specify which idle state we want to inject by
-adding a new function helper to set the state and use it when calling
-play_idle().
+It it pointless to check if CONFIG_OF is set in the header file as
+this is always true if CONFIG_CPU_THERMAL is true. Remove it.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
-  V6:
-   - Rename variable name 'state' -> 'state_idx':
-     https://lkml.org/lkml/2019/10/28/874
----
- drivers/powercap/idle_inject.c | 14 +++++++++++++-
- include/linux/idle_inject.h    |  3 +++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ include/linux/cpu_cooling.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 233c878cbf46..2607d3e9afc5 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -66,6 +66,7 @@ struct idle_inject_thread {
-  */
- struct idle_inject_device {
- 	struct hrtimer timer;
-+	int state_idx;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
- 	unsigned long int cpumask[0];
-@@ -140,7 +141,7 @@ static void idle_inject_fn(unsigned int cpu)
- 	iit->should_run = 0;
- 
- 	play_idle(READ_ONCE(ii_dev->idle_duration_us),
--		  cpuidle_find_deepest_state());
-+		  READ_ONCE(ii_dev->state_idx));
+diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
+index bae54bb7c048..72d1c9c5e538 100644
+--- a/include/linux/cpu_cooling.h
++++ b/include/linux/cpu_cooling.h
+@@ -47,7 +47,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
  }
+ #endif	/* CONFIG_CPU_THERMAL */
  
+-#if defined(CONFIG_THERMAL_OF) && defined(CONFIG_CPU_THERMAL)
++#ifdef CONFIG_CPU_THERMAL
  /**
-@@ -171,6 +172,16 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+  * of_cpufreq_cooling_register - create cpufreq cooling device based on DT.
+  * @policy: cpufreq policy.
+@@ -60,6 +60,6 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+ {
+ 	return NULL;
  }
+-#endif /* defined(CONFIG_THERMAL_OF) && defined(CONFIG_CPU_THERMAL) */
++#endif /* CONFIG_CPU_THERMAL */
  
-+/**
-+ * idle_inject_set_state - set the idle state to inject
-+ * @state: an integer for the idle state to inject
-+ */
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int index)
-+{
-+	if (index >= CPUIDLE_STATE_NOUSE && index < CPUIDLE_STATE_MAX)
-+		WRITE_ONCE(ii_dev->state_idx, index);
-+}
-+
- /**
-  * idle_inject_start - start idle injections
-  * @ii_dev: idle injection control device structure
-@@ -299,6 +310,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
- 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	ii_dev->timer.function = idle_inject_timer_fn;
-+	ii_dev->state_idx = 0;
- 
- 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
- 
-diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-index a445cd1a36c5..2efc60252d7b 100644
---- a/include/linux/idle_inject.h
-+++ b/include/linux/idle_inject.h
-@@ -26,4 +26,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 				 unsigned int *run_duration_us,
- 				 unsigned int *idle_duration_us);
-+
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int index);
-+
- #endif /* __IDLE_INJECT_H__ */
+ #endif /* __CPU_COOLING_H__ */
 -- 
 2.17.1
 
