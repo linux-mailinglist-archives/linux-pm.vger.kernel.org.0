@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1602EA52E
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 22:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C4DEA54F
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 22:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbfJ3VMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 17:12:02 -0400
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:54246 "EHLO
+        id S1727108AbfJ3VVT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 17:21:19 -0400
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:36499 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727027AbfJ3VMC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 17:12:02 -0400
+        with ESMTP id S1727036AbfJ3VVT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 17:21:19 -0400
 Received: from belgarion ([90.55.204.252])
         by mwinf5d15 with ME
-        id KxC02100A5TFNlm03xC0Rv; Wed, 30 Oct 2019 22:12:01 +0100
+        id KxMG210075TFNlm03xMGp5; Wed, 30 Oct 2019 22:21:17 +0100
 X-ME-Helo: belgarion
 X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Wed, 30 Oct 2019 22:12:01 +0100
+X-ME-Date: Wed, 30 Oct 2019 22:21:17 +0100
 X-ME-IP: 90.55.204.252
 From:   Robert Jarzmik <robert.jarzmik@free.fr>
 To:     Sebastian Reichel <sre@kernel.org>
@@ -30,10 +30,10 @@ References: <20191018154052.1276506-1-arnd@arndb.de>
         <20191018154201.1276638-39-arnd@arndb.de>
         <20191019090749.ps27yjfebzscw2pk@earth.universe>
 X-URL:  http://belgarath.falguerolles.org/
-Date:   Wed, 30 Oct 2019 22:12:00 +0100
+Date:   Wed, 30 Oct 2019 22:21:16 +0100
 In-Reply-To: <20191019090749.ps27yjfebzscw2pk@earth.universe> (Sebastian
         Reichel's message of "Sat, 19 Oct 2019 11:07:49 +0200")
-Message-ID: <87d0eelyzj.fsf@belgarion.home>
+Message-ID: <878sp2lyk3.fsf@belgarion.home>
 User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
