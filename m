@@ -2,114 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00759E98EE
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 10:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DF8E9924
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 10:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbfJ3JLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 05:11:34 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38228 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbfJ3JLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 05:11:30 -0400
-Received: by mail-wr1-f65.google.com with SMTP id v9so1377222wrq.5
-        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 02:11:29 -0700 (PDT)
+        id S1726284AbfJ3J2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 05:28:00 -0400
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:37379 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfJ3J2A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 05:28:00 -0400
+Received: by mail-vk1-f194.google.com with SMTP id u79so316944vke.4
+        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 02:27:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0cMzmwOQ45CvCpy5BV9I0axI+oTcT02C42maobILAtA=;
-        b=Jcy8FggjKwJb4bd9H4Q6f/qntfaIsKoRcwzdf8bVSIBZsq/wZACAWyQxjs8qrpoM48
-         0ojV8Qx7fKxGvn1Ln8S3TyUUB2yHjlEIbRFbrWIPy6gqUg+cq1BwbLCUPD3//EwoprbA
-         AgGv2ykIUrdJ0p3sJsRBFDWKLmEm2e1yZMwHwVPUUzdzXR2f/e46jXEky77tjWm7SmOm
-         +pCMyc8RIFnudmO8HCTTXlsoQpgvD5OSf6MlAZxumT0m8PyR0xwCe5aXgbKqRzprLcKq
-         ZsblpQ+IM82gyL4ansMguDQ6BFePNWjNBI5BYGWQwFY56600Vfb/MQRl+GTWWYPd7eK+
-         YETg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MN5/XA2iWTn3JwsaVPfUNETYKLVHfkkM5TGKnq2qWow=;
+        b=q4vfihaI5SgnZO1mREK0EE92a2TcRqe5YARf2JUxGWe8b3RCSilUTop4ZV/z3M/1Ia
+         weN9ltfEM6u2b4/2t7/tw+Nxzk9cRD14JW13Kz1VeE42C+IfgQ/qD2/hYVUPK3BAQwqG
+         tlqjEzGFBCSsTNQ14MgdrT4ebi23gasDFuGezAvuHNHJVgg3LEBNiT6EXtL0homvbZhl
+         mio1vgHviIVlTCyvDstI8u54o+OZPUxbYIwR8RMJpDrxPfE5AB+uNioto7r5yR/eGy3p
+         WyJYHYunxFfhqU8bWoLWNd6oujzPiq2P6zitBof1M66HTaRyvjAV9LM2oWjqPhZdzTpp
+         LUnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=0cMzmwOQ45CvCpy5BV9I0axI+oTcT02C42maobILAtA=;
-        b=Svxk7JwtF3G9AVfyYBj0oJwvO1BEZSJeo2DCtooKCrRa/X92sR87Fr9ssiYBbNoHRa
-         xgGfu47O314nKabN6o1b6wxqxkTLscrV/WynyFr7tjzXww8kG/okNhqISIb+kKD72+XQ
-         FJ2D0tLevMOqHc1JibqS/lQT3esh6miebFFz/Rkd4jyuyXTRs49qrWnfja2cRwdQwEDS
-         MaCiNeS0SfzGPwRXdYq8RWTSX4mqI0gHRLObtKzzbTbWPwnoQMybCIGG7ymUpchN1ouc
-         S2lZ11wYBebycmWBUtZOo16ArtiUdte7aeKfYYibmf3IdUgcmxHU5ZdJrc/Fl5RDeef3
-         xU2w==
-X-Gm-Message-State: APjAAAXBx03JqHl1TRb1dw/6mHSbF55am2WzCYJFPoWByv4aztfWzSvo
-        GzVWgSdqdU4JWLkHrow26MY6iRkrqRo=
-X-Google-Smtp-Source: APXvYqz2E4NMQlmOnxogLoFoSCKmtXixmPvQMaVqKsn2Qt80aUGkIwMVP0MmgrZZNDpIGpFr/1oowA==
-X-Received: by 2002:a5d:66c6:: with SMTP id k6mr23308468wrw.152.1572426688132;
-        Wed, 30 Oct 2019 02:11:28 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:2c7f:2fc:5551:ee55])
-        by smtp.gmail.com with ESMTPSA id t24sm2608394wra.55.2019.10.30.02.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 02:11:27 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org
-Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MN5/XA2iWTn3JwsaVPfUNETYKLVHfkkM5TGKnq2qWow=;
+        b=Gtj6pY8uTV/2aGDYa5V+kSOGu+CLDmKbE8gbL9u75s/yEdtMKfYcuNxnO8/E0Jhki2
+         P+0wOHduGCSSFqhxHPrzGwlLgGXU0xgQkv9HTLcBwr9L3FaFB400LBm4F+8hp3qSy6hX
+         1dLm1X6z2W4ix9DO1ksVhIkRI9CJ08/xX3uJOSfoM+YI/obsbK55eVzD3lSbQIBr5Fc8
+         BtxcQon8EvM4T9DBkDh08MueqE80vqlXM6XarYrXw9TwfEYXDZjlitqaAr5B5O+J/emC
+         5Lda0cFCiRQCg+wGXuRpT6kCTGVxodjjD9dmuvMVBlwn3nYWKVnyk2/ntZ3H6PxdoZGI
+         rTaA==
+X-Gm-Message-State: APjAAAUEpDRo74HUVH+Jnc/lY/77GUxzZaMOVysdEnxu0+tWMMzuS3xB
+        BGarepEL9Mi0LqRGPLJTofvOGXrzQ9vToXUZxwSsfQ==
+X-Google-Smtp-Source: APXvYqzSHup2gFA5wBykiES6RNVVoT6htSpGRNx96Dg7POOVg6LTuWNWzkXHYGZc5adR+GHSe5AntmF9j9UEzqu7mqI=
+X-Received: by 2002:a1f:b202:: with SMTP id b2mr14227092vkf.59.1572427678476;
+ Wed, 30 Oct 2019 02:27:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
+ <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
+ <5DA88892.5000408@linaro.org> <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
+ <5DA89267.30806@linaro.org> <20191029013648.GB27045@bogus>
+ <CAPDyKFpiyvGg0+bXDVCbfr+yW0SOH6DhVgAiav8ZnE8TSF6EHQ@mail.gmail.com> <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 30 Oct 2019 10:27:21 +0100
+Message-ID: <CAPDyKFrZ9uFt8zqncYTQ-SB6s6LqSRHbwo+Eh_zu57kxj_2eMw@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
+ controller binding to describe thermal warming device
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
         Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL/CPU_COOLING),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] thermal: cpu_cooling: Reorder the header file
-Date:   Wed, 30 Oct 2019 10:10:37 +0100
-Message-Id: <20191030091038.678-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030091038.678-1-daniel.lezcano@linaro.org>
-References: <20191030091038.678-1-daniel.lezcano@linaro.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As the conditions are simplified and unified, it is useless to have
-different blocks of definitions under the same compiler condition,
-let's merge the blocks.
+On Tue, 29 Oct 2019 at 21:16, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Oct 29, 2019 at 5:07 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Tue, 29 Oct 2019 at 02:36, Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Thu, Oct 17, 2019 at 12:10:15PM -0400, Thara Gopinath wrote:
+> > > > On 10/17/2019 11:43 AM, Ulf Hansson wrote:
+> > > > > On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+> > > > >>
+> > > > >> Hello Ulf,
+> > > > >> Thanks for the review!
+> > > > >>
+> > > > >> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
+> > > > >>> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+> > > > >>>>
+> > > > >>>> RPMh power controller hosts mx domain that can be used as thermal
+> > > > >>>> warming device. Add a sub-node to specify this.
+> > > > >>>>
+> > > > >>>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> > > > >>>> ---
+> > > > >>>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
+> > > > >>>>  1 file changed, 10 insertions(+)
+> > > > >>>>
+> > > > >>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > > >>>> index eb35b22..fff695d 100644
+> > > > >>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > > >>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
+> > > > >>>> @@ -18,6 +18,16 @@ Required Properties:
+> > > > >>>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
+> > > > >>>>  various OPPs for different platforms as well as Power domain indexes
+> > > > >>>>
+> > > > >>>> += SUBNODES
+> > > > >>>> +RPMh alsp hosts power domains that can behave as thermal warming device.
+> > > > >>>> +These are expressed as subnodes of the RPMh. The name of the node is used
+> > > > >>>> +to identify the power domain and must therefor be "mx".
+> > > > >>>> +
+> > > > >>>> +- #cooling-cells:
+> > > > >>>> +       Usage: optional
+> > > > >>>> +       Value type: <u32>
+> > > > >>>> +       Definition: must be 2
+> > > > >>>> +
+> > > > >>>
+> > > > >>> Just wanted to express a minor thought about this. In general we use
+> > > > >>> subnodes of PM domain providers to represent the topology of PM
+> > > > >>> domains (subdomains), this is something different, which I guess is
+> > > > >>> fine.
+> > > > >>>
+> > > > >>> I assume the #cooling-cells is here tells us this is not a PM domain
+> > > > >>> provider, but a "cooling device provider"?
+> > > > >> Yep.
+> > > > >>>
+> > > > >>> Also, I wonder if it would be fine to specify "power-domains" here,
+> > > > >>> rather than using "name" as I think that is kind of awkward!?
+> > > > >> Do you mean "power-domain-names" ? I am using this to match against the
+> > > > >> genpd names defined in the provider driver.
+> > > > >
+> > > > > No. If you are using "power-domains" it means that you allow to
+> > > > > describe the specifier for the provider.
+> > > > Yep. But won't this look funny in DT ? The provider node will have a sub
+> > > > node with a power domain referencing to itself Like below: Is this ok ?
+> > > >
+> > > > rpmhpd: power-controller {
+> > > >                                 compatible = "qcom,sdm845-rpmhpd";
+> > > >                                 #power-domain-cells = <1>;
+> > > >
+> > > >                       ...
+> > > >                       ...
+> > > >                               mx_cdev: mx {
+> > > >                                         #cooling-cells = <2>;
+> > > >                                         power-domains = <&rpmhpd      SDM845_MX>;
+> > > >                                 };
+> > > >
+> > >
+> > > The whole concept here seems all wrong to me. Isn't it what's in the
+> > > power domain that's the cooling device. A CPU power domain is not a
+> > > cooling device, the CPU is. Or we wouldn't make a clock a cooling
+> > > device, but what the clock drives.
+> >
+> > Well, I don't think that's entirely correct description either.
+> >
+> > As I see it, it's really the actual PM domain (that manages voltages
+> > for a power island), that needs to stay in full power state and
+> > increase its voltage level, as to warm up some of the silicon. It's
+> > not a regular device, but more a characteristics of how the PM domain
+> > can be used.
+>
+> First I've heard of Si needing warming...
 
-There is no functional change.
+I guess people go to cooler places with their devices. :-)
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- include/linux/cpu_cooling.h | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+>
+> I think I'd just expect the power domain provider to know which
+> domains to power on then.
 
-diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
-index 72d1c9c5e538..b74732535e4b 100644
---- a/include/linux/cpu_cooling.h
-+++ b/include/linux/cpu_cooling.h
-@@ -33,6 +33,13 @@ cpufreq_cooling_register(struct cpufreq_policy *policy);
-  */
- void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev);
- 
-+/**
-+ * of_cpufreq_cooling_register - create cpufreq cooling device based on DT.
-+ * @policy: cpufreq policy.
-+ */
-+struct thermal_cooling_device *
-+of_cpufreq_cooling_register(struct cpufreq_policy *policy);
-+
- #else /* !CONFIG_CPU_THERMAL */
- static inline struct thermal_cooling_device *
- cpufreq_cooling_register(struct cpufreq_policy *policy)
-@@ -45,16 +52,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- {
- 	return;
- }
--#endif	/* CONFIG_CPU_THERMAL */
- 
--#ifdef CONFIG_CPU_THERMAL
--/**
-- * of_cpufreq_cooling_register - create cpufreq cooling device based on DT.
-- * @policy: cpufreq policy.
-- */
--struct thermal_cooling_device *
--of_cpufreq_cooling_register(struct cpufreq_policy *policy);
--#else
- static inline struct thermal_cooling_device *
- of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- {
--- 
-2.17.1
+Yeah, I agree. This seems reasonable.
 
+Thanks!
+
+Kind regards
+Uffe
