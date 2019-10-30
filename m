@@ -2,188 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 433D2E9D81
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 15:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADEFE9DB4
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Oct 2019 15:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbfJ3O1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 10:27:47 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44202 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfJ3O1r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 10:27:47 -0400
-Received: by mail-qk1-f196.google.com with SMTP id m16so2554989qki.11
-        for <linux-pm@vger.kernel.org>; Wed, 30 Oct 2019 07:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=0Vz1KDYCDT2nsHaipdZBgphD7z8UkOtZoGz67YhDtMM=;
-        b=JPfoLkqBMtflePcsG2m0PMHTXAiStkOEa8LPn1smF+pru4l/wbDQztqjA/77KBu5b8
-         +4+TM8gotpTQHMlqQgNgVarr6Ksgg2u76AA+c/CPubiyByGEFkoBr5/J+fDLdtW5Xc98
-         x9EB/fmVJdZnaEdGdCSCY8Mp0JtRoMcMRDAofwL/xaDRcV18nSTVhzE0kDrQiLVPuMl8
-         Kyv4XqSMWKENZC3EVFmg9K+7/953SfZyjKmawXRQBMCmgdT/+2UGixJM2HCgx5PBD2PN
-         JB+8SsoBrgiZ8e3NJe7G5Qv6gti7JjjIby6foHIcDiQtgmEUZKDe4iVyT6S4d4l4naPe
-         QkCg==
+        id S1726345AbfJ3OiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 10:38:17 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:37104 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbfJ3OiR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Oct 2019 10:38:17 -0400
+Received: by mail-oi1-f196.google.com with SMTP id y194so2163292oie.4;
+        Wed, 30 Oct 2019 07:38:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=0Vz1KDYCDT2nsHaipdZBgphD7z8UkOtZoGz67YhDtMM=;
-        b=M6oTZyd0Izz3uSKUxB5ITUGDe558I4Bz+A3Uiwxe3YyJAdpxdutA5PLo/71P+YPAZC
-         F3uTYoy4+2TR35XCXSz8cdYQUxDSjVo4qZ8gtyuetSigVDX+EtHx1Es8Z0JkGUmcJGgV
-         Kb5TjriQOg7mf4NbMvUImMiZ6U4gxVt/081+w52Vdet32om5xSYC4Am4iZSZPargPlSQ
-         zzeaxN/4R9D2+xA5u0rZrchg3P7bjlJV/ne6FN07N5DrxFnNt8uW5ksV1Wg6glYtbN2Z
-         RZVwOaCFg+gYrxWbtu3B1E6HXRrAPu60VIK0JIe/ub+Lkw2/5ALZs6psiQe7z/bpNOzi
-         jXtg==
-X-Gm-Message-State: APjAAAUMSx6yeHW/Cq6NfmClKB+plzJOwiqvl8Ve723PvtDpCG3iXzmn
-        d4KZjJOWp/JaqxcuJYQK/JcvSw==
-X-Google-Smtp-Source: APXvYqy8cFexzqoRmYs3AGz0CkYOjQU34dt4clEvGmzbKsx0WtTc2MzW3Kg6ruCf0gqi2mYNZ7Ht2w==
-X-Received: by 2002:a37:7943:: with SMTP id u64mr104655qkc.295.1572445665090;
-        Wed, 30 Oct 2019 07:27:45 -0700 (PDT)
-Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id y33sm300083qta.18.2019.10.30.07.27.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 30 Oct 2019 07:27:44 -0700 (PDT)
-Subject: Re: [PATCH v3 6/7] dt-bindings: soc: qcom: Extend RPMh power
- controller binding to describe thermal warming device
-To:     Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org>
- <1571254641-13626-7-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFqcKfmnNJ7j4Jb+JH739FBcHg5NBD6aR4H_N=zWGwm1ww@mail.gmail.com>
- <5DA88892.5000408@linaro.org>
- <CAPDyKFpYG7YADb6Xmm=8ug5=5X3d1y+JdkRvrnvtroeV3Yj62Q@mail.gmail.com>
- <5DA89267.30806@linaro.org> <20191029013648.GB27045@bogus>
- <CAPDyKFpiyvGg0+bXDVCbfr+yW0SOH6DhVgAiav8ZnE8TSF6EHQ@mail.gmail.com>
- <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5DB99DDE.3090308@linaro.org>
-Date:   Wed, 30 Oct 2019 10:27:42 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.5.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+BfFad26abRQq38bwh8Mr1R+j43UFqfABvnUm8o1taw=;
+        b=D9m5xzaNqnwcGPtyRnii6aOuyUpk/a0DvUJXKWkJY6YW0libo/O9qur7wLybAp+Rwx
+         idTIArGeW8KhXb9ofxSGgkXy6WNOWRFdPdqHZKmdkUO/OiS9T2v6v66TLvYuy/UarTk4
+         m4ctegdcE55f1App50AZEQ8CHf6Mi81O8kRUIxSsxukbUY7tAsD/hq19vaYYSy3vde1f
+         io5cnaukk/AjRkuoRGdcGbFxZAIVObHm0eY54/wDjKeGHzfOBoUZdMgz0OOqf14HeY4d
+         1ZmwS7MtI52OA+rcLxJiSEyQdcv/vWMKC2rALs1ENiuAo4+0/T3Fp7+8x67Dr8oSf0qX
+         cFOg==
+X-Gm-Message-State: APjAAAVgCHgEpl4jYu//L8BAneUlRai98eiApV+CPf63x6ZfNDYcAhmh
+        ItU/cL7NdZKKWadiFu0rx//eXFULnA==
+X-Google-Smtp-Source: APXvYqxFcqCnjzslRGByaccuPPCxbj/xGiXI0T5sZQDtLsUsBwQFx0ajU2xY2DO4ZF1wqOj3CpQ5pw==
+X-Received: by 2002:aca:5441:: with SMTP id i62mr8840685oib.42.1572446295718;
+        Wed, 30 Oct 2019 07:38:15 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j129sm44729oib.22.2019.10.30.07.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2019 07:38:14 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 09:38:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     sre@kernel.org, mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yuanjiang.yu@unisoc.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com, orsonzhai@gmail.com
+Subject: Re: [PATCH 1/5] dt-bindings: power: Introduce one property to
+ describe the battery resistance with temperature changes
+Message-ID: <20191030143814.GA14919@bogus>
+References: <cover.1572245011.git.baolin.wang@linaro.org>
+ <44f0c19510c7317cb4ee6cac54b3adfa81c2d6d0.1572245011.git.baolin.wang@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+OoyC5FZxYrX_KN1QLDXRvKuFbH=9pLiELsOtoPixnPA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44f0c19510c7317cb4ee6cac54b3adfa81c2d6d0.1572245011.git.baolin.wang@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
-
-Thanks for the review.
-
-On 10/29/2019 04:16 PM, Rob Herring wrote:
-> On Tue, Oct 29, 2019 at 5:07 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->>
->> On Tue, 29 Oct 2019 at 02:36, Rob Herring <robh@kernel.org> wrote:
->>>
->>> On Thu, Oct 17, 2019 at 12:10:15PM -0400, Thara Gopinath wrote:
->>>> On 10/17/2019 11:43 AM, Ulf Hansson wrote:
->>>>> On Thu, 17 Oct 2019 at 17:28, Thara Gopinath <thara.gopinath@linaro.org> wrote:
->>>>>>
->>>>>> Hello Ulf,
->>>>>> Thanks for the review!
->>>>>>
->>>>>> On 10/17/2019 05:04 AM, Ulf Hansson wrote:
->>>>>>> On Wed, 16 Oct 2019 at 21:37, Thara Gopinath <thara.gopinath@linaro.org> wrote:
->>>>>>>>
->>>>>>>> RPMh power controller hosts mx domain that can be used as thermal
->>>>>>>> warming device. Add a sub-node to specify this.
->>>>>>>>
->>>>>>>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->>>>>>>> ---
->>>>>>>>  Documentation/devicetree/bindings/power/qcom,rpmpd.txt | 10 ++++++++++
->>>>>>>>  1 file changed, 10 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>>>>>> index eb35b22..fff695d 100644
->>>>>>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>>>>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
->>>>>>>> @@ -18,6 +18,16 @@ Required Properties:
->>>>>>>>  Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
->>>>>>>>  various OPPs for different platforms as well as Power domain indexes
->>>>>>>>
->>>>>>>> += SUBNODES
->>>>>>>> +RPMh alsp hosts power domains that can behave as thermal warming device.
->>>>>>>> +These are expressed as subnodes of the RPMh. The name of the node is used
->>>>>>>> +to identify the power domain and must therefor be "mx".
->>>>>>>> +
->>>>>>>> +- #cooling-cells:
->>>>>>>> +       Usage: optional
->>>>>>>> +       Value type: <u32>
->>>>>>>> +       Definition: must be 2
->>>>>>>> +
->>>>>>>
->>>>>>> Just wanted to express a minor thought about this. In general we use
->>>>>>> subnodes of PM domain providers to represent the topology of PM
->>>>>>> domains (subdomains), this is something different, which I guess is
->>>>>>> fine.
->>>>>>>
->>>>>>> I assume the #cooling-cells is here tells us this is not a PM domain
->>>>>>> provider, but a "cooling device provider"?
->>>>>> Yep.
->>>>>>>
->>>>>>> Also, I wonder if it would be fine to specify "power-domains" here,
->>>>>>> rather than using "name" as I think that is kind of awkward!?
->>>>>> Do you mean "power-domain-names" ? I am using this to match against the
->>>>>> genpd names defined in the provider driver.
->>>>>
->>>>> No. If you are using "power-domains" it means that you allow to
->>>>> describe the specifier for the provider.
->>>> Yep. But won't this look funny in DT ? The provider node will have a sub
->>>> node with a power domain referencing to itself Like below: Is this ok ?
->>>>
->>>> rpmhpd: power-controller {
->>>>                                 compatible = "qcom,sdm845-rpmhpd";
->>>>                                 #power-domain-cells = <1>;
->>>>
->>>>                       ...
->>>>                       ...
->>>>                               mx_cdev: mx {
->>>>                                         #cooling-cells = <2>;
->>>>                                         power-domains = <&rpmhpd      SDM845_MX>;
->>>>                                 };
->>>>
->>>
->>> The whole concept here seems all wrong to me. Isn't it what's in the
->>> power domain that's the cooling device. A CPU power domain is not a
->>> cooling device, the CPU is. Or we wouldn't make a clock a cooling
->>> device, but what the clock drives.
->>
->> Well, I don't think that's entirely correct description either.
->>
->> As I see it, it's really the actual PM domain (that manages voltages
->> for a power island), that needs to stay in full power state and
->> increase its voltage level, as to warm up some of the silicon. It's
->> not a regular device, but more a characteristics of how the PM domain
->> can be used.
+On Mon, Oct 28, 2019 at 03:18:57PM +0800, Baolin Wang wrote:
+> Since the battery internal resistance can be changed as the temperature
+> changes, thus add one table to describe the battery resistance percent
+> in different temperature to get a accurate battery internal resistance.
 > 
-> First I've heard of Si needing warming...
-Cold regions and non-closing of circuits is what I am told.
+> Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
+> ---
+>  .../devicetree/bindings/power/supply/battery.txt   |    5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> I think I'd just expect the power domain provider to know which
-> domains to power on then.
-I will just retain #cooling-cells in the power domain provider and let
-the driver identify the actual power domains.
+> diff --git a/Documentation/devicetree/bindings/power/supply/battery.txt b/Documentation/devicetree/bindings/power/supply/battery.txt
+> index 5c913d4c..1a6f951 100644
+> --- a/Documentation/devicetree/bindings/power/supply/battery.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/battery.txt
+> @@ -35,6 +35,10 @@ Optional Properties:
+>     for each of the battery capacity lookup table. The first temperature value
+>     specifies the OCV table 0, and the second temperature value specifies the
+>     OCV table 1, and so on.
+> + - resistance-temp-table: An array providing the resistance percent and
+> +   corresponding temperature in degree Celsius, which is used to look up the
+> +   resistance percent according to current temperature to get a accurate
+> +   batterty internal resistance.
 
+What's the order of values? The description and example don't seem to 
+agree unless negative percent is a thing.
+
+>  
+>  Battery properties are named, where possible, for the corresponding
+>  elements in enum power_supply_property, defined in
+> @@ -61,6 +65,7 @@ Example:
+>  		ocv-capacity-table-0 = <4185000 100>, <4113000 95>, <4066000 90>, ...;
+>  		ocv-capacity-table-1 = <4200000 100>, <4185000 95>, <4113000 90>, ...;
+>  		ocv-capacity-table-2 = <4250000 100>, <4200000 95>, <4185000 90>, ...;
+> +		resistance-temp-table = <20 100>, <10 90>, <0 80>, <(-10) 60>;
+>  	};
+>  
+>  	charger: charger@11 {
+> -- 
+> 1.7.9.5
 > 
-> Rob
-> 
-
-
--- 
-Warm Regards
-Thara
