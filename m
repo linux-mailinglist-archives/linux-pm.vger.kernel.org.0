@@ -2,243 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9632CEB905
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 22:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5D2EB94A
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 22:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728406AbfJaVem (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 17:34:42 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:57724 "EHLO inva020.nxp.com"
+        id S1729112AbfJaVuf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 17:50:35 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:42258 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727580AbfJaVem (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 17:34:42 -0400
+        id S1728561AbfJaVuf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 31 Oct 2019 17:50:35 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B21351A057E;
-        Thu, 31 Oct 2019 22:34:39 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1D7391A057E;
+        Thu, 31 Oct 2019 22:50:32 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A4A6B1A0112;
-        Thu, 31 Oct 2019 22:34:39 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0549F1A00B6;
+        Thu, 31 Oct 2019 22:50:32 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 0CDEC205E9;
-        Thu, 31 Oct 2019 22:34:39 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E3827205E9;
+        Thu, 31 Oct 2019 22:50:30 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     Stephen Boyd <sboyd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Alexandre Bailon <abailon@baylibre.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v10 11/11] PM / devfreq: Use PM QoS for sysfs min/max_freq
-Date:   Thu, 31 Oct 2019 23:34:28 +0200
-Message-Id: <5b58df9e6244d79768617d20ff1a9a825da6293d.1572556786.git.leonard.crestez@nxp.com>
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/6] PM / devfreq: Add dynamic scaling for imx ddr controller
+Date:   Thu, 31 Oct 2019 23:50:21 +0200
+Message-Id: <cover.1572558427.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1572556786.git.leonard.crestez@nxp.com>
-References: <cover.1572556786.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1572556786.git.leonard.crestez@nxp.com>
-References: <cover.1572556786.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Switch the handling of min_freq and max_freq from sysfs to use the
-dev_pm_qos_request interface.
+This adds support for dynamic scaling of the DDR Controller (ddrc) present in
+imx8m series. Actual frequency switching is implemented inside TF-A, this
+driver wraps the SMC calls and synchronizes the clk tree.
 
-Since PM QoS handles frequencies as kHz this change reduces the
-precision of min_freq and max_freq. This shouldn't introduce problems
-because frequencies which are not an integer number of kHz are likely
-not an integer number of Hz either.
+DRAM frequency switching requires clock manipulation but during this operation
+DRAM itself is briefly inaccessible so this operation is performed a SMC call
+to by TF-A which runs from a SRAM area. Upon returning to linux the clock tree
+is updated to correspond to hardware configuration.
 
-Try to ensure compatibility by rounding min values down and rounding
-max values up.
+This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are handled
+manually: the driver will prepare/enable the new parents ahead of switching (so
+that the expected roots are enabled) and afterwards it will call clk_set_parent
+to ensure the parents in clock framework are up-to-date.
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
----
- drivers/devfreq/devfreq.c | 58 +++++++++++++++++++++++++++------------
- include/linux/devfreq.h   |  9 +++---
- 2 files changed, 46 insertions(+), 21 deletions(-)
+This series is atomically useful and roughly similar to devfreq drivers for
+tegra and rockchip.
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 776dec301a4e..ddf6a8ff454d 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -139,14 +139,10 @@ static void get_freq_range(struct devfreq *devfreq,
- 	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
- 	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
- 		*max_freq = min(*max_freq,
- 				(unsigned long)HZ_PER_KHZ * qos_max_freq);
- 
--	/* Apply constraints from sysfs */
--	*min_freq = max(*min_freq, devfreq->min_freq);
--	*max_freq = min(*max_freq, devfreq->max_freq);
--
- 	/* Apply constraints from OPP interface */
- 	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
- 	*max_freq = min(*max_freq, devfreq->scaling_max_freq);
- 
- 	if (*min_freq > *max_freq)
-@@ -688,10 +684,19 @@ static void devfreq_dev_release(struct device *dev)
- 			"Failed to remove min_freq notifier: %d\n", err);
- 
- 	if (devfreq->profile->exit)
- 		devfreq->profile->exit(devfreq->dev.parent);
- 
-+	err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
-+	if (err)
-+		dev_warn(dev->parent,
-+			"Failed to remove max_freq request: %d\n", err);
-+	err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
-+	if (err)
-+		dev_warn(dev->parent,
-+			"Failed to remove min_freq request: %d\n", err);
-+
- 	mutex_destroy(&devfreq->lock);
- 	kfree(devfreq);
- }
- 
- /**
-@@ -755,18 +760,26 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
- 	if (!devfreq->scaling_min_freq) {
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
--	devfreq->min_freq = devfreq->scaling_min_freq;
- 
- 	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
- 	if (!devfreq->scaling_max_freq) {
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
--	devfreq->max_freq = devfreq->scaling_max_freq;
-+
-+	err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-+				     DEV_PM_QOS_MIN_FREQUENCY, 0);
-+	if (err < 0)
-+		goto err_dev;
-+	err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-+				     DEV_PM_QOS_MAX_FREQUENCY,
-+				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-+	if (err < 0)
-+		goto err_dev;
- 
- 	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
- 	atomic_set(&devfreq->suspend_count, 0);
- 
- 	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
-@@ -1401,14 +1414,15 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
- 
- 	ret = sscanf(buf, "%lu", &value);
- 	if (ret != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&df->lock);
--	df->min_freq = value;
--	update_devfreq(df);
--	mutex_unlock(&df->lock);
-+	/* Round down to kHz for PM QoS */
-+	ret = dev_pm_qos_update_request(&df->user_min_freq_req,
-+					value / HZ_PER_KHZ);
-+	if (ret < 0)
-+		return ret;
- 
- 	return count;
- }
- 
- static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
-@@ -1433,18 +1447,28 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- 
- 	ret = sscanf(buf, "%lu", &value);
- 	if (ret != 1)
- 		return -EINVAL;
- 
--	mutex_lock(&df->lock);
--
--	if (!value)
--		value = ULONG_MAX;
-+	/*
-+	 * PM QoS frequencies are in kHz so we need to convert. Convert by
-+	 * rounding upwards so that the acceptable interval never shrinks.
-+	 *
-+	 * For example if the user writes "666666666" to sysfs this value will
-+	 * be converted to 666667 kHz and back to 666667000 Hz before an OPP
-+	 * lookup, this ensures that an OPP of 666666666Hz is still accepted.
-+	 *
-+	 * A value of zero means "no limit".
-+	 */
-+	if (value)
-+		value = DIV_ROUND_UP(value, HZ_PER_KHZ);
-+	else
-+		value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
- 
--	df->max_freq = value;
--	update_devfreq(df);
--	mutex_unlock(&df->lock);
-+	ret = dev_pm_qos_update_request(&df->user_max_freq_req, value);
-+	if (ret < 0)
-+		return ret;
- 
- 	return count;
- }
- static DEVICE_ATTR_RW(min_freq);
- 
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index dac0dffeabb4..d4d1ec04aeea 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -11,10 +11,11 @@
- #define __LINUX_DEVFREQ_H__
- 
- #include <linux/device.h>
- #include <linux/notifier.h>
- #include <linux/pm_opp.h>
-+#include <linux/pm_qos.h>
- 
- #define DEVFREQ_NAME_LEN 16
- 
- /* DEVFREQ governor name */
- #define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
-@@ -121,12 +122,12 @@ struct devfreq_dev_profile {
-  *		devfreq.nb to the corresponding register notifier call chain.
-  * @work:	delayed work for load monitoring.
-  * @previous_freq:	previously configured frequency value.
-  * @data:	Private data of the governor. The devfreq framework does not
-  *		touch this.
-- * @min_freq:	Limit minimum frequency requested by user (0: none)
-- * @max_freq:	Limit maximum frequency requested by user (0: none)
-+ * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
-+ * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
-  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-  * @scaling_max_freq:	Limit maximum frequency requested by OPP interface
-  * @stop_polling:	 devfreq polling status of a device.
-  * @suspend_freq:	 frequency of a device set during suspend phase.
-  * @resume_freq:	 frequency of a device set in resume phase.
-@@ -161,12 +162,12 @@ struct devfreq {
- 	unsigned long previous_freq;
- 	struct devfreq_dev_status last_status;
- 
- 	void *data; /* private data for governors */
- 
--	unsigned long min_freq;
--	unsigned long max_freq;
-+	struct dev_pm_qos_request user_min_freq_req;
-+	struct dev_pm_qos_request user_max_freq_req;
- 	unsigned long scaling_min_freq;
- 	unsigned long scaling_max_freq;
- 	bool stop_polling;
- 
- 	unsigned long suspend_freq;
+Running at lower dram rates saves power but can affect the functionality of
+other blocks in the chip (display, vpu etc). Support for in-kernel constraints
+will some separately.
+
+Angus/Martin: You previously attempted to test on purism boards, this updated
+version should work without hacks and has no dependencies.
+
+Changes since v2:
+* Add support for entire imx8m family including imx8mq B0.
+* Also mark dram PLLs as CLK_GET_RATE_NO_CACHE (required for imx8mq b0 low OPP)
+* Explicitly update dram pll rate at the end of imx_ddrc_set_freq.
+* Use do_div in imx-ddrc (kbuild robot)
+* Improve explanations around adding CLK_GET_RATE_NO_CACHE to dram clks.
+(Stephen Boyd)
+* Handle ddrc devfreq-events earlier for fewer probe defers.
+* Validate DDRC opp tables versus firmware: supported OPPs depend on board and
+SOC revision.
+* Move DDRC opp tables to board dts because they can vary based on ram type on
+board.
+* Verify DDRC rate is changed in clk tree and otherwise report an error.
+* Change imx_ddrc_freq.rate to be measure in MT/s and round down from HZ in
+imx_ddrc_find_freq instead.
+* Split NOC scaling away.
+Link to v2: https://patchwork.kernel.org/cover/11104113/
+
+Changes since v1:
+* bindings: Stop using "contains" for "compatible"
+* bindings: Set "additionalProperties: false" and document missing stuff.
+* Remove (c) from NXP copyright notice
+* Fix various checkpatch issues
+* Remove unused dram_alt_root clk from imx-ddrc
+Link to v1: https://patchwork.kernel.org/cover/11090649/
+
+Changes since RFC v3:
+* Implement passive support and set NOC's parent to DDRC
+* Drop scaling AHB/AXI for now (NOC/DDRC use most power anyway)
+* Stop relying on clk_min_rate
+* Split into two devreq drivers (and bindings) because the ddrc is
+really a distinct piece of hardware.
+* Perform DRAM frequency inside devfreq instead of clk, mostly due to
+objections to earlier RFCs for imx8m-dram-clk.
+* Fetch info about dram clk parents from firmware instead of
+hardcoding in driver. This can more easily support additional rates.
+* Link: https://patchwork.kernel.org/cover/11056779/
+* Link: https://patchwork.kernel.org/patch/11049429/
+
+Scaling buses can cause problems for devices with realtime bandwith
+requirements such as display, the intention is to use the interconnect
+framework to make DEV_PM_QOS_MIN_FREQUENCY to devfreq. There are
+separate patches for that:
+
+* https://patchwork.kernel.org/cover/11104055/
+* https://patchwork.kernel.org/cover/11078671/
+
+
+Leonard Crestez (6):
+  clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
+  clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACHE
+  dt-bindings: devfreq: Add bindings for imx ddr controller
+  PM / devfreq: Add dynamic scaling for imx ddr controller
+  PM / devfreq: imx-ddrc: Measure bandwidth with perf
+  arm64: dts: imx8m: Add ddr controller nodes
+
+ .../devicetree/bindings/devfreq/imx-ddrc.yaml |  60 ++
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  17 +-
+ .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  16 +-
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  16 +-
+ drivers/clk/imx/clk-imx8mm.c                  |  13 +-
+ drivers/clk/imx/clk-imx8mn.c                  |  14 +-
+ drivers/clk/imx/clk-imx8mq.c                  |  15 +-
+ drivers/clk/imx/clk-pll14xx.c                 |   7 +
+ drivers/clk/imx/clk.h                         |   1 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx-ddrc.c                    | 570 ++++++++++++++++++
+ 14 files changed, 777 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml
+ create mode 100644 drivers/devfreq/imx-ddrc.c
+
 -- 
 2.17.1
 
