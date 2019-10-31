@@ -2,75 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4663CEB7EF
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 20:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A74EB8AF
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 22:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbfJaT0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 15:26:44 -0400
-Received: from mga06.intel.com ([134.134.136.31]:49730 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729347AbfJaT0o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 15:26:44 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 12:26:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,252,1569308400"; 
-   d="scan'208";a="400610761"
-Received: from spandruv-mobl3.jf.intel.com ([10.254.190.10])
-  by fmsmga005.fm.intel.com with ESMTP; 31 Oct 2019 12:26:43 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, cai@lca.pw
-Subject: [PATCH] cpufreq: intel_pstate: Fix Invalid EPB setting
-Date:   Thu, 31 Oct 2019 12:26:20 -0700
-Message-Id: <20191031192620.23482-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.17.2
+        id S1726739AbfJaVFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 17:05:17 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34159 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbfJaVFR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 17:05:17 -0400
+Received: by mail-ot1-f66.google.com with SMTP id h6so1958238otk.1
+        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2019 14:05:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kOsWUibXaRq8YUzcKEc8pmXWX2utaa3I6yXkA2zu/zA=;
+        b=HYSVXaVaaLrwnXpJWszk/6mL6cOo2YGpfL780PYlPHP1zE4NftBOWob43GpJ9qw19h
+         F4vDYo4r+yg9pbPl6Dri9IQDOYFrlxDMsTsBAHA8mA7S5SMfpzCV8HtW2X8hSNCUk8h/
+         YTZaT/Cxf4bbqj4tC8O3WjxXM9vlv1WCAgwI0mIaOish0dSpaaA1mrTlw7c1pUse1lbY
+         qG8O4G2Km4alUMOn9VT2sa5opnI/fw67CAHvHSefMa2kvr/3ElqEQcWzzbpAWkcJzZQt
+         H5qHgQJrSEnGMKKz23uATOBeaQSe+UprxMSQn/agbU1gFAQZiNFVckoS9qnepSqCoIMk
+         eZnw==
+X-Gm-Message-State: APjAAAX0LMWNGw4DCDrbv2ixVk7rCB49aMd1jUCbzRebe7Eb9tHiH53D
+        z7y2kT+oqgqo7ybiWvKDwdslOCpUlbqAAUKDNGc=
+X-Google-Smtp-Source: APXvYqwPSUeLOQI6Cq1yIxBC02S4eoAwjMA4wzKteTVwOaggTFLdpinwVbEW2DTW/gN710tsWG5p/Mq30QrpnMogI4I=
+X-Received: by 2002:a9d:70c1:: with SMTP id w1mr3411095otj.167.1572555915997;
+ Thu, 31 Oct 2019 14:05:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <c222deda79ad334ff4edcbd49ddda248685c4ee1.1572395990.git.leonard.crestez@nxp.com>
+ <3169109.BFaCN5124U@kreacher> <VI1PR04MB702337E37DF8E57A754C1DC5EE630@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB702337E37DF8E57A754C1DC5EE630@VI1PR04MB7023.eurprd04.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 31 Oct 2019 22:05:05 +0100
+Message-ID: <CAJZ5v0hYYav6sGns0_8EMAEPh2KE7BFZ_kftdPTA+n253oxFzA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Add user_min/max_freq
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The max value of EPB can be only be 0x0F. Setting more than that results
-in "unchecked MSR access error". During CPU offline via cpufreq stop_cpu()
-callback, this error condition is triggered in the function
-intel_pstate_hwp_force_min_perf().
+On Thu, Oct 31, 2019 at 2:01 PM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+>
+> On 31.10.2019 12:24, Rafael J. Wysocki wrote:
+> > On Wednesday, October 30, 2019 1:41:49 AM CET Leonard Crestez wrote:
+> >> Current values in scaling_min_freq and scaling_max freq can change on
+> >> the fly due to event such as thermal monitoring.
+> >
+> > Which is intentional.
+> >
+> >> This behavior is confusing for userspace and because once an userspace
+> >> limit is written to scaling_min/max_freq it is not possible to read it back.
+> >
+> > That can be argued both ways.
+> >
+> > It is also useful to know the effective constraints and arguably the ability
+> > to read back the values that you have written is mostly needed for debugging
+> > the code.
+> >
+> > Also arguably, if there are multiple sources of frequency limits in user space,
+> > there needs to be a user space arbiter deciding on which value to use and in
+> > that case it needs to store the last value chosen by it anyway.
+>
+> If an userspace tool needs to temporarily adjust min/max_freq it has no
+> way of reliably restoring the old value.
 
-Instead, EPB corresponding to preference to maximize energy saving (0x0F),
-can be set. But this will conflict with the save/restore done in
-arch/x86/kernel/cpu/intel_epb.c. Based on the test, if 0x0F is set in the
-function intel_pstate_hwp_force_min_perf(), this gets restored during next
-CPU online operation. This is not desired.
-
-Hence don't set EPB in the offline path in this driver and let the
-processing in intel_epb.c handle EPB.
-
-Fixes: af3b7379e2d70 ("cpufreq: intel_pstate: Force HWP min perf before offline")
-Reported-by: Qian Cai <cai@lca.pw>
-Cc: 5.0+ <stable@vger.kernel.org> # 5.0+
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 53a51c169451..8ab31702cf6a 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -847,11 +847,9 @@ static void intel_pstate_hwp_force_min_perf(int cpu)
- 	value |= HWP_MAX_PERF(min_perf);
- 	value |= HWP_MIN_PERF(min_perf);
- 
--	/* Set EPP/EPB to min */
-+	/* Set EPP to min */
- 	if (boot_cpu_has(X86_FEATURE_HWP_EPP))
- 		value |= HWP_ENERGY_PERF_PREFERENCE(HWP_EPP_POWERSAVE);
--	else
--		intel_pstate_set_epb(cpu, HWP_EPP_BALANCE_POWERSAVE);
- 
- 	wrmsrl_on_cpu(cpu, MSR_HWP_REQUEST, value);
- }
--- 
-2.17.2
-
+And the new attributes don't really help here AFAICS, because if the
+old value was written by a user space task different from the one
+updating it, that task may try to update it again in parallel with the
+current writer, and so the current writer actually doesn't know
+whether or not the value it has read is the most recent one (and even
+so, whether or not writing it back is desirable anyway).
