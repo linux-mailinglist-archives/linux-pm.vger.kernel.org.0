@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E8FEB9E7
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 23:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7105EB9EA
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 23:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727488AbfJaWwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1727610AbfJaWwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 31 Oct 2019 18:52:21 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:51476 "EHLO inva021.nxp.com"
+Received: from inva021.nxp.com ([92.121.34.21]:51514 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726735AbfJaWwV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1726739AbfJaWwV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 31 Oct 2019 18:52:21 -0400
 Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 078442002ED;
-        Thu, 31 Oct 2019 23:52:18 +0100 (CET)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1DFEB2000BF;
+        Thu, 31 Oct 2019 23:52:19 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EBF892000BB;
-        Thu, 31 Oct 2019 23:52:17 +0100 (CET)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0EFDA2000BB;
+        Thu, 31 Oct 2019 23:52:19 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E39D0205E9;
-        Thu, 31 Oct 2019 23:52:16 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 088D9205E9;
+        Thu, 31 Oct 2019 23:52:18 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -46,131 +46,123 @@ Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         Martin Kepplinger <martink@posteo.de>,
         linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH RFC v5 00/10] interconnect: Add imx support via devfreq
-Date:   Fri,  1 Nov 2019 00:51:59 +0200
-Message-Id: <cover.1572562150.git.leonard.crestez@nxp.com>
+Subject: [PATCH RFC v5 01/10] dt-bindings: devfreq: Add bindings for generic imx buses
+Date:   Fri,  1 Nov 2019 00:52:00 +0200
+Message-Id: <0e4118456f8eb67e1ba8a7c23127fc3def58547b.1572562150.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1572562150.git.leonard.crestez@nxp.com>
+References: <cover.1572562150.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1572562150.git.leonard.crestez@nxp.com>
+References: <cover.1572562150.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds upstream DRAM and interconnect scaling support for imx8m
-series chips. It uses a per-SOC interconnect provider layered on top of
-multiple instances of devfreq for scalable nodes along the interconnect.
+Add initial dt bindings for the interconnects inside i.MX chips.
+Multiple external IPs are involved but SOC integration means the
+software controllable interfaces are very similar.
 
-Existing qcom interconnect providers mostly translate bandwidth requests into
-firmware calls but equivalent firmware on imx8m is much thinner. Scaling
-support for individual nodes (NIC/NOC and DDRC) is implemented through
-devfreq.
+Single node also acts as interconnect provider if #interconnect-cells is
+present.
 
-The imx interconnect provider doesn't communicate with devfreq instance
-directly but rather computes "minimum frequencies" for nodes along the path
-and creates dev_pm_qos requests.
-
-This needs core changes for dev_pm_qos frequency support for devfreq:
-
-	https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196443
-
-Since imx interconnect only needs to interact with imx devfreq it would also be
-possible to tie them together directly, but it would be a little sad.
-
-Since there is no single devicetree node that can represent the
-"interconnect" the main NOC is picked as the "interconnect provider" and
-will probe the interconnect platform device if #interconnect-cells is
-present. This is a bit odd.
-
-On i.MX there are multiple instances of a few interconnect IPs, this
-patch identifies them by enumerating the entire devicetree scanning for
-the "interconnect-node-id" property. As far as I see current providers
-do this based entirely on compatible string of the interconnect instance
-and this seems very odd to me. Do you think we could move this
-"interconnect-node-id" approach to core interconnect bindings?
-
-The same interconnect-node-id property is used to identify the DDRC and
-this is arguably a hack.
-
-Also as a github branch (with few other changes):
-    https://github.com/cdleonard/linux/tree/next_imx_busfreq
-
-This is layered upon imx-ddrc scaling support:
-* https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196459
-The DDRC only really interacts by receiving dev_pm_qos requests.
-
-Changes since RFCv4:
-* Drop icc proxy nonsense
-* Make devfreq driver for NOC probe the ICC driver if
-#interconnect-cells is present.
-* Move NOC support to interconnect series and rename the node in DT
-* Add support for all chips at once, differences are not intereseting
-and there is more community interest for 8mq than 8mm.
-Link: https://patchwork.kernel.org/cover/11111865/
-
-Changes since RFCv3:
-* Remove the virtual "icc" node and add devfreq nodes as proxy providers
-* Fix build on 32-bit arm (reported by kbuilt test robot)
-* Remove ARCH_MXC_ARM64 (never existed in upstream)
-* Remove _numlinks, calculate instead
-* Replace __BUSFREQ_H header guard
-* Improve commit message and comment spelling
-* Fix checkpatch issues
-Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
-
-Changes since RFCv2 and initial work by Alexandre Bailon:
-* Relying on devfreq and dev_pm_qos instead of CLK
-* No more "platform opp" stuff
-* No more special suspend handling: use suspend-opp on devfreq instead.
-* Replace all mentions of "busfreq" with "interconnect"
-Link to v2: https://patchwork.kernel.org/patch/11056789/
-
-Leonard Crestez (10):
-  dt-bindings: devfreq: Add bindings for generic imx buses
-  PM / devfreq: Add generic imx bus driver
-  PM / devfreq: imx: Register interconnect device
-  PM / devfreq: Add devfreq_get_devfreq_by_node
-  interconnect: Add imx core driver
-  interconnect: imx: Add platform driver for imx8mm
-  interconnect: imx: Add platform driver for imx8mq
-  interconnect: imx: Add platform driver for imx8mn
-  arm64: dts: imx8m: Add NOC nodes
-  arm64: dts: imx8m: Add interconnect provider properties
-
- .../devicetree/bindings/devfreq/imx.yaml      |  83 ++++++
- arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  26 ++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  26 ++
- arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  26 ++
- drivers/devfreq/Kconfig                       |  12 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/devfreq.c                     |  42 ++-
- drivers/devfreq/imx-devfreq.c                 | 185 ++++++++++++
- drivers/interconnect/Kconfig                  |   1 +
- drivers/interconnect/Makefile                 |   1 +
- drivers/interconnect/imx/Kconfig              |  17 ++
- drivers/interconnect/imx/Makefile             |   4 +
- drivers/interconnect/imx/imx.c                | 273 ++++++++++++++++++
- drivers/interconnect/imx/imx.h                |  60 ++++
- drivers/interconnect/imx/imx8mm.c             | 105 +++++++
- drivers/interconnect/imx/imx8mn.c             |  94 ++++++
- drivers/interconnect/imx/imx8mq.c             | 103 +++++++
- include/dt-bindings/interconnect/imx8mm.h     |  49 ++++
- include/dt-bindings/interconnect/imx8mn.h     |  41 +++
- include/dt-bindings/interconnect/imx8mq.h     |  48 +++
- include/linux/devfreq.h                       |   1 +
- 21 files changed, 1187 insertions(+), 11 deletions(-)
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+---
+ .../devicetree/bindings/devfreq/imx.yaml      | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/devfreq/imx.yaml
- create mode 100644 drivers/devfreq/imx-devfreq.c
- create mode 100644 drivers/interconnect/imx/Kconfig
- create mode 100644 drivers/interconnect/imx/Makefile
- create mode 100644 drivers/interconnect/imx/imx.c
- create mode 100644 drivers/interconnect/imx/imx.h
- create mode 100644 drivers/interconnect/imx/imx8mm.c
- create mode 100644 drivers/interconnect/imx/imx8mn.c
- create mode 100644 drivers/interconnect/imx/imx8mq.c
- create mode 100644 include/dt-bindings/interconnect/imx8mm.h
- create mode 100644 include/dt-bindings/interconnect/imx8mn.h
- create mode 100644 include/dt-bindings/interconnect/imx8mq.h
 
+diff --git a/Documentation/devicetree/bindings/devfreq/imx.yaml b/Documentation/devicetree/bindings/devfreq/imx.yaml
+new file mode 100644
+index 000000000000..bfc825407764
+--- /dev/null
++++ b/Documentation/devicetree/bindings/devfreq/imx.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/devfreq/imx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic i.MX bus frequency device
++
++maintainers:
++  - Leonard Crestez <leonard.crestez@nxp.com>
++
++description: |
++  The i.MX SoC family has multiple buses for which clock frequency (and
++  sometimes voltage) can be adjusted.
++
++  Some of those buses expose register areas mentioned in the memory maps as GPV
++  ("Global Programmers View") but not all. Access to this area might be denied
++  for normal (non-secure) world.
++
++  The buses are based on externally licensed IPs such as ARM NIC-301 and
++  Arteris FlexNOC but DT bindings are specific to the integration of these bus
++  interconnect IPs into imx SOCs.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++        - enum:
++          - fsl,imx8mn-nic
++          - fsl,imx8mm-nic
++          - fsl,imx8mq-nic
++        - const: fsl,imx8m-nic
++      - items:
++        - enum:
++          - fsl,imx8mn-noc
++          - fsl,imx8mm-noc
++          - fsl,imx8mq-noc
++        - const: fsl,imx8m-noc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  operating-points-v2: true
++
++  devfreq:
++    description: |
++      Phandle to another devfreq device to match OPPs with by using the
++      passive governor.
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++
++  '#interconnect-cells':
++    description: |
++      If specified then also act as an interconnect provider. Should only be
++      set once per soc on main noc.
++    const: 1
++
++  interconnect-node-id:
++    description: |
++      i.MX chips have multiple scalable buses based on the same IP, this is
++      used to distinguish between. Uses same identifier namespace as consumer
++      "interconnects" property, for example one of the values in
++      "include/dt-bindings/interconnect/imx8mm.h"
++
++    const: 1
++
++required:
++  - compatible
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mm-clock.h>
++    noc: noc@32700000 {
++            compatible = "fsl,imx8mm-noc", "fsl,imx8m-noc";
++            reg = <0x32700000 0x100000>;
++            clocks = <&clk IMX8MM_CLK_NOC>;
++            operating-points-v2 = <&noc_opp_table>;
++    };
 -- 
 2.17.1
 
