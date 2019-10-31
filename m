@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60653EB9EE
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 23:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE11EB9F0
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 23:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727669AbfJaWwX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 18:52:23 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:56526 "EHLO inva020.nxp.com"
+        id S1727742AbfJaWwZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 18:52:25 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:51564 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726735AbfJaWwX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 18:52:23 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 59C3F1A0033;
-        Thu, 31 Oct 2019 23:52:21 +0100 (CET)
+        id S1726739AbfJaWwY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 31 Oct 2019 18:52:24 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 73031200946;
+        Thu, 31 Oct 2019 23:52:22 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 41E601A010A;
-        Thu, 31 Oct 2019 23:52:21 +0100 (CET)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 58DC0200130;
+        Thu, 31 Oct 2019 23:52:22 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 3B74E205E9;
-        Thu, 31 Oct 2019 23:52:20 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 52A1B205E9;
+        Thu, 31 Oct 2019 23:52:21 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         Martin Kepplinger <martink@posteo.de>,
         linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH RFC v5 03/10] PM / devfreq: imx: Register interconnect device
-Date:   Fri,  1 Nov 2019 00:52:02 +0200
-Message-Id: <97da7dcb626009da4a25a6f63cdd52f908e57356.1572562150.git.leonard.crestez@nxp.com>
+Subject: [PATCH RFC v5 04/10] PM / devfreq: Add devfreq_get_devfreq_by_node
+Date:   Fri,  1 Nov 2019 00:52:03 +0200
+Message-Id: <69885e720ae7d51b1080e2386b1612366d86a1f4.1572562150.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1572562150.git.leonard.crestez@nxp.com>
 References: <cover.1572562150.git.leonard.crestez@nxp.com>
@@ -60,102 +60,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no single device which can represent the imx interconnect.
-Instead of adding a virtual one just make the main &noc act as the
-global interconnect provider.
-
-The imx interconnect provider driver will scale the NOC and DDRC based
-on bandwidth request. More scalable nodes can be added in the future,
-for example for audio/display/vpu/gpu NICs.
+Split off part of devfreq_get_devfreq_by_phandle into a separate
+function. This allows callers to fetch devfreq instances by enumerating
+devicetree instead of explicit phandles.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- drivers/devfreq/imx-devfreq.c | 37 +++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/devfreq/devfreq.c | 42 +++++++++++++++++++++++++++++----------
+ include/linux/devfreq.h   |  1 +
+ 2 files changed, 32 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx-devfreq.c
-index 5c907b3ab9c0..241d4c00db1f 100644
---- a/drivers/devfreq/imx-devfreq.c
-+++ b/drivers/devfreq/imx-devfreq.c
-@@ -15,10 +15,11 @@
- struct imx_devfreq {
- 	struct devfreq_dev_profile profile;
- 	struct devfreq *devfreq;
- 	struct clk *clk;
- 	struct devfreq_passive_data passive_data;
-+	struct platform_device *icc_pdev;
- };
- 
- static int imx_devfreq_target(struct device *dev, unsigned long *freq, u32 flags)
- {
- 	struct imx_devfreq *priv = dev_get_drvdata(dev);
-@@ -59,11 +60,40 @@ static int imx_devfreq_get_dev_status(struct device *dev,
- 	return 0;
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index dab31b63eb10..bc83d0aab279 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -931,10 +931,33 @@ struct devfreq *devm_devfreq_add_device(struct device *dev,
+ 	return devfreq;
  }
+ EXPORT_SYMBOL(devm_devfreq_add_device);
  
- static void imx_devfreq_exit(struct device *dev)
- {
-+	struct imx_devfreq *priv = dev_get_drvdata(dev);
+ #ifdef CONFIG_OF
++/*
++ * devfreq_get_devfreq_by_node - Get the devfreq device from devicetree
++ * @np - pointer to device_node
++ *
++ * return the instance of devfreq device
++ */
++struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
++{
++	struct devfreq *devfreq;
 +
- 	dev_pm_opp_of_remove_table(dev);
-+	platform_device_unregister(priv->icc_pdev);
++	mutex_lock(&devfreq_list_lock);
++	list_for_each_entry(devfreq, &devfreq_list, node) {
++		if (devfreq->dev.parent
++			&& devfreq->dev.parent->of_node == node) {
++			mutex_unlock(&devfreq_list_lock);
++			return devfreq;
++		}
++	}
++	mutex_unlock(&devfreq_list_lock);
++
++	return ERR_PTR(-EPROBE_DEFER);
 +}
 +
-+/* imx_devfreq_init_icc() - register matching icc provider if required */
-+static int imx_devfreq_init_icc(struct device *dev)
+ /*
+  * devfreq_get_devfreq_by_phandle - Get the devfreq device from devicetree
+  * @dev - instance to the given device
+  * @index - index into list of devfreq
+  *
+@@ -953,25 +976,22 @@ struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int index)
+ 
+ 	node = of_parse_phandle(dev->of_node, "devfreq", index);
+ 	if (!node)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	mutex_lock(&devfreq_list_lock);
+-	list_for_each_entry(devfreq, &devfreq_list, node) {
+-		if (devfreq->dev.parent
+-			&& devfreq->dev.parent->of_node == node) {
+-			mutex_unlock(&devfreq_list_lock);
+-			of_node_put(node);
+-			return devfreq;
+-		}
+-	}
+-	mutex_unlock(&devfreq_list_lock);
++	devfreq = devfreq_get_devfreq_by_node(node);
+ 	of_node_put(node);
+ 
+-	return ERR_PTR(-EPROBE_DEFER);
++	return devfreq;
+ }
++
+ #else
++struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
 +{
-+	struct imx_devfreq *priv = dev_get_drvdata(dev);
-+	const char *icc_driver_name;
++	return ERR_PTR(-ENODEV);
++}
 +
-+	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX))
-+		return 0;
-+	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
-+		return 0;
-+
-+	icc_driver_name = of_device_get_match_data(dev);
-+	if (!icc_driver_name)
-+		return 0;
-+
-+	priv->icc_pdev = platform_device_register_data(
-+			dev, icc_driver_name, 0, NULL, 0);
-+	if (IS_ERR(priv->icc_pdev)) {
-+		dev_err(dev, "failed to register icc provider %s: %ld\n",
-+				icc_driver_name, PTR_ERR(priv->devfreq));
-+		return PTR_ERR(priv->devfreq);
-+	}
-+
-+	return 0;
- }
- 
- static int imx_devfreq_probe(struct platform_device *pdev)
+ struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int index)
  {
- 	struct device *dev = &pdev->dev;
-@@ -118,18 +148,25 @@ static int imx_devfreq_probe(struct platform_device *pdev)
- 		ret = PTR_ERR(priv->devfreq);
- 		dev_err(dev, "failed to add devfreq device: %d\n", ret);
- 		goto err;
- 	}
- 
-+	ret = imx_devfreq_init_icc(dev);
-+	if (ret)
-+		goto err;
-+
- 	return 0;
- 
- err:
- 	dev_pm_opp_of_remove_table(dev);
- 	return ret;
+ 	return ERR_PTR(-ENODEV);
  }
+ #endif /* CONFIG_OF */
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index fb376b5b7281..d4d1ec04aeea 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -242,10 +242,11 @@ extern int devm_devfreq_register_notifier(struct device *dev,
+ 				unsigned int list);
+ extern void devm_devfreq_unregister_notifier(struct device *dev,
+ 				struct devfreq *devfreq,
+ 				struct notifier_block *nb,
+ 				unsigned int list);
++extern struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node);
+ extern struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
+ 						int index);
  
- static const struct of_device_id imx_devfreq_of_match[] = {
-+	{ .compatible = "fsl,imx8mq-noc", .data = "imx8mq-interconnect", },
-+	{ .compatible = "fsl,imx8mm-noc", .data = "imx8mm-interconnect", },
-+	{ .compatible = "fsl,imx8mn-noc", .data = "imx8mn-interconnect", },
- 	{ .compatible = "fsl,imx8m-noc", },
- 	{ .compatible = "fsl,imx8m-nic", },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
+ #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)
+ /**
 -- 
 2.17.1
 
