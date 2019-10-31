@@ -2,134 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 113D3EADC8
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 11:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B883EB021
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 13:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbfJaKrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 06:47:17 -0400
-Received: from mga01.intel.com ([192.55.52.88]:53905 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726932AbfJaKrR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 06:47:17 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 03:47:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,250,1569308400"; 
-   d="scan'208";a="401839713"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Oct 2019 03:47:15 -0700
-Received: from [10.226.39.46] (unknown [10.226.39.46])
-        by linux.intel.com (Postfix) with ESMTP id 24DEE58048F;
-        Thu, 31 Oct 2019 03:47:10 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure pcie
- link
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Andrew Murray <andrew.murray@arm.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, martin.blumenstingl@googlemail.com,
-        linux-pci@vger.kernel.org, hch@infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
-        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Rajat Jain <rajatja@google.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20191030221436.GA261632@google.com>
-From:   Dilip Kota <eswara.kota@linux.intel.com>
-Message-ID: <f49e1e3c-aa26-2d9d-c100-fa073ada958b@linux.intel.com>
-Date:   Thu, 31 Oct 2019 18:47:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191030221436.GA261632@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S1726462AbfJaMXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 08:23:37 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40652 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726650AbfJaMXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 08:23:36 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 15so3957306pgt.7
+        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2019 05:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=L7FbNq4GtcEGuMrNoamJkpzDtDF+1hg78dDxcjF8GrA=;
+        b=yoTArB90N55H99xOlmJsXTlX5Q4PdrQV2uSRnS11/me3WlG9q7aAWgOJjafBlLqLz2
+         JOi5ezGa/Q/VE6g75yQmuFb29m7vFH7/gKIGz3b/RvsoUWVYM21Hj0Ly7PoDvYb45wHP
+         ntHx4AkgwlGfAIHnOfHVMcQVxHhOMr0n/xikhaRl+QVGIqAHdOLFRkChL7eKRtHP+Ise
+         pRoH/2YffkBa92Mlswd0f/wyi3PU9lIhTE0dtndJ5v3tf2JGgDdfc8vm2SJQrp/cTeGY
+         3WLB3mIXHHn0OKZzq4FbUHFHaQlAAProeAAcniPwRBNNllznqIZHTQIlVd5Vndg+1hDW
+         y0SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=L7FbNq4GtcEGuMrNoamJkpzDtDF+1hg78dDxcjF8GrA=;
+        b=U4stpQpTcgJj0DUCRWBlhysrIkDJ4sdy7wUtn6FMMO/NWSDBDEbXhK/VVzOK9w15tL
+         mVRIYkzrpLrx5B0sCuOoxbox4XFgjKBonQLuqbaDS/Y6XO2rgVPkAiS7alOhogaxSQxN
+         iq7kKp79zTwOWqVQnOS6Kr6a0DY6Fna6aH7Tv3K0A8dpU6bsqxJt/8uTIRfkP6iX3qPf
+         kaIeSpBv2uuYbpGaZ64l9+k19DWheToQH/Aygenq8/yBqnUm+DrtFAK8xwtI8QflevKX
+         OIw/0DFCB5SQdvJu6Tl9BXIYGole19SqyXQMmSdZ/09yyeaSiiJjTl5+J/I7fb/sX1sC
+         ETLw==
+X-Gm-Message-State: APjAAAVLmvIOAmHaNnwCRkxY894ZFOU/Wpl37SMNGUuuSPFjdhKjgOE6
+        7s8aK1zS/VGMzs0S/CQ6dZ1HZQ==
+X-Google-Smtp-Source: APXvYqzkMwwYEMRk7E7iMmBJE8XD9e61/YS3XuGQMYPLmQolNAnvK2BAUeKzmOayGe1Fd76SpxyXug==
+X-Received: by 2002:a17:90a:48:: with SMTP id 8mr6777617pjb.82.1572524616055;
+        Thu, 31 Oct 2019 05:23:36 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id j25sm2983077pfi.113.2019.10.31.05.23.31
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 31 Oct 2019 05:23:34 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuanjiang.yu@unisoc.com,
+        baolin.wang@linaro.org, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com, orsonzhai@gmail.com
+Subject: [PATCH v2 0/5] Improve the SC27XX fuel gauge controller
+Date:   Thu, 31 Oct 2019 20:22:39 +0800
+Message-Id: <cover.1572523415.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
-On 10/31/2019 6:14 AM, Bjorn Helgaas wrote:
-> [+cc Heiner, Rajat]
->
-> On Tue, Oct 29, 2019 at 05:31:18PM +0800, Dilip Kota wrote:
->> On 10/22/2019 8:59 PM, Bjorn Helgaas wrote:
->>> [+cc Rafael, linux-pm, beginning of discussion at
->>> https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
->>>
->>> On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
->>>> On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
->>>>> On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
->>>>>> On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
->>>>>>> PCIe RC driver on Intel Gateway SoCs have a requirement
->>>>>>> of changing link width and speed on the fly.
->>>>> Please add more details about why this is needed.  Since you're adding
->>>>> sysfs files, it sounds like it's not actually the *driver* that needs
->>>>> this; it's something in userspace?
->>>> We have use cases to change the link speed and width on the fly.
->>>> One is EMI check and other is power saving.  Some battery backed
->>>> applications have to switch PCIe link from higher GEN to GEN1 and
->>>> width to x1. During the cases like external power supply got
->>>> disconnected or broken. Once external power supply is connected then
->>>> switch PCIe link to higher GEN and width.
->>> That sounds plausible, but of course nothing there is specific to the
->>> Intel Gateway, so we should implement this generically so it would
->>> work on all hardware.
->> Agree.
->>> I'm not sure what the interface should look like -- should it be a
->>> low-level interface as you propose where userspace would have to
->>> identify each link of interest, or is there some system-wide
->>> power/performance knob that could tune all links?  Cc'd Rafael and
->>> linux-pm in case they have ideas.
->> To my knowledge sysfs is the appropriate way to go.
->> If there are any other best possible knobs, will be helpful.
-> I agree sysfs is the right place for it; my question was whether we
-> should have files like:
->
->    /sys/.../0000:00:1f.3/pcie_speed
->    /sys/.../0000:00:1f.3/pcie_width
->
-> as I think this patch would add (BTW, please include sample paths like
-> the above in the commit log), or whether there should be a more global
-> thing that would affect all the links in the system.
-Sure, i will add them.
->
-> I think the low-level files like you propose would be better because
-> one might want to tune link performance differently for different
-> types of devices and workloads.
->
-> We also have to decide if these files should be associated with the
-> device at the upstream or downstream end of the link.  For ASPM, the
-> current proposal [1] has the files at the downstream end on the theory
-> that the GPU, NIC, NVMe device, etc is the user-recognizable one.
-> Also, neither ASPM nor link speed/width make any sense unless there
-> *is* a device at the downstream end, so putting them there
-> automatically makes them visible only when they're useful.
+This patch set adds one battery resistance-temperature table to optimize
+the real battery internal resistance in different tempertures, and
+calibrates the resistance of coulomb counter to improve the accuracy
+of the coulomb counter.
 
-This patch places the speed and width in the host controller directory.
-/sys/.../xxx.pcie/pcie_speed
-/sys/.../xxx.pcie/pcie_width
+Any comments are welcome. Thanks.
 
-I agree with you partially,  because i am having couple of points making 
-me to
-keep speed and width change entries in controller directory:
+Changes from v1:
+ - Fix the order of values in resistance-temp-table property's description.
+ - Add an unit suffix for FGU resistance property.
 
--- For changing the speed/width with device node, software ends up 
-traversing to the controller
-   from the device and do the operations.
--- Change speed and width are performed at controller level,
--- Keeping speed and width in controller gives a perspective (to the 
-user) of changing
-them only once irrespective of no. of devices.
--- For speed and link change in Synopsys PCIe controller, specific 
-registers need to be configured.
-    This prevents or complicates adding the speed and width change 
-functionality in pci-sysfs or pci framework.
+Baolin Wang (4):
+  dt-bindings: power: Introduce one property to describe the battery
+    resistance with temperature changes
+  power: supply: core: Add battery internal resistance temperature
+    table support
+  dt-bindings: power: sc27xx: Add a new property to describe the real
+    resistance of coulomb counter chip
+  power: supply: sc27xx: Calibrate the resistance of coulomb counter
 
-Regards,
-Dilip
+Yuanjiang Yu (1):
+  power: supply: sc27xx: Optimize the battery resistance with measuring
+    temperature
+
+ .../devicetree/bindings/power/supply/battery.txt   |    5 ++
+ .../devicetree/bindings/power/supply/sc27xx-fg.txt |    3 +
+ drivers/power/supply/power_supply_core.c           |   67 +++++++++++++++++++-
+ drivers/power/supply/sc27xx_fuel_gauge.c           |   49 +++++++++++++-
+ include/linux/power_supply.h                       |   10 +++
+ 5 files changed, 130 insertions(+), 4 deletions(-)
+
+-- 
+1.7.9.5
 
