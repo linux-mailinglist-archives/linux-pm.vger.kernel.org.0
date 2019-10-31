@@ -2,217 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2789EAD61
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 11:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113D3EADC8
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 11:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbfJaKYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 06:24:36 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52678 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbfJaKYg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 06:24:36 -0400
-Received: from 91.217.168.176 (91.217.168.176) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id c2cbb5481e9d89f0; Thu, 31 Oct 2019 11:24:33 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: Add user_min/max_freq
-Date:   Thu, 31 Oct 2019 11:24:31 +0100
-Message-ID: <3169109.BFaCN5124U@kreacher>
-In-Reply-To: <c222deda79ad334ff4edcbd49ddda248685c4ee1.1572395990.git.leonard.crestez@nxp.com>
-References: <c222deda79ad334ff4edcbd49ddda248685c4ee1.1572395990.git.leonard.crestez@nxp.com>
+        id S1727078AbfJaKrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 06:47:17 -0400
+Received: from mga01.intel.com ([192.55.52.88]:53905 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726932AbfJaKrR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 31 Oct 2019 06:47:17 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 03:47:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,250,1569308400"; 
+   d="scan'208";a="401839713"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Oct 2019 03:47:15 -0700
+Received: from [10.226.39.46] (unknown [10.226.39.46])
+        by linux.intel.com (Postfix) with ESMTP id 24DEE58048F;
+        Thu, 31 Oct 2019 03:47:10 -0700 (PDT)
+Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure pcie
+ link
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andrew Murray <andrew.murray@arm.com>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, martin.blumenstingl@googlemail.com,
+        linux-pci@vger.kernel.org, hch@infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
+        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Rajat Jain <rajatja@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20191030221436.GA261632@google.com>
+From:   Dilip Kota <eswara.kota@linux.intel.com>
+Message-ID: <f49e1e3c-aa26-2d9d-c100-fa073ada958b@linux.intel.com>
+Date:   Thu, 31 Oct 2019 18:47:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20191030221436.GA261632@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 30, 2019 1:41:49 AM CET Leonard Crestez wrote:
-> Current values in scaling_min_freq and scaling_max freq can change on
-> the fly due to event such as thermal monitoring.
 
-Which is intentional.
+On 10/31/2019 6:14 AM, Bjorn Helgaas wrote:
+> [+cc Heiner, Rajat]
+>
+> On Tue, Oct 29, 2019 at 05:31:18PM +0800, Dilip Kota wrote:
+>> On 10/22/2019 8:59 PM, Bjorn Helgaas wrote:
+>>> [+cc Rafael, linux-pm, beginning of discussion at
+>>> https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
+>>>
+>>> On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
+>>>> On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
+>>>>> On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
+>>>>>> On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
+>>>>>>> PCIe RC driver on Intel Gateway SoCs have a requirement
+>>>>>>> of changing link width and speed on the fly.
+>>>>> Please add more details about why this is needed.  Since you're adding
+>>>>> sysfs files, it sounds like it's not actually the *driver* that needs
+>>>>> this; it's something in userspace?
+>>>> We have use cases to change the link speed and width on the fly.
+>>>> One is EMI check and other is power saving.  Some battery backed
+>>>> applications have to switch PCIe link from higher GEN to GEN1 and
+>>>> width to x1. During the cases like external power supply got
+>>>> disconnected or broken. Once external power supply is connected then
+>>>> switch PCIe link to higher GEN and width.
+>>> That sounds plausible, but of course nothing there is specific to the
+>>> Intel Gateway, so we should implement this generically so it would
+>>> work on all hardware.
+>> Agree.
+>>> I'm not sure what the interface should look like -- should it be a
+>>> low-level interface as you propose where userspace would have to
+>>> identify each link of interest, or is there some system-wide
+>>> power/performance knob that could tune all links?  Cc'd Rafael and
+>>> linux-pm in case they have ideas.
+>> To my knowledge sysfs is the appropriate way to go.
+>> If there are any other best possible knobs, will be helpful.
+> I agree sysfs is the right place for it; my question was whether we
+> should have files like:
+>
+>    /sys/.../0000:00:1f.3/pcie_speed
+>    /sys/.../0000:00:1f.3/pcie_width
+>
+> as I think this patch would add (BTW, please include sample paths like
+> the above in the commit log), or whether there should be a more global
+> thing that would affect all the links in the system.
+Sure, i will add them.
+>
+> I think the low-level files like you propose would be better because
+> one might want to tune link performance differently for different
+> types of devices and workloads.
+>
+> We also have to decide if these files should be associated with the
+> device at the upstream or downstream end of the link.  For ASPM, the
+> current proposal [1] has the files at the downstream end on the theory
+> that the GPU, NIC, NVMe device, etc is the user-recognizable one.
+> Also, neither ASPM nor link speed/width make any sense unless there
+> *is* a device at the downstream end, so putting them there
+> automatically makes them visible only when they're useful.
 
-> This behavior is confusing for userspace and because once an userspace
-> limit is written to scaling_min/max_freq it is not possible to read it back.
+This patch places the speed and width in the host controller directory.
+/sys/.../xxx.pcie/pcie_speed
+/sys/.../xxx.pcie/pcie_width
 
-That can be argued both ways.
+I agree with you partially,  because i am having couple of points making 
+me to
+keep speed and width change entries in controller directory:
 
-It is also useful to know the effective constraints and arguably the ability
-to read back the values that you have written is mostly needed for debugging
-the code.
+-- For changing the speed/width with device node, software ends up 
+traversing to the controller
+   from the device and do the operations.
+-- Change speed and width are performed at controller level,
+-- Keeping speed and width in controller gives a perspective (to the 
+user) of changing
+them only once irrespective of no. of devices.
+-- For speed and link change in Synopsys PCIe controller, specific 
+registers need to be configured.
+    This prevents or complicates adding the speed and width change 
+functionality in pci-sysfs or pci framework.
 
-Also arguably, if there are multiple sources of frequency limits in user space,
-there needs to be a user space arbiter deciding on which value to use and in
-that case it needs to store the last value chosen by it anyway.
-
-> Introduce two new user_min/max_freq files which only contain the limits
-> imposed by userspace, without any aggregation.
-
-I'm not sure how useful that is except for the debugging use case to be honest.
-
-Do you have any specific use cases beyond debugging in mind?
-
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
-> This was motivated by these discussions:
-> 
-> * https://patchwork.kernel.org/patch/11078475/#22805379
-> * https://patchwork.kernel.org/patch/11171817/#22917099
-> 
-> Those threads are about devfreq but same issue applies to cpufreq as
-> well. Let me know if this solution seems reasonable?
-> 
-> An alternative would be to make scaling_min/max_freq always read back
-> the configured value and introduce new effective_min/max_freq files for
-> the aggregate values. That might break existing users (though I'm not
-> familiar with any).
-> 
->  Documentation/admin-guide/pm/cpufreq.rst | 27 ++++++++++++++++++------
->  drivers/cpufreq/cpufreq.c                | 19 +++++++++++++++++
->  include/linux/pm_qos.h                   |  4 ++++
->  3 files changed, 44 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-> index 0c74a7784964..734c01c1040e 100644
-> --- a/Documentation/admin-guide/pm/cpufreq.rst
-> +++ b/Documentation/admin-guide/pm/cpufreq.rst
-> @@ -309,21 +309,36 @@ are the following:
->  
->  ``scaling_max_freq``
->  	Maximum frequency the CPUs belonging to this policy are allowed to be
->  	running at (in kHz).
->  
-> -	This attribute is read-write and writing a string representing an
-> -	integer to it will cause a new limit to be set (it must not be lower
-> -	than the value of the ``scaling_min_freq`` attribute).
-> +	This attribute is read-write: writing an integer will set a new limit
-> +	(just like ``user_max_freq``) while reading will show the current
-> +	limit (potentially affected by other system contraints such as thermal
-> +	throttling).
->  
->  ``scaling_min_freq``
->  	Minimum frequency the CPUs belonging to this policy are allowed to be
->  	running at (in kHz).
->  
-> -	This attribute is read-write and writing a string representing a
-> -	non-negative integer to it will cause a new limit to be set (it must not
-> -	be higher than the value of the ``scaling_max_freq`` attribute).
-> +	This attribute is read-write: writing an integer will set a new limit
-> +	(just like ``user_min_freq``) while reading will show the current
-> +	limit (potentially affected by other system contraints).
-> +
-> +``user_max_freq``
-> +	Userspace contraint for the maximum frequency the CPUs belonging to
-> +	this policy are allowed to be running at (in kHz).
-> +
-> +	This attribute is read-write: writing an integer will set a new limit
-> +	and reading will show the last limit set by userspace.
-
-Making these read-write is not useful IMO.  Make them read-only.
-
-> +
-> +``user_min_freq``
-> +	Userspace contraint for minimum frequency the CPUs belonging to this
-> +	policy are allowed to be running at (in kHz).
-> +
-> +	This attribute is read-write: writing an integer will set a new limit
-> +	and reading will show the last limit set by userspace.
->  
->  ``scaling_setspeed``
->  	This attribute is functional only if the `userspace`_ scaling governor
->  	is attached to the given policy.
->  
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 48a224a6b178..caefed0dac43 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -722,13 +722,28 @@ static ssize_t store_##file_name					\
->  									\
->  	ret = freq_qos_update_request(policy->object##_freq_req, val);\
->  	return ret >= 0 ? count : ret;					\
->  }
->  
-> +store_one(user_min_freq, min);
-> +store_one(user_max_freq, max);
->  store_one(scaling_min_freq, min);
->  store_one(scaling_max_freq, max);
-
-I don't agree with duplicating functionality like this.
-
->  
-> +#undef show_one
-> +
-> +#define show_one(file_name, object)					\
-> +static ssize_t show_##file_name						\
-> +(struct cpufreq_policy *policy, char *buf)				\
-> +{									\
-> +	s32 val = freq_qos_get_request_value(policy->object##_freq_req);\
-> +	return sprintf(buf, "%d\n", val);				\
-> +}
-> +
-> +show_one(user_min_freq, min);
-> +show_one(user_max_freq, max);
-> +
->  /**
->   * show_cpuinfo_cur_freq - current CPU frequency as detected by hardware
->   */
->  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
->  					char *buf)
-> @@ -906,10 +921,12 @@ cpufreq_freq_attr_ro(related_cpus);
->  cpufreq_freq_attr_ro(affected_cpus);
->  cpufreq_freq_attr_rw(scaling_min_freq);
->  cpufreq_freq_attr_rw(scaling_max_freq);
->  cpufreq_freq_attr_rw(scaling_governor);
->  cpufreq_freq_attr_rw(scaling_setspeed);
-> +cpufreq_freq_attr_rw(user_min_freq);
-> +cpufreq_freq_attr_rw(user_max_freq);
->  
->  static struct attribute *default_attrs[] = {
->  	&cpuinfo_min_freq.attr,
->  	&cpuinfo_max_freq.attr,
->  	&cpuinfo_transition_latency.attr,
-> @@ -919,10 +936,12 @@ static struct attribute *default_attrs[] = {
->  	&related_cpus.attr,
->  	&scaling_governor.attr,
->  	&scaling_driver.attr,
->  	&scaling_available_governors.attr,
->  	&scaling_setspeed.attr,
-> +	&user_min_freq.attr,
-> +	&user_max_freq.attr,
->  	NULL
->  };
->  
->  #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
->  #define to_attr(a) container_of(a, struct freq_attr, attr)
-> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-> index e97c2e376889..90b147b7d7a3 100644
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -310,7 +310,11 @@ int freq_qos_add_notifier(struct freq_constraints *qos,
->  			  enum freq_qos_req_type type,
->  			  struct notifier_block *notifier);
->  int freq_qos_remove_notifier(struct freq_constraints *qos,
->  			     enum freq_qos_req_type type,
->  			     struct notifier_block *notifier);
-> +static inline s32 freq_qos_get_request_value(struct freq_qos_request *req)
-> +{
-> +	return req->pnode.prio;
-> +}
->  
->  #endif
-> 
-
-
-
+Regards,
+Dilip
 
