@@ -2,144 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AB7EB25F
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 15:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B0AEB44C
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 16:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfJaOW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 10:22:56 -0400
-Received: from mail-eopbgr20084.outbound.protection.outlook.com ([40.107.2.84]:62542
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726741AbfJaOW4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 10:22:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MVx2aKrVtjRMmloqKvFq+kKLyIhD228+iuQkBRE+QWCx+x8XmnbzHlNtdJGwYTVcIR8RkWNcI2dBmHzBOFoPSICoh5/WGwhsFq53koVuMcg++I9dkROG86u2n7k87j84J11ePgscwwaqsutuiUMs8ZO63ElLRzRGGiyI0l4m6zQSZdnuNh2XyHOJbxV89g5xE6If0MhPj3BKDhBF/tPpalMTnyk1F2FeJd9HBe8rQLIYo39FEPJW3V79T9T64sE3RkbWmztbQxVjLk07qou9altV6tw56TkuyWYeGKDGIIZDDswJJoUxf2yRTIjrUCwcEAYHb5q9eHWkuspfd55zhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XJDkspaZ1tbaiuYzTK6HCL4TX+62eTaxgRB84kjbGXA=;
- b=iKul02b6zKYAq68GUh+qkQQxxCK0PxvkKkBc2HwaFvUG+UmZ02xbJwpIm0Dj1rt5VOWFs30Z/YcasizNkJd8OTP9D//iaH8+Rg5hic1v2x3OcwDvCk/hmEpYequ63yUgLpRsngDb4+S/IVariGnVB2RCCdZLWxr2kaNR8E6K2K8Vm7i0HXvGlEUMN42LSe2cWHtTDjiRffkwZQhKtyRb41rrhlp5uKScnGvu9SZk1vLDMFkv1HmBVQMZb/+8Q6NHBcL0oJZbvgaD8v3YhLWlWm/3mujGANgyVU9f5TqtuJtQXAWu4WLXqAZgfgeqKjjjyvsaEgP3QOZxCWVmf5P2lQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XJDkspaZ1tbaiuYzTK6HCL4TX+62eTaxgRB84kjbGXA=;
- b=SuTIRGruYGMgYCA4LCKwQSWogsrwYtWOzuI4WnyJ0BvrpSGJjWeZixupovPiR+cpPszpb0ghB2Smn93FVAQIR58YJ29HZo0BXBREf+d+2udemEsjqT42ylkvLhyt/ptYwFj9Fomopgb1AljEnYgEBzVyI3OYDEmpDpXK1HN0DjY=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB7166.eurprd04.prod.outlook.com (10.186.156.11) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.22; Thu, 31 Oct 2019 14:22:52 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2387.028; Thu, 31 Oct 2019
- 14:22:51 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-CC:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2] PM / devfreq: Check NULL governor in
- available_governors_show
-Thread-Topic: [PATCH v2] PM / devfreq: Check NULL governor in
- available_governors_show
-Thread-Index: AQHVcqlz8mBQO8LnZUW2xGpsUnk7Sw==
-Date:   Thu, 31 Oct 2019 14:22:51 +0000
-Message-ID: <VI1PR04MB7023C870D21D89C523101A70EE630@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <921db734cb5c92875c3f81250126e2027bf6144b.1569309756.git.leonard.crestez@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 0f64108f-e0a2-44a4-ec45-08d75e0dd05b
-x-ms-traffictypediagnostic: VI1PR04MB7166:|VI1PR04MB7166:
-x-ms-exchange-purlcount: 2
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB716644EB89AAC06BAA09D3B8EE630@VI1PR04MB7166.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 02070414A1
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(199004)(189003)(25786009)(99286004)(305945005)(26005)(6506007)(45080400002)(102836004)(76176011)(53546011)(110136005)(54906003)(486006)(52536014)(8936002)(81166006)(81156014)(8676002)(66066001)(316002)(33656002)(7696005)(86362001)(186003)(74316002)(7736002)(76116006)(66446008)(66476007)(66946007)(91956017)(66556008)(64756008)(14454004)(6116002)(229853002)(71200400001)(44832011)(3846002)(6436002)(55016002)(6306002)(476003)(9686003)(6246003)(446003)(256004)(14444005)(2906002)(5660300002)(4326008)(966005)(71190400001)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB7166;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hG8vJY4+shWhLt3tB47dM8rbndmNZ54nUvhbMq2WPPEiMf7vJYijOmvmi62TQrRgFallIrmNenDBqOAEIgk1ulJeYih5MKWydmEXP6/yW8sUSrdV3PGkjAErjy8Or7NpjXNUSx1Pl4KqHXByhEshjH/SfTYKb5Ax9zqrOMa/EYQ5BChdEjMccrAqSqg4obnUJVMQMs4tSEzJv02G54bQnvSiwiB5oWA+ePbdD5Hjy6XEtf11N12TIWmidu7ez040+Cn1prDCPC3vLsgZx5ghLrR1W6dwGaxHqxupLnu8rQRONeUFlz/lrzj6sdM/lzK2hf8sQouUzUzen6HmmEKSPQ6vi/oE6iZrD/oGpZr/5K/Z42AppnETXlUUSw0GdXY13TO6YK8F81eCj8zAZDfqY43ghifR/ocMoJAT+o5JQ7TPiDtGsVuLy5InHjqMN7AsJiDbBI+GlndPjjLgSgkUiMEOTmGlnghS3zIVkuoe/Qk=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1727020AbfJaP4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 11:56:14 -0400
+Received: from mx3.freesources.org ([195.34.172.217]:54816 "EHLO
+        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727580AbfJaP4N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 11:56:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:Subject:From:References:Cc:To; bh=H6WeyQHGvJemHtOBb8i70Imk1EYAuWSs3x0uFKq4/kg=;
+        b=e6YfdeA7mui2CKeArjz549J07GfiL2epyFHP0mnV6h1L+hZ3P6I+1GhaIHKA9/dNaj4u76QN3simKDZtbbWFvtGAy/mcCenl7b+8vlQse+eHXR63OMaM27UDMHGRw5OMiP/eWcLsPTrGKIM8yQG739MvfNShJIPokVJoji9lo34=;
+Received: from anon-36-251.vpn.ipredator.se ([46.246.36.251])
+        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <jonas@freesources.org>)
+        id 1iQCnw-00078u-KR; Thu, 31 Oct 2019 15:56:08 +0000
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>
+References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+ <2847488.TR0R5COpHM@kreacher>
+ <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
+ <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
+ <20191022103909.GA10573@amd>
+From:   Jonas Meurer <jonas@freesources.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
+ 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
+ 2SCIHpzHfm/mpRL2
+Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+ suspend
+Message-ID: <1a180a7e-265d-f4c8-1cdd-ecafe72cf0a0@freesources.org>
+Date:   Thu, 31 Oct 2019 16:56:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f64108f-e0a2-44a4-ec45-08d75e0dd05b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2019 14:22:51.8420
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: t7JoFrASbc9kpLG2Dlsj0CBw2AIlIdGd4wafcLcD8XjWFJVNu4drJbwFkUtmIOT2MkolM1T2UW3ATXIG64zBIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7166
+In-Reply-To: <20191022103909.GA10573@amd>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24.09.2019 10:26, Leonard Crestez wrote:=0A=
-> The governor is initialized after sysfs attributes become visible so in=
-=0A=
-> theory the governor field can be NULL here.=0A=
-> =0A=
-> Fixes: bcf23c79c4e46 ("PM / devfreq: Fix available_governor sysfs")=0A=
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>=0A=
-> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>=0A=
-=0A=
-Gentle ping?=0A=
-=0A=
-This is a very simple bugfix with no dependencies which has already been =
-=0A=
-reviewed. Same applies to the following patch:=0A=
-=0A=
-https://patchwork.kernel.org/patch/11158225/=0A=
-=0A=
-> ---=0A=
->   drivers/devfreq/devfreq.c | 2 +-=0A=
->   1 file changed, 1 insertion(+), 1 deletion(-)=0A=
-> =0A=
-> Changes since v1:=0A=
-> * Add Fixes tag and Reviewed-by=0A=
-> Link to v1: https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3=
-A%2F%2Fpatchwork.kernel.org%2Fpatch%2F11157333%2F&amp;data=3D02%7C01%7Cleon=
-ard.crestez%40nxp.com%7C857374c5be41480ec9ad08d740c09549%7C686ea1d3bc2b4c6f=
-a92cd99c5c301635%7C0%7C0%7C637049068194432556&amp;sdata=3DBIV9uq2WOBIrDLwGB=
-WiM2wvHPselZnqdtOUV1uzzBsQ%3D&amp;reserved=3D0=0A=
-> =0A=
-> Don't add cc: stable since it's a theoretical race condition.=0A=
-> =0A=
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c=0A=
-> index b905963cea7d..60859a2400bc 100644=0A=
-> --- a/drivers/devfreq/devfreq.c=0A=
-> +++ b/drivers/devfreq/devfreq.c=0A=
-> @@ -1193,11 +1193,11 @@ static ssize_t available_governors_show(struct de=
-vice *d,=0A=
->   =0A=
->   	/*=0A=
->   	 * The devfreq with immutable governor (e.g., passive) shows=0A=
->   	 * only own governor.=0A=
->   	 */=0A=
-> -	if (df->governor->immutable) {=0A=
-> +	if (df->governor && df->governor->immutable) {=0A=
->   		count =3D scnprintf(&buf[count], DEVFREQ_NAME_LEN,=0A=
->   				  "%s ", df->governor_name);=0A=
->   	/*=0A=
->   	 * The devfreq device shows the registered governor except for=0A=
->   	 * immutable governors such as passive governor .=0A=
-> =0A=
-=0A=
+Hi Pavel,
+
+thanks for your comment.
+
+Pavel Machek:
+>> sorry for the noise, but again: is there a chance to get a brief review
+>> of my patchset?
+>>
+>> Probably it was a bad idea to rename the build-time flag, right? Should
+>> I revert that part of the patch?
+> 
+> I don't like adding more and more knobs.
+> 
+> We should not have added that compile-time option, either.
+> 
+> Perhaps it is time to declare that if the user wants the data to be
+> synced, he just does sys_sync() himself?
+
+Mh, I don't see why you would want to do that? In most standard cases, I
+think it's perfectly reasonable that the kernel takes care of a final
+sync() before doing suspend to RAM in order to prevent potential data
+loss when the system looses power during suspend mode.
+
+> (Yes, that will mean tiny ammount of dirty data created between
+> sys_sync() and suspend to be unwritten, but...)
+> 
+> (Besides, if you add a runtime option to avoid deadlocks, you still
+> have not fixed the deadlocks...)
+
+The deadlock only happens if something outside the kernel suspends the
+block devices *before* doing suspend to RAM. In this edge case, the
+runtime option would help a lot.
+
+Besides, what you suggest probably requires a lot more discussion than
+adding a runtime option, no? Would you be ok with adding the runtime
+switch now and discuss the removal of sync() from suspend function
+altogether later?
+
+Cheers
+ jonas
+
