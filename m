@@ -2,172 +2,300 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B0AEB44C
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 16:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488DBEB5CB
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 18:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbfJaP4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 11:56:14 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:54816 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727580AbfJaP4N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 11:56:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:Subject:From:References:Cc:To; bh=H6WeyQHGvJemHtOBb8i70Imk1EYAuWSs3x0uFKq4/kg=;
-        b=e6YfdeA7mui2CKeArjz549J07GfiL2epyFHP0mnV6h1L+hZ3P6I+1GhaIHKA9/dNaj4u76QN3simKDZtbbWFvtGAy/mcCenl7b+8vlQse+eHXR63OMaM27UDMHGRw5OMiP/eWcLsPTrGKIM8yQG739MvfNShJIPokVJoji9lo34=;
-Received: from anon-36-251.vpn.ipredator.se ([46.246.36.251])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <jonas@freesources.org>)
-        id 1iQCnw-00078u-KR; Thu, 31 Oct 2019 15:56:08 +0000
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
- <2847488.TR0R5COpHM@kreacher>
- <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
- <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
- <20191022103909.GA10573@amd>
-From:   Jonas Meurer <jonas@freesources.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- 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
- 2SCIHpzHfm/mpRL2
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
-Message-ID: <1a180a7e-265d-f4c8-1cdd-ecafe72cf0a0@freesources.org>
-Date:   Thu, 31 Oct 2019 16:56:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728702AbfJaRHv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 13:07:51 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34401 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728597AbfJaRHv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 13:07:51 -0400
+Received: by mail-lj1-f195.google.com with SMTP id 139so7469639ljf.1;
+        Thu, 31 Oct 2019 10:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xKp3WfNzfRPprkwSMJmaH7UF6M0QGd/6mj3T8rfzGeA=;
+        b=g/94vjp3DxJKC4lpG7ZfRbS/LB/xMrDY/KGRdyNllSqD77GRT+A6/HUVDXfFuoZHDc
+         srl4MMUeR/oY/P8mcNqpwaYGsFnhm2KFxfk8ZKWi17QvlK+Dl76WvczZ7DhvedD0Wgba
+         A3L1NT1o+fA4L62RD0f/0n2ZwplZskiAbmWprihupOkZMzR6QcaQhPcD0nFuK1oPlzzK
+         f/7GxwX9eraTh5cl3mV2g2fHbi5BdHWxT8z73v1HozhBDRGDHSPwxYxiJUcxDNVuba92
+         GYGuqp53Utj5viWUgXD587JZEaGuGHUf3wbqCouQ9Dlkrq3MV9yL8pan7u5yXA3FGAQG
+         oDUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xKp3WfNzfRPprkwSMJmaH7UF6M0QGd/6mj3T8rfzGeA=;
+        b=apJBo4KYEM3QdiqgpFLrpJ9olQcu6BSel7vNoQRl1qn/OskImft5oWYhY1LR1AQV28
+         isJWSQgxmW3AF6kZ6Tapsyl78lbRSd6uhO79ivHp3GQRtrppTIeRUcDtTAIFmu/zUftf
+         6hrbyAFyT0qL8YkO9koxiGAvSTVKXE9g6Tq/uSBF5soLOpAysyTFsLq91woU3nJFxq9D
+         bISpAFxs0u6DxN9NxYh59yk5cF8A2nK6swzyTEKAShEAAhqhthSqIbBZvj5bTkV5otaL
+         DaEThaqu4szUCAmdbHBZsEQIIlS2lqDh9T14U/PUoPrcWQkbjLiQXrQpzliN8LEa8WZu
+         HXog==
+X-Gm-Message-State: APjAAAW9guW4JhD5m/klFGFX4Ioc006Us9QT635z0LwP9IV9w2iEWNHm
+        r47I1MuzyEnPH4f9aGx5jDrYXTvD
+X-Google-Smtp-Source: APXvYqxkyxPnYuZ6K5jJWpVjKNj99Ixk735u6swPjP+FCJR+/J3a75ogeSssFbIBeMTu30lUzJvNSw==
+X-Received: by 2002:a2e:8e88:: with SMTP id z8mr4883420ljk.56.1572541666839;
+        Thu, 31 Oct 2019 10:07:46 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id g26sm1924040lfh.1.2019.10.31.10.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Oct 2019 10:07:45 -0700 (PDT)
+Subject: Re: [PATCH v3 01/10] clk: tegra: Add custom CCLK implementation
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191030213400.29434-1-digetx@gmail.com>
+ <20191030213400.29434-2-digetx@gmail.com>
+Message-ID: <50651277-d8db-0a38-3ca8-c991480c1e6a@gmail.com>
+Date:   Thu, 31 Oct 2019 20:07:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20191022103909.GA10573@amd>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: de-DE
+In-Reply-To: <20191030213400.29434-2-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pavel,
-
-thanks for your comment.
-
-Pavel Machek:
->> sorry for the noise, but again: is there a chance to get a brief review
->> of my patchset?
->>
->> Probably it was a bad idea to rename the build-time flag, right? Should
->> I revert that part of the patch?
+31.10.2019 00:33, Dmitry Osipenko пишет:
+> CCLK stands for "CPU Clock", CPU core is running off CCLK. CCLK supports
+> multiple parents, it has internal clock divider and a clock skipper.
+> PLLX is the main CCLK parent that provides clock rates above 1GHz and it
+> has special property such that the CCLK's internal divider is set into
+> bypass mode when PLLX is selected as a parent for CCLK.
 > 
-> I don't like adding more and more knobs.
+> This patch forks generic Super Clock into CCLK implementation which takes
+> into account all CCLK specifics. The proper CCLK implementation is needed
+> by the upcoming Tegra20 CPUFreq driver update that will allow to utilize
+> the generic cpufreq-dt driver by moving intermediate clock selection into
+> the clock driver.
 > 
-> We should not have added that compile-time option, either.
+> Note that technically this patch could be squashed into clk-super.c, but
+> it is cleaner to have a separate source file. Also note that currently all
+> CCLKLP bits are left in the clk-super.c and only CCLKG is supported by
+> clk-tegra-super-cclk. It shouldn't be difficult to move the CCLKLP bits,
+> but CCLKLP is not used by anything in kernel and thus better not to touch
+> it for now.
 > 
-> Perhaps it is time to declare that if the user wants the data to be
-> synced, he just does sys_sync() himself?
-
-Mh, I don't see why you would want to do that? In most standard cases, I
-think it's perfectly reasonable that the kernel takes care of a final
-sync() before doing suspend to RAM in order to prevent potential data
-loss when the system looses power during suspend mode.
-
-> (Yes, that will mean tiny ammount of dirty data created between
-> sys_sync() and suspend to be unwritten, but...)
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/clk/tegra/Makefile               |   1 +
+>  drivers/clk/tegra/clk-tegra-super-cclk.c | 176 +++++++++++++++++++++++
+>  drivers/clk/tegra/clk.h                  |  11 +-
+>  3 files changed, 186 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/clk/tegra/clk-tegra-super-cclk.c
 > 
-> (Besides, if you add a runtime option to avoid deadlocks, you still
-> have not fixed the deadlocks...)
+> diff --git a/drivers/clk/tegra/Makefile b/drivers/clk/tegra/Makefile
+> index df966ca06788..f04b490f5416 100644
+> --- a/drivers/clk/tegra/Makefile
+> +++ b/drivers/clk/tegra/Makefile
+> @@ -14,6 +14,7 @@ obj-y					+= clk-tegra-audio.o
+>  obj-y					+= clk-tegra-periph.o
+>  obj-y					+= clk-tegra-pmc.o
+>  obj-y					+= clk-tegra-fixed.o
+> +obj-y					+= clk-tegra-super-cclk.o
+>  obj-y					+= clk-tegra-super-gen4.o
+>  obj-$(CONFIG_TEGRA_CLK_EMC)		+= clk-emc.o
+>  obj-$(CONFIG_ARCH_TEGRA_2x_SOC)         += clk-tegra20.o
+> diff --git a/drivers/clk/tegra/clk-tegra-super-cclk.c b/drivers/clk/tegra/clk-tegra-super-cclk.c
+> new file mode 100644
+> index 000000000000..5cff8363c978
+> --- /dev/null
+> +++ b/drivers/clk/tegra/clk-tegra-super-cclk.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Based on clk-super.c
+> + * Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+> + *
+> + * Based on older tegra20-cpufreq driver by Colin Cross <ccross@google.com>
+> + * Copyright (C) 2010 Google, Inc.
+> + *
+> + * Author: Dmitry Osipenko <digetx@gmail.com>
+> + * Copyright (C) 2019 GRATE-DRIVER project
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +
+> +#include "clk.h"
+> +
+> +#define PLLP_INDEX		4
+> +#define PLLX_INDEX		8
+> +
+> +#define SUPER_CDIV_ENB		BIT(31)
+> +
+> +static u8 cclk_super_get_parent(struct clk_hw *hw)
+> +{
+> +	return tegra_clk_super_ops.get_parent(hw);
+> +}
+> +
+> +static int cclk_super_set_parent(struct clk_hw *hw, u8 index)
+> +{
+> +	return tegra_clk_super_ops.set_parent(hw, index);
+> +}
+> +
+> +static int cclk_super_set_rate(struct clk_hw *hw, unsigned long rate,
+> +			       unsigned long parent_rate)
+> +{
+> +	return tegra_clk_super_ops.set_rate(hw, rate, parent_rate);
+> +}
+> +
+> +static unsigned long cclk_super_recalc_rate(struct clk_hw *hw,
+> +					    unsigned long parent_rate)
+> +{
+> +	if (cclk_super_get_parent(hw) == PLLX_INDEX)
+> +		return parent_rate;
+> +
+> +	return tegra_clk_super_ops.recalc_rate(hw, parent_rate);
+> +}
+> +
+> +static int cclk_super_determine_rate(struct clk_hw *hw,
+> +				     struct clk_rate_request *req)
+> +{
+> +	struct clk_hw *pllp_hw = clk_hw_get_parent_by_index(hw, PLLP_INDEX);
+> +	struct clk_hw *pllx_hw = clk_hw_get_parent_by_index(hw, PLLX_INDEX);
+> +	struct tegra_clk_super_mux *super = to_clk_super_mux(hw);
+> +	unsigned long pllp_rate;
+> +	long rate = req->rate;
+> +
+> +	if (WARN_ON_ONCE(!pllp_hw || !pllx_hw))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Switch parent to PLLP for all CCLK rates that are suitable for PLLP.
+> +	 * PLLX will be disabled in this case, saving some power.
+> +	 */
+> +	pllp_rate = clk_hw_get_rate(pllp_hw);
+> +
+> +	if (rate <= pllp_rate) {
+> +		if (super->flags & TEGRA20_SUPER_CLK)
+> +			rate = pllp_rate;
+> +		else
+> +			rate = tegra_clk_super_ops.round_rate(hw, rate,
+> +							      &pllp_rate);
+> +
+> +		req->best_parent_rate = pllp_rate;
+> +		req->best_parent_hw = pllp_hw;
+> +		req->rate = rate;
+> +	} else {
+> +		rate = clk_hw_round_rate(pllx_hw, rate);
+> +		req->best_parent_rate = rate;
+> +		req->best_parent_hw = pllx_hw;
+> +		req->rate = rate;
+> +	}
+> +
+> +	if (WARN_ON_ONCE(rate <= 0))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct clk_ops tegra_cclk_super_ops = {
+> +	.get_parent = cclk_super_get_parent,
+> +	.set_parent = cclk_super_set_parent,
+> +	.set_rate = cclk_super_set_rate,
+> +	.recalc_rate = cclk_super_recalc_rate,
+> +	.determine_rate = cclk_super_determine_rate,
+> +};
+> +
+> +static const struct clk_ops tegra_cclk_super_mux_ops = {
+> +	.get_parent = cclk_super_get_parent,
+> +	.set_parent = cclk_super_set_parent,
+> +	.determine_rate = cclk_super_determine_rate,
+> +};
+> +
+> +struct clk *tegra_clk_register_super_cclk(const char *name,
+> +		const char * const *parent_names, u8 num_parents,
+> +		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
+> +		spinlock_t *lock)
+> +{
+> +	struct tegra_clk_super_mux *super;
+> +	struct clk *clk;
+> +	struct clk_init_data init;
+> +	u32 val;
+> +
+> +	super = kzalloc(sizeof(*super), GFP_KERNEL);
+> +	if (!super)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	init.name = name;
+> +	init.flags = flags;
+> +	init.parent_names = parent_names;
+> +	init.num_parents = num_parents;
+> +
+> +	super->reg = reg;
+> +	super->lock = lock;
+> +	super->width = 4;
+> +	super->flags = clk_super_flags;
+> +	super->hw.init = &init;
+> +
+> +	if (super->flags & TEGRA20_SUPER_CLK) {
+> +		init.ops = &tegra_cclk_super_mux_ops;
+> +	} else {
+> +		init.ops = &tegra_cclk_super_ops;
+> +
+> +		super->frac_div.reg = reg + 4;
+> +		super->frac_div.shift = 16;
+> +		super->frac_div.width = 8;
+> +		super->frac_div.frac_width = 1;
+> +		super->frac_div.lock = lock;
+> +		super->div_ops = &tegra_clk_frac_div_ops;
+> +	}
+> +
+> +	/*
+> +	 * Tegra30+ has the following CPUG clock topology:
+> +	 *
+> +	 *                                              OVERHEAT+----+
+> +	 *        +---+  +-------+  +---+                            |
+> +	 * PLLP+->+   +->+DIVIDER+->+0  |                            v
+> +	 *        |   |  +-------+  |   |  +-------+               +-+-+
+> +	 * PLLC+->+MUX|             |OUT+->+SKIPPER+-+------------>+0  |
+> +	 *  ...   |   |             |   |  +-------+ |             |   |
+> +	 * PLLX+->+-->+------------>+1  |            |             |OUT|->+CPU
+> +	 *        +---+             +-+-+            |  +-------+  |   |
+> +	 *                            ^              +->+ DIV2  +->+1  |
+> +	 *                            |                 |SKIPPER|  +---+
+> +	 *                PLLX_SEL+---+                 +-------+
 
-The deadlock only happens if something outside the kernel suspends the
-block devices *before* doing suspend to RAM. In this edge case, the
-runtime option would help a lot.
+Probably this will be a bit better:
 
-Besides, what you suggest probably requires a lot more discussion than
-adding a runtime option, no? Would you be ok with adding the runtime
-switch now and discuss the removal of sync() from suspend function
-altogether later?
+       +---+  +-------+  +-+            +-+                +-+
+PLLP+->+   +->+DIVIDER+->+0|  +-------->+0|  ------------->+0|
+       |   |  +-------+  | |  |  +---+  | |  |             | |
+PLLC+->+MUX|             | +->+  | S |  | +->+             | +>
+ ...   |   |             | |  |  | K |  | |  |  +-------+  | |
+PLLX+->+-->+------------>+1|  +->+ I +->+1|  +->+ DIV2  +->+1|
+       +---+             +++     | P |  +++     |SKIPPER|  +++
+                          ^      | P |   ^      +-------+   ^
+                          |      | E |   |                  |
+               PLLX_SEL+--+      | R |   |       OVERHEAT+--+
+                                 +---+   |
+                                         |
+                        SUPER_CDIV_ENB+--+
 
-Cheers
- jonas
-
+[snip]
