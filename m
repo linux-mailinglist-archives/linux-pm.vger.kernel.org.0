@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD4CEB900
+	by mail.lfdr.de (Postfix) with ESMTP id 47D9DEB8FF
 	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 22:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728227AbfJaVei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728484AbfJaVei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 31 Oct 2019 17:34:38 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:58040 "EHLO inva021.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:57634 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728229AbfJaVeh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 31 Oct 2019 17:34:37 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A294720056B;
-        Thu, 31 Oct 2019 22:34:35 +0100 (CET)
+        id S1728406AbfJaVei (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 31 Oct 2019 17:34:38 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4763B1A0223;
+        Thu, 31 Oct 2019 22:34:36 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 874442001CC;
-        Thu, 31 Oct 2019 22:34:35 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3A9351A0214;
+        Thu, 31 Oct 2019 22:34:36 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E1126205E9;
-        Thu, 31 Oct 2019 22:34:34 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 9701820605;
+        Thu, 31 Oct 2019 22:34:35 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -35,9 +35,9 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v10 05/11] PM / devfreq: Don't take lock in devfreq_add_device
-Date:   Thu, 31 Oct 2019 23:34:22 +0200
-Message-Id: <8739a86ed0c03165694881c7f1b4fecb9d916c9c.1572556786.git.leonard.crestez@nxp.com>
+Subject: [PATCH v10 06/11] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+Date:   Thu, 31 Oct 2019 23:34:23 +0200
+Message-Id: <254e9ed653c7d9d866a860673629d02351c1afd8.1572556786.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1572556786.git.leonard.crestez@nxp.com>
 References: <cover.1572556786.git.leonard.crestez@nxp.com>
@@ -49,103 +49,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A device usually doesn't need to lock itself during initialization
-because it is not yet reachable from other threads.
-
-This simplifies the code and helps avoid recursive lock warnings.
+This allows dev_pm_qos to embed freq_qos structs, which is done in the
+next patch. Separate commit to make it easier to review.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
- drivers/devfreq/devfreq.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
+ 1 file changed, 38 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index d89de2c37dfa..ab12fd22aa08 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -635,11 +635,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		err = -ENOMEM;
- 		goto err_out;
- 	}
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index c35ff21e8a40..a8e1486e3200 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -47,25 +47,10 @@ struct pm_qos_request {
+ struct pm_qos_flags_request {
+ 	struct list_head node;
+ 	s32 flags;	/* Do not change to 64 bit */
+ };
  
- 	mutex_init(&devfreq->lock);
--	mutex_lock(&devfreq->lock);
- 	devfreq->dev.parent = dev;
- 	devfreq->dev.class = devfreq_class;
- 	devfreq->dev.release = devfreq_dev_release;
- 	device_initialize(&devfreq->dev);
- 	INIT_LIST_HEAD(&devfreq->node);
-@@ -649,28 +648,24 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	devfreq->last_status.current_frequency = profile->initial_freq;
- 	devfreq->data = data;
- 	devfreq->nb.notifier_call = devfreq_notifier_call;
- 
- 	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
--		mutex_unlock(&devfreq->lock);
- 		err = set_freq_table(devfreq);
- 		if (err < 0)
- 			goto err_dev;
--		mutex_lock(&devfreq->lock);
- 	}
- 
- 	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
- 	if (!devfreq->scaling_min_freq) {
--		mutex_unlock(&devfreq->lock);
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
- 	devfreq->min_freq = devfreq->scaling_min_freq;
- 
- 	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
- 	if (!devfreq->scaling_max_freq) {
--		mutex_unlock(&devfreq->lock);
- 		err = -EINVAL;
- 		goto err_dev;
- 	}
- 	devfreq->max_freq = devfreq->scaling_max_freq;
- 
-@@ -681,21 +676,19 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 			array3_size(sizeof(unsigned int),
- 				    devfreq->profile->max_state,
- 				    devfreq->profile->max_state),
- 			GFP_KERNEL);
- 	if (!devfreq->trans_table) {
--		mutex_unlock(&devfreq->lock);
- 		err = -ENOMEM;
- 		goto err_dev;
- 	}
- 
- 	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
- 			devfreq->profile->max_state,
- 			sizeof(unsigned long),
- 			GFP_KERNEL);
- 	if (!devfreq->time_in_state) {
--		mutex_unlock(&devfreq->lock);
- 		err = -ENOMEM;
- 		goto err_dev;
- 	}
- 
- 	devfreq->last_stat_updated = jiffies;
-@@ -703,16 +696,12 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	srcu_init_notifier_head(&devfreq->transition_notifier_list);
- 
- 	dev_set_name(&devfreq->dev, "devfreq%d",
- 				atomic_inc_return(&devfreq_no));
- 	err = device_add(&devfreq->dev);
--	if (err) {
--		mutex_unlock(&devfreq->lock);
-+	if (err)
- 		goto err_dev;
--	}
+-enum dev_pm_qos_req_type {
+-	DEV_PM_QOS_RESUME_LATENCY = 1,
+-	DEV_PM_QOS_LATENCY_TOLERANCE,
+-	DEV_PM_QOS_FLAGS,
+-};
 -
--	mutex_unlock(&devfreq->lock);
+-struct dev_pm_qos_request {
+-	enum dev_pm_qos_req_type type;
+-	union {
+-		struct plist_node pnode;
+-		struct pm_qos_flags_request flr;
+-	} data;
+-	struct device *dev;
+-};
+-
+ enum pm_qos_type {
+ 	PM_QOS_UNITIALIZED,
+ 	PM_QOS_MAX,		/* return the largest value */
+ 	PM_QOS_MIN,		/* return the smallest value */
+ 	PM_QOS_SUM		/* return the sum */
+@@ -88,10 +73,48 @@ struct pm_qos_constraints {
+ struct pm_qos_flags {
+ 	struct list_head list;
+ 	s32 effective_flags;	/* Do not change to 64 bit */
+ };
  
- 	mutex_lock(&devfreq_list_lock);
++
++#define FREQ_QOS_MIN_DEFAULT_VALUE	0
++#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
++
++enum freq_qos_req_type {
++	FREQ_QOS_MIN = 1,
++	FREQ_QOS_MAX,
++};
++
++struct freq_constraints {
++	struct pm_qos_constraints min_freq;
++	struct blocking_notifier_head min_freq_notifiers;
++	struct pm_qos_constraints max_freq;
++	struct blocking_notifier_head max_freq_notifiers;
++};
++
++struct freq_qos_request {
++	enum freq_qos_req_type type;
++	struct plist_node pnode;
++	struct freq_constraints *qos;
++};
++
++
++enum dev_pm_qos_req_type {
++	DEV_PM_QOS_RESUME_LATENCY = 1,
++	DEV_PM_QOS_LATENCY_TOLERANCE,
++	DEV_PM_QOS_FLAGS,
++};
++
++struct dev_pm_qos_request {
++	enum dev_pm_qos_req_type type;
++	union {
++		struct plist_node pnode;
++		struct pm_qos_flags_request flr;
++	} data;
++	struct device *dev;
++};
++
+ struct dev_pm_qos {
+ 	struct pm_qos_constraints resume_latency;
+ 	struct pm_qos_constraints latency_tolerance;
+ 	struct pm_qos_flags flags;
+ 	struct dev_pm_qos_request *resume_latency_req;
+@@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+ {
+ 	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+ }
+ #endif
  
- 	governor = try_then_request_governor(devfreq->governor_name);
- 	if (IS_ERR(governor)) {
+-#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+-#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+-
+-enum freq_qos_req_type {
+-	FREQ_QOS_MIN = 1,
+-	FREQ_QOS_MAX,
+-};
+-
+-struct freq_constraints {
+-	struct pm_qos_constraints min_freq;
+-	struct blocking_notifier_head min_freq_notifiers;
+-	struct pm_qos_constraints max_freq;
+-	struct blocking_notifier_head max_freq_notifiers;
+-};
+-
+-struct freq_qos_request {
+-	enum freq_qos_req_type type;
+-	struct plist_node pnode;
+-	struct freq_constraints *qos;
+-};
+-
+ static inline int freq_qos_request_active(struct freq_qos_request *req)
+ {
+ 	return !IS_ERR_OR_NULL(req->qos);
+ }
+ 
 -- 
 2.17.1
 
