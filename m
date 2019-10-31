@@ -2,110 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3BEEB7C1
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 20:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C95EB7D2
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 20:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729515AbfJaTFs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Oct 2019 15:05:48 -0400
-Received: from gateway36.websitewelcome.com ([192.185.187.5]:24217 "EHLO
-        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729528AbfJaTFr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Oct 2019 15:05:47 -0400
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway36.websitewelcome.com (Postfix) with ESMTP id 748CE409CAF8B
-        for <linux-pm@vger.kernel.org>; Thu, 31 Oct 2019 12:50:09 -0500 (CDT)
-Received: from br164.hostgator.com.br ([192.185.176.180])
-        by cmsmtp with SMTP
-        id QFOOiqt8p3Qi0QFOPiDPNw; Thu, 31 Oct 2019 13:41:57 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PfbvhlnkuY2KQkorE0kvU3NX0iEBIbAm1o1NOoLQQyM=; b=VMSqA8K8m8UcrvytKxMHZVUW5j
-        MNYRpP2mWTZOhmgxHfhWkfESd0GoLpznRr48ivf42UFrVMzNIe13I+Wb88VP8MVPBsKvgPCnb4FUu
-        STX8pgLHfrtENtkmbHrkoVw+C4CuH3l1hJQfSPCEajVy3UVk1ZvtxmJ0eTBoDWuNsRjkUaVu8Rcts
-        y/EPQyqrcMeoVkbBwuW4IYtdYWZC8hVFy8UWAmUWRiMWCEvh0HaylZjVXO1m6JactE25Seo/pXlXH
-        DwLrfTMJTrqqo9J4JGzRtO7bS/lB2F1drnfsE49j0dT8nwp5OD8vriFp5iFpZAp5GEDOT+M199bdd
-        CT1t7l8Q==;
-Received: from [191.31.195.127] (port=35710 helo=castello.bz.toradex.local)
-        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <matheus@castello.eng.br>)
-        id 1iQFON-0035gz-Di; Thu, 31 Oct 2019 15:41:56 -0300
-From:   Matheus Castello <matheus@castello.eng.br>
-To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
-Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, lee.jones@linaro.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Matheus Castello <matheus@castello.eng.br>
-Subject: [PATCH v4 4/4] power: supply: max17040: Send uevent in SOC and status change
-Date:   Thu, 31 Oct 2019 15:41:34 -0300
-Message-Id: <20191031184134.30621-5-matheus@castello.eng.br>
-X-Mailer: git-send-email 2.24.0.rc2
-In-Reply-To: <20191031184134.30621-1-matheus@castello.eng.br>
-References: <CAJKOXPdCtbsPaAgYp5iVBhkAsjXzOYWwttQBptgiUgzhbKi09w@mail.gmail.com>
- <20191031184134.30621-1-matheus@castello.eng.br>
+        id S1729312AbfJaTNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Oct 2019 15:13:00 -0400
+Received: from vps.xff.cz ([195.181.215.36]:46168 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729296AbfJaTNA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 31 Oct 2019 15:13:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1572549177; bh=FBhBhCbprAZVkPZ3QAQvStNaQNJCu5ZanEhE9s1mTjM=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=hCM/GltDpo77xYTpaz5/dMejRWcp59srCsks7ySNzk7z79SyUnRSfnGdVP5DlrOpR
+         1ip+EBcUGDaNCK/biB6v8CbSlFIlqVZTyRqOaNPsSiM08tOHV1BKrSXrIv6dKpRsSJ
+         jVyh+iOa7L3nh1tSDQgOAVE7UuRJ/AB0EBdoG/ys=
+Date:   Thu, 31 Oct 2019 20:12:57 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Cc:     linux-sunxi <linux-sunxi@googlegroups.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [linux-sunxi] [PATCH] cpufreq: sun50i: Fix CPU speed bin
+ detection
+Message-ID: <20191031191257.j7bpxx5xyot2ay2i@core.my.home>
+Mail-Followup-To: =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20191031181359.282617-1-megous@megous.com>
+ <CAJiuCcdZqpoXKuupk_w3F1npZgCHDgb=+Fdd1ukKA22K2PJ6Ww@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - castello.eng.br
-X-BWhitelist: no
-X-Source-IP: 191.31.195.127
-X-Source-L: No
-X-Exim-ID: 1iQFON-0035gz-Di
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (castello.bz.toradex.local) [191.31.195.127]:35710
-X-Source-Auth: matheus@castello.eng.br
-X-Email-Count: 47
-X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
-X-Local-Domain: yes
+In-Reply-To: <CAJiuCcdZqpoXKuupk_w3F1npZgCHDgb=+Fdd1ukKA22K2PJ6Ww@mail.gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Notify core through power_supply_changed() in case of changes in state
-of charge and power supply status. This is useful for user-space to
-efficiently update current battery level.
+Hi,
 
-Signed-off-by: Matheus Castello <matheus@castello.eng.br>
----
- drivers/power/supply/max17040_battery.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Thu, Oct 31, 2019 at 07:55:43PM +0100, Clément Péron wrote:
+> Hi Ondrej,
+> 
+> On Thu, 31 Oct 2019 at 19:14, Ondrej Jirman <megous@megous.com> wrote:
+> >
+> > I have failures to boot on Orange Pi 3, because this driver determined
+> > that my SoC is from the normal bin, but my SoC only works reliably with
+> > the OPP values for the slowest bin.
+> >
+> > Looking at BSP code, I found that efuse values have following meanings
+> > on H6:
+> >
+> > - 0b000 invalid (interpreted in vendor's BSP as normal bin)
+> > - 0b001 slowest bin
+> > - 0b011 normal bin
+> > - 0b111 fastest bin
+> 
+> Maybe have some defines will be more readable no ?
+> https://megous.com/git/linux/tree/drivers/soc/sunxi/sunxi-sid.c?h=h6-4.9-bsp#n213
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index 802575342c72..0ed3d856e4f5 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -210,10 +210,19 @@ static void max17040_check_changes(struct i2c_client *client)
- static void max17040_work(struct work_struct *work)
- {
- 	struct max17040_chip *chip;
-+	int last_soc, last_status;
+Hmm, Alwwinner is really funny. Unused macros that just confuse things.
 
- 	chip = container_of(work, struct max17040_chip, work.work);
-+
-+	/* store SOC and status to check changes */
-+	last_soc = chip->soc;
-+	last_status = chip->status;
- 	max17040_check_changes(chip->client);
+#if defined(CONFIG_ARCH_SUN50IW6)
+#define TYPE_SB (0b001)
+#define TYPE_NB (0b010)
+#define TYPE_FB (0b011)
+#else
+#define TYPE_SB (0b001)
+#define TYPE_NB (0b011)
+#define TYPE_FB (0b111)
+#endif
 
-+	/* check changes and send uevent */
-+	if (last_soc != chip->soc || last_status != chip->status)
-+		power_supply_changed(chip->battery);
-+
- 	queue_delayed_work(system_power_efficient_wq, &chip->work,
- 			   MAX17040_DELAY);
- }
---
-2.24.0.rc2
+So for H6 they define special bin values and actually use different ones
+in code. Fun.
 
+I've sent out some testing program to Armbian forums, so hopefully, we'll
+collect some real efuse_values from real SoCs, to see what's really being
+used in the wild. If we see value 0b010, the BSP code is probably just
+wrong.
+
+Interestingly, TYPE_NB 0b010 would be interpreted as normal bin even with
+the current BSP code, and TYPE_FB would be misdetected as TYPE_NB.
+
+> #define SUN50I_NVEM_INVALID_CPU_OPP (0b000)
+> #define SUN50I_NVEM_LOW_CPU_OPP (0b001)
+> #define SUN50I_NVEM_NORMAL_CPU_OPP (0b011)
+> #define SUN50I_NVEM_HIGH_CPU_OPP (0b111)
+
+I'd rather not describe meanings just yet, until we get some real-world
+data from H6 owners.
+
+https://forum.armbian.com/topic/9368-orangepi-3-h6-allwiner-chip/?do=findComment&comment=88439
+
+regards,
+	o.
+
+> Regards,
+> Clément
+> 
+> >
+> > Let's play it safe and interpret 0 as the slowest bin, but fix detection
+> > of other bins to match vendor code.
+> >
+> > Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> > ---
+> >
+> > See https://megous.com/git/linux/tree/drivers/soc/sunxi/sunxi-sid.c?h=h6-4.9-bsp#n484
+> > and https://megous.com/git/linux/tree/drivers/cpufreq/sunxi-cpufreq.c?h=h6-4.9-bsp#n428
+> > (1 is substracted from soc_bin number here!)
+> >
+> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > index df35ef3ef567..41dad03e245c 100644
+> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > @@ -71,9 +71,12 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
+> >         efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
+> >         switch (efuse_value) {
+> >         case 0b0001:
+> > -               *versions = 1;
+> > +               *versions = 0;
+> >                 break;
+> >         case 0b0011:
+> > +               *versions = 1;
+> > +               break;
+> > +       case 0b0111:
+> >                 *versions = 2;
+> >                 break;
+> >         default:
+> > --
+> > 2.23.0
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "linux-sunxi" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to linux-sunxi+unsubscribe@googlegroups.com.
+> > To view this discussion on the web, visit https://groups.google.com/d/msgid/linux-sunxi/20191031181359.282617-1-megous%40megous.com.
