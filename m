@@ -2,146 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEF8EA947
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 03:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E1CEA94F
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Oct 2019 03:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbfJaCkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Oct 2019 22:40:01 -0400
-Received: from ozlabs.org ([203.11.71.1]:42865 "EHLO ozlabs.org"
+        id S1726636AbfJaCmL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Oct 2019 22:42:11 -0400
+Received: from mga17.intel.com ([192.55.52.151]:24397 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbfJaCkB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Oct 2019 22:40:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 473V0X52pSz9sPl;
-        Thu, 31 Oct 2019 13:39:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1572489598;
-        bh=kh7Ij8wGLE85JmfMZDo7nA07OV4ozZTfqMQZHKEtQog=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Ru6HuP4NQURWTF/ppIf+4JjYsUi+3s1xPD/DtHVEhoqzV1uNWtu8tlfTJIGLLmi8P
-         Md3r6FH2F89VJddOWBfm7OYCJfR+uJdkEUQt2Wp0EGYCw4ErS3Da5J66exxhHwyLyt
-         6oeyDj0vl1y8dO7HUCKdJbC3l3Sake7GZC8zuTxyF+c+A9hhe5YSgK//ic6oWDlhdW
-         txuj0rpXoIT/DKKyyOBCtfTC15zN7Q/mPf4Y6jV+a5kvoaFV+Fnr3qL6EkHPsnBLnH
-         d2BrByItD5GHFBsBbyuqnQi5IxLk8jJFddYBYtb1OCkzSalGGbctcNyctq54CNBKDn
-         ilDrQteDWD8dQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Cc:     linux-pm@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Preeti U Murthy <preeti@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] cpufreq: powernv: fix stack bloat and NR_CPUS limitation
-In-Reply-To: <20191018045539.3765565-1-jhubbard@nvidia.com>
-References: <20191018045539.3765565-1-jhubbard@nvidia.com>
-Date:   Thu, 31 Oct 2019 13:39:55 +1100
-Message-ID: <87pnidbptw.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1726353AbfJaCmL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Oct 2019 22:42:11 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 19:42:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,249,1569308400"; 
+   d="scan'208";a="375093383"
+Received: from yle-mobl3.ccr.corp.intel.com ([10.255.28.108])
+  by orsmga005.jf.intel.com with ESMTP; 30 Oct 2019 19:42:04 -0700
+Message-ID: <4efc55ad929dbb3432e72b96cb27876efa496242.camel@intel.com>
+Subject: Re: [PATCH v5 0/6] Initialise thermal framework and cpufreq earlier
+ during boot
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        sudeep.holla@arm.com, bjorn.andersson@linaro.org,
+        edubezval@gmail.com, agross@kernel.org, tdas@codeaurora.org,
+        swboyd@chromium.org, ilina@codeaurora.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-clk@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Date:   Thu, 31 Oct 2019 10:42:03 +0800
+In-Reply-To: <cover.1571656014.git.amit.kucheria@linaro.org>
+References: <cover.1571656014.git.amit.kucheria@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi John,
+Hi,
 
-Sorry I didn't reply to this sooner, too many patches :/
+Given that all the patches in this series have got the ACK from the
+subsystem maintainers, I suppose we can take all the patches through
+thermal tree, right?
 
-John Hubbard <jhubbard@nvidia.com> writes:
-> The following build warning occurred on powerpc 64-bit builds:
->
-> drivers/cpufreq/powernv-cpufreq.c: In function 'init_chip_info':
-> drivers/cpufreq/powernv-cpufreq.c:1070:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+thanks,
+rui
 
-Oddly I don't see that warning in my builds, eg with GCC9:
+On Mon, 2019-10-21 at 17:45 +0530, Amit Kucheria wrote:
+> Changes since v4:
+> - Collect Acks
+> - Pick the US spelling for 'initialis^Hze' consistently.
+> 
+> Changes since v3:
+> - Init schedutil governor earlier too
+> - Simplified changes to thermal_init() error path
+> - Collects Acks
+> 
+> Changes since v2:
+> - Missed one patch when posting v2. Respinning.
+> 
+> Changes since v1:
+> - Completely get rid of netlink support in the thermal framework.
+> - This changes the early init patch to a single line - change to
+>   core_initcall. Changed authorship of patch since it is nothing like
+> the
+>   original. Lina, let me know if you feel otherwise.
+> - I've tested to make sure that the qcom-cpufreq-hw driver continues
+> to
+>   work correctly as a module so this won't impact Android's GKI
+> plans.
+> - Collected Acks
+> 
+> Device boot needs to be as fast as possible while keeping under the
+> thermal
+> envelope. Now that thermal framework is built-in to the kernel, we
+> can
+> initialize it earlier to enable thermal mitigation during boot.
+> 
+> We also need the cpufreq HW drivers to be initialised earlier to act
+> as the
+> cooling devices. This series only converts over the qcom-hw driver to
+> initialize earlier but can be extended to other platforms as well.
+> 
+> Amit Kucheria (6):
+>   thermal: Remove netlink support
+>   thermal: Initialize thermal subsystem earlier
+>   cpufreq: Initialize the governors in core_initcall
+>   cpufreq: Initialize cpufreq-dt driver earlier
+>   clk: qcom: Initialize clock drivers earlier
+>   cpufreq: qcom-hw: Move driver initialization earlier
+> 
+>  .../driver-api/thermal/sysfs-api.rst          |  26 +----
+>  drivers/clk/qcom/clk-rpmh.c                   |   2 +-
+>  drivers/clk/qcom/gcc-qcs404.c                 |   2 +-
+>  drivers/clk/qcom/gcc-sdm845.c                 |   2 +-
+>  drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +-
+>  drivers/cpufreq/cpufreq_conservative.c        |   2 +-
+>  drivers/cpufreq/cpufreq_ondemand.c            |   2 +-
+>  drivers/cpufreq/cpufreq_performance.c         |   2 +-
+>  drivers/cpufreq/cpufreq_powersave.c           |   2 +-
+>  drivers/cpufreq/cpufreq_userspace.c           |   2 +-
+>  drivers/cpufreq/qcom-cpufreq-hw.c             |   2 +-
+>  drivers/thermal/thermal_core.c                | 103 +---------------
+> --
+>  include/linux/thermal.h                       |  11 --
+>  kernel/sched/cpufreq_schedutil.c              |   2 +-
+>  14 files changed, 19 insertions(+), 143 deletions(-)
+> 
 
-  https://travis-ci.org/linuxppc/linux/jobs/604870722
-
-> This is due to putting 1024 bytes on the stack:
->
->     unsigned int chip[256];
->
-> ...and while looking at this, it also has a bug: it fails with a stack
-> overrun, if CONFIG_NR_CPUS > 256.
-
-It _probably_ doesn't, because it only increments the index when the
-chip_id of the CPU changes, ie. it doesn't create a chip for every CPU.
-But I agree it's flaky the way it's written.
-
-> Fix both problems by dynamically allocating based on CONFIG_NR_CPUS.
-
-Shouldn't it use num_possible_cpus() ?
-
-Given the for loop is over possible CPUs that seems like the upper
-bound. In practice it should be lower because some CPUs will share a
-chip.
-
-cheers
-
-
-> Fixes: 053819e0bf840 ("cpufreq: powernv: Handle throttling due to Pmax capping at chip level")
-> Cc: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-> Cc: Preeti U Murthy <preeti@linux.vnet.ibm.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->
-> Changes since v1: includes Viresh's review commit fixes.
->
->  drivers/cpufreq/powernv-cpufreq.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 6061850e59c9..5b2e968cb5ea 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -1041,9 +1041,14 @@ static struct cpufreq_driver powernv_cpufreq_driver = {
->  
->  static int init_chip_info(void)
->  {
-> -	unsigned int chip[256];
-> +	unsigned int *chip;
->  	unsigned int cpu, i;
->  	unsigned int prev_chip_id = UINT_MAX;
-> +	int ret = 0;
-> +
-> +	chip = kcalloc(CONFIG_NR_CPUS, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
->  
->  	for_each_possible_cpu(cpu) {
->  		unsigned int id = cpu_to_chip_id(cpu);
-> @@ -1055,8 +1060,10 @@ static int init_chip_info(void)
->  	}
->  
->  	chips = kcalloc(nr_chips, sizeof(struct chip), GFP_KERNEL);
-> -	if (!chips)
-> -		return -ENOMEM;
-> +	if (!chips) {
-> +		ret = -ENOMEM;
-> +		goto free_and_return;
-> +	}
->  
->  	for (i = 0; i < nr_chips; i++) {
->  		chips[i].id = chip[i];
-> @@ -1066,7 +1073,9 @@ static int init_chip_info(void)
->  			per_cpu(chip_info, cpu) =  &chips[i];
->  	}
->  
-> -	return 0;
-> +free_and_return:
-> +	kfree(chip);
-> +	return ret;
->  }
->  
->  static inline void clean_chip_info(void)
-> -- 
-> 2.23.0
