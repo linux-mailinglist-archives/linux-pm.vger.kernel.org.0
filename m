@@ -2,160 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AF6EBD57
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 06:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A9FEBDA6
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 07:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfKAFrq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 01:47:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:60353 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbfKAFrq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 1 Nov 2019 01:47:46 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 22:47:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,254,1569308400"; 
-   d="scan'208";a="199738011"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Oct 2019 22:47:44 -0700
-Received: from [10.226.39.46] (unknown [10.226.39.46])
-        by linux.intel.com (Postfix) with ESMTP id 59030580499;
-        Thu, 31 Oct 2019 22:47:40 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure pcie
- link
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Andrew Murray <andrew.murray@arm.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, martin.blumenstingl@googlemail.com,
-        linux-pci@vger.kernel.org, hch@infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
-        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Rajat Jain <rajatja@google.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20191031132228.GA44315@google.com>
-From:   Dilip Kota <eswara.kota@linux.intel.com>
-Message-ID: <33585725-51c7-6fe5-5d92-1e7fe77ca106@linux.intel.com>
-Date:   Fri, 1 Nov 2019 13:47:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727486AbfKAGKK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 02:10:10 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:21686 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726457AbfKAGKK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 02:10:10 -0400
+X-UUID: 90a92d519a89414a9fdd9345d3ad74ab-20191101
+X-UUID: 90a92d519a89414a9fdd9345d3ad74ab-20191101
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 557455374; Fri, 01 Nov 2019 14:10:04 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 1 Nov 2019 14:09:57 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 1 Nov 2019 14:09:57 +0800
+Message-ID: <1572588602.6939.1.camel@mtksdaap41>
+Subject: Re: [PATCH v5 3/3] PM / AVS: SVS: Introduce SVS engine
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Pi-Hsun Shih <pihsun@chromium.org>
+CC:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Fan Chen" <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>, <yt.lee@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Nishanth Menon" <nm@ti.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Date:   Fri, 1 Nov 2019 14:10:02 +0800
+In-Reply-To: <CANdKZ0dAWWy7QMMZhNHAha5ZpcBo1GHebPc5_FRu5gvBc569QA@mail.gmail.com>
+References: <20190906100514.30803-1-roger.lu@mediatek.com>
+         <20190906100514.30803-4-roger.lu@mediatek.com>
+         <CANdKZ0dAWWy7QMMZhNHAha5ZpcBo1GHebPc5_FRu5gvBc569QA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20191031132228.GA44315@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 37EE6EFD37277920D5707B79253F0016321E83FB9A72C31F0E381067B1C135692000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dear Pi-Hsun,
 
-On 10/31/2019 9:22 PM, Bjorn Helgaas wrote:
-> On Thu, Oct 31, 2019 at 06:47:10PM +0800, Dilip Kota wrote:
->> On 10/31/2019 6:14 AM, Bjorn Helgaas wrote:
->>> On Tue, Oct 29, 2019 at 05:31:18PM +0800, Dilip Kota wrote:
->>>> On 10/22/2019 8:59 PM, Bjorn Helgaas wrote:
->>>>> [+cc Rafael, linux-pm, beginning of discussion at
->>>>> https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
->>>>>
->>>>> On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
->>>>>> On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
->>>>>>> On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
->>>>>>>> On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
->>>>>>>>> PCIe RC driver on Intel Gateway SoCs have a requirement
->>>>>>>>> of changing link width and speed on the fly.
->>>>>>> Please add more details about why this is needed.  Since
->>>>>>> you're adding sysfs files, it sounds like it's not
->>>>>>> actually the *driver* that needs this; it's something in
->>>>>>> userspace?
->>>>>> We have use cases to change the link speed and width on the fly.
->>>>>> One is EMI check and other is power saving.  Some battery backed
->>>>>> applications have to switch PCIe link from higher GEN to GEN1 and
->>>>>> width to x1. During the cases like external power supply got
->>>>>> disconnected or broken. Once external power supply is connected then
->>>>>> switch PCIe link to higher GEN and width.
->>>>> That sounds plausible, but of course nothing there is specific to the
->>>>> Intel Gateway, so we should implement this generically so it would
->>>>> work on all hardware.
->>>> Agree.
->>>>> I'm not sure what the interface should look like -- should it be a
->>>>> low-level interface as you propose where userspace would have to
->>>>> identify each link of interest, or is there some system-wide
->>>>> power/performance knob that could tune all links?  Cc'd Rafael and
->>>>> linux-pm in case they have ideas.
->>>> To my knowledge sysfs is the appropriate way to go.
->>>> If there are any other best possible knobs, will be helpful.
->>> I agree sysfs is the right place for it; my question was whether we
->>> should have files like:
->>>
->>>     /sys/.../0000:00:1f.3/pcie_speed
->>>     /sys/.../0000:00:1f.3/pcie_width
->>>
->>> as I think this patch would add (BTW, please include sample paths like
->>> the above in the commit log), or whether there should be a more global
->>> thing that would affect all the links in the system.
->> Sure, i will add them.
->>> I think the low-level files like you propose would be better because
->>> one might want to tune link performance differently for different
->>> types of devices and workloads.
->>>
->>> We also have to decide if these files should be associated with the
->>> device at the upstream or downstream end of the link.  For ASPM, the
->>> current proposal [1] has the files at the downstream end on the theory
->>> that the GPU, NIC, NVMe device, etc is the user-recognizable one.
->>> Also, neither ASPM nor link speed/width make any sense unless there
->>> *is* a device at the downstream end, so putting them there
->>> automatically makes them visible only when they're useful.
->> This patch places the speed and width in the host controller directory.
->> /sys/.../xxx.pcie/pcie_speed
->> /sys/.../xxx.pcie/pcie_width
->>
->> I agree with you partially,  because i am having couple of points
->> making me to keep speed and width change entries in controller
->> directory:
->>
->> -- For changing the speed/width with device node, software ends up
->>     traversing to the controller from the device and do the
->>     operations.
->> -- Change speed and width are performed at controller level,
-> The controller is effectively a Root Complex, which may contain
-> several Root Ports.  I have the impression that the Synopsys
-> controller only supports a single Root Port, but that's just a detail
-> of the Synopsys implementation.  I think it should be possible to
-> configure the width/speed of each Root Port individually.
->
->> -- Keeping speed and width in controller gives a perspective (to the
->>     user) of changing them only once irrespective of no. of devices.
-> What if there's a switch?  If we change the width/speed of the link
-> between the Root Port and the Switch Upstream Port, that doesn't do
-> anything about the links from the Switch Downstream Ports.
-I missed to evaluate the multiple root port and switch scenarios, thanks 
-for pointing it.
-Then, placing the link speed and width change entries in the device node 
-will be appropriate.
-Software will traverse to the respective port or bus through the device 
-node and does the changes.
->
->> -- For speed and link change in Synopsys PCIe controller, specific
->>     registers need to be configured.  This prevents or complicates
->>     adding the speed and width change functionality in pci-sysfs or
->>     pci framework.
-> Don't the Link Control and related registers in PCIe spec give us
-> enough control to manage the link width/speed of *all* links,
-> including those from Root Ports and Switch Downstream Ports?
->
-> If the Synopsys controller requires controller-specific registers,
-> that sounds to me like it doesn't quite conform to the spec.  Maybe
-> that means we would need some sort of quirk or controller callback?
-Yes, Synopsys has specific registers configuration for link width 
-resizing and speed change.
-I will evaluate the possible mechanism for plugging in the controller 
-specific changes to the framework.
+Thanks for reminding me. I'll add dev_pm_opp_put(opp) in the next
+patchset.
 
-Regards,
-Dilip
->
-> Bjorn
+On Mon, 2019-10-21 at 15:51 +0800, Pi-Hsun Shih wrote:
+> Hi Roger,
+> 
+> On Fri, Sep 6, 2019 at 6:06 PM Roger Lu <roger.lu@mediatek.com> wrote:
+> > ...
+> > +static int svs_resource_setup(struct mtk_svs *svs)
+> > ...
+> > +               for (i = 0, freq = (u32)-1; i < svsb->opp_count; i++, freq--) {
+> > +                       opp = dev_pm_opp_find_freq_floor(svsb->dev, &freq);
+> > +                       if (IS_ERR(opp)) {
+> > +                               pr_err("%s: error opp entry!!, err = %ld\n",
+> > +                                      svsb->name, PTR_ERR(opp));
+> > +                               return PTR_ERR(opp);
+> > +                       }
+> > +
+> > +                       svsb->opp_freqs[i] = freq;
+> > +                       svsb->opp_volts[i] = dev_pm_opp_get_voltage(opp);
+> > +                       svsb->freqs_pct[i] = percent(svsb->opp_freqs[i],
+> > +                                                    svsb->freq_base) & 0xff;
+> 
+> Should have dev_pm_opp_put(opp); here.
+Sure. Thanks.
+
+> 
+> > +               }
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > ...
+> > +static int svs_status_proc_show(struct seq_file *m, void *v)
+> > ...
+> > +       for (i = 0, freq = (u32)-1; i < svsb->opp_count; i++, freq--) {
+> > +               opp = dev_pm_opp_find_freq_floor(svsb->dev, &freq);
+> > +               if (IS_ERR(opp)) {
+> > +                       seq_printf(m, "%s: error opp entry!!, err = %ld\n",
+> > +                                  svsb->name, PTR_ERR(opp));
+> > +                       return PTR_ERR(opp);
+> > +               }
+> > +
+> > +               seq_printf(m, "opp_freqs[%02u]: %lu, volts[%02u]: %lu, ",
+> > +                          i, freq, i, dev_pm_opp_get_voltage(opp));
+> > +               seq_printf(m, "svsb_volts[%02u]: 0x%x, freqs_pct[%02u]: %u\n",
+> > +                          i, svsb->volts[i], i, svsb->freqs_pct[i]);
+> 
+> Same here.
+Sure. Thanks.
+
+> 
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > ...
+
+
