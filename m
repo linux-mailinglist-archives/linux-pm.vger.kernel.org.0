@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B1DEC412
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 14:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75432EC41C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 14:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727600AbfKANzR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 09:55:17 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45863 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbfKANzR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 09:55:17 -0400
-Received: by mail-lf1-f67.google.com with SMTP id v8so7256374lfa.12;
-        Fri, 01 Nov 2019 06:55:15 -0700 (PDT)
+        id S1727751AbfKAN4N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 09:56:13 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42144 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726622AbfKAN4N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 09:56:13 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a21so10316916ljh.9;
+        Fri, 01 Nov 2019 06:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wJ8DQqrB7pmMixz1CBZ98UUR7nSyCCIA+w4JRokeNfw=;
-        b=dPNCs6gwULwiAgvgo1hFPCmr4o9xEPz1Uh26uX9jrW/wv5d8TMG2nWb3R+umzvPgG3
-         1eRVaHUKi4kA/5Wa+zpKREr1J+/cRnXN2nW7XBCrGpB0uNCqm6sGt48QGR0OjZG3C6Ls
-         oapboPTCNWYNC595FVNCaq0mOo2/89IIhHURNupJ6aq0W65kYnQv9Ap4dNkT2jxUgYav
-         u5bquz3iufKpFexRBYqjWbsrXOTMsXe5k8uoUPA+SeG+AgJd8L0dB7mDUvw4nhkQK89c
-         AnnRUZ9LaJaymQYT7YwA9Kl7fVp1lJD6yoKY79xgA4QFA2fAJNkMmBQ3PBDKT5460mCV
-         purA==
+        bh=QARoAkysEnXhZ8U4UHSm2hbxasucAbzuyPLqACWX3X4=;
+        b=uncZ3qilpfNYt7SNVRmywgFcCXAPVamxWceWgJaY+lb7IVw8ZoGkrPPZpeE2y5FvdD
+         VLQDutuyZnI2LpEaZmFT41222prNuBYZ5ssKZyAXTldLtYyLZXxFs89qpnQ2jWLR1aYP
+         TrrQ/fyBZpAfQXXXU0yljkMTNVe+QqjHzyzWN8o1+JJlpl8KVxz6OtRqSvmFQrqtn5xx
+         hBCr0h0+eB3puTY/HBNILfcUnS87oXss4q+XFN3AUWflPzsoRg9gj+GgtZFQK726FNWz
+         4buwn90y+9aKTaYGevmy2AetaZxebj612tZILBEfb1HgDlI6RPRiKmCZre67CVc5rY/g
+         Do0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wJ8DQqrB7pmMixz1CBZ98UUR7nSyCCIA+w4JRokeNfw=;
-        b=f7vNWXUnNU7IEtQIicCV3OEXbu7Oit90c5R55wpCc53fNutq2ISX5WyaIVb2DArpqO
-         NANpeKlYBIa/uWqveNhbkQ+XkWvlvZcNSEBRzHQ4Wn+43BC+xxyitoOmHGkX4qdxheAv
-         Vuxx1hyTiOpIL5/YrfrA02Hxj6uC51wYX3aKSSn+ADLm5b313i6+0vLjaDZPYREOhBqB
-         uBdsuzlECPEduGEmOhALk6eMA0hhiViDUjmmvPy12N5G7nqDfMztbsfBruW13zsq/jnN
-         S4TBw3uEOZCwJsqVKVeFHLIOyAnp9VhPApNeq6UVx5R/VIzO/GInYiBKuhc3l73jUpZp
-         YsFg==
-X-Gm-Message-State: APjAAAXIVNqJniPmKswI3agr3XCd9/uLn9ry4GK3kZ4w9Asg/qdb6drL
-        bL7DE8nM0sgGEdn8sl3R1HeDPUeB
-X-Google-Smtp-Source: APXvYqzpMAx8ZksmsiB4hgGKaRJEpJ02QnO6e9wZTNVaiHrTKuIIig3w16p76kcDKa826MF9dMBf/Q==
-X-Received: by 2002:a19:6d19:: with SMTP id i25mr7418381lfc.178.1572616514188;
-        Fri, 01 Nov 2019 06:55:14 -0700 (PDT)
+        bh=QARoAkysEnXhZ8U4UHSm2hbxasucAbzuyPLqACWX3X4=;
+        b=t4QCxjjzCrrRaOdTrf72C7k5b6/s4yrKNbjM55gmEw+ls2ShNpcMS2SIhMXAiMyARL
+         pluTQ/88kdOW6o4x4HDLJAV6M5yhab4+L8qprY+yf3zXkC5BQS/IpGPMOyzB8f9XnK2j
+         cKJxlT2tjpHpxTBvZwbJEMCKWx8ZJo9DDtz/fNS4PaN1yHTZwaB+48XYx55SIW/YygGz
+         63rlMxwVxLbicjpYA5KkZioOLsTk59A7HkWPc9ZHCFWk+1atR9mlyw/z7urzqiJTwJj2
+         TKg8LHNwJTjBWT0UoY5aY2e0IvKgk8cVbczWDdApoybzEpRSH3nl/THzQSkLywy+V+GJ
+         8wcA==
+X-Gm-Message-State: APjAAAUD2AxMtrenrR7iwMYX2bbguWzH4TSZZRFWU+rv0rtjGw7B8mNo
+        IiZYIahDcgA1dKKlSLxsl3tKpH4n
+X-Google-Smtp-Source: APXvYqw8Qbb+Lo1YKz7WFgX9NUMZ34SC0m4h/ORfIWgV4GdDjIDEw/N6gfHRs6tf/+xfhpIdUwG+6g==
+X-Received: by 2002:a2e:420a:: with SMTP id p10mr8662905lja.16.1572616570109;
+        Fri, 01 Nov 2019 06:56:10 -0700 (PDT)
 Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id b67sm6101429ljf.5.2019.11.01.06.55.12
+        by smtp.googlemail.com with ESMTPSA id a26sm3586771lfg.50.2019.11.01.06.56.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2019 06:55:13 -0700 (PDT)
-Subject: Re: [PATCH v7 17/19] PM / devfreq: tegra30: Support variable polling
- interval
+        Fri, 01 Nov 2019 06:56:09 -0700 (PDT)
+Subject: Re: [PATCH v7 16/19] PM / devfreq: Add new interrupt_driven flag for
+ governors
 To:     Chanwoo Choi <cw00.choi@samsung.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -56,16 +56,16 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20191029220019.26773-1-digetx@gmail.com>
- <CGME20191029220636epcas2p279bee6ee40d9253cdfbcf5d6da6b3a14@epcas2p2.samsung.com>
- <20191029220019.26773-18-digetx@gmail.com>
- <00ddcbd5-262b-2130-6242-b1ec364825f3@samsung.com>
+ <CGME20191029220705epcas5p1dc9787952bd19cefe9e0bff592642142@epcas5p1.samsung.com>
+ <20191029220019.26773-17-digetx@gmail.com>
+ <a4caf25c-5907-6347-f4d7-37800a077f29@samsung.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a60d5949-a980-306a-e65a-6017b40a7321@gmail.com>
-Date:   Fri, 1 Nov 2019 16:55:12 +0300
+Message-ID: <fcf107da-a164-521d-f507-047b79b1578a@gmail.com>
+Date:   Fri, 1 Nov 2019 16:56:08 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <00ddcbd5-262b-2130-6242-b1ec364825f3@samsung.com>
+In-Reply-To: <a4caf25c-5907-6347-f4d7-37800a077f29@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -74,128 +74,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.11.2019 10:41, Chanwoo Choi пишет:
+01.11.2019 10:32, Chanwoo Choi пишет:
+> Hi,
+> 
 > On 19. 10. 30. 오전 7:00, Dmitry Osipenko wrote:
->> The ACTMON governor is interrupt-driven and currently hardware's polling
->> interval is fixed to 16ms in the driver. Devfreq supports variable polling
->> interval by the generic governors, let's re-use the generic interface for
->> changing of the polling interval. Now the polling interval can be changed
->> dynamically via /sys/class/devfreq/devfreq0/polling_interval.
+>> Currently interrupt-driven governors (like NVIDIA Tegra30 ACTMON governor)
+>> are used to set polling_ms=0 in order to avoid periodic polling of device
+>> status by devfreq core. This means that polling interval can't be changed
+>> by userspace for such governors.
+>>
+>> The new governor flag allows interrupt-driven governors to convey that
+>> devfreq core shouldn't perform polling of device status and thus generic
+>> devfreq polling interval could be supported by these governors now.
 >>
 >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 >> ---
->>  drivers/devfreq/tegra30-devfreq.c | 35 ++++++++++++++++++++++++-------
->>  1 file changed, 28 insertions(+), 7 deletions(-)
+>>  drivers/devfreq/devfreq.c  | 14 +++++++++-----
+>>  drivers/devfreq/governor.h |  3 +++
+>>  2 files changed, 12 insertions(+), 5 deletions(-)
 >>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->> index b745a973c35a..d0dd42856e5b 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -218,7 +218,7 @@ static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
+>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>> index b905963cea7d..0ef972264841 100644
+>> --- a/drivers/devfreq/devfreq.c
+>> +++ b/drivers/devfreq/devfreq.c
+>> @@ -410,7 +410,8 @@ static void devfreq_monitor(struct work_struct *work)
+>>  void devfreq_monitor_start(struct devfreq *devfreq)
 >>  {
->>  	u32 avg = dev->avg_count;
->>  	u32 avg_band_freq = tegra->max_freq * ACTMON_DEFAULT_AVG_BAND / KHZ;
->> -	u32 band = avg_band_freq * ACTMON_SAMPLING_PERIOD;
->> +	u32 band = avg_band_freq * tegra->devfreq->profile->polling_ms;
->>  
->>  	device_writel(dev, avg + band, ACTMON_DEV_AVG_UPPER_WMARK);
->>  
->> @@ -229,7 +229,7 @@ static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
->>  static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
->>  				       struct tegra_devfreq_device *dev)
->>  {
->> -	u32 val = tegra->cur_freq * ACTMON_SAMPLING_PERIOD;
->> +	u32 val = tegra->cur_freq * tegra->devfreq->profile->polling_ms;
->>  
->>  	device_writel(dev, do_percent(val, dev->config->boost_up_threshold),
->>  		      ACTMON_DEV_UPPER_WMARK);
->> @@ -308,7 +308,7 @@ static unsigned long actmon_device_target_freq(struct tegra_devfreq *tegra,
->>  	unsigned int avg_sustain_coef;
->>  	unsigned long target_freq;
->>  
->> -	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD;
->> +	target_freq = dev->avg_count / tegra->devfreq->profile->polling_ms;
->>  	avg_sustain_coef = 100 * 100 / dev->config->boost_up_threshold;
->>  	target_freq = do_percent(target_freq, avg_sustain_coef);
->>  	target_freq += dev->boost_freq;
->> @@ -465,7 +465,7 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
->>  
->>  	dev->target_freq = tegra->cur_freq;
->>  
->> -	dev->avg_count = tegra->cur_freq * ACTMON_SAMPLING_PERIOD;
->> +	dev->avg_count = tegra->cur_freq * tegra->devfreq->profile->polling_ms;
->>  	device_writel(dev, dev->avg_count, ACTMON_DEV_INIT_AVG);
->>  
->>  	tegra_devfreq_update_avg_wmark(tegra, dev);
->> @@ -506,7 +506,11 @@ static int tegra_actmon_start(struct tegra_devfreq *tegra)
->>  	unsigned int i;
->>  	int err;
->>  
->> -	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
->> +	if (!tegra->devfreq->profile->polling_ms ||
->> +	    tegra->devfreq->stop_polling)
-> 
-> I think that the access of 'devfreq->stop_polling' is not good
-> on governor. It is possible to alter with DEVFREQ_GOV_START/STOP/SUSPEND/RESUME
-> notification.
-
-Could you please clarify what you're meaning by "alter with notification"?
-
-Do you mean to have the start/stop state tracking done by the
-tegra30-devfreq driver itself?
-
->> +		return 0;> +
->> +	actmon_writel(tegra, tegra->devfreq->profile->polling_ms - 1,
->>  		      ACTMON_GLB_PERIOD_CTRL);
->>  
->>  	/*
->> @@ -554,6 +558,10 @@ static int tegra_actmon_start(struct tegra_devfreq *tegra)
->>  
->>  static void tegra_actmon_stop(struct tegra_devfreq *tegra)
->>  {
->> +	if (!tegra->devfreq->profile->polling_ms ||
->> +	    tegra->devfreq->stop_polling)
-> 
-> ditto.
-> 
->> +		return;
->> +
->>  	disable_irq(tegra->irq);
->>  
->>  	cpufreq_unregister_notifier(&tegra->cpu_rate_change_nb,
->> @@ -623,7 +631,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
->>  	stat->busy_time *= 100 / BUS_SATURATION_RATIO;
->>  
->>  	/* Number of cycles in a sampling period */
->> -	stat->total_time = ACTMON_SAMPLING_PERIOD * cur_freq;
->> +	stat->total_time = tegra->devfreq->profile->polling_ms * cur_freq;
->>  
->>  	stat->busy_time = min(stat->busy_time, stat->total_time);
->>  
->> @@ -631,7 +639,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
+>>  	INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
+>> -	if (devfreq->profile->polling_ms)
+>> +	if (devfreq->profile->polling_ms &&
+>> +	    !devfreq->governor->interrupt_driven)
+>>  		queue_delayed_work(devfreq_wq, &devfreq->work,
+>>  			msecs_to_jiffies(devfreq->profile->polling_ms));
 >>  }
+>> @@ -474,7 +475,8 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
+>>  		goto out;
 >>  
->>  static struct devfreq_dev_profile tegra_devfreq_profile = {
->> -	.polling_ms	= 0,
->> +	.polling_ms	= ACTMON_SAMPLING_PERIOD,
->>  	.target		= tegra_devfreq_target,
->>  	.get_dev_status	= tegra_devfreq_get_dev_status,
->>  };
->> @@ -671,6 +679,7 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->>  					unsigned int event, void *data)
->>  {
->>  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
->> +	unsigned int *new_delay = data;
->>  	int ret = 0;
->>  
->>  	/*
->> @@ -690,6 +699,17 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->>  		devfreq_monitor_stop(devfreq);
->>  		break;
->>  
->> +	case DEVFREQ_GOV_INTERVAL:
->> +		if (*new_delay > 256) {
+>>  	if (!delayed_work_pending(&devfreq->work) &&
+>> -			devfreq->profile->polling_ms)
+>> +			devfreq->profile->polling_ms &&
+>> +				!devfreq->governor->interrupt_driven)
 > 
-> Need to add the comment why the maximum delay is under 256 ms.
+> Better to edit it as following for the indentation.
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index cea05b43225f..60c5540b2a55 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -477,7 +477,7 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
+>  
+>         if (!delayed_work_pending(&devfreq->work) &&
+>                         devfreq->profile->polling_ms &&
+> -                               !devfreq->governor->interrupt_driven)
+> +                       !devfreq->governor->interrupt_driven)
+> 
+> 
+> 
+>>  		queue_delayed_work(devfreq_wq, &devfreq->work,
+>>  			msecs_to_jiffies(devfreq->profile->polling_ms));
+>>  
+>> @@ -518,8 +520,9 @@ void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay)
+>>  
+>>  	/* if current delay is zero, start polling with new delay */
+>>  	if (!cur_delay) {
+>> -		queue_delayed_work(devfreq_wq, &devfreq->work,
+>> -			msecs_to_jiffies(devfreq->profile->polling_ms));
+>> +		if (!devfreq->governor->interrupt_driven)
+>> +			queue_delayed_work(devfreq_wq, &devfreq->work,
+>> +				msecs_to_jiffies(devfreq->profile->polling_ms));
+>>  		goto out;
+>>  	}
+>>  
+>> @@ -528,7 +531,8 @@ void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay)
+>>  		mutex_unlock(&devfreq->lock);
+>>  		cancel_delayed_work_sync(&devfreq->work);
+>>  		mutex_lock(&devfreq->lock);
+>> -		if (!devfreq->stop_polling)
+>> +		if (!devfreq->stop_polling &&
+>> +		    !devfreq->governor->interrupt_driven)
+>>  			queue_delayed_work(devfreq_wq, &devfreq->work,
+>>  				msecs_to_jiffies(devfreq->profile->polling_ms));
+>>  	}
+> 
+> In the devfreq_interval_update(), you better to modify this function as following:
+> It is more simple.
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index d3d12ed0ed29..80acb55d1686 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -510,6 +510,9 @@ void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay)
+>         if (devfreq->stop_polling)
+>                 goto out;
+>  
+> +       if (!devfreq->governor->interrupt_driven)
+> +               goto out;
+> +
+>         /* if new delay is zero, stop polling */
+>         if (!new_delay) {
+>                 mutex_unlock(&devfreq->lock);
+> 
+> 
+> 
+>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+>> index bbe5ff9fcecf..dc7533ccc3db 100644
+>> --- a/drivers/devfreq/governor.h
+>> +++ b/drivers/devfreq/governor.h
+>> @@ -31,6 +31,8 @@
+>>   * @name:		Governor's name
+>>   * @immutable:		Immutable flag for governor. If the value is 1,
+>>   *			this govenror is never changeable to other governor.
+>> + * @interrupt_driven:	Devfreq core won't schedule polling work for this
+>> + *			governor if value is set to 1.
+>>   * @get_target_freq:	Returns desired operating frequency for the device.
+>>   *			Basically, get_target_freq will run
+>>   *			devfreq_dev_profile.get_dev_status() to get the
+>> @@ -49,6 +51,7 @@ struct devfreq_governor {
+>>  
+>>  	const char name[DEVFREQ_NAME_LEN];
+>>  	const unsigned int immutable;
+>> +	const unsigned int interrupt_driven;
+>>  	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
+>>  	int (*event_handler)(struct devfreq *devfreq,
+>>  				unsigned int event, void *data);
+>>
+> 
+> 
 
-Okay, will add comment in v8. The 256ms max is the hardware's capability.
+Okay, I'll update this patch.
