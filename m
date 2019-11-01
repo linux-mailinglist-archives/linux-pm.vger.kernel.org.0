@@ -2,74 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59249EC626
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 16:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7B1EC64F
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 17:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729349AbfKAP4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 11:56:11 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:37460 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729327AbfKAP4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 11:56:10 -0400
-Received: by mail-il1-f195.google.com with SMTP id t9so6805688ils.4
-        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 08:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=jkikiuxKNQxBjumG32R/xAOzBpTQzIQOGlQ9PlZMzROUxuROhIRW7LOTcmmKqgHbY3
-         GOAi1JnMWEnE/cHrGKrepuphWKFno/pbedjX9XbUWfuIb71+aWSjlL5ZBdl2tkqhPPKE
-         upGJ5iT/1C19qe7FISRldhXG8lpP7RchXgCPpOby1LewLJ9oB1SrBH33yMLjEi7ivjNF
-         o703S5ww1Ql1WeM1aVK41ldtWwBkirNy1eGYI9RnsPVvXaYfqhEH77U0dn8RQUxe2Nnp
-         f+7QOSjXXt7VdhDDkepSvRzDGCUBO3iHq8K6k3uKK4gkq+wr+4nHyD89dMwGRy4pl6Pa
-         lYoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=YCpmmbpGHFxHe9O09LxmdfJK/YdMxZB+aaxT5pP8LVBVOHtM8Xlki0cznhsJm2bKAt
-         mqzeXnvQkZZNAV9FXrIBziLKI5omkbFWVrvg1HV9cwC/xXngruNJkAHUuMziD4hMeuKe
-         rLzPac4pzTNko5q8TmkrfCg8Lq5E4CeE3YoyWjXVwfupEGF8EOIg3ZLtUMbil4/1BvF+
-         4gGbEMFRhzSqi1j4aHV5e7cnBkSg0cJ3JpXaiPuT+5MCsi4XNDHKwE5MpQfLwCqq49vj
-         3/dyPZD9rERY/WccdKEZZnA4RjgFru+9JctQTHpKjYwvPpUjM4WZ4oKmLwt/kJhd4yGI
-         ljfA==
-X-Gm-Message-State: APjAAAUAxN9ZP1osDJg3tAe1V/BBX1c0kr71rYJSf0qSO92yQdLi54/i
-        v3pTx1H+evKbcUYniLxVSL3IhOc0yNaYl0LSVg==
-X-Google-Smtp-Source: APXvYqykJV+0/JwFtVH+nsMp7ykNvWlhcV0rRy9Az9oSoBx/tmbFcQXrrs+n9sPNEOpMU4VQknLk5nY+7hLQNduMfzM=
-X-Received: by 2002:a92:9ac2:: with SMTP id c63mr13404416ill.8.1572623769676;
- Fri, 01 Nov 2019 08:56:09 -0700 (PDT)
+        id S1727180AbfKAQBh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 12:01:37 -0400
+Received: from vps.xff.cz ([195.181.215.36]:60034 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726912AbfKAQBh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 Nov 2019 12:01:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1572624095; bh=E/fbHRLXQc9yL42ILQyIrY7ShI2u1NGQZd6aLMmys9A=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=tnaqTMz9YGuF8cKSjHlduKJk7RfWI4X44N3TU0gbrQA2h2DLvnZUMKqsidsL7hPZ4
+         A/bAsSp2ImUz1BWUSUJ98G8UmIDOIgAUF+znhSvSvOBBd3/POx2U9jB2X/2j/sYEAb
+         9KcZDkaVj6C9iExKATC2xCbWlcek8xFF3uYh6460=
+Date:   Fri, 1 Nov 2019 17:01:34 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     linux-sunxi@googlegroups.com, Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: sun50i: Fix CPU speed bin detection
+Message-ID: <20191101160134.n7ay2jl7j5vzofo2@core.my.home>
+Mail-Followup-To: Maxime Ripard <mripard@kernel.org>,
+        linux-sunxi@googlegroups.com, Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20191031181359.282617-1-megous@megous.com>
+ <20191101150701.fgke7hoad5zn3vn2@hendrix>
 MIME-Version: 1.0
-Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:56:08 -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Mary Coster, I.M.F director-Benin" 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Fri, 1 Nov 2019 16:56:08 +0100
-Message-ID: <CABHzvrmbRd3tt-E2+9AO2XvrMQFKQcn+kao_7DN4rb=grxZAcA@mail.gmail.com>
-Subject: Contact Money Gram international service-Benin to receive your
- payment funds US$2.500,000 Million
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191101150701.fgke7hoad5zn3vn2@hendrix>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attn Dear,Funds Beneficiary.
-Contact Money Gram international service-Benin to receive your payment
-funds US$2.500,000 Million approved this morning through the UN
-payment settlement organization.
-Contact Person, Mr. John Dave.
-Official Director.Money Gram-Benin
-Email: moneygram.1820@outlook.fr
-Telephone +229 62619517
-Once you get intouch with Mr. John Dave, Money Gram Director, send to
-him your address including your phone numbers. He will be sending the
-transfer to you  $5000.00 USD daily until you received your complete
-payment $2.5m from the office.
-Note,I have paid the whole service fees for you but only small money
-you been required to send to this office is $23.00 only via Money Gram
-transfer.
-God bless
-Mary Coster, I.M.F director-Benin
-m.coster@aol.com
+On Fri, Nov 01, 2019 at 04:07:01PM +0100, Maxime Ripard wrote:
+> On Thu, Oct 31, 2019 at 07:13:58PM +0100, Ondrej Jirman wrote:
+> > I have failures to boot on Orange Pi 3, because this driver determined
+> > that my SoC is from the normal bin, but my SoC only works reliably with
+> > the OPP values for the slowest bin.
+> >
+> > Looking at BSP code, I found that efuse values have following meanings
+> > on H6:
+> >
+> > - 0b000 invalid (interpreted in vendor's BSP as normal bin)
+> > - 0b001 slowest bin
+> > - 0b011 normal bin
+> > - 0b111 fastest bin
+> >
+> > Let's play it safe and interpret 0 as the slowest bin, but fix detection
+> > of other bins to match vendor code.
+> >
+> > Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> 
+> Acked-by: Maxime Ripard <mripard@kernel.org>
+> 
+> Out of curiosity, which OPP table is being used? I guess it's one of
+> the dozens of patches sitting there...
+
+I'm using one from Orange Pi 3's fex file from Xunlong:
+
+https://github.com/orangepi-xunlong/OrangePiH6_external/blob/master/sys_config/OrangePiH6_3_sys_config.fex
+https://megous.com/git/linux/commit/?h=ths-5.4&id=7b409e83b4ac70f3435886da6a26cecf9af77213
+
+This one doesn't really differentiate between normal/fast bins.
+
+There's also another one in the Allwinner DTS files:
+
+https://github.com/orangepi-xunlong/OrangePiH6_Linux4_9/blob/master/arch/arm64/boot/dts/sunxi/sun50iw6p1.dtsi#L349
+
+which seems to be the one used by Yangtao Li in the dt-bindings
+docummentation.
+	
+regards,
+	o.
+
+> Maxime
+
+
