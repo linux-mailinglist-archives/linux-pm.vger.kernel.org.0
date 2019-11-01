@@ -2,213 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A37EC35C
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 14:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1A0EC39A
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 14:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbfKANAl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 09:00:41 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35392 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726939AbfKANAk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 09:00:40 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 8so1989882wmo.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 06:00:38 -0700 (PDT)
+        id S1726840AbfKANW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 09:22:28 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45935 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726780AbfKANW1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 09:22:27 -0400
+Received: by mail-lj1-f194.google.com with SMTP id q64so10191247ljb.12;
+        Fri, 01 Nov 2019 06:22:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7ux6o8Ncrgfjd9hT9inKPay1u+1v9WsFB/qk1kBdey4=;
-        b=CTKLIytn7ZTjITu7BzPyvUo9TrjzAxCK7D9g0LWLpfABh3mg3wOEt2dDeKYe3NC5K3
-         NDfD8U9F0Vc9h3bulWoAp8VdhDmNvDasPBFq3y2ENx9dC0ZpxuYi1OWuq+CVrFjetyj4
-         S6oLIS5rxMNIUGK9h1Noo0i1G4NAE8ZC8A/BoJJAl03Umjl8w3RWQCvW6T8tjVeHf7Lw
-         ehGkVwo8laANr6Ilbmt+scU0l40+hY6LQ1vB4++/iaUb+H12OdoRfAQYvYAyi0xEJy6s
-         vst3FbrJ+lD7d21A07SwpYnLXz09JHNbWyXn2spBIGM8C4WApvkB+F43M02X06oT9mZy
-         ojaA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BxLuKMZeBlVEfxN/A5Vfu9gCXIr8p72x+ZY3unGqehk=;
+        b=MSMO14DH6Z1a0eTruGrePh2yxhOOYdC3mv/l+VHLxl/E0Ub3012lpAoCuMOWFNx5Gs
+         DNideGmtLK7TGQVSv9CVsaKUEncGH6TmWjSciHa4QTBpBi5JyQI4dh5Puw6x4Io8e0NW
+         tbk+rk4GdB4C7wVJLivNAahZJkAngdEY5R69tH6+rWsYTVXTcVy7d6ab4iJu/K9nvmeP
+         RLhRIjnVlNTijyRPDGvWR5jmQtNDWOCFA0BaJAEvRaUSPQwry90dy/M+9Hwalej2zFS/
+         b9w3Qq7Y+I2c5Yl3swluJKY+gqoF53z4aHZ4BjFvHKKiDA2xr0EpaYRgikkmzCMVcXob
+         YEyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7ux6o8Ncrgfjd9hT9inKPay1u+1v9WsFB/qk1kBdey4=;
-        b=Rb42bmcxxrmFEDzjHdgB5X84HsM3pNTnZWzXF/mUkdel6HVo+ROHB6tqHzeM3SPTLq
-         xfsTlmbJTrUSCsqNUqU8ATv9i1TVcES+gE59CzU0ixklVRGgLwpxXwFGTbHCANDSd2y7
-         4lEgiyBzMcWs5t7wAMNz7DoUoEgyzYFAeINdSLF+lov7YCDFNxUMhtjLsbKcDvDO0TBv
-         oxcnGM55ih5yiU+45/zZsFb+oqTZaSg+e1MouUe2o7jDqpQQa4QaQJmjf5yINBPPQGyX
-         ZEgZiKO2WRnxIk76k8zi97jqrrdsggoYml3dd1d19Oa6fPbpLpJzaBUnG2N1UozWyYJa
-         i4wQ==
-X-Gm-Message-State: APjAAAUaYUQzEs++9u/8LwmWTRf/ac4XJHU8npLnDojOxaAvWAjja5UB
-        NT4Z7zOz6Y9KZEYK7DOLVqU497bFwGE=
-X-Google-Smtp-Source: APXvYqzcma1qwrrHm8nBTfaVgmdLBFM2hKith8MUY3GNBuouABkehfdmx4SI9jj3UBnwWNhoH/fJqA==
-X-Received: by 2002:a1c:c90c:: with SMTP id f12mr9719141wmb.97.1572613237769;
-        Fri, 01 Nov 2019 06:00:37 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id x7sm14208476wrg.63.2019.11.01.06.00.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 01 Nov 2019 06:00:36 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com
-Cc:     bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
-        daidavid1@codeaurora.org, okukatla@codeaurora.org,
-        evgreen@chromium.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [PATCH v2 3/3] interconnect: Add basic tracepoints
-Date:   Fri,  1 Nov 2019 15:00:31 +0200
-Message-Id: <20191101130031.27996-4-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191101130031.27996-1-georgi.djakov@linaro.org>
-References: <20191101130031.27996-1-georgi.djakov@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BxLuKMZeBlVEfxN/A5Vfu9gCXIr8p72x+ZY3unGqehk=;
+        b=fdYusMLDzFvqMEJVVL5+VNX72KG7U+bvr+eux28XJt5jKtgeHI1Dzw8l/iAvCKoRXj
+         CaWfJKHijdzcnVIcM+pkxkY6VykKjWw1ycsQPOQVhcq2FzzIkoWcA6qwxFNmwNymQ/as
+         TY6klA9aA3KKPX5rTqUSzj7KmdZm37jZi5qhpSTwWKa3ZvigO1yrYJhQ+bQKtvk+3sey
+         r+6/P0/YE1i1wJGFdJlEgOHWR1wGuu5PcVrHML4x14K26qwgknZOdXgljEsx6GbRYBAR
+         7wumzPwGXZgTXGxg06x/m3g9dhakMAv0CQgdPjMrjMx/poF4vGthpeiQwMnMf4NEUWTs
+         CRdQ==
+X-Gm-Message-State: APjAAAUEDhKXFsIKun+BZsUMHUMIyjy0vFcDL2foju70l3Cn84Im5jcZ
+        0v7YQ/Uk3g9GRQbgpzXJyAobBthq
+X-Google-Smtp-Source: APXvYqzoXtTpyz8779l4Pan7YKFr+WghIOshLrJXjqxgJt3oJslriavZUkF4t4kZyFY8lJdkfh7WNA==
+X-Received: by 2002:a2e:b5b7:: with SMTP id f23mr8267156ljn.236.1572614544555;
+        Fri, 01 Nov 2019 06:22:24 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id r1sm2512815ljk.83.2019.11.01.06.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2019 06:22:23 -0700 (PDT)
+Subject: Re: [PATCH v6 00/18] Consolidate and improve NVIDIA Tegra CPUIDLE
+ driver(s)
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191015170015.1135-1-digetx@gmail.com>
+ <20191016192133.GB26038@pdeschrijver-desktop.Nvidia.com>
+ <72636eb3-5354-eea3-3a51-4975a04186b2@gmail.com>
+ <53ee8bd3-5c53-f0aa-175c-7fa3024d0af5@gmail.com>
+ <20191028140443.GA27141@pdeschrijver-desktop.Nvidia.com>
+ <40de641f-c38e-51ee-ae27-c5db468c45b5@gmail.com>
+ <20191101123359.GG27141@pdeschrijver-desktop.Nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a72463cd-cc16-691c-3c82-54ebb618ec32@gmail.com>
+Date:   Fri, 1 Nov 2019 16:22:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
+In-Reply-To: <20191101123359.GG27141@pdeschrijver-desktop.Nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The tracepoints can help with understanding the system behavior of a
-given interconnect path when the consumer drivers change their bandwidth
-demands. This might be interesting when we want to monitor the requested
-interconnect bandwidth for each client driver. The paths may share the
-same nodes and this will help to understand "who and when is requesting
-what". All this is useful for subsystem drivers developers and may also
-provide hints when optimizing the power and performance profile of the
-system.
+01.11.2019 15:33, Peter De Schrijver пишет:
+> On Tue, Oct 29, 2019 at 03:47:56AM +0300, Dmitry Osipenko wrote:
+> ..
+> 
+>>>>>> It would be useful to switch the power state terminology to the one used
+>>>>>> for later chips:
+>>>>>>
+>>>>>> LP0 becomes SC7
+>>>>>> LP1 becomes C1
+>>>>>> LP2 becomes CC7
+>>>>>>
+>>>>>> Meaning of these states is as follows
+>>>>>>
+>>>>>> C is a core state:
+>>>>>>
+>>>>>> C1 clock gating
+>>>>>> C2 not defined
+>>>>>> C3 not defined
+>>>>>> C4 not defined
+>>>>>> C5 not defined
+>>>>>> C6 not defined for ARM cores
+>>>>>> C7 power-gating
+>>>>>>
+>>>>>> CC is a CPU cluster C state:
+>>>>>>
+>>>>>> CC1 cluster clock gated
+>>>>>> CC2 not defined
+>>>>>> CC3 fmax@Vmin: not used prior to Tegra186
+>>>>>> CC4: cluster retention: no longer supported
+>>>>>> CC5: not defined
+>>>>>> CC6: cluster power gating
+>>>>>> CC7: cluster rail gating
+>>>>>>
+>>>>>> SC is a System C state:
+>>>>>>
+>>>>>> SC1: not defined
+>>>>>> SC2: not defined
+>>>>>> SC3: not defined
+>>>>>> SC4: not defined
+>>>>>> SC5: not defined
+>>>>>> SC6: not defined
+>>>>>> SC7: VDD_SOC off
+>>>>>
+>>>>> Hello Peter,
+>>>>>
+>>>>> But new "drivers/cpuidle/cpuidle-tegra.c" uses exactly that terminology,
+>>>>> please see "cpuidle: Refactor and move NVIDIA Tegra20 driver into
+>>>>> drivers/cpuidle/" and further patches. Am I missing something? Or do you
+>>>>> want the renaming to be a separate patch?
+>>>>>
+>>>>
+>>>> Or maybe you're suggesting to change the names everywhere and not only
+>>>> in the cpuidle driver? Please clarify :)
+>>>
+>>> At least some of the variable and function names still say lp2?
+>>
+>> The cpuidle driver uses LP2 terminology for everything that comes from
+>> the external arch / firmware includes. But it says CC6 for everything
+>> that is internal to the driver. So yes, there is a bit of new/old
+>> terminology mixing in the code.
+>>
+>> The arch code / PMC driver / TF firmware are all saying LP2. The LP2
+>> naming is also a part of the device-tree binding.
+>>
+>> It will be a lot of mess to rename the mach-tegra/pm.c code. I guess
+>> eventually it could be moved to drivers/soc/, so maybe it will be better
+>> to postpone the renaming until then?
+> 
+> Or maybe add a comment somewhere indicating:
+> 
+> LP2 = CC6
+> LP1 = C1
+> LP0 = SC7
+> 
+> TF predates the new naming, so that may make some sense.
 
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- MAINTAINERS                         |  1 +
- drivers/interconnect/core.c         |  7 +++
- include/trace/events/interconnect.h | 81 +++++++++++++++++++++++++++++
- 3 files changed, 89 insertions(+)
- create mode 100644 include/trace/events/interconnect.h
+Today it should make more sense just to add an explicit comment to the
+cpuidle driver that clarifies the new naming (IMHO). I'll prepare v7
+with that change.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a69e6db80c79..16f28fa515f2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8522,6 +8522,7 @@ F:	drivers/interconnect/
- F:	include/dt-bindings/interconnect/
- F:	include/linux/interconnect-provider.h
- F:	include/linux/interconnect.h
-+F:	include/trace/events/interconnect.h
- 
- INVENSENSE MPU-3050 GYROSCOPE DRIVER
- M:	Linus Walleij <linus.walleij@linaro.org>
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index df44ef713db5..15e11e22ddf7 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -26,6 +26,9 @@ static LIST_HEAD(icc_providers);
- static DEFINE_MUTEX(icc_lock);
- static struct dentry *icc_debugfs_dir;
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/interconnect.h>
-+
- static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
- {
- 	if (!n)
-@@ -435,6 +438,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 
- 		/* aggregate requests for this node */
- 		aggregate_requests(node);
-+
-+		trace_icc_set_bw(path, node, i, avg_bw, peak_bw);
- 	}
- 
- 	ret = apply_constraints(path);
-@@ -453,6 +458,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 
- 	mutex_unlock(&icc_lock);
- 
-+	trace_icc_set_bw_end(path, ret);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(icc_set_bw);
-diff --git a/include/trace/events/interconnect.h b/include/trace/events/interconnect.h
-new file mode 100644
-index 000000000000..64b646aa7bd3
---- /dev/null
-+++ b/include/trace/events/interconnect.h
-@@ -0,0 +1,81 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2019, Linaro Ltd.
-+ * Author: Georgi Djakov <georgi.djakov@linaro.org>
-+ */
-+
-+#if !defined(_TRACE_INTERCONNECT_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_INTERCONNECT_H
-+
-+#include <linux/tracepoint.h>
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM interconnect
-+
-+#include "../../../drivers/interconnect/internal.h"
-+
-+TRACE_EVENT(icc_set_bw,
-+
-+	TP_PROTO(struct icc_path *p, struct icc_node *n, int i,
-+		 u32 avg_bw, u32 peak_bw),
-+
-+	TP_ARGS(p, n, i, avg_bw, peak_bw),
-+
-+	TP_STRUCT__entry(
-+		__string(path_name, p->name)
-+		__string(dev, dev_name(p->reqs[i].dev))
-+		__string(node_name, n->name)
-+		__field(u32, avg_bw)
-+		__field(u32, peak_bw)
-+		__field(u32, node_avg_bw)
-+		__field(u32, node_peak_bw)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(path_name, p->name);
-+		__assign_str(dev, dev_name(p->reqs[i].dev));
-+		__assign_str(node_name, n->name);
-+		__entry->avg_bw = avg_bw;
-+		__entry->peak_bw = peak_bw;
-+		__entry->node_avg_bw = n->avg_bw;
-+		__entry->node_peak_bw = n->peak_bw;
-+	),
-+
-+	TP_printk("path=%s dev=%s node=%s avg_bw=%u peak_bw=%u agg_avg=%u agg_peak=%u",
-+		  __get_str(path_name),
-+		  __get_str(dev),
-+		  __get_str(node_name),
-+		  __entry->avg_bw,
-+		  __entry->peak_bw,
-+		  __entry->node_avg_bw,
-+		  __entry->node_peak_bw)
-+);
-+
-+TRACE_EVENT(icc_set_bw_end,
-+
-+	TP_PROTO(struct icc_path *p, int ret),
-+
-+	TP_ARGS(p, ret),
-+
-+	TP_STRUCT__entry(
-+		__string(path_name, p->name)
-+		__string(dev, dev_name(p->reqs[0].dev))
-+		__field(int, ret)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(path_name, p->name);
-+		__assign_str(dev, dev_name(p->reqs[0].dev));
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("path=%s dev=%s ret=%d",
-+		  __get_str(path_name),
-+		  __get_str(dev),
-+		  __entry->ret)
-+);
-+
-+#endif /* _TRACE_INTERCONNECT_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+Maybe later on, once more code will be consolidated in
+drivers/soc/tegra/, it will become useful to duplicate the clarification
+there as well.
+
+Please let me know if you disagree or think that something better could
+be done.
