@@ -2,286 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6FCEBF2D
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 09:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCB7EBFE5
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 09:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730330AbfKAIZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 04:25:50 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:53242 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730098AbfKAIZu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 04:25:50 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191101082544epoutp0126af0a023b76bd5025c91697021e3a90~S-GhQqaNQ2074120741epoutp01B
-        for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2019 08:25:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191101082544epoutp0126af0a023b76bd5025c91697021e3a90~S-GhQqaNQ2074120741epoutp01B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1572596744;
-        bh=roQQq6L24tjjeQ/Fbnrwlk6m+bJMna+39cbViVWB4sw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ZW+p/xVnbz4fIR2sCl0fCkU8ecfvhfOLmXYovvJgzdnUIj8NZqpd9iGAYRWUGy4sW
-         NtC2v/+I0folTxzFlVwvFRfsYCGGYLU+uyTl7lIPDMJ3/ui3Hb4+aOhz058LwFUYAD
-         yUwFqcqprjlasqsYbH5zthy64ZVJp6/IID/9Yf0E=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191101082544epcas1p19ba7d0fb00f9fd9fa867881dcd0eeeae~S-Ggqxoib2651126511epcas1p1K;
-        Fri,  1 Nov 2019 08:25:44 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 474Fd15xwGzMqYkf; Fri,  1 Nov
-        2019 08:25:41 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A7.14.04144.50CEBBD5; Fri,  1 Nov 2019 17:25:41 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191101082541epcas1p1392a9d2a87c6240ef470162c5cfef685~S-Gd-8aKK2419524195epcas1p1W;
-        Fri,  1 Nov 2019 08:25:41 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191101082541epsmtrp1218f8ceaf45e254b2986efd523c67da9~S-Gd-CAkS0584805848epsmtrp1T;
-        Fri,  1 Nov 2019 08:25:41 +0000 (GMT)
-X-AuditID: b6c32a35-2c7ff70000001030-62-5dbbec05651e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BB.1D.25663.50CEBBD5; Fri,  1 Nov 2019 17:25:41 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191101082540epsmtip19f57c47a75a241fe2aa83b90760e4d88~S-Gda1g3i0180501805epsmtip1W;
-        Fri,  1 Nov 2019 08:25:40 +0000 (GMT)
-Subject: Re: [PATCH v9 4/8] PM / devfreq: Move more initialization before
- registration
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <l.luba@partner.samsung.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <6f9334b3-01f9-a7c5-a87b-7e8a77c8d6e0@samsung.com>
-Date:   Fri, 1 Nov 2019 17:31:11 +0900
+        id S1726229AbfKAIrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 04:47:00 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39568 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726500AbfKAIq7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 04:46:59 -0400
+Received: by mail-wm1-f67.google.com with SMTP id t26so4292234wmi.4
+        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 01:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PgH/EKzRLT5jJoxf9CSs6yfql44XE/FVhESN+wEtbRg=;
+        b=mGvfEJRt00doMqgAiLStXj79wDTsPiHNEQvge/qvticWX5WZ0a6TD79eBwounWiM5h
+         885SK+oif4Mgfx4CKA6ygBWvGRMvHH2JL2aSwlogTtbcck8GH4xxk02U4PAa8nV6Rlv1
+         5KdDReBinV8trX01l6XIIgABHOGfKneJ9aO+kCmgsdrOfvBj1thoHGRSCCocYcZuQAVJ
+         7/FLh7MYfJKWqXqISd2uFoRG05SQO15bDyRG+kd5rkq0x86j5fN6ngwnuRsT4GXeYt2k
+         ALH5KfcUm/jvKEb8RHvpX3eYXqARWSZSHPU+syWfvS4lX4pv0RaTUWblWkKkJWeR7CGX
+         /cvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=PgH/EKzRLT5jJoxf9CSs6yfql44XE/FVhESN+wEtbRg=;
+        b=YTPHKGwdULJLtG3lZpGxLRM+IZzrMjrH7lEed/fKM8Y2BqlK6EVwLMngKrQAhvP01i
+         2/xLyHV61SWG8OwZirXjTkyKhLs94XfsLEfOKxDsDar6hPHoS3qlS+jBYJqI5bQyUUc7
+         FFun2ySQrOB14+bMRv+Ffe0PAW1+y/Ozd39xe3kkzPyr98SH4tb5SbL6s9kAii93f7nJ
+         Ph9YN7LYrtHUOdt4e/2pWE9qHX6LwE5VwOdzrErwbEZfY1y+rNlg8ZR6P6kNFudb3ScJ
+         prhm4r1ljxVbyYFhQplPXECr8B58bzdSmJ7PSvsHCoPD8rQQw2s1aPeaw2gnksFcFGd7
+         mbLA==
+X-Gm-Message-State: APjAAAW+Ef7x6IoqtbEIr8hafYafoulAn/cSCRVd/Yq7FepbMBtNPxTn
+        tsJnr+uXUYBAkNPNgqSIKgLJNQ==
+X-Google-Smtp-Source: APXvYqxLCOyj1kNEUCerOyyRQV0kRPeBkx4CaYfk+yL1Jdp/FJxDWl8BtqaPpgY2e1OQ9wIm9kKZ/w==
+X-Received: by 2002:a1c:7709:: with SMTP id t9mr2946852wmi.80.1572598014232;
+        Fri, 01 Nov 2019 01:46:54 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4cb0:7f54:9d5f:4d40? ([2a01:e34:ed2f:f020:4cb0:7f54:9d5f:4d40])
+        by smtp.googlemail.com with ESMTPSA id n13sm1251650wmi.25.2019.11.01.01.46.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Nov 2019 01:46:53 -0700 (PDT)
+Subject: Re: [RESEND PATCH] thermal: mediatek: add suspend/resume callback
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Louis Yu <louis.yu@mediatek.com>
+References: <1570613704-16609-1-git-send-email-michael.kao@mediatek.com>
+ <a0af0b72-dbc3-f284-34b7-fc94bbe349a4@linaro.org>
+ <1572571899.23942.3.camel@mtksdccf07>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <81f767f4-3dd6-b20c-1c4e-8e5229ddf66d@linaro.org>
+Date:   Fri, 1 Nov 2019 09:46:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB70234DF1004231D1BB02A41DEE630@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <1572571899.23942.3.camel@mtksdccf07>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCJsWRmVeSWpSXmKPExsWy7bCmvi7rm92xBrO/GlgcOraV3eLr6VOM
-        FssuHWW0mL53E5vF+fMb2C3ONr1ht7jVIGOx4u5HVotNj6+xWnT9Wsls8bn3CKPF5w2PGS1u
-        N65gs1h97iCbRdehv2wWG796OAh4vL/Ryu4xu+Eii8eCTaUem1Z1snncubaHzWPzknqPje92
-        MHkcfLeHyaNvyypGj8+b5AK4orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU
-        8hJzU22VXHwCdN0yc4AeUVIoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUWBboFSfm
-        Fpfmpesl5+daGRoYGJkCFSZkZzzddpm94KdmxbTt25kbGG8pdjFycEgImEh8PynfxcjFISSw
-        g1Fi2cvbbBDOJ0aJnYfeMEE43xglrtw6wQ7T8XeDDkR8L6NE56RVzBDOe0aJKfufsIEUCQtE
-        SHR9zQQxRYDMaa/dQUqYBf6zSNye9oGli5GTg01AS2L/ixtsIDa/gKLE1R+PGUFsXgE7iZkr
-        TzOB2CwCKhLrpp1iBJkjCjTn9NdEiBJBiZMzn4CN4RSIlbjadAHMZhYQl7j1ZD4ThC0v0bx1
-        NthpEgKX2CW2zHgAlpAQcJE4eLqRGcIWlnh1fAs7hC0l8bK/Dcqullh58ggbRHMHo8SW/RdY
-        IRLGEvuXTmYCOYhZQFNi/S59iLCixM7fcxkhFvNJvPvawwoJK16JjjYhiBJlicsP7kKdICmx
-        uL2TbQKj0iwk78xC8sIsJC/MQli2gJFlFaNYakFxbnpqsWGBIXJUb2IEp3At0x2MU875HGIU
-        4GBU4uGdcG53rBBrYllxZe4hRgkOZiUR3u3rgEK8KYmVValF+fFFpTmpxYcYTYGBPZFZSjQ5
-        H5hf8kriDU2NjI2NLUwMzUwNDZXEeR2XL40VEkhPLEnNTk0tSC2C6WPi4JRqYJQqsfmzoPvR
-        Os+/TlX7/k7pCVn1r6XXQcxNIGKHwge77C+zt2330LXlzfJ+0l7VlXTyWeB9m/96tzxra/eo
-        7Dy44epN5waHw3cal+nqPc2/mN4oLb8uZ5ns8fSlmv8c2xr9Z8iEPVVbH7b59Bqen4n/t2lW
-        T3ebM1+qL/isyf7E4ybz2Sqnv1JiKc5INNRiLipOBAAZEHmG9wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsWy7bCSnC7rm92xBq9/CVkcOraV3eLr6VOM
-        FssuHWW0mL53E5vF+fMb2C3ONr1ht7jVIGOx4u5HVotNj6+xWnT9Wsls8bn3CKPF5w2PGS1u
-        N65gs1h97iCbRdehv2wWG796OAh4vL/Ryu4xu+Eii8eCTaUem1Z1snncubaHzWPzknqPje92
-        MHkcfLeHyaNvyypGj8+b5AK4orhsUlJzMstSi/TtErgynm67zF7wU7Ni2vbtzA2MtxS7GDk4
-        JARMJP5u0Oli5OQQEtjNKHFgpS+ILSEgKTHt4lFmiBJhicOHi7sYuYBK3jJKnFg2lwkkLiwQ
-        IdH1NROkXATInDNtBgtIDbPAfxaJpjV9jBANr5gkdl05yAxSxSagJbH/xQ02EJtfQFHi6o/H
-        jCA2r4CdxMyVp5lAbBYBFYl1006BxUWBpj7ffgOqRlDi5MwnLCA2p0CsxNWmC2A2s4C6xJ95
-        l5ghbHGJW0/mM0HY8hLNW2czT2AUnoWkfRaSlllIWmYhaVnAyLKKUTK1oDg3PbfYsMAoL7Vc
-        rzgxt7g0L10vOT93EyM4nrW0djCeOBF/iFGAg1GJh3dG1+5YIdbEsuLK3EOMEhzMSiK829cB
-        hXhTEiurUovy44tKc1KLDzFKc7AoifPK5x+LFBJITyxJzU5NLUgtgskycXBKNTBW3j1kycG1
-        Vn9+7/UtU2YWRuctuRGQLcC49c3hR983Cb3Rd97P4FmoItPpsI1/16b5HzuXndVof7Pm4eKl
-        hsu6fh6vyNoUd1PGQIqn4ccBV87llinTGa6f97wt7suw87YzL9OjZteMi34hf3uNmIIDVF1u
-        MWvuCFt/no9h93vRN9NZruZ92xGqxFKckWioxVxUnAgABq+K2OMCAAA=
-X-CMS-MailID: 20191101082541epcas1p1392a9d2a87c6240ef470162c5cfef685
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191002192527epcas3p3ba24247bd1b8ce8ac33f7e4431c25241
-References: <cover.1570044052.git.leonard.crestez@nxp.com>
-        <CGME20191002192527epcas3p3ba24247bd1b8ce8ac33f7e4431c25241@epcas3p3.samsung.com>
-        <25f46d76dc95d5509edd7bf9d1a2e0532faef4cc.1570044052.git.leonard.crestez@nxp.com>
-        <0cadb00d-d34e-4028-93c4-b4902a50f5e2@samsung.com>
-        <VI1PR04MB70234DF1004231D1BB02A41DEE630@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 10. 31. 오후 10:31, Leonard Crestez wrote:
-> On 31.10.2019 05:10, Chanwoo Choi wrote:
->> Hi Leonard,
->>
->> This patch didn't get the acked-by from devfreq maintainer.
->> I think that we need to discuss this patch with more time.
->> Also, it is possible to make it as the separate patch
->> from this series.
->>
->> IMHO, if you make the separate patch for this and
->> resend the separate patch on later, I think that
->> we can merge the remained patch related to PM_QOS.
-> 
-> The devfreq initialization cleanups are required for dev_pm_qos support, 
-> otherwise lockdep warnings are triggered. I can post the cleanups as a 
-> separate series but the PM QoS one would depend on the cleanups.
-> 
-> Do you prefer multiple smaller series?
-
-After read the v10, I think v9 is better than v10
-for this issue. 
-
-> 
-> I try to order my patches with uncontroversial fixes and cleanups first 
-> so in theory the earlier parts could be applied separately. It's very 
-> rare to see series partially applied though.
-> 
-> Earlier objection was that devm should be kept, I think this can be 
-> accomplished by splitting device_register into device_initialize and 
-> device_add.
-> 
->> On 19. 10. 3. 오전 4:25, Leonard Crestez wrote:
->>> In general it is a better to initialize an object before making it
->>> accessible externally (through device_register).
+On 01/11/2019 02:31, Michael Kao wrote:
+> On Sun, 2019-10-13 at 19:50 +0200, Daniel Lezcano wrote:
+>> On 09/10/2019 11:35, michael.kao@mediatek.com wrote:
+>>> From: Louis Yu <louis.yu@mediatek.com>
 >>>
->>> This makes it possible to avoid remove locking the partially initialized
->>> object and simplifies the code. However devm is not available before
->>> device_register (only after the device_initialize step) so the two
->>> allocations need to be managed manually.
+>>> Add suspend/resume callback to disable/enable Mediatek thermal sensor
+>>> respectively. Since thermal power domain is off in suspend, thermal driver
+>>> needs re-initialization during resume.
 >>>
->>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
->>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>> Signed-off-by: Louis Yu <louis.yu@mediatek.com>
+>>> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 >>> ---
->>>   drivers/devfreq/devfreq.c | 43 +++++++++++++++++++++++----------------
->>>   1 file changed, 25 insertions(+), 18 deletions(-)
+>>> This patch series base on these patches [1][2].
 >>>
->>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>> index 3e0e936185a3..0b40f40ee7aa 100644
->>> --- a/drivers/devfreq/devfreq.c
->>> +++ b/drivers/devfreq/devfreq.c
->>> @@ -591,10 +591,12 @@ static void devfreq_dev_release(struct device *dev)
->>>   	mutex_unlock(&devfreq_list_lock);
->>>   
->>>   	if (devfreq->profile->exit)
->>>   		devfreq->profile->exit(devfreq->dev.parent);
->>>   
->>> +	kfree(devfreq->time_in_state);
->>> +	kfree(devfreq->trans_table);
->>>   	mutex_destroy(&devfreq->lock);
->>>   	kfree(devfreq);
->>>   }
->>>   
->>>   /**
->>> @@ -674,44 +676,43 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>>   	devfreq->max_freq = devfreq->scaling_max_freq;
->>>   
->>>   	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
->>>   	atomic_set(&devfreq->suspend_count, 0);
->>>   
->>> -	dev_set_name(&devfreq->dev, "devfreq%d",
->>> -				atomic_inc_return(&devfreq_no));
->>> -	err = device_register(&devfreq->dev);
->>> -	if (err) {
->>> -		mutex_unlock(&devfreq->lock);
->>> -		put_device(&devfreq->dev);
->>> -		goto err_out;
->>> -	}
->>> -
->>> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
->>> +	devfreq->trans_table = kzalloc(
->>>   			array3_size(sizeof(unsigned int),
->>>   				    devfreq->profile->max_state,
->>>   				    devfreq->profile->max_state),
->>>   			GFP_KERNEL);
->>>   	if (!devfreq->trans_table) {
->>>   		mutex_unlock(&devfreq->lock);
->>>   		err = -ENOMEM;
->>> -		goto err_devfreq;
->>> +		goto err_dev;
->>>   	}
->>>   
->>> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
->>> -			devfreq->profile->max_state,
->>> -			sizeof(unsigned long),
->>> -			GFP_KERNEL);
->>> +	devfreq->time_in_state = kcalloc(devfreq->profile->max_state,
->>> +					 sizeof(unsigned long),
->>> +					 GFP_KERNEL);
->>>   	if (!devfreq->time_in_state) {
->>>   		mutex_unlock(&devfreq->lock);
->>>   		err = -ENOMEM;
->>> -		goto err_devfreq;
->>> +		goto err_dev;
->>>   	}
->>>   
->>>   	devfreq->last_stat_updated = jiffies;
->>>   
->>>   	srcu_init_notifier_head(&devfreq->transition_notifier_list);
->>>   
->>> +	dev_set_name(&devfreq->dev, "devfreq%d",
->>> +				atomic_inc_return(&devfreq_no));
->>> +	err = device_register(&devfreq->dev);
->>> +	if (err) {
->>> +		mutex_unlock(&devfreq->lock);
->>> +		put_device(&devfreq->dev);
->>> +		goto err_out;
+>>> [1]thermal: mediatek: mt8183: fix bank number settings (https://patchwork.kernel.org/patch/10938817/)
+>>> [2]thermal: mediatek: add another get_temp ops for thermal sensors (https://patchwork.kernel.org/patch/10938829/)
+>>
+>> There is no new version with the comments take into account. Did I miss
+>> something?
+>>
+>> The patch base on Kenrel 5.4. I resend to linux-pm. The original patch is at linux-mediatek only.
 
-err_out -> err_dev
-When failed to register, have to free resource.
-
->>> +	}
->>> +
->>>   	mutex_unlock(&devfreq->lock);
->>>   
->>>   	mutex_lock(&devfreq_list_lock);
->>>   
->>>   	governor = try_then_request_governor(devfreq->governor_name);
->>> @@ -737,14 +738,20 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>>   
->>>   	return devfreq;
->>>   
->>>   err_init:
->>>   	mutex_unlock(&devfreq_list_lock);
->>> -err_devfreq:
->>>   	devfreq_remove_device(devfreq);
->>> -	devfreq = NULL;
->>> +	return ERR_PTR(err);
-
-
-It is not proper to return on the middle 
-of the exception handling. Need to consider more clean method.
-
->>> +
->>>   err_dev:
->>> +	/*
->>> +	 * Cleanup path for errors that happen before registration.
->>> +	 * Otherwise we rely on devfreq_dev_release.
->>> +	 */
->>> +	kfree(devfreq->time_in_state);
->>> +	kfree(devfreq->trans_table);
->>>   	kfree(devfreq);
->>>   err_out:
->>>   	return ERR_PTR(err);
->>>   }
->>>   EXPORT_SYMBOL(devfreq_add_device);
-
+Sorry I don't get your anwser, can you rephrase it ?
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
