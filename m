@@ -2,144 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9ACEC9DD
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 21:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5280ECA4B
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 22:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727876AbfKAUrP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 16:47:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727517AbfKAUrP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 1 Nov 2019 16:47:15 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92699217D9;
-        Fri,  1 Nov 2019 20:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572641234;
-        bh=SSkz3soRV0jdoMV7GQDwd9LGZExhDp/y3PEYxGNxQLY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jVoqK4iZZstPIyuKWWbEFzDm5toz63GhaArRo3fr0RbJXH38Yu90S9QnQSeUZp6GA
-         MgdvB+9y8GOV1FAak3eTcsrCsba1SSCPxlKZi7t+7jD/9iLHwppKo5bZr51OX1xpy6
-         Fu+YQ3KiBQrIL4hnYEg/sHXAI7x9oRodQwIWxgyY=
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 6/6] PCI/PM: Remove unused pci_driver.suspend_late() hook
-Date:   Fri,  1 Nov 2019 15:45:58 -0500
-Message-Id: <20191101204558.210235-7-helgaas@kernel.org>
-X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
-In-Reply-To: <20191101204558.210235-1-helgaas@kernel.org>
-References: <20191101204558.210235-1-helgaas@kernel.org>
+        id S1725989AbfKAVak (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 17:30:40 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38060 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbfKAVak (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 17:30:40 -0400
+Received: by mail-lj1-f194.google.com with SMTP id y23so11206707ljc.5;
+        Fri, 01 Nov 2019 14:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZUMbanYAR2JSQFXtbmagULus+WfywDZrwLUh3k9jtsA=;
+        b=umMn3Y+u4IeNaoKlgUdMAZNW66GDjoo8446drYodCdBa7ZmGnsoygSzfiBCEk5EW/K
+         Z3YKyGO/huuIQ9ZWYK2xKSadEzoEz9Uoq7veWo+T9lhlHL4OPQAagL35zEgPhPXEmuNn
+         8Ctc8Rk1yMl2pYgBY9qd/muTcdrZx398dbczT6YURP2tjHGOkz5NSth7TRQtvML4n0Nr
+         mC2kFGS+OgZK5WDZEH+LGa2TsZhVVIIdReVjom9QVzRdK8sVCZzN1T3xlSJn4pjvUHGT
+         iPNGWA84KW3Vpy1na6bJ6ViB9Djz1yPCa08StTgz4dqXy1Xhk5dg+11uPBxqRCQW8Q4z
+         djpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZUMbanYAR2JSQFXtbmagULus+WfywDZrwLUh3k9jtsA=;
+        b=hcgLJgQeJ5jUwjGjogzL0bvMV0f4JkWeG5shOJwk0+Vo88lhbC+n3WT4qVlp8mH0pS
+         i4X10CoAMiRC2KYWBWMtnqNx8z0QtKkrzBTOc89/JVbRs3ieK8YMNXeAS/1gvNyUMlmO
+         OQl4Ls2YiC8DlTFvATJvGbq9kbKF7lMiG3pW6mLnsb+/XpLMk04YTBq9ICOC1VqQ8ueV
+         4aZ/GX56OO9vOk97H0sht1C5bS/4xkW179TDpNPsZx9thrJzkvJQEY4jPjHmSv0LJA6+
+         /NlB5WNcLWRZgdz++C9YoFgucIvP2DqKP2cD/vE4gx08vzehF3hqXoPYURio3RKvNWC/
+         BbzA==
+X-Gm-Message-State: APjAAAVGGdn6gA2HNCCi/XxBC9odsxoZ7w5OKAzdopJ+vsUuutyxfkH6
+        bJGZ5WQn/dTI+zHMBJ86Bot/ACme
+X-Google-Smtp-Source: APXvYqyQg7FVoTK+7F7aVQMbDzmR4UztW5orQfSKGemWQwF3ydiJE5F9YDtBNjdUEqfNel0WXXx4yw==
+X-Received: by 2002:a2e:161b:: with SMTP id w27mr9594995ljd.183.1572643837562;
+        Fri, 01 Nov 2019 14:30:37 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id r21sm2805638ljn.65.2019.11.01.14.30.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2019 14:30:36 -0700 (PDT)
+Subject: Re: [PATCH v6 00/18] Consolidate and improve NVIDIA Tegra CPUIDLE
+ driver(s)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191015170015.1135-1-digetx@gmail.com>
+ <20191016192133.GB26038@pdeschrijver-desktop.Nvidia.com>
+ <72636eb3-5354-eea3-3a51-4975a04186b2@gmail.com>
+ <53ee8bd3-5c53-f0aa-175c-7fa3024d0af5@gmail.com>
+ <20191028140443.GA27141@pdeschrijver-desktop.Nvidia.com>
+ <40de641f-c38e-51ee-ae27-c5db468c45b5@gmail.com>
+ <20191101123359.GG27141@pdeschrijver-desktop.Nvidia.com>
+ <a72463cd-cc16-691c-3c82-54ebb618ec32@gmail.com>
+Message-ID: <9c25ea71-ebe9-d9c2-0dff-6b2752e27131@gmail.com>
+Date:   Sat, 2 Nov 2019 00:30:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
+In-Reply-To: <a72463cd-cc16-691c-3c82-54ebb618ec32@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+01.11.2019 16:22, Dmitry Osipenko пишет:
+> 01.11.2019 15:33, Peter De Schrijver пишет:
+>> On Tue, Oct 29, 2019 at 03:47:56AM +0300, Dmitry Osipenko wrote:
+>> ..
+>>
+>>>>>>> It would be useful to switch the power state terminology to the one used
+>>>>>>> for later chips:
+>>>>>>>
+>>>>>>> LP0 becomes SC7
+>>>>>>> LP1 becomes C1
+>>>>>>> LP2 becomes CC7
+>>>>>>>
+>>>>>>> Meaning of these states is as follows
+>>>>>>>
+>>>>>>> C is a core state:
+>>>>>>>
+>>>>>>> C1 clock gating
+>>>>>>> C2 not defined
+>>>>>>> C3 not defined
+>>>>>>> C4 not defined
+>>>>>>> C5 not defined
+>>>>>>> C6 not defined for ARM cores
+>>>>>>> C7 power-gating
+>>>>>>>
+>>>>>>> CC is a CPU cluster C state:
+>>>>>>>
+>>>>>>> CC1 cluster clock gated
+>>>>>>> CC2 not defined
+>>>>>>> CC3 fmax@Vmin: not used prior to Tegra186
+>>>>>>> CC4: cluster retention: no longer supported
+>>>>>>> CC5: not defined
+>>>>>>> CC6: cluster power gating
+>>>>>>> CC7: cluster rail gating
+>>>>>>>
+>>>>>>> SC is a System C state:
+>>>>>>>
+>>>>>>> SC1: not defined
+>>>>>>> SC2: not defined
+>>>>>>> SC3: not defined
+>>>>>>> SC4: not defined
+>>>>>>> SC5: not defined
+>>>>>>> SC6: not defined
+>>>>>>> SC7: VDD_SOC off
+>>>>>>
+>>>>>> Hello Peter,
+>>>>>>
+>>>>>> But new "drivers/cpuidle/cpuidle-tegra.c" uses exactly that terminology,
+>>>>>> please see "cpuidle: Refactor and move NVIDIA Tegra20 driver into
+>>>>>> drivers/cpuidle/" and further patches. Am I missing something? Or do you
+>>>>>> want the renaming to be a separate patch?
+>>>>>>
+>>>>>
+>>>>> Or maybe you're suggesting to change the names everywhere and not only
+>>>>> in the cpuidle driver? Please clarify :)
+>>>>
+>>>> At least some of the variable and function names still say lp2?
+>>>
+>>> The cpuidle driver uses LP2 terminology for everything that comes from
+>>> the external arch / firmware includes. But it says CC6 for everything
+>>> that is internal to the driver. So yes, there is a bit of new/old
+>>> terminology mixing in the code.
+>>>
+>>> The arch code / PMC driver / TF firmware are all saying LP2. The LP2
+>>> naming is also a part of the device-tree binding.
+>>>
+>>> It will be a lot of mess to rename the mach-tegra/pm.c code. I guess
+>>> eventually it could be moved to drivers/soc/, so maybe it will be better
+>>> to postpone the renaming until then?
+>>
+>> Or maybe add a comment somewhere indicating:
+>>
+>> LP2 = CC6
+>> LP1 = C1
+>> LP0 = SC7
+>>
+>> TF predates the new naming, so that may make some sense.
+> 
+> Today it should make more sense just to add an explicit comment to the
+> cpuidle driver that clarifies the new naming (IMHO). I'll prepare v7
+> with that change.
+> 
+> Maybe later on, once more code will be consolidated in
+> drivers/soc/tegra/, it will become useful to duplicate the clarification
+> there as well.
+> 
+> Please let me know if you disagree or think that something better could
+> be done.
 
-The struct pci_driver.suspend_late() hook is one of the legacy PCI power
-management callbacks, and there are no remaining users of it.  Remove it.
+BTW, LP3 = C1.
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- Documentation/power/pci.rst | 10 +++++-----
- drivers/pci/pci-driver.c    | 22 +---------------------
- include/linux/pci.h         |  2 --
- 3 files changed, 6 insertions(+), 28 deletions(-)
-
-diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-index ff7029b94068..0924d29636ad 100644
---- a/Documentation/power/pci.rst
-+++ b/Documentation/power/pci.rst
-@@ -692,11 +692,11 @@ controlling the runtime power management of their devices.
- At the time of this writing there are two ways to define power management
- callbacks for a PCI device driver, the recommended one, based on using a
- dev_pm_ops structure described in Documentation/driver-api/pm/devices.rst, and
--the "legacy" one, in which the .suspend(), .suspend_late(), and
--.resume() callbacks from struct pci_driver are used.  The legacy approach,
--however, doesn't allow one to define runtime power management callbacks and is
--not really suitable for any new drivers.  Therefore it is not covered by this
--document (refer to the source code to learn more about it).
-+the "legacy" one, in which the .suspend() and .resume() callbacks from struct
-+pci_driver are used.  The legacy approach, however, doesn't allow one to define
-+runtime power management callbacks and is not really suitable for any new
-+drivers.  Therefore it is not covered by this document (refer to the source code
-+to learn more about it).
- 
- It is recommended that all PCI device drivers define a struct dev_pm_ops object
- containing pointers to power management (PM) callbacks that will be executed by
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index fc372c2d529a..e89fd90eaa93 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -599,32 +599,12 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
- static int pci_legacy_suspend_late(struct device *dev, pm_message_t state)
- {
- 	struct pci_dev *pci_dev = to_pci_dev(dev);
--	struct pci_driver *drv = pci_dev->driver;
--
--	if (drv && drv->suspend_late) {
--		pci_power_t prev = pci_dev->current_state;
--		int error;
--
--		error = drv->suspend_late(pci_dev, state);
--		suspend_report_result(drv->suspend_late, error);
--		if (error)
--			return error;
--
--		if (!pci_dev->state_saved && pci_dev->current_state != PCI_D0
--		    && pci_dev->current_state != PCI_UNKNOWN) {
--			pci_WARN_ONCE(pci_dev, pci_dev->current_state != prev,
--				      "PCI PM: Device state not saved by %pS\n",
--				      drv->suspend_late);
--			goto Fixup;
--		}
--	}
- 
- 	if (!pci_dev->state_saved)
- 		pci_save_state(pci_dev);
- 
- 	pci_pm_set_unknown_state(pci_dev);
- 
--Fixup:
- 	pci_fixup_device(pci_fixup_suspend_late, pci_dev);
- 
- 	return 0;
-@@ -653,7 +633,7 @@ static void pci_pm_default_suspend(struct pci_dev *pci_dev)
- static bool pci_has_legacy_pm_support(struct pci_dev *pci_dev)
- {
- 	struct pci_driver *drv = pci_dev->driver;
--	bool ret = drv && (drv->suspend || drv->suspend_late || drv->resume);
-+	bool ret = drv && (drv->suspend || drv->resume);
- 
- 	/*
- 	 * Legacy PM support is used by default, so warn if the new framework is
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index dd4596fc1208..9b0e35e09874 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -805,7 +805,6 @@ struct module;
-  *		The remove function always gets called from process
-  *		context, so it can sleep.
-  * @suspend:	Put device into low power state.
-- * @suspend_late: Put device into low power state.
-  * @resume:	Wake device from low power state.
-  *		(Please see Documentation/power/pci.rst for descriptions
-  *		of PCI Power Management and the related functions.)
-@@ -828,7 +827,6 @@ struct pci_driver {
- 	int  (*probe)(struct pci_dev *dev, const struct pci_device_id *id);	/* New device inserted */
- 	void (*remove)(struct pci_dev *dev);	/* Device removed (NULL if not a hot-plug capable driver) */
- 	int  (*suspend)(struct pci_dev *dev, pm_message_t state);	/* Device suspended */
--	int  (*suspend_late)(struct pci_dev *dev, pm_message_t state);
- 	int  (*resume)(struct pci_dev *dev);	/* Device woken up */
- 	void (*shutdown)(struct pci_dev *dev);
- 	int  (*sriov_configure)(struct pci_dev *dev, int num_vfs); /* On PF */
--- 
-2.24.0.rc1.363.gb1bccd3e3d-goog
-
+I don't think that the new terminology has equivalent to LP1 (CPU
+cluster power gating + DRAM in self-refresh).
