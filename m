@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D903FEBE2D
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 07:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453C8EBE32
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 07:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725798AbfKAGzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 02:55:35 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:55067 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbfKAGzf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 02:55:35 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191101065532epoutp01e4db25daf0c9b06ad51559934c6e1e99~S93wcA8dd0429804298epoutp01C
-        for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2019 06:55:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191101065532epoutp01e4db25daf0c9b06ad51559934c6e1e99~S93wcA8dd0429804298epoutp01C
+        id S1730054AbfKAGzj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 02:55:39 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:64569 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729476AbfKAGzj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 02:55:39 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191101065537epoutp03519285964e53faf3dfd13482dd582b5e~S931cwU1x0795507955epoutp03q
+        for <linux-pm@vger.kernel.org>; Fri,  1 Nov 2019 06:55:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191101065537epoutp03519285964e53faf3dfd13482dd582b5e~S931cwU1x0795507955epoutp03q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1572591332;
-        bh=izcNP/hLiYVSKEzCuHOenOd/RanTgVtooHCxQOAVUbs=;
+        s=mail20170921; t=1572591337;
+        bh=6y5zp92aW7WyXIDBavkDiN5CumCyAgaC0bAZLoSm1yw=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=cNB5MULEt0PkdJZOYt+X2jAPj0AsnxR4tUQm2zJONByAlYvV3Gqg1RmziG4dLUeYt
-         SwPsgStQCVb09Zkv0CxU8iNnXYrUFjwBap3AXXlTfIyQJ92WpOaGyVB9S77OcL42JZ
-         1OBLZ7LbiivfUbwXoqidBSouyTomEFFf09akuVh0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20191101065531epcas1p3e0b6585497fecd265807acbd46533fea~S93v_YW4P0360703607epcas1p3C;
-        Fri,  1 Nov 2019 06:55:31 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 474Ccx3ZghzMqYkb; Fri,  1 Nov
-        2019 06:55:29 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        87.24.04085.1E6DBBD5; Fri,  1 Nov 2019 15:55:29 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        b=CJ2q7aZ1IB0XeQ7zBJ5isJU65mkxJEVnXiLqlNtFF8pK7yAFfyg2d/43f16WAOUtU
+         FeGCEDHpmlxvIQf+FvJlakXdimDlREtbx9eUep0qIlOluThP+5+9Kpn7W3n3186WGt
+         V5J7JxdFQBvzJSpC2ouFUAjVsg26N37t82ObFKZ4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191101065537epcas1p20269cbb96d68c66c22a6b7333ec9eb2a~S931BNrMI1271412714epcas1p2U;
+        Fri,  1 Nov 2019 06:55:37 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 474Cd26YCnzMqYlv; Fri,  1 Nov
+        2019 06:55:34 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.A8.04068.6E6DBBD5; Fri,  1 Nov 2019 15:55:34 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20191101065528epcas1p4c98eb2f047e91c429229c4b27df9c784~S93tP6U6d1538215382epcas1p4U;
-        Fri,  1 Nov 2019 06:55:28 +0000 (GMT)
+        20191101065534epcas1p487ab18951c725c79495f546b8ff13bff~S93yl6a4I2361823618epcas1p4H;
+        Fri,  1 Nov 2019 06:55:34 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191101065528epsmtrp19cf9a214cd77d85d892226ee58bc1536~S93tPEnkj2342223422epsmtrp1O;
-        Fri,  1 Nov 2019 06:55:28 +0000 (GMT)
-X-AuditID: b6c32a37-e19ff70000000ff5-41-5dbbd6e143e2
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191101065534epsmtrp2df45c04e6aaa789ae1b25bf2be816d9e~S93ylHU4h0075400754epsmtrp2M;
+        Fri,  1 Nov 2019 06:55:34 +0000 (GMT)
+X-AuditID: b6c32a39-f47ff70000000fe4-a4-5dbbd6e69c6f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        12.59.24756.0E6DBBD5; Fri,  1 Nov 2019 15:55:28 +0900 (KST)
+        B4.59.24756.6E6DBBD5; Fri,  1 Nov 2019 15:55:34 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191101065528epsmtip11cd179d6b8c955003d04a9bd7f5c0595~S93s_MqwC1596415964epsmtip1j;
-        Fri,  1 Nov 2019 06:55:28 +0000 (GMT)
-Subject: Re: [PATCH v7 14/19] PM / devfreq: tegra30: Don't enable already
- enabled consecutive interrupts
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191101065534epsmtip232091287ef28c718a1de871fa0077dad~S93yV-Gt70302403024epsmtip22;
+        Fri,  1 Nov 2019 06:55:34 +0000 (GMT)
+Subject: Re: [PATCH v7 15/19] PM / devfreq: tegra30: Disable consecutive
+ interrupts when appropriate
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -61,90 +61,111 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <6b98cb58-7487-3e0d-705a-fa1d8e4e43bd@samsung.com>
-Date:   Fri, 1 Nov 2019 16:00:59 +0900
+Message-ID: <1e363539-c9fb-0b1c-8cf7-b1cf320a2d28@samsung.com>
+Date:   Fri, 1 Nov 2019 16:01:05 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191029220019.26773-15-digetx@gmail.com>
+In-Reply-To: <20191029220019.26773-16-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmge7Da7tjDe6uk7FY/fExo0XLrEUs
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa1BMYRieb8/p7KmxfFbxyiCHGXTd07Y5IXIZdlxG4zY0kjPtsTXtbc7Z
+        EH/cV5EhY6YWyW0o45JW2tTE5hbCCOOWCTEYckkuI8OeTkb/nu95nu993vf7XprQnqZC6Uyb
+        UxBtvIWhgsjK+tExUa8fnE/VlTTFc8c/v0TcRvdBkmtc/17NNVXvpbj2/EuIy/3qprgn645R
+        XOPrmdzP6mKS237iLpUUZKxqPoyMXnez2pi/oY0ybveUIWP7mSHJASlZ4zME3iSIYYIt3W7K
+        tJkTmZnz0qakGeJ1bBSbwI1hwmy8VUhkps5KjpqWafE3xYSt4C3ZfiqZlyQmZsJ40Z7tFMIy
+        7JIzkREcJosjwREt8VYp22aOTrdbx7I6XazBb1yWlXH9Vy3heKNd9fT5b7QWneyThwJpwHHQ
+        4qkh8lAQrcVVCC48KkLK4QuC2w+3divfEDSW/ib+Xanc9IRUhFoEVwvWdbs+Ivje3tjl6oeX
+        w4UPRylZCMYHVXDi8rkugcCLod57XCVjCodD3ZuHlIz74GFw/8dLfzhNa/AEKHclyTSJR8CN
+        zg5CpkPwIrjRwcu0BveFhqJWUqYD8Rj448lRig+Ax637VQoeChvO7unu2aWGsvdxsh3wVOgs
+        sSp0P3h31aNWcCi0t9VSCl4DpQ2XupoHvAWBp+5OgCLooe7ILpVch8Cj4VR1jEIPA++vfUiJ
+        7Q1tHdsClCgNbNmsVSzDoamlWaXggXDIlUvtQIy7xyzuHgO4ewzg/h9Wgsgy1F9wSFazILEO
+        Q8+vPoO6tjU8oQpduTXLhzCNmF6awrzzqdoAfoWUY/UhoAkmWHPupJ/SmPic1YJoTxOzLYLk
+        Qwb/S+8kQkPS7f7dtznTWEOsXq/n4th4A8syAzSTjh5J1WIz7xSyBMEhiP/uqejA0LUo2FV0
+        7+3c6SGqzfS2ZxPv5nzbr/N1+FCnON9VeGtcftKniIVi3oJRs+ckV9avLM01H9AENwyeXTCS
+        rIgsLK9+1OKJ/Ci9q5kxNvLz5PW7L84oD7r/ovVO7CD7iKUH7N/Da2uKK1KuCaeO3Yx4vGQe
+        fqH3biqepO9rim4exKobXqV45zKklMGz4YQo8X8BnnTgQsMDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLIsWRmVeSWpSXmKPExsWy7bCSvO6za7tjDW5vkLdY/fExo0XLrEUs
         Fmeb3rBbXN41h83ic+8RRovOL7PYLG43rmCzOPvM2+LnrnksFn1rL7E5cHnsuLuE0WPnrLvs
-        Hr3N79g8+rasYvT4vEkugDUq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEv
-        MTfVVsnFJ0DXLTMH6CglhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFlgV5xYm5x
-        aV66XnJ+rpWhgYGRKVBhQnbGl6/5Bf+5KuYsfcXYwPifo4uRk0NCwESie9IXxi5GLg4hgR2M
-        ElOvTmOHcD4xSpxuu8sM4XxjlOjvngqU4QBrmb1aCiK+l1Fizr8XTBDOe0aJvws/sIIUCQtk
-        SUx7KgsSFxFYxCSx9uh2ZpB9zAKREod3rmYCsdkEtCT2v7jBBmLzCyhKXP3xmBHE5hWwk/g7
-        9xSYzSKgIvHi/0pGkJmiAhESp78mQpQISpyc+YQFxOYUMJfYcuEJI8R4cYlbT+YzQdjyEs1b
-        ZzNDvPmfTWLX9AII20Xi1+ZXLBC2sMSr41vYIWwpiZf9bVB2tcTKk0fYQO6XEOhglNiy/wIr
-        RMJYYv/SyUwg9zALaEqs36UPEVaU2Pl7LtQNfBLvvvawQsKKV6KjTQiiRFni8oO7TBC2pMTi
-        9k62CYxKs5B8MwvJB7OQfDALYdkCRpZVjGKpBcW56anFhgXGyFG9iRGcWrXMdzBuOOdziFGA
-        g1GJh3dG1+5YIdbEsuLK3EOMEhzMSiK829cBhXhTEiurUovy44tKc1KLDzGaAsN6IrOUaHI+
-        MO3nlcQbmhoZGxtbmBiamRoaKonzOi5fGiskkJ5YkpqdmlqQWgTTx8TBKdXAmCztleCy5Jn4
-        x5/PhNZIzm4XE+N5bqrmxrviUMWTZafc25X3a4u6OaU0vfddL9bkzrZr+YrFL593xVs3v5h9
-        Ra9/a3OykhCDcq1M647+ngQ7N6NUzmUF1+7tmPdpaVZ145eLK+6Vcwh9yuRW85ZZEqThtfNh
-        bYo2k/ye9Ks/Cx4HfPNcIPlbiaU4I9FQi7moOBEAQJiM2cMDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsWy7bCSnO6Da7tjDXo3Glqs/viY0aJl1iIW
-        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZnH3mbfFz1zwWi761l9gcuDx23F3C6LFz1l12
-        j97md2wefVtWMXp83iQXwBrFZZOSmpNZllqkb5fAlfHla37Bf66KOUtfMTYw/ufoYuTgkBAw
-        kZi9WqqLkYtDSGA3o8SWmb8Yuxg5geKSEtMuHmWGqBGWOHy4GKLmLaNE27oXjCBxYYEsiWlP
-        ZUHiIgJLmCTOflnODNLLLBAp0TN3CxtEwzZGic5D31hBEmwCWhL7X9xgA7H5BRQlrv54DLaM
-        V8BO4u/cU2A2i4CKxIv/K8FsUYEIiefbb0DVCEqcnPmEBcTmFDCX2HLhCSPEMnWJP/MuQS0W
-        l7j1ZD4ThC0v0bx1NvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuKc9Nziw0LDPNSy/WKE3OL
-        S/PS9ZLzczcxguNMS3MH4+Ul8YcYBTgYlXh4Z3TtjhViTSwrrsw9xCjBwawkwrt9HVCINyWx
-        siq1KD++qDQntfgQozQHi5I479O8Y5FCAumJJanZqakFqUUwWSYOTqkGRrFuzvrX9xKen3wr
-        9LDL4nXAOXX3vMMK/Luv6ik4LBE42hQ41y66X+x+1o86i1Dlw11bZy3l+N+9JzSKs/HcnrnC
-        /ctrQ29X1X3XUX31l6fbkaXwX5M3j75M5wPeclmNHIf+s8xPFTeJTdPZNOPQ84AFeiyrfa6e
-        mzBri8d6gbArBz9ZiM5bo8RSnJFoqMVcVJwIAGnpTSivAgAA
-X-CMS-MailID: 20191101065528epcas1p4c98eb2f047e91c429229c4b27df9c784
+        Hr3N79g8+rasYvT4vEkugDWKyyYlNSezLLVI3y6BK+PU773MBS+EKu48/MvYwLiOv4uRk0NC
+        wERiW+ttli5GLg4hgd2MEufX/2SDSEhKTLt4lLmLkQPIFpY4fLgYouYto8TsdbdZQWqEBdIk
+        DrxdzgaSEBFYwiRx9styZpAEs0CkRM/cLWwQHdsYJS71LQKbyiagJbH/xQ0wm19AUeLqj8eM
+        IBt4BewkNrY7gIRZBFQkTv/5CjZHVCBC4vn2G4wgNq+AoMTJmU9YQMo5Bcwl/m+phFilLvFn
+        3iWoteISt57MZ4Kw5SWat85mnsAoPAtJ9ywkLbOQtMxC0rKAkWUVo2RqQXFuem6xYYFhXmq5
+        XnFibnFpXrpecn7uJkZwpGlp7mC8vCT+EKMAB6MSD++Mrt2xQqyJZcWVuYcYJTiYlUR4t68D
+        CvGmJFZWpRblxxeV5qQWH2KU5mBREud9mncsUkggPbEkNTs1tSC1CCbLxMEp1cBYJuIjcdH/
+        Wc6e1vSGbXVvzcqjdiexr/m0ZpaRmHjAWdY2y53s61RKZqblBKpJrInJvzx7WZh61qudNeYz
+        Jq6SutHJulBrjn/grSNbd8vqOlyZkPk4VfnSJd+VWQExnreXzDy3pmzTkX9qC5SjP65zXTFJ
+        vuve/lynZ1MLP95xfFiv9eOGzd3XSizFGYmGWsxFxYkApulOP7ACAAA=
+X-CMS-MailID: 20191101065534epcas1p487ab18951c725c79495f546b8ff13bff
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191029220705epcas5p2ea4d8a7c244b4ba35f98fba05cfab646
+X-CMS-RootMailID: 20191029220657epcas3p42c1eccf4499f36a57cdbd89a750fb60b
 References: <20191029220019.26773-1-digetx@gmail.com>
-        <CGME20191029220705epcas5p2ea4d8a7c244b4ba35f98fba05cfab646@epcas5p2.samsung.com>
-        <20191029220019.26773-15-digetx@gmail.com>
+        <CGME20191029220657epcas3p42c1eccf4499f36a57cdbd89a750fb60b@epcas3p4.samsung.com>
+        <20191029220019.26773-16-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 19. 10. 30. 오전 7:00, Dmitry Osipenko wrote:
-> Consecutive up/down interrupt-bit is set in the interrupt status register
-> only if that interrupt was previously enabled. Thus enabling the already
-> enabled interrupt doesn't do much for us.
+> Consecutive interrupts should be disabled when boosting is completed.
+> 
+> Currently the disabling of "lower" interrupt happens only for MCCPU
+> monitor that uses dependency threshold, but even in a case of MCCPU the
+> interrupt isn't getting disabled if CPU's activity is above the threshold.
+> This results in a lot of dummy interrupt requests. The boosting feature is
+> used by both MCCPU and MCALL, boosting should be stopped once it reaches 0
+> for both of the monitors and regardless of the activity level.
+> 
+> The boosting stops to grow once the maximum limit is hit and thus the
+> "upper" interrupt needs to be disabled when the limit is reached.
 > 
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/devfreq/tegra30-devfreq.c | 4 ----
->  1 file changed, 4 deletions(-)
+>  drivers/devfreq/tegra30-devfreq.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 > 
 > diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 9cbee82880ff..a9336cf4b37a 100644
+> index a9336cf4b37a..b745a973c35a 100644
 > --- a/drivers/devfreq/tegra30-devfreq.c
 > +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -261,8 +261,6 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+> @@ -259,8 +259,10 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
 >  
->  		if (dev->boost_freq >= tegra->max_freq)
+>  		dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
+>  
+> -		if (dev->boost_freq >= tegra->max_freq)
+> +		if (dev->boost_freq >= tegra->max_freq) {
+> +			dev_ctrl &= ~ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
 >  			dev->boost_freq = tegra->max_freq;
-> -		else
-> -			dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+> +		}
 >  	} else if (intr_status & ACTMON_DEV_INTR_CONSECUTIVE_LOWER) {
 >  		/*
 >  		 * new_boost = old_boost * down_coef
-> @@ -275,8 +273,6 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+> @@ -271,15 +273,10 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
 >  
->  		if (dev->boost_freq < (ACTMON_BOOST_FREQ_STEP >> 1))
->  			dev->boost_freq = 0;
-> -		else
+>  		dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+>  
+> -		if (dev->boost_freq < (ACTMON_BOOST_FREQ_STEP >> 1))
+> -			dev->boost_freq = 0;
+> -	}
+> -
+> -	if (dev->config->avg_dependency_threshold) {
+> -		if (dev->avg_count >= dev->config->avg_dependency_threshold)
 > -			dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
+> -		else if (dev->boost_freq == 0)
+> +		if (dev->boost_freq < (ACTMON_BOOST_FREQ_STEP >> 1)) {
+>  			dev_ctrl &= ~ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
+> +			dev->boost_freq = 0;
+> +		}
 >  	}
 >  
->  	if (dev->config->avg_dependency_threshold) {
+>  	device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
 > 
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
