@@ -2,161 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87013EC145
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 11:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA550EC1DB
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 12:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729380AbfKAK2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 06:28:47 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:57068 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729290AbfKAK2q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 06:28:46 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA1AKFeb144312;
-        Fri, 1 Nov 2019 10:28:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=HuA8RaLVfqKHYCJhNS2PfjhgX6duj/i6VwF/atHQe0U=;
- b=Iq/ZFoG1vmZajIFaLIDy3zU02rQ5rdrV94mauY24RI9QVarahicT/Dwj8ajBH1M4e3kk
- TgmDpMP1mWWtxqPc9YyugNMjvOtWvh5/BOjfncsjp8j2/zaC36SMwKXcMqN6KBa4jeL+
- QdTWrBelUxhMeB21dzWzPqcKuBCWEDm/xmL3UtkDOL/V6pLqC4cqP2nqfu83AdAN17mC
- X6m8wzK4k0GhS7FZc5NH1IIQeALIpb7sBodCPZTIlDswg6DFWuFplFljQjFdOk3EIWPP
- keenyV/UOfXH0Jqgkr+H70PuGrUCvlJGuPv+CjYAT41+fLnBs51BY88YlmgSW4Z8y5l7 /g== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2vxwhfs5c3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Nov 2019 10:28:39 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA1ASGG7067286;
-        Fri, 1 Nov 2019 10:28:38 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2vyv9hyywq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Nov 2019 10:28:38 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA1ASZBT009972;
-        Fri, 1 Nov 2019 10:28:35 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 01 Nov 2019 03:28:34 -0700
-Date:   Fri, 1 Nov 2019 13:28:26 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Erik Schmauss <erik.schmauss@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [pm:bleeding-edge 62/70] drivers/acpi/acpica/dbnames.c:576
- acpi_db_walk_for_fields() error: double free of 'buffer.pointer'
-Message-ID: <20191101102553.GH18421@kadam>
+        id S1727699AbfKALaf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 07:30:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:34206 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725904AbfKALaf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 Nov 2019 07:30:35 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EB661FB;
+        Fri,  1 Nov 2019 04:30:34 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C1653F6C4;
+        Fri,  1 Nov 2019 04:30:33 -0700 (PDT)
+Date:   Fri, 1 Nov 2019 11:30:31 +0000
+From:   Andrew Murray <andrew.murray@arm.com>
+To:     Dilip Kota <eswara.kota@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, martin.blumenstingl@googlemail.com,
+        linux-pci@vger.kernel.org, hch@infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
+        chuanhua.lei@linux.intel.com, qi-ming.wu@intel.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Rajat Jain <rajatja@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v4 3/3] pci: intel: Add sysfs attributes to configure
+ pcie link
+Message-ID: <20191101113031.GC9723@e119886-lin.cambridge.arm.com>
+References: <20191031132228.GA44315@google.com>
+ <33585725-51c7-6fe5-5d92-1e7fe77ca106@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9427 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911010105
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9427 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911010104
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <33585725-51c7-6fe5-5d92-1e7fe77ca106@linux.intel.com>
+User-Agent: Mutt/1.10.1+81 (426a6c1) (2018-08-26)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   aaa43552df9b1f8c788d18df5f5989f8a13433f5
-commit: 5fd033288a86676045d9e16243dfc5f988013371 [62/70] ACPICA: debugger: add command to dump all fields of particular subtype
+On Fri, Nov 01, 2019 at 01:47:39PM +0800, Dilip Kota wrote:
+> 
+> On 10/31/2019 9:22 PM, Bjorn Helgaas wrote:
+> > On Thu, Oct 31, 2019 at 06:47:10PM +0800, Dilip Kota wrote:
+> > > On 10/31/2019 6:14 AM, Bjorn Helgaas wrote:
+> > > > On Tue, Oct 29, 2019 at 05:31:18PM +0800, Dilip Kota wrote:
+> > > > > On 10/22/2019 8:59 PM, Bjorn Helgaas wrote:
+> > > > > > [+cc Rafael, linux-pm, beginning of discussion at
+> > > > > > https://lore.kernel.org/r/d8574605f8e70f41ce1e88ccfb56b63c8f85e4df.1571638827.git.eswara.kota@linux.intel.com]
+> > > > > > 
+> > > > > > On Tue, Oct 22, 2019 at 05:27:38PM +0800, Dilip Kota wrote:
+> > > > > > > On 10/22/2019 1:18 AM, Bjorn Helgaas wrote:
+> > > > > > > > On Mon, Oct 21, 2019 at 02:38:50PM +0100, Andrew Murray wrote:
+> > > > > > > > > On Mon, Oct 21, 2019 at 02:39:20PM +0800, Dilip Kota wrote:
+> > > > > > > > > > PCIe RC driver on Intel Gateway SoCs have a requirement
+> > > > > > > > > > of changing link width and speed on the fly.
+> > > > > > > > Please add more details about why this is needed.  Since
+> > > > > > > > you're adding sysfs files, it sounds like it's not
+> > > > > > > > actually the *driver* that needs this; it's something in
+> > > > > > > > userspace?
+> > > > > > > We have use cases to change the link speed and width on the fly.
+> > > > > > > One is EMI check and other is power saving.  Some battery backed
+> > > > > > > applications have to switch PCIe link from higher GEN to GEN1 and
+> > > > > > > width to x1. During the cases like external power supply got
+> > > > > > > disconnected or broken. Once external power supply is connected then
+> > > > > > > switch PCIe link to higher GEN and width.
+> > > > > > That sounds plausible, but of course nothing there is specific to the
+> > > > > > Intel Gateway, so we should implement this generically so it would
+> > > > > > work on all hardware.
+> > > > > Agree.
+> > > > > > I'm not sure what the interface should look like -- should it be a
+> > > > > > low-level interface as you propose where userspace would have to
+> > > > > > identify each link of interest, or is there some system-wide
+> > > > > > power/performance knob that could tune all links?  Cc'd Rafael and
+> > > > > > linux-pm in case they have ideas.
+> > > > > To my knowledge sysfs is the appropriate way to go.
+> > > > > If there are any other best possible knobs, will be helpful.
+> > > > I agree sysfs is the right place for it; my question was whether we
+> > > > should have files like:
+> > > > 
+> > > >     /sys/.../0000:00:1f.3/pcie_speed
+> > > >     /sys/.../0000:00:1f.3/pcie_width
+> > > > 
+> > > > as I think this patch would add (BTW, please include sample paths like
+> > > > the above in the commit log), or whether there should be a more global
+> > > > thing that would affect all the links in the system.
+> > > Sure, i will add them.
+> > > > I think the low-level files like you propose would be better because
+> > > > one might want to tune link performance differently for different
+> > > > types of devices and workloads.
+> > > > 
+> > > > We also have to decide if these files should be associated with the
+> > > > device at the upstream or downstream end of the link.  For ASPM, the
+> > > > current proposal [1] has the files at the downstream end on the theory
+> > > > that the GPU, NIC, NVMe device, etc is the user-recognizable one.
+> > > > Also, neither ASPM nor link speed/width make any sense unless there
+> > > > *is* a device at the downstream end, so putting them there
+> > > > automatically makes them visible only when they're useful.
+> > > This patch places the speed and width in the host controller directory.
+> > > /sys/.../xxx.pcie/pcie_speed
+> > > /sys/.../xxx.pcie/pcie_width
+> > > 
+> > > I agree with you partially,  because i am having couple of points
+> > > making me to keep speed and width change entries in controller
+> > > directory:
+> > > 
+> > > -- For changing the speed/width with device node, software ends up
+> > >     traversing to the controller from the device and do the
+> > >     operations.
+> > > -- Change speed and width are performed at controller level,
+> > The controller is effectively a Root Complex, which may contain
+> > several Root Ports.  I have the impression that the Synopsys
+> > controller only supports a single Root Port, but that's just a detail
+> > of the Synopsys implementation.  I think it should be possible to
+> > configure the width/speed of each Root Port individually.
+> > 
+> > > -- Keeping speed and width in controller gives a perspective (to the
+> > >     user) of changing them only once irrespective of no. of devices.
+> > What if there's a switch?  If we change the width/speed of the link
+> > between the Root Port and the Switch Upstream Port, that doesn't do
+> > anything about the links from the Switch Downstream Ports.
+> I missed to evaluate the multiple root port and switch scenarios, thanks for
+> pointing it.
+> Then, placing the link speed and width change entries in the device node
+> will be appropriate.
+> Software will traverse to the respective port or bus through the device node
+> and does the changes.
+> > 
+> > > -- For speed and link change in Synopsys PCIe controller, specific
+> > >     registers need to be configured.  This prevents or complicates
+> > >     adding the speed and width change functionality in pci-sysfs or
+> > >     pci framework.
+> > Don't the Link Control and related registers in PCIe spec give us
+> > enough control to manage the link width/speed of *all* links,
+> > including those from Root Ports and Switch Downstream Ports?
+> > 
+> > If the Synopsys controller requires controller-specific registers,
+> > that sounds to me like it doesn't quite conform to the spec.  Maybe
+> > that means we would need some sort of quirk or controller callback?
+> Yes, Synopsys has specific registers configuration for link width resizing
+> and speed change.
+> I will evaluate the possible mechanism for plugging in the controller
+> specific changes to the framework.
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+According to the spec, "Software is permitted to restrict the maximum speed
+of Link operation and set the perferred Link speed by setting the value in the
+Target Link Speed field in the Upstream component." - This is the Link Control
+2 Register, and a link retrain should then be triggered.
 
-smatch warnings:
-drivers/acpi/acpica/dbnames.c:576 acpi_db_walk_for_fields() error: double free of 'buffer.pointer'
+With regards to this proposed sysfs API - I wonder if this implies we should
+also disable 'Hardware Autonomous Speed Disable' to prevent a link speed
+change for device specific reasons?
 
-# https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=5fd033288a86676045d9e16243dfc5f988013371
-git remote add pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-git remote update pm
-git checkout 5fd033288a86676045d9e16243dfc5f988013371
-vim +576 drivers/acpi/acpica/dbnames.c
+In my view, this means we *can* have a sysfs control for limiting the link
+speed using standard PCI means - though callbacks and quirks may be needed
+for host bridge controllers and similar.
 
-5fd033288a8667 Erik Schmauss 2019-10-25  518  static acpi_status
-5fd033288a8667 Erik Schmauss 2019-10-25  519  acpi_db_walk_for_fields(acpi_handle obj_handle,
-5fd033288a8667 Erik Schmauss 2019-10-25  520  			u32 nesting_level, void *context, void **return_value)
-5fd033288a8667 Erik Schmauss 2019-10-25  521  {
-5fd033288a8667 Erik Schmauss 2019-10-25  522  	union acpi_object *ret_value;
-5fd033288a8667 Erik Schmauss 2019-10-25  523  	struct acpi_region_walk_info *info =
-5fd033288a8667 Erik Schmauss 2019-10-25  524  	    (struct acpi_region_walk_info *)context;
-5fd033288a8667 Erik Schmauss 2019-10-25  525  	struct acpi_buffer buffer;
-5fd033288a8667 Erik Schmauss 2019-10-25  526  	acpi_status status;
-5fd033288a8667 Erik Schmauss 2019-10-25  527  	struct acpi_namespace_node *node = acpi_ns_validate_handle(obj_handle);
-5fd033288a8667 Erik Schmauss 2019-10-25  528  
-5fd033288a8667 Erik Schmauss 2019-10-25  529  	if (!node) {
-5fd033288a8667 Erik Schmauss 2019-10-25  530  		return (AE_OK);
-5fd033288a8667 Erik Schmauss 2019-10-25  531  	}
-5fd033288a8667 Erik Schmauss 2019-10-25  532  	if (node->object->field.region_obj->region.space_id !=
-5fd033288a8667 Erik Schmauss 2019-10-25  533  	    info->address_space_id) {
-5fd033288a8667 Erik Schmauss 2019-10-25  534  		return (AE_OK);
-5fd033288a8667 Erik Schmauss 2019-10-25  535  	}
-5fd033288a8667 Erik Schmauss 2019-10-25  536  
-5fd033288a8667 Erik Schmauss 2019-10-25  537  	info->count++;
-5fd033288a8667 Erik Schmauss 2019-10-25  538  
-5fd033288a8667 Erik Schmauss 2019-10-25  539  	/* Get and display the full pathname to this object */
-5fd033288a8667 Erik Schmauss 2019-10-25  540  
-5fd033288a8667 Erik Schmauss 2019-10-25  541  	buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
-5fd033288a8667 Erik Schmauss 2019-10-25  542  	status = acpi_ns_handle_to_pathname(obj_handle, &buffer, TRUE);
-5fd033288a8667 Erik Schmauss 2019-10-25  543  	if (ACPI_FAILURE(status)) {
-5fd033288a8667 Erik Schmauss 2019-10-25  544  		acpi_os_printf("Could Not get pathname for object %p\n",
-5fd033288a8667 Erik Schmauss 2019-10-25  545  			       obj_handle);
-5fd033288a8667 Erik Schmauss 2019-10-25  546  		return (AE_OK);
-5fd033288a8667 Erik Schmauss 2019-10-25  547  	}
-5fd033288a8667 Erik Schmauss 2019-10-25  548  
-5fd033288a8667 Erik Schmauss 2019-10-25  549  	acpi_os_printf("%s ", (char *)buffer.pointer);
-5fd033288a8667 Erik Schmauss 2019-10-25  550  	ACPI_FREE(buffer.pointer);
+With regards to link width, I can't see any obvious software initiated means
+to change the link width (they are all RO) - though a device can change its
+own link width so long as it's 'Hardware Autonomous Width Disable' bit is
+clear. So whilst there may be some benefit for the initial links of a few
+host bridge controllers that may opt-in to some framework for this - such an
+API wouldn't benefit the majority of links in a PCI fabric. Perhaps this
+(width) should be DWC specific.
 
-Freed here.
+Thanks,
 
-5fd033288a8667 Erik Schmauss 2019-10-25  551  
-5fd033288a8667 Erik Schmauss 2019-10-25  552  	buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
-5fd033288a8667 Erik Schmauss 2019-10-25  553  	acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
+Andrew Murray
 
-No error handling here so "buffer.pointer" isn't necessarily modified.
-
-5fd033288a8667 Erik Schmauss 2019-10-25  554  
-5fd033288a8667 Erik Schmauss 2019-10-25  555  	ret_value = (union acpi_object *)buffer.pointer;
-5fd033288a8667 Erik Schmauss 2019-10-25  556  	switch (ret_value->type) {
-5fd033288a8667 Erik Schmauss 2019-10-25  557  	case ACPI_TYPE_INTEGER:
-5fd033288a8667 Erik Schmauss 2019-10-25  558  
-5fd033288a8667 Erik Schmauss 2019-10-25  559  		acpi_os_printf("%8.8X%8.8X",
-5fd033288a8667 Erik Schmauss 2019-10-25  560  			       ACPI_FORMAT_UINT64(ret_value->integer.value));
-5fd033288a8667 Erik Schmauss 2019-10-25  561  		break;
-5fd033288a8667 Erik Schmauss 2019-10-25  562  
-5fd033288a8667 Erik Schmauss 2019-10-25  563  	case ACPI_TYPE_BUFFER:
-5fd033288a8667 Erik Schmauss 2019-10-25  564  
-5fd033288a8667 Erik Schmauss 2019-10-25  565  		acpi_ut_dump_buffer(ret_value->buffer.pointer,
-5fd033288a8667 Erik Schmauss 2019-10-25  566  				    ret_value->buffer.length,
-5fd033288a8667 Erik Schmauss 2019-10-25  567  				    DB_DISPLAY_DATA_ONLY | DB_BYTE_DISPLAY, 0);
-5fd033288a8667 Erik Schmauss 2019-10-25  568  		break;
-5fd033288a8667 Erik Schmauss 2019-10-25  569  
-5fd033288a8667 Erik Schmauss 2019-10-25  570  	default:
-5fd033288a8667 Erik Schmauss 2019-10-25  571  
-5fd033288a8667 Erik Schmauss 2019-10-25  572  		break;
-5fd033288a8667 Erik Schmauss 2019-10-25  573  	}
-5fd033288a8667 Erik Schmauss 2019-10-25  574  	acpi_os_printf("\n");
-5fd033288a8667 Erik Schmauss 2019-10-25  575  
-5fd033288a8667 Erik Schmauss 2019-10-25 @576  	ACPI_FREE(buffer.pointer);
-
-Double free.
-
-5fd033288a8667 Erik Schmauss 2019-10-25  577  
-5fd033288a8667 Erik Schmauss 2019-10-25  578  	return (AE_OK);
-5fd033288a8667 Erik Schmauss 2019-10-25  579  }
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+> 
+> Regards,
+> Dilip
+> > 
+> > Bjorn
