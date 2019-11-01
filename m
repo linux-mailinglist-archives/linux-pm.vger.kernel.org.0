@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84740EC8DD
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 20:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1C9EC8DE
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 20:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfKATHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 15:07:33 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:37047 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726671AbfKATHd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 15:07:33 -0400
-Received: by mail-qk1-f195.google.com with SMTP id u184so11684900qkd.4
-        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 12:07:32 -0700 (PDT)
+        id S1727598AbfKATHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 15:07:35 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:35470 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726671AbfKATHf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 15:07:35 -0400
+Received: by mail-qt1-f196.google.com with SMTP id r22so4208251qtt.2
+        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 12:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wVfSPJ9zvMnUU5ly0+xbA4vuN0APYA1A0PaPALobUlo=;
-        b=SBj7at5RDnaViDCsq1YnwgGzXDla0NhUa/yFYA11hNExkymPOVnJyUGsnnRv1YcQAb
-         G543MMkGozOejW9CbEyLRCWf392g7zPthhOU/+yfQp/EIeyQCF2PjoxQxILsCF8sOlhs
-         1LP2HDAvV1CSBUOboUkNWUnZCb8neUV80awYaybu2tJ0Q59ESuInkOL02eWy18i9uMFV
-         dZE+Lks6+GxjzpM84M7/IjAlwIZyfAquvO46fNk9YLc6Ahtg4lv/j28LdcGB/5fncOv3
-         YWlef4RluZuwp40fE2I0yNKZOIAQYlZJnpedZHORM8EmeK8sa2LD02Ffrr7rm4ls4vvG
-         e2dw==
+        bh=8Zrt7Ciu4aEbO1sutkMk41HncYdL+eJqeqa2yKbY6m8=;
+        b=LYb2sQCf+hVD51/AaxMTr5P56gM5TugPuWmdhGKsEn/bKeuSP+E9QfBb3QnlBH1lPO
+         /hjMCCaxzKEYUnBo2QTp5cmnmfvS01uZNBlilO8V4yaIN3irx9FKVqCcHnrFgp3hQBsc
+         w4l4lZ5Dl03jBm+fpD3BR3wlNS5YN9q1F478RkUShv6z1DnMPwLjdtQwJU2bOHPVKNFN
+         9UAZSZWj395jWoJ6cbGbP+nCQhAALt+dErfkfv5eyeEgomiK9VdRk5oexkIup3IOZ+P0
+         ICFHlzmtmDsQjL1vIxmB43RQnbzPwEEFL2UdtYz1oIOKVIi9KiHu05OdY8jAkGd4dj0D
+         I5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wVfSPJ9zvMnUU5ly0+xbA4vuN0APYA1A0PaPALobUlo=;
-        b=tBkir/ZOJ6HzxCO+xFnAP2dg+bvUajZs4AxqGHySZy7SethQVjztksh/bf2zzVleyj
-         xOJlQOkgZTEGrkyVD4OrQS9rfQ5HglQMzUnDRdgHG+6r40JkzCeOJQgzgLp1FRzOP5VO
-         DDerk40TzO3+aTWILbv6quzso89KFAFxd6bWZRw3Y5EsP3xSi/n7MePLuzRTgdmjFDB7
-         t1uwdsVHMMx8IaSqtM0I+gO2m6Msb7mpoeCh9yiQSLKjy3z1ev58ebjMlZ2sF0PGpEPs
-         C3hkTniyYJmpqGaMp7aLvZNOLq6dXx429p1kv1j1dfzPs2PYkXuipoespnAFKm7/0NGj
-         oH6g==
-X-Gm-Message-State: APjAAAX1kfRUuRkyGiRZqaZuqMJiWbK0TZSJ5mLHSuNEnVbxouKOKsM9
-        H1Z08AYKe3IlFa33ggyXQnw=
-X-Google-Smtp-Source: APXvYqyqB1nZnfWC7XHJxvyyNNXzFu93iEIwir609A5iiDbXec5XOQIhvK/Oi1AY73GIA68QXCHJgg==
-X-Received: by 2002:a37:6ec3:: with SMTP id j186mr11949468qkc.473.1572635251963;
-        Fri, 01 Nov 2019 12:07:31 -0700 (PDT)
+        bh=8Zrt7Ciu4aEbO1sutkMk41HncYdL+eJqeqa2yKbY6m8=;
+        b=O0eGxRYJjnXYISL+yYeCRIG+XvyRNNtzZGkMc/fwiyBqTbDcIs5bLlDrqFhMwhoy8E
+         32ae9q9zs6LkGJnkGHolvq8QZWtgjCp6wOi+wKMucZesYDBijhO4ZqAcJ01okdbzHDqA
+         759k9a+IaqKvGo073npbAxLjKKbOfan/Z+5qQyZlUTudYBeWwAeVTMAelF+POW+hWSe4
+         yD5bHan2L53GjkDHPbl1ldC2kAsqhMV5LbsD2Y4V0hUOXrZQbElv0IseEw741C8jlAo2
+         tQifuBeQuwfjcfuUIRQ3JiAZaKToCGdGEmH1jHdgExJ81aDRJ9t8KEiHihI+BjTpYEBt
+         k9xA==
+X-Gm-Message-State: APjAAAVEQOHqC+VuqC8IJ5Cbvn0NhDsaObOMVdpFO7y6Myyy/h3cwJNL
+        aPdxd5k4k/KEodBHoWLoozY=
+X-Google-Smtp-Source: APXvYqw0qim5XDlFLVZjFYFkwU15MKN9o9SCpHyR6JQ9cyjjPwcNg9u0vDqSxePgeGolvXfTms3aSQ==
+X-Received: by 2002:a0c:eb90:: with SMTP id x16mr11662879qvo.140.1572635254599;
+        Fri, 01 Nov 2019 12:07:34 -0700 (PDT)
 Received: from jfddesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
-        by smtp.gmail.com with ESMTPSA id d139sm5105905qkb.36.2019.11.01.12.07.31
+        by smtp.gmail.com with ESMTPSA id d139sm5105905qkb.36.2019.11.01.12.07.33
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 01 Nov 2019 12:07:31 -0700 (PDT)
+        Fri, 01 Nov 2019 12:07:34 -0700 (PDT)
 From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 To:     sre@kernel.org, linux-pm@vger.kernel.org
 Cc:     Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Subject: [PATCH 3/7] power: supply: sbs-battery: add force_load as a dts property
-Date:   Fri,  1 Nov 2019 15:07:01 -0400
-Message-Id: <20191101190705.13393-3-jeff.dagenais@gmail.com>
+Subject: [PATCH 4/7] devicetree: bindings: sbs-battery: add sbs,force-load property
+Date:   Fri,  1 Nov 2019 15:07:02 -0400
+Message-Id: <20191101190705.13393-4-jeff.dagenais@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191101190705.13393-1-jeff.dagenais@gmail.com>
 References: <20191101190705.13393-1-jeff.dagenais@gmail.com>
@@ -60,45 +60,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This extends the behaviour of the existing module param so that system
-integrators can specify the flag in device-tree.
-
 Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 ---
- drivers/power/supply/sbs-battery.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/power/supply/sbs_sbs-battery.txt       | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index f9e8c14ac830..f92b98d900d2 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -814,6 +814,7 @@ static int sbs_probe(struct i2c_client *client,
- 	struct power_supply_desc *sbs_desc;
- 	struct sbs_platform_data *pdata = client->dev.platform_data;
- 	struct power_supply_config psy_cfg = {};
-+	bool force_load;
- 	int rc;
- 	int irq;
+diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+index 4e78e51018eb..62ec842325b4 100644
+--- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
++++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+@@ -15,6 +15,8 @@ Optional properties :
+    after an external change notification.
+  - sbs,battery-detect-gpios : The gpio which signals battery detection and
+    a flag specifying its polarity.
++ - sbs,force-load : Same as the module param, makes the probe skip the
++   detection of the battery and assume it is (or will be) present.
  
-@@ -858,6 +859,9 @@ static int sbs_probe(struct i2c_client *client,
+ Example:
+ 
+@@ -24,4 +26,5 @@ Example:
+ 		sbs,i2c-retry-count = <2>;
+ 		sbs,poll-retry-count = <10>;
+ 		sbs,battery-detect-gpios = <&gpio-controller 122 1>;
++		sbs,force-load;
  	}
- 	chip->i2c_retry_count = chip->i2c_retry_count + 1;
- 
-+	force_load = of_property_read_bool(client->dev.of_node,
-+					   "sbs,force-load");
-+
- 	chip->gpio_detect = devm_gpiod_get_optional(&client->dev,
- 			"sbs,battery-detect", GPIOD_IN);
- 	if (IS_ERR(chip->gpio_detect)) {
-@@ -890,7 +894,7 @@ static int sbs_probe(struct i2c_client *client,
- 	 * Before we register, we might need to make sure we can actually talk
- 	 * to the battery.
- 	 */
--	if (!(param_force_load || chip->gpio_detect)) {
-+	if (!(param_force_load || force_load || chip->gpio_detect)) {
- 		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
- 
- 		if (rc < 0) {
 -- 
 2.23.0
 
