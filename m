@@ -2,103 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EACFEECB50
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 23:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB89ECBC2
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Nov 2019 00:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbfKAWXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 18:23:53 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36940 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKAWXw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 18:23:52 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v2so11714492lji.4;
-        Fri, 01 Nov 2019 15:23:51 -0700 (PDT)
+        id S1726701AbfKAXBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 19:01:42 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:35736 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726685AbfKAXBl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 19:01:41 -0400
+Received: by mail-il1-f196.google.com with SMTP id p8so10006113ilp.2
+        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 16:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZtYy8JIoPhclpxplgGaYgaB4fxX4wiQ7tc8XNEC8Bx0=;
-        b=d1lRCCjtx3wCBamI6MROflNdX9OFkuv1AbxijfmzU9uEtbGPU+0Me3Rc1qHhjJ4CDb
-         hectN2uXw09c4XQyyRQSh/fOL+Uk/6p3kATNtFGDhHnOvI0y+vH7X5FnYywLcZpBZzZZ
-         B7sTfZtc+kLxC6JuKDPZ86hIjLiUBaVEiet/X6QoVWAD8QPKpLtdCmGdvg6hTx84IDfV
-         Bk85a725iwQpxvZhtlqeD6pApa0MWJc6r7TqnB6hFUFvGnKk0P4mYvIhEfKWR6ZyaWLc
-         ULLLWpB3Se0tC3VhScFi6ku3lokkujvIF+W4h/7VcJ0dCpGIQXxQ/sUqLAXmxTCP+9uD
-         hZaQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bf69Nkr7XBkmTO1YD+9sNVV+WBGtzvC5rxPzFLKlWNo=;
+        b=fef9ITiroUgvdPL9dSereSDmc2uHGR7fnIsdwnXDmA0MFiLxHlMcWFQLIHWQVYz488
+         wepTmOx6B3NDyuQStyl0eD2Y0ifgeBrEdd4uyG48SyEac7cZmtepCiNECLJ5HIE9h1Ku
+         nuK5ExP5bNiE27blrdbkdwG0Y7XVk8OxK0D1I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZtYy8JIoPhclpxplgGaYgaB4fxX4wiQ7tc8XNEC8Bx0=;
-        b=mZRRWPkUISPlexKmLtw3TtZ8N7xNWP8+PqJa5zvF3NlJXXB+PrBrYzjH4ccs/XeXlw
-         rUzsgf1/Ex3WawA/0hRbpPDA7JyiKt2Iw0ZlzeYt2d4fIS5iVNvdBhmprbcJSoAUIZ4q
-         4r/UjvkmMc3hIxQItrj5nnHn52YeEd5MsvLeJEmMWAN2dO3VjIm9cSRCOyPFxSQCe88D
-         IaINBc017nIxkRHtq73mmNoMiAqCF7wag0PssUvQ/v9/Bna0p0z/YkArz1hdwf2f5lO/
-         expWtB/A/y85UFXIyAMZ5fIVz4sVe1NxCfs9lOBGvhBgOIMJsDOsF2GVB4Gc+Wpic2um
-         ZF3w==
-X-Gm-Message-State: APjAAAVjuRY1h5OhW0wMDc6028VzySDxyxFZoJHrOOYCb/xCGXxc0TEC
-        QLeszvP1btAfx8cUQKrBgGWlnspW
-X-Google-Smtp-Source: APXvYqw0wp/lLW5MOFN7wQ4OQm6O8roXtIB3VdUnRHs9Hu0WeaESXzHtJ71S8ISX9OMF5N2g9euJQQ==
-X-Received: by 2002:a2e:b1c7:: with SMTP id e7mr9629902lja.239.1572647030504;
-        Fri, 01 Nov 2019 15:23:50 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id b141sm3137785lfg.67.2019.11.01.15.23.49
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bf69Nkr7XBkmTO1YD+9sNVV+WBGtzvC5rxPzFLKlWNo=;
+        b=qufFqC/gCWlBY+rfBhRyUdjrg/IKb/lcXDuYuDSgqoNWYm9HG/TB8EYk7tVeayPGcH
+         Lj5nt5uh87qLdAjLDqxqGEPNsc8Ya53w0aJl48m/UjAjrtMxIMmXvVXhhZ0PrQwV8p0F
+         hxizK5kCL0Av9VkWeDS57XNSN4KNpA9qdu5BqZ+LnfrcdIUofzhG1HUzuSyqE1tzctcv
+         tWnwucFkXgldqre4mX0+jhNycKc8SajAc1E41SQKJFOwovgIIaROVPF17KncB40zkryr
+         QncS1hQRwa7YAKOy6aaAyRIAWg9kqchtTWUkBBOWmZ7jWnXmt+ovoR8kH+qF3uCLukt9
+         bImQ==
+X-Gm-Message-State: APjAAAV4NFlDaM6+norqBhBXGu/flJCk/NQTgcK8IzarLVM678sCN8sL
+        TbJqFl+kee4lIm1qUT0tCiBx5wnjXu8=
+X-Google-Smtp-Source: APXvYqyxtmgyeX1ccoSVdS2mmk4IO4Svdlg0seWoqk5t32WeR2Cec1BtT9EMH7Gw7eGR+ZTyx14zRw==
+X-Received: by 2002:a92:9c95:: with SMTP id x21mr15255909ill.115.1572649300646;
+        Fri, 01 Nov 2019 16:01:40 -0700 (PDT)
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com. [209.85.166.180])
+        by smtp.gmail.com with ESMTPSA id r22sm872597ioh.77.2019.11.01.16.01.40
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2019 15:23:49 -0700 (PDT)
-Subject: Re: [PATCH v7 17/19] PM / devfreq: tegra30: Support variable polling
- interval
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191029220019.26773-1-digetx@gmail.com>
- <20191029220019.26773-18-digetx@gmail.com>
- <20191101215816.GB8724@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <590f47a4-c75a-e8c9-88b8-b3cd98578969@gmail.com>
-Date:   Sat, 2 Nov 2019 01:23:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Fri, 01 Nov 2019 16:01:40 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id t9so7727052ils.4
+        for <linux-pm@vger.kernel.org>; Fri, 01 Nov 2019 16:01:40 -0700 (PDT)
+X-Received: by 2002:a92:d0a:: with SMTP id 10mr14227736iln.218.1572648817422;
+ Fri, 01 Nov 2019 15:53:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191101215816.GB8724@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <cover.1572526427.git.amit.kucheria@linaro.org> <18717de35f31098d3ebc12564c2767b6d54d37d8.1572526427.git.amit.kucheria@linaro.org>
+In-Reply-To: <18717de35f31098d3ebc12564c2767b6d54d37d8.1572526427.git.amit.kucheria@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 1 Nov 2019 15:53:26 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X3o3JKye8pZZckEtk=9XNoajf-Kj8XGUemut7NS2bZjw@mail.gmail.com>
+Message-ID: <CAD=FV=X3o3JKye8pZZckEtk=9XNoajf-Kj8XGUemut7NS2bZjw@mail.gmail.com>
+Subject: Re: [PATCH v7 03/15] drivers: thermal: tsens: Add __func__ identifier
+ to debug statements
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>, masneyb@onstation.org,
+        Stephen Boyd <swboyd@chromium.org>, julia.lawall@lip6.fr,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-02.11.2019 00:58, Michał Mirosław пишет:
-> On Wed, Oct 30, 2019 at 01:00:17AM +0300, Dmitry Osipenko wrote:
->> The ACTMON governor is interrupt-driven and currently hardware's polling
->> interval is fixed to 16ms in the driver. Devfreq supports variable polling
->> interval by the generic governors, let's re-use the generic interface for
->> changing of the polling interval. Now the polling interval can be changed
->> dynamically via /sys/class/devfreq/devfreq0/polling_interval.
-> [...]
->> @@ -308,7 +308,7 @@ static unsigned long actmon_device_target_freq(struct tegra_devfreq *tegra,
->>  	unsigned int avg_sustain_coef;
->>  	unsigned long target_freq;
->>  
->> -	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD;
->> +	target_freq = dev->avg_count / tegra->devfreq->profile->polling_ms;
->>  	avg_sustain_coef = 100 * 100 / dev->config->boost_up_threshold;
->>  	target_freq = do_percent(target_freq, avg_sustain_coef);
->>  	target_freq += dev->boost_freq;
-> 
-> Noting a comment in patch 13, if this is hot path you could try reciprocal_divide().
+Hi,
 
-Hello Michał,
+On Thu, Oct 31, 2019 at 11:38 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
+>
+> Printing the function name when enabling debugging makes logs easier to
+> read.
+>
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/qcom/tsens-common.c | 8 ++++----
+>  drivers/thermal/qcom/tsens.c        | 6 +++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-This not really a hot path, I just wanted to optimize that case to keep
-things a bit nicer.
+Obviously my opinion doesn't trump maintainers ones, but I have always
+heard that this is the wrong thing to do for "dev_xxx" debug
+statements.  Specifically:
 
-Please take a look at the arch/arm/boot/compressed/lib1funcs.S, firstly
-it checks whether divisor is a power of 2 value and then takes optimized
-code path that uses a single shift. Hence the patch 13 still applies here.
+* For "dev_xxx" statements, the device name is already printed which
+is pretty good for getting you to the right driver.
+
+* Once you're in the right driver, error messages should be unique
+enough to find the right function.
+
+If having __func__ in all messages was beneficial then the "dev_xxx"
+macros would include it by default.  They don't and such things just
+uglify the logs and chew up log space.  I suppose you could try
+including a CONFIG option to add it to all "dev_xxx" functions and see
+if it would be accepted?  Then you can turn it on locally.
+
+Using __func__ in cases where you don't happen to have a "struct
+device" (and can't get one easily) makes some sense, but otherwise I
+believe it should be kept out.
+
+-Doug
