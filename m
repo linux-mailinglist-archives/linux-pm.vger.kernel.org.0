@@ -2,116 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9060EC685
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 17:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64585EC6F7
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Nov 2019 17:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbfKAQTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Nov 2019 12:19:15 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43414 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfKAQTP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Nov 2019 12:19:15 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 3so7385964pfb.10;
-        Fri, 01 Nov 2019 09:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dAGwFFDGn7AorxgIz/AEpdCiGhCVLv3rIV9fz6SUeP8=;
-        b=UMeh5QejuPBHRPk70ICMaxUtljVz04aSCgfhYqis0E+f/qX9YksRLO7gylTYEKYdZS
-         mY9BheeLRGuXG96psRHLn7eGWKCfiXCVooi3Nr0pcj3xbx2JxEuIzoA5NikKE+TwNcac
-         Czof0g0/HS6tjeFTLI3/C15xuzNymXh4xk/+5dl1tK0aCNXvDpZM/Cboof8NnyTLUGaJ
-         5IbU+Tod3smBHkiY8bEnMCuwChwcxbDBZSc18TTgQc9rUsf3QZtbQyYcd/PmHgY81sNi
-         Q7R5vkOLrftO5A+Hp7WcOYjnqVl2MANl57fpvIWa6ly2F/Bn0aiAELMZOR+mvVP8pXR6
-         QbWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dAGwFFDGn7AorxgIz/AEpdCiGhCVLv3rIV9fz6SUeP8=;
-        b=OZAIRAoZlKPAUAXoSyW/akRSX+BfpC1Opf9pizKBvlLRUoRfJDzwO0ldeoeBxiloqU
-         ApLFaomjStQracM8Jo9mM9Ea7v/yGFe/hrpPruKYWpgfs9tf+8BhX/TnS4lt/lE1IpMN
-         DR6NzP9p65KVdUrlyfN/J662YAWLZL/G7ds69aVK5o/FP9CmZ2PDk/TV/qvG7HgPZM1V
-         3uYd2+LjY4SKl35/BHoQI1vMquhXcqvAxlNa0RVgm6Jn4pht7xhDZ4jMHX40tas4v3eD
-         CAk6PtL3emrL3YSKmHgBG14kCluTcsFUrgj0H1keV561UHbZuZ55kX36nh5ofLPSjlDG
-         B+Yg==
-X-Gm-Message-State: APjAAAV3Tov7xdDJv2QT4tNqwUH3AmzXXFKstYvw1kP8QTtpYLqDazcs
-        soPugdjLSvCllpXl+2lez8G5uHE7OxuJixOGp8A=
-X-Google-Smtp-Source: APXvYqyI9lotw31W/ZvoHgHNajTKgybh89AhP1kwZOAh1wJBGAWlmqvLx8kWHzHz2ipfEJOIxWHoPn6XBMDYrjsksTw=
-X-Received: by 2002:a62:fb06:: with SMTP id x6mr6778318pfm.231.1572625154324;
- Fri, 01 Nov 2019 09:19:14 -0700 (PDT)
+        id S1727766AbfKAQmE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Nov 2019 12:42:04 -0400
+Received: from vps.xff.cz ([195.181.215.36]:60608 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727426AbfKAQmE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 Nov 2019 12:42:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1572626522; bh=Gmx9bz5c58Bmxt6o/l+l4TxxiIaJ3KV5uLxeuq7aJF4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q1GNBpiQn9Hc6z2CYpSi/KhF7+Zu43LFYFVzBX3EmFZCU0KFXbokbxCCPg1g7n+FU
+         Ztbh4zB5zrTH1o5e8YV6cvZkk+eeb0mP2ta6GWqUrAWICBj5DIOyo14eLesIO0F8UZ
+         YRUOINktiejT4Q2xpVswf4M6RJynZKasnXXDtpGU=
+From:   Ondrej Jirman <megous@megous.com>
+To:     linux-sunxi@googlegroups.com
+Cc:     Ondrej Jirman <megous@megous.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-pm@vger.kernel.org (open list:ALLWINNER CPUFREQ DRIVER),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
+        sunXi SoC support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] cpufreq: sun50i: Fix CPU speed bin detection
+Date:   Fri,  1 Nov 2019 17:41:51 +0100
+Message-Id: <20191101164152.445067-1-megous@megous.com>
 MIME-Version: 1.0
-References: <20191101035646.25644-1-linux@roeck-us.net>
-In-Reply-To: <20191101035646.25644-1-linux@roeck-us.net>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Sat, 2 Nov 2019 01:19:03 +0900
-Message-ID: <CAC5umyhiOiAiYWs2Y=L5133CCQNnAgi8oq6AbGzgkznZKz5f-w@mail.gmail.com>
-Subject: Re: [PATCH v3] nvme: Add hardware monitoring support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Keith Busch <kbusch@kernel.org>, Chris Healy <cphealy@gmail.com>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B411=E6=9C=881=E6=97=A5(=E9=87=91) 12:56 Guenter Roeck <linux@ro=
-eck-us.net>:
-> +void nvme_hwmon_init(struct nvme_ctrl *ctrl)
-> +{
-> +       struct device *dev =3D ctrl->device;
+I have observed failures to boot on Orange Pi 3, because this driver
+determined that my SoC is from the normal bin, but my SoC only works
+reliably with the OPP values for the slowest bin.
 
-Should we use 'ctrl->dev' instead of 'ctrl->device'?
+By querying H6 owners, it was found that e-fuse values found in the wild
+are in the range of 1-3, value of 7 was not reported, yet. From this and
+from unused defines in BSP code, it can be assumed that meaning of efuse
+values on H6 actually is:
 
-The 'ctrl->device' is a pointer to char device and the '->of_node' member
-is NULL.
+- 1 = slowest bin
+- 2 = normal bin
+- 3 = fastest bin
 
-So if devm_hwmon_device_register_with_info() (i.e. __hwmon_device_register)
-is called with 'ctrl->device', it doesn't attempt to register a sensor to a
-DT thermal zone (i.e. hwmon_thermal_add_sensor() is not called at all).
+Vendor code actually treats 0 and 2 as invalid efuse values, but later
+treats all invalid values as a normal bin. This looks like a mistake in
+bin detection code, that was plastered over by a hack in cpufreq code,
+so let's not repeat it here. It probably only works because there are no
+SoCs in the wild with efuse value of 0, and fast bin SoCs are made to
+use normal bin OPP tables, which is also safe.
 
-This change was required, when I tried this nvme hwmon patch with the
-following DT thermal setup.
+Let's play it safe and interpret 0 as the slowest bin, but fix detection
+of other bins to match this research. More research will be done before
+actual OPP tables are merged.
 
-https://lore.kernel.org/linux-devicetree/1561990354-4084-3-git-send-email-a=
-kinobu.mita@gmail.com/
+Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+---
 
-> +       struct nvme_hwmon_data *data;
-> +       struct device *hwmon;
-> +       int err;
-> +
-> +       data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +       if (!data)
-> +               return;
-> +
-> +       data->ctrl =3D ctrl;
-> +       mutex_init(&data->read_lock);
-> +
-> +       err =3D nvme_hwmon_get_smart_log(data);
-> +       if (err) {
-> +               dev_warn(dev, "Failed to read smart log (error %d)\n", er=
-r);
-> +               devm_kfree(dev, data);
-> +               return;
-> +       }
-> +
-> +       hwmon =3D devm_hwmon_device_register_with_info(dev, dev_name(dev)=
-, data,
-> +                                                    &nvme_hwmon_chip_inf=
-o,
-> +                                                    NULL);
+ See also https://lkml.org/lkml/2019/11/1/496
 
-If the above change is applied, the second 'name' argument is changed
-from 'nvme0' to '0000:01:00.0' as a side effect.  So we may want to
-change the second argument, too.
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-> +       if (IS_ERR(hwmon)) {
-> +               dev_warn(dev, "Failed to instantiate hwmon device\n");
-> +               devm_kfree(dev, data);
-> +       }
-> +}
+diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+index eca32e443716..9907a165135b 100644
+--- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
++++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+@@ -25,7 +25,7 @@
+ static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
+ 
+ /**
+- * sun50i_cpufreq_get_efuse() - Parse and return efuse value present on SoC
++ * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse value
+  * @versions: Set to the value parsed from efuse
+  *
+  * Returns 0 if success.
+@@ -69,21 +69,16 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
+ 		return PTR_ERR(speedbin);
+ 
+ 	efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
+-	switch (efuse_value) {
+-	case 0b0001:
+-		*versions = 1;
+-		break;
+-	case 0b0011:
+-		*versions = 2;
+-		break;
+-	default:
+-		/*
+-		 * For other situations, we treat it as bin0.
+-		 * This vf table can be run for any good cpu.
+-		 */
++
++	/*
++	 * We treat unexpected efuse values as if the SoC was from
++	 * the slowest bin. Expected efuse values are 1-3, slowest
++	 * to fastest.
++	 */
++	if (efuse_value >= 1 && efuse_value <= 3)
++		*versions = efuse_value - 1;
++	else
+ 		*versions = 0;
+-		break;
+-	}
+ 
+ 	kfree(speedbin);
+ 	return 0;
+-- 
+2.23.0
+
