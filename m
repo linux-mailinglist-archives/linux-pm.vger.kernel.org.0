@@ -2,109 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F26AED3AF
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2019 16:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DBDED3C0
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Nov 2019 16:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfKCPZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Nov 2019 10:25:24 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43830 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727541AbfKCPZY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Nov 2019 10:25:24 -0500
-Received: by mail-lj1-f196.google.com with SMTP id y23so4006514ljh.10;
-        Sun, 03 Nov 2019 07:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rn9KeNDT4iKdtNBCSH/cL/Z9GtPYoGbYGu5A9HzK+V8=;
-        b=aE/p2FZzEKu66BHJpH4hj/dEDXQxyxWCua3xFzwKaHe96+IqbqAZXWZ1HxJfYa+fZq
-         vC1ViJa2PsNRG45cQ+AstJS0+7eLZC2QkBcw9fkLaGyNvu/18xfnyhSFaDktZ2NngReA
-         ke4jYoVYTdkf2TzqyqyrKHAbpAucd9C2AXHnwIJS+I3TTwVncu9uY5jAjUyCAKpKEp+4
-         6jY3mtkliZbn1K5Ai7NlxacFZw66GV4rL+WhnTC0peCc2729BDsLhIa1xh8+rCN9uaAp
-         fYJcl5K83+hTGMV1WSo0B+9OtEfUwu0ofXDvrWyhsUI3ir0zWBBZoBSGPGHRMJlfz7Nc
-         kLLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rn9KeNDT4iKdtNBCSH/cL/Z9GtPYoGbYGu5A9HzK+V8=;
-        b=fBEAR4qPVhh5+B9r4zBa0a/JsdpRUWqr1w/Iv7oTeql4VMfkkatCuow/go5tTDHrSF
-         5iVGK2oMZkzeLz+h5CnkCvyadmLAvgcDF+U0De/xHXu9/N64CQa31OuqhkgHPKt//bDr
-         FDNS1dABY6waowM8iNFItIAF0WItmqES44vwl3kv6OkmSgkofyWPuKgw3W1DO+Hhv2pR
-         zZgk35+ZMskdTGmWvVbjVdudP2W00KAsIln5ufTfXyyZ/litcpr8TMri96eZV3JTxQAj
-         rhCHbkAkbxSrKWwtieTCGDknOOodqY/t9IgPqDwHSXocIcA4qjabqeXNo50BkHnlUDDO
-         KsSw==
-X-Gm-Message-State: APjAAAWMCl4zzCYuVTVUm99MNDVB/jFyE1nmf8WnkNOCNwjG8dt11nxa
-        LzMJfbvl0KGWee33cm/7vU9Jzq6q
-X-Google-Smtp-Source: APXvYqybUK3ykGyF1yNXnJXyTeInwvIxLz2b6crTmz2O69lefh6fgNByWl410QpolqgTMdDb+P3uiQ==
-X-Received: by 2002:a2e:3016:: with SMTP id w22mr15687484ljw.117.1572794721360;
-        Sun, 03 Nov 2019 07:25:21 -0800 (PST)
-Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id q26sm5372252lfo.65.2019.11.03.07.25.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Nov 2019 07:25:20 -0800 (PST)
-Subject: Re: [PATCH v7 17/19] PM / devfreq: tegra30: Support variable polling
- interval
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191029220019.26773-1-digetx@gmail.com>
- <20191029220019.26773-18-digetx@gmail.com>
- <20191101215816.GB8724@qmqm.qmqm.pl>
- <590f47a4-c75a-e8c9-88b8-b3cd98578969@gmail.com>
-Message-ID: <71a16d74-5908-ea97-ae98-4b7d0e99a765@gmail.com>
-Date:   Sun, 3 Nov 2019 18:25:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1727769AbfKCP7F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Nov 2019 10:59:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727523AbfKCP7F (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 3 Nov 2019 10:59:05 -0500
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60FA920578;
+        Sun,  3 Nov 2019 15:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572796744;
+        bh=STPgCcvb19pfRf+vnfbC1wTtiEh0IBWfIryoTNEJMEA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TWHerJGBCwtOqQStSNzF3VL2JaGGK3XHgLAfZDlqRHGVbSHM0qWqvmIZ2JO8gIlyQ
+         iHIR2oY9pr5KRvDKjNBx3SjgjbhL+vrRCscsJa17npYGIOwVYksL1rkf27GNCjQRUI
+         eq9YtHm10ACDH+EykS5F4Je1V8NqYfScJwHW9WFo=
+Date:   Sun, 3 Nov 2019 16:59:01 +0100
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Ondrej Jirman <megous@megous.com>
+Cc:     linux-sunxi@googlegroups.com, Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] cpufreq: sun50i: Fix CPU speed bin detection
+Message-ID: <20191103155901.GC7001@gilmour>
+References: <20191101164152.445067-1-megous@megous.com>
 MIME-Version: 1.0
-In-Reply-To: <590f47a4-c75a-e8c9-88b8-b3cd98578969@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WYTEVAkct0FjGQmd"
+Content-Disposition: inline
+In-Reply-To: <20191101164152.445067-1-megous@megous.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-02.11.2019 01:23, Dmitry Osipenko пишет:
-> 02.11.2019 00:58, Michał Mirosław пишет:
->> On Wed, Oct 30, 2019 at 01:00:17AM +0300, Dmitry Osipenko wrote:
->>> The ACTMON governor is interrupt-driven and currently hardware's polling
->>> interval is fixed to 16ms in the driver. Devfreq supports variable polling
->>> interval by the generic governors, let's re-use the generic interface for
->>> changing of the polling interval. Now the polling interval can be changed
->>> dynamically via /sys/class/devfreq/devfreq0/polling_interval.
->> [...]
->>> @@ -308,7 +308,7 @@ static unsigned long actmon_device_target_freq(struct tegra_devfreq *tegra,
->>>  	unsigned int avg_sustain_coef;
->>>  	unsigned long target_freq;
->>>  
->>> -	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD;
->>> +	target_freq = dev->avg_count / tegra->devfreq->profile->polling_ms;
->>>  	avg_sustain_coef = 100 * 100 / dev->config->boost_up_threshold;
->>>  	target_freq = do_percent(target_freq, avg_sustain_coef);
->>>  	target_freq += dev->boost_freq;
->>
->> Noting a comment in patch 13, if this is hot path you could try reciprocal_divide().
-> 
-> Hello Michał,
-> 
-> This not really a hot path, I just wanted to optimize that case to keep
-> things a bit nicer.
-> 
-> Please take a look at the arch/arm/boot/compressed/lib1funcs.S, firstly
-> it checks whether divisor is a power of 2 value and then takes optimized
-> code path that uses a single shift. Hence the patch 13 still applies here.
 
-On the other hand, there is now only a single case of the division by
-polling_ms in the driver which won't bring much benefit, so it indeed
-makes sense to skip the patch 13 for now.
+--WYTEVAkct0FjGQmd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Nov 01, 2019 at 05:41:51PM +0100, Ondrej Jirman wrote:
+> I have observed failures to boot on Orange Pi 3, because this driver
+> determined that my SoC is from the normal bin, but my SoC only works
+> reliably with the OPP values for the slowest bin.
+>
+> By querying H6 owners, it was found that e-fuse values found in the wild
+> are in the range of 1-3, value of 7 was not reported, yet. From this and
+> from unused defines in BSP code, it can be assumed that meaning of efuse
+> values on H6 actually is:
+>
+> - 1 = slowest bin
+> - 2 = normal bin
+> - 3 = fastest bin
+>
+> Vendor code actually treats 0 and 2 as invalid efuse values, but later
+> treats all invalid values as a normal bin. This looks like a mistake in
+> bin detection code, that was plastered over by a hack in cpufreq code,
+> so let's not repeat it here. It probably only works because there are no
+> SoCs in the wild with efuse value of 0, and fast bin SoCs are made to
+> use normal bin OPP tables, which is also safe.
+>
+> Let's play it safe and interpret 0 as the slowest bin, but fix detection
+> of other bins to match this research. More research will be done before
+> actual OPP tables are merged.
+>
+> Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> Signed-off-by: Ondrej Jirman <megous@megous.com>
+
+Acked-by: Maxime Ripard <mripard@kernel.org>
+
+Maxime
+
+--WYTEVAkct0FjGQmd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXb75RQAKCRDj7w1vZxhR
+xWJzAQDSTsPAfe3tzFoFc8OXfLqCONSQW6Y7iTt9VnVtov6sNwEAuBQWjBl3soHJ
+5L0MFRa27tIkr2hh5oVbQSGj6vO5rAw=
+=0Y7o
+-----END PGP SIGNATURE-----
+
+--WYTEVAkct0FjGQmd--
