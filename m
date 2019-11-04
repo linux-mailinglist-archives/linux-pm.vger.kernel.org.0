@@ -2,83 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE7FEDE08
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 12:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5233EE138
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 14:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfKDLwH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 06:52:07 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:43930 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKDLwH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 06:52:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Z45EwIm/nVJd7d8qmHSBF95/M8CehBnDBQi1wTICEOU=; b=YjUYLUPTB/RXa6Ktkoz1wCjTz
-        4MwPhuteCIwgB1TZ1JwEvX+IhXAVoZOOKoeDptaDYKIShVe3JtHyY9YqCAHH4MobpRws9984uz2HU
-        fPYfKCYTgBC2e3J+JYA0hVDhGrTeaQQDCJu2vaGesZmbUynrnhEV6dpeanDQnGpZTERFZSE/o3k5+
-        i3Xw3FU7OLMpZMBewKCYOWRs7sAGVEQMTPs0DomKXKGT8GoOSj+oiwjFfIoFRDabIzMHLMSDrvogH
-        iquYwc7lBREVKR1QYHI0yG5nY5ms2KRZq0WiQvynjqPxu/FYvWX8c25lxNyOESynm3P8KVPY+h2u4
-        YABuW4BZA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iRatv-0006On-RA; Mon, 04 Nov 2019 11:52:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F052305FC2;
-        Mon,  4 Nov 2019 12:50:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 51D022B4220F7; Mon,  4 Nov 2019 12:52:01 +0100 (CET)
-Date:   Mon, 4 Nov 2019 12:52:01 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: Consolidate disabled state checks
-Message-ID: <20191104115201.GG4131@hirez.programming.kicks-ass.net>
-References: <2717750.dCEzHT3DVQ@kreacher>
+        id S1729166AbfKDNau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 08:30:50 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52636 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728783AbfKDNau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 08:30:50 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA4DNH0l017943;
+        Mon, 4 Nov 2019 14:30:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : subject :
+ date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=I3NGuc3Rt+teCuWa84VgiyUccSUQsi2ao2vZWxXCPGY=;
+ b=QNXyxE1yFylAYnPQmDlZtT6exOsIQPDCeA7Znu8TNAQhDGJcRJ1L2N6tKJ8OvV/DqFmb
+ qdkcJWQDkvGStQ2i9mdI1lCMNaSIRsnAjeHan6LUMLv9MrwK72AVusRylcff0q/JAbNz
+ UmxDmNW58GdFPHsnjkPu3mLQq15qMuhxGdEkfUc6AGPKF6JE1mzkl3rsNNtaSBAfR6g/
+ hQgrkasIV0FrAS2OD4Jc88cC9sEDrcXmeBa74CF86D1cJ3SNwS3t2hJGSS091xxwlBpP
+ JeM+TSmHRho/fanptl/sxPpIAYwRgmf4pSDu5IUASxgw0NoFM2pNk7AvxgE8gajd470H 7A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2w11jn1vxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Nov 2019 14:30:25 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 00B10100038;
+        Mon,  4 Nov 2019 14:30:22 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag6node2.st.com [10.75.127.17])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DB3D22D379D;
+        Mon,  4 Nov 2019 14:30:22 +0100 (CET)
+Received: from localhost (10.75.127.48) by SFHDAG6NODE2.st.com (10.75.127.17)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 4 Nov 2019 14:30:22
+ +0100
+From:   Pascal Paillet <p.paillet@st.com>
+To:     <rui.zhang@intel.com>, <edubezval@gmail.com>,
+        <daniel.lezcano@linaro.org>, <amit.kucheria@verdurent.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <p.paillet@st.com>, <david.hernandezsanchez@st.com>,
+        <horms+renesas@verge.net.au>, <wsa+renesas@sang-engineering.com>,
+        <linux-pm@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/5] thermal: stm32: driver improvements
+Date:   Mon, 4 Nov 2019 14:30:15 +0100
+Message-ID: <20191104133020.8820-1-p.paillet@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2717750.dCEzHT3DVQ@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG6NODE2.st.com
+ (10.75.127.17)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-11-04_08:2019-11-04,2019-11-04 signatures=0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 12:16:17PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> There are two reasons why CPU idle states may be disabled: either
-> because the driver has disabled them or because they have been
-> disabled by user space via sysfs.
-> 
-> In the former case, the state's "disabled" flag is set once during
-> the initialization of the driver and it is never cleared later (it
-> is read-only effectively).  In the latter case, the "disable" field
-> of the given state's cpuidle_state_usage struct is set and it may be
-> changed via sysfs.  Thus checking whether or not an idle state has
-> been disabled involves reading these two flags every time.
-> 
-> In order to avoid the additional check of the state's "disabled" flag
-> (which is effectively read-only anyway), use the value of it at the
-> init time to set a (new) flag in the "disable" field of that state's
-> cpuidle_state_usage structure and use the sysfs interface to
-> manipulate another (new) flag in it.  This way the state is disabled
-> whenever the "disable" field of its cpuidle_state_usage structure is
-> nonzero, whatever the reason, and it is the only place to look into
-> to check whether or not the state has been disabled.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+The goal of this patchset is to improve and simplify the stm32 thermal
+driver:
+* remove hardware interrupt handler that is useless
+* let the framewwork handle the trip points
+* fix interrupt management to avoid receiving hundreds of
+interrupts when the temperature is close to the low threshold.
+* improve temperature reading resolution
 
-Much thanks, that always bugged me.
+Pascal Paillet (5):
+  thermal: stm32: remove hardware irq handler
+  thermal: stm32: fix icifr register name
+  thermal: stm32: handle multiple trip points
+  thermal: stm32: improve temperature resolution
+  thermal: stm32: fix low threshold interrupt flood
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+ drivers/thermal/st/stm_thermal.c | 367 ++++++++++---------------------
+ 1 file changed, 111 insertions(+), 256 deletions(-)
+
+-- 
+2.17.1
+
