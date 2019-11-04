@@ -2,173 +2,254 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FA4EDD23
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 11:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D71BEDD31
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 11:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbfKDK5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 05:57:43 -0500
-Received: from mx3.freesources.org ([195.34.172.217]:58604 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726633AbfKDK5m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 05:57:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:Subject:References:Cc:To:From; bh=/HM98VClpFseULMvGjIcLghvYGY3yvcLTlW8M23JIIk=;
-        b=IWPeaccLkAL/JV/5RyDtMDdjsJxHvkBpZ41MwKnUb3wS5V4IKaolyvlKabX44cmSVMXh2polFrAJczHTUUIaluCCVSwzAYmmV16COK8Ld5lKOPc3jIIREV+c31jk+tO0zAs0rbjalAJ7+6RI28VfrrnD2/O3+gbYkXN73qxFZIs=;
-Received: from anon-37-243.vpn.ipredator.se ([46.246.37.243])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <jonas@freesources.org>)
-        id 1iRa3H-0001eN-IU; Mon, 04 Nov 2019 10:57:39 +0000
-From:   Jonas Meurer <jonas@freesources.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
- <2847488.TR0R5COpHM@kreacher>
- <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
- <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
- <CAJZ5v0gNAONVcfvrUu4DBPBo=YzWW2NK-3774_Hv__p2JWmPgA@mail.gmail.com>
- <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- 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
- 2SCIHpzHfm/mpRL2
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
-Message-ID: <d9ac5225-51fb-8207-5661-64089ad98a4e@freesources.org>
-Date:   Mon, 4 Nov 2019 11:57:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727663AbfKDK7f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 05:59:35 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38131 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbfKDK7f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 05:59:35 -0500
+Received: by mail-ed1-f67.google.com with SMTP id d23so10070637edr.5;
+        Mon, 04 Nov 2019 02:59:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YYx9cA98hYZwadO4BwMOGO3D3OfaJvfz6Uw8V9dkUG0=;
+        b=dPOxPWzB04d+bFgtUofKlq/P4eMVVn2zpT9bZstQjJfM0H+m3/1CE1Ji2o6gN7qAv5
+         GEZ2Vg/yszGVj0jvdjRMSin2WkkOexoIwcxtDl0bU0S5sQJrSyKkwhpIYTIt8jKNR3cv
+         xQGwgEKfsdDk3m1hmk6BLXxIyKo2hU30hfmyOB3XzIqE9t/Rjp+AKr+lMM+QedEo/e57
+         jodTFWFpXhBhk+dN4DgwBm/3JXj+J6ydatJMJgt1usHVcYRUFsW+zI4AAY+P6cTs0nWD
+         Z+zIITpX3tav5AqVaVrS2HIqR113JeDM7o2b7fo5UAeabAy1Uk4CRDKbdPZgdO2/UbdQ
+         ynig==
+X-Gm-Message-State: APjAAAU6o+Xh7YQzW4hF+OadDDixQcNzwDgxLHmcKaCEzHLq/N5o0SBJ
+        JN6jdSdaMs71/Pbfl872EZ8=
+X-Google-Smtp-Source: APXvYqzMW9zD8g+O5xk16u7hoxQfhguwNNj1wZ8UUrKr3Q1PO558Sogl+j/Qle1rFc3DwEoFDGtZ/Q==
+X-Received: by 2002:aa7:dd9a:: with SMTP id g26mr5676768edv.85.1572865172738;
+        Mon, 04 Nov 2019 02:59:32 -0800 (PST)
+Received: from pi3 ([194.230.155.180])
+        by smtp.googlemail.com with ESMTPSA id m26sm81314edr.16.2019.11.04.02.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2019 02:59:32 -0800 (PST)
+Date:   Mon, 4 Nov 2019 11:59:30 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Matheus Castello <matheus@castello.eng.br>
+Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
+        lee.jones@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] power: supply: max17040: Config alert SOC low
+ level threshold from FDT
+Message-ID: <20191104105930.GA30857@pi3>
+References: <CAJKOXPdCtbsPaAgYp5iVBhkAsjXzOYWwttQBptgiUgzhbKi09w@mail.gmail.com>
+ <20191031184134.30621-1-matheus@castello.eng.br>
+ <20191031184134.30621-4-matheus@castello.eng.br>
+ <20191101152755.GC28931@pi3>
+ <c18ab487-6242-4ac2-b2c2-ef78c899521a@castello.eng.br>
 MIME-Version: 1.0
-In-Reply-To: <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <c18ab487-6242-4ac2-b2c2-ef78c899521a@castello.eng.br>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael, hi Pavel,
-
-Jonas Meurer:
-> Rafael J. Wysocki:
->> On Mon, Oct 21, 2019 at 12:47 PM Jonas Meurer <jonas@freesources.org> wrote:
->>> Hi Rafael and linux-pm maintainers,
->>>
->>> sorry for the noise, but again: is there a chance to get a brief review
->>> of my patchset?
->>>
->>> Probably it was a bad idea to rename the build-time flag, right? Should
->>> I revert that part of the patch?
->>
->> Sorry for the delay, I'll get to your patches in the next couple of days.
+On Fri, Nov 01, 2019 at 01:52:13PM -0300, Matheus Castello wrote:
 > 
-> No worries. Thanks a lot for looking into it. It's no problem at all for
-> me/us if it takes a few more days. Just wanted to make sure that it
-> doesn't get lost.
 > 
-> If you find a minute to give a quick comment on whether I should revert
-> the renaming of build-time flag CONFIG_SUSPEND_SKIP_SYNC to
-> CONFIG_SKIP_SYNC_ON_SUSPEND, then I could do that in advance to your
-> thorough review.
+> Em 11/1/19 12:27 PM, Krzysztof Kozlowski escreveu:
+> > On Thu, Oct 31, 2019 at 03:41:33PM -0300, Matheus Castello wrote:
+> > > For configuration of fuel gauge alert for a low level state of charge
+> > > interrupt we add a function to config level threshold and a device tree
+> > > binding property to set it in flatned device tree node.
+> > > 
+> > > Now we can use "maxim,alert-low-soc-level" property with the values from
+> > > 1% up to 32% to configure alert interrupt threshold.
+> > > 
+> > > Signed-off-by: Matheus Castello <matheus@castello.eng.br>
+> > > ---
+> > >   drivers/power/supply/max17040_battery.c | 88 +++++++++++++++++++++----
+> > >   1 file changed, 74 insertions(+), 14 deletions(-)
+> > > 
+> > > diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+> > > index 75459f76d02c..802575342c72 100644
+> > > --- a/drivers/power/supply/max17040_battery.c
+> > > +++ b/drivers/power/supply/max17040_battery.c
+> > > @@ -29,6 +29,9 @@
+> > >   #define MAX17040_DELAY		1000
+> > >   #define MAX17040_BATTERY_FULL	95
+> > > 
+> > > +#define MAX17040_ATHD_MASK		0xFFC0
+> > > +#define MAX17040_ATHD_DEFAULT_POWER_UP	4
+> > > +
+> > >   struct max17040_chip {
+> > >   	struct i2c_client		*client;
+> > >   	struct delayed_work		work;
+> > > @@ -43,6 +46,8 @@ struct max17040_chip {
+> > >   	int soc;
+> > >   	/* State Of Charge */
+> > >   	int status;
+> > > +	/* Low alert threshold from 32% to 1% of the State of Charge */
+> > > +	u32 low_soc_alert_threshold;
+> > >   };
+> > > 
+> > >   static int max17040_get_property(struct power_supply *psy,
+> > > @@ -99,6 +104,22 @@ static void max17040_reset(struct i2c_client *client)
+> > >   	max17040_write_reg(client, MAX17040_CMD, 0x0054);
+> > >   }
+> > > 
+> > > +static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
+> > > +	u32 level)
+> > > +{
+> > > +	int ret;
+> > > +	u16 data;
+> > > +
+> > > +	level = 32 - level;
+> > > +	data = max17040_read_reg(client, MAX17040_RCOMP);
+> > > +	/* clear the alrt bit and set LSb 5 bits */
+> > > +	data &= MAX17040_ATHD_MASK;
+> > > +	data |= level;
+> > > +	ret = max17040_write_reg(client, MAX17040_RCOMP, data);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > >   static void max17040_get_vcell(struct i2c_client *client)
+> > >   {
+> > >   	struct max17040_chip *chip = i2c_get_clientdata(client);
+> > > @@ -115,7 +136,6 @@ static void max17040_get_soc(struct i2c_client *client)
+> > >   	u16 soc;
+> > > 
+> > >   	soc = max17040_read_reg(client, MAX17040_SOC);
+> > > -
+> > >   	chip->soc = (soc >> 8);
+> > >   }
+> > > 
+> > > @@ -161,6 +181,24 @@ static void max17040_get_status(struct i2c_client *client)
+> > >   		chip->status = POWER_SUPPLY_STATUS_FULL;
+> > >   }
+> > > 
+> > > +static int max17040_get_of_data(struct max17040_chip *chip)
+> > > +{
+> > > +	struct device *dev = &chip->client->dev;
+> > > +	struct device_node *np = dev->of_node;
+> > > +	int ret = 0;
+> > > +
+> > > +	if (of_property_read_u32(np, "maxim,alert-low-soc-level",
+> > > +			&chip->low_soc_alert_threshold)) {
+> > 
+> > Please align the line break with line above. checkpatch --strict might
+> > give you hints about this.
+> > >> +		chip->low_soc_alert_threshold = MAX17040_ATHD_DEFAULT_POWER_UP;
+> > > +	/* check if low_soc_alert_threshold is between 1% and 32% */
+> > 
+> > The comment looks misleading here, like it belongs to previous block.
+> > Maybe put it inside else if {} block?
+> > 
+> > > +	} else if (chip->low_soc_alert_threshold <= 0 ||
+> > > +			chip->low_soc_alert_threshold >= 33){
+> > 
+> > Missing space before {.
+> > 
+> > > +		ret = -EINVAL;
+> > > +	}
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > >   static void max17040_check_changes(struct i2c_client *client)
+> > >   {
+> > >   	max17040_get_vcell(client);
+> > > @@ -192,6 +230,10 @@ static irqreturn_t max17040_thread_handler(int id, void *dev)
+> > >   	/* send uevent */
+> > >   	power_supply_changed(chip->battery);
+> > > 
+> > > +	/* reset alert bit */
+> > > +	max17040_set_low_soc_threshold_alert(client,
+> > > +		chip->low_soc_alert_threshold);
+> > 
+> > Unless the continuation exceeds 80 character limit, please align it with
+> > previous line.
+> > 
+> > > +
+> > >   	return IRQ_HANDLED;
+> > >   }
+> > > 
+> > > @@ -216,6 +258,7 @@ static int max17040_probe(struct i2c_client *client,
+> > >   	struct i2c_adapter *adapter = client->adapter;
+> > >   	struct power_supply_config psy_cfg = {};
+> > >   	struct max17040_chip *chip;
+> > > +	int ret;
+> > > 
+> > >   	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
+> > >   		return -EIO;
+> > > @@ -226,6 +269,12 @@ static int max17040_probe(struct i2c_client *client,
+> > > 
+> > >   	chip->client = client;
+> > >   	chip->pdata = client->dev.platform_data;
+> > > +	ret = max17040_get_of_data(chip);
+> > > +	if (ret) {
+> > > +		dev_err(&client->dev,
+> > > +			"failed: low SOC alert OF data out of bounds\n");
+> > > +		return ret;
+> > > +	}
+> > > 
+> > >   	i2c_set_clientdata(client, chip);
+> > >   	psy_cfg.drv_data = chip;
+> > > @@ -242,20 +291,31 @@ static int max17040_probe(struct i2c_client *client,
+> > > 
+> > >   	/* check interrupt */
+> > >   	if (client->irq) {
+> > > -		int ret;
+> > > -		unsigned int flags;
+> > > -
+> > > -		dev_info(&client->dev, "IRQ: enabled\n");
+> > > -		flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
+> > > -		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+> > > -						max17040_thread_handler, flags,
+> > > -						chip->battery->desc->name,
+> > > -						chip);
+> > > -
+> > > -		if (ret) {
+> > > -			client->irq = 0;
+> > > +		if (of_device_is_compatible(client->dev.of_node,
+> > > +			"maxim,max77836-battery")) {
+> > 
+> > Alignment.
+> > 
+> > > +			ret = max17040_set_low_soc_threshold_alert(client,
+> > > +				chip->low_soc_alert_threshold);
+> > 
+> > Ditto.
+> > 
+> > > +			if (ret) {
+> > > +				dev_err(&client->dev,
+> > > +					"Failed to set low SOC alert: err %d\n",
+> > > +					ret);
+> > > +				return ret;
+> > > +			}
+> > > +
+> > > +			dev_info(&client->dev, "IRQ: enabled\n");
+> > > +			ret = devm_request_threaded_irq(&client->dev,
+> > > +				client->irq, NULL, max17040_thread_handler,
+> > > +				(client->flags | IRQF_ONESHOT),
+> > 
+> > This looks unrelated. Befor ethis were IRQF_TRIGGER_FALLING |
+> > IRQF_ONESHOT, now you use client->flags. There is no reason why this
+> > commit should change >
+> 
+> I am using client->flags here to not overwrite the flag passed in device
+> tree. Let me know what you think about it: if I should leave it as in the
+> previous commit, or should I modify the previous commit too.
 
-I went ahead now and reverted the renaming of build-time flag
-CONFIG_SUSPEND_SKIP_SYNC[1]. There's no reason to do so and it breaks
-backwards-compability.
+I still do not get why this change is here and how is related to this
+commit.
 
-Rafael, could you take a look at the patches anytime soon? I'd like to
-propose them for inclusion into the Linux Kernel within the next weeks.
-Again the question: would you sign them (if you consider them sensible)?
-It's my first Linux Kernel contribution, so I'm unsure about the
-process. My understanding is that a subsystem maintainer should approve
-the patches first before they can be proposed for upstream integration,
-right?
 
-Cheers
- jonas
+Best regards,
+Krzysztof
 
-[1] See [PATCH v3 2/2] PM: CONFIG_SUSPEND_SKIP_SYNC sets default for
-    '/sys/power/sync_on_suspend'
