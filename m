@@ -2,115 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CB2EE3A8
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 16:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA17EE3C4
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 16:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727838AbfKDPXe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 10:23:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727796AbfKDPXe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Nov 2019 10:23:34 -0500
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E4D8C20663;
-        Mon,  4 Nov 2019 15:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572881013;
-        bh=xyu7zj1DRcpATjwDO3Xwwxna0eNzybOKXEowE0HTldI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=b3pxHHsmoH0dZXU8+a+w49+bpwI4hOLZ8/6YUPKNf6aSzNbN/7HhCaMGUsi++gThR
-         2GM25Uiec0YXdz0hX7vvjKE4IxqDlLgW66ct7s3xbG/5lebD5CtObtKhEJvGZZNzIJ
-         +YCxbzUvYjA59ZNONPng4DnBUxgSo1fJzvhp/IQc=
-Date:   Mon, 4 Nov 2019 09:23:30 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        KarimAllah Ahmed <karahmed@amazon.de>
-Subject: Re: [PATCH 4/6] xen-platform: Convert to generic power management
-Message-ID: <20191104152330.GA104689@google.com>
+        id S1728607AbfKDP3k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 10:29:40 -0500
+Received: from mail-il1-f182.google.com ([209.85.166.182]:42683 "EHLO
+        mail-il1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728474AbfKDP3k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 10:29:40 -0500
+Received: by mail-il1-f182.google.com with SMTP id n18so8158120ilt.9
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2019 07:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=NqR5XU4p3tUzLoUU09owoA1NuABgrde5Fo+bBm5B7SA=;
+        b=J8jC2c2QV11dg73MpdfG0fAtIy9Lb6rlSVF3pZjoVhSMpEbhnJf7PCAu34T2X3teTu
+         aSjI2oT5KeOh9JRBzERBGw0QpEqoorjVlCgIuBYM6ILwEvE5Bs1npHu7qUiB+QZzU+rJ
+         YqyM7s2h1qJYPL1VSyPQ+TubSLVquTQSJBjYCTaaiF6pnaJfdrio7sKTEFtEcj4utLnJ
+         1RV6pQlAeUGjT8T06l2gcIvWvXzXwxTjYBo6i0YBy/AvgWwtgHrCWSWnuODyeQ0BvssO
+         vnYERMskr+iH3g8iPBzPP7QDb7Y8ntSGFah9DvgmEIOqxbST2QtrqFuP9eahmtVy2o9m
+         BOIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=NqR5XU4p3tUzLoUU09owoA1NuABgrde5Fo+bBm5B7SA=;
+        b=Ka4T1EdcO6pmVkhoXm2pqYysDMhZuiGFoz3+pe8Mim9CY3MFfzwH1JLxAVMmoMJmee
+         ao4MhLOx6l5K9hbudqQ/hrG/9lwhYawy2oasWGDSCEEa/yKJWd7K+bDvmFOpjlrvZ9+3
+         gTGT831OnpSwPM2G1xfe5d55VDRL1Ah3UTbYJfgJdntJz3zNimbCs7vkkXw3Kl54hEHn
+         RkcXivhqb1EaEeuu2ydMux4ChTTzzrfCspwOIj5Sd5/LY1YcWk1y4iDnm+AWBW0EaHz+
+         ULJl0PEHOeuISwoCCmwxk1xQLlEhFHNhw9sFzMH96+E8yFYj17cUivJdoLr31f9rj1c9
+         LGZA==
+X-Gm-Message-State: APjAAAWztsWTdAlm1lYPj2G2gtlppzrIl0pJfd1940jyGw6z9gGx20y1
+        iM9Vi1z0rZYWjynKTs6FDdzq3TYhnEbiEVeQXgNRJGub
+X-Google-Smtp-Source: APXvYqxjIXnxwgnPjv+S6A5tvIH+lNE1dGic5nJ7S6nTQAnRIDglZkn9GD4R/hx7SCnuEl0XNbzwPn0QZA542LXEXsI=
+X-Received: by 2002:a92:9908:: with SMTP id p8mr28009578ili.304.1572881379103;
+ Mon, 04 Nov 2019 07:29:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191101204558.210235-5-helgaas@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Tom Cook <tom.k.cook@gmail.com>
+Date:   Mon, 4 Nov 2019 15:29:27 +0000
+Message-ID: <CAFSh4UxDh4fuRgKv4puz3i9Y4KT+V+BBN21v4KxzRd2zpgKb5g@mail.gmail.com>
+Subject: Power management on HP 15-ds0502na
+To:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 01, 2019 at 03:45:56PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Convert xen-platform from the legacy PCI power management callbacks to the
-> generic operations.  This is one step towards removing support for the
-> legacy PCI callbacks.
-> 
-> The generic .resume_noirq() operation is called by pci_pm_resume_noirq() at
-> the same point the legacy PCI .resume_early() callback was, so this patch
-> should not change the xen-platform behavior.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+I've been pointed here from the LKML.  I've recently bought an HP
+15-ds0502na 2-in-1 laptop.  It does not appear to support
+suspend-to-ram at all; /sys/power/mem_sleep contains only "[s2idle]"
+and adding mem_sleep_default=deep on the command line doesn't help
+this.
 
-I made the tweak below to fix the compile error.  I could swear I
-built this, but I must have been mistaken.
+Which leaves s2idle.  The O/S (Ubuntu 19.10 in this case) correctly
+tries to initiate s2idle.  But leaving it in this state in a bag
+results in a very hot laptop and the battery drain is still
+considerable.
 
-> Cc: Stefano Stabellini <sstabellini@kernel.org>
-> Cc: KarimAllah Ahmed <karahmed@amazon.de>
-> ---
->  drivers/xen/platform-pci.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/xen/platform-pci.c b/drivers/xen/platform-pci.c
-> index 5e30602fdbad..e06e8769eb84 100644
-> --- a/drivers/xen/platform-pci.c
-> +++ b/drivers/xen/platform-pci.c
-> @@ -168,13 +168,17 @@ static const struct pci_device_id platform_pci_tbl[] = {
->  	{0,}
->  };
->  
-> +static struct dev_pm_ops platform_pm_ops = {
-> +	.resume_noirq =   platform_pci_resume,
-> +};
-> +
->  static struct pci_driver platform_driver = {
->  	.name =           DRV_NAME,
->  	.probe =          platform_pci_probe,
->  	.id_table =       platform_pci_tbl,
-> -#ifdef CONFIG_PM
-> -	.resume_early =   platform_pci_resume,
-> -#endif
-> +	.driver = {
-> +		.pm =     &platform_pm_ops,
-> +	},
->  };
->  
->  builtin_pci_driver(platform_driver);
-> -- 
-> 2.24.0.rc1.363.gb1bccd3e3d-goog
+It seems that this is likely to be caused by a device driver that
+isn't correctly powering down its corresponding device.  Can someone
+point me towards how to figure out which one?
 
-diff --git a/drivers/xen/platform-pci.c b/drivers/xen/platform-pci.c
-index e06e8769eb84..59e85e408c23 100644
---- a/drivers/xen/platform-pci.c
-+++ b/drivers/xen/platform-pci.c
-@@ -74,7 +74,7 @@ static int xen_allocate_irq(struct pci_dev *pdev)
- 			"xen-platform-pci", pdev);
- }
- 
--static int platform_pci_resume(struct pci_dev *pdev)
-+static int platform_pci_resume(struct device *dev)
- {
- 	int err;
- 
-@@ -83,7 +83,7 @@ static int platform_pci_resume(struct pci_dev *pdev)
- 
- 	err = xen_set_callback_via(callback_via);
- 	if (err) {
--		dev_err(&pdev->dev, "platform_pci_resume failure!\n");
-+		dev_err(dev, "platform_pci_resume failure!\n");
- 		return err;
- 	}
- 	return 0;
+Thanks,
+Tom
