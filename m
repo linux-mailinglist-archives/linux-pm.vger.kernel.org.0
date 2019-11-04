@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D8AEEF27
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 23:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E46EECE0
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 23:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389401AbfKDWT3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 17:19:29 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41687 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388944AbfKDWBE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 17:01:04 -0500
-Received: by mail-lj1-f193.google.com with SMTP id m9so19369751ljh.8;
-        Mon, 04 Nov 2019 14:01:02 -0800 (PST)
+        id S2388957AbfKDWBG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 17:01:06 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42651 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388949AbfKDWBF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 17:01:05 -0500
+Received: by mail-lj1-f195.google.com with SMTP id n5so8386053ljc.9;
+        Mon, 04 Nov 2019 14:01:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QriNmcLUT52c0PWl9XCAOvuUeyuuGYT8NGYlPG2RmN8=;
-        b=rITuHkgNdE2RiaxYQ+jQXE8w17351TUMhfAxjgzUZqoXp4Gdt5wjTJswkHxZIhCXpD
-         STBIuyOLgM8fN3WDmRVA1dX2G6Hb/Rqky3yakDuijpSB2tEcJTwEtKo2S3BYC0E+7jRf
-         i9Ygkd6aLquOlCDLomoXNinc2qon8Keq7GDAd4bdAYZc7cMUayGJhMMLsBhzZitSqduq
-         m2PdYrH+JG75MyntjtbzweBfg0sfkEdNmrKwvkbAnfeG2I4r4gb0ktzufeUfMDDEbOT5
-         7xmGjDjLRBLXOJi1mAYMVZCpRLtdZ+ZrnS4oDNqGZl7TFw2zLsXKu6aBKZdTRl2tQj5S
-         Yvqw==
+        bh=6TJlQkVC15YK1Mmhxs/rkGDrxgdE3q8G1rLTH1Ltzd0=;
+        b=Lk22YzHxOA6nZMYEhNYYDGLVMMEMhzir8xS5idni7f5IYzZjCZaj9Q+YYENzfL3p8u
+         /2x4vO7g6qfU9AKhXo3a6xsK4ILwpqI8ZNXpQqbhMHDMxOJBkO8QA3FKfY6EkFFKXaUa
+         9jY1Pccw7Lt/+YlxE1jxTXtSkQv8IrFX4g7UJUnBX0iD8NfdRfTWHkMJg30WjyohxBhA
+         5Wvam17LnlDk9ofTk3gN/hh1HBQeBMXksrzqUqF8uaycRGuplTTvh+MQhl41hYjMtXAV
+         mkj1pcUwWHqiS/I72/mpSuZXeAT2lowh/fmrr4PLF9bp1TofO8MPBc9Cj3A7XV7Fnwah
+         Cewg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QriNmcLUT52c0PWl9XCAOvuUeyuuGYT8NGYlPG2RmN8=;
-        b=Q97i7jalF5U2DgrIi0ChwaMDu4ApLHma0uIU3ylrBMqnxuWUiUnZ+Tln1KBjyR1lOA
-         YIGRneFJnA+HOPcO1ptrQ47Vtz2B3ONME9llFZSeFqaKAGy9eGsXCJnnNnscHWFfbmaj
-         F5DpUiJT8Z4l27BlhrsCd3tt5BJz/bv39ZjhRguSeFK58KiiApXvDK/qsXN/QkUU6d68
-         H7x/C95ffwRdqpnVsT/yylaUPMsymamfID6RJQKz/0yiD5udlgnaMuAIusBf+p9kqqc1
-         V09Wqb5nLsmXiBNydIU1tHBJguy+LDlQn2CK/MEtr1BRI2dfG8wDDGrkGs0GBPc+CbAZ
-         vmdA==
-X-Gm-Message-State: APjAAAUU7DPa4bPQ1mEnOEb9t5B5OX+M037zDmsp+dKDPLkjbDrnFbsT
-        c/JETqfr5+r4ZtV4uLDj9K1GJRPg
-X-Google-Smtp-Source: APXvYqxwvIhW+sU2X4l+7sS8n0nLJFbt9HYUO4fqO6OhXtRzNow5UqpvUg/hgz6lepiRR3vG44BToQ==
-X-Received: by 2002:a2e:874a:: with SMTP id q10mr20878013ljj.14.1572904862038;
+        bh=6TJlQkVC15YK1Mmhxs/rkGDrxgdE3q8G1rLTH1Ltzd0=;
+        b=HJgRhDN3ORM1ermy/0i78s2G9gHqNREXsqnICV7tK7Ps1Dk1RSmNheF2Y2XbTVzLpU
+         D1JF+UUu97EE/HKvdojshQ1NaUiTrKGcVU8mhD+6s7aN+iGAZE1l0UY+i6RELEl3gliD
+         tCa9gANANnxSZN8mnc6YgVsLYCd0M8UldYVPyW/V6IU4utBxLGfyzlkvLm2eNy2Mti/7
+         cA/PAtbt0lERZKDjiTAIKnargO1b5pVBXzGi6GcQulAKNAMgoutVIIAm9OvbPAnENog/
+         T/hwd6es1PbHSci46Lb7ARW/9J/4KJh3uMVf7UXuvD9c9FuIArumYUBSqaFp8X3UKXpd
+         OzNA==
+X-Gm-Message-State: APjAAAX97n8rdl3ITVLtfCWgKpxMUhDoK9TP0uJw+SjTZNGyM1DT/u/m
+        TotowGEQLjQ+8B1LyY/En9M=
+X-Google-Smtp-Source: APXvYqznNX5QtPgSIWUNQdtXRtK+09ntEdga9YULTtdrABGJbd7AMffoE6v9Xpm/JZ5MjpMFW7hlOA==
+X-Received: by 2002:a05:651c:313:: with SMTP id a19mr20494836ljp.199.1572904862997;
         Mon, 04 Nov 2019 14:01:02 -0800 (PST)
 Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id g3sm7454669ljj.59.2019.11.04.14.01.01
+        by smtp.gmail.com with ESMTPSA id g3sm7454669ljj.59.2019.11.04.14.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 14:01:01 -0800 (PST)
+        Mon, 04 Nov 2019 14:01:02 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -55,9 +55,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 03/19] PM / devfreq: tegra30: Handle possible round-rate error
-Date:   Tue,  5 Nov 2019 00:56:01 +0300
-Message-Id: <20191104215617.25544-4-digetx@gmail.com>
+Subject: [PATCH v9 04/19] PM / devfreq: tegra30: Drop write-barrier
+Date:   Tue,  5 Nov 2019 00:56:02 +0300
+Message-Id: <20191104215617.25544-5-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191104215617.25544-1-digetx@gmail.com>
 References: <20191104215617.25544-1-digetx@gmail.com>
@@ -68,60 +68,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The EMC clock rate rounding technically could fail, hence let's handle
-the error cases properly.
+There is no need in a write-barrier now, given that interrupt masking is
+handled by CPU's GIC now. Hence we know exactly that interrupt won't fire
+after stopping the devfreq's governor. In other cases we don't care about
+potential buffering of the writes to hardware and thus there is no need to
+stall CPU.
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 Tested-by: Peter Geis <pgwipeout@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index a0a5f3f7b789..66dfa98d8c6b 100644
+index 66dfa98d8c6b..b50bd1615010 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -592,8 +592,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	struct tegra_devfreq_device *dev;
- 	struct tegra_devfreq *tegra;
- 	struct devfreq *devfreq;
--	unsigned long rate;
- 	unsigned int i;
-+	long rate;
- 	int err;
+@@ -230,12 +230,6 @@ static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
+ 		      ACTMON_DEV_LOWER_WMARK);
+ }
  
- 	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
-@@ -650,8 +650,14 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+-static void actmon_write_barrier(struct tegra_devfreq *tegra)
+-{
+-	/* ensure the update has reached the ACTMON */
+-	readl(tegra->regs + ACTMON_GLB_STATUS);
+-}
+-
+ static void actmon_isr_device(struct tegra_devfreq *tegra,
+ 			      struct tegra_devfreq_device *dev)
+ {
+@@ -287,8 +281,6 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+ 	device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
  
- 	reset_control_deassert(tegra->reset);
+ 	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
+-
+-	actmon_write_barrier(tegra);
+ }
  
--	tegra->max_freq = clk_round_rate(tegra->emc_clock, ULONG_MAX) / KHZ;
-+	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
-+	if (rate < 0) {
-+		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
-+		return rate;
-+	}
-+
- 	tegra->cur_freq = clk_get_rate(tegra->emc_clock) / KHZ;
-+	tegra->max_freq = rate / KHZ;
+ static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra,
+@@ -376,8 +368,6 @@ static int tegra_actmon_rate_notify_cb(struct notifier_block *nb,
+ 		tegra_devfreq_update_wmark(tegra, dev);
+ 	}
  
- 	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
- 		dev = tegra->devices + i;
-@@ -662,6 +668,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
- 		rate = clk_round_rate(tegra->emc_clock, rate);
+-	actmon_write_barrier(tegra);
+-
+ 	return NOTIFY_OK;
+ }
  
-+		if (rate < 0) {
-+			dev_err(&pdev->dev,
-+				"Failed to round clock rate: %ld\n", rate);
-+			err = rate;
-+			goto remove_opps;
-+		}
-+
- 		err = dev_pm_opp_add(&pdev->dev, rate, 0);
- 		if (err) {
- 			dev_err(&pdev->dev, "Failed to add OPP: %d\n", err);
+@@ -423,8 +413,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+ 	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
+ 		tegra_actmon_configure_device(tegra, &tegra->devices[i]);
+ 
+-	actmon_write_barrier(tegra);
+-
+ 	enable_irq(tegra->irq);
+ }
+ 
+@@ -439,8 +427,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
+ 		device_writel(&tegra->devices[i], ACTMON_INTR_STATUS_CLEAR,
+ 			      ACTMON_DEV_INTR_STATUS);
+ 	}
+-
+-	actmon_write_barrier(tegra);
+ }
+ 
+ static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
 -- 
 2.23.0
 
