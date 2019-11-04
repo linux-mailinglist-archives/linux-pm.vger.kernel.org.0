@@ -2,34 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CBEEDCE3
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 11:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FA4EDD23
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 11:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728522AbfKDKvd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 05:51:33 -0500
-Received: from mx3.freesources.org ([195.34.172.217]:58594 "EHLO
+        id S1726071AbfKDK5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 05:57:43 -0500
+Received: from mx3.freesources.org ([195.34.172.217]:58604 "EHLO
         mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726364AbfKDKvc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 05:51:32 -0500
+        with ESMTP id S1726633AbfKDK5m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 05:57:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=freesources.org; s=20160526;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=iw+qaVPnDA6Z/6H+pK0OGFdN7Q2fmEyeTFPQCTImpjM=;
-        b=gDBNyGoxFcTdyBdBR2p+ConOTwGOYVlVeKzyYyeZDSd6JQgk9LgGVg7A0qyRBx+n4zF1lx3+rnePCkXGuejqBgA0rZoqSuNFr8yFZDojgq+VigzkFUvvVMsEJvRyuaEVfiKbTf8qe3vk9Mx2SeTFRpvkJtHNRLc8ypes873n5Jg=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:Subject:References:Cc:To:From; bh=/HM98VClpFseULMvGjIcLghvYGY3yvcLTlW8M23JIIk=;
+        b=IWPeaccLkAL/JV/5RyDtMDdjsJxHvkBpZ41MwKnUb3wS5V4IKaolyvlKabX44cmSVMXh2polFrAJczHTUUIaluCCVSwzAYmmV16COK8Ld5lKOPc3jIIREV+c31jk+tO0zAs0rbjalAJ7+6RI28VfrrnD2/O3+gbYkXN73qxFZIs=;
 Received: from anon-37-243.vpn.ipredator.se ([46.246.37.243])
         by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <jonas@freesources.org>)
-        id 1iRZxE-0001b6-RN; Mon, 04 Nov 2019 10:51:24 +0000
+        id 1iRa3H-0001eN-IU; Mon, 04 Nov 2019 10:57:39 +0000
 From:   Jonas Meurer <jonas@freesources.org>
-Subject: Re: [PATCH v3 2/2] PM: CONFIG_SUSPEND_SKIP_SYNC sets default for
- '/sys/power/sync_on_suspend'
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Len Brown <len.brown@intel.com>,
         Tim Dittler <tim.dittler@systemli.org>
 References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
  <2847488.TR0R5COpHM@kreacher>
  <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
- <7f6b9ec9-b26f-8c13-6b0b-1d697bc1a7a9@freesources.org>
+ <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
+ <CAJZ5v0gNAONVcfvrUu4DBPBo=YzWW2NK-3774_Hv__p2JWmPgA@mail.gmail.com>
+ <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  mQINBEqFXAEBEAC+7gfLht8lDqGH1EPYoctDHvWQ4nk60UFDLfjqHmBGReL/9C7CyxYaqgY4
@@ -115,80 +115,60 @@ Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
  tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
  2SCIHpzHfm/mpRL2
-Message-ID: <ee04f44f-5732-0326-26d7-5a0e9c2a7c8f@freesources.org>
-Date:   Mon, 4 Nov 2019 11:51:21 +0100
+Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
+ suspend
+Message-ID: <d9ac5225-51fb-8207-5661-64089ad98a4e@freesources.org>
+Date:   Mon, 4 Nov 2019 11:57:36 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <7f6b9ec9-b26f-8c13-6b0b-1d697bc1a7a9@freesources.org>
+In-Reply-To: <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Slightly change the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC:
-Make it configure the default for '/sys/power/sync_on_suspend', now that we
-have a run-time switch for it.
+Hi Rafael, hi Pavel,
 
-Signed-off-by: Jonas Meurer <jonas@freesources.org>
----
- Documentation/ABI/testing/sysfs-power |    7 ++++---
- kernel/power/Kconfig                  |    5 ++++-
- kernel/power/main.c                   |    2 +-
- kernel/power/suspend.c                |    2 +-
- 4 files changed, 10 insertions(+), 6 deletions(-)
+Jonas Meurer:
+> Rafael J. Wysocki:
+>> On Mon, Oct 21, 2019 at 12:47 PM Jonas Meurer <jonas@freesources.org> wrote:
+>>> Hi Rafael and linux-pm maintainers,
+>>>
+>>> sorry for the noise, but again: is there a chance to get a brief review
+>>> of my patchset?
+>>>
+>>> Probably it was a bad idea to rename the build-time flag, right? Should
+>>> I revert that part of the patch?
+>>
+>> Sorry for the delay, I'll get to your patches in the next couple of days.
+> 
+> No worries. Thanks a lot for looking into it. It's no problem at all for
+> me/us if it takes a few more days. Just wanted to make sure that it
+> doesn't get lost.
+> 
+> If you find a minute to give a quick comment on whether I should revert
+> the renaming of build-time flag CONFIG_SUSPEND_SKIP_SYNC to
+> CONFIG_SKIP_SYNC_ON_SUSPEND, then I could do that in advance to your
+> thorough review.
 
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -575,7 +575,7 @@ static int enter_state(suspend_state_t s
- 	if (state == PM_SUSPEND_TO_IDLE)
- 		s2idle_begin();
- 
--	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && sync_on_suspend_enabled) {
-+	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
- 		ksys_sync_helper();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
- 	  Skip the kernel sys_sync() before freezing user processes.
- 	  Some systems prefer not to pay this cost on every invocation
- 	  of suspend, or they are content with invoking sync() from
--	  user-space before invoking suspend.  Say Y if that's your case.
-+	  user-space before invoking suspend.  There's a run-time switch
-+	  at '/sys/power/sync_on_suspend' to configure this behaviour.
-+	  This setting changes the default for the run-tim switch. Say Y
-+	  to change the default to disable the kernel sys_sync().
- 
- config HIBERNATE_CALLBACKS
- 	bool
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -198,7 +198,7 @@ power_attr(mem_sleep);
-  * show() returns whether ksys_sync_helper() is invoked before suspend.
-  * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
-  */
--bool sync_on_suspend_enabled = true;
-+bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
- 
- static ssize_t sync_on_suspend_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -312,6 +312,7 @@ Description:
- 		aware that you have to take care of sync() yourself before
- 		suspending the system if you disable it here.
- 
--		Writing a "1" (default) to this file enables the sync() and
--		writing a "0" disables it. Reads from the file return the
--		current value.
-+		Writing a "1" to this file enables the sync() and writing a
-+		"0" disables it. Reads from the file return the current value.
-+		The default is "1" but can be configured with the build-time
-+		config flag "SUSPEND_SKIP_SYNC".
+I went ahead now and reverted the renaming of build-time flag
+CONFIG_SUSPEND_SKIP_SYNC[1]. There's no reason to do so and it breaks
+backwards-compability.
 
+Rafael, could you take a look at the patches anytime soon? I'd like to
+propose them for inclusion into the Linux Kernel within the next weeks.
+Again the question: would you sign them (if you consider them sensible)?
+It's my first Linux Kernel contribution, so I'm unsure about the
+process. My understanding is that a subsystem maintainer should approve
+the patches first before they can be proposed for upstream integration,
+right?
 
+Cheers
+ jonas
+
+[1] See [PATCH v3 2/2] PM: CONFIG_SUSPEND_SKIP_SYNC sets default for
+    '/sys/power/sync_on_suspend'
