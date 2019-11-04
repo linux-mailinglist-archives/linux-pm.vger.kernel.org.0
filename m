@@ -2,79 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CDAEDDAE
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 12:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6257EDDC2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 12:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbfKDL2y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 06:28:54 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63005 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726364AbfKDL2y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 06:28:54 -0500
-Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 0f4bedc1c9d8da7c; Mon, 4 Nov 2019 12:28:51 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cai@lca.pw
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix Invalid EPB setting
-Date:   Mon, 04 Nov 2019 12:28:51 +0100
-Message-ID: <5038220.5Ruqr03OBg@kreacher>
-In-Reply-To: <20191031192620.23482-1-srinivas.pandruvada@linux.intel.com>
-References: <20191031192620.23482-1-srinivas.pandruvada@linux.intel.com>
+        id S1726526AbfKDLfF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 06:35:05 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42418 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726364AbfKDLfF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 06:35:05 -0500
+Received: by mail-ot1-f67.google.com with SMTP id b16so14064919otk.9
+        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2019 03:35:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3T41h1XsLLHvSP9ZmI/zVvx/+EaAzjaN7MfLaCLo27o=;
+        b=TY4uVgyzCjR8BbsAV3LUBCB9UgGPbPWXGI76amKa1hfMcp/4x83hT1gxLi7eze7Tzl
+         vGEwTFskFkjoxh2FpQeuOmJz6zyD21TqZJmiDpN6J31oUZn47Ykuknm0wuxYO8iBZ/LB
+         /YmiIgj+yxGP2C51euoGTToNvsDA64Vj1BBOubKKBvKgfc9WPNSAB90C5iAikhw0o9Eo
+         E5fm5BeuGm/gMFBMAHI2lKp48uZSgiOXNGsH9796Eo8e7IznpBCaaGIUmMkJVnqmYu2W
+         b/eSP/SqkawZfg+NG/aPa0HeO0lrE1VAT/6kv0KeXjb4q2yURCSlbFqUdTZyLT8nxXnl
+         2w7A==
+X-Gm-Message-State: APjAAAXDhzVlsvc4d5oSbDKlt73RCNbEgWSM9nt/FmgcZbGuZMobyPWi
+        XALtwoTaB0DYYS5Tzp5Tv4Vp3xmNEhVpXJCkrBE=
+X-Google-Smtp-Source: APXvYqwa6JpC+DIXPVUHbtmmviajaSllnandc7mgFqJ3C9Zc/bz42PIPeIAGmm3ayVQRTRhoFrO+ASrOkh6BG+B3Euc=
+X-Received: by 2002:a9d:5907:: with SMTP id t7mr7680211oth.118.1572867304724;
+ Mon, 04 Nov 2019 03:35:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20191031131812.19427-1-rui.zhang@intel.com>
+In-Reply-To: <20191031131812.19427-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 4 Nov 2019 12:34:53 +0100
+Message-ID: <CAJZ5v0hLmPqZYXO_8488X2Z3CSony5rMM6b9y=UnHCVUTaAsZw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powercap/intel_rapl: add support for CometLake Mobile
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, October 31, 2019 8:26:20 PM CET Srinivas Pandruvada wrote:
-> The max value of EPB can be only be 0x0F. Setting more than that results
-> in "unchecked MSR access error". During CPU offline via cpufreq stop_cpu()
-> callback, this error condition is triggered in the function
-> intel_pstate_hwp_force_min_perf().
-> 
-> Instead, EPB corresponding to preference to maximize energy saving (0x0F),
-> can be set. But this will conflict with the save/restore done in
-> arch/x86/kernel/cpu/intel_epb.c. Based on the test, if 0x0F is set in the
-> function intel_pstate_hwp_force_min_perf(), this gets restored during next
-> CPU online operation. This is not desired.
-> 
-> Hence don't set EPB in the offline path in this driver and let the
-> processing in intel_epb.c handle EPB.
-> 
-> Fixes: af3b7379e2d70 ("cpufreq: intel_pstate: Force HWP min perf before offline")
-> Reported-by: Qian Cai <cai@lca.pw>
-> Cc: 5.0+ <stable@vger.kernel.org> # 5.0+
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Thu, Oct 31, 2019 at 2:18 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> Add CometLake Mobile support in intel_rapl driver
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  drivers/cpufreq/intel_pstate.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 53a51c169451..8ab31702cf6a 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -847,11 +847,9 @@ static void intel_pstate_hwp_force_min_perf(int cpu)
->  	value |= HWP_MAX_PERF(min_perf);
->  	value |= HWP_MIN_PERF(min_perf);
->  
-> -	/* Set EPP/EPB to min */
-> +	/* Set EPP to min */
->  	if (boot_cpu_has(X86_FEATURE_HWP_EPP))
->  		value |= HWP_ENERGY_PERF_PREFERENCE(HWP_EPP_POWERSAVE);
-> -	else
-> -		intel_pstate_set_epb(cpu, HWP_EPP_BALANCE_POWERSAVE);
->  
->  	wrmsrl_on_cpu(cpu, MSR_HWP_REQUEST, value);
->  }
-> 
+>  drivers/powercap/intel_rapl_common.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 94ddd7d659c8..cc1e82d513a9 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -978,6 +978,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+>         INTEL_CPU_FAM6(ICELAKE_NNPI, rapl_defaults_core),
+>         INTEL_CPU_FAM6(ICELAKE_X, rapl_defaults_hsw_server),
+>         INTEL_CPU_FAM6(ICELAKE_D, rapl_defaults_hsw_server),
+> +       INTEL_CPU_FAM6(COMETLAKE_L, rapl_defaults_core),
+>
+>         INTEL_CPU_FAM6(ATOM_SILVERMONT, rapl_defaults_byt),
+>         INTEL_CPU_FAM6(ATOM_AIRMONT, rapl_defaults_cht),
+> --
 
-Applying as a fix for 5.4, thanks!
-
-
-
-
+Applying this and the [2/2] as 5.5 material, thanks!
