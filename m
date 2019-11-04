@@ -2,96 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 744ABEDB91
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 10:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0180AEDC82
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Nov 2019 11:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728063AbfKDJVe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 04:21:34 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38381 "EHLO
+        id S1727553AbfKDK3R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 05:29:17 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:40149 "EHLO
         mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbfKDJVe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 04:21:34 -0500
-Received: by mail-oi1-f194.google.com with SMTP id v186so13477789oie.5
-        for <linux-pm@vger.kernel.org>; Mon, 04 Nov 2019 01:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7BzvCFGFyHem7aNvDILp+YA5kEio7GlXJNf7u1ymYOQ=;
-        b=0/myShTiuQ4rArcEWL8wQRtTTKVsb2N3NQXnwQYMfPFcyhRTMJ+0vpsq7Ox2xr39VA
-         8Awfq4VwFqUYLI92qKeUN9UC5PMacNHQkAY3l7dNZG1YTRsele9Hidoet2llNrWOLQ12
-         9UFYDzesbB56fdWwSOlfYYULjDeyT0GFbeq8tyl9f/93zbi6BanBbX7nCf13V/36sLKg
-         XoVSaK5XUbT+hVwZ0YGEOILxL/yUKSo+ttq/bxjtjG8lBrSthpTKYrolEofmCTOrGrlp
-         759BLOJ30Grp4iGtIEzNCS7mATs3NjGyCkIPoEqizBGoQhkakbOxsKzk0bgGDICkzyOJ
-         qG+A==
+        with ESMTP id S1726364AbfKDK3R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 05:29:17 -0500
+Received: by mail-oi1-f194.google.com with SMTP id r27so13610195oij.7;
+        Mon, 04 Nov 2019 02:29:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7BzvCFGFyHem7aNvDILp+YA5kEio7GlXJNf7u1ymYOQ=;
-        b=kVTW1pXCnCs6faPlsUOCwToCo/YlFmXSkgZl4bfKAUpwedD5MumwfaSLmkE87jESqy
-         O4esQxHCCI9p8cLcQfd9+OPfZ50PA2tsOKyNr0+/T14NMD9YJ5thSf6Aq3fofqAgWE0/
-         aTNeNk+HImtnUp9ugpWRUCa0U1Bs+YaOwnL+bjLBetJulgumWR3ZtAi302Y+fsOTCeax
-         y4l2sekiZb1yYBTS6T7a6i1Cwqu8epqpODGf8zBCs6DnaTTDhm+q3BzelUFdbXvZq2Ar
-         g7NW4xFtPgq+h+s5n/irQ+2v2Cso8afiMlRbKpUmVOoZ7CkHpRCxisSiZaBTQ/ZT10yn
-         br0w==
-X-Gm-Message-State: APjAAAVtUySHwapCqSUeTRaZBAgfxemjpDo0XMfLN1PLr1DCwWuWXF5S
-        MrfiVUxN4di5kNDO2vMjcIZEgNNGEWLFo6HptC6ZTQ==
-X-Google-Smtp-Source: APXvYqyQ0vp3yLB+4K20lpmZqH2Zh3Z1GRej9tMUGvHlMZYtobNN2gwGszngK6ROtXBsWD+0NaiVD2cotrXFaCG0vS0=
-X-Received: by 2002:a05:6808:498:: with SMTP id z24mr3440549oid.114.1572859293807;
- Mon, 04 Nov 2019 01:21:33 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=SMaIK5rI7m/XaGA7nbAfirt41zqNOSaQ5u4JanEnkug=;
+        b=BYetKR2HRiOchQmzTF7hw1EeVCQSvJaafGLuWrzhQjiRXSyU5E8ZTEfOHJSpSzrgVa
+         WHv3i4hEPNa7TN2Bt0HHBc1SYCaSbsu8yfmg3paUGLGNPBtn39QHDiA448eHK7Z6VJEM
+         dDdUT82I5itLJJC4J1qnzyWD6OGAuviyRjnBiiJ5MXboWORNYkFQc02cW7qvbTjk97jR
+         zhBAwhHH4tvfLh6KholtORK7KDI8cK4Z2riRB5cbaGTaO1evhz3FgelExIoHG1adAYnq
+         SQNFxr0DYJSW25NvuWztfXc0jtoU/+ArVmXTlxHixKKL6bliQVX6fEOm5bHq6NSbtaT+
+         azvw==
+X-Gm-Message-State: APjAAAXUKoQMynYHi1mxBVzxxbZhDmmZMwjWLd8uG0eFVUy8168lNe+j
+        STcZl8iPGeh4YkcHzgW0WsqjCyiVwBYV9wBotfm90Q==
+X-Google-Smtp-Source: APXvYqxQUk0WYQBzPpqoGAwgt5HqYDWNnE/GxSDuAM84IjirBT0shkbB8HKRCkoo58R/wbA9vlSePjd7Oefh6i5mh4g=
+X-Received: by 2002:aca:fdd8:: with SMTP id b207mr8222796oii.57.1572863354723;
+ Mon, 04 Nov 2019 02:29:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20190930130246.4860-1-brgl@bgdev.pl> <20190930130246.4860-6-brgl@bgdev.pl>
- <20191104090904.GA12355@duo.ucw.cz>
-In-Reply-To: <20191104090904.GA12355@duo.ucw.cz>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Mon, 4 Nov 2019 10:21:23 +0100
-Message-ID: <CAMpxmJWc6G6d5zR9kbGoKckMmGwXHB6o4AbFA56sjcyUZrNXjQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] dt-bindings: leds: max77650: convert the binding
- document to yaml
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
+References: <20191101204558.210235-1-helgaas@kernel.org> <20191101204558.210235-2-helgaas@kernel.org>
+In-Reply-To: <20191101204558.210235-2-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 4 Nov 2019 11:29:03 +0100
+Message-ID: <CAJZ5v0ihZTc_e7ORcAWFOYvLdc9keO2evRYxr9qz-w8WkQtEhQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] PCI/PM: Apply D2 delay as milliseconds, not microseconds
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pon., 4 lis 2019 o 10:09 Pavel Machek <pavel@ucw.cz> napisa=C5=82(a):
+On Fri, Nov 1, 2019 at 9:46 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Hi!
+> From: Bjorn Helgaas <bhelgaas@google.com>
 >
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > Convert the binding document for max77650 LED module to yaml.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> PCI_PM_D2_DELAY is defined as 200, which is milliseconds, but previously we
+> used udelay(), which only waited for 200 microseconds.  Use msleep()
+> instead so we wait the correct amount of time.  See PCIe r5.0, sec 5.9.
 >
-> Acked-by: Pavel Machek <pavel@ucw.cz>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+>  drivers/pci/pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-
-Hi Pavel,
-
-thanks for the Ack, but a much modified version of this is already in
-Rob's branch.
-
-Bart
-
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index e7982af9a5d8..cd96874ae76d 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -886,7 +886,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+>         if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
+>                 pci_dev_d3_sleep(dev);
+>         else if (state == PCI_D2 || dev->current_state == PCI_D2)
+> -               udelay(PCI_PM_D2_DELAY);
+> +               msleep(PCI_PM_D2_DELAY);
+>
+>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
 > --
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/b=
-log.html
+> 2.24.0.rc1.363.gb1bccd3e3d-goog
+>
