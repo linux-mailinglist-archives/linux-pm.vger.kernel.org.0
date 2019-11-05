@@ -2,118 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65799F06B7
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 21:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F844F08B7
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 22:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbfKEUNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 15:13:05 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:45623 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbfKEUNF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 15:13:05 -0500
-Received: by mail-oi1-f196.google.com with SMTP id k2so18737385oij.12;
-        Tue, 05 Nov 2019 12:13:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mU9UcOU7sHcf7HCmRIHXhWHMA1uoQHabE8Uv8Jt+A7E=;
-        b=deYGSv8p6GIzQ3anqm/7VuAyUdkL8f4vSLJd//erntmjUeSYr369cjy2nWUkkDX8BX
-         1T6PqCjcVp8lm3GY5LohQhIQEVqUjZXpAZ8LxMs0d5GaO599TdUR3E2umG8fppna7E/K
-         pn12fGx312nfP23kG7KaPJeUd+QzOi77BifVXHYjMuKy6g2fZqLu+J20/UpJSMONwzLH
-         1k+JRJ9nrTd3Fo0mhO7ZmWsHoWNOYMk7qVcM1pZAYiwbqyTQyCyKo7kEhtyu47DVDi9h
-         sxnJAHPK8SfuYH5nCCzv5+QwLWUssw2vxAp0gAEuTlCW1QHFKGPhnHYvmXhANpkywSKE
-         5qFA==
-X-Gm-Message-State: APjAAAWET6wphwNAdWYbdfGmT6cssUm9sQwmXeUNShouijm4e9DSXMgp
-        T6/aEYB2bu61bbrtu2bt6Q==
-X-Google-Smtp-Source: APXvYqzy0m98tPqHlFSqTVQuTPMUjEJDLNZe7DOwoduqbUy3ipM2+KtNECfZLQnN0fel0V++XN/OPg==
-X-Received: by 2002:aca:dd0a:: with SMTP id u10mr740393oig.130.1572984783628;
-        Tue, 05 Nov 2019 12:13:03 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v13sm1077013ota.53.2019.11.05.12.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 12:13:03 -0800 (PST)
-Date:   Tue, 5 Nov 2019 14:13:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 3/6] dt-bindings: devfreq: Add bindings for imx ddr
- controller
-Message-ID: <20191105201302.GA4772@bogus>
-References: <cover.1572558427.git.leonard.crestez@nxp.com>
- <b9a87c69eb603622303add4f0c02dd4c1262462a.1572558427.git.leonard.crestez@nxp.com>
- <20191104222126.GB5218@bogus>
- <VI1PR04MB7023F375AEDC4549FA12247FEE7E0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+        id S1730118AbfKEVvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 16:51:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729698AbfKEVvb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Nov 2019 16:51:31 -0500
+Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A98002087E;
+        Tue,  5 Nov 2019 21:51:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572990690;
+        bh=0uPoeY7f8Xl2TSYG/j1gfM+nKOLQlwKRV48yW9UgR20=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VAnRBPHjLKMzEhv5+42ap2Fntzf+XRJthXm3kxA7Yj+mc7WwIcuKPJIUN8g8YpbTO
+         6SiUV7u+NJYQ+Fm/v5yvF/6nD/RCBYaWyuHH6CdPEIN6oENxaG9n0ICdRhiUU5M0DY
+         VXV5S+o0KhhUwC0kTW8aUGhEoOl19M7n4UWfCRNc=
+Date:   Tue, 5 Nov 2019 15:51:29 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        KarimAllah Ahmed <karahmed@amazon.de>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 4/6] xen-platform: Convert to generic power management
+Message-ID: <20191105215129.GA36983@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <VI1PR04MB7023F375AEDC4549FA12247FEE7E0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <20191104152330.GA104689@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 07:25:57PM +0000, Leonard Crestez wrote:
-> On 05.11.2019 00:21, Rob Herring wrote:
-> > On Thu, Oct 31, 2019 at 11:50:24PM +0200, Leonard Crestez wrote:
-> >> Add devicetree bindings for the i.MX DDR Controller on imx8m series
-> >> chips. It supports dynamic frequency switching between multiple data
-> >> rates and this is exposed to Linux via the devfreq subsystem.
-> >>
-> >> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> >> ---
-> >>   .../devicetree/bindings/devfreq/imx-ddrc.yaml | 60 +++++++++++++++++++
+On Mon, Nov 04, 2019 at 09:23:30AM -0600, Bjorn Helgaas wrote:
+> On Fri, Nov 01, 2019 at 03:45:56PM -0500, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
 > > 
-> > .../bindings/memory-controllers/
+> > Convert xen-platform from the legacy PCI power management callbacks to the
+> > generic operations.  This is one step towards removing support for the
+> > legacy PCI callbacks.
+> > 
+> > The generic .resume_noirq() operation is called by pci_pm_resume_noirq() at
+> > the same point the legacy PCI .resume_early() callback was, so this patch
+> > should not change the xen-platform behavior.
+> > 
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Okay, but I'm not sure about the rules here. Usually there is a 1:1 
-> mapping between subsystems and bindings directory but I guess devfreq is 
-> odd since it's not really a physical class of device.
+> I made the tweak below to fix the compile error.  I could swear I
+> built this, but I must have been mistaken.
+> 
+> > Cc: Stefano Stabellini <sstabellini@kernel.org>
+> > Cc: KarimAllah Ahmed <karahmed@amazon.de>
 
-Mostly true, but it's not completely 1:1.
+I applied this to pci/pm for v5.5 as part of the larger series:
+https://lore.kernel.org/r/20191101204558.210235-1-helgaas@kernel.org
 
-
-> I saw there is also a drivers/memory and there is already a 
-> devfreq-using driver in there (EXYNOS5422_DMC).
-
-Yeah, well it's been a while since I last tried to clean up locations of 
-things. DDR controller bindings are not in the best shape.
-
-
-> It's not clear if my driver fits in there; as far as I can see the only 
-> "core" functionality in drivers/memory is parsing DDR timings from DTS 
-> but for imx8m this is all controlled in firmware.
-
-You shouldn't have to think about that. Bindings should be for DDR 
-controllers regardless of whether there's a driver for devfreq, EDAC, 
-perf, or ??? or all of those.
-
-Rob
+> > ---
+> >  drivers/xen/platform-pci.c | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/xen/platform-pci.c b/drivers/xen/platform-pci.c
+> > index 5e30602fdbad..e06e8769eb84 100644
+> > --- a/drivers/xen/platform-pci.c
+> > +++ b/drivers/xen/platform-pci.c
+> > @@ -168,13 +168,17 @@ static const struct pci_device_id platform_pci_tbl[] = {
+> >  	{0,}
+> >  };
+> >  
+> > +static struct dev_pm_ops platform_pm_ops = {
+> > +	.resume_noirq =   platform_pci_resume,
+> > +};
+> > +
+> >  static struct pci_driver platform_driver = {
+> >  	.name =           DRV_NAME,
+> >  	.probe =          platform_pci_probe,
+> >  	.id_table =       platform_pci_tbl,
+> > -#ifdef CONFIG_PM
+> > -	.resume_early =   platform_pci_resume,
+> > -#endif
+> > +	.driver = {
+> > +		.pm =     &platform_pm_ops,
+> > +	},
+> >  };
+> >  
+> >  builtin_pci_driver(platform_driver);
+> > -- 
+> > 2.24.0.rc1.363.gb1bccd3e3d-goog
+> 
+> diff --git a/drivers/xen/platform-pci.c b/drivers/xen/platform-pci.c
+> index e06e8769eb84..59e85e408c23 100644
+> --- a/drivers/xen/platform-pci.c
+> +++ b/drivers/xen/platform-pci.c
+> @@ -74,7 +74,7 @@ static int xen_allocate_irq(struct pci_dev *pdev)
+>  			"xen-platform-pci", pdev);
+>  }
+>  
+> -static int platform_pci_resume(struct pci_dev *pdev)
+> +static int platform_pci_resume(struct device *dev)
+>  {
+>  	int err;
+>  
+> @@ -83,7 +83,7 @@ static int platform_pci_resume(struct pci_dev *pdev)
+>  
+>  	err = xen_set_callback_via(callback_via);
+>  	if (err) {
+> -		dev_err(&pdev->dev, "platform_pci_resume failure!\n");
+> +		dev_err(dev, "platform_pci_resume failure!\n");
+>  		return err;
+>  	}
+>  	return 0;
