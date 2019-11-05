@@ -2,111 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1CFEF54B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 07:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2758EF560
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 07:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730544AbfKEGDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 01:03:01 -0500
-Received: from gateway33.websitewelcome.com ([192.185.145.87]:46065 "EHLO
-        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730520AbfKEGDB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 01:03:01 -0500
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id B2D4811B3F
-        for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2019 23:42:39 -0600 (CST)
-Received: from br164.hostgator.com.br ([192.185.176.180])
-        by cmsmtp with SMTP
-        id Rrbzi7ltwVUVYRrbzihrkV; Mon, 04 Nov 2019 23:42:39 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NXoTDm5tilUy+3fiCn1QLdQDuJ4WM4+qUq84t9usS4k=; b=y0g1VKoYKEdO/9b5CptUIGjYdl
-        umbUcAqMZWmxgEhDq4Ar0JYjUCfRTD1FnDKvbP5uFsGSVn1HuquS/X+qSnYnCBXJWx/0DEEGZhcth
-        8MifgPRm+PRuRiVH8XqvFjJ9lHWcIv+DgFrzhqx7gdUpfqSIGY/JvFmwWQ21Z+8NYXa0abAMJx635
-        XGRLXX/1UHKC1Ih7q3pYk4d7b1FhWFKIhUxzIW/YWQ5urr55TrEdJmkR/XqEA8055uBTqAvAuRnV+
-        FExZxxefngQV3WKSmN/tkWbZNtHeZ5nXM9k9TrzY5I6fwqoVmBb+G0AYg+vP5YiTlISgu+nwZpqLY
-        9fdEeBaQ==;
-Received: from [191.31.196.28] (port=37450 helo=castello.castello)
-        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <matheus@castello.eng.br>)
-        id 1iRrby-002sjK-Uv; Tue, 05 Nov 2019 02:42:39 -0300
-From:   Matheus Castello <matheus@castello.eng.br>
-To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
-Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, lee.jones@linaro.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Matheus Castello <matheus@castello.eng.br>
-Subject: [PATCH v5 5/5] power: supply: max17040: Send uevent in SOC and status change
-Date:   Tue,  5 Nov 2019 02:42:18 -0300
-Message-Id: <20191105054218.29826-6-matheus@castello.eng.br>
-X-Mailer: git-send-email 2.24.0.rc2
-In-Reply-To: <20191105054218.29826-1-matheus@castello.eng.br>
-References: <20191105015827.GA332@bogus>
- <20191105054218.29826-1-matheus@castello.eng.br>
+        id S1728515AbfKEGIV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 01:08:21 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:36242 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725800AbfKEGIV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 01:08:21 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA568ADZ075972;
+        Tue, 5 Nov 2019 00:08:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572934090;
+        bh=Lj8BuL9H7FwKRGUfF3Cm96AZFzlChHbAeMHo+XORVoY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=ErOLakDQbiDbOLj3bzCsc+GL6gKpscJhlH5/6IAu5lSYNGJbdQJ72jRR8cXMkX8Np
+         /zLi02UkEswhjGZxWaeFYeieseEHoPmWXr+9WKXBjPOaUZySYrxrkD93RsCEHfuM/1
+         JZ/KYzCCocAosFZyuySaxAHiaHuhJwY6pCScF14I=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA568A60059425;
+        Tue, 5 Nov 2019 00:08:10 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 5 Nov
+ 2019 00:07:55 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 5 Nov 2019 00:07:55 -0600
+Received: from [172.24.191.45] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA5686kK089087;
+        Tue, 5 Nov 2019 00:08:07 -0600
+Subject: Re: [PATCH -next] thermal: ti-soc-thermal: Remove dev_err() on
+ platform_get_irq() failure
+To:     YueHaibing <yuehaibing@huawei.com>, <edubezval@gmail.com>,
+        <rui.zhang@intel.com>, <daniel.lezcano@linaro.org>,
+        <amit.kucheria@verdurent.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20191102075654.36700-1-yuehaibing@huawei.com>
+From:   Keerthy <j-keerthy@ti.com>
+Message-ID: <655d95c2-20d2-e03f-539e-32fbe69da9fc@ti.com>
+Date:   Tue, 5 Nov 2019 11:38:35 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - castello.eng.br
-X-BWhitelist: no
-X-Source-IP: 191.31.196.28
-X-Source-L: No
-X-Exim-ID: 1iRrby-002sjK-Uv
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (castello.castello) [191.31.196.28]:37450
-X-Source-Auth: matheus@castello.eng.br
-X-Email-Count: 73
-X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
-X-Local-Domain: yes
+In-Reply-To: <20191102075654.36700-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Notify core through power_supply_changed() in case of changes in state
-of charge and power supply status. This is useful for user-space to
-efficiently update current battery level.
 
-Signed-off-by: Matheus Castello <matheus@castello.eng.br>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/power/supply/max17040_battery.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index c48a691cbd7b..d7405650cc38 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -209,10 +209,19 @@ static void max17040_check_changes(struct i2c_client *client)
- static void max17040_work(struct work_struct *work)
- {
- 	struct max17040_chip *chip;
-+	int last_soc, last_status;
+On 02/11/19 1:26 PM, YueHaibing wrote:
+> platform_get_irq() will call dev_err() itself on failure,
+> so there is no need for the driver to also do this.
+> This is detected by coccinelle.
 
- 	chip = container_of(work, struct max17040_chip, work.work);
-+
-+	/* store SOC and status to check changes */
-+	last_soc = chip->soc;
-+	last_status = chip->status;
- 	max17040_check_changes(chip->client);
+Acked-by: Keerthy <j-keerthy@ti.com>
 
-+	/* check changes and send uevent */
-+	if (last_soc != chip->soc || last_status != chip->status)
-+		power_supply_changed(chip->battery);
-+
- 	queue_delayed_work(system_power_efficient_wq, &chip->work,
- 			   MAX17040_DELAY);
- }
---
-2.24.0.rc2
-
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>   drivers/thermal/ti-soc-thermal/ti-bandgap.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+> index 2fa78f7..89c3ba7 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+> @@ -787,10 +787,9 @@ static int ti_bandgap_talert_init(struct ti_bandgap *bgp,
+>   	int ret;
+>   
+>   	bgp->irq = platform_get_irq(pdev, 0);
+> -	if (bgp->irq < 0) {
+> -		dev_err(&pdev->dev, "get_irq failed\n");
+> +	if (bgp->irq < 0)
+>   		return bgp->irq;
+> -	}
+> +
+>   	ret = request_threaded_irq(bgp->irq, NULL,
+>   				   ti_bandgap_talert_irq_handler,
+>   				   IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+> 
