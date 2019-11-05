@@ -2,110 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1961EEF533
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 06:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99311EF547
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 07:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387520AbfKEFym (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 00:54:42 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46065 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387443AbfKEFym (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 00:54:42 -0500
-Received: by mail-pl1-f193.google.com with SMTP id y24so8807633plr.12;
-        Mon, 04 Nov 2019 21:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=j/zjH1WsGxqzWXQl7cWzzAx6Ls1Pf10bXD65wF5zXRA=;
-        b=Z6WgzEkt/ANlGabZkKqXN6RmV5XMrA5SiDCHoSJKDz3H5pnqawFalWJLWNuaHtsUak
-         QA8CwlkHE+KFsS36o6edkbQNBbnrnYwN6TRZOUbUevyEykq34SovXvL5feuZY/48SAbp
-         ydPoXk3w1C2mgVjRcHWk1/epIWbn2zycR33cpih3szV8nLVxkUpLATOPbXPgcdm7Fs0q
-         kkkrit31SIftidf5ckDzgE6tVJSATMAeaFGMYJ14WNCcyVKhwlIZbfTsGVloEOzWTPmV
-         wkTr7mlKBhSRCHM3ZSZrdHcT6C5lGm4m2aFyP+msECEGbFkvuCNgRFxFRpGI0MHXziuU
-         gUzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=j/zjH1WsGxqzWXQl7cWzzAx6Ls1Pf10bXD65wF5zXRA=;
-        b=Nssp1qYgb9rDIRkHx4PLREeZkhEvbcav81qpXXn2WPChkaZ1XM7BbOdwGffTCXc4su
-         T020jnVEVfQk0z3FkHBhGIjeWjlu+tari6KenahR8ZQoWWmIIoxIAy91jQawKI9sLpRW
-         +e9lBddQQNQUQXAGG/B6w7Iw7yp8sVAJrGPFxQbb7SGy02XTbguxg9vdy7nhfaEm0f5p
-         +CSyOSNOx7l1M2Ce+GNcdOuPuAlA773XXY3LEphp4I1vIABXru2OIwJmrnjCnnLCBwvr
-         CC1L48wFqtDvJL1eMFsWYIYAOOiUPIHSKTGtZXdWOR+/5OP4QEZuNG/UPdmBfnIOAiYy
-         zgrQ==
-X-Gm-Message-State: APjAAAUII261gS7h15zGE0haYB96hkweAnEp1/14qVbIectTkOS0WE7f
-        vSLI63rQUhQfkfebGUv0lcBoeW/beTK77Q==
-X-Google-Smtp-Source: APXvYqzoh0Yyyw+RhnZSqLU7FF50fOQSb5iK2ir+hQYvcEAP7bxG99RI/nYlxb1paxMhY3MPJBV+RQ==
-X-Received: by 2002:a17:902:7e45:: with SMTP id a5mr7715143pln.315.1572933281462;
-        Mon, 04 Nov 2019 21:54:41 -0800 (PST)
-Received: from jamal-desktop (97-126-66-56.tukw.qwest.net. [97.126.66.56])
-        by smtp.gmail.com with ESMTPSA id w5sm6944900pfd.31.2019.11.04.21.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 21:54:40 -0800 (PST)
-From:   Jamal Shareef <jamal.k.shareef@gmail.com>
-To:     outreachy-kernel@googlegroups.com
-Cc:     Jamal Shareef <jamal.k.shareef@gmail.com>,
-        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
-        rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: intel_pstate: Fix sparse plain int pointer
-Date:   Mon,  4 Nov 2019 21:54:27 -0800
-Message-Id: <20191105055427.11943-1-jamal.k.shareef@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1730480AbfKEGCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 01:02:43 -0500
+Received: from gateway22.websitewelcome.com ([192.185.47.228]:25474 "EHLO
+        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726033AbfKEGCn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 01:02:43 -0500
+X-Greylist: delayed 1217 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Nov 2019 01:02:42 EST
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id B170AB398
+        for <linux-pm@vger.kernel.org>; Mon,  4 Nov 2019 23:42:24 -0600 (CST)
+Received: from br164.hostgator.com.br ([192.185.176.180])
+        by cmsmtp with SMTP
+        id RrbkijZn8PUvSRrbkiAZQJ; Mon, 04 Nov 2019 23:42:24 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=XzVcb7tGAONUw/MGZuqDTvZTFYKEVcjqC7bTyT+W++E=; b=J6ALkRzpiRDm5X9ZdaST4cneod
+        BrjezjeL/IrdYUoMKUVlYMNuP3yDUwfkH3lhXZd97t8danEYqui1HSN1GYwqIko52jLrgTO04i4bM
+        +9y7CDKzppKukf24XpImCOswMRdNNbktbD4545x5v5sjfwLTtZi5hJtyil9TcvpqJRMFZtcTIi5gF
+        eWCEpKoQSOK2yIjECxrDdmROxabYDX2Rh93c483uyH0dS899jDOkoTqzF1oDWBLYee7HpDGAhaeuC
+        NCTwFdELZMbVXIVB+vAq2Gr8KokAQXwdHSee5nIB4Upey+dziCWUjua07gtNgV83YIvL9v6NuEWAD
+        qUmpIZgQ==;
+Received: from [191.31.196.28] (port=37450 helo=castello.castello)
+        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <matheus@castello.eng.br>)
+        id 1iRrbj-002sjK-SJ; Tue, 05 Nov 2019 02:42:24 -0300
+From:   Matheus Castello <matheus@castello.eng.br>
+To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
+Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, lee.jones@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matheus Castello <matheus@castello.eng.br>
+Subject: [PATCH v5 0/5] power: supply: MAX17040: Add IRQ for low level and alert SOC changes
+Date:   Tue,  5 Nov 2019 02:42:13 -0300
+Message-Id: <20191105054218.29826-1-matheus@castello.eng.br>
+X-Mailer: git-send-email 2.24.0.rc2
+In-Reply-To: <20191105015827.GA332@bogus>
+References: <20191105015827.GA332@bogus>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - castello.eng.br
+X-BWhitelist: no
+X-Source-IP: 191.31.196.28
+X-Source-L: No
+X-Exim-ID: 1iRrbj-002sjK-SJ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (castello.castello) [191.31.196.28]:37450
+X-Source-Auth: matheus@castello.eng.br
+X-Email-Count: 18
+X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Patch fixes sparse warning: Using plain integer as NULL pointer.
-Replaces assignment of 0 to pointer with NULL assignment.
+This series add IRQ handler for low level SOC alert, define a devicetree
+binding attribute to configure the alert level threshold and check for
+changes in SOC and power supply status for send uevents.
 
-Signed-off-by: Jamal Shareef <jamal.k.shareef@gmail.com>
----
- drivers/cpufreq/intel_pstate.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Max17043/17044 have a pin for alert host about low level state of charge and
+this alert can be configured in a threshold from 1% up to 32% of SOC.
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 53a51c169451..cfcf34e04c3d 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2664,21 +2664,21 @@ enum {
- 
- /* Hardware vendor-specific info that has its own power management modes */
- static struct acpi_platform_list plat_info[] __initdata = {
--	{"HP    ", "ProLiant", 0, ACPI_SIG_FADT, all_versions, 0, PSS},
--	{"ORACLE", "X4-2    ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4-2L   ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4-2B   ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X3-2    ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X3-2L   ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X3-2B   ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4470M2 ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4270M3 ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4270M2 ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4170M2 ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4170 M3", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X4275 M3", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "X6-2    ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
--	{"ORACLE", "Sudbury ", 0, ACPI_SIG_FADT, all_versions, 0, PPC},
-+	{"HP    ", "ProLiant", 0, ACPI_SIG_FADT, all_versions, NULL, PSS},
-+	{"ORACLE", "X4-2    ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4-2L   ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4-2B   ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X3-2    ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X3-2L   ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X3-2B   ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4470M2 ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4270M3 ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4270M2 ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4170M2 ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4170 M3", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X4275 M3", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "X6-2    ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
-+	{"ORACLE", "Sudbury ", 0, ACPI_SIG_FADT, all_versions, NULL, PPC},
- 	{ } /* End */
- };
- 
--- 
-2.17.1
+Tested on Toradex Colibri iMX7D, with a SparkFun Lipo Fuel Gauge module
+based on MAXIM MAX17043.
+
+Thanks Krzysztof for your time reviewing it. Let me know what you think about
+the fixes.
+
+Changes since v4:
+(Suggested by Krzysztof Kozlowski)
+- Fix code style and alignment issues
+- Keep IRQF_TRIGGER_FALLING | IRQF_ONESHOT instead client->flags
+
+(Suggested by Rob Herring)
+- Add reference to the MFD description
+- Fix the dt-bindings commit description
+
+Matheus Castello (5):
+  power: supply: max17040: Add IRQ handler for low SOC alert
+  dt-bindings: power: supply: Max17040: Add DT bindings for max17040
+    fuel gauge
+  devicetree: mfd: max14577: Add reference to max14040_battery.txt
+    descriptions
+  power: supply: max17040: Config alert SOC low level threshold from FDT
+  power: supply: max17040: Send uevent in SOC and status change
+
+ .../devicetree/bindings/mfd/max14577.txt      |   2 +
+ .../power/supply/max17040_battery.txt         |  33 ++++
+ drivers/power/supply/max17040_battery.c       | 142 +++++++++++++++++-
+ 3 files changed, 172 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+
+--
+2.24.0.rc2
 
