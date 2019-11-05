@@ -2,132 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0919F01C7
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 16:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C565F0258
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 17:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389793AbfKEPpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 10:45:10 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34121 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389571AbfKEPpK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 10:45:10 -0500
-Received: by mail-lj1-f194.google.com with SMTP id 139so22436144ljf.1;
-        Tue, 05 Nov 2019 07:45:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ay+h7c6u74y0NDeAAMw4e9/VcMJ072gLoBrrzIdrw+4=;
-        b=dywZ6FpAkymA6khuADv5aozdmj+qm8Ih+0CsbdG53LZ53xAAFb6miFnpuZclfH19JD
-         4uHXVPdmZFzYVJoOHJtboVneTqLMx5U8l0+uxQANTMH1Utw/MPrSQy9wvj3EbZ7ZPFBD
-         I3Pk8IJcJCibzzyu3G+IrQQudXl0bWdcv+7oKscO3UI6zqbgU8CQZ4EFoEnJQKGbodL9
-         vOVmdFAFpiKNoP9Ks/Ivl2orsTYcuwsThyvgDkqyJefqkumjNWscHUCJxxiV/7SKP0QF
-         8h1rFJHbrRIL3bSanhznb31tea+zYasdGaxQDaC/5PwDPqzG5xJMVQuLnSOaWaPPTkZX
-         P7Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ay+h7c6u74y0NDeAAMw4e9/VcMJ072gLoBrrzIdrw+4=;
-        b=PFsAxjrbBLJ5EtTwb6FGYCvkHqvUrsT8I5HRNn0pLSux0hpVAH3px8rcC446Vw2EBJ
-         QzhsbZZxjE46e+uCiCGAdMzJbjWZ0//BVqBni92XNdRTbrIU4ww4UQGV0k9DppvN53Un
-         M5lSSInVdTW0N2qMx0v2epK8zoqeovT6mukhNoFz9sSiudHKjTtLY/hZ1FAcMJwrGZwN
-         vmW0kFEXs+BVIqufIbrUsDyQZjoHdulHVB97mr/1dlUgmMbr0lGrS1zxlGLKJ1n0Qrp4
-         /E6LcmvIwWrb7yvtYsYK8yeQnghSCvrYXKM9LyvYCjWuaJjQDlxzCIb/2vD/lGNBUngX
-         aftw==
-X-Gm-Message-State: APjAAAVQKsmr8xFltcxrt0QvactLi4gU7CwIRdnnGEJz38ZxlII6nu3z
-        3iE/jgiI216mJ4UOi69nFlUgssnwYrAAfC7wOm8W2+Gw
-X-Google-Smtp-Source: APXvYqwgP223ysQHD0U2ApItHEUOrYRG++kDvJ8HQF8nebhnlOaxv4s/qoh1vpev3gpdrwpDFsgYxc6JjaWYO9ujXrw=
-X-Received: by 2002:a2e:9842:: with SMTP id e2mr6656552ljj.93.1572968707730;
- Tue, 05 Nov 2019 07:45:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20191102145530.16104-1-linux@roeck-us.net> <CAC5umyi9PuMTERNvNShfzu725bhBtkOZsD3NWtcxhKq5XGU2CQ@mail.gmail.com>
-In-Reply-To: <CAC5umyi9PuMTERNvNShfzu725bhBtkOZsD3NWtcxhKq5XGU2CQ@mail.gmail.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Wed, 6 Nov 2019 00:44:56 +0900
-Message-ID: <CAC5umyiJT300+MunDi4wwwAgSxiqx7_rersbNRvybcNoo3kGDg@mail.gmail.com>
-Subject: Re: [PATCH v4] nvme: Add hardware monitoring support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Keith Busch <kbusch@kernel.org>, Chris Healy <cphealy@gmail.com>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
+        id S2390054AbfKEQJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 11:09:44 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:60118 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390035AbfKEQJo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 11:09:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=zYj73f1UT7gOij9GCCcNrorE4sfMx2ngwu5XUOipz28=; b=icIN7PqFV7lEMwnaLNKG7bxBF
+        D3oYIWzLqeG4iMGvdsbIM2GeR9041rEZBJiqBPeznRMvwpUeOWEgaCnyAZ6A66J5qZws2AGah9rke
+        x4sP8yJLok3HX448lZB7ah2qcA7SZWua53CWYlhSAH1KhCdwPti+ikajFdRD+HeNU5Hwvx+8RfHWf
+        yQtCuFLP5wBsKI8iz55oSNtq0pQmmcyXgFZS3eKUF1Tnwn810bw0yVCGxJZ7AQRh2g1GBg0TgdaT2
+        SGimOUiWNsppaBBdQVAQKftbxcec2ULbOy/DjnG8PGBbdR5y8igtL3GemlMDBIXPFuo6MYFKrQpQ5
+        tEvuJmxyg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iS1Op-0005lQ-NQ; Tue, 05 Nov 2019 16:09:43 +0000
+Date:   Tue, 5 Nov 2019 08:09:43 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH 5/5] PCI: PM: Fold __pci_complete_power_transition() into
+ its caller
+Message-ID: <20191105160943.GA19190@infradead.org>
+References: <2771503.n70vfTtcVb@kreacher>
+ <1769241.yKxyosiRnQ@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1769241.yKxyosiRnQ@kreacher>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B411=E6=9C=886=E6=97=A5(=E6=B0=B4) 0:38 Akinobu Mita <akinobu.mi=
-ta@gmail.com>:
->
-> 2019=E5=B9=B411=E6=9C=882=E6=97=A5(=E5=9C=9F) 23:55 Guenter Roeck <linux@=
-roeck-us.net>:
-> > diff --git a/drivers/nvme/host/nvme-hwmon.c b/drivers/nvme/host/nvme-hw=
-mon.c
-> > new file mode 100644
-> > index 000000000000..28b4b7f43bb0
-> > --- /dev/null
-> > +++ b/drivers/nvme/host/nvme-hwmon.c
-> > @@ -0,0 +1,181 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * NVM Express hardware monitoring support
-> > + * Copyright (c) 2019, Guenter Roeck
-> > + */
-> > +
-> > +#include <linux/hwmon.h>
-> > +#include <asm/unaligned.h>
-> > +
-> > +#include "nvme.h"
-> > +
-> > +struct nvme_hwmon_data {
-> > +       struct nvme_ctrl *ctrl;
-> > +       struct nvme_smart_log log;
-> > +       struct mutex read_lock;
-> > +};
-> > +
-> > +static int nvme_hwmon_get_smart_log(struct nvme_hwmon_data *data)
-> > +{
-> > +       int ret;
-> > +
-> > +       ret =3D nvme_get_log(data->ctrl, NVME_NSID_ALL, NVME_LOG_SMART,=
- 0,
-> > +                          &data->log, sizeof(data->log), 0);
-> > +
-> > +       return ret <=3D 0 ? ret : -EIO;
-> > +}
-> > +
-> > +static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types=
- type,
-> > +                          u32 attr, int channel, long *val)
-> > +{
-> > +       struct nvme_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +       struct nvme_smart_log *log =3D &data->log;
-> > +       int temp;
-> > +       int err;
-> > +
-> > +       /*
-> > +        * First handle attributes which don't require us to read
-> > +        * the smart log.
-> > +        */
-> > +       switch (attr) {
-> > +       case hwmon_temp_max:
-> > +               *val =3D (data->ctrl->wctemp - 273) * 1000;
-> > +               return 0;
-> > +       case hwmon_temp_crit:
-> > +               *val =3D (data->ctrl->cctemp - 273) * 1000;
->
-> This attribute should be 'hwmon_temp_max_alarm' rather than
-> 'hwmon_temp_crit_alarm'?
+On Tue, Nov 05, 2019 at 11:32:02AM +0100, Rafael J. Wysocki wrote:
+>  	if (state > PCI_D3cold)
+> @@ -1132,10 +1112,12 @@ int pci_set_power_state(struct pci_dev *
+>  	error = pci_raw_set_power_state(dev, state > PCI_D3hot ?
+>  					PCI_D3hot : state);
+>  
+> -	if (!__pci_complete_power_transition(dev, state))
+> -		error = 0;
+> +	ret = pci_platform_power_transition(dev, state);
+> +	/* Powering off a bridge may power off the whole hierarchy */
+> +	if (!ret && state == PCI_D3cold)
+> +		pci_bus_set_current_state(dev->subordinate, PCI_D3cold);
+>  
+> -	return error;
+> +	return ret ? error : 0;
 
-Oops, I misquoted the code.
+Total nitpick, but why not:
 
-This comment should be addressed to the code below:
+	if (pci_platform_power_transition(dev, state))
+		return error;
 
-+       case hwmon_temp_crit_alarm:
-+               *val =3D !!(log->critical_warning & NVME_SMART_CRIT_TEMPERA=
-TURE);
-+               break;
+	/* Powering off a bridge may power off the whole hierarchy */
+	if (state == PCI_D3cold)
+		pci_bus_set_current_state(dev->subordinate, PCI_D3cold);
+	return 0;
+
