@@ -2,104 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C2FEF7B6
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 10:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCCBEF865
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 10:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730536AbfKEJEc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 04:04:32 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36649 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727925AbfKEJEc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 04:04:32 -0500
-Received: by mail-pl1-f196.google.com with SMTP id g9so9061683plp.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Nov 2019 01:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=X1aa+RRLCGC9my2m6kd83snLA2qyRmty2v6y1d5R9P0=;
-        b=endRY/Rltnfhp07fO3ptST2djGJsP4DdqdYX5XkzofqOnX0ENzldtbpHu3ndfGNcRC
-         WhzHSKVymDgWvFSuGgBDAcZNiaAQrJYFYWb6zhrouxvKjKspy7ST+c28KInjRb7c6HH6
-         1bk0NKQLwE9OCUPkuIqVkw8JncayJ8YYWwxkLfPPSOosU91aQqmZHGGHX1+L6vCwWz7b
-         q/IoI67ej+buHog5IwRC22tzfHy8P5grReGhijAXvOPweJ5VAJZzBtUISBRBgsi+uXW0
-         9okhfeWC3Qnr7wPFDHtC5VtqVGxGQjbYgoBHoiBMzuWTGO6Q6fQk2w2BTOgX5FP9uWmV
-         vMHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X1aa+RRLCGC9my2m6kd83snLA2qyRmty2v6y1d5R9P0=;
-        b=YmclAlHImCglMnvEcg3IrQ6hf5P7r5dMECs7mV4toW8r28AHknc+uen7Z3DQsjAjfh
-         EjFSgP6/Qljq17SfdReGwmvtLe3heyX8f4cm2ncVeGNELFq6R5z/dcjlVOj1x/fSBzWz
-         9kCE0hAX0PCK5Xb//LoeZQobBs2DSWOw8FbK+vAI9Z+ppGnwnP+TPNs7rZjj6yqQcaol
-         gLBF3vyfd1ATnFmPa3WGevqZ0IpT+3tMxK69ZvkoVnzpK+8BOFNL4RHgpnLRULeiSVCn
-         KgMAs0TjJ0SQpyl9nBmlcsworh0aNxVB1/G18/XGGYUrNNH9jK3q3kZaqSUPcXjBJQ1I
-         bG2Q==
-X-Gm-Message-State: APjAAAXkZNZpEbU55Qu6qzEKF9a56WooWTD8vyBcTAGw0g/EG5CmYit+
-        3lCQsLxKL7eyiBdA6iy7Z6DyHA==
-X-Google-Smtp-Source: APXvYqxpCk6VYogCmBRUaj33ltVVU8V3qzwuVeHtSMuP604mRn5mA22dm6U3ZPTDJtZl24ulfM7MIg==
-X-Received: by 2002:a17:902:9a0a:: with SMTP id v10mr459102plp.190.1572944669845;
-        Tue, 05 Nov 2019 01:04:29 -0800 (PST)
-Received: from localhost ([122.171.110.253])
-        by smtp.gmail.com with ESMTPSA id a29sm26327469pfr.49.2019.11.05.01.04.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 Nov 2019 01:04:28 -0800 (PST)
-Date:   Tue, 5 Nov 2019 14:34:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-Cc:     linux-kernel@lists.codethink.co.uk,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: fix integer/pointer warnings in
- acpi_platform_list
-Message-ID: <20191105090422.vehycbs7eubwq7xq@vireshk-i7>
-References: <20191105075225.9083-1-ben.dooks@codethink.co.uk>
+        id S1730631AbfKEJQj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 04:16:39 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:58854 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730528AbfKEJQj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 04:16:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1572945397; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=no3TrOXPIr0fb/tqGISxsTogfkVht99KnNkO4ofz60M=;
+        b=vq5W//hPFzbGEyBcqtgjAWIk3JU4FOQdB3QjM1LbXjuiaFJKNXYW0nYzdGurjRyoY2Qhvu
+        N8T+SFiQmKA3tQvgWFgjwY3V+/Nb59Xu0mWKfNUhnSh8lhI0pVPG9S1lem3ba6E5+TtMWB
+        Z6TXGP/IVLwclNA4ZfNytBlcpvtOoF4=
+Date:   Tue, 05 Nov 2019 10:16:31 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] dt-bindings: power/supply: Document generic USB
+ charger
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@zcrc.me
+Message-Id: <1572945391.3.1@crapouillou.net>
+In-Reply-To: <CAL_Jsq+aSXPT-vmHbDLygO0G3RmM3svTeS+S5FKKjj_Auf3gPw@mail.gmail.com>
+References: <20191103220801.10666-1-paul@crapouillou.net>
+        <CAL_Jsq+aSXPT-vmHbDLygO0G3RmM3svTeS+S5FKKjj_Auf3gPw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191105075225.9083-1-ben.dooks@codethink.co.uk>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-11-19, 07:52, Ben Dooks (Codethink) wrote:
-> The fourth field in this table is a pointer, not an integer so replace
-> the 0 with a NULL to avoid the following sparse warnings:
-> 
-> drivers/cpufreq/intel_pstate.c:2667:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2668:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2669:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2670:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2671:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2672:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2673:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2674:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2675:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2676:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2677:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2678:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2679:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2680:64: sparse: sparse: Using plain integer as NULL pointer
-> drivers/cpufreq/intel_pstate.c:2681:64: sparse: sparse: Using plain integer as NULL pointer
-> 
-> Signed-off-by: Ben Dooks (Codethink) <ben.dooks@codethink.co.uk>
-> ---
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+Hi Rob,
 
-Someone else posted this before you :)
 
-https://lore.kernel.org/lkml/20191105055427.11943-1-jamal.k.shareef@gmail.com/
+Le lun., nov. 4, 2019 at 07:52, Rob Herring <robh+dt@kernel.org> a=20
+=E9crit :
+> On Sun, Nov 3, 2019 at 4:08 PM Paul Cercueil <paul@crapouillou.net>=20
+> wrote:
+>>=20
+>>  Add documentation about the devicetree bindings for the generic USB
+>>  charger.
+>=20
+> What makes it generic?
 
-Will be good if you can review that. Thanks.
+It only uses the USB PHY subsystem, which already has some half-baked=20
+support for chargers but not bound to the power-supply subsystem.
 
--- 
-viresh
+
+>>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   .../bindings/power/supply/usb-charger.txt     | 24=20
+>> +++++++++++++++++++
+>>   1 file changed, 24 insertions(+)
+>>   create mode 100644=20
+>> Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>=20
+>>  diff --git=20
+>> a/Documentation/devicetree/bindings/power/supply/usb-charger.txt=20
+>> b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  new file mode 100644
+>>  index 000000000000..fd46734cb0e5
+>>  --- /dev/null
+>>  +++ b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  @@ -0,0 +1,24 @@
+>>  +Generic USB charger bindings
+>>  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>  +
+>>  +Required properties :
+>>  + - compatible : should be "usb-charger"
+>>  + - phys: phandle to the USB PHY
+>>  +
+>>  +Example:
+>>  +
+>>  +usb_con: extcon {
+>>  +       compatible =3D "linux,extcon-usb-gpio";
+>>  +       vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
+>>  +};
+>>  +
+>>  +usb_phy: usb-phy@0 {
+>>  +       compatible =3D "usb-nop-xceiv";
+>>  +       #phy-cells =3D <0>;
+>>  +       extcon =3D <&usb_con>;
+>=20
+> extcon is deprecated in favor of usb-connector binding. See
+> .../bindings/connector/usb-connector.txt. There's also some pending
+> patches for adding GPIO based connector controls including Vbus sense
+> (GPIO input) and control (regulator via a GPIO).
+>=20
+> Rob
+
+I understand that the usb-connector binding is better, but the current=20
+code doesn't integrate at all with the USB PHY subsystem, which has its=20
+own code to handle ID and VBUS GPIOs and supports notifiers. Is that=20
+deprecated then?
+
+What's the big picture here?
+
+Thanks,
+-Paul
+
+
+=
+
