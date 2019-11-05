@@ -2,121 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E32F8EFE8E
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 14:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E42EFEF1
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 14:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389217AbfKEN3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 08:29:36 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45522 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389214AbfKEN3g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 08:29:36 -0500
-Received: by mail-lf1-f68.google.com with SMTP id v8so15086694lfa.12;
-        Tue, 05 Nov 2019 05:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZOTg6g7hCuvtXnBHLuvcs7p7udu+4fyfYleTU75B/EM=;
-        b=p5Xj5ezgsgFtifssHjdEwSuNEJ/GCbehuE5g+iH1oYuhg7XMTeFgXrwV+Ek8E5Q0DS
-         fl0zAfWEA94oiTi2JTJneBAiFOf1rhPK//qsATHTyDX+BgAKS84L1hnCVkjcYHD2gyvq
-         MKraJGRUChWYOmE6Dkvzkc123NQ/EVuly2Qv2YIoYJeDT3QOhm9vDg5HZpOgJBmEiixK
-         4pNSBn1eoGXwqZ/D2cr1JkPThDvWDQUUw1uuvL3wRih70+/Wc/gUGQWRwcDEbbqRO79O
-         8iMjrlPHVdbkk7+spFGJUSbTgK75cAWDPUHjUlN9e8graqJWZXa+yXI5HvqH12bj7IMO
-         FI2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZOTg6g7hCuvtXnBHLuvcs7p7udu+4fyfYleTU75B/EM=;
-        b=oVJSbkoYc7JoW6DGLyoyaFTpzD1Uub/xwqlUIyRwpD/hsyBWPeCw7jee0kQfqevjYG
-         Fa5lYLIP9n00QDFNfdru6OubzdWaLgLbgLKFgLpKRA6tLT4MZd5QnDUoYixItyKFC5zI
-         ltO66NajzZByQ8yYov3mE4YI88JJnNzMc129STVtrgxPTKN7GYROT5KmVkuPqsVLZ/1x
-         1m3KmrcRfF7fP0c816kBPttN4zZe85ImyGgktnqkcWSI1r4MEVIz1uOSivhH6/yeSTO5
-         O1egMYotLDYJEoxe7nEn6kKoS0ncL7AszGVsDDLFvsTiHahK7YQvoYFrulpmoJLQJPH0
-         7+xQ==
-X-Gm-Message-State: APjAAAXw9VUGG/5k8kV9dVHGbY5CWL85lQXvESFTMopIaI2lBSQFY9+6
-        bp38h3JQd0MDfjkaaxPPR2Q3rIiV
-X-Google-Smtp-Source: APXvYqznZXKXH8nF2dSdhtB4hX0nZfuUp2RVCTfMvSd7yo4ZS00SQT3DtwBWwYiNxDgib34c5ZpYZA==
-X-Received: by 2002:a19:6d12:: with SMTP id i18mr21011786lfc.153.1572960573592;
-        Tue, 05 Nov 2019 05:29:33 -0800 (PST)
-Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id j23sm8037113lji.41.2019.11.05.05.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2019 05:29:32 -0800 (PST)
-Subject: Re: [PATCH v9 19/19] PM / devfreq: tegra20/30: Add Dmitry as a
- maintainer
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191104215617.25544-1-digetx@gmail.com>
- <CGME20191104221855epcas4p3761ca7e09ffa66b686be8b5a840ea383@epcas4p3.samsung.com>
- <20191104215617.25544-20-digetx@gmail.com>
- <0e7db72b-37ff-a36e-11fe-727ed43c26a6@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <9bd7bfc0-508f-e7fb-d985-d32f2d9a88d8@gmail.com>
-Date:   Tue, 5 Nov 2019 16:29:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S2389260AbfKENsg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 08:48:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59082 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388860AbfKENsg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Nov 2019 08:48:36 -0500
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A896B21D7D;
+        Tue,  5 Nov 2019 13:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572961714;
+        bh=jcvmqK0w1Iqo7UHWSqlXcYUsc1MVhw6hDCOK8MEqwCg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AhinqTDuo41At9YuFlREsi13iiVAadcH+Y0UvuUBQRL4IZ1LjDYUcm1AZwvWH0Kj7
+         YyHpkmgKTs7ja8ujol11v++RNWXZaZIdNyUDB4y4e808lH7zHSFVKDyKIzuI4uUEG+
+         BQM8PvO/uiDvEGUK6rC4iZlCfs+sIAGQ2ZzGvvFg=
+Received: by mail-qk1-f182.google.com with SMTP id a18so3487544qkk.7;
+        Tue, 05 Nov 2019 05:48:34 -0800 (PST)
+X-Gm-Message-State: APjAAAV2dvzIz7Pd/Pq7kgtqv2fHoX114DLATt8KBHgXcFoe4PEJk7yZ
+        trkEctje0o3pZDAEue7gavoD+Xv92QD2wllM8A==
+X-Google-Smtp-Source: APXvYqzaZcSGoONsXuXI03XKrd01Y+KIO7axdLFPshVUra0eJ0zk30JGENPxby1o+H2VvHyAMjsceN4vqKFeusCInUk=
+X-Received: by 2002:a37:4904:: with SMTP id w4mr21044984qka.119.1572961713720;
+ Tue, 05 Nov 2019 05:48:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <0e7db72b-37ff-a36e-11fe-727ed43c26a6@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20191103220801.10666-1-paul@crapouillou.net> <CAL_Jsq+aSXPT-vmHbDLygO0G3RmM3svTeS+S5FKKjj_Auf3gPw@mail.gmail.com>
+ <1572945391.3.1@crapouillou.net>
+In-Reply-To: <1572945391.3.1@crapouillou.net>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 5 Nov 2019 07:48:22 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
+Message-ID: <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power/supply: Document generic USB charger
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        od@zcrc.me
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-05.11.2019 07:07, Chanwoo Choi пишет:
-> On 19. 11. 5. 오전 6:56, Dmitry Osipenko wrote:
->> I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
->> want to help keep them working and evolving in the future.
->>
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  MAINTAINERS | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 9f69d01da3a6..4b9679988514 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -10632,6 +10632,15 @@ F:	include/linux/memblock.h
->>  F:	mm/memblock.c
->>  F:	Documentation/core-api/boot-time-mm.rst
->>  
->> +MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
->> +M:	Dmitry Osipenko <digetx@gmail.com>
->> +L:	linux-pm@vger.kernel.org
->> +L:	linux-tegra@vger.kernel.org
->> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
->> +S:	Maintained
->> +F:	drivers/devfreq/tegra20-devfreq.c
->> +F:	drivers/devfreq/tegra30-devfreq.c
->> +
->>  MEMORY MANAGEMENT
->>  L:	linux-mm@kvack.org
->>  W:	https://protect2.fireeye.com/url?k=9d0ba644-c09508de-9d0a2d0b-0cc47a336fae-300ed90f1ba3077c&u=http://www.linux-mm.org/
->>
-> 
-> Looks good to me. 
-> 
-> But, the merge conflict might be occurred.
-> After getting the review from Myungjoo,
-> you better to send this patch separately
-> based on the latest MAINTAINERS file.
-> 
-> Thanks for your all efforts.
+On Tue, Nov 5, 2019 at 3:16 AM Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> Hi Rob,
+>
+>
+> Le lun., nov. 4, 2019 at 07:52, Rob Herring <robh+dt@kernel.org> a
+> =C3=A9crit :
+> > On Sun, Nov 3, 2019 at 4:08 PM Paul Cercueil <paul@crapouillou.net>
+> > wrote:
+> >>
+> >>  Add documentation about the devicetree bindings for the generic USB
+> >>  charger.
+> >
+> > What makes it generic?
+>
+> It only uses the USB PHY subsystem, which already has some half-baked
+> support for chargers but not bound to the power-supply subsystem.
+>
+>
+> >>
+> >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> >>  ---
+> >>   .../bindings/power/supply/usb-charger.txt     | 24
+> >> +++++++++++++++++++
+> >>   1 file changed, 24 insertions(+)
+> >>   create mode 100644
+> >> Documentation/devicetree/bindings/power/supply/usb-charger.txt
+> >>
+> >>  diff --git
+> >> a/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+> >> b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+> >>  new file mode 100644
+> >>  index 000000000000..fd46734cb0e5
+> >>  --- /dev/null
+> >>  +++ b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+> >>  @@ -0,0 +1,24 @@
+> >>  +Generic USB charger bindings
+> >>  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>  +
+> >>  +Required properties :
+> >>  + - compatible : should be "usb-charger"
+> >>  + - phys: phandle to the USB PHY
+> >>  +
+> >>  +Example:
+> >>  +
+> >>  +usb_con: extcon {
+> >>  +       compatible =3D "linux,extcon-usb-gpio";
+> >>  +       vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
+> >>  +};
+> >>  +
+> >>  +usb_phy: usb-phy@0 {
+> >>  +       compatible =3D "usb-nop-xceiv";
+> >>  +       #phy-cells =3D <0>;
+> >>  +       extcon =3D <&usb_con>;
+> >
+> > extcon is deprecated in favor of usb-connector binding. See
+> > .../bindings/connector/usb-connector.txt. There's also some pending
+> > patches for adding GPIO based connector controls including Vbus sense
+> > (GPIO input) and control (regulator via a GPIO).
+> >
+> > Rob
+>
+> I understand that the usb-connector binding is better, but the current
+> code doesn't integrate at all with the USB PHY subsystem, which has its
+> own code to handle ID and VBUS GPIOs and supports notifiers. Is that
+> deprecated then?
+>
+> What's the big picture here?
 
-Okay, I'll wait for the rest of patches to land and then re-send this
-patch separately. Thank you very much for the reviews.
+Does this series work for you?:
+
+https://patchwork.kernel.org/cover/11120707/
