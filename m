@@ -2,38 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0153AEFC58
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 12:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E8FEFDD6
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 14:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730624AbfKEL2u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 06:28:50 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61890 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730701AbfKEL2t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 06:28:49 -0500
-Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 38ee2767fad8bdf3; Tue, 5 Nov 2019 12:28:47 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        id S2388340AbfKENCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 08:02:25 -0500
+Received: from mga05.intel.com ([192.55.52.43]:14644 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388008AbfKENCZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Nov 2019 08:02:25 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 05:02:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
+   d="scan'208";a="212537047"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 05 Nov 2019 05:02:22 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 05 Nov 2019 15:02:21 +0200
+Date:   Tue, 5 Nov 2019 15:02:21 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        Linux PM <linux-pm@vger.kernel.org>
 Subject: Re: [PATCH 0/5] PCI: PM: Cleanups related to power state changes
-Date:   Tue, 05 Nov 2019 12:28:47 +0100
-Message-ID: <3568330.mzdaIbGaoM@kreacher>
-In-Reply-To: <2771503.n70vfTtcVb@kreacher>
+Message-ID: <20191105130221.GX2552@lahna.fi.intel.com>
 References: <2771503.n70vfTtcVb@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2771503.n70vfTtcVb@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, November 5, 2019 11:11:57 AM CET Rafael J. Wysocki wrote:
+On Tue, Nov 05, 2019 at 11:11:57AM +0100, Rafael J. Wysocki wrote:
 > Hi,
 > 
 > This series rearranges some PCI power management code to make it somewhat
@@ -42,14 +52,6 @@ On Tuesday, November 5, 2019 11:11:57 AM CET Rafael J. Wysocki wrote:
 > 
 > It is not intended to change the functionality of the code.
 
-This series applies on top of 5.4-rc6 with your pci/pm-2 branch from today
-merged on top of it.
+The whole series looks good to me,
 
-I guess I can make it apply on top of pci/pm-2, but there were some PCI PM
-changes in 5.4-rc later than -rc1 in that area and they need to be taken
-into account anyway.
-
-Cheers!
-
-
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
