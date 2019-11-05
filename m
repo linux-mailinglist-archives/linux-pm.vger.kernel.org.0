@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BADEF43D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 04:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C27CEF440
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 04:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387509AbfKED4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 22:56:51 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:59852 "EHLO
+        id S2387553AbfKED5U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 22:57:20 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:60090 "EHLO
         mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387454AbfKED4v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 22:56:51 -0500
+        with ESMTP id S2387421AbfKED5U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 22:57:20 -0500
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191105035648epoutp0378e9d88cc0a308b6d751cf4a0b3ebb2f~UKA123lJt0268202682epoutp03h
-        for <linux-pm@vger.kernel.org>; Tue,  5 Nov 2019 03:56:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191105035648epoutp0378e9d88cc0a308b6d751cf4a0b3ebb2f~UKA123lJt0268202682epoutp03h
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191105035717epoutp03fea6081278adf0f176c0f296062e55f9~UKBRJCDM60195301953epoutp03d
+        for <linux-pm@vger.kernel.org>; Tue,  5 Nov 2019 03:57:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191105035717epoutp03fea6081278adf0f176c0f296062e55f9~UKBRJCDM60195301953epoutp03d
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1572926208;
-        bh=Ui9tA+UYBsSWnr3h2ocPjxY5hgU9p3yUegbC1G7sx0c=;
+        s=mail20170921; t=1572926237;
+        bh=DYxMz6JqCMlTP0GtfwvhuqL15LAqP6ypmBpBVPeB1/E=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ii6cxuIzkYGcDAaCtz7QekfK2do2X0kPPpY5z3l06AV4N1N+7HFcGKwGEFiyCi3zR
-         u4oSjbH8CW0PHj3H3u4sewC6KGxc/8OIDz2jfQUldeCgknyi9lSRzBHrKdTrSkcaKS
-         Cp7AjXyiOMP+kZu6tkk06p5qtytfZ5sEDyGOLKWo=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20191105035647epcas1p4f7493dfe216fbf41cb90da6a34638c0b~UKA1Ur9u61811218112epcas1p4K;
-        Tue,  5 Nov 2019 03:56:47 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 476bSs2tQ7zMqYkk; Tue,  5 Nov
-        2019 03:56:45 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4D.71.04144.DF2F0CD5; Tue,  5 Nov 2019 12:56:45 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20191105035645epcas1p4dbfd6dab703a4772b429ace9494982c8~UKAzCjy7z1662216622epcas1p4Y;
-        Tue,  5 Nov 2019 03:56:45 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191105035645epsmtrp2804d038cebd6c38ba429e5d97bc21de1~UKAzBzvPM2632726327epsmtrp2G;
-        Tue,  5 Nov 2019 03:56:45 +0000 (GMT)
-X-AuditID: b6c32a35-2dfff70000001030-a7-5dc0f2fdf45b
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.8E.25663.DF2F0CD5; Tue,  5 Nov 2019 12:56:45 +0900 (KST)
+        b=Cmv/3cPAT17AN172OtfiB0x1L8uOCym9LJuutHr9zyNZaKyPOUXciw36OheCCriJP
+         Z+muODie3oooV83WKbHixJjr2pKDAc5XOdZdrE4ZrGWDyi4EUoVd1PyG+S29uP4piC
+         oP+5ywTdOopvqCNkqQxDdYTsclXfHtXv+RO2aPlo=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191105035716epcas1p283dbb70c465f9d98ce96a88b4426f472~UKBQncwol2227522275epcas1p2l;
+        Tue,  5 Nov 2019 03:57:16 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 476bTQ4XnbzMqYkh; Tue,  5 Nov
+        2019 03:57:14 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        98.7F.04224.813F0CD5; Tue,  5 Nov 2019 12:57:12 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191105035711epcas1p2d4293aaf1db47befb909e0030ea39158~UKBLatXu21246912469epcas1p2i;
+        Tue,  5 Nov 2019 03:57:11 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191105035711epsmtrp111e72212747d8916bcd85d895f312a76~UKBLZ17lu2158921589epsmtrp1v;
+        Tue,  5 Nov 2019 03:57:11 +0000 (GMT)
+X-AuditID: b6c32a38-d5bff70000001080-3c-5dc0f318da76
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        72.71.24756.713F0CD5; Tue,  5 Nov 2019 12:57:11 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191105035644epsmtip20aa390ddd2eea5621144376da067e42f~UKAyviGFG0976409764epsmtip2M;
-        Tue,  5 Nov 2019 03:56:44 +0000 (GMT)
-Subject: Re: [PATCH v9 17/19] PM / devfreq: tegra30: Support variable
- polling interval
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191105035710epsmtip1608e646e77c942281d7ca5e1767fc983~UKBLCjuVC2448224482epsmtip1t;
+        Tue,  5 Nov 2019 03:57:10 +0000 (GMT)
+Subject: Re: [PATCH v9 15/19] PM / devfreq: tegra30: Use kHz units for
+ dependency threshold
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -62,258 +62,156 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <5e1246dc-0dce-1f05-49f7-354a581ae510@samsung.com>
-Date:   Tue, 5 Nov 2019 13:02:22 +0900
+Message-ID: <503e756b-4bed-2cd9-a167-2cabfd739fc3@samsung.com>
+Date:   Tue, 5 Nov 2019 13:02:48 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191104215617.25544-18-digetx@gmail.com>
+In-Reply-To: <20191104215617.25544-16-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHJsWRmVeSWpSXmKPExsWy7bCmnu7fTwdiDX5PFbdY/fExo0XLrEUs
-        Fmeb3rBbXN41h83ic+8RRovOL7PYLL49P8VocbtxBZvF2WfeFj93zWOx6Ft7ic2B22PH3SWM
-        Hjtn3WX36G1+x+Yxq20fm0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5ua
-        GRjqGlpamCsp5CXmptoqufgE6Lpl5gCdp6RQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUot
-        SMkpsCzQK07MLS7NS9dLzs+1MjQwMDIFKkzIzth4cwFjwQKLiq7jm1kbGM/pdjFyckgImEg0
-        rXnG0sXIxSEksINR4uKRG+wQzidGiYOfnkBlvjFKrJn9jwWm5caCOYwQib2MEqenXWCFcN4z
-        Snx4t44RpEpYIELize4FYLNEBJ4wSew90gLWziwQKXF452omEJtNQEti/4sbbCA2v4CixNUf
-        j8GaeQXsJP7+OsYOYrMIqEi8+jMJyObgEAUaevprIkSJoMTJmU/ARnIKmEvc+3mVEWK8uMSt
-        J/OZIGx5ieats5lBbpAQmMwusaX5EyPECy4SX4/vZYWwhSVeHd/CDmFLSXx+t5cNwq6WWHny
-        CBtEcwejxJb9F6AajCX2L53MBHIQs4CmxPpd+hBhRYmdv+dCHcEn8e5rDytIiYQAr0RHmxBE
-        ibLE5Qd3mSBsSYnF7Z1sExiVZiF5ZxaSF2YheWEWwrIFjCyrGMVSC4pz01OLDQsMkaN7EyM4
-        7WqZ7mCccs7nEKMAB6MSD++H9gOxQqyJZcWVuYcYJTiYlUR4L87YGyvEm5JYWZValB9fVJqT
-        WnyI0RQY2BOZpUST84E5Ia8k3tDUyNjY2MLE0MzU0FBJnNdx+dJYIYH0xJLU7NTUgtQimD4m
-        Dk6pBkZdFwfO1oA78/ZbpqzhPKRwO1yaLSir8ofAKneWm4IOrt+3LBAMKT+/XD3o02R99tOT
-        0y4p5v9nVvm9NT4s+//kZ6/uzKmOWDh/3Vb/0pWtcrGzHoUGLRQpyDiwWsff480rdanozrvy
-        9zU8Dpe5vnc7d0TvXYffyT0Vv4InnvuYX9auOO/0dnclluKMREMt5qLiRABC1R0i0QMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRmVeSWpSXmKPExsWy7bCSvO7fTwdiDf4fZrFY/fExo0XLrEUs
-        Fmeb3rBbXN41h83ic+8RRovOL7PYLL49P8VocbtxBZvF2WfeFj93zWOx6Ft7ic2B22PH3SWM
-        Hjtn3WX36G1+x+Yxq20fm0ffllWMHp83yQWwRXHZpKTmZJalFunbJXBlbLy5gLFggUVF1/HN
-        rA2M53S7GDk5JARMJG4smMPYxcjFISSwm1Fi6fIz7BAJSYlpF48ydzFyANnCEocPF0PUvGWU
-        mLV0PwtIjbBAhMTNye/YQBIiAs+YJBbu3ckEkmAWiJTombuFDcQWEtjGKHF4cgmIzSagJbH/
-        xQ2wOL+AosTVH48ZQWxeATuJv7+OgS1mEVCRePVnEpgtCrTg+fYbUDWCEidnPgFbzClgLnHv
-        51VGiF3qEn/mXWKGsMUlbj2ZD3WDvETz1tnMExiFZyFpn4WkZRaSlllIWhYwsqxilEwtKM5N
-        zy02LDDKSy3XK07MLS7NS9dLzs/dxAiOPy2tHYwnTsQfYhTgYFTi4f3QfiBWiDWxrLgy9xCj
-        BAezkgjvxRl7Y4V4UxIrq1KL8uOLSnNSiw8xSnOwKInzyucfixQSSE8sSc1OTS1ILYLJMnFw
-        SjUwrj3zQoNrfeSByx5ZFh+iXZNSF+4X/7WQ9WSgZV+E5Y5O0XMndrWsvnnLcon6rtjvSuoM
-        djOmTN2V9eaU7Tkll6ManfaMT7JsM58ZcF6e9O7D0n9/ckOV7UwfJE48Gi9RuHeqVbHJ5ogL
-        auLNP3zvOotvdJvOc3lH4PfuKTMvRF15mCu6Yfs5GSWW4oxEQy3mouJEAOVHNnG7AgAA
-X-CMS-MailID: 20191105035645epcas1p4dbfd6dab703a4772b429ace9494982c8
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TaUwTYRDN12O7qKufBXEkRuuqiZIAXUthPUCNqI1XSEyMGiquZVMIvdIt
+        RjQxKgYUEfGKWO+jyhGtgYKAIgp4oGJUQjCaxqMoYoyiaCPxiG3Xg39v3sybmfcdpFR5lYgi
+        sywO3m7hTDQxRFbbMlUdA/3X9erXecBWfvIhdrvztIxt3/ZewXY0HCXY/t2tiN35xUmw/p67
+        iH22tYxg298sZgcajsvY4guPiTlDdXXes0hX7/QqdLvzPhA6Z/41QlfsqUC6/qpxqcTq7FmZ
+        PJfB21W8xWDNyLIYk+jFy9PnpWsT1EwMM51NpFUWzswn0SlLUmMWZJkC69Gq9ZwpJ0ClcoJA
+        xyXPsltzHLwq0yo4kmjelmGyTbfFCpxZyLEYYw1W8wxGrZ6mDRSuzc5036qS22rpDZW1pbIt
+        qGBsIQojAcdDfdFpVIiGkEpch6B3n1cqBp8R1Py4SYiBH4HrkUv2T1LjlouJxoDE3acQg48I
+        /N/aJcGqcKyHa+5dkmAiAndLoLF1e0guxaugpb4yVETgaGh6+4QI4hF4AnR+8wU2IUkKJ0Nn
+        +ZogLcOTwP/rORGkR+GVcO8rF6QpPBLaDneHOobhRDjVXaIQu4+Gp90nJCIeD3k1R0J2AB9S
+        QNenakWwD+AUqPZpRDPh8O62RyHiKOjdk/8Hb4LytlZC1O5A4Gl6KBcTGmhy7ZcE+0jxVHA3
+        xIn0BKj/fgyJc4fDh69FcnEUBTvylWLJROh44ZWIeAycKdhJlCDaOciNc5AD5yAHzv/DTiJZ
+        BYrkbYLZyAuMLX7wZVeh0MuNZuvQ1QdLmhEmET2M6iu4rlfKufVCrrkZASmlI6hHpY16JZXB
+        5W7k7dZ0e46JF5qRNnDWe6VRowzWwD+wONIZ7TSNRsPGMwlahqFHU3PPu/RKbOQcfDbP23j7
+        X52EDIvaglwHXxQfulgWeWmBUne0bN0VR3Kh98cibPTM7EwrObV04ssB5aT7WurGZso/eZmh
+        d+BiGhvnNnfsUTXtvZPrqXrdEFu9oeiwoiu65U7EXIN1aML8kwtn9xxos6dUnFsxJTGCzn91
+        a3NXeG1auck379KipTU/1/nO3Lt8oKgnctdZoi+PlgmZHBMttQvcb1yLlQHPAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOIsWRmVeSWpSXmKPExsWy7bCSnK745wOxBq/v8Vqs/viY0aJl1iIW
+        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFt+en2K0uN24gs3i7DNvi5+75rFY9K29xObA7bHj7hJG
+        j52z7rJ79Da/Y/OY1baPzaNvyypGj8+b5ALYorhsUlJzMstSi/TtErgy1h/bxFqwTali9bYZ
+        LA2M7TJdjJwcEgImEju3rmftYuTiEBLYzSjR9+ERC0RCUmLaxaPMXYwcQLawxOHDxRA1bxkl
+        3ndPZgSpERaIldi3vpsJJCEi8IxJYuHenUwgCWaBSImeuVvYQGwhgW2MEld640BsNgEtif0v
+        boDF+QUUJa7+eMwIsoBXwE7i6kqwEhYBFYlv/+6DlYgKREg8334DbBevgKDEyZlPwG7jFDCX
+        WPhkAjvEKnWJP/MuMUPY4hK3nsyHOkFeonnrbOYJjMKzkLTPQtIyC0nLLCQtCxhZVjFKphYU
+        56bnFhsWGOallusVJ+YWl+al6yXn525iBEefluYOxstL4g8xCnAwKvHwfmg/ECvEmlhWXJl7
+        iFGCg1lJhPfijL2xQrwpiZVVqUX58UWlOanFhxilOViUxHmf5h2LFBJITyxJzU5NLUgtgsky
+        cXBKNTBGh2dMLXytKdJs9Gh/44Fpl34+rXzhx3dQdGd4wjnd6pKd2f9e7LxxYVZK4XEV7ueT
+        Fr2Rujp36spYSZXPEzcZNHG8XPL/8MRDM6Ykcomuywkv2tAQJtDi8Ls5xPqI0LHS6O7rEyc0
+        8SwUfL3kZN9Hk5eiMrqH774NrS/tsE14V571etckvpMNSizFGYmGWsxFxYkAT8O18roCAAA=
+X-CMS-MailID: 20191105035711epcas1p2d4293aaf1db47befb909e0030ea39158
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191104221852epcas4p4a2994854fa50bded40d0a3550f6f7e10
+X-CMS-RootMailID: 20191104221911epcas1p1ad970858ae85cddbb3961b1c7a727315
 References: <20191104215617.25544-1-digetx@gmail.com>
-        <CGME20191104221852epcas4p4a2994854fa50bded40d0a3550f6f7e10@epcas4p4.samsung.com>
-        <20191104215617.25544-18-digetx@gmail.com>
+        <CGME20191104221911epcas1p1ad970858ae85cddbb3961b1c7a727315@epcas1p1.samsung.com>
+        <20191104215617.25544-16-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
-
 On 19. 11. 5. 오전 6:56, Dmitry Osipenko wrote:
-> The ACTMON governor is interrupt-driven and currently hardware's polling
-> interval is fixed to 16ms in the driver. Devfreq supports variable polling
-> interval by the generic governors, let's re-use the generic interface for
-> changing of the polling interval. Now the polling interval can be changed
-> dynamically via /sys/class/devfreq/devfreq0/polling_interval.
+> The dependency threshold designates a memory activity level below which
+> CPU's frequency isn't accounted. Currently the threshold is given in
+> "memory cycle" units and that value depends on the polling interval which
+> is fixed to 12ms in the driver. Later on we'd want to add support for a
+> variable polling interval and thus the threshold value either needs to be
+> scaled in accordance to the polling interval or it needs to be represented
+> in a units that do not depend on the polling interval.
+> 
+> It is nicer to have threshold value being defined independently of the
+> polling interval, thus this patch converts the dependency threshold units
+> from "cycle" to "kHz". Having this change as a separate-preparatory patch
+> will make easier to follow further patches.
 > 
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/devfreq/tegra30-devfreq.c | 78 ++++++++++++++++++++++++++-----
->  1 file changed, 66 insertions(+), 12 deletions(-)
+>  drivers/devfreq/tegra30-devfreq.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
 > 
 > diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 3bd920829bfd..e44f1a48f838 100644
+> index 852bde6249c7..3bd920829bfd 100644
 > --- a/drivers/devfreq/tegra30-devfreq.c
 > +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -171,6 +171,8 @@ struct tegra_devfreq {
->  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
+> @@ -96,9 +96,10 @@ struct tegra_devfreq_device_config {
+>  	unsigned int	boost_down_threshold;
 >  
->  	unsigned int		irq;
-> +
-> +	bool			started;
+>  	/*
+> -	 * Threshold of activity (cycles) below which the CPU frequency isn't
+> -	 * to be taken into account. This is to avoid increasing the EMC
+> -	 * frequency when the CPU is very busy but not accessing the bus often.
+> +	 * Threshold of activity (cycles translated to kHz) below which the
+> +	 * CPU frequency isn't to be taken into account. This is to avoid
+> +	 * increasing the EMC frequency when the CPU is very busy but not
+> +	 * accessing the bus often.
+>  	 */
+>  	u32		avg_dependency_threshold;
+>  };
+> @@ -126,7 +127,7 @@ static const struct tegra_devfreq_device_config actmon_device_configs[] = {
+>  		.boost_down_coeff = 90,
+>  		.boost_up_threshold = 27,
+>  		.boost_down_threshold = 10,
+> -		.avg_dependency_threshold = 50000,
+> +		.avg_dependency_threshold = 16000, /* 16MHz in kHz units */
+>  	},
 >  };
 >  
->  struct tegra_actmon_emc_ratio {
-> @@ -209,18 +211,26 @@ static void device_writel(struct tegra_devfreq_device *dev, u32 val,
->  	writel_relaxed(val, dev->regs + offset);
->  }
->  
-> -static unsigned long do_percent(unsigned long val, unsigned int pct)
-> +static unsigned long do_percent(unsigned long long val, unsigned int pct)
->  {
-> -	return val * pct / 100;
-> +	val = val * pct;
-> +	do_div(val, 100);
-> +
-> +	/*
-> +	 * High freq + high boosting percent + large polling interval are
-> +	 * resulting in integer overflow when watermarks are calculated.
-> +	 */
-> +	return min_t(u64, val, U32_MAX);
->  }
->  
->  static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
->  					   struct tegra_devfreq_device *dev)
->  {
-> -	u32 avg = dev->avg_count;
->  	u32 avg_band_freq = tegra->max_freq * ACTMON_DEFAULT_AVG_BAND / KHZ;
-> -	u32 band = avg_band_freq * ACTMON_SAMPLING_PERIOD;
-> +	u32 band = avg_band_freq * tegra->devfreq->profile->polling_ms;
-> +	u32 avg;
->  
-> +	avg = min(dev->avg_count, U32_MAX - band);
->  	device_writel(dev, avg + band, ACTMON_DEV_AVG_UPPER_WMARK);
->  
->  	avg = max(dev->avg_count, band);
-> @@ -230,7 +240,7 @@ static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
->  static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
->  				       struct tegra_devfreq_device *dev)
->  {
-> -	u32 val = tegra->cur_freq * ACTMON_SAMPLING_PERIOD;
-> +	u32 val = tegra->cur_freq * tegra->devfreq->profile->polling_ms;
->  
->  	device_writel(dev, do_percent(val, dev->config->boost_up_threshold),
->  		      ACTMON_DEV_UPPER_WMARK);
-> @@ -309,7 +319,7 @@ static unsigned long actmon_device_target_freq(struct tegra_devfreq *tegra,
->  	unsigned int avg_sustain_coef;
->  	unsigned long target_freq;
->  
-> -	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD;
-> +	target_freq = dev->avg_count / tegra->devfreq->profile->polling_ms;
+> @@ -311,7 +312,6 @@ static unsigned long actmon_device_target_freq(struct tegra_devfreq *tegra,
+>  	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD;
 >  	avg_sustain_coef = 100 * 100 / dev->config->boost_up_threshold;
 >  	target_freq = do_percent(target_freq, avg_sustain_coef);
+> -	target_freq += dev->boost_freq;
 >  
-> @@ -469,7 +479,7 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
->  
->  	dev->target_freq = tegra->cur_freq;
->  
-> -	dev->avg_count = tegra->cur_freq * ACTMON_SAMPLING_PERIOD;
-> +	dev->avg_count = tegra->cur_freq * tegra->devfreq->profile->polling_ms;
->  	device_writel(dev, dev->avg_count, ACTMON_DEV_INIT_AVG);
->  
->  	tegra_devfreq_update_avg_wmark(tegra, dev);
-> @@ -505,12 +515,15 @@ static void tegra_actmon_stop_devices(struct tegra_devfreq *tegra)
->  	}
+>  	return target_freq;
 >  }
+> @@ -322,15 +322,18 @@ static void actmon_update_target(struct tegra_devfreq *tegra,
+>  	unsigned long cpu_freq = 0;
+>  	unsigned long static_cpu_emc_freq = 0;
 >  
-> -static int tegra_actmon_start(struct tegra_devfreq *tegra)
-> +static int tegra_actmon_resume(struct tegra_devfreq *tegra)
->  {
->  	unsigned int i;
->  	int err;
->  
-> -	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
-> +	if (!tegra->devfreq->profile->polling_ms || !tegra->started)
-> +		return 0;
+> -	if (dev->config->avg_dependency_threshold) {
+> +	dev->target_freq = actmon_device_target_freq(tegra, dev);
 > +
-> +	actmon_writel(tegra, tegra->devfreq->profile->polling_ms - 1,
->  		      ACTMON_GLB_PERIOD_CTRL);
+> +	if (dev->config->avg_dependency_threshold &&
+> +	    dev->config->avg_dependency_threshold <= dev->target_freq) {
+>  		cpu_freq = cpufreq_quick_get(0);
+>  		static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
+> -	}
 >  
->  	/*
-> @@ -558,8 +571,26 @@ static int tegra_actmon_start(struct tegra_devfreq *tegra)
->  	return err;
->  }
->  
-> -static void tegra_actmon_stop(struct tegra_devfreq *tegra)
-> +static int tegra_actmon_start(struct tegra_devfreq *tegra)
->  {
-> +	int ret = 0;
-> +
-> +	if (!tegra->started) {
-> +		tegra->started = true;
-> +
-> +		ret = tegra_actmon_resume(tegra);
-> +		if (ret)
-> +			tegra->started = false;
+> -	dev->target_freq = actmon_device_target_freq(tegra, dev);
+> -
+> -	if (dev->avg_count >= dev->config->avg_dependency_threshold)
+> +		dev->target_freq += dev->boost_freq;
+>  		dev->target_freq = max(dev->target_freq, static_cpu_emc_freq);
+> +	} else {
+> +		dev->target_freq += dev->boost_freq;
 > +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static void tegra_actmon_pause(struct tegra_devfreq *tegra)
-> +{
-> +	if (!tegra->devfreq->profile->polling_ms || !tegra->started)
-> +		return;
-> +
->  	disable_irq(tegra->irq);
->  
->  	cpufreq_unregister_notifier(&tegra->cpu_rate_change_nb,
-> @@ -572,6 +603,12 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
->  	clk_notifier_unregister(tegra->emc_clock, &tegra->clk_rate_change_nb);
 >  }
 >  
-> +static void tegra_actmon_stop(struct tegra_devfreq *tegra)
-> +{
-> +	tegra_actmon_pause(tegra);
-> +	tegra->started = false;
-> +}
-> +
->  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
->  				u32 flags)
+>  static irqreturn_t actmon_thread_isr(int irq, void *data)
+> @@ -396,15 +399,16 @@ static unsigned long
+>  tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
+>  				  unsigned int cpu_freq)
 >  {
-> @@ -629,7 +666,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
->  	stat->busy_time *= 100 / BUS_SATURATION_RATIO;
+> +	struct tegra_devfreq_device *actmon_dev = &tegra->devices[MCCPU];
+>  	unsigned long static_cpu_emc_freq, dev_freq;
 >  
->  	/* Number of cycles in a sampling period */
-> -	stat->total_time = ACTMON_SAMPLING_PERIOD * cur_freq;
-> +	stat->total_time = tegra->devfreq->profile->polling_ms * cur_freq;
->  
->  	stat->busy_time = min(stat->busy_time, stat->total_time);
->  
-> @@ -637,7 +674,7 @@ static int tegra_devfreq_get_dev_status(struct device *dev,
->  }
->  
->  static struct devfreq_dev_profile tegra_devfreq_profile = {
-> -	.polling_ms	= 0,
-> +	.polling_ms	= ACTMON_SAMPLING_PERIOD,
->  	.target		= tegra_devfreq_target,
->  	.get_dev_status	= tegra_devfreq_get_dev_status,
->  };
-> @@ -677,6 +714,7 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->  					unsigned int event, void *data)
->  {
->  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
-> +	unsigned int *new_delay = data;
->  	int ret = 0;
->  
->  	/*
-> @@ -696,6 +734,21 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->  		devfreq_monitor_stop(devfreq);
->  		break;
->  
-> +	case DEVFREQ_GOV_INTERVAL:
-> +		/*
-> +		 * ACTMON hardware supports up to 256 milliseconds for the
-> +		 * sampling period.
-> +		 */
-> +		if (*new_delay > 256) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
+> +	dev_freq = actmon_device_target_freq(tegra, actmon_dev);
 > +
-> +		tegra_actmon_pause(tegra);
-> +		devfreq_interval_update(devfreq, new_delay);
-> +		ret = tegra_actmon_resume(tegra);
-> +		break;
-> +
->  	case DEVFREQ_GOV_SUSPEND:
->  		tegra_actmon_stop(tegra);
->  		devfreq_monitor_suspend(devfreq);
-> @@ -715,6 +768,7 @@ static struct devfreq_governor tegra_devfreq_governor = {
->  	.get_target_freq = tegra_governor_get_target,
->  	.event_handler = tegra_governor_event_handler,
->  	.immutable = true,
-> +	.interrupt_driven = true,
->  };
+>  	/* check whether CPU's freq is taken into account at all */
+> -	if (tegra->devices[MCCPU].avg_count <
+> -	    tegra->devices[MCCPU].config->avg_dependency_threshold)
+> +	if (dev_freq < actmon_dev->config->avg_dependency_threshold)
+>  		return 0;
 >  
->  static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
+> -	dev_freq = actmon_device_target_freq(tegra, &tegra->devices[MCCPU]);
+>  
+>  	if (dev_freq >= static_cpu_emc_freq)
+>  		return 0;
 > 
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
