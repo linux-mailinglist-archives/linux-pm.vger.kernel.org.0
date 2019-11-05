@@ -2,50 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E42EFEF1
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 14:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AEAF01A0
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 16:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389260AbfKENsg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 08:48:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388860AbfKENsg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 5 Nov 2019 08:48:36 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A896B21D7D;
-        Tue,  5 Nov 2019 13:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572961714;
-        bh=jcvmqK0w1Iqo7UHWSqlXcYUsc1MVhw6hDCOK8MEqwCg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AhinqTDuo41At9YuFlREsi13iiVAadcH+Y0UvuUBQRL4IZ1LjDYUcm1AZwvWH0Kj7
-         YyHpkmgKTs7ja8ujol11v++RNWXZaZIdNyUDB4y4e808lH7zHSFVKDyKIzuI4uUEG+
-         BQM8PvO/uiDvEGUK6rC4iZlCfs+sIAGQ2ZzGvvFg=
-Received: by mail-qk1-f182.google.com with SMTP id a18so3487544qkk.7;
-        Tue, 05 Nov 2019 05:48:34 -0800 (PST)
-X-Gm-Message-State: APjAAAV2dvzIz7Pd/Pq7kgtqv2fHoX114DLATt8KBHgXcFoe4PEJk7yZ
-        trkEctje0o3pZDAEue7gavoD+Xv92QD2wllM8A==
-X-Google-Smtp-Source: APXvYqzaZcSGoONsXuXI03XKrd01Y+KIO7axdLFPshVUra0eJ0zk30JGENPxby1o+H2VvHyAMjsceN4vqKFeusCInUk=
-X-Received: by 2002:a37:4904:: with SMTP id w4mr21044984qka.119.1572961713720;
- Tue, 05 Nov 2019 05:48:33 -0800 (PST)
+        id S1730988AbfKEPix (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 10:38:53 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45772 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727889AbfKEPix (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 10:38:53 -0500
+Received: by mail-lj1-f193.google.com with SMTP id n21so8750825ljg.12;
+        Tue, 05 Nov 2019 07:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EIBHT5s6k+333mQe6iMA24qOIrnpa2LpfWWRGm3y8Uk=;
+        b=Gk33wkxLvAqPOKdHBeJ6/Wa+w97SPkh9B3EAkkX7ibmcliP2i+jxA/tLdWb7LJQcao
+         22DiooKESnaW5Fr1zKJC2eDwcXyX9eDXs8BkHVl1mglyDeJsj3Tc8MDf4Kgrt0LEzcCD
+         6re7DGPQuAlrVVB+LWbQM9X1Z7SLuzsS1dhaSWU8BLN201a2TVuFP28M2anLI1/JmtsO
+         gl/6KVoA1f5ZldRpmIbIXKELKfQvbRGgKsG5C0/HUkNHrEDNx7BLUGEMCvE2uNW5eH5E
+         oVdhEc1kPI3nfsLIM9tAFvhe3CN426XtFhX3D7Kiq0WIrJXFgVIYt2KzzkOoGIT+fD74
+         uxcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EIBHT5s6k+333mQe6iMA24qOIrnpa2LpfWWRGm3y8Uk=;
+        b=nk0QWyDakuSphyDGI/gDteik8EAuPwebbgbJ3DdS64HTSF8jOK7rOAiSNDMtcVe94D
+         wN0Z2GgZxKTzdTu3xbcQ9qU4CSRbZt2+kuFMgNKYUELJmIq5biRxq1ciGZPqNjfgk3sT
+         rZcI2Eg8j9bzeM1wmTg3Gpk5WU6vtvf11rrnNnpCGQjx7jlOCUAr7NOvGnJTSEOAGz90
+         ArjSH9pYctpMyxGQIEex/9J7koUfbnj/GBoELVf7V5SFtjE1Y+0Kg+D+f/lf8hMTzTJR
+         8DnsZHuN4a/ei5fHTdhrzuY//+DiqlJ7H4W1/tUNxt7SL3x5ykKYsGfyMd0lbar3OStY
+         PLBw==
+X-Gm-Message-State: APjAAAWQ1yqQWXMnBqvkGABk9F6uiH4OjcFnuZ/NKVacQLDOWl3JkOs1
+        tmBqzIp+HP/WGx16FDBnR3CWSix/ZVVEfChbc0SdiLaD
+X-Google-Smtp-Source: APXvYqyiGPWvrCoBqJQH7r/HG/3sG6Ju3FA5kbjzd30hxCt/lsfpv0gfRpsiNbY1AP1GIFX/pQGmwzTzcF1+WHkGSGU=
+X-Received: by 2002:a2e:9842:: with SMTP id e2mr6634886ljj.93.1572968331102;
+ Tue, 05 Nov 2019 07:38:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20191103220801.10666-1-paul@crapouillou.net> <CAL_Jsq+aSXPT-vmHbDLygO0G3RmM3svTeS+S5FKKjj_Auf3gPw@mail.gmail.com>
- <1572945391.3.1@crapouillou.net>
-In-Reply-To: <1572945391.3.1@crapouillou.net>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 5 Nov 2019 07:48:22 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
-Message-ID: <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power/supply: Document generic USB charger
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        od@zcrc.me
+References: <20191102145530.16104-1-linux@roeck-us.net>
+In-Reply-To: <20191102145530.16104-1-linux@roeck-us.net>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Wed, 6 Nov 2019 00:38:39 +0900
+Message-ID: <CAC5umyi9PuMTERNvNShfzu725bhBtkOZsD3NWtcxhKq5XGU2CQ@mail.gmail.com>
+Subject: Re: [PATCH v4] nvme: Add hardware monitoring support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Keith Busch <kbusch@kernel.org>, Chris Healy <cphealy@gmail.com>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
@@ -53,75 +60,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 5, 2019 at 3:16 AM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Rob,
->
->
-> Le lun., nov. 4, 2019 at 07:52, Rob Herring <robh+dt@kernel.org> a
-> =C3=A9crit :
-> > On Sun, Nov 3, 2019 at 4:08 PM Paul Cercueil <paul@crapouillou.net>
-> > wrote:
-> >>
-> >>  Add documentation about the devicetree bindings for the generic USB
-> >>  charger.
-> >
-> > What makes it generic?
->
-> It only uses the USB PHY subsystem, which already has some half-baked
-> support for chargers but not bound to the power-supply subsystem.
->
->
-> >>
-> >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> >>  ---
-> >>   .../bindings/power/supply/usb-charger.txt     | 24
-> >> +++++++++++++++++++
-> >>   1 file changed, 24 insertions(+)
-> >>   create mode 100644
-> >> Documentation/devicetree/bindings/power/supply/usb-charger.txt
-> >>
-> >>  diff --git
-> >> a/Documentation/devicetree/bindings/power/supply/usb-charger.txt
-> >> b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
-> >>  new file mode 100644
-> >>  index 000000000000..fd46734cb0e5
-> >>  --- /dev/null
-> >>  +++ b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
-> >>  @@ -0,0 +1,24 @@
-> >>  +Generic USB charger bindings
-> >>  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>  +
-> >>  +Required properties :
-> >>  + - compatible : should be "usb-charger"
-> >>  + - phys: phandle to the USB PHY
-> >>  +
-> >>  +Example:
-> >>  +
-> >>  +usb_con: extcon {
-> >>  +       compatible =3D "linux,extcon-usb-gpio";
-> >>  +       vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
-> >>  +};
-> >>  +
-> >>  +usb_phy: usb-phy@0 {
-> >>  +       compatible =3D "usb-nop-xceiv";
-> >>  +       #phy-cells =3D <0>;
-> >>  +       extcon =3D <&usb_con>;
-> >
-> > extcon is deprecated in favor of usb-connector binding. See
-> > .../bindings/connector/usb-connector.txt. There's also some pending
-> > patches for adding GPIO based connector controls including Vbus sense
-> > (GPIO input) and control (regulator via a GPIO).
-> >
-> > Rob
->
-> I understand that the usb-connector binding is better, but the current
-> code doesn't integrate at all with the USB PHY subsystem, which has its
-> own code to handle ID and VBUS GPIOs and supports notifiers. Is that
-> deprecated then?
->
-> What's the big picture here?
+2019=E5=B9=B411=E6=9C=882=E6=97=A5(=E5=9C=9F) 23:55 Guenter Roeck <linux@ro=
+eck-us.net>:
+> diff --git a/drivers/nvme/host/nvme-hwmon.c b/drivers/nvme/host/nvme-hwmo=
+n.c
+> new file mode 100644
+> index 000000000000..28b4b7f43bb0
+> --- /dev/null
+> +++ b/drivers/nvme/host/nvme-hwmon.c
+> @@ -0,0 +1,181 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * NVM Express hardware monitoring support
+> + * Copyright (c) 2019, Guenter Roeck
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include "nvme.h"
+> +
+> +struct nvme_hwmon_data {
+> +       struct nvme_ctrl *ctrl;
+> +       struct nvme_smart_log log;
+> +       struct mutex read_lock;
+> +};
+> +
+> +static int nvme_hwmon_get_smart_log(struct nvme_hwmon_data *data)
+> +{
+> +       int ret;
+> +
+> +       ret =3D nvme_get_log(data->ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0=
+,
+> +                          &data->log, sizeof(data->log), 0);
+> +
+> +       return ret <=3D 0 ? ret : -EIO;
+> +}
+> +
+> +static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types t=
+ype,
+> +                          u32 attr, int channel, long *val)
+> +{
+> +       struct nvme_hwmon_data *data =3D dev_get_drvdata(dev);
+> +       struct nvme_smart_log *log =3D &data->log;
+> +       int temp;
+> +       int err;
+> +
+> +       /*
+> +        * First handle attributes which don't require us to read
+> +        * the smart log.
+> +        */
+> +       switch (attr) {
+> +       case hwmon_temp_max:
+> +               *val =3D (data->ctrl->wctemp - 273) * 1000;
+> +               return 0;
+> +       case hwmon_temp_crit:
+> +               *val =3D (data->ctrl->cctemp - 273) * 1000;
 
-Does this series work for you?:
+This attribute should be 'hwmon_temp_max_alarm' rather than
+'hwmon_temp_crit_alarm'?
 
-https://patchwork.kernel.org/cover/11120707/
+The 'hwmon_temp_crit_alarm' indicates that the temperature is greater
+than CCTEMP.
+
+But according to the description of the Critical Warning field in the NVMe
+spec, the bit 1 is set to '1' when the temperature is greater than or
+equal to an over temperature threshold.  The default value of the over
+temperature threshold for Composite Temperature is WCTEMP.
+
+That's why I think this attribute should be 'hwmon_temp_max_alarm' which
+indicates that the temperature is greater than WCTEMP.
