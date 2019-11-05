@@ -2,117 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9A2EF315
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 02:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A1FEF406
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 04:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729981AbfKEB6a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Nov 2019 20:58:30 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45505 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729597AbfKEB6a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 20:58:30 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 77so11838125oti.12;
-        Mon, 04 Nov 2019 17:58:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gmYraXUwBZGb7SjnYfb7LVvYyu+EbS6Dq6WsiW6ugLQ=;
-        b=W+gLolNegV0kBHweDucIh4cXTdNJN24nGK2Doc2xWFKEPfP4O9lJ36H32wPa+s7qne
-         QOCzejraKrhq4LspATp6iB/6J3GNw+yCu6xGF0QMsdy7xaPYO1zn/nDEorGUG9cBMmlN
-         NyvG1JxsKEjqlVW4tUVBTdXFKyb+LiEA27d8HGog2vpQrf4f8pki788HcTaRQ1lExfJu
-         JQnemhX2RnECz0giB7nvT2YoYHBVU2XPiFvJ3aw4smzdhPFl5QglhFtzgfl3OAIbDP94
-         P2mJPKNuzcnYSox2exJHoSoi6kSogRsXpn1RxB7TUlXbRQcXHNdsqnmyouka71mVzXje
-         aRzw==
-X-Gm-Message-State: APjAAAVjSeGhkDs0nuLNRfapBmvF3krFBSAf+TKqpKkctPIgCKG+aecb
-        J4JaohYmxqjMUIS/ipQblw==
-X-Google-Smtp-Source: APXvYqx9fT0D63eHAknVkyowX+0cfZhjqiWWNlSNjVlzbGr8k08aYwX9ohraNUzyt9RHvzcqojdddQ==
-X-Received: by 2002:a9d:1c8f:: with SMTP id l15mr16727710ota.313.1572919109034;
-        Mon, 04 Nov 2019 17:58:29 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q82sm513021oif.11.2019.11.04.17.58.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 17:58:28 -0800 (PST)
-Date:   Mon, 4 Nov 2019 19:58:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Matheus Castello <matheus@castello.eng.br>
-Cc:     sre@kernel.org, krzk@kernel.org, mark.rutland@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
-        lee.jones@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] dt-bindings: power: supply: Max17040: Add low
- level SOC alert threshold
-Message-ID: <20191105015827.GA332@bogus>
-References: <CAJKOXPdCtbsPaAgYp5iVBhkAsjXzOYWwttQBptgiUgzhbKi09w@mail.gmail.com>
- <20191031184134.30621-1-matheus@castello.eng.br>
- <20191031184134.30621-3-matheus@castello.eng.br>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191031184134.30621-3-matheus@castello.eng.br>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1730023AbfKEDYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Nov 2019 22:24:04 -0500
+Received: from lucky1.263xmail.com ([211.157.147.133]:54304 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728910AbfKEDYE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Nov 2019 22:24:04 -0500
+X-Greylist: delayed 391 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 22:24:02 EST
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 82CA978E2A;
+        Tue,  5 Nov 2019 11:17:26 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P5865T139886076045056S1572923844811932_;
+        Tue, 05 Nov 2019 11:17:26 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <7b586cca0afd8c8e7450e099e60d9917>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+From:   Elaine Zhang <zhangqing@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     amit.kucheria@verdurent.com, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
+        andy.yan@rock-chips.com, Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [PATCH v1 0/3] thermal: rockchip: Support the RK3308 SoC in thermal driver
+Date:   Tue,  5 Nov 2019 11:17:23 +0800
+Message-Id: <1572923846-23310-1-git-send-email-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 31, 2019 at 03:41:32PM -0300, Matheus Castello wrote:
-> For configure low level state of charge threshold alert signaled from
-> max17040 we add "maxim,alert-low-soc-level" property.
+RK3308 SOC has two Temperature Sensors for CPU and GPU.
 
-This doesn't match the change. You're adding a whole new device binding.
+Elaine Zhang (3):
+  dt-bindings: rockchip-thermal: Support the RK3308 SoC compatible
+  thermal: rockchip: Support the RK3308 SoC in thermal driver
+  ARM64: dts: rockchip: rk3308: add tsadc node
 
-> Signed-off-by: Matheus Castello <matheus@castello.eng.br>
-> ---
->  .../power/supply/max17040_battery.txt         | 33 +++++++++++++++++++
+ .../bindings/thermal/rockchip-thermal.txt          |  1 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi           | 20 ++++++++++++++++
+ drivers/thermal/rockchip_thermal.c                 | 28 ++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
 
-Part of an MFD? The MFD binding should reference this file then.
+-- 
+1.9.1
 
->  1 file changed, 33 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> new file mode 100644
-> index 000000000000..f2d0b22b5f79
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> @@ -0,0 +1,33 @@
-> +max17040_battery
-> +~~~~~~~~~~~~~~~~
-> +
-> +Required properties :
-> + - compatible : "maxim,max17040" or "maxim,max77836-battery"
-> + - reg: i2c slave address
-> +
-> +Optional properties :
-> +- maxim,alert-low-soc-level :	The alert threshold that sets the state of
-> + 				charge level (%) where an interrupt is
-> +				generated. Can be configured from 1 up to 32
-> +				(%). If skipped the power up default value of
-> +				4 (%) will be used.
 
-Seems like something that should be a common battery property.
 
-> +- interrupts : 			Interrupt line see Documentation/devicetree/
-> +				bindings/interrupt-controller/interrupts.txt
-> +- wakeup-source :		This device has wakeup capabilities. Use this
-> +				property to use alert low SOC level interrupt
-> +				as wake up source.
-> +
-> +Optional properties support interrupt functionality for alert low state of
-> +charge level, present in some ICs in the same family, and should be used with
-> +compatible "maxim,max77836-battery".
-> +
-> +Example:
-> +
-> +	battery-fuel-gauge@36 {
-> +		compatible = "maxim,max77836-battery";
-> +		reg = <0x36>;
-> +		maxim,alert-low-soc-level = <10>;
-> +		interrupt-parent = <&gpio7>;
-> +		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-> +		wakeup-source;
-> +	};
-> --
-> 2.24.0.rc2
-> 
