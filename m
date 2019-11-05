@@ -2,83 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB04F09D2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 23:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27BCF0A1F
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 00:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730560AbfKEWtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 17:49:00 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37235 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730192AbfKEWtA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 17:49:00 -0500
-Received: by mail-oi1-f194.google.com with SMTP id y194so19198723oie.4;
-        Tue, 05 Nov 2019 14:48:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GM1jm2cNcrjl3y3RDdX2JWn1WUw2Dw4x55GxoNuL9wc=;
-        b=sveWCiwPZvi8fImz/79HgSKZSsfoaqHTI1lZK2ep1XY+O76T1+H0w4AnohKkJHZ9Hh
-         t2TimBj9D/zTvhIKQRiCOoe0pgtVRreEvZDGU7EUWCVYVXwrMJ9t10kjR2sqR0Qqvu/R
-         shRgi9yYqWeuUdNmfIcq9K1/oFX/ewcCUsxys8Y+t9aTBKGzLJuynmNj22ViG/NArtFH
-         eNz9ea9R1i5itsMl0OTYDRhaimLJljGBcMG83vFZPqnZxHX3mLaT835T52A79OWeyHFN
-         8Br/oK/V3LNluWN4thQHCozRrXhDEy92LRrU7Kr+/uuHtGPsoma+jZbvrwLePmGD86JF
-         wedQ==
-X-Gm-Message-State: APjAAAUnBVXDroJsVhhjP1N4JR4hOxIdV6dnTZyqJfDkUsmUgV0Xd/9U
-        eHFOP9Ty2AGoPpAcaBFDtPmDDozwrNT0ny7sGRB2zA==
-X-Google-Smtp-Source: APXvYqw2yN1NleQ/hjDjqay4Ch1kFxl+QWttqGc7nxbJAJb982dnpQnHy/lxA1YrI0mD7AhubtukYf7lRTzJV4IzqWE=
-X-Received: by 2002:aca:fdd8:: with SMTP id b207mr1293430oii.57.1572994138853;
- Tue, 05 Nov 2019 14:48:58 -0800 (PST)
+        id S1727252AbfKEXQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 18:16:26 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:33224 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727046AbfKEXQZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 18:16:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1572995783; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eDsiJOXarrFhke1fkCycy1O3NiGTme3bfHAiHJkXB/8=;
+        b=tKXqfuTr2nlPjgFFl0fNG+qcFIc/NLt830kfPzztWEd44nARkG01pVjsPw1FGfhHOg1D9y
+        AQBEjji+3O7H2S9vFSCBXnAnpz7G6kCNxKGYzDRIH0nNoTfSLL+6P6bYRH3blL6xzG3Y5f
+        30XL3GuyitI6hQmD6SJ2+Wu3zgX7QZM=
+Date:   Wed, 06 Nov 2019 00:16:17 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] dt-bindings: power/supply: Document generic USB
+ charger
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@zcrc.me
+Message-Id: <1572995777.3.4@crapouillou.net>
+In-Reply-To: <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
+References: <20191103220801.10666-1-paul@crapouillou.net>
+        <CAL_Jsq+aSXPT-vmHbDLygO0G3RmM3svTeS+S5FKKjj_Auf3gPw@mail.gmail.com>
+        <1572945391.3.1@crapouillou.net>
+        <CAL_JsqJDT71eThy43kaN3RsU03Ew7aZ_abJg0zhaFxyDH9RhhA@mail.gmail.com>
 MIME-Version: 1.0
-References: <3568330.mzdaIbGaoM@kreacher> <20191105223521.GA42216@google.com>
-In-Reply-To: <20191105223521.GA42216@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Nov 2019 23:48:47 +0100
-Message-ID: <CAJZ5v0hdHsP-sWB4ZAXOqwq7cwduZi2yanxPBoZm75G7gcWkdQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] PCI: PM: Cleanups related to power state changes
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 5, 2019 at 11:35 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Tue, Nov 05, 2019 at 12:28:47PM +0100, Rafael J. Wysocki wrote:
-> > On Tuesday, November 5, 2019 11:11:57 AM CET Rafael J. Wysocki wrote:
-> > > Hi,
-> > >
-> > > This series rearranges some PCI power management code to make it somewhat
-> > > easier to follow and explicitly consolidate the power-up (transitions to
-> > > D0) code path.
-> > >
-> > > It is not intended to change the functionality of the code.
-> >
-> > This series applies on top of 5.4-rc6 with your pci/pm-2 branch from today
-> > merged on top of it.
-> >
-> > I guess I can make it apply on top of pci/pm-2, but there were some PCI PM
-> > changes in 5.4-rc later than -rc1 in that area and they need to be taken
-> > into account anyway.
->
-> I applied the commits from pci/pm-2 to pci/pm (pci/pm-2 was really
-> just to get the 0-day robot to build test it).
->
-> pci/pm is based on v5.4-rc1, which doesn't have 45144d42f299 ("PCI:
-> PM: Fix pci_power_up()"), which appeared in -rc4.
->
-> All my branches are based on -rc1.  I *could* rebase them all to -rc4,
-> but that's quite a bit of work and affects Lorenzo as well, so I'd
-> rather not.  What's the git expert's way of doing this?
 
-It is not necessary to rebase.
 
-I would just merge the current pci/pm on top of v5.4-rc4 (or any later
--rc), commit my patches on top of that and push the result as the new
-pci/pm.  That should be a fast-forward update.
+Le mar., nov. 5, 2019 at 07:48, Rob Herring <robh+dt@kernel.org> a=20
+=E9crit :
+> On Tue, Nov 5, 2019 at 3:16 AM Paul Cercueil <paul@crapouillou.net>=20
+> wrote:
+>>=20
+>>  Hi Rob,
+>>=20
+>>=20
+>>  Le lun., nov. 4, 2019 at 07:52, Rob Herring <robh+dt@kernel.org> a
+>>  =E9crit :
+>>  > On Sun, Nov 3, 2019 at 4:08 PM Paul Cercueil=20
+>> <paul@crapouillou.net>
+>>  > wrote:
+>>  >>
+>>  >>  Add documentation about the devicetree bindings for the generic=20
+>> USB
+>>  >>  charger.
+>>  >
+>>  > What makes it generic?
+>>=20
+>>  It only uses the USB PHY subsystem, which already has some=20
+>> half-baked
+>>  support for chargers but not bound to the power-supply subsystem.
+>>=20
+>>=20
+>>  >>
+>>  >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  >>  ---
+>>  >>   .../bindings/power/supply/usb-charger.txt     | 24
+>>  >> +++++++++++++++++++
+>>  >>   1 file changed, 24 insertions(+)
+>>  >>   create mode 100644
+>>  >> Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  >>
+>>  >>  diff --git
+>>  >> a/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  >> b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  >>  new file mode 100644
+>>  >>  index 000000000000..fd46734cb0e5
+>>  >>  --- /dev/null
+>>  >>  +++=20
+>> b/Documentation/devicetree/bindings/power/supply/usb-charger.txt
+>>  >>  @@ -0,0 +1,24 @@
+>>  >>  +Generic USB charger bindings
+>>  >>  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>  >>  +
+>>  >>  +Required properties :
+>>  >>  + - compatible : should be "usb-charger"
+>>  >>  + - phys: phandle to the USB PHY
+>>  >>  +
+>>  >>  +Example:
+>>  >>  +
+>>  >>  +usb_con: extcon {
+>>  >>  +       compatible =3D "linux,extcon-usb-gpio";
+>>  >>  +       vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
+>>  >>  +};
+>>  >>  +
+>>  >>  +usb_phy: usb-phy@0 {
+>>  >>  +       compatible =3D "usb-nop-xceiv";
+>>  >>  +       #phy-cells =3D <0>;
+>>  >>  +       extcon =3D <&usb_con>;
+>>  >
+>>  > extcon is deprecated in favor of usb-connector binding. See
+>>  > .../bindings/connector/usb-connector.txt. There's also some=20
+>> pending
+>>  > patches for adding GPIO based connector controls including Vbus=20
+>> sense
+>>  > (GPIO input) and control (regulator via a GPIO).
+>>  >
+>>  > Rob
+>>=20
+>>  I understand that the usb-connector binding is better, but the=20
+>> current
+>>  code doesn't integrate at all with the USB PHY subsystem, which has=20
+>> its
+>>  own code to handle ID and VBUS GPIOs and supports notifiers. Is that
+>>  deprecated then?
+>>=20
+>>  What's the big picture here?
+>=20
+> Does this series work for you?:
+>=20
+> https://patchwork.kernel.org/cover/11120707/
+
+I had to do some changes to my musb and PHY drivers but it works, yes.
+
+The good thing is that I didn't have to change this driver, so I'll=20
+wait for feedback on patch 2/2 then post a v2 with a fixed devicetree=20
+example.
+
+Thanks,
+-Paul
+
+=
+
