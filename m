@@ -2,111 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD4AF0647
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 20:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65799F06B7
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Nov 2019 21:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727606AbfKETvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 14:51:02 -0500
-Received: from cmta17.telus.net ([209.171.16.90]:34631 "EHLO cmta17.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbfKETvC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 5 Nov 2019 14:51:02 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id S4qwiWGx0bg38S4qxiTdH1; Tue, 05 Nov 2019 12:51:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1572983460; bh=Hr2YMJ1ZfQYlH43F0mQyo2gi/XKK9mF4Jrvjk025Lag=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=IQTfetl5+3wId2+RnQJS0XT2jVGXESDVeeAdajXBIXbFe9IP80qJPTGtdJii4T/uK
-         9pNz6702Pe9p1X/1SzIJzz/wijwQhIzIUWjkD9xyTSjBjAFh27VEugdOXFXtbUX4Yj
-         boCvMSA07O5W3a/HBsa95PBHvn4mQYaFebSWKS5ZMpSwXn5b0Fhk7M2fNOncf3zLPR
-         UPUFvrq2wzAsL/2gFgIAUXrTfdTXcWqaYpjuy1l3B8/SMUIXvhgV++0WFx0m+cOFsR
-         hwAMDR5y0LoDkl6RpGGudQughRjFZhhvQ8La/yUS37M5xOdgWHR/NdH4n+/Avg9lCi
-         yge9mx08Dqc/A==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=O/1HQy1W c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8 a=aatUQebYAAAA:8 a=rAq7UpmyHFtLT1OCutkA:9
- a=netjI_sRjhY9QG3l:21 a=KFigGKmJXnE7LcBR:21 a=CjuIK1q_8ugA:10
- a=jQRHTDX4f64A:10 a=7715FyvI7WU-l6oqrZBK:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>
-References: <60416800.X4hXmAfbqi@kreacher> <1746940.X44tFrgt99@kreacher>
-In-Reply-To: <1746940.X44tFrgt99@kreacher>
-Subject: RE: [PATCH 4/4] cpuidle: teo: Fix "early hits" handling for disabled idle states
-Date:   Tue, 5 Nov 2019 11:50:56 -0800
-Message-ID: <001701d59412$5804f620$080ee260$@net>
+        id S1726853AbfKEUNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 15:13:05 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45623 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726368AbfKEUNF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 15:13:05 -0500
+Received: by mail-oi1-f196.google.com with SMTP id k2so18737385oij.12;
+        Tue, 05 Nov 2019 12:13:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mU9UcOU7sHcf7HCmRIHXhWHMA1uoQHabE8Uv8Jt+A7E=;
+        b=deYGSv8p6GIzQ3anqm/7VuAyUdkL8f4vSLJd//erntmjUeSYr369cjy2nWUkkDX8BX
+         1T6PqCjcVp8lm3GY5LohQhIQEVqUjZXpAZ8LxMs0d5GaO599TdUR3E2umG8fppna7E/K
+         pn12fGx312nfP23kG7KaPJeUd+QzOi77BifVXHYjMuKy6g2fZqLu+J20/UpJSMONwzLH
+         1k+JRJ9nrTd3Fo0mhO7ZmWsHoWNOYMk7qVcM1pZAYiwbqyTQyCyKo7kEhtyu47DVDi9h
+         sxnJAHPK8SfuYH5nCCzv5+QwLWUssw2vxAp0gAEuTlCW1QHFKGPhnHYvmXhANpkywSKE
+         5qFA==
+X-Gm-Message-State: APjAAAWET6wphwNAdWYbdfGmT6cssUm9sQwmXeUNShouijm4e9DSXMgp
+        T6/aEYB2bu61bbrtu2bt6Q==
+X-Google-Smtp-Source: APXvYqzy0m98tPqHlFSqTVQuTPMUjEJDLNZe7DOwoduqbUy3ipM2+KtNECfZLQnN0fel0V++XN/OPg==
+X-Received: by 2002:aca:dd0a:: with SMTP id u10mr740393oig.130.1572984783628;
+        Tue, 05 Nov 2019 12:13:03 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v13sm1077013ota.53.2019.11.05.12.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 12:13:03 -0800 (PST)
+Date:   Tue, 5 Nov 2019 14:13:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 3/6] dt-bindings: devfreq: Add bindings for imx ddr
+ controller
+Message-ID: <20191105201302.GA4772@bogus>
+References: <cover.1572558427.git.leonard.crestez@nxp.com>
+ <b9a87c69eb603622303add4f0c02dd4c1262462a.1572558427.git.leonard.crestez@nxp.com>
+ <20191104222126.GB5218@bogus>
+ <VI1PR04MB7023F375AEDC4549FA12247FEE7E0@VI1PR04MB7023.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdV/svNL1SGyn6VuSRenWSHfKDOrigUXgi5Q
-X-CMAE-Envelope: MS4wfPTo3Tg79I5gcuqTg0S8haGff6gCV7l9YRfbgkZeCEg3EQTeTOV8SnrYUDGJGAP2WlEKHb8FUGvUzzN6/sHz757OAgajzOAa16IVoqpNBeGyQ3tX7a1U
- fqihNDzZZC5O1EQ8wxXe3xolk8+NGJ3bpEx6FRJmLvvaALzrS2P333dyfkMjSQswciPPVx8eRkd7laBv9xetbZVAq+7XCkLCYRl2JiFw4ZqYvaH+Gq8eFwhF
- DgSRLctwzpHVGIKV3LArd9Ia/qidj/y8ga1Dbj3dqIZgyoMe5yyuzzxBVlRU1VVbTtMTIVNFpkmdRuedwuZnjYm1J+vXHvSGg7CYaBl8+YGi65z9bjpc3fKn
- 8QREqsFz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <VI1PR04MB7023F375AEDC4549FA12247FEE7E0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.10.10 14:38 Rafael J. Wysocki wrote:
-
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The TEO governor uses idle duration "bins" defined in accordance with
-> the CPU idle states table provided by the driver, so that each "bin"
-> covers the idle duration range between the target residency of the
-> idle state corresponding to it and the target residency of the closest
-> deeper idle state.  The governor collects statistics for each bin
-> regardless of whether or not the idle state corresponding to it is
-> currently enabled.
->
-> In particular, the "early hits" metric measures the likelihood of a
-> situation in which the idle duration measured after wakeup falls into
-> to given bin, but the time till the next timer (sleep length) falls
-> into a bin corresponding to one of the deeper idle states.  It is
-> used when the "hits" and "misses" metrics indicate that the state
-> "matching" the sleep length should not be selected, so that the state
-> with the maximum "early hits" value is selected instead of it.
->
-> If the idle state corresponding to the given bin is disabled, it
-> cannot be selected and if it turns out to be the one that should be
-> selected, a shallower idle state needs to be used instead of it.
-> Nevertheless, the metrics collected for the bin corresponding to it
-> are still valid and need to be taken into account as though that
-> state had not been disabled.
->
-> As far as the "early hits" metric is concerned, teo_select() tries to
-> take disabled states into account, but the state index corresponding
-> to the maximum "early hits" value computed by it may be incorrect.
-> Namely, it always uses the index of the previous maximum "early hits"
-> state then, but there may be enabled idle states closer to the
-> disabled one in question.  In particular, if the current candidate
-> state (whose index is the idx value) is closer to the disabled one
-> and the "early hits" value of the disabled state is greater than the
-> current maximum, the index of the current candidate state (idx)
-> should replace the "maximum early hits state" index.
->
-> Modify the code to handle that case correctly.
+On Tue, Nov 05, 2019 at 07:25:57PM +0000, Leonard Crestez wrote:
+> On 05.11.2019 00:21, Rob Herring wrote:
+> > On Thu, Oct 31, 2019 at 11:50:24PM +0200, Leonard Crestez wrote:
+> >> Add devicetree bindings for the i.MX DDR Controller on imx8m series
+> >> chips. It supports dynamic frequency switching between multiple data
+> >> rates and this is exposed to Linux via the devfreq subsystem.
+> >>
+> >> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> >> ---
+> >>   .../devicetree/bindings/devfreq/imx-ddrc.yaml | 60 +++++++++++++++++++
+> > 
+> > .../bindings/memory-controllers/
 > 
-> Fixes: b26bf6ab716f ("cpuidle: New timer events oriented governor for tickless systems")
-> Reported-by: Doug Smythies <dsmythies@telus.net>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Okay, but I'm not sure about the rules here. Usually there is a 1:1 
+> mapping between subsystems and bindings directory but I guess devfreq is 
+> odd since it's not really a physical class of device.
 
-I tested this pretty patch set thoroughly, but can not claim exhaustively.
-I did my best to mess it up via trying weird scenarios.
-Unrelated issues discovered during testing are being handled on
-other e-mail threads.
-
-Tested-by: Doug Smythies <dsmythies@telus.net>
+Mostly true, but it's not completely 1:1.
 
 
+> I saw there is also a drivers/memory and there is already a 
+> devfreq-using driver in there (EXYNOS5422_DMC).
+
+Yeah, well it's been a while since I last tried to clean up locations of 
+things. DDR controller bindings are not in the best shape.
+
+
+> It's not clear if my driver fits in there; as far as I can see the only 
+> "core" functionality in drivers/memory is parsing DDR timings from DTS 
+> but for imx8m this is all controlled in firmware.
+
+You shouldn't have to think about that. Bindings should be for DDR 
+controllers regardless of whether there's a driver for devfreq, EDAC, 
+perf, or ??? or all of those.
+
+Rob
