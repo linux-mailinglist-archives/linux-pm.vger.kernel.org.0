@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52782F1715
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 14:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10B9F170E
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 14:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731864AbfKFN3J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 08:29:09 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40040 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731826AbfKFN3I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 08:29:08 -0500
-Received: by mail-pl1-f194.google.com with SMTP id e3so9311175plt.7
-        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 05:29:08 -0800 (PST)
+        id S1731894AbfKFN3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 08:29:14 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40048 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731887AbfKFN3N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 08:29:13 -0500
+Received: by mail-pl1-f196.google.com with SMTP id e3so9311266plt.7
+        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 05:29:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=2xqYXv9mzaQHwdDh6j/4ycM4TkgLqd6VvlhGxQOhNwg=;
-        b=za0v+vrOAYFsK6XXgXtbLMXEk/0Jo14oKAfvmttgjG9v8GTN3APeKjjkysHBIo/MaD
-         yu1fZQ8H+NAJ/MF1Jb65S7HsNdTp52aIe2OqV7nU/fr3/e2KDfBJa5HMfkeSVHMiPaWW
-         pjJ7GrAUvONFXEc2cWBBFXzetevUlhXpioV7h5PS917zag1508jFEetnjK0914bqqzdY
-         z6myjrjljlOZOD3qORGAP0lciZJSobhzFPoJYYF8KE3t7m1+Vd6KhBJI37QGCM7tU7m3
-         xlR68RTUxYR9NhAjBoSmKY60c6bglrGlJ6+UZkW0SU5UkzgR2LFnaqY85S8gIQnGTaEs
-         7vDg==
+        bh=7255+C81bgkCi8NGM8c0LBC3vCxrIbGTPf3ioqLcyWY=;
+        b=ddcOjiSextgQgzgcfT/whbaOfy/nCfGeGuEGl2N4Ki0Atdupm/umvsICnXhHuZ6QLj
+         QzlPsgnzZAGelJxDBlasD3SISnQudVbzb+ryGfqUla8rmjEwGfrkONCrDYJjzSZwjTvx
+         VPA0r9ABhIY3CAcJNS+bzaA6YRsL2bA8v1BpF7JkjGr/vgXnIwTa3zBudYVkdNjE+DMn
+         27jMaw5vTbktUbz2qUA9wlQBsEnJunmiF4N5wSkOA+P7I7e8eGsEqYGe7ZkpbNBgpTSi
+         +djdpFzIeFkzs3/6Mn5IethZC30s7HajAi9qTK1482fMaI92qN+OPBA554jkYSPgLPkO
+         mH0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=2xqYXv9mzaQHwdDh6j/4ycM4TkgLqd6VvlhGxQOhNwg=;
-        b=l88tw4y0F1O6hlqLmMfT4INruJ4kRxIJ1dgvtxJeLvta3LPebuXlmUtGS6GV5uAFt+
-         vJh7aQCPGjoRKHWUGUkbIXqV9986WX+9sFHlnwX5D9mZrL9qpzWuvriES2KsYFjjM5G4
-         NzIwvbtli29RgWODsYGkJ47qr5MSEAj6I7uVhAMniOP9F0mMxxMt7dH87b5OzcTQAXlR
-         f3PiBKB2Hpv9afe/byC2/81v5MuLRxo0t659oOJbDmjpqEdzyXJLP5rQTLYNDD8LkAzb
-         r6MsznmVv1d9z5eJyzKNTRyB1+qnqMBbk1zDzwJU+ZcbVBrr550RIbo/xKf5JO8gndT5
-         2v4Q==
-X-Gm-Message-State: APjAAAXy6/Rc3BU+bYq7pTBH69RufKpbgLk4Xy2p2LkGdOu+kYDu0iR0
-        xHkp16yfxMkPOqqaVds/WgGBjw==
-X-Google-Smtp-Source: APXvYqzdD6PP3zR2WOpA7wbJdtG8RYdi6t7S3j+JCo3E8AwHpvLtfylSKI497txtjQISu6lCPm6v2A==
-X-Received: by 2002:a17:902:8309:: with SMTP id bd9mr1678528plb.153.1573046947813;
-        Wed, 06 Nov 2019 05:29:07 -0800 (PST)
+        bh=7255+C81bgkCi8NGM8c0LBC3vCxrIbGTPf3ioqLcyWY=;
+        b=W46TjGvw8b/gRYr7RLo9GPI0BpbSP+M2xCk/PhtsytSmpIAXhLqYS6sBIDPws624jA
+         Tt21ddEoHEIdmqPggCPwstSuk1HWeDj8x1AlYw+crbRgt/wNEbx0zkdynDU8nln4qZP9
+         ZTvMhmKDGlh+PkM14yy9hTIyDXYd/YZb6ahrp4vwZ8totutVNytifLAP3mqBrDkEXfyo
+         Q3pHc/Ahih8YjHFFFsbr6/pIJ0D8MZpM+Cpp7FIEmNeFKxelfo5+FwQ+PFPLaSwQfaIz
+         MSTVo6zZqg4z7yFvfiT4chA12D8ygvPZPP+caaT6Xs8iHLy+KavFVhixmgohOqgCK7wp
+         f5uA==
+X-Gm-Message-State: APjAAAWj1wr6SwjnGpT+wJtNNcfHJQDEAj0At6xivkxm/XsixW2WA2Oy
+        FjvLkFSzl5zZXpdym1Pu6/5U4Q==
+X-Google-Smtp-Source: APXvYqyeNXgF7biG1nwiqCenHBeFxFsORJqDAJyTpsd6aDgQGfxwcYqK4YoW8uZnbSSjDUTalwVjNg==
+X-Received: by 2002:a17:902:7207:: with SMTP id ba7mr2659118plb.172.1573046951646;
+        Wed, 06 Nov 2019 05:29:11 -0800 (PST)
 Received: from localhost ([49.248.202.230])
-        by smtp.gmail.com with ESMTPSA id g7sm23243544pgr.52.2019.11.06.05.29.06
+        by smtp.gmail.com with ESMTPSA id l24sm22658774pff.151.2019.11.06.05.29.10
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 Nov 2019 05:29:07 -0800 (PST)
+        Wed, 06 Nov 2019 05:29:11 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Amit Daniel Kachhap <amit.kachhap@gmail.com>,
@@ -62,11 +62,10 @@ To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Thierry Reding <thierry.reding@gmail.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 08/11] thermal: samsung: Appease the kernel-doc deity
-Date:   Wed,  6 Nov 2019 18:58:24 +0530
-Message-Id: <ef268335454e96e6ee3d13deb1cb89af0d0a3b61.1573046440.git.amit.kucheria@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH 09/11] thermal: tegra: Appease the kernel-doc deity
+Date:   Wed,  6 Nov 2019 18:58:25 +0530
+Message-Id: <4cba46c100cb504a52e52062bdf4e4a4e9427b99.1573046440.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1573046440.git.amit.kucheria@linaro.org>
 References: <cover.1573046440.git.amit.kucheria@linaro.org>
@@ -79,42 +78,130 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Fix up the following warning when compiled with make W=1:
 
-linux.git/drivers/thermal/mtk_thermal.c:374: warning: cannot understand function prototype: 'const struct mtk_thermal_data mt8173_thermal_data = '
-linux.git/drivers/thermal/mtk_thermal.c:413: warning: cannot understand function prototype: 'const struct mtk_thermal_data mt2701_thermal_data = '
-linux.git/drivers/thermal/mtk_thermal.c:443: warning: cannot understand function prototype: 'const struct mtk_thermal_data mt2712_thermal_data = '
-linux.git/drivers/thermal/mtk_thermal.c:499: warning: cannot understand function prototype: 'const struct mtk_thermal_data mt8183_thermal_data = '
-linux.git/drivers/thermal/mtk_thermal.c:529: warning: Function parameter or member 'sensno' not described in 'raw_to_mcelsius'
+linux.git/drivers/thermal/tegra/soctherm.c:369: warning: Function parameter or member 'value' not described in 'ccroc_writel'
+linux.git/drivers/thermal/tegra/soctherm.c:369: warning: Excess function parameter 'v' description in 'ccroc_writel'
+linux.git/drivers/thermal/tegra/soctherm.c:447: warning: Function parameter or member 'dev' not described in 'enforce_temp_range'
+linux.git/drivers/thermal/tegra/soctherm.c:772: warning: Function parameter or member 'sg' not described in 'tegra_soctherm_set_hwtrips'
+linux.git/drivers/thermal/tegra/soctherm.c:772: warning: Function parameter or member 'tz' not described in 'tegra_soctherm_set_hwtrips'
+linux.git/drivers/thermal/tegra/soctherm.c:944: warning: Function parameter or member 'ts' not described in 'soctherm_oc_intr_enable'
+linux.git/drivers/thermal/tegra/soctherm.c:1167: warning: Function parameter or member 'data' not described in 'soctherm_oc_irq_disable'
+linux.git/drivers/thermal/tegra/soctherm.c:1167: warning: Excess function parameter 'irq_data' description in 'soctherm_oc_irq_disable'
+linux.git/drivers/thermal/tegra/soctherm.c:1224: warning: Function parameter or member 'ctrlr' not described in 'soctherm_irq_domain_xlate_twocell'
+linux.git/drivers/thermal/tegra/soctherm.c:1686: warning: Function parameter or member 'pdev' not described in 'soctherm_init_hw_throt_cdev'
+linux.git/drivers/thermal/tegra/soctherm.c:1764: warning: Function parameter or member 'ts' not described in 'throttlectl_cpu_level_cfg'
+linux.git/drivers/thermal/tegra/soctherm.c:1812: warning: Function parameter or member 'ts' not described in 'throttlectl_cpu_level_select'
+linux.git/drivers/thermal/tegra/soctherm.c:1855: warning: Function parameter or member 'ts' not described in 'throttlectl_cpu_mn'
+linux.git/drivers/thermal/tegra/soctherm.c:1886: warning: Function parameter or member 'ts' not described in 'throttlectl_gpu_level_select'
+linux.git/drivers/thermal/tegra/soctherm.c:1928: warning: Function parameter or member 'ts' not described in 'soctherm_throttle_program'
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/samsung/exynos_tmu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/thermal/tegra/soctherm.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index fb2c55123a99e..8193b66a3f831 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -138,7 +138,7 @@ enum soc_type {
+diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
+index 5acaad3a594f3..66e0639da4bf2 100644
+--- a/drivers/thermal/tegra/soctherm.c
++++ b/drivers/thermal/tegra/soctherm.c
+@@ -360,7 +360,7 @@ static struct soctherm_oc_irq_chip_data soc_irq_cdata;
+ /**
+  * ccroc_writel() - writes a value to a CCROC register
+  * @ts: pointer to a struct tegra_soctherm
+- * @v: the value to write
++ * @value: the value to write
+  * @reg: the register offset
+  *
+  * Writes @v to @reg.  No return value.
+@@ -435,6 +435,7 @@ static int tegra_thermctl_get_temp(void *data, int *out_temp)
  
  /**
-  * struct exynos_tmu_data : A structure to hold the private data of the TMU
--	driver
-+ *			    driver
-  * @id: identifier of the one instance of the TMU controller.
-  * @base: base address of the single instance of the TMU controller.
-  * @base_second: base address of the common registers of the TMU controller.
-@@ -162,8 +162,11 @@ enum soc_type {
-  *	0 < reference_voltage <= 31
-  * @regulator: pointer to the TMU regulator structure.
-  * @reg_conf: pointer to structure to register with core thermal.
-+ * @tzd: pointer to thermal_zone_device structure
-  * @ntrip: number of supported trip points.
-  * @enabled: current status of TMU device
-+ * @tmu_set_trip_temp: SoC specific method to set trip (rising threshold)
-+ * @tmu_set_trip_hyst: SoC specific to set hysteresis (falling threshold)
-  * @tmu_initialize: SoC specific TMU initialization method
-  * @tmu_control: SoC specific TMU control method
-  * @tmu_read: SoC specific TMU temperature read method
+  * enforce_temp_range() - check and enforce temperature range [min, max]
++ * @dev: struct device * of the SOC_THERM instance
+  * @trip_temp: the trip temperature to check
+  *
+  * Checks and enforces the permitted temperature range that SOC_THERM
+@@ -747,6 +748,8 @@ static int get_hot_temp(struct thermal_zone_device *tz, int *trip, int *temp)
+ /**
+  * tegra_soctherm_set_hwtrips() - set HW trip point from DT data
+  * @dev: struct device * of the SOC_THERM instance
++ * @sg: pointer to the sensor group to set the thermtrip temperature for
++ * @tz: struct thermal_zone_device *
+  *
+  * Configure the SOC_THERM HW trip points, setting "THERMTRIP"
+  * "THROTTLE" trip points , using "thermtrips", "critical" or "hot"
+@@ -931,6 +934,7 @@ static irqreturn_t soctherm_thermal_isr_thread(int irq, void *dev_id)
+ 
+ /**
+  * soctherm_oc_intr_enable() - Enables the soctherm over-current interrupt
++ * @ts:		pointer to a struct tegra_soctherm
+  * @alarm:		The soctherm throttle id
+  * @enable:		Flag indicating enable the soctherm over-current
+  *			interrupt or disable it
+@@ -1156,7 +1160,7 @@ static void soctherm_oc_irq_enable(struct irq_data *data)
+ 
+ /**
+  * soctherm_oc_irq_disable() - Disables overcurrent interrupt requests
+- * @irq_data:	The interrupt request information
++ * @data:	The interrupt request information
+  *
+  * Clears the interrupt request enable bit of the overcurrent
+  * interrupt request chip data.
+@@ -1206,6 +1210,7 @@ static int soctherm_oc_irq_map(struct irq_domain *h, unsigned int virq,
+ /**
+  * soctherm_irq_domain_xlate_twocell() - xlate for soctherm interrupts
+  * @d:      Interrupt request domain
++ * @ctrlr:      Controller device tree node
+  * @intspec:    Array of u32s from DTs "interrupt" property
+  * @intsize:    Number of values inside the intspec array
+  * @out_hwirq:  HW IRQ value associated with this interrupt
+@@ -1681,6 +1686,7 @@ static int soctherm_throt_cfg_parse(struct device *dev,
+ /**
+  * soctherm_init_hw_throt_cdev() - Parse the HW throttle configurations
+  * and register them as cooling devices.
++ * @pdev: Pointer to platform_device struct
+  */
+ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
+ {
+@@ -1751,6 +1757,7 @@ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
+ 
+ /**
+  * throttlectl_cpu_level_cfg() - programs CCROC NV_THERM level config
++ * @ts: pointer to a struct tegra_soctherm
+  * @level: describing the level LOW/MED/HIGH of throttling
+  *
+  * It's necessary to set up the CPU-local CCROC NV_THERM instance with
+@@ -1798,6 +1805,7 @@ static void throttlectl_cpu_level_cfg(struct tegra_soctherm *ts, int level)
+ 
+ /**
+  * throttlectl_cpu_level_select() - program CPU pulse skipper config
++ * @ts: pointer to a struct tegra_soctherm
+  * @throt: the LIGHT/HEAVY of throttle event id
+  *
+  * Pulse skippers are used to throttle clock frequencies.  This
+@@ -1841,6 +1849,7 @@ static void throttlectl_cpu_level_select(struct tegra_soctherm *ts,
+ 
+ /**
+  * throttlectl_cpu_mn() - program CPU pulse skipper configuration
++ * @ts: pointer to a struct tegra_soctherm
+  * @throt: the LIGHT/HEAVY of throttle event id
+  *
+  * Pulse skippers are used to throttle clock frequencies.  This
+@@ -1874,6 +1883,7 @@ static void throttlectl_cpu_mn(struct tegra_soctherm *ts,
+ 
+ /**
+  * throttlectl_gpu_level_select() - selects throttling level for GPU
++ * @ts: pointer to a struct tegra_soctherm
+  * @throt: the LIGHT/HEAVY of throttle event id
+  *
+  * This function programs soctherm's interface to GK20a NV_THERM to select
+@@ -1918,6 +1928,7 @@ static int soctherm_oc_cfg_program(struct tegra_soctherm *ts,
+ 
+ /**
+  * soctherm_throttle_program() - programs pulse skippers' configuration
++ * @ts: pointer to a struct tegra_soctherm
+  * @throt: the LIGHT/HEAVY of the throttle event id.
+  *
+  * Pulse skippers are used to throttle clock frequencies.
 -- 
 2.17.1
 
