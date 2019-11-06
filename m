@@ -2,100 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C48E3F0CA9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 04:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A1AF0D08
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 04:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731132AbfKFDJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 22:09:03 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38427 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731100AbfKFDJC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 22:09:02 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 15so2940024pgh.5
-        for <linux-pm@vger.kernel.org>; Tue, 05 Nov 2019 19:09:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=googlenew;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u9meDnCrlVy1TEfNYgEE4zPiyrI7Aj0wUdJgTmJwPd0=;
-        b=ChIZGBOdauzWNRPMnZx4mS7Rx5rG6NTYLpSXvupVqsl+sUmP7noGaGBGMiiv/y2/Ma
-         MtXYd6Baj2roRqbE6Vq6XJNznJVhMLo+2V7rdESrYmmVPxu1Vew+x9mNg0BbRFRsAtTP
-         gB7hfkRq5dCyv7yVeof+dALAis+0NRgnD4civRyhjY9SA2ON+JtbvVj7G/A8wPwllzZB
-         rEeomigcHVdNEBgUrhkQg1IUIyaVKXk15XMbslvyVMTP5upDAUrcnY2PQhbp6s/1e0TF
-         u26VOSKxbMhfkA8cjZj7Ka4FmmwXhD1VE52xXEsj5Cv0F37K4aukNd36KzI3Kkn+WEuq
-         4f4g==
+        id S1730804AbfKFD2N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 22:28:13 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38928 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730655AbfKFD2N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 22:28:13 -0500
+Received: by mail-ot1-f68.google.com with SMTP id e17so11095048otk.6;
+        Tue, 05 Nov 2019 19:28:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u9meDnCrlVy1TEfNYgEE4zPiyrI7Aj0wUdJgTmJwPd0=;
-        b=gVY/i2ccuBC2DABBWDEJvUWMkswO6vP+OqiDQ9o9P5QX56+TJKsTmQFAlFMa4+htkx
-         95Qsz1nW1Tq63IW7+Nq/cOjQ4PQz2XNfm5ZqzgkCDKLs2UqDF/I3PE7EAiIL/v1rKfKI
-         SWppDpvkAM2IDaQZVlUFKkvYkt7Netf6/VzUoQQo2M5+bYO879LrMMQaAO251I8X2dFY
-         VJoj9pDVAT+g7iW+xgiad++c7rHaoaWSKHsHoNRAdIbU8xklzvltn3qs40FspuKU6yn+
-         MCLNY+uMfFaBJOwLlJ3hPpeivHP5qKkCGGzYQCHTSM4PBRi77QEpC0z7xdkHThiDPZJz
-         jpug==
-X-Gm-Message-State: APjAAAUBrZLnIGle6LExMOqNOzVHpZwOmPngrFTREgESsQVFibQvexTq
-        qEPn/iBHuOO3mINTY1LP+TWbAQ==
-X-Google-Smtp-Source: APXvYqzhrFwpuYwd8Wlj1WmlC+ES/GKmbsEVqf2kNamEBw9yHqXZ/UGxwK3ReXng8nT7sP5aDGlQyg==
-X-Received: by 2002:a17:90a:c56:: with SMTP id u22mr654373pje.24.1573009742083;
-        Tue, 05 Nov 2019 19:09:02 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id k24sm19570487pgl.6.2019.11.05.19.08.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=O0oTid0SW10XwZb1RF+BrVVIvnOR1wYdO6Pj1OAvnFY=;
+        b=rM7ZfqNACRtWroo00blzihto1nv27ttoBG1XtZ2fonRNzv7wF6jho2APRDuckeILpl
+         +8pDvQb3/vTOgtDNjF7Ml+A/Taefe3XjBgTyBKx1Gos2HiPua4F2qDjeA5rJf2qrfGgA
+         FiINv1eKe3A3urrY28TTbtPXQJuJsntHD9I3EUgIJo9gE9Bu8uo312z8wHwcSJzrTo0S
+         XFcsqPB98kSxOVVK/gnlXDSZk/oXwEo5jOV6iiONRD8udqu9vPgM21h1DWRmsu7AXx5U
+         o3UXJ5piPxdKX4k5LKl/HWfuG5XgHKJizZZbst9sje6gnXKIA9GgHky2A4bNL9WeJXFL
+         +7Fg==
+X-Gm-Message-State: APjAAAWgNrrexDFCHmGpV3ljN9Gc0W+m1K8LZWJ5qe5m+k5j6uBWz/Fg
+        AhOwaxs2sz9dnBIFwhTfZA==
+X-Google-Smtp-Source: APXvYqzvmFAIynZbAa+Lau3VpEysLExen+Ata4ibdUunVPAd4NoDWn0KHV+ZffT5oKe/kQcLjtQNQw==
+X-Received: by 2002:a9d:6141:: with SMTP id c1mr152751otk.117.1573010892175;
+        Tue, 05 Nov 2019 19:28:12 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 100sm6852434otl.48.2019.11.05.19.28.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 19:09:01 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Jiri Slaby <jslaby@suse.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: [PATCH 46/50] power: Use show_stack_loglvl()
-Date:   Wed,  6 Nov 2019 03:05:37 +0000
-Message-Id: <20191106030542.868541-47-dima@arista.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191106030542.868541-1-dima@arista.com>
-References: <20191106030542.868541-1-dima@arista.com>
+        Tue, 05 Nov 2019 19:28:11 -0800 (PST)
+Date:   Tue, 5 Nov 2019 21:28:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     krzk@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        vireshk@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: Re: [PATCH 3/3] dt-bindings: arm: samsung: Drop syscon compatible
+ from  CHIPID binding
+Message-ID: <20191106032811.GA24162@bogus>
+References: <20191028152050.10220-1-s.nawrocki@samsung.com>
+ <CGME20191028152100eucas1p2ed6bd2d53670c85f6bf550af0631a55a@eucas1p2.samsung.com>
+ <20191028152050.10220-3-s.nawrocki@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191028152050.10220-3-s.nawrocki@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Aligning with other watchdog messages just before panic - use
-KERN_EMERG.
+On Mon, 28 Oct 2019 16:20:50 +0100, Sylwester Nawrocki wrote:
+> The "syscon" compatible string was introduced mainly to allow sharing
+> of the CHIPID IO region between multiple drivers. However, such sharing
+> can be also done without an additional compatible so remove "syscon".
+> 
+> Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
+>  .../devicetree/bindings/arm/samsung/exynos-chipid.yaml         | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- drivers/base/power/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks.
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 134a8af51511..3f39c9524c4d 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -487,7 +487,7 @@ static void dpm_watchdog_handler(struct timer_list *t)
- 	struct dpm_watchdog *wd = from_timer(wd, t, timer);
- 
- 	dev_emerg(wd->dev, "**** DPM device timeout ****\n");
--	show_stack(wd->tsk, NULL);
-+	show_stack_loglvl(wd->tsk, NULL, KERN_EMERG);
- 	panic("%s %s: unrecoverable failure\n",
- 		dev_driver_string(wd->dev), dev_name(wd->dev));
- }
--- 
-2.23.0
-
+Rob
