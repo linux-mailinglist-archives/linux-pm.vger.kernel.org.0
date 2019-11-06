@@ -2,71 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E79F0D5D
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 04:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CB5F0D67
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 04:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730583AbfKFDwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Nov 2019 22:52:41 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:44936 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727266AbfKFDwl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 22:52:41 -0500
-Received: by mail-ot1-f67.google.com with SMTP id c19so3550282otr.11;
-        Tue, 05 Nov 2019 19:52:39 -0800 (PST)
+        id S1729705AbfKFDzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Nov 2019 22:55:48 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:34892 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727266AbfKFDzs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Nov 2019 22:55:48 -0500
+Received: by mail-oi1-f194.google.com with SMTP id n16so19743687oig.2;
+        Tue, 05 Nov 2019 19:55:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qVL6/KdJU5CK3KGDry37q377IXjdSjsU4IwjB7ytqvU=;
-        b=AOdIx3mGPHoOBVTbgrR3Ttjyc1KxVQ/dsXwYAAx6JfxXfqiTnLJL0dk/EGZlkVaAvy
-         g0P9h7uY5VBXBFdJbB8aYblf8feoPB88INwQN10CnQwUQX9MzhIahs70KpMnS075qGmA
-         FIHFIfcXvLRtXOFor5y0K/CeDeOqAa0M82/RkEHljwbcl3ViZ1Z04OD4EBvEYGZNhyP+
-         CoWddgQU2Zl+C5cyMWKuGQXsv/YVEqOhaQJPF7tJxvVHI7GxNbRPYuoxnODMPt3xQeh/
-         saURn0KKPUEvaPlcFzpV0Xp3qUDukwjA7z5qWjR+mxEYdY8qcm5uV8n4b4uBPlFtDjni
-         OXPQ==
-X-Gm-Message-State: APjAAAX+umnKDBiXH1i0rPFQu604ZSCndBbkAAzLjctnBHVXp8bhW2z6
-        AyMD/+kR+naye2RgEr/gqg==
-X-Google-Smtp-Source: APXvYqw9JKyWfFwQh0q+Ym9dD6boCstaS2iRfFy5rBdgL0cCxIbhhpjTpkl5RRvH3B5KqmWgf9RjNQ==
-X-Received: by 2002:a9d:4604:: with SMTP id y4mr219841ote.10.1573012359179;
-        Tue, 05 Nov 2019 19:52:39 -0800 (PST)
+        bh=HjUAd9X8fjLKsDxJpN2012RcMafvu6lngdZt6RcTJmE=;
+        b=oAvomgS7+612l4DdAVlOAMLAkoewa7XcB8MmP8NDj1zJM/vDTusKWQ92J9R6OZHSI+
+         uhT45bhZHRZiG9Sad+sgZ/yH1RcUQIl1UGbHgOaWDZAFCaybTkORddgeqLPxFmaqtDLP
+         Ec1HAuOE/DW2chzTJoD3CvzziZY1a5U9JSV5m35cDZ8JWnPhIe/Fi9IG0bcTZLYwn0Kn
+         1J4Vja5+jhqTnJ2pdhQ2DJbf4Lsk4zT/bHJtpluAlOpfi4mL8eV5NmfJ50+7V1igQEFs
+         YKN1MM587cyU1jnewMJMlE5+FOo2eW1j2DC0xaJdsb/l2PKzskjMzk1vUgdxXZ9eAAQv
+         QmGA==
+X-Gm-Message-State: APjAAAX3lxHqBdAazdCqNT88G5F3crgOA0ZHR4oyB/d1Nd8r3232KLPi
+        nlgXbvGiZGuBczWlPFe7Aw==
+X-Google-Smtp-Source: APXvYqxJkijcKLeyFdKVWB0o60ED3NvjcHRUtiDM4zKRWEtVlOO/Z5sLKo86HRD5S3kjvC0jks7g6Q==
+X-Received: by 2002:aca:c753:: with SMTP id x80mr337979oif.115.1573012545901;
+        Tue, 05 Nov 2019 19:55:45 -0800 (PST)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m205sm6483459oif.10.2019.11.05.19.52.38
+        by smtp.gmail.com with ESMTPSA id c23sm6055178oiy.20.2019.11.05.19.55.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 19:52:38 -0800 (PST)
-Date:   Tue, 5 Nov 2019 21:52:38 -0600
+        Tue, 05 Nov 2019 19:55:45 -0800 (PST)
+Date:   Tue, 5 Nov 2019 21:55:44 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        mark.rutland@arm.com, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: Re: [PATCH] dt-bindings: interconnect: Convert qcom,qcs404 to DT
- schema
-Message-ID: <20191106035238.GA25559@bogus>
-References: <20191030101555.10955-1-georgi.djakov@linaro.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/6] dt-bindings: thermal: Define BCM7216 thermal sensor
+ compatible
+Message-ID: <20191106035544.GA29667@bogus>
+References: <20191030182132.25763-1-f.fainelli@gmail.com>
+ <20191030182132.25763-4-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191030101555.10955-1-georgi.djakov@linaro.org>
+In-Reply-To: <20191030182132.25763-4-f.fainelli@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Oct 2019 12:15:55 +0200, Georgi Djakov wrote:
-> Convert the qcom,qcs404 interconnect provider binding to DT schema.
+On Wed, 30 Oct 2019 11:21:29 -0700, Florian Fainelli wrote:
+> BCM7216 is a 16nm process STB chip, which requires a different
+> compatible string to differentiate different temperature formulas.
 > 
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  .../bindings/interconnect/qcom,qcs404.txt     | 45 -----------
->  .../bindings/interconnect/qcom,qcs404.yaml    | 77 +++++++++++++++++++
->  2 files changed, 77 insertions(+), 45 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.yaml
+>  .../devicetree/bindings/thermal/brcm,avs-tmon.txt         | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
 
-Applied, thanks.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
