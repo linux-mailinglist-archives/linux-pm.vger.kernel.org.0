@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2598FF16FF
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 14:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033FDF1701
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 14:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731744AbfKFN2t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 08:28:49 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39789 "EHLO
+        id S1731777AbfKFN2w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 08:28:52 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45960 "EHLO
         mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731453AbfKFN2s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 08:28:48 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x28so15670225pfo.6
-        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 05:28:48 -0800 (PST)
+        with ESMTP id S1731635AbfKFN2w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 08:28:52 -0500
+Received: by mail-pf1-f193.google.com with SMTP id z4so12849824pfn.12
+        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 05:28:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=M2QJIZx29Gwekb8NQRHw9lqWCpHwrUdysxQR0ZEdvxo=;
-        b=YXE20HvW35Fp8pQXuwFOC39tRqHrhYYIB0Kk79+k+E6QK0j4qvWRYMcwIXgdk74Xj0
-         vxAiAxqDLOc4idYj7jalm+2xF8RpeJzQflNYXKNeN0RZodAmcSkx4m9CXVQkc5dpCTqK
-         y64ygp67E832PmLIBKmgWF61yy1LjpbasXdLfG0bj+Ac+C2SdTk1Qa/fMBaRsHUg9Rzd
-         LVQE38dNolQKbYx+rZaEhWhyxvYSgrFiyS2KfZUu1U18mswP1e5iO8Yoh04EiDtESruo
-         ZfgRnm2ij4RJNsK5kD1oftJDX76h502Lj8g9BGAVW05qiZSts4YKVDcUt4BYNRDM3bm+
-         1siQ==
+        bh=iZlXNo5QDi4Ku2OumCxTReBsuPP9X5fG3KsKTSejROc=;
+        b=y54iMZhFsDkhFVspBHefTVsS0hpSeUoA3E6jZcdSI24ker0Pp8pVSHUKkHOnchnU2y
+         bE3qmBDWjNZbAq+4XwhySlaLmsMnZ/V7IEwhs6HajcnVKTeVTuPwQcmh/HedpQx8YUgE
+         4lZJmGpSURzeSqWHx3Cehn2x+RmRN8m0U3erKhQB2CDj4ScykGxNU4DmYjCNKxd5DbqR
+         eOGiSGBesA+CLOh+by1tGNqI0KkNtofAJ6xCaueiAzznemhYiWztpVfVj7tH5tNqc4g8
+         sTH+D/ReKhn2R0pteTZ0fOsKb8oNIbyMSIRcwCdwe7hceH3Be8Z4ysxaWGgd3bAvXFRt
+         CGbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=M2QJIZx29Gwekb8NQRHw9lqWCpHwrUdysxQR0ZEdvxo=;
-        b=bimvB2AsKzxKM1MA1nVinWHzESOwxVH6qo6rs2k1kqAEU0eQSuic53N5qJyz1t7l7M
-         T8i9K0ptmZIFj6RqSoIntr+RN1WzmVxYKvZ22GEv3EK5qIh9u+i/GOPEcyz3iig2J6aX
-         EDwv893qg8L3lWmKLqaZuePc4o+2uOmthAw9srLClv1LPx8qLMK6GDa3Ov4mn+rHYXTu
-         InG7Qy1KgvCXRpg9eJI26ur/usco5KpWT3TTT6c82VaGrvcNf7qxymI8hDQOpmVLjoNz
-         wStaNsgD9MjVwM7VsMZeWMn86x7j6kfvtBlHToEbL0Fp8G1T2Tl6qFJFGP+c6rXtty5N
-         2wJw==
-X-Gm-Message-State: APjAAAVZhHSQ11Sfepia5RMW0X8mr82946M0kTYFrLTsC/bDxnJ4jjy3
-        74qLc8SsCbQ0Q0uBpUwea+CjZyC/OVtGUA==
-X-Google-Smtp-Source: APXvYqx39ocvWK4EJjHayELfW7zIYDcufpwnEtY5mR0CiHvyOrP67iXURKLfvVVPd86QyNCrMOUkmQ==
-X-Received: by 2002:aa7:9aea:: with SMTP id y10mr3292063pfp.16.1573046927655;
-        Wed, 06 Nov 2019 05:28:47 -0800 (PST)
+        bh=iZlXNo5QDi4Ku2OumCxTReBsuPP9X5fG3KsKTSejROc=;
+        b=ZzrXwnWdWsQoP/NiicQxery7UOBJK0bq8n5AbkFlklNMts1TiMtCppcg4AC676xqYf
+         oZw7+Y7DMBmMhVS+2dw6DG+Upo+ch1sd3r8qGfGVDteGfoXVI0Ch6bDP3y0/oQqIWJxn
+         GuHzcytkLsUgc6DbPpuFKLHdoR3LA0owMl32TLuaulSnuYBtaJv6ooqR888Kl4U4xuXF
+         YZjnpMHa61TkH5MeHKNwtNmY6nu4Vi0SgmMkOlSSCxK2XhMFYpX8m4MYXwrMxfLOQm5U
+         C+tNZhvXbr+/tS6sIB51x+QbLmHRd4as/6gtyVu9vs90Xhom/fTZKHzzjthJretTOitX
+         59tg==
+X-Gm-Message-State: APjAAAWGlB9knG7NcihILeAc0yNhtyGb7NyzEtAAddlCPpSjd/4wzJnl
+        iJxhqVx9+1Fq6NIVQ1VvuTztOA==
+X-Google-Smtp-Source: APXvYqylDq4LroSCnkG+NIJ7kCS82rA20ZZVdTUzOtMvXKS2/99tTZNfrdM2gL5LpglHl3+0dWxrbQ==
+X-Received: by 2002:a17:90a:c306:: with SMTP id g6mr3803290pjt.38.1573046931527;
+        Wed, 06 Nov 2019 05:28:51 -0800 (PST)
 Received: from localhost ([49.248.202.230])
-        by smtp.gmail.com with ESMTPSA id w11sm18236846pgp.28.2019.11.06.05.28.46
+        by smtp.gmail.com with ESMTPSA id u20sm6015923pgo.50.2019.11.06.05.28.50
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 Nov 2019 05:28:47 -0800 (PST)
+        Wed, 06 Nov 2019 05:28:51 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Amit Daniel Kachhap <amit.kachhap@gmail.com>,
@@ -63,9 +63,9 @@ To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 03/11] thermal: step_wise: Appease the kernel-doc deity
-Date:   Wed,  6 Nov 2019 18:58:19 +0530
-Message-Id: <fe3fc4028189d45f8a20da48501e0ea09f2b5236.1573046440.git.amit.kucheria@linaro.org>
+Subject: [PATCH 04/11] thermal: devfreq_cooling: Appease the kernel-doc deity
+Date:   Wed,  6 Nov 2019 18:58:20 +0530
+Message-Id: <fbaad8b0854e8127624e6b7bd5f1272eaf8aee85.1573046440.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1573046440.git.amit.kucheria@linaro.org>
 References: <cover.1573046440.git.amit.kucheria@linaro.org>
@@ -76,87 +76,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Replace - with : to appease the kernel-doc gods and fix warnings such as
-the following when compiled with make W=1:
+Fix up the following warnings with make W=1:
 
-linux-amit.git/drivers/thermal/step_wise.c:187: warning: Function
-parameter or member 'tz' not described in 'step_wise_throttle'
-linux-amit.git/drivers/thermal/step_wise.c:187: warning: Function
-parameter or member 'trip' not described in 'step_wise_throttle'
-
-linux.git/drivers/thermal/fair_share.c:79: warning: Function parameter
-or member 'tz' not described in 'fair_share_throttle'
-linux.git/drivers/thermal/fair_share.c:79: warning: Function parameter
-or member 'trip' not described in 'fair_share_throttle'
+linux.git/drivers/thermal/devfreq_cooling.c:593: warning: Function
+parameter or member 'cdev' not described in 'devfreq_cooling_unregister'
+linux.git/drivers/thermal/devfreq_cooling.c:593: warning: Excess
+function parameter 'dfc' description in 'devfreq_cooling_unregister'
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/fair_share.c    | 4 ++--
- drivers/thermal/gov_bang_bang.c | 4 ++--
- drivers/thermal/step_wise.c     | 4 ++--
- drivers/thermal/user_space.c    | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/thermal/devfreq_cooling.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/fair_share.c b/drivers/thermal/fair_share.c
-index afd99f668c65d..aaa07180ab482 100644
---- a/drivers/thermal/fair_share.c
-+++ b/drivers/thermal/fair_share.c
-@@ -58,8 +58,8 @@ static long get_target_state(struct thermal_zone_device *tz,
- 
- /**
-  * fair_share_throttle - throttles devices associated with the given zone
-- * @tz - thermal_zone_device
-- * @trip - trip point index
-+ * @tz: thermal_zone_device
-+ * @trip: trip point index
-  *
-  * Throttling Logic: This uses three parameters to calculate the new
-  * throttle state of the cooling devices associated with the given zone.
-diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
-index b831fc77cf64a..991a1c54296de 100644
---- a/drivers/thermal/gov_bang_bang.c
-+++ b/drivers/thermal/gov_bang_bang.c
-@@ -71,8 +71,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 
- /**
-  * bang_bang_control - controls devices associated with the given zone
-- * @tz - thermal_zone_device
-- * @trip - the trip point
-+ * @tz: thermal_zone_device
-+ * @trip: the trip point
-  *
-  * Regulation Logic: a two point regulation, deliver cooling state depending
-  * on the previous state shown in this diagram:
-diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/step_wise.c
-index 6e051cbd824ff..2ae7198d3067c 100644
---- a/drivers/thermal/step_wise.c
-+++ b/drivers/thermal/step_wise.c
-@@ -174,8 +174,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 
- /**
-  * step_wise_throttle - throttles devices associated with the given zone
-- * @tz - thermal_zone_device
-- * @trip - trip point index
-+ * @tz: thermal_zone_device
-+ * @trip: trip point index
-  *
-  * Throttling Logic: This uses the trend of the thermal zone to throttle.
-  * If the thermal zone is 'heating up' this throttles all the cooling
-diff --git a/drivers/thermal/user_space.c b/drivers/thermal/user_space.c
-index 962873fd92425..293cffd9c8adb 100644
---- a/drivers/thermal/user_space.c
-+++ b/drivers/thermal/user_space.c
-@@ -17,8 +17,8 @@
- 
- /**
-  * notify_user_space - Notifies user space about thermal events
-- * @tz - thermal_zone_device
-- * @trip - trip point index
-+ * @tz: thermal_zone_device
-+ * @trip: trip point index
-  *
-  * This function notifies the user space through UEvents.
+diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+index ef59256887ff6..a87d4fa031c87 100644
+--- a/drivers/thermal/devfreq_cooling.c
++++ b/drivers/thermal/devfreq_cooling.c
+@@ -53,6 +53,7 @@ static DEFINE_IDA(devfreq_ida);
+  *		'utilization' (which is	'busy_time / 'total_time').
+  *		The 'res_util' range is from 100 to (power_table[state] * 100)
+  *		for the corresponding 'state'.
++ * @capped_state:	index to cooling state with in dynamic power budget
   */
+ struct devfreq_cooling_device {
+ 	int id;
+@@ -587,7 +588,7 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_register);
+ 
+ /**
+  * devfreq_cooling_unregister() - Unregister devfreq cooling device.
+- * @dfc: Pointer to devfreq cooling device to unregister.
++ * @cdev: Pointer to devfreq cooling device to unregister.
+  */
+ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ {
 -- 
 2.17.1
 
