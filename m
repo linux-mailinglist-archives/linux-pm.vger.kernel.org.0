@@ -2,42 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDF1F20D9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 22:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C17F2169
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Nov 2019 23:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728817AbfKFVbb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 16:31:31 -0500
-Received: from mail-eopbgr140085.outbound.protection.outlook.com ([40.107.14.85]:4163
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727587AbfKFVba (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 6 Nov 2019 16:31:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VvhnEmmOQ7TVpmxeJQQb5/l8c8nN/aq9MyN0VnZj5+xKV6f2FfjhLQv7EdGTA8fSbopwdFI1DsskdvSsFfWi//MkzGv9G9z5RCq2gZuQzEh7nrDWu78cz8I8cKn6NV0iw7/3dlVhSj2uxCKoIPYEMuWt6LlikNfsuSZpRaEM8y5/Pm/5X78MMeuWuLnY1/xGzFEaN3ZkmVxv/d9h9awU5/vdK9wgrY/WwQn8wSeyw/Prb7WbzAPfqQdeMUs8eIZ11f84GQ1d7mFvpkw3x23N8kpE+XmYpYfC8y7Ym+tZi55aqnMgsMGjZzHhq0A0dwFwoG0IjXtOv5HJF/H3uriEiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gr8y8jwVc8+Dfj+DQuPJUQFa6V0sttGRMnzUPxQUpqE=;
- b=eKnRN7ytAhjbRQSUXdETQCfF4UowdB0zfRqw1XfTDtdhcHxMFCLnnmDqRxH74cizX5tJ3yeix4RjWh9EGKeJS5TOwkpYczvSqZv9c8GNpcHgPe8LKpA/CbB9n4hdxh6Am6AeKoi9nhQrr1Rt0+nA8NweTuxXHTHyx15IJ0pqdRgGljKHAc6mDKWH6wHWaSPlzbfPqModE4BvUKqODZ9/b7HZgCBcUXnjxeV7uaCPzyx97KLbcPbvTNWM0qVUK7lkdb4DI9nqLHh0C187L7Imiqb50BHinSKxqwudnWSKQ/8KfFIkD8+E8jNhhpquas27J9TEkGSRXQj/6rDjkWRluA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gr8y8jwVc8+Dfj+DQuPJUQFa6V0sttGRMnzUPxQUpqE=;
- b=UbJ0UqUHVNzx7oowOY4YCnq9E1yzoVhFgYggEBgadCOkG1pnW9tV8aiMF5U4y8h2Osv3I7OkU8fGh+byWTUKtXIuLdY1Yg0Q+TSELUkjDCALl3zs3hfKFojX03D3p/WM8glYBCxFkfssFIZjeDFj/TsC4hKT45E36zaIRzAqEaw=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB3229.eurprd04.prod.outlook.com (10.170.231.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2408.24; Wed, 6 Nov 2019 21:31:24 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2430.023; Wed, 6 Nov 2019
- 21:31:24 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
+        id S1726798AbfKFWKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 17:10:43 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40231 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726779AbfKFWKn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 17:10:43 -0500
+Received: by mail-ed1-f67.google.com with SMTP id p59so150944edp.7;
+        Wed, 06 Nov 2019 14:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SDr75JeUJsJ8dZL/F1Be4/O1quSb0nw2X9hrHND8Y8U=;
+        b=GANudTF+1UsLE9mwYGatQdZ9xW827oG/pClc3lKYYg/7SRSfh4AxD+YbTxwiEof0xS
+         7I8Hj4e+3LyJT+sS2AdizrwRxnmhCvo89bfMYafgivJ4ZGei4MSMxELjSnOyEg4/hiYw
+         JEOXqc1W8chNN1+jU48HL1C/M4S1HHHfn/tjxmNTPlD+U88n9lZd/WdP9rMS0kVmfT9E
+         j2802XFtbb0aCZtx09n7Bq9jT+D6aIln6u7htKHyO5Pn2ouMdF2Tt6M2LkuPdCFWyP3a
+         ZetB760Ovy1LyLCDpvlPiKI55/WzLE2nJ1hnoYXI3F/sDYOCHGDrlgePZLZ9NgJtZCKQ
+         RQ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=SDr75JeUJsJ8dZL/F1Be4/O1quSb0nw2X9hrHND8Y8U=;
+        b=IExiqUMGmlfBUsbViLEtc9iHe+eg6zaP7sAPybNPjeTsF2r1macOsMwFX3F1pchMIc
+         Rvh50oC6RdnhcCSAgxNlROw17rr5sNUPZcoLsm0qzFuUVDn+wHvwBBcLVaFCBzShqZBD
+         /t907aPWGVRgeTOyxsnng6tlIWPixtFPEDVIHYWQbEHwf7GiAp/7NinKospYhc7TQ7iS
+         F+/vzyHTNdVGP2wD4IXWviw5QPLv1cM9msuzePRZhEYYK7GnYf/y8Q8rVUp3Ags1uLff
+         +BUGKstuF0Owt2Lp3YghpUKYR2XynXjmX1DYGYs7/+g8EQ9su1umve6+x3UM6+LN++r/
+         FeAg==
+X-Gm-Message-State: APjAAAVTpO0vR+F+ysyFbBREo2QVQ8RMOAYAl/QTs4pu4pNDAREWHVvj
+        DG5be0Gwqnx7ijhqdH+Vcu0=
+X-Google-Smtp-Source: APXvYqwG75vte35QkvT6lDd1vdJ/jH+dGJ7ahEnC2vQZyVqVLeC5SH0ROIIEHzS74SFsspMtbQEEVQ==
+X-Received: by 2002:aa7:d842:: with SMTP id f2mr49149eds.262.1573078240727;
+        Wed, 06 Nov 2019 14:10:40 -0800 (PST)
+Received: from [10.67.50.53] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m20sm1280edb.60.2019.11.06.14.10.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Nov 2019 14:10:40 -0800 (PST)
+Subject: Re: [RFC 0/7] cpuidle: Add poking mechanism to support non-IPI wakeup
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
         Abel Vesa <abel.vesa@nxp.com>
-CC:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Aisheng Dong <aisheng.dong@nxp.com>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
         Jacky Bai <ping.bai@nxp.com>,
@@ -57,12 +69,6 @@ CC:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         "robh@kernel.org" <robh@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC 0/7] cpuidle: Add poking mechanism to support non-IPI wakeup
-Thread-Topic: [RFC 0/7] cpuidle: Add poking mechanism to support non-IPI
- wakeup
-Thread-Index: AQHU5J/uL6RBBX3AA0GxPKCBIrMc4A==
-Date:   Wed, 6 Nov 2019 21:31:24 +0000
-Message-ID: <VI1PR04MB7023BCCCE80A02B00F5F2ED0EE790@VI1PR04MB7023.eurprd04.prod.outlook.com>
 References: <1553692845-20983-1-git-send-email-abel.vesa@nxp.com>
  <1553701479.2561.38.camel@pengutronix.de>
  <564216aa-1144-71de-e887-00c58f466bf5@arm.com>
@@ -71,199 +77,229 @@ References: <1553692845-20983-1-git-send-email-abel.vesa@nxp.com>
  <cb2e5521cc0d29b7c3ac42a6717256ec2e8d35e6.camel@nxp.com>
  <20190328104542.GA27459@e107981-ln.cambridge.arm.com>
  <ebf1b5f3-1612-9dae-72bb-cc67be69ebf2@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4970d12b-7cc3-49cd-b9f5-08d76300acec
-x-ms-traffictypediagnostic: VI1PR04MB3229:|VI1PR04MB3229:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB3229EFDD40ABD30BE2E029D8EE790@VI1PR04MB3229.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 02135EB356
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(366004)(396003)(376002)(136003)(199004)(189003)(446003)(6116002)(54906003)(476003)(305945005)(99286004)(76176011)(33656002)(110136005)(66556008)(8936002)(81166006)(9686003)(6436002)(6636002)(6306002)(7416002)(6246003)(66446008)(76116006)(66476007)(64756008)(86362001)(316002)(3846002)(478600001)(7696005)(6506007)(53546011)(8676002)(5660300002)(52536014)(81156014)(7736002)(14444005)(102836004)(14454004)(25786009)(26005)(256004)(66066001)(186003)(74316002)(44832011)(55016002)(486006)(66946007)(91956017)(71190400001)(71200400001)(2906002)(4326008)(229853002)(966005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3229;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xZRV2/hzdc3jTAvzpVuPe1xmEMMWRZ062YBGlmtcS6kDG4Mb7toN4UOo3mphYRJrfXyjPERbXM7oeBJVaScwZzFuYA+7BoJ+qVWeMIvLz7oXf8uPdTlEzqo3AMjwKQ1ChKApz81AywliaR3227JQj0azSDLO10ZEV6240xfb8gRjBZaQ0pp1HxBBk9r2hCrdkt59OFAJgdriZ4SHp78rjw/t1pIHfdzaYEgX1zpoMZC6uWx49Ni2L4fFGJiMIYidBGqnDiemuLrBAsn8qS07OgUN8/Bm+1wn2odZ+cHdpRxhzmZwftK5+TSQ2D/kkaTS9XNVEBP+IG9Yju8pdm9hP/+tzYkWqiYutsYk/5KhMzB4XgSutnvdkB/M9VeDjHAjnaYYsZaXzQpOHZdMa9wRnHESXlqjzQ4X0RAHVu3SjKHhPGNS+JsV5itWo6ShMT/a/Nq5Uj1wZuxOMArWhz685/ddQUV7hQeHyJtFOJVqOoM=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <VI1PR04MB7023BCCCE80A02B00F5F2ED0EE790@VI1PR04MB7023.eurprd04.prod.outlook.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <8e5de17a-b81b-fa92-3ffc-58ddb5b864b3@gmail.com>
+Date:   Wed, 6 Nov 2019 14:10:26 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4970d12b-7cc3-49cd-b9f5-08d76300acec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2019 21:31:24.6508
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dW0JAy4646Mx9o0VLhDGkIhPpwR7h1q52KXQOw6JzoDTLqqhbnKQmhk1hDWLWQnFPg+pTRHdbj1ek/kmPrZORA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3229
+In-Reply-To: <VI1PR04MB7023BCCCE80A02B00F5F2ED0EE790@VI1PR04MB7023.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06.11.2019 22:15, Florian Fainelli wrote:=0A=
-> On 3/28/19 3:45 AM, Lorenzo Pieralisi wrote:=0A=
->> On Wed, Mar 27, 2019 at 06:40:07PM +0000, Leonard Crestez wrote:=0A=
->>> On Wed, 2019-03-27 at 17:45 +0000, Marc Zyngier wrote:=0A=
->>>> On 27/03/2019 16:06, Lucas Stach wrote:=0A=
->>>>> Am Mittwoch, den 27.03.2019, 15:57 +0000 schrieb Marc Zyngier:=0A=
->>>>>> On 27/03/2019 15:44, Lucas Stach wrote:=0A=
->>>>>>> Am Mittwoch, den 27.03.2019, 13:21 +0000 schrieb Abel Vesa:=0A=
->>>>>>>> This work is a workaround I'm looking into (more as a background t=
-ask)=0A=
->>>>>>>> in order to add support for cpuidle on i.MX8MQ based platforms.=0A=
->>>>>>>>=0A=
->>>>>>>> The main idea here is getting around the missing GIC wake_request =
-signal=0A=
->>>>>>>> (due to integration design issue) by waking up a each individual c=
-ore through=0A=
->>>>>>>> some dedicated SW power-up bits inside the power controller (GPC) =
-right before=0A=
->>>>>>>> every IPI is requested for that each individual core.=0A=
->>>>>>>=0A=
->>>>>>> Just a general comment, without going into the details of this seri=
-es:=0A=
->>>>>>> this issue is not only affecting IPIs, but also MSIs terminated at =
-the=0A=
->>>>>>> GIC. Currently MSIs are terminated at the PCIe core, but terminatin=
-g=0A=
->>>>>>> them at the GIC is clearly preferable, as this allows assigning CPU=
-=0A=
->>>>>>> affinity to individual MSIs and lowers IRQ service overhead.=0A=
->>>>>>>=0A=
->>>>>>> I'm not sure what the consequences are for upstream Linux support y=
-et,=0A=
->>>>>>> but we should keep in mind that having a workaround for IPIs is onl=
-y=0A=
->>>>>>> solving part of the issue.=0A=
->>>>>>=0A=
->>>>>> If this erratum is affecting more than just IPIs, then indeed I don'=
-t=0A=
->>>>>> see how this patch series solves anything.=0A=
->>>>>>=0A=
->>>>>> But the erratum documentation seems to imply that only SGIs are=0A=
->>>>>> affected, and goes as far as suggesting to use an external interrupt=
-=0A=
->>>>>> would solve it. How comes this is not the case? Or is it that anythi=
-ng=0A=
->>>>>> directly routed to a redistributor is also affected? This would brea=
-k=0A=
->>>>>> LPIs (and thus MSIs) and PPIs (the CPU timer, among others).=0A=
->>>>>=0A=
->>>>> Anything that isn't visible to the GPC and requires the GIC=0A=
->>>>> wake_request signal to behave as specified is broken by this erratum.=
-=0A=
->>>>=0A=
->>>> I really wonder how a timer interrupt (a PPI, hence not routed through=
-=0A=
->>>> the GPC) can wake up the CPU in this case. It really feels like=0A=
->>>> something like "program CNTV_CVAL_EL0 to expire at some later point;=
-=0A=
->>>> WFI" could result in the CPU going to a deep sleep state, and not=0A=
->>>> wake-up at all.=0A=
->>>=0A=
->>> This is already a common issue for cpuidle implementions handled by the=
-=0A=
->>> "local-timer-stop" property. imx has other timer blocks in the SOC,=0A=
->>> they generate SPIs which are connected to GPC.=0A=
->>=0A=
->> It is not a common issue. The tick-broadcast mechanism relies on=0A=
->> IPIs that are sent to specific CPUs upon timer expiry.=0A=
->>=0A=
->> If IPIs don't work for CPUs in shutdown state (which is what this patch=
-=0A=
->> is fixing AFAIU), the only reason I can see how a CPU can resume from=0A=
->> idle on a timer expiry is the GPC waking up all cores upon the global=0A=
->> timer SPI; if that's the case there is precious little point in=0A=
->> implementing CPUidle at all - too bad people worked hard to implement=0A=
->> NOHZ in a power efficient manner.=0A=
->>=0A=
->>>> This would indicate that not only cpuidle is broken with this, but=0A=
->>>> absolutely every interrupt that is not routed through the GPC.=0A=
->>>=0A=
->>> Yes, cpuidle is broken for irqs not routed through GPC. However:=0A=
->>>=0A=
->>> * All SPIs are connected to GPC in a 1:1 mapping=0A=
->>> * This series deals with SGIs=0A=
->>> * The timer PPIs are not required; covered by local-timer-stop=0A=
->>> * LPIs are currently unused (I understand imx-pci uses SPI by default=
-=0A=
->>> from Lucas)=0A=
->>>=0A=
->>> Anything missing?=0A=
->>=0A=
->> Yes, LPIs must be able to wake up CPUs and only the CPU for which=0A=
->> an IRQ is actually pending.=0A=
->>=0A=
->> >From an architectural perspective, an ARM core executing the WFI=0A=
->> instruction must resume execution upon an IRQ occurrence targeted=0A=
->> at it and that's true regardless of the idle state entered.=0A=
->>=0A=
->> Anything deviating from this behaviour is not architecture compliant.=0A=
-> =0A=
-> What if you enter a deeper state than WFI, which leads to the power=0A=
-> gating of your CPU core, and you are missing the necessary hardware that=
-=0A=
-> should be driven from the GIC's nIRQOUT/nFIQOUT signals to automatically=
-=0A=
-> bring the core back on upon the GIC seeing a pending interrupt targeting=
-=0A=
-> that core?=0A=
-=0A=
-imx8mq has a secondary "GPC" block which receives SPIs and can wake the =0A=
-cores. Do you have something similar? Because if you only have the GIC =0A=
-then that sounds much worse: you'd have to ensure that all peripheral =0A=
-interrupts are routed away from sleeping cores.=0A=
-=0A=
-On IMX only SGIs need special treatment and a newer version just =0A=
-replaces __smp_cross_call in a platform-specific manner:=0A=
-=0A=
-     https://lkml.org/lkml/2019/6/10/350=0A=
-=0A=
-> Would it be acceptable in that case to "help" the platform by ensuring=0A=
-> that there is at least one core that is not allowed to enter the deepest=
-=0A=
-> idle state and be able to help wake back up the others? I am asking=0A=
-> because I am facing a similar issue to what Abel is trying to solve here=
-=0A=
-> with ARCH_BRCMSTB platforms which do not have the ability to have their=
-=0A=
-> CPU cores wake-up on their once power gated.=0A=
-=0A=
-Maybe you can workaround in ATF: if (last_core) wfi(); else powerdown();=0A=
-=0A=
-But you still need special treatment for interrupts targeted at gated cores=
-.=0A=
-=0A=
->>> My understanding is that this wake request feature via GIC is new in v3=
-=0A=
->>> and this is maybe why HW team missed it during integration. Older=0A=
->>> imx6/7 has GICv2 and has deep idle states which always rely on GPC to=
-=0A=
->>> wakeup so the approach can work.=0A=
->>=0A=
->> If HW designers really wanted to have sensible power management policy=
-=0A=
->> in this SoC they would have paid attention, I am against patching the=0A=
->> kernel heavily to fix a platform bug.=0A=
-=0A=
-> HW designers may not be aware of how the cpuifle framework operates or=0A=
-> what its constraints are, so they may not understand that any interrupt,=
-=0A=
-> must be able to autonomously (with lack of a better name) wake-up a=0A=
-> given core, given any idle state it has entered.=0A=
-=0A=
-My understanding is that this is a requirement of GICv3 architecture.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On 11/6/19 1:31 PM, Leonard Crestez wrote:
+> On 06.11.2019 22:15, Florian Fainelli wrote:
+>> On 3/28/19 3:45 AM, Lorenzo Pieralisi wrote:
+>>> On Wed, Mar 27, 2019 at 06:40:07PM +0000, Leonard Crestez wrote:
+>>>> On Wed, 2019-03-27 at 17:45 +0000, Marc Zyngier wrote:
+>>>>> On 27/03/2019 16:06, Lucas Stach wrote:
+>>>>>> Am Mittwoch, den 27.03.2019, 15:57 +0000 schrieb Marc Zyngier:
+>>>>>>> On 27/03/2019 15:44, Lucas Stach wrote:
+>>>>>>>> Am Mittwoch, den 27.03.2019, 13:21 +0000 schrieb Abel Vesa:
+>>>>>>>>> This work is a workaround I'm looking into (more as a background task)
+>>>>>>>>> in order to add support for cpuidle on i.MX8MQ based platforms.
+>>>>>>>>>
+>>>>>>>>> The main idea here is getting around the missing GIC wake_request signal
+>>>>>>>>> (due to integration design issue) by waking up a each individual core through
+>>>>>>>>> some dedicated SW power-up bits inside the power controller (GPC) right before
+>>>>>>>>> every IPI is requested for that each individual core.
+>>>>>>>>
+>>>>>>>> Just a general comment, without going into the details of this series:
+>>>>>>>> this issue is not only affecting IPIs, but also MSIs terminated at the
+>>>>>>>> GIC. Currently MSIs are terminated at the PCIe core, but terminating
+>>>>>>>> them at the GIC is clearly preferable, as this allows assigning CPU
+>>>>>>>> affinity to individual MSIs and lowers IRQ service overhead.
+>>>>>>>>
+>>>>>>>> I'm not sure what the consequences are for upstream Linux support yet,
+>>>>>>>> but we should keep in mind that having a workaround for IPIs is only
+>>>>>>>> solving part of the issue.
+>>>>>>>
+>>>>>>> If this erratum is affecting more than just IPIs, then indeed I don't
+>>>>>>> see how this patch series solves anything.
+>>>>>>>
+>>>>>>> But the erratum documentation seems to imply that only SGIs are
+>>>>>>> affected, and goes as far as suggesting to use an external interrupt
+>>>>>>> would solve it. How comes this is not the case? Or is it that anything
+>>>>>>> directly routed to a redistributor is also affected? This would break
+>>>>>>> LPIs (and thus MSIs) and PPIs (the CPU timer, among others).
+>>>>>>
+>>>>>> Anything that isn't visible to the GPC and requires the GIC
+>>>>>> wake_request signal to behave as specified is broken by this erratum.
+>>>>>
+>>>>> I really wonder how a timer interrupt (a PPI, hence not routed through
+>>>>> the GPC) can wake up the CPU in this case. It really feels like
+>>>>> something like "program CNTV_CVAL_EL0 to expire at some later point;
+>>>>> WFI" could result in the CPU going to a deep sleep state, and not
+>>>>> wake-up at all.
+>>>>
+>>>> This is already a common issue for cpuidle implementions handled by the
+>>>> "local-timer-stop" property. imx has other timer blocks in the SOC,
+>>>> they generate SPIs which are connected to GPC.
+>>>
+>>> It is not a common issue. The tick-broadcast mechanism relies on
+>>> IPIs that are sent to specific CPUs upon timer expiry.
+>>>
+>>> If IPIs don't work for CPUs in shutdown state (which is what this patch
+>>> is fixing AFAIU), the only reason I can see how a CPU can resume from
+>>> idle on a timer expiry is the GPC waking up all cores upon the global
+>>> timer SPI; if that's the case there is precious little point in
+>>> implementing CPUidle at all - too bad people worked hard to implement
+>>> NOHZ in a power efficient manner.
+>>>
+>>>>> This would indicate that not only cpuidle is broken with this, but
+>>>>> absolutely every interrupt that is not routed through the GPC.
+>>>>
+>>>> Yes, cpuidle is broken for irqs not routed through GPC. However:
+>>>>
+>>>> * All SPIs are connected to GPC in a 1:1 mapping
+>>>> * This series deals with SGIs
+>>>> * The timer PPIs are not required; covered by local-timer-stop
+>>>> * LPIs are currently unused (I understand imx-pci uses SPI by default
+>>>> from Lucas)
+>>>>
+>>>> Anything missing?
+>>>
+>>> Yes, LPIs must be able to wake up CPUs and only the CPU for which
+>>> an IRQ is actually pending.
+>>>
+>>> >From an architectural perspective, an ARM core executing the WFI
+>>> instruction must resume execution upon an IRQ occurrence targeted
+>>> at it and that's true regardless of the idle state entered.
+>>>
+>>> Anything deviating from this behaviour is not architecture compliant.
+>>
+>> What if you enter a deeper state than WFI, which leads to the power
+>> gating of your CPU core, and you are missing the necessary hardware that
+>> should be driven from the GIC's nIRQOUT/nFIQOUT signals to automatically
+>> bring the core back on upon the GIC seeing a pending interrupt targeting
+>> that core?
+> 
+> imx8mq has a secondary "GPC" block which receives SPIs and can wake the 
+> cores. Do you have something similar? Because if you only have the GIC 
+> then that sounds much worse: you'd have to ensure that all peripheral 
+> interrupts are routed away from sleeping cores.
+
+We have a legacy interrupt controller that receives all SPIs as well,
+and it can be used as a full replacement for the GIC (with the loss of
+nVIRQ/nFIQ) but it cannot wake-up the cores unfortunately. This is all
+custom logic, so we could have done at least wake-up based on SPIs, but
+we missed that apparently, at least we were consistent.
+
+Out of curiosity, does your GPC somehow know the affinity of a given
+interrupt to a particular core?
+
+> 
+> On IMX only SGIs need special treatment and a newer version just 
+> replaces __smp_cross_call in a platform-specific manner:
+> 
+>      https://lkml.org/lkml/2019/6/10/350
+
+Right, because for PPIs you leverage the timer broadcast and for SPIs
+you have that GPC, so all your left are the remaining "intra GIC"
+interrupts which are SGIs.
+
+> 
+>> Would it be acceptable in that case to "help" the platform by ensuring
+>> that there is at least one core that is not allowed to enter the deepest
+>> idle state and be able to help wake back up the others? I am asking
+>> because I am facing a similar issue to what Abel is trying to solve here
+>> with ARCH_BRCMSTB platforms which do not have the ability to have their
+>> CPU cores wake-up on their once power gated.
+> 
+> Maybe you can workaround in ATF: if (last_core) wfi(); else powerdown();
+
+Yes, that would certainly work, the biggest problem in my case is
+dealing with SPIs, since we still have no way to wake-up from those,
+other than by getting the help of another CPU that is not power gated.
+Lovely, I know.
+
+> 
+> But you still need special treatment for interrupts targeted at gated cores.
+> 
+>>>> My understanding is that this wake request feature via GIC is new in v3
+>>>> and this is maybe why HW team missed it during integration. Older
+>>>> imx6/7 has GICv2 and has deep idle states which always rely on GPC to
+>>>> wakeup so the approach can work.
+>>>
+>>> If HW designers really wanted to have sensible power management policy
+>>> in this SoC they would have paid attention, I am against patching the
+>>> kernel heavily to fix a platform bug.
+> 
+>> HW designers may not be aware of how the cpuifle framework operates or
+>> what its constraints are, so they may not understand that any interrupt,
+>> must be able to autonomously (with lack of a better name) wake-up a
+>> given core, given any idle state it has entered.
+> 
+> My understanding is that this is a requirement of GICv3 architecture.
+> 
+
+The systems I use have a GICv2 architecture though this is still no
+excuse for not having hooked the nIRQOUT/nFIQOUT to a power management
+controller, this is clearly an oversight, and it should have been
+possible to automatically take a core out of power gating, since we did
+design our own power gating logic, but this was done that way. Hopefully
+future designs can remedy that, designers are aware of why this is a
+problem now.
+--
+Florian
