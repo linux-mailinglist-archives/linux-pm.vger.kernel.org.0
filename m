@@ -2,61 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42160F38BA
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 20:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C33F3A77
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 22:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbfKGThA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Nov 2019 14:37:00 -0500
-Received: from ms.lwn.net ([45.79.88.28]:39222 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726019AbfKGThA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 7 Nov 2019 14:37:00 -0500
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 619206EC;
-        Thu,  7 Nov 2019 19:36:59 +0000 (UTC)
-Date:   Thu, 7 Nov 2019 12:36:58 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Louis Taylor <louis@kragniz.eu>
-Cc:     georgi.djakov@linaro.org, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: driver-api: make interconnect title quieter
-Message-ID: <20191107123658.5bd0e1b7@lwn.net>
-In-Reply-To: <20191101193314.67994-1-louis@kragniz.eu>
-References: <20191101193314.67994-1-louis@kragniz.eu>
-Organization: LWN.net
+        id S1727077AbfKGVYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Nov 2019 16:24:18 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:54854 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfKGVYR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Nov 2019 16:24:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=v7prfR74WqpB6QjYI8Y2BOHTsG7nZfh2FWlkAYoo2zA=; b=Imc2kjH0IvF3QaF7CwIUZA1V8
+        1vhnmAP/TlwFxEl14+16JWeXd/8A3xITJYmDlzybsR88oprxcQI/wdEeV3VK+Z5likFSENCJA6fCz
+        RriAfb0x702kNR92AkTM/YZ+Xs0jp2awOTdxc6ouRkl5Lde/3/PTTTD/+E9v/dNdKw01b6M8T+NrH
+        bt8CL1YmL5ihf3A7z2vCzxqJeJYhWG8gxf8R+zdae0PDpLzRSWOWyod3gWJI4etT33yd8UDWDpaKl
+        EH9rzODP+4wvBLfi0D/ehwjxSfugUfOHOtMhy2zqaBR9Kk4bAiJ3G7a87Iq+oHOLo/oZ0lXZIYdPD
+        8iGVgO6OQ==;
+Received: from [2001:4bb8:184:e48:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iSpGH-0007F5-Hl; Thu, 07 Nov 2019 21:24:13 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: QEMU RISC-V virt machine poweroff driver
+Date:   Thu,  7 Nov 2019 22:24:06 +0100
+Message-Id: <20191107212408.11857-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri,  1 Nov 2019 19:33:14 +0000
-Louis Taylor <louis@kragniz.eu> wrote:
+Hi all,
 
-> This makes it consistent with the other headings in the Linux driver
-> implementer's API guide.
-> 
-> Signed-off-by: Louis Taylor <louis@kragniz.eu>
-> ---
->  Documentation/driver-api/interconnect.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/driver-api/interconnect.rst b/Documentation/driver-api/interconnect.rst
-> index c3e004893796..cdeb5825f314 100644
-> --- a/Documentation/driver-api/interconnect.rst
-> +++ b/Documentation/driver-api/interconnect.rst
-> @@ -1,7 +1,7 @@
->  .. SPDX-License-Identifier: GPL-2.0
->  
->  =====================================
-> -GENERIC SYSTEM INTERCONNECT SUBSYSTEM
-> +Generic System Interconnect Subsystem
->  =====================================
-
-Applied, thanks.
-
-jon
+this patch add a driver for the test device in the Qemu RISC-V
+virt machine which allows properly shutting down the VM.
+It also is added to the riscv defconfig given that qemu-virt
+is the most popular riscv platform.
