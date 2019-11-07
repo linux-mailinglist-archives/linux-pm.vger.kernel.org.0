@@ -2,76 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E1DF2490
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 02:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FD5F2517
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 03:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727597AbfKGBx2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 20:53:28 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:6166 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727328AbfKGBx1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 6 Nov 2019 20:53:27 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 165F1E5BEE9EAE9716C4;
-        Thu,  7 Nov 2019 09:53:26 +0800 (CST)
-Received: from HGHY2S004841851.china.huawei.com (10.184.217.114) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 7 Nov 2019 09:53:17 +0800
-From:   Shen Kai <shenkai8@huawei.com>
-To:     <viresh.kumar@linaro.org>, <rjw@rjwysocki.net>
-CC:     <rafael@kernel.org>, <hushiyuan@huawei.com>,
-        <linfeilong@huawei.com>, <linux-pm@vger.kernel.org>
-Subject: [PATCH]cpufreq: add NULL check to the store method of cpufreq
-Date:   Thu, 7 Nov 2019 01:53:05 +0000
-Message-ID: <1573091585-8628-1-git-send-email-shenkai8@huawei.com>
-X-Mailer: git-send-email 2.6.4.windows.1
-In-Reply-To: <CAJZ5v0h5t2Hv60Y77HaM6DgTS3-m2moNu3DOX4zp8S4YgpS_ag@mail.gmail.com>
-References: <CAJZ5v0h5t2Hv60Y77HaM6DgTS3-m2moNu3DOX4zp8S4YgpS_ag@mail.gmail.com>
+        id S1727916AbfKGCP6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 21:15:58 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39074 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbfKGCP6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 21:15:58 -0500
+Received: by mail-pl1-f194.google.com with SMTP id o9so366264plk.6
+        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 18:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4cKuNUYvAqunvz+72B7anlYEtcmjqeC5FeNltzDFT5k=;
+        b=T59vipNJYtRlVOnfzcZA23VauEahxy7MNspU0b7oX2ekYAE3qzT7B/EnaGYttLoMDQ
+         TkM+K1VxwwR9r3IAcW2Flh4PVi7CpxcgKYiJ1Gp5/FrciIQBzjIveyNa6BeFvA0Cg05m
+         iiljd57ipGroXvyQ0j/MtNI8E5IYIdVFMfilWKgYNhHQNn99lk+fFSHl2AfsNCElOeyb
+         rGDw6zIdYgXGq1SmHNxizrDSS33B0eYcuUOsZeL2H0R8tqygnUZK2kuENLHQVCDiHSXr
+         FjS14E2QKkU0EZ8CxEoVy3Em0+YdFMq2F86KoKPL8YywVWgvqHj1U6OEJg1mNqlq4fmd
+         BB1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4cKuNUYvAqunvz+72B7anlYEtcmjqeC5FeNltzDFT5k=;
+        b=gPKNts8+3lG1tTgAXMHPG0HKPgm+TzRnKeNyp3uWqt2LKkC/qowJMVsjpPP8t+TzIg
+         EP0WLpMq/e732230OEx+RytokcZKZkg8UAT0ROOZummbuvNVVDNZRWJgqWouKBV1C0Vs
+         ZnOcnmRUyOucgXy6T8CQcOZT2BZNeODJezv3wV+4V7HVCyUpp4bseItNbsoDyQacuRiD
+         UvjG840GVWZF03kskHFEriRKkXOccCUyK1IDRYL/GG60c+Aq5o+wstzPCy4D+QGx1LId
+         OAqWMOu32LM9Do7XM9IpWiqmzH5S3/POwm1nzsQCOhUHG3WhoEgPjVnO/9LV7Qyh08KW
+         EdbA==
+X-Gm-Message-State: APjAAAUbFuhZ58eUG6gbxRvGYSYi83t/sBscXq18u7nYvjnvAxC6oUi9
+        xaIa0djPv0tW8ZCcFb5OUqVkRQ==
+X-Google-Smtp-Source: APXvYqzCKzlvkuqzRAncs0ielDj0zuGNM9QqxzhWJxgll4/9/pZjwl3R0uj4+gXExMgSAmRcPke6aw==
+X-Received: by 2002:a17:902:102:: with SMTP id 2mr1010877plb.156.1573092957436;
+        Wed, 06 Nov 2019 18:15:57 -0800 (PST)
+Received: from localhost ([122.171.110.253])
+        by smtp.gmail.com with ESMTPSA id 70sm326657pfw.160.2019.11.06.18.15.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Nov 2019 18:15:56 -0800 (PST)
+Date:   Thu, 7 Nov 2019 07:45:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Javi Merino <javi.merino@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jun Nie <jun.nie@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 01/11] thermal: of-thermal: Appease the kernel-doc deity
+Message-ID: <20191107021552.qlg2xvan6sajntgm@vireshk-i7>
+References: <cover.1573046440.git.amit.kucheria@linaro.org>
+ <ebd5991d5554202893fbcab4707be6d26f502aef.1573046440.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.184.217.114]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebd5991d5554202893fbcab4707be6d26f502aef.1573046440.git.amit.kucheria@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Kai Shen <shenkai8@huawei.com>
+On 06-11-19, 18:58, Amit Kucheria wrote:
+> Replace a comment starting with /** by simply /* to avoid having
+> it interpreted as a kernel-doc comment.
+> 
+> Fixes the following warning when compile with make W=1:
+> linux.git/drivers/thermal/of-thermal.c:761: warning: cannot understand function prototype: 'const char *trip_types[] = '
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  drivers/thermal/of-thermal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
+> index dc5093be553ec..5235aed2fadd5 100644
+> --- a/drivers/thermal/of-thermal.c
+> +++ b/drivers/thermal/of-thermal.c
+> @@ -754,7 +754,7 @@ static int thermal_of_populate_bind_params(struct device_node *np,
+>  	return ret;
+>  }
+>  
+> -/**
+> +/*
+>   * It maps 'enum thermal_trip_type' found in include/linux/thermal.h
+>   * into the device tree binding of 'trip', property type.
+>   */
 
-Add NULL check in the store function here to avoid NULL callback invoking.
-Though some interfaces of cpufreq are set as read-only, user can still get 
-write permission using chmod which can lead to a kernel crash.
+Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-The following operations can lead to a kernel crash.
-
-chmod +w /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
-echo 1 >  /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
-
-This bug was found on linux 4.19
-
-Signed-off-by: Kai Shen <shenkai8@huawei.com>
-Reported-by: Feilong Lin <linfeilong@huawei.com>
-Reviewed-by: Feilong Lin <linfeilong@huawei.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index bffc11b..4ccaa96 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -947,6 +947,9 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- 	struct freq_attr *fattr = to_attr(attr);
- 	ssize_t ret = -EINVAL;
- 
-+	if (!fattr->store)
-+		return ret;
-+
- 	/*
- 	 * cpus_read_trylock() is used here to work around a circular lock
- 	 * dependency problem with respect to the cpufreq_register_driver().
 -- 
-2.6.4.windows.1
-
-
+viresh
