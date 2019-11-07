@@ -2,233 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 872F9F260D
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 04:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7349CF2624
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 04:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733062AbfKGDhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 22:37:53 -0500
-Received: from gateway31.websitewelcome.com ([192.185.143.39]:12603 "EHLO
-        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727751AbfKGDhx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 22:37:53 -0500
-X-Greylist: delayed 1223 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Nov 2019 22:37:52 EST
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id 82A844AF9B
-        for <linux-pm@vger.kernel.org>; Wed,  6 Nov 2019 21:17:29 -0600 (CST)
-Received: from br164.hostgator.com.br ([192.185.176.180])
-        by cmsmtp with SMTP
-        id SYIbihUrUW4frSYIbiAGrs; Wed, 06 Nov 2019 21:17:29 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rfUlDakKv5yVKMK73mGLsSF6+WI5OQYJrDn/ijazhPA=; b=QkHBMifEMcHExUDuUGfwXNaKfY
-        hKT+6KIIriJQihBxwYACxo1FGNNx0w317oQUVNkv58MZit2h3nhk2IMbPKjBDvEvaw5OshPxhGv0L
-        gdBmXbU2xuq+wagcEiTNLxta0Ge50JIgs6LrEd+wrb0Qo24g8W5IEPjjg9DmYwbe3Qw+ox+DhyJ2V
-        tXCtyh+s4JYMoYaNgl4ty1VdxZkRKCK+0+DocUMKE69kAvRj8q5/GuOwOX2n6JZye1TyLDep7p8yN
-        5nyPE8N/R3rAW8pMZEyz6f6GzWAyQZtF4sRHuSOJ7VQqmMa+mJ7d4xE61UCItlco/WjMbQZsjFuSP
-        J7fLAbnQ==;
-Received: from [191.31.194.59] (port=34854 helo=castello.castello)
-        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <matheus@castello.eng.br>)
-        id 1iSYIa-000Mrk-LD; Thu, 07 Nov 2019 00:17:29 -0300
-From:   Matheus Castello <matheus@castello.eng.br>
-To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
-Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, lee.jones@linaro.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Matheus Castello <matheus@castello.eng.br>
-Subject: [PATCH v6 4/5] power: supply: max17040: Config alert SOC low level threshold from FDT
-Date:   Thu,  7 Nov 2019 00:17:09 -0300
-Message-Id: <20191107031710.5672-5-matheus@castello.eng.br>
-X-Mailer: git-send-email 2.24.0.rc2
-In-Reply-To: <20191107031710.5672-1-matheus@castello.eng.br>
-References: <20191105095905.GA31721@pi3>
- <20191107031710.5672-1-matheus@castello.eng.br>
+        id S1727581AbfKGD5N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 22:57:13 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:32246 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727279AbfKGD5N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 22:57:13 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191107035709epoutp016cf3f7fce5c25e58f0143cb6679251b2~UxTt6-LJy2843328433epoutp010
+        for <linux-pm@vger.kernel.org>; Thu,  7 Nov 2019 03:57:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191107035709epoutp016cf3f7fce5c25e58f0143cb6679251b2~UxTt6-LJy2843328433epoutp010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1573099029;
+        bh=AWybcpMgrQSTggA9B94xiUoLber9ej/kmw/368T+q2I=;
+        h=To:Cc:From:Subject:Date:References:From;
+        b=XN0ZsXlc8fY6VDB27p68nPY1XbXUrFjxZNLfxJ6J7RFNS1iITzBjhe1WZMl3GEhJN
+         CxUwZ1ZNR7H5sXbtU9P/1u1QLEw5iPwt4qwgyFYhPfub2yia9tCg7a+OEoN5c8hoNh
+         kzOCozlRTVSmtMm4pvYODZ5y1FTv6Ge+uiGHezro=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191107035708epcas1p1bc507940ab511496df615c920cea7e5e~UxTtW2pAw1369713697epcas1p1M;
+        Thu,  7 Nov 2019 03:57:08 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 477qNK0dVzzMqYkV; Thu,  7 Nov
+        2019 03:57:05 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        31.2E.04068.E0693CD5; Thu,  7 Nov 2019 12:57:02 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191107035701epcas1p237d69dd23f28fde1f52bfc4def529e92~UxTm4D9Ty2381723817epcas1p2P;
+        Thu,  7 Nov 2019 03:57:01 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191107035701epsmtrp12081deac00b4dcef7dc44de3cc5ac9d4~UxTm3OTCx0607506075epsmtrp1d;
+        Thu,  7 Nov 2019 03:57:01 +0000 (GMT)
+X-AuditID: b6c32a39-f5fff70000000fe4-99-5dc3960ee1ae
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        22.1E.25663.D0693CD5; Thu,  7 Nov 2019 12:57:01 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191107035701epsmtip2af8aecdee3629609c8eb9e37bfa7ecaa~UxTmsF0uE1936119361epsmtip2q;
+        Thu,  7 Nov 2019 03:57:01 +0000 (GMT)
+To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Chanwoo Choi (samsung.com)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [GIT PULL] devfreq next for v5.5
+Organization: Samsung Electronics
+Message-ID: <dcdea33b-472f-c3e5-ed9e-3fae16591f46@samsung.com>
+Date:   Thu, 7 Nov 2019 13:02:37 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - castello.eng.br
-X-BWhitelist: no
-X-Source-IP: 191.31.194.59
-X-Source-L: No
-X-Exim-ID: 1iSYIa-000Mrk-LD
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (castello.castello) [191.31.194.59]:34854
-X-Source-Auth: matheus@castello.eng.br
-X-Email-Count: 62
-X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
-X-Local-Domain: yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmvi7ftMOxBo0/rC0m3rjCYnH9y3NW
+        i8u75rBZfO49wmhxu3EFm8WZ05dYHdg8Nq3qZPPYcrWdxaNvyypGj8+b5AJYorJtMlITU1KL
+        FFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4CWKymUJeaUAoUCEouL
+        lfTtbIryS0tSFTLyi0tslVILUnIKLAv0ihNzi0vz0vWS83OtDA0MjEyBChOyM1pfbGAtOKVV
+        0T95CUsD43fFLkZODgkBE4kDv86zdjFycQgJ7GCUOHnnPAtIQkjgE6PE8SMBEIlvjBLfdi5n
+        hOlYc28xM0RiL6PErZsvWCCc94wSH7tfA83i4BARsJfo+JAJEmcWmMckce/zJGaQbjYBLYn9
+        L26wgdjCApoSX7Z8B4vzCyhKXP3xmBGkl1fATuLLyXSQMIuAisTWxu0sIGFRgQiJ018TQcK8
+        AoISJ2c+ATuUWUBc4taT+UwQtrzE9rdzwG6TEDjDJjH17Qc2iKNdJDoeb2KHsIUlXh3fAmVL
+        Sbzsb4OyqyVWnjzCBtHcwSixZf8FVoiEscT+pZOZQI5gBrp5/S59iLCixM7fcxkhFvNJvPva
+        A/a6hACvREebEESJssTlB3eZIGxJicXtnVDneEi0bvvMNoFRcRaSd2YheWcWkndmISxewMiy
+        ilEstaA4Nz212LDAFDmuNzGCk6WW5Q7GY+d8DjEKcDAq8fBmbD4UK8SaWFZcmXuIUYKDWUmE
+        N6bvYKwQb0piZVVqUX58UWlOavEhRlNgYE9klhJNzgcm8rySeENTI2NjYwsTQzNTQ0MlcV7H
+        5UtjhQTSE0tSs1NTC1KLYPqYODilGhhleb1lwpZy/NGs+VhurfOCYSpPn4qvzhH2vZ+XTY6U
+        cv69/O2jVxxXNl9/VsucdErEcl+1m5CS2Nu5ugnPa87YWGecUXDb2XS63ubhx/6L4nl3tJ5d
+        Lf7Suq4hf9n1RSnvRWP4tZSNzs1gaJtX52D2NvnAI+HypPvzfV82n3q82ikgMOJTg4USS3FG
+        oqEWc1FxIgBUhjoLrAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDLMWRmVeSWpSXmKPExsWy7bCSvC7vtMOxBuueylpMvHGFxeL6l+es
+        Fpd3zWGz+Nx7hNHiduMKNoszpy+xOrB5bFrVyeax5Wo7i0ffllWMHp83yQWwRHHZpKTmZJal
+        FunbJXBltL7YwFpwSquif/ISlgbG74pdjJwcEgImEmvuLWbuYuTiEBLYzSjx/+8rRoiEpMS0
+        i0eBEhxAtrDE4cPFEDVvGSWOzv7EBBIXEbCX6PiQCRJnFpjHJPH57VcmkF42AS2J/S9usIHY
+        wgKaEl+2fGcGsfkFFCWu/njMCNLLK2An8eVkOkiYRUBFYmvjdhYQW1QgQuL59htgJ/AKCEqc
+        nPkELM4soC7xZ94lZghbXOLWk/lMELa8xPa3c5gnMArOQtIyC0nLLCQts5C0LGBkWcUomVpQ
+        nJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERwHWlo7GE+ciD/EKMDBqMTDm7H5UKwQa2JZcWXu
+        IUYJDmYlEd6YvoOxQrwpiZVVqUX58UWlOanFhxilOViUxHnl849FCgmkJ5akZqemFqQWwWSZ
+        ODilGhinv70n7FXVrHds69cle73rn5wOzLGwZ+rWPsdw8eyhtKyYNC/bydFcuikHxC3PNOt4
+        pay49tNxqq+qVuajdSvbnvvxrK90ruFceu7F/osbzwo/vLzJ+6Znd8wEra36DKXXE6JCtMT/
+        /LZ1XZsTGb34KuOM4PISU53WeYlCQv47b28Va9L/sVeJpTgj0VCLuag4EQBpSMeAfwIAAA==
+X-CMS-MailID: 20191107035701epcas1p237d69dd23f28fde1f52bfc4def529e92
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191107035701epcas1p237d69dd23f28fde1f52bfc4def529e92
+References: <CGME20191107035701epcas1p237d69dd23f28fde1f52bfc4def529e92@epcas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For configuration of fuel gauge alert for a low level state of charge
-interrupt we add a function to config level threshold and a device tree
-binding property to set it in flatned device tree node.
+Dear Rafael,
 
-Now we can use "maxim,alert-low-soc-level" property with the values from
-1% up to 32% to configure alert interrupt threshold.
+This is devfreq-next pull request for v5.5-rc1. I add detailed description of
+this pull request on the following tag. Please pull devfreq with following updates.
+- tag name : devfreq-next-for-5.5
 
-Signed-off-by: Matheus Castello <matheus@castello.eng.br>
----
- drivers/power/supply/max17040_battery.c | 75 ++++++++++++++++++++++---
- 1 file changed, 67 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index 9909f8cd7b5d..3fc9e1c7b257 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -29,6 +29,9 @@
- #define MAX17040_DELAY		1000
- #define MAX17040_BATTERY_FULL	95
+When pull the this pull request to linux-pm, auto-merging will happen.
+Because of the change of the devfreq git information on patch[1] and
+patch[2] add the additional information of exynos_ppmu.h.
+But, when I tested it, the auto merging was completed without problem.
+If the problem happen, I'll resend the pull request rebased on
+the top of 'linux-next' branch instead of Linux 5.4-rc6.
 
-+#define MAX17040_ATHD_MASK		0xFFC0
-+#define MAX17040_ATHD_DEFAULT_POWER_UP	4
-+
- struct max17040_chip {
- 	struct i2c_client		*client;
- 	struct delayed_work		work;
-@@ -43,6 +46,8 @@ struct max17040_chip {
- 	int soc;
- 	/* State Of Charge */
- 	int status;
-+	/* Low alert threshold from 32% to 1% of the State of Charge */
-+	u32 low_soc_alert;
- };
+[1] MAINTAINERS: Update myself as maintainer for DEVFREQ subsystem support
+- https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=c389ec67b7f8e028438643c4af4bbff550192187
 
- static int max17040_get_property(struct power_supply *psy,
-@@ -99,6 +104,21 @@ static void max17040_reset(struct i2c_client *client)
- 	max17040_write_reg(client, MAX17040_CMD, 0x0054);
- }
+[2] include: dt-bindings: add Performance Monitoring Unit for Exynos
+- https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-next&id=fcbd8037f7df694aa7bfb7ce82c0c7f5e53e7b7b
 
-+static int max17040_set_low_soc_alert(struct i2c_client *client, u32 level)
-+{
-+	int ret;
-+	u16 data;
-+
-+	level = 32 - level;
-+	data = max17040_read_reg(client, MAX17040_RCOMP);
-+	/* clear the alrt bit and set LSb 5 bits */
-+	data &= MAX17040_ATHD_MASK;
-+	data |= level;
-+	ret = max17040_write_reg(client, MAX17040_RCOMP, data);
-+
-+	return ret;
-+}
-+
- static void max17040_get_vcell(struct i2c_client *client)
- {
- 	struct max17040_chip *chip = i2c_get_clientdata(client);
-@@ -115,7 +135,6 @@ static void max17040_get_soc(struct i2c_client *client)
- 	u16 soc;
+Best Regards,
+Chanwoo Choi
 
- 	soc = max17040_read_reg(client, MAX17040_SOC);
--
- 	chip->soc = (soc >> 8);
- }
 
-@@ -161,6 +180,24 @@ static void max17040_get_status(struct i2c_client *client)
- 		chip->status = POWER_SUPPLY_STATUS_FULL;
- }
+The following changes since commit a99d8080aaf358d5d23581244e5da23b35e340b9:
 
-+static int max17040_get_of_data(struct max17040_chip *chip)
-+{
-+	struct device *dev = &chip->client->dev;
-+	struct device_node *np = dev->of_node;
-+	int ret = 0;
-+
-+	if (of_property_read_u32(np, "maxim,alert-low-soc-level",
-+				 &chip->low_soc_alert)) {
-+		chip->low_soc_alert = MAX17040_ATHD_DEFAULT_POWER_UP;
-+	} else if (chip->low_soc_alert <= 0 ||
-+			chip->low_soc_alert >= 33) {
-+		/* low_soc_alert is not between 1% and 32% */
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
- static void max17040_check_changes(struct i2c_client *client)
- {
- 	max17040_get_vcell(client);
-@@ -192,6 +229,9 @@ static irqreturn_t max17040_thread_handler(int id, void *dev)
- 	/* send uevent */
- 	power_supply_changed(chip->battery);
+  Linux 5.4-rc6 (2019-11-03 14:07:26 -0800)
 
-+	/* reset alert bit */
-+	max17040_set_low_soc_alert(client, chip->low_soc_alert);
-+
- 	return IRQ_HANDLED;
- }
+are available in the Git repository at:
 
-@@ -230,6 +270,7 @@ static int max17040_probe(struct i2c_client *client,
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct power_supply_config psy_cfg = {};
- 	struct max17040_chip *chip;
-+	int ret;
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.5
 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
- 		return -EIO;
-@@ -240,6 +281,12 @@ static int max17040_probe(struct i2c_client *client,
+for you to fetch changes up to fee22854c0273569836de2039d9c432ea4df2cfc:
 
- 	chip->client = client;
- 	chip->pdata = client->dev.platform_data;
-+	ret = max17040_get_of_data(chip);
-+	if (ret) {
-+		dev_err(&client->dev,
-+			"failed: low SOC alert OF data out of bounds\n");
-+		return ret;
-+	}
+  PM / devfreq: tegra30: Tune up MCCPU boost-down coefficient (2019-11-06 12:04:01 +0900)
 
- 	i2c_set_clientdata(client, chip);
- 	psy_cfg.drv_data = chip;
-@@ -256,14 +303,26 @@ static int max17040_probe(struct i2c_client *client,
+----------------------------------------------------------------
+Update devfreq for 5.5
 
- 	/* check interrupt */
- 	if (client->irq) {
--		int ret;
--
--		ret = max17040_enable_alert_irq(chip);
--
--		if (ret) {
--			client->irq = 0;
-+		if (of_device_is_compatible(client->dev.of_node,
-+					    "maxim,max77836-battery")) {
-+			ret = max17040_set_low_soc_alert(client,
-+							 chip->low_soc_alert);
-+			if (ret) {
-+				dev_err(&client->dev,
-+					"Failed to set low SOC alert: err %d\n",
-+					ret);
-+				return ret;
-+			}
-+
-+			ret = max17040_enable_alert_irq(chip);
-+			if (ret) {
-+				client->irq = 0;
-+				dev_warn(&client->dev,
-+					 "Failed to get IRQ err %d\n", ret);
-+			}
-+		} else {
- 			dev_warn(&client->dev,
--				 "Failed to get IRQ err %d\n", ret);
-+				 "Device not compatible for IRQ");
- 		}
- 	}
+Detailed description for this pull request:
+1. Update devfreq core
+- Check NULL governor in available_governors_show sysfs in order to prevent
+  showing the wrong governor information.
+- Fix the race condition between devfreq_update_status() and trans_stat_show()
+- Add new 'interrupt-driven' flag for devfreq goveror. Each devfreq driver can
+  add the their own governor (NIVIDIA Tegra30 ACTMON governor) which is interrupt-driven
+  governor. It needs to use the following sysfs interface to get the new polling
+  interval in order to change the NVIDIA Tegra30 hardware's polling interval.
+  : /sys/class/devfreq/devfreqX/polling_interval
+  So, if 'interrupt-driven' flag of devfreq governor is 1, the devfreq governor
+  is able to use the 'polling_interval' sysfs interface to get the new polling
+  interval value. But, the devfreq core doesn't schedule out the polling work
+  for this governor like NVIDIA Tegra30 ACTMON governor.
 
---
-2.24.0.rc2
+2. Update devfreq driver
+- For exynos-bus.c, remove unused property from dt-binding documentation
+- For tegra30-devfreq.c, update the internal behavior like fixing the overflow
+  integer issue and clean-up code.
 
+3. Update devfreq-event driver
+- For exynos-ppmu.c, add exynos_ppmu.h dt-binding file for 'event-data-type' filed.
+  and update dt-binging documentation. Also,  Fix minor coding style.
+
+----------------------------------------------------------------
+Dmitry Osipenko (18):
+      PM / devfreq: tegra30: Change irq type to unsigned int
+      PM / devfreq: tegra30: Keep interrupt disabled while governor is stopped
+      PM / devfreq: tegra30: Handle possible round-rate error
+      PM / devfreq: tegra30: Drop write-barrier
+      PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
+      PM / devfreq: tegra30: Use kHz units uniformly in the code
+      PM / devfreq: tegra30: Use CPUFreq notifier
+      PM / devfreq: tegra30: Move clk-notifier's registration to governor's start
+      PM / devfreq: tegra30: Reset boosting on startup
+      PM / devfreq: tegra30: Don't enable consecutive-down interrupt on startup
+      PM / devfreq: tegra30: Constify structs
+      PM / devfreq: tegra30: Include appropriate header
+      PM / devfreq: tegra30: Don't enable already enabled consecutive interrupts
+      PM / devfreq: tegra30: Disable consecutive interrupts when appropriate
+      PM / devfreq: tegra30: Use kHz units for dependency threshold
+      PM / devfreq: Add new interrupt_driven flag for governors
+      PM / devfreq: tegra30: Support variable polling interval
+      PM / devfreq: tegra30: Tune up MCCPU boost-down coefficient
+
+Kamil Konieczny (1):
+      dt-bindings: devfreq: exynos-bus: Remove unused property
+
+Leonard Crestez (2):
+      PM / devfreq: Check NULL governor in available_governors_show
+      PM / devfreq: Lock devfreq in trans_stat_show
+
+Lukasz Luba (2):
+      include: dt-bindings: add Performance Monitoring Unit for Exynos
+      Documentation: devicetree: add PPMU events description
+
+Marek Szyprowski (1):
+      PM / devfreq: exynos-ppmu: remove useless assignment
+
+Matthias Kaehlcke (1):
+      PM / devfreq: Make log message more explicit when devfreq device already exists
+
+ .../bindings/devfreq/event/exynos-ppmu.txt         |  26 +-
+ .../devicetree/bindings/devfreq/exynos-bus.txt     |   2 -
+ MAINTAINERS                                        |   1 +
+ drivers/devfreq/devfreq.c                          |  33 +-
+ drivers/devfreq/event/exynos-ppmu.c                |   1 -
+ drivers/devfreq/governor.h                         |   3 +
+ drivers/devfreq/tegra30-devfreq.c                  | 417 +++++++++++++++------
+ include/dt-bindings/pmu/exynos_ppmu.h              |  25 ++
+ 8 files changed, 386 insertions(+), 122 deletions(-)
+ create mode 100644 include/dt-bindings/pmu/exynos_ppmu.h
