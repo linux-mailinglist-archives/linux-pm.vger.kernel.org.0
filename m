@@ -2,75 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF090F3AD2
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 22:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7605F3B6B
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 23:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfKGV4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Nov 2019 16:56:43 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:38191 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfKGV4n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Nov 2019 16:56:43 -0500
-Received: by mail-pl1-f195.google.com with SMTP id w8so2540653plq.5
-        for <linux-pm@vger.kernel.org>; Thu, 07 Nov 2019 13:56:41 -0800 (PST)
+        id S1725906AbfKGWcE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Nov 2019 17:32:04 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35568 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbfKGWcE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Nov 2019 17:32:04 -0500
+Received: by mail-pf1-f195.google.com with SMTP id d13so3446891pfq.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 Nov 2019 14:32:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mWI9stxDpq8HJvqv8MCISb1ecAdUqoG0T1yUS3u0IrA=;
-        b=s6jn1u0Kn+ufylzuMEdtOyFKuLD2exS9830kqrL8skohXscPiciZr4QIvU52nusuFN
-         G9bfAFb9pUxCEqp8O8G/9FJKau0y9+bkclzBOZszFINzEU2pv9Ns8AuuV9vpUFeRef+F
-         XSd5IwXG0je9F4DYdkMnLZCED0qQL4KixehnjwND0nCgFfmp/ktaFi+vucg9MQ/T7GCS
-         yuDOiZRp112qlfDiuPPorFYOLFRl+52BB1zNcme6CvVv61B4V8YATnFoh2f2/7P9VT40
-         j0iv692KZCbB/u1a4LBT0YsfXbP85XkviJkxXqM08bstxkgv8uPJ1adoKbx7/fPGpR0T
-         jLrg==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=ZDZxE3X2u0Q7iWpkFaFMXlQVwx+tT1FJavF2B89FPtQ=;
+        b=QtH1+NFXJ0zzfuKxuEMoDpcPK9ve7QSvHogyfZ1LD7WbXf1vDvHk1gduDooLeS3gSa
+         OQ3Iuy0iZC41baX078kKCIeaia9GMa3KjZi9B/3VjKahrxuaPICa6MWCXjekHjmiy0Y1
+         SY2EiKmne3GXAJRmsBQsy2QSW4VDhhxYelSb5nKn8Oq0uZBjnmvBdve2KYmQ3tg6cpX9
+         iDI5aqWNyVmHm4b5vPv1Fe+BH9/fNlR+2jpvh52/fjAPY4wfFFLhpwl5wwhwcMvyUiEg
+         CT/ddVBror3UdtXZOJDJMDyl93GUbm3Cn/qDOnh6C7iuStCKkoIv03sv3cKV9P+MavEw
+         Rc/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=mWI9stxDpq8HJvqv8MCISb1ecAdUqoG0T1yUS3u0IrA=;
-        b=ioWf1U7+WVzWqOGjczgjWwTW8QTpLyg0URmYXUtGEDh4ERT+32BJfk7yMaI8C5HPTk
-         v/8QfYFyBniVBBgDoMYlRAgoCpe0NS6XnPsIIYaOznqWpqjxx3pkqM6slhiPhhbGi8rP
-         ZW/YsuwEyJWyFpLu8UAjhgpMwTrZOt4k9ZEYylLDErQL2JqwNW9pWkKJxoo/1m//uGIa
-         oYUEEno0eMEAQJzH51bdANq2giq6mZ5T/xT96eSvAXfUXCslhTx73Tj6rowQXi2qYiiU
-         TXMIPmiH0gNd8vgdHyIl+swe+FcFs0dxEsgOlPnrtPSrhLn7zluGl58eipEtNBTfN2Ki
-         NaFQ==
-X-Gm-Message-State: APjAAAUVJuEe7d8TjaMijdQYmnJHd3esvnY5OCXkP7qJ0wUJ7QW3vvPo
-        51SmJLhbfuy1bS3fNHEU6QT9iQ==
-X-Google-Smtp-Source: APXvYqypGBDtT9XiTGKw7mXsmVqn69WUWL+JDoHnXMUjftIDLB7WHBnLsDcY3YunwBRu2ri7IywBDQ==
-X-Received: by 2002:a17:90b:300c:: with SMTP id hg12mr8533144pjb.75.1573163800561;
-        Thu, 07 Nov 2019 13:56:40 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=ZDZxE3X2u0Q7iWpkFaFMXlQVwx+tT1FJavF2B89FPtQ=;
+        b=KCZpyH6OWYhwVYelyUdU22Pp8eIkpQl9ZHAqV37xSm+fetGcDBEU9Q5ewoGvX1qOox
+         57hTn+OXnmBdYONQGsk1OvZdPTi8NCJtkyLXWrz0id/fCbBEuVmSTmFqz0jtzeJbhAB6
+         5UFLhqGY8H/FGHPKbjSDvJSLz0t1eNAymkqvjNQN0aac0TmcvpoweKQfy87LiXDc03L6
+         3Y9ilWA30KHHU50m2lgXjsz0R78dBbAGGn+L+TbTzhGPkJLD4LpaCdglZqGfUhf/nHfD
+         5z9bVhygFC+m70Q6FxeN3PGRqJNTmmEdDAZPLLW312J5VMOXz7YZZmyTkTyOBicitujM
+         19fQ==
+X-Gm-Message-State: APjAAAVpOYy3kn5y4kq2THsnqcPWiBps8eAk/ppRx211WUBokp2PpYIy
+        TUYYlcKr4xoxH9cVusrXzjyFpg==
+X-Google-Smtp-Source: APXvYqwls8ddOTQNH1en07qze09B+ck+PA1CQw6LiSffpWOEx3b9mIFdJ4cJ6t90/fOVdQWQ78m/kg==
+X-Received: by 2002:a63:8f5e:: with SMTP id r30mr7741111pgn.146.1573165923226;
+        Thu, 07 Nov 2019 14:32:03 -0800 (PST)
 Received: from localhost ([12.206.222.5])
-        by smtp.gmail.com with ESMTPSA id b17sm4046597pfr.17.2019.11.07.13.56.39
+        by smtp.gmail.com with ESMTPSA id w15sm3662519pfn.13.2019.11.07.14.32.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 13:56:40 -0800 (PST)
-Date:   Thu, 07 Nov 2019 13:56:40 -0800 (PST)
-X-Google-Original-Date: Thu, 07 Nov 2019 13:56:36 PST (-0800)
-Subject:     Re: QEMU RISC-V virt machine poweroff driver
-In-Reply-To: <20191107212408.11857-1-hch@lst.de>
-CC:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
+        Thu, 07 Nov 2019 14:32:02 -0800 (PST)
+Date:   Thu, 7 Nov 2019 14:32:01 -0800 (PST)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
 To:     Christoph Hellwig <hch@lst.de>
-Message-ID: <mhng-0dedc685-73d2-4e7f-b608-69385a6e7a99@palmer-si-x1c4>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        peter.maydell@linaro.org
+Subject: Re: [PATCH 1/2] dt-bindings: power: reset: document the QEMU RISC-V
+ virt machine poweroff device
+In-Reply-To: <20191107212408.11857-2-hch@lst.de>
+Message-ID: <alpine.DEB.2.21.9999.1911071431390.8918@viisi.sifive.com>
+References: <20191107212408.11857-1-hch@lst.de> <20191107212408.11857-2-hch@lst.de>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 07 Nov 2019 13:24:06 PST (-0800), Christoph Hellwig wrote:
-> Hi all,
->
-> this patch add a driver for the test device in the Qemu RISC-V
-> virt machine which allows properly shutting down the VM.
-> It also is added to the riscv defconfig given that qemu-virt
-> is the most popular riscv platform.
+On Thu, 7 Nov 2019, Christoph Hellwig wrote:
 
-Thanks!  I'm assuming this is going in through some other tree, so
+> Add the binding for the trivial Qemu RISC-V poweroff mechanism, which is
 
-Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
+There's nothing RISC-V specific here.  This IP isn't defined in the RISC-V 
+specifications, or anything like that.  
+
+Apparently it's a SiFive IP block which now has a virtual IP 
+implementation in QEMU in hw/riscv/sifive_test.c.  But since there's 
+nothing RISC-V specific about this IP block, any QEMU system, with any CPU 
+implementation, should be able to use this virtual IP, and this Linux 
+driver.
+
+For these reasons, it's better if "RISC-V" is just removed from everywhere 
+in this driver.  If something needs to go in its place, "SiFive" may be 
+better.
+
+
+- Paul
+
+
+> just a single MMIO register exposed through the DT.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  .../power/reset/qemu-riscv-virt-poweroff.txt     | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/qemu-riscv-virt-poweroff.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/qemu-riscv-virt-poweroff.txt b/Documentation/devicetree/bindings/power/reset/qemu-riscv-virt-poweroff.txt
+> new file mode 100644
+> index 000000000000..80ff6fd4e3b7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/qemu-riscv-virt-poweroff.txt
+> @@ -0,0 +1,16 @@
+> +QEMU RISC-V virt machine poweroff device
+> +
+> +This is a device in Qemu that can signal successful or error exit
+> +by writing two magic numbers to a trivial mmio register.
+> +A Linux poweroff is implemented as successful exit.
+> +
+> +Required Properties:
+> +-compatible: "sifive,test0"
+> +-reg: Specifies the physical address of the register
+> +
+> +Example:
+> +
+> +	test@100000 {
+> +		compatible = "sifive,test0";
+> +		reg = <0x100000 0x1000>;
+> +	};
+> -- 
+> 2.20.1
+> 
+> 
+
+
+- Paul
