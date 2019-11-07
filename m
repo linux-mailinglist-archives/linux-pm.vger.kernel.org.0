@@ -2,122 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C32F25CB
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 04:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BAAF25E4
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Nov 2019 04:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733032AbfKGDGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Nov 2019 22:06:11 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45068 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733026AbfKGDGK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 22:06:10 -0500
-Received: by mail-pf1-f196.google.com with SMTP id z4so1209470pfn.12
-        for <linux-pm@vger.kernel.org>; Wed, 06 Nov 2019 19:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eosUJ654Yi0yJK3kskuYbXOckPSyPCl8py+bvd6dC9k=;
-        b=WYho+V5MnsCE3Jh2PHNTDmRJjvvgThtgxE2qpRLAxqOVEUDgq81Udr+FmB/tICUlKY
-         0sJRWPrLRQS5xZVyQop3oMLxooVvpuOoWzELRHhQgV4TZM5bwcvApc2Tjb9I3tFnaacQ
-         WQd0K7kUBIzpstNbXUEd20jMKI57R7A5ixzQE7uy2Ev6M4RQjNOzGJ/NnHuI6WuA5tUn
-         F5gHEJkWQwvfo9YsA4hK0Qo71MGiwZZ44TGlCxDGR2sVBKALKcAezI8ShAu54YBmy2Ta
-         eAWRLvgBFhYboooZfRi5vO0m1qpOZ9rjEOBxVvbWXZY2j7dhAt4xPjNOZjHpnXhpUJe0
-         pKTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eosUJ654Yi0yJK3kskuYbXOckPSyPCl8py+bvd6dC9k=;
-        b=pcYA4HbHY9jUcF3g4bQ46D9zVUwL3Ab6qQa3yBOq1CiY90oF5XPI4nKScqrCXEs+QQ
-         +6im8zu3Bi20Vtmz4jkoUWyCfe302BGpCDtKglGmnSW1Q3rY8C0qC2iEA0LNj/iS9JMg
-         qGUuh8Vv2xw0MsGf62MmxAsxtewtCQvsw++HQivILhXifAyyzZMvZgYm+sIE8Vycrgk3
-         XJjLZcPBjxBXGI3+JI4Cwira9jQ12miM+4sCAYj6z/cZv50ZycTkLFM0e/rtzjbxCO3l
-         0Tf7YksdRnzto42NCS25+LKPVdVGI5NBw4Y0VSb2++6j8ljaBdxV5CZNRdLZvc6foB3X
-         FddQ==
-X-Gm-Message-State: APjAAAV/rG5k2MPs+wxcYbSoNnBl58zv1ii7NgVIOzEY0S86EwLqiIAQ
-        GrGDmCJXYOHDfo5dtOQptBtHoA==
-X-Google-Smtp-Source: APXvYqzY/p1YfDXXVCSku2q+6GrY2DGQUTSrgEIcG71PMoWS+PaSzz59AbvzjIKlgC3rG/RjQapH9A==
-X-Received: by 2002:a63:6e82:: with SMTP id j124mr1594015pgc.115.1573095968351;
-        Wed, 06 Nov 2019 19:06:08 -0800 (PST)
-Received: from localhost ([122.171.110.253])
-        by smtp.gmail.com with ESMTPSA id q20sm393882pff.134.2019.11.06.19.06.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 Nov 2019 19:06:07 -0800 (PST)
-Date:   Thu, 7 Nov 2019 08:36:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Shen Kai <shenkai8@huawei.com>
-Cc:     rjw@rjwysocki.net, rafael@kernel.org, hushiyuan@huawei.com,
-        linfeilong@huawei.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH]cpufreq: add NULL check to the store method of cpufreq
-Message-ID: <20191107030601.xqe2tpcprkg7epul@vireshk-i7>
-References: <20191107023442.q5xg6ltu2uzbjrp2@vireshk-i7>
- <1573095182-22008-1-git-send-email-shenkai8@huawei.com>
+        id S1727581AbfKGDRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Nov 2019 22:17:18 -0500
+Received: from gateway36.websitewelcome.com ([192.185.184.18]:49806 "EHLO
+        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727751AbfKGDRS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Nov 2019 22:17:18 -0500
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway36.websitewelcome.com (Postfix) with ESMTP id C517140D99E54
+        for <linux-pm@vger.kernel.org>; Wed,  6 Nov 2019 20:25:50 -0600 (CST)
+Received: from br164.hostgator.com.br ([192.185.176.180])
+        by cmsmtp with SMTP
+        id SYIOiQezwqNtvSYIOiGg8N; Wed, 06 Nov 2019 21:17:16 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8sv29UR8E5pLNoh42IdLCVMD0V6+Oaujyjo0kbs91yg=; b=qI0AalYcgbXWWtVOpw90rjH8TD
+        0G8wU+FJ58A8UwnSGAQ2AAy4JPjk+lkzyVeHE1zRPoC+k39UJdmDWFobT/B5LQfL+rkpkSzotzxnP
+        ZW/HtA8uyC6YQ7BUtxLx2TBuTh+vah3Rkxfh2mVFAWvTvD9e1iN/AiC61qzRa0nLTd74y3GIqlhIt
+        rY7QOhfPfhvJLomvLYrsK5GLma/9/ucXBOSyf8f8wc3eHKuraPtLg5kbmCYtv9CdJ9qNxCdW5YbO4
+        fk+W/OOq8EvP6f0VXvYoLQa6MhZBBjAvks/5lcQlOVp4fqvKRTraEn5uDStaa+6sNUhpGvKCKaeqP
+        YzRksQQg==;
+Received: from [191.31.194.59] (port=34854 helo=castello.castello)
+        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <matheus@castello.eng.br>)
+        id 1iSYIN-000Mrk-V1; Thu, 07 Nov 2019 00:17:16 -0300
+From:   Matheus Castello <matheus@castello.eng.br>
+To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
+Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, lee.jones@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matheus Castello <matheus@castello.eng.br>
+Subject: [PATCH v6 0/5] power: supply: MAX17040: Add IRQ for low level and alert SOC changes
+Date:   Thu,  7 Nov 2019 00:17:05 -0300
+Message-Id: <20191107031710.5672-1-matheus@castello.eng.br>
+X-Mailer: git-send-email 2.24.0.rc2
+In-Reply-To: <20191105095905.GA31721@pi3>
+References: <20191105095905.GA31721@pi3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573095182-22008-1-git-send-email-shenkai8@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - castello.eng.br
+X-BWhitelist: no
+X-Source-IP: 191.31.194.59
+X-Source-L: No
+X-Exim-ID: 1iSYIN-000Mrk-V1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (castello.castello) [191.31.194.59]:34854
+X-Source-Auth: matheus@castello.eng.br
+X-Email-Count: 18
+X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-11-19, 02:53, Shen Kai wrote:
-> From: Kai Shen <shenkai8@huawei.com>
-> 
-> Add NULL check in the store function here to avoid NULL callback invoking.
-> Though some interfaces of cpufreq are set as read-only, user can still get 
-> write permission using chmod which can lead to a kernel crash.
-> 
-> The following operations can lead to a kernel crash.
-> 
-> chmod +w /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
-> echo 1 >  /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
-> 
-> This bug was found on linux 4.19
-> 
-> Signed-off-by: Kai Shen <shenkai8@huawei.com>
-> Reported-by: Feilong Lin <linfeilong@huawei.com>
-> Reviewed-by: Feilong Lin <linfeilong@huawei.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index bffc11b..4ccaa96 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -947,6 +947,9 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
->  	struct freq_attr *fattr = to_attr(attr);
->  	ssize_t ret = -EINVAL;
->  
-> +	if (!fattr->store)
-> +		return -EPERM;
-> +
+This series add IRQ handler for low level SOC alert, define a devicetree
+binding attribute to configure the alert level threshold and check for
+changes in SOC and power supply status for send uevents.
 
-And this should be -EIO, I found that after looking at all the
-instances of struct kobj_type in the kernel :(
+Max17043/17044 have a pin for alert host about low level state of charge and
+this alert can be configured in a threshold from 1% up to 32% of SOC.
 
-Also there is another change you need to make.
+Tested on Toradex Colibri iMX7D, with a SparkFun Lipo Fuel Gauge module
+based on MAXIM MAX17043.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index dd1628192310..4bfaafde9083 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -933,6 +933,9 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
-        struct freq_attr *fattr = to_attr(attr);
-        ssize_t ret;
- 
-+       if (!fattr->show)
-+               return -EIO;
-+
-        down_read(&policy->rwsem);
-        ret = fattr->show(policy, buf);
-        up_read(&policy->rwsem);
+Thanks Krzysztof for your time reviewing it. Let me know what you think about
+the fixes.
 
-as there is a write-only attribute (reset) in cpufreq stats.
+Changes since v5:
+(Suggested by Krzysztof Kozlowski)
+- Rearrange code and add max17040_enable_alert_irq on patch 1/5
+- Remove useless dev_info
 
--- 
-viresh
+Changes since v4:
+(Suggested by Krzysztof Kozlowski)
+- Fix code style and alignment issues
+- Keep IRQF_TRIGGER_FALLING | IRQF_ONESHOT instead client->flags
+
+(Suggested by Rob Herring)
+- Add reference to the MFD description
+- Fix the dt-bindings commit description
+
+Matheus Castello (5):
+  power: supply: max17040: Add IRQ handler for low SOC alert
+  dt-bindings: power: supply: Max17040: Add DT bindings for max17040
+    fuel gauge
+  devicetree: mfd: max14577: Add reference to max14040_battery.txt
+    descriptions
+  power: supply: max17040: Config alert SOC low level threshold from FDT
+  power: supply: max17040: Send uevent in SOC and status change
+
+ .../devicetree/bindings/mfd/max14577.txt      |   2 +
+ .../power/supply/max17040_battery.txt         |  33 ++++
+ drivers/power/supply/max17040_battery.c       | 141 +++++++++++++++++-
+ 3 files changed, 171 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+
+--
+2.24.0.rc2
+
