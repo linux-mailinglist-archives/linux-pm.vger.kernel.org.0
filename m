@@ -2,102 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0B4F4A54
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 13:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81720F4BD7
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 13:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388712AbfKHMI1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 07:08:27 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:48576 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732218AbfKHLkc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:40:32 -0500
-Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id c6a3f0ec310a8f1c; Fri, 8 Nov 2019 12:40:31 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM / core: Cleanup some function definitions in power.h
-Date:   Fri, 08 Nov 2019 12:40:31 +0100
-Message-ID: <2547127.Nu07Onx00h@kreacher>
-In-Reply-To: <20191016141627.18642-1-ulf.hansson@linaro.org>
-References: <20191016141627.18642-1-ulf.hansson@linaro.org>
+        id S1727046AbfKHMg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 07:36:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44524 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727044AbfKHMg7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 Nov 2019 07:36:59 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F5B3222CE;
+        Fri,  8 Nov 2019 12:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573216617;
+        bh=w5zfCeUX9i5B82TJRkTa+MWcnAYSb0as6CxzkjQ/Mfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iGnAKLwSEjwEZR42zMQWeWurK04crK14YZvSXe3pOdSajfzC9qmC9WCrUsZMNZoaX
+         t9AiUOSFEle3OE2ai8ZN0gPsksifXgPNK8WqkRfI317IX+wRm7fRZBJatbsdxmVE6t
+         xHg/9x5YVUyEWC6xPTFHZRhI818qbyY+6lTFHVNo=
+Date:   Fri, 8 Nov 2019 13:36:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL v2] interconnect changes for 5.5
+Message-ID: <20191108123655.GA733294@kroah.com>
+References: <dd4ff7e3-920d-979b-c29b-7535d84d360f@linaro.org>
+ <20191108105355.GA683899@kroah.com>
+ <25808ada-dbe6-db38-c68d-26a263942a28@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <25808ada-dbe6-db38-c68d-26a263942a28@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 16, 2019 4:16:27 PM CET Ulf Hansson wrote:
-> The power.h is a bit messy due to the various existing CONFIG_PM* Kconfig
-> combinations. However the final section for wakeup_source_sysfs*() can be
-> moved inside one of the existing sections rather than adding yet another
-> one, so let's do that to clean up the code a little bit.
-
-Fair enough.
-
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/base/power/power.h | 30 ++++++++++++------------------
->  1 file changed, 12 insertions(+), 18 deletions(-)
+On Fri, Nov 08, 2019 at 01:47:51PM +0200, Georgi Djakov wrote:
+> On 8.11.19 г. 12:53 ч., Greg Kroah-Hartman wrote:
+> > On Fri, Nov 08, 2019 at 10:59:11AM +0200, Georgi Djakov wrote:
+> >> Hi Greg,
+> >>
+> >> This is the updated pull request with interconnect patches for the 5.5 merge
+> >> window. The details are in the signed tag. Please pull into char-misc-next.
+> > 
+> > Ugh, ok, can we just go back to sending patches instead?
+> > 
+> > The first two patches have "Fixes:" tags for older kernels, yet no
+> > stable tags.  That's not ok.
 > 
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index 39a06a0cfdaa..444f5c169a0b 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -117,6 +117,13 @@ static inline bool device_pm_initialized(struct device *dev)
->  	return dev->power.in_dpm_list;
->  }
->  
-> +/* drivers/base/power/wakeup_stats.c */
-> +extern int wakeup_source_sysfs_add(struct device *parent,
-> +				   struct wakeup_source *ws);
-> +extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
-> +
-> +extern int pm_wakeup_source_sysfs_add(struct device *parent);
-> +
->  #else /* !CONFIG_PM_SLEEP */
->  
->  static inline void device_pm_sleep_init(struct device *dev) {}
-> @@ -141,6 +148,11 @@ static inline bool device_pm_initialized(struct device *dev)
->  	return device_is_registered(dev);
->  }
->  
-> +static inline int pm_wakeup_source_sysfs_add(struct device *parent)
-> +{
-> +	return 0;
-> +}
-> +
->  #endif /* !CONFIG_PM_SLEEP */
->  
->  static inline void device_pm_init(struct device *dev)
-> @@ -149,21 +161,3 @@ static inline void device_pm_init(struct device *dev)
->  	device_pm_sleep_init(dev);
->  	pm_runtime_init(dev);
->  }
-> -
-> -#ifdef CONFIG_PM_SLEEP
-> -
-> -/* drivers/base/power/wakeup_stats.c */
-> -extern int wakeup_source_sysfs_add(struct device *parent,
-> -				   struct wakeup_source *ws);
-> -extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
-> -
-> -extern int pm_wakeup_source_sysfs_add(struct device *parent);
-> -
-> -#else /* !CONFIG_PM_SLEEP */
-> -
-> -static inline int pm_wakeup_source_sysfs_add(struct device *parent)
-> -{
-> -	return 0;
-> -}
-> -
-> -#endif /* CONFIG_PM_SLEEP */
-> 
+> These two patches are for the current 5.4 release and you have them in your
+> char-misc-linus branch already. I assume that you will get them in -next later
+> via back merge anyway, so will drop them.
 
-Applying as 5.5 material, thanks!
+Ah, yeah, that's odd, don't send me stuff like that unless there is a
+build dependency on them.
 
+> Should we use Fixes and stable tags always together and only when we fix
+> something in older kernels and not in the current one?
 
+stable, no, fixes is fine.  It wasn't obvious that these were already in
+another branch of mine.
 
+Because of all of this, let's just stick to patches in emails please.
+
+thanks,
+
+greg k-h
