@@ -2,79 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 972C5F45C5
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FD4F45CD
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730151AbfKHLe0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 06:34:26 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:57883 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfKHLeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:34:25 -0500
-Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 2cb5217da455c9c5; Fri, 8 Nov 2019 12:34:23 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     zhuguangqing83@gmail.com
-Cc:     gregkh@linuxfoundation.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: Re: [PATCH] PM/wakeup: Add print_wakeup_sour_stats(m, &deleted_ws)
-Date:   Fri, 08 Nov 2019 12:34:23 +0100
-Message-ID: <2538968.KVf98yYfh7@kreacher>
-In-Reply-To: <20191021085140.14030-1-zhuguangqing83@gmail.com>
-References: <20191021085140.14030-1-zhuguangqing83@gmail.com>
+        id S1730151AbfKHLhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 06:37:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50384 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726149AbfKHLhJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:37:09 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C480320869;
+        Fri,  8 Nov 2019 11:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573213028;
+        bh=G5j+RwShAgrettv3VQJ2Hzibs0yOoFaJu63CqOxn8Oo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iWFuYTQcqXM/DR65wCIopKLQsBH2V3ve8n4fUHcE6O0QCwEWq5LcBR7HT3UYbVuXy
+         LLH+DzR/qTOHmtgWKoaaTL5pocOV+6Wehrg/cMS5rr/2mDYoYQbR8bXug4dIKrlFDH
+         izPZgMynJUZ3fTgx+ygLAuT+nnb+N95WoPMCQjcs=
+Date:   Fri, 8 Nov 2019 12:37:05 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Breno =?iso-8859-1?Q?Leit=E3o?= <leitao@debian.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        David@rox.of.borg, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Casey Leedom <leedom@chelsio.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] power: avs: smartreflex: Remove superfluous cast in
+ debugfs_create_file() call
+Message-ID: <20191108113705.GA721212@kroah.com>
+References: <20191021145149.31657-1-geert+renesas@glider.be>
+ <20191021145149.31657-5-geert+renesas@glider.be>
+ <4367615.jSCgeRn5tF@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4367615.jSCgeRn5tF@kreacher>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, October 21, 2019 10:51:40 AM CET zhuguangqing83@gmail.com wrote:
-> From: zhuguangqing <zhuguangqing@xiaomi.com>
+On Fri, Nov 08, 2019 at 12:24:42PM +0100, Rafael J. Wysocki wrote:
+> On Monday, October 21, 2019 4:51:48 PM CET Geert Uytterhoeven wrote:
+> > There is no need to cast a typed pointer to a void pointer when calling
+> > a function that accepts the latter.  Remove it, as the cast prevents
+> > further compiler checks.
+> > 
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > 
-> After commit 00ee22c28915 (PM / wakeup: Use seq_open()
-> to show wakeup stats), print_wakeup_source_stats(m, &deleted_ws)
-> is deleted in function wakeup_sources_stats_seq_show().
-> 
-> Because deleted_ws is one of wakeup sources, so it should
-> also be showed. This patch add it to the end of all other
-> wakeup sources.
-> 
-> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
-> ---
->  drivers/base/power/wakeup.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 5817b51d2b15..29e9434ccaaa 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -1071,6 +1071,9 @@ static void *wakeup_sources_stats_seq_next(struct seq_file *m,
->  		break;
->  	}
->  
-> +	if (&ws->entry == &wakeup_sources)
-> +		print_wakeup_source_stats(m, &deleted_ws);
-> +
+> Greg, have you taken this one by any chance?
 
-That would be when NULL is about to be returned, right?
-
-Why not to check for !next_ws instead, then?
-
-Moreover, why to call print_wakeup_source_stats() directly instead of returning
-&deleted_ws?
-
-Also it looks like you need a similar change in wakeup_sources_stats_seq_start(),
-in case n is greater than the number of list entries, don't you?
-
->  	return next_ws;
->  }
->  
-> 
-
-
-
+Nope, it's all yours!  :)
 
