@@ -2,907 +2,310 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED36FF4C30
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 13:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A787FF4D38
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 14:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfKHMyg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 07:54:36 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34516 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbfKHMyg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 07:54:36 -0500
-Received: by mail-wr1-f65.google.com with SMTP id e6so7001545wrw.1
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 04:54:31 -0800 (PST)
+        id S1727677AbfKHNdF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 08:33:05 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54158 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728158AbfKHNdF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 08:33:05 -0500
+Received: by mail-wm1-f67.google.com with SMTP id x4so6194577wmi.3
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 05:33:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DEUph8SrtHouYTsTHsq/Zb4quyzaWw7CRK81W9R4lo8=;
-        b=oP2x7CZiLX324SMYu0hemdpIoDxwcvShCvBv6soTt9r6Djpkt5RwBO1My0N2tSwZTb
-         JY434oHzfiD8Qt58NRGqMnDX3BOUKNGrxZWZXldKahoM4qfOjpQCOx2PjNB6+argPpLJ
-         BCCMlnYiWiY1e6KW/CjqcwKy0lvi4UMS5jq6zUINRdeznEC2QWV4fr5OZRLGVFZehA9w
-         PyTpXfmSGeonIorpxrqgRVOSTwh94UAJh6TlBLdwxZtCOzOPLjDL9xrDZJpicDNGH4O2
-         4/FXCCgKyGz5WwgTzHzgcjqiUjsGSnyR8ChB6paU3yZZxWf7ObQK+DtMdrUeeTE8BBqT
-         R1rA==
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ACIMBrgborIoC2m5uBLNb/+jxkzjuWQrkN4+mG5Y4nw=;
+        b=bc0Hy4iALAMrNp4pnfyzxtBbc84tSMVdLA4lsNwjRwXGDFUyOPj91GTtLelzer2ElA
+         WQccCP2qQ9uECW5kzPw88X5f7oC0+InTjNs39lTh+DpTEKoB7ChvK02xsajzjPt7cyDZ
+         aJwUiPCir2rLHNoXHOpdg8CwiGD3ocdazsoU2e1kMNSXDhhdU3d+RBay5vZvNmzEtML0
+         e9v9vCXVRFchRxYD3o9B+AqbfpCQ/m6VqyX23yZzB9xK6lP2JJxAzOHvNrmam16eKvsa
+         xoiRZRmHM/6O2tjKNlF7wBcd1LR3x24ZWPW/dVSc22xEdyZepKsuzffmcaV95+45lisJ
+         Ulnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DEUph8SrtHouYTsTHsq/Zb4quyzaWw7CRK81W9R4lo8=;
-        b=GTilU6NI8B2FkN7eXoySwrvQRJu9DMLAxTKCN+CqoA9knjDRFgevjpxmbvzmh5fcH0
-         mlQ+k+miRvYXNZkH/aq/JCat1NnGqzP540HxjijcfUk29FSVPm91O7r20xUs5FoLJwlx
-         CAMWrKC88MH2teFAM2BjhlXJg1kRgx5ieEFtY4qvFOO46M0haYJgku1MhNPFtW9E1iVb
-         9Bsn+HGPIRA0fbyCjCsGofw3snvcMRV5I9iy8nes0wqiAl+3hX6OSTK3OJixhOT3wMnK
-         C4gyqaxXDHFj5YZDkKF/FDfjZK7LB3QKCJwsKjk+L6ILpiXhyD+oRCFadLNb2POS2Q5Y
-         PtUg==
-X-Gm-Message-State: APjAAAVZwI1ymtQ0yHEUKtJhwV2govfG5//DEua3OPzXwB51ckIAjb0V
-        nxXPuadojplChQPcT+rk+nqr5sFJolA=
-X-Google-Smtp-Source: APXvYqznX5ZtlOtZXs8wSFrb2n8Dsqkq+VD+c5Yo6sPczLVaurKlyp179/W7+YWAjqdHQbFsVGAIjw==
-X-Received: by 2002:adf:9f52:: with SMTP id f18mr7967576wrg.51.1573217670605;
-        Fri, 08 Nov 2019 04:54:30 -0800 (PST)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id 19sm8515234wrc.47.2019.11.08.04.54.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 08 Nov 2019 04:54:30 -0800 (PST)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Brian Masney <masneyb@onstation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [PATCH 2/2] interconnect: qcom: add msm8974 driver
-Date:   Fri,  8 Nov 2019 14:53:49 +0200
-Message-Id: <20191108125349.24191-3-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191108125349.24191-1-georgi.djakov@linaro.org>
-References: <20191108125349.24191-1-georgi.djakov@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ACIMBrgborIoC2m5uBLNb/+jxkzjuWQrkN4+mG5Y4nw=;
+        b=hn/Z5PV0s5v6G/8VQxD7S52J2DuALVNzcFaCuNT9oHuamBLHJFhWEMQ5cdm/T8OvMG
+         MG2hs8rtJCGs+PNx85SnTi2h16R3XcTPxOPoAo19Im/+Mj1yO/4fxz8R7u1V6/vrAFQu
+         5p9yFHxrj4+Bk+wZL3Dh2H2QWBfK3zesIe03f10lGkgZ3H7XSmHUih9JM6BoEWime3Pu
+         KtXLQtTOelt44fHsPVCInmAmmWyy27f7ppoWmJVCrzxXLAul3afFDQUw2RO6oTSV5I6T
+         2sU6XnhF/4wV/ri77gen7NSanCBFaZk4tjgkI9Zuwk2/VlXY07u12S0ibhgOaJhPhHG2
+         /1wg==
+X-Gm-Message-State: APjAAAX7wjmMead2uHX5EVlueUdkSio3Mom/rqKD4LE66nZl6sDTyWi1
+        HIfQyfG+cchl+mYbhTeT7//sGg==
+X-Google-Smtp-Source: APXvYqyJpJqfh6G3j4k2XgNMbUVzHaS/P4o5bLfGYwDIxWgBgoTX35dBBRf8ll+k0kYh7MqIoLlgWQ==
+X-Received: by 2002:a7b:c181:: with SMTP id y1mr7980211wmi.16.1573219981044;
+        Fri, 08 Nov 2019 05:33:01 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:85c9:ca0d:aae1:f680? ([2a01:e34:ed2f:f020:85c9:ca0d:aae1:f680])
+        by smtp.googlemail.com with ESMTPSA id g184sm9504356wma.8.2019.11.08.05.32.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 05:33:00 -0800 (PST)
+Subject: Re: [PATCH V6 2/3] cpuidle: play_idle: Specify play_idle with an idle
+ state
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+References: <20191030075141.1039-1-daniel.lezcano@linaro.org>
+ <20191030075141.1039-2-daniel.lezcano@linaro.org>
+ <143021538.HHUP3Pj7i7@kreacher>
+ <9dfe3bd3-1903-4dc4-0605-27cc867d87ad@linaro.org>
+ <CAJZ5v0hLZ9O=QtZ+ktc-_Dk7aJjgD9BRLyYKw1g9Ze2n8KZyVQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <59f10030-cef0-4d75-5135-9d0590385fda@linaro.org>
+Date:   Fri, 8 Nov 2019 14:32:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0hLZ9O=QtZ+ktc-_Dk7aJjgD9BRLyYKw1g9Ze2n8KZyVQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Brian Masney <masneyb@onstation.org>
+On 08/11/2019 11:56, Rafael J. Wysocki wrote:
+> On Fri, Nov 8, 2019 at 11:47 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 08/11/2019 02:20, Rafael J. Wysocki wrote:
+>>> On Wednesday, October 30, 2019 8:51:40 AM CET Daniel Lezcano wrote:
+>>>> Currently, the play_idle function does not allow to tell which idle
+>>>> state we want to go. Improve this by passing the idle state as
+>>>> parameter to the function.
+>>>>
+>>>> Export cpuidle_find_deepest_state() symbol as it is used from the
+>>>> intel_powerclamp driver as a module.
+>>>>
+>>>> There is no functional changes, the cpuidle state is the deepest one.
+>>>>
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>>>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>> ---
+>>>>   V6:
+>>>>    - Change variable name 'state' -> 'index':
+>>>>      https://lkml.org/lkml/2019/10/28/874
+>>>>   V4:
+>>>>    - Add EXPORT_SYMBOL_GPL(cpuidle_find_deepest_state) for the
+>>>>      intel_powerclamp driver when this one is compiled as a module
+>>>>   V3:
+>>>>    - Add missing cpuidle.h header
+>>>> ---
+>>>>  drivers/cpuidle/cpuidle.c                | 1 +
+>>>>  drivers/powercap/idle_inject.c           | 4 +++-
+>>>>  drivers/thermal/intel/intel_powerclamp.c | 4 +++-
+>>>>  include/linux/cpu.h                      | 2 +-
+>>>>  kernel/sched/idle.c                      | 4 ++--
+>>>>  5 files changed, 10 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+>>>> index 18523ea6b11b..b871fc2e8e67 100644
+>>>> --- a/drivers/cpuidle/cpuidle.c
+>>>> +++ b/drivers/cpuidle/cpuidle.c
+>>>> @@ -126,6 +126,7 @@ int cpuidle_find_deepest_state(void)
+>>>>
+>>>>      return find_deepest_state(drv, dev, UINT_MAX, 0, false);
+>>>>  }
+>>>> +EXPORT_SYMBOL_GPL(cpuidle_find_deepest_state);
+>>>
+>>> That doesn't appear to be really necessary to me.
+>>>
+>>>>
+>>>>  #ifdef CONFIG_SUSPEND
+>>>>  static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>>>> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+>>>> index cd1270614cc6..233c878cbf46 100644
+>>>> --- a/drivers/powercap/idle_inject.c
+>>>> +++ b/drivers/powercap/idle_inject.c
+>>>> @@ -38,6 +38,7 @@
+>>>>  #define pr_fmt(fmt) "ii_dev: " fmt
+>>>>
+>>>>  #include <linux/cpu.h>
+>>>> +#include <linux/cpuidle.h>
+>>>>  #include <linux/hrtimer.h>
+>>>>  #include <linux/kthread.h>
+>>>>  #include <linux/sched.h>
+>>>> @@ -138,7 +139,8 @@ static void idle_inject_fn(unsigned int cpu)
+>>>>       */
+>>>>      iit->should_run = 0;
+>>>>
+>>>> -    play_idle(READ_ONCE(ii_dev->idle_duration_us));
+>>>> +    play_idle(READ_ONCE(ii_dev->idle_duration_us),
+>>>> +              cpuidle_find_deepest_state());
+>>>
+>>> The next patch changes this again and I'm not sure why this intermediate
+>>> change is useful.
+>>>
+>>>>  }
+>>>>
+>>>>  /**
+>>>> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+>>>> index 53216dcbe173..b55786c169ae 100644
+>>>> --- a/drivers/thermal/intel/intel_powerclamp.c
+>>>> +++ b/drivers/thermal/intel/intel_powerclamp.c
+>>>> @@ -29,6 +29,7 @@
+>>>>  #include <linux/delay.h>
+>>>>  #include <linux/kthread.h>
+>>>>  #include <linux/cpu.h>
+>>>> +#include <linux/cpuidle.h>
+>>>>  #include <linux/thermal.h>
+>>>>  #include <linux/slab.h>
+>>>>  #include <linux/tick.h>
+>>>> @@ -430,7 +431,8 @@ static void clamp_idle_injection_func(struct kthread_work *work)
+>>>>      if (should_skip)
+>>>>              goto balance;
+>>>>
+>>>> -    play_idle(jiffies_to_usecs(w_data->duration_jiffies));
+>>>> +    play_idle(jiffies_to_usecs(w_data->duration_jiffies),
+>>>> +              cpuidle_find_deepest_state());
+>>>
+>>> I don't see a reason for changing the code here like this.
+>>>
+>>> What you really need is to have a way to set a limit on the idle
+>>> state exit latency for idle injection on ARM.
+>>
+>> Mmh, yes you are right. The idle state number is part of the internals
+>> of the cpuidle framework while the exit latency is an input (from user
+>> or kernel).
+>>
+>>> For that you can pass the exit latency limit to play_idle(), but then
+>>> you need to change powerclamp to pass UNIT_MAX or similar which is
+>>> ugly, or you can redefine cpuidle_use_deepest_state() to take the
+>>> exit latency limit as the arg (with 0 meaning use_deepest_state == false).
+>>
+>> Should it make sense to just get the resume latency in
+>> cpuidle_use_deepest_state() and pass the value to find_deepest_state()?
+> 
+> Yes, I would change cpuidle_use_deepest_state() to take the max exit
+> latency as the arg (maybe with 0 meaning "don't use the deepest state
+> only any more").
 
-Add driver for the Qualcomm MSM8974 interconnect providers that support
-setting system bandwidth requirements between various network-on-chip
-fabrics.
+Why not simply ?
 
-Signed-off-by: Brian Masney <masneyb@onstation.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20191024103054.9770-3-masneyb@onstation.org
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/qcom/Kconfig   |   9 +
- drivers/interconnect/qcom/Makefile  |   2 +
- drivers/interconnect/qcom/msm8974.c | 784 ++++++++++++++++++++++++++++
- 3 files changed, 795 insertions(+)
- create mode 100644 drivers/interconnect/qcom/msm8974.c
+int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+				struct cpuidle_device *dev)
+{
+	int latency = cpuidle_governor_latency_req(dev->cpu);
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index 6ab4012a059a..c49afbea3458 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -5,6 +5,15 @@ config INTERCONNECT_QCOM
- 	help
- 	  Support for Qualcomm's Network-on-Chip interconnect hardware.
- 
-+config INTERCONNECT_QCOM_MSM8974
-+       tristate "Qualcomm MSM8974 interconnect driver"
-+       depends on INTERCONNECT_QCOM
-+       depends on QCOM_SMD_RPM
-+       select INTERCONNECT_QCOM_SMD_RPM
-+       help
-+         This is a driver for the Qualcomm Network-on-Chip on msm8974-based
-+         platforms.
-+
- config INTERCONNECT_QCOM_QCS404
- 	tristate "Qualcomm QCS404 interconnect driver"
- 	depends on INTERCONNECT_QCOM
-diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-index 67dafb783dec..9adf9e380545 100644
---- a/drivers/interconnect/qcom/Makefile
-+++ b/drivers/interconnect/qcom/Makefile
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+qnoc-msm8974-objs			:= msm8974.o
- qnoc-qcs404-objs			:= qcs404.o
- qnoc-sdm845-objs			:= sdm845.o
- icc-smd-rpm-objs			:= smd-rpm.o
- 
-+obj-$(CONFIG_INTERCONNECT_QCOM_MSM8974) += qnoc-msm8974.o
- obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
-diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
-new file mode 100644
-index 000000000000..ce599a0c83d9
---- /dev/null
-+++ b/drivers/interconnect/qcom/msm8974.c
-@@ -0,0 +1,784 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Brian Masney <masneyb@onstation.org>
-+ *
-+ * Based on MSM bus code from downstream MSM kernel sources.
-+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
-+ *
-+ * Based on qcs404.c
-+ * Copyright (C) 2019 Linaro Ltd
-+ *
-+ * Here's a rough representation that shows the various buses that form the
-+ * Network On Chip (NOC) for the msm8974:
-+ *
-+ *                         Multimedia Subsystem (MMSS)
-+ *         |----------+-----------------------------------+-----------|
-+ *                    |                                   |
-+ *                    |                                   |
-+ *        Config      |                     Bus Interface | Memory Controller
-+ *       |------------+-+-----------|        |------------+-+-----------|
-+ *                      |                                   |
-+ *                      |                                   |
-+ *                      |             System                |
-+ *     |--------------+-+---------------------------------+-+-------------|
-+ *                    |                                   |
-+ *                    |                                   |
-+ *        Peripheral  |                           On Chip | Memory (OCMEM)
-+ *       |------------+-------------|        |------------+-------------|
-+ */
-+
-+#include <dt-bindings/interconnect/qcom,msm8974.h>
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include "smd-rpm.h"
-+
-+enum {
-+	MSM8974_BIMC_MAS_AMPSS_M0 = 1,
-+	MSM8974_BIMC_MAS_AMPSS_M1,
-+	MSM8974_BIMC_MAS_MSS_PROC,
-+	MSM8974_BIMC_TO_MNOC,
-+	MSM8974_BIMC_TO_SNOC,
-+	MSM8974_BIMC_SLV_EBI_CH0,
-+	MSM8974_BIMC_SLV_AMPSS_L2,
-+	MSM8974_CNOC_MAS_RPM_INST,
-+	MSM8974_CNOC_MAS_RPM_DATA,
-+	MSM8974_CNOC_MAS_RPM_SYS,
-+	MSM8974_CNOC_MAS_DEHR,
-+	MSM8974_CNOC_MAS_QDSS_DAP,
-+	MSM8974_CNOC_MAS_SPDM,
-+	MSM8974_CNOC_MAS_TIC,
-+	MSM8974_CNOC_SLV_CLK_CTL,
-+	MSM8974_CNOC_SLV_CNOC_MSS,
-+	MSM8974_CNOC_SLV_SECURITY,
-+	MSM8974_CNOC_SLV_TCSR,
-+	MSM8974_CNOC_SLV_TLMM,
-+	MSM8974_CNOC_SLV_CRYPTO_0_CFG,
-+	MSM8974_CNOC_SLV_CRYPTO_1_CFG,
-+	MSM8974_CNOC_SLV_IMEM_CFG,
-+	MSM8974_CNOC_SLV_MESSAGE_RAM,
-+	MSM8974_CNOC_SLV_BIMC_CFG,
-+	MSM8974_CNOC_SLV_BOOT_ROM,
-+	MSM8974_CNOC_SLV_PMIC_ARB,
-+	MSM8974_CNOC_SLV_SPDM_WRAPPER,
-+	MSM8974_CNOC_SLV_DEHR_CFG,
-+	MSM8974_CNOC_SLV_MPM,
-+	MSM8974_CNOC_SLV_QDSS_CFG,
-+	MSM8974_CNOC_SLV_RBCPR_CFG,
-+	MSM8974_CNOC_SLV_RBCPR_QDSS_APU_CFG,
-+	MSM8974_CNOC_TO_SNOC,
-+	MSM8974_CNOC_SLV_CNOC_ONOC_CFG,
-+	MSM8974_CNOC_SLV_CNOC_MNOC_MMSS_CFG,
-+	MSM8974_CNOC_SLV_CNOC_MNOC_CFG,
-+	MSM8974_CNOC_SLV_PNOC_CFG,
-+	MSM8974_CNOC_SLV_SNOC_MPU_CFG,
-+	MSM8974_CNOC_SLV_SNOC_CFG,
-+	MSM8974_CNOC_SLV_EBI1_DLL_CFG,
-+	MSM8974_CNOC_SLV_PHY_APU_CFG,
-+	MSM8974_CNOC_SLV_EBI1_PHY_CFG,
-+	MSM8974_CNOC_SLV_RPM,
-+	MSM8974_CNOC_SLV_SERVICE_CNOC,
-+	MSM8974_MNOC_MAS_GRAPHICS_3D,
-+	MSM8974_MNOC_MAS_JPEG,
-+	MSM8974_MNOC_MAS_MDP_PORT0,
-+	MSM8974_MNOC_MAS_VIDEO_P0,
-+	MSM8974_MNOC_MAS_VIDEO_P1,
-+	MSM8974_MNOC_MAS_VFE,
-+	MSM8974_MNOC_TO_CNOC,
-+	MSM8974_MNOC_TO_BIMC,
-+	MSM8974_MNOC_SLV_CAMERA_CFG,
-+	MSM8974_MNOC_SLV_DISPLAY_CFG,
-+	MSM8974_MNOC_SLV_OCMEM_CFG,
-+	MSM8974_MNOC_SLV_CPR_CFG,
-+	MSM8974_MNOC_SLV_CPR_XPU_CFG,
-+	MSM8974_MNOC_SLV_MISC_CFG,
-+	MSM8974_MNOC_SLV_MISC_XPU_CFG,
-+	MSM8974_MNOC_SLV_VENUS_CFG,
-+	MSM8974_MNOC_SLV_GRAPHICS_3D_CFG,
-+	MSM8974_MNOC_SLV_MMSS_CLK_CFG,
-+	MSM8974_MNOC_SLV_MMSS_CLK_XPU_CFG,
-+	MSM8974_MNOC_SLV_MNOC_MPU_CFG,
-+	MSM8974_MNOC_SLV_ONOC_MPU_CFG,
-+	MSM8974_MNOC_SLV_SERVICE_MNOC,
-+	MSM8974_OCMEM_NOC_TO_OCMEM_VNOC,
-+	MSM8974_OCMEM_MAS_JPEG_OCMEM,
-+	MSM8974_OCMEM_MAS_MDP_OCMEM,
-+	MSM8974_OCMEM_MAS_VIDEO_P0_OCMEM,
-+	MSM8974_OCMEM_MAS_VIDEO_P1_OCMEM,
-+	MSM8974_OCMEM_MAS_VFE_OCMEM,
-+	MSM8974_OCMEM_MAS_CNOC_ONOC_CFG,
-+	MSM8974_OCMEM_SLV_SERVICE_ONOC,
-+	MSM8974_OCMEM_VNOC_TO_SNOC,
-+	MSM8974_OCMEM_VNOC_TO_OCMEM_NOC,
-+	MSM8974_OCMEM_VNOC_MAS_GFX3D,
-+	MSM8974_OCMEM_SLV_OCMEM,
-+	MSM8974_PNOC_MAS_PNOC_CFG,
-+	MSM8974_PNOC_MAS_SDCC_1,
-+	MSM8974_PNOC_MAS_SDCC_3,
-+	MSM8974_PNOC_MAS_SDCC_4,
-+	MSM8974_PNOC_MAS_SDCC_2,
-+	MSM8974_PNOC_MAS_TSIF,
-+	MSM8974_PNOC_MAS_BAM_DMA,
-+	MSM8974_PNOC_MAS_BLSP_2,
-+	MSM8974_PNOC_MAS_USB_HSIC,
-+	MSM8974_PNOC_MAS_BLSP_1,
-+	MSM8974_PNOC_MAS_USB_HS,
-+	MSM8974_PNOC_TO_SNOC,
-+	MSM8974_PNOC_SLV_SDCC_1,
-+	MSM8974_PNOC_SLV_SDCC_3,
-+	MSM8974_PNOC_SLV_SDCC_2,
-+	MSM8974_PNOC_SLV_SDCC_4,
-+	MSM8974_PNOC_SLV_TSIF,
-+	MSM8974_PNOC_SLV_BAM_DMA,
-+	MSM8974_PNOC_SLV_BLSP_2,
-+	MSM8974_PNOC_SLV_USB_HSIC,
-+	MSM8974_PNOC_SLV_BLSP_1,
-+	MSM8974_PNOC_SLV_USB_HS,
-+	MSM8974_PNOC_SLV_PDM,
-+	MSM8974_PNOC_SLV_PERIPH_APU_CFG,
-+	MSM8974_PNOC_SLV_PNOC_MPU_CFG,
-+	MSM8974_PNOC_SLV_PRNG,
-+	MSM8974_PNOC_SLV_SERVICE_PNOC,
-+	MSM8974_SNOC_MAS_LPASS_AHB,
-+	MSM8974_SNOC_MAS_QDSS_BAM,
-+	MSM8974_SNOC_MAS_SNOC_CFG,
-+	MSM8974_SNOC_TO_BIMC,
-+	MSM8974_SNOC_TO_CNOC,
-+	MSM8974_SNOC_TO_PNOC,
-+	MSM8974_SNOC_TO_OCMEM_VNOC,
-+	MSM8974_SNOC_MAS_CRYPTO_CORE0,
-+	MSM8974_SNOC_MAS_CRYPTO_CORE1,
-+	MSM8974_SNOC_MAS_LPASS_PROC,
-+	MSM8974_SNOC_MAS_MSS,
-+	MSM8974_SNOC_MAS_MSS_NAV,
-+	MSM8974_SNOC_MAS_OCMEM_DMA,
-+	MSM8974_SNOC_MAS_WCSS,
-+	MSM8974_SNOC_MAS_QDSS_ETR,
-+	MSM8974_SNOC_MAS_USB3,
-+	MSM8974_SNOC_SLV_AMPSS,
-+	MSM8974_SNOC_SLV_LPASS,
-+	MSM8974_SNOC_SLV_USB3,
-+	MSM8974_SNOC_SLV_WCSS,
-+	MSM8974_SNOC_SLV_OCIMEM,
-+	MSM8974_SNOC_SLV_SNOC_OCMEM,
-+	MSM8974_SNOC_SLV_SERVICE_SNOC,
-+	MSM8974_SNOC_SLV_QDSS_STM,
-+};
-+
-+#define RPM_BUS_MASTER_REQ	0x73616d62
-+#define RPM_BUS_SLAVE_REQ	0x766c7362
-+
-+#define to_msm8974_icc_provider(_provider) \
-+	container_of(_provider, struct msm8974_icc_provider, provider)
-+
-+static const struct clk_bulk_data msm8974_icc_bus_clocks[] = {
-+	{ .id = "bus" },
-+	{ .id = "bus_a" },
-+};
-+
-+/**
-+ * struct msm8974_icc_provider - Qualcomm specific interconnect provider
-+ * @provider: generic interconnect provider
-+ * @bus_clks: the clk_bulk_data table of bus clocks
-+ * @num_clks: the total number of clk_bulk_data entries
-+ */
-+struct msm8974_icc_provider {
-+	struct icc_provider provider;
-+	struct clk_bulk_data *bus_clks;
-+	int num_clks;
-+};
-+
-+#define MSM8974_ICC_MAX_LINKS	3
-+
-+/**
-+ * struct msm8974_icc_node - Qualcomm specific interconnect nodes
-+ * @name: the node name used in debugfs
-+ * @id: a unique node identifier
-+ * @links: an array of nodes where we can go next while traversing
-+ * @num_links: the total number of @links
-+ * @buswidth: width of the interconnect between a node and the bus (bytes)
-+ * @mas_rpm_id:	RPM ID for devices that are bus masters
-+ * @slv_rpm_id:	RPM ID for devices that are bus slaves
-+ * @rate: current bus clock rate in Hz
-+ */
-+struct msm8974_icc_node {
-+	unsigned char *name;
-+	u16 id;
-+	u16 links[MSM8974_ICC_MAX_LINKS];
-+	u16 num_links;
-+	u16 buswidth;
-+	int mas_rpm_id;
-+	int slv_rpm_id;
-+	u64 rate;
-+};
-+
-+struct msm8974_icc_desc {
-+	struct msm8974_icc_node **nodes;
-+	size_t num_nodes;
-+};
-+
-+#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,	\
-+		     ...)						\
-+		static struct msm8974_icc_node _name = {		\
-+		.name = #_name,						\
-+		.id = _id,						\
-+		.buswidth = _buswidth,					\
-+		.mas_rpm_id = _mas_rpm_id,				\
-+		.slv_rpm_id = _slv_rpm_id,				\
-+		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
-+		.links = { __VA_ARGS__ },				\
-+	}
-+
-+DEFINE_QNODE(mas_ampss_m0, MSM8974_BIMC_MAS_AMPSS_M0, 8, 0, -1);
-+DEFINE_QNODE(mas_ampss_m1, MSM8974_BIMC_MAS_AMPSS_M1, 8, 0, -1);
-+DEFINE_QNODE(mas_mss_proc, MSM8974_BIMC_MAS_MSS_PROC, 8, 1, -1);
-+DEFINE_QNODE(bimc_to_mnoc, MSM8974_BIMC_TO_MNOC, 8, 2, -1, MSM8974_BIMC_SLV_EBI_CH0);
-+DEFINE_QNODE(bimc_to_snoc, MSM8974_BIMC_TO_SNOC, 8, 3, 2, MSM8974_SNOC_TO_BIMC, MSM8974_BIMC_SLV_EBI_CH0, MSM8974_BIMC_MAS_AMPSS_M0);
-+DEFINE_QNODE(slv_ebi_ch0, MSM8974_BIMC_SLV_EBI_CH0, 8, -1, 0);
-+DEFINE_QNODE(slv_ampss_l2, MSM8974_BIMC_SLV_AMPSS_L2, 8, -1, 1);
-+
-+static struct msm8974_icc_node *msm8974_bimc_nodes[] = {
-+	[BIMC_MAS_AMPSS_M0] = &mas_ampss_m0,
-+	[BIMC_MAS_AMPSS_M1] = &mas_ampss_m1,
-+	[BIMC_MAS_MSS_PROC] = &mas_mss_proc,
-+	[BIMC_TO_MNOC] = &bimc_to_mnoc,
-+	[BIMC_TO_SNOC] = &bimc_to_snoc,
-+	[BIMC_SLV_EBI_CH0] = &slv_ebi_ch0,
-+	[BIMC_SLV_AMPSS_L2] = &slv_ampss_l2,
-+};
-+
-+static struct msm8974_icc_desc msm8974_bimc = {
-+	.nodes = msm8974_bimc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_bimc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_rpm_inst, MSM8974_CNOC_MAS_RPM_INST, 8, 45, -1);
-+DEFINE_QNODE(mas_rpm_data, MSM8974_CNOC_MAS_RPM_DATA, 8, 46, -1);
-+DEFINE_QNODE(mas_rpm_sys, MSM8974_CNOC_MAS_RPM_SYS, 8, 47, -1);
-+DEFINE_QNODE(mas_dehr, MSM8974_CNOC_MAS_DEHR, 8, 48, -1);
-+DEFINE_QNODE(mas_qdss_dap, MSM8974_CNOC_MAS_QDSS_DAP, 8, 49, -1);
-+DEFINE_QNODE(mas_spdm, MSM8974_CNOC_MAS_SPDM, 8, 50, -1);
-+DEFINE_QNODE(mas_tic, MSM8974_CNOC_MAS_TIC, 8, 51, -1);
-+DEFINE_QNODE(slv_clk_ctl, MSM8974_CNOC_SLV_CLK_CTL, 8, -1, 47);
-+DEFINE_QNODE(slv_cnoc_mss, MSM8974_CNOC_SLV_CNOC_MSS, 8, -1, 48);
-+DEFINE_QNODE(slv_security, MSM8974_CNOC_SLV_SECURITY, 8, -1, 49);
-+DEFINE_QNODE(slv_tcsr, MSM8974_CNOC_SLV_TCSR, 8, -1, 50);
-+DEFINE_QNODE(slv_tlmm, MSM8974_CNOC_SLV_TLMM, 8, -1, 51);
-+DEFINE_QNODE(slv_crypto_0_cfg, MSM8974_CNOC_SLV_CRYPTO_0_CFG, 8, -1, 52);
-+DEFINE_QNODE(slv_crypto_1_cfg, MSM8974_CNOC_SLV_CRYPTO_1_CFG, 8, -1, 53);
-+DEFINE_QNODE(slv_imem_cfg, MSM8974_CNOC_SLV_IMEM_CFG, 8, -1, 54);
-+DEFINE_QNODE(slv_message_ram, MSM8974_CNOC_SLV_MESSAGE_RAM, 8, -1, 55);
-+DEFINE_QNODE(slv_bimc_cfg, MSM8974_CNOC_SLV_BIMC_CFG, 8, -1, 56);
-+DEFINE_QNODE(slv_boot_rom, MSM8974_CNOC_SLV_BOOT_ROM, 8, -1, 57);
-+DEFINE_QNODE(slv_pmic_arb, MSM8974_CNOC_SLV_PMIC_ARB, 8, -1, 59);
-+DEFINE_QNODE(slv_spdm_wrapper, MSM8974_CNOC_SLV_SPDM_WRAPPER, 8, -1, 60);
-+DEFINE_QNODE(slv_dehr_cfg, MSM8974_CNOC_SLV_DEHR_CFG, 8, -1, 61);
-+DEFINE_QNODE(slv_mpm, MSM8974_CNOC_SLV_MPM, 8, -1, 62);
-+DEFINE_QNODE(slv_qdss_cfg, MSM8974_CNOC_SLV_QDSS_CFG, 8, -1, 63);
-+DEFINE_QNODE(slv_rbcpr_cfg, MSM8974_CNOC_SLV_RBCPR_CFG, 8, -1, 64);
-+DEFINE_QNODE(slv_rbcpr_qdss_apu_cfg, MSM8974_CNOC_SLV_RBCPR_QDSS_APU_CFG, 8, -1, 65);
-+DEFINE_QNODE(cnoc_to_snoc, MSM8974_CNOC_TO_SNOC, 8, 52, 75);
-+DEFINE_QNODE(slv_cnoc_onoc_cfg, MSM8974_CNOC_SLV_CNOC_ONOC_CFG, 8, -1, 68);
-+DEFINE_QNODE(slv_cnoc_mnoc_mmss_cfg, MSM8974_CNOC_SLV_CNOC_MNOC_MMSS_CFG, 8, -1, 58);
-+DEFINE_QNODE(slv_cnoc_mnoc_cfg, MSM8974_CNOC_SLV_CNOC_MNOC_CFG, 8, -1, 66);
-+DEFINE_QNODE(slv_pnoc_cfg, MSM8974_CNOC_SLV_PNOC_CFG, 8, -1, 69);
-+DEFINE_QNODE(slv_snoc_mpu_cfg, MSM8974_CNOC_SLV_SNOC_MPU_CFG, 8, -1, 67);
-+DEFINE_QNODE(slv_snoc_cfg, MSM8974_CNOC_SLV_SNOC_CFG, 8, -1, 70);
-+DEFINE_QNODE(slv_ebi1_dll_cfg, MSM8974_CNOC_SLV_EBI1_DLL_CFG, 8, -1, 71);
-+DEFINE_QNODE(slv_phy_apu_cfg, MSM8974_CNOC_SLV_PHY_APU_CFG, 8, -1, 72);
-+DEFINE_QNODE(slv_ebi1_phy_cfg, MSM8974_CNOC_SLV_EBI1_PHY_CFG, 8, -1, 73);
-+DEFINE_QNODE(slv_rpm, MSM8974_CNOC_SLV_RPM, 8, -1, 74);
-+DEFINE_QNODE(slv_service_cnoc, MSM8974_CNOC_SLV_SERVICE_CNOC, 8, -1, 76);
-+
-+static struct msm8974_icc_node *msm8974_cnoc_nodes[] = {
-+	[CNOC_MAS_RPM_INST] = &mas_rpm_inst,
-+	[CNOC_MAS_RPM_DATA] = &mas_rpm_data,
-+	[CNOC_MAS_RPM_SYS] = &mas_rpm_sys,
-+	[CNOC_MAS_DEHR] = &mas_dehr,
-+	[CNOC_MAS_QDSS_DAP] = &mas_qdss_dap,
-+	[CNOC_MAS_SPDM] = &mas_spdm,
-+	[CNOC_MAS_TIC] = &mas_tic,
-+	[CNOC_SLV_CLK_CTL] = &slv_clk_ctl,
-+	[CNOC_SLV_CNOC_MSS] = &slv_cnoc_mss,
-+	[CNOC_SLV_SECURITY] = &slv_security,
-+	[CNOC_SLV_TCSR] = &slv_tcsr,
-+	[CNOC_SLV_TLMM] = &slv_tlmm,
-+	[CNOC_SLV_CRYPTO_0_CFG] = &slv_crypto_0_cfg,
-+	[CNOC_SLV_CRYPTO_1_CFG] = &slv_crypto_1_cfg,
-+	[CNOC_SLV_IMEM_CFG] = &slv_imem_cfg,
-+	[CNOC_SLV_MESSAGE_RAM] = &slv_message_ram,
-+	[CNOC_SLV_BIMC_CFG] = &slv_bimc_cfg,
-+	[CNOC_SLV_BOOT_ROM] = &slv_boot_rom,
-+	[CNOC_SLV_PMIC_ARB] = &slv_pmic_arb,
-+	[CNOC_SLV_SPDM_WRAPPER] = &slv_spdm_wrapper,
-+	[CNOC_SLV_DEHR_CFG] = &slv_dehr_cfg,
-+	[CNOC_SLV_MPM] = &slv_mpm,
-+	[CNOC_SLV_QDSS_CFG] = &slv_qdss_cfg,
-+	[CNOC_SLV_RBCPR_CFG] = &slv_rbcpr_cfg,
-+	[CNOC_SLV_RBCPR_QDSS_APU_CFG] = &slv_rbcpr_qdss_apu_cfg,
-+	[CNOC_TO_SNOC] = &cnoc_to_snoc,
-+	[CNOC_SLV_CNOC_ONOC_CFG] = &slv_cnoc_onoc_cfg,
-+	[CNOC_SLV_CNOC_MNOC_MMSS_CFG] = &slv_cnoc_mnoc_mmss_cfg,
-+	[CNOC_SLV_CNOC_MNOC_CFG] = &slv_cnoc_mnoc_cfg,
-+	[CNOC_SLV_PNOC_CFG] = &slv_pnoc_cfg,
-+	[CNOC_SLV_SNOC_MPU_CFG] = &slv_snoc_mpu_cfg,
-+	[CNOC_SLV_SNOC_CFG] = &slv_snoc_cfg,
-+	[CNOC_SLV_EBI1_DLL_CFG] = &slv_ebi1_dll_cfg,
-+	[CNOC_SLV_PHY_APU_CFG] = &slv_phy_apu_cfg,
-+	[CNOC_SLV_EBI1_PHY_CFG] = &slv_ebi1_phy_cfg,
-+	[CNOC_SLV_RPM] = &slv_rpm,
-+	[CNOC_SLV_SERVICE_CNOC] = &slv_service_cnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_cnoc = {
-+	.nodes = msm8974_cnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_cnoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_graphics_3d, MSM8974_MNOC_MAS_GRAPHICS_3D, 16, 6, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_jpeg, MSM8974_MNOC_MAS_JPEG, 16, 7, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_mdp_port0, MSM8974_MNOC_MAS_MDP_PORT0, 16, 8, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mas_video_p0, MSM8974_MNOC_MAS_VIDEO_P0, 16, 9, -1);
-+DEFINE_QNODE(mas_video_p1, MSM8974_MNOC_MAS_VIDEO_P1, 16, 10, -1);
-+DEFINE_QNODE(mas_vfe, MSM8974_MNOC_MAS_VFE, 16, 11, -1, MSM8974_MNOC_TO_BIMC);
-+DEFINE_QNODE(mnoc_to_cnoc, MSM8974_MNOC_TO_CNOC, 16, 4, -1);
-+DEFINE_QNODE(mnoc_to_bimc, MSM8974_MNOC_TO_BIMC, 16, -1, 16, MSM8974_BIMC_TO_MNOC);
-+DEFINE_QNODE(slv_camera_cfg, MSM8974_MNOC_SLV_CAMERA_CFG, 16, -1, 3);
-+DEFINE_QNODE(slv_display_cfg, MSM8974_MNOC_SLV_DISPLAY_CFG, 16, -1, 4);
-+DEFINE_QNODE(slv_ocmem_cfg, MSM8974_MNOC_SLV_OCMEM_CFG, 16, -1, 5);
-+DEFINE_QNODE(slv_cpr_cfg, MSM8974_MNOC_SLV_CPR_CFG, 16, -1, 6);
-+DEFINE_QNODE(slv_cpr_xpu_cfg, MSM8974_MNOC_SLV_CPR_XPU_CFG, 16, -1, 7);
-+DEFINE_QNODE(slv_misc_cfg, MSM8974_MNOC_SLV_MISC_CFG, 16, -1, 8);
-+DEFINE_QNODE(slv_misc_xpu_cfg, MSM8974_MNOC_SLV_MISC_XPU_CFG, 16, -1, 9);
-+DEFINE_QNODE(slv_venus_cfg, MSM8974_MNOC_SLV_VENUS_CFG, 16, -1, 10);
-+DEFINE_QNODE(slv_graphics_3d_cfg, MSM8974_MNOC_SLV_GRAPHICS_3D_CFG, 16, -1, 11);
-+DEFINE_QNODE(slv_mmss_clk_cfg, MSM8974_MNOC_SLV_MMSS_CLK_CFG, 16, -1, 12);
-+DEFINE_QNODE(slv_mmss_clk_xpu_cfg, MSM8974_MNOC_SLV_MMSS_CLK_XPU_CFG, 16, -1, 13);
-+DEFINE_QNODE(slv_mnoc_mpu_cfg, MSM8974_MNOC_SLV_MNOC_MPU_CFG, 16, -1, 14);
-+DEFINE_QNODE(slv_onoc_mpu_cfg, MSM8974_MNOC_SLV_ONOC_MPU_CFG, 16, -1, 15);
-+DEFINE_QNODE(slv_service_mnoc, MSM8974_MNOC_SLV_SERVICE_MNOC, 16, -1, 17);
-+
-+static struct msm8974_icc_node *msm8974_mnoc_nodes[] = {
-+	[MNOC_MAS_GRAPHICS_3D] = &mas_graphics_3d,
-+	[MNOC_MAS_JPEG] = &mas_jpeg,
-+	[MNOC_MAS_MDP_PORT0] = &mas_mdp_port0,
-+	[MNOC_MAS_VIDEO_P0] = &mas_video_p0,
-+	[MNOC_MAS_VIDEO_P1] = &mas_video_p1,
-+	[MNOC_MAS_VFE] = &mas_vfe,
-+	[MNOC_TO_CNOC] = &mnoc_to_cnoc,
-+	[MNOC_TO_BIMC] = &mnoc_to_bimc,
-+	[MNOC_SLV_CAMERA_CFG] = &slv_camera_cfg,
-+	[MNOC_SLV_DISPLAY_CFG] = &slv_display_cfg,
-+	[MNOC_SLV_OCMEM_CFG] = &slv_ocmem_cfg,
-+	[MNOC_SLV_CPR_CFG] = &slv_cpr_cfg,
-+	[MNOC_SLV_CPR_XPU_CFG] = &slv_cpr_xpu_cfg,
-+	[MNOC_SLV_MISC_CFG] = &slv_misc_cfg,
-+	[MNOC_SLV_MISC_XPU_CFG] = &slv_misc_xpu_cfg,
-+	[MNOC_SLV_VENUS_CFG] = &slv_venus_cfg,
-+	[MNOC_SLV_GRAPHICS_3D_CFG] = &slv_graphics_3d_cfg,
-+	[MNOC_SLV_MMSS_CLK_CFG] = &slv_mmss_clk_cfg,
-+	[MNOC_SLV_MMSS_CLK_XPU_CFG] = &slv_mmss_clk_xpu_cfg,
-+	[MNOC_SLV_MNOC_MPU_CFG] = &slv_mnoc_mpu_cfg,
-+	[MNOC_SLV_ONOC_MPU_CFG] = &slv_onoc_mpu_cfg,
-+	[MNOC_SLV_SERVICE_MNOC] = &slv_service_mnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_mnoc = {
-+	.nodes = msm8974_mnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_mnoc_nodes),
-+};
-+
-+DEFINE_QNODE(ocmem_noc_to_ocmem_vnoc, MSM8974_OCMEM_NOC_TO_OCMEM_VNOC, 16, 54, 78, MSM8974_OCMEM_SLV_OCMEM);
-+DEFINE_QNODE(mas_jpeg_ocmem, MSM8974_OCMEM_MAS_JPEG_OCMEM, 16, 13, -1);
-+DEFINE_QNODE(mas_mdp_ocmem, MSM8974_OCMEM_MAS_MDP_OCMEM, 16, 14, -1);
-+DEFINE_QNODE(mas_video_p0_ocmem, MSM8974_OCMEM_MAS_VIDEO_P0_OCMEM, 16, 15, -1);
-+DEFINE_QNODE(mas_video_p1_ocmem, MSM8974_OCMEM_MAS_VIDEO_P1_OCMEM, 16, 16, -1);
-+DEFINE_QNODE(mas_vfe_ocmem, MSM8974_OCMEM_MAS_VFE_OCMEM, 16, 17, -1);
-+DEFINE_QNODE(mas_cnoc_onoc_cfg, MSM8974_OCMEM_MAS_CNOC_ONOC_CFG, 16, 12, -1);
-+DEFINE_QNODE(slv_service_onoc, MSM8974_OCMEM_SLV_SERVICE_ONOC, 16, -1, 19);
-+DEFINE_QNODE(slv_ocmem, MSM8974_OCMEM_SLV_OCMEM, 16, -1, 18);
-+
-+/* Virtual NoC is needed for connection to OCMEM */
-+DEFINE_QNODE(ocmem_vnoc_to_onoc, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC, 16, 56, 79, MSM8974_OCMEM_NOC_TO_OCMEM_VNOC);
-+DEFINE_QNODE(ocmem_vnoc_to_snoc, MSM8974_OCMEM_VNOC_TO_SNOC, 8, 57, 80);
-+DEFINE_QNODE(mas_v_ocmem_gfx3d, MSM8974_OCMEM_VNOC_MAS_GFX3D, 8, 55, -1, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC);
-+
-+static struct msm8974_icc_node *msm8974_onoc_nodes[] = {
-+	[OCMEM_NOC_TO_OCMEM_VNOC] = &ocmem_noc_to_ocmem_vnoc,
-+	[OCMEM_MAS_JPEG_OCMEM] = &mas_jpeg_ocmem,
-+	[OCMEM_MAS_MDP_OCMEM] = &mas_mdp_ocmem,
-+	[OCMEM_MAS_VIDEO_P0_OCMEM] = &mas_video_p0_ocmem,
-+	[OCMEM_MAS_VIDEO_P1_OCMEM] = &mas_video_p1_ocmem,
-+	[OCMEM_MAS_VFE_OCMEM] = &mas_vfe_ocmem,
-+	[OCMEM_MAS_CNOC_ONOC_CFG] = &mas_cnoc_onoc_cfg,
-+	[OCMEM_SLV_SERVICE_ONOC] = &slv_service_onoc,
-+	[OCMEM_VNOC_TO_SNOC] = &ocmem_vnoc_to_snoc,
-+	[OCMEM_VNOC_TO_OCMEM_NOC] = &ocmem_vnoc_to_onoc,
-+	[OCMEM_VNOC_MAS_GFX3D] = &mas_v_ocmem_gfx3d,
-+	[OCMEM_SLV_OCMEM] = &slv_ocmem,
-+};
-+
-+static struct msm8974_icc_desc msm8974_onoc = {
-+	.nodes = msm8974_onoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_onoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_pnoc_cfg, MSM8974_PNOC_MAS_PNOC_CFG, 8, 43, -1);
-+DEFINE_QNODE(mas_sdcc_1, MSM8974_PNOC_MAS_SDCC_1, 8, 33, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_3, MSM8974_PNOC_MAS_SDCC_3, 8, 34, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_4, MSM8974_PNOC_MAS_SDCC_4, 8, 36, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_sdcc_2, MSM8974_PNOC_MAS_SDCC_2, 8, 35, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_tsif, MSM8974_PNOC_MAS_TSIF, 8, 37, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_bam_dma, MSM8974_PNOC_MAS_BAM_DMA, 8, 38, -1);
-+DEFINE_QNODE(mas_blsp_2, MSM8974_PNOC_MAS_BLSP_2, 8, 39, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_usb_hsic, MSM8974_PNOC_MAS_USB_HSIC, 8, 40, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_blsp_1, MSM8974_PNOC_MAS_BLSP_1, 8, 41, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(mas_usb_hs, MSM8974_PNOC_MAS_USB_HS, 8, 42, -1, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(pnoc_to_snoc, MSM8974_PNOC_TO_SNOC, 8, 44, 45, MSM8974_SNOC_TO_PNOC, MSM8974_PNOC_SLV_PRNG);
-+DEFINE_QNODE(slv_sdcc_1, MSM8974_PNOC_SLV_SDCC_1, 8, -1, 31);
-+DEFINE_QNODE(slv_sdcc_3, MSM8974_PNOC_SLV_SDCC_3, 8, -1, 32);
-+DEFINE_QNODE(slv_sdcc_2, MSM8974_PNOC_SLV_SDCC_2, 8, -1, 33);
-+DEFINE_QNODE(slv_sdcc_4, MSM8974_PNOC_SLV_SDCC_4, 8, -1, 34);
-+DEFINE_QNODE(slv_tsif, MSM8974_PNOC_SLV_TSIF, 8, -1, 35);
-+DEFINE_QNODE(slv_bam_dma, MSM8974_PNOC_SLV_BAM_DMA, 8, -1, 36);
-+DEFINE_QNODE(slv_blsp_2, MSM8974_PNOC_SLV_BLSP_2, 8, -1, 37);
-+DEFINE_QNODE(slv_usb_hsic, MSM8974_PNOC_SLV_USB_HSIC, 8, -1, 38);
-+DEFINE_QNODE(slv_blsp_1, MSM8974_PNOC_SLV_BLSP_1, 8, -1, 39);
-+DEFINE_QNODE(slv_usb_hs, MSM8974_PNOC_SLV_USB_HS, 8, -1, 40);
-+DEFINE_QNODE(slv_pdm, MSM8974_PNOC_SLV_PDM, 8, -1, 41);
-+DEFINE_QNODE(slv_periph_apu_cfg, MSM8974_PNOC_SLV_PERIPH_APU_CFG, 8, -1, 42);
-+DEFINE_QNODE(slv_pnoc_mpu_cfg, MSM8974_PNOC_SLV_PNOC_MPU_CFG, 8, -1, 43);
-+DEFINE_QNODE(slv_prng, MSM8974_PNOC_SLV_PRNG, 8, -1, 44, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(slv_service_pnoc, MSM8974_PNOC_SLV_SERVICE_PNOC, 8, -1, 46);
-+
-+static struct msm8974_icc_node *msm8974_pnoc_nodes[] = {
-+	[PNOC_MAS_PNOC_CFG] = &mas_pnoc_cfg,
-+	[PNOC_MAS_SDCC_1] = &mas_sdcc_1,
-+	[PNOC_MAS_SDCC_3] = &mas_sdcc_3,
-+	[PNOC_MAS_SDCC_4] = &mas_sdcc_4,
-+	[PNOC_MAS_SDCC_2] = &mas_sdcc_2,
-+	[PNOC_MAS_TSIF] = &mas_tsif,
-+	[PNOC_MAS_BAM_DMA] = &mas_bam_dma,
-+	[PNOC_MAS_BLSP_2] = &mas_blsp_2,
-+	[PNOC_MAS_USB_HSIC] = &mas_usb_hsic,
-+	[PNOC_MAS_BLSP_1] = &mas_blsp_1,
-+	[PNOC_MAS_USB_HS] = &mas_usb_hs,
-+	[PNOC_TO_SNOC] = &pnoc_to_snoc,
-+	[PNOC_SLV_SDCC_1] = &slv_sdcc_1,
-+	[PNOC_SLV_SDCC_3] = &slv_sdcc_3,
-+	[PNOC_SLV_SDCC_2] = &slv_sdcc_2,
-+	[PNOC_SLV_SDCC_4] = &slv_sdcc_4,
-+	[PNOC_SLV_TSIF] = &slv_tsif,
-+	[PNOC_SLV_BAM_DMA] = &slv_bam_dma,
-+	[PNOC_SLV_BLSP_2] = &slv_blsp_2,
-+	[PNOC_SLV_USB_HSIC] = &slv_usb_hsic,
-+	[PNOC_SLV_BLSP_1] = &slv_blsp_1,
-+	[PNOC_SLV_USB_HS] = &slv_usb_hs,
-+	[PNOC_SLV_PDM] = &slv_pdm,
-+	[PNOC_SLV_PERIPH_APU_CFG] = &slv_periph_apu_cfg,
-+	[PNOC_SLV_PNOC_MPU_CFG] = &slv_pnoc_mpu_cfg,
-+	[PNOC_SLV_PRNG] = &slv_prng,
-+	[PNOC_SLV_SERVICE_PNOC] = &slv_service_pnoc,
-+};
-+
-+static struct msm8974_icc_desc msm8974_pnoc = {
-+	.nodes = msm8974_pnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_pnoc_nodes),
-+};
-+
-+DEFINE_QNODE(mas_lpass_ahb, MSM8974_SNOC_MAS_LPASS_AHB, 8, 18, -1);
-+DEFINE_QNODE(mas_qdss_bam, MSM8974_SNOC_MAS_QDSS_BAM, 8, 19, -1);
-+DEFINE_QNODE(mas_snoc_cfg, MSM8974_SNOC_MAS_SNOC_CFG, 8, 20, -1);
-+DEFINE_QNODE(snoc_to_bimc, MSM8974_SNOC_TO_BIMC, 8, 21, 24, MSM8974_BIMC_TO_SNOC);
-+DEFINE_QNODE(snoc_to_cnoc, MSM8974_SNOC_TO_CNOC, 8, 22, 25);
-+DEFINE_QNODE(snoc_to_pnoc, MSM8974_SNOC_TO_PNOC, 8, 29, 28, MSM8974_PNOC_TO_SNOC);
-+DEFINE_QNODE(snoc_to_ocmem_vnoc, MSM8974_SNOC_TO_OCMEM_VNOC, 8, 53, 77, MSM8974_OCMEM_VNOC_TO_OCMEM_NOC);
-+DEFINE_QNODE(mas_crypto_core0, MSM8974_SNOC_MAS_CRYPTO_CORE0, 8, 23, -1, MSM8974_SNOC_TO_BIMC);
-+DEFINE_QNODE(mas_crypto_core1, MSM8974_SNOC_MAS_CRYPTO_CORE1, 8, 24, -1);
-+DEFINE_QNODE(mas_lpass_proc, MSM8974_SNOC_MAS_LPASS_PROC, 8, 25, -1, MSM8974_SNOC_TO_OCMEM_VNOC);
-+DEFINE_QNODE(mas_mss, MSM8974_SNOC_MAS_MSS, 8, 26, -1);
-+DEFINE_QNODE(mas_mss_nav, MSM8974_SNOC_MAS_MSS_NAV, 8, 27, -1);
-+DEFINE_QNODE(mas_ocmem_dma, MSM8974_SNOC_MAS_OCMEM_DMA, 8, 28, -1);
-+DEFINE_QNODE(mas_wcss, MSM8974_SNOC_MAS_WCSS, 8, 30, -1);
-+DEFINE_QNODE(mas_qdss_etr, MSM8974_SNOC_MAS_QDSS_ETR, 8, 31, -1);
-+DEFINE_QNODE(mas_usb3, MSM8974_SNOC_MAS_USB3, 8, 32, -1, MSM8974_SNOC_TO_BIMC);
-+DEFINE_QNODE(slv_ampss, MSM8974_SNOC_SLV_AMPSS, 8, -1, 20);
-+DEFINE_QNODE(slv_lpass, MSM8974_SNOC_SLV_LPASS, 8, -1, 21);
-+DEFINE_QNODE(slv_usb3, MSM8974_SNOC_SLV_USB3, 8, -1, 22);
-+DEFINE_QNODE(slv_wcss, MSM8974_SNOC_SLV_WCSS, 8, -1, 23);
-+DEFINE_QNODE(slv_ocimem, MSM8974_SNOC_SLV_OCIMEM, 8, -1, 26);
-+DEFINE_QNODE(slv_snoc_ocmem, MSM8974_SNOC_SLV_SNOC_OCMEM, 8, -1, 27);
-+DEFINE_QNODE(slv_service_snoc, MSM8974_SNOC_SLV_SERVICE_SNOC, 8, -1, 29);
-+DEFINE_QNODE(slv_qdss_stm, MSM8974_SNOC_SLV_QDSS_STM, 8, -1, 30);
-+
-+static struct msm8974_icc_node *msm8974_snoc_nodes[] = {
-+	[SNOC_MAS_LPASS_AHB] = &mas_lpass_ahb,
-+	[SNOC_MAS_QDSS_BAM] = &mas_qdss_bam,
-+	[SNOC_MAS_SNOC_CFG] = &mas_snoc_cfg,
-+	[SNOC_TO_BIMC] = &snoc_to_bimc,
-+	[SNOC_TO_CNOC] = &snoc_to_cnoc,
-+	[SNOC_TO_PNOC] = &snoc_to_pnoc,
-+	[SNOC_TO_OCMEM_VNOC] = &snoc_to_ocmem_vnoc,
-+	[SNOC_MAS_CRYPTO_CORE0] = &mas_crypto_core0,
-+	[SNOC_MAS_CRYPTO_CORE1] = &mas_crypto_core1,
-+	[SNOC_MAS_LPASS_PROC] = &mas_lpass_proc,
-+	[SNOC_MAS_MSS] = &mas_mss,
-+	[SNOC_MAS_MSS_NAV] = &mas_mss_nav,
-+	[SNOC_MAS_OCMEM_DMA] = &mas_ocmem_dma,
-+	[SNOC_MAS_WCSS] = &mas_wcss,
-+	[SNOC_MAS_QDSS_ETR] = &mas_qdss_etr,
-+	[SNOC_MAS_USB3] = &mas_usb3,
-+	[SNOC_SLV_AMPSS] = &slv_ampss,
-+	[SNOC_SLV_LPASS] = &slv_lpass,
-+	[SNOC_SLV_USB3] = &slv_usb3,
-+	[SNOC_SLV_WCSS] = &slv_wcss,
-+	[SNOC_SLV_OCIMEM] = &slv_ocimem,
-+	[SNOC_SLV_SNOC_OCMEM] = &slv_snoc_ocmem,
-+	[SNOC_SLV_SERVICE_SNOC] = &slv_service_snoc,
-+	[SNOC_SLV_QDSS_STM] = &slv_qdss_stm,
-+};
-+
-+static struct msm8974_icc_desc msm8974_snoc = {
-+	.nodes = msm8974_snoc_nodes,
-+	.num_nodes = ARRAY_SIZE(msm8974_snoc_nodes),
-+};
-+
-+static int msm8974_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				 u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	*agg_avg += avg_bw;
-+	*agg_peak = max(*agg_peak, peak_bw);
-+
-+	return 0;
-+}
-+
-+static void msm8974_icc_rpm_smd_send(struct device *dev, int rsc_type,
-+				     char *name, int id, u64 val)
-+{
-+	int ret;
-+
-+	if (id == -1)
-+		return;
-+
-+	/*
-+	 * Setting the bandwidth requests for some nodes fails and this same
-+	 * behavior occurs on the downstream MSM 3.4 kernel sources based on
-+	 * errors like this in that kernel:
-+	 *
-+	 *   msm_rpm_get_error_from_ack(): RPM NACK Unsupported resource
-+	 *   AXI: msm_bus_rpm_req(): RPM: Ack failed
-+	 *   AXI: msm_bus_rpm_commit_arb(): RPM: Req fail: mas:32, bw:240000000
-+	 *
-+	 * Since there's no publicly available documentation for this hardware,
-+	 * and the bandwidth for some nodes in the path can be set properly,
-+	 * let's not return an error.
-+	 */
-+	ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE, rsc_type, id,
-+				    val);
-+	if (ret)
-+		dev_dbg(dev, "Cannot set bandwidth for node %s (%d): %d\n",
-+			name, id, ret);
-+}
-+
-+static int msm8974_icc_set(struct icc_node *src, struct icc_node *dst)
-+{
-+	struct msm8974_icc_node *src_qn, *dst_qn;
-+	struct msm8974_icc_provider *qp;
-+	u64 sum_bw, max_peak_bw, rate;
-+	u32 agg_avg = 0, agg_peak = 0;
-+	struct icc_provider *provider;
-+	struct icc_node *n;
-+	int ret, i;
-+
-+	src_qn = src->data;
-+	dst_qn = dst->data;
-+	provider = src->provider;
-+	qp = to_msm8974_icc_provider(provider);
-+
-+	list_for_each_entry(n, &provider->nodes, node_list)
-+		msm8974_icc_aggregate(n, 0, n->avg_bw, n->peak_bw,
-+				      &agg_avg, &agg_peak);
-+
-+	sum_bw = icc_units_to_bps(agg_avg);
-+	max_peak_bw = icc_units_to_bps(agg_peak);
-+
-+	/* Set bandwidth on source node */
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_MASTER_REQ,
-+				 src_qn->name, src_qn->mas_rpm_id, sum_bw);
-+
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_SLAVE_REQ,
-+				 src_qn->name, src_qn->slv_rpm_id, sum_bw);
-+
-+	/* Set bandwidth on destination node */
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_MASTER_REQ,
-+				 dst_qn->name, dst_qn->mas_rpm_id, sum_bw);
-+
-+	msm8974_icc_rpm_smd_send(provider->dev, RPM_BUS_SLAVE_REQ,
-+				 dst_qn->name, dst_qn->slv_rpm_id, sum_bw);
-+
-+	rate = max(sum_bw, max_peak_bw);
-+
-+	do_div(rate, src_qn->buswidth);
-+
-+	if (src_qn->rate == rate)
-+		return 0;
-+
-+	for (i = 0; i < qp->num_clks; i++) {
-+		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
-+		if (ret) {
-+			dev_err(provider->dev, "%s clk_set_rate error: %d\n",
-+				qp->bus_clks[i].id, ret);
-+			ret = 0;
-+		}
-+	}
-+
-+	src_qn->rate = rate;
-+
-+	return 0;
-+}
-+
-+static int msm8974_icc_probe(struct platform_device *pdev)
-+{
-+	const struct msm8974_icc_desc *desc;
-+	struct msm8974_icc_node **qnodes;
-+	struct msm8974_icc_provider *qp;
-+	struct device *dev = &pdev->dev;
-+	struct icc_onecell_data *data;
-+	struct icc_provider *provider;
-+	struct icc_node *node;
-+	size_t num_nodes, i;
-+	int ret;
-+
-+	/* wait for the RPM proxy */
-+	if (!qcom_icc_rpm_smd_available())
-+		return -EPROBE_DEFER;
-+
-+	desc = of_device_get_match_data(dev);
-+	if (!desc)
-+		return -EINVAL;
-+
-+	qnodes = desc->nodes;
-+	num_nodes = desc->num_nodes;
-+
-+	qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
-+	if (!qp)
-+		return -ENOMEM;
-+
-+	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
-+			    GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	qp->bus_clks = devm_kmemdup(dev, msm8974_icc_bus_clocks,
-+				    sizeof(msm8974_icc_bus_clocks), GFP_KERNEL);
-+	if (!qp->bus_clks)
-+		return -ENOMEM;
-+
-+	qp->num_clks = ARRAY_SIZE(msm8974_icc_bus_clocks);
-+	ret = devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_bulk_prepare_enable(qp->num_clks, qp->bus_clks);
-+	if (ret)
-+		return ret;
-+
-+	provider = &qp->provider;
-+	INIT_LIST_HEAD(&provider->nodes);
-+	provider->dev = dev;
-+	provider->set = msm8974_icc_set;
-+	provider->aggregate = msm8974_icc_aggregate;
-+	provider->xlate = of_icc_xlate_onecell;
-+	provider->data = data;
-+
-+	ret = icc_provider_add(provider);
-+	if (ret) {
-+		dev_err(dev, "error adding interconnect provider: %d\n", ret);
-+		goto err_disable_clks;
-+	}
-+
-+	for (i = 0; i < num_nodes; i++) {
-+		size_t j;
-+
-+		node = icc_node_create(qnodes[i]->id);
-+		if (IS_ERR(node)) {
-+			ret = PTR_ERR(node);
-+			goto err_del_icc;
-+		}
-+
-+		node->name = qnodes[i]->name;
-+		node->data = qnodes[i];
-+		icc_node_add(node, provider);
-+
-+		dev_dbg(dev, "registered node %s\n", node->name);
-+
-+		/* populate links */
-+		for (j = 0; j < qnodes[i]->num_links; j++)
-+			icc_link_create(node, qnodes[i]->links[j]);
-+
-+		data->nodes[i] = node;
-+	}
-+	data->num_nodes = num_nodes;
-+
-+	platform_set_drvdata(pdev, qp);
-+
-+	return 0;
-+
-+err_del_icc:
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		icc_node_del(node);
-+		icc_node_destroy(node->id);
-+	}
-+	icc_provider_del(provider);
-+
-+err_disable_clks:
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+
-+	return ret;
-+}
-+
-+static int msm8974_icc_remove(struct platform_device *pdev)
-+{
-+	struct msm8974_icc_provider *qp = platform_get_drvdata(pdev);
-+	struct icc_provider *provider = &qp->provider;
-+	struct icc_node *n;
-+
-+	list_for_each_entry(n, &provider->nodes, node_list) {
-+		icc_node_del(n);
-+		icc_node_destroy(n->id);
-+	}
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
-+
-+	return icc_provider_del(provider);
-+}
-+
-+static const struct of_device_id msm8974_noc_of_match[] = {
-+	{ .compatible = "qcom,msm8974-bimc", .data = &msm8974_bimc},
-+	{ .compatible = "qcom,msm8974-cnoc", .data = &msm8974_cnoc},
-+	{ .compatible = "qcom,msm8974-mmssnoc", .data = &msm8974_mnoc},
-+	{ .compatible = "qcom,msm8974-ocmemnoc", .data = &msm8974_onoc},
-+	{ .compatible = "qcom,msm8974-pnoc", .data = &msm8974_pnoc},
-+	{ .compatible = "qcom,msm8974-snoc", .data = &msm8974_snoc},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, msm8974_noc_of_match);
-+
-+static struct platform_driver msm8974_noc_driver = {
-+	.probe = msm8974_icc_probe,
-+	.remove = msm8974_icc_remove,
-+	.driver = {
-+		.name = "qnoc-msm8974",
-+		.of_match_table = msm8974_noc_of_match,
-+	},
-+};
-+module_platform_driver(msm8974_noc_driver);
-+MODULE_DESCRIPTION("Qualcomm MSM8974 NoC driver");
-+MODULE_AUTHOR("Brian Masney <masneyb@onstation.org>");
-+MODULE_LICENSE("GPL v2");
+        return find_deepest_state(drv, dev, latency_req, 0, false);
+}
+
+>> It is the only code path where the constraint is not taken into account
+>> AFAICT.
+>>
+>> With this simple change, we can manage everything from the pm_qos API
+>> then and this series is no longer needed.
+> 
+> OK
+> 
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
