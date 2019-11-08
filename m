@@ -2,46 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FDDF43FF
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 10:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966DAF4401
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 10:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731435AbfKHJzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 04:55:51 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:37575 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731373AbfKHJzv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 04:55:51 -0500
-Received: by mail-il1-f194.google.com with SMTP id s5so4611888iln.4
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 01:55:49 -0800 (PST)
+        id S1731463AbfKHJzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 04:55:54 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38566 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731358AbfKHJzy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 04:55:54 -0500
+Received: by mail-pf1-f195.google.com with SMTP id c13so4232479pfp.5
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 01:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=spYWTHjb7/MYzsI9bYPcwS26fEghILksNMY9w8ImjM0=;
-        b=ZXIzhvrbd4xxyWux72pPsvlPW99KePyYAt/Ja3nYluiduO6c00vIX+TC0Hp44xFrFf
-         gOsQXi3l6l2Ok3XLfAtQopP3BCRIyDFf/tiJLz8G5Qi9hRXrPW7Q1KipED8u0TFo/YFT
-         6NcNpaRUi/NWOsLPT+U6r9d/QWrdh+i8ABP33IeTi1UuxB+2JJNIV97wZauPsBGAYSw9
-         DcrGud7Lk+STyaH/zkeCIEpzEmoier69vvVaRkpdG5CLs3sPcjZJbDh6dwWDm+KEdJEf
-         2KZWnkhgIcoBXlWVkCdHA0d6uWAfurQma5kglDFOlhDHyIa/MMZoqsHOJeEIeDRfF6oY
-         iSpA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :in-reply-to:references;
+        bh=sa4c9TQszBnSFJ6Tmvd40ZWGEUtTre7H0PZsyqt7VNs=;
+        b=pfChcpvfIXQU7c/BIXwPJjdERIekzJIKphdRzLrTHM99UYRjaZBDCZPa+uEeiHYo1f
+         cFIAd2meMi3yH1k/rGw24+9qpTTVlEyZzgWpK2eXmy2XtZJHGlll+7fBTG6S52B4CABK
+         Q2CQU5ZCpy/bSTqMl2U2ZjgCeQbKNIalFf/aAXRapn4Vf6qlgi/S7uPm/ghoNUMUgn9y
+         +udQgO6CCm9PwVKqysAeUjc4kkPmxGhefsDnXs4f6wgW3RZbSrVvmUIgufpwHk+H/ZAU
+         xOKaZd4xz1SzI8gD8pgj55LPd48SY3ciyRd3hj2dEfToUdzpeRqfx4xqXV9VhXO7wiP0
+         zCcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=spYWTHjb7/MYzsI9bYPcwS26fEghILksNMY9w8ImjM0=;
-        b=fQR665jFAGjzmHhU4peVH4iP5AGUpQaUO1dZI0A3qAXdkuW3NIkZF+/njqPtGrXWNv
-         d66TeU7afRLUPZR0ebGj2Bz9D4D/9P+22Q+xz5o9voBi50mNERhvHV0R5f+keNA8J6BT
-         6yEe28xrgmGyR+xcnuOvR+ZpaSgRcmGj27m59qwmwUJzV0vz8UmmQRm1HBsiU7Vo8YaH
-         BV94+Ml7I3rGw10/M75eEnwM7qba9RHnQ0g6fKs9stvmOnRBYTcRiaQnJOhaOjRpGmzf
-         tt5bIdqg1X6bqRSZboQeAC3Git2xLaG979KB+4WBMybilSuPeDUdJyWWKbXm+CQ36ly2
-         DPEg==
-X-Gm-Message-State: APjAAAWvR5Y4Vn93herYKlCzpQAJoBO1SuRLwQVuYEMVR/R8gWJWt1B/
-        Or3mMmUeLGWn2KInCOOQRr3CbQ==
-X-Google-Smtp-Source: APXvYqxARYtwBC201uyHdNNTlDXaPFI6/906RtwY8BQdnP0JJkgmWvxjTofTB7u4fR8W6vOkU5NcSg==
-X-Received: by 2002:a17:90a:2a41:: with SMTP id d1mr12471267pjg.87.1573206948601;
-        Fri, 08 Nov 2019 01:55:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:in-reply-to:references;
+        bh=sa4c9TQszBnSFJ6Tmvd40ZWGEUtTre7H0PZsyqt7VNs=;
+        b=dNJCiFBoB0IT0U+UZghmkvDhwHO49N1PY0gGG5AK56aysjL0nrH9GiZauz3T/Q4SGB
+         nEjsDrjk76w/3qTMKjiTBIoxBi4T+yXig4ayVLWJ0NhXXMM23u4jCkXNjaDKH03te1An
+         SforusBDerfHdf9YwPqtOcn5aSwtjRHug1koi6NO1aBIc/GCYKxtPdfnw0HVvv93lgiD
+         Dt1rcAmYIg5ZAHZh3xLjv5MUVo07jKmznAWZm16Jjd9Sna7njmDzW5m8iuNM1LEdNmXs
+         ER01Mx+JSJ+WYH0CchSKCS/E1dFtTRrNTRweeUj/33AMAxe9rwtmadzNQT+HwcSLqh5P
+         rFGw==
+X-Gm-Message-State: APjAAAWYMHljzEcwzAcl43CAMIfTnQIjPfotkRZWAHxyPQewYaefYgna
+        eWiJfvWVAoXCWfNdimX0APtp1Q==
+X-Google-Smtp-Source: APXvYqwo+r2dFNg26VXXwL9x8DDeQ/QtQwRB13A+kBlUH2EjrIdUneruNwfoTyGoGVXGVhDidTrfpA==
+X-Received: by 2002:a62:1ad6:: with SMTP id a205mr10752350pfa.64.1573206953530;
+        Fri, 08 Nov 2019 01:55:53 -0800 (PST)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id v14sm5019009pfe.94.2019.11.08.01.55.44
+        by smtp.gmail.com with ESMTPSA id v14sm5019009pfe.94.2019.11.08.01.55.48
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 08 Nov 2019 01:55:47 -0800 (PST)
+        Fri, 08 Nov 2019 01:55:52 -0800 (PST)
 From:   Baolin Wang <baolin.wang@linaro.org>
 To:     rui.zhang@intel.com, edubezval@gmail.com,
         daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
@@ -50,10 +52,14 @@ Cc:     orsonzhai@gmail.com, baolin.wang@linaro.org,
         baolin.wang7@gmail.com, freeman.liu@unisoc.com,
         zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: thermal: sprd: Add the Spreadtrum thermal documentation
-Date:   Fri,  8 Nov 2019 17:54:30 +0800
-Message-Id: <0a6b113010ad772a633b9cfeeb280dc41f17b951.1573206815.git.baolin.wang@linaro.org>
+Subject: [PATCH 2/2] thermal: sprd: Add Spreadtrum thermal driver support
+Date:   Fri,  8 Nov 2019 17:54:31 +0800
+Message-Id: <556e460ca8df5abfb034e9908fe41424d6b867f8.1573206815.git.baolin.wang@linaro.org>
 X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <0a6b113010ad772a633b9cfeeb280dc41f17b951.1573206815.git.baolin.wang@linaro.org>
+References: <0a6b113010ad772a633b9cfeeb280dc41f17b951.1573206815.git.baolin.wang@linaro.org>
+In-Reply-To: <0a6b113010ad772a633b9cfeeb280dc41f17b951.1573206815.git.baolin.wang@linaro.org>
+References: <0a6b113010ad772a633b9cfeeb280dc41f17b951.1573206815.git.baolin.wang@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -61,62 +67,597 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Freeman Liu <freeman.liu@unisoc.com>
 
-Add the Spreadtrum thermal documentation.
+This patch adds the support for Spreadtrum thermal sensor controller,
+which can support maximum 8 sensors.
 
 Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
 Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
 ---
- .../devicetree/bindings/thermal/sprd-thermal.txt   |   41 ++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sprd-thermal.txt
+ drivers/thermal/Kconfig        |    7 +
+ drivers/thermal/Makefile       |    1 +
+ drivers/thermal/sprd_thermal.c |  548 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 556 insertions(+)
+ create mode 100644 drivers/thermal/sprd_thermal.c
 
-diff --git a/Documentation/devicetree/bindings/thermal/sprd-thermal.txt b/Documentation/devicetree/bindings/thermal/sprd-thermal.txt
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 001a21a..47e1fb3 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -417,4 +417,11 @@ config UNIPHIER_THERMAL
+ 	  Enable this to plug in UniPhier on-chip PVT thermal driver into the
+ 	  thermal framework. The driver supports CPU thermal zone temperature
+ 	  reporting and a couple of trip points.
++
++config SPRD_THERMAL
++	tristate "Temperature sensor on Spreadtrum SoCs"
++	depends on ARCH_SPRD || COMPILE_TEST
++	help
++	  Support for the Spreadtrum thermal sensor driver in the Linux thermal
++	  framework.
+ endif
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 74a37c7..ef4c032 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -54,3 +54,4 @@ obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+ obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
+ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
++obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
 new file mode 100644
-index 0000000..a9da7f4
+index 0000000..d9b6074
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sprd-thermal.txt
-@@ -0,0 +1,41 @@
-+* Spreadtrum thermal sensor controller bindings
++++ b/drivers/thermal/sprd_thermal.c
+@@ -0,0 +1,548 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2019 Spreadtrum Communications Inc.
 +
-+Required properties:
-+- compatible : Should be "sprd,ums512-thermal"
-+- reg: Address range of the thermal registers
-+- clock-names: "enable" for thermal module enable clock.
-+- clocks: Should contain a clock specifier for each entry in clock-names.
-+- nvmem-cells: A phandle to the calibration data provided by a nvmem device.
-+- nvmem-cell-names: Should be "thm_sign_cal" and "thm_ratio_cal".
-+- #thermal-sensor-cells: Should be 1. See ./thermal.txt for a description.
++#include <linux/clk.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/nvmem-consumer.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/thermal.h>
 +
-+Child nodes properties:
-+- reg: Specify the sensor id.
-+- nvmem-cells: A phandle to the calibration data provided by a nvmem device.
-+- nvmem-cell-names: Should be "sen_delta_cal".
++#define SPRD_THM_CTL			0x0
++#define SPRD_THM_INT_EN			0x4
++#define SPRD_THM_INT_STS		0x8
++#define SPRD_THM_INT_RAW_STS		0xc
++#define SPRD_THM_DET_PERIOD		0x10
++#define SPRD_THM_INT_CLR		0x14
++#define SPRD_THM_INT_CLR_ST		0x18
++#define SPRD_THM_MON_PERIOD		0x4c
++#define SPRD_THM_MON_CTL		0x50
++#define SPRD_THM_INTERNAL_STS1		0x54
++#define SPRD_THM_RAW_READ_MSK		0x3ff
 +
-+Example:
++#define SPRD_THM_OFFSET(id)		((id) * 0x4)
++#define SPRD_THM_TEMP(id)		(SPRD_THM_OFFSET(id) + 0x5c)
++#define SPRD_THM_THRES(id)		(SPRD_THM_OFFSET(id) + 0x2c)
 +
-+	ap_thm0: thermal@32200000 {
-+		compatible = "sprd,ums512-thermal";
-+		reg = <0 0x32200000 0 0x10000>;
-+		clock-names = "enable";
-+		clocks = <&aonapb_gate CLK_THM0_EB>;
-+		#thermal-sensor-cells = <1>;
-+		nvmem-cells = <&thm0_sign>, <&thm0_ratio>;
-+		nvmem-cell-names = "thm_sign_cal", "thm_ratio_cal";
++#define SPRD_THM_SEN(id)		BIT((id) + 2)
++#define SPRD_THM_SEN_OVERHEAT_EN(id)	BIT((id) + 8)
++#define SPRD_THM_SEN_OVERHEAT_ALARM_EN(id)	BIT((id) + 0)
 +
-+		prometheus0-sensor@0{
-+			reg = <0>;
-+			nvmem-cells = <&thm0_sen0>;
-+			nvmem-cell-names = "sen_delta_cal";
-+		};
++/* bits definitions for register THM_CTL */
++#define SPRD_THM_SET_RDY_ST		BIT(13)
++#define SPRD_THM_SET_RDY		BIT(12)
++#define SPRD_THM_MON_EN			BIT(1)
++#define SPRD_THM_EN			BIT(0)
 +
-+		ank1-sensor@1{
-+			reg = <1>;
-+			nvmem-cells = <&thm0_sen1>;
-+			nvmem-cell-names = "sen_delta_cal";
-+		};
++/* bits definitions for register THM_INT_CTL */
++#define SPRD_THM_BIT_INT_EN		BIT(26)
++#define SPRD_THM_OVERHEAT_EN		BIT(25)
++#define SPRD_THM_OTP_TRIP_SHIFT		10
 +
-+		......
-+	};
++/* bits definitions for register SPRD_THM_INTERNAL_STS1 */
++#define SPRD_THM_TEMPER_RDY		BIT(0)
++
++#define SPRD_THM_DET_PERIOD_DATA	0x800
++#define SPRD_THM_DET_PERIOD_MASK	GENMASK(19, 0)
++#define SPRD_THM_MON_MODE		0x7
++#define SPRD_THM_MON_MODE_MASK		GENMASK(3, 0)
++#define SPRD_THM_MON_PERIOD_DATA	0x10
++#define SPRD_THM_MON_PERIOD_MASK	GENMASK(15, 0)
++#define SPRD_THM_THRES_MASK		GENMASK(19, 0)
++#define SPRD_THM_INT_CLR_MASK		GENMASK(24, 0)
++
++/* thermal sensor calibration parameters */
++#define SPRD_THM_TEMP_LOW		-40000
++#define SPRD_THM_TEMP_HIGH		120000
++#define SPRD_THM_OTP_TEMP		120000
++#define SPRD_THM_HOT_TEMP		75000
++#define SPRD_THM_RAW_DATA_LOW		0
++#define SPRD_THM_RAW_DATA_HIGH		1000
++#define SPRD_THM_SEN_NUM		8
++#define SPRD_THM_DT_OFFSET		24
++#define SPRD_THM_RATION_OFFSET		17
++#define SPRD_THM_RATION_SIGN		16
++
++#define SPRD_THM_RDYST_POLLING_TIME	10
++#define SPRD_THM_RDYST_TIMEOUT		700
++#define SPRD_THM_TEMP_READY_POLL_TIME	10000
++#define SPRD_THM_TEMP_READY_TIMEOUT	600000
++#define SPRD_THM_MAX_SENSOR		8
++
++struct sprd_thermal_sensor {
++	struct thermal_zone_device *thmzone_dev;
++	struct sprd_thermal_data *data;
++	struct device *dev;
++	bool ready;
++	int cal_slope;
++	int cal_offset;
++	int last_temp;
++	int id;
++};
++
++struct sprd_thermal_data {
++	const struct sprd_thm_variant_data *var_data;
++	struct sprd_thermal_sensor *sensor[SPRD_THM_MAX_SENSOR];
++	struct clk *clk;
++	void __iomem *base;
++	u32 ratio_off;
++	u32 ratio_sign;
++	int nr_sensors;
++};
++
++/*
++ * The conversion between ADC and temperature is based on linear relationship,
++ * and use idea_k to specify the slope and ideal_b to specify the offset.
++ *
++ * Since different Spreadtrum SoCs have different ideal_k and ideal_b,
++ * we should save ideal_k and ideal_b in the device data structure.
++ */
++struct sprd_thm_variant_data {
++	u32 ideal_k;
++	u32 ideal_b;
++};
++
++static const struct sprd_thm_variant_data ums512_data = {
++	.ideal_k = 262,
++	.ideal_b = 66400,
++};
++
++static inline void sprd_thm_update_bits(void __iomem *reg, u32 mask, u32 val)
++{
++	u32 tmp, orig;
++
++	orig = readl(reg);
++	tmp = orig & ~mask;
++	tmp |= val & mask;
++	writel(tmp, reg);
++}
++
++static int sprd_thm_cal_read(struct device_node *np, const char *cell_id,
++			     u32 *val)
++{
++	struct nvmem_cell *cell;
++	void *buf;
++	size_t len;
++
++	cell = of_nvmem_cell_get(np, cell_id);
++	if (IS_ERR(cell))
++		return PTR_ERR(cell);
++
++	buf = nvmem_cell_read(cell, &len);
++	nvmem_cell_put(cell);
++	if (IS_ERR(buf))
++		return PTR_ERR(buf);
++
++	memcpy(val, buf, min(len, sizeof(u32)));
++
++	kfree(buf);
++	return 0;
++}
++
++static int sprd_thm_senor_calibration(struct device_node *np,
++				      struct sprd_thermal_data *thm,
++				      struct sprd_thermal_sensor *sen)
++{
++	int ret;
++	/*
++	 * According to thermal datasheet, the default calibration offset is 64,
++	 * and the default ratio is 1000.
++	 */
++	int dt_offset = 64, ratio = 1000;
++
++	ret = sprd_thm_cal_read(np, "sen_delta_cal", &dt_offset);
++	if (ret)
++		return ret;
++
++	if (thm->ratio_sign == 1)
++		ratio = 1000 - thm->ratio_off;
++	else
++		ratio = 1000 + thm->ratio_off;
++
++	/*
++	 * According to the ideal slope K and ideal offset B, combined with
++	 * calibration value of thermal from efuse, then calibrate the real
++	 * slope k and offset b:
++	 * k_cal = (k * ratio) / 1000.
++	 * b_cal = b + (dt_offset - 64) * 500.
++	 */
++	sen->cal_slope = (thm->var_data->ideal_k * ratio) / 1000;
++	sen->cal_offset = thm->var_data->ideal_b + (dt_offset - 128) * 250;
++
++	return 0;
++}
++
++static int sprd_thm_rawdata_to_temp(struct sprd_thermal_sensor *sen,
++				    u32 rawdata)
++{
++	if (rawdata < SPRD_THM_RAW_DATA_LOW)
++		rawdata = SPRD_THM_RAW_DATA_LOW;
++	else if (rawdata > SPRD_THM_RAW_DATA_HIGH)
++		rawdata = SPRD_THM_RAW_DATA_HIGH;
++
++	/*
++	 * According to the thermal datasheet, the formula of converting
++	 * adc value to the temperature value should be:
++	 * T_final = k_cal * x - b_cal.
++	 */
++	return sen->cal_slope * rawdata - sen->cal_offset;
++}
++
++static int sprd_thm_temp_to_rawdata(int temp, struct sprd_thermal_sensor *sen)
++{
++	u32 val;
++
++	if (temp < SPRD_THM_TEMP_LOW)
++		temp = SPRD_THM_TEMP_LOW;
++	else if (temp > SPRD_THM_TEMP_HIGH)
++		temp = SPRD_THM_TEMP_HIGH;
++
++	/*
++	 * According to the thermal datasheet, the formula of converting
++	 * adc value to the temperature value should be:
++	 * T_final = k_cal * x - b_cal.
++	 */
++	val = (temp + sen->cal_offset) / sen->cal_slope;
++
++	return val >= SPRD_THM_RAW_DATA_HIGH ? (SPRD_THM_RAW_DATA_HIGH - 1) : val;
++}
++
++static int sprd_thm_read_temp(void *devdata, int *temp)
++{
++	struct sprd_thermal_sensor *sen = devdata;
++	int sensor_temp;
++	u32 data;
++
++	data = readl(sen->data->base + SPRD_THM_TEMP(sen->id)) &
++		SPRD_THM_RAW_READ_MSK;
++
++	if (sen->ready) {
++		sensor_temp = sprd_thm_rawdata_to_temp(sen, data);
++		sen->last_temp = sensor_temp;
++		*temp = sensor_temp;
++	} else {
++		/*
++		 * If the sensor is not ready, then just return last
++		 * temperature value.
++		 */
++		*temp = sen->last_temp;
++	}
++
++	return 0;
++}
++
++static const struct thermal_zone_of_device_ops sprd_thm_ops = {
++	.get_temp = sprd_thm_read_temp,
++};
++
++static int sprd_thm_poll_ready_status(struct sprd_thermal_data *thm)
++{
++	u32 val;
++	int ret;
++
++	/*
++	 * Wait for thermal ready status before configuring thermal parameters.
++	 */
++	ret = readl_poll_timeout(thm->base + SPRD_THM_CTL, val,
++				 !(val & SPRD_THM_SET_RDY_ST),
++				 SPRD_THM_RDYST_POLLING_TIME,
++				 SPRD_THM_RDYST_TIMEOUT);
++	if (ret)
++		return ret;
++
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_MON_EN,
++			     SPRD_THM_MON_EN);
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_SET_RDY,
++			     SPRD_THM_SET_RDY);
++	return 0;
++}
++
++static int sprd_thm_wait_temp_ready(struct sprd_thermal_data *thm)
++{
++	u32 val;
++
++	/* Wait for first temperature data ready before reading temperature */
++	return readl_poll_timeout(thm->base + SPRD_THM_INTERNAL_STS1, val,
++				  !(val & SPRD_THM_TEMPER_RDY),
++				  SPRD_THM_TEMP_READY_POLL_TIME,
++				  SPRD_THM_TEMP_READY_TIMEOUT);
++}
++
++static int sprd_thm_set_ready(struct sprd_thermal_data *thm)
++{
++	int ret;
++
++	ret = sprd_thm_poll_ready_status(thm);
++	if (ret)
++		return ret;
++
++	/*
++	 * Clear interrupt status, enable thermal interrupt and enable thermal.
++	 */
++	writel(SPRD_THM_INT_CLR_MASK, thm->base + SPRD_THM_INT_CLR);
++	sprd_thm_update_bits(thm->base + SPRD_THM_INT_EN,
++			     SPRD_THM_BIT_INT_EN, SPRD_THM_BIT_INT_EN);
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
++			     SPRD_THM_EN, SPRD_THM_EN);
++	return 0;
++}
++
++static void sprd_thm_sensor_init(struct sprd_thermal_data *thm,
++				 struct sprd_thermal_sensor *sen)
++{
++	u32 otp_rawdata, hot_rawdata;
++
++	otp_rawdata = sprd_thm_temp_to_rawdata(SPRD_THM_OTP_TEMP, sen);
++	hot_rawdata = sprd_thm_temp_to_rawdata(SPRD_THM_HOT_TEMP, sen);
++
++	/* Enable the sensor' overheat temperature protection interrupt */
++	sprd_thm_update_bits(thm->base + SPRD_THM_INT_EN,
++			     SPRD_THM_SEN_OVERHEAT_ALARM_EN(sen->id),
++			     SPRD_THM_SEN_OVERHEAT_ALARM_EN(sen->id));
++
++	/* Set the sensor' overheat and hot threshold temperature */
++	sprd_thm_update_bits(thm->base + SPRD_THM_THRES(sen->id),
++			     SPRD_THM_THRES_MASK,
++			     (otp_rawdata << SPRD_THM_OTP_TRIP_SHIFT) |
++			     hot_rawdata);
++
++	/* Enable the corresponding sensor */
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_SEN(sen->id),
++			     SPRD_THM_SEN(sen->id));
++}
++
++static void sprd_thm_para_config(struct sprd_thermal_data *thm)
++{
++	/* Set the period of two valid temperature detection action */
++	sprd_thm_update_bits(thm->base + SPRD_THM_DET_PERIOD,
++			     SPRD_THM_DET_PERIOD_MASK, SPRD_THM_DET_PERIOD);
++
++	/* Set the sensors' monitor mode */
++	sprd_thm_update_bits(thm->base + SPRD_THM_MON_CTL,
++			     SPRD_THM_MON_MODE_MASK, SPRD_THM_MON_MODE);
++
++	/* Set the sensors' monitor period */
++	sprd_thm_update_bits(thm->base + SPRD_THM_MON_PERIOD,
++			     SPRD_THM_MON_PERIOD_MASK, SPRD_THM_MON_PERIOD);
++}
++
++static int sprd_thm_probe(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node;
++	struct device_node *sen_child;
++	struct sprd_thermal_data *thm;
++	struct sprd_thermal_sensor *sen;
++	const struct sprd_thm_variant_data *pdata;
++	int ret, i;
++
++	pdata = of_device_get_match_data(&pdev->dev);
++	if (!pdata) {
++		dev_err(&pdev->dev, "No matching driver data found\n");
++		return -EINVAL;
++	}
++
++	thm = devm_kzalloc(&pdev->dev, sizeof(*thm), GFP_KERNEL);
++	if (!thm)
++		return -ENOMEM;
++
++	thm->var_data = pdata;
++	thm->base = devm_platform_ioremap_resource(pdev, 0);
++	if (!thm->base)
++		return -ENOMEM;
++
++	thm->nr_sensors = of_get_child_count(np);
++	if (thm->nr_sensors == 0 || thm->nr_sensors > SPRD_THM_MAX_SENSOR) {
++		dev_err(&pdev->dev, "incorrect sensor count\n");
++		return -EINVAL;
++	}
++
++	thm->clk = devm_clk_get(&pdev->dev, "enable");
++	if (IS_ERR(thm->clk)) {
++		dev_err(&pdev->dev, "failed to get enable clock\n");
++		return PTR_ERR(thm->clk);
++	}
++
++	ret = clk_prepare_enable(thm->clk);
++	if (ret)
++		return ret;
++
++	sprd_thm_para_config(thm);
++
++	ret = sprd_thm_cal_read(np, "thm_sign_cal", &thm->ratio_sign);
++	if (ret)
++		goto disable_clk;
++
++	ret = sprd_thm_cal_read(np, "thm_ratio_cal", &thm->ratio_off);
++	if (ret)
++		goto disable_clk;
++
++	for_each_child_of_node(np, sen_child) {
++		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
++		if (!sen) {
++			ret = -ENOMEM;
++			goto disable_clk;
++		}
++
++		sen->ready = false;
++		sen->data = thm;
++		sen->dev = &pdev->dev;
++
++		ret = of_property_read_u32(sen_child, "reg", &sen->id);
++		if (ret) {
++			dev_err(&pdev->dev, "get sensor reg failed");
++			goto disable_clk;
++		}
++
++		ret = sprd_thm_senor_calibration(sen_child, thm, sen);
++		if (ret) {
++			dev_err(&pdev->dev, "efuse cal analysis failed");
++			goto disable_clk;
++		}
++
++		sprd_thm_sensor_init(thm, sen);
++
++		sen->thmzone_dev =
++			devm_thermal_zone_of_sensor_register(sen->dev, sen->id,
++							     sen, &sprd_thm_ops);
++		if (IS_ERR(sen->thmzone_dev)) {
++			dev_err(&pdev->dev, "register thermal zone failed %d\n",
++				sen->id);
++			ret = PTR_ERR(sen->thmzone_dev);
++			goto disable_clk;
++		}
++
++		thm->sensor[sen->id] = sen;
++	}
++
++	ret = sprd_thm_set_ready(thm);
++	if (ret)
++		goto disable_clk;
++
++	ret = sprd_thm_wait_temp_ready(thm);
++	if (ret)
++		goto disable_clk;
++
++	for (i = 0; i < thm->nr_sensors; i++)
++		thm->sensor[i]->ready = true;
++
++	platform_set_drvdata(pdev, thm);
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(thm->clk);
++	return ret;
++}
++
++#ifdef CONFIG_PM_SLEEP
++static void sprd_thm_hw_suspend(struct sprd_thermal_data *thm)
++{
++	int i;
++
++	for (i = 0; i < thm->nr_sensors; i++) {
++		sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
++				     SPRD_THM_SEN(thm->sensor[i]->id), 0);
++	}
++
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
++			     SPRD_THM_EN, 0x0);
++}
++
++static int sprd_thm_suspend(struct device *dev)
++{
++	struct sprd_thermal_data *thm = dev_get_drvdata(dev);
++	int i;
++
++	for (i = 0; i < thm->nr_sensors; i++)
++		thm->sensor[i]->ready = false;
++
++	sprd_thm_hw_suspend(thm);
++	clk_disable_unprepare(thm->clk);
++
++	return 0;
++}
++
++static int sprd_thm_hw_resume(struct sprd_thermal_data *thm)
++{
++	int ret, i;
++
++	for (i = 0; i < thm->nr_sensors; i++) {
++		sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
++				     SPRD_THM_SEN(thm->sensor[i]->id),
++				     SPRD_THM_SEN(thm->sensor[i]->id));
++	}
++
++	ret = sprd_thm_poll_ready_status(thm);
++	if (ret)
++		return ret;
++
++	writel(SPRD_THM_INT_CLR_MASK, thm->base + SPRD_THM_INT_CLR);
++	sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
++			     SPRD_THM_EN, SPRD_THM_EN);
++	return sprd_thm_wait_temp_ready(thm);
++}
++
++static int sprd_thm_resume(struct device *dev)
++{
++	struct sprd_thermal_data *thm = dev_get_drvdata(dev);
++	int ret, i;
++
++	ret = clk_prepare_enable(thm->clk);
++	if (ret)
++		return ret;
++
++	ret = sprd_thm_hw_resume(thm);
++	if (ret)
++		goto disable_clk;
++
++	for (i = 0; i < thm->nr_sensors; i++)
++		thm->sensor[i]->ready = true;
++
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(thm->clk);
++	return ret;
++}
++#endif
++
++static int sprd_thm_remove(struct platform_device *pdev)
++{
++	struct sprd_thermal_data *thm = platform_get_drvdata(pdev);
++	int i;
++
++	for (i = 0; i < thm->nr_sensors; i++) {
++		devm_thermal_zone_of_sensor_unregister(&pdev->dev,
++						       thm->sensor[i]->thmzone_dev);
++	}
++
++	clk_disable_unprepare(thm->clk);
++	return 0;
++}
++
++static const struct of_device_id sprd_thermal_of_match[] = {
++	{ .compatible = "sprd,ums512-thermal", .data = &ums512_data },
++	{ },
++};
++
++static const struct dev_pm_ops sprd_thermal_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(sprd_thm_suspend, sprd_thm_resume)
++};
++
++static struct platform_driver sprd_thermal_driver = {
++	.probe = sprd_thm_probe,
++	.remove = sprd_thm_remove,
++	.driver = {
++		.name = "sprd-thermal",
++		.pm = &sprd_thermal_pm_ops,
++		.of_match_table = sprd_thermal_of_match,
++	},
++};
++
++module_platform_driver(sprd_thermal_driver);
++
++MODULE_AUTHOR("Freeman Liu <freeman.liu@unisoc.com>");
++MODULE_DESCRIPTION("Spreadtrum thermal driver");
++MODULE_LICENSE("GPL v2");
 -- 
 1.7.9.5
 
