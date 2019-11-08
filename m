@@ -2,75 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3047AF4552
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36149F4574
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731787AbfKHLFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 06:05:13 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34714 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731784AbfKHLFN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:05:13 -0500
-Received: by mail-oi1-f194.google.com with SMTP id l202so4903439oig.1;
-        Fri, 08 Nov 2019 03:05:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=3aTH1Z977b25oWGjuZ0H/5AYWBINoF8nmYXtAY/gL1M=;
-        b=qDrYv4CAE9TZIvOUHD/jNU9Ywd3T+mCJ0kTgsCMmDlPsoQFtUbP6RebY/lgrYfE9Je
-         2gsp5GAV4+ibcwoX+5oZ9V03IG6GiTa1LQ2YUL3U/ZQjL49XXhKDqLKBca0TRqLhZlCj
-         ZvUHQ5fuWgnniXN+3WRWxxceuh1MgPVXfGAqPfpNS4/smo9UEZirrj5cbtsTemMzmTWl
-         mI7rZL+62y6UQO7BeMpV2gzPATZYEG/lzoYwsQgubkEek1FYSXdH0HrxvSRl6v4ng5wL
-         tT3pRU5LKnVKUG4w9PAgkBYCk33eAbyfpYx9d6qQjM0CaIxhHNDrkLiwhThp7FFyPYuz
-         OI1w==
-X-Gm-Message-State: APjAAAX4VvsMcLcqMQ8rMPuvvmzxnVvf0c8Aq+PX/STPL0VTSTJQnIYR
-        THtUPlO0GH7QdHVIbe8BcKP6Nm89e0OqI7gFnSA=
-X-Google-Smtp-Source: APXvYqwm4cJl+Tjng1uo+7i3zAU990Nw38Gcd0+2psUThBjuGsUnGyYtPPbeEoP/Y5CrXW17PqUyMwGx9DiAk79SNRo=
-X-Received: by 2002:aca:530c:: with SMTP id h12mr4567158oib.110.1573211112276;
- Fri, 08 Nov 2019 03:05:12 -0800 (PST)
+        id S1729873AbfKHLLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 06:11:17 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:54553 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726180AbfKHLLR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:11:17 -0500
+Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id d53db4b0a350beab; Fri, 8 Nov 2019 12:11:15 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Shen Kai <shenkai8@huawei.com>
+Cc:     viresh.kumar@linaro.org, hushiyuan@huawei.com,
+        linfeilong@huawei.com, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3]cpufreq: add NULL check to the store method of cpufreq
+Date:   Fri, 08 Nov 2019 12:11:15 +0100
+Message-ID: <3342762.qvnmYYrl9k@kreacher>
+In-Reply-To: <1573103297-7252-1-git-send-email-shenkai8@huawei.com>
+References: <20191107030601.xqe2tpcprkg7epul@vireshk-i7> <1573103297-7252-1-git-send-email-shenkai8@huawei.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 8 Nov 2019 12:05:01 +0100
-Message-ID: <CAJZ5v0hTxyzNAyEeeZfqu1XNcFY9mYeft9EnAP+zD6s7x0Csqg@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v5.4-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Thursday, November 7, 2019 6:08:17 AM CET Shen Kai wrote:
+> From: Kai Shen <shenkai8@huawei.com>
+> 
+> Add NULL check in the store function here to avoid NULL callback invoking.
+> Though some interfaces of cpufreq are set as read-only, user can still get 
+> write permission using chmod which can lead to a kernel crash.
+> 
+> The following operations can lead to a kernel crash.
+> 
+> chmod +w /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+> echo 1 >  /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+> 
+> This bug was found on linux 4.19
+> 
+> Signed-off-by: Kai Shen <shenkai8@huawei.com>
+> Reported-by: Feilong Lin <linfeilong@huawei.com>
+> Reviewed-by: Feilong Lin <linfeilong@huawei.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V2->V3
+> - use return value -EIO instead.
+> - do NULL check in show method too.
+> 
+>  drivers/cpufreq/cpufreq.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 48a224a..bc19d6c 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -933,6 +933,9 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+>  	struct freq_attr *fattr = to_attr(attr);
+>  	ssize_t ret;
+>  
+> +	if (!fattr->show)
+> +		return -EIO;
+> +
+>  	down_read(&policy->rwsem);
+>  	ret = fattr->show(policy, buf);
+>  	up_read(&policy->rwsem);
+> @@ -947,6 +950,9 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+>  	struct freq_attr *fattr = to_attr(attr);
+>  	ssize_t ret = -EINVAL;
+>  
+> +	if (!fattr->store)
+> +		return -EIO;
+> +
+>  	/*
+>  	 * cpus_read_trylock() is used here to work around a circular lock
+>  	 * dependency problem with respect to the cpufreq_register_driver().
+> 
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.4-rc7
-
-with top-most commit c31432fa7f825de0e19838f1ac7746381c509ec4
-
- cpufreq: intel_pstate: Fix invalid EPB setting
-
-on top of commit a99d8080aaf358d5d23581244e5da23b35e340b9
-
- Linux 5.4-rc6
-
-to receive a power management fix for 5.4-rc7.
-
-This fixes an "unchecked MSR access" warning in the intel_pstate
-cpufreq driver (Srinivas Pandruvada).
+Applying as 5.5 material with updated subject and changelog (the original ones
+did not mention the show() function).
 
 Thanks!
 
 
----------------
 
-Srinivas Pandruvada (1):
-      cpufreq: intel_pstate: Fix invalid EPB setting
-
----------------
-
- drivers/cpufreq/intel_pstate.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
