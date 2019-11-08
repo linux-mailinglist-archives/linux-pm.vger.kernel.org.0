@@ -2,78 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C30F496B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 13:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0B4F4A54
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 13:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390161AbfKHLmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 06:42:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390159AbfKHLmr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:42:47 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 368C8222C5;
-        Fri,  8 Nov 2019 11:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213366;
-        bh=8C77Ah9eGNmpKFrXn+KY6E4yKZ1R8Yn9FxFLckt44Sg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lc9BkQgBg602v4bPkH5xpIqo61dR+xmj7J07vkqPmRu8Ejk7DRGv7xh41LvbHEUtj
-         SU2PhkaHCvpNBNraWzFi2gzJNSfFRck8d9z4K7If7UTs2i9zQgOyHiFn3JNi/CnliA
-         ZB9k3rTvBWBHKn01uEHYYNyMKlKkr/nBXn+tKQ3I=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 194/205] power: reset: at91-poweroff: do not procede if at91_shdwc is allocated
-Date:   Fri,  8 Nov 2019 06:37:41 -0500
-Message-Id: <20191108113752.12502-194-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
-References: <20191108113752.12502-1-sashal@kernel.org>
+        id S2388712AbfKHMI1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 07:08:27 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:48576 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732218AbfKHLkc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:40:32 -0500
+Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id c6a3f0ec310a8f1c; Fri, 8 Nov 2019 12:40:31 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PM / core: Cleanup some function definitions in power.h
+Date:   Fri, 08 Nov 2019 12:40:31 +0100
+Message-ID: <2547127.Nu07Onx00h@kreacher>
+In-Reply-To: <20191016141627.18642-1-ulf.hansson@linaro.org>
+References: <20191016141627.18642-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+On Wednesday, October 16, 2019 4:16:27 PM CET Ulf Hansson wrote:
+> The power.h is a bit messy due to the various existing CONFIG_PM* Kconfig
+> combinations. However the final section for wakeup_source_sysfs*() can be
+> moved inside one of the existing sections rather than adding yet another
+> one, so let's do that to clean up the code a little bit.
 
-[ Upstream commit 9f1e44774be578fb92776add95f1fcaf8284d692 ]
+Fair enough.
 
-There should be only one instance of struct shdwc in the system. This is
-referenced through at91_shdwc. Return in probe if at91_shdwc is already
-allocated.
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/base/power/power.h | 30 ++++++++++++------------------
+>  1 file changed, 12 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 39a06a0cfdaa..444f5c169a0b 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -117,6 +117,13 @@ static inline bool device_pm_initialized(struct device *dev)
+>  	return dev->power.in_dpm_list;
+>  }
+>  
+> +/* drivers/base/power/wakeup_stats.c */
+> +extern int wakeup_source_sysfs_add(struct device *parent,
+> +				   struct wakeup_source *ws);
+> +extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
+> +
+> +extern int pm_wakeup_source_sysfs_add(struct device *parent);
+> +
+>  #else /* !CONFIG_PM_SLEEP */
+>  
+>  static inline void device_pm_sleep_init(struct device *dev) {}
+> @@ -141,6 +148,11 @@ static inline bool device_pm_initialized(struct device *dev)
+>  	return device_is_registered(dev);
+>  }
+>  
+> +static inline int pm_wakeup_source_sysfs_add(struct device *parent)
+> +{
+> +	return 0;
+> +}
+> +
+>  #endif /* !CONFIG_PM_SLEEP */
+>  
+>  static inline void device_pm_init(struct device *dev)
+> @@ -149,21 +161,3 @@ static inline void device_pm_init(struct device *dev)
+>  	device_pm_sleep_init(dev);
+>  	pm_runtime_init(dev);
+>  }
+> -
+> -#ifdef CONFIG_PM_SLEEP
+> -
+> -/* drivers/base/power/wakeup_stats.c */
+> -extern int wakeup_source_sysfs_add(struct device *parent,
+> -				   struct wakeup_source *ws);
+> -extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
+> -
+> -extern int pm_wakeup_source_sysfs_add(struct device *parent);
+> -
+> -#else /* !CONFIG_PM_SLEEP */
+> -
+> -static inline int pm_wakeup_source_sysfs_add(struct device *parent)
+> -{
+> -	return 0;
+> -}
+> -
+> -#endif /* CONFIG_PM_SLEEP */
+> 
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/reset/at91-sama5d2_shdwc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Applying as 5.5 material, thanks!
 
-diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-index 0206cce328b3d..d9493e893d64e 100644
---- a/drivers/power/reset/at91-sama5d2_shdwc.c
-+++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-@@ -246,6 +246,9 @@ static int __init at91_shdwc_probe(struct platform_device *pdev)
- 	if (!pdev->dev.of_node)
- 		return -ENODEV;
- 
-+	if (at91_shdwc)
-+		return -EBUSY;
-+
- 	at91_shdwc = devm_kzalloc(&pdev->dev, sizeof(*at91_shdwc), GFP_KERNEL);
- 	if (!at91_shdwc)
- 		return -ENOMEM;
--- 
-2.20.1
+
 
