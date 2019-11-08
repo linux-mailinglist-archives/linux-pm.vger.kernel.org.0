@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EA8F3D31
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 02:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E849F3D5D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 02:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfKHBDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Nov 2019 20:03:32 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:53282 "EHLO
+        id S1726094AbfKHBUa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Nov 2019 20:20:30 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:63959 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbfKHBDc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Nov 2019 20:03:32 -0500
+        with ESMTP id S1725930AbfKHBUa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Nov 2019 20:20:30 -0500
 Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 2f724591da4bb447; Fri, 8 Nov 2019 02:03:28 +0100
+ id 7418509ce44e4b04; Fri, 8 Nov 2019 02:20:27 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     mathieu.poirier@linaro.org, mingo@redhat.com, peterz@infradead.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         ulf.hansson@linaro.org
-Subject: Re: [PATCH V6 1/3] cpuidle: play_idle: Make play_idle more flexible
-Date:   Fri, 08 Nov 2019 02:03:28 +0100
-Message-ID: <2789916.f0jx01YxDY@kreacher>
-In-Reply-To: <20191030075141.1039-1-daniel.lezcano@linaro.org>
-References: <20191030075141.1039-1-daniel.lezcano@linaro.org>
+Subject: Re: [PATCH V6 2/3] cpuidle: play_idle: Specify play_idle with an idle state
+Date:   Fri, 08 Nov 2019 02:20:27 +0100
+Message-ID: <143021538.HHUP3Pj7i7@kreacher>
+In-Reply-To: <20191030075141.1039-2-daniel.lezcano@linaro.org>
+References: <20191030075141.1039-1-daniel.lezcano@linaro.org> <20191030075141.1039-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,206 +32,111 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 30, 2019 8:51:39 AM CET Daniel Lezcano wrote:
-> The play_idle function has two users, the intel powerclamp and the
-> idle_injection.
+On Wednesday, October 30, 2019 8:51:40 AM CET Daniel Lezcano wrote:
+> Currently, the play_idle function does not allow to tell which idle
+> state we want to go. Improve this by passing the idle state as
+> parameter to the function.
 > 
-> The idle injection cooling device uses the function via the
-> idle_injection powercap's APIs. Unfortunately, play_idle is currently
-> limited by the idle state depth: by default the deepest idle state is
-> selected. On the ARM[64] platforms, most of the time it is the cluster
-> idle state, the exit latency and the residency can be very high. That
-> reduces the scope of the idle injection usage because the impact on
-> the performances can be very significant.
+> Export cpuidle_find_deepest_state() symbol as it is used from the
+> intel_powerclamp driver as a module.
 > 
-> If the idle injection cycles can be done with a shallow state like a
-> retention state, the cooling effect would eventually give similar
-> results than the cpufreq cooling device.
-> 
-> In order to prepare the function to receive an idle state parameter,
-> let's replace the 'use_deepest_state' boolean field with 'use_state'
-> and use this value to enter the specific idle state.
-> 
-> The current code keeps the default behavior which is go to the deepest
-> idle state.
+> There is no functional changes, the cpuidle state is the deepest one.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
 >   V6:
->    - Change use_state variable name by use_state_idx:
+>    - Change variable name 'state' -> 'index':
 >      https://lkml.org/lkml/2019/10/28/874
->   V5:
->    - Fix s2idle default idle state value:
->      https://lkml.org/lkml/2019/10/15/522
+>   V4:
+>    - Add EXPORT_SYMBOL_GPL(cpuidle_find_deepest_state) for the
+>      intel_powerclamp driver when this one is compiled as a module
+>   V3:
+>    - Add missing cpuidle.h header
 > ---
->  drivers/cpuidle/cpuidle.c | 21 +++++++++++----------
->  include/linux/cpuidle.h   | 13 ++++++-------
->  kernel/sched/idle.c       | 11 +++++++----
->  3 files changed, 24 insertions(+), 21 deletions(-)
+>  drivers/cpuidle/cpuidle.c                | 1 +
+>  drivers/powercap/idle_inject.c           | 4 +++-
+>  drivers/thermal/intel/intel_powerclamp.c | 4 +++-
+>  include/linux/cpu.h                      | 2 +-
+>  kernel/sched/idle.c                      | 4 ++--
+>  5 files changed, 10 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 0895b988fa92..18523ea6b11b 100644
+> index 18523ea6b11b..b871fc2e8e67 100644
 > --- a/drivers/cpuidle/cpuidle.c
 > +++ b/drivers/cpuidle/cpuidle.c
-> @@ -99,31 +99,31 @@ static int find_deepest_state(struct cpuidle_driver *drv,
->  }
+> @@ -126,6 +126,7 @@ int cpuidle_find_deepest_state(void)
 >  
->  /**
-> - * cpuidle_use_deepest_state - Set/clear governor override flag.
-> - * @enable: New value of the flag.
-> + * cpuidle_use_state - Force the cpuidle framework to enter an idle state.
-> + * @state: An integer for an idle state
->   *
-> - * Set/unset the current CPU to use the deepest idle state (override governors
-> - * going forward if set).
-> + * Specify an idle state the cpuidle framework must step in and bypass
-> + * the idle state selection process.
->   */
-> -void cpuidle_use_deepest_state(bool enable)
-> +void cpuidle_use_state(int index)
->  {
->  	struct cpuidle_device *dev;
->  
->  	preempt_disable();
->  	dev = cpuidle_get_device();
->  	if (dev)
-> -		dev->use_deepest_state = enable;
-> +		dev->use_state_idx = index;
->  	preempt_enable();
->  }
->  
->  /**
->   * cpuidle_find_deepest_state - Find the deepest available idle state.
-> - * @drv: cpuidle driver for the given CPU.
-> - * @dev: cpuidle device for the given CPU.
->   */
-> -int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -			       struct cpuidle_device *dev)
-> +int cpuidle_find_deepest_state(void)
->  {
-> +	struct cpuidle_device *dev = cpuidle_get_device();
-> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-
-This is totally wasteful for the cpuidle_idle_call() use case.
-
-> +
 >  	return find_deepest_state(drv, dev, UINT_MAX, 0, false);
 >  }
+> +EXPORT_SYMBOL_GPL(cpuidle_find_deepest_state);
+
+That doesn't appear to be really necessary to me.
+
 >  
-> @@ -554,6 +554,7 @@ static void __cpuidle_unregister_device(struct cpuidle_device *dev)
->  static void __cpuidle_device_init(struct cpuidle_device *dev)
->  {
->  	memset(dev->states_usage, 0, sizeof(dev->states_usage));
-> +	dev->use_state_idx = CPUIDLE_STATE_NOUSE;
->  	dev->last_residency = 0;
->  	dev->next_hrtimer = 0;
->  }
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index 4b6b5bea8f79..d53ad36cb2de 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -15,6 +15,7 @@
->  #include <linux/list.h>
+>  #ifdef CONFIG_SUSPEND
+>  static void enter_s2idle_proper(struct cpuidle_driver *drv,
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index cd1270614cc6..233c878cbf46 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -38,6 +38,7 @@
+>  #define pr_fmt(fmt) "ii_dev: " fmt
+>  
+>  #include <linux/cpu.h>
+> +#include <linux/cpuidle.h>
 >  #include <linux/hrtimer.h>
->  
-> +#define CPUIDLE_STATE_NOUSE	-1
->  #define CPUIDLE_STATE_MAX	10
->  #define CPUIDLE_NAME_LEN	16
->  #define CPUIDLE_DESC_LEN	32
-> @@ -80,11 +81,11 @@ struct cpuidle_driver_kobj;
->  struct cpuidle_device {
->  	unsigned int		registered:1;
->  	unsigned int		enabled:1;
-> -	unsigned int		use_deepest_state:1;
->  	unsigned int		poll_time_limit:1;
->  	unsigned int		cpu;
->  	ktime_t			next_hrtimer;
->  
-> +	int			use_state_idx;
->  	int			last_state_idx;
->  	int			last_residency;
->  	u64			poll_limit_ns;
-> @@ -203,19 +204,17 @@ static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
->  #endif
->  
->  #ifdef CONFIG_CPU_IDLE
-> -extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -				      struct cpuidle_device *dev);
-> +extern int cpuidle_find_deepest_state(void);
->  extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->  				struct cpuidle_device *dev);
-> -extern void cpuidle_use_deepest_state(bool enable);
-> +extern void cpuidle_use_state(int index);
->  #else
-> -static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> -					     struct cpuidle_device *dev)
-> +static inline int cpuidle_find_deepest_state(void)
->  {return -ENODEV; }
->  static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->  				       struct cpuidle_device *dev)
->  {return -ENODEV; }
-> -static inline void cpuidle_use_deepest_state(bool enable)
-> +static inline void cpuidle_use_state(int index)
->  {
->  }
->  #endif
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index 8dad5aa600ea..fb9fc93f1497 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -165,7 +165,8 @@ static void cpuidle_idle_call(void)
->  	 * until a proper wakeup interrupt happens.
+>  #include <linux/kthread.h>
+>  #include <linux/sched.h>
+> @@ -138,7 +139,8 @@ static void idle_inject_fn(unsigned int cpu)
 >  	 */
+>  	iit->should_run = 0;
 >  
-> -	if (idle_should_enter_s2idle() || dev->use_deepest_state) {
-> +	if (idle_should_enter_s2idle() ||
-> +	    dev->use_state_idx != CPUIDLE_STATE_NOUSE) {
->  		if (idle_should_enter_s2idle()) {
->  			rcu_idle_enter();
->  
-> @@ -176,12 +177,14 @@ static void cpuidle_idle_call(void)
->  			}
->  
->  			rcu_idle_exit();
-> +			next_state = cpuidle_find_deepest_state();
-> +		} else {
-> +			next_state = dev->use_state_idx;
->  		}
->  
->  		tick_nohz_idle_stop_tick();
->  		rcu_idle_enter();
->  
-> -		next_state = cpuidle_find_deepest_state(drv, dev);
->  		call_cpuidle(drv, dev, next_state);
->  	} else {
->  		bool stop_tick = true;
-> @@ -328,7 +331,7 @@ void play_idle(unsigned long duration_us)
->  	rcu_sleep_check();
->  	preempt_disable();
->  	current->flags |= PF_IDLE;
-> -	cpuidle_use_deepest_state(true);
-> +	cpuidle_use_state(cpuidle_find_deepest_state());
+> -	play_idle(READ_ONCE(ii_dev->idle_duration_us));
+> +	play_idle(READ_ONCE(ii_dev->idle_duration_us),
+> +		  cpuidle_find_deepest_state());
 
-And this assumes that the deepest state will not change for the whole
-play_idle() duration, but what if it is disabled by user space in the
-meantime?
+The next patch changes this again and I'm not sure why this intermediate
+change is useful.
 
+>  }
 >  
->  	it.done = 0;
->  	hrtimer_init_on_stack(&it.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> @@ -339,7 +342,7 @@ void play_idle(unsigned long duration_us)
->  	while (!READ_ONCE(it.done))
->  		do_idle();
+>  /**
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 53216dcbe173..b55786c169ae 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/kthread.h>
+>  #include <linux/cpu.h>
+> +#include <linux/cpuidle.h>
+>  #include <linux/thermal.h>
+>  #include <linux/slab.h>
+>  #include <linux/tick.h>
+> @@ -430,7 +431,8 @@ static void clamp_idle_injection_func(struct kthread_work *work)
+>  	if (should_skip)
+>  		goto balance;
 >  
-> -	cpuidle_use_deepest_state(false);
-> +	cpuidle_use_state(CPUIDLE_STATE_NOUSE);
->  	current->flags &= ~PF_IDLE;
->  
->  	preempt_fold_need_resched();
-> 
+> -	play_idle(jiffies_to_usecs(w_data->duration_jiffies));
+> +	play_idle(jiffies_to_usecs(w_data->duration_jiffies),
+> +		  cpuidle_find_deepest_state());
 
+I don't see a reason for changing the code here like this.
+
+What you really need is to have a way to set a limit on the idle
+state exit latency for idle injection on ARM.
+
+For that you can pass the exit latency limit to play_idle(), but then
+you need to change powerclamp to pass UNIT_MAX or similar which is
+ugly, or you can redefine cpuidle_use_deepest_state() to take the
+exit latency limit as the arg (with 0 meaning use_deepest_state == false).
+
+In the latter case, it would be quite straightforward to add an
+exit_latency argument to cpuidle_find_deepest_state() and note that
+find_deepest_state() takes a max_latency arg already, so that would be
+a trivial change (hint!).
 
 
 
