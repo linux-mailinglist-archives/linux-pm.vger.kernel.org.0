@@ -2,29 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93932F459D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6C8F45A5
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 12:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730221AbfKHLW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 06:22:28 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47120 "EHLO
+        id S1726149AbfKHLYp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 06:24:45 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:48453 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfKHLW2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:22:28 -0500
+        with ESMTP id S1725730AbfKHLYp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 06:24:45 -0500
 Received: from 79.184.254.83.ipv4.supernova.orange.pl (79.184.254.83) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 7b93b3f4ee9f5846; Fri, 8 Nov 2019 12:22:26 +0100
+ id c76056e31ef5e5d1; Fri, 8 Nov 2019 12:24:42 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     linux-pm@vger.kernel.org, "Pavel Machek )" <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Breno =?ISO-8859-1?Q?Leit=E3o?= <leitao@debian.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        David@rox.of.borg, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Casey Leedom <leedom@chelsio.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH RESEND] cpuidle: undelaying cpuidle in dpm_{suspend|resume}()
-Date:   Fri, 08 Nov 2019 12:22:25 +0100
-Message-ID: <2576101.gjqMWB6DaV@kreacher>
-In-Reply-To: <20191030022105.223213-1-ikjn@chromium.org>
-References: <20191030022105.223213-1-ikjn@chromium.org>
+Subject: Re: [PATCH 4/5] power: avs: smartreflex: Remove superfluous cast in debugfs_create_file() call
+Date:   Fri, 08 Nov 2019 12:24:42 +0100
+Message-ID: <4367615.jSCgeRn5tF@kreacher>
+In-Reply-To: <20191021145149.31657-5-geert+renesas@glider.be>
+References: <20191021145149.31657-1-geert+renesas@glider.be> <20191021145149.31657-5-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -33,75 +50,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 30, 2019 3:21:05 AM CET Ikjoon Jang wrote:
-> cpuidle is paused only during dpm_suspend_noirq() ~ dpm_resume_noirq().
-> But some device drivers need random sized IOs in dpm_{suspend|resume}()
-> stage (e.g. re-downloading firmware in resume).
-> And with such a device, cpuidle's latencies could be critical to
-> response time of system suspend/resume.
+On Monday, October 21, 2019 4:51:48 PM CET Geert Uytterhoeven wrote:
+> There is no need to cast a typed pointer to a void pointer when calling
+> a function that accepts the latter.  Remove it, as the cast prevents
+> further compiler checks.
 > 
-> To minimize those latencies, we could apply pm_qos to such device drivers,
-> but simply undelaying cpuidle from dpm_suspend_noirq() to dpm suspend()
-> seems no harm.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-While the patch is generally acceptable, the changelog is not.
+Greg, have you taken this one by any chance?
 
-First, what does "undelying" mean?
-
-Second, you seem to be talking about the cases in which exit latencies of
-idle states are not small relative to the system suspend/resume time, so
-without any specific examples this is not really convincing.
-
-Also, potentially, there is another reason to make this change, which is
-that on some systems i2c (or similar) controllers may be requisite for
-idle state entry and exit, so it may make sense in general to prevent
-cpuidle from being used over the entire suspend and resume of the
-system.  However, without any example of a system in which that matters
-it still is not convincing enough IMO.
-
-> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
 > ---
->  drivers/base/power/main.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  drivers/power/avs/smartreflex.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index 134a8af51511..5928dd2139e8 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -773,8 +773,6 @@ void dpm_resume_noirq(pm_message_t state)
+> diff --git a/drivers/power/avs/smartreflex.c b/drivers/power/avs/smartreflex.c
+> index 4684e7df833a81e9..5376f3d22f31eade 100644
+> --- a/drivers/power/avs/smartreflex.c
+> +++ b/drivers/power/avs/smartreflex.c
+> @@ -905,7 +905,7 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  	sr_info->dbg_dir = debugfs_create_dir(sr_info->name, sr_dbg_dir);
 >  
->  	resume_device_irqs();
->  	device_wakeup_disarm_wake_irqs();
-> -
-> -	cpuidle_resume();
->  }
->  
->  static pm_callback_t dpm_subsys_resume_early_cb(struct device *dev,
-> @@ -1069,6 +1067,7 @@ void dpm_resume(pm_message_t state)
->  
->  	cpufreq_resume();
->  	devfreq_resume();
-> +	cpuidle_resume();
->  	trace_suspend_resume(TPS("dpm_resume"), state.event, false);
->  }
->  
-> @@ -1411,8 +1410,6 @@ int dpm_suspend_noirq(pm_message_t state)
->  {
->  	int ret;
->  
-> -	cpuidle_pause();
-> -
->  	device_wakeup_arm_wake_irqs();
->  	suspend_device_irqs();
->  
-> @@ -1830,6 +1827,7 @@ int dpm_suspend(pm_message_t state)
->  	trace_suspend_resume(TPS("dpm_suspend"), state.event, true);
->  	might_sleep();
->  
-> +	cpuidle_pause();
->  	devfreq_suspend();
->  	cpufreq_suspend();
->  
+>  	debugfs_create_file("autocomp", S_IRUGO | S_IWUSR, sr_info->dbg_dir,
+> -			    (void *)sr_info, &pm_sr_fops);
+> +			    sr_info, &pm_sr_fops);
+>  	debugfs_create_x32("errweight", S_IRUGO, sr_info->dbg_dir,
+>  			   &sr_info->err_weight);
+>  	debugfs_create_x32("errmaxlimit", S_IRUGO, sr_info->dbg_dir,
 > 
 
 
