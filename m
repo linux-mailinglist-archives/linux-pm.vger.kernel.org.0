@@ -2,273 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6500F5B1B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Nov 2019 23:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157A8F5BDE
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 00:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731643AbfKHWkU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 17:40:20 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:57320 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731564AbfKHWkT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 Nov 2019 17:40:19 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 30019200831;
-        Fri,  8 Nov 2019 23:40:16 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 18B95200770;
-        Fri,  8 Nov 2019 23:40:16 +0100 (CET)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 0A283205CD;
-        Fri,  8 Nov 2019 23:40:15 +0100 (CET)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
+        id S1726640AbfKHXiX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 18:38:23 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34821 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbfKHXiX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 18:38:23 -0500
+Received: by mail-lj1-f193.google.com with SMTP id r7so7949318ljg.2;
+        Fri, 08 Nov 2019 15:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7g5vTbYZHmeYxWc2Gp9Pqp9iJ2yMYEuiir3i4U6QyGc=;
+        b=g4c+EHEmb/zwM04L6VsDL30KBvGNvRnetX4OgsnUMzeSIvfsNNMpr7R04r1t36mD1g
+         9N1m/Zxmz0XL4qs1HL0kX9pb93U58ukQJP0DOpUqVsSj8z+XhQ0K1I3NzRuQSX/Xly41
+         m0SRo/ziYu2HH+QVrBiQAj2HXcgyCOQMsbnr/dEg6BqOxBMiHQTxohH10+5PANOlmaoQ
+         Tl9TvVkcHRxwnCh3TW0Vnd5nB8sDfxpwqAa9ImpAL8ANI8tsp/axNPL4rQZZ0bogO231
+         c8vhCOauNTFoeu/q2r5NsyQNJBMc9U1ywy5Nt+reRVSwvIfee+ONnXutViIQR48cU2HG
+         /fDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7g5vTbYZHmeYxWc2Gp9Pqp9iJ2yMYEuiir3i4U6QyGc=;
+        b=ayX8AKH753WRo4COxGRoPSlSNmRK3BjEkr4XRNTLPc6m84WeQ1BC9GeRf1YsjHlG2T
+         PstL5nTdKcoQMe6BEan/eD0kmvoTEbMj31m4aa1+1/vV+nC0/F74swJFjI26x8irnmFB
+         mtIPBuobasgkt9ytlf7mxhFKv8PE0We39DeTfOAzvatPdC1sJK8egKTP+yrMSOkUtPSx
+         eQ7chU1YtdHNyRsNpXwLoDYA26mGU7goW7RgmSoFMWkmMZ1ATiFRPD0AyYqdcKG69Zv+
+         gJ8IzrCjdFGT5LkaW/7+ThfOz/SLv5GvecC0GI8djMqWEL14E0SLXUJA9SkybWE73HSH
+         EsoA==
+X-Gm-Message-State: APjAAAVkv0ybh1VoGEKqVOZ4Opj+GuMA/8i7ki6cadCSnRg2TiVa+tYv
+        VsHi3A2vaO53964vml/RrXk5UL4s
+X-Google-Smtp-Source: APXvYqxaj9XZxFaWcLquzKkYuOY6emBFDT9DQB76RUhm8CVhIxzy0iJ36Ofx4pSQCHKNBl6ONxjr1g==
+X-Received: by 2002:a2e:b0f6:: with SMTP id h22mr8250988ljl.171.1573256300397;
+        Fri, 08 Nov 2019 15:38:20 -0800 (PST)
+Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
+        by smtp.googlemail.com with ESMTPSA id n21sm3053273ljc.67.2019.11.08.15.38.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2019 15:38:19 -0800 (PST)
+Subject: Re: [PATCH v9 11/22] clk: tegra: clk-dfll: Add suspend and resume
+ support
 To:     Stephen Boyd <sboyd@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 6/6] arm64: dts: imx8m: Add ddr controller nodes
-Date:   Sat,  9 Nov 2019 00:39:56 +0200
-Message-Id: <cfaee2ac845b07497a25f688915b60c9bb7c7ac1.1573252696.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1573252696.git.leonard.crestez@nxp.com>
-References: <cover.1573252696.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1573252696.git.leonard.crestez@nxp.com>
-References: <cover.1573252696.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        jason@lakedaemon.net, jonathanh@nvidia.com,
+        linus.walleij@linaro.org, marc.zyngier@arm.com,
+        mark.rutland@arm.com, stefan@agner.ch, tglx@linutronix.de,
+        thierry.reding@gmail.com
+Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
+References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
+ <1565984527-5272-12-git-send-email-skomatineni@nvidia.com>
+ <20191108212015.07BC720869@mail.kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <f644adda-dc6b-9b7e-3fc2-94091a38c99a@gmail.com>
+Date:   Sat, 9 Nov 2019 02:38:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191108212015.07BC720869@mail.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is used by the imx-ddrc devfreq driver to implement dynamic
-frequency scaling of DRAM.
+09.11.2019 00:20, Stephen Boyd пишет:
+> Quoting Sowjanya Komatineni (2019-08-16 12:41:56)
+>> diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll.c
+>> index f8688c2ddf1a..c051d92c2bbf 100644
+>> --- a/drivers/clk/tegra/clk-dfll.c
+>> +++ b/drivers/clk/tegra/clk-dfll.c
+>> @@ -1487,6 +1487,7 @@ static int dfll_init(struct tegra_dfll *td)
+>>         td->last_unrounded_rate = 0;
+>>  
+>>         pm_runtime_enable(td->dev);
+>> +       pm_runtime_irq_safe(td->dev);
+> 
+> Why irq_safe? It would be good to mention it in the commit text or
+> something.
 
-Add a devfreq-event link to the dram PMU in order to support on-demand
-scaling of ddrc based on measured dram bandwidth usage.
+That's a good catch. It was somewhat relevant for some older version of
+this patch, but should be irrelevant now.
 
-Support for proactive scaling via interconnect will come later. The
-high-performance bus masters which need that (display, vpu, gpu) are not
-yet enabled in upstream anyway.
-
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 18 ++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mm.dtsi     | 13 +++++++++-
- .../boot/dts/freescale/imx8mn-ddr4-evk.dts    | 18 ++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi     | 13 +++++++++-
- arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 24 +++++++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 13 +++++++++-
- 6 files changed, 96 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-index 28ab17a277bb..ecf0d385c164 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-@@ -75,10 +75,28 @@
- 
- &A53_0 {
- 	cpu-supply = <&buck2_reg>;
- };
- 
-+&ddrc {
-+	operating-points-v2 = <&ddrc_opp_table>;
-+
-+	ddrc_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-25M {
-+			opp-hz = /bits/ 64 <25000000>;
-+		};
-+		opp-100M {
-+			opp-hz = /bits/ 64 <100000000>;
-+		};
-+		opp-750M {
-+			opp-hz = /bits/ 64 <750000000>;
-+		};
-+	};
-+};
-+
- &fec1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_fec1>;
- 	phy-mode = "rgmii-id";
- 	phy-handle = <&ethphy0>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 6edbdfe2d0d7..0fffc6362c43 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -856,11 +856,22 @@
- 			#interrupt-cells = <3>;
- 			interrupt-controller;
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		ddr-pmu@3d800000 {
-+		ddrc: dram-controller@3d400000 {
-+			compatible = "fsl,imx8mm-ddrc", "fsl,imx8m-ddrc";
-+			reg = <0x3d400000 0x400000>;
-+			clock-names = "core", "pll", "alt", "apb";
-+			clocks = <&clk IMX8MM_CLK_DRAM_CORE>,
-+				 <&clk IMX8MM_DRAM_PLL>,
-+				 <&clk IMX8MM_CLK_DRAM_ALT>,
-+				 <&clk IMX8MM_CLK_DRAM_APB>;
-+			devfreq-events = <&ddr_pmu>;
-+		};
-+
-+		ddr_pmu: ddr-pmu@3d800000 {
- 			compatible = "fsl,imx8mm-ddr-pmu", "fsl,imx8m-ddr-pmu";
- 			reg = <0x3d800000 0x400000>;
- 			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
- 		};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-index 071949412caf..b051c927c11e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-@@ -15,10 +15,28 @@
- 
- &A53_0 {
- 	cpu-supply = <&buck2_reg>;
- };
- 
-+&ddrc {
-+	operating-points-v2 = <&ddrc_opp_table>;
-+
-+	ddrc_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-25M {
-+			opp-hz = /bits/ 64 <25000000>;
-+		};
-+		opp-100M {
-+			opp-hz = /bits/ 64 <100000000>;
-+		};
-+		opp-600M {
-+			opp-hz = /bits/ 64 <600000000>;
-+		};
-+	};
-+};
-+
- &i2c1 {
- 	pmic@4b {
- 		compatible = "rohm,bd71847";
- 		reg = <0x4b>;
- 		pinctrl-0 = <&pinctrl_pmic>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index e91625063f8e..c952bfb906a7 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -757,11 +757,22 @@
- 			#interrupt-cells = <3>;
- 			interrupt-controller;
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		ddr-pmu@3d800000 {
-+		ddrc: dram-controller@3d400000 {
-+			compatible = "fsl,imx8mn-ddrc", "fsl,imx8m-ddrc";
-+			reg = <0x3d400000 0x400000>;
-+			clock-names = "core", "pll", "alt", "apb";
-+			clocks = <&clk IMX8MN_CLK_DRAM_CORE>,
-+				 <&clk IMX8MN_DRAM_PLL>,
-+				 <&clk IMX8MN_CLK_DRAM_ALT>,
-+				 <&clk IMX8MN_CLK_DRAM_APB>;
-+			devfreq-events = <&ddr_pmu>;
-+		};
-+
-+		ddr_pmu: ddr-pmu@3d800000 {
- 			compatible = "fsl,imx8mn-ddr-pmu", "fsl,imx8m-ddr-pmu";
- 			reg = <0x3d800000 0x400000>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 	};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-index c36685916683..ee6dc5f07622 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-@@ -103,10 +103,34 @@
- 
- &A53_3 {
- 	cpu-supply = <&buck2_reg>;
- };
- 
-+&ddrc {
-+	operating-points-v2 = <&ddrc_opp_table>;
-+
-+	ddrc_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-25M {
-+			opp-hz = /bits/ 64 <25000000>;
-+		};
-+		opp-100M {
-+			opp-hz = /bits/ 64 <100000000>;
-+		};
-+		/*
-+		 * On imx8mq B0 PLL can't be bypassed so low bus is 166M
-+		 */
-+		opp-166M {
-+			opp-hz = /bits/ 64 <166935483>;
-+		};
-+		opp-800M {
-+			opp-hz = /bits/ 64 <800000000>;
-+		};
-+	};
-+};
-+
- &fec1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_fec1>;
- 	phy-mode = "rgmii-id";
- 	phy-handle = <&ethphy0>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index 7f9319452b58..d2270e99098e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -1111,11 +1111,22 @@
- 			interrupt-controller;
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-parent = <&gic>;
- 		};
- 
--		ddr-pmu@3d800000 {
-+		ddrc: dram-controller@3d400000 {
-+			compatible = "fsl,imx8mq-ddrc", "fsl,imx8m-ddrc";
-+			reg = <0x3d400000 0x400000>;
-+			clock-names = "core", "pll", "alt", "apb";
-+			clocks = <&clk IMX8MQ_CLK_DRAM_CORE>,
-+				 <&clk IMX8MQ_DRAM_PLL_OUT>,
-+				 <&clk IMX8MQ_CLK_DRAM_ALT>,
-+				 <&clk IMX8MQ_CLK_DRAM_APB>;
-+			devfreq-events = <&ddr_pmu>;
-+		};
-+
-+		ddr_pmu: ddr-pmu@3d800000 {
- 			compatible = "fsl,imx8mq-ddr-pmu", "fsl,imx8m-ddr-pmu";
- 			reg = <0x3d800000 0x400000>;
- 			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
- 		};
--- 
-2.17.1
-
+[snip]
