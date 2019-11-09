@@ -2,136 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EE1F6161
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 21:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7DBF61EF
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Nov 2019 01:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfKIU1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Nov 2019 15:27:44 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:42920 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726537AbfKIU1o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Nov 2019 15:27:44 -0500
-Received: by mail-ed1-f67.google.com with SMTP id m13so8852492edv.9
-        for <linux-pm@vger.kernel.org>; Sat, 09 Nov 2019 12:27:41 -0800 (PST)
+        id S1726651AbfKJAah (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Nov 2019 19:30:37 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42846 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726537AbfKJAag (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Nov 2019 19:30:36 -0500
+Received: by mail-pg1-f194.google.com with SMTP id q17so6586917pgt.9
+        for <linux-pm@vger.kernel.org>; Sat, 09 Nov 2019 16:30:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b+8khpJ1Hz+tMD0njO1mPXhcUz3AaktW0QE8s0RXEy0=;
-        b=cAXINlTqhr2dYYRGvd9NyArzc+EEga3e/Nr45Py3EXZQkp8APG66x9NL+TlBrJNRuE
-         WMDl88rcOO5QiMtFtuOZGWGdm0PUfwJsY6KNrS9v3OoAIamKh5LFa69MH/du7nB0Vegs
-         Ts5glrzo3MD0jk5JV6/lzhHpFCYeH3WI4o0woPVbY8tGPYI8J9UFewDOgRVq6DyowxNf
-         KgvNAULB6HecR8O93lRomvc5Ch25S+XIrnY6IHDPqYuiztZdaJZhrZWcbsYBI3ZZc12m
-         ISs2hpsm4bcpFCao14BmtTho/xIPg2rgb0U5+uv0vGlxT836+RM2Lr50snCA9TQWEpl5
-         5Mpw==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=QJ9M/1JvgfL9a3naUkuoeUKHp140e3y+7LN+oRlvvF0=;
+        b=NCxT1PtSjVriRDY0McvWgqg1c96vuIp6GwyYFPzUd8SsWhDu6AwFt1cy+ZjLXPFvGF
+         LhFFE+gwmzFecxdZ7WNuy7InOhsm6d1xROIkSmVm+R/UZHOYYc7nSCM4IoA5iXAfPatm
+         I6bAdoT4eqFv5eCSyEzQQq9jCwzRNgp0LEGoIgQ9u1tfVLi6LtpyzphrogFujaLOJVAY
+         OpDqbE7AQHo3fmg66SEF31pePDtgnfa8yQZZJK3WeV2qZX2nI++q4iPd7J0bGKA18H42
+         6mx/bhK0qpDwTlrSoV9ISWG//olIHZOODsFZWsDrk43o7EN8QE9jfWMqBCkPc44h1l1/
+         NRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b+8khpJ1Hz+tMD0njO1mPXhcUz3AaktW0QE8s0RXEy0=;
-        b=uLynhI/gpBMkUi0ckB9WxxJi+lnc5mRXNWj8ISiY8jkytQMk9quz6EE+L7qXQiIMiG
-         A5ENEApiabgchseAP+jnllSa969uZmKaC5AfEWVtw3Lha2bf9dHhhPUUcHJ2TUc1Hjz6
-         sLyaUGNUiRU0GkMR1n7kJ+IEjw8Fa036eq0a3R+jEziPk1caF4ISKP2t2MFGqKmN/ljP
-         bxUOy1GUCVk3KbQTAYbw3VwT6nIIFAIXlTBMR71VwJS6t8cDoeMeb1tHfyBAi4YhYZlf
-         3jy+1GkPergT7TcMnVPZgLkJd5ZwLsKvz2lO87ULayeLKxRT/5UfmPkEHieYG62x2bvC
-         NheA==
-X-Gm-Message-State: APjAAAVwWPxtPCHImL7sT5iSt21WGjYz7Z0T8LltVPxHXKs8VgKZIGcM
-        5qxZqTlt0+SGUzEvMFNVjGCGuQrme7Hdx5RALPgX0I4s
-X-Google-Smtp-Source: APXvYqzHkGJ3thq037poRWi7Fb25K2gOcNkPsCPTR5ycyhsTeNJ5+LOyIylym/6LOuq7Wh1X2CEkYzCBoL15Tpu5SS4=
-X-Received: by 2002:a17:906:d93b:: with SMTP id rn27mr3416343ejb.184.1573331260654;
- Sat, 09 Nov 2019 12:27:40 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=QJ9M/1JvgfL9a3naUkuoeUKHp140e3y+7LN+oRlvvF0=;
+        b=QMFaz7ONh4p8wt2Z/mX77eNCQLZ6QFP39tpvw6F0V8HUTPuddFk4cQJUNxhhGRyKhc
+         odZuDrOI1JRBSfYtS2x9WgUq4TCX5tY03mwsXH4YEkxxFVHr7IX5AJuQQCm5+0suvkax
+         2qTk7WUbOo2ol6yB+Q7spq4hwYKmxIJqNLn4YPvW7/YlHs4C8cTkUgK3AxgPuI9sibMh
+         OSFIjztsp5RYJ6DS58eNwWy0J2EG/V9WeJUf6AP7pbYyeq5eaXFJqIlU5hLa2Xbkkaxl
+         DYeCOa534DMymfh8XmRfNPLFq9TFjPSuDXfXnYGreoctdYre+XYeWHZVrnUZksDTt9WE
+         G4Cw==
+X-Gm-Message-State: APjAAAXFC0Ek6ndoTFXDYBiBUm4QtIaUGw6DKHKOtSgxvp4xO+naUuPa
+        eTD+LOqpipABASNE7vz36uUkCg==
+X-Google-Smtp-Source: APXvYqxu6JimPLetLyzs5b3fNNN+T5TOM3IxKtOOtZlw0hsFzmo99TMBKf40oTi9kAjJRpBteOx8Ug==
+X-Received: by 2002:a17:90a:d792:: with SMTP id z18mr24756222pju.34.1573345835992;
+        Sat, 09 Nov 2019 16:30:35 -0800 (PST)
+Received: from localhost ([2601:602:9200:a1a5:7c60:912:1380:6df8])
+        by smtp.gmail.com with ESMTPSA id 126sm3785679pgi.9.2019.11.09.16.30.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 09 Nov 2019 16:30:35 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        linux-amlogic@lists.infradead.org
+Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH v4 3/4] soc: amlogic: Add support for Secure power domains controller
+In-Reply-To: <1572868028-73076-4-git-send-email-jianxin.pan@amlogic.com>
+References: <1572868028-73076-1-git-send-email-jianxin.pan@amlogic.com> <1572868028-73076-4-git-send-email-jianxin.pan@amlogic.com>
+Date:   Sat, 09 Nov 2019 21:09:31 +0100
+Message-ID: <7hmud4stfo.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <5123bf54-5d62-fc5c-8838-17bc34487d83@linaro.org>
- <20191107142111.GB109902@kroah.com> <0cb5a6a6-399f-99e3-dc41-50114eea4025@linaro.org>
- <20191108103917.GB683302@kroah.com> <CAOCOHw4d0q3uGTAh_UrNWr+Wi6ObDKUFn7M_zkD8cFTkNFEUDA@mail.gmail.com>
- <20191109084820.GC1289838@kroah.com>
-In-Reply-To: <20191109084820.GC1289838@kroah.com>
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-Date:   Sat, 9 Nov 2019 12:27:29 -0800
-Message-ID: <CAOCOHw4AFz2Rj3sLTrboA0pBOkL_5MbitJnFHgBYaVBbWyYATw@mail.gmail.com>
-Subject: Re: [GIT PULL] interconnect changes for 5.5
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 9, 2019 at 12:48 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi Jianxin,
+
+Jianxin Pan <jianxin.pan@amlogic.com> writes:
+
+> Add support for the Amlogic Secure Power controller. In A1/C1 series, power
+> control registers are in secure domain, and should be accessed by smc.
 >
-> On Fri, Nov 08, 2019 at 05:36:46PM -0800, Bjorn Andersson wrote:
-> > On Fri, Nov 8, 2019 at 2:39 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Nov 07, 2019 at 05:42:13PM +0200, Georgi Djakov wrote:
-> > > > Hi Greg,
-> > > >
-> > > > On 11/7/19 16:21, Greg Kroah-Hartman wrote:
-> > > > > On Thu, Nov 07, 2019 at 02:46:53PM +0200, Georgi Djakov wrote:
-> > > > >> Hi Greg,
-> > > > >>
-> > > > >> This is a pull request with interconnect patches for the 5.5 merge window.
-> > > > >> All patches have been for a while in linux-next without reported issues. The
-> > > > >> details are in the signed tag. Please consider pulling into char-misc-next.
-> > > > >
-> > > > > I don't know about
-> > > > > 0003-interconnect-Disallow-interconnect-core-to-be-built-.patch here.
-> > > > > Shouldn't you just fix up the dependancies of subsystems that rely on
-> > > > > this?  We are moving more and more to kernels that "just work" with
-> > > > > everything as modules, even on arm64 systems.  So forbiding the
-> > > > > interconnect code from being able to be built as a module does not feel
-> > > > > good to me at all.
-> > > >
-> > > > Thank you for commenting on this! The initial idea was to keep everything as
-> > > > modular as possible. The reasons behind this change is that other core
-> > > > frameworks like cpufreq (and possibly others) want to call the interconnect
-> > > > APIs. Some of these frameworks are built-in only and it would be easier to
-> > > > handle dependencies if interconnect core built-in too. Now each user that
-> > > > can be built-in has to specify in Kconfig that it depends on INTERCONNECT ||
-> > > > !INTERCONNECT.
-> > >
-> > > That's fine, when those subsystems start to use those apis, that
-> > > dependency needs to be added.  Nothing new here, and you forcing it to
-> > > either be "on or off" isn't going to change that.  Let's do it correctly
-> > > please.
-> > >
-> >
-> > Please no!
-> >
-> > Making our frameworks tristate means that we can no longer rely on
-> > include file stubs (as framework=m, client=y will fail), so every
-> > single client must add the "depends on framework || framework=n" - in
-> > contrast to nothing the framework itself is bool.
->
-> What's wrong with a single "depends on framework"?  If your code relies
-> on this framework, you should depend on it, right?
+> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
 
-As your question shows, everyone gets this wrong and the build breaks
-all the time (it's not "depends on framework", it's "depends on
-framework || framework=n" - and everyone you'll talk to will be
-puzzled as to why this is).
+This driver is looking pretty good.  A few more minor comments below.
 
-But consistently introducing this for clocks, regulators, pinctrl,
-resets, etc should be a task so large that people will come out
-educated from it - or whatever it is that one feels after fixing
-thousands of Kconfig entries.
+[...]
 
-> Include file stubs
-> feels odd for a core functionality, if you can live without that
-> functionality, then sure, don't depend on it and all should be just
-> fine.
->
+> +static bool pwrc_secure_is_off(struct meson_secure_pwrc_domain *pwrc_domain)
+> +{
+> +	int sts = 1;
 
-Odd or not, it's what we have in all these frameworks.
+What does 'sts' mean?  status?  or something else?  Please use a more
+descriptive name.
 
-Regards,
-Bjorn
+> +	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_PWRC_GET, &sts,
+> +			  pwrc_domain->index, 0, 0, 0, 0) < 0)
+> +		pr_err("failed to get power domain status\n");
 
-> thanks,
->
-> greg k-h
+Does any bit in this register mean the power domain is off?  I think it
+would be better (and more future proof) if you checked the specific bit
+(or mask)
+
+> +	return !!sts;
+
+and then:
+
+    return sts & bitmask;
+    
+> +}
+> +
+> +static int meson_secure_pwrc_off(struct generic_pm_domain *domain)
+> +{
+> +	int sts = 0;
+
+Like above, what does sts mean?
+
+> +	struct meson_secure_pwrc_domain *pwrc_domain =
+> +		container_of(domain, struct meson_secure_pwrc_domain, base);
+> +
+> +	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_PWRC_SET, NULL,
+> +			  pwrc_domain->index, PWRC_OFF, 0, 0, 0) < 0) {
+> +		pr_err("failed to set power domain off\n");
+> +		sts = -EINVAL;
+> +	}
+> +
+> +	return sts;
+
+It looks to me like sts is only used as a return code, so maybe call it
+ret for clarity?  or rename it to something more descriptive.
+
+> +}
+> +
+> +static int meson_secure_pwrc_on(struct generic_pm_domain *domain)
+> +{
+> +	int sts = 0;
+> +	struct meson_secure_pwrc_domain *pwrc_domain =
+> +		container_of(domain, struct meson_secure_pwrc_domain, base);
+> +
+> +	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_PWRC_SET, NULL,
+> +			  pwrc_domain->index, PWRC_ON, 0, 0, 0) < 0) {
+> +		pr_err("failed to set power domain on\n");
+> +		sts = -EINVAL;
+> +	}
+> +
+> +	return sts;
+
+same comment as above.
+
+> +}
+> +
+> +#define SEC_PD(__name, __flag)			\
+> +[PWRC_##__name##_ID] =				\
+> +{						\
+> +	.name = #__name,			\
+> +	.index = PWRC_##__name##_ID,		\
+> +	.is_off = pwrc_secure_is_off,	\
+> +	.flags = __flag,			\
+> +}
+> +
+> +static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
+> +	SEC_PD(DSPA,	0),
+> +	SEC_PD(DSPB,	0),
+> +	/* UART should keep working in ATF after suspend and before resume */
+> +	SEC_PD(UART,	GENPD_FLAG_ALWAYS_ON),
+> +	/* DMC is for DDR PHY ana/dig and DMC, and should be always on */
+> +	SEC_PD(DMC,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(I2C,	0),
+> +	SEC_PD(PSRAM,	0),
+> +	SEC_PD(ACODEC,	0),
+> +	SEC_PD(AUDIO,	0),
+> +	SEC_PD(OTP,	0),
+> +	SEC_PD(DMA,	0),
+> +	SEC_PD(SD_EMMC,	0),
+> +	SEC_PD(RAMA,	0),
+> +	/* SRAMB is used as AFT runtime memory, and should be always on */
+
+AFT?  I assume you mean ATF?
+
+> +	SEC_PD(RAMB,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(IR,	0),
+> +	SEC_PD(SPICC,	0),
+> +	SEC_PD(SPIFC,	0),
+> +	SEC_PD(USB,	0),
+> +	/* NIC is for NIC400, and should be always on */
+
+Why?
+
+> +	SEC_PD(NIC,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(PDMIN,	0),
+> +	SEC_PD(RSA,	0),
+> +};
+
+[...]
+
+Kevin
