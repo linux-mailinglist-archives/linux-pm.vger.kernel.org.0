@@ -2,115 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C88CF5CC4
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 02:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9DEF5DB2
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 07:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbfKIBg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 20:36:59 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37542 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbfKIBg7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 20:36:59 -0500
-Received: by mail-ed1-f65.google.com with SMTP id k14so7054260eds.4
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 17:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0ihuncdiVh1w2nyHht0DAHccXGXWUHYDHepJ39RlLdk=;
-        b=Skz4hWsKKuMx3wLuXfNJY24cjJ18AYpIo5ZHOlNqrz8J3nwwcDUlRtB+tv7D9x2NkQ
-         zNixtCDqplp8PO2X/wAh8J/TpUopdAgeexbq4Lxdq4VK9tJuxWsfQp7kri2dwVsCdgxk
-         xbiapGcqF1W/OgSXycwf7e6uZz0pHt720u5GMLI+Ebw6KlGwXfrjLmfQvaXsQtFhn1Ow
-         mf6BoIEJplnSUhqv2fhUzpqX+0tEH7uY9WinBXfD3eq/6/eTncJGfLjseYrRTMlYpE6I
-         ve4FT+vOtFI43aTVR02MQd7dZ28tLDofKefDIegDg38eElj8jtTsHGavqTwuCl/Fxj9F
-         LtJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0ihuncdiVh1w2nyHht0DAHccXGXWUHYDHepJ39RlLdk=;
-        b=PWKDon8S6GF59Y0Iu6gnBrYk3JPx6e/oZ+bqDbZrO9CzgJtK84qLL2ZCxDdKWPeGBx
-         0DlIGUAIkpJ+TXx6TXdyfg5IJGTZrVyZPvzbwcu8FDbOry6NU0J5T0a2QP6SgGqHOlgF
-         PpVs6ODeGYka5WbBnWvynmcdPdbdU36YBl7lEVvuj5b7f1sCtdahKcXclxdfSj9RBrdj
-         +8GeU0ayHbx7YBoezLn2Y78M3CJq8X86OSOwQTXULSP7ywZG8Dbt5hsy8end46bVNlpl
-         ebjN8LQV2Bafs1ZSLDXpkblwm1L6OV/x1pHWlr5Uos/Ph/dY3By8WoD+Wb1lIvmaO+Gi
-         dhNg==
-X-Gm-Message-State: APjAAAU/qiI5sXjlFgNI3AyjmPftmtcOVkGn7xolhjQMES+g//rZLifM
-        PPnj20ggKMiMWPLcXipTYZKD3PBX3XtP7hb3dHkLTQ==
-X-Google-Smtp-Source: APXvYqy7XqIGIk9M5j3K1MmAPYs5/4NA3INBn2+8EF5Xsbvfv01MNL4os3Li5IUVMzKzXcW0J69aXJQz7KjQVLN/j28=
-X-Received: by 2002:a05:6402:6cf:: with SMTP id n15mr13619391edy.269.1573263417389;
- Fri, 08 Nov 2019 17:36:57 -0800 (PST)
-MIME-Version: 1.0
-References: <5123bf54-5d62-fc5c-8838-17bc34487d83@linaro.org>
- <20191107142111.GB109902@kroah.com> <0cb5a6a6-399f-99e3-dc41-50114eea4025@linaro.org>
- <20191108103917.GB683302@kroah.com>
-In-Reply-To: <20191108103917.GB683302@kroah.com>
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-Date:   Fri, 8 Nov 2019 17:36:46 -0800
-Message-ID: <CAOCOHw4d0q3uGTAh_UrNWr+Wi6ObDKUFn7M_zkD8cFTkNFEUDA@mail.gmail.com>
-Subject: Re: [GIT PULL] interconnect changes for 5.5
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726111AbfKIGYc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Nov 2019 01:24:32 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:23569 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbfKIGYb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Nov 2019 01:24:31 -0500
+X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Sat, 09 Nov 2019 01:24:28 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573280667;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=WMmQ4+DDSXPayYeZHO1v0pTuWaWEXdBQOD1L/vQ0wYA=;
+        b=pNWI8VFLfQLSO/0cXszM3IwAKkfStabkkXe1bxIeuzTjodElRJ/LB2CqJ8alMkYONZ
+        xpf8wOn/s4LRLdCxRczYXwEosgccLsh4J1UDmBaQskq4ccXx4t119QBGGEBdN1xT1WeD
+        aO1RvX/fboKuWCWVzO+N4/MkJPev02sxmjmxnwSxzoXBX8JKVJX0aDN+7DtMGS2cxHGe
+        B8x0mgLJP24wxTXc6peg7j3UOVj4LoaXPz3TQdzoEuvUDWAKAitktm1T+E0NgXio98Tu
+        IgXIWl6Bc0ABw2rEh4WdQmvKe/jx/z98968NOaMEwsy2dXJSgQ2/FihaEkb7YLk0Ztv6
+        qyuA==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGH/PrwDOi71s="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
+        with ESMTPSA id L09db3vA96CMnPU
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Sat, 9 Nov 2019 07:12:22 +0100 (CET)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: [PATCH v3 0/8] OMAP3: convert opp-v1 to opp-v2 and read speed binned / 720MHz grade bits
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <CAHCN7xLvuj_LkvOV3YG5=0MZYsohbQArE0UCZx6pcRPwM5pkYg@mail.gmail.com>
+Date:   Sat, 9 Nov 2019 07:12:22 +0100
+Cc:     =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4F6078BD-0759-4B47-933E-E29EE1D8AD18@goldelico.com>
+References: <cover.1568224032.git.hns@goldelico.com> <CAHCN7xLvuj_LkvOV3YG5=0MZYsohbQArE0UCZx6pcRPwM5pkYg@mail.gmail.com>
+To:     Adam Ford <aford173@gmail.com>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 8, 2019 at 2:39 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Nov 07, 2019 at 05:42:13PM +0200, Georgi Djakov wrote:
-> > Hi Greg,
-> >
-> > On 11/7/19 16:21, Greg Kroah-Hartman wrote:
-> > > On Thu, Nov 07, 2019 at 02:46:53PM +0200, Georgi Djakov wrote:
-> > >> Hi Greg,
-> > >>
-> > >> This is a pull request with interconnect patches for the 5.5 merge window.
-> > >> All patches have been for a while in linux-next without reported issues. The
-> > >> details are in the signed tag. Please consider pulling into char-misc-next.
-> > >
-> > > I don't know about
-> > > 0003-interconnect-Disallow-interconnect-core-to-be-built-.patch here.
-> > > Shouldn't you just fix up the dependancies of subsystems that rely on
-> > > this?  We are moving more and more to kernels that "just work" with
-> > > everything as modules, even on arm64 systems.  So forbiding the
-> > > interconnect code from being able to be built as a module does not feel
-> > > good to me at all.
-> >
-> > Thank you for commenting on this! The initial idea was to keep everything as
-> > modular as possible. The reasons behind this change is that other core
-> > frameworks like cpufreq (and possibly others) want to call the interconnect
-> > APIs. Some of these frameworks are built-in only and it would be easier to
-> > handle dependencies if interconnect core built-in too. Now each user that
-> > can be built-in has to specify in Kconfig that it depends on INTERCONNECT ||
-> > !INTERCONNECT.
->
-> That's fine, when those subsystems start to use those apis, that
-> dependency needs to be added.  Nothing new here, and you forcing it to
-> either be "on or off" isn't going to change that.  Let's do it correctly
-> please.
->
+Hi Adam,
 
-Please no!
+> Am 08.11.2019 um 21:08 schrieb Adam Ford <aford173@gmail.com>:
+>=20
+>=20
+> Nikolaus,
+>=20
+> I am getting some notices sent to me when I apply your series.  It
+> works, but I want to clean up the notice.  Can you suggest what might
+> cause this:
+>=20
+>     debugfs: Directory 'cpu0-cpu0' with parent
+> '48070000.i2c:twl@48:regulator-vdd1-VDD1' already present!
+>=20
+> It wasn't present before your series.  It's not a big deal, but I'd
+> like to quiet down the messages if I can.
+> Thanks.
 
-Making our frameworks tristate means that we can no longer rely on
-include file stubs (as framework=m, client=y will fail), so every
-single client must add the "depends on framework || framework=n" - in
-contrast to nothing the framework itself is bool.
+I have checked and can also see this message - and it should be removed.
 
-An example of this is that there's almost 500 files referencing the
-regulator api and all Kconfig entries referencing these files must be
-updated with a "depends on REGULATOR || REGULATOR=n" if we're going to
-start tristating frameworks.
+There is a debugfs node at:
 
-For individual drivers behind these frameworks, definitely tristate.
-But the only thing you're going to get out of making the frameworks
-tristate is more build failures.
+=
+/sys/kernel/debug/regulator/48070000.i2c:twl@48:regulator-vdd1-VDD1/cpu0-c=
+pu0
 
-Regards,
-Bjorn
+OMAP5 also has a similar node but no such debugfs warning:
+
+/sys/kernel/debug/regulator/smps123/cpu0-cpu0
+
+So what I suspect is some bug in the twl4030 regulator driver which is
+just revealed by my patch series for the first time.
+
+Could it be that the debugfs node is created and not cleaned up by =
+deferred
+probing?
+
+But this is not explicitly done in drivers/regulator/twl-regulator.c
+
+BTW: twl6030 and palmas (twl6037) have separate driver, so that =
+mentioning
+twl6030 in the comments in drivers/regulator/twl-regulator.c may be =
+wrong.
+It also mentions some "TW5030" which I have never heard of.
+
+To find out the call sequence I added a dump_stack to start_creating()
+after the error message is printed:
+
+
+[    2.289947] debugfs: Directory 'cpu0-cpu0' with parent =
+'48070000.i2c:twl@48:regulator-vdd1-VDD1' already present!
+[    2.301727] CPU: 0 PID: 1 Comm: swapper/0 Not tainted =
+5.4.0-rc6-letux+ #1329
+[    2.309112] Hardware name: Generic OMAP36xx (Flattened Device Tree)
+[    2.315734] [<c0110028>] (unwind_backtrace) from [<c010b60c>] =
+(show_stack+0x10/0x14)
+[    2.323852] [<c010b60c>] (show_stack) from [<c07b9b60>] =
+(dump_stack+0x7c/0x9c)
+[    2.331420] [<c07b9b60>] (dump_stack) from [<c0373588>] =
+(start_creating+0xa8/0x104)
+[    2.339477] [<c0373588>] (start_creating) from [<c0373fb0>] =
+(debugfs_create_dir+0xc/0xc0)
+[    2.348052] [<c0373fb0>] (debugfs_create_dir) from [<c04e96e0>] =
+(create_regulator+0xd0/0x1c8)
+[    2.356994] [<c04e96e0>] (create_regulator) from [<c04ec608>] =
+(_regulator_get+0x190/0x224)
+[    2.365661] [<c04ec608>] (_regulator_get) from [<c06653d0>] =
+(dt_cpufreq_probe+0x80/0x108)
+[    2.374237] [<c06653d0>] (dt_cpufreq_probe) from [<c053e018>] =
+(platform_drv_probe+0x48/0x98)
+[    2.383087] [<c053e018>] (platform_drv_probe) from [<c053c3a8>] =
+(really_probe+0x164/0x324)
+[    2.391754] [<c053c3a8>] (really_probe) from [<c053c7b8>] =
+(driver_probe_device+0x10c/0x154)
+[    2.400512] [<c053c7b8>] (driver_probe_device) from [<c053a9f4>] =
+(bus_for_each_drv+0x90/0xb8)
+[    2.409423] [<c053a9f4>] (bus_for_each_drv) from [<c053c5f8>] =
+(__device_attach+0x90/0x120)
+[    2.418090] [<c053c5f8>] (__device_attach) from [<c053b628>] =
+(bus_probe_device+0x28/0x80)
+[    2.426666] [<c053b628>] (bus_probe_device) from [<c05393ec>] =
+(device_add+0x2f0/0x55c)
+[    2.434967] [<c05393ec>] (device_add) from [<c053decc>] =
+(platform_device_add+0x12c/0x1b8)
+[    2.443542] [<c053decc>] (platform_device_add) from [<c053e954>] =
+(platform_device_register_full+0xec/0x13c)
+[    2.453765] [<c053e954>] (platform_device_register_full) from =
+[<c0665ff4>] (ti_cpufreq_probe+0x298/0x2fc)
+[    2.463775] [<c0665ff4>] (ti_cpufreq_probe) from [<c053e018>] =
+(platform_drv_probe+0x48/0x98)
+[    2.472625] [<c053e018>] (platform_drv_probe) from [<c053c3a8>] =
+(really_probe+0x164/0x324)
+[    2.481292] [<c053c3a8>] (really_probe) from [<c053c7b8>] =
+(driver_probe_device+0x10c/0x154)
+[    2.490051] [<c053c7b8>] (driver_probe_device) from [<c053a9f4>] =
+(bus_for_each_drv+0x90/0xb8)
+[    2.498992] [<c053a9f4>] (bus_for_each_drv) from [<c053c5f8>] =
+(__device_attach+0x90/0x120)
+[    2.507629] [<c053c5f8>] (__device_attach) from [<c053b628>] =
+(bus_probe_device+0x28/0x80)
+[    2.516204] [<c053b628>] (bus_probe_device) from [<c05393ec>] =
+(device_add+0x2f0/0x55c)
+[    2.524505] [<c05393ec>] (device_add) from [<c053decc>] =
+(platform_device_add+0x12c/0x1b8)
+[    2.533081] [<c053decc>] (platform_device_add) from [<c053e954>] =
+(platform_device_register_full+0xec/0x13c)
+[    2.543304] [<c053e954>] (platform_device_register_full) from =
+[<c0665d2c>] (ti_cpufreq_init+0x78/0xa8)
+[    2.553039] [<c0665d2c>] (ti_cpufreq_init) from [<c0102ed8>] =
+(do_one_initcall+0xb4/0x268)
+[    2.561645] [<c0102ed8>] (do_one_initcall) from [<c0b00fe4>] =
+(kernel_init_freeable+0x11c/0x1ec)
+[    2.570770] [<c0b00fe4>] (kernel_init_freeable) from [<c07cf1c8>] =
+(kernel_init+0x8/0x110)
+[    2.579345] [<c07cf1c8>] (kernel_init) from [<c01010e8>] =
+(ret_from_fork+0x14/0x2c)
+[    2.587249] Exception stack(0xde0b1fb0 to 0xde0b1ff8)
+[    2.592559] 1fa0:                                     00000000 =
+00000000 00000000 00000000
+[    2.601135] 1fc0: 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000 00000000
+[    2.609680] 1fe0: 00000000 00000000 00000000 00000000 00000013 =
+00000000
+
+
+So the problem seems to be that ti_cpufreq_probe() tries to register the =
+regulators
+"vdd" and "vbb" without properly checking if they have been registered =
+elsewhere.
+
+The second attempt to create the debugfs directory seems to come from =
+resources_available()
+which thinks that it has to create the regulator (again) [around line =
+1935 in drivers/regulator/core.c].
+
+Hope this helps, although I have no idea why the vdd regulator already =
+exists at that point.
+
+BR,
+Nikolaus
+
+
+
