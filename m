@@ -2,95 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73068F5C40
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 01:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C88CF5CC4
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Nov 2019 02:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbfKIASg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Nov 2019 19:18:36 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38732 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726095AbfKIASg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 19:18:36 -0500
-Received: by mail-pf1-f196.google.com with SMTP id c13so6054238pfp.5
-        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 16:18:36 -0800 (PST)
+        id S1726112AbfKIBg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Nov 2019 20:36:59 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:37542 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbfKIBg7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Nov 2019 20:36:59 -0500
+Received: by mail-ed1-f65.google.com with SMTP id k14so7054260eds.4
+        for <linux-pm@vger.kernel.org>; Fri, 08 Nov 2019 17:36:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DLA227JSDThrqcDvBPe+ZMoWdBImgX3jObiKE0Xgwkw=;
-        b=WWBipmWU1An5/dBytWXyJRDgQfp1e7XO7x+Zcu8uWWcIUTFbRsUuR/c1B8rdMdqJGk
-         A2GvlLA6727EJEWOBmdFj+q1HIVPS57BehxiESPbFe6Fwn4mFkCBg4Ds3neXCNHNqdqt
-         rpsZq1sw9EL01jxWESNQ0ViHR7/NeGKdcdc5ssS4DbQRmszYFlXYHGy5rZh/TUwjQGPQ
-         MCNh00+E5/jUtFfdYCMO94th9hMr76d2zJRIjpVzBs6M5ubrDZgJ1vFsmjgZFb/u0pB/
-         7NesZB7n+FmCBfiZpdGEeQ6ee1g2Zbj4VvBhrm+/TD6AhxJBiELMCUv3oOqEX0bbZbkd
-         +OQw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0ihuncdiVh1w2nyHht0DAHccXGXWUHYDHepJ39RlLdk=;
+        b=Skz4hWsKKuMx3wLuXfNJY24cjJ18AYpIo5ZHOlNqrz8J3nwwcDUlRtB+tv7D9x2NkQ
+         zNixtCDqplp8PO2X/wAh8J/TpUopdAgeexbq4Lxdq4VK9tJuxWsfQp7kri2dwVsCdgxk
+         xbiapGcqF1W/OgSXycwf7e6uZz0pHt720u5GMLI+Ebw6KlGwXfrjLmfQvaXsQtFhn1Ow
+         mf6BoIEJplnSUhqv2fhUzpqX+0tEH7uY9WinBXfD3eq/6/eTncJGfLjseYrRTMlYpE6I
+         ve4FT+vOtFI43aTVR02MQd7dZ28tLDofKefDIegDg38eElj8jtTsHGavqTwuCl/Fxj9F
+         LtJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DLA227JSDThrqcDvBPe+ZMoWdBImgX3jObiKE0Xgwkw=;
-        b=oz8xPEwk+gFw7jNDkPdEtzlXpgkpMB+KxICb2rw49CXp7GanToIYkHaVlejqjAHUH0
-         q56bqpl2cD+9d8U4ASLY2mQZSNHr39K9oiAh8j/IdCgqjyuSEVVqjDp60XS/aIl3/a+q
-         sjouEadeAyc7THOYW4wCLcwSKP+rRTf+oTa63fZt5NmzQVxEQtQ30m976/GjvuC4mHBR
-         Go8fhW2C35PM+dWu+qa0+flDmXmAxLUr80UC+AWb5iNTeGYo2VBR9a9D7UNK2F3Pzmy0
-         WOif+eixc8Y0FzSM9yhX5dqszrIm/ZzblO3Q+/wWfNGPv+AjitNhysvwQ8kM1HJUQJBp
-         FufA==
-X-Gm-Message-State: APjAAAXqiJyaIHnvG5BZ1C59ATdGvEcXdMciOGbt2GzAq1hx6+Zki7LF
-        kqh/VTcw41Pp0P+ARJ3/ve9+/Q==
-X-Google-Smtp-Source: APXvYqxtM4kW+4iOrGcT90S2hhiMLXIK3ueLusLgB5r8wnxQkOJWuHvgSLcX+HoRFUPSGI2nIbPUrQ==
-X-Received: by 2002:a17:90a:e651:: with SMTP id ep17mr10060962pjb.74.1573258715438;
-        Fri, 08 Nov 2019 16:18:35 -0800 (PST)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id p7sm7178343pjp.4.2019.11.08.16.18.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2019 16:18:34 -0800 (PST)
-Date:   Fri, 8 Nov 2019 16:18:32 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Elliot Berman <eberman@codeaurora.org>
-Cc:     sre@kernel.org, tkjos@google.com, gregkh@linuxfoundation.org,
-        tsoni@codeaurora.org, rananta@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] reboot: Export reboot_mode
-Message-ID: <20191109001832.GA5592@tuxbook-pro>
-References: <1573256452-14838-1-git-send-email-eberman@codeaurora.org>
- <1573256452-14838-2-git-send-email-eberman@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0ihuncdiVh1w2nyHht0DAHccXGXWUHYDHepJ39RlLdk=;
+        b=PWKDon8S6GF59Y0Iu6gnBrYk3JPx6e/oZ+bqDbZrO9CzgJtK84qLL2ZCxDdKWPeGBx
+         0DlIGUAIkpJ+TXx6TXdyfg5IJGTZrVyZPvzbwcu8FDbOry6NU0J5T0a2QP6SgGqHOlgF
+         PpVs6ODeGYka5WbBnWvynmcdPdbdU36YBl7lEVvuj5b7f1sCtdahKcXclxdfSj9RBrdj
+         +8GeU0ayHbx7YBoezLn2Y78M3CJq8X86OSOwQTXULSP7ywZG8Dbt5hsy8end46bVNlpl
+         ebjN8LQV2Bafs1ZSLDXpkblwm1L6OV/x1pHWlr5Uos/Ph/dY3By8WoD+Wb1lIvmaO+Gi
+         dhNg==
+X-Gm-Message-State: APjAAAU/qiI5sXjlFgNI3AyjmPftmtcOVkGn7xolhjQMES+g//rZLifM
+        PPnj20ggKMiMWPLcXipTYZKD3PBX3XtP7hb3dHkLTQ==
+X-Google-Smtp-Source: APXvYqy7XqIGIk9M5j3K1MmAPYs5/4NA3INBn2+8EF5Xsbvfv01MNL4os3Li5IUVMzKzXcW0J69aXJQz7KjQVLN/j28=
+X-Received: by 2002:a05:6402:6cf:: with SMTP id n15mr13619391edy.269.1573263417389;
+ Fri, 08 Nov 2019 17:36:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573256452-14838-2-git-send-email-eberman@codeaurora.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <5123bf54-5d62-fc5c-8838-17bc34487d83@linaro.org>
+ <20191107142111.GB109902@kroah.com> <0cb5a6a6-399f-99e3-dc41-50114eea4025@linaro.org>
+ <20191108103917.GB683302@kroah.com>
+In-Reply-To: <20191108103917.GB683302@kroah.com>
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Fri, 8 Nov 2019 17:36:46 -0800
+Message-ID: <CAOCOHw4d0q3uGTAh_UrNWr+Wi6ObDKUFn7M_zkD8cFTkNFEUDA@mail.gmail.com>
+Subject: Re: [GIT PULL] interconnect changes for 5.5
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 08 Nov 15:40 PST 2019, Elliot Berman wrote:
+On Fri, Nov 8, 2019 at 2:39 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Nov 07, 2019 at 05:42:13PM +0200, Georgi Djakov wrote:
+> > Hi Greg,
+> >
+> > On 11/7/19 16:21, Greg Kroah-Hartman wrote:
+> > > On Thu, Nov 07, 2019 at 02:46:53PM +0200, Georgi Djakov wrote:
+> > >> Hi Greg,
+> > >>
+> > >> This is a pull request with interconnect patches for the 5.5 merge window.
+> > >> All patches have been for a while in linux-next without reported issues. The
+> > >> details are in the signed tag. Please consider pulling into char-misc-next.
+> > >
+> > > I don't know about
+> > > 0003-interconnect-Disallow-interconnect-core-to-be-built-.patch here.
+> > > Shouldn't you just fix up the dependancies of subsystems that rely on
+> > > this?  We are moving more and more to kernels that "just work" with
+> > > everything as modules, even on arm64 systems.  So forbiding the
+> > > interconnect code from being able to be built as a module does not feel
+> > > good to me at all.
+> >
+> > Thank you for commenting on this! The initial idea was to keep everything as
+> > modular as possible. The reasons behind this change is that other core
+> > frameworks like cpufreq (and possibly others) want to call the interconnect
+> > APIs. Some of these frameworks are built-in only and it would be easier to
+> > handle dependencies if interconnect core built-in too. Now each user that
+> > can be built-in has to specify in Kconfig that it depends on INTERCONNECT ||
+> > !INTERCONNECT.
+>
+> That's fine, when those subsystems start to use those apis, that
+> dependency needs to be added.  Nothing new here, and you forcing it to
+> either be "on or off" isn't going to change that.  Let's do it correctly
+> please.
+>
 
-> Export reboot_mode to support kernel modules wishing to modify reboot_mode.
-> 
+Please no!
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Making our frameworks tristate means that we can no longer rely on
+include file stubs (as framework=m, client=y will fail), so every
+single client must add the "depends on framework || framework=n" - in
+contrast to nothing the framework itself is bool.
 
-> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
-> ---
->  kernel/reboot.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index c4d472b..b1fbc22 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -32,7 +32,9 @@ EXPORT_SYMBOL(cad_pid);
->  #define DEFAULT_REBOOT_MODE
->  #endif
->  enum reboot_mode reboot_mode DEFAULT_REBOOT_MODE;
-> +EXPORT_SYMBOL_GPL(reboot_mode);
->  enum reboot_mode panic_reboot_mode = REBOOT_UNDEFINED;
-> +EXPORT_SYMBOL_GPL(panic_reboot_mode);
->  
->  /*
->   * This variable is used privately to keep track of whether or not
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+An example of this is that there's almost 500 files referencing the
+regulator api and all Kconfig entries referencing these files must be
+updated with a "depends on REGULATOR || REGULATOR=n" if we're going to
+start tristating frameworks.
+
+For individual drivers behind these frameworks, definitely tristate.
+But the only thing you're going to get out of making the frameworks
+tristate is more build failures.
+
+Regards,
+Bjorn
