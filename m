@@ -2,133 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17548F698B
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Nov 2019 16:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0212F6A40
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Nov 2019 17:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726800AbfKJPN2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Nov 2019 10:13:28 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41699 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbfKJPN1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Nov 2019 10:13:27 -0500
-Received: by mail-lj1-f193.google.com with SMTP id m9so11057765ljh.8
-        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2019 07:13:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lcuaDzTn5xcx3GvRhEsUKRkdeQxQHVuFzpLwf2zUomU=;
-        b=ZBl2Q626uvo+qPgSkpC2cJabVplXCzF78qFmX7LeouV/27Y6uldo66xhfgL/qXiOhk
-         17GqrrfVdKaUU1PoYyKk4nMu2eq6FFgl+yLOvHDNmV5GLe4sVR4aPLHfyFzlGGN3ZrrM
-         bGXRBuUCBQvqjEkF+rNkbjPgNxxrSgamRzUbgmmuv9CtRvJ16YmjQyxzmgLKJu0Y0md7
-         k7hahzuHJzZwjt5U0/+qSjoqJ6GYNjTLUwKNEMfspSvEcSqvns/YMBelHzfKpKaoJxaf
-         30YfYrheitZ/0MXy1KapL+0m2lBWQVURjwT9VWd7aDHupaJTytnxu+OcMPLP9IXfAhm3
-         pN6A==
+        id S1726731AbfKJQsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Nov 2019 11:48:38 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34157 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726616AbfKJQsi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Nov 2019 11:48:38 -0500
+Received: by mail-ot1-f65.google.com with SMTP id t4so9382833otr.1;
+        Sun, 10 Nov 2019 08:48:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lcuaDzTn5xcx3GvRhEsUKRkdeQxQHVuFzpLwf2zUomU=;
-        b=XdBjmefrYymiLXIvrhlZAshzeM5sYjAoV9HofM1Hqw/eZyZB2WtSbSETuGf6cTjAXK
-         FmG0++qmLVBtm9K+anJEkxJ+EqjIvGVpkTVzoXcpxee8bRQpHjrcx00owzK4jF6B/loy
-         JCj71eZYtvrt4yn5QxMfBZp6jgOBg2Chxo8pqvX+0bK2tYFjdf/IqTmQECWBexKK3DwV
-         oB7fVa42x56fbaUZNy+38z0XOpdJ3fCp/EfYTeIbOBaizo/d5UVL7du8aFvyZ/PNOFj1
-         0O8s0pbHClQxMQfpu0wHXRiAuY6smyeEIg1/ooaF/kcj2K8IuIxKOKSdMyQ6NFwdUskq
-         7WbQ==
-X-Gm-Message-State: APjAAAVXPibQPVDJtiSlnfvL8dS3uJWmb3AHHMtBJXNpLts5DxwIk4ti
-        /YzBn2PixD75iN2akovNC/NXPLHitxT0vGLGzAf/9w==
-X-Google-Smtp-Source: APXvYqz4nQCQX2bf/HJVWQsssPaerxtaX085BJbf2h0MeAOyO8y6e4BeuELkHjJPLJ9vPB+D8crG16Tsaxzu6xA3ARE=
-X-Received: by 2002:a05:651c:28a:: with SMTP id b10mr12768619ljo.193.1573398805894;
- Sun, 10 Nov 2019 07:13:25 -0800 (PST)
+        bh=X+Hr26sKlbLNkFabRdYHJh0Vikgffq61go87PtY2UhY=;
+        b=WkiBwAkeGj3UN+no84lM+DuSqJW8lTahaG6c8SnsN13trd8K6AUtiblhRV7MUlu2CW
+         uwoejGjXbAd2YwBNbYjv9JGtNzVv1VrBzGzuIay6NEoecVWcDvdsCd7RcsBJHBcJmGi+
+         0U9zhqbiYMIgDam2E9gKbo0lqLTpwsdTmvdxs1VAvsWBx4BBJD7v7qpK52GepldhyYPd
+         D5aJjXo9zSkrYRvUwYz9a42NZ/RHhIQwlxb7vFOedHQoLcMbj5QPbtTbZQwByU9iaWqk
+         NEodSVVRpfCxv4xJr3rrLrTi2J8oLCyr59sOVqhFrCBgrz2Kk4aFdbLHfzve9yJxZ0jI
+         CToA==
+X-Gm-Message-State: APjAAAXV+tXPBDI2C/9OdZPxBnlDFDCDB0pYJ3v95irWIR2gBr81LQmk
+        RaMtCUJppZYo22UMX4yET7o0R+WKE1SeLC04w/4=
+X-Google-Smtp-Source: APXvYqxuVzOnIt2l3F8NIGk/yDQJdv9j9+oZHfSr+qXwah8ELqgiaaMixwOSIRXvdrhjma0/WrY8jCGcq1ir1wGunhI=
+X-Received: by 2002:a9d:590f:: with SMTP id t15mr17448636oth.118.1573404515975;
+ Sun, 10 Nov 2019 08:48:35 -0800 (PST)
 MIME-Version: 1.0
-References: <1572018904-5234-1-git-send-email-dsmythies@telus.net>
- <CAKfTPtDFAS3TiNaaPoEXFZbqdMt_-tfGm9ffVcQAN=Mu_KbRdQ@mail.gmail.com>
- <000c01d58bca$f5709b30$e051d190$@net> <CAKfTPtDx6nu7YtYN=JLRAseZS3Q6Nt-QdMQuG_XoUtmtR_101A@mail.gmail.com>
- <001201d58e68$eaa39630$bfeac290$@net> <20191029160210.GA8343@linaro.org>
- <000001d58f2a$fc593200$f50b9600$@net> <CAKfTPtCjhYKttEuWs9cqicUdJMiJVy5he+=xWofof_4xAWgKAw@mail.gmail.com>
- <20191108091834.GA24402@linaro.org> <000001d5971d$57a90c80$06fb2580$@net>
-In-Reply-To: <000001d5971d$57a90c80$06fb2580$@net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Sun, 10 Nov 2019 16:13:14 +0100
-Message-ID: <CAKfTPtA6+stq0heDa6r29Tyi2D9qEX9KZRcR8J0qw3vp6mdcMg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "sched/fair: Fix O(nr_cgroups) in the load
- balancing path"
+References: <10494959.bKODIZ00nm@kreacher> <3269796.AzLOQfDnpo@kreacher>
+ <CAJZ5v0jM3+qMvO6dx=FmK-xF0q3YKOwBf-yUPXSBfRjxJ59Cpg@mail.gmail.com>
+ <000701d59610$e0b3caa0$a21b5fe0$@net> <CAJZ5v0gsK0OmqAvw2BVGvajPmCTrRGFVVZ0+Y99ZkbbUcWYGOg@mail.gmail.com>
+ <000a01d59656$99798710$cc6c9530$@net>
+In-Reply-To: <000a01d59656$99798710$cc6c9530$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 10 Nov 2019 17:48:21 +0100
+Message-ID: <CAJZ5v0gZDJ2=PiiGw2mcCcVKBM2OyM1G9nRvJ+iWLFUQcXqZuw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: Use nanoseconds as the unit of time
 To:     Doug Smythies <dsmythies@telus.net>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
-        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Rik van Riel <riel@surriel.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-
-On Sat, 9 Nov 2019 at 17:47, Doug Smythies <dsmythies@telus.net> wrote:
+On Fri, Nov 8, 2019 at 6:04 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> Hi Vincent,
->
-> Thank you for your item 2 patch.
->
-> On 2019.11.08 01:19 Vincent Guittot wrote:
-> ...
-> >> I have to prepare a patch for this part which is item 2
+> On 2019.11.08 01:45 Rafael J. Wysocki wrote:
+> > On Fri, Nov 8, 2019 at 9:45 AM Doug Smythies <dsmythies@telus.net> wrote:
 > >
-> > I have finally been able to prepared the patch for item 2. Could you check
-> > that it also fixes your problem ?
 > ...
-> > We can still have some spurious call to cpufreq_util_change in
-> > update_blocked_average() with this patch but at least the value will be
-> > up to date in both calls, which was not the case before. If this fix
-> > Doug's problem, I can prepare an additional one to fix the spurious call
-> > but I wanted to make sure that this fix the problem first.
+> >> I have been running this v2 today, with both menu and teo
+> >> governors. Acquiring some baseline reference data to compare
+> >> to now. The menu governor response seems different (Supporting
+> >> information/graphs will come later).
+> >
+> > That may be good or bad, depending in what way it is different. :-)
 >
-> Yes, the issue is solved with this patch.
+> My thinking was that the differences should be minimal between
+> the baseline (linux-next as of 2019.11.07) and plus your two patches.
+> Because this was a change of units, but not functionality.
+> Such is the case with the teo governor, but not the menu governor.
+> I have not tried the ladder or haltpoll governors, and don't intend to.
+>
+> Now to attempt to isolate the issue in the code, which might take
+> considerable time.
 
-Thanks for your tests
+Thanks!
 
-> I do wonder if I am seeing the effect of the spurious calls.
-
-I don't think so because the spurious calls are in fact a 2nd call
-during the same update_blocked_average and from what i have seen ,
-intel pstate driver filter call when there is less than 3 or 10ms
-between the 2 calls
-
->
-> Details:
->
-> Test 1: an 8000 second trace during system idle:
-> Maximum duration: 4.00015 seconds. Good.
-> Typically, there would have been about 300 durations
-> of over 10 seconds in 8000 seconds.
-> Number of calls to driver: 103168, which is about 8% more than
-> the previous experimental solution.
-> (Should be repeated a few times to verify repeatability, but
-> not going to.)
->
-> Test 2: one 8000 second energy sample, for high accuracy idle power:
-> 3.703 watts which is about +0.7% idle power increase.
->
-> Test 3: The load-no-load test with only idle state 1 enabled:
-> There was never an excessive energy sample for the no load samples.
-> The test ran for about 8 hours.
-> Maximum: 9.49 watts
-> Minimum: 9.13 watts
-> Recall that with the issue, the max would have been about 14 watts
->
-> Kernel: 5.4-rc6 + your items 1 and item 2 patches.
-> Idle governor = menu, because teo fixes are still pending.
-> Note: some reference data is from kernel 5.4-rc2, and really
-> should have been re-done with 5.4-rc6 as the baseline.
->
-> ... Doug
->
->
+It looks like I have overlooked a unit conversion in menu or done a
+unit conversion twice somewhere.
