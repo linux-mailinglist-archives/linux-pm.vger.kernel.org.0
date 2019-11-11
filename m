@@ -2,215 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FB7F7A3F
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 18:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5B7F7A5C
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 19:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbfKKRwd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 12:52:33 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33621 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbfKKRwd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 12:52:33 -0500
-Received: by mail-ed1-f66.google.com with SMTP id a24so8942883edt.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 09:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Z1hM417lFwAqZ6tPuUeJLMHQyA6CpiEKFqvGXrz6gk=;
-        b=VS9STizxueUZRgMzpSMXJ6IJbDWeHx4ZduySM1LCp7eW9BxEzbtzbAA5bci1JH95fB
-         qIQ+OoWfKq96uEvaKyqRSrkX72uqDihPVON0krTbK+iZmLSIsFZDtP6Md2k2wIER9+AX
-         PzDNK08rvlew5uUUnGSB+f+4gsha8qUtALx/o1dv49g8+rnqEWO45M6grdufmgxczYnA
-         3CmMDI8eVIzsy6F8UqSomFyJRJSbswMU037z9SM7naNuUC5g8HsLS+4Kr8fBKg4Bz9jH
-         pmscL8x9ibM+XtojxwpQrmoxjk9mrsklzOgqVDh7NrrbQzlcF2zQ2OYCbBfMks/Chh/V
-         lhKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Z1hM417lFwAqZ6tPuUeJLMHQyA6CpiEKFqvGXrz6gk=;
-        b=VvLKNI5+7/4p25PVXxSEEGD45KyrmvqGdnqaSID6CpGZhq0S78sQHhdZMhRK1R3usU
-         BQA0twsS31qHMpC1QRT/i6YfsJgVOJ2oRWsJzsM6WKkVVQus9xtmoGA7cwXRS/Ba1Ro2
-         qtUCNC3ETSkkY25MovtgxClUWCq5al+rvbXOLJFWFSpJzIZV1icQS2pv7kEWQSnvle1+
-         WCCnEN/FOZADySxJUea5mTUks88SE4OaJkhWhsNdzFfPj3A4IQH6G1ebKtZBoV49EEgq
-         DMlkb4ZTgf+AwRWDOUbq6sh24BCdV47iUp/nxrUV0AcwAodO2ZNyWUjBZb10vov3T1oQ
-         abRA==
-X-Gm-Message-State: APjAAAUYXIFFFseR1ojjAH6A9urVRyiCEqzAYDLpuCgFZdlqAQt8Qufo
-        VaTPy+YglV3WHElHg7qIofjiHpLJZ98PqynEZ+TiWA==
-X-Google-Smtp-Source: APXvYqxnqO7lyEwx8ALYTzElu0UZ+HWIfQ70kcm9wFLx/nn/sS5zyvoeEqCVU07M5lG3VBZkNtdv1o78TbhAxaRLcR8=
-X-Received: by 2002:a17:906:e0d5:: with SMTP id gl21mr23419971ejb.292.1573494749900;
- Mon, 11 Nov 2019 09:52:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20191015061349.141448-1-wvw@google.com> <CAHLCerNffKDgJKqaVTH3Kp_QfBLtm2M4H80xFDy=2fGXTVQR+w@mail.gmail.com>
- <CAHLCerN0CWOox-_=ywVO40R9LCahBRoU6Myg3Ca3p_TkZyJAMw@mail.gmail.com>
- <CAGXk5yp4uSCESvve5j_LbCr7b_55DqBagjNr_Dsdi=HppSpBPg@mail.gmail.com> <CAHLCerN4ymf7LOGQPRLuAwirwCUaQGynrnUMfgU6+frDswey5A@mail.gmail.com>
-In-Reply-To: <CAHLCerN4ymf7LOGQPRLuAwirwCUaQGynrnUMfgU6+frDswey5A@mail.gmail.com>
-From:   Wei Wang <wvw@google.com>
-Date:   Mon, 11 Nov 2019 09:52:18 -0800
-Message-ID: <CAGXk5ypP0qSm-GMbHJy+hQtYN1hw6Ow6XgeO9JDni0bD1bFSVg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: create softlink by name for thermal_zone and cooling_device
-To:     Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726915AbfKKSAY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 13:00:24 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33684 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726741AbfKKSAY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 Nov 2019 13:00:24 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 4F721B2E9;
+        Mon, 11 Nov 2019 18:00:21 +0000 (UTC)
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@qperret.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: [PATCH 0/6] Add support for frequency invariance for (some) x86
+Date:   Mon, 11 Nov 2019 19:05:43 +0100
+Message-Id: <20191111180549.12166-1-ggherdovich@suse.cz>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Nov 10, 2019 at 9:26 PM Amit Kucheria
-<amit.kucheria@verdurent.com> wrote:
->
-> On Thu, Oct 17, 2019 at 3:04 AM Wei Wang <wvw@google.com> wrote:
-> >
-> > On Wed, Oct 16, 2019 at 10:16 AM Amit Kucheria
-> > <amit.kucheria@verdurent.com> wrote:
-> > >
-> > > On Wed, Oct 16, 2019 at 10:20 PM Amit Kucheria
-> > > <amit.kucheria@verdurent.com> wrote:
-> > > >
-> > > > On Tue, Oct 15, 2019 at 11:43 AM Wei Wang <wvw@google.com> wrote:
-> > > > >
-> > > > > The paths thermal_zone%d and cooling_device%d are not intuitive and the
-> > > > > numbers are subject to change due to device tree change. This usually
-> > > > > leads to tree traversal in userspace code.
-> > > > > The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
-> > > > > cooling_device respectively.
-> > > >
-> > > > I like this.
-> > > >
-> > > > > Signed-off-by: Wei Wang <wvw@google.com>
-> > > > > ---
-> > > > >  drivers/thermal/thermal_core.c | 23 +++++++++++++++++++++--
-> > > > >  1 file changed, 21 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> > > > > index d4481cc8958f..0ff8fb1d7b0a 100644
-> > > > > --- a/drivers/thermal/thermal_core.c
-> > > > > +++ b/drivers/thermal/thermal_core.c
-> > > > > @@ -22,6 +22,7 @@
-> > > > >  #include <net/netlink.h>
-> > > > >  #include <net/genetlink.h>
-> > > > >  #include <linux/suspend.h>
-> > > > > +#include <linux/kobject.h>
-> > > > >
-> > > > >  #define CREATE_TRACE_POINTS
-> > > > >  #include <trace/events/thermal.h>
-> > > > > @@ -46,6 +47,8 @@ static DEFINE_MUTEX(poweroff_lock);
-> > > > >
-> > > > >  static atomic_t in_suspend;
-> > > > >  static bool power_off_triggered;
-> > > > > +static struct kobject *cdev_link_kobj;
-> > > > > +static struct kobject *tz_link_kobj;
-> > > > >
-> > > > >  static struct thermal_governor *def_governor;
-> > > > >
-> > > > > @@ -954,7 +957,7 @@ __thermal_cooling_device_register(struct device_node *np,
-> > > > >         struct thermal_zone_device *pos = NULL;
-> > > > >         int result;
-> > > > >
-> > > > > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
-> > > > > +       if (!type || !type[0] || strlen(type) >= THERMAL_NAME_LENGTH)
-> > > > >                 return ERR_PTR(-EINVAL);
-> > > >
-> > > > This should be a separate fix, if needed.
-> > Agree, but the link now requires that "" as invalid _type_.
->
-> I'm not sure I understand. What does this change have to do with
-> adding symlinks below?
->
+v2 at https://lore.kernel.org/lkml/20191002122926.385-1-ggherdovich@suse.cz/
 
-cdev->type will be used later in sysfs_create_link and adding "" as
-symlink is kind of bad practise AIUI.
+Changes wrt v2:
 
-thanks
+- Removing the tick_disable mechanism. Frequency scale-invariance isn't
+  just about helping schedutil choose better frequencies, but also
+  providing the scheduler load balancer with better metrics. All users of
+  PELT signals benefit from this feature. The tick_disable patch disabled
+  frequency invariant calculation when a specific driver is in use
+  (intel_pstate in active mode).
+
+- static_branch_enable(&arch_scale_freq_key) is now called earlier, right
+  after we learn that X86_FEATURE_APERFMPERF is available. Previously Peter
+  Z. commented "if we can't tell the max_freq we don't want to use the
+  invariant stuff.". I've decided to do it differently: if we can't tell
+  the max_freq, then it's because the CPU encodes max_freq in MSRs in a way
+  this patch doesn't understand, and we assume max_p is the max_freq which
+  seems like a safe bet. As a reminder, max_freq=max_p is encoded by
+  setting arch_max_freq=1024 as default value. I'm open to feedback.
+
+- Refactoring the switch case statement in set_cpu_max_freq() as Rafael
+  W. Now the first patch doesn't hint at what the following patch will
+  bring along.
+
+- Handling the case were turbo is disabled at runtime and a _PPC ACPI
+  notification is issued, as requested by Rafael W. This happens eg. when
+  some laptop model is disconnected from AC. (Patch #6)
+
+- Handling all Intel x86_64 micro-arches.
+
+- A note for Srinivas P., who expressed concern for Atoms: on Atom CPUs the
+  max_freq is set to the highest turbo level, as a power-efficiency
+  oriented measure. In this way the ratio curr_freq/max_freq tends to be
+  lower, PELT signals are consequently lower, and schedutil doesn't push
+  too hard on speed. (Patches #4 and #5).
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v2:
+
+v1 at https://lore.kernel.org/lkml/20190909024216.5942-1-ggherdovich@suse.cz/
+
+Changes wrt v1:
+
+- add x86-specific implementation of arch_scale_freq_invariant() using a
+  static key that checks for the availability of APERF and MPERF
+- refer to GOLDMONT_D instead of GOLDMONT_X, according to recent rename
+- set arch_cpu_freq to 1024 from x86_arch_scale_freq_tick_disable() to prevent
+  PELT from being fed stale data
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cover Letter from v1:
+
+This is a resend with of Peter Zijlstra's patch to support frequency
+scale-invariance on x86 from May 2018 [see 1]. I've added some modifications
+and included performance test results. If Peter doesn't mind, I'm slapping my
+name on it :)
+
+The changes from Peter's original implementation are:
+
+1) normalizing against the 4-cores turbo level instead or 1-core turbo
+2) removing the run-time search for when the above value isn't found in the
+   various Intel MSRs -- the base frequency value is taken in that case.
+
+The section "4. KNOWN LIMITATIONS" in the first patch commit message addresses
+the reason why this approach was dropped back in 2018, and explains that the
+performance gains outweight that issue.
+
+The second patch from Srinivas is taken verbatim from the May 2018 submission
+as it still applies.
+
+I apologies for the length of patch #1 commit message; I've made a table of
+contents with summaries of each section that should make easier to skim
+through the content.
+
+This submission incorporates the feedback and requests for additional tests
+received during the presentation made at OSPM 2019 in Pisa three months ago.
+
+[1] https://lore.kernel.org/lkml/20180516044911.28797-2-srinivas.pandruvada@linux.intel.com/
 
 
-> > > >
-> > > > >         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
-> > > > > @@ -989,9 +992,15 @@ __thermal_cooling_device_register(struct device_node *np,
-> > > > >                 return ERR_PTR(result);
-> > > > >         }
-> > > > >
-> > > > > -       /* Add 'this' new cdev to the global cdev list */
-> > > > > +       /* Add 'this' new cdev to the global cdev list and create link*/
-> > > > >         mutex_lock(&thermal_list_lock);
-> > > > >         list_add(&cdev->node, &thermal_cdev_list);
-> > > > > +       if (!cdev_link_kobj)
-> > > > > +               cdev_link_kobj = kobject_create_and_add("cdev-by-name",
-> > > > > +                                               cdev->device.kobj.parent);
-> > > > > +       if (!cdev_link_kobj || sysfs_create_link(cdev_link_kobj,
-> > > > > +                                               &cdev->device.kobj, cdev->type))
-> > > > > +               dev_err(&cdev->device, "Failed to create cdev-by-name link\n");
-> > > >
-> > > > Any reason not to use the following form instead? It seems easier to read.
-> > > >
-> > > > if (!cdev_link_kobj) {
-> > > >                cdev_link_kobj = kobject_create_and_add("cdev-by-name",
-> > > >                                                cdev->device.kobj.parent);
-> > > >               ret = sysfs_create_link(cdev_link_kobj,
-> > > >                                               &cdev->device.kobj, cdev->type))
-> > > >               if (ret)
-> > > >                        dev_err(&cdev->device, "Failed to create
-> > > > cdev-by-name link\n");
-> > > > }
-> > >
-> > > I can now see why you had to do that - none of the other links would
-> > > get created after the first one.
-> > >
-> > > Perhaps create the directories in the __init functions and only create
-> > > the links here?
-> > >
-> > AFAICT, this is no such API except the private get_device_parent()
-> > under driver/base/. Also the lazy initialization makes sense in such
-> > case when there is no thermal device attached. Looks like the class
-> > dir is also lazy-initialized when first device registered
-> > https://elixir.bootlin.com/linux/v5.3.5/source/drivers/base/core.c#L1790.
->
-> OK.
->
-> > >
-> > > > >         mutex_unlock(&thermal_list_lock);
-> > > > >
-> > > > >         /* Update binding information for 'this' new cdev */
-> > > > > @@ -1157,6 +1166,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
-> > > > >                         }
-> > > > >                 }
-> > > > >         }
-> > > > > +       if (cdev_link_kobj)
-> > > > > +               sysfs_remove_link(cdev_link_kobj, cdev->type);
-> > > > >
-> > > > >         mutex_unlock(&thermal_list_lock);
-> > > > >
-> > > > > @@ -1340,6 +1351,12 @@ thermal_zone_device_register(const char *type, int trips, int mask,
-> > > > >
-> > > > >         mutex_lock(&thermal_list_lock);
-> > > > >         list_add_tail(&tz->node, &thermal_tz_list);
-> > > > > +       if (!tz_link_kobj)
-> > > > > +               tz_link_kobj = kobject_create_and_add("tz-by-name",
-> > > > > +                                               tz->device.kobj.parent);
-> > > > > +       if (!tz_link_kobj || sysfs_create_link(tz_link_kobj,
-> > > > > +                                               &tz->device.kobj, tz->type))
-> > > > > +               dev_err(&tz->device, "Failed to create tz-by-name link\n");
-> > > >
-> > > > Same as above.
-> > > >
-> > > > >         mutex_unlock(&thermal_list_lock);
-> > > > >
-> > > > >         /* Bind cooling devices for this zone */
-> > > > > @@ -1411,6 +1428,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
-> > > > >                         }
-> > > > >                 }
-> > > > >         }
-> > > > > +       if (tz_link_kobj)
-> > > > > +               sysfs_remove_link(tz_link_kobj, tz->type);
-> > > > >
-> > > > >         mutex_unlock(&thermal_list_lock);
-> > > > >
-> > > > > --
-> > > > > 2.23.0.700.g56cf767bdb-goog
-> > > > >
+Giovanni Gherdovich (6):
+  x86,sched: Add support for frequency invariance
+  x86,sched: Add support for frequency invariance on SKYLAKE_X
+  x86,sched: Add support for frequency invariance on XEON_PHI_KNL/KNM
+  x86,sched: Add support for frequency invariance on ATOM_GOLDMONT*
+  x86,sched: Add support for frequency invariance on ATOM
+  x86: intel_pstate: handle runtime turbo disablement/enablement in
+    freq. invariance
+
+ arch/x86/include/asm/topology.h |  25 ++++
+ arch/x86/kernel/smpboot.c       | 324 +++++++++++++++++++++++++++++++++++++++-
+ drivers/cpufreq/intel_pstate.c  |   1 +
+ kernel/sched/core.c             |   1 +
+ kernel/sched/sched.h            |   7 +
+ 5 files changed, 357 insertions(+), 1 deletion(-)
+
+-- 
+2.16.4
+
