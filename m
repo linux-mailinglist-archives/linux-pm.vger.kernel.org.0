@@ -2,184 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22158F6EBA
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 07:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B2BF6F72
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 09:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbfKKGwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 01:52:21 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42803 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726780AbfKKGwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 01:52:21 -0500
-Received: by mail-pl1-f196.google.com with SMTP id j12so7385566plt.9
-        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2019 22:52:20 -0800 (PST)
+        id S1726857AbfKKIIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 03:08:50 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:55473 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbfKKIIs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 03:08:48 -0500
+Received: by mail-wm1-f66.google.com with SMTP id b11so12203073wmb.5
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 00:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=KRI1XTx3ScnO9o6hd8WFFLokdnrudXto4YZVvY+IIlE=;
-        b=G5bZQ6wheJbnwPA1TWJbFmeyqZXSsp8hy8or4FsalmBamAhHXN1aGZ4BDhgbv+F0w3
-         Sz7LCJyWpjIE9ODToR5ZkxAMJYRiI7F5w8kcCFsqCQtaOdR7B5PMimzq8wLtnjeXNvJt
-         yX6Qpey+2Yy4eUrpvUWp7Y6rY6VoWxBeH8rBDSJ1i62j79WP4RgtKP9gDkBTXr2ivUmj
-         VeoKprXaP63KTQwNIgnh4jNeIc2f07axJXfxzx5eWlRFCjjBcLImT/yDJqZo84C0/8Q9
-         uvfbyTN7HhgIh+Mli1/DyjTsmseTuFx0+ZGkhk71B5nlTxqLhRN9sx7106uVmXsfcoGM
-         rJfA==
+        bh=L3adQNG+/hxoajCHfb6EoDmmTT7W+dDlfD3Fz0vzm7c=;
+        b=N3NT49MXSpaS4htlbCzGibfT5QOaRtUcTgMKFzsLb2Tib2Z6P9pcJqi397Dvn6YP4f
+         J+o7N6J+oOSicQ+PBFkRuQlvWxbhKxNPdKyV08Wrh8gPB/yrMy8pLZ6Zxad2mgfKt63n
+         ogkHsJYocck6VVBrNoLp7nV7TGB3VwImhpkJ4yDk3pjf4leGqqq+mmXBLhm2ywUtUnFW
+         22SVUJo16tKawT9xiVAwgdyCyXpa4298o0Yl5d8s6Y5u/DyxseRGd+9l4usDR906Zwe1
+         XK3PaxW8sBaHnnRfKtnUFKIhjqn5WKUYcvtX1R3BsAIIg1PYlogSzsBtp4F5W+0j6bGR
+         1CHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=KRI1XTx3ScnO9o6hd8WFFLokdnrudXto4YZVvY+IIlE=;
-        b=QKwEwkDnuX/oJMkIflQgfNmVY+2q6SN4qSfNPQwF9siGalMU3rtaNObAGT4RNGMJ5T
-         N5sa85ExLRPfKl+uV2yybCW/OgB7zCtRNyW3Mf4p0D6Fjeyl7sGV0bJPiXf0mxdFyzpv
-         +YOkEwPVllTpjN21eqDLwzctBOtti6zD3XMc38Em/leytLyHrfZZTg4VmtYHU7Nxl8gv
-         8hwhjul5AZAckdWhdn3xevGsTYet4tgFIeNPRClaxXn7znoLMxRCFAN06Sm9+dwndiKR
-         93+/61KIVzbCy6AXOd5iH5vmKEqvt1P68l5ufFPorVCSxkCfU3GG1PWhP1HssL2bolW7
-         Eohg==
-X-Gm-Message-State: APjAAAU0RpChk69P+7gGz/lBhjlvk1nUCcY0KGsA1ZrA3fBOl2q/7IxM
-        jBzd160O7hUKegdyYFHPEDHswQ==
-X-Google-Smtp-Source: APXvYqzIuJUteepvgHS33tgjIVqvWWUi53X45p7ZcUcm0NsZsAUoBn6FOyR3q0tcCws3bz+md+T1QQ==
-X-Received: by 2002:a17:902:74c6:: with SMTP id f6mr24645391plt.167.1573455139599;
-        Sun, 10 Nov 2019 22:52:19 -0800 (PST)
-Received: from localhost ([122.171.110.253])
-        by smtp.gmail.com with ESMTPSA id c21sm12957327pgh.25.2019.11.10.22.52.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 10 Nov 2019 22:52:18 -0800 (PST)
-Date:   Mon, 11 Nov 2019 12:22:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm changes for 5.5
-Message-ID: <20191111065213.zorc3mk6pz73xfl2@vireshk-i7>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=L3adQNG+/hxoajCHfb6EoDmmTT7W+dDlfD3Fz0vzm7c=;
+        b=Mj8OdTAbZ1JNdGVm9JlbK6+Fvqgz/RUUxCGask9RH00fJclBWBaXdqRNa5eevNK/hK
+         PGMx7EZHkUl+E2lqigrt1NmsigSHZj2s/qdyem1IUCQk13eabCJ3GzM6Uv94ccySXGUP
+         lp3nrzUZrrqCiPa3cQTpL8ZNZuH8SlFn9U3OhB+5qFFAGHN6RHRLWQJ9rw6rAjDZMgzV
+         bzXsARoupQULcLqvCPT5X/TVAZtZYEb2zJYQzpjV1uCd9h/VhncDHNS2KIeAA5CgXyX2
+         J3KuvbE6Tlz8B/HFZ5SiX2lLxG/qRHEjYp9bk//YyVvftFw/WDsQ5xNgef+AhMyj3Kb/
+         6yZQ==
+X-Gm-Message-State: APjAAAUDPe909ZMNMcpn/E9yOneNSyUpONT1tOnAjf4WDphKp0s8+am7
+        ZtiYpIO+R6yOYBYI/TJukfd+Tg==
+X-Google-Smtp-Source: APXvYqyYb8rJgu+xJm4zJb5VdIdq1kwZM5m0E2HUWvADn6q+tzrpOCxz+FxIkPKzGQcKis8F4cU9BA==
+X-Received: by 2002:a1c:814b:: with SMTP id c72mr20247255wmd.167.1573459725396;
+        Mon, 11 Nov 2019 00:08:45 -0800 (PST)
+Received: from dell ([95.147.198.88])
+        by smtp.gmail.com with ESMTPSA id k125sm19217715wmf.2.2019.11.11.00.08.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 00:08:44 -0800 (PST)
+Date:   Mon, 11 Nov 2019 08:08:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v4 5/6] dt-bindings: mfd: max77650: convert the binding
+ document to yaml
+Message-ID: <20191111080837.GF18902@dell>
+References: <20191021124428.2541-1-brgl@bgdev.pl>
+ <20191021124428.2541-6-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191021124428.2541-6-brgl@bgdev.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Mon, 21 Oct 2019, Bartosz Golaszewski wrote:
 
-This pull request contains:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> Convert the binding document for MAX77650 core MFD module to YAML.
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
+>  .../devicetree/bindings/mfd/max77650.yaml     | 149 ++++++++++++++++++
+>  2 files changed, 149 insertions(+), 46 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
 
-- Updates to ti-cpufreq driver and DT files to support new platforms
-  and migrate from opp-v1 bindings to opp-v2 bindings (H. Nikolaus
-  Schaller and Adam Ford).
+Applied, thanks.
 
-- Merging of arm_big_little and vexpress-spc drivers and related
-  cleanup (Sudeep Holla).
-
-- Fix for imx's default speed grade value (Anson Huang).
-
-- Minor cleanup patch for s3c64xx (Nathan Chancellor).
-
-- Fix CPU speed bin detection for sun50i (Ondrej Jirman).
-
---
-viresh
-
--------------------------8<-------------------------
-
-The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
-
-  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to c23734487fb44ee16c1b007ba72d793c085e4ec4:
-
-  cpufreq: sun50i: Fix CPU speed bin detection (2019-11-05 15:06:49 +0530)
-
-----------------------------------------------------------------
-Adam Ford (2):
-      cpufreq: ti-cpufreq: Add support for AM3517
-      ARM: dts: Add OPP-V2 table for AM3517
-
-Anson Huang (1):
-      cpufreq: imx-cpufreq-dt: Correct i.MX8MN's default speed grade value
-
-H. Nikolaus Schaller (6):
-      cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
-      ARM: dts: omap34xx & omap36xx: replace opp-v1 tables by opp-v2 for
-      DTS: bindings: omap: update bindings documentation
-      ARM: dts: omap3: bulk convert compatible to be explicitly ti,omap3430 or ti,omap3630 or ti,am3517
-      cpufreq: ti-cpufreq: omap36xx use "cpu0","vbb" if run in multi_regulator mode
-      ARM: dts: omap36xx: using OPP1G needs to control the abb_ldo
-
-Nathan Chancellor (1):
-      cpufreq: s3c64xx: Remove pointless NULL check in s3c64xx_cpufreq_driver_init
-
-Ondrej Jirman (1):
-      cpufreq: sun50i: Fix CPU speed bin detection
-
-Sudeep Holla (7):
-      cpufreq: scpi: remove stale/outdated comment about the driver
-      cpufreq: merge arm_big_little and vexpress-spc
-      cpufreq: vexpress-spc: drop unnessary cpufreq_arm_bL_ops abstraction
-      cpufreq: vexpress-spc: remove lots of debug messages
-      cpufreq: vexpress-spc: fix some coding style issues
-      cpufreq: vexpress-spc: use macros instead of hardcoded values for cluster ids
-      cpufreq: vexpress-spc: find and skip duplicates when merging frequencies
-
- .../devicetree/bindings/arm/omap/omap.txt          |  30 +-
- .../devicetree/bindings/cpufreq/ti-cpufreq.txt     |   6 +-
- MAINTAINERS                                        |   5 +-
- arch/arm/boot/dts/am3517.dtsi                      |  31 +
- arch/arm/boot/dts/am3517_mt_ventoux.dts            |   2 +-
- arch/arm/boot/dts/logicpd-som-lv-35xx-devkit.dts   |   2 +-
- arch/arm/boot/dts/logicpd-torpedo-35xx-devkit.dts  |   2 +-
- arch/arm/boot/dts/omap3-beagle-xm.dts              |   2 +-
- arch/arm/boot/dts/omap3-beagle.dts                 |   2 +-
- arch/arm/boot/dts/omap3-cm-t3530.dts               |   2 +-
- arch/arm/boot/dts/omap3-cm-t3730.dts               |   2 +-
- arch/arm/boot/dts/omap3-devkit8000-lcd43.dts       |   2 +-
- arch/arm/boot/dts/omap3-devkit8000-lcd70.dts       |   2 +-
- arch/arm/boot/dts/omap3-devkit8000.dts             |   2 +-
- arch/arm/boot/dts/omap3-gta04.dtsi                 |   2 +-
- arch/arm/boot/dts/omap3-ha-lcd.dts                 |   2 +-
- arch/arm/boot/dts/omap3-ha.dts                     |   2 +-
- arch/arm/boot/dts/omap3-igep0020-rev-f.dts         |   2 +-
- arch/arm/boot/dts/omap3-igep0020.dts               |   2 +-
- arch/arm/boot/dts/omap3-igep0030-rev-g.dts         |   2 +-
- arch/arm/boot/dts/omap3-igep0030.dts               |   2 +-
- arch/arm/boot/dts/omap3-ldp.dts                    |   2 +-
- arch/arm/boot/dts/omap3-lilly-a83x.dtsi            |   2 +-
- arch/arm/boot/dts/omap3-lilly-dbb056.dts           |   2 +-
- arch/arm/boot/dts/omap3-n9.dts                     |   2 +-
- arch/arm/boot/dts/omap3-n950-n9.dtsi               |   7 -
- arch/arm/boot/dts/omap3-n950.dts                   |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-alto35.dts     |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-palo35.dts     |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-palo43.dts     |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-summit.dts     |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-tobi.dts       |   2 +-
- arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    |   2 +-
- arch/arm/boot/dts/omap3-pandora-1ghz.dts           |   2 +-
- arch/arm/boot/dts/omap3-sbc-t3530.dts              |   2 +-
- arch/arm/boot/dts/omap3-sbc-t3730.dts              |   2 +-
- arch/arm/boot/dts/omap3-sniper.dts                 |   2 +-
- arch/arm/boot/dts/omap3-thunder.dts                |   2 +-
- arch/arm/boot/dts/omap3-zoom3.dts                  |   2 +-
- arch/arm/boot/dts/omap3430-sdp.dts                 |   2 +-
- arch/arm/boot/dts/omap34xx.dtsi                    |  66 ++-
- arch/arm/boot/dts/omap36xx.dtsi                    |  65 +-
- drivers/cpufreq/Kconfig.arm                        |  12 +-
- drivers/cpufreq/Makefile                           |   2 -
- drivers/cpufreq/arm_big_little.c                   | 658 ---------------------
- drivers/cpufreq/arm_big_little.h                   |  43 --
- drivers/cpufreq/cpufreq-dt-platdev.c               |   2 +-
- drivers/cpufreq/imx-cpufreq-dt.c                   |  20 +-
- drivers/cpufreq/s3c64xx-cpufreq.c                  |   7 -
- drivers/cpufreq/scpi-cpufreq.c                     |   2 -
- drivers/cpufreq/sun50i-cpufreq-nvmem.c             |  25 +-
- drivers/cpufreq/ti-cpufreq.c                       | 119 +++-
- drivers/cpufreq/vexpress-spc-cpufreq.c             | 584 +++++++++++++++++-
- 55 files changed, 904 insertions(+), 854 deletions(-)
- delete mode 100644 drivers/cpufreq/arm_big_little.c
- delete mode 100644 drivers/cpufreq/arm_big_little.h
-
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
