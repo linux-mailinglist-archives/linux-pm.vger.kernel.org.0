@@ -2,89 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC9DF8200
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02182F8239
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbfKKVQo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 16:16:44 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33406 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727480AbfKKVQn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 16:16:43 -0500
-Received: by mail-lj1-f194.google.com with SMTP id t5so15393939ljk.0;
-        Mon, 11 Nov 2019 13:16:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HzU4Em/jAGZPIDjIbLxQtLRkI9MSE1QrI5BazFDeU+g=;
-        b=LIpkEbMUel9UPxujxayC9reONTyWYPFNh9mFHg5noiWUpH9n12BAfoh5mTxv8JMXGG
-         gISRHA+W8XBKj0QuO2FIkHB3jJviaMUPJ/0U8yLq7Wl3Vhla5OncNfdbccfyBK6pIjkC
-         Tx1j/n/nW2+58p9Oyl94Z87qoAyYKARClWM9LQimFPhSiKbW0jNUMquNZD7CMmtMfDyl
-         LwMpsyLqmVgQNL7kh1Aa+jDerymGKrf6rShbF5p1ybe16F5Rq77za2hMpvF65AlCszLm
-         JEPc1/EayKYIVvHWt5VzgxI31FMhkXy8Yu+dVy/+oLWO0Sg6dMX8qa+dGbWZFwIGVtkb
-         ZvuA==
+        id S1727047AbfKKV3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 16:29:21 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46985 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727040AbfKKV3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 16:29:20 -0500
+Received: by mail-ot1-f67.google.com with SMTP id n23so12469530otr.13;
+        Mon, 11 Nov 2019 13:29:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HzU4Em/jAGZPIDjIbLxQtLRkI9MSE1QrI5BazFDeU+g=;
-        b=V5Y+HkG5m35N366C3Yl279Z9NqHnVDpPzy7mgGSL91/7WHZtru/QLqoxuOIL6Zp926
-         OkL5vGI7f+aDHAcUyjwfyLHUaF+spCNfCX6/LHR8Gsvo4m+ap+7sxLAXiMRSPIppzo9t
-         HEE89DyD3KZVYdeEhjXL/NfsQbdSuKnHq+NINIhRQe0QxVy84VIASvicdDRgnMIQpvAO
-         VVWopmrJ1YBZ0sm67qN/komzbPFh+ppr82cTUpb3sv3Zs/fMwwlCevaMK+xp9N47akU3
-         0ES22d3UGL6+omwUdp8x1Hsnow1AG2YWlpOhYSFP2YJD5hCB68WSWNkgnLU2d3U7NxQ5
-         ePxQ==
-X-Gm-Message-State: APjAAAWbzQG6ckDncr8ekwaenaj5RdSZwsk2J3emePhxYgO6nWfPBgg/
-        acTHI1cOoATYK+MFwqtfPM0=
-X-Google-Smtp-Source: APXvYqxHXuW0ui2OCx/3DMvtAgxaM0zGFqKl5bAN8SNMT3vs9cWXLqGG9IBn1FShX5OC31J9C7xJvA==
-X-Received: by 2002:a2e:9a12:: with SMTP id o18mr17625625lji.191.1573507001338;
-        Mon, 11 Nov 2019 13:16:41 -0800 (PST)
-Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id n19sm7913150lfl.85.2019.11.11.13.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 13:16:40 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 17/17] ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
-Date:   Tue, 12 Nov 2019 00:15:56 +0300
-Message-Id: <20191111211556.20723-18-digetx@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191111211556.20723-1-digetx@gmail.com>
-References: <20191111211556.20723-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0EaaQakc/Olt1+inLfsxuVhU6rWXEXlsy8c5lcy0DyE=;
+        b=EY8xtl227uo8kNI6SRAs/fKXX6zV4w8eokSbQtFhTMHQ+Ft5DjcRES+dwSRB4kBYP2
+         VYL1QpVxCXjKrjfaW1quhar7B1+oohZBeNolNLG5JizOlwcRVfLiWYaUwdkonKWIF+RY
+         xb0Q14jHmRJ4j3288BRZEWdfO+xJlqXC8WoYvPpX+5hCa5a2stbSjdj0gUPYXQNPEEdc
+         tpLGShN17Fk2wFDUDJW3tp40wmsQ2pcmIj3NBO43YzFsOSNuUogPoolAobATTOfSQQME
+         I/w948Y+iQ/IeNeOAHWrPsKpvSP9XTAx7gH/+cMv/6HucluMgObxCryfYLJ+/rTMzBlJ
+         9hpw==
+X-Gm-Message-State: APjAAAUGh8J08O/kE5CpLVGnZO2St/BlkXkUaSWBaZy08DrH3DDhTwBu
+        /inSbFcyD+ymKFzZntvb9dmfy4bW7HRNWcX8cbQ=
+X-Google-Smtp-Source: APXvYqyn3HyV29I3Exmg96+ZNvBAEDMds2v9BIW3fBJWmGtjU2xIWKaEiub/FOFmNk8ZD2+N7/GBfNsXpdv1kiMswvQ=
+X-Received: by 2002:a05:6830:232a:: with SMTP id q10mr22974750otg.262.1573507759372;
+ Mon, 11 Nov 2019 13:29:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <10494959.bKODIZ00nm@kreacher> <000a01d59656$99798710$cc6c9530$@net>
+ <CAJZ5v0gZDJ2=PiiGw2mcCcVKBM2OyM1G9nRvJ+iWLFUQcXqZuw@mail.gmail.com>
+ <6163696.37NBKbymtj@kreacher> <000b01d597f2$06403a50$12c0aef0$@net> <002301d59813$ee18c920$ca4a5b60$@net>
+In-Reply-To: <002301d59813$ee18c920$ca4a5b60$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 11 Nov 2019 22:29:08 +0100
+Message-ID: <CAJZ5v0hFjNHgNz-MfbLhXkxPvcJzEmBBvGF7mi8v52jV3CPy2Q@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: Use nanoseconds as the unit of time
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Tegra CPU Idle driver was moved out into driver/cpuidle/ directory and
-it is now a proper platform driver.
+On Sun, Nov 10, 2019 at 11:12 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On 2019.11.10 10:10 Doug Smythies wrote:
+> > On 2019.11.10 09:24 Rafael J. Wysocki wrote:
+> >> On Sunday, November 10, 2019 5:48:21 PM CET Rafael J. Wysocki wrote:
+> >>
+> >> I have found a bug, which should be addressed by the patch below.
+> >>
+> >> If it still doesn't reduce the discrepancy, we'll need to look further.
+> >>
+> >> ---
+> >> drivers/cpuidle/governors/menu.c |    4 ++--
+> >> 1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> Index: linux-pm/drivers/cpuidle/governors/menu.c
+> >> ===================================================================
+> >> --- linux-pm.orig/drivers/cpuidle/governors/menu.c
+> >> +++ linux-pm/drivers/cpuidle/governors/menu.c
+> >> @@ -516,8 +516,8 @@ static void menu_update(struct cpuidle_d
+> >>      new_factor -= new_factor / DECAY;
+> >>
+> >>      if (data->next_timer_ns > 0 && measured_ns < MAX_INTERESTING)
+> >> -            new_factor += RESOLUTION * div64_u64(measured_ns,
+> >> -                                                 data->next_timer_ns);
+> >> +            new_factor += div64_u64(RESOLUTION * measured_ns,
+> >> +                                    data->next_timer_ns);
+> >>      else
+> >>              /*
+> >>               * we were idle so long that we count it as a perfect
+> >
+> > Yes, that was the exact bit of code I focused on yesterday.
+> > However, my attempt to fix was different, and made no difference,
+> > with the new graph being exactly on top of the old bad one.
+> > I had defined new_factor as u64 and RESOLUTION as ULL.
+>
+> Your patch does fix the problem.
+> I now also understand why my attempt did not.
+>
+> New data added to previous graphs. For those that don't
+> want to go to the graphs, the nanosecond menu graphs are now
+> almost identical to the microsecond based one.
+>
+> http://www.smythies.com/~doug/linux/idle/nano-second-conversion/sweep/index.html
+>
+> Legend:
+> teo-base : linux-next 2019.11.07
+> menu-base: linux-next 2019.11.07
+> teo-v2   : linux-next 2019.11.07 + cpuidle: Consolidate disabled state checks + this v2
+> menu-v2  : linux-next 2019.11.07 + cpuidle: Consolidate disabled state checks + this v2
+> rjw1     : menu-v2 + above patch.
+>
+> Acked-by and tested-by Doug Smythies <dsmythies@telus.net>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/configs/tegra_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Thanks a lot!
 
-diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
-index a27592d3b1fa..aa94369bdd0f 100644
---- a/arch/arm/configs/tegra_defconfig
-+++ b/arch/arm/configs/tegra_defconfig
-@@ -25,6 +25,7 @@ CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
- CONFIG_CPUFREQ_DT=y
- CONFIG_CPU_IDLE=y
-+CONFIG_ARM_TEGRA_CPUIDLE=y
- CONFIG_VFP=y
- CONFIG_NEON=y
- CONFIG_TRUSTED_FOUNDATIONS=y
--- 
-2.23.0
+> Disclaimer: Only teo and menu, not ladder or haltpoll governors.
+>
+> Additional suggestions:
+>
+> Header comments:
+>
+> > microseconds provided by drivers.  In addition to that, change
+> > cpuidle_governor_latency_req() to return the idle state exit
+> > latency constraint in nanoseconds.
+>
+> Suggest:
+>
+> microseconds provided by drivers.  Additionally, change
+> cpuidle_governor_latency_req() to return the idle state exit
+> latency constraint in nanoseconds.
+>
+> > With that, meeasure idle state residency (last_residency_ns in
+>              ^^^^^^^^
+> Suggest:
+>
+> Also measure idle state residency (last_residency_ns in
+>
+> Code:
+> Suggest deletion of this note:
+>
+> /*
+>  * Please note when changing the tuning values:
+>  * If (MAX_INTERESTING-1) * RESOLUTION > UINT_MAX, the result of
+>  * a scaling operation multiplication may overflow on 32 bit platforms.
+>  * In that case, #define RESOLUTION as ULL to get 64 bit result:
+>  * #define RESOLUTION 1024ULL
+>  *
+>  * The default values do not overflow.
+>  */
+>
+> Because you have managed the extra bit requirements as part of the patch.
 
+Good suggestion! :-)
+
+I have folded the fix and the removal of the comment as suggested
+above into to v2 and applied the resulting patch with tags from you
+and Peter.
+
+Also the changelog has been updated as suggested.
+
+Thanks!
