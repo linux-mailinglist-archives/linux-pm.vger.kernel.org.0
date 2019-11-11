@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0F2F821E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2BBF8220
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbfKKVQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 16:16:28 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37894 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726916AbfKKVQ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 16:16:28 -0500
-Received: by mail-lj1-f193.google.com with SMTP id v8so15363391ljh.5;
-        Mon, 11 Nov 2019 13:16:26 -0800 (PST)
+        id S1727142AbfKKVQ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 16:16:29 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46696 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726950AbfKKVQ3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 16:16:29 -0500
+Received: by mail-lf1-f65.google.com with SMTP id o65so7309083lff.13;
+        Mon, 11 Nov 2019 13:16:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AJsM8Od2cQbwnjMd2WWbJxd1SHRmM5N6fXuOeZ21tBs=;
-        b=PAD7MzK8qKyr/5DC1SX/bWu/6WPrOGRzHIzAHpN07byU/XavHfOH4nsVQk/6vuiF+e
-         On28owfl73Vqmo4QMyuZYf+GjDk9D4HAeh81+nAWNxHgEqyjWB9l/XI/Kv0dYjnr1QGp
-         KLUhuzvn0iPFZGhha2t/ausahpwtuWpnb+yIy5iHdc1CqGd3DANRu3bgHNZ1vdzYOHSB
-         Kv/S3RZxnTAPmQKufQMNY7uokJ8Yh0g90t6s5Nu434MQYjDE49vmULjjLB9m2G6HoNoH
-         d3ETC488CIixKb2WmX/1RLoqVfMuGba8rOnsIlkoaEt1QmZTYT5ifLZ88RGrTvg3+PxJ
-         NJTw==
+        bh=PAYNs/o0oQ+5oMrw2AY1UO1+THnKmjTd9tnbcB8Y4M0=;
+        b=Q2iK21iJtBFjWAaeOaPZqOmSaSe3MEwlmERW6ilxD3hSfoKzMxedVnKiznVsi17Biz
+         oC2qAhXpfpGw+JoWIM4mFwyQrQ+jJV1Sh8oM7yiNBINEBdDaqGgAg/qtmFAHz0U8rw6K
+         7fQYgpTwg6BQzwmS7mW/OwRJcrjlu7AG3Jv7dM7KIhD/Rl1ENrJF+qXFAawVuciatO9I
+         iZn0NVydM8QqSnDsI76ZW7JQbRVcB73xp35uvZAhMjdFnr5RBkA6HbfyY61/XAQbauNK
+         sinoTLTtKh5wAUb3kh8rCwvEZKxSDQFcZ/Jvn6wH+8JsKnBOxDNoJPfIxhdsh1A6GeFR
+         wyQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AJsM8Od2cQbwnjMd2WWbJxd1SHRmM5N6fXuOeZ21tBs=;
-        b=ZHtmQtXCTS93yEwLgSdh6WOTPjHbzN5LP3QEgWSJserZpzzuGxUk/P9NHR+XmsJtAA
-         +Bp3L7bdm+3PB/WFX/cald+Zq7AyyJu7pctOWUbavE3KChvWNw959O/iz/pCqtzYlAGj
-         inWoJzYZluBKIISi1OimNFFSHSnihBJ3rZeWACSy5h2r2FmKxpeLzfZRDyR09t8GRj5r
-         +8g0uz3gg9wSY3+dvSqfYJriO42FMaUBLB3JZPwnjN/xR5acKEinpuP4cFkZWHayMeYj
-         r4e5fHH2Vpe9m4peYOcky+xE8A2bZemHE9dfxbbyzYnDAJF1th54J42dc0O+t9z4qK+5
-         SOZA==
-X-Gm-Message-State: APjAAAW0W3ui8PElSB/YjikFWA41IqhYO+T+m5mXmS1at6XqfAM5U/ed
-        9G28PzoqnlgEnxEhRhzqFcY=
-X-Google-Smtp-Source: APXvYqxHIMp2EWsXJvYmtynLMilk1ROjHzfYLjWofW1N6f5khsq4Mo5Y//7UjiyFJz3JUngdHp90EQ==
-X-Received: by 2002:a2e:b5c4:: with SMTP id g4mr11731518ljn.169.1573506985570;
-        Mon, 11 Nov 2019 13:16:25 -0800 (PST)
+        bh=PAYNs/o0oQ+5oMrw2AY1UO1+THnKmjTd9tnbcB8Y4M0=;
+        b=tDVEa4Rzuic9jX62TBlsQ6PRZXAeRLmNj0InJr85mZJsz+cnIo8bvNeroHYj2vCNfh
+         TxvNAv8ZWKScfbVU92SfSSKBomK7Z0wm/gSs5OEwlHLP8Kksr9b213RkuLkBzYo6qhDb
+         59pt7IoV0WtFX/2yjBY2+8TiYKdqwYysj50Unt6RvGJbcbL5jX6UOgOY/hpn9XV6wAo2
+         rfKEMxypECjxWLwc8j8jCt1IBuM4Yh0hA6+nAKHdH6oqwBS0kVrtc/44mNNzsPEpHf1c
+         aLfexf/1SyI6PVVM+Z4w6cKSoO9V9Fd7aKyLsCkchAK+dJPNDBl20VomBvRqdFPMnEt1
+         pMiw==
+X-Gm-Message-State: APjAAAWpC7QSyU7wHbCaVcqlUPdNa0vpz3LAGTvozx76HvNmH0t91he9
+        SQooYMEnkL9J4IMcVx1xS3s=
+X-Google-Smtp-Source: APXvYqwInkgo9xGt2KGB+I5coaGai3wVBR+4uSRNQnaeGTAmcU2wav8h0Q//umkpsgCjen4XxTYoAw==
+X-Received: by 2002:ac2:4c1c:: with SMTP id t28mr2971767lfq.63.1573506986619;
+        Mon, 11 Nov 2019 13:16:26 -0800 (PST)
 Received: from localhost.localdomain (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.gmail.com with ESMTPSA id n19sm7913150lfl.85.2019.11.11.13.16.24
+        by smtp.gmail.com with ESMTPSA id n19sm7913150lfl.85.2019.11.11.13.16.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 13:16:25 -0800 (PST)
+        Mon, 11 Nov 2019 13:16:26 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 01/17] ARM: tegra: Compile sleep-tegra20/30.S unconditionally
-Date:   Tue, 12 Nov 2019 00:15:40 +0300
-Message-Id: <20191111211556.20723-2-digetx@gmail.com>
+Subject: [PATCH v7 02/17] ARM: tegra: Add tegra_pm_park_secondary_cpu()
+Date:   Tue, 12 Nov 2019 00:15:41 +0300
+Message-Id: <20191111211556.20723-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191111211556.20723-1-digetx@gmail.com>
 References: <20191111211556.20723-1-digetx@gmail.com>
@@ -65,67 +65,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sleep-tegra*.S provides functionality required for suspend/resume
-and CPU hotplugging. The new unified CPUIDLE driver will support multiple
-hardware generations starting from Terga20 and ending with Tegra124, the
-driver will utilize functions that are provided by the assembly and thus
-it is cleaner to compile that code without any build-dependencies in order
-to avoid churning with #ifdef's.
+This function resembles tegra_cpu_die() of the hotplug code, but
+this variant is more suitable to be used for CPU PM because it's made
+specifically to be used by cpu_suspend(). In short this function puts
+secondary CPU offline, it will be used by the new CPUIDLE driver.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/Makefile | 6 ++----
- arch/arm/mach-tegra/sleep.h  | 2 --
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ arch/arm/mach-tegra/pm.c | 14 ++++++++++++++
+ arch/arm/mach-tegra/pm.h |  5 +++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/arch/arm/mach-tegra/Makefile b/arch/arm/mach-tegra/Makefile
-index 6c1dff2eccc2..965862608ff6 100644
---- a/arch/arm/mach-tegra/Makefile
-+++ b/arch/arm/mach-tegra/Makefile
-@@ -8,13 +8,13 @@ obj-y					+= reset.o
- obj-y					+= reset-handler.o
- obj-y					+= sleep.o
- obj-y					+= tegra.o
-+obj-y					+= sleep-tegra20.o
-+obj-y					+= sleep-tegra30.o
- obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
--obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= sleep-tegra20.o
- obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= pm-tegra20.o
- ifeq ($(CONFIG_CPU_IDLE),y)
- obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= cpuidle-tegra20.o
- endif
--obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= sleep-tegra30.o
- obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= pm-tegra30.o
- ifeq ($(CONFIG_CPU_IDLE),y)
- obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= cpuidle-tegra30.o
-@@ -22,12 +22,10 @@ endif
- obj-$(CONFIG_SMP)			+= platsmp.o
- obj-$(CONFIG_HOTPLUG_CPU)               += hotplug.o
+diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
+index 3cab81b82866..f5ff3dd1dd81 100644
+--- a/arch/arm/mach-tegra/pm.c
++++ b/arch/arm/mach-tegra/pm.c
+@@ -436,4 +436,18 @@ void __init tegra_init_suspend(void)
  
--obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= sleep-tegra30.o
- obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= pm-tegra30.o
- ifeq ($(CONFIG_CPU_IDLE),y)
- obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= cpuidle-tegra114.o
- endif
--obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= sleep-tegra30.o
- obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= pm-tegra30.o
- ifeq ($(CONFIG_CPU_IDLE),y)
- obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= cpuidle-tegra114.o
-diff --git a/arch/arm/mach-tegra/sleep.h b/arch/arm/mach-tegra/sleep.h
-index 78ef32a907c8..63e2205cbc82 100644
---- a/arch/arm/mach-tegra/sleep.h
-+++ b/arch/arm/mach-tegra/sleep.h
-@@ -120,10 +120,8 @@ void tegra_resume(void);
- int tegra_sleep_cpu_finish(unsigned long);
- void tegra_disable_clean_inv_dcache(u32 flag);
+ 	suspend_set_ops(&tegra_suspend_ops);
+ }
++
++int tegra_pm_park_secondary_cpu(unsigned long cpu)
++{
++	if (cpu > 0) {
++		tegra_disable_clean_inv_dcache(TEGRA_FLUSH_CACHE_LOUIS);
++
++		if (tegra_get_chip_id() == TEGRA20)
++			tegra20_hotplug_shutdown();
++		else
++			tegra30_hotplug_shutdown();
++	}
++
++	return -EINVAL;
++}
+ #endif
+diff --git a/arch/arm/mach-tegra/pm.h b/arch/arm/mach-tegra/pm.h
+index 569151b3edc0..9a790f00237f 100644
+--- a/arch/arm/mach-tegra/pm.h
++++ b/arch/arm/mach-tegra/pm.h
+@@ -31,8 +31,13 @@ extern void (*tegra_tear_down_cpu)(void);
  
--#ifdef CONFIG_HOTPLUG_CPU
- void tegra20_hotplug_shutdown(void);
- void tegra30_hotplug_shutdown(void);
--#endif
+ #ifdef CONFIG_PM_SLEEP
+ void tegra_init_suspend(void);
++int tegra_pm_park_secondary_cpu(unsigned long cpu);
+ #else
+ static inline void tegra_init_suspend(void) {}
++static inline int tegra_pm_park_secondary_cpu(unsigned long cpu)
++{
++	return -ENOTSUPP;
++}
+ #endif
  
- void tegra20_cpu_shutdown(int cpu);
- int tegra20_cpu_is_resettable_soon(void);
+ #endif /* _MACH_TEGRA_PM_H_ */
 -- 
 2.23.0
 
