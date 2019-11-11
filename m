@@ -2,222 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4195CF731A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 12:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B328F7329
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 12:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbfKKLb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 06:31:28 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39306 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbfKKLb2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 06:31:28 -0500
-Received: by mail-pg1-f193.google.com with SMTP id 29so9308245pgm.6
-        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 03:31:26 -0800 (PST)
+        id S1726810AbfKKLgj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 06:36:39 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51407 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbfKKLgj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 06:36:39 -0500
+Received: by mail-wm1-f68.google.com with SMTP id q70so12946991wme.1
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 03:36:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wQ8N+KA4QdswtlAn03t/0lkW6AyogqYP1p+/zebuU3k=;
-        b=fzz6eTmnCHSzgfHm+F9KSKSXxf8LVByz/JTIJZO7G2LjaoT0RjN6qPPKdXs+3LL/IA
-         1GVailmzDlDeuREvMUxvJ+xqG/CGEEg/pAFDrlchlEIWLIU9SmuxCVgPABW+jGSZ9eW3
-         GuQIx32Ab1FQDK5sOCHX8Nns0vGXPw651PQ6ru00m08ZE+7veSa6Ns9sbmwsXcTpWa54
-         8Vg6oPZTr4wAwI9IU3GWh1zoOppOwxHmuzBotnjTMZGDIFRv6VAG2T0fCMz2uawbCQCS
-         ENr2HN7tWHQ71sJ9yrfyNR8ENxwg7kXrppAFoeHz64zPrHZfmv0HNb/geYRVj+2Bb+sa
-         S50w==
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y0dulQXEpY4JTRjYNrgxL7H4Oc+cEpHXSad2UPEfcck=;
+        b=bxHpIPb5phD5/xnyo/ChAZAMq+BdxeaAyc6U/zw8Sl83T8N5fzUKeN95dyN4AbByx4
+         QNGTpquHrJxqPQO2cqiIHQ2xGmU5avPs8s2QfezmZ++a5NpQMU35u+5KyGmNEzAruCOs
+         H2FSzP5CLlAOpkaoFUQyAkVvhvJ76TBZvk65gF/5pA3xvKn5rUe59p6lzZZ+Qzq18wql
+         eSqtJfMIohZsY/OldoyBBzP9r4hsvs2yeIzz/2iytuuiUh1dPmeDMmiDSN3UHRakIwsV
+         nFzL/cLdwv5l1flpZ5DcbGZtbEYmTbPj2AyiFTBM4xfjtF6Bk+H5L/uClwVVlRggjvb4
+         1Z7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wQ8N+KA4QdswtlAn03t/0lkW6AyogqYP1p+/zebuU3k=;
-        b=ViYQJFNj3XCoMEwkV92A9o6wVMXp3PiyrdVlO/k3eI/7L8vGlE833m24Y3+8PbRpUO
-         8MKnjabo6UG3u5SopqCu0WLewHS4hBNNWSrpuFFitsS1zig558+Uf61mprm4dMK3TCvG
-         SQDVsIidpo9+v6VM3uhnjcBYAnT78pqITdbf5k6cuATc72mz0oXWC2DcnsjogVwdIHTG
-         zwdNXkmtpM1fqhYA5nOm2XHCfrrgjuocK02cNgKw0BXUHXJZmfO8LvjoTdtSlIq+TNUB
-         sAx/R+w1eqWFAmV1RC35mYLc3dZzfDI4oew7hAUoxFTx7bfRajrcWZRTGrlSffBFNbQ4
-         +SmQ==
-X-Gm-Message-State: APjAAAVTR4rB2nfQS+7wK/xbD//zwa/A6LQV+neI55gNe1Poo1CJtTmy
-        ja/BhnZ7Wo2E3Jgmw0usl+AuQw==
-X-Google-Smtp-Source: APXvYqyRN+ytjyasbPOi1n+bkrl3ZY1icxCMoBihsUQ6BVbam4FcrrAYUXBdsKV/iv1gSI0SvP+c+A==
-X-Received: by 2002:a63:d916:: with SMTP id r22mr28461215pgg.45.1573471885985;
-        Mon, 11 Nov 2019 03:31:25 -0800 (PST)
-Received: from localhost ([122.171.110.253])
-        by smtp.gmail.com with ESMTPSA id f24sm12918778pjp.12.2019.11.11.03.31.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Nov 2019 03:31:24 -0800 (PST)
-Date:   Mon, 11 Nov 2019 17:01:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Viresh Kumar <vireshk@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] opp: Reinitialize the list_kref before adding the static
- OPPs again
-Message-ID: <20191111113117.d7jdolfetb24rgmb@vireshk-i7>
-References: <2700308706c0d46ca06eeb973079a1f18bf553dd.1571390916.git.viresh.kumar@linaro.org>
- <20191018211214.444D32089C@mail.kernel.org>
- <20191021022516.gecunkpahu7okvm5@vireshk-i7>
- <20191028120133.3E85F2086D@mail.kernel.org>
- <CAKohpo=ky8FR4thsuW1xPnZrEW8zgXL0n4e+9rkRE0RLKKk1uQ@mail.gmail.com>
- <20191030143400.1680D20656@mail.kernel.org>
- <20191111082131.ysngb7dfal6fpu2h@vireshk-i7>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y0dulQXEpY4JTRjYNrgxL7H4Oc+cEpHXSad2UPEfcck=;
+        b=ETAp+OYAHOXYLEIRYJ4CJ2DUTMgc370VP+zeCzkD4BeRVHoOgt622Qidx6mtUiBs7g
+         c3k1wgDkoSupUmwo38+Tze6HCNsN4bS38xCa9zMZlXZb9kHcFW1oeKfYHM8hXSPog1r2
+         V1NW4+cFm4FSqg60DJJQEKD8kKWwoM1JFxamKWDLt55kHHbAdxRFzL1YYxlMwGgiK6H1
+         l9jmRltY58sE503bNyH25wUWoVxGlZKuPoZ3fnweHxpZ/xySf0Jryj9hI5taXJ4pODVu
+         4D2v7bDb01snea5+tQru+idBq/AzZ6ktP1tyb6Dxj6IE+gGwqJEItIQd1ogxb+tIhsVk
+         25pQ==
+X-Gm-Message-State: APjAAAVSJTVyLZ9bxA20OFBP7ILUzlJ6/Tr2mUiOkANPWE8Srf597TmW
+        aJ2YpiLMzenH37yuFi4XlEiUyd/3M0Y86vSsjMHEH9PxHAg=
+X-Google-Smtp-Source: APXvYqzukrpx06aOA3LqbJs8I7XR+FwIaaQYKy+Gm7Tz2e7dz1DLqlFOVFvJ8DYuDBp3HPhpvJ+qTAC1ypDwtFmt5ow=
+X-Received: by 2002:a1c:4c10:: with SMTP id z16mr18470654wmf.24.1573472196560;
+ Mon, 11 Nov 2019 03:36:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191111082131.ysngb7dfal6fpu2h@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20191107212408.11857-1-hch@lst.de>
+In-Reply-To: <20191107212408.11857-1-hch@lst.de>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 11 Nov 2019 17:06:24 +0530
+Message-ID: <CAAhSdy3SGAkOFMhx320KJdPDh6c=qcKqCZ=qrXNKBGtejpZwSA@mail.gmail.com>
+Subject: Re: QEMU RISC-V virt machine poweroff driver
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        devicetree@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-11-19, 13:51, Viresh Kumar wrote:
-> On 30-10-19, 07:33, Stephen Boyd wrote:
-> > I agree a simple refcount_t makes more sense here instead of using a
-> > kref. That would be clearer.
-> 
-> I was using kref as I wanted to call the cleanup routine when kref
-> reaches 0. A refcount_t will have the same problem as the warning in
-> this came from refcount mechanism only (which is used by kref). You
-> can't increment a refcount_t if it is zero :)
-> 
-> Any other suggestions other than local counting ?
+On Fri, Nov 8, 2019 at 2:54 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Hi all,
+>
+> this patch add a driver for the test device in the Qemu RISC-V
+> virt machine which allows properly shutting down the VM.
+> It also is added to the riscv defconfig given that qemu-virt
+> is the most popular riscv platform.
 
-i.e. something like this, untested.
+We really don't need this driver. Instead, we can simply re-use
+following drivers:
+mfd/syscon
+power/reset/syscon-reboot
+power/reset/syscon-poweroff
 
----
- drivers/opp/core.c | 26 ++++++++------------------
- drivers/opp/of.c   | 14 +++++---------
- drivers/opp/opp.h  |  6 ++----
- 3 files changed, 15 insertions(+), 31 deletions(-)
+Just enable following to your defconfig:
+CONFIG_POWER_RESET=y
+CONFIG_POWER_RESET_SYSCON=y
+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
+CONFIG_SYSCON_REBOOT_MODE=y
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 467b2348a289..ea1d89177511 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -988,7 +988,6 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
- 	BLOCKING_INIT_NOTIFIER_HEAD(&opp_table->head);
- 	INIT_LIST_HEAD(&opp_table->opp_list);
- 	kref_init(&opp_table->kref);
--	kref_init(&opp_table->list_kref);
- 
- 	/* Secure the device table modification */
- 	list_add(&opp_table->node, &opp_tables);
-@@ -1076,27 +1075,18 @@ static void _opp_remove_all_static(struct opp_table *opp_table)
- {
- 	struct dev_pm_opp *opp, *tmp;
- 
-+	mutex_lock(&opp_table->lock);
+
+Once above drivers are enabled in your defconfig, make sure
+test device DT nodes are described in the following way for virt machine:
+
+testdev: test@100000 {
+    compatible = "syscon";
+    reg = <0x100000 0x1000>;
+};
+
+reboot {
+    compatible = "syscon-reboot";
+    regmap = <&testdev>;
+    offset = <0x0>;
+    value = <0x7777>;
+};
+
+poweroff {
+    compatible = "syscon-poweroff";
+    regmap = <&testdev>;
+    offset = <0x0>;
+    value = <0x5555>;
+};
+
+
+Here's the QEMU changes I used for above DT nodes:
+
+diff --git a/hw/riscv/virt.c b/hw/riscv/virt.c
+index d7c5d630eb..7f8206c726 100644
+--- a/hw/riscv/virt.c
++++ b/hw/riscv/virt.c
+@@ -186,7 +186,7 @@ static void create_fdt(RISCVVirtState *s, const
+struct MemmapEntry *memmap,
+     int cpu;
+     uint32_t *cells;
+     char *nodename;
+-    uint32_t plic_phandle, phandle = 1;
++    uint32_t plic_phandle, test_phandle, phandle = 1;
+     int i;
+     hwaddr flashsize = virt_memmap[VIRT_FLASH].size / 2;
+     hwaddr flashbase = virt_memmap[VIRT_FLASH].base;
+@@ -357,13 +357,32 @@ static void create_fdt(RISCVVirtState *s, const
+struct MemmapEntry *memmap,
+     create_pcie_irq_map(fdt, nodename, plic_phandle);
+     g_free(nodename);
+
++    test_phandle = phandle++;
+     nodename = g_strdup_printf("/test@%lx",
+         (long)memmap[VIRT_TEST].base);
+     qemu_fdt_add_subnode(fdt, nodename);
+-    qemu_fdt_setprop_string(fdt, nodename, "compatible", "sifive,test0");
++    qemu_fdt_setprop_string(fdt, nodename, "compatible", "syscon");
+     qemu_fdt_setprop_cells(fdt, nodename, "reg",
+         0x0, memmap[VIRT_TEST].base,
+         0x0, memmap[VIRT_TEST].size);
++    qemu_fdt_setprop_cell(fdt, nodename, "phandle", test_phandle);
++    test_phandle = qemu_fdt_get_phandle(fdt, nodename);
++    g_free(nodename);
 +
-+	if (!opp_table->parsed_static_opps || --opp_table->parsed_static_opps)
-+		goto unlock;
++    nodename = g_strdup_printf("/reboot");
++    qemu_fdt_add_subnode(fdt, nodename);
++    qemu_fdt_setprop_string(fdt, nodename, "compatible", "syscon-reboot");
++    qemu_fdt_setprop_cell(fdt, nodename, "regmap", test_phandle);
++    qemu_fdt_setprop_cell(fdt, nodename, "offset", 0x0);
++    qemu_fdt_setprop_cell(fdt, nodename, "value", FINISHER_RESET);
++    g_free(nodename);
 +
- 	list_for_each_entry_safe(opp, tmp, &opp_table->opp_list, node) {
- 		if (!opp->dynamic)
- 			dev_pm_opp_put(opp);
- 	}
- 
--	opp_table->parsed_static_opps = false;
--}
--
--static void _opp_table_list_kref_release(struct kref *kref)
--{
--	struct opp_table *opp_table = container_of(kref, struct opp_table,
--						   list_kref);
--
--	_opp_remove_all_static(opp_table);
--	mutex_unlock(&opp_table_lock);
--}
--
--void _put_opp_list_kref(struct opp_table *opp_table)
--{
--	kref_put_mutex(&opp_table->list_kref, _opp_table_list_kref_release,
--		       &opp_table_lock);
-+unlock:
-+	mutex_unlock(&opp_table->lock);
- }
- 
- void dev_pm_opp_put_opp_table(struct opp_table *opp_table)
-@@ -2276,7 +2266,7 @@ void _dev_pm_opp_find_and_remove_table(struct device *dev)
- 		return;
- 	}
- 
--	_put_opp_list_kref(opp_table);
-+	_opp_remove_all_static(opp_table);
- 
- 	/* Drop reference taken by _find_opp_table() */
- 	dev_pm_opp_put_opp_table(opp_table);
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 1cbb58240b80..2c433e9f9223 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -658,17 +658,15 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
- 	struct dev_pm_opp *opp;
- 
- 	/* OPP table is already initialized for the device */
-+	mutex_lock(&opp_table->lock);
- 	if (opp_table->parsed_static_opps) {
--		kref_get(&opp_table->list_kref);
-+		opp_table->parsed_static_opps++;
-+		mutex_unlock(&opp_table->lock);
- 		return 0;
- 	}
- 
--	/*
--	 * Re-initialize list_kref every time we add static OPPs to the OPP
--	 * table as the reference count may be 0 after the last tie static OPPs
--	 * were removed.
--	 */
--	kref_init(&opp_table->list_kref);
-+	opp_table->parsed_static_opps = 1;
-+	mutex_unlock(&opp_table->lock);
- 
- 	/* We have opp-table node now, iterate over it and add OPPs */
- 	for_each_available_child_of_node(opp_table->np, np) {
-@@ -701,8 +699,6 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
- 	if (pstate_count)
- 		opp_table->genpd_performance_state = true;
- 
--	opp_table->parsed_static_opps = true;
--
- 	return 0;
- }
- 
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 51ad942d1b6b..4e69b855a6a0 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -127,11 +127,10 @@ enum opp_table_access {
-  * @dev_list:	list of devices that share these OPPs
-  * @opp_list:	table of opps
-  * @kref:	for reference count of the table.
-- * @list_kref:	for reference count of the OPP list.
-  * @lock:	mutex protecting the opp_list and dev_list.
-  * @np:		struct device_node pointer for opp's DT node.
-  * @clock_latency_ns_max: Max clock latency in nanoseconds.
-- * @parsed_static_opps: True if OPPs are initialized from DT.
-+ * @parsed_static_opps: Count of devices for which OPPs are initialized from DT.
-  * @shared_opp: OPP is shared between multiple devices.
-  * @suspend_opp: Pointer to OPP to be used during device suspend.
-  * @genpd_virt_dev_lock: Mutex protecting the genpd virtual device pointers.
-@@ -167,7 +166,6 @@ struct opp_table {
- 	struct list_head dev_list;
- 	struct list_head opp_list;
- 	struct kref kref;
--	struct kref list_kref;
- 	struct mutex lock;
- 
- 	struct device_node *np;
-@@ -176,7 +174,7 @@ struct opp_table {
- 	/* For backward compatibility with v1 bindings */
- 	unsigned int voltage_tolerance_v1;
- 
--	bool parsed_static_opps;
-+	unsigned int parsed_static_opps;
- 	enum opp_table_access shared_opp;
- 	struct dev_pm_opp *suspend_opp;
++    nodename = g_strdup_printf("/poweroff");
++    qemu_fdt_add_subnode(fdt, nodename);
++    qemu_fdt_setprop_string(fdt, nodename, "compatible", "syscon-poweroff");
++    qemu_fdt_setprop_cell(fdt, nodename, "regmap", test_phandle);
++    qemu_fdt_setprop_cell(fdt, nodename, "offset", 0x0);
++    qemu_fdt_setprop_cell(fdt, nodename, "value", FINISHER_PASS);
+     g_free(nodename);
 
--- 
-viresh
+     nodename = g_strdup_printf("/uart@%lx",
+
+
+Regards,
+Anup
+
+
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
