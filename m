@@ -2,136 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 715C0F7A62
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 19:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB3CF7A9A
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 19:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfKKSA2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 13:00:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33910 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726924AbfKKSA2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 11 Nov 2019 13:00:28 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0F090B24D;
-        Mon, 11 Nov 2019 18:00:26 +0000 (UTC)
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
+        id S1726964AbfKKSQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 13:16:15 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:56290 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726763AbfKKSQO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 Nov 2019 13:16:14 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2E5BB1A0232;
+        Mon, 11 Nov 2019 19:16:13 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1F6641A0657;
+        Mon, 11 Nov 2019 19:16:13 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id B5F8B205FE;
+        Mon, 11 Nov 2019 19:16:12 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH 6/6] x86: intel_pstate: handle runtime turbo disablement/enablement in freq. invariance
-Date:   Mon, 11 Nov 2019 19:05:49 +0100
-Message-Id: <20191111180549.12166-7-ggherdovich@suse.cz>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191111180549.12166-1-ggherdovich@suse.cz>
-References: <20191111180549.12166-1-ggherdovich@suse.cz>
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org
+Subject: [PATCH] PM / devfreq: Kconfig: Drop explicit selection of PM_OPP
+Date:   Mon, 11 Nov 2019 20:16:10 +0200
+Message-Id: <1fb316f5b2c4d36437a536cef46ce8e4567dee15.1573495711.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On some platforms such as the Dell XPS 13 laptop the firmware disables turbo
-when the machine is disconnected from AC, and viceversa it enables it again
-when it's reconnected. In these cases a _PPC ACPI notification is issued.
+CONFIG_PM_OPP is already selected by CONFIG_PM_DEVFREQ since
+commit b9c69e043266 ("PM / devfreq: Add dependency on PM_OPP")
 
-The scheduler needs to know freq_max for frequency-invariant calculations.
-To account for turbo availability to come and go, record freq_max at boot as
-if turbo was available and store it in a helper variable. Use a setter
-function to swap between 1024 and freq_max every time turbo goes off or on.
+This means that individual drivers shouldn't "select PM_OPP" explicitly.
 
-Reminder: "freq_max" isn't really the maximum frequency but the ratio
-turbo_freq*1024/base_freq, which becomes 1024 when turbo is disabled. The name
-could be misleading but makes explainations a lot simpler and is really
-convenient in calculations.
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 
-Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
 ---
- arch/x86/include/asm/topology.h |  2 ++
- arch/x86/kernel/smpboot.c       | 14 ++++++++++----
- drivers/cpufreq/intel_pstate.c  |  1 +
- 3 files changed, 13 insertions(+), 4 deletions(-)
+Spawned by review comments on a new driver:
+https://patchwork.kernel.org/patch/11235695/#22992159
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 9b3aca463c8f..5c36fa1a6f3e 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -214,6 +214,8 @@ static inline long arch_scale_freq_capacity(int cpu)
- extern void arch_scale_freq_tick(void);
- #define arch_scale_freq_tick arch_scale_freq_tick
+This patch shouldn't have any dependencies.
+
+ drivers/devfreq/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index defe1d438710..066e6c4efaa2 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -81,11 +81,10 @@ config ARM_EXYNOS_BUS_DEVFREQ
+ 	depends on ARCH_EXYNOS || COMPILE_TEST
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	select DEVFREQ_GOV_PASSIVE
+ 	select DEVFREQ_EVENT_EXYNOS_PPMU
+ 	select PM_DEVFREQ_EVENT
+-	select PM_OPP
+ 	help
+ 	  This adds the common DEVFREQ driver for Exynos Memory bus. Exynos
+ 	  Memory bus has one more group of memory bus (e.g, MIF and INT block).
+ 	  Each memory bus group could contain many memoby bus block. It reads
+ 	  PPMU counters of memory controllers by using DEVFREQ-event device
+@@ -96,22 +95,20 @@ config ARM_TEGRA_DEVFREQ
+ 	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+ 	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
+ 		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
+ 		ARCH_TEGRA_210_SOC || \
+ 		COMPILE_TEST
+-	select PM_OPP
+ 	help
+ 	  This adds the DEVFREQ driver for the Tegra family of SoCs.
+ 	  It reads ACTMON counters of memory controllers and adjusts the
+ 	  operating frequencies and voltages with OPP support.
  
-+extern void set_arch_max_freq(bool turbo_disabled);
-+
- #endif
+ config ARM_TEGRA20_DEVFREQ
+ 	tristate "NVIDIA Tegra20 DEVFREQ Driver"
+ 	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
+ 	depends on COMMON_CLK
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+-	select PM_OPP
+ 	help
+ 	  This adds the DEVFREQ driver for the Tegra20 family of SoCs.
+ 	  It reads Memory Controller counters and adjusts the operating
+ 	  frequencies and voltages with OPP support.
  
- #endif /* _ASM_X86_TOPOLOGY_H */
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 8988177064be..f94aa1dfc778 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1807,8 +1807,15 @@ DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
+@@ -119,11 +116,10 @@ config ARM_RK3399_DMC_DEVFREQ
+ 	tristate "ARM RK3399 DMC DEVFREQ Driver"
+ 	depends on ARCH_ROCKCHIP
+ 	select DEVFREQ_EVENT_ROCKCHIP_DFI
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	select PM_DEVFREQ_EVENT
+-	select PM_OPP
+ 	help
+           This adds the DEVFREQ driver for the RK3399 DMC(Dynamic Memory Controller).
+           It sets the frequency for the memory controller and reads the usage counts
+           from hardware.
  
- static DEFINE_PER_CPU(u64, arch_prev_aperf);
- static DEFINE_PER_CPU(u64, arch_prev_mperf);
-+static u64 arch_max_turbo_freq = SCHED_CAPACITY_SCALE;
- static u64 arch_max_freq = SCHED_CAPACITY_SCALE;
- 
-+void set_arch_max_freq(bool turbo_disabled)
-+{
-+	arch_max_freq = turbo_disabled ? SCHED_CAPACITY_SCALE :
-+					arch_max_turbo_freq;
-+}
-+
- static bool turbo_disabled(void)
- {
- 	u64 misc_en;
-@@ -2004,9 +2011,6 @@ static void intel_set_cpu_max_freq(void)
- {
- 	u64 ratio = 1, turbo_ratio = 1;
- 
--	if (turbo_disabled())
--		return;
--
- 	if (slv_set_cpu_max_freq(&ratio, &turbo_ratio))
- 		goto set_value;
- 
-@@ -2022,7 +2026,9 @@ static void intel_set_cpu_max_freq(void)
- 	core_set_cpu_max_freq(&ratio, &turbo_ratio);
- 
- set_value:
--	arch_max_freq = div_u64(turbo_ratio * SCHED_CAPACITY_SCALE, ratio);
-+	arch_max_turbo_freq = div_u64(turbo_ratio * SCHED_CAPACITY_SCALE,
-+					ratio);
-+	set_arch_max_freq(turbo_disabled());
- 	static_branch_enable(&arch_scale_freq_key);
- }
- 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 8ab31702cf6a..6bf50783bc24 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -922,6 +922,7 @@ static void intel_pstate_update_limits(unsigned int cpu)
- 	 */
- 	if (global.turbo_disabled_mf != global.turbo_disabled) {
- 		global.turbo_disabled_mf = global.turbo_disabled;
-+		set_arch_max_freq(global.turbo_disabled);
- 		for_each_possible_cpu(cpu)
- 			intel_pstate_update_max_freq(cpu);
- 	} else {
 -- 
-2.16.4
+2.17.1
 
