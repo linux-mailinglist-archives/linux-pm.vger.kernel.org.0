@@ -2,101 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F34F7F82
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 20:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3D5F7FB1
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 20:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbfKKTLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 14:11:36 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:44949 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbfKKTLg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 14:11:36 -0500
-Received: by mail-io1-f68.google.com with SMTP id j20so15524165ioo.11
-        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 11:11:34 -0800 (PST)
+        id S1727040AbfKKTVg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 14:21:36 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40999 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbfKKTVf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 14:21:35 -0500
+Received: by mail-pg1-f196.google.com with SMTP id h4so10031627pgv.8
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 11:21:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2HgDUfvYTFbpP69aWKc0kGJILBYPdrw3d304UudQR6Y=;
-        b=eTbtsuOY1bdhKdbXYiPZJ/aG2Qace47DkAJbL4Op2wp42tGwtELx5aJ26CvJ9Jb3qT
-         vlhJLgZkDCviw9bLoBdRKzAEYECphGMJH3AnxorVg1SBo/rDG5z1xL1PRUcddapYELJc
-         JlDIgnKwPtZybDPnZO/Vil39jXyaJ3tn4cWD3olZQTk/Xys15Qnjc5WHDiyzLrr1dhpI
-         gUDI74hAWak5E6pqdOxyvLhSsu+bf3+IfPyWmb5suN58S2X3MoWTIFC9SW4Y0R3aIW+5
-         ErM2InmMnwLQIG+6QpsYESxWHX25EqnFNz7/WEo+Dks7zTq3u5LsV9tqWiolA629rCzm
-         iHFw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=zZILD+44OX1q5dyQzdM2BbgJv0kkr/NqvYdzqJF0VWU=;
+        b=jcc2cAskjWBgTeYwsSv3lvsFyjpx3z/2/dQVMzCjv1lmIFKWhkHxwaMJrmIvvzX4Zr
+         OF/rQM08+qFfbfpDc8ai8eZ0IFQ4+o3hIYKkDKyXMOLL24DVR1C15WLDsCUXefgV4oKA
+         pMO1W8OkboYcq+mtU/Rj1PxtqnJR3JahYQwmQeCGRHFcMGdwDyYM2RtjQwMqyZJKryNL
+         Ax08rcC/xS5IEgOE60HRwPIja/rZ2eeyJTh3DI9MAGLckAXXO4Tr5GPKw9R3kv6Kq3ye
+         lYqLrULR/t+MCbEALuBHLQJacFwZUVEGlAqbpTSFu5C3nv2uCt0XwGTOVxA099KQGn/h
+         IfUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2HgDUfvYTFbpP69aWKc0kGJILBYPdrw3d304UudQR6Y=;
-        b=rXhZLUAYJlQpziphtVbl0W5CzJqOPCh+hFcHjQDo2LrZyVBv6QtGQSCt4gojOlXuEn
-         l47sDt7Jjgphby1zoyni8hc4fOXwaDYg/RGWsM8AB/RMIacOYF1Z8svqZMOLSrqPpC9O
-         hJNqL9sm/27KNeVGkBVfDg4oDG1oeBmTpkt+VeUviZEI9IfYPpT3b3JyAHzl4FxaFEZ4
-         G7pL2GP5xSiws0Uasj5t193sYzzymX/H3xcSgHbln4M2zrFSSK70y0UV76VpRuCgFtSp
-         qVUB3eN85ZMEmjSXCOsKBG2pphZr04c4TpsOG9c+xB5eEK9nebmxm1F9QSCe4W2EDEpw
-         ybzw==
-X-Gm-Message-State: APjAAAUNzr42RRVl1Y+vfbDoaDRTyMO2GdF+jG1foIwWDx/yFRBH/aUZ
-        rI1XR3vXa5P22mlDC3UayjSg7LRvxzXsEn7QpUPI5g==
-X-Google-Smtp-Source: APXvYqy1znbPoGeXemeR0vFArovOl/+lq8cNdMivbT38ZF3jpW8pGC7IQIdwYmdC0F0dJSIodB17Xximee0fFWz8NMY=
-X-Received: by 2002:a02:c54b:: with SMTP id g11mr2199988jaj.136.1573499493869;
- Mon, 11 Nov 2019 11:11:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20191021124428.2541-1-brgl@bgdev.pl> <20191021124428.2541-6-brgl@bgdev.pl>
- <20191111080837.GF18902@dell>
-In-Reply-To: <20191111080837.GF18902@dell>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 11 Nov 2019 20:11:23 +0100
-Message-ID: <CAMRc=Me_b5c_e+qZ1s=TgTh7k_bQqrqthC8VTb7ak8+3AOEugg@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] dt-bindings: mfd: max77650: convert the binding
- document to yaml
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zZILD+44OX1q5dyQzdM2BbgJv0kkr/NqvYdzqJF0VWU=;
+        b=GEsUcbHA+tHzplLR8f0WHMGJBOwXAKnwYpyIMoRUyF95qiZmRBHaENCba285AgRWWT
+         yzjvAMgN9IgCwni6cu1Wlb7sBx5bk/vckjUGQRjPsIt40kS0GkOcMQJJSa6w57QzqYYh
+         U1GRUBamBZouvUqO0Sgb58XdRj43hjnNJVFSdChpKdaSBeJN1muxVIxu27ObmKX9dvAh
+         caAPqYZVzMtZYkppHnPa9W7Xo7TOOO1hbIBpVBpNn5waY/daB9ow9owdoI6olcRPsxq4
+         RS64vdo9pQqAy7booEP4DejZoXAgpMgmkFbxnUUfftukaSzTEpGlaSOnAbrxupWaTmvG
+         BSAA==
+X-Gm-Message-State: APjAAAXUmuwTETHIkzWgV+mCUf76qYAk3u7dkc4mbrmwb2PXdFGWou41
+        Gn8HMq6A84XETPkOlHkqfVuyqLAc6NmFag==
+X-Google-Smtp-Source: APXvYqzvHgUVjW/Rd7K/W+r2O5+4vx7SxfEQkH5rCRHJfWJtzF7eQkUWs7LcfgNd2hnpOUHjHrobqg==
+X-Received: by 2002:a17:90a:2623:: with SMTP id l32mr861971pje.70.1573500094683;
+        Mon, 11 Nov 2019 11:21:34 -0800 (PST)
+Received: from localhost ([49.248.192.129])
+        by smtp.gmail.com with ESMTPSA id v24sm4331651pfn.53.2019.11.11.11.21.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 11 Nov 2019 11:21:33 -0800 (PST)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com,
+        swboyd@chromium.org, sivaa@codeaurora.org,
+        Andy Gross <agross@kernel.org>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 0/3] thermal: tsens: Handle critical interrupts
+Date:   Tue, 12 Nov 2019 00:51:26 +0530
+Message-Id: <cover.1573499020.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pon., 11 lis 2019 o 09:08 Lee Jones <lee.jones@linaro.org> napisa=C5=82(a):
->
-> On Mon, 21 Oct 2019, Bartosz Golaszewski wrote:
->
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > Convert the binding document for MAX77650 core MFD module to YAML.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > ---
-> >  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
-> >  .../devicetree/bindings/mfd/max77650.yaml     | 149 ++++++++++++++++++
-> >  2 files changed, 149 insertions(+), 46 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
->
-> Applied, thanks.
->
+TSENS IP v2.x supports critical interrupts and v2.3+ adds watchdog support
+in case the FSM is frozen. Enable support in the driver.
 
-Hi Lee,
+Amit Kucheria (3):
+  drivers: thermal: tsens: Add critical interrupt support
+  drivers: thermal: tsens: Add watchdog support
+  arm64: dts: sdm845: thermal: Add critical interrupt support
 
-FYI this series is already in next through Rob's DT tree.
+ arch/arm64/boot/dts/qcom/sdm845.dtsi |  10 +-
+ drivers/thermal/qcom/tsens-common.c  | 170 +++++++++++++++++++++++++--
+ drivers/thermal/qcom/tsens-v2.c      |  18 ++-
+ drivers/thermal/qcom/tsens.c         |  21 ++++
+ drivers/thermal/qcom/tsens.h         |  85 ++++++++++++++
+ 5 files changed, 289 insertions(+), 15 deletions(-)
 
-Bart
+-- 
+2.17.1
 
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Linaro Services Technical Lead
-> Linaro.org =E2=94=82 Open source software for ARM SoCs
-> Follow Linaro: Facebook | Twitter | Blog
