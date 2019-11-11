@@ -2,110 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB3CF7A9A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 19:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F34F7F82
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 20:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfKKSQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 13:16:15 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:56290 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726763AbfKKSQO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 11 Nov 2019 13:16:14 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2E5BB1A0232;
-        Mon, 11 Nov 2019 19:16:13 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1F6641A0657;
-        Mon, 11 Nov 2019 19:16:13 +0100 (CET)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id B5F8B205FE;
-        Mon, 11 Nov 2019 19:16:12 +0100 (CET)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org
-Subject: [PATCH] PM / devfreq: Kconfig: Drop explicit selection of PM_OPP
-Date:   Mon, 11 Nov 2019 20:16:10 +0200
-Message-Id: <1fb316f5b2c4d36437a536cef46ce8e4567dee15.1573495711.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726985AbfKKTLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 14:11:36 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:44949 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726979AbfKKTLg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 14:11:36 -0500
+Received: by mail-io1-f68.google.com with SMTP id j20so15524165ioo.11
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 11:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2HgDUfvYTFbpP69aWKc0kGJILBYPdrw3d304UudQR6Y=;
+        b=eTbtsuOY1bdhKdbXYiPZJ/aG2Qace47DkAJbL4Op2wp42tGwtELx5aJ26CvJ9Jb3qT
+         vlhJLgZkDCviw9bLoBdRKzAEYECphGMJH3AnxorVg1SBo/rDG5z1xL1PRUcddapYELJc
+         JlDIgnKwPtZybDPnZO/Vil39jXyaJ3tn4cWD3olZQTk/Xys15Qnjc5WHDiyzLrr1dhpI
+         gUDI74hAWak5E6pqdOxyvLhSsu+bf3+IfPyWmb5suN58S2X3MoWTIFC9SW4Y0R3aIW+5
+         ErM2InmMnwLQIG+6QpsYESxWHX25EqnFNz7/WEo+Dks7zTq3u5LsV9tqWiolA629rCzm
+         iHFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2HgDUfvYTFbpP69aWKc0kGJILBYPdrw3d304UudQR6Y=;
+        b=rXhZLUAYJlQpziphtVbl0W5CzJqOPCh+hFcHjQDo2LrZyVBv6QtGQSCt4gojOlXuEn
+         l47sDt7Jjgphby1zoyni8hc4fOXwaDYg/RGWsM8AB/RMIacOYF1Z8svqZMOLSrqPpC9O
+         hJNqL9sm/27KNeVGkBVfDg4oDG1oeBmTpkt+VeUviZEI9IfYPpT3b3JyAHzl4FxaFEZ4
+         G7pL2GP5xSiws0Uasj5t193sYzzymX/H3xcSgHbln4M2zrFSSK70y0UV76VpRuCgFtSp
+         qVUB3eN85ZMEmjSXCOsKBG2pphZr04c4TpsOG9c+xB5eEK9nebmxm1F9QSCe4W2EDEpw
+         ybzw==
+X-Gm-Message-State: APjAAAUNzr42RRVl1Y+vfbDoaDRTyMO2GdF+jG1foIwWDx/yFRBH/aUZ
+        rI1XR3vXa5P22mlDC3UayjSg7LRvxzXsEn7QpUPI5g==
+X-Google-Smtp-Source: APXvYqy1znbPoGeXemeR0vFArovOl/+lq8cNdMivbT38ZF3jpW8pGC7IQIdwYmdC0F0dJSIodB17Xximee0fFWz8NMY=
+X-Received: by 2002:a02:c54b:: with SMTP id g11mr2199988jaj.136.1573499493869;
+ Mon, 11 Nov 2019 11:11:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20191021124428.2541-1-brgl@bgdev.pl> <20191021124428.2541-6-brgl@bgdev.pl>
+ <20191111080837.GF18902@dell>
+In-Reply-To: <20191111080837.GF18902@dell>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 11 Nov 2019 20:11:23 +0100
+Message-ID: <CAMRc=Me_b5c_e+qZ1s=TgTh7k_bQqrqthC8VTb7ak8+3AOEugg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] dt-bindings: mfd: max77650: convert the binding
+ document to yaml
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CONFIG_PM_OPP is already selected by CONFIG_PM_DEVFREQ since
-commit b9c69e043266 ("PM / devfreq: Add dependency on PM_OPP")
+pon., 11 lis 2019 o 09:08 Lee Jones <lee.jones@linaro.org> napisa=C5=82(a):
+>
+> On Mon, 21 Oct 2019, Bartosz Golaszewski wrote:
+>
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > Convert the binding document for MAX77650 core MFD module to YAML.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/mfd/max77650.txt      |  46 ------
+> >  .../devicetree/bindings/mfd/max77650.yaml     | 149 ++++++++++++++++++
+> >  2 files changed, 149 insertions(+), 46 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.yaml
+>
+> Applied, thanks.
+>
 
-This means that individual drivers shouldn't "select PM_OPP" explicitly.
+Hi Lee,
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+FYI this series is already in next through Rob's DT tree.
 
----
-Spawned by review comments on a new driver:
-https://patchwork.kernel.org/patch/11235695/#22992159
+Bart
 
-This patch shouldn't have any dependencies.
-
- drivers/devfreq/Kconfig | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index defe1d438710..066e6c4efaa2 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -81,11 +81,10 @@ config ARM_EXYNOS_BUS_DEVFREQ
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select DEVFREQ_GOV_PASSIVE
- 	select DEVFREQ_EVENT_EXYNOS_PPMU
- 	select PM_DEVFREQ_EVENT
--	select PM_OPP
- 	help
- 	  This adds the common DEVFREQ driver for Exynos Memory bus. Exynos
- 	  Memory bus has one more group of memory bus (e.g, MIF and INT block).
- 	  Each memory bus group could contain many memoby bus block. It reads
- 	  PPMU counters of memory controllers by using DEVFREQ-event device
-@@ -96,22 +95,20 @@ config ARM_TEGRA_DEVFREQ
- 	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
- 	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
- 		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
- 		ARCH_TEGRA_210_SOC || \
- 		COMPILE_TEST
--	select PM_OPP
- 	help
- 	  This adds the DEVFREQ driver for the Tegra family of SoCs.
- 	  It reads ACTMON counters of memory controllers and adjusts the
- 	  operating frequencies and voltages with OPP support.
- 
- config ARM_TEGRA20_DEVFREQ
- 	tristate "NVIDIA Tegra20 DEVFREQ Driver"
- 	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
- 	depends on COMMON_CLK
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
--	select PM_OPP
- 	help
- 	  This adds the DEVFREQ driver for the Tegra20 family of SoCs.
- 	  It reads Memory Controller counters and adjusts the operating
- 	  frequencies and voltages with OPP support.
- 
-@@ -119,11 +116,10 @@ config ARM_RK3399_DMC_DEVFREQ
- 	tristate "ARM RK3399 DMC DEVFREQ Driver"
- 	depends on ARCH_ROCKCHIP
- 	select DEVFREQ_EVENT_ROCKCHIP_DFI
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select PM_DEVFREQ_EVENT
--	select PM_OPP
- 	help
-           This adds the DEVFREQ driver for the RK3399 DMC(Dynamic Memory Controller).
-           It sets the frequency for the memory controller and reads the usage counts
-           from hardware.
- 
--- 
-2.17.1
-
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Linaro Services Technical Lead
+> Linaro.org =E2=94=82 Open source software for ARM SoCs
+> Follow Linaro: Facebook | Twitter | Blog
