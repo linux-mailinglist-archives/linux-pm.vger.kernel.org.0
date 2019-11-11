@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20797F6E3D
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 06:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52833F6E40
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 06:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbfKKFqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 00:46:25 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:28161 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbfKKFqZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 00:46:25 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191111054620epoutp02fe6b79b7276070073cbfd87ad7c477c3~WBYM1FwSt2660526605epoutp02R
-        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 05:46:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191111054620epoutp02fe6b79b7276070073cbfd87ad7c477c3~WBYM1FwSt2660526605epoutp02R
+        id S1726205AbfKKFtp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 00:49:45 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:13898 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbfKKFtp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 00:49:45 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191111054941epoutp03493355a9980162977f921412d4454066~WBbH06ozI1363213632epoutp03B
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 05:49:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191111054941epoutp03493355a9980162977f921412d4454066~WBbH06ozI1363213632epoutp03B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1573451180;
-        bh=8SfcOS7yf2L6oLFgtZFXODynh8Gmi92dVmq5MpiVnRs=;
+        s=mail20170921; t=1573451381;
+        bh=olReB5/sYyr6noqS7XjlPXjfuQaRIcMYAnEV2FSvs6Q=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=aQl8BKFbgbd/5bTcR0tAFQILzH8IMmHboD8lrJdMCX2AoAA+aB2m7ZSH/ol+VbWkD
-         GVpTi2NyXN5dAn8TT7Wo+60X0Ytg+dJPntwqYr3Cl78dfLJE9APK5rNaRLoB8sjrfc
-         GJ4kNiwMmUDLExIhybQDwcCVTY5hM2bre6HD0+bM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20191111054620epcas1p3c4a119681c299647982c91143eee0675~WBYMPwsiX3196131961epcas1p3m;
-        Mon, 11 Nov 2019 05:46:20 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 47BKcV0YF7zMqYkr; Mon, 11 Nov
-        2019 05:46:18 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        22.D4.04144.9A5F8CD5; Mon, 11 Nov 2019 14:46:18 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191111054617epcas1p2f6b3c5247d770ad90f07c7433a7831cd~WBYJNlIRo2148421484epcas1p2E;
-        Mon, 11 Nov 2019 05:46:17 +0000 (GMT)
+        b=Ymugn/s5U+QuOL7HUN2/ZZo3qBmqL9lTKZMxxMj/gxMH3i1ODaS3PTKShubs4JrH1
+         y+lujfv4d1oZx60U6y6cL363F1GTu4YBgLzxO02Cmug/DUJCpPGeXFCPufUMyDIh3P
+         o2r3+fXjHrePpWTfQ/1S3F3hYSGL+ocy1cG4fjSE=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20191111054940epcas1p4f0602a2ab46daa5bb129e41bca93fd4a~WBbHLRA2H3052130521epcas1p4b;
+        Mon, 11 Nov 2019 05:49:40 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47BKhL4H2szMqYkq; Mon, 11 Nov
+        2019 05:49:38 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8B.27.04068.276F8CD5; Mon, 11 Nov 2019 14:49:38 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191111054938epcas1p37100eab66b763e82859bcb1a720bfa2e~WBbEb8VtH0597105971epcas1p3R;
+        Mon, 11 Nov 2019 05:49:38 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191111054617epsmtrp112613feea260dad2ac5afba759bf35e7~WBYJMphCQ2326723267epsmtrp1H;
-        Mon, 11 Nov 2019 05:46:17 +0000 (GMT)
-X-AuditID: b6c32a35-2c7ff70000001030-43-5dc8f5a951c4
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191111054938epsmtrp276d1e4f705606c47d544c69e42d9ce78~WBbEbFNmJ2689626896epsmtrp2j;
+        Mon, 11 Nov 2019 05:49:38 +0000 (GMT)
+X-AuditID: b6c32a39-3b9219c000000fe4-38-5dc8f67297cc
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        28.30.25663.8A5F8CD5; Mon, 11 Nov 2019 14:46:16 +0900 (KST)
+        E3.80.25663.176F8CD5; Mon, 11 Nov 2019 14:49:37 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191111054616epsmtip1a95634a5810aff2507f3fac2c7e34c50~WBYI6gtw_2988629886epsmtip10;
-        Mon, 11 Nov 2019 05:46:16 +0000 (GMT)
-Subject: Re: [PATCH v10 06/11] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos
- structs
+        20191111054937epsmtip159dad636d80d77725e70cfcb43e636be~WBbEJb_gT3130731307epsmtip1g;
+        Mon, 11 Nov 2019 05:49:37 +0000 (GMT)
+Subject: Re: [PATCH v10 01/11] PM / devfreq: Fix devfreq_notifier_call
+ returning errno
 To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
         =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         Saravana Kannan <saravanak@google.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -62,240 +62,131 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <a9d671f8-0720-84de-abc7-563cc35731a4@samsung.com>
-Date:   Mon, 11 Nov 2019 14:52:04 +0900
+Message-ID: <3e31fce5-97ec-5f69-d352-d45a7cf0eb75@samsung.com>
+Date:   Mon, 11 Nov 2019 14:55:25 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB7023B0E36FF4C9180F6B7A6AEE620@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <b13007563e6c1e29e2d9b31c9881693fc2bf167a.1572556786.git.leonard.crestez@nxp.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJsWRmVeSWpSXmKPExsWy7bCmnu6qrydiDebMYbI4dGwru8XX06cY
-        LZZdOspoMX3vJjaL8+c3sFucbXrDbrHi7kdWi02Pr7FadP1ayWzxufcIo8XnDY8ZLW43rmCz
-        WH3uIJvFmdOXgLKH/rJZbPzq4SDg8f5GK7vH7IaLLB4LNpV6bFrVyeZx59oeNo/NS+o9Nr7b
-        weRx8N0eJo8tV9tZPPq2rGL0+LxJLoA7KtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTMwFDX
-        0NLCXEkhLzE31VbJxSdA1y0zB+gdJYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpBSk6B
-        ZYFecWJucWleul5yfq6VoYGBkSlQYUJ2RvfL6WwFazUrnh7bydbAOFGxi5GTQ0LAROLfz4ds
-        XYxcHEICOxglXp54zQqSEBL4xCjx5F0qROIbo8T7M9/ZYTrO3utnh0jsZZT4M+stE4TznlFi
-        34G1TCBVwgKhEidPtDGD2CICERJTH65lASliFvjHIjHv6Ro2kASbgJbE/hc3wGx+AUWJqz8e
-        M4LYvAJ2Ems2fgAbxCKgKrH/6B6gGg4OUaBBp78mQpQISpyc+YQFxOYUiJW4fnoy2NnMAuIS
-        t57MZ4Kw5SWat85mBtkrIXCLXeLB3rVQL7hITJ+/iRnCFpZ4dXwLVFxK4mV/G5RdLbHy5BE2
-        iOYORokt+y+wQiSMJfYvncwEchCzgKbE+l36EGFFiZ2/5zJCLOaTePe1hxWkREKAV6KjTQii
-        RFni8oO7TBC2pMTi9k62CYxKs5C8MwvJC7OQvDALYdkCRpZVjGKpBcW56anFhgWGyLG9iRGc
-        1LVMdzBOOedziFGAg1GJh/eHzolYIdbEsuLK3EOMEhzMSiK8OyqAQrwpiZVVqUX58UWlOanF
-        hxhNgYE9kVlKNDkfmHHySuINTY2MjY0tTAzNTA0NlcR5HZcvjRUSSE8sSc1OTS1ILYLpY+Lg
-        lGpgPPM18XNCyN//3yRXV300env+pU/vm71h+7UzL51kap8nrbP/ddVij+tRXatf9YsLVKh8
-        WVq4PsyG6duXNRc+BPiw+ax2iD60yWlK2PVVwcfkDEq3/9TSKL9u+v41p7+jtofRy7tPFlhM
-        6HdTtlr1lE9Qzt1g3/ZzL53b/lzv0A/RmnTr9dOW90osxRmJhlrMRcWJALwojkcABAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsWy7bCSnO6KrydiDda3mVkcOraV3eLr6VOM
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDJsWRmVeSWpSXmKPExsWy7bCmvm7RtxOxBv8nK1ocOraV3eLr6VOM
         FssuHWW0mL53E5vF+fMb2C3ONr1ht1hx9yOrxabH11gtun6tZLb43HuE0eLzhseMFrcbV7BZ
         rD53kM3izOlLQNlDf9ksNn71cBDweH+jld1jdsNFFo8Fm0o9Nq3qZPO4c20Pm8fmJfUeG9/t
-        YPI4+G4Pk8eWq+0sHn1bVjF6fN4kF8AdxWWTkpqTWZZapG+XwJXR/XI6W8FazYqnx3ayNTBO
-        VOxi5OSQEDCROHuvn72LkYtDSGA3o8S1L//YIRKSEtMuHmXuYuQAsoUlDh8uhqh5yyjxettl
-        NpAaYYFQiZMn2phBbBGBCIlTncdYQYqYBRpYJe4eXw019RWTxMamL0wgVWwCWhL7X9wA6+YX
-        UJS4+uMxI4jNK2AnsWbjB7AaFgFVif1H94DViAJNfb79BlSNoMTJmU9YQGxOgViJ66cns4LY
-        zALqEn/mXWKGsMUlbj2ZzwRhy0s0b53NPIFReBaS9llIWmYhaZmFpGUBI8sqRsnUguLc9Nxi
-        wwKjvNRyveLE3OLSvHS95PzcTYzgCNfS2sF44kT8IUYBDkYlHt4fOidihVgTy4orcw8xSnAw
-        K4nw7qgACvGmJFZWpRblxxeV5qQWH2KU5mBREueVzz8WKSSQnliSmp2aWpBaBJNl4uCUamCU
-        K14089eHKe/vPJhi9fnZxIXLXG+p1z+eLOMq98F0xQzmDc4szrPL9nPxC5gkGi+J/vaCQ3Rt
-        9+YqFT4TZ5WFiWdnrzN4V3IsTlD6acLeT4e+CRvydzSJ3jzy9ffMj2V2rYfXTMyYv2Uu8/db
-        rhFZvjGtB5bNlora5XBxTmae++7aLvmWwLWiSizFGYmGWsxFxYkABfDlf+wCAAA=
-X-CMS-MailID: 20191111054617epcas1p2f6b3c5247d770ad90f07c7433a7831cd
+        YPI4+G4Pk8eWq+0sHn1bVjF6fN4kF8AdlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhr
+        aGlhrqSQl5ibaqvk4hOg65aZA/SOkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafA
+        skCvODG3uDQvXS85P9fK0MDAyBSoMCE7Y/maX8wFzwUqNp3+zdrAeIy3i5GTQ0LAROLI+ycs
+        ILaQwA5GiU/v7LoYuYDsT4wSV67sZYZIfGOUODpdFaah//oSFoiivYwSE78sgip6zyjxeXo2
+        iC0sECHxdscNZpAiEYF1jBJ/DncxgTjMAg+YJSZN/c0IUsUmoCWx/8UNNhCbX0BR4uqPx2Bx
+        XgE7iVUrv4JNZRFQlTh2dTdrFyMHhyjQ1NNfEyFKBCVOzoQ4m1MgTuLL9+3sIDazgLjErSfz
+        mSBseYntb+eAHSEhcI9dYlX3ORaIF1wkutveMkPYwhKvjm9hh7ClJD6/28sGYVdLrDx5hA2i
+        uYNRYsv+C6wQCWOJ/UsnM4EcxCygKbF+lz5EWFFi5++5jBCL+STefe0Bu1lCgFeio00IokRZ
+        4vKDu0wQtqTE4vZOtgmMSrOQvDMLyQuzkLwwC2HZAkaWVYxiqQXFuempxYYFpsiRvYkRnNK1
+        LHcwHjvnc4hRgINRiYc3QP9ErBBrYllxZe4hRgkOZiUR3h0VQCHelMTKqtSi/Pii0pzU4kOM
+        psDAnsgsJZqcD8w3eSXxhqZGxsbGFiaGZqaGhkrivI7Ll8YKCaQnlqRmp6YWpBbB9DFxcEo1
+        MFoFRzwp3OWWsVz84PM1p7zmaJ+drx12PpZ7ngr/Hxm1htYvEzzbWcKv9yzeFa+nY6+659ff
+        bM7om+dFt3NvihatmLrI85ngjx/Vy5+npendFGdpye6PV9m27cyjJ983NOiJB7nd2swwa3al
+        WHZObr+wWnLad+e9L24tLTz4w273BE82xxLPNCWW4oxEQy3mouJEADHrggD/AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RXUhTYRjHfXfOzs5Wo7f59WqotahgmWlEvZCKoBcHg+gDxEKzYx5Ucm7t
+        6FKJNKEPLaurSkvzYpquIF1+5RbDqWvqUhyoK/MiNQxqVujMLCGPK/Du9/w/nufioQnFOzKU
+        zs0v4HT5bJ6SkpEdvcrwfReXHOnR1lex2GZvl2Dv0CDAja5+gB+8NlF4ZKRFgt+Wf5Xgpqkf
+        YmyaGRfjypVmAi9U9QG80DID8OTVJgo/G+6hsHPItebaVinc6mUSIPPNfU3CPCobJZl6UyFj
+        MlZQzIdxC8W8NJQyrfNdIqZn3iJi2sZukMydNiNgFkzhxzedkcVmcXm5ek63P/6cLOfp8xVC
+        OweLTEO/xWXALq8EUhrBg+juhIGsBDJaAc0A3bTPUz4jBN0f7ScqAb3G/qi3l/dlPABV13WL
+        hIw/TEWeLjchGAGwBaDm9lWRMBBwmkAdNu/6JgWcBqj7zXaBKahC1s/udX0L3IHGlmeAwHIY
+        j4zNXkJgEu5C9jGzWODAtQtzne5/ma1ooHqWFFgKz6LFn50SgQm4B/2pcxE+DkbvZ5+IfByB
+        Oj2PiXvAv2ZDvWZDpWZDpWZDpR6QRhDCaXl1tpqP0R7I5y5F8ayaL8zPjjqvUZvA+sNVqi7g
+        cGTYAKSBcrN8OdKRrhCzer5YbQOIJpQB8q6iNUmexRaXcDpNhq4wj+NtYBtNKoPlERr7aQXM
+        Zgu4Cxyn5XT/XREtDS0DJ8uDUhuHpR9Vhl9HXE5NStWVxczdft2TSwMN8SOs4QQ83OC8nlTS
+        hwc/7awz1H5n0vTMQ2er90tg1S2qIm5AYz4l8Uwll+Kizst+tUfZPkdimnUhOSgxLjrsWKpy
+        NWciM46O7AhrfGE2ogQbPJRCsKEVeqfFaku6jSx7lSSfw8aoCB3P/gXCmGeX7AIAAA==
+X-CMS-MailID: 20191111054938epcas1p37100eab66b763e82859bcb1a720bfa2e
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191031213442epcas1p41dc9214e98c05c634647ef06cdd0a7f3
+X-CMS-RootMailID: 20191031213438epcas1p3c8f3e43372631fd66f28bbaff6925001
 References: <cover.1572556786.git.leonard.crestez@nxp.com>
-        <CGME20191031213442epcas1p41dc9214e98c05c634647ef06cdd0a7f3@epcas1p4.samsung.com>
-        <254e9ed653c7d9d866a860673629d02351c1afd8.1572556786.git.leonard.crestez@nxp.com>
-        <072ef916-1753-ddc9-0fe8-7704b85def7a@samsung.com>
-        <VI1PR04MB7023B0E36FF4C9180F6B7A6AEE620@VI1PR04MB7023.eurprd04.prod.outlook.com>
+        <CGME20191031213438epcas1p3c8f3e43372631fd66f28bbaff6925001@epcas1p3.samsung.com>
+        <b13007563e6c1e29e2d9b31c9881693fc2bf167a.1572556786.git.leonard.crestez@nxp.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
-
-On 11/1/19 11:45 PM, Leonard Crestez wrote:
-> On 01.11.2019 04:07, Chanwoo Choi wrote:
->> Hi Leonard,
->>
->> Why do you add the new patches on v10 (patch6/7/8)
->> in this series? If you think that need to update
->> the pm_qos core, you have to send the new patchset
->> on separate mail thread. It make the difficult
->> to merge the PM_QoS support of devfreq.
->>
->> Please split out the patch6/7/8 from this series.
+On 11/1/19 6:34 AM, Leonard Crestez wrote:
+> Notifier callbacks shouldn't return negative errno but one of the
+> NOTIFY_OK/DONE/BAD values.
 > 
-> Unfortunately DEV_PM_QOS_MIN/MAX_FREQUENCY was removed when cpufreq 
-> switched away:
+> The OPP core will ignore return values from notifiers but returning a
+> value that matches NOTIFY_STOP_MASK will stop the notification chain.
 > 
->      https://patchwork.kernel.org/cover/11193021/
+> Fix by always returning NOTIFY_OK.
 > 
-> Support for freq limits in PM QoS needs to be restored, otherwise PM QoS 
-> for devfreq doesn't even compile. I posted the restoration separately:
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+> ---
+>  drivers/devfreq/devfreq.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
 > 
->      https://patchwork.kernel.org/cover/11212887/
-> 
-> I guess we can wait for Rafael to review that?
-
-I'm sorry for late reply.
-Thanks for the explanation.
-
-> 
-> We could also consider other alternatives such as using "raw" PM QoS 
-> aggregation inside devfreq and asking all consumers to call 
-> devfreq-specific APIs for frequency constraints?
-
-Actually, I don't want to make the separate devfreq-specific something
-for PM QoS feature. If possible, I think that we need to reduce the redundant
-or duplicate code in the linux kernel. Even if spend the long time
-for updating or fixing the issue of PM QoS, we need to do them. Thanks.
-
-
-> 
-> In the meantime I can post the devfreq cleanups in separately. would 
-> that help?
-
-Yes, you better to send the devfreq cleanup patches separately.
-
-> 
->> On 19. 11. 1. 오전 6:34, Leonard Crestez wrote:
->>> This allows dev_pm_qos to embed freq_qos structs, which is done in the
->>> next patch. Separate commit to make it easier to review.
->>>
->>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
->>> ---
->>>   include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
->>>   1 file changed, 38 insertions(+), 36 deletions(-)
->>>
->>> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
->>> index c35ff21e8a40..a8e1486e3200 100644
->>> --- a/include/linux/pm_qos.h
->>> +++ b/include/linux/pm_qos.h
->>> @@ -47,25 +47,10 @@ struct pm_qos_request {
->>>   struct pm_qos_flags_request {
->>>   	struct list_head node;
->>>   	s32 flags;	/* Do not change to 64 bit */
->>>   };
->>>   
->>> -enum dev_pm_qos_req_type {
->>> -	DEV_PM_QOS_RESUME_LATENCY = 1,
->>> -	DEV_PM_QOS_LATENCY_TOLERANCE,
->>> -	DEV_PM_QOS_FLAGS,
->>> -};
->>> -
->>> -struct dev_pm_qos_request {
->>> -	enum dev_pm_qos_req_type type;
->>> -	union {
->>> -		struct plist_node pnode;
->>> -		struct pm_qos_flags_request flr;
->>> -	} data;
->>> -	struct device *dev;
->>> -};
->>> -
->>>   enum pm_qos_type {
->>>   	PM_QOS_UNITIALIZED,
->>>   	PM_QOS_MAX,		/* return the largest value */
->>>   	PM_QOS_MIN,		/* return the smallest value */
->>>   	PM_QOS_SUM		/* return the sum */
->>> @@ -88,10 +73,48 @@ struct pm_qos_constraints {
->>>   struct pm_qos_flags {
->>>   	struct list_head list;
->>>   	s32 effective_flags;	/* Do not change to 64 bit */
->>>   };
->>>   
->>> +
->>> +#define FREQ_QOS_MIN_DEFAULT_VALUE	0
->>> +#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
->>> +
->>> +enum freq_qos_req_type {
->>> +	FREQ_QOS_MIN = 1,
->>> +	FREQ_QOS_MAX,
->>> +};
->>> +
->>> +struct freq_constraints {
->>> +	struct pm_qos_constraints min_freq;
->>> +	struct blocking_notifier_head min_freq_notifiers;
->>> +	struct pm_qos_constraints max_freq;
->>> +	struct blocking_notifier_head max_freq_notifiers;
->>> +};
->>> +
->>> +struct freq_qos_request {
->>> +	enum freq_qos_req_type type;
->>> +	struct plist_node pnode;
->>> +	struct freq_constraints *qos;
->>> +};
->>> +
->>> +
->>> +enum dev_pm_qos_req_type {
->>> +	DEV_PM_QOS_RESUME_LATENCY = 1,
->>> +	DEV_PM_QOS_LATENCY_TOLERANCE,
->>> +	DEV_PM_QOS_FLAGS,
->>> +};
->>> +
->>> +struct dev_pm_qos_request {
->>> +	enum dev_pm_qos_req_type type;
->>> +	union {
->>> +		struct plist_node pnode;
->>> +		struct pm_qos_flags_request flr;
->>> +	} data;
->>> +	struct device *dev;
->>> +};
->>> +
->>>   struct dev_pm_qos {
->>>   	struct pm_qos_constraints resume_latency;
->>>   	struct pm_qos_constraints latency_tolerance;
->>>   	struct pm_qos_flags flags;
->>>   	struct dev_pm_qos_request *resume_latency_req;
->>> @@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
->>>   {
->>>   	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
->>>   }
->>>   #endif
->>>   
->>> -#define FREQ_QOS_MIN_DEFAULT_VALUE	0
->>> -#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
->>> -
->>> -enum freq_qos_req_type {
->>> -	FREQ_QOS_MIN = 1,
->>> -	FREQ_QOS_MAX,
->>> -};
->>> -
->>> -struct freq_constraints {
->>> -	struct pm_qos_constraints min_freq;
->>> -	struct blocking_notifier_head min_freq_notifiers;
->>> -	struct pm_qos_constraints max_freq;
->>> -	struct blocking_notifier_head max_freq_notifiers;
->>> -};
->>> -
->>> -struct freq_qos_request {
->>> -	enum freq_qos_req_type type;
->>> -	struct plist_node pnode;
->>> -	struct freq_constraints *qos;
->>> -};
->>> -
->>>   static inline int freq_qos_request_active(struct freq_qos_request *req)
->>>   {
->>>   	return !IS_ERR_OR_NULL(req->qos);
->>>   }
->>>   
->>>
->>
->>
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 323d43315d1e..b65faa1a2baa 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -548,30 +548,32 @@ EXPORT_SYMBOL(devfreq_interval_update);
+>   */
+>  static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
+>  				 void *devp)
+>  {
+>  	struct devfreq *devfreq = container_of(nb, struct devfreq, nb);
+> -	int ret;
+> +	int err = -EINVAL;
+>  
+>  	mutex_lock(&devfreq->lock);
+>  
+>  	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
+> -	if (!devfreq->scaling_min_freq) {
+> -		mutex_unlock(&devfreq->lock);
+> -		return -EINVAL;
+> -	}
+> +	if (!devfreq->scaling_min_freq)
+> +		goto out;
+>  
+>  	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
+> -	if (!devfreq->scaling_max_freq) {
+> -		mutex_unlock(&devfreq->lock);
+> -		return -EINVAL;
+> -	}
+> +	if (!devfreq->scaling_max_freq)
+> +		goto out;
+> +
+> +	err = update_devfreq(devfreq);
+>  
+> -	ret = update_devfreq(devfreq);
+> +out:
+>  	mutex_unlock(&devfreq->lock);
+> +	if (err)
+> +		dev_err(devfreq->dev.parent,
+> +			"failed to update frequency from OPP notifier (%d)\n",
+> +			err);
+>  
+> -	return ret;
+> +	return NOTIFY_OK;
+>  }
+>  
+>  /**
+>   * devfreq_dev_release() - Callback for struct device to release the device.
+>   * @dev:	the devfreq device
 > 
 
+Applied it because it doesn't depend on the pm_qos feature.
 
 -- 
 Best Regards,
