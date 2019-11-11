@@ -2,96 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7749AF76CB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 15:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4EDF773B
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 15:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbfKKOoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 09:44:16 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44679 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbfKKOoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 09:44:16 -0500
-Received: by mail-pf1-f194.google.com with SMTP id q26so10812388pfn.11
-        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 06:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=LU8AMzMDy4OOUqnFmi5XN0F2ODrVM91j32IqE/77mHI=;
-        b=NTMOinJQKgGx9JbjTBpaKVajY1gfGsX1WblOyp3NBFsN8p75WfacP6UqvvXptVTVId
-         xN5qz61ZGXzP9BO1kdYSvUOKp39Fbhf66yDAtZWO5BKFue22crRdtliWAHS4kz2fTSfn
-         76wXnu2Gctwypqjj2Ju18XWXFc/3dzXGUwRIqHNjdCmv1mmK1k7ayrSQh4xKVlXgR3iY
-         NYRa8Ad7h162TBo7EYx3gGgD3fsHCxv0IT2DFhME9aROh7ybGMZsLX7HKJHvJ9G/lY2d
-         PN7HPgDwPADieUk7aqhYEFA5qnheSRp14/hszYvfmRF7NBno4Ps/bJO3zF5v9m0oeLr6
-         w6Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=LU8AMzMDy4OOUqnFmi5XN0F2ODrVM91j32IqE/77mHI=;
-        b=WwKkaLjrtboCv1LEYJN3X+xcfQl2qvVTp1FF9yxe++HKeyzlPkOYqzKR9vh5uC66iM
-         Kv15C03h5HftsxEqFpZeq4x+R8f7/6lFc3bawobkjd69GXgThCrDlO8Mv029u3nTA9Gy
-         7XE7LtWHkmbiSAZ4pyQGVUICix2miA/IDnd3ZpyQ0crYz3EWEQUh34ZyxWrwM23budTe
-         CAzHIzhk/veCJolh9myAcri/sFWxBGfojYw01AhaGJMOJJ+Expt2W7301a+2qmraYyAx
-         gXQl+WsRDzkGk8Vm9W5p6/UI90l3Ky4egH75p542fYqOtZmkT7Cb9jzFVCUgj5bUV7OK
-         dZmQ==
-X-Gm-Message-State: APjAAAUS5bbpvJAgpG5sDh8zgaWkSz/Fg95U6nGLUv93Y7U7F/MgZ2wU
-        pIX0Y47DrCruV6XCgPaZd++5uQ==
-X-Google-Smtp-Source: APXvYqx0YKzHjeIhgnYjvdDvP29Rz7Fr9hL8YrdKueSuJN1eULz6g6R0rM2MwrtthHa/AXMwwqvLnw==
-X-Received: by 2002:a63:7210:: with SMTP id n16mr27806220pgc.397.1573483454953;
-        Mon, 11 Nov 2019 06:44:14 -0800 (PST)
-Received: from localhost ([2601:602:9200:a1a5:dd5e:2cce:fe26:7bc6])
-        by smtp.gmail.com with ESMTPSA id q126sm2117762pfb.42.2019.11.11.06.44.14
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 11 Nov 2019 06:44:14 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        id S1726928AbfKKO70 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 09:59:26 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:49308 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726923AbfKKO70 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 09:59:26 -0500
+Received: from [192.168.0.108] (223.167.21.236) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 11 Nov
+ 2019 22:59:25 +0800
+Subject: Re: [PATCH v4 2/4] firmware: meson_sm: Add secure power domain
+ support
+To:     Kevin Hilman <khilman@baylibre.com>,
+        <linux-amlogic@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jian Hu <jian.hu@amlogic.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
         Hanjie Lin <hanjie.lin@amlogic.com>,
         Victor Wan <victor.wan@amlogic.com>,
         Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH v4 3/4] soc: amlogic: Add support for Secure power domains controller
-In-Reply-To: <57b9c706-c341-c7cf-698a-66335b34442b@amlogic.com>
-References: <1572868028-73076-1-git-send-email-jianxin.pan@amlogic.com> <1572868028-73076-4-git-send-email-jianxin.pan@amlogic.com> <7hmud4stfo.fsf@baylibre.com> <57b9c706-c341-c7cf-698a-66335b34442b@amlogic.com>
-Date:   Mon, 11 Nov 2019 06:44:13 -0800
-Message-ID: <7h36eucw1u.fsf@baylibre.com>
+References: <1572868028-73076-1-git-send-email-jianxin.pan@amlogic.com>
+ <1572868028-73076-3-git-send-email-jianxin.pan@amlogic.com>
+ <7hk188stcy.fsf@baylibre.com>
+ <420073b1-0a3f-1bfd-4422-34f8cd7e0d2d@amlogic.com>
+ <7heeyecw8d.fsf@baylibre.com>
+From:   Jianxin Pan <jianxin.pan@amlogic.com>
+Message-ID: <3d14fc01-f903-c008-631f-eeb0b4a335f0@amlogic.com>
+Date:   Mon, 11 Nov 2019 22:59:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <7heeyecw8d.fsf@baylibre.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [223.167.21.236]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jianxin,
+Hi Kevin,
 
-Jianxin Pan <jianxin.pan@amlogic.com> writes:
-
-[...]
-
->>> +	SEC_PD(RAMB,	GENPD_FLAG_ALWAYS_ON),
->>> +	SEC_PD(IR,	0),
->>> +	SEC_PD(SPICC,	0),
->>> +	SEC_PD(SPIFC,	0),
->>> +	SEC_PD(USB,	0),
->>> +	/* NIC is for NIC400, and should be always on */
->> 
->> Why?
->> 
-> NIC domain is for ARM CoreLink NIC-400 Network Interconnect, and should be always on since bootloader.
-
-OK, makes sense.  I suggest a minor change to the comment to remind that
-this is an interconnect:
-
-   /* NIC is for the Arm NIC-400 interconnect, and should be always on */
-
-Thanks,
-
-Kevin
+On 2019/11/11 22:40, Kevin Hilman wrote:
+> Jianxin Pan <jianxin.pan@amlogic.com> writes:
+> 
+>> Hi Kevin,
+>>
+>> Please see my comments below:
+>>
+>> On 2019/11/10 4:11, Kevin Hilman wrote:
+>>> Jianxin Pan <jianxin.pan@amlogic.com> writes:
+>>>
+>>>> The Amlogic Meson A1/C1 Secure Monitor implements calls to control power
+>>>> domain.
+>>>>
+>>>> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+>>>> ---
+>>>>  drivers/firmware/meson/meson_sm.c       | 2 ++
+>>>>  include/linux/firmware/meson/meson_sm.h | 2 ++
+>>>>  2 files changed, 4 insertions(+)
+>>>>
+>> [...]
+>>>> diff --git a/include/linux/firmware/meson/meson_sm.h b/include/linux/firmware/meson/meson_sm.h
+>>>> index 6669e2a..4ed3989 100644
+>>>> --- a/include/linux/firmware/meson/meson_sm.h
+>>>> +++ b/include/linux/firmware/meson/meson_sm.h
+>>>> @@ -12,6 +12,8 @@ enum {
+>>>>  	SM_EFUSE_WRITE,
+>>>>  	SM_EFUSE_USER_MAX,
+>>>>  	SM_GET_CHIP_ID,
+>>>> +	SM_PWRC_SET,
+>>>> +	SM_PWRC_GET,
+>>>
+>>> These new IDs are unique to the A1/C1 family.  Maybe we should add a
+>>> prefix to better indicate that.  Maybe:
+>>>
+>>>        SM_A1_PWRC_SET,
+>>>        SM_A1_PWRC_GET,
+>>>
+>>> Thoughts?
+>>
+>> I consulted with the internal VLSI team, and it's likely that the latter new SOC will follow A1/C1.
+>> And then it may become common function in the future.
+> 
+> OK, but it's not a common function for the past, so it's useful to mark
+> that distinction.
+> 
+> Just like in device-tree, we often have compatibles named for previous
+> SoC families (e.g. "gxbb") used on newer SoCs, but we use that to mean
+> "GXBB or newer".
+> 
+> Similarily here, we can use SM_A1_ prefix to mean "A1 or newer.
+> 
+Thanks for your explaination, I will fix it in the next version.
+> Kevin
+> 
+> .
+> 
 
