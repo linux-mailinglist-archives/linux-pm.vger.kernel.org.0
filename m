@@ -2,153 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02182F8239
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85181F829D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 22:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfKKV3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 16:29:21 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46985 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727040AbfKKV3U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 16:29:20 -0500
-Received: by mail-ot1-f67.google.com with SMTP id n23so12469530otr.13;
-        Mon, 11 Nov 2019 13:29:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0EaaQakc/Olt1+inLfsxuVhU6rWXEXlsy8c5lcy0DyE=;
-        b=EY8xtl227uo8kNI6SRAs/fKXX6zV4w8eokSbQtFhTMHQ+Ft5DjcRES+dwSRB4kBYP2
-         VYL1QpVxCXjKrjfaW1quhar7B1+oohZBeNolNLG5JizOlwcRVfLiWYaUwdkonKWIF+RY
-         xb0Q14jHmRJ4j3288BRZEWdfO+xJlqXC8WoYvPpX+5hCa5a2stbSjdj0gUPYXQNPEEdc
-         tpLGShN17Fk2wFDUDJW3tp40wmsQ2pcmIj3NBO43YzFsOSNuUogPoolAobATTOfSQQME
-         I/w948Y+iQ/IeNeOAHWrPsKpvSP9XTAx7gH/+cMv/6HucluMgObxCryfYLJ+/rTMzBlJ
-         9hpw==
-X-Gm-Message-State: APjAAAUGh8J08O/kE5CpLVGnZO2St/BlkXkUaSWBaZy08DrH3DDhTwBu
-        /inSbFcyD+ymKFzZntvb9dmfy4bW7HRNWcX8cbQ=
-X-Google-Smtp-Source: APXvYqyn3HyV29I3Exmg96+ZNvBAEDMds2v9BIW3fBJWmGtjU2xIWKaEiub/FOFmNk8ZD2+N7/GBfNsXpdv1kiMswvQ=
-X-Received: by 2002:a05:6830:232a:: with SMTP id q10mr22974750otg.262.1573507759372;
- Mon, 11 Nov 2019 13:29:19 -0800 (PST)
-MIME-Version: 1.0
-References: <10494959.bKODIZ00nm@kreacher> <000a01d59656$99798710$cc6c9530$@net>
- <CAJZ5v0gZDJ2=PiiGw2mcCcVKBM2OyM1G9nRvJ+iWLFUQcXqZuw@mail.gmail.com>
- <6163696.37NBKbymtj@kreacher> <000b01d597f2$06403a50$12c0aef0$@net> <002301d59813$ee18c920$ca4a5b60$@net>
-In-Reply-To: <002301d59813$ee18c920$ca4a5b60$@net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 Nov 2019 22:29:08 +0100
-Message-ID: <CAJZ5v0hFjNHgNz-MfbLhXkxPvcJzEmBBvGF7mi8v52jV3CPy2Q@mail.gmail.com>
-Subject: Re: [PATCH v2] cpuidle: Use nanoseconds as the unit of time
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726983AbfKKVzb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 16:55:31 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:42354 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726896AbfKKVzb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 Nov 2019 16:55:31 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8C020200654;
+        Mon, 11 Nov 2019 22:55:28 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7DADF2000AC;
+        Mon, 11 Nov 2019 22:55:28 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 1EEC7205FE;
+        Mon, 11 Nov 2019 22:55:28 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] PM / devfreq: Add usage_stat file to sysfs
+Date:   Mon, 11 Nov 2019 23:55:24 +0200
+Message-Id: <f70ebc907933717ae5fe2af5bc7f53eed0ef3308.1573508311.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Nov 10, 2019 at 11:12 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> On 2019.11.10 10:10 Doug Smythies wrote:
-> > On 2019.11.10 09:24 Rafael J. Wysocki wrote:
-> >> On Sunday, November 10, 2019 5:48:21 PM CET Rafael J. Wysocki wrote:
-> >>
-> >> I have found a bug, which should be addressed by the patch below.
-> >>
-> >> If it still doesn't reduce the discrepancy, we'll need to look further.
-> >>
-> >> ---
-> >> drivers/cpuidle/governors/menu.c |    4 ++--
-> >> 1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> Index: linux-pm/drivers/cpuidle/governors/menu.c
-> >> ===================================================================
-> >> --- linux-pm.orig/drivers/cpuidle/governors/menu.c
-> >> +++ linux-pm/drivers/cpuidle/governors/menu.c
-> >> @@ -516,8 +516,8 @@ static void menu_update(struct cpuidle_d
-> >>      new_factor -= new_factor / DECAY;
-> >>
-> >>      if (data->next_timer_ns > 0 && measured_ns < MAX_INTERESTING)
-> >> -            new_factor += RESOLUTION * div64_u64(measured_ns,
-> >> -                                                 data->next_timer_ns);
-> >> +            new_factor += div64_u64(RESOLUTION * measured_ns,
-> >> +                                    data->next_timer_ns);
-> >>      else
-> >>              /*
-> >>               * we were idle so long that we count it as a perfect
-> >
-> > Yes, that was the exact bit of code I focused on yesterday.
-> > However, my attempt to fix was different, and made no difference,
-> > with the new graph being exactly on top of the old bad one.
-> > I had defined new_factor as u64 and RESOLUTION as ULL.
->
-> Your patch does fix the problem.
-> I now also understand why my attempt did not.
->
-> New data added to previous graphs. For those that don't
-> want to go to the graphs, the nanosecond menu graphs are now
-> almost identical to the microsecond based one.
->
-> http://www.smythies.com/~doug/linux/idle/nano-second-conversion/sweep/index.html
->
-> Legend:
-> teo-base : linux-next 2019.11.07
-> menu-base: linux-next 2019.11.07
-> teo-v2   : linux-next 2019.11.07 + cpuidle: Consolidate disabled state checks + this v2
-> menu-v2  : linux-next 2019.11.07 + cpuidle: Consolidate disabled state checks + this v2
-> rjw1     : menu-v2 + above patch.
->
-> Acked-by and tested-by Doug Smythies <dsmythies@telus.net>
+This file shows the currently usage of the device as reported by
+get_dev_status.
 
-Thanks a lot!
+This is the same information used by the ondemand governor to make
+decisions and it is not otherwise easily available.
 
-> Disclaimer: Only teo and menu, not ladder or haltpoll governors.
->
-> Additional suggestions:
->
-> Header comments:
->
-> > microseconds provided by drivers.  In addition to that, change
-> > cpuidle_governor_latency_req() to return the idle state exit
-> > latency constraint in nanoseconds.
->
-> Suggest:
->
-> microseconds provided by drivers.  Additionally, change
-> cpuidle_governor_latency_req() to return the idle state exit
-> latency constraint in nanoseconds.
->
-> > With that, meeasure idle state residency (last_residency_ns in
->              ^^^^^^^^
-> Suggest:
->
-> Also measure idle state residency (last_residency_ns in
->
-> Code:
-> Suggest deletion of this note:
->
-> /*
->  * Please note when changing the tuning values:
->  * If (MAX_INTERESTING-1) * RESOLUTION > UINT_MAX, the result of
->  * a scaling operation multiplication may overflow on 32 bit platforms.
->  * In that case, #define RESOLUTION as ULL to get 64 bit result:
->  * #define RESOLUTION 1024ULL
->  *
->  * The default values do not overflow.
->  */
->
-> Because you have managed the extra bit requirements as part of the patch.
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+---
+ Documentation/ABI/testing/sysfs-class-devfreq |  8 +++++
+ drivers/devfreq/devfreq.c                     | 34 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-Good suggestion! :-)
+The output might be a little too "free-form" for a sysfs file,
+suggestions welcome.
+* Splitting it into single-field files would make
+reads non-atomic.
+* There is currently no debugfs for devfreq
 
-I have folded the fix and the removal of the comment as suggested
-above into to v2 and applied the resulting patch with tags from you
-and Peter.
+The only current alternative seems to be debug statements in the
+driver's implementation of get_dev_status.
 
-Also the changelog has been updated as suggested.
+diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+index 01196e19afca..680dab768105 100644
+--- a/Documentation/ABI/testing/sysfs-class-devfreq
++++ b/Documentation/ABI/testing/sysfs-class-devfreq
+@@ -53,10 +53,18 @@ Description:
+ 		the number of transitions between states.
+ 		In order to activate this ABI, the devfreq target device
+ 		driver should provide the list of available frequencies
+ 		with its profile.
+ 
++What:		/sys/class/devfreq/.../usage_stat
++Date:		November 2019
++Contact:	Leonard Crestez <leonard.crestez@nxp.com>
++Description:
++		This file shows the currently usage of the device if
++		measurement is enabled. This is the same information used by
++		ondemand governor to make decisions.
++
+ What:		/sys/class/devfreq/.../userspace/set_freq
+ Date:		September 2011
+ Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
+ Description:
+ 		The /sys/class/devfreq/.../userspace/set_freq shows and
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 78a5af869a0e..20dce6167946 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -1559,20 +1559,54 @@ static ssize_t trans_stat_show(struct device *dev,
+ 					devfreq->total_trans);
+ 	return len;
+ }
+ static DEVICE_ATTR_RO(trans_stat);
+ 
++static ssize_t usage_stat_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct devfreq *devfreq = to_devfreq(dev);
++	struct devfreq_dev_status *stat = &devfreq->last_status;
++	int ret;
++	ssize_t len = 0;
++
++	if (!devfreq->profile->get_dev_status)
++		return sprintf(buf, "Not Supported.\n");
++
++	if (!devfreq->stop_polling) {
++		mutex_lock(&devfreq->lock);
++		ret = devfreq->profile->get_dev_status(dev->parent, stat);
++		mutex_unlock(&devfreq->lock);
++		if (ret) {
++			len += sprintf(buf + len, "Poll error: %d\n", ret);
++			return len;
++		}
++	} else
++		len += sprintf(buf + len, "Polling stopped\n");
++
++	len += sprintf(buf + len, "Busy: %lu\n", stat->busy_time);
++	len += sprintf(buf + len, "Total: %lu\n", stat->total_time);
++	len += sprintf(buf + len, "Current Frequency: %lu\n",
++		       stat->current_frequency);
++	len += sprintf(buf + len, "Usage: %lu%%\n",
++		       stat->busy_time * 100 / stat->total_time);
++
++	return len;
++}
++static DEVICE_ATTR_RO(usage_stat);
++
+ static struct attribute *devfreq_attrs[] = {
+ 	&dev_attr_governor.attr,
+ 	&dev_attr_available_governors.attr,
+ 	&dev_attr_cur_freq.attr,
+ 	&dev_attr_available_frequencies.attr,
+ 	&dev_attr_target_freq.attr,
+ 	&dev_attr_polling_interval.attr,
+ 	&dev_attr_min_freq.attr,
+ 	&dev_attr_max_freq.attr,
+ 	&dev_attr_trans_stat.attr,
++	&dev_attr_usage_stat.attr,
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(devfreq);
+ 
+ static int __init devfreq_init(void)
+-- 
+2.17.1
 
-Thanks!
