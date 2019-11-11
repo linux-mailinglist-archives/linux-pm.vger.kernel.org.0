@@ -2,204 +2,302 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63416F6E11
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 06:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20797F6E3D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 06:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbfKKF0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 00:26:48 -0500
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:34366 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726164AbfKKF0s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 00:26:48 -0500
-Received: by mail-vk1-f195.google.com with SMTP id t184so2879126vka.1
-        for <linux-pm@vger.kernel.org>; Sun, 10 Nov 2019 21:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DXwG7Htt8xNu0lrk1CpbOO5TmV59fWwZQbJzjoVIM78=;
-        b=h8lrbRMrrhVlG6DWJGLEMzVAA3RZl2r6zZCSH8Buo45xvL6NfgvfUszEX1y9lILLGN
-         V8mlpV90yp5XtQmkx1Q9RteWm9G1IL5Fj5+d1ZiO16Dm4IQ0oi4H7iJxttg49FfFIFEu
-         4o3XmqaUvlKymwS514aX4+oaXdsEuBuAnWQt3ofclnGD340pPa8BqmX0cMTcMuEtlHb/
-         ZuPtFOpOJcKDMLhgLXTPCk959aHIeQWOPpNInWwdWDCijdZJGKZCZ88DhFDpFbTKBYa8
-         CfBi0wPSBklojiNhead9uXF5ha7uIcwFiQozmx5fsG2wgSyNfyipe2u0og2QTv4B9+tZ
-         pW3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DXwG7Htt8xNu0lrk1CpbOO5TmV59fWwZQbJzjoVIM78=;
-        b=MNuxhVSdu4MaGPWMZ/6IwBQQRrKFUBQvVZEhTy76kR1m2xT+yMgj0YZuuv2rZ2PIuS
-         8pLvoIU47fm+YsNgyzP5RhjQtL0CHFdx51CM/z7zHsTJXX9XjKJdBdn07zl+L5QFdeTd
-         I+CRPVegQKFnSxnjEXPgzSHtwcbuIa8V7LZBsf9kE9a6WJoPfmqm61oMy7hM6as5KFya
-         clxj/SvGZvkUAV7qkmdGUlA/clukeewbJVH1kTDFAJookLJZtI6zkNguKoZUvKxO8KNe
-         jz3uQWubFUU/LYTFTP0gP4oNWgJzMpksW0beBTc64mbIHJVKwdkdtq8jXYMH4HFsZ0q7
-         v5tg==
-X-Gm-Message-State: APjAAAXIxUTOCDLWbBc1gtZjVpWRBFnKUIB9I9ZwlZD5zICQbed+l7IP
-        HaoeHD8OLEnwON37fcfE8Wy/eh6TJpnGaysdzqCc9w==
-X-Google-Smtp-Source: APXvYqyvRzUFxvAr+4U1TJibsN+f5gff9mvIlEY8CgnrfvYIwjzf6AmIsl3DKsTnNOun/OG9RsaKkKkkUDn2wYlAr7w=
-X-Received: by 2002:a1f:7387:: with SMTP id o129mr16986118vkc.73.1573450005202;
- Sun, 10 Nov 2019 21:26:45 -0800 (PST)
+        id S1726215AbfKKFqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 00:46:25 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:28161 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbfKKFqZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 00:46:25 -0500
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191111054620epoutp02fe6b79b7276070073cbfd87ad7c477c3~WBYM1FwSt2660526605epoutp02R
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 05:46:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191111054620epoutp02fe6b79b7276070073cbfd87ad7c477c3~WBYM1FwSt2660526605epoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1573451180;
+        bh=8SfcOS7yf2L6oLFgtZFXODynh8Gmi92dVmq5MpiVnRs=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=aQl8BKFbgbd/5bTcR0tAFQILzH8IMmHboD8lrJdMCX2AoAA+aB2m7ZSH/ol+VbWkD
+         GVpTi2NyXN5dAn8TT7Wo+60X0Ytg+dJPntwqYr3Cl78dfLJE9APK5rNaRLoB8sjrfc
+         GJ4kNiwMmUDLExIhybQDwcCVTY5hM2bre6HD0+bM=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20191111054620epcas1p3c4a119681c299647982c91143eee0675~WBYMPwsiX3196131961epcas1p3m;
+        Mon, 11 Nov 2019 05:46:20 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 47BKcV0YF7zMqYkr; Mon, 11 Nov
+        2019 05:46:18 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        22.D4.04144.9A5F8CD5; Mon, 11 Nov 2019 14:46:18 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191111054617epcas1p2f6b3c5247d770ad90f07c7433a7831cd~WBYJNlIRo2148421484epcas1p2E;
+        Mon, 11 Nov 2019 05:46:17 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191111054617epsmtrp112613feea260dad2ac5afba759bf35e7~WBYJMphCQ2326723267epsmtrp1H;
+        Mon, 11 Nov 2019 05:46:17 +0000 (GMT)
+X-AuditID: b6c32a35-2c7ff70000001030-43-5dc8f5a951c4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        28.30.25663.8A5F8CD5; Mon, 11 Nov 2019 14:46:16 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191111054616epsmtip1a95634a5810aff2507f3fac2c7e34c50~WBYI6gtw_2988629886epsmtip10;
+        Mon, 11 Nov 2019 05:46:16 +0000 (GMT)
+Subject: Re: [PATCH v10 06/11] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos
+ structs
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <a9d671f8-0720-84de-abc7-563cc35731a4@samsung.com>
+Date:   Mon, 11 Nov 2019 14:52:04 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191015061349.141448-1-wvw@google.com> <CAHLCerNffKDgJKqaVTH3Kp_QfBLtm2M4H80xFDy=2fGXTVQR+w@mail.gmail.com>
- <CAHLCerN0CWOox-_=ywVO40R9LCahBRoU6Myg3Ca3p_TkZyJAMw@mail.gmail.com> <CAGXk5yp4uSCESvve5j_LbCr7b_55DqBagjNr_Dsdi=HppSpBPg@mail.gmail.com>
-In-Reply-To: <CAGXk5yp4uSCESvve5j_LbCr7b_55DqBagjNr_Dsdi=HppSpBPg@mail.gmail.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Mon, 11 Nov 2019 10:56:34 +0530
-Message-ID: <CAHLCerN4ymf7LOGQPRLuAwirwCUaQGynrnUMfgU6+frDswey5A@mail.gmail.com>
-Subject: Re: [PATCH] thermal: create softlink by name for thermal_zone and cooling_device
-To:     Wei Wang <wvw@google.com>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <VI1PR04MB7023B0E36FF4C9180F6B7A6AEE620@VI1PR04MB7023.eurprd04.prod.outlook.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJsWRmVeSWpSXmKPExsWy7bCmnu6qrydiDebMYbI4dGwru8XX06cY
+        LZZdOspoMX3vJjaL8+c3sFucbXrDbrHi7kdWi02Pr7FadP1ayWzxufcIo8XnDY8ZLW43rmCz
+        WH3uIJvFmdOXgLKH/rJZbPzq4SDg8f5GK7vH7IaLLB4LNpV6bFrVyeZx59oeNo/NS+o9Nr7b
+        weRx8N0eJo8tV9tZPPq2rGL0+LxJLoA7KtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTMwFDX
+        0NLCXEkhLzE31VbJxSdA1y0zB+gdJYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpBSk6B
+        ZYFecWJucWleul5yfq6VoYGBkSlQYUJ2RvfL6WwFazUrnh7bydbAOFGxi5GTQ0LAROLfz4ds
+        XYxcHEICOxglXp54zQqSEBL4xCjx5F0qROIbo8T7M9/ZYTrO3utnh0jsZZT4M+stE4TznlFi
+        34G1TCBVwgKhEidPtDGD2CICERJTH65lASliFvjHIjHv6Ro2kASbgJbE/hc3wGx+AUWJqz8e
+        M4LYvAJ2Ems2fgAbxCKgKrH/6B6gGg4OUaBBp78mQpQISpyc+YQFxOYUiJW4fnoy2NnMAuIS
+        t57MZ4Kw5SWat85mBtkrIXCLXeLB3rVQL7hITJ+/iRnCFpZ4dXwLVFxK4mV/G5RdLbHy5BE2
+        iOYORokt+y+wQiSMJfYvncwEchCzgKbE+l36EGFFiZ2/5zJCLOaTePe1hxWkREKAV6KjTQii
+        RFni8oO7TBC2pMTi9k62CYxKs5C8MwvJC7OQvDALYdkCRpZVjGKpBcW56anFhgWGyLG9iRGc
+        1LVMdzBOOedziFGAg1GJh/eHzolYIdbEsuLK3EOMEhzMSiK8OyqAQrwpiZVVqUX58UWlOanF
+        hxhNgYE9kVlKNDkfmHHySuINTY2MjY0tTAzNTA0NlcR5HZcvjRUSSE8sSc1OTS1ILYLpY+Lg
+        lGpgPPM18XNCyN//3yRXV300env+pU/vm71h+7UzL51kap8nrbP/ddVij+tRXatf9YsLVKh8
+        WVq4PsyG6duXNRc+BPiw+ax2iD60yWlK2PVVwcfkDEq3/9TSKL9u+v41p7+jtofRy7tPFlhM
+        6HdTtlr1lE9Qzt1g3/ZzL53b/lzv0A/RmnTr9dOW90osxRmJhlrMRcWJALwojkcABAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsWy7bCSnO6KrydiDda3mVkcOraV3eLr6VOM
+        FssuHWW0mL53E5vF+fMb2C3ONr1ht1hx9yOrxabH11gtun6tZLb43HuE0eLzhseMFrcbV7BZ
+        rD53kM3izOlLQNlDf9ksNn71cBDweH+jld1jdsNFFo8Fm0o9Nq3qZPO4c20Pm8fmJfUeG9/t
+        YPI4+G4Pk8eWq+0sHn1bVjF6fN4kF8AdxWWTkpqTWZZapG+XwJXR/XI6W8FazYqnx3ayNTBO
+        VOxi5OSQEDCROHuvn72LkYtDSGA3o8S1L//YIRKSEtMuHmXuYuQAsoUlDh8uhqh5yyjxettl
+        NpAaYYFQiZMn2phBbBGBCIlTncdYQYqYBRpYJe4eXw019RWTxMamL0wgVWwCWhL7X9wA6+YX
+        UJS4+uMxI4jNK2AnsWbjB7AaFgFVif1H94DViAJNfb79BlSNoMTJmU9YQGxOgViJ66cns4LY
+        zALqEn/mXWKGsMUlbj2ZzwRhy0s0b53NPIFReBaS9llIWmYhaZmFpGUBI8sqRsnUguLc9Nxi
+        wwKjvNRyveLE3OLSvHS95PzcTYzgCNfS2sF44kT8IUYBDkYlHt4fOidihVgTy4orcw8xSnAw
+        K4nw7qgACvGmJFZWpRblxxeV5qQWH2KU5mBREueVzz8WKSSQnliSmp2aWpBaBJNl4uCUamCU
+        K14089eHKe/vPJhi9fnZxIXLXG+p1z+eLOMq98F0xQzmDc4szrPL9nPxC5gkGi+J/vaCQ3Rt
+        9+YqFT4TZ5WFiWdnrzN4V3IsTlD6acLeT4e+CRvydzSJ3jzy9ffMj2V2rYfXTMyYv2Uu8/db
+        rhFZvjGtB5bNlora5XBxTmae++7aLvmWwLWiSizFGYmGWsxFxYkABfDlf+wCAAA=
+X-CMS-MailID: 20191111054617epcas1p2f6b3c5247d770ad90f07c7433a7831cd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191031213442epcas1p41dc9214e98c05c634647ef06cdd0a7f3
+References: <cover.1572556786.git.leonard.crestez@nxp.com>
+        <CGME20191031213442epcas1p41dc9214e98c05c634647ef06cdd0a7f3@epcas1p4.samsung.com>
+        <254e9ed653c7d9d866a860673629d02351c1afd8.1572556786.git.leonard.crestez@nxp.com>
+        <072ef916-1753-ddc9-0fe8-7704b85def7a@samsung.com>
+        <VI1PR04MB7023B0E36FF4C9180F6B7A6AEE620@VI1PR04MB7023.eurprd04.prod.outlook.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 3:04 AM Wei Wang <wvw@google.com> wrote:
->
-> On Wed, Oct 16, 2019 at 10:16 AM Amit Kucheria
-> <amit.kucheria@verdurent.com> wrote:
-> >
-> > On Wed, Oct 16, 2019 at 10:20 PM Amit Kucheria
-> > <amit.kucheria@verdurent.com> wrote:
-> > >
-> > > On Tue, Oct 15, 2019 at 11:43 AM Wei Wang <wvw@google.com> wrote:
-> > > >
-> > > > The paths thermal_zone%d and cooling_device%d are not intuitive and the
-> > > > numbers are subject to change due to device tree change. This usually
-> > > > leads to tree traversal in userspace code.
-> > > > The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
-> > > > cooling_device respectively.
-> > >
-> > > I like this.
-> > >
-> > > > Signed-off-by: Wei Wang <wvw@google.com>
-> > > > ---
-> > > >  drivers/thermal/thermal_core.c | 23 +++++++++++++++++++++--
-> > > >  1 file changed, 21 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> > > > index d4481cc8958f..0ff8fb1d7b0a 100644
-> > > > --- a/drivers/thermal/thermal_core.c
-> > > > +++ b/drivers/thermal/thermal_core.c
-> > > > @@ -22,6 +22,7 @@
-> > > >  #include <net/netlink.h>
-> > > >  #include <net/genetlink.h>
-> > > >  #include <linux/suspend.h>
-> > > > +#include <linux/kobject.h>
-> > > >
-> > > >  #define CREATE_TRACE_POINTS
-> > > >  #include <trace/events/thermal.h>
-> > > > @@ -46,6 +47,8 @@ static DEFINE_MUTEX(poweroff_lock);
-> > > >
-> > > >  static atomic_t in_suspend;
-> > > >  static bool power_off_triggered;
-> > > > +static struct kobject *cdev_link_kobj;
-> > > > +static struct kobject *tz_link_kobj;
-> > > >
-> > > >  static struct thermal_governor *def_governor;
-> > > >
-> > > > @@ -954,7 +957,7 @@ __thermal_cooling_device_register(struct device_node *np,
-> > > >         struct thermal_zone_device *pos = NULL;
-> > > >         int result;
-> > > >
-> > > > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
-> > > > +       if (!type || !type[0] || strlen(type) >= THERMAL_NAME_LENGTH)
-> > > >                 return ERR_PTR(-EINVAL);
-> > >
-> > > This should be a separate fix, if needed.
-> Agree, but the link now requires that "" as invalid _type_.
+Hi Leonard,
 
-I'm not sure I understand. What does this change have to do with
-adding symlinks below?
+On 11/1/19 11:45 PM, Leonard Crestez wrote:
+> On 01.11.2019 04:07, Chanwoo Choi wrote:
+>> Hi Leonard,
+>>
+>> Why do you add the new patches on v10 (patch6/7/8)
+>> in this series? If you think that need to update
+>> the pm_qos core, you have to send the new patchset
+>> on separate mail thread. It make the difficult
+>> to merge the PM_QoS support of devfreq.
+>>
+>> Please split out the patch6/7/8 from this series.
+> 
+> Unfortunately DEV_PM_QOS_MIN/MAX_FREQUENCY was removed when cpufreq 
+> switched away:
+> 
+>      https://patchwork.kernel.org/cover/11193021/
+> 
+> Support for freq limits in PM QoS needs to be restored, otherwise PM QoS 
+> for devfreq doesn't even compile. I posted the restoration separately:
+> 
+>      https://patchwork.kernel.org/cover/11212887/
+> 
+> I guess we can wait for Rafael to review that?
 
-> > >
-> > > >         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
-> > > > @@ -989,9 +992,15 @@ __thermal_cooling_device_register(struct device_node *np,
-> > > >                 return ERR_PTR(result);
-> > > >         }
-> > > >
-> > > > -       /* Add 'this' new cdev to the global cdev list */
-> > > > +       /* Add 'this' new cdev to the global cdev list and create link*/
-> > > >         mutex_lock(&thermal_list_lock);
-> > > >         list_add(&cdev->node, &thermal_cdev_list);
-> > > > +       if (!cdev_link_kobj)
-> > > > +               cdev_link_kobj = kobject_create_and_add("cdev-by-name",
-> > > > +                                               cdev->device.kobj.parent);
-> > > > +       if (!cdev_link_kobj || sysfs_create_link(cdev_link_kobj,
-> > > > +                                               &cdev->device.kobj, cdev->type))
-> > > > +               dev_err(&cdev->device, "Failed to create cdev-by-name link\n");
-> > >
-> > > Any reason not to use the following form instead? It seems easier to read.
-> > >
-> > > if (!cdev_link_kobj) {
-> > >                cdev_link_kobj = kobject_create_and_add("cdev-by-name",
-> > >                                                cdev->device.kobj.parent);
-> > >               ret = sysfs_create_link(cdev_link_kobj,
-> > >                                               &cdev->device.kobj, cdev->type))
-> > >               if (ret)
-> > >                        dev_err(&cdev->device, "Failed to create
-> > > cdev-by-name link\n");
-> > > }
-> >
-> > I can now see why you had to do that - none of the other links would
-> > get created after the first one.
-> >
-> > Perhaps create the directories in the __init functions and only create
-> > the links here?
-> >
-> AFAICT, this is no such API except the private get_device_parent()
-> under driver/base/. Also the lazy initialization makes sense in such
-> case when there is no thermal device attached. Looks like the class
-> dir is also lazy-initialized when first device registered
-> https://elixir.bootlin.com/linux/v5.3.5/source/drivers/base/core.c#L1790.
+I'm sorry for late reply.
+Thanks for the explanation.
 
-OK.
+> 
+> We could also consider other alternatives such as using "raw" PM QoS 
+> aggregation inside devfreq and asking all consumers to call 
+> devfreq-specific APIs for frequency constraints?
 
-> >
-> > > >         mutex_unlock(&thermal_list_lock);
-> > > >
-> > > >         /* Update binding information for 'this' new cdev */
-> > > > @@ -1157,6 +1166,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
-> > > >                         }
-> > > >                 }
-> > > >         }
-> > > > +       if (cdev_link_kobj)
-> > > > +               sysfs_remove_link(cdev_link_kobj, cdev->type);
-> > > >
-> > > >         mutex_unlock(&thermal_list_lock);
-> > > >
-> > > > @@ -1340,6 +1351,12 @@ thermal_zone_device_register(const char *type, int trips, int mask,
-> > > >
-> > > >         mutex_lock(&thermal_list_lock);
-> > > >         list_add_tail(&tz->node, &thermal_tz_list);
-> > > > +       if (!tz_link_kobj)
-> > > > +               tz_link_kobj = kobject_create_and_add("tz-by-name",
-> > > > +                                               tz->device.kobj.parent);
-> > > > +       if (!tz_link_kobj || sysfs_create_link(tz_link_kobj,
-> > > > +                                               &tz->device.kobj, tz->type))
-> > > > +               dev_err(&tz->device, "Failed to create tz-by-name link\n");
-> > >
-> > > Same as above.
-> > >
-> > > >         mutex_unlock(&thermal_list_lock);
-> > > >
-> > > >         /* Bind cooling devices for this zone */
-> > > > @@ -1411,6 +1428,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
-> > > >                         }
-> > > >                 }
-> > > >         }
-> > > > +       if (tz_link_kobj)
-> > > > +               sysfs_remove_link(tz_link_kobj, tz->type);
-> > > >
-> > > >         mutex_unlock(&thermal_list_lock);
-> > > >
-> > > > --
-> > > > 2.23.0.700.g56cf767bdb-goog
-> > > >
+Actually, I don't want to make the separate devfreq-specific something
+for PM QoS feature. If possible, I think that we need to reduce the redundant
+or duplicate code in the linux kernel. Even if spend the long time
+for updating or fixing the issue of PM QoS, we need to do them. Thanks.
+
+
+> 
+> In the meantime I can post the devfreq cleanups in separately. would 
+> that help?
+
+Yes, you better to send the devfreq cleanup patches separately.
+
+> 
+>> On 19. 11. 1. 오전 6:34, Leonard Crestez wrote:
+>>> This allows dev_pm_qos to embed freq_qos structs, which is done in the
+>>> next patch. Separate commit to make it easier to review.
+>>>
+>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+>>> ---
+>>>   include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
+>>>   1 file changed, 38 insertions(+), 36 deletions(-)
+>>>
+>>> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+>>> index c35ff21e8a40..a8e1486e3200 100644
+>>> --- a/include/linux/pm_qos.h
+>>> +++ b/include/linux/pm_qos.h
+>>> @@ -47,25 +47,10 @@ struct pm_qos_request {
+>>>   struct pm_qos_flags_request {
+>>>   	struct list_head node;
+>>>   	s32 flags;	/* Do not change to 64 bit */
+>>>   };
+>>>   
+>>> -enum dev_pm_qos_req_type {
+>>> -	DEV_PM_QOS_RESUME_LATENCY = 1,
+>>> -	DEV_PM_QOS_LATENCY_TOLERANCE,
+>>> -	DEV_PM_QOS_FLAGS,
+>>> -};
+>>> -
+>>> -struct dev_pm_qos_request {
+>>> -	enum dev_pm_qos_req_type type;
+>>> -	union {
+>>> -		struct plist_node pnode;
+>>> -		struct pm_qos_flags_request flr;
+>>> -	} data;
+>>> -	struct device *dev;
+>>> -};
+>>> -
+>>>   enum pm_qos_type {
+>>>   	PM_QOS_UNITIALIZED,
+>>>   	PM_QOS_MAX,		/* return the largest value */
+>>>   	PM_QOS_MIN,		/* return the smallest value */
+>>>   	PM_QOS_SUM		/* return the sum */
+>>> @@ -88,10 +73,48 @@ struct pm_qos_constraints {
+>>>   struct pm_qos_flags {
+>>>   	struct list_head list;
+>>>   	s32 effective_flags;	/* Do not change to 64 bit */
+>>>   };
+>>>   
+>>> +
+>>> +#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+>>> +#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+>>> +
+>>> +enum freq_qos_req_type {
+>>> +	FREQ_QOS_MIN = 1,
+>>> +	FREQ_QOS_MAX,
+>>> +};
+>>> +
+>>> +struct freq_constraints {
+>>> +	struct pm_qos_constraints min_freq;
+>>> +	struct blocking_notifier_head min_freq_notifiers;
+>>> +	struct pm_qos_constraints max_freq;
+>>> +	struct blocking_notifier_head max_freq_notifiers;
+>>> +};
+>>> +
+>>> +struct freq_qos_request {
+>>> +	enum freq_qos_req_type type;
+>>> +	struct plist_node pnode;
+>>> +	struct freq_constraints *qos;
+>>> +};
+>>> +
+>>> +
+>>> +enum dev_pm_qos_req_type {
+>>> +	DEV_PM_QOS_RESUME_LATENCY = 1,
+>>> +	DEV_PM_QOS_LATENCY_TOLERANCE,
+>>> +	DEV_PM_QOS_FLAGS,
+>>> +};
+>>> +
+>>> +struct dev_pm_qos_request {
+>>> +	enum dev_pm_qos_req_type type;
+>>> +	union {
+>>> +		struct plist_node pnode;
+>>> +		struct pm_qos_flags_request flr;
+>>> +	} data;
+>>> +	struct device *dev;
+>>> +};
+>>> +
+>>>   struct dev_pm_qos {
+>>>   	struct pm_qos_constraints resume_latency;
+>>>   	struct pm_qos_constraints latency_tolerance;
+>>>   	struct pm_qos_flags flags;
+>>>   	struct dev_pm_qos_request *resume_latency_req;
+>>> @@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+>>>   {
+>>>   	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+>>>   }
+>>>   #endif
+>>>   
+>>> -#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+>>> -#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+>>> -
+>>> -enum freq_qos_req_type {
+>>> -	FREQ_QOS_MIN = 1,
+>>> -	FREQ_QOS_MAX,
+>>> -};
+>>> -
+>>> -struct freq_constraints {
+>>> -	struct pm_qos_constraints min_freq;
+>>> -	struct blocking_notifier_head min_freq_notifiers;
+>>> -	struct pm_qos_constraints max_freq;
+>>> -	struct blocking_notifier_head max_freq_notifiers;
+>>> -};
+>>> -
+>>> -struct freq_qos_request {
+>>> -	enum freq_qos_req_type type;
+>>> -	struct plist_node pnode;
+>>> -	struct freq_constraints *qos;
+>>> -};
+>>> -
+>>>   static inline int freq_qos_request_active(struct freq_qos_request *req)
+>>>   {
+>>>   	return !IS_ERR_OR_NULL(req->qos);
+>>>   }
+>>>   
+>>>
+>>
+>>
+> 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
