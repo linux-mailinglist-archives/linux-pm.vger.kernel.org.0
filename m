@@ -2,115 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A61F7041
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 10:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C6BF7147
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Nov 2019 10:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbfKKJQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Nov 2019 04:16:31 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:47113 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726768AbfKKJQa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 04:16:30 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D10C34BB;
-        Mon, 11 Nov 2019 04:16:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 11 Nov 2019 04:16:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=767pSBRJ5shuYMbgPGJ/NNfiJLw
-        uGxahyROFUAPFCyc=; b=QL7E7y/EkKZiIaXtSdO5xlErh7sWmESOBvYArr7CVfp
-        eQzc3UERDa9ID9hdy2lFIlSKG6qxAErTf3njeANYlVShDy6UuKgA7ijVOvSazPcr
-        g3wjoXv9ZEYeqkbXvf0xTRSWRhXoa1JYrOQt2QjNXGY0UjKrpaPoCwunhc7kKjpb
-        /frGGcTi8OBPNTf8rvHE3WO9zkj3pDCRuchNBLsC22DpVKVMK6qSAL+QAJF0ZvId
-        utlEu3dYSA+MdZeJj/OfIlrYwLTu+kHwKlBxe0T/sjFJirwbVVtvZg9tz2skBtgb
-        uIRhrA1vAjindtTZDdMuPzbNunRo9atznS0r8/pQOhQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=767pSB
-        RJ5shuYMbgPGJ/NNfiJLwuGxahyROFUAPFCyc=; b=bDztKrrAvA8V+7wLK3MLVe
-        m8W/bcOJD8KxIyKB8OkXlQb0Y3RFA6OsgJx61wa5oIIG5+hDfQVPgsl7LWhb0p/+
-        CT+mslvrBRj7y02GVeqDbQxbQquw6kAu7SXKQrHIr36J5XLqTphRRnaHX2zJKrLw
-        3Du7MBVCEO7FZh58iviSUnQ9aA2j/QYYn9KDTo4a3JdK/+Z3yrKKPdciuyhU5crQ
-        3LWP5KfWvJZ4dxW4zBxAXjNSxkKfjlqolNIGNH/8oH88a1nWMsEoD8yWATMpcd8X
-        A+gaQo3VAbFQXhxOkPn9ubd42Yyj/3VBXnDOW/SoYSsYkQGIgiRVKAFeL6ey8jVw
-        ==
-X-ME-Sender: <xms:6ybJXeu0x1QJJObgsILvHQe3sOcXCVOvVrYyrT1UytIqV59h2uVRsQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedruddvjedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:6ybJXZfJyvDt3neyds_yxO2il2OqimVf6hPU5EQM6QAV3J2PtmykCA>
-    <xmx:6ybJXXZ18rQyPBzQhbADNALFi019tBRuNUERxXgmFmzdQVC9g2o3Ww>
-    <xmx:6ybJXUVQZqXp4-UBlASkwi0BVT8d-IaH2XgMqMnhdOezzcBG0xRdbg>
-    <xmx:7CbJXe0xMG9EQdfRsehkw-9hE_MmqmKB8aUY2nxGKil6KH1KfHK83w>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0FF8F3060060;
-        Mon, 11 Nov 2019 04:16:26 -0500 (EST)
-Date:   Mon, 11 Nov 2019 10:16:24 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     "# 4 . 7" <stable@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [BACKPORT 4.14.y 04/18] usb: dwc3: Allow disabling of
- metastability workaround
-Message-ID: <20191111091624.GA4139389@kroah.com>
-References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
- <20190905161759.28036-5-mathieu.poirier@linaro.org>
- <20190910143601.GD3362@kroah.com>
- <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
+        id S1726834AbfKKJ7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Nov 2019 04:59:15 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39080 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbfKKJ7P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Nov 2019 04:59:15 -0500
+Received: by mail-wr1-f67.google.com with SMTP id l7so2302517wrp.6
+        for <linux-pm@vger.kernel.org>; Mon, 11 Nov 2019 01:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=eD2mFxfVr7jqwjCQLkcsr471D4SkGotzfy35wgYgUMM=;
+        b=RMN2bA4+lMAKFdwR+4JeDk0HISR2OU0FOBH3RzzHhI/3G7Aeehalukuq8QJv4Iaw4u
+         D87xCtfvNz2KS+6hRDw9iic7hESPaOmQVDI5cqXwZxaKfoOKwohZvJCreG2uDfCbO9Ob
+         pVYsTBYV0s8KAOnyoFmcGQZyFn/NNVuIQr6G5NlXgnEeRcwJIKFJ2Ef91rhf8aZayj18
+         poEvX7X6+puOeqqfaJUF6t0tXUPzylfEDQYHhJF2LFBMArOPABUWOe4qSFXkrqHcXllV
+         Tt8ihTjn1PbSxdQnSP6n/njk7ICTSj0UA6XmKtzNqwPKneov+0K9K9JHaecUGUBN3ADb
+         7L3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=eD2mFxfVr7jqwjCQLkcsr471D4SkGotzfy35wgYgUMM=;
+        b=lAJ1gXutFlaW8wEfX4JSXxR6we4pQbIbNFJv0XMypflUqlPI3qQgVesTA7YPEbdXTP
+         bDtgQ09XnQ5nn7oaUL1/rzcHBpNeBynRrjynCTerOM2qJ7MIq7EYfJBcx7Ue1tbeAWNn
+         w2To12E55hIpfJp7/CJbf7ICmX+kIK3OAJsTFzF1rjsmolKhmaYjxW4UC9jH1Stcr8pp
+         HZDTJ1UbkctlWFzYLsFD5g/iEUGo9IB0Av1mPZe3Lp7rq/Axtg9fp12+pOeLho2BFOgO
+         /l+cO9FOCdHSikaZ9oIfwgZWBB9n09CCrNvEhxFnXD0yPXeaX91gfyDTYKOcyyYeCTKC
+         NpPA==
+X-Gm-Message-State: APjAAAVQBikM/LdR4PFddq5hWumgkEJiQxVef+jT1g9dzbY9TWKuHHWn
+        ypScsJpqCE4KDxMnIBwwk/X38w==
+X-Google-Smtp-Source: APXvYqyP3ss0XlR714UlyWGfjXdVI34ShILsdqamZSJmStxPFOuXee/ehWWpIIjd+7QdhhoQvF5zJg==
+X-Received: by 2002:adf:de86:: with SMTP id w6mr19953529wrl.220.1573466353227;
+        Mon, 11 Nov 2019 01:59:13 -0800 (PST)
+Received: from dell ([95.147.198.88])
+        by smtp.gmail.com with ESMTPSA id n23sm14842601wmc.18.2019.11.11.01.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 01:59:12 -0800 (PST)
+Date:   Mon, 11 Nov 2019 09:59:05 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matheus Castello <matheus@castello.eng.br>
+Cc:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] power: supply: MAX17040: Add IRQ for low level
+ and alert SOC changes
+Message-ID: <20191111095905.GD3218@dell>
+References: <20191105095905.GA31721@pi3>
+ <20191107031710.5672-1-matheus@castello.eng.br>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191107031710.5672-1-matheus@castello.eng.br>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 08:01:40AM -0600, Mathieu Poirier wrote:
-> On Tue, 10 Sep 2019 at 08:36, Greg KH <greg@kroah.com> wrote:
-> >
-> > On Thu, Sep 05, 2019 at 10:17:45AM -0600, Mathieu Poirier wrote:
-> > > From: Roger Quadros <rogerq@ti.com>
-> > >
-> > > commit 42bf02ec6e420e541af9a47437d0bdf961ca2972 upstream
-> > >
-> > > Some platforms (e.g. TI's DRA7 USB2 instance) have more trouble
-> > > with the metastability workaround as it supports only
-> > > a High-Speed PHY and the PHY can enter into an Erratic state [1]
-> > > when the controller is set in SuperSpeed mode as part of
-> > > the metastability workaround.
-> > >
-> > > This causes upto 2 seconds delay in enumeration on DRA7's USB2
-> > > instance in gadget mode.
-> > >
-> > > If these platforms can be better off without the workaround,
-> > > provide a device tree property to suggest that so the workaround
-> > > is avoided.
-> > >
-> > > [1] Device mode enumeration trace showing PHY Erratic Error.
-> > >      irq/90-dwc3-969   [000] d...    52.323145: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.560646: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.798144: dwc3_event: event (00000901): Erratic Error [U0]
-> >
-> > Does the DT also need to get updated with this new id for this?  Is that
-> > a separate patch somewhere?
-> 
-> The upstream commit is:
-> 
-> b8c9c6fa2002 ARM: dts: dra7: Disable USB metastability workaround for USB2
-> 
-> Should I just send the latter or you prefer a resend with both patches?
+On Thu, 07 Nov 2019, Matheus Castello wrote:
 
-I've queued this up now, along with the rest of this series, thanks.
+> This series add IRQ handler for low level SOC alert, define a devicetree
+> binding attribute to configure the alert level threshold and check for
+> changes in SOC and power supply status for send uevents.
+> 
+> Max17043/17044 have a pin for alert host about low level state of charge and
+> this alert can be configured in a threshold from 1% up to 32% of SOC.
+> 
+> Tested on Toradex Colibri iMX7D, with a SparkFun Lipo Fuel Gauge module
+> based on MAXIM MAX17043.
+> 
+> Thanks Krzysztof for your time reviewing it. Let me know what you think about
+> the fixes.
+> 
+> Changes since v5:
+> (Suggested by Krzysztof Kozlowski)
+> - Rearrange code and add max17040_enable_alert_irq on patch 1/5
+> - Remove useless dev_info
 
-greg k-h
+Just something to bear in mind in the future:
+
+When submitting subsequent versions, could you please do so as
+separate sets? Attaching them to previous submissions gets confusing
+real quick.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
