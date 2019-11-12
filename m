@@ -2,293 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F461F907D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 14:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F67BF90E0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 14:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727187AbfKLNVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 08:21:37 -0500
-Received: from mail-eopbgr720080.outbound.protection.outlook.com ([40.107.72.80]:7264
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        id S1727012AbfKLNnk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 08:43:40 -0500
+Received: from mail-eopbgr20071.outbound.protection.outlook.com ([40.107.2.71]:39414
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725834AbfKLNVh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 Nov 2019 08:21:37 -0500
+        id S1726962AbfKLNnk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Nov 2019 08:43:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lzRdDmSRYYv8DDHuHECIxPeTc9gCyOYOsmaMJRq/HYOrhIGTk0Tm2T6ttrPoJIRZtfAJ7LNN1VhiTwQqj0hn86S1Artv54wsicduGakZfTW/nYZst+2aCgF8Dvr7yzyduhUvODybBZSlBZEJLYImLuwDPjRZ3vjPtr+Gx7uGYzh4yMClcyf8c3YjzKnBOq4HyqpTbsFi0EKbbNmgIv7O+mGP3np2hDjxrk+/KwhNH9+jCkK4IhIawE2Cvr7COpJGeTBE3e1yNb2gMwFmBCx0VPivFp+KOKr2EyodUlBJwsBNyLdQyBYaXOfosLa9jF1ZdjC1OC313K/wUxFgYFfqhA==
+ b=W0cxoxdhJleLm2AD0g1BF4srK3fZ2m5UR8AFb5D7mhLuXkBteWZSXU7aK2oNRyCsohJ+BVXLVmEiEnyLCTVS7tdwf+Fa7TsZ5dybckpa7JurNoURRyCC0omLR4CBckR2qWKYtqJ9kxQkEhcB1GdpyFqNAYj2O7bY4cla9ZwxCaCTyvPaF/OUj12O8QZ7S6hAuFFOJahrsYb2Ees4h7/VNFtQjtxayGfpHzZpwbiRpz/mXnygJ+9b2SSMJpC7Y4Ht7c7uztY6fIxcbddjp68LAPFJh6YsujAgsuFJozUX447yleI7b4LWPBfpHvZeiv/mqa3JizCI+V3lidxoRw3zhw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jgqxPs4s049Nu3VOR1et90OOfPB4rIKPyCovfxt1jI0=;
- b=H0xjpyBTlUspGK0vgUOlJj9PwfodBPGzwODBRQ7ihBcNEO9nXB7GvDNci7kpV4KzYg7i0W7yAirdX41bb0DIJTTADRMFOxrhiMhSELBFXvp9/YJgHRnCTsWG/NNrkChay571mnaGZgxn0RMGo2wrMIaVsOwar//dMRCYBWw26SabKJS5vkQxja7uuPgLVIdzwpXdY0/GiBSyHElr1wdSMOBeRFDBZvVLyZyE+DejSz+canxy7TdH0ki4KuqhswKN3nc2jw692tLQiN82EzSb7OL8GCqVxejRbj/4NeXEXC9v0DKBwIzN31flq3VmdEzZjzsVyqMhiPAWTTt2lDccXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ bh=RvMS3MnR+OVag5l/7OjETDYlKEje4ZsT7YnEeaFqzLI=;
+ b=Y9bhA/9efF+hMOh3oC+bNiiuT5g/oMD7jt13j0yi5PleL2TJkFZRUN4cDHnr6YDoYeBu+Z9oJO1s98lXXzZ7JxowEvM4s7woq7TpRsc5ISyi3K64BzCqZbvyu4f5KYppnX+OI3/jYxiOS4un7YKczGX3BATNuiI1U7KJZR4WSPa0AZCLXxmjhFmQdImCheJ0Miy/BIBNr4oGSv1YlcjRdBMtkmILA6bvs6gB1qWeEXgptf0lW1TknpkqUT2fAeGAqyTVJqOCbFSNDjHmCtXcgI/lOyw6wlv31QnECp82mH0hfaK1pFWxBJ6AShP658Nsmp3Gw/t/BuO/L2KV9iNJBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jgqxPs4s049Nu3VOR1et90OOfPB4rIKPyCovfxt1jI0=;
- b=C2/xdRaPMvloeMhIpjGsBl5FZ3K95Fe0o8UzHMH7OiRrq0NJNUTvCTOPRXUObvwSeI+mS2XIdIwAKKhkO1nlVv+vzF7gsuX51D8FNFyrDTASlklVndRwZqvYkSaC73eUtlGXk/mp0P/r/Mj7jB0uvMuphhIZYw28yzO7kjwNSJs=
-Received: from BL0PR02CA0097.namprd02.prod.outlook.com (2603:10b6:208:51::38)
- by BY5PR02MB6083.namprd02.prod.outlook.com (2603:10b6:a03:1ff::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.24; Tue, 12 Nov
- 2019 13:21:32 +0000
-Received: from BL2NAM02FT008.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::200) by BL0PR02CA0097.outlook.office365.com
- (2603:10b6:208:51::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.24 via Frontend
- Transport; Tue, 12 Nov 2019 13:21:31 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT008.mail.protection.outlook.com (10.152.76.162) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2430.20
- via Frontend Transport; Tue, 12 Nov 2019 13:21:31 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6s-0003vM-Uo; Tue, 12 Nov 2019 05:21:30 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6n-0005Bb-RI; Tue, 12 Nov 2019 05:21:25 -0800
-Received: from xsj-pvapsmtp01 (mailhost.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xACDLIkg023637;
-        Tue, 12 Nov 2019 05:21:18 -0800
-Received: from [172.19.2.91] (helo=xsjjollys50.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6g-000578-8W; Tue, 12 Nov 2019 05:21:18 -0800
-From:   Rajan Vaja <rajan.vaja@xilinx.com>
-To:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        michal.simek@xilinx.com, jollys@xilinx.com, tejas.patel@xilinx.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rajan Vaja <rajan.vaja@xilinx.com>
-Subject: [PATCH 2/2] drivers: soc: xilinx: Use mailbox IPI callback
-Date:   Tue, 12 Nov 2019 05:20:51 -0800
-Message-Id: <1573564851-9275-3-git-send-email-rajan.vaja@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1573564851-9275-1-git-send-email-rajan.vaja@xilinx.com>
-References: <1573564851-9275-1-git-send-email-rajan.vaja@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(39860400002)(346002)(396003)(189003)(199004)(426003)(186003)(446003)(11346002)(36756003)(6666004)(356004)(107886003)(50466002)(16586007)(7696005)(5660300002)(76176011)(51416003)(336012)(48376002)(305945005)(47776003)(44832011)(486006)(106002)(2616005)(476003)(126002)(316002)(26005)(4326008)(478600001)(81166006)(81156014)(2906002)(36386004)(6636002)(9786002)(14444005)(70586007)(50226002)(15650500001)(8676002)(70206006)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR02MB6083;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+ bh=RvMS3MnR+OVag5l/7OjETDYlKEje4ZsT7YnEeaFqzLI=;
+ b=Y7/Pgg6OHpNKFoSQRMqWaw2WKtFkgWacd3Lp4TvFQM8OYxKMRkgv39GLqQsoR3RRgSsgcZnf1373a7J8Xw0/ByGOQNDry4niw/91ltEwpMqabRfbxGNZSgs9+iO6iZ8CfwIRgkr60HCgc79eodPGegR2ynFVslvsjChuSz3v/VQ=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB3277.eurprd04.prod.outlook.com (10.170.231.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.22; Tue, 12 Nov 2019 13:43:35 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
+ 13:43:35 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Abel Vesa <abel.vesa@nxp.com>, Stephen Boyd <sboyd@kernel.org>
+CC:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Topic: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Index: AQHVloV8DX9ZS8xtzEe77doMKYgOwQ==
+Date:   Tue, 12 Nov 2019 13:43:35 +0000
+Message-ID: <VI1PR04MB702387DCA9DB5A0A3F6288EDEE770@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1573252696.git.leonard.crestez@nxp.com>
+ <0e0eeeee546a3bb664935184d66866f1c66458ce.1573252696.git.leonard.crestez@nxp.com>
+ <20191112111803.c5624in2masqipqf@fsr-ub1664-175>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 490628d5-dcda-4fd8-2c60-08d7677650b6
+x-ms-traffictypediagnostic: VI1PR04MB3277:|VI1PR04MB3277:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB327775FC29CE0703F6AA72A8EE770@VI1PR04MB3277.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 021975AE46
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(189003)(199004)(76176011)(6246003)(54906003)(110136005)(316002)(256004)(14444005)(55016002)(9686003)(305945005)(7416002)(5660300002)(74316002)(66066001)(44832011)(33656002)(478600001)(3846002)(2906002)(14454004)(6116002)(7736002)(86362001)(81156014)(26005)(486006)(446003)(186003)(476003)(229853002)(53546011)(52536014)(102836004)(25786009)(6436002)(6506007)(71190400001)(71200400001)(7696005)(99286004)(66476007)(64756008)(8676002)(81166006)(66556008)(66446008)(8936002)(76116006)(66946007)(91956017)(4326008)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3277;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vrCzU2araRXbTyDe9NwWjmIVHmRqqQjIiQhYkZ8qkvF09+3wrPJ83HR5YQRWTWxORvBUxvSIJqh8xLQTy+C1lplLe8O4jOoD6xrsAoI1c3nMvh7bLKPqZqWKqPZFUEojecEIp4TNabFcw8/q2ngb1jO48raee4If6PdKSTpYiwPRCI8BmPViKcB6lr45IPdUmB8Ybz6H/fWAXvnpdXJEYkedtaYS7KPa3gxW11TS/OjxJu1zNh/JYiNDz1Vzib056Bv0RzslTXXwoIFgx14YoQuF6NvOVGmbsIejJepco7Bo2065hh9yDTXViZWNTEW0PxoMGT/ob8rR7SrcuZEwGkcSr/qOxVXaQWE7dLDZyRdYz91Cw9jAEGWNkqhGfBzMtKMq6Lu5y6hFWq/8fliYqU8oOPKBSu2AGS7DooJ98tlWqCTmi9hX903lpIazC/FR
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6549f1e9-d29c-4b1b-583b-08d767733bbd
-X-MS-TrafficTypeDiagnostic: BY5PR02MB6083:
-X-Microsoft-Antispam-PRVS: <BY5PR02MB6083B48F771C2251CDC0298AB7770@BY5PR02MB6083.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
-X-Forefront-PRVS: 021975AE46
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2dZv0yBZ/xvbMQZURBxzP7oNMX74rI2oyt2aN81LJM58L9tpfgsFKQoVcE3YvXqncQeqHZrArSsPwd3yYnbx486XLBcuc3+7ToWDEo+0vsIUgrSkGO/UJ+R2tSeHlTsUw2TdugVnBR7XUAoqjmodW1TOvhKevxz/Sn6X2Qg+6iOMOREImbrjNOa7XtgpVYkREsolO17es4U2THpBD7SPqLvkpiaV+gdwYJmW8Cf0/EW7KO2klJCWZjv2bO1bFzwC+RfwvMkDpT1MEddiBwImWGs9R8Un/DdcBPO95NxYC/4YG9oBzBIcNQKvjky7eCgsPa9CqnWtLiZWpG7dkDW9xmL4lkrZO7JMAVI7QfFjMkE4pTN1eblI1IPgoidQc5wzCP6DMpKBKHS+lr/ELZgI0BI3j7hZheXIac7qVQ1GVeQrNESikkAcKXhWArBe3QwZ
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2019 13:21:31.4977
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 490628d5-dcda-4fd8-2c60-08d7677650b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 13:43:35.1653
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6549f1e9-d29c-4b1b-583b-08d767733bbd
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6083
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Lm6TD9vyh/KawvPhUvQ4r0exUEKLbjZj5PT7I/wwSH5qQsScvl5kfmnuu9RWcYVdP9Pq0fhGkjhqtJCQ9a3Mug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3277
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Tejas Patel <tejas.patel@xilinx.com>
-
-Add support for init suspend callback through mailbox IPI callback.
-
-Signed-off-by: Tejas Patel <tejas.patel@xilinx.com>
-Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
----
- drivers/soc/xilinx/zynqmp_power.c | 119 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 106 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/soc/xilinx/zynqmp_power.c b/drivers/soc/xilinx/zynqmp_power.c
-index 1b9d144..d572d2e 100644
---- a/drivers/soc/xilinx/zynqmp_power.c
-+++ b/drivers/soc/xilinx/zynqmp_power.c
-@@ -2,7 +2,7 @@
- /*
-  * Xilinx Zynq MPSoC Power Management
-  *
-- *  Copyright (C) 2014-2018 Xilinx, Inc.
-+ *  Copyright (C) 2014-2019 Xilinx, Inc.
-  *
-  *  Davorin Mista <davorin.mista@aggios.com>
-  *  Jolly Shah <jollys@xilinx.com>
-@@ -16,6 +16,20 @@
- #include <linux/suspend.h>
- 
- #include <linux/firmware/xlnx-zynqmp.h>
-+#include <linux/mailbox/zynqmp-ipi-message.h>
-+
-+/**
-+ * struct zynqmp_pm_work_struct - Wrapper for struct work_struct
-+ * @callback_work:	Work structure
-+ * @args:		Callback arguments
-+ */
-+struct zynqmp_pm_work_struct {
-+	struct work_struct callback_work;
-+	u32 args[CB_ARG_CNT];
-+};
-+static struct zynqmp_pm_work_struct *zynqmp_pm_init_suspend_work;
-+static struct mbox_chan *rx_chan;
-+static const struct zynqmp_eemi_ops *eemi_ops;
- 
- enum pm_suspend_mode {
- 	PM_SUSPEND_MODE_FIRST = 0,
-@@ -31,7 +45,6 @@ static const char *const suspend_modes[] = {
- };
- 
- static enum pm_suspend_mode suspend_mode = PM_SUSPEND_MODE_STD;
--static const struct zynqmp_eemi_ops *eemi_ops;
- 
- enum pm_api_cb_id {
- 	PM_INIT_SUSPEND_CB = 30,
-@@ -68,6 +81,53 @@ static irqreturn_t zynqmp_pm_isr(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static void ipi_receive_callback(struct mbox_client *cl, void *data)
-+{
-+	struct zynqmp_ipi_message *msg = (struct zynqmp_ipi_message *)data;
-+	u32 payload[CB_PAYLOAD_SIZE];
-+	int ret;
-+
-+	memcpy(payload, msg->data, sizeof(msg->len));
-+	/* First element is callback API ID, others are callback arguments */
-+	if (payload[0] == PM_INIT_SUSPEND_CB) {
-+		if (work_pending(&zynqmp_pm_init_suspend_work->callback_work))
-+			return;
-+
-+		/* Copy callback arguments into work's structure */
-+		memcpy(zynqmp_pm_init_suspend_work->args, &payload[1],
-+		       sizeof(zynqmp_pm_init_suspend_work->args));
-+
-+		queue_work(system_unbound_wq,
-+			   &zynqmp_pm_init_suspend_work->callback_work);
-+
-+		/* Send NULL message to mbox controller to ack the message */
-+		ret = mbox_send_message(rx_chan, NULL);
-+		if (ret)
-+			pr_err("IPI ack failed. Error %d\n", ret);
-+	}
-+}
-+
-+/**
-+ * zynqmp_pm_init_suspend_work_fn - Initialize suspend
-+ * @work:	Pointer to work_struct
-+ *
-+ * Bottom-half of PM callback IRQ handler.
-+ */
-+static void zynqmp_pm_init_suspend_work_fn(struct work_struct *work)
-+{
-+	struct zynqmp_pm_work_struct *pm_work =
-+		container_of(work, struct zynqmp_pm_work_struct, callback_work);
-+
-+	if (pm_work->args[0] == SUSPEND_SYSTEM_SHUTDOWN) {
-+		orderly_poweroff(true);
-+	} else if (pm_work->args[0] == SUSPEND_POWER_REQUEST) {
-+		pm_suspend(PM_SUSPEND_MEM);
-+	} else {
-+		pr_err("%s Unsupported InitSuspendCb reason code %d.\n",
-+		       __func__, pm_work->args[0]);
-+	}
-+}
-+
- static ssize_t suspend_mode_show(struct device *dev,
- 				 struct device_attribute *attr, char *buf)
- {
-@@ -119,6 +179,7 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
- {
- 	int ret, irq;
- 	u32 pm_api_version;
-+	struct mbox_client *client;
- 
- 	eemi_ops = zynqmp_pm_get_eemi_ops();
- 	if (IS_ERR(eemi_ops))
-@@ -134,17 +195,46 @@ static int zynqmp_pm_probe(struct platform_device *pdev)
- 	if (pm_api_version < ZYNQMP_PM_VERSION)
- 		return -ENODEV;
- 
--	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0)
--		return -ENXIO;
--
--	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, zynqmp_pm_isr,
--					IRQF_NO_SUSPEND | IRQF_ONESHOT,
--					dev_name(&pdev->dev), &pdev->dev);
--	if (ret) {
--		dev_err(&pdev->dev, "devm_request_threaded_irq '%d' failed "
--			"with %d\n", irq, ret);
--		return ret;
-+	if (of_find_property(pdev->dev.of_node, "mboxes", NULL)) {
-+		zynqmp_pm_init_suspend_work =
-+			devm_kzalloc(&pdev->dev,
-+				     sizeof(struct zynqmp_pm_work_struct),
-+				     GFP_KERNEL);
-+		if (!zynqmp_pm_init_suspend_work)
-+			return -ENOMEM;
-+
-+		INIT_WORK(&zynqmp_pm_init_suspend_work->callback_work,
-+			  zynqmp_pm_init_suspend_work_fn);
-+		client = devm_kzalloc(&pdev->dev, sizeof(*client), GFP_KERNEL);
-+		if (!client)
-+			return -ENOMEM;
-+
-+		client->dev = &pdev->dev;
-+		client->rx_callback = ipi_receive_callback;
-+
-+		rx_chan = mbox_request_channel_byname(client, "rx");
-+		if (IS_ERR(rx_chan)) {
-+			dev_err(&pdev->dev, "Failed to request rx channel\n");
-+			return IS_ERR(rx_chan);
-+		}
-+	} else if (of_find_property(pdev->dev.of_node, "interrupts", NULL)) {
-+		irq = platform_get_irq(pdev, 0);
-+		if (irq <= 0)
-+			return -ENXIO;
-+
-+		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+						zynqmp_pm_isr,
-+						IRQF_NO_SUSPEND | IRQF_ONESHOT,
-+						dev_name(&pdev->dev),
-+						&pdev->dev);
-+		if (ret) {
-+			dev_err(&pdev->dev, "devm_request_threaded_irq '%d' "
-+					    "failed with %d\n", irq, ret);
-+			return ret;
-+		}
-+	} else {
-+		dev_err(&pdev->dev, "Required property not found in DT node\n");
-+		return -ENOENT;
- 	}
- 
- 	ret = sysfs_create_file(&pdev->dev.kobj, &dev_attr_suspend_mode.attr);
-@@ -160,6 +250,9 @@ static int zynqmp_pm_remove(struct platform_device *pdev)
- {
- 	sysfs_remove_file(&pdev->dev.kobj, &dev_attr_suspend_mode.attr);
- 
-+	if (!rx_chan)
-+		mbox_free_channel(rx_chan);
-+
- 	return 0;
- }
- 
--- 
-2.7.4
-
+On 12.11.2019 13:18, Abel Vesa wrote:=0A=
+> On 19-11-09 00:39:51, Leonard Crestez wrote:=0A=
+>> These clocks are only modified as part of DRAM frequency switches during=
+=0A=
+>> which DRAM itself is briefly inaccessible. The switch is performed with=
+=0A=
+>> a SMC call to by TF-A which runs from a SRAM area; upon returning to=0A=
+>> linux several clocks bits are modified and we need to update them.=0A=
+>>=0A=
+>> For rate bits an easy solution is to just mark with=0A=
+>> CLK_GET_RATE_NOCACHE so that new rates are always read back from=0A=
+>> registers.=0A=
+>>=0A=
+>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>> ---=0A=
+>>   drivers/clk/imx/clk-imx8mm.c | 11 +++++++++--=0A=
+>>   drivers/clk/imx/clk-imx8mn.c | 12 ++++++++++--=0A=
+>>   drivers/clk/imx/clk-imx8mq.c | 15 +++++++++++----=0A=
+>>   3 files changed, 30 insertions(+), 8 deletions(-)=0A=
+=0A=
+>> --- a/drivers/clk/imx/clk-imx8mn.c=0A=
+>> +++ b/drivers/clk/imx/clk-imx8mn.c=0A=
+>> @@ -428,12 +428,20 @@ static int imx8mn_clocks_probe(struct platform_dev=
+ice *pdev)=0A=
+>>   	clks[IMX8MN_CLK_AHB] =3D imx8m_clk_composite_critical("ahb", imx8mn_a=
+hb_sels, base + 0x9000);=0A=
+>>   	clks[IMX8MN_CLK_AUDIO_AHB] =3D imx8m_clk_composite("audio_ahb", imx8m=
+n_audio_ahb_sels, base + 0x9100);=0A=
+>>   	clks[IMX8MN_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", bas=
+e + 0x9080, 0, 1);=0A=
+>>   	clks[IMX8MN_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root"=
+, "audio_ahb", base + 0x9180, 0, 1);=0A=
+>>   	clks[IMX8MN_CLK_DRAM_CORE] =3D imx_clk_mux2_flags("dram_core_clk", ba=
+se + 0x9800, 24, 1, imx8mn_dram_core_sels, ARRAY_SIZE(imx8mn_dram_core_sels=
+), CLK_IS_CRITICAL);=0A=
+>> -	clks[IMX8MN_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mn_d=
+ram_alt_sels, base + 0xa000);=0A=
+>> -	clks[IMX8MN_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb",=
+ imx8mn_dram_apb_sels, base + 0xa080);=0A=
+>> +=0A=
+>> +	/*=0A=
+>> +	 * DRAM clocks are manipulated from TF-A outside clock framework.=0A=
+>> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware=
+=0A=
+>> +	 */=0A=
+>> +	clks[IMX8MN_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mn=
+_dram_alt_sels, base + 0xa000,=0A=
+>> +			CLK_GET_RATE_NOCACHE);=0A=
+>> +	clks[IMX8MN_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mn=
+_dram_apb_sels, base + 0xa080,=0A=
+>> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);=0A=
+> =0A=
+> nitpick: I think it looks better if we stick to one line each clock.=0A=
+> I know it's against the 80 chars rule, but at least is consistent.=0A=
+=0A=
+Yes, there are longer lines in the imx8m* files anyway.=0A=
+=0A=
+If I fix this (in all instances) can I also add a "reviewed-by"?=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
