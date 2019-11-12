@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DE9F9C82
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 22:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D80CF9C93
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 22:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726954AbfKLVvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 16:51:12 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:43100 "EHLO inva020.nxp.com"
+        id S1727031AbfKLVvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 16:51:14 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:43134 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726376AbfKLVvL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 Nov 2019 16:51:11 -0500
+        id S1726896AbfKLVvN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Nov 2019 16:51:13 -0500
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0B66E1A0075;
-        Tue, 12 Nov 2019 22:51:09 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 34E711A00B9;
+        Tue, 12 Nov 2019 22:51:10 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F0DA01A0014;
-        Tue, 12 Nov 2019 22:51:08 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1C3AC1A0014;
+        Tue, 12 Nov 2019 22:51:10 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E006F205E9;
-        Tue, 12 Nov 2019 22:51:07 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 0D0C2205E9;
+        Tue, 12 Nov 2019 22:51:09 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -46,142 +46,127 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-imx@nxp.com,
         kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr controller
-Date:   Tue, 12 Nov 2019 23:50:50 +0200
-Message-Id: <cover.1573595318.git.leonard.crestez@nxp.com>
+Subject: [PATCH v5 1/5] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
+Date:   Tue, 12 Nov 2019 23:50:51 +0200
+Message-Id: <b952d06bba141eef8cb062a42c4831223ce12834.1573595318.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1573595318.git.leonard.crestez@nxp.com>
+References: <cover.1573595318.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1573595318.git.leonard.crestez@nxp.com>
+References: <cover.1573595318.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds support for dynamic scaling of the DDR Controller (ddrc) present in
-imx8m series. Actual frequency switching is implemented inside TF-A, this
-driver wraps the SMC calls and synchronizes the clk tree.
+These clocks are only modified as part of DRAM frequency switches during
+which DRAM itself is briefly inaccessible. The switch is performed with
+a SMC call to by TF-A which runs from a SRAM area; upon returning to
+linux several clocks bits are modified and we need to update them.
 
-DRAM frequency switching requires clock manipulation but during this operation
-DRAM itself is briefly inaccessible so this operation is performed a SMC call
-to by TF-A which runs from a SRAM area. Upon returning to linux the clock tree
-is updated to correspond to hardware configuration.
+For rate bits an easy solution is to just mark with
+CLK_GET_RATE_NOCACHE so that new rates are always read back from
+registers.
 
-This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are handled
-manually: the driver will prepare/enable the new parents ahead of switching (so
-that the expected roots are enabled) and afterwards it will call clk_set_parent
-to ensure the parents in clock framework are up-to-date.
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+---
+ drivers/clk/imx/clk-imx8mm.c |  9 +++++++--
+ drivers/clk/imx/clk-imx8mn.c | 10 ++++++++--
+ drivers/clk/imx/clk-imx8mq.c | 12 ++++++++----
+ 3 files changed, 23 insertions(+), 8 deletions(-)
 
-This series is atomically useful and roughly similar to devfreq drivers for
-tegra and rockchip.
-
-Running at lower dram rates saves power but can affect the functionality of
-other blocks in the chip (display, vpu etc). Support for in-kernel constraints
-will some separately.
-
-Angus/Martin: You previously attempted to test on purism boards, this updated
-version should work without hacks and has no dependencies.
-
-Changes since v4:
-* Restore empty _get_dev_status: testing shows this is *NOT* optional. If
-absent then switching to simple_ondemand governor will trigger an Oops.
-* Keep clk registration on single-line in clk-imx8m* for consistency with rest
-of the file.
-* Drop explicit "select PM_OPP"
-* Check for NULL new_dram_core_parent
-* Rename "out_dis_" labels to out_disable_*
-* Use dev_warn on imx8m_ddrc_set_freq error paths after SMC call (where
-operation is not abandoned).
-* More elaborate error messages in imx8m_ddrc_target
-* More elaborate checks when fetching clks in imx8m_ddrc_set_freq
-* Rename ddrc nodes to memory-controller@* as per devicetree.org "Generic Names
-Recommendation"
-* Collect reviews
-* Defer perf support
-Link to v4: https://patchwork.kernel.org/cover/11235685/
-
-Changes since v3:
-* Rename to imx8m-ddrc. Similar blocks are present on imx7d and imx8qxp/imx8qm
-but soc integration is different.
-* Move dt bindings to /memory-controllers/fsl/
-* Fix dt validation issues
-* Fix imx8mm.dtsi ddrc referencing ddrc_opp_table which is only defined in evk
-* Move opps to child of ddrc device node
-* Only add imx_ddrc_get_dev_status in perf patch.
-* Adjust print messages
-Link to v3: https://patchwork.kernel.org/cover/11221935/
-
-Changes since v2:
-* Add support for entire imx8m family including imx8mq B0.
-* Also mark dram PLLs as CLK_GET_RATE_NO_CACHE (required for imx8mq b0 low OPP)
-* Explicitly update dram pll rate at the end of imx_ddrc_set_freq.
-* Use do_div in imx-ddrc (kbuild robot)
-* Improve explanations around adding CLK_GET_RATE_NO_CACHE to dram clks.
-(Stephen Boyd)
-* Handle ddrc devfreq-events earlier for fewer probe defers.
-* Validate DDRC opp tables versus firmware: supported OPPs depend on board and
-SOC revision.
-* Move DDRC opp tables to board dts because they can vary based on ram type on
-board.
-* Verify DDRC rate is changed in clk tree and otherwise report an error.
-* Change imx_ddrc_freq.rate to be measure in MT/s and round down from HZ in
-imx_ddrc_find_freq instead.
-* Split away from NOC scaling and interconnect support.
-Link to v2: https://patchwork.kernel.org/cover/11104113/
-
-Changes since v1:
-* bindings: Stop using "contains" for "compatible"
-* bindings: Set "additionalProperties: false" and document missing stuff.
-* Remove (c) from NXP copyright notice
-* Fix various checkpatch issues
-* Remove unused dram_alt_root clk from imx-ddrc
-Link to v1: https://patchwork.kernel.org/cover/11090649/
-
-Changes since RFC v3:
-* Implement passive support and set NOC's parent to DDRC
-* Drop scaling AHB/AXI for now (NOC/DDRC use most power anyway)
-* Stop relying on clk_min_rate
-* Split into two devreq drivers (and bindings) because the ddrc is
-really a distinct piece of hardware.
-* Perform DRAM frequency inside devfreq instead of clk, mostly due to
-objections to earlier RFCs for imx8m-dram-clk.
-* Fetch info about dram clk parents from firmware instead of
-hardcoding in driver. This can more easily support additional rates.
-* Link: https://patchwork.kernel.org/cover/11056779/
-* Link: https://patchwork.kernel.org/patch/11049429/
-
-Scaling buses can cause problems for devices with realtime bandwith
-requirements such as display, the intention is to use the interconnect
-framework to make DEV_PM_QOS_MIN_FREQUENCY to devfreq. There are
-separate patches for that:
-
-* https://patchwork.kernel.org/cover/11104055/
-* https://patchwork.kernel.org/cover/11078671/
-
-Leonard Crestez (5):
-  clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
-  clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACHE
-  dt-bindings: memory: Add bindings for imx8m ddr controller
-  PM / devfreq: Add dynamic scaling for imx8m ddr controller
-  arm64: dts: imx8m: Add ddr controller nodes
-
- .../memory-controllers/fsl/imx8m-ddrc.yaml    |  57 +++
- arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +
- arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +
- .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +
- arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  10 +
- arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +
- arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  10 +
- drivers/clk/imx/clk-imx8mm.c                  |  11 +-
- drivers/clk/imx/clk-imx8mn.c                  |  12 +-
- drivers/clk/imx/clk-imx8mq.c                  |  12 +-
- drivers/clk/imx/clk-pll14xx.c                 |   7 +
- drivers/clk/imx/clk.h                         |   1 +
- drivers/devfreq/Kconfig                       |   9 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/imx8m-ddrc.c                  | 460 ++++++++++++++++++
- 15 files changed, 650 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
- create mode 100644 drivers/devfreq/imx8m-ddrc.c
-
+diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+index 030b15d7c0ce..e2bc3c90d93c 100644
+--- a/drivers/clk/imx/clk-imx8mm.c
++++ b/drivers/clk/imx/clk-imx8mm.c
+@@ -440,13 +440,18 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
+ 
+ 	/* IPG */
+ 	clks[IMX8MM_CLK_IPG_ROOT] = imx_clk_divider2("ipg_root", "ahb", base + 0x9080, 0, 1);
+ 	clks[IMX8MM_CLK_IPG_AUDIO_ROOT] = imx_clk_divider2("ipg_audio_root", "audio_ahb", base + 0x9180, 0, 1);
+ 
++	/*
++	 * DRAM clocks are manipulated from TF-A outside clock framework.
++	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
++	 */
++	clks[IMX8MM_CLK_DRAM_ALT] = __imx8m_clk_composite("dram_alt", imx8mm_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
++	clks[IMX8MM_CLK_DRAM_APB] = __imx8m_clk_composite("dram_apb", imx8mm_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
++
+ 	/* IP */
+-	clks[IMX8MM_CLK_DRAM_ALT] = imx8m_clk_composite("dram_alt", imx8mm_dram_alt_sels, base + 0xa000);
+-	clks[IMX8MM_CLK_DRAM_APB] = imx8m_clk_composite_critical("dram_apb", imx8mm_dram_apb_sels, base + 0xa080);
+ 	clks[IMX8MM_CLK_VPU_G1] = imx8m_clk_composite("vpu_g1", imx8mm_vpu_g1_sels, base + 0xa100);
+ 	clks[IMX8MM_CLK_VPU_G2] = imx8m_clk_composite("vpu_g2", imx8mm_vpu_g2_sels, base + 0xa180);
+ 	clks[IMX8MM_CLK_DISP_DTRC] = imx8m_clk_composite("disp_dtrc", imx8mm_disp_dtrc_sels, base + 0xa200);
+ 	clks[IMX8MM_CLK_DISP_DC8000] = imx8m_clk_composite("disp_dc8000", imx8mm_disp_dc8000_sels, base + 0xa280);
+ 	clks[IMX8MM_CLK_PCIE1_CTRL] = imx8m_clk_composite("pcie1_ctrl", imx8mm_pcie1_ctrl_sels, base + 0xa300);
+diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
+index 9f5a5a56b45e..de905e278b80 100644
+--- a/drivers/clk/imx/clk-imx8mn.c
++++ b/drivers/clk/imx/clk-imx8mn.c
+@@ -428,12 +428,18 @@ static int imx8mn_clocks_probe(struct platform_device *pdev)
+ 	clks[IMX8MN_CLK_AHB] = imx8m_clk_composite_critical("ahb", imx8mn_ahb_sels, base + 0x9000);
+ 	clks[IMX8MN_CLK_AUDIO_AHB] = imx8m_clk_composite("audio_ahb", imx8mn_audio_ahb_sels, base + 0x9100);
+ 	clks[IMX8MN_CLK_IPG_ROOT] = imx_clk_divider2("ipg_root", "ahb", base + 0x9080, 0, 1);
+ 	clks[IMX8MN_CLK_IPG_AUDIO_ROOT] = imx_clk_divider2("ipg_audio_root", "audio_ahb", base + 0x9180, 0, 1);
+ 	clks[IMX8MN_CLK_DRAM_CORE] = imx_clk_mux2_flags("dram_core_clk", base + 0x9800, 24, 1, imx8mn_dram_core_sels, ARRAY_SIZE(imx8mn_dram_core_sels), CLK_IS_CRITICAL);
+-	clks[IMX8MN_CLK_DRAM_ALT] = imx8m_clk_composite("dram_alt", imx8mn_dram_alt_sels, base + 0xa000);
+-	clks[IMX8MN_CLK_DRAM_APB] = imx8m_clk_composite_critical("dram_apb", imx8mn_dram_apb_sels, base + 0xa080);
++
++	/*
++	 * DRAM clocks are manipulated from TF-A outside clock framework.
++	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
++	 */
++	clks[IMX8MN_CLK_DRAM_ALT] = __imx8m_clk_composite("dram_alt", imx8mn_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
++	clks[IMX8MN_CLK_DRAM_APB] = __imx8m_clk_composite("dram_apb", imx8mn_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
++
+ 	clks[IMX8MN_CLK_DISP_PIXEL] = imx8m_clk_composite("disp_pixel", imx8mn_disp_pixel_sels, base + 0xa500);
+ 	clks[IMX8MN_CLK_SAI2] = imx8m_clk_composite("sai2", imx8mn_sai2_sels, base + 0xa600);
+ 	clks[IMX8MN_CLK_SAI3] = imx8m_clk_composite("sai3", imx8mn_sai3_sels, base + 0xa680);
+ 	clks[IMX8MN_CLK_SAI5] = imx8m_clk_composite("sai5", imx8mn_sai5_sels, base + 0xa780);
+ 	clks[IMX8MN_CLK_SAI6] = imx8m_clk_composite("sai6", imx8mn_sai6_sels, base + 0xa800);
+diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+index 5f10a606d836..c8ab86fcba7c 100644
+--- a/drivers/clk/imx/clk-imx8mq.c
++++ b/drivers/clk/imx/clk-imx8mq.c
+@@ -341,11 +341,11 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+ 	clks[IMX8MQ_VIDEO_PLL1_OUT] = imx_clk_gate("video_pll1_out", "video_pll1_bypass", base + 0x10, 21);
+ 
+ 	clks[IMX8MQ_SYS1_PLL_OUT] = imx_clk_fixed("sys1_pll_out", 800000000);
+ 	clks[IMX8MQ_SYS2_PLL_OUT] = imx_clk_fixed("sys2_pll_out", 1000000000);
+ 	clks[IMX8MQ_SYS3_PLL_OUT] = imx_clk_sccg_pll("sys3_pll_out", sys3_pll_out_sels, ARRAY_SIZE(sys3_pll_out_sels), 0, 0, 0, base + 0x48, CLK_IS_CRITICAL);
+-	clks[IMX8MQ_DRAM_PLL_OUT] = imx_clk_sccg_pll("dram_pll_out", dram_pll_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60, CLK_IS_CRITICAL);
++	clks[IMX8MQ_DRAM_PLL_OUT] = imx_clk_sccg_pll("dram_pll_out", dram_pll_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+ 	clks[IMX8MQ_VIDEO2_PLL_OUT] = imx_clk_sccg_pll("video2_pll_out", video2_pll_out_sels, ARRAY_SIZE(video2_pll_out_sels), 0, 0, 0, base + 0x54, 0);
+ 
+ 	/* SYS PLL1 fixed output */
+ 	clks[IMX8MQ_SYS1_PLL_40M_CG] = imx_clk_gate("sys1_pll_40m_cg", "sys1_pll_out", base + 0x30, 9);
+ 	clks[IMX8MQ_SYS1_PLL_80M_CG] = imx_clk_gate("sys1_pll_80m_cg", "sys1_pll_out", base + 0x30, 11);
+@@ -433,15 +433,19 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+ 
+ 	/* IPG */
+ 	clks[IMX8MQ_CLK_IPG_ROOT] = imx_clk_divider2("ipg_root", "ahb", base + 0x9080, 0, 1);
+ 	clks[IMX8MQ_CLK_IPG_AUDIO_ROOT] = imx_clk_divider2("ipg_audio_root", "audio_ahb", base + 0x9180, 0, 1);
+ 
+-	/* IP */
++	/*
++	 * DRAM clocks are manipulated from TF-A outside clock framework.
++	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
++	 */
+ 	clks[IMX8MQ_CLK_DRAM_CORE] = imx_clk_mux2_flags("dram_core_clk", base + 0x9800, 24, 1, imx8mq_dram_core_sels, ARRAY_SIZE(imx8mq_dram_core_sels), CLK_IS_CRITICAL);
++	clks[IMX8MQ_CLK_DRAM_ALT] = __imx8m_clk_composite("dram_alt", imx8mq_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
++	clks[IMX8MQ_CLK_DRAM_APB] = __imx8m_clk_composite("dram_apb", imx8mq_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+ 
+-	clks[IMX8MQ_CLK_DRAM_ALT] = imx8m_clk_composite("dram_alt", imx8mq_dram_alt_sels, base + 0xa000);
+-	clks[IMX8MQ_CLK_DRAM_APB] = imx8m_clk_composite_critical("dram_apb", imx8mq_dram_apb_sels, base + 0xa080);
++	/* IP */
+ 	clks[IMX8MQ_CLK_VPU_G1] = imx8m_clk_composite("vpu_g1", imx8mq_vpu_g1_sels, base + 0xa100);
+ 	clks[IMX8MQ_CLK_VPU_G2] = imx8m_clk_composite("vpu_g2", imx8mq_vpu_g2_sels, base + 0xa180);
+ 	clks[IMX8MQ_CLK_DISP_DTRC] = imx8m_clk_composite("disp_dtrc", imx8mq_disp_dtrc_sels, base + 0xa200);
+ 	clks[IMX8MQ_CLK_DISP_DC8000] = imx8m_clk_composite("disp_dc8000", imx8mq_disp_dc8000_sels, base + 0xa280);
+ 	clks[IMX8MQ_CLK_PCIE1_CTRL] = imx8m_clk_composite("pcie1_ctrl", imx8mq_pcie1_ctrl_sels, base + 0xa300);
 -- 
 2.17.1
 
