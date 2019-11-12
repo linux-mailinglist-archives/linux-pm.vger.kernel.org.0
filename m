@@ -2,47 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7423F9AC2
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 21:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E41F9AF1
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 21:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbfKLUcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 15:32:07 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:38657 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbfKLUcH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Nov 2019 15:32:07 -0500
-Received: by mail-pf1-f202.google.com with SMTP id m1so16388491pfh.5
-        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2019 12:32:06 -0800 (PST)
+        id S1726978AbfKLUma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 15:42:30 -0500
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:46725 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727074AbfKLUm3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Nov 2019 15:42:29 -0500
+Received: by mail-qt1-f202.google.com with SMTP id h39so21198245qth.13
+        for <linux-pm@vger.kernel.org>; Tue, 12 Nov 2019 12:42:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:cc;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
         bh=YXQx/W19DjRT45sudkGcownKnjElC/pkN1OhsIzM96I=;
-        b=E0MA/U0e/Ir3oTesUR3lbc72KPhRUcktmr14Rd6IlEOsdXbMHM3KS9JGSWuxc9kHCc
-         +O+JezJM5VfFVoT5Ngsj5Sw56M+Roju26suQqeDGGsLTQg50XFx2zw+5sEfaX3f71JE9
-         cdeSvQmgtD+paGsQf3w169KBi6k1Ah2IND7S+OIREx3FbSOpNAFG5oiaKMVmzSu2rcov
-         Dc8SAkQ9lr0T9UqO8OubcaAlYGjuG5iSI8YKJbmUP/rGU6AjtxC7R/mk/v9t9cA06pFM
-         WbLZUsbqe55f2wPyA9FfMRo8qGprp6LcvxoxT4+Sce0kqTnJIwI+qiNE+9TRae6Hg3Sw
-         5ZOA==
+        b=hq2cMG+Uz05dfP/Fx2OKks757/JeqdQlDjyT1GANKrtXZxgcX/dwHrLtCbo2nf091s
+         vp72Z4yUGit3E53HyROAw7oK6rMU3b+NBm9EN24bTXOzxZlh/hj9Wobe800a6fwDKzvV
+         5+4SB0qmTSV2l0HoWmFfV28iRcuofohr3vLp9YGcdUf3Xf0T+YwwuoizwIVHYzDcT9v/
+         Lfxv+eaysYiuh+CUM1eAC9f9SO2h3C07FwAWlFwJU/bKj9KKJF7O5wtwt+z8WovnqXwI
+         ZgGNYc9Ny2NsXIgZcVjAVpMO5CCZH65ufzWAI2CZS7aKLSKSE3VeNGJwbPQX1N1CK5kn
+         xnlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
         bh=YXQx/W19DjRT45sudkGcownKnjElC/pkN1OhsIzM96I=;
-        b=nQCcfHSZwrOLhinHDHvnnzqnl9OtTIy+F4+l3w6oaudVq9lOHWCIR8A4t5TKX0Wn5F
-         Z3QPInGWyZuXTa6fguO/3/t3VIZN1EwDAlE4VmEX8bF3Br3WBrM6cMtbU8oPwHzSvOCs
-         0UwV7YD7d8ybK52OrmtZlvD8MI8Kt8PglWepnISmKG9xnM1tqquGqF8iu8kUAcxR8a95
-         c0HfVh0M2SLt4nlLwH/HDCRtCax7UOHWYhJ8Bw3W846Z+WUh8ULYMcICDkHV6fht0ZW8
-         4I41FidEi5QVwfgfyYPK0+OIeU3ldJcfI9ctBRYLTKY5tKKL/5cZxHuu09PXF0ZYVUhx
-         QXNw==
-X-Gm-Message-State: APjAAAWXsgEEuMV88mvD8iirM0/ql7W/lKeZ1k2T4cSveJFAuqj5tGua
-        ozDFbOUu8svLOIr+o6x5DI5xmcM=
-X-Google-Smtp-Source: APXvYqxZYENeurFYBI93H6hBNoITu9pAWLh8dS9xxQVYZFilab1ST7b555XNIa21qYSv4OFEaNmCPcg=
-X-Received: by 2002:a65:6687:: with SMTP id b7mr3795669pgw.214.1573590726189;
- Tue, 12 Nov 2019 12:32:06 -0800 (PST)
-Date:   Tue, 12 Nov 2019 12:31:54 -0800
-Message-Id: <20191112203154.101534-1-wvw@google.com>
+        b=JajF4qqrqOGkSW6o2XLyuK0WrGyEetnxCEfeCK7h5cjwl1EIojgMrElVjOyS7sITR5
+         i6+sNv/u0J45R3dgRvZsBtI4ILWVwk6v+Yj0kj920QS8xmSm8GaflR8FCbgkq0Hr8r3T
+         eCcT6Jaq67hkIQ7SCc4KBBWMpAAhe0dICryYykslcVin1w6cCoCtIzgAvhdHuZvThWEW
+         g7cc1epDdZ0RTLrErPYlKnOFVfbTf8LDjohHYUA6T4mDXv+jCQsZHR7RMy7h7tvZWQR6
+         qRH4f/0yFkICwpiLnXv6shO+ORGCo9S4d5B6WKvmDif1hXRB9B6c2Yu48cEXm0o+MZFD
+         3YCw==
+X-Gm-Message-State: APjAAAWn39PDSx85rqh+66/fgDKlYimGuPIwLxrQ6U6fRYeAagB0DnYo
+        5TxlUwsGCoW4qLu6FUeZSlkg6i0=
+X-Google-Smtp-Source: APXvYqwbZFKbD9LE+MkSwEN0QEJOryx6wcn25B8ceR9SeAtG1HgyyDCK9nldmGXqK7jhtDw54pM/qqs=
+X-Received: by 2002:a05:6214:1052:: with SMTP id l18mr29832087qvr.204.1573591347257;
+ Tue, 12 Nov 2019 12:42:27 -0800 (PST)
+Date:   Tue, 12 Nov 2019 12:42:23 -0800
+In-Reply-To: <20191112203154.101534-1-wvw@google.com>
+Message-Id: <20191112204223.115589-1-wvw@google.com>
 Mime-Version: 1.0
+References: <20191112203154.101534-1-wvw@google.com>
 X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH] Fix deadlock in thermal thermal_zone_device_check
+Subject: [PATCH v2] thermal: Fix deadlock in thermal thermal_zone_device_check
 From:   Wei Wang <wvw@google.com>
 Cc:     wei.vince.wang@gmail.com, Wei Wang <wvw@google.com>,
         Zhang Rui <rui.zhang@intel.com>,
