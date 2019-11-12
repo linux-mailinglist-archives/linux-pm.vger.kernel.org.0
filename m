@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38ECFF907B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 14:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5C7F9083
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 14:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbfKLNV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 08:21:26 -0500
-Received: from mail-eopbgr790079.outbound.protection.outlook.com ([40.107.79.79]:6064
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        id S1727310AbfKLNVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 08:21:37 -0500
+Received: from mail-eopbgr680064.outbound.protection.outlook.com ([40.107.68.64]:16910
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725834AbfKLNV0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 Nov 2019 08:21:26 -0500
+        id S1726376AbfKLNVh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Nov 2019 08:21:37 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CZJk0Sgst9KVQHf8Zz//aXqEMConfEDOgNXGAUCaY4nw9r9Emn1HAA9D80Acv5tiLzu7z5PsgqzlOM13jMtYiEbWqt6DllGJpIlhpwgjZMBvMMIOMh3sX3uFILWBsc8oYGlFxaV/nlsiRTSQBAuxWqfAWuuPXQ5Ze8jcQnpaEX66jc3UN4k7JP29NT4sYcsyB5Va9+oYaIfvrucP84vHKFhtVG12iPm92k8yvofBpq2KB2asFHuRJoAImtkHGItiTOrdq+KeVpqzb6oM1cwaVViVstbVbpK9ivd7DjMY8YnrTfE98iyOiKLoKdD6KjyejRSWhkm7qcMulAjXircuMQ==
+ b=eWS2Bqg17HURnKV5Gntq1IK4neUgvymCr8tSPF6X1iXiuTv3Xfd/62pfCq0LDm0jRikdRAtPp8CgyxNDbcQcK5vAERyAZWvLHRayRR44b/NY0Bo21LvJh2fX7VaXK2cMPfOuntzxDLOdQyXbwsdU6BfT5Xx2g2bnwFtfMWya366cE9Q9OKAQ02qfMzJHD09UOGUoS6EdLs164ohxV9mu7Fg2HxuqyoXWdOaXoqqPt8S5v+Fx2H4cKhlZsN3YvHbAXM8QOQb+o/jf1adZ2ZOANL2w0YuGGzb8/I2U3lA+FprRzX0e5KDpJdC2NHLai/9XoYQd7k9xzr+/cWux1M4WIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ic+szegcMXmRV+L8BIyV5McFHgsPGogwbqd2F48xxZs=;
- b=bxX2GubOa7f4G+uqvOrwJyz2kvo/ZMp3gc5jqAeV4ymNP0epUMXFAnixoFvwvyl3G/BMC1MUCYjEjTVp7OwXEn0vnwBZKgWEVKNWEGBq0JUB2kQfs4yi7UhGkSb4CF1VG5CL+cQtMagqz4qsyKCKMZcEYI/9PeF5g789gB+zgP+sAwJDNbnmh814q0jPu2zpfSsvcjeL6csd9mbATh+fwefvN0aQiPtzGNmM2GDwrnHOaA2YFuOycpvtmqoSb0rRwwNRn3qBeCYnJ6yzdVP+LWIHsdhJxs+QuOB+tY16JRnU+w8FFSiCxXVOWLKBeNfATWetF0MJizK6Xot4YS72Cw==
+ bh=Qn2mROzth7dOG3yMwH/39kZrvRMRwcHzbwU0cdZgneg=;
+ b=S6FDGgrISFYUOSEX+yP6Jm3Bn2+Au6uZtLSG06fgYerhyzLZHXlpK3fNVJHUUSj7T3+TuVHMbToWkbv8iCnN4dgAcjwtLKvqp6ZG8qtIem3AWmYaSzpbjH5SQEDtHz2MhNPHIyjP1Kphe2aIliHmewOF8OFXc0xhkMso8jEbwyAbyWTweadxW1Sw8KMQ8psOnCodwTXFgBAxct5BD7wLBpM1fCmeql0Ni5ra5YF1yZGRo/4NqPZMaPB2eV3zsXdz4U1qev5ukPJxqH985t2cKGBdXNk0nRrjLB1sGFMKfPpzUJGESd806QM1OVkf75UCNm1TeyWZDsINQFBHLu48DQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ic+szegcMXmRV+L8BIyV5McFHgsPGogwbqd2F48xxZs=;
- b=P+vDv5hNYGXCzv3c221StUDex7lhuKzS7Nqpf43phaf7ddbq5tbezEJdY6ZOsLnzf4ZrpAIYf+tQ7Gnt4GDpPdhWIRQPXFfY80trlPHcyt/rfJ7BpP4i6pfix4DB8a5+q5U1Ox/RLDpfTg0VqznWr6rLC5NLglO+BPqf13IBDPI=
-Received: from BL0PR02CA0098.namprd02.prod.outlook.com (2603:10b6:208:51::39)
- by BYAPR02MB4678.namprd02.prod.outlook.com (2603:10b6:a03:43::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.25; Tue, 12 Nov
- 2019 13:21:22 +0000
-Received: from CY1NAM02FT063.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::202) by BL0PR02CA0098.outlook.office365.com
- (2603:10b6:208:51::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.24 via Frontend
- Transport; Tue, 12 Nov 2019 13:21:21 +0000
+ bh=Qn2mROzth7dOG3yMwH/39kZrvRMRwcHzbwU0cdZgneg=;
+ b=kWIeVuxNeB6hMkmtqkWsAIgRxmmwyxXXDsQpdgnRRTjqeZ3FpFJ1R22et+ZjnAeyOecxU/sV+U8cMfbEBIXKouFjjPMzhdMyarfDHnlwe5Gjg1oyc4z8vbxT8nWA4JkEptiBpgF7GptAf1RajN3gXddMmZCdMKw2QqX7GrMvbjo=
+Received: from MWHPR0201CA0031.namprd02.prod.outlook.com
+ (2603:10b6:301:74::44) by BL0PR02MB3714.namprd02.prod.outlook.com
+ (2603:10b6:207:44::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.22; Tue, 12 Nov
+ 2019 13:21:31 +0000
+Received: from SN1NAM02FT010.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::202) by MWHPR0201CA0031.outlook.office365.com
+ (2603:10b6:301:74::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2451.23 via Frontend
+ Transport; Tue, 12 Nov 2019 13:21:31 +0000
 Authentication-Results: spf=pass (sender IP is 149.199.60.83)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
@@ -46,78 +46,131 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.60.83 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
 Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT063.mail.protection.outlook.com (10.152.75.161) with Microsoft SMTP
+ SN1NAM02FT010.mail.protection.outlook.com (10.152.72.86) with Microsoft SMTP
  Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2430.20
- via Frontend Transport; Tue, 12 Nov 2019 13:21:21 +0000
+ via Frontend Transport; Tue, 12 Nov 2019 13:21:31 +0000
 Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
         by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
         (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6i-0003ux-Mf; Tue, 12 Nov 2019 05:21:20 -0800
+        id 1iUW6s-0003vL-QK; Tue, 12 Nov 2019 05:21:30 -0800
 Received: from [127.0.0.1] (helo=localhost)
         by xsj-pvapsmtp01 with smtp (Exim 4.63)
         (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6d-00058k-JJ; Tue, 12 Nov 2019 05:21:15 -0800
-Received: from xsj-pvapsmtp01 (xsj-smtp.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xACDLDSA012481;
-        Tue, 12 Nov 2019 05:21:13 -0800
+        id 1iUW6n-0005Bb-Mi; Tue, 12 Nov 2019 05:21:25 -0800
+Received: from xsj-pvapsmtp01 (smtp.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xACDLGte023617;
+        Tue, 12 Nov 2019 05:21:16 -0800
 Received: from [172.19.2.91] (helo=xsjjollys50.xilinx.com)
         by xsj-pvapsmtp01 with esmtp (Exim 4.63)
         (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iUW6b-000578-9l; Tue, 12 Nov 2019 05:21:13 -0800
+        id 1iUW6e-000578-IL; Tue, 12 Nov 2019 05:21:16 -0800
 From:   Rajan Vaja <rajan.vaja@xilinx.com>
 To:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         michal.simek@xilinx.com, jollys@xilinx.com, tejas.patel@xilinx.com
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Rajan Vaja <rajan.vaja@xilinx.com>
-Subject: [PATCH 0/2] drivers: soc: xilinx: Add support for init suspend
-Date:   Tue, 12 Nov 2019 05:20:49 -0800
-Message-Id: <1573564851-9275-1-git-send-email-rajan.vaja@xilinx.com>
+Subject: [PATCH 1/2] dt-bindings: power: reset: xilinx: Add bindings for ipi mailbox
+Date:   Tue, 12 Nov 2019 05:20:50 -0800
+Message-Id: <1573564851-9275-2-git-send-email-rajan.vaja@xilinx.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1573564851-9275-1-git-send-email-rajan.vaja@xilinx.com>
+References: <1573564851-9275-1-git-send-email-rajan.vaja@xilinx.com>
 X-RCIS-Action: ALLOW
 X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
 X-TM-AS-User-Approved-Sender: Yes;Yes
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(396003)(136003)(199004)(189003)(6636002)(186003)(81156014)(8676002)(81166006)(8936002)(50226002)(4744005)(356004)(6666004)(15650500001)(106002)(2906002)(36756003)(36386004)(478600001)(336012)(316002)(486006)(305945005)(16586007)(5660300002)(9786002)(126002)(48376002)(26005)(7696005)(426003)(70206006)(4326008)(51416003)(476003)(2616005)(70586007)(44832011)(107886003)(47776003)(50466002)(14444005);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR02MB4678;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(376002)(136003)(346002)(199004)(189003)(81156014)(81166006)(316002)(305945005)(106002)(8936002)(50466002)(36756003)(48376002)(50226002)(8676002)(478600001)(2906002)(5660300002)(16586007)(9786002)(476003)(76176011)(26005)(11346002)(15650500001)(6636002)(7696005)(70206006)(70586007)(446003)(2616005)(4326008)(126002)(186003)(6666004)(356004)(336012)(107886003)(44832011)(47776003)(36386004)(486006)(51416003)(426003);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR02MB3714;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1371a3d5-0f44-4fc2-06ad-08d7677335af
-X-MS-TrafficTypeDiagnostic: BYAPR02MB4678:
-X-Microsoft-Antispam-PRVS: <BYAPR02MB46787F2BCF6BC2D46D2FA487B7770@BYAPR02MB4678.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 15d40f35-fa5c-40d9-b66b-08d767733b80
+X-MS-TrafficTypeDiagnostic: BL0PR02MB3714:
+X-Microsoft-Antispam-PRVS: <BL0PR02MB37140627267BE687CCE14915B7770@BL0PR02MB3714.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-Forefront-PRVS: 021975AE46
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dTVjn0c9stNcGH2OdhxGO0qkTgFWAjg0YsIdqDWRZxvXr55vOAsU4uVN7rvrrcKxo+3LniQ2Xlf5pnfy7jq9FpiFwQETKjeBUeCurDyCIMa3Pdiar7WoxcFzDmUxlyFVQfcht30oocxQQaipIPC/d3t4KELMjfMEOYuHI29JaHClHv5ST3xmMEApebS+kv8P1OzXxbQkYKoLiY+U/MVNJKaCuzEAWbZT8FPIcxQWE82C5IyUar8azAlaDYBzGLTCTvY5DlXCGs1GfKJK5I5w/BozDn8jpmQNHREIhy2S06HWgT2vz1eTeu7ZcirVDtBxK74DxJ19+y4u+869vRSa9SrB4zIOdpA9kNPArlwLqtsERbMWg876Zw9hoqXlowKPdbl76TzVXAdbu/sQ3tmH+cH9BkQJsHQUerPFESCTkSVBotx5XIX74gXIwzNUJb3D
+X-Microsoft-Antispam-Message-Info: mVY5wSxx9OhWBkXK6r77YI/+iKbiITnR2FHu+GC+E62yrs+3SUs4vCvD6jqD2+NACNgYEF2a/4EAInyS0JVaymxd2vCPR/UzIwixeQm/FklH4YVzlyyccuoa+KOzSTUfd+zDGXDaEiw+FTfJZcAMuVeTqGOqXx9Piz/uiKc4FKrA4cXXiDnKKi/MnP3S+dilHmbBmqzaRVThUBp+OU+QItoBZg4Bb8uKwjDSbw53G8mUE3hx7InwgIjtifVl0B6SIKlpcJpek8gDj568bNr9QoItKl/7QTERto7KrcPEw7pQll8vkLkoYPcu/5wXlgCjQ7R4WtW1Q8nsqHH97qDeKbOEdKUUYt61CLxoOnQvT2DM3SbFLOXIHs4LoB3pNbHle8qsfqXVTyYLod/cZSw3/5xj8YlcbHB0svED2+/svFTySKWx7mIt956Tl6DPinzk
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2019 13:21:21.4306
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2019 13:21:31.2284
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1371a3d5-0f44-4fc2-06ad-08d7677335af
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15d40f35-fa5c-40d9-b66b-08d767733b80
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4678
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3714
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for init suspend in xilinx soc driver. Also update
-documentation of zynqmp-power with IPI mailbox property.
+Add IPI mailbox property and its example in xilinx zynqmp-power
+documentation.
 
-Rajan Vaja (1):
-  dt-bindings: power: reset: xilinx: Add bindings for ipi mailbox
+Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
+---
+ .../bindings/power/reset/xlnx,zynqmp-power.txt     | 41 ++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 3 deletions(-)
 
-Tejas Patel (1):
-  drivers: soc: xilinx: Use mailbox IPI callback
-
- .../bindings/power/reset/xlnx,zynqmp-power.txt     |  41 ++++++-
- drivers/soc/xilinx/zynqmp_power.c                  | 119 ++++++++++++++++++---
- 2 files changed, 144 insertions(+), 16 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.txt b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.txt
+index d366f1e..450f3a4 100644
+--- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.txt
++++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.txt
+@@ -8,9 +8,27 @@ Required properties:
+  - compatible:		Must contain:	"xlnx,zynqmp-power"
+  - interrupts:		Interrupt specifier
+ 
+--------
+-Example
+--------
++Optional properties:
++ - mbox-names	: Name given to channels seen in the 'mboxes' property.
++		  "rx" - Mailbox corresponding to receive path
++		  "tx" - Mailbox corresponding to transmit path
++ - mboxes	: Standard property to specify a Mailbox. Each value of
++		  the mboxes property should contain a phandle to the
++		  mailbox controller device node and an args specifier
++		  that will be the phandle to the intended sub-mailbox
++		  child node to be used for communication. See
++		  Documentation/devicetree/bindings/mailbox/mailbox.txt
++		  for more details about the generic mailbox controller
++		  and client driver bindings. Also see
++		  Documentation/devicetree/bindings/mailbox/ \
++		  xlnx,zynqmp-ipi-mailbox.txt for typical controller that
++		  is used to communicate with this System controllers.
++
++--------
++Examples
++--------
++
++Example with interrupt method:
+ 
+ firmware {
+ 	zynqmp_firmware: zynqmp-firmware {
+@@ -23,3 +41,20 @@ firmware {
+ 		};
+ 	};
+ };
++
++Example with IPI mailbox method:
++
++firmware {
++
++	zynqmp_firmware: zynqmp-firmware {
++		compatible = "xlnx,zynqmp-firmware";
++		method = "smc";
++
++		zynqmp_power: zynqmp-power {
++			compatible = "xlnx,zynqmp-power";
++			mboxes = <&ipi_mailbox_pmu0 0>,
++				 <&ipi_mailbox_pmu0 1>;
++			mbox-names = "tx", "rx";
++		};
++	};
++};
 -- 
 2.7.4
 
