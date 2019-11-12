@@ -2,182 +2,293 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FC3F8D6C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 12:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C994BF8E67
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Nov 2019 12:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbfKLLA2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 06:00:28 -0500
-Received: from mx3.freesources.org ([195.34.172.217]:40548 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfKLLA1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Nov 2019 06:00:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=freesources.org; s=20160526; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=++8wCAmdksGfHIF0MlgpD6fcdCnYWunEe52ipk44Fbs=; b=Mw+MX/9tsLJf6Atwoon6OgE/L0
-        lBQpkvyCmvWWjC2+dVoiNcS751rbzyYiu957O+SmnuC0AVHE2JkPCZO7gHBVgtmEIYDJ1/GUO0PLB
-        sq9bbjQQMXOVssK/AZMcMVeIBVawSAiTRRHryRVSh3RKRTNaBf1YnmxB8/ZREe8nvMrE=;
-Received: from anon-38-117.vpn.ipredator.se ([46.246.38.117])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <jonas@freesources.org>)
-        id 1iUTuE-0000uF-Bb; Tue, 12 Nov 2019 11:00:18 +0000
-Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
- suspend
-From:   Jonas Meurer <jonas@freesources.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>
-References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
- <2847488.TR0R5COpHM@kreacher>
- <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
- <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
- <CAJZ5v0gNAONVcfvrUu4DBPBo=YzWW2NK-3774_Hv__p2JWmPgA@mail.gmail.com>
- <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
- <d9ac5225-51fb-8207-5661-64089ad98a4e@freesources.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- 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
- 2SCIHpzHfm/mpRL2
-Message-ID: <355b0fb4-47da-3ab8-bc65-5191cd8882d6@freesources.org>
-Date:   Tue, 12 Nov 2019 12:00:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727616AbfKLLV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 06:21:56 -0500
+Received: from mail-eopbgr20087.outbound.protection.outlook.com ([40.107.2.87]:64066
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727281AbfKLLSK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Nov 2019 06:18:10 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=beY1kPs0ItmyEC9ara0M/79wNC3BYsu7lskAXzhE2V2lbSORlCn106vXdSspAk1M7wc8nibubK8IsBUMIlaPMtNyvzXhxChj7rtpqECV8AqLcI+qSzR0AJGQaOtq3+U7Q+kIqHW7cHXnLO53uE7aJGXxJ89KwOYImXndPR0/2bCJyvuZ+8YVa7ZmSFjaDk6Mt70JSSIOk79odwWyWAu/34KTIFPlsmDOxL4FFTT1WLLIAj7KgU8YGHMvlZiXjfQmskL3LUsdw2ilI80uyMbZPhHaDv23XaN0LY8LF8wOmeeWA1tE92g5q0Is/nrEjksdmfiJAUbD9p7swVzqSawRIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L6gVKOTRJEEcvDhtPX8de3LGPo8grudqnmZUlbE1h5g=;
+ b=FQp/LKuiGKwoCs1NVmrAvEFFzgpq1jhEE2x2m5ul2mZDQbJ0oITC8vNl27dzGkZbxHwY6lP4nP2kjA2DNaP+ASW8afFMXmOHgz2lRtEbMYPnIefr7YSWksD70idpaPJfawNY4Dbv0j/uYiLaqtZn/O83a7YyM3LJTQRvNMoAZUmsp2wjLx/QigAJAG1p1gHF9kZIDbRZNXmggA4LUeSJydoqxCH1yl0APyBZEfG2cGAj/YJ95cWPDyWDiwSq3uzY0BWU2w2kQlwq1BHci4cHq7eM99LrZy1VSj2Vsh+sGbC85RfeJcCZyxizwenUBrTuk6IEpBffN2ai/lW6GfXibA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L6gVKOTRJEEcvDhtPX8de3LGPo8grudqnmZUlbE1h5g=;
+ b=nV3+sqX8Ow3LajG1lF8D5tnigXE657i0fBMZZstXB44D2aSUoojjuHyTX9ICnruKUYBwjVmyQAu3rIF80Wi+px0r0hk0ZEgvoVNBbJqvtI0kNuzEvSq2eRXq4qY+hSFFIYKnGB6c1tjQqq0kw6pm/JWtPn6e5zLRqmmmCJbj45Y=
+Received: from AM0PR04MB5779.eurprd04.prod.outlook.com (20.178.202.151) by
+ AM0PR04MB6113.eurprd04.prod.outlook.com (20.179.33.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2430.22; Tue, 12 Nov 2019 11:18:04 +0000
+Received: from AM0PR04MB5779.eurprd04.prod.outlook.com
+ ([fe80::fd44:1b14:587c:9fde]) by AM0PR04MB5779.eurprd04.prod.outlook.com
+ ([fe80::fd44:1b14:587c:9fde%7]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
+ 11:18:04 +0000
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Topic: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Index: AQHVloV7VZOJz0hWAkeO+G3807P1dqeHaKeA
+Date:   Tue, 12 Nov 2019 11:18:04 +0000
+Message-ID: <20191112111803.c5624in2masqipqf@fsr-ub1664-175>
+References: <cover.1573252696.git.leonard.crestez@nxp.com>
+ <0e0eeeee546a3bb664935184d66866f1c66458ce.1573252696.git.leonard.crestez@nxp.com>
+In-Reply-To: <0e0eeeee546a3bb664935184d66866f1c66458ce.1573252696.git.leonard.crestez@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM0PR0202CA0035.eurprd02.prod.outlook.com
+ (2603:10a6:208:1::48) To AM0PR04MB5779.eurprd04.prod.outlook.com
+ (2603:10a6:208:131::23)
+x-originating-ip: [89.37.124.34]
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=abel.vesa@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7ac35b0d-7eec-436f-9fa9-08d76761fcb4
+x-ms-traffictypediagnostic: AM0PR04MB6113:|AM0PR04MB6113:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB6113D9C5381B288DE3617C3FF6770@AM0PR04MB6113.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:843;
+x-forefront-prvs: 021975AE46
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(39860400002)(366004)(346002)(136003)(396003)(189003)(199004)(86362001)(3846002)(33716001)(4326008)(6116002)(66066001)(6486002)(5660300002)(64756008)(66946007)(66446008)(66476007)(66556008)(6246003)(1076003)(478600001)(7736002)(316002)(44832011)(305945005)(7416002)(25786009)(6862004)(52116002)(99286004)(102836004)(76176011)(2906002)(6636002)(486006)(26005)(53546011)(6506007)(6512007)(71200400001)(9686003)(386003)(14454004)(6436002)(14444005)(186003)(8676002)(81156014)(229853002)(256004)(446003)(8936002)(54906003)(476003)(11346002)(71190400001)(81166006)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6113;H:AM0PR04MB5779.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QLOnpDQ50oy4YYD3vso7LoVB1Q9PRHPgxPlAPXF8Q9K4+EXYQ1X/tMiHq4+tm+rqxvEtBinIDaO6qc6/w7XWVFOsCWuwCfpu+2/a0zKw1hqhEn4vxKpOrsvQdageglqMYn6rpyzq6yF+PRk4ZXMr2Mt1O000EWN0z8Is557gNEI+vIUzcFqAKByKJUgPm2/zO99QZSaXSlBs2lWYSzAhdR5DudNJw/+gJ89LT3YN74OvVkjl70rLBBDtVLALIGny68USCZWIkcpWMLjZ4aczMKvEjQBYkwTfBYv11nU89iscR1x4/U9FTP6LS2yg7y8bf02Rv2RdIL2qsiq0Y0de3vAvYCGmXkQdCRJ7QRuwKn/0A02H1Ec8Bh1ZBzunqhIjBtADBFt8snaNqku0d/8tjEXxgBta1LbB0bA2lJzwZPnLT/rLTnThAsTr7Orwire2
+Content-Type: text/plain; charset="iso-8859-2"
+Content-ID: <38B37E1CA4CBAC4B94040C69C2ECE4D2@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <d9ac5225-51fb-8207-5661-64089ad98a4e@freesources.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac35b0d-7eec-436f-9fa9-08d76761fcb4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 11:18:04.7257
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: C3AMSYKqQxkBy2umZK8AeBdBt2u8oQRYgtqCj+neXpEPrHz99WgVeppWFlyu0Rv9wzqPoZmZUhoW+5+gMGKZ1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6113
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On 19-11-09 00:39:51, Leonard Crestez wrote:
+> These clocks are only modified as part of DRAM frequency switches during
+> which DRAM itself is briefly inaccessible. The switch is performed with
+> a SMC call to by TF-A which runs from a SRAM area; upon returning to
+> linux several clocks bits are modified and we need to update them.
+>=20
+> For rate bits an easy solution is to just mark with
+> CLK_GET_RATE_NOCACHE so that new rates are always read back from
+> registers.
+>=20
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/clk/imx/clk-imx8mm.c | 11 +++++++++--
+>  drivers/clk/imx/clk-imx8mn.c | 12 ++++++++++--
+>  drivers/clk/imx/clk-imx8mq.c | 15 +++++++++++----
+>  3 files changed, 30 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+> index 030b15d7c0ce..c58f988191a5 100644
+> --- a/drivers/clk/imx/clk-imx8mm.c
+> +++ b/drivers/clk/imx/clk-imx8mm.c
+> @@ -440,13 +440,20 @@ static int imx8mm_clocks_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	/* IPG */
+>  	clks[IMX8MM_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MM_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+> =20
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+> +	clks[IMX8MM_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mm_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MM_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mm_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+> +
+>  	/* IP */
+> -	clks[IMX8MM_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mm_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MM_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mm_dram_apb_sels, base + 0xa080);
+>  	clks[IMX8MM_CLK_VPU_G1] =3D imx8m_clk_composite("vpu_g1", imx8mm_vpu_g1=
+_sels, base + 0xa100);
+>  	clks[IMX8MM_CLK_VPU_G2] =3D imx8m_clk_composite("vpu_g2", imx8mm_vpu_g2=
+_sels, base + 0xa180);
+>  	clks[IMX8MM_CLK_DISP_DTRC] =3D imx8m_clk_composite("disp_dtrc", imx8mm_=
+disp_dtrc_sels, base + 0xa200);
+>  	clks[IMX8MM_CLK_DISP_DC8000] =3D imx8m_clk_composite("disp_dc8000", imx=
+8mm_disp_dc8000_sels, base + 0xa280);
+>  	clks[IMX8MM_CLK_PCIE1_CTRL] =3D imx8m_clk_composite("pcie1_ctrl", imx8m=
+m_pcie1_ctrl_sels, base + 0xa300);
+> diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
+> index 9f5a5a56b45e..ca78cb1249a7 100644
+> --- a/drivers/clk/imx/clk-imx8mn.c
+> +++ b/drivers/clk/imx/clk-imx8mn.c
+> @@ -428,12 +428,20 @@ static int imx8mn_clocks_probe(struct platform_devi=
+ce *pdev)
+>  	clks[IMX8MN_CLK_AHB] =3D imx8m_clk_composite_critical("ahb", imx8mn_ahb=
+_sels, base + 0x9000);
+>  	clks[IMX8MN_CLK_AUDIO_AHB] =3D imx8m_clk_composite("audio_ahb", imx8mn_=
+audio_ahb_sels, base + 0x9100);
+>  	clks[IMX8MN_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MN_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+>  	clks[IMX8MN_CLK_DRAM_CORE] =3D imx_clk_mux2_flags("dram_core_clk", base=
+ + 0x9800, 24, 1, imx8mn_dram_core_sels, ARRAY_SIZE(imx8mn_dram_core_sels),=
+ CLK_IS_CRITICAL);
+> -	clks[IMX8MN_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mn_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MN_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mn_dram_apb_sels, base + 0xa080);
+> +
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+> +	clks[IMX8MN_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mn_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MN_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mn_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
 
-Jonas Meurer:
-> Jonas Meurer:
->> Rafael J. Wysocki:
->>> On Mon, Oct 21, 2019 at 12:47 PM Jonas Meurer <jonas@freesources.org> wrote:
->>>> Hi Rafael and linux-pm maintainers,
->>>>
->>>> sorry for the noise, but again: is there a chance to get a brief review
->>>> of my patchset?
->>>>
->>>> Probably it was a bad idea to rename the build-time flag, right? Should
->>>> I revert that part of the patch?
->>>
->>> Sorry for the delay, I'll get to your patches in the next couple of days.
->>
->> No worries. Thanks a lot for looking into it. It's no problem at all for
->> me/us if it takes a few more days. Just wanted to make sure that it
->> doesn't get lost.
->>
->> If you find a minute to give a quick comment on whether I should revert
->> the renaming of build-time flag CONFIG_SUSPEND_SKIP_SYNC to
->> CONFIG_SKIP_SYNC_ON_SUSPEND, then I could do that in advance to your
->> thorough review.
-> 
-> I went ahead now and reverted the renaming of build-time flag
-> CONFIG_SUSPEND_SKIP_SYNC[1]. There's no reason to do so and it breaks
-> backwards-compability.
-> 
-> Rafael, could you take a look at the patches anytime soon? I'd like to
-> propose them for inclusion into the Linux Kernel within the next weeks.
-> Again the question: would you sign them (if you consider them sensible)?
-> It's my first Linux Kernel contribution, so I'm unsure about the
-> process. My understanding is that a subsystem maintainer should approve
-> the patches first before they can be proposed for upstream integration,
-> right?
+nitpick: I think it looks better if we stick to one line each clock.=20
+I know it's against the 80 chars rule, but at least is consistent.
 
-Just another friendly reminder: do you think you find time to look into
-my patchset anytime soon? Or shall I re-send them with lkml in the loop
-as they are?
-
-Kind regards
- jonas
+> +
+>  	clks[IMX8MN_CLK_DISP_PIXEL] =3D imx8m_clk_composite("disp_pixel", imx8m=
+n_disp_pixel_sels, base + 0xa500);
+>  	clks[IMX8MN_CLK_SAI2] =3D imx8m_clk_composite("sai2", imx8mn_sai2_sels,=
+ base + 0xa600);
+>  	clks[IMX8MN_CLK_SAI3] =3D imx8m_clk_composite("sai3", imx8mn_sai3_sels,=
+ base + 0xa680);
+>  	clks[IMX8MN_CLK_SAI5] =3D imx8m_clk_composite("sai5", imx8mn_sai5_sels,=
+ base + 0xa780);
+>  	clks[IMX8MN_CLK_SAI6] =3D imx8m_clk_composite("sai6", imx8mn_sai6_sels,=
+ base + 0xa800);
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index 5f10a606d836..3e2ccc17dc66 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -341,11 +341,12 @@ static int imx8mq_clocks_probe(struct platform_devi=
+ce *pdev)
+>  	clks[IMX8MQ_VIDEO_PLL1_OUT] =3D imx_clk_gate("video_pll1_out", "video_p=
+ll1_bypass", base + 0x10, 21);
+> =20
+>  	clks[IMX8MQ_SYS1_PLL_OUT] =3D imx_clk_fixed("sys1_pll_out", 800000000);
+>  	clks[IMX8MQ_SYS2_PLL_OUT] =3D imx_clk_fixed("sys2_pll_out", 1000000000)=
+;
+>  	clks[IMX8MQ_SYS3_PLL_OUT] =3D imx_clk_sccg_pll("sys3_pll_out", sys3_pll=
+_out_sels, ARRAY_SIZE(sys3_pll_out_sels), 0, 0, 0, base + 0x48, CLK_IS_CRIT=
+ICAL);
+> -	clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out", dram_pll=
+_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60, CLK_IS_CRIT=
+ICAL);
+> +	clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out", dram_pll=
+_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+>  	clks[IMX8MQ_VIDEO2_PLL_OUT] =3D imx_clk_sccg_pll("video2_pll_out", vide=
+o2_pll_out_sels, ARRAY_SIZE(video2_pll_out_sels), 0, 0, 0, base + 0x54, 0);
+> =20
+>  	/* SYS PLL1 fixed output */
+>  	clks[IMX8MQ_SYS1_PLL_40M_CG] =3D imx_clk_gate("sys1_pll_40m_cg", "sys1_=
+pll_out", base + 0x30, 9);
+>  	clks[IMX8MQ_SYS1_PLL_80M_CG] =3D imx_clk_gate("sys1_pll_80m_cg", "sys1_=
+pll_out", base + 0x30, 11);
+> @@ -433,15 +434,21 @@ static int imx8mq_clocks_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	/* IPG */
+>  	clks[IMX8MQ_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MQ_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+> =20
+> -	/* IP */
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+>  	clks[IMX8MQ_CLK_DRAM_CORE] =3D imx_clk_mux2_flags("dram_core_clk", base=
+ + 0x9800, 24, 1, imx8mq_dram_core_sels, ARRAY_SIZE(imx8mq_dram_core_sels),=
+ CLK_IS_CRITICAL);
+> +	clks[IMX8MQ_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mq_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MQ_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mq_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+> =20
+> -	clks[IMX8MQ_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mq_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MQ_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mq_dram_apb_sels, base + 0xa080);
+> +	/* IP */
+>  	clks[IMX8MQ_CLK_VPU_G1] =3D imx8m_clk_composite("vpu_g1", imx8mq_vpu_g1=
+_sels, base + 0xa100);
+>  	clks[IMX8MQ_CLK_VPU_G2] =3D imx8m_clk_composite("vpu_g2", imx8mq_vpu_g2=
+_sels, base + 0xa180);
+>  	clks[IMX8MQ_CLK_DISP_DTRC] =3D imx8m_clk_composite("disp_dtrc", imx8mq_=
+disp_dtrc_sels, base + 0xa200);
+>  	clks[IMX8MQ_CLK_DISP_DC8000] =3D imx8m_clk_composite("disp_dc8000", imx=
+8mq_disp_dc8000_sels, base + 0xa280);
+>  	clks[IMX8MQ_CLK_PCIE1_CTRL] =3D imx8m_clk_composite("pcie1_ctrl", imx8m=
+q_pcie1_ctrl_sels, base + 0xa300);
+> --=20
+> 2.17.1
+>=20
