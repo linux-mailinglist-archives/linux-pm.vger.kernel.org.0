@@ -2,165 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B269FFB707
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 19:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3F0FB822
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 19:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbfKMSJk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 13:09:40 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36893 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbfKMSJj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 13:09:39 -0500
-Received: by mail-wm1-f68.google.com with SMTP id b17so3091456wmj.2
-        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 10:09:36 -0800 (PST)
+        id S1728072AbfKMSyd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 13:54:33 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:37236 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727999AbfKMSyd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 13:54:33 -0500
+Received: by mail-wm1-f67.google.com with SMTP id b17so3231482wmj.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 10:54:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=M+vh+JtPBA/nELsdW8FXtsVseJ/XSaHzYgPaZO1dM+k=;
-        b=ymS1XAraf98PBmkpZgbandG8SepionTVitSyVJ3HE5CT9CgRmGSWPljQ6pHaDOT6bv
-         SOwwIVal93txZ45NRyKqlavEHJdQeYEIFJDldelwfpokq0npZ8qcGOtCfuZsoHSa+A6Z
-         Lg2dE1YIwma3+snkOjhYe/tIQmdVpniaY4LTjoQMaj8QQkwvGhnPUlbtpHFolHPM3o9k
-         tpILFP4wXYDOeOUMte7X5iNidAeSth6TwP5BF/3Gk1HtyOK6J4mNl8/MBi4jEwIpxaXq
-         LLQgtUCymMMlVeelxIBEk/WA6CPrPQh4uDoASJncvwUTNOVUTUNtfWN6ENVOUmTtzwD+
-         cy0Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=mxbZ8+c1HWx+jX/DqmbvHgrD0xG3oGCm5/inpyhujDI=;
+        b=xbkhJUOltkSzyozuDE5IeFiFnWsqRe6WSN7P/KyRswAlSB68Fg/2wMePtaC9laKO1e
+         IoIZz2XW52u0SMEoMZB2VKfw1YBjCg02luv7h7LyPrk3j5tI3HN4mF6FSiuM5i6EWkHY
+         c3eTZ/wwRXUJUZfGmTtKagrS0hFTVJKxZZ1lpyFsQuo6XXkPYciymEmbGddnKyUIhJvL
+         O09YHa9HxnyyLC82+rzfRheSkU9tPA3+QfyZnPzqq3UBUXJDgmtvphqOvWZ/RgFngQxR
+         4MrjLIaCBaXQnBNBTtIj9TYFuy+Fy1laVtDE1yRzUvRbrMUffwT8ZBOpNBPVi+uLLtT6
+         Y2gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=M+vh+JtPBA/nELsdW8FXtsVseJ/XSaHzYgPaZO1dM+k=;
-        b=hDBBqQSygx2peGDa7+d7tAgmuMtm+4nVt85wjhPmJhPAUm6PucradTKXPl933zmCgl
-         atuZYnu57mVWuXRW/bNiMGUYMbaZyg9WeArq20Q5vokRZ5oPpV3vyvAd4Q89R1bBSCCy
-         aLsW5tssEaG6RKISvKopkCdGjZ/Yrz5J6wB1sfKDzHMU122pVeudFdq3UWVJ0iNv4bT1
-         SD4ldwjT6qUuyZLCHs0DqL7zwiECIufJDD3pcrXNPBcEHvzvwqzo+czle8+/A6W01B4k
-         crrAA/WTJmXfKRfbv6vW6weTu/+aIbgi03cvfduSLhv14ANyh576naie4vt7Rd8DmgJS
-         GOZw==
-X-Gm-Message-State: APjAAAXeY0xvqMpHIEtuu/XoC2+2BcTmfeosEDfXcgs8GyC7w8sixUIp
-        Wmy3NgYlPWTz8T8IUAx5q21KcA==
-X-Google-Smtp-Source: APXvYqx1692n6c6jZamqQWXLIh1PjQUnanC8Gmv1QQBmTl6/FzG1v9T/32/TTnlGT7giZXO7b4hBtA==
-X-Received: by 2002:a7b:c001:: with SMTP id c1mr4117921wmb.96.1573668575773;
-        Wed, 13 Nov 2019 10:09:35 -0800 (PST)
-Received: from linaro.org ([2a01:e0a:f:6020:bdd0:28e6:f0d9:a18c])
-        by smtp.gmail.com with ESMTPSA id z8sm3605501wrp.49.2019.11.13.10.09.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Nov 2019 10:09:34 -0800 (PST)
-Date:   Wed, 13 Nov 2019 19:09:32 +0100
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Doug Smythies <dsmythies@telus.net>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
-        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v2] sched/freq: move call to cpufreq_update_util
-Message-ID: <20191113180932.GA24352@linaro.org>
-References: <1573570093-1340-1-git-send-email-vincent.guittot@linaro.org>
- <20191112150544.GA3664@linaro.org>
- <3b8cafb7-894d-c302-e6c6-b5844b1298b5@arm.com>
- <CAKfTPtBMNnM2tTfb72VtufDpwBvqu6Ttj3dnLgoNOZ--Q6qo+Q@mail.gmail.com>
- <bcba52bc-6780-1efc-6ef4-1a75f1cef33d@arm.com>
- <20191113175035.GA8553@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191113175035.GA8553@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mxbZ8+c1HWx+jX/DqmbvHgrD0xG3oGCm5/inpyhujDI=;
+        b=ZLEy4B78dvORwNix3+/RUpsApSSi+HQQ5EjZk6jryR9IBlftjzwmCUL8VfuaEtHp0v
+         CM0gFSYwTF9gQz1Zh0QOHdhD9n76h5ZTr9rXNl2BOnPwv769u5HZJhjK9FnNsjPu8Av0
+         q+DU5Csh/MFMc8mC2eKsVYwn3Mlec+FAo7l48UcX3WIlU/8GPcIG7CvVlTkKUIDc+ag+
+         Msp4w9dmSDrEPxFIa3QJ9JH9AhCLihhbqxUxQjnahEXjXB+4NHgRxCLoWKkB8Rry2DRh
+         bSvR0Vmnq/4d2nXAaTOWn4BTY40Twq2jkzhqGR+GfezH/dOYiHPGm8SnYMzJEGH+rOh1
+         4FZQ==
+X-Gm-Message-State: APjAAAXwHMbaJvvMFceSFOi4x67YZIx/IDak7TU5a59v7Tgy1QM1LurA
+        D8KwZKQFs0Io5HZGF8NCKIGzWg==
+X-Google-Smtp-Source: APXvYqy13Me73uZ2M/FZW7maBTWK2qakrUvJ2/7ThhIIodfkNB48jSY/JJEUXFIcuuTE9MjTNMFMBA==
+X-Received: by 2002:a1c:1f03:: with SMTP id f3mr4127745wmf.131.1573671271226;
+        Wed, 13 Nov 2019 10:54:31 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:ec92:781d:6592:837])
+        by smtp.gmail.com with ESMTPSA id 17sm2652848wmg.19.2019.11.13.10.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 10:54:30 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ulf.hansson@linaro.org
+Subject: [PATCH RFC 1/3] cpuidle: Replace use_deepest_state flag by use_latency
+Date:   Wed, 13 Nov 2019 19:54:17 +0100
+Message-Id: <20191113185419.13305-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le Wednesday 13 Nov 2019 à 18:50:35 (+0100), Vincent Guittot a écrit :
-> Le Wednesday 13 Nov 2019 à 15:09:47 (+0100), Dietmar Eggemann a écrit :
-> > On 13.11.19 14:30, Vincent Guittot wrote:
-> > > On Wed, 13 Nov 2019 at 11:50, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> > >>
-> > >> On 12.11.19 16:05, Vincent Guittot wrote:
-> > >>> Le Tuesday 12 Nov 2019 à 15:48:13 (+0100), Vincent Guittot a écrit :
-> > 
-> > [...]
-> > 
-> > >>>> @@ -7493,9 +7495,9 @@ static void update_blocked_averages(int cpu)
-> > >>>>       * that RT, DL and IRQ signals have been updated before updating CFS.
-> > >>>>       */
-> > >>>>      curr_class = rq->curr->sched_class;
-> > >>>> -    update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
-> > >>>> -    update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
-> > >>>> -    update_irq_load_avg(rq, 0);
-> > >>>> +    decayed |= update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
-> > >>>> +    decayed |= update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
-> > >>>> +    decayed |= update_irq_load_avg(rq, 0);
-> > >>
-> > >> Why not 'decayed  = update_cfs_rq_load_avg()' like in the
-> > >> !CONFIG_FAIR_GROUP_SCHED case?
-> > > 
-> > > Because it is handled by the update_load_avg() in
-> > > for_each_leaf_cfs_rq_safe() loop
-> > > 
-> > > This means that we can have 2 calls to cpufreq_update_util in
-> > > update_blocked_average() but at least the values will be up to date in
-> > > both calls unlike previously.
-> > > 
-> > > I'm going to prepare an additional patch to remove this useless call.
-> > > I have also seen some possible further optimization that i need to
-> > > study a bit more before preparing a patch
-> > 
-> > I see. The update_load_avg() call for the taskgroup skeleton se
-> > (cfs_rq->tg->se[cpu]). But what happens to the cpu which only has the
-> > root cfs_rq i the list? It doesn't have a skeleton se.
-> 
-> you're right. I have to add the following to make sure it will be called
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 2eb1aa8..9fc077c 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7604,9 +7604,13 @@ static void update_blocked_averages(int cpu)
->                         cpu,
->                         cfs_rq == &rq->cfs ? 0 : (long)cfs_rq->tg );
->  
-> -               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-> +               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
->                         update_tg_load_avg(cfs_rq, 0);
->  
-> +                       if (cfs_rq == &rq->cfs)
-> +                               decayed = 1;
-> +               }
-> +
->                 trace_sched_load_contrib_blocked(cpu,
->                         &cfs_rq->avg,
->                         cfs_rq == &rq->cfs ? 0 : (long)cfs_rq->tg );
+We want to specify a latency constraint when choosing an idle state at
+play_idle time. Instead of duplicating the information in the
+structure or propagate the latency in the call stack, change the
+use_deepest_state by use_latency to introduce this constraint.
 
-the proper fix without some debug trace events :-)
+A zero latency constraint means "do not use the deepest idle state
+path" as the 'use_deepest_state' boolean was used in the
+cpuidle_idle_call.
 
-@@ -7567,9 +7569,13 @@ static void update_blocked_averages(int cpu)
- 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
- 		struct sched_entity *se;
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/cpuidle/cpuidle.c | 6 +++---
+ include/linux/cpuidle.h   | 6 +++---
+ kernel/sched/idle.c       | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 44ae39f2b47a..f68a6c9e8482 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -100,19 +100,19 @@ static int find_deepest_state(struct cpuidle_driver *drv,
  
--		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-+		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq, 0);
+ /**
+  * cpuidle_use_deepest_state - Set/clear governor override flag.
+- * @enable: New value of the flag.
++ * @latency: A latency constraint
+  *
+  * Set/unset the current CPU to use the deepest idle state (override governors
+  * going forward if set).
+  */
+-void cpuidle_use_deepest_state(bool enable)
++void cpuidle_use_latency(unsigned int latency)
+ {
+ 	struct cpuidle_device *dev;
  
-+			if (cfs_rq == &rq->cfs)
-+				decayed = 1;
-+		}
-+
- 		/* Propagate pending load changes to the parent, if any: */
- 		se = cfs_rq->tg->se[cpu];
- 		if (se && !skip_blocked_update(se))
+ 	preempt_disable();
+ 	dev = cpuidle_get_device();
+ 	if (dev)
+-		dev->use_deepest_state = enable;
++		dev->use_latency = latency;
+ 	preempt_enable();
+ }
+ 
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index d23a3b1ddcf6..32018704f4ea 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -83,8 +83,8 @@ struct cpuidle_driver_kobj;
+ struct cpuidle_device {
+ 	unsigned int		registered:1;
+ 	unsigned int		enabled:1;
+-	unsigned int		use_deepest_state:1;
+ 	unsigned int		poll_time_limit:1;
++	unsigned int		use_latency;
+ 	unsigned int		cpu;
+ 	ktime_t			next_hrtimer;
+ 
+@@ -210,7 +210,7 @@ extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+ 				      struct cpuidle_device *dev);
+ extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
+ 				struct cpuidle_device *dev);
+-extern void cpuidle_use_deepest_state(bool enable);
++extern void cpuidle_use_latency(unsigned int latency);
+ #else
+ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+ 					     struct cpuidle_device *dev)
+@@ -218,7 +218,7 @@ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+ static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
+ 				       struct cpuidle_device *dev)
+ {return -ENODEV; }
+-static inline void cpuidle_use_deepest_state(bool enable)
++static inline void cpuidle_use_latency(unsigned int latency)
+ {
+ }
+ #endif
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index 8dad5aa600ea..00e064d3dfe1 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -165,7 +165,7 @@ static void cpuidle_idle_call(void)
+ 	 * until a proper wakeup interrupt happens.
+ 	 */
+ 
+-	if (idle_should_enter_s2idle() || dev->use_deepest_state) {
++	if (idle_should_enter_s2idle() || dev->use_latency) {
+ 		if (idle_should_enter_s2idle()) {
+ 			rcu_idle_enter();
+ 
+@@ -328,7 +328,7 @@ void play_idle(unsigned long duration_us)
+ 	rcu_sleep_check();
+ 	preempt_disable();
+ 	current->flags |= PF_IDLE;
+-	cpuidle_use_deepest_state(true);
++	cpuidle_use_latency(1);
+ 
+ 	it.done = 0;
+ 	hrtimer_init_on_stack(&it.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+@@ -339,7 +339,7 @@ void play_idle(unsigned long duration_us)
+ 	while (!READ_ONCE(it.done))
+ 		do_idle();
+ 
+-	cpuidle_use_deepest_state(false);
++	cpuidle_use_latency(0);
+ 	current->flags &= ~PF_IDLE;
+ 
+ 	preempt_fold_need_resched();
+-- 
+2.17.1
 
-
-
-> 
-> 
