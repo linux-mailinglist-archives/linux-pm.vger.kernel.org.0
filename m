@@ -2,112 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A94A6FB13C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 14:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9DFFB152
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 14:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbfKMNYX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 08:24:23 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:35082 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbfKMNYW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 08:24:22 -0500
-Received: by mail-ed1-f68.google.com with SMTP id r16so1813278edq.2
-        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 05:24:21 -0800 (PST)
+        id S1727206AbfKMNap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 08:30:45 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38397 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726186AbfKMNap (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 08:30:45 -0500
+Received: by mail-lj1-f193.google.com with SMTP id v8so2578692ljh.5
+        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 05:30:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=JRP/6EKOcSy60KLVoWb7jM1Tf5lS/OPVbKzG0KgZCIY=;
-        b=uAo9yOmMnM/3SrNHSnXryuXkoyxb7GED2KW+gIH19apn94zis9+gv/nx8PglsR6vpz
-         qgtdeMAI+ooZ7/giFoQgpO9y5Lk6VE/AHCfSm/vZLHdwBv3H8neAZyQ9j9WyTEHri1Xa
-         lJieaXHz3a86aDe6YDxtgc/RLaADka6P+E/kyDkiaBWNprpijul2teXVwERnh1LlT7pu
-         roagxEM8zv0CKc08CIY7j5Cs6C7GbzXyRZRYcCm5++1/44kHTBy8c/SL2b6YN6AiyeVL
-         m6zBIp5Yl0jCmcqa1K9N2gaDZWAPTq1WfzDTgAhUMawRzqwg8IJ1qNETtKIncMHKfqrM
-         PGMw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OOnEuO9COFi4aqj08qcvAhg7573JPt49e4+HEFPh3cQ=;
+        b=pLQ96LKUVUgrh2Xs8imGdJTUy4dQn1wyCiKhmMGZK2M+TBn9MlFaeIycIXKeJ0LG0f
+         qZmGjLSYiy1WoBKwpJsMoMVg+tQCJhv+OPRUdvq940V2jVsjNl2+BA4wYL4UQ6384gNu
+         bwfMOGUvHyyCkUv4obZsVStsWgTwWa0JOKDFPHy4WOLd8MwuNIYBa3JH6FjmWuHVqFat
+         P761xD9lH9Mlkz6EHM3hn6glre11aj3gTxq58kgym9ed6jzOhpm/zLejtjdbisgfMwsS
+         1JP2041OTjxXLsF/tWujkv31qQuHtLaPvUfCohc98qSPbGJAmZX/MXFdpBd4bpCmCGnC
+         W2fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JRP/6EKOcSy60KLVoWb7jM1Tf5lS/OPVbKzG0KgZCIY=;
-        b=Ywhk6sA3S09aDtcfSmv3f9n/WmI2T/3t1Xu0ZTkZBQEe0oV9ZG6RpAjdcVkafM/iSe
-         AO3iUDCI9Kk54BEDJcfI/7oT5PEirweoI1AQxWK5yXwo+EjtwtrOU+jW1+U47L31514O
-         Y37vBvSONimvry6JDTWLHTHFSwBIHodLMHLLs+kNVf+mmu757Ryxf46o1rKd7dGPbdJ5
-         b5Hb+a1ptRz/6vw/5AfLR2NyuRWo09dphFID8PVfFUMOqjn5mzJoUuIAbnX/bgtgT/wq
-         0eAkra33Cue/FNktg9y/UySiKH1f62wbUkjL/h+ctGzO16jYfJXtakAkUFVzsf5XFuIU
-         9Myg==
-X-Gm-Message-State: APjAAAUNxbIdk6rE0rb0d87IXI1hFLM8iTUm2RHfSJiANSFxaw48Opxc
-        ti+ps+dmgHwjixjGPX31Kx4SjQ==
-X-Google-Smtp-Source: APXvYqxeIzEC0kKghBW/pPOmDCzIOyjj19Pwibt4u2DqsePBx8gRya4BnBeKHlC6mxU0yG1bCUmjRw==
-X-Received: by 2002:a17:906:c797:: with SMTP id cw23mr2705388ejb.19.1573651461073;
-        Wed, 13 Nov 2019 05:24:21 -0800 (PST)
-Received: from [192.168.27.135] ([37.157.136.206])
-        by smtp.googlemail.com with ESMTPSA id r12sm245953edm.85.2019.11.13.05.24.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Nov 2019 05:24:20 -0800 (PST)
-Subject: Re: [PATCH v10 2/3] interconnect: qcom: Add MSM8916 interconnect
- provider driver
-To:     Dmitry Osipenko <digetx@gmail.com>, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, daidavid1@codeaurora.org,
-        vincent.guittot@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191030153904.8715-1-georgi.djakov@linaro.org>
- <20191030153904.8715-3-georgi.djakov@linaro.org>
- <88315b5a-1354-acf9-d57d-b301fb78cfa4@gmail.com>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Message-ID: <95eb0a55-d36b-b66e-ae64-18aa5baafff7@linaro.org>
-Date:   Wed, 13 Nov 2019 15:24:19 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OOnEuO9COFi4aqj08qcvAhg7573JPt49e4+HEFPh3cQ=;
+        b=VREeM5lbq+5HjC0ld6sGJ/Pq4tTpTTBZa7g3U1GYlNtuCvP/MjDJwu0SvsxfD5TeJE
+         7Sr9MYAQA1unDHUxbVhXpa4FgqAtSD/lrA0Tx3y/FWg5AvViSrpOpXOlvqsk5zEkhEq/
+         nyMdWE0FBRZqu86u0NP8ewxSzjp/ocweBIEDF3nEn369g5EMkdET1+jOnScIG7oIJmDc
+         hWFb30yKMHVqdD/t8HTWQjOzO2YRh5pegp68quo8hdXV0mFCrP+W7aCMiFv0QUSHl+E3
+         9Q/fSm9o5d5gS822as06JrpTA+Rae6s3Uf6mo22jbziwu9Ht4dZnuIeD2kO5ONXqo60W
+         g5sQ==
+X-Gm-Message-State: APjAAAU8+WyTg8vvg9ZvToheLBrptGsnG8vZtt0Tu6Q+A0HBLrLgmj25
+        CevJslwiS9O5+vv7ijYlBLI7L80ZXWsgxVVsBMshMg==
+X-Google-Smtp-Source: APXvYqwWujEGA3sqMgB0m8GdEybm4VNcXLjSY8U4Lgc3LKiZkpqhS7SrGPz5w9X1VeygVyGay7PJRPQtcQ+oSkJ8PQM=
+X-Received: by 2002:a2e:9695:: with SMTP id q21mr2549457lji.206.1573651843281;
+ Wed, 13 Nov 2019 05:30:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <88315b5a-1354-acf9-d57d-b301fb78cfa4@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1573570093-1340-1-git-send-email-vincent.guittot@linaro.org>
+ <20191112150544.GA3664@linaro.org> <3b8cafb7-894d-c302-e6c6-b5844b1298b5@arm.com>
+In-Reply-To: <3b8cafb7-894d-c302-e6c6-b5844b1298b5@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 13 Nov 2019 14:30:31 +0100
+Message-ID: <CAKfTPtBMNnM2tTfb72VtufDpwBvqu6Ttj3dnLgoNOZ--Q6qo+Q@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/freq: move call to cpufreq_update_util
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Doug Smythies <dsmythies@telus.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Wed, 13 Nov 2019 at 11:50, Dietmar Eggemann <dietmar.eggemann@arm.com> w=
+rote:
+>
+> On 12.11.19 16:05, Vincent Guittot wrote:
+> > Le Tuesday 12 Nov 2019 =C3=A0 15:48:13 (+0100), Vincent Guittot a =C3=
+=A9crit :
+> >> update_cfs_rq_load_avg() calls cfs_rq_util_change() everytime pelt dec=
+ays,
+> >> which might be inefficient when cpufreq driver has rate limitation.
+> >>
+> >> When a task is attached on a CPU, we have call path:
+> >>
+> >> update_blocked_averages()
+> >>   update_cfs_rq_load_avg()
+> >>     cfs_rq_util_change -- > trig frequency update
+> >>   attach_entity_load_avg()
+> >>     cfs_rq_util_change -- > trig frequency update
+>
+> This looks like attach_entity_load_avg() is called from
+> update_blocked_averages(). Do you refer to the attach_entity_load_avg()
+> call from attach_entity_cfs_rq() or update_load_avg() here? I assume the
+> former.
 
-On 13.11.19 г. 15:03 ч., Dmitry Osipenko wrote:
-> 30.10.2019 18:39, Georgi Djakov пишет:
->> Add driver for the Qualcomm interconnect buses found in MSM8916 based
->> platforms. The topology consists of three NoCs that are controlled by
->> a remote processor that collects the aggregated bandwidth for each
->> master-slave pairs.
->>
-[..]
->> +static int qnoc_remove(struct platform_device *pdev)
->> +{
->> +	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
->> +	struct icc_provider *provider = &qp->provider;
->> +	struct icc_node *n;
->> +
->> +	list_for_each_entry(n, &provider->nodes, node_list) {
->> +		icc_node_del(n);
->> +		icc_node_destroy(n->id);
->> +	}
-> 
-> Hello Georgi,
-> 
-> While examining the interconnect API and current drivers' code, I
-> noticed that everybody are copying this chunk of code which should crash
-> kernel because removing node from a list during the traverse is allowed
-> only when list_for_each_entry_safe() is used.
+ah... typo mistake, i wanted to write update_load_avg
+update_blocked_averages()
+  update_cfs_rq_load_avg()
+    cfs_rq_util_change -- > trig frequency update
+  attach_entity_load_avg()
+    cfs_rq_util_change -- > trig frequency update
 
-Nice catch. Thank you!
+>
+> >> The 1st frequency update will not take into account the utilization of=
+ the
+> >> newly attached task and the 2nd one might be discard because of rate
+> >> limitation of the cpufreq driver.
+> >>
+> >> update_cfs_rq_load_avg() is only called by update_blocked_averages()
+> >> and update_load_avg() so we can move the call to
+> >> {cfs_rq,cpufreq}_util_change() into these 2 functions. It's also
+>
+> s/cpufreq_util_change()/cpufreq_update_util() ?
 
-> Seems the IMX driver (which is under review now on the ML) is the only
-> driver that does the removing procedure correctly.
-> 
-> Maybe it won't hurt to factor out the removal of provider's nodes into a
-> common helper.
-> 
+yes
 
-Yes, this is a very good idea. Will do it.
+>
+> [...]
+>
+> >> I have just rebased the patch on latest tip/sched/core and made it a p=
+roper
+> >> patchset after Doug reported that the problem has diseappeared accordi=
+ng to
+> >> his 1st results but tests results are not all based on the same v5.4-r=
+cX
+> >> and with menu instead of teo governor.
+>
+> I had some minor tweaks to do putting this on a0e813f26ebc ("sched/core:
+> Further clarify sched_class::set_next_task()") ? I saw the '[tip:
+> sched/urgent] sched/pelt: Fix update of blocked PELT ordering' tip-bot
+> msg this morning though.
 
-Thanks,
-Georgi
+yes, a0e813f26ebc was item 1 and this patch is item 2 on top
+
+>
+> [...]
+>
+> >> @@ -7493,9 +7495,9 @@ static void update_blocked_averages(int cpu)
+> >>       * that RT, DL and IRQ signals have been updated before updating =
+CFS.
+> >>       */
+> >>      curr_class =3D rq->curr->sched_class;
+> >> -    update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class =3D=3D &r=
+t_sched_class);
+> >> -    update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class =3D=3D &d=
+l_sched_class);
+> >> -    update_irq_load_avg(rq, 0);
+> >> +    decayed |=3D update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_cl=
+ass =3D=3D &rt_sched_class);
+> >> +    decayed |=3D update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_cl=
+ass =3D=3D &dl_sched_class);
+> >> +    decayed |=3D update_irq_load_avg(rq, 0);
+>
+> Why not 'decayed  =3D update_cfs_rq_load_avg()' like in the
+> !CONFIG_FAIR_GROUP_SCHED case?
+
+Because it is handled by the update_load_avg() in
+for_each_leaf_cfs_rq_safe() loop
+
+This means that we can have 2 calls to cpufreq_update_util in
+update_blocked_average() but at least the values will be up to date in
+both calls unlike previously.
+
+I'm going to prepare an additional patch to remove this useless call.
+I have also seen some possible further optimization that i need to
+study a bit more before preparing a patch
+
+
+>
+> [...]
