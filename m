@@ -2,96 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E30FF9F14
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 01:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FDFF9F38
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 01:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbfKMALi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Nov 2019 19:11:38 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61985 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbfKMALi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Nov 2019 19:11:38 -0500
-Received: from 79.184.253.153.ipv4.supernova.orange.pl (79.184.253.153) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 0fe9b4f92c5da7e6; Wed, 13 Nov 2019 01:11:35 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: [PATCH 3/3] cpuidle: teo: Avoid code duplication in conditionals
-Date:   Wed, 13 Nov 2019 01:10:13 +0100
-Message-ID: <3101916.xHKGgMp4rb@kreacher>
-In-Reply-To: <13588000.TfE7eV4KYW@kreacher>
-References: <13588000.TfE7eV4KYW@kreacher>
+        id S1726969AbfKMAWk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Nov 2019 19:22:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726910AbfKMAWk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Nov 2019 19:22:40 -0500
+Received: from localhost (lfbn-ncy-1-150-155.w83-194.abo.wanadoo.fr [83.194.232.155])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD8CA206BB;
+        Wed, 13 Nov 2019 00:22:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573604559;
+        bh=KYsxxVfb9c/zNMVXXf6w4bZXIsHRXJu0HaUT9jvjS00=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X60QwV+TY1luo9vcFS/kOlrxatdJKJF4PDOBVlOrneBwPxse7QBb6ZbrqZqNYAaSJ
+         klLbWbH9v36NACYd+CGLcLlxIw6gkJkEH9QIEMNLiOvNfezKtJ05omywy2QM0i/iWa
+         GFkKAX5BjMUUmQVcipBXgLeYBT2pI3FAfhPUPSXs=
+Date:   Wed, 13 Nov 2019 01:22:36 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH 3/4] irq_work: Slightly simplify IRQ_WORK_PENDING clearing
+Message-ID: <20191113002235.GA5746@lenoir>
+References: <20191108160858.31665-1-frederic@kernel.org>
+ <20191108160858.31665-4-frederic@kernel.org>
+ <VI1PR04MB70239C2E838B72C171CC62C7EE770@VI1PR04MB7023.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <VI1PR04MB70239C2E838B72C171CC62C7EE770@VI1PR04MB7023.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Nov 12, 2019 at 08:27:05PM +0000, Leonard Crestez wrote:
+> On 08.11.2019 18:09, Frederic Weisbecker wrote:
+> > Instead of fetching the value of flags and perform an xchg() to clear
+> > a bit, just use atomic_fetch_andnot() that is more suitable to do that
+> > job in one operation while keeping the full ordering.
+> > 
+> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > Cc: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > ---
+> >   kernel/irq_work.c | 7 +++----
+> >   1 file changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+> > index 255454a48346..49c53f80a13a 100644
+> > --- a/kernel/irq_work.c
+> > +++ b/kernel/irq_work.c
+> > @@ -34,7 +34,7 @@ static bool irq_work_claim(struct irq_work *work)
+> >   	oflags = atomic_fetch_or(IRQ_WORK_CLAIMED, &work->flags);
+> >   	/*
+> >   	 * If the work is already pending, no need to raise the IPI.
+> > -	 * The pairing atomic_xchg() in irq_work_run() makes sure
+> > +	 * The pairing atomic_fetch_andnot() in irq_work_run() makes sure
+> >   	 * everything we did before is visible.
+> >   	 */
+> >   	if (oflags & IRQ_WORK_PENDING)
+> > @@ -135,7 +135,6 @@ static void irq_work_run_list(struct llist_head *list)
+> >   {
+> >   	struct irq_work *work, *tmp;
+> >   	struct llist_node *llnode;
+> > -	int flags;
+> >   
+> >   	BUG_ON(!irqs_disabled());
+> >   
+> > @@ -144,6 +143,7 @@ static void irq_work_run_list(struct llist_head *list)
+> >   
+> >   	llnode = llist_del_all(list);
+> >   	llist_for_each_entry_safe(work, tmp, llnode, llnode) {
+> > +		int flags;
+> >   		/*
+> >   		 * Clear the PENDING bit, after this point the @work
+> >   		 * can be re-used.
+> > @@ -151,8 +151,7 @@ static void irq_work_run_list(struct llist_head *list)
+> >   		 * to claim that work don't rely on us to handle their data
+> >   		 * while we are in the middle of the func.
+> >   		 */
+> > -		flags = atomic_read(&work->flags) & ~IRQ_WORK_PENDING;
+> > -		atomic_xchg(&work->flags, flags);
+> > +		flags = atomic_fetch_andnot(IRQ_WORK_PENDING, &work->flags);
+> >   
+> >   		work->func(work);
+> >   		/*
+> 
+> This breaks switching between cpufreq governors in linux-next on arm64 
+> and various other stuff. The fix in this email doesn't compile:
+> 
+>      https://lkml.org/lkml/2019/11/12/622
+> 
+> I assume you meant "&= ~" instead of "~=", this seems to work:
 
-There are three places in teo_select() where a given amount of time
-is compared with TICK_NSEC if tick_nohz_tick_stopped() returns true,
-which is a bit of duplicated code.
+Indeed, duh again!
 
-Avoid that code duplication by defining a helper function to do the
-check and using it in all of the places in question.
+I still think that ~= would be nice to have though...
 
-No intentional functional impact.
+Thanks!
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpuidle/governors/teo.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-Index: linux-pm/drivers/cpuidle/governors/teo.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/teo.c
-+++ linux-pm/drivers/cpuidle/governors/teo.c
-@@ -202,6 +202,11 @@ static void teo_update(struct cpuidle_dr
- 		cpu_data->interval_idx = 0;
- }
- 
-+static bool teo_time_ok(u64 interval_ns)
-+{
-+	return !tick_nohz_tick_stopped() || interval_ns >= TICK_NSEC;
-+}
-+
- /**
-  * teo_find_shallower_state - Find shallower idle state matching given duration.
-  * @drv: cpuidle driver containing state data.
-@@ -306,8 +311,7 @@ static int teo_select(struct cpuidle_dri
- 			 * check if the current candidate state is not too
- 			 * shallow for that role.
- 			 */
--			if (!(tick_nohz_tick_stopped() &&
--			      drv->states[idx].target_residency_ns < TICK_NSEC)) {
-+			if (teo_time_ok(drv->states[idx].target_residency_ns)) {
- 				prev_max_early_idx = max_early_idx;
- 				early_hits = cpu_data->states[i].early_hits;
- 				max_early_idx = idx;
-@@ -333,8 +337,7 @@ static int teo_select(struct cpuidle_dri
- 		misses = cpu_data->states[i].misses;
- 
- 		if (early_hits < cpu_data->states[i].early_hits &&
--		    !(tick_nohz_tick_stopped() &&
--		      drv->states[i].target_residency_ns < TICK_NSEC)) {
-+		    teo_time_ok(drv->states[i].target_residency_ns)) {
- 			prev_max_early_idx = max_early_idx;
- 			early_hits = cpu_data->states[i].early_hits;
- 			max_early_idx = i;
-@@ -409,7 +412,7 @@ static int teo_select(struct cpuidle_dri
- 			 * Avoid spending too much time in an idle state that
- 			 * would be too shallow.
- 			 */
--			if (!(tick_nohz_tick_stopped() && avg_ns < TICK_NSEC)) {
-+			if (teo_time_ok(avg_ns)) {
- 				duration_ns = avg_ns;
- 				if (drv->states[idx].target_residency_ns > avg_ns)
- 					idx = teo_find_shallower_state(drv, dev,
-
-
-
+> 
+> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+> index 49c53f80a13a..828cc30774bc 100644
+> --- a/kernel/irq_work.c
+> +++ b/kernel/irq_work.c
+> @@ -156,10 +156,11 @@ static void irq_work_run_list(struct llist_head *list)
+>                  work->func(work);
+>                  /*
+>                   * Clear the BUSY bit and return to the free state if
+>                   * no-one else claimed it meanwhile.
+>                   */
+> +               flags &= ~IRQ_WORK_PENDING;
+>                  (void)atomic_cmpxchg(&work->flags, flags, flags & 
+> ~IRQ_WORK_BUSY);
+>          }
+>   }
