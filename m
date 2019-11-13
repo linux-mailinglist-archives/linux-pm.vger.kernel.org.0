@@ -2,195 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD46FB58F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 17:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226D7FB698
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 18:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728016AbfKMQuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 11:50:05 -0500
-Received: from mga12.intel.com ([192.55.52.136]:54543 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727145AbfKMQuF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 13 Nov 2019 11:50:05 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Nov 2019 08:50:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,301,1569308400"; 
-   d="scan'208";a="355524621"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
-  by orsmga004.jf.intel.com with ESMTP; 13 Nov 2019 08:50:04 -0800
-Message-ID: <64baa18f7cd6066cc50360928d77504c1b68773e.camel@linux.intel.com>
-Subject: Re: [PATCH v4 5/6] x86,sched: Add support for frequency invariance
- on ATOM
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S1726350AbfKMRul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 12:50:41 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:56017 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727187AbfKMRul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 12:50:41 -0500
+Received: by mail-wm1-f66.google.com with SMTP id b11so2947405wmb.5
+        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 09:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=XtZ5+hurRglr2Zec63tSlfjqtuoBsXpGgI+k5kdQDcU=;
+        b=QuLdIKvOrPdm9jUB2Y3bTEmV76qPaTwnuZ2n/kzC+Pw6MXe1N4HV1EZNRLJghkAhXU
+         goHShHGpbQkNngKCZylqHOEnNL0SvIgSfF/5LqoCIPr4zbdY3yCLA0rcGWjdqtOXHiQ9
+         ebCfGFWOzHaqD8WI0UnFdMzT8grOKeXdEfWX9kPLFW/+Ud/2ouVzUhlQc7SVPKiUAA3C
+         v1kHT8uYWHsAmRDQGJqfKvF/tU/ht6qPaQPgWeFfEEySzgO345SedMr5p25ncrZLeHQm
+         BPi3QMvjcCj1OKZwBiWckNcKSbUm41swEvu4hiJxee55vL/yhuiXGTocJ1bVZGp5ac4a
+         8GRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=XtZ5+hurRglr2Zec63tSlfjqtuoBsXpGgI+k5kdQDcU=;
+        b=GN4BvRYJ7RRq086eQHH1XPruT2C/rzbhcmQTBgwPvRjdgtfns5A4khldMiIUoga1+F
+         GFTK8AO76Vsic9kKhKIRtwRIRn+TF5t+QTqejixF1VZSEmCxHS9FYAU25A10B1UK8sJg
+         s2AAP/cKBK746q9e0E/OZr/kQ3TvQXtRa/gxtCLq3JhPQCeeCTAHOCxwJbWWEaaZkCGk
+         hLgLt/7+Rgbbo+p3ddKhZeK93DurUHmcvDYvkbMQ/TudcNK7nONvRsGYaMTmZycNmHdM
+         ZE05s8xHVwNWhd+nRUOl4xe2osr8szFvmokT7mcwcs6zTqli4nchsWwuH4PWoJHd2MkH
+         vmcw==
+X-Gm-Message-State: APjAAAV9TNf4EN0MQXC/fmAt+fWA7sUu2A85WxnKDf9RKsV7gJE1OBxY
+        gmPe9Osy9k+LL2hlMYZEid/djA==
+X-Google-Smtp-Source: APXvYqwOVazO2F4zD8CghNWIMLBqPeDM2BvHp40pB/noJ1PV95xa2h4VO4iA6aANqurH7qMZLVQGng==
+X-Received: by 2002:a7b:c347:: with SMTP id l7mr4047027wmj.48.1573667439032;
+        Wed, 13 Nov 2019 09:50:39 -0800 (PST)
+Received: from linaro.org ([2a01:e0a:f:6020:bdd0:28e6:f0d9:a18c])
+        by smtp.gmail.com with ESMTPSA id u1sm2854689wmc.3.2019.11.13.09.50.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Nov 2019 09:50:37 -0800 (PST)
+Date:   Wed, 13 Nov 2019 18:50:35 +0100
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 13 Nov 2019 08:50:03 -0800
-In-Reply-To: <20191113124654.18122-6-ggherdovich@suse.cz>
-References: <20191113124654.18122-1-ggherdovich@suse.cz>
-         <20191113124654.18122-6-ggherdovich@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Doug Smythies <dsmythies@telus.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH v2] sched/freq: move call to cpufreq_update_util
+Message-ID: <20191113175035.GA8553@linaro.org>
+References: <1573570093-1340-1-git-send-email-vincent.guittot@linaro.org>
+ <20191112150544.GA3664@linaro.org>
+ <3b8cafb7-894d-c302-e6c6-b5844b1298b5@arm.com>
+ <CAKfTPtBMNnM2tTfb72VtufDpwBvqu6Ttj3dnLgoNOZ--Q6qo+Q@mail.gmail.com>
+ <bcba52bc-6780-1efc-6ef4-1a75f1cef33d@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bcba52bc-6780-1efc-6ef4-1a75f1cef33d@arm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-11-13 at 13:46 +0100, Giovanni Gherdovich wrote:
-> The scheduler needs the ratio freq_curr/freq_max for frequency-
-> invariant
-> accounting. On all ATOM CPUs prior to Goldmont, set freq_max to the
-> 1-core
-> turbo ratio.
+Le Wednesday 13 Nov 2019 à 15:09:47 (+0100), Dietmar Eggemann a écrit :
+> On 13.11.19 14:30, Vincent Guittot wrote:
+> > On Wed, 13 Nov 2019 at 11:50, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 12.11.19 16:05, Vincent Guittot wrote:
+> >>> Le Tuesday 12 Nov 2019 à 15:48:13 (+0100), Vincent Guittot a écrit :
 > 
-> We intended to perform tests validating that this patch doesn't
-> regress in
-> terms of energy efficiency, given that this is the primary concern on
-> Atom
-> processors. Alas, we found out that turbostat doesn't support reading
-> RAPL
-> interfaces on our test machine (Airmont), and we don't have external
-> equipment
-> to measure power consumption; all we have is the performance results
-> of the
-> benchmarks we ran.
+> [...]
 > 
-I can run some benchmarks on this.
+> >>>> @@ -7493,9 +7495,9 @@ static void update_blocked_averages(int cpu)
+> >>>>       * that RT, DL and IRQ signals have been updated before updating CFS.
+> >>>>       */
+> >>>>      curr_class = rq->curr->sched_class;
+> >>>> -    update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+> >>>> -    update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+> >>>> -    update_irq_load_avg(rq, 0);
+> >>>> +    decayed |= update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+> >>>> +    decayed |= update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+> >>>> +    decayed |= update_irq_load_avg(rq, 0);
+> >>
+> >> Why not 'decayed  = update_cfs_rq_load_avg()' like in the
+> >> !CONFIG_FAIR_GROUP_SCHED case?
+> > 
+> > Because it is handled by the update_load_avg() in
+> > for_each_leaf_cfs_rq_safe() loop
+> > 
+> > This means that we can have 2 calls to cpufreq_update_util in
+> > update_blocked_average() but at least the values will be up to date in
+> > both calls unlike previously.
+> > 
+> > I'm going to prepare an additional patch to remove this useless call.
+> > I have also seen some possible further optimization that i need to
+> > study a bit more before preparing a patch
+> 
+> I see. The update_load_avg() call for the taskgroup skeleton se
+> (cfs_rq->tg->se[cpu]). But what happens to the cpu which only has the
+> root cfs_rq i the list? It doesn't have a skeleton se.
 
-Thanks,
-Srinivas
+you're right. I have to add the following to make sure it will be called
 
-> Test machine:
-> 
-> Platform    : Dell Wyse 3040 Thin Client[1]
-> CPU Model   : Intel Atom x5-Z8350 (aka Cherry Trail, aka Airmont)
-> Fam/Mod/Ste : 6:76:4
-> Topology    : 1 socket, 4 cores / 4 threads
-> Memory      : 2G
-> Storage     : onboard flash, XFS filesystem
-> 
-> [1] 
-> https://www.dell.com/en-us/work/shop/wyse-endpoints-and-software/wyse-3040-thin-client/spd/wyse-3040-thin-client
-> 
-> Base frequency and available turbo levels (MHz):
-> 
->     Min Operating Freq   266 |***
->     Low Freq Mode        800 |********
->     Base Freq           2400 |************************
->     4 Cores             2800 |****************************
->     3 Cores             2800 |****************************
->     2 Cores             3200 |********************************
->     1 Core              3200 |********************************
-> 
-> Tested kernels:
-> 
-> Baseline      : v5.4-rc1,              intel_pstate
-> passive,  schedutil
-> Comparison #1 : v5.4-rc1,              intel_pstate active
-> ,  powersave
-> Comparison #2 : v5.4-rc1, this patch,  intel_pstate
-> passive,  schedutil
-> 
-> tbench, hackbench and kernbench performed the same under all three
-> kernels;
-> dbench ran faster with intel_pstate/powersave and the git unit tests
-> were a
-> lot faster with intel_pstate/powersave and invariant schedutil wrt
-> the
-> baseline. Not that any of this is terrbily interesting anyway, one
-> doesn't buy
-> an Atom system to go fast. Power consumption regressions aren't
-> expected but
-> we lack the equipment to make that measurement. Turbostat seems to
-> think that
-> reading RAPL on this machine isn't a good idea and we're trusting
-> that
-> decision.
-> 
-> comparison ratio of performance with baseline; 1.00 means neutral,
-> lower is better:
-> 
->                       I_PSTATE      FREQ-INV
->     ----------------------------------------
->     dbench                0.90             ~
->     kernbench             0.98          0.97
->     gitsource             0.63          0.43
-> 
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> ---
->  arch/x86/kernel/smpboot.c | 29 +++++++++++++++++++++--------
->  1 file changed, 21 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 4d192abf337d..8988177064be 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1821,6 +1821,24 @@ static bool turbo_disabled(void)
->  	return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
->  }
->  
-> +static bool slv_set_cpu_max_freq(u64 *ratio, u64 *turbo_ratio)
-> +{
-> +	int err;
-> +
-> +	err = rdmsrl_safe(MSR_ATOM_CORE_RATIOS, ratio);
-> +	if (err)
-> +		return false;
-> +
-> +	err = rdmsrl_safe(MSR_ATOM_CORE_TURBO_RATIOS, turbo_ratio);
-> +	if (err)
-> +		return false;
-> +
-> +	*ratio = (*ratio >> 16) & 0x3F;      /* max P state ratio */
-> +	*turbo_ratio = *turbo_ratio & 0x3F;  /* 1C turbo ratio */
-> +
-> +	return true;
-> +}
-> +
->  #include <asm/cpu_device_id.h>
->  #include <asm/intel-family.h>
->  
-> @@ -1984,19 +2002,14 @@ static bool core_set_cpu_max_freq(u64 *ratio,
-> u64 *turbo_ratio)
->  
->  static void intel_set_cpu_max_freq(void)
->  {
-> -	/*
-> -	 * TODO: add support for:
-> -	 *
-> -	 * - Atom Silvermont
-> -	 *
-> -	 * which all now get by default arch_max_freq =
-> SCHED_CAPACITY_SCALE
-> -	 */
-> -
->  	u64 ratio = 1, turbo_ratio = 1;
->  
->  	if (turbo_disabled())
->  		return;
->  
-> +	if (slv_set_cpu_max_freq(&ratio, &turbo_ratio))
-> +		goto set_value;
-> +
->  	if (glm_set_cpu_max_freq(&ratio, &turbo_ratio))
->  		goto set_value;
->  
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 2eb1aa8..9fc077c 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7604,9 +7604,13 @@ static void update_blocked_averages(int cpu)
+                        cpu,
+                        cfs_rq == &rq->cfs ? 0 : (long)cfs_rq->tg );
+ 
+-               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
++               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
+                        update_tg_load_avg(cfs_rq, 0);
+ 
++                       if (cfs_rq == &rq->cfs)
++                               decayed = 1;
++               }
++
+                trace_sched_load_contrib_blocked(cpu,
+                        &cfs_rq->avg,
+                        cfs_rq == &rq->cfs ? 0 : (long)cfs_rq->tg );
+
 
