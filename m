@@ -2,598 +2,765 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A74FFB103
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 14:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7431CFB115
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 14:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbfKMNDb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 08:03:31 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46670 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbfKMNDb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 08:03:31 -0500
-Received: by mail-lj1-f194.google.com with SMTP id e9so2443721ljp.13;
-        Wed, 13 Nov 2019 05:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VfhU3E+1us91HJ37QsBB8zF5Mwf7eU6LuqrEz0/DflU=;
-        b=Gk1ktzeDq8ZxXMyeFVqJ6wCnAeWwekPpLzt98BolYTktzb3HcntpM2izdXzURjNDDq
-         X2CO0PGz3oAlNU2fbxP/svmwtXqs+IT2aIdjpSKs2y4RENk6U7E2tJOqWpVWvCELGT2/
-         jNk5WfOctxGudFK9r5W/tp93ftdV3WYm9CjW/1Cxnc5jDbMV4g2EsrH70yBGkhJ3gZ/9
-         7/zD6Ii7lVGxCE35Hb/g5ElJ8jk0eaex3Tue7Bbm/2i7OTEKlQmns/7btCFA36q0C+od
-         MTvASSnjxxQHUpLTAo5lBBNzKpplqtnscV2Rq58d2RAXiCtIvOjXsrZ6Q1t4dhSl6VOj
-         25zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VfhU3E+1us91HJ37QsBB8zF5Mwf7eU6LuqrEz0/DflU=;
-        b=mEWeluTxYsxVOEX83mOAaXAzD27XoVgeHGQxEWmG0EURHJf4dlA34N7gp+B9mMPVmR
-         93LeF6M2wkJoJyUxF23UHFYLSQ2uEsN1Hq885WaBJ/OzkxUPD6CTg2zXTkDE1VSx0S+Z
-         mh469Dh/kF916xJt4umCql/OCh2rfM226oZj9A8dmLgnq+aeLa8oip4JyKSP+Mk33Kn7
-         yqwGfa6IXGspuTHuokwADxkf/nBEYlaof25Iug7MBdecp+DoaZIFzwYc85xhd8VIAXI0
-         DxweNxmshUp/lzNnsoZ+mHlHdrU0aWivzAc3TzOWucwL3wGY+96zKN3ymMe5bE6MNzRo
-         Ihpg==
-X-Gm-Message-State: APjAAAXB3GK5ujQxch9aQ+5EpuZnJFPadpKCcGxRCjvVWicxijvZAGdZ
-        UAFzB54S3AoXn/w3IKTLHNE9xmg3
-X-Google-Smtp-Source: APXvYqxQ//IpmjdyHgsJ3x7YFKlbd/FMVERhOYGFMYL1YhfToO9ZnJcY1tlRk/LWYYfC90gCauOEhw==
-X-Received: by 2002:a2e:558:: with SMTP id 85mr2603503ljf.67.1573650207531;
-        Wed, 13 Nov 2019 05:03:27 -0800 (PST)
-Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id v10sm834557ljc.6.2019.11.13.05.03.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Nov 2019 05:03:26 -0800 (PST)
-Subject: Re: [PATCH v10 2/3] interconnect: qcom: Add MSM8916 interconnect
- provider driver
-To:     Georgi Djakov <georgi.djakov@linaro.org>, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, daidavid1@codeaurora.org,
-        vincent.guittot@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191030153904.8715-1-georgi.djakov@linaro.org>
- <20191030153904.8715-3-georgi.djakov@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <88315b5a-1354-acf9-d57d-b301fb78cfa4@gmail.com>
-Date:   Wed, 13 Nov 2019 16:03:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <20191030153904.8715-3-georgi.djakov@linaro.org>
-Content-Type: text/plain; charset=utf-8
+        id S1727001AbfKMNK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 08:10:26 -0500
+Received: from mail-eopbgr80053.outbound.protection.outlook.com ([40.107.8.53]:55054
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726250AbfKMNK0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 13 Nov 2019 08:10:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jok8u2FZlbN7/3OrN8OdDLQG96FpNNE6Oa+/Y34xeYTyt0JB+yxAm3Uf1R/ltBOcTSk95t4NFs6RnkF8X2ec3lg40mMyIDFyhnBFEJ38GhWfB9c2/FDW4J7xikjRaSmKfZggMKjh8LIf0ww557pMDjiQ74RISyRD5CAfe2y19rMXuCcOBe6NE/X4KJROYyOdIFPQfpcgqh5vCCBrmLY1GeyxLGiIi3frEhPGqDg0i+rxm9QHAwgk5dG01Nauk8M0QNBw3eWYATnEeyT6ix6uz6jDBs2kNZWuq/Ghy0QkdIbnSX12NKAT89b2wAwkE3oGQwL0jN5NjhVlU/2dxJhW2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nc9L/4HCVZPbv6qxOp8w0MsaOoissAp0hMBih0R54wQ=;
+ b=oNaC874ZT78EmMYhVVRfGeS6JJjBJJAz3XC89BdYXuGFR84+6fbDNQyMXNLL67uFUpCalE49iDvlG/yHue595ZgvkJjqYz3txMvAIzlao3R6IFVk6GvkMyk/qmrkPwOCmBQUJ9WTE86znV6CpQ1knVc7kwWYwqnardqRrBpQMUwNuMwGPZMyd8awuFQkQya3vbZ92A7j/4E+7ZvNLupj+edzXbpukCLsjFieIHeyCDG1J2GIjTAlXQPWqJHGwtjxMJcsdbOSoGJjGZw6fMGciyoWY/oVk1gWV1xaAM7VuX2p/spl7s31d6vNriuVKW5PcKTXX/C+rGwvVtS7ZJUtvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nc9L/4HCVZPbv6qxOp8w0MsaOoissAp0hMBih0R54wQ=;
+ b=lqnuvzjCRfFeGJKx8+GvytJ+b6XAcUHRjotAntQULXleI+rygPuY3iihZGeOt4vNZ05P4kkdo/ghZBbnvn0INR32ZJKj4u3TAMKyrzJNqPEgX7tKFzY5ZMcOnW20fNuXBqNlulOirHjHPZLiveXjj2HiGIl4WW//+H7O5owftOw=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB6862.eurprd04.prod.outlook.com (52.133.244.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2430.20; Wed, 13 Nov 2019 13:10:10 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2451.023; Wed, 13 Nov 2019
+ 13:10:10 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v5 4/5] PM / devfreq: Add dynamic scaling for imx8m ddr
+ controller
+Thread-Topic: [PATCH v5 4/5] PM / devfreq: Add dynamic scaling for imx8m ddr
+ controller
+Thread-Index: AQHVmaNOsaN7UjD1dEWSlMW3gWLuow==
+Date:   Wed, 13 Nov 2019 13:10:10 +0000
+Message-ID: <VI1PR04MB70238C187E23AFAA6DB3281CEE760@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1573595318.git.leonard.crestez@nxp.com>
+ <CGME20191112215123epcas5p47d93a1e1837accf16ba0430963d03858@epcas5p4.samsung.com>
+ <d33acdcc043ce12713a9279636e32d039da5ee54.1573595319.git.leonard.crestez@nxp.com>
+ <0c416a08-811d-f3bc-af37-9e182f7c4d37@samsung.com>
+ <6d9ace7b-3177-9bb2-82e6-7ee47f0fdf1c@samsung.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 27005398-4bce-4ff8-6b77-08d7683ad053
+x-ms-traffictypediagnostic: VI1PR04MB6862:|VI1PR04MB6862:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB6862F755AA6505DE72B80597EE760@VI1PR04MB6862.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 0220D4B98D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(199004)(189003)(51444003)(6506007)(66066001)(66476007)(52536014)(446003)(7696005)(66446008)(64756008)(478600001)(54906003)(66556008)(26005)(476003)(6436002)(76116006)(91956017)(5660300002)(66946007)(71200400001)(33656002)(9686003)(74316002)(486006)(316002)(71190400001)(44832011)(7736002)(305945005)(99286004)(14454004)(7416002)(55016002)(6116002)(3846002)(2906002)(229853002)(25786009)(186003)(102836004)(8676002)(81166006)(81156014)(4326008)(8936002)(76176011)(6246003)(86362001)(14444005)(53546011)(110136005)(30864003)(256004)(32563001)(579004);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6862;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ffrXmrjxZDzH6P+QdMFYttjgieYnnde6WfV+rDd2VMUZeicu5s3vr4NlF5pKhevRghAiyHaMf2w7OfxVcQXYOET2ZDDaMrH7x37DEUH3KmXqoSqOasfiEUbxzKCz7JwHbO0PPe70lTFdweOybyLjOd2l0w2xumCL9MjqJJOMZPxprr3+JmJYu/IBbaPuatJX6WXbls8ULcDXfANiILlJswNeSyUujMNjgFffHZ4dNa/Pq+zMGnWpbN/KFVMEtujycokVlPJZySDgKsQsghovZ36bpEzXOla8jV45hSOSPVkGApRkJOHxWn+nx9+C/25uNCS1FjVbmuCDHLl6D0zqpGG6k72nHOjerkvkswDfwkh8bBiG8E+q0XKuznGaZHcas6OKcc6E1DHckAfgjC/D6S7F+XcO/GreAyyQW5QT1OlQxKh9fegsG0eX1Hu/Sdh0
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27005398-4bce-4ff8-6b77-08d7683ad053
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 13:10:10.5787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QTQnuFjYee3F5P8zZLnTph2eUzC8ncbVOR+k9QS38Tl2JB0ErMqUEkZGRrd73DMJSscj6yD7fbwhE7Z2G0Z8sQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6862
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-30.10.2019 18:39, Georgi Djakov пишет:
-> Add driver for the Qualcomm interconnect buses found in MSM8916 based
-> platforms. The topology consists of three NoCs that are controlled by
-> a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
-> 
-> Reviewed-by: Evan Green <evgreen@chromium.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
->  drivers/interconnect/qcom/Kconfig   |   9 +
->  drivers/interconnect/qcom/Makefile  |   2 +
->  drivers/interconnect/qcom/msm8916.c | 572 ++++++++++++++++++++++++++++
->  3 files changed, 583 insertions(+)
->  create mode 100644 drivers/interconnect/qcom/msm8916.c
-> 
-> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> index ecf057d7e240..aa395733613e 100644
-> --- a/drivers/interconnect/qcom/Kconfig
-> +++ b/drivers/interconnect/qcom/Kconfig
-> @@ -5,6 +5,15 @@ config INTERCONNECT_QCOM
->  	help
->  	  Support for Qualcomm's Network-on-Chip interconnect hardware.
->  
-> +config INTERCONNECT_QCOM_MSM8916
-> +	tristate "Qualcomm MSM8916 interconnect driver"
-> +	depends on INTERCONNECT_QCOM
-> +	depends on QCOM_SMD_RPM
-> +	select INTERCONNECT_QCOM_SMD_RPM
-> +	help
-> +	  This is a driver for the Qualcomm Network-on-Chip on msm8916-based
-> +	  platforms.
-> +
->  config INTERCONNECT_QCOM_QCS404
->  	tristate "Qualcomm QCS404 interconnect driver"
->  	depends on INTERCONNECT_QCOM
-> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-> index 9adf9e380545..e8271575e3d8 100644
-> --- a/drivers/interconnect/qcom/Makefile
-> +++ b/drivers/interconnect/qcom/Makefile
-> @@ -1,10 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +qnoc-msm8916-objs			:= msm8916.o
->  qnoc-msm8974-objs			:= msm8974.o
->  qnoc-qcs404-objs			:= qcs404.o
->  qnoc-sdm845-objs			:= sdm845.o
->  icc-smd-rpm-objs			:= smd-rpm.o
->  
-> +obj-$(CONFIG_INTERCONNECT_QCOM_MSM8916) += qnoc-msm8916.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_MSM8974) += qnoc-msm8974.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
-> diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
-> new file mode 100644
-> index 000000000000..752012c87e63
-> --- /dev/null
-> +++ b/drivers/interconnect/qcom/msm8916.c
-> @@ -0,0 +1,572 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2018-2019 Linaro Ltd
-> + * Author: Georgi Djakov <georgi.djakov@linaro.org>
-> + */
-> +
-> +#include <dt-bindings/interconnect/qcom,msm8916.h>
-> +#include <linux/clk.h>
-> +#include <linux/device.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "smd-rpm.h"
-> +
-> +#define RPM_BUS_MASTER_REQ      0x73616d62
-> +#define RPM_BUS_SLAVE_REQ       0x766c7362
-> +
-> +enum {
-> +	MSM8916_BIMC_SNOC_MAS = 1,
-> +	MSM8916_BIMC_SNOC_SLV,
-> +	MSM8916_MASTER_AMPSS_M0,
-> +	MSM8916_MASTER_LPASS,
-> +	MSM8916_MASTER_BLSP_1,
-> +	MSM8916_MASTER_DEHR,
-> +	MSM8916_MASTER_GRAPHICS_3D,
-> +	MSM8916_MASTER_JPEG,
-> +	MSM8916_MASTER_MDP_PORT0,
-> +	MSM8916_MASTER_CRYPTO_CORE0,
-> +	MSM8916_MASTER_SDCC_1,
-> +	MSM8916_MASTER_SDCC_2,
-> +	MSM8916_MASTER_QDSS_BAM,
-> +	MSM8916_MASTER_QDSS_ETR,
-> +	MSM8916_MASTER_SNOC_CFG,
-> +	MSM8916_MASTER_SPDM,
-> +	MSM8916_MASTER_TCU0,
-> +	MSM8916_MASTER_TCU1,
-> +	MSM8916_MASTER_USB_HS,
-> +	MSM8916_MASTER_VFE,
-> +	MSM8916_MASTER_VIDEO_P0,
-> +	MSM8916_SNOC_MM_INT_0,
-> +	MSM8916_SNOC_MM_INT_1,
-> +	MSM8916_SNOC_MM_INT_2,
-> +	MSM8916_SNOC_MM_INT_BIMC,
-> +	MSM8916_PNOC_INT_0,
-> +	MSM8916_PNOC_INT_1,
-> +	MSM8916_PNOC_MAS_0,
-> +	MSM8916_PNOC_MAS_1,
-> +	MSM8916_PNOC_SLV_0,
-> +	MSM8916_PNOC_SLV_1,
-> +	MSM8916_PNOC_SLV_2,
-> +	MSM8916_PNOC_SLV_3,
-> +	MSM8916_PNOC_SLV_4,
-> +	MSM8916_PNOC_SLV_8,
-> +	MSM8916_PNOC_SLV_9,
-> +	MSM8916_PNOC_SNOC_MAS,
-> +	MSM8916_PNOC_SNOC_SLV,
-> +	MSM8916_SNOC_QDSS_INT,
-> +	MSM8916_SLAVE_AMPSS_L2,
-> +	MSM8916_SLAVE_APSS,
-> +	MSM8916_SLAVE_LPASS,
-> +	MSM8916_SLAVE_BIMC_CFG,
-> +	MSM8916_SLAVE_BLSP_1,
-> +	MSM8916_SLAVE_BOOT_ROM,
-> +	MSM8916_SLAVE_CAMERA_CFG,
-> +	MSM8916_SLAVE_CATS_128,
-> +	MSM8916_SLAVE_OCMEM_64,
-> +	MSM8916_SLAVE_CLK_CTL,
-> +	MSM8916_SLAVE_CRYPTO_0_CFG,
-> +	MSM8916_SLAVE_DEHR_CFG,
-> +	MSM8916_SLAVE_DISPLAY_CFG,
-> +	MSM8916_SLAVE_EBI_CH0,
-> +	MSM8916_SLAVE_GRAPHICS_3D_CFG,
-> +	MSM8916_SLAVE_IMEM_CFG,
-> +	MSM8916_SLAVE_IMEM,
-> +	MSM8916_SLAVE_MPM,
-> +	MSM8916_SLAVE_MSG_RAM,
-> +	MSM8916_SLAVE_MSS,
-> +	MSM8916_SLAVE_PDM,
-> +	MSM8916_SLAVE_PMIC_ARB,
-> +	MSM8916_SLAVE_PNOC_CFG,
-> +	MSM8916_SLAVE_PRNG,
-> +	MSM8916_SLAVE_QDSS_CFG,
-> +	MSM8916_SLAVE_QDSS_STM,
-> +	MSM8916_SLAVE_RBCPR_CFG,
-> +	MSM8916_SLAVE_SDCC_1,
-> +	MSM8916_SLAVE_SDCC_2,
-> +	MSM8916_SLAVE_SECURITY,
-> +	MSM8916_SLAVE_SNOC_CFG,
-> +	MSM8916_SLAVE_SPDM,
-> +	MSM8916_SLAVE_SRVC_SNOC,
-> +	MSM8916_SLAVE_TCSR,
-> +	MSM8916_SLAVE_TLMM,
-> +	MSM8916_SLAVE_USB_HS,
-> +	MSM8916_SLAVE_VENUS_CFG,
-> +	MSM8916_SNOC_BIMC_0_MAS,
-> +	MSM8916_SNOC_BIMC_0_SLV,
-> +	MSM8916_SNOC_BIMC_1_MAS,
-> +	MSM8916_SNOC_BIMC_1_SLV,
-> +	MSM8916_SNOC_INT_0,
-> +	MSM8916_SNOC_INT_1,
-> +	MSM8916_SNOC_INT_BIMC,
-> +	MSM8916_SNOC_PNOC_MAS,
-> +	MSM8916_SNOC_PNOC_SLV,
-> +};
-> +
-> +#define to_qcom_provider(_provider) \
-> +	container_of(_provider, struct qcom_icc_provider, provider)
-> +
-> +static const struct clk_bulk_data bus_clocks[] = {
-> +	{ .id = "bus" },
-> +	{ .id = "bus_a" },
-> +};
-> +
-> +/**
-> + * struct qcom_icc_provider - Qualcomm specific interconnect provider
-> + * @provider: generic interconnect provider
-> + * @bus_clks: the clk_bulk_data table of bus clocks
-> + * @num_clks: the total number of clk_bulk_data entries
-> + */
-> +struct qcom_icc_provider {
-> +	struct icc_provider provider;
-> +	struct clk_bulk_data *bus_clks;
-> +	int num_clks;
-> +};
-> +
-> +#define MSM8916_MAX_LINKS	8
-> +
-> +/**
-> + * struct qcom_icc_node - Qualcomm specific interconnect nodes
-> + * @name: the node name used in debugfs
-> + * @id: a unique node identifier
-> + * @links: an array of nodes where we can go next while traversing
-> + * @num_links: the total number of @links
-> + * @buswidth: width of the interconnect between a node and the bus (bytes)
-> + * @mas_rpm_id:	RPM id for devices that are bus masters
-> + * @slv_rpm_id:	RPM id for devices that are bus slaves
-> + * @rate: current bus clock rate in Hz
-> + */
-> +struct qcom_icc_node {
-> +	unsigned char *name;
-> +	u16 id;
-> +	u16 links[MSM8916_MAX_LINKS];
-> +	u16 num_links;
-> +	u16 buswidth;
-> +	int mas_rpm_id;
-> +	int slv_rpm_id;
-> +	u64 rate;
-> +};
-> +
-> +struct qcom_icc_desc {
-> +	struct qcom_icc_node **nodes;
-> +	size_t num_nodes;
-> +};
-> +
-> +#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,	\
-> +					...)				\
-> +		static struct qcom_icc_node _name = {			\
-> +		.name = #_name,						\
-> +		.id = _id,						\
-> +		.buswidth = _buswidth,					\
-> +		.mas_rpm_id = _mas_rpm_id,				\
-> +		.slv_rpm_id = _slv_rpm_id,				\
-> +		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
-> +		.links = { __VA_ARGS__ },				\
-> +	}
-> +
-> +DEFINE_QNODE(bimc_snoc_mas, MSM8916_BIMC_SNOC_MAS, 8, -1, -1, MSM8916_BIMC_SNOC_SLV);
-> +DEFINE_QNODE(bimc_snoc_slv, MSM8916_BIMC_SNOC_SLV, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_1);
-> +DEFINE_QNODE(mas_apss, MSM8916_MASTER_AMPSS_M0, 8, -1, -1, MSM8916_SLAVE_EBI_CH0, MSM8916_BIMC_SNOC_MAS, MSM8916_SLAVE_AMPSS_L2);
-> +DEFINE_QNODE(mas_audio, MSM8916_MASTER_LPASS, 4, -1, -1, MSM8916_PNOC_MAS_0);
-> +DEFINE_QNODE(mas_blsp_1, MSM8916_MASTER_BLSP_1, 4, -1, -1, MSM8916_PNOC_MAS_1);
-> +DEFINE_QNODE(mas_dehr, MSM8916_MASTER_DEHR, 4, -1, -1, MSM8916_PNOC_MAS_0);
-> +DEFINE_QNODE(mas_gfx, MSM8916_MASTER_GRAPHICS_3D, 8, -1, -1, MSM8916_SLAVE_EBI_CH0, MSM8916_BIMC_SNOC_MAS, MSM8916_SLAVE_AMPSS_L2);
-> +DEFINE_QNODE(mas_jpeg, MSM8916_MASTER_JPEG, 16, -1, -1, MSM8916_SNOC_MM_INT_0, MSM8916_SNOC_MM_INT_2);
-> +DEFINE_QNODE(mas_mdp, MSM8916_MASTER_MDP_PORT0, 16, -1, -1, MSM8916_SNOC_MM_INT_0, MSM8916_SNOC_MM_INT_2);
-> +DEFINE_QNODE(mas_pcnoc_crypto_0, MSM8916_MASTER_CRYPTO_CORE0, 8, -1, -1, MSM8916_PNOC_INT_1);
-> +DEFINE_QNODE(mas_pcnoc_sdcc_1, MSM8916_MASTER_SDCC_1, 8, -1, -1, MSM8916_PNOC_INT_1);
-> +DEFINE_QNODE(mas_pcnoc_sdcc_2, MSM8916_MASTER_SDCC_2, 8, -1, -1, MSM8916_PNOC_INT_1);
-> +DEFINE_QNODE(mas_qdss_bam, MSM8916_MASTER_QDSS_BAM, 8, -1, -1, MSM8916_SNOC_QDSS_INT);
-> +DEFINE_QNODE(mas_qdss_etr, MSM8916_MASTER_QDSS_ETR, 8, -1, -1, MSM8916_SNOC_QDSS_INT);
-> +DEFINE_QNODE(mas_snoc_cfg, MSM8916_MASTER_SNOC_CFG, 4, 20, -1, MSM8916_SNOC_QDSS_INT);
-> +DEFINE_QNODE(mas_spdm, MSM8916_MASTER_SPDM, 4, -1, -1, MSM8916_PNOC_MAS_0);
-> +DEFINE_QNODE(mas_tcu0, MSM8916_MASTER_TCU0, 8, -1, -1, MSM8916_SLAVE_EBI_CH0, MSM8916_BIMC_SNOC_MAS, MSM8916_SLAVE_AMPSS_L2);
-> +DEFINE_QNODE(mas_tcu1, MSM8916_MASTER_TCU1, 8, -1, -1, MSM8916_SLAVE_EBI_CH0, MSM8916_BIMC_SNOC_MAS, MSM8916_SLAVE_AMPSS_L2);
-> +DEFINE_QNODE(mas_usb_hs, MSM8916_MASTER_USB_HS, 4, -1, -1, MSM8916_PNOC_MAS_1);
-> +DEFINE_QNODE(mas_vfe, MSM8916_MASTER_VFE, 16, -1, -1, MSM8916_SNOC_MM_INT_1, MSM8916_SNOC_MM_INT_2);
-> +DEFINE_QNODE(mas_video, MSM8916_MASTER_VIDEO_P0, 16, -1, -1, MSM8916_SNOC_MM_INT_0, MSM8916_SNOC_MM_INT_2);
-> +DEFINE_QNODE(mm_int_0, MSM8916_SNOC_MM_INT_0, 16, -1, -1, MSM8916_SNOC_MM_INT_BIMC);
-> +DEFINE_QNODE(mm_int_1, MSM8916_SNOC_MM_INT_1, 16, -1, -1, MSM8916_SNOC_MM_INT_BIMC);
-> +DEFINE_QNODE(mm_int_2, MSM8916_SNOC_MM_INT_2, 16, -1, -1, MSM8916_SNOC_INT_0);
-> +DEFINE_QNODE(mm_int_bimc, MSM8916_SNOC_MM_INT_BIMC, 16, -1, -1, MSM8916_SNOC_BIMC_1_MAS);
-> +DEFINE_QNODE(pcnoc_int_0, MSM8916_PNOC_INT_0, 8, -1, -1, MSM8916_PNOC_SNOC_MAS, MSM8916_PNOC_SLV_0, MSM8916_PNOC_SLV_1, MSM8916_PNOC_SLV_2, MSM8916_PNOC_SLV_3, MSM8916_PNOC_SLV_4, MSM8916_PNOC_SLV_8, MSM8916_PNOC_SLV_9);
-> +DEFINE_QNODE(pcnoc_int_1, MSM8916_PNOC_INT_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
-> +DEFINE_QNODE(pcnoc_m_0, MSM8916_PNOC_MAS_0, 8, -1, -1, MSM8916_PNOC_INT_0);
-> +DEFINE_QNODE(pcnoc_m_1, MSM8916_PNOC_MAS_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
-> +DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 8, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
-> +DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 8, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
-> +DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 8, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
-> +DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 8, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
-> +DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 8, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
-> +DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 8, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
-> +DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 8, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
-> +DEFINE_QNODE(pcnoc_snoc_mas, MSM8916_PNOC_SNOC_MAS, 8, 29, -1, MSM8916_PNOC_SNOC_SLV);
-> +DEFINE_QNODE(pcnoc_snoc_slv, MSM8916_PNOC_SNOC_SLV, 8, -1, 45, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC, MSM8916_SNOC_INT_1);
-> +DEFINE_QNODE(qdss_int, MSM8916_SNOC_QDSS_INT, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC);
-> +DEFINE_QNODE(slv_apps_l2, MSM8916_SLAVE_AMPSS_L2, 8, -1, -1, 0);
-> +DEFINE_QNODE(slv_apss, MSM8916_SLAVE_APSS, 4, -1, 20, 0);
-> +DEFINE_QNODE(slv_audio, MSM8916_SLAVE_LPASS, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_bimc_cfg, MSM8916_SLAVE_BIMC_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_blsp_1, MSM8916_SLAVE_BLSP_1, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_boot_rom, MSM8916_SLAVE_BOOT_ROM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_camera_cfg, MSM8916_SLAVE_CAMERA_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_cats_0, MSM8916_SLAVE_CATS_128, 16, -1, 106, 0);
-> +DEFINE_QNODE(slv_cats_1, MSM8916_SLAVE_OCMEM_64, 8, -1, 107, 0);
-> +DEFINE_QNODE(slv_clk_ctl, MSM8916_SLAVE_CLK_CTL, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_crypto_0_cfg, MSM8916_SLAVE_CRYPTO_0_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_dehr_cfg, MSM8916_SLAVE_DEHR_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_display_cfg, MSM8916_SLAVE_DISPLAY_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_ebi_ch0, MSM8916_SLAVE_EBI_CH0, 8, -1, 0, 0);
-> +DEFINE_QNODE(slv_gfx_cfg, MSM8916_SLAVE_GRAPHICS_3D_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_imem_cfg, MSM8916_SLAVE_IMEM_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_imem, MSM8916_SLAVE_IMEM, 8, -1, 26, 0);
-> +DEFINE_QNODE(slv_mpm, MSM8916_SLAVE_MPM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_msg_ram, MSM8916_SLAVE_MSG_RAM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_mss, MSM8916_SLAVE_MSS, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_pdm, MSM8916_SLAVE_PDM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_pmic_arb, MSM8916_SLAVE_PMIC_ARB, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_pcnoc_cfg, MSM8916_SLAVE_PNOC_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_prng, MSM8916_SLAVE_PRNG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_qdss_cfg, MSM8916_SLAVE_QDSS_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_qdss_stm, MSM8916_SLAVE_QDSS_STM, 4, -1, 30, 0);
-> +DEFINE_QNODE(slv_rbcpr_cfg, MSM8916_SLAVE_RBCPR_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_sdcc_1, MSM8916_SLAVE_SDCC_1, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_sdcc_2, MSM8916_SLAVE_SDCC_2, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_security, MSM8916_SLAVE_SECURITY, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_snoc_cfg, MSM8916_SLAVE_SNOC_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_spdm, MSM8916_SLAVE_SPDM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_srvc_snoc, MSM8916_SLAVE_SRVC_SNOC, 8, -1, 29, 0);
-> +DEFINE_QNODE(slv_tcsr, MSM8916_SLAVE_TCSR, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_tlmm, MSM8916_SLAVE_TLMM, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_usb_hs, MSM8916_SLAVE_USB_HS, 4, -1, -1, 0);
-> +DEFINE_QNODE(slv_venus_cfg, MSM8916_SLAVE_VENUS_CFG, 4, -1, -1, 0);
-> +DEFINE_QNODE(snoc_bimc_0_mas, MSM8916_SNOC_BIMC_0_MAS, 8, 3, -1, MSM8916_SNOC_BIMC_0_SLV);
-> +DEFINE_QNODE(snoc_bimc_0_slv, MSM8916_SNOC_BIMC_0_SLV, 8, -1, 24, MSM8916_SLAVE_EBI_CH0);
-> +DEFINE_QNODE(snoc_bimc_1_mas, MSM8916_SNOC_BIMC_1_MAS, 16, -1, -1, MSM8916_SNOC_BIMC_1_SLV);
-> +DEFINE_QNODE(snoc_bimc_1_slv, MSM8916_SNOC_BIMC_1_SLV, 8, -1, -1, MSM8916_SLAVE_EBI_CH0);
-> +DEFINE_QNODE(snoc_int_0, MSM8916_SNOC_INT_0, 8, 99, 130, MSM8916_SLAVE_QDSS_STM, MSM8916_SLAVE_IMEM, MSM8916_SNOC_PNOC_MAS);
-> +DEFINE_QNODE(snoc_int_1, MSM8916_SNOC_INT_1, 8, 100, 131, MSM8916_SLAVE_APSS, MSM8916_SLAVE_CATS_128, MSM8916_SLAVE_OCMEM_64);
-> +DEFINE_QNODE(snoc_int_bimc, MSM8916_SNOC_INT_BIMC, 8, 101, 132, MSM8916_SNOC_BIMC_0_MAS);
-> +DEFINE_QNODE(snoc_pcnoc_mas, MSM8916_SNOC_PNOC_MAS, 8, -1, -1, MSM8916_SNOC_PNOC_SLV);
-> +DEFINE_QNODE(snoc_pcnoc_slv, MSM8916_SNOC_PNOC_SLV, 8, -1, -1, MSM8916_PNOC_INT_0);
-> +
-> +static struct qcom_icc_node *msm8916_snoc_nodes[] = {
-> +	[BIMC_SNOC_SLV] = &bimc_snoc_slv,
-> +	[MASTER_JPEG] = &mas_jpeg,
-> +	[MASTER_MDP_PORT0] = &mas_mdp,
-> +	[MASTER_QDSS_BAM] = &mas_qdss_bam,
-> +	[MASTER_QDSS_ETR] = &mas_qdss_etr,
-> +	[MASTER_SNOC_CFG] = &mas_snoc_cfg,
-> +	[MASTER_VFE] = &mas_vfe,
-> +	[MASTER_VIDEO_P0] = &mas_video,
-> +	[SNOC_MM_INT_0] = &mm_int_0,
-> +	[SNOC_MM_INT_1] = &mm_int_1,
-> +	[SNOC_MM_INT_2] = &mm_int_2,
-> +	[SNOC_MM_INT_BIMC] = &mm_int_bimc,
-> +	[PCNOC_SNOC_SLV] = &pcnoc_snoc_slv,
-> +	[SLAVE_APSS] = &slv_apss,
-> +	[SLAVE_CATS_128] = &slv_cats_0,
-> +	[SLAVE_OCMEM_64] = &slv_cats_1,
-> +	[SLAVE_IMEM] = &slv_imem,
-> +	[SLAVE_QDSS_STM] = &slv_qdss_stm,
-> +	[SLAVE_SRVC_SNOC] = &slv_srvc_snoc,
-> +	[SNOC_BIMC_0_MAS] = &snoc_bimc_0_mas,
-> +	[SNOC_BIMC_1_MAS] = &snoc_bimc_1_mas,
-> +	[SNOC_INT_0] = &snoc_int_0,
-> +	[SNOC_INT_1] = &snoc_int_1,
-> +	[SNOC_INT_BIMC] = &snoc_int_bimc,
-> +	[SNOC_PCNOC_MAS] = &snoc_pcnoc_mas,
-> +	[SNOC_QDSS_INT] = &qdss_int,
-> +};
-> +
-> +static struct qcom_icc_desc msm8916_snoc = {
-> +	.nodes = msm8916_snoc_nodes,
-> +	.num_nodes = ARRAY_SIZE(msm8916_snoc_nodes),
-> +};
-> +
-> +static struct qcom_icc_node *msm8916_bimc_nodes[] = {
-> +	[BIMC_SNOC_MAS] = &bimc_snoc_mas,
-> +	[MASTER_AMPSS_M0] = &mas_apss,
-> +	[MASTER_GRAPHICS_3D] = &mas_gfx,
-> +	[MASTER_TCU0] = &mas_tcu0,
-> +	[MASTER_TCU1] = &mas_tcu1,
-> +	[SLAVE_AMPSS_L2] = &slv_apps_l2,
-> +	[SLAVE_EBI_CH0] = &slv_ebi_ch0,
-> +	[SNOC_BIMC_0_SLV] = &snoc_bimc_0_slv,
-> +	[SNOC_BIMC_1_SLV] = &snoc_bimc_1_slv,
-> +};
-> +
-> +static struct qcom_icc_desc msm8916_bimc = {
-> +	.nodes = msm8916_bimc_nodes,
-> +	.num_nodes = ARRAY_SIZE(msm8916_bimc_nodes),
-> +};
-> +
-> +static struct qcom_icc_node *msm8916_pcnoc_nodes[] = {
-> +	[MASTER_BLSP_1] = &mas_blsp_1,
-> +	[MASTER_DEHR] = &mas_dehr,
-> +	[MASTER_LPASS] = &mas_audio,
-> +	[MASTER_CRYPTO_CORE0] = &mas_pcnoc_crypto_0,
-> +	[MASTER_SDCC_1] = &mas_pcnoc_sdcc_1,
-> +	[MASTER_SDCC_2] = &mas_pcnoc_sdcc_2,
-> +	[MASTER_SPDM] = &mas_spdm,
-> +	[MASTER_USB_HS] = &mas_usb_hs,
-> +	[PCNOC_INT_0] = &pcnoc_int_0,
-> +	[PCNOC_INT_1] = &pcnoc_int_1,
-> +	[PCNOC_MAS_0] = &pcnoc_m_0,
-> +	[PCNOC_MAS_1] = &pcnoc_m_1,
-> +	[PCNOC_SLV_0] = &pcnoc_s_0,
-> +	[PCNOC_SLV_1] = &pcnoc_s_1,
-> +	[PCNOC_SLV_2] = &pcnoc_s_2,
-> +	[PCNOC_SLV_3] = &pcnoc_s_3,
-> +	[PCNOC_SLV_4] = &pcnoc_s_4,
-> +	[PCNOC_SLV_8] = &pcnoc_s_8,
-> +	[PCNOC_SLV_9] = &pcnoc_s_9,
-> +	[PCNOC_SNOC_MAS] = &pcnoc_snoc_mas,
-> +	[SLAVE_BIMC_CFG] = &slv_bimc_cfg,
-> +	[SLAVE_BLSP_1] = &slv_blsp_1,
-> +	[SLAVE_BOOT_ROM] = &slv_boot_rom,
-> +	[SLAVE_CAMERA_CFG] = &slv_camera_cfg,
-> +	[SLAVE_CLK_CTL] = &slv_clk_ctl,
-> +	[SLAVE_CRYPTO_0_CFG] = &slv_crypto_0_cfg,
-> +	[SLAVE_DEHR_CFG] = &slv_dehr_cfg,
-> +	[SLAVE_DISPLAY_CFG] = &slv_display_cfg,
-> +	[SLAVE_GRAPHICS_3D_CFG] = &slv_gfx_cfg,
-> +	[SLAVE_IMEM_CFG] = &slv_imem_cfg,
-> +	[SLAVE_LPASS] = &slv_audio,
-> +	[SLAVE_MPM] = &slv_mpm,
-> +	[SLAVE_MSG_RAM] = &slv_msg_ram,
-> +	[SLAVE_MSS] = &slv_mss,
-> +	[SLAVE_PDM] = &slv_pdm,
-> +	[SLAVE_PMIC_ARB] = &slv_pmic_arb,
-> +	[SLAVE_PCNOC_CFG] = &slv_pcnoc_cfg,
-> +	[SLAVE_PRNG] = &slv_prng,
-> +	[SLAVE_QDSS_CFG] = &slv_qdss_cfg,
-> +	[SLAVE_RBCPR_CFG] = &slv_rbcpr_cfg,
-> +	[SLAVE_SDCC_1] = &slv_sdcc_1,
-> +	[SLAVE_SDCC_2] = &slv_sdcc_2,
-> +	[SLAVE_SECURITY] = &slv_security,
-> +	[SLAVE_SNOC_CFG] = &slv_snoc_cfg,
-> +	[SLAVE_SPDM] = &slv_spdm,
-> +	[SLAVE_TCSR] = &slv_tcsr,
-> +	[SLAVE_TLMM] = &slv_tlmm,
-> +	[SLAVE_USB_HS] = &slv_usb_hs,
-> +	[SLAVE_VENUS_CFG] = &slv_venus_cfg,
-> +	[SNOC_PCNOC_SLV] = &snoc_pcnoc_slv,
-> +};
-> +
-> +static struct qcom_icc_desc msm8916_pcnoc = {
-> +	.nodes = msm8916_pcnoc_nodes,
-> +	.num_nodes = ARRAY_SIZE(msm8916_pcnoc_nodes),
-> +};
-> +
-> +static int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-> +			      u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-> +{
-> +	*agg_avg += avg_bw;
-> +	*agg_peak = max(*agg_peak, peak_bw);
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	struct qcom_icc_provider *qp;
-> +	struct qcom_icc_node *qn;
-> +	struct icc_provider *provider;
-> +	struct icc_node *n;
-> +	u64 sum_bw;
-> +	u64 max_peak_bw;
-> +	u64 rate;
-> +	u32 agg_avg = 0;
-> +	u32 agg_peak = 0;
-> +	int ret, i;
-> +
-> +	qn = src->data;
-> +	provider = src->provider;
-> +	qp = to_qcom_provider(provider);
-> +
-> +	list_for_each_entry(n, &provider->nodes, node_list)
-> +		qcom_icc_aggregate(n, 0, n->avg_bw, n->peak_bw,
-> +				   &agg_avg, &agg_peak);
-> +
-> +	sum_bw = icc_units_to_bps(agg_avg);
-> +	max_peak_bw = icc_units_to_bps(agg_peak);
-> +
-> +	/* send bandwidth request message to the RPM processor */
-> +	if (qn->mas_rpm_id != -1) {
-> +		ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
-> +					    RPM_BUS_MASTER_REQ,
-> +					    qn->mas_rpm_id,
-> +					    sum_bw);
-> +		if (ret) {
-> +			pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
-> +			       qn->mas_rpm_id, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (qn->slv_rpm_id != -1) {
-> +		ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
-> +					    RPM_BUS_SLAVE_REQ,
-> +					    qn->slv_rpm_id,
-> +					    sum_bw);
-> +		if (ret) {
-> +			pr_err("qcom_icc_rpm_smd_send slv error %d\n",
-> +			       ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	rate = max(sum_bw, max_peak_bw);
-> +
-> +	do_div(rate, qn->buswidth);
-> +
-> +	if (qn->rate == rate)
-> +		return 0;
-> +
-> +	for (i = 0; i < qp->num_clks; i++) {
-> +		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
-> +		if (ret) {
-> +			pr_err("%s clk_set_rate error: %d\n",
-> +			       qp->bus_clks[i].id, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	qn->rate = rate;
-> +
-> +	return 0;
-> +}
-> +
-> +static int qnoc_remove(struct platform_device *pdev)
-> +{
-> +	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
-> +	struct icc_provider *provider = &qp->provider;
-> +	struct icc_node *n;
-> +
-> +	list_for_each_entry(n, &provider->nodes, node_list) {
-> +		icc_node_del(n);
-> +		icc_node_destroy(n->id);
-> +	}
-
-Hello Georgi,
-
-While examining the interconnect API and current drivers' code, I
-noticed that everybody are copying this chunk of code which should crash
-kernel because removing node from a list during the traverse is allowed
-only when list_for_each_entry_safe() is used.
-
-Seems the IMX driver (which is under review now on the ML) is the only
-driver that does the removing procedure correctly.
-
-Maybe it won't hurt to factor out the removal of provider's nodes into a
-common helper.
-
-[snip]
+On 13.11.2019 08:23, Chanwoo Choi wrote:=0A=
+> On 11/13/19 11:30 AM, Chanwoo Choi wrote:=0A=
+>> Hi Leonard,=0A=
+>>=0A=
+>> On 11/13/19 6:50 AM, Leonard Crestez wrote:=0A=
+>>> Add driver for dynamic scaling the DDR Controller on imx8m chips. Actua=
+l=0A=
+>>> frequency switching is implemented inside TF-A, this driver wraps the=
+=0A=
+>>> SMC calls and synchronizes the clk tree.=0A=
+>>>=0A=
+>>> The DRAM clocks on imx8m have the following structure (abridged):=0A=
+>>>=0A=
+>>>   +----------+       |\            +------+=0A=
+>>>   | dram_pll |-------|M| dram_core |      |=0A=
+>>>   +----------+       |U|---------->| D    |=0A=
+>>>                   /--|X|           |  D   |=0A=
+>>>     dram_alt_root |  |/            |   R  |=0A=
+>>>                   |                |    C |=0A=
+>>>              +---------+           |      |=0A=
+>>>              |FIX DIV/4|           |      |=0A=
+>>>              +---------+           |      |=0A=
+>>>    composite:     |                |      |=0A=
+>>>   +----------+    |                |      |=0A=
+>>>   | dram_alt |----/                |      |=0A=
+>>>   +----------+                     |      |=0A=
+>>>   | dram_apb |-------------------->|      |=0A=
+>>>   +----------+                     +------+=0A=
+>>>=0A=
+>>> The dram_pll is used for higher rates and dram_alt is used for lower=0A=
+>>> rates. The dram_alt and dram_apb clocks are "imx composite" and their=
+=0A=
+>>> parent can also be modified.=0A=
+>>>=0A=
+>>> This driver will prepare/enable the new parents ahead of switching (so=
+=0A=
+>>> that the expected roots are enabled) and afterwards it will call=0A=
+>>> clk_set_parent to ensure the parents in clock framework are up-to-date.=
+=0A=
+>>>=0A=
+>>> The driver relies on dram_pll dram_alt and dram_apb being marked with=
+=0A=
+>>> CLK_GET_RATE_NOCACHE for rate updates.=0A=
+>>>=0A=
+>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>>> ---=0A=
+>>>   drivers/devfreq/Kconfig      |   9 +=0A=
+>>>   drivers/devfreq/Makefile     |   1 +=0A=
+>>>   drivers/devfreq/imx8m-ddrc.c | 460 ++++++++++++++++++++++++++++++++++=
++=0A=
+>>>   3 files changed, 470 insertions(+)=0A=
+>>>   create mode 100644 drivers/devfreq/imx8m-ddrc.c=0A=
+>>>=0A=
+>>> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig=0A=
+>>> index 066e6c4efaa2..923a6132e741 100644=0A=
+>>> --- a/drivers/devfreq/Kconfig=0A=
+>>> +++ b/drivers/devfreq/Kconfig=0A=
+>>> @@ -89,10 +89,19 @@ config ARM_EXYNOS_BUS_DEVFREQ=0A=
+>>>   	  Each memory bus group could contain many memoby bus block. It read=
+s=0A=
+>>>   	  PPMU counters of memory controllers by using DEVFREQ-event device=
+=0A=
+>>>   	  and adjusts the operating frequencies and voltages with OPP suppor=
+t.=0A=
+>>>   	  This does not yet operate with optimal voltages.=0A=
+>>>   =0A=
+>>> +config ARM_IMX8M_DDRC_DEVFREQ=0A=
+>>> +	tristate "i.MX8M DDRC DEVFREQ Driver"=0A=
+>>> +	depends on ARCH_MXC || COMPILE_TEST=0A=
+>>> +	select DEVFREQ_GOV_SIMPLE_ONDEMAND=0A=
+>>> +	select DEVFREQ_GOV_USERSPACE=0A=
+>>> +	help=0A=
+>>> +	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allo=
+ws=0A=
+>>> +	  adjusting DRAM frequency.=0A=
+>>> +=0A=
+>>>   config ARM_TEGRA_DEVFREQ=0A=
+>>>   	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"=0A=
+>>>   	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \=0A=
+>>>   		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \=0A=
+>>>   		ARCH_TEGRA_210_SOC || \=0A=
+>>> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile=0A=
+>>> index 338ae8440db6..3eb4d5e6635c 100644=0A=
+>>> --- a/drivers/devfreq/Makefile=0A=
+>>> +++ b/drivers/devfreq/Makefile=0A=
+>>> @@ -7,10 +7,11 @@ obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+=3D governor_pow=
+ersave.o=0A=
+>>>   obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+=3D governor_userspace.o=0A=
+>>>   obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+=3D governor_passive.o=0A=
+>>>   =0A=
+>>>   # DEVFREQ Drivers=0A=
+>>>   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+=3D exynos-bus.o=0A=
+>>> +obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+=3D imx8m-ddrc.o=0A=
+>>>   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+=3D rk3399_dmc.o=0A=
+>>>   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+=3D tegra30-devfreq.o=0A=
+>>>   obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+=3D tegra20-devfreq.o=0A=
+>>>   =0A=
+>>>   # DEVFREQ Event Drivers=0A=
+>>> diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.=
+c=0A=
+>>> new file mode 100644=0A=
+>>> index 000000000000..62abb9b79d8a=0A=
+>>> --- /dev/null=0A=
+>>> +++ b/drivers/devfreq/imx8m-ddrc.c=0A=
+>>> @@ -0,0 +1,460 @@=0A=
+>>> +// SPDX-License-Identifier: GPL-2.0=0A=
+>>> +/*=0A=
+>>> + * Copyright 2019 NXP=0A=
+>>> + */=0A=
+>>> +=0A=
+>>> +#include <linux/module.h>=0A=
+>>> +#include <linux/device.h>=0A=
+>>> +#include <linux/of_device.h>=0A=
+>>> +#include <linux/platform_device.h>=0A=
+>>> +#include <linux/devfreq.h>=0A=
+>>> +#include <linux/pm_opp.h>=0A=
+>>> +#include <linux/clk.h>=0A=
+>>> +#include <linux/clk-provider.h>=0A=
+>>> +#include <linux/arm-smccc.h>=0A=
+>>> +=0A=
+>>> +#define IMX_SIP_DDR_DVFS			0xc2000004=0A=
+>>> +=0A=
+>>> +/* Values starting from 0 switch to specific frequency */=0A=
+>>> +#define IMX_SIP_DDR_FREQ_SET_HIGH		0x00=0A=
+>>> +=0A=
+>>> +/* Deprecated after moving IRQ handling to ATF */=0A=
+>>> +#define IMX_SIP_DDR_DVFS_WAIT_CHANGE		0x0F=0A=
+>>> +=0A=
+>>> +/* Query available frequencies. */=0A=
+>>> +#define IMX_SIP_DDR_DVFS_GET_FREQ_COUNT		0x10=0A=
+>>> +#define IMX_SIP_DDR_DVFS_GET_FREQ_INFO		0x11=0A=
+>>> +=0A=
+>>> +/*=0A=
+>>> + * This should be in a 1:1 mapping with devicetree OPPs but=0A=
+>>> + * firmware provides additional info.=0A=
+>>> + */=0A=
+>>> +struct imx8m_ddrc_freq {=0A=
+>>> +	unsigned long rate;=0A=
+>>> +	unsigned long smcarg;=0A=
+>>> +	int dram_core_parent_index;=0A=
+>>> +	int dram_alt_parent_index;=0A=
+>>> +	int dram_apb_parent_index;=0A=
+>>> +};=0A=
+>>> +=0A=
+>>> +/* Hardware limitation */=0A=
+>>> +#define IMX8M_DDRC_MAX_FREQ_COUNT 4=0A=
+>>> +=0A=
+>>> +/*=0A=
+>>> + * i.MX8M DRAM Controller clocks have the following structure (abridge=
+d):=0A=
+>>> + *=0A=
+>>> + * +----------+       |\            +------+=0A=
+>>> + * | dram_pll |-------|M| dram_core |      |=0A=
+>>> + * +----------+       |U|---------->| D    |=0A=
+>>> + *                 /--|X|           |  D   |=0A=
+>>> + *   dram_alt_root |  |/            |   R  |=0A=
+>>> + *                 |                |    C |=0A=
+>>> + *            +---------+           |      |=0A=
+>>> + *            |FIX DIV/4|           |      |=0A=
+>>> + *            +---------+           |      |=0A=
+>>> + *  composite:     |                |      |=0A=
+>>> + * +----------+    |                |      |=0A=
+>>> + * | dram_alt |----/                |      |=0A=
+>>> + * +----------+                     |      |=0A=
+>>> + * | dram_apb |-------------------->|      |=0A=
+>>> + * +----------+                     +------+=0A=
+>>> + *=0A=
+>>> + * The dram_pll is used for higher rates and dram_alt is used for lowe=
+r rates.=0A=
+>>> + *=0A=
+>>> + * Frequency switching is implemented in TF-A (via SMC call) and can c=
+hange the=0A=
+>>> + * configuration of the clocks, including mux parents. The dram_alt an=
+d=0A=
+>>> + * dram_apb clocks are "imx composite" and their parent can change too=
+.=0A=
+>>> + *=0A=
+>>> + * We need to prepare/enable the new mux parents head of switching and=
+ update=0A=
+>>> + * their information afterwards.=0A=
+>>> + */=0A=
+>>> +struct imx8m_ddrc {=0A=
+>>> +	struct devfreq_dev_profile profile;=0A=
+>>> +	struct devfreq *devfreq;=0A=
+>>> +=0A=
+>>> +	/* For frequency switching: */=0A=
+>>> +	struct clk *dram_core;=0A=
+>>> +	struct clk *dram_pll;=0A=
+>>> +	struct clk *dram_alt;=0A=
+>>> +	struct clk *dram_apb;=0A=
+>>> +=0A=
+>>> +	int freq_count;=0A=
+>>> +	struct imx8m_ddrc_freq freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];=0A=
+>>> +};=0A=
+>>> +=0A=
+>>> +static struct imx8m_ddrc_freq *imx8m_ddrc_find_freq(struct imx8m_ddrc =
+*priv,=0A=
+>>> +						    unsigned long rate)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc_freq *freq;=0A=
+>>> +	int i;=0A=
+>>> +=0A=
+>>> +	/*=0A=
+>>> +	 * Firmware reports values in MT/s, so we round-down from Hz=0A=
+>>> +	 * Rounding is extra generous to ensure a match.=0A=
+>>> +	 */=0A=
+>>> +	rate =3D DIV_ROUND_CLOSEST(rate, 250000);=0A=
+>>> +	for (i =3D 0; i < priv->freq_count; ++i) {=0A=
+>>> +		freq =3D &priv->freq_table[i];=0A=
+>>> +		if (freq->rate =3D=3D rate ||=0A=
+>>> +				freq->rate + 1 =3D=3D rate ||=0A=
+>>> +				freq->rate - 1 =3D=3D rate)=0A=
+>>> +			return freq;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	return NULL;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static void imx8m_ddrc_smc_set_freq(int target_freq)=0A=
+>>> +{=0A=
+>>> +	struct arm_smccc_res res;=0A=
+>>> +	u32 online_cpus =3D 0;=0A=
+>>> +	int cpu;=0A=
+>>> +=0A=
+>>> +	local_irq_disable();=0A=
+>>> +=0A=
+>>> +	for_each_online_cpu(cpu)=0A=
+>>> +		online_cpus |=3D (1 << (cpu * 8));=0A=
+>>> +=0A=
+>>> +	/* change the ddr freqency */=0A=
+>>> +	arm_smccc_smc(IMX_SIP_DDR_DVFS, target_freq, online_cpus,=0A=
+>>> +			0, 0, 0, 0, 0, &res);=0A=
+>>> +=0A=
+>>> +	local_irq_enable();=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +struct clk *clk_get_parent_by_index(struct clk *clk, int index)=0A=
+>>> +{=0A=
+>>> +	struct clk_hw *hw;=0A=
+>>> +=0A=
+>>> +	hw =3D clk_hw_get_parent_by_index(__clk_get_hw(clk), index);=0A=
+>>> +=0A=
+>>> +	return hw ? hw->clk : NULL;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_set_freq(struct device *dev, struct imx8m_ddrc_f=
+req *freq)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +	struct clk *new_dram_core_parent;=0A=
+>>> +	struct clk *new_dram_alt_parent;=0A=
+>>> +	struct clk *new_dram_apb_parent;=0A=
+>>> +	int ret;=0A=
+>>> +=0A=
+>>> +	/*=0A=
+>>> +	 * Fetch new parents=0A=
+>>> +	 *=0A=
+>>> +	 * new_dram_alt_parent and new_dram_apb_parent are optional but=0A=
+>>> +	 * new_dram_core_parent is not.=0A=
+>>> +	 */=0A=
+>>> +	new_dram_core_parent =3D clk_get_parent_by_index(=0A=
+>>> +			priv->dram_core, freq->dram_core_parent_index - 1);=0A=
+>>> +	if (!new_dram_core_parent) {=0A=
+>>> +		dev_err(dev, "failed to fetch new dram_core parent\n");=0A=
+>>> +		return -EINVAL;=0A=
+>>> +	}=0A=
+>>> +	if (freq->dram_alt_parent_index) {=0A=
+>>> +		new_dram_alt_parent =3D clk_get_parent_by_index(=0A=
+>>> +				priv->dram_alt,=0A=
+>>> +				freq->dram_alt_parent_index - 1);=0A=
+>>> +		if (!new_dram_alt_parent) {=0A=
+>>> +			dev_err(dev, "failed to fetch new dram_alt parent\n");=0A=
+>>> +			return -EINVAL;=0A=
+>>> +		}=0A=
+>>> +	} else=0A=
+>>> +		new_dram_alt_parent =3D NULL;=0A=
+>>> +=0A=
+>>> +	if (freq->dram_alt_parent_index) {=0A=
+>>> +		new_dram_apb_parent =3D clk_get_parent_by_index(=0A=
+>>> +				priv->dram_apb, freq->dram_apb_parent_index - 1);=0A=
+>>> +		if (!new_dram_alt_parent) {=0A=
+>>> +			dev_err(dev, "failed to fetch new dram_apb parent\n");=0A=
+>>> +			return -EINVAL;=0A=
+>>> +		}=0A=
+>>> +	} else=0A=
+>>> +		new_dram_apb_parent =3D NULL;=0A=
+>>> +=0A=
+>>> +	/* increase reference counts and ensure clks are ON before switch */=
+=0A=
+>>> +	ret =3D clk_prepare_enable(new_dram_core_parent);=0A=
+>>> +	if (ret) {=0A=
+>>> +		dev_err(dev, "failed enable new dram_core parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed enable/failed to enable=0A=
+>>=0A=
+>>> +		goto out;=0A=
+>>> +	}=0A=
+>>> +	ret =3D clk_prepare_enable(new_dram_alt_parent);=0A=
+>>> +	if (ret) {=0A=
+>>> +		dev_err(dev, "failed enable new dram_alt parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed enable/failed to enable=0A=
+>>=0A=
+>>> +		goto out_disable_core_parent;=0A=
+>>> +	}=0A=
+>>> +	ret =3D clk_prepare_enable(new_dram_apb_parent);=0A=
+>>> +	if (ret) {=0A=
+>>> +		dev_err(dev, "failed enable new dram_apb parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed enable/failed to enable=0A=
+>>=0A=
+>>> +		goto out_disable_alt_parent;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	imx8m_ddrc_smc_set_freq(freq->smcarg);=0A=
+>>> +=0A=
+>>> +	/* update parents in clk tree after switch. */=0A=
+>>> +	ret =3D clk_set_parent(priv->dram_core, new_dram_core_parent);=0A=
+>>> +	if (ret)=0A=
+>>> +		dev_warn(dev, "failed set dram_core parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed set/failed to set=0A=
+>>=0A=
+>>> +	if (new_dram_alt_parent) {=0A=
+>>> +		ret =3D clk_set_parent(priv->dram_alt, new_dram_alt_parent);=0A=
+>>> +		if (ret)=0A=
+>>> +			dev_warn(dev, "failed set dram_alt parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed set/failed to set=0A=
+>>=0A=
+>>> +	}=0A=
+>>> +	if (new_dram_apb_parent) {=0A=
+>>> +		ret =3D clk_set_parent(priv->dram_apb, new_dram_apb_parent);=0A=
+>>> +		if (ret)=0A=
+>>> +			dev_warn(dev, "failed set dram_apb parent: %d\n", ret);=0A=
+>>=0A=
+>> s/failed set/failed to set=0A=
+=0A=
+OK, but this might make a few messages longer than 80 chars.=0A=
+=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	/*=0A=
+>>> +	 * Explicitly refresh dram PLL rate.=0A=
+>>> +	 *=0A=
+>>> +	 * Even if it's marked with CLK_GET_RATE_NOCACHE the rate will not be=
+=0A=
+>>> +	 * automatically refreshed when clk_get_rate is called on children.=
+=0A=
+>>> +	 */=0A=
+>>> +	clk_get_rate(priv->dram_pll);=0A=
+>>> +=0A=
+>>> +	/*=0A=
+>>> +	 * clk_set_parent transfer the reference count from old parent.=0A=
+>>> +	 * now we drop extra reference counts used during the switch=0A=
+>>> +	 */=0A=
+>>> +	clk_disable_unprepare(new_dram_apb_parent);=0A=
+>>> +out_disable_alt_parent:=0A=
+>>> +	clk_disable_unprepare(new_dram_alt_parent);=0A=
+>>> +out_disable_core_parent:=0A=
+>>> +	clk_disable_unprepare(new_dram_core_parent);=0A=
+>>> +out:=0A=
+>>> +	return ret;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_target(struct device *dev, unsigned long *freq, =
+u32 flags)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +	struct imx8m_ddrc_freq *freq_info;=0A=
+>>> +	struct dev_pm_opp *new_opp;=0A=
+>>> +	unsigned long old_freq, new_freq;=0A=
+>>> +	int ret;=0A=
+>>> +=0A=
+>>> +	new_opp =3D devfreq_recommended_opp(dev, freq, flags);=0A=
+>>> +	if (IS_ERR(new_opp)) {=0A=
+>>> +		ret =3D PTR_ERR(new_opp);=0A=
+>>> +		dev_err(dev, "failed to get recommended opp: %d\n", ret);=0A=
+>>> +		return ret;=0A=
+>>> +	}=0A=
+>>> +	dev_pm_opp_put(new_opp);=0A=
+>>> +=0A=
+>>> +	old_freq =3D clk_get_rate(priv->dram_core);=0A=
+>>> +	if (*freq =3D=3D old_freq)=0A=
+>>> +		return 0;=0A=
+>>> +=0A=
+>>> +	freq_info =3D imx8m_ddrc_find_freq(priv, *freq);=0A=
+>>> +	if (!freq_info)=0A=
+>>> +		return -EINVAL;=0A=
+>>> +=0A=
+>>> +	/*=0A=
+>>> +	 * Read back the clk rate to verify switch was correct and so that=0A=
+>>> +	 * we can report it on all error paths.=0A=
+>>> +	 */=0A=
+>>> +	ret =3D imx8m_ddrc_set_freq(dev, freq_info);=0A=
+>>> +=0A=
+>>> +	new_freq =3D clk_get_rate(priv->dram_core);=0A=
+>>> +	if (ret)=0A=
+>>> +		dev_err(dev, "ddrc failed freq switch to %lu from %lu: error %d. now=
+ at %lu\n",=0A=
+>>> +			old_freq, *freq, ret, new_freq);=0A=
+>>> +	else if (*freq !=3D new_freq)=0A=
+>>> +		dev_err(dev, "ddrc failed freq update to %lu from %lu, now at %lu\n"=
+,=0A=
+>>> +			old_freq, *freq, new_freq);=0A=
+>>=0A=
+>> Actually, is it error? When use clk_set_rate with target_freq,=0A=
+>> if target_freq is not same with supported clock of h/w clock,=0A=
+>> the clk_set_rate set the similiar clock rate among the supported clock t=
+able.=0A=
+>>=0A=
+>> It means that if the user of clock_set_rate() enters the unsupported clo=
+ck rate,=0A=
+>> the case of (*freq !=3D new_freq) happen.=0A=
+>>=0A=
+>> Are you sure that you want to show the error when this case (*freq !=3D =
+new_freq)?=0A=
+>> The your origin code is not wrong. Just question from me.=0A=
+=0A=
+The assumption here is that the OPP table will contain the precise =0A=
+frequency as reported by clk_get_rate after a switch.=0A=
+=0A=
+For example imx8mq-evk.dts has an OPP of exactly 166935483 Hz.=0A=
+=0A=
+>>> +	else=0A=
+>>> +		dev_dbg(dev, "ddrc freq set to %lu (was %lu)\n",=0A=
+>>> +			*freq, old_freq);=0A=
+>>> +=0A=
+>>> +	return ret;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned long *=
+freq)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +=0A=
+>>> +	*freq =3D clk_get_rate(priv->dram_core);=0A=
+>>> +=0A=
+>>> +	return 0;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_get_dev_status(struct device *dev,=0A=
+>>> +				     struct devfreq_dev_status *stat)=0A=
+>>=0A=
+>> get_dev_status() callback is called by only simpleondemand governor.=0A=
+>> When userspace governor is used, this function is never called.=0A=
+>> So, need to drop this function and then add this function on next time.=
+=0A=
+=0A=
+Then you get an oops on "echo simple_ondemand > governor".=0A=
+=0A=
+In theory the simple_ondemand governor could check for NULL =0A=
+"get_dev_status" or devfreq core could reject switching to =0A=
+simple_ondemand if no get_dev_status is implemented. For example a =0A=
+devfreq_governor.validate callback could be implemented?=0A=
+=0A=
+But right now the "get_dev_status" callback is NOT optional.=0A=
+=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +=0A=
+>>> +	stat->busy_time =3D 0;=0A=
+>>> +	stat->total_time =3D 0;=0A=
+>>> +	stat->current_frequency =3D clk_get_rate(priv->dram_core);=0A=
+>>> +=0A=
+>>> +	return 0;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_init_freq_info(struct device *dev)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +	struct arm_smccc_res res;=0A=
+>>> +	int index;=0A=
+>>> +=0A=
+>>> +	/* An error here means DDR DVFS API not supported by firmware */=0A=
+>>> +	arm_smccc_smc(IMX_SIP_DDR_DVFS, IMX_SIP_DDR_DVFS_GET_FREQ_COUNT,=0A=
+>>> +			0, 0, 0, 0, 0, 0, &res);=0A=
+>>> +	priv->freq_count =3D res.a0;=0A=
+>>> +	if (priv->freq_count <=3D 0 ||=0A=
+>>> +			priv->freq_count > IMX8M_DDRC_MAX_FREQ_COUNT)=0A=
+>>> +		return -ENODEV;=0A=
+>>> +=0A=
+>>> +	for (index =3D 0; index < priv->freq_count; ++index) {=0A=
+>>> +		struct imx8m_ddrc_freq *freq =3D &priv->freq_table[index];=0A=
+>>> +=0A=
+>>> +		arm_smccc_smc(IMX_SIP_DDR_DVFS, IMX_SIP_DDR_DVFS_GET_FREQ_INFO,=0A=
+>>> +			      index, 0, 0, 0, 0, 0, &res);=0A=
+>>> +		/* Result should be strictly positive */=0A=
+>>> +		if ((long)res.a0 <=3D 0)=0A=
+>>> +			return -ENODEV;=0A=
+>>> +=0A=
+>>> +		freq->rate =3D res.a0;=0A=
+>>> +		freq->smcarg =3D index;=0A=
+>>> +		freq->dram_core_parent_index =3D res.a1;=0A=
+>>> +		freq->dram_alt_parent_index =3D res.a2;=0A=
+>>> +		freq->dram_apb_parent_index =3D res.a3;=0A=
+>>> +=0A=
+>>> +		/* dram_core has 2 options: dram_pll or dram_alt_root */=0A=
+>>> +		if (freq->dram_core_parent_index !=3D 1 &&=0A=
+>>> +				freq->dram_core_parent_index !=3D 2)=0A=
+>>> +			return -ENODEV;=0A=
+>>> +		/* dram_apb and dram_alt have exactly 8 possible parents */=0A=
+>>> +		if (freq->dram_alt_parent_index > 8 ||=0A=
+>>> +				freq->dram_apb_parent_index > 8)=0A=
+>>> +			return -ENODEV;=0A=
+>>> +		/* dram_core from alt requires explicit dram_alt parent */=0A=
+>>> +		if (freq->dram_core_parent_index =3D=3D 2 &&=0A=
+>>> +				freq->dram_alt_parent_index =3D=3D 0)=0A=
+>>> +			return -ENODEV;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	return 0;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_check_opps(struct device *dev)=0A=
+>>> +{=0A=
+>>> +	struct imx8m_ddrc *priv =3D dev_get_drvdata(dev);=0A=
+>>> +	struct imx8m_ddrc_freq *freq_info;=0A=
+>>> +	struct dev_pm_opp *opp;=0A=
+>>> +	unsigned long freq;=0A=
+>>> +=0A=
+>>> +	/* Enumerate DT OPPs and disable those not supported by firmware */=
+=0A=
+>>> +	freq =3D ULONG_MAX;=0A=
+>>> +	while (true) {=0A=
+> =0A=
+> You can get the number of OPP entries int the opp table=0A=
+> with dev_pm_opp_get_count(dev). I think that better to=0A=
+> use the correct number of OPP entries instead of 'while(true)' style.=0A=
+=0A=
+I need to enumerate frequencies and there's no "get_freq_by_index" in =0A=
+opp core that I can find so I'd still need to use =0A=
+dev_pm_opp_find_freq_floor.=0A=
+=0A=
+It's strange that OPP core doesn't offer additional support for =0A=
+enumerating OPPs like a for_each macro?=0A=
+=0A=
+>>> +		opp =3D dev_pm_opp_find_freq_floor(dev, &freq);=0A=
+>>> +		if (opp =3D=3D ERR_PTR(-ERANGE))=0A=
+>>> +			break;=0A=
+>>> +		if (IS_ERR(opp)) {=0A=
+>>> +			dev_err(dev, "Failed enumerating OPPs: %ld\n",=0A=
+>>> +				PTR_ERR(opp));=0A=
+>>> +			return PTR_ERR(opp);=0A=
+>>> +		}=0A=
+>>> +		dev_pm_opp_put(opp);=0A=
+>>> +=0A=
+>>> +		freq_info =3D imx8m_ddrc_find_freq(priv, freq);=0A=
+>>> +		if (!freq_info) {=0A=
+>>> +			dev_info(dev, "Disable unsupported OPP %luHz %luMT/s\n",=0A=
+>>> +					freq, DIV_ROUND_CLOSEST(freq, 250000));=0A=
+>>> +			dev_pm_opp_disable(dev, freq);=0A=
+>>> +		}=0A=
+>>> +=0A=
+>>> +		freq--;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	return 0;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static void imx8m_ddrc_exit(struct device *dev)=0A=
+>>> +{=0A=
+>>> +	dev_pm_opp_of_remove_table(dev);=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static int imx8m_ddrc_probe(struct platform_device *pdev)=0A=
+>>> +{=0A=
+>>> +	struct device *dev =3D &pdev->dev;=0A=
+>>> +	struct imx8m_ddrc *priv;=0A=
+>>> +	const char *gov =3D DEVFREQ_GOV_USERSPACE;=0A=
+>>> +	int ret;=0A=
+>>> +=0A=
+>>> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);=0A=
+>>> +	if (!priv)=0A=
+>>> +		return -ENOMEM;=0A=
+>>> +=0A=
+>>> +	platform_set_drvdata(pdev, priv);=0A=
+>>> +=0A=
+>>> +	ret =3D imx8m_ddrc_init_freq_info(dev);=0A=
+>>> +	if (ret) {=0A=
+>>> +		dev_err(dev, "failed to init firmware freq info: %d\n", ret);=0A=
+>>> +		return ret;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	priv->dram_core =3D devm_clk_get(dev, "core");=0A=
+>>> +	priv->dram_pll =3D devm_clk_get(dev, "pll");=0A=
+>>> +	priv->dram_alt =3D devm_clk_get(dev, "alt");=0A=
+>>> +	priv->dram_apb =3D devm_clk_get(dev, "apb");=0A=
+>>> +	if (IS_ERR(priv->dram_core) ||=0A=
+>>> +		IS_ERR(priv->dram_pll) ||=0A=
+>>> +		IS_ERR(priv->dram_alt) ||=0A=
+>>> +		IS_ERR(priv->dram_apb)) {=0A=
+>>> +		ret =3D PTR_ERR(priv->devfreq);=0A=
+>>> +		dev_err(dev, "failed to fetch clocks: %d\n", ret);=0A=
+>>> +		return ret;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	ret =3D dev_pm_opp_of_add_table(dev);=0A=
+>>> +	if (ret < 0) {=0A=
+>>> +		dev_err(dev, "failed to get OPP table\n");=0A=
+>>> +		return ret;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	ret =3D imx8m_ddrc_check_opps(dev);=0A=
+>>> +	if (ret < 0)=0A=
+>>> +		goto err;=0A=
+>>> +=0A=
+>>> +	priv->profile.polling_ms =3D 1000;=0A=
+>>> +	priv->profile.target =3D imx8m_ddrc_target;=0A=
+>>> +	priv->profile.get_dev_status =3D imx8m_ddrc_get_dev_status;=0A=
+>>=0A=
+>> ditto. It is not used on this patch. On later, add the get_dev_status=0A=
+>> for the ondemand governor.=0A=
+>>=0A=
+>>> +	priv->profile.exit =3D imx8m_ddrc_exit;=0A=
+>>> +	priv->profile.get_cur_freq =3D imx8m_ddrc_get_cur_freq;=0A=
+>>> +	priv->profile.initial_freq =3D clk_get_rate(priv->dram_core);=0A=
+>>> +=0A=
+>>> +	priv->devfreq =3D devm_devfreq_add_device(dev, &priv->profile,=0A=
+>>> +						gov, NULL);=0A=
+>>> +	if (IS_ERR(priv->devfreq)) {=0A=
+>>> +		ret =3D PTR_ERR(priv->devfreq);=0A=
+>>> +		dev_err(dev, "failed to add devfreq device: %d\n", ret);=0A=
+>>> +		goto err;=0A=
+>>> +	}=0A=
+>>> +=0A=
+>>> +	return 0;=0A=
+>>> +=0A=
+>>> +err:=0A=
+>>> +	dev_pm_opp_of_remove_table(dev);=0A=
+>>> +	return ret;=0A=
+>>> +}=0A=
+>>> +=0A=
+>>> +static const struct of_device_id imx8m_ddrc_of_match[] =3D {=0A=
+>>> +	{ .compatible =3D "fsl,imx8m-ddrc", },=0A=
+>>> +	{ /* sentinel */ },=0A=
+>>> +};=0A=
+>>> +MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);=0A=
+>>> +=0A=
+>>> +static struct platform_driver imx8m_ddrc_platdrv =3D {=0A=
+>>> +	.probe		=3D imx8m_ddrc_probe,=0A=
+>>> +	.driver =3D {=0A=
+>>> +		.name	=3D "imx8m-ddrc-devfreq",=0A=
+>>> +		.of_match_table =3D of_match_ptr(imx8m_ddrc_of_match),=0A=
+>>> +	},=0A=
+>>> +};=0A=
+>>> +module_platform_driver(imx8m_ddrc_platdrv);=0A=
+>>> +=0A=
+>>> +MODULE_DESCRIPTION("i.MX8M DDR Controller frequency driver");=0A=
+>>> +MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");=0A=
+>>> +MODULE_LICENSE("GPL v2");=0A=
