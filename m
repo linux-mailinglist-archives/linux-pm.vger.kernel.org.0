@@ -2,250 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4A4FBBBD
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 23:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457F5FBC6F
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 00:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbfKMWjH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 17:39:07 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47564 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfKMWjG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 17:39:06 -0500
-Received: from 79.184.253.153.ipv4.supernova.orange.pl (79.184.253.153) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 695e88c4f6f8395e; Wed, 13 Nov 2019 23:39:02 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     y2038@lists.linaro.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 12/23] y2038: syscalls: change remaining timeval to __kernel_old_timeval
-Date:   Wed, 13 Nov 2019 23:39:01 +0100
-Message-ID: <43741269.9cZ5YESnMi@kreacher>
-In-Reply-To: <20191108211323.1806194-3-arnd@arndb.de>
-References: <20191108210236.1296047-1-arnd@arndb.de> <20191108211323.1806194-3-arnd@arndb.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1727063AbfKMXVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 18:21:41 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:58126 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726251AbfKMXVl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 13 Nov 2019 18:21:41 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8CBD8200199;
+        Thu, 14 Nov 2019 00:21:38 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7F2F5200139;
+        Thu, 14 Nov 2019 00:21:38 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 0F83B205D5;
+        Thu, 14 Nov 2019 00:21:38 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com
+Subject: [PATCH 0/5] PM / devfreq: Don't take lock in devfreq_add_device
+Date:   Thu, 14 Nov 2019 01:21:30 +0200
+Message-Id: <cover.1573686315.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, November 8, 2019 10:12:11 PM CET Arnd Bergmann wrote:
-> All of the remaining syscalls that pass a timeval (gettimeofday, utime,
-> futimesat) can trivially be changed to pass a __kernel_old_timeval
-> instead, which has a compatible layout, but avoids ambiguity with
-> the timeval type in user space.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Right now the devfreq_add_device takes devfreq->lock as soon as the device is
+allocated, this is awkward and unnecessary. In general an object should be
+initialized in isolation and only be made available to the system when it's in
+a consistent state.
 
-For the change in power/power.h
+Locking the device during initialization causes problems (lockdep warnings)
+when interacting with other subsystems that also use heavy locking. There are
+also a few fields (such as trans_table) which are initialized after
+device_register even through they're readable from sysfs, these are now
+allocated earlier.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This was spawned by the attempt to add dev_pm_qos support. I split this series
+here because it might benefit from separate discussion.
 
-> ---
->  arch/powerpc/include/asm/asm-prototypes.h |  3 ++-
->  arch/powerpc/kernel/syscalls.c            |  4 ++--
->  fs/select.c                               | 10 +++++-----
->  fs/utimes.c                               |  8 ++++----
->  include/linux/syscalls.h                  | 10 +++++-----
->  kernel/power/power.h                      |  2 +-
->  kernel/time/time.c                        |  2 +-
->  7 files changed, 20 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/asm-prototypes.h b/arch/powerpc/include/asm/asm-prototypes.h
-> index 8561498e653c..2c25dc079cb9 100644
-> --- a/arch/powerpc/include/asm/asm-prototypes.h
-> +++ b/arch/powerpc/include/asm/asm-prototypes.h
-> @@ -92,7 +92,8 @@ long sys_swapcontext(struct ucontext __user *old_ctx,
->  long sys_debug_setcontext(struct ucontext __user *ctx,
->  			  int ndbg, struct sig_dbg_op __user *dbg);
->  int
-> -ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp, struct timeval __user *tvp);
-> +ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp,
-> +	   struct __kernel_old_timeval __user *tvp);
->  unsigned long __init early_init(unsigned long dt_ptr);
->  void __init machine_init(u64 dt_ptr);
->  #endif
-> diff --git a/arch/powerpc/kernel/syscalls.c b/arch/powerpc/kernel/syscalls.c
-> index 3bfb3888e897..078608ec2e92 100644
-> --- a/arch/powerpc/kernel/syscalls.c
-> +++ b/arch/powerpc/kernel/syscalls.c
-> @@ -79,7 +79,7 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, size_t, len,
->   * sys_select() with the appropriate args. -- Cort
->   */
->  int
-> -ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp, struct timeval __user *tvp)
-> +ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp, struct __kernel_old_timeval __user *tvp)
->  {
->  	if ( (unsigned long)n >= 4096 )
->  	{
-> @@ -89,7 +89,7 @@ ppc_select(int n, fd_set __user *inp, fd_set __user *outp, fd_set __user *exp, s
->  		    || __get_user(inp, ((fd_set __user * __user *)(buffer+1)))
->  		    || __get_user(outp, ((fd_set  __user * __user *)(buffer+2)))
->  		    || __get_user(exp, ((fd_set  __user * __user *)(buffer+3)))
-> -		    || __get_user(tvp, ((struct timeval  __user * __user *)(buffer+4))))
-> +		    || __get_user(tvp, ((struct __kernel_old_timeval  __user * __user *)(buffer+4))))
->  			return -EFAULT;
->  	}
->  	return sys_select(n, inp, outp, exp, tvp);
-> diff --git a/fs/select.c b/fs/select.c
-> index 53a0c149f528..11d0285d46b7 100644
-> --- a/fs/select.c
-> +++ b/fs/select.c
-> @@ -321,7 +321,7 @@ static int poll_select_finish(struct timespec64 *end_time,
->  	switch (pt_type) {
->  	case PT_TIMEVAL:
->  		{
-> -			struct timeval rtv;
-> +			struct __kernel_old_timeval rtv;
->  
->  			if (sizeof(rtv) > sizeof(rtv.tv_sec) + sizeof(rtv.tv_usec))
->  				memset(&rtv, 0, sizeof(rtv));
-> @@ -698,10 +698,10 @@ int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
->  }
->  
->  static int kern_select(int n, fd_set __user *inp, fd_set __user *outp,
-> -		       fd_set __user *exp, struct timeval __user *tvp)
-> +		       fd_set __user *exp, struct __kernel_old_timeval __user *tvp)
->  {
->  	struct timespec64 end_time, *to = NULL;
-> -	struct timeval tv;
-> +	struct __kernel_old_timeval tv;
->  	int ret;
->  
->  	if (tvp) {
-> @@ -720,7 +720,7 @@ static int kern_select(int n, fd_set __user *inp, fd_set __user *outp,
->  }
->  
->  SYSCALL_DEFINE5(select, int, n, fd_set __user *, inp, fd_set __user *, outp,
-> -		fd_set __user *, exp, struct timeval __user *, tvp)
-> +		fd_set __user *, exp, struct __kernel_old_timeval __user *, tvp)
->  {
->  	return kern_select(n, inp, outp, exp, tvp);
->  }
-> @@ -810,7 +810,7 @@ SYSCALL_DEFINE6(pselect6_time32, int, n, fd_set __user *, inp, fd_set __user *,
->  struct sel_arg_struct {
->  	unsigned long n;
->  	fd_set __user *inp, *outp, *exp;
-> -	struct timeval __user *tvp;
-> +	struct __kernel_old_timeval __user *tvp;
->  };
->  
->  SYSCALL_DEFINE1(old_select, struct sel_arg_struct __user *, arg)
-> diff --git a/fs/utimes.c b/fs/utimes.c
-> index 1ba3f7883870..c952b6b3d8a0 100644
-> --- a/fs/utimes.c
-> +++ b/fs/utimes.c
-> @@ -161,9 +161,9 @@ SYSCALL_DEFINE4(utimensat, int, dfd, const char __user *, filename,
->   * utimensat() instead.
->   */
->  static long do_futimesat(int dfd, const char __user *filename,
-> -			 struct timeval __user *utimes)
-> +			 struct __kernel_old_timeval __user *utimes)
->  {
-> -	struct timeval times[2];
-> +	struct __kernel_old_timeval times[2];
->  	struct timespec64 tstimes[2];
->  
->  	if (utimes) {
-> @@ -190,13 +190,13 @@ static long do_futimesat(int dfd, const char __user *filename,
->  
->  
->  SYSCALL_DEFINE3(futimesat, int, dfd, const char __user *, filename,
-> -		struct timeval __user *, utimes)
-> +		struct __kernel_old_timeval __user *, utimes)
->  {
->  	return do_futimesat(dfd, filename, utimes);
->  }
->  
->  SYSCALL_DEFINE2(utimes, char __user *, filename,
-> -		struct timeval __user *, utimes)
-> +		struct __kernel_old_timeval __user *, utimes)
->  {
->  	return do_futimesat(AT_FDCWD, filename, utimes);
->  }
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index 2f27bc9d5ef0..e665920fa359 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -51,7 +51,7 @@ struct statx;
->  struct __sysctl_args;
->  struct sysinfo;
->  struct timespec;
-> -struct timeval;
-> +struct __kernel_old_timeval;
->  struct __kernel_timex;
->  struct timezone;
->  struct tms;
-> @@ -732,7 +732,7 @@ asmlinkage long sys_prctl(int option, unsigned long arg2, unsigned long arg3,
->  asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, struct getcpu_cache __user *cache);
->  
->  /* kernel/time.c */
-> -asmlinkage long sys_gettimeofday(struct timeval __user *tv,
-> +asmlinkage long sys_gettimeofday(struct __kernel_old_timeval __user *tv,
->  				struct timezone __user *tz);
->  asmlinkage long sys_settimeofday(struct timeval __user *tv,
->  				struct timezone __user *tz);
-> @@ -1082,9 +1082,9 @@ asmlinkage long sys_time32(old_time32_t __user *tloc);
->  asmlinkage long sys_utime(char __user *filename,
->  				struct utimbuf __user *times);
->  asmlinkage long sys_utimes(char __user *filename,
-> -				struct timeval __user *utimes);
-> +				struct __kernel_old_timeval __user *utimes);
->  asmlinkage long sys_futimesat(int dfd, const char __user *filename,
-> -			      struct timeval __user *utimes);
-> +			      struct __kernel_old_timeval __user *utimes);
->  #endif
->  asmlinkage long sys_futimesat_time32(unsigned int dfd,
->  				     const char __user *filename,
-> @@ -1098,7 +1098,7 @@ asmlinkage long sys_getdents(unsigned int fd,
->  				struct linux_dirent __user *dirent,
->  				unsigned int count);
->  asmlinkage long sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> -			fd_set __user *exp, struct timeval __user *tvp);
-> +			fd_set __user *exp, struct __kernel_old_timeval __user *tvp);
->  asmlinkage long sys_poll(struct pollfd __user *ufds, unsigned int nfds,
->  				int timeout);
->  asmlinkage long sys_epoll_wait(int epfd, struct epoll_event __user *events,
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index 44bee462ff57..7cdc64dc2373 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -179,7 +179,7 @@ extern void swsusp_close(fmode_t);
->  extern int swsusp_unmark(void);
->  #endif
->  
-> -struct timeval;
-> +struct __kernel_old_timeval;
->  /* kernel/power/swsusp.c */
->  extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
->  
-> diff --git a/kernel/time/time.c b/kernel/time/time.c
-> index 7eba7c9a7e3e..bc114f0be8f1 100644
-> --- a/kernel/time/time.c
-> +++ b/kernel/time/time.c
-> @@ -137,7 +137,7 @@ SYSCALL_DEFINE1(stime32, old_time32_t __user *, tptr)
->  #endif /* __ARCH_WANT_SYS_TIME32 */
->  #endif
->  
-> -SYSCALL_DEFINE2(gettimeofday, struct timeval __user *, tv,
-> +SYSCALL_DEFINE2(gettimeofday, struct __kernel_old_timeval __user *, tv,
->  		struct timezone __user *, tz)
->  {
->  	if (likely(tv != NULL)) {
-> 
+Notifiers from pm_qos are executed under a single global dev_pm_qos_mtx and
+need to take devfreq->lock, this means that in order to prevent possible
+deadlocks all initialization of dev_pm_qos must be performed outside the
+devfreq->lock.
 
+PM QoS requests from sysfs should be initialized before the device is
+registered (because they're touched from sysfs) but all of that is currently
+done with devfreq->lock held!
 
+This series makes some tricky changes but the end results is easier to
+understand and maintain. For example it removes a scary unlock/lock pair
+around set_freq_table, maybe this also caused problems in the past?
 
+Alternative solutions exist: all PM QoS setup could be done after device_add
+just like governor setup and the min/max_freq_store could return an error if
+the qos request is not yet properly initialized.
+
+It might even be possible to modify dev_pm_qos to call notifiers without
+holding internal locks? That is generally a good idea for all notifiers.
+
+Changes since split from PM_QOS:
+* Add a patch which moves devm from devfreq->dev->parent to devfreq->dev.
+See: https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196443
+
+Leonard Crestez (5):
+  PM / devfreq: Don't fail devfreq_dev_release if not in list
+  PM / devfreq: Split device_register usage
+  PM / devfreq: Move more initialization before registration
+  PM / devfreq: Don't use devm on parent device
+  PM / devfreq: Don't take lock in devfreq_add_device
+
+ drivers/devfreq/devfreq.c | 41 ++++++++++++---------------------------
+ 1 file changed, 12 insertions(+), 29 deletions(-)
+
+-- 
+2.17.1
 
