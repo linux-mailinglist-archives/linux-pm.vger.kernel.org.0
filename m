@@ -2,238 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2C7FB355
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 16:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD46FB58F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Nov 2019 17:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbfKMPMq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 10:12:46 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:40161 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728087AbfKMPMp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 10:12:45 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191113151243euoutp01d5cb4cefa9af0aa94278a97f18db2d16~WwZRvC6VY0598505985euoutp01J
-        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 15:12:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191113151243euoutp01d5cb4cefa9af0aa94278a97f18db2d16~WwZRvC6VY0598505985euoutp01J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1573657963;
-        bh=RiDiIT7iZ5uWRSjJDpfwksM+DRbkVa+LCl9cMMehqnI=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=tGXerBJ7Va5Aq7PP8dnmiz2KrZLnS/JofvI6jykP6ykDrjWcLbmeOkxA2AbBtKBlG
-         BQza9yLSGjzgEPyCQOn3kxME2+T2rJRgs2G8KKzSkuExgEkhPDhWBA+W2KcsvOoA8s
-         Mas6grB5W5AOTo7+ViQNfPiRIvS5iLl+Kd4G8/ME=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191113151242eucas1p19f54308ea4dd5ef747b4f485b803195a~WwZRYuPz-0444904449eucas1p1j;
-        Wed, 13 Nov 2019 15:12:42 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id D1.1C.04469.A6D1CCD5; Wed, 13
-        Nov 2019 15:12:42 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191113151242eucas1p1e8b0d203e369ebfd09e6f1a0a1dcbb38~WwZQ8Azu10439304393eucas1p1z;
-        Wed, 13 Nov 2019 15:12:42 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191113151242eusmtrp10b8b131e00d6d2b819161bb99d21f889~WwZQ7Vhb_2223022230eusmtrp1y;
-        Wed, 13 Nov 2019 15:12:42 +0000 (GMT)
-X-AuditID: cbfec7f2-569ff70000001175-71-5dcc1d6acedf
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id D0.BE.04117.A6D1CCD5; Wed, 13
-        Nov 2019 15:12:42 +0000 (GMT)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191113151241eusmtip15dedb606b73b17597ce4871c94296be2~WwZQYnjNx0590005900eusmtip14;
-        Wed, 13 Nov 2019 15:12:41 +0000 (GMT)
-Subject: Re: [PATCH] devfreq: exynos-bus: workaround dev_pm_opp_set_rate()
- errors on Exynos5422/5800 SoCs
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        k.konieczny@partner.samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-Message-ID: <dd5bc937-e776-f717-1cf3-ee0e17621304@samsung.com>
-Date:   Wed, 13 Nov 2019 16:12:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <d742e7be-ca79-ae9e-6cc2-dc1fae08d252@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SaUwTYRD163bbpaFkKRAmoBBL0IgKEq9NUNDEaH/4Q/8Y1KCssnIX0uXG
-        RPBAIdASRUUwVAyXRQRLJYQokbOUFrkMIngQAZuIEKXQID9A2sXIvzfvvZk3kwyBSTpwDyJa
-        nsQo5HScVCDiN3X/6d8ds8UUtme5zYd6WVyPUx8WzDilbF1FlGpyBqP6+xuEVN/1n0JKOzmC
-        U8MtjwWUpaATUcX9rTyqrvOzkBrPrhEccZRpNbkCWWPFNVnb3GueTKnTIJlF63UKPyc6FMHE
-        RacwioDgcFHUikbLS3y/M62xawxloW6fPORAALkPRgyFwjwkIiRkDYJJkwXjigUESsNHnCss
-        CAxLOehfi9ZcxOOEagQDo2rEFbMIinJrBTaXCxkLVmMVZsOuZBrkq/LtczFynAcF88t8myAg
-        A6Ctz2DHYjIYrOoeewSf9IUq8/RaBEG4kaFgXKQ5izMYHk3Z7Q5kCAy809jnY6Q7jE2peRz2
-        hhuvSu1ZQI4IQVNZKuTWPgZ60zzGYRf4odet85vBeC+fz+FUmC5XCrnmmwgmbv9eF4KgQz+I
-        2xbCyB1Q3xLA0Udh9uswstFAOsHorDO3gxPcbXqIcbQY7uRIOLcvmHvzeRz2hLzVF3ghkpZs
-        uKxkwzUlG64p+Z/7BPE1yJ1JZuMjGTZQzqT6s3Q8myyP9L+cEK9Fa69lXNHPN6PFoUvtiCSQ
-        1FH81s0UJsHpFDY9vh0BgUldxc1pPWEScQSdnsEoEi4qkuMYth15Enypuzhz08R5CRlJJzGx
-        DJPIKP6pPMLBIws90McUXzl92F++9dPBNHRC56VzjcgtS1o4WT3Y8D3bU6AyagqGKhlFzcJI
-        8pu88tmZvcWC1Ja5jMxQ66/EOF0wMVpqsT799kx3NpOWHqhI8LtVt225K/iL1nu7Z4iP24XB
-        Xc+tV7OP9y7NBe0Pr1Opl8cazZHRZVL6/pn5idrVDCmfjaID/TAFS/8F3cqc4VYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsVy+t/xu7pZsmdiDdp3c1hsnLGe1eL6l+es
-        Fn37/jNa9D9+zWxx/vwGdouzTW/YLTY9vsZqcXnXHDaLz71HGC1mnN/HZLH2yF12i9uNK9gc
-        eDw2repk89i8pN7j4Ls9TB59W1YxenzeJBfAGqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2Ri
-        qWdobB5rZWSqpG9nk5Kak1mWWqRvl6CX8W/VJqaCK9oVm4/eYmxgPKbcxcjJISFgIrHp+RSm
-        LkYuDiGBpYwSV9bMZYZISEs0nl7NBGELS/y51sUGUfSaUaLn4js2kISwQLbEt9PLwBpEBCok
-        tlybATaJWeAuk8S6bx+gxm5nkrj88QULSBWbgL7EwbMnwWxeATuJb/NPMILYLAKqEsuePwVb
-        JyoQIfF8+w1GiBpBiZMzn4DVcwrYS1w4twpsG7OAusSfeZegbHGJW0/mM0HY8hLNW2czT2AU
-        moWkfRaSlllIWmYhaVnAyLKKUSS1tDg3PbfYSK84Mbe4NC9dLzk/dxMjMFK3Hfu5ZQdj17vg
-        Q4wCHIxKPLwSEmdihVgTy4orcw8xSnAwK4nw7qg4ESvEm5JYWZValB9fVJqTWnyI0RTouYnM
-        UqLJ+cAkklcSb2hqaG5haWhubG5sZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgXGd9U3D
-        ujuPZypsvbx/1fuUH/cOifmVPHFZq3Krp/5WfmYrs5iv2gvRk8575031/n+k9frzuZNqTHqn
-        drwQ2/7d9/Mm3Z2rwgxm/XE6Ee/ZkRv0bIpprcpGLifnXUtWfFy6YkfcU36hLdLZpjPqzSvK
-        r1q7e3/X2LVt1rHCQhVt1adFLwU+ya9VYinOSDTUYi4qTgQAEWC1r+oCAAA=
-X-CMS-MailID: 20191113151242eucas1p1e8b0d203e369ebfd09e6f1a0a1dcbb38
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b
-References: <CGME20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b@eucas1p1.samsung.com>
-        <20191008134923.30123-1-k.konieczny@partner.samsung.com>
-        <4f14d3af-e455-d05b-fc03-cba58e001f41@samsung.com>
-        <0ce56e65-d989-18f8-af84-2fbd74ba20aa@samsung.com>
-        <d742e7be-ca79-ae9e-6cc2-dc1fae08d252@samsung.com>
+        id S1728016AbfKMQuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 11:50:05 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54543 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727145AbfKMQuF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 13 Nov 2019 11:50:05 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Nov 2019 08:50:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,301,1569308400"; 
+   d="scan'208";a="355524621"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.31])
+  by orsmga004.jf.intel.com with ESMTP; 13 Nov 2019 08:50:04 -0800
+Message-ID: <64baa18f7cd6066cc50360928d77504c1b68773e.camel@linux.intel.com>
+Subject: Re: [PATCH v4 5/6] x86,sched: Add support for frequency invariance
+ on ATOM
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@qperret.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 13 Nov 2019 08:50:03 -0800
+In-Reply-To: <20191113124654.18122-6-ggherdovich@suse.cz>
+References: <20191113124654.18122-1-ggherdovich@suse.cz>
+         <20191113124654.18122-6-ggherdovich@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-3.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+On Wed, 2019-11-13 at 13:46 +0100, Giovanni Gherdovich wrote:
+> The scheduler needs the ratio freq_curr/freq_max for frequency-
+> invariant
+> accounting. On all ATOM CPUs prior to Goldmont, set freq_max to the
+> 1-core
+> turbo ratio.
+> 
+> We intended to perform tests validating that this patch doesn't
+> regress in
+> terms of energy efficiency, given that this is the primary concern on
+> Atom
+> processors. Alas, we found out that turbostat doesn't support reading
+> RAPL
+> interfaces on our test machine (Airmont), and we don't have external
+> equipment
+> to measure power consumption; all we have is the performance results
+> of the
+> benchmarks we ran.
+> 
+I can run some benchmarks on this.
 
-On 14.10.2019 08:46, Chanwoo Choi wrote:
-> Hi Marek,
-> 
-> On 19. 10. 11. 오후 8:33, Marek Szyprowski wrote:
->> Hi Chanwoo,
->>
->> On 10.10.2019 04:50, Chanwoo Choi wrote:
->>> On 2019년 10월 08일 22:49, k.konieczny@partner.samsung.com wrote:
->>>> Commit 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use
->>>> dev_pm_opp_set_rate()") introduced errors:
->>>> exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
->>>> exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
->>>> exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
->>>> ...
->>>> exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
->>>> exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
->>>> exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
->>>>
->>>> They are caused by incorrect PLL assigned to clock source, which results
->>>> in clock rate outside of OPP range. Add workaround for this in
->>>> exynos_bus_parse_of() by adjusting clock rate to those present in OPP.
->>> If the clock caused this issue, you can set the initial clock on DeviceTree
->>> with assigned-clock-* properties. Because the probe time of clock driver
->>> is early than the any device drivers.
->>>
->>> It is not proper to fix the clock issue on other device driver.
->>> I think you can fix it by using the supported clock properties.
->>
->> This issue is about something completely different. The OPPs defined in 
->> DT cannot be applied, because it is not possible to derive the needed 
->> clock rate from the bootloader-configured clock topology (mainly due to 
->> lack of common divisor values for some of the parent clocks). Some time 
->> ago Lukasz tried initially to redefine this clock topology using 
->> assigned-clock-rates/parents properties (see 
->> https://protect2.fireeye.com/url?k=4b80c0304459bc8e.4b814b7f-f87f1e1aee1a85c0&u=https://lkml.org/lkml/2019/7/15/276), but it has limitations and some 
->> such changes has to be done in bootloader. Until this is resolved, 
->> devfreq simply cannot set some of the defined OPPs.
-> 
-> As you mentioned, the wrong setting in bootloader cause the this issue.
-> So, this patch change the rate on exynos-bus.c in order to fix
-> the issue with workaround style. 
-> 
-> But, also, it can be fixed by initializing the clock rate on DT
-> although it is not fundamental solution as you mentioned.
-> 
-> If above two method are workaround way, I think that set the clock
-> rate in DT is proper. The role of 'assigned-clock-*' properties
-> is for this case in order to set the initial frequency on probe time.
+Thanks,
+Srinivas
 
-I can add 'assigned-clock-*' to DT, but the issue is caused in opp points,
-so the warning from exynos-bus will still be there.
-
-Before this fix, devfreq will issue warning and then change clock to max
-frequency within opp range. This fix mask warning, and as Marek and
-Lukasz Luba wrotes, the proper fix will be to make changes in u-boot
-(and connect proper PLLs to IPs).
-
-Second solution would be to write down new OPP points with currently used
-frequencies, and with max one for 532 MHz.
-
-> I think that the previous patch[1] of Kamil Konieczny is missing
-> the patches which initialize the clock rate on DT file.
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4294a779bd8dff6c65e7e85ffe7a1ea236e92a68
+> Test machine:
 > 
->>
->> This issue was there from the beginning, recent Kamil's patch only 
->> revealed it. In fact it was even worse - devfreq and common clock 
->> framework silently set lower clock than the given OPP defined.
->>
->>>> Fixes: 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use dev_pm_opp_set_rate()")
->>>> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
->>>> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
->>>> ---
->>>>   drivers/devfreq/exynos-bus.c | 14 +++++++++++---
->>>>   1 file changed, 11 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->>>> index c832673273a2..37bd34d5625b 100644
->>>> --- a/drivers/devfreq/exynos-bus.c
->>>> +++ b/drivers/devfreq/exynos-bus.c
->>>> @@ -243,7 +243,7 @@ static int exynos_bus_parse_of(struct device_node *np,
->>>>   {
->>>>   	struct device *dev = bus->dev;
->>>>   	struct dev_pm_opp *opp;
->>>> -	unsigned long rate;
->>>> +	unsigned long rate, opp_rate;
->>>>   	int ret;
->>>>   
->>>>   	/* Get the clock to provide each bus with source clock */
->>>> @@ -267,13 +267,21 @@ static int exynos_bus_parse_of(struct device_node *np,
->>>>   	}
->>>>   
->>>>   	rate = clk_get_rate(bus->clk);
->>>> -
->>>> -	opp = devfreq_recommended_opp(dev, &rate, 0);
->>>> +	opp_rate = rate;
->>>> +	opp = devfreq_recommended_opp(dev, &opp_rate, 0);
->>>>   	if (IS_ERR(opp)) {
->>>>   		dev_err(dev, "failed to find dev_pm_opp\n");
->>>>   		ret = PTR_ERR(opp);
->>>>   		goto err_opp;
->>>>   	}
->>>> +	/*
->>>> +	 * FIXME: U-boot leaves clock source at incorrect PLL, this results
->>>> +	 * in clock rate outside defined OPP rate. Work around this bug by
->>>> +	 * setting clock rate to recommended one.
->>>> +	 */
->>>> +	if (rate > opp_rate)
->>>> +		clk_set_rate(bus->clk, opp_rate);
->>>> +
->>>>   	bus->curr_freq = dev_pm_opp_get_freq(opp);
->>>>   	dev_pm_opp_put(opp);
->>>>   
->>>>
->>>
->> Best regards
->>
+> Platform    : Dell Wyse 3040 Thin Client[1]
+> CPU Model   : Intel Atom x5-Z8350 (aka Cherry Trail, aka Airmont)
+> Fam/Mod/Ste : 6:76:4
+> Topology    : 1 socket, 4 cores / 4 threads
+> Memory      : 2G
+> Storage     : onboard flash, XFS filesystem
 > 
+> [1] 
+> https://www.dell.com/en-us/work/shop/wyse-endpoints-and-software/wyse-3040-thin-client/spd/wyse-3040-thin-client
 > 
-
--- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
+> Base frequency and available turbo levels (MHz):
+> 
+>     Min Operating Freq   266 |***
+>     Low Freq Mode        800 |********
+>     Base Freq           2400 |************************
+>     4 Cores             2800 |****************************
+>     3 Cores             2800 |****************************
+>     2 Cores             3200 |********************************
+>     1 Core              3200 |********************************
+> 
+> Tested kernels:
+> 
+> Baseline      : v5.4-rc1,              intel_pstate
+> passive,  schedutil
+> Comparison #1 : v5.4-rc1,              intel_pstate active
+> ,  powersave
+> Comparison #2 : v5.4-rc1, this patch,  intel_pstate
+> passive,  schedutil
+> 
+> tbench, hackbench and kernbench performed the same under all three
+> kernels;
+> dbench ran faster with intel_pstate/powersave and the git unit tests
+> were a
+> lot faster with intel_pstate/powersave and invariant schedutil wrt
+> the
+> baseline. Not that any of this is terrbily interesting anyway, one
+> doesn't buy
+> an Atom system to go fast. Power consumption regressions aren't
+> expected but
+> we lack the equipment to make that measurement. Turbostat seems to
+> think that
+> reading RAPL on this machine isn't a good idea and we're trusting
+> that
+> decision.
+> 
+> comparison ratio of performance with baseline; 1.00 means neutral,
+> lower is better:
+> 
+>                       I_PSTATE      FREQ-INV
+>     ----------------------------------------
+>     dbench                0.90             ~
+>     kernbench             0.98          0.97
+>     gitsource             0.63          0.43
+> 
+> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> ---
+>  arch/x86/kernel/smpboot.c | 29 +++++++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 4d192abf337d..8988177064be 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -1821,6 +1821,24 @@ static bool turbo_disabled(void)
+>  	return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
+>  }
+>  
+> +static bool slv_set_cpu_max_freq(u64 *ratio, u64 *turbo_ratio)
+> +{
+> +	int err;
+> +
+> +	err = rdmsrl_safe(MSR_ATOM_CORE_RATIOS, ratio);
+> +	if (err)
+> +		return false;
+> +
+> +	err = rdmsrl_safe(MSR_ATOM_CORE_TURBO_RATIOS, turbo_ratio);
+> +	if (err)
+> +		return false;
+> +
+> +	*ratio = (*ratio >> 16) & 0x3F;      /* max P state ratio */
+> +	*turbo_ratio = *turbo_ratio & 0x3F;  /* 1C turbo ratio */
+> +
+> +	return true;
+> +}
+> +
+>  #include <asm/cpu_device_id.h>
+>  #include <asm/intel-family.h>
+>  
+> @@ -1984,19 +2002,14 @@ static bool core_set_cpu_max_freq(u64 *ratio,
+> u64 *turbo_ratio)
+>  
+>  static void intel_set_cpu_max_freq(void)
+>  {
+> -	/*
+> -	 * TODO: add support for:
+> -	 *
+> -	 * - Atom Silvermont
+> -	 *
+> -	 * which all now get by default arch_max_freq =
+> SCHED_CAPACITY_SCALE
+> -	 */
+> -
+>  	u64 ratio = 1, turbo_ratio = 1;
+>  
+>  	if (turbo_disabled())
+>  		return;
+>  
+> +	if (slv_set_cpu_max_freq(&ratio, &turbo_ratio))
+> +		goto set_value;
+> +
+>  	if (glm_set_cpu_max_freq(&ratio, &turbo_ratio))
+>  		goto set_value;
+>  
 
