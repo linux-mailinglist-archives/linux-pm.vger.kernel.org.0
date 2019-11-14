@@ -2,91 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CEBFCED3
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 20:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCCFFCF34
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 21:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbfKNTjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 14:39:43 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44119 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbfKNTjn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 14:39:43 -0500
-Received: by mail-oi1-f195.google.com with SMTP id s71so6359859oih.11
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 11:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0qaQkNh+GwkOF+p4ly8ErfnaN1DdWL0XCLZl3cfnx0U=;
-        b=hHhiugikMlvmnXY5OlPpArh17lbPea4isMp4gtfpQVX0k1giOLMErHW7H/USxzM3h/
-         jOQcKrFZNTOTuT+89N0iSB1mRtJRzmb60d2eKp8TGgbav6sVp7nnwOV4PtWkU6oydc3p
-         iy80YEdHK54gK3kWYSJOOOgumGhCXZB+Gt9f1n0Wlv1anT2AbI4d4NJDzagXxEUr7EGr
-         RyPk20WvXOee+EYrxxcZDcM8c757d8l8vlwKKer+SnXUSBJa3MgEj0SMw7r6Kv7vQ+O3
-         jJm01sKIsxqgYKTeJ/yS0eGvLjTXI4mSI+xzujNOGtlrW9v2ASsZUAWsRvuc/wk2e7/i
-         9QMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0qaQkNh+GwkOF+p4ly8ErfnaN1DdWL0XCLZl3cfnx0U=;
-        b=bdHgzIzK+LzIyoXDEDSMNXI6pcp1eHDkz1Wnn0+kc4PH+DrHKiwImsCKJwMU3dMQ3Q
-         Gvl+qGACKgp6EQNwdfp8n1BJQGQrJIUSWQrAMHPLS3Mjg9ovi/Rlzlg8pdBRHPOGtDYp
-         dewflMP/p3jj4ldmDJY8vOaXbrNY90S69THGDVQmJB/JljzurvWcZgLOzfTW0i+1Rlq+
-         TEMUQ4iPMVno312qr1w+lJ6fHrNRDVE5I2JooZK59iQeq4XTcK7BIGYjVeWsNxdgz4vl
-         cbllFuWJk4yvaffR68forUV+wplAMjIcvUTe7aSYJ9ZfU2pbe6Ah45QkDdFCPl1SkXPL
-         1XGA==
-X-Gm-Message-State: APjAAAU4IbYA2OmJbJfqoeY2VlmduTTBljAXc9GGSxG5Y+P0A8nuUFLC
-        InflXwaCjajLTrdsJ9aXlUkTuOrtk3+SWVCLmoqI1A==
-X-Google-Smtp-Source: APXvYqx3fXNqkZI16D4D5lPb7+21HLSvnaDSZr50dgUF+ElE4iLArszfeHeTjd+60PQkHrdyr4vkZoVyG160Ab8Cb58=
-X-Received: by 2002:aca:d558:: with SMTP id m85mr4669663oig.43.1573760382147;
- Thu, 14 Nov 2019 11:39:42 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20190724014230epcas5p371a5fdee330f91a646d619fbcc024acf@epcas5p3.samsung.com>
- <20190724014222.110767-1-saravanak@google.com> <cb0d4aad-81e4-0b8d-40f2-7f58ef1e38d9@samsung.com>
- <CAGETcx-tUtnX0T47YGdf7-cgp6e8K9Rgb34Mfe5Za9L4YMGS1g@mail.gmail.com> <20191114083532.vmccmqgj2uj73tcn@vireshk-i7>
-In-Reply-To: <20191114083532.vmccmqgj2uj73tcn@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 14 Nov 2019 11:39:06 -0800
-Message-ID: <CAGETcx9ccBgH2cjHMuecLRNJzTZTC_WZSGiWT-476Dqf2vADkQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] Add required-opps support to devfreq passive gov
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        id S1726952AbfKNUKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 15:10:43 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:58014 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726613AbfKNUKn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Nov 2019 15:10:43 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3F2691A00A6;
+        Thu, 14 Nov 2019 21:10:40 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 21B9E1A009D;
+        Thu, 14 Nov 2019 21:10:40 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 05AF02060A;
+        Thu, 14 Nov 2019 21:10:38 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH RFC v6 0/9] interconnect: Add imx support via devfreq
+Date:   Thu, 14 Nov 2019 22:09:47 +0200
+Message-Id: <cover.1573761527.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 12:35 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 14-11-19, 00:23, Saravana Kannan wrote:
-> > Thanks for checking. I haven't abandoned this patch series. This patch
-> > series depends on "lazy linking" of required-opps to avoid a cyclic
-> > dependency between devfreq and OPP table population. But Viresh wasn't
-> > happy with my implementation of the lazy liking for reasonable
-> > reasons.
-> >
-> > I had a chat with Viresh during one of the several conferences that I
-> > met him at. To fix the lazy linking in the way he wanted it meant we
-> > had to fix other issues in the OPP framework that arise when OPP
-> > tables are shared in DT but not in memory. So he was kind enough to
-> > sign up to add lazy linking support to OPPs so that I won't have to do
-> > it. So, I'm waiting on that. So once that's added, I should be able to
-> > drop a few patches in this series, do some minor updates and then this
-> > will be good to go.
->
-> I am fixing few other issues in OPP core right now and lazy linking
-> is next in the list :)
+This series adds interconnect scaling support for imx8m series chips. It uses a
+per-SOC interconnect provider layered on top of multiple instances of devfreq
+for scalable nodes along the interconnect.
 
-Thanks Viresh! Glad the offer still stands :)
+Existing qcom interconnect providers mostly translate bandwidth requests into
+firmware calls but equivalent firmware on imx8m is much thinner. Scaling
+support for individual nodes is implemented as distinct devfreq drivers
+instead.
 
--Saravana
+The imx interconnect provider doesn't communicate with devfreq directly
+but rather computes "minimum frequencies" for nodes along the path and
+creates dev_pm_qos requests.
+
+Since there is no single devicetree node that can represent the
+"interconnect" the main NOC is picked as the "interconnect provider" and
+will probe the interconnect platform device if #interconnect-cells is
+present. This avoids introducing "virtual" devices but it means that DT
+bindings of main NOC includes properties for both devfreq and
+interconnect.
+
+This depends on other series for devfreq pm/qos and ddrc:
+	https://patchwork.kernel.org/cover/11244283/
+	https://patchwork.kernel.org/cover/11212887/
+	https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196443
+
+Also available as a github branch (with various unrelated changes):
+	https://github.com/cdleonard/linux/tree/next_imx_busfreq
+
+Changes since RFCv5:
+* Replace scanning for interconnect-node-id with explicit
+scalable-nodes/scalable-node-ids property on NoC.
+* Now passes make `dtbs_check`
+* Remove struct imx_icc_provider
+* Switch to of_icc_xlate_onecell
+* Use of_find_device_by_node to fetch QoS target, this causes fewer probe
+deferrals, removes dependency on devfreq API and even allows reloading ddrc
+module at runtime
+* Add imx_icc_node_destroy helper
+* Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
+Link: https://patchwork.kernel.org/cover/11222015/
+
+Changes since RFCv4:
+* Drop icc proxy nonsense
+* Make devfreq driver for NOC probe the ICC driver if
+#interconnect-cells is present
+* Move NOC support to interconnect series and rename the node in DT
+* Add support for all chips at once, differences are not intereseting
+and there is more community interest for 8mq than 8mm.
+Link: https://patchwork.kernel.org/cover/11111865/
+
+Changes since RFCv3:
+* Remove the virtual "icc" node and add devfreq nodes as proxy providers
+* Fix build on 32-bit arm (reported by kbuilt test robot)
+* Remove ARCH_MXC_ARM64 (never existed in upstream)
+* Remove _numlinks, calculate instead
+* Replace __BUSFREQ_H header guard
+* Improve commit message and comment spelling
+* Fix checkpatch issues
+Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
+
+Changes since RFCv2 and initial work by Alexandre Bailon:
+* Relying on devfreq and dev_pm_qos instead of CLK
+* No more "platform opp" stuff
+* No more special suspend handling: use suspend-opp on devfreq instead
+* Replace all mentions of "busfreq" with "interconnect"
+Link to v2: https://patchwork.kernel.org/cover/11021563/
+
+Leonard Crestez (9):
+  dt-bindings: interconnect: Add bindings for imx8m noc
+  PM / devfreq: Add generic imx bus scaling driver
+  PM / devfreq: imx: Register interconnect device
+  interconnect: Add imx core driver
+  interconnect: imx: Add platform driver for imx8mm
+  interconnect: imx: Add platform driver for imx8mq
+  interconnect: imx: Add platform driver for imx8mn
+  arm64: dts: imx8m: Add NOC nodes
+  arm64: dts: imx8m: Add interconnect provider properties
+
+ .../bindings/interconnect/fsl,imx8m-noc.yaml  | 104 ++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  28 ++
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  28 ++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  28 ++
+ drivers/devfreq/Kconfig                       |   9 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx-devfreq.c                 | 187 +++++++++++
+ drivers/interconnect/Kconfig                  |   1 +
+ drivers/interconnect/Makefile                 |   1 +
+ drivers/interconnect/imx/Kconfig              |  17 +
+ drivers/interconnect/imx/Makefile             |   4 +
+ drivers/interconnect/imx/imx.c                | 301 ++++++++++++++++++
+ drivers/interconnect/imx/imx.h                |  60 ++++
+ drivers/interconnect/imx/imx8mm.c             | 105 ++++++
+ drivers/interconnect/imx/imx8mn.c             |  94 ++++++
+ drivers/interconnect/imx/imx8mq.c             | 103 ++++++
+ include/dt-bindings/interconnect/imx8mm.h     |  49 +++
+ include/dt-bindings/interconnect/imx8mn.h     |  41 +++
+ include/dt-bindings/interconnect/imx8mq.h     |  48 +++
+ 19 files changed, 1209 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+ create mode 100644 drivers/devfreq/imx-devfreq.c
+ create mode 100644 drivers/interconnect/imx/Kconfig
+ create mode 100644 drivers/interconnect/imx/Makefile
+ create mode 100644 drivers/interconnect/imx/imx.c
+ create mode 100644 drivers/interconnect/imx/imx.h
+ create mode 100644 drivers/interconnect/imx/imx8mm.c
+ create mode 100644 drivers/interconnect/imx/imx8mn.c
+ create mode 100644 drivers/interconnect/imx/imx8mq.c
+ create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mn.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mq.h
+
+-- 
+2.17.1
+
