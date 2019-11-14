@@ -2,176 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 757B4FD0DF
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 23:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C73FD104
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 23:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbfKNWSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 17:18:05 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:46427 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfKNWSE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 17:18:04 -0500
-Received: by mail-oi1-f193.google.com with SMTP id n14so6778504oie.13;
-        Thu, 14 Nov 2019 14:18:03 -0800 (PST)
+        id S1726952AbfKNWiN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 17:38:13 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:43107 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726881AbfKNWiN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 17:38:13 -0500
+Received: by mail-pl1-f196.google.com with SMTP id a18so3309063plm.10
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 14:38:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:to:subject:from:user-agent:date;
+        bh=p4y/u0pJZ4ht/TVnTh39A/nft5VvdZ/DB4gpmQC3eKE=;
+        b=R5r44sicHCxyOg50fkAynKsN7Vct8b4lVY3vLt/krsrcaSxBxuEOssTswUgaCguWrX
+         Tr/1JgiVI6HEfXHF1XdM4QNG5NwEWwhNGArtpxFPCgeQg9T/JUcLWWU+Z0fKERu1fyWF
+         YHeuDO1ycha3/W1d+56fpvv1NhnbCHZfnNoKE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bvaIXmyjkpLo8dw69tP+rWKaaoE3Lzk6tMGk7heZwRg=;
-        b=gQauNC0wiLdiA381knU7UBewKdSum8muOypnCmCbH5qsiUoCpNfk4jEFGRUKvs+bHg
-         sFSeMasrVcOaoXunP1thtomJ4fyqEGS47KngoEjz/OmBsCEs/cWgrEMjy16gd5wOqQog
-         ikmlMN4190x1E6O624QO8uTGd8mYEWJHV8D50TKrCxrWg2fH/SY84La86/B74akry6nZ
-         cFrVNfuKZiWeA3xK7bd7VlBZeqgttk5oZAgUkNIsbzg6bllOxJY8MywlGeUkTwd8JqQ8
-         142UVY/Fyd1uhhcSdM2+A+epATLkf8K9qrtAxRwPLOV0wS0dOzunEZgnf/9vlmsW1+Oo
-         nOvQ==
-X-Gm-Message-State: APjAAAVWQPXEpXEWzPVuRGKgasX11X7vTSvKJaBy5YeRFsv7GdAtCfLN
-        CXX+14pX6ut6nKAnnDuodCOJtEBqHUiB+2NCnPM=
-X-Google-Smtp-Source: APXvYqyN/BifFeHZOmj/U1xV2A+uIjeMTaXFtyUp9OTDS9tnC8cvy7HwaNh2lJCTtzTLS9KfQVPhQquagUJQrMK0qrc=
-X-Received: by 2002:aca:c753:: with SMTP id x80mr5127204oif.115.1573769883243;
- Thu, 14 Nov 2019 14:18:03 -0800 (PST)
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:to:subject:from
+         :user-agent:date;
+        bh=p4y/u0pJZ4ht/TVnTh39A/nft5VvdZ/DB4gpmQC3eKE=;
+        b=We0ubYbgORTrE49iOewCPm/xo8iyLMFS+gRlbc6toXtr4MJOyGrlgCBYcwnNZrRXK7
+         1fsb6XU3oEQsuGnD0KwdiT6M7W3ZYXKK9pNg3nhLLmxrhl1MxctbxRjjKrbfw6j4qtb2
+         6TahlYn+xFqPCpqGhC7ELlsgkt5zzcIO5PTrcSgUJ4vJ4ZVELQOQPcyTt5U6/3Ct6gLC
+         GSx8yeoY0NrqYmvTfa0soWCP9O7vPc6/7In6HFi2J6Rj00gW1tCrgDpKiTl20v7oPf8I
+         qwxU2tXa4yhfdcpHdNx6MclYJ4tijhq9BT6Ay3lDBBlOZvQM4LRBnjIsL+VlnbgzX7rw
+         0uYQ==
+X-Gm-Message-State: APjAAAXkY1vw3bJNva522ueDp1Nd6Vf5XFEiFeE++Vp14ciYOTvLjVHh
+        9orwiayx5d1daHalDnh5blVkbw==
+X-Google-Smtp-Source: APXvYqyfHmCJR7t2KTVkw2EmAY2DsVM1nVcn+H7AqIvcJSrHnpqB5L2ob+YwQadE1CBnl57hyUOmaQ==
+X-Received: by 2002:a17:90a:bcf:: with SMTP id x15mr16023012pjd.0.1573771092936;
+        Thu, 14 Nov 2019 14:38:12 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id b82sm7853038pfb.33.2019.11.14.14.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2019 14:38:12 -0800 (PST)
+Message-ID: <5dcdd754.1c69fb81.27caf.7022@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20191114204914.21206-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20191114204914.21206-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 14 Nov 2019 23:17:52 +0100
-Message-ID: <CAJZ5v0jE=wODwwMTPx6J8+A60asR5ZAcX2ezbYo8-1-BU3ru5w@mail.gmail.com>
-Subject: Re: [PATCH V1 1/3] cpuidle: Replace use_deepest_state flag by forced_idle_latency_limit_ns
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <c08cf285b8696c4fd00706b85cd3c88d12f97df3.1573499020.git.amit.kucheria@linaro.org>
+References: <cover.1573499020.git.amit.kucheria@linaro.org> <c08cf285b8696c4fd00706b85cd3c88d12f97df3.1573499020.git.amit.kucheria@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>, bjorn.andersson@linaro.org,
+        edubezval@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sivaa@codeaurora.org
+Subject: Re: [PATCH 2/3] drivers: thermal: tsens: Add watchdog support
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 14 Nov 2019 14:38:11 -0800
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 9:49 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> We want to specify a latency constraint when choosing an idle state at
-> play_idle time. Instead of duplicating the information in the
-> structure or propagate the latency in the call stack, change the
-> use_deepest_state by forced_latency_limit_ns to introduce this
-> constraint. The idea being that when it is set, idle is forced
-> (i.e. no governors), but there is a latency limit for the state to
-> use.
->
-> A zero latency constraint means "do not use the deepest idle state
-> path" as the 'use_deepest_state' boolean was used in the
-> cpuidle_idle_call.
->
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Quoting Amit Kucheria (2019-11-11 11:21:28)
+> TSENS IP v2.3 onwards adds support for a watchdog to detect if the TSENS
+> HW FSM is frozen. Add support to detect and restart the FSM in the
+
+Maybe 'frozen' is an ambiguous term? Maybe 'stuck' or 'has stopped
+making progress'?
+
+> driver. The watchdog is configured by the bootloader, we just enable the
+> feature in the kernel.
+
+Does it work to enable it if we don't configure it in the bootloader?
+
+>=20
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  drivers/cpuidle/cpuidle.c | 10 +++++-----
->  include/linux/cpuidle.h   |  6 +++---
->  kernel/sched/idle.c       |  6 +++---
->  3 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 44ae39f2b47a..62226fadc02d 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -100,19 +100,19 @@ static int find_deepest_state(struct cpuidle_driver *drv,
->
->  /**
->   * cpuidle_use_deepest_state - Set/clear governor override flag.
-> - * @enable: New value of the flag.
-> + * @latency_limit_ns: A latency limit constraint
->   *
-> - * Set/unset the current CPU to use the deepest idle state (override governors
-> - * going forward if set).
-> + * Set/unset the current CPU to use the deepest idle state with the exit
-> + * latency within @latency_limit_ns
->   */
-> -void cpuidle_use_deepest_state(bool enable)
-> +void cpuidle_use_deepest_state(u64 latency_limit_ns)
->  {
->         struct cpuidle_device *dev;
->
->         preempt_disable();
->         dev = cpuidle_get_device();
->         if (dev)
-> -               dev->use_deepest_state = enable;
-> +               dev->forced_idle_latency_limit_ns = latency_limit_ns;
->         preempt_enable();
->  }
->
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index d23a3b1ddcf6..1f3f4dd01e48 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -83,7 +83,6 @@ struct cpuidle_driver_kobj;
->  struct cpuidle_device {
->         unsigned int            registered:1;
->         unsigned int            enabled:1;
-> -       unsigned int            use_deepest_state:1;
->         unsigned int            poll_time_limit:1;
->         unsigned int            cpu;
->         ktime_t                 next_hrtimer;
-> @@ -91,6 +90,7 @@ struct cpuidle_device {
->         int                     last_state_idx;
->         int                     last_residency;
->         u64                     poll_limit_ns;
-> +       u64                     forced_idle_latency_limit_ns;
->         struct cpuidle_state_usage      states_usage[CPUIDLE_STATE_MAX];
->         struct cpuidle_state_kobj *kobjs[CPUIDLE_STATE_MAX];
->         struct cpuidle_driver_kobj *kobj_driver;
-> @@ -210,7 +210,7 @@ extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->                                       struct cpuidle_device *dev);
->  extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->                                 struct cpuidle_device *dev);
-> -extern void cpuidle_use_deepest_state(bool enable);
-> +extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
->  #else
->  static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->                                              struct cpuidle_device *dev)
-> @@ -218,7 +218,7 @@ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
->                                        struct cpuidle_device *dev)
->  {return -ENODEV; }
-> -static inline void cpuidle_use_deepest_state(bool enable)
-> +static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
->  {
->  }
->  #endif
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index 8dad5aa600ea..d4681b3d7074 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -165,7 +165,7 @@ static void cpuidle_idle_call(void)
->          * until a proper wakeup interrupt happens.
->          */
->
-> -       if (idle_should_enter_s2idle() || dev->use_deepest_state) {
-> +       if (idle_should_enter_s2idle() || dev->forced_idle_latency_limit_ns) {
->                 if (idle_should_enter_s2idle()) {
->                         rcu_idle_enter();
->
-> @@ -328,7 +328,7 @@ void play_idle(unsigned long duration_us)
->         rcu_sleep_check();
->         preempt_disable();
->         current->flags |= PF_IDLE;
-> -       cpuidle_use_deepest_state(true);
-> +       cpuidle_use_deepest_state(1);
+>  drivers/thermal/qcom/tsens-common.c | 41 +++++++++++++++++++++++++++++
+>  drivers/thermal/qcom/tsens-v2.c     | 10 +++++++
+>  drivers/thermal/qcom/tsens.h        | 12 +++++++++
+>  3 files changed, 63 insertions(+)
+>=20
+> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/t=
+sens-common.c
+> index 2989cb952cdb..9432518502a7 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -794,6 +820,21 @@ int __init init_common(struct tsens_priv *priv)
+>                 }
+>         }
+> =20
+> +       if (tsens_version(priv) > VER_1_X &&  ver_minor > 2) {
+> +               /* Watchdog is present only on v2.3+ */
+> +               for (i =3D 0, j =3D WDOG_BARK_STATUS; j <=3D CC_MON_MASK;=
+ i++, j++) {
 
-This is kind of artificial without the changes in the second patch, so
-I would fold the [2/3] into this one.
+The variable 'i' is not actually used in this loop. What's going on?
 
-Apart from that the patches look reasonable to me.
-
->
->         it.done = 0;
->         hrtimer_init_on_stack(&it.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> @@ -339,7 +339,7 @@ void play_idle(unsigned long duration_us)
->         while (!READ_ONCE(it.done))
->                 do_idle();
->
-> -       cpuidle_use_deepest_state(false);
-> +       cpuidle_use_deepest_state(0);
->         current->flags &= ~PF_IDLE;
->
->         preempt_fold_need_resched();
-> --
+> +                       priv->rf[j] =3D devm_regmap_field_alloc(dev, priv=
+->tm_map,
+> +                                                             priv->field=
+s[j]);
+> +                       if (IS_ERR(priv->rf[j])) {
+> +                               ret =3D PTR_ERR(priv->rf[j]);
+> +                               goto err_put_device;
+> +                       }
+> +               }
+> +               /* Enable WDOG and disable cycle completion monitoring */
+> +               regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
+> +               regmap_field_write(priv->rf[CC_MON_MASK], 1);
+> +       }
