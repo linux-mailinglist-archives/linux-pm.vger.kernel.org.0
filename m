@@ -2,112 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8396FBD9B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 02:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DB5FBDBF
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 02:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbfKNBqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 20:46:30 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:63048 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbfKNBqa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 20:46:30 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191114014622epoutp039334242407ac5cb77641de7f796d9516~W5Cigpcn_1805518055epoutp03T
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 01:46:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191114014622epoutp039334242407ac5cb77641de7f796d9516~W5Cigpcn_1805518055epoutp03T
+        id S1726473AbfKNB5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 20:57:12 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:53062 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbfKNB5M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 20:57:12 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20191114015708epoutp04379f368ae6c2256040764c9f69c4a009~W5L7s8k9O1876718767epoutp046
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 01:57:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20191114015708epoutp04379f368ae6c2256040764c9f69c4a009~W5L7s8k9O1876718767epoutp046
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1573695982;
-        bh=ETZHV/D1P8aQur4fGuxnAaRu9rS7d8NaSd/KyDGj9Ok=;
+        s=mail20170921; t=1573696628;
+        bh=+p2bWoVto7KhkPJxdL4vv44kLGOYKuDdFh7byFPtH1U=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=fOpaukgHgpPOf3HU0uuG+u/yWuOGlpiMRUzip8GXZ8nYUZBe8yfUAvlGe+rrxMhPS
-         dQrx3xOON5cC7ZoV6AKf8fpIClfEMnfOXTszQblfh9HrbryvUiFe6/moomWFNWP5Lc
-         28f9H2/yDLfFeiiuQFD6VHbqjB21vuwQ+gZ2qpho=
+        b=SOAeCywnnWtaUMASHXqTvVp4VapHRrNtaNZZ77cTIVqAT05qF+scmai53eOA2M+1Y
+         TEuCkVjEvu3mfkvIrdYh7ALa6+w1iPHnWzYZCWZJ3BnpTsO3OWtQ/LtoNudxqRI0BB
+         bKu11oqDXjF66E3sxUXSqossgEjamAdnzN9lI6Q0=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191114014622epcas1p2ebc315e185483cad764014dd6db2384c~W5CiFVpjO2598425984epcas1p2t;
-        Thu, 14 Nov 2019 01:46:22 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47D48D0ClDzMqYkf; Thu, 14 Nov
-        2019 01:46:20 +0000 (GMT)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20191114015708epcas1p41003b0952a12dbe55bd04f90f8d34476~W5L7XBRq31425214252epcas1p4R;
+        Thu, 14 Nov 2019 01:57:08 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47D4Nc1532zMqYkq; Thu, 14 Nov
+        2019 01:57:04 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F6.7E.04085.BE1BCCD5; Thu, 14 Nov 2019 10:46:19 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A3.89.04068.074BCCD5; Thu, 14 Nov 2019 10:57:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191114014619epcas1p2786e37229e73ebc896f3e130aa559830~W5CfWY9lY1796017960epcas1p2X;
-        Thu, 14 Nov 2019 01:46:19 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191114014619epsmtrp1c85b20e86b14df911c8cbc12577fc424~W5CfVf2LZ0241402414epsmtrp1N;
-        Thu, 14 Nov 2019 01:46:19 +0000 (GMT)
-X-AuditID: b6c32a37-287189c000000ff5-0d-5dccb1ebc0ca
+        20191114015703epcas1p2e8c4eed763fae8754d9aa8a2740226fc~W5L3GpLKZ1143411434epcas1p2Z;
+        Thu, 14 Nov 2019 01:57:03 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191114015703epsmtrp296dd0952c00d809498cfc6ea9b7813e5~W5L3FzCij0198901989epsmtrp2n;
+        Thu, 14 Nov 2019 01:57:03 +0000 (GMT)
+X-AuditID: b6c32a39-f5fff70000000fe4-05-5dccb4708d98
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4E.02.24756.BE1BCCD5; Thu, 14 Nov 2019 10:46:19 +0900 (KST)
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.60.25663.F64BCCD5; Thu, 14 Nov 2019 10:57:03 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191114014619epsmtip109eaa2fcdeb0ca6ab6fcb31e1cfdd57f~W5CfFEcWY1137411374epsmtip1r;
-        Thu, 14 Nov 2019 01:46:19 +0000 (GMT)
-Subject: Re: [PATCH 7/7] devfreq: move statistics to separate struct
+        20191114015703epsmtip113bb9be563050f71cb2ffcfa63e238ce~W5L21TObb1818918189epsmtip1R;
+        Thu, 14 Nov 2019 01:57:03 +0000 (GMT)
+Subject: Re: [PATCH 5/7] devfreq: move transition statistics to devfreq
+ profile structure
 To:     Kamil Konieczny <k.konieczny@samsung.com>
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Kamil Konieczny <k.konieczny@partner.samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <4942d2ad-fef7-89be-91c1-c02c319546ff@samsung.com>
-Date:   Thu, 14 Nov 2019 10:52:04 +0900
+Message-ID: <72e517d9-725d-b05d-028f-153bb6684df3@samsung.com>
+Date:   Thu, 14 Nov 2019 11:02:48 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191113091336.5218-8-k.konieczny@samsung.com>
+In-Reply-To: <20191113091336.5218-6-k.konieczny@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0hTURzu7G5312x1Wpm//KPmjSAFdde5vIpGkckqA6mICGTd9KLiXtw7
-        oweUVpr2tIyyYQ8oyaSaLit7uVLBrC1728uIJr1TKiyjsrbdRf73/b7z/c53vt85hyLUrWQU
-        VWix84KFM9HkaPn59piEuA9Nnhxtb28a21TjVLC7Wv8g9uiXGgW72/eBYLu7G5Wsd9NHJevy
-        PVKw9y/VkuzXnR2IrelulbGnO3qV7LPSenL2GIOroZI0nD2+0XC9/4rMsKu5ARm+uqZkK1YU
-        pRXwXB4vaHhLrjWv0JKfTi9cYpxr1M/UMnFMCptMayycmU+nM7Ky4zILTf7j0ZrVnKnYT2Vz
-        okgnzEoTrMV2XlNgFe3pNG/LM9lSbPEiZxaLLfnxuVZzKqPVJur9wpVFBfd8TqWt04HWlHgf
-        yEtQ3/ptKIwCnAQ39lYT29BoSo1bEPw+VauQii8I+n+8kUnFNwQ3Nntl/1q8l5uRtHAVgafM
-        GSoGEPTUVxIB1QScAZ69m8gAnojj4GNLXdCEwG4Cyi/fDW5F4lhwv30cFI3D0fBwyIcCWIVn
-        wf7Dd4IbyfF0aO90+XmKisDL4dYgJ0nGQ9fBPnmADsNp0PJiQYAmcCQ87Tsik/BUuPCpNmgL
-        +IASjnzvUEgJMmBoX5NSwhPgfWdzCEfBu93lIbweTnZ1kFJzBYJm951Qsw7cddWygDGBY8B5
-        KUGio+Hiz0NIMh4L/YM7FAEJYBVUlKslyTS4/7I3NMTJcGxrJVmFaMeINI4RERwjIjj+mx1F
-        8gY0ibeJ5nxeZGy6kdftQsG3G5vcghpvZ7UhTCF6jOpahCdHreBWi2vNbQgogp6ommHxU6o8
-        bu06XrAahWITL7YhvX/We4ioiFyr/ydY7EZGn6jT6dgkZqaeYehI1ZwTdTlqnM/Z+SKet/HC
-        vz4ZFRZVgmyZzh5jeE/3Iv30qqGKmKyhzouDOQs9y/peCMLw3SdsdVL1KK1vAbehrn4cu2Nx
-        ZknK9ugiNCo3MWK7M3ZJ+Xw3tS9R8L5+BBvPnPM914qlv7rid9bcfDw8b8uvSfLkhJeRt3ra
-        qwYbMwbuvX1lWHpm7qoNZZg4kDoQfjq8X5P0mZaLBRwTSwgi9xfRneBi0QMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSnO7rjWdiDU69lLTYOGM9q0Xfvv+M
-        Fgs+zWC16H/8mtni/PkN7BZnm96wW2x6fI3V4vKuOWwWn3uPMFrMOL+PyWLtkbvsFrcbV7A5
-        8HhsWtXJ5rF5Sb3HwXd7mDz6tqxi9Pi8SS6ANYrLJiU1J7MstUjfLoEr49Lj9ewFx2cxVjSc
-        vcLSwPikuouRk0NCwETi7O4tjF2MXBxCArsZJZp3rmWFSEhKTLt4lLmLkQPIFpY4fLgYouYt
-        o0TP7kMsIDXCAi4SZyY1sYHYIgK6Em92LGUGKWIWOMgscW/9I6ipBxklNt5aBDaVTUBLYv+L
-        G2Ad/AKKEld/PGYEsXkF7CSmzbvADGKzCKhKHD6+CSwuKhAh8Xz7DagaQYmTM5+wgFzEKWAj
-        seOeF0iYWUBd4s+8S8wQtrjErSfzmSBseYntb+cwT2AUnoWkexaSlllIWmYhaVnAyLKKUTK1
-        oDg3PbfYsMAwL7Vcrzgxt7g0L10vOT93EyM4ArU0dzBeXhJ/iFGAg1GJh/eA6JlYIdbEsuLK
-        3EOMEhzMSiK8GnlAId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rxP845FCgmkJ5akZqemFqQWwWSZ
-        ODilGhiduB3W1GY9UZwyaaPDHJ7/E9U5mcIL75aVRK+cG3x2CR9jxOyZeVETnlpIvbhyMSLb
-        923WhURzl59pvhFRLiFC+ddMftlYXzi9IKu79RSL1o5bOv2ZMmpn8qcuOb7fd5LKdq2PLA/k
-        D2ueP/Pz+blVmmouwnufCksoa6VIrHusrRA6ud/plKISS3FGoqEWc1FxIgA7AEMZvAIAAA==
-X-CMS-MailID: 20191114014619epcas1p2786e37229e73ebc896f3e130aa559830
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmvm7BljOxBpPusFtsnLGe1aJv339G
+        iwWfZrBanD+/gd3ibNMbdovLu+awWXzuPcJosfbIXXaL240r2Bw4PTat6mTzOPhuD5NH35ZV
+        jB6fN8kFsERl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6
+        ZeYA3aKkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKbAs0CtOzC0uzUvXS87PtTI0
+        MDAyBSpMyM7Y3NvCVtAUVzF11y/mBsaT3l2MnBwSAiYSW19NY+li5OIQEtjBKHF54182COcT
+        o8TOl83MEM43Rokfvx+wwbSca70OldjLKLHox2QmCOc9UP/Bv4wgVcIC0RLPt31nB7FFBHQl
+        3uxYCtbBLHCZSeLa5rNgCTYBLYn9L26AjeUXUJS4+uMxWDOvgJ3EpHcHwGpYBFQlTp+aAFTD
+        wSEqECFx+msiRImgxMmZT1hAbE4BG4nmF5PAxjALiEvcejKfCcKWl9j+dg4zxNWf2SSW9dtC
+        2C4Sk/eth4oLS7w6voUdwpaS+PxuL9SX1RIrTx4Bh4WEQAejxJb9F1ghEsYS+5eCfMwBtEBT
+        Yv0ufYiwosTO33MZIfbySbz72sMKUiIhwCvR0SYEUaIscfnBXSYIW1JicXsn2wRGpVlIvpmF
+        5INZSD6YhbBsASPLKkax1ILi3PTUYsMCU+TY3sQITqdaljsYj53zOcQowMGoxMN7QPRMrBBr
+        YllxZe4hRgkOZiURXo08oBBvSmJlVWpRfnxRaU5q8SFGU2BYT2SWEk3OB6b6vJJ4Q1MjY2Nj
+        CxNDM1NDQyVxXsflS2OFBNITS1KzU1MLUotg+pg4OKUaGKu09cVu56o93ll+qLqXdWmrz9PX
+        OzkSD/4+srnYUsVGzWTatK17fQ8LiUcIvH2fo2FtUfmxepeJzZKFUexxnAErmEzabbc58xjY
+        H+p/fODd57cZAuWFp5e4Gxf41jjelyq7qylty3fH4bRCTqKbxssHPzgier4Y//nVtTtKaflq
+        OdYLYmpTlViKMxINtZiLihMBsQUPHb0DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCIsWRmVeSWpSXmKPExsWy7bCSnG7+ljOxBk2PJSw2zljPatG37z+j
+        xYJPM1gtzp/fwG5xtukNu8XlXXPYLD73HmG0WHvkLrvF7cYVbA6cHptWdbJ5HHy3h8mjb8sq
+        Ro/Pm+QCWKK4bFJSczLLUov07RK4Mjb3trAVNMVVTN31i7mB8aR3FyMnh4SAicS51uvMXYxc
+        HEICuxkl5v+bywKRkJSYdvEoUIIDyBaWOHy4GCQsJPCWUeLzCQ0QW1ggWuL5tu/sILaIgK7E
+        mx1LmUFsZoGrTBI7TjtBzDzIKPFzzk2wBJuAlsT+FzfYQGx+AUWJqz8eM4LYvAJ2EpPeHQAb
+        xCKgKnH61ASwGlGBCInn229A1QhKnJz5BOw2TgEbieYXk9gglqlL/Jl3CWqxuMStJ/OZIGx5
+        ie1v5zBPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cT
+        IziutLR2MJ44EX+IUYCDUYmHV0LiTKwQa2JZcWXuIUYJDmYlEV6NPKAQb0piZVVqUX58UWlO
+        avEhRmkOFiVxXvn8Y5FCAumJJanZqakFqUUwWSYOTqkGxuU37FacP8AnJKAntaA+7keaz1zB
+        TKPvASdOnXpg6WfQcF328Y4jwcwJnd8/fjYxnhho0zxH3F49e36n2LGzFXl3my14F99Vq56X
+        L5/Bpmg631PzHWtY7/qc8COKlYZ+xpF3tzS8ZTv5R3xHDPvRlIU5qlecA199n2zjrSAhueTA
+        4e91QmEHlViKMxINtZiLihMB0Aut46cCAAA=
+X-CMS-MailID: 20191114015703epcas1p2e8c4eed763fae8754d9aa8a2740226fc
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191113091354eucas1p265de4985d167814f5080fbdf21b75a0a
+X-CMS-RootMailID: 20191113091353eucas1p283be3173c7a9ea726b4767f9cb113f0f
 References: <20191113091336.5218-1-k.konieczny@samsung.com>
-        <CGME20191113091354eucas1p265de4985d167814f5080fbdf21b75a0a@eucas1p2.samsung.com>
-        <20191113091336.5218-8-k.konieczny@samsung.com>
+        <CGME20191113091353eucas1p283be3173c7a9ea726b4767f9cb113f0f@eucas1p2.samsung.com>
+        <20191113091336.5218-6-k.konieczny@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -115,529 +114,336 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Kamil,
 
-The 'freq_table' and 'max_state' in the devfreq_dev_profile
-were used in the ARM Mali device driver[1][2][3]. Although ARM Mali
-device driver was posted to mainline kernel, they used
-them for a long time. It means that this patch break
-the compatibility. The ARM Mali drivers are very
-important devfreq device driver. 
+The devfreq_dev_profile structure have to only contain the each devfreq device
+callback function/data which are used in the devfreq core.
 
-[1] https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/bifrost-kernel#
-[2] https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/midgard-kernel
-[3] https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-drivers/utgard-kernel
+The generated information after registered the devfreq device
+with devfreq_add_device() should be stored in the 'struct device'.
 
-Also, the devfreq device driver specifies their own
-information and data into devfreq_dev_profile structure 
-before registering the devfreq device with devfreq_add_device().
-This patch breaks the basic usage rule of devfreq_dev_profile structure.
+The devfreq core need to split out the data between user input
+data (struct devfreq_dev_profile) and the initialized/generated data
+by core (struct devfreq). It is not same with cpufreq. cpufreq
+don't require the any structure like 'devfreq_dev_profile'.
 
-So, I can't agree this patch. Not ack.
+So, I can't agree.
 
-Regards,
+Thanks.
 Chanwoo Choi
 
+
 On 11/13/19 6:13 PM, Kamil Konieczny wrote:
-> Count time and transitions between devfreq frequencies in separate struct
-> for improved code readability and maintenance.
+> Move transition statistics to devfreq profile structure. This is for
+> preparation for moving transition statistics into separate struct.
+> It is safe to do as frequency table and maximum state information are
+> already present in devfreq profile structure and there are no devfreq
+> drivers using more than one instance of devfreq structure per devfreq
+> profile one.
+> 
+> It also makes devfreq code more similar to cpufreq one.
 > 
 > Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
 > ---
->  drivers/devfreq/devfreq.c          | 156 ++++++++++++++++-------------
->  drivers/devfreq/exynos-bus.c       |   6 +-
->  drivers/devfreq/governor_passive.c |  26 +++--
->  include/linux/devfreq.h            |  43 ++++----
->  4 files changed, 129 insertions(+), 102 deletions(-)
+>  drivers/devfreq/devfreq.c | 115 +++++++++++++++++++-------------------
+>  include/linux/devfreq.h   |  25 ++++-----
+>  2 files changed, 70 insertions(+), 70 deletions(-)
 > 
 > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index d79412b0de59..d85867a91230 100644
+> index 6e5a17f4c92c..70533b787744 100644
 > --- a/drivers/devfreq/devfreq.c
 > +++ b/drivers/devfreq/devfreq.c
-> @@ -105,10 +105,11 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
->   */
->  static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
->  {
-> +	struct devfreq_stats *stats = devfreq->profile->stats;
->  	int lev;
+> @@ -128,7 +128,7 @@ static int set_freq_table(struct devfreq *devfreq)
 >  
-> -	for (lev = 0; lev < devfreq->profile->max_state; lev++)
-> -		if (freq == devfreq->profile->freq_table[lev])
-> +	for (lev = 0; lev < stats->max_state; lev++)
-> +		if (freq == stats->freq_table[lev])
->  			return lev;
->  
->  	return -EINVAL;
-> @@ -117,56 +118,64 @@ static int devfreq_get_freq_level(struct devfreq *devfreq, unsigned long freq)
->  static int set_freq_table(struct devfreq *devfreq)
->  {
->  	struct devfreq_dev_profile *profile = devfreq->profile;
-> +	struct devfreq_stats *stats;
->  	struct dev_pm_opp *opp;
->  	unsigned long freq;
-> -	int i, count;
-> +	int i, count, err = -ENOMEM;
->  
->  	/* Initialize the freq_table from OPP table */
->  	count = dev_pm_opp_get_opp_count(devfreq->dev.parent);
->  	if (count <= 0)
->  		return -EINVAL;
->  
-> -	profile->max_state = count;
-> -	profile->freq_table = devm_kcalloc(devfreq->dev.parent,
-> -					count,
-> -					sizeof(*profile->freq_table),
-> -					GFP_KERNEL);
-> -	if (!profile->freq_table) {
-> -		profile->max_state = 0;
-> +	stats = devm_kzalloc(devfreq->dev.parent,
-> +			     sizeof(struct devfreq_stats), GFP_KERNEL);
-> +	if (!stats)
->  		return -ENOMEM;
-> -	}
->  
-> -	for (i = 0, freq = 0; i < profile->max_state; i++, freq++) {
-> +	profile->stats = stats;
-> +	stats->max_state = count;
-> +	stats->freq_table = devm_kcalloc(devfreq->dev.parent,
-> +					 count,
-> +					 sizeof(*stats->freq_table),
-> +					 GFP_KERNEL);
-> +	if (!stats->freq_table)
-> +		goto err_no_mem;
-> +
-> +	for (i = 0, freq = 0; i < count; i++, freq++) {
->  		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
->  		if (IS_ERR(opp)) {
-> -			devm_kfree(devfreq->dev.parent, profile->freq_table);
-> -			profile->max_state = 0;
-> -			return PTR_ERR(opp);
-> +			devm_kfree(devfreq->dev.parent, stats->freq_table);
-> +			stats->max_state = 0;
-> +			err = PTR_ERR(opp);
-> +			goto err_no_mem;
->  		}
->  		dev_pm_opp_put(opp);
-> -		profile->freq_table[i] = freq;
-> +		stats->freq_table[i] = freq;
->  	}
->  
-> -	profile->trans_table = devm_kzalloc(devfreq->dev.parent,
-> -					    array3_size(sizeof(unsigned int),
-> -							count, count),
-> -					    GFP_KERNEL);
-> -	if (!profile->trans_table)
-> +	stats->trans_table = devm_kzalloc(devfreq->dev.parent,
-> +					  array3_size(sizeof(unsigned int),
-> +						      count, count),
-> +					  GFP_KERNEL);
-> +	if (!stats->trans_table)
->  		goto err_no_mem;
->  
-> -	profile->time_in_state = devm_kcalloc(devfreq->dev.parent, count,
-> -					      sizeof(*profile->time_in_state),
-> -					      GFP_KERNEL);
-> -	if (!profile->time_in_state)
-> +	stats->time_in_state = devm_kcalloc(devfreq->dev.parent, count,
-> +					    sizeof(*stats->time_in_state),
-> +					    GFP_KERNEL);
-> +	if (!stats->time_in_state)
->  		goto err_no_mem;
->  
-> -	profile->last_time = get_jiffies_64();
-> -	spin_lock_init(&profile->stats_lock);
-> +	stats->last_time = get_jiffies_64();
-> +	spin_lock_init(&stats->stats_lock);
->  
->  	return 0;
->  err_no_mem:
-> -	profile->max_state = 0;
-> -	return -ENOMEM;
-> +	stats->max_state = 0;
-> +	devm_kfree(devfreq->dev.parent, profile->stats);
-> +	profile->stats = NULL;
-> +	return err;
->  }
->  
->  /**
-> @@ -176,7 +185,7 @@ static int set_freq_table(struct devfreq *devfreq)
+>  	profile->max_state = count;
+>  	profile->freq_table = devm_kcalloc(devfreq->dev.parent,
+> -					profile->max_state,
+> +					count,
+>  					sizeof(*profile->freq_table),
+>  					GFP_KERNEL);
+>  	if (!profile->freq_table) {
+> @@ -157,29 +157,30 @@ static int set_freq_table(struct devfreq *devfreq)
 >   */
 >  int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
 >  {
-> -	struct devfreq_dev_profile *profile = devfreq->profile;
-> +	struct devfreq_stats *stats = devfreq->profile->stats;
+> -	int lev, prev_lev, ret = 0;
+> +	struct devfreq_dev_profile *profile = devfreq->profile;
 >  	unsigned long long cur_time;
->  	int lev, prev_lev, ret = 0;
+> +	int lev, prev_lev, ret = 0;
 >  
-> @@ -184,22 +193,21 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+>  	cur_time = get_jiffies_64();
 >  
 >  	/* Immediately exit if previous_freq is not initialized yet. */
 >  	if (!devfreq->previous_freq) {
-> -		spin_lock(&profile->stats_lock);
-> -		profile->last_time = cur_time;
-> -		spin_unlock(&profile->stats_lock);
-> +		spin_lock(&stats->stats_lock);
-> +		stats->last_time = cur_time;
-> +		spin_unlock(&stats->stats_lock);
+> -		spin_lock(&devfreq->stats_lock);
+> -		devfreq->last_time = cur_time;
+> -		spin_unlock(&devfreq->stats_lock);
+> +		spin_lock(&profile->stats_lock);
+> +		profile->last_time = cur_time;
+> +		spin_unlock(&profile->stats_lock);
 >  		return 0;
 >  	}
 >  
 >  	prev_lev = devfreq_get_freq_level(devfreq, devfreq->previous_freq);
 >  
-> -	spin_lock(&profile->stats_lock);
-> +	spin_lock(&stats->stats_lock);
+> -	spin_lock(&devfreq->stats_lock);
+> +	spin_lock(&profile->stats_lock);
 >  	if (prev_lev < 0) {
 >  		ret = prev_lev;
 >  		goto out;
 >  	}
 >  
-> -	profile->time_in_state[prev_lev] +=
-> -			 cur_time - profile->last_time;
-> +	stats->time_in_state[prev_lev] += cur_time - stats->last_time;
+> -	devfreq->time_in_state[prev_lev] +=
+> -			 cur_time - devfreq->last_time;
+> +	profile->time_in_state[prev_lev] +=
+> +			 cur_time - profile->last_time;
 >  	lev = devfreq_get_freq_level(devfreq, freq);
 >  	if (lev < 0) {
 >  		ret = lev;
-> @@ -207,14 +215,14 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
+> @@ -187,14 +188,14 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
 >  	}
 >  
 >  	if (lev != prev_lev) {
-> -		profile->trans_table[(prev_lev *
-> -				profile->max_state) + lev]++;
-> -		profile->total_trans++;
-> +		stats->trans_table[(prev_lev *
-> +				stats->max_state) + lev]++;
-> +		stats->total_trans++;
+> -		devfreq->trans_table[(prev_lev *
+> -				devfreq->profile->max_state) + lev]++;
+> -		devfreq->total_trans++;
+> +		profile->trans_table[(prev_lev *
+> +				profile->max_state) + lev]++;
+> +		profile->total_trans++;
 >  	}
 >  
 >  out:
-> -	profile->last_time = cur_time;
-> -	spin_unlock(&profile->stats_lock);
-> +	stats->last_time = cur_time;
-> +	spin_unlock(&stats->stats_lock);
+> -	devfreq->last_time = cur_time;
+> -	spin_unlock(&devfreq->stats_lock);
+> +	profile->last_time = cur_time;
+> +	spin_unlock(&profile->stats_lock);
 >  	return ret;
 >  }
 >  EXPORT_SYMBOL(devfreq_update_status);
-> @@ -504,9 +512,9 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
->  		queue_delayed_work(devfreq_wq, &devfreq->work,
->  			msecs_to_jiffies(profile->polling_ms));
+> @@ -474,23 +475,23 @@ EXPORT_SYMBOL(devfreq_monitor_suspend);
+>  void devfreq_monitor_resume(struct devfreq *devfreq)
+>  {
+>  	unsigned long freq;
+> +	struct devfreq_dev_profile *profile = devfreq->profile;
 >  
-> -	spin_lock(&profile->stats_lock);
-> -	profile->last_time = get_jiffies_64();
-> -	spin_unlock(&profile->stats_lock);
-> +	spin_lock(&profile->stats->stats_lock);
-> +	profile->stats->last_time = get_jiffies_64();
-> +	spin_unlock(&profile->stats->stats_lock);
+>  	mutex_lock(&devfreq->lock);
+>  	if (!devfreq->stop_polling)
+>  		goto out;
+>  
+> -	if (!delayed_work_pending(&devfreq->work) &&
+> -			devfreq->profile->polling_ms)
+> +	if (!delayed_work_pending(&devfreq->work) && profile->polling_ms)
+>  		queue_delayed_work(devfreq_wq, &devfreq->work,
+> -			msecs_to_jiffies(devfreq->profile->polling_ms));
+> +			msecs_to_jiffies(profile->polling_ms));
+>  
+> -	spin_lock(&devfreq->stats_lock);
+> -	devfreq->last_time = get_jiffies_64();
+> -	spin_unlock(&devfreq->stats_lock);
+> +	spin_lock(&profile->stats_lock);
+> +	profile->last_time = get_jiffies_64();
+> +	spin_unlock(&profile->stats_lock);
 >  	devfreq->stop_polling = false;
 >  
->  	if (profile->get_cur_freq &&
-> @@ -677,7 +685,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> -	if (devfreq->profile->get_cur_freq &&
+> -		!devfreq->profile->get_cur_freq(devfreq->dev.parent, &freq))
+> +	if (profile->get_cur_freq &&
+> +	    !profile->get_cur_freq(devfreq->dev.parent, &freq))
+>  		devfreq->previous_freq = freq;
+>  
+>  out:
+> @@ -657,7 +658,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
 >  	devfreq->data = data;
 >  	devfreq->nb.notifier_call = devfreq_notifier_call;
 >  
-> -	if (!profile->max_state && !profile->freq_table) {
-> +	if (!profile->stats) {
+> -	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
+> +	if (!profile->max_state && !profile->freq_table) {
 >  		mutex_unlock(&devfreq->lock);
 >  		err = set_freq_table(devfreq);
 >  		if (err < 0)
-> @@ -1282,6 +1290,7 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
->  			      const char *buf, size_t count)
->  {
->  	struct devfreq *df = to_devfreq(dev);
-> +	struct devfreq_stats *stats = df->profile->stats;
->  	unsigned long value;
->  	int ret;
->  
-> @@ -1297,13 +1306,13 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
->  			goto unlock;
->  		}
->  	} else {
-> -		unsigned long *freq_table = df->profile->freq_table;
-> +		unsigned long *freq_table = stats->freq_table;
->  
->  		/* Get minimum frequency according to sorting order */
-> -		if (freq_table[0] < freq_table[df->profile->max_state - 1])
-> +		if (freq_table[0] < freq_table[stats->max_state - 1])
->  			value = freq_table[0];
->  		else
-> -			value = freq_table[df->profile->max_state - 1];
-> +			value = freq_table[stats->max_state - 1];
+> @@ -693,29 +694,29 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  		goto err_out;
 >  	}
 >  
->  	df->min_freq = value;
-> @@ -1326,6 +1335,7 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
->  			      const char *buf, size_t count)
->  {
->  	struct devfreq *df = to_devfreq(dev);
-> +	struct devfreq_stats *stats = df->profile->stats;
->  	unsigned long value;
->  	int ret;
->  
-> @@ -1341,11 +1351,11 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
->  			goto unlock;
->  		}
->  	} else {
-> -		unsigned long *freq_table = df->profile->freq_table;
-> +		unsigned long *freq_table = stats->freq_table;
->  
->  		/* Get maximum frequency according to sorting order */
-> -		if (freq_table[0] < freq_table[df->profile->max_state - 1])
-> -			value = freq_table[df->profile->max_state - 1];
-> +		if (freq_table[0] < freq_table[stats->max_state - 1])
-> +			value = freq_table[stats->max_state - 1];
->  		else
->  			value = freq_table[0];
+> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
+> -			array3_size(sizeof(unsigned int),
+> -				    devfreq->profile->max_state,
+> -				    devfreq->profile->max_state),
+> -			GFP_KERNEL);
+> -	if (!devfreq->trans_table) {
+> +	profile->trans_table = devm_kzalloc(&devfreq->dev,
+> +					    array3_size(sizeof(unsigned int),
+> +							profile->max_state,
+> +							profile->max_state),
+> +					    GFP_KERNEL);
+> +	if (!profile->trans_table) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -ENOMEM;
+>  		goto err_devfreq;
 >  	}
-> @@ -1373,14 +1383,15 @@ static ssize_t available_frequencies_show(struct device *d,
->  					  char *buf)
->  {
->  	struct devfreq *df = to_devfreq(d);
-> +	struct devfreq_stats *stats = df->profile->stats;
->  	ssize_t count = 0;
->  	int i;
 >  
->  	mutex_lock(&df->lock);
+> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
+> -			devfreq->profile->max_state,
+> -			sizeof(*devfreq->time_in_state),
+> -			GFP_KERNEL);
+> -	if (!devfreq->time_in_state) {
+> +	profile->time_in_state = devm_kcalloc(&devfreq->dev,
+> +					      profile->max_state,
+> +					      sizeof(*profile->time_in_state),
+> +					      GFP_KERNEL);
+> +	if (!profile->time_in_state) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -ENOMEM;
+>  		goto err_devfreq;
+>  	}
 >  
-> -	for (i = 0; i < df->profile->max_state; i++)
-> +	for (i = 0; i < stats->max_state; i++)
->  		count += scnprintf(&buf[count], (PAGE_SIZE - count - 2),
-> -				"%lu ", df->profile->freq_table[i]);
-> +				"%lu ", stats->freq_table[i]);
+> -	devfreq->last_time = get_jiffies_64();
+> -	spin_lock_init(&devfreq->stats_lock);
+> +	profile->last_time = get_jiffies_64();
+> +	spin_lock_init(&profile->stats_lock);
 >  
->  	mutex_unlock(&df->lock);
->  	/* Truncate the trailing space */
-> @@ -1398,9 +1409,10 @@ static ssize_t trans_stat_show(struct device *dev,
+>  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
+>  
+> @@ -1402,9 +1403,10 @@ static ssize_t trans_stat_show(struct device *dev,
+>  			       struct device_attribute *attr, char *buf)
 >  {
 >  	struct devfreq *devfreq = to_devfreq(dev);
->  	struct devfreq_dev_profile *profile = devfreq->profile;
-> +	struct devfreq_stats *stats = profile->stats;
-> +	unsigned int max_state = stats->max_state;
+> +	struct devfreq_dev_profile *profile = devfreq->profile;
 >  	ssize_t len;
 >  	int i, j;
-> -	unsigned int max_state = profile->max_state;
+> -	unsigned int max_state = devfreq->profile->max_state;
+> +	unsigned int max_state = profile->max_state;
 >  
 >  	if (!devfreq->stop_polling &&
 >  			devfreq_update_status(devfreq, devfreq->previous_freq))
-> @@ -1411,45 +1423,45 @@ static ssize_t trans_stat_show(struct device *dev,
+> @@ -1415,46 +1417,45 @@ static ssize_t trans_stat_show(struct device *dev,
 >  	len = sprintf(buf, "     From  :   To\n");
 >  	len += sprintf(buf + len, "           :");
 >  
-> -	spin_lock(&profile->stats_lock);
-> +	spin_lock(&stats->stats_lock);
+> -	spin_lock(&devfreq->stats_lock);
+> +	spin_lock(&profile->stats_lock);
 >  	for (i = 0; i < max_state; i++)
 >  		len += sprintf(buf + len, "%10lu",
-> -				profile->freq_table[i]);
-> +				stats->freq_table[i]);
+> -				devfreq->profile->freq_table[i]);
+> +				profile->freq_table[i]);
 >  
 >  	len += sprintf(buf + len, "   time(ms)\n");
 >  
 >  	for (i = 0; i < max_state; i++) {
-> -		if (profile->freq_table[i] == devfreq->previous_freq)
-> +		if (stats->freq_table[i] == devfreq->previous_freq)
+> -		if (devfreq->profile->freq_table[i]
+> -					== devfreq->previous_freq) {
+> +		if (profile->freq_table[i] == devfreq->previous_freq)
 >  			len += sprintf(buf + len, "*");
->  		else
+> -		} else {
+> +		else
 >  			len += sprintf(buf + len, " ");
->  
+> -		}
+> +
 >  		len += sprintf(buf + len, "%10lu:",
-> -				profile->freq_table[i]);
-> +				stats->freq_table[i]);
+> -				devfreq->profile->freq_table[i]);
+> +				profile->freq_table[i]);
 >  		for (j = 0; j < max_state; j++)
 >  			len += sprintf(buf + len, "%10u",
-> -				profile->trans_table[(i * max_state) + j]);
-> +				stats->trans_table[(i * max_state) + j]);
+> -				devfreq->trans_table[(i * max_state) + j]);
+> +				profile->trans_table[(i * max_state) + j]);
 >  		len += sprintf(buf + len, "%10llu\n", (u64)
-> -			jiffies64_to_msecs(profile->time_in_state[i]));
-> +			jiffies64_to_msecs(stats->time_in_state[i]));
+> -			jiffies64_to_msecs(devfreq->time_in_state[i]));
+> +			jiffies64_to_msecs(profile->time_in_state[i]));
 >  	}
 >  
 >  	len += sprintf(buf + len, "Total transition : %u\n",
-> -					profile->total_trans);
-> -	spin_unlock(&profile->stats_lock);
-> +					stats->total_trans);
-> +	spin_unlock(&stats->stats_lock);
+> -					devfreq->total_trans);
+> -	spin_unlock(&devfreq->stats_lock);
+> +					profile->total_trans);
+> +	spin_unlock(&profile->stats_lock);
 >  	return len;
 >  }
 >  static DEVICE_ATTR_RO(trans_stat);
 >  
-> -static void defvreq_stats_clear_table(struct devfreq_dev_profile *profile)
-> +static void defvreq_stats_clear_table(struct devfreq_stats *stats)
+> -static void defvreq_stats_clear_table(struct devfreq *devfreq)
+> +static void defvreq_stats_clear_table(struct devfreq_dev_profile *profile)
 >  {
-> -	unsigned int count = profile->max_state;
+> -	unsigned int count = devfreq->profile->max_state;
 > -
-> -	spin_lock(&profile->stats_lock);
-> -	memset(profile->time_in_state, 0, count * sizeof(u64));
-> -	memset(profile->trans_table, 0, count * count * sizeof(int));
-> -	profile->last_time = get_jiffies_64();
-> -	profile->total_trans = 0;
-> -	spin_unlock(&profile->stats_lock);
-> +	unsigned int count = stats->max_state;
+> -	spin_lock(&devfreq->stats_lock);
+> -	memset(devfreq->time_in_state, 0, count * sizeof(u64));
+> -	memset(devfreq->trans_table, 0, count * count * sizeof(int));
+> -	devfreq->last_time = get_jiffies_64();
+> -	devfreq->total_trans = 0;
+> -	spin_unlock(&devfreq->stats_lock);
+> +	unsigned int count = profile->max_state;
 > +
-> +	spin_lock(&stats->stats_lock);
-> +	memset(stats->time_in_state, 0, count * sizeof(u64));
-> +	memset(stats->trans_table, 0, count * count * sizeof(int));
-> +	stats->last_time = get_jiffies_64();
-> +	stats->total_trans = 0;
-> +	spin_unlock(&stats->stats_lock);
+> +	spin_lock(&profile->stats_lock);
+> +	memset(profile->time_in_state, 0, count * sizeof(u64));
+> +	memset(profile->trans_table, 0, count * count * sizeof(int));
+> +	profile->last_time = get_jiffies_64();
+> +	profile->total_trans = 0;
+> +	spin_unlock(&profile->stats_lock);
 >  }
 >  
 >  static ssize_t trans_reset_store(struct device *dev,
-> @@ -1459,7 +1471,7 @@ static ssize_t trans_reset_store(struct device *dev,
+> @@ -1464,7 +1465,7 @@ static ssize_t trans_reset_store(struct device *dev,
 >  {
 >  	struct devfreq *devfreq = to_devfreq(dev);
 >  
-> -	defvreq_stats_clear_table(devfreq->profile);
-> +	defvreq_stats_clear_table(devfreq->profile->stats);
+> -	defvreq_stats_clear_table(devfreq);
+> +	defvreq_stats_clear_table(devfreq->profile);
 >  
 >  	return count;
 >  }
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index d9f377912c10..b212aae2bb3e 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -496,9 +496,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
->  	}
->  
->  out:
-> -	max_state = bus->devfreq->profile->max_state;
-> -	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
-> -	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
-> +	max_state = profile->stats->max_state;
-> +	min_freq = (profile->stats->freq_table[0] / 1000);
-> +	max_freq = (profile->stats->freq_table[max_state - 1] / 1000);
->  	pr_info("exynos-bus: new bus device registered: %s (%6ld KHz ~ %6ld KHz)\n",
->  			dev_name(dev), min_freq, max_freq);
->  
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index 58308948b863..b2d87a88335c 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -18,6 +18,8 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->  	struct devfreq_passive_data *p_data
->  			= (struct devfreq_passive_data *)devfreq->data;
->  	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
-> +	struct devfreq_stats *parent_stats = parent_devfreq->profile->stats;
-> +	struct devfreq_stats *stats;
->  	unsigned long child_freq = ULONG_MAX;
->  	struct dev_pm_opp *opp;
->  	int i, count, ret = 0;
-> @@ -47,10 +49,14 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->  	 * device. And then the index is used for getting the suitable
->  	 * new frequency for passive devfreq device.
->  	 */
-> -	if (!devfreq->profile || !devfreq->profile->freq_table
-> -		|| devfreq->profile->max_state <= 0)
-> +	if (!devfreq->profile || !devfreq->profile->stats ||
-> +	    devfreq->profile->stats->max_state <= 0 ||
-> +	    !parent_devfreq->profile ||	!parent_devfreq->profile->stats ||
-> +	    parent_devfreq->profile->stats->max_state <= 0)
->  		return -EINVAL;
->  
-> +	stats = devfreq->profile->stats;
-> +	parent_stats = parent_devfreq->profile->stats;
->  	/*
->  	 * The passive governor have to get the correct frequency from OPP
->  	 * list of parent device. Because in this case, *freq is temporary
-> @@ -68,21 +74,21 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->  	 * Get the OPP table's index of decided freqeuncy by governor
->  	 * of parent device.
->  	 */
-> -	for (i = 0; i < parent_devfreq->profile->max_state; i++)
-> -		if (parent_devfreq->profile->freq_table[i] == *freq)
-> +	for (i = 0; i < parent_stats->max_state; i++)
-> +		if (parent_stats->freq_table[i] == *freq)
->  			break;
->  
-> -	if (i == parent_devfreq->profile->max_state) {
-> +	if (i == parent_stats->max_state) {
->  		ret = -EINVAL;
->  		goto out;
->  	}
->  
->  	/* Get the suitable frequency by using index of parent device. */
-> -	if (i < devfreq->profile->max_state) {
-> -		child_freq = devfreq->profile->freq_table[i];
-> +	if (i < stats->max_state) {
-> +		child_freq = stats->freq_table[i];
->  	} else {
-> -		count = devfreq->profile->max_state;
-> -		child_freq = devfreq->profile->freq_table[count - 1];
-> +		count = stats->max_state;
-> +		child_freq = stats->freq_table[count - 1];
->  	}
->  
->  	/* Return the suitable frequency for passive device. */
-> @@ -109,7 +115,7 @@ static int update_devfreq_passive(struct devfreq *devfreq, unsigned long freq)
->  	if (ret < 0)
->  		goto out;
->  
-> -	if (devfreq->profile->freq_table
-> +	if (devfreq->profile->stats
->  		&& (devfreq_update_status(devfreq, freq)))
->  		dev_err(&devfreq->dev,
->  			"Couldn't update frequency transition information.\n");
 > diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 4ceb2a517a9c..8459af1a1583 100644
+> index 2ddf25993f7d..4ceb2a517a9c 100644
 > --- a/include/linux/devfreq.h
 > +++ b/include/linux/devfreq.h
-> @@ -64,6 +64,30 @@ struct devfreq_dev_status {
->   */
->  #define DEVFREQ_FLAG_LEAST_UPPER_BOUND		0x1
->  
-> +/**
-> + * struct devfreq_stats - Devfreq's transitions stats counters
-> + * @freq_table:		Optional list of frequencies to support statistics
-> + *			and freq_table must be generated in ascending order.
-> + * @max_state:		The size of freq_table.
+> @@ -91,6 +91,12 @@ struct devfreq_dev_status {
+>   * @freq_table:		Optional list of frequencies to support statistics
+>   *			and freq_table must be generated in ascending order.
+>   * @max_state:		The size of freq_table.
 > + * @total_trans:	Number of devfreq transitions
 > + * @trans_table:	Statistics of devfreq transitions
 > + * @time_in_state:	Statistics of devfreq states
 > + * @last_time:		The last time stats were updated
 > + * @stats_lock:		Lock protecting trans_table, time_in_state,
 > + *			last_time and total_trans used for statistics
-> + */
-> +struct devfreq_stats {
-> +	unsigned long *freq_table;
-> +	unsigned int max_state;
-> +
+>   */
+>  struct devfreq_dev_profile {
+>  	unsigned long initial_freq;
+> @@ -104,6 +110,12 @@ struct devfreq_dev_profile {
+>  
+>  	unsigned long *freq_table;
+>  	unsigned int max_state;
 > +	/* information for device frequency transition */
 > +	unsigned int total_trans;
 > +	unsigned int *trans_table;
 > +	u64 *time_in_state;
 > +	unsigned long long last_time;
 > +	spinlock_t stats_lock;
-> +};
-> +
+>  };
+>  
 >  /**
->   * struct devfreq_dev_profile - Devfreq's user device profile
->   * @initial_freq:	The operating frequency when devfreq_add_device() is
-> @@ -88,15 +112,7 @@ struct devfreq_dev_status {
->   *			from devfreq_remove_device() call. If the user
->   *			has registered devfreq->nb at a notifier-head,
->   *			this is the time to unregister it.
-> - * @freq_table:		Optional list of frequencies to support statistics
-> - *			and freq_table must be generated in ascending order.
-> - * @max_state:		The size of freq_table.
+> @@ -131,12 +143,6 @@ struct devfreq_dev_profile {
+>   * @suspend_freq:	 frequency of a device set during suspend phase.
+>   * @resume_freq:	 frequency of a device set in resume phase.
+>   * @suspend_count:	 suspend requests counter for a device.
 > - * @total_trans:	Number of devfreq transitions
 > - * @trans_table:	Statistics of devfreq transitions
 > - * @time_in_state:	Statistics of devfreq states
 > - * @last_time:		The last time stats were updated
-> - * @stats_lock:		Lock protecting trans_table, time_in_state,
-> - *			last_time and total_trans used for statistics
-> + * @stats:		Statistics of devfreq states and state transitions
->   */
->  struct devfreq_dev_profile {
->  	unsigned long initial_freq;
-> @@ -108,14 +124,7 @@ struct devfreq_dev_profile {
->  	int (*get_cur_freq)(struct device *dev, unsigned long *freq);
->  	void (*exit)(struct device *dev);
+> - * @stats_lock:		Lock protecting trans_table, time_in_state, last_time
+> - *			and total_trans used for statistics
+>   * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
+>   *
+>   * This structure stores the devfreq information for a give device.
+> @@ -173,13 +179,6 @@ struct devfreq {
+>  	unsigned long resume_freq;
+>  	atomic_t suspend_count;
 >  
-> -	unsigned long *freq_table;
-> -	unsigned int max_state;
 > -	/* information for device frequency transition */
 > -	unsigned int total_trans;
 > -	unsigned int *trans_table;
 > -	u64 *time_in_state;
 > -	unsigned long long last_time;
 > -	spinlock_t stats_lock;
-> +	struct devfreq_stats *stats;
+> -
+>  	struct srcu_notifier_head transition_notifier_list;
 >  };
 >  
->  /**
 > 
