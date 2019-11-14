@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9734FCF38
+	by mail.lfdr.de (Postfix) with ESMTP id C62F8FCF37
 	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 21:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfKNUKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726953AbfKNUKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 14 Nov 2019 15:10:45 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:58042 "EHLO inva020.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:58094 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726533AbfKNUKo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1726930AbfKNUKo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 14 Nov 2019 15:10:44 -0500
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5C0EE1A048C;
-        Thu, 14 Nov 2019 21:10:41 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 754D31A07F5;
+        Thu, 14 Nov 2019 21:10:42 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 443691A009D;
-        Thu, 14 Nov 2019 21:10:41 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 648181A009D;
+        Thu, 14 Nov 2019 21:10:42 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 3216C2063D;
-        Thu, 14 Nov 2019 21:10:40 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 55D9D2060A;
+        Thu, 14 Nov 2019 21:10:41 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         Silvano di Ninno <silvano.dininno@nxp.com>,
         linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH RFC v6 1/9] dt-bindings: interconnect: Add bindings for imx8m noc
-Date:   Thu, 14 Nov 2019 22:09:48 +0200
-Message-Id: <6db2ce55ee62dd8548aa8e1e0ecdf8c06eda868f.1573761527.git.leonard.crestez@nxp.com>
+Subject: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling driver
+Date:   Thu, 14 Nov 2019 22:09:49 +0200
+Message-Id: <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1573761527.git.leonard.crestez@nxp.com>
 References: <cover.1573761527.git.leonard.crestez@nxp.com>
@@ -61,131 +61,216 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add initial dt bindings for the interconnects inside i.MX chips.
-Multiple external IPs are involved but SOC integration means the
-software controllable interfaces are very similar.
+Add initial support for dynamic frequency switching on pieces of the imx
+interconnect fabric.
 
-Main NOC node acts as interconnect provider if #interconnect-cells is
-present.
-
-Multiple interconnects can be present, each with their own OPP table.
+All this driver does is set a clk rate based on an opp table, it does
+not map register areas.
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
- .../bindings/interconnect/fsl,imx8m-noc.yaml  | 104 ++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+ drivers/devfreq/Kconfig       |   9 ++
+ drivers/devfreq/Makefile      |   1 +
+ drivers/devfreq/imx-devfreq.c | 150 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 160 insertions(+)
+ create mode 100644 drivers/devfreq/imx-devfreq.c
 
-diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index 923a6132e741..fef5ce831e90 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -98,10 +98,19 @@ config ARM_IMX8M_DDRC_DEVFREQ
+ 	select DEVFREQ_GOV_USERSPACE
+ 	help
+ 	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allows
+ 	  adjusting DRAM frequency.
+ 
++config ARM_IMX_DEVFREQ
++	tristate "i.MX Generic DEVFREQ Driver"
++	depends on ARCH_MXC || COMPILE_TEST
++	select DEVFREQ_GOV_PASSIVE
++	select DEVFREQ_GOV_USERSPACE
++	help
++	  This adds the generic DEVFREQ driver for i.MX interconnects. It
++	  allows adjusting NIC/NOC frequency.
++
+ config ARM_TEGRA_DEVFREQ
+ 	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+ 	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
+ 		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
+ 		ARCH_TEGRA_210_SOC || \
+diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+index 3eb4d5e6635c..61d0edee16f7 100644
+--- a/drivers/devfreq/Makefile
++++ b/drivers/devfreq/Makefile
+@@ -8,10 +8,11 @@ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
+ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
+ 
+ # DEVFREQ Drivers
+ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+ obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
++obj-$(CONFIG_ARM_IMX_DEVFREQ)		+= imx-devfreq.o
+ obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
+ obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+ obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
+ 
+ # DEVFREQ Event Drivers
+diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx-devfreq.c
 new file mode 100644
-index 000000000000..5cd94185fec3
+index 000000000000..620b344e87aa
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-@@ -0,0 +1,104 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interconnect/fsl,imx8m-noc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/devfreq/imx-devfreq.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2019 NXP
++ */
 +
-+title: Generic i.MX bus frequency device
++#include <linux/clk.h>
++#include <linux/devfreq.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/pm_opp.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
 +
-+maintainers:
-+  - Leonard Crestez <leonard.crestez@nxp.com>
++struct imx_devfreq {
++	struct devfreq_dev_profile profile;
++	struct devfreq *devfreq;
++	struct clk *clk;
++	struct devfreq_passive_data passive_data;
++};
 +
-+description: |
-+  The i.MX SoC family has multiple buses for which clock frequency (and
-+  sometimes voltage) can be adjusted.
++static int imx_devfreq_target(struct device *dev,
++			      unsigned long *freq, u32 flags)
++{
++	struct imx_devfreq *priv = dev_get_drvdata(dev);
++	struct dev_pm_opp *new_opp;
++	unsigned long new_freq;
++	int ret;
 +
-+  Some of those buses expose register areas mentioned in the memory maps as GPV
-+  ("Global Programmers View") but not all. Access to this area might be denied
-+  for normal (non-secure) world.
++	new_opp = devfreq_recommended_opp(dev, freq, flags);
++	if (IS_ERR(new_opp)) {
++		ret = PTR_ERR(new_opp);
++		dev_err(dev, "failed to get recommended opp: %d\n", ret);
++		return ret;
++	}
++	new_freq = dev_pm_opp_get_freq(new_opp);
++	dev_pm_opp_put(new_opp);
 +
-+  The buses are based on externally licensed IPs such as ARM NIC-301 and
-+  Arteris FlexNOC but DT bindings are specific to the integration of these bus
-+  interconnect IPs into imx SOCs.
++	return clk_set_rate(priv->clk, new_freq);
++}
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+        - enum:
-+          - fsl,imx8mn-nic
-+          - fsl,imx8mm-nic
-+          - fsl,imx8mq-nic
-+        - const: fsl,imx8m-nic
-+      - items:
-+        - enum:
-+          - fsl,imx8mn-noc
-+          - fsl,imx8mm-noc
-+          - fsl,imx8mq-noc
-+        - const: fsl,imx8m-noc
++static int imx_devfreq_get_cur_freq(struct device *dev, unsigned long *freq)
++{
++	struct imx_devfreq *priv = dev_get_drvdata(dev);
 +
-+  reg:
-+    maxItems: 1
++	*freq = clk_get_rate(priv->clk);
 +
-+  clocks:
-+    maxItems: 1
++	return 0;
++}
 +
-+  operating-points-v2: true
-+  opp-table: true
++static int imx_devfreq_get_dev_status(struct device *dev,
++				      struct devfreq_dev_status *stat)
++{
++	struct imx_devfreq *priv = dev_get_drvdata(dev);
 +
-+  devfreq:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description:
-+      Phandle to another devfreq device to match OPPs with by using the
-+      passive governor.
++	stat->busy_time = 0;
++	stat->total_time = 0;
++	stat->current_frequency = clk_get_rate(priv->clk);
 +
-+  '#interconnect-cells':
-+    description:
-+      If specified then also act as an interconnect provider. Should only be
-+      set once per soc on main noc.
-+    const: 1
++	return 0;
++}
 +
-+  fsl,scalable-node-ids:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description:
-+      Array of node ids for scalable nodes. Uses same numeric identifier
-+      namespace as the consumer "interconnects" binding.
++static void imx_devfreq_exit(struct device *dev)
++{
++	dev_pm_opp_of_remove_table(dev);
++}
 +
-+  fsl,scalable-nodes:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description:
-+      Array of phandles to scalable nodes. Must be of same length as
-+      fsl,scalable-node-ids.
++static int imx_devfreq_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct imx_devfreq *priv;
++	const char *gov = DEVFREQ_GOV_USERSPACE;
++	void *govdata = NULL;
++	int ret;
 +
-+required:
-+  - compatible
-+  - clocks
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+additionalProperties: false
++	priv->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(priv->clk)) {
++		ret = PTR_ERR(priv->clk);
++		dev_err(dev, "failed to fetch clk: %d\n", ret);
++		return ret;
++	}
++	platform_set_drvdata(pdev, priv);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx8mq-clock.h>
-+    #include <dt-bindings/interconnect/imx8mq.h>
-+    noc: interconnect@32700000 {
-+            compatible = "fsl,imx8mq-noc", "fsl,imx8m-noc";
-+            reg = <0x32700000 0x100000>;
-+            clocks = <&clk IMX8MQ_CLK_NOC>;
-+            #interconnect-cells = <1>;
-+            fsl,scalable-node-ids = <IMX8MQ_ICN_NOC>,
-+                                    <IMX8MQ_ICS_DRAM>;
-+            fsl,scalable-nodes = <&noc>,
-+                                 <&ddrc>;
-+            operating-points-v2 = <&noc_opp_table>;
++	ret = dev_pm_opp_of_add_table(dev);
++	if (ret < 0) {
++		dev_err(dev, "failed to get OPP table\n");
++		return ret;
++	}
 +
-+            noc_opp_table: opp-table {
-+                    compatible = "operating-points-v2";
++	priv->profile.polling_ms = 1000;
++	priv->profile.target = imx_devfreq_target;
++	priv->profile.get_dev_status = imx_devfreq_get_dev_status;
++	priv->profile.exit = imx_devfreq_exit;
++	priv->profile.get_cur_freq = imx_devfreq_get_cur_freq;
++	priv->profile.initial_freq = clk_get_rate(priv->clk);
 +
-+                    opp-133M {
-+                            opp-hz = /bits/ 64 <133333333>;
-+                    };
-+                    opp-800M {
-+                            opp-hz = /bits/ 64 <800000000>;
-+                    };
-+            };
-+    };
++	/* Handle passive devfreq parent link */
++	priv->passive_data.parent = devfreq_get_devfreq_by_phandle(dev, 0);
++	if (!IS_ERR(priv->passive_data.parent)) {
++		dev_info(dev, "setup passive link to %s\n",
++			 dev_name(priv->passive_data.parent->dev.parent));
++		gov = DEVFREQ_GOV_PASSIVE;
++		govdata = &priv->passive_data;
++	} else if (priv->passive_data.parent != ERR_PTR(-ENODEV)) {
++		// -ENODEV means no parent: not an error.
++		ret = PTR_ERR(priv->passive_data.parent);
++		if (ret != -EPROBE_DEFER)
++			dev_warn(dev, "failed to get initialize passive parent: %d\n",
++				 ret);
++		goto err;
++	}
++
++	priv->devfreq = devm_devfreq_add_device(dev, &priv->profile,
++						gov, govdata);
++	if (IS_ERR(priv->devfreq)) {
++		ret = PTR_ERR(priv->devfreq);
++		dev_err(dev, "failed to add devfreq device: %d\n", ret);
++		goto err;
++	}
++
++	return 0;
++
++err:
++	dev_pm_opp_of_remove_table(dev);
++	return ret;
++}
++
++static const struct of_device_id imx_devfreq_of_match[] = {
++	{ .compatible = "fsl,imx8m-noc", },
++	{ .compatible = "fsl,imx8m-nic", },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
++
++static struct platform_driver imx_devfreq_platdrv = {
++	.probe		= imx_devfreq_probe,
++	.driver = {
++		.name	= "imx-devfreq",
++		.of_match_table = of_match_ptr(imx_devfreq_of_match),
++	},
++};
++module_platform_driver(imx_devfreq_platdrv);
++
++MODULE_DESCRIPTION("Generic i.MX bus frequency driver");
++MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.17.1
 
