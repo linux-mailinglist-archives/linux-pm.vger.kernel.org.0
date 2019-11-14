@@ -2,220 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4196AFCE9D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 20:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CEBFCED3
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 20:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbfKNTRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 14:17:49 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:31504 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726549AbfKNTRs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 14:17:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573759066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iO7IjIFxA01AP12H/14msCUb1F6tFNp4BMry0uJ072A=;
-        b=XJjP5tDV5hTyiLgGoZDbQehhbViTUWP09PJaXZnAJqqWl3gEeYIunBcx2qkofSAuS5eikV
-        jJIE5Aw61Y4fDkCT28UDichazHR7O5pUyvZxKo1UJgyo5r0zz+qBttS9GKRX9Lf0tY/zB4
-        SKWQsSNVScxJ/UKmNhpeTwG3rhc7U7U=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-370-TWKz6BlBOnG9BcOSq9NSZA-1; Thu, 14 Nov 2019 14:17:45 -0500
-Received: by mail-qv1-f72.google.com with SMTP id g33so4811888qvd.7
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 11:17:42 -0800 (PST)
+        id S1726910AbfKNTjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 14:39:43 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:44119 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbfKNTjn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 14:39:43 -0500
+Received: by mail-oi1-f195.google.com with SMTP id s71so6359859oih.11
+        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 11:39:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0qaQkNh+GwkOF+p4ly8ErfnaN1DdWL0XCLZl3cfnx0U=;
+        b=hHhiugikMlvmnXY5OlPpArh17lbPea4isMp4gtfpQVX0k1giOLMErHW7H/USxzM3h/
+         jOQcKrFZNTOTuT+89N0iSB1mRtJRzmb60d2eKp8TGgbav6sVp7nnwOV4PtWkU6oydc3p
+         iy80YEdHK54gK3kWYSJOOOgumGhCXZB+Gt9f1n0Wlv1anT2AbI4d4NJDzagXxEUr7EGr
+         RyPk20WvXOee+EYrxxcZDcM8c757d8l8vlwKKer+SnXUSBJa3MgEj0SMw7r6Kv7vQ+O3
+         jJm01sKIsxqgYKTeJ/yS0eGvLjTXI4mSI+xzujNOGtlrW9v2ASsZUAWsRvuc/wk2e7/i
+         9QMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yzU2orsV1IQ0b605t7GrUNqdH9lGit9QLMaD0lmIB5c=;
-        b=X7NpmgxfO2CPiTUd4+Ehl2A3fN+FqcsBJmp4QgeGLhDI/na342IKy73HraD1U4QRjT
-         Vj3tm2AH+IKf27L+eGFV07cKqBf9ikdf0kdGfUxHZdPyZacXlXWSZKqcXSn/Cad6ySjb
-         5Gk4sT2ooX+LK6OQAo9BnNACRqp6mHbJykkeN50HfJoBc39duTNJIYRS2k7eYTHTB/1u
-         fppfZdRMD98cUkW5EF1NLvClB7sNLkW5o2wRbp9gYq4HjfGakyle3ViL/YKiuYPE6VOk
-         lv7hyijs4pdpIM2ujgXSO2AQLOaBgWEierjqmSI8y9gZP8+QiQZrCkxjQNK8OMh3dhye
-         UXSw==
-X-Gm-Message-State: APjAAAUwkMh+WLHMsnCOg8YNy6JSB813tbCrBBikk1FYYzojJlcEy1K7
-        vZMYFu48z2aohtYvY6p9U8pCCHtIV+MxV1HdoriATrbqGY9A1DGhxjojxecRUWVP+I5bj4kNNIB
-        lUM7kPlKARN530tDBUupJVsXhlxNu1p6wVxo=
-X-Received: by 2002:ac8:75ce:: with SMTP id z14mr9911913qtq.130.1573759062327;
-        Thu, 14 Nov 2019 11:17:42 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyBzlpxS0u5QYAn3+7xHyAlZnhB1xo77FSDY0Sd/oCUw4ff3cxInd+1N0Ly/+l1puO3E0enij5HXFW6Mn/Bh7c=
-X-Received: by 2002:ac8:75ce:: with SMTP id z14mr9911890qtq.130.1573759062129;
- Thu, 14 Nov 2019 11:17:42 -0800 (PST)
+        bh=0qaQkNh+GwkOF+p4ly8ErfnaN1DdWL0XCLZl3cfnx0U=;
+        b=bdHgzIzK+LzIyoXDEDSMNXI6pcp1eHDkz1Wnn0+kc4PH+DrHKiwImsCKJwMU3dMQ3Q
+         Gvl+qGACKgp6EQNwdfp8n1BJQGQrJIUSWQrAMHPLS3Mjg9ovi/Rlzlg8pdBRHPOGtDYp
+         dewflMP/p3jj4ldmDJY8vOaXbrNY90S69THGDVQmJB/JljzurvWcZgLOzfTW0i+1Rlq+
+         TEMUQ4iPMVno312qr1w+lJ6fHrNRDVE5I2JooZK59iQeq4XTcK7BIGYjVeWsNxdgz4vl
+         cbllFuWJk4yvaffR68forUV+wplAMjIcvUTe7aSYJ9ZfU2pbe6Ah45QkDdFCPl1SkXPL
+         1XGA==
+X-Gm-Message-State: APjAAAU4IbYA2OmJbJfqoeY2VlmduTTBljAXc9GGSxG5Y+P0A8nuUFLC
+        InflXwaCjajLTrdsJ9aXlUkTuOrtk3+SWVCLmoqI1A==
+X-Google-Smtp-Source: APXvYqx3fXNqkZI16D4D5lPb7+21HLSvnaDSZr50dgUF+ElE4iLArszfeHeTjd+60PQkHrdyr4vkZoVyG160Ab8Cb58=
+X-Received: by 2002:aca:d558:: with SMTP id m85mr4669663oig.43.1573760382147;
+ Thu, 14 Nov 2019 11:39:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20191017121901.13699-1-kherbst@redhat.com>
-In-Reply-To: <20191017121901.13699-1-kherbst@redhat.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Thu, 14 Nov 2019 20:17:30 +0100
-Message-ID: <CACO55tuMvHtPSHmU_G_0f5P6O3Ao0OqVMDPvaaRCYrMSd29NMQ@mail.gmail.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+References: <CGME20190724014230epcas5p371a5fdee330f91a646d619fbcc024acf@epcas5p3.samsung.com>
+ <20190724014222.110767-1-saravanak@google.com> <cb0d4aad-81e4-0b8d-40f2-7f58ef1e38d9@samsung.com>
+ <CAGETcx-tUtnX0T47YGdf7-cgp6e8K9Rgb34Mfe5Za9L4YMGS1g@mail.gmail.com> <20191114083532.vmccmqgj2uj73tcn@vireshk-i7>
+In-Reply-To: <20191114083532.vmccmqgj2uj73tcn@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 14 Nov 2019 11:39:06 -0800
+Message-ID: <CAGETcx9ccBgH2cjHMuecLRNJzTZTC_WZSGiWT-476Dqf2vADkQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] Add required-opps support to devfreq passive gov
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>
-X-MC-Unique: TWKz6BlBOnG9BcOSq9NSZA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-ping on the patch.
+On Thu, Nov 14, 2019 at 12:35 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 14-11-19, 00:23, Saravana Kannan wrote:
+> > Thanks for checking. I haven't abandoned this patch series. This patch
+> > series depends on "lazy linking" of required-opps to avoid a cyclic
+> > dependency between devfreq and OPP table population. But Viresh wasn't
+> > happy with my implementation of the lazy liking for reasonable
+> > reasons.
+> >
+> > I had a chat with Viresh during one of the several conferences that I
+> > met him at. To fix the lazy linking in the way he wanted it meant we
+> > had to fix other issues in the OPP framework that arise when OPP
+> > tables are shared in DT but not in memory. So he was kind enough to
+> > sign up to add lazy linking support to OPPs so that I won't have to do
+> > it. So, I'm waiting on that. So once that's added, I should be able to
+> > drop a few patches in this series, do some minor updates and then this
+> > will be good to go.
+>
+> I am fixing few other issues in OPP core right now and lazy linking
+> is next in the list :)
 
-I wasn't able to verify this issue on any other bridge controller, so
-it really might be only this one.
+Thanks Viresh! Glad the offer still stands :)
 
-On Thu, Oct 17, 2019 at 2:19 PM Karol Herbst <kherbst@redhat.com> wrote:
->
-> Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher dev=
-ice
-> states.
->
-> v2: convert to pci_dev quirk
->     put a proper technical explanation of the issue as a in-code comment
-> v3: disable it only for certain combinations of intel and nvidia hardware
-> v4: simplify quirk by setting flag on the GPU itself
->
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Lyude Paul <lyude@redhat.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Mika Westerberg <mika.westerberg@intel.com>
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: nouveau@lists.freedesktop.org
-> ---
->  drivers/pci/pci.c    |  7 ++++++
->  drivers/pci/quirks.c | 53 ++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pci.h  |  1 +
->  3 files changed, 61 insertions(+)
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index b97d9e10c9cc..02e71e0bcdd7 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -850,6 +850,13 @@ static int pci_raw_set_power_state(struct pci_dev *d=
-ev, pci_power_t state)
->            || (state =3D=3D PCI_D2 && !dev->d2_support))
->                 return -EIO;
->
-> +       /*
-> +        * check if we have a bad combination of bridge controller and nv=
-idia
-> +         * GPU, see quirk_broken_nv_runpm for more info
-> +        */
-> +       if (state !=3D PCI_D0 && dev->broken_nv_runpm)
-> +               return 0;
-> +
->         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
->
->         /*
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 44c4ae1abd00..0006c9e37b6f 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5268,3 +5268,56 @@ static void quirk_reset_lenovo_thinkpad_p50_nvgpu(=
-struct pci_dev *pdev)
->  DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, 0x13b1,
->                               PCI_CLASS_DISPLAY_VGA, 8,
->                               quirk_reset_lenovo_thinkpad_p50_nvgpu);
-> +
-> +/*
-> + * Some Intel PCIe bridges cause devices to disappear from the PCIe bus =
-after
-> + * those were put into D3cold state if they were put into a non D0 PCI P=
-M
-> + * device state before doing so.
-> + *
-> + * This leads to various issue different issues which all manifest diffe=
-rently,
-> + * but have the same root cause:
-> + *  - AIML code execution hits an infinite loop (as the coe waits on dev=
-ice
-> + *    memory to change).
-> + *  - kernel crashes, as all pci reads return -1, which most code isn't =
-able
-> + *    to handle well enough.
-> + *  - sudden shutdowns, as the kernel identified an unrecoverable error =
-after
-> + *    userspace tries to access the GPU.
-> + *
-> + * In all cases dmesg will contain at least one line like this:
-> + * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3=
-'
-> + * followed by a lot of nouveau timeouts.
-> + *
-> + * ACPI code writes bit 0x80 to the not documented PCI register 0x248 of=
- the
-> + * PCIe bridge controller in order to power down the GPU.
-> + * Nonetheless, there are other code paths inside the ACPI firmware whic=
-h use
-> + * other registers, which seem to work fine:
-> + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
-> + *  - 0xb0 bit 0x10 (link disable)
-> + * Changing the conditions inside the firmware by poking into the releva=
-nt
-> + * addresses does resolve the issue, but it seemed to be ACPI private me=
-mory
-> + * and not any device accessible memory at all, so there is no portable =
-way of
-> + * changing the conditions.
-> + *
-> + * The only systems where this behavior can be seen are hybrid graphics =
-laptops
-> + * with a secondary Nvidia Pascal GPU. It cannot be ruled out that this =
-issue
-> + * only occurs in combination with listed Intel PCIe bridge controllers =
-and
-> + * the mentioned GPUs or if it's only a hw bug in the bridge controller.
-> + *
-> + * But because this issue was NOT seen on laptops with an Nvidia Pascal =
-GPU
-> + * and an Intel Coffee Lake SoC, there is a higher chance of there being=
- a bug
-> + * in the bridge controller rather than in the GPU.
-> + *
-> + * This issue was not able to be reproduced on non laptop systems.
-> + */
-> +
-> +static void quirk_broken_nv_runpm(struct pci_dev *dev)
-> +{
-> +       struct pci_dev *bridge =3D pci_upstream_bridge(dev);
-> +
-> +       if (bridge->vendor =3D=3D PCI_VENDOR_ID_INTEL &&
-> +           bridge->device =3D=3D 0x1901)
-> +               dev->broken_nv_runpm =3D 1;
-> +}
-> +DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
-> +                             PCI_BASE_CLASS_DISPLAY, 16,
-> +                             quirk_broken_nv_runpm);
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index ac8a6c4e1792..903a0b3a39ec 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -416,6 +416,7 @@ struct pci_dev {
->         unsigned int    __aer_firmware_first_valid:1;
->         unsigned int    __aer_firmware_first:1;
->         unsigned int    broken_intx_masking:1;  /* INTx masking can't be =
-used */
-> +       unsigned int    broken_nv_runpm:1;      /* some combinations of i=
-ntel bridge controller and nvidia GPUs break rtd3 */
->         unsigned int    io_window_1k:1;         /* Intel bridge 1K I/O wi=
-ndows */
->         unsigned int    irq_managed:1;
->         unsigned int    has_secondary_link:1;
-> --
-> 2.21.0
->
-
+-Saravana
