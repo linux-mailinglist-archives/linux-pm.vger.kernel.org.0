@@ -2,217 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 393AFFCB7D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 18:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9947FCBB9
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 18:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727170AbfKNRHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 12:07:39 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34584 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbfKNRHi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 12:07:38 -0500
-Received: by mail-wr1-f68.google.com with SMTP id e6so7369393wrw.1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 09:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=1ttFX6mWZtj3YRIFFgJ6Wwp3zHGzs5AKoNMo4yJ71bI=;
-        b=WHZK123eBZHkZP/Y8D8MlnOe/2Nmnk2EbmjV7pOYxzOF9bglYHQM0CpE466xwJDzf2
-         QvmrWlPfr91t6/5XVDBgljgZAcUAfQ+8pdBV4Rx/QS5M149hHSGdvgIMEqVFhxPUaHqp
-         yFyA+EQDWwXaszXyanRYc0Sw9uWoX6A+lKIK+C2fJvaArIv5PMiWTgRh9VFwzorrv3JR
-         mAnoCLpiELtGgwpUzV1zRUREx++WEjZea5oXN8PnwnG1f3nCHbX/nloFHWfL2bS7upie
-         RUZ153xCXEB8LgmG7Ie0RchcaEFi1ZIKZPN3zRnUyH5LISFUX98YBQ/VULbiqGcYaDIz
-         NaFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1ttFX6mWZtj3YRIFFgJ6Wwp3zHGzs5AKoNMo4yJ71bI=;
-        b=g49MSzJTUqdgnlNJz7Dn91Fz0wDJxlYuEkF4REWy/qec6Or8UqplCPuJW/qwjWS/fZ
-         0rvoD6QNjTMtCrELQ2SWYYWqIvL0jULdZQGQp8lHUfRGzxsmr8ZPyNnYDqSK1RLBWtHc
-         jVc8jj7jQKDAlCc6IcpSs4Z/lYoLTp5AtC8zVu4qWSC3TjJYYhKQuK/KLZfO7wh45ZiE
-         261vD5DUzvYB9s2uWRWLpBl/fDh1jB+yjMAuTDeNhjrglx3Wm8hQUhbNSt1OCxG5tBaV
-         Xo5Xe8TJOr+DRcBnoZ/yHRXEsdVGTEaRQz1JXOZqzojo2mWOlgNqe0kXspYAI9T+ER5n
-         IAkA==
-X-Gm-Message-State: APjAAAVxq/zxQ2mI3CReYg51aPUQQLLLVUuIWcvaRhqQ2uH2PdHH+O+P
-        9xLk2v9E5RPz2dtiZSd3P8o8ig==
-X-Google-Smtp-Source: APXvYqw/DbqT30oaTSSQCsMzIEM6CXlElniAe550T4zmltle7nwi+XIYxEvJuCHQhA1ntJ7bpz/9lA==
-X-Received: by 2002:adf:82c6:: with SMTP id 64mr8827756wrc.151.1573751255472;
-        Thu, 14 Nov 2019 09:07:35 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e0a:f:6020:b163:2e66:cb71:e145])
-        by smtp.gmail.com with ESMTPSA id m3sm7552619wrw.20.2019.11.14.09.07.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 14 Nov 2019 09:07:34 -0800 (PST)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, dietmar.eggemann@arm.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, mgorman@suse.de,
-        dsmythies@telus.net
-Cc:     linux-pm@vger.kernel.org, torvalds@linux-foundation.org,
-        tglx@linutronix.de, sargun@sargun.me, tj@kernel.org,
-        xiexiuqi@huawei.com, xiezhipeng1@huawei.com,
-        srinivas.pandruvada@linux.intel.com,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v4] sched/freq: move call to cpufreq_update_util
-Date:   Thu, 14 Nov 2019 18:07:31 +0100
-Message-Id: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726533AbfKNRU4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 12:20:56 -0500
+Received: from mail-eopbgr140047.outbound.protection.outlook.com ([40.107.14.47]:63635
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726491AbfKNRU4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Nov 2019 12:20:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XmR9+9QKpSl2TbW78bI5XcH+nYpJbCXtK1XP99tkCZNQ+x44nWvZOB40rdUVzU/ZVhie3OswdVmdNyg+2VgLzBbX33rY/JkwSOTZbHxARF4eU/F34FFMP9Z0tHk5VLsJCyk/d5Ks5/mBRAsqeHgTpiE89qE7NnBCB6BIkZWduSm21Z1gk+UyyRHbBFsS038vPeHPpdhHUHROAFvcHIPvxJ4XanLU3KwuskMXVh2rc2xN/A8ltgn3NclQh7wHSWXshJ0Tx7WQBDkzao38YbyLIGQrT3mArmVSM+1QsC07Lc/02ByWv9hio9pccoBzdQ50eykaAfzdS5lMbW3eJyPakA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lkqS3vUpuCzSqtjWpusdOdAlqZROerLERMwBdZyTi6Q=;
+ b=VzHiWap2fSANt3CzZjnt/j5uW0tI1d1OBELGp+zO06TThvYREGsqKLLU8zBCJkAfU4+telA8aQoyXokB+OX3ByP4Lr7UfpnFZroe/YoOyksT6y88fDSITx+WoLJvq1vITSDeKFQtjN9xrwtM1EfwS9+HzspjGudlxa6rQbp42uC/+1qCmjyhpZl6Y4ilXR78IxR4sBgWFVPDqU5pU6GvOz9A3a3OKf3bejZq7J40TZhesQ8arBm2GrasDa7zu/Ax/nFFKG0y/xCyBZgY9a99WM818wyMPo5GgtJlDU+h1DlHWSZ92WifbLWWaWhND4kT50uh+A+5fQSNg6GnzKJLXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lkqS3vUpuCzSqtjWpusdOdAlqZROerLERMwBdZyTi6Q=;
+ b=nTzbER+iitM2wZZ1LRhrkj7dUq0c4WxOVFRRp3yvauw420auPo+cGnVU3Lijl4LhKjYlJDrJ4FFtPbLeMEXKYXXq9K+jynp4SatcTG1PUvHA6WTRfP5QHp3I0A80/Pd7fj9aa8hoeEy+ZDkdyXvCCw9/01i6xHHVUj7c2WVmICk=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB6127.eurprd04.prod.outlook.com (20.179.26.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.23; Thu, 14 Nov 2019 17:20:13 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2451.024; Thu, 14 Nov 2019
+ 17:20:13 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH RFC] interconnect: Add interconnect_graph file to debugfs
+Thread-Topic: [PATCH RFC] interconnect: Add interconnect_graph file to debugfs
+Thread-Index: AQHVmpUL9/SyHMg2fkCUeguJeLjH5A==
+Date:   Thu, 14 Nov 2019 17:20:13 +0000
+Message-ID: <VI1PR04MB7023BA56243AADB3E462F535EE710@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <70f672b39780ba7387d15fd6485f94b75d47b1ec.1573692109.git.leonard.crestez@nxp.com>
+ <20191114024134.GA47006@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 02dbc490-756e-49db-266b-08d76926e8d1
+x-ms-traffictypediagnostic: VI1PR04MB6127:
+x-microsoft-antispam-prvs: <VI1PR04MB612797BCB3E7F661941BEBCEEE710@VI1PR04MB6127.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 02213C82F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(366004)(396003)(346002)(39860400002)(189003)(199004)(54534003)(64756008)(305945005)(74316002)(7416002)(8936002)(76176011)(5660300002)(7696005)(229853002)(8676002)(99286004)(81166006)(86362001)(478600001)(81156014)(4326008)(45080400002)(316002)(110136005)(71200400001)(71190400001)(25786009)(54906003)(6436002)(33656002)(9686003)(7736002)(6306002)(14454004)(55016002)(966005)(256004)(66066001)(6246003)(52536014)(486006)(26005)(91956017)(446003)(44832011)(476003)(2906002)(76116006)(102836004)(3846002)(186003)(6116002)(66476007)(66556008)(66446008)(53546011)(6506007)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6127;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dIJ1IlwQS8ANzN6dPRNXqAgPV1tSfYCpxwwZvc6IRvmN76Icu90Y1ht6RDXQObxsp+ldJmFFuFyZGGYPwItFz8OYrAwlYa/1iFvRHSOchxOJEYSSHloqkkB/6wFwnsPzCRuUyE7yODqT0gZHVdShSRWFALPEtwuFvajuIt/tAsjeJIhx8QKMjbrWPtKcuGvG2Fw4bOuTOhGpwGHxuNjsPcwvSSCkSjyTaZt29t031J6DH0/oYLiwdjnL4q77leIvc43yaraMLSEsdFEyko+HdRN9Fu6t3ZtcCP2k1ggMjIDBUBgFJZviF4yhDQRjyowPWNXXC0LPa8NyfwB0hbPnxkhHj93Y0ynTQcCTtOsF16E9OncP6yhffT+W9I2Zb2mXe8kej8ZxcA75EO/6hDdWjzKPGMrD9fS0rguvh6cKfGVl6RwAX0uryquw3qYWc5i9
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02dbc490-756e-49db-266b-08d76926e8d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2019 17:20:13.1660
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7clVE4HWVcpUTkQ43PT8mhVt2Z/vmZfXgkM45cWCPDtxdSIM8kd6HYakBb2w4vytaCl7Lc+wWLNUixmbNCKTEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6127
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-update_cfs_rq_load_avg() calls cfs_rq_util_change() everytime pelt decays,
-which might be inefficient when cpufreq driver has rate limitation.
-
-When a task is attached on a CPU, we have call path:
-
-update_load_avg()
-  update_cfs_rq_load_avg()
-    cfs_rq_util_change -- > trig frequency update
-  attach_entity_load_avg()
-    cfs_rq_util_change -- > trig frequency update
-
-The 1st frequency update will not take into account the utilization of the
-newly attached task and the 2nd one might be discard because of rate
-limitation of the cpufreq driver.
-
-update_cfs_rq_load_avg() is only called by update_blocked_averages()
-and update_load_avg() so we can move the call to
-cfs_rq_util_change/cpufreq_update_util() into these 2 functions. It's also
-interesting to notice that update_load_avg() already calls directly
-cfs_rq_util_change() for !SMP case.
-
-This changes will also ensure that cpufreq_update_util() is called even
-when there is no more CFS rq in the leaf_cfs_rq_list to update but only
-irq, rt or dl pelt signals.
-
-Reported-by: Doug Smythies <dsmythies@telus.net>
-Fixes: 039ae8bcf7a5 ("sched/fair: Fix O(nr_cgroups) in the load balancing path")
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
----
-
-this patch applies on tip/sched/urgent as there is a dependency with
-commit b90f7c9d2198 ("sched/pelt: Fix update of blocked PELT ordering")
-
-Changes for v4:
-- updated comments
-- added Reviewed-by and Acked-by 
-
- kernel/sched/fair.c | 47 ++++++++++++++++++++++++++++-------------------
- 1 file changed, 28 insertions(+), 19 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 69a81a5..3be44e1 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3504,9 +3504,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 	cfs_rq->load_last_update_time_copy = sa->last_update_time;
- #endif
- 
--	if (decayed)
--		cfs_rq_util_change(cfs_rq, 0);
--
- 	return decayed;
- }
- 
-@@ -3616,8 +3613,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
- 		update_tg_load_avg(cfs_rq, 0);
- 
--	} else if (decayed && (flags & UPDATE_TG))
--		update_tg_load_avg(cfs_rq, 0);
-+	} else if (decayed) {
-+		cfs_rq_util_change(cfs_rq, 0);
-+
-+		if (flags & UPDATE_TG)
-+			update_tg_load_avg(cfs_rq, 0);
-+	}
- }
- 
- #ifndef CONFIG_64BIT
-@@ -7543,18 +7544,19 @@ static void update_blocked_averages(int cpu)
- 	const struct sched_class *curr_class;
- 	struct rq_flags rf;
- 	bool done = true;
-+	int decayed;
- 
- 	rq_lock_irqsave(rq, &rf);
- 	update_rq_clock(rq);
- 
- 	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
-+	 * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
-+	 * DL and IRQ signals have been updated before updating CFS.
- 	 */
- 	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
-+	decayed = update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
-+	decayed |= update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
-+	decayed |= update_irq_load_avg(rq, 0);
- 
- 	/* Don't need periodic decay once load/util_avg are null */
- 	if (others_have_blocked(rq))
-@@ -7567,9 +7569,13 @@ static void update_blocked_averages(int cpu)
- 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
- 		struct sched_entity *se;
- 
--		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-+		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq, 0);
- 
-+			if (cfs_rq == &rq->cfs)
-+				decayed = 1;
-+		}
-+
- 		/* Propagate pending load changes to the parent, if any: */
- 		se = cfs_rq->tg->se[cpu];
- 		if (se && !skip_blocked_update(se))
-@@ -7588,6 +7594,9 @@ static void update_blocked_averages(int cpu)
- 	}
- 
- 	update_blocked_load_status(rq, !done);
-+
-+	if (decayed)
-+		cpufreq_update_util(rq, 0);
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
-@@ -7644,22 +7653,22 @@ static inline void update_blocked_averages(int cpu)
- 	struct cfs_rq *cfs_rq = &rq->cfs;
- 	const struct sched_class *curr_class;
- 	struct rq_flags rf;
-+	int decayed;
- 
- 	rq_lock_irqsave(rq, &rf);
- 	update_rq_clock(rq);
- 
--	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
--	 */
- 	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
-+	decayed = update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
-+	decayed |= update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
-+	decayed |= update_irq_load_avg(rq, 0);
- 
--	update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	decayed |= update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
- 
- 	update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
-+
-+	if (decayed)
-+		cpufreq_update_util(rq, 0);
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
--- 
-2.7.4
-
+On 14.11.2019 04:41, Greg Kroah-Hartman wrote:=0A=
+> On Thu, Nov 14, 2019 at 02:50:49AM +0200, Leonard Crestez wrote:=0A=
+>> The interconnect graphs can be difficult to understand and the current=
+=0A=
+>> "interconnect_summary" file doesn't even display links in any way.=0A=
+>>=0A=
+>> Add a new "interconnect_graph" file to debugfs in the graphviz "dot"=0A=
+>> format which describes interconnect providers, nodes and links.=0A=
+>>=0A=
+>> The file is human-readable and can be visualized by piping through=0A=
+>> graphviz. Example:=0A=
+>>=0A=
+>> ssh $TARGET cat /sys/kernel/debug/interconnect/interconnect_graph \=0A=
+>> 	| dot -Tsvg > interconnect_graph.svg=0A=
+> =0A=
+> You might want to document this somewhere so we don't all have to go dig=
+=0A=
+> it out of the changelog every time we want to look at this file.=0A=
+=0A=
+Files from sysfs are all described under Documentation/ABI but there's =0A=
+nothing similar for debugfs (and this should definitely not be =0A=
+considered ABI).=0A=
+=0A=
+Maybe Documentation/driver-api/interconnect.rst should have a "debugfs =0A=
+interfaces" paragraph?=0A=
+=0A=
+>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>> ---=0A=
+>>   drivers/interconnect/core.c | 66 +++++++++++++++++++++++++++++++++++++=
+=0A=
+>>   1 file changed, 66 insertions(+)=0A=
+>>=0A=
+>> Example output as a github gist:=0A=
+>> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgist=
+.github.com%2Fcdleonard%2F2f74a7efe74587e3d4b57cf7983b46a8&amp;data=3D02%7C=
+01%7Cleonard.crestez%40nxp.com%7C946b54955bda47a2c7a308d768ac2d23%7C686ea1d=
+3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637092961007878684&amp;sdata=3DUk7QI%2F=
+Oo70H4H5N3ZZl2IMXMHMvP3vov%2FqSMnPuNWg8%3D&amp;reserved=3D0=0A=
+>>=0A=
+>> The qcs404 driver was hacked to probe on imx, the links to "0" seem to=
+=0A=
+>> from incorrect trailing 0s on DEFINE_QNODE. Possibly fallout from=0A=
+>> switching to ARRAY_SIZE(__VA_ARGS__)?=0A=
+>>=0A=
+>> I'm not sure that "graphviz" is allowed as an output format even in=0A=
+>> debugfs.=0A=
+> =0A=
+> Why not!  :)=0A=
+> =0A=
+> This is great, I love it, nice job, no objection from me.=0A=
+> =0A=
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>=0A=
