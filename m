@@ -2,206 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D5DFCD61
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 19:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8847AFCD9D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 19:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbfKNSXH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 13:23:07 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:38082 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726969AbfKNSXG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 13:23:06 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191114182305euoutp010a806a7514d6f9eb0203fcd991c3c5e3~XGoxn6WML2328623286euoutp01c
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 18:23:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191114182305euoutp010a806a7514d6f9eb0203fcd991c3c5e3~XGoxn6WML2328623286euoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1573755785;
-        bh=8A8cbdxqtvyWnHtbwa/FzjfQ0uga80SIYlE1UAGn4Bo=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Se0pyxUNX33A4vCsulk3XeiE94gCRHRXu6cXMVV698S+So9xwycj7ZPMiGBemhZns
-         VxbAinpG9CDArD7MB/R9eOF3mlZdSEqkNkKQdnimpsuid4C64ksf+miDCsbuQl8Xn5
-         yL+9nMQgSspbmP+gIDQRGQJPLOsU4SzhcohhZJv0=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191114182304eucas1p199982b52337f7c7e01e6535ca746e204~XGoxI_2M53104331043eucas1p1r;
-        Thu, 14 Nov 2019 18:23:04 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 57.AC.04309.88B9DCD5; Thu, 14
-        Nov 2019 18:23:04 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191114182304eucas1p1953894d6757259534b521aa26bb2277a~XGowlQMfs3104431044eucas1p1r;
-        Thu, 14 Nov 2019 18:23:04 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191114182304eusmtrp27c2723dbef2e2b81fd1cb8fa1d4407c7~XGowkkBgx3098030980eusmtrp2D;
-        Thu, 14 Nov 2019 18:23:04 +0000 (GMT)
-X-AuditID: cbfec7f4-afbff700000010d5-53-5dcd9b88dc75
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 0C.6D.04166.78B9DCD5; Thu, 14
-        Nov 2019 18:23:03 +0000 (GMT)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191114182303eusmtip2a8a1af312e7bd253d1f0bc6bd4643b37~XGowCjFyO0346003460eusmtip2Z;
-        Thu, 14 Nov 2019 18:23:03 +0000 (GMT)
-Subject: Re: [PATCH 3/7] devfreq: add clearing transitions stats in sysfs
+        id S1726640AbfKNSda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 13:33:30 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:33848 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726491AbfKNSda (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Nov 2019 13:33:30 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E2D6E1A0AC9;
+        Thu, 14 Nov 2019 19:33:27 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C92DA1A04A9;
+        Thu, 14 Nov 2019 19:33:27 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 608F4205D5;
+        Thu, 14 Nov 2019 19:33:26 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Kamil Konieczny <k.konieczny@samsung.com>
-Cc:     Kamil Konieczny <k.konieczny@partner.samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Message-ID: <95813188-be4f-d3b3-459a-597be775f035@samsung.com>
-Date:   Thu, 14 Nov 2019 19:23:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <3a5096c3-03d2-fd5d-852a-6a19c5b262a5@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUhTURjGPbvbvXezyXVae9E+cFRkpGZUXCwtoWBakP9EUmitvEzRbbKr
-        lkW1LHWOlDLJmqJG4VdZNkRzlOL8SvwqirR0tD+EvlzoFEGcmtc7yf+e85zfc973gUNiskZR
-        AJmizWD0WlWaApcIm3vmh0OMZYMJew1fg+iR2R8iuqhtGdFVrkcieni4kaAHcyYJ+pO1HKdn
-        CrsQ3dBlJ+ixW7X4UbHSUl+AKzv+vhUoi5rqkXLGsjVOeFZyOIlJS8li9GFRFyTJ722jgvQh
-        uNJtDzOgfH8TEpNA7QeTZYwwIQkpo2oRuJ1GEX+YRTB324LxhxkEkxWFxFrEbnB5IjUIXlSW
-        eygnglFDg4Cj/KgYyCkbwDjtT52G4i/VQg7CqDIBtObYVyGcioD7+fWI01IqCr7nPl/VQmoH
-        jFa+W2U2UvHgcnSKeMYX+h5PrDxEkmLqCIyMh3A2Rsnh20SlgNfboMXJLwSUlYCC6RYhv/Yx
-        uGt1YLz2g9+9TZ46m2G5lQtzgZcIFo0/PekWBDUPlnCeOgSdvR9F3GSMCoZX1jDejobPU6Wr
-        NlA+MOr05ZfwgeLmUoy3pWDMk/H0TmisbsTXxppa67B7SGFe18y8ro55XR3z/7lVSFiP5Ewm
-        q1Ez7D4tczmUVWnYTK069JJOY0Er/6h/qXf2DbK6L9oQRSLFBinAQIJMpMpiszU2BCSm8JeW
-        OFcsaZIq+yqj153XZ6YxrA0FkkKFXHrNy3FORqlVGUwqw6Qz+rVbASkOMKCy7htQWToeN9gx
-        daJ04oPjWeSupwfxvMTr7XbxibmTslh193y8n7m/LzqiztvRlnCq4wyRIRhy10oYS1W7bu5O
-        uFyt0MUEbprADlQExvocH4qMTF1YtHp3bs+q8br5Jyh2OnHLr4f4Qm42EayNG1lCrxdcPSXN
-        5mGrcU/dE7dCyCarwndjelb1DxzRcFRDAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsVy+t/xe7rts8/GGtw+Z2lx/ctzVou+ff8Z
-        LRZ8msFqcf78BnaLs01v2C0u75rDZvG59wijxdojd9ktbjeuYHPg9Ni0qpPN4+C7PUwefVtW
-        MXp83iQXwBKlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqk
-        b5egl3Hi0A2mgnMSFUfv6jcwtot0MXJySAiYSNxt+MTexcjFISSwlFHi9YY9LF2MHEAJGYnj
-        68sgaoQl/lzrYoOoec0o0bX5PBtIQljAU6Jp9hlmEFtEIFTi1MbJYEXMAnOZJL70/4Wa+o1R
-        YvKCdawgVWwCVhIT21cxgti8AnYS91tXg9ksAqoSN+bvZQKxRQUiJA7vmAVVIyhxcuYTsIs4
-        Bewlrt/RBQkzC6hL/Jl3iRnCFpe49WQ+E4QtL7H97RzmCYxCs5B0z0LSMgtJyywkLQsYWVYx
-        iqSWFuem5xYb6hUn5haX5qXrJefnbmIERt+2Yz8372C8tDH4EKMAB6MSD+8B0TOxQqyJZcWV
-        uYcYJTiYlUR4p7wFCvGmJFZWpRblxxeV5qQWH2I0BfptIrOUaHI+MDHklcQbmhqaW1gamhub
-        G5tZKInzdggcjBESSE8sSc1OTS1ILYLpY+LglGpg5HcsfnDQ7qbf9L6dTJwbdrj+yhVcIH5r
-        6se5wili0VorFkXc+7S1QECt4vGph4LFqb2NYbe/2na8XZ37yy14g+gx1uQQl8auLr76sNu+
-        31dYHjb3fFSw+eXM7XaLDQTne6rsqGtdvb7/gy1j2/pHTm9OMPl/lf324nbftcsR4tcOdzNW
-        tS6tUWIpzkg01GIuKk4EAIHgh2vUAgAA
-X-CMS-MailID: 20191114182304eucas1p1953894d6757259534b521aa26bb2277a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191113091352eucas1p2c30c8a73a8362aff872e3cd9312eb24b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191113091352eucas1p2c30c8a73a8362aff872e3cd9312eb24b
-References: <20191113091336.5218-1-k.konieczny@samsung.com>
-        <CGME20191113091352eucas1p2c30c8a73a8362aff872e3cd9312eb24b@eucas1p2.samsung.com>
-        <20191113091336.5218-4-k.konieczny@samsung.com>
-        <3a5096c3-03d2-fd5d-852a-6a19c5b262a5@samsung.com>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v6 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr controller
+Date:   Thu, 14 Nov 2019 20:33:17 +0200
+Message-Id: <cover.1573756360.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This adds support for dynamic scaling of the DDR Controller (ddrc) present in
+imx8m series. Actual frequency switching is implemented inside TF-A, this
+driver wraps the SMC calls and synchronizes the clk tree.
 
-Hi Chanwoo,
+DRAM frequency switching requires clock manipulation but during this operation
+DRAM itself is briefly inaccessible so this operation is performed a SMC call
+to by TF-A which runs from a SRAM area. Upon returning to linux the clock tree
+is updated to correspond to hardware configuration.
 
-On 11/13/19 10:41 AM, Chanwoo Choi wrote:
-> Hi,
-> 
-> If user only want to use the transitions stats information
-> from now, the user just read the sysfs twice and then
-> can calculate them between the read data. It is enough
+This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are handled
+manually: the driver will prepare/enable the new parents ahead of switching (so
+that the expected roots are enabled) and afterwards it will call clk_set_parent
+to ensure the parents in clock framework are up-to-date.
 
-IOW you are suggesting that user should invest his valuable time
-into actually doing such calculations (or implementing some extra
-script to do the data parsing and calculations automatically)
-instead of doing simple write to special sysfs file?
+This series is useful standalone and roughly similar to devfreq drivers for
+tegra and rockchip.
 
-Also similar patch for cpufreq has been applied not so long ago:
+Running at lower dram rates saves power but can affect the functionality of
+other blocks in the chip (display, vpu etc). Support for in-kernel constraints
+will some separately.
 
-commit ee7930ee27fe5240398cc302fa8eb4454725f188
-Author: Markus Mayer <mmayer@broadcom.com>
-Date:   Mon Nov 7 10:02:23 2016 -0800
+This series has no dependencies outside linux-next.
 
-    cpufreq: stats: New sysfs attribute for clearing statistics
-    
-    Allow CPUfreq statistics to be cleared by writing anything to
-    /sys/.../cpufreq/stats/reset.
-    
-    Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-    Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-    Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-...
+Changes since v5:
+* Fix a dram_apb/dram_alt mixup in imx8m_ddrc_set_freq
+* Make clk_get_parent_by_index static (kbuild robot)
+* Adjust messages in imx8m_ddrc_set_freq
+* Use a for loop inside imx8m_ddrc_check_opps instead of while
+* More elaborate description in dt-bindings file.
+Link to v5: https://patchwork.kernel.org/cover/11240289/
 
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
-Samsung Electronics
+Changes since v4:
+* Restore empty _get_dev_status: testing shows this is *NOT* optional. If
+absent then switching to simple_ondemand governor will trigger an Oops.
+* Keep clk registration on single-line in clk-imx8m* for consistency with rest
+of the file.
+* Drop explicit "select PM_OPP"
+* Check for NULL new_dram_core_parent
+* Rename "out_dis_" labels to out_disable_*
+* Use dev_warn on imx8m_ddrc_set_freq error paths after SMC call (where
+operation is not abandoned).
+* More elaborate error messages in imx8m_ddrc_target
+* More elaborate checks when fetching clks in imx8m_ddrc_set_freq
+* Rename ddrc nodes to memory-controller@* as per devicetree.org "Generic Names
+Recommendation"
+* Defer perf support, it requires perf changes to fetch PMU by DT
+Link to v4: https://patchwork.kernel.org/cover/11235685/
 
-> to get the existing sysfs information. 
-> 
-> And I don't know the any other reason. So, I can't agree this patch.
-> So, Not ack.
-> 
-> Regards,
-> Chanwoo Choi
-> 
-> 
-> On 11/13/19 6:13 PM, Kamil Konieczny wrote:
->> Add new function trans_reset in sysfs for clearing transition
->> table and time in states devfreq statistics.> 
->> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
->> ---
->>  drivers/devfreq/devfreq.c | 26 ++++++++++++++++++++++++++
->>  1 file changed, 26 insertions(+)
->>
->> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->> index ac04b5baef70..0a88055d1362 100644
->> --- a/drivers/devfreq/devfreq.c
->> +++ b/drivers/devfreq/devfreq.c
->> @@ -1445,6 +1445,31 @@ static ssize_t trans_stat_show(struct device *dev,
->>  }
->>  static DEVICE_ATTR_RO(trans_stat);
->>  
->> +static void defvreq_stats_clear_table(struct devfreq *devfreq)
->> +{
->> +	unsigned int count = devfreq->profile->max_state;
->> +
->> +	spin_lock(&devfreq->stats_lock);
->> +	memset(devfreq->time_in_state, 0, count * sizeof(u64));
->> +	memset(devfreq->trans_table, 0, count * count * sizeof(int));
->> +	devfreq->last_stat_updated = get_jiffies_64();
->> +	devfreq->total_trans = 0;
->> +	spin_unlock(&devfreq->stats_lock);
->> +}
->> +
->> +static ssize_t trans_reset_store(struct device *dev,
->> +				 struct device_attribute *attr,
->> +				 const char *buf,
->> +				 size_t count)
->> +{
->> +	struct devfreq *devfreq = to_devfreq(dev);
->> +
->> +	defvreq_stats_clear_table(devfreq);
->> +
->> +	return count;
->> +}
->> +static DEVICE_ATTR_WO(trans_reset);
->> +
->>  static struct attribute *devfreq_attrs[] = {
->>  	&dev_attr_governor.attr,
->>  	&dev_attr_available_governors.attr,
->> @@ -1455,6 +1480,7 @@ static struct attribute *devfreq_attrs[] = {
->>  	&dev_attr_min_freq.attr,
->>  	&dev_attr_max_freq.attr,
->>  	&dev_attr_trans_stat.attr,
->> +	&dev_attr_trans_reset.attr,
->>  	NULL,
->>  };
->>  ATTRIBUTE_GROUPS(devfreq);
+Changes since v3:
+* Rename to imx8m-ddrc. Similar blocks are present on imx7d and imx8qxp/imx8qm
+but soc integration is different.
+* Move dt bindings to /memory-controllers/fsl/
+* Fix dt validation issues
+* Fix imx8mm.dtsi ddrc referencing ddrc_opp_table which is only defined in evk
+* Move opps to child of ddrc device node
+* Only add imx_ddrc_get_dev_status in perf patch.
+* Adjust print messages
+Link to v3: https://patchwork.kernel.org/cover/11221935/
+
+Changes since v2:
+* Add support for entire imx8m family including imx8mq B0.
+* Also mark dram PLLs as CLK_GET_RATE_NO_CACHE (required for imx8mq b0 low OPP)
+* Explicitly update dram pll rate at the end of imx_ddrc_set_freq.
+* Use do_div in imx-ddrc (kbuild robot)
+* Improve explanations around adding CLK_GET_RATE_NO_CACHE to dram clks.
+(Stephen Boyd)
+* Handle ddrc devfreq-events earlier for fewer probe defers.
+* Validate DDRC opp tables versus firmware: supported OPPs depend on board and
+SOC revision.
+* Move DDRC opp tables to board dts because they can vary based on ram type on
+board.
+* Verify DDRC rate is changed in clk tree and otherwise report an error.
+* Change imx_ddrc_freq.rate to be measure in MT/s and round down from HZ in
+imx_ddrc_find_freq instead.
+* Split away from NOC scaling and interconnect support.
+Link to v2: https://patchwork.kernel.org/cover/11104113/
+
+Changes since v1:
+* bindings: Stop using "contains" for "compatible"
+* bindings: Set "additionalProperties: false" and document missing stuff.
+* Remove (c) from NXP copyright notice
+* Fix various checkpatch issues
+* Remove unused dram_alt_root clk from imx-ddrc
+Link to v1: https://patchwork.kernel.org/cover/11090649/
+
+Leonard Crestez (5):
+  clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
+  clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACHE
+  dt-bindings: memory: Add bindings for imx8m ddr controller
+  PM / devfreq: Add dynamic scaling for imx8m ddr controller
+  arm64: dts: imx8m: Add ddr controller nodes
+
+ .../memory-controllers/fsl/imx8m-ddrc.yaml    |  72 +++
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +
+ .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  10 +
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  10 +
+ drivers/clk/imx/clk-imx8mm.c                  |  11 +-
+ drivers/clk/imx/clk-imx8mn.c                  |  12 +-
+ drivers/clk/imx/clk-imx8mq.c                  |  12 +-
+ drivers/clk/imx/clk-pll14xx.c                 |   7 +
+ drivers/clk/imx/clk.h                         |   1 +
+ drivers/devfreq/Kconfig                       |   9 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx8m-ddrc.c                  | 465 ++++++++++++++++++
+ 15 files changed, 670 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+ create mode 100644 drivers/devfreq/imx8m-ddrc.c
+
+-- 
+2.17.1
 
