@@ -2,129 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 311E3FBE56
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 04:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB64FBE72
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 04:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfKNDg1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Nov 2019 22:36:27 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38656 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbfKNDg1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 22:36:27 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c13so3153518pfp.5
-        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 19:36:25 -0800 (PST)
+        id S1726557AbfKNDuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Nov 2019 22:50:03 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34786 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbfKNDuD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Nov 2019 22:50:03 -0500
+Received: by mail-pg1-f193.google.com with SMTP id z188so2809778pgb.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Nov 2019 19:50:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zfh62teJf2BZgYM+/0fl1CP/Fxqn42ZyCR+MYxF6pao=;
-        b=nd/6bCe2vLCNQ17q5z7dsZZ6wNxHSpI/uvIqp+SR/3RkVRWmA+ilxHFQGn9YJMLbRb
-         GyRObG+7zxD5yfnZyYCV/VhA5BLdTRtiVT9ZVO92wlD24yDUdmZFxVGryOUUj202EtO3
-         hkfyADFg4kF46NGnccgEiC3BPsiSUurZK3EbGZWTcymyAiYI3UfF+tL16x4O6Kxmyk2M
-         MSG50fTYjnV23yftGr9RwuAHBORRbXXRTQ8QtbdcDWZdEeD18P5xL6Bk8I1VBXwYwTt3
-         bElr/gYWXcJz8qBBlL04OiCXr3zgqOOqSPbtFxw6YZgtCjbAXwTojEo3+btxTrZWfXFn
-         avLg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=umYuaqH/vbuPE2RKme3P+diNf3XB7pJeeiLOBWpjlxQ=;
+        b=gbXjk36W2ZI78md3gZiDvYN1Ubl5bCYMO4M59KEKajKjLtHrIpu/7LqR0t9OkVEXaS
+         ADSvn0omLpE07LIqJy+CpADAYT0M+JPc6bMFsPndfeMNgrZsEeMssMJW68YS4JunuFmk
+         +scVI2LkJs/WsKIQbDLMwT7bu1baMltGUVWV+AYeP492naFHD4jvZ5FzUxmbfHrVMxp/
+         6WbIEtLCQZuo/VQ+wy/gehF7yBjIpQoC/AreaiEZ7bSG5guPXXXoTDdV2kCR0OmSyrB4
+         rptOHNs4ZbFZ9dC/9JLY/po12bMU6a+N9/2AQvVr8i19zJoLU2vEMEJIVhdGJf4zDXFc
+         i/MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zfh62teJf2BZgYM+/0fl1CP/Fxqn42ZyCR+MYxF6pao=;
-        b=nFfsdA1h7bCtLpoqswuK5nzy/fe23mN8fUb6XeP59oW9e+u9+WR54Z1+R7fuSXEtrq
-         nfu/RFNmYsIk86gR1ewbLUtbWRteKKpR/s1QypxXngbIjy+GCribazhseSLPjDDtzegH
-         h2j8rv4/TYz4sEW8W6KtzViyjrNeRzb6g8R5FBUkfLWBb4rQyUoBFPz6aUA5zdg1P01L
-         +Tur/9x6SwsMe7ICyOAukbgeutJCwR60qPmTLmn8O2jUZ3bqW8LbOt2qpaG6HJyJId4I
-         b9NLzLaMhm72ntYAVpUScUfauNVzP2zwqiuxeKvu869gJXSxZEGprZPInQCxX8t0hwRj
-         cMyw==
-X-Gm-Message-State: APjAAAUsGoouV8Nv6ZzbBiYoezISwK5phXaTCphGWl6j89nDMvI7Yf4a
-        g4ol8PCCFoFqKvG4pzEhgTOBNQ==
-X-Google-Smtp-Source: APXvYqxl+SlKr/KwBSoet9YqcQ1Hjjw+7TCETckK3oZ1Cw6rNBN7E7Vu0Uen8+spsKTKlo97IlVgcQ==
-X-Received: by 2002:a63:6e82:: with SMTP id j124mr7689659pgc.115.1573702584525;
-        Wed, 13 Nov 2019 19:36:24 -0800 (PST)
-Received: from localhost ([122.171.110.253])
-        by smtp.gmail.com with ESMTPSA id c21sm4222858pgh.25.2019.11.13.19.36.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Nov 2019 19:36:23 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: Register cpufreq drivers only after CPU devices are registered
-Date:   Thu, 14 Nov 2019 09:06:17 +0530
-Message-Id: <c60806d5480b7311ced8db07ff239aa5af7a050d.1573702497.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=umYuaqH/vbuPE2RKme3P+diNf3XB7pJeeiLOBWpjlxQ=;
+        b=RRm2F+O2kcCxqf1UJwNACs51/jDmfg9dN/MPC87FA/Rs3z4PwqTBmWsA0/74ImS3UT
+         cA+Oemwf/ANWgmm/BwaIhjRREMNfzA1trV5VSgyGCxJaAZHzA5sSsdrz7v3r1I1u2Gp7
+         KzSmYjHa6YVGuR+MW1MVUUrOT3uz3R/rnEtdHZ3p5sSJ1PltPzI460eMlFBKpDaX5EuV
+         9roT9ZwMtK/V4apXUoKS3sJ8H8moQ0pw1GmQMCTXuB/Gg5iODxQBFHzEKt1OpjFYq5IM
+         A4fyqfbwsTm8t8oBHl3aGVBd73DnR6N5WJfxGUK1ouand17uk4Uua8hy1CzH/FUnMUU7
+         /X8w==
+X-Gm-Message-State: APjAAAXeXAa0qvXdfGYLfvsSqEWHcrHMP4YmNTRXyx5d3LXoMU2An7uB
+        TUh4EMhsMu0a1YFMI0aT5feXMA==
+X-Google-Smtp-Source: APXvYqxuazx8M6Jgo0s4QPNDTfksqLUO1ArYjoFL+xvFC43QOaCBZoo+WhNmkI3OQ/GA10fktSFlsw==
+X-Received: by 2002:a63:4a1a:: with SMTP id x26mr4919608pga.298.1573703402162;
+        Wed, 13 Nov 2019 19:50:02 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id b82sm4649335pfb.33.2019.11.13.19.50.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 19:50:01 -0800 (PST)
+Date:   Wed, 13 Nov 2019 19:49:58 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur ??wigo?? <a.swigon@partner.samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC] interconnect: Add interconnect_graph file to debugfs
+Message-ID: <20191114034958.GB21530@yoga>
+References: <70f672b39780ba7387d15fd6485f94b75d47b1ec.1573692109.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70f672b39780ba7387d15fd6485f94b75d47b1ec.1573692109.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq core heavily depends on the availability of the struct
-device for CPUs and if they aren't available at the time cpufreq driver
-is registered, we will never succeed in making cpufreq work.
+On Wed 13 Nov 16:50 PST 2019, Leonard Crestez wrote:
 
-This happens due to following sequence of events:
+> The interconnect graphs can be difficult to understand and the current
+> "interconnect_summary" file doesn't even display links in any way.
+> 
+> Add a new "interconnect_graph" file to debugfs in the graphviz "dot"
+> format which describes interconnect providers, nodes and links.
+> 
+> The file is human-readable and can be visualized by piping through
+> graphviz. Example:
+> 
+> ssh $TARGET cat /sys/kernel/debug/interconnect/interconnect_graph \
+> 	| dot -Tsvg > interconnect_graph.svg
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 
-- cpufreq_register_driver()
-  - subsys_interface_register()
-  - return 0; //successful registration of driver
+Nice, I like it!
 
-... at a later point of time
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-- register_cpu();
-  - device_register();
-    - bus_probe_device();
-      - sif->add_dev();
-	- cpufreq_add_dev();
-	  - get_cpu_device(); //FAILS
-  - per_cpu(cpu_sys_devices, num) = &cpu->dev; //used by get_cpu_device()
-  - return 0; //CPU registered successfully
+Regards,
+Bjorn
 
-Because the per-cpu variable cpu_sys_devices is set only after the CPU
-device is regsitered, cpufreq will never be able to get it when
-cpufreq_add_dev() is called.
-
-This patch avoids this failure by making sure device structure of at
-least CPU0 is available when the cpufreq driver is registered, else
-return -EPROBE_DEFER.
-
-Reported-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-@Amit: I have added your sob without asking as you were involved in
-getting us to this patch, you did a lot of testing yesterday to find the
-root cause.
-
-@Rafael: This fixes the issues reported by Bjorn on Amit's series and so
-should land before Amit's series, if at all this is acceptable to you.
-Thanks.
-
- drivers/cpufreq/cpufreq.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 681c1b5f0a1a..05293b43e56d 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2641,6 +2641,13 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
- 	if (cpufreq_disabled())
- 		return -ENODEV;
- 
-+	/*
-+	 * The cpufreq core depends heavily on the availability of device
-+	 * structure, make sure they are available before proceeding further.
-+	 */
-+	if (!get_cpu_device(0))
-+		return -EPROBE_DEFER;
-+
- 	if (!driver_data || !driver_data->verify || !driver_data->init ||
- 	    !(driver_data->setpolicy || driver_data->target_index ||
- 		    driver_data->target) ||
--- 
-2.21.0.rc0.269.g1a574e7a288b
-
+> ---
+>  drivers/interconnect/core.c | 66 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+> 
+> Example output as a github gist:
+> https://gist.github.com/cdleonard/2f74a7efe74587e3d4b57cf7983b46a8
+> 
+> The qcs404 driver was hacked to probe on imx, the links to "0" seem to
+> from incorrect trailing 0s on DEFINE_QNODE. Possibly fallout from
+> switching to ARRAY_SIZE(__VA_ARGS__)?
+> 
+> I'm not sure that "graphviz" is allowed as an output format even in
+> debugfs.
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index c498796adc07..07e91288c7f4 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -92,10 +92,74 @@ static int icc_summary_show(struct seq_file *s, void *data)
+>  
+>  	return 0;
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(icc_summary);
+>  
+> +static void icc_graph_show_link(struct seq_file *s, int level,
+> +				struct icc_node *n, struct icc_node *m)
+> +{
+> +	seq_printf(s, "%s\"%d:%s\" -> \"%d:%s\"\n",
+> +			level == 2 ? "\t\t" : "\t",
+> +			n->id, n->name, m->id, m->name);
+> +}
+> +
+> +static void icc_graph_show_node(struct seq_file *s, struct icc_node *n)
+> +{
+> +	seq_printf(s, "\t\t\"%d:%s\" [label=\"%d:%s",
+> +		   n->id, n->name, n->id, n->name);
+> +	seq_printf(s, "\n\t\t\t|avg_bw=%ukBps", n->avg_bw);
+> +	seq_printf(s, "\n\t\t\t|peak_bw=%ukBps", n->peak_bw);
+> +	seq_puts(s, "\"]\n");
+> +}
+> +
+> +static int icc_graph_show(struct seq_file *s, void *data)
+> +{
+> +	struct icc_provider *provider;
+> +	struct icc_node *n;
+> +	int cluster_index = 0;
+> +	int i;
+> +
+> +	seq_puts(s, "digraph {\n\trankdir = LR\n\tnode [shape = record]\n");
+> +	mutex_lock(&icc_lock);
+> +
+> +	/* draw providers as cluster subgraphs */
+> +	cluster_index = 0;
+> +	list_for_each_entry(provider, &icc_providers, provider_list) {
+> +		seq_printf(s, "\tsubgraph cluster_%d {\n", ++cluster_index);
+> +		if (provider->dev)
+> +			seq_printf(s, "\t\tlabel = \"%s\"\n",
+> +				   dev_name(provider->dev));
+> +
+> +		/* draw nodes */
+> +		list_for_each_entry(n, &provider->nodes, node_list)
+> +			icc_graph_show_node(s, n);
+> +
+> +		/* draw internal links */
+> +		list_for_each_entry(n, &provider->nodes, node_list)
+> +			for (i = 0; i < n->num_links; ++i)
+> +				if (n->provider == n->links[i]->provider)
+> +					icc_graph_show_link(s, 2, n,
+> +							    n->links[i]);
+> +
+> +		seq_puts(s, "\t}\n");
+> +	}
+> +
+> +	/* draw external links */
+> +	list_for_each_entry(provider, &icc_providers, provider_list)
+> +		list_for_each_entry(n, &provider->nodes, node_list)
+> +			for (i = 0; i < n->num_links; ++i)
+> +				if (n->provider != n->links[i]->provider)
+> +					icc_graph_show_link(s, 1, n,
+> +							    n->links[i]);
+> +
+> +	mutex_unlock(&icc_lock);
+> +	seq_puts(s, "}");
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(icc_graph);
+> +
+>  static struct icc_node *node_find(const int id)
+>  {
+>  	return idr_find(&icc_idr, id);
+>  }
+>  
+> @@ -800,10 +864,12 @@ EXPORT_SYMBOL_GPL(icc_provider_del);
+>  static int __init icc_init(void)
+>  {
+>  	icc_debugfs_dir = debugfs_create_dir("interconnect", NULL);
+>  	debugfs_create_file("interconnect_summary", 0444,
+>  			    icc_debugfs_dir, NULL, &icc_summary_fops);
+> +	debugfs_create_file("interconnect_graph", 0444,
+> +			    icc_debugfs_dir, NULL, &icc_graph_fops);
+>  	return 0;
+>  }
+>  
+>  static void __exit icc_exit(void)
+>  {
+> -- 
+> 2.17.1
+> 
