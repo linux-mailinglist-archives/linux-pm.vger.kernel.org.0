@@ -2,145 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA232FC6CA
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 13:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE05FCA0B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Nov 2019 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbfKNM7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Nov 2019 07:59:55 -0500
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:43219 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbfKNM7y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Nov 2019 07:59:54 -0500
-Received: by mail-wr1-f41.google.com with SMTP id n1so6339828wra.10
-        for <linux-pm@vger.kernel.org>; Thu, 14 Nov 2019 04:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NVm1JTEP+HaSOJ0+sJvVCGbI/hoKCutUJ9lzwy/Av/A=;
-        b=KXMqs1gOMDLsfzvb1GSchDLrgdDs/pGfgJpo+ObAeOa4inJ3D6uW6HGkK91pwMeLhj
-         zaWhAzC3lNULuoc1YNOZ3oynVzwKHzjY/hqpS4dikozbedmHr6FVsM+RdPqzharFLE5f
-         VLMzYTaPASr7ITLUIolXEeuUFogbAOAzXAvUCSK3IIdt1llU3G/n2hh0MLlJjbkCbO0y
-         jm6t/4irMHkyQWw+4rA3vtjU2tOsSa8RSRbQ63l6zEzMCSaiuMd4uZX/Oa38YjrSZB8U
-         OgfPIUNVI+k04+BJxV6p7sMR7/eSZdZ0OixZCIQfzvhn7R9A3llcXHV20YLBcO7g/Shb
-         nXoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NVm1JTEP+HaSOJ0+sJvVCGbI/hoKCutUJ9lzwy/Av/A=;
-        b=YI2RkNJXcIzxlOsvP/LHS2Nn7BfvZQNg3c6jy3mJs6VxRVmB8stmySdUVOI5ZDv4R6
-         UdVah3qPfN8H4p4KZfxKSfC7GyRS0BxWcwxlpkQGj6pFyzcNnTkbtsdsAWdXBkbOXABt
-         P44R02p+7J5BsWJfePZWv2OS3jGfGsd7CX8+WL2Z3SQKicTkT0jUHxK3S7WqETpbIR58
-         rzWm+MADQKDuLuSaNnJQheX6iNzGW8XUcKybMAOJzN71v2LFQnQ0UNM8nIHlEmw05f97
-         HPE9uv+Q1l8p8YOqcys1dLnPQNyAWvoIIoab+hClVJ+KgGIiChbC2KzKVKqfmSPE/oOv
-         zmPQ==
-X-Gm-Message-State: APjAAAXtPlJqzFYLaDU99Ipo34h3yu70TfxiSHmp0Sh5M8WpWxnkgwKz
-        OQOCKYiD9baLSsAhi53g9u3Y0UzCnZE=
-X-Google-Smtp-Source: APXvYqyeUd8qq5xYoNEzOesUYkYRaaIjQC8+hS8pozvVKnEJ75fi+CY2+0bbx+FEZKB1Z41xbCln/A==
-X-Received: by 2002:adf:f490:: with SMTP id l16mr8217353wro.77.1573736390145;
-        Thu, 14 Nov 2019 04:59:50 -0800 (PST)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id b1sm6611943wrs.74.2019.11.14.04.59.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Nov 2019 04:59:49 -0800 (PST)
-Subject: Re: [GIT PULL] interconnect changes for 5.5
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <5123bf54-5d62-fc5c-8838-17bc34487d83@linaro.org>
- <20191107142111.GB109902@kroah.com>
- <0cb5a6a6-399f-99e3-dc41-50114eea4025@linaro.org>
- <20191108103917.GB683302@kroah.com>
- <CAOCOHw4d0q3uGTAh_UrNWr+Wi6ObDKUFn7M_zkD8cFTkNFEUDA@mail.gmail.com>
- <20191109084820.GC1289838@kroah.com>
- <CAOCOHw4AFz2Rj3sLTrboA0pBOkL_5MbitJnFHgBYaVBbWyYATw@mail.gmail.com>
- <20191110101647.GA1441986@kroah.com>
- <20191114084122.35myncenejt54hht@vireshk-i7>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <bf025961-5b0b-c52c-c387-62123dd4c226@linaro.org>
-Date:   Thu, 14 Nov 2019 14:59:47 +0200
-MIME-Version: 1.0
-In-Reply-To: <20191114084122.35myncenejt54hht@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
+        id S1726640AbfKNPhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Nov 2019 10:37:34 -0500
+Received: from mail-eopbgr70071.outbound.protection.outlook.com ([40.107.7.71]:45329
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726339AbfKNPhe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Nov 2019 10:37:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oi3AKWVRiOXLKtkRWU6Y2jF6AlCuQfUUOB7Qhu3g4S8ZIvvfiAFpiiuzCny23VxW7ybESCwI7pRJ6+30G0hmQSBFijBjLZhjarfwP/I66u5jMymKe7YIRczNZMF/NjQvz7yxWD6f6KK+Z9hOEZETN3B9WeV1zgOFRuZDEc8JVmY7xGhz1KrYV+HyZtiy7FgSvDsFr4Zk7jgNtf9OlFCjjFKK/gRW0FZL/RrtoGBymeiu6WcgQxSXTm6j32Pho+lDr9Mh9rdc5tKQjgyLpHjIBM8PPIkBffi2YIN1Wq73TPbzl+as2kpqbi9znvBu3LCmaB7M7uG/2cyFYwW1g+38Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pzLVkIeB4avHKt7gZXrgD2I5Q65q1ns7M4a1EjLFR8M=;
+ b=ZxMV2MpXvfnzxyq72ttLk2kBOXVYpDGpTDr4pcb/PKln5KAB7T0y0xmhLkmay8hM7yDeMgIAmXpg8/CkkNjep87GlzfIYQAYKftOfXI31SLOC73BjbOfCer7dlMgShg3Clr4tEegzq0uRiR3O7p26Hkl5sZeu960etTRUBDzvbNWWDA6RlIDHtWKrp62ViE1wFOpzTJZlX2DaXXWjc3nBqQtTmwHQEltn+j1lYmJWWfcZsT50cOfLsU/2VZHsAXJNXjP6JJO3kX0+oYEQ+Z9M0QM+Xp2ryQG7dI62q1mQl3Ifzl37W94x4Dqqhz4y2ArZU9+spTEQa5oHzaimxWz+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pzLVkIeB4avHKt7gZXrgD2I5Q65q1ns7M4a1EjLFR8M=;
+ b=r1IZDEtvHVcsDMu1d7+u16i0Q50YoC/8vogBxft44c5DfgboF6PhkxaQmIaDOurGwPkRR0U6pgVLJC1AF8vOe6DYVTJuxUiWmT9zX/v9+RkxGtpaw6AOHe4m9craOGNg5kPWlvKtwbBoqSzzyxuwrxzG1L7k6LY44mL3MWuk0GI=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB3069.eurprd04.prod.outlook.com (10.170.228.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.23; Thu, 14 Nov 2019 15:37:30 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2451.024; Thu, 14 Nov 2019
+ 15:37:30 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 2/3] PM: QoS: Export _freq_qos_apply
+Thread-Topic: [PATCH 2/3] PM: QoS: Export _freq_qos_apply
+Thread-Index: AQHVi14l5BMB9UEF1E+gVvTdlffcwg==
+Date:   Thu, 14 Nov 2019 15:37:30 +0000
+Message-ID: <VI1PR04MB7023C32807542C9EAFC2011FEE710@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1572025364.git.leonard.crestez@nxp.com>
+ <27d83f2bb2aaa4e69d480622727ba7f4497dbe2a.1572025364.git.leonard.crestez@nxp.com>
+ <2045347.p7qcj6nqyX@kreacher>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: cf36aa40-580e-48cb-dbaf-08d769188f99
+x-ms-traffictypediagnostic: VI1PR04MB3069:|VI1PR04MB3069:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB30691DCB830D13CD03E0358DEE710@VI1PR04MB3069.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2043;
+x-forefront-prvs: 02213C82F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(39860400002)(136003)(346002)(189003)(199004)(66066001)(71190400001)(71200400001)(478600001)(26005)(14454004)(25786009)(9686003)(256004)(2906002)(4326008)(66946007)(66446008)(64756008)(66476007)(66556008)(476003)(14444005)(6916009)(99286004)(6246003)(44832011)(6436002)(486006)(102836004)(91956017)(316002)(54906003)(5660300002)(76116006)(305945005)(446003)(74316002)(52536014)(33656002)(186003)(7736002)(81156014)(81166006)(3846002)(53546011)(8936002)(6506007)(8676002)(7696005)(229853002)(76176011)(86362001)(6116002)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3069;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Xx2q+mIxMZ37Y2gsC7X+rmNHIFn76UwkuONsUtopZ/Ckc+VoCmVAdrfENkfcBzj3MDE8Lq2frtXIqIZcM0m8pXHX4q9ysSvVBSiglEb76EJNvjtiwfekAFMpStTRC1cvsImjIju1axLe/QBFbadO8R+xa/+BVYC9Ma4A6wjgD+Uz2aZRt/04vtakf7eLEozJuLNgj5Sqs0Iy1Be7pNIPcwC9vKpScQGvCvgnfamfwCsYgELyfhSCs4fdawx+zOOBV/rXwFeq400i3hf1mXhST4EQGqcoEUgKUTFuoluKOEWkPajedMgUJ7RV0IUMYXblIlHxJHOTfXtyU76aFNkPYQ+ESYiFzX9FXPaXJHMGpZB2d6wKyUpig6v9N6MZ1Qd5JxRxVfoVjPXwqrkLm3Fed8FVs88GcX51DhXCq6iKPdViYB4oOvbS5SmYq449m7+4
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf36aa40-580e-48cb-dbaf-08d769188f99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2019 15:37:30.4555
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: evQhTsZHX3MT/AACMG83bd1nEAe5kiNec+To7BysYWcDzzXLKnhhThGE37M0FjnGwbEOPdGnGArCNgL2LdeFyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3069
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/14/19 10:41, Viresh Kumar wrote:
-> On 10-11-19, 11:16, Greg Kroah-Hartman wrote:
->> On Sat, Nov 09, 2019 at 12:27:29PM -0800, Bjorn Andersson wrote:
->>> As your question shows, everyone gets this wrong and the build breaks
->>> all the time (it's not "depends on framework", it's "depends on
->>> framework || framework=n" - and everyone you'll talk to will be
->>> puzzled as to why this is).
->>
->> Ah, now I get it.  Yeah, that sucks.  We need a "shortcut" in Kconfig to
->> express that type of dependancy.
-> 
-> Maybe we can use
-> 
-> depends on framework != m
-
-That won't work in the case where framework=m, provider=m and consumer=m.
-Today this is supported by having each consumer to:
-	depends on framework || !framework
-
-So again, the problem is that we need to add something to Kconfig, even a
-"shortcut", in order to express this dependency. If we convert the framework
-from tristate to bool, there will be no need to touch Kconfig, as we have the
-include stubs. Keeping the modular support comes at the cost of adding a
-dependency to Kconfig for each user.
-
-Thanks,
-Georgi
+On 14.11.2019 00:24, Rafael J. Wysocki wrote:=0A=
+> On Friday, October 25, 2019 8:00:48 PM CET Leonard Crestez wrote:=0A=
+>> This is exported only for dev_pm_qos to use in order to implement=0A=
+>> per-device freq constraints.=0A=
+>>=0A=
+>> Export with a leading underscore because this is an implementation=0A=
+>> detail, it's not meant to be used by drivers making QoS requests.=0A=
+>>=0A=
+>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>> ---=0A=
+>>   include/linux/pm_qos.h |  2 ++=0A=
+>>   kernel/power/qos.c     | 11 ++++++-----=0A=
+>>   2 files changed, 8 insertions(+), 5 deletions(-)=0A=
+>>=0A=
+>> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h=0A=
+>> index 9105f47f5195..e90dae0b8de9 100644=0A=
+>> --- a/include/linux/pm_qos.h=0A=
+>> +++ b/include/linux/pm_qos.h=0A=
+>> @@ -291,10 +291,12 @@ s32 freq_qos_read_value(struct freq_constraints *q=
+os,=0A=
+>>   int freq_qos_add_request(struct freq_constraints *qos,=0A=
+>>   			 struct freq_qos_request *req,=0A=
+>>   			 enum freq_qos_req_type type, s32 value);=0A=
+>>   int freq_qos_update_request(struct freq_qos_request *req, s32 new_valu=
+e);=0A=
+>>   int freq_qos_remove_request(struct freq_qos_request *req);=0A=
+>> +int _freq_qos_apply(struct freq_qos_request *req,=0A=
+>> +		    enum pm_qos_req_action action, s32 value);=0A=
+>>   =0A=
+>>   int freq_qos_add_notifier(struct freq_constraints *qos,=0A=
+>>   			  enum freq_qos_req_type type,=0A=
+>>   			  struct notifier_block *notifier);=0A=
+>>   int freq_qos_remove_notifier(struct freq_constraints *qos,=0A=
+>> diff --git a/kernel/power/qos.c b/kernel/power/qos.c=0A=
+>> index 04e83fdfbe80..ea38ae86bd66 100644=0A=
+>> --- a/kernel/power/qos.c=0A=
+>> +++ b/kernel/power/qos.c=0A=
+>> @@ -708,16 +708,16 @@ s32 freq_qos_read_value(struct freq_constraints *q=
+os,=0A=
+>>   =0A=
+>>   	return ret;=0A=
+>>   }=0A=
+>>   =0A=
+>>   /**=0A=
+>> - * freq_qos_apply - Add/modify/remove frequency QoS request.=0A=
+>> + * _freq_qos_apply - Add/modify/remove frequency QoS request.=0A=
+>>    * @req: Constraint request to apply.=0A=
+>>    * @action: Action to perform (add/update/remove).=0A=
+>>    * @value: Value to assign to the QoS request.=0A=
+>>    */=0A=
+>> -static int freq_qos_apply(struct freq_qos_request *req,=0A=
+>> +int _freq_qos_apply(struct freq_qos_request *req,=0A=
+>>   			  enum pm_qos_req_action action, s32 value)=0A=
+>>   {=0A=
+>>   	int ret;=0A=
+>>   =0A=
+>>   	switch(req->type) {=0A=
+>> @@ -733,10 +733,11 @@ static int freq_qos_apply(struct freq_qos_request =
+*req,=0A=
+>>   		ret =3D -EINVAL;=0A=
+>>   	}=0A=
+>>   =0A=
+>>   	return ret;=0A=
+>>   }=0A=
+>> +EXPORT_SYMBOL_GPL(_freq_qos_apply);=0A=
+> =0A=
+> The devuce PM QoS code is not modular, so this is not necessary.=0A=
+> =0A=
+> And so I wouldn't change the name of the function, just make it non-stati=
+c=0A=
+> and add its header to pm_qos.h.=0A=
+=0A=
+OK, and since the changes for exporting freq_qos_apply are so small I'll =
+=0A=
+just I'll just squash into the third patch.=0A=
+=0A=
+> =0A=
+>>   =0A=
+>>   /**=0A=
+>>    * freq_qos_add_request - Insert new frequency QoS request into a give=
+n list.=0A=
+>>    * @qos: Constraints to update.=0A=
+>>    * @req: Preallocated request object.=0A=
+>> @@ -763,11 +764,11 @@ int freq_qos_add_request(struct freq_constraints *=
+qos,=0A=
+>>   		 "%s() called for active request\n", __func__))=0A=
+>>   		return -EINVAL;=0A=
+>>   =0A=
+>>   	req->qos =3D qos;=0A=
+>>   	req->type =3D type;=0A=
+>> -	ret =3D freq_qos_apply(req, PM_QOS_ADD_REQ, value);=0A=
+>> +	ret =3D _freq_qos_apply(req, PM_QOS_ADD_REQ, value);=0A=
+>>   	if (ret < 0) {=0A=
+>>   		req->qos =3D NULL;=0A=
+>>   		req->type =3D 0;=0A=
+>>   	}=0A=
+>>   =0A=
+>> @@ -796,11 +797,11 @@ int freq_qos_update_request(struct freq_qos_reques=
+t *req, s32 new_value)=0A=
+>>   		return -EINVAL;=0A=
+>>   =0A=
+>>   	if (req->pnode.prio =3D=3D new_value)=0A=
+>>   		return 0;=0A=
+>>   =0A=
+>> -	return freq_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);=0A=
+>> +	return _freq_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);=0A=
+>>   }=0A=
+>>   EXPORT_SYMBOL_GPL(freq_qos_update_request);=0A=
+>>   =0A=
+>>   /**=0A=
+>>    * freq_qos_remove_request - Remove frequency QoS request from its lis=
+t.=0A=
+>> @@ -819,11 +820,11 @@ int freq_qos_remove_request(struct freq_qos_reques=
+t *req)=0A=
+>>   =0A=
+>>   	if (WARN(!freq_qos_request_active(req),=0A=
+>>   		 "%s() called for unknown object\n", __func__))=0A=
+>>   		return -EINVAL;=0A=
+>>   =0A=
+>> -	return freq_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);=
+=0A=
+>> +	return _freq_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);=
+=0A=
+>>   }=0A=
+>>   EXPORT_SYMBOL_GPL(freq_qos_remove_request);=0A=
+>>   =0A=
+>>   /**=0A=
+>>    * freq_qos_add_notifier - Add frequency QoS change notifier.=0A=
+>>=0A=
+> =0A=
+> =0A=
+> =0A=
+> =0A=
+> =0A=
+=0A=
