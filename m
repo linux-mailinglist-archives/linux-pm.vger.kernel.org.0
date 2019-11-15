@@ -2,118 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEA6FDB4D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 11:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB24CFDB63
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 11:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727406AbfKOK04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 05:26:56 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37548 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727386AbfKOK04 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 05:26:56 -0500
-Received: by mail-ot1-f68.google.com with SMTP id d5so7605892otp.4;
-        Fri, 15 Nov 2019 02:26:54 -0800 (PST)
+        id S1727112AbfKOK3T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 05:29:19 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42816 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727122AbfKOK3S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 05:29:18 -0500
+Received: by mail-lj1-f194.google.com with SMTP id n5so10124356ljc.9
+        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2019 02:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PNO7uhgp1dcpLp+jSsP4cB4QzEUZpe1GKQTX+AAJeuY=;
+        b=q0G6wd3wtT1g3Ze5W4bLdIwUj2olQvXCc26kmtZu4cGRHUgr0c2yofqR/zp1BazHVd
+         4GurAZcPwsvrmGAMNxAnQLpstMvjDpGtH0cbKMLR8ZauXVjV76MPSante0JjgH8u0JhN
+         1tY882Wfa50TCIHKGdfprKC990u64sTz9OwKHeoeV3nj5Qfeox4tA0qEMn1OZuDvvQMM
+         n+i0DaoCXK3ULsgRg1BV+JFn+ySXVebWnu6u842J5Ps6TMSfFAkuYFmxUMNnpCVZoD06
+         pf7ZUXgpfAmis/wJagvkYIqnCznjwZBfMMLaSQOO4TR0ZlmjGK/owvZA3snF4CV/F34n
+         taQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pem47e68QsfR2xvNK79o7bq8NBfMBA9ulZTmR6QPBXQ=;
-        b=K1vHfbFJfFav1lGD0zptMCjxNGjlxHQMOTx24Z7vDAV4oGg6LhS7onR1GIpDJm9eew
-         OSAYPM64Lekp3X3ycoMo3UD4FYI7hh+16fK/1bYK08Vh4EIbxOSWNSiOMLjYTQIFfU4G
-         WqhhwBhtGiU/itI9TEAUspMcy21LbP33lncsFmv+0+jq1J0vfKK6OHM813aVJTS+eWG3
-         Am0nSyIyvHS/9gKX8VdtDQpl+fAiPQwo8e08BxwW9cWPgRnK6J4oMV2jbj+q85QcMqF7
-         Tsmdy0BtIAS3JYJTVpABZoFGqxiAX07DTTtTUfEiuEn9WPwecLSlyybRQk9MVKWMwDK5
-         jtUg==
-X-Gm-Message-State: APjAAAV04iwVukIyc2QvqA0K1HoYlIaPFw19vuTYAaWH6dqZwosyj8CO
-        B6mDNl1PWWmXDi1Ir0r6KoP0x3gF4O6I0Ym3+ew=
-X-Google-Smtp-Source: APXvYqztMO0pme2trK3Xq1OxPCXqw9OHvMhjZFp3BASCzEKVIw6hhkm5ZGbKg8xG2i1KfPlviXBRToiXidUY4AKPnF0=
-X-Received: by 2002:a9d:6b91:: with SMTP id b17mr10218038otq.189.1573813613955;
- Fri, 15 Nov 2019 02:26:53 -0800 (PST)
+        bh=PNO7uhgp1dcpLp+jSsP4cB4QzEUZpe1GKQTX+AAJeuY=;
+        b=kTPQwqlfZV9HbacUwRAC/LAFqJiunSKM1ImdoG7vXUAynQ+dcKzj0oMx3STh4VdFQE
+         AJOEhaIzY6hCDOuRE87XiPhxVDmTSqmdaSs5AimTZojmlpKcguOp4G4r3mXav5oML9v8
+         ho7J0H4omYwL0SS6gNJYBS00AcbhU18z3Cd84i2nv8obvJamROuAcwNt/bMDFfbiTPlR
+         icOTw2DKDQdljfDPMtNKtuQFaDwYeL/o2BuQt+IMtDdArRC6uLNWcnrFMcfKB1Retemn
+         cJ38bCikIAX/IxJwz/6GdQsjGJdu6IbqPJGnandRKT8HemqHaKpQATkuG0d0y9D5lwza
+         hqNA==
+X-Gm-Message-State: APjAAAUX++TargNmkWaMTbzFV0mmI9IGcDM4zGB6k7I3OoekWvlXQglR
+        aySSKMOdMOXD02j2H7fYAsw2S6KNcO1+HaKpagDt2g==
+X-Google-Smtp-Source: APXvYqxS72HHnU9jyNroqC25BDaEGu7VNx5qQYXeMTZC7ZEf2Rk0L9H2sBLv3DCxNHHvulZNf2UsHJOXSc7+dOL5STM=
+X-Received: by 2002:a2e:b0e3:: with SMTP id h3mr10169336ljl.193.1573813755258;
+ Fri, 15 Nov 2019 02:29:15 -0800 (PST)
 MIME-Version: 1.0
-References: <1573041302-4904-1-git-send-email-zhenzhong.duan@oracle.com> <1573041302-4904-2-git-send-email-zhenzhong.duan@oracle.com>
-In-Reply-To: <1573041302-4904-2-git-send-email-zhenzhong.duan@oracle.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Nov 2019 11:26:43 +0100
-Message-ID: <CAJZ5v0gyszPOvUxd8WX8gxc1OvX_nLUGh3vKn=aXWRj52L76yw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 1/4] cpuidle-haltpoll: ensure grow start value
- is nonzero
-To:     Zhenzhong Duan <zhenzhong.duan@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        kvm-devel <kvm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org>
+ <20191115095447.GU4114@hirez.programming.kicks-ass.net> <CAKfTPtCTcrq1E1H8A3TL1xvALUrQ7ybPoERJ+C2O2+QXpVEZGQ@mail.gmail.com>
+In-Reply-To: <CAKfTPtCTcrq1E1H8A3TL1xvALUrQ7ybPoERJ+C2O2+QXpVEZGQ@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 15 Nov 2019 11:29:03 +0100
+Message-ID: <CAKfTPtA-up_9WHfTka33WRxXCatUZioYS0v5gY9jjzOGT98oLQ@mail.gmail.com>
+Subject: Re: [PATCH v4] sched/freq: move call to cpufreq_update_util
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Doug Smythies <dsmythies@telus.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 6, 2019 at 12:56 PM Zhenzhong Duan
-<zhenzhong.duan@oracle.com> wrote:
+On Fri, 15 Nov 2019 at 11:18, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
-> dev->poll_limit_ns could be zeroed in certain cases (e.g. by
-> guest_halt_poll_ns = 0). If guest_halt_poll_grow_start is zero,
-> dev->poll_limit_ns will never be bigger than zero.
+> On Fri, 15 Nov 2019 at 10:55, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Nov 14, 2019 at 06:07:31PM +0100, Vincent Guittot wrote:
+> > > update_cfs_rq_load_avg() calls cfs_rq_util_change() everytime pelt decays,
+> > > which might be inefficient when cpufreq driver has rate limitation.
+> > >
+> > > When a task is attached on a CPU, we have call path:
+> > >
+> > > update_load_avg()
+> > >   update_cfs_rq_load_avg()
+> > >     cfs_rq_util_change -- > trig frequency update
+> > >   attach_entity_load_avg()
+> > >     cfs_rq_util_change -- > trig frequency update
+> > >
+> > > The 1st frequency update will not take into account the utilization of the
+> > > newly attached task and the 2nd one might be discard because of rate
+> > > limitation of the cpufreq driver.
+> >
+> > Doesn't this just show that a dumb rate limit in the driver is broken?
+>
+> But the rate limit may come from HW constraints that forces to wait
+> let say 4ms or even 10ms between each frequency update.
+>
+> >
+> > > update_cfs_rq_load_avg() is only called by update_blocked_averages()
+> > > and update_load_avg() so we can move the call to
+> > > cfs_rq_util_change/cpufreq_update_util() into these 2 functions. It's also
+> > > interesting to notice that update_load_avg() already calls directly
+> > > cfs_rq_util_change() for !SMP case.
+> > >
+> > > This changes will also ensure that cpufreq_update_util() is called even
+> > > when there is no more CFS rq in the leaf_cfs_rq_list to update but only
+> > > irq, rt or dl pelt signals.
+> >
+> > I don't think it does that; that is, iirc the return value of
+> > ___update_load_sum() is 1 every time a period lapses. So even if the avg
+> > is 0 and doesn't change, it'll still return 1 on every period.
+> >
+> > Which is what that dumb rate-limit thing wants of course. But I'm still
+> > thinking that it's stupid to do. If nothing changes, don't generate
+> > events.
+>
+> When everything (irq, dl, rt, cfs) is 0, we don't generate events
+> because update_blocked_averages is no more called because
+> rq->has_blocked_load is clear
+>
+> With current implementation, if cfs is 0 but not irq, dl or rt, we
+> don't call cpufreq_update_util because it is only called through cfs
+>
+> >
+> > If anything, update_blocked_avgerages() should look at
+> > @done/others_have_blocked() to emit events for rt,dl,irq.
+>
+> other_have_blocked can be set but no decay happened during the update
+> and we don't need to call cpufreq_update_util
+>
+> >
+> > So why are we making the scheduler code more ugly instead of fixing that
+> > driver?
 
-I would rephrase this in the following way:
+Also, I think that calling cfs_rq_util_change in
+attach_entity_load_avg is not optimal because the attach can happen at
+a child level before it has been propagated down to root
+So I'm working on trying to remove it from attach_entity_load_avg and
+keep it in update_load_avg. this would help cleaning the ugly
 
-"If guest_halt_poll_grow_start is zero and dev->poll_limit_ns becomes
-zero for any reason, it will never be greater than zero again, so use
-..."
-
-The patch itself looks OK to me.
-
-> Use param callback to avoid writing zero to guest_halt_poll_grow_start.
->
-> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
-> ---
->  drivers/cpuidle/governors/haltpoll.c | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-> index 7a703d2..660859d 100644
-> --- a/drivers/cpuidle/governors/haltpoll.c
-> +++ b/drivers/cpuidle/governors/haltpoll.c
-> @@ -20,6 +20,26 @@
->  #include <linux/module.h>
->  #include <linux/kvm_para.h>
->
-> +static int grow_start_set(const char *val, const struct kernel_param *kp)
-> +{
-> +       int ret;
-> +       unsigned int n;
-> +
-> +       if (!val)
-> +               return -EINVAL;
-> +
-> +       ret = kstrtouint(val, 0, &n);
-> +       if (ret || !n)
-> +               return -EINVAL;
-> +
-> +       return param_set_uint(val, kp);
-> +}
-> +
-> +static const struct kernel_param_ops grow_start_ops = {
-> +       .set = grow_start_set,
-> +       .get = param_get_uint,
-> +};
-> +
->  static unsigned int guest_halt_poll_ns __read_mostly = 200000;
->  module_param(guest_halt_poll_ns, uint, 0644);
->
-> @@ -33,7 +53,7 @@
->
->  /* value in us to start growing per-cpu halt_poll_ns */
->  static unsigned int guest_halt_poll_grow_start __read_mostly = 50000;
-> -module_param(guest_halt_poll_grow_start, uint, 0644);
-> +module_param_cb(guest_halt_poll_grow_start, &grow_start_ops, &guest_halt_poll_grow_start, 0644);
->
->  /* allow shrinking guest halt poll */
->  static bool guest_halt_poll_allow_shrink __read_mostly = true;
-> --
-> 1.8.3.1
->
+-       } else if (decayed && (flags & UPDATE_TG))
+-               update_tg_load_avg(cfs_rq, 0);
++       } else if (decayed) {
++               cfs_rq_util_change(cfs_rq, 0);
++
++               if (flags & UPDATE_TG)
++                       update_tg_load_avg(cfs_rq, 0);
++       }
+ }
