@@ -2,191 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1346AFE0F2
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 16:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE529FE142
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 16:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfKOPNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 10:13:01 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:33266 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727380AbfKOPNA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 10:13:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=OQdTLuR4MwzJvC3l2K9WiOBsfhChWetXzjSMuUMUuxA=; b=Lz5ZvFoc56/6mRaBw91xDfNB/
-        CmlEBZP5nqpX6wKCTXRhgE5vSEBZCqqFIPZ4AwqnWXX57UpifP7lQy2xDjnpTpfAU0cowXh0bGagZ
-        rEt9gGXBqdWShK9pmYTMdk1kxDjVrttwv0gBUGyIO0zfhKqBg7LXgKPRqYaj+pIftpcZtmdFIzHRV
-        QMj+tmg8JgRh07j8ho30bQcth84zOvAGhWSDUmBZjq92EgcfWvxbSjPw0Dqgdw+iYD+5ulPSBD9c/
-        gXOZRz1aqW+hSXOgbBH7B3agMwvkCi9L5LihNef3Z+vjsdpAs/wuNlCqoQFivk2E1hvjZNwTjaC91
-        ZwxpaE/UQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iVdGq-0000YK-3Q; Fri, 15 Nov 2019 15:12:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5CB9303DDD;
-        Fri, 15 Nov 2019 16:11:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C8E352B12EE0A; Fri, 15 Nov 2019 16:12:20 +0100 (CET)
-Date:   Fri, 15 Nov 2019 16:12:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Doug Smythies <dsmythies@telus.net>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
-        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v4] sched/freq: move call to cpufreq_update_util
-Message-ID: <20191115151220.GO4131@hirez.programming.kicks-ass.net>
-References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org>
- <20191115132520.GJ4131@hirez.programming.kicks-ass.net>
- <CAKfTPtB4UGmZ53iVRsOV+k4MiS=Dzqw2-6_sBhko0bHRMAed2g@mail.gmail.com>
+        id S1727476AbfKOPa5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 10:30:57 -0500
+Received: from cmta16.telus.net ([209.171.16.89]:40473 "EHLO cmta16.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727443AbfKOPa4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 Nov 2019 10:30:56 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id VdYfit82MFXoiVdYgiVUb5; Fri, 15 Nov 2019 08:30:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1573831854; bh=yMfigeQBBOt/OlOFPFk+3W/D65H7EvP4UA3rosQWmIU=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=wfac57YiF7xX0aRDFhpiq2jQiMFLwNxMs0W07nH49IDSESIAN/8MSZYt3E1x7koTr
+         Whuw3FZgTy6TE9Tv2aQXobQzF6EYjXyTtdafkSbrY6Ks7DfvyJtfzrYJIWlGDo1c2o
+         QtSB954/ZeuIGfeqRz59R1fn82HTZYEAdk9YC6JxqmxtVzgIqG/GPYNoKirIUMLZ5Y
+         S5bxf6nrzayoyQQe/2nv3Tdo/1HPJ8P20rFqMCJ8wuGtOlV/6Tw1G0pNMZDBVEtajE
+         1j4P0LyE+XsCK5ZnYlwIgvluZoT9fvwy3JvNsTMecTr2UyNaIlvDRbAlgbdcA20UBP
+         Z5+HMtLj20wVw==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=HoEI5HbS c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=XbKOgolVw54_PmlDEtoA:9 a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Peter Zijlstra'" <peterz@infradead.org>
+Cc:     "'linux-kernel'" <linux-kernel@vger.kernel.org>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Steven Rostedt'" <rostedt@goodmis.org>,
+        "'Mel Gorman'" <mgorman@suse.de>,
+        "'open list:THERMAL'" <linux-pm@vger.kernel.org>,
+        "'Linus Torvalds'" <torvalds@linux-foundation.org>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Sargun Dhillon'" <sargun@sargun.me>,
+        "'Tejun Heo'" <tj@kernel.org>, "'Xie XiuQi'" <xiexiuqi@huawei.com>,
+        <xiezhipeng1@huawei.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>
+References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org> <20191115095447.GU4114@hirez.programming.kicks-ass.net> <CAKfTPtCTcrq1E1H8A3TL1xvALUrQ7ybPoERJ+C2O2+QXpVEZGQ@mail.gmail.com> <20191115103735.GE4131@hirez.programming.kicks-ass.net> <CAKfTPtDi_-h6g+rhV04XXjqpWprC2vT6hgLZSrTW5rdD54PrQA@mail.gmail.com> <20191115105110.GG4131@hirez.programming.kicks-ass.net> <CAKfTPtC3g4iCxvAJo9Km9fZ0fPSw5Jt9TY2+xF7kxGmOZ66gxw@mail.gmail.com> <20191115130144.GA4097@hirez.programming.kicks-ass.net>
+In-Reply-To: <20191115130144.GA4097@hirez.programming.kicks-ass.net>
+Subject: RE: [PATCH v4] sched/freq: move call to cpufreq_update_util
+Date:   Fri, 15 Nov 2019 07:30:47 -0800
+Message-ID: <000001d59bc9$aab4e010$001ea030$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtB4UGmZ53iVRsOV+k4MiS=Dzqw2-6_sBhko0bHRMAed2g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdWbtO4ylk/1Cq0UT7GdBw8Mb2nOvgADxNjA
+X-CMAE-Envelope: MS4wfHHFw51kjAZZ0qdbGvJn7HzWIB4x3VEf3XTQKgWc4M/sDOsEmPYxF6VpbwmuHyROFdkggo5LWZiX9Jmv1VGR1f1BqKRv5Fkk/jATlDEyYHtrTfX4Mh7x
+ 4ph6c4uhrsvltmOk0m+pGBnDz0Oa+i4pk8IFM8/UMWb420NveSPauJCWgGT60b2VqV/7HVjygj1GZY/shKU6vV55xcYRBYoldeNxBr+I0TzdVK4Fnmzdhu52
+ uluAHLN6KA86IbSLZkb7Ccejm74bH2V45J1HMjS8HB+/x5DF/fQ6o651qk5rf/olEOcGrMc+YHnil4PNsLGJkTjYVJS3k+Nt73+ywI/tgXqo+Wg7/NB2YtIt
+ guEqL03+zfdBLedYHoGrsVy8qonhYG3m8i/FMNHXDtAi4OG1DsBaFPzVJ3K2jetF+77b4tnbXa2ThnMD2/rueSBthhUWHoUDSksdIl5e5CiNW0aZLaVNFw13
+ 5dlaPSABLUYwuR246zvaciE4ed2mpUpzxUeCAJoH61YLrp5tkDMUy7r6U7ljyAbz6g6xvDjV49aoucfuH2K5tBJKRTugyHy4Jg7ujsuISdiSNVNy+y24vKcu
+ qhWPf+3vPSHPRue7PG/I218F/N/q5TA5+0QGru+fVif/Nig0pdOd0bMrVtxjgIfXA1h1F8pwlg/5PrZ8U+jZ+Kae
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 02:37:27PM +0100, Vincent Guittot wrote:
-> On Fri, 15 Nov 2019 at 14:25, Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Peter,
 
-> > Should not all 3 have their windows aligned and thus alway return the
-> > exact same value?
-> 
-> rt and dl yes but not irq
-> 
-> But having aligned window doesn't mean that they will all decay.
-> One can have been updated just before (during a dequeue as an example)
-> or at least less than 1ms before
+On 2019.11.15 05:02 Peter Zijlstra wrote:
+> On Fri, Nov 15, 2019 at 12:03:31PM +0100, Vincent Guittot wrote:
+>
+>> This patch does 2 things:
+>> - fix the spurious call to cpufreq just before attaching a task
+>
+> Right, so that one doesn't concern me too much.
+>
+>> - make sure cpufreq is still called when cfs is 0 but not irq/rt or dl
+>
+> But per the rq->has_blocked_load logic we would mostly stop sending
+> events once we reach all 0s.
+>
+> Now, most of those updates will be through _nohz_idle_balance() ->
+> update_nohz_stats(), which are remote, which means intel_pstate is
+> ignoring them anyway.
+>
+> Now the _nohz_idle_balance() -> update_blocked_averages() thing runs
+> local, and that will update the one random idle CPU we picked to run
+> nohz balance, but all others will be left where they were.
+>
+> So why does intel_pstate care... Esp. on SKL+ with per-core P state this
+> is of dubious value.
+>
+> Also, and maybe I should go read back, why do we care what the P state
+> is when we're mostly in C states anyway? These are all idle CPUs,
+> otherwise we wouldkn't be running update_blocked_averages() on them
+> anyway.
+>
+> Much confusion..
 
-Now, the thing is, if that update happened in sched/rt, then it wouldn't
-have called cpufreq anyway. And once we're idle longer than a period,
-they'll all decay at once.
+Background:
 
-Except indeed that IRQ stuff, which runs out of sync.
+It is true that this is very likely a rare use case.
+Apparently, I can make my test system considerably more "idle"
+than most.
 
-That is, I'm just not convinced it matters much if we keep rq->cfs
-on the list forever (like UP). Because we'll only stop calling when
-update_blocked_averages() when everything hit 0, and up until that
-point, we'll get one update per period from rq->cfs.
+For many years now, I have never seen the time between calls,
+per CPU, to the intel_pstate driver exceed 4 seconds.
 
-For good measure we can force an update when @done, at that point we
-know all 0s.
+Then as of:
+sched/fair: Fix O(nr_cgroups) in load balance path
+and for an idle system, the time between calls could
+be as much as a few hundred seconds. Myself, and not
+knowing much (anything) about scheduler details, I found
+this odd, and so investigated.
 
-How is something like this?
+And yes, so who cares if we are in deep C states anyhow?
+If, for whatever reason, the system is running with
+"intel_idle.max_cstate=1" my findings were that
+the processor could end up consuming a lot more energy
+for a long long time. Why? Because, at least for my
+processor, and older i7-2600K (no HWP), in idle state 1, the
+CPU does not relinquish its vote to the PLL, and with
+no calls to the driver the requested p-state doesn't decay.
 
----
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 545bcb90b4de..a99ac2aa4a23 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3508,9 +3508,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 	cfs_rq->load_last_update_time_copy = sa->last_update_time;
- #endif
+Not previously mentioned: The situation is considerably
+exasperated by this piece of boost code within the intel_pstate
+driver:
+
+        /*
+         * If the average P-state during the previous cycle was higher than the
+         * current target, add 50% of the difference to the target to reduce
+         * possible performance oscillations and offset possible performance
+         * loss related to moving the workload from one CPU to another within
+         * a package/module.
+         */
+        avg_pstate = get_avg_pstate(cpu);
+        if (avg_pstate > target)
+                target += (avg_pstate - target) >> 1;
+
+Hope this helps.
+
+... Doug
  
--	if (decayed)
--		cfs_rq_util_change(cfs_rq, 0);
--
- 	return decayed;
- }
- 
-@@ -3620,8 +3617,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
- 		update_tg_load_avg(cfs_rq, 0);
- 
--	} else if (decayed && (flags & UPDATE_TG))
--		update_tg_load_avg(cfs_rq, 0);
-+	} else if (decayed) {
-+		cfs_rq_util_change(cfs_rq, 0);
-+
-+		if (flags & UPDATE_TG)
-+			update_tg_load_avg(cfs_rq, 0);
-+	}
- }
- 
- #ifndef CONFIG_64BIT
-@@ -7453,7 +7454,7 @@ static void update_blocked_averages(int cpu)
- 	struct cfs_rq *cfs_rq, *pos;
- 	const struct sched_class *curr_class;
- 	struct rq_flags rf;
--	bool done = true;
-+	bool done = true, decayed = false;
- 
- 	rq_lock_irqsave(rq, &rf);
- 	update_rq_clock(rq);
-@@ -7476,10 +7477,14 @@ static void update_blocked_averages(int cpu)
- 	 * list_add_leaf_cfs_rq() for details.
- 	 */
- 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
-+		bool last = cfs_rq == &rq->cfs;
- 		struct sched_entity *se;
- 
--		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-+		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq, 0);
-+			if (last)
-+				decayed = true;
-+		}
- 
- 		/* Propagate pending load changes to the parent, if any: */
- 		se = cfs_rq->tg->se[cpu];
-@@ -7490,7 +7495,7 @@ static void update_blocked_averages(int cpu)
- 		 * There can be a lot of idle CPU cgroups.  Don't let fully
- 		 * decayed cfs_rqs linger on the list.
- 		 */
--		if (cfs_rq_is_decayed(cfs_rq))
-+		if (!last && cfs_rq_is_decayed(cfs_rq))
- 			list_del_leaf_cfs_rq(cfs_rq);
- 
- 		/* Don't need periodic decay once load/util_avg are null */
-@@ -7498,6 +7503,9 @@ static void update_blocked_averages(int cpu)
- 			done = false;
- 	}
- 
-+	if (decayed || done)
-+		cpufreq_update_util(rq, 0);
-+
- 	update_blocked_load_status(rq, !done);
- 	rq_unlock_irqrestore(rq, &rf);
- }
-@@ -7555,6 +7563,7 @@ static inline void update_blocked_averages(int cpu)
- 	struct cfs_rq *cfs_rq = &rq->cfs;
- 	const struct sched_class *curr_class;
- 	struct rq_flags rf;
-+	bool done, decayed;
- 
- 	rq_lock_irqsave(rq, &rf);
- 	update_rq_clock(rq);
-@@ -7568,9 +7577,13 @@ static inline void update_blocked_averages(int cpu)
- 	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
- 	update_irq_load_avg(rq, 0);
- 
--	update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	done = !(cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
- 
--	update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
-+	if (decayed || done)
-+		cpufreq_update_util(rq, 0);
-+
-+	update_blocked_load_status(rq, !done);
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
+
