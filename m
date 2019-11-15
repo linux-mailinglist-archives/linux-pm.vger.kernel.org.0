@@ -2,86 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDA5FD66B
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 07:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EF1FD6B2
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 08:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbfKOGZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 01:25:26 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37857 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727362AbfKOGZ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 01:25:26 -0500
-Received: by mail-pl1-f195.google.com with SMTP id bb5so3933310plb.4;
-        Thu, 14 Nov 2019 22:25:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hWSFthaD6WQUpptuakDsFyGfoN+3DaezgL6+fYz/Ahc=;
-        b=surtFdZ6zev7u3GpypYS2mChQSvez3bS0pyRfpr0JfAThjv1WU5p0mZ9tfK5pvXCLD
-         xCX/zk8n+XK3BQOsjfd+hE1wpQpfFJ+lOZzDnINijaahKraSSjOD+jrPujRtt7T3tIHr
-         Q5pcmZsObJYz1F5yRoAkJ6MG9NM7KZ9hYzfxzOhUOrufjedpvuQimZE63+HEdWPPQWfx
-         zwZxjATZZForCjopS6WxX7HLFEeJtZQs8NQROfwp8fqa9ZXdVAtqZ/HaEpoKi3pc995g
-         +LrVj9lOLH7RnIsXLttMBNA5d7p7G/BU/cAtXayQNKPRmQXt/mUyMAKRgCJg/8cehpBO
-         BgEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hWSFthaD6WQUpptuakDsFyGfoN+3DaezgL6+fYz/Ahc=;
-        b=oL5ZsSUWD4ZEqe6cvcJEUIlQPqrZ7Li1JghBYqGAe/OzpPRj3Q2P7EaGykiX36B9di
-         dGWD+/C/mD5n+xYEZePOkivZQTYTPcRUEM8IMGiXY7ey8BEwbxk48JrD9lgPA/M7jjyr
-         Rd1G9QF1Ue4xSwEnWKO2IaGlXcDxpvNrwF5nYzyhzC/SKlrFvhHncKVBJ60vGm2S8gAo
-         QqIl4bXTNlU9kqVl0ffS35b3NEVfAJjD/8y8xtfgmrT2Kyv6VI44i1RgpCyZG0FFDqdG
-         aCVGBQv5cXhjSognbjVm7T9tP9e3UUTybXalPxXryx+CgBkd4jW/G+fhetoKtME5U0iW
-         8kyg==
-X-Gm-Message-State: APjAAAXKUqYsQQQPSItuZlcQ8QxbCznR6clQoatsWUyJbp8rZe7/EDGU
-        CoFNYi2qgtHNA6SeYUlosVg=
-X-Google-Smtp-Source: APXvYqyUtDRGP8aPtEUpVOiMEJ3XpXw98JSoFyR7XZp1dXU0TZoIdIwfRWpWprrKDJqFByr7GZINAQ==
-X-Received: by 2002:a17:90a:d155:: with SMTP id t21mr16943033pjw.84.1573799124691;
-        Thu, 14 Nov 2019 22:25:24 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id x12sm8682608pfm.130.2019.11.14.22.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2019 22:25:24 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] power: supply: pda_power: add missed usb_unregister_notifier
-Date:   Fri, 15 Nov 2019 14:25:15 +0800
-Message-Id: <20191115062515.7087-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726958AbfKOHBF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 15 Nov 2019 02:01:05 -0500
+Received: from azteca-comunicaciones.com ([191.102.66.70]:52370 "EHLO semo.net"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727066AbfKOHBE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 Nov 2019 02:01:04 -0500
+Reply-To: yuval@free2312.com
+From:   "Yuval" <tstewart@semo.net>
+To:     linux-pm@vger.kernel.org
+Subject: Business Proposal - Please Reply
+Date:   15 Nov 2019 02:01:03 -0500
+Message-ID: <20191115020103.5BECF21D3B9A42BB@semo.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver forgets to unregister the notifier in remove.
-Add the call to fix it.
+Hello
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/power/supply/pda_power.c | 4 ++++
- 1 file changed, 4 insertions(+)
+My name is Yuval Rose, a Client Relations officer at CoinMatic, A 
+crypto currency exchange company based in Canada and one of 
+Canada’s foremost Crypto-currency exchange platforms. I have an 
+urgent lucrative business opportunity for you. I got your details 
+on the internet when I was searching for a reliable person that 
+can handle this deal and I believe you can handle it because you 
+bears the same Last-Name with the dead investor of the business 
+am about to introduce to you. This is a private and confidential 
+message from me to you and I request that it be treated as such.
 
-diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_power.c
-index 3ae5707d39fa..03a37fd6be27 100644
---- a/drivers/power/supply/pda_power.c
-+++ b/drivers/power/supply/pda_power.c
-@@ -429,6 +429,10 @@ static int pda_power_probe(struct platform_device *pdev)
- 
- static int pda_power_remove(struct platform_device *pdev)
- {
-+#if IS_ENABLED(CONFIG_USB_PHY)
-+	if (!IS_ERR_OR_NULL(transceiver) && pdata->use_otg_notifier)
-+		usb_unregister_notifier(transceiver, &otg_nb);
-+#endif
- 	if (pdata->is_usb_online && usb_irq)
- 		free_irq(usb_irq->start, pda_psy_usb);
- 	if (pdata->is_ac_online && ac_irq)
--- 
-2.24.0
+I am contacting you with respect to an urgent issue regarding a 
+Bitcoin account belonging to a deceased account holder, I got 
+your contact in my quest for a Partner to stand in as a Next of 
+Kin to the deceased account holder, this was from the last 
+details she sent in to the company regarding liquidation of her 
+BTC account, since you might be aware that BTC transactions are 
+mostly anonymous. I contacted you so that you can apply to my 
+company as a relative of the deceased in order to claim the fund. 
+This is as easy as ABC since my company already took a decision 
+that the entire fund would be credited to any relative that comes 
+up for claim before the end of December this year.
 
+The Bitcoin was sold and converted to cash at the request of the 
+late account holder for onward deposit to an account to be 
+advised by her. Upon liquidation, we waited for months for info 
+on the bank account for the deposit but never got a feedback. 
+Upon inquiry, it was confirmed that she passed away (died) after 
+a cancer related ailment.
+
+At a meeting held 2 weeks ago by my Company’s Management on the 
+matter, it was resolved that unless a Next of Kin or any relative 
+of the late account Holder comes forward for claim of the funds 
+on or before 30th of December 2019 (which is practically 
+impossible) the whole funds would be converted back to Bitcoin 
+and becomes part of the Company's portfolio.
+
+With the above in mind, I decided to quickly reach out to you so 
+that you can apply to my company for claim of this fund in the 
+capacity of a Next-of-Kin/Relative. Rest assured that this is a 
+straight forward process with no risks involved whatsoever. Start 
+to finish of the process with fund deposited in your nominated 
+bank account can be achieved within a space of 10 banking days or 
+less. All that I require from you is full cooperation and 
+sincerity.
+
+I am suggestion a sharing ratio of 50/50 split after fund is 
+credited to your account. We shall have to draft up an agreement 
+to that effect if agreed. If this is OK with you and wish to 
+continue with the claim process, I will draft a letter which you 
+would email to my Company as a formal request for claim of this 
+funds.
+
+I await your reply, please provide your private phone number in 
+your reply.
+
+
+Send reply to: yuval@free2312.com
+
+
+Best Regards
+Yuval
+
+
+Toronto-Canada
