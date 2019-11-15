@@ -2,85 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C1AFE85A
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 23:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A8EFE8C7
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 00:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbfKOW7T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 17:59:19 -0500
-Received: from mailgate-2.ics.forth.gr ([139.91.1.5]:59278 "EHLO
-        mailgate-2.ics.forth.gr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbfKOW7T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 17:59:19 -0500
-X-Greylist: delayed 2624 seconds by postgrey-1.27 at vger.kernel.org; Fri, 15 Nov 2019 17:59:17 EST
-Received: from av3.ics.forth.gr (av3in [139.91.1.77])
-        by mailgate-2.ics.forth.gr (8.14.4/ICS-FORTH/V10-1.8-GATE) with ESMTP id xAFMEr1p017647;
-        Fri, 15 Nov 2019 22:14:55 GMT
-X-AuditID: 8b5b014d-771ff70000003678-bf-5dcf235dc69b
-Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id C0.AA.13944.D532FCD5; Sat, 16 Nov 2019 00:14:53 +0200 (EET)
-X-ICS-AUTH-INFO: Authenticated user:  at ics.forth.gr
+        id S1727200AbfKOXoP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 18:44:15 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:53714 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727056AbfKOXoP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 18:44:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=FEky5kd3UxgQGOzkEXIPDTXEoTONlGizTLsmqA8bwWA=; b=JwLPwh/InU2pJOkVs5TtJ6ZsH
+        idRgPyOqtFMmoibc0jLx+IFH72OW/aXO2IWt4E+QnNJbnJSGdA6JzWFEDd1A6rfwQca9Bp5gYbhaM
+        oTxbJocQVcU9hK3XyFRtSlk5jUvyFBoGoR60Ii8Y0tdneY/touCOKtFDT9HvFt1jmz88wI/xWJ5hW
+        ReoXLKYLbGwMwa2yrHSE0NlU8eXBkAz4CRRWgNCHd3d2gG7h7ohv/S8O4EWkc0+HnE7Jx9IDBrbRQ
+        DnfEpsa8VQ2a+6f06zF0vSu32XEIswGCnE+hmmwcZb70FoNa2PIC1lWH7thwD0PUHX/w/IRsv4j2T
+        m0+Njbz2A==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iVlGA-0005PX-Re; Fri, 15 Nov 2019 23:44:14 +0000
+Subject: Re: linux-next: Tree for Nov 15 (thermal:
+ THERMAL_GOV_POWER_ALLOCATOR)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20191115190525.77efdf6c@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <247cd41e-a07b-adf0-4ec2-6467f0257837@infradead.org>
+Date:   Fri, 15 Nov 2019 15:44:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 16 Nov 2019 00:14:52 +0200
-From:   Nick Kossifidis <mick@ics.forth.gr>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: QEMU RISC-V virt machine poweroff driver
-Organization: FORTH
-In-Reply-To: <20191107212408.11857-1-hch@lst.de>
-References: <20191107212408.11857-1-hch@lst.de>
-Message-ID: <cca46a52ee91548962e2f9da4cf2202e@mailhost.ics.forth.gr>
-X-Sender: mick@mailhost.ics.forth.gr
-User-Agent: Roundcube Webmail/1.3.9
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsXSHT1dWTdW+XyswcZjPBbzj5xjtVi5+iiT
-        xefeI4wW2z63sFksvX6RyeLl5R5mi7ZZ/Bate4+wW5zeXeLA6bFm3hpGjzcvX7J4bFrVyeax
-        eUm9x+6bDWwel5qvs3t83iQXwB7FZZOSmpNZllqkb5fAlfHj8SPWghlsFX8mdLM1MM5g7WLk
-        5JAQMJF43XGSBcQWEjjCKLHsUC1E3FRi9t5ORhCbV0BQ4uTMJ2A1zAIWElOv7GeEsOUlmrfO
-        ZgaxWQRUJWZcXQFmswloSsy/dBCsXkRASeLpq7NA9VxA9TuZJDYeXQO2WBhoQUfrTTYQm19A
-        WOLT3YtAcQ4OTgEDiYNvJCHu0ZeYvm8iO0iYV8BF4tlxV4jTVCQ+/H7ADmKLCihL3Dz8nH0C
-        o+AsJJfOQnLpLCSXLmBkXsUokFhmrJeZXKyXll9UkqGXXrSJERwRjL47GG9vfqt3iJGJg/EQ
-        owQHs5II746KE7FCvCmJlVWpRfnxRaU5qcWHGKU5WJTEefO4l8cKCaQnlqRmp6YWpBbBZJk4
-        OKUamOb3XT0b8jIwkOOxa7xm1dyvE2fzTVNlcTzyIHRmrIvUgc2T7tQv+F+hlvRG52Ls7wU1
-        uhIzbW18BJe9MX+4P+ljhvTU9qp1140MrLceV2ub7lzVZPq3nzeuY1VHAn9E7H1uhy9u/85d
-        ufNqreyKif2i2yLlhA7wLJg6952y01nV13eSKxn/bbz09qPOIw71U2UBh14l7+GJOe6ys+WG
-        +YfiiMO/7p4JmvTx9zvR0JxNoawnWWpefCtYaLqsT+bgpR1HJk7+/ED8y9WJNab/hM5uzZm0
-        Zll3Ku+WtT8tVFmu923c7jvnr2msNZcVy6GeRzv3+XzZmVW9bMu7n24BtS+F/hcE2M5X+MD6
-        ck3omRkHlFiKMxINtZiLihMBSll9NvcCAAA=
-X-Greylist: inspected by milter-greylist-4.6.2 (mailgate-2.ics.forth.gr [139.91.1.5]); Fri, 15 Nov 2019 22:14:55 +0000 (GMT) for IP:'139.91.1.77' DOMAIN:'av3in' HELO:'av3.ics.forth.gr' FROM:'mick@ics.forth.gr' RCPT:''
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mailgate-2.ics.forth.gr [139.91.1.5]); Fri, 15 Nov 2019 22:14:55 +0000 (GMT)
+In-Reply-To: <20191115190525.77efdf6c@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Στις 2019-11-07 23:24, Christoph Hellwig έγραψε:
+On 11/15/19 12:05 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> this patch add a driver for the test device in the Qemu RISC-V
-> virt machine which allows properly shutting down the VM.
-> It also is added to the riscv defconfig given that qemu-virt
-> is the most popular riscv platform.
+> Changes since 20191114:
 > 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-We do this already through OpenSBI, I contributed a patch for this some 
-time ago.
+on i386:
 
-https://github.com/riscv/opensbi/commit/51e543511a7425da1a5378e149de0b45928c7111#diff-36ecc47313ff13e406c53b99471f294e
+WARNING: unmet direct dependencies detected for THERMAL_GOV_POWER_ALLOCATOR
+  Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
+  Selected by [y]:
+  - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
 
-Last time I checked I could just halt and the system would shut down 
-properly.
 
-Regards,
-Nick
+THERMAL_GOV_POWER_ALLOCATOR is selected by THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+even though ENERGY_MODEL is not set/enabled.
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
