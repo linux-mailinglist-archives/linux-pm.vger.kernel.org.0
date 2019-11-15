@@ -2,70 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC25FE408
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709E7FE42F
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727567AbfKORdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 12:33:04 -0500
-Received: from foss.arm.com ([217.140.110.172]:34300 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727540AbfKORdE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 Nov 2019 12:33:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FA2C31B;
-        Fri, 15 Nov 2019 09:33:01 -0800 (PST)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78B203F6C4;
-        Fri, 15 Nov 2019 09:32:59 -0800 (PST)
-Date:   Fri, 15 Nov 2019 17:32:57 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 11/13] cpuidle: psci: Manage runtime PM in the idle
- path
-Message-ID: <20191115173257.GF27170@bogus>
-References: <20191029164438.17012-1-ulf.hansson@linaro.org>
- <20191029164438.17012-12-ulf.hansson@linaro.org>
+        id S1726196AbfKORjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 12:39:43 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:54401 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726182AbfKORjn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 12:39:43 -0500
+Received: from webmail.gandi.net (webmail15.sd4.0x35.net [10.200.201.15])
+        (Authenticated sender: contact@artur-rojek.eu)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPA id 57CC0240002;
+        Fri, 15 Nov 2019 17:39:40 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191029164438.17012-12-ulf.hansson@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 15 Nov 2019 18:39:40 +0100
+From:   Artur Rojek <contact@artur-rojek.eu>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] power/supply: ingenic-battery: Don't change scale if
+ there's only one
+In-Reply-To: <20191114163500.57384-1-paul@crapouillou.net>
+References: <20191114163500.57384-1-paul@crapouillou.net>
+Message-ID: <0f300a5f82b4cce76cdbdb5ba081d7ae@artur-rojek.eu>
+X-Sender: contact@artur-rojek.eu
+User-Agent: Roundcube Webmail/1.3.8
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 05:44:36PM +0100, Ulf Hansson wrote:
-> In case we have succeeded to attach a CPU to its PM domain, let's deploy
-> runtime PM support for the corresponding attached device, to allow the CPU
-> to be powered-managed accordingly.
->
-> To set the triggering point for when runtime PM reference counting should
-> be done, let's store the index of deepest idle state for the CPU in the per
-> CPU struct. Then use this index to compare the selected idle state index
-> when entering idle, as to understand whether runtime PM reference counting
-> is needed or not.
->
-> Note that, from the hierarchical point view, there may be good reasons to
-> do runtime PM reference counting even on shallower idle states, but at this
-> point this isn't supported, mainly due to limitations set by the generic PM
-> domain.
->
+Hi Paul.
+Comments inline.
 
-Looks much better now with psci_enter_domain_state split as separate.
+On 2019-11-14 17:35, Paul Cercueil wrote:
+> The ADC in the JZ4740 can work either in high-precision mode with a 
+> 2.5V
+> range, or in low-precision mode with a 7.5V range. The code in place in
+> this driver will select the proper scale according to the maximum
+> voltage of the battery.
+> 
+> The JZ4770 however only has one mode, with a 6.6V range. If only one
+> scale is available, there's no need to change it (and nothing to change
+> it to), and trying to do so will fail with -EINVAL.
+> 
+> Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery 
+> driver.")
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Cc: stable@vger.kernel.org
+> ---
+> 
+> Notes:
+>     v2: Rebased on v5.4-rc7
+> 
+>  drivers/power/supply/ingenic-battery.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/power/supply/ingenic-battery.c
+> b/drivers/power/supply/ingenic-battery.c
+> index 35816d4b3012..5a53057b4f64 100644
+> --- a/drivers/power/supply/ingenic-battery.c
+> +++ b/drivers/power/supply/ingenic-battery.c
+> @@ -80,6 +80,10 @@ static int ingenic_battery_set_scale(struct
+> ingenic_battery *bat)
+>  	if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2)
+>  		return -EINVAL;
+> 
+> +	/* Only one (fractional) entry - nothing to change */
+> +	if (scale_len == 2)
+> +		return 0;
+> +
 
---
-Regards,
-Sudeep
+This function also serves to validate that the maximum voltage is in 
+range of available scales.
+Please move your code down a bit so that the check for max_mV is still 
+being done.
+
+Thanks,
+Artur
+
+>  	max_mV = bat->info.voltage_max_design_uv / 1000;
+> 
+>  	for (i = 0; i < scale_len; i += 2) {
