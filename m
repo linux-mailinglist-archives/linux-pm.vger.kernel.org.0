@@ -2,90 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 709E7FE42F
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858AAFE443
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbfKORjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 12:39:43 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:54401 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726182AbfKORjn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 12:39:43 -0500
-Received: from webmail.gandi.net (webmail15.sd4.0x35.net [10.200.201.15])
-        (Authenticated sender: contact@artur-rojek.eu)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPA id 57CC0240002;
-        Fri, 15 Nov 2019 17:39:40 +0000 (UTC)
+        id S1725907AbfKORoZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 12:44:25 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:49488 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfKORoZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 12:44:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Elg7Tj8yjS/b/ScYw/Zf/Uu5gZwsbcJit98EjXWYU08=; b=QHwa1471lA8KkwjDIvNIB3sRN
+        HRVpVP0oiyqHlfm/pRAycgcBULkejAuVLVsv/za4wK6oe7fFSiyCYxtA08V6Ps2efmGqKZzX//t4F
+        wEso6OHL4yD/69r4T9Ixj6snzrB8bAK5B0mDOi/RAd3rSOvmAVRe5D2Wi/JcTaFgcFg6YC/DyImFb
+        dpA0GBz6XRDZzZzod2xAc/YEpwA3OolGB0XyVpnTLSp2Oh6TJIVF9EhoRt0aYP+UHKiJwcoJDdPDf
+        VRe11Q7oVDQ3I8/F7Je+uc07+02jmIzBGR9pIe0b4Znp2ojwyXLjYMcPvsrjuh+5fJeoEcAv9ycdc
+        wexEl+qpw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iVfdX-0008VF-1i; Fri, 15 Nov 2019 17:43:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 91517303D9F;
+        Fri, 15 Nov 2019 18:42:47 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A520B2B130F61; Fri, 15 Nov 2019 18:43:55 +0100 (CET)
+Date:   Fri, 15 Nov 2019 18:43:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Doug Smythies <dsmythies@telus.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH v4] sched/freq: move call to cpufreq_update_util
+Message-ID: <20191115174355.GP4131@hirez.programming.kicks-ass.net>
+References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org>
+ <20191115132520.GJ4131@hirez.programming.kicks-ass.net>
+ <CAKfTPtB4UGmZ53iVRsOV+k4MiS=Dzqw2-6_sBhko0bHRMAed2g@mail.gmail.com>
+ <20191115151220.GO4131@hirez.programming.kicks-ass.net>
+ <CAKfTPtCg-zEysYmGSFTa4bjh0D=sf1UsT0WpeWcVrb9SLt+VZw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 15 Nov 2019 18:39:40 +0100
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] power/supply: ingenic-battery: Don't change scale if
- there's only one
-In-Reply-To: <20191114163500.57384-1-paul@crapouillou.net>
-References: <20191114163500.57384-1-paul@crapouillou.net>
-Message-ID: <0f300a5f82b4cce76cdbdb5ba081d7ae@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-User-Agent: Roundcube Webmail/1.3.8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCg-zEysYmGSFTa4bjh0D=sf1UsT0WpeWcVrb9SLt+VZw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Paul.
-Comments inline.
+On Fri, Nov 15, 2019 at 04:31:35PM +0100, Vincent Guittot wrote:
 
-On 2019-11-14 17:35, Paul Cercueil wrote:
-> The ADC in the JZ4740 can work either in high-precision mode with a 
-> 2.5V
-> range, or in low-precision mode with a 7.5V range. The code in place in
-> this driver will select the proper scale according to the maximum
-> voltage of the battery.
+> > @@ -7476,10 +7477,14 @@ static void update_blocked_averages(int cpu)
+> >          * list_add_leaf_cfs_rq() for details.
+> >          */
+> >         for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
+> > +               bool last = cfs_rq == &rq->cfs;
+> >                 struct sched_entity *se;
+> >
+> > -               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
+> > +               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
+> >                         update_tg_load_avg(cfs_rq, 0);
+> > +                       if (last)
 > 
-> The JZ4770 however only has one mode, with a 6.6V range. If only one
-> scale is available, there's no need to change it (and nothing to change
-> it to), and trying to do so will fail with -EINVAL.
+> using this last make code more readable
 > 
-> Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery 
-> driver.")
+> > +                               decayed = true;
+> > +               }
+> >
+> >                 /* Propagate pending load changes to the parent, if any: */
+> >                 se = cfs_rq->tg->se[cpu];
+> > @@ -7490,7 +7495,7 @@ static void update_blocked_averages(int cpu)
+> >                  * There can be a lot of idle CPU cgroups.  Don't let fully
+> >                  * decayed cfs_rqs linger on the list.
+> >                  */
+> > -               if (cfs_rq_is_decayed(cfs_rq))
+> > +               if (!last && cfs_rq_is_decayed(cfs_rq))
+> >                         list_del_leaf_cfs_rq(cfs_rq);
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> Notes:
->     v2: Rebased on v5.4-rc7
-> 
->  drivers/power/supply/ingenic-battery.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/power/supply/ingenic-battery.c
-> b/drivers/power/supply/ingenic-battery.c
-> index 35816d4b3012..5a53057b4f64 100644
-> --- a/drivers/power/supply/ingenic-battery.c
-> +++ b/drivers/power/supply/ingenic-battery.c
-> @@ -80,6 +80,10 @@ static int ingenic_battery_set_scale(struct
-> ingenic_battery *bat)
->  	if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2)
->  		return -EINVAL;
-> 
-> +	/* Only one (fractional) entry - nothing to change */
-> +	if (scale_len == 2)
-> +		return 0;
-> +
+> Keeping root cfs in the list will not change anything now that
+> cfs_rq_util_change is in update_load_avg()
+> cfs_rq_util_change will not be called
 
-This function also serves to validate that the maximum voltage is in 
-range of available scales.
-Please move your code down a bit so that the check for max_mV is still 
-being done.
+Oh but it does, since it will then keep triggering that hunk above on
+every period.
 
-Thanks,
-Artur
-
->  	max_mV = bat->info.voltage_max_design_uv / 1000;
+> >
+> >                 /* Don't need periodic decay once load/util_avg are null */
+> > @@ -7498,6 +7503,9 @@ static void update_blocked_averages(int cpu)
+> >                         done = false;
+> >         }
+> >
+> > +       if (decayed || done)
 > 
->  	for (i = 0; i < scale_len; i += 2) {
+> I'm not sure to get why you want to call cpufreq when done is true
+> which means that everything reaches 0
+> Why do you prefer to use done instead of ORing the decay of  rt, dl,
+> irq and cfs ?
+> 
+> > +               cpufreq_update_util(rq, 0);
+
+Because we don't care about the rt,dl,irq decay anywhere else either. We
+only call cpufreq_update_util() for rq->cfs changes.
+
+Also, as I argued, realistically rt,dl and cfs decay on the same edge,
+so aside from some fuzz on the first period, they're all the same. But
+even if they were not, why would we care about their exact edges here
+when we do no anywhere else.
+
+Not caring reduces the number of cpufreq_update_util() calls to one per
+period, instead of potentially many more.
+
+Doing the || done ensures never miss the all 0 case.
