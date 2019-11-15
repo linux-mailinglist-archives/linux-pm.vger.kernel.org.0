@@ -2,84 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B942BFDB91
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 11:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540B7FDB9B
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 11:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfKOKlv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 05:41:51 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37706 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfKOKlu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 05:41:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=IAccDbabd4kdJ+HEadLyepvJYR0lE95gi46SLtYmJXY=; b=k4Yd09/FaWg5kduhn1xEgQ/0q
-        klkhrzjZ9cxOzw9iMrEsmRV7xeFNEmkxOc9eSt2Av/UAyr4i0AB0Vbsxf6+4NrwSIuBWOWqCTRTGL
-        9GyGzrqNe1/JF5AfEZC7FqYHA7YBVT+m4BC39418EDhtZgIOpBWZdW5h3nDyPJ9qxB3mrf3Lpz5Nb
-        Z6bVQlzFpYhYbZrLDFElJzvAi5d3qe0phAHxlgcHB7UCEtaadO5zkudpdBUTQuvFZQoD8iEgL6eyP
-        CDINFP1BzXLUvJ5IxMW33CP7XOASSFP/kEj7ixgryJoZexsyWdH4FxSKQPCD96jsokyQcHYBsl3mo
-        t26ncrzBA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iVZ26-0001Se-3T; Fri, 15 Nov 2019 10:40:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 24BD4303D9F;
-        Fri, 15 Nov 2019 11:39:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 388892B0BC1FC; Fri, 15 Nov 2019 11:40:52 +0100 (CET)
-Date:   Fri, 15 Nov 2019 11:40:52 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Doug Smythies <dsmythies@telus.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
-        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v4] sched/freq: move call to cpufreq_update_util
-Message-ID: <20191115104052.GF4131@hirez.programming.kicks-ass.net>
-References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org>
- <20191115095447.GU4114@hirez.programming.kicks-ass.net>
- <CAJZ5v0hjsWM=bRg4k2qNCfcqjQ08N+6kG=1vCXpjbi5qEx7utw@mail.gmail.com>
+        id S1727142AbfKOKpF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 05:45:05 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42681 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727022AbfKOKpF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 05:45:05 -0500
+Received: from 79.184.253.153.ipv4.supernova.orange.pl (79.184.253.153) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id fddc515768e678ae; Fri, 15 Nov 2019 11:45:02 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Zhenzhong Duan <zhenzhong.duan@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        rkrcmar@redhat.com, rafael.j.wysocki@intel.com,
+        joao.m.martins@oracle.com, mtosatti@redhat.com,
+        kvm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 3/4] cpuidle-haltpoll: ensure cpu_halt_poll_us in right scope
+Date:   Fri, 15 Nov 2019 11:45:01 +0100
+Message-ID: <6161954.sKiXg2khOt@kreacher>
+In-Reply-To: <1573041302-4904-4-git-send-email-zhenzhong.duan@oracle.com>
+References: <1573041302-4904-1-git-send-email-zhenzhong.duan@oracle.com> <1573041302-4904-4-git-send-email-zhenzhong.duan@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hjsWM=bRg4k2qNCfcqjQ08N+6kG=1vCXpjbi5qEx7utw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 11:03:20AM +0100, Rafael J. Wysocki wrote:
-> On Fri, Nov 15, 2019 at 10:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
-
-> > So why are we making the scheduler code more ugly instead of fixing that
-> > driver?
+On Wednesday, November 6, 2019 12:55:01 PM CET Zhenzhong Duan wrote:
+> As user can adjust guest_halt_poll_grow_start and guest_halt_poll_ns
+> which leads to cpu_halt_poll_us beyond the two boundaries. This patch
+> ensures cpu_halt_poll_us in that scope.
 > 
-> I guess we could "fix" the driver by making it rate limit MSR writes
-> only, but I'm not sure if that would help.
+> If guest_halt_poll_shrink is 0, shrink the cpu_halt_poll_us to
+> guest_halt_poll_grow_start instead of 0. To disable poll we can set
+> guest_halt_poll_ns to 0.
+> 
+> If user wrongly set guest_halt_poll_grow_start > guest_halt_poll_ns > 0,
+> guest_halt_poll_ns take precedency and poll time is a fixed value of
+> guest_halt_poll_ns.
+> 
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@oracle.com>
+> ---
+>  drivers/cpuidle/governors/haltpoll.c | 28 +++++++++++++---------------
+>  1 file changed, 13 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+> index 660859d..4a39df4 100644
+> --- a/drivers/cpuidle/governors/haltpoll.c
+> +++ b/drivers/cpuidle/governors/haltpoll.c
+> @@ -97,32 +97,30 @@ static int haltpoll_select(struct cpuidle_driver *drv,
+>  
+>  static void adjust_poll_limit(struct cpuidle_device *dev, unsigned int block_us)
+>  {
+> -	unsigned int val;
+> +	unsigned int val = dev->poll_limit_ns;
 
-So it is not clear to me what exactly intel_pstate needs and why. Like I
-wrote in my reply to Vincent just now, it can still store the last
-value, even if it doesn't act on it right away.
+Not necessary to initialize it here.
 
-And it can then act on that stored value at a later event, whatever is
-appropriate.
+>  	u64 block_ns = block_us*NSEC_PER_USEC;
+>  
+>  	/* Grow cpu_halt_poll_us if
+> -	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
+> +	 * cpu_halt_poll_us < block_ns <= guest_halt_poll_us
 
-I'm just saying that generating superfluous events is silly. But
-possibly I read the patch wrong.
+You could update the comment to say "dev->poll_limit_ns" instead of
+"cpu_halt_poll_us" while at it.
+
+>  	 */
+> -	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
+> +	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns &&
+> +	    guest_halt_poll_grow)
+
+The "{" brace is still needed as per the coding style and I'm not sure why
+to avoid guest_halt_poll_grow equal to zero here?
+
+>  		val = dev->poll_limit_ns * guest_halt_poll_grow;
+> -
+> -		if (val < guest_halt_poll_grow_start)
+> -			val = guest_halt_poll_grow_start;
+> -		if (val > guest_halt_poll_ns)
+> -			val = guest_halt_poll_ns;
+> -
+> -		dev->poll_limit_ns = val;
+> -	} else if (block_ns > guest_halt_poll_ns &&
+> -		   guest_halt_poll_allow_shrink) {
+> +	else if (block_ns > guest_halt_poll_ns &&
+> +		 guest_halt_poll_allow_shrink) {
+>  		unsigned int shrink = guest_halt_poll_shrink;
+>  
+> -		val = dev->poll_limit_ns;
+>  		if (shrink == 0)
+> -			val = 0;
+> +			val = guest_halt_poll_grow_start;
+
+That's going to be corrected below, so the original code would be fine.
+
+>  		else
+>  			val /= shrink;
+
+Here you can do
+
+			val = dev->poll_limit_ns / shrink;
+
+> -		dev->poll_limit_ns = val;
+>  	}
+> +	if (val < guest_halt_poll_grow_start)
+> +		val = guest_halt_poll_grow_start;
+
+Note that guest_halt_poll_grow_start is in us (as per the comment next to its
+definition and the initial value).  That is a bug in the original code too,
+but anyway.
+
+> +	if (val > guest_halt_poll_ns)
+> +		val = guest_halt_poll_ns;
+> +
+> +	dev->poll_limit_ns = val;
+>  }
+>  
+>  /**
+> 
+
+
+
+
