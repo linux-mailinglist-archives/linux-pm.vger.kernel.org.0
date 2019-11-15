@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4420FE3C2
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19151FE3FC
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Nov 2019 18:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727626AbfKORQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 12:16:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:34096 "EHLO foss.arm.com"
+        id S1727555AbfKORa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Nov 2019 12:30:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:34252 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727540AbfKORQA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 Nov 2019 12:16:00 -0500
+        id S1727543AbfKORa6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 Nov 2019 12:30:58 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F99431B;
-        Fri, 15 Nov 2019 09:15:59 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF2C531B;
+        Fri, 15 Nov 2019 09:30:57 -0800 (PST)
 Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 994393F6C4;
-        Fri, 15 Nov 2019 09:15:57 -0800 (PST)
-Date:   Fri, 15 Nov 2019 17:15:55 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1F7B3F6C4;
+        Fri, 15 Nov 2019 09:30:55 -0800 (PST)
+Date:   Fri, 15 Nov 2019 17:30:53 +0000
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -30,103 +30,55 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 09/13] cpuidle: psci: Attach CPU devices to their PM
- domains
-Message-ID: <20191115171555.GD27170@bogus>
+        Kevin Hilman <khilman@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
+Subject: Re: [PATCH v2 10/13] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
+Message-ID: <20191115173053.GE27170@bogus>
 References: <20191029164438.17012-1-ulf.hansson@linaro.org>
- <20191029164438.17012-10-ulf.hansson@linaro.org>
+ <20191029164438.17012-11-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191029164438.17012-10-ulf.hansson@linaro.org>
+In-Reply-To: <20191029164438.17012-11-ulf.hansson@linaro.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 05:44:34PM +0100, Ulf Hansson wrote:
-> In order to enable a CPU to be power managed through its PM domain, let's
-> try to attach it by calling psci_dt_attach_cpu() during the cpuidle
-> initialization.
+On Tue, Oct 29, 2019 at 05:44:35PM +0100, Ulf Hansson wrote:
+> The per CPU variable psci_power_state, contains an array of fixed values,
+> which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> each of the available CPU idle states.
 >
-> psci_dt_attach_cpu() returns a pointer to the attached struct device, which
-> later should be used for runtime PM, hence we need to store it somewhere.
-> Rather than adding yet another per CPU variable, let's create a per CPU
-> struct to collect the relevant per CPU variables.
+> This isn't sufficient when using the hierarchical CPU topology in DT, in
+> combination with having PSCI OS initiated (OSI) mode enabled. More
+> precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> idle state the cluster (a group of CPUs) should enter, while in PSCI
+> Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> state of the cluster.
 >
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
+> For this reason, introduce a per CPU variable called domain_state and
+> implement two helper functions to read/write its value. Then let the
+> domain_state take precedence over the regular selected state, when entering
+> and idle state.
 >
-> Changes in v2:
-> 	- Rebased.
+> Finally, let's also avoid sprinkling the existing non-OSI path with
+> operations being specific for OSI.
 >
-> ---
->  drivers/cpuidle/cpuidle-psci.c | 24 ++++++++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 830995b8a56f..167249d0493f 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -20,14 +20,20 @@
->
->  #include <asm/cpuidle.h>
->
-> +#include "cpuidle-psci.h"
->  #include "dt_idle_states.h"
->
-> -static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> +struct psci_cpuidle_data {
-> +	u32 *psci_states;
-> +	struct device *dev;
-> +};
-> +
-> +static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
->
->  static int psci_enter_idle_state(struct cpuidle_device *dev,
->  				struct cpuidle_driver *drv, int idx)
->  {
-> -	u32 *state = __this_cpu_read(psci_power_state);
-> +	u32 *state = __this_cpu_read(psci_cpuidle_data.psci_states);
->
->  	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
->  					   idx, state[idx]);
-> @@ -78,7 +84,9 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
->  {
->  	int i, ret = 0;
->  	u32 *psci_states;
-> +	struct device *dev;
->  	struct device_node *state_node;
-> +	struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
->
->  	state_count++; /* Add WFI state too */
->  	psci_states = kcalloc(state_count, sizeof(*psci_states), GFP_KERNEL);
-> @@ -104,8 +112,16 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
->  		goto free_mem;
->  	}
->
-> -	/* Idle states parsed correctly, initialize per-cpu pointer */
-> -	per_cpu(psci_power_state, cpu) = psci_states;
-> +	dev = psci_dt_attach_cpu(cpu);
 
-Why do we need to call psci_dt_attach_cpu for even PC mode and ...
-
-> +	if (IS_ERR(dev)) {
-> +		ret = PTR_ERR(dev);
-> +		goto free_mem;
-> +	}
-> +
-> +	data->dev = dev;
-> +
-
-... assign NULL above. I don't see the need for one. Default it will be
-NULL anyway and we can call psci_dt_attach_cpu only if psci_has_osi_support()
-
-I will look through further patches to see if it make sense or not.
+Mostly looks good. I am still wondering if we can keep all OSI related
+info in the newly created structure and have psci_states outside it as
+before. And I was think psci_enter_idle_state_pc and psci_enter_idle_state_osi
+instead of single psci_enter_idle_state and assign/initialise state->enter
+based on the mode chosen. I had to closer look now and looks like enter
+is initialised in generic dt_idle_states. That said, what you have in this
+patch also looks OK to me, was just trying to avoid access to the new
+structure all together and keep the PC mode patch almost same as before
+when suspending. I will see what Lorenzo thinks about this.
 
 --
 Regards,
