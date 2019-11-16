@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF2BFF132
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 17:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D28EFF019
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 17:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730219AbfKPPsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Nov 2019 10:48:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56252 "EHLO mail.kernel.org"
+        id S1731179AbfKPQDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Nov 2019 11:03:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730208AbfKPPsy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:48:54 -0500
+        id S1730978AbfKPPwI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:52:08 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8B822086A;
-        Sat, 16 Nov 2019 15:48:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C26620B7C;
+        Sat, 16 Nov 2019 15:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919333;
+        s=default; t=1573919527;
         bh=Dr/MgV0CT6e61/f8fbdA16ZEvfZhrv4OxigPBFLptW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GjMish9SvTdNTUQDc+xXENSbndt8dydOwnXokEvvHifxvXt7OjgnaEK+uBsmCgxli
-         pGafN/YoDpd+3LtsHVkV1IVlON4ZDxS6OwXX+YyWpI8n3rt6OJWKFBWEJfuNCDuVCb
-         MQYa4gdU+AXQ4ige0PMXlT+qXN2bK6js9m0AQZMc=
+        b=aQvemwozWZKKdlNQ82WUwPOEOGwQy9LLSrx6d+v9irWNQXI07XFx2Mogn67XKCCmX
+         bJ11/uOnZFrIXK0RCBtYhxIKiOwGbaTAvgKI3q3mnU8F20CXGsyVvwnYrbrcvBSa0k
+         s/SZUKjH9IbQXHXungo3ODz/SZAVwfuKRNtUTDzI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -30,12 +30,12 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         <niklas.soderlund+renesas@ragnatech.se>,
         Eduardo Valentin <edubezval@gmail.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 074/150] thermal: rcar_thermal: Prevent hardware access during system suspend
-Date:   Sat, 16 Nov 2019 10:46:12 -0500
-Message-Id: <20191116154729.9573-74-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 49/99] thermal: rcar_thermal: Prevent hardware access during system suspend
+Date:   Sat, 16 Nov 2019 10:50:12 -0500
+Message-Id: <20191116155103.10971-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
-References: <20191116154729.9573-1-sashal@kernel.org>
+In-Reply-To: <20191116155103.10971-1-sashal@kernel.org>
+References: <20191116155103.10971-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
