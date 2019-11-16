@@ -2,95 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16105FEC95
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 15:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A358FFECCD
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 16:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727634AbfKPOIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Nov 2019 09:08:49 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:38195 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727551AbfKPOIt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Nov 2019 09:08:49 -0500
-Received: from webmail.gandi.net (webmail15.sd4.0x35.net [10.200.201.15])
-        (Authenticated sender: contact@artur-rojek.eu)
-        by relay12.mail.gandi.net (Postfix) with ESMTPA id 58C58200002;
-        Sat, 16 Nov 2019 14:08:46 +0000 (UTC)
+        id S1727740AbfKPPH6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Nov 2019 10:07:58 -0500
+Received: from cmta16.telus.net ([209.171.16.89]:52290 "EHLO cmta16.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727123AbfKPPH6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:07:58 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id VzfzizxjdFXoiVzg0iZxUB; Sat, 16 Nov 2019 08:07:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1573916876; bh=gfhpbgmjK0Z6cFEsiYiyqlkxUABvV4et9WNwTIgnHR8=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=wEZ405YQjzJKpJhQ66akCoXMudTp/gWEf+zFV3m1ZVtZKKBHI0/031KGEMPBhKU0u
+         ysFwqWOfGB18hbbjyZdGA3nA4ZRZvXLzlfxyUMmbeWMHiV/zy5vDlQBHkYBU+328oQ
+         5ame1cxrfI0h8Gc4GsrXncCn6AOwasub91QFaw+Mdclhb5HLIXGnEqCXAOcLlmvVxQ
+         PUPhyA2EWhaA3I02rNAzhv9QET8AVB/eR4YmjDIynru6osnw0PO7Q+Yb4aME9a+Qin
+         z+2JfpLqL6zlvW4VVFURQKnubRVEgBPjGGzJxq8TJMSKWiAHVpD+Xa/kTVTP7k2xK2
+         qHagXtlxrl9uw==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=HoEI5HbS c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=aatUQebYAAAA:8 a=sBVMCQuwt-iZQsn2n_0A:9 a=QEXdDO2ut3YA:10
+ a=7715FyvI7WU-l6oqrZBK:22 a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Peter Zijlstra'" <peterz@infradead.org>
+Cc:     "'linux-kernel'" <linux-kernel@vger.kernel.org>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Steven Rostedt'" <rostedt@goodmis.org>,
+        "'Mel Gorman'" <mgorman@suse.de>,
+        "'open list:THERMAL'" <linux-pm@vger.kernel.org>,
+        "'Linus Torvalds'" <torvalds@linux-foundation.org>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Sargun Dhillon'" <sargun@sargun.me>,
+        "'Tejun Heo'" <tj@kernel.org>, "'Xie XiuQi'" <xiexiuqi@huawei.com>,
+        <xiezhipeng1@huawei.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
+References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org> <20191115215228.GN3079@worktop.programming.kicks-ass.net> <CAKfTPtDyZ5gom41S-8Nu+BMK7hPijWoZPqo0HFYkRnNmWo1UTA@mail.gmail.com>
+In-Reply-To: <CAKfTPtDyZ5gom41S-8Nu+BMK7hPijWoZPqo0HFYkRnNmWo1UTA@mail.gmail.com>
+Subject: RE: [PATCH v4] sched/freq: move call to cpufreq_update_util
+Date:   Sat, 16 Nov 2019 07:07:49 -0800
+Message-ID: <000601d59c8f$9fa191c0$dee4b540$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain;
+        charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Date:   Sat, 16 Nov 2019 15:08:46 +0100
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, od@zcrc.me, stable@vger.kernel.org
-Subject: Re: [PATCH v3] power/supply: ingenic-battery: Don't change scale if
- there's only one
-In-Reply-To: <20191116135619.9545-1-paul@crapouillou.net>
-References: <20191116135619.9545-1-paul@crapouillou.net>
-Message-ID: <d5d13a62c1652ce109136dcb3b2e1e51@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-User-Agent: Roundcube Webmail/1.3.8
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdWcWopiwiZdY0yaRPete3H70UhivQAMM8sw
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfG1sLv7HR5WrZlqpjRLUvD9/42QqRTBgrepLsZ3LDn/3VWI7wyyl4ZFDoYZVfFAvxNBJBrZ6WPfCdfRKp13YJGnqKYM+hpVh93k4GMjldDnHo6TmJE9J
+ vyFV4tBWOLQduIKik6jHSIfmSnwF7W3yVi8dvdug88C3cGRkeF5sLriO8gIX5V5lZfj4qmYqA6mzN5Qn/a2HxL4lp2IMAR9mo9EwypcyBM+btqe7RYG69nWQ
+ fAo1SkFabFm/euDSRU5C9+nSruJYSwy9Xds5iMGkRBxvZVJrfV4O+NB+bbNK+JED24SiDnRMw6czjdyq+07jGm8yYoYoGoCxpQsp5DGJ7fu2Cw4+G95LhkrR
+ +QhhXsJaH+dYmnEQUcQghpCWOHdvPLEtAKSxJ0r9H3q/PCudwNSO8b3YWxZqBV9V8W/pBlhJdojRiXsV8N7+wXCmQJScEkporHC91+mEcVFrNUXsjmA3RSmZ
+ 4nIA0VMVwUl7e4LjrSs/QIAWWbP8zboFfVtNCkQ8B6v/PiTfLpZnPsJH1XaT+ErFhl3w3OpCF7UQ4WIY7g6xEW+FZw8IiXb4gyfieLsjmG/BciXLY2KjDwcg
+ 6eQXfqtPDiMlsmt/XbcbWUX08nUjiV8U3sJGNUSRBguwjrAkI6Ds/7WMiJtyLctKlzTwME+mdjxmSisf/dddUDJ9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019-11-16 14:56, Paul Cercueil wrote:
-> The ADC in the JZ4740 can work either in high-precision mode with a 
-> 2.5V
-> range, or in low-precision mode with a 7.5V range. The code in place in
-> this driver will select the proper scale according to the maximum
-> voltage of the battery.
-> 
-> The JZ4770 however only has one mode, with a 6.6V range. If only one
-> scale is available, there's no need to change it (and nothing to change
-> it to), and trying to do so will fail with -EINVAL.
-> 
-> Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery 
-> driver.")
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
+Hi,
 
-Looks good to me!
+I tested both Vincent's V4 and Peter's, I called it V1.
 
-Acked-by: Artur Rojek <contact@artur-rojek.eu>
+8000 seconds intel_pstate_tracer on a very idle system.
+Everything was fine.
 
-> ---
-> 
-> Notes:
->     v2: Rebased on v5.4-rc7
->     v3: Move code after check for max scale voltage
-> 
->  drivers/power/supply/ingenic-battery.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/supply/ingenic-battery.c
-> b/drivers/power/supply/ingenic-battery.c
-> index 35816d4b3012..2748715c4c75 100644
-> --- a/drivers/power/supply/ingenic-battery.c
-> +++ b/drivers/power/supply/ingenic-battery.c
-> @@ -100,10 +100,17 @@ static int ingenic_battery_set_scale(struct
-> ingenic_battery *bat)
->  		return -EINVAL;
->  	}
-> 
-> -	return iio_write_channel_attribute(bat->channel,
-> -					   scale_raw[best_idx],
-> -					   scale_raw[best_idx + 1],
-> -					   IIO_CHAN_INFO_SCALE);
-> +	/* Only set scale if there is more than one (fractional) entry */
-> +	if (scale_len > 2) {
-> +		ret = iio_write_channel_attribute(bat->channel,
-> +						  scale_raw[best_idx],
-> +						  scale_raw[best_idx + 1],
-> +						  IIO_CHAN_INFO_SCALE);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
->  }
-> 
->  static enum power_supply_property ingenic_battery_properties[] = {
+Vincent-V4:
+
+Maximum time between calls to the intel_pstate driver,
+per CPU: 4.00813 seconds: GOOD/PASS
+
+Total entries/exits to/from driver: 90,730:
+Consistent with previous tests / expectations.
+
+228,600 aperf clocks / second / cpu.  
+Consistent with previous tests / expectations.
+
+Peter-V1:
+
+Maximum time between calls to the intel_pstate driver,
+per CPU: 4.00407 seconds: GOOD/PASS
+
+Total entries/exits to/from driver: 96,440:
+Consistent with previous tests / expectations.
+
+241,310 aperf clocks / second / cpu.  
+Consistent with previous tests / expectations.
+
+Baseline reference:
+
+Maximum time between calls to the intel_pstate driver,
+per CPU: 225.03 seconds: BAD/FAIL
+
+Number of durations over an arbitrary threshold of
+10 seconds: 379.
+
+Total entries/exits to/from driver: 75,969:
+Consistent with previous tests / expectations,
+when the issue is present.
+
+226,963 aperf clocks / second / cpu.
+Consistent with previous tests / expectations.
+
+I did not do the load no-load energy test.
+It is not possible for it to be a problem
+if the long duration issue is solved.
+I'll do the test, if someone wants the proof.
+
+Kernels were 5.4-rc7 + linux next.
+Idle governor was TEO, but this isn't actually relevant.
+
+Tested-by: Doug Smythies <dsmythies@telus.net>
+
+... Doug
+
+
