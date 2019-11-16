@@ -2,145 +2,294 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 594F2FEA27
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 02:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6914BFEB47
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Nov 2019 09:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbfKPBpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Nov 2019 20:45:39 -0500
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:32814 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727205AbfKPBpj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Nov 2019 20:45:39 -0500
-Received: by mail-pl1-f174.google.com with SMTP id ay6so5890637plb.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 Nov 2019 17:45:38 -0800 (PST)
+        id S1726342AbfKPIr4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Nov 2019 03:47:56 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44650 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbfKPIr4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Nov 2019 03:47:56 -0500
+Received: by mail-lf1-f66.google.com with SMTP id z188so9805054lfa.11
+        for <linux-pm@vger.kernel.org>; Sat, 16 Nov 2019 00:47:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=f+r+DGtsqxKFObfIu/+a0rM7YdWT3Hu5doy0T2jUaCg=;
-        b=NS+KRsSLddSeLOhePE0fMS1L4ilPIg6LfOSKLj5RdZv88sLQryro61uKoRzZCz3BBD
-         MpO6gqdN01mv+jOjQy5OL3R8OHxbNXPYFvKB83+tJULVw78r6VJQtE2gCYInf0uH8Phc
-         dyDolVMJ9eK9gOrIZfDaik4WvHtDnEjps7yQzAYb4QtHzA3+gMaOU719seTuHsoB5wXX
-         WtvH7N43lpswwuxon04XUSdLeBAbG9mef6oqewcT577rzdKnOMHUK7QbqzxqBgUJWwMS
-         L6wxdsDMHb2HQ+gicdKiUKSfQRHmtEOYsnqSZVF/3GSe6n+jL5FKiiSapyF9x4+q7mdB
-         bqtw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bp91uD0/PiW/BRpY7HaS8KieB9FSTnD2w31WsW+jdmY=;
+        b=y/4486Eimo018DrcBEqfmHn2cw4vwyZQL2FCCIS1qbeA6plSyTD641cf2JiLmZfIuo
+         4f0qXk8sgbQTXuOb/5CIVc6wl0W5vCcFS25hiBBIp9Fq2tktamU1gw7VQNYUpzoUaHMu
+         ycZsSZbULIx8Olov6AhZCOyf2wnVMOJSvf4o1A+uxVRblkzfC0IatMiqu6G5df85zk9a
+         Io1BLR+3IbByD/Qq3QcLtR3qugFClG7AUpW/HFFWBH1sz3hAGw64mo7WSgsVWbyPfJVa
+         BBbIaNGv5XC7DOSBrgZLLhPkuJAy67DG3p5TCdVdJ8iDVWKax6JIx59FE/uv+cRyWYji
+         SyLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f+r+DGtsqxKFObfIu/+a0rM7YdWT3Hu5doy0T2jUaCg=;
-        b=c8RRBTcjvZwUPSfhP+KRL3fnv2LlH0n+l0MJ5rcv4ZIzx7W5ezcFi0NWVueKKvwP68
-         2cerZJupC5G7IHUJaGbFU6+d3hkGN1xLKmcWvUb4vpunSIfu/PHDjMSuWt6Z9BaZY4+Y
-         +l16IJaSViC/LsGeYYMIjXexfky6VQRRKCP/yIK7h2RJBNeXfaKTIdDavzVrDTsaXDfB
-         DCGfUxbmXBZP/APav+inaWAQuu+3nG+P4RiTkJMmHFRRGvuDOTyTt/uVa4MmGMdly3mp
-         f3H7iv8J1yPQ8o+U7k1aybfGSCA7R9PoXiRv94nmIlhZxLpA/iNIGAyRpfhGfjPjJafw
-         Zkhg==
-X-Gm-Message-State: APjAAAXYye6WyQFzAdVbHv8Fen40FdgXMYIegTRdds9yrRTL7Utb0ozS
-        DhhdcTsYWVV/zC4jENZ7f/131g==
-X-Google-Smtp-Source: APXvYqxN3iPA9TuLpRAbHys8T2knz3Fvpj5w5DwGRFQnIxjd+34ZqdRRo0cZ4mwHNS9GAiehBk0Dsg==
-X-Received: by 2002:a17:902:8494:: with SMTP id c20mr18609248plo.123.1573868738258;
-        Fri, 15 Nov 2019 17:45:38 -0800 (PST)
-Received: from yoga (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id f189sm10793776pgc.94.2019.11.15.17.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2019 17:45:37 -0800 (PST)
-Date:   Fri, 15 Nov 2019 17:45:34 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Maulik Shah <mkshah@codeaurora.org>
-Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        rafael@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org
-Subject: Re: [v3] soc: qcom: Introduce subsystem sleep stats driver
-Message-ID: <20191116014534.GA25371@yoga>
-References: <1573039165-30435-1-git-send-email-mkshah@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bp91uD0/PiW/BRpY7HaS8KieB9FSTnD2w31WsW+jdmY=;
+        b=KGYirsPeZcfSIcl4MD1nhHxQEhjrBmOSJDUq+qq1c833NgNusjMudbNe9OPyzyGTVI
+         zHpPgpRU/cLRCLL8G9SjAGvu6wVOo9rs3tfzTpKME3044dR2zGFgo4n7tEh84vW/ENby
+         lbl4VvspdmSeyGgWtG2pJeg8RwiZbuPtgEWgSgUtF/rL/1DFXKtdWS28epmnPIC2qVLN
+         ItVT4rlJ0DIBsu7aOpMfwV7Le4LwwiluZsnEIL1hsnlwHMQSQt9znunJGgxMI8r88OpC
+         4IFMXk2AuiQE+IzEbImjBscxhuRAtbj0JQAORx/hj/WIWq/IOvaB4WvL5WSD763IJdXe
+         otww==
+X-Gm-Message-State: APjAAAWH6mWizvozf6U7X1YxTlW+cLSHoT121ZQpxWohEsRNS33etY/b
+        DEHvAdzdHCkiKYBSI3E9Wa9+cMjrMKW7ofyg+dyqSQ==
+X-Google-Smtp-Source: APXvYqzMLc7nuk9MO3TViXexHb2VFT5V9zfY78caMJQJZvQ3BdJcJwM2SZ/Hh81F2Ka+cDnlzaN/kpIyULvjcA/Io38=
+X-Received: by 2002:a19:800a:: with SMTP id b10mr14490861lfd.15.1573894073025;
+ Sat, 16 Nov 2019 00:47:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573039165-30435-1-git-send-email-mkshah@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <1573751251-3505-1-git-send-email-vincent.guittot@linaro.org> <20191115215228.GN3079@worktop.programming.kicks-ass.net>
+In-Reply-To: <20191115215228.GN3079@worktop.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Sat, 16 Nov 2019 09:47:41 +0100
+Message-ID: <CAKfTPtDyZ5gom41S-8Nu+BMK7hPijWoZPqo0HFYkRnNmWo1UTA@mail.gmail.com>
+Subject: Re: [PATCH v4] sched/freq: move call to cpufreq_update_util
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Doug Smythies <dsmythies@telus.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sargun Dhillon <sargun@sargun.me>, Tejun Heo <tj@kernel.org>,
+        Xie XiuQi <xiexiuqi@huawei.com>, xiezhipeng1@huawei.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 06 Nov 03:19 PST 2019, Maulik Shah wrote:
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index 6f87b9d..e095eae 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -288,6 +288,16 @@ Description:
->  		writing a "0" (default) to it disables them.  Reads from
->  		this file return the current value.
->  
-> +What:		/sys/power/subsystem_sleep/stats
-> +Date:		December 2017
-> +Contact:	Maulik Shah <mkshah@codeaurora.org>
-> +Description:
-> +		The /sys/power/subsystem_sleep/stats file prints the subsystem
-> +		sleep information on Qualcomm Technologies, Inc. (QTI) SoCs.
+On Fri, 15 Nov 2019 at 22:52, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Nov 14, 2019 at 06:07:31PM +0100, Vincent Guittot wrote:
+> > update_cfs_rq_load_avg() calls cfs_rq_util_change() everytime pelt decays,
+> > which might be inefficient when cpufreq driver has rate limitation.
+> >
+> > When a task is attached on a CPU, we have call path:
+> >
+> > update_load_avg()
+> >   update_cfs_rq_load_avg()
+> >     cfs_rq_util_change -- > trig frequency update
+> >   attach_entity_load_avg()
+> >     cfs_rq_util_change -- > trig frequency update
+> >
+> > The 1st frequency update will not take into account the utilization of the
+> > newly attached task and the 2nd one might be discard because of rate
+> > limitation of the cpufreq driver.
+> >
+> > update_cfs_rq_load_avg() is only called by update_blocked_averages()
+> > and update_load_avg() so we can move the call to
+> > cfs_rq_util_change/cpufreq_update_util() into these 2 functions. It's also
+> > interesting to notice that update_load_avg() already calls directly
+> > cfs_rq_util_change() for !SMP case.
+> >
+> > This changes will also ensure that cpufreq_update_util() is called even
+> > when there is no more CFS rq in the leaf_cfs_rq_list to update but only
+> > irq, rt or dl pelt signals.
+> >
+> > Reported-by: Doug Smythies <dsmythies@telus.net>
+> > Fixes: 039ae8bcf7a5 ("sched/fair: Fix O(nr_cgroups) in the load balancing path")
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > ---
+>
+> OK, but shall we write it like so instead?
+
+Yes. Looks good to me
+
+>
+> ---
+>  kernel/sched/fair.c | 111 +++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 62 insertions(+), 49 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 545bcb90b4de..7a762266c335 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3508,9 +3508,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+>         cfs_rq->load_last_update_time_copy = sa->last_update_time;
+>  #endif
+>
+> -       if (decayed)
+> -               cfs_rq_util_change(cfs_rq, 0);
+> -
+>         return decayed;
+>  }
+>
+> @@ -3620,8 +3617,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+>                 attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
+>                 update_tg_load_avg(cfs_rq, 0);
+>
+> -       } else if (decayed && (flags & UPDATE_TG))
+> -               update_tg_load_avg(cfs_rq, 0);
+> +       } else if (decayed) {
+> +               cfs_rq_util_change(cfs_rq, 0);
 > +
-> +		Reading from this file will display subsystem level low power
-> +		mode statistics.
-
-sysfs files must follow the design of "one file, one value" and it must
-be well defined. "sleep information" does not have a defined structure.
-
-And as Stephen has pointed out several times, /sys/power/subsystem_sleep
-is hardly the right place for a Qualcomm-specific entry.
-
-[..]
-> diff --git a/drivers/soc/qcom/subsystem_sleep_stats.c b/drivers/soc/qcom/subsystem_sleep_stats.c
-[..]
-> +static int __init subsystem_sleep_stats_init(void)
+> +               if (flags & UPDATE_TG)
+> +                       update_tg_load_avg(cfs_rq, 0);
+> +       }
+>  }
+>
+>  #ifndef CONFIG_64BIT
+> @@ -7428,6 +7429,28 @@ static inline bool others_have_blocked(struct rq *rq) { return false; }
+>  static inline void update_blocked_load_status(struct rq *rq, bool has_blocked) {}
+>  #endif
+>
+> +static bool __update_blocked_others(struct rq *rq, bool *done)
 > +{
-> +	struct kobject *ss_stats_kobj;
-> +	int ret;
+> +       const struct sched_class *curr_class;
+> +       u64 now = rq_clock_pelt(rq);
+> +       bool decayed;
 > +
-> +	prvdata = kzalloc(sizeof(*prvdata), GFP_KERNEL);
-> +	if (!prvdata)
-> +		return -ENOMEM;
+> +       /*
+> +        * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
+> +        * DL and IRQ signals have been updated before updating CFS.
+> +        */
+> +       curr_class = rq->curr->sched_class;
 > +
-> +	ss_stats_kobj = kobject_create_and_add("subsystem_sleep",
-> +					       power_kobj);
-> +	if (!ss_stats_kobj)
-> +		return -ENOMEM;
+> +       decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
+> +                 update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
+> +                 update_irq_load_avg(rq, 0);
 > +
-> +	prvdata->kobj = ss_stats_kobj;
+> +       if (others_have_blocked(rq))
+> +               *done = false;
 > +
-> +	sysfs_attr_init(&prvdata->ka.attr);
-> +	prvdata->ka.attr.mode = 0444;
-> +	prvdata->ka.attr.name = "stats";
-> +	prvdata->ka.show = subsystem_stats_show;
-> +
-> +	ret = sysfs_create_file(prvdata->kobj, &prvdata->ka.attr);
-> +	if (ret) {
-> +		kobject_put(prvdata->kobj);
-> +		kfree(prvdata);
-> +	}
-> +
-> +	return ret;
+> +       return decayed;
 > +}
 > +
-> +static void __exit subsystem_sleep_stats_exit(void)
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>
+>  static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+> @@ -7447,29 +7470,11 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+>         return true;
+>  }
+>
+> -static void update_blocked_averages(int cpu)
+> +static bool __update_blocked_fair(struct rq *rq, bool *done)
+>  {
+> -       struct rq *rq = cpu_rq(cpu);
+>         struct cfs_rq *cfs_rq, *pos;
+> -       const struct sched_class *curr_class;
+> -       struct rq_flags rf;
+> -       bool done = true;
+> -
+> -       rq_lock_irqsave(rq, &rf);
+> -       update_rq_clock(rq);
+> -
+> -       /*
+> -        * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
+> -        * that RT, DL and IRQ signals have been updated before updating CFS.
+> -        */
+> -       curr_class = rq->curr->sched_class;
+> -       update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+> -       update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+> -       update_irq_load_avg(rq, 0);
+> -
+> -       /* Don't need periodic decay once load/util_avg are null */
+> -       if (others_have_blocked(rq))
+> -               done = false;
+> +       bool decayed = false;
+> +       int cpu = cpu_of(rq);
+>
+>         /*
+>          * Iterates the task_group tree in a bottom up fashion, see
+> @@ -7478,9 +7483,13 @@ static void update_blocked_averages(int cpu)
+>         for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
+>                 struct sched_entity *se;
+>
+> -               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
+> +               if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
+>                         update_tg_load_avg(cfs_rq, 0);
+>
+> +                       if (cfs_rq == &rq->cfs)
+> +                               decayed = true;
+> +               }
+> +
+>                 /* Propagate pending load changes to the parent, if any: */
+>                 se = cfs_rq->tg->se[cpu];
+>                 if (se && !skip_blocked_update(se))
+> @@ -7495,11 +7504,10 @@ static void update_blocked_averages(int cpu)
+>
+>                 /* Don't need periodic decay once load/util_avg are null */
+>                 if (cfs_rq_has_blocked(cfs_rq))
+> -                       done = false;
+> +                       *done = false;
+>         }
+>
+> -       update_blocked_load_status(rq, !done);
+> -       rq_unlock_irqrestore(rq, &rf);
+> +       return decayed;
+>  }
+>
+>  /*
+> @@ -7549,29 +7557,16 @@ static unsigned long task_h_load(struct task_struct *p)
+>                         cfs_rq_load_avg(cfs_rq) + 1);
+>  }
+>  #else
+> -static inline void update_blocked_averages(int cpu)
+> +static bool __update_blocked_fair(struct rq *rq, bool *done)
+>  {
+> -       struct rq *rq = cpu_rq(cpu);
+>         struct cfs_rq *cfs_rq = &rq->cfs;
+> -       const struct sched_class *curr_class;
+> -       struct rq_flags rf;
+> -
+> -       rq_lock_irqsave(rq, &rf);
+> -       update_rq_clock(rq);
+> -
+> -       /*
+> -        * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
+> -        * that RT, DL and IRQ signals have been updated before updating CFS.
+> -        */
+> -       curr_class = rq->curr->sched_class;
+> -       update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+> -       update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+> -       update_irq_load_avg(rq, 0);
+> +       bool decayed;
+>
+> -       update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
+> +       decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
+> +       if (cfs_rq_has_blocked(cfs_rq))
+> +               *done = false;
+>
+> -       update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
+> -       rq_unlock_irqrestore(rq, &rf);
+> +       return decayed;
+>  }
+>
+>  static unsigned long task_h_load(struct task_struct *p)
+> @@ -7580,6 +7575,24 @@ static unsigned long task_h_load(struct task_struct *p)
+>  }
+>  #endif
+>
+> +static void update_blocked_averages(int cpu)
 > +{
-> +	sysfs_remove_file(prvdata->kobj, &prvdata->ka.attr);
-> +	kobject_put(prvdata->kobj);
-> +	kfree(prvdata);
+> +       bool decayed = false, done = true;
+> +       struct rq *rq = cpu_rq(cpu);
+> +       struct rq_flags rf;
+> +
+> +       rq_lock_irqsave(rq, &rf);
+> +       update_rq_clock(rq);
+> +
+> +       decayed |= __update_blocked_others(rq, &done);
+> +       decayed |= __update_blocked_fair(rq, &done);
+> +
+> +       update_blocked_load_status(rq, !done);
+> +       if (decayed)
+> +               cpufreq_update_util(rq, 0);
+> +       rq_unlock_irqrestore(rq, &rf);
 > +}
 > +
-> +module_init(subsystem_sleep_stats_init);
-> +module_exit(subsystem_sleep_stats_exit);
-
-In the event that this is compiled as a kernel module, this driver won't
-be automatically loaded - there's no references from other drivers nor
-devicetree.
-
-But equally big of an issue is that there's a single arm64 defconfig, so
-this driver will be available on non-Qualcomm installations as well,
-so you will be creating /sys/power/subsystem_sleep/stats regardless if
-it ever will be possible to get any data out of this.
-
-Regards,
-Bjorn
+>  /********** Helpers for find_busiest_group ************************/
+>
+>  /*
+>
