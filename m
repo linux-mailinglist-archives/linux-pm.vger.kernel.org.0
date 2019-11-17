@@ -2,118 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA93FFAA4
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2019 17:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D3FFFBEC
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Nov 2019 23:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbfKQQNU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Nov 2019 11:13:20 -0500
-Received: from cmta19.telus.net ([209.171.16.92]:45129 "EHLO cmta19.telus.net"
+        id S1726134AbfKQWXJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Nov 2019 17:23:09 -0500
+Received: from mga14.intel.com ([192.55.52.115]:26044 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726116AbfKQQNU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 17 Nov 2019 11:13:20 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id WNApi85OLhFQMWNAqijTzR; Sun, 17 Nov 2019 09:13:18 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1574007198; bh=/83FfEBDfmvBw04Q4UuVZoxQgu1KAV2tcdoKts6VNow=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=H6tt7LXs3vrKYjyHpu0ZwWsQqbDJ2mZAsPyvA1QEIOOKOpRs2S8cdj3pnSyFeJzzy
-         kerZ2ZLXPlU+3fRpQ1UTA5eAU6f6KW+e8Vk1PgG7Na/gQpBTUGbvGU+0eFDqNKjvid
-         NKKED9MVFkrhfECmF0FiU5gtARz4aw/02ZD0Rels1lXZZpykE8QstDWKumMFnPEnGC
-         IzoJWy3ZZeQffjz5i1ZZagIJ50jlHp+hcEQYWbNNQoPsY+/zrWqmBVJ0aU+gaZuqcw
-         VbzQ3pSSJFzb7VtT28wTP7SrPwDymLtZHwiNhAN85fxXcOpcMX4iqnLp0gkYmu2oFl
-         wGRfgTLx3g5vA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=ZPWpZkzb c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=FGbulvE0AAAA:8 a=pk_skBFnF1ww1f-5cLQA:9 a=CjuIK1q_8ugA:10
- a=svzTaB3SJmTkU8mK-ULk:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-Cc:     "'Linux ACPI'" <linux-acpi@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Sudeep Holla'" <sudeep.holla@arm.com>,
-        "'Dmitry Osipenko'" <digetx@gmail.com>
-References: <2811202.iOFZ6YHztY@kreacher> <4551555.oysnf1Sd0E@kreacher> 
-In-Reply-To: 
-Subject: RE: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
-Date:   Sun, 17 Nov 2019 08:13:13 -0800
-Message-ID: <000001d59d61$eb4e6670$c1eb3350$@net>
+        id S1726128AbfKQWXJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 17 Nov 2019 17:23:09 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Nov 2019 14:23:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,317,1569308400"; 
+   d="scan'208";a="195947889"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2019 14:23:07 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iWSwk-0005wk-I1; Mon, 18 Nov 2019 06:23:06 +0800
+Date:   Mon, 18 Nov 2019 06:22:55 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Dong Aisheng <aisheng.dong@nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, dongas86@gmail.com,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH 1/1] firmware: imx: scu-pd: do not power off console
+ domain
+Message-ID: <201911180631.ArCyBnqH%lkp@intel.com>
+References: <1573995924-14752-1-git-send-email-aisheng.dong@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdWED0vlByLFQ8J4Rz2jUgcX377w8gZBYsHgABMAilA=
-X-CMAE-Envelope: MS4wfF/JGJ1eYjQlKjqKAe7kaaAk7UWmlqKC95adLwFboHlEdj7PHS/9oAHE45UqhqPtIXG3Fc54CD2dNHhLK1dUe4vw7P1Ktg5Ej4Pe5QGBHX/lxoh7SivR
- dqb40cloNjo8AMaFPrU/HLIZ7X5vtt06Ss71oGVvt9jW+lAhRkUEjYtAD6Re4TvTP60tCpRQs68lYqL65SeE8CVx9O24hya8oeCljFt5CkeXQlSK/BOSZRI+
- +CBT9jpq2qWQakOmi26Xr+h6aNomPefKY6n72qjMQ/daGG/Gk7SkxgCt0ixPBDcvN1LtBASHd0DFqPELMSSIV81SLuQB3/M7w/sprzQEXfm3tTUTGojnY1l0
- hlCdbJWtvOOOV3E8EAPCgpWnZHGG8A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1573995924-14752-1-git-send-email-aisheng.dong@nxp.com>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Apologies if people are getting this e-mail twice.
-Because it had an attachment, I think it got deleted
-from list distribution.
+Hi Dong,
 
-On 2019.11.16 23:35 Doug Smythies wrote:
-> On 2019.10.16 03:41 Rafael J. Wysocki wrote:
->
-> ... deleted ...
->
-> Hi Rafael,
->
-> Not sure, but I think it is this one that
-> causes complaining when I try to set the
-> intel_pstate driver to passive mode.
-> I started from active mode, powersave governor,
-> no HWP.
->
-> Kernel: 5.4-rc7
->
-> I did not go back and try previous 5.4 RCs.
-> I did try kernel 5.3-rc8, because I already had
-> it installed, and it worked fine.
->
-> I use a script (for years), run as sudo:
->
-> doug@s15:~/temp$ cat set_cpu_passive
-> #! /bin/bash
-> cat /sys/devices/system/cpu/intel_pstate/status
-> echo passive > /sys/devices/system/cpu/intel_pstate/status
-> cat /sys/devices/system/cpu/intel_pstate/status
->
-> And I get this (very small excerpt):
->
-> freq_qos_add_request() called for active request
-> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
-> CPU: 1 PID: 2758 Comm: set_cpu_passive Not tainted 5.4.0-rc7-stock #727
-> Failed to add freq constraint for CPU0 (-22)
->
-> freq_qos_add_request() called for active request
-> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
-> CPU: 1 PID: 2758 Comm: set_cpu_passive Tainted: G        W         5.4.0-rc7-stock #727
-> Failed to add freq constraint for CPU1 (-22)
->
-> ...
->
-> I'll attach the whole thing, but it will likely get removed
-> from the general list e-mails.
->
-> ... Doug
+I love your patch! Perhaps something to improve:
 
-I forgot to mention, other than the error messages,
-things seems to work fine.
+[auto build test WARNING on shawnguo/for-next]
+[also build test WARNING on v5.4-rc7 next-20191115]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-If anyone wants to see what was the attachment, it
-is here (for a few days):
+url:    https://github.com/0day-ci/linux/commits/Dong-Aisheng/firmware-imx-scu-pd-do-not-power-off-console-domain/20191117-211100
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-32-g233d4e1-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-http://www.smythies.com/~doug/temp_kernel/rjw.txt
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+
+>> drivers/firmware/imx/scu-pd.c:88:5: sparse: sparse: symbol 'imx_con_rsrc' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
