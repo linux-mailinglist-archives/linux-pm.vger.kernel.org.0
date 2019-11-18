@@ -2,122 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B70410040E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 12:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CD110059B
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 13:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726552AbfKRL1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Nov 2019 06:27:10 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:40500 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfKRL1K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Nov 2019 06:27:10 -0500
-Received: by mail-ot1-f68.google.com with SMTP id m15so14170314otq.7;
-        Mon, 18 Nov 2019 03:27:09 -0800 (PST)
+        id S1726536AbfKRM3H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Nov 2019 07:29:07 -0500
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:45309 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726490AbfKRM3H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Nov 2019 07:29:07 -0500
+Received: by mail-vk1-f193.google.com with SMTP id s4so1883285vkk.12
+        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2019 04:29:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U/Dzry7dkP8u9lgjMIg9ewtJsEx1dOyW/4RrZyMxcwg=;
+        b=BwopXKkvUAS0EsnuPjioJ+LUEnpqkyiTJbK+tzbwnWZ0QyXSFXcw6+wZo/RWOI15OP
+         bLQ5seVn7kEWfk3jqwjl8aznVCVYDr3gZrnAY88ZigjS379xYGIwMwgxZrwi5c7XBnRd
+         R1qgFS4vJ/rjrCBcpolaaitww7T6o3FADj118wcn9mwW9O6xYk3th1Dp32SnEa8KRUMI
+         gQV/QKhOo9F0FDGv5BY3bMTzrntVQeA/KPqMdNvLRJ5itgB7g9TAdYnz+bLzcdSFHv9o
+         jc5C/hywJxJXHL0Qtyv3Jgnzwo4gmR2UBCwhRLfiADd61Fmed1fj/Q2BwX9i8IlcxJw6
+         XPmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0VGp3OpF5GA2F7BU2LE4TwYF6X0125T01Rr+E1EqppI=;
-        b=jCMLZMfmYQkoKN3iFC/0AuUf28FH7MDLubE6jSmZTvABJSU6ZYjmQ32KzTMLwEL/BE
-         v0pJd7qp2EpS84gG91LfN2xUw7n83VVDK8v8gKacvB4uCupsDGv3xLa0iXh2atKSCn2D
-         ynj/bzN3qT3Y/+1cvsNSvogzpIowAY/Bmqv5PCNk1ZfHYs1h6KyL8eKM8lDsl7SAAAR9
-         S98uJrIdufRAh8CxeBEAlPkavt8T8v9nMghFZBCTRQ+RkQsbANyP8bo0C3keGkVv0agB
-         C2e5g8OXIuVFCk6wfa9rAGNBcGvUk0UUuLf5id0AVE/0OfMenq6WE1UhSSiir9MWfK7e
-         H4ng==
-X-Gm-Message-State: APjAAAXTEGxk0JBBEnl/mVbB/Kdu4nLAvMZCpjnSpaFkO7Td4ulNnpww
-        UbVtUHtSZ0Jf9RefQ6idRM450nBISiIbtgD/t/A=
-X-Google-Smtp-Source: APXvYqxy13t3uLGFNSvy3wvHL6OJCqB1p2rtgvpSnNHM+tvUbQdNmTfWxjSP1ZfXrk3AUSM30/lBEFwcSxpYvZPNb+4=
-X-Received: by 2002:a05:6830:232a:: with SMTP id q10mr22460237otg.262.1574076428641;
- Mon, 18 Nov 2019 03:27:08 -0800 (PST)
+        bh=U/Dzry7dkP8u9lgjMIg9ewtJsEx1dOyW/4RrZyMxcwg=;
+        b=fYpl/drzHaGTjWhQ1QaRHrO2/DupMAuUa2I2R4jH83dEnISFWbGJaLmRlMX8hZnzZu
+         XupiJMclFy6RhzIas4axReMqH9oG2WXMOX6jXvQn6n5g/gkagJj5BSYMmvH/DNjn73Um
+         Ms9UeSsJMH8GshNCQQsxOerpD49+uUihDX23lBjJpqFKJCCSROk2ndc5+ipfFLr0q73Y
+         ec3bYCtI+YBAELb1zlNbQs/8mOBNpxYbzQ8eTKhNGTiOfEhH4sPaMj/pFOXPvsgjDswE
+         6yKqFQH/0k8QOShyx1A8pHYdcGJ03qNDjTTk28+pYvURz5zR0Ybn58KrWCevDvWxpJJK
+         8nIw==
+X-Gm-Message-State: APjAAAXo50LZTCGCXI4TUISBBw5HrQEvA+NnGz7CWCbPd1Af53PGEtV3
+        rhEeBH97QmYSI8g51DmlbCG3CnBQ0pq1AQ1JGvXTHg==
+X-Google-Smtp-Source: APXvYqz4jVOHFzimlFTeSKI08BoNNlhIhBV2zNSqr4gbAhvZZ0RFr2YfD9/jeZsJ45egP1Vtmo5ZajRTJswbmlREPO4=
+X-Received: by 2002:ac5:cd47:: with SMTP id n7mr8716291vkm.101.1574080146192;
+ Mon, 18 Nov 2019 04:29:06 -0800 (PST)
 MIME-Version: 1.0
-References: <2717750.dCEzHT3DVQ@kreacher> <CAJvTdKn9wuoXkKecZxCJHPZAG7XK_BqAZT5=7k9Mi4zo4SBL0g@mail.gmail.com>
- <CAJZ5v0ifOQaOm-8n5gUgud0sCn-Y1KQWWhzhtzdm+exvMLgL7Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ifOQaOm-8n5gUgud0sCn-Y1KQWWhzhtzdm+exvMLgL7Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 18 Nov 2019 12:26:57 +0100
-Message-ID: <CAJZ5v0jsQG37VF3-tiSndE0pXX9jEfgucm0UyvpM0bsyoOcpuA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Consolidate disabled state checks
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+References: <20191029164438.17012-1-ulf.hansson@linaro.org>
+ <20191029164438.17012-9-ulf.hansson@linaro.org> <20191115171336.GC27170@bogus>
+In-Reply-To: <20191115171336.GC27170@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 18 Nov 2019 13:28:29 +0100
+Message-ID: <CAPDyKFoqOPg_kfVTuENSh-m-cW_6M1H4Ma8=8dgPvK8_w4addw@mail.gmail.com>
+Subject: Re: [PATCH v2 08/13] cpuidle: psci: Add a helper to attach a CPU to
+ its PM domain
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        LKML <linux-kernel@vger.kernel.org>
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 10:22 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Fri, 15 Nov 2019 at 18:13, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Mon, Nov 18, 2019 at 5:46 AM Len Brown <lenb@kernel.org> wrote:
+> On Tue, Oct 29, 2019 at 05:44:33PM +0100, Ulf Hansson wrote:
+> > Introduce a PSCI DT helper function, psci_dt_attach_cpu(), which takes a
+> > CPU number as an in-parameter and tries to attach the CPU's struct device
+> > to its corresponding PM domain.
 > >
-> > On Mon, Nov 4, 2019 at 6:16 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > There are two reasons why CPU idle states may be disabled: either
-> > > because the driver has disabled them or because they have been
-> > > disabled by user space via sysfs.
-> > >
-> > > In the former case, the state's "disabled" flag is set once during
-> > > the initialization of the driver and it is never cleared later (it
-> > > is read-only effectively).
+> > Let's makes use of dev_pm_domain_attach_by_name(), as it allows us to
+> > specify "psci" as the "name" of the PM domain to attach to. Additionally,
+> > let's also prepare the attached device to be power managed via runtime PM.
 > >
-> > for x86 (intel_idle and acpi_idle), no states with disabled=1 are  registered
-> > with cpuidle.  Instead, intel_idle (currently) skips them in the loop
-> > that registers states.
-> > (and acpi_idle never touches the disabled field)
+> > Note that, the implementation of the new helper function is in a new
+> > separate c-file, which may seems a bit too much at this point. However,
+> > subsequent changes that implements the remaining part of the PM domain
+> > support for cpuidle-psci, helps to justify this split.
 > >
-> > And so for x86, governors checking for drv->states[i].disabled is a NOP,
-> > and the condition described by CPUIDLE_STATE_DISABLED_BY_DRIVER
-> > does not (yet) exist.
->
-> OK
->
-> > Looking at the ARM code, it seems that cpuidle-imx6q.c and cpuidle-tegra20.c
-> > reach into the cpuidle states at run time and toggle the
-> > drv->states[i].disabled.
->
-> I might have overlooked that, let me check.
->
-> > It seems that this patch takes the initial value of
-> > drv->states->disabled, and sets the (per cpu)
-> > usage.disable=..BY_DRIVER,
-> > but that subsequent run-time toggles in drv->states[i]disabled by
-> > these drivers would be missed,
-> > because you're removed the run-time checking of drv->states->disabled?
->
-> If it is updated at run time, then yes, the updates will be missed, so
-> thanks for pointing that out.
->
-> > Finally, I'd like to change intel_idle so that it *can* register a
-> > state that is disabled, by default.
-> > If I change the driver to NOT skip registering disabled states, and
-> > the cpuidle copy has cpuidle_state.disabled=1,
-> > then the state is indeed, unused at run-time.  But as you said,
-> > it is effectively read-only, and is not indicated in sysfs, and can
-> > not be changed via sysfs.
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
 > >
-> > One way to do this is to do what you do here and initialize
-> > usage.disabled to drv->state.disabled. (not distinguishing between
-> > DRIVER and USER)
-> > That way the user could later over-ride what a driver set, by clearing
-> > the disabled attribute.
+> > Changes in v2:
+> >       - Reorder patch to be the first one that starts adding the PM domain
+> >         support.
+> >       - Rebased.
+> >
+> > ---
+> >  drivers/cpuidle/Makefile              |  4 ++-
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 36 +++++++++++++++++++++++++++
+> >  drivers/cpuidle/cpuidle-psci.h        | 12 +++++++++
+> >  3 files changed, 51 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/cpuidle/cpuidle-psci-domain.c
+> >  create mode 100644 drivers/cpuidle/cpuidle-psci.h
+> >
+> > diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+> > index ee70d5cc5b99..cc8c769d7fa9 100644
+> > --- a/drivers/cpuidle/Makefile
+> > +++ b/drivers/cpuidle/Makefile
+> > @@ -21,7 +21,9 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
+> >  obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
+> >  obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
+> >  obj-$(CONFIG_ARM_CPUIDLE)            += cpuidle-arm.o
+> > -obj-$(CONFIG_ARM_PSCI_CPUIDLE)               += cpuidle-psci.o
+> > +obj-$(CONFIG_ARM_PSCI_CPUIDLE)               += cpuidle_psci.o
+> > +cpuidle_psci-y                               := cpuidle-psci.o
+> > +cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
+>
+> This was super confusing for a minute until I noticed the difference
+> between _ and - used here. I know such pattern is used in the kernel,
+> just that it's difficult to notice on first go :)
+>
+> >
+> >  ###############################################################################
+> >  # MIPS drivers
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > new file mode 100644
+> > index 000000000000..bc7df4dc0686
+> > --- /dev/null
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -0,0 +1,36 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * PM domains for CPUs via genpd - managed by cpuidle-psci.
+> > + *
+> > + * Copyright (C) 2019 Linaro Ltd.
+> > + * Author: Ulf Hansson <ulf.hansson@linaro.org>
+> > + *
+> > + */
+> > +
+> > +#include <linux/cpu.h>
+> > +#include <linux/device.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/pm_domain.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/psci.h>
+> > +
+> > +#include "cpuidle-psci.h"
+> > +
+> > +struct device *psci_dt_attach_cpu(int cpu)
+> > +{
+> > +     struct device *dev;
+> > +
+> > +     /* Currently limit the hierarchical topology to be used in OSI mode. */
+> > +     if (!psci_has_osi_support())
+> > +             return NULL;
+> > +
+> > +     dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
+> > +     if (IS_ERR_OR_NULL(dev))
+> > +             return dev;
+> > +
+> > +     pm_runtime_irq_safe(dev);
+> > +     if (cpu_online(cpu))
+> > +             pm_runtime_get_sync(dev);
+>
+> I probably have to wait till I see the user of this, but until then I
+> assume we have some way to deal with CPU HP machinery for this.
 
-I'd rather get rid of the "disabled" field from struct cpuidle_state
-entirely and introduce a new state flag to indicate the "disabled by
-default" status.
+Yes, I discussed this with Lorenzo at LPC as well. I did not include a
+patch in the series using a CPU HP, simply because I am targeting to
+land the basic support first.
 
-I also would expose that new flag in a new sysfs attribute of idle
-states, say "disable_default".
+For now, this means that the "cluster" will remain on even if there
+are CPUs being put offline.
 
-Then, the DISABLED_BY_DRIVER bit would be reserved for driver quirks
-(as per https://patchwork.kernel.org/patch/11249519/) and the
-DISABLED_BY_USER one could be used for all of the other purposes.
+>
+> Other than that, it looks fine. I will get back to this to ack or with
+> more questions as I review further.
 
-Cheers,
-Rafael
+Great, thanks!
+
+Kind regards
+Uffe
