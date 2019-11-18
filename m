@@ -2,170 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB3B1005EA
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 13:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F5F10065A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 14:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbfKRMu5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Nov 2019 07:50:57 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:46865 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfKRMu5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Nov 2019 07:50:57 -0500
-Received: by mail-ua1-f67.google.com with SMTP id i31so5166825uae.13
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2019 04:50:56 -0800 (PST)
+        id S1726739AbfKRNV1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Nov 2019 08:21:27 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40181 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbfKRNV1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Nov 2019 08:21:27 -0500
+Received: by mail-wr1-f66.google.com with SMTP id q15so6645429wrw.7
+        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2019 05:21:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4CJs0fnp4q3JTEKHH9CQ9OKvCdAUdjRx5u4JJzw81b0=;
-        b=jm/CGt7tMSAzLYhkixWLkxEXB1f5LJyGoCoOoFxlnO1gso8Id9iLeGv2aW4LW5znZq
-         g6D7bQd8XKKrGt6fHk4Mm7CoUf8yYM84TI2iPBGcS7sUvriRa441sKSufEAI0F7m7E8C
-         eOam7M7+p4Lcwf4AlUnszEmEghhMJ91gL+MXQxzPpe8Nsir1Hopl7O6iXlOBMMbv15C2
-         O0mkepdXFpseZGMHApBOd8ZRVmgfXYKeqf+9jK5l039kqix7NysENToIMw9mgNefwmp/
-         fJN6n5Ze7UzzgzbMZ0rNaAt3ktEj9ZUb6uvFCMIYPbP/Ofvkm4EvLIVVE89VgaXVR0AC
-         sZGA==
+        h=from:to:cc:subject:date:message-id;
+        bh=lxr9GeEXmv85wrOINCVAdQwZGIOO7LWMdZuLx8D/s+g=;
+        b=WepqQ2MLR3dv6BdTSlx/OorTFy1GwgA7kGJUyfCgeq/K0BCp/QrBROKM8KUVVRjePF
+         LWIldKlG5HSXlIYg5u6YFqrHgY1uzC3TXGpttuoKtmqW+HWS8WFVgz1b9esoj8CHprSX
+         MyoIIPMij0igA425jyt1pcKGnz33Wu+s93N3rr5gik9Ugb9+Kqo+z/qUsdMF40HImQ3n
+         du1VexynxXwnDStOW/eHaNmuZzEhatmoQY5f0lwraHeQltO4+Fmkltl6Dp7OR/BnaaDH
+         gTjXLUkk5iexmL8qqpBZT99VxHn7YeT/6Vpn13BKU/ZFbHTXcb2C+xyJgWeQ4qZoEILg
+         XEhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4CJs0fnp4q3JTEKHH9CQ9OKvCdAUdjRx5u4JJzw81b0=;
-        b=Cg8sB/ShROJlIiK2yBD8nF3NsRm8kwtyfWc1s16IaMswNQYeL6e5ju60EUNpMdPCz7
-         xSBfH/IvGR607eefH9gMcWcbXnRWvhQzWWbY28cdB4w4PJL+HW1RunHUmK856ih/7JF9
-         LGp3pVfuckAtpBr85A9CQfetlZKzZakXUscGXl/pGTk7LJK+fNgCBMkRKgHnDeP9ScVJ
-         dVzsnfNs/BR4jxbxf9ti/XT8QJdA18BPHZx3nRcJMFtjXvJTX8uUyAm3JwgwBikMa101
-         NsjL5yc6xMQxfI0QKPcmRF7tbQcI1OW+eMqi5nZ2D29smcvPEtMDWTc5PzxmZ1L/+pjV
-         X7xQ==
-X-Gm-Message-State: APjAAAUIW3kctk6IX80+TdRi1FmAStvRLhIulVlctfPu9Xm5DjcbhgTM
-        29g5oZchW+IBa72mvkjXwDLpnRS/Tce3pU+GM77HXqfHf9I=
-X-Google-Smtp-Source: APXvYqzllSdd6OH2VE+FgRV8tVggasb5KGapL/QKSUOqEAXbQPVSSHwo16Z2VRlyvLFg4PqcAu+xADeZo9azF6gmR7M=
-X-Received: by 2002:ab0:61cc:: with SMTP id m12mr16585279uan.129.1574081455188;
- Mon, 18 Nov 2019 04:50:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20191029164438.17012-1-ulf.hansson@linaro.org>
- <20191029164438.17012-10-ulf.hansson@linaro.org> <20191115171555.GD27170@bogus>
-In-Reply-To: <20191115171555.GD27170@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 18 Nov 2019 13:50:19 +0100
-Message-ID: <CAPDyKFr0jmcF9EAnhDER49kwb3oBGwFJy2iQArmqAqdB5Xz0BA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/13] cpuidle: psci: Attach CPU devices to their PM domains
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lxr9GeEXmv85wrOINCVAdQwZGIOO7LWMdZuLx8D/s+g=;
+        b=Op6pDYIcY6LxQvLF6j9zOgeZwKttUuUyhLXerk4tuslfmkhEnbdUPa+zu7tFuQqEsk
+         8MjBwJiTUyrGla4qZ4nVwIh2vwRuhVHJusQZRyJzoVRPBBOF5y8dLrPb+oHuOMcyrYQc
+         w7zkV7ddtkmg4SgnzF1l0/3cNSs4PR7UVbDbw/a4s9BagJ+An9dTwLGqaPb9O13hrjGE
+         uiNoEnrwca6LBtFoYX13RonLUIkeyhCBiy+tbmzhugQ9xOoOGk7p8pnMvqe7BgmJqh/y
+         OpwDbKrCvUX+5st9Lr++4yUIjl6X2AgHVxm9m8Ecke6iRtm3HrXMRkOY5gHLQSPYm7aL
+         gX3g==
+X-Gm-Message-State: APjAAAWsKoQQXnq7DSHtm8jo5v5VU/vYsos+/h2XbMPUuQAwm85AZLXw
+        y8aP9b6FGvvSMEAIRf4M7hRIjg==
+X-Google-Smtp-Source: APXvYqwOw5vY+XC8a1FuDYfRrM1VgnuaYLBFMScjC2Gn+RImpzNdz0SHH+YSU0mbsLfBvecVE/2vtw==
+X-Received: by 2002:adf:ecca:: with SMTP id s10mr30998209wro.22.1574083284192;
+        Mon, 18 Nov 2019 05:21:24 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:fc86:5ba0:cc9f:f10b])
+        by smtp.gmail.com with ESMTPSA id f140sm21331661wme.21.2019.11.18.05.21.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 18 Nov 2019 05:21:22 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, dietmar.eggemann@arm.com,
+        juri.lelli@redhat.com, rostedt@goodmis.org, mgorman@suse.de,
+        dsmythies@telus.net
+Cc:     linux-pm@vger.kernel.org, torvalds@linux-foundation.org,
+        tglx@linutronix.de, sargun@sargun.me, tj@kernel.org,
+        xiexiuqi@huawei.com, xiezhipeng1@huawei.com,
+        srinivas.pandruvada@linux.intel.com, rafael.j.wysocki@intel.com,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v5] sched/freq: move call to cpufreq_update_util
+Date:   Mon, 18 Nov 2019 14:21:19 +0100
+Message-Id: <1574083279-799-1-git-send-email-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 15 Nov 2019 at 18:16, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Tue, Oct 29, 2019 at 05:44:34PM +0100, Ulf Hansson wrote:
-> > In order to enable a CPU to be power managed through its PM domain, let's
-> > try to attach it by calling psci_dt_attach_cpu() during the cpuidle
-> > initialization.
-> >
-> > psci_dt_attach_cpu() returns a pointer to the attached struct device, which
-> > later should be used for runtime PM, hence we need to store it somewhere.
-> > Rather than adding yet another per CPU variable, let's create a per CPU
-> > struct to collect the relevant per CPU variables.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - Rebased.
-> >
-> > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 24 ++++++++++++++++++++----
-> >  1 file changed, 20 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index 830995b8a56f..167249d0493f 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -20,14 +20,20 @@
-> >
-> >  #include <asm/cpuidle.h>
-> >
-> > +#include "cpuidle-psci.h"
-> >  #include "dt_idle_states.h"
-> >
-> > -static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-> > +struct psci_cpuidle_data {
-> > +     u32 *psci_states;
-> > +     struct device *dev;
-> > +};
-> > +
-> > +static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
-> >
-> >  static int psci_enter_idle_state(struct cpuidle_device *dev,
-> >                               struct cpuidle_driver *drv, int idx)
-> >  {
-> > -     u32 *state = __this_cpu_read(psci_power_state);
-> > +     u32 *state = __this_cpu_read(psci_cpuidle_data.psci_states);
-> >
-> >       return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
-> >                                          idx, state[idx]);
-> > @@ -78,7 +84,9 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
-> >  {
-> >       int i, ret = 0;
-> >       u32 *psci_states;
-> > +     struct device *dev;
-> >       struct device_node *state_node;
-> > +     struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
-> >
-> >       state_count++; /* Add WFI state too */
-> >       psci_states = kcalloc(state_count, sizeof(*psci_states), GFP_KERNEL);
-> > @@ -104,8 +112,16 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
-> >               goto free_mem;
-> >       }
-> >
-> > -     /* Idle states parsed correctly, initialize per-cpu pointer */
-> > -     per_cpu(psci_power_state, cpu) = psci_states;
-> > +     dev = psci_dt_attach_cpu(cpu);
->
-> Why do we need to call psci_dt_attach_cpu for even PC mode and ...
->
-> > +     if (IS_ERR(dev)) {
-> > +             ret = PTR_ERR(dev);
-> > +             goto free_mem;
-> > +     }
-> > +
-> > +     data->dev = dev;
-> > +
->
-> ... assign NULL above. I don't see the need for one. Default it will be
-> NULL anyway and we can call psci_dt_attach_cpu only if psci_has_osi_support()
+update_cfs_rq_load_avg() calls cfs_rq_util_change() everytime pelt decays,
+which might be inefficient when cpufreq driver has rate limitation.
 
-Are you sure it's NULL as default? It's a pointer, within a static
-initiated struct.
+When a task is attached on a CPU, we have call path:
 
-"static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data,
-psci_cpuidle_data);"
+update_load_avg()
+  update_cfs_rq_load_avg()
+    cfs_rq_util_change -- > trig frequency update
+  attach_entity_load_avg()
+    cfs_rq_util_change -- > trig frequency update
 
->
-> I will look through further patches to see if it make sense or not.
+The 1st frequency update will not take into account the utilization of the
+newly attached task and the 2nd one might be discard because of rate
+limitation of the cpufreq driver.
 
-So, the check for psci_has_osi_support() is done in
-psci_dt_attach_cpu(), which returns "NULL" if OSI isn't supported.
+update_cfs_rq_load_avg() is only called by update_blocked_averages()
+and update_load_avg() so we can move the call to
+cfs_rq_util_change/cpufreq_update_util() into these 2 functions. It's also
+interesting to notice that update_load_avg() already calls directly
+cfs_rq_util_change() for !SMP case.
 
-The idea with this approach is also to keep the common code in
-psci_dt_cpu_init_idle() (or the entire cpuidle-psci.c actually), as
-transparent as possible, to whether PSCI OSI-mode is supported or not.
+This changes will also ensure that cpufreq_update_util() is called even
+when there is no more CFS rq in the leaf_cfs_rq_list to update but only
+irq, rt or dl pelt signals.
 
-Of course, if you insist, I am open to change in any way you prefer.
+Reported-by: Doug Smythies <dsmythies@telus.net>
+Fixes: 039ae8bcf7a5 ("sched/fair: Fix O(nr_cgroups) in the load balancing path")
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: Doug Smythies <dsmythies@telus.net>
+---
 
-Kind regards
-Uffe
+this patch applies on tip/sched/urgent as there is a dependency with
+commit b90f7c9d2198 ("sched/pelt: Fix update of blocked PELT ordering")
+
+Changes for v5:
+- split functions and move code
+- no functional change
+
+ kernel/sched/fair.c | 111 +++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 62 insertions(+), 49 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 69a81a5..9893528 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3504,9 +3504,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ 	cfs_rq->load_last_update_time_copy = sa->last_update_time;
+ #endif
+ 
+-	if (decayed)
+-		cfs_rq_util_change(cfs_rq, 0);
+-
+ 	return decayed;
+ }
+ 
+@@ -3616,8 +3613,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
+ 		update_tg_load_avg(cfs_rq, 0);
+ 
+-	} else if (decayed && (flags & UPDATE_TG))
+-		update_tg_load_avg(cfs_rq, 0);
++	} else if (decayed) {
++		cfs_rq_util_change(cfs_rq, 0);
++
++		if (flags & UPDATE_TG)
++			update_tg_load_avg(cfs_rq, 0);
++	}
+ }
+ 
+ #ifndef CONFIG_64BIT
+@@ -7517,6 +7518,28 @@ static inline bool others_have_blocked(struct rq *rq) { return false; }
+ static inline void update_blocked_load_status(struct rq *rq, bool has_blocked) {}
+ #endif
+ 
++static bool __update_blocked_others(struct rq *rq, bool *done)
++{
++	const struct sched_class *curr_class;
++	u64 now = rq_clock_pelt(rq);
++	bool decayed;
++
++	/*
++	 * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
++	 * DL and IRQ signals have been updated before updating CFS.
++	 */
++	curr_class = rq->curr->sched_class;
++
++	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
++		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
++		  update_irq_load_avg(rq, 0);
++
++	if (others_have_blocked(rq))
++		*done = false;
++
++	return decayed;
++}
++
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ 
+ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+@@ -7536,29 +7559,11 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+ 	return true;
+ }
+ 
+-static void update_blocked_averages(int cpu)
++static bool __update_blocked_fair(struct rq *rq, bool *done)
+ {
+-	struct rq *rq = cpu_rq(cpu);
+ 	struct cfs_rq *cfs_rq, *pos;
+-	const struct sched_class *curr_class;
+-	struct rq_flags rf;
+-	bool done = true;
+-
+-	rq_lock_irqsave(rq, &rf);
+-	update_rq_clock(rq);
+-
+-	/*
+-	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
+-	 * that RT, DL and IRQ signals have been updated before updating CFS.
+-	 */
+-	curr_class = rq->curr->sched_class;
+-	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+-	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+-	update_irq_load_avg(rq, 0);
+-
+-	/* Don't need periodic decay once load/util_avg are null */
+-	if (others_have_blocked(rq))
+-		done = false;
++	bool decayed = false;
++	int cpu = cpu_of(rq);
+ 
+ 	/*
+ 	 * Iterates the task_group tree in a bottom up fashion, see
+@@ -7567,9 +7572,13 @@ static void update_blocked_averages(int cpu)
+ 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
+ 		struct sched_entity *se;
+ 
+-		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
++		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
+ 			update_tg_load_avg(cfs_rq, 0);
+ 
++			if (cfs_rq == &rq->cfs)
++				decayed = true;
++		}
++
+ 		/* Propagate pending load changes to the parent, if any: */
+ 		se = cfs_rq->tg->se[cpu];
+ 		if (se && !skip_blocked_update(se))
+@@ -7584,11 +7593,10 @@ static void update_blocked_averages(int cpu)
+ 
+ 		/* Don't need periodic decay once load/util_avg are null */
+ 		if (cfs_rq_has_blocked(cfs_rq))
+-			done = false;
++			*done = false;
+ 	}
+ 
+-	update_blocked_load_status(rq, !done);
+-	rq_unlock_irqrestore(rq, &rf);
++	return decayed;
+ }
+ 
+ /*
+@@ -7638,29 +7646,16 @@ static unsigned long task_h_load(struct task_struct *p)
+ 			cfs_rq_load_avg(cfs_rq) + 1);
+ }
+ #else
+-static inline void update_blocked_averages(int cpu)
++static bool __update_blocked_fair(struct rq *rq, bool *done)
+ {
+-	struct rq *rq = cpu_rq(cpu);
+ 	struct cfs_rq *cfs_rq = &rq->cfs;
+-	const struct sched_class *curr_class;
+-	struct rq_flags rf;
+-
+-	rq_lock_irqsave(rq, &rf);
+-	update_rq_clock(rq);
+-
+-	/*
+-	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
+-	 * that RT, DL and IRQ signals have been updated before updating CFS.
+-	 */
+-	curr_class = rq->curr->sched_class;
+-	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
+-	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
+-	update_irq_load_avg(rq, 0);
++	bool decayed;
+ 
+-	update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
++	decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
++	if (cfs_rq_has_blocked(cfs_rq))
++		*done = false;
+ 
+-	update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
+-	rq_unlock_irqrestore(rq, &rf);
++	return decayed;
+ }
+ 
+ static unsigned long task_h_load(struct task_struct *p)
+@@ -7669,6 +7664,24 @@ static unsigned long task_h_load(struct task_struct *p)
+ }
+ #endif
+ 
++static void update_blocked_averages(int cpu)
++{
++	bool decayed = false, done = true;
++	struct rq *rq = cpu_rq(cpu);
++	struct rq_flags rf;
++
++	rq_lock_irqsave(rq, &rf);
++	update_rq_clock(rq);
++
++	decayed |= __update_blocked_others(rq, &done);
++	decayed |= __update_blocked_fair(rq, &done);
++
++	update_blocked_load_status(rq, !done);
++	if (decayed)
++		cpufreq_update_util(rq, 0);
++	rq_unlock_irqrestore(rq, &rf);
++}
++
+ /********** Helpers for find_busiest_group ************************/
+ 
+ /*
+-- 
+2.7.4
+
