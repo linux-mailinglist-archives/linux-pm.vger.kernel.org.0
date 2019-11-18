@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEAF100F06
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 23:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EC0100F08
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Nov 2019 23:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfKRW4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Nov 2019 17:56:51 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:35232 "EHLO inva020.nxp.com"
+        id S1726822AbfKRW4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Nov 2019 17:56:54 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:57226 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726717AbfKRW4v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 18 Nov 2019 17:56:51 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7A4851A0D95;
-        Mon, 18 Nov 2019 23:56:49 +0100 (CET)
+        id S1726717AbfKRW4y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 Nov 2019 17:56:54 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EABC22001BE;
+        Mon, 18 Nov 2019 23:56:50 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6D0AD1A0427;
-        Mon, 18 Nov 2019 23:56:49 +0100 (CET)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DC421200045;
+        Mon, 18 Nov 2019 23:56:50 +0100 (CET)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id F2783203BF;
-        Mon, 18 Nov 2019 23:56:48 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 6D36D2039C;
+        Mon, 18 Nov 2019 23:56:50 +0100 (CET)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>
@@ -30,68 +30,139 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
         Jacky Bai <ping.bai@nxp.com>, Angus Ainslie <angus@akkea.ca>,
         linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH v2 0/2] PM: QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-Date:   Tue, 19 Nov 2019 00:56:41 +0200
-Message-Id: <cover.1574116684.git.leonard.crestez@nxp.com>
+Subject: [PATCH v2 1/2] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+Date:   Tue, 19 Nov 2019 00:56:42 +0200
+Message-Id: <f6bf48636374084581ff0fd40f79e4090d82c4ad.1574116684.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1574116684.git.leonard.crestez@nxp.com>
+References: <cover.1574116684.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1574116684.git.leonard.crestez@nxp.com>
+References: <cover.1574116684.git.leonard.crestez@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Support for frequency limits in dev_pm_qos was removed when cpufreq was
-switched to freq_qos, this series attempts to restore it by
-reimplementing top of freq_qos.
+This allows dev_pm_qos to embed freq_qos structs, which is done in the
+next patch. Separate commit to make it easier to review.
 
-Previous discussion here:
-
-https://lore.kernel.org/linux-pm/VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com/T/#u
-
-The cpufreq core switched away because it needs contraints at the level
-of a "cpufreq_policy" which cover multiple cpus so dev_pm_qos coupling
-to struct device was not useful. Cpufreq could only use dev_pm_qos by
-implementing an additional layer of aggregation anyway.
-
-However the devfreq subsystem scaling is always performed for each
-device so dev_pm_qos is a very good match.
-
-In theory if freq_qos is extended to handle conflicting min/max values then
-this sharing would be useful. Right now freq_qos just ties two unrelated
-pm_qos aggregations for min and max freq.
-
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 ---
-This is implemented by embeding a freq_qos_request inside dev_pm_qos_request:
-the data field was already an union in order to deal with flag requests.
+ include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
+ 1 file changed, 38 insertions(+), 36 deletions(-)
 
-The internal freq_qos_apply is exported so that it can be called from
-dev_pm_qos apply_constraints.
-
-The dev_pm_qos_constraints_destroy function has no obvious equivalent in
-freq_qos and the whole approach of "removing requests" is somewhat
-dubios: request objects should be owned by consumers and the list of qos
-requests should be empty when the target device is deleted.
-
-Clearing the request list and would likely result in a WARN next time
-"update_request" is called by the requestor. Perhaps constraints_destroy
-should dev_warn if lists are not empty? That would be an unrelated fix
-for PM QoS.
-
-Changes since v1:
-* Don't add a leading underscore and EXPORT_SYMBOL_GPL the
-freq_qos_apply function; just drop the static marker.
-* Merged the freq_qos_apply export into the last patch.
-Link to v1: https://patchwork.kernel.org/cover/11212887/
-
-Leonard Crestez (2):
-  PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
-  PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-
- drivers/base/power/qos.c | 69 +++++++++++++++++++++++++++++---
- include/linux/pm_qos.h   | 86 +++++++++++++++++++++++-----------------
- kernel/power/qos.c       |  4 +-
- 3 files changed, 116 insertions(+), 43 deletions(-)
-
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index ebf5ef17cc2a..9105f47f5195 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -47,25 +47,10 @@ struct pm_qos_request {
+ struct pm_qos_flags_request {
+ 	struct list_head node;
+ 	s32 flags;	/* Do not change to 64 bit */
+ };
+ 
+-enum dev_pm_qos_req_type {
+-	DEV_PM_QOS_RESUME_LATENCY = 1,
+-	DEV_PM_QOS_LATENCY_TOLERANCE,
+-	DEV_PM_QOS_FLAGS,
+-};
+-
+-struct dev_pm_qos_request {
+-	enum dev_pm_qos_req_type type;
+-	union {
+-		struct plist_node pnode;
+-		struct pm_qos_flags_request flr;
+-	} data;
+-	struct device *dev;
+-};
+-
+ enum pm_qos_type {
+ 	PM_QOS_UNITIALIZED,
+ 	PM_QOS_MAX,		/* return the largest value */
+ 	PM_QOS_MIN,		/* return the smallest value */
+ 	PM_QOS_SUM		/* return the sum */
+@@ -88,10 +73,48 @@ struct pm_qos_constraints {
+ struct pm_qos_flags {
+ 	struct list_head list;
+ 	s32 effective_flags;	/* Do not change to 64 bit */
+ };
+ 
++
++#define FREQ_QOS_MIN_DEFAULT_VALUE	0
++#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
++
++enum freq_qos_req_type {
++	FREQ_QOS_MIN = 1,
++	FREQ_QOS_MAX,
++};
++
++struct freq_constraints {
++	struct pm_qos_constraints min_freq;
++	struct blocking_notifier_head min_freq_notifiers;
++	struct pm_qos_constraints max_freq;
++	struct blocking_notifier_head max_freq_notifiers;
++};
++
++struct freq_qos_request {
++	enum freq_qos_req_type type;
++	struct plist_node pnode;
++	struct freq_constraints *qos;
++};
++
++
++enum dev_pm_qos_req_type {
++	DEV_PM_QOS_RESUME_LATENCY = 1,
++	DEV_PM_QOS_LATENCY_TOLERANCE,
++	DEV_PM_QOS_FLAGS,
++};
++
++struct dev_pm_qos_request {
++	enum dev_pm_qos_req_type type;
++	union {
++		struct plist_node pnode;
++		struct pm_qos_flags_request flr;
++	} data;
++	struct device *dev;
++};
++
+ struct dev_pm_qos {
+ 	struct pm_qos_constraints resume_latency;
+ 	struct pm_qos_constraints latency_tolerance;
+ 	struct pm_qos_flags flags;
+ 	struct dev_pm_qos_request *resume_latency_req;
+@@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+ {
+ 	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+ }
+ #endif
+ 
+-#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+-#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+-
+-enum freq_qos_req_type {
+-	FREQ_QOS_MIN = 1,
+-	FREQ_QOS_MAX,
+-};
+-
+-struct freq_constraints {
+-	struct pm_qos_constraints min_freq;
+-	struct blocking_notifier_head min_freq_notifiers;
+-	struct pm_qos_constraints max_freq;
+-	struct blocking_notifier_head max_freq_notifiers;
+-};
+-
+-struct freq_qos_request {
+-	enum freq_qos_req_type type;
+-	struct plist_node pnode;
+-	struct freq_constraints *qos;
+-};
+-
+ static inline int freq_qos_request_active(struct freq_qos_request *req)
+ {
+ 	return !IS_ERR_OR_NULL(req->qos);
+ }
+ 
 -- 
 2.17.1
 
