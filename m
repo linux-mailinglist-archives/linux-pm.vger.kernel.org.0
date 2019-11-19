@@ -2,100 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4A8102A70
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 18:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B421E102C73
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 20:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728637AbfKSRC3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 12:02:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56396 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727560AbfKSRC3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 Nov 2019 12:02:29 -0500
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 522C222384;
-        Tue, 19 Nov 2019 17:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574182943;
-        bh=9xlP6l6zc8LrRTuryqi4QOF5/Hg74NZf0SPlZK2mEU8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hHdDFqFWJkwOuMKZk0NzaOxgeAE6UqGlvZAVH+WTtjEaZ3CCkLs6cDI5yFhIl9SRE
-         54T4E31B4t+satNSKMSJ+416Ec7m0NKdD49RPHEpukOMZs6k0mxIRc9AHYb5zIBbTG
-         bNPOVvg5RSncACs08sPyTJmxe1NXOpvf8io01pqY=
-Received: by mail-qk1-f179.google.com with SMTP id z16so18462574qkg.7;
-        Tue, 19 Nov 2019 09:02:23 -0800 (PST)
-X-Gm-Message-State: APjAAAWDgqNzuLMJs8sFoNhCpmKJ/NCyiGWxa3+rUuO7R+v5e5LWatrG
-        AnMysVzyQOrrnIp3ZSRcxGlXeEucbJgpgLW1ZA==
-X-Google-Smtp-Source: APXvYqxucfdWSXPgW2vd8l9633HeMvIH864eMJ/p+Bk0FhDvh444Pum/yEC+Gs6buUxeu7x2jucgvrCcmOz57phmAkg=
-X-Received: by 2002:a05:620a:205d:: with SMTP id d29mr30290391qka.152.1574182942398;
- Tue, 19 Nov 2019 09:02:22 -0800 (PST)
+        id S1727124AbfKSTRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 14:17:18 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38462 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727036AbfKSTRS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 14:17:18 -0500
+Received: by mail-oi1-f193.google.com with SMTP id a14so20050278oid.5;
+        Tue, 19 Nov 2019 11:17:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wNhSIdXIAMhTZZlTq4fvLUCixY9Z52dvDBqLG8iKTeg=;
+        b=RwYmRCTgVEBKrMJlWvkpWxd/5naacajGqd7cDvNQfe10wT0oEdntJWDUuS7cNHwA5Y
+         Pc3sIynZs9P6WuCaA8VkzLAHA2sa1oNFvHf2M5M8D6iut9pi3R9NAI1LvL66zrlIO1qO
+         r+Y1CDonyZnv8kRpjDVwnZPSNnOuK6VTTqSsqR0x8mzjTFqN/cumHEzq7RzmDWKNGrwf
+         N4lh6JXh0fe8oAEZvyTWO/yFE7AJBkGE7eIrAOmFm0fskx5IVuwuRvyGvm3kow5wG0PN
+         u5N99lSFkWWN6wd9CDh+0STVDUYMwf5wB9il+TNbJmCXb9tz6jf5EvzRS7easWy8HQV/
+         iBKg==
+X-Gm-Message-State: APjAAAUf/z5oP2KnQc/BzZfo1tozVfdtdkwkr68hjlKZBS15ZLlP/Z4S
+        dFLN0Fz+ikGeTUG9oJzHqiEVqWz89/B0B6BAl7o=
+X-Google-Smtp-Source: APXvYqwLfxciI4GS3t+oWbXzFREIpD12GUXpB9UJ5E3BLWwvX0dd5QLcJSKaltQnW2ZhblzctccArehQ8GCNyphjH2U=
+X-Received: by 2002:aca:1101:: with SMTP id 1mr5643630oir.103.1574191036787;
+ Tue, 19 Nov 2019 11:17:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20191119144315.11261-1-krzk@kernel.org>
-In-Reply-To: <20191119144315.11261-1-krzk@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 19 Nov 2019 11:02:11 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+1hHneSW5DzLNxU00AqQJ49chTyULJ0S3JR-CqfOfTgA@mail.gmail.com>
-Message-ID: <CAL_Jsq+1hHneSW5DzLNxU00AqQJ49chTyULJ0S3JR-CqfOfTgA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: power: Fix path to power-domain.txt bindings
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+References: <2811202.iOFZ6YHztY@kreacher> <4551555.oysnf1Sd0E@kreacher>
+ <000001d59d61$eb4e6670$c1eb3350$@net> <000401d59ee6$959e3da0$c0dab8e0$@net>
+In-Reply-To: <000401d59ee6$959e3da0$c0dab8e0$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Nov 2019 20:17:05 +0100
+Message-ID: <CAJZ5v0i1iAjpWju6FiCjP3RvspKDRfSwz4=b_3qgGhhfz8sSrw@mail.gmail.com>
+Subject: Re: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
+To:     Doug Smythies <dsmythies@telus.net>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        etnaviv@lists.freedesktop.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 8:43 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Tue, Nov 19, 2019 at 3:35 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> With split of power domain controller bindings to power-domain.yaml, the
-> consumer part was renamed to power-domain.txt.  Update the references in
-> other bindings.
+> On 2019.11.17 08:13 Doug Smythies wrote:
+> > On 2019.11.16 23:35 Doug Smythies wrote:
 >
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Fixes: abb4805e343a ("dt-bindings: power: Convert Samsung Exynos Power Domain bindings to json-schema")
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  Documentation/devicetree/bindings/clock/clk-exynos-audss.txt  | 2 +-
->  Documentation/devicetree/bindings/clock/exynos5433-clock.txt  | 2 +-
->  .../devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt  | 2 +-
->  .../devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt  | 2 +-
->  .../bindings/clock/renesas,rcar-gen2-cpg-clocks.txt           | 2 +-
->  .../devicetree/bindings/clock/renesas,rz-cpg-clocks.txt       | 2 +-
->  .../devicetree/bindings/display/etnaviv/etnaviv-drm.txt       | 2 +-
->  Documentation/devicetree/bindings/display/msm/dpu.txt         | 2 +-
->  Documentation/devicetree/bindings/display/msm/mdp5.txt        | 2 +-
->  Documentation/devicetree/bindings/dsp/fsl,dsp.yaml            | 2 +-
->  Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt    | 2 +-
->  .../devicetree/bindings/media/mediatek-jpeg-decoder.txt       | 2 +-
->  Documentation/devicetree/bindings/media/mediatek-mdp.txt      | 2 +-
->  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt  | 2 +-
->  Documentation/devicetree/bindings/pci/pci-keystone.txt        | 2 +-
->  Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt | 2 +-
->  Documentation/devicetree/bindings/power/qcom,rpmpd.txt        | 2 +-
->  Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt | 2 +-
->  .../devicetree/bindings/usb/nvidia,tegra124-xusb.txt          | 4 ++--
->  19 files changed, 20 insertions(+), 20 deletions(-)
+> >> Hi Rafael,
+> >>
+> >> Not sure, but I think it is this one that
+> >> causes complaining when I try to set the
+> >> intel_pstate driver to passive mode.
+> >> I started from active mode, powersave governor,
+> >> no HWP.
+> >>
+> >> Kernel: 5.4-rc7
+> >>
+> >> I did not go back and try previous 5.4 RCs.
+>
+> After looking at the git tags for this patch,
+> I tried kernel 5.4-rc2, which was the closest
+> Kernel I had to before the patch set was added.
+> It worked fine, as expected.
+>
+> >> I did try kernel 5.3-rc8, because I already had
+> >> it installed, and it worked fine.
+> >>
+> >> I use a script (for years), run as sudo:
+> >>
+> >> doug@s15:~/temp$ cat set_cpu_passive
+> >> #! /bin/bash
+> >> cat /sys/devices/system/cpu/intel_pstate/status
+> >> echo passive > /sys/devices/system/cpu/intel_pstate/status
+> >> cat /sys/devices/system/cpu/intel_pstate/status
+> >>
+> >> And I get this (very small excerpt):
+> >>
+> >> freq_qos_add_request() called for active request
+> >> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
+> >> CPU: 1 PID: 2758 Comm: set_cpu_passive Not tainted 5.4.0-rc7-stock #727
+> >> Failed to add freq constraint for CPU0 (-22)
+> >>
+> >> freq_qos_add_request() called for active request
+> >> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
+> >> CPU: 1 PID: 2758 Comm: set_cpu_passive Tainted: G        W         5.4.0-rc7-stock #727
+> >> Failed to add freq constraint for CPU1 (-22)
+>
+> Updated summary of previous emails:
+> This patch or patch set breaks the after boot
+> ability to change CPU frequency scaling drivers.
+>
+> Using a workaround of booting with
+> "intel_pstate=passive" seems to prevent the errors.
+>
+> Changing between the intel_pstate and intel_cpufreq drivers
+> (i.e. between active and passive modes)
+> after boot, either way, causes the errors. i.e.
+>
+> Failed to add freq constraint for CPU7 (-22)
+> (2 per CPU per attempt)
 
-Please no. Can you just undo the renaming back to power_domain.txt
+These messages come from acpi_processor_ppc_init() and
+acpi_thermal_cpufreq_init(), AFAICS, which are invoked by
+acpi_processor_notifier() and that is invoked by the
+blocking_notifier_call_chain() in cpufreq_online() which tirggers for
+new policies after adding the max freq QoS request to
+policy->constraints.
 
-Rob
+The requests added by them should be removed by
+acpi_processor_ppc_exit() and acpi_thermal_cpufreq_exit(),
+respectively, invoked by the blocking_notifier_call_chain() in
+cpufreq_policy_free(), but it looks like that doesn't happen.
+
+However, I now also see that freq_qos_remove_request() doesn't clear
+the qos field in req which is should do, so freq_qos_add_request()
+will complain and fail if the object pointed to by req is passed to it
+again.
+
+I'll send a patch to test for this later today.
