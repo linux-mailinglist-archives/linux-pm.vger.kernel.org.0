@@ -2,168 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98650101702
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 07:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF7810193D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 07:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730675AbfKSFqM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 00:46:12 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:41808 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729545AbfKSFqL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 00:46:11 -0500
-Received: by mail-pj1-f65.google.com with SMTP id gc1so2239844pjb.8
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2019 21:46:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TwTrHFfUEXPF0AdUJSKGrhG7MiL19etHomK5sNh967I=;
-        b=J6Z97g+qaqyRgX61FIN/BkQqzrRD+3LDgXXlfrFFZUoLkXr3VLk5HxrFc6KPw5VfYv
-         mPoKIl19kU5HhwhdhdkAWzztoA0y2uE4VaYw+uHYmgYHjZBYEtSUDbmfcIoXEzCbUJBy
-         cw+J+sJeTJgo/WX3zDt3uGuy8amvs6hITpY/ha3yrfiZTntAO6fHEiqksp0x4S9efA4U
-         aic+9ItWAQjBiV2GBVuc/PteN5zRsmNhPssJmFr06wR/eK2arqFLIWuZL8EJtn0wpp7J
-         HsVMJByIUyx82zeS2IB/dVia5hQPA3f5xGsyzam3wZeRnsWZ+PZ4OCZykcACpxI2iSB2
-         4NqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TwTrHFfUEXPF0AdUJSKGrhG7MiL19etHomK5sNh967I=;
-        b=dpKiQVUATnbvU5C6QoVZ4hr766qFqTU+8C5UaBp9qAw5E9udZK5ObD+h0xRSPIoSiw
-         a/Ysx0ie+gqZffsZ52NHS0Jqr3pdIs5UJ+BQDT0ppPjyO22ZsbFxuzBRUR+i1QQzTBNv
-         xkvsMah8Sd0BTz0CW/wtYHUTfPbmJiXCAZqkRMNhLVRJZVvNhCy8X6JzP7WotA7Wm8eT
-         jJez7fLKuZIKpULOT/NTtc0x+1seo+qbedUO88IekjLdV8r8roFX3TiMTqWbYAP+NX6x
-         aaRHcV6BdHkoZtiU3x1kn6gVm7+TXeenyENm7JFEUZNlj0YXNZAP6qSlRHjPEjNIH/VO
-         iNuA==
-X-Gm-Message-State: APjAAAWKwdLjNi8+w1BxjgljvMqoLAZ3jUaCyGaHGL8g+c+dvqpwpn1L
-        KWeoVORRdnhlyr0CYSsVvE0fZg==
-X-Google-Smtp-Source: APXvYqwqcOsssd3YquYy0WRNNJ5pR2v2XZW1TLZfs/VZBu5jO8v1LBqaLVMMQWSkuKN7wawDZ28Phw==
-X-Received: by 2002:a17:90a:c2:: with SMTP id v2mr3866143pjd.140.1574142370364;
-        Mon, 18 Nov 2019 21:46:10 -0800 (PST)
-Received: from localhost ([223.226.74.76])
-        by smtp.gmail.com with ESMTPSA id z1sm1494163pju.27.2019.11.18.21.46.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2019 21:46:09 -0800 (PST)
-Date:   Tue, 19 Nov 2019 11:16:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, edubezval@gmail.com, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, amit.kucheria@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] thermal/drivers/Kconfig: Convert the CPU cooling
- device to a choice
-Message-ID: <20191119054607.m4bcztc5euhe3jve@vireshk-i7>
-References: <20191113084042.5707-1-daniel.lezcano@linaro.org>
+        id S1726671AbfKSGTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 01:19:05 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:36236 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbfKSGTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 01:19:05 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ69ENq152442;
+        Tue, 19 Nov 2019 06:19:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=JrDgdyR7Xidziim1tDHzGIvDWJrxtek74M3qnDhMihQ=;
+ b=qFwpYg35GtAX/9CE90a/Lrg0CTk1yAo7Wd+u4e/yFRgZiallqZccY+tLjE6ACy3bFmT9
+ Rvoy9T11u44ax3KEowyT8WbyfouCwHHYTMNZXk5TI6RjSPjGFgdIHP+Wuw8HCA5ZUf2l
+ GO/Pd2LlYFHDYEeCmFB5C6cKrSOBBZGfaI3OjesuaR673aRrAX77iqjI8gguiPaHXCF2
+ 0+4PnNCIwuGmLi5rqilhrtAWREp8H9uFWLzgA8qF5amu4sqwNAmrZjxVRcZdlMEBgiTP
+ NSYLsm5Hh3YR/hsq2LJuaIQuwx9oy1nEKsqVZqGTXUKfRosDuB9evaX9vdCn4VxRpWL2 +w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2wa92pmqq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Nov 2019 06:19:03 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ68urv105745;
+        Tue, 19 Nov 2019 06:19:02 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2wbxm3qxmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Nov 2019 06:19:02 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAJ6J2Oa003174;
+        Tue, 19 Nov 2019 06:19:02 GMT
+Received: from kili.mountain (/41.210.141.188)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 18 Nov 2019 22:19:01 -0800
+Date:   Tue, 19 Nov 2019 09:18:54 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kernelfans@gmail.com
+Cc:     linux-pm@vger.kernel.org
+Subject: [bug report] PM / reboot: Eliminate race between reboot and suspend
+Message-ID: <20191119052701.fcbfdpdhylqpdyye@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191113084042.5707-1-daniel.lezcano@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911190057
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1911190057
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13-11-19, 09:40, Daniel Lezcano wrote:
-> The next changes will add a new way to cool down a CPU by injecting
-> idle cycles. With the current configuration, a CPU cooling device is
-> the cpufreq cooling device. As we want to add a new CPU cooling
-> device, let's convert the CPU cooling to a choice giving a list of CPU
-> cooling devices. At this point, there is obviously only one CPU
-> cooling device.
-> 
-> There is no functional changes.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/Kconfig     | 13 +++++++++++--
->  drivers/thermal/Makefile    |  2 +-
->  include/linux/cpu_cooling.h |  6 +++---
->  3 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 001a21abcc28..2b82c4861091 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -150,8 +150,17 @@ config THERMAL_GOV_POWER_ALLOCATOR
->  
->  config CPU_THERMAL
->  	bool "Generic cpu cooling support"
-> -	depends on CPU_FREQ
->  	depends on THERMAL_OF
-> +	help
-> +	  Enable the CPU cooling features. If the system has no active
-> +	  cooling device available, this option allows to use the CPU
-> +	  as a cooling device.
-> +
-> +if CPU_THERMAL
-> +
-> +config CPU_FREQ_THERMAL
-> +	bool "CPU frequency cooling device"
-> +	depends on CPU_FREQ
+Hello Pingfan Liu,
 
-Many of the current set of defconfigs have CONFIG_CPU_THERMAL=y for
-them and they will break now as CONFIG_CPU_FREQ_THERMAL won't be
-selected for them without any defconfig changes. Can we have this
-option selected by default if CONFIG_CPU_THERMAL is enabled ?
+The patch 55f2503c3b69: "PM / reboot: Eliminate race between reboot
+and suspend" from Jul 31, 2018, leads to the following static checker
+warning:
 
->  	help
->  	  This implements the generic cpu cooling mechanism through frequency
->  	  reduction. An ACPI version of this already exists
-> @@ -159,7 +168,7 @@ config CPU_THERMAL
->  	  This will be useful for platforms using the generic thermal interface
->  	  and not the ACPI interface.
->  
-> -	  If you want this support, you should say Y here.
-> +endif
->  
->  config CLOCK_THERMAL
->  	bool "Generic clock cooling support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 74a37c7f847a..d3b01cc96981 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -19,7 +19,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= user_space.o
->  thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
->  
->  # cpufreq cooling
-> -thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
-> +thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
->  
->  # clock cooling
->  thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
-> diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
-> index b74732535e4b..3cdd85f987d7 100644
-> --- a/include/linux/cpu_cooling.h
-> +++ b/include/linux/cpu_cooling.h
-> @@ -19,7 +19,7 @@
->  
->  struct cpufreq_policy;
->  
-> -#ifdef CONFIG_CPU_THERMAL
-> +#ifdef CONFIG_CPU_FREQ_THERMAL
->  /**
->   * cpufreq_cooling_register - function to create cpufreq cooling device.
->   * @policy: cpufreq policy.
-> @@ -40,7 +40,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev);
->  struct thermal_cooling_device *
->  of_cpufreq_cooling_register(struct cpufreq_policy *policy);
->  
-> -#else /* !CONFIG_CPU_THERMAL */
-> +#else /* !CONFIG_CPU_FREQ_THERMAL */
->  static inline struct thermal_cooling_device *
->  cpufreq_cooling_register(struct cpufreq_policy *policy)
->  {
-> @@ -58,6 +58,6 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
->  {
->  	return NULL;
->  }
-> -#endif /* CONFIG_CPU_THERMAL */
-> +#endif /* CONFIG_CPU_FREQ_THERMAL */
->  
->  #endif /* __CPU_COOLING_H__ */
-> -- 
-> 2.17.1
+	kernel/reboot.c:395 __do_sys_reboot()
+	error: double unlocked 'system_transition_mutex' (orig line 387)
 
--- 
-viresh
+kernel/reboot.c
+   310  SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
+   311                  void __user *, arg)
+   312  {
+   313          struct pid_namespace *pid_ns = task_active_pid_ns(current);
+   314          char buffer[256];
+   315          int ret = 0;
+   316  
+   317          /* We only trust the superuser with rebooting the system. */
+   318          if (!ns_capable(pid_ns->user_ns, CAP_SYS_BOOT))
+   319                  return -EPERM;
+   320  
+   321          /* For safety, we require "magic" arguments. */
+   322          if (magic1 != LINUX_REBOOT_MAGIC1 ||
+   323                          (magic2 != LINUX_REBOOT_MAGIC2 &&
+   324                          magic2 != LINUX_REBOOT_MAGIC2A &&
+   325                          magic2 != LINUX_REBOOT_MAGIC2B &&
+   326                          magic2 != LINUX_REBOOT_MAGIC2C))
+   327                  return -EINVAL;
+   328  
+   329          /*
+   330           * If pid namespaces are enabled and the current task is in a child
+   331           * pid_namespace, the command is handled by reboot_pid_ns() which will
+   332           * call do_exit().
+   333           */
+   334          ret = reboot_pid_ns(pid_ns, cmd);
+   335          if (ret)
+   336                  return ret;
+   337  
+   338          /* Instead of trying to make the power_off code look like
+   339           * halt when pm_power_off is not set do it the easy way.
+   340           */
+   341          if ((cmd == LINUX_REBOOT_CMD_POWER_OFF) && !pm_power_off)
+   342                  cmd = LINUX_REBOOT_CMD_HALT;
+   343  
+   344          mutex_lock(&system_transition_mutex);
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This used to be reboot_mutex.
+
+   345          switch (cmd) {
+   346          case LINUX_REBOOT_CMD_RESTART:
+   347                  kernel_restart(NULL);
+   348                  break;
+   349  
+   350          case LINUX_REBOOT_CMD_CAD_ON:
+   351                  C_A_D = 1;
+   352                  break;
+   353  
+   354          case LINUX_REBOOT_CMD_CAD_OFF:
+   355                  C_A_D = 0;
+   356                  break;
+   357  
+   358          case LINUX_REBOOT_CMD_HALT:
+   359                  kernel_halt();
+   360                  do_exit(0);
+   361                  panic("cannot halt");
+   362  
+   363          case LINUX_REBOOT_CMD_POWER_OFF:
+   364                  kernel_power_off();
+   365                  do_exit(0);
+   366                  break;
+   367  
+   368          case LINUX_REBOOT_CMD_RESTART2:
+   369                  ret = strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1);
+   370                  if (ret < 0) {
+   371                          ret = -EFAULT;
+   372                          break;
+   373                  }
+   374                  buffer[sizeof(buffer) - 1] = '\0';
+   375  
+   376                  kernel_restart(buffer);
+   377                  break;
+   378  
+   379  #ifdef CONFIG_KEXEC_CORE
+   380          case LINUX_REBOOT_CMD_KEXEC:
+   381                  ret = kernel_kexec();
+   382                  break;
+   383  #endif
+   384  
+   385  #ifdef CONFIG_HIBERNATION
+   386          case LINUX_REBOOT_CMD_SW_SUSPEND:
+   387                  ret = hibernate();
+                        ^^^^^^^^^^^^^^^^^
+The first thing that hibernate() does is call lock_system_sleep() which
+use to take the pm_mutex, but now it takes system_transition_mutex so
+it will just hang forever.
+
+   388                  break;
+   389  #endif
+   390  
+   391          default:
+   392                  ret = -EINVAL;
+   393                  break;
+   394          }
+   395          mutex_unlock(&system_transition_mutex);
+   396          return ret;
+   397  }
+
+regards,
+dan carpenter
