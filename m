@@ -2,91 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D49E101A7B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 08:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09841022A2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 12:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfKSHq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 02:46:56 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33363 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbfKSHq4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 02:46:56 -0500
-Received: by mail-lj1-f194.google.com with SMTP id t5so22176659ljk.0
-        for <linux-pm@vger.kernel.org>; Mon, 18 Nov 2019 23:46:54 -0800 (PST)
+        id S1727255AbfKSLKV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 06:10:21 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39805 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbfKSLKU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 06:10:20 -0500
+Received: by mail-wm1-f67.google.com with SMTP id t26so3051969wmi.4;
+        Tue, 19 Nov 2019 03:10:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OQcL4KeSUnBX/WAoY428hVjcl0P7/kkL2Fm2OZbyzCA=;
-        b=fkvCkItxkx0F8zOFusOr8rkJVZzDK9EfXZ4WTvL35D42a7Cf0OI0EmcaVbpF01xmSa
-         gNjxnkGNiNu4blhsWTDnmd3xSQjPRoU0pcZYhS9CvejOL3s1NRuB0Y0J4+cFgmn6/IBa
-         QJnu0bxve/aDzWyZ1oW688z1XyqTul8/3U77zcgYCr6H+6Dv1cHMsGXFe+cEAeCCMtJW
-         SSFiqLjtt12LB5ERGTpjop4xLf3Rm+AXJJWfGQt3+p26b9Sd+/0EpVJaTG9zGHfmErB+
-         pLMiux15H009ow4tTRIku8N+YOF5T3TjTr0PY2+3SCfpXF9k/Nrc+iOukW5CYaavlVxg
-         1nHg==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NYWeXLuQGLvOPwK8pHNuzurveHjA/E4XL3deYT2CQ6Q=;
+        b=skdJ1UEHu5PJl89Mkk9VRRqLagIUdwLLzIvfE7qxc79DduSNiquwoFXzoJXVUbZ9zw
+         g1cNgucakgJrNBfc9PtJPQUQH7hiPIbQNdvm4HfPAxaPqEE5yDoU/Fm0WZrr770x6z9Z
+         1mV4N6EIFIO+H5heFTgopWe3ElCwZHNDP6TrB6ZxXDF+BVJoJCgzBj9WZ81yUaCLfyGK
+         QBfOV9xXA4+nU1SmqoIng5FZDcMYQif9wRQNWBuakBreDAgwkdsGdC6lPo7bjUeRutEb
+         FqwSvcrmf/LrgaSpoIWvYSkunbCfPVklaj+EQbJw7jUcxpmgoRV0aJoU4yUuzBudNnyu
+         7iYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OQcL4KeSUnBX/WAoY428hVjcl0P7/kkL2Fm2OZbyzCA=;
-        b=eLD42tpW8ZBzmx4l6GtOhKfNvp/YPFVhAuX4G91o2ahHfLg0+6Ipq5q0rlZbCQIuFy
-         dj+u5zfEvXde5NpVvAp6oOqbz4/9p9FT4XJyaIOhJWJdV4XjSuTZxhBXw6QILr46lx0q
-         BmHWE4zsOuLCfXdmaRhkDTYiYj7V2oI2PAXYOalWJAlWe0ibHRQwuh/szAmVv6sQnpjp
-         brWOk7bU4265ZNmRpG69nB1q1/pC7ynqQTD69SSIgf0lrn6Tq9XEHP7rlkZG3CnK2gSV
-         Yqwgez4cb99AXifTsoGM8j/Ue0O3tNWcDYictOJU2Y5vl056qd9NyMU8KqDcOk+0EVuL
-         6Klw==
-X-Gm-Message-State: APjAAAVWNDndS8jFnRxksN2Z5QHpK96hEMsybs9xKCjxXNtYMKAtAY7d
-        r8+Jlj+k2h+lPMTabqsHWups+g==
-X-Google-Smtp-Source: APXvYqw8dlD+iLZYpffwJEx56n/V6YAQfhSnDMoiUdL1Yi9Ed/3rRIOcfpvUz7FGlSGc+p93bSf10g==
-X-Received: by 2002:a2e:8919:: with SMTP id d25mr2568438lji.97.1574149613992;
-        Mon, 18 Nov 2019 23:46:53 -0800 (PST)
-Received: from localhost.bredbandsbolaget (c-79c8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.200.121])
-        by smtp.gmail.com with ESMTPSA id c80sm442584lfg.81.2019.11.18.23.46.52
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NYWeXLuQGLvOPwK8pHNuzurveHjA/E4XL3deYT2CQ6Q=;
+        b=hZmXTyiyx7aVpTe+a8ydQ0G4XT+90owkQ5cxH1ixfdTTwdvTgb0r4PkMJeqhvjlpV5
+         vZWknw9yZOszz1sQUHUC/AzaE74Vwxy9ZhC1/zSmm2vinDq19hphlDcM4QQCshQe6CU+
+         HJXBERLE6vh7N0to9kNRNm/mr1mYY47a0dJ+LE2uwVZCltntBE2ZVUjDA55HdUVxlONc
+         JnKUEqVZUxEZ5DsRLjLe5yLoSHBIh8umj3Rgk58xywo86ikHpsoBkyQza/nD/LFsYnZH
+         k/YAIO/ro2U8w205N0idlkMnzyDb5qGSlou/o67wPxA1ItWynr5d6ProFXaSuYhB4WiW
+         nwSw==
+X-Gm-Message-State: APjAAAURyIdLbu0gCAqW4G/EW90ZQ3Rrmta4rIEKzEu/L9lVmkJfbXdL
+        aQYaC6TW1B09T3/3NR/mxoA=
+X-Google-Smtp-Source: APXvYqxkMDs2asP+vgJXKZTaN6ik3+6S/o6ZGiHDU8XukZ5zzOg6DqoFabjwqzDackICD1Kv7aubiw==
+X-Received: by 2002:a7b:cb4a:: with SMTP id v10mr4628412wmj.106.1574161816817;
+        Tue, 19 Nov 2019 03:10:16 -0800 (PST)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id z4sm2754237wmf.36.2019.11.19.03.10.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2019 23:46:52 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH] thermal: db8500: Depromote debug print
-Date:   Tue, 19 Nov 2019 08:46:50 +0100
-Message-Id: <20191119074650.2664-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Tue, 19 Nov 2019 03:10:15 -0800 (PST)
+Date:   Tue, 19 Nov 2019 12:10:12 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Nadav Amit <namit@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/12] treewide: break dependencies on x86's RM header
+Message-ID: <20191119111012.GA109842@gmail.com>
+References: <20191119002121.4107-1-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191119002121.4107-1-sean.j.christopherson@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We are not interested in getting this debug print on our
-console all the time.
 
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Stephan Gerhold <stephan@gerhold.net>
-Fixes: 6c375eccded4 ("thermal: db8500: Rewrite to be a pure OF sensor")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/thermal/db8500_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+* Sean Christopherson <sean.j.christopherson@intel.com> wrote:
 
-diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index 372dbbaaafb8..21d4d6e6409a 100644
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -152,8 +152,8 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
- 		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
- 					     next_low, next_high);
- 
--		dev_info(&th->tz->device,
--			 "PRCMU set max %ld, min %ld\n", next_high, next_low);
-+		dev_dbg(&th->tz->device,
-+			"PRCMU set max %ld, min %ld\n", next_high, next_low);
- 	} else if (idx == num_points - 1)
- 		/* So we roof out 1 degree over the max point */
- 		th->interpolated_temp = db8500_thermal_points[idx] + 1;
--- 
-2.21.0
+> x86's asm/realmode.h, which defines low level structures, variables and
+> helpers used to bring up APs during SMP boot, ends up getting included in
+> practically every nook and cranny of the kernel because the address used
+> by ACPI for resuming from S3 also happens to be stored in the real mode
+> header, and ACPI bleeds the dependency into its widely included headers.
+> 
+> As a result, modifying realmode.h for even the most trivial change to the
+> boot code triggers a full kernel rebuild, which is frustrating to say the
+> least as it some of the most difficult code to get exactly right *and* is
+> also some of the most functionally isolated code in the kernel.
+> 
+> To break the kernel's widespread dependency on realmode.h, add a wrapper
+> in the aforementioned ACPI S3 code to access the real mode header instead
+> of derefencing the header directly in asm/acpi.h and thereby exposing it
+> to the world via linux/acpi.h.
+> 
+> Build tested on x86 with allyesconfig and allmodconfig, so hopefully there
+> aren't more build issues lurking, but at this point it wouldn't surprise
+> me in the least if this somehow manages to break the build.
+> 
+> Based on tip/master, commit ceceaf1f12ba ("Merge branch 'WIP.x86/cleanups'").
+> 
+> Patch Synopsis:
+>   - Patches 01-09 fix a variety of build errors that arise when patch 12
+>     drops realmode.h from asm/acpi.h.  Most of the errors are quite absurb
+>     as they have no relation whatsoever to x86's RM boot code, but occur
+>     because realmode.h happens to include asm/io.h.
 
+Yeah, these kind of parasitic header dependencies are the main driving 
+force behind kernel header spaghetti hell: it's super easy to add a new 
+header, but very hard to remove them...
+
+Hence they practically only accumulate.
+
+As a result header removal patches get priority, from me at least. :-)
+
+>   - Patch 10 removes a spurious include of realmode.h from an ACPI header.
+> 
+>   - Patches 11 and 12 implement the wrapper and move it out of acpi.h.
+
+So if the ACPI maintainers are fine with -tip carrying patches #11 and #12
+then I'd be glad to route these patches upstream.
+
+I've applied them to tip:WIP.core/headers as a work-in-progress tree, and 
+I'm testing them on randconfigs to make sure there's no broken 
+dependencies. I'll wait for the ACPI acks.
+
+I edited the title of patch 12 slightly, to:
+
+   c8bceb321209: x86/ACPI/sleep: Move acpi_wakeup_address() definition into sleep.c, remove <asm/realmode.h> from <asm/acpi.h>
+
+to make sure the big header dependency change is obvious at first sight.
+
+Thanks,
+
+	Ingo
