@@ -2,333 +2,267 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE3110271C
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 15:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088F31027D6
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 16:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbfKSOnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 09:43:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727693AbfKSOnw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 Nov 2019 09:43:52 -0500
-Received: from localhost.localdomain (unknown [118.189.143.39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C2AD20891;
-        Tue, 19 Nov 2019 14:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574174630;
-        bh=xlCB2NOHd/yTkvOyVHqvWxkdfMebhvc+db3L014iAWw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0j/LRqrcg/xOzpjnzUqmHOPzP+ABzba43oGZjfah4WMWN4BlqcLKYdYKaRpAmYmq9
-         P5t8TLBYWEhfIBYqP/qUf2Ak9XrukeTWsCIKYbRvKJtEfhgI/v9bGnnJQ+nGNWCi48
-         iPSyMjeRJM5IoiwUJZRMAma2JrI1yS/bKM1QPDBY=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1726637AbfKSPQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 10:16:30 -0500
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:43030 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727504AbfKSPQa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 10:16:30 -0500
+Received: by mail-vk1-f196.google.com with SMTP id k19so5130376vke.10
+        for <linux-pm@vger.kernel.org>; Tue, 19 Nov 2019 07:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5L2A8QO6Lknhw02yoV5/M3MO1trwIEwEqsWv1aYEh90=;
+        b=H8M8a84P2al3EOggvXui0Musem1r5oC9q7bgEi+ILCQ2gZx8gVwugbWW+ymWUNoxEU
+         zcGL50yVB9UHPE8gZgcWf05jpMP1snUW2yi0a9zTRJBYvlPLo4C7wGfkvLk8qI6M6iER
+         yHEeO7u1q5cY5ood5p2proqV45Wfo+GMx9Eglk1F15C9dKVmHKBEdxxYRwS4qoeziF6E
+         Kr0tjZifHYyKf7FNb1xKQBXiasYhmacmj84uRY68JWcWHwpMKUdrxhZ99AXNsKDsQYrP
+         4S/DCH/UnuhL9zYO6iiYNnmZAwBghM+2Zoi2CV1LTVmc7mD92VQa4J+018MYFyHy3Pad
+         C+hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5L2A8QO6Lknhw02yoV5/M3MO1trwIEwEqsWv1aYEh90=;
+        b=APpaUFBeKwTA6xjW3IOnX4AENMCpuWcQAb6f8t2T/ZRxmeGOXkFFFsIo9+5m0x1d9t
+         YcwYMJAgrtR7SaKput7cqo/7GVykFm3qWA/ySMmv54DqJ2GqeWZs76SeUtUh8gkRJMUs
+         qC4Sfin8VysZ68GXt+YqeNPf4RYbF8NBD+Wh4JhYTWt91C/FUfiIPkGWmW3EtGWNy3aj
+         sc46FYydK+agMkf7MTwy7OkMIOSV+LNZ7odG5sgu4/sIYxF4pb30NY6gBw5KWGHji9S0
+         uHynyqkeKixymf6xMP7M2R909SwW0yNFQBlugg9Jo7Vl9TjE1cI0U4TZj2yCCCB51cXY
+         ifww==
+X-Gm-Message-State: APjAAAX/QFY8kEt2ljSWBAeIXIzI7XoQ9O68lUAUYwQWXmNYe7lf8aUm
+        2gmhpS3STPNvVsbtopqHjWBBBOaX+f/qt9UhrOTwvA==
+X-Google-Smtp-Source: APXvYqxuKUxvO/3z2gC0NLyjswtAsKo05ZVpznPLq86jWCuNXwTk4k201eeS30Me8LoUIKhKDpTZWEv4yzTBZwVt90E=
+X-Received: by 2002:a1f:7381:: with SMTP id o123mr20880364vkc.53.1574176588225;
+ Tue, 19 Nov 2019 07:16:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20191029164438.17012-1-ulf.hansson@linaro.org> <20191029164438.17012-3-ulf.hansson@linaro.org>
+In-Reply-To: <20191029164438.17012-3-ulf.hansson@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 19 Nov 2019 16:15:52 +0100
+Message-ID: <CAPDyKFpg+T=FiA03O=OFq2G33AcKG6198MUGP1BxJ0t4E5dGtA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/13] dt: psci: Update DT bindings to support
+ hierarchical PSCI states
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] dt-bindings: power: Fix path to power-domain.txt bindings
-Date:   Tue, 19 Nov 2019 22:43:15 +0800
-Message-Id: <20191119144315.11261-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With split of power domain controller bindings to power-domain.yaml, the
-consumer part was renamed to power-domain.txt.  Update the references in
-other bindings.
+Hi Rob,
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Fixes: abb4805e343a ("dt-bindings: power: Convert Samsung Exynos Power Domain bindings to json-schema")
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- Documentation/devicetree/bindings/clock/clk-exynos-audss.txt  | 2 +-
- Documentation/devicetree/bindings/clock/exynos5433-clock.txt  | 2 +-
- .../devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt  | 2 +-
- .../devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt  | 2 +-
- .../bindings/clock/renesas,rcar-gen2-cpg-clocks.txt           | 2 +-
- .../devicetree/bindings/clock/renesas,rz-cpg-clocks.txt       | 2 +-
- .../devicetree/bindings/display/etnaviv/etnaviv-drm.txt       | 2 +-
- Documentation/devicetree/bindings/display/msm/dpu.txt         | 2 +-
- Documentation/devicetree/bindings/display/msm/mdp5.txt        | 2 +-
- Documentation/devicetree/bindings/dsp/fsl,dsp.yaml            | 2 +-
- Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt    | 2 +-
- .../devicetree/bindings/media/mediatek-jpeg-decoder.txt       | 2 +-
- Documentation/devicetree/bindings/media/mediatek-mdp.txt      | 2 +-
- Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt  | 2 +-
- Documentation/devicetree/bindings/pci/pci-keystone.txt        | 2 +-
- Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt | 2 +-
- Documentation/devicetree/bindings/power/qcom,rpmpd.txt        | 2 +-
- Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt | 2 +-
- .../devicetree/bindings/usb/nvidia,tegra124-xusb.txt          | 4 ++--
- 19 files changed, 20 insertions(+), 20 deletions(-)
+On Tue, 29 Oct 2019 at 17:44, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> Update PSCI DT bindings to allow to represent idle states for CPUs and the
+> CPU topology, by using a hierarchical layout. Primarily this is done by
+> re-using the existing DT bindings for PM domains [1] and for PM domain idle
+> states [2].
+>
+> Let's also add an example into the document for the PSCI DT bindings, to
+> clearly show the new hierarchical based layout. The currently supported
+> flattened layout, is already described in the ARM idle states bindings [3],
+> so let's leave that as is.
+>
+> [1] Documentation/devicetree/bindings/power/power_domain.txt
+> [2] Documentation/devicetree/bindings/power/domain-idle-state.txt
+> [3] Documentation/devicetree/bindings/arm/idle-states.txt
+>
+> Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+> Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>
+> Changes in v2:
+>         - Clarifications and also added updates cpus.yaml, to descrive that CPUs
+>         may be attached to PM domains.
+>
+> ---
+>  .../devicetree/bindings/arm/cpus.yaml         |  15 +++
+>  .../devicetree/bindings/arm/psci.yaml         | 102 ++++++++++++++++++
+>  2 files changed, 117 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> index cb30895e3b67..92a775d6fc0e 100644
+> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> @@ -241,6 +241,21 @@ properties:
+>
+>        where voltage is in V, frequency is in MHz.
+>
+> +  power-domains:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> +    description:
+> +      List of phandles and PM domain specifiers, as defined by bindings of the
+> +      PM domain provider (see also ../power_domain.txt).
+> +
+> +  power-domain-names:
+> +    $ref: '/schemas/types.yaml#/definitions/string-array'
+> +    description:
+> +      A list of power domain name strings sorted in the same order as the
+> +      power-domains property.
+> +
+> +      For PSCI based platforms, the name corresponding to the index of the PSCI
+> +      PM domain provider, must be "psci".
+> +
+>    qcom,saw:
+>      $ref: '/schemas/types.yaml#/definitions/phandle'
+>      description: |
+> diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
+> index 7abdf58b335e..9fed255cc92d 100644
+> --- a/Documentation/devicetree/bindings/arm/psci.yaml
+> +++ b/Documentation/devicetree/bindings/arm/psci.yaml
+> @@ -102,6 +102,34 @@ properties:
+>        [1] Kernel documentation - ARM idle states bindings
+>          Documentation/devicetree/bindings/arm/idle-states.txt
+>
+> +  "#power-domain-cells":
+> +    description:
+> +      The number of cells in a PM domain specifier as per binding in [3].
+> +      Must be 0 as to represent a single PM domain.
+> +
+> +      ARM systems can have multiple cores, sometimes in an hierarchical
+> +      arrangement. This often, but not always, maps directly to the processor
+> +      power topology of the system. Individual nodes in a topology have their
+> +      own specific power states and can be better represented hierarchically.
+> +
+> +      For these cases, the definitions of the idle states for the CPUs and the
+> +      CPU topology, must conform to the binding in [3]. The idle states
+> +      themselves must conform to the binding in [4] and must specify the
+> +      arm,psci-suspend-param property.
+> +
+> +      It should also be noted that, in PSCI firmware v1.0 the OS-Initiated
+> +      (OSI) CPU suspend mode is introduced. Using a hierarchical representation
+> +      helps to implement support for OSI mode and OS implementations may choose
+> +      to mandate it.
+> +
+> +      [3] Documentation/devicetree/bindings/power/power_domain.txt
+> +      [4] Documentation/devicetree/bindings/power/domain-idle-state.txt
+> +
+> +  power-domains:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> +    description:
+> +      List of phandles and PM domain specifiers, as defined by bindings of the
+> +      PM domain provider.
+>
+>  required:
+>    - compatible
+> @@ -160,4 +188,78 @@ examples:
+>        cpu_on = <0x95c10002>;
+>        cpu_off = <0x95c10001>;
+>      };
+> +
+> +  - |+
+> +
+> +    // Case 4: CPUs and CPU idle states described using the hierarchical model.
+> +
+> +    cpus {
+> +
 
-diff --git a/Documentation/devicetree/bindings/clock/clk-exynos-audss.txt b/Documentation/devicetree/bindings/clock/clk-exynos-audss.txt
-index 6030afb10b5c..e6c6b43e9770 100644
---- a/Documentation/devicetree/bindings/clock/clk-exynos-audss.txt
-+++ b/Documentation/devicetree/bindings/clock/clk-exynos-audss.txt
-@@ -36,7 +36,7 @@ Required Properties:
- Optional Properties:
- 
-   - power-domains: a phandle to respective power domain node as described by
--    generic PM domain bindings (see power/power_domain.txt for more
-+    generic PM domain bindings (see power/power-domain.txt for more
-     information).
- 
- The following is the list of clocks generated by the controller. Each clock is
-diff --git a/Documentation/devicetree/bindings/clock/exynos5433-clock.txt b/Documentation/devicetree/bindings/clock/exynos5433-clock.txt
-index 183c327a7d6b..972d4e45f8c1 100644
---- a/Documentation/devicetree/bindings/clock/exynos5433-clock.txt
-+++ b/Documentation/devicetree/bindings/clock/exynos5433-clock.txt
-@@ -178,7 +178,7 @@ Required Properties:
- 
- Optional properties:
-   - power-domains: a phandle to respective power domain node as described by
--	generic PM domain bindings (see power/power_domain.txt for more
-+	generic PM domain bindings (see power/power-domain.txt for more
- 	information).
- 
- Each clock is assigned an identifier and client nodes can use this identifier
-diff --git a/Documentation/devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt b/Documentation/devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt
-index 7cc4c0330b53..46ecbbce277c 100644
---- a/Documentation/devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt
-+++ b/Documentation/devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt
-@@ -17,7 +17,7 @@ Required Properties:
- SoC devices that are part of the CPG/MSTP Clock Domain and can be power-managed
- through an MSTP clock should refer to the CPG device node in their
- "power-domains" property, as documented by the generic PM domain bindings in
--Documentation/devicetree/bindings/power/power_domain.txt.
-+Documentation/devicetree/bindings/power/power-domain.txt.
- 
- 
- Examples
-diff --git a/Documentation/devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt b/Documentation/devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt
-index 8c81547c29f5..cb32b4f41046 100644
---- a/Documentation/devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt
-+++ b/Documentation/devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt
-@@ -19,7 +19,7 @@ Required Properties:
- SoC devices that are part of the CPG/MSTP Clock Domain and can be power-managed
- through an MSTP clock should refer to the CPG device node in their
- "power-domains" property, as documented by the generic PM domain bindings in
--Documentation/devicetree/bindings/power/power_domain.txt.
-+Documentation/devicetree/bindings/power/power-domain.txt.
- 
- 
- Examples
-diff --git a/Documentation/devicetree/bindings/clock/renesas,rcar-gen2-cpg-clocks.txt b/Documentation/devicetree/bindings/clock/renesas,rcar-gen2-cpg-clocks.txt
-index f8c05bb4116e..58f9054704c2 100644
---- a/Documentation/devicetree/bindings/clock/renesas,rcar-gen2-cpg-clocks.txt
-+++ b/Documentation/devicetree/bindings/clock/renesas,rcar-gen2-cpg-clocks.txt
-@@ -28,7 +28,7 @@ Required Properties:
- SoC devices that are part of the CPG/MSTP Clock Domain and can be power-managed
- through an MSTP clock should refer to the CPG device node in their
- "power-domains" property, as documented by the generic PM domain bindings in
--Documentation/devicetree/bindings/power/power_domain.txt.
-+Documentation/devicetree/bindings/power/power-domain.txt.
- 
- 
- Examples
-diff --git a/Documentation/devicetree/bindings/clock/renesas,rz-cpg-clocks.txt b/Documentation/devicetree/bindings/clock/renesas,rz-cpg-clocks.txt
-index 8ff3e2774ed8..9f32528e7245 100644
---- a/Documentation/devicetree/bindings/clock/renesas,rz-cpg-clocks.txt
-+++ b/Documentation/devicetree/bindings/clock/renesas,rz-cpg-clocks.txt
-@@ -21,7 +21,7 @@ Required Properties:
- SoC devices that are part of the CPG/MSTP Clock Domain and can be power-managed
- through an MSTP clock should refer to the CPG device node in their
- "power-domains" property, as documented by the generic PM domain bindings in
--Documentation/devicetree/bindings/power/power_domain.txt.
-+Documentation/devicetree/bindings/power/power-domain.txt.
- 
- 
- Examples
-diff --git a/Documentation/devicetree/bindings/display/etnaviv/etnaviv-drm.txt b/Documentation/devicetree/bindings/display/etnaviv/etnaviv-drm.txt
-index 640592e8ab2e..76d25d1499f7 100644
---- a/Documentation/devicetree/bindings/display/etnaviv/etnaviv-drm.txt
-+++ b/Documentation/devicetree/bindings/display/etnaviv/etnaviv-drm.txt
-@@ -20,7 +20,7 @@ Required properties:
- 
- Optional properties:
- - power-domains: a power domain consumer specifier according to
--  Documentation/devicetree/bindings/power/power_domain.txt
-+  Documentation/devicetree/bindings/power/power-domain.txt
- - #cooling-cells: : If used as a cooling device, must be <2>
- 
- example:
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu.txt b/Documentation/devicetree/bindings/display/msm/dpu.txt
-index a61dd40f3792..3ef875e94845 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu.txt
-+++ b/Documentation/devicetree/bindings/display/msm/dpu.txt
-@@ -13,7 +13,7 @@ Required properties:
- - reg-names: register region names. The following region is required:
-   * "mdss"
- - power-domains: a power domain consumer specifier according to
--  Documentation/devicetree/bindings/power/power_domain.txt
-+  Documentation/devicetree/bindings/power/power-domain.txt
- - clocks: list of clock specifiers for clocks needed by the device.
- - clock-names: device clock names, must be in same order as clocks property.
-   The following clocks are required:
-diff --git a/Documentation/devicetree/bindings/display/msm/mdp5.txt b/Documentation/devicetree/bindings/display/msm/mdp5.txt
-index 4e11338548aa..1cce2a61cb8e 100644
---- a/Documentation/devicetree/bindings/display/msm/mdp5.txt
-+++ b/Documentation/devicetree/bindings/display/msm/mdp5.txt
-@@ -19,7 +19,7 @@ Required properties:
- - #interrupt-cells: specifies the number of cells needed to encode an interrupt
-   source, should be 1.
- - power-domains: a power domain consumer specifier according to
--  Documentation/devicetree/bindings/power/power_domain.txt
-+  Documentation/devicetree/bindings/power/power-domain.txt
- - clocks: device clocks. See ../clocks/clock-bindings.txt for details.
- - clock-names: the following clocks are required.
-   * "iface"
-diff --git a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-index f04870d84542..e71cff583cf0 100644
---- a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-+++ b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-@@ -36,7 +36,7 @@ properties:
-   power-domains:
-     description:
-       List of phandle and PM domain specifier as documented in
--      Documentation/devicetree/bindings/power/power_domain.txt
-+      Documentation/devicetree/bindings/power/power-domain.txt
-     maxItems: 4
- 
-   mboxes:
-diff --git a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-index 71fd74ed3ec8..0b2bbd64d18b 100644
---- a/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-+++ b/Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt
-@@ -17,7 +17,7 @@ Required properties:
- - clock-names   : must contain "pclk", "wrap" and "phy" entries, matching
-                   entries in the clock property;
- - power-domains : a phandle to the power domain, see
--          Documentation/devicetree/bindings/power/power_domain.txt for details.
-+          Documentation/devicetree/bindings/power/power-domain.txt for details.
- - reset-names   : should include following entry "mrst";
- - resets        : a list of phandle, should contain reset entry of
-                   reset-names;
-diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
-index 044b11913c49..51f890c64004 100644
---- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
-@@ -14,7 +14,7 @@ Required properties:
-   Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
- - clock-names: must contain "jpgdec-smi" and "jpgdec".
- - power-domains: a phandle to the power domain, see
--  Documentation/devicetree/bindings/power/power_domain.txt for details.
-+  Documentation/devicetree/bindings/power/power-domain.txt for details.
- - mediatek,larb: must contain the local arbiters in the current Socs, see
-   Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
-   for details.
-diff --git a/Documentation/devicetree/bindings/media/mediatek-mdp.txt b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
-index 0d03e3ae2be2..988898f44bac 100644
---- a/Documentation/devicetree/bindings/media/mediatek-mdp.txt
-+++ b/Documentation/devicetree/bindings/media/mediatek-mdp.txt
-@@ -17,7 +17,7 @@ Required properties (all function blocks, child node):
- - clocks: device clocks, see
-   Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
- - power-domains: a phandle to the power domain, see
--  Documentation/devicetree/bindings/power/power_domain.txt for details.
-+  Documentation/devicetree/bindings/power/power-domain.txt for details.
- 
- Required properties (DMA function blocks, child node):
- - compatible: Should be one of
-diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-index 4751029b9b74..de58cbee3dca 100644
---- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-+++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-@@ -27,7 +27,7 @@ In 'cpu' nodes:
- - power-domains: A phandle pointing to the PM domain specifier which provides
- 		the performance states available for active state management.
- 		Please refer to the power-domains bindings
--		Documentation/devicetree/bindings/power/power_domain.txt
-+		Documentation/devicetree/bindings/power/power-domain.txt
- 		and also examples below.
- - power-domain-names: Should be
- 	- 'cpr' for qcs404.
-diff --git a/Documentation/devicetree/bindings/pci/pci-keystone.txt b/Documentation/devicetree/bindings/pci/pci-keystone.txt
-index 47202a2938f2..4c592504bb69 100644
---- a/Documentation/devicetree/bindings/pci/pci-keystone.txt
-+++ b/Documentation/devicetree/bindings/pci/pci-keystone.txt
-@@ -88,7 +88,7 @@ num-ob-windows: As specified in
- num-lanes: As specified in
- 	   Documentation/devicetree/bindings/pci/designware-pcie.txt
- power-domains: As documented by the generic PM domain bindings in
--	       Documentation/devicetree/bindings/power/power_domain.txt.
-+	       Documentation/devicetree/bindings/power/power-domain.txt.
- ti,syscon-pcie-mode: phandle to the device control module required to configure
- 		      PCI in either RC mode or EP mode.
- 
-diff --git a/Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt b/Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt
-index 64b286d2d398..3fff2c2e1500 100644
---- a/Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt
-+++ b/Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt
-@@ -17,7 +17,7 @@ Required properties:
- 		1 - PCIe0 Lane1
- 		2 - ICSS2 SGMII Lane1
-  - power-domains: As documented by the generic PM domain bindings in
--	Documentation/devicetree/bindings/power/power_domain.txt.
-+	Documentation/devicetree/bindings/power/power-domain.txt.
-  - clocks: List of clock-specifiers representing the input to the SERDES.
- 	Should have 3 items representing the left input clock, external
- 	reference clock and right input clock in that order.
-diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-index bc75bf49cdae..014be1448fab 100644
---- a/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-+++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.txt
-@@ -13,7 +13,7 @@ Required Properties:
-  - #power-domain-cells: number of cells in Power domain specifier
- 	must be 1.
-  - operating-points-v2: Phandle to the OPP table for the Power domain.
--	Refer to Documentation/devicetree/bindings/power/power_domain.txt
-+	Refer to Documentation/devicetree/bindings/power/power-domain.txt
- 	and Documentation/devicetree/bindings/opp/opp.txt for more details
- 
- Refer to <dt-bindings/power/qcom-rpmpd.h> for the level values for
-diff --git a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt
-index 712caa5726f7..442768f68b49 100644
---- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt
-+++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt
-@@ -44,7 +44,7 @@ Example:
- 
- Devices residing in a power area must refer to that power area, as documented
- by the generic PM domain bindings in
--Documentation/devicetree/bindings/power/power_domain.txt.
-+Documentation/devicetree/bindings/power/power-domain.txt.
- 
- Required properties:
-   - power-domains: A phandle and symbolic PM domain specifier, as defined in
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.txt
-index 5bfcc0b4d6b9..ac6b272c4bbf 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.txt
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.txt
-@@ -64,12 +64,12 @@ For Tegra210:
- For Tegra210 and Tegra186:
- - power-domains: A list of PM domain specifiers that reference each power-domain
-   used by the xHCI controller. This list must comprise of a specifier for the
--  XUSBA and XUSBC power-domains. See ../power/power_domain.txt and
-+  XUSBA and XUSBC power-domains. See ../power/power-domain.txt and
-   ../arm/tegra/nvidia,tegra20-pmc.txt for details.
- - power-domain-names: A list of names that represent each of the specifiers in
-   the 'power-domains' property. Must include 'xusb_ss' and 'xusb_host' which
-   represent the power-domains XUSBA and XUSBC, respectively. See
--  ../power/power_domain.txt for details.
-+  ../power/power-domain.txt for details.
- 
- Optional properties:
- --------------------
--- 
-2.17.1
+I noticed that I got a compiler warning from "make dt_binding_check".
+I have fixed that by adding the below for the next version.
 
+#size-cells = <0>;
+#address-cells = <1>;
+
+Other than that, are you okay with these bindings?
+
+Note that, these bindings have been discussed and acked by you
+earlier. Although since your acked back then, they have been converted
+to the yaml format, hence why I wanted to double check that I managed
+to get this right.
+
+> +      CPU0: cpu@0 {
+> +        device_type = "cpu";
+> +        compatible = "arm,cortex-a53", "arm,armv8";
+> +        reg = <0x0>;
+> +        enable-method = "psci";
+> +        power-domains = <&CPU_PD0>;
+> +        power-domain-names = "psci";
+> +      };
+> +
+> +      CPU1: cpu@1 {
+> +        device_type = "cpu";
+> +        compatible = "arm,cortex-a57", "arm,armv8";
+> +        reg = <0x100>;
+> +        enable-method = "psci";
+> +        power-domains = <&CPU_PD1>;
+> +        power-domain-names = "psci";
+> +      };
+> +
+> +      idle-states {
+> +
+> +        CPU_PWRDN: cpu-power-down {
+> +          compatible = "arm,idle-state";
+> +          arm,psci-suspend-param = <0x0000001>;
+> +          entry-latency-us = <10>;
+> +          exit-latency-us = <10>;
+> +          min-residency-us = <100>;
+> +        };
+> +
+> +        CLUSTER_RET: cluster-retention {
+> +          compatible = "domain-idle-state";
+> +          arm,psci-suspend-param = <0x1000011>;
+> +          entry-latency-us = <500>;
+> +          exit-latency-us = <500>;
+> +          min-residency-us = <2000>;
+> +        };
+> +
+> +        CLUSTER_PWRDN: cluster-power-down {
+> +          compatible = "domain-idle-state";
+> +          arm,psci-suspend-param = <0x1000031>;
+> +          entry-latency-us = <2000>;
+> +          exit-latency-us = <2000>;
+> +          min-residency-us = <6000>;
+> +        };
+> +      };
+> +    };
+> +
+> +    psci {
+> +      compatible = "arm,psci-1.0";
+> +      method = "smc";
+> +
+> +      CPU_PD0: cpu-pd0 {
+> +        #power-domain-cells = <0>;
+> +        domain-idle-states = <&CPU_PWRDN>;
+> +        power-domains = <&CLUSTER_PD>;
+> +      };
+> +
+> +      CPU_PD1: cpu-pd1 {
+> +        #power-domain-cells = <0>;
+> +        domain-idle-states =  <&CPU_PWRDN>;
+> +        power-domains = <&CLUSTER_PD>;
+> +      };
+> +
+> +      CLUSTER_PD: cluster-pd {
+> +        #power-domain-cells = <0>;
+> +        domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
+> +      };
+> +    };
+>  ...
+> --
+> 2.17.1
+>
+
+Kind regards
+Uffe
