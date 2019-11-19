@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F297F102A3B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 17:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840C1102A46
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 18:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728979AbfKSQ65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 11:58:57 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:44258 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728967AbfKSQ6x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 11:58:53 -0500
-Received: by mail-lf1-f67.google.com with SMTP id n186so5224379lfd.11;
-        Tue, 19 Nov 2019 08:58:52 -0800 (PST)
+        id S1728387AbfKSRAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 12:00:03 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43698 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727212AbfKSRAC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 12:00:02 -0500
+Received: by mail-lj1-f196.google.com with SMTP id y23so24148254ljh.10;
+        Tue, 19 Nov 2019 09:00:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xiX0EqzPXmfl9+8cycQGn6gTe/lI1705Bk47uYfm4oU=;
-        b=ktleR1QkiRWXpJ1PymOF+AnwE7Q9PBQG4UVHVcltdxluMcrO7oMme2qW6uYcxu9BmM
-         5eVsufxlWyMMLypvEN5Rft13s81NH2I12Nhodkw5VzivVryLVBn78eJPsiCjavVjwiVE
-         crv4IfEd/KThz46OLInqN0ZxYZerI0Hz0a6/Poj40xkFmg6RM/xpzNyhzSLIfslGeSXP
-         SU+ZGVH00vtrS+muuiIgHjd1kYOHNSL7kDvVA88gYYRKFLMJKQRkf+pCNKLlHuLPlKV7
-         ZFY4YR6GsuOrwjsGk5fH9j0kpxj7xB02oBoAd1mNClvz1VZ5Wtewa9dBJZQbsw5VgAKE
-         VqaQ==
+        bh=EWN1ZpXN/f4GXP8V3XISkI6qP/p5d7CKryKCLpJongQ=;
+        b=aV6b0zLK4e7wbM1ZqDppNii3W6Ag4g5//no+UHoUiVeNIQgXKDrnfxRLKpfBT8VqBo
+         qBtgQiapfJ2JKvZBuaMVlROzz3SCBM1cugVluR5kWQm9fi25lc1zS5klcPis9FLahaOw
+         /g53hBUEu5u43bK+URJzsoM4AP7d7MRZ0plD0maa7r8BksyFqTxy+wx+noGZ78dxUphQ
+         DxNRXt5wJMus1KC/9ZmV+GbBAx4KC+htMC4PFs6IZTzwlKFHeHHv6gFLlOIhMrEdnbcX
+         +NTUIVuLZB+X/Q55XOgdgGj4hV9lYO2GhTsR//EEFh5Kh29XPZZzEnlad3pPE9lF22WV
+         u+nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=xiX0EqzPXmfl9+8cycQGn6gTe/lI1705Bk47uYfm4oU=;
-        b=qCLW9QeB8ootVjRjp0/5dFKp5SbHPVLYfThbnWS4Ur4nn5MydtjXYXC92fQ6pLPN+k
-         /PGqJ70vR/xeRHRfKo/wJAodh1qDggP8ti2M8KxytH6d6xk3wtltXzQC+jRfj+8q0gDX
-         5KKbBiRx8E1PMwDth27v/vA0aHDebATWr3Tol5Fjeo+Fsy6jyG03BJ9bofCvsC9Es3DS
-         vVoTka0efbZCyXYGF8B8tbWUMalebwwRD42+0HGYtoJquyoae1RbUlSrP3H/g0hrjAzW
-         LAVWmIEhv1cwkya3OMi/O2Qzz/FzJrxENNuCPh/2JUkyqchvpAY2OGZVdLU5JtG0pgVI
-         smXw==
-X-Gm-Message-State: APjAAAU5loJp8fxqHtdBmtKyK7yW2B1bAd5NlPqsSM+nDdH990Z6OaHV
-        Vt5wvVwkQvXCwyfsOtOdk8+c0M/2
-X-Google-Smtp-Source: APXvYqxOFPeDqctZEbuJVO4GYrRKbyIayL3pi6tIsdyQWNkua6J7ci15SiL5pULo3eySWzEJD8Bv1A==
-X-Received: by 2002:ac2:5216:: with SMTP id a22mr4824691lfl.169.1574182731139;
-        Tue, 19 Nov 2019 08:58:51 -0800 (PST)
+        bh=EWN1ZpXN/f4GXP8V3XISkI6qP/p5d7CKryKCLpJongQ=;
+        b=L1HHSRhY2H1Rn9eTedq8IBNNCU+W+Q0vXhuJOZaoMWbV0oM1RU9KEguQ4550L6Uzvk
+         kvtQzxI1rbPQS3BP8RqEHNCvOPW4ZUUhcp0n89BUYDDCcM2EsEyhPouaK2CHsfK6GSdi
+         uEYPKGaeC4R8P8feMKU5X/3UxlVEZjOTXFzPg7k0z3WDG4vZtxKMRQLIwJasOkTwJAXH
+         otXEB37f80unDeyrMMlREgqHkaM4EVdVRBfndQ7tomCa0t6+LsXuZdmbi8LXIogc4b1+
+         52Lr9ymZoeawq8/ye1Qr7L2FcCK3BXaOUd2Px8sV7g1kKZvncHD/I9GtPX9cy5SD+Ulf
+         DMYA==
+X-Gm-Message-State: APjAAAXdKj715bdU3pGy+XZMP2oXh95M6eYsLJYfSOXM4xRVoL8tr5Jd
+        qqtmu5cxHP0FOxcQOXCfcK8n3Bcm
+X-Google-Smtp-Source: APXvYqzUJ15qHXRQXDdLUOjO7y7PndvAwTYq5Hd82LpDfgGl42VActAGgmwBJM+mFWepTDd8E6UwPQ==
+X-Received: by 2002:a05:651c:390:: with SMTP id e16mr4856596ljp.196.1574182799913;
+        Tue, 19 Nov 2019 08:59:59 -0800 (PST)
 Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id 141sm10189491ljj.37.2019.11.19.08.58.50
+        by smtp.googlemail.com with ESMTPSA id 206sm1213375lfb.20.2019.11.19.08.59.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2019 08:58:50 -0800 (PST)
+        Tue, 19 Nov 2019 08:59:59 -0800 (PST)
 Subject: Re: [PATCH v1 12/29] interconnect: Add memory interconnection
  providers for NVIDIA Tegra SoCs
 To:     Thierry Reding <thierry.reding@gmail.com>
@@ -56,14 +56,14 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
 References: <20191118200247.3567-1-digetx@gmail.com>
- <20191118200247.3567-13-digetx@gmail.com> <20191119063002.GE2462695@ulmo>
+ <20191118200247.3567-13-digetx@gmail.com> <20191119063139.GF2462695@ulmo>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a16b54bf-a881-84d0-4437-993dc275487c@gmail.com>
-Date:   Tue, 19 Nov 2019 19:58:49 +0300
+Message-ID: <044b17a8-7186-fec0-e786-5ec5a13e5873@gmail.com>
+Date:   Tue, 19 Nov 2019 19:59:58 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20191119063002.GE2462695@ulmo>
+In-Reply-To: <20191119063139.GF2462695@ulmo>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,56 +72,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-19.11.2019 09:30, Thierry Reding пишет:
+19.11.2019 09:31, Thierry Reding пишет:
 > On Mon, Nov 18, 2019 at 11:02:30PM +0300, Dmitry Osipenko wrote:
->> All NVIDIA Tegra SoCs have identical topology in regards to memory
->> interconnection between memory clients and memory controllers.
->> The memory controller (MC) and external memory controller (EMC) are
->> providing memory clients with required memory bandwidth. The memory
->> controller performs arbitration between memory clients, while the
->> external memory controller transfers data from/to DRAM and pipes that
->> data from/to memory controller. Memory controller interconnect provider
->> aggregates bandwidth requests from memory clients and sends the aggregated
->> request to EMC provider that scales DRAM frequency in order to satisfy the
->> bandwidth requirement. Memory controller provider could adjust hardware
->> configuration for a more optimal arbitration depending on bandwidth
->> requirements from memory clients, but this is unimplemented for now.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/interconnect/Kconfig               |   1 +
->>  drivers/interconnect/Makefile              |   1 +
->>  drivers/interconnect/tegra/Kconfig         |   6 +
->>  drivers/interconnect/tegra/Makefile        |   4 +
->>  drivers/interconnect/tegra/tegra-icc-emc.c | 138 +++++++++++++++++++++
->>  drivers/interconnect/tegra/tegra-icc-mc.c  | 130 +++++++++++++++++++
->>  include/soc/tegra/mc.h                     |  26 ++++
->>  7 files changed, 306 insertions(+)
->>  create mode 100644 drivers/interconnect/tegra/Kconfig
->>  create mode 100644 drivers/interconnect/tegra/Makefile
->>  create mode 100644 drivers/interconnect/tegra/tegra-icc-emc.c
->>  create mode 100644 drivers/interconnect/tegra/tegra-icc-mc.c
+> [...]
+>> diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
+>> index 1238e35653d1..593954324259 100644
+>> --- a/include/soc/tegra/mc.h
+>> +++ b/include/soc/tegra/mc.h
+>> @@ -141,6 +141,11 @@ struct tegra_mc_reset_ops {
+>>  			    const struct tegra_mc_reset *rst);
+>>  };
+>>  
+>> +struct tegra_mc_icc_node {
+>> +	const char *name;
+>> +	unsigned int id;
+>> +};
+>> +
+>>  struct tegra_mc_soc {
+>>  	const struct tegra_mc_client *clients;
+>>  	unsigned int num_clients;
+>> @@ -160,6 +165,9 @@ struct tegra_mc_soc {
+>>  	const struct tegra_mc_reset_ops *reset_ops;
+>>  	const struct tegra_mc_reset *resets;
+>>  	unsigned int num_resets;
+>> +
+>> +	const struct tegra_mc_icc_node *icc_nodes;
+>> +	unsigned int num_icc_nodes;
+>>  };
+>>  
+>>  struct tegra_mc {
+>> @@ -184,4 +192,22 @@ struct tegra_mc {
+>>  int tegra_mc_write_emem_configuration(struct tegra_mc *mc, unsigned long rate);
+>>  unsigned int tegra_mc_get_emem_device_count(struct tegra_mc *mc);
+>>  
+>> +#ifdef CONFIG_INTERCONNECT_TEGRA
+>> +int tegra_icc_mc_setup_interconnect(struct tegra_mc *mc);
+>> +int tegra_icc_emc_setup_interconnect(struct device *emc_dev,
+>> +				     unsigned int dram_data_bus_width_bytes);
+>> +#else
+>> +static inline int tegra_icc_mc_setup_interconnect(struct tegra_mc *mc);
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline int
+>> +tegra_icc_emc_setup_interconnect(struct device *emc_dev,
+>> +				 unsigned int dram_data_bus_width_bytes)
+>> +{
+>> +	return 0;
+>> +}
+>> +#endif
 > 
-> Why does this have to be separate from the memory controller driver in
-> drivers/memory/tegra? It seems like this requires a bunch of boilerplate
-> just so that this code can live in the drivers/interconnect directory.
+> Is there really any reason why we should make this support optional? It
+> seems to me like we would always want this enabled once it's tested and
+> known to work.
 
-It fits with the IOMMU separation. To me that it's a bit nicer to have
-the separation for the ICC as well, but having ICC within memory
-controller driver also will be fine.
-
-Indeed it looks like there is not much in the MC's provider code right
-now, but maybe more stuff will be added later on.
-
-> If Georgi doesn't insist, I'd prefer if we carried this code directly in
-> the drivers/memory/tegra directory so that we don't have so many
-> indirections.
-> 
-> Also, and I already briefly mentioned this in another reply, I think we
-> don't need two providers here. The only one we're really interested in
-> is the memory-client to memory-controller paths. The MC to EMC path is
-> static.
-
-Perhaps it is fine to drop EMC path, I'll revisit it.
-
-[snip]
+There is always some room for bugs, should be better to have an option
+to disable ICC entirely (IMO).
