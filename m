@@ -2,94 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1021028C9
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 17:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D46D4102908
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 17:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfKSQA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 11:00:26 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46179 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727509AbfKSQA0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Nov 2019 11:00:26 -0500
-Received: by mail-oi1-f195.google.com with SMTP id n14so19350085oie.13;
-        Tue, 19 Nov 2019 08:00:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lOp09REXBJlIhxRQLG3yF3pkOzVMqVXKGYr5zOkYKTU=;
-        b=tvirj1n2/8raLM1mnIsqp2gtwTG5uKIyP1xLwQY0vY3qjRyRnMTQn215elCAXasSfy
-         WSyp8Uwl85PcYNgWjZwZCCdkqTskSJ7Rg1xm3satC2WKj3DCWtIcVjDP0SHl9JfadCE7
-         iQzb2KSMDGkLqXoZ4QACKQLtKY3Q7Mxtk0GCW53GI6ZE3T4ApWiG6V6gSuFNhNyUc/Zb
-         0a/IjQe5z6lDgHz8T0LrFt3P57rYJKyytp5fk+au0tF9Mz2CIDBpgZN0BPu/OZv7iZxX
-         Rt8K5H761gL0OeumSjzBiNg5XjPK7ROO/j9j68puMeduawUwkVi0Ii3t4994/lK3JRSY
-         QfEg==
-X-Gm-Message-State: APjAAAU8JKYPSL1ZgPixnZpQwmt6hecZN3aEXOBQkZEKuEurNgWD71f2
-        JpBl0Ntpex8oGGzdJhPHeyLiWU3wsUy5mfxGH/g=
-X-Google-Smtp-Source: APXvYqyFjVcr3DV/kDkPHFaPjGoNOAPUlx3qgBTMVdhzS/Ov2hib4acxOvn1dSc2R4bN1wN/M0QqvauTflblBxgZCm8=
-X-Received: by 2002:aca:fc92:: with SMTP id a140mr4573964oii.153.1574179223502;
- Tue, 19 Nov 2019 08:00:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20191119144315.11261-1-krzk@kernel.org>
-In-Reply-To: <20191119144315.11261-1-krzk@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Nov 2019 17:00:05 +0100
-Message-ID: <CAMuHMdUnn8uYyQ+D=6rp1+R1sE_W-SS1t+EuNHm=vWaKQ9Z6tQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: power: Fix path to power-domain.txt bindings
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        etnaviv@lists.freedesktop.org,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno@lists.freedesktop.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728475AbfKSQNE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 11:13:04 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:41628 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728470AbfKSQNE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 Nov 2019 11:13:04 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 33C351A000D;
+        Tue, 19 Nov 2019 17:13:01 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 270F91A0065;
+        Tue, 19 Nov 2019 17:13:01 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 3E43D2039B;
+        Tue, 19 Nov 2019 17:13:00 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH RFC 0/2] PM / devfreq: Add dev_pm_qos support with minimal changes
+Date:   Tue, 19 Nov 2019 18:12:12 +0200
+Message-Id: <cover.1574179738.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+Add dev_pm_qos notifiers to devfreq core in order to support frequency
+limits via dev_pm_qos_add_request.
 
-On Tue, Nov 19, 2019 at 3:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> With split of power domain controller bindings to power-domain.yaml, the
-> consumer part was renamed to power-domain.txt.  Update the references in
-> other bindings.
->
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Fixes: abb4805e343a ("dt-bindings: power: Convert Samsung Exynos Power Domain bindings to json-schema")
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Unlike the rest of devfreq the dev_pm_qos frequency is measured in kHz,
+this is consistent with current dev_pm_qos usage for cpufreq and
+allows frequencies above 2Ghz (pm_qos expresses limits as s32).
 
-Thanks for your patch!
+Like with cpufreq the handling of min_freq/max_freq is moved to the
+dev_pm_qos mechanism. Constraints from userspace are no longer clamped on
+store, instead all values can be written and we only check against OPPs in a
+new devfreq_get_freq_range function. This is consistent with the design of
+dev_pm_qos.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Notifiers from pm_qos are executed under a single global dev_pm_qos_mtx and
+need to take devfreq->lock, this means that calls into dev_pm_qos while holding
+devfreq->lock are not allowed (lockdep warns about possible deadlocks).
 
->  .../bindings/clock/renesas,rcar-gen2-cpg-clocks.txt           | 2 +-
+Fix this by only adding the qos request and notifiers after devfreq->lock is
+released inside devfreq_add_device. In theory this means sysfs writes
+are possible before the min/max requests are initialized so we guard
+against that explictly. The dev_pm_qos_update_request function would
+otherwise print a big WARN splat.
 
-Please note this file is no longer present in next.
-But robh/for-next still has it.
+Alternatively devfreq initialization could be refactored to avoid taking
+devfreq->lock but that requires several intricate changes:
 
-Gr{oetje,eeting}s,
+	https://patchwork.kernel.org/cover/11242865/
 
-                        Geert
+I considered making dev_pm_qos call notifiers outside the lock but
+that's another complex refactoring and it's difficult to ensure
+correctness. If two identical qos requests are made in parallel then the
+second shouldn't return until all notifiers are completely executed for
+the first and QOS is enforced; otherwise it mostly defeats the purpose
+of making proactive requests.
+
+This series implements the minimal changes in order to implement dev_pm_qos
+support for devfreq. It only costs a little defensive programming.
+
+This series is also marked as [RFC] because it depends on restoring
+DEV_PM_QOS_MIN/MAX_FREQUENCY inside the pm core:
+
+	https://patchwork.kernel.org/cover/11250413/
+
+---
+Changes since "big version" v10:
+* Drop accepted cleanups
+* Work with current locking approach (split cleanups into other series)
+* Drop acks and deliberately relabel as a new series. It still incorporates
+most previous discussion but takes a different approach to locking.
+* Don't print errors if devfreq_dev_release is called on error cleanup from
+devfreq_add_device, just accept that requests and notifiers might not be
+registered yet. I wish dev_pm_qos cleanups behaved like standard "kfree" and
+silently did nothing when there's nothing to be done.
+Link to v10: https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196443
+
+Leonard Crestez (2):
+  PM / devfreq: Add PM QoS support
+  PM / devfreq: Use PM QoS for sysfs min/max_freq
+
+ drivers/devfreq/devfreq.c | 151 ++++++++++++++++++++++++++++++++++----
+ include/linux/devfreq.h   |  14 +++-
+ 2 files changed, 145 insertions(+), 20 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
