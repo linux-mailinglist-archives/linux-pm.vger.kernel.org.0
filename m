@@ -2,392 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEBE1025FD
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 15:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027331026E8
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Nov 2019 15:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbfKSOJ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Nov 2019 09:09:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46540 "EHLO mail.kernel.org"
+        id S1728368AbfKSOfc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Nov 2019 09:35:32 -0500
+Received: from cmta16.telus.net ([209.171.16.89]:50027 "EHLO cmta16.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727763AbfKSOJ2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 Nov 2019 09:09:28 -0500
-Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 270002084D;
-        Tue, 19 Nov 2019 14:09:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574172566;
-        bh=FM/bjst/yFekG0yKfuQFRL1ctO1Q0YUL6KdL5pMpTpI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QsH29e/KeSXLDnVP8R5/iy0uhn4gbbcZC7WJaJ1mZrV1HTYkJJY4NWDGAIqT3zqBn
-         mHGjDsVXldWNtaEg0hWJiqw9ri/VrO/W0ejbzi+vPOTI7r9hn09PHghBjldivyPEn1
-         yYEH7kKeRXw4OodgEqzBW/UQTsoqj+WAe+PCWSro=
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] PM / QoS: Wrap documentation to fit in 80 columns
-Date:   Tue, 19 Nov 2019 08:09:23 -0600
-Message-Id: <20191119140923.175286-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
+        id S1728365AbfKSOfb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 Nov 2019 09:35:31 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id X4bGiIrObFXoiX4bHild2S; Tue, 19 Nov 2019 07:35:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1574174129; bh=63LOnJc30pBSREJO4wJYShoRYdLEO0kEt45oadjC+os=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=T4Ten+hDuivTIJWRrZY7rqjP2VeElc6BzCjlCqBXu2EyHRlZjJ1C1yX8+28Tyjnxw
+         CnaaSdbbn3MpSkswl8qcWvlfX5axjhzlf9f9Qb21eLlHndiYTtdoUFjEiO2Ez8sTDd
+         P2p3vHBN5KP65OSlAVlTcUUVegve2Aw8KkNHbezVLnHMG64rP4gY+zJZbzxIyPV4+h
+         pEqaYmUe8bx0KsyjzRiJ9JbnR/xRdTqHO+WOpnlS8JMHHRqbcZgwamwZFIP8qnTlR+
+         fsmthn7rdRji8aua5AZHzOg97ZEDOZWQT0Qz2os5KQy6bkfxjJKsJ+K3AP+Q1B2iBP
+         pqbpCmXfPaUrA==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=HoEI5HbS c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=eoc6EyjFvRJxczR-1ZoA:9 a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>
+Cc:     "'Linux ACPI'" <linux-acpi@vger.kernel.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Sudeep Holla'" <sudeep.holla@arm.com>,
+        "'Dmitry Osipenko'" <digetx@gmail.com>
+References: <2811202.iOFZ6YHztY@kreacher> <4551555.oysnf1Sd0E@kreacher>  <000001d59d61$eb4e6670$c1eb3350$@net>
+In-Reply-To: <000001d59d61$eb4e6670$c1eb3350$@net>
+Subject: RE: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
+Date:   Tue, 19 Nov 2019 06:35:23 -0800
+Message-ID: <000401d59ee6$959e3da0$c0dab8e0$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdWED0vlByLFQ8J4Rz2jUgcX377w8gZBYsHgABMAilAARNHnkA==
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfGlZrt8fA0JDBbp+rsXg0s950oIfnn+/5U3Qm7Roij26fEaS19MOqBw4jeWFATeCWVBexqn8CudFMysYBwgIZfgQQY3dT+dVkuEK0GK9dAXNyVvOG1AJ
+ nly4uNkrMp0yuqm0IJMHZhBcRPmkNwi19v/U7bA4KlKXTCKN4RvIfW/H9HUnMJD6wVvhh/E0wfN00I4E88G2GnqKQvUC0d1582yNNJY323aPxQqPnuQzZ5A2
+ lzU0491n5rWctVVvQN6vo2RbwVHE6oQjzIbwr9LYUntar2wuYniBshX88VGQibAb3QnH6AA1Q/jGu0FPp1BI4b++SSB8bMb3XjayolNKfiBJ9ChsiFWIMpom
+ xIJ2RboYQFNYuOq98YrWSnBjRiWgdA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On 2019.11.17 08:13 Doug Smythies wrote:
+> On 2019.11.16 23:35 Doug Smythies wrote:
 
-Wrap to 80 columns.  No textual change except to correct some "it's" that
-should be "its".
+>> Hi Rafael,
+>>
+>> Not sure, but I think it is this one that
+>> causes complaining when I try to set the
+>> intel_pstate driver to passive mode.
+>> I started from active mode, powersave governor,
+>> no HWP.
+>>
+>> Kernel: 5.4-rc7
+>>
+>> I did not go back and try previous 5.4 RCs.
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- Documentation/power/drivers-testing.rst       |  7 ++--
- Documentation/power/freezing-of-tasks.rst     | 37 ++++++++++---------
- Documentation/power/opp.rst                   | 32 ++++++++--------
- Documentation/power/pci.rst                   | 28 +++++++-------
- Documentation/power/pm_qos_interface.rst      | 26 ++++++-------
- Documentation/power/runtime_pm.rst            |  4 +-
- .../power/suspend-and-cpuhotplug.rst          |  7 ++--
- Documentation/power/swsusp.rst                | 14 ++++---
- 8 files changed, 81 insertions(+), 74 deletions(-)
+After looking at the git tags for this patch,
+I tried kernel 5.4-rc2, which was the closest
+Kernel I had to before the patch set was added.
+It worked fine, as expected.
 
-diff --git a/Documentation/power/drivers-testing.rst b/Documentation/power/drivers-testing.rst
-index e53f1999fc39..d77d2894f9fe 100644
---- a/Documentation/power/drivers-testing.rst
-+++ b/Documentation/power/drivers-testing.rst
-@@ -39,9 +39,10 @@ c) Compile the driver directly into the kernel and try the test modes of
- d) Attempt to hibernate with the driver compiled directly into the kernel
-    in the "reboot", "shutdown" and "platform" modes.
- 
--e) Try the test modes of suspend (see: Documentation/power/basic-pm-debugging.rst,
--   2).  [As far as the STR tests are concerned, it should not matter whether or
--   not the driver is built as a module.]
-+e) Try the test modes of suspend (see:
-+   Documentation/power/basic-pm-debugging.rst, 2).  [As far as the STR tests are
-+   concerned, it should not matter whether or not the driver is built as a
-+   module.]
- 
- f) Attempt to suspend to RAM using the s2ram tool with the driver loaded
-    (see: Documentation/power/basic-pm-debugging.rst, 2).
-diff --git a/Documentation/power/freezing-of-tasks.rst b/Documentation/power/freezing-of-tasks.rst
-index ef110fe55e82..8bd693399834 100644
---- a/Documentation/power/freezing-of-tasks.rst
-+++ b/Documentation/power/freezing-of-tasks.rst
-@@ -215,30 +215,31 @@ VI. Are there any precautions to be taken to prevent freezing failures?
- 
- Yes, there are.
- 
--First of all, grabbing the 'system_transition_mutex' lock to mutually exclude a piece of code
--from system-wide sleep such as suspend/hibernation is not encouraged.
--If possible, that piece of code must instead hook onto the suspend/hibernation
--notifiers to achieve mutual exclusion. Look at the CPU-Hotplug code
--(kernel/cpu.c) for an example.
--
--However, if that is not feasible, and grabbing 'system_transition_mutex' is deemed necessary,
--it is strongly discouraged to directly call mutex_[un]lock(&system_transition_mutex) since
--that could lead to freezing failures, because if the suspend/hibernate code
--successfully acquired the 'system_transition_mutex' lock, and hence that other entity failed
--to acquire the lock, then that task would get blocked in TASK_UNINTERRUPTIBLE
--state. As a consequence, the freezer would not be able to freeze that task,
--leading to freezing failure.
-+First of all, grabbing the 'system_transition_mutex' lock to mutually exclude a
-+piece of code from system-wide sleep such as suspend/hibernation is not
-+encouraged.  If possible, that piece of code must instead hook onto the
-+suspend/hibernation notifiers to achieve mutual exclusion. Look at the
-+CPU-Hotplug code (kernel/cpu.c) for an example.
+>> I did try kernel 5.3-rc8, because I already had
+>> it installed, and it worked fine.
+>>
+>> I use a script (for years), run as sudo:
+>>
+>> doug@s15:~/temp$ cat set_cpu_passive
+>> #! /bin/bash
+>> cat /sys/devices/system/cpu/intel_pstate/status
+>> echo passive > /sys/devices/system/cpu/intel_pstate/status
+>> cat /sys/devices/system/cpu/intel_pstate/status
+>>
+>> And I get this (very small excerpt):
+>>
+>> freq_qos_add_request() called for active request
+>> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
+>> CPU: 1 PID: 2758 Comm: set_cpu_passive Not tainted 5.4.0-rc7-stock #727
+>> Failed to add freq constraint for CPU0 (-22)
+>>
+>> freq_qos_add_request() called for active request
+>> WARNING: CPU: 1 PID: 2758 at kernel/power/qos.c:763 freq_qos_add_request+0x4c/0xa0
+>> CPU: 1 PID: 2758 Comm: set_cpu_passive Tainted: G        W         5.4.0-rc7-stock #727
+>> Failed to add freq constraint for CPU1 (-22)
+
+Updated summary of previous emails:
+This patch or patch set breaks the after boot
+ability to change CPU frequency scaling drivers.
+
+Using a workaround of booting with
+"intel_pstate=passive" seems to prevent the errors.
+
+Changing between the intel_pstate and intel_cpufreq drivers
+(i.e. between active and passive modes)
+after boot, either way, causes the errors. i.e.
+
+Failed to add freq constraint for CPU7 (-22)
+(2 per CPU per attempt)
+
+This is 100% repeatable.
+
+> I forgot to mention, other than the error messages,
+> things seems to work fine.
+
+Correction: It is actually quite bad. Eventually,
+there will be a "Segmentation fault (core dumped)",
+and then even re-boot gets stuck and the only
+recourse seems to be the reset button.
+
+This is not 100% repeatable.
+
+I did this (kernel 5.4-rc8):
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 8ab3170..24c7a6b 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2491,6 +2491,8 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
+ {
+        int ret;
+
++       pr_info("Intel P-state register driver .... \n");
 +
-+However, if that is not feasible, and grabbing 'system_transition_mutex' is
-+deemed necessary, it is strongly discouraged to directly call
-+mutex_[un]lock(&system_transition_mutex) since that could lead to freezing
-+failures, because if the suspend/hibernate code successfully acquired the
-+'system_transition_mutex' lock, and hence that other entity failed to acquire
-+the lock, then that task would get blocked in TASK_UNINTERRUPTIBLE state. As a
-+consequence, the freezer would not be able to freeze that task, leading to
-+freezing failure.
- 
- However, the [un]lock_system_sleep() APIs are safe to use in this scenario,
- since they ask the freezer to skip freezing this task, since it is anyway
--"frozen enough" as it is blocked on 'system_transition_mutex', which will be released
--only after the entire suspend/hibernation sequence is complete.
--So, to summarize, use [un]lock_system_sleep() instead of directly using
-+"frozen enough" as it is blocked on 'system_transition_mutex', which will be
-+released only after the entire suspend/hibernation sequence is complete.  So, to
-+summarize, use [un]lock_system_sleep() instead of directly using
- mutex_[un]lock(&system_transition_mutex). That would prevent freezing failures.
- 
- V. Miscellaneous
- ================
- 
- /sys/power/pm_freeze_timeout controls how long it will cost at most to freeze
--all user space processes or all freezable kernel threads, in unit of millisecond.
--The default value is 20000, with range of unsigned integer.
-+all user space processes or all freezable kernel threads, in unit of
-+millisecond.  The default value is 20000, with range of unsigned integer.
-diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
-index 209c7613f5a4..e3cc4f349ea8 100644
---- a/Documentation/power/opp.rst
-+++ b/Documentation/power/opp.rst
-@@ -73,19 +73,21 @@ factors. Example usage: Thermal management or other exceptional situations where
- SoC framework might choose to disable a higher frequency OPP to safely continue
- operations until that OPP could be re-enabled if possible.
- 
--OPP library facilitates this concept in it's implementation. The following
-+OPP library facilitates this concept in its implementation. The following
- operational functions operate only on available opps:
--opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq, dev_pm_opp_get_opp_count
-+opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq,
-+dev_pm_opp_get_opp_count
- 
--dev_pm_opp_find_freq_exact is meant to be used to find the opp pointer which can then
--be used for dev_pm_opp_enable/disable functions to make an opp available as required.
-+dev_pm_opp_find_freq_exact is meant to be used to find the opp pointer
-+which can then be used for dev_pm_opp_enable/disable functions to make an
-+opp available as required.
- 
- WARNING: Users of OPP library should refresh their availability count using
--get_opp_count if dev_pm_opp_enable/disable functions are invoked for a device, the
--exact mechanism to trigger these or the notification mechanism to other
--dependent subsystems such as cpufreq are left to the discretion of the SoC
--specific framework which uses the OPP library. Similar care needs to be taken
--care to refresh the cpufreq table in cases of these operations.
-+get_opp_count if dev_pm_opp_enable/disable functions are invoked for a
-+device, the exact mechanism to trigger these or the notification mechanism
-+to other dependent subsystems such as cpufreq are left to the discretion of
-+the SoC specific framework which uses the OPP library. Similar care needs
-+to be taken care to refresh the cpufreq table in cases of these operations.
- 
- 2. Initial OPP List Registration
- ================================
-@@ -99,11 +101,11 @@ OPPs dynamically using the dev_pm_opp_enable / disable functions.
- dev_pm_opp_add
- 	Add a new OPP for a specific domain represented by the device pointer.
- 	The OPP is defined using the frequency and voltage. Once added, the OPP
--	is assumed to be available and control of it's availability can be done
--	with the dev_pm_opp_enable/disable functions. OPP library internally stores
--	and manages this information in the opp struct. This function may be
--	used by SoC framework to define a optimal list as per the demands of
--	SoC usage environment.
-+	is assumed to be available and control of its availability can be done
-+	with the dev_pm_opp_enable/disable functions. OPP library
-+	internally stores and manages this information in the opp struct.
-+	This function may be used by SoC framework to define a optimal list
-+	as per the demands of SoC usage environment.
- 
- 	WARNING:
- 		Do not use this function in interrupt context.
-@@ -354,7 +356,7 @@ struct dev_pm_opp
- 
- struct device
- 	This is used to identify a domain to the OPP layer. The
--	nature of the device and it's implementation is left to the user of
-+	nature of the device and its implementation is left to the user of
- 	OPP library such as the SoC framework.
- 
- Overall, in a simplistic view, the data structure operations is represented as
-diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-index 0e2ef7429304..51e0a493d284 100644
---- a/Documentation/power/pci.rst
-+++ b/Documentation/power/pci.rst
-@@ -426,12 +426,12 @@ pm->runtime_idle() callback.
- 2.4. System-Wide Power Transitions
- ----------------------------------
- There are a few different types of system-wide power transitions, described in
--Documentation/driver-api/pm/devices.rst.  Each of them requires devices to be handled
--in a specific way and the PM core executes subsystem-level power management
--callbacks for this purpose.  They are executed in phases such that each phase
--involves executing the same subsystem-level callback for every device belonging
--to the given subsystem before the next phase begins.  These phases always run
--after tasks have been frozen.
-+Documentation/driver-api/pm/devices.rst.  Each of them requires devices to be
-+handled in a specific way and the PM core executes subsystem-level power
-+management callbacks for this purpose.  They are executed in phases such that
-+each phase involves executing the same subsystem-level callback for every device
-+belonging to the given subsystem before the next phase begins.  These phases
-+always run after tasks have been frozen.
- 
- 2.4.1. System Suspend
- ^^^^^^^^^^^^^^^^^^^^^
-@@ -636,12 +636,12 @@ System restore requires a hibernation image to be loaded into memory and the
- pre-hibernation memory contents to be restored before the pre-hibernation system
- activity can be resumed.
- 
--As described in Documentation/driver-api/pm/devices.rst, the hibernation image is loaded
--into memory by a fresh instance of the kernel, called the boot kernel, which in
--turn is loaded and run by a boot loader in the usual way.  After the boot kernel
--has loaded the image, it needs to replace its own code and data with the code
--and data of the "hibernated" kernel stored within the image, called the image
--kernel.  For this purpose all devices are frozen just like before creating
-+As described in Documentation/driver-api/pm/devices.rst, the hibernation image
-+is loaded into memory by a fresh instance of the kernel, called the boot kernel,
-+which in turn is loaded and run by a boot loader in the usual way.  After the
-+boot kernel has loaded the image, it needs to replace its own code and data with
-+the code and data of the "hibernated" kernel stored within the image, called the
-+image kernel.  For this purpose all devices are frozen just like before creating
- the image during hibernation, in the
- 
- 	prepare, freeze, freeze_noirq
-@@ -691,8 +691,8 @@ controlling the runtime power management of their devices.
- 
- At the time of this writing there are two ways to define power management
- callbacks for a PCI device driver, the recommended one, based on using a
--dev_pm_ops structure described in Documentation/driver-api/pm/devices.rst, and the
--"legacy" one, in which the .suspend(), .suspend_late(), .resume_early(), and
-+dev_pm_ops structure described in Documentation/driver-api/pm/devices.rst, and
-+the "legacy" one, in which the .suspend(), .suspend_late(), .resume_early(), and
- .resume() callbacks from struct pci_driver are used.  The legacy approach,
- however, doesn't allow one to define runtime power management callbacks and is
- not really suitable for any new drivers.  Therefore it is not covered by this
-diff --git a/Documentation/power/pm_qos_interface.rst b/Documentation/power/pm_qos_interface.rst
-index 3097694fba69..0d62d506caf0 100644
---- a/Documentation/power/pm_qos_interface.rst
-+++ b/Documentation/power/pm_qos_interface.rst
-@@ -8,8 +8,8 @@ one of the parameters.
- 
- Two different PM QoS frameworks are available:
- 1. PM QoS classes for cpu_dma_latency
--2. the per-device PM QoS framework provides the API to manage the per-device latency
--constraints and PM QoS flags.
-+2. The per-device PM QoS framework provides the API to manage the
-+   per-device latency constraints and PM QoS flags.
- 
- Each parameters have defined units:
- 
-@@ -47,14 +47,14 @@ void pm_qos_add_request(handle, param_class, target_value):
-   pm_qos API functions.
- 
- void pm_qos_update_request(handle, new_target_value):
--  Will update the list element pointed to by the handle with the new target value
--  and recompute the new aggregated target, calling the notification tree if the
--  target is changed.
-+  Will update the list element pointed to by the handle with the new target
-+  value and recompute the new aggregated target, calling the notification tree
-+  if the target is changed.
- 
- void pm_qos_remove_request(handle):
--  Will remove the element.  After removal it will update the aggregate target and
--  call the notification tree if the target was changed as a result of removing
--  the request.
-+  Will remove the element.  After removal it will update the aggregate target
-+  and call the notification tree if the target was changed as a result of
-+  removing the request.
- 
- int pm_qos_request(param_class):
-   Returns the aggregated value for a given PM QoS class.
-@@ -167,9 +167,9 @@ int dev_pm_qos_expose_flags(device, value)
-   change the value of the PM_QOS_FLAG_NO_POWER_OFF flag.
- 
- void dev_pm_qos_hide_flags(device)
--  Drop the request added by dev_pm_qos_expose_flags() from the device's PM QoS list
--  of flags and remove sysfs attribute pm_qos_no_power_off from the device's power
--  directory.
-+  Drop the request added by dev_pm_qos_expose_flags() from the device's PM QoS
-+  list of flags and remove sysfs attribute pm_qos_no_power_off from the device's
-+  power directory.
- 
- Notification mechanisms:
- 
-@@ -179,8 +179,8 @@ int dev_pm_qos_add_notifier(device, notifier, type):
-   Adds a notification callback function for the device for a particular request
-   type.
- 
--  The callback is called when the aggregated value of the device constraints list
--  is changed.
-+  The callback is called when the aggregated value of the device constraints
-+  list is changed.
- 
- int dev_pm_qos_remove_notifier(device, notifier, type):
-   Removes the notification callback function for the device.
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 2c2ec99b5088..ab8406c84254 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -268,8 +268,8 @@ defined in include/linux/pm.h:
-   `unsigned int runtime_auto;`
-     - if set, indicates that the user space has allowed the device driver to
-       power manage the device at run time via the /sys/devices/.../power/control
--      `interface;` it may only be modified with the help of the pm_runtime_allow()
--      and pm_runtime_forbid() helper functions
-+      `interface;` it may only be modified with the help of the
-+      pm_runtime_allow() and pm_runtime_forbid() helper functions
- 
-   `unsigned int no_callbacks;`
-     - indicates that the device does not use the runtime PM callbacks (see
-diff --git a/Documentation/power/suspend-and-cpuhotplug.rst b/Documentation/power/suspend-and-cpuhotplug.rst
-index 7ac8e1f549f4..572d968c5375 100644
---- a/Documentation/power/suspend-and-cpuhotplug.rst
-+++ b/Documentation/power/suspend-and-cpuhotplug.rst
-@@ -106,8 +106,8 @@ execution during resume):
- * Release system_transition_mutex lock.
- 
- 
--It is to be noted here that the system_transition_mutex lock is acquired at the very
--beginning, when we are just starting out to suspend, and then released only
-+It is to be noted here that the system_transition_mutex lock is acquired at the
-+very beginning, when we are just starting out to suspend, and then released only
- after the entire cycle is complete (i.e., suspend + resume).
- 
- ::
-@@ -165,7 +165,8 @@ Important files and functions/entry points:
- 
- - kernel/power/process.c : freeze_processes(), thaw_processes()
- - kernel/power/suspend.c : suspend_prepare(), suspend_enter(), suspend_finish()
--- kernel/cpu.c: cpu_[up|down](), _cpu_[up|down](), [disable|enable]_nonboot_cpus()
-+- kernel/cpu.c: cpu_[up|down](), _cpu_[up|down](),
-+  [disable|enable]_nonboot_cpus()
- 
- 
- 
-diff --git a/Documentation/power/swsusp.rst b/Documentation/power/swsusp.rst
-index d000312f6965..8524f079e05c 100644
---- a/Documentation/power/swsusp.rst
-+++ b/Documentation/power/swsusp.rst
-@@ -118,7 +118,8 @@ In a really perfect world::
- 
-   echo 1 > /proc/acpi/sleep       # for standby
-   echo 2 > /proc/acpi/sleep       # for suspend to ram
--  echo 3 > /proc/acpi/sleep       # for suspend to ram, but with more power conservative
-+  echo 3 > /proc/acpi/sleep       # for suspend to ram, but with more power
-+                                  # conservative
-   echo 4 > /proc/acpi/sleep       # for suspend to disk
-   echo 5 > /proc/acpi/sleep       # for shutdown unfriendly the system
- 
-@@ -192,8 +193,8 @@ Q:
- 
- A:
-   The freezing of tasks is a mechanism by which user space processes and some
--  kernel threads are controlled during hibernation or system-wide suspend (on some
--  architectures).  See freezing-of-tasks.txt for details.
-+  kernel threads are controlled during hibernation or system-wide suspend (on
-+  some architectures).  See freezing-of-tasks.txt for details.
- 
- Q:
-   What is the difference between "platform" and "shutdown"?
-@@ -282,7 +283,8 @@ A:
-       suspend(PMSG_FREEZE): devices are frozen so that they don't interfere
-       with state snapshot
- 
--      state snapshot: copy of whole used memory is taken with interrupts disabled
-+      state snapshot: copy of whole used memory is taken with interrupts
-+      disabled
- 
-       resume(): devices are woken up so that we can write image to swap
- 
-@@ -353,8 +355,8 @@ Q:
- 
- A:
-   Generally, yes, you can.  However, it requires you to use the "resume=" and
--  "resume_offset=" kernel command line parameters, so the resume from a swap file
--  cannot be initiated from an initrd or initramfs image.  See
-+  "resume_offset=" kernel command line parameters, so the resume from a swap
-+  file cannot be initiated from an initrd or initramfs image.  See
-   swsusp-and-swap-files.txt for details.
- 
- Q:
--- 
-2.24.0.432.g9d3f5f5b63-goog
+        memset(&global, 0, sizeof(global));
+        global.max_perf_pct = 100;
+
+@@ -2508,6 +2510,8 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
+
+ static int intel_pstate_unregister_driver(void)
+ {
++       pr_info("Intel P-state unregister driver .... \n");
++
+        if (hwp_active)
+                return -EBUSY;
+
+And got this (dmesg | grep -i pstate):
+
+[    2.024876] intel_pstate: Intel P-state driver initializing
+[    2.024883] intel_pstate: Intel P-state register driver ....
+
+Attempt to change from the booted passive mode to active mode:
+
+[  175.903031] intel_pstate: Intel P-state unregister driver ....
+[  175.975543] intel_pstate: Intel P-state register driver ....
+[  175.975754]  intel_pstate_register_driver+0x4b/0x90
+[  175.975756]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.977728]  intel_pstate_register_driver+0x4b/0x90
+[  175.977730]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.979644]  intel_pstate_register_driver+0x4b/0x90
+[  175.979647]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.981424]  intel_pstate_register_driver+0x4b/0x90
+[  175.981427]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.982428]  intel_pstate_register_driver+0x4b/0x90
+[  175.982430]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.983127]  intel_pstate_register_driver+0x4b/0x90
+[  175.983128]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.983829]  intel_pstate_register_driver+0x4b/0x90
+[  175.983832]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.984434]  intel_pstate_register_driver+0x4b/0x90
+[  175.984435]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.985040]  intel_pstate_register_driver+0x4b/0x90
+[  175.985041]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.985598]  intel_pstate_register_driver+0x4b/0x90
+[  175.985600]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.986178]  intel_pstate_register_driver+0x4b/0x90
+[  175.986179]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.986721]  intel_pstate_register_driver+0x4b/0x90
+[  175.986723]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.987301]  intel_pstate_register_driver+0x4b/0x90
+[  175.987302]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.987828]  intel_pstate_register_driver+0x4b/0x90
+[  175.987830]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.988420]  intel_pstate_register_driver+0x4b/0x90
+[  175.988421]  ? intel_pstate_unregister_driver+0x31/0x40
+[  175.988920]  intel_pstate_register_driver+0x4b/0x90
+[  175.988921]  ? intel_pstate_unregister_driver+0x31/0x40
+
+Sometimes I get this:
+
+grep . /sys/devices/system/cpu/intel_pstate/*
+/sys/devices/system/cpu/intel_pstate/max_perf_pct:100
+/sys/devices/system/cpu/intel_pstate/min_perf_pct:42
+
+Instead of this:
+
+grep . /sys/devices/system/cpu/intel_pstate/*
+/sys/devices/system/cpu/intel_pstate/max_perf_pct:100
+/sys/devices/system/cpu/intel_pstate/min_perf_pct:42
+/sys/devices/system/cpu/intel_pstate/no_turbo:0
+/sys/devices/system/cpu/intel_pstate/num_pstates:23
+/sys/devices/system/cpu/intel_pstate/status:active
+/sys/devices/system/cpu/intel_pstate/turbo_pct:18
+
+But do not yet know the exact way to reliably
+create it.
+
+This is as far as I got so far.
+
+... Doug
+
 
