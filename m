@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 761B0103FB3
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D3B103FCC
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732469AbfKTPp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 10:45:57 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46724 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732464AbfKTPpz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 10:45:55 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 193so14385898pfc.13
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 07:45:54 -0800 (PST)
+        id S1731516AbfKTPq0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 10:46:26 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33973 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732464AbfKTPp6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 10:45:58 -0500
+Received: by mail-pf1-f196.google.com with SMTP id n13so14420077pff.1
+        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 07:45:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=v3CJPtWLFIAdj/z5fwUlZLLT5DwATGfWb2hJrMtJGHc=;
-        b=CNEfZPSc00pRWoq84G/7TVzpTaMRm4f05LM6FCV1VOsDJFHTamkVpCGFoDhuONbHLF
-         fGQ3QFgk9JrPR5QovNQuEOktGYhLYyTUE7QqhttLNJJdgBfd6K9y7RNy2qQC6NTZ6nRK
-         GyGT0usaaxjppXXdsYbHxQFzFo9OPWes7B+dx92L2sMB9Vhg1yAPcqyE9s6iUHHmbKYK
-         aklatOW98Mb6E08K/ThSluXkneUIGi6JY2HhTal3fJc3GrEpmH7Lik/cfIOPa3HokwwS
-         lfBHdgSAEUCuwhZWoNPvdJewIftJz5en5zEsLR1GM8W1VyVpFp5cK9/DVMtFBlsySZ/7
-         dKgw==
+        bh=NSg5zBP2bkEtgf/AJ9lwtdlcJh9mMI+s8A/QE9EBrqI=;
+        b=pyfzMEiXET5WNLh0lbzWH2k8Ma4kL/gchA2TSfgf9FOt77Ipge3tgeetL+B/eMQ3nQ
+         qK74PRyKA6Xzfhp8SDKE8IDOG9FnvPqI6zAxyvVWg6TQP7y92eClE7VPgn5EQgevKmTn
+         31isyeVwYrt/63T3W7c/7GYIA5cpiXc/FjWnfRx3+zoDJBZViOljMLADxrUxQ7RA6vsu
+         R4P0FAggkEapQV9P/JrJvCvOqiJCr2EcBVxIorboYb7NdrqFEAaI3ZrbK10/PJQHQdmL
+         XAbs0VUQKIfNCfpp8OueO+3Wys7vJrR6BqL9ZgscME+PrmMK7xFCfeyBCRbpBj9pzPrW
+         baSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=v3CJPtWLFIAdj/z5fwUlZLLT5DwATGfWb2hJrMtJGHc=;
-        b=MEKeYql5B/1fuy59zvy5Sv71Zjfzx79FO6YRLD1P/sHMjqs7AEh507IdJXgyP0IWez
-         kjdr4fJ4CkZ16bTvT+cfQy0w8Izuja5F0cOdwc1JG90C5y6a4t4mTFArdVeqoDzf52bF
-         jleTeGdqmolZMTouQYKSAduX99FxViAUwtMXSRNqhpfSanutUp7hQYX4jTqArRYn2nKQ
-         VEyNsxrw4tp/R46Uu2BKfc3HeXxWHyXt8DViqXHtk87sh2bmkReFfDyFe6zKLLU0t6T8
-         zKMzvO8kTPn2ScyVkQ2v4BPwLXUMbpo5RcKyhkGesAMQRCy7hHB2qF/1hcHGgXdv4DS6
-         3mDQ==
-X-Gm-Message-State: APjAAAX6I7kRnLLEiMCP74HDSUOxwOgr3b+wm+9XmQOtja/AlsvjEKih
-        NxdecOYKHaUj0LPCo1LjRIlwGw==
-X-Google-Smtp-Source: APXvYqxTZ7gTIsjV9nk438TlBRqYyZMMBLSDJ7P/pE/AYAB1y/QGOt8ZB8aniHR4LsuEnlOE8F3Ukg==
-X-Received: by 2002:a63:a804:: with SMTP id o4mr3735957pgf.401.1574264753964;
-        Wed, 20 Nov 2019 07:45:53 -0800 (PST)
+        bh=NSg5zBP2bkEtgf/AJ9lwtdlcJh9mMI+s8A/QE9EBrqI=;
+        b=kF2xZGOXDBdRtfP21wAbxis/Y89JL4WXVztVfNgRlvJhH3T6hVOmDZGsW/l7uH4EwR
+         LZhURGAB0Ej6e9EGcw5rBhPmuaD9dFKaZgMAX/EG72nSVLkmrkDphcp68m3ymnVMPULb
+         LwcGN06eDu5gcdYRUUwsBGDaEBKsAh/dDZc14pcX7x5KW12YJWjbTJ68vR2Gr44hth5o
+         iiopaoBO9zsVZQvmpDh7RpUuZvPc5kXeaGrCddymGJ8Zb0/68KNd3Xbj/+tLoPf13YJ8
+         QZ6CbEiATGYrzU0InH6TS652iwU/GrCaG+cGCBKLhB2HPb2dacFOUsCWc5RwDr7oCvl6
+         URsQ==
+X-Gm-Message-State: APjAAAUtQq/QySdU22hK3ET1YPhynas78PXYSk8Ym0OrQ7pEzKUP1m+E
+        +WELCW82n/7kbw/plgJihr7BAw==
+X-Google-Smtp-Source: APXvYqzJUD458tw9LKLIOVTpzUVrazVeldBx+3/BvF6tmCLBMY2h07OohUoX/CJQd6M8piZEF0jNfw==
+X-Received: by 2002:aa7:8b08:: with SMTP id f8mr4854182pfd.92.1574264757863;
+        Wed, 20 Nov 2019 07:45:57 -0800 (PST)
 Received: from localhost ([14.96.110.98])
-        by smtp.gmail.com with ESMTPSA id 67sm7938816pjz.27.2019.11.20.07.45.52
+        by smtp.gmail.com with ESMTPSA id 125sm29559387pfu.136.2019.11.20.07.45.56
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Nov 2019 07:45:53 -0800 (PST)
+        Wed, 20 Nov 2019 07:45:57 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Amit Daniel Kachhap <amit.kachhap@gmail.com>,
@@ -62,11 +62,11 @@ To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
         Thierry Reding <thierry.reding@gmail.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 07/11] thermal: rockchip: Appease the kernel-doc deity
-Date:   Wed, 20 Nov 2019 21:15:16 +0530
-Message-Id: <c3cbdb0619fec602668ba7ae703ba49d67e30b33.1574242756.git.amit.kucheria@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 08/11] thermal: samsung: Appease the kernel-doc deity
+Date:   Wed, 20 Nov 2019 21:15:17 +0530
+Message-Id: <1ded1697c6e5eff11b034b3302b9c79e88fa9c42.1574242756.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1574242756.git.amit.kucheria@linaro.org>
 References: <cover.1574242756.git.amit.kucheria@linaro.org>
@@ -77,156 +77,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Replace a comment starting with /** by simply /* to avoid having it
-interpreted as a kernel-doc comment. Describe missing function
-parameters where needed.
+Fix up the following warning when compiled with make W=1:
 
-Fixes up the following warnings when compiled with make W=1:
-
-linux.git/drivers/thermal/rockchip_thermal.c:27: warning: cannot
-understand function prototype: 'enum tshut_mode '
-linux.git/drivers/thermal/rockchip_thermal.c:37: warning: cannot
-understand function prototype: 'enum tshut_polarity '
-linux.git/drivers/thermal/rockchip_thermal.c:46: warning: cannot
-understand function prototype: 'enum sensor_id '
-linux.git/drivers/thermal/rockchip_thermal.c:56: warning: cannot
-understand function prototype: 'enum adc_sort_mode '
-linux.git/drivers/thermal/rockchip_thermal.c:123: warning: Function
-parameter or member 'chn_id' not described in 'rockchip_tsadc_chip'
-linux.git/drivers/thermal/rockchip_thermal.c:123: warning: Function
-parameter or member 'control' not described in 'rockchip_tsadc_chip'
-linux.git/drivers/thermal/rockchip_thermal.c:167: warning: Function
-parameter or member 'sensors' not described in 'rockchip_thermal_data'
-linux.git/drivers/thermal/rockchip_thermal.c:608: warning: Function
-parameter or member 'grf' not described in 'rk_tsadcv2_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:608: warning: Function
-parameter or member 'regs' not described in 'rk_tsadcv2_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:608: warning: Function
-parameter or member 'tshut_polarity' not described in
-'rk_tsadcv2_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:644: warning: Function
-parameter or member 'grf' not described in 'rk_tsadcv3_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:644: warning: Function
-parameter or member 'regs' not described in 'rk_tsadcv3_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:644: warning: Function
-parameter or member 'tshut_polarity' not described in
-'rk_tsadcv3_initialize'
-linux.git/drivers/thermal/rockchip_thermal.c:732: warning: Function
-parameter or member 'regs' not described in 'rk_tsadcv3_control'
-linux.git/drivers/thermal/rockchip_thermal.c:732: warning: Function
-parameter or member 'enable' not described in 'rk_tsadcv3_control'
-linux.git/drivers/thermal/rockchip_thermal.c:1211: warning: Function
-parameter or member 'reset' not described in
-'rockchip_thermal_reset_controller'
+linux.git/drivers/thermal/samsung/exynos_tmu.c:141: warning: bad
+line:         driver
+linux.git/drivers/thermal/samsung/exynos_tmu.c:203: warning: Function
+parameter or member 'tzd' not described in 'exynos_tmu_data'
+linux.git/drivers/thermal/samsung/exynos_tmu.c:203: warning: Function
+parameter or member 'tmu_set_trip_temp' not described in
+'exynos_tmu_data'
+linux.git/drivers/thermal/samsung/exynos_tmu.c:203: warning: Function
+parameter or member 'tmu_set_trip_hyst' not described in
+'exynos_tmu_data'
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/thermal/rockchip_thermal.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index 343c2f5c5a25..9ed8085bb792 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -19,7 +19,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/pinctrl/consumer.h>
- 
--/**
-+/*
-  * If the temperature over a period of time High,
-  * the resulting TSHUT gave CRU module,let it reset the entire chip,
-  * or via GPIO give PMIC.
-@@ -29,7 +29,7 @@ enum tshut_mode {
- 	TSHUT_MODE_GPIO,
- };
- 
--/**
-+/*
-  * The system Temperature Sensors tshut(tshut) polarity
-  * the bit 8 is tshut polarity.
-  * 0: low active, 1: high active
-@@ -39,7 +39,7 @@ enum tshut_polarity {
- 	TSHUT_HIGH_ACTIVE,
- };
- 
--/**
-+/*
-  * The system has two Temperature Sensors.
-  * sensor0 is for CPU, and sensor1 is for GPU.
-  */
-@@ -48,7 +48,7 @@ enum sensor_id {
- 	SENSOR_GPU,
- };
- 
--/**
-+/*
-  * The conversion table has the adc value and temperature.
-  * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
-  * ADC_INCREMENT: the adc value is incremental.(e.g. rk3368_code_table)
-@@ -80,13 +80,14 @@ struct chip_tsadc_table {
+diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+index fb2c55123a99..8193b66a3f83 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -138,7 +138,7 @@ enum soc_type {
  
  /**
-  * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-- * @chn_id[SOC_MAX_SENSORS]: the sensor id of chip correspond to the channel
-+ * @chn_id: array of sensor ids of chip corresponding to the channel
-  * @chn_num: the channel number of tsadc chip
-  * @tshut_temp: the hardware-controlled shutdown temperature value
-  * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-  * @tshut_polarity: the hardware-controlled active polarity (0:LOW 1:HIGH)
-  * @initialize: SoC special initialize tsadc controller method
-  * @irq_ack: clear the interrupt
-+ * @control: enable/disable method for the tsadc controller
-  * @get_temp: get the temperature
-  * @set_alarm_temp: set the high temperature interrupt
-  * @set_tshut_temp: set the hardware-controlled shutdown temperature
-@@ -139,7 +140,7 @@ struct rockchip_thermal_sensor {
-  * @chip: pointer to the platform/configuration data
-  * @pdev: platform device of thermal
-  * @reset: the reset controller of tsadc
-- * @sensors[SOC_MAX_SENSORS]: the thermal sensor
-+ * @sensors: array of thermal sensors
-  * @clk: the controller clock is divided by the exteral 24MHz
-  * @pclk: the advanced peripherals bus clock
-  * @grf: the general register file will be used to do static set by software
-@@ -590,6 +591,9 @@ static int rk_tsadcv2_code_to_temp(const struct chip_tsadc_table *table,
- 
- /**
-  * rk_tsadcv2_initialize - initialize TASDC Controller.
-+ * @grf: the general register file will be used to do static set by software
-+ * @regs: the base address of tsadc controller
-+ * @tshut_polarity: the hardware-controlled active polarity (0:LOW 1:HIGH)
-  *
-  * (1) Set TSADC_V2_AUTO_PERIOD:
-  *     Configure the interleave between every two accessing of
-@@ -624,6 +628,9 @@ static void rk_tsadcv2_initialize(struct regmap *grf, void __iomem *regs,
- 
- /**
-  * rk_tsadcv3_initialize - initialize TASDC Controller.
-+ * @grf: the general register file will be used to do static set by software
-+ * @regs: the base address of tsadc controller
-+ * @tshut_polarity: the hardware-controlled active polarity (0:LOW 1:HIGH)
-  *
-  * (1) The tsadc control power sequence.
-  *
-@@ -723,6 +730,8 @@ static void rk_tsadcv2_control(void __iomem *regs, bool enable)
- 
- /**
-  * rk_tsadcv3_control - the tsadc controller is enabled or disabled.
-+ * @regs: the base address of tsadc controller
-+ * @enable: boolean flag to enable the controller
-  *
-  * NOTE: TSADC controller works at auto mode, and some SoCs need set the
-  * tsadc_q_sel bit on TSADCV2_AUTO_CON[1]. The (1024 - tsadc_q) as output
-@@ -1206,6 +1215,7 @@ rockchip_thermal_register_sensor(struct platform_device *pdev,
- 
- /**
-  * Reset TSADC Controller, reset all tsadc registers.
-+ * @reset: the reset controller of tsadc
-  */
- static void rockchip_thermal_reset_controller(struct reset_control *reset)
- {
+  * struct exynos_tmu_data : A structure to hold the private data of the TMU
+-	driver
++ *			    driver
+  * @id: identifier of the one instance of the TMU controller.
+  * @base: base address of the single instance of the TMU controller.
+  * @base_second: base address of the common registers of the TMU controller.
+@@ -162,8 +162,11 @@ enum soc_type {
+  *	0 < reference_voltage <= 31
+  * @regulator: pointer to the TMU regulator structure.
+  * @reg_conf: pointer to structure to register with core thermal.
++ * @tzd: pointer to thermal_zone_device structure
+  * @ntrip: number of supported trip points.
+  * @enabled: current status of TMU device
++ * @tmu_set_trip_temp: SoC specific method to set trip (rising threshold)
++ * @tmu_set_trip_hyst: SoC specific to set hysteresis (falling threshold)
+  * @tmu_initialize: SoC specific TMU initialization method
+  * @tmu_control: SoC specific TMU control method
+  * @tmu_read: SoC specific TMU temperature read method
 -- 
 2.20.1
 
