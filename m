@@ -2,52 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EADED103CF8
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 15:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8185C103DE9
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730717AbfKTOIi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 09:08:38 -0500
-Received: from node.akkea.ca ([192.155.83.177]:53300 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728541AbfKTOIi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Nov 2019 09:08:38 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id 0D8D94E2006;
-        Wed, 20 Nov 2019 14:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1574258916; bh=sKXNf7+tf+BHu9LsQrewd8ubqQd3MAlMp6RKQ8vGqME=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=ln5bjmnpH6cgB8T90YllEB3R/25CJbdV/ppU9JD2niV7Iq+SvNdN3iKQ5JGNhGk8o
-         NROKXAnyg4CWgbdRtkeYteTryenPCxlN+q4K9wWMM4xIdg/eDXu2RF9b36vzMiaGsP
-         XMHOsgIaFvCxigs2U9xmnHV4JnFXVm5mNIaIlWTE=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pS7Fsl0d8JuL; Wed, 20 Nov 2019 14:08:35 +0000 (UTC)
-Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
-        by node.akkea.ca (Postfix) with ESMTPSA id 778804E2003;
-        Wed, 20 Nov 2019 14:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1574258915; bh=sKXNf7+tf+BHu9LsQrewd8ubqQd3MAlMp6RKQ8vGqME=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=Q74PgIzw5xRN362xel6NtMZ0DbSUmhl31g3br/LrGgWAQgmaYAWMgPJXEuArshe0/
-         ZaAXrGSBNQvd/98sLp9TFLrBBoW51R+9Kbua9emoXxom+LdaBj57g2j3z9uN+DNE/v
-         uQbB84vuYz0txpZ/BLE5032hD7H3E8fvPNlM9VxQ=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 20 Nov 2019 06:08:35 -0800
-From:   Angus Ainslie <angus@akkea.ca>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        id S1729062AbfKTPEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 10:04:36 -0500
+Received: from mail-eopbgr150043.outbound.protection.outlook.com ([40.107.15.43]:33239
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728864AbfKTPEf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 Nov 2019 10:04:35 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kvZBEOj9A8ZJe7OxuzxfXhf2HGU2KVVLoslwRe2fHSOjmOPwA7mB4i638SlBuq/iNHJ7CD6Dh1ZMH8ah4Q6X7FKBfHUcQrhb2RLQUgVMG2/tu/Oc7Q5Um7gZHEZ3Ts8oKBbDedVgHhJxBfWEk0wFDPOBzksbkRfWEVI3KYykvdkqmnjgDCKSc8DAosl162249n5rjzS27UXzd0+0bGBtqYQ6Jo2tZnUT0vqk/Nup0GTHJExB9kZyCc91SNOPoiNHM8fDRC26uvtTj+Zk2YxV+UNwAiZvanX0q3MvK1Wz3Q0jE04exdvBg8qR7T1fc8m6jxyKGOcKcuh8KZYy0Yt6wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CEy6VFUqKO7/sYosT1DOO4YdjRu9+pCyq6qi30pzkJM=;
+ b=d3/NWg0XgQ4HNzAnP6v4U/0Cwih+27LKT2N3IiQj0zsCcBmyJAj3HGbfkC/7FQ10JhfwUpl1+NfxWO2yIh4iDqIz8HZh4lJeDDxDHQDF4ssdB0FUZUsbpjhAwMqh/HyU+hhg8pHAP6fdWulNo6MoXISkOGngy3NiqBifP4trp6ldJL5XEKybMviKwbSoyL8v8cgtKtb72zllbnR6QwPpD20mSTBmtX7rJXrBTukDnk3yAu8bXAi4sL5bBJp+QpmrC66SYI0LVmBx3DDpIgulPgS5JLbWIbplBeCqzqW2CzKH5zbeto0E6n7XJK8DZcIjy0Ikxj/zZjvh7K5gFfBTWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CEy6VFUqKO7/sYosT1DOO4YdjRu9+pCyq6qi30pzkJM=;
+ b=rb/aD47ws1jXCG/NX5+jrG2H25W3jThjsBfeJh0FBRkTnTme79aYopEdftLklmDlGEE4oEri3uUms2Xk3kJ65o+iRn9Wh4gyNltDMYkNGwMX56x3gaz3b7X3acHH+0lmXxwzHsquemDQ37ZkELwPJ0eKQ2fqajxVJd9Zhakbq7Y=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB4718.eurprd04.prod.outlook.com (20.177.50.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.16; Wed, 20 Nov 2019 15:04:32 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2474.015; Wed, 20 Nov 2019
+ 15:04:32 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Angus Ainslie <angus@akkea.ca>, Jacky Bai <ping.bai@nxp.com>
+CC:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        =?UTF-8?Q?Artur_=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
         Alexandre Bailon <abailon@baylibre.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
         Abel Vesa <abel.vesa@nxp.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -56,250 +51,102 @@ Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
         Fabio Estevam <fabio.estevam@nxp.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Matthias Kaehlcke <mka@chromium.org>,
         Martin Kepplinger <martink@posteo.de>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+        Silvano Di Ninno <silvano.dininno@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling
  driver
-In-Reply-To: <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
+Thread-Topic: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling
+ driver
+Thread-Index: AQHVmyeZDID07b0oVkajwef04uXjmg==
+Date:   Wed, 20 Nov 2019 15:04:32 +0000
+Message-ID: <VI1PR04MB70233920AC838AD88E1ECC26EE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
 References: <cover.1573761527.git.leonard.crestez@nxp.com>
  <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
-Message-ID: <e311a376e6aec0c380686a7e307d2c07@akkea.ca>
-X-Sender: angus@akkea.ca
-User-Agent: Roundcube Webmail/1.3.6
+ <e311a376e6aec0c380686a7e307d2c07@akkea.ca>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 76422b5a-e3d6-4c9d-6d68-08d76dcaf2eb
+x-ms-traffictypediagnostic: VI1PR04MB4718:|VI1PR04MB4718:
+x-ms-exchange-purlcount: 3
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB47189C8781A6263B17FED9D2EE4F0@VI1PR04MB4718.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 02272225C5
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(199004)(189003)(74316002)(7416002)(6436002)(2906002)(54906003)(316002)(44832011)(66446008)(64756008)(66556008)(66476007)(76116006)(91956017)(186003)(26005)(4001150100001)(6116002)(3846002)(76176011)(102836004)(4326008)(110136005)(486006)(7696005)(14454004)(6246003)(52536014)(53546011)(6506007)(305945005)(66946007)(86362001)(476003)(8936002)(14444005)(229853002)(966005)(33656002)(6636002)(81156014)(81166006)(7736002)(478600001)(5660300002)(99286004)(6306002)(8676002)(66066001)(71200400001)(71190400001)(25786009)(9686003)(55016002)(256004)(446003)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4718;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4t9P8Z3aFxX5EcO4ALXEBZPaUZor2gZYEpscTDDgem7/UOhpzhkZFJ5DY8fzbA9jlvAFmPC9Gy/YOQbMJsJjWxZlwhKHTImExQiIjXKzYthwUvKn8uJ6X02RIlHbqk5DkIZ7Rg6O6NhEpcToHpaJNFTqmEZ+6IWOAhdUoi/SePHUD4Pde/S93vCQcI6W3ekrqar50K9tf9N2jhS+3TjPYsusaMdOEsRIr9bTyCmdOVS9rtQaIc6rE+dWS5Hv4NEwBAcbznOi5r6n3NuwZyKeXcQXBSa8gv8/uFv7eeCQzyqIrdr5wXgkvn8bsKSeN4YGPJaHH0U64u6Og9wJV4oBC03Tj0msoxEiYLGletRtXTlkCcw91dufityJuiWD0jGukOAqGdleP3u5VjvLxTM6OOCoW6aDWSXI0bZ0hqws+Rb1cCs+9S2wA4w2/VcObb3npFOz3+kh7xnK1h63rl2qgppSRQxLtEl86JXDyyw1uL0=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76422b5a-e3d6-4c9d-6d68-08d76dcaf2eb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2019 15:04:32.1167
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yDF2fscqIc315saebDGbAjIwgXlvoVO4xN0KhIpPFadaQQdPPiobu2MZVKfWB1sNOIdmdL6okQRR7VE04p3VOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4718
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
-
-On 2019-11-14 12:09, Leonard Crestez wrote:
-> Add initial support for dynamic frequency switching on pieces of the 
-> imx
-> interconnect fabric.
-> 
-> All this driver does is set a clk rate based on an opp table, it does
-> not map register areas.
-> 
-
-Is this working with mainline ATF or does it still need to be used with 
-your modified ATF code ?
-
-Thanks
-Angus
-
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
->  drivers/devfreq/Kconfig       |   9 ++
->  drivers/devfreq/Makefile      |   1 +
->  drivers/devfreq/imx-devfreq.c | 150 ++++++++++++++++++++++++++++++++++
->  3 files changed, 160 insertions(+)
->  create mode 100644 drivers/devfreq/imx-devfreq.c
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 923a6132e741..fef5ce831e90 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -98,10 +98,19 @@ config ARM_IMX8M_DDRC_DEVFREQ
->  	select DEVFREQ_GOV_USERSPACE
->  	help
->  	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It 
-> allows
->  	  adjusting DRAM frequency.
-> 
-> +config ARM_IMX_DEVFREQ
-> +	tristate "i.MX Generic DEVFREQ Driver"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	select DEVFREQ_GOV_PASSIVE
-> +	select DEVFREQ_GOV_USERSPACE
-> +	help
-> +	  This adds the generic DEVFREQ driver for i.MX interconnects. It
-> +	  allows adjusting NIC/NOC frequency.
-> +
->  config ARM_TEGRA_DEVFREQ
->  	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
->  	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
->  		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
->  		ARCH_TEGRA_210_SOC || \
-> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> index 3eb4d5e6635c..61d0edee16f7 100644
-> --- a/drivers/devfreq/Makefile
-> +++ b/drivers/devfreq/Makefile
-> @@ -8,10 +8,11 @@ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= 
-> governor_userspace.o
->  obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
-> 
->  # DEVFREQ Drivers
->  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
->  obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
-> +obj-$(CONFIG_ARM_IMX_DEVFREQ)		+= imx-devfreq.o
->  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
->  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
->  obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
-> 
->  # DEVFREQ Event Drivers
-> diff --git a/drivers/devfreq/imx-devfreq.c 
-> b/drivers/devfreq/imx-devfreq.c
-> new file mode 100644
-> index 000000000000..620b344e87aa
-> --- /dev/null
-> +++ b/drivers/devfreq/imx-devfreq.c
-> @@ -0,0 +1,150 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 NXP
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/devfreq.h>
-> +#include <linux/device.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +struct imx_devfreq {
-> +	struct devfreq_dev_profile profile;
-> +	struct devfreq *devfreq;
-> +	struct clk *clk;
-> +	struct devfreq_passive_data passive_data;
-> +};
-> +
-> +static int imx_devfreq_target(struct device *dev,
-> +			      unsigned long *freq, u32 flags)
-> +{
-> +	struct imx_devfreq *priv = dev_get_drvdata(dev);
-> +	struct dev_pm_opp *new_opp;
-> +	unsigned long new_freq;
-> +	int ret;
-> +
-> +	new_opp = devfreq_recommended_opp(dev, freq, flags);
-> +	if (IS_ERR(new_opp)) {
-> +		ret = PTR_ERR(new_opp);
-> +		dev_err(dev, "failed to get recommended opp: %d\n", ret);
-> +		return ret;
-> +	}
-> +	new_freq = dev_pm_opp_get_freq(new_opp);
-> +	dev_pm_opp_put(new_opp);
-> +
-> +	return clk_set_rate(priv->clk, new_freq);
-> +}
-> +
-> +static int imx_devfreq_get_cur_freq(struct device *dev, unsigned long 
-> *freq)
-> +{
-> +	struct imx_devfreq *priv = dev_get_drvdata(dev);
-> +
-> +	*freq = clk_get_rate(priv->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx_devfreq_get_dev_status(struct device *dev,
-> +				      struct devfreq_dev_status *stat)
-> +{
-> +	struct imx_devfreq *priv = dev_get_drvdata(dev);
-> +
-> +	stat->busy_time = 0;
-> +	stat->total_time = 0;
-> +	stat->current_frequency = clk_get_rate(priv->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static void imx_devfreq_exit(struct device *dev)
-> +{
-> +	dev_pm_opp_of_remove_table(dev);
-> +}
-> +
-> +static int imx_devfreq_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct imx_devfreq *priv;
-> +	const char *gov = DEVFREQ_GOV_USERSPACE;
-> +	void *govdata = NULL;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(priv->clk)) {
-> +		ret = PTR_ERR(priv->clk);
-> +		dev_err(dev, "failed to fetch clk: %d\n", ret);
-> +		return ret;
-> +	}
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	ret = dev_pm_opp_of_add_table(dev);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to get OPP table\n");
-> +		return ret;
-> +	}
-> +
-> +	priv->profile.polling_ms = 1000;
-> +	priv->profile.target = imx_devfreq_target;
-> +	priv->profile.get_dev_status = imx_devfreq_get_dev_status;
-> +	priv->profile.exit = imx_devfreq_exit;
-> +	priv->profile.get_cur_freq = imx_devfreq_get_cur_freq;
-> +	priv->profile.initial_freq = clk_get_rate(priv->clk);
-> +
-> +	/* Handle passive devfreq parent link */
-> +	priv->passive_data.parent = devfreq_get_devfreq_by_phandle(dev, 0);
-> +	if (!IS_ERR(priv->passive_data.parent)) {
-> +		dev_info(dev, "setup passive link to %s\n",
-> +			 dev_name(priv->passive_data.parent->dev.parent));
-> +		gov = DEVFREQ_GOV_PASSIVE;
-> +		govdata = &priv->passive_data;
-> +	} else if (priv->passive_data.parent != ERR_PTR(-ENODEV)) {
-> +		// -ENODEV means no parent: not an error.
-> +		ret = PTR_ERR(priv->passive_data.parent);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_warn(dev, "failed to get initialize passive parent: %d\n",
-> +				 ret);
-> +		goto err;
-> +	}
-> +
-> +	priv->devfreq = devm_devfreq_add_device(dev, &priv->profile,
-> +						gov, govdata);
-> +	if (IS_ERR(priv->devfreq)) {
-> +		ret = PTR_ERR(priv->devfreq);
-> +		dev_err(dev, "failed to add devfreq device: %d\n", ret);
-> +		goto err;
-> +	}
-> +
-> +	return 0;
-> +
-> +err:
-> +	dev_pm_opp_of_remove_table(dev);
-> +	return ret;
-> +}
-> +
-> +static const struct of_device_id imx_devfreq_of_match[] = {
-> +	{ .compatible = "fsl,imx8m-noc", },
-> +	{ .compatible = "fsl,imx8m-nic", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
-> +
-> +static struct platform_driver imx_devfreq_platdrv = {
-> +	.probe		= imx_devfreq_probe,
-> +	.driver = {
-> +		.name	= "imx-devfreq",
-> +		.of_match_table = of_match_ptr(imx_devfreq_of_match),
-> +	},
-> +};
-> +module_platform_driver(imx_devfreq_platdrv);
-> +
-> +MODULE_DESCRIPTION("Generic i.MX bus frequency driver");
-> +MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");
-> +MODULE_LICENSE("GPL v2");
+On 20.11.2019 16:08, Angus Ainslie wrote:=0A=
+> Hi Leonard,=0A=
+> =0A=
+> On 2019-11-14 12:09, Leonard Crestez wrote:=0A=
+>> Add initial support for dynamic frequency switching on pieces of the=0A=
+>> imx=0A=
+>> interconnect fabric.=0A=
+>>=0A=
+>> All this driver does is set a clk rate based on an opp table, it does=0A=
+>> not map register areas.=0A=
+>>=0A=
+> =0A=
+> Is this working with mainline ATF or does it still need to be used with=
+=0A=
+> your modified ATF code ?=0A=
+=0A=
+This series doesn't perform SMC calls, that's done by the imx8m-ddrc =0A=
+driver: https://patchwork.kernel.org/cover/11244283/=0A=
+=0A=
+This particular patch allows switching NOC frequency but that's just =0A=
+clk_set_rate.=0A=
+=0A=
+DDRC frequency switching requires the imx branch of ATF (v2.0 + ~200 =0A=
+patches) otherwise you will get probe failures. Source for imx atf is =0A=
+published here: https://source.codeaurora.org/external/imx/imx-atf/=0A=
+=0A=
+For your particular 8mq B0 case slightly different setpoints are used =0A=
+and the fix is not in any public release yet so you need this:=0A=
+=0A=
+https://github.com/cdleonard/arm-trusted-firmware/commits/imx_2.0.y_busfreq=
+=0A=
+=0A=
+Is "mainline ATF" an important criteria for Purism?=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
