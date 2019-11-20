@@ -2,37 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D28E103B80
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 14:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6411F103C0C
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 14:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730651AbfKTNd1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 08:33:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40844 "EHLO mail.kernel.org"
+        id S1728319AbfKTNkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 08:40:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730650AbfKTNd1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Nov 2019 08:33:27 -0500
+        id S1728220AbfKTNj7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 Nov 2019 08:39:59 -0500
 Received: from localhost.localdomain (unknown [118.189.143.39])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB73C22521;
-        Wed, 20 Nov 2019 13:33:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E13692251E;
+        Wed, 20 Nov 2019 13:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574256806;
-        bh=crDJnPjOlOMnMpToasc/QNgCCxnojz7Gt+oJifbABfA=;
+        s=default; t=1574257199;
+        bh=48KK0SLAaUeyUff4S3qn2YlPeutE7T2QR9bxIH2re6A=;
         h=From:To:Cc:Subject:Date:From;
-        b=IFtJmZwVGAu+M1OiaNeJ8nii6218nM+iENEqrLh3wAGGxJJgDi4onqPhYQP15NAQJ
-         RdSR3FehinLGwknGIHrJ7zgUL20ZJB8KqINs4tX7tlmfkFq/qOs2CyylENRqIInqDS
-         ylBgk5+xHCkbooit8zRWuURusc9DeFUUI4wBNo+g=
+        b=iG2Q3aIcxDbYLfAS1EqiE7K5lJIUu8aW10Dq8IQnRfAULvAUWEz1hDUfz91Xo74iJ
+         kXUgy55vbzgNO6iQTqtZCNKZ4S7MIqScZ4LT1f/LlqYtVwIqkGEhI/MDoL7M74eVag
+         j63sHlOHurBD1S4p51WsCsQ5WykKxjUz9FjSM0YE=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: Fix Kconfig indentation
-Date:   Wed, 20 Nov 2019 21:33:07 +0800
-Message-Id: <20191120133307.6421-1-krzk@kernel.org>
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] power: reset: Fix Kconfig indentation
+Date:   Wed, 20 Nov 2019 21:39:54 +0800
+Message-Id: <20191120133954.14051-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -45,24 +42,29 @@ coding style with command like:
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/interconnect/qcom/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/reset/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index c49afbea3458..b6735f11438c 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -11,8 +11,8 @@ config INTERCONNECT_QCOM_MSM8974
-        depends on QCOM_SMD_RPM
-        select INTERCONNECT_QCOM_SMD_RPM
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index c721939767eb..14a1d6d10ca9 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -144,11 +144,11 @@ config POWER_RESET_MT6323
+        bool "MediaTek MT6323 power-off driver"
+        depends on MFD_MT6397
         help
--         This is a driver for the Qualcomm Network-on-Chip on msm8974-based
--         platforms.
-+	 This is a driver for the Qualcomm Network-on-Chip on msm8974-based
-+	 platforms.
+-         The power-off driver is responsible for externally shutdown down
+-         the power of a remote MediaTek SoC MT6323 is connected to through
+-         controlling a tiny circuit BBPU inside MT6323 RTC.
++	 The power-off driver is responsible for externally shutdown down
++	 the power of a remote MediaTek SoC MT6323 is connected to through
++	 controlling a tiny circuit BBPU inside MT6323 RTC.
  
- config INTERCONNECT_QCOM_QCS404
- 	tristate "Qualcomm QCS404 interconnect driver"
+-         Say Y if you have a board where MT6323 could be found.
++	 Say Y if you have a board where MT6323 could be found.
+ 
+ config POWER_RESET_QNAP
+ 	bool "QNAP power-off driver"
 -- 
 2.17.1
 
