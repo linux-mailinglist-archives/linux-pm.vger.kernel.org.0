@@ -2,84 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBD71035B7
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 09:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC1310365F
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 10:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727230AbfKTIAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 03:00:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55030 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726529AbfKTIAP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Nov 2019 03:00:15 -0500
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C26322461;
-        Wed, 20 Nov 2019 08:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574236814;
-        bh=QttJKRtC10VXWG+9qQ5nVIL+rG+zre/MBZV9fsi2lbY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IQzkyAJnQZwLxO4NwQEIleoqKwlSnpr5yhXCd+TkIe+wpeE722E00RgBgheuq9zzv
-         awssC7EhfOAn6nFB7G2ZONpj1Eu7iM+p0kXkA7mtgDD99C8XnJQAYXMl7g1NWye4Hy
-         XR+TSNysM3U4NVMmENeBfrUxzuxa6x+gjzuKpKm8=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v3] dt-bindings: power: Rename back power_domain.txt bindings to fix references
-Date:   Wed, 20 Nov 2019 08:59:56 +0100
-Message-Id: <1574236796-25016-1-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728062AbfKTJJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 04:09:03 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:47095 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727816AbfKTJJD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 04:09:03 -0500
+Received: by mail-oi1-f194.google.com with SMTP id n14so21800353oie.13;
+        Wed, 20 Nov 2019 01:09:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fxjAZZwG5hIfrc3YBFvEHX0U8tqNbosfqpgXVFQpjTc=;
+        b=dmCR20i9ljycuzcdpQ/+b/WzPGniZOP3/6mDPi8Lf2AIOn/ZMrlKNLkRzOyYvLfEbF
+         k7RcT/zJpksB6x3YX4q6Pzry8vL61YqQ8mLEk9wjOY14zfyDHls6QQeB+IVrhh+Qaess
+         5wAaaEGr3TNr2+1Np2IJlt+hp3Pg7JqHFcqv5svCoDEV7cWk/QbFDr9aSIQ0s4iQed3B
+         m6Sh5WPOXyEo2VbsXThlgB55DAi/bUtCombh8WjA4zHLys/gPUhlqqO/rqz0EK0YksJP
+         +HOSy2Kb3NFYa+EXH9awcsVtbc3cU9S7TNG9pbKKq8F9KwlbPO75LOh1+giw/ugacKTB
+         nGUQ==
+X-Gm-Message-State: APjAAAWYSGq45lA3bd6E63YBkYTvAJsx0lX5T/JZ+SxTmmAflbftLDS/
+        bISBT2pmRrIemUy1Ss0PrK0dfsjyZANcPLL3AO0=
+X-Google-Smtp-Source: APXvYqxQjCBlQqe/f/mECD0vZZyqUXnBDslf+mcXcDjZNftUBzoDIa8ouyVTVLVhR1a+rSsJzXW2qceRI7vfoJ5tp48=
+X-Received: by 2002:a05:6808:901:: with SMTP id w1mr1897534oih.57.1574240942620;
+ Wed, 20 Nov 2019 01:09:02 -0800 (PST)
+MIME-Version: 1.0
+References: <2811202.iOFZ6YHztY@kreacher> <000401d59ee6$959e3da0$c0dab8e0$@net>
+ <CAJZ5v0i1iAjpWju6FiCjP3RvspKDRfSwz4=b_3qgGhhfz8sSrw@mail.gmail.com>
+ <6710300.onecg0m5mP@kreacher> <002a01d59f6f$7f609540$7e21bfc0$@net>
+In-Reply-To: <002a01d59f6f$7f609540$7e21bfc0$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Nov 2019 10:08:50 +0100
+Message-ID: <CAJZ5v0i1UqdQBvXm1cozOQeQ8YRdTxOAQPP9=RyZHHnsmuGHTw@mail.gmail.com>
+Subject: Re: [RFT][PATCH 1/3] PM: QoS: Introduce frequency QoS
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With split of power domain controller bindings to power-domain.yaml,
-the consumer part was renamed to power-domain.txt breaking the
-references.  Undo the renaming.
+On Wed, Nov 20, 2019 at 7:55 AM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On 2019.11.19 14:14 Rafael J. Wysocki wrote:
+> > On Tuesday, November 19, 2019 8:17:05 PM CET Rafael J. Wysocki wrote:
+>
+> ...
+>
+> >> However, I now also see that freq_qos_remove_request() doesn't clear
+> >> the qos field in req which is should do, so freq_qos_add_request()
+> >> will complain and fail if the object pointed to by req is passed to it
+> >> again.
+> >>
+> >> I'll send a patch to test for this later today.
+> >>
+> >
+> > The patch is appended.  Please test it (on top of 5.4-rc8) and report back.
+> >
+> > ---
+> > kernel/power/qos.c |    8 +++++++-
+> > 1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/kernel/power/qos.c
+> > ===================================================================
+> > --- linux-pm.orig/kernel/power/qos.c
+> > +++ linux-pm/kernel/power/qos.c
+> > @@ -814,6 +814,8 @@ EXPORT_SYMBOL_GPL(freq_qos_update_reques
+> >  */
+> > int freq_qos_remove_request(struct freq_qos_request *req)
+> > {
+> > +     int ret;
+> > +
+> >       if (!req)
+> >               return -EINVAL;
+> >
+> > @@ -821,7 +823,11 @@ int freq_qos_remove_request(struct freq_
+> >                "%s() called for unknown object\n", __func__))
+> >               return -EINVAL;
+> >
+> > -     return freq_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+> > +     ret = freq_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+> > +     req->qos = NULL;
+> > +     req->type = 0;
+> > +
+> > +     return ret;
+> >  }
+> >  EXPORT_SYMBOL_GPL(freq_qos_remove_request);
+>
+> Yes the patch fixes the problem. Thanks.
+>
+> I tested several hundred times switching between
+> passive and active modes with the intel_pstate driver,
+> including with various CPUs disabled and re-enabled.
 
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Fixes: ea312b90857d ("dt-bindings: power: Convert Generic Power Domain bindings to json-schema")
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks a lot!
 
----
-
-Changes since v2:
-1. Simplify pattern in Maintainers as Geert suggested,
-2. Add Reviewed-by.
-
-Changes since v1:
-1. Undo the renaming.
----
- .../devicetree/bindings/power/{power-domain.txt => power_domain.txt}    | 0
- MAINTAINERS                                                             | 2 +-
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename Documentation/devicetree/bindings/power/{power-domain.txt => power_domain.txt} (100%)
-
-diff --git a/Documentation/devicetree/bindings/power/power-domain.txt b/Documentation/devicetree/bindings/power/power_domain.txt
-similarity index 100%
-rename from Documentation/devicetree/bindings/power/power-domain.txt
-rename to Documentation/devicetree/bindings/power/power_domain.txt
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7126d3e079a4..0aff4bebed78 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6953,7 +6953,7 @@ L:	linux-pm@vger.kernel.org
- S:	Supported
- F:	drivers/base/power/domain*.c
- F:	include/linux/pm_domain.h
--F:	Documentation/devicetree/bindings/power/power-domain*
-+F:	Documentation/devicetree/bindings/power/power?domain*
- 
- GENERIC RESISTIVE TOUCHSCREEN ADC DRIVER
- M:	Eugen Hristev <eugen.hristev@microchip.com>
--- 
-2.7.4
-
+Let me resend the patch with a changelog and tags.
