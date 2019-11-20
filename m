@@ -2,128 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 629A9103958
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 13:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330A3103981
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 13:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729479AbfKTMAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 07:00:43 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:43808 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728728AbfKTMAn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 07:00:43 -0500
-Received: by mail-ua1-f67.google.com with SMTP id k11so7669925ual.10
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 04:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B0tsxj8KZGAT/o1qcGiW6HKsR+OIwQVXMM2ODuLvIpk=;
-        b=EqVhZA3XS/izMBNsikllPUdPo/A4jO0CJ2WlCc6sonVPI2GnfaVvbdDuNlHdyVmBWs
-         04nfUBbI06D35YPWUGTFpPWM+eHRl7KJqzvMQZ83STlGgvja0fblAtHeSfAFZaJtrKA1
-         zmFiNtK3ttF7B1Fj4bDCbrnfA1x2DjrISFT4bYrf4bnivgaf2hWaN/7r/wMso4uvtHqe
-         shcCcvg8GlTnd3B7NHCeEdi4N+JTWa5XVlWqJoGC8NG0l9O8cxzUQYX3uLaU9pld4Ptn
-         uKq5VO98MpAoB+6hx23bKtwlM4Kx3cxqoTlHoH7OXOjuf6SVEg0kUKz7XdpkTWoKVgaL
-         HNqA==
+        id S1728911AbfKTMGj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 07:06:39 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34344 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbfKTMGj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 07:06:39 -0500
+Received: by mail-oi1-f196.google.com with SMTP id l202so22292064oig.1;
+        Wed, 20 Nov 2019 04:06:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=B0tsxj8KZGAT/o1qcGiW6HKsR+OIwQVXMM2ODuLvIpk=;
-        b=VRJn1qExIYCS7mynMLoKp4VK46Bhy+bXnjRC2FsE1032wj3g4619CjsniLPyPhVWen
-         53aslnmHTjEWuxyGUr0iAn/skQw1Fn/vsAB0FYxe1+i5jjwIQf8tPKkgSo7yfTYiYVtH
-         Ekb4GghW2vwvOcv45lR1UZ00IiNvFtDUIxIHaFyUfhwujkK6im3+AMhnmIzgDBF32Ahr
-         fGeQhO31wbVDbKA6MkxpKLj6WE7Ntzmil3dPJxo26knFMyt6wEaKI+zctEy4nAzOrfaD
-         ojcPh+L7ozCOw7fuO8JU3a2s8qTnFTljW4ygUgXFNscvzdQEjRUmfAZzn9ozn/hTUlxE
-         IXKQ==
-X-Gm-Message-State: APjAAAUxHlPFXCJWUIkLfqJ8byvm5kSorhdP5OXUbegK0PNyxA9hD/AC
-        iOfgpzKGr+qcFB/u6+acp3q1G8u2JBUeHMW7mMiC7g==
-X-Google-Smtp-Source: APXvYqyiLCF3MBQoSmzlqqxli2MvGV261pRD3zdGvysKb7s9Nit3G2b6p/dRiZmGs4K0UtVDM+P1vhy5Y89wBip3NWE=
-X-Received: by 2002:ab0:74cd:: with SMTP id f13mr1351834uaq.104.1574251241748;
- Wed, 20 Nov 2019 04:00:41 -0800 (PST)
+        bh=ElT7EJNqtwpJJU4QjMYGJbxkB5AWzSyGEgl7I/cinCY=;
+        b=hr58LFCDCSzTnyNwpoB7s6lVEQK1tD0HPWHIS2n6GAB5ej72KyYoWxDVPuG6sNHjvs
+         +i4tXFgQDVRylOpu3hf2FssZKNbIqbCsa+E3BEmzYRP7vTR0cSph3tIUaYZykugeOW7P
+         t90QAVn3U8koe1EJuWLYgSdBZuN4mMCyj80HpBMtqiBu84H0j+QJ2IBZwEhnD8rQIrck
+         HV9KWTgi7j6l0PYBDAA74o09F2kZquV3ek0kCoNwOj4Fqfsxc0Pvc0mZoWxsux38nqHW
+         HC3GbzvFznH8A1mjyj8cu9E5jHkPsW4KnCfqyBuEE+DyDbe5pENwkX16vE9xfYgW75Ue
+         HiuQ==
+X-Gm-Message-State: APjAAAVuz/wWxvyOS57hTEz4oFSryCNSqyIZ23j8fGWrhg4ZHQnRPkbS
+        T4KZbAWVlIqDB/GGVyH3dtzEMreRSc4rHPhnuwE=
+X-Google-Smtp-Source: APXvYqxheneYqbQjWsEAfSkE2ZQbClubvVZBCaL5vjr7E9PZ5SxHyJLeCYrf4NpLC+8pv/qSSK7clExZOkJduiPveC8=
+X-Received: by 2002:aca:c753:: with SMTP id x80mr2352248oif.115.1574251597887;
+ Wed, 20 Nov 2019 04:06:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20191119154621.55341-1-niklas.cassel@linaro.org>
-In-Reply-To: <20191119154621.55341-1-niklas.cassel@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 20 Nov 2019 13:00:05 +0100
-Message-ID: <CAPDyKFqjsJSRW7XvfUe2Ssewqxo5Xjk_3p_EywP_rTsvrdNDYQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] Add support for QCOM Core Power Reduction
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20191017121901.13699-1-kherbst@redhat.com> <20191119214955.GA223696@google.com>
+ <CACO55tu+8VeyMw1Lb6QvNspaJm9LDgoRbooVhr0s3v9uBt=feg@mail.gmail.com>
+ <20191120101816.GX11621@lahna.fi.intel.com> <CAJZ5v0g4vp1C+zHU5nOVnkGsOjBvLaphK1kK=qAT6b=mK8kpsA@mail.gmail.com>
+ <20191120112212.GA11621@lahna.fi.intel.com> <CAJZ5v0in4VSULsfLshHxhNLf+NZxVQM0xx=hzdNa2X3FW=V7DA@mail.gmail.com>
+ <CACO55tsjj+xkDjubz1J=fsPecW4H_J8AaBTeaMm+NYjp8Kiq8g@mail.gmail.com>
+In-Reply-To: <CACO55tsjj+xkDjubz1J=fsPecW4H_J8AaBTeaMm+NYjp8Kiq8g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Nov 2019 13:06:26 +0100
+Message-ID: <CAJZ5v0ithxMPK2YxfTUx_Ygpze2FMDJ6LwKwJb2vx89dfgHX_A@mail.gmail.com>
+Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 19 Nov 2019 at 16:46, Niklas Cassel <niklas.cassel@linaro.org> wrote:
+On Wed, Nov 20, 2019 at 12:51 PM Karol Herbst <kherbst@redhat.com> wrote:
 >
-> This series adds support for Core Power Reduction (CPR), a form of
-> Adaptive Voltage Scaling (AVS), found on certain Qualcomm SoCs.
->
-> This series is based on top of the qcs404 cpufreq patch series that
-> hasn't landed yet:
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=173423
-> as well as that series' matching device tree changes:
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=165457
->
-> For testing purposes, this patch series, including the dependencies
-> listed above, is available on the following git tag:
-> https://git.linaro.org/people/niklas.cassel/kernel.git/log/?h=cpr-v6
->
-> CPR is a technology that reduces core power on a CPU or on other device.
-> It reads voltage settings from efuses (that have been written in
-> production), it uses these voltage settings as initial values, for each
-> OPP.
->
-> After moving to a certain OPP, CPR monitors dynamic factors such as
-> temperature, etc. and adjusts the voltage for that frequency accordingly
-> to save power and meet silicon characteristic requirements.
->
-> This driver has been developed together with Jorge Ramirez-Ortiz, and
-> is based on an RFC by Stephen Boyd[1], which in turn is based on work
-> by others on codeaurora.org[2].
->
-> [1] https://lkml.org/lkml/2015/9/18/833
-> [2] https://source.codeaurora.org/quic/la/kernel/msm-4.14/tree/drivers/regulator/cpr-regulator.c?h=msm-4.14
->
-> Changes since v5:
-> -Removed pm_ops from platform_driver struct.
->  (This was embarrassingly not properly removed in previous patch revision.)
->
-> Niklas Cassel (5):
->   dt-bindings: power: avs: Add support for CPR (Core Power Reduction)
->   power: avs: Add support for CPR (Core Power Reduction)
->   arm64: dts: qcom: qcs404: Add CPR and populate OPP table
->   arm64: defconfig: enable CONFIG_QCOM_CPR
->   arm64: defconfig: enable CONFIG_ARM_QCOM_CPUFREQ_NVMEM
->
->  .../bindings/power/avs/qcom,cpr.txt           |  130 ++
->  MAINTAINERS                                   |    8 +
->  arch/arm64/boot/dts/qcom/qcs404.dtsi          |  132 +-
->  arch/arm64/configs/defconfig                  |    2 +
->  drivers/power/avs/Kconfig                     |   15 +
->  drivers/power/avs/Makefile                    |    1 +
->  drivers/power/avs/qcom-cpr.c                  | 1754 +++++++++++++++++
->  7 files changed, 2034 insertions(+), 8 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
->  create mode 100644 drivers/power/avs/qcom-cpr.c
->
-> --
-> 2.23.0
->
+> On Wed, Nov 20, 2019 at 12:48 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, Nov 20, 2019 at 12:22 PM Mika Westerberg
+> > <mika.westerberg@intel.com> wrote:
+> > >
+> > > On Wed, Nov 20, 2019 at 11:52:22AM +0100, Rafael J. Wysocki wrote:
+> > > > On Wed, Nov 20, 2019 at 11:18 AM Mika Westerberg
+> > > > <mika.westerberg@intel.com> wrote:
+> > > > >
 
-For the series (except patch 2 that I provided some comment for), feel
-free to add:
+[cut]
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > >
+> > > > Oh, so does it look like we are trying to work around AML that tried
+> > > > to work around some problematic behavior in Linux at one point?
+> > >
+> > > Yes, it looks like so if I read the ASL right.
+> >
+> > OK, so that would call for a DMI-based quirk as the real cause for the
+> > issue seems to be the AML in question, which means a firmware problem.
+> >
+>
+> And I disagree as this is a linux specific workaround and windows goes
+> that path and succeeds. This firmware based workaround was added,
+> because it broke on Linux.
 
-Kind regards
-Uffe
+Apparently so at the time it was added, but would it still break after
+the kernel changes made since then?
+
+Moreover, has it not become harmful now?  IOW, wouldn't it work after
+removing the "Linux workaround" from the AML?
+
+The only way to verify that I can see would be to run the system with
+custom ACPI tables without the "Linux workaround" in the AML in
+question.
