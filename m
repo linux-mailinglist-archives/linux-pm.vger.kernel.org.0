@@ -2,48 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF7B1039B4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 13:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080031039AE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 13:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729267AbfKTMLs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 07:11:48 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40115 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729236AbfKTMLs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 07:11:48 -0500
-Received: by mail-ot1-f66.google.com with SMTP id m15so20978679otq.7;
-        Wed, 20 Nov 2019 04:11:48 -0800 (PST)
+        id S1729601AbfKTMMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 07:12:06 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:52715 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729598AbfKTMMF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 07:12:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574251924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VF+bQZFHPewNnM9aH9KyZQntlM8F2dUwAxVJVb/6oKY=;
+        b=BRMvBy0jr6Cl7DF+3UNGZo3rjEa3ndIOh44ahtijq+vY8thtK4qQKQG/adR0rb5RqFX2La
+        j/FCO8gVonNnmDnprlVcE7/k11Xgg7+hbuXhiDlo5dhNxTOEebod66yjSqYxZUtV+RXigH
+        GjJmuXTdJUzUwwhwtOfEsy8BByTm7dI=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-260-7vUJX46aOuCVV71oDZZjLw-1; Wed, 20 Nov 2019 07:12:03 -0500
+Received: by mail-qk1-f197.google.com with SMTP id v9so6101236qkj.14
+        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 04:12:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OeFNReHTu2Z/wmOhc+6rykSX19PAp/KecxFvBbcF5xE=;
-        b=HRXYhe8xWVyZOKnpqhh6cQn0NPCw7hjOT/kpVG+1tq6BiNldAuT/qZyRyFhdx4T/qh
-         SKPc+B7f85cCBJccdQfSD31PU8iGI0X55hS7ucRcDgTQtzclrKI/JUdxJtmtNIBO/IFt
-         AKjTQz8JFqR+2myxJmzcbY26xqLfakNrsjq3vu1NgXt5tjWK4XwB8/gOfYnfDspDyXzb
-         9gPkP2tielZFwLUMGPj9LbNKxVufi2o4azvh8mdpiHYeKQAs8NA2c5fFDlsmKOv4Z1Ay
-         9UUva97FlsCFqgHdBXf6LNY5I20xyUqKzohPUFUfD5Y8vdixh0fmtcCc7oPnVE5TiszY
-         3oIA==
-X-Gm-Message-State: APjAAAW+bGnF0NwosqqSNelUtTigiDCUqK7l01onjt7k7giyrIn0PNVg
-        I9N/ziIaupqann+ug66QAEsAazrKf+1FaGzq7s4=
-X-Google-Smtp-Source: APXvYqyrkRK0kaVt5Z4vrt370dqRdCmzFhxyhg+9v0spLlBL7ZERizh4DCBBV+SYsNe6NGTAKOmu24BP4l9rb4a+3xk=
-X-Received: by 2002:a9d:7d01:: with SMTP id v1mr1670717otn.167.1574251907511;
- Wed, 20 Nov 2019 04:11:47 -0800 (PST)
+        bh=VF+bQZFHPewNnM9aH9KyZQntlM8F2dUwAxVJVb/6oKY=;
+        b=H4QM/7wEpfDqzYIziSeJoT1CQYeQEKv2xciXwiOZowFs3BdEflJl4voAkL8YmHnXKm
+         XaXA7srzChxf8TMghVy59Bg0Txe2Vpj2Vz1p+oYr8MgFA0FFZgNo9F2q4nmL9rREnGzj
+         qFvjWxAvC2o3lw9ES7xxYoAHT+94k16ZYgU4T6yVXqtd5UyXL8T1sRbfPCXLu/Va4zmW
+         F8wL9yJlIJGNwYZ1AjJwBcJPPalXqsBwKd7UXTE0aHFXrMqTh+mLvten8MGrxOCI2eU3
+         9pOha3pquSOvNBT3Zl46jBmMToN2p/OIzoXzPbgLHA7FcpRxA60zCDT1ESVtU9RW/7zM
+         0Gsg==
+X-Gm-Message-State: APjAAAWfLsUJxnM+cTbKZsu2+MtqR4WVYzRS0b//ZDc6kbbB4R9QIxfF
+        /hhbuL9VuTKob6z6fvjDcBAlmAH302N8vLnFhl5Sipz78MZgPYvkoT6f5ATKHxL/z0FsvnOOCi+
+        cN0F61gmVrcaqEGfVYwxVEnQPn5MdqSdUaWQ=
+X-Received: by 2002:a37:9083:: with SMTP id s125mr2044111qkd.192.1574251923299;
+        Wed, 20 Nov 2019 04:12:03 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyBAA4TCCMTkJLA3fk7uQ/livSO00sZJsFKKfFUtKcydvGnjFRyWiHk4b/E6hpfbS10eFj88YdwU+FKUdPz0cI=
+X-Received: by 2002:a37:9083:: with SMTP id s125mr2044079qkd.192.1574251923040;
+ Wed, 20 Nov 2019 04:12:03 -0800 (PST)
 MIME-Version: 1.0
 References: <20191017121901.13699-1-kherbst@redhat.com> <20191119214955.GA223696@google.com>
  <CACO55tu+8VeyMw1Lb6QvNspaJm9LDgoRbooVhr0s3v9uBt=feg@mail.gmail.com>
  <20191120101816.GX11621@lahna.fi.intel.com> <CAJZ5v0g4vp1C+zHU5nOVnkGsOjBvLaphK1kK=qAT6b=mK8kpsA@mail.gmail.com>
- <20191120112212.GA11621@lahna.fi.intel.com> <CAJZ5v0in4VSULsfLshHxhNLf+NZxVQM0xx=hzdNa2X3FW=V7DA@mail.gmail.com>
- <CACO55tsjj+xkDjubz1J=fsPecW4H_J8AaBTeaMm+NYjp8Kiq8g@mail.gmail.com> <CAJZ5v0ithxMPK2YxfTUx_Ygpze2FMDJ6LwKwJb2vx89dfgHX_A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ithxMPK2YxfTUx_Ygpze2FMDJ6LwKwJb2vx89dfgHX_A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Nov 2019 13:11:36 +0100
-Message-ID: <CAJZ5v0hYLrmFup61kzQL_rUuRy9yb+3L-BdRUGfSKqkGpm-utw@mail.gmail.com>
+ <20191120112212.GA11621@lahna.fi.intel.com> <20191120115127.GD11621@lahna.fi.intel.com>
+ <CACO55tsfNOdtu5SZ-4HzO4Ji6gQtafvZ7Rm19nkPcJAgwUBFMw@mail.gmail.com>
+ <CACO55tscD_96jUVts+MTAUsCt-fZx4O5kyhRKoo4mKoC84io8A@mail.gmail.com> <20191120120913.GE11621@lahna.fi.intel.com>
+In-Reply-To: <20191120120913.GE11621@lahna.fi.intel.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Wed, 20 Nov 2019 13:11:52 +0100
+Message-ID: <CACO55tsHy6yZQZ8PkdW8iPA7+uc5rdcEwRJwYEQ3iqu85F8Sqg@mail.gmail.com>
 Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
  states on certain intel bridges
-To:     Karol Herbst <kherbst@redhat.com>,
-        Mika Westerberg <mika.westerberg@intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+To:     Mika Westerberg <mika.westerberg@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Lyude Paul <lyude@redhat.com>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -53,51 +70,42 @@ Cc:     Bjorn Helgaas <helgaas@kernel.org>,
         nouveau <nouveau@lists.freedesktop.org>,
         Dave Airlie <airlied@gmail.com>,
         Mario Limonciello <Mario.Limonciello@dell.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: 7vUJX46aOuCVV71oDZZjLw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 1:06 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Wed, Nov 20, 2019 at 1:09 PM Mika Westerberg
+<mika.westerberg@intel.com> wrote:
 >
-> On Wed, Nov 20, 2019 at 12:51 PM Karol Herbst <kherbst@redhat.com> wrote:
-> >
-> > On Wed, Nov 20, 2019 at 12:48 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Wed, Nov 20, 2019 at 12:22 PM Mika Westerberg
-> > > <mika.westerberg@intel.com> wrote:
-> > > >
-> > > > On Wed, Nov 20, 2019 at 11:52:22AM +0100, Rafael J. Wysocki wrote:
-> > > > > On Wed, Nov 20, 2019 at 11:18 AM Mika Westerberg
-> > > > > <mika.westerberg@intel.com> wrote:
-> > > > > >
+> On Wed, Nov 20, 2019 at 12:58:00PM +0100, Karol Herbst wrote:
+> > overall, what I really want to know is, _why_ does it work on windows?
 >
-> [cut]
+> So do I ;-)
 >
-> > > > >
-> > > > > Oh, so does it look like we are trying to work around AML that tried
-> > > > > to work around some problematic behavior in Linux at one point?
-> > > >
-> > > > Yes, it looks like so if I read the ASL right.
-> > >
-> > > OK, so that would call for a DMI-based quirk as the real cause for the
-> > > issue seems to be the AML in question, which means a firmware problem.
-> > >
-> >
-> > And I disagree as this is a linux specific workaround and windows goes
-> > that path and succeeds. This firmware based workaround was added,
-> > because it broke on Linux.
+> > Or what are we doing differently on Linux so that it doesn't work? If
+> > anybody has any idea on how we could dig into this and figure it out
+> > on this level, this would probably allow us to get closer to the root
+> > cause? no?
 >
-> Apparently so at the time it was added, but would it still break after
-> the kernel changes made since then?
+> Have you tried to use the acpi_rev_override parameter in your system and
+> does it have any effect?
 >
-> Moreover, has it not become harmful now?  IOW, wouldn't it work after
-> removing the "Linux workaround" from the AML?
+> Also did you try to trace the ACPI _ON/_OFF() methods? I think that
+> should hopefully reveal something.
 >
-> The only way to verify that I can see would be to run the system with
-> custom ACPI tables without the "Linux workaround" in the AML in
-> question.
 
-Or running it with acpi_rev_override as suggested by Mika, which
-effectively would be the same thing.
+I think I did in the past and it seemed to have worked, there is just
+one big issue with this: it's a Dell specific workaround afaik, and
+this issue plagues not just Dell, but we've seen it on HP and Lenovo
+laptops as well, and I've heard about users having the same issues on
+Asus and MSI laptops as well.
+
+I will spend some time to collect all the necessary information,
+create a bug to put it all in there and send out a v5 with the updated
+information and references to this bug.
+
