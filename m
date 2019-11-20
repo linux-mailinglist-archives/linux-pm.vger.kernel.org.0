@@ -2,103 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E31B103FBC
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9321B10400E
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732506AbfKTPqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 10:46:11 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33863 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732491AbfKTPqJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 10:46:09 -0500
-Received: by mail-pl1-f196.google.com with SMTP id h13so14020647plr.1
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 07:46:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=XsaIBKQXmIKdbRdQ/GaM37eqJC/1U/v/pIK3m7cBLow=;
-        b=FVXrQCwGGlFa8AiYBJLxFUB/FwOeAS6Iyd+JEgzbLkClNVuIjQ3OetLej32TbAu2aP
-         MxQu2vBBglMV9Uwx934dgYhz8BoF8vm7yZS+vOEqXl6QmiezSAJWHw/Bn+mVFlDZNMFW
-         cqg6O8KhRBst6sZ/DfDMK00auNWQr7GsgDHm0vX31D9JbEOEfS/lBRFkuMOcX4c8OYCe
-         aOUT9+CS9AAmyM/s7C5zAQeA7vzsaEMYa1Qgm+qiXY4n7u4nhIH9OZ+4sg57WP5KyBRY
-         UzGjLg202ZnsAGtWqHFCMXq9SFn01hDQwfWWWnxkeMbpqWmsB9rttG9ol1F5VQMMoMXS
-         O6jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=XsaIBKQXmIKdbRdQ/GaM37eqJC/1U/v/pIK3m7cBLow=;
-        b=DtsxZ5FndZJ7kBpH3h1PIhmCqrnThDWTJqva/L8rauMgCAAbUM0hBz8npWkUDntXrP
-         tl5ood+5sb9iuY5mKXEAuctyYVyRtpzwOjkvXvxHQ/xtHIYg/5aU/yzDdFLupTvsAJV3
-         nbI/JBnmoNvWfd9d19iI/yLutKho/BUKNediI2BrTS3t3cA0Zdxxpxi8uOBfjkRx126v
-         3kFew+z6QslgDgb27djsMzVvPdjABaJqP3Q2ELscjgcnvh8+SbQfYuTfAmNQB4/gKD8Y
-         CakvweOEn25Mrb9h932zCZngrCFR9iuWhuxKJp3CUkLQ8TFEZSXibamBmeRt5vZNT+Pb
-         vAnw==
-X-Gm-Message-State: APjAAAXnJo0DdqCOMtVVq04bFz/Lz8cxzueZLHK6z8fTOb86Oy9zc3px
-        zI1kqhNZy6COkCeonC4pdApWSQ==
-X-Google-Smtp-Source: APXvYqwSje57oE5y3bBVJjGXG2B2M4xxUYYkxaLEakRWmjFy/GHedrja+GYKVJcVdFnwtR7GHryhvg==
-X-Received: by 2002:a17:90b:3108:: with SMTP id gc8mr4878371pjb.54.1574264769037;
-        Wed, 20 Nov 2019 07:46:09 -0800 (PST)
-Received: from localhost ([14.96.110.98])
-        by smtp.gmail.com with ESMTPSA id o16sm7414811pjp.23.2019.11.20.07.46.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Nov 2019 07:46:08 -0800 (PST)
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Javi Merino <javi.merino@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jun Nie <jun.nie@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 11/11] thermal: zx2967: Appease the kernel-doc deity
-Date:   Wed, 20 Nov 2019 21:15:20 +0530
-Message-Id: <1b4f6fb91e2e713ad5135f0d40dcded65dee9d0e.1574242756.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1574242756.git.amit.kucheria@linaro.org>
-References: <cover.1574242756.git.amit.kucheria@linaro.org>
-In-Reply-To: <cover.1574242756.git.amit.kucheria@linaro.org>
-References: <cover.1574242756.git.amit.kucheria@linaro.org>
+        id S1728681AbfKTPxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 10:53:08 -0500
+Received: from mga17.intel.com ([192.55.52.151]:63174 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728453AbfKTPxI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 Nov 2019 10:53:08 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Nov 2019 07:53:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,222,1571727600"; 
+   d="scan'208";a="215842721"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 20 Nov 2019 07:53:02 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 20 Nov 2019 17:53:02 +0200
+Date:   Wed, 20 Nov 2019 17:53:01 +0200
+From:   Mika Westerberg <mika.westerberg@intel.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>
+Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+Message-ID: <20191120155301.GL11621@lahna.fi.intel.com>
+References: <20191120101816.GX11621@lahna.fi.intel.com>
+ <CAJZ5v0g4vp1C+zHU5nOVnkGsOjBvLaphK1kK=qAT6b=mK8kpsA@mail.gmail.com>
+ <20191120112212.GA11621@lahna.fi.intel.com>
+ <20191120115127.GD11621@lahna.fi.intel.com>
+ <CACO55tsfNOdtu5SZ-4HzO4Ji6gQtafvZ7Rm19nkPcJAgwUBFMw@mail.gmail.com>
+ <CACO55tscD_96jUVts+MTAUsCt-fZx4O5kyhRKoo4mKoC84io8A@mail.gmail.com>
+ <20191120120913.GE11621@lahna.fi.intel.com>
+ <CACO55tsHy6yZQZ8PkdW8iPA7+uc5rdcEwRJwYEQ3iqu85F8Sqg@mail.gmail.com>
+ <20191120151542.GH11621@lahna.fi.intel.com>
+ <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix up the following warning when compiled with make W=1:
+On Wed, Nov 20, 2019 at 04:37:14PM +0100, Karol Herbst wrote:
+> On Wed, Nov 20, 2019 at 4:15 PM Mika Westerberg
+> <mika.westerberg@intel.com> wrote:
+> >
+> > On Wed, Nov 20, 2019 at 01:11:52PM +0100, Karol Herbst wrote:
+> > > On Wed, Nov 20, 2019 at 1:09 PM Mika Westerberg
+> > > <mika.westerberg@intel.com> wrote:
+> > > >
+> > > > On Wed, Nov 20, 2019 at 12:58:00PM +0100, Karol Herbst wrote:
+> > > > > overall, what I really want to know is, _why_ does it work on windows?
+> > > >
+> > > > So do I ;-)
+> > > >
+> > > > > Or what are we doing differently on Linux so that it doesn't work? If
+> > > > > anybody has any idea on how we could dig into this and figure it out
+> > > > > on this level, this would probably allow us to get closer to the root
+> > > > > cause? no?
+> > > >
+> > > > Have you tried to use the acpi_rev_override parameter in your system and
+> > > > does it have any effect?
+> > > >
+> > > > Also did you try to trace the ACPI _ON/_OFF() methods? I think that
+> > > > should hopefully reveal something.
+> > > >
+> > >
+> > > I think I did in the past and it seemed to have worked, there is just
+> > > one big issue with this: it's a Dell specific workaround afaik, and
+> > > this issue plagues not just Dell, but we've seen it on HP and Lenovo
+> > > laptops as well, and I've heard about users having the same issues on
+> > > Asus and MSI laptops as well.
+> >
+> > Maybe it is not a workaround at all but instead it simply determines
+> > whether the system supports RTD3 or something like that (IIRC Windows 8
+> > started supporting it). Maybe Dell added check for Linux because at that
+> > time Linux did not support it.
+> >
+> 
+> the point is, it's not checking it by default, so by default you still
+> run into the windows 8 codepath.
 
-linux.git/drivers/thermal/zx2967_thermal.c:57: warning: Function
-parameter or member 'dev' not described in 'zx2967_thermal_priv'
+Well you can add the quirk to acpi_rev_dmi_table[] so it goes to that
+path by default. There are a bunch of similar entries for Dell machines.
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/thermal/zx2967_thermal.c | 1 +
- 1 file changed, 1 insertion(+)
+Of course this does not help the non-Dell users so we would still need
+to figure out the root cause.
 
-diff --git a/drivers/thermal/zx2967_thermal.c b/drivers/thermal/zx2967_thermal.c
-index 7c8a82c8e1e9..8e3a2d3c2f9a 100644
---- a/drivers/thermal/zx2967_thermal.c
-+++ b/drivers/thermal/zx2967_thermal.c
-@@ -45,6 +45,7 @@
-  * @clk_topcrm: topcrm clk structure
-  * @clk_apb: apb clk structure
-  * @regs: pointer to base address of the thermal sensor
-+ * @dev: struct device pointer
-  */
- 
- struct zx2967_thermal_priv {
--- 
-2.20.1
+> > In case RTD3 is supported it invokes LKDS() which probably does the L2
+> > or L3 entry and this is for some reason does not work the same way in
+> > Linux than it does with Windows 8+.
+> >
+> > I don't remember if this happens only with nouveau or with the
+> > proprietary driver as well but looking at the nouveau runtime PM suspend
+> > hook (assuming I'm looking at the correct code):
+> >
+> > static int
+> > nouveau_pmops_runtime_suspend(struct device *dev)
+> > {
+> >         struct pci_dev *pdev = to_pci_dev(dev);
+> >         struct drm_device *drm_dev = pci_get_drvdata(pdev);
+> >         int ret;
+> >
+> >         if (!nouveau_pmops_runtime()) {
+> >                 pm_runtime_forbid(dev);
+> >                 return -EBUSY;
+> >         }
+> >
+> >         nouveau_switcheroo_optimus_dsm();
+> >         ret = nouveau_do_suspend(drm_dev, true);
+> >         pci_save_state(pdev);
+> >         pci_disable_device(pdev);
+> >         pci_ignore_hotplug(pdev);
+> >         pci_set_power_state(pdev, PCI_D3cold);
+> >         drm_dev->switch_power_state = DRM_SWITCH_POWER_DYNAMIC_OFF;
+> >         return ret;
+> > }
+> >
+> > Normally PCI drivers leave the PCI bus PM things to PCI core but here
+> > the driver does these. So I wonder if it makes any difference if we let
+> > the core handle all that:
+> >
+> > static int
+> > nouveau_pmops_runtime_suspend(struct device *dev)
+> > {
+> >         struct pci_dev *pdev = to_pci_dev(dev);
+> >         struct drm_device *drm_dev = pci_get_drvdata(pdev);
+> >         int ret;
+> >
+> >         if (!nouveau_pmops_runtime()) {
+> >                 pm_runtime_forbid(dev);
+> >                 return -EBUSY;
+> >         }
+> >
+> >         nouveau_switcheroo_optimus_dsm();
+> >         ret = nouveau_do_suspend(drm_dev, true);
+> >         pci_ignore_hotplug(pdev);
+> >         drm_dev->switch_power_state = DRM_SWITCH_POWER_DYNAMIC_OFF;
+> >         return ret;
+> > }
+> >
+> > and similar for the nouveau_pmops_runtime_resume().
+> >
+> 
+> yeah, I tried that at some point and it didn't help either. The reason
+> we call those from inside Nouveau is to support systems pre _PR where
+> nouveau invokes custom _DSM calls on its own. We could potentially
+> check for that though.
 
+OK.
