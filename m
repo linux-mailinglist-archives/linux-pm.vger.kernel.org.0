@@ -2,138 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B50B1037F7
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 11:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF4C103810
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 11:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbfKTKwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 05:52:35 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37693 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727514AbfKTKwf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 05:52:35 -0500
-Received: by mail-oi1-f194.google.com with SMTP id y194so22109110oie.4;
-        Wed, 20 Nov 2019 02:52:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0XJsWOiRBHmD2kFFkY9kcnlnvFi6tJbcT90YhvqGyXk=;
-        b=qiGWd+XbXurL8W+kG/70kg6t3cxg2w0LjapF3GhgCZNcDcHalKboqxJ0Fvs+eIOAzE
-         fDdibhF/wgWQalEtF5slXGtJmpi3XOJj6WA+bGKn3iDW0MD8UbAhHuG8ypBiPBIFue6m
-         0dHn+APRs+rzhK9R3taZtHFwvEdEPJKqyLc/1QNIUaCweGcwap/rT2X4KxT40b9SGY6x
-         EuLePsBcXK1xTBk3mDdZHvWdUfvinBjdLYy7phPe49hvknb7bqrjSgWz7wCQkcRdDsgo
-         tqoqE53kWeZkrlfZzb+RQ0G2gPjid8yEmlYzrJPawkLbMVnOtEX5mYovjYoRoiP6Vt5U
-         7jLw==
-X-Gm-Message-State: APjAAAU3yshwBNb3skcMSWhhFZ874UEJhrDI6eiXes119Szf9o3VMQf1
-        SnXtsHeENXgJTzm+odM6sJwRb75oM/Y9+GMJy3g=
-X-Google-Smtp-Source: APXvYqwjeK8wGKLpVWDbUsiy3/KlqoGVkGuPGsBhhnC19t6bK2aUnaLaipUiMNwoRc1MrCUzVHSwZIqPrINSdEqrGGc=
-X-Received: by 2002:aca:530c:: with SMTP id h12mr2293868oib.110.1574247153834;
- Wed, 20 Nov 2019 02:52:33 -0800 (PST)
+        id S1727230AbfKTK6g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 05:58:36 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:49359 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728942AbfKTK6f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 05:58:35 -0500
+Received: from 79.184.253.244.ipv4.supernova.orange.pl (79.184.253.244) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 469c83978beedbff; Wed, 20 Nov 2019 11:58:32 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Nadav Amit <namit@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 11/12] ACPI/sleep: Convert acpi_wakeup_address into a function
+Date:   Wed, 20 Nov 2019 11:58:31 +0100
+Message-ID: <7338293.UcAxln0NAJ@kreacher>
+In-Reply-To: <20191119002121.4107-12-sean.j.christopherson@intel.com>
+References: <20191119002121.4107-1-sean.j.christopherson@intel.com> <20191119002121.4107-12-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-References: <20191017121901.13699-1-kherbst@redhat.com> <20191119214955.GA223696@google.com>
- <CACO55tu+8VeyMw1Lb6QvNspaJm9LDgoRbooVhr0s3v9uBt=feg@mail.gmail.com> <20191120101816.GX11621@lahna.fi.intel.com>
-In-Reply-To: <20191120101816.GX11621@lahna.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 20 Nov 2019 11:52:22 +0100
-Message-ID: <CAJZ5v0g4vp1C+zHU5nOVnkGsOjBvLaphK1kK=qAT6b=mK8kpsA@mail.gmail.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Mika Westerberg <mika.westerberg@intel.com>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Mario Limonciello <Mario.Limonciello@dell.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 11:18 AM Mika Westerberg
-<mika.westerberg@intel.com> wrote:
->
-> Hi Karol,
->
-> On Tue, Nov 19, 2019 at 11:26:45PM +0100, Karol Herbst wrote:
-> > On Tue, Nov 19, 2019 at 10:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > [+cc Dave]
-> > >
-> > > On Thu, Oct 17, 2019 at 02:19:01PM +0200, Karol Herbst wrote:
-> > > > Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
-> > > > states.
-> > > >
-> > > > v2: convert to pci_dev quirk
-> > > >     put a proper technical explanation of the issue as a in-code comment
-> > > > v3: disable it only for certain combinations of intel and nvidia hardware
-> > > > v4: simplify quirk by setting flag on the GPU itself
-> > >
-> > > I have zero confidence that we understand the real problem, but we do
-> > > need to do something with this.  I'll merge it for v5.5 if we get the
-> > > minor procedural stuff below straightened out.
-> > >
-> >
-> > Thanks, and I agree with your statement, but at this point I think
-> > only Intel can help out digging deeper as I see no way to debug this
-> > further.
->
-> I don't have anything against this patch, as long as the quirk stays
-> limited to the particular root port leading to the NVIDIA GPU. The
-> reason why I think it should to be limited is that I'm pretty certain
-> the problem is not in the root port itself. I have here a KBL based
-> Thinkpad X1 Carbon 6th gen that can put the TBT controller into D3cold
-> (it is connected to PCH root port) and it wakes up there just fine, so
-> don't want to break that.
->
-> Now, PCIe devices cannot go into D3cold all by themselves. They always
-> need help from the platform side which is ACPI in this case. This is
-> done by having the device to have _PR3 method that returns one or more
-> power resources that the OS is supposed to turn off when the device is
-> put into D3cold. All of that is implemented as form of ACPI methods that
-> pretty much do the hardware specific things that are outside of PCIe
-> spec to get the device into D3cold. At high level the _OFF() method
-> causes the root port to broadcast PME_Turn_Off message that results the
-> link to enter L2/3 ready, it then asserts PERST, configures WAKE (both
-> can be GPIOs) and finally removes power (if the link goes into L3,
-> otherwise it goes into L2).
->
-> I think this is where the problem actually lies - the ASL methods that
-> are used to put the device into D3cold and back. We know that in Windows
-> this all works fine so unless Windows quirks the root port the same way
-> there is another reason behind this.
->
-> In case of Dell XPS 9560 (IIRC that's the machine you have) the
-> corresponding power resource is called \_SB.PCI0.PEG0.PG00 and its
-> _ON/_OFF methods end up calling PGON()/PGOF() accordingly. The methods
-> itself do lots of things and it is hard to follow the dissassembled
-> ASL which does not have any comments but there are couple of things that
-> stand out where we may go into a different path. One of them is this in
-> the PGOF() method:
->
->    If (((OSYS <= 0x07D9) || ((OSYS == 0x07DF) && (_REV == 0x05))))
->
-> The ((OSYS == 0x07DF) && (_REV == 0x05)) checks specifically for Linux
-> (see [1] and 18d78b64fddc ("ACPI / init: Make it possible to override
-> _REV")) so it might be that Dell people tested this at some point in
-> Linux as well. Added Mario in case he has any ideas.
->
-> Previously I suggested you to try the ACPI method tracing to see what
-> happens inside PGOF(). Did you have time to try it? It may provide more
-> information about that is happening inside those methods and hopefully
-> point us to the root cause.
->
-> Also if you haven't tried already passing acpi_rev_override in the
-> command line makes the _REV to return 5 so it should go into the "Linux"
-> path in PGOF().
+On Tuesday, November 19, 2019 1:21:20 AM CET Sean Christopherson wrote:
+> Convert acpi_wakeup_address from a raw variable into a function so that
+> x86 can wrap its dereference of the real mode boot header in a function
+> instead of broadcasting it to the world via a #define.  This sets the
+> stage for a future patch to move the definition of acpi_wakeup_address()
+> out of asm/acpi.h and thus break acpi.h's dependency on asm/realmode.h.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 
-Oh, so does it look like we are trying to work around AML that tried
-to work around some problematic behavior in Linux at one point?
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> [1] https://www.kernel.org/doc/html/latest/firmware-guide/acpi/osi.html#do-not-use-rev
+> ---
+>  arch/ia64/include/asm/acpi.h | 5 ++++-
+>  arch/ia64/kernel/acpi.c      | 2 --
+>  arch/x86/include/asm/acpi.h  | 5 ++++-
+>  drivers/acpi/sleep.c         | 4 ++--
+>  4 files changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/ia64/include/asm/acpi.h b/arch/ia64/include/asm/acpi.h
+> index f886d4dc9d55..36d7003eee71 100644
+> --- a/arch/ia64/include/asm/acpi.h
+> +++ b/arch/ia64/include/asm/acpi.h
+> @@ -38,7 +38,10 @@ int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
+>  /* Low-level suspend routine. */
+>  extern int acpi_suspend_lowlevel(void);
+>  
+> -extern unsigned long acpi_wakeup_address;
+> +static inline unsigned long acpi_wakeup_address(void)
+> +{
+> +	return 0;
+> +}
+>  
+>  /*
+>   * Record the cpei override flag and current logical cpu. This is
+> diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
+> index 70d1587ddcd4..a5636524af76 100644
+> --- a/arch/ia64/kernel/acpi.c
+> +++ b/arch/ia64/kernel/acpi.c
+> @@ -42,8 +42,6 @@ int acpi_lapic;
+>  unsigned int acpi_cpei_override;
+>  unsigned int acpi_cpei_phys_cpuid;
+>  
+> -unsigned long acpi_wakeup_address = 0;
+> -
+>  #define ACPI_MAX_PLATFORM_INTERRUPTS	256
+>  
+>  /* Array to record platform interrupt vectors for generic interrupt routing. */
+> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+> index bc9693c9107e..57788ec6fa82 100644
+> --- a/arch/x86/include/asm/acpi.h
+> +++ b/arch/x86/include/asm/acpi.h
+> @@ -62,7 +62,10 @@ static inline void acpi_disable_pci(void)
+>  extern int (*acpi_suspend_lowlevel)(void);
+>  
+>  /* Physical address to resume after wakeup */
+> -#define acpi_wakeup_address ((unsigned long)(real_mode_header->wakeup_start))
+> +static inline unsigned long acpi_wakeup_address(void)
+> +{
+> +	return ((unsigned long)(real_mode_header->wakeup_start));
+> +}
+>  
+>  /*
+>   * Check if the CPU can handle C2 and deeper
+> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> index 2af937a8b1c5..9e66c4109556 100644
+> --- a/drivers/acpi/sleep.c
+> +++ b/drivers/acpi/sleep.c
+> @@ -63,9 +63,9 @@ static int acpi_sleep_prepare(u32 acpi_state)
+>  #ifdef CONFIG_ACPI_SLEEP
+>  	/* do we have a wakeup address for S2 and S3? */
+>  	if (acpi_state == ACPI_STATE_S3) {
+> -		if (!acpi_wakeup_address)
+> +		if (!acpi_wakeup_address())
+>  			return -EFAULT;
+> -		acpi_set_waking_vector(acpi_wakeup_address);
+> +		acpi_set_waking_vector(acpi_wakeup_address());
+>  
+>  	}
+>  	ACPI_FLUSH_CPU_CACHE();
+> 
+
+
+
+
