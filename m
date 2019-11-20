@@ -2,137 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F19B103F18
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4140103FD2
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Nov 2019 16:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732065AbfKTPlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Nov 2019 10:41:15 -0500
-Received: from node.akkea.ca ([192.155.83.177]:56262 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731906AbfKTPlI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Nov 2019 10:41:08 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id A14614E200E;
-        Wed, 20 Nov 2019 15:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1574264467; bh=c1bwvGZ3DtvSeRPrVEI/eLrZgFbhGdVgFlrw3H+Ljmg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=W8kQw5TiUDaohToYRNY47L6bmIwZ1V9gB2GsTL8ZcnBCvzYIuFzBsu+ZWC1RTl495
-         tg8GMEM99IGqVzCmA4BeIqefw7g9e3VbBVJXEmkeJ/3TNBQcU7FPDLD6pd6c8ywVaH
-         KwtpqvqJvQZgB3SVwvpxgvnc2Nl3VhGbNm6NOG3g=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bzL7GrYHn4P7; Wed, 20 Nov 2019 15:41:06 +0000 (UTC)
-Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
-        by node.akkea.ca (Postfix) with ESMTPSA id 7E7C64E2003;
-        Wed, 20 Nov 2019 15:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1574264466; bh=c1bwvGZ3DtvSeRPrVEI/eLrZgFbhGdVgFlrw3H+Ljmg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=mwzIUaLoFOmzPRRwdy6cZm1S1cVC3dxyuglKyfH2imk2OPl2aFZgClNXZ2MoQsSd5
-         5zvMyZw2rWcC0Beme8vIYyQW/vw+JDYhY4bDgw/OMjbULDuW7HH1JjI/W6X0x/Rryn
-         S3ySlOmYGvbtcHZ+5OWyQotpdiB131AG7YWtTqDw=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 20 Nov 2019 07:41:06 -0800
-From:   Angus Ainslie <angus@akkea.ca>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Jacky Bai <ping.bai@nxp.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        =?UTF-8?Q?Artur_=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Anson Huang <anson.huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
+        id S1729879AbfKTPqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Nov 2019 10:46:43 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39209 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729338AbfKTPp2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Nov 2019 10:45:28 -0500
+Received: by mail-pl1-f195.google.com with SMTP id o9so13999881plk.6
+        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 07:45:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=p1oQ2/ApuLBZfJjzJxbReeEfweEJSenuiYCAOd26jOY=;
+        b=sx33veXRT/WG71DXlr2LQUN/kHNNUnPt88phqsfsYVlAgZGxBvXbK0fqchczHwjND/
+         1EGPyi7lDPIkCrm+8jV6C6faKYzD2LwCZtawDM48VNil5JrKDFYq/j92RN3POFavam4Q
+         3M+Tutp1fhrWLVf5po3HELVk4FWWjzopaxpiuFaSbEUlC19y3zCMMjRiDRAIjNgB3Vs4
+         BX5kbPUQ3ld73hsLb3GuVJmcROm71Vb4Y1uWFMHNmbnhMSz53nFcT9/CBimpRqCrj33I
+         3/U1bD9M8Kdjx6Vb62TMyRxIX5ab6z88+AMp21kU32iV1Yznt8pQb9jqRWu7JaM6XwcU
+         sQwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=p1oQ2/ApuLBZfJjzJxbReeEfweEJSenuiYCAOd26jOY=;
+        b=jL5IcwWauZFr3Q6OEmcXwIH/CTq4Eu1SnmPXrrSq5Ms/A17fuybtAALv+VqKQuu9rs
+         p3lq7Him2FQXOjawjCqkDkxfTfDnixoVZ4mjC5r++7ENXVMkTta1faPWxbVpynl4Km5l
+         WFcqahKx3X4KJHcgQdxQ7VdsNY93Y2zbJBCu09Evplnd/WGC10rOd21O4RPebP5oSNPH
+         +cSXOIcL38tTLwwV3JUFiss1ijJrggfVcZCJs99j3eMgWbR8D5D9l/9s8Sidfg5EYiVf
+         g7HdzxNl/Ty4SWGf5748JmtGcjle3u2ke9I/PT3R6OcIL94pAg0iO4/5AJ9xt/BG1o5d
+         czQA==
+X-Gm-Message-State: APjAAAXpL45Ew/AywspAKLQEhWzp6sBzM+p2LMU1g+tytzxS2xsTrHU2
+        TPIooKyiErKD2t8pyjrnpDDqkQ==
+X-Google-Smtp-Source: APXvYqxogLp6gc4NSWr1kl81LqhVaiFMVmTnBYfJTGwLUMofS4/vu9+JzshkluAWJdxeFvOnWyJZAQ==
+X-Received: by 2002:a17:90a:bb82:: with SMTP id v2mr5064560pjr.62.1574264727478;
+        Wed, 20 Nov 2019 07:45:27 -0800 (PST)
+Received: from localhost ([14.96.110.98])
+        by smtp.gmail.com with ESMTPSA id q41sm7643756pja.20.2019.11.20.07.45.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Nov 2019 07:45:26 -0800 (PST)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Javi Merino <javi.merino@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jun Nie <jun.nie@linaro.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de,
-        dl-linux-imx <linux-imx@nxp.com>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-pm-owner@vger.kernel.org
-Subject: Re: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling
- driver
-In-Reply-To: <VI1PR04MB70233920AC838AD88E1ECC26EE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1573761527.git.leonard.crestez@nxp.com>
- <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
- <e311a376e6aec0c380686a7e307d2c07@akkea.ca>
- <VI1PR04MB70233920AC838AD88E1ECC26EE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Message-ID: <008f2fa973b23fc716d678c5bd35af54@akkea.ca>
-X-Sender: angus@akkea.ca
-User-Agent: Roundcube Webmail/1.3.6
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v2 00/11] thermal: clean up output of make W=1 
+Date:   Wed, 20 Nov 2019 21:15:09 +0530
+Message-Id: <cover.1574242756.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
+Cleanup output of make W=1 inside drivers/thermal. This should allow us to
+focus on real issues that tend to get lost in the noise much better.
 
-On 2019-11-20 07:04, Leonard Crestez wrote:
-> On 20.11.2019 16:08, Angus Ainslie wrote:
->> Hi Leonard,
->> 
->> On 2019-11-14 12:09, Leonard Crestez wrote:
->>> Add initial support for dynamic frequency switching on pieces of the
->>> imx
->>> interconnect fabric.
->>> 
->>> All this driver does is set a clk rate based on an opp table, it does
->>> not map register areas.
->>> 
->> 
->> Is this working with mainline ATF or does it still need to be used 
->> with
->> your modified ATF code ?
-> 
-> This series doesn't perform SMC calls, that's done by the imx8m-ddrc
-> driver: https://patchwork.kernel.org/cover/11244283/
-> 
-> This particular patch allows switching NOC frequency but that's just
-> clk_set_rate.
-> 
-> DDRC frequency switching requires the imx branch of ATF (v2.0 + ~200
-> patches) otherwise you will get probe failures. Source for imx atf is
-> published here: https://source.codeaurora.org/external/imx/imx-atf/
+There is no functional change. This series was generate on top of
+linux-next from 20191119.
 
-Ok I was under the impression that the imx_2.0.y_busfreq branch below 
-was based on this. Shouldn't those patches be added to the imx ATF ?
+Changes since v1:
+- Add review tags
+- Fixed up commit message for devfreq_cooling and samsung changes
 
-> 
-> For your particular 8mq B0 case slightly different setpoints are used
-> and the fix is not in any public release yet so you need this:
-> 
-> https://github.com/cdleonard/arm-trusted-firmware/commits/imx_2.0.y_busfreq
-> 
+Regards,
+Amit
 
-We also have 2n14w ( is that B1 ? ) imx8mq's that we are working with.
 
-> Is "mainline ATF" an important criteria for Purism?
-> 
+Amit Kucheria (11):
+  thermal: of-thermal: Appease the kernel-doc deity
+  thermal: cpu_cooling: Appease the kernel-doc deity
+  thermal: step_wise: Appease the kernel-doc deity
+  thermal: devfreq_cooling: Appease the kernel-doc deity
+  thermal: max77620: Appease the kernel-doc deity
+  thermal: mediatek: Appease the kernel-doc deity
+  thermal: rockchip: Appease the kernel-doc deity
+  thermal: samsung: Appease the kernel-doc deity
+  thermal: tegra: Appease the kernel-doc deity
+  thermal: amlogic: Appease the kernel-doc deity
+  thermal: zx2967: Appease the kernel-doc deity
 
-Yes we intend to bring all of our patches to mainline and were hoping 
-that NXP would be doing the same. Shouldn't a mainline kernel run on a 
-mainline ATF ?
+ drivers/thermal/amlogic_thermal.c    |  6 +++++-
+ drivers/thermal/cpu_cooling.c        |  1 +
+ drivers/thermal/devfreq_cooling.c    |  3 ++-
+ drivers/thermal/fair_share.c         |  4 ++--
+ drivers/thermal/gov_bang_bang.c      |  4 ++--
+ drivers/thermal/max77620_thermal.c   |  2 +-
+ drivers/thermal/mtk_thermal.c        | 12 ++++++------
+ drivers/thermal/of-thermal.c         |  2 +-
+ drivers/thermal/rockchip_thermal.c   | 22 ++++++++++++++++------
+ drivers/thermal/samsung/exynos_tmu.c |  5 ++++-
+ drivers/thermal/step_wise.c          |  4 ++--
+ drivers/thermal/tegra/soctherm.c     | 15 +++++++++++++--
+ drivers/thermal/user_space.c         |  4 ++--
+ drivers/thermal/zx2967_thermal.c     |  1 +
+ 14 files changed, 58 insertions(+), 27 deletions(-)
 
-Thanks
-Angus
+-- 
+2.20.1
 
-> --
-> Regards,
-> Leonard
