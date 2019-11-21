@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2C41055E7
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 16:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8DD1055F7
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 16:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfKUPni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 10:43:38 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37137 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfKUPni (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 10:43:38 -0500
-Received: by mail-ot1-f66.google.com with SMTP id d5so3325616otp.4;
-        Thu, 21 Nov 2019 07:43:36 -0800 (PST)
+        id S1726573AbfKUPr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 10:47:26 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40295 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbfKUPr0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 10:47:26 -0500
+Received: by mail-ot1-f65.google.com with SMTP id m15so3315224otq.7;
+        Thu, 21 Nov 2019 07:47:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=O6BtIcSR6Sz2/7y/lGE3fC0q1eR/CKJYxQr5CTA/9Uc=;
-        b=pOhfT9kJ9HEyHZ+7YqsMjsJ+4osY8nBU/WgE0IKnWh6msl4uQx+4Sg2jK3q6qcW2CQ
-         crFwN/1Te5TvAzC+5eM22SdDiZ6yqSYk1t8AV0SbW9foKMsHy2dblhmfT6eJUHKJFOAS
-         bic8yDNUhdLRvTgKRY3zjly7b6D+mTUO9Bn7dtHLeXOTphZuWgF+D9V/pWBelIlX3BCf
-         EVQRqQXzMFEUohiSvdFVb0moxpsFdohGCpFOwiohtPUD/Jiou5L6a7D0tBXijd5HC9PJ
-         SbEMk01zd2cFJl4M84EXr+0VPtO+DFSX+3aRS8eRjwdg02C6mzimAJfdisMJulc/g7Sj
-         LqjA==
-X-Gm-Message-State: APjAAAX0m4KP023mktn65lPnA2waSXnC0potUZmLfg71FltJCjK4dvH0
-        g2KAWSff9YjlOpiEKJJH6zEfgCjD3bPkOzteYYk=
-X-Google-Smtp-Source: APXvYqxszDM90W/tRIlxbpBS9iYycKQwHojBugtimrAfg57FfxPfoUZyiQ/a8iP2L0RYZnuBEcgjDJESRlnjbPGrO6M=
-X-Received: by 2002:a05:6830:232a:: with SMTP id q10mr7175465otg.262.1574351015588;
- Thu, 21 Nov 2019 07:43:35 -0800 (PST)
+        bh=cENdR/YNP8WrkCnrRlfKo/wx15sIIepZ4jmxr2d85Gc=;
+        b=NEV0BMMzi2ceMhmYh2NvynkD/34CXFFAdYcLzHubxWKPYdscnVzC/H4kOciDL4QNol
+         5kpkxPLbg4RF0hyvKNf29ZbS3JiQ3IErLbCeOoo/R/qKP6j5sl+j2S9fABBwNkVgT8pR
+         eGcRZelB9Xa18K0oUK1XZMQWehCQlfmYmsuf5Enn1b14J/0TkwLinKDWYs2PpURrVlfd
+         m1XGOZjN7IkFNwMFGYiLmw4Ekmap0QA29A0GPzbJqgnGE5U4lN0ZiPYyyBMOFsb2OGC5
+         Gecr9LsJIaH+tlySm5fzp1gcOh5FQyCoM6qr56TzzpRqgwExG+2u9wrWTRAIAOK+8hW+
+         Yv/w==
+X-Gm-Message-State: APjAAAXd/NmrBZf+RU9PhJYE/L8AS18+kuKLDz9dENCkS7bBKkvBYGxn
+        Sp18+qkh6R0oAs9Q6ieuRnxHWYypCErTtcWOsji1JA==
+X-Google-Smtp-Source: APXvYqw1iwAHzb0NCqnuFton0CCPRqV6XwmgvO+O7iPDqA3/HjpBzqll2kKyoYasjd6DGrsXRz/cJtR9Xj0PRUbIR3g=
+X-Received: by 2002:a05:6830:103:: with SMTP id i3mr7223613otp.266.1574351245103;
+ Thu, 21 Nov 2019 07:47:25 -0800 (PST)
 MIME-Version: 1.0
-References: <CACO55tsHy6yZQZ8PkdW8iPA7+uc5rdcEwRJwYEQ3iqu85F8Sqg@mail.gmail.com>
+References: <20191120120913.GE11621@lahna.fi.intel.com> <CACO55tsHy6yZQZ8PkdW8iPA7+uc5rdcEwRJwYEQ3iqu85F8Sqg@mail.gmail.com>
  <20191120151542.GH11621@lahna.fi.intel.com> <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
  <20191120155301.GL11621@lahna.fi.intel.com> <CAJZ5v0hkT-fHFOQKzp2qYPyR+NUa4c-G-uGLPZuQxqsG454PiQ@mail.gmail.com>
  <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
  <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
  <20191121112821.GU11621@lahna.fi.intel.com> <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
- <20191121114610.GW11621@lahna.fi.intel.com> <20191121125236.GX11621@lahna.fi.intel.com>
-In-Reply-To: <20191121125236.GX11621@lahna.fi.intel.com>
+ <20191121114610.GW11621@lahna.fi.intel.com> <CACO55ttXJgXG32HzYP_uJDfQ6T-d8zQaGjXK_AZD3kF0Rmft4g@mail.gmail.com>
+In-Reply-To: <CACO55ttXJgXG32HzYP_uJDfQ6T-d8zQaGjXK_AZD3kF0Rmft4g@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Nov 2019 16:43:24 +0100
-Message-ID: <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
+Date:   Thu, 21 Nov 2019 16:47:13 +0100
+Message-ID: <CAJZ5v0ibzcLEm44udUxW2uVgaF9NapdNBF8Ag+RE++u7gi2yNA@mail.gmail.com>
 Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
  states on certain intel bridges
-To:     Mika Westerberg <mika.westerberg@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Karol Herbst <kherbst@redhat.com>,
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Bjorn Helgaas <helgaas@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Lyude Paul <lyude@redhat.com>,
@@ -62,10 +62,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
-<mika.westerberg@intel.com> wrote:
+On Thu, Nov 21, 2019 at 1:53 PM Karol Herbst <kherbst@redhat.com> wrote:
 >
-> On Thu, Nov 21, 2019 at 01:46:14PM +0200, Mika Westerberg wrote:
+> On Thu, Nov 21, 2019 at 12:46 PM Mika Westerberg
+> <mika.westerberg@intel.com> wrote:
+> >
 > > On Thu, Nov 21, 2019 at 12:34:22PM +0100, Rafael J. Wysocki wrote:
 > > > On Thu, Nov 21, 2019 at 12:28 PM Mika Westerberg
 > > > <mika.westerberg@intel.com> wrote:
@@ -84,6 +85,13 @@ On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
 > > > > PEG, PCI Express Graphics, ports), and the PCH side. I think the IP is
 > > > > still the same.
 > > > >
+>
+> yeah, I meant the bridge controller with the ID 0x1901 is on the CPU
+> side. And if the Nvidia GPU is on a port on the PCH side it all seems
+> to work just fine.
+
+But that may involve different AML too, may it not?
+
 > > > > > Also some custom AML-based power management is involved and that may
 > > > > > be making specific assumptions on the configuration of the SoC and the
 > > > > > GPU at the time of its invocation which unfortunately are not known to
@@ -102,58 +110,16 @@ On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
 > > > Why would the parent port be in D3hot at that point?  Wouldn't that be
 > > > a suspend ordering violation?
 > >
-> > No. We put the GPU into D3hot first,
+> > No. We put the GPU into D3hot first, then the root port and then turn
+> > off the power resource (which is attached to the root port) resulting
+> > the topology entering D3cold.
+> >
+>
+> If the kernel does a D0 -> D3hot -> D0 cycle this works as well, but
+> the power savings are way lower, so I kind of prefer skipping D3hot
+> instead of D3cold. Skipping D3hot doesn't seem to make any difference
+> in power savings in my testing.
 
 OK
 
-Does this involve any AML, like a _PS3 under the GPU object?
-
-> > then the root port and then turn
-> > off the power resource (which is attached to the root port) resulting
-> > the topology entering D3cold.
->
-> I don't see that happening in the AML though.
-
-Which AML do you mean, specifically?  The _OFF method for the root
-port's _PR3 power resource or something else?
-
-> Basically the difference is that when Windows 7 or Linux (the _REV==5
-> check) then we directly do link disable whereas in Windows 8+ we invoke
-> LKDS() method that puts the link into L2/L3. None of the fields they
-> access seem to touch the GPU itself.
-
-So that may be where the problem is.
-
-Putting the downstream component into PCI D[1-3] is expected to put
-the link into L1, so I'm not sure how that plays with the later
-attempt to put it into L2/L3 Ready.
-
-Also, L2/L3 Ready is expected to be transient, so finally power should
-be removed somehow.
-
-> LKDS() for the first PEG port looks like this:
->
->    P0L2 = One
->    Sleep (0x10)
->    Local0 = Zero
->    While (P0L2)
->    {
->         If ((Local0 > 0x04))
->         {
->             Break
->         }
->
->         Sleep (0x10)
->         Local0++
->    }
->
-> One thing that comes to mind is that the loop can end even if P0L2 is
-> not cleared as it does only 5 iterations with 16 ms sleep between. Maybe
-> Sleep() is implemented differently in Windows? I mean Linux may be
-> "faster" here and return prematurely and if we leave the port into D0
-> this does not happen, or something. I'm just throwing out ideas :)
-
-But this actually works for the downstream component in D0, doesn't it?
-
-Also, if the downstream component is in D0, the port actually should
-stay in D0 too, so what would happen with the $subject patch applied?
+What exactly did you do to skip D3cold in your testing?
