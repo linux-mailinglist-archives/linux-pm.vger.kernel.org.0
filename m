@@ -2,137 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECF910589F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 18:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF33105937
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 19:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfKUReF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 12:34:05 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41238 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbfKUReF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 12:34:05 -0500
-Received: by mail-lf1-f65.google.com with SMTP id m30so1449151lfp.8;
-        Thu, 21 Nov 2019 09:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6J1piRgV0I8ZeSxFU2hLB+lhIu/EsMKbTjoUdKhBoh4=;
-        b=cI7WavVQXW6YTTsx24kyro2bKraJeez/5xvP+u/FCt+8IEeH++xRr7bppVVaMcdStl
-         VqYxOPhucE+noi9PVTucRx3xce0OO49s9ls3Rn0f9DRBFLG6X54uc7hLeS10i4nF8zW1
-         vuqLnHyIWSOvQTAvI4OJmhjUiY1gpB1znoS71dGYEKG5c26PdBdXjfB9+3tj8FSe1rlq
-         smug1wpdMdRqaG6e0+o44KHpGF9s9eBS5+SP7KBhUOEvIakX82SUDuzGwQOlKU2wAIuo
-         Tc4AiK8LReNqyA9rHaQQkFQxFrOOMP1aSH1H1iqDr3iROHhqGnFIYNZ6wnBnJV6FlKXk
-         Lb0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6J1piRgV0I8ZeSxFU2hLB+lhIu/EsMKbTjoUdKhBoh4=;
-        b=XHCnykBwKKHnIbnbZQ8vBM03/0psfRrMD4mdUp3wh6FBP1373W4m25d4nhqv6YtIa9
-         6CaKaitc1P8StcVgF4GCbJv3ebY6uRKm2E6UAsxp2gTXjd4FOR46zeVnYz89TbF0sL4F
-         4WtDZSG7cHaLogRIZhS/4E5wZF3kiTvmgqnzEIluxeWs/za6LXg8kw85pjfB4gPudlar
-         McLR+lufE4rUH6l0QztxeMc9GuZqcjTHXQBS9hUhFpSr2gQoCNlG7XgsXux22C6r9OyJ
-         T8OHACYCOtsreSCTJdbkhG4s+NEiv70jkmrKTIOC+uUKhLXRi9KFFBtElCqyMBSayHJ2
-         /8Gg==
-X-Gm-Message-State: APjAAAVpK83nPfTd7JTIYgO/dvFhstaLdEJESDxnCVgG9E1dLjJzLzxi
-        cULPYtDx1MeM8s2nVBVj8NUUpQ5+
-X-Google-Smtp-Source: APXvYqzI4efW+jpylCKcwwlKWAScScn1OR7oGncmwtojSpUNDIX2q6OMNOWDFnG0E3FBtdAKJO/UzA==
-X-Received: by 2002:ac2:5dcc:: with SMTP id x12mr8758634lfq.163.1574357640859;
-        Thu, 21 Nov 2019 09:34:00 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id y7sm1738852lfb.75.2019.11.21.09.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2019 09:34:00 -0800 (PST)
-Subject: Re: [PATCH v1 12/29] interconnect: Add memory interconnection
- providers for NVIDIA Tegra SoCs
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-References: <20191118200247.3567-1-digetx@gmail.com>
- <20191118200247.3567-13-digetx@gmail.com> <20191119063002.GE2462695@ulmo>
- <a16b54bf-a881-84d0-4437-993dc275487c@gmail.com>
-Message-ID: <a9bbe36e-8082-8cab-7377-f71f2489fb30@gmail.com>
-Date:   Thu, 21 Nov 2019 20:33:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1726990AbfKUSPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 13:15:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726279AbfKUSPC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 Nov 2019 13:15:02 -0500
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 78F07206CB;
+        Thu, 21 Nov 2019 18:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574360101;
+        bh=ijyd7cvmLy8JKNJbgtDDlfBXxuIHmN+a8yLmCNyGDqQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VgwLmUNzZRbIdTmWHbDI8KdQQ+ScwxNVOV7pkZGey2MAv2Ut5eFUXXTW67vDabEOV
+         RHtsfLKq8QC+/GnTC3C0fo9kMAqptOayz2c1bZmnXLhoIdEEcn/zAk22QVqBcSuHCI
+         kM/dv9vzFnnBE3Ix/ZmKNfzQenYhqT4eob4P/E1s=
+Date:   Thu, 21 Nov 2019 12:15:00 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
+        linux@endlessm.com, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191121181500.GA55996@google.com>
 MIME-Version: 1.0
-In-Reply-To: <a16b54bf-a881-84d0-4437-993dc275487c@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191120002836.GA247344@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-19.11.2019 19:58, Dmitry Osipenko пишет:
-> 19.11.2019 09:30, Thierry Reding пишет:
->> On Mon, Nov 18, 2019 at 11:02:30PM +0300, Dmitry Osipenko wrote:
->>> All NVIDIA Tegra SoCs have identical topology in regards to memory
->>> interconnection between memory clients and memory controllers.
->>> The memory controller (MC) and external memory controller (EMC) are
->>> providing memory clients with required memory bandwidth. The memory
->>> controller performs arbitration between memory clients, while the
->>> external memory controller transfers data from/to DRAM and pipes that
->>> data from/to memory controller. Memory controller interconnect provider
->>> aggregates bandwidth requests from memory clients and sends the aggregated
->>> request to EMC provider that scales DRAM frequency in order to satisfy the
->>> bandwidth requirement. Memory controller provider could adjust hardware
->>> configuration for a more optimal arbitration depending on bandwidth
->>> requirements from memory clients, but this is unimplemented for now.
->>>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>  drivers/interconnect/Kconfig               |   1 +
->>>  drivers/interconnect/Makefile              |   1 +
->>>  drivers/interconnect/tegra/Kconfig         |   6 +
->>>  drivers/interconnect/tegra/Makefile        |   4 +
->>>  drivers/interconnect/tegra/tegra-icc-emc.c | 138 +++++++++++++++++++++
->>>  drivers/interconnect/tegra/tegra-icc-mc.c  | 130 +++++++++++++++++++
->>>  include/soc/tegra/mc.h                     |  26 ++++
->>>  7 files changed, 306 insertions(+)
->>>  create mode 100644 drivers/interconnect/tegra/Kconfig
->>>  create mode 100644 drivers/interconnect/tegra/Makefile
->>>  create mode 100644 drivers/interconnect/tegra/tegra-icc-emc.c
->>>  create mode 100644 drivers/interconnect/tegra/tegra-icc-mc.c
->>
->> Why does this have to be separate from the memory controller driver in
->> drivers/memory/tegra? It seems like this requires a bunch of boilerplate
->> just so that this code can live in the drivers/interconnect directory.
+On Tue, Nov 19, 2019 at 06:28:36PM -0600, Bjorn Helgaas wrote:
+> On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
+> > On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
 > 
-> It fits with the IOMMU separation. To me that it's a bit nicer to have
-> the separation for the ICC as well, but having ICC within memory
-> controller driver also will be fine.
+> Can you include specific models here in case we revisit this or find a
+> generic solution that needs to be tested to make sure we don't regress
+> these platforms?
 > 
-> Indeed it looks like there is not much in the MC's provider code right
-> now, but maybe more stuff will be added later on.
+> Maybe a bugzilla with complete "lspci -vvnn" and dmesg logs?
 > 
->> If Georgi doesn't insist, I'd prefer if we carried this code directly in
->> the drivers/memory/tegra directory so that we don't have so many
->> indirections.
->>
->> Also, and I already briefly mentioned this in another reply, I think we
->> don't need two providers here. The only one we're really interested in
->> is the memory-client to memory-controller paths. The MC to EMC path is
->> static.
+> > the XHCI controller fails to resume from runtime suspend or s2idle,
+> > and USB becomes unusable from that point.
+> > 
+> > xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> > xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> > xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
+> > xhci_hcd 0000:03:00.4: PCI post-resume error -110!
+> > xhci_hcd 0000:03:00.4: HC died; cleaning up
+> > 
+> > The D3-to-D0 transition is successful if the D3 delay is increased
+> > to 20ms. Add an appropriate quirk for the affected hardware.
 > 
-> Perhaps it is fine to drop EMC path, I'll revisit it.
+> IIUC, we're doing a D3cold-to-D0 transition in this path:
 > 
-> [snip]
+>   pci_pm_default_resume_early
+>     pci_power_up
+>       platform_pci_set_power_state(PCI_D0)    # turn on via ACPI
+>       pci_raw_set_power_state(PCI_D0)
+>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr)
+>         # pmcsr says device is in D3hot
+>         pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr)
+>         # sets to D0
+>         pci_dev_d3_sleep                      # <-- need more time here
+> 
+> I would sort of expect that ACPI would be putting the device in D0,
+> not leaving it in D3hot, but maybe that's just my ignorance.
 
-One advantage of having both MC and EMC as ICC providers is that there
-won't be a need to mess with a custom coupling of MC-EMC drivers
-together because interconnect API naturally takes care of the coupling
-for us by telling ICC users to defer until both providers are registered.
+I definitely was not understanding this correctly.  There is no path
+for a D3cold -> D3hot transition.  Per spec (PCIe r5.0, sec 5.8), the
+only legal exit from D3cold is to D0uninitialized.
 
-I'll take another look at this over the weekend, but for now my v1
-variant looks appropriate in terms of a better hardware description and
-implementation in the code.
+I know you tried a debug patch to call pci_dev_wait(), and it didn't
+work, but I'm not sure exactly where it was called.  I have these
+patches on my pci/pm branch for v5.5:
+
+  bae26849372b ("PCI/PM: Move pci_dev_wait() definition earlier")
+  395f121e6199 ("PCI/PM: Wait for device to become ready after power-on")
+
+The latter adds the wait just before we call
+pci_raw_set_power_state().  If the device is responding with CRS
+status, that should be the point where we'd see it.  If you have a
+chance to try it, I'd be interested in the results.  Here's the
+branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/pm&id=395f121e61994bc135bb669eb35325d5457d669d
