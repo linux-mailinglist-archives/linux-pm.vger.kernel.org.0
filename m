@@ -2,31 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8791059BE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 19:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE741059D3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 19:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbfKUSly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 13:41:54 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61632 "EHLO
+        id S1727022AbfKUSoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 13:44:12 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:44844 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbfKUSly (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 13:41:54 -0500
+        with ESMTP id S1726563AbfKUSoL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 13:44:11 -0500
 Received: from 79.184.253.244.ipv4.supernova.orange.pl (79.184.253.244) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 1158072d821797ee; Thu, 21 Nov 2019 19:41:51 +0100
+ id 152313deb1676010; Thu, 21 Nov 2019 19:44:09 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Len Brown <len.brown@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Subject: [PATCH 1/2] cpuidle: Drop disabled field from struct cpuidle_state
-Date:   Thu, 21 Nov 2019 19:41:51 +0100
-Message-ID: <3690440.Wzkxfdnirm@kreacher>
+        Len Brown <lenb@kernel.org>, Rafael Wysocki <rafael@kernel.org>
+Subject: [PATCH 2/2] cpuidle: Allow idle states to be disabled by default
+Date:   Thu, 21 Nov 2019 19:44:09 +0100
+Message-ID: <2631482.XsRaRaDd0s@kreacher>
 In-Reply-To: <5961586.ml7s97geqL@kreacher>
 References: <5961586.ml7s97geqL@kreacher>
 MIME-Version: 1.0
@@ -39,139 +36,133 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-After recent cpuidle updates the "disabled" field in struct
-cpuidle_state is only used by two drivers (intel_idle and shmobile
-cpuidle) for marking unusable idle states, but that may as well be
-achieved with the help of a state flag, so define an "unusable" idle
-state flag, CPUIDLE_FLAG_UNUSABLE, make the drivers in question use
-it instead of the "disabled" field and make the core set
-CPUIDLE_STATE_DISABLED_BY_DRIVER for the idle states with that flag
-set.
+In certain situations it may be useful to prevent some idle states
+from being used by default while allowing user space to enable them
+later on.
 
-After the above changes, the "disabled" field in struct cpuidle_state
-is not used any more, so drop it.
-
-No intentional functional impact.
+For this purpose, introduce a new state flag, CPUIDLE_FLAG_OFF, to
+mark idle states that should be disabled by default, make the core
+set CPUIDLE_STATE_DISABLED_BY_USER for those states at the
+initialization time and add a new state attribute in sysfs,
+"initial_status", to inform user space of the initial status of
+the given idle state ("disabled" if CPUIDLE_FLAG_OFF is set for it,
+"enabled" otherwise).
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
 Changes from RFC:
 
- - Do not add extra braces (unrelated to the rest of the patch).
+ - Rename the new flag to CPUIDLE_FLAG_OFF.
+ - Rename the new sysfs attribute to initial_status.
+ - Fix typos in the documentation.
 
 ---
- arch/sh/kernel/cpu/shmobile/cpuidle.c |    8 ++++----
- drivers/cpuidle/cpuidle.c             |    2 +-
- drivers/cpuidle/poll_state.c          |    1 -
- drivers/idle/intel_idle.c             |    6 +++---
- include/linux/cpuidle.h               |    2 +-
- 5 files changed, 9 insertions(+), 10 deletions(-)
+ Documentation/ABI/testing/sysfs-devices-system-cpu |    6 ++++++
+ Documentation/admin-guide/pm/cpuidle.rst           |    3 +++
+ drivers/cpuidle/cpuidle.c                          |    6 +++++-
+ drivers/cpuidle/sysfs.c                            |   10 ++++++++++
+ include/linux/cpuidle.h                            |    1 +
+ 5 files changed, 25 insertions(+), 1 deletion(-)
 
-Index: linux-pm/drivers/idle/intel_idle.c
+Index: linux-pm/drivers/cpuidle/sysfs.c
 ===================================================================
---- linux-pm.orig/drivers/idle/intel_idle.c
-+++ linux-pm/drivers/idle/intel_idle.c
-@@ -1291,8 +1291,8 @@ static void sklh_idle_state_table_update
- 			return;
- 	}
- 
--	skl_cstates[5].disabled = 1;	/* C8-SKL */
--	skl_cstates[6].disabled = 1;	/* C9-SKL */
-+	skl_cstates[5].flags |= CPUIDLE_FLAG_UNUSABLE;	/* C8-SKL */
-+	skl_cstates[6].flags |= CPUIDLE_FLAG_UNUSABLE;	/* C9-SKL */
+--- linux-pm.orig/drivers/cpuidle/sysfs.c
++++ linux-pm/drivers/cpuidle/sysfs.c
+@@ -327,6 +327,14 @@ static ssize_t store_state_disable(struc
+ 	return size;
  }
- /*
-  * intel_idle_state_table_update()
-@@ -1355,7 +1355,7 @@ static void __init intel_idle_cpuidle_dr
- 			continue;
  
- 		/* if state marked as disabled, skip it */
--		if (cpuidle_state_table[cstate].disabled != 0) {
-+		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_UNUSABLE) {
- 			pr_debug("state %s is disabled\n",
- 				 cpuidle_state_table[cstate].name);
- 			continue;
++static ssize_t show_state_initial_status(struct cpuidle_state *state,
++					  struct cpuidle_state_usage *state_usage,
++					  char *buf)
++{
++	return sprintf(buf, "%s\n",
++		       state->flags & CPUIDLE_FLAG_OFF ? "disabled" : "enabled");
++}
++
+ define_one_state_ro(name, show_state_name);
+ define_one_state_ro(desc, show_state_desc);
+ define_one_state_ro(latency, show_state_exit_latency);
+@@ -337,6 +345,7 @@ define_one_state_ro(time, show_state_tim
+ define_one_state_rw(disable, show_state_disable, store_state_disable);
+ define_one_state_ro(above, show_state_above);
+ define_one_state_ro(below, show_state_below);
++define_one_state_ro(initial_status, show_state_initial_status);
+ 
+ static struct attribute *cpuidle_state_default_attrs[] = {
+ 	&attr_name.attr,
+@@ -349,6 +358,7 @@ static struct attribute *cpuidle_state_d
+ 	&attr_disable.attr,
+ 	&attr_above.attr,
+ 	&attr_below.attr,
++	&attr_initial_status.attr,
+ 	NULL
+ };
+ 
 Index: linux-pm/include/linux/cpuidle.h
 ===================================================================
 --- linux-pm.orig/include/linux/cpuidle.h
 +++ linux-pm/include/linux/cpuidle.h
-@@ -54,7 +54,6 @@ struct cpuidle_state {
- 	unsigned int	exit_latency; /* in US */
- 	int		power_usage; /* in mW */
- 	unsigned int	target_residency; /* in US */
--	bool		disabled; /* disabled on all CPUs */
- 
- 	int (*enter)	(struct cpuidle_device *dev,
- 			struct cpuidle_driver *drv,
-@@ -77,6 +76,7 @@ struct cpuidle_state {
- #define CPUIDLE_FLAG_POLLING	BIT(0) /* polling state */
+@@ -77,6 +77,7 @@ struct cpuidle_state {
  #define CPUIDLE_FLAG_COUPLED	BIT(1) /* state applies to multiple cpus */
  #define CPUIDLE_FLAG_TIMER_STOP BIT(2) /* timer is stopped on this state */
-+#define CPUIDLE_FLAG_UNUSABLE	BIT(3) /* avoid using this state */
+ #define CPUIDLE_FLAG_UNUSABLE	BIT(3) /* avoid using this state */
++#define CPUIDLE_FLAG_OFF	BIT(4) /* disable this state by default */
  
  struct cpuidle_device_kobj;
  struct cpuidle_state_kobj;
-Index: linux-pm/arch/sh/kernel/cpu/shmobile/cpuidle.c
-===================================================================
---- linux-pm.orig/arch/sh/kernel/cpu/shmobile/cpuidle.c
-+++ linux-pm/arch/sh/kernel/cpu/shmobile/cpuidle.c
-@@ -67,7 +67,7 @@ static struct cpuidle_driver cpuidle_dri
- 			.enter = cpuidle_sleep_enter,
- 			.name = "C2",
- 			.desc = "SuperH Sleep Mode [SF]",
--			.disabled = true,
-+			.flags = CPUIDLE_FLAG_UNUSABLE,
- 		},
- 		{
- 			.exit_latency = 2300,
-@@ -76,7 +76,7 @@ static struct cpuidle_driver cpuidle_dri
- 			.enter = cpuidle_sleep_enter,
- 			.name = "C3",
- 			.desc = "SuperH Mobile Standby Mode [SF]",
--			.disabled = true,
-+			.flags = CPUIDLE_FLAG_UNUSABLE,
- 		},
- 	},
- 	.safe_state_index = 0,
-@@ -86,10 +86,10 @@ static struct cpuidle_driver cpuidle_dri
- int __init sh_mobile_setup_cpuidle(void)
- {
- 	if (sh_mobile_sleep_supported & SUSP_SH_SF)
--		cpuidle_driver.states[1].disabled = false;
-+		cpuidle_driver.states[1].flags = CPUIDLE_FLAG_NONE;
- 
- 	if (sh_mobile_sleep_supported & SUSP_SH_STANDBY)
--		cpuidle_driver.states[2].disabled = false;
-+		cpuidle_driver.states[2].flags = CPUIDLE_FLAG_NONE;
- 
- 	return cpuidle_register(&cpuidle_driver, NULL);
- }
 Index: linux-pm/drivers/cpuidle/cpuidle.c
 ===================================================================
 --- linux-pm.orig/drivers/cpuidle/cpuidle.c
 +++ linux-pm/drivers/cpuidle/cpuidle.c
-@@ -570,7 +570,7 @@ static int __cpuidle_register_device(str
+@@ -569,10 +569,14 @@ static int __cpuidle_register_device(str
+ 	if (!try_module_get(drv->owner))
  		return -EINVAL;
  
- 	for (i = 0; i < drv->state_count; i++)
--		if (drv->states[i].disabled)
-+		if (drv->states[i].flags & CPUIDLE_FLAG_UNUSABLE)
+-	for (i = 0; i < drv->state_count; i++)
++	for (i = 0; i < drv->state_count; i++) {
+ 		if (drv->states[i].flags & CPUIDLE_FLAG_UNUSABLE)
  			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_DRIVER;
  
++		if (drv->states[i].flags & CPUIDLE_FLAG_OFF)
++			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_USER;
++	}
++
  	per_cpu(cpuidle_devices, dev->cpu) = dev;
-Index: linux-pm/drivers/cpuidle/poll_state.c
+ 	list_add(&dev->device_list, &cpuidle_detected_devices);
+ 
+Index: linux-pm/Documentation/ABI/testing/sysfs-devices-system-cpu
 ===================================================================
---- linux-pm.orig/drivers/cpuidle/poll_state.c
-+++ linux-pm/drivers/cpuidle/poll_state.c
-@@ -53,7 +53,6 @@ void cpuidle_poll_state_init(struct cpui
- 	state->target_residency_ns = 0;
- 	state->power_usage = -1;
- 	state->enter = poll_idle;
--	state->disabled = false;
- 	state->flags = CPUIDLE_FLAG_POLLING;
- }
- EXPORT_SYMBOL_GPL(cpuidle_poll_state_init);
+--- linux-pm.orig/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ linux-pm/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -196,6 +196,12 @@ Description:
+ 		does not reflect it. Likewise, if one enables a deep state but a
+ 		lighter state still is disabled, then this has no effect.
+ 
++What:		/sys/devices/system/cpu/cpuX/cpuidle/stateN/initial_status
++Date:		November 2019
++KernelVersion:	v5.6
++Contact:	Linux power management list <linux-pm@vger.kernel.org>
++Description:
++		(RO) The initial status of this state, "enabled" or "disabled".
+ 
+ What:		/sys/devices/system/cpu/cpuX/cpuidle/stateN/residency
+ Date:		March 2014
+Index: linux-pm/Documentation/admin-guide/pm/cpuidle.rst
+===================================================================
+--- linux-pm.orig/Documentation/admin-guide/pm/cpuidle.rst
++++ linux-pm/Documentation/admin-guide/pm/cpuidle.rst
+@@ -506,6 +506,9 @@ object corresponding to it, as follows:
+ ``disable``
+ 	Whether or not this idle state is disabled.
+ 
++``initial_status``
++	The initial status of this state, "enabled" or "disabled".
++
+ ``latency``
+ 	Exit latency of the idle state in microseconds.
+ 
 
 
 
