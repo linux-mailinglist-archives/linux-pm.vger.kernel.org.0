@@ -2,107 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A40B105D22
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 00:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C756105D35
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 00:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfKUX0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 18:26:18 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34388 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfKUX0S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 18:26:18 -0500
-Received: by mail-pl1-f195.google.com with SMTP id h13so2307548plr.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 15:26:18 -0800 (PST)
+        id S1726270AbfKUXlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 18:41:15 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:41451 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbfKUXlP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 18:41:15 -0500
+Received: by mail-io1-f67.google.com with SMTP id z26so2145669iot.8
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 15:41:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UX7iTTjdEU6lqyPY0tdERChAcK++ceGU6xfKYB18y8I=;
-        b=GtnKPuU9EgPu/SgU2WO2jNbdA5pWvEvvOK1/EldWI5kBU9l6FNzbF0Fk9GDCHwkh5O
-         xxif0RbtbgB6EJV320EBZBOCIg2mrw3xJAUz+BXbD/envo9Fot81JfRq9IMlyRBV0apS
-         INq4MvOLzB1laIhW1ZPur/7mGB9urU0b4yWNM=
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=uACTtkuIJfMaBrmrOMjqpsbLeXCbKKhLGPjsdUGUn50=;
+        b=ATla5Mm3z+aOSJ66NK85YT1q/SnFkBStQC85FhCDpIB9Top6rOmlTlPOyJIUuzjr8o
+         6K53jRv0jQY8JJhsE0zzzA3Yh+g1U0ynGzpnNk1J27pNFx2cTJQHqhQ6DinQWKVvs//i
+         TT3JD5gxhoEf2clL7ZIpum5r2Xn6IsRfa655X3Ck7rrsV7EoAQPCPLOfT9yxDHi7aKIJ
+         cYk3nZtXTb/oqDHDTvx3xNCdHMeLaDHiv9QyqUZksP55YyxUgywibz2EbJg3yFvmS00f
+         /I8+3l8qmalkpGCA5v+iJU9PPKR8BbRV3aApbaSwxSTHOjmrPeQIE/FDuE87o6HA9Yzj
+         xKtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UX7iTTjdEU6lqyPY0tdERChAcK++ceGU6xfKYB18y8I=;
-        b=H9tAk0bnLQAHcXrz+Qwk9Zw2sLrX2dgHoSAoMYD3t27I4RsAgZsa4SeBCq2tPe1X4f
-         s7uN56yB6WbRkfbEydGCx+mNF09AbyWnhPfsDhlbStutDT8wC+2kM+sNBnv+HEmll2+8
-         mozV5QgWIa34KJDZT4qFQIG0ZD43RuQ3x6k4pOyOjpoxbhR/hkChGiRKKW5E+yiGQDoT
-         YlUEbr8WPl3N4air54b7OAtc7oanq+ioGnonnNl7F4SatEgA181WU3RHxkMenO6d6KoC
-         ryHII31kRhYFnjebe0JiiQBgwaypHWylJBQXGkkIJii6Z/QWgfaqLZs2tYLryS4d6WuV
-         3jhg==
-X-Gm-Message-State: APjAAAXI4upVvTvd0L1X910OTKm31+KSQzMIne19KatQyocILnMeH3Xo
-        2yv2vhHOzzMxQXHHXB1tG9wYpQ==
-X-Google-Smtp-Source: APXvYqy0vKRAnpb7KD8cpjJndNdBddLXVI+1W6QNmfivkdzdkG3eE9L+doyZcnfC7F8T3fFVdGXxBw==
-X-Received: by 2002:a17:90a:a483:: with SMTP id z3mr14146346pjp.55.1574378777576;
-        Thu, 21 Nov 2019 15:26:17 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id z7sm4125300pgk.10.2019.11.21.15.26.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2019 15:26:16 -0800 (PST)
-Date:   Thu, 21 Nov 2019 15:26:15 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Jacky Bai <ping.bai@nxp.com>, Angus Ainslie <angus@akkea.ca>,
-        linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v2 2/2] PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-Message-ID: <20191121232615.GL27773@google.com>
-References: <cover.1574116684.git.leonard.crestez@nxp.com>
- <7190da59fb8fbb12538d2b28b87e1ee420cbb705.1574116684.git.leonard.crestez@nxp.com>
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uACTtkuIJfMaBrmrOMjqpsbLeXCbKKhLGPjsdUGUn50=;
+        b=IidBvxvJPXhTunz6iJBrzPyuHqSVws/zmk8Ok1r+X0AZQ232GHwdm1VKqrY0SpH8xa
+         tM8zdVgl6KFBa97S9xhh7RnAF52XFILOfHx5lIFWzPgeHMahcsSX49kX/FBbvzuN4lR0
+         c1GQ4mkIvWEp2183wCD0MjsyxP0pDU+6Aa0736/vKKrWXIhtsq0nMCziewRmLlgCeA5y
+         kcQUI8gCkj+OEIdIe2Y2cv0CuUjPmVQn9pOo8W4Peyl8dA0bdTvFQUgkHaQb84ZzDlhn
+         3HEoADWdGH9sY0LyUO6mdH7FwwF9iWY3jGTUooL0b79DC0Gkf8TKQUlXRYoLWL7YkIXM
+         cgUg==
+X-Gm-Message-State: APjAAAXCYZ25l/W2/BYwysl3S2ee4cZjFK5A6cKvNKh61JjqhVZ00Pc9
+        OAnQeKLe/5o0Coa7KieZww1u/w==
+X-Google-Smtp-Source: APXvYqxM0XCrMtbJZmjbWGBiasGzyQbYZ89bcym0RaLoJmTu15rbGtwOEw3ToJQeqvDJifnXmvORMg==
+X-Received: by 2002:a6b:e518:: with SMTP id y24mr9835193ioc.244.1574379674403;
+        Thu, 21 Nov 2019 15:41:14 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id j23sm4544131pfe.95.2019.11.21.15.41.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 21 Nov 2019 15:41:13 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: avs: Fix Kconfig indentation
+In-Reply-To: <20191120134004.14167-1-krzk@kernel.org>
+References: <20191120134004.14167-1-krzk@kernel.org>
+Date:   Thu, 21 Nov 2019 15:41:13 -0800
+Message-ID: <7ho8x4n6g6.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7190da59fb8fbb12538d2b28b87e1ee420cbb705.1574116684.git.leonard.crestez@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
+Krzysztof Kozlowski <krzk@kernel.org> writes:
 
-On Tue, Nov 19, 2019 at 12:56:43AM +0200, Leonard Crestez wrote:
-> Support for adding per-device frequency limits was removed in commit
-> 2aac8bdf7a0f ("PM: QoS: Drop frequency QoS types from device PM QoS")
-> after cpufreq switched to use a new "freq_constraints" construct.
-> 
-> Restore support for per-device freq limits but base this upon
-> freq_constraints. This is primarily meant to be used by the devfreq
-> subsystem.
-> 
-> This removes the "static" marking on freq_qos_apply but does not export
-> it for modules.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
+> Adjust indentation from spaces to tab (+optional two spaces) as in
+> coding style with command like:
+> 	$ sed -e 's/^        /\t/' -i */Kconfig
 >
-> ...
->
-> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-> index 9105f47f5195..5193915913fe 100644
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -32,10 +32,12 @@ enum pm_qos_flags_status {
->  #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
->  #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
->  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
->  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
->  #define PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE	0
-> +#define PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE	0
-> +#define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE	(-1)
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-The value of -1 is problematic, as reported on
-https://patchwork.kernel.org/patch/11252413/#23017003.
+Acked-by: Kevin Hilman <khilman@baylibre.com>
 
-dev_pm_qos_read_value(dev, DEV_PM_QOS_MAX_FREQUENCY) returns the smallest
-value of all requests, which is PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE / -1
-unless all requests have set an actual constraint.
+Rafael, feel free to apply directly.
 
-I'd suggest to change the default max value to S32_MAX or similar.
+Kevin
