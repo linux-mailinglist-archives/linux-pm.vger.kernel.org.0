@@ -2,167 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE741059D3
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 19:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B02105A9B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 20:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfKUSoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 13:44:12 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44844 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbfKUSoL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 13:44:11 -0500
-Received: from 79.184.253.244.ipv4.supernova.orange.pl (79.184.253.244) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id 152313deb1676010; Thu, 21 Nov 2019 19:44:09 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <lenb@kernel.org>, Rafael Wysocki <rafael@kernel.org>
-Subject: [PATCH 2/2] cpuidle: Allow idle states to be disabled by default
-Date:   Thu, 21 Nov 2019 19:44:09 +0100
-Message-ID: <2631482.XsRaRaDd0s@kreacher>
-In-Reply-To: <5961586.ml7s97geqL@kreacher>
-References: <5961586.ml7s97geqL@kreacher>
+        id S1726792AbfKUTts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 14:49:48 -0500
+Received: from mga12.intel.com ([192.55.52.136]:61330 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726379AbfKUTts (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 Nov 2019 14:49:48 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Nov 2019 11:49:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,226,1571727600"; 
+   d="scan'208";a="216204277"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2019 11:49:43 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 21 Nov 2019 21:49:43 +0200
+Date:   Thu, 21 Nov 2019 21:49:42 +0200
+From:   Mika Westerberg <mika.westerberg@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lyude Paul <lyude@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>
+Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+Message-ID: <20191121194942.GY11621@lahna.fi.intel.com>
+References: <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
+ <20191120155301.GL11621@lahna.fi.intel.com>
+ <CAJZ5v0hkT-fHFOQKzp2qYPyR+NUa4c-G-uGLPZuQxqsG454PiQ@mail.gmail.com>
+ <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
+ <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
+ <20191121112821.GU11621@lahna.fi.intel.com>
+ <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
+ <20191121114610.GW11621@lahna.fi.intel.com>
+ <20191121125236.GX11621@lahna.fi.intel.com>
+ <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Nov 21, 2019 at 04:43:24PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
+> <mika.westerberg@intel.com> wrote:
+> >
+> > On Thu, Nov 21, 2019 at 01:46:14PM +0200, Mika Westerberg wrote:
+> > > On Thu, Nov 21, 2019 at 12:34:22PM +0100, Rafael J. Wysocki wrote:
+> > > > On Thu, Nov 21, 2019 at 12:28 PM Mika Westerberg
+> > > > <mika.westerberg@intel.com> wrote:
+> > > > >
+> > > > > On Wed, Nov 20, 2019 at 11:29:33PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > last week or so I found systems where the GPU was under the "PCI
+> > > > > > > Express Root Port" (name from lspci) and on those systems all of that
+> > > > > > > seems to work. So I am wondering if it's indeed just the 0x1901 one,
+> > > > > > > which also explains Mikas case that Thunderbolt stuff works as devices
+> > > > > > > never get populated under this particular bridge controller, but under
+> > > > > > > those "Root Port"s
+> > > > > >
+> > > > > > It always is a PCIe port, but its location within the SoC may matter.
+> > > > >
+> > > > > Exactly. Intel hardware has PCIe ports on CPU side (these are called
+> > > > > PEG, PCI Express Graphics, ports), and the PCH side. I think the IP is
+> > > > > still the same.
+> > > > >
+> > > > > > Also some custom AML-based power management is involved and that may
+> > > > > > be making specific assumptions on the configuration of the SoC and the
+> > > > > > GPU at the time of its invocation which unfortunately are not known to
+> > > > > > us.
+> > > > > >
+> > > > > > However, it looks like the AML invoked to power down the GPU from
+> > > > > > acpi_pci_set_power_state() gets confused if it is not in PCI D0 at
+> > > > > > that point, so it looks like that AML tries to access device memory on
+> > > > > > the GPU (beyond the PCI config space) or similar which is not
+> > > > > > accessible in PCI power states below D0.
+> > > > >
+> > > > > Or the PCI config space of the GPU when the parent root port is in D3hot
+> > > > > (as it is the case here). Also then the GPU config space is not
+> > > > > accessible.
+> > > >
+> > > > Why would the parent port be in D3hot at that point?  Wouldn't that be
+> > > > a suspend ordering violation?
+> > >
+> > > No. We put the GPU into D3hot first,
+> 
+> OK
+> 
+> Does this involve any AML, like a _PS3 under the GPU object?
 
-In certain situations it may be useful to prevent some idle states
-from being used by default while allowing user space to enable them
-later on.
+I don't see _PS3 (nor _PS0) for that object. If I read it right the GPU
+itself is not described in ACPI tables at all.
 
-For this purpose, introduce a new state flag, CPUIDLE_FLAG_OFF, to
-mark idle states that should be disabled by default, make the core
-set CPUIDLE_STATE_DISABLED_BY_USER for those states at the
-initialization time and add a new state attribute in sysfs,
-"initial_status", to inform user space of the initial status of
-the given idle state ("disabled" if CPUIDLE_FLAG_OFF is set for it,
-"enabled" otherwise).
+> > > then the root port and then turn
+> > > off the power resource (which is attached to the root port) resulting
+> > > the topology entering D3cold.
+> >
+> > I don't see that happening in the AML though.
+> 
+> Which AML do you mean, specifically?  The _OFF method for the root
+> port's _PR3 power resource or something else?
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+The root port's _OFF method for the power resource returned by its _PR3.
 
-Changes from RFC:
+> > Basically the difference is that when Windows 7 or Linux (the _REV==5
+> > check) then we directly do link disable whereas in Windows 8+ we invoke
+> > LKDS() method that puts the link into L2/L3. None of the fields they
+> > access seem to touch the GPU itself.
+> 
+> So that may be where the problem is.
+> 
+> Putting the downstream component into PCI D[1-3] is expected to put
+> the link into L1, so I'm not sure how that plays with the later
+> attempt to put it into L2/L3 Ready.
 
- - Rename the new flag to CPUIDLE_FLAG_OFF.
- - Rename the new sysfs attribute to initial_status.
- - Fix typos in the documentation.
+That should be fine. What I've seen the link goes into L1 when
+downstream component is put to D-state (not D0) and then it is put back
+to L0 when L2/3 ready is propagated. Eventually it goes into L2 or L3.
 
----
- Documentation/ABI/testing/sysfs-devices-system-cpu |    6 ++++++
- Documentation/admin-guide/pm/cpuidle.rst           |    3 +++
- drivers/cpuidle/cpuidle.c                          |    6 +++++-
- drivers/cpuidle/sysfs.c                            |   10 ++++++++++
- include/linux/cpuidle.h                            |    1 +
- 5 files changed, 25 insertions(+), 1 deletion(-)
+> Also, L2/L3 Ready is expected to be transient, so finally power should
+> be removed somehow.
 
-Index: linux-pm/drivers/cpuidle/sysfs.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/sysfs.c
-+++ linux-pm/drivers/cpuidle/sysfs.c
-@@ -327,6 +327,14 @@ static ssize_t store_state_disable(struc
- 	return size;
- }
- 
-+static ssize_t show_state_initial_status(struct cpuidle_state *state,
-+					  struct cpuidle_state_usage *state_usage,
-+					  char *buf)
-+{
-+	return sprintf(buf, "%s\n",
-+		       state->flags & CPUIDLE_FLAG_OFF ? "disabled" : "enabled");
-+}
-+
- define_one_state_ro(name, show_state_name);
- define_one_state_ro(desc, show_state_desc);
- define_one_state_ro(latency, show_state_exit_latency);
-@@ -337,6 +345,7 @@ define_one_state_ro(time, show_state_tim
- define_one_state_rw(disable, show_state_disable, store_state_disable);
- define_one_state_ro(above, show_state_above);
- define_one_state_ro(below, show_state_below);
-+define_one_state_ro(initial_status, show_state_initial_status);
- 
- static struct attribute *cpuidle_state_default_attrs[] = {
- 	&attr_name.attr,
-@@ -349,6 +358,7 @@ static struct attribute *cpuidle_state_d
- 	&attr_disable.attr,
- 	&attr_above.attr,
- 	&attr_below.attr,
-+	&attr_initial_status.attr,
- 	NULL
- };
- 
-Index: linux-pm/include/linux/cpuidle.h
-===================================================================
---- linux-pm.orig/include/linux/cpuidle.h
-+++ linux-pm/include/linux/cpuidle.h
-@@ -77,6 +77,7 @@ struct cpuidle_state {
- #define CPUIDLE_FLAG_COUPLED	BIT(1) /* state applies to multiple cpus */
- #define CPUIDLE_FLAG_TIMER_STOP BIT(2) /* timer is stopped on this state */
- #define CPUIDLE_FLAG_UNUSABLE	BIT(3) /* avoid using this state */
-+#define CPUIDLE_FLAG_OFF	BIT(4) /* disable this state by default */
- 
- struct cpuidle_device_kobj;
- struct cpuidle_state_kobj;
-Index: linux-pm/drivers/cpuidle/cpuidle.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/cpuidle.c
-+++ linux-pm/drivers/cpuidle/cpuidle.c
-@@ -569,10 +569,14 @@ static int __cpuidle_register_device(str
- 	if (!try_module_get(drv->owner))
- 		return -EINVAL;
- 
--	for (i = 0; i < drv->state_count; i++)
-+	for (i = 0; i < drv->state_count; i++) {
- 		if (drv->states[i].flags & CPUIDLE_FLAG_UNUSABLE)
- 			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_DRIVER;
- 
-+		if (drv->states[i].flags & CPUIDLE_FLAG_OFF)
-+			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_USER;
-+	}
-+
- 	per_cpu(cpuidle_devices, dev->cpu) = dev;
- 	list_add(&dev->device_list, &cpuidle_detected_devices);
- 
-Index: linux-pm/Documentation/ABI/testing/sysfs-devices-system-cpu
-===================================================================
---- linux-pm.orig/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ linux-pm/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -196,6 +196,12 @@ Description:
- 		does not reflect it. Likewise, if one enables a deep state but a
- 		lighter state still is disabled, then this has no effect.
- 
-+What:		/sys/devices/system/cpu/cpuX/cpuidle/stateN/initial_status
-+Date:		November 2019
-+KernelVersion:	v5.6
-+Contact:	Linux power management list <linux-pm@vger.kernel.org>
-+Description:
-+		(RO) The initial status of this state, "enabled" or "disabled".
- 
- What:		/sys/devices/system/cpu/cpuX/cpuidle/stateN/residency
- Date:		March 2014
-Index: linux-pm/Documentation/admin-guide/pm/cpuidle.rst
-===================================================================
---- linux-pm.orig/Documentation/admin-guide/pm/cpuidle.rst
-+++ linux-pm/Documentation/admin-guide/pm/cpuidle.rst
-@@ -506,6 +506,9 @@ object corresponding to it, as follows:
- ``disable``
- 	Whether or not this idle state is disabled.
- 
-+``initial_status``
-+	The initial status of this state, "enabled" or "disabled".
-+
- ``latency``
- 	Exit latency of the idle state in microseconds.
- 
+There is GPIO for both power and PERST, I think the line here:
 
+  \_SB.SGOV (0x01010004, Zero)
 
+is the one that removes power.
 
+> > LKDS() for the first PEG port looks like this:
+> >
+> >    P0L2 = One
+> >    Sleep (0x10)
+> >    Local0 = Zero
+> >    While (P0L2)
+> >    {
+> >         If ((Local0 > 0x04))
+> >         {
+> >             Break
+> >         }
+> >
+> >         Sleep (0x10)
+> >         Local0++
+> >    }
+> >
+> > One thing that comes to mind is that the loop can end even if P0L2 is
+> > not cleared as it does only 5 iterations with 16 ms sleep between. Maybe
+> > Sleep() is implemented differently in Windows? I mean Linux may be
+> > "faster" here and return prematurely and if we leave the port into D0
+> > this does not happen, or something. I'm just throwing out ideas :)
+> 
+> But this actually works for the downstream component in D0, doesn't it?
+
+It does and that leaves the link in L0 so it could be that then the
+above AML works better or something.
+
+That reminds me, ASPM may have something to do with this as well.
+
+> Also, if the downstream component is in D0, the port actually should
+> stay in D0 too, so what would happen with the $subject patch applied?
+
+Parent port cannot be lower D-state than the child so I agree it should
+stay in D0 as well. However, it seems that what happens is that the
+issue goes away :)
