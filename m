@@ -2,83 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9E010538E
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 14:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7B1053FA
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 15:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbfKUNwy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 08:52:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60264 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726293AbfKUNwy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 Nov 2019 08:52:54 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E8D820679;
-        Thu, 21 Nov 2019 13:52:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574344371;
-        bh=zYluV3+BkKDTzX4PhM/6p8mm4PW1N2NXyUniwFP2SIE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=x91gtEgxXBqjIgsQOgdk7x0GiDDCxwDmZtviKrjR+nByMeWgo19NAQ3WAymaWWviH
-         zlvhAf78wNJ6qMg74R+JpoIChWrczxTrye0Dqzgrt3QEgMstRcO1YOiMWkib2fwuxM
-         lj9DbLQHNzNo0L/bwdiNlP7atLCBlD7mllrCsiCA=
-Date:   Thu, 21 Nov 2019 14:52:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>, tomeu.vizoso@collabora.com,
-        guillaume.tucker@collabora.com,
-        Niklas Cassel <niklas.cassel@linaro.org>, broonie@kernel.org,
-        khilman@baylibre.com, mgalka@collabora.com,
-        enric.balletbo@collabora.com, linux-pm@vger.kernel.org,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Viresh Kumar <vireshk@kernel.org>
-Subject: Re: stable/linux-4.14.y bisection: boot on odroid-x2
-Message-ID: <20191121135249.GA549340@kroah.com>
-References: <5dd5fbf5.1c69fb81.0938.8061@mx.google.com>
- <20191121060811.mvzzh4zlfzlubzlv@vireshk-i7>
- <20191121065821.GA344102@kroah.com>
- <20191121085529.qjmj7pwew4wjmggu@vireshk-i7>
+        id S1726293AbfKUOKE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 09:10:04 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:43050 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbfKUOKE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 09:10:04 -0500
+Received: by mail-qt1-f194.google.com with SMTP id q8so1141235qtr.10
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 06:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=ndBghIAW5jexbjstvssowNgkv48SOm6LHbFBASVDuQI=;
+        b=E+3g4JXDHhaV3nv6Jnkpf/uAYDpBcirtfCOtykviPuf8+8JadmxlqRxUSn/i/KNfi/
+         xeXN6tcZhDjIGC/IeUgOCPvR0gwQu7VKBYj3LMVUGRRgG7McU7A58hCxswbVh0DNGp0U
+         Ryi8oflhf2IrzM7D3mrt04WStpLx8hISOn9RxKB4pWAlNcOOXNoeBlUZ24X2pl/JSdUG
+         4IB7uxRMijM70jcRyRe5pBrJrUn1n/2ZyWYg7UADvp8p73bxZTUo4OF3kx/XH+TNPyBs
+         P5Ouep2zfOJTWEVPZcMj50GwwOoUBL3LA3L1ThGjNckQ7kDrEaLvuRIKWcd7rz90/czD
+         fhBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=ndBghIAW5jexbjstvssowNgkv48SOm6LHbFBASVDuQI=;
+        b=GJdIjY/Xu6w875KDVMonHROYU3prrp4taWX7RTMSDau9cA9qGR6SM9gjIxZigD8sEP
+         HoHcJUK61xDwC/f3h0BtMi3qSUCoVzvKoJ+5i+E7SxoELm9QpuwsSLzUyWE5ZxAj6O/5
+         KxqB6he0Pk73D8GduMa1pf0jaKxi783PD96mgSDEXrxW+2F4UWzuF26t1oKQ7w19QMsi
+         EspxQtIoRHNk2HhEp+eGjiPOnMoqOxeBFEUykXNMmO35ah5qFtWwTlYaxIE/zmuGRsFl
+         uLfA6KOIZpIJ+ncsBJ8UCnQ3OQZN8CZfiJfNFYzkSHaIGdAIhQSVUL6UGPn8ki6ZLQXX
+         9A3A==
+X-Gm-Message-State: APjAAAWW7xgFANK9KWAnmRQqgiHcUI+KaN5S7ifXdhCiYKle+C+tVMcI
+        MfsEjDROw7ckIoJdCaWt/Ts74fxVivU=
+X-Google-Smtp-Source: APXvYqwlIPVfLC7kmWQrv11Ie25ynbnCuwb33CgLllClg/M3PxJvJL6TKoWz3JyuO+mxbbwsZKZ0CA==
+X-Received: by 2002:ac8:7454:: with SMTP id h20mr8866546qtr.146.1574345402032;
+        Thu, 21 Nov 2019 06:10:02 -0800 (PST)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id o53sm1557251qtj.91.2019.11.21.06.10.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Nov 2019 06:10:00 -0800 (PST)
+Subject: Re: [PATCH] drivers: thermal: step_wise: add support for hysteresis
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org, j-keerthy@ti.com,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+References: <8e812065f4a76325097c5f9c17f3386736d8c1d4.1574315190.git.amit.kucheria@linaro.org>
+Cc:     Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Lina Iyer <ilina@codeaurora.org>, linux-pm@vger.kernel.org
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5DD69AB7.3060307@linaro.org>
+Date:   Thu, 21 Nov 2019 09:09:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191121085529.qjmj7pwew4wjmggu@vireshk-i7>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <8e812065f4a76325097c5f9c17f3386736d8c1d4.1574315190.git.amit.kucheria@linaro.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 02:25:29PM +0530, Viresh Kumar wrote:
-> On 21-11-19, 07:58, Greg Kroah-Hartman wrote:
-> > On Thu, Nov 21, 2019 at 11:38:11AM +0530, Viresh Kumar wrote:
-> > > On 20-11-19, 18:52, kernelci.org bot wrote:
-> > > > commit 714ab224a8db6e8255c61a42613de9349ceb0bba
-> > > > Author: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > Date:   Fri Aug 3 07:05:21 2018 +0530
-> > > > 
-> > > >     OPP: Protect dev_list with opp_table lock
-> > > >     
-> > > >     [ Upstream commit 3d2556992a878a2210d3be498416aee39e0c32aa ]
-> > > >     
-> > > >     The dev_list needs to be protected with a lock, else we may have
-> > > >     simultaneous access (addition/removal) to it and that would be racy.
-> > > >     Extend scope of the opp_table lock to protect dev_list as well.
-> > > >     
-> > > >     Tested-by: Niklas Cassel <niklas.cassel@linaro.org>
-> > > >     Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > >     Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > > 
-> > > @Sasha: Please drop this patch for now.
-> > 
-> > Drop it from 4.14 and 4.19?
+On 11/21/2019 12:50 AM, Amit Kucheria wrote:
+> From: Ram Chandrasekar <rkumbako@codeaurora.org>
 > 
-> Yes.
+> Currently, step wise governor increases the mitigation when the
+> temperature goes above a threshold and decreases the mitigation when the
+> temperature goes below the threshold. If there is a case where the
+> temperature is wavering around the threshold, the mitigation will be
+> applied and removed every iteration, which is not very efficient.
+> 
+> The use of hysteresis temperature could avoid this ping-pong of
+> mitigation by relaxing the mitigation to happen only when the
+> temperature goes below this lower hysteresis value.
+Hi Amit,
 
-Now done, thanks.
+Can this not lead to ping-pong around the hysteresis temperature?
+If the idea is to minimize ping-pong isn't average a better method?
 
-greg k-h
+Warm Regards
+Thara
+
+> 
+> Signed-off-by: Ram Chandrasekar <rkumbako@codeaurora.org>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> [Rebased patch from downstream]
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  drivers/thermal/step_wise.c | 35 ++++++++++++++++++++++++-----------
+>  1 file changed, 24 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/step_wise.c
+> index 6e051cbd824ff..2c8a34a7cf959 100644
+> --- a/drivers/thermal/step_wise.c
+> +++ b/drivers/thermal/step_wise.c
+> @@ -24,7 +24,7 @@
+>   *       for this trip point
+>   *    d. if the trend is THERMAL_TREND_DROP_FULL, use lower limit
+>   *       for this trip point
+> - * If the temperature is lower than a trip point,
+> + * If the temperature is lower than a hysteresis temperature,
+>   *    a. if the trend is THERMAL_TREND_RAISING, do nothing
+>   *    b. if the trend is THERMAL_TREND_DROPPING, use lower cooling
+>   *       state for this trip point, if the cooling state already
+> @@ -115,30 +115,31 @@ static void update_passive_instance(struct thermal_zone_device *tz,
+>  
+>  static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>  {
+> -	int trip_temp;
+> +	int trip_temp, hyst_temp;
+>  	enum thermal_trip_type trip_type;
+>  	enum thermal_trend trend;
+>  	struct thermal_instance *instance;
+> -	bool throttle = false;
+> +	bool throttle;
+>  	int old_target;
+>  
+>  	if (trip == THERMAL_TRIPS_NONE) {
+> -		trip_temp = tz->forced_passive;
+> +		hyst_temp = trip_temp = tz->forced_passive;
+>  		trip_type = THERMAL_TRIPS_NONE;
+>  	} else {
+>  		tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> +		hyst_temp = trip_temp;
+> +		if (tz->ops->get_trip_hyst) {
+> +			tz->ops->get_trip_hyst(tz, trip, &hyst_temp);
+> +			hyst_temp = trip_temp - hyst_temp;
+> +		}
+>  		tz->ops->get_trip_type(tz, trip, &trip_type);
+>  	}
+>  
+>  	trend = get_tz_trend(tz, trip);
+>  
+> -	if (tz->temperature >= trip_temp) {
+> -		throttle = true;
+> -		trace_thermal_zone_trip(tz, trip, trip_type);
+> -	}
+> -
+> -	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+> -				trip, trip_type, trip_temp, trend, throttle);
+> +	dev_dbg(&tz->device,
+> +		"Trip%d[type=%d,temp=%d,hyst=%d]:trend=%d,throttle=%d\n",
+> +		trip, trip_type, trip_temp, hyst_temp, trend, throttle);
+>  
+>  	mutex_lock(&tz->lock);
+>  
+> @@ -147,6 +148,18 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>  			continue;
+>  
+>  		old_target = instance->target;
+> +		throttle = false;
+> +		/*
+> +		 * Lower the mitigation only if the temperature
+> +		 * goes below the hysteresis temperature.
+> +		 */
+> +		if (tz->temperature >= trip_temp ||
+> +		    (tz->temperature >= hyst_temp &&
+> +		     old_target != THERMAL_NO_TARGET)) {
+> +			throttle = true;
+> +			trace_thermal_zone_trip(tz, trip, trip_type);
+> +		}
+> +
+>  		instance->target = get_target_state(instance, trend, throttle);
+>  		dev_dbg(&instance->cdev->device, "old_target=%d, target=%d\n",
+>  					old_target, (int)instance->target);
+> 
