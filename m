@@ -2,97 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B92B104A40
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 06:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFFE104A44
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 06:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727173AbfKUFaY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 00:30:24 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41060 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbfKUFaX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 00:30:23 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 207so991360pge.8
-        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 21:30:23 -0800 (PST)
+        id S1726765AbfKUFbG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 00:31:06 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:46382 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbfKUFbG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 00:31:06 -0500
+Received: by mail-pj1-f65.google.com with SMTP id a16so921360pjs.13
+        for <linux-pm@vger.kernel.org>; Wed, 20 Nov 2019 21:31:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=4D4X+d65vB46upiDHWg7wE4kF7eD+7kjNy1cehfn2oQ=;
-        b=Dbi54ISi74aXHnims2c664T10I9251duW3uNmME/xUGikSdVwFN/kJO9t75CZczLn/
-         80PrUc1q/Fb/svH2iL+Jiw8RaNlYxgbj/zrNAOGN7tFrUHS3/DN7Ft7Ay6gNk4g4Xwrv
-         rhWQahqO73uWtaerIzF0eFXGWcBgroFFE/lxTeAGJefrenneJKaROgQTFuWaG0xseUY0
-         XUflwQN5Y+2w1PTEmoxeUVGA55FDBOILKb16/mohbEuG+A6j4mf3bGUGt9CmmhDAzoMz
-         6TPv6OkZsQS7InXknusyVr6YQMB8E17dMXjqv7hSMNSNYNqRJjtSuovTHUUl9rMHyUdC
-         n1Pw==
+        bh=rL8hsxXOm58YLNC8couVxmo6ukGppsdnsrBhdoTeJ8M=;
+        b=yP4VtZZT65ZG+FSZS2cZ1NXoYGAhUkgAXQaO+2Mr2QD6iuf87JmzlP1Qwj4FXQIz+6
+         83xrB3b8ZCtusD6snYqdiNWtJGPsZ6nuhPp4IA5EYHgFh3aZcnyFbi4ad0sxXyee2QmZ
+         uQ3n2etgi+zEB4uyxcnLLsaSICP2zFasJIVBowNjxyBwIOS325lWkKGVzFwWHMDBdgOm
+         qBZbazJ2kRj3uAjoA0yL4UfEzxEufZG08iOhRvq9Fd++6NPexCTPaE/YYszrwcevM4W9
+         wT/v01VIosSCzE1dy4I+mzhH5nZDEq5uP+LgMmiiOJdD9gvxdfXTFpWeTMCGaPm4TPHy
+         41UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4D4X+d65vB46upiDHWg7wE4kF7eD+7kjNy1cehfn2oQ=;
-        b=MVbvvykwMF+Gwo33jzxe+zzXa/V1x+Sf6bJGmOEiROCOcywwWxyaOGZL/+yXz+ltva
-         fmn/R//oQf0txHdWKLS4sP4D7aj7mLMqBRSojQzbm0z29XlxriJvEuf0W8mAi/98gTzn
-         RXyq/MOmyWSoyKy5IY6f8bvbLWExP7QlS5Dcwe8HxfPfgIpkc65YQzjNQRA1dRSWRKBC
-         2KPubLjoYrAfqjkwBgKW/WjoIq/4RcAk1ifSxW8Z82wAcm7aVylPIrYla5udAeHYDfBx
-         lthPejQJuf9dYMV8qIRZM2lgkVnOIauDkx89VFQxniuLDi5oz215aVpsxI5bTwWBH9YC
-         UtqQ==
-X-Gm-Message-State: APjAAAVTIbkJu+91zAnF9OOBvShYKNX5icdqA/ouvadzg0XVYj8dDdG7
-        Hb4tLvPUqo+XiHgSdEuM31/NZw==
-X-Google-Smtp-Source: APXvYqyqTn5XWsO1zfG9ZOJXWRgzwqe/HV9l7wVKSf9rtf+6rI+k7zCzilzgiWRkEhSvL0fgS3rNmQ==
-X-Received: by 2002:aa7:9314:: with SMTP id 20mr8314051pfj.231.1574314221707;
-        Wed, 20 Nov 2019 21:30:21 -0800 (PST)
+        bh=rL8hsxXOm58YLNC8couVxmo6ukGppsdnsrBhdoTeJ8M=;
+        b=srQosKUDbyFLnYvCLTkIT8q9OhcGSgg2/73mrG9Q8N+AmvCh0HTEATFhFUVCpi0qkv
+         E1EMK2au9IwpBh85iQq5NjGYebHor6myzzrbutZYnG7NpQzLSQzWYLy1CVE9tGpxRHzJ
+         xu1izbunGkM7a/3x5PJHtfoPeqL5bBGhh2+FL0BK8JF9rbwLXj3nwkNj9JhCLbjHtaYX
+         8zST2jEx4Fmt4yww0nJGFWfrQyBrRFr0mFjBXn9KT4phh/9epTWq098NRFdfux9cEuKJ
+         jrrk444/2OO6GVg/HgV90QhXYYEaylrvytuNKRlN1xpbRDG1HYv7f/0AwWoTj3X1UG7x
+         vcDQ==
+X-Gm-Message-State: APjAAAXRiK71NBWh5cCewj6ApKVTOcoaFPjSliikXREk3WY4OG66p4D1
+        thF89oHfidYncFmU3qWIg/xh9A==
+X-Google-Smtp-Source: APXvYqwa/abldXMYEl8LBuu0njPcVapw0WdE692UrwL6RedCl8fLaMrSsPHgHvqqPHrTXvLk2slBew==
+X-Received: by 2002:a17:90a:989:: with SMTP id 9mr9079835pjo.35.1574314265591;
+        Wed, 20 Nov 2019 21:31:05 -0800 (PST)
 Received: from localhost ([223.226.74.76])
-        by smtp.gmail.com with ESMTPSA id p3sm1318953pfb.163.2019.11.20.21.30.19
+        by smtp.gmail.com with ESMTPSA id a29sm857837pgd.12.2019.11.20.21.31.04
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Nov 2019 21:30:20 -0800 (PST)
-Date:   Thu, 21 Nov 2019 11:00:14 +0530
+        Wed, 20 Nov 2019 21:31:04 -0800 (PST)
+Date:   Thu, 21 Nov 2019 11:01:00 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Fix Kconfig indentation
-Message-ID: <20191121053014.tcnw63yz7w3koj7x@vireshk-i7>
-References: <20191120134232.15900-1-krzk@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, edubezval@gmail.com,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Javi Merino <javi.merino@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jun Nie <jun.nie@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] thermal: devfreq_cooling: Appease the
+ kernel-doc deity
+Message-ID: <20191121053100.n3vfo564gs2sn72v@vireshk-i7>
+References: <cover.1574242756.git.amit.kucheria@linaro.org>
+ <7059d82472fe12139fc7a3379c5b9716a23cce5c.1574242756.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191120134232.15900-1-krzk@kernel.org>
+In-Reply-To: <7059d82472fe12139fc7a3379c5b9716a23cce5c.1574242756.git.amit.kucheria@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-11-19, 21:42, Krzysztof Kozlowski wrote:
-> Adjust indentation from spaces to tab (+optional two spaces) as in
-> coding style with command like:
-> 	$ sed -e 's/^        /\t/' -i */Kconfig
+On 20-11-19, 21:15, Amit Kucheria wrote:
+> Fix up the following warnings with make W=1:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> linux.git/drivers/thermal/devfreq_cooling.c:68: warning: Function
+> parameter or member 'capped_state' not described in
+> 'devfreq_cooling_device'
+> linux.git/drivers/thermal/devfreq_cooling.c:593: warning: Function
+> parameter or member 'cdev' not described in 'devfreq_cooling_unregister'
+> linux.git/drivers/thermal/devfreq_cooling.c:593: warning: Excess
+> function parameter 'dfc' description in 'devfreq_cooling_unregister'
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  drivers/cpufreq/Kconfig.x86 | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index dfa6457deaf6..6eec6ccb14cb 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -9,12 +9,12 @@ config X86_INTEL_PSTATE
->         select ACPI_PROCESSOR if ACPI
->         select ACPI_CPPC_LIB if X86_64 && ACPI && SCHED_MC_PRIO
->         help
-> -          This driver provides a P state for Intel core processors.
-> +	  This driver provides a P state for Intel core processors.
->  	  The driver implements an internal governor and will become
-> -          the scaling driver and governor for Sandy bridge processors.
-> +	  the scaling driver and governor for Sandy bridge processors.
->  
->  	  When this driver is enabled it will become the preferred
-> -          scaling driver for Sandy bridge processors.
-> +	  scaling driver for Sandy bridge processors.
->  
->  	  If in doubt, say N.
+>  drivers/thermal/devfreq_cooling.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
