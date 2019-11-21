@@ -2,179 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDBA104F5F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 10:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BB0105019
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 11:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfKUJgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 04:36:02 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39455 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbfKUJgB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 04:36:01 -0500
-Received: by mail-pg1-f194.google.com with SMTP id b126so1303808pga.6
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 01:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1gP5M8E1Lp53CluNJlQ5qTvIzXJX9BPd5BYgWq+qp0o=;
-        b=gZkrpRAmnz/Or49yYEYhqRnGf27F81asppii9RaTsNRpIuqZFx1N6EA2vOa2S2X/w2
-         XcKFXQEB3pjj8Nls2rpL3rxts2+nbiDFtnRYS9A14gXOywmPyzIv5f3HZgI3xKfenuoE
-         QM6x3HlJq8l8GDdxViV4SW1ZSfGY2cR35xmIOPPPMsMEPewJptg/mWf0BE5PtCMKaYVc
-         P52R//zP7ZUHbjCC4X78Nqju7oGDey3WYJ2E/lPDVat4zT5qjxtfuxlf16ctNTWAZtTC
-         2xeeFwGyFX9NcX6xeeo1pu5/8OB6HNIj+HC0UVRbV/j3pKvqjxN/vFErlDi9Dxx4uIY8
-         0fDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1gP5M8E1Lp53CluNJlQ5qTvIzXJX9BPd5BYgWq+qp0o=;
-        b=GBePVdQcZE8F7hlk8WOoC2uAtIUvGhb/LvnbqTQwWDhVzXmIQawU39j1sZIq5eGSBp
-         Vx+jwlBwuOq0ZJFrwhhXwnb/D4+IXvPZg4gK0OVLscn1RTkIhJe8tVjZc+7tCwaBhIun
-         sZEN0KzKbFE7sg5+MjHDZ8lw/DkMD/WGQnneh/o/gOKJSTeCO2+J8iY89x3hYVNVQz4x
-         Bg+yd00k1z7/umjM/JFZ3s2dH/xvixn+kW5wzfl76MHtktZU2CHkjM66gUr6bUgMrBYE
-         Sma1r63TW+3gabeGWLBSJXaOV3LztyFS18+xjkpM+Ng62vJFeI2LLD6UnomYvq2RW2xr
-         Ycig==
-X-Gm-Message-State: APjAAAVxYZEjfTbhQEI4oPPhzoYLQTm0GTftl8K1Gjd5x00ZzKlmJj0J
-        fMv/T9Y8f/DZwXAe4ADuZnx9mCoLbDc=
-X-Google-Smtp-Source: APXvYqxff5kwHWLfrJoAgzXE6b/K5jMKi2BoORiXU8Rhdz0UgBV6Z5FWz/M6x9OFhrL5/qWX53fvvw==
-X-Received: by 2002:a65:4506:: with SMTP id n6mr8520456pgq.105.1574328959765;
-        Thu, 21 Nov 2019 01:35:59 -0800 (PST)
-Received: from localhost ([223.226.74.76])
-        by smtp.gmail.com with ESMTPSA id a66sm2658047pfb.166.2019.11.21.01.35.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Nov 2019 01:35:59 -0800 (PST)
-Date:   Thu, 21 Nov 2019 15:05:57 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     Jacky Bai <ping.bai@nxp.com>, rafael@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
-Message-ID: <20191121093557.bycvdo4xyinbc5cb@vireshk-i7>
+        id S1726132AbfKUKNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 05:13:17 -0500
+Received: from mail-eopbgr80045.outbound.protection.outlook.com ([40.107.8.45]:37963
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726014AbfKUKNR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 Nov 2019 05:13:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lua2v3jfJsG7Cb6TKrseDmomwCLJgtvEs+bsvVt0X8/GpAYYllJjnmODKfwslK+ooJjbXDF5jPdNQKqhqHmhvRvznp8BAPA5Diqs68U2KML0VqNPkog6atZhclB/INLObeTOemqQAbGFmRTPwyUlymWL1fVavTi9EjdbCSBWhNRM7sd+bbgNII8yENJ87uYofoZo8/BK8FaFuF5hR8jGUM5GG4MvGL6ljpklbqL7w9nhlBMal77F5IB1zSZm/+rVW/J0IGAtqxWJdNtY8V03R8Yr/mbBmy9xQr5qT04Tb6w08Rq+GH6st8Phnvj5AXPkovgwy4Mw2fvYcK10tWae/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ObALxsBqR0e0P8gavx56fWeZwRIHw5TAfwQfqCqiZaQ=;
+ b=biBgesekysITnFA3xEMUAqcMUqiazJVvQwrT/Yq0sDhKI9ztnOR87mObph14homJP49b2bPo6oufMeRh24ZWL3H1i3IhHy90wJhptzNqmK1oA9ApG86ILt/iObcBSvgxRtKJDDvzJWmj6G4wb6v0Yw++4pt3iVSDhSIzt+YmO8WBoEcZrO0oRrkrpBvOoKGGobcv1YnWH5OlF7nZTQYSkyEc/HmzOzUm/BbV/VVybsE0ytTQdOhC0BT01jvquJ5ELi2ggexza4ntFRKh2ZuT8n+Ag+b0WB/ad0eiwHZDdndxz6QIrd0olXA1eX4f8tgf2nRFDpcOhF2heWtKHJnYIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ObALxsBqR0e0P8gavx56fWeZwRIHw5TAfwQfqCqiZaQ=;
+ b=ZNUjccpBinlVLPN41+Pv3cwHT6P25ivFIrViE7u0s0AOqfBRuxus3TbDzfk8MFir3jHodUjOxWhtnPZVGMN/G8T3lZsmTw1x7p6ca6lSGMLpia2RQbT/38O4QyVvMPPq8voMU+cNnLFilyhBuOjvKOUK5I5FYU5wSF3PYRIH9Dk=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3771.eurprd04.prod.outlook.com (52.134.67.30) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.30; Thu, 21 Nov 2019 10:13:13 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::b8dd:75d4:49ea:6360]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::b8dd:75d4:49ea:6360%5]) with mapi id 15.20.2474.019; Thu, 21 Nov 2019
+ 10:13:13 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Jacky Bai <ping.bai@nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: About CPU hot-plug stress test failed in cpufreq driver
+Thread-Topic: About CPU hot-plug stress test failed in cpufreq driver
+Thread-Index: AdWgM3EuFQeyF1SHRka5sBhDxaFShQAG6J6AAAAKxPA=
+Date:   Thu, 21 Nov 2019 10:13:12 +0000
+Message-ID: <DB3PR0402MB39165544EDD0317095A1B72DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 References: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <20191121093557.bycvdo4xyinbc5cb@vireshk-i7>
+In-Reply-To: <20191121093557.bycvdo4xyinbc5cb@vireshk-i7>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 411b9836-fc2f-432e-e4c0-08d76e6b6b03
+x-ms-traffictypediagnostic: DB3PR0402MB3771:|DB3PR0402MB3771:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB37719BC6A339A5B3F6287DFFF54E0@DB3PR0402MB3771.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0228DDDDD7
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(199004)(189003)(102836004)(7736002)(6506007)(229853002)(6436002)(26005)(6246003)(71190400001)(71200400001)(81166006)(4326008)(25786009)(76116006)(3846002)(6116002)(66556008)(66446008)(305945005)(66476007)(316002)(44832011)(11346002)(446003)(186003)(55016002)(9686003)(66066001)(76176011)(54906003)(7696005)(99286004)(66946007)(256004)(81156014)(5024004)(8676002)(74316002)(64756008)(8936002)(478600001)(14454004)(52536014)(6916009)(86362001)(5660300002)(2906002)(14444005)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3771;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L396D8OAjcam6+yU13vPXzGxzlSV0UhPRhXbAI0wirL+vbiEukUdQjR/OrlMkzBnZEdDV+HrEcJb1gHZuIXjoWCMMf6kz55lVi5DtX/Y6cGs77BCB+2kTKHKrM8OoppUSzKXe/noHdP/km3o/M7BGdiMDbfjRgp55+vvX6+ABjb4SFEH1126W1i6aQPy+gljYct9i1mfpfW8vOooGIoolmspv0lQJTA5/X3oU2w9WUTlVUVsz1LNizmOoXW6DaMakedGUeXcELt+GMm63IotVQdyEPRCg1r4cX/o/ZaVRt8bU48GQAr4/WK2hj+o6iMUyfxEE4yvhMpHAfdHCndmf+UADBsMJ7Fv/DbtdcZy0nUbIAw+zLXKSpALm+hdUGM44mGSD19lg405xNgYaNMxq77VU5x0QVXxJx9t+w5T4DI+hWv9V6xk6t+14C2u93fn
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716-391-311a52
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 411b9836-fc2f-432e-e4c0-08d76e6b6b03
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2019 10:13:12.8979
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uHoOS27gqbFCU7MfWT+xa/LOkKUO8Vo4qs4er70qWg0yeKO/3F5UUECHsfsaxfNL017KvA9s8cI9LQ1rb3dZnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3771
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Rafael and PM list.
-
-Please provide output of following for your platform while I am having a look at
-your problem.
-
-grep . /sys/devices/system/cpu/cpufreq/*/*
-
-On 21-11-19, 09:17, Anson Huang wrote:
-> Hi, Viresh
-> Sorry to bother you directly via mail.
-> We met something wrong with cpufreq governor driver during CPU hot-plug stress
-> test on v5.4-rc7, below is the log, from debug, looks like the irq_work is
-> still pending on a CPU which is already offline, so next CPU being on/off line
-> will call the cpufreq_stop_governor and it will wait for previous irq_work
-> free for use, but since it is pending on an offline CPU, so it will never
-> success. Do you have any idea of it or have any info about it? Thanks a lot in
-> advanced!
-> 
-> [ 1062.437497] smp_test.sh     D    0   584    477 0x00000200
-> [ 1062.442986] Call trace:
-> [ 1062.445445]  __switch_to+0xb4/0x200
-> [ 1062.448937]  __schedule+0x304/0x5b0
-> [ 1062.452423]  schedule+0x40/0xd0
-> [ 1062.455565]  schedule_timeout+0x16c/0x268
-> [ 1062.459574]  wait_for_completion+0xa0/0x120
-> [ 1062.463758]  __cpuhp_kick_ap+0x54/0x68
-> [ 1062.467506]  cpuhp_kick_ap+0x38/0xa8
-> [ 1062.471079]  bringup_cpu+0xbc/0xe8
-> [ 1062.474480]  cpuhp_invoke_callback+0x88/0x1f8
-> [ 1062.478835]  _cpu_up+0xe8/0x1e0
-> [ 1062.481975]  do_cpu_up+0x98/0xb8
-> [ 1062.485202]  cpu_up+0x10/0x18
-> [ 1062.488172]  cpu_subsys_online+0x48/0xa0
-> [ 1062.492094]  device_online+0x68/0xb0
-> [ 1062.495667]  online_store+0xa8/0xb8
-> [ 1062.499157]  dev_attr_store+0x14/0x28
-> [ 1062.502820]  sysfs_kf_write+0x48/0x58
-> [ 1062.506480]  kernfs_fop_write+0xe0/0x1f8
-> [ 1062.510404]  __vfs_write+0x18/0x40
-> [ 1062.513806]  vfs_write+0x19c/0x1f0
-> [ 1062.517206]  ksys_write+0x64/0xf0
-> [ 1062.520520]  __arm64_sys_write+0x14/0x20
-> [ 1062.524446]  el0_svc_common.constprop.2+0xb0/0x168
-> [ 1062.529236]  el0_svc_handler+0x20/0x80
-> [ 1062.532984]  el0_svc+0x8/0xc
-> [ 1062.535868] kworker/0:2     D    0  5496      2 0x00000228
-> [ 1062.541361] Workqueue: events vmstat_shepherd
-> [ 1062.545717] Call trace:
-> [ 1062.548163]  __switch_to+0xb4/0x200
-> [ 1062.551650]  __schedule+0x304/0x5b0
-> [ 1062.555137]  schedule+0x40/0xd0
-> [ 1062.558278]  rwsem_down_read_slowpath+0x200/0x4c0
-> [ 1062.562984]  __down_read+0x9c/0xc0
-> [ 1062.566385]  __percpu_down_read+0x6c/0xd8
-> [ 1062.570393]  cpus_read_lock+0x70/0x78
-> [ 1062.574054]  vmstat_shepherd+0x30/0xd0
-> [ 1062.577804]  process_one_work+0x1dc/0x370
-> [ 1062.581812]  worker_thread+0x48/0x468
-> [ 1062.585475]  kthread+0xf0/0x120
-> [ 1062.588615]  ret_from_fork+0x10/0x1c
-> 
->   [ 1311.095934] sysrq: Show backtrace of all active CPUs
-> [ 1311.100913] sysrq: CPU0:
-> [ 1311.103450] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.4.0-rc7-03224-g9b510305bd68-dirty #28
-> [ 1311.111972] Hardware name: NXP i.MX8MNano DDR4 EVK board (DT)
-> [ 1311.117717] pstate: 40000005 (nZcv daif -PAN -UAO)
-> [ 1311.122519] pc : arch_cpu_idle+0x10/0x18
-> [ 1311.126445] lr : default_idle_call+0x18/0x30
-> [ 1311.130712] sp : ffff800011f73ec0
-> [ 1311.134024] x29: ffff800011f73ec0 x28: 0000000041dd0018
-> [ 1311.139335] x27: 0000000000000400 x26: 0000000000000000
-> [ 1311.144646] x25: 0000000000000000 x24: ffff800011f7a220
-> [ 1311.149956] x23: ffff800011f79000 x22: ffff800011b42bf8
-> [ 1311.155267] x21: ffff800011f7a000 x20: 0000000000000001
-> [ 1311.160578] x19: ffff800011f7a120 x18: 0000000000000000
-> [ 1311.165888] x17: 0000000000000000 x16: 0000000000000000
-> [ 1311.171198] x15: 0000000000000000 x14: 0000000000000000
-> [ 1311.176508] x13: 0000000000000001 x12: 0000000000000000
-> [ 1311.181819] x11: 0000000000000000 x10: 0000000000000990
-> [ 1311.187129] x9 : ffff800011f73e10 x8 : ffff800011f83ef0
-> [ 1311.192440] x7 : ffff000069b8f6c0 x6 : ffff000069b8ad70
-> [ 1311.197750] x5 : 0000013165fb6700 x4 : 4000000000000000
-> [ 1311.203061] x3 : ffff800011f73eb0 x2 : 0000000000000000
-> [ 1311.208371] x1 : 0000000000095e94 x0 : 00000000000000e0
-> [ 1311.213682] Call trace:
-> [ 1311.216131]  arch_cpu_idle+0x10/0x18
-> [ 1311.219708]  do_idle+0x1c4/0x290
-> [ 1311.222935]  cpu_startup_entry+0x24/0x40
-> [ 1311.226856]  rest_init+0xd4/0xe0
-> [ 1311.230087]  arch_call_rest_init+0xc/0x14
-> [ 1311.234094]  start_kernel+0x430/0x45c
-> [ 1311.243556] sysrq: CPU1:
-> [ 1311.246099] Call trace:
-> [ 1311.248557]  dump_backtrace+0x0/0x158
-> [ 1311.252220]  show_stack+0x14/0x20
-> [ 1311.255537]  showacpu+0x70/0x80
-> [ 1311.258682]  flush_smp_call_function_queue+0x74/0x150
-> [ 1311.263733]  generic_smp_call_function_single_interrupt+0x10/0x18
-> [ 1311.269831]  handle_IPI+0x138/0x168
-> [ 1311.273319]  gic_handle_irq+0x144/0x148
-> [ 1311.277153]  el1_irq+0xb8/0x180
-> [ 1311.280298]  irq_work_sync+0x10/0x18
-> [ 1311.283875]  cpufreq_stop_governor.part.20+0x1c/0x30
-> [ 1311.288839]  cpufreq_online+0x5a0/0x860
-> [ 1311.292673]  cpuhp_cpufreq_online+0xc/0x18
-> [ 1311.296771]  cpuhp_invoke_callback+0x88/0x1f8
-> [ 1311.301127]  cpuhp_thread_fun+0xd8/0x160
-> [ 1311.305051]  smpboot_thread_fn+0x200/0x2a8
-> [ 1311.309151]  kthread+0xf0/0x120
-> [ 1311.312291]  ret_from_fork+0x10/0x1c
-> 
-> 
-> Anson
-
--- 
-viresh
+VGhhbmtzIFZpcmVzaCBmb3IgeW91ciBxdWljayByZXNwb25zZS4NClRoZSBvdXRwdXQgb2YgY3B1
+ZnJlcSBpbmZvIGFyZSBhcyBiZWxvdywgc29tZSBtb3JlIGluZm8gZm9yIHlvdSBhcmUsIG91ciBp
+bnRlcm5hbCB0cmVlIGlzIGJhc2VkIG9uIHY1LjQtcmM3LA0KYW5kIHRoZSBDUFUgaG90cGx1ZyBo
+YXMgbm8gaS5NWCBwbGF0Zm9ybSBjb2RlLCBzbyBmYXIgd2UgcmVwcm9kdWNlZCBpdCBvbiBpLk1Y
+OFFYUCwgaS5NWDhRTSBhbmQgaS5NWDhNTi4NCldpdGggY3B1ZnJlcSBkaXNhYmxlZCwgbm8gaXNz
+dWUgbWV0Lg0KSSBhbHNvIHJlcHJvZHVjZWQgdGhpcyBpc3N1ZSB3aXRoIHY1LjQtcmM3LA0KV2ls
+bCBjb250aW51ZSB0byBkZWJ1ZyBhbmQgbGV0IHlvdSBrbm93IGlmIGFueSBuZXcgZm91bmQuDQoN
+Cj4gU3ViamVjdDogUmU6IEFib3V0IENQVSBob3QtcGx1ZyBzdHJlc3MgdGVzdCBmYWlsZWQgaW4g
+Y3B1ZnJlcSBkcml2ZXINCj4gDQo+ICtSYWZhZWwgYW5kIFBNIGxpc3QuDQo+IA0KPiBQbGVhc2Ug
+cHJvdmlkZSBvdXRwdXQgb2YgZm9sbG93aW5nIGZvciB5b3VyIHBsYXRmb3JtIHdoaWxlIEkgYW0g
+aGF2aW5nIGEgbG9vaw0KPiBhdCB5b3VyIHByb2JsZW0uDQo+IA0KPiBncmVwIC4gL3N5cy9kZXZp
+Y2VzL3N5c3RlbS9jcHUvY3B1ZnJlcS8qLyoNCg0Kcm9vdEBpbXg4cXhwbWVrOn4jIGdyZXAgLiAv
+c3lzL2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxLyovKg0KL3N5cy9kZXZpY2VzL3N5c3RlbS9j
+cHUvY3B1ZnJlcS9vbmRlbWFuZC9pZ25vcmVfbmljZV9sb2FkOjANCi9zeXMvZGV2aWNlcy9zeXN0
+ZW0vY3B1L2NwdWZyZXEvb25kZW1hbmQvaW9faXNfYnVzeTowDQovc3lzL2RldmljZXMvc3lzdGVt
+L2NwdS9jcHVmcmVxL29uZGVtYW5kL3Bvd2Vyc2F2ZV9iaWFzOjANCi9zeXMvZGV2aWNlcy9zeXN0
+ZW0vY3B1L2NwdWZyZXEvb25kZW1hbmQvc2FtcGxpbmdfZG93bl9mYWN0b3I6MQ0KL3N5cy9kZXZp
+Y2VzL3N5c3RlbS9jcHUvY3B1ZnJlcS9vbmRlbWFuZC9zYW1wbGluZ19yYXRlOjEwMDAwDQovc3lz
+L2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxL29uZGVtYW5kL3VwX3RocmVzaG9sZDo5NQ0KL3N5
+cy9kZXZpY2VzL3N5c3RlbS9jcHUvY3B1ZnJlcS9wb2xpY3kwL2FmZmVjdGVkX2NwdXM6MCAxIDIg
+Mw0KL3N5cy9kZXZpY2VzL3N5c3RlbS9jcHUvY3B1ZnJlcS9wb2xpY3kwL2NwdWluZm9fY3VyX2Zy
+ZXE6OTAwMDAwDQovc3lzL2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxL3BvbGljeTAvY3B1aW5m
+b19tYXhfZnJlcToxMjAwMDAwDQovc3lzL2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxL3BvbGlj
+eTAvY3B1aW5mb19taW5fZnJlcTo5MDAwMDANCi9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2NwdWZy
+ZXEvcG9saWN5MC9jcHVpbmZvX3RyYW5zaXRpb25fbGF0ZW5jeToxNTAwMDANCi9zeXMvZGV2aWNl
+cy9zeXN0ZW0vY3B1L2NwdWZyZXEvcG9saWN5MC9yZWxhdGVkX2NwdXM6MCAxIDIgMw0KL3N5cy9k
+ZXZpY2VzL3N5c3RlbS9jcHUvY3B1ZnJlcS9wb2xpY3kwL3NjYWxpbmdfYXZhaWxhYmxlX2ZyZXF1
+ZW5jaWVzOjkwMDAwMCAxMjAwMDAwDQovc3lzL2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxL3Bv
+bGljeTAvc2NhbGluZ19hdmFpbGFibGVfZ292ZXJub3JzOm9uZGVtYW5kIHVzZXJzcGFjZSBwZXJm
+b3JtYW5jZSBzY2hlZHV0aWwNCi9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2NwdWZyZXEvcG9saWN5
+MC9zY2FsaW5nX2N1cl9mcmVxOjkwMDAwMA0KL3N5cy9kZXZpY2VzL3N5c3RlbS9jcHUvY3B1ZnJl
+cS9wb2xpY3kwL3NjYWxpbmdfZHJpdmVyOmNwdWZyZXEtZHQNCi9zeXMvZGV2aWNlcy9zeXN0ZW0v
+Y3B1L2NwdWZyZXEvcG9saWN5MC9zY2FsaW5nX2dvdmVybm9yOm9uZGVtYW5kDQovc3lzL2Rldmlj
+ZXMvc3lzdGVtL2NwdS9jcHVmcmVxL3BvbGljeTAvc2NhbGluZ19tYXhfZnJlcToxMjAwMDAwDQov
+c3lzL2RldmljZXMvc3lzdGVtL2NwdS9jcHVmcmVxL3BvbGljeTAvc2NhbGluZ19taW5fZnJlcTo5
+MDAwMDANCi9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2NwdWZyZXEvcG9saWN5MC9zY2FsaW5nX3Nl
+dHNwZWVkOjx1bnN1cHBvcnRlZD4NCmdyZXA6IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2NwdWZy
+ZXEvcG9saWN5MC9zdGF0czogSXMgYSBkaXJlY3RvcnkNCg0KDQpDUFVIb3RwbHVnOiA0NTI0IHRp
+bWVzIHJlbWFpbmluZw0KWyA1OTU0LjQ0MTgwM10gQ1BVMTogc2h1dGRvd24NClsgNTk1NC40NDQ1
+MjldIHBzY2k6IENQVTEga2lsbGVkLg0KWyA1OTU0LjQ4MTczOV0gQ1BVMjogc2h1dGRvd24NClsg
+NTk1NC40ODQ0ODRdIHBzY2k6IENQVTIga2lsbGVkLg0KWyA1OTU0LjUzMDUwOV0gQ1BVMzogc2h1
+dGRvd24NClsgNTk1NC41MzMyNzBdIHBzY2k6IENQVTMga2lsbGVkLg0KWyA1OTU1LjU2MTk3OF0g
+RGV0ZWN0ZWQgVklQVCBJLWNhY2hlIG9uIENQVTENClsgNTk1NS41NjIwMTVdIEdJQ3YzOiBDUFUx
+OiBmb3VuZCByZWRpc3RyaWJ1dG9yIDEgcmVnaW9uIDA6MHgwMDAwMDAwMDUxYjIwMDAwDQpbIDU5
+NTUuNTYyMDczXSBDUFUxOiBCb290ZWQgc2Vjb25kYXJ5IHByb2Nlc3NvciAweDAwMDAwMDAwMDEg
+WzB4NDEwZmQwNDJdDQpbIDU5NTUuNTk2OTIxXSBEZXRlY3RlZCBWSVBUIEktY2FjaGUgb24gQ1BV
+Mg0KWyA1OTU1LjU5Njk1OV0gR0lDdjM6IENQVTI6IGZvdW5kIHJlZGlzdHJpYnV0b3IgMiByZWdp
+b24gMDoweDAwMDAwMDAwNTFiNDAwMDANClsgNTk1NS41OTcwMThdIENQVTI6IEJvb3RlZCBzZWNv
+bmRhcnkgcHJvY2Vzc29yIDB4MDAwMDAwMDAwMiBbMHg0MTBmZDA0Ml0NClsgNTk1NS42NDU4Nzhd
+IERldGVjdGVkIFZJUFQgSS1jYWNoZSBvbiBDUFUzDQpbIDU5NTUuNjQ1OTIxXSBHSUN2MzogQ1BV
+MzogZm91bmQgcmVkaXN0cmlidXRvciAzIHJlZ2lvbiAwOjB4MDAwMDAwMDA1MWI2MDAwMA0KWyA1
+OTU1LjY0NTk4Nl0gQ1BVMzogQm9vdGVkIHNlY29uZGFyeSBwcm9jZXNzb3IgMHgwMDAwMDAwMDAz
+IFsweDQxMGZkMDQyXQ0KQ1BVSG90cGx1ZzogNDUyMyB0aW1lcyByZW1haW5pbmcNClsgNTk1Ni43
+Njk3OTBdIENQVTE6IHNodXRkb3duDQpbIDU5NTYuNzcyNTE4XSBwc2NpOiBDUFUxIGtpbGxlZC4N
+ClsgNTk1Ni44MDk3NTJdIENQVTI6IHNodXRkb3duDQpbIDU5NTYuODEyNDgwXSBwc2NpOiBDUFUy
+IGtpbGxlZC4NClsgNTk1Ni44NDk3NjldIENQVTM6IHNodXRkb3duDQpbIDU5NTYuODUyNDk0XSBw
+c2NpOiBDUFUzIGtpbGxlZC4NClsgNTk1Ny44ODIwNDVdIERldGVjdGVkIFZJUFQgSS1jYWNoZSBv
+biBDUFUxDQpbIDU5NTcuODgyMDg5XSBHSUN2MzogQ1BVMTogZm91bmQgcmVkaXN0cmlidXRvciAx
+IHJlZ2lvbiAwOjB4MDAwMDAwMDA1MWIyMDAwMA0KWyA1OTU3Ljg4MjE1M10gQ1BVMTogQm9vdGVk
+IHNlY29uZGFyeSBwcm9jZXNzb3IgMHgwMDAwMDAwMDAxIFsweDQxMGZkMDQyXQ0KDQoNCkxvb3Bp
+bmcgaGVyZSwgbm8gaGFuZywgY2FuIHJlc3BvbnNlIHRvIGRlYnVnIGNvbnNvbGUuLi4uIGlmIGF0
+dGFjaGluZyBKVEFHLCBJIGNhbiBzZWUgdGhlIENQVTENCldpbGwgYnVzeSB3YWl0aW5nIGZvciBp
+cnFfd29yayB0byBiZSBmcmVlLi4NCg0KDQpBbnNvbg0K
