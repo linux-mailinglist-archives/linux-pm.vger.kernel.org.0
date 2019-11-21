@@ -2,181 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B02105A9B
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 20:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8AA105B6C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 21:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbfKUTts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 14:49:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:61330 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726379AbfKUTts (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 Nov 2019 14:49:48 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Nov 2019 11:49:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,226,1571727600"; 
-   d="scan'208";a="216204277"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2019 11:49:43 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 21 Nov 2019 21:49:43 +0200
-Date:   Thu, 21 Nov 2019 21:49:42 +0200
-From:   Mika Westerberg <mika.westerberg@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Mario Limonciello <Mario.Limonciello@dell.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-Message-ID: <20191121194942.GY11621@lahna.fi.intel.com>
-References: <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
- <20191120155301.GL11621@lahna.fi.intel.com>
- <CAJZ5v0hkT-fHFOQKzp2qYPyR+NUa4c-G-uGLPZuQxqsG454PiQ@mail.gmail.com>
- <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
- <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
- <20191121112821.GU11621@lahna.fi.intel.com>
- <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
- <20191121114610.GW11621@lahna.fi.intel.com>
- <20191121125236.GX11621@lahna.fi.intel.com>
- <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
+        id S1726967AbfKUU5X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 15:57:23 -0500
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:34182 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726937AbfKUU5X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 15:57:23 -0500
+Received: by mail-qv1-f65.google.com with SMTP id n12so2034112qvt.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 12:57:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=sQ8Qhu5I7Yu+t8z9NI1yRkhgiVWdzL96yBPPh8PD1oo=;
+        b=oN3wZvC1R6G5/Jf3gq0qoDYMfS/8AQUj7eJjlx0h/BtHfjkdRhs994GeewnMwU06WA
+         QH0wrZXmsuVvpMMcHemlFtpq0jv0LBKDE/kVPPk5O0IZZHXvkR69cMAA84MqGHqqjaMr
+         GN1eYiQ2Vjj5r5fXMQiM+V5pmp6TRkffh70XILZIZsW3pm+lneowgk8+Z//hlT+6J2vO
+         9HliYPfAbK6tJ1fMNOyIbbhsmVHoryv7X7Wu2EFP4mWf06g+3k9nF2qyYneHnhPHw+yq
+         3v4g/XBQsmGDelHXqJAtDqkdGImDuqC8cPLfg6zDRZGqP8ewc4aCsBjk6COkmYtJeqXF
+         26/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=sQ8Qhu5I7Yu+t8z9NI1yRkhgiVWdzL96yBPPh8PD1oo=;
+        b=ZODAa5+OuxLlmYiteo/+lEH/gDiG+6432LwQN4yCl5N989JHMn02anbOyY21IkXGOb
+         1RfppwcXnMHOOCYAwN0SCC5EuXlBJq8ajsghhFwTOKs+CnSjZ0mMBFaKnMbkiSOZikkW
+         fBdJTdbXGXeYI2aU1mSuyrWUjrm+pAo9RqXN3QGT3SH3cnDPFJDlwCwoV5yWvSQDPIeG
+         hv3ov7uIdeWzx91UGnwJNG3pkqk0RICPWJyF0O6jq0nCd8LLp8q5E8EarzsIw1DPQM1e
+         /dlRRFONx5M+yHcWb5R1sJX8WeYkfauUlYZjFdX6BWHCE5BxGP2mTy0cggKi0JJxdgpQ
+         UemA==
+X-Gm-Message-State: APjAAAXv461cTwKMWEqcF49vuX/YuYcVok5frYqwVTrKglvZ6nacsH7X
+        jKwcrju4k8bE/YSJv2eohNIK3gaNvPQ=
+X-Google-Smtp-Source: APXvYqwjAkXBpg5htqYU978h+VtAKuq77kT0b2WXFTCFGyw+usd4elChK5PukSEkKw1SYmyPk3ZqoQ==
+X-Received: by 2002:ad4:55cc:: with SMTP id bt12mr10044192qvb.58.1574369841267;
+        Thu, 21 Nov 2019 12:57:21 -0800 (PST)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id l12sm888494qtf.93.2019.11.21.12.57.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Nov 2019 12:57:20 -0800 (PST)
+Subject: Re: [PATCH] drivers: thermal: step_wise: add support for hysteresis
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org, j-keerthy@ti.com,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+References: <8e812065f4a76325097c5f9c17f3386736d8c1d4.1574315190.git.amit.kucheria@linaro.org>
+Cc:     Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Lina Iyer <ilina@codeaurora.org>, linux-pm@vger.kernel.org
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5DD6FA2E.9010704@linaro.org>
+Date:   Thu, 21 Nov 2019 15:57:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <8e812065f4a76325097c5f9c17f3386736d8c1d4.1574315190.git.amit.kucheria@linaro.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 04:43:24PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
-> <mika.westerberg@intel.com> wrote:
-> >
-> > On Thu, Nov 21, 2019 at 01:46:14PM +0200, Mika Westerberg wrote:
-> > > On Thu, Nov 21, 2019 at 12:34:22PM +0100, Rafael J. Wysocki wrote:
-> > > > On Thu, Nov 21, 2019 at 12:28 PM Mika Westerberg
-> > > > <mika.westerberg@intel.com> wrote:
-> > > > >
-> > > > > On Wed, Nov 20, 2019 at 11:29:33PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > last week or so I found systems where the GPU was under the "PCI
-> > > > > > > Express Root Port" (name from lspci) and on those systems all of that
-> > > > > > > seems to work. So I am wondering if it's indeed just the 0x1901 one,
-> > > > > > > which also explains Mikas case that Thunderbolt stuff works as devices
-> > > > > > > never get populated under this particular bridge controller, but under
-> > > > > > > those "Root Port"s
-> > > > > >
-> > > > > > It always is a PCIe port, but its location within the SoC may matter.
-> > > > >
-> > > > > Exactly. Intel hardware has PCIe ports on CPU side (these are called
-> > > > > PEG, PCI Express Graphics, ports), and the PCH side. I think the IP is
-> > > > > still the same.
-> > > > >
-> > > > > > Also some custom AML-based power management is involved and that may
-> > > > > > be making specific assumptions on the configuration of the SoC and the
-> > > > > > GPU at the time of its invocation which unfortunately are not known to
-> > > > > > us.
-> > > > > >
-> > > > > > However, it looks like the AML invoked to power down the GPU from
-> > > > > > acpi_pci_set_power_state() gets confused if it is not in PCI D0 at
-> > > > > > that point, so it looks like that AML tries to access device memory on
-> > > > > > the GPU (beyond the PCI config space) or similar which is not
-> > > > > > accessible in PCI power states below D0.
-> > > > >
-> > > > > Or the PCI config space of the GPU when the parent root port is in D3hot
-> > > > > (as it is the case here). Also then the GPU config space is not
-> > > > > accessible.
-> > > >
-> > > > Why would the parent port be in D3hot at that point?  Wouldn't that be
-> > > > a suspend ordering violation?
-> > >
-> > > No. We put the GPU into D3hot first,
+Hi Amit,
+
+On 11/21/2019 12:50 AM, Amit Kucheria wrote:
+> From: Ram Chandrasekar <rkumbako@codeaurora.org>
 > 
-> OK
+> Currently, step wise governor increases the mitigation when the
+> temperature goes above a threshold and decreases the mitigation when the
+> temperature goes below the threshold. If there is a case where the
+> temperature is wavering around the threshold, the mitigation will be
+> applied and removed every iteration, which is not very efficient.
 > 
-> Does this involve any AML, like a _PS3 under the GPU object?
-
-I don't see _PS3 (nor _PS0) for that object. If I read it right the GPU
-itself is not described in ACPI tables at all.
-
-> > > then the root port and then turn
-> > > off the power resource (which is attached to the root port) resulting
-> > > the topology entering D3cold.
-> >
-> > I don't see that happening in the AML though.
+> The use of hysteresis temperature could avoid this ping-pong of
+> mitigation by relaxing the mitigation to happen only when the
+> temperature goes below this lower hysteresis value.
 > 
-> Which AML do you mean, specifically?  The _OFF method for the root
-> port's _PR3 power resource or something else?
-
-The root port's _OFF method for the power resource returned by its _PR3.
-
-> > Basically the difference is that when Windows 7 or Linux (the _REV==5
-> > check) then we directly do link disable whereas in Windows 8+ we invoke
-> > LKDS() method that puts the link into L2/L3. None of the fields they
-> > access seem to touch the GPU itself.
+> Signed-off-by: Ram Chandrasekar <rkumbako@codeaurora.org>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> [Rebased patch from downstream]
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  drivers/thermal/step_wise.c | 35 ++++++++++++++++++++++++-----------
+>  1 file changed, 24 insertions(+), 11 deletions(-)
 > 
-> So that may be where the problem is.
+> diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/step_wise.c
+> index 6e051cbd824ff..2c8a34a7cf959 100644
+> --- a/drivers/thermal/step_wise.c
+> +++ b/drivers/thermal/step_wise.c
+> @@ -24,7 +24,7 @@
+>   *       for this trip point
+>   *    d. if the trend is THERMAL_TREND_DROP_FULL, use lower limit
+>   *       for this trip point
+> - * If the temperature is lower than a trip point,
+> + * If the temperature is lower than a hysteresis temperature,
+>   *    a. if the trend is THERMAL_TREND_RAISING, do nothing
+>   *    b. if the trend is THERMAL_TREND_DROPPING, use lower cooling
+>   *       state for this trip point, if the cooling state already
+> @@ -115,30 +115,31 @@ static void update_passive_instance(struct thermal_zone_device *tz,
+>  
+>  static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>  {
+> -	int trip_temp;
+> +	int trip_temp, hyst_temp;
+>  	enum thermal_trip_type trip_type;
+>  	enum thermal_trend trend;
+>  	struct thermal_instance *instance;
+> -	bool throttle = false;
+> +	bool throttle;
+
+There is no need to remove throttle = false here. You are setting it to
+false later down.
+
+>  	int old_target;
+>  
+>  	if (trip == THERMAL_TRIPS_NONE) {
+> -		trip_temp = tz->forced_passive;
+> +		hyst_temp = trip_temp = tz->forced_passive;
+>  		trip_type = THERMAL_TRIPS_NONE;
+>  	} else {
+>  		tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> +		hyst_temp = trip_temp;
+> +		if (tz->ops->get_trip_hyst) {
+> +			tz->ops->get_trip_hyst(tz, trip, &hyst_temp);
+> +			hyst_temp = trip_temp - hyst_temp;
+> +		}
+>  		tz->ops->get_trip_type(tz, trip, &trip_type);
+>  	}
+>  
+>  	trend = get_tz_trend(tz, trip);
+>  
+> -	if (tz->temperature >= trip_temp) {
+> -		throttle = true;
+> -		trace_thermal_zone_trip(tz, trip, trip_type);
+> -	}
+> -
+> -	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+> -				trip, trip_type, trip_temp, trend, throttle);
+> +	dev_dbg(&tz->device,
+> +		"Trip%d[type=%d,temp=%d,hyst=%d]:trend=%d,throttle=%d\n",
+> +		trip, trip_type, trip_temp, hyst_temp, trend, throttle);
+
+throttle value is not final here. Why is the debug print and the setting
+of throttle reversed ? Idea is to print the final value of
+throttle.
+
+>  
+>  	mutex_lock(&tz->lock);
+>  
+> @@ -147,6 +148,18 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+>  			continue;
+>  
+>  		old_target = instance->target;
+> +		throttle = false;
+> +		/*
+> +		 * Lower the mitigation only if the temperature
+> +		 * goes below the hysteresis temperature.
+> +		 */
+
+I think this requires more comment here on why there is a check for
+old_target != THERMAL_NO_TARGET. Basically to ensure that the hysteresis
+is considered only when temperature is dropping.
+
+> +		if (tz->temperature >= trip_temp ||
+> +		    (tz->temperature >= hyst_temp &&
+> +		     old_target != THERMAL_NO_TARGET)) {
+> +			throttle = true;
+> +			trace_thermal_zone_trip(tz, trip, trip_type);
+> +		}
+> +
+>  		instance->target = get_target_state(instance, trend, throttle);
+>  		dev_dbg(&instance->cdev->device, "old_target=%d, target=%d\n",
+>  					old_target, (int)instance->target);
 > 
-> Putting the downstream component into PCI D[1-3] is expected to put
-> the link into L1, so I'm not sure how that plays with the later
-> attempt to put it into L2/L3 Ready.
 
-That should be fine. What I've seen the link goes into L1 when
-downstream component is put to D-state (not D0) and then it is put back
-to L0 when L2/3 ready is propagated. Eventually it goes into L2 or L3.
 
-> Also, L2/L3 Ready is expected to be transient, so finally power should
-> be removed somehow.
-
-There is GPIO for both power and PERST, I think the line here:
-
-  \_SB.SGOV (0x01010004, Zero)
-
-is the one that removes power.
-
-> > LKDS() for the first PEG port looks like this:
-> >
-> >    P0L2 = One
-> >    Sleep (0x10)
-> >    Local0 = Zero
-> >    While (P0L2)
-> >    {
-> >         If ((Local0 > 0x04))
-> >         {
-> >             Break
-> >         }
-> >
-> >         Sleep (0x10)
-> >         Local0++
-> >    }
-> >
-> > One thing that comes to mind is that the loop can end even if P0L2 is
-> > not cleared as it does only 5 iterations with 16 ms sleep between. Maybe
-> > Sleep() is implemented differently in Windows? I mean Linux may be
-> > "faster" here and return prematurely and if we leave the port into D0
-> > this does not happen, or something. I'm just throwing out ideas :)
-> 
-> But this actually works for the downstream component in D0, doesn't it?
-
-It does and that leaves the link in L0 so it could be that then the
-above AML works better or something.
-
-That reminds me, ASPM may have something to do with this as well.
-
-> Also, if the downstream component is in D0, the port actually should
-> stay in D0 too, so what would happen with the $subject patch applied?
-
-Parent port cannot be lower D-state than the child so I agree it should
-stay in D0 as well. However, it seems that what happens is that the
-issue goes away :)
+-- 
+Warm Regards
+Thara
