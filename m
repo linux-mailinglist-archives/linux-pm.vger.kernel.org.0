@@ -2,301 +2,552 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ECE105CD9
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Nov 2019 23:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B685105D16
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 00:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKUWun (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 17:50:43 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:40625 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726500AbfKUWum (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 17:50:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574376640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rTk6XMOiYbuw5+XVlipRiSh5UzNmwzHGNqkkTsALVdg=;
-        b=VWET5Mwrse85ED/PMXHoeSuFCOE36llSrM0SqEOC/Gq9CgD8wOzjg170wTrIdSwadBXTPK
-        Se7eJiiAwAKiPDqzZvklMozCfa1lshRgVM+jWyeEOULkn+SlM76+DDCiBiiBoP+KjylGsF
-        ltBhwl6mmSxVW1IsEMFsVKt2ADnegjQ=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-301-M9nSpAGkNhWp-IjtYshDbw-1; Thu, 21 Nov 2019 17:50:39 -0500
-Received: by mail-qv1-f70.google.com with SMTP id q2so3344801qvo.23
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 14:50:39 -0800 (PST)
+        id S1726265AbfKUXQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 18:16:28 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37034 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbfKUXQ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 18:16:28 -0500
+Received: by mail-pf1-f194.google.com with SMTP id p24so2527293pfn.4
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 15:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8sWPzcCwJjLfWeGoew09hehB2qcRrNVbdZlAGvSzZ/4=;
+        b=RLW2Z2ol/mCAxqaWtd7Zi/Y7HonJe7Yg/sTnXVvWkTPLtR8+wdOhbP+fQkwEJxMM5q
+         wZCt7iop3j3b6nUvhpyEqnnXI3O3XJyNgnqqS7t0oYwfD6bLjKyKFZkqcn1lU7ayyAbw
+         dDtWqpj4bGgUJmvodg9wj3KF6DbUERwcU22wM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L6kwu2ljuFRHJGSHsZ074oAeIVPpmWLJ+DvKmAed55k=;
-        b=EB4arpcoHAuKPJUD+cCf20TqCqz007EunHKz+DmWjaYXzb3tBXm1wCrvaOVVXx9AX6
-         urz0mVw63FZfB7udnMVy8dDFJuRASuKpa9gyMphqJQPNSzSMiFhT4ZahlR1FGThDDutx
-         B1lVIhHTbxWxVRGdUdu5HmqjvliaKUlW9dBT9vDJdE9R7GVDwAt1kl+hJlgIgFOuzQmf
-         36cVLQRtzZrcdqzQbskk18fdUtmaFQtXJkP2d7emtntxq/J3Bcrz3+ozsVWzC0gW3A5l
-         o5dn9pC7TcjwBRr9de3G+nVZnXIuYN6ekysCsF9LKKjZLc1JlcsKEoMRhPeKzSrg1k9F
-         /s5g==
-X-Gm-Message-State: APjAAAXY1AvvpEFlsZhTzh7qltEeqoT4yUYdeBAC/HQ842neDn1GISj3
-        0CpVBFbuTxLEGU0tPpo/Dlx3v1W3ShHYClA9n1BPYMcLgnoDKgLHaD/lzH7YSjwz5zxkNQ+xh6g
-        msCK0b8ApK82QqA2yCwuryYWYScfS5FzgxuE=
-X-Received: by 2002:a37:8285:: with SMTP id e127mr2677677qkd.62.1574376638874;
-        Thu, 21 Nov 2019 14:50:38 -0800 (PST)
-X-Google-Smtp-Source: APXvYqziB5Ucb8ZFpCpITvN4kvLRDkloqv4Emub8IRaRDSPVC7EbFpNg+VGTx80DbnaXEZuqQUj9nX/wiwQNyS7b2t8=
-X-Received: by 2002:a37:8285:: with SMTP id e127mr2677652qkd.62.1574376638429;
- Thu, 21 Nov 2019 14:50:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8sWPzcCwJjLfWeGoew09hehB2qcRrNVbdZlAGvSzZ/4=;
+        b=CPKo67bUNu34Q8s4i2ce9XPHWL/oOKO8Z8rgtx6tyeH1mFoWnZls4Kv5eVBhJBfEe+
+         sz6pE9Ytx/lCURvyiY3BnqRGMJVHxoBLreQwhSrwD0tinUTE22xwD/F+00fX/bjE6kK2
+         scVGlDlQS5OnAcXFCu7faQw+3ZPV17JBKHrJz1BQtMHM3KeNVnYkmEPjETQ2Uf6xQF6Z
+         u8Fg7HFCIQkRY5vvTgxBB09gAxqfLOHM+yHYX4DL1Hhag7dadC8a1oyR6/4JsZPy2qox
+         JwSXmEjl4c98A2z4RBGqHEEIaSvv6nloOJAKlGpqRnOqqsdNMVd6M3Nwgjq2lQfyw6dt
+         yWdg==
+X-Gm-Message-State: APjAAAUxPWlFud08Tj7DyivrR0qXGtBRJOanuJHtArrPrZh9IUOpU/XG
+        MzfMdqa3ROE48bpuBK2ClLnXJg==
+X-Google-Smtp-Source: APXvYqzDaN/gUHbALcy0iPAeUp0twk7ht0phtka4mb2z5ujRvgii3zwCv6/WBeA1/7RLRW3MF/Y5AA==
+X-Received: by 2002:a62:7553:: with SMTP id q80mr14378924pfc.203.1574378185361;
+        Thu, 21 Nov 2019 15:16:25 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id f10sm4713293pfd.28.2019.11.21.15.16.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Nov 2019 15:16:24 -0800 (PST)
+Date:   Thu, 21 Nov 2019 15:16:22 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC 2/2] PM / devfreq: Use PM QoS for sysfs min/max_freq
+Message-ID: <20191121231622.GK27773@google.com>
+References: <cover.1574179738.git.leonard.crestez@nxp.com>
+ <1f567d6478b1782f7f4afc27cb6d3f896d77ac9f.1574179738.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-References: <CACO55tvo3rbPtYJcioEgXCEQqVXcVAm-iowr9Nim=bgTdMjgLw@mail.gmail.com>
- <20191120155301.GL11621@lahna.fi.intel.com> <CAJZ5v0hkT-fHFOQKzp2qYPyR+NUa4c-G-uGLPZuQxqsG454PiQ@mail.gmail.com>
- <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
- <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
- <20191121112821.GU11621@lahna.fi.intel.com> <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
- <20191121114610.GW11621@lahna.fi.intel.com> <20191121125236.GX11621@lahna.fi.intel.com>
- <CAJZ5v0iMwhudB7O0hR-6KfRfa+_iGOY=t0Zzeh6+9OiTzeYJfA@mail.gmail.com>
- <20191121194942.GY11621@lahna.fi.intel.com> <CAJZ5v0gyna0b135uxBVfNXgB9v-U9-93EYe0uzsr2BukJ9OtuA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gyna0b135uxBVfNXgB9v-U9-93EYe0uzsr2BukJ9OtuA@mail.gmail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Thu, 21 Nov 2019 23:50:26 +0100
-Message-ID: <CACO55tvFeTFo3gGdL02gnWMMk+AHPPb=hntkre0ZcA6WvKcV1A@mail.gmail.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Mario Limonciello <Mario.Limonciello@dell.com>
-X-MC-Unique: M9nSpAGkNhWp-IjtYshDbw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1f567d6478b1782f7f4afc27cb6d3f896d77ac9f.1574179738.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 11:39 PM Rafael J. Wysocki <rafael@kernel.org> wrot=
-e:
->
-> On Thu, Nov 21, 2019 at 8:49 PM Mika Westerberg
-> <mika.westerberg@intel.com> wrote:
-> >
-> > On Thu, Nov 21, 2019 at 04:43:24PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Nov 21, 2019 at 1:52 PM Mika Westerberg
-> > > <mika.westerberg@intel.com> wrote:
-> > > >
-> > > > On Thu, Nov 21, 2019 at 01:46:14PM +0200, Mika Westerberg wrote:
-> > > > > On Thu, Nov 21, 2019 at 12:34:22PM +0100, Rafael J. Wysocki wrote=
-:
-> > > > > > On Thu, Nov 21, 2019 at 12:28 PM Mika Westerberg
-> > > > > > <mika.westerberg@intel.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, Nov 20, 2019 at 11:29:33PM +0100, Rafael J. Wysocki w=
-rote:
-> > > > > > > > > last week or so I found systems where the GPU was under t=
-he "PCI
-> > > > > > > > > Express Root Port" (name from lspci) and on those systems=
- all of that
-> > > > > > > > > seems to work. So I am wondering if it's indeed just the =
-0x1901 one,
-> > > > > > > > > which also explains Mikas case that Thunderbolt stuff wor=
-ks as devices
-> > > > > > > > > never get populated under this particular bridge controll=
-er, but under
-> > > > > > > > > those "Root Port"s
-> > > > > > > >
-> > > > > > > > It always is a PCIe port, but its location within the SoC m=
-ay matter.
-> > > > > > >
-> > > > > > > Exactly. Intel hardware has PCIe ports on CPU side (these are=
- called
-> > > > > > > PEG, PCI Express Graphics, ports), and the PCH side. I think =
-the IP is
-> > > > > > > still the same.
-> > > > > > >
-> > > > > > > > Also some custom AML-based power management is involved and=
- that may
-> > > > > > > > be making specific assumptions on the configuration of the =
-SoC and the
-> > > > > > > > GPU at the time of its invocation which unfortunately are n=
-ot known to
-> > > > > > > > us.
-> > > > > > > >
-> > > > > > > > However, it looks like the AML invoked to power down the GP=
-U from
-> > > > > > > > acpi_pci_set_power_state() gets confused if it is not in PC=
-I D0 at
-> > > > > > > > that point, so it looks like that AML tries to access devic=
-e memory on
-> > > > > > > > the GPU (beyond the PCI config space) or similar which is n=
-ot
-> > > > > > > > accessible in PCI power states below D0.
-> > > > > > >
-> > > > > > > Or the PCI config space of the GPU when the parent root port =
-is in D3hot
-> > > > > > > (as it is the case here). Also then the GPU config space is n=
-ot
-> > > > > > > accessible.
-> > > > > >
-> > > > > > Why would the parent port be in D3hot at that point?  Wouldn't =
-that be
-> > > > > > a suspend ordering violation?
-> > > > >
-> > > > > No. We put the GPU into D3hot first,
-> > >
-> > > OK
-> > >
-> > > Does this involve any AML, like a _PS3 under the GPU object?
-> >
-> > I don't see _PS3 (nor _PS0) for that object. If I read it right the GPU
-> > itself is not described in ACPI tables at all.
->
-> OK
->
-> > > > > then the root port and then turn
-> > > > > off the power resource (which is attached to the root port) resul=
-ting
-> > > > > the topology entering D3cold.
-> > > >
-> > > > I don't see that happening in the AML though.
-> > >
-> > > Which AML do you mean, specifically?  The _OFF method for the root
-> > > port's _PR3 power resource or something else?
-> >
-> > The root port's _OFF method for the power resource returned by its _PR3=
-.
->
-> OK, so without the $subject patch we (1) program the downstream
-> component (GPU) into D3hot, then we (2) program the port holding it
-> into D3hot and then we (3) let the AML (_OFF for the power resource
-> listed by _PR3 under the port object) run.
->
-> Something strange happens at this point (and I guess that _OFF doesn't
-> even reach the point where it removes power from the port which is why
-> we see a lock-up).
->
+Hi Leonard,
 
-it does though. I will post the data shortly (with the change in power
-consumption), as I also want to do the ACPI traces now.
+this seems to work ok as long as there are no other ('external') PM QoS
+requests, however the aggregate max_freq can be incorrect when there are
+multiple requests.
 
-> We know that skipping (1) makes things work and we kind of suspect
-> that skipping (3) would make things work either, but what about doing
-> (1) and (3) without (2)?
->
-> > > > Basically the difference is that when Windows 7 or Linux (the _REV=
-=3D=3D5
-> > > > check) then we directly do link disable whereas in Windows 8+ we in=
-voke
-> > > > LKDS() method that puts the link into L2/L3. None of the fields the=
-y
-> > > > access seem to touch the GPU itself.
-> > >
-> > > So that may be where the problem is.
-> > >
-> > > Putting the downstream component into PCI D[1-3] is expected to put
-> > > the link into L1, so I'm not sure how that plays with the later
-> > > attempt to put it into L2/L3 Ready.
-> >
-> > That should be fine. What I've seen the link goes into L1 when
-> > downstream component is put to D-state (not D0) and then it is put back
-> > to L0 when L2/3 ready is propagated. Eventually it goes into L2 or L3.
->
-> Well, that's the expected behavior, but the observed behavior isn't as
-> expected. :-)
->
-> > > Also, L2/L3 Ready is expected to be transient, so finally power shoul=
-d
-> > > be removed somehow.
-> >
-> > There is GPIO for both power and PERST, I think the line here:
-> >
-> >   \_SB.SGOV (0x01010004, Zero)
-> >
-> > is the one that removes power.
->
-> OK
->
-> > > > LKDS() for the first PEG port looks like this:
-> > > >
-> > > >    P0L2 =3D One
-> > > >    Sleep (0x10)
-> > > >    Local0 =3D Zero
-> > > >    While (P0L2)
-> > > >    {
-> > > >         If ((Local0 > 0x04))
-> > > >         {
-> > > >             Break
-> > > >         }
-> > > >
-> > > >         Sleep (0x10)
-> > > >         Local0++
-> > > >    }
-> > > >
-> > > > One thing that comes to mind is that the loop can end even if P0L2 =
-is
-> > > > not cleared as it does only 5 iterations with 16 ms sleep between. =
-Maybe
-> > > > Sleep() is implemented differently in Windows? I mean Linux may be
-> > > > "faster" here and return prematurely and if we leave the port into =
-D0
-> > > > this does not happen, or something. I'm just throwing out ideas :)
-> > >
-> > > But this actually works for the downstream component in D0, doesn't i=
-t?
-> >
-> > It does and that leaves the link in L0 so it could be that then the
-> > above AML works better or something.
->
-> That would be my guess.
->
-> > That reminds me, ASPM may have something to do with this as well.
->
-> Not really if D-states are involved.
->
-> > > Also, if the downstream component is in D0, the port actually should
-> > > stay in D0 too, so what would happen with the $subject patch applied?
-> >
-> > Parent port cannot be lower D-state than the child so I agree it should
-> > stay in D0 as well. However, it seems that what happens is that the
-> > issue goes away :)
->
-> Well, at least this is kind of out of the spec.
->
-> Note that pci_pm_suspend_noirq() won't let the port go into D3 if the
-> downstream device is in D0, so the $subject patch will not work as
-> expected in the suspend-to-idle case.
->
-> Also we really should make up our minds on whether or not to force
-> PCIe ports to stay in D0 when downstream devices are in D0 and be
-> consequent about that.  Right now we do one thing during system-wide
-> suspend and the other one in PM-runtime, which is confusing.
->
-> The current design is mostly based on the PCI PM Spec 1.2, so it would
-> be consequent to follow system-wide suspend in PM-runtime and avoid
-> putting PCIe ports holding devices in D0 into any low-power states.
-> but that would make the approach in the $subject patch ineffective.
->
-> Moreover, the fact that there are separate branches for "Windows 7"
-> and "Windows 8+" kind of suggest a change in the expected behavior
-> between Windows 7 and Windows 8, from the AML perspective.  I would
-> guess that Windows 7 followed PCI PM 1.2 and Windows 8 (and later)
-> does something else.  Now, the structure of the "Windows 8+" branch
-> described by you suggests that, at least in the cases when it is going
-> to remove power from the port eventually, it goes straight for the
-> link preparation (the L2/L3 Ready transition) and power removal
-> without bothering to program the downstream device and port into D3hot
-> (because that's kind of redundant).
->
-> That hypothetical "Windows 8+" approach may really work universally,
-> because it doesn't seem to break any rules (going straight from D0 to
-> D3cold is not disallowed and doing that for both a port and a
-> downstream device at the same time is kind of OK either, as long as
-> the link is ready for that).
->
+I intended to test with devfreq_cooling using PM QoS, but this didn't work
+out due to limitations on my development platform. Instead I added another
+set of requests and sysfs attributes to devfreq (see patch below).
 
+With this we get:
+
+cat available_frequencies
+  180000000 267000000 355000000 430000000 565000000 650000000 800000000
+
+# ok
+cat max_freq
+  800000000
+
+# wtf???
+echo 650000000 > max_freq
+cat max_freq
+  800000000
+
+# this looks better
+echo 800000000 > test_max_freq
+cat max_freq
+  650000000
+
+
+The problem appears to be:
+
+#define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE      (-1)
+
+in include/linux/pm_qos.h (added by "PM / QoS: Restore
+DEV_PM_QOS_MIN/MAX_FREQUENCY")
+
+The aggregate value returned by
+dev_pm_qos_read_value(dev, DEV_PM_QOS_MAX_FREQUENCY) is the
+smallest of all requests, which is PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
+unless all requests have set an actual constraint.
+
+You probably want to change the constant to resolve to S32_MAX or some
+other big value.
+
+Cheers
+
+Matthias
+
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 4e6b3c05b3706f..935098bfadf944 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -659,6 +659,18 @@ static void devfreq_dev_release(struct device *dev)
+                        dev_warn(dev->parent,
+                                "Failed to remove min_freq request: %d\n", err);
+        }
++       if (dev_pm_qos_request_active(&devfreq->test_max_freq_req)) {
++               err = dev_pm_qos_remove_request(&devfreq->test_max_freq_req);
++               if (err)
++                       dev_warn(dev->parent,
++                               "Failed to remove test_max_freq request: %d\n", err);
++       }
++       if (dev_pm_qos_request_active(&devfreq->test_min_freq_req)) {
++               err = dev_pm_qos_remove_request(&devfreq->test_min_freq_req);
++               if (err)
++                       dev_warn(dev->parent,
++                               "Failed to remove test_min_freq request: %d\n", err);
++       }
+
+        if (devfreq->profile->exit)
+                devfreq->profile->exit(devfreq->dev.parent);
+@@ -738,6 +750,16 @@ struct devfreq *devfreq_add_device(struct device *dev,
+        if (err < 0)
+                goto err_dev;
+
++       err = dev_pm_qos_add_request(dev, &devfreq->test_min_freq_req,
++                                    DEV_PM_QOS_MIN_FREQUENCY, 0);
++       if (err < 0)
++               goto err_dev;
++       err = dev_pm_qos_add_request(dev, &devfreq->test_max_freq_req,
++                                    DEV_PM_QOS_MAX_FREQUENCY,
++                                    PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
++       if (err < 0)
++               goto err_dev;
++
+        devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+        devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
+        if (IS_ERR(devfreq->opp_table))
+@@ -1454,6 +1476,101 @@ static ssize_t max_freq_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(max_freq);
+
++static ssize_t test_min_freq_store(struct device *dev, struct device_attribute *attr,
++                             const char *buf, size_t count)
++{
++       struct devfreq *df = to_devfreq(dev);
++       unsigned long value;
++       int ret;
++
++       /*
++        * Protect against theoretical sysfs writes between
++        * device_add and dev_pm_qos_add_request
++        */
++       if (!dev_pm_qos_request_active(&df->test_min_freq_req))
++               return -EINVAL;
++
++       ret = sscanf(buf, "%lu", &value);
++       if (ret != 1)
++               return -EINVAL;
++
++       /* Round down to kHz for PM QoS */
++       ret = dev_pm_qos_update_request(&df->test_min_freq_req,
++                                       value / HZ_PER_KHZ);
++       if (ret < 0)
++               return ret;
++
++       return count;
++}
++
++static ssize_t test_min_freq_show(struct device *dev, struct device_attribute *attr,
++                            char *buf)
++{
++       struct devfreq *df = to_devfreq(dev);
++       unsigned long min_freq, max_freq;
++
++       mutex_lock(&df->lock);
++       get_freq_range(df, &min_freq, &max_freq);
++       mutex_unlock(&df->lock);
++
++       return sprintf(buf, "%lu\n", min_freq);
++}
++
++static ssize_t test_max_freq_store(struct device *dev, struct device_attribute *attr,
++                             const char *buf, size_t count)
++{
++       struct devfreq *df = to_devfreq(dev);
++       unsigned long value;
++       int ret;
++
++       /*
++        * Protect against theoretical sysfs writes between
++        * device_add and dev_pm_qos_add_request
++        */
++       if (!dev_pm_qos_request_active(&df->test_max_freq_req))
++               return -EINVAL;
++
++       ret = sscanf(buf, "%lu", &value);
++       if (ret != 1)
++               return -EINVAL;
++
++       /*
++        * PM QoS frequencies are in kHz so we need to convert. Convert by
++        * rounding upwards so that the acceptable interval never shrinks.
++        *
++        * For example if the user writes "666666666" to sysfs this value will
++        * be converted to 666667 kHz and back to 666667000 Hz before an OPP
++        * lookup, this ensures that an OPP of 666666666Hz is still accepted.
++        *
++        * A value of zero means "no limit".
++        */
++       if (value)
++               value = DIV_ROUND_UP(value, HZ_PER_KHZ);
++       else
++               value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
++
++       ret = dev_pm_qos_update_request(&df->test_max_freq_req, value);
++       if (ret < 0)
++               return ret;
++
++       return count;
++}
++static DEVICE_ATTR_RW(test_min_freq);
++
++static ssize_t test_max_freq_show(struct device *dev, struct device_attribute *attr,
++                            char *buf)
++{
++       struct devfreq *df = to_devfreq(dev);
++       unsigned long min_freq, max_freq;
++
++       mutex_lock(&df->lock);
++       get_freq_range(df, &min_freq, &max_freq);
++       mutex_unlock(&df->lock);
++
++       return sprintf(buf, "%lu\n", max_freq);
++}
++static DEVICE_ATTR_RW(test_max_freq);
++
+ static ssize_t available_frequencies_show(struct device *d,
+                                          struct device_attribute *attr,
+                                          char *buf)
+@@ -1532,6 +1649,8 @@ static struct attribute *devfreq_attrs[] = {
+        &dev_attr_polling_interval.attr,
+        &dev_attr_min_freq.attr,
+        &dev_attr_max_freq.attr,
++       &dev_attr_test_min_freq.attr,
++       &dev_attr_test_max_freq.attr,
+        &dev_attr_trans_stat.attr,
+        NULL,
+ };
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 6cdd070d59c1f2..8f97c1efaacca5 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -166,6 +166,8 @@ struct devfreq {
+
+        struct dev_pm_qos_request user_min_freq_req;
+        struct dev_pm_qos_request user_max_freq_req;
++
++static ssize_t test_max_freq_show(struct device *dev, struct device_attribute *attr,
++                            char *buf)
++{
++       struct devfreq *df = to_devfreq(dev);
++       unsigned long min_freq, max_freq;
++
++       mutex_lock(&df->lock);
++       get_freq_range(df, &min_freq, &max_freq);
++       mutex_unlock(&df->lock);
++
++       return sprintf(buf, "%lu\n", max_freq);
++}
++static DEVICE_ATTR_RW(test_max_freq);
++
+ static ssize_t available_frequencies_show(struct device *d,
+                                          struct device_attribute *attr,
+                                          char *buf)
+@@ -1532,6 +1649,8 @@ static struct attribute *devfreq_attrs[] = {
+        &dev_attr_polling_interval.attr,
+        &dev_attr_min_freq.attr,
+        &dev_attr_max_freq.attr,
++       &dev_attr_test_min_freq.attr,
++       &dev_attr_test_max_freq.attr,
+        &dev_attr_trans_stat.attr,
+        NULL,
+ };
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 6cdd070d59c1f2..8f97c1efaacca5 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -166,6 +166,8 @@ struct devfreq {
+
+        struct dev_pm_qos_request user_min_freq_req;
+        struct dev_pm_qos_request user_max_freq_req;
++       struct dev_pm_qos_request test_min_freq_req;
++       struct dev_pm_qos_request test_max_freq_req;
+        bool stop_polling;
+
+        unsigned long suspend_freq;
+
+
+On Tue, Nov 19, 2019 at 06:12:14PM +0200, Leonard Crestez wrote:
+> Switch the handling of min_freq and max_freq from sysfs to use the
+> dev_pm_qos_request interface.
+> 
+> Since PM QoS handles frequencies as kHz this change reduces the
+> precision of min_freq and max_freq. This shouldn't introduce problems
+> because frequencies which are not an integer number of kHz are likely
+> not an integer number of Hz either.
+> 
+> Try to ensure compatibility by rounding min values down and rounding
+> max values up.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/devfreq/devfreq.c | 76 ++++++++++++++++++++++++++++++---------
+>  include/linux/devfreq.h   |  9 ++---
+>  2 files changed, 64 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 34bbaac6ea7e..518dd2745d06 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -139,14 +139,10 @@ static void get_freq_range(struct devfreq *devfreq,
+>  	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
+>  	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
+>  		*max_freq = min(*max_freq,
+>  				(unsigned long)HZ_PER_KHZ * qos_max_freq);
+>  
+> -	/* Apply constraints from sysfs */
+> -	*min_freq = max(*min_freq, devfreq->min_freq);
+> -	*max_freq = min(*max_freq, devfreq->max_freq);
+> -
+>  	/* Apply constraints from OPP interface */
+>  	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
+>  	*max_freq = min(*max_freq, devfreq->scaling_max_freq);
+>  
+>  	if (*min_freq > *max_freq)
+> @@ -708,10 +704,23 @@ static void devfreq_dev_release(struct device *dev)
+>  					 DEV_PM_QOS_MIN_FREQUENCY);
+>  	if (err && err != -ENOENT)
+>  		dev_warn(dev->parent,
+>  			"Failed to remove min_freq notifier: %d\n", err);
+>  
+> +	if (dev_pm_qos_request_active(&devfreq->user_max_freq_req)) {
+> +		err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
+> +		if (err)
+> +			dev_warn(dev->parent,
+> +				"Failed to remove max_freq request: %d\n", err);
+> +	}
+> +	if (dev_pm_qos_request_active(&devfreq->user_min_freq_req)) {
+> +		err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
+> +		if (err)
+> +			dev_warn(dev->parent,
+> +				"Failed to remove min_freq request: %d\n", err);
+> +	}
+> +
+>  	if (devfreq->profile->exit)
+>  		devfreq->profile->exit(devfreq->dev.parent);
+>  
+>  	mutex_destroy(&devfreq->lock);
+>  	kfree(devfreq);
+> @@ -780,19 +789,17 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	if (!devfreq->scaling_min_freq) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -EINVAL;
+>  		goto err_dev;
+>  	}
+> -	devfreq->min_freq = devfreq->scaling_min_freq;
+>  
+>  	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
+>  	if (!devfreq->scaling_max_freq) {
+>  		mutex_unlock(&devfreq->lock);
+>  		err = -EINVAL;
+>  		goto err_dev;
+>  	}
+> -	devfreq->max_freq = devfreq->scaling_max_freq;
+>  
+>  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+>  	atomic_set(&devfreq->suspend_count, 0);
+>  
+>  	dev_set_name(&devfreq->dev, "devfreq%d",
+> @@ -829,10 +836,20 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  
+>  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
+>  
+>  	mutex_unlock(&devfreq->lock);
+>  
+> +	err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
+> +				     DEV_PM_QOS_MIN_FREQUENCY, 0);
+> +	if (err < 0)
+> +		goto err_devfreq;
+> +	err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
+> +				     DEV_PM_QOS_MAX_FREQUENCY,
+> +				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+> +	if (err < 0)
+> +		goto err_devfreq;
+> +
+>  	devfreq->nb_min.notifier_call = qos_min_notifier_call;
+>  	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
+>  				      DEV_PM_QOS_MIN_FREQUENCY);
+>  	if (err)
+>  		goto err_devfreq;
+> @@ -1414,18 +1431,26 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
+>  {
+>  	struct devfreq *df = to_devfreq(dev);
+>  	unsigned long value;
+>  	int ret;
+>  
+> +	/*
+> +	 * Protect against theoretical sysfs writes between
+> +	 * device_add and dev_pm_qos_add_request
+> +	 */
+> +	if (!dev_pm_qos_request_active(&df->user_min_freq_req))
+> +		return -EINVAL;
+> +
+>  	ret = sscanf(buf, "%lu", &value);
+>  	if (ret != 1)
+>  		return -EINVAL;
+>  
+> -	mutex_lock(&df->lock);
+> -	df->min_freq = value;
+> -	update_devfreq(df);
+> -	mutex_unlock(&df->lock);
+> +	/* Round down to kHz for PM QoS */
+> +	ret = dev_pm_qos_update_request(&df->user_min_freq_req,
+> +					value / HZ_PER_KHZ);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	return count;
+>  }
+>  
+>  static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
+> @@ -1446,22 +1471,39 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
+>  {
+>  	struct devfreq *df = to_devfreq(dev);
+>  	unsigned long value;
+>  	int ret;
+>  
+> +	/*
+> +	 * Protect against theoretical sysfs writes between
+> +	 * device_add and dev_pm_qos_add_request
+> +	 */
+> +	if (!dev_pm_qos_request_active(&df->user_max_freq_req))
+> +		return -EINVAL;
+> +
+>  	ret = sscanf(buf, "%lu", &value);
+>  	if (ret != 1)
+>  		return -EINVAL;
+>  
+> -	mutex_lock(&df->lock);
+> -
+> -	if (!value)
+> -		value = ULONG_MAX;
+> +	/*
+> +	 * PM QoS frequencies are in kHz so we need to convert. Convert by
+> +	 * rounding upwards so that the acceptable interval never shrinks.
+> +	 *
+> +	 * For example if the user writes "666666666" to sysfs this value will
+> +	 * be converted to 666667 kHz and back to 666667000 Hz before an OPP
+> +	 * lookup, this ensures that an OPP of 666666666Hz is still accepted.
+> +	 *
+> +	 * A value of zero means "no limit".
+> +	 */
+> +	if (value)
+> +		value = DIV_ROUND_UP(value, HZ_PER_KHZ);
+> +	else
+> +		value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
+>  
+> -	df->max_freq = value;
+> -	update_devfreq(df);
+> -	mutex_unlock(&df->lock);
+> +	ret = dev_pm_qos_update_request(&df->user_max_freq_req, value);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	return count;
+>  }
+>  static DEVICE_ATTR_RW(min_freq);
+>  
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index 8b92ccbd1962..fb376b5b7281 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -11,10 +11,11 @@
+>  #define __LINUX_DEVFREQ_H__
+>  
+>  #include <linux/device.h>
+>  #include <linux/notifier.h>
+>  #include <linux/pm_opp.h>
+> +#include <linux/pm_qos.h>
+>  
+>  #define DEVFREQ_NAME_LEN 16
+>  
+>  /* DEVFREQ governor name */
+>  #define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
+> @@ -121,12 +122,12 @@ struct devfreq_dev_profile {
+>   *		devfreq.nb to the corresponding register notifier call chain.
+>   * @work:	delayed work for load monitoring.
+>   * @previous_freq:	previously configured frequency value.
+>   * @data:	Private data of the governor. The devfreq framework does not
+>   *		touch this.
+> - * @min_freq:	Limit minimum frequency requested by user (0: none)
+> - * @max_freq:	Limit maximum frequency requested by user (0: none)
+> + * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
+> + * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
+>   * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
+>   * @scaling_max_freq:	Limit maximum frequency requested by OPP interface
+>   * @stop_polling:	 devfreq polling status of a device.
+>   * @suspend_freq:	 frequency of a device set during suspend phase.
+>   * @resume_freq:	 frequency of a device set in resume phase.
+> @@ -161,12 +162,12 @@ struct devfreq {
+>  	unsigned long previous_freq;
+>  	struct devfreq_dev_status last_status;
+>  
+>  	void *data; /* private data for governors */
+>  
+> -	unsigned long min_freq;
+> -	unsigned long max_freq;
+> +	struct dev_pm_qos_request user_min_freq_req;
+> +	struct dev_pm_qos_request user_max_freq_req;
+>  	unsigned long scaling_min_freq;
+>  	unsigned long scaling_max_freq;
+>  	bool stop_polling;
+>  
+>  	unsigned long suspend_freq;
+> -- 
+> 2.17.1
+> 
