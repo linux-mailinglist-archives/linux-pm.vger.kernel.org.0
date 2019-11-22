@@ -2,258 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DDA10693E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 10:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A81106968
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 10:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKVJtK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 04:49:10 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:42673 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVJtK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 04:49:10 -0500
-Received: by mail-oi1-f193.google.com with SMTP id o12so5946924oic.9;
-        Fri, 22 Nov 2019 01:49:09 -0800 (PST)
+        id S1726500AbfKVJ7p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 04:59:45 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46740 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbfKVJ7p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 04:59:45 -0500
+Received: by mail-ot1-f65.google.com with SMTP id n23so5629500otr.13
+        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2019 01:59:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PNbKiV+6k7+b+wykrIzmPoYnrmgC3vrubjDeVmiZRhs=;
-        b=XVwQ1JiT8RvoGDu6e3WlZSPZQ1J7NdIWQIaGus3zxJIVIypCw0Ic0lk291mn+yQE6F
-         4Q+Z81c3ouXtf4+91aWSBDBwd6oIV9gIriXjrjLrO+P+gitHTg+tAlXBfJoCRO3vIMzQ
-         1vddng4qFMIRFy8B28HPJ9oJeWCIIa04jwQmlO4ImdF/1MMXM5igXWq342gpm8LHJFZw
-         beb5CJaRfzcqJWeEqoPMK9aI3qvxdCSCFzMsIjKkuAILw/dReH3fyoW7otUepos75bzW
-         Rx0ZJHheULjuu+bf+MMX8R0g7Wsi2FGtUEwe2ZLK/UxT+LewQnplrBqHpChUP79irAtu
-         jnkg==
-X-Gm-Message-State: APjAAAXuYdqg9N2LgjcqbKe4/lzZ6ewkS7SDY7ytkMs1uHAj691Btz5G
-        fO8cJaOAMp79Nv8xr7/Cl0bFzpv0kGuG3mJ2GAM=
-X-Google-Smtp-Source: APXvYqyRz9VSwWJoLGs/NoQ6wjkEvXxseNEUmAP7gSrfGLs4z0zd9AhvIvV7ufYDVH/BFs1mbB0V7W9AesqEmnZco8s=
-X-Received: by 2002:a05:6808:901:: with SMTP id w1mr11871220oih.57.1574416148960;
- Fri, 22 Nov 2019 01:49:08 -0800 (PST)
+        bh=I/ZdY3bM8lpQtmraKi1sgvqQFXBo796yS3lFNXe7mJw=;
+        b=ALe/6RHEobBH3AqYzQS2SWET2xmemMfKB6Ijm/IZcbwMc5Zci3EC1R1c0x8I+iHuJJ
+         G0MvWyjecI/gzNOibDd5oSuqI6fPXbnUM7rZUYbDdv7j/XnLuS0/5Ozb0hIbGVc6UMiB
+         FgZfzPTw/pDLYgJUeQXQvc7rlKlDS2tkDxZqO2G48I7V2W99F5/xuKjqe4RILTV2Fnmo
+         0hwT1jj/MjYrjC0w1PHb2akDiKz5UntLgFl28YCv/zomFqhSfgom99Qa1N16gMMeqj21
+         QkK+rcW7oeyd5ocW0eZ/c7NUvwiRvwrULvCyu8U+VrB2nOfoi2Mk/3KBebvbEM4LJMNt
+         c1jA==
+X-Gm-Message-State: APjAAAVefDtJ9ZpA8rqJnlVwW5VmpdnMJr2bUOnjx7d4+YU3YHVJKzg7
+        jy2YNN44dDMsQ4iAqiOAEmYwTvylzqjO39nEo+4=
+X-Google-Smtp-Source: APXvYqyM6QTfDCgfxt3GM73HDDfMyg/8imJDfW9t+ZT8V+pxkictWZK96fzGP0Xrz8kOnzKnxTQ/+gfPZsUpyzsz9Po=
+X-Received: by 2002:a9d:4c85:: with SMTP id m5mr9643405otf.118.1574416781916;
+ Fri, 22 Nov 2019 01:59:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20191122002159.4159-1-kherbst@redhat.com>
-In-Reply-To: <20191122002159.4159-1-kherbst@redhat.com>
+References: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <20191121093557.bycvdo4xyinbc5cb@vireshk-i7> <DB3PR0402MB39165544EDD0317095A1B72DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAJZ5v0geykeebX-67+h4twj+t7oTVBf7X7_UsXw0LAc+0Ap75Q@mail.gmail.com>
+ <CAJZ5v0j4z9tEDCGKRc7dHqTiJ1Fq3So=ELfvR6H25UkRmKeBvg@mail.gmail.com> <DB3PR0402MB3916BDC24BDA1053B7ADBDCFF5490@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB3916BDC24BDA1053B7ADBDCFF5490@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Nov 2019 10:48:57 +0100
-Message-ID: <CAJZ5v0iQttGB4m5TbzCtjp2C1j5qEkUhqhpWb++LhSk3mbW=Lw@mail.gmail.com>
-Subject: Re: [PATCH v5] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>
+Date:   Fri, 22 Nov 2019 10:59:30 +0100
+Message-ID: <CAJZ5v0g5EGWVAm4A8ynoWAPc1wJRpR6wgZqwhvbmeT4eT49EUA@mail.gmail.com>
+Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 1:22 AM Karol Herbst <kherbst@redhat.com> wrote:
+On Fri, Nov 22, 2019 at 6:15 AM Anson Huang <anson.huang@nxp.com> wrote:
 >
-> Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
-> states.
+> Hi, Rafael
+>         Theoretically, yes, the CPU being offline will run the irq work list to make sure the irq work pending on it will be clear, but the fact is NOT,
+
+So this looks like a problem with irq_work_sync() working not as expected.
+
+>         both ondemand and schedutil governor can reproduce this issue if running stress CPU hotplug test.
+>         I tried add a "int cpu" in irq work structure to record CPU number which has irq work pending, when issue happen, I can see the irq work is pending at CPU #3 which is already offline, this is why issue happen, but I don't know how it happens...
 >
-> v2: convert to pci_dev quirk
->     put a proper technical explanation of the issue as a in-code comment
-> v3: disable it only for certain combinations of intel and nvidia hardware
-> v4: simplify quirk by setting flag on the GPU itself
-> v5: restructure quirk to make it easier to add new IDs
->     fix whitespace issues
->     fix potential NULL pointer access
->     update the quirk documentation
+> diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
+> index b11fcdf..f8da06f9 100644
+> --- a/include/linux/irq_work.h
+> +++ b/include/linux/irq_work.h
+> @@ -25,6 +25,7 @@ struct irq_work {
+>         unsigned long flags;
+>         struct llist_node llnode;
+>         void (*func)(struct irq_work *);
+> +       int cpu;
+>  };
 >
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Lyude Paul <lyude@redhat.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Mika Westerberg <mika.westerberg@intel.com>
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: nouveau@lists.freedesktop.org
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=205623
-> ---
->  drivers/pci/pci.c    |  7 ++++++
->  drivers/pci/quirks.c | 51 ++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pci.h  |  1 +
->  3 files changed, 59 insertions(+)
+>  static inline
+> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+> index d42acaf..2e893d5 100644
+> --- a/kernel/irq_work.c
+> +++ b/kernel/irq_work.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/export.h>
+>  #include <linux/irq_work.h>
+> +#include <linux/jiffies.h>
+>  #include <linux/percpu.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/irqflags.h>
+> @@ -78,6 +79,7 @@ bool irq_work_queue(struct irq_work *work)
+>         if (!irq_work_claim(work))
+>                 return false;
 >
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 57f15a7e6f0b..e08db2daa924 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -850,6 +850,13 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
->            || (state == PCI_D2 && !dev->d2_support))
->                 return -EIO;
+> +       work->cpu = smp_processor_id();
+>         /* Queue the entry and raise the IPI if needed. */
+>         preempt_disable();
+>         __irq_work_queue_local(work);
+> @@ -105,6 +107,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
+>         /* Only queue if not already pending */
+>         if (!irq_work_claim(work))
+>                 return false;
+> +       work->cpu = cpu;
 >
-> +       /*
-> +        * Check if we have a bad combination of bridge controller and nvidia
-> +        * GPU, see quirk_broken_nv_runpm for more info
-> +        */
-> +       if (state != PCI_D0 && dev->broken_nv_runpm)
-> +               return 0;
-
-The result of this change in the suspend-to-idle path will be leaving
-the device and its PCIe port in D0 while suspended, unless the device
-itself has power management methods in the ACPI tables (according to
-Mika that is not the case).
-
-I don't think that this is desirable.
-
-> +
->         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>         preempt_disable();
+>         if (cpu != smp_processor_id()) {
+> @@ -161,6 +164,7 @@ static void irq_work_run_list(struct llist_head *list)
+>                  */
+>                 flags = work->flags & ~IRQ_WORK_PENDING;
+>                 xchg(&work->flags, flags);
+> +               work->cpu = -1;
 >
->         /*
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 44c4ae1abd00..24e3f247d291 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5268,3 +5268,54 @@ static void quirk_reset_lenovo_thinkpad_p50_nvgpu(struct pci_dev *pdev)
->  DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, 0x13b1,
->                               PCI_CLASS_DISPLAY_VGA, 8,
->                               quirk_reset_lenovo_thinkpad_p50_nvgpu);
-> +
-> +/*
-> + * Some Intel PCIe bridge controllers cause devices to not reappear doing a
-> + * D0 -> D3hot -> D3cold -> D0 sequence.
+>                 work->func(work);
+>                 /*
+> @@ -197,9 +201,13 @@ void irq_work_tick(void)
+>   */
+>  void irq_work_sync(struct irq_work *work)
+>  {
+> +       unsigned long timeout = jiffies + msecs_to_jiffies(500);
+>         lockdep_assert_irqs_enabled();
 
-This is inaccurate and not entirely fair AFAICS.
+Can you please add something like
 
-First off, what is a "PCIe bridge controller"?  A PCIe root complex?
+pr_info("%s: CPU %d\n", __func__, work->cpu);
 
-Second, I don't think that you really can blame hardware here, because
-the problem is related to AML (forcing a different code path in AML
-makes it go away, so the same hardware with different AML would work).
+here re-run the test and collect a log again?
 
-More precisely, the behavior of the kernel is not what is expected by
-AML associated with the PCIe port holding the device.
+I need to know if irq_work_sync() runs during CPU offline as expected.
 
-> Skipping the intermediate D3hot step
-> + * seems to make it work again.
-
-Yes, but the change would need to cover both the PM-runtime and
-suspend-to-idle code paths.
-
-Also it may be driver-induced rather than quirk-based.
-
-> + *
-> + * This leads to various manifestations of this issue:
-> + *  - AIML code execution hits an infinite loop (as the coe waits on device
-
-Typo: coe -> code
-
-> + *    memory to change).
-
-Which AML code is this, the power-off part or power-on part?  Is this
-AML code associated with the GPU or with the PCIe port holding it (I
-guess the latter from what Mika said)?
-
-Also IIRC ACPICA has a mechanism to break infinite loops in AML by
-aborting the looping method after a timeout.
-
-> + *  - kernel crashes, as all PCI reads return -1, which most code isn't able
-> + *    to handle well enough.
-> + *  - sudden shutdowns, as the kernel identified an unrecoverable error after
-> + *    userspace tries to access the GPU.
-
-IMO it would be enough to say that the GPU is not accessible after an
-attempt to remove power from it.
-
-> + *
-> + * In all cases dmesg will contain at least one line like this:
-> + * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3'
-> + * followed by a lot of nouveau timeouts.
-> + *
-> + * ACPI code
-
-Which ACPI code?
-
-> writes bit 0x80 to the not documented PCI register 0x248 of the
-
-0x248 relative to what?  A PCI bar (if so then which one) or the PCI
-config space (and which part of it if so)?
-
-> + * Intel PCIe bridge controller (0x1901) in order to power down the GPU.
-
-This doesn't seem accurate.  It rather writes to this register to
-change the state of the PCIe link between the GPU and the PCIe port
-holding it, which is not the same as powering off.
-
-> + * Nonetheless, there are other code paths inside the ACPI firmware which use
-> + * other registers, which seem to work fine:
-
-The meaning of the above is unclear.
-
-Does "other" mean "alternative"?
-
-> + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
-
-A pointer to that documentation, please (yes, it should be included in
-the comment).
-
-> + *  - 0xb0 bit 0x10 (link disable)
-> + * Changing the conditions inside the firmware by poking into the relevant
-> + * addresses does resolve the issue,
-
-What does this mean, precisely?
-
-> but it seemed to be ACPI private memory
-> + * and not any device accessible memory at all, so there is no portable way of
-> + * changing the conditions.
-> + *
-> + * The only systems where this behavior can be seen are hybrid graphics laptops
-> + * with a secondary Nvidia Maxwell, Pascal or Turing GPU. It cannot be ruled
-> + * out that this issue only occurs in combination with listed Intel PCIe
-> + * bridge controllers and the mentioned GPUs or if it's only a hw bug in the
-> + * bridge controller.
-> + */
-
-So again, this is AML-related, so talking about hardware bugs at this
-point is premature at best.
-
-> +
-> +static void quirk_broken_nv_runpm(struct pci_dev *dev)
-> +{
-> +       struct pci_dev *bridge = pci_upstream_bridge(dev);
-> +
-> +       if (!bridge || bridge->vendor != PCI_VENDOR_ID_INTEL)
-> +               return;
-> +
-> +       switch (bridge->device) {
-> +       case 0x1901:
-> +               dev->broken_nv_runpm = 1;
+>
+> -       while (work->flags & IRQ_WORK_BUSY)
+> +       while (work->flags & IRQ_WORK_BUSY) {
+> +               if (time_after(jiffies, timeout))
+> +                       pr_warn("irq_work_sync 500ms timeout, work cpu %d\n", work->cpu);
+>                 cpu_relax();
 > +       }
-> +}
-> +DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
-> +                             PCI_BASE_CLASS_DISPLAY, 16,
-> +                             quirk_broken_nv_runpm);
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index ac8a6c4e1792..903a0b3a39ec 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -416,6 +416,7 @@ struct pci_dev {
->         unsigned int    __aer_firmware_first_valid:1;
->         unsigned int    __aer_firmware_first:1;
->         unsigned int    broken_intx_masking:1;  /* INTx masking can't be used */
-> +       unsigned int    broken_nv_runpm:1;      /* some combinations of intel bridge controller and nvidia GPUs break rtd3 */
->         unsigned int    io_window_1k:1;         /* Intel bridge 1K I/O windows */
->         unsigned int    irq_managed:1;
->         unsigned int    has_secondary_link:1;
-> --
-
-Based of what has been uncovered so far, I would propose the following
-way to address this issue:
-
-(1) Introduce a "parent_d3cold" PCI device flag that would indicate to
-the PCI layer to leave the given device in D0 during suspend (both
-system-wide and runtime) and power-manage the parent instead as long
-as the parent PCIe port can be put into D3cold via ACPI (and as long
-as the downstream device itself has no ACPI PM).
-(2) Set this new flag for the GPUs in question from the nouveau driver.
-
-So what about this?
+>  }
+>  EXPORT_SYMBOL_GPL(irq_work_sync);
