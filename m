@@ -2,98 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCCF105E83
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 03:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F25105ED9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 04:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfKVCM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Nov 2019 21:12:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43140 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbfKVCM1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 Nov 2019 21:12:27 -0500
-Received: from oasis.local.home (unknown [66.170.99.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAD8F20692;
-        Fri, 22 Nov 2019 02:12:25 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 21:12:24 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Nadav Amit <namit@vmware.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 04/12] x86/kprobes: Explicitly include vmalloc.h for
- set_vm_flush_reset_perms()
-Message-ID: <20191121211224.15f006b4@oasis.local.home>
-In-Reply-To: <20191119002121.4107-5-sean.j.christopherson@intel.com>
-References: <20191119002121.4107-1-sean.j.christopherson@intel.com>
-        <20191119002121.4107-5-sean.j.christopherson@intel.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726736AbfKVDAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Nov 2019 22:00:37 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:45237 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbfKVDAh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Nov 2019 22:00:37 -0500
+Received: by mail-qt1-f195.google.com with SMTP id 30so6179040qtz.12
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 19:00:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aQXzMZojDdxTeVrFDC7oCHSUIlgKVBtiaKVu10Zcb/M=;
+        b=j6OIwOyNVokNpMoYYRKV/i/g7qXb25aWC8/hPaKT6Fyn0ySkiz/DvN9nnm1eHhRXJv
+         NB4dJ9QjiBgw31V9+ejfMxr5LH4cEbuQ1r10OdFXunZSS+h7YM5KHvGBLR8PAuIsg7b5
+         RLakVpXGDy7gdlcsL8NMsaJdPxViJTdwg7s5Lc9qsKM1FSf8+LOoP4Dg5UieaC3JZP9w
+         nHNeidIW3mejXB9pjC0q4eBbxrpZD5yRWVftc7G9+pdZj1TEI8ObSHpHVzaXSsF5aAe3
+         NP3Ndjpb7ZQm1LlK3gbcHONUUSI7oe6HAFULHGAG+01SGKvvd6Vqx4osGB1obXD3j5py
+         Mwag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aQXzMZojDdxTeVrFDC7oCHSUIlgKVBtiaKVu10Zcb/M=;
+        b=j/7ZFqL/lcgkXVuDy3LkIP1Ms1Xwg1N/6O4COrWq9PganY9EaCnjthvwcJlqvZlKMm
+         I1tGh10aaEslwit8fI2pRTooL/LAkqvshXoa+umK3wyqGX58JBtO2SP7qgkIPhQhwivN
+         /poVoqRxofoYqJdv9BAuru50oVlDAoHEsi51+fL7IOGWD2+bxLzaww6RbfYevwGvZTki
+         j1Cw0+YHNizQE7qvzl7anq3N7OEZjl3ak4+lGs9U+/gHI47fUakGgTUF4pfTTCWqjeSi
+         3NT48Iyv6DtChufV8pC0eOWSBwCubcCNkw8/utDngIZgb4L4ZqQ8WMfx3dlclolbd3K3
+         ptew==
+X-Gm-Message-State: APjAAAU3gV67lq25lYzILHABRgRV2Spic0z1+/bNXTVaY4/YNoDOVrYL
+        bwGPS3TbfCF4jIz77MFz9yY5bo1Dj+q+5cHvCxETpA==
+X-Google-Smtp-Source: APXvYqxF++WJ4ysxQKliHFnNspapcsV/8c2phT5X5JEGqZj6yvwOy4roCA3ODgFlgFW8HPMqC7ELqBtX2Q4ycCqZrZU=
+X-Received: by 2002:ac8:60d3:: with SMTP id i19mr12182666qtm.391.1574391635899;
+ Thu, 21 Nov 2019 19:00:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20191120002836.GA247344@google.com> <20191121181500.GA55996@google.com>
+In-Reply-To: <20191121181500.GA55996@google.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Fri, 22 Nov 2019 11:00:24 +0800
+Message-ID: <CAD8Lp47o6PqKnQYBba0o_8LSGhd3_APhVuXAVsJRT7TedeqXDg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 18 Nov 2019 16:21:13 -0800
-Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+On Fri, Nov 22, 2019 at 2:15 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> I definitely was not understanding this correctly.  There is no path
+> for a D3cold -> D3hot transition.  Per spec (PCIe r5.0, sec 5.8), the
+> only legal exit from D3cold is to D0uninitialized.
 
-> The inclusion of linux/vmalloc.h, which is required for its definition
-> of set_vm_flush_reset_perms(), is somehow dependent on asm/realmode.h
-> being included by asm/acpi.h.  Explicitly include linux/vmalloc.h so
-> that a future patch can drop the realmode.h include from asm/acpi.h
-> without breaking the build.
-> 
-> Fixes: 241a1f2238064 ("x86/kprobes: Use vmalloc special flag")
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+I'm also learning these details as we go.
 
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+During runtime suspend, the ACPI _PS3 method (which does exist on this
+device) is called, then _PR3 resources are turned off, which (I think)
+means that the state should now be D3cold.
 
--- Steve
+During runtime resume, the ACPI _PR0 resources are turned on, then
+ACPI _PS0 method is called (and does exist on this device), and my
+reading is that this should put the device in D0.
 
-> ---
->  arch/x86/kernel/kprobes/core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index 4f13af7cbcdb..a0c223ab7264 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -40,6 +40,7 @@
->  #include <linux/frame.h>
->  #include <linux/kasan.h>
->  #include <linux/moduleloader.h>
-> +#include <linux/vmalloc.h>
->  
->  #include <asm/text-patching.h>
->  #include <asm/cacheflush.h>
+But then when pci_update_current_state() is called, it reads pmcsr as
+3 (D3hot). That's not what I would expect. I guess this means that
+this platform's _PR3/_PS3 do not actually allow us to put the device
+into D3cold, and/or the _PR0/_PS0 transition does not actually
+transition the device to D0.
 
+While there is some ACPI strangeness here, the D3hot vs D3cold thing
+is perhaps not the most relevant point. If I hack the code to avoid
+D3cold altogether, just trying to do D0->D3hot->D0, it fails in the
+same way.
+
+> I know you tried a debug patch to call pci_dev_wait(), and it didn't
+> work, but I'm not sure exactly where it was called.  I have these
+> patches on my pci/pm branch for v5.5:
+>
+>   bae26849372b ("PCI/PM: Move pci_dev_wait() definition earlier")
+>   395f121e6199 ("PCI/PM: Wait for device to become ready after power-on")
+>
+> The latter adds the wait just before we call
+> pci_raw_set_power_state().  If the device is responding with CRS
+> status, that should be the point where we'd see it.  If you have a
+> chance to try it, I'd be interested in the results.
+
+pci_dev_wait() doesn't have any effect no matter where you put it
+because we have yet to observe this device presenting a CRS-like
+condition. According to our earlier experiments, PCI_VENDOR_ID and
+PCI_COMMAND never return the ~0 value that would be needed for
+pci_dev_wait() to have any effect.
+
+I tried the branch anyway and it doesn't solve the issue.
+
+I haven't finished gathering all the logs you asked for, but I tried
+to summarize my current understanding at
+https://bugzilla.kernel.org/show_bug.cgi?id=205587 - hopefully that
+helps.
+
+Thanks
+Daniel
