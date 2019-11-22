@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EE51064C2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 07:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FC910632D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 07:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726750AbfKVGTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 01:19:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33658 "EHLO mail.kernel.org"
+        id S1727840AbfKVGIl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 01:08:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39842 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728974AbfKVFz6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:55:58 -0500
+        id S1728989AbfKVGBi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 Nov 2019 01:01:38 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 370D32068F;
-        Fri, 22 Nov 2019 05:55:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1785A2068F;
+        Fri, 22 Nov 2019 06:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402158;
-        bh=JNSklQNz9vqxyS3kmFKL2m9+pzdRIfV4JKVPzeen/oE=;
+        s=default; t=1574402497;
+        bh=sz0y5j2fxJx1Pkcj5/eMAgrHZ2wvg0pw0CiCrYSmcjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rWMMR5pVhXNDSja98rITJwr+HGisDyRMo2xwbvCbIvfVA3r4NP/L9YLeAuKKds80M
-         OJGTJaPfjKpedRTx8v6pFjtMcmh15ZCsj6Qn3kwGT0RTLk1Xy+WootaOJDiyNzH0GB
-         pvlQBLZ6BJnziphik+ctaQy/q8ki901y30xUv09I=
+        b=rtgjyX48zAqjzGO6+NxSm6bhh0oeXnl1py2OUEtY0nU2jGEOITReXjNKjfFx8LQLb
+         Ns2RJ1xiAUpOacO8/VMiYaqvN/CjZwVvQnFQCO446j2G1w1s/yPaYFFqZnPbAdH191
+         jidc31WqowC/kL65X4xfjbvrJmeicR6ylDlkQ2/s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Thomas Meyer <thomas@m3y3r.de>,
         Kevin Hilman <khilman@baylibre.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 012/127] PM / AVS: SmartReflex: NULL check before some freeing functions is not needed
-Date:   Fri, 22 Nov 2019 00:53:50 -0500
-Message-Id: <20191122055544.3299-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 08/91] PM / AVS: SmartReflex: NULL check before some freeing functions is not needed
+Date:   Fri, 22 Nov 2019 01:00:06 -0500
+Message-Id: <20191122060129.4239-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122055544.3299-1-sashal@kernel.org>
-References: <20191122055544.3299-1-sashal@kernel.org>
+In-Reply-To: <20191122060129.4239-1-sashal@kernel.org>
+References: <20191122060129.4239-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,7 +59,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/power/avs/smartreflex.c b/drivers/power/avs/smartreflex.c
-index 974fd684bab2c..4b6fddc183948 100644
+index fa0f19b975a6a..bb7b817cca599 100644
 --- a/drivers/power/avs/smartreflex.c
 +++ b/drivers/power/avs/smartreflex.c
 @@ -994,8 +994,7 @@ static int omap_sr_remove(struct platform_device *pdev)
