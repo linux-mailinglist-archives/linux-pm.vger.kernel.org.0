@@ -2,136 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 554C0106765
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 08:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5550910679C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 09:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfKVH6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 02:58:21 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43820 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfKVH6V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 02:58:21 -0500
-Received: by mail-wr1-f66.google.com with SMTP id n1so7402928wra.10
-        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 23:58:19 -0800 (PST)
+        id S1726526AbfKVIOx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 03:14:53 -0500
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:38155 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726248AbfKVIOw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 03:14:52 -0500
+Received: by mail-vs1-f66.google.com with SMTP id u18so4246142vsg.5
+        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2019 00:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=w67p8xtPdt4/A9arfHNMFL65WBSDvCsMKuFi+DGBUsw=;
-        b=GnqUaOqhAGPj1mSB54UkQHX4DC7zQbAMKGlzXTenoyFS7SJHIG7SkYKpS3E591jesy
-         icCdTroOZhl3lQG0MC4noVz3GcrSdZ3Q0UiheNxmIgcCRphi4DzocgH6+akJKPMp54rE
-         Zs9Tj8Bf38qwZUAhUiOtHylkX7OAbM9jDrZB5FWjgT724BNcW6t+rVhc+VS8nys/Yq+k
-         X83hu5TH1/dV5m34mQ8wWV4jNtwESzBy6NBTfIFEUeVfVZCMG1ar96ADpDaRKm2evh/s
-         wU/EBeaQJwE6HVdRYf8a3cY4MJpP0lZ+WrIwOTf4uiILzOSMn/yTgbEWMC2AfBJNxcrp
-         x3+Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kFTfLz77NfOOoLRcjoRQoDvWTF66Atpx3UZ3GFfFuKk=;
+        b=ZwDWMqx+Nhi1GjLIEgBzGDzcliHIzbVRqH6FsQsZS3QO+ytfBXNLs2DUa758bQdkdh
+         66Rb4/Vdi7d875DaOKhoxbpjLYWaf87TSMA8tpEP7kinrYYMXfmu+TqSxno3zNOPFxnb
+         taF3ZXVXk9b9/EabAcdMnv3VsekR7jctf7FAlzMwS3G2WjpJFtw444OcwMV0vlF4eJZK
+         PE78xHeCfX5fr2GCXh2wglMMw/bCdh2Zpw4mvFUsJJsTeKvLuN0e4SwQ60kthIwiFLqj
+         Y9E17GJcAzWqbhXPs1AJ1ei9+JDNjX1DKVx8fdlOE1AJcV0vv+3tHgyiAWxazI+fIF3X
+         jEkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=w67p8xtPdt4/A9arfHNMFL65WBSDvCsMKuFi+DGBUsw=;
-        b=pS6m96AEINhtVkiCxJZpN7Zh8FW2o/JAwcWaykNGUtyxq672YmRXhkvgtgxdWduZzL
-         N79KaFUHCSvoOtYGBPWd8TFIFGpjzEoYHsu84JAWphoWJ/mbqesyq/qNihPpvA49Cvro
-         h8L+s0PYkDDd6cLQX9hi8M9cbtVIsqcOoo/aFPzQ32qd+uBYSB7FDMHNmoIDMFsmB6mI
-         XVlw4QnK0KZ6dTfnsqe+37OzP8HUb4xaluh74YKXzsJRYDn1bGaix8MfXzewf8Bzd1uk
-         xjrl9FAcYrD2e2nMXFiFndHCFR3MM8YOmN7WIrhRTlqD2CJkyzH9/F70/4dlyodi4oxw
-         oDBA==
-X-Gm-Message-State: APjAAAUTyA+0u7xQUq3QLA8sPpgztuoccp/noMS6D6zP7oZeVAm5HDj3
-        nX8/Kfb5PDYdOXe/5W+XN14tKg==
-X-Google-Smtp-Source: APXvYqzcaOQ0bWkk1yg8dpRwylAawt7qFh0J8UP4pvucZ/KaMyU92DHdCC4aa6RA4P2POZCfKVRT4Q==
-X-Received: by 2002:adf:f50b:: with SMTP id q11mr16206077wro.343.1574409498689;
-        Thu, 21 Nov 2019 23:58:18 -0800 (PST)
-Received: from dell ([2.27.35.135])
-        by smtp.gmail.com with ESMTPSA id j67sm2673521wmb.43.2019.11.21.23.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2019 23:58:18 -0800 (PST)
-Date:   Fri, 22 Nov 2019 07:58:04 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     enric.balletbo@collabora.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, Enrico Granata <egranata@chromium.org>,
-        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH] platform/chrome: cros_ec: Rename cros_ec_dev to
- cros_ec_mfd_dev
-Message-ID: <20191122075804.GB3296@dell>
-References: <20191121164458.1.Ie5c276b95210779fc2ca5651e46552236795b6b9@changeid>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kFTfLz77NfOOoLRcjoRQoDvWTF66Atpx3UZ3GFfFuKk=;
+        b=CB/pmYWnMi1HtTMtdscWLx6rpHpxRq7XLbIvrTXZp7X5sYMZ2MC7Y1ZGSXCdx7Yyo8
+         8y1q5+ICV7j4ucRQI8nWJg55gA6phlb1NzLWrCxVYIA0pZjfnjd005+R1jV0Svh7vp/B
+         LFQY0fUTDYAFKa4tJ3ojP0GHDZgT2RMk7WSMYDBhSDjCxPvgJP/wKJbfxwmZ1iGhWC5d
+         My/SYpzrTYEyTvixh9qTWr7j39wv2Fxwy6O+enldl0GfJmX79RTAN8PEjjCFoR6kf4qf
+         22vfutvc0Jkf+0BHKPrevkJrZ7IAsHFyliY1aVVDI3jVuPGP5tP2vewv0QVyi0C7yg8s
+         Yq0A==
+X-Gm-Message-State: APjAAAUFPawjIMXr1tJVhHal3tOQZsg5HlFm1h0pjUPS1C9aya2TOWqF
+        kk1NfW/4aTXFhugXcQuPmXx33TEbehy6ucUI6xTkhA==
+X-Google-Smtp-Source: APXvYqzK+cyn8m/2M4gYVtla7YFWEf/01wZBxA5Qm1kV1UpsOuvqk37Xn1jmB1PigbuN81mwvRR8Jtk1ZnfSecXaf4I=
+X-Received: by 2002:a67:5ec1:: with SMTP id s184mr9129478vsb.200.1574410490515;
+ Fri, 22 Nov 2019 00:14:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191121164458.1.Ie5c276b95210779fc2ca5651e46552236795b6b9@changeid>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191029164438.17012-1-ulf.hansson@linaro.org> <CAPDyKFpiMK_P+4+n9wHc+68X6j44XOoTm=J8OXz5HkqoMxOsOg@mail.gmail.com>
+In-Reply-To: <CAPDyKFpiMK_P+4+n9wHc+68X6j44XOoTm=J8OXz5HkqoMxOsOg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 22 Nov 2019 09:14:14 +0100
+Message-ID: <CAPDyKFprrtTJ8b5B1AgOWEGNeMGdjS4NbVFU1h4E2SA_oZ2dAw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/13] cpuidle: psci: Support hierarchical CPU arrangement
+To:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Nov 2019, Raul E Rangel wrote:
+On Mon, 11 Nov 2019 at 12:00, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Tue, 29 Oct 2019 at 17:44, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Changes in v2:
+> >         - Avoid to affect the non-OSI path with specific changes for OSI. This
+> >         forced me to re-order the series and a caused more or less minor changes
+> >         to most of the patches.
+> >         - Updated the DT bindings for PSCI to clarify and to include the "psci"
+> >         name of the PM domain to attach to.
+> >         - Replaced patch1 with another patch from Sudeep, solving the same
+> >         problem, but in a different way.
+>
+> Hi Sudeep and Lorenzo,
+>
+> Apologize for nagging you about reviews, again. Can you please have a
+> look at the new version!?
 
-> It's very confusing having cros_ec_dev and cros_ec_device. This makes it
-> clear you are dealing with the mfd device.
+Lorenzo, apologize for nagging you about reviewing this series.
 
-An MFD isn't really a thing. It's a Linuxisum that doesn't really
-describe anything meaningful. IMHO it would make more sense to follow
-the same hierarchical structure that platform devices use:
+It seems like both me and Sudeep are now waiting to hear from you, can
+you please have look.
 
-  s/cros_ec_mfd_dev/cros_ec_parent/
-
-> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> ---
-> This is based on top of the i2c acpi tunnel patches:
-> https://lore.kernel.org/patchwork/project/lkml/list/?series=419791
-> 
->  drivers/i2c/busses/i2c-cros-ec-tunnel.c       |  2 +-
->  drivers/iio/accel/cros_ec_accel_legacy.c      |  2 +-
->  .../common/cros_ec_sensors/cros_ec_sensors.c  |  2 +-
->  .../cros_ec_sensors/cros_ec_sensors_core.c    |  2 +-
->  .../cros_ec_sensors/cros_ec_sensors_ring.c    |  2 +-
->  drivers/iio/light/cros_ec_light_prox.c        |  2 +-
->  drivers/iio/pressure/cros_ec_baro.c           |  2 +-
->  .../media/platform/cros-ec-cec/cros-ec-cec.c  |  2 +-
->  drivers/mfd/cros_ec_dev.c                     | 14 ++++-----
->  drivers/platform/chrome/cros_ec_chardev.c     | 21 +++++++-------
->  drivers/platform/chrome/cros_ec_debugfs.c     | 16 +++++-----
->  drivers/platform/chrome/cros_ec_lightbar.c    | 29 ++++++++++---------
->  drivers/platform/chrome/cros_ec_pd_sysfs.c    |  6 ++--
->  drivers/platform/chrome/cros_ec_pd_update.c   | 20 ++++++-------
->  drivers/platform/chrome/cros_ec_sysfs.c       | 16 +++++-----
->  drivers/platform/chrome/cros_ec_vbc.c         |  8 ++---
->  drivers/platform/chrome/cros_usbpd_logger.c   |  6 ++--
->  drivers/power/supply/cros_usbpd-charger.c     |  6 ++--
->  drivers/rtc/rtc-cros-ec.c                     |  2 +-
->  include/linux/mfd/cros_ec.h                   |  8 ++---
->  .../linux/platform_data/cros_ec_pd_update.h   |  4 +--
->  21 files changed, 87 insertions(+), 85 deletions(-)
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Kind regards
+Uffe
