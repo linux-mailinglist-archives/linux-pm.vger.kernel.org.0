@@ -2,161 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 657031079DA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 22:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072F7107A13
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 22:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfKVVKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 16:10:45 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33303 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbfKVVKp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 16:10:45 -0500
-Received: by mail-wm1-f68.google.com with SMTP id t26so7191062wmi.0
-        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2019 13:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=pPhsnSH3nxPXeIqxL+4HqjbYwWteqaf0lm5i420fGio=;
-        b=dxIbQ0FDD6MvsKJDshOkIFWxi5Uo2rZG2gF6wayWi+Wn25wurIoOleWQgpG14zJxxU
-         o58qa2GHq7h/TjYyEdnovONa6Z8KC98Yta02QPYelHis/bFwfCbzpN5tTkGEL3pPjKed
-         d3yDTFSr9bE8qPDnSqyHhvA0o9ygYxYZi3FMcxqLCSd3Hufc6cFqjJBcYwMx73FzeUH/
-         8ee5yz6aqSM+wSuLHvEo96o1oM0Zs5/YnMzdQLlMYAOkECwAj7GoT3TAVik7maxOYHu8
-         AvRoO74JLBSzDfmyy8RW2lWnUVOhdKIzUg4jyOuulke/Lo9ftnAYMui3thyYzkC78Cpx
-         siMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pPhsnSH3nxPXeIqxL+4HqjbYwWteqaf0lm5i420fGio=;
-        b=IfhINA9sKzcFb6l9pCJT60EYllTMprVSxsovQmli8k96N+EMRd7+mjZxCK5A+2rQLt
-         KIh9Xnz+KvDV/Ez/0v4pN2p/fn9heyLX7vWSnqGkbFoZdnnp8Ppr9QlVcKO3dL48TabY
-         iLSd3ImKudoxtCXs8Aor6dEouFl+66aXaPmkvkypCmHW8RAajiWhJeHhAmJzmItSES/L
-         abRUhy+HbdmSU1LpyTy8bw6Nb2XYr9m5LCjaxpmg4oOoG0r3xcuBq+IY8uChgVa9PcgR
-         zZiFyJoBxq2mB9SDoN/0kPrGe4dJfOBvbzR/Vc7658IG9gwTehTk1GIIZl2J5TTg0SKL
-         GLig==
-X-Gm-Message-State: APjAAAUgV7FzUcQ3qLiL39cqNMGPNUoyDVhr7BrAdn4IeaM/pMYNBveE
-        ahUnL5OrEou5iOwX5nD0i+J6QA==
-X-Google-Smtp-Source: APXvYqz0PxIAgoOL7pxxIotIUSnqptPZj21kwFC/Nm5LZ4sgRAZJJGXgh10z4Cl154JEp+YA/ZpZHA==
-X-Received: by 2002:a7b:c7d6:: with SMTP id z22mr7185736wmk.136.1574457043123;
-        Fri, 22 Nov 2019 13:10:43 -0800 (PST)
-Received: from macbook.djakov.com ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id 72sm9188182wrl.73.2019.11.22.13.10.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Nov 2019 13:10:42 -0800 (PST)
-Subject: Re: [PATCH v3 3/3] interconnect: Add basic tracepoints
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com,
-        bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
-        daidavid1@codeaurora.org, okukatla@codeaurora.org,
-        evgreen@chromium.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191122152712.19105-1-georgi.djakov@linaro.org>
- <20191122152712.19105-4-georgi.djakov@linaro.org>
- <20191122120746.62027203@oasis.local.home>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <da40050f-dbc5-e95f-29bb-edaa6ae565dc@linaro.org>
-Date:   Fri, 22 Nov 2019 23:10:39 +0200
-MIME-Version: 1.0
-In-Reply-To: <20191122120746.62027203@oasis.local.home>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726852AbfKVVp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 16:45:27 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:37590 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726089AbfKVVp1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 Nov 2019 16:45:27 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0B8322002C9;
+        Fri, 22 Nov 2019 22:45:24 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E8A89200277;
+        Fri, 22 Nov 2019 22:45:23 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id D03E420465;
+        Fri, 22 Nov 2019 22:45:22 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v7 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr controller
+Date:   Fri, 22 Nov 2019 23:44:59 +0200
+Message-Id: <cover.1574458460.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Steven,
+This adds support for dynamic scaling of the DDR Controller (ddrc)
+present on i.MX8M series chips. Actual frequency switching is
+implemented inside TF-A, this driver wraps the SMC calls and
+synchronizes the clk tree.
 
-On 22.11.19 19:07, Steven Rostedt wrote:
-> On Fri, 22 Nov 2019 17:27:12 +0200
-> Georgi Djakov <georgi.djakov@linaro.org> wrote:
->> index 28f2ab0824d5..725029ae7a2c 100644
->> --- a/drivers/interconnect/Makefile
->> +++ b/drivers/interconnect/Makefile
->> @@ -1,5 +1,6 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  
->> +CFLAGS_core.o				:= -I$(src)
->>  icc-core-objs				:= core.o
->>  
->>  obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
->> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 1ddad8ef3cf0..b218a2609f6b 100644
->> --- a/drivers/interconnect/core.c
->> +++ b/drivers/interconnect/core.c
->> @@ -19,6 +19,9 @@
->>  #include <linux/of.h>
->>  #include <linux/overflow.h>
->>  
->> +#define CREATE_TRACE_POINTS
->> +#include "trace.h"
->> +
-> 
-> You may want to move this below the include of internal.h, as you don't
-> want CREATE_TRACE_POINTS defined when including any other header, or it
-> can cause issues if that header has some tracepoint header inside it.
-> 
-> It may not be the case now, but could cause for headaches in the
-> future, if other headers get included in internal.h.
-> 
->>  #include "internal.h"
->>  
->>  static DEFINE_IDR(icc_idr);
->> @@ -435,6 +438,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->>  
->>  		/* aggregate requests for this node */
->>  		aggregate_requests(node);
->> +
->> +		trace_icc_set_bw(path, node, i, avg_bw, peak_bw);
->>  	}
->>  
->>  	ret = apply_constraints(path);
->> @@ -453,6 +458,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->>  
->>  	mutex_unlock(&icc_lock);
->>  
->> +	trace_icc_set_bw_end(path, ret);
->> +
->>  	return ret;
->>  }
->>  EXPORT_SYMBOL_GPL(icc_set_bw);
->> diff --git a/drivers/interconnect/trace.h b/drivers/interconnect/trace.h
->> new file mode 100644
->> index 000000000000..d2421bf7b389
->> --- /dev/null
->> +++ b/drivers/interconnect/trace.h
->> @@ -0,0 +1,90 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Interconnect framework tracepoints
->> + * Copyright (c) 2019, Linaro Ltd.
->> + * Author: Georgi Djakov <georgi.djakov@linaro.org>
->> + */
->> +
->> +#undef TRACE_SYSTEM
->> +#define TRACE_SYSTEM interconnect
->> +
->> +#if !defined(_TRACE_INTERCONNECT_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_INTERCONNECT_H
->> +
->> +#include <linux/interconnect.h>
->> +#include <linux/tracepoint.h>
->> +
->> +#include "internal.h"
-> 
-> And you include it here too, perhaps it is best not to have it here,
-> and then just have it before trace.h is called?
+DRAM frequency switching requires clock manipulation but during this operation
+DRAM itself is briefly inaccessible so this operation is performed a SMC call
+to by TF-A which runs from a SRAM area. Upon returning to linux the clock tree
+is updated to correspond to hardware configuration.
 
-Sure! Thanks a lot for reviewing!
+This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are handled
+manually: the driver will prepare/enable the new parents ahead of switching (so
+that the expected roots are enabled) and afterwards it will call clk_set_parent
+to ensure the parents in clock framework are up-to-date.
 
-BR,
-Georgi
+This series is useful standalone and roughly similar to devfreq drivers for
+tegra and rockchip.
 
-> 
-> The rest looks good. Besides the comments above:
-> 
-> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> 
-> -- Steve
+Running at lower dram rates saves power but can affect the functionality of
+other blocks in the chip (display, vpu etc). Support for in-kernel constraints
+will some separately.
+
+This series has no dependencies outside linux-next. The driver depends
+on features from the NXP branch of TF-A and will cleanly fail to probe
+on mainline. There are also plans to upstream dram dvfs in TF-A.
+
+Changes since v6:
+* Replace ARCH_MXC || COMPILE_TEST with ARCH_MXC && HAVE_ARM_SMCCC
+* Collect reviews
+Link to v6: https://patchwork.kernel.org/cover/11244283/
+
+I'd rather not fix COMPILE_TEST with ifdefs for this driver, if anything
+that should be fixed in smccc header. ARCH_MXC doesn't imply SMCCC, it
+also covers some very old chips which don't have it.
+
+Resending full series because that's the standard method.
+
+Changes since v5:
+* Fix a dram_apb/dram_alt mixup in imx8m_ddrc_set_freq
+* Make clk_get_parent_by_index static (kbuild robot)
+* Adjust messages in imx8m_ddrc_set_freq
+* Use a for loop inside imx8m_ddrc_check_opps instead of while
+* More elaborate description in dt-bindings file.
+Link to v5: https://patchwork.kernel.org/cover/11240289/
+
+Changes since v4:
+* Restore empty _get_dev_status: testing shows this is *NOT* optional. If
+absent then switching to simple_ondemand governor will trigger an Oops.
+* Keep clk registration on single-line in clk-imx8m* for consistency with rest
+of the file.
+* Drop explicit "select PM_OPP"
+* Check for NULL new_dram_core_parent
+* Rename "out_dis_" labels to out_disable_*
+* Use dev_warn on imx8m_ddrc_set_freq error paths after SMC call (where
+operation is not abandoned).
+* More elaborate error messages in imx8m_ddrc_target
+* More elaborate checks when fetching clks in imx8m_ddrc_set_freq
+* Rename ddrc nodes to memory-controller@* as per devicetree.org "Generic Names
+Recommendation"
+* Defer perf support, it requires perf changes to fetch PMU by DT
+Link to v4: https://patchwork.kernel.org/cover/11235685/
+
+Changes since v3:
+* Rename to imx8m-ddrc. Similar blocks are present on imx7d and imx8qxp/imx8qm
+but soc integration is different.
+* Move dt bindings to /memory-controllers/fsl/
+* Fix dt validation issues
+* Fix imx8mm.dtsi ddrc referencing ddrc_opp_table which is only defined in evk
+* Move opps to child of ddrc device node
+* Only add imx_ddrc_get_dev_status in perf patch.
+* Adjust print messages
+Link to v3: https://patchwork.kernel.org/cover/11221935/
+
+Changes since v2:
+* Add support for entire imx8m family including imx8mq B0.
+* Also mark dram PLLs as CLK_GET_RATE_NO_CACHE (required for imx8mq b0 low OPP)
+* Explicitly update dram pll rate at the end of imx_ddrc_set_freq.
+* Use do_div in imx-ddrc (kbuild robot)
+* Improve explanations around adding CLK_GET_RATE_NO_CACHE to dram clks.
+(Stephen Boyd)
+* Handle ddrc devfreq-events earlier for fewer probe defers.
+* Validate DDRC opp tables versus firmware: supported OPPs depend on board and
+SOC revision.
+* Move DDRC opp tables to board dts because they can vary based on ram type on
+board.
+* Verify DDRC rate is changed in clk tree and otherwise report an error.
+* Change imx_ddrc_freq.rate to be measure in MT/s and round down from HZ in
+imx_ddrc_find_freq instead.
+* Split away from NOC scaling and interconnect support.
+Link to v2: https://patchwork.kernel.org/cover/11104113/
+
+Changes since v1:
+* bindings: Stop using "contains" for "compatible"
+* bindings: Set "additionalProperties: false" and document missing stuff.
+* Remove (c) from NXP copyright notice
+* Fix various checkpatch issues
+* Remove unused dram_alt_root clk from imx-ddrc
+Link to v1: https://patchwork.kernel.org/cover/11090649/
+
+Leonard Crestez (5):
+  clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
+  clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACHE
+  dt-bindings: memory: Add bindings for imx8m ddr controller
+  PM / devfreq: Add dynamic scaling for imx8m ddr controller
+  arm64: dts: imx8m: Add ddr controller nodes
+
+ .../memory-controllers/fsl/imx8m-ddrc.yaml    |  72 +++
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +
+ .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  10 +
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  10 +
+ drivers/clk/imx/clk-imx8mm.c                  |  11 +-
+ drivers/clk/imx/clk-imx8mn.c                  |  12 +-
+ drivers/clk/imx/clk-imx8mq.c                  |  12 +-
+ drivers/clk/imx/clk-pll14xx.c                 |   7 +
+ drivers/clk/imx/clk.h                         |   1 +
+ drivers/devfreq/Kconfig                       |   9 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx8m-ddrc.c                  | 465 ++++++++++++++++++
+ 15 files changed, 670 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+ create mode 100644 drivers/devfreq/imx8m-ddrc.c
+
+-- 
+2.17.1
+
