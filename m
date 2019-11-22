@@ -2,133 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A81106968
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 10:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DF41069B3
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 11:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbfKVJ7p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 04:59:45 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46740 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVJ7p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 04:59:45 -0500
-Received: by mail-ot1-f65.google.com with SMTP id n23so5629500otr.13
-        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2019 01:59:42 -0800 (PST)
+        id S1726568AbfKVKMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 05:12:53 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:36024 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726563AbfKVKMx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 05:12:53 -0500
+Received: by mail-oi1-f171.google.com with SMTP id j7so6052669oib.3
+        for <linux-pm@vger.kernel.org>; Fri, 22 Nov 2019 02:12:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=I/ZdY3bM8lpQtmraKi1sgvqQFXBo796yS3lFNXe7mJw=;
-        b=ALe/6RHEobBH3AqYzQS2SWET2xmemMfKB6Ijm/IZcbwMc5Zci3EC1R1c0x8I+iHuJJ
-         G0MvWyjecI/gzNOibDd5oSuqI6fPXbnUM7rZUYbDdv7j/XnLuS0/5Ozb0hIbGVc6UMiB
-         FgZfzPTw/pDLYgJUeQXQvc7rlKlDS2tkDxZqO2G48I7V2W99F5/xuKjqe4RILTV2Fnmo
-         0hwT1jj/MjYrjC0w1PHb2akDiKz5UntLgFl28YCv/zomFqhSfgom99Qa1N16gMMeqj21
-         QkK+rcW7oeyd5ocW0eZ/c7NUvwiRvwrULvCyu8U+VrB2nOfoi2Mk/3KBebvbEM4LJMNt
-         c1jA==
-X-Gm-Message-State: APjAAAVefDtJ9ZpA8rqJnlVwW5VmpdnMJr2bUOnjx7d4+YU3YHVJKzg7
-        jy2YNN44dDMsQ4iAqiOAEmYwTvylzqjO39nEo+4=
-X-Google-Smtp-Source: APXvYqyM6QTfDCgfxt3GM73HDDfMyg/8imJDfW9t+ZT8V+pxkictWZK96fzGP0Xrz8kOnzKnxTQ/+gfPZsUpyzsz9Po=
-X-Received: by 2002:a9d:4c85:: with SMTP id m5mr9643405otf.118.1574416781916;
- Fri, 22 Nov 2019 01:59:41 -0800 (PST)
+        bh=kastVHhagzRBS2jF1vY5Xy9GzDog5t2lB64T5jmZDOQ=;
+        b=Zsnzck9UuOcwg17T4vcADVjyfp1myXVSEWPVEgIS5Z/6fhzaNYMulp/IMPbBjpIdMP
+         p+go/wsj4gJmnWNTC/0d0H5gcK/djcu8OheRkrlXozwL2ti6RruNHoU43i3R4NJlRnMB
+         LrGvNpPQqQLHe1d9lnu08z6zjRIMHPAXcTFuyg4KdseXf6NkdBYWB5yR+OXgIPRFiNA8
+         CWbM2WwzrS+zw9VSAy1ap5qJeTHKu5kM/xYIrdu/daWh2k9OKZB0phBKDrZVA5r1OjwT
+         A0JTdAfb5E8JNLh7UZKJiBk2kYLjTUZzDQK6AXn+B7CQ1i099NeUoJE758PqjgeSCGDc
+         abjg==
+X-Gm-Message-State: APjAAAVM+ZpIGaOKOO4mj2bHVwhOp+Nl3yzZXx4D5ZIgVmRqkyqwjiZl
+        JBVA2rfG8FX+Rdkxhrlgk/Wih2FpyToSGNElpOc=
+X-Google-Smtp-Source: APXvYqyNe4N5b3jrCEDALzivA/ktFgOKd+59EDpdw7ay58Aq1fqtem6gByDyyR80VuHnBZfy+crKnO3kZ67V8UwWAwA=
+X-Received: by 2002:aca:c753:: with SMTP id x80mr11019685oif.115.1574417572681;
+ Fri, 22 Nov 2019 02:12:52 -0800 (PST)
 MIME-Version: 1.0
-References: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <20191121093557.bycvdo4xyinbc5cb@vireshk-i7> <DB3PR0402MB39165544EDD0317095A1B72DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <CAJZ5v0geykeebX-67+h4twj+t7oTVBf7X7_UsXw0LAc+0Ap75Q@mail.gmail.com>
- <CAJZ5v0j4z9tEDCGKRc7dHqTiJ1Fq3So=ELfvR6H25UkRmKeBvg@mail.gmail.com> <DB3PR0402MB3916BDC24BDA1053B7ADBDCFF5490@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB3916BDC24BDA1053B7ADBDCFF5490@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n>
+In-Reply-To: <alpine.DEB.2.21.1911211549500.3167@hp-x360n>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Nov 2019 10:59:30 +0100
-Message-ID: <CAJZ5v0g5EGWVAm4A8ynoWAPc1wJRpR6wgZqwhvbmeT4eT49EUA@mail.gmail.com>
-Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Date:   Fri, 22 Nov 2019 11:12:41 +0100
+Message-ID: <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep:
+ Simplify suspend-to-idle control flow)
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 6:15 AM Anson Huang <anson.huang@nxp.com> wrote:
+On Fri, Nov 22, 2019 at 1:28 AM Kenneth R. Crudup <kenny@panix.com> wrote:
 >
-> Hi, Rafael
->         Theoretically, yes, the CPU being offline will run the irq work list to make sure the irq work pending on it will be clear, but the fact is NOT,
-
-So this looks like a problem with irq_work_sync() working not as expected.
-
->         both ondemand and schedutil governor can reproduce this issue if running stress CPU hotplug test.
->         I tried add a "int cpu" in irq work structure to record CPU number which has irq work pending, when issue happen, I can see the irq work is pending at CPU #3 which is already offline, this is why issue happen, but I don't know how it happens...
 >
-> diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
-> index b11fcdf..f8da06f9 100644
-> --- a/include/linux/irq_work.h
-> +++ b/include/linux/irq_work.h
-> @@ -25,6 +25,7 @@ struct irq_work {
->         unsigned long flags;
->         struct llist_node llnode;
->         void (*func)(struct irq_work *);
-> +       int cpu;
->  };
+> I've been running Linus' tip for a while, mostly to get the PM improvements
+> on s2idle (I hate this mode so much- I'm tired of taking a warm laptop out
+> of my bag) and I'd reported after a previous merge to Linus' tip from pm-next:
 >
->  static inline
-> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-> index d42acaf..2e893d5 100644
-> --- a/kernel/irq_work.c
-> +++ b/kernel/irq_work.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kernel.h>
->  #include <linux/export.h>
->  #include <linux/irq_work.h>
-> +#include <linux/jiffies.h>
->  #include <linux/percpu.h>
->  #include <linux/hardirq.h>
->  #include <linux/irqflags.h>
-> @@ -78,6 +79,7 @@ bool irq_work_queue(struct irq_work *work)
->         if (!irq_work_claim(work))
->                 return false;
+> On Wed, 18 Sep 2019, Kenneth R. Crudup wrote:
 >
-> +       work->cpu = smp_processor_id();
->         /* Queue the entry and raise the IPI if needed. */
->         preempt_disable();
->         __irq_work_queue_local(work);
-> @@ -105,6 +107,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
->         /* Only queue if not already pending */
->         if (!irq_work_claim(work))
->                 return false;
-> +       work->cpu = cpu;
+> > - Randomly, if left suspended, nothing other than a hard power off will get
+> >   it back  ...  It appears "ec_no_wakeup=1" doesn't have this issue
 >
->         preempt_disable();
->         if (cpu != smp_processor_id()) {
-> @@ -161,6 +164,7 @@ static void irq_work_run_list(struct llist_head *list)
->                  */
->                 flags = work->flags & ~IRQ_WORK_PENDING;
->                 xchg(&work->flags, flags);
-> +               work->cpu = -1;
+> So I noticed this bug seems to only happen if the laptop is plugged in and
+> charging- but only if the battery is < 100%; now that I had a real failure
+> mode I started bisecting, and I traced it to 56b991849, "PM: sleep: Simplify
+> suspend-to-idle control flow".
 >
->                 work->func(work);
->                 /*
-> @@ -197,9 +201,13 @@ void irq_work_tick(void)
->   */
->  void irq_work_sync(struct irq_work *work)
->  {
-> +       unsigned long timeout = jiffies + msecs_to_jiffies(500);
->         lockdep_assert_irqs_enabled();
-
-Can you please add something like
-
-pr_info("%s: CPU %d\n", __func__, work->cpu);
-
-here re-run the test and collect a log again?
-
-I need to know if irq_work_sync() runs during CPU offline as expected.
-
+> What happens is I'll initiate a suspend, then when I try to resume the power
+> LED doesn't come on, and the machine is completely unresponsive. I have to
+> force a reset by holding the power key.
 >
-> -       while (work->flags & IRQ_WORK_BUSY)
-> +       while (work->flags & IRQ_WORK_BUSY) {
-> +               if (time_after(jiffies, timeout))
-> +                       pr_warn("irq_work_sync 500ms timeout, work cpu %d\n", work->cpu);
->                 cpu_relax();
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(irq_work_sync);
+> I'd like to help you fix this issue; I figure if it's affecting my device
+> it's affecting others, too. I'm quite proficient with the kernel overall,
+> but know very little about ACPI or the EC. I'm assuming- totally wild guess-
+> that when we get some of those EC GPEs(?) while suspended(?) we're panic()ing
+> or hanging somewhere so the BIOS is getting hung up and the whole system is
+> stalled out.
+>
+> Where should I begin to help debug this? I have EFI store set up so BUG_ON()s
+> et al.  will dump there for retrival later if inserting those at critical
+> places could help.
+
+First off, please try to change the sleep_no_lps0 ACPI module
+parameter (/sys/module/acpi/parameters/sleep_no_lps0) to 1 and see if
+that makes any difference.  If it helps, I don't think we can do much
+except for blacklisting your machine.
