@@ -2,76 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8914106649
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 07:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C0106765
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 08:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727258AbfKVFtr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 00:49:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727235AbfKVFtp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:49:45 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2212D2072E;
-        Fri, 22 Nov 2019 05:49:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574401784;
-        bh=uqhPIXMKfLyTsWEAtu6GVSKRK/3Tjp8n6QMtSKSox/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HbFQL4UXR78M7FPBgxtw5nO9JImp1LCa+Q1ZPplWGTdIMbhukUci5/VcHHdgEcfRj
-         yI+U2+peUbdVpGeontsaPF0tc6t8uzkv9uTMJilaPXDOaeOOkb9aKZzClMblbA4bw6
-         N4kUyqBr30WaL4yTRuEzZSbL+VnPwK+n9uY7a7Ms=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thomas Meyer <thomas@m3y3r.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 033/219] PM / AVS: SmartReflex: NULL check before some freeing functions is not needed
-Date:   Fri, 22 Nov 2019 00:46:05 -0500
-Message-Id: <20191122054911.1750-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
-References: <20191122054911.1750-1-sashal@kernel.org>
+        id S1726712AbfKVH6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 02:58:21 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:43820 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726500AbfKVH6V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 02:58:21 -0500
+Received: by mail-wr1-f66.google.com with SMTP id n1so7402928wra.10
+        for <linux-pm@vger.kernel.org>; Thu, 21 Nov 2019 23:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=w67p8xtPdt4/A9arfHNMFL65WBSDvCsMKuFi+DGBUsw=;
+        b=GnqUaOqhAGPj1mSB54UkQHX4DC7zQbAMKGlzXTenoyFS7SJHIG7SkYKpS3E591jesy
+         icCdTroOZhl3lQG0MC4noVz3GcrSdZ3Q0UiheNxmIgcCRphi4DzocgH6+akJKPMp54rE
+         Zs9Tj8Bf38qwZUAhUiOtHylkX7OAbM9jDrZB5FWjgT724BNcW6t+rVhc+VS8nys/Yq+k
+         X83hu5TH1/dV5m34mQ8wWV4jNtwESzBy6NBTfIFEUeVfVZCMG1ar96ADpDaRKm2evh/s
+         wU/EBeaQJwE6HVdRYf8a3cY4MJpP0lZ+WrIwOTf4uiILzOSMn/yTgbEWMC2AfBJNxcrp
+         x3+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=w67p8xtPdt4/A9arfHNMFL65WBSDvCsMKuFi+DGBUsw=;
+        b=pS6m96AEINhtVkiCxJZpN7Zh8FW2o/JAwcWaykNGUtyxq672YmRXhkvgtgxdWduZzL
+         N79KaFUHCSvoOtYGBPWd8TFIFGpjzEoYHsu84JAWphoWJ/mbqesyq/qNihPpvA49Cvro
+         h8L+s0PYkDDd6cLQX9hi8M9cbtVIsqcOoo/aFPzQ32qd+uBYSB7FDMHNmoIDMFsmB6mI
+         XVlw4QnK0KZ6dTfnsqe+37OzP8HUb4xaluh74YKXzsJRYDn1bGaix8MfXzewf8Bzd1uk
+         xjrl9FAcYrD2e2nMXFiFndHCFR3MM8YOmN7WIrhRTlqD2CJkyzH9/F70/4dlyodi4oxw
+         oDBA==
+X-Gm-Message-State: APjAAAUTyA+0u7xQUq3QLA8sPpgztuoccp/noMS6D6zP7oZeVAm5HDj3
+        nX8/Kfb5PDYdOXe/5W+XN14tKg==
+X-Google-Smtp-Source: APXvYqzcaOQ0bWkk1yg8dpRwylAawt7qFh0J8UP4pvucZ/KaMyU92DHdCC4aa6RA4P2POZCfKVRT4Q==
+X-Received: by 2002:adf:f50b:: with SMTP id q11mr16206077wro.343.1574409498689;
+        Thu, 21 Nov 2019 23:58:18 -0800 (PST)
+Received: from dell ([2.27.35.135])
+        by smtp.gmail.com with ESMTPSA id j67sm2673521wmb.43.2019.11.21.23.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2019 23:58:18 -0800 (PST)
+Date:   Fri, 22 Nov 2019 07:58:04 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     enric.balletbo@collabora.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i2c@vger.kernel.org, Enrico Granata <egranata@chromium.org>,
+        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Akshu Agrawal <akshu.agrawal@amd.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH] platform/chrome: cros_ec: Rename cros_ec_dev to
+ cros_ec_mfd_dev
+Message-ID: <20191122075804.GB3296@dell>
+References: <20191121164458.1.Ie5c276b95210779fc2ca5651e46552236795b6b9@changeid>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191121164458.1.Ie5c276b95210779fc2ca5651e46552236795b6b9@changeid>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Thomas Meyer <thomas@m3y3r.de>
+On Thu, 21 Nov 2019, Raul E Rangel wrote:
 
-[ Upstream commit 14d338a857f05f894ba3badd9e6d3039c68b8180 ]
+> It's very confusing having cros_ec_dev and cros_ec_device. This makes it
+> clear you are dealing with the mfd device.
 
-NULL check before some freeing functions is not needed.
+An MFD isn't really a thing. It's a Linuxisum that doesn't really
+describe anything meaningful. IMHO it would make more sense to follow
+the same hierarchical structure that platform devices use:
 
-Signed-off-by: Thomas Meyer <thomas@m3y3r.de>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/avs/smartreflex.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+  s/cros_ec_mfd_dev/cros_ec_parent/
 
-diff --git a/drivers/power/avs/smartreflex.c b/drivers/power/avs/smartreflex.c
-index 1360a7fa542c5..8760477d0e8af 100644
---- a/drivers/power/avs/smartreflex.c
-+++ b/drivers/power/avs/smartreflex.c
-@@ -1010,8 +1010,7 @@ static int omap_sr_remove(struct platform_device *pdev)
- 
- 	if (sr_info->autocomp_active)
- 		sr_stop_vddautocomp(sr_info);
--	if (sr_info->dbg_dir)
--		debugfs_remove_recursive(sr_info->dbg_dir);
-+	debugfs_remove_recursive(sr_info->dbg_dir);
- 
- 	pm_runtime_disable(&pdev->dev);
- 	list_del(&sr_info->node);
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> ---
+> This is based on top of the i2c acpi tunnel patches:
+> https://lore.kernel.org/patchwork/project/lkml/list/?series=419791
+> 
+>  drivers/i2c/busses/i2c-cros-ec-tunnel.c       |  2 +-
+>  drivers/iio/accel/cros_ec_accel_legacy.c      |  2 +-
+>  .../common/cros_ec_sensors/cros_ec_sensors.c  |  2 +-
+>  .../cros_ec_sensors/cros_ec_sensors_core.c    |  2 +-
+>  .../cros_ec_sensors/cros_ec_sensors_ring.c    |  2 +-
+>  drivers/iio/light/cros_ec_light_prox.c        |  2 +-
+>  drivers/iio/pressure/cros_ec_baro.c           |  2 +-
+>  .../media/platform/cros-ec-cec/cros-ec-cec.c  |  2 +-
+>  drivers/mfd/cros_ec_dev.c                     | 14 ++++-----
+>  drivers/platform/chrome/cros_ec_chardev.c     | 21 +++++++-------
+>  drivers/platform/chrome/cros_ec_debugfs.c     | 16 +++++-----
+>  drivers/platform/chrome/cros_ec_lightbar.c    | 29 ++++++++++---------
+>  drivers/platform/chrome/cros_ec_pd_sysfs.c    |  6 ++--
+>  drivers/platform/chrome/cros_ec_pd_update.c   | 20 ++++++-------
+>  drivers/platform/chrome/cros_ec_sysfs.c       | 16 +++++-----
+>  drivers/platform/chrome/cros_ec_vbc.c         |  8 ++---
+>  drivers/platform/chrome/cros_usbpd_logger.c   |  6 ++--
+>  drivers/power/supply/cros_usbpd-charger.c     |  6 ++--
+>  drivers/rtc/rtc-cros-ec.c                     |  2 +-
+>  include/linux/mfd/cros_ec.h                   |  8 ++---
+>  .../linux/platform_data/cros_ec_pd_update.h   |  4 +--
+>  21 files changed, 87 insertions(+), 85 deletions(-)
+
 -- 
-2.20.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
