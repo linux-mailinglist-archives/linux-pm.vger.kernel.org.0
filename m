@@ -2,60 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC2D10767D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 18:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A45C1076AF
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Nov 2019 18:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfKVRfx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Nov 2019 12:35:53 -0500
-Received: from mailbackend.panix.com ([166.84.1.89]:62865 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbfKVRfx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Nov 2019 12:35:53 -0500
-Received: from hp-x360n.lan (ip68-111-223-64.sd.sd.cox.net [68.111.223.64])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 47KNr6333Vz1G1Z;
-        Fri, 22 Nov 2019 12:35:50 -0500 (EST)
-Date:   Fri, 22 Nov 2019 09:35:49 -0800 (PST)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+        id S1726907AbfKVRpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Nov 2019 12:45:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726638AbfKVRpF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 Nov 2019 12:45:05 -0500
+Subject: Re: [GIT PULL] Power management regression fix for final v5.4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574444704;
+        bh=9x1hxC3qi2eaamCM/dHXu4NQ/2NJTHkhMoy7sos1LU4=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=xXCqc8aTzWlubuKtIXno+XuTfuYOUnSDjtbAI1fzL35Gll9+Smc2G7gRtqs+WLsD+
+         Cw8GDPgeXl/SQhqO1O5HCDMLAskSyq9PAX1QnAR/aPunrUcmxsV+cLxGzrlD6kDpsU
+         lNdulm9MVEOnZNPFHKdyTpZmPVDH3cvwL+3r+bLo=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0ioXnbzy86fV7=JfZwjawfN45xXs8-b2xMtnTEy8ACsuw@mail.gmail.com>
+References: <CAJZ5v0ioXnbzy86fV7=JfZwjawfN45xXs8-b2xMtnTEy8ACsuw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0ioXnbzy86fV7=JfZwjawfN45xXs8-b2xMtnTEy8ACsuw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+ pm-5.4-final
+X-PR-Tracked-Commit-Id: 05ff1ba412fd6bd48d56dd4c0baff626533728cc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a6b0373ffcd8950b9121195e09c5d7c73e6e9f5d
+Message-Id: <157444470467.7762.11731245732169668008.pr-tracker-bot@kernel.org>
+Date:   Fri, 22 Nov 2019 17:45:04 +0000
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
- suspend-to-idle control flow)
-In-Reply-To: <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1911220929540.24730@hp-x360n>
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com> <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Fri, 22 Nov 2019 13:40:35 +0100:
 
-On Fri, 22 Nov 2019, Rafael J. Wysocki wrote:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.4-final
 
-> > > > - Randomly, if left suspended, nothing other than a hard power off will get
-> > > >   it back  ...  It appears "ec_no_wakeup=1" doesn't have this issue
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a6b0373ffcd8950b9121195e09c5d7c73e6e9f5d
 
-> BTW, is the ec_no_wakeup=1 workaround still effective?
-
-I'm pretty sure that's always effective, but:
-
-> If so, does the lid and/or power button wake up the system from
-> suspend with ec_no_wakeup=1?
-
-No, hitting a key on the keyboard is the only thing that wakes it up. This
-actually isn't a bad thing for me at all- but as per my previous E-mail I'm
-trying to determine the cause for the occasional much higher suspended idle
-draw and I was thinking using these workarounds means I'm not taking advantage
-of all the suspend optimisations you've added.
-
-That being said, I do have "XHC" disabled as a wakeup source (written to
-/proc/acpi/wakeup) else BT mouse movement would wake this thing up.
-
-	-Kenny
+Thank you!
 
 -- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
