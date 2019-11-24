@@ -2,167 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F65D108408
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 16:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A755010841E
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 17:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727004AbfKXPRu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 10:17:50 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34414 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726948AbfKXPRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 10:17:50 -0500
-Received: by mail-oi1-f195.google.com with SMTP id l202so10883253oig.1;
-        Sun, 24 Nov 2019 07:17:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5C9fcZplZbhqVRMPmr2V23XeMRp4oEU3og0P7QEerd4=;
-        b=Jpx1440YYqzexRpdjA3SiAXYclFcRW+1AfgPguF0jIkyAvx6JHX8y+wllMlbcSgDco
-         eK2aFQg70ozNQNHxITEOvlqPDYLnndXq9eeXtS4Oi1Z8oBPuAZMLjB4TEa+V3ptHcNG6
-         e0hCF5JuyilIJRpYC8aMsh4Lf5ExTN3ISK1ulc9fzIgZ7F/HQITN2iDR6i933R4h6llG
-         7oMm6hcdle9fL/RUJhFwLps0dU5tvK4Nh9N5kFbRk1wOnr2ebRLzeTyVJugqrWcGYdVY
-         Vkx3FdnZaoBHvR4vkWkyksMbdAHh+QJApDTek7WBJxQHySdHoVoXT37KH6PJSmMgAosL
-         jqNA==
+        id S1726784AbfKXQC6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 11:02:58 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:35877 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726775AbfKXQC6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 11:02:58 -0500
+Received: by mail-ot1-f42.google.com with SMTP id f10so10462393oto.3
+        for <linux-pm@vger.kernel.org>; Sun, 24 Nov 2019 08:02:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5C9fcZplZbhqVRMPmr2V23XeMRp4oEU3og0P7QEerd4=;
-        b=NHOtDzD9m3Yvlf1mbg8XkWJ60DWU3j81MWYXs1LdDil3E4RB0YXX5WapBJLpo3F07n
-         P4KFVjlZUGDv7hzJUsW8SPzcH55/fHnZlp9j8tQ5i/HC1Kpv3g4dyUYP1J0nL9pL3qt5
-         0xjK8CFXVH4whjIJ608Y+k0GklPuIo+rRFbQ+uoz82hABVuuyXT9SN4Lyp6NkvQSFWkr
-         Ta9lEHyfNw9ha83txkUMBnzQXvaYbfv/G8vJHQjf/0ObabaKtJOos2AKxg7XwM+M8cuQ
-         5oc1oeX0jtwJjdK9Z5gIB1BH1o/CrrNKAaHv3zRkjz4AKHX7ADUFEGA/ZBzOGJ5Bdw/F
-         l0MA==
-X-Gm-Message-State: APjAAAVGV89M1f2I3NV71rNGcbM6ftsUJDGbNTMNovHYrSs6wtTFAE7a
-        ofnSiLtr1xSoVCJBZFUbtxIB5NVN
-X-Google-Smtp-Source: APXvYqyo788a2sh7C+EcGrnmfMQbs2nuTW/CVkvqD52t1x6QsdY3JKPC2qKdW9qWYn5up2z8JtTfBw==
-X-Received: by 2002:aca:d78a:: with SMTP id o132mr20032815oig.79.1574608669287;
-        Sun, 24 Nov 2019 07:17:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v7sm1548686oie.51.2019.11.24.07.17.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Nov 2019 07:17:48 -0800 (PST)
-Subject: Re: [PATCH 2/8] ACPI: thermal: switch to use <linux/temperature.h>
- helpers
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sujith Thomas <sujith.thomas@intel.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
- <1574604530-9024-3-git-send-email-akinobu.mita@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <00fff683-d0e2-67ae-83e3-c472fdbe9e1d@roeck-us.net>
-Date:   Sun, 24 Nov 2019 07:17:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pgtTMDRLMsINDI90Oaa8s7ELM7N23s1SMYnXteFyuJU=;
+        b=fmW293W5SS16m9IgrQsv/rnGCfThQh/3HpkNpghwKybYG9U7ekTUncXiEImZ/sZoo+
+         VGjsnKooHmTH7QhsO1YTaRiKtk7sp5mFoZca/Hw13Xqtta/IaEHQyi/xSnUUQEW5ZSDn
+         fCAMUpmXrmosLE0Og+9Wpi9Q7k0IimWxFPD3b/D1N/8uehl/Esws5MYHnl2/7P5M0kCc
+         TaywuMfKzXOh2M2+UIb+s+OZi6uUY063HJR2C4XXGHhZvD2Y2F+o3ZnzXhqXNxPFOZk9
+         YoIlIqKLxwQSaObw0tNh3eSuOHJTjFZfScULroV69vE0ucwVVbXsryoZC8qLKBQo650X
+         6qew==
+X-Gm-Message-State: APjAAAUhagz3Ot3Fdn9PONvxiBOdWpOOhGpVG7i89diGQQZ3TJAGFEDW
+        hlDOv9W31MEKiVxfsGWhlqVcJcb33mLsB8594CY=
+X-Google-Smtp-Source: APXvYqyIncPjyQ1sZ5bISWG7Ih/tut88q410VgCjMbWSGNsv2vbkkG3QcW8O4iCXK7GP96nz6VMzZHagUOOqstfmgKc=
+X-Received: by 2002:a9d:4c85:: with SMTP id m5mr16672362otf.118.1574611377361;
+ Sun, 24 Nov 2019 08:02:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1574604530-9024-3-git-send-email-akinobu.mita@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com>
+ <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com> <alpine.DEB.2.21.1911230213510.2531@hp-x360n>
+In-Reply-To: <alpine.DEB.2.21.1911230213510.2531@hp-x360n>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 24 Nov 2019 17:02:43 +0100
+Message-ID: <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep:
+ Simplify suspend-to-idle control flow)
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/24/19 6:08 AM, Akinobu Mita wrote:
-> This switches the ACPI thermal zone driver to use celsius_to_deci_kelvin()
-> and deci_kelvin_to_celsius() in <linux/temperature.h> instead of helpers
-> in <linux/thermal.h>.
-> 
-> This is preparation for centralizing the kelvin to/from Celsius conversion
-> helpers in <linux/temprature.h>.
-> 
-s/temprature/temperature/
+On Sat, Nov 23, 2019 at 11:24 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+>
+>
+> On Fri, 22 Nov 2019, Rafael J. Wysocki wrote:
+>
+> > BTW, is the ec_no_wakeup=1 workaround still effective?
+>
+> OK, I was wrong the first time, at least from the new Linus' tip (as of
+> merge commit 2027cabe6af anyway). So I did some testing, and I now have a matrix:
+>
+> If "sleep_no_lps0" == 1, the machine never goes fully to sleep; the power
+> light stays on and the backlight goes off, but if I have external monitors
+> connected they're still showing dmesg activity. This is independent of the
+> state of "ec_no_wakeup".
 
-Looks like this applies to all patches.
+Hmm.  The external monitors part is something you have never mentioned.
 
-> Cc: Sujith Thomas <sujith.thomas@intel.com>
-> Cc: Darren Hart <dvhart@infradead.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Eduardo Valentin <edubezval@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amit.kucheria@verdurent.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Keith Busch <kbusch@kernel.org>
-> Cc: Jens Axboe <axboe@fb.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Sagi Grimberg <sagi@grimberg.me>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> ---
->   drivers/acpi/thermal.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index d831a61..bd9b6eb 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -297,7 +297,9 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   			if (crt == -1) {
->   				tz->trips.critical.flags.valid = 0;
->   			} else if (crt > 0) {
-> -				unsigned long crt_k = CELSIUS_TO_DECI_KELVIN(crt);
-> +				unsigned long crt_k =
-> +					celsius_to_deci_kelvin(crt);
-> +
+> If "ec_no_wakeup" == 1, the system *at times* will go to sleep and never return
 
->   				/*
->   				 * Allow override critical threshold
->   				 */
-> @@ -333,7 +335,7 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   		if (psv == -1) {
->   			status = AE_SUPPORT;
->   		} else if (psv > 0) {
-> -			tmp = CELSIUS_TO_DECI_KELVIN(psv);
-> +			tmp = celsius_to_deci_kelvin(psv);
->   			status = AE_OK;
->   		} else {
->   			status = acpi_evaluate_integer(tz->device->handle,
-> @@ -413,7 +415,7 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   					break;
->   				if (i == 1)
->   					tz->trips.active[0].temperature =
-> -						CELSIUS_TO_DECI_KELVIN(act);
-> +						celsius_to_deci_kelvin(act);
->   				else
->   					/*
->   					 * Don't allow override higher than
-> @@ -421,9 +423,9 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   					 */
->   					tz->trips.active[i - 1].temperature =
->   						(tz->trips.active[i - 2].temperature <
-> -						CELSIUS_TO_DECI_KELVIN(act) ?
-> +						celsius_to_deci_kelvin(act) ?
->   						tz->trips.active[i - 2].temperature :
-> -						CELSIUS_TO_DECI_KELVIN(act));
-> +						celsius_to_deci_kelvin(act));
->   				break;
->   			} else {
->   				tz->trips.active[i].temperature = tmp;
-> @@ -1087,7 +1089,8 @@ static int acpi_thermal_add(struct acpi_device *device)
->   	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
->   
->   	pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
-> -		acpi_device_bid(device), DECI_KELVIN_TO_CELSIUS(tz->temperature));
-> +		acpi_device_bid(device),
-> +		deci_kelvin_to_celsius(tz->temperature));
->   	goto end;
->   
->   free_memory:
-> 
+This is unclear.
 
+What exactly do you mean by "go to sleep"?
+
+Which part of the behavior does the "at times" phrase apply to?  The
+"going to sleep" or coming back?  Or both?
+
+> (i.e. no power light comes on, it's totally unresponsive until I do a hard
+> reset with a power-button long-press) whether I'm plugged in or not.
+> This is new behavior.
+
+So how did it behave in 5.3.y?
+
+> If "ec_no_wakeup" == 0, the system goes fully to sleep and either of the
+> power button, lid opening or hitting a key resumes the laptop, but if I'm
+> plugged in and actually charging when I suspend (and I suspect if I plug
+> it in during suspend) it never returns, as in the case above.
+
+OK, so ec_no_wakeup doesn't really change the behavior substantially,
+it only makes certain things more or less likely to happen.
+
+Does it still hang if you use the keyboard to wake up the system?
+
+> Help! What can I do to return to the behavior of right before the s0 rework?
+
+I guess you mean the 5.3.y behavior.  And what was it?
+
+> Where in the code could I start looking to try to find out where the machine
+> goes dead?
+
+Well, because you identified 56b991849 as the first bad commit, the
+following three lines of code in drivers/acpi/sleep.c are likely to be
+the source of the problem:
+
+        acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
+        acpi_ec_flush_work();
+        acpi_os_wait_events_complete(); /* synchronize Notify handling */
+
+Can you please try to comment them out and retest?
+
+Note that you most likely won't be able to wake up the system via the
+lid/power button without them, so use the keyboard to way it up during
+that test.
+
+Thanks!
