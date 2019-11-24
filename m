@@ -2,51 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ED41083B9
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 15:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599251083E1
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 15:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727268AbfKXOJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 09:09:50 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44826 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfKXOJu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 09:09:50 -0500
-Received: by mail-pg1-f195.google.com with SMTP id e6so5745617pgi.11;
-        Sun, 24 Nov 2019 06:09:49 -0800 (PST)
+        id S1726945AbfKXO5P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 09:57:15 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44171 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbfKXO5P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 09:57:15 -0500
+Received: by mail-pf1-f194.google.com with SMTP id d199so1357900pfd.11;
+        Sun, 24 Nov 2019 06:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HlZyESYLe6A5DAq1XkhuEkfPsYgeQ0ev4dh7nFf6DlA=;
-        b=aF+EL/uaBuy3BwpoI2oa5LtqP9+p1sZ6VjixxtI6M70GSLCINBULaM3WNiSvJ1WIrZ
-         xIp52aIi0nJQeAktwdoDbbpWpUGRijeoTLe1MAm4hB4Z4WYl9NAkew4iN56rugjskot4
-         yt0PkQGxQXJReAVRmTDpxgmvwAEprEGHPYHel8zMm9c4Pbf0nfdxKiEAsstWT0AfLR8r
-         bDsPU9XMtHOa1IO5HUXITzT66ktxxcPF+Z9kAYhRpX5dnnkPp6PRQV0tZTGgJfpG2Hcz
-         Q8Q4/16zkCk9xffjh+a8YQwbn/z/50qSQu4mMZdfby+ch8XiXZOg7GCvCrNQfdl2VLIo
-         mnVQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SfWsOmQE/r0rnoMiC9E/xzw8dmYppncobr92itFVVSs=;
+        b=IsG6iwopTfpkSahUG6WT0yB+bF7hDW/WcOu4iU3POG1cggRa/nihBOenHTteUKComn
+         QVl0DDjCxmf9EE7EenT2oriblVHVJ9/to9q0OQEwuehzdoRMQcUSxvjQawTzu/j/BWcV
+         MPrVab+hfkO/mCUxfHkxLvEhsOC+zpWxDEFHOO9VxZ8w97dbccUR4GgTL9NEz+eg6BpA
+         rYFXlupkxzoVEdLBQZDXL8kaEzwZu0rfxnwMnxtTMsQQrlaJTrrGaDw5jxxzZgZfj8iy
+         5tJ/5KgbWrEBCceGl9LLkyc5KaRyMS/shAiHnlA8Z1oCKKu30+Xwsk7Fmix9T8eI0cY9
+         y3wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=HlZyESYLe6A5DAq1XkhuEkfPsYgeQ0ev4dh7nFf6DlA=;
-        b=iV6zmf0RUu6hsg8v6w0y/b39yhmMlbUsKsvq4E9CQKrm0hRM9iNB2f86trKuP+Q+WA
-         gD6pML8cxJKgQL40qqWn0O/qK3Ew1R2rNuUTKm1t62PbLteA6yTnmY9x8fOtAH1uyexi
-         LkeJO7pvTRgmohvnwo9sHAYbcJp9FjPOL1Mwm8x2a5+QuTAVN0agXp8gYTiBVk2EfCZy
-         iv7hA9zEx23uDwNzWkfxI7X4iQMwAHJ0Ls2YNcWKdeKZrURdCl5u41lV0KtEL/mXgJkc
-         2j46iSBjibqqJZC6kucAfWR2FJ7CwFRwtkCd8XlzIQJgkVBMCw8TqUc0tzGoD1pqxpir
-         BQDA==
-X-Gm-Message-State: APjAAAUUtTVlA0IgxxvpbVF5ju3idunD0fLK29OuFE5+ylWVwoEPACXC
-        LrbNAhrQaUBdK8t/MtIde8QYEYl+35g=
-X-Google-Smtp-Source: APXvYqx7K4Gt18amX+hLKSOMgjI0zyd/A3QfgpeceRkltPJbTjqHafxczzSCZqTAx0AlbO7TqjQWng==
-X-Received: by 2002:a62:8789:: with SMTP id i131mr28078223pfe.221.1574604589140;
-        Sun, 24 Nov 2019 06:09:49 -0800 (PST)
-Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id a3sm4816326pgh.91.2019.11.24.06.09.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 24 Nov 2019 06:09:48 -0800 (PST)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SfWsOmQE/r0rnoMiC9E/xzw8dmYppncobr92itFVVSs=;
+        b=tmYcT8ZMa+3vE37DKlZEL3ol//P+6FHDUVUVyj0KKnHqUvhcg9V6ol5NuwmHvM+I1v
+         jMuXtNh4yh1ZTsNdlke4j3frWL7e6Kv5g8tcFDwbnIpRgSSJqrpZPtNlqa0RPnJM8fA7
+         d4z7igs55SpSoU2R5zUYH1HfOjQBErEbis2yzF/oXdVyYAdFyiY9cNScXXSbtjXpQ1Ev
+         5OP/8W7MTlpbk92p19NCHKpJIMzWP1qXufepkQKdRLe5N5uiOn/Rm/jn2pDU+CrMz3iF
+         abuAHpcNBb3KYdLIMrhgDz31EUYWRQKFJeSs5GaFVh/Bpgajz+jAwBec2Q6STWLtsbzL
+         MpgA==
+X-Gm-Message-State: APjAAAVVHl4vgWn1E4DY18+23g2FNwZ2zByZG003Cu0ybEdN+HRE2Cjq
+        PWH9MEhVCeHmUNndJUSfLDsHOjANQNJeITVx6DxrzN+E
+X-Google-Smtp-Source: APXvYqwZoLFN1zxu52vVv3dD5/32mEnANCd+XVhQAiRkPPoSM2JkZ9mS6MAzmzvEHaPoZLlNYU+nqc9CBou0i1oYEfw=
+X-Received: by 2002:a62:7590:: with SMTP id q138mr6261090pfc.241.1574607434795;
+ Sun, 24 Nov 2019 06:57:14 -0800 (PST)
+MIME-Version: 1.0
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com> <1574604530-9024-2-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <1574604530-9024-2-git-send-email-akinobu.mita@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 24 Nov 2019 16:57:03 +0200
+Message-ID: <CAHp75VfGt59F5YbEjctvOm00g+Pws+1jYgVbNLnUE3kq3SZi-A@mail.gmail.com>
+Subject: Re: [PATCH 1/8] add header file for kelvin to/from Celsius conversion helpers
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Sujith Thomas <sujith.thomas@intel.com>,
         Darren Hart <dvhart@infradead.org>,
         Andy Shevchenko <andy@infradead.org>,
@@ -59,78 +63,55 @@ Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
         Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
         Sagi Grimberg <sagi@grimberg.me>
-Subject: [PATCH 8/8] thermal: remove kelvin to/from Celsius conversion helpers from <linux/thermal.h>
-Date:   Sun, 24 Nov 2019 23:08:50 +0900
-Message-Id: <1574604530-9024-9-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
-References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This removes the kelvin to/from Celsius conversion helpers in
-<linux/thermal.h> which were switched to <linux/temperature.h> helpers.
+On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
+>
+> There are several helper macros to convert kelvin to/from Celsius in
+> <linux/thermal.h> for thermal drivers.  These are useful for any other
+> drivers or subsystems, but it's odd to include <linux/thermal.h> just for
+> the helpers.
+>
+> This adds a new <linux/temperature.h> that provides the equivalent inline
+> functions for any drivers or subsystems.  It is intended to replace the
+> helpers in <linux/thermal.h>.
+>
+> Cc: Sujith Thomas <sujith.thomas@intel.com>
+> Cc: Darren Hart <dvhart@infradead.org>
+> Cc: Andy Shevchenko <andy@infradead.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Eduardo Valentin <edubezval@gmail.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Keith Busch <kbusch@kernel.org>
+> Cc: Jens Axboe <axboe@fb.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Sagi Grimberg <sagi@grimberg.me>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> ---
+>  include/linux/temperature.h | 39 +++++++++++++++++++++++++++++++++++++++
 
-DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET() is only used by ACPI thermal
-zone driver and the usage is specific to the driver.  So this macro
-is moved to the ACPI thermal driver rather than generic header.
+>  include/linux/thermal.h     |  1 +
 
-Cc: Sujith Thomas <sujith.thomas@intel.com>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: Andy Shevchenko <andy@infradead.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Eduardo Valentin <edubezval@gmail.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amit.kucheria@verdurent.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Keith Busch <kbusch@kernel.org>
-Cc: Jens Axboe <axboe@fb.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- drivers/acpi/thermal.c  |  2 ++
- include/linux/thermal.h | 11 -----------
- 2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index bd9b6eb..370e114 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -42,6 +42,8 @@
- #define ACPI_THERMAL_MAX_ACTIVE	10
- #define ACPI_THERMAL_MAX_LIMIT_STR_LEN 65
- 
-+#define DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET(t, off) (((t) - (off)) * 100)
-+
- #define _COMPONENT		ACPI_THERMAL_COMPONENT
- ACPI_MODULE_NAME("thermal");
- 
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index ed549e4..06e1695 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -33,17 +33,6 @@
- /* use value, which < 0K, to indicate an invalid/uninitialized temperature */
- #define THERMAL_TEMP_INVALID	-274000
- 
--/* Unit conversion macros */
--#define DECI_KELVIN_TO_CELSIUS(t)	({			\
--	long _t = (t);						\
--	((_t-2732 >= 0) ? (_t-2732+5)/10 : (_t-2732-5)/10);	\
--})
--#define CELSIUS_TO_DECI_KELVIN(t)	((t)*10+2732)
--#define DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET(t, off) (((t) - (off)) * 100)
--#define DECI_KELVIN_TO_MILLICELSIUS(t) DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET(t, 2732)
--#define MILLICELSIUS_TO_DECI_KELVIN_WITH_OFFSET(t, off) (((t) / 100) + (off))
--#define MILLICELSIUS_TO_DECI_KELVIN(t) MILLICELSIUS_TO_DECI_KELVIN_WITH_OFFSET(t, 2732)
--
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -14,6 +14,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/device.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/temperature.h>
+>  #include <linux/workqueue.h>
+>  #include <uapi/linux/thermal.h>
+
+I don't see any users of it. Why did you include?
+
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
