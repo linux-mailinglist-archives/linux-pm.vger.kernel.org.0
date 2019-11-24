@@ -2,150 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B02210827C
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 08:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3A510839E
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 15:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbfKXHuJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 02:50:09 -0500
-Received: from cmta16.telus.net ([209.171.16.89]:40844 "EHLO cmta16.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725980AbfKXHuJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 24 Nov 2019 02:50:09 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id YmedirLl6FXoiYmeei80Cx; Sun, 24 Nov 2019 00:50:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1574581807; bh=h0LBhE0iQuKPr/tUZesX5007Cm2XS3vVFYqAWfewTQo=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=Yx8+tMKrUUSfV0lMcDOWqcpp3isBKLAj5EGXseY0mMyWQB3zgzZDRHnVeBQygRcH6
-         QsRvtbvsgQTNJNK/Y8s2NOvF6vt9OOe5NutbM5tI148CaJBqJvw+fILwgw6dP+Ybf0
-         /Vule9beZyfSzSpYIiefghVvjk3QQ0tHYqGgQ5pBDsdOItDOwF9ZB87wcn4iNpcrOn
-         PDGC8mWNDnuTTmPfiFK6OUAP6whv6LBf9LJJMT9z5C5TFnVuMaQuxC0GftqnmhfyiG
-         IaRscugbHLkQnGo1+DVt4xHv2U37oEdDogQfGIiNmw9X6HDFrJ0TKDgUG1lqUdjEJM
-         Ayjp9zDncJInQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=HoEI5HbS c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=JfrnYn6hAAAA:8 a=dyyLcSohDm2E6IqdOvAA:9 a=CjuIK1q_8ugA:10
- a=1CNFftbPRP8L7MoqJWF3:22 a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Ingo Molnar'" <mingo@redhat.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
-        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
-Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "'Mel Gorman'" <mgorman@techsingularity.net>,
-        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Juri Lelli'" <juri.lelli@redhat.com>,
-        "'Paul Turner'" <pjt@google.com>,
-        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
-        "'Quentin Perret'" <qperret@qperret.net>,
-        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>
-References: <20191113124654.18122-1-ggherdovich@suse.cz> <20191113124654.18122-2-ggherdovich@suse.cz>
-In-Reply-To: <20191113124654.18122-2-ggherdovich@suse.cz>
-Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
-Date:   Sat, 23 Nov 2019 23:49:57 -0800
-Message-ID: <000001d5a29b$c944fd70$5bcef850$@net>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdWaH6kpvI2RPz8IRtKQLXZcAyoYugIIu9uQ
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfN/Lu7m5KE5yhuHdppXc/me+VKZjdiQs2pJ7JaSn+Kt5AJUl0qFJRkFcdIu6vYdqbQ7gCE6Q5G7in/rSUSLVh7EI+SuWH4RBz2reEwFFcUAz3Op/azXq
- GokWLqVZGsIHriQBqsLsmxx74TD1rMTkNC1DYCnMk0KDO4wdS1Cfirhufd/hNKQrQubwAcsgAC5fQ/uAg4aO3wy4QgX5c01GY+j48qYjhowRzmJ8fmuL8y5q
- WOjQQrZvmZklo7wZCYT4gmsc4EF7A8Op7DhepXsTEDgPRSYQRQUSO+/kRv7juyihOnL9UDmqc2BZjlFmH0QK3VTJbqpiciaqNvaQFoM+uScmZgSHysHNV1l8
- C8B76rh/1m0+FPaQm90owXmtliB9Y1rsjSDoRHor9FS0cL2PVOy1mChobVthcO6/2H83IFBMi5wC1CyMflZkQlHcu3XROGwDpDrOJGf6GkqgsynphM92FADY
- /M4c4h9uSmPOfxTjsomCeXkaB1vEGTxvvR5RuqX5MOwg/dhXVrXiazdBb2amwa3y9b5/KJ/dB9BQx+jtcSwTWwW/LwlAItVSPtfMkylwrIL1BJtX+CCXzVwB
- 1tn9Au0I9FHbyGHQmg8DCYmFvCZPgT9U9cn2j5FxfcAkcO9C2lgvdEddANH0HyqEySJYFu/WJ6I5ud2LspKAjaYC/3G7/XAVFryauaQ7je2rRxgUEoWZx36+
- rIJ+xojuqVoO9wHQirjhrAqbGgf1kutjo39Jdj+pG8HIYDHJMo30OA==
+        id S1726779AbfKXOJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 09:09:09 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:35639 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfKXOJJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 09:09:09 -0500
+Received: by mail-pj1-f66.google.com with SMTP id s8so5258046pji.2;
+        Sun, 24 Nov 2019 06:09:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=fytYybgFl7xuOSmQnvp6q1/Ea79YQjw0tWt4Bizw0mA=;
+        b=GVHhFrNwoGoDRtY80N3KIXvLBkqiN+/S+ChGYbUMe8BwAr2Tr1j+hFE8Tmi9VxetkG
+         Bmw3loe+8p46VnVE+5HUsdYV9BPGv0uFwcI2D5UZwibK9Lw46kOIoq9aZrC+Zzr+Cjcj
+         gVEW/xdtdeM07YaDgT3aS2eQrXx1YRAwawXVfjdlohWo2t/F7ujcUBOxSVol0iJrFefT
+         aXu9ud7QrK04QN4gvERRWXrv0Cu5w0JSp8oWnZhFs4wpLPpeXvOIzuEuI8w+IQk20mbu
+         oG3J3H4daa5FOMXPnlZ6DO03N7Ozdcrpz/DAve7sEVECGUK+Hr/5GOMF9YzgZjUwOmE6
+         3jow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fytYybgFl7xuOSmQnvp6q1/Ea79YQjw0tWt4Bizw0mA=;
+        b=XokUoAnCypP9L6GpWZ/I94//rWLMDbERyEtmqZ3nhiuKo5WASO2igBkTHTcFuvEMvL
+         O3h/er/WijcOwsw1ayGBMn6/VQBdUcvqTbkpeJV8nmpp1472KEgcoIjfPCMjoKSeVf12
+         r1w6AA2/T8GL97rizP8BYbec9B3nUmR8b9vYCRGlIBsKFaVctb1/ws/XorfgKYJxjOAR
+         CBiZn0zLqBEUXUgoPb04rTgZkTn/WBycOGii0g/IY6AEdoL8TNLb5Sja2FWemJcpfCEY
+         8cG8SCvDUBnbDQPj+Ehgth9hC3ctCpYVwKWhyAszkg0mDyADk5SZBVsdXuFdkhbhjKKp
+         yNWQ==
+X-Gm-Message-State: APjAAAVkG8uODLfETs28Hs9XugI8qsLhUIpHzoLcgjeREm8Nwi4b8Y38
+        ADUkts/JmtFW2wU+fBUnFJxQ6agY3gY=
+X-Google-Smtp-Source: APXvYqyBSLTq/CtXVdy1kZ+42OQ1yYPI2w3yb9lfouKDp/CevSx3IwrqhzpBj4/MpiNWC/bSBrJqaQ==
+X-Received: by 2002:a17:90b:30d7:: with SMTP id hi23mr31851724pjb.10.1574604547338;
+        Sun, 24 Nov 2019 06:09:07 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
+        by smtp.gmail.com with ESMTPSA id a3sm4816326pgh.91.2019.11.24.06.09.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 24 Nov 2019 06:09:05 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Subject: [PATCH 0/8] add header file for kelvin to/from Celsius conversion helpers
+Date:   Sun, 24 Nov 2019 23:08:42 +0900
+Message-Id: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+There are several helper macros to convert kelvin to/from Celsius in
+<linux/thermal.h> for thermal drivers.  These are useful for any other
+drivers or subsystems, but it's odd to include <linux/thermal.h> just for
+the helpers.
 
-The address list here is likely incorrect,
-and this e-mail is really about a kernel 5.4
-bisected regression.
+This adds a new <linux/temperature.h> that provides the equivalent inline
+functions for any drivers or subsystems, and switches all the users of
+conversion helpers in <linux/thermal.h> to use <linux/temperature.h>
+helpers.
 
-It had been since mid September, and kernel 5.3-rc8 since
-I had tried this, so I wanted to try it again. Call it due diligence.
-I focused on my own version of the "gitsource" test.
+Akinobu Mita (8):
+  add header file for kelvin to/from Celsius conversion helpers
+  ACPI: thermal: switch to use <linux/temperature.h> helpers
+  platform/x86: asus-wmi: switch to use <linux/temperature.h> helpers
+  platform/x86: intel_menlow: switch to use <linux/temperature.h>
+    helpers
+  thermal: int340x: switch to use <linux/temperature.h> helpers
+  thermal: intel_pch: switch to use <linux/temperature.h> helpers
+  nvme: hwmon: switch to use <linux/temperature.h> helpers
+  thermal: remove kelvin to/from Celsius conversion helpers from
+    <linux/thermal.h>
 
-Kernel 5.4-rc8 (as a baseline reference).
+ drivers/acpi/thermal.c                             | 17 ++++++----
+ drivers/nvme/host/hwmon.c                          | 13 +++-----
+ drivers/platform/x86/asus-wmi.c                    |  7 ++--
+ drivers/platform/x86/intel_menlow.c                |  8 +++--
+ .../intel/int340x_thermal/int340x_thermal_zone.c   |  6 ++--
+ drivers/thermal/intel/intel_pch_thermal.c          |  2 +-
+ include/linux/temperature.h                        | 39 ++++++++++++++++++++++
+ include/linux/thermal.h                            | 12 +------
+ 8 files changed, 68 insertions(+), 36 deletions(-)
+ create mode 100644 include/linux/temperature.h
 
-My results were extremely surprising.
-
-As it turns out, at least on my test computer, both the
-acpi-cpufreq and intel_cpufreq CPU frequency scaling drivers
-using the schedutil governor are broken. For the tests that
-I ran, there is negligible difference between them and the
-performance governor. So, one might argue that they are not
-broken, but rather working incredibly well, which if true
-then this patch is no longer needed.
-
-I bisected the kernel and got:
-
-first bad commit: [04cbfba6208592999d7bfe6609ec01dc3fde73f5]
-Merge tag 'dmaengine-5.4-rc1' of git://git.infradead.org/users/vkoul/slave-dma
-
-Which did not make any sense at all. I don't even know how
-this is being pulled into my kernel compile.
-O.K., I often (usually) make a mistake
-during bisection, so I did it again, and got the same result.
-
-Relevant excerpt from the commit:
-
-diff --cc drivers/dma/Kconfig
-index 413efef,03fa0c5..7c511e3
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@@ -294,8 -294,8 +294,8 @@@ config INTEL_IOATDM
-          If unsure, say N.
-
-  config INTEL_IOP_ADMA
- -      tristate "Intel IOP ADMA support"
- -      depends on ARCH_IOP32X || ARCH_IOP33X || ARCH_IOP13XX
- +      tristate "Intel IOP32x ADMA support"
--       depends on ARCH_IOP32X
-++      depends on ARCH_IOP32X || COMPILE_TEST
-        select DMA_ENGINE
-        select ASYNC_TX_ENABLE_CHANNEL_SWITCH
-        help
-
-If I revert the above, manually, then everything behaves
-as expected (minimally tested only, so far).
-
-Are others seeing the schedutil governors not working as
-expected with any of kernels 5.4-rc1 - 5.4-rc8?
-
-I do have a pretty graph of my method of doing the
-"gitsource" test, but am not ready to post it yet.
-Here is some gitsource test data, 6 runs of "make test",
-the first run is discarded:
-
-"gg 6" means this 6 patch set.
-
-Kernel 5.4-rc8 + revert, intel_cpufreq/schedutil: 3899 seconds
-Kernel 5.4-rc8 + gg 6 + revert, intel_cpufreq/schedutil: 2740.7 seconds
-Ratio: 0.70 (as expected)
-Kernel 5.4-rc8, intel_cpufreq/schedutil: 2334.7 seconds (faster than expected)
-Kernel 5.4-rc8 + gg 6 patch set, intel_cpufreq/schedutil: 2275.0 seconds (faster than expected)
-Ratio: 0.97 (not as expected)
-Kernel 5.4-rc8, intel_cpufreq/performance: 2215.3 seconds
-Kernel 5.4-rc8, intel_cpufreq/ondemand: 3286.3 seconds
-Re-stated from previous e-mail:
-Kernel 5.3-rc8, intel_cpufreq/schedutil: ratio: 0.69 (I don't have the original times)
-
-... Doug
-
+Cc: Sujith Thomas <sujith.thomas@intel.com>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Andy Shevchenko <andy@infradead.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Keith Busch <kbusch@kernel.org>
+Cc: Jens Axboe <axboe@fb.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+-- 
+2.7.4
 
