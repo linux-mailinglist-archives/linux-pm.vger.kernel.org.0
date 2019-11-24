@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3A510839E
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 15:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB67A1083A3
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Nov 2019 15:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbfKXOJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 09:09:09 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:35639 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfKXOJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 09:09:09 -0500
-Received: by mail-pj1-f66.google.com with SMTP id s8so5258046pji.2;
-        Sun, 24 Nov 2019 06:09:07 -0800 (PST)
+        id S1727112AbfKXOJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 09:09:14 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44235 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfKXOJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 09:09:13 -0500
+Received: by mail-pf1-f195.google.com with SMTP id d199so1330965pfd.11;
+        Sun, 24 Nov 2019 06:09:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=fytYybgFl7xuOSmQnvp6q1/Ea79YQjw0tWt4Bizw0mA=;
-        b=GVHhFrNwoGoDRtY80N3KIXvLBkqiN+/S+ChGYbUMe8BwAr2Tr1j+hFE8Tmi9VxetkG
-         Bmw3loe+8p46VnVE+5HUsdYV9BPGv0uFwcI2D5UZwibK9Lw46kOIoq9aZrC+Zzr+Cjcj
-         gVEW/xdtdeM07YaDgT3aS2eQrXx1YRAwawXVfjdlohWo2t/F7ujcUBOxSVol0iJrFefT
-         aXu9ud7QrK04QN4gvERRWXrv0Cu5w0JSp8oWnZhFs4wpLPpeXvOIzuEuI8w+IQk20mbu
-         oG3J3H4daa5FOMXPnlZ6DO03N7Ozdcrpz/DAve7sEVECGUK+Hr/5GOMF9YzgZjUwOmE6
-         3jow==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=uiVaOYC0AJAeDJiNsTnIMMgr41e8eY8TpWvmzxTalS8=;
+        b=UZIHl+FvynMquo91lmoV5lbWmLcB+8Iw8tQF+m0vCBO8UCd9CRAQcTeAd+sMHZP4jo
+         B6Xmatc+2rgYJ+34ssDGYNBtJiUINZ7+QB/gQplVjthaNSrMy7CSwwU1ucQLlf6Giaof
+         RmRShwUrp8NUVqYWsha6437Pq0+vhr3TLYELT1yPmV1/KZZmDjeJbQFOq3MaBxRqYQQl
+         SHu6KL9a66DZesCDnoB59cQL5Rh1E/13ZazzHc7ARMdE7lHt6pFFCXdkGHuk2BCh37uM
+         A2hSAc1RcaWOLGy67uLEvZGH2wuKAwZsFzYeDmcmMK3gnM/ALNPxjGQhAOJ1zNSS55O+
+         yqNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=fytYybgFl7xuOSmQnvp6q1/Ea79YQjw0tWt4Bizw0mA=;
-        b=XokUoAnCypP9L6GpWZ/I94//rWLMDbERyEtmqZ3nhiuKo5WASO2igBkTHTcFuvEMvL
-         O3h/er/WijcOwsw1ayGBMn6/VQBdUcvqTbkpeJV8nmpp1472KEgcoIjfPCMjoKSeVf12
-         r1w6AA2/T8GL97rizP8BYbec9B3nUmR8b9vYCRGlIBsKFaVctb1/ws/XorfgKYJxjOAR
-         CBiZn0zLqBEUXUgoPb04rTgZkTn/WBycOGii0g/IY6AEdoL8TNLb5Sja2FWemJcpfCEY
-         8cG8SCvDUBnbDQPj+Ehgth9hC3ctCpYVwKWhyAszkg0mDyADk5SZBVsdXuFdkhbhjKKp
-         yNWQ==
-X-Gm-Message-State: APjAAAVkG8uODLfETs28Hs9XugI8qsLhUIpHzoLcgjeREm8Nwi4b8Y38
-        ADUkts/JmtFW2wU+fBUnFJxQ6agY3gY=
-X-Google-Smtp-Source: APXvYqyBSLTq/CtXVdy1kZ+42OQ1yYPI2w3yb9lfouKDp/CevSx3IwrqhzpBj4/MpiNWC/bSBrJqaQ==
-X-Received: by 2002:a17:90b:30d7:: with SMTP id hi23mr31851724pjb.10.1574604547338;
-        Sun, 24 Nov 2019 06:09:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=uiVaOYC0AJAeDJiNsTnIMMgr41e8eY8TpWvmzxTalS8=;
+        b=uFylDnKrPaO6Nmgi1tavMINCYDwrQLnlnR83cYpC4RFCQagBui8i6sv2BOMxmAdq57
+         Mzen7I9hno87+FhNAb3fdlFDzdYfRjhQ+3TABRUUnXPQuoOfQFPXYM3xv5W93KC5PSqT
+         tf632b94GdNW44sRl49/A4iM3rR7ErrCXU8zcUnaP3kFyDP/Fzk88IzkCnOmHN/BhFyi
+         4rIew1IkO1U7SXG642iOfzo635edMXIJp/+Xa9l0tFYOf0TeQzPhnLai0RgDNptkX+hr
+         XTJoYiSh5XhEip1d/72f4tFXcX807qSfVAQJwhdiR69SrnEfTSpk7NPmQBWTQD4Ke/Sm
+         s2DQ==
+X-Gm-Message-State: APjAAAU8127VBFfg6nhL17eKFKofTgwNV9D98yOO8qElJV6RemKNJTas
+        4+4FjnIRqxznQT+ZoIpFqH+YjBeR870=
+X-Google-Smtp-Source: APXvYqxa+x5Ky0KmnA9MrXJ6wT3QpcqvpcitOx/D7jKeOjTqkBRfuQPdefSpwDVRKgldh3VsRGRMZQ==
+X-Received: by 2002:aa7:8b1a:: with SMTP id f26mr8162545pfd.81.1574604552956;
+        Sun, 24 Nov 2019 06:09:12 -0800 (PST)
 Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id a3sm4816326pgh.91.2019.11.24.06.09.01
+        by smtp.gmail.com with ESMTPSA id a3sm4816326pgh.91.2019.11.24.06.09.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 24 Nov 2019 06:09:05 -0800 (PST)
+        Sun, 24 Nov 2019 06:09:12 -0800 (PST)
 From:   Akinobu Mita <akinobu.mita@gmail.com>
 To:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -58,10 +59,12 @@ Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
         Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
         Sagi Grimberg <sagi@grimberg.me>
-Subject: [PATCH 0/8] add header file for kelvin to/from Celsius conversion helpers
-Date:   Sun, 24 Nov 2019 23:08:42 +0900
-Message-Id: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+Subject: [PATCH 1/8] add header file for kelvin to/from Celsius conversion helpers
+Date:   Sun, 24 Nov 2019 23:08:43 +0900
+Message-Id: <1574604530-9024-2-git-send-email-akinobu.mita@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -73,32 +76,8 @@ drivers or subsystems, but it's odd to include <linux/thermal.h> just for
 the helpers.
 
 This adds a new <linux/temperature.h> that provides the equivalent inline
-functions for any drivers or subsystems, and switches all the users of
-conversion helpers in <linux/thermal.h> to use <linux/temperature.h>
-helpers.
-
-Akinobu Mita (8):
-  add header file for kelvin to/from Celsius conversion helpers
-  ACPI: thermal: switch to use <linux/temperature.h> helpers
-  platform/x86: asus-wmi: switch to use <linux/temperature.h> helpers
-  platform/x86: intel_menlow: switch to use <linux/temperature.h>
-    helpers
-  thermal: int340x: switch to use <linux/temperature.h> helpers
-  thermal: intel_pch: switch to use <linux/temperature.h> helpers
-  nvme: hwmon: switch to use <linux/temperature.h> helpers
-  thermal: remove kelvin to/from Celsius conversion helpers from
-    <linux/thermal.h>
-
- drivers/acpi/thermal.c                             | 17 ++++++----
- drivers/nvme/host/hwmon.c                          | 13 +++-----
- drivers/platform/x86/asus-wmi.c                    |  7 ++--
- drivers/platform/x86/intel_menlow.c                |  8 +++--
- .../intel/int340x_thermal/int340x_thermal_zone.c   |  6 ++--
- drivers/thermal/intel/intel_pch_thermal.c          |  2 +-
- include/linux/temperature.h                        | 39 ++++++++++++++++++++++
- include/linux/thermal.h                            | 12 +------
- 8 files changed, 68 insertions(+), 36 deletions(-)
- create mode 100644 include/linux/temperature.h
+functions for any drivers or subsystems.  It is intended to replace the
+helpers in <linux/thermal.h>.
 
 Cc: Sujith Thomas <sujith.thomas@intel.com>
 Cc: Darren Hart <dvhart@infradead.org>
@@ -113,6 +92,70 @@ Cc: Keith Busch <kbusch@kernel.org>
 Cc: Jens Axboe <axboe@fb.com>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+---
+ include/linux/temperature.h | 39 +++++++++++++++++++++++++++++++++++++++
+ include/linux/thermal.h     |  1 +
+ 2 files changed, 40 insertions(+)
+ create mode 100644 include/linux/temperature.h
+
+diff --git a/include/linux/temperature.h b/include/linux/temperature.h
+new file mode 100644
+index 0000000..d7e2aed
+--- /dev/null
++++ b/include/linux/temperature.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_TEMPERATURE_H
++#define _LINUX_TEMPERATURE_H
++
++#include <linux/kernel.h>
++
++#define ABSOLUTE_ZERO_MILLICELSIUS -273150
++
++static inline long kelvin_to_millicelsius(long t)
++{
++	return t * 1000 + ABSOLUTE_ZERO_MILLICELSIUS;
++}
++
++static inline long millicelsius_to_kelvin(long t)
++{
++	return DIV_ROUND_CLOSEST(t - ABSOLUTE_ZERO_MILLICELSIUS, 1000);
++}
++
++static inline long deci_kelvin_to_celsius(long t)
++{
++	return DIV_ROUND_CLOSEST(t * 100 + ABSOLUTE_ZERO_MILLICELSIUS, 1000);
++}
++
++static inline long celsius_to_deci_kelvin(long t)
++{
++	return t * 10 - DIV_ROUND_CLOSEST(ABSOLUTE_ZERO_MILLICELSIUS, 100);
++}
++
++static inline long deci_kelvin_to_millicelsius(long t)
++{
++	return t * 100 + ABSOLUTE_ZERO_MILLICELSIUS;
++}
++
++static inline long millicelsius_to_deci_kelvin(long t)
++{
++	return DIV_ROUND_CLOSEST(t - ABSOLUTE_ZERO_MILLICELSIUS, 100);
++}
++
++#endif /* _LINUX_TEMPERATURE_H */
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index e45659c..ed549e4 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -14,6 +14,7 @@
+ #include <linux/idr.h>
+ #include <linux/device.h>
+ #include <linux/sysfs.h>
++#include <linux/temperature.h>
+ #include <linux/workqueue.h>
+ #include <uapi/linux/thermal.h>
+ 
 -- 
 2.7.4
 
