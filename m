@@ -2,100 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67146108B3B
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 10:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C799A108BFF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 11:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbfKYJ5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 04:57:33 -0500
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:43280 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727133AbfKYJ5d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 04:57:33 -0500
-Received: by mail-ua1-f65.google.com with SMTP id o42so1138523uad.10
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 01:57:31 -0800 (PST)
+        id S1727437AbfKYKpZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 05:45:25 -0500
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:45878 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727316AbfKYKpZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 05:45:25 -0500
+Received: by mail-ua1-f68.google.com with SMTP id w10so4224916uar.12
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 02:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=npyab8aYxxLux0JRUK733Ht60e/4IF75r/XvwUY4q5g=;
-        b=T5u1pfET1qVIZvkqwn861rrzWt3JpgaSvmbMndh+kJZaj53GP6XSkmxMDLU89RiaG5
-         vfUqEWUgP482GU1cMbMwT1tc23cpnLcMLbs+LNDTSRx8hUPXe25ABb5tWWfUVXWVspxH
-         NKJqHYPnk2KqHt6ZEm08wz7G+OpKEtO74t3LReEVJNX5PCLsmVX9wG0q40vvkjexXeSI
-         jbSfljXWA3Alqar5gzCfqLpIg/3q3kFAupuvXGbaf8Sy4RVsNDhShpBHBXOa9gOu8TUN
-         1kadBoO1A4FTVVi57u4XFCStR0WFCGTn9Q2X0FuoqlsYgPEWutl00lDmd53WgbKyLltd
-         MX8g==
+        bh=v3FcaoN4WpK7Q0vtzl4nYB1ganJ2eAq1FfL3c8YRofM=;
+        b=ZDRYVS6oMiefCRKtfx6O85kns5YodUHvE0qkZ89CA83dG5VPVQ/5ydRUAYnvWdMIvF
+         wQCIQC5Xj1D2G/oyRg+NI0d9KV0LwX3FienSwjDKbOPAAN0eDWGOd73IZ3ismtaDHgX6
+         eqgctaE/jXwP7enTDv3Ur1JUOsZw0ZNhaJzd7x2yBfPxAVte2/ebjN0glqeypCe6H91e
+         IwBZQYXojUnzcGvwbz3ef5J1ZA+d+DquArEddji6W/MQyfGjJoWAwtllFwVD1hfRrxx2
+         r7xnWPhwnYyjDGZH+WyLSH6v/auD9V6Gn9OUbRIO8ZIWntvvC+vdV6b/92dtzN38lAlU
+         nuPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=npyab8aYxxLux0JRUK733Ht60e/4IF75r/XvwUY4q5g=;
-        b=MN97wuXkUVptzhvbdq3n6kJ9IeLArE0ueVd+XjibPkgZpAr89sDMXVrr+0tJwx/CqO
-         BGE99BJbxihxwOinZgmqnu7GwdEVhBhu8QBewhDgWeT8GLWGr6R8jN97N/QPN6xUeAjF
-         9b96B5X//M+ZOO1vKPKtTwMiSN4R7VsDkoX1H60Wu3LKX42dFnbTSHJAr60E9HquaVrL
-         W/j83RZkD8Tri8zLuyAc1MD8mAyuOCWHxbkBIM2+L+tVbc6KviD7gqwZHC8mt9eGBkFz
-         fTVWCJhdfIuPuDyQrhvfI2z39XWMtyLNF3c+bSCewDZhqsgt4SH89o+mND2s0A378zM8
-         lOzw==
-X-Gm-Message-State: APjAAAVYqutJIyYj6HdMcef/MkDizdy+j3C+J2NC/8VLg0QYn/1ITseX
-        nr+jI4HTukvn1sbYOC1P+HIyvEULjjNTI/2IJDly+w==
-X-Google-Smtp-Source: APXvYqxWUuUDQt4N5TOS0389vJ3GuxnBsBigoWwOYjK0gHgDpi6Ynu7sMULHtzGCWGKYiJZPi+o3brmFyk0kTjg/uJQ=
-X-Received: by 2002:a9f:3f46:: with SMTP id i6mr17435451uaj.60.1574675850866;
- Mon, 25 Nov 2019 01:57:30 -0800 (PST)
+        bh=v3FcaoN4WpK7Q0vtzl4nYB1ganJ2eAq1FfL3c8YRofM=;
+        b=rc3yoZmkXAT47G36eLs33sIbOLtLz7OtC3uUHjsnml45+Eyx2cO5lF7dR0Zv/dO995
+         /fHjRhLzBYfWTwpUT53l6o0N7x6YZN1VomeK4HjaABItqjJGMybkFVV1yT/RvdRMIUTR
+         DwjKbWHgyyAcfyEYdaBOgRI6l9gmwFolfeyuK4FVmt/Dh4UU0RsLESIfhKsZ48B25y2+
+         njtBI7fNChr3MFqzZkbBk0t1qIVyvjJUBIPQfwkCUsCS0rNXhDMO1VUJ2J1gi7bz9Owa
+         TF4ry5WGBxA7TZHXp3W9TAugS80JmXGtkw8+QrqR4x/aXe2T5NNk7i2o/LsAVnE6qcnG
+         CbJQ==
+X-Gm-Message-State: APjAAAVq/JHa3joK4m3v+Y3uXgRF1eir2uXiSpFC/gfzr+nOY4Sv50wV
+        piFZG6ACFc1ZjsCCjmTUHiMW7RmRaYxulIg105Rkkw==
+X-Google-Smtp-Source: APXvYqyDzET5SML3xNWZZrjmwffcN/e/xq3A6chWsSJXUzKQk6BczKfAYyCDO2GtQX02kfBKmW4iJtVcrcnUlGDfDBA=
+X-Received: by 2002:ab0:74cd:: with SMTP id f13mr17428863uaq.104.1574678724284;
+ Mon, 25 Nov 2019 02:45:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20191123154303.2202-1-f.fainelli@gmail.com>
-In-Reply-To: <20191123154303.2202-1-f.fainelli@gmail.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Mon, 25 Nov 2019 15:27:19 +0530
-Message-ID: <CAHLCerPKQSLrgybYhhFDxjXu56BD+iAyz1OYF14rTbjotEkD7g@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: thermal: Eduardo's email is bouncing
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, eduval@amazon.com,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20191029164438.17012-1-ulf.hansson@linaro.org>
+ <20191029164438.17012-11-ulf.hansson@linaro.org> <20191115173053.GE27170@bogus>
+ <CAPDyKFraEhFVm27YG0fVkjT0-oBBxFpfiBY4zS+1TMy=0F6GRQ@mail.gmail.com> <20191122182623.GA8290@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20191122182623.GA8290@e121166-lin.cambridge.arm.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 25 Nov 2019 11:44:47 +0100
+Message-ID: <CAPDyKFruoj_r3ktAHbVJAnnCZ6EP1dB9sZLE0=BZX=UziUYJag@mail.gmail.com>
+Subject: Re: [PATCH v2 10/13] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 23, 2019 at 9:13 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Fri, 22 Nov 2019 at 19:26, Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
 >
-> The last two emails to Eduardo were returned with:
+> On Mon, Nov 18, 2019 at 02:37:41PM +0100, Ulf Hansson wrote:
+> > On Fri, 15 Nov 2019 at 18:30, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > >
+> > > On Tue, Oct 29, 2019 at 05:44:35PM +0100, Ulf Hansson wrote:
+> > > > The per CPU variable psci_power_state, contains an array of fixed values,
+> > > > which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> > > > each of the available CPU idle states.
+> > > >
+> > > > This isn't sufficient when using the hierarchical CPU topology in DT, in
+> > > > combination with having PSCI OS initiated (OSI) mode enabled. More
+> > > > precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> > > > idle state the cluster (a group of CPUs) should enter, while in PSCI
+> > > > Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> > > > state of the cluster.
+> > > >
+> > > > For this reason, introduce a per CPU variable called domain_state and
+> > > > implement two helper functions to read/write its value. Then let the
+> > > > domain_state take precedence over the regular selected state, when entering
+> > > > and idle state.
+> > > >
+> > > > Finally, let's also avoid sprinkling the existing non-OSI path with
+> > > > operations being specific for OSI.
+> > > >
+> > >
+> > > Mostly looks good.
+> >
+> > Thanks!
+> >
+> >
+> > > I am still wondering if we can keep all OSI related
+> > > info in the newly created structure and have psci_states outside it as
+> > > before. And I was think psci_enter_idle_state_pc and psci_enter_idle_state_osi
+> > > instead of single psci_enter_idle_state and assign/initialise state->enter
+> > > based on the mode chosen. I had to closer look now and looks like enter
+> > > is initialised in generic dt_idle_states. That said, what you have in this
+> > > patch also looks OK to me, was just trying to avoid access to the new
+> > > structure all together and keep the PC mode patch almost same as before
+> > > when suspending. I will see what Lorenzo thinks about this.
+> >
+> > I did explore that approach a bit, but found it easier to go with what
+> > I propose here. The most important point, in my view, is that in this
+> > suggested approach only one if-check, "if (!data->dev)", is added to
+> > the PC mode path compared to the original path. I think this should be
+> > fine, right!?
 >
-> 452 4.2.2 The email account that you tried to reach is over quota.
-> Please direct the recipient to
-> https://support.google.com/mail/?p=OverQuotaTemp j17sor626162wrq.49 -
-> gsmtp
-
-Right, I've been seeing the same for the last week for all my postings.
-
-Rui, will you please send the pull request to Linus for 5.5 (and going
-forward) with all the contents of thermal/next[1]? Otherwise, the
-thermal soc patches will unnecessarily miss the merge window. They've
-been baking in linux-next for a while.
-
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/next
-
-
-
-> ---
->  MAINTAINERS | 1 -
->  1 file changed, 1 deletion(-)
+> I don't see why we should use data->dev at runtime when we can
+> have two separate idle enter functions and the detection can
+> be done at probe once for all instead of every idle entry.
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e4f170d8bc29..84e8bdae4beb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16085,7 +16085,6 @@ F:      drivers/media/radio/radio-raremono.c
->
->  THERMAL
->  M:     Zhang Rui <rui.zhang@intel.com>
-> -M:     Eduardo Valentin <edubezval@gmail.com>
->  R:     Daniel Lezcano <daniel.lezcano@linaro.org>
->  R:     Amit Kucheria <amit.kucheria@verdurent.com>
->  L:     linux-pm@vger.kernel.org
-> --
-> 2.17.1
->
+> The overhead is close to nought but the point is that it is
+> really not needed.
+
+Alright, I will adopt our suggestion and override the assigned idle
+enter callback, when we succeed to attach the cpu-device to its PM
+domain.
+
+Do you have any other thoughts about the series?
+
+Kind regards
+Uffe
