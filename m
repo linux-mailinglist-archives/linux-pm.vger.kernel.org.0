@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 404DE1093F6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 20:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F5E1093FA
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 20:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727142AbfKYTHm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 14:07:42 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33277 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfKYTHm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 14:07:42 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c184so7839679pfb.0;
-        Mon, 25 Nov 2019 11:07:42 -0800 (PST)
+        id S1725868AbfKYTJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 14:09:05 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44793 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfKYTJF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 14:09:05 -0500
+Received: by mail-pl1-f196.google.com with SMTP id az9so6894763plb.11;
+        Mon, 25 Nov 2019 11:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=V6RCMCu0u2OME2YGHfLS+ptk7Pmu3SS68O9Jky4kB7Y=;
-        b=gNuYAtvklCeB3PPdPcDxP20KNQXOsNyDP66uuHFOCxg8ce7xWrfKR4uD7H/U5tQSa7
-         3Vi2vOJqV4PN2Ar2XZxdNxYHoiaSOkTYjh85Ts+vtNQtL2mLU6cJbeKjkbc0a5Zt/Tuf
-         OudAAcbtq20THMsD6fNKGGDw7eDdVF1DfNHWFuRLYGIvXrTBs11NDhEDh7r5o+8gzxvI
-         KENfZ51WYIN2CsFXPvoW5JhM6vIAY66DR6+s0wTUQq+9u2nkh9JFx09rmn9jrtPhWz4p
-         OQ0XIFcRCNRwk3QVCgqdHOhwb16cxXPNmCl+YfaOlScoOYn+RNQB5HkEysOHxmsOenIC
-         Dr1g==
+        bh=ikkTiJJF7DyuxBpIsOZUMlx8g8P8FFkwaJYiKXyPGkU=;
+        b=Azlhce4pb1chMrQml/2O9Hb/ydwympIFo5rZug/EIB/hxnr1PPvdNLzsmrDScjvKhk
+         Nq5NK059+n067h+MGhaJDlz8p/6G8KcOpQCWKVl8rM1ULKyRDZ+/7X6+1Njl5JGrMR5g
+         9aKbWnuq9ZhQ1pRjzle4xjHqGwc47CvQU7taxtqLW40ujpmkK72XoxFyTDj6Lp1rIzn0
+         eARRfPJpuDs0LMsgj2zWNpWcaJXPZwxU62b3cPXAE8B223lCG369o/ShkjmUNV9nR9T1
+         ZTp9nzIKk1pP2xDyUfqMdStGB7tv+6mdkZFRX+s25PNiHI9fR/UPKL55ogXh1VCU44Wx
+         dKkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=V6RCMCu0u2OME2YGHfLS+ptk7Pmu3SS68O9Jky4kB7Y=;
-        b=BHX2mGDE6DnTE4/F2WArTITwPAntYnyc78cHKqV7dSR3et+ivCZhLCrwTDorELPrXl
-         a5nKhnyc/bcOI9wDI07sGgPSbmEYcro1LF0AemRgqbAxhrdk6w/XTht1efn7ZUAkUWDZ
-         iSJWFhrzkDyVwjMCeB0VUsujt6QP8Fdw2xJsqnLX9SMLx4XS2cJbXvmxQeZ8oSQJZ3yM
-         vItvunSQxuk7TWnDyQGbhkIS7errRzlutVvW/lZ0xAWE9cORf/VqE2bNWaZWfmWDwjwJ
-         DuNTnbh6PN97gxq5YzH+gQVSm9npxT/PQPM8bu1MANm+qDCSSc4GL+xbCZG+S1iLJ/Ko
-         OP4w==
-X-Gm-Message-State: APjAAAU1sj/6yBb29Mtued/TMYB/sYgRbibwfTwM0RRGHxMrwmMClBqZ
-        5imRQFTctq8R6OL6xAhOR0Z7rflNid46c3+068M=
-X-Google-Smtp-Source: APXvYqwdv0gIuwtCK0KGXjB0lvaltYm5Uyb+DZ4bp5hvIaqB0rUkOYH37caKpsTrlUZiHIJyhhqBYx9R9AUwrZCpeRA=
-X-Received: by 2002:a65:6118:: with SMTP id z24mr35095773pgu.203.1574708861836;
- Mon, 25 Nov 2019 11:07:41 -0800 (PST)
+        bh=ikkTiJJF7DyuxBpIsOZUMlx8g8P8FFkwaJYiKXyPGkU=;
+        b=W6MkgQblyLL3jocnAHtJRCcWeVzDmPMEltrg0MITSRQ/aa4vkJHdu8Tfdg6+WDEhzG
+         WxpDwSqU9rCG2MsyqFFQTAW0LfY7umiDCL3pIFfLBW7TNdnl4E0dn56kbOmiDNRarm6X
+         XLFMfiFj0a387TU2BOKG0BnDE17yjFY8gPep5qsYFM1DHblYKVadLtIGCGYR4AzfNUQM
+         VgNyZ0FkpmQuFTZlUAOpy0xKwq+Xvlor4EceO+mOV6CQqFWS+WjTpPrmowEOgaChT87F
+         9p+UUp+bO++dNtfE8exNSdf0PXWGd5+O6/hHqSLPJgUB9SxOafyeaYqCuxWw6Km9liGw
+         UDCw==
+X-Gm-Message-State: APjAAAX4JuqyPglOR2lXEhXXbm6gUeGsIMR0VorDSSIEZxjYM79EhisW
+        NviJ66BHFulp8KvcssbDkHzdxdPvGUgBOIC033Y=
+X-Google-Smtp-Source: APXvYqxdIMRqrIG6lbt22pFjiANsAscQpsPrJ9lvBLoBB04bsEreQiS1atTxsz6l1qN/h2K5PDmCfPmB5QPkSgEpBWw=
+X-Received: by 2002:a17:90a:1b0e:: with SMTP id q14mr631126pjq.132.1574708944081;
+ Mon, 25 Nov 2019 11:09:04 -0800 (PST)
 MIME-Version: 1.0
 References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
- <1574604530-9024-5-git-send-email-akinobu.mita@gmail.com> <CAHp75VfOUiN_2bW+o-AqGmAY32mmdNxP54B2f2+gj0NTEr9FTQ@mail.gmail.com>
- <CAC5umygc95VBWz1L5CTZO9kmkZL2MCEL2_z9d2TJ6Ow5+fKYPw@mail.gmail.com>
-In-Reply-To: <CAC5umygc95VBWz1L5CTZO9kmkZL2MCEL2_z9d2TJ6Ow5+fKYPw@mail.gmail.com>
+ <1574604530-9024-9-git-send-email-akinobu.mita@gmail.com> <CAHp75Vc6e8xq==QGtEX0MGLoV8QCGQf+vP0x-SauNHyjveZrnQ@mail.gmail.com>
+ <CAC5umyiMoByGhd6b2xWA4SLO1Lcn2+ag-yEgw6uirsCmj37mkQ@mail.gmail.com>
+In-Reply-To: <CAC5umyiMoByGhd6b2xWA4SLO1Lcn2+ag-yEgw6uirsCmj37mkQ@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Nov 2019 21:07:31 +0200
-Message-ID: <CAHp75VfPR7JSa7Mn5s_wJs22tXy7rC+W8x1jHLP=Npyd06BJ5w@mail.gmail.com>
-Subject: Re: [PATCH 4/8] platform/x86: intel_menlow: switch to use
- <linux/temperature.h> helpers
+Date:   Mon, 25 Nov 2019 21:08:54 +0200
+Message-ID: <CAHp75VfJ_+aTYWM6JXtENAD1=DbZwTaVELjDwP=aXnxtR_bHPQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] thermal: remove kelvin to/from Celsius conversion
+ helpers from <linux/thermal.h>
 To:     Akinobu Mita <akinobu.mita@gmail.com>
 Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
         linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
@@ -73,23 +73,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 4:35 PM Akinobu Mita <akinobu.mita@gmail.com> wrote=
+On Mon, Nov 25, 2019 at 4:40 PM Akinobu Mita <akinobu.mita@gmail.com> wrote=
 :
-> 2019=E5=B9=B411=E6=9C=8825=E6=97=A5(=E6=9C=88) 4:58 Andy Shevchenko <andy=
+> 2019=E5=B9=B411=E6=9C=8825=E6=97=A5(=E6=9C=88) 5:00 Andy Shevchenko <andy=
 .shevchenko@gmail.com>:
 > > On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> w=
 rote:
 
-> > > -       return result ? result : sprintf(buf, "%lu", DECI_KELVIN_TO_C=
-ELSIUS(value));
-> > > +       return sprintf(buf, "%ld", deci_kelvin_to_celsius(value));
+> > > DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET() is only used by ACPI therma=
+l
+> > > zone driver and the usage is specific to the driver.  So this macro
+> > > is moved to the ACPI thermal driver rather than generic header.
 > >
-> > Can you explain the change %lu to %ld?
+> > I didn't get this point. If we split all helpers, let's do it for all,
+> > and not spreading macro per driver.
 >
-> Isn't it possible for aux values to be lower than 0 degrees Celsius?
+> OK, I'll add deci_kelvin_to_millicelsius_with_offset() in the header.
 
-If it's a change due to requirement of new helpers, put it in the
-commit message, otherwise leave as is.
+Thank you.
+
+> But the unit of 'offset' argument will be in millidegree instead of
+> decidegree, because it's a bit more generic.
+
+It's fine as long as the helpers are consolidated and consistent.
 
 --=20
 With Best Regards,
