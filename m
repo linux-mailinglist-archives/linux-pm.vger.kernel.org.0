@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0586810949D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 21:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38191094EE
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 22:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfKYUUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 15:20:03 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42732 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfKYUUD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 15:20:03 -0500
-Received: by mail-pl1-f194.google.com with SMTP id j12so6978326plt.9
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+        id S1725912AbfKYVJk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 16:09:40 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42767 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfKYVJk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 16:09:40 -0500
+Received: by mail-pf1-f196.google.com with SMTP id s5so7975196pfh.9
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 13:09:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
-        b=UFI2NR3RoQ/NlQaasK7qc+w8Z8M54ZZJ0JndaolcZ1a5pjJYZnEg9KNE5L8EtqHqjt
-         w+T3GFGazVRKfyFN5Pw7OY6A4al6qV0sGYyI4l5g5UIWwfNwTIFgK+4NNz29EpMNlzkg
-         +/dwNnlMeTIzQorI688S4tur4EoYg2iYgm4bw=
+        bh=2eOx4ye28sFtzJeeKAL0QyQ7h9oIsvpFy7JAk2W7dYo=;
+        b=RJPj2JZ9eVqA0psVzdENDC4T3MwIFETE5xtjBVqccuNL6Fil8AI92rLHwgkK53G7os
+         Ryt5ozzJmIxJcj/GZsq8hDxR20zjCz0Fkn4tDpXwjnvn31v7nqri3kTbeVlQEKQa2r5o
+         7eADL1xcH9DWcPTFSKsG85UKPWoNFla26ucV4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
-        b=p0c1E4uss73wW9y4pTUePbTKH8oPTInnUn7c4Bvd6O3olIce9ipVXqUbyeVMx49M31
-         FUUHaJOGllgV04gMn7lA8YNFRzDMCI/keAHchj3/vaDwULvyE5eyfkLFcqK0Hgb31a+h
-         RaIznjImjtnztqE1luRdgSXIaY5JJn5YoEVZXsiY1jMLXI+GUcyTxdnV6qK0g1GNOE0l
-         1HPjL3UMn+GH3EK7uPctiuIO5Ei1Dvma/RLDwnahUOsOby+9d1U+NeyojzFS6UXruapt
-         oY4i2D0t0Ycgy2BjNu+s2cmxCGfo0p2ie5BPdCCS3ZbpvL0ODepePLvIWPAopQnUrkFf
-         6wWQ==
-X-Gm-Message-State: APjAAAUCQeo4oGN5Z05e6NZF3RnrlzaBEa2pjCXbOvNfBTBluuKmAcZo
-        MLZzSpDExZDko3Or1UEv9HQhYw==
-X-Google-Smtp-Source: APXvYqwJUiUuCfgPZoWhn99mTCEBSQnBeCbbxZW58h1oCDGrSPmNRr3Sne4ERCwuSY4RnxDRzfm/ug==
-X-Received: by 2002:a17:90a:f00d:: with SMTP id bt13mr1084835pjb.43.1574713202310;
-        Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+        bh=2eOx4ye28sFtzJeeKAL0QyQ7h9oIsvpFy7JAk2W7dYo=;
+        b=BKGUw4mvXlEGzg/t2kCecI5ONJXPxpV5kESMN/8X+N2pc9w+vY+dEKXQ4H5+JzQG4q
+         aF/wMJ+bH44uQGDixXLalZSi1WusN+9mjM2HbyijhQS4Gt79ibFw2XlhaA9yw/LuWqwj
+         XPD9E/woyM96f48FQrCmVQjkXLw68HMWcGe66G3u0lrzj1bu+fPeIhCxuDH/g5EnP2GC
+         2RsGDSFIMIF9OC+LD37d/4WdEKWSfaSFOrYjGI07W2Ppa8q1664rwykWhr78FmKy4KVm
+         hn5Bst//WdeqRkspaHl4XN00ws4YafA5QZy2kYBdg3UV2Bxu9Hke+nxu/SbsOdMMWcgF
+         TuTQ==
+X-Gm-Message-State: APjAAAW+/B3qHYssXtWD+SvAFksqfAPOpM6H2gXYJXlaNW37JgUW7TNK
+        bqQjRSKHgOwQNkyAECrTQUo0Kg==
+X-Google-Smtp-Source: APXvYqyYC+eaxeL1oOBkSLWNuH+jzXjRsOnySbrO4TcoIBArJr4D1+N9x6uqeAXJEY8DZguVL37QlQ==
+X-Received: by 2002:a63:c804:: with SMTP id z4mr35135355pgg.440.1574716179379;
+        Mon, 25 Nov 2019 13:09:39 -0800 (PST)
 Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id a26sm9295506pff.155.2019.11.25.12.20.00
+        by smtp.gmail.com with ESMTPSA id x186sm9414045pfx.105.2019.11.25.13.09.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2019 12:20:01 -0800 (PST)
-Date:   Mon, 25 Nov 2019 12:19:59 -0800
+        Mon, 25 Nov 2019 13:09:38 -0800 (PST)
+Date:   Mon, 25 Nov 2019 13:09:37 -0800
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -54,161 +54,58 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Brendan Higgins <brendanhiggins@google.com>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
-Message-ID: <20191125201959.GA228856@google.com>
+Subject: Re: [PATCH v3 2/4] PM / QOS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to
+ S32_MAX
+Message-ID: <20191125210937.GB228856@google.com>
 References: <cover.1574699610.git.leonard.crestez@nxp.com>
- <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
+ <43ffe25df5e9b268778656a0b9259c2939715681.1574699610.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
+In-Reply-To: <43ffe25df5e9b268778656a0b9259c2939715681.1574699610.git.leonard.crestez@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:
-> The pm_qos family of APIs are used in relatively difficult to reproduce
-> scenarios such as thermal throttling so they benefit from unit testing.
-
-indeed, a unit test is useful in this case!
-
-> Start by adding basic tests from the the freq_qos APIs. It includes
-> tests for issues that were brought up on mailing lists:
+On Mon, Nov 25, 2019 at 06:42:17PM +0200, Leonard Crestez wrote:
+> QOS requests for DEFAULT_VALUE are supposed to be ignored but this is
+> not the case for FREQ_QOS_MAX. Adding one request for MAX_DEFAULT_VALUE
+> and one for a real value will cause freq_qos_read_value to unexpectedly
+> return MAX_DEFAULT_VALUE (-1).
 > 
-> https://patchwork.kernel.org/patch/11252425/#23017005
-> https://patchwork.kernel.org/patch/11253421/
+> This happens because freq_qos max value is aggregated with PM_QOS_MIN
+> but FREQ_QOS_MAX_DEFAULT_VALUE is (-1) so it's smaller than other
+> values.
 > 
+> Fix this by redefining FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX.
+> 
+> Looking at current users for freq_qos it seems that none of them create
+> requests for FREQ_QOS_MAX_DEFAULT_VALUE.
+> 
+> Fixes: 77751a466ebd ("PM: QoS: Introduce frequency QoS")
+
+nit: you could add:
+
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+
 > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > ---
->  drivers/base/Kconfig          |   4 ++
->  drivers/base/power/Makefile   |   1 +
->  drivers/base/power/qos-test.c | 116 ++++++++++++++++++++++++++++++++++
->  3 files changed, 121 insertions(+)
->  create mode 100644 drivers/base/power/qos-test.c
+>  include/linux/pm_qos.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> index e37d37684132..d4ae1c1adf69 100644
-> --- a/drivers/base/Kconfig
-> +++ b/drivers/base/Kconfig
-> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE
+> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+> index ebf5ef17cc2a..24a6263c9931 100644
+> --- a/include/linux/pm_qos.h
+> +++ b/include/linux/pm_qos.h
+> @@ -254,11 +254,11 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+>  	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+>  }
+>  #endif
 >  
->  	  This option is expected to find errors and may render your system
->  	  unusable. You should say N here unless you are explicitly looking to
->  	  test this functionality.
->  
-> +config PM_QOS_KUNIT_TEST
-> +	bool "KUnit Test for PM QoS features"
-> +	depends on KUNIT
-> +
->  config HMEM_REPORTING
->  	bool
->  	default n
->  	depends on NUMA
->  	help
-> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
-> index ec5bb190b9d0..8fdd0073eeeb 100644
-> --- a/drivers/base/power/Makefile
-> +++ b/drivers/base/power/Makefile
-> @@ -2,7 +2,8 @@
->  obj-$(CONFIG_PM)	+= sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
->  obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
->  obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
->  obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=  domain.o domain_governor.o
->  obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
-> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
->  
->  ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
-> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
-> new file mode 100644
-> index 000000000000..8267d91332a8
-> --- /dev/null
-> +++ b/drivers/base/power/qos-test.c
-> @@ -0,0 +1,116 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2019 NXP
-> + */
-> +#include <kunit/test.h>
-> +#include <linux/pm_qos.h>
-> +
-> +/* Basic test for aggregating two "min" requests */
-> +static void freq_qos_test_min(struct kunit *test)
-> +{
-> +	struct freq_constraints	qos;
-> +	struct freq_qos_request	req1, req2;
-> +	int ret;
-> +
-> +	freq_constraints_init(&qos);
-> +	memset(&req1, 0, sizeof(req1));
-> +	memset(&req2, 0, sizeof(req2));
-> +
-> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
-> +
-> +	freq_qos_remove_request(&req2);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
+>  #define FREQ_QOS_MIN_DEFAULT_VALUE	0
+> -#define FREQ_QOS_MAX_DEFAULT_VALUE	(-1)
+> +#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
 
-This checks (again) the return value of the above freq_qos_add_request() call,
-which I suppose is not intended. Remove?
-
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
-> +
-> +	freq_qos_remove_request(&req1);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-
-ditto
-
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
-> +			FREQ_QOS_MIN_DEFAULT_VALUE);
-> +}
-> +
-> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */
-> +static void freq_qos_test_maxdef(struct kunit *test)
-> +{
-> +	struct freq_constraints	qos;
-> +	struct freq_qos_request	req1, req2;
-> +	int ret;
-> +
-> +	freq_constraints_init(&qos);
-> +	memset(&req1, 0, sizeof(req1));
-> +	memset(&req2, 0, sizeof(req2));
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +
-> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +	/* Add max 1000 */
-> +	ret = freq_qos_update_request(&req1, 1000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
-> +
-> +	/* Add max 2000, no impact */
-> +	ret = freq_qos_update_request(&req2, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
-> +
-> +	/* Remove max 2000, new max 1000 */
-
-the code doesn't match the comment, max 1000 is removed
-
-> +	ret = freq_qos_remove_request(&req1);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);
-> +}
-> +
-> +/*
-> + * Test that a freq_qos_request can be readded after removal
-
-nit: 're-added'. It took me a few secs to figure this is not a about
-'read'ing something
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
