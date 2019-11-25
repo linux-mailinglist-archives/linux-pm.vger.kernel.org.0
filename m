@@ -2,117 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B6E1086DA
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 04:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81E41086DD
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 04:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbfKYDk2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 22:40:28 -0500
-Received: from mailbackend.panix.com ([166.84.1.89]:41428 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbfKYDk2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 22:40:28 -0500
-Received: from hp-x360n (c-73-241-154-233.hsd1.ca.comcast.net [73.241.154.233])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 47Lt8k3KMbz1FcH;
-        Sun, 24 Nov 2019 22:40:22 -0500 (EST)
-Date:   Sun, 24 Nov 2019 19:40:19 -0800 (PST)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
- suspend-to-idle control flow)
-In-Reply-To: <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1911241929220.16116@hp-x360n>
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com> <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com> <alpine.DEB.2.21.1911230213510.2531@hp-x360n>
- <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1727050AbfKYDpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 22:45:55 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:33856 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbfKYDpz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 22:45:55 -0500
+Received: by mail-qk1-f193.google.com with SMTP id d202so3195088qkb.1
+        for <linux-pm@vger.kernel.org>; Sun, 24 Nov 2019 19:45:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AF12oMOhXfc9Px1qgEFgcsznioBCGPRgpR5oqy4G2B8=;
+        b=ohus8ZaLy91n7yWY7CAuSCod5PdiGyEijWDibZCHmn3LOpJ9bd5ykpBgoHswudwAMV
+         gq33eHfeRPzhxptnRGsj4SyLJiGffu62hDBY4OYXyixy+zwjYsIKc1SN6O5oD0EdBPEJ
+         c2TnSIJgNWlnoWybsfNWn4AlpT2IH9Sro+CQ7UixGBR0J2oagC9VzBcSHeJVyR/ahXCc
+         g/+0vwqi9pfSD3hjT0Qvy99IoVl3OgWZ7sdJ1y69efz1CW8ffWqCoDk/iEOQB14ewR7o
+         VxDwWQP0leejBXfuhyOR/jFx28HwlsIuWccknS6alrPj4TWJgnAgIaEBdCl/hNe2tVxs
+         kiJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AF12oMOhXfc9Px1qgEFgcsznioBCGPRgpR5oqy4G2B8=;
+        b=shSrLEJs2VI4guLtj1ej84MhPtZyuzhBbUDpxKrF51fVKnuX2Eij0KtrnlkGq8XIXD
+         XJm/x6qXGe62WdiS2sp8aWN4r9nGSmhFiDYlJdHBnvRE+gHyontgrGv2VNZXo5tfz8XM
+         ZS/MQOy9VRT4wK5/XL+yU/5KmUFLT33A1QADCc4lsUsZB/4LBmBWuE7wG+B5xQIlfWwU
+         I9xkHEHlnL/bQxsW5sNFiMWQb+jLpuAnA1m3ZBB7iWpa8Gjir6RPHmL+HQ7ng1sQd89g
+         kUF3vS8xXIh1gU3CQzPDT1MLwJrG1JxpfPVns4W7uDdXCtbfWTsBbM3IrJMKFetAHoRz
+         B8aw==
+X-Gm-Message-State: APjAAAXf0rx6O3eKhGo2J7Mw9AGVfF0vc8i2r00WWy/0v2s3JpDpye+v
+        7JJkij2pn8/zvO3t06tgVKh13pw0Tqu1ZUmNNjpGhA==
+X-Google-Smtp-Source: APXvYqw5y5nchP1cUDHKO4br6F+MHXkoNQBfCnCnCKjuQEozW0/9xvEHfwNtOzn9mPXU/ki1lahN3/hMDEkoX868dtM=
+X-Received: by 2002:a05:620a:12c3:: with SMTP id e3mr24217720qkl.14.1574653553789;
+ Sun, 24 Nov 2019 19:45:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20191120002836.GA247344@google.com> <20191121181500.GA55996@google.com>
+ <CAD8Lp47o6PqKnQYBba0o_8LSGhd3_APhVuXAVsJRT7TedeqXDg@mail.gmail.com> <CAJZ5v0hxa9OGF-w82ZkQ0n_p5VM7uOdKD_UrdGVoz0MAfeqy0w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hxa9OGF-w82ZkQ0n_p5VM7uOdKD_UrdGVoz0MAfeqy0w@mail.gmail.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Mon, 25 Nov 2019 11:45:42 +0800
+Message-ID: <CAD8Lp47kV-C_wf02=s-KKKgB6EVsjNVET9kqYuxfdHFDWbAShw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Thanks for getting back to me.
-
-On Sun, 24 Nov 2019, Rafael J. Wysocki wrote:
-
-> > If "sleep_no_lps0" == 1, the machine never goes fully to sleep; the power
-> > light stays on and the backlight goes off, but if I have external monitors
-> > connected they're still showing dmesg activity. This is independent of the
-> > state of "ec_no_wakeup".
-
-> Hmm.  The external monitors part is something you have never mentioned.
-
-I didn't realize that myself until I'd tried "sleep_no_lps0" testing for this
-thread and happened to have my Thunderbolt dock connected.
-
-> > If "ec_no_wakeup" == 1, the system *at times* will go to sleep and never return
-
-> This is unclear.  What exactly do you mean by "go to sleep"?
-
-It appears to do a suspend cycle; the screen goes off, the power light goes out,
-and the power consumption (as measured at the charge port) (usually) goes to the
-smallest draw this laptop is capable of in s2idle.
-
-> Which part of the behavior does the "at times" phrase apply to?  The
-> "going to sleep" or coming back?  Or both?
-
-The coming back. Many times I'll hit a key on the keyboard (when "ec_no_wakeup"
-is set) or open the lid or hit the the power button (if it's not set) and nothing
-happens. IIRC the current draw doesn't increase either, but don't quote me on
-that (it's easy enough to reproduce, so I'll try it out and report back).
-
-> > (i.e. no power light comes on, it's totally unresponsive until I do a hard
-> > reset with a power-button long-press) whether I'm plugged in or not.
-> > This is new behavior.
-
-> So how did it behave in 5.3.y?
-...
-> > Help! What can I do to return to the behavior of right before the s0 rework?
-> I guess you mean the 5.3.y behavior.  And what was it?
-...
-
-Seemed to always work; I don't recall any issues with s2idle in earlier
-kernels. Sometimes my idle draw would be much higher than it should be, but
-I have zero clue as to why that is (which is why I'm chasing down bleeding-
-edge PM commits).
-
-> > If "ec_no_wakeup" == 0, the system goes fully to sleep and either of the
-> > power button, lid opening or hitting a key resumes the laptop, but if I'm
-> > plugged in and actually charging when I suspend (and I suspect if I plug
-> > it in during suspend) it never returns, as in the case above.
-
-> OK, so ec_no_wakeup doesn't really change the behavior substantially,
-> it only makes certain things more or less likely to happen.
-> Does it still hang if you use the keyboard to wake up the system?
-
-When "ec_no_wakeup" is set, ONLY the keyboard wakes up the system, and the dead
-system is unrelated to the method I'm using to wake things up.
-
-> > Where in the code could I start looking to try to find out where the machine
-> > goes dead?
+On Fri, Nov 22, 2019 at 7:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > But then when pci_update_current_state() is called, it reads pmcsr as
+> > 3 (D3hot). That's not what I would expect. I guess this means that
+> > this platform's _PR3/_PS3 do not actually allow us to put the device
+> > into D3cold,
 >
-> Well, because you identified 56b991849 as the first bad commit, the
-> following three lines of code in drivers/acpi/sleep.c are likely to be
-> the source of the problem:
+> That you can't really say.
 >
->         acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
->         acpi_ec_flush_work();
->         acpi_os_wait_events_complete(); /* synchronize Notify handling */
+> Anyway, it is not guaranteed to do that.  For example, the power
+> resource(s) listed by _PR3 for the device may be referenced by
+> something else too which prevents them from being turned off.
 >
-> Can you please try to comment them out and retest?
+> > and/or the _PR0/_PS0 transition does not actually transition the device to D0.
+>
+> Yes.
+>
+> Which may be the case if the power resource(s) in _PR3 have not been
+> turned off really.
+>
+> [To debug this a bit more, you can enable dynamic debug in
+> drivers/acpi/device_pm.c.]
 
-I'll do that and get back to you.
+We checked in an earlier thread before I figured out the timing detail
+- these power resources are being turned off at this point.
 
-> Note that you most likely won't be able to wake up the system via the
-> lid/power button without them
+> > While there is some ACPI strangeness here, the D3hot vs D3cold thing
+> > is perhaps not the most relevant point. If I hack the code to avoid
+> > D3cold altogether, just trying to do D0->D3hot->D0, it fails in the
+> > same way.
+>
+> OK, but then you don't really flip the power resource(s), so that only
+> means that _PS0 does not restore D0, but in general it only is valid
+> to execute _PS0 after _PS3 (if both are present which is the case
+> here), so this is not conclusive again.
 
-Yeah, I'm used to that.
+_PS0 is called after _PS3 in the above case.
 
-	-Kenny
+My feeling is that on this platform, we are not actually entering
+D3cold at any point. Linux appears to be powering off the specified
+ACPI power domains, but after turning them back on and executing _PS0
+to move to D0initialized, the pmcsr still reporting D3 state seems
+highly suspicious to me.
 
--- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+Also, I just experimented adding a pmscr register read to the end of
+pci_set_power_state() , after pci_platform_power_transition() has been
+called. If the power was truly cut and we're in D3cold then I would
+expect this to fail. However the register read succeeds and returns
+the same value 0x103.
+
+During resume, Linux seems to have accurately detected this failure to
+transition to D3cold in pci_update_current_state() by reading pmcsr
+and setting dev->current_state to D3hot accordingly. We then deal with
+what looks like a D3hot->D0 transition, which suffers the same failure
+as seen when I force Linux to avoid D3cold and actually do a "real"
+D0->D3hot->D0 cycle.
+
+Presumably on a platform where D3cold actually works, after the device
+has then been moved to D0uninitialized via ACPI _PS0 and _PR0,
+pci_update_current_state() would then read pmcsr and update
+dev->current_state to have value D0?
+
+So in terms of the review comment questioning if the function name
+quirk_d3_delay() and accompanying message "extending delay after
+power-on from D3 to %d msec\n" is good (or whether it should say D3hot
+or D3cold), maybe it should say D3hot. Plus a comment noting that
+D3cold doesn't actually seem to be fully cold on this platform, so
+we're actually dealing with a D3hot -> D0 transition?
+
+Daniel
