@@ -2,60 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F01810949B
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 21:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0586810949D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 21:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbfKYUT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 15:19:28 -0500
-Received: from mailbackend.panix.com ([166.84.1.89]:38339 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfKYUT2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 15:19:28 -0500
-Received: from hp-x360n (50-76-61-131-ip-static.hfc.comcastbusiness.net [50.76.61.131])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 47MJKT2dtlz1npW;
-        Mon, 25 Nov 2019 15:19:24 -0500 (EST)
-Date:   Mon, 25 Nov 2019 12:19:23 -0800 (PST)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
- suspend-to-idle control flow)
-In-Reply-To: <alpine.DEB.2.21.1911251155440.2817@hp-x360n>
-Message-ID: <alpine.DEB.2.21.1911251213200.2817@hp-x360n>
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n> <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com> <2977390.9qzeJo7xji@kreacher> <alpine.DEB.2.21.1911251019100.12067@hp-x360n>
- <alpine.DEB.2.21.1911251155440.2817@hp-x360n>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1725916AbfKYUUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 15:20:03 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42732 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfKYUUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 15:20:03 -0500
+Received: by mail-pl1-f194.google.com with SMTP id j12so6978326plt.9
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
+        b=UFI2NR3RoQ/NlQaasK7qc+w8Z8M54ZZJ0JndaolcZ1a5pjJYZnEg9KNE5L8EtqHqjt
+         w+T3GFGazVRKfyFN5Pw7OY6A4al6qV0sGYyI4l5g5UIWwfNwTIFgK+4NNz29EpMNlzkg
+         +/dwNnlMeTIzQorI688S4tur4EoYg2iYgm4bw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
+        b=p0c1E4uss73wW9y4pTUePbTKH8oPTInnUn7c4Bvd6O3olIce9ipVXqUbyeVMx49M31
+         FUUHaJOGllgV04gMn7lA8YNFRzDMCI/keAHchj3/vaDwULvyE5eyfkLFcqK0Hgb31a+h
+         RaIznjImjtnztqE1luRdgSXIaY5JJn5YoEVZXsiY1jMLXI+GUcyTxdnV6qK0g1GNOE0l
+         1HPjL3UMn+GH3EK7uPctiuIO5Ei1Dvma/RLDwnahUOsOby+9d1U+NeyojzFS6UXruapt
+         oY4i2D0t0Ycgy2BjNu+s2cmxCGfo0p2ie5BPdCCS3ZbpvL0ODepePLvIWPAopQnUrkFf
+         6wWQ==
+X-Gm-Message-State: APjAAAUCQeo4oGN5Z05e6NZF3RnrlzaBEa2pjCXbOvNfBTBluuKmAcZo
+        MLZzSpDExZDko3Or1UEv9HQhYw==
+X-Google-Smtp-Source: APXvYqwJUiUuCfgPZoWhn99mTCEBSQnBeCbbxZW58h1oCDGrSPmNRr3Sne4ERCwuSY4RnxDRzfm/ug==
+X-Received: by 2002:a17:90a:f00d:: with SMTP id bt13mr1084835pjb.43.1574713202310;
+        Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id a26sm9295506pff.155.2019.11.25.12.20.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2019 12:20:01 -0800 (PST)
+Date:   Mon, 25 Nov 2019 12:19:59 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
+Message-ID: <20191125201959.GA228856@google.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
+ <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:
+> The pm_qos family of APIs are used in relatively difficult to reproduce
+> scenarios such as thermal throttling so they benefit from unit testing.
 
-On Mon, 25 Nov 2019, Kenneth R. Crudup wrote:
+indeed, a unit test is useful in this case!
 
-> Had to do a long- power-button reset to get it back up again.
+> Start by adding basic tests from the the freq_qos APIs. It includes
+> tests for issues that were brought up on mailing lists:
+> 
+> https://patchwork.kernel.org/patch/11252425/#23017005
+> https://patchwork.kernel.org/patch/11253421/
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/base/Kconfig          |   4 ++
+>  drivers/base/power/Makefile   |   1 +
+>  drivers/base/power/qos-test.c | 116 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 121 insertions(+)
+>  create mode 100644 drivers/base/power/qos-test.c
+> 
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index e37d37684132..d4ae1c1adf69 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE
+>  
+>  	  This option is expected to find errors and may render your system
+>  	  unusable. You should say N here unless you are explicitly looking to
+>  	  test this functionality.
+>  
+> +config PM_QOS_KUNIT_TEST
+> +	bool "KUnit Test for PM QoS features"
+> +	depends on KUNIT
+> +
+>  config HMEM_REPORTING
+>  	bool
+>  	default n
+>  	depends on NUMA
+>  	help
+> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+> index ec5bb190b9d0..8fdd0073eeeb 100644
+> --- a/drivers/base/power/Makefile
+> +++ b/drivers/base/power/Makefile
+> @@ -2,7 +2,8 @@
+>  obj-$(CONFIG_PM)	+= sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
+>  obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
+>  obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
+>  obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=  domain.o domain_governor.o
+>  obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
+> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+>  
+>  ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
+> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
+> new file mode 100644
+> index 000000000000..8267d91332a8
+> --- /dev/null
+> +++ b/drivers/base/power/qos-test.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 NXP
+> + */
+> +#include <kunit/test.h>
+> +#include <linux/pm_qos.h>
+> +
+> +/* Basic test for aggregating two "min" requests */
+> +static void freq_qos_test_min(struct kunit *test)
+> +{
+> +	struct freq_constraints	qos;
+> +	struct freq_qos_request	req1, req2;
+> +	int ret;
+> +
+> +	freq_constraints_init(&qos);
+> +	memset(&req1, 0, sizeof(req1));
+> +	memset(&req2, 0, sizeof(req2));
+> +
+> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
+> +
+> +	freq_qos_remove_request(&req2);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
 
-Datapoint that may be useful- when I have to do the hard power cycle after
-a failed suspend, the ports on this laptop (2x USB-C/Thunderbolt 3) get
-totally wedged up- the charging light stays on even if there's nothing
-plugged into either port, and USB/TB operation is almost always wedged
-up (devices not recognized). I have to use a special key sequence (hold
-down F6 and power at the same time for several seconds) to get it unwedged.
+This checks (again) the return value of the above freq_qos_add_request() call,
+which I suppose is not intended. Remove?
 
-The system seems to also think the laptop is charging as well, even with
-nothing plugged into either port. It's like something in the ACPI/BIOS
-doesn't get "unsuspended" either.
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
+> +
+> +	freq_qos_remove_request(&req1);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
 
-I used to have TB and USB as modules that would get unloaded at suspend to
-see if those were related to this issue, but that only seemed to make idle
-power draw even higher for some reason.
+ditto
 
-	-Kenny
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
+> +			FREQ_QOS_MIN_DEFAULT_VALUE);
+> +}
+> +
+> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */
+> +static void freq_qos_test_maxdef(struct kunit *test)
+> +{
+> +	struct freq_constraints	qos;
+> +	struct freq_qos_request	req1, req2;
+> +	int ret;
+> +
+> +	freq_constraints_init(&qos);
+> +	memset(&req1, 0, sizeof(req1));
+> +	memset(&req2, 0, sizeof(req2));
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +
+> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +	/* Add max 1000 */
+> +	ret = freq_qos_update_request(&req1, 1000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> +
+> +	/* Add max 2000, no impact */
+> +	ret = freq_qos_update_request(&req2, 2000);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> +
+> +	/* Remove max 2000, new max 1000 */
 
--- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+the code doesn't match the comment, max 1000 is removed
+
+> +	ret = freq_qos_remove_request(&req1);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);
+> +}
+> +
+> +/*
+> + * Test that a freq_qos_request can be readded after removal
+
+nit: 're-added'. It took me a few secs to figure this is not a about
+'read'ing something
