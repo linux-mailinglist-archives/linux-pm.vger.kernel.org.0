@@ -2,178 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 275CA108FAF
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 15:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC603108FF3
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 15:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbfKYOO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 09:14:56 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:43167 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727666AbfKYOO4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 09:14:56 -0500
-Received: from 79.184.255.91.ipv4.supernova.orange.pl (79.184.255.91) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
- id cb423cbf1cd249e2; Mon, 25 Nov 2019 15:14:52 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify suspend-to-idle control flow)
-Date:   Mon, 25 Nov 2019 15:14:52 +0100
-Message-ID: <2977390.9qzeJo7xji@kreacher>
-In-Reply-To: <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com>
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n> <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com>
+        id S1728086AbfKYOaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 09:30:12 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35462 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727666AbfKYOaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 09:30:11 -0500
+Received: by mail-lf1-f65.google.com with SMTP id r15so8260115lff.2;
+        Mon, 25 Nov 2019 06:30:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LKjdexg+LkffG26VUSsNwV+tvqoIqAg7PNu5vMgemIs=;
+        b=uZG2o2nYUojcIlyWe8PXU+6To4lKeOe9RblB9GWLBDHP0ROIwlChkyw0SKs6JtiR1f
+         MD2l3RucqTGhVbOhYG1uBeE6ZOOh5kvcDBIIW2cMvMhIgT707IS2IweaA8uIIlMxwob4
+         DAmhCFqI+PYiMm5hgaQ7NH9ImizHriobDG60zsBWOlJpMTIMpk23p6obVPnKF8D9Jd0w
+         Msd9NGRiv37kIRGnA1gDRLcvLDRdl8ucZ9K+rextcluWC7tAWJIYhcuQ2TuAL99qtP0E
+         /KglPy0CcvOGFbyFrFpEgQV034Asp79um1Jn3oKBEstlAvZsFeBNDmVdfz7fqdwJAI4u
+         0TmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LKjdexg+LkffG26VUSsNwV+tvqoIqAg7PNu5vMgemIs=;
+        b=RoS16EbS50y/ne2DmgxUQVEN0ydRLE8a6cXHUyxZkBYcloZjPLBAuukm4x5iPZPtce
+         d8J8Vi+QD63zRueElYp8h8R1VBBlxMnvBZx63awClZcb7rkm59s29C3Udg6vEyInlWgC
+         HZ6G8eSjxf/SvWaCBupu2R9L1l1OL1Hk5Mzjwr637NBQCCogs2XXFnqX0IDpI5KV+X9/
+         spCt1pvERl03jNp/CpZP7FAVcn8sY2VNbJrtlUQSC+9xhsFoer7GhCe/nKdejYqQGrRJ
+         BsvXn/A4dIgj0II0/i4OLcE6A2ByBaOir4f3f8odk/korGZUK/YvecnKzvVmLK979SDc
+         cLXg==
+X-Gm-Message-State: APjAAAWDIuOS2JHT/+lM/EUteBcFkU5iXTQ1nl3psDHo5Zfu3mn2tDCY
+        B12axCioLVDBu3duMqrm7WDOA4sKq44BokgP1TU=
+X-Google-Smtp-Source: APXvYqwNQ1gDP49zPYN8njc+j07Y/QD6fHpbzABV0vcBHhUVmveHtPabf233H4srJ1klzQkQ15yydwmm2QnzFdfBd1w=
+X-Received: by 2002:ac2:428d:: with SMTP id m13mr14985341lfh.64.1574692208081;
+ Mon, 25 Nov 2019 06:30:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+ <1574604530-9024-2-git-send-email-akinobu.mita@gmail.com> <CAHp75VfGt59F5YbEjctvOm00g+Pws+1jYgVbNLnUE3kq3SZi-A@mail.gmail.com>
+In-Reply-To: <CAHp75VfGt59F5YbEjctvOm00g+Pws+1jYgVbNLnUE3kq3SZi-A@mail.gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Mon, 25 Nov 2019 23:29:56 +0900
+Message-ID: <CAC5umyjzDODZf8ECWDmR6SAY-TNkdJ+a0GZRgOFcPCAMok2Ddg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] add header file for kelvin to/from Celsius conversion helpers
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, November 25, 2019 2:27:00 PM CET Rafael J. Wysocki wrote:
-> On Mon, Nov 25, 2019 at 4:40 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+2019=E5=B9=B411=E6=9C=8824=E6=97=A5(=E6=97=A5) 23:57 Andy Shevchenko <andy.=
+shevchenko@gmail.com>:
+>
+> On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wro=
+te:
 > >
+> > There are several helper macros to convert kelvin to/from Celsius in
+> > <linux/thermal.h> for thermal drivers.  These are useful for any other
+> > drivers or subsystems, but it's odd to include <linux/thermal.h> just f=
+or
+> > the helpers.
 > >
-> > Thanks for getting back to me.
+> > This adds a new <linux/temperature.h> that provides the equivalent inli=
+ne
+> > functions for any drivers or subsystems.  It is intended to replace the
+> > helpers in <linux/thermal.h>.
 > >
-> > On Sun, 24 Nov 2019, Rafael J. Wysocki wrote:
-> >
-> > > > If "sleep_no_lps0" == 1, the machine never goes fully to sleep; the power
-> > > > light stays on and the backlight goes off, but if I have external monitors
-> > > > connected they're still showing dmesg activity. This is independent of the
-> > > > state of "ec_no_wakeup".
-> >
-> > > Hmm.  The external monitors part is something you have never mentioned.
-> >
-> > I didn't realize that myself until I'd tried "sleep_no_lps0" testing for this
-> > thread and happened to have my Thunderbolt dock connected.
-> 
-> OK, but with sleep_no_lps0, does it also hang during resume or not?
-> 
-> > > > If "ec_no_wakeup" == 1, the system *at times* will go to sleep and never return
-> >
-> > > This is unclear.  What exactly do you mean by "go to sleep"?
-> >
-> > It appears to do a suspend cycle; the screen goes off, the power light goes out,
-> > and the power consumption (as measured at the charge port) (usually) goes to the
-> > smallest draw this laptop is capable of in s2idle.
-> >
-> > > Which part of the behavior does the "at times" phrase apply to?  The
-> > > "going to sleep" or coming back?  Or both?
-> >
-> > The coming back. Many times I'll hit a key on the keyboard (when "ec_no_wakeup"
-> > is set) or open the lid or hit the the power button (if it's not set) and nothing
-> > happens. IIRC the current draw doesn't increase either, but don't quote me on
-> > that (it's easy enough to reproduce, so I'll try it out and report back).
-> >
-> > > > (i.e. no power light comes on, it's totally unresponsive until I do a hard
-> > > > reset with a power-button long-press) whether I'm plugged in or not.
-> > > > This is new behavior.
-> >
-> > > So how did it behave in 5.3.y?
-> > ...
-> > > > Help! What can I do to return to the behavior of right before the s0 rework?
-> > > I guess you mean the 5.3.y behavior.  And what was it?
-> > ...
-> >
-> > Seemed to always work; I don't recall any issues with s2idle in earlier
-> > kernels. Sometimes my idle draw would be much higher than it should be, but
-> > I have zero clue as to why that is (which is why I'm chasing down bleeding-
-> > edge PM commits).
-> >
-> > > > If "ec_no_wakeup" == 0, the system goes fully to sleep and either of the
-> > > > power button, lid opening or hitting a key resumes the laptop, but if I'm
-> > > > plugged in and actually charging when I suspend (and I suspect if I plug
-> > > > it in during suspend) it never returns, as in the case above.
-> >
-> > > OK, so ec_no_wakeup doesn't really change the behavior substantially,
-> > > it only makes certain things more or less likely to happen.
-> > > Does it still hang if you use the keyboard to wake up the system?
-> >
-> > When "ec_no_wakeup" is set, ONLY the keyboard wakes up the system, and the dead
-> > system is unrelated to the method I'm using to wake things up.
-> 
-> In that case whatever happens in acpi_s2idle_wake() can be ruled out,
-> because on your system that function effectively is a NOP with
-> ec_no_wakeup.  I don't expect the test below to add anything new to
-> what we know already.
-> 
-> > > > Where in the code could I start looking to try to find out where the machine
-> > > > goes dead?
-> > >
-> > > Well, because you identified 56b991849 as the first bad commit, the
-> > > following three lines of code in drivers/acpi/sleep.c are likely to be
-> > > the source of the problem:
-> > >
-> > >         acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
-> > >         acpi_ec_flush_work();
-> > >         acpi_os_wait_events_complete(); /* synchronize Notify handling */
-> > >
-> > > Can you please try to comment them out and retest?
-> >
-> > I'll do that and get back to you.
-> >
-> > > Note that you most likely won't be able to wake up the system via the
-> > > lid/power button without them
-> >
-> > Yeah, I'm used to that.
-> 
-> So, as stated above, this test is not likely to be conclusive.
-> 
-> Now, given that the changes in acpi_s2idle_wake() don't matter, you
-> seem to be missing the acpi_s2idle_sync() after
-> dpm_noirq_resume_devices(), because dropping it was the only other
-> substantial change made by commit 56b991849 AFAICS.
-> 
-> I'll send you a patch to try for that.
+> > Cc: Sujith Thomas <sujith.thomas@intel.com>
+> > Cc: Darren Hart <dvhart@infradead.org>
+> > Cc: Andy Shevchenko <andy@infradead.org>
+> > Cc: Zhang Rui <rui.zhang@intel.com>
+> > Cc: Eduardo Valentin <edubezval@gmail.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Keith Busch <kbusch@kernel.org>
+> > Cc: Jens Axboe <axboe@fb.com>
+> > Cc: Christoph Hellwig <hch@lst.de>
+> > Cc: Sagi Grimberg <sagi@grimberg.me>
+> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> > ---
+> >  include/linux/temperature.h | 39 +++++++++++++++++++++++++++++++++++++=
+++
+>
+> >  include/linux/thermal.h     |  1 +
+>
+>
+> > --- a/include/linux/thermal.h
+> > +++ b/include/linux/thermal.h
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/idr.h>
+> >  #include <linux/device.h>
+> >  #include <linux/sysfs.h>
+> > +#include <linux/temperature.h>
+> >  #include <linux/workqueue.h>
+> >  #include <uapi/linux/thermal.h>
+>
+> I don't see any users of it. Why did you include?
 
-Appended (untested).
+The rest of this patch series starts using it.
 
----
- drivers/acpi/sleep.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+I decided to include <linux/temperature.h> from <linux/thermal.h> because
+the existing <linux/thermal.h> provides the conversion helpers.
 
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -977,6 +977,13 @@ static int acpi_s2idle_prepare_late(void
- 	return 0;
- }
- 
-+static void acpi_s2idle_sync(void)
-+{
-+	acpi_os_wait_events_complete(); /* synchronize GPE processing */
-+	acpi_ec_flush_work();
-+	acpi_os_wait_events_complete(); /* synchronize Notify handling */
-+}
-+
- static void acpi_s2idle_wake(void)
- {
- 	/*
-@@ -1005,9 +1012,7 @@ static void acpi_s2idle_wake(void)
- 		 * The EC driver uses the system workqueue and an additional
- 		 * special one, so those need to be flushed too.
- 		 */
--		acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
--		acpi_ec_flush_work();
--		acpi_os_wait_events_complete(); /* synchronize Notify handling */
-+		acpi_s2idle_sync();
- 
- 		rearm_wake_irq(acpi_sci_irq);
- 	}
-@@ -1024,6 +1029,8 @@ static void acpi_s2idle_restore_early(vo
- 
- static void acpi_s2idle_restore(void)
- {
-+	acpi_s2idle_sync();
-+
- 	s2idle_wakeup = false;
- 
- 	acpi_enable_all_runtime_gpes();
+However, not all of the thermal drivers require these conversion helpers,
+so we can change to include <linux/temperature.h> from each thermal driver
+instead of including it from <linux/thermal.h>.
 
-
-
-
+Which way do you prefer?
