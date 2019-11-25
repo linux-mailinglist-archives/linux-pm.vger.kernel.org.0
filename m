@@ -2,143 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09951109553
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 23:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0BB10957D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 23:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbfKYWBY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 17:01:24 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36316 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfKYWBY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 17:01:24 -0500
-Received: by mail-oi1-f193.google.com with SMTP id j7so14690581oib.3
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 14:01:23 -0800 (PST)
+        id S1725992AbfKYWWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 17:22:14 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33918 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfKYWWO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 17:22:14 -0500
+Received: by mail-pg1-f196.google.com with SMTP id z188so7909321pgb.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 14:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lXNGjbAB2c8bZdmv6dV6YWnGoVduWVluKBQ973lB61U=;
+        b=G2YsyhJQebcAOqVCRATW2DLiaThjq5gWcdXkckmTwJ9HcWSu691Bfm5EWG+GJagmWT
+         WLV1g/tvA5BgufUM12MYGRn3uzFqT7zdH+MSUfg04DPmJwwCsan6C/FYTao8fug/Qzb8
+         jIuAUZr9iCdXwvhClq2bJ4KbDThL/Ae6KroCU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QfkXRmU9vvpHFOe7u7keWz0SRMT0LuebZTI1s8tgKEM=;
-        b=GVXrCTHsZFQg2CaRGPSnivYjV/U5/QkOAe9a0rIKB6MHiSqFFpRR2gHWEdmIzrc3Pl
-         u6eMGAL9A8qnhShU38iOgbhR82iMzQJXFzftFttZdQMPGRFXcAZAUskIn4P1s7OjM98P
-         05T8awYLXXRISip+veQFJzkApoYiBfEyQsLZzHHe4Ji24VAXHE8/qYGAtedFHtEjAieZ
-         Jz3hUVgFhAF8ZMqDvTvTmyAGWGb2a1PXUEPCnDCOhdAv4OrfMlbbLmWqOXY75SBUTCMN
-         wYB+M/LHTiJmxnHNUDjbiZJ1iUic98edOpL2eQNt4EB6HhDpOEj/enuJi6nZtamGGp2T
-         +ykQ==
-X-Gm-Message-State: APjAAAXTWf+bLCsBpC01iRXd/ySMK1xGtvkXieyAtglW0Zup2MyUISQ4
-        C1z0kkJK55GjsQjMVvF0COgHM92dvIKPOah63bA=
-X-Google-Smtp-Source: APXvYqwSEA7VpuVJtvv4bKzUr+F3zmMULTNei5lhYJyVunuxx8nK8SDpD/jVcjeYihH1KdneN3OuMzRg9jM3JXp1qnY=
-X-Received: by 2002:aca:d4c6:: with SMTP id l189mr868397oig.68.1574719281951;
- Mon, 25 Nov 2019 14:01:21 -0800 (PST)
-MIME-Version: 1.0
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n>
- <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com>
- <2977390.9qzeJo7xji@kreacher> <alpine.DEB.2.21.1911251019100.12067@hp-x360n> <alpine.DEB.2.21.1911251155440.2817@hp-x360n>
-In-Reply-To: <alpine.DEB.2.21.1911251155440.2817@hp-x360n>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Nov 2019 23:01:10 +0100
-Message-ID: <CAJZ5v0hMR8_i=oA1ovX0-xfa_w1x7nHhTwmmKRPu27ceFxpFow@mail.gmail.com>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep:
- Simplify suspend-to-idle control flow)
-To:     "Kenneth R. Crudup" <kenny@panix.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lXNGjbAB2c8bZdmv6dV6YWnGoVduWVluKBQ973lB61U=;
+        b=GvH9Fo24meEHouHlkKIuyaqFUw26I2AloopROUZpsi2klFWqZpzNImNWivlivakQr9
+         VCcTIiXQ8xHaPYR+XVuHKsixK2J+SE8NUle5x9P4C6HO/Xa4t7VB+vFeLvIsPoXyOh9T
+         gBHiw5mHoRZ+hzGALvol41Z/WCRIEfUqGB8v1BOQCKmi5X9t8wH1ViGX5vfDiq0xqXNp
+         x9lUocAzhuxm7IXqFL9PqVeBkFNmxC8/7DhVIcUfaUqt4gi6eFICiAuFhtt3xAoAdvol
+         x6KkQPUQr5jc49gqg++ktjBqMhCeS5DmqKIYJww2DQOGM0yTEqcE0BuhoMr5ECxbBo0g
+         chfA==
+X-Gm-Message-State: APjAAAXWaNwStD+qFO5k8ej2npopGUIl4JTLN96BHyIoNOqETRkoje6Z
+        4r9/njSsh/FjCdgvX4Ld3zTS5Q==
+X-Google-Smtp-Source: APXvYqyDE3P4mK8WqGerdRCeEdkWSs9jYIQyozqLj9zZNYVM2eBdaQ/zpD6yJzPUvSjQWnIHUnnSdg==
+X-Received: by 2002:a63:5c0c:: with SMTP id q12mr33643431pgb.197.1574720531856;
+        Mon, 25 Nov 2019 14:22:11 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id j4sm9355552pgt.57.2019.11.25.14.22.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2019 14:22:11 -0800 (PST)
+Date:   Mon, 25 Nov 2019 14:22:10 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v3 3/4] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos
+ structs
+Message-ID: <20191125222210.GC228856@google.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
+ <f6d6572ad860d479416108a41f0e20d5cb72ae46.1574699610.git.leonard.crestez@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f6d6572ad860d479416108a41f0e20d5cb72ae46.1574699610.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 9:11 PM Kenneth R. Crudup <kenny@panix.com> wrote:
->
->
-> On Mon, 25 Nov 2019, Kenneth R. Crudup wrote:
->
-> > I'll keep testing it (and the best way to get something to break is to
-> > proclaim it's "fixed" :)
->
-> ... grumble ...!
->
-> So, put the laptop to sleep, put it in my bag[1], then head off to go work.
-> Get to where I'm working, plug in the power meter, it's now drawing 150mA
-> while idle ...  uh oh. Sure enough, open the lid, hit some keys, dead. Had
-> to do a long- power-button reset to get it back up again. I note that it's
-> now charging (I may not have allowed the battery to drain enough for the
-> charging circuit think the battery's discharged enough to begin a charge
-> cycle before).
+On Mon, Nov 25, 2019 at 06:42:18PM +0200, Leonard Crestez wrote:
+> This allows dev_pm_qos to embed freq_qos structs, which is done in the
+> next patch. Separate commit to make it easier to review.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
+>  1 file changed, 38 insertions(+), 36 deletions(-)
+> 
+> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+> index 24a6263c9931..678fec6da5b9 100644
+> --- a/include/linux/pm_qos.h
+> +++ b/include/linux/pm_qos.h
+> @@ -47,25 +47,10 @@ struct pm_qos_request {
+>  struct pm_qos_flags_request {
+>  	struct list_head node;
+>  	s32 flags;	/* Do not change to 64 bit */
+>  };
+>  
+> -enum dev_pm_qos_req_type {
+> -	DEV_PM_QOS_RESUME_LATENCY = 1,
+> -	DEV_PM_QOS_LATENCY_TOLERANCE,
+> -	DEV_PM_QOS_FLAGS,
+> -};
+> -
+> -struct dev_pm_qos_request {
+> -	enum dev_pm_qos_req_type type;
+> -	union {
+> -		struct plist_node pnode;
+> -		struct pm_qos_flags_request flr;
+> -	} data;
+> -	struct device *dev;
+> -};
+> -
+>  enum pm_qos_type {
+>  	PM_QOS_UNITIALIZED,
+>  	PM_QOS_MAX,		/* return the largest value */
+>  	PM_QOS_MIN,		/* return the smallest value */
+>  	PM_QOS_SUM		/* return the sum */
+> @@ -88,10 +73,48 @@ struct pm_qos_constraints {
+>  struct pm_qos_flags {
+>  	struct list_head list;
+>  	s32 effective_flags;	/* Do not change to 64 bit */
+>  };
+>  
+> +
+> +#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+> +#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
+> +
+> +enum freq_qos_req_type {
+> +	FREQ_QOS_MIN = 1,
+> +	FREQ_QOS_MAX,
+> +};
+> +
+> +struct freq_constraints {
+> +	struct pm_qos_constraints min_freq;
+> +	struct blocking_notifier_head min_freq_notifiers;
+> +	struct pm_qos_constraints max_freq;
+> +	struct blocking_notifier_head max_freq_notifiers;
+> +};
+> +
+> +struct freq_qos_request {
+> +	enum freq_qos_req_type type;
+> +	struct plist_node pnode;
+> +	struct freq_constraints *qos;
+> +};
+> +
+> +
+> +enum dev_pm_qos_req_type {
+> +	DEV_PM_QOS_RESUME_LATENCY = 1,
+> +	DEV_PM_QOS_LATENCY_TOLERANCE,
+> +	DEV_PM_QOS_FLAGS,
+> +};
+> +
+> +struct dev_pm_qos_request {
+> +	enum dev_pm_qos_req_type type;
+> +	union {
+> +		struct plist_node pnode;
+> +		struct pm_qos_flags_request flr;
+> +	} data;
+> +	struct device *dev;
+> +};
+> +
+>  struct dev_pm_qos {
+>  	struct pm_qos_constraints resume_latency;
+>  	struct pm_qos_constraints latency_tolerance;
+>  	struct pm_qos_flags flags;
+>  	struct dev_pm_qos_request *resume_latency_req;
+> @@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
+>  {
+>  	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+>  }
+>  #endif
+>  
+> -#define FREQ_QOS_MIN_DEFAULT_VALUE	0
+> -#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
+> -
+> -enum freq_qos_req_type {
+> -	FREQ_QOS_MIN = 1,
+> -	FREQ_QOS_MAX,
+> -};
+> -
+> -struct freq_constraints {
+> -	struct pm_qos_constraints min_freq;
+> -	struct blocking_notifier_head min_freq_notifiers;
+> -	struct pm_qos_constraints max_freq;
+> -	struct blocking_notifier_head max_freq_notifiers;
+> -};
+> -
+> -struct freq_qos_request {
+> -	enum freq_qos_req_type type;
+> -	struct plist_node pnode;
+> -	struct freq_constraints *qos;
+> -};
+> -
+>  static inline int freq_qos_request_active(struct freq_qos_request *req)
+>  {
+>  	return !IS_ERR_OR_NULL(req->qos);
+>  }
+>  
+> -- 
+> 2.17.1
+> 
 
-It looks like the platform has problems with switching power between
-AC and battery while suspended.  Also this appears to be related to
-the EC.
-
-Also I'm wondering if the problem is reproducible with ec_no_wakeup
-and the last patch I posted applied.
-
-> I'm going to go back to the original patch (the three removed lines) for now
-> (which may not do any better long-term, but I'll have to at least try.
-
-The last patch I posted is orthogonal to this.  It actually should be
-entirely transparent on systems without any issues.
-
-But with that patch applied, please try to comment out the
-acpi_s2idle_sync() in acpi_s2idle_wake() and retest.
-
-> [1] - I can let it sit idle at home and it'll be OK, but when I put it in
-> my bag and go somewhere it always seems to be the trigger for failed resumes
-> I have no idea why.
->
-> BTW, what was different about your 2nd patch (the addition of acpi_s2idle_sync()
-> to the resume cycle) was I was getting WMI power events captured during
-> resume in the EC blocked/unblocked path, which hadn't happened before:
-
-That's because of the added ACPI events flushing in acpi_s2idle_restore().
-
-> -----
-> Nov 25 10:16:56 hp-x360n kernel: [ 4418.792164] PM: suspend entry (s2idle)
-> Nov 25 10:16:56 hp-x360n kernel: [ 4418.801869] Filesystems sync: 0.009 seconds
-> Nov 25 10:17:29 hp-x360n kernel: [ 4418.802615] Freezing user space processes ... (elapsed 0.002 seconds) done.
-> Nov 25 10:17:29 hp-x360n kernel: [ 4418.805200] OOM killer disabled.
-> Nov 25 10:17:29 hp-x360n kernel: [ 4418.805201] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
-> Nov 25 10:17:29 hp-x360n kernel: [ 4418.806127] printk: Suspending console(s) (use no_console_suspend to debug)
-> Nov 25 10:17:29 hp-x360n kernel: [ 4418.817183] [drm] GuC communication disabled
-> Nov 25 10:17:29 hp-x360n kernel: [ 4419.296506] ACPI: EC: interrupt blocked
-> *** Nov 25 10:17:29 hp-x360n kernel: [ 4440.111494] hp_wmi_notify(): event_id 0x20001, event_data 0x00000000
-> *** Nov 25 10:17:29 hp-x360n kernel: [ 4440.111496] hp_wmi: Unknown event_id - 131073 - 0x0
-
-This looks kind of weird.
-
-Do you get similar "unknown" events during normal operation too?
-
-Anyway, hp_wmi is involved and I'm quite unsure if it is ready to
-handle events during acpi_s2idle_wake(), so that's why it may not work
-every time with the last patch applied.
-
-> *** Nov 25 10:17:29 hp-x360n kernel: [ 4440.198013] hp_wmi_notify(): event_id 0x03, event_data 0x00000000
-> Nov 25 10:17:29 hp-x360n kernel: [ 4449.527844] ACPI: EC: interrupt unblocked
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.118846] intel_pmc_core INT33A1:00: CPU did not enter SLP_S0!!! (S0ix cnt=0)
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.126383] usb usb3: root hub lost power or was reset
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.126384] usb usb4: root hub lost power or was reset
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.127298] [drm] GuC communication enabled
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.127400] i915 0000:00:02.0: GuC firmware i915/kbl_guc_33.0.0.bin version 33.0 subm
-> ission:disabled
-> Nov 25 10:17:29 hp-x360n kernel: [ 4451.127401] i915 0000:00:02.0: HuC firmware i915/kbl_huc_ver02_00_1810.bin version 2.
-> 0 authenticated:yes
-> Nov 25 10:17:29 hp-x360n kernel: [ 4452.229576] OOM killer enabled.
-> Nov 25 10:17:29 hp-x360n kernel: [ 4452.229577] Restarting tasks ... done.
-> Nov 25 10:17:29 hp-x360n auto-rotate[15448]: normal
-> Nov 25 10:17:29 hp-x360n kernel: [ 4452.256340] thermal thermal_zone7: failed to read out thermal zone (-61)
-> Nov 25 10:17:29 hp-x360n systemd-udevd[18777]: Process '/usr/sbin/tlp auto' failed with exit code 4.
-> Nov 25 10:17:29 hp-x360n systemd-udevd[18777]: Process '/usr/sbin/tlp auto' failed with exit code 4.
-> Nov 25 10:17:29 hp-x360n systemd-sleep[18673]: System resumed.
-> Nov 25 10:17:29 hp-x360n kernel: [ 4452.313345] PM: suspend exit
-> ----
->
-> (best I can tell, event_id 0x20001 is a charger unplug event and event_id 0x03 is a charger plug event).
->
-> BTW, is ther any way to determine if this is an issue with some other driver? I'd think I'd be getting BUG_ON()s
-> if that were it, though.
-
-Not necessarily.
-
-It appears to be related to hp_wmi as mentioned above.
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
