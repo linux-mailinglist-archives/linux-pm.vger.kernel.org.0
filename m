@@ -2,176 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD583108630
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 01:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B6E1086DA
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 04:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbfKYA6t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 19:58:49 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:45995 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727188AbfKYA6s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 19:58:48 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20191125005846epoutp04aad9a34c5636e34244da23a29cdd0a7e~aQfHC3hIH2339023390epoutp04a
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 00:58:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20191125005846epoutp04aad9a34c5636e34244da23a29cdd0a7e~aQfHC3hIH2339023390epoutp04a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1574643526;
-        bh=4skhpBEBX6CXBp8/rVRERvHCz2Nln/qfjqcNNE9xmMs=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=oI0SeHBMm4h0e1CImpIOLjOthjiWEvD8lC1EYf0ZowZohLI0xz2j7SOKxw0hgPxxL
-         j4XDKGdK1PZE0bSvVe0S61myzk6NuahooQ8AHiMzMx9wAe7nWQ96Ax48L6uKSEGFtl
-         74M1eakuDdt8cOEv888sYRZ4JQtTbu/wiHYVatjs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191125005845epcas1p28ed647f6d43872bf301c5c6c34c813bd~aQfGYeZM70635306353epcas1p2Y;
-        Mon, 25 Nov 2019 00:58:45 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47LpZC068kzMqYkt; Mon, 25 Nov
-        2019 00:58:43 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CB.80.57028.0472BDD5; Mon, 25 Nov 2019 09:58:40 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20191125005839epcas1p4ed0603c2304a0cb59fd934b0bf2fe48f~aQfAzH9-m2921529215epcas1p4z;
-        Mon, 25 Nov 2019 00:58:39 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191125005839epsmtrp1d54f2d130ef20625b74d526b34ef28ff~aQfAyTyjh2222022220epsmtrp1h;
-        Mon, 25 Nov 2019 00:58:39 +0000 (GMT)
-X-AuditID: b6c32a35-4f3ff7000001dec4-32-5ddb2740faab
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0B.C3.10238.F372BDD5; Mon, 25 Nov 2019 09:58:39 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191125005839epsmtip262bd0be37e092bc1b91f87f54d0c1bd8~aQfAiSLlA1700217002epsmtip2w;
-        Mon, 25 Nov 2019 00:58:39 +0000 (GMT)
-Subject: Re: [v2 PATCH] PM / devfreq: Add new name attribute for sysfs
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rafael.j.wysocki@intel.com, gregkh@linuxfoundation.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        chanwoo@kernel.org, stable@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <d427b9a2-f11d-0739-6cc8-e1b0cb6892a0@samsung.com>
-Date:   Mon, 25 Nov 2019 10:04:46 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S1726939AbfKYDk2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Nov 2019 22:40:28 -0500
+Received: from mailbackend.panix.com ([166.84.1.89]:41428 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726921AbfKYDk2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 22:40:28 -0500
+Received: from hp-x360n (c-73-241-154-233.hsd1.ca.comcast.net [73.241.154.233])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 47Lt8k3KMbz1FcH;
+        Sun, 24 Nov 2019 22:40:22 -0500 (EST)
+Date:   Sun, 24 Nov 2019 19:40:19 -0800 (PST)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
+ suspend-to-idle control flow)
+In-Reply-To: <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1911241929220.16116@hp-x360n>
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com> <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com> <alpine.DEB.2.21.1911230213510.2531@hp-x360n>
+ <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20191125004723.17926-1-cw00.choi@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHe3e2s7NoeZpaTxY2j5hlrXbaZsfKEBQdZGVXMlh20IOau7Ez
-        pduHbtqS1Ib1QXMqaRe1qMTSolioaKKWZaUlSaRJWhYkZhBRO54iv/2e9/n/eS7vQ2CqK3gQ
-        kWl1cg4ra6bw2dK7Lcs1mpjwAZP242Aw4+5/IWVOVt3Eme4Tn+VM7/0ynJkoaEXMwPFrODN0
-        bVzOVN5+j2IIY9WDUYmxvvYMbvR6rsuNhQ21yDhRH5wk25u1IYNj0ziHmrOm2tIyrenR1KYd
-        KbEphkgtraGjmLWU2spauGgqLjFJE59p9vVCqXNYc7bvKYnleWr1xg0OW7aTU2fYeGc0xdnT
-        zPYo+yqetfDZ1vRVqTbLOlqrXWPwCfdnZTzui7J7/A9emPA/hkb98hFBAKmHO+6V+UhBqMgm
-        BEXD+nw028ffEBQMjEvE4DuC1uYeJKgEQ5HHg8TEQwS55dUyMfiK4PFUBS6o/Ml4cNW8xgQO
-        INdB528XJogwsgJBW9lniZDAyQjwfuyfNviRIfDyx9B0CSW5ESo7XyGhPykZBh8+hAgYSO6B
-        zklWVMyDjpJhqcAKcj1M3SqSCYyRC+DNcIVE5CXQOF42XRbInziMtD/CxQnioKLtokxkfxhr
-        b5CLHASjRXl/+QjUdLTiotmFoMHb89egA+/lYonQEEYuh5v3V4vPIXDvpweJhefCl8mzMnG9
-        SnDlqURJKPS+eysReSFUnT6Dn0NU6YxxSmeMUDpjhNL/xSqRtBbN5+y8JZ3jaTs986fr0fSN
-        Rhia0Pknic2IJBA1R3nrxhuTSsbm8IcszQgIjApQxnf3m1TKNPbQYc5hS3Fkmzm+GRl8u3Zj
-        QYGpNt/FW50ptGGNTqdj9HSkgaapBUrixzOTikxnnVwWx9k5xz+fhFAEHUPLPiVqn+8sufsw
-        rPHqZktL16zYo+669WvHOozh8iHX9gGCHem6tGiwIXdbzJ6Ep0llB1corr8vdGmWtozcid8Z
-        6d21O9GdPLil+KwmtFdbPpxg2vr6CC0xJWT2GE4E67teORcntyv69iXvr/u1VU1Ux3xpizww
-        1hcevGvi6bNTttsmSspnsHQE5uDZP+Kh05C5AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMIsWRmVeSWpSXmKPExsWy7bCSvK69+u1Yg8WT5Cwm3rjCYtG8eD2b
-        xdmmN+wWl3fNYbP43HuE0eJ24wo2i8cr3rJbLNj4iNGBw2PxnpdMHptWdbJ57J+7ht2jb8sq
-        Ro/Pm+QCWKO4bFJSczLLUov07RK4Mk5ctyyYK1wx9bNwA+NL/i5GTg4JAROJ/rlzGbsYuTiE
-        BHYzSizdfYkJIiEpMe3iUeYuRg4gW1ji8OFiiJq3jBIf7v1nAakRFnCT6Fh5kxnEFhGwkjj9
-        v4MZpIhZYD6jxM7lZ9ggOvoYJT5N3AU2lU1AS2L/ixtsIDa/gKLE1R+PGUFsXgE7iQWnrzGC
-        bGMRUJV4+lQRJCwqECHxfPsNqBJBiZMzn4At5hSwlvi+oZ8VxGYWUJf4M+8SM4QtLnHryXwm
-        CFteYvvbOcwTGIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vO
-        z93ECI4qLc0djJeXxB9iFOBgVOLh3bD2VqwQa2JZcWXuIUYJDmYlEV63szdihXhTEiurUovy
-        44tKc1KLDzFKc7AoifM+zTsWKSSQnliSmp2aWpBaBJNl4uCUamCcENP6ZtNZzxwhpuATTd0z
-        CoJ3T/ByylbUrg77kfUgJubwzENzFm2VPb3Bvf9/lfCkhsx1IZ+NTqc7O3TIhgjvWxUa4JP+
-        7ULrgWdTK7tXx+ctWHou+N/Ca5pTj5uElvZETTxetnZ14Hrjf52fngdF+bx62CTj3pgVLtEZ
-        2B1Q1HexpYl7wwclluKMREMt5qLiRABcvLMxpgIAAA==
-X-CMS-MailID: 20191125005839epcas1p4ed0603c2304a0cb59fd934b0bf2fe48f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191125004131epcas1p403cab8b34662b44a704d6f91aa4c4a0f
-References: <CGME20191125004131epcas1p403cab8b34662b44a704d6f91aa4c4a0f@epcas1p4.samsung.com>
-        <20191125004723.17926-1-cw00.choi@samsung.com>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear all,
 
-Please ignore this patch because it has the my mistake.
-I'll send v3 patch.
+Thanks for getting back to me.
 
-Best Regards,
-Chanwoo Choi
+On Sun, 24 Nov 2019, Rafael J. Wysocki wrote:
 
-On 11/25/19 9:47 AM, Chanwoo Choi wrote:
-> The commit 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X) for
-> sysfs") changed the node name to devfreq(x). After this commit, it is not
-> possible to get the device name through /sys/class/devfreq/devfreq(X)/*.
-> 
-> Add new name attribute in order to get device name.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X) for sysfs")
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-> ---
-> Changes from v1:
-> - Update sysfs-class-devfreq documentation
-> - Show device name directly from 'devfreq->dev.parent'
-> 
->  Documentation/ABI/testing/sysfs-class-devfreq | 7 +++++++
->  drivers/devfreq/devfreq.c                     | 9 +++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
-> index 01196e19afca..75897e2fde43 100644
-> --- a/Documentation/ABI/testing/sysfs-class-devfreq
-> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
-> @@ -7,6 +7,13 @@ Description:
->  		The name of devfreq object denoted as ... is same as the
->  		name of device using devfreq.
->  
-> +What:		/sys/class/devfreq/.../name
-> +Date:		November 2019
-> +Contact:	Chanwoo Choi <cw00.choi@samsung.com>
-> +Description:
-> +		The /sys/class/devfreq/.../name shows the name of device
-> +		of the corresponding devfreq object.
-> +
->  What:		/sys/class/devfreq/.../governor
->  Date:		September 2011
->  Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 61c3e2d08969..2e5f64ee1969 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -1476,7 +1476,16 @@ static ssize_t trans_stat_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(trans_stat);
->  
-> +static ssize_t name_show(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	struct devfreq *devfreq = to_devfreq(dev);
-> +	return sprintf(buf, "%s\n", dev_name(devfreq->dev.parent));
-> +}
-> +static DEVICE_ATTR_RO(name);
-> +
->  static struct attribute *devfreq_attrs[] = {
-> +	&dev_attr_name.attr,
->  	&dev_attr_governor.attr,
->  	&dev_attr_available_governors.attr,
->  	&dev_attr_cur_freq.attr,
-> 
+> > If "sleep_no_lps0" == 1, the machine never goes fully to sleep; the power
+> > light stays on and the backlight goes off, but if I have external monitors
+> > connected they're still showing dmesg activity. This is independent of the
+> > state of "ec_no_wakeup".
 
+> Hmm.  The external monitors part is something you have never mentioned.
 
+I didn't realize that myself until I'd tried "sleep_no_lps0" testing for this
+thread and happened to have my Thunderbolt dock connected.
+
+> > If "ec_no_wakeup" == 1, the system *at times* will go to sleep and never return
+
+> This is unclear.  What exactly do you mean by "go to sleep"?
+
+It appears to do a suspend cycle; the screen goes off, the power light goes out,
+and the power consumption (as measured at the charge port) (usually) goes to the
+smallest draw this laptop is capable of in s2idle.
+
+> Which part of the behavior does the "at times" phrase apply to?  The
+> "going to sleep" or coming back?  Or both?
+
+The coming back. Many times I'll hit a key on the keyboard (when "ec_no_wakeup"
+is set) or open the lid or hit the the power button (if it's not set) and nothing
+happens. IIRC the current draw doesn't increase either, but don't quote me on
+that (it's easy enough to reproduce, so I'll try it out and report back).
+
+> > (i.e. no power light comes on, it's totally unresponsive until I do a hard
+> > reset with a power-button long-press) whether I'm plugged in or not.
+> > This is new behavior.
+
+> So how did it behave in 5.3.y?
+...
+> > Help! What can I do to return to the behavior of right before the s0 rework?
+> I guess you mean the 5.3.y behavior.  And what was it?
+...
+
+Seemed to always work; I don't recall any issues with s2idle in earlier
+kernels. Sometimes my idle draw would be much higher than it should be, but
+I have zero clue as to why that is (which is why I'm chasing down bleeding-
+edge PM commits).
+
+> > If "ec_no_wakeup" == 0, the system goes fully to sleep and either of the
+> > power button, lid opening or hitting a key resumes the laptop, but if I'm
+> > plugged in and actually charging when I suspend (and I suspect if I plug
+> > it in during suspend) it never returns, as in the case above.
+
+> OK, so ec_no_wakeup doesn't really change the behavior substantially,
+> it only makes certain things more or less likely to happen.
+> Does it still hang if you use the keyboard to wake up the system?
+
+When "ec_no_wakeup" is set, ONLY the keyboard wakes up the system, and the dead
+system is unrelated to the method I'm using to wake things up.
+
+> > Where in the code could I start looking to try to find out where the machine
+> > goes dead?
+>
+> Well, because you identified 56b991849 as the first bad commit, the
+> following three lines of code in drivers/acpi/sleep.c are likely to be
+> the source of the problem:
+>
+>         acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
+>         acpi_ec_flush_work();
+>         acpi_os_wait_events_complete(); /* synchronize Notify handling */
+>
+> Can you please try to comment them out and retest?
+
+I'll do that and get back to you.
+
+> Note that you most likely won't be able to wake up the system via the
+> lid/power button without them
+
+Yeah, I'm used to that.
+
+	-Kenny
+
+-- 
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
