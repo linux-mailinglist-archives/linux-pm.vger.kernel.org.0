@@ -2,195 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0BB10957D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 23:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF621095E7
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 00:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbfKYWWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 17:22:14 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33918 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfKYWWO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 17:22:14 -0500
-Received: by mail-pg1-f196.google.com with SMTP id z188so7909321pgb.1
-        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 14:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lXNGjbAB2c8bZdmv6dV6YWnGoVduWVluKBQ973lB61U=;
-        b=G2YsyhJQebcAOqVCRATW2DLiaThjq5gWcdXkckmTwJ9HcWSu691Bfm5EWG+GJagmWT
-         WLV1g/tvA5BgufUM12MYGRn3uzFqT7zdH+MSUfg04DPmJwwCsan6C/FYTao8fug/Qzb8
-         jIuAUZr9iCdXwvhClq2bJ4KbDThL/Ae6KroCU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lXNGjbAB2c8bZdmv6dV6YWnGoVduWVluKBQ973lB61U=;
-        b=GvH9Fo24meEHouHlkKIuyaqFUw26I2AloopROUZpsi2klFWqZpzNImNWivlivakQr9
-         VCcTIiXQ8xHaPYR+XVuHKsixK2J+SE8NUle5x9P4C6HO/Xa4t7VB+vFeLvIsPoXyOh9T
-         gBHiw5mHoRZ+hzGALvol41Z/WCRIEfUqGB8v1BOQCKmi5X9t8wH1ViGX5vfDiq0xqXNp
-         x9lUocAzhuxm7IXqFL9PqVeBkFNmxC8/7DhVIcUfaUqt4gi6eFICiAuFhtt3xAoAdvol
-         x6KkQPUQr5jc49gqg++ktjBqMhCeS5DmqKIYJww2DQOGM0yTEqcE0BuhoMr5ECxbBo0g
-         chfA==
-X-Gm-Message-State: APjAAAXWaNwStD+qFO5k8ej2npopGUIl4JTLN96BHyIoNOqETRkoje6Z
-        4r9/njSsh/FjCdgvX4Ld3zTS5Q==
-X-Google-Smtp-Source: APXvYqyDE3P4mK8WqGerdRCeEdkWSs9jYIQyozqLj9zZNYVM2eBdaQ/zpD6yJzPUvSjQWnIHUnnSdg==
-X-Received: by 2002:a63:5c0c:: with SMTP id q12mr33643431pgb.197.1574720531856;
-        Mon, 25 Nov 2019 14:22:11 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id j4sm9355552pgt.57.2019.11.25.14.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2019 14:22:11 -0800 (PST)
-Date:   Mon, 25 Nov 2019 14:22:10 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 3/4] PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos
- structs
-Message-ID: <20191125222210.GC228856@google.com>
-References: <cover.1574699610.git.leonard.crestez@nxp.com>
- <f6d6572ad860d479416108a41f0e20d5cb72ae46.1574699610.git.leonard.crestez@nxp.com>
+        id S1725946AbfKYXCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 18:02:37 -0500
+Received: from mailbackend.panix.com ([166.84.1.89]:42069 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725940AbfKYXCh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 18:02:37 -0500
+Received: from hp-x360n (50-76-61-131-ip-static.hfc.comcastbusiness.net [50.76.61.131])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 47MMxk5VdLzmJm;
+        Mon, 25 Nov 2019 18:02:34 -0500 (EST)
+Date:   Mon, 25 Nov 2019 15:02:32 -0800 (PST)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
+ suspend-to-idle control flow)
+In-Reply-To: <CAJZ5v0hFjW-MG5Jxqx7maC0OH9XzrAPEVqzidQhTORTW5i1M1g@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1911251501180.13123@hp-x360n>
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <CAJZ5v0jQ3RY8An+V2VYH+ZKLC6=HrCYUMomM6jyEXJ47aeLT+A@mail.gmail.com> <CAJZ5v0gKvDb8=Y04DB3wQe0rK8Zfw5yNuAybV980ozxfmem=BQ@mail.gmail.com> <alpine.DEB.2.21.1911230213510.2531@hp-x360n>
+ <CAJZ5v0i2oC-w1RJ2X35fYyHdysorjLRYs-OBn+y_r6ksEZzVtg@mail.gmail.com> <alpine.DEB.2.21.1911241929220.16116@hp-x360n> <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com> <alpine.DEB.2.21.1911250812070.3858@hp-x360n>
+ <CAJZ5v0hFjW-MG5Jxqx7maC0OH9XzrAPEVqzidQhTORTW5i1M1g@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f6d6572ad860d479416108a41f0e20d5cb72ae46.1574699610.git.leonard.crestez@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 06:42:18PM +0200, Leonard Crestez wrote:
-> This allows dev_pm_qos to embed freq_qos structs, which is done in the
-> next patch. Separate commit to make it easier to review.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
->  include/linux/pm_qos.h | 74 ++++++++++++++++++++++--------------------
->  1 file changed, 38 insertions(+), 36 deletions(-)
-> 
-> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-> index 24a6263c9931..678fec6da5b9 100644
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -47,25 +47,10 @@ struct pm_qos_request {
->  struct pm_qos_flags_request {
->  	struct list_head node;
->  	s32 flags;	/* Do not change to 64 bit */
->  };
->  
-> -enum dev_pm_qos_req_type {
-> -	DEV_PM_QOS_RESUME_LATENCY = 1,
-> -	DEV_PM_QOS_LATENCY_TOLERANCE,
-> -	DEV_PM_QOS_FLAGS,
-> -};
-> -
-> -struct dev_pm_qos_request {
-> -	enum dev_pm_qos_req_type type;
-> -	union {
-> -		struct plist_node pnode;
-> -		struct pm_qos_flags_request flr;
-> -	} data;
-> -	struct device *dev;
-> -};
-> -
->  enum pm_qos_type {
->  	PM_QOS_UNITIALIZED,
->  	PM_QOS_MAX,		/* return the largest value */
->  	PM_QOS_MIN,		/* return the smallest value */
->  	PM_QOS_SUM		/* return the sum */
-> @@ -88,10 +73,48 @@ struct pm_qos_constraints {
->  struct pm_qos_flags {
->  	struct list_head list;
->  	s32 effective_flags;	/* Do not change to 64 bit */
->  };
->  
-> +
-> +#define FREQ_QOS_MIN_DEFAULT_VALUE	0
-> +#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
-> +
-> +enum freq_qos_req_type {
-> +	FREQ_QOS_MIN = 1,
-> +	FREQ_QOS_MAX,
-> +};
-> +
-> +struct freq_constraints {
-> +	struct pm_qos_constraints min_freq;
-> +	struct blocking_notifier_head min_freq_notifiers;
-> +	struct pm_qos_constraints max_freq;
-> +	struct blocking_notifier_head max_freq_notifiers;
-> +};
-> +
-> +struct freq_qos_request {
-> +	enum freq_qos_req_type type;
-> +	struct plist_node pnode;
-> +	struct freq_constraints *qos;
-> +};
-> +
-> +
-> +enum dev_pm_qos_req_type {
-> +	DEV_PM_QOS_RESUME_LATENCY = 1,
-> +	DEV_PM_QOS_LATENCY_TOLERANCE,
-> +	DEV_PM_QOS_FLAGS,
-> +};
-> +
-> +struct dev_pm_qos_request {
-> +	enum dev_pm_qos_req_type type;
-> +	union {
-> +		struct plist_node pnode;
-> +		struct pm_qos_flags_request flr;
-> +	} data;
-> +	struct device *dev;
-> +};
-> +
->  struct dev_pm_qos {
->  	struct pm_qos_constraints resume_latency;
->  	struct pm_qos_constraints latency_tolerance;
->  	struct pm_qos_flags flags;
->  	struct dev_pm_qos_request *resume_latency_req;
-> @@ -253,31 +276,10 @@ static inline s32 dev_pm_qos_raw_resume_latency(struct device *dev)
->  {
->  	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
->  }
->  #endif
->  
-> -#define FREQ_QOS_MIN_DEFAULT_VALUE	0
-> -#define FREQ_QOS_MAX_DEFAULT_VALUE	S32_MAX
-> -
-> -enum freq_qos_req_type {
-> -	FREQ_QOS_MIN = 1,
-> -	FREQ_QOS_MAX,
-> -};
-> -
-> -struct freq_constraints {
-> -	struct pm_qos_constraints min_freq;
-> -	struct blocking_notifier_head min_freq_notifiers;
-> -	struct pm_qos_constraints max_freq;
-> -	struct blocking_notifier_head max_freq_notifiers;
-> -};
-> -
-> -struct freq_qos_request {
-> -	enum freq_qos_req_type type;
-> -	struct plist_node pnode;
-> -	struct freq_constraints *qos;
-> -};
-> -
->  static inline int freq_qos_request_active(struct freq_qos_request *req)
->  {
->  	return !IS_ERR_OR_NULL(req->qos);
->  }
->  
-> -- 
-> 2.17.1
-> 
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+On Mon, 25 Nov 2019, Rafael J. Wysocki wrote:
+
+> So what exactly does happen when you try to suspend with
+> sleep_no_lps0?  Does it return to user space right away by itself
+
+Yeah. It's like it never suspends (or suspends quickly and comes right
+back; I didn't bother to look at the dmesg in those cases). I could find
+out if you wish, but- see my next E-mails.
+
+	-Kenny
+
+-- 
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
