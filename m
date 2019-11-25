@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5410B109002
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 15:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233B6109018
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 15:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbfKYOcJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Nov 2019 09:32:09 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:38762 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728026AbfKYOcJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 09:32:09 -0500
-Received: by mail-lf1-f65.google.com with SMTP id q28so11198143lfa.5;
-        Mon, 25 Nov 2019 06:32:07 -0800 (PST)
+        id S1728061AbfKYOfE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 09:35:04 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:40261 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728026AbfKYOfE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 09:35:04 -0500
+Received: by mail-lf1-f67.google.com with SMTP id v24so11191757lfi.7;
+        Mon, 25 Nov 2019 06:35:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=oGTTnKM0xwW7nj0x0MrfZUkr7TGce1cyBxrsce9fTz0=;
-        b=kH6P1Kq2tBKFD4TQmcJWpSKJ6Hagdx11zVsv7mKgsiJXkYyHhoViKTtr3sadCGlZeL
-         ehG6P1sCdCzZo3us3xttS17NdAC8JuBBBu2/iHQHjk8KzF1TRPEoa9TufBvSCutEj6SK
-         DTxiSmYqOGBeDhSdnKY5GbiaPiWFTYTvf2gAf/wwtRybSNHMzyBBw40snnTXoxI4sRMI
-         vzaeJsp/QYlJSyBYc4SrInm75e+vgf6lqgniLQF9GS50M7g9kv3GU6xrf0oHtXtlAHcb
-         O1ZQEL9IRYyXdMr5mW0EVkKldcYv1mblryWchjlQGlCXJhYrUhbajFSRdHW0YGcxIxAf
-         JO/g==
+        bh=mOb7drR/WTWufTxzUC4FI8sP3G8txIhCN7WbUI3E994=;
+        b=Vm9h9oP4w8AakWL2fpCxlWT8rExaAbM1+kSqScdhnmQG1luK1zgK6Jdlquh2waUpHm
+         RyapDHjTaFbxM32TvEKBApfC1ZzIfq/ddxiMGvmNPWU0jFOQofKhnhYGIuenJEo9NJh9
+         YX2bY8OEFxZZX8p9ZDUh6bY4c82EAlazeV2P8fpk65wyUCN40/3CF2zqDgvCI9J5uoGb
+         VKByqCEAwySpm39p8W7jQycG9Ufsh4BO/IRn6fvYXWpFXgXbxwED9tePDWk/RURVP+jw
+         qqckozcfMLX8scEKBgiP+kWniBitb80gZKNMZDbv2qBWO5nZ5Og9dSZxDpWX4Q9R82r2
+         nR7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oGTTnKM0xwW7nj0x0MrfZUkr7TGce1cyBxrsce9fTz0=;
-        b=TAKvXm2f8ClRCu3oINqkmY5SN4o7bZXxe+oma3oHX+CWHyywJuOThmtold3I6mcRC3
-         OYhpy3orKQQf4jTlBJEigon1srR7j8UK3pGTHKK8yBqCh4u8yB1kdjGQuJyhfkNSj2da
-         FQZ3ProgQzfopJC0hMQWjhriYQ2wPOp2tzTWO4C3swxbgyX5L1oTyiSfdqOLPgXfF7nI
-         NGlTgpV8/rWKmuIQKyByNOFQ6WutR1i+ERF2jr4Ps0F0xSbYN6T6HdxEr01Faol2/hkR
-         scjS4WVZ5zV+i8BS2YIYIBTQ18cNwMohL96BT+JqmR0j0f/Kh4iBABpmThvvS33hRtkR
-         UJgA==
-X-Gm-Message-State: APjAAAU9TNlSYbnhudW76ry/XoDIUGHLoFBTc16p1+W+SqB+DaL86ki6
-        kP/kp8IpUuMpJK7BkaZYOqjlZ24k4g05Rxzf8IU=
-X-Google-Smtp-Source: APXvYqxEZzHQPIyjGRJIRceOVV99/gHLbc042Znh/KAbP8bMgC3AKDkjIZgHKxBU2iKFp3ecyEUrHxfT37I88etCPEI=
-X-Received: by 2002:ac2:41d8:: with SMTP id d24mr6024078lfi.98.1574692327003;
- Mon, 25 Nov 2019 06:32:07 -0800 (PST)
+        bh=mOb7drR/WTWufTxzUC4FI8sP3G8txIhCN7WbUI3E994=;
+        b=BWS72isxoJFecucUVHSBpRs92apOmc3ZsPKaAH+pLc5MFKY7ZMPnCZH6aonPJ+P2DA
+         6HHzgOcAaOExmOVYGFVd+opzZ8TzUY5mbF1ojKEVFt9j1eK45kJ7Bbt9XhQyYczdc6CO
+         AocSsLKCpFTJKXlNET5a9o0Xh+bvubHC2qrZapHK9K8ZrBgfs+3nDPsjbiIiPlC+Omrj
+         yzQHtPPkR8h5iM0mJ7syD4PpDFWlavUCjDwd8Rv5n7juWdoFNOxlw5mnj8bPIgsKgWCG
+         PMcnqcs9f/lVFnD+tt93o3+HCcLtBl+wXAjdqQIfWOI3CjLFJOQBk0k4+82LkkqLcBob
+         FMhQ==
+X-Gm-Message-State: APjAAAUgJqu0B8cV+FiNxM9MdbVGtq5ebx7DttBrUz7VsvQzbNq2G+7g
+        oKSBliEdAEHobKAgcusXjW+iufseBraCOzjQZdQ=
+X-Google-Smtp-Source: APXvYqzbXX4EpoK9rwjhMiOUCyPCyQLDSuvkp+U1kLrHk/9+VVPTL0+HDaQ9/gLUpO6yoEMWsqdZTWB6OqR8naZMiq0=
+X-Received: by 2002:ac2:428d:: with SMTP id m13mr15000406lfh.64.1574692501816;
+ Mon, 25 Nov 2019 06:35:01 -0800 (PST)
 MIME-Version: 1.0
 References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
- <1574604530-9024-4-git-send-email-akinobu.mita@gmail.com> <CAHp75VdkhFJZ71FS+DhrKTDPEW7Z-6imRSePm8EhgGF2sgTThg@mail.gmail.com>
-In-Reply-To: <CAHp75VdkhFJZ71FS+DhrKTDPEW7Z-6imRSePm8EhgGF2sgTThg@mail.gmail.com>
+ <1574604530-9024-5-git-send-email-akinobu.mita@gmail.com> <CAHp75VfOUiN_2bW+o-AqGmAY32mmdNxP54B2f2+gj0NTEr9FTQ@mail.gmail.com>
+In-Reply-To: <CAHp75VfOUiN_2bW+o-AqGmAY32mmdNxP54B2f2+gj0NTEr9FTQ@mail.gmail.com>
 From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Mon, 25 Nov 2019 23:31:55 +0900
-Message-ID: <CAC5umygDcYNd396K=CO7wpfDbESo4Sc39oWjkqu_-hmYbb2R1Q@mail.gmail.com>
-Subject: Re: [PATCH 3/8] platform/x86: asus-wmi: switch to use
+Date:   Mon, 25 Nov 2019 23:34:50 +0900
+Message-ID: <CAC5umygc95VBWz1L5CTZO9kmkZL2MCEL2_z9d2TJ6Ow5+fKYPw@mail.gmail.com>
+Subject: Re: [PATCH 4/8] platform/x86: intel_menlow: switch to use
  <linux/temperature.h> helpers
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
@@ -72,20 +72,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B411=E6=9C=8825=E6=97=A5(=E6=9C=88) 4:54 Andy Shevchenko <andy.s=
+2019=E5=B9=B411=E6=9C=8825=E6=97=A5(=E6=9C=88) 4:58 Andy Shevchenko <andy.s=
 hevchenko@gmail.com>:
 >
 > On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wro=
 te:
 > >
-> > The asus-wmi driver doesn't implement the thermal device functionality
-> > directly, so including <linux/thermal.h> just for DECI_KELVIN_TO_CELSIU=
-S()
-> > is a bit odd.
+> > This switches the intel_menlow driver to use deci_kelvin_to_celsius() a=
+nd
+> > celsius_to_deci_kelvin() in <linux/temperature.h> instead of helpers in
+> > <linux/thermal.h>.
 > >
-> > This switches the asus-wmi driver to use deci_kelvin_to_millicelsius() =
-in
-> > <linux/temperature.h>.
+> > This is preparation for centralizing the kelvin to/from Celsius convers=
+ion
+> > helpers in <linux/temprature.h>.
 > >
 > > Cc: Sujith Thomas <sujith.thomas@intel.com>
 > > Cc: Darren Hart <dvhart@infradead.org>
@@ -102,36 +102,44 @@ in
 > > Cc: Sagi Grimberg <sagi@grimberg.me>
 > > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 > > ---
-> >  drivers/platform/x86/asus-wmi.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> >  drivers/platform/x86/intel_menlow.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asu=
-s-wmi.c
-> > index 821b08e..6a1a2f9 100644
-> > --- a/drivers/platform/x86/asus-wmi.c
-> > +++ b/drivers/platform/x86/asus-wmi.c
-> > @@ -33,7 +33,7 @@
-> >  #include <linux/seq_file.h>
-> >  #include <linux/platform_data/x86/asus-wmi.h>
-> >  #include <linux/platform_device.h>
-> > -#include <linux/thermal.h>
-> > +#include <linux/temperature.h>
-> >  #include <linux/acpi.h>
-> >  #include <linux/dmi.h>
+> > diff --git a/drivers/platform/x86/intel_menlow.c b/drivers/platform/x86=
+/intel_menlow.c
+> > index b102f6d..6313591 100644
+> > --- a/drivers/platform/x86/intel_menlow.c
+> > +++ b/drivers/platform/x86/intel_menlow.c
+> > @@ -302,8 +302,10 @@ static ssize_t aux_show(struct device *dev, struct=
+ device_attribute *dev_attr,
+> >         int result;
 > >
-> > @@ -1512,9 +1512,8 @@ static ssize_t asus_hwmon_temp1(struct device *de=
-v,
-> >         if (err < 0)
-> >                 return err;
+> >         result =3D sensor_get_auxtrip(attr->handle, idx, &value);
+> > +       if (result)
+> > +               return result;
 > >
-> > -       value =3D DECI_KELVIN_TO_CELSIUS((value & 0xFFFF)) * 1000;
-> > -
-> > -       return sprintf(buf, "%d\n", value);
+> > -       return result ? result : sprintf(buf, "%lu", DECI_KELVIN_TO_CEL=
+SIUS(value));
+> > +       return sprintf(buf, "%ld", deci_kelvin_to_celsius(value));
 >
-> > +       return sprintf(buf, "%ld\n",
-> > +                      deci_kelvin_to_millicelsius(value & 0xFFFF));
->
-> Leave it in one line.
+> Can you explain the change %lu to %ld?
 
-It causes this line over 80 characters.  Or do you prefer to save the
-conversion result in 'value' temporarily as before?
+Isn't it possible for aux values to be lower than 0 degrees Celsius?
+
+> >  }
+> >
+> >  static ssize_t aux0_show(struct device *dev,
+> > @@ -332,8 +334,8 @@ static ssize_t aux_store(struct device *dev, struct=
+ device_attribute *dev_attr,
+> >         if (value < 0)
+> >                 return -EINVAL;
+> >
+> > -       result =3D sensor_set_auxtrip(attr->handle, idx,
+> > -                                   CELSIUS_TO_DECI_KELVIN(value));
+>
+> > +       result =3D sensor_set_auxtrip(attr->handle, idx,
+> > +                                   celsius_to_deci_kelvin(value));
+>
+> How come the first line has been changed?
+
+Because the trailing space is removed.  I'll mention it in the commit log.
