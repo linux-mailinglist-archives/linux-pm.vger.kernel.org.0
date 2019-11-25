@@ -2,131 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A81E41086DD
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 04:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD2F108823
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Nov 2019 06:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfKYDpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Nov 2019 22:45:55 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:33856 "EHLO
+        id S1725535AbfKYFSM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Nov 2019 00:18:12 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:37366 "EHLO
         mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbfKYDpz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Nov 2019 22:45:55 -0500
-Received: by mail-qk1-f193.google.com with SMTP id d202so3195088qkb.1
-        for <linux-pm@vger.kernel.org>; Sun, 24 Nov 2019 19:45:54 -0800 (PST)
+        with ESMTP id S1725497AbfKYFSM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Nov 2019 00:18:12 -0500
+Received: by mail-qk1-f193.google.com with SMTP id e187so11657805qkf.4
+        for <linux-pm@vger.kernel.org>; Sun, 24 Nov 2019 21:18:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=endlessm-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AF12oMOhXfc9Px1qgEFgcsznioBCGPRgpR5oqy4G2B8=;
-        b=ohus8ZaLy91n7yWY7CAuSCod5PdiGyEijWDibZCHmn3LOpJ9bd5ykpBgoHswudwAMV
-         gq33eHfeRPzhxptnRGsj4SyLJiGffu62hDBY4OYXyixy+zwjYsIKc1SN6O5oD0EdBPEJ
-         c2TnSIJgNWlnoWybsfNWn4AlpT2IH9Sro+CQ7UixGBR0J2oagC9VzBcSHeJVyR/ahXCc
-         g/+0vwqi9pfSD3hjT0Qvy99IoVl3OgWZ7sdJ1y69efz1CW8ffWqCoDk/iEOQB14ewR7o
-         VxDwWQP0leejBXfuhyOR/jFx28HwlsIuWccknS6alrPj4TWJgnAgIaEBdCl/hNe2tVxs
-         kiJw==
+        bh=rxoPFJpfdFPGzCh7S8c0UjDSOfZgv1geNk+cSpTg93A=;
+        b=qqwQ83fEGtuJ/caSJw10t/dKGcP2GbkM+PF1XwPrvLYUOABioklJPjXq74oG7P2q3w
+         iDzgrv0a97x3WS2G/BLl6W0qqEPfzXtnranE777UVyXyxql9KKMDn2uzJyjMNNAx4thu
+         YoyL6NTJ+xnt4zxCXEOGZziIQmhxzn98rYkKrtkTkGw9BHdkOHBl+5fq84UvXU+xkUIw
+         YeZiX33IWfkpmKSPUjalajkDuqump5K1H0wckc3AJ/nxf4FDe1QiXwdU2Lial+6LTaQs
+         1SvwINb9oS0DlRiLdljff/m3Yv9fyObdtYS3aGWTjHPQF1gtZLki8mSiIXd8t4AF1C3A
+         JPsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AF12oMOhXfc9Px1qgEFgcsznioBCGPRgpR5oqy4G2B8=;
-        b=shSrLEJs2VI4guLtj1ej84MhPtZyuzhBbUDpxKrF51fVKnuX2Eij0KtrnlkGq8XIXD
-         XJm/x6qXGe62WdiS2sp8aWN4r9nGSmhFiDYlJdHBnvRE+gHyontgrGv2VNZXo5tfz8XM
-         ZS/MQOy9VRT4wK5/XL+yU/5KmUFLT33A1QADCc4lsUsZB/4LBmBWuE7wG+B5xQIlfWwU
-         I9xkHEHlnL/bQxsW5sNFiMWQb+jLpuAnA1m3ZBB7iWpa8Gjir6RPHmL+HQ7ng1sQd89g
-         kUF3vS8xXIh1gU3CQzPDT1MLwJrG1JxpfPVns4W7uDdXCtbfWTsBbM3IrJMKFetAHoRz
-         B8aw==
-X-Gm-Message-State: APjAAAXf0rx6O3eKhGo2J7Mw9AGVfF0vc8i2r00WWy/0v2s3JpDpye+v
-        7JJkij2pn8/zvO3t06tgVKh13pw0Tqu1ZUmNNjpGhA==
-X-Google-Smtp-Source: APXvYqw5y5nchP1cUDHKO4br6F+MHXkoNQBfCnCnCKjuQEozW0/9xvEHfwNtOzn9mPXU/ki1lahN3/hMDEkoX868dtM=
-X-Received: by 2002:a05:620a:12c3:: with SMTP id e3mr24217720qkl.14.1574653553789;
- Sun, 24 Nov 2019 19:45:53 -0800 (PST)
+        bh=rxoPFJpfdFPGzCh7S8c0UjDSOfZgv1geNk+cSpTg93A=;
+        b=reIZAGEWZEWZw/iGUZP5DkAgv7AhxHG1P5kJwoftcstsUCyIWohRzlm+V5F8UjUaGd
+         NmrpBu2YEGhVZJBMIbkMMwhMMKMY9httPNwAM5b+p2RZ0eU7qmhQ8Yz/xA9YaOlyL2O6
+         x63YJwUVrnE0KqTB85t+u4nbLYfBQfySMxLsUhrtmTe6BHPi3TUZA/7OyOJH/nLSu36M
+         Vynsauvd8flRPDsxQJy6/7Rond/Vq0SEvb4Uk14NtliJg7ia3COLMiwphMG0+sRE1f0E
+         nCvdaiIZ/mr3Csn+G012n8HjeDqlNuvVv1QHMehDTKXRYLziMdIX6WBdbdJteYMe7XpJ
+         gFmA==
+X-Gm-Message-State: APjAAAU4+n9y6oBTOmMpuqxfKCHVoPiIIH7UdkJoE1dyM9yxFagiiStH
+        oY+uQ5ZRlZMIHlhTzMUcwfLhvOgzhW1LzyQnh4ezGg==
+X-Google-Smtp-Source: APXvYqw2AQtWJ1rxhi+gFVMKsY1xEeG7JlJZ3Dqg/h6yR8lXjZuzC8siyXYp8ipfy1+snxUBB+72udZxnRjiimvG71w=
+X-Received: by 2002:a05:620a:12c3:: with SMTP id e3mr24416696qkl.14.1574659090155;
+ Sun, 24 Nov 2019 21:18:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20191120002836.GA247344@google.com> <20191121181500.GA55996@google.com>
- <CAD8Lp47o6PqKnQYBba0o_8LSGhd3_APhVuXAVsJRT7TedeqXDg@mail.gmail.com> <CAJZ5v0hxa9OGF-w82ZkQ0n_p5VM7uOdKD_UrdGVoz0MAfeqy0w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hxa9OGF-w82ZkQ0n_p5VM7uOdKD_UrdGVoz0MAfeqy0w@mail.gmail.com>
+References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+ <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com> <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
+In-Reply-To: <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
 From:   Daniel Drake <drake@endlessm.com>
-Date:   Mon, 25 Nov 2019 11:45:42 +0800
-Message-ID: <CAD8Lp47kV-C_wf02=s-KKKgB6EVsjNVET9kqYuxfdHFDWbAShw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Date:   Mon, 25 Nov 2019 13:17:59 +0800
+Message-ID: <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chunming Zhou <David1.Zhou@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 7:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > But then when pci_update_current_state() is called, it reads pmcsr as
-> > 3 (D3hot). That's not what I would expect. I guess this means that
-> > this platform's _PR3/_PS3 do not actually allow us to put the device
-> > into D3cold,
->
-> That you can't really say.
->
-> Anyway, it is not guaranteed to do that.  For example, the power
-> resource(s) listed by _PR3 for the device may be referenced by
-> something else too which prevents them from being turned off.
->
-> > and/or the _PR0/_PS0 transition does not actually transition the device to D0.
->
-> Yes.
->
-> Which may be the case if the power resource(s) in _PR3 have not been
-> turned off really.
->
-> [To debug this a bit more, you can enable dynamic debug in
-> drivers/acpi/device_pm.c.]
+On Fri, Nov 22, 2019 at 11:32 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+> Do these patches help?
+> https://patchwork.freedesktop.org/patch/341775/
+> https://patchwork.freedesktop.org/patch/341968/
 
-We checked in an earlier thread before I figured out the timing detail
-- these power resources are being turned off at this point.
+Unfortunately not. The original issue still exists (dead gfx after
+resume from s2idle) and also when I trigger execution of the suspend
+or runtime suspend routines the power usage increases around 1.5W as
+before.
 
-> > While there is some ACPI strangeness here, the D3hot vs D3cold thing
-> > is perhaps not the most relevant point. If I hack the code to avoid
-> > D3cold altogether, just trying to do D0->D3hot->D0, it fails in the
-> > same way.
->
-> OK, but then you don't really flip the power resource(s), so that only
-> means that _PS0 does not restore D0, but in general it only is valid
-> to execute _PS0 after _PS3 (if both are present which is the case
-> here), so this is not conclusive again.
+Have you confirmed that amdgpu s2idle is working on platforms you have in hand?
 
-_PS0 is called after _PS3 in the above case.
-
-My feeling is that on this platform, we are not actually entering
-D3cold at any point. Linux appears to be powering off the specified
-ACPI power domains, but after turning them back on and executing _PS0
-to move to D0initialized, the pmcsr still reporting D3 state seems
-highly suspicious to me.
-
-Also, I just experimented adding a pmscr register read to the end of
-pci_set_power_state() , after pci_platform_power_transition() has been
-called. If the power was truly cut and we're in D3cold then I would
-expect this to fail. However the register read succeeds and returns
-the same value 0x103.
-
-During resume, Linux seems to have accurately detected this failure to
-transition to D3cold in pci_update_current_state() by reading pmcsr
-and setting dev->current_state to D3hot accordingly. We then deal with
-what looks like a D3hot->D0 transition, which suffers the same failure
-as seen when I force Linux to avoid D3cold and actually do a "real"
-D0->D3hot->D0 cycle.
-
-Presumably on a platform where D3cold actually works, after the device
-has then been moved to D0uninitialized via ACPI _PS0 and _PR0,
-pci_update_current_state() would then read pmcsr and update
-dev->current_state to have value D0?
-
-So in terms of the review comment questioning if the function name
-quirk_d3_delay() and accompanying message "extending delay after
-power-on from D3 to %d msec\n" is good (or whether it should say D3hot
-or D3cold), maybe it should say D3hot. Plus a comment noting that
-D3cold doesn't actually seem to be fully cold on this platform, so
-we're actually dealing with a D3hot -> D0 transition?
-
+Thanks
 Daniel
