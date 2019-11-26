@@ -2,108 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 905FF10A237
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 17:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A9C10A287
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 17:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbfKZQfP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 11:35:15 -0500
-Received: from mailbackend.panix.com ([166.84.1.89]:60298 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbfKZQfO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 11:35:14 -0500
-Received: from hp-x360n (c-73-241-154-233.hsd1.ca.comcast.net [73.241.154.233])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 47MqJH5gklz1dnL;
-        Tue, 26 Nov 2019 11:35:11 -0500 (EST)
-Date:   Tue, 26 Nov 2019 08:35:10 -0800 (PST)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep: Simplify
- suspend-to-idle control flow)
-In-Reply-To: <CAJZ5v0iJevs95=wpZF8iprXqs2R6H=T-FHfbFwGsQqcBe=Wk5w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1911260833250.2714@hp-x360n>
-References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n> <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com> <2977390.9qzeJo7xji@kreacher> <alpine.DEB.2.21.1911251019100.12067@hp-x360n>
- <alpine.DEB.2.21.1911251155440.2817@hp-x360n> <CAJZ5v0hMR8_i=oA1ovX0-xfa_w1x7nHhTwmmKRPu27ceFxpFow@mail.gmail.com> <alpine.DEB.2.21.1911251502490.13123@hp-x360n> <CAJZ5v0jR8OQVOniR++NJeDukDn9Bgp+DZtvmSCF_d0pH1LDr6w@mail.gmail.com> <alpine.DEB.2.21.1911260759220.6292@hp-x360n>
- <CAJZ5v0iJevs95=wpZF8iprXqs2R6H=T-FHfbFwGsQqcBe=Wk5w@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1728504AbfKZQyn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 11:54:43 -0500
+Received: from mga17.intel.com ([192.55.52.151]:10925 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727756AbfKZQym (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Nov 2019 11:54:42 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Nov 2019 08:54:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,246,1571727600"; 
+   d="scan'208";a="217197185"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2019 08:54:41 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     Tony Luck <tony.luck@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v2 00/12] treewide: break dependencies on x86's RM header
+Date:   Tue, 26 Nov 2019 08:54:05 -0800
+Message-Id: <20191126165417.22423-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 Nov 2019, Rafael J. Wysocki wrote:
+x86's asm/realmode.h, which defines low level structures, variables and
+helpers used to bring up APs during SMP boot, ends up getting included in
+practically every nook and cranny of the kernel because the address used
+by ACPI for resuming from S3 also happens to be stored in the real mode
+header, and ACPI bleeds the dependency into its widely included headers.
 
-> OK, so just to double check if I understand you correctly, you are
-> running the Linus' tip with [the patch] on top and with two extra
-> WARN_ON(1) statements in acpi_ec_query_flushed()?
+As a result, modifying realmode.h for even the most trivial change to the
+boot code triggers a full kernel rebuild, which is frustrating to say the
+least as it some of the most difficult code to get exactly right *and* is
+also some of the most functionally isolated code in the kernel.
 
-Yeah:
+To break the kernel's widespread dependency on realmode.h, add a wrapper
+in the aforementioned ACPI S3 code to access the real mode header instead
+of derefencing the header directly in asm/acpi.h and thereby exposing it
+to the world via linux/acpi.h.
 
-----
-$ git diff lk-linus/master drivers/acpi/
+v2:
+  - Rebased on tip/x86/cleanups, commit b74374fef924 ("x86/setup: Enhance
+    the comments").
+  - Use acpi_get_wakeup_address() as new function name. [Boris and Pavel]
+  - Capture acpi_get_wakeup_address() in a local address. [Pavel]
+  - Collect acks.  I didn't add Rafael's acks on patches 11 and 12 due to
+    the above changes.
+  - Explicitly call out the removal of <asm/realmode.h> from <asm/acpi.h>
+    in patch 12. [Ingo]
+  - Remove superfluous Fixes: tags. [Ard]
 
-diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-index da1e5c5ce150..0bb13a596e4f 100644
---- a/drivers/acpi/ec.c
-+++ b/drivers/acpi/ec.c
-@@ -530,9 +530,11 @@ static bool acpi_ec_query_flushed(struct acpi_ec *ec)
- 	bool flushed;
- 	unsigned long flags;
+Patch Synopsis:
+  - Patches 01-09 fix a variety of build errors that arise when patch 12
+    drops realmode.h from asm/acpi.h.  Most of the errors are quite absurb
+    as they have no relation whatsoever to x86's RM boot code, but occur
+    because realmode.h happens to include asm/io.h.
 
-+	WARN_ON(1);
- 	spin_lock_irqsave(&ec->lock, flags);
- 	flushed = !ec->nr_pending_queries;
- 	spin_unlock_irqrestore(&ec->lock, flags);
-+	WARN_ON(1);
- 	return flushed;
- }
+  - Patch 10 removes a spurious include of realmode.h from an ACPI header.
 
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index 2af937a8b1c5..003b314eda29 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -977,6 +977,13 @@ static int acpi_s2idle_prepare_late(void)
- 	return 0;
- }
+  - Patches 11 and 12 implement the wrapper and move it out of acpi.h.
 
-+static void acpi_s2idle_sync(void)
-+{
-+	acpi_os_wait_events_complete(); /* synchronize GPE processing */
-+	acpi_ec_flush_work();
-+	acpi_os_wait_events_complete(); /* synchronize Notify handling */
-+}
-+
- static void acpi_s2idle_wake(void)
- {
- 	/*
-@@ -1005,9 +1012,7 @@ static void acpi_s2idle_wake(void)
- 		 * The EC driver uses the system workqueue and an additional
- 		 * special one, so those need to be flushed too.
- 		 */
--		acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
--		acpi_ec_flush_work();
--		acpi_os_wait_events_complete(); /* synchronize Notify handling */
-+		acpi_s2idle_sync();
 
- 		rearm_wake_irq(acpi_sci_irq);
- 	}
-@@ -1024,6 +1029,8 @@ static void acpi_s2idle_restore_early(void)
+Sean Christopherson (12):
+  x86/efi: Explicitly include realmode.h to handle RM trampoline quirk
+  x86/boot: Explicitly include realmode.h to handle RM reservations
+  x86/ftrace: Explicitly include vmalloc.h for
+    set_vm_flush_reset_perms()
+  x86/kprobes: Explicitly include vmalloc.h for
+    set_vm_flush_reset_perms()
+  perf/x86/intel: Explicitly include asm/io.h to use virt_to_phys()
+  efi/capsule-loader: Explicitly include linux/io.h for page_to_phys()
+  virt: vbox: Explicitly include linux/io.h to pick up various defs
+  vmw_balloon: Explicitly include linux/io.h for virt_to_phys()
+  ASoC: Intel: Skylake: Explicitly include linux/io.h for virt_to_phys()
+  x86/ACPI/sleep: Remove an unnecessary include of asm/realmode.h
+  ACPI/sleep: Convert acpi_wakeup_address into a function
+  x86/ACPI/sleep: Move acpi_get_wakeup_address() into sleep.c, remove
+    <asm/realmode.h> from <asm/acpi.h>
 
- static void acpi_s2idle_restore(void)
- {
-+	acpi_s2idle_sync();
-+
- 	s2idle_wakeup = false;
-
- 	acpi_enable_all_runtime_gpes();
-----
-
-	-Kenny
+ arch/ia64/include/asm/acpi.h             |  5 ++++-
+ arch/ia64/kernel/acpi.c                  |  2 --
+ arch/x86/events/intel/ds.c               |  1 +
+ arch/x86/include/asm/acpi.h              |  3 +--
+ arch/x86/kernel/acpi/sleep.c             | 11 +++++++++++
+ arch/x86/kernel/acpi/sleep.h             |  2 +-
+ arch/x86/kernel/ftrace.c                 |  1 +
+ arch/x86/kernel/kprobes/core.c           |  1 +
+ arch/x86/kernel/setup.c                  |  1 +
+ arch/x86/platform/efi/quirks.c           |  1 +
+ drivers/acpi/sleep.c                     |  3 +++
+ drivers/firmware/efi/capsule-loader.c    |  1 +
+ drivers/misc/vmw_balloon.c               |  1 +
+ drivers/virt/vboxguest/vboxguest_core.c  |  1 +
+ drivers/virt/vboxguest/vboxguest_utils.c |  1 +
+ sound/soc/intel/skylake/skl-sst-cldma.c  |  1 +
+ 16 files changed, 30 insertions(+), 6 deletions(-)
 
 -- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+2.24.0
+
