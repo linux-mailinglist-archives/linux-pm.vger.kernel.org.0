@@ -2,85 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1141D1098C2
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 06:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D73109907
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 06:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbfKZFfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 00:35:02 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56934 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727379AbfKZFfC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 00:35:02 -0500
-X-UUID: 6538519289be4a80823965c00f1f7dfa-20191126
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PTHlyvPT7+DKctsDgzzDOzGrtWUVdvF9uAmdUpUUCzI=;
-        b=mj2lbBLvkictvFSSj+JAgzHcQAc4bXK2h+Ln6vu27+lO41QJPsV5dmm+cnyQd0MGxR5vvilDM1cbmzvlhVQQSk5Mfs40q71MwdvBPexx59/WypM7JnpUQ3y+9Ug/4Bz3bWa2a6X/DHAAp3hZ7ZPe1+qor5um8q2b7nAun44O/Co=;
-X-UUID: 6538519289be4a80823965c00f1f7dfa-20191126
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <freddy.hsin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 787183843; Tue, 26 Nov 2019 13:34:55 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 26 Nov 2019 13:34:42 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 26 Nov 2019 13:34:35 +0800
-From:   <freddy.hsin@mediatek.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <matthias.bgg@gmail.com>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>
-CC:     <Chang-An.Chen@mediatek.com>, <wsd_upstream@mediatek.com>,
-        Freddy Hsin <freddy.hsin@mediatek.com>
-Subject: [PATCH v1 4/4] dt-binding: power: reset: Add documentation for MTK RGU (Reset Gernation Unit) reboot driver
-Date:   Tue, 26 Nov 2019 13:34:50 +0800
-Message-ID: <1574746490-625-5-git-send-email-freddy.hsin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1574746490-625-1-git-send-email-freddy.hsin@mediatek.com>
-References: <1574746490-625-1-git-send-email-freddy.hsin@mediatek.com>
+        id S1727097AbfKZF7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 00:59:30 -0500
+Received: from cmta19.telus.net ([209.171.16.92]:59850 "EHLO cmta19.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726052AbfKZF73 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Nov 2019 00:59:29 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id ZTsgi5W0bhFQMZTshiLxqh; Mon, 25 Nov 2019 22:59:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1574747967; bh=z8K/VrFh+Mh+HHkwgWhGVWNDyBSRROvGxEQPmJ/967I=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=sCCZcTBW2BMiJWxHG+31qUiS8xoOOxA3Rs9G5zJZw8Dal6ujQ/ma8xWDjNcsmQ5Cr
+         wnhoI1/VLFGMkPWdQZKjfz6v+CIc7+II6RlrWfO58nWSvlairt9prGEO6WRvwp/l2a
+         eqeLT09Sntw/V8/Zi/g52Dhkiihc8uGLToMGFyz72eBL61h+gb5yMnz9TopxqdF+rj
+         RD73LskYr1EEGG6i2oGEF4xNJgh9he+/OfGad3bZujgpTUMi4ftyNPyubQ3rRJiSo5
+         owq+gdT5pYveQowNp+0FupqQD3NQMbkWn2yPG9D2B76pXpjVh3cI2ljUTHCJv4X+Ed
+         FgcXCH0NXW/Cw==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=ZPWpZkzb c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=JFpEMq-k8J54Cn6rv2oA:9 a=QEXdDO2ut3YA:10
+ a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'Mel Gorman'" <mgorman@techsingularity.net>,
+        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Paul Turner'" <pjt@google.com>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Quentin Perret'" <qperret@qperret.net>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>
+References: <20191113124654.18122-1-ggherdovich@suse.cz>         <20191113124654.18122-2-ggherdovich@suse.cz>    <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz>
+In-Reply-To: <1574697961.16378.5.camel@suse.cz>
+Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+Date:   Mon, 25 Nov 2019 21:59:19 -0800
+Message-ID: <000801d5a41e$a7fce2c0$f7f6a840$@net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdWjqXhG/2FkhiwgRMuiczjnDuyRDAAcWJdQ
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfInqMyosb61dzHgkCKzooGPz79WDnaXBPCmUSZDIwyZ5LmcPMdmWp44zLZREww2ABFfDRsT+z8Bgb6nk5mhKfDYozE8wV31XBvSJrTGlvGaCUEyO45Nm
+ ATKnDQWFQYihptyBVYWzlUx6dE/qeohbR2bjHUu/L3NipUmb/r1zLITY27BGqlwMVGcaDCHr3kVjLAE5fKX/cBg7Zl7To46YJn8Pji4L2JTKNWm1OSQaQoo9
+ 1Eg6kLlG3apyrkB6WoXltwHQQFvc8o058qggz40RXX2q7xys/KoYmXrfuHA+nKj+bypSPCzXs7Fhq8D30Xw1bIQQlLSUuHWOyvhyomfCvBmnZchiTuyLGRrN
+ YVvUBWqikuOPIAFT3SjmewJZqGJZ39T7E4qPvVZNNMHNeYniOYK29gb5+vHW56yaOXeMorj7rGGREntvD4r/az0kT0aMEzOTUmMa/DIGkVXvFVVunG3Wi11z
+ IbEHZeTxqdp8AbcLqw8v2X2kf3VN7O4o/CCTI9h8Vy0WisgXni9O5+oRpnvnKtQ9nmZPg2W+HQiXTfAUD978fTetQqJFv4aRGCfXki4zKiN/mJfZZmSjppSK
+ 1aj/0KNZh1UAeT07CoJNmK9lSkjxfsI7kBPKNpY3lyhkyu3Ds4r72CJVygeV8mBQZUQbitq/gPklx/hhbBBRgPkSxG5o1DlDXOaDwL18On8J4KepLw/S75zG
+ Fy62+K/DIgEU/E+yNwAotg2DGBPDBlV8vYs95DAXw07dA+gUCArEEQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogRnJlZGR5IEhzaW4gPGZyZWRkeS5oc2luQG1lZGlhdGVrLmNvbT4NCg0KQWRkIGRvY3Vt
-ZW50YXRpb24gZm9yIE1USyBSR1UgKFJlc2V0IEdlbmVyYXRpb24gVW5pdCkgcmVib290IGRyaXZl
-ci4NCg0KU2lnbmVkLW9mZi1ieTogRnJlZGR5IEhzaW4gPGZyZWRkeS5oc2luQG1lZGlhdGVrLmNv
-bT4NCi0tLQ0KIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3Qu
-dHh0IHwgICAzMCArKysrKysrKysrKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCAzMCBpbnNl
-cnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9wb3dlci9yZXNldC9tdGstcmVib290LnR4dA0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3QudHh0IGIv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3Qu
-dHh0DQpuZXcgZmlsZSBtb2RlIDEwMDY0NA0KaW5kZXggMDAwMDAwMC4uNzA4ZDM1MQ0KLS0tIC9k
-ZXYvbnVsbA0KKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jl
-c2V0L210ay1yZWJvb3QudHh0DQpAQCAtMCwwICsxLDMwIEBADQorR2VuZXJpYyBNVEsgUkdVIG1h
-cHBlZCByZWdpc3RlciByZXNldCBkcml2ZXINCisNCitUaGlzIGlzIGEgcmVzZXQgZHJpdmVyIHVz
-aW5nIHRvcHJndSB0byBtYXAgaXRzIG5vbi12b2xhdGlsZSByZWdpc3Rlci4NCitUaGUgcmVzZXQg
-aXMgZ2VuZXJhbGx5IHBlcmZvcm1lZCB3aXRoIGEgd3JpdGUgdG8gdGhlIG5vbi12b2xhdGlsZSBy
-ZWdpc3Rlcg0KK2RlZmluZWQgYnkgdGhlIHJlZ2lzdGVyIG1hcCBwb2ludGVkIGJ5IHRvcHJndSBy
-ZWZlcmVuY2UgcGx1cyB0aGUgb2Zmc2V0DQord2l0aCB0aGUgbWFzayBkZWZpbmVkIGluIHRoZSBy
-ZWJvb3QtbW9kZSBub2RlLg0KKw0KK1JlcXVpcmVkIHByb3BlcnRpZXM6DQorLSBjb21wYXRpYmxl
-OiBzaG91bGQgY29udGFpbiAidG9wcmd1LXJlYm9vdC1tb2RlIg0KKy0gcmVnbWFwOiB0aGlzIGlz
-IHBoYW5kbGUgdG8gdGhlIHJlZ2lzdGVyIG1hcCBub2RlDQorLSBvZmZzZXQ6IG9mZnNldCBpbiB0
-aGUgcmVnaXN0ZXIgbWFwIGZvciB0aGUgcmVib290LW1vZGUgcmVnaXN0ZXIgKGluIGJ5dGVzKQ0K
-Ky0gbWFzazogdGhlIHJlc2V0IHZhbHVlIHdyaXR0ZW4gdG8gdGhlIHJlYm9vdCByZWdpc3RlciAo
-MzIgYml0IGFjY2VzcykNCisNCitFeGFtcGxlczoNCisJcmVib290LW1vZGUgew0KKwkgICBjb21w
-YXRpYmxlID0gInRvcHJndS1yZWJvb3QtbW9kZSI7DQorCSAgIHJlZ21hcCA9IDwmdG9wcmd1PjsN
-CisJICAgb2Zmc2V0ID0gPDB4MjQ+Ow0KKwkgICBtYXNrID0gPDB4Rj47DQorCX07DQorDQorT3B0
-aW9uYWwgcHJvcGVydGllcyAtIHJlYm9vdCBtb2RlIHZhbHVlIHRoYXQgd2lsbCBrZWVwIGluIHRv
-cHJndSBub25yc3QgUkc6DQorLSBtb2RlLWNoYXJnZXIgPSA8Qk9PVF9DSEFSR0VSPjsNCistIG1v
-ZGUtcmVjb3ZlcnkgPSA8Qk9PVF9SRUNPVkVSWT47DQorLSBtb2RlLWJvb3Rsb2FkZXIgPSA8Qk9P
-VF9CT09UTE9BREVSPjsNCistIG1vZGUtZG0tdmVyaXR5LWRldi1jb3JydXB0ID0gPEJPT1RfRE1f
-VkVSSVRZPjsNCistIG1vZGUta3BvYyA9IDxCT09UX0tQT0M+Ow0KKy0gbW9kZS1kZHItcmVzZXJ2
-ZSA9IDxCT09UX0REUl9SU1ZEPjsNCistIG1vZGUtbWV0YSA9IDxCT09UX01FVEE+Ow0KKy0gbW9k
-ZS1ycG1icGsgPSA8Qk9PVF9SUE1CUEs+Ow0KLS0gDQoxLjcuOS41DQo=
+On 2019.11.25 08:06 Giovanni Gherdovich wrote:
+> On Sat, 2019-11-23 at 23:49 -0800, Doug Smythies wrote:
+>> ...
+>> Kernel 5.4-rc8 + revert, intel_cpufreq/schedutil: 3899 seconds
+>> Kernel 5.4-rc8 + gg 6 + revert, intel_cpufreq/schedutil: 2740.7 seconds
+>> Ratio: 0.70 (as expected)
+>> Kernel 5.4-rc8, intel_cpufreq/schedutil: 2334.7 seconds (faster than expected)
+>> Kernel 5.4-rc8 + gg 6 patch set, intel_cpufreq/schedutil: 2275.0 seconds (faster than expected)
+>> Ratio: 0.97 (not as expected)
+>> Kernel 5.4-rc8, intel_cpufreq/performance: 2215.3 seconds
+>> Kernel 5.4-rc8, intel_cpufreq/ondemand: 3286.3 seconds
+>> Re-stated from previous e-mail:
+>> Kernel 5.3-rc8, intel_cpufreq/schedutil: ratio: 0.69 (I don't have the original times)
+>
+> Hello Doug,
+>
+> schedutil in 5.4 going a lot faster than in 5.3 would be a surprise. I'm
+> running that same test too to check if I can see it as well.
+
+Great, thanks. But see below.
+
+>
+> Besides, as it's already been said this patchset adds frequency
+> scale-invariance to scheduler metrics such as load and utilization and that's
+> useful also in areas other than frequency scaling (most notably the scheduler
+> load balancer).
+
+The issue with the schedutil governor not working properly in the 5.4 RC series
+appears to be hardware dependant.
+
+My test computer is Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz., Sandy Bridge.
+On a temporary basis, I acquired a computer with an
+Intel(R) Core(TM) i5-4460 CPU @ 3.20GHz, Haswell,
+and schedutil governor behaviour with the exact same kernels is fine:
+
+That "gitsource" test, "make test" 6 times, first run thrown out:
+
+Kernel 5.4 intel_cpufreq/schedutil: 3411.8 seconds
+Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 1696.7 seconds
+Ratio: 0.49
+Recall you got a ratio of 0.49 with 5th generation, Broadwell.
+
+... Doug
+
 
