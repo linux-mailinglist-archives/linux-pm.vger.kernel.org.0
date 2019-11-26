@@ -2,107 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E7310A143
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 16:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8699310A1BB
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 17:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728547AbfKZPeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 10:34:44 -0500
-Received: from mga17.intel.com ([192.55.52.151]:3914 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727028AbfKZPeo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Nov 2019 10:34:44 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Nov 2019 07:34:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,246,1571727600"; 
-   d="scan'208";a="233783662"
-Received: from fmsmsx107.amr.corp.intel.com ([10.18.124.205])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Nov 2019 07:34:43 -0800
-Received: from fmsmsx118.amr.corp.intel.com (10.18.116.18) by
- fmsmsx107.amr.corp.intel.com (10.18.124.205) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 26 Nov 2019 07:34:43 -0800
-Received: from shsmsx106.ccr.corp.intel.com (10.239.4.159) by
- fmsmsx118.amr.corp.intel.com (10.18.116.18) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 26 Nov 2019 07:34:42 -0800
-Received: from shsmsx108.ccr.corp.intel.com ([169.254.8.41]) by
- SHSMSX106.ccr.corp.intel.com ([169.254.10.248]) with mapi id 14.03.0439.000;
- Tue, 26 Nov 2019 23:34:41 +0800
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "eduval@amazon.com" <eduval@amazon.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        "eduval@amazon.com" <eduval@amazon.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: RE: [PATCH] MAINTAINERS: thermal: Eduardo's email is bouncing
-Thread-Topic: [PATCH] MAINTAINERS: thermal: Eduardo's email is bouncing
-Thread-Index: AQHVohS5Ixvfndb26E+eyP+M+LEZvKebIy2AgAFHYgCAAS68EA==
-Date:   Tue, 26 Nov 2019 15:34:40 +0000
-Message-ID: <744357E9AAD1214791ACBA4B0B90926377666A90@SHSMSX108.ccr.corp.intel.com>
-References: <20191123154303.2202-1-f.fainelli@gmail.com>
-         <CAHLCerPKQSLrgybYhhFDxjXu56BD+iAyz1OYF14rTbjotEkD7g@mail.gmail.com>
- <b146b35e4434a0bf57dfd8052b2b455f06fa46ab.camel@intel.com>
-In-Reply-To: <b146b35e4434a0bf57dfd8052b2b455f06fa46ab.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNTRmMjY4MjYtOTc1NC00MTE3LWEwNzEtNjIyMGJlNzFmMGUyIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiUCtaeHNaMUxPbmdxZExrcHd0WWhWYTJFUlwvaG12ekM1V1MwdTltUEN3S1BUOXFNTzkrZ1dvSXV4V0hSclNhZksifQ==
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728118AbfKZQMp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 11:12:45 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:47080 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727580AbfKZQMp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 11:12:45 -0500
+Received: by mail-oi1-f174.google.com with SMTP id n14so17086210oie.13
+        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 08:12:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nENT5zZGvr/OZgtY1rn8vciNTC+OKABafSND442R6eU=;
+        b=XS4gnmTghYJtI7Mec5VtF/pl0SFSDEGDOVom7g2lKwKf3VAhokikHUkPD83wSydq/d
+         IZLarqdKDPcGuzB55IS3k8rdApI+voV4AilWNV++loTPClMJSP5OvYYa0rxPH6ys0Gc+
+         QJ041ev/R44P4Pc3J2a7Chnn0VgLvWyvPn2o8N4SMC09LDSfMhligpLzQluf0pQ4LO3D
+         Nx20pzmEH1oblo1qjg42vESpO3e/9wSV326xG+fGqURZhRiiI+A/KsnWVbfwY1R1VJ/D
+         3XV4WZFQVnX67kELmmBhyX+pwJcXbFkuM2567JSiV+yhbf6HH0D4d1vEof1+cAKKb82M
+         gNyA==
+X-Gm-Message-State: APjAAAUBf+bG8y0+94P5mOsWMzXUcDcFAKhaPXn1II7gSxveuX2d2ijz
+        QbIm1ylr1LNHvckIufUND+Fp/2/L3jzGCWb9JHHPFw==
+X-Google-Smtp-Source: APXvYqxSZJlwfRbKL7sVKIv1gAkLxvXLaTF31UVWE+WWuBYF2Ed579HhqPjj9q4WjrYQrhm3M+tDzQLm7NwphWXG6xE=
+X-Received: by 2002:aca:c753:: with SMTP id x80mr4028049oif.115.1574784763708;
+ Tue, 26 Nov 2019 08:12:43 -0800 (PST)
 MIME-Version: 1.0
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n>
+ <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com>
+ <2977390.9qzeJo7xji@kreacher> <alpine.DEB.2.21.1911251019100.12067@hp-x360n>
+ <alpine.DEB.2.21.1911251155440.2817@hp-x360n> <CAJZ5v0hMR8_i=oA1ovX0-xfa_w1x7nHhTwmmKRPu27ceFxpFow@mail.gmail.com>
+ <alpine.DEB.2.21.1911251502490.13123@hp-x360n> <CAJZ5v0jR8OQVOniR++NJeDukDn9Bgp+DZtvmSCF_d0pH1LDr6w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jR8OQVOniR++NJeDukDn9Bgp+DZtvmSCF_d0pH1LDr6w@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Nov 2019 17:12:32 +0100
+Message-ID: <CAJZ5v0jbU3ikuju-oV6Y0g0f_F44w-3bkfvBZTFT8tUPycC69w@mail.gmail.com>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep:
+ Simplify suspend-to-idle control flow)
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-TGV0J3MgdHJ5IEVkdWFyZG8nIEFtYXpvbiBlbWFpbCBhY2NvdW50IGJlZm9yZSBhcHBseWluZyB0
-aGlzIG9uZS4NCg0KVGhhbmtzLA0KcnVpDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0N
-Cj4gRnJvbTogbGludXgtcG0tb3duZXJAdmdlci5rZXJuZWwub3JnIFttYWlsdG86bGludXgtcG0t
-DQo+IG93bmVyQHZnZXIua2VybmVsLm9yZ10gT24gQmVoYWxmIE9mIFpoYW5nIFJ1aQ0KPiBTZW50
-OiBUdWVzZGF5LCBOb3ZlbWJlciAyNiwgMjAxOSAxOjI5IFBNDQo+IFRvOiBBbWl0IEt1Y2hlcmlh
-IDxhbWl0Lmt1Y2hlcmlhQHZlcmR1cmVudC5jb20+OyBGbG9yaWFuIEZhaW5lbGxpDQo+IDxmLmZh
-aW5lbGxpQGdtYWlsLmNvbT4NCj4gQ2M6IExLTUwgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc+OyBlZHV2YWxAYW1hem9uLmNvbTsgTGludXggUE0NCj4gbGlzdCA8bGludXgtcG1Admdlci5r
-ZXJuZWwub3JnPjsgRGFuaWVsIExlemNhbm8gPGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+DQo+
-IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIE1BSU5UQUlORVJTOiB0aGVybWFsOiBFZHVhcmRvJ3MgZW1h
-aWwgaXMgYm91bmNpbmcNCj4gDQo+IE9uIE1vbiwgMjAxOS0xMS0yNSBhdCAxNToyNyArMDUzMCwg
-QW1pdCBLdWNoZXJpYSB3cm90ZToNCj4gPiBPbiBTYXQsIE5vdiAyMywgMjAxOSBhdCA5OjEzIFBN
-IEZsb3JpYW4gRmFpbmVsbGkgPA0KPiA+IGYuZmFpbmVsbGlAZ21haWwuY29tPiB3cm90ZToNCj4g
-PiA+DQo+ID4gPiBUaGUgbGFzdCB0d28gZW1haWxzIHRvIEVkdWFyZG8gd2VyZSByZXR1cm5lZCB3
-aXRoOg0KPiA+ID4NCj4gPiA+IDQ1MiA0LjIuMiBUaGUgZW1haWwgYWNjb3VudCB0aGF0IHlvdSB0
-cmllZCB0byByZWFjaCBpcyBvdmVyIHF1b3RhLg0KPiA+ID4gUGxlYXNlIGRpcmVjdCB0aGUgcmVj
-aXBpZW50IHRvDQo+ID4gPiBodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPU92ZXJR
-dW90YVRlbXANCj4gajE3c29yNjI2MTYyd3JxLjQ5DQo+ID4gPiAtDQo+ID4gPiBnc210cA0KPiA+
-DQo+ID4gUmlnaHQsIEkndmUgYmVlbiBzZWVpbmcgdGhlIHNhbWUgZm9yIHRoZSBsYXN0IHdlZWsg
-Zm9yIGFsbCBteQ0KPiA+IHBvc3RpbmdzLg0KPiANCj4gb2theSwgSSB3aWxsIHF1ZXVlIHRoaXMg
-cGF0Y2guDQo+IA0KPiA+DQo+ID4gUnVpLCB3aWxsIHlvdSBwbGVhc2Ugc2VuZCB0aGUgcHVsbCBy
-ZXF1ZXN0IHRvIExpbnVzIGZvciA1LjUgKGFuZCBnb2luZw0KPiA+IGZvcndhcmQpIHdpdGggYWxs
-IHRoZSBjb250ZW50cyBvZiB0aGVybWFsL25leHRbMV0/IE90aGVyd2lzZSwgdGhlDQo+ID4gdGhl
-cm1hbCBzb2MgcGF0Y2hlcyB3aWxsIHVubmVjZXNzYXJpbHkgbWlzcyB0aGUgbWVyZ2Ugd2luZG93
-LiBUaGV5J3ZlDQo+ID4gYmVlbiBiYWtpbmcgaW4gbGludXgtbmV4dCBmb3IgYSB3aGlsZS4NCj4g
-DQo+IHllcywgYWxsIHRoZSBwYXRjaGVzIGluIHRoZXJtYWwvbmV4dCBhcmUgZm9yIDUuNS1yYzEu
-DQo+IA0KPiB0aGFua3MsDQo+IHJ1aQ0KPiANCj4gPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTogRmxv
-cmlhbiBGYWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+DQo+ID4NCj4gPiBbMV0NCj4gPiBo
-dHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90aGVybWFsL2xp
-bnV4LmdpdC9sb2cvDQo+ID4gP2g9dGhlcm1hbC9uZXh0DQo+ID4NCj4gPg0KPiA+DQo+ID4gPiAt
-LS0NCj4gPiA+ICBNQUlOVEFJTkVSUyB8IDEgLQ0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGRl
-bGV0aW9uKC0pDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJTlRB
-SU5FUlMgaW5kZXgNCj4gPiA+IGU0ZjE3MGQ4YmMyOS4uODRlOGJkYWU0YmViIDEwMDY0NA0KPiA+
-ID4gLS0tIGEvTUFJTlRBSU5FUlMNCj4gPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4gPiBAQCAt
-MTYwODUsNyArMTYwODUsNiBAQCBGOiAgICAgIGRyaXZlcnMvbWVkaWEvcmFkaW8vcmFkaW8tDQo+
-ID4gPiByYXJlbW9uby5jDQo+ID4gPg0KPiA+ID4gIFRIRVJNQUwNCj4gPiA+ICBNOiAgICAgWmhh
-bmcgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPg0KPiA+ID4gLU06ICAgICBFZHVhcmRvIFZhbGVu
-dGluIDxlZHViZXp2YWxAZ21haWwuY29tPg0KPiA+ID4gIFI6ICAgICBEYW5pZWwgTGV6Y2FubyA8
-ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz4NCj4gPiA+ICBSOiAgICAgQW1pdCBLdWNoZXJpYSA8
-YW1pdC5rdWNoZXJpYUB2ZXJkdXJlbnQuY29tPg0KPiA+ID4gIEw6ICAgICBsaW51eC1wbUB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gPiA+IC0tDQo+ID4gPiAyLjE3LjENCj4gPiA+DQoNCg==
+On Tue, Nov 26, 2019 at 9:50 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Nov 26, 2019 at 12:32 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+> >
+> >
+> > On Mon, 25 Nov 2019, Rafael J. Wysocki wrote:
+> >
+> > > It looks like the platform has problems with switching power between
+> > > AC and battery while suspended.  Also this appears to be related to the EC.
+> >
+> > That being said, I always keep a stock kernel on this machine (latest is Kubuntu
+> > vmlinuz-5.0.0-35-generic) and the failure mode isn't reproducible on that. I'm
+> > still wondering what's substantially different between the versions.
+> >
+> > BTW, I've got breaking it down to a science now:
+> >
+> > - Let the battery drain pretty well down (< ~80%)
+> > - Boot the kernel I wish to test, while still on battery
+> > - Intiate a suspend/resume, which will come back OK
+> > - Initiate another suspend
+> > - Plug in the charger. If I have my power meter in, I see it do the PD
+> >   negotiation (it'll start off at 20V/150mA, then it'll PD ramp up to
+> >   a full 2.5-2.75A @20v to charge the battery)
+> > - Try to resume. It'll be totally dead and I have to long-power-button
+> >   to get it back
+> >
+> > - If I have "ec_no_wakeup=1" set, then the first time it seems to resume
+> >   OK from the procedure above, then I'll wait about two minutes then
+> >   flip the laptop around a bunch (apparently getting the accelerometer
+> >   involved, which I guess happens during a car ride) which can also
+> >   trigger the hard hangup when I plug it in before suspending
+> >
+> > > Also I'm wondering if the problem is reproducible with ec_no_wakeup
+> > > and the last patch I posted applied.
+> >
+> > With the stock -rc kernel, I used to be able to work around this issue with
+> > "ec_no_wakeup=1", but sometimes the battery would drain while "suspended"
+> > far higher than idle at random.
+> >
+> > With the second patchset (the introduction of acpi_s2idle_sync()) the
+> > *second* resume while the battery is charging locks it up hard.
+> >
+> > > But with that patch applied, please try to comment out the
+> > > acpi_s2idle_sync() in acpi_s2idle_wake() and retest.
+> >
+> > So get this- I took it out of acpi_s2idle_wake() and left it in acpi_s2idle_restore() ;
+> > when I do this, I get the issue where it seems to no longer care about the
+> > charging state, BUT it is back to responding to charger events (i.e., it won't
+> > go to sleep as long as it's plugged in, and "ec_no_wakeup=1" has no effect on this.
+> >
+> > It also turns out that it doesn't apparently matter if I remove the call of acpi_s2idle_sync()
+> > from either of acpi_s2idle_wake() or acpi_s2idle_restore() but I get the behavior above.
+> > I took a shot in the dark and commented out the call to acpi_ec_flush_work() in acpi_s2idle_sync()
+> > and left the calls to acpi_s2idle_sync() in both _wake and _restore and also get this
+> > behavior, which to me implies that whatever is in the acpi_ec_flush_work() call (and I
+> > looked at it, but didn't go any further) is where it's hanging up.
+>
+> It doesn't have to be like that.
+>
+> What acpi_ec_flush_work() does it to process the EC events received so
+> far and they may trigger notifications that are processed
+> subsequently.  The next acpi_os_wait_events_complete() is there to
+> wait for that processing to finish.
+>
+> It looks like it hangs somewhere in the platform firmware, but it is
+> hard to say where exactly.
+>
+> > I can put WARN_ON(cond)
+> > calls in places that'll write to EFI pstore, if you think that would be useful.
+> >
+> > As this workaround does at least (so far, anyway) keep the machine from going off into
+> > a black hole,
+>
+> So to be precise you mean commenting out acpi_ec_flush_work() in
+> acpi_s2idle_sync() with the
+>
+> https://lore.kernel.org/linux-pm/alpine.DEB.2.21.1911220920500.24730@hp-x360n/T/#m199e175157c9cddf48fdee16681f6c2f0549a364
+>
+> patch applied?
+>
+> And does the power button/lid wakeup work without that?
+>
+> > I'm willing to live with it until/as we find a workaround that gets it
+> > right; even though it'll be somewhat annoying to not go to sleep when charged AND
+> > automatically wake up on power connection/disconnection events (can those be filtered
+> > out of /proc/acpi/wakeup_sources ? Nothing looked obvious) at least I have a laptop
+> > when I need it.
+>
+> There should be a way to filter them out.
+>
+> From the above it looks like this happens with "ec_no_wakeup=1" too,
+> is that correct?
+>
+> > Can you think of any other strategy to try (and I'm all ears at this point; this
+> > kind of breakage- while almost certainly that something in this HP BIOS/ACPI
+> > is doing wrong, should be properly worked around for the rest of us poor suckers
+> > who got these devices so I'm willing to help either fix it,
+>
+> It's rather that the platform firmware has expectations that we don't
+> know about.
+>
+> Yes, it should be possible to diagnose it further with some extra work.
+
+To that end, please send me the output of dmidecode and acpidump from
+your laptop.
