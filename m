@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BB010A507
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 21:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA32F10A5BC
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 22:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfKZUES (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 15:04:18 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:33649 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbfKZUES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 15:04:18 -0500
-Received: by mail-pj1-f65.google.com with SMTP id r67so1022475pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 12:04:17 -0800 (PST)
+        id S1726036AbfKZVBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 16:01:34 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40572 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbfKZVBe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 16:01:34 -0500
+Received: by mail-pg1-f194.google.com with SMTP id e17so9601976pgd.7
+        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 13:01:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=dJopp9pR4UowE4MKKxONEjDdV0BlsklEMTw+PvfsY8Q=;
-        b=eE7PGm7QXHba+0OsXaxVpSOnF3RoooKge3/iQo44EP2ZR4fNvLPjYyOMzJfZRkcgWC
-         i/PmIiymlF20YyHLDMVFgk2eMoTEKUzwly7uYTFl2Iv59/ysfwQE8Wr7JFYPDe/E0s+2
-         q++fWnBvD/n0oM7s6NJjMgZmyFfS86YhZo/f0=
+        bh=n9+15kW1fXPH1gcYh1ndHqY4WDW+ziUzi1CRsMcSLPc=;
+        b=EZ7S7WCKFn8c+ujV3klPjacvkVwbJOr7J/xb55cuQOl7tTVm6u5qpPCDztfrXkOVOr
+         PtP3sLDm2rq8NCNh92RdGWh+IJ/hj/Ty5fuBwoODzF3GyzKhkWCHiLUJLe4GHvlnkH3n
+         1lxZP0GSLO9BNFA6KoA/1d77Fm7ASYOWLJgbY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dJopp9pR4UowE4MKKxONEjDdV0BlsklEMTw+PvfsY8Q=;
-        b=FiC1vUz/r+AmYnXmsubOMo84CrFq8uF71rhcZ0yHPrRdOfXVNfxevwm8QxyjIEXGO/
-         +Np34AkJyDaNsiaHABgJleJURRGIgIIe7VGfo1viSVzbURdV37xHY80CxAXyfTISuZXw
-         tRAVfsJVKyszWlELHOczcpWKzwqt6l1Aot+AqUhZf+Jc1cewgumFb54eFgCXuqv9udaL
-         lrN0Tmm/Wh27vTQd8z8Dz7sGCDYyQhM/k+11RXwG9zsD+ETbAUx1ZJRC5q1vDAIOxcoh
-         dOwRaWfm9H74x4x3F0dAEN3pi+e/oa1flGZ0MoOIn4qyrMnWPLtA31vDFpFK0LQQKa2k
-         XJhQ==
-X-Gm-Message-State: APjAAAUB9qj0KoDHD0is/mZD0/cmtIt4huF3S9Swqb8v69+pFtl01lzg
-        1gaEAZ7jLuYzq0W0U2wA34AteA==
-X-Google-Smtp-Source: APXvYqwY5ODtk28juSNQIExCxXe/O2ELRtOVwOgtZeXW7WIFGrhKTjWpQMzJE9AghyvkNW9+h7di2Q==
-X-Received: by 2002:a17:90b:4006:: with SMTP id ie6mr1158551pjb.50.1574798656886;
-        Tue, 26 Nov 2019 12:04:16 -0800 (PST)
+        bh=n9+15kW1fXPH1gcYh1ndHqY4WDW+ziUzi1CRsMcSLPc=;
+        b=PCoot9f5d8Cbd3BVkJbpmjJftHLl3nr7oqWIrRKyOFVtvPXX9jQMpNj+/QgIt9Zs7D
+         JQQiX1fXhfAoDPfQk226PbEgu/C/bbVmokabtGivP5bVMJWpcb3wXsjKeqDIG8TSPQae
+         GbZRG2sqBT3tj/pxGBgDXq+kMo+3IdvT/0SGVufHA4xkfE9hT/uZCj2gPqIPS2jIR4lY
+         aynkdp7WXUNc5SQ/Bj3Cb4h3Typ4QpwP4l4eI/O46+ZCzPtCXvs9Q+XrgjOSMOm/EL43
+         HDMe9DQ8xT48dpYULJ+ngV7UkwOvaptVCs8K9fc40nTD4XgdqBYNIopwygxdG3wl1lb4
+         /qsQ==
+X-Gm-Message-State: APjAAAUKiV8UbvF4njdMvn28vpe3kUSe7kGMSree76FbzX1y1iTXC+C1
+        3EG69Bi1eLqD1b1gEFcrHvi9vw==
+X-Google-Smtp-Source: APXvYqwpqSfOOzlAA99rsH+xk9rnMdYHVBoqyYHPv4kb3hbVx9TFEfg5Hdh5ltTR6UQsSlnJoZ2/pw==
+X-Received: by 2002:a63:fb03:: with SMTP id o3mr565465pgh.378.1574802092568;
+        Tue, 26 Nov 2019 13:01:32 -0800 (PST)
 Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id y1sm13764278pfq.138.2019.11.26.12.04.15
+        by smtp.gmail.com with ESMTPSA id a13sm13464295pfi.187.2019.11.26.13.01.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Nov 2019 12:04:16 -0800 (PST)
-Date:   Tue, 26 Nov 2019 12:04:14 -0800
+        Tue, 26 Nov 2019 13:01:31 -0800 (PST)
+Date:   Tue, 26 Nov 2019 13:01:30 -0800
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -54,206 +54,306 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Brendan Higgins <brendanhiggins@google.com>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v4 1/4] PM / QoS: Initial kunit test
-Message-ID: <20191126200414.GD228856@google.com>
+Subject: Re: [PATCH v4 4/4] PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+Message-ID: <20191126210130.GE228856@google.com>
 References: <cover.1574781196.git.leonard.crestez@nxp.com>
- <be196b656bb5fbf2c59a179e6453aa963b862109.1574781196.git.leonard.crestez@nxp.com>
+ <44cfaddb5be6403f687a0e56e57f17925b9a521b.1574781196.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <be196b656bb5fbf2c59a179e6453aa963b862109.1574781196.git.leonard.crestez@nxp.com>
+In-Reply-To: <44cfaddb5be6403f687a0e56e57f17925b9a521b.1574781196.git.leonard.crestez@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 05:17:10PM +0200, Leonard Crestez wrote:
-> The pm_qos family of APIs are used in relatively difficult to reproduce
-> scenarios such as thermal throttling so they benefit from unit testing.
+On Tue, Nov 26, 2019 at 05:17:13PM +0200, Leonard Crestez wrote:
+> Support for adding per-device frequency limits was removed in
+> commit 2aac8bdf7a0f ("PM: QoS: Drop frequency QoS types from device PM QoS")
+> after cpufreq switched to use a new "freq_constraints" construct.
 > 
-> Start by adding basic tests from the the freq_qos APIs. It includes
-> tests for issues that were brought up on mailing lists:
+> Restore support for per-device freq limits but base this upon
+> freq_constraints. This is primarily meant to be used by the devfreq
+> subsystem.
 > 
-> https://patchwork.kernel.org/patch/11252425/#23017005
-> https://patchwork.kernel.org/patch/11253421/
+> This removes the "static" marking on freq_qos_apply but does not export
+> it for modules.
 > 
 > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > ---
->  drivers/base/Kconfig          |   4 ++
->  drivers/base/power/Makefile   |   1 +
->  drivers/base/power/qos-test.c | 117 ++++++++++++++++++++++++++++++++++
->  3 files changed, 122 insertions(+)
->  create mode 100644 drivers/base/power/qos-test.c
+>  drivers/base/power/qos.c | 73 ++++++++++++++++++++++++++++++++++++----
+>  include/linux/pm_qos.h   | 12 +++++++
+>  kernel/power/qos.c       |  4 ++-
+>  3 files changed, 82 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> index e37d37684132..d4ae1c1adf69 100644
-> --- a/drivers/base/Kconfig
-> +++ b/drivers/base/Kconfig
-> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE
+> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+> index 350dcafd751f..8e93167f1783 100644
+> --- a/drivers/base/power/qos.c
+> +++ b/drivers/base/power/qos.c
+> @@ -113,14 +113,24 @@ s32 dev_pm_qos_read_value(struct device *dev, enum dev_pm_qos_req_type type)
+>  	unsigned long flags;
+>  	s32 ret;
 >  
->  	  This option is expected to find errors and may render your system
->  	  unusable. You should say N here unless you are explicitly looking to
->  	  test this functionality.
+>  	spin_lock_irqsave(&dev->power.lock, flags);
 >  
-> +config PM_QOS_KUNIT_TEST
-> +	bool "KUnit Test for PM QoS features"
-> +	depends on KUNIT
-> +
->  config HMEM_REPORTING
->  	bool
->  	default n
->  	depends on NUMA
->  	help
-> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
-> index ec5bb190b9d0..8fdd0073eeeb 100644
-> --- a/drivers/base/power/Makefile
-> +++ b/drivers/base/power/Makefile
-> @@ -2,7 +2,8 @@
->  obj-$(CONFIG_PM)	+= sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
->  obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
->  obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
->  obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=  domain.o domain_governor.o
->  obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
-> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+> -	if (type == DEV_PM_QOS_RESUME_LATENCY) {
+> +	switch (type) {
+> +	case DEV_PM_QOS_RESUME_LATENCY:
+>  		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_RESUME_LATENCY_NO_CONSTRAINT
+>  			: pm_qos_read_value(&qos->resume_latency);
+> -	} else {
+> +		break;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE
+> +			: freq_qos_read_value(&qos->freq, FREQ_QOS_MIN);
+> +		break;
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
+> +			: freq_qos_read_value(&qos->freq, FREQ_QOS_MAX);
+> +		break;
+> +	default:
+>  		WARN_ON(1);
+>  		ret = 0;
+>  	}
 >  
->  ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
-> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
-> new file mode 100644
-> index 000000000000..3115db08d56b
-> --- /dev/null
-> +++ b/drivers/base/power/qos-test.c
-> @@ -0,0 +1,117 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 NXP
-> + */
-> +#include <kunit/test.h>
-> +#include <linux/pm_qos.h>
+>  	spin_unlock_irqrestore(&dev->power.lock, flags);
+> @@ -157,10 +167,14 @@ static int apply_constraint(struct dev_pm_qos_request *req,
+>  		if (ret) {
+>  			value = pm_qos_read_value(&qos->latency_tolerance);
+>  			req->dev->power.set_latency_tolerance(req->dev, value);
+>  		}
+>  		break;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		ret = freq_qos_apply(&req->data.freq, action, value);
+> +		break;
+>  	case DEV_PM_QOS_FLAGS:
+>  		ret = pm_qos_update_flags(&qos->flags, &req->data.flr,
+>  					  action, value);
+>  		break;
+>  	default:
+> @@ -207,10 +221,12 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
+>  	c->target_value = PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE;
+>  	c->default_value = PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE;
+>  	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
+>  	c->type = PM_QOS_MIN;
+>  
+> +	freq_constraints_init(&qos->freq);
 > +
-> +/* Basic test for aggregating two "min" requests */
-> +static void freq_qos_test_min(struct kunit *test)
-> +{
-> +	struct freq_constraints	qos;
-> +	struct freq_qos_request	req1, req2;
-> +	int ret;
+>  	INIT_LIST_HEAD(&qos->flags.list);
+>  
+>  	spin_lock_irq(&dev->power.lock);
+>  	dev->power.qos = qos;
+>  	spin_unlock_irq(&dev->power.lock);
+> @@ -267,10 +283,24 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
+>  	plist_for_each_entry_safe(req, tmp, &c->list, data.pnode) {
+>  		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+>  		memset(req, 0, sizeof(*req));
+>  	}
+>  
+> +	c = &qos->freq.min_freq;
+> +	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
+> +		apply_constraint(req, PM_QOS_REMOVE_REQ,
+> +				 PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE);
+> +		memset(req, 0, sizeof(*req));
+> +	}
 > +
-> +	freq_constraints_init(&qos);
-> +	memset(&req1, 0, sizeof(req1));
-> +	memset(&req2, 0, sizeof(req2));
+> +	c = &qos->freq.max_freq;
+> +	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
+> +		apply_constraint(req, PM_QOS_REMOVE_REQ,
+> +				 PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+> +		memset(req, 0, sizeof(*req));
+> +	}
 > +
-> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
-> +
-> +	ret = freq_qos_remove_request(&req2);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
-> +
-> +	ret = freq_qos_remove_request(&req1);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
-> +			FREQ_QOS_MIN_DEFAULT_VALUE);
-> +}
-> +
-> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */
-> +static void freq_qos_test_maxdef(struct kunit *test)
-> +{
-> +	struct freq_constraints	qos;
-> +	struct freq_qos_request	req1, req2;
-> +	int ret;
-> +
-> +	freq_constraints_init(&qos);
-> +	memset(&req1, 0, sizeof(req1));
-> +	memset(&req2, 0, sizeof(req2));
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +
-> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,
-> +			FREQ_QOS_MAX_DEFAULT_VALUE);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +	/* Add max 1000 */
-> +	ret = freq_qos_update_request(&req1, 1000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
-> +
-> +	/* Add max 2000, no impact */
-> +	ret = freq_qos_update_request(&req2, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
-> +
-> +	/* Remove max 1000, new max 2000 */
-> +	ret = freq_qos_remove_request(&req1);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);
 
-nit: this last part isn't really related with MAX_DEFAULT_VALUE. It's a
-worthwhile test, but not necessarily in this test case. It might make more sense
-to set one of the constraints to FREQ_QOS_MAX_DEFAULT_VALUE again, and verify it
-doesn't have an impact.
+nit: these loops look a bit redundant, might be worth to encapsulate them in a
+macro.
 
-Just a comment, there's nothing really wrong with how it is.
-
-> +}
+>  	f = &qos->flags;
+>  	list_for_each_entry_safe(req, tmp, &f->list, data.flr.node) {
+>  		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+>  		memset(req, 0, sizeof(*req));
+>  	}
+> @@ -312,15 +342,26 @@ static int __dev_pm_qos_add_request(struct device *dev,
+>  		ret = -ENODEV;
+>  	else if (!dev->power.qos)
+>  		ret = dev_pm_qos_constraints_allocate(dev);
+>  
+>  	trace_dev_pm_qos_add_request(dev_name(dev), type, value);
+> -	if (!ret) {
+> -		req->dev = dev;
+> -		req->type = type;
+> +	if (ret)
+> +		return ret;
 > +
-> +/*
-> + * Test that a freq_qos_request can be added again after removal
+> +	req->dev = dev;
+> +	req->type = type;
+> +	if (req->type == DEV_PM_QOS_MIN_FREQUENCY)
+> +		ret = freq_qos_add_request(&dev->power.qos->freq,
+> +					   &req->data.freq,
+> +					   FREQ_QOS_MIN, value);
+> +	else if (req->type == DEV_PM_QOS_MAX_FREQUENCY)
+> +		ret = freq_qos_add_request(&dev->power.qos->freq,
+> +					   &req->data.freq,
+> +					   FREQ_QOS_MAX, value);
+> +	else
+>  		ret = apply_constraint(req, PM_QOS_ADD_REQ, value);
+> -	}
+> +
+>  	return ret;
+>  }
+>  
+>  /**
+>   * dev_pm_qos_add_request - inserts new qos request into the list
+> @@ -380,10 +421,14 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
+>  	switch(req->type) {
+>  	case DEV_PM_QOS_RESUME_LATENCY:
+>  	case DEV_PM_QOS_LATENCY_TOLERANCE:
+>  		curr_value = req->data.pnode.prio;
+>  		break;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		curr_value = req->data.freq.pnode.prio;
+> +		break;
+>  	case DEV_PM_QOS_FLAGS:
+>  		curr_value = req->data.flr.flags;
+>  		break;
+>  	default:
+>  		return -EINVAL;
+> @@ -505,10 +550,18 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
+>  	switch (type) {
+>  	case DEV_PM_QOS_RESUME_LATENCY:
+>  		ret = blocking_notifier_chain_register(dev->power.qos->resume_latency.notifiers,
+>  						       notifier);
+>  		break;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +		ret = freq_qos_add_notifier(&dev->power.qos->freq,
+> +					    FREQ_QOS_MIN, notifier);
+> +		break;
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		ret = freq_qos_add_notifier(&dev->power.qos->freq,
+> +					    FREQ_QOS_MAX, notifier);
+> +		break;
+>  	default:
+>  		WARN_ON(1);
+>  		ret = -EINVAL;
+>  	}
+>  
+> @@ -544,10 +597,18 @@ int dev_pm_qos_remove_notifier(struct device *dev,
+>  	switch (type) {
+>  	case DEV_PM_QOS_RESUME_LATENCY:
+>  		ret = blocking_notifier_chain_unregister(dev->power.qos->resume_latency.notifiers,
+>  							 notifier);
+>  		break;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +		ret = freq_qos_remove_notifier(&dev->power.qos->freq,
+> +					       FREQ_QOS_MIN, notifier);
+> +		break;
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		ret = freq_qos_remove_notifier(&dev->power.qos->freq,
+> +					       FREQ_QOS_MAX, notifier);
+> +		break;
+>  	default:
+>  		WARN_ON(1);
+>  		ret = -EINVAL;
+>  	}
+>  
+> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+> index 678fec6da5b9..19eafca5680e 100644
+> --- a/include/linux/pm_qos.h
+> +++ b/include/linux/pm_qos.h
+> @@ -32,10 +32,12 @@ enum pm_qos_flags_status {
+>  #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
+>  #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
+>  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
+>  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
+>  #define PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE	0
+> +#define PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE	0
+> +#define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE	FREQ_QOS_MAX_DEFAULT_VALUE
+>  #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
+>  
+>  #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
+>  
+>  struct pm_qos_request {
+> @@ -99,25 +101,29 @@ struct freq_qos_request {
+>  
+>  
+>  enum dev_pm_qos_req_type {
+>  	DEV_PM_QOS_RESUME_LATENCY = 1,
+>  	DEV_PM_QOS_LATENCY_TOLERANCE,
+> +	DEV_PM_QOS_MIN_FREQUENCY,
+> +	DEV_PM_QOS_MAX_FREQUENCY,
+>  	DEV_PM_QOS_FLAGS,
+>  };
+>  
+>  struct dev_pm_qos_request {
+>  	enum dev_pm_qos_req_type type;
+>  	union {
+>  		struct plist_node pnode;
+>  		struct pm_qos_flags_request flr;
+> +		struct freq_qos_request freq;
+>  	} data;
+>  	struct device *dev;
+>  };
+>  
+>  struct dev_pm_qos {
+>  	struct pm_qos_constraints resume_latency;
+>  	struct pm_qos_constraints latency_tolerance;
+> +	struct freq_constraints freq;
+>  	struct pm_qos_flags flags;
+>  	struct dev_pm_qos_request *resume_latency_req;
+>  	struct dev_pm_qos_request *latency_tolerance_req;
+>  	struct dev_pm_qos_request *flags_req;
+>  };
+> @@ -212,10 +218,14 @@ static inline s32 dev_pm_qos_read_value(struct device *dev,
+>  					enum dev_pm_qos_req_type type)
+>  {
+>  	switch (type) {
+>  	case DEV_PM_QOS_RESUME_LATENCY:
+>  		return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+> +	case DEV_PM_QOS_MIN_FREQUENCY:
+> +		return PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
+> +	case DEV_PM_QOS_MAX_FREQUENCY:
+> +		return PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
+>  	default:
+>  		WARN_ON(1);
+>  		return 0;
+>  	}
+>  }
+> @@ -291,10 +301,12 @@ s32 freq_qos_read_value(struct freq_constraints *qos,
+>  int freq_qos_add_request(struct freq_constraints *qos,
+>  			 struct freq_qos_request *req,
+>  			 enum freq_qos_req_type type, s32 value);
+>  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value);
+>  int freq_qos_remove_request(struct freq_qos_request *req);
+> +int freq_qos_apply(struct freq_qos_request *req,
+> +		   enum pm_qos_req_action action, s32 value);
+>  
+>  int freq_qos_add_notifier(struct freq_constraints *qos,
+>  			  enum freq_qos_req_type type,
+>  			  struct notifier_block *notifier);
+>  int freq_qos_remove_notifier(struct freq_constraints *qos,
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index a45cba7df0ae..83edf8698118 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -712,12 +712,14 @@ s32 freq_qos_read_value(struct freq_constraints *qos,
+>  /**
+>   * freq_qos_apply - Add/modify/remove frequency QoS request.
+>   * @req: Constraint request to apply.
+>   * @action: Action to perform (add/update/remove).
+>   * @value: Value to assign to the QoS request.
 > + *
-> + * This issue was solved by commit 05ff1ba412fd ("PM: QoS: Invalidate frequency
-> + * QoS requests after removal")
-> + */
-> +static void freq_qos_test_readd(struct kunit *test)
-> +{
-> +	struct freq_constraints	qos;
-> +	struct freq_qos_request	req;
-> +	int ret;
-> +
-> +	freq_constraints_init(&qos);
-> +	memset(&req, 0, sizeof(req));
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
-> +			FREQ_QOS_MIN_DEFAULT_VALUE);
-
-nit: you could do this check once in a dedicated test and omit it
-in other tests to de-clutter
-
-> +
-> +	/* Add */
-> +	ret = freq_qos_add_request(&qos, &req, FREQ_QOS_MIN, 1000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
-
-similar here, this test validates re-adding, another dedicated test
-could verify once that the aggregate value is correct after adding a single
-request. Checking the return value still is sensible, just in case.
-
-I guess it can be argued either way, checking the values every time is
-extra-safe, omitting the checks reduces clutter and might help to make it
-clearer what the test really intends to verify.
-
-> +
-> +	/* Remove */
-> +	ret = freq_qos_remove_request(&req);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
-> +			FREQ_QOS_MIN_DEFAULT_VALUE);
-
-ditto
-
-> +	/* Add again */
-> +	ret = freq_qos_add_request(&qos, &req, FREQ_QOS_MIN, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 1);
-> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
-
-Here the explicit check makes sense, since we verify re-adding.
-
-Anyway, my comments are just about possible improvements, it's also fine
-as is:
+> + * This is only meant to be called from inside pm_qos, not drivers.
+>   */
+> -static int freq_qos_apply(struct freq_qos_request *req,
+> +int freq_qos_apply(struct freq_qos_request *req,
+>  			  enum pm_qos_req_action action, s32 value)
+>  {
+>  	int ret;
+>  
+>  	switch(req->type) {
 
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
