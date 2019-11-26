@@ -2,111 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE684109DBF
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 13:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB46F109E0E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 13:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727693AbfKZMSq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 07:18:46 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36489 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727615AbfKZMSp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 07:18:45 -0500
-Received: by mail-ot1-f65.google.com with SMTP id f10so15700345oto.3;
-        Tue, 26 Nov 2019 04:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GPjIoPKAdBU2rhij0XkCzvo+ahx+quTsSMqV7wK7Go4=;
-        b=kXH19YTYWBb/zAuzTG2D+tFgg9MZ74NGM3I9FEiCDfBIv4BipMdk0YtT7FQh0nx5du
-         5PsAvauJPiHo77O5deZ5/3NbsAg0+Gdmezpq8R3AStdJGmuATFgOVZok7YMKr9sqs8bm
-         HXUzJ+zkd2cmITUiWpjDt4aoRMoDG4XqMfmhVeppEEFlKLejOy8ykHb+qo0LUaA7+U1s
-         M+CvJ/EWC9H+Teu1OtUwbORx5axg9qB3wN8xa2iq7JvgnMsGc/itO705yS1BuWj/YNDJ
-         OhokstKZZ0/DL6vn1/DLgvxJ0tVhmUCiFP8sb881PmusrfoU0XCHQQcFCCDncHkUSvLB
-         UDxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GPjIoPKAdBU2rhij0XkCzvo+ahx+quTsSMqV7wK7Go4=;
-        b=OuiOdAB3QuTdKju8C9ULQ6Piio2kcFmVMxD6n7Yvns2JJzt7in5FBI2Y8plKeYIIXZ
-         D0lZbe7JERm35e83Zga8YWm9bDLUyaKVt+Dd5ZYcfA8zIjdhLSnDSDhEWrq5ktxZLSFT
-         WjAP/akxXkeAW/rP8wLy5Askc4rAyynt9QCRH04hT1CNCg+MYlnU5e2x5kx46a5v5fqj
-         sYJ4qanj9Stt1lxG2y8bmZ5Ptb1wl34zlkSQOa8Ko5UeEd4yGp5SXanpyY8rniW5XaMy
-         sv0WDlh+Ph9qmPwf360ahrzFyDoZguRJ1RfvDw1tpOukZux3+dyNTAD5rYQkY5cHGLSP
-         Uo8w==
-X-Gm-Message-State: APjAAAWYGWGsaGqoUdZ1dkbbiCvgjitPsMCe/NGo2asnyhY9aFaPExID
-        PNSchz1T/WbkiwUk2GSa9sc=
-X-Google-Smtp-Source: APXvYqz/ELJmUcs3pP92+oVmdlJk7E+Dzm6ctuvIFTGCxQmgLgtcI9qH8dxQ7s2bJR6TaZ355x0psQ==
-X-Received: by 2002:a9d:470f:: with SMTP id a15mr24541053otf.290.1574770724780;
-        Tue, 26 Nov 2019 04:18:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j8sm3567921otj.42.2019.11.26.04.18.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Nov 2019 04:18:43 -0800 (PST)
-Subject: Re: [PATCH v1 2/4] watchdog: populate reboot mode node in toprgu node
- of MTK RGU (Reset Generation Unit)
-To:     freddy.hsin@mediatek.com, sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        matthias.bgg@gmail.com, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, devicetree@vger.kernel.org
-Cc:     Chang-An.Chen@mediatek.com, wsd_upstream@mediatek.com
-References: <1574746490-625-1-git-send-email-freddy.hsin@mediatek.com>
- <1574746490-625-3-git-send-email-freddy.hsin@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ca66e52e-df80-388e-3018-7bf35aef5f43@roeck-us.net>
-Date:   Tue, 26 Nov 2019 04:18:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <1574746490-625-3-git-send-email-freddy.hsin@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1728548AbfKZMg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 07:36:28 -0500
+Received: from mail-eopbgr140071.outbound.protection.outlook.com ([40.107.14.71]:15681
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728538AbfKZMg1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Nov 2019 07:36:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jhjhHxnD7Nl86nWZDxthfgZXcyaeZU2vMdDu14V9n9DVlMYHJ3l5AIF2Vz8JT5FI7pYl1CxzFlobbhDwQQwCQ7M1uD6zUFbd6qUODOQBoo+17we8+o036MTyDYbCNdQrrWZajeoxlz/sngz0UpPmTlnfPDSisCltLTb5IKtpxUkoDh9FNaa3Lrqwz6hRwBauOi5ZRuLC5OL0wJiBWa7YQJryX7VA6fG/rMQl91Prl9f5qZq+TE2FadPsqnXjuHOLAssRzSwY75zUig+H7XbRMbK3gGbSyQWwuH1l5fhVmN6aJAhwCSuRAphzqz4rPne70F0rfh/Q/zHnar7Ut5mIBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
+ b=H+nWZi+/q1DS8vNRS5YBQ1NDnYYdd9cbDG/BOyimSLSFs3oALg6RslSUlfK94KqDWHWHMzTqyIW01ThAuXk5UTxjbPLXiE1k/f9LipY6aZlvxinuWxeda9HC8dF1l9qYNPKKlbvv46KSQYJvldKe00za57M4mQKKimxD6qW+ac9KSsvky+EI+Bf3jpPF+TzfXxYgQfbfC3DzYSCrN3eNcaP4gFFiCMjw0hAmUC38c2kBlmjZtsDZTzTri11gZvjeDjsM61U+iEW6vlAkbF6qTl5QpF1NaP33MpNgG2NXRQxvuDF88E26msvZYecAk2QUbVxRtd2rg8C2LocmbDdO1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
+ b=f/p5RQM+/WfWsf4znCgNESz7u0VDE40NxK4rTA8AwERoY8StzJKhUbWbYBxGiWO82LL0jjYBgmlbqPG+ODjuyYXEchnuDbTe3p6jEAnIOe/dzlUdRkUB3U9f2KuEdSfdSqSwUbhUqEFuoL9qBqBNVBpClUE6MrJ5GBkizrTd4+Y=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB4672.eurprd04.prod.outlook.com (20.177.53.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.16; Tue, 26 Nov 2019 12:36:23 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2474.023; Tue, 26 Nov 2019
+ 12:36:23 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
+Thread-Topic: [PATCH v3 1/4] PM / QoS: Initial kunit test
+Thread-Index: AQHVo69Vkiab2WNf8Uavz0kAKoCkHQ==
+Date:   Tue, 26 Nov 2019 12:36:23 +0000
+Message-ID: <VI1PR04MB7023D1F8F0085897E55BC084EE450@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
+ <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
+ <20191125201959.GA228856@google.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [212.146.100.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 01867fed-531e-452f-96f6-08d7726d3f7a
+x-ms-traffictypediagnostic: VI1PR04MB4672:|VI1PR04MB4672:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4672596E0091A31881F4C1C3EE450@VI1PR04MB4672.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0233768B38
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(6246003)(33656002)(6506007)(6916009)(9686003)(478600001)(86362001)(25786009)(44832011)(74316002)(186003)(7696005)(102836004)(4326008)(4001150100001)(55016002)(76176011)(305945005)(7736002)(53546011)(71190400001)(71200400001)(66476007)(2906002)(66446008)(5660300002)(52536014)(54906003)(7416002)(8936002)(81166006)(81156014)(76116006)(66946007)(91956017)(6116002)(6436002)(14454004)(229853002)(99286004)(3846002)(446003)(66066001)(316002)(14444005)(8676002)(26005)(256004)(64756008)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4672;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BBLc9RgLUP8fD0yNIomOJ5IlfD6hTX71WXDGYqiZtU2hOojBwfUlY2htYHMp3uDjLGaiP0Yw19DN9h20BYfqNsQ2M+g2XYyuYkrdnZLas88Cbo+F8Km4/srex0dktacVqn8qS9/GH6W6mtblrqLxjp45DNSg2+4097W/Ez87BHwpUHRrvytJROS50K0kLbX0H52dDEqqao5RZtkICJKYaZS8M2vwJuosUj5plBroprzWGhwhakHtJ81A9Pm6S9/w05o6Fmqr+4riUnQHwazpQBlWa9gnrRumQSguYVFaVTgQFDTytJxkdkSEJeYYd25LVkavq/Tik6LBFQAg7VruJ1mcuWF5Z8i6zbQBQbqQGx5wXV83lxOMqLY9TOdXRBvs2VQEA0OZ6ZnUqYEcM2M85YwVagiQVKqmzx+yYH5jZ4cgvG+H2U2TJkeqhfaY9nt8
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01867fed-531e-452f-96f6-08d7726d3f7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Nov 2019 12:36:23.4600
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2YElGOdlTVR0I+9gYMWuIgJ4Zjk76qjG2T3JB1koaMAbHW4dS89U2j2VDeNLYmTwX7SHmcXfdk1sR0YmPrHzhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4672
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/25/19 9:34 PM, freddy.hsin@mediatek.com wrote:
-> From: Freddy Hsin <freddy.hsin@mediatek.com>
-> 
-> of_platform_population should be added in the probe function of
-> toprgu driver, or the reboot mode driver will not be probed
-> 
-> Signed-off-by: Freddy Hsin <freddy.hsin@mediatek.com>
-> ---
->   drivers/watchdog/mtk_wdt.c |    3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 9c3d003..2fb2614 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -20,6 +20,7 @@
->   #include <linux/types.h>
->   #include <linux/watchdog.h>
->   #include <linux/delay.h>
-> +#include <linux/of_platform.h>
->   
->   #define WDT_MAX_TIMEOUT		31
->   #define WDT_MIN_TIMEOUT		1
-> @@ -167,6 +168,8 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->   	if (IS_ERR(mtk_wdt->wdt_base))
->   		return PTR_ERR(mtk_wdt->wdt_base);
->   
-> +	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
-> +
-
-This seems just wrong. Such a driver should not be a child of the watchdog driver.
-
-Guenter
-
->   	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
->   	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
->   	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
-> 
-
+On 2019-11-25 10:20 PM, Matthias Kaehlcke wrote:=0A=
+> On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:=0A=
+>> The pm_qos family of APIs are used in relatively difficult to reproduce=
+=0A=
+>> scenarios such as thermal throttling so they benefit from unit testing.=
+=0A=
+> =0A=
+> indeed, a unit test is useful in this case!=0A=
+> =0A=
+>> Start by adding basic tests from the the freq_qos APIs. It includes=0A=
+>> tests for issues that were brought up on mailing lists:=0A=
+=0A=
+>> +/* Basic test for aggregating two "min" requests */=0A=
+>> +static void freq_qos_test_min(struct kunit *test)=0A=
+>> +{=0A=
+>> +	struct freq_constraints	qos;=0A=
+>> +	struct freq_qos_request	req1, req2;=0A=
+>> +	int ret;=0A=
+>> +=0A=
+>> +	freq_constraints_init(&qos);=0A=
+>> +	memset(&req1, 0, sizeof(req1));=0A=
+>> +	memset(&req2, 0, sizeof(req2));=0A=
+>> +=0A=
+>> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+>> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+>> +=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);=
+=0A=
+>> +=0A=
+>> +	freq_qos_remove_request(&req2);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+> =0A=
+> This checks (again) the return value of the above freq_qos_add_request() =
+call,=0A=
+> which I suppose is not intended. Remove?=0A=
+=0A=
+Should check the return value from freq_qos_remove_request=0A=
+=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);=
+=0A=
+>> +=0A=
+>> +	freq_qos_remove_request(&req1);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+> =0A=
+> ditto=0A=
+> =0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),=0A=
+>> +			FREQ_QOS_MIN_DEFAULT_VALUE);=0A=
+>> +}=0A=
+>> +=0A=
+>> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */=0A=
+>> +static void freq_qos_test_maxdef(struct kunit *test)=0A=
+>> +{=0A=
+>> +	struct freq_constraints	qos;=0A=
+>> +	struct freq_qos_request	req1, req2;=0A=
+>> +	int ret;=0A=
+>> +=0A=
+>> +	freq_constraints_init(&qos);=0A=
+>> +	memset(&req1, 0, sizeof(req1));=0A=
+>> +	memset(&req2, 0, sizeof(req2));=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),=0A=
+>> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
+>> +=0A=
+>> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,=0A=
+>> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
+>> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,=0A=
+>> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
+>> +=0A=
+>> +	/* Add max 1000 */=0A=
+>> +	ret =3D freq_qos_update_request(&req1, 1000);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
+=0A=
+>> +=0A=
+>> +	/* Add max 2000, no impact */=0A=
+>> +	ret =3D freq_qos_update_request(&req2, 2000);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
+=0A=
+>> +=0A=
+>> +	/* Remove max 2000, new max 1000 */=0A=
+> =0A=
+> the code doesn't match the comment, max 1000 is removed=0A=
+=0A=
+Fixed=0A=
+=0A=
+>> +	ret =3D freq_qos_remove_request(&req1);=0A=
+>> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
+>> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);=
+=0A=
+>> +}=0A=
+>> +=0A=
+>> +/*=0A=
+>> + * Test that a freq_qos_request can be readded after removal=0A=
+> =0A=
+> nit: 're-added'. It took me a few secs to figure this is not a about=0A=
+> 'read'ing something=0A=
+=0A=
+Both re-add and readd seem to be valid, I'll change to "added again".=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
