@@ -2,331 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1893710A112
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 16:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FA910A102
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 16:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728427AbfKZPRY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 10:17:24 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:55238 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728428AbfKZPRY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Nov 2019 10:17:24 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2159E1A0624;
-        Tue, 26 Nov 2019 16:17:22 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 13F891A005A;
-        Tue, 26 Nov 2019 16:17:22 +0100 (CET)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 83A3720507;
-        Tue, 26 Nov 2019 16:17:21 +0100 (CET)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-pm@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH v4 4/4] PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
-Date:   Tue, 26 Nov 2019 17:17:13 +0200
-Message-Id: <44cfaddb5be6403f687a0e56e57f17925b9a521b.1574781196.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1574781196.git.leonard.crestez@nxp.com>
-References: <cover.1574781196.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1574781196.git.leonard.crestez@nxp.com>
-References: <cover.1574781196.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728359AbfKZPOU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 10:14:20 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58184 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728078AbfKZPOU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Nov 2019 10:14:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 1E196B9ED;
+        Tue, 26 Nov 2019 15:14:18 +0000 (UTC)
+Message-ID: <1574781600.7677.2.camel@suse.cz>
+Subject: Re: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Doug Smythies <dsmythies@telus.net>,
+        'Srinivas Pandruvada' <srinivas.pandruvada@linux.intel.com>,
+        'Thomas Gleixner' <tglx@linutronix.de>,
+        'Ingo Molnar' <mingo@redhat.com>,
+        'Peter Zijlstra' <peterz@infradead.org>,
+        'Borislav Petkov' <bp@suse.de>, 'Len Brown' <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        'Mel Gorman' <mgorman@techsingularity.net>,
+        'Matt Fleming' <matt@codeblueprint.co.uk>,
+        'Viresh Kumar' <viresh.kumar@linaro.org>,
+        'Juri Lelli' <juri.lelli@redhat.com>,
+        'Paul Turner' <pjt@google.com>,
+        'Vincent Guittot' <vincent.guittot@linaro.org>,
+        'Quentin Perret' <qperret@qperret.net>,
+        'Dietmar Eggemann' <dietmar.eggemann@arm.com>
+Date:   Tue, 26 Nov 2019 16:20:00 +0100
+In-Reply-To: <000801d5a41e$a7fce2c0$f7f6a840$@net>
+References: <20191113124654.18122-1-ggherdovich@suse.cz>
+                 <20191113124654.18122-2-ggherdovich@suse.cz>
+                 <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz>
+         <000801d5a41e$a7fce2c0$f7f6a840$@net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Support for adding per-device frequency limits was removed in
-commit 2aac8bdf7a0f ("PM: QoS: Drop frequency QoS types from device PM QoS")
-after cpufreq switched to use a new "freq_constraints" construct.
+On Mon, 2019-11-25 at 21:59 -0800, Doug Smythies wrote:
+> [...]
+> The issue with the schedutil governor not working properly in the 5.4 RC series
+> appears to be hardware dependant.
+> 
+> My test computer is Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz., Sandy Bridge.
+> On a temporary basis, I acquired a computer with an
+> Intel(R) Core(TM) i5-4460 CPU @ 3.20GHz, Haswell,
+> and schedutil governor behaviour with the exact same kernels is fine:
+> 
+> That "gitsource" test, "make test" 6 times, first run thrown out:
+> 
+> Kernel 5.4 intel_cpufreq/schedutil: 3411.8 seconds
+> Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 1696.7 seconds
+> Ratio: 0.49
+> Recall you got a ratio of 0.49 with 5th generation, Broadwell.
 
-Restore support for per-device freq limits but base this upon
-freq_constraints. This is primarily meant to be used by the devfreq
-subsystem.
+It's good to hear that we're getting the same performance numbers for this
+patchset on all hardware that is not a Sandy Bridge. Thanks for double
+checking, independent verification is always valuable.
 
-This removes the "static" marking on freq_qos_apply but does not export
-it for modules.
+Now, regarding the 5.4 regression for schedutil you see on Sandy Bridge: can
+we move this to the kernel bugzilla? Would you care to open a bug there and CC
+me to it? If it's reproducible we should assess it and see what can be done.
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- drivers/base/power/qos.c | 73 ++++++++++++++++++++++++++++++++++++----
- include/linux/pm_qos.h   | 12 +++++++
- kernel/power/qos.c       |  4 ++-
- 3 files changed, 82 insertions(+), 7 deletions(-)
+I've tried gitsource on 5.3 versus 5.4, using intel_cpufreq + schedutil; I
+don't see the drop you're observing, but I don't have a Sandy Bridge readily
+available. This is what I see:
 
-diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-index 350dcafd751f..8e93167f1783 100644
---- a/drivers/base/power/qos.c
-+++ b/drivers/base/power/qos.c
-@@ -113,14 +113,24 @@ s32 dev_pm_qos_read_value(struct device *dev, enum dev_pm_qos_req_type type)
- 	unsigned long flags;
- 	s32 ret;
- 
- 	spin_lock_irqsave(&dev->power.lock, flags);
- 
--	if (type == DEV_PM_QOS_RESUME_LATENCY) {
-+	switch (type) {
-+	case DEV_PM_QOS_RESUME_LATENCY:
- 		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_RESUME_LATENCY_NO_CONSTRAINT
- 			: pm_qos_read_value(&qos->resume_latency);
--	} else {
-+		break;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE
-+			: freq_qos_read_value(&qos->freq, FREQ_QOS_MIN);
-+		break;
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
-+			: freq_qos_read_value(&qos->freq, FREQ_QOS_MAX);
-+		break;
-+	default:
- 		WARN_ON(1);
- 		ret = 0;
- 	}
- 
- 	spin_unlock_irqrestore(&dev->power.lock, flags);
-@@ -157,10 +167,14 @@ static int apply_constraint(struct dev_pm_qos_request *req,
- 		if (ret) {
- 			value = pm_qos_read_value(&qos->latency_tolerance);
- 			req->dev->power.set_latency_tolerance(req->dev, value);
- 		}
- 		break;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		ret = freq_qos_apply(&req->data.freq, action, value);
-+		break;
- 	case DEV_PM_QOS_FLAGS:
- 		ret = pm_qos_update_flags(&qos->flags, &req->data.flr,
- 					  action, value);
- 		break;
- 	default:
-@@ -207,10 +221,12 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
- 	c->target_value = PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE;
- 	c->default_value = PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE;
- 	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
- 	c->type = PM_QOS_MIN;
- 
-+	freq_constraints_init(&qos->freq);
-+
- 	INIT_LIST_HEAD(&qos->flags.list);
- 
- 	spin_lock_irq(&dev->power.lock);
- 	dev->power.qos = qos;
- 	spin_unlock_irq(&dev->power.lock);
-@@ -267,10 +283,24 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
- 	plist_for_each_entry_safe(req, tmp, &c->list, data.pnode) {
- 		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
- 		memset(req, 0, sizeof(*req));
- 	}
- 
-+	c = &qos->freq.min_freq;
-+	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-+		apply_constraint(req, PM_QOS_REMOVE_REQ,
-+				 PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE);
-+		memset(req, 0, sizeof(*req));
-+	}
-+
-+	c = &qos->freq.max_freq;
-+	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-+		apply_constraint(req, PM_QOS_REMOVE_REQ,
-+				 PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-+		memset(req, 0, sizeof(*req));
-+	}
-+
- 	f = &qos->flags;
- 	list_for_each_entry_safe(req, tmp, &f->list, data.flr.node) {
- 		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
- 		memset(req, 0, sizeof(*req));
- 	}
-@@ -312,15 +342,26 @@ static int __dev_pm_qos_add_request(struct device *dev,
- 		ret = -ENODEV;
- 	else if (!dev->power.qos)
- 		ret = dev_pm_qos_constraints_allocate(dev);
- 
- 	trace_dev_pm_qos_add_request(dev_name(dev), type, value);
--	if (!ret) {
--		req->dev = dev;
--		req->type = type;
-+	if (ret)
-+		return ret;
-+
-+	req->dev = dev;
-+	req->type = type;
-+	if (req->type == DEV_PM_QOS_MIN_FREQUENCY)
-+		ret = freq_qos_add_request(&dev->power.qos->freq,
-+					   &req->data.freq,
-+					   FREQ_QOS_MIN, value);
-+	else if (req->type == DEV_PM_QOS_MAX_FREQUENCY)
-+		ret = freq_qos_add_request(&dev->power.qos->freq,
-+					   &req->data.freq,
-+					   FREQ_QOS_MAX, value);
-+	else
- 		ret = apply_constraint(req, PM_QOS_ADD_REQ, value);
--	}
-+
- 	return ret;
- }
- 
- /**
-  * dev_pm_qos_add_request - inserts new qos request into the list
-@@ -380,10 +421,14 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
- 	switch(req->type) {
- 	case DEV_PM_QOS_RESUME_LATENCY:
- 	case DEV_PM_QOS_LATENCY_TOLERANCE:
- 		curr_value = req->data.pnode.prio;
- 		break;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		curr_value = req->data.freq.pnode.prio;
-+		break;
- 	case DEV_PM_QOS_FLAGS:
- 		curr_value = req->data.flr.flags;
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -505,10 +550,18 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
- 	switch (type) {
- 	case DEV_PM_QOS_RESUME_LATENCY:
- 		ret = blocking_notifier_chain_register(dev->power.qos->resume_latency.notifiers,
- 						       notifier);
- 		break;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+		ret = freq_qos_add_notifier(&dev->power.qos->freq,
-+					    FREQ_QOS_MIN, notifier);
-+		break;
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		ret = freq_qos_add_notifier(&dev->power.qos->freq,
-+					    FREQ_QOS_MAX, notifier);
-+		break;
- 	default:
- 		WARN_ON(1);
- 		ret = -EINVAL;
- 	}
- 
-@@ -544,10 +597,18 @@ int dev_pm_qos_remove_notifier(struct device *dev,
- 	switch (type) {
- 	case DEV_PM_QOS_RESUME_LATENCY:
- 		ret = blocking_notifier_chain_unregister(dev->power.qos->resume_latency.notifiers,
- 							 notifier);
- 		break;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+		ret = freq_qos_remove_notifier(&dev->power.qos->freq,
-+					       FREQ_QOS_MIN, notifier);
-+		break;
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		ret = freq_qos_remove_notifier(&dev->power.qos->freq,
-+					       FREQ_QOS_MAX, notifier);
-+		break;
- 	default:
- 		WARN_ON(1);
- 		ret = -EINVAL;
- 	}
- 
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 678fec6da5b9..19eafca5680e 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -32,10 +32,12 @@ enum pm_qos_flags_status {
- #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
- #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
- #define PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE	0
-+#define PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE	0
-+#define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE	FREQ_QOS_MAX_DEFAULT_VALUE
- #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
- 
- #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
- 
- struct pm_qos_request {
-@@ -99,25 +101,29 @@ struct freq_qos_request {
- 
- 
- enum dev_pm_qos_req_type {
- 	DEV_PM_QOS_RESUME_LATENCY = 1,
- 	DEV_PM_QOS_LATENCY_TOLERANCE,
-+	DEV_PM_QOS_MIN_FREQUENCY,
-+	DEV_PM_QOS_MAX_FREQUENCY,
- 	DEV_PM_QOS_FLAGS,
- };
- 
- struct dev_pm_qos_request {
- 	enum dev_pm_qos_req_type type;
- 	union {
- 		struct plist_node pnode;
- 		struct pm_qos_flags_request flr;
-+		struct freq_qos_request freq;
- 	} data;
- 	struct device *dev;
- };
- 
- struct dev_pm_qos {
- 	struct pm_qos_constraints resume_latency;
- 	struct pm_qos_constraints latency_tolerance;
-+	struct freq_constraints freq;
- 	struct pm_qos_flags flags;
- 	struct dev_pm_qos_request *resume_latency_req;
- 	struct dev_pm_qos_request *latency_tolerance_req;
- 	struct dev_pm_qos_request *flags_req;
- };
-@@ -212,10 +218,14 @@ static inline s32 dev_pm_qos_read_value(struct device *dev,
- 					enum dev_pm_qos_req_type type)
- {
- 	switch (type) {
- 	case DEV_PM_QOS_RESUME_LATENCY:
- 		return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+		return PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		return PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
- 	default:
- 		WARN_ON(1);
- 		return 0;
- 	}
- }
-@@ -291,10 +301,12 @@ s32 freq_qos_read_value(struct freq_constraints *qos,
- int freq_qos_add_request(struct freq_constraints *qos,
- 			 struct freq_qos_request *req,
- 			 enum freq_qos_req_type type, s32 value);
- int freq_qos_update_request(struct freq_qos_request *req, s32 new_value);
- int freq_qos_remove_request(struct freq_qos_request *req);
-+int freq_qos_apply(struct freq_qos_request *req,
-+		   enum pm_qos_req_action action, s32 value);
- 
- int freq_qos_add_notifier(struct freq_constraints *qos,
- 			  enum freq_qos_req_type type,
- 			  struct notifier_block *notifier);
- int freq_qos_remove_notifier(struct freq_constraints *qos,
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index a45cba7df0ae..83edf8698118 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -712,12 +712,14 @@ s32 freq_qos_read_value(struct freq_constraints *qos,
- /**
-  * freq_qos_apply - Add/modify/remove frequency QoS request.
-  * @req: Constraint request to apply.
-  * @action: Action to perform (add/update/remove).
-  * @value: Value to assign to the QoS request.
-+ *
-+ * This is only meant to be called from inside pm_qos, not drivers.
-  */
--static int freq_qos_apply(struct freq_qos_request *req,
-+int freq_qos_apply(struct freq_qos_request *req,
- 			  enum pm_qos_req_action action, s32 value)
- {
- 	int ret;
- 
- 	switch(req->type) {
--- 
-2.17.1
+Arithmetic mean of elapsed time for gitsource over 5 iterations (seconds):
 
+    microarch         v5.3 (baseline)                             v5.4
+    ------------------------------------------------------------------
+    Haswell         1337.84  +- 0.11%     1336.35  +- 0.12% (   0.11%)
+    Broadwell       1335.42  +- 0.08%     1352.54  +- 0.03% (  -1.28%)
+    Skylake          887.03  +- 1.02%      870.90  +- 1.19% (   1.82%)
+
+I'm looking around for a Sandy Bridge but I can make no promises at the
+moment.
+
+
+Thanks,
+Giovanni
