@@ -2,145 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B85C710A49E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 20:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07F810A4AE
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 20:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbfKZTfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 14:35:55 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34686 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbfKZTfz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 14:35:55 -0500
-Received: by mail-ot1-f68.google.com with SMTP id w11so17006733ote.1;
-        Tue, 26 Nov 2019 11:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=HT2M1Xfv+tvpjG1ucYQkF2fvfzcdx/n3wzuhyYktctM=;
-        b=JOLm1AXku5RalOJtjRieB/kQKtK0udRdscDeEXxH1KAHd/fYWGsjz4xkUcLdpDNU4L
-         3LF5fe0fVVNNP+dspxrYrGnLoyux4FgkHnDl0YpGt74hEHT9r9fZ5SLTycjn5+fy07Lk
-         uq/Bkwg4bYsgKll9SLSzdzC1rkiciuWzGekJqBGenTIabcP8aqXBMUgPtuU1zOvRo6Iy
-         jg/61mts1Vg1P41pVsgPAVb+vVUfGFy+4WeI0e+EFwSdLoATYfQHsd+3/aR5alvw3+XX
-         Q0NpGmPM1EXKaiGqf9+ZtKOC735yL/I9wWudIFHWCSHwQqgLZhGZ1Y7V1blYW8MXGocZ
-         ZPyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=HT2M1Xfv+tvpjG1ucYQkF2fvfzcdx/n3wzuhyYktctM=;
-        b=cVuTbMj6s67HZHDKOvZ76HuKR08hMMA5nezvzq1WGi29TVQw4Oj3eHwt2M0fBQpzFJ
-         15Lh2WDo/BikQrft/s/ifq9qNB//50P/k5+POgpnAI/QWhkGbNkXgokB4sttgWStAnjO
-         53EFVJlJu4HzWWqYIiUeCiqgKKjTzOTMztFqgZ0IUiySJL4ahrJXuqelSYv1P8BTyQof
-         GGLx7fCOZBJMHAfct/fWNSJR4wPHQFb5FwCccy3SKWAIDE3TpWGrY8fEHV7V7qWl0lsM
-         xaQrmvQPR+OndBGsIhTTut4Tfhrux4k7MPckWRf0+62il9zpZaaYF5LZ7tmIYqQ6kK9A
-         Cndg==
-X-Gm-Message-State: APjAAAU19FacvlrlpALAxZwA1A2D9HdYrgoG4qNqIc0sL/sRNy2iPh2Q
-        bRKnPneV1sYqmHxk8SK9OEWOu6mUK1DBsrnQaN8=
-X-Google-Smtp-Source: APXvYqxwy2YH1zXRvoLZhDl2LwHUaPWwfU4ZwllfPWEY5VmEMkXSvMDIFkZLaOj3kJ+NneohsrgZgOhpJ7pdvQg1LaY=
-X-Received: by 2002:a9d:64ce:: with SMTP id n14mr472946otl.263.1574796954091;
- Tue, 26 Nov 2019 11:35:54 -0800 (PST)
+        id S1726072AbfKZToZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 14:44:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40042 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726049AbfKZToZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 Nov 2019 14:44:25 -0500
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E94B20874;
+        Tue, 26 Nov 2019 19:44:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574797464;
+        bh=um1j8Y/GaUsZ1q4T+Tiu5+4Kgs2yzoDg2ThT8cprhsY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=s2DzKRlGMlFyXboS3+ux6a+0J9Jj4ZZ2Ta/XPxcn/LL1zm9tGpoJ2knRLRxeO9UKm
+         7aSAdRg7u09+FNjsPT5WPuvb++5joBKHq8TQWRJVlfwsW0unmURJhcf+tUm4vCnOhA
+         45eqetRrjwiY4T6IizY/TnfK/dpZyfJ+ZiETfYLc=
+Received: by mail-qk1-f176.google.com with SMTP id c124so12823712qkg.0;
+        Tue, 26 Nov 2019 11:44:24 -0800 (PST)
+X-Gm-Message-State: APjAAAXGW1IjEtN2Z7mcpfuM0sbVat53CSxW58Gj6IejL6ARLRc4vglm
+        nq3t9KV0yZ4GPdiXNZl/E2EqbwIjNnsvqwIp/A==
+X-Google-Smtp-Source: APXvYqwtMCX2ktU7XP1vLiDif7HsVDYIGE5gPdIX/yIa4O+B0IDcNylxr73NToCcb42qbcuGNjawEioJubJ0X61Ew5M=
+X-Received: by 2002:a05:620a:1eb:: with SMTP id x11mr115675qkn.254.1574797463436;
+ Tue, 26 Nov 2019 11:44:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20190810052829.6032-1-tiny.windzz@gmail.com> <20190901215214.f4vbxemdd7mf3gun@core.my.home>
- <20190902072735.zkrueocyz4glc26n@flea> <20190902105816.zurkkh2vjfexft7t@core.my.home>
-In-Reply-To: <20190902105816.zurkkh2vjfexft7t@core.my.home>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Tue, 26 Nov 2019 11:36:37 -0800
-Message-ID: <CA+E=qVdzHGZsazfeZYBA2YZBZv_rSpk7NsV5wbiAFH80cjxajQ@mail.gmail.com>
-Subject: Re: [PATCH v5 00/18] add thermal driver for h6
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <cover.1574458460.git.leonard.crestez@nxp.com> <CGME20191122214539epcas1p34d4ca24634642e8a79c33d7a7c9291ba@epcas1p3.samsung.com>
+ <c0b332b85560e39d7dbb5e88b99bbed1d1b32373.1574458460.git.leonard.crestez@nxp.com>
+ <f8838bc8-44db-551f-3199-eeea91e493f7@samsung.com>
+In-Reply-To: <f8838bc8-44db-551f-3199-eeea91e493f7@samsung.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 26 Nov 2019 12:44:12 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqJmZUVmM9BqQuD1npJ7Nqsh07CSEA5nB9-pt0v_X6HQCA@mail.gmail.com>
+Message-ID: <CAL_JsqJmZUVmM9BqQuD1npJ7Nqsh07CSEA5nB9-pt0v_X6HQCA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] PM / devfreq: Add dynamic scaling for imx8m ddr controller
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan.Cameron@huawei.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Michael Turquette <mturquette@baylibre.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        devicetree@vger.kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 2, 2019 at 3:58 AM Ond=C5=99ej Jirman <megous@megous.com> wrote=
-:
+On Sun, Nov 24, 2019 at 4:53 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
 >
-> Hello Maxime,
+> Hi Leonard,
 >
-> On Mon, Sep 02, 2019 at 09:27:35AM +0200, Maxime Ripard wrote:
-> > Hi,
+> On 11/23/19 6:45 AM, Leonard Crestez wrote:
+> > Add driver for dynamic scaling the DDR Controller on imx8m chips. Actual
+> > frequency switching is implemented inside TF-A, this driver wraps the
+> > SMC calls and synchronizes the clk tree.
 > >
-> > On Sun, Sep 01, 2019 at 11:52:14PM +0200, Ond=C5=99ej Jirman wrote:
-> > > Hello Yangtao,
-> > >
-> > > On Sat, Aug 10, 2019 at 05:28:11AM +0000, Yangtao Li wrote:
-> > > > This patchset add support for A64, H3, H5, H6 and R40 thermal senso=
-r.
-> > > >
-> > > > Thx to Icenowy and Vasily.
-> > > >
-> > > > BTY, do a cleanup in thermal makfile.
-
-Hey Yangtao,
-
-Are there any plans for v6?
-
-Regards,
-Vasily
-
-> > > I've added support for A83T and also some cleanups, according to my
-> > > feedback:
-> > >
-> > > https://megous.com/git/linux/log/?h=3Dths-5.3
-> > >
-> > > Feel free to pick up whatever you like from that tree.
-> > >
-> > > For others, there are also DTS patches in that tree for H3, H5, A83T,=
- and H6, so
-> > > that shoul make testing of this driver easier.
+> > The DRAM clocks on imx8m have the following structure (abridged):
 > >
-> > I'm not convinced that always expanding the number of SoC supported is
-> > the best strategy to get this merged. Usually, keeping the same
-> > feature set across version, consolidating that, and then once it's in
-> > sending the new SoC support works best.
->
-> That's fine and all, but I've mostly added DT descriptions for already su=
-pported
-> SoCs and fixed bugs in the driver, so that people can actually test the e=
-xisting
-> driver.
->
-> I think adding DT changes will actually help get needed exposure for this
-> patch series.
->
-> A83T support that I added, was actually just a small change to the driver=
-.
->
-> regards,
->         o.
->
-> > Maxime
+> >  +----------+       |\            +------+
+> >  | dram_pll |-------|M| dram_core |      |
+> >  +----------+       |U|---------->| D    |
+> >                  /--|X|           |  D   |
+> >    dram_alt_root |  |/            |   R  |
+> >                  |                |    C |
+> >             +---------+           |      |
+> >             |FIX DIV/4|           |      |
+> >             +---------+           |      |
+> >   composite:     |                |      |
+> >  +----------+    |                |      |
+> >  | dram_alt |----/                |      |
+> >  +----------+                     |      |
+> >  | dram_apb |-------------------->|      |
+> >  +----------+                     +------+
 > >
-> > --
-> > Maxime Ripard, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+> > The dram_pll is used for higher rates and dram_alt is used for lower
+> > rates. The dram_alt and dram_apb clocks are "imx composite" and their
+> > parent can also be modified.
 > >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> > This driver will prepare/enable the new parents ahead of switching (so
+> > that the expected roots are enabled) and afterwards it will call
+> > clk_set_parent to ensure the parents in clock framework are up-to-date.
+> >
+> > The driver relies on dram_pll dram_alt and dram_apb being marked with
+> > CLK_GET_RATE_NOCACHE for rate updates.
+> >
+> > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > ---
+> >  drivers/devfreq/Kconfig      |   9 +
+> >  drivers/devfreq/Makefile     |   1 +
+> >  drivers/devfreq/imx8m-ddrc.c | 465 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 475 insertions(+)
+> >  create mode 100644 drivers/devfreq/imx8m-ddrc.c
+> >
+> > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> > index 59027d7ddf2a..5eac479dd05f 100644
+> > --- a/drivers/devfreq/Kconfig
+> > +++ b/drivers/devfreq/Kconfig
+> > @@ -89,10 +89,19 @@ config ARM_EXYNOS_BUS_DEVFREQ
+> >         Each memory bus group could contain many memoby bus block. It reads
+> >         PPMU counters of memory controllers by using DEVFREQ-event device
+> >         and adjusts the operating frequencies and voltages with OPP support.
+> >         This does not yet operate with optimal voltages.
+> >
+> > +config ARM_IMX8M_DDRC_DEVFREQ
+> > +     tristate "i.MX8M DDRC DEVFREQ Driver"
+> > +     depends on ARCH_MXC && HAVE_ARM_SMCCC
 >
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> I'll edit it as following and applied it.
+
+You corrupted the URLs in the binding patch when applying the series:
+
+Traceback (most recent call last):
+ File "/usr/local/lib/python3.6/dist-packages/jsonschema/validators.py",
+line 774, in resolve_from_url
+ document = self.store[url]
+ File "/usr/local/lib/python3.6/dist-packages/jsonschema/_utils.py",
+line 22, in __getitem__
+ return self.store[self.normalize(uri)]
+KeyError: 'https://protect2.fireeye.com/url?k=b51ff83f-e8cff0d7-b51e7370-000babff32e3-c25c03b8af1b12ee&u=http://devicetree.org/meta-schemas/core.yaml'
+
+Rob
