@@ -2,304 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C748109A24
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 09:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC1D109A88
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 09:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfKZI3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 03:29:37 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:25187 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfKZI3g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 03:29:36 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191126082931epoutp022abde689e0f02949162916e5aa179d22~aqR9QMSso0962709627epoutp02N
-        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 08:29:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191126082931epoutp022abde689e0f02949162916e5aa179d22~aqR9QMSso0962709627epoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1574756971;
-        bh=sGZDjNX3Of3xrSYiM4G2qW5GGss8dqlvEhiKt5BxAw0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=tYnYyxjCD0HBOIxZMBDmwXd+vlpagVuSmEpv9zBGJXvX3FM4LJt3+FNATGDAtJctv
-         obBqGyf5VgkLseWUlDypKTcUq9yVythMuNXhjwMq0ejg5y9gP7/5SYsqDUqxV9gMbr
-         b+KIoQFyfaNQj2/tNp1R2gJya5aF1SGFNpHPbx3k=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191126082931epcas1p1ce4b4bdfe0122e26b6f4b09b84d58de2~aqR8s7HSf1687316873epcas1p1X;
-        Tue, 26 Nov 2019 08:29:31 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 47McWr0KDyzMqYkf; Tue, 26 Nov
-        2019 08:29:28 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        22.8C.51241.462ECDD5; Tue, 26 Nov 2019 17:29:24 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191126082923epcas1p2634e1b74e9ff8513a3b375ed3bb893b0~aqR1hhWfz2046320463epcas1p2T;
-        Tue, 26 Nov 2019 08:29:23 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191126082923epsmtrp16f9f9ace67c8c8836a0b19e70752f34b~aqR1gsEL72933029330epsmtrp1A;
-        Tue, 26 Nov 2019 08:29:23 +0000 (GMT)
-X-AuditID: b6c32a39-14bff7000001c829-be-5ddce264c431
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.BA.10238.362ECDD5; Tue, 26 Nov 2019 17:29:23 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191126082923epsmtip2a2b3ecc47afbf024842a09edfe5d2734~aqR1OLlTG0961509615epsmtip2D;
-        Tue, 26 Nov 2019 08:29:23 +0000 (GMT)
-Subject: Re: [PATCH v3] PM / devfreq: Add new name attribute for sysfs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael.j.wysocki@intel.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, chanwoo@kernel.org,
-        stable@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <c5c9dc78-8209-3b42-4b16-cb40b00b8508@samsung.com>
-Date:   Tue, 26 Nov 2019 17:35:28 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S1727112AbfKZIui (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 03:50:38 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:40710 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfKZIui (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 03:50:38 -0500
+Received: by mail-ot1-f44.google.com with SMTP id m15so15220236otq.7
+        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 00:50:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h+INLc8GY68vuf7x/BT/eKpciTXxDzSiusuMeTySRzw=;
+        b=gRxseBqahaE7L+iJDzqDt7GfLRhUWW2u9LN+BqFu0g9+oE4w8BpLg55ndXJimyu4eJ
+         XnEeEx/KjGDvjZzkajqBj0MnMc6yJQEBI71gFzSQ8j6uet+zncolJ2x00g79U0CiqjMH
+         9Y+qChzrnRjLNiAgdP/CS1VqLKD8Mqs/4S5r5/J37rrUTOnbCvM4oWsAlsTU97TyeynT
+         kgub6eFCWfCUnarGjAeIU06QYzxJxF+Bj9KkEtRlQXOOqlpavqAqFrrDfpiPqcFXvp7b
+         G6yr1ehNCuKoc3hNGo3R8nu1yx+E9WGU+Oy6ea2sD+Cdm4bx28Z47oVIAWUVV2Q3cGg2
+         c3gw==
+X-Gm-Message-State: APjAAAXHKEX+f8opCNbvSvb0Em/tQLEi5Qd4cddPVKiXlDKeu743vCKM
+        PxJCc0i8yVxNYEWUEZgmQd5DeIRFPQ4aHi3avoOfAL+S
+X-Google-Smtp-Source: APXvYqy91S8tdX9PwXB3oM6XviTOhDBf6aYBMbTLOIfQA2ZTAQR2w8S1Azko+zhW38lj+kAFBftN8mdLs4IvpSq+8vs=
+X-Received: by 2002:a9d:7d01:: with SMTP id v1mr1456562otn.167.1574758235596;
+ Tue, 26 Nov 2019 00:50:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191126075333.GA1231308@kroah.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SaUwTURDO67bbBSk+y+HAD61rMIIBumJ1a0BJUNMoPwieMTZ1bTeAtNum
-        W8AjJh4JClG0Ek0kIhjUYNGgDfFCQ6CIoogaMMFbDg+MeALiEbXtauTfNzPf92a+eUMR6joy
-        lsoTXLxT4Kw0GSq/4IvXJlr6nhi1nR7Munu65eyumnqSvbPznZLtunKUZL/sa0Xs4x21JNtf
-        O6Rkq8/3oXTKUHN1UGbwekpIQ1PlGaWhrMGDDF+8U7IUa/NTc3nOwjs1vGC2W/KEnDR62XJT
-        hkk3V8skMnp2Hq0ROBufRi/KzEpckmf1z0JrCjlrgT+VxYkinbwg1WkvcPGaXLvoSqN5h8Xq
-        0DuSRM4mFgg5SWa7bT6j1c7W+Ynr83N72z/KHFezN7m7nxLbkSejFIVQgOeAr3aAKEWhlBpf
-        QtD2vVQpBZ8RvC7dq5CCUQR198/J/0nqh31yqXANQWfrEJKCDwjOnO5BAVYEXgL1jX1BRSSe
-        CYPXHwUVBG5EcPfNcWWgQOIEaHrTQwbwRDwNHoz1B8UqvADc7kYigOU4DmpqX/k5FBWF18Dt
-        EU6iTIL2IwPB90MwA97Ow4oAJvBkeDRQJZPwVLg4dDRoDvBXEh5e+KSULCwC38nDhIQj4O2N
-        hr/5WBjcX/wXb4XT7a2kJN6DoKHpnkIqpEDTyXJZYCACx0P9lWQpPQ0u/6hEUuNweD8S2B3l
-        z6tgT7FaokyHrhdPZRKOgZrdJeQBRFeMs1MxzkLFOAsV/5tVI7kHRfMO0ZbDi4xDN/67vSh4
-        qAn6S6itM7MFYQrRYaqxO4+NagVXKG62tSCgCDpSNcv3xKhWWbjNW3in3eQssPJiC9L5l+0m
-        YqPMdv/ZCy4To5udkpLCzmHm6hiGnqyixu4b1TiHc/H5PO/gnf90MiokdjvSD6tXhX/7GZa/
-        kIumbnad3dZxsHJnVWrLyKHCW2yZrdkTc+KZ3lwi/k6vyoobbTezK7OTD5R5j8wylWcX0b0d
-        6+JertTMEOIVGpXHUNRREmFs6198bOnXsNUTiorbfnUPLU2fEabzbWiOzlBFbjz1e/C1Qpjy
-        cbi36/mKuo536h20XMzlmATCKXJ/AMkkcD++AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGIsWRmVeSWpSXmKPExsWy7bCSvG7yozuxBo2r+S0m3rjCYtG8eD2b
-        xdmmN+wWl3fNYbP43HuE0eJ24wo2i8cr3rJbLNj4iNGBw2PxnpdMHptWdbJ57J+7ht2jb8sq
-        Ro/Pm+QCWKO4bFJSczLLUov07RK4Mh6e/MBUsCeoYuKVu8wNjKucuxg5OSQETCTWfznM0sXI
-        xSEksJtRYt2JGcwQCUmJaRePAtkcQLawxOHDxRA1bxkl5jVOBKsRFnCTWL/7EQuILSKgIfHy
-        6C2wQcwgg5ZN3sUI0TGRSaJ351w2kCo2AS2J/S9ugNn8AooSV388ZgSxeQXsJCZO3A02lUVA
-        VWLximdgNaICERLPt9+AqhGUODnzCdg2TgFDiU3nprGC2MwC6hJ/5l1ihrDFJW49mc8EYctL
-        bH87h3kCo/AsJO2zkLTMQtIyC0nLAkaWVYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsY
-        wbGlpbmD8fKS+EOMAhyMSjy8P87ejhViTSwrrsw9xCjBwawkwqt9+E6sEG9KYmVValF+fFFp
-        TmrxIUZpDhYlcd6neccihQTSE0tSs1NTC1KLYLJMHJxSDYxLd27fsezrst1CN+PzvNYVbRZS
-        LVrC8jCxdxOvmXD62+lBtitnaEWZ5C2bsHOR/82046qX3/91Kz716Pkmpbh379gm3msrUDYJ
-        Cm/J+NnK/WSp7Myic9dXMN6/c2fzGfVHdslxCSKfFTnqpKdkve56fX//5tlrj+wN2p6VmqBg
-        NHPWXbObjXuXKrEUZyQaajEXFScCAOYI2qqpAgAA
-X-CMS-MailID: 20191126082923epcas1p2634e1b74e9ff8513a3b375ed3bb893b0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191125005755epcas1p2404d0f095e6ce543d36e55e2427282f8
-References: <CGME20191125005755epcas1p2404d0f095e6ce543d36e55e2427282f8@epcas1p2.samsung.com>
-        <20191125010357.27153-1-cw00.choi@samsung.com>
-        <20191125085039.GA2301674@kroah.com>
-        <48cadf42-4675-ffe1-a3d4-a97a37538955@samsung.com>
-        <20191126075333.GA1231308@kroah.com>
+References: <alpine.DEB.2.21.1911211549500.3167@hp-x360n> <alpine.DEB.2.21.1911241929220.16116@hp-x360n>
+ <CAJZ5v0ichG5N+yLyyX1BZhNf+Fk_xrvQ+9q4FeP3XVtxKp7yug@mail.gmail.com>
+ <2977390.9qzeJo7xji@kreacher> <alpine.DEB.2.21.1911251019100.12067@hp-x360n>
+ <alpine.DEB.2.21.1911251155440.2817@hp-x360n> <CAJZ5v0hMR8_i=oA1ovX0-xfa_w1x7nHhTwmmKRPu27ceFxpFow@mail.gmail.com>
+ <alpine.DEB.2.21.1911251502490.13123@hp-x360n>
+In-Reply-To: <alpine.DEB.2.21.1911251502490.13123@hp-x360n>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Nov 2019 09:50:24 +0100
+Message-ID: <CAJZ5v0jR8OQVOniR++NJeDukDn9Bgp+DZtvmSCF_d0pH1LDr6w@mail.gmail.com>
+Subject: Re: Help me fix a regression caused by 56b9918490 (PM: sleep:
+ Simplify suspend-to-idle control flow)
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/26/19 4:53 PM, Greg KH wrote:
-> On Tue, Nov 26, 2019 at 12:08:18PM +0900, Chanwoo Choi wrote:
->> Hi Greg,
->>
->> On 11/25/19 5:50 PM, Greg KH wrote:
->>> On Mon, Nov 25, 2019 at 10:03:57AM +0900, Chanwoo Choi wrote:
->>>> The commit 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X) for
->>>> sysfs") changed the node name to devfreq(x). After this commit, it is not
->>>> possible to get the device name through /sys/class/devfreq/devfreq(X)/*.
->>>>
->>>> Add new name attribute in order to get device name.
->>>>
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X) for sysfs")
->>>> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
->>>> ---
->>>>  Changes from v2:
->>>> - Change the order of name_show() according to the sequence in devfreq_attrs[]
->>>>
->>>> Changes from v1:
->>>> - Update sysfs-class-devfreq documentation
->>>> - Show device name directly from 'devfreq->dev.parent'
->>>>
->>>
->>> Shouldn't you just revert the original patch here?  Why did the sysfs
->>> file change?
->>
->> The initial devfreq code used the parent device name for device name
->> corresponding to devfreq object instead of 'devfreq%d' style.
->> Before applied The commit 4585fbcb5331 ("PM / devfreq: Modify
->> the device name as devfreq(X) for sysfs"), the devfreq sysfs
->> showed the parent device name as following:
->>
->> For example on Odroid-XU3 board before applied the commit 4585fbcb5331,
->> 	/sys/class/devfreq/soc:bus_wcore
->> 	/sys/class/devfreq/soc:bus_noc
->> 	...(skip)
->>
->>
->> But, I think that devfreq subsystem had to show the consistent
->> sysfs entry name for devfreq device like input, thermal, hwmon subsystem.
->>
->> For example on Odroid-XU3 board,
->> - The input subsystem show the 'input%d' style for input device.
->> $root@localhost:/# ls /sys/class/input/                                         
->> event0  event1  input0  input1  mice  mouse0
->>
->> - The thermal subsystem show the 'cooling_device%d' style for thermal cooling device.
->> $ root@localhost:/# ls /sys/class/thermal/                                       
->> cooling_device0  cooling_device2  thermal_zone1  thermal_zone3
->> cooling_device1  thermal_zone0    thermal_zone2  thermal_zone4
->>
->> - The hwmon subsystem show the 'hwmon%d' style for h/w monitor device.
->> $root@localhost:/# ls /sys/class/hwmon/                                         
->> hwmon0
->>
->>
->> So, I tried to make the consistent sysfs entry name for devfreq device
->> by contributing commit 4585fbcb5331 ("PM / devfreq: Modify the device name as
->> devfreq(X) for sysfs"). But, The commit 4585fbcb5331 have missed that sysfs
->> interface had to provide the real device name. Some subsystem like thermal
->> and hwmon provide the device type or device name through sysfs interface.
->> It is possible to make the user to find their own specific device by iteration
->> on user-space.
->>
->> root@localhost:/# cat /sys/class/thermal/cooling_device0/type 
->> pwm-fan
->> root@localhost:/# cat /sys/class/thermal/cooling_device1/type                  
->> thermal-cpufreq-0
->> root@localhost:/# cat /sys/class/thermal/cooling_device2/type                  
->> thermal-cpufreq-1
->>
->> root@localhost:/# cat /sys/class/hwmon/hwmon0/name                             
->> pwmfan
->>
->>
->> So, I add the new 'name' attribute of sysfs for devfreq device.
->>
->>>
->>>> Documentation/ABI/testing/sysfs-class-devfreq | 7 +++++++
->>>>  drivers/devfreq/devfreq.c                     | 9 +++++++++
->>>>  2 files changed, 16 insertions(+)
->>>>
->>>> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
->>>> index 01196e19afca..75897e2fde43 100644
->>>> --- a/Documentation/ABI/testing/sysfs-class-devfreq
->>>> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
->>>> @@ -7,6 +7,13 @@ Description:
->>>>  		The name of devfreq object denoted as ... is same as the
->>>>  		name of device using devfreq.
->>>>  
->>>> +What:		/sys/class/devfreq/.../name
->>>> +Date:		November 2019
->>>> +Contact:	Chanwoo Choi <cw00.choi@samsung.com>
->>>> +Description:
->>>> +		The /sys/class/devfreq/.../name shows the name of device
->>>> +		of the corresponding devfreq object.
->>>> +
->>>>  What:		/sys/class/devfreq/.../governor
->>>>  Date:		September 2011
->>>>  Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
->>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>>> index 65a4b6cf3fa5..6f4d93d2a651 100644
->>>> --- a/drivers/devfreq/devfreq.c
->>>> +++ b/drivers/devfreq/devfreq.c
->>>> @@ -1169,6 +1169,14 @@ int devfreq_remove_governor(struct devfreq_governor *governor)
->>>>  }
->>>>  EXPORT_SYMBOL(devfreq_remove_governor);
->>>>  
->>>> +static ssize_t name_show(struct device *dev,
->>>> +			struct device_attribute *attr, char *buf)
->>>> +{
->>>> +	struct devfreq *devfreq = to_devfreq(dev);
->>>> +	return sprintf(buf, "%s\n", dev_name(devfreq->dev.parent));
->>>
->>> Why is the parent's name being set here, and not the device name?
->>
->> The device name style in struct devfreq is 'devfreq%d' instead of
->> parent device name in order to keep the consistent naming style for devfreq device
->> as I mentioned above. 'devfreq%d' name is consistent name style for devfreq device.
->> But, it don't show the real h/w device name. So, show the parent device name
->> which is specified on device-tree file.
-> 
-> I'm sorry, but I still do not understand.  Can you show me the directory
-> tree before and after here?
-> 
+On Tue, Nov 26, 2019 at 12:32 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+>
+>
+> On Mon, 25 Nov 2019, Rafael J. Wysocki wrote:
+>
+> > It looks like the platform has problems with switching power between
+> > AC and battery while suspended.  Also this appears to be related to the EC.
+>
+> That being said, I always keep a stock kernel on this machine (latest is Kubuntu
+> vmlinuz-5.0.0-35-generic) and the failure mode isn't reproducible on that. I'm
+> still wondering what's substantially different between the versions.
+>
+> BTW, I've got breaking it down to a science now:
+>
+> - Let the battery drain pretty well down (< ~80%)
+> - Boot the kernel I wish to test, while still on battery
+> - Intiate a suspend/resume, which will come back OK
+> - Initiate another suspend
+> - Plug in the charger. If I have my power meter in, I see it do the PD
+>   negotiation (it'll start off at 20V/150mA, then it'll PD ramp up to
+>   a full 2.5-2.75A @20v to charge the battery)
+> - Try to resume. It'll be totally dead and I have to long-power-button
+>   to get it back
+>
+> - If I have "ec_no_wakeup=1" set, then the first time it seems to resume
+>   OK from the procedure above, then I'll wait about two minutes then
+>   flip the laptop around a bunch (apparently getting the accelerometer
+>   involved, which I guess happens during a car ride) which can also
+>   trigger the hard hangup when I plug it in before suspending
+>
+> > Also I'm wondering if the problem is reproducible with ec_no_wakeup
+> > and the last patch I posted applied.
+>
+> With the stock -rc kernel, I used to be able to work around this issue with
+> "ec_no_wakeup=1", but sometimes the battery would drain while "suspended"
+> far higher than idle at random.
+>
+> With the second patchset (the introduction of acpi_s2idle_sync()) the
+> *second* resume while the battery is charging locks it up hard.
+>
+> > But with that patch applied, please try to comment out the
+> > acpi_s2idle_sync() in acpi_s2idle_wake() and retest.
+>
+> So get this- I took it out of acpi_s2idle_wake() and left it in acpi_s2idle_restore() ;
+> when I do this, I get the issue where it seems to no longer care about the
+> charging state, BUT it is back to responding to charger events (i.e., it won't
+> go to sleep as long as it's plugged in, and "ec_no_wakeup=1" has no effect on this.
+>
+> It also turns out that it doesn't apparently matter if I remove the call of acpi_s2idle_sync()
+> from either of acpi_s2idle_wake() or acpi_s2idle_restore() but I get the behavior above.
+> I took a shot in the dark and commented out the call to acpi_ec_flush_work() in acpi_s2idle_sync()
+> and left the calls to acpi_s2idle_sync() in both _wake and _restore and also get this
+> behavior, which to me implies that whatever is in the acpi_ec_flush_work() call (and I
+> looked at it, but didn't go any further) is where it's hanging up.
 
-I'm sorry for not enough description. I add the following example on Odroid-XU3 board.
+It doesn't have to be like that.
 
+What acpi_ec_flush_work() does it to process the EC events received so
+far and they may trigger notifications that are processed
+subsequently.  The next acpi_os_wait_events_complete() is there to
+wait for that processing to finish.
 
-1. Before applied commit 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X),
+It looks like it hangs somewhere in the platform firmware, but it is
+hard to say where exactly.
 
-root@localhost:~# ls /sys/class/devfreq                                        
-soc:bus_disp1       soc:bus_fsys_apb  soc:bus_gscl_scaler  soc:bus_mscl
-soc:bus_disp1_fimd  soc:bus_g2d       soc:bus_jpeg         soc:bus_noc
-soc:bus_fsys        soc:bus_g2d_acp   soc:bus_jpeg_apb     soc:bus_peri
-soc:bus_fsys2       soc:bus_gen       soc:bus_mfc          soc:bus_wcore
+> I can put WARN_ON(cond)
+> calls in places that'll write to EFI pstore, if you think that would be useful.
+>
+> As this workaround does at least (so far, anyway) keep the machine from going off into
+> a black hole,
 
-root@localhost:~# ls -al /sys/class/devfreq
-total 0
-drwxr-xr-x  2 root root 0 Jan  1 09:00 .
-drwxr-xr-x 52 root root 0 Jan  1 09:00 ..
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_disp1 -> ../../devices/platform/soc/soc:bus_disp1/devfreq/soc:bus_disp1
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_disp1_fimd -> ../../devices/platform/soc/soc:bus_disp1_fimd/devfreq/soc:bus_did
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_fsys -> ../../devices/platform/soc/soc:bus_fsys/devfreq/soc:bus_fsys
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_fsys2 -> ../../devices/platform/soc/soc:bus_fsys2/devfreq/soc:bus_fsys2
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_fsys_apb -> ../../devices/platform/soc/soc:bus_fsys_apb/devfreq/soc:bus_fsys_ab
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_g2d -> ../../devices/platform/soc/soc:bus_g2d/devfreq/soc:bus_g2d
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_g2d_acp -> ../../devices/platform/soc/soc:bus_g2d_acp/devfreq/soc:bus_g2d_acp
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_gen -> ../../devices/platform/soc/soc:bus_gen/devfreq/soc:bus_gen
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_gscl_scaler -> ../../devices/platform/soc/soc:bus_gscl_scaler/devfreq/soc:bus_r
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_jpeg -> ../../devices/platform/soc/soc:bus_jpeg/devfreq/soc:bus_jpeg
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_jpeg_apb -> ../../devices/platform/soc/soc:bus_jpeg_apb/devfreq/soc:bus_jpeg_ab
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_mfc -> ../../devices/platform/soc/soc:bus_mfc/devfreq/soc:bus_mfc
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_mscl -> ../../devices/platform/soc/soc:bus_mscl/devfreq/soc:bus_mscl
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_noc -> ../../devices/platform/soc/soc:bus_noc/devfreq/soc:bus_noc
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_peri -> ../../devices/platform/soc/soc:bus_peri/devfreq/soc:bus_peri
-lrwxrwxrwx  1 root root 0 Jan  1 09:00 soc:bus_wcore -> ../../devices/platform/soc/soc:bus_wcore/devfreq/soc:bus_wcore
+So to be precise you mean commenting out acpi_ec_flush_work() in
+acpi_s2idle_sync() with the
 
+https://lore.kernel.org/linux-pm/alpine.DEB.2.21.1911220920500.24730@hp-x360n/T/#m199e175157c9cddf48fdee16681f6c2f0549a364
 
+patch applied?
 
-2. After applied commit 4585fbcb5331 ("PM / devfreq: Modify the device name as devfreq(X),
+And does the power button/lid wakeup work without that?
 
-root@localhost:~# ls  /sys/class/devfreq                                       
-devfreq0   devfreq11  devfreq14  devfreq3  devfreq6  devfreq9
-devfreq1   devfreq12  devfreq15  devfreq4  devfreq7
-devfreq10  devfreq13  devfreq2   devfreq5  devfreq8
+> I'm willing to live with it until/as we find a workaround that gets it
+> right; even though it'll be somewhat annoying to not go to sleep when charged AND
+> automatically wake up on power connection/disconnection events (can those be filtered
+> out of /proc/acpi/wakeup_sources ? Nothing looked obvious) at least I have a laptop
+> when I need it.
 
-root@localhost:~# ls -al /sys/class/devfreq                                    
-total 0
-drwxr-xr-x  2 root root 0 Jan  1 09:02 .
-drwxr-xr-x 52 root root 0 Jan  1 09:02 ..
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq0 -> ../../devices/platform/soc/soc:bus_wcore/devfreq/devfreq0
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq1 -> ../../devices/platform/soc/soc:bus_noc/devfreq/devfreq1
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq10 -> ../../devices/platform/soc/soc:bus_jpeg/devfreq/devfreq10
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq11 -> ../../devices/platform/soc/soc:bus_jpeg_apb/devfreq/devfreq11
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq12 -> ../../devices/platform/soc/soc:bus_disp1_fimd/devfreq/devfreq12
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq13 -> ../../devices/platform/soc/soc:bus_disp1/devfreq/devfreq13
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq14 -> ../../devices/platform/soc/soc:bus_gscl_scaler/devfreq/devfreq14
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq15 -> ../../devices/platform/soc/soc:bus_mscl/devfreq/devfreq15
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq2 -> ../../devices/platform/soc/soc:bus_fsys_apb/devfreq/devfreq2
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq3 -> ../../devices/platform/soc/soc:bus_fsys/devfreq/devfreq3
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq4 -> ../../devices/platform/soc/soc:bus_fsys2/devfreq/devfreq4
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq5 -> ../../devices/platform/soc/soc:bus_mfc/devfreq/devfreq5
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq6 -> ../../devices/platform/soc/soc:bus_gen/devfreq/devfreq6
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq7 -> ../../devices/platform/soc/soc:bus_peri/devfreq/devfreq7
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq8 -> ../../devices/platform/soc/soc:bus_g2d/devfreq/devfreq8
-lrwxrwxrwx  1 root root 0 Jan  1 09:02 devfreq9 -> ../../devices/platform/soc/soc:bus_g2d_acp/devfreq/devfreq9
+There should be a way to filter them out.
 
+From the above it looks like this happens with "ec_no_wakeup=1" too,
+is that correct?
 
-Best Regards,
-Chanwoo Choi
+> Can you think of any other strategy to try (and I'm all ears at this point; this
+> kind of breakage- while almost certainly that something in this HP BIOS/ACPI
+> is doing wrong, should be properly worked around for the rest of us poor suckers
+> who got these devices so I'm willing to help either fix it,
 
+It's rather that the platform firmware has expectations that we don't
+know about.
+
+Yes, it should be possible to diagnose it further with some extra work.
