@@ -2,117 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D73109907
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 06:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85059109915
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 07:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbfKZF7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 00:59:30 -0500
-Received: from cmta19.telus.net ([209.171.16.92]:59850 "EHLO cmta19.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726052AbfKZF73 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Nov 2019 00:59:29 -0500
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id ZTsgi5W0bhFQMZTshiLxqh; Mon, 25 Nov 2019 22:59:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1574747967; bh=z8K/VrFh+Mh+HHkwgWhGVWNDyBSRROvGxEQPmJ/967I=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=sCCZcTBW2BMiJWxHG+31qUiS8xoOOxA3Rs9G5zJZw8Dal6ujQ/ma8xWDjNcsmQ5Cr
-         wnhoI1/VLFGMkPWdQZKjfz6v+CIc7+II6RlrWfO58nWSvlairt9prGEO6WRvwp/l2a
-         eqeLT09Sntw/V8/Zi/g52Dhkiihc8uGLToMGFyz72eBL61h+gb5yMnz9TopxqdF+rj
-         RD73LskYr1EEGG6i2oGEF4xNJgh9he+/OfGad3bZujgpTUMi4ftyNPyubQ3rRJiSo5
-         owq+gdT5pYveQowNp+0FupqQD3NQMbkWn2yPG9D2B76pXpjVh3cI2ljUTHCJv4X+Ed
-         FgcXCH0NXW/Cw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=ZPWpZkzb c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=IkcTkHD0fZMA:10 a=JFpEMq-k8J54Cn6rv2oA:9 a=QEXdDO2ut3YA:10
- a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Ingo Molnar'" <mingo@redhat.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
-        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
-Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "'Mel Gorman'" <mgorman@techsingularity.net>,
-        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Juri Lelli'" <juri.lelli@redhat.com>,
-        "'Paul Turner'" <pjt@google.com>,
-        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
-        "'Quentin Perret'" <qperret@qperret.net>,
-        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>
-References: <20191113124654.18122-1-ggherdovich@suse.cz>         <20191113124654.18122-2-ggherdovich@suse.cz>    <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz>
-In-Reply-To: <1574697961.16378.5.camel@suse.cz>
-Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
-Date:   Mon, 25 Nov 2019 21:59:19 -0800
-Message-ID: <000801d5a41e$a7fce2c0$f7f6a840$@net>
+        id S1726103AbfKZGSO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 01:18:14 -0500
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:38715 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfKZGSN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 01:18:13 -0500
+Received: by mail-pf1-f176.google.com with SMTP id c13so8630340pfp.5
+        for <linux-pm@vger.kernel.org>; Mon, 25 Nov 2019 22:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jYKbf8t5MJmFcFLJj0YBMp2i4jSC3lqUJ+HXzAnqTRg=;
+        b=BrjksMYgLIbf28KworKYAbpgmWeicMHkwEVcJWaNIuApQ8Nh6E+P2ozrZTg8q/gQRo
+         H4GlHRBjD8aR7dlQb0k7lj/kOHu577eoIn7uFrGzOeUU4w/hMCvEcSVgZOAGDRCPhIUz
+         tSMlMI8lMIdWv3izvDeTzHidCgH1dG8S3aBKjyI3MPPqy7fbir6anlX/pJ/IIeT+gLv1
+         dit3oTqWs7HvV3NBETXXjdWe4poeXxJ5vDPQDfxiOlqIS2Csrw9cciT5Uh0lE3mNtNYV
+         h+u3Mb/KpXPT6OR9D8zxEreLlfugcYr9vEuUvh/w2b7dldXl6Ltv9/JdIa4X5vx81CBh
+         xkzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jYKbf8t5MJmFcFLJj0YBMp2i4jSC3lqUJ+HXzAnqTRg=;
+        b=rA6/mC/+fx3YKxtKRucg7GuEzHKjueFlwUxpQvkVim9wIOYe2ORaTtLQWrAAe331lc
+         +Ikc77H/6sy4zNvdZ53QpregBk3Q2HFqqdUQIp8/GEBwhPuoDl/UjVGSv96gRBJhDXFs
+         dUClJLRw7Lj8s0Y6SWW9LJc0oAUCgYkbIf4ujLr4TirIEBbb6EfwYbGjbeMQ+carpS1k
+         CyA8NVYdJLpNG2kyLox4pm+hwt8kDJG5d7rNam9mOuFBYIXH5x49CFCx7SS30c295wzh
+         Bpl75wGxEUPO9aIUfSJiSKC+YuJmatF9AxSGgZXvSnzdnDkbdLtnZvLVkB6KiZPW1UmE
+         +xuQ==
+X-Gm-Message-State: APjAAAVaxK5YObNRfG0/Y25AIDKWoq+hyS3vkO9rusjL6yG3VzHCqQd5
+        ULLzlVBmO7MH58aV/N43WBH9JA==
+X-Google-Smtp-Source: APXvYqwvCTL3s14OouWzkghX/Mp7rVzEvkTzurldGfmlL9tYuzKRd4F4YLU96mSUBWq8mS5i2iTigg==
+X-Received: by 2002:aa7:920b:: with SMTP id 11mr39802393pfo.61.1574749092891;
+        Mon, 25 Nov 2019 22:18:12 -0800 (PST)
+Received: from localhost ([122.171.112.123])
+        by smtp.gmail.com with ESMTPSA id o20sm10990931pfp.16.2019.11.25.22.18.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 25 Nov 2019 22:18:12 -0800 (PST)
+Date:   Tue, 26 Nov 2019 11:48:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+Message-ID: <20191126061810.okkw3wkjmi2uvqjj@vireshk-i7>
+References: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <20191121093557.bycvdo4xyinbc5cb@vireshk-i7>
+ <DB3PR0402MB39165544EDD0317095A1B72DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAJZ5v0geykeebX-67+h4twj+t7oTVBf7X7_UsXw0LAc+0Ap75Q@mail.gmail.com>
+ <CAJZ5v0j4z9tEDCGKRc7dHqTiJ1Fq3So=ELfvR6H25UkRmKeBvg@mail.gmail.com>
+ <DB3PR0402MB3916BDC24BDA1053B7ADBDCFF5490@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAJZ5v0g5EGWVAm4A8ynoWAPc1wJRpR6wgZqwhvbmeT4eT49EUA@mail.gmail.com>
+ <DB3PR0402MB39165E40800E42C2E5635C7CF54A0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB391638C66C7EB93B5156A2D2F54A0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdWjqXhG/2FkhiwgRMuiczjnDuyRDAAcWJdQ
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfInqMyosb61dzHgkCKzooGPz79WDnaXBPCmUSZDIwyZ5LmcPMdmWp44zLZREww2ABFfDRsT+z8Bgb6nk5mhKfDYozE8wV31XBvSJrTGlvGaCUEyO45Nm
- ATKnDQWFQYihptyBVYWzlUx6dE/qeohbR2bjHUu/L3NipUmb/r1zLITY27BGqlwMVGcaDCHr3kVjLAE5fKX/cBg7Zl7To46YJn8Pji4L2JTKNWm1OSQaQoo9
- 1Eg6kLlG3apyrkB6WoXltwHQQFvc8o058qggz40RXX2q7xys/KoYmXrfuHA+nKj+bypSPCzXs7Fhq8D30Xw1bIQQlLSUuHWOyvhyomfCvBmnZchiTuyLGRrN
- YVvUBWqikuOPIAFT3SjmewJZqGJZ39T7E4qPvVZNNMHNeYniOYK29gb5+vHW56yaOXeMorj7rGGREntvD4r/az0kT0aMEzOTUmMa/DIGkVXvFVVunG3Wi11z
- IbEHZeTxqdp8AbcLqw8v2X2kf3VN7O4o/CCTI9h8Vy0WisgXni9O5+oRpnvnKtQ9nmZPg2W+HQiXTfAUD978fTetQqJFv4aRGCfXki4zKiN/mJfZZmSjppSK
- 1aj/0KNZh1UAeT07CoJNmK9lSkjxfsI7kBPKNpY3lyhkyu3Ds4r72CJVygeV8mBQZUQbitq/gPklx/hhbBBRgPkSxG5o1DlDXOaDwL18On8J4KepLw/S75zG
- Fy62+K/DIgEU/E+yNwAotg2DGBPDBlV8vYs95DAXw07dA+gUCArEEQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB3PR0402MB391638C66C7EB93B5156A2D2F54A0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.11.25 08:06 Giovanni Gherdovich wrote:
-> On Sat, 2019-11-23 at 23:49 -0800, Doug Smythies wrote:
->> ...
->> Kernel 5.4-rc8 + revert, intel_cpufreq/schedutil: 3899 seconds
->> Kernel 5.4-rc8 + gg 6 + revert, intel_cpufreq/schedutil: 2740.7 seconds
->> Ratio: 0.70 (as expected)
->> Kernel 5.4-rc8, intel_cpufreq/schedutil: 2334.7 seconds (faster than expected)
->> Kernel 5.4-rc8 + gg 6 patch set, intel_cpufreq/schedutil: 2275.0 seconds (faster than expected)
->> Ratio: 0.97 (not as expected)
->> Kernel 5.4-rc8, intel_cpufreq/performance: 2215.3 seconds
->> Kernel 5.4-rc8, intel_cpufreq/ondemand: 3286.3 seconds
->> Re-stated from previous e-mail:
->> Kernel 5.3-rc8, intel_cpufreq/schedutil: ratio: 0.69 (I don't have the original times)
->
-> Hello Doug,
->
-> schedutil in 5.4 going a lot faster than in 5.3 would be a surprise. I'm
-> running that same test too to check if I can see it as well.
+On 25-11-19, 09:43, Anson Huang wrote:
+> Hi, Rafael
+> 	I tried to print the necessary info into DRAM instead of calling pr_info
+> 	directly, then issue can be reproduced easily again, when issue
+> 	happened, the LOG shows the last irq_work_sync() is NOT correctly
+> 	finished. Below are the log and patch I added, the test case is simply
+> 	to repeat removing CPU1/CPU2/CPU3 then adding back CPU1/CPU2/CPU3.
+> 	When issue happens, below log shows last round of removing CPUs,
+> 	CPU1/CPU2/CPU3 irq_work_sync() all worked as expected, the work->cpu is
+> 	-1, then when CPU1 was added back, the irq_work flag is pending/busy on
+> 	CPU1, and issue happened:
 
-Great, thanks. But see below.
+FWIW, I tried to reproduce it on my hikey board and I couldn't even after hours
+of testing :(
 
->
-> Besides, as it's already been said this patchset adds frequency
-> scale-invariance to scheduler metrics such as load and utilization and that's
-> useful also in areas other than frequency scaling (most notably the scheduler
-> load balancer).
-
-The issue with the schedutil governor not working properly in the 5.4 RC series
-appears to be hardware dependant.
-
-My test computer is Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz., Sandy Bridge.
-On a temporary basis, I acquired a computer with an
-Intel(R) Core(TM) i5-4460 CPU @ 3.20GHz, Haswell,
-and schedutil governor behaviour with the exact same kernels is fine:
-
-That "gitsource" test, "make test" 6 times, first run thrown out:
-
-Kernel 5.4 intel_cpufreq/schedutil: 3411.8 seconds
-Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 1696.7 seconds
-Ratio: 0.49
-Recall you got a ratio of 0.49 with 5th generation, Broadwell.
-
-... Doug
-
-
+-- 
+viresh
