@@ -2,202 +2,494 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB46F109E0E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 13:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EBD109E61
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Nov 2019 13:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728548AbfKZMg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Nov 2019 07:36:28 -0500
-Received: from mail-eopbgr140071.outbound.protection.outlook.com ([40.107.14.71]:15681
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728538AbfKZMg1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 Nov 2019 07:36:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhjhHxnD7Nl86nWZDxthfgZXcyaeZU2vMdDu14V9n9DVlMYHJ3l5AIF2Vz8JT5FI7pYl1CxzFlobbhDwQQwCQ7M1uD6zUFbd6qUODOQBoo+17we8+o036MTyDYbCNdQrrWZajeoxlz/sngz0UpPmTlnfPDSisCltLTb5IKtpxUkoDh9FNaa3Lrqwz6hRwBauOi5ZRuLC5OL0wJiBWa7YQJryX7VA6fG/rMQl91Prl9f5qZq+TE2FadPsqnXjuHOLAssRzSwY75zUig+H7XbRMbK3gGbSyQWwuH1l5fhVmN6aJAhwCSuRAphzqz4rPne70F0rfh/Q/zHnar7Ut5mIBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
- b=H+nWZi+/q1DS8vNRS5YBQ1NDnYYdd9cbDG/BOyimSLSFs3oALg6RslSUlfK94KqDWHWHMzTqyIW01ThAuXk5UTxjbPLXiE1k/f9LipY6aZlvxinuWxeda9HC8dF1l9qYNPKKlbvv46KSQYJvldKe00za57M4mQKKimxD6qW+ac9KSsvky+EI+Bf3jpPF+TzfXxYgQfbfC3DzYSCrN3eNcaP4gFFiCMjw0hAmUC38c2kBlmjZtsDZTzTri11gZvjeDjsM61U+iEW6vlAkbF6qTl5QpF1NaP33MpNgG2NXRQxvuDF88E26msvZYecAk2QUbVxRtd2rg8C2LocmbDdO1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
- b=f/p5RQM+/WfWsf4znCgNESz7u0VDE40NxK4rTA8AwERoY8StzJKhUbWbYBxGiWO82LL0jjYBgmlbqPG+ODjuyYXEchnuDbTe3p6jEAnIOe/dzlUdRkUB3U9f2KuEdSfdSqSwUbhUqEFuoL9qBqBNVBpClUE6MrJ5GBkizrTd4+Y=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4672.eurprd04.prod.outlook.com (20.177.53.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2474.16; Tue, 26 Nov 2019 12:36:23 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2474.023; Tue, 26 Nov 2019
- 12:36:23 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
-Thread-Topic: [PATCH v3 1/4] PM / QoS: Initial kunit test
-Thread-Index: AQHVo69Vkiab2WNf8Uavz0kAKoCkHQ==
-Date:   Tue, 26 Nov 2019 12:36:23 +0000
-Message-ID: <VI1PR04MB7023D1F8F0085897E55BC084EE450@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1574699610.git.leonard.crestez@nxp.com>
- <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
- <20191125201959.GA228856@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 01867fed-531e-452f-96f6-08d7726d3f7a
-x-ms-traffictypediagnostic: VI1PR04MB4672:|VI1PR04MB4672:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4672596E0091A31881F4C1C3EE450@VI1PR04MB4672.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0233768B38
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(6246003)(33656002)(6506007)(6916009)(9686003)(478600001)(86362001)(25786009)(44832011)(74316002)(186003)(7696005)(102836004)(4326008)(4001150100001)(55016002)(76176011)(305945005)(7736002)(53546011)(71190400001)(71200400001)(66476007)(2906002)(66446008)(5660300002)(52536014)(54906003)(7416002)(8936002)(81166006)(81156014)(76116006)(66946007)(91956017)(6116002)(6436002)(14454004)(229853002)(99286004)(3846002)(446003)(66066001)(316002)(14444005)(8676002)(26005)(256004)(64756008)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4672;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BBLc9RgLUP8fD0yNIomOJ5IlfD6hTX71WXDGYqiZtU2hOojBwfUlY2htYHMp3uDjLGaiP0Yw19DN9h20BYfqNsQ2M+g2XYyuYkrdnZLas88Cbo+F8Km4/srex0dktacVqn8qS9/GH6W6mtblrqLxjp45DNSg2+4097W/Ez87BHwpUHRrvytJROS50K0kLbX0H52dDEqqao5RZtkICJKYaZS8M2vwJuosUj5plBroprzWGhwhakHtJ81A9Pm6S9/w05o6Fmqr+4riUnQHwazpQBlWa9gnrRumQSguYVFaVTgQFDTytJxkdkSEJeYYd25LVkavq/Tik6LBFQAg7VruJ1mcuWF5Z8i6zbQBQbqQGx5wXV83lxOMqLY9TOdXRBvs2VQEA0OZ6ZnUqYEcM2M85YwVagiQVKqmzx+yYH5jZ4cgvG+H2U2TJkeqhfaY9nt8
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1727586AbfKZMzq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Nov 2019 07:55:46 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38380 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727332AbfKZMzq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Nov 2019 07:55:46 -0500
+Received: by mail-oi1-f193.google.com with SMTP id a14so16519529oid.5;
+        Tue, 26 Nov 2019 04:55:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=YSHsJY2ZH1bwO7jLvlHgKYh9UyxOH116OQ47Cgq1Vtc=;
+        b=Y+cgo5vJNE7dqfB/+yU8/mZjXyT6qxSNKpllwRSkq6PUax4++7hJKYWrUP3Vjt8B7N
+         sWFJJ/aSM3IRZ6b8pZyyzSN8wMaStBTNCZmco6HpIGzbaiHm8UTrf9FAxTURAj+MdH/d
+         NsVyOb1MBJJRDXqGSMCXpq/YwpwJ7tXDZGF825l2Pc2vCmVUliOigu/oyipwF1+E9P1g
+         PU0CtfDa0VQIlX1zENEZqUQQQReuUsHc63mYPAFE6DQT2dbBaXgukh9FFKNxJLDSL1AU
+         nWzhDCfzbv4vSdVxSlYH2zFW2nWPJ1SH/fT9hhk4NEqgGN5qTtbL9frpSw3ggvL0lSlG
+         r2yw==
+X-Gm-Message-State: APjAAAWC/gBRd7DBbN9aUriF3toUpn1OiJL+0drVTO6Sk2JVjVgHSqJg
+        3krtpNEORuUNMC4A4H5FrHWf/eUvQijvVqcfQdkMMr25
+X-Google-Smtp-Source: APXvYqxo3rr86ItiU+1xhnQcivJAlDZUPyehf3hiNaneh/4u1kpbMO2kfGpBtQGEfBVrG7yViW9tqL3cbE/HNRR2FWo=
+X-Received: by 2002:aca:c753:: with SMTP id x80mr3270720oif.115.1574772943970;
+ Tue, 26 Nov 2019 04:55:43 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01867fed-531e-452f-96f6-08d7726d3f7a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Nov 2019 12:36:23.4600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2YElGOdlTVR0I+9gYMWuIgJ4Zjk76qjG2T3JB1koaMAbHW4dS89U2j2VDeNLYmTwX7SHmcXfdk1sR0YmPrHzhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4672
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Nov 2019 13:55:32 +0100
+Message-ID: <CAJZ5v0hNKs11t2d0L=GkMN5RgOBfQ7sgss4U0VEJtS=EETwtNA@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v5.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019-11-25 10:20 PM, Matthias Kaehlcke wrote:=0A=
-> On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:=0A=
->> The pm_qos family of APIs are used in relatively difficult to reproduce=
-=0A=
->> scenarios such as thermal throttling so they benefit from unit testing.=
-=0A=
-> =0A=
-> indeed, a unit test is useful in this case!=0A=
-> =0A=
->> Start by adding basic tests from the the freq_qos APIs. It includes=0A=
->> tests for issues that were brought up on mailing lists:=0A=
-=0A=
->> +/* Basic test for aggregating two "min" requests */=0A=
->> +static void freq_qos_test_min(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);=
-=0A=
->> +=0A=
->> +	freq_qos_remove_request(&req2);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
-> =0A=
-> This checks (again) the return value of the above freq_qos_add_request() =
-call,=0A=
-> which I suppose is not intended. Remove?=0A=
-=0A=
-Should check the return value from freq_qos_remove_request=0A=
-=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);=
-=0A=
->> +=0A=
->> +	freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
-> =0A=
-> ditto=0A=
-> =0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),=0A=
->> +			FREQ_QOS_MIN_DEFAULT_VALUE);=0A=
->> +}=0A=
->> +=0A=
->> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */=0A=
->> +static void freq_qos_test_maxdef(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +=0A=
->> +	/* Add max 1000 */=0A=
->> +	ret =3D freq_qos_update_request(&req1, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Add max 2000, no impact */=0A=
->> +	ret =3D freq_qos_update_request(&req2, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Remove max 2000, new max 1000 */=0A=
-> =0A=
-> the code doesn't match the comment, max 1000 is removed=0A=
-=0A=
-Fixed=0A=
-=0A=
->> +	ret =3D freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);=
-=0A=
->> +}=0A=
->> +=0A=
->> +/*=0A=
->> + * Test that a freq_qos_request can be readded after removal=0A=
-> =0A=
-> nit: 're-added'. It took me a few secs to figure this is not a about=0A=
-> 'read'ing something=0A=
-=0A=
-Both re-add and readd seem to be valid, I'll change to "added again".=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.5-rc1
+
+with top-most commit e350b60f4e0f089f585d738e27213c8133fe9093
+
+ Merge branches 'pm-avs', 'pm-docs' and 'pm-tools'
+
+on top of commit 05ff1ba412fd6bd48d56dd4c0baff626533728cc
+
+ PM: QoS: Invalidate frequency QoS requests after removal
+
+to receive power management updates for 5.5-rc1.
+
+These include cpuidle changes to use nanoseconds (instead of
+microseconds) as the unit of time and to simplify checks for
+disabled idle states in the idle loop, some cpuidle fixes and
+governor updates, assorted cpufreq updates (driver updates
+mostly and a few core fixes and cleanups), devfreq updates
+(dominated by the tegra30 driver changes), new CPU IDs for
+the RAPL power capping driver, relatively minor updates of
+the generic power domains (genpd) and operation performance
+points (OPP) frameworks, and assorted fixes and cleanups.
+
+There are also two maintainer information updates: Chanwoo Choi will
+be maintaining the devfreq subsystem going forward and Todd Brandt is
+going to maintain the pm-graph utility (created by him).
+
+Specifics:
+
+ - Use nanoseconds (instead of microseconds) as the unit of time in
+   the cpuidle core and simplify checks for disabled idle states in
+   the idle loop (Rafael Wysocki).
+
+ - Fix and clean up the teo cpuidle governor (Rafael Wysocki).
+
+ - Fix the cpuidle registration error code path (Zhenzhong Duan).
+
+ - Avoid excessive vmexits in the ACPI cpuidle driver (Yin Fengwei).
+
+ - Extend the idle injection infrastructure to be able to measure the
+   requested duration in nanoseconds and to allow an exit latency
+   limit for idle states to be specified (Daniel Lezcano).
+
+ - Fix cpufreq driver registration and clarify a comment in the
+   cpufreq core (Viresh Kumar).
+
+ - Add NULL checks to the show() and store() methods of sysfs
+   attributes exposed by cpufreq (Kai Shen).
+
+ - Update cpufreq drivers:
+
+   * Fix for a plain int as pointer warning from sparse in
+     intel_pstate (Jamal Shareef).
+
+   * Fix for a hardcoded number of CPUs and stack bloat in the
+     powernv driver (John Hubbard).
+
+   * Updates to the ti-cpufreq driver and DT files to support new
+     platforms and migrate bindings from opp-v1 to opp-v2 (Adam Ford,
+     H. Nikolaus Schaller).
+
+   * Merging of the arm_big_little and vexpress-spc drivers and
+     related cleanup (Sudeep Holla).
+
+   * Fix for imx's default speed grade value (Anson Huang).
+
+   * Minor cleanup of the s3c64xx driver (Nathan Chancellor).
+
+   * CPU speed bin detection fix for sun50i (Ondrej Jirman).
+
+ - Appoint Chanwoo Choi as the new devfreq maintainer.
+
+ - Update the devfreq core:
+
+   * Check NULL governor in available_governors_show sysfs to prevent
+     showing wrong governor information and fix a race condition
+     between devfreq_update_status() and trans_stat_show() (Leonard
+     Crestez).
+
+   * Add new 'interrupt-driven' flag for devfreq governors to allow
+     interrupt-driven governors to prevent the devfreq core from
+     polling devices for status (Dmitry Osipenko).
+
+   * Improve an error message in devfreq_add_device() (Matthias
+     Kaehlcke).
+
+ - Update devfreq drivers:
+
+   * tegra30 driver fixes and cleanups (Dmitry Osipenko).
+
+   * Removal of unused property from dt-binding documentation for
+     the exynos-bus driver (Kamil Konieczny).
+
+   * exynos-ppmu cleanup and DT bindings update (Lukasz Luba, Marek
+     Szyprowski).
+
+ - Add new CPU IDs for CometLake Mobile and Desktop to the Intel RAPL
+   power capping driver (Zhang Rui).
+
+ - Allow device initialization in the generic power domains (genpd)
+   framework to be more straightforward and clean it up (Ulf Hansson).
+
+ - Add support for adjusting OPP voltages at run time to the OPP
+   framework (Stephen Boyd).
+
+ - Avoid freeing memory that has never been allocated in the
+   hibernation core (Andy Whitcroft).
+
+ - Clean up function headers in a header file and coding style in the
+   wakeup IRQs handling code (Ulf Hansson, Xiaofei Tan).
+
+ - Clean up the SmartReflex adaptive voltage scaling (AVS) driver for
+   ARM (Ben Dooks, Geert Uytterhoeven).
+
+ - Wrap power management documentation to fit in 80 columns (Bjorn
+   Helgaas).
+
+ - Add pm-graph utility entry to MAINTAINERS (Todd Brandt).
+
+ - Update the cpupower utility:
+
+   * Fix the handling of set and info subcommands (Abhishek Goel).
+
+   * Fix build warnings (Nathan Chancellor).
+
+   * Improve mperf_monitor handling (Janakarajan Natarajan).
+
+There is a merge conflict of this with the PCI tree (specifically in the
+PCI power management documentation) that has been addressed by the
+appended patch from Stephen in linux-next.
+
+Thanks!
+
+
+---------------
+
+Abhishek Goel (1):
+      cpupower : Handle set and info subcommands correctly
+
+Adam Ford (2):
+      cpufreq: ti-cpufreq: Add support for AM3517
+      ARM: dts: Add OPP-V2 table for AM3517
+
+Andy Whitcroft (1):
+      PM / hibernate: memory_bm_find_bit(): Tighten node optimisation
+
+Anson Huang (1):
+      cpufreq: imx-cpufreq-dt: Correct i.MX8MN's default speed grade value
+
+Ben Dooks (1):
+      ARM: OMAP2+: SmartReflex: add omap_sr_pdata definition
+
+Bjorn Helgaas (1):
+      PM: Wrap documentation to fit in 80 columns
+
+Chanwoo Choi (1):
+      MAINTAINERS: Update myself as maintainer for DEVFREQ subsystem support
+
+Daniel Lezcano (2):
+      cpuidle: Allow idle injection to apply exit latency limit
+      cpuidle: Pass exit latency limit to cpuidle_use_deepest_state()
+
+Dmitry Osipenko (18):
+      PM / devfreq: tegra30: Change irq type to unsigned int
+      PM / devfreq: tegra30: Keep interrupt disabled while governor is stopped
+      PM / devfreq: tegra30: Handle possible round-rate error
+      PM / devfreq: tegra30: Drop write-barrier
+      PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
+      PM / devfreq: tegra30: Use kHz units uniformly in the code
+      PM / devfreq: tegra30: Use CPUFreq notifier
+      PM / devfreq: tegra30: Move clk-notifier's registration to
+governor's start
+      PM / devfreq: tegra30: Reset boosting on startup
+      PM / devfreq: tegra30: Don't enable consecutive-down interrupt on startup
+      PM / devfreq: tegra30: Constify structs
+      PM / devfreq: tegra30: Include appropriate header
+      PM / devfreq: tegra30: Don't enable already enabled consecutive interrupts
+      PM / devfreq: tegra30: Disable consecutive interrupts when appropriate
+      PM / devfreq: tegra30: Use kHz units for dependency threshold
+      PM / devfreq: Add new interrupt_driven flag for governors
+      PM / devfreq: tegra30: Support variable polling interval
+      PM / devfreq: tegra30: Tune up MCCPU boost-down coefficient
+
+Geert Uytterhoeven (1):
+      power: avs: smartreflex: Remove superfluous cast in
+debugfs_create_file() call
+
+H. Nikolaus Schaller (6):
+      cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+      ARM: dts: omap34xx & omap36xx: replace opp-v1 tables by opp-v2 for
+      DTS: bindings: omap: update bindings documentation
+      ARM: dts: omap3: bulk convert compatible to be explicitly
+ti,omap3430 or ti,omap3630 or ti,am3517
+      cpufreq: ti-cpufreq: omap36xx use "cpu0","vbb" if run in
+multi_regulator mode
+      ARM: dts: omap36xx: using OPP1G needs to control the abb_ldo
+
+Jamal Shareef (1):
+      cpufreq: intel_pstate: Fix plain int as pointer warning from sparse
+
+Janakarajan Natarajan (4):
+      cpupower: Move needs_root variable into a sub-struct
+      cpupower: mperf_monitor: Introduce per_cpu_schedule flag
+      cpupower: mperf_monitor: Update cpupower to use the RDPRU instruction
+      cpupower: ToDo: Update ToDo with ideas for per_cpu_schedule handling
+
+John Hubbard (1):
+      cpufreq: powernv: fix stack bloat and hard limit on number of CPUs
+
+Kai Shen (1):
+      cpufreq: Add NULL checks to show() and store() methods of cpufreq
+
+Kamil Konieczny (1):
+      dt-bindings: devfreq: exynos-bus: Remove unused property
+
+Leonard Crestez (2):
+      PM / devfreq: Check NULL governor in available_governors_show
+      PM / devfreq: Lock devfreq in trans_stat_show
+
+Lukasz Luba (2):
+      include: dt-bindings: add Performance Monitoring Unit for Exynos
+      Documentation: devicetree: add PPMU events description
+
+Marek Szyprowski (1):
+      PM / devfreq: exynos-ppmu: remove useless assignment
+
+Matthias Kaehlcke (1):
+      PM / devfreq: Make log message more explicit when devfreq device
+already exists
+
+Nathan Chancellor (2):
+      tools/power/cpupower: Fix initializer override in hsw_ext_cstates
+      cpufreq: s3c64xx: Remove pointless NULL check in
+s3c64xx_cpufreq_driver_init
+
+Ondrej Jirman (1):
+      cpufreq: sun50i: Fix CPU speed bin detection
+
+Rafael J. Wysocki (10):
+      cpuidle: teo: Ignore disabled idle states that are too deep
+      cpuidle: teo: Rename local variable in teo_select()
+      cpuidle: teo: Consider hits and misses metrics of disabled states
+      cpuidle: teo: Fix "early hits" handling for disabled idle states
+      cpuidle: Consolidate disabled state checks
+      cpuidle: Use nanoseconds as the unit of time
+      cpuidle: teo: Exclude cpuidle overhead from computations
+      cpuidle: teo: Avoid using "early hits" incorrectly
+      cpuidle: teo: Avoid code duplication in conditionals
+      cpuidle: Introduce cpuidle_driver_state_disabled() for driver quirks
+
+Stephen Boyd (1):
+      PM / OPP: Support adjusting OPP voltages at runtime
+
+Sudeep Holla (7):
+      cpufreq: scpi: remove stale/outdated comment about the driver
+      cpufreq: merge arm_big_little and vexpress-spc
+      cpufreq: vexpress-spc: drop unnessary cpufreq_arm_bL_ops abstraction
+      cpufreq: vexpress-spc: remove lots of debug messages
+      cpufreq: vexpress-spc: fix some coding style issues
+      cpufreq: vexpress-spc: use macros instead of hardcoded values
+for cluster ids
+      cpufreq: vexpress-spc: find and skip duplicates when merging frequencies
+
+Todd Brandt (1):
+      pm-graph info added to MAINTAINERS
+
+Ulf Hansson (5):
+      PM / core: Clean up some function headers in power.h
+      PM / Domains: Introduce dev_pm_domain_start()
+      PM / Domains: Implement the ->start() callback for genpd
+      mmc: tmio: Avoid boilerplate code in ->runtime_suspend()
+      PM / Domains: Convert to dev_to_genpd_safe() in genpd_syscore_switch()
+
+Viresh Kumar (2):
+      cpufreq: Clarify the comment in cpufreq_set_policy()
+      cpufreq: Register drivers only after CPU devices have been registered
+
+Xiaofei Tan (1):
+      PM / wakeirq: remove unnecessary parentheses
+
+Yin Fengwei (1):
+      ACPI: processor_idle: Skip dummy wait if kernel is in guest
+
+Zhang Rui (2):
+      powercap/intel_rapl: add support for CometLake Mobile
+      powercap/intel_rapl: add support for Cometlake desktop
+
+Zhenzhong Duan (1):
+      cpuidle: Do not unset the driver if it is there already
+
+---------------
+
+ .../devicetree/bindings/arm/omap/omap.txt          |  30 +-
+ .../devicetree/bindings/cpufreq/ti-cpufreq.txt     |   6 +-
+ .../bindings/devfreq/event/exynos-ppmu.txt         |  26 +-
+ .../devicetree/bindings/devfreq/exynos-bus.txt     |   2 -
+ Documentation/power/drivers-testing.rst            |   7 +-
+ Documentation/power/freezing-of-tasks.rst          |  37 +-
+ Documentation/power/opp.rst                        |  32 +-
+ Documentation/power/pci.rst                        |  28 +-
+ Documentation/power/pm_qos_interface.rst           |  26 +-
+ Documentation/power/runtime_pm.rst                 |   4 +-
+ Documentation/power/suspend-and-cpuhotplug.rst     |   7 +-
+ Documentation/power/swsusp.rst                     |  14 +-
+ MAINTAINERS                                        |  23 +-
+ arch/arm/boot/dts/am3517.dtsi                      |  31 +
+ arch/arm/boot/dts/am3517_mt_ventoux.dts            |   2 +-
+ arch/arm/boot/dts/logicpd-som-lv-35xx-devkit.dts   |   2 +-
+ arch/arm/boot/dts/logicpd-torpedo-35xx-devkit.dts  |   2 +-
+ arch/arm/boot/dts/omap3-beagle-xm.dts              |   2 +-
+ arch/arm/boot/dts/omap3-beagle.dts                 |   2 +-
+ arch/arm/boot/dts/omap3-cm-t3530.dts               |   2 +-
+ arch/arm/boot/dts/omap3-cm-t3730.dts               |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd43.dts       |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd70.dts       |   2 +-
+ arch/arm/boot/dts/omap3-devkit8000.dts             |   2 +-
+ arch/arm/boot/dts/omap3-gta04.dtsi                 |   2 +-
+ arch/arm/boot/dts/omap3-ha-lcd.dts                 |   2 +-
+ arch/arm/boot/dts/omap3-ha.dts                     |   2 +-
+ arch/arm/boot/dts/omap3-igep0020-rev-f.dts         |   2 +-
+ arch/arm/boot/dts/omap3-igep0020.dts               |   2 +-
+ arch/arm/boot/dts/omap3-igep0030-rev-g.dts         |   2 +-
+ arch/arm/boot/dts/omap3-igep0030.dts               |   2 +-
+ arch/arm/boot/dts/omap3-ldp.dts                    |   2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi            |   2 +-
+ arch/arm/boot/dts/omap3-lilly-dbb056.dts           |   2 +-
+ arch/arm/boot/dts/omap3-n9.dts                     |   2 +-
+ arch/arm/boot/dts/omap3-n950-n9.dtsi               |   7 -
+ arch/arm/boot/dts/omap3-n950.dts                   |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-alto35.dts     |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-chestnut43.dts |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-gallop43.dts   |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-palo35.dts     |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-palo43.dts     |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-summit.dts     |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-tobi.dts       |   2 +-
+ arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts    |   2 +-
+ arch/arm/boot/dts/omap3-pandora-1ghz.dts           |   2 +-
+ arch/arm/boot/dts/omap3-sbc-t3530.dts              |   2 +-
+ arch/arm/boot/dts/omap3-sbc-t3730.dts              |   2 +-
+ arch/arm/boot/dts/omap3-sniper.dts                 |   2 +-
+ arch/arm/boot/dts/omap3-thunder.dts                |   2 +-
+ arch/arm/boot/dts/omap3-zoom3.dts                  |   2 +-
+ arch/arm/boot/dts/omap3430-sdp.dts                 |   2 +-
+ arch/arm/boot/dts/omap34xx.dtsi                    |  66 ++-
+ arch/arm/boot/dts/omap36xx.dtsi                    |  65 +-
+ arch/arm/mach-imx/cpuidle-imx6q.c                  |   4 +-
+ arch/arm/mach-tegra/cpuidle-tegra20.c              |   2 +-
+ drivers/acpi/processor_idle.c                      |  21 +-
+ drivers/base/power/common.c                        |  20 +
+ drivers/base/power/domain.c                        |  40 +-
+ drivers/base/power/power.h                         |  30 +-
+ drivers/base/power/wakeirq.c                       |   4 +-
+ drivers/cpufreq/Kconfig.arm                        |  12 +-
+ drivers/cpufreq/Makefile                           |   2 -
+ drivers/cpufreq/arm_big_little.c                   | 658 ---------------------
+ drivers/cpufreq/arm_big_little.h                   |  43 --
+ drivers/cpufreq/cpufreq-dt-platdev.c               |   2 +-
+ drivers/cpufreq/cpufreq.c                          |  18 +-
+ drivers/cpufreq/imx-cpufreq-dt.c                   |  20 +-
+ drivers/cpufreq/intel_pstate.c                     |  30 +-
+ drivers/cpufreq/powernv-cpufreq.c                  |  17 +-
+ drivers/cpufreq/s3c64xx-cpufreq.c                  |   7 -
+ drivers/cpufreq/scpi-cpufreq.c                     |   2 -
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c             |  25 +-
+ drivers/cpufreq/ti-cpufreq.c                       | 119 +++-
+ drivers/cpufreq/vexpress-spc-cpufreq.c             | 584 +++++++++++++++++-
+ drivers/cpuidle/cpuidle-powernv.c                  |   7 +-
+ drivers/cpuidle/cpuidle.c                          |  72 +--
+ drivers/cpuidle/driver.c                           |  72 ++-
+ drivers/cpuidle/governor.c                         |   7 +-
+ drivers/cpuidle/governors/haltpoll.c               |   7 +-
+ drivers/cpuidle/governors/ladder.c                 |  29 +-
+ drivers/cpuidle/governors/menu.c                   | 131 ++--
+ drivers/cpuidle/governors/teo.c                    | 182 ++++--
+ drivers/cpuidle/poll_state.c                       |   2 +
+ drivers/cpuidle/sysfs.c                            |  71 ++-
+ drivers/devfreq/devfreq.c                          |  33 +-
+ drivers/devfreq/event/exynos-ppmu.c                |   1 -
+ drivers/devfreq/governor.h                         |   3 +
+ drivers/devfreq/tegra30-devfreq.c                  | 417 +++++++++----
+ drivers/mmc/host/tmio_mmc.h                        |   1 -
+ drivers/mmc/host/tmio_mmc_core.c                   |  10 +-
+ drivers/opp/core.c                                 |  69 +++
+ drivers/power/avs/smartreflex.c                    |   2 +-
+ drivers/powercap/intel_rapl_common.c               |   2 +
+ include/dt-bindings/pmu/exynos_ppmu.h              |  25 +
+ include/linux/cpu.h                                |   7 +-
+ include/linux/cpuidle.h                            |  27 +-
+ include/linux/pm.h                                 |   2 +
+ include/linux/pm_domain.h                          |   5 +
+ include/linux/pm_opp.h                             |  13 +
+ include/linux/power/smartreflex.h                  |   3 +
+ kernel/power/snapshot.c                            |   9 +-
+ kernel/sched/idle.c                                |  24 +-
+ tools/power/cpupower/ToDo                          |  14 +
+ tools/power/cpupower/utils/cpupower-info.c         |   9 +
+ tools/power/cpupower/utils/cpupower-set.c          |   9 +
+ tools/power/cpupower/utils/helpers/cpuid.c         |   4 +
+ tools/power/cpupower/utils/helpers/helpers.h       |   1 +
+ .../cpupower/utils/idle_monitor/amd_fam14h_idle.c  |   2 +-
+ .../cpupower/utils/idle_monitor/cpuidle_sysfs.c    |   2 +-
+ .../cpupower/utils/idle_monitor/cpupower-monitor.c |   2 +-
+ .../cpupower/utils/idle_monitor/cpupower-monitor.h |   5 +-
+ .../cpupower/utils/idle_monitor/hsw_ext_idle.c     |   3 +-
+ .../cpupower/utils/idle_monitor/mperf_monitor.c    |  64 +-
+ tools/power/cpupower/utils/idle_monitor/nhm_idle.c |   2 +-
+ tools/power/cpupower/utils/idle_monitor/snb_idle.c |   2 +-
+ 116 files changed, 2091 insertions(+), 1406 deletions(-)
+
+
+---------------
+
+diff --cc Documentation/power/pci.rst
+index 0924d29636ad,51e0a493d284..000000000000
+--- a/Documentation/power/pci.rst
++++ b/Documentation/power/pci.rst
+@@@ -692,11 -692,11 +692,11 @@@ controlling the runtime power managemen
+  At the time of this writing there are two ways to define power management
+  callbacks for a PCI device driver, the recommended one, based on using a
+  dev_pm_ops structure described in Documentation/driver-api/pm/devices.rst, and
+- the "legacy" one, in which the .suspend() and .resume() callbacks from struct
+- pci_driver are used.  The legacy approach, however, doesn't allow
+one to define
+- runtime power management callbacks and is not really suitable for any new
+- drivers.  Therefore it is not covered by this document (refer to the
+source code
+- to learn more about it).
+ -the "legacy" one, in which the .suspend(), .suspend_late(),
+.resume_early(), and
+ -.resume() callbacks from struct pci_driver are used.  The legacy approach,
+ -however, doesn't allow one to define runtime power management callbacks and is
+ -not really suitable for any new drivers.  Therefore it is not covered by this
+ -document (refer to the source code to learn more about it).
+++the "legacy" one, in which the .suspend() and .resume() callbacks from
+++struct pci_driver are used.  The legacy approach, however, doesn't allow
+++one to define runtime power management callbacks and is not really suitable
+++for any new drivers.  Therefore it is not covered by this document (refer
+++to the source code to learn more about it).
+
+  It is recommended that all PCI device drivers define a struct
+dev_pm_ops object
+  containing pointers to power management (PM) callbacks that will be
+executed by
