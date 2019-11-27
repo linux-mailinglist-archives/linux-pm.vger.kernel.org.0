@@ -2,133 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA50B10AB02
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 08:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6403310AB37
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 08:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbfK0HVE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 02:21:04 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:56139 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbfK0HVE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 02:21:04 -0500
-Received: by mail-wm1-f68.google.com with SMTP id a131so1567216wme.5;
-        Tue, 26 Nov 2019 23:21:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kCncgZfNLfu/DMj0wXER7XvmqE7+H8NXbrnKF+xxq0U=;
-        b=RSC3imGkI2eVKkgg38Jlm1TsR+Yjp09v6ffKoandFuxhXe+nBgW9uOHL+l020Y7rdF
-         tSYsjMmQCs6HaS/TUMfPNAarUe2TJ0CqybUceItnNLhGo9az8T3Y5fNOH3GLZnX3jWQm
-         jisTx/sLc7NDTLdHJbfTfFjGwYGuuKVV4/d96w5zdcKRtmsI6jd1GM9EA/jQgTY8Vu4z
-         83O39LSKtgLiosa1NNh8Vo9Cv1oYVXNALrsUmYDlpqUlQKgLeOzmXyrSO9N3UJef1UAD
-         dUG5ZLwAMqKaIBiXpIpT8vxX4HmooGbATxlPXMKIaxtINEPsboG+CsqGwvTnCJnfU8tC
-         a9sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kCncgZfNLfu/DMj0wXER7XvmqE7+H8NXbrnKF+xxq0U=;
-        b=aEGDG5mmXMLRGDRcVRsffO/4UtSqO1bkmRzqczOe8OkeYGyXe8jrOuNCzuNGr7A3Rz
-         MmTKtqXE2tAqK+pWgrltl6Oi7qp/HH/OKkyhg+roCIgtaIRdlu9xJnwbvPJ/VsTLxJ+L
-         WgJ429DjqQj3hcDJ+RuiR2zqAYho0lbfxcEIYI0JgM/Gxwl5gg3jIE3L90D0FDgicP/j
-         jkX6VT8Sp0qsQ8j6iu9twhQMn8I+g6cFSNLbAMBMausB1Hj2Aw3QB31h6onrqFOc8Y2O
-         CmRaGeYSkSv2zWPQSaH5AgPqOSFC4zIrc1sEXD4cSh/QuDJTpyMHFqDxRsqWfUFnT/HS
-         5tGg==
-X-Gm-Message-State: APjAAAVYHnihbxknaVIdujTUljq8TUMZugws2HLG1lQ3htEoMFCkOPSk
-        xg/UccLFR1zk/a/O0z847C5MyIjJ
-X-Google-Smtp-Source: APXvYqxrSAjRPVtPzeiTNsYJZTIC0WUoeM08Y93jY7ZHuWeAPoH8sbaPbhCv3NuqgLVIdvVnq6xVHw==
-X-Received: by 2002:a1c:5415:: with SMTP id i21mr2803843wmb.120.1574839261678;
-        Tue, 26 Nov 2019 23:21:01 -0800 (PST)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id h2sm18649610wrt.45.2019.11.26.23.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2019 23:21:00 -0800 (PST)
-Date:   Wed, 27 Nov 2019 08:20:57 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 00/12] treewide: break dependencies on x86's RM header
-Message-ID: <20191127072057.GB94748@gmail.com>
-References: <20191126165417.22423-1-sean.j.christopherson@intel.com>
+        id S1726092AbfK0Hcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 02:32:43 -0500
+Received: from cmta20.telus.net ([209.171.16.93]:60758 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726135AbfK0Hcn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Nov 2019 02:32:43 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id ZroRi5vCYN5I9ZroSiik5X; Wed, 27 Nov 2019 00:32:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1574839960; bh=0ORBH/ZadSHCKZQiUWjIShwLMG7CSdG3H9xgVcazVJU=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=q22+IpVAASH+U2XC4w8g/WP4DylYoKoUrCa+ZrfCCIARaAiRcPxqRq5d7UtnIyMVO
+         Q9mBDyc4XKS3AadM6fJrbbtxzxXuUqDT3I9xJ11leHzRC6dVlmgcMZ3VT74LiR8vtm
+         ApAzKp1ldrxZZILhypUdEu+azketPmv7dvFwFrP0rl73zqnqya4SV96XoyP3Cpq8np
+         hSCjobndT7a8tluUQUip/CTOZXJoGTLlu+wbFGfhmTRAvK+Huvh77qJ+YMsBcUZx0V
+         pqvcrgGLjEcSSxg+efyHL4z1aQvmWB5L+ex2b6vX18++k+ReKYaCskAq/729E85RLh
+         hCBMaUTP1ooRg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=K/Fc4BeI c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=dAj8EvzD0n44Yc48VYEA:9 a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
+Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'Mel Gorman'" <mgorman@techsingularity.net>,
+        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Paul Turner'" <pjt@google.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Quentin Perret'" <qperret@qperret.net>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+References: <20191113124654.18122-1-ggherdovich@suse.cz>                 <20191113124654.18122-2-ggherdovich@suse.cz>                 <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz>         <000801d5a41e$a7fce2c0$f7f6a840$@net> <1574781600.7677.2.camel@suse.cz>
+In-Reply-To: <1574781600.7677.2.camel@suse.cz>
+Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+Date:   Tue, 26 Nov 2019 23:32:34 -0800
+Message-ID: <001d01d5a4f4$d96b21b0$8c416510$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191126165417.22423-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdWkbC8LB/SpP9sCRCWbwO3FO+l3UwAhVS2w
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfNRXJHBbT8vjMdPapanEaph3gv4V2+AANKO8BH+eYmR1Nso692Mw0NJl1Q6Yq/wGlZoYcEBt0dX5lbjPw89ZHFUy+HTJlBcHXQs65J2CzkiO2FtVCMHQ
+ 8qdbInoD2VETmXgk4ekKkZonQQKdAO46hQD9usndH/mEOiD0AH7jjUh7JqiqZuLO3penEF0LiInl2sPX95+rCsZbsCyzdzn4ZFcWkzaFrXbaRjPbyKGQAsTH
+ N19Ik0dOoYG4CV/PH65GATgDjKC5uHH5IQWK4QEZS1eBZ4JEhWTr8tW3DD5bs0UMaMespVt3UlZggS8pRgc7K90vD5i+J/LhbdfXk3ljr61n8mTSRRp0ZEqm
+ Tb6tV6H4qONGNCJI2OiLs9JxHdxwoUdSg5bZPYun40VAHGxe8P+AQ5GYJ0MKcbEcQ+ZFQ4gzn6br3dhbMmCiLn0AOPvsNqLcsi/uKtR+1IElAhRLS0GvuqXx
+ 5DMVk9rakujonmx9aSZmCtHPeJeZ+AuMYbLghbOhLS7RR5G8FeIdHz2NZVHuYDTji9jGvakZCto8DpelczMhJ2aPNeP20pnxSkA1NobSiaYApscVe3S8Gb+D
+ 9lsnwqa8827j5yNeFKxpC4sIG3mJiLLrsgwQdxFzw8BT8zZ/7s27U5h+o3+XZ0bgM9aTs29VlUbpE6QIUwJnlQvH16gf7jhe1pQWdhrfLrjvrqV/DMRk4zoq
+ htB7xbjfM51qlUWP9vtjH3lT75ZBEMM4XKUpJQUJAoQoPDSdu3fBag==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-* Sean Christopherson <sean.j.christopherson@intel.com> wrote:
-
-> x86's asm/realmode.h, which defines low level structures, variables and
-> helpers used to bring up APs during SMP boot, ends up getting included in
-> practically every nook and cranny of the kernel because the address used
-> by ACPI for resuming from S3 also happens to be stored in the real mode
-> header, and ACPI bleeds the dependency into its widely included headers.
+On 2019.11.26 07:20 Giovanni Gherdovich wrote:
+> On Mon, 2019-11-25 at 21:59 -0800, Doug Smythies wrote:
+>> [...]
+>> The issue with the schedutil governor not working properly in the 5.4 RC series
+>> appears to be hardware dependant.
+>> 
+>> My test computer is Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz., Sandy Bridge.
+>> On a temporary basis, I acquired a computer with an
+>> Intel(R) Core(TM) i5-4460 CPU @ 3.20GHz, Haswell,
+>> and schedutil governor behaviour with the exact same kernels is fine:
+>> 
+>> That "gitsource" test, "make test" 6 times, first run thrown out:
+>> 
+>> Kernel 5.4 intel_cpufreq/schedutil: 3411.8 seconds
+>> Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 1696.7 seconds
+>> Ratio: 0.49
+>> Recall you got a ratio of 0.49 with 5th generation, Broadwell.
+>
+> It's good to hear that we're getting the same performance numbers for this
+> patchset on all hardware that is not a Sandy Bridge. Thanks for double
+> checking, independent verification is always valuable.
 > 
-> As a result, modifying realmode.h for even the most trivial change to the
-> boot code triggers a full kernel rebuild, which is frustrating to say the
-> least as it some of the most difficult code to get exactly right *and* is
-> also some of the most functionally isolated code in the kernel.
-> 
-> To break the kernel's widespread dependency on realmode.h, add a wrapper
-> in the aforementioned ACPI S3 code to access the real mode header instead
-> of derefencing the header directly in asm/acpi.h and thereby exposing it
-> to the world via linux/acpi.h.
-> 
-> v2:
->   - Rebased on tip/x86/cleanups, commit b74374fef924 ("x86/setup: Enhance
->     the comments").
->   - Use acpi_get_wakeup_address() as new function name. [Boris and Pavel]
->   - Capture acpi_get_wakeup_address() in a local address. [Pavel]
->   - Collect acks.  I didn't add Rafael's acks on patches 11 and 12 due to
->     the above changes.
->   - Explicitly call out the removal of <asm/realmode.h> from <asm/acpi.h>
->     in patch 12. [Ingo]
->   - Remove superfluous Fixes: tags. [Ard]
+> Now, regarding the 5.4 regression for schedutil you see on Sandy Bridge: can
+> we move this to the kernel bugzilla? Would you care to open a bug there and CC
+> me to it?
 
-You didn't include every patch from v1 though, such us my fix to Quark:
+O.K., I'll need another day or two to isolate further, then I'll open a bug.
+I now understand considerably more, and why my bisection ended up
+at a strange spot.
 
-  [PATCH] x86/platform/intel/quark: Explicitly include linux/io.h for virt_to_phys()
+> If it's reproducible we should assess it and see what can be done.
 
-I've applied that one too and your updated patches, and it's now all 
-pushed out into tip:WIP.core/headers.
+On my Sandy Bridge system if the kernel configuration contains:
 
-Thanks,
+CONFIG_UCLAMP_TASK_GROUP=y
 
-	Ingo
+Then the intel_cpufreq/schedutil will respond much like the performance
+governor.
+
+If the kernel configuration contains:
+
+# CONFIG_UCLAMP_TASK_GROUP is not set
+
+Then the intel_cpufreq/schedutil will respond much like it used to.
+
+On the Haswell computer, it doesn't seem to matter, and your tests
+seem to confirm this.
+
+Note: I steal my kernel configuration from the Ubuntu mainline builds,
+and they changed this parameter during the 5.4-rc series.
+
+... Doug
+
+
