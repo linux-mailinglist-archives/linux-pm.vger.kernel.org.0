@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 612AB10AD9B
+	by mail.lfdr.de (Postfix) with ESMTP id EDACC10AD9C
 	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 11:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbfK0K3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 05:29:23 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35232 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727085AbfK0K3X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 05:29:23 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j6so14839705lja.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 02:29:21 -0800 (PST)
+        id S1726204AbfK0K3Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 05:29:24 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:40161 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727113AbfK0K3Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 05:29:24 -0500
+Received: by mail-lf1-f67.google.com with SMTP id y5so4001372lfy.7
+        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 02:29:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sCVWNeBJQqE/5xyPRPgEm2JhEV906v9Oz0Oq1T8bJNI=;
-        b=YvFWt71U882ckxf/LB6gEUlRbjQnxw2v4HSpTtRA/CIRR1fdiPx/bBK1w0X47GcArH
-         2b9y2zcZfgC0lb0vg3dJclAJXeV3ERi2wWSVYb6FyWacBlStC+t9YTkvGRCm18vwu+Az
-         yuQLsVYJum5iZFqaWYVgDK8Xb9Ccn1AsZjD0FRB3DKOHxmyLVfnk0GqW9rhBk4X6nFwk
-         zSiXEt6IUYn6CtLibeLt9S0fPMSNivoSo5fGoS3gHmW+PL43rwvlE7LjlE2vJDLtPz4W
-         pzfj/w0oRH7NucNFnlBau1FCnAgxYxvlF1TEAP+NqRDGnjkmLTZzG3s6CiGzNgOj3pic
-         tm8Q==
+        bh=HTpoNIOk6QVHLkL5hD/y3Oh3mM1LWBHn64GrXkiktTA=;
+        b=AyUxtvbcofFh17U604la4Y1G39mBOWKGJg5dHe2xNMOmUM+72q8KFL+MRj9MXbX1cg
+         6TGADlEWGQG3IeUrcLndrG52Pb3xsYv/O4+js502Oo4yMQF+CBIfC6qa+QnnT5sGyBP2
+         TBoTGuANUAcOEiHVUgGaySfBTjOTRiGHqALcwOsEdIhI2aK06Qcf6q+7cHDOX/EEt6m9
+         408m8uS7ul/++ymsVs+h1d0qHZ4rTaqbZH/E6Jsnx4XhbHYMMq9nKxz5tLDMlr6qXfUf
+         JfF4LZpBdnWLuZ9iIxL9MNTFOhBS4AwUO8u59tKLkSbAMxjg+Ymn4a6pqkfGJM72On3K
+         FllA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=sCVWNeBJQqE/5xyPRPgEm2JhEV906v9Oz0Oq1T8bJNI=;
-        b=rkZPoetiqU5j2MuJI7lUP4jnJLUusynYeSMIYQ2Tsz4QGbfyWKZCj4LsfaG0ofyDdg
-         qJih3aC6wCzcnvX82tnrff4z4gYStbHM4G9/uqlngR/pyzHm/Gm4ZW1YYZp9xmJiALhY
-         xyR4mEaJH2G7IkfDml99yi+niA12TQLr09rxcpRB9Ta0BQbgrwxeo/6n1NlqdCkbKtlb
-         6721WZrK2mpjp+0zTbfmmTFPgSm4XeEoWeVuWeHuwiWhYGCc83IuFjS28TzCWW5AaQ/R
-         rLfOEk1BYPW5fbiF+QmBnsveqWEOyFw/nWPRdqawKAiQqrm5gIJf40ThoUsNJCdDkfY4
-         TKeQ==
-X-Gm-Message-State: APjAAAW0w4bx/QOGhq+mEVgOpzSTXb6ZXMSWflLmlJqhNSG4ZGWJ/SYR
-        kK1rwaNj2LPvN2PnLaMjT69y6w==
-X-Google-Smtp-Source: APXvYqwp8QFzKd9gx47/plPp96c8HGRuP0rFEep/FiEuLZuC3rMt3DrkVicIFLwEUpX8FVCTCDvBKA==
-X-Received: by 2002:a2e:7204:: with SMTP id n4mr28853360ljc.139.1574850560358;
-        Wed, 27 Nov 2019 02:29:20 -0800 (PST)
+        bh=HTpoNIOk6QVHLkL5hD/y3Oh3mM1LWBHn64GrXkiktTA=;
+        b=CiZnoFtru5Xf2DMn5K7ewT2K1oKqcwO+54Kskpzxv2TOjO07XK9ezlDoQ3ASUV9SZE
+         nq7M1j+ZjFjvBLa4UgA6T0BQyvLQngamjH3KjSxjpfoklXixOAQVFAvM+QLoJalnLyW3
+         lfPU1WHt6/Dj14ozmiGteybmUWGaBsFAM7ebCqoOCrtK7u7PGbp9w12a106RMbWtm5Do
+         uvnC0gfubXEDTzpWSjsIwilksqCMElWWv6INEad1dZsWRna9hjK72AcCkjyf4DmTNkRz
+         1EGaq5JlEDGThe0prctscIjkBTKO7o5SL1FmPqlGdU8aoxieI2QJqEUZPHASBjVMguBv
+         MYzg==
+X-Gm-Message-State: APjAAAVrsaZjoFST+043rsZemFDrmRf45uhKlmjp4hu25YF6Kv8GE2w4
+        RmqSR+BZzcbM+PP8t+GJwEzGtQ==
+X-Google-Smtp-Source: APXvYqwFJjqYM7aDnhXGNf9deKSkKCg+5HFB9vXDa+I/5Qtw5VKdR0KMezOx2PnWjK5Zoh8cIB0ztg==
+X-Received: by 2002:ac2:55a3:: with SMTP id y3mr17405016lfg.108.1574850562474;
+        Wed, 27 Nov 2019 02:29:22 -0800 (PST)
 Received: from uffe-XPS-13-9360.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id t9sm6868260ljj.19.2019.11.27.02.29.18
+        by smtp.gmail.com with ESMTPSA id t9sm6868260ljj.19.2019.11.27.02.29.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 02:29:19 -0800 (PST)
+        Wed, 27 Nov 2019 02:29:21 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -57,11 +57,10 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
-Subject: [PATCH v3 02/13] dt: psci: Update DT bindings to support hierarchical PSCI states
-Date:   Wed, 27 Nov 2019 11:29:03 +0100
-Message-Id: <20191127102914.18729-3-ulf.hansson@linaro.org>
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 03/13] firmware: psci: Export functions to manage the OSI mode
+Date:   Wed, 27 Nov 2019 11:29:04 +0100
+Message-Id: <20191127102914.18729-4-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191127102914.18729-1-ulf.hansson@linaro.org>
 References: <20191127102914.18729-1-ulf.hansson@linaro.org>
@@ -70,180 +69,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update PSCI DT bindings to allow to represent idle states for CPUs and the
-CPU topology, by using a hierarchical layout. Primarily this is done by
-re-using the existing DT bindings for PM domains [1] and for PM domain idle
-states [2].
+To allow subsequent changes to implement support for OSI mode through the
+cpuidle-psci driver, export the existing psci_has_osi_support(). Export
+also a new function, psci_set_osi_mode(), that allows its caller to enable
+the OS-initiated CPU-suspend mode in the PSCI FW.
 
-Let's also add an example into the document for the PSCI DT bindings, to
-clearly show the new hierarchical based layout. The currently supported
-flattened layout, is already described in the ARM idle states bindings [3],
-so let's leave that as is.
+To deal with backwards compatibility for a kernel started through a kexec
+call, default to set the CPU-suspend mode to the Platform Coordinated mode
+during boot.
 
-[1] Documentation/devicetree/bindings/power/power_domain.txt
-[2] Documentation/devicetree/bindings/power/domain-idle-state.txt
-[3] Documentation/devicetree/bindings/arm/idle-states.txt
-
-Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
 
 Changes in v3:
-	- Updated example to make it compile with "make dt_binding_check".
+	- None.
 
 ---
- .../devicetree/bindings/arm/cpus.yaml         |  15 +++
- .../devicetree/bindings/arm/psci.yaml         | 104 ++++++++++++++++++
- 2 files changed, 119 insertions(+)
+ drivers/firmware/psci/psci.c | 18 ++++++++++++++++--
+ include/linux/psci.h         |  2 ++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index cb30895e3b67..92a775d6fc0e 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -241,6 +241,21 @@ properties:
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index b3b6c15e7b36..2937d44b5df4 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -97,7 +97,7 @@ static inline bool psci_has_ext_power_state(void)
+ 				PSCI_1_0_FEATURES_CPU_SUSPEND_PF_MASK;
+ }
  
-       where voltage is in V, frequency is in MHz.
+-static inline bool psci_has_osi_support(void)
++bool psci_has_osi_support(void)
+ {
+ 	return psci_cpu_suspend_feature & PSCI_1_0_OS_INITIATED;
+ }
+@@ -162,6 +162,15 @@ static u32 psci_get_version(void)
+ 	return invoke_psci_fn(PSCI_0_2_FN_PSCI_VERSION, 0, 0, 0);
+ }
  
-+  power-domains:
-+    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    description:
-+      List of phandles and PM domain specifiers, as defined by bindings of the
-+      PM domain provider (see also ../power_domain.txt).
++int psci_set_osi_mode(void)
++{
++	int err;
 +
-+  power-domain-names:
-+    $ref: '/schemas/types.yaml#/definitions/string-array'
-+    description:
-+      A list of power domain name strings sorted in the same order as the
-+      power-domains property.
++	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
++			     PSCI_1_0_SUSPEND_MODE_OSI, 0, 0);
++	return psci_to_linux_errno(err);
++}
 +
-+      For PSCI based platforms, the name corresponding to the index of the PSCI
-+      PM domain provider, must be "psci".
-+
-   qcom,saw:
-     $ref: '/schemas/types.yaml#/definitions/phandle'
-     description: |
-diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-index 7abdf58b335e..8ef85420b2ab 100644
---- a/Documentation/devicetree/bindings/arm/psci.yaml
-+++ b/Documentation/devicetree/bindings/arm/psci.yaml
-@@ -102,6 +102,34 @@ properties:
-       [1] Kernel documentation - ARM idle states bindings
-         Documentation/devicetree/bindings/arm/idle-states.txt
+ static int psci_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	int err;
+@@ -544,9 +553,14 @@ static int __init psci_1_0_init(struct device_node *np)
+ 	if (err)
+ 		return err;
  
-+  "#power-domain-cells":
-+    description:
-+      The number of cells in a PM domain specifier as per binding in [3].
-+      Must be 0 as to represent a single PM domain.
-+
-+      ARM systems can have multiple cores, sometimes in an hierarchical
-+      arrangement. This often, but not always, maps directly to the processor
-+      power topology of the system. Individual nodes in a topology have their
-+      own specific power states and can be better represented hierarchically.
-+
-+      For these cases, the definitions of the idle states for the CPUs and the
-+      CPU topology, must conform to the binding in [3]. The idle states
-+      themselves must conform to the binding in [4] and must specify the
-+      arm,psci-suspend-param property.
-+
-+      It should also be noted that, in PSCI firmware v1.0 the OS-Initiated
-+      (OSI) CPU suspend mode is introduced. Using a hierarchical representation
-+      helps to implement support for OSI mode and OS implementations may choose
-+      to mandate it.
-+
-+      [3] Documentation/devicetree/bindings/power/power_domain.txt
-+      [4] Documentation/devicetree/bindings/power/domain-idle-state.txt
-+
-+  power-domains:
-+    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    description:
-+      List of phandles and PM domain specifiers, as defined by bindings of the
-+      PM domain provider.
+-	if (psci_has_osi_support())
++	if (psci_has_osi_support()) {
+ 		pr_info("OSI mode supported.\n");
  
- required:
-   - compatible
-@@ -160,4 +188,80 @@ examples:
-       cpu_on = <0x95c10002>;
-       cpu_off = <0x95c10001>;
-     };
++		/* Default to PC mode. */
++		invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
++			       PSCI_1_0_SUSPEND_MODE_PC, 0, 0);
++	}
 +
-+  - |+
-+
-+    // Case 4: CPUs and CPU idle states described using the hierarchical model.
-+
-+    cpus {
-+      #size-cells = <0>;
-+      #address-cells = <1>;
-+
-+      CPU0: cpu@0 {
-+        device_type = "cpu";
-+        compatible = "arm,cortex-a53", "arm,armv8";
-+        reg = <0x0>;
-+        enable-method = "psci";
-+        power-domains = <&CPU_PD0>;
-+        power-domain-names = "psci";
-+      };
-+
-+      CPU1: cpu@1 {
-+        device_type = "cpu";
-+        compatible = "arm,cortex-a57", "arm,armv8";
-+        reg = <0x100>;
-+        enable-method = "psci";
-+        power-domains = <&CPU_PD1>;
-+        power-domain-names = "psci";
-+      };
-+
-+      idle-states {
-+
-+        CPU_PWRDN: cpu-power-down {
-+          compatible = "arm,idle-state";
-+          arm,psci-suspend-param = <0x0000001>;
-+          entry-latency-us = <10>;
-+          exit-latency-us = <10>;
-+          min-residency-us = <100>;
-+        };
-+
-+        CLUSTER_RET: cluster-retention {
-+          compatible = "domain-idle-state";
-+          arm,psci-suspend-param = <0x1000011>;
-+          entry-latency-us = <500>;
-+          exit-latency-us = <500>;
-+          min-residency-us = <2000>;
-+        };
-+
-+        CLUSTER_PWRDN: cluster-power-down {
-+          compatible = "domain-idle-state";
-+          arm,psci-suspend-param = <0x1000031>;
-+          entry-latency-us = <2000>;
-+          exit-latency-us = <2000>;
-+          min-residency-us = <6000>;
-+        };
-+      };
-+    };
-+
-+    psci {
-+      compatible = "arm,psci-1.0";
-+      method = "smc";
-+
-+      CPU_PD0: cpu-pd0 {
-+        #power-domain-cells = <0>;
-+        domain-idle-states = <&CPU_PWRDN>;
-+        power-domains = <&CLUSTER_PD>;
-+      };
-+
-+      CPU_PD1: cpu-pd1 {
-+        #power-domain-cells = <0>;
-+        domain-idle-states =  <&CPU_PWRDN>;
-+        power-domains = <&CLUSTER_PD>;
-+      };
-+
-+      CLUSTER_PD: cluster-pd {
-+        #power-domain-cells = <0>;
-+        domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
-+      };
-+    };
- ...
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/psci.h b/include/linux/psci.h
+index ebe0a881d13d..a67712b73b6c 100644
+--- a/include/linux/psci.h
++++ b/include/linux/psci.h
+@@ -18,6 +18,8 @@ bool psci_tos_resident_on(int cpu);
+ 
+ int psci_cpu_suspend_enter(u32 state);
+ bool psci_power_state_is_valid(u32 state);
++int psci_set_osi_mode(void);
++bool psci_has_osi_support(void);
+ 
+ enum smccc_version {
+ 	SMCCC_VERSION_1_0,
 -- 
 2.17.1
 
