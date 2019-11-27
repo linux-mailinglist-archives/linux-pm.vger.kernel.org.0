@@ -2,55 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B820110B629
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 19:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEC310B6ED
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 20:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbfK0SxW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 13:53:22 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37069 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfK0SxW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 13:53:22 -0500
-Received: by mail-oi1-f193.google.com with SMTP id 128so12983171oih.4;
-        Wed, 27 Nov 2019 10:53:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=B7OdfyOfsvItvmaN0rYdNSg9G6SH0O4NS8qdePNGNsM=;
-        b=N8vdY+vlJAQhjge4fCNhfz2W4+03pESQoSCgv88q2OlHXMyNb5KgDwo52mHKSK/4D5
-         6+Ro8/dh5tdnzYBZTchIotY9Bliv0l+waCLXOhRzpqsPOwOfJlqMq6KAiDGTIHWIdxy4
-         eNFZ4R6HMfsm//Y86ousrjQwK6cIajqJTjbWJSLMEreAY3VyYzy+6EX76/JpzO0N9mUa
-         Ab3bg3doy/GnWBRHtoUin/0E0lzjBm/Q4jbyMuBVqasrsTA2zfyJm4+70JjmIu/m5PYe
-         wBg3FPSV5rUVFe08TNISjx6zOXlxDNo6VChINu5JHQVzCx+Dskm3IBMiG0DbNWuTJM1S
-         jTCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=B7OdfyOfsvItvmaN0rYdNSg9G6SH0O4NS8qdePNGNsM=;
-        b=mahTAn0wv+Ww4fhMVm2TOavbv/42UXdAIEdwXyRjiVdOpIVxVtYdwquBgG0g5uVfr1
-         sRh7fne7CgzlmFgrfh2ANVhvbnYIz/5tQzKr7XVPtngGrnjC08x48Ct0Ok0x6Cny0sMw
-         pJWTVY6W5nVR0DlBQE1MgIQ0DZc2VsyXVLDGTNzDj7YlawQ44XYHWljmoOnPElWFaBZc
-         6GrxPQX/z7xeLa4CYuDs343q+lMu4oiUKrR1TLXWau2r8AgJ4S0nZONWPbgRXIfZy8c5
-         Jn8CnOnN2QKF2GgvZlApKlJoXW84aLaHmF8wSBk1qgO9ScPnS4EgDT/egkYnOoetZuih
-         6MtA==
-X-Gm-Message-State: APjAAAUOZ8jeOKNrzMb9iaAY+CpAHdMqzCdRQwoDQG7U9fdPuuadmH3q
-        tUdN3ohUI2sYDftb1E5nMZ1u7pziri7iNsk1/P89ZIJB
-X-Google-Smtp-Source: APXvYqx+wTrJMMEAadlR2TvpMsiJs6MouGSI7S70yGV387JqMw+U7ZdD2Kjv46qQTOWW6lu42qDvJ/n1yjP4CpNThoM=
-X-Received: by 2002:aca:5883:: with SMTP id m125mr5055567oib.145.1574880800897;
- Wed, 27 Nov 2019 10:53:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20191127052935.1719897-1-anarsoul@gmail.com> <20191127052935.1719897-3-anarsoul@gmail.com>
- <20191127174434.wousbqosmm5vxcsu@gilmour.lan> <20191127180743.ww5npenlg2urxtjn@core.my.home>
-In-Reply-To: <20191127180743.ww5npenlg2urxtjn@core.my.home>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Wed, 27 Nov 2019 10:52:55 -0800
-Message-ID: <CA+E=qVeXhutfeJ6m8fuokzy8aRmNqWWyRGn0Lbtv_9hNCXzSeg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: add YAML schema for
- sun8i-thermal driver bindings
-To:     Maxime Ripard <mripard@kernel.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
+        id S1728346AbfK0Tko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 14:40:44 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:40735 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728342AbfK0Tko (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 14:40:44 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 0F7C96E1B;
+        Wed, 27 Nov 2019 14:40:43 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 27 Nov 2019 14:40:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        subject:to:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=E
+        /eIlh2168YayUz7yI7wcMUEWzVWY48EgCDeJX0YMmc=; b=OGV5MB7v9L4rOLaXQ
+        J2XEyZ+7vKPjJVyBSlgfr4asg+jthrU79qhCu9A77Kai+VIUoyMt/UspFCmISUvh
+        fN/SwO6HeCySalYiK5IWjFxCQjK1JuL/wR7Zq/rP/FPXus35l7U45dhoceTMpckw
+        koT4wVAThGHzQ+pR3pJGIef9HFXr4wln7d8bBA4PhWLWsRA/0g6MSkuONbA19g5z
+        0NHcFzKOxrDS881CzG4qU5bFBACrc2qJltShmQuEG+SlpGsFIrUn21Nv9SvWfS/a
+        ARl6kvtkpl52tZ26c0h1R2udVVGRSKeo9GNOhsxF2eRX57b4pBj0tGP8HisB4vT7
+        /o2AQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=E/eIlh2168YayUz7yI7wcMUEWzVWY48EgCDeJX0YM
+        mc=; b=a9kBxkyVK77sxjD/7mLsLVOu7ZRh8aqcB+qVA6ZhTszjPgdeGUsZCBr5W
+        9XdNCfEEx0Ki8DFVR2oeEvPlpperlCQCoBXlPOBLm3lS3aalBRSBCbkiLzPz0uPk
+        nF+lfeV1s+/abGu1wou3b+MktFjRpG/zLVHI7fJkZpeq5ovIdKzfoEsFTA4ZU8du
+        VsuGjH05IwzNfKqIuZzm9Pmh8jPE6CWerFIAQ2EAyG9ljYIsKHsO41A750agoNdP
+        IC0jeNj/pcF7thyz2zUKUUzaoTHhsDQ9eK4rpWvfi7FlkC8ih7r4Kss+UJ0HvAYN
+        Aq36RAcm02qB8ha8h7unRK98xAHKQ==
+X-ME-Sender: <xms:OdHeXUEWs5o7TXILYIJAwNVE41K8opmhTyiisUdezT0C-4kS03zb3w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeihedguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    fkphepudefiedrfedvrdeifedrvdegvdenucfrrghrrghmpehmrghilhhfrhhomhepshgr
+    mhhuvghlsehshhholhhlrghnugdrohhrghenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:OdHeXX0aDv9YBuzW9gWZzwC_E7nc8j3Os2ip8HRqKFAqedL0SHn58w>
+    <xmx:OdHeXfQ8HroTLDfDwnRpl9fDY2QZ_IhN9kghtJznHLSIqw_3YNPjvw>
+    <xmx:OdHeXU0LaTyk-Lv0e1VJGkou9C58ojI5-GpBIUHTLFAdWC2enbrYxQ>
+    <xmx:O9HeXUNxhlDeXv0rzUm5lt1jPWYDVLAzSEZA_u4O5InPWEkSuoNgaw>
+Received: from [192.168.16.195] (unknown [136.32.63.242])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 4BEF980059;
+        Wed, 27 Nov 2019 14:40:40 -0500 (EST)
+Subject: Re: [PATCH v6 4/7] ARM: dts: sun8i-h3: Add thermal sensor and thermal
+ zones
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
         Yangtao Li <tiny.windzz@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
@@ -58,204 +62,93 @@ To:     Maxime Ripard <mripard@kernel.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megous@megous.com>,
+        linux-kernel@vger.kernel.org
+References: <20191127052935.1719897-1-anarsoul@gmail.com>
+ <20191127052935.1719897-5-anarsoul@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <78c38148-872d-6aa1-5848-c0df2c22c2b6@sholland.org>
+Date:   Wed, 27 Nov 2019 13:40:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <20191127052935.1719897-5-anarsoul@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 10:07 AM Ond=C5=99ej Jirman <megous@megous.com> wro=
-te:
->
-> Hi,
->
-> On Wed, Nov 27, 2019 at 06:44:34PM +0100, Maxime Ripard wrote:
-> > Hi,
-> >
-> > On Tue, Nov 26, 2019 at 09:29:30PM -0800, Vasily Khoruzhick wrote:
-> > > From: Yangtao Li <tiny.windzz@gmail.com>
-> > >
-> > > sun8i-thermal driver supports thermal sensor in wide range of Allwinn=
-er
-> > > SoCs. Add YAML schema for its bindings.
-> > >
-> > > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > > Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
-> > > ---
-> > >  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 103 ++++++++++++++++=
-++
-> > >  1 file changed, 103 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/thermal/allwinn=
-er,sun8i-a83t-ths.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8=
-i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i=
--a83t-ths.yaml
-> > > new file mode 100644
-> > > index 000000000000..e622f0a4be90
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-=
-ths.yaml
-> > > @@ -0,0 +1,103 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/thermal/allwinner,sun8i-a83t-ths.=
-yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Allwinner SUN8I Thermal Controller Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - Yangtao Li <tiny.windzz@gmail.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - const: allwinner,sun8i-a83t-ths
-> > > +      - const: allwinner,sun8i-h3-ths
-> > > +      - const: allwinner,sun8i-r40-ths
-> > > +      - const: allwinner,sun50i-a64-ths
-> > > +      - const: allwinner,sun50i-h5-ths
-> > > +      - const: allwinner,sun50i-h6-ths
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  resets:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    minItems: 1
-> > > +    maxItems: 2
-> > > +
-> > > +  clock-names:
-> > > +    anyOf:
-> > > +      - items:
-> > > +        - const: bus
-> > > +        - const: mod
-> > > +      - items:
-> > > +        - const: bus
-> >
-> > This can be:
-> >
-> > clock-names:
-> >   minItems: 1
->
-> Additionally, minItems should be 0, since A83T doesn't have bus clock/res=
-et. And
-> then there should be a special case for A83T too with min/maxItems =3D 0 =
-for both
-> resets and clocks.
+Hi,
 
-That's why I removed clocks, clock-names and resets from required
-properties. If they're present min/maxItems should be 1 and 2
-accordingly.
+On 11/26/19 11:29 PM, Vasily Khoruzhick wrote:
+> From: Ondrej Jirman <megous@megous.com>
+> 
+> There is just one sensor for the CPU.
+> 
+> Signed-off-by: Ondrej Jirman <megous@megous.com>
+> Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> ---
+>  arch/arm/boot/dts/sun8i-h3.dtsi | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sun8i-h3.dtsi b/arch/arm/boot/dts/sun8i-h3.dtsi
+> index e37c30e811d3..42fd0418d678 100644
+> --- a/arch/arm/boot/dts/sun8i-h3.dtsi
+> +++ b/arch/arm/boot/dts/sun8i-h3.dtsi
+> @@ -177,6 +177,26 @@
+>  			assigned-clocks = <&ccu CLK_GPU>;
+>  			assigned-clock-rates = <384000000>;
+>  		};
+> +
+> +		ths: ths@1c25000 {
+> +			compatible = "allwinner,sun8i-h3-ths";
+> +			reg = <0x01c25000 0x400>;
+> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> +			resets = <&ccu RST_BUS_THS>;
+> +			clocks = <&ccu CLK_BUS_THS>, <&ccu CLK_THS>;
+> +			clock-names = "bus", "mod";
+> +			nvmem-cells = <&ths_calibration>;
+> +			nvmem-cell-names = "calibration";
+> +			#thermal-sensor-cells = <0>;
+> +		};
+> +	};
+> +
+> +	thermal-zones {
+> +		cpu_thermal: cpu-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&ths 0>;
+> +		};
+>  	};
+>  };
+>  
+> @@ -234,4 +254,10 @@
+>  
+>  &sid {
+>  	compatible = "allwinner,sun8i-h3-sid";
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	ths_calibration: thermal-sensor-calibration@34 {
+> +		reg = <0x34 4>;
+> +	};
 
-> regards,
->         o.
->
-> >   maxItems: 2
-> >   items:
-> >     - const: bus
-> >     - const: mod
-> >
-> > And the length should be checked based on the compatible value, with
-> > something like
-> >
-> > if:
-> >   properties:
-> >     compatible:
-> >       contains:
-> >         const: allwinner,sun50i-h6-ths
-> >
-> > then:
-> >   properties:
-> >     clocks:
-> >       maxItems: 1
-> >
-> >     clock-names:
-> >       maxItems: 1
-> >
-> > else:
-> >   properties:
-> >     clocks:
-> >       maxItems: 2
-> >
-> >     clock-names:
-> >       maxItems: 2
-> >
-> > > +
-> > > +  '#thermal-sensor-cells':
-> > > +    enum: [ 0, 1 ]
-> > > +    description: |
-> > > +      Definition depends on soc version:
-> > > +
-> > > +      For "allwinner,sun8i-h3-ths",
-> > > +      value must be 0.
-> > > +      For all other compatibles
-> > > +      value must be 1.
-> >
-> > This should be checked using an if as well.
-> >
-> > > +
-> > > +  nvmem-cells:
-> > > +    maxItems: 1
-> > > +    items:
-> > > +      - description: Calibration data for thermal sensors
-> >
-> > You can drop the items and just move the description up one level,
-> > under nvmem-cells
-> >
-> > > +
-> > > +  nvmem-cell-names:
-> > > +    items:
-> > > +      - const: calibration
-> >
-> > Ditto for the const
-> >
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +  - '#thermal-sensor-cells'
-> >
-> > Whether clocks, clock-names and resets are thereshould be check using
-> > an if statement as well.
-> >
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    ths_a83t: ths@1f04000 {
-> >
-> > You don't need the label at all, and the node name should be
-> > temperature-sensor according to the DT spec, not ths. This applies to
-> > all you examples.
-> >
-> > > +         compatible =3D "allwinner,sun8i-a83t-ths";
-> > > +         reg =3D <0x01f04000 0x100>;
-> > > +         interrupts =3D <0 31 0>;
-> > > +         nvmem-cells =3D <&ths_calibration>;
-> > > +         nvmem-cell-names =3D "calibration";
-> > > +         #thermal-sensor-cells =3D <1>;
-> > > +    };
-> >
-> > New line.
-> >
-> > Thanks!
-> > Maxime
->
->
+All of the lines added here are common between the H3 and H5, so they can go in
+the shared SID node in sunxi-h3-h5.dtsi.
+
+Cheers,
+Samuel
+
+>  };
+> 
+
