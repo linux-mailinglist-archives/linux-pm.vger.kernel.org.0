@@ -2,254 +2,439 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D0810ABE3
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 09:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DA010AC5C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 10:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbfK0IgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 03:36:24 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34400 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726133AbfK0IgY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 03:36:24 -0500
-Received: by mail-pf1-f196.google.com with SMTP id n13so10637636pff.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 00:36:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kEWlTxImZpdkwXhGS8325FceSNRBs8VLhunG13s9KAM=;
-        b=yHpRnVxIjSPnmIdbMbeu/tYzFBYDtKTTB287cO1KR1bARwSmREn/eQP74Bl7Af9/y8
-         a82ewmL2RBQDxl2XmBxTNBAL+KaxJmKAwlKSRl+2cOkk7//wvP6vjlBiIup/h7v2jo8V
-         hD3ZtLbo9ZCwivNiTAZq2pUpGLBvhYf0Fvj3PTlMiN0akT2u3kqKvVPIDeYgrbSC2Cb9
-         ERUMql/9D07dmErr5NA8VCMA753S+WHPa1jovOmvlhsanFxOuurKFWr5XnitU2n4yk0s
-         6g95m1QCflgnf2y6N/vMnCzgc3LucbF8wwRMWAlX49Y/dCTaJfA0G0K6Ehqx6Ay7WAr2
-         baJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kEWlTxImZpdkwXhGS8325FceSNRBs8VLhunG13s9KAM=;
-        b=kWfP72U7x8K3NbeHKYCKhnjZddKveL8jjhMFM9PNWryF1qluIHEnFt+DPWlS6GE2d4
-         mCvZb3bEkusebq6yRlNSgegQPFVuUc1G1OZoUzmVe4KrQuxolvqf/uxjsSCj8jmIFblW
-         GlGQY/lxuVSjRlJazztjZ21K/xOkFJ1Cq4ydhh4yh33byZzV+Cf9Ogrwp29ZVFS3bKFc
-         Iq+jFICNYMAk52H9mSqdmhUmBoj4FYv1DveRkCNoAbq4SdYGSCLIa785k6VMrw6n9GnQ
-         S78ncdT7y9UEZd6oCqALbcw3R8Yvc2jXvI2zaBfiStDbuLJ8k39nW07bWj1Wqd41ALLf
-         9mZA==
-X-Gm-Message-State: APjAAAVYgKRE/w81bBnDpOQco+dppMxo7j6mOE/wXPiln1L1yVWy9vqk
-        gAbEcMHO0S5YmHg/GPUhCzBcLQ==
-X-Google-Smtp-Source: APXvYqz6ciA/bE2sIdxV8IrR+vllOp4Mb3eFxMKadK3NK074FLo5rfjIe4sBJET8JrQj229M/EAXpQ==
-X-Received: by 2002:a63:1b1f:: with SMTP id b31mr3451053pgb.177.1574843782900;
-        Wed, 27 Nov 2019 00:36:22 -0800 (PST)
-Received: from localhost ([122.171.112.123])
-        by smtp.gmail.com with ESMTPSA id k24sm15884442pfk.63.2019.11.27.00.36.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Nov 2019 00:36:21 -0800 (PST)
-Date:   Wed, 27 Nov 2019 14:06:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        id S1726373AbfK0JBj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 04:01:39 -0500
+Received: from a27-186.smtp-out.us-west-2.amazonses.com ([54.240.27.186]:58548
+        "EHLO a27-186.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726112AbfK0JBi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 04:01:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574845296;
+        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
+        bh=W3L6nlmes8oXrfGyTRcQKAPftzxl1AiuiyJp8dmg4qg=;
+        b=LQG2OjjgFMOCHDWLBHvCmbMKHttjEMksDlR4S96SjPEyyV5pFvlSKq5yWrDu40aB
+        ZzASbkPRfUJSRra96rlqq6XKS0mY+zvnq6j4st/08Nlxxnlb2jlnHH22Iy5rVr62MIN
+        baya9Hl+8pojRgvEcwJkk8gpff5o6/Id4SN0Uu/k=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574845296;
+        h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
+        bh=W3L6nlmes8oXrfGyTRcQKAPftzxl1AiuiyJp8dmg4qg=;
+        b=PshHnikMhvrHPlqgUvukSzpIAPjOmiHAHIL2mYDEbCBzbDICoJZ6bsV9/XU4+c0n
+        AxBylgkoqFTWVxlUMvEHGjE+XMgrVfTJ+pierx25rsVeJO+SNBJSM95BvO818tUch+h
+        7bZP+O+dXdBPE4s7uxDCClRezJQmKoTjEpuF5Kg4=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 27 Nov 2019 09:01:36 +0000
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@google.com, sboyd@kernel.org,
+        Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com, fan.chen@mediatek.com
-Subject: Re: [v5, PATCH 4/5] cpufreq: mediatek: add opp notification for SVS
- support
-Message-ID: <20191127083619.etocnhpyyut3hzwq@vireshk-i7>
-References: <1574769046-28449-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <1574769046-28449-5-git-send-email-andrew-sh.cheng@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1574769046-28449-5-git-send-email-andrew-sh.cheng@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ilina@codeaurora.org, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH V1 1/2] dt-bindings: interconnect: Add Qualcomm SC7180 DT
+ bindings
+In-Reply-To: <0101016ea83b44e2-546fc9ff-6056-482b-a42d-231b9d908640-000000@us-west-2.amazonses.com>
+References: <1574780408-21282-1-git-send-email-okukatla@codeaurora.org>
+ <0101016ea83b44e2-546fc9ff-6056-482b-a42d-231b9d908640-000000@us-west-2.amazonses.com>
+Message-ID: <0101016eac183058-afcce911-d283-4748-b3ff-8455e076a313-000000@us-west-2.amazonses.com>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
+X-SES-Outgoing: 2019.11.27-54.240.27.186
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-11-19, 19:50, Andrew-sh.Cheng wrote:
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 4b0cc50dd93b..7c37ab31230a 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -42,6 +42,10 @@ struct mtk_cpu_dvfs_info {
->  	struct list_head list_head;
->  	int intermediate_voltage;
->  	bool need_voltage_tracking;
-> +	struct mutex lock; /* avoid notify and policy race condition */
+Hey Odelu,
 
-Will a read-write lock be better suited here for performance reasons ?
-
-> +	struct notifier_block opp_nb;
-> +	int opp_cpu;
-> +	unsigned long opp_freq;
->  };
->  
->  static LIST_HEAD(dvfs_info_list);
-> @@ -231,6 +235,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  	vproc = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
->  
-> +	mutex_lock(&info->lock);
->  	/*
->  	 * If the new voltage or the intermediate voltage is higher than the
->  	 * current voltage, scale up voltage first.
-> @@ -242,6 +247,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  			pr_err("cpu%d: failed to scale up voltage!\n",
->  			       policy->cpu);
->  			mtk_cpufreq_set_voltage(info, old_vproc);
-> +			mutex_unlock(&info->lock);
->  			return ret;
->  		}
->  	}
-> @@ -253,6 +259,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		mtk_cpufreq_set_voltage(info, old_vproc);
->  		WARN_ON(1);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -263,6 +270,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		clk_set_parent(cpu_clk, armpll);
->  		mtk_cpufreq_set_voltage(info, old_vproc);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -273,6 +281,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		mtk_cpufreq_set_voltage(info, inter_vproc);
->  		WARN_ON(1);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -288,15 +297,75 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  			clk_set_parent(cpu_clk, info->inter_clk);
->  			clk_set_rate(armpll, old_freq_hz);
->  			clk_set_parent(cpu_clk, armpll);
-> +			mutex_unlock(&info->lock);
->  			return ret;
->  		}
->  	}
->  
-> +	info->opp_freq = freq_hz;
-> +	mutex_unlock(&info->lock);
+On 2019-11-26 20:31, Odelu Kukatla wrote:
+> The Qualcomm SC7180 platform has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>  .../bindings/interconnect/qcom,bcm-voter.yaml      |   1 +
+>  .../bindings/interconnect/qcom,sc7180.yaml         | 155 
+> +++++++++++++++++++++
+>  include/dt-bindings/interconnect/qcom,sc7180.h     | 149 
+> ++++++++++++++++++++
+>  3 files changed, 305 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sc7180.h
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> index 74f0715..55c9f34 100644
+> --- 
+> a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> +++ 
+> b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> @@ -19,6 +19,7 @@ description: |
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,sc7180-bcm-voter
+>        - qcom,sdm845-bcm-voter
+> 
+>  required:
+> diff --git
+> a/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+> b/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+> new file mode 100644
+> index 0000000..487da5e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+> @@ -0,0 +1,155 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,sc7180.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	return 0;
->  }
->  
->  #define DYNAMIC_POWER "dynamic-power-coefficient"
->  
-> +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
-> +				    unsigned long event, void *data)
-> +{
-> +	struct dev_pm_opp *opp = data;
-> +	struct dev_pm_opp *opp_item;
-> +	struct mtk_cpu_dvfs_info *info =
-> +		container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
-
-Do the assignment after all definitions, instead of awkwardly breaking
-the line here.
-
-> +	unsigned long freq, volt;
-> +	struct cpufreq_policy *policy;
-> +	int ret = 0;
-> +
-> +	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
-> +		freq = dev_pm_opp_get_freq(opp);
-> +
-> +		mutex_lock(&info->lock);
-> +		if (info->opp_freq == freq) {
-> +			volt = dev_pm_opp_get_voltage(opp);
-> +			ret = mtk_cpufreq_set_voltage(info, volt);
-> +			if (ret)
-> +				dev_err(info->cpu_dev, "failed to scale voltage: %d\n",
-> +					ret);
-> +		}
-> +		mutex_unlock(&info->lock);
-> +	} else if (event == OPP_EVENT_DISABLE) {
-> +		freq = info->opp_freq;
-> +		opp_item = dev_pm_opp_find_freq_ceil(info->cpu_dev, &freq);
-
-name it new_opp instead of opp_item.
-
-> +		if (!IS_ERR(opp_item))
-> +			dev_pm_opp_put(opp_item);
-> +		else
-> +			freq = 0;
+> +title:  Qualcomm SC7180 Network-On-Chip Interconnect
 > +
 
-What is the purpose of the above code ?
+seems to be same as the SDM845
+icc description can't we just
+re-use/add it to that?
 
-> +		/* case of current opp is disabled */
-> +		if (freq == 0 || freq != info->opp_freq) {
-> +			// find an enable opp item
-
-Use proper commenting style please.
-
-> +			freq = 1;
-> +			opp_item = dev_pm_opp_find_freq_ceil(info->cpu_dev,
-> +							     &freq);
-> +			if (!IS_ERR(opp_item)) {
-> +				dev_pm_opp_put(opp_item);
-> +				policy = cpufreq_cpu_get(info->opp_cpu);
-> +				if (policy) {
-> +					cpufreq_driver_target(policy,
-> +						freq / 1000,
-> +						CPUFREQ_RELATION_L);
-
-Why don't you simply call this instead of all the code in the else
-block ?
-
-> +					cpufreq_cpu_put(policy);
-> +				}
-> +			} else {
-> +				pr_err("%s: all opp items are disabled\n",
-> +				       __func__);
-> +			}
-> +		}
-> +	}
+> +maintainers:
+> +  - David Dai <daidavid1@codeaurora.org>
 > +
-> +	return notifier_from_errno(ret);
-> +}
+> +description: |
+> +   SC7180 interconnect providers support system bandwidth requirements 
+> through
+> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The 
+> provider is
+> +   able to communicate with the BCM through the Resource State
+> Coordinator (RSC)
+> +   associated with each execution environment. Provider nodes must 
+> point to at
+> +   least one RPMh device child node pertaining to their RSC and each 
+> provider
+> +   can map to multiple RPMh resources.
 > +
->  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  {
->  	struct device *cpu_dev;
-> @@ -383,11 +452,21 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
->  
-> +	info->opp_cpu = cpu;
-> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
-> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
-> +	if (ret) {
-> +		pr_warn("cannot register opp notification\n");
-> +		goto out_free_opp_table;
-> +	}
+> +properties:
+> +  reg:
+> +    maxItems: 1
 > +
-> +	mutex_init(&info->lock);
->  	info->cpu_dev = cpu_dev;
->  	info->proc_reg = proc_reg;
->  	info->sram_reg = IS_ERR(sram_reg) ? NULL : sram_reg;
->  	info->cpu_clk = cpu_clk;
->  	info->inter_clk = inter_clk;
-> +	info->opp_freq = clk_get_rate(cpu_clk);
->  
->  	/*
->  	 * If SRAM regulator is present, software "voltage tracking" is needed
-> -- 
-> 2.12.5
+> +  compatible:
+> +    enum:
+> +      - qcom,sc7180-aggre1-noc
+> +      - qcom,sc7180-aggre2-noc
+> +      - qcom,sc7180-camnoc-virt
+> +      - qcom,sc7180-compute-noc
+> +      - qcom,sc7180-config-noc
+> +      - qcom,sc7180-dc-noc
+> +      - qcom,sc7180-gem-noc
+> +      - qcom,sc7180-ipa-virt
+> +      - qcom,sc7180-mc-virt
+> +      - qcom,sc7180-mmss-noc
+> +      - qcom,sc7180-npu-noc
+> +      - qcom,sc7180-qup-virt
+> +      - qcom,sc7180-system-noc
+> +
+> +  '#interconnect-cells':
+> +    const: 1
+> +
+> +  qcom,bcm-voters:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      List of phandles to qcom,bcm-voter nodes that are required by
+> +      this interconnect to send RPMh commands.
+> +
+> +  qcom,bcm-voter-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description: |
+> +      Names for each of the qcom,bcm-voters specified.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#interconnect-cells'
+> +  - qcom,bcm-voters
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/interconnect/qcom,sc7180.h>
+> +
+> +      config_noc: interconnect@1500000 {
+> +            compatible = "qcom,sc7180-config-noc";
+> +            reg = <0 0x01500000 0 0x28000>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      system_noc: interconnect@1620000 {
+> +            compatible = "qcom,sc7180-system-noc";
+> +            reg = <0 0x01620000 0 0x17080>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      mc_virt: interconnect@1630000 {
+> +            compatible = "qcom,sc7180-mc-virt";
+> +            reg = <0 0x01630000 0 0x4000>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      qup_virt: interconnect@1650000 {
+> +            compatible = "qcom,sc7180-qup-virt";
+> +            reg = <0 0x01650000 0 0x4000>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      aggre1_noc: interconnect@16e0000 {
+> +            compatible = "qcom,sc7180-aggre1-noc";
+> +            reg = <0 0x016e0000 0 0x15080>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      aggre2_noc: interconnect@1700000 {
+> +            compatible = "qcom,sc7180-aggre2-noc";
+> +            reg = <0 0x01700000 0 0x1f880>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      compute_noc: interconnect@170e000 {
+> +            compatible = "qcom,sc7180-compute-noc";
+> +            reg = <0 0x0170e000 0 0x11880>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      mmss_noc: interconnect@1740000 {
+> +            compatible = "qcom,sc7180-mmss-noc";
+> +            reg = <0 0x01740000 0 0x1c100>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      ipa_virt: interconnect@1e00000 {
+> +            compatible = "qcom,sc7180-ipa-virt";
+> +            reg = <0 0x01e00000 0 0x4000>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      dc_noc: interconnect@9160000 {
+> +            compatible = "qcom,sc7180-dc-noc";
+> +            reg = <0 0x09160000 0 0x03200>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      gem_noc: interconnect@9680000 {
+> +            compatible = "qcom,sc7180-gem-noc";
+> +            reg = <0 0x09680000 0 0x3e200>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      npu_noc: interconnect@9990000 {
+> +            compatible = "qcom,sc7180-npu-noc";
+> +            reg = <0 0x09990000 0 0x1600>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      camnoc_virt: interconnect@ac00000 {
+> +            compatible = "qcom,sc7180-camnoc-virt";
+> +            reg = <0 0x0ac00000 0 0x4000>;
+> +            #interconnect-cells = <1>;
+> +            qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> diff --git a/include/dt-bindings/interconnect/qcom,sc7180.h
+> b/include/dt-bindings/interconnect/qcom,sc7180.h
+> new file mode 100644
+> index 0000000..b762bc3
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,sc7180.h
+> @@ -0,0 +1,149 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Qualcomm SC7180 interconnect IDs
+> + *
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SC7180_H
+> +#define __DT_BINDINGS_INTERCONNECT_QCOM_SC7180_H
+
+Please use local ids instead, the
+following way of defining nodes will
+lead to unnecessarily large array
+sizes.
+
+> +
+> +#define MASTER_APPSS_PROC			0
+> +#define MASTER_SYS_TCU				1
+> +#define MASTER_NPU_SYS				2
+> +#define MASTER_IPA_CORE				3
+> +#define MASTER_LLCC				4
+> +#define MASTER_A1NOC_CFG			5
+> +#define MASTER_A2NOC_CFG			6
+> +#define MASTER_CNOC_DC_NOC			7
+> +#define MASTER_GEM_NOC_CFG			8
+> +#define MASTER_CNOC_MNOC_CFG			9
+> +#define MASTER_NPU_NOC_CFG			10
+> +#define MASTER_QDSS_BAM				11
+> +#define MASTER_QSPI				12
+> +#define MASTER_QUP_0				13
+> +#define MASTER_QUP_1				14
+> +#define MASTER_SNOC_CFG				15
+> +#define MASTER_A1NOC_SNOC			16
+> +#define MASTER_A2NOC_SNOC			17
+> +#define MASTER_COMPUTE_NOC			18
+> +#define MASTER_GEM_NOC_SNOC			19
+> +#define MASTER_MNOC_HF_MEM_NOC			20
+> +#define MASTER_MNOC_SF_MEM_NOC			21
+> +#define MASTER_NPU				22
+> +#define MASTER_SNOC_CNOC			23
+> +#define MASTER_SNOC_GC_MEM_NOC			24
+> +#define MASTER_SNOC_SF_MEM_NOC			25
+> +#define MASTER_QUP_CORE_0			26
+> +#define MASTER_QUP_CORE_1			27
+> +#define MASTER_CAMNOC_HF0			28
+> +#define MASTER_CAMNOC_HF1			29
+> +#define MASTER_CAMNOC_HF0_UNCOMP		30
+> +#define MASTER_CAMNOC_HF1_UNCOMP		31
+> +#define MASTER_CAMNOC_SF			32
+> +#define MASTER_CAMNOC_SF_UNCOMP			33
+> +#define MASTER_CRYPTO				34
+> +#define MASTER_GFX3D				35
+> +#define MASTER_IPA				36
+> +#define MASTER_MDP0				37
+> +#define MASTER_NPU_PROC				38
+> +#define MASTER_PIMEM				39
+> +#define MASTER_ROTATOR				40
+> +#define MASTER_VIDEO_P0				41
+> +#define MASTER_VIDEO_PROC			42
+> +#define MASTER_QDSS_DAP				43
+> +#define MASTER_QDSS_ETR				44
+> +#define MASTER_SDCC_2				45
+> +#define MASTER_UFS_MEM				46
+> +#define MASTER_USB3				47
+> +#define MASTER_EMMC				48
+> +#define SLAVE_EBI1				512
+
+Shouldn't the node ids be just
+sequential?
+
+> +#define SLAVE_IPA_CORE				513
+> +#define SLAVE_A1NOC_CFG				514
+> +#define SLAVE_A2NOC_CFG				515
+> +#define SLAVE_AHB2PHY_SOUTH			516
+> +#define SLAVE_AHB2PHY_CENTER			517
+> +#define SLAVE_AOP				518
+> +#define SLAVE_AOSS				519
+> +#define SLAVE_APPSS				520
+> +#define SLAVE_BOOT_ROM				521
+> +#define SLAVE_NPU_CAL_DP0			522
+> +#define SLAVE_CAMERA_CFG			523
+> +#define SLAVE_CAMERA_NRT_THROTTLE_CFG		524
+> +#define SLAVE_CAMERA_RT_THROTTLE_CFG		525
+> +#define SLAVE_CLK_CTL				526
+> +#define SLAVE_NPU_CP				527
+> +#define SLAVE_RBCPR_CX_CFG			528
+> +#define SLAVE_RBCPR_MX_CFG			529
+> +#define SLAVE_CRYPTO_0_CFG			530
+> +#define SLAVE_DCC_CFG				531
+> +#define SLAVE_CNOC_DDRSS			532
+> +#define SLAVE_DISPLAY_CFG			533
+> +#define SLAVE_DISPLAY_RT_THROTTLE_CFG		534
+> +#define SLAVE_DISPLAY_THROTTLE_CFG		535
+> +#define SLAVE_NPU_INT_DMA_BWMON_CFG		536
+> +#define SLAVE_NPU_DPM				537
+> +#define SLAVE_EMMC_CFG				538
+> +#define SLAVE_GEM_NOC_CFG			539
+> +#define SLAVE_GLM				540
+> +#define SLAVE_GFX3D_CFG				541
+> +#define SLAVE_IMEM_CFG				542
+> +#define SLAVE_IPA_CFG				543
+> +#define SLAVE_ISENSE_CFG			544
+> +#define SLAVE_LLCC_CFG				545
+> +#define SLAVE_NPU_LLM_CFG			546
+> +#define SLAVE_MSS_PROC_MS_MPU_CFG		547
+> +#define SLAVE_CNOC_MNOC_CFG			548
+> +#define SLAVE_CNOC_MSS				549
+> +#define SLAVE_NPU_CFG				550
+> +#define SLAVE_NPU_DMA_BWMON_CFG			551
+> +#define SLAVE_NPU_PROC_BWMON_CFG		552
+> +#define SLAVE_PDM				553
+> +#define SLAVE_PIMEM_CFG				554
+> +#define SLAVE_PRNG				555
+> +#define SLAVE_QDSS_CFG				556
+> +#define SLAVE_QM_CFG				557
+> +#define SLAVE_QM_MPU_CFG			558
+> +#define SLAVE_QSPI_0				559
+> +#define SLAVE_QUP_0				560
+> +#define SLAVE_QUP_1				561
+> +#define SLAVE_SDCC_2				562
+> +#define SLAVE_SECURITY				563
+> +#define SLAVE_SNOC_CFG				564
+> +#define SLAVE_NPU_TCM				565
+> +#define SLAVE_TCSR				566
+> +#define SLAVE_TLMM_WEST				567
+> +#define SLAVE_TLMM_NORTH			568
+> +#define SLAVE_TLMM_SOUTH			569
+> +#define SLAVE_UFS_MEM_CFG			570
+> +#define SLAVE_USB3				571
+> +#define SLAVE_VENUS_CFG				572
+> +#define SLAVE_VENUS_THROTTLE_CFG		573
+> +#define SLAVE_VSENSE_CTRL_CFG			574
+> +#define SLAVE_A1NOC_SNOC			575
+> +#define SLAVE_A2NOC_SNOC			576
+> +#define SLAVE_CAMNOC_UNCOMP			577
+> +#define SLAVE_CDSP_GEM_NOC			578
+> +#define SLAVE_SNOC_CNOC				579
+> +#define SLAVE_GEM_NOC_SNOC			580
+> +#define SLAVE_SNOC_GEM_NOC_GC			581
+> +#define SLAVE_SNOC_GEM_NOC_SF			582
+> +#define SLAVE_LLCC				583
+> +#define SLAVE_MNOC_HF_MEM_NOC			584
+> +#define SLAVE_MNOC_SF_MEM_NOC			585
+> +#define SLAVE_NPU_COMPUTE_NOC			586
+> +#define SLAVE_QUP_CORE_0			587
+> +#define SLAVE_QUP_CORE_1			588
+> +#define SLAVE_IMEM				589
+> +#define SLAVE_PIMEM				590
+> +#define SLAVE_SERVICE_A1NOC			591
+> +#define SLAVE_SERVICE_A2NOC			592
+> +#define SLAVE_SERVICE_CNOC			593
+> +#define SLAVE_SERVICE_GEM_NOC			594
+> +#define SLAVE_SERVICE_MNOC			595
+> +#define SLAVE_SERVICE_NPU_NOC			596
+> +#define SLAVE_SERVICE_SNOC			597
+> +#define SLAVE_QDSS_STM				598
+> +#define SLAVE_TCU				599
+> +
+> +#endif
 
 -- 
-viresh
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
