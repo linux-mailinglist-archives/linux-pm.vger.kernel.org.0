@@ -2,121 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0867310AA49
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 06:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA50B10AB02
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 08:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbfK0Fip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 00:38:45 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39164 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbfK0Fip (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 00:38:45 -0500
-Received: by mail-pl1-f194.google.com with SMTP id o9so9232497plk.6
-        for <linux-pm@vger.kernel.org>; Tue, 26 Nov 2019 21:38:44 -0800 (PST)
+        id S1726136AbfK0HVE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 02:21:04 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:56139 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbfK0HVE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 02:21:04 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a131so1567216wme.5;
+        Tue, 26 Nov 2019 23:21:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=A1crt5ZX5/o6tqZ8uQeAgWxnW6il/kNy0inAaXVelWg=;
-        b=03QmaYAqqV7p+2/P0ek7syQoGHcAgOXji2fJRE13ydAmBy/qMCG4aBhnyp/RnL1MEg
-         HngVDerDsYPHadSYiO2t4A6vPf3vU5YfWkQDy5yL4v1TI3qCgXvSaj4y5WRLv+tfioR3
-         P6kREx5Mc4tkwL8LHBfqCxMBlBtAGowVmk05raMfkzNZVAarD7Thw/yPmXlH8TrCYhGQ
-         Sw+AiR0DHihdJZk+CYuI5j4FcWDUzeS462dvKaGpvi8lRY428rEUO96BPQ1NfRBcU06h
-         qQXH+ROoIhA8KeSWq5lQQAw7bgUdUd4foBxqPnL182bs9eam/JqCS9bXC3bCIaEyNcrW
-         y59Q==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kCncgZfNLfu/DMj0wXER7XvmqE7+H8NXbrnKF+xxq0U=;
+        b=RSC3imGkI2eVKkgg38Jlm1TsR+Yjp09v6ffKoandFuxhXe+nBgW9uOHL+l020Y7rdF
+         tSYsjMmQCs6HaS/TUMfPNAarUe2TJ0CqybUceItnNLhGo9az8T3Y5fNOH3GLZnX3jWQm
+         jisTx/sLc7NDTLdHJbfTfFjGwYGuuKVV4/d96w5zdcKRtmsI6jd1GM9EA/jQgTY8Vu4z
+         83O39LSKtgLiosa1NNh8Vo9Cv1oYVXNALrsUmYDlpqUlQKgLeOzmXyrSO9N3UJef1UAD
+         dUG5ZLwAMqKaIBiXpIpT8vxX4HmooGbATxlPXMKIaxtINEPsboG+CsqGwvTnCJnfU8tC
+         a9sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A1crt5ZX5/o6tqZ8uQeAgWxnW6il/kNy0inAaXVelWg=;
-        b=mqeuIM7dQrysr7J8+wkOnJdDpsgyt2hvoeJZmS/sMXowMHn5HUcoQLaW6+OUTDRuTP
-         gRUjVNeIDmim9ja9BKBE2H9+qMOMTkZs2chAkX5BqPnBHfdhyQWzT3V5+D5Ff5WWmVPp
-         6JAlwiz8I7ZFLtXRGj4gExfcY3ZewNyx1b95jEvLlI5IhiZJWXc8pLlvhuv/nSZLmL5V
-         zqIX2PTepHg/IUXVZYUB5Uuh8qGhNrIhRwsSKCPkhE/86/U2NzmCv73/MT6Hdh+FGxly
-         3ueaIE9Fm6S2CMRncCI2bF+eJCGkh8x1p9qPaewsNbq6swADlxzxsPfwQ1I3vP0fr+GM
-         oj7g==
-X-Gm-Message-State: APjAAAXbB8GLRrp84bsbwqyNP8y9PAmBrXAq7/m180WdzYJGgL8p/o2b
-        6bmlYZNM2H+RdG+wOkA7enVRFw==
-X-Google-Smtp-Source: APXvYqwaICaiIi2qlVP9oI/G9SEz3ACyQkNtE5h1JyLUsyrXggjU2y9sZVHDzZcDGoCT3MoOKaOHAw==
-X-Received: by 2002:a17:902:5a04:: with SMTP id q4mr2318041pli.34.1574833124051;
-        Tue, 26 Nov 2019 21:38:44 -0800 (PST)
-Received: from limbo.local (123-204-46-122.static.seed.net.tw. [123.204.46.122])
-        by smtp.gmail.com with ESMTPSA id y8sm14088008pfl.8.2019.11.26.21.38.41
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kCncgZfNLfu/DMj0wXER7XvmqE7+H8NXbrnKF+xxq0U=;
+        b=aEGDG5mmXMLRGDRcVRsffO/4UtSqO1bkmRzqczOe8OkeYGyXe8jrOuNCzuNGr7A3Rz
+         MmTKtqXE2tAqK+pWgrltl6Oi7qp/HH/OKkyhg+roCIgtaIRdlu9xJnwbvPJ/VsTLxJ+L
+         WgJ429DjqQj3hcDJ+RuiR2zqAYho0lbfxcEIYI0JgM/Gxwl5gg3jIE3L90D0FDgicP/j
+         jkX6VT8Sp0qsQ8j6iu9twhQMn8I+g6cFSNLbAMBMausB1Hj2Aw3QB31h6onrqFOc8Y2O
+         CmRaGeYSkSv2zWPQSaH5AgPqOSFC4zIrc1sEXD4cSh/QuDJTpyMHFqDxRsqWfUFnT/HS
+         5tGg==
+X-Gm-Message-State: APjAAAVYHnihbxknaVIdujTUljq8TUMZugws2HLG1lQ3htEoMFCkOPSk
+        xg/UccLFR1zk/a/O0z847C5MyIjJ
+X-Google-Smtp-Source: APXvYqxrSAjRPVtPzeiTNsYJZTIC0WUoeM08Y93jY7ZHuWeAPoH8sbaPbhCv3NuqgLVIdvVnq6xVHw==
+X-Received: by 2002:a1c:5415:: with SMTP id i21mr2803843wmb.120.1574839261678;
+        Tue, 26 Nov 2019 23:21:01 -0800 (PST)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id h2sm18649610wrt.45.2019.11.26.23.20.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2019 21:38:43 -0800 (PST)
-From:   Daniel Drake <drake@endlessm.com>
-To:     bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, mika.westerberg@linux.intel.com
-Subject: [PATCH v2 2/2] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Date:   Wed, 27 Nov 2019 13:38:36 +0800
-Message-Id: <20191127053836.31624-2-drake@endlessm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191127053836.31624-1-drake@endlessm.com>
-References: <20191127053836.31624-1-drake@endlessm.com>
+        Tue, 26 Nov 2019 23:21:00 -0800 (PST)
+Date:   Wed, 27 Nov 2019 08:20:57 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 00/12] treewide: break dependencies on x86's RM header
+Message-ID: <20191127072057.GB94748@gmail.com>
+References: <20191126165417.22423-1-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191126165417.22423-1-sean.j.christopherson@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Asus UX434DA (AMD Ryzen7 3700U) and Asus X512DK (AMD Ryzen5 3500U),
-the XHCI controller fails to resume from runtime suspend or s2idle,
-and USB becomes unusable from that point.
 
-xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
-xhci_hcd 0000:03:00.4: PCI post-resume error -110!
-xhci_hcd 0000:03:00.4: HC died; cleaning up
+* Sean Christopherson <sean.j.christopherson@intel.com> wrote:
 
-During suspend, a transition to D3cold is attempted, however the affected
-platforms do not seem to cut the power to the PCI device when in this
-state, so the device stays in D3hot.
+> x86's asm/realmode.h, which defines low level structures, variables and
+> helpers used to bring up APs during SMP boot, ends up getting included in
+> practically every nook and cranny of the kernel because the address used
+> by ACPI for resuming from S3 also happens to be stored in the real mode
+> header, and ACPI bleeds the dependency into its widely included headers.
+> 
+> As a result, modifying realmode.h for even the most trivial change to the
+> boot code triggers a full kernel rebuild, which is frustrating to say the
+> least as it some of the most difficult code to get exactly right *and* is
+> also some of the most functionally isolated code in the kernel.
+> 
+> To break the kernel's widespread dependency on realmode.h, add a wrapper
+> in the aforementioned ACPI S3 code to access the real mode header instead
+> of derefencing the header directly in asm/acpi.h and thereby exposing it
+> to the world via linux/acpi.h.
+> 
+> v2:
+>   - Rebased on tip/x86/cleanups, commit b74374fef924 ("x86/setup: Enhance
+>     the comments").
+>   - Use acpi_get_wakeup_address() as new function name. [Boris and Pavel]
+>   - Capture acpi_get_wakeup_address() in a local address. [Pavel]
+>   - Collect acks.  I didn't add Rafael's acks on patches 11 and 12 due to
+>     the above changes.
+>   - Explicitly call out the removal of <asm/realmode.h> from <asm/acpi.h>
+>     in patch 12. [Ingo]
+>   - Remove superfluous Fixes: tags. [Ard]
 
-Upon resume, the D3hot-to-D0 transition is successful only if the D3 delay
-is increased to 20ms. The transition failure does not appear to be
-detectable as a CRS condition. Add a PCI quirk to increase the delay on the
-affected hardware.
+You didn't include every patch from v1 though, such us my fix to Quark:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205587
-Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
-Signed-off-by: Daniel Drake <drake@endlessm.com>
----
- drivers/pci/quirks.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+  [PATCH] x86/platform/intel/quark: Explicitly include linux/io.h for virt_to_phys()
 
-v2: split out the creation of quirk_d3hot_delay() into its own patch
+I've applied that one too and your updated patches, and it's now all 
+pushed out into tip:WIP.core/headers.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 3b4021e719530..222108f1a602e 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -1889,6 +1889,22 @@ static void quirk_radeon_pm(struct pci_dev *dev)
- }
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
- 
-+/*
-+ * Ryzen5/7 XHCI controllers fail upon resume from runtime suspend or s2idle.
-+ * https://bugzilla.kernel.org/show_bug.cgi?id=205587
-+ *
-+ * The kernel attempts to transition these devices to D3cold, but that seems
-+ * to be ineffective on the platforms in question; the PCI device appears to
-+ * remain on in D3hot state. The D3hot-to-D0 transition then requires an
-+ * extended delay in order to succeed.
-+ */
-+static void quirk_ryzen_xhci_d3hot(struct pci_dev *dev)
-+{
-+	quirk_d3hot_delay(dev, 20);
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3hot);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3hot);
-+
- #ifdef CONFIG_X86_IO_APIC
- static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
- {
--- 
-2.20.1
+Thanks,
 
+	Ingo
