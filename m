@@ -2,112 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 693BF10B035
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 14:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADACF10B19D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 15:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfK0NcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 08:32:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:47582 "EHLO foss.arm.com"
+        id S1727073AbfK0OrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 09:47:06 -0500
+Received: from mga14.intel.com ([192.55.52.115]:18703 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726320AbfK0NcF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 Nov 2019 08:32:05 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C58D31B;
-        Wed, 27 Nov 2019 05:32:04 -0800 (PST)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9A83F52E;
-        Wed, 27 Nov 2019 05:32:03 -0800 (PST)
-Date:   Wed, 27 Nov 2019 13:32:01 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: vexpress-spc: Fix wrong alternation of
- policy->related_cpus during CPU hp
-Message-ID: <20191127133200.GE29301@bogus>
-References: <20191127114801.23837-1-dietmar.eggemann@arm.com>
- <20191127120816.GC29301@bogus>
- <20191127121402.vd3tul4gmqm6qtyb@vireshk-i7>
+        id S1726537AbfK0OrF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Nov 2019 09:47:05 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Nov 2019 06:47:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,249,1571727600"; 
+   d="scan'208";a="203094641"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2019 06:47:03 -0800
+Date:   Wed, 27 Nov 2019 06:47:03 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 00/12] treewide: break dependencies on x86's RM header
+Message-ID: <20191127144703.GA18530@linux.intel.com>
+References: <20191126165417.22423-1-sean.j.christopherson@intel.com>
+ <20191127072057.GB94748@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191127121402.vd3tul4gmqm6qtyb@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191127072057.GB94748@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 05:44:02PM +0530, Viresh Kumar wrote:
-> On 27-11-19, 12:08, Sudeep Holla wrote:
-> > On Wed, Nov 27, 2019 at 12:48:01PM +0100, Dietmar Eggemann wrote:
-> > > Since commit ca74b316df96 ("arm: Use common cpu_topology structure and
-> > > functions.") the core cpumask has to be modified during cpu hotplug
-> > > operations.
-> > >
-> > > ("arm: Fix topology setup in case of CPU hotplug for CONFIG_SCHED_MC")
-> > > [1] fixed that but revealed another issue on TC2, i.e in its cpufreq
-> > > driver.
-> > >
-> > > During CPU hp stress operations on multiple CPUs, policy->related_cpus
-> > > can be altered. This is wrong since this cpumask should contain the
-> > > online and offline CPUs.
-> > >
-> > > The WARN_ON(!cpumask_test_cpu(cpu, policy->related_cpus)) in
-> > > cpufreq_online() triggers in this case.
-> > >
-> > > The core cpumask can't be used to set the policy->cpus in
-> > > ve_spc_cpufreq_init() anymore in case it is called via
-> > > cpuhp_cpufreq_online()->cpufreq_online()->cpufreq_driver->init().
-> > >
-> > > An empty online() callback can be used to avoid that the init()
-> > > driver function is called during CPU hotplug in so that
-> > > policy->related_cpus will not be changed.
-> > >
-> >
-> > Unlike DT based drivers, it not easy to get the fixed cpumask unless we
-> > add some mechanism to extract it based on clks/OPP added. I prefer
-> > this simple solution instead.
->
-> I will call this a work-around for the problem and not really the
-> solution, though I won't necessarily oppose it. There are cases which
-> will break even with this solution.
->
+On Wed, Nov 27, 2019 at 08:20:57AM +0100, Ingo Molnar wrote:
+> 
+> * Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+> 
+> > x86's asm/realmode.h, which defines low level structures, variables and
+> > helpers used to bring up APs during SMP boot, ends up getting included in
+> > practically every nook and cranny of the kernel because the address used
+> > by ACPI for resuming from S3 also happens to be stored in the real mode
+> > header, and ACPI bleeds the dependency into its widely included headers.
+> > 
+> > As a result, modifying realmode.h for even the most trivial change to the
+> > boot code triggers a full kernel rebuild, which is frustrating to say the
+> > least as it some of the most difficult code to get exactly right *and* is
+> > also some of the most functionally isolated code in the kernel.
+> > 
+> > To break the kernel's widespread dependency on realmode.h, add a wrapper
+> > in the aforementioned ACPI S3 code to access the real mode header instead
+> > of derefencing the header directly in asm/acpi.h and thereby exposing it
+> > to the world via linux/acpi.h.
+> > 
+> > v2:
+> >   - Rebased on tip/x86/cleanups, commit b74374fef924 ("x86/setup: Enhance
+> >     the comments").
+> >   - Use acpi_get_wakeup_address() as new function name. [Boris and Pavel]
+> >   - Capture acpi_get_wakeup_address() in a local address. [Pavel]
+> >   - Collect acks.  I didn't add Rafael's acks on patches 11 and 12 due to
+> >     the above changes.
+> >   - Explicitly call out the removal of <asm/realmode.h> from <asm/acpi.h>
+> >     in patch 12. [Ingo]
+> >   - Remove superfluous Fixes: tags. [Ard]
+> 
+> You didn't include every patch from v1 though, such us my fix to Quark:
+> 
+>   [PATCH] x86/platform/intel/quark: Explicitly include linux/io.h for virt_to_phys()
+> 
+> I've applied that one too and your updated patches, and it's now all 
+> pushed out into tip:WIP.core/headers.
 
-I agree and that's the reason I spoke out my thought aloud here :)
-
-> - Boot board with cpufreq driver as module.
-> - Offline all CPUs except CPU0.
-> - insert cpufreq driver.
-> - online all CPUs.
->
-
-Indeed, not just boot anytime since it's a module :)
-
-> Now there is no guarantee that the last online will get the mask
-> properly, if I have understood the problem well :)
->
-
-Yes
-
-> But yeah, who does this kind of messy work anyway :)
->
-
-I won't bet on that ;)
-
-> FWIW, we need a proper way (may be from architecture code) to find
-> list of all CPUs that share clock line.
->
-
-Yes but there's no architectural way. I need to revise and see tc2_pm.c
-to check if we can do any magic there.
-
---
-Regards,
-Sudeep
+Sorry, it wasn't clear to me whether or not to include that one.  Next
+time I'll ask.
