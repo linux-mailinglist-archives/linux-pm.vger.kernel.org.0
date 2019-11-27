@@ -2,225 +2,809 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7600810AE62
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 12:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25E710AE88
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 12:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727017AbfK0LAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 06:00:36 -0500
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:45507 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbfK0LAc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 06:00:32 -0500
-Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa1.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa1.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: BzSn+z6L3iDnUhacot7RWCvxo3MDxn+XZYt4n57ssvPqctJGOAfAUJkBzwtGO1+StmBpodNmDc
- neG9D5Vhh1XemuSZJGcHQVkBE3nedKksuIE8FWd5sdHEo5ttD79g/7Bvn7HSICRVPyow4QgZ5L
- IBlQb29T8yqyQ0ytl9TMfvQ9enLJ6CMyzYlur2LTzzpbFihzsF6b6UTrCs6lcVvhuF+mq8xjEG
- BnhnmdYxSayqfT53MZQbQvocD8RbpRxOaGnBhug7cA2RlmlprNzBf6kgLk8MrPvhy4xVyocaoa
- daQ=
-X-IronPort-AV: E=Sophos;i="5.69,249,1571727600"; 
-   d="scan'208";a="59919477"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Nov 2019 04:00:31 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 27 Nov 2019 04:00:30 -0700
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Wed, 27 Nov 2019 04:00:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eTsfJyEaaNBXPzxf97mGKu8a13cDTJbP8yN6XmiwhHvThtNC8QfjQD+9PUrE3eUjnkerYe8loT5F87y4CSM2GZYvj1DpkJiFkh22YlZixslS9i9+T7/09cEhcki+jjKsZmxAxtLfb+Jdp6g7fZs13twEukB8kFAH8uXHXr6HWD93xEibRfqsnEkOiTT1mnqT0udnADzALCVAyy2u4kr+wkK3nZFM1DSUEA092y49izz+zc0lAXWObC5/C/wIxOo4WukXaPTjp4TviYa1mgw9QN8Kbmm5u0Y7gzXbH9JDG4COHMoJ6yzg+M3Wn7QbrvRLpCAHmdUsgnpfYLPKWhLkcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XmhKquvNSYE+AUF6UEz8pUjhur0pNHVzdRDCK0gvU7Y=;
- b=gwr4BuCwCYPSrocowLMQ9YurD5Orb6+g6FySC3WE8xk3L9Z6BLWd/gN/fpYo9XaxXwTUJu/NZv4DnxkZUpXe65PnZzmfCytFkC0Yp0evfFM46j5UH1ruBIcZo4wXJ7ma3Wpf3v0P2O/a72kuBt4qjEJ3PgocKpf7yu9xaEd9tjxctupcn02Q7s7h7OYjuEKWECRrJDue0hc1u4DOjSiOVBxcKIPDcWJMmXBSOExNCeJ1Li0KZ/CXbA60gZQGz1Ormi+0OU654/f4plmpttf606gsb1sBRGq4kduClIorcG5ay2gQDHsNRLkiQHlATfVcoWTqoY6qpm0G//fmKvEHAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XmhKquvNSYE+AUF6UEz8pUjhur0pNHVzdRDCK0gvU7Y=;
- b=fTSjqPKHDzvaYej1xYSz3o2pWdg3ifCeBDqknQgxg3dDhXrtj1wFyMjsjxva9lVO66t4+VsgGPfQ6v5IMj4/bqbkcMNER7NMZf1jPhy2iPnibkcrLmZycOj4N7luVHZi58YnFkx1ro44OVCZ6zqG/oirGn9ppOShnXqtOuiLVww=
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com (20.176.120.224) by
- DM6PR11MB3418.namprd11.prod.outlook.com (20.177.219.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.18; Wed, 27 Nov 2019 11:00:27 +0000
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::ed7d:d06f:7d55:cbe2]) by DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::ed7d:d06f:7d55:cbe2%6]) with mapi id 15.20.2474.023; Wed, 27 Nov 2019
- 11:00:26 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <alexandre.belloni@bootlin.com>
-CC:     <linux@armlinux.org.uk>, <Nicolas.Ferre@microchip.com>,
-        <Ludovic.Desroches@microchip.com>, <sre@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 02/17] ARM: at91: pm: move SAM9X60's PM under its own
- SoC config flag
-Thread-Topic: [PATCH v2 02/17] ARM: at91: pm: move SAM9X60's PM under its own
- SoC config flag
-Thread-Index: AQHVpKCFd9tGDLZ9XESHiYu6fIDZcaeeqfCAgAAhugCAAA7LgA==
-Date:   Wed, 27 Nov 2019 11:00:26 +0000
-Message-ID: <dea74fd0-de8b-96b5-b71c-a77a98d72c3f@microchip.com>
-References: <1574773941-20649-1-git-send-email-claudiu.beznea@microchip.com>
- <1574773941-20649-3-git-send-email-claudiu.beznea@microchip.com>
- <20191126212841.GR299836@piout.net>
- <10705ea9-7a0f-5af4-e383-293fabed6b89@microchip.com>
- <20191127100722.GI299836@piout.net>
-In-Reply-To: <20191127100722.GI299836@piout.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR0102CA0005.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:14::18) To DM6PR11MB3225.namprd11.prod.outlook.com
- (2603:10b6:5:5b::32)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tagtoolbar-keys: D20191127130019556
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 54b027fe-0472-4e47-54c3-08d773290226
-x-ms-traffictypediagnostic: DM6PR11MB3418:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB3418FA2A9BE3A6422567E8CF87440@DM6PR11MB3418.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 023495660C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(39860400002)(136003)(396003)(366004)(346002)(199004)(189003)(966005)(66946007)(4326008)(66446008)(6916009)(66476007)(64756008)(66556008)(478600001)(71190400001)(2906002)(71200400001)(6116002)(256004)(3846002)(76176011)(25786009)(7736002)(52116002)(5024004)(102836004)(14444005)(8936002)(81156014)(81166006)(31686004)(305945005)(8676002)(229853002)(86362001)(66066001)(6512007)(6306002)(5660300002)(6436002)(386003)(6506007)(11346002)(2616005)(31696002)(36756003)(53546011)(6246003)(14454004)(26005)(446003)(54906003)(186003)(6486002)(99286004)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR11MB3418;H:DM6PR11MB3225.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EW+m6/JenC0FM+DwBY3abChwqJhzh9qCOyuD7G5D+6RPlrNSAGHu/jcmABFBdJ8yFBgBUswsN3P5A2bEcNAs+UtOjWJEmj6wXfUa98nyfhes+bm9qzfiUkavSe5e/0fRz2tr8bu4ihNwFJb7t4eDBgUMxQ3PabSm9TZ57vQdYKDff6R+0/Y0LHyqiDzB5HdDit2+xHOooSc/6n+cqDdOJ43DWExxqqI6poNxbGMDrrC2EZEJid3bhxgxFbMIVqicwaHLGLG2FjJ5YetWEQKUpYFkjk/utdrzXod6HRNow+K7DTlf92Gbnl+E3Lr1SBT4CXWeEdt7E/AdML1dRkQE1mqgxjuK/PQAg5fkb25/4nYiMplB2csQCDP0pUQd+sYIRcipsiwnNWpz/FTRGT4nPyKcJqhO4GkwLWdJiaMFRgucYyEih+YkoRd9yVS/D/AxcPQrGdN73+JVaI+fMCPM4V50/mbpl/ZckYIA7iF6PBY=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DF2927522DE2994A9E0308BBC3711455@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726194AbfK0LOY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 06:14:24 -0500
+Received: from vps.xff.cz ([195.181.215.36]:53782 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726149AbfK0LOY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Nov 2019 06:14:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1574853259; bh=7CzzEQSXmaBf5z9EvuKgkn5BWzpCk55PsteV1+fNef0=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=Pfcn/Cq6bcs7Z//lotR2YT4Au0j1p8SVFl4NeO4JFSrzWW/ZkK+UNfSQea/+mJehH
+         RDfHrsW8cRj5OHY2NoytnKuunX1ACTS49rGXRgNXokC7JqM6x6O2gf/Ao5a8UGy8eM
+         15xqEF+Ip54dYivTlZSlWHnSSenToB9x5wsemoEM=
+Date:   Wed, 27 Nov 2019 12:14:19 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/7] thermal: sun8i: add thermal driver for
+ H6/H5/H3/A64/A83T/R40
+Message-ID: <20191127111419.z5hfu5soxceiivg6@core.my.home>
+Mail-Followup-To: Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20191127052935.1719897-1-anarsoul@gmail.com>
+ <20191127052935.1719897-2-anarsoul@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54b027fe-0472-4e47-54c3-08d773290226
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2019 11:00:26.5133
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: njRJwm6/BmUC/f+l+wgedlmBLNKNHJ3AjEiKYkozt/aO+gx2ryaZV52C+2xcDdw5z0a9/NrWQAvkQ+ETL5OMc2CvgaLGTQWI7y178rTPkdY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3418
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191127052935.1719897-2-anarsoul@gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCk9uIDI3LjExLjIwMTkgMTI6MDcsIEFsZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBFWFRF
-Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIDI3LzExLzIwMTkgMDg6MDY6
-NDcrMDAwMCwgQ2xhdWRpdS5CZXpuZWFAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+DQo+Pg0KPj4g
-T24gMjYuMTEuMjAxOSAyMzoyOCwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+Pj4gRVhURVJO
-QUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
-b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+Pj4NCj4+PiBPbiAyNi8xMS8yMDE5IDE1OjEy
-OjA2KzAyMDAsIENsYXVkaXUgQmV6bmVhIHdyb3RlOg0KPj4+PiBNb3ZlIFNBTTlYNjAncyBQTSBw
-YXJ0IHVuZGVyIFNvQyBjb25maWcgZmxhZy4gVGhpcyBhbGxvd3MgdGhlIGJ1aWxkaW5nDQo+Pj4+
-IG9mIFNBTTlYNjAgcGxhdGZvcm0gd2l0aG91dGggZGVwZW5kaW5nIG9uIENPTkZJR19TT0NfQVQ5
-MVNBTTkgZmxhZywNCj4+Pj4gYWxsb3dpbmcgdXMgdG8gc2VsZWN0IG9ubHkgbmVjZXNzYXJ5IGNv
-bmZpZyBmbGFncyBmb3IgU0FNOVg2MC4NCj4+Pj4NCj4+Pg0KPj4+IEknbSByZWFsbHkgd29uZGVy
-aW5nLCBob3cgbXVjaCBzcGFjZSBkb2VzIHRoYXQgcmVhbGx5IHNhdmU/DQo+Pj4NCj4+PiBUaGUg
-bmV0IGJlbmVmaXQgc2VlbXMgdG8gYmUgdmVyeSBzbWFsbC4uLg0KPj4NCj4+IE5vdCB0aGF0IG11
-Y2gsIGluZGVlZC4gV2Ugd2FudCB0byBiZSBpbmRlcGVuZGVudCBvZiBTT0NfQVQ5MVNBTTkuDQo+
-Pg0KPiANCj4gVGhlIHF1ZXN0aW9uIGlzIHdoeT8gSSBkb24ndCBzZWUgdGhlIHRlY2huaWNhbCBi
-ZW5lZml0IGJ1dCBJDQo+IGRlZmluaXRpdmVseSBzZWUgdGhlIG1haW50ZW5hbmNlIGJ1cmRlbiBv
-ZiBoYXZpbmcgdHdvIHNlcGFyYXRlIGNvbmZpZ3MNCj4gZG9pbmcgYWxtb3N0IHRoZSBzYW1lIHRo
-aW5nLg0KDQpBcyBJIHNhaWQgYWJvdmU6IHRvIGJlIGFibGUgdG8gYnVpbGQgU0FNOVg2MCB3aXRo
-b3V0IGRlcGVuZGluZyBvbg0KU09DX0FUOTFTQU05IGFuZCB0byBsaW1pdCB0aGUgbGVnYWN5IChp
-biB0ZXJtIG9mIGRyaXZlcnMpIGNvbWluZyB3aXRoDQpTT0NfQVQ5MVNBTTkuDQoNCldvdWxkIHlv
-dSBwcmVmZXIgdGhlIG90aGVyIHdheSBhcm91bmQgbGlrZSBJIGhhZCBpbiB0aGUgMXN0IHZlcnNp
-b246DQoNCitjb25maWcgU09DX1NBTTlYNjANCisJYm9vbCAiU0FNOVg2MCINCisJZGVwZW5kcyBv
-biBTT0NfQVQ5MVNBTTkNCisJc2VsZWN0IEFUTUVMX0FJQzVfSVJRDQorCXNlbGVjdCBIQVZFX0FU
-OTFfR0VORVJBVEVEX0NMSw0KKwlzZWxlY3QgSEFWRV9BVDkxX1NBTTlYNjBfUExMDQorCWhlbHAN
-CisJICBTZWxlY3QgdGhpcyBpZiB5b3UgYXJlIHVzaW5nIE1pY3JvY2hpcCdzIFNBTTlYNjAgU29D
-DQoNCg0KDQo+IA0KPj4+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IENsYXVkaXUgQmV6bmVhIDxjbGF1
-ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29tPg0KPj4+PiAtLS0NCj4+Pj4gIGFyY2gvYXJtL21hY2gt
-YXQ5MS9NYWtlZmlsZSAgIHwgIDEgKw0KPj4+PiAgYXJjaC9hcm0vbWFjaC1hdDkxL2F0OTFzYW05
-LmMgfCAxOCAtLS0tLS0tLS0tLS0tLS0tLS0NCj4+Pj4gIGFyY2gvYXJtL21hY2gtYXQ5MS9wbS5j
-ICAgICAgIHwgIDIgKy0NCj4+Pj4gIGFyY2gvYXJtL21hY2gtYXQ5MS9zYW05eDYwLmMgIHwgMzQg
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPj4+PiAgNCBmaWxlcyBjaGFuZ2Vk
-LCAzNiBpbnNlcnRpb25zKCspLCAxOSBkZWxldGlvbnMoLSkNCj4+Pj4gIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBhcmNoL2FybS9tYWNoLWF0OTEvc2FtOXg2MC5jDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
-YS9hcmNoL2FybS9tYWNoLWF0OTEvTWFrZWZpbGUgYi9hcmNoL2FybS9tYWNoLWF0OTEvTWFrZWZp
-bGUNCj4+Pj4gaW5kZXggZGU2NDMwMWRjZmYyLi5mNTY1NDkwZjFiNzAgMTAwNjQ0DQo+Pj4+IC0t
-LSBhL2FyY2gvYXJtL21hY2gtYXQ5MS9NYWtlZmlsZQ0KPj4+PiArKysgYi9hcmNoL2FybS9tYWNo
-LWF0OTEvTWFrZWZpbGUNCj4+Pj4gQEAgLTYsNiArNiw3IEBADQo+Pj4+ICAjIENQVS1zcGVjaWZp
-YyBzdXBwb3J0DQo+Pj4+ICBvYmotJChDT05GSUdfU09DX0FUOTFSTTkyMDApICs9IGF0OTFybTky
-MDAubw0KPj4+PiAgb2JqLSQoQ09ORklHX1NPQ19BVDkxU0FNOSkgICArPSBhdDkxc2FtOS5vDQo+
-Pj4+ICtvYmotJChDT05GSUdfU09DX1NBTTlYNjApICAgICs9IHNhbTl4NjAubw0KPj4+PiAgb2Jq
-LSQoQ09ORklHX1NPQ19TQU1BNSkgICAgICAgICAgICAgICs9IHNhbWE1Lm8NCj4+Pj4gIG9iai0k
-KENPTkZJR19TT0NfU0FNVjcpICAgICAgICAgICAgICArPSBzYW12Ny5vDQo+Pj4+DQo+Pj4+IGRp
-ZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLWF0OTEvYXQ5MXNhbTkuYyBiL2FyY2gvYXJtL21hY2gt
-YXQ5MS9hdDkxc2FtOS5jDQo+Pj4+IGluZGV4IGJmNjI5YzkwYzc1OC4uN2U1NzIxODlhNWViIDEw
-MDY0NA0KPj4+PiAtLS0gYS9hcmNoL2FybS9tYWNoLWF0OTEvYXQ5MXNhbTkuYw0KPj4+PiArKysg
-Yi9hcmNoL2FybS9tYWNoLWF0OTEvYXQ5MXNhbTkuYw0KPj4+PiBAQCAtMzEsMjEgKzMxLDMgQEAg
-RFRfTUFDSElORV9TVEFSVChhdDkxc2FtX2R0LCAiQXRtZWwgQVQ5MVNBTTkiKQ0KPj4+PiAgICAg
-ICAuaW5pdF9tYWNoaW5lICAgPSBhdDkxc2FtOV9pbml0LA0KPj4+PiAgICAgICAuZHRfY29tcGF0
-ICAgICAgPSBhdDkxX2R0X2JvYXJkX2NvbXBhdCwNCj4+Pj4gIE1BQ0hJTkVfRU5EDQo+Pj4+IC0N
-Cj4+Pj4gLXN0YXRpYyB2b2lkIF9faW5pdCBzYW05eDYwX2luaXQodm9pZCkNCj4+Pj4gLXsNCj4+
-Pj4gLSAgICAgb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1bGF0ZShOVUxMLCBOVUxMLCBOVUxMKTsN
-Cj4+Pj4gLQ0KPj4+PiAtICAgICBzYW05eDYwX3BtX2luaXQoKTsNCj4+Pj4gLX0NCj4+Pj4gLQ0K
-Pj4+PiAtc3RhdGljIGNvbnN0IGNoYXIgKmNvbnN0IHNhbTl4NjBfZHRfYm9hcmRfY29tcGF0W10g
-X19pbml0Y29uc3QgPSB7DQo+Pj4+IC0gICAgICJtaWNyb2NoaXAsc2FtOXg2MCIsDQo+Pj4+IC0g
-ICAgIE5VTEwNCj4+Pj4gLX07DQo+Pj4+IC0NCj4+Pj4gLURUX01BQ0hJTkVfU1RBUlQoc2FtOXg2
-MF9kdCwgIk1pY3JvY2hpcCBTQU05WDYwIikNCj4+Pj4gLSAgICAgLyogTWFpbnRhaW5lcjogTWlj
-cm9jaGlwICovDQo+Pj4+IC0gICAgIC5pbml0X21hY2hpbmUgICA9IHNhbTl4NjBfaW5pdCwNCj4+
-Pj4gLSAgICAgLmR0X2NvbXBhdCAgICAgID0gc2FtOXg2MF9kdF9ib2FyZF9jb21wYXQsDQo+Pj4+
-IC1NQUNISU5FX0VORA0KPj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vbWFjaC1hdDkxL3BtLmMg
-Yi9hcmNoL2FybS9tYWNoLWF0OTEvcG0uYw0KPj4+PiBpbmRleCBkNWFmNmFlZGMwMmMuLjU2YTZh
-NDliMTllMiAxMDA2NDQNCj4+Pj4gLS0tIGEvYXJjaC9hcm0vbWFjaC1hdDkxL3BtLmMNCj4+Pj4g
-KysrIGIvYXJjaC9hcm0vbWFjaC1hdDkxL3BtLmMNCj4+Pj4gQEAgLTgwNSw3ICs4MDUsNyBAQCB2
-b2lkIF9faW5pdCBhdDkxcm05MjAwX3BtX2luaXQodm9pZCkNCj4+Pj4NCj4+Pj4gIHZvaWQgX19p
-bml0IHNhbTl4NjBfcG1faW5pdCh2b2lkKQ0KPj4+PiAgew0KPj4+PiAtICAgICBpZiAoIUlTX0VO
-QUJMRUQoQ09ORklHX1NPQ19BVDkxU0FNOSkpDQo+Pj4+ICsgICAgIGlmICghSVNfRU5BQkxFRChD
-T05GSUdfU09DX1NBTTlYNjApKQ0KPj4+PiAgICAgICAgICAgICAgIHJldHVybjsNCj4+Pj4NCj4+
-Pj4gICAgICAgYXQ5MV9wbV9tb2Rlc19pbml0KCk7DQo+Pj4+IGRpZmYgLS1naXQgYS9hcmNoL2Fy
-bS9tYWNoLWF0OTEvc2FtOXg2MC5jIGIvYXJjaC9hcm0vbWFjaC1hdDkxL3NhbTl4NjAuYw0KPj4+
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPj4+PiBpbmRleCAwMDAwMDAwMDAwMDAuLmQ4YzczOWQy
-NTQ1OA0KPj4+PiAtLS0gL2Rldi9udWxsDQo+Pj4+ICsrKyBiL2FyY2gvYXJtL21hY2gtYXQ5MS9z
-YW05eDYwLmMNCj4+Pj4gQEAgLTAsMCArMSwzNCBAQA0KPj4+PiArLy8gU1BEWC1MaWNlbnNlLUlk
-ZW50aWZpZXI6IEdQTC0yLjArDQo+Pj4+ICsvKg0KPj4+PiArICogU2V0dXAgY29kZSBmb3IgU0FN
-OVg2MC4NCj4+Pj4gKyAqDQo+Pj4+ICsgKiBDb3B5cmlnaHQgKEMpIDIwMTkgTWljcm9jaGlwIFRl
-Y2hub2xvZ3kgSW5jLiBhbmQgaXRzIHN1YnNpZGlhcmllcw0KPj4+PiArICoNCj4+Pj4gKyAqIEF1
-dGhvcjogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5jb20+DQo+Pj4+
-ICsgKi8NCj4+Pj4gKw0KPj4+PiArI2luY2x1ZGUgPGxpbnV4L29mLmg+DQo+Pj4+ICsjaW5jbHVk
-ZSA8bGludXgvb2ZfcGxhdGZvcm0uaD4NCj4+Pj4gKw0KPj4+PiArI2luY2x1ZGUgPGFzbS9tYWNo
-L2FyY2guaD4NCj4+Pj4gKyNpbmNsdWRlIDxhc20vc3lzdGVtX21pc2MuaD4NCj4+Pj4gKw0KPj4+
-PiArI2luY2x1ZGUgImdlbmVyaWMuaCINCj4+Pj4gKw0KPj4+PiArc3RhdGljIHZvaWQgX19pbml0
-IHNhbTl4NjBfaW5pdCh2b2lkKQ0KPj4+PiArew0KPj4+PiArICAgICBvZl9wbGF0Zm9ybV9kZWZh
-dWx0X3BvcHVsYXRlKE5VTEwsIE5VTEwsIE5VTEwpOw0KPj4+PiArDQo+Pj4+ICsgICAgIHNhbTl4
-NjBfcG1faW5pdCgpOw0KPj4+PiArfQ0KPj4+PiArDQo+Pj4+ICtzdGF0aWMgY29uc3QgY2hhciAq
-Y29uc3Qgc2FtOXg2MF9kdF9ib2FyZF9jb21wYXRbXSBfX2luaXRjb25zdCA9IHsNCj4+Pj4gKyAg
-ICAgIm1pY3JvY2hpcCxzYW05eDYwIiwNCj4+Pj4gKyAgICAgTlVMTA0KPj4+PiArfTsNCj4+Pj4g
-Kw0KPj4+PiArRFRfTUFDSElORV9TVEFSVChzYW05eDYwX2R0LCAiTWljcm9jaGlwIFNBTTlYNjAi
-KQ0KPj4+PiArICAgICAvKiBNYWludGFpbmVyOiBNaWNyb2NoaXAgKi8NCj4+Pj4gKyAgICAgLmlu
-aXRfbWFjaGluZSAgID0gc2FtOXg2MF9pbml0LA0KPj4+PiArICAgICAuZHRfY29tcGF0ICAgICAg
-PSBzYW05eDYwX2R0X2JvYXJkX2NvbXBhdCwNCj4+Pj4gK01BQ0hJTkVfRU5EDQo+Pj4+IC0tDQo+
-Pj4+IDIuNy40DQo+Pj4+DQo+Pj4NCj4+PiAtLQ0KPj4+IEFsZXhhbmRyZSBCZWxsb25pLCBCb290
-bGluDQo+Pj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZw0KPj4+IGh0dHBz
-Oi8vYm9vdGxpbi5jb20NCj4+Pg0KPiANCj4gLS0NCj4gQWxleGFuZHJlIEJlbGxvbmksIEJvb3Rs
-aW4NCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZw0KPiBodHRwczovL2Jv
-b3RsaW4uY29tDQo+IA0K
+Hello Vasily,
+
+I have found just a bunch of trivial simplifications, no functional changes:
+
+On Tue, Nov 26, 2019 at 09:29:29PM -0800, Vasily Khoruzhick wrote:
+> From: Yangtao Li <tiny.windzz@gmail.com>
+> 
+> This patch adds the support for allwinner thermal sensor, within
+> allwinner SoC. It will register sensors for thermal framework
+> and use device tree to bind cooling device.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> Signed-off-by: Ondrej Jirman <megous@megous.com>
+> Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> ---
+>  MAINTAINERS                     |   7 +
+>  drivers/thermal/Kconfig         |  14 +
+>  drivers/thermal/Makefile        |   1 +
+>  drivers/thermal/sun8i_thermal.c | 643 ++++++++++++++++++++++++++++++++
+>  4 files changed, 665 insertions(+)
+>  create mode 100644 drivers/thermal/sun8i_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 66cc549ac327..da34f3f2e80b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -688,6 +688,13 @@ L:	linux-crypto@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/crypto/allwinner/
+>  
+> +ALLWINNER THERMAL DRIVER
+> +M:	Yangtao Li <tiny.windzz@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> +F:	drivers/thermal/sun8i_thermal.c
+> +
+>  ALLWINNER VPU DRIVER
+>  M:	Maxime Ripard <mripard@kernel.org>
+>  M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 001a21abcc28..0b0422e89adb 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -262,6 +262,20 @@ config SPEAR_THERMAL
+>  	  Enable this to plug the SPEAr thermal sensor driver into the Linux
+>  	  thermal framework.
+>  
+> +config SUN8I_THERMAL
+> +	tristate "Allwinner sun8i thermal driver"
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on OF
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Support for the sun8i thermal sensor driver into the Linux thermal
+> +	  framework.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called sun8i-thermal.
+> +
+>  config ROCKCHIP_THERMAL
+>  	tristate "Rockchip thermal driver"
+>  	depends on ARCH_ROCKCHIP || COMPILE_TEST
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 74a37c7f847a..fa6f8b206281 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -31,6 +31,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+>  obj-y				+= broadcom/
+>  obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
+>  obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
+> +obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
+>  obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
+>  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
+>  obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> new file mode 100644
+> index 000000000000..e86b64f51196
+> --- /dev/null
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -0,0 +1,643 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Thermal sensor driver for Allwinner SOC
+> + * Copyright (C) 2019 Yangtao Li
+> + *
+> + * Based on the work of Icenowy Zheng <icenowy@aosc.io>
+> + * Based on the work of Ondrej Jirman <megous@megous.com>
+> + * Based on the work of Josef Gajdusek <atx@atx.name>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/device.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset.h>
+> +#include <linux/slab.h>
+> +#include <linux/thermal.h>
+> +
+> +#define MAX_SENSOR_NUM	4
+> +
+> +#define FT_TEMP_MASK				GENMASK(11, 0)
+> +#define TEMP_CALIB_MASK				GENMASK(11, 0)
+> +#define CALIBRATE_DEFAULT			0x800
+> +
+> +#define SUN8I_THS_CTRL0				0x00
+> +#define SUN8I_THS_CTRL2				0x40
+> +#define SUN8I_THS_IC				0x44
+> +#define SUN8I_THS_IS				0x48
+> +#define SUN8I_THS_MFC				0x70
+> +#define SUN8I_THS_TEMP_CALIB			0x74
+> +#define SUN8I_THS_TEMP_DATA			0x80
+> +
+> +#define SUN50I_THS_CTRL0			0x00
+> +#define SUN50I_H6_THS_ENABLE			0x04
+> +#define SUN50I_H6_THS_PC			0x08
+> +#define SUN50I_H6_THS_DIC			0x10
+> +#define SUN50I_H6_THS_DIS			0x20
+> +#define SUN50I_H6_THS_MFC			0x30
+> +#define SUN50I_H6_THS_TEMP_CALIB		0xa0
+> +#define SUN50I_H6_THS_TEMP_DATA			0xc0
+> +
+> +#define SUN8I_THS_CTRL0_T_ACQ0(x)		(GENMASK(15, 0) & (x))
+> +#define SUN8I_THS_CTRL2_T_ACQ1(x)		((GENMASK(15, 0) & (x)) << 16)
+> +#define SUN8I_THS_DATA_IRQ_STS(x)		BIT(x + 8)
+> +
+> +#define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
+> +#define SUN50I_THS_FILTER_EN			BIT(2)
+> +#define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
+> +#define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
+> +#define SUN50I_H6_THS_DATA_IRQ_STS(x)		BIT(x)
+> +
+> +/* millidegree celsius */
+> +#define THS_EFUSE_CP_FT_MASK			0x3000
+> +#define THS_EFUSE_CP_FT_BIT			12
+> +#define THS_CALIBRATION_IN_FT			1
+> +
+> +struct ths_device;
+
+This can be dropped ^.
+
+> +struct tsensor {
+> +	struct ths_device		*tmdev;
+> +	struct thermal_zone_device	*tzd;
+> +	int				id;
+> +};
+> +
+> +struct ths_thermal_chip {
+> +	bool            has_mod_clk;
+> +	bool            has_bus_clk_reset;
+> +	int		sensor_num;
+> +	int		offset;
+> +	int		scale;
+> +	int		ft_deviation;
+> +	int		temp_data_base;
+> +	int		(*calibrate)(struct ths_device *tmdev,
+> +				     u16 *caldata, int callen);
+> +	int		(*init)(struct ths_device *tmdev);
+> +	int             (*irq_ack)(struct ths_device *tmdev);
+> +	int		(*calc_temp)(struct ths_device *tmdev,
+> +				     int id, int reg);
+> +};
+> +
+> +struct ths_device {
+> +	const struct ths_thermal_chip		*chip;
+> +	struct device				*dev;
+> +	struct regmap				*regmap;
+> +	struct reset_control			*reset;
+> +	struct clk				*bus_clk;
+> +	struct clk                              *mod_clk;
+> +	struct tsensor				sensor[MAX_SENSOR_NUM];
+> +	u32					cp_ft_flag;
+> +};
+> +
+> +/* Temp Unit: millidegree Celsius */
+> +static int sun8i_ths_calc_temp(struct ths_device *tmdev,
+> +			       int id, int reg)
+> +{
+> +	return tmdev->chip->offset - (reg * tmdev->chip->scale / 10);
+> +}
+> +
+> +static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+> +			       int id, int reg)
+> +{
+> +	if (reg >= 0x500)
+> +		return -1191 * reg / 10 + 223000;
+> +	else if (!id)
+> +		return -1452 * reg / 10 + 259000;
+> +	else
+> +		return -1590 * reg / 10 + 276000;
+> +}
+> +
+> +static int sun8i_ths_get_temp(void *data, int *temp)
+> +{
+> +	struct tsensor *s = data;
+> +	struct ths_device *tmdev = s->tmdev;
+> +	int val = 0;
+> +
+> +	regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
+> +		    0x4 * s->id, &val);
+> +
+> +	/* ths have no data yet */
+> +	if (!val)
+> +		return -EAGAIN;
+> +
+> +	*temp = tmdev->chip->calc_temp(tmdev, s->id, val);
+> +	/*
+> +	 * According to the original sdk, there are some platforms(rarely)
+> +	 * that add a fixed offset value after calculating the temperature
+> +	 * value. We can't simply put it on the formula for calculating the
+> +	 * temperature above, because the formula for calculating the
+> +	 * temperature above is also used when the sensor is calibrated. If
+> +	 * do this, the correct calibration formula is hard to know.
+> +	 */
+> +	*temp += tmdev->chip->ft_deviation;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops ths_ops = {
+> +	.get_temp = sun8i_ths_get_temp,
+> +};
+> +
+> +static const struct regmap_config config = {
+> +	.reg_bits = 32,
+> +	.val_bits = 32,
+> +	.reg_stride = 4,
+> +	.fast_io = true,
+> +	.max_register = 0xfc,
+> +};
+> +
+> +static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+> +{
+> +	int i, state, ret = 0;
+> +
+> +	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+> +			regmap_write(tmdev->regmap, SUN8I_THS_IS,
+> +				     SUN8I_THS_DATA_IRQ_STS(i));
+> +			ret |= BIT(i);
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+> +{
+> +	int i, state, ret = 0;
+> +
+> +	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+> +			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
+> +				     SUN50I_H6_THS_DATA_IRQ_STS(i));
+> +			ret |= BIT(i);
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t sun8i_irq_thread(int irq, void *data)
+> +{
+> +	struct ths_device *tmdev = data;
+> +	int i, state;
+> +
+> +	state = tmdev->chip->irq_ack(tmdev);
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		if (state & BIT(i))
+> +			thermal_zone_device_update(tmdev->sensor[i].tzd,
+> +						   THERMAL_EVENT_UNSPECIFIED);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int sun8i_h3_ths_calibrate(struct ths_device *tmdev,
+> +				  u16 *caldata, int callen)
+> +{
+> +	int i;
+> +
+> +	if (!caldata[0] || callen < 2 * tmdev->chip->sensor_num)
+> +		return -EINVAL;
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		int offset = (i % 2) << 4;
+> +		regmap_update_bits(tmdev->regmap,
+> +				   SUN8I_THS_TEMP_CALIB + (4 * (i >> 1)),
+> +				   0xfff << offset,
+> +				   caldata[i] << offset);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+> +				   u16 *caldata, int callen)
+> +{
+> +	struct device *dev = tmdev->dev;
+> +	int i, ft_temp;
+> +
+> +	if (!caldata[0] || callen < 2 + 2 * tmdev->chip->sensor_num)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * efuse layout:
+> +	 *
+> +	 *	0   11  16	 32
+> +	 *	+-------+-------+-------+
+> +	 *	|temp|  |sensor0|sensor1|
+> +	 *	+-------+-------+-------+
+> +	 *
+> +	 * The calibration data on the H6 is the ambient temperature and
+> +	 * sensor values that are filled during the factory test stage.
+> +	 *
+> +	 * The unit of stored FT temperature is 0.1 degreee celusis.
+> +	 *
+> +	 * We need to calculate a delta between measured and caluclated
+> +	 * register values and this will become a calibration offset.
+> +	 */
+> +	ft_temp = (caldata[0] & FT_TEMP_MASK) * 100;
+> +	tmdev->cp_ft_flag = (caldata[0] & THS_EFUSE_CP_FT_MASK)
+> +		>> THS_EFUSE_CP_FT_BIT;
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		int sensor_reg = caldata[i + 1];
+> +		int cdata, offset;
+> +		int sensor_temp = tmdev->chip->calc_temp(tmdev, i, sensor_reg);
+> +
+> +		/*
+> +		 * Calibration data is CALIBRATE_DEFAULT - (calculated
+> +		 * temperature from sensor reading at factory temperature
+> +		 * minus actual factory temperature) * 14.88 (scale from
+> +		 * temperature to register values)
+> +		 */
+> +		cdata = CALIBRATE_DEFAULT -
+> +			((sensor_temp - ft_temp) * 10 / tmdev->chip->scale);
+> +		if (cdata & ~TEMP_CALIB_MASK) {
+> +			/*
+> +			 * Calibration value more than 12-bit, but calibration
+> +			 * register is 12-bit. In this case, ths hardware can
+> +			 * still work without calibration, although the data
+> +			 * won't be so accurate.
+> +			 */
+> +			dev_warn(dev, "sensor%d is not calibrated.\n", i);
+> +			continue;
+> +		}
+> +
+> +		offset = (i % 2) * 16;
+> +		regmap_update_bits(tmdev->regmap,
+> +				   SUN50I_H6_THS_TEMP_CALIB + (i / 2 * 4),
+> +				   0xfff << offset,
+> +				   cdata << offset);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> +{
+> +	struct nvmem_cell *calcell;
+> +	struct device *dev = tmdev->dev;
+> +	u16 *caldata;
+> +	size_t callen;
+> +	int ret = 0;
+> +
+> +	calcell = devm_nvmem_cell_get(dev, "calibration");
+> +	if (IS_ERR(calcell)) {
+> +		if (PTR_ERR(calcell) == -EPROBE_DEFER)
+> +			return -EPROBE_DEFER;
+> +		/*
+> +		 * Even if the external calibration data stored in sid is
+> +		 * not accessible, the THS hardware can still work, although
+> +		 * the data won't be so accurate.
+> +		 *
+> +		 * The default value of calibration register is 0x800 for
+> +		 * every sensor, and the calibration value is usually 0x7xx
+> +		 * or 0x8xx, so they won't be away from the default value
+> +		 * for a lot.
+> +		 *
+> +		 * So here we do not return error if the calibartion data is
+> +		 * not available, except the probe needs deferring.
+> +		 */
+> +		goto out;
+> +	}
+> +
+> +	caldata = nvmem_cell_read(calcell, &callen);
+> +	if (IS_ERR(caldata)) {
+> +		ret = PTR_ERR(caldata);
+> +		goto out;
+> +	}
+> +
+> +	tmdev->chip->calibrate(tmdev, caldata, callen);
+> +
+> +	kfree(caldata);
+> +out:
+> +	return ret;
+> +}
+> +
+> +static int sun8i_ths_resource_init(struct ths_device *tmdev)
+> +{
+> +	struct device *dev = tmdev->dev;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct resource *mem;
+
+I didn't notice earlier, but this can be dropped ^
+
+> +	void __iomem *base;
+> +	int ret;
+> +
+> +	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+
+This can be dropped too ^
+
+> +	base = devm_ioremap_resource(dev, mem);
+
+And this can now simply be devm_platform_ioremap_resource(pdev, 0) ^
+
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	tmdev->regmap = devm_regmap_init_mmio(dev, base, &config);
+> +	if (IS_ERR(tmdev->regmap))
+> +		return PTR_ERR(tmdev->regmap);
+> +
+> +	if (tmdev->chip->has_bus_clk_reset) {
+> +		tmdev->reset = devm_reset_control_get(dev, 0);
+> +		if (IS_ERR(tmdev->reset))
+> +			return PTR_ERR(tmdev->reset);
+> +
+> +		tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
+> +		if (IS_ERR(tmdev->bus_clk))
+> +			return PTR_ERR(tmdev->bus_clk);
+> +	}
+> +
+> +	if (tmdev->chip->has_mod_clk) {
+> +		tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
+> +		if (IS_ERR(tmdev->mod_clk))
+> +			return PTR_ERR(tmdev->mod_clk);
+> +	}
+> +
+> +	ret = reset_control_deassert(tmdev->reset);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(tmdev->bus_clk);
+> +	if (ret)
+> +		goto assert_reset;
+> +
+> +	ret = clk_set_rate(tmdev->mod_clk, 24000000);
+> +	if (ret)
+> +		goto bus_disable;
+> +
+> +	ret = clk_prepare_enable(tmdev->mod_clk);
+> +	if (ret)
+> +		goto bus_disable;
+> +
+> +	ret = sun8i_ths_calibrate(tmdev);
+> +	if (ret)
+> +		goto mod_disable;
+> +
+> +	return 0;
+> +
+> +mod_disable:
+> +	clk_disable_unprepare(tmdev->mod_clk);
+> +bus_disable:
+> +	clk_disable_unprepare(tmdev->bus_clk);
+> +assert_reset:
+> +	reset_control_assert(tmdev->reset);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sun8i_h3_thermal_init(struct ths_device *tmdev)
+> +{
+> +	int val;
+> +
+> +	/* average over 4 samples */
+> +	regmap_write(tmdev->regmap, SUN8I_THS_MFC,
+> +		     SUN50I_THS_FILTER_EN |
+> +		     SUN50I_THS_FILTER_TYPE(1));
+> +	/*
+> +	 * clkin = 24MHz
+> +	 * filter_samples = 4
+> +	 * period = 0.25s
+> +	 *
+> +	 * x = period * clkin / 4096 / filter_samples - 1
+> +	 *   = 365
+> +	 */
+> +	val = GENMASK(7 + tmdev->chip->sensor_num, 8);
+> +	regmap_write(tmdev->regmap, SUN8I_THS_IC,
+> +		     SUN50I_H6_THS_PC_TEMP_PERIOD(365) | val);
+> +	/*
+> +	 * T_acq = 20us
+> +	 * clkin = 24MHz
+> +	 *
+> +	 * x = T_acq * clkin - 1
+> +	 *   = 479
+> +	 */
+> +	regmap_write(tmdev->regmap, SUN8I_THS_CTRL0,
+> +		     SUN8I_THS_CTRL0_T_ACQ0(479));
+> +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
+> +	regmap_write(tmdev->regmap, SUN8I_THS_CTRL2,
+> +		     SUN8I_THS_CTRL2_T_ACQ1(479) | val);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Without this undocummented value, the returned temperatures would
+> + * be higher than real ones by about 20C.
+> + */
+> +#define SUN50I_H6_CTRL0_UNK 0x0000002f
+> +
+> +static int sun50i_h6_thermal_init(struct ths_device *tmdev)
+> +{
+> +	int val;
+> +
+> +	/*
+> +	 * T_acq = 20us
+> +	 * clkin = 24MHz
+> +	 *
+> +	 * x = T_acq * clkin - 1
+> +	 *   = 479
+> +	 */
+> +	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
+> +		     SUN50I_H6_CTRL0_UNK | SUN50I_THS_CTRL0_T_ACQ(479));
+> +	/* average over 4 samples */
+> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
+> +		     SUN50I_THS_FILTER_EN |
+> +		     SUN50I_THS_FILTER_TYPE(1));
+> +	/*
+> +	 * clkin = 24MHz
+> +	 * filter_samples = 4
+> +	 * period = 0.25s
+> +	 *
+> +	 * x = period * clkin / 4096 / filter_samples - 1
+> +	 *   = 365
+> +	 */
+> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
+> +		     SUN50I_H6_THS_PC_TEMP_PERIOD(365));
+> +	/* enable sensor */
+> +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
+> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
+> +	/* thermal data interrupt enable */
+> +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
+> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_DIC, val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun8i_ths_register(struct ths_device *tmdev)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> +		tmdev->sensor[i].tmdev = tmdev;
+> +		tmdev->sensor[i].id = i;
+> +		tmdev->sensor[i].tzd =
+> +			devm_thermal_zone_of_sensor_register(tmdev->dev,
+> +							     i,
+> +							     &tmdev->sensor[i],
+> +							     &ths_ops);
+> +		if (IS_ERR(tmdev->sensor[i].tzd))
+> +			return PTR_ERR(tmdev->sensor[i].tzd);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun8i_ths_probe(struct platform_device *pdev)
+> +{
+> +	struct ths_device *tmdev;
+> +	struct device *dev = &pdev->dev;
+> +	int ret, irq;
+> +
+> +	tmdev = devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
+> +	if (!tmdev)
+> +		return -ENOMEM;
+> +
+> +	tmdev->dev = dev;
+> +	tmdev->chip = of_device_get_match_data(&pdev->dev);
+> +	if (!tmdev->chip)
+> +		return -EINVAL;
+> +
+> +	platform_set_drvdata(pdev, tmdev);
+> +
+> +	ret = sun8i_ths_resource_init(tmdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	ret = tmdev->chip->init(tmdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sun8i_ths_register(tmdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Avoid entering the interrupt handler, the thermal device is not
+> +	 * registered yet, we deffer the registration of the interrupt to
+> +	 * the end.
+> +	 */
+> +	ret = devm_request_threaded_irq(dev, irq, NULL,
+> +					sun8i_irq_thread,
+> +					IRQF_ONESHOT, "ths", tmdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+
+I guess just return devm_request_threaded_irq(... ^
+
+thank you and regards,
+	o.
+
+> +}
+> +
+> +static int sun8i_ths_remove(struct platform_device *pdev)
+> +{
+> +	struct ths_device *tmdev = platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(tmdev->mod_clk);
+> +	clk_disable_unprepare(tmdev->bus_clk);
+> +	reset_control_assert(tmdev->reset);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct ths_thermal_chip sun8i_a83t_ths = {
+> +	.sensor_num = 3,
+> +	.scale = 705,
+> +	.offset = 191668,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+> +static const struct ths_thermal_chip sun8i_h3_ths = {
+> +	.sensor_num = 1,
+> +	.scale = 1211,
+> +	.offset = 217000,
+> +	.has_mod_clk = true,
+> +	.has_bus_clk_reset = true,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+> +static const struct ths_thermal_chip sun8i_r40_ths = {
+> +	.sensor_num = 3,
+> +	.offset = 251086,
+> +	.scale = 1130,
+> +	.has_mod_clk = true,
+> +	.has_bus_clk_reset = true,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+> +static const struct ths_thermal_chip sun50i_a64_ths = {
+> +	.sensor_num = 3,
+> +	.offset = 253890,
+> +	.scale = 1170,
+> +	.has_mod_clk = true,
+> +	.has_bus_clk_reset = true,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+> +static const struct ths_thermal_chip sun50i_h5_ths = {
+> +	.sensor_num = 2,
+> +	.has_mod_clk = true,
+> +	.has_bus_clk_reset = true,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +	.calc_temp = sun50i_h5_calc_temp,
+> +};
+> +
+> +static const struct ths_thermal_chip sun50i_h6_ths = {
+> +	.sensor_num = 2,
+> +	.has_bus_clk_reset = true,
+> +	.ft_deviation = 7000,
+> +	.offset = 187744,
+> +	.scale = 672,
+> +	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
+> +	.calibrate = sun50i_h6_ths_calibrate,
+> +	.init = sun50i_h6_thermal_init,
+> +	.irq_ack = sun50i_h6_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+> +static const struct of_device_id of_ths_match[] = {
+> +	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+> +	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+> +	{ .compatible = "allwinner,sun8i-r40-ths", .data = &sun8i_r40_ths },
+> +	{ .compatible = "allwinner,sun50i-a64-ths", .data = &sun50i_a64_ths },
+> +	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
+> +	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, of_ths_match);
+> +
+> +static struct platform_driver ths_driver = {
+> +	.probe = sun8i_ths_probe,
+> +	.remove = sun8i_ths_remove,
+> +	.driver = {
+> +		.name = "sun8i-thermal",
+> +		.of_match_table = of_ths_match,
+> +	},
+> +};
+> +module_platform_driver(ths_driver);
+> +
+> +MODULE_DESCRIPTION("Thermal sensor driver for Allwinner SOC");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.24.0
+> 
