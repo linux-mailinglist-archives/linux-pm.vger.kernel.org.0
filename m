@@ -2,105 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F4C10BDAC
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 22:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D7610C028
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 23:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730374AbfK0Van (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 16:30:43 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:36718 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730315AbfK0Vam (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 16:30:42 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6ECFA1C228B; Wed, 27 Nov 2019 22:30:38 +0100 (CET)
-Date:   Wed, 27 Nov 2019 22:30:37 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        id S1727313AbfK0WYa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 17:24:30 -0500
+Received: from vps.xff.cz ([195.181.215.36]:33888 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726947AbfK0WYa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Nov 2019 17:24:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1574893467; bh=03v6MvLb4Npw9AjFHB6zyIbUbdm8FNg3ot9ZMiWCnvw=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=SZtJFJb99qPrcwh17WvZ7KCnSMzXBjnAnvHpu7Gn3xSDHVbhUiaRVRhlTirhzYsKX
+         FZGf0WqtJx2bGpPWY8QtMbI6X9uvKcrlp5LJzPW9WjyQa/bG20uXYeqqn0Y+6Xqoz1
+         BjXvrmC8WC92tmr7mgjROc7CyUWoyPncd+CpV7BY=
+Date:   Wed, 27 Nov 2019 23:24:27 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     Frank Lee <tiny.windzz@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 11/12] ACPI/sleep: Convert acpi_wakeup_address into a
- function
-Message-ID: <20191127213037.GB20612@amd>
-References: <20191126165417.22423-1-sean.j.christopherson@intel.com>
- <20191126165417.22423-12-sean.j.christopherson@intel.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v6 1/7] thermal: sun8i: add thermal driver for
+ H6/H5/H3/A64/A83T/R40
+Message-ID: <20191127222427.coyeggbxs5miioxn@core.my.home>
+Mail-Followup-To: Vasily Khoruzhick <anarsoul@gmail.com>,
+        Frank Lee <tiny.windzz@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20191127052935.1719897-1-anarsoul@gmail.com>
+ <20191127052935.1719897-2-anarsoul@gmail.com>
+ <20191127111419.z5hfu5soxceiivg6@core.my.home>
+ <20191127173547.ch3pcv3lxgdcrfnu@gilmour.lan>
+ <CAEExFWvG-Af4qtUrxQV4ssNQCVQAmpXfxB+92wX+6ZxUNfX-Jw@mail.gmail.com>
+ <CA+E=qVcdwQO3Y8ismmBN-gRVNMs1Thx+TPLqstKM9fYf2_0qFQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ZfOjI3PrQbgiZnxM"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191126165417.22423-12-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <CA+E=qVcdwQO3Y8ismmBN-gRVNMs1Thx+TPLqstKM9fYf2_0qFQ@mail.gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Nov 27, 2019 at 11:48:32AM -0800, Vasily Khoruzhick wrote:
+> On Wed, Nov 27, 2019 at 11:44 AM Frank Lee <tiny.windzz@gmail.com> wrote:
+> >
+> > Hello Vasily,
+> >
+> > Thank you very much for your work on this.
+> > This looks good to me.
+> 
+> Thanks!
+> 
+> > By the way, I would like to ask comments about adding the following code.
+> 
+> Can we add it as follow up patch? I don't think that I have a device
+> with working suspend to test it and I'm hesitant to add any code that
+> I can't test.
 
---ZfOjI3PrQbgiZnxM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I have, but it doesn't use any of the clocks and resets, so it wouldn't
+test this fully, and basicaly doesn't need re-calibration at all, probably.
 
-On Tue 2019-11-26 08:54:16, Sean Christopherson wrote:
-> Convert acpi_wakeup_address from a raw variable into a function so that
-> x86 can wrap its dereference of the real mode boot header in a function
-> instead of broadcasting it to the world via a #define.  This sets the
-> stage for a future patch to move x86's definition of the new function,
-> acpi_get_wakeup_address(), out of asm/acpi.h and thus break acpi.h's
-> dependency on asm/realmode.h.
->=20
-> No functional change intended.
->=20
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+So that may be one feedback. On a83t, I'd made these callbacks a no-op.
 
-Thanks!
+regards,
+	o.
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---ZfOjI3PrQbgiZnxM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl3e6v0ACgkQMOfwapXb+vIvKgCgj+csmgRVJU3LjSgRtQ9xs4OL
-1n8An0cFCD4JerAugYVERVISU8Tw+N8s
-=cvdZ
------END PGP SIGNATURE-----
-
---ZfOjI3PrQbgiZnxM--
+> >
+> > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> > index c0ed60782b11..579dde5e0701 100644
+> > --- a/drivers/thermal/sun8i_thermal.c
+> > +++ b/drivers/thermal/sun8i_thermal.c
+> > @@ -629,11 +629,63 @@ static const struct of_device_id of_ths_match[] = {
+> >  };
+> >  MODULE_DEVICE_TABLE(of, of_ths_match);
+> >
+> > +static int __maybe_unused sun8i_thermal_suspend(struct device *dev)
+> > +{
+> > + struct ths_device *tmdev; = dev_get_drvdata(dev);
+> > +
+> > + clk_disable(tmdev->mod_clk);
+> > + clk_disable(tmdev->bus_clk);
+> > +
+> > + reset_control_assert(tmdev->reset);
+> > +
+> > + return 0;
+> > +}
+> > +
+> > +static int __maybe_unused sun8i_thermal_resume(struct device *dev)
+> > +{
+> > + struct ths_device *tmdev; = dev_get_drvdata(dev);
+> > + int error;
+> > +
+> > + error = reset_control_deassert(tmdev->reset);
+> > + if (error)
+> > + return error;
+> > +
+> > + error = clk_enable(tmdev->bus_clk);
+> > + if (error)
+> > + goto assert_reset;
+> > +
+> > + clk_set_rate(tmdev->mod_clk, 24000000);
+> > + error = clk_enable(tmdev->mod_clk);
+> > + if (error)
+> > + goto bus_disable;
+> > +
+> > + sun8i_ths_calibrate(tmdev);
+> > +
+> > + ret = tmdev->chip->init(tmdev);
+> > + if (ret)
+> > + goto mod_disable;
+> > +
+> > + return 0;
+> > +
+> > +mod_disable:
+> > + clk_disable(tmdev->mod_clk);
+> > +bus_disable:
+> > + clk_disable(tmdev->bus_clk);
+> > +assert_reset:
+> > + reset_control_assert(tmdev->reset);
+> > +
+> > + return 0;
+> > +}
+> > +
+> > +static SIMPLE_DEV_PM_OPS(sun8i_thermal_pm_ops,
+> > + sun8i_thermal_suspend, sun8i_thermal_resume);
+> > +
+> >  static struct platform_driver ths_driver = {
+> >   .probe = sun8i_ths_probe,
+> >   .remove = sun8i_ths_remove,
+> >   .driver = {
+> >   .name = "sun8i-thermal",
+> > + .pm = &sun8i_thermal_pm_ops,
+> >   .of_match_table = of_ths_match,
+> >   },
+> >  };
+> >
+> > Yangtao
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
