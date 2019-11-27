@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A30D10B706
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 20:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCEE10B75F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 21:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbfK0TtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 14:49:00 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34237 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727126AbfK0Ts7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 14:48:59 -0500
-Received: by mail-oi1-f196.google.com with SMTP id l136so5577367oig.1;
-        Wed, 27 Nov 2019 11:48:58 -0800 (PST)
+        id S1727113AbfK0UYU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 15:24:20 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:43695 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726703AbfK0UYU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 15:24:20 -0500
+Received: by mail-ot1-f67.google.com with SMTP id l14so20227061oti.10;
+        Wed, 27 Nov 2019 12:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hJQOsjHUQwGyDgldLtvmDQQC956sPZlhFuJn6q/Fye4=;
-        b=UHQm3Z4sQErDpbdcFsI5LZbvUBE5BhMXUdsIzb7O41xb6Fspwq2A1/BPVDQTjXSLdr
-         ikEI2AYLU+Ctu05Qf5u6bYWG5Lv63zshN411Mdsn1W+4fPFdDgMahME+EZCOJoU1CwJE
-         35v5Ycykph2Hq7xeEUKlTOBl/6E7kGL1nu5zSgrq7Xb8TN+sHbdlAw19oDeYA+AjLBgT
-         uqu17Y9ld56yXwu9aHlpdmiTJDgzKXhhd9fayPZmR2GSNicg68x2CeUBNU6BukSF4B2/
-         Uwsg1kCy2nPtULkc6eJeqq+y+2aHS3iyXlg2wQC2DR7fcJBxqjd2FJ5aYi/hj+VnLm4B
-         SzVQ==
+        bh=MixxgPNvg3pUnry2JzNoXYx2kY3tKkdeMgXAkzkyNYs=;
+        b=Q8xCo+ZbqsfjOgoXWTnHWNvKIjvPEEcwP+yXEBzmj2ekJJlDCBa94VFtCAGp2f+bzq
+         elQN5VZ0Q6MrI3M85kFAM7EcRpIT6dOyhTlaodtLBSugf0KJru8davD/6imekZuJmkNx
+         PKcyk5pw+9Yw45suj7kCI5epoouGLLTi0kYP0fey25mulV3BNtcIR6WKxFwJiFpSvh39
+         r+fZZtaHTh8Vqg56FBTN6g91jdzGaHCpToEq7ANGcvTUaONmosJTjEnzZ0amMb7T/Dfh
+         2sMqDroQQ4rqoAnUrp4pRzTkVcUnPo3MZ6ZYkFQ/jv9nMvj+GO/NOi53qfubSe832egJ
+         s8hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hJQOsjHUQwGyDgldLtvmDQQC956sPZlhFuJn6q/Fye4=;
-        b=QaHD+RerXlEbPYM4n6A8VwJ9OZVVK/RhJt+DqGmML2sko89/4xWurfwlDEMT2oUFE3
-         xYc5fX8hGfsP4IVIShKsvHQuj6sE+2Ox8nAu1Ap8GW744nGnEv6nz6uANZYBy+0piLDU
-         +dDpy29jjPaSXHOFrAJ08PpRiggBdUpmHnhOOvqTu0aAiM/iasroqgL1memOTLt6h8fV
-         Kb1n6aMcR4d37sVe7ylkNSim1hOI9fRrZbquZGYKOYtLnpbzLI9+V0T0i9v45iwn4ETF
-         gdPdWtugEKZvtOT16dxlWrnfXXNTteIyY7y9xePEZLCVnGf9VKpIblOMZBmOnhwc78Cx
-         5K2Q==
-X-Gm-Message-State: APjAAAX+HR+/5qD/3xjvBwuQOSXccxsSz8xuDOAW2a6x5jXdd2WIR1qk
-        rXBlG6wDRkXH63z/o19SBtEe0aLVMrw3xOmluwg=
-X-Google-Smtp-Source: APXvYqyED1U8iGKLv5Q8myGQWskAymaEmPDOweek/ULUMOk2izeVMnMgtOcUrHFsfo71UXovu5AJlOMgACDpkBnTwd4=
-X-Received: by 2002:aca:5e03:: with SMTP id s3mr5733588oib.88.1574884137631;
- Wed, 27 Nov 2019 11:48:57 -0800 (PST)
+        bh=MixxgPNvg3pUnry2JzNoXYx2kY3tKkdeMgXAkzkyNYs=;
+        b=a0VItJa3X0pfxxUXygSTuVIzLf+Jj1Ay9e7FNkFGehThv21Ac1QcAL0TgBFNrMKmav
+         76BK+Ug/xqscFobx0z5J4N8o0c1Qp64bMbAFjtfbCUBsbGSO47Nsg/f/xNGPRyxgpiVC
+         LdKTDGXfnB8+OiMsUtO2OQkSKNtSOOklxfWoE5MCVCH2v6Ju2EbZRTVqPWJHSo0qhhoV
+         9ibM5I5NzvPvQ8stHX2KVQ5S336wB5gi3kXR1dBQcXOOWKTluRLcTtA/uY8kA5b3cB3A
+         IUZChD2dcYWYyJxnxE9FFuJPQwYELakbrdDle8kTr5JQ1aMHMtYhrln5MdxemGLT8SJX
+         U25g==
+X-Gm-Message-State: APjAAAWFvwoHQdx1EOs+H00bN/xGUtlX3cTzNYxPbu3gyAI6BxPN4N/R
+        Cy9gWWNYkmuTbICHGNGpWpdzpMH8htGFV8DmPpw=
+X-Google-Smtp-Source: APXvYqzQ//Ez72MjlZ6tnpozQgzvE/hhO0Vn1XVq9GxyZPcPEL2qouYxRSGFV+mE8Gods9QDh7e/ODo46N4kJh7VLCE=
+X-Received: by 2002:a9d:6acf:: with SMTP id m15mr5155723otq.312.1574886258682;
+ Wed, 27 Nov 2019 12:24:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20191127052935.1719897-1-anarsoul@gmail.com> <20191127052935.1719897-2-anarsoul@gmail.com>
- <20191127111419.z5hfu5soxceiivg6@core.my.home> <20191127173547.ch3pcv3lxgdcrfnu@gilmour.lan>
- <CAEExFWvG-Af4qtUrxQV4ssNQCVQAmpXfxB+92wX+6ZxUNfX-Jw@mail.gmail.com>
-In-Reply-To: <CAEExFWvG-Af4qtUrxQV4ssNQCVQAmpXfxB+92wX+6ZxUNfX-Jw@mail.gmail.com>
+References: <20191127052935.1719897-1-anarsoul@gmail.com> <20191127052935.1719897-3-anarsoul@gmail.com>
+ <20191127174434.wousbqosmm5vxcsu@gilmour.lan>
+In-Reply-To: <20191127174434.wousbqosmm5vxcsu@gilmour.lan>
 From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Wed, 27 Nov 2019 11:48:32 -0800
-Message-ID: <CA+E=qVcdwQO3Y8ismmBN-gRVNMs1Thx+TPLqstKM9fYf2_0qFQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/7] thermal: sun8i: add thermal driver for H6/H5/H3/A64/A83T/R40
-To:     Frank Lee <tiny.windzz@gmail.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
+Date:   Wed, 27 Nov 2019 12:23:53 -0800
+Message-ID: <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
+Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: add YAML schema for
+ sun8i-thermal driver bindings
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -63,97 +63,187 @@ Cc:     Maxime Ripard <mripard@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 11:44 AM Frank Lee <tiny.windzz@gmail.com> wrote:
+On Wed, Nov 27, 2019 at 9:44 AM Maxime Ripard <mripard@kernel.org> wrote:
 >
-> Hello Vasily,
+> Hi,
 >
-> Thank you very much for your work on this.
-> This looks good to me.
+> On Tue, Nov 26, 2019 at 09:29:30PM -0800, Vasily Khoruzhick wrote:
+> > From: Yangtao Li <tiny.windzz@gmail.com>
+> >
+> > sun8i-thermal driver supports thermal sensor in wide range of Allwinner
+> > SoCs. Add YAML schema for its bindings.
+> >
+> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> > Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> > ---
+> >  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 103 ++++++++++++++++++
+> >  1 file changed, 103 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> > new file mode 100644
+> > index 000000000000..e622f0a4be90
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> > @@ -0,0 +1,103 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/allwinner,sun8i-a83t-ths.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Allwinner SUN8I Thermal Controller Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Yangtao Li <tiny.windzz@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - const: allwinner,sun8i-a83t-ths
+> > +      - const: allwinner,sun8i-h3-ths
+> > +      - const: allwinner,sun8i-r40-ths
+> > +      - const: allwinner,sun50i-a64-ths
+> > +      - const: allwinner,sun50i-h5-ths
+> > +      - const: allwinner,sun50i-h6-ths
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  clock-names:
+> > +    anyOf:
+> > +      - items:
+> > +        - const: bus
+> > +        - const: mod
+> > +      - items:
+> > +        - const: bus
+>
+> This can be:
+>
+> clock-names:
+>   minItems: 1
+>   maxItems: 2
+>   items:
+>     - const: bus
+>     - const: mod
+>
+> And the length should be checked based on the compatible value, with
+> something like
+>
+> if:
+>   properties:
+>     compatible:
+>       contains:
+>         const: allwinner,sun50i-h6-ths
+>
+> then:
+>   properties:
+>     clocks:
+>       maxItems: 1
+>
+>     clock-names:
+>       maxItems: 1
+>
+> else:
+>   properties:
+>     clocks:
+>       maxItems: 2
+>
+>     clock-names:
+>       maxItems: 2
 
-Thanks!
+OK, will do
 
-> By the way, I would like to ask comments about adding the following code.
+> > +
+> > +  '#thermal-sensor-cells':
+> > +    enum: [ 0, 1 ]
+> > +    description: |
+> > +      Definition depends on soc version:
+> > +
+> > +      For "allwinner,sun8i-h3-ths",
+> > +      value must be 0.
+> > +      For all other compatibles
+> > +      value must be 1.
+>
+> This should be checked using an if as well.
 
-Can we add it as follow up patch? I don't think that I have a device
-with working suspend to test it and I'm hesitant to add any code that
-I can't test.
+Will do.
+
+> > +
+> > +  nvmem-cells:
+> > +    maxItems: 1
+> > +    items:
+> > +      - description: Calibration data for thermal sensors
+>
+> You can drop the items and just move the description up one level,
+> under nvmem-cells
+
+Will do.
+
+> > +
+> > +  nvmem-cell-names:
+> > +    items:
+> > +      - const: calibration
+>
+> Ditto for the const
+
+Sorry, I don't quite get it. What exactly do you want me to do with
+this one? nvmem-cell-names must be "calibration"
+
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - '#thermal-sensor-cells'
+>
+> Whether clocks, clock-names and resets are thereshould be check using
+> an if statement as well.
+
+Will do
+
+> > +
+> > +examples:
+> > +  - |
+> > +    ths_a83t: ths@1f04000 {
+>
+> You don't need the label at all, and the node name should be
+> temperature-sensor according to the DT spec, not ths. This applies to
+> all you examples.
+
+OK
+
+> > +         compatible = "allwinner,sun8i-a83t-ths";
+> > +         reg = <0x01f04000 0x100>;
+> > +         interrupts = <0 31 0>;
+> > +         nvmem-cells = <&ths_calibration>;
+> > +         nvmem-cell-names = "calibration";
+> > +         #thermal-sensor-cells = <1>;
+> > +    };
+>
+> New line.
+
+OK
 
 >
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index c0ed60782b11..579dde5e0701 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -629,11 +629,63 @@ static const struct of_device_id of_ths_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, of_ths_match);
->
-> +static int __maybe_unused sun8i_thermal_suspend(struct device *dev)
-> +{
-> + struct ths_device *tmdev; = dev_get_drvdata(dev);
-> +
-> + clk_disable(tmdev->mod_clk);
-> + clk_disable(tmdev->bus_clk);
-> +
-> + reset_control_assert(tmdev->reset);
-> +
-> + return 0;
-> +}
-> +
-> +static int __maybe_unused sun8i_thermal_resume(struct device *dev)
-> +{
-> + struct ths_device *tmdev; = dev_get_drvdata(dev);
-> + int error;
-> +
-> + error = reset_control_deassert(tmdev->reset);
-> + if (error)
-> + return error;
-> +
-> + error = clk_enable(tmdev->bus_clk);
-> + if (error)
-> + goto assert_reset;
-> +
-> + clk_set_rate(tmdev->mod_clk, 24000000);
-> + error = clk_enable(tmdev->mod_clk);
-> + if (error)
-> + goto bus_disable;
-> +
-> + sun8i_ths_calibrate(tmdev);
-> +
-> + ret = tmdev->chip->init(tmdev);
-> + if (ret)
-> + goto mod_disable;
-> +
-> + return 0;
-> +
-> +mod_disable:
-> + clk_disable(tmdev->mod_clk);
-> +bus_disable:
-> + clk_disable(tmdev->bus_clk);
-> +assert_reset:
-> + reset_control_assert(tmdev->reset);
-> +
-> + return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(sun8i_thermal_pm_ops,
-> + sun8i_thermal_suspend, sun8i_thermal_resume);
-> +
->  static struct platform_driver ths_driver = {
->   .probe = sun8i_ths_probe,
->   .remove = sun8i_ths_remove,
->   .driver = {
->   .name = "sun8i-thermal",
-> + .pm = &sun8i_thermal_pm_ops,
->   .of_match_table = of_ths_match,
->   },
->  };
->
-> Yangtao
+> Thanks!
+> Maxime
