@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD9A10ADB4
+	by mail.lfdr.de (Postfix) with ESMTP id 2117B10ADB3
 	for <lists+linux-pm@lfdr.de>; Wed, 27 Nov 2019 11:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727154AbfK0K3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 05:29:41 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38997 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727156AbfK0K3k (ORCPT
+        id S1727150AbfK0K3k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 05:29:40 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45589 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbfK0K3k (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 05:29:40 -0500
-Received: by mail-lj1-f196.google.com with SMTP id e10so14679139ljj.6
-        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 02:29:37 -0800 (PST)
+Received: by mail-lf1-f68.google.com with SMTP id 203so16677694lfa.12
+        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 02:29:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ojwf4ly83xUW6dp5+GMXCBlvMV1YbXRntOyZUrl5OUs=;
-        b=QgfDNcaWwKS5maCkGGbNpmSdSl/WAalIAc/5R/ZXnVBMsZZgArohJaxvBkhuNgmFdu
-         x4fnF8qGa42tHrcucj7lYauL0So26pAO7RnIEAS5zm1scv1phGjPJxhWtnqJJUoEa/na
-         EcdYO5kuPFju1CBlKVUcMbmG8ZE/MRGT9Yyl1sR2dfZppVVMKB97/2nVtptw2CTaKFjx
-         dWxXLkziNsEwDI5R04CJIriYCSkzzNOpt68rzcQVnXaT1raB41QjBryDPzyy/gb5Hcuh
-         VPE+LUs6LRkF5AtPpE9TV4qKFiMZZEiE3rHIRTAXw4f0H5asiFq8SetwbUP6Qs4ofVOx
-         DYjw==
+        bh=YE8YvkurDwcmK3uqareXLGBcqQwJuyVozrMdvAFxIY4=;
+        b=V0sHWW+6lT6XzspaGhjr68xPBxpq7cPOhMWh1T+Yuzw50GwEW9jikpXcj4Xys51BZG
+         +uEZgF33ABgUWs+x7CUqOSTxvnuanzhxSRePKrmiiqBpnMsbA9sZbF7VmOpPS/SNkGPm
+         BIparBEt6Symbx9RStqtt6zw4wByrXDGWpP1pkjmBBNf+j2SYGbQn7tZOFc8OmK4X6LG
+         HBj6c6FBilNnoTc9kiephZw+sT4KpxSMylomgmXHxbP21AhsU00DviVyClbq2NucHpB2
+         lPNQAS61sJFOUXirZNTvRAMgUOUuuPQroVBFt2umHunxgvkAe+QY+F9rKUVTNv7HP6o8
+         Hegg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ojwf4ly83xUW6dp5+GMXCBlvMV1YbXRntOyZUrl5OUs=;
-        b=cm7r1VRhnFxWRBm6nGDuzf16Y5YJdY5yhlxyDfuwsR0qGd20jal0eQr+znFioXHL5F
-         96i7Fn6hv/objZEA4LvmvAEUpMX0v5qZI0ELgqgP6PEG2H88xwZKhn/nzugeKqJ/F9A4
-         R93LpPu4ZpmAql3uga3i8m3SP3hGZtdhFh5NLL9hwrB4et+1CpVgsWM5oGFwtIVM31wV
-         50kXsX2X2g6bB/w8vupSiGPl56lyH8Ifhq1uaatLK06jD7UUWWJq+aBnFcngXe8gvcFC
-         aLaCuWhgyxpuI4tpelJ4TjcyEaRlW9hSPS7YKIFQG6OL3uymI7WiGpB5UtgMudfwrz9j
-         ykcw==
-X-Gm-Message-State: APjAAAUfJTt9u5bLgUbhbfpAeoISQzRxrDhYB/a9rCYJIfaI6wUIDBJ8
-        v6JVnqjSlyMFp8pifQISRl8i6w==
-X-Google-Smtp-Source: APXvYqxSrADzY+DNQH6KW7/kvRcSzE/0+zwazwzkYrgGsO2J2TR75kSdIzocGBWy1mQNQ1Gtuf/ChQ==
-X-Received: by 2002:a2e:8695:: with SMTP id l21mr29828905lji.53.1574850576223;
-        Wed, 27 Nov 2019 02:29:36 -0800 (PST)
+        bh=YE8YvkurDwcmK3uqareXLGBcqQwJuyVozrMdvAFxIY4=;
+        b=J1/0jxf7bglX3PniGAY6lQo58TLla29iLexvPvwckETISoQ1UFde+7sTIOKkWfFihq
+         8GIOk5z0p2abpoockbBPJCbqpNMI37tQGpwRqlqTFgqZs97G+QAMX2nc8xtG5CpRm09q
+         IVvSpAN7yl6voTGuRo2sKJDxHBKcjsZHkdYE67CzjYoFI9VKPrIfH2qznaKJF2XtM1TQ
+         7OhyDGSCxlbUuIxKhPZsEpcjKhUNhxGJO4E3mxSwKxQz02P0rCF3IGMSWLmaEJBKbEuq
+         2zbZUS9Nct9f/sUAX5RwLX4mw8eKdAYlTCrrXhR4g4SR7o8P7NEUE6f1DdV24dxibm3c
+         clcQ==
+X-Gm-Message-State: APjAAAXh35pB8yORrMvteF/ICH7L5AuESkdOpg1lO2fivwBJuHxXydAm
+        iDjQSfgAFp52SGA9fnN/U7mV8Q==
+X-Google-Smtp-Source: APXvYqzfK7p4G4XeXLmvxRBXQfax0x8CjKcQ8ndzaEP1RnAz44tx+i8EzhOqNotZjQZFL/St0ciykg==
+X-Received: by 2002:a19:8c4e:: with SMTP id i14mr14761604lfj.90.1574850577700;
+        Wed, 27 Nov 2019 02:29:37 -0800 (PST)
 Received: from uffe-XPS-13-9360.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id t9sm6868260ljj.19.2019.11.27.02.29.33
+        by smtp.gmail.com with ESMTPSA id t9sm6868260ljj.19.2019.11.27.02.29.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 02:29:35 -0800 (PST)
+        Wed, 27 Nov 2019 02:29:37 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -59,9 +59,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
-Subject: [PATCH v3 12/13] cpuidle: psci: Add support for PM domains by using genpd
-Date:   Wed, 27 Nov 2019 11:29:13 +0100
-Message-Id: <20191127102914.18729-13-ulf.hansson@linaro.org>
+Subject: [PATCH v3 13/13] arm64: dts: Convert to the hierarchical CPU topology layout for MSM8916
+Date:   Wed, 27 Nov 2019 11:29:14 +0100
+Message-Id: <20191127102914.18729-14-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191127102914.18729-1-ulf.hansson@linaro.org>
 References: <20191127102914.18729-1-ulf.hansson@linaro.org>
@@ -70,25 +70,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the hierarchical CPU topology layout is used in DT and the PSCI OSI
-mode is supported by the PSCI FW, let's initialize a corresponding PM
-domain topology by using genpd. This enables a CPU and a group of CPUs,
-when attached to the topology, to be power-managed accordingly.
+To enable the OS to better support PSCI OS initiated CPU suspend mode,
+let's convert from the flattened layout to the hierarchical layout.
 
-To trigger the attempt to initialize the genpd data structures let's use a
-subsys_initcall, which should be early enough to allow CPUs, but also other
-devices to be attached.
-
-The initialization consists of parsing the PSCI OF node for the topology
-and the "domain idle states" DT bindings. In case the idle states are
-compatible with "domain-idle-state", the initialized genpd becomes
-responsible of selecting an idle state for the PM domain, via assigning it
-a genpd governor.
-
-Note that, a successful initialization of the genpd data structures, is
-followed by a call to psci_set_osi_mode(), as to try to enable the OSI mode
-in the PSCI FW. In case this fails, we fall back into a degraded mode
-rather than bailing out and returning an error code.
+In the hierarchical layout, let's create a power domain provider per CPU
+and describe the idle states for each CPU inside the power domain provider
+node. To group the CPUs into a cluster, let's add another power domain
+provider and make it act as the master domain. Note that, the CPU's idle
+states remains compatible with "arm,idle-state", while the cluster's idle
+state becomes compatible with "domain-idle-state".
 
 Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
 Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
@@ -99,335 +89,123 @@ Changes in v3:
 	- None.
 
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 266 ++++++++++++++++++++++++++
- drivers/cpuidle/cpuidle-psci.c        |   4 +-
- drivers/cpuidle/cpuidle-psci.h        |   5 +
- 3 files changed, 273 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 57 +++++++++++++++++++++++++--
+ 1 file changed, 53 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index bc7df4dc0686..7429fd7626a1 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -7,15 +7,281 @@
-  *
-  */
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index 5ea9fb8f2f87..1ece0c763592 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -102,10 +102,11 @@
+ 			reg = <0x0>;
+ 			next-level-cache = <&L2_0>;
+ 			enable-method = "psci";
+-			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&apcs>;
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 			#cooling-cells = <2>;
++			power-domains = <&CPU_PD0>;
++			power-domain-names = "psci";
+ 		};
  
-+#define pr_fmt(fmt) "CPUidle PSCI: " fmt
-+
- #include <linux/cpu.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/psci.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
+ 		CPU1: cpu@1 {
+@@ -114,10 +115,11 @@
+ 			reg = <0x1>;
+ 			next-level-cache = <&L2_0>;
+ 			enable-method = "psci";
+-			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&apcs>;
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 			#cooling-cells = <2>;
++			power-domains = <&CPU_PD1>;
++			power-domain-names = "psci";
+ 		};
  
- #include "cpuidle-psci.h"
+ 		CPU2: cpu@2 {
+@@ -126,10 +128,11 @@
+ 			reg = <0x2>;
+ 			next-level-cache = <&L2_0>;
+ 			enable-method = "psci";
+-			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&apcs>;
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 			#cooling-cells = <2>;
++			power-domains = <&CPU_PD2>;
++			power-domain-names = "psci";
+ 		};
  
-+struct psci_pd_provider {
-+	struct list_head link;
-+	struct device_node *node;
-+};
-+
-+static LIST_HEAD(psci_pd_providers);
-+static bool osi_mode_enabled;
-+
-+static int psci_pd_power_off(struct generic_pm_domain *pd)
-+{
-+	struct genpd_power_state *state = &pd->states[pd->state_idx];
-+	u32 *pd_state;
-+
-+	/* If we have failed to enable OSI mode, then abort power off. */
-+	if (!osi_mode_enabled)
-+		return -EBUSY;
-+
-+	if (!state->data)
-+		return 0;
-+
-+	/* OSI mode is enabled, set the corresponding domain state. */
-+	pd_state = state->data;
-+	psci_set_domain_state(*pd_state);
-+
-+	return 0;
-+}
-+
-+static int __init psci_pd_parse_state_nodes(struct genpd_power_state *states,
-+					int state_count)
-+{
-+	int i, ret;
-+	u32 psci_state, *psci_state_buf;
-+
-+	for (i = 0; i < state_count; i++) {
-+		ret = psci_dt_parse_state_node(to_of_node(states[i].fwnode),
-+					&psci_state);
-+		if (ret)
-+			goto free_state;
-+
-+		psci_state_buf = kmalloc(sizeof(u32), GFP_KERNEL);
-+		if (!psci_state_buf) {
-+			ret = -ENOMEM;
-+			goto free_state;
-+		}
-+		*psci_state_buf = psci_state;
-+		states[i].data = psci_state_buf;
-+	}
-+
-+	return 0;
-+
-+free_state:
-+	i--;
-+	for (; i >= 0; i--)
-+		kfree(states[i].data);
-+	return ret;
-+}
-+
-+static int __init psci_pd_parse_states(struct device_node *np,
-+			struct genpd_power_state **states, int *state_count)
-+{
-+	int ret;
-+
-+	/* Parse the domain idle states. */
-+	ret = of_genpd_parse_idle_states(np, states, state_count);
-+	if (ret)
-+		return ret;
-+
-+	/* Fill out the PSCI specifics for each found state. */
-+	ret = psci_pd_parse_state_nodes(*states, *state_count);
-+	if (ret)
-+		kfree(*states);
-+
-+	return ret;
-+}
-+
-+static void psci_pd_free_states(struct genpd_power_state *states,
-+				unsigned int state_count)
-+{
-+	int i;
-+
-+	for (i = 0; i < state_count; i++)
-+		kfree(states[i].data);
-+	kfree(states);
-+}
-+
-+static int __init psci_pd_init(struct device_node *np)
-+{
-+	struct generic_pm_domain *pd;
-+	struct psci_pd_provider *pd_provider;
-+	struct dev_power_governor *pd_gov;
-+	struct genpd_power_state *states = NULL;
-+	int ret = -ENOMEM, state_count = 0;
-+
-+	pd = kzalloc(sizeof(*pd), GFP_KERNEL);
-+	if (!pd)
-+		goto out;
-+
-+	pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
-+	if (!pd_provider)
-+		goto free_pd;
-+
-+	pd->name = kasprintf(GFP_KERNEL, "%pOF", np);
-+	if (!pd->name)
-+		goto free_pd_prov;
-+
-+	/*
-+	 * Parse the domain idle states and let genpd manage the state selection
-+	 * for those being compatible with "domain-idle-state".
-+	 */
-+	ret = psci_pd_parse_states(np, &states, &state_count);
-+	if (ret)
-+		goto free_name;
-+
-+	pd->free_states = psci_pd_free_states;
-+	pd->name = kbasename(pd->name);
-+	pd->power_off = psci_pd_power_off;
-+	pd->states = states;
-+	pd->state_count = state_count;
-+	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-+
-+	/* Use governor for CPU PM domains if it has some states to manage. */
-+	pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
-+
-+	ret = pm_genpd_init(pd, pd_gov, false);
-+	if (ret) {
-+		psci_pd_free_states(states, state_count);
-+		goto free_name;
-+	}
-+
-+	ret = of_genpd_add_provider_simple(np, pd);
-+	if (ret)
-+		goto remove_pd;
-+
-+	pd_provider->node = of_node_get(np);
-+	list_add(&pd_provider->link, &psci_pd_providers);
-+
-+	pr_debug("init PM domain %s\n", pd->name);
-+	return 0;
-+
-+remove_pd:
-+	pm_genpd_remove(pd);
-+free_name:
-+	kfree(pd->name);
-+free_pd_prov:
-+	kfree(pd_provider);
-+free_pd:
-+	kfree(pd);
-+out:
-+	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
-+	return ret;
-+}
-+
-+static void __init psci_pd_remove(void)
-+{
-+	struct psci_pd_provider *pd_provider, *it;
-+	struct generic_pm_domain *genpd;
-+
-+	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
-+		of_genpd_del_provider(pd_provider->node);
-+
-+		genpd = of_genpd_remove_last(pd_provider->node);
-+		if (!IS_ERR(genpd))
-+			kfree(genpd);
-+
-+		of_node_put(pd_provider->node);
-+		list_del(&pd_provider->link);
-+		kfree(pd_provider);
-+	}
-+}
-+
-+static int __init psci_pd_init_topology(struct device_node *np)
-+{
-+	struct device_node *node;
-+	struct of_phandle_args child, parent;
-+	int ret;
-+
-+	for_each_child_of_node(np, node) {
-+		if (of_parse_phandle_with_args(node, "power-domains",
-+					"#power-domain-cells", 0, &parent))
-+			continue;
-+
-+		child.np = node;
-+		child.args_count = 0;
-+
-+		ret = of_genpd_add_subdomain(&parent, &child);
-+		of_node_put(parent.np);
-+		if (ret) {
-+			of_node_put(node);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id psci_of_match[] __initconst = {
-+	{ .compatible = "arm,psci" },
-+	{ .compatible = "arm,psci-0.2" },
-+	{ .compatible = "arm,psci-1.0" },
-+	{}
-+};
-+
-+static int __init psci_idle_init_domains(void)
-+{
-+	struct device_node *np = of_find_matching_node(NULL, psci_of_match);
-+	struct device_node *node;
-+	int ret = 0, pd_count = 0;
-+
-+	if (!np)
-+		return -ENODEV;
-+
-+	/* Currently limit the hierarchical topology to be used in OSI mode. */
-+	if (!psci_has_osi_support())
-+		goto out;
-+
-+	/*
-+	 * Parse child nodes for the "#power-domain-cells" property and
-+	 * initialize a genpd/genpd-of-provider pair when it's found.
-+	 */
-+	for_each_child_of_node(np, node) {
-+		if (!of_find_property(node, "#power-domain-cells", NULL))
-+			continue;
-+
-+		ret = psci_pd_init(node);
-+		if (ret)
-+			goto put_node;
-+
-+		pd_count++;
-+	}
-+
-+	/* Bail out if not using the hierarchical CPU topology. */
-+	if (!pd_count)
-+		goto out;
-+
-+	/* Link genpd masters/subdomains to model the CPU topology. */
-+	ret = psci_pd_init_topology(np);
-+	if (ret)
-+		goto remove_pd;
-+
-+	/* Try to enable OSI mode. */
-+	ret = psci_set_osi_mode();
-+	if (ret)
-+		pr_warn("failed to enable OSI mode: %d\n", ret);
-+	else
-+		osi_mode_enabled = true;
-+
-+	of_node_put(np);
-+	pr_info("Initialized CPU PM domain topology\n");
-+	return pd_count;
-+
-+put_node:
-+	of_node_put(node);
-+remove_pd:
-+	if (pd_count)
-+		psci_pd_remove();
-+	pr_err("failed to create CPU PM domains ret=%d\n", ret);
-+out:
-+	of_node_put(np);
-+	return ret;
-+}
-+subsys_initcall(psci_idle_init_domains);
-+
- struct device *psci_dt_attach_cpu(int cpu)
- {
- 	struct device *dev;
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index 0707222a40bd..835c7c3aa118 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -32,7 +32,7 @@ struct psci_cpuidle_data {
- static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
- static DEFINE_PER_CPU(u32, domain_state);
+ 		CPU3: cpu@3 {
+@@ -138,10 +141,11 @@
+ 			reg = <0x3>;
+ 			next-level-cache = <&L2_0>;
+ 			enable-method = "psci";
+-			cpu-idle-states = <&CPU_SLEEP_0>;
+ 			clocks = <&apcs>;
+ 			operating-points-v2 = <&cpu_opp_table>;
+ 			#cooling-cells = <2>;
++			power-domains = <&CPU_PD3>;
++			power-domain-names = "psci";
+ 		};
  
--static inline void psci_set_domain_state(u32 state)
-+void psci_set_domain_state(u32 state)
- {
- 	__this_cpu_write(domain_state, state);
- }
-@@ -103,7 +103,7 @@ static const struct of_device_id psci_idle_state_match[] __initconst = {
- 	{ },
- };
- 
--static int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
-+int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
- {
- 	int err = of_property_read_u32(np, "arm,psci-suspend-param", state);
- 
-diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
-index 0cadbb71dc55..d2e55cad9ac6 100644
---- a/drivers/cpuidle/cpuidle-psci.h
-+++ b/drivers/cpuidle/cpuidle-psci.h
-@@ -3,6 +3,11 @@
- #ifndef __CPUIDLE_PSCI_H
- #define __CPUIDLE_PSCI_H
- 
-+struct device_node;
+ 		L2_0: l2-cache {
+@@ -161,12 +165,57 @@
+ 				min-residency-us = <2000>;
+ 				local-timer-stop;
+ 			};
 +
-+void psci_set_domain_state(u32 state);
-+int __init psci_dt_parse_state_node(struct device_node *np, u32 *state);
++			CLUSTER_RET: cluster-retention {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41000012>;
++				entry-latency-us = <500>;
++				exit-latency-us = <500>;
++				min-residency-us = <2000>;
++			};
 +
- #ifdef CONFIG_PM_GENERIC_DOMAINS_OF
- struct device *psci_dt_attach_cpu(int cpu);
- #else
++			CLUSTER_PWRDN: cluster-gdhs {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41000032>;
++				entry-latency-us = <2000>;
++				exit-latency-us = <2000>;
++				min-residency-us = <6000>;
++			};
+ 		};
+ 	};
+ 
+ 	psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
++
++		CPU_PD0: cpu-pd0 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&CPU_SLEEP_0>;
++		};
++
++		CPU_PD1: cpu-pd1 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&CPU_SLEEP_0>;
++		};
++
++		CPU_PD2: cpu-pd2 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&CPU_SLEEP_0>;
++		};
++
++		CPU_PD3: cpu-pd3 {
++			#power-domain-cells = <0>;
++			power-domains = <&CLUSTER_PD>;
++			domain-idle-states = <&CPU_SLEEP_0>;
++		};
++
++		CLUSTER_PD: cluster-pd {
++			#power-domain-cells = <0>;
++			domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
++		};
+ 	};
+ 
+ 	pmu {
 -- 
 2.17.1
 
