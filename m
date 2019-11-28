@@ -2,228 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E9410CECE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 20:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C04610CF12
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 21:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbfK1TTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 14:19:13 -0500
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:43020 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726641AbfK1TTL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 14:19:11 -0500
-Received: by mail-vk1-f193.google.com with SMTP id k19so6643083vke.10
-        for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2019 11:19:09 -0800 (PST)
+        id S1726692AbfK1UGK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 15:06:10 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43172 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbfK1UGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 15:06:10 -0500
+Received: by mail-lf1-f65.google.com with SMTP id l14so20854177lfh.10;
+        Thu, 28 Nov 2019 12:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cohhF1NGkG9wv8KaQQ+xdNEYPWRsIUKdm2ue5iTbmiM=;
-        b=oK8tIb+uLUO2qX0hYciICXuvv6wMjGagZAoTFfYbRaXRP9zlHg+O2RF6KdDI8I9pxt
-         HIn1aREPGUBckjK9jjUZ4fgV/sMMLaYBpqjRayTjPEthUiRGBATLB1qG2DP8bYDlJcFO
-         4KBd3eeIx8RyU+a8r4wS3+IV+IWv3XueP3tFRqhpp+wh9eYbq/AW5aa6nDC8BUdfU9LQ
-         fh8Ude7KCXeGOysmhP0htm+8EBl0Fhk9s28jgkTmRzL/whm2GCZdtkivWBl1bbBSt6BW
-         Nb34aL0GYPHub+Kr677NLhWIMd3tD9g2zQd6iv1jmkloCUFLz/inU9KAXS3YjjOCEJo3
-         gRSg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FjNGi4sGPAMOwSu//4rjJ+SnF7x7q5U9m2ivWbacmrs=;
+        b=prlw5sTfXskWdLGt1n1eJ5Y/HudXYVV3XQf//ICFu7YD/09HJLyK1Gt/eUqntGMq7j
+         MZxGrohvVH6Dt8zQSBdM82OBOsRclo678gkPc3GJTckx4aDYNkip2t+71xebU5f2nFFl
+         cRMUsgK0E73k/jnILquqQdmjxai2nVLnwLBA4v9fcLobpDuuQr3LVRgjJ/EPJRHZFWXF
+         jPYHvfhYr+VY1Z2o46InkqOw6/0HhGbhM5sncUxKEJGXgXyjGllKB/qXS0/NE1JeZX91
+         ADno3NmCgdKAKvCIXk9O2THtzM6650KH/LaL8O0n+gx+E4ocM+OlAOLPkN38n+r4qfB5
+         JUxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cohhF1NGkG9wv8KaQQ+xdNEYPWRsIUKdm2ue5iTbmiM=;
-        b=ByNOya/hJNzfhuxz4QQbcHUidTaBfxHpgzcR+sHieJmnfo2NyXpkEWo0jmKLsSsN8r
-         JgydR/x8rEtGTPhPpK52wIUMyRcztNxZx+EliOrwR9AIDfiCQuOoLvKB/r4K2yEHiflw
-         M/OVHVqTswqMYFxYR+KB6KKgIQywC982G/mIYU8U6irh0eOLma6DGlxeVjvXlOiHlMaQ
-         BLUtjZ7BuEC4kdeBU+4DO+WKlTo4Cp++MELxnU9loCkVEBpMelHVitLyqdv0jRKIAJHr
-         ibWuBM/GaYOWZPU4funPQ3eimeYspOoz45YHOTV7qJuc/lYaXhpUfStbrvjy0zWxOi4W
-         A3Xw==
-X-Gm-Message-State: APjAAAXIFH09FPzLjF0K+M7n7tIrCnO8X5DEuAWg59mqQWLG6/bEnIot
-        5D8enqMpomfjkbHFM9eM3+Sbzc6Z3I84v66vTN5bng==
-X-Google-Smtp-Source: APXvYqztvoQz7r5LCaOjyU7Z4nZCZOfzB76ES9oL6R3zQ1poLJ083TCQY3ueU5VXnq1YC+p+cQPvg+PhY3a0VcwKUyg=
-X-Received: by 2002:a1f:bdd0:: with SMTP id n199mr1849831vkf.86.1574968748546;
- Thu, 28 Nov 2019 11:19:08 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FjNGi4sGPAMOwSu//4rjJ+SnF7x7q5U9m2ivWbacmrs=;
+        b=NsBPPyg0ZdcgXsioX+aFa5mzGCt3xY4vd/E6FMeI94h79QRHRkzBnRw/JkhFe9ACYH
+         rxW4BXl+H9Q+EdU8YLuXqRVMou/uB5J8Q8jtIwdAl3iSuaFV9GiaIe5u5tHstJ92y3pE
+         71uZqKCtA73oipqQZxsPadrMRUpTAB5hdEFKPXawl8pKremOXlinTYF8bJyNmmZXQFT/
+         dU9n5ZKkQU+JQiswfZADKhYBiSEIDEowYj20/U2cl+qzj/WIq4CQ9u06i6ddQWvNfnyV
+         D8w8vNnpwyQb2sbmiMUrtBci2sVo2DuBqJ9Dr8e7f56AfBQZqoXQBVfZ2ks/WNMhGwEe
+         dOpg==
+X-Gm-Message-State: APjAAAUSYUcf2WOGS+QgiBOM/X1FsmefLdNve0H7nGpqZJHvYbWkPk88
+        /PqX5WUjeaRYTUfyHPebwXMprzXq
+X-Google-Smtp-Source: APXvYqzgPP9GLzInH7+s9jf2E5EQByrAmOEH9D4KiMZ3l/KM0WdjxySOJ/KXRCdKijAKz7DotGJUKQ==
+X-Received: by 2002:a19:6a15:: with SMTP id u21mr30911327lfu.31.1574971567031;
+        Thu, 28 Nov 2019 12:06:07 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id n30sm10178631lfi.54.2019.11.28.12.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Nov 2019 12:06:06 -0800 (PST)
+Subject: Re: [PATCH v1 08/29] dt-bindings: interconnect: tegra: Add initial
+ IDs
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+References: <20191118200247.3567-1-digetx@gmail.com>
+ <20191118200247.3567-9-digetx@gmail.com> <20191119062535.GC2462695@ulmo>
+ <8cff3af3-42c7-3312-5f98-cd5eb98b7b7a@gmail.com>
+ <f0f36176-8070-08a6-a61f-77221d916f04@gmail.com>
+ <20191125113218.GK1409040@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a3c16696-8ecf-ac7f-4f8a-2dd3221e5334@gmail.com>
+Date:   Thu, 28 Nov 2019 23:06:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-References: <cover.1573499020.git.amit.kucheria@linaro.org>
- <c08cf285b8696c4fd00706b85cd3c88d12f97df3.1573499020.git.amit.kucheria@linaro.org>
- <20191112192244.GB3140946@builder>
-In-Reply-To: <20191112192244.GB3140946@builder>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Fri, 29 Nov 2019 00:48:57 +0530
-Message-ID: <CAHLCerPojTpUV0TiJfis7skghuRzbkC+RB7kwDhi35c5-f=VgA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drivers: thermal: tsens: Add watchdog support
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>, sivaa@codeaurora.org,
-        Andy Gross <agross@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191125113218.GK1409040@ulmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 12:52 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Mon 11 Nov 11:21 PST 2019, Amit Kucheria wrote:
->
-> > TSENS IP v2.3 onwards adds support for a watchdog to detect if the TSENS
-> > HW FSM is frozen. Add support to detect and restart the FSM in the
-> > driver. The watchdog is configured by the bootloader, we just enable the
-> > feature in the kernel.
-> >
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > ---
-> >  drivers/thermal/qcom/tsens-common.c | 41 +++++++++++++++++++++++++++++
-> >  drivers/thermal/qcom/tsens-v2.c     | 10 +++++++
-> >  drivers/thermal/qcom/tsens.h        | 12 +++++++++
-> >  3 files changed, 63 insertions(+)
-> >
-> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> > index 2989cb952cdb..9432518502a7 100644
-> > --- a/drivers/thermal/qcom/tsens-common.c
-> > +++ b/drivers/thermal/qcom/tsens-common.c
-> > @@ -378,6 +378,28 @@ irqreturn_t tsens_critical_irq_thread(int irq, void *data)
-> >       bool enable = true, disable = false;
-> >       unsigned long flags;
-> >       int temp, ret, i;
-> > +     u32 wdog_status, wdog_count, ver_minor;
-> > +
-> > +     ret = regmap_field_read(priv->rf[VER_MINOR], &ver_minor);
->
-> The version is unlikely to change from one interrupt to the next, so I
-> suggest that you add a boolean "has_watchdog" to your context that you
-> populate in init_common.
+25.11.2019 14:32, Thierry Reding пишет:
+> On Thu, Nov 21, 2019 at 08:14:35PM +0300, Dmitry Osipenko wrote:
+>> 19.11.2019 19:56, Dmitry Osipenko пишет:
+>>> 19.11.2019 09:25, Thierry Reding пишет:
+>>>> On Mon, Nov 18, 2019 at 11:02:26PM +0300, Dmitry Osipenko wrote:
+>>>>> Define interconnect IDs for memory controller (MC), external memory
+>>>>> controller (EMC), external memory (EMEM) and memory clients of display
+>>>>> controllers (DC).
+>>>>>
+>>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>>> ---
+>>>>>  include/dt-bindings/interconnect/tegra-icc.h | 11 +++++++++++
+>>>>>  1 file changed, 11 insertions(+)
+>>>>>  create mode 100644 include/dt-bindings/interconnect/tegra-icc.h
+>>>
+>>>
+>>> Hello Thierry,
+>>>
+>>>> There was a bit of discussion regarding this for a recent patch that I
+>>>> was working on, see:
+>>>>
+>>>> 	http://patchwork.ozlabs.org/project/linux-tegra/list/?series=140318
+>>>
+>>> Thank you very much for the link.
+>>>
+>>>> I'd rather not use an additional set of definitions for this. The memory
+>>>> controller already has a set of native IDs for memory clients that I
+>>>> think we can reuse for this.
+>>>
+>>> I missed that it's fine to have multiple ICC connections defined
+>>> per-path, at quick glance looks like indeed it should be fine to re-use
+>>> MC IDs.
+>>
+>> Well, it is not quite correct to have multiple connections per-path.
+>>
+>> Please take look at interconnect's binding and core.c:
+>>
+>>   1. there should be one src->dst connection per-path
+>>   2. each connection should comprise of one source and one destination nodes
+>>
+>>>> I've only added these client IDs for Tegra194 because that's where we
+>>>> need it to actually describe a specific hardware quirk, but I can come
+>>>> up with the equivalent for older chips as well.
+>>>
+>>> Older Tegra SoCs have hardware units connected to MC through AHB bus,
+>>> like USB for example. These units do not have MC client IDs and there is
+>>> no MC ID defined for the AHB bus either, but probably it won't be a
+>>> problem to define IDs for them if will be necessary.
+>>>
+>>
+>> Since interconnect binding requires to define both source and
+>> destination nodes for the path, then MC IDs are not enough in order to
+>> define interconnect path because these IDs represent only the source
+>> nodes. Destination node should be either EMC or EMEM.
+> 
+> This doesn't really map well to Tegra. The source of the path is always
+> the device and the destination is always the memory controller. We also
+> can have multiple paths between a device and the memory controller. The
+> typical case is to have at least a read and a write path, but there are
+> a number of devices that have multiple read and/or multiple write paths
+> to the memory controller.
+> 
+> Or perhaps I'm looking at this the wrong way, and what we really ought
+> to describe is the paths with MC sitting in the middle. So it'd be
+> something like:
+> 
+> 	MC ID --- source ---> MC --- destination ---> EMC
 
-Fair enough, will de-const tsense_features pointer and add a flag
-there. It has been overdue, now that we're starting to look at
-features that were introduced midway through an IP version cycle. That
-is where this should reside instead of tsens_priv.
+Yes, this should be correct.
 
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (tsens_version(priv) > VER_1_X &&  ver_minor > 2) {
-> > +             /* Watchdog is present only on v2.3+ */
-> > +             ret = regmap_field_read(priv->rf[WDOG_BARK_STATUS], &wdog_status);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             /* Clear WDOG interrupt */
-> > +             regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
-> > +             regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
-> > +
-> > +             ret = regmap_field_read(priv->rf[WDOG_BARK_COUNT], &wdog_count);
-> > +             if (ret)
-> > +                     return ret;
-> > +             if (wdog_count)
-> > +                     dev_err(priv->dev, "%s: watchdog count: %d\n", __func__, wdog_count);
->
-> What's the benefit of reading wdog_count and who's the audience for this
-> print? What do I do when this goes to 11?
+> for write paths and:
+> 
+> 	EMC --- source ---> MC --- destination ---> MC ID
 
-Should be a debug statement. Will convert to dev_dbg.
+Both write and read paths have the same direction in terms of
+interconnect API. The source node requests bandwidth from the
+destination node, where source is memory client and destination is EMC/EMEM.
 
+> for read paths. I have no idea what would be a good connection ID for
+> EMC, since I don't think MC really differentiates at that level. Perhaps
+> #interconnect-cells = <0> for EMC would be appropriate.
 
-> Regards,
-> Bjorn
->
-> > +     }
-> >
-> >       for (i = 0; i < priv->num_sensors; i++) {
-> >               struct tsens_sensor *s = &priv->sensor[i];
-> > @@ -685,6 +707,7 @@ int __init init_common(struct tsens_priv *priv)
-> >  {
-> >       void __iomem *tm_base, *srot_base;
-> >       struct device *dev = priv->dev;
-> > +     u32 ver_minor;
-> >       struct resource *res;
-> >       u32 enabled;
-> >       int ret, i, j;
-> > @@ -734,6 +757,9 @@ int __init init_common(struct tsens_priv *priv)
-> >                       if (IS_ERR(priv->rf[i]))
-> >                               return PTR_ERR(priv->rf[i]);
-> >               }
-> > +             ret = regmap_field_read(priv->rf[VER_MINOR], &ver_minor);
-> > +             if (ret)
-> > +                     goto err_put_device;
-> >       }
-> >
-> >       priv->rf[TSENS_EN] = devm_regmap_field_alloc(dev, priv->srot_map,
-> > @@ -794,6 +820,21 @@ int __init init_common(struct tsens_priv *priv)
-> >               }
-> >       }
-> >
-> > +     if (tsens_version(priv) > VER_1_X &&  ver_minor > 2) {
-> > +             /* Watchdog is present only on v2.3+ */
-> > +             for (i = 0, j = WDOG_BARK_STATUS; j <= CC_MON_MASK; i++, j++) {
-> > +                     priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
-> > +                                                           priv->fields[j]);
-> > +                     if (IS_ERR(priv->rf[j])) {
-> > +                             ret = PTR_ERR(priv->rf[j]);
-> > +                             goto err_put_device;
-> > +                     }
-> > +             }
-> > +             /* Enable WDOG and disable cycle completion monitoring */
-> > +             regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
-> > +             regmap_field_write(priv->rf[CC_MON_MASK], 1);
-> > +     }
-> > +
-> >       spin_lock_init(&priv->ul_lock);
-> >       tsens_enable_irq(priv);
-> >       tsens_debug_init(op);
-> > diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-> > index 47d831df0803..4184850d1e42 100644
-> > --- a/drivers/thermal/qcom/tsens-v2.c
-> > +++ b/drivers/thermal/qcom/tsens-v2.c
-> > @@ -24,6 +24,7 @@
-> >  #define TM_Sn_CRITICAL_THRESHOLD_OFF 0x0060
-> >  #define TM_Sn_STATUS_OFF             0x00a0
-> >  #define TM_TRDY_OFF                  0x00e4
-> > +#define TM_WDOG_LOG_OFF              0x013c
-> >
-> >  /* v2.x: 8996, 8998, sdm845 */
-> >
-> > @@ -66,6 +67,15 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
-> >       REG_FIELD_SPLIT_BITS_0_15(CRIT_INT_CLEAR,  TM_CRITICAL_INT_CLEAR_OFF),
-> >       REG_FIELD_SPLIT_BITS_0_15(CRIT_INT_MASK,   TM_CRITICAL_INT_MASK_OFF),
-> >
-> > +     /* WATCHDOG on v2.3 or later */
-> > +     [WDOG_BARK_STATUS] = REG_FIELD(TM_CRITICAL_INT_STATUS_OFF, 31, 31),
-> > +     [WDOG_BARK_CLEAR]  = REG_FIELD(TM_CRITICAL_INT_CLEAR_OFF,  31, 31),
-> > +     [WDOG_BARK_MASK]   = REG_FIELD(TM_CRITICAL_INT_MASK_OFF,   31, 31),
-> > +     [CC_MON_STATUS]    = REG_FIELD(TM_CRITICAL_INT_STATUS_OFF, 30, 30),
-> > +     [CC_MON_CLEAR]     = REG_FIELD(TM_CRITICAL_INT_CLEAR_OFF,  30, 30),
-> > +     [CC_MON_MASK]      = REG_FIELD(TM_CRITICAL_INT_MASK_OFF,   30, 30),
-> > +     [WDOG_BARK_COUNT]  = REG_FIELD(TM_WDOG_LOG_OFF,             0,  7),
-> > +
-> >       /* Sn_STATUS */
-> >       REG_FIELD_FOR_EACH_SENSOR16(LAST_TEMP,       TM_Sn_STATUS_OFF,  0,  11),
-> >       REG_FIELD_FOR_EACH_SENSOR16(VALID,           TM_Sn_STATUS_OFF, 21,  21),
-> > diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> > index 9b5a30533c52..7608e7877a7b 100644
-> > --- a/drivers/thermal/qcom/tsens.h
-> > +++ b/drivers/thermal/qcom/tsens.h
-> > @@ -440,6 +440,18 @@ enum regfield_ids {
-> >       CRIT_THRESH_13,
-> >       CRIT_THRESH_14,
-> >       CRIT_THRESH_15,
-> > +
-> > +     /* WATCHDOG */
-> > +     WDOG_BARK_STATUS,
-> > +     WDOG_BARK_CLEAR,
-> > +     WDOG_BARK_MASK,
-> > +     WDOG_BARK_COUNT,
-> > +
-> > +     /* CYCLE COMPLETION MONITOR */
-> > +     CC_MON_STATUS,
-> > +     CC_MON_CLEAR,
-> > +     CC_MON_MASK,
-> > +
-> >       MIN_STATUS_0,           /* MIN threshold violated */
-> >       MIN_STATUS_1,
-> >       MIN_STATUS_2,
-> > --
-> > 2.17.1
-> >
+It should be fine to define ICC ID for EMC that doesn't overlap with the
+memory client IDs, say #1000.
+
+> This would make the bindings look more like this, taking a random sample
+> from the above series:
+> 
+> 	ethernet@2490000 {
+> 		...
+> 		interconnects = <&emc &mc TEGRA194_MEMORY_CLIENT_EQOSR>,
+> 				<&mc TEGRA194_MEMORY_CLIENT_EQOSW &emc>;
+> 		interconnect-names = "dma-mem", "dma-mem";
+> 		...
+> 	};
+> 
+> In words, the above would mean that for the ethernet device there is one
+> path (a read slave interface) where data flows from the EMC through the
+> MC to the device with memory client ID TEGRA194_MEMORY_CLIENT_EQOSR. The
+> second path (a write slave interface) describes data flowing from the
+> device (with memory client ID TEGRA194_MEMORY_CLIENT_EQOSW) through the
+> MC and towards the EMC.
+> 
+> Irrespective of the above, I think we definitely need to keep separate
+> IDs for read and write paths because each of them have separate controls
+> for arbitration and latency allowance. So each of those may need to be
+> separately configurable.
+> 
+> Does that make sense?
+
+I'll try to update this series to use ICC-path per display plane and see
+how it goes.
+
+In general, looks like should be fine to have ICC paths defined per
+memory client.
