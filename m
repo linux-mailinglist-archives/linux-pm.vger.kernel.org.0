@@ -2,108 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF4810CFB9
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 23:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B94E10CFC3
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 23:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfK1WUF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 17:20:05 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54885 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726569AbfK1WUF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 17:20:05 -0500
-Received: from 79.184.255.242.ipv4.supernova.orange.pl (79.184.255.242) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id eea6408bb1d4e6fd; Thu, 28 Nov 2019 23:20:02 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 1/2] PM / runtime: Allow drivers to override runtime PM behaviour on sleep
-Date:   Thu, 28 Nov 2019 23:20:01 +0100
-Message-ID: <4149037.GOuMSCS4uT@kreacher>
-In-Reply-To: <2310325.iNVD75376c@kreacher>
-References: <20191128160314.2381249-1-thierry.reding@gmail.com> <20191128163623.GA2382107@ulmo> <2310325.iNVD75376c@kreacher>
+        id S1726609AbfK1WiF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 17:38:05 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:46704 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726569AbfK1WiF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 17:38:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=f3rjvT6j+bT26WVJqnERf3RXYSJGnbAkdL5QvBotJac=; b=UbOLwMOXvmPhk3YPbXXwYcUS2
+        21Hs9wjGAi4YX0ezggz+uYhPoFK0YJPWi9+24Z1AY2uqsneaNS+jWnR67reK7yeLTBIacAOdltLuL
+        aUnw/xJjk9SkeXoutf4U8OxXDh24FZEJcyxNYugiwROhIZUn68XcHSU/nimgsYJoeT+ckBs3R3++7
+        1lZI0YmpKxDRjCr7qW/KfqJhb12zHR5WmSuzKxDNDQCmu+MicqK6Rg8bFrLDoeV0plEwfbmnWjt51
+        67fdPTwBFTeqaqoQOKYTY6S6oonaXE359KJSlrYm26f7JtupKkhaDHkhtxTl1iRZIlPAsXEnZHdwf
+        kpLvEr99Q==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iaSQF-00079Q-PF; Thu, 28 Nov 2019 22:38:03 +0000
+To:     Linux PM list <linux-pm@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] cpuidle: minor Kconfig help text fixes
+Message-ID: <b0e9d1df-8bb9-9eee-f433-c7a8e8269e06@infradead.org>
+Date:   Thu, 28 Nov 2019 14:38:03 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, November 28, 2019 11:03:57 PM CET Rafael J. Wysocki wrote:
-> On Thursday, November 28, 2019 5:50:26 PM CET Thierry Reding wrote:
-> > 
-> > --0F1p//8PRICkK4MW
-> > Content-Type: text/plain; charset=us-ascii
-> > Content-Disposition: inline
-> > Content-Transfer-Encoding: quoted-printable
-> > 
-> > On Thu, Nov 28, 2019 at 05:14:51PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Nov 28, 2019 at 5:03 PM Thierry Reding <thierry.reding@gmail.com>=
-> >  wrote:
-> > > >
-> > > > From: Thierry Reding <treding@nvidia.com>
-> > > >
-> > > > Currently the driver PM core will automatically acquire a runtime PM
-> > > > reference for devices before system sleep is entered. This is needed
-> > > > to avoid potential issues related to devices' parents getting put to
-> > > > runtime suspend at the wrong time and causing problems with their
-> > > > children.
-> > >=20
-> > > Not only for that.
-> > >=20
-> > > > In some cases drivers are carefully written to avoid such issues and
-> > > > the default behaviour can be changed to allow runtime PM to operate
-> > > > regularly during system sleep.
-> > >=20
-> > > But this change breaks quite a few assumptions in the core too, so no,
-> > > it can't be made.
-> > 
-> > Anything in particular that I can look at? I'm not seeing any issues
-> > when I test this, which could of course mean that I'm just getting
-> > lucky.
-> 
-> There are races and such that you may never hit during casual testing.
-> 
-> > One thing that irritated me is that I think this used to work. I do
-> > recall testing suspend/resume a few years ago and devices would get
-> > properly runtime suspended/resumed.
-> 
-> Not true at all.
-> 
-> The PM core has always taken PM-runtime references on all devices pretty much
-> since when PM-runtime was introduced.
-> 
-> > I did some digging but couldn't
-> > find anything that would have had an impact on this.
-> > 
-> > Given that this is completely opt-in feature, why are you categorically
-> > NAK'ing this?
-> 
-> The general problem is that if any device has been touched by system-wide
-> suspend code, it should not be subject to PM-runtime any more until the
-> subsequent system-wide resume is able to undo whatever the suspend did.
-> 
-> Moreover, if a device is runtime-suspended, the system-wide suspend code
-> may mishandle it, in general.  That's why PM-runtime suspend is not allowed
-> during system-wide transitions at all.  And it has always been like that.
-> 
-> For a specific platform you may be able to overcome these limitations if
-> you are careful enough, but certainly they are there in general and surely
-> you cannot prevent people from using your opt-in just because they think
-> that they know what they are doing.
+From: Randy Dunlap <rdunlap@infradead.org>
 
-BTW, what if user space prevents PM-runtime from suspending devices by writing
-"on" to their "control" files?
+End sentences in help text with a period (aka full stop).
 
-System-wide suspend is (of course) still expected to work in that case, so how
-exactly would you overcome that?
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ drivers/cpuidle/Kconfig.arm |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+--- lnx-54.orig/drivers/cpuidle/Kconfig.arm
++++ lnx-54/drivers/cpuidle/Kconfig.arm
+@@ -65,21 +65,21 @@ config ARM_U8500_CPUIDLE
+ 	bool "Cpu Idle Driver for the ST-E u8500 processors"
+ 	depends on ARCH_U8500 && !ARM64
+ 	help
+-	  Select this to enable cpuidle for ST-E u8500 processors
++	  Select this to enable cpuidle for ST-E u8500 processors.
+ 
+ config ARM_AT91_CPUIDLE
+ 	bool "Cpu Idle Driver for the AT91 processors"
+ 	default y
+ 	depends on ARCH_AT91 && !ARM64
+ 	help
+-	  Select this to enable cpuidle for AT91 processors
++	  Select this to enable cpuidle for AT91 processors.
+ 
+ config ARM_EXYNOS_CPUIDLE
+ 	bool "Cpu Idle Driver for the Exynos processors"
+ 	depends on ARCH_EXYNOS && !ARM64
+ 	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+ 	help
+-	  Select this to enable cpuidle for Exynos processors
++	  Select this to enable cpuidle for Exynos processors.
+ 
+ config ARM_MVEBU_V7_CPUIDLE
+ 	bool "CPU Idle Driver for mvebu v7 family processors"
 
 
