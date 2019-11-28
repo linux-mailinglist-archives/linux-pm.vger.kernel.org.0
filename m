@@ -2,220 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE1D10CA42
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 15:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1722110CA6D
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 15:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfK1OSc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 09:18:32 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40349 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726716AbfK1OS2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 09:18:28 -0500
-Received: by mail-wr1-f67.google.com with SMTP id c14so6715324wrn.7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2019 06:18:25 -0800 (PST)
+        id S1726401AbfK1Ofl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 09:35:41 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:46138 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbfK1Ofl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 09:35:41 -0500
+Received: by mail-io1-f67.google.com with SMTP id i11so29117467iol.13;
+        Thu, 28 Nov 2019 06:35:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JT/cyXM4c3hlhS/42ul0Bg6b/PSo9qW/fW/jL/8JN5I=;
-        b=aBW4RYhYozIkFwfWySiGzURoUK9gm0MvN+lR/Cel+fVCRq9AHk7CUDGMkIS89R3axU
-         A2hDkR2Y3fkuG60BOe5DzK1Qnv2jNQ8ziyx8MRBjX1NicgfFIYbmUHlI3UKoeIJDyCxC
-         Mw6q4RgeIqt0DHN03YALF2tnD/hYDDaHNccs1LgxIcY2KztA8IrK0meBV3r7KofbQuSi
-         wnpUPgz9f2WYd1mjOa/1oDAAXEyOnmYIWkOD9BhkI2tl9ZjovrH2oAFhpHsHOuTVvkvZ
-         YebdzA76BVW5RqTmgJ7qaTsII7a2hzcqc8t3cgTy7YYOzqw2oL9LtO9CwmEZ8ZDy4FLC
-         gsMA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ys0oMorfIi7C824w1iSly86fym9t4iyqfpjSyuy5/k0=;
+        b=PioA0zCk+Zd1n1my8PwKcIy9bGLuGHvxzfRo+ZfAPyjeRq+t7owhwcYEMQIPTfrnqv
+         EU+zFJ8MD/b9LESDZxyRZl+lq98TXlmoP3C/l3/7Yx/44I0GRpe1LHLi9k4z7UBseA4w
+         Z4JmUD/WHtxFKrZ7HTsYtdtODVh1WugT0FZSoZyLM+RRL2sb5U1K8ZCuY70/n8frH34T
+         N96cyOTf9JtCSEs6/uFNKga29ug5uOeOLvweU8aY2N2RzHXeKaESO32IKOpwhaKWuhr5
+         MPyi3LMKkp2CfBjZH1Q70UelnV1rkoMhfNqfa2K8ERWEORXWWR4uYwVK/esOZq7LFZil
+         kiNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JT/cyXM4c3hlhS/42ul0Bg6b/PSo9qW/fW/jL/8JN5I=;
-        b=U06FvFLZUHiCzg+qrJpGOq9xvdF45zreyjoPu47akbD7ws53rWYUkEGohW1XAYCM+7
-         WRFmiUUHpGzSgIuTO2EiE1+3ohahbvQiMphgO30mig/VP6dU5oAjPgOZowqM2NYvw9wZ
-         W7YON6zTnPzbC+NU6njv7mU9Lqo8pIAgJEI0P0CtaktcmlduhBDYLTHBitNiUFN/F2yZ
-         40w7TWwwSQxGqiJicEbikcs4qh5MutlKm9WtX9yYYobNTk/wKtb7PFyZrjl1YqiYXwMT
-         bpMS+BBIrZaIzB7kAutbLQcOrjKPzSPCZMXu5jPGrQDQ10rfIxJ7o1qrM8w6EEauxYBe
-         5p9Q==
-X-Gm-Message-State: APjAAAU/o2bnF1yuFJDHQA4YUuKmfTtS00jVpcpSoT4dbu6H30E5FCJe
-        lHhIOKjBG4WQzAr3IgdqJUvdL1U2EHk=
-X-Google-Smtp-Source: APXvYqycAPzTOk7jiYu0x7chzYsqp4QkBnI1R5T6PVG42h5covchwVRihpX7Va66RoE5RKSY6KNu2g==
-X-Received: by 2002:a5d:6652:: with SMTP id f18mr6935257wrw.246.1574950704416;
-        Thu, 28 Nov 2019 06:18:24 -0800 (PST)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id f6sm23947092wrr.15.2019.11.28.06.18.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 28 Nov 2019 06:18:23 -0800 (PST)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, bjorn.andersson@linaro.org,
-        vincent.guittot@linaro.org, daidavid1@codeaurora.org,
-        okukatla@codeaurora.org, evgreen@chromium.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        georgi.djakov@linaro.org
-Subject: [PATCH v4 3/3] interconnect: Add basic tracepoints
-Date:   Thu, 28 Nov 2019 16:18:18 +0200
-Message-Id: <20191128141818.32168-4-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191128141818.32168-1-georgi.djakov@linaro.org>
-References: <20191128141818.32168-1-georgi.djakov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ys0oMorfIi7C824w1iSly86fym9t4iyqfpjSyuy5/k0=;
+        b=ennCYRvfjdo7zYPj6kF5Nr5IDEj0x+K9lWIzIAZxzZ6caLOXtGJlJiJJr369Dr4a/t
+         vIHDs831fNNoLjC4VxaWe+iWEDUe/H17tINeY1BDlyvOKqimagxgeeFj3qmMtFTjMmeZ
+         47C2+h/3n+ii7m4zYVKE9e083LhQA5z35xWzLSe9SY65d3d/yKepteijwFKJRp/Cbwph
+         lUEscjE1jQPtamWSB6q9XSE2MXhJ+np9LxgkCg5SaKB6KmWvzmE3VjqyOcG4iD0Qgewa
+         uBaLRTrxJVeOEgPnR2nuMrFQrLaOWoqVoW18wjS5rcF7XWxNiVM88E8VploPIxisi9wD
+         zV3Q==
+X-Gm-Message-State: APjAAAUZf2B14Ayg7S/sq8rilH/zfahskC8NjsjoPmD512y1lxbeJdsX
+        46jSaHx5e2E4SZqRkEggMxWR6PjQHr+n7h3rR6M=
+X-Google-Smtp-Source: APXvYqyoGjY0mx1trgavH/ZA03bPvP02qQfLhuQ1bKJZqfjHvrQEWB4fK7mvLNy2ZuozIPH7DeV9tZeFX3KAwFGNV7c=
+X-Received: by 2002:a5d:8953:: with SMTP id b19mr14362242iot.168.1574951738305;
+ Thu, 28 Nov 2019 06:35:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191127052935.1719897-1-anarsoul@gmail.com> <20191127052935.1719897-3-anarsoul@gmail.com>
+ <20191127174434.wousbqosmm5vxcsu@gilmour.lan> <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
+ <20191128074325.q47rpzhufwog6mbb@gilmour.lan>
+In-Reply-To: <20191128074325.q47rpzhufwog6mbb@gilmour.lan>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Thu, 28 Nov 2019 22:35:26 +0800
+Message-ID: <CAEExFWs7A4TcB-QcatfR3w1hUX88dC-Sxd=epQppwB7p2CC6SA@mail.gmail.com>
+Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: add YAML schema for
+ sun8i-thermal driver bindings
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000e697a30598690697"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The tracepoints can help with understanding the system behavior of a
-given interconnect path when the consumer drivers change their bandwidth
-demands. This might be interesting when we want to monitor the requested
-interconnect bandwidth for each client driver. The paths may share the
-same nodes and this will help to understand "who and when is requesting
-what". All this is useful for subsystem drivers developers and may also
-provide hints when optimizing the power and performance profile of the
-system.
+--000000000000e697a30598690697
+Content-Type: text/plain; charset="UTF-8"
 
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/Makefile |  1 +
- drivers/interconnect/core.c   |  7 +++
- drivers/interconnect/trace.h  | 88 +++++++++++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+)
- create mode 100644 drivers/interconnect/trace.h
+Hi,
 
-diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
-index 28f2ab0824d5..725029ae7a2c 100644
---- a/drivers/interconnect/Makefile
-+++ b/drivers/interconnect/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+CFLAGS_core.o				:= -I$(src)
- icc-core-objs				:= core.o
- 
- obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index c9e16bc1331e..0e4852feb395 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -21,6 +21,9 @@
- 
- #include "internal.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "trace.h"
-+
- static DEFINE_IDR(icc_idr);
- static LIST_HEAD(icc_providers);
- static DEFINE_MUTEX(icc_lock);
-@@ -435,6 +438,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 
- 		/* aggregate requests for this node */
- 		aggregate_requests(node);
-+
-+		trace_icc_set_bw(path, node, i, avg_bw, peak_bw);
- 	}
- 
- 	ret = apply_constraints(path);
-@@ -453,6 +458,8 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 
- 	mutex_unlock(&icc_lock);
- 
-+	trace_icc_set_bw_end(path, ret);
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(icc_set_bw);
-diff --git a/drivers/interconnect/trace.h b/drivers/interconnect/trace.h
-new file mode 100644
-index 000000000000..3d668ff566bf
---- /dev/null
-+++ b/drivers/interconnect/trace.h
-@@ -0,0 +1,88 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Interconnect framework tracepoints
-+ * Copyright (c) 2019, Linaro Ltd.
-+ * Author: Georgi Djakov <georgi.djakov@linaro.org>
-+ */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM interconnect
-+
-+#if !defined(_TRACE_INTERCONNECT_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_INTERCONNECT_H
-+
-+#include <linux/interconnect.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(icc_set_bw,
-+
-+	TP_PROTO(struct icc_path *p, struct icc_node *n, int i,
-+		 u32 avg_bw, u32 peak_bw),
-+
-+	TP_ARGS(p, n, i, avg_bw, peak_bw),
-+
-+	TP_STRUCT__entry(
-+		__string(path_name, p->name)
-+		__string(dev, dev_name(p->reqs[i].dev))
-+		__string(node_name, n->name)
-+		__field(u32, avg_bw)
-+		__field(u32, peak_bw)
-+		__field(u32, node_avg_bw)
-+		__field(u32, node_peak_bw)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(path_name, p->name);
-+		__assign_str(dev, dev_name(p->reqs[i].dev));
-+		__assign_str(node_name, n->name);
-+		__entry->avg_bw = avg_bw;
-+		__entry->peak_bw = peak_bw;
-+		__entry->node_avg_bw = n->avg_bw;
-+		__entry->node_peak_bw = n->peak_bw;
-+	),
-+
-+	TP_printk("path=%s dev=%s node=%s avg_bw=%u peak_bw=%u agg_avg=%u agg_peak=%u",
-+		  __get_str(path_name),
-+		  __get_str(dev),
-+		  __get_str(node_name),
-+		  __entry->avg_bw,
-+		  __entry->peak_bw,
-+		  __entry->node_avg_bw,
-+		  __entry->node_peak_bw)
-+);
-+
-+TRACE_EVENT(icc_set_bw_end,
-+
-+	TP_PROTO(struct icc_path *p, int ret),
-+
-+	TP_ARGS(p, ret),
-+
-+	TP_STRUCT__entry(
-+		__string(path_name, p->name)
-+		__string(dev, dev_name(p->reqs[0].dev))
-+		__field(int, ret)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(path_name, p->name);
-+		__assign_str(dev, dev_name(p->reqs[0].dev));
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("path=%s dev=%s ret=%d",
-+		  __get_str(path_name),
-+		  __get_str(dev),
-+		  __entry->ret)
-+);
-+
-+#endif /* _TRACE_INTERCONNECT_H */
-+
-+/* This part must be outside protection */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE trace
-+
-+#include <trace/define_trace.h>
+How about this?
+
+Best regards,
+Yangtao
+
+--000000000000e697a30598690697
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-dt-bindings-thermal-add-YAML-schema-for-sun8i-therma.patch"
+Content-Disposition: attachment; 
+	filename="0001-dt-bindings-thermal-add-YAML-schema-for-sun8i-therma.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k3itjtrt0>
+X-Attachment-Id: f_k3itjtrt0
+
+RnJvbSAzOGRkMGU0MTYyYjY5OGEzMDA3ZDRlZWU3NzFlMzQ4MTBkM2E4ZjlhIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBZYW5ndGFvIExpIDx0aW55LndpbmR6ekBnbWFpbC5jb20+CkRh
+dGU6IFRodSwgMjggTm92IDIwMTkgMjI6MzE6MjggKzA4MDAKU3ViamVjdDogW1BBVENIXSBkdC1i
+aW5kaW5nczogdGhlcm1hbDogYWRkIFlBTUwgc2NoZW1hIGZvciBzdW44aS10aGVybWFsCiBkcml2
+ZXIgYmluZGluZ3MKCnN1bjhpLXRoZXJtYWwgZHJpdmVyIHN1cHBvcnRzIHRoZXJtYWwgc2Vuc29y
+IGluIHdpZGUgcmFuZ2Ugb2YgQWxsd2lubmVyClNvQ3MuIEFkZCBZQU1MIHNjaGVtYSBmb3IgaXRz
+IGJpbmRpbmdzLgoKU2lnbmVkLW9mZi1ieTogWWFuZ3RhbyBMaSA8dGlueS53aW5kenpAZ21haWwu
+Y29tPgotLS0KIC4uLi9iaW5kaW5ncy90aGVybWFsL3N1bjhpLXRoZXJtYWwueWFtbCAgICAgICB8
+IDE2MCArKysrKysrKysrKysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCAxNjAgaW5zZXJ0aW9ucygr
+KQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90
+aGVybWFsL3N1bjhpLXRoZXJtYWwueWFtbAoKZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
+aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL3N1bjhpLXRoZXJtYWwueWFtbCBiL0RvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL3N1bjhpLXRoZXJtYWwueWFtbApuZXcgZmls
+ZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwMDAuLjFiZTMyZjA5ZmNjOAotLS0gL2Rldi9u
+dWxsCisrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aGVybWFsL3N1bjhp
+LXRoZXJtYWwueWFtbApAQCAtMCwwICsxLDE2MCBAQAorIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
+cjogR1BMLTIuMAorJVlBTUwgMS4yCistLS0KKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3Nj
+aGVtYXMvdGhlcm1hbC9zdW44aS10aGVybWFsLnlhbWwjCiskc2NoZW1hOiBodHRwOi8vZGV2aWNl
+dHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMKKwordGl0bGU6IEFsbHdpbm5lciBTVU44
+SSBUaGVybWFsIENvbnRyb2xsZXIgRGV2aWNlIFRyZWUgQmluZGluZ3MKKworbWFpbnRhaW5lcnM6
+CisgIC0gWWFuZ3RhbyBMaSA8dGlueS53aW5kenpAZ21haWwuY29tPgorCitkZXNjcmlwdGlvbjog
+fC0KKyAgVGhpcyBkZXNjcmliZXMgdGhlIGRldmljZSB0cmVlIGJpbmRpbmcgZm9yIHRoZSBBbGx3
+aW5uZXIgdGhlcm1hbAorICBjb250cm9sbGVyIHdoaWNoIG1lYXN1cmVzIHRoZSBvbi1Tb0MgdGVt
+cGVyYXR1cmVzLgorCitwcm9wZXJ0aWVzOgorICBjb21wYXRpYmxlOgorICAgIGVudW06CisgICAg
+ICAtIGFsbHdpbm5lcixzdW44aS1hODN0LXRocworICAgICAgLSBhbGx3aW5uZXIsc3VuOGktaDMt
+dGhzCisgICAgICAtIGFsbHdpbm5lcixzdW44aS1yNDAtdGhzCisgICAgICAtIGFsbHdpbm5lcixz
+dW41MGktYTY0LXRocworICAgICAgLSBhbGx3aW5uZXIsc3VuNTBpLWg1LXRocworICAgICAgLSBh
+bGx3aW5uZXIsc3VuNTBpLWg2LXRocworCisgIHJlZzoKKyAgICBtYXhJdGVtczogMQorCisgIGlu
+dGVycnVwdHM6CisgICAgbWF4SXRlbXM6IDEKKworICByZXNldHM6CisgICAgbWF4SXRlbXM6IDEK
+KworICBjbG9ja3M6CisgICAgbWluSXRlbXM6IDEKKyAgICBtYXhJdGVtczogMgorICAgIGl0ZW1z
+OgorICAgICAgLSBkZXNjcmlwdGlvbjogdGhzIGJ1cyBjbG9jaworICAgICAgLSBkZXNjcmlwdGlv
+bjogdGhzIG1vZCBjbG9jaworCisgIGNsb2NrLW5hbWVzOgorICAgIG1pbkl0ZW1zOiAxCisgICAg
+bWF4SXRlbXM6IDIKKyAgICBpdGVtczoKKyAgICAgIC0gY29uc3Q6IGJ1cworICAgICAgLSBjb25z
+dDogbW9kCisKKyAgIiN0aGVybWFsLXNlbnNvci1jZWxscyI6CisgICAgZW51bTogWyAwLCAxIF0K
+KworICBudm1lbS1jZWxsczoKKyAgICBkZXNjcmlwdGlvbjogdGhzIGNhbGlicmF0ZSBkYXRhCisK
+KyAgbnZtZW0tY2VsbC1uYW1lczoKKyAgICBjb25zdDogY2FsaWJyYXRpb24KKworcmVxdWlyZWQ6
+CisgIC0gY29tcGF0aWJsZQorICAtIHJlZworICAtIGludGVycnVwdHMKKyAgLSAiI3RoZXJtYWwt
+c2Vuc29yLWNlbGxzIgorCithbGxPZjoKKyAgLSBpZjoKKyAgICAgIHByb3BlcnRpZXM6CisgICAg
+ICAgIGNvbXBhdGlibGU6CisgICAgICAgICAgY29udGFpbnM6CisgICAgICAgICAgICBlbnVtOgor
+ICAgICAgICAgICAgICAtIGFsbHdpbm5lcixzdW44aS1oMy10aHMKKyAgICAgICAgICAgICAgLSBh
+bGx3aW5uZXIsc3VuOGktcjQwLXRocworICAgICAgICAgICAgICAtIGFsbHdpbm5lcixzdW41MGkt
+YTY0LXRocworICAgICAgICAgICAgICAtIGFsbHdpbm5lcixzdW41MGktaDUtdGhzCisgICAgICAg
+ICAgICAgIC0gYWxsd2lubmVyLHN1bjUwaS1oNi10aHMKKworICAgIHRoZW46CisgICAgICBwcm9w
+ZXJ0aWVzOgorICAgICAgICByZXNldHM6CisgICAgICAgICAgbWluSXRlbXM6IDEKKyAgICAgICAg
+ICBtYXhJdGVtczogMQorCisgIC0gaWY6CisgICAgICBwcm9wZXJ0aWVzOgorICAgICAgICBjb21w
+YXRpYmxlOgorICAgICAgICAgIGNvbnRhaW5zOgorICAgICAgICAgICAgY29uc3Q6IGFsbHdpbm5l
+cixzdW41MGktaDYtdGhzCisKKyAgICB0aGVuOgorICAgICAgcHJvcGVydGllczoKKyAgICAgICAg
+Y2xvY2tzOgorICAgICAgICAgIG1pbkl0ZW1zOiAxCisgICAgICAgICAgbWF4SXRlbXM6IDEKKwor
+ICAgICAgICBjbG9jay1uYW1lczoKKyAgICAgICAgICBtaW5JdGVtczogMQorICAgICAgICAgIG1h
+eEl0ZW1zOiAxCisKKyAgICBlbHNlOgorICAgICAgaWY6CisgICAgICAgIHByb3BlcnRpZXM6Cisg
+ICAgICAgICAgY29tcGF0aWJsZToKKyAgICAgICAgICAgIGNvbnRhaW5zOgorICAgICAgICAgICAg
+ICBlbnVtOgorICAgICAgICAgICAgICAgIC0gYWxsd2lubmVyLHN1bjhpLWgzLXRocworICAgICAg
+ICAgICAgICAgIC0gYWxsd2lubmVyLHN1bjhpLXI0MC10aHMKKyAgICAgICAgICAgICAgICAtIGFs
+bHdpbm5lcixzdW41MGktYTY0LXRocworICAgICAgICAgICAgICAgIC0gYWxsd2lubmVyLHN1bjUw
+aS1oNS10aHMKKworICAgICAgdGhlbjoKKyAgICAgICAgcHJvcGVydGllczoKKyAgICAgICAgICBj
+bG9ja3M6CisgICAgICAgICAgICBtaW5JdGVtczogMgorICAgICAgICAgICAgbWF4SXRlbXM6IDIK
+KworICAgICAgICAgIGNsb2NrLW5hbWVzOgorICAgICAgICAgICAgbWluSXRlbXM6IDIKKyAgICAg
+ICAgICAgIG1heEl0ZW1zOiAyCisKKyAgLSBpZjoKKyAgICAgIHByb3BlcnRpZXM6CisgICAgICAg
+IGNvbXBhdGlibGU6CisgICAgICAgICAgY29udGFpbnM6CisgICAgICAgICAgICBjb25zdDogYWxs
+d2lubmVyLHN1bjhpLWgzLXRocworCisgICAgdGhlbjoKKyAgICAgIHByb3BlcnRpZXM6CisgICAg
+ICAgICIjdGhlcm1hbC1zZW5zb3ItY2VsbHMiOgorICAgICAgICAgIGNvbnN0OiAwCisKKyAgICBl
+bHNlOgorICAgICAgcHJvcGVydGllczoKKyAgICAgICAgIiN0aGVybWFsLXNlbnNvci1jZWxscyI6
+CisgICAgICAgICAgY29uc3Q6IDEKKworYWRkaXRpb25hbFByb3BlcnRpZXM6IGZhbHNlCisKK2V4
+YW1wbGVzOgorICAtIHwKKyAgICB0aHM6IHRoc0A1MDcwNDAwIHsKKyAgICAgICAgY29tcGF0aWJs
+ZSA9ICJhbGx3aW5uZXIsc3VuNTBpLWg2LXRocyI7CisgICAgICAgIHJlZyA9IDwweDA1MDcwNDAw
+IDB4MTAwPjsKKyAgICAgICAgY2xvY2tzID0gPCZjY3UgODk+OworICAgICAgICBjbG9jay1uYW1l
+cyA9ICJidXMiOworICAgICAgICByZXNldHMgPSA8JmNjdSAzNj47CisgICAgICAgIGludGVycnVw
+dHMgPSA8MCAxNSA0PjsKKyAgICAgICAgbnZtZW0tY2VsbHMgPSA8JnRzZW5fY2FsaWI+OworICAg
+ICAgICBudm1lbS1jZWxsLW5hbWVzID0gImNhbGlicmF0aW9uIjsKKyAgICAgICAgI3RoZXJtYWwt
+c2Vuc29yLWNlbGxzID0gPDE+OworICAgIH07CisKKyAgICBzaWQ6IHNpZEAzMDA2MDAwIHsKKyAg
+ICAgICAgY29tcGF0aWJsZSA9ICJhbGx3aW5uZXIsc3VuNTBpLWg2LXNpZCI7CisgICAgICAgIHJl
+ZyA9IDwweDAzMDA2MDAwIDB4NDAwPjsKKyAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47Cisg
+ICAgICAgICNzaXplLWNlbGxzID0gPDE+OworICAgICAgICB0c2VuX2NhbGliOiBjYWxpYkAxNCB7
+CisgICAgICAgICAgICAgICAgcmVnID0gPDB4MTQgNj47CisgICAgICAgIH07CisgICAgfTsKKy4u
+LgotLSAKMi4xNy4xCgo=
+--000000000000e697a30598690697--
