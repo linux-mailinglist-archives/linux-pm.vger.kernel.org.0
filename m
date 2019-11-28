@@ -2,295 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4412710C0BA
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 00:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FA510C141
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 02:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbfK0Xkj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Nov 2019 18:40:39 -0500
-Received: from mail-eopbgr50077.outbound.protection.outlook.com ([40.107.5.77]:52893
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727328AbfK0Xkg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 Nov 2019 18:40:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BX8HP+c/j/REXMqesHHEvxbJqBIghS9BAdULPHybUtHRsoEJaxVW8zk7HYm6S1QXu0DmcAtv5B54BXtdI+GASeFlEKbS+eq/hFxt+FKtx9gGUIRqfSZyewZ/gFtA5lBfM2spuh6oFnUfUSKQnddkfYuu7i4GedhG4i079l9nJ7uLzZlc4n10NGU+EFsLfgwL3YDyh9YABH1PT18rQo0miln2ATPd+WUYeRVvZ4oXnbbd7S+JNPwYQtwjKevMeH0kQBtRVE/uM79NitsgOHzFVJswvkR7jpzWWrn73fVb2Ij/7Ks1MDGlfCsKGXDghOjmP0DNNSYqI8wAPycS8z40lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPt/RvBl8ql+huF1E38lVjdcd9M47l0t4COuFwjzmd8=;
- b=Es5gsGUL4qPq66/eomdv6SXQHZfXtpltY/8ihiaDSOQ28637lL0CgwD0pQ2wv+zAO2Bz8UtrZ8Yg2MqQbGlV6PsWtzvqdBNgOu4Tc779eoTe+icqsTCWlAGXWgysSJ5piSWFoyRp0CJ19tRSxzCPKlDXk739lgQmEBYuyv6GOmgDgGSuSOQqazqpoq1sD0Tj45TZU+Oawx+5vNSMFR2YCAirbIOhFwlxBsZjYuoeeab+RbCuu0ys5LiUMsNCQgKK70YAlDWGLha+ANVFMu0c0RO+sYeiOo668Ys/7w0FUOAZX8mhXbC/cO+FVoy29iCLV29UvyvXbnvU4PNQajqfeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPt/RvBl8ql+huF1E38lVjdcd9M47l0t4COuFwjzmd8=;
- b=CkI+crQyez1YQ6Ep6cvGPUw7p+FFgON9r2Ciuac8uUrNLOR08Y07BRfM9SAwY8fIVZOtllZPQ2MMLXIlBsJL3jDRKmUn2kNYtvsRzf7AVCJO+sNE6Z7c1o926LJkcDX4bm/DjxyDEJ3EyzLoZpDh3MKr6c37n4tJhVMPfx1u9iE=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4942.eurprd04.prod.outlook.com (20.177.50.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.20; Wed, 27 Nov 2019 23:40:32 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2495.014; Wed, 27 Nov 2019
- 23:40:32 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v4 1/4] PM / QoS: Initial kunit test
-Thread-Topic: [PATCH v4 1/4] PM / QoS: Initial kunit test
-Thread-Index: AQHVpGyaJy+qk1jZxUut96Do5LWNDw==
-Date:   Wed, 27 Nov 2019 23:40:32 +0000
-Message-ID: <VI1PR04MB70234D1D3953E6E7C69A5ED6EE440@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1574781196.git.leonard.crestez@nxp.com>
- <be196b656bb5fbf2c59a179e6453aa963b862109.1574781196.git.leonard.crestez@nxp.com>
- <20191126200414.GD228856@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [95.76.3.178]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 2b3ee1a1-d431-44f5-4ce2-08d773933169
-x-ms-traffictypediagnostic: VI1PR04MB4942:|VI1PR04MB4942:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4942F86F8B2F02ADAD13CF0AEE440@VI1PR04MB4942.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 023495660C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(199004)(189003)(52314003)(8676002)(99286004)(71200400001)(8936002)(4326008)(54906003)(316002)(6116002)(25786009)(14444005)(256004)(71190400001)(81156014)(81166006)(55016002)(6246003)(14454004)(6916009)(2906002)(66066001)(478600001)(229853002)(446003)(6506007)(7736002)(102836004)(7416002)(33656002)(52536014)(53546011)(66476007)(66446008)(64756008)(74316002)(76116006)(66946007)(305945005)(91956017)(186003)(66556008)(44832011)(9686003)(6436002)(3846002)(86362001)(5660300002)(7696005)(76176011)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4942;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UbP7GFrswjdP1VcuSX/Kdo8FUChESe6miSi+WG3Bgf5as067kZfFTrad6CkXAedOdZ7Qid8wE/Wg5/prfJvE+8OnxxXiVVxzJinQJEnL+99YW1xn3sDLNhTjy8ujRUYA2a9XjcXtAbdCfqPh7VEnYiiz7+UcnGWl9GnslVYcd6MSngG07LgqQCJNRLNxlL9SDlUlYVLkEfwoM6GhHc1Hog6Z5iI2Fzxg9mLQknw+wyBuhftg1/OXlnknJXm06F3epP7wYrhYDk74Tylc1CS4o3NYsFNShBVcANrwJxMmGcKFOYb+Nw1bq5Hc2NDieQA8eT7zPJdrNCy3Iwq6ryh8CF3gSnqLryMetIDAfx853lcMWje+Mor55Vlq9zBw7+TIwIo/Xy4XhW6rVeQ6ukxg+SAmROdFEu0jHd4pYcosHkJsPqf7qOjfX2XVQ0tROLXm
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1727176AbfK1BGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Nov 2019 20:06:54 -0500
+Received: from gateway21.websitewelcome.com ([192.185.45.91]:33515 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726984AbfK1BGy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Nov 2019 20:06:54 -0500
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id 4BA50400DC98D
+        for <linux-pm@vger.kernel.org>; Wed, 27 Nov 2019 19:06:52 -0600 (CST)
+Received: from br164.hostgator.com.br ([192.185.176.180])
+        by cmsmtp with SMTP
+        id a8Giif8gKqNtva8GiiQnV7; Wed, 27 Nov 2019 19:06:52 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hvOYKQUJE21stIgSn0WN4z50J2vix7puMNZz1Y1suDY=; b=O3JngmG83jQxHb4ZrcNpw7Mhpn
+        AiYoiDIeR3kYXDxmlz4VfrTSAd3m90MhLtm/mpC4PFRU26ZLpm6RVcVac4N5/L4MnsjfzUhV6VZQL
+        S5C6Xd7bPm1JAodGyvuSbG3vikDQmCGbZppNrVp2h4/Z+k1qcAYsLkJzO2oGqrKCpr55Ahv7WHmxa
+        rvKEpbg5362IgyELfg40R2FpopiWAbqisX6mw/7QxsEQwOm1XRfwwkN4cY9KDYI9qM4CJVK5Hlq4H
+        VAiC2nuRexYHEL1Vjmfu6wlYhYlRo/h9fOmb+zJLAM+i69/djeCNRUoIpPm0pnfNiws0WQIYQbW88
+        fcdzTgOQ==;
+Received: from [191.31.194.237] (port=59596 helo=[192.168.15.4])
+        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <matheus@castello.eng.br>)
+        id 1ia8Gh-0041CU-Br; Wed, 27 Nov 2019 22:06:51 -0300
+Subject: Re: [PATCH v7 4/5] power: supply: max17040: Config alert SOC low
+ level threshold from FDT
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     krzk@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
+        lee.jones@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191117141335.23404-1-matheus@castello.eng.br>
+ <20191117141335.23404-5-matheus@castello.eng.br>
+ <20191126145200.xqtvfrm6qc6yuutb@earth.universe>
+From:   Matheus Castello <matheus@castello.eng.br>
+Message-ID: <c5bb4962-10f7-0877-0c99-c2dad5bb53cf@castello.eng.br>
+Date:   Wed, 27 Nov 2019 22:06:47 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b3ee1a1-d431-44f5-4ce2-08d773933169
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2019 23:40:32.0753
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uHRSXsH9Lr9uu3pixpkLMnJktDAkFqBg+Ay26ipcTuLe4JTKw2kXPS/3SvualWiktJvooW6HSuO5bQy+PXt26w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4942
+In-Reply-To: <20191126145200.xqtvfrm6qc6yuutb@earth.universe>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: pt-BR
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - castello.eng.br
+X-BWhitelist: no
+X-Source-IP: 191.31.194.237
+X-Source-L: No
+X-Exim-ID: 1ia8Gh-0041CU-Br
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.4]) [191.31.194.237]:59596
+X-Source-Auth: matheus@castello.eng.br
+X-Email-Count: 8
+X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.11.2019 22:04, Matthias Kaehlcke wrote:=0A=
-> On Tue, Nov 26, 2019 at 05:17:10PM +0200, Leonard Crestez wrote:=0A=
->> The pm_qos family of APIs are used in relatively difficult to reproduce=
-=0A=
->> scenarios such as thermal throttling so they benefit from unit testing.=
-=0A=
->>=0A=
->> Start by adding basic tests from the the freq_qos APIs. It includes=0A=
->> tests for issues that were brought up on mailing lists:=0A=
->>=0A=
->> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
->> ---=0A=
->>   drivers/base/Kconfig          |   4 ++=0A=
->>   drivers/base/power/Makefile   |   1 +=0A=
->>   drivers/base/power/qos-test.c | 117 ++++++++++++++++++++++++++++++++++=
-=0A=
->>   3 files changed, 122 insertions(+)=0A=
->>   create mode 100644 drivers/base/power/qos-test.c=0A=
->>=0A=
->> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig=0A=
->> index e37d37684132..d4ae1c1adf69 100644=0A=
->> --- a/drivers/base/Kconfig=0A=
->> +++ b/drivers/base/Kconfig=0A=
->> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE=0A=
->>   =0A=
->>   	  This option is expected to find errors and may render your system=
-=0A=
->>   	  unusable. You should say N here unless you are explicitly looking t=
-o=0A=
->>   	  test this functionality.=0A=
->>   =0A=
->> +config PM_QOS_KUNIT_TEST=0A=
->> +	bool "KUnit Test for PM QoS features"=0A=
->> +	depends on KUNIT=0A=
->> +=0A=
->>   config HMEM_REPORTING=0A=
->>   	bool=0A=
->>   	default n=0A=
->>   	depends on NUMA=0A=
->>   	help=0A=
->> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile=
-=0A=
->> index ec5bb190b9d0..8fdd0073eeeb 100644=0A=
->> --- a/drivers/base/power/Makefile=0A=
->> +++ b/drivers/base/power/Makefile=0A=
->> @@ -2,7 +2,8 @@=0A=
->>   obj-$(CONFIG_PM)	+=3D sysfs.o generic_ops.o common.o qos.o runtime.o w=
-akeirq.o=0A=
->>   obj-$(CONFIG_PM_SLEEP)	+=3D main.o wakeup.o wakeup_stats.o=0A=
->>   obj-$(CONFIG_PM_TRACE_RTC)	+=3D trace.o=0A=
->>   obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=3D  domain.o domain_governor.o=0A=
->>   obj-$(CONFIG_HAVE_CLK)	+=3D clock_ops.o=0A=
->> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) +=3D qos-test.o=0A=
->>   =0A=
->>   ccflags-$(CONFIG_DEBUG_DRIVER) :=3D -DDEBUG=0A=
->> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test=
-.c=0A=
->> new file mode 100644=0A=
->> index 000000000000..3115db08d56b=0A=
->> --- /dev/null=0A=
->> +++ b/drivers/base/power/qos-test.c=0A=
->> @@ -0,0 +1,117 @@=0A=
->> +// SPDX-License-Identifier: GPL-2.0=0A=
->> +/*=0A=
->> + * Copyright 2019 NXP=0A=
->> + */=0A=
->> +#include <kunit/test.h>=0A=
->> +#include <linux/pm_qos.h>=0A=
->> +=0A=
->> +/* Basic test for aggregating two "min" requests */=0A=
->> +static void freq_qos_test_min(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);=
-=0A=
->> +=0A=
->> +	ret =3D freq_qos_remove_request(&req2);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);=
-=0A=
->> +=0A=
->> +	ret =3D freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),=0A=
->> +			FREQ_QOS_MIN_DEFAULT_VALUE);=0A=
->> +}=0A=
->> +=0A=
->> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */=0A=
->> +static void freq_qos_test_maxdef(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +=0A=
->> +	/* Add max 1000 */=0A=
->> +	ret =3D freq_qos_update_request(&req1, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Add max 2000, no impact */=0A=
->> +	ret =3D freq_qos_update_request(&req2, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Remove max 1000, new max 2000 */=0A=
->> +	ret =3D freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);=
-=0A=
-> =0A=
-> nit: this last part isn't really related with MAX_DEFAULT_VALUE. It's a=
-=0A=
-> worthwhile test, but not necessarily in this test case. It might make mor=
-e sense=0A=
-> to set one of the constraints to FREQ_QOS_MAX_DEFAULT_VALUE again, and ve=
-rify it=0A=
-> doesn't have an impact.=0A=
-> =0A=
-> Just a comment, there's nothing really wrong with how it is.=0A=
-> =0A=
->> +}=0A=
->> +=0A=
->> +/*=0A=
->> + * Test that a freq_qos_request can be added again after removal=0A=
->> + *=0A=
->> + * This issue was solved by commit 05ff1ba412fd ("PM: QoS: Invalidate f=
-requency=0A=
->> + * QoS requests after removal")=0A=
->> + */=0A=
->> +static void freq_qos_test_readd(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req, 0, sizeof(req));=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),=0A=
->> +			FREQ_QOS_MIN_DEFAULT_VALUE);=0A=
-> =0A=
-> nit: you could do this check once in a dedicated test and omit it=0A=
-> in other tests to de-clutter=0A=
-> =0A=
->> +=0A=
->> +	/* Add */=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req, FREQ_QOS_MIN, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);=
-=0A=
-> =0A=
-> similar here, this test validates re-adding, another dedicated test=0A=
-> could verify once that the aggregate value is correct after adding a sing=
-le=0A=
-> request. Checking the return value still is sensible, just in case.=0A=
-> =0A=
-> I guess it can be argued either way, checking the values every time is=0A=
-> extra-safe, omitting the checks reduces clutter and might help to make it=
-=0A=
-> clearer what the test really intends to verify.=0A=
-=0A=
-The complaint of "too many assertions" is odd for an unit test; I just =0A=
-wrote enough code to validate corectness without relying on a pile of =0A=
-external shell scripts and DTS hacks.=0A=
-=0A=
-If we had more tests then the constant checking of every single return =0A=
-value might get tedious, but right now there are only 3 and their logic =0A=
-is reasonably easy to follow.=0A=
-=0A=
-> Anyway, my comments are just about possible improvements, it's also fine=
-=0A=
-> as is:=0A=
-> =0A=
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>=0A=
+Hi Sebastian,
+
+Em 11/26/19 11:52 AM, Sebastian Reichel escreveu:
+> Hi,
+> 
+> On Sun, Nov 17, 2019 at 11:13:34AM -0300, Matheus Castello wrote:
+>> For configuration of fuel gauge alert for a low level state of charge
+>> interrupt we add a function to config level threshold and a device tree
+>> binding property to set it in flatned device tree node.
+>>
+>> Now we can use "maxim,alert-low-soc-level" property with the values from
+>> 1% up to 32% to configure alert interrupt threshold.
+>>
+>> Signed-off-by: Matheus Castello <matheus@castello.eng.br>
+>> ---
+>>   drivers/power/supply/max17040_battery.c | 75 ++++++++++++++++++++++---
+>>   1 file changed, 67 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+>> index 9909f8cd7b5d..3fc9e1c7b257 100644
+>> --- a/drivers/power/supply/max17040_battery.c
+>> +++ b/drivers/power/supply/max17040_battery.c
+>> @@ -29,6 +29,9 @@
+>>   #define MAX17040_DELAY		1000
+>>   #define MAX17040_BATTERY_FULL	95
+>>
+>> +#define MAX17040_ATHD_MASK		0xFFC0
+>> +#define MAX17040_ATHD_DEFAULT_POWER_UP	4
+>> +
+>>   struct max17040_chip {
+>>   	struct i2c_client		*client;
+>>   	struct delayed_work		work;
+>> @@ -43,6 +46,8 @@ struct max17040_chip {
+>>   	int soc;
+>>   	/* State Of Charge */
+>>   	int status;
+>> +	/* Low alert threshold from 32% to 1% of the State of Charge */
+>> +	u32 low_soc_alert;
+>>   };
+>>
+>>   static int max17040_get_property(struct power_supply *psy,
+>> @@ -99,6 +104,21 @@ static void max17040_reset(struct i2c_client *client)
+>>   	max17040_write_reg(client, MAX17040_CMD, 0x0054);
+>>   }
+>>
+>> +static int max17040_set_low_soc_alert(struct i2c_client *client, u32 level)
+>> +{
+>> +	int ret;
+>> +	u16 data;
+>> +
+>> +	level = 32 - level;
+>> +	data = max17040_read_reg(client, MAX17040_RCOMP);
+>> +	/* clear the alrt bit and set LSb 5 bits */
+>> +	data &= MAX17040_ATHD_MASK;
+>> +	data |= level;
+>> +	ret = max17040_write_reg(client, MAX17040_RCOMP, data);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>   static void max17040_get_vcell(struct i2c_client *client)
+>>   {
+>>   	struct max17040_chip *chip = i2c_get_clientdata(client);
+>> @@ -115,7 +135,6 @@ static void max17040_get_soc(struct i2c_client *client)
+>>   	u16 soc;
+>>
+>>   	soc = max17040_read_reg(client, MAX17040_SOC);
+>> -
+> 
+> unrelated change.
+> 
+>>   	chip->soc = (soc >> 8);
+>>   }
+>>
+>> @@ -161,6 +180,24 @@ static void max17040_get_status(struct i2c_client *client)
+>>   		chip->status = POWER_SUPPLY_STATUS_FULL;
+>>   }
+>>
+>> +static int max17040_get_of_data(struct max17040_chip *chip)
+>> +{
+>> +	struct device *dev = &chip->client->dev;
+>> +	struct device_node *np = dev->of_node;
+>> +	int ret = 0;
+>> +
+>> +	if (of_property_read_u32(np, "maxim,alert-low-soc-level",
+>> +				 &chip->low_soc_alert)) {
+>> +		chip->low_soc_alert = MAX17040_ATHD_DEFAULT_POWER_UP;
+>> +	} else if (chip->low_soc_alert <= 0 ||
+>> +			chip->low_soc_alert >= 33) {
+>> +		/* low_soc_alert is not between 1% and 32% */
+>> +		ret = -EINVAL;
+>> +	}
+> 
+> use device_property_read_u32(), which is not DT specific. Also
+> code can be simplified a bit:
+> 
+> chip->low_soc_alert = MAX17040_ATHD_DEFAULT_POWER_UP;
+> device_property_read_u32(dev, "maxim,alert-low-soc-level", &chip->low_soc_alert);
+> if (chip->low_soc_alert <= 0 || chip->low_soc_alert >= 33)
+>      return -EINVAL;
+> return 0;
+> 
+
+Thanks for the review, I will use this.
+
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>   static void max17040_check_changes(struct i2c_client *client)
+>>   {
+>>   	max17040_get_vcell(client);
+>> @@ -192,6 +229,9 @@ static irqreturn_t max17040_thread_handler(int id, void *dev)
+>>   	/* send uevent */
+>>   	power_supply_changed(chip->battery);
+>>
+>> +	/* reset alert bit */
+>> +	max17040_set_low_soc_alert(client, chip->low_soc_alert);
+>> +
+>>   	return IRQ_HANDLED;
+>>   }
+>>
+>> @@ -230,6 +270,7 @@ static int max17040_probe(struct i2c_client *client,
+>>   	struct i2c_adapter *adapter = client->adapter;
+>>   	struct power_supply_config psy_cfg = {};
+>>   	struct max17040_chip *chip;
+>> +	int ret;
+>>
+>>   	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
+>>   		return -EIO;
+>> @@ -240,6 +281,12 @@ static int max17040_probe(struct i2c_client *client,
+>>
+>>   	chip->client = client;
+>>   	chip->pdata = client->dev.platform_data;
+>> +	ret = max17040_get_of_data(chip);
+>> +	if (ret) {
+>> +		dev_err(&client->dev,
+>> +			"failed: low SOC alert OF data out of bounds\n");
+>> +		return ret;
+>> +	}
+>>
+>>   	i2c_set_clientdata(client, chip);
+>>   	psy_cfg.drv_data = chip;
+>> @@ -256,14 +303,26 @@ static int max17040_probe(struct i2c_client *client,
+>>
+>>   	/* check interrupt */
+>>   	if (client->irq) {
+>> -		int ret;
+>> -
+>> -		ret = max17040_enable_alert_irq(chip);
+>> -
+>> -		if (ret) {
+>> -			client->irq = 0;
+>> +		if (of_device_is_compatible(client->dev.of_node,
+>> +					    "maxim,max77836-battery")) {
+>> +			ret = max17040_set_low_soc_alert(client,
+>> +							 chip->low_soc_alert);
+>> +			if (ret) {
+>> +				dev_err(&client->dev,
+>> +					"Failed to set low SOC alert: err %d\n",
+>> +					ret);
+>> +				return ret;
+>> +			}
+>> +
+>> +			ret = max17040_enable_alert_irq(chip);
+>> +			if (ret) {
+>> +				client->irq = 0;
+>> +				dev_warn(&client->dev,
+>> +					 "Failed to get IRQ err %d\n", ret);
+>> +			}
+>> +		} else {
+>>   			dev_warn(&client->dev,
+>> -				 "Failed to get IRQ err %d\n", ret);
+>> +				 "Device not compatible for IRQ");
+> 
+> Something is odd here. Either this should be part of the first
+> patch ("max17040: Add IRQ handler for low SOC alert"), or both
+> device types support the IRQ and this check should be removed.
+> > -- Sebastian
+>
+
+The first patch add the IRQ without the configuration of the low SoC 
+alert, using the default state of charge level. This patch is working 
+with registers to config the low state of charge level, so it was 
+proposed to just try to write registers in the models compatible with 
+that (maxim,max77836-battery).
+
+Maybe join the first patch to this one, and let DT binding be the first 
+patch on the series so we can already test compatible here, let me know 
+what you think about it.
+
+>>   		}
+>>   	}
+>>
+>> --
+>> 2.24.0.rc2
+>>
