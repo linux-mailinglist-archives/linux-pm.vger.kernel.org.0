@@ -2,31 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B2710C463
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 08:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C008710C467
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 08:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbfK1HmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 02:42:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60474 "EHLO mail.kernel.org"
+        id S1726749AbfK1Hn3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 02:43:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32900 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfK1HmV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Nov 2019 02:42:21 -0500
+        id S1726448AbfK1Hn3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 Nov 2019 02:43:29 -0500
 Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 607442154A;
-        Thu, 28 Nov 2019 07:42:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAAB0215F2;
+        Thu, 28 Nov 2019 07:43:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574926940;
-        bh=j0Tz96Fkl28s6zX+DlYzNGtrex6eFQbYospBRTigaKc=;
+        s=default; t=1574927008;
+        bh=MxbZZyhMxP8MypT5uzl2FbmRA7P2Fx2ZT4tGfc6hXSA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1qi6fI/4PWQ2IEoHYlgo1pPyMok3HEHinsu6q5lLtbK/TaSl4hKDZOwg4iadRNEZO
-         XTAVgHapTKp9dmOOVsGC2P/MUuxpot1Zo7v07gxQnLg8wDcHSGeru3xENxgCntlo2j
-         RhCp+WavYVqGTBzXjhvxdgZaAoSD/Cy8nYmzZbBs=
-Date:   Thu, 28 Nov 2019 08:42:18 +0100
+        b=wm8PVK7LJ/eHbBcPlypR34e9nGdlHpiyX+tDcKnSJxAQM91yQgFENMYbMHwZzBPie
+         yRkIECYbg027w8uzuxwxYyGyI6EDte1JFAmNABgHVQO8I88Z5HY8A4vPdyjwu2xwR6
+         QmnlLKgm3/xS4ZOJqZlhnywaFER5ex6PX8/4i3LE=
+Date:   Thu, 28 Nov 2019 08:43:25 +0100
 From:   Maxime Ripard <mripard@kernel.org>
 To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Frank Lee <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>,
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
@@ -38,62 +39,59 @@ Cc:     Frank Lee <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 1/7] thermal: sun8i: add thermal driver for
- H6/H5/H3/A64/A83T/R40
-Message-ID: <20191128074218.6ctvumauyyerujqe@gilmour.lan>
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: add YAML schema for
+ sun8i-thermal driver bindings
+Message-ID: <20191128074325.q47rpzhufwog6mbb@gilmour.lan>
 References: <20191127052935.1719897-1-anarsoul@gmail.com>
- <20191127052935.1719897-2-anarsoul@gmail.com>
- <20191127111419.z5hfu5soxceiivg6@core.my.home>
- <20191127173547.ch3pcv3lxgdcrfnu@gilmour.lan>
- <CAEExFWvG-Af4qtUrxQV4ssNQCVQAmpXfxB+92wX+6ZxUNfX-Jw@mail.gmail.com>
- <CA+E=qVcdwQO3Y8ismmBN-gRVNMs1Thx+TPLqstKM9fYf2_0qFQ@mail.gmail.com>
+ <20191127052935.1719897-3-anarsoul@gmail.com>
+ <20191127174434.wousbqosmm5vxcsu@gilmour.lan>
+ <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4x5ug6mtkmdsnllw"
+        protocol="application/pgp-signature"; boundary="cnk3ppztnbfqfu5l"
 Content-Disposition: inline
-In-Reply-To: <CA+E=qVcdwQO3Y8ismmBN-gRVNMs1Thx+TPLqstKM9fYf2_0qFQ@mail.gmail.com>
+In-Reply-To: <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---4x5ug6mtkmdsnllw
+--cnk3ppztnbfqfu5l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Nov 27, 2019 at 11:48:32AM -0800, Vasily Khoruzhick wrote:
-> On Wed, Nov 27, 2019 at 11:44 AM Frank Lee <tiny.windzz@gmail.com> wrote:
+On Wed, Nov 27, 2019 at 12:23:53PM -0800, Vasily Khoruzhick wrote:
+> On Wed, Nov 27, 2019 at 9:44 AM Maxime Ripard <mripard@kernel.org> wrote:
+> > > +
+> > > +  nvmem-cell-names:
+> > > +    items:
+> > > +      - const: calibration
 > >
-> > Hello Vasily,
-> >
-> > Thank you very much for your work on this.
-> > This looks good to me.
+> > Ditto for the const
 >
-> Thanks!
->
-> > By the way, I would like to ask comments about adding the following code.
->
-> Can we add it as follow up patch? I don't think that I have a device
-> with working suspend to test it and I'm hesitant to add any code that
-> I can't test.
+> Sorry, I don't quite get it. What exactly do you want me to do with
+> this one? nvmem-cell-names must be "calibration"
 
-Yeah, this should be a followup patch, otherwise this will never get
-merged.
+You don't need the items here either, this can be
+
+nvmem-cell-names:
+  const: calibration
 
 Maxime
 
---4x5ug6mtkmdsnllw
+--cnk3ppztnbfqfu5l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXd96UwAKCRDj7w1vZxhR
-xWArAP9j8E1Vrf+8eJ4RgagjWjZ1+t05fXcWABrdX7WGAt2zgAEAoM/FkxgwTVNQ
-+PjXhrnAxqUcH3tDMorB60UQ+gYj2wo=
-=/Deg
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXd96nQAKCRDj7w1vZxhR
+xRLoAQC3m7wZvI4EmXSfHN3h/VKMdIvvo5P5sgtpMsfd6hwbiAEAwqYBPjEtyyKB
+IP3PzaCesyLXY9dHooofrsm3Z7+pIgw=
+=I+ik
 -----END PGP SIGNATURE-----
 
---4x5ug6mtkmdsnllw--
+--cnk3ppztnbfqfu5l--
