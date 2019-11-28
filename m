@@ -2,165 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4778D10CFD6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 23:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD5010CFD1
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 23:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfK1WvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 17:51:02 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63649 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbfK1WvC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 17:51:02 -0500
-Received: from 79.184.255.242.ipv4.supernova.orange.pl (79.184.255.242) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 5936317b2e2d446d; Thu, 28 Nov 2019 23:51:00 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     "Kenneth R. Crudup" <kenny@panix.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] ACPI: EC: Rework flushing of pending work
-Date:   Thu, 28 Nov 2019 23:47:51 +0100
-Message-ID: <5947679.MAvhsAmGqv@kreacher>
-In-Reply-To: <2787005.CsmIKtZlk9@kreacher>
-References: <2787005.CsmIKtZlk9@kreacher>
+        id S1726681AbfK1Wsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 17:48:37 -0500
+Received: from cmta20.telus.net ([209.171.16.93]:46547 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726670AbfK1Wsh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 Nov 2019 17:48:37 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id aSaKiIsVnN5I9aSaLiqyaf; Thu, 28 Nov 2019 15:48:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1574981315; bh=CPFK3woqfG6ZOimrL1hyYBRtHBi0+2WkWsR2eHMBihE=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=obgBs6BWp7aVFKj+IDbPc4DbdD6QYY5DDjRyWx21zRHHYN1AolGuUV42JFQASN6p6
+         87g2EkjmH/4gVEPYwBYqW2yceFZ2fNOzr1o0d4lOtvTcogeClfhOUVx4ZfHe/1X6SO
+         kugz9rVgeI/CqX8+5nyY/HBTX1/GYDO92FHUgH95fm/8lN1CaFcoyBr25Uk1/HT6Dw
+         rpsBqnsMC+lMtKHyLirTyFkEH1pgat/Wbvd+A9nOiOLv76TbQPK1G9JV1lbhY6ilCK
+         qrsv8lYLgSK63HPh7tsA9hdOTg0TQZyTHi8hsNxYvC7zMWqUrqXVY7N0JUIHsmzN+V
+         pQXdSzWYRS3pg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=K/Fc4BeI c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=siDWz7SyTkNVcnO4k2gA:9 a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
+Cc:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'Mel Gorman'" <mgorman@techsingularity.net>,
+        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Paul Turner'" <pjt@google.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Quentin Perret'" <qperret@qperret.net>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+References: <20191113124654.18122-1-ggherdovich@suse.cz>                 <20191113124654.18122-2-ggherdovich@suse.cz>                 <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz>         <000801d5a41e$a7fce2c0$f7f6a840$@net> <1574781600.7677.2.camel@suse.cz> <001d01d5a4f4$d96b21b0$8c416510$@net>
+In-Reply-To: <001d01d5a4f4$d96b21b0$8c416510$@net>
+Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+Date:   Thu, 28 Nov 2019 14:48:27 -0800
+Message-ID: <003d01d5a63d$f6ab3950$e401abf0$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdWkbC8LB/SpP9sCRCWbwO3FO+l3UwAhVS2wAEbrT1A=
+X-CMAE-Envelope: MS4wfOtRsfbZnTQ5Z2TeTXge1GkRx76NgDeB6Idj4Im7L8yxQYgF202u0DBMVSNoWZSRA184sTQcvdhfQTMZRqjm83yLiNYr7mi+r5B71b7H5gKcDmwyhPKz
+ YPpQGfo857MCu3WE+JalTWJ4pBObDzwNn/l12OWiQq9g3e7YROVQ9J9Q42vIJ0ETSG/z5Zp8i6FXpJUTcv287q4WIBzxoNm5KQWagwLCTT3Yb8acVnu5rXs4
+ fKQ1xFAFzXsewHb0L0G+y7FxkxzQq50q8YvEnOLhAIB8hI8B0xJg+YEKmKoYIfsGV6Vi003OVWNYcJOQitKBpbUYvgtPEFpFofN1TanLtiWvvmgRCVas3S6x
+ UTpOMF5GCtEcIY9lrf/Fee4UBQDaJ6KhGqWkRcQJW+MeKngOvGNbds2W2PehqUfeajE4lrUNzDHX9s1BRFHUJpFdp01XDw7Voujxx6jmz3iMwZe1zaL18nj1
+ Wri7NoVppwX5iJCltMdaaR7ATanz7Bhve2vI6keDBkC1pthBVMm3Zp2ZyIdWeSDmuD22EYWA8mI0JFykWIBa8AfFbxs3gNhQ601CQDPgFOQ10DSB+/+rt8HY
+ TwyjYpmGimfhRPkf2Wgeo1pUeNJ5qTT0eiLj0VBaDmp7NWDmxKMwhbyiI3LjmXWvFWN9/+N4B1wkyvtib4ayVW2FEJpDl/8tpUqsI02mBNBNJnKSnrc0EXlt
+ EIeiSs8c8tnKcfqvXIA4LFGNlzdBJAN7268FmshEVm0EEhi/H9S7vQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Summary: There never was an issue here.
 
-There is a race condition in the ACPI EC driver, between
-__acpi_ec_flush_event() and acpi_ec_event_handler(), that may
-cause systems to stay in suspended-to-idle forever after a wakeup
-event coming from the EC.
+Sorry for the noise of this thread, and the resulting waste of time.
 
-Namely, acpi_s2idle_wake() calls acpi_ec_flush_work() to wait until
-the delayed work resulting from the handling of the EC GPE in
-acpi_ec_dispatch_gpe() is processed, and that function invokes
-__acpi_ec_flush_event() which uses wait_event() to wait for
-ec->nr_pending_queries to become zero on ec->wait, and that wait
-queue may be woken up too early.
+On 2019.11.26 23:33 Doug Smythies wrote:
+> On 2019.11.26 07:20 Giovanni Gherdovich wrote:
+>> On Mon, 2019-11-25 at 21:59 -0800, Doug Smythies wrote:
+>>> [...]
+>>> The issue with the schedutil governor not working properly in the 5.4 RC series
+>>> appears to be hardware dependant.
 
-Suppose that acpi_ec_dispatch_gpe() has caused acpi_ec_gpe_handler()
-to run, so advance_transaction() has been called and it has invoked
-acpi_ec_submit_query() to queue up an event work item, so
-ec->nr_pending_queries has been incremented (under ec->lock).  The
-work function of that work item, acpi_ec_event_handler() runs later
-and calls acpi_ec_query() to process the event.  That function calls
-acpi_ec_transaction() which invokes acpi_ec_transaction_unlocked()
-and the latter wakes up ec->wait under ec->lock, but it drops that
-lock before returning.
+No it 's not.
 
-When acpi_ec_query() returns, acpi_ec_event_handler() acquires
-ec->lock and decrements ec->nr_pending_queries, but at that point
-__acpi_ec_flush_event() (woken up previously) may already have
-acquired ec->lock, checked the value of ec->nr_pending_queries (and
-it would not have been zero then) and decided to go back to sleep.
-Next, if ec->nr_pending_queries is equal to zero now, the loop
-in acpi_ec_event_handler() terminates, ec->lock is released and
-acpi_ec_check_event() is called, but it does nothing unless
-ec_event_clearing is equal to ACPI_EC_EVT_TIMING_EVENT (which is
-not the case by default).  In the end, if no more event work items
-have been queued up while executing acpi_ec_transaction_unlocked(),
-there is nothing to wake up __acpi_ec_flush_event() again and it
-sleeps forever, so the suspend-to-idle loop cannot make progress and
-the system is permanently suspended.
+Issues with my Sandy Bridge, i7-2600K, test computer and kernel 5.4
+seem to be because it is running an older Ubuntu server version,
+apparently somewhat dependant on cgroup V1 and their cgmanager package.
+I am unable to remove the package to test further because I do use VMs
+that seem to depend on it.
 
-To avoid this issue, notice that it actually is not necessary to
-wait for ec->nr_pending_queries to become zero in every case in
-which __acpi_ec_flush_event() is used.
+In the kernel configuration when CONFIG_UCLAMP_TASK_GROUP=y
+the computer behaves as though the new parameter "cpu.uclamp.min"
+is set to max rather than 0, but I can not prove it.
 
-First, during platform-based system suspend (not suspend-to-idle),
-__acpi_ec_flush_event() is called by acpi_ec_disable_event() after
-clearing the EC_FLAGS_QUERY_ENABLED flag, which prevents
-acpi_ec_submit_query() from submitting any new event work items,
-so calling flush_scheduled_work() and flushing ec_query_wq
-subsequently (in order to wait until all of the queries in that
-queue have been processed) would be sufficient to flush all of
-the pending EC work in that case.
+>>> My test computer is Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz., Sandy Bridge.
+>>> On a temporary basis, I acquired a computer with an
+>>> Intel(R) Core(TM) i5-4460 CPU @ 3.20GHz, Haswell,
+>>> and schedutil governor behaviour with the exact same kernels is fine:
 
-Second, the purpose of the flushing of pending EC work while
-suspended-to-idle described above really is to wait until the
-first event work item coming from acpi_ec_dispatch_gpe() is
-complete, because it should produce system wakeup events if
-that is a valid EC-based system wakeup, so calling
-flush_scheduled_work() followed by flushing ec_query_wq is also
-sufficient for that purpose.
+I failed to mention that was brand new Ubuntu server 20.04 development version
+installation, which turns out to have been an important omission.
 
-Rework the code to follow the above observations.
+>>> 
+>>> That "gitsource" test, "make test" 6 times, first run thrown out:
+>>> 
+>>> Kernel 5.4 intel_cpufreq/schedutil: 3411.8 seconds
+>>> Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 1696.7 seconds
+>>> Ratio: 0.49
+>>> Recall you got a ratio of 0.49 with 5th generation, Broadwell.
 
-Fixes: 56b9918490 ("PM: sleep: Simplify suspend-to-idle control flow")
-Reported-by: Kenneth R. Crudup <kenny@panix.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/ec.c |   36 +++++++++++++-----------------------
- 1 file changed, 13 insertions(+), 23 deletions(-)
+I took the disk from the Haswell computer and put it in the Sandy Bridge
+computer, and then everything was fine:
 
-Index: linux-pm/drivers/acpi/ec.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ec.c
-+++ linux-pm/drivers/acpi/ec.c
-@@ -525,26 +525,10 @@ static void acpi_ec_enable_event(struct
- }
- 
- #ifdef CONFIG_PM_SLEEP
--static bool acpi_ec_query_flushed(struct acpi_ec *ec)
-+static void __acpi_ec_flush_work(void)
- {
--	bool flushed;
--	unsigned long flags;
--
--	spin_lock_irqsave(&ec->lock, flags);
--	flushed = !ec->nr_pending_queries;
--	spin_unlock_irqrestore(&ec->lock, flags);
--	return flushed;
--}
--
--static void __acpi_ec_flush_event(struct acpi_ec *ec)
--{
--	/*
--	 * When ec_freeze_events is true, we need to flush events in
--	 * the proper position before entering the noirq stage.
--	 */
--	wait_event(ec->wait, acpi_ec_query_flushed(ec));
--	if (ec_query_wq)
--		flush_workqueue(ec_query_wq);
-+	flush_scheduled_work(); /* flush ec->work */
-+	flush_workqueue(ec_query_wq); /* flush queries */
- }
- 
- static void acpi_ec_disable_event(struct acpi_ec *ec)
-@@ -554,15 +538,21 @@ static void acpi_ec_disable_event(struct
- 	spin_lock_irqsave(&ec->lock, flags);
- 	__acpi_ec_disable_event(ec);
- 	spin_unlock_irqrestore(&ec->lock, flags);
--	__acpi_ec_flush_event(ec);
-+
-+	/*
-+	 * When ec_freeze_events is true, we need to flush events in
-+	 * the proper position before entering the noirq stage.
-+	 */
-+	__acpi_ec_flush_work();
- }
- 
- void acpi_ec_flush_work(void)
- {
--	if (first_ec)
--		__acpi_ec_flush_event(first_ec);
-+	/* Without ec_query_wq there is nothing to flush. */
-+	if (!ec_query_wq)
-+		return;
- 
--	flush_scheduled_work();
-+	__acpi_ec_flush_work();
- }
- #endif /* CONFIG_PM_SLEEP */
- 
+Kernel 5.4 intel_cpufreq/schedutil: 3636 seconds
+Kernel 5.4 + gg 6 intel_cpufreq/schedutil: 2427.6 seconds
+Ratio: 0.67 which is consistent with previous Sandy Bridge results
 
+...
+
+Those above kernels included:
+
+CONFIG_UCLAMP_TASK_GROUP=y
+
+Which cause my older Ubuntu server edition using the 
+intel_cpufreq/schedutil to respond much like the performance
+governor, as reported the other day and above.
+
+I also booted the Sandy Bridge computer, with its original disk,
+with the kernel command line containing:
+
+cgroup_no_v1=all
+
+and, while it complained during boot, it did work as expected
+using the intel_cpufreq/schedutil driver/governor.
+
+... Doug
 
 
