@@ -2,96 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C008710C467
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 08:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD9110C64D
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 11:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbfK1Hn3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 02:43:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32900 "EHLO mail.kernel.org"
+        id S1726191AbfK1KBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 05:01:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:33012 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfK1Hn3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Nov 2019 02:43:29 -0500
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAAB0215F2;
-        Thu, 28 Nov 2019 07:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574927008;
-        bh=MxbZZyhMxP8MypT5uzl2FbmRA7P2Fx2ZT4tGfc6hXSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wm8PVK7LJ/eHbBcPlypR34e9nGdlHpiyX+tDcKnSJxAQM91yQgFENMYbMHwZzBPie
-         yRkIECYbg027w8uzuxwxYyGyI6EDte1JFAmNABgHVQO8I88Z5HY8A4vPdyjwu2xwR6
-         QmnlLKgm3/xS4ZOJqZlhnywaFER5ex6PX8/4i3LE=
-Date:   Thu, 28 Nov 2019 08:43:25 +0100
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: add YAML schema for
- sun8i-thermal driver bindings
-Message-ID: <20191128074325.q47rpzhufwog6mbb@gilmour.lan>
-References: <20191127052935.1719897-1-anarsoul@gmail.com>
- <20191127052935.1719897-3-anarsoul@gmail.com>
- <20191127174434.wousbqosmm5vxcsu@gilmour.lan>
- <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
+        id S1726281AbfK1KBr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 Nov 2019 05:01:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90F1B1FB;
+        Thu, 28 Nov 2019 02:01:46 -0800 (PST)
+Received: from [192.168.0.9] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 130FA3F6C4;
+        Thu, 28 Nov 2019 02:01:44 -0800 (PST)
+Subject: Re: [PATCH] cpufreq: vexpress-spc: Fix wrong alternation of
+ policy->related_cpus during CPU hp
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20191127114801.23837-1-dietmar.eggemann@arm.com>
+ <20191127120816.GC29301@bogus> <20191127121402.vd3tul4gmqm6qtyb@vireshk-i7>
+ <20191127133200.GE29301@bogus> <a60cab69-4d47-d418-94bd-74630bf9e846@arm.com>
+ <20191127154029.GA4826@bogus> <20191128023116.3skwbeowk7wtjaxc@vireshk-i7>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <0e1cf1c3-3790-3032-2843-04a112de1411@arm.com>
+Date:   Thu, 28 Nov 2019 11:01:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cnk3ppztnbfqfu5l"
-Content-Disposition: inline
-In-Reply-To: <CA+E=qVe22T1uhUo6iq9a82Y9bC014CZSkAtSJJNX4qsn6dJL9w@mail.gmail.com>
+In-Reply-To: <20191128023116.3skwbeowk7wtjaxc@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 28/11/2019 03:31, Viresh Kumar wrote:
+> On 27-11-19, 15:40, Sudeep Holla wrote:
+>> diff --git i/arch/arm/mach-vexpress/spc.c w/arch/arm/mach-vexpress/spc.c
+>> index 354e0e7025ae..e0e2e789a0b7 100644
+>> --- i/arch/arm/mach-vexpress/spc.c
+>> +++ w/arch/arm/mach-vexpress/spc.c
+>> @@ -551,8 +551,9 @@ static struct clk *ve_spc_clk_register(struct device *cpu_dev)
+>>
+>>  static int __init ve_spc_clk_init(void)
+>>  {
+>> -       int cpu;
+>> +       int cpu, cluster;
+>>         struct clk *clk;
+>> +       bool init_opp_table[MAX_CLUSTERS] = { false };
+>>
+>>         if (!info)
+>>                 return 0; /* Continue only if SPC is initialised */
+>> @@ -578,8 +579,17 @@ static int __init ve_spc_clk_init(void)
+>>                         continue;
+>>                 }
+>>
+>> +               cluster = topology_physical_package_id(cpu_dev->id);
+>> +               if (init_opp_table[cluster])
+>> +                       continue;
+>> +
+>>                 if (ve_init_opp_table(cpu_dev))
+>>                         pr_warn("failed to initialise cpu%d opp table\n", cpu);
+>> +               else if (dev_pm_opp_set_sharing_cpus(cpu_dev,
+>> +                        topology_core_cpumask(cpu_dev->id)))
+>> +                       pr_warn("failed to mark OPPs shared for cpu%d\n", cpu);
+>> +
+>> +               init_opp_table[cluster] = true;
+>>         }
+>>
+>>         platform_device_register_simple("vexpress-spc-cpufreq", -1, NULL, 0);
+>> diff --git i/drivers/cpufreq/vexpress-spc-cpufreq.c w/drivers/cpufreq/vexpress-spc-cpufreq.c
+>> index 506e3f2bf53a..83c85d3d67e3 100644
+>> --- i/drivers/cpufreq/vexpress-spc-cpufreq.c
+>> +++ w/drivers/cpufreq/vexpress-spc-cpufreq.c
+>> @@ -434,7 +434,7 @@ static int ve_spc_cpufreq_init(struct cpufreq_policy *policy)
+>>         if (cur_cluster < MAX_CLUSTERS) {
+>>                 int cpu;
+>>
+>> -               cpumask_copy(policy->cpus, topology_core_cpumask(policy->cpu));
+>> +               dev_pm_opp_get_sharing_cpus(cpu_dev, policy->cpus);
+>>
+>>                 for_each_cpu(cpu, policy->cpus)
+>>                         per_cpu(physical_cluster, cpu) = cur_cluster;
+> 
+> This is a better *work-around* I would say, as we can't break it the
+> way I explained earlier :)
 
---cnk3ppztnbfqfu5l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I do agree. Tested CPU hp stress on TC2 and it looks good.
 
-On Wed, Nov 27, 2019 at 12:23:53PM -0800, Vasily Khoruzhick wrote:
-> On Wed, Nov 27, 2019 at 9:44 AM Maxime Ripard <mripard@kernel.org> wrote:
-> > > +
-> > > +  nvmem-cell-names:
-> > > +    items:
-> > > +      - const: calibration
-> >
-> > Ditto for the const
->
-> Sorry, I don't quite get it. What exactly do you want me to do with
-> this one? nvmem-cell-names must be "calibration"
-
-You don't need the items here either, this can be
-
-nvmem-cell-names:
-  const: calibration
-
-Maxime
-
---cnk3ppztnbfqfu5l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXd96nQAKCRDj7w1vZxhR
-xRLoAQC3m7wZvI4EmXSfHN3h/VKMdIvvo5P5sgtpMsfd6hwbiAEAwqYBPjEtyyKB
-IP3PzaCesyLXY9dHooofrsm3Z7+pIgw=
-=I+ik
------END PGP SIGNATURE-----
-
---cnk3ppztnbfqfu5l--
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
