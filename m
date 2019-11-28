@@ -2,71 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2935B10C67D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 11:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9691710C98B
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Nov 2019 14:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfK1KQC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Nov 2019 05:16:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:33202 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726133AbfK1KQB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Nov 2019 05:16:01 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 308F61042;
-        Thu, 28 Nov 2019 02:16:01 -0800 (PST)
-Received: from usa.arm.com (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AC69D3F6C4;
-        Thu, 28 Nov 2019 02:15:59 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH 2/2] cpufreq: vexpress-spc: Switch cpumask from topology core to OPP sharing
-Date:   Thu, 28 Nov 2019 10:15:47 +0000
-Message-Id: <20191128101547.519-2-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191128101547.519-1-sudeep.holla@arm.com>
-References: <20191128101547.519-1-sudeep.holla@arm.com>
+        id S1726726AbfK1Nem (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Nov 2019 08:34:42 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36012 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbfK1Nek (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Nov 2019 08:34:40 -0500
+Received: by mail-wm1-f66.google.com with SMTP id p17so5793227wma.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Nov 2019 05:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/SDaimtx4qvfQT+a77LcPCR1TXpL+CTCSqALSHB4+Rg=;
+        b=fKWoGZnUHc0AEupO0e6BxYnAvJWsF4R3vlQfEGVemUrT1VmzmBVuRcs3pYHh1i022b
+         gHmZKlDlHLPDLKLOFB31mC+7L1exI346izL/6cLcwo2keOu59Zw/hKq7Fx1iS2FOTJZD
+         mrE7l2joW729IcshdEEbg8w+u5mfrT3HexEs7L86uvd6tZlm29ugtWvQDcHsUeUURYYj
+         vsec6EgQjjsV+Rn7koKFXTjcMr42HpbtZsEwcA5vxEIBbyymZfRIf9MWFdoWveRAa2xJ
+         y+FhU5PfevlbWXY3k+t9i7MqLgHUKy5Tn5QeNyyX0XO1UTS1j6uaZCNiWEMOzFGkdVX5
+         970Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/SDaimtx4qvfQT+a77LcPCR1TXpL+CTCSqALSHB4+Rg=;
+        b=VGiCXVJRCooio75/+g2sEeuoB8EsF2qjLRFb4oxKYsCQlcspzWCGOWN1QjjxaOC+tu
+         RKe+5iXZkhZqQHvlbOZJZwUfOtSCRkLspkdaEK0isPFmtnFBv5vixwULWAhaQ99QSAbp
+         moxEDBkQxy/8l+K/4artYjEuwjiqwUmw9r4ysjnuinTJEa+bohIG6niZDfNM0xEqAygZ
+         rWVIDbKqhHG4LjhUkPyw01ctgCZEMkbig47SLtuC6zHBn35G+U7IuMz/TIGh5gnKDcGf
+         0H6wAB+PzcLR2gNDbhHe8uss5rUXm4rCiCzsOqWWaqtsqGJ9oBRKugdUAnzyzWk/X1m2
+         tc4A==
+X-Gm-Message-State: APjAAAWctB9G+qzYv2wBmT4R56VrNR6jjUDuTCq41Rd6lNVBSESqmgkl
+        GsgpxGz4jymb1dW5VT2FF4MKJMW3yLs=
+X-Google-Smtp-Source: APXvYqz50wTmdDHppw64lnOGv4kBmYEywC/jd69HR/l3/KqJ/30thrOsVhsT64GKvxVlxa0p/ykg9w==
+X-Received: by 2002:a1c:23d5:: with SMTP id j204mr9329041wmj.0.1574948077036;
+        Thu, 28 Nov 2019 05:34:37 -0800 (PST)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id y20sm2220451wmi.25.2019.11.28.05.34.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 28 Nov 2019 05:34:36 -0800 (PST)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org, digetx@gmail.com,
+        evgreen@chromium.org, daidavid1@codeaurora.org,
+        masneyb@onstation.org, sibis@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: [PATCH 1/5] interconnect: qcom: sdm845: Walk the list safely on node removal
+Date:   Thu, 28 Nov 2019 15:34:31 +0200
+Message-Id: <20191128133435.25667-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit ca74b316df96 ("arm: Use common cpu_topology structure and
-functions.") the core cpumask has to be modified during cpu hotplug
-operations. So using them to set up cpufreq policy cpumask may be
-incorrect as it may contain only cpus that are online at that instance.
+As we will remove items off the list using list_del(), we need to use the
+safe version of list_for_each_entry().
 
-Instead, we can use the cpumask setup by OPP library that contains all
-the cpus sharing OPP table using dev_pm_opp_get_sharing_cpus.
-
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Fixes: b5d2f741077a ("interconnect: qcom: Add sdm845 interconnect provider driver")
+Reported-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- drivers/cpufreq/vexpress-spc-cpufreq.c | 2 +-
+ drivers/interconnect/qcom/sdm845.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
-index 506e3f2bf53a..83c85d3d67e3 100644
---- a/drivers/cpufreq/vexpress-spc-cpufreq.c
-+++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
-@@ -434,7 +434,7 @@ static int ve_spc_cpufreq_init(struct cpufreq_policy *policy)
- 	if (cur_cluster < MAX_CLUSTERS) {
- 		int cpu;
+diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+index 502a6c22b41e..924c2d056d85 100644
+--- a/drivers/interconnect/qcom/sdm845.c
++++ b/drivers/interconnect/qcom/sdm845.c
+@@ -870,7 +870,7 @@ static int qnoc_remove(struct platform_device *pdev)
+ 	struct icc_provider *provider = &qp->provider;
+ 	struct icc_node *n;
  
--		cpumask_copy(policy->cpus, topology_core_cpumask(policy->cpu));
-+		dev_pm_opp_get_sharing_cpus(cpu_dev, policy->cpus);
- 
- 		for_each_cpu(cpu, policy->cpus)
- 			per_cpu(physical_cluster, cpu) = cur_cluster;
--- 
-2.17.1
-
+-	list_for_each_entry(n, &provider->nodes, node_list) {
++	list_for_each_entry_safe(n, &provider->nodes, node_list) {
+ 		icc_node_del(n);
+ 		icc_node_destroy(n->id);
+ 	}
