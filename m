@@ -2,218 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF5810D7F4
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 16:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCC210D9A6
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 19:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfK2PkX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Nov 2019 10:40:23 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:45123 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbfK2PkX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 10:40:23 -0500
-X-Originating-IP: 90.65.102.129
-Received: from localhost (lfbn-1-1480-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B367A240006;
-        Fri, 29 Nov 2019 15:40:20 +0000 (UTC)
-Date:   Fri, 29 Nov 2019 16:40:16 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Eugen.Hristev@microchip.com
-Cc:     Claudiu.Beznea@microchip.com, kamel.bouhara@bootlin.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sre@kernel.org, Ludovic.Desroches@microchip.com,
-        thomas.petazzoni@bootlin.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] power: reset: at91-reset: add sysfs interface to the
- power on reason
-Message-ID: <20191129154016.GZ299836@piout.net>
-References: <20191017124058.19300-1-kamel.bouhara@bootlin.com>
- <034c9d01-633a-eeaa-f61f-d185be7227f2@microchip.com>
- <20191129110253.GX299836@piout.net>
- <00f4e9a2-f6bd-9242-cafd-9c0c4f4dc619@microchip.com>
+        id S1727004AbfK2Sdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Nov 2019 13:33:45 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40054 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbfK2Sdp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 13:33:45 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 0AED228C03C
+Received: by earth.universe (Postfix, from userid 1000)
+        id 40A483C0C78; Fri, 29 Nov 2019 19:33:40 +0100 (CET)
+Date:   Fri, 29 Nov 2019 19:33:40 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Matheus Castello <matheus@castello.eng.br>
+Cc:     krzk@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
+        lee.jones@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/5] power: supply: max17040: Config alert SOC low
+ level threshold from FDT
+Message-ID: <20191129183340.hsjddxot7ocnxran@earth.universe>
+References: <20191117141335.23404-1-matheus@castello.eng.br>
+ <20191117141335.23404-5-matheus@castello.eng.br>
+ <20191126145200.xqtvfrm6qc6yuutb@earth.universe>
+ <c5bb4962-10f7-0877-0c99-c2dad5bb53cf@castello.eng.br>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xcuscrzzo6oezrpv"
 Content-Disposition: inline
-In-Reply-To: <00f4e9a2-f6bd-9242-cafd-9c0c4f4dc619@microchip.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <c5bb4962-10f7-0877-0c99-c2dad5bb53cf@castello.eng.br>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/11/2019 11:15:18+0000, Eugen.Hristev@microchip.com wrote:
-> 
-> 
-> On 29.11.2019 13:02, Alexandre Belloni wrote:
-> 
-> > On 29/11/2019 10:57:45+0000, Claudiu.Beznea@microchip.com wrote:
-> >> Hi Kamel,
-> >>
-> >> On 17.10.2019 15:40, Kamel Bouhara wrote:
-> >>> This patch export the power on reason through the sysfs interface and
-> >>> introduce some generic reset sources.
-> >>> Update the ABI documentation to list current power on sources.
-> >>>
-> >>> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> >>> ---
-> >>>   .../sysfs-devices-platform-power-on-reason    | 14 ++++++
-> >>>   drivers/power/reset/at91-reset.c              | 44 +++++++++++++------
-> >>>   include/linux/power/power_on_reason.h         | 19 ++++++++
-> >>>   3 files changed, 64 insertions(+), 13 deletions(-)
-> >>>   create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-power-on-reason
-> >>>   create mode 100644 include/linux/power/power_on_reason.h
-> >>>
-> >>> diff --git a/Documentation/ABI/testing/sysfs-devices-platform-power-on-reason b/Documentation/ABI/testing/sysfs-devices-platform-power-on-reason
-> >>> new file mode 100644
-> >>> index 000000000000..83daeb9b1aa2
-> >>> --- /dev/null
-> >>> +++ b/Documentation/ABI/testing/sysfs-devices-platform-power-on-reason
-> >>> @@ -0,0 +1,14 @@
-> >>> +What:              /sys/devices/platform/.../power_on_reason
-> >>> +
-> >>> +Date:              October 2019
-> >>> +KernelVersion:     5.4
-> >>> +Contact:   Kamel Bouhara <kamel.bouhara@bootlin.com>
-> >>> +Description:       This file shows system power on reason.
-> >>> +           The possible sources are:
-> >>> +           General System Power-ON, RTC wakeup, Watchdog timeout,
-> >>> +           Software Reset, User pressed reset button,
-> >>> +           CPU Clock failure, 32.768kHz Oscillator Failure,
-> >>> +           Low power mode exit, Unknown.
-> >>> +
-> >>> +           The file is read only.
-> >>> +
-> >>> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
-> >>> index 44ca983a49a1..3cb2df40af37 100644
-> >>> --- a/drivers/power/reset/at91-reset.c
-> >>> +++ b/drivers/power/reset/at91-reset.c
-> >>> @@ -17,7 +17,7 @@
-> >>>   #include <linux/of_address.h>
-> >>>   #include <linux/platform_device.h>
-> >>>   #include <linux/reboot.h>
-> >>> -
-> >>> +#include <linux/power/power_on_reason.h>
-> >>>   #include <soc/at91/at91sam9_ddrsdr.h>
-> >>>   #include <soc/at91/at91sam9_sdramc.h>
-> >>>
-> >>> @@ -146,42 +146,42 @@ static int samx7_restart(struct notifier_block *this, unsigned long mode,
-> >>>      return NOTIFY_DONE;
-> >>>   }
-> >>>
-> >>> -static void __init at91_reset_status(struct platform_device *pdev)
-> >>> +static const char *at91_reset_reason(struct platform_device *pdev)
-> >>>   {
-> >>>      const char *reason;
-> >>>      u32 reg = readl(at91_rstc_base + AT91_RSTC_SR);
-> >>>
-> >>>      switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
-> >>>      case RESET_TYPE_GENERAL:
-> >>> -           reason = "general reset";
-> >>> +           reason = POWER_ON_REASON_GENERAL;
-> >>>              break;
-> >>>      case RESET_TYPE_WAKEUP:
-> >>> -           reason = "wakeup";
-> >>> +           reason = POWER_ON_REASON_RTC;
-> >>>              break;
-> >>>      case RESET_TYPE_WATCHDOG:
-> >>> -           reason = "watchdog reset";
-> >>> +           reason = POWER_ON_REASON_WATCHDOG;
-> >>>              break;
-> >>>      case RESET_TYPE_SOFTWARE:
-> >>> -           reason = "software reset";
-> >>> +           reason = POWER_ON_REASON_SOFTWARE;
-> >>>              break;
-> >>>      case RESET_TYPE_USER:
-> >>> -           reason = "user reset";
-> >>> +           reason = POWER_ON_REASON_USER;
-> >>>              break;
-> >>>      case RESET_TYPE_CPU_FAIL:
-> >>> -           reason = "CPU clock failure detection";
-> >>> +           reason = POWER_ON_REASON_CPU_FAIL;
-> >>>              break;
-> >>>      case RESET_TYPE_XTAL_FAIL:
-> >>> -           reason = "32.768 kHz crystal failure detection";
-> >>> +           reason = POWER_ON_REASON_XTAL_FAIL;
-> >>>              break;
-> >>>      case RESET_TYPE_ULP2:
-> >>> -           reason = "ULP2 reset";
-> >>> +           reason = POWER_ON_REASON_LOW_POWER;
-> >>>              break;
-> >>>      default:
-> >>> -           reason = "unknown reset";
-> >>> +           reason = POWER_ON_REASON_UNKNOWN;
-> >>>              break;
-> >>>      }
-> >>>
-> >>> -   dev_info(&pdev->dev, "Starting after %s\n", reason);
-> >>> +   return reason;
-> >>>   }
-> >>>
-> >>>   static const struct of_device_id at91_ramc_of_match[] = {
-> >>> @@ -204,6 +204,17 @@ static struct notifier_block at91_restart_nb = {
-> >>>      .priority = 192,
-> >>>   };
-> >>>
-> >>> +static ssize_t power_on_reason_show(struct device *dev,
-> >>> +                               struct device_attribute *attr,
-> >>> +                               char *buf)
-> >>> +{
-> >>> +   struct platform_device *pdev = to_platform_device(dev);
-> >>> +
-> >>> +   return sprintf(buf, "%s\n", at91_reset_reason(pdev));
-> >>> +}
-> >>> +
-> >>> +static DEVICE_ATTR_RO(power_on_reason);
-> >>> +
-> >>>   static int __init at91_reset_probe(struct platform_device *pdev)
-> >>>   {
-> >>>      const struct of_device_id *match;
-> >>> @@ -248,7 +259,14 @@ static int __init at91_reset_probe(struct platform_device *pdev)
-> >>>              return ret;
-> >>>      }
-> >>>
-> >>> -   at91_reset_status(pdev);
-> >>> +   ret = device_create_file(&pdev->dev, &dev_attr_power_on_reason);
-> >>> +   if (ret) {
-> >>> +           dev_err(&pdev->dev, "Could not create sysfs entry\n");
-> >>> +           return ret;
-> >>> +   }
-> >>> +
-> >>> +   dev_info(&pdev->dev, "Starting after %s reset\n",
-> >>> +            at91_reset_reason(pdev));
-> >>>
-> >>>      return 0;
-> >>>   }
-> >>> diff --git a/include/linux/power/power_on_reason.h b/include/linux/power/power_on_reason.h
-> >>> new file mode 100644
-> >>> index 000000000000..9978cc757427
-> >>> --- /dev/null
-> >>> +++ b/include/linux/power/power_on_reason.h
-> >>> @@ -0,0 +1,19 @@
-> >>> +/* SPDX-License-Identifier: GPL-2.0-only */
-> >>> +/*
-> >>> + * Author: Kamel Bouhra <kamel.bouhara@bootlin.com>
-> >>> + */
-> >>> +
-> >>> +#ifndef POWER_ON_REASON_H
-> >>> +#define POWER_ON_REASON_H
-> >>> +
-> >>> +#define POWER_ON_REASON_GENERAL "General"
-> >>> +#define POWER_ON_REASON_RTC "RTC wakeup"
-> >>> +#define POWER_ON_REASON_WATCHDOG "Watchdog timeout"
-> >>> +#define POWER_ON_REASON_SOFTWARE "Software"
-> >>> +#define POWER_ON_REASON_USER "User"
-> >>> +#define POWER_ON_REASON_CPU_FAIL "CPU Clock Failure"
-> >>> +#define POWER_ON_REASON_XTAL_FAIL "32.768k Crystal oscillator Failure"
-> 
-> Hi,
-> 
-> Looks rather odd to have a hardcoded crystal value inside a generic header.
-> Also how is REASON_CPU_FAIL related to CPU Clock ?
-> 
 
-Yes, I also think having the xtal rate is a bit too specific.
+--xcuscrzzo6oezrpv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Hi,
+
+On Wed, Nov 27, 2019 at 10:06:47PM -0300, Matheus Castello wrote:
+> [...]
+> > > @@ -256,14 +303,26 @@ static int max17040_probe(struct i2c_client *cl=
+ient,
+> > >=20
+> > >   	/* check interrupt */
+> > >   	if (client->irq) {
+> > > -		int ret;
+> > > -
+> > > -		ret =3D max17040_enable_alert_irq(chip);
+> > > -
+> > > -		if (ret) {
+> > > -			client->irq =3D 0;
+> > > +		if (of_device_is_compatible(client->dev.of_node,
+> > > +					    "maxim,max77836-battery")) {
+> > > +			ret =3D max17040_set_low_soc_alert(client,
+> > > +							 chip->low_soc_alert);
+> > > +			if (ret) {
+> > > +				dev_err(&client->dev,
+> > > +					"Failed to set low SOC alert: err %d\n",
+> > > +					ret);
+> > > +				return ret;
+> > > +			}
+> > > +
+> > > +			ret =3D max17040_enable_alert_irq(chip);
+> > > +			if (ret) {
+> > > +				client->irq =3D 0;
+> > > +				dev_warn(&client->dev,
+> > > +					 "Failed to get IRQ err %d\n", ret);
+> > > +			}
+> > > +		} else {
+> > >   			dev_warn(&client->dev,
+> > > -				 "Failed to get IRQ err %d\n", ret);
+> > > +				 "Device not compatible for IRQ");
+> >=20
+> > Something is odd here. Either this should be part of the first
+> > patch ("max17040: Add IRQ handler for low SOC alert"), or both
+> > device types support the IRQ and this check should be removed.
+>=20
+> The first patch add the IRQ without the configuration of the low SoC aler=
+t,
+> using the default state of charge level. This patch is working with
+> registers to config the low state of charge level, so it was proposed to
+> just try to write registers in the models compatible with that
+> (maxim,max77836-battery).
+>=20
+> Maybe join the first patch to this one, and let DT binding be the first
+> patch on the series so we can already test compatible here, let me know w=
+hat
+> you think about it.
+
+Assuming the !max77836 do not have any interrupt support, you can
+just add the OF check in the first patch in "if (client->irq)", so
+that it reads=20
+
+if (client->irq && of_device_is_compatible(...)) {
+    ...
+}
+
+-- Sebastian
+
+--xcuscrzzo6oezrpv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl3hZIAACgkQ2O7X88g7
++pqwQQ/+JvYfTlob8QpLMuveqR4F7Jz+118C4j8H6w4xx8uCSp/xPQSxGSQ7zSIg
+mrAm5+YQnm12m4e2nZwdLNAkePuW++O+U9was7s0TUsjVFRC4tQhtwo+LIAbirBz
+RjqOm7tzZnTGu2w6Bhfoe3iyIRvNxELaEl4jk1iEV1qgn6G+z55p6Z6KpbMKWxKu
+8PKEtmZdeN9s9fZQdkyukjvPAs23E2pUB8a++mc7Y5kML6xMMwqnR6Wn+MzaJgq9
+7jL1dNZJ///rH/3JtOr/F237jAZdFdocwIhzS+uDYIU2FxC3WYu3/lD8TMXmWeBb
+kYwOUHDvSx2sh1Bx52UyKvLT1rAtSIbp/u2NbOj9w3zB7k+cl9ePqw7HqiJlZ11d
+V8T93H6bQvCXbftcSAvtRUA8HKh1HSO8o1U8+RMtBxz1y6B2LqNfD4dFT+wltWSj
+Q+HyuzGfz6mrFQ3owFmohyeOSOC1FHJa6Fc1Z40obR3XKYBBMrO+8qXckTim9/dk
+SsPF7E0O6UNJyqthzw9HL1R99F7AX9JX2fjOMAsWpVvoaDEqDkt3Ebt96Gl/YvRL
+x+/+cWQSwGxikSHdDg6drOOYQri/jzySqwFJJhCtvnjqXGRUCRFxgluAIzy4qDBf
++67VS9ef6Xd2QDlxOPjxRAeqOYbCz6Z8v91q2s0FfS/uC5r7jCo=
+=+2/E
+-----END PGP SIGNATURE-----
+
+--xcuscrzzo6oezrpv--
