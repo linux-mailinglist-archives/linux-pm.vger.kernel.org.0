@@ -2,480 +2,903 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C416A10D519
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 12:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B3010D520
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 12:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbfK2LpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Nov 2019 06:45:00 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37731 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbfK2Lo7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 06:44:59 -0500
-Received: by mail-wm1-f65.google.com with SMTP id f129so14724068wmf.2;
-        Fri, 29 Nov 2019 03:44:56 -0800 (PST)
+        id S1726604AbfK2LrN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Nov 2019 06:47:13 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42322 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbfK2LrM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 06:47:12 -0500
+Received: by mail-io1-f66.google.com with SMTP id f25so6017298iog.9;
+        Fri, 29 Nov 2019 03:47:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1ybZKIU+kA2575KMw1e+4ZB3gUgyWTrws2IIF76aQJ4=;
-        b=hDrvPSuN7tCuqIX23Duc9KJ9cMRRcIWMVzHhJFkJ39cvKqIHZe6x9j7Czt2Fm5ufoZ
-         caadreCP7d05/ouuL+KktUohs2LOBEBFqU+GcniISpfzaenT3Sc7J/IV4x70L7ASlqRA
-         NCStNy/QBX8WmjaKp45qPLi6Irsh606Gx4Pe30nsoazkvM3xDMO6S0EISFr8BDVXGa9k
-         ciwsVUQKLsLDqogIo/XCDw0NMZ/dMVpD47XLI2p0+CVnHoomxG95MqiU6o/a0gBIIOIU
-         6QKq9qrnmIKIcRqFtOhiCyUmRSpx2EKHbS4BiM47AIIu656cRXdj3wbNKzkCtvj0BAeL
-         Wf7g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cA0I5C6Q3B3d8zS+DiHH/GqBQJqrOgcRR1irSWspGPM=;
+        b=pFMcp9+t6yyFcDTzFFqnBBeSM2+ij0bvxSPTKEAqX/xVLp3tSqg8hROyoxiW1R99k+
+         y1HP4Aj6JGB4AQYzeWaF/7wvS+TomQinHwy2fAbFDMeEj02LXLc99u+ykxgzVhs3Cs44
+         07y+lwCu1/cGWHM7iTTCVxPuR6FyNwC8ht7xsM9yT8ahFoOZgrgzcdDR3RyOWuoQB5OD
+         9Ndb730hkoGGXkia1tNIRC7zNEwtc2KGxy9uif+M5LTJ58jZehsWKhyuMR+KkaDTwNld
+         7FvvMNNjgO5IyXkcCxgSDzaNfV8lLpYt9leTHd4ifkGxa0WIVAzdjYGAhSnGCW64pq1U
+         gT7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1ybZKIU+kA2575KMw1e+4ZB3gUgyWTrws2IIF76aQJ4=;
-        b=IAi0k8JiDcpMZo+hsT1rtU75ExZpKUpPPs0WznSoIwVIyYUJ4M0idgez7HLQViuJYV
-         PPlyOQhXRtsOa4GVSS/EW6BFB3fxFBBLftU9yljtnOSxskEZLpFWnLrs3R4YEkp0XH4q
-         fi8rJKc3U/GxsA9p/UaywqTDcxIsOqR0/SWbK9m5me7nNXl50c22ZXdjDuUr3yw0gHQy
-         ZBBAsUD7wv/+0SQj0NhIqpzdnCC4YhU7thmYQmXgkKBMqrHgtmvj8QVhlHk5dJENTxkT
-         gLdTRm2c3/hUaaW39UbH6MQUD4CBPrpMdYMlZEXFe582xQKh+yDo3Cv2pcQnllZpUbcQ
-         0EaA==
-X-Gm-Message-State: APjAAAXm/mNvDOOrKWJujw3eCMZzxQ5s2Us61ZnpWIn0Xk7O1ouBmvWp
-        qqKJhRk0/D5hKRDziHe09So=
-X-Google-Smtp-Source: APXvYqxxa0WxYcomALpGJtrOVhMwIslBR5TlVRiThe2qGMw/ITix+05FIwf29ulXX7aEaZUX8Br4kQ==
-X-Received: by 2002:a1c:8055:: with SMTP id b82mr14574401wmd.176.1575027894743;
-        Fri, 29 Nov 2019 03:44:54 -0800 (PST)
-Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
-        by smtp.gmail.com with ESMTPSA id d20sm28179936wra.4.2019.11.29.03.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2019 03:44:53 -0800 (PST)
-Date:   Fri, 29 Nov 2019 12:44:51 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 1/2] PM / runtime: Allow drivers to override runtime PM
- behaviour on sleep
-Message-ID: <20191129114451.GE2771912@ulmo>
-References: <20191128160314.2381249-1-thierry.reding@gmail.com>
- <CAJZ5v0haOB1vc8aKk11RR-OnfLHChcqa+z7QkeKyN66s6xM3OA@mail.gmail.com>
- <20191128163623.GA2382107@ulmo>
- <2310325.iNVD75376c@kreacher>
- <20191129093357.GA2770902@ulmo>
- <CAJZ5v0j56xrmiO6bvs3W-_pY0HjGhSUEbZYzjZHfm6gA-k605g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=cA0I5C6Q3B3d8zS+DiHH/GqBQJqrOgcRR1irSWspGPM=;
+        b=LiVdtoRhN9nFR/gXcnzyGuKT2QYSbfQsGtsIrn+P7gwMSmlw0cMK12yTzBwdwLt0pG
+         +9fUpPk+BYyvOnUv215WBO2/k2ybEuY0lHJboByoFc13baEEC13N3rwTpndWHFzn6dhZ
+         YnGLeL0ToLHDnYJ587Eug+DsAGJTCNHva2CBN9P2W4UFzPubLRbA7B5b2ST+vfoyZM8z
+         CVj8IrHDMuXMBsMONzXU03MqZg+Gi25w33jeTbnbsP/1U9o7C5v6og4TY475au2FjRAe
+         YoOvnKLFEYt8PDQssJP3eKQy/6iLyDgXcYV9ff3Uvl6SiDbhRMge2uWfxA5Nv8/4ALhq
+         /U3g==
+X-Gm-Message-State: APjAAAUwnHStWyzdmLBN/aVf3pSDv+aJab5MmlsH927RKfI8R3Iz5oEz
+        D+Nt+HzMXW3yk83CREIa4HHOKAghedbK7aQCPLQ=
+X-Google-Smtp-Source: APXvYqyVN1vKF+/xYWq81smfed8JPfm7tNl6Hy3WuyqH9q83ycoyaUYm2drIPxKl9dEZu1xtsnBqdA1OWpcO0s/qLWA=
+X-Received: by 2002:a02:c004:: with SMTP id y4mr13664465jai.12.1575028030345;
+ Fri, 29 Nov 2019 03:47:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5L6AZ1aJH5mDrqCQ"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j56xrmiO6bvs3W-_pY0HjGhSUEbZYzjZHfm6gA-k605g@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191127052935.1719897-1-anarsoul@gmail.com> <20191127052935.1719897-2-anarsoul@gmail.com>
+ <CAEExFWtGcxevppy7yRHbcQSbMued_s_0u6FV6rT=fe+1AW=Jbg@mail.gmail.com> <20191128170626.xsm7xmizmbenqval@core.my.home>
+In-Reply-To: <20191128170626.xsm7xmizmbenqval@core.my.home>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Fri, 29 Nov 2019 19:46:58 +0800
+Message-ID: <CAEExFWt_c0gdwudf62JhT1et6SPXUEwE67KTdjtmk7fnSAcEiQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/7] thermal: sun8i: add thermal driver for H6/H5/H3/A64/A83T/R40
+To:     Frank Lee <tiny.windzz@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---5L6AZ1aJH5mDrqCQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 29, 2019 at 11:09:26AM +0100, Rafael J. Wysocki wrote:
-> On Fri, Nov 29, 2019 at 10:34 AM Thierry Reding
-> <thierry.reding@gmail.com> wrote:
+On Fri, Nov 29, 2019 at 1:06 AM Ond=C5=99ej Jirman <megous@megous.com> wrot=
+e:
+>
+> On Fri, Nov 29, 2019 at 12:43:02AM +0800, Frank Lee wrote:
+> > HI,
 > >
-> > On Thu, Nov 28, 2019 at 11:03:57PM +0100, Rafael J. Wysocki wrote:
-> > > On Thursday, November 28, 2019 5:50:26 PM CET Thierry Reding wrote:
-> > > >
-> > > > --0F1p//8PRICkK4MW
-> > > > Content-Type: text/plain; charset=3Dus-ascii
-> > > > Content-Disposition: inline
-> > > > Content-Transfer-Encoding: quoted-printable
-> > > >
-> > > > On Thu, Nov 28, 2019 at 05:14:51PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Thu, Nov 28, 2019 at 5:03 PM Thierry Reding <thierry.reding@gm=
-ail.com>=3D
-> > > >  wrote:
-> > > > > >
-> > > > > > From: Thierry Reding <treding@nvidia.com>
-> > > > > >
-> > > > > > Currently the driver PM core will automatically acquire a runti=
-me PM
-> > > > > > reference for devices before system sleep is entered. This is n=
-eeded
-> > > > > > to avoid potential issues related to devices' parents getting p=
-ut to
-> > > > > > runtime suspend at the wrong time and causing problems with the=
-ir
-> > > > > > children.
-> > > > >=3D20
-> > > > > Not only for that.
-> > > > >=3D20
-> > > > > > In some cases drivers are carefully written to avoid such issue=
-s and
-> > > > > > the default behaviour can be changed to allow runtime PM to ope=
-rate
-> > > > > > regularly during system sleep.
-> > > > >=3D20
-> > > > > But this change breaks quite a few assumptions in the core too, s=
-o no,
-> > > > > it can't be made.
-> > > >
-> > > > Anything in particular that I can look at? I'm not seeing any issues
-> > > > when I test this, which could of course mean that I'm just getting
-> > > > lucky.
+> > I took a closer look at it, and I had some questions about these places=
+.
+> >
+> > On Wed, Nov 27, 2019 at 1:30 PM Vasily Khoruzhick <anarsoul@gmail.com> =
+wrote:
 > > >
-> > > There are races and such that you may never hit during casual testing.
+> > > From: Yangtao Li <tiny.windzz@gmail.com>
 > > >
-> > > > One thing that irritated me is that I think this used to work. I do
-> > > > recall testing suspend/resume a few years ago and devices would get
-> > > > properly runtime suspended/resumed.
+> > > This patch adds the support for allwinner thermal sensor, within
+> > > allwinner SoC. It will register sensors for thermal framework
+> > > and use device tree to bind cooling device.
 > > >
-> > > Not true at all.
+> > > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> > > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> > > Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> > > ---
+> > >  MAINTAINERS                     |   7 +
+> > >  drivers/thermal/Kconfig         |  14 +
+> > >  drivers/thermal/Makefile        |   1 +
+> > >  drivers/thermal/sun8i_thermal.c | 643 ++++++++++++++++++++++++++++++=
+++
+> > >  4 files changed, 665 insertions(+)
+> > >  create mode 100644 drivers/thermal/sun8i_thermal.c
 > > >
-> > > The PM core has always taken PM-runtime references on all devices pre=
-tty much
-> > > since when PM-runtime was introduced.
-> >
-> > You're right. I was finally able to find a toolchain that I could build
-> > an old version of the kernel with. I tested system suspend/resume on the
-> > v4.8 release, which is the first one that had the runtime PM changes as
-> > well as the subsystem suspend/resume support wired up, and I can't see
-> > the runtime PM callbacks invoked during system suspend/resume.
-> >
-> > So I must be misremembering, or I'm confusing it with some other tests I
-> > was running at the time.
-> >
-> > > > I did some digging but couldn't
-> > > > find anything that would have had an impact on this.
-> > > >
-> > > > Given that this is completely opt-in feature, why are you categoric=
-ally
-> > > > NAK'ing this?
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 66cc549ac327..da34f3f2e80b 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -688,6 +688,13 @@ L: linux-crypto@vger.kernel.org
+> > >  S:     Maintained
+> > >  F:     drivers/crypto/allwinner/
 > > >
-> > > The general problem is that if any device has been touched by system-=
-wide
-> > > suspend code, it should not be subject to PM-runtime any more until t=
-he
-> > > subsequent system-wide resume is able to undo whatever the suspend di=
-d.
+> > > +ALLWINNER THERMAL DRIVER
+> > > +M:     Yangtao Li <tiny.windzz@gmail.com>
+> > > +L:     linux-pm@vger.kernel.org
+> > > +S:     Maintained
+> > > +F:     Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83=
+t-ths.yaml
+> > > +F:     drivers/thermal/sun8i_thermal.c
+> > > +
+> > >  ALLWINNER VPU DRIVER
+> > >  M:     Maxime Ripard <mripard@kernel.org>
+> > >  M:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > > index 001a21abcc28..0b0422e89adb 100644
+> > > --- a/drivers/thermal/Kconfig
+> > > +++ b/drivers/thermal/Kconfig
+> > > @@ -262,6 +262,20 @@ config SPEAR_THERMAL
+> > >           Enable this to plug the SPEAr thermal sensor driver into th=
+e Linux
+> > >           thermal framework.
 > > >
-> > > Moreover, if a device is runtime-suspended, the system-wide suspend c=
-ode
-> > > may mishandle it, in general.  That's why PM-runtime suspend is not a=
-llowed
-> > > during system-wide transitions at all.  And it has always been like t=
-hat.
+> > > +config SUN8I_THERMAL
+> > > +       tristate "Allwinner sun8i thermal driver"
+> > > +       depends on ARCH_SUNXI || COMPILE_TEST
+> > > +       depends on HAS_IOMEM
+> > > +       depends on NVMEM
+> > > +       depends on OF
+> > > +       depends on RESET_CONTROLLER
+> > > +       help
+> > > +         Support for the sun8i thermal sensor driver into the Linux =
+thermal
+> > > +         framework.
+> > > +
+> > > +         To compile this driver as a module, choose M here: the
+> > > +         module will be called sun8i-thermal.
+> > > +
+> > >  config ROCKCHIP_THERMAL
+> > >         tristate "Rockchip thermal driver"
+> > >         depends on ARCH_ROCKCHIP || COMPILE_TEST
+> > > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > > index 74a37c7f847a..fa6f8b206281 100644
+> > > --- a/drivers/thermal/Makefile
+> > > +++ b/drivers/thermal/Makefile
+> > > @@ -31,6 +31,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) +=3D devfreq_=
+cooling.o
+> > >  obj-y                          +=3D broadcom/
+> > >  obj-$(CONFIG_THERMAL_MMIO)             +=3D thermal_mmio.o
+> > >  obj-$(CONFIG_SPEAR_THERMAL)    +=3D spear_thermal.o
+> > > +obj-$(CONFIG_SUN8I_THERMAL)     +=3D sun8i_thermal.o
+> > >  obj-$(CONFIG_ROCKCHIP_THERMAL) +=3D rockchip_thermal.o
+> > >  obj-$(CONFIG_RCAR_THERMAL)     +=3D rcar_thermal.o
+> > >  obj-$(CONFIG_RCAR_GEN3_THERMAL)        +=3D rcar_gen3_thermal.o
+> > > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_=
+thermal.c
+> > > new file mode 100644
+> > > index 000000000000..e86b64f51196
+> > > --- /dev/null
+> > > +++ b/drivers/thermal/sun8i_thermal.c
+> > > @@ -0,0 +1,643 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Thermal sensor driver for Allwinner SOC
+> > > + * Copyright (C) 2019 Yangtao Li
+> > > + *
+> > > + * Based on the work of Icenowy Zheng <icenowy@aosc.io>
+> > > + * Based on the work of Ondrej Jirman <megous@megous.com>
+> > > + * Based on the work of Josef Gajdusek <atx@atx.name>
+> > > + */
+> > > +
+> > > +#include <linux/clk.h>
+> > > +#include <linux/device.h>
+> > > +#include <linux/interrupt.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/nvmem-consumer.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/platform_device.h>
+> > > +#include <linux/regmap.h>
+> > > +#include <linux/reset.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/thermal.h>
+> > > +
+> > > +#define MAX_SENSOR_NUM 4
+> > > +
+> > > +#define FT_TEMP_MASK                           GENMASK(11, 0)
+> > > +#define TEMP_CALIB_MASK                                GENMASK(11, 0=
+)
+> > > +#define CALIBRATE_DEFAULT                      0x800
+> > > +
+> > > +#define SUN8I_THS_CTRL0                                0x00
+> > > +#define SUN8I_THS_CTRL2                                0x40
+> > > +#define SUN8I_THS_IC                           0x44
+> > > +#define SUN8I_THS_IS                           0x48
+> > > +#define SUN8I_THS_MFC                          0x70
+> > > +#define SUN8I_THS_TEMP_CALIB                   0x74
+> > > +#define SUN8I_THS_TEMP_DATA                    0x80
+> > > +
+> > > +#define SUN50I_THS_CTRL0                       0x00
+> > > +#define SUN50I_H6_THS_ENABLE                   0x04
+> > > +#define SUN50I_H6_THS_PC                       0x08
+> > > +#define SUN50I_H6_THS_DIC                      0x10
+> > > +#define SUN50I_H6_THS_DIS                      0x20
+> > > +#define SUN50I_H6_THS_MFC                      0x30
+> > > +#define SUN50I_H6_THS_TEMP_CALIB               0xa0
+> > > +#define SUN50I_H6_THS_TEMP_DATA                        0xc0
+> > > +
+> > > +#define SUN8I_THS_CTRL0_T_ACQ0(x)              (GENMASK(15, 0) & (x)=
+)
+> > > +#define SUN8I_THS_CTRL2_T_ACQ1(x)              ((GENMASK(15, 0) & (x=
+)) << 16)
+> > > +#define SUN8I_THS_DATA_IRQ_STS(x)              BIT(x + 8)
+> > > +
+> > > +#define SUN50I_THS_CTRL0_T_ACQ(x)              ((GENMASK(15, 0) & (x=
+)) << 16)
+> > > +#define SUN50I_THS_FILTER_EN                   BIT(2)
+> > > +#define SUN50I_THS_FILTER_TYPE(x)              (GENMASK(1, 0) & (x))
+> > > +#define SUN50I_H6_THS_PC_TEMP_PERIOD(x)                ((GENMASK(19,=
+ 0) & (x)) << 12)
+> > > +#define SUN50I_H6_THS_DATA_IRQ_STS(x)          BIT(x)
+> > > +
+> > > +/* millidegree celsius */
+> > > +#define THS_EFUSE_CP_FT_MASK                   0x3000
+> > > +#define THS_EFUSE_CP_FT_BIT                    12
+> > > +#define THS_CALIBRATION_IN_FT                  1
+> > > +
+> > > +struct ths_device;
+> > > +
+> > > +struct tsensor {
+> > > +       struct ths_device               *tmdev;
+> > > +       struct thermal_zone_device      *tzd;
+> > > +       int                             id;
+> > > +};
+> > > +
+> > > +struct ths_thermal_chip {
+> > > +       bool            has_mod_clk;
+> > > +       bool            has_bus_clk_reset;
+> > > +       int             sensor_num;
+> > > +       int             offset;
+> > > +       int             scale;
+> > > +       int             ft_deviation;
+> > > +       int             temp_data_base;
+> > > +       int             (*calibrate)(struct ths_device *tmdev,
+> > > +                                    u16 *caldata, int callen);
+> > > +       int             (*init)(struct ths_device *tmdev);
+> > > +       int             (*irq_ack)(struct ths_device *tmdev);
+> > > +       int             (*calc_temp)(struct ths_device *tmdev,
+> > > +                                    int id, int reg);
+> > > +};
+> > > +
+> > > +struct ths_device {
+> > > +       const struct ths_thermal_chip           *chip;
+> > > +       struct device                           *dev;
+> > > +       struct regmap                           *regmap;
+> > > +       struct reset_control                    *reset;
+> > > +       struct clk                              *bus_clk;
+> > > +       struct clk                              *mod_clk;
+> > > +       struct tsensor                          sensor[MAX_SENSOR_NUM=
+];
+> > > +       u32                                     cp_ft_flag;
+> > > +};
+> > > +
+> > > +/* Temp Unit: millidegree Celsius */
+> > > +static int sun8i_ths_calc_temp(struct ths_device *tmdev,
+> > > +                              int id, int reg)
+> > > +{
+> > > +       return tmdev->chip->offset - (reg * tmdev->chip->scale / 10);
+> > > +}
+> > > +
+> > > +static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+> > > +                              int id, int reg)
+> > > +{
+> > > +       if (reg >=3D 0x500)
+> > > +               return -1191 * reg / 10 + 223000;
+> > > +       else if (!id)
+> > > +               return -1452 * reg / 10 + 259000;
+> > > +       else
+> > > +               return -1590 * reg / 10 + 276000;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_get_temp(void *data, int *temp)
+> > > +{
+> > > +       struct tsensor *s =3D data;
+> > > +       struct ths_device *tmdev =3D s->tmdev;
+> > > +       int val =3D 0;
+> > > +
+> > > +       regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
+> > > +                   0x4 * s->id, &val);
+> > > +
+> > > +       /* ths have no data yet */
+> > > +       if (!val)
+> > > +               return -EAGAIN;
+> > > +
+> > > +       *temp =3D tmdev->chip->calc_temp(tmdev, s->id, val);
+> > > +       /*
+> > > +        * According to the original sdk, there are some platforms(ra=
+rely)
+> > > +        * that add a fixed offset value after calculating the temper=
+ature
+> > > +        * value. We can't simply put it on the formula for calculati=
+ng the
+> > > +        * temperature above, because the formula for calculating the
+> > > +        * temperature above is also used when the sensor is calibrat=
+ed. If
+> > > +        * do this, the correct calibration formula is hard to know.
+> > > +        */
+> > > +       *temp +=3D tmdev->chip->ft_deviation;
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static const struct thermal_zone_of_device_ops ths_ops =3D {
+> > > +       .get_temp =3D sun8i_ths_get_temp,
+> > > +};
+> > > +
+> > > +static const struct regmap_config config =3D {
+> > > +       .reg_bits =3D 32,
+> > > +       .val_bits =3D 32,
+> > > +       .reg_stride =3D 4,
+> > > +       .fast_io =3D true,
+> > > +       .max_register =3D 0xfc,
+> > > +};
+> > > +
+> > > +static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+> > > +{
+> > > +       int i, state, ret =3D 0;
+> > > +
+> > > +       regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               if (state & SUN8I_THS_DATA_IRQ_STS(i)) {
+> > > +                       regmap_write(tmdev->regmap, SUN8I_THS_IS,
+> > > +                                    SUN8I_THS_DATA_IRQ_STS(i));
+> > > +                       ret |=3D BIT(i);
+> > > +               }
+> > > +       }
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+> > > +{
+> > > +       int i, state, ret =3D 0;
+> > > +
+> > > +       regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
+> > > +                       regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS=
+,
+> > > +                                    SUN50I_H6_THS_DATA_IRQ_STS(i));
+> > > +                       ret |=3D BIT(i);
+> > > +               }
+> > > +       }
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static irqreturn_t sun8i_irq_thread(int irq, void *data)
+> > > +{
+> > > +       struct ths_device *tmdev =3D data;
+> > > +       int i, state;
+> > > +
+> > > +       state =3D tmdev->chip->irq_ack(tmdev);
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               if (state & BIT(i))
+> > > +                       thermal_zone_device_update(tmdev->sensor[i].t=
+zd,
+> > > +                                                  THERMAL_EVENT_UNSP=
+ECIFIED);
+> > > +       }
+> > > +
+> > > +       return IRQ_HANDLED;
+> > > +}
+> > > +
+> > > +static int sun8i_h3_ths_calibrate(struct ths_device *tmdev,
+> > > +                                 u16 *caldata, int callen)
+> > > +{
+> > > +       int i;
+> > > +
+> > > +       if (!caldata[0] || callen < 2 * tmdev->chip->sensor_num)
+> > > +               return -EINVAL;
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               int offset =3D (i % 2) << 4;
+> > > +
+> > > +               regmap_update_bits(tmdev->regmap,
+> > > +                                  SUN8I_THS_TEMP_CALIB + (4 * (i >> =
+1)),
+> > > +                                  0xfff << offset,
+> > > +                                  caldata[i] << offset);
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+> > > +                                  u16 *caldata, int callen)
+> > > +{
+> > > +       struct device *dev =3D tmdev->dev;
+> > > +       int i, ft_temp;
+> > > +
+> > > +       if (!caldata[0] || callen < 2 + 2 * tmdev->chip->sensor_num)
+> > > +               return -EINVAL;
+> > > +
+> > > +       /*
+> > > +        * efuse layout:
+> > > +        *
+> > > +        *      0   11  16       32
+> > > +        *      +-------+-------+-------+
+> > > +        *      |temp|  |sensor0|sensor1|
+> > > +        *      +-------+-------+-------+
+> > > +        *
+> > > +        * The calibration data on the H6 is the ambient temperature =
+and
+> > > +        * sensor values that are filled during the factory test stag=
+e.
+> > > +        *
+> > > +        * The unit of stored FT temperature is 0.1 degreee celusis.
+> > > +        *
+> > > +        * We need to calculate a delta between measured and caluclat=
+ed
+> > > +        * register values and this will become a calibration offset.
+> > > +        */
+> > > +       ft_temp =3D (caldata[0] & FT_TEMP_MASK) * 100;
+> > > +       tmdev->cp_ft_flag =3D (caldata[0] & THS_EFUSE_CP_FT_MASK)
+> > > +               >> THS_EFUSE_CP_FT_BIT;
 > >
-> > For this particular use-case the above should all be irrelevant. None of
-> > the drivers involved here do anything special at system suspend, because
-> > runtime suspend already puts the devices into the lowest possible power
-> > state. Basically when these devices are put into runtime suspend, they
-> > are completely turned off. The only exception is for things like HDMI
-> > where the +5V pin remains powered, so that hotplug detection will work.
+> > Here got an unused data "cp_ft_flag",
+> > which is used in the calculation of the temperature function according
+> > to the source code.
 > >
-> > The runtime PM state of the devices involved is managed by the subsystem
-> > system suspend/resume helpers in DRM/KMS. Basically those helpers turn
-> > off all the devices in the composite device, which ultimately results in
-> > their last runtime PM reference being released. So for system suspend
-> > and resume, these devices aren't touched, other than maybe for the PM
-> > core's internal book-keeping.
->=20
-> OK, so you actually want system-wide PM to work like PM-runtime on the
-> platform in question, but there are substantial differences.
-
-That's not exactly what I'm trying to do here. If this was all I wanted
-to do I could simply use UNIVERSAL_DEV_PM_OPS.
-
-What I want to do is basically allow the system-wide PM of the subsystem
-to control the runtime PM of the devices involved.
-
-> First, PM-runtime suspend can be effectively disabled by user space
-> and system-wide suspend is always expected to work.
->=20
-> Second, if system wakeup devices are involved, their handling during
-> system-wide suspend depends on the return value of device_may_wakeup()
-> which depends on what user space does, whereas PM-runtime assumes
-> device wakeup to be always enabled.
->=20
-> > > For a specific platform you may be able to overcome these limitations=
- if
-> > > you are careful enough, but certainly they are there in general and s=
-urely
-> > > you cannot prevent people from using your opt-in just because they th=
-ink
-> > > that they know what they are doing.
+> > https://github.com/orangepi-xunlong/OrangePiH6_kernel/blob/master/drive=
+rs/thermal/sunxi_thermal/sunxi_ths_core.c#L392
+>
+> It should be used to enable the addition of ft_deviation in
+> sun8i_ths_get_temp(), I guess. Probably an ommission. I guess most of H6
+> chips will have this set anyway.
+>
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               int sensor_reg =3D caldata[i + 1];
+> > > +               int cdata, offset;
+> > > +               int sensor_temp =3D tmdev->chip->calc_temp(tmdev, i, =
+sensor_reg);
+> > > +
+> > > +               /*
+> > > +                * Calibration data is CALIBRATE_DEFAULT - (calculate=
+d
+> > > +                * temperature from sensor reading at factory tempera=
+ture
+> > > +                * minus actual factory temperature) * 14.88 (scale f=
+rom
+> > > +                * temperature to register values)
+> > > +                */
+> > > +               cdata =3D CALIBRATE_DEFAULT -
+> > > +                       ((sensor_temp - ft_temp) * 10 / tmdev->chip->=
+scale);
 > >
-> > That's true. But the same thing is true for pretty much all other APIs.
-> > People obviously have to make sure they know what they're doing, just
-> > like they have to with any other API.
+> > Why change the formula here.
 > >
-> > I suppose the documentation for this new function is currently lacking a
-> > bit. Perhaps adding a big warning to this and listing the common
-> > pitfalls would help people make the right call about whether or not they
-> > can use this.
->=20
-> And then *somebody* would have to chase a ton of subtle issues
-> resulting from that.  No, thanks, but no thanks.
+> > https://github.com/orangepi-xunlong/OrangePiH6_kernel/blob/master/drive=
+rs/thermal/sunxi_thermal/sunxi_ths_core.c#L339
+>
 
-If the kerneldoc makes it clear that they're only supposed to use this
-when they exactly know that it's safe to do, I don't think anybody is
-going to put the blame on you to fix their bugs. If using this breaks,
-it's clearly wrong to use it.
+HI,
 
-> > > > Is there some other alternative that I can look into?
+I suggest keeping you as it was before this patch, just change this
+place to this.
+
+cdata =3D CALIBRATE_DEFAULT - ((ft_temp * 100 - sensor_temp) /
+tmdev->chip->scale);
+
+Yangtao
+
+> It looks the same to me as before. Here's the original patch:
+>
+> https://megous.com/git/linux/commit/?h=3Dths-5.4&id=3Dcae28a7dfa6fc79ba37=
+e31d4dff281947247e822
+>
+> It's basicaly to avoid magic values TEMP_TO_REG and use what's defined
+> in the chip struct.
+>
+> regards,
+>         o.
+>
+> > > +               if (cdata & ~TEMP_CALIB_MASK) {
+> > > +                       /*
+> > > +                        * Calibration value more than 12-bit, but ca=
+libration
+> > > +                        * register is 12-bit. In this case, ths hard=
+ware can
+> > > +                        * still work without calibration, although t=
+he data
+> > > +                        * won't be so accurate.
+> > > +                        */
+> > > +                       dev_warn(dev, "sensor%d is not calibrated.\n"=
+, i);
+> > > +                       continue;
+> > > +               }
+> > > +
+> > > +               offset =3D (i % 2) * 16;
+> > > +               regmap_update_bits(tmdev->regmap,
+> > > +                                  SUN50I_H6_THS_TEMP_CALIB + (i / 2 =
+* 4),
+> > > +                                  0xfff << offset,
+> > > +                                  cdata << offset);
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> > > +{
+> > > +       struct nvmem_cell *calcell;
+> > > +       struct device *dev =3D tmdev->dev;
+> > > +       u16 *caldata;
+> > > +       size_t callen;
+> > > +       int ret =3D 0;
+> > > +
+> > > +       calcell =3D devm_nvmem_cell_get(dev, "calibration");
+> > > +       if (IS_ERR(calcell)) {
+> > > +               if (PTR_ERR(calcell) =3D=3D -EPROBE_DEFER)
+> > > +                       return -EPROBE_DEFER;
+> > > +               /*
+> > > +                * Even if the external calibration data stored in si=
+d is
+> > > +                * not accessible, the THS hardware can still work, a=
+lthough
+> > > +                * the data won't be so accurate.
+> > > +                *
+> > > +                * The default value of calibration register is 0x800=
+ for
+> > > +                * every sensor, and the calibration value is usually=
+ 0x7xx
+> > > +                * or 0x8xx, so they won't be away from the default v=
+alue
+> > > +                * for a lot.
+> > > +                *
+> > > +                * So here we do not return error if the calibartion =
+data is
+> > > +                * not available, except the probe needs deferring.
+> > > +                */
+> > > +               goto out;
+> > > +       }
+> > > +
+> > > +       caldata =3D nvmem_cell_read(calcell, &callen);
+> > > +       if (IS_ERR(caldata)) {
+> > > +               ret =3D PTR_ERR(caldata);
+> > > +               goto out;
+> > > +       }
+> > > +
+> > > +       tmdev->chip->calibrate(tmdev, caldata, callen);
+> > > +
+> > > +       kfree(caldata);
+> > > +out:
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_resource_init(struct ths_device *tmdev)
+> > > +{
+> > > +       struct device *dev =3D tmdev->dev;
+> > > +       struct platform_device *pdev =3D to_platform_device(dev);
+> > > +       struct resource *mem;
+> > > +       void __iomem *base;
+> > > +       int ret;
+> > > +
+> > > +       mem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > > +       base =3D devm_ioremap_resource(dev, mem);
+> > > +       if (IS_ERR(base))
+> > > +               return PTR_ERR(base);
+> > > +
+> > > +       tmdev->regmap =3D devm_regmap_init_mmio(dev, base, &config);
+> > > +       if (IS_ERR(tmdev->regmap))
+> > > +               return PTR_ERR(tmdev->regmap);
+> > > +
+> > > +       if (tmdev->chip->has_bus_clk_reset) {
+> > > +               tmdev->reset =3D devm_reset_control_get(dev, 0);
+> > > +               if (IS_ERR(tmdev->reset))
+> > > +                       return PTR_ERR(tmdev->reset);
+> > > +
+> > > +               tmdev->bus_clk =3D devm_clk_get(&pdev->dev, "bus");
+> > > +               if (IS_ERR(tmdev->bus_clk))
+> > > +                       return PTR_ERR(tmdev->bus_clk);
+> > > +       }
+> > > +
+> > > +       if (tmdev->chip->has_mod_clk) {
+> > > +               tmdev->mod_clk =3D devm_clk_get(&pdev->dev, "mod");
+> > > +               if (IS_ERR(tmdev->mod_clk))
+> > > +                       return PTR_ERR(tmdev->mod_clk);
+> > > +       }
+> > > +
+> > > +       ret =3D reset_control_deassert(tmdev->reset);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       ret =3D clk_prepare_enable(tmdev->bus_clk);
+> > > +       if (ret)
+> > > +               goto assert_reset;
+> > > +
+> > > +       ret =3D clk_set_rate(tmdev->mod_clk, 24000000);
+> > > +       if (ret)
+> > > +               goto bus_disable;
+> > > +
+> > > +       ret =3D clk_prepare_enable(tmdev->mod_clk);
+> > > +       if (ret)
+> > > +               goto bus_disable;
+> > > +
+> > > +       ret =3D sun8i_ths_calibrate(tmdev);
+> > > +       if (ret)
+> > > +               goto mod_disable;
+> > > +
+> > > +       return 0;
+> > > +
+> > > +mod_disable:
+> > > +       clk_disable_unprepare(tmdev->mod_clk);
+> > > +bus_disable:
+> > > +       clk_disable_unprepare(tmdev->bus_clk);
+> > > +assert_reset:
+> > > +       reset_control_assert(tmdev->reset);
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static int sun8i_h3_thermal_init(struct ths_device *tmdev)
+> > > +{
+> > > +       int val;
+> > > +
+> > > +       /* average over 4 samples */
+> > > +       regmap_write(tmdev->regmap, SUN8I_THS_MFC,
+> > > +                    SUN50I_THS_FILTER_EN |
+> > > +                    SUN50I_THS_FILTER_TYPE(1));
+> > > +       /*
+> > > +        * clkin =3D 24MHz
+> > > +        * filter_samples =3D 4
+> > > +        * period =3D 0.25s
+> > > +        *
+> > > +        * x =3D period * clkin / 4096 / filter_samples - 1
+> > > +        *   =3D 365
+> > > +        */
+> > > +       val =3D GENMASK(7 + tmdev->chip->sensor_num, 8);
+> > > +       regmap_write(tmdev->regmap, SUN8I_THS_IC,
+> > > +                    SUN50I_H6_THS_PC_TEMP_PERIOD(365) | val);
+> > > +       /*
+> > > +        * T_acq =3D 20us
+> > > +        * clkin =3D 24MHz
+> > > +        *
+> > > +        * x =3D T_acq * clkin - 1
+> > > +        *   =3D 479
+> > > +        */
+> > > +       regmap_write(tmdev->regmap, SUN8I_THS_CTRL0,
+> > > +                    SUN8I_THS_CTRL0_T_ACQ0(479));
+> > > +       val =3D GENMASK(tmdev->chip->sensor_num - 1, 0);
+> > > +       regmap_write(tmdev->regmap, SUN8I_THS_CTRL2,
+> > > +                    SUN8I_THS_CTRL2_T_ACQ1(479) | val);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Without this undocummented value, the returned temperatures would
+> > > + * be higher than real ones by about 20C.
+> > > + */
+> > > +#define SUN50I_H6_CTRL0_UNK 0x0000002f
+> > > +
+> > > +static int sun50i_h6_thermal_init(struct ths_device *tmdev)
+> > > +{
+> > > +       int val;
+> > > +
+> > > +       /*
+> > > +        * T_acq =3D 20us
+> > > +        * clkin =3D 24MHz
+> > > +        *
+> > > +        * x =3D T_acq * clkin - 1
+> > > +        *   =3D 479
+> > > +        */
+> > > +       regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
+> > > +                    SUN50I_H6_CTRL0_UNK | SUN50I_THS_CTRL0_T_ACQ(479=
+));
+> > > +       /* average over 4 samples */
+> > > +       regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
+> > > +                    SUN50I_THS_FILTER_EN |
+> > > +                    SUN50I_THS_FILTER_TYPE(1));
+> > > +       /*
+> > > +        * clkin =3D 24MHz
+> > > +        * filter_samples =3D 4
+> > > +        * period =3D 0.25s
+> > > +        *
+> > > +        * x =3D period * clkin / 4096 / filter_samples - 1
+> > > +        *   =3D 365
+> > > +        */
+> > > +       regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
+> > > +                    SUN50I_H6_THS_PC_TEMP_PERIOD(365));
+> > > +       /* enable sensor */
+> > > +       val =3D GENMASK(tmdev->chip->sensor_num - 1, 0);
+> > > +       regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
+> > > +       /* thermal data interrupt enable */
+> > > +       val =3D GENMASK(tmdev->chip->sensor_num - 1, 0);
+> > > +       regmap_write(tmdev->regmap, SUN50I_H6_THS_DIC, val);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_register(struct ths_device *tmdev)
+> > > +{
+> > > +       int i;
+> > > +
+> > > +       for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
+> > > +               tmdev->sensor[i].tmdev =3D tmdev;
+> > > +               tmdev->sensor[i].id =3D i;
+> > > +               tmdev->sensor[i].tzd =3D
+> > > +                       devm_thermal_zone_of_sensor_register(tmdev->d=
+ev,
+> > > +                                                            i,
+> > > +                                                            &tmdev->=
+sensor[i],
+> > > +                                                            &ths_ops=
+);
+> > > +               if (IS_ERR(tmdev->sensor[i].tzd))
+> > > +                       return PTR_ERR(tmdev->sensor[i].tzd);
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_probe(struct platform_device *pdev)
+> > > +{
+> > > +       struct ths_device *tmdev;
+> > > +       struct device *dev =3D &pdev->dev;
+> > > +       int ret, irq;
+> > > +
+> > > +       tmdev =3D devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
+> > > +       if (!tmdev)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       tmdev->dev =3D dev;
+> > > +       tmdev->chip =3D of_device_get_match_data(&pdev->dev);
+> > > +       if (!tmdev->chip)
+> > > +               return -EINVAL;
+> > > +
+> > > +       platform_set_drvdata(pdev, tmdev);
+> > > +
+> > > +       ret =3D sun8i_ths_resource_init(tmdev);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       irq =3D platform_get_irq(pdev, 0);
+> > > +       if (irq < 0)
+> > > +               return irq;
+> > > +
+> > > +       ret =3D tmdev->chip->init(tmdev);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       ret =3D sun8i_ths_register(tmdev);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       /*
+> > > +        * Avoid entering the interrupt handler, the thermal device i=
+s not
+> > > +        * registered yet, we deffer the registration of the interrup=
+t to
+> > > +        * the end.
+> > > +        */
+> > > +       ret =3D devm_request_threaded_irq(dev, irq, NULL,
+> > > +                                       sun8i_irq_thread,
+> > > +                                       IRQF_ONESHOT, "ths", tmdev);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static int sun8i_ths_remove(struct platform_device *pdev)
+> > > +{
+> > > +       struct ths_device *tmdev =3D platform_get_drvdata(pdev);
+> > > +
+> > > +       clk_disable_unprepare(tmdev->mod_clk);
+> > > +       clk_disable_unprepare(tmdev->bus_clk);
+> > > +       reset_control_assert(tmdev->reset);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static const struct ths_thermal_chip sun8i_a83t_ths =3D {
+> > > +       .sensor_num =3D 3,
+> > > +       .scale =3D 705,
+> > > +       .offset =3D 191668,
+> > > +       .temp_data_base =3D SUN8I_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun8i_h3_ths_calibrate,
+> > > +       .init =3D sun8i_h3_thermal_init,
+> > > +       .irq_ack =3D sun8i_h3_irq_ack,
+> > > +       .calc_temp =3D sun8i_ths_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct ths_thermal_chip sun8i_h3_ths =3D {
+> > > +       .sensor_num =3D 1,
+> > > +       .scale =3D 1211,
+> > > +       .offset =3D 217000,
+> > > +       .has_mod_clk =3D true,
+> > > +       .has_bus_clk_reset =3D true,
+> > > +       .temp_data_base =3D SUN8I_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun8i_h3_ths_calibrate,
+> > > +       .init =3D sun8i_h3_thermal_init,
+> > > +       .irq_ack =3D sun8i_h3_irq_ack,
+> > > +       .calc_temp =3D sun8i_ths_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct ths_thermal_chip sun8i_r40_ths =3D {
+> > > +       .sensor_num =3D 3,
+> > > +       .offset =3D 251086,
+> > > +       .scale =3D 1130,
+> > > +       .has_mod_clk =3D true,
+> > > +       .has_bus_clk_reset =3D true,
+> > > +       .temp_data_base =3D SUN8I_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun8i_h3_ths_calibrate,
+> > > +       .init =3D sun8i_h3_thermal_init,
+> > > +       .irq_ack =3D sun8i_h3_irq_ack,
+> > > +       .calc_temp =3D sun8i_ths_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct ths_thermal_chip sun50i_a64_ths =3D {
+> > > +       .sensor_num =3D 3,
+> > > +       .offset =3D 253890,
+> > > +       .scale =3D 1170,
+> > > +       .has_mod_clk =3D true,
+> > > +       .has_bus_clk_reset =3D true,
+> > > +       .temp_data_base =3D SUN8I_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun8i_h3_ths_calibrate,
+> > > +       .init =3D sun8i_h3_thermal_init,
+> > > +       .irq_ack =3D sun8i_h3_irq_ack,
+> > > +       .calc_temp =3D sun8i_ths_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct ths_thermal_chip sun50i_h5_ths =3D {
+> > > +       .sensor_num =3D 2,
+> > > +       .has_mod_clk =3D true,
+> > > +       .has_bus_clk_reset =3D true,
+> > > +       .temp_data_base =3D SUN8I_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun8i_h3_ths_calibrate,
+> > > +       .init =3D sun8i_h3_thermal_init,
+> > > +       .irq_ack =3D sun8i_h3_irq_ack,
+> > > +       .calc_temp =3D sun50i_h5_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct ths_thermal_chip sun50i_h6_ths =3D {
+> > > +       .sensor_num =3D 2,
+> > > +       .has_bus_clk_reset =3D true,
+> > > +       .ft_deviation =3D 7000,
+> > > +       .offset =3D 187744,
+> > > +       .scale =3D 672,
+> > > +       .temp_data_base =3D SUN50I_H6_THS_TEMP_DATA,
+> > > +       .calibrate =3D sun50i_h6_ths_calibrate,
+> > > +       .init =3D sun50i_h6_thermal_init,
+> > > +       .irq_ack =3D sun50i_h6_irq_ack,
+> > > +       .calc_temp =3D sun8i_ths_calc_temp,
+> > > +};
+> > > +
+> > > +static const struct of_device_id of_ths_match[] =3D {
+> > > +       { .compatible =3D "allwinner,sun8i-a83t-ths", .data =3D &sun8=
+i_a83t_ths },
+> > > +       { .compatible =3D "allwinner,sun8i-h3-ths", .data =3D &sun8i_=
+h3_ths },
+> > > +       { .compatible =3D "allwinner,sun8i-r40-ths", .data =3D &sun8i=
+_r40_ths },
+> > > +       { .compatible =3D "allwinner,sun50i-a64-ths", .data =3D &sun5=
+0i_a64_ths },
+> > > +       { .compatible =3D "allwinner,sun50i-h5-ths", .data =3D &sun50=
+i_h5_ths },
+> > > +       { .compatible =3D "allwinner,sun50i-h6-ths", .data =3D &sun50=
+i_h6_ths },
+> > > +       { /* sentinel */ },
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, of_ths_match);
+> > > +
+> > > +static struct platform_driver ths_driver =3D {
+> > > +       .probe =3D sun8i_ths_probe,
+> > > +       .remove =3D sun8i_ths_remove,
+> > > +       .driver =3D {
+> > > +               .name =3D "sun8i-thermal",
+> > > +               .of_match_table =3D of_ths_match,
+> > > +       },
+> > > +};
+> > > +module_platform_driver(ths_driver);
+> > > +
+> > > +MODULE_DESCRIPTION("Thermal sensor driver for Allwinner SOC");
+> > > +MODULE_LICENSE("GPL v2");
+> > > --
+> > > 2.24.0
 > > >
-> > > First of all, ensure that the dpm_list ordering is what it should be =
-on the
-> > > system/platform in question.  That can be done with the help of devic=
-e links.
 > >
-> > I don't think we have device links for everything, but the deferred
-> > probe code should take care of ordering the dpm_list correctly because
-> > we do handle deferred probe properly in all cases.
-> >
-> > Also, the dpm_list ordering isn't very critical in this case. If the
-> > devices are allowed to runtime suspend during system sleep, the
-> > subsystem sleep helper will put them into runtime suspend at the correct
-> > time. This is propagated all the way through the display pipeline and
-> > that order is ensured by the subsystem helpers.
->=20
-> You are still not saying what happens if user space doesn't allow
-> PM-runtime to suspend the devices (by writing "on" to their "control"
-> files).
-
-I was suggesting that we prohibit that, which you clearly didn't like.
-You didn't give any reasons for why you think this is a bad idea, but
-the alternative would be to implement some driver-specific equivalent of
-that.
-
-At that point, does it really matter whether the user is prevented from
-prohibiting suspend via runtime PM or some non-standard mechanism with a
-different name but equivalent functionality?
-
-The fact is that in order to properly use the device we need to be able
-to suspend it. We need to do this to switch video modes anyway. There's
-simply no way to make the display work reliably without it going into
-suspend and resuming. Whether we call this runtime suspend/resume or
-something driver-specific is really just an implementation detail. The
-consequences for userspace are exactly the same.
-
-So if you think that allowing userspace to prohibit runtime suspend is
-imperative always, then I don't have much choice but to do it without
-runtime PM.
-
-> > > In addition, make sure that the devices needed to suspend other devic=
-es are
-> > > suspended in the noirq phase of system-wide suspend and resumed in the
-> > > noirq phase of system-wide resume.  Or at least all of the other devi=
-ces
-> > > need to be suspended before them and resumed after them.
-> >
-> > We're fine on this front as well. We have run into such issues in the
-> > past, but I don't think there are any such issue left at the moment. I
-> > do have one pending fix for I2C suspend/resume which fixes an issue
-> > where some pinmuxing changes needed to get the HDMI DDC channel to work
-> > were not getting applied during resume.
-> >
-> > That I2C issue is related to this, I think. What I'm seeing is that when
-> > the system goes to sleep, the pinmux looses its programming at a
-> > hardware level, but the I2C driver doesn't know about it because it does
-> > not get runtime suspended.
->=20
-> Well, no, that's not the reason.  The real reason is that the handling
-> of that device during system-wide suspend does not follow the rules
-> followed by PM-runtime for it.
->=20
-> Switching system-wide PM over to PM-runtime to address that is not
-> going to work, because PM-runtime is not mandatory and system-wide PM
-> is.
->=20
-> > At runtime suspend it would switch the pinmux
-> > state to "idle" which would then match the system suspend state. Upon
-> > runtime resume it sets the "default" pinmux state, which will then
-> > restore the register programming.
->=20
-> So this logic needs to be implemented in the system-wide suspend flow as =
-well.
-
-I suppose one other alternative would be to use universal PM ops for
-this case. In this case we actually do want the same behaviour at system
-sleep than we do for runtime PM.
-
-> > In the current case where runtime suspend/resume is prohibited during
->=20
-> Runtime suspend is, runtime resume isn't until the "late" suspend phase.
->=20
-> > system sleep, upon resume the I2C driver will assume that the pinmux
-> > state is still "default" and it won't reapply the state (it's actually
-> > the pinmux subsystem that makes this decision) and causes HDMI DDC
-> > transactions to time out.
->=20
-> So this is a bug in the system-wide suspend/resume flow that needs to
-> be addressed, but not by switching it over to PM-runtime.
->=20
-> > One simple fix for that is to use pm_runtime_force_suspend() and
-> > pm_runtime_force_resume() as system suspend/resume callbacks to make
-> > sure the I2C controller is runtime suspended/resumed during system
-> > sleep.
-> >
-> > Note that forcing runtime suspend/resume this way is suboptimal in the
-> > DRM/KMS case because the suspend/resume happens disconnected from the
-> > subsystem suspend/resume callbacks, which is not desired as that breaks
-> > some of the assumptions in those callbacks.
->=20
-> So there needs to be another way.
->=20
-> Have you looked at DPM_FLAG_SMART_SUSPEND?
-
-I'll look at that. It seems like it could do the trick for the I2C
-problem I'm seeing.
-
-Generally, though, what I keep noticing here is that for many devices
-there is some commonality between runtime PM and system sleep. Actually
-for some devices they are exactly the same, which I guess is one of the
-reasons why I had hoped we could somehow simplify things by having
-runtime PM on one hand and then if system sleep doesn't need anything
-other than what runtime PM already does, we could just do runtime PM all
-the time. That way we could avoid all the duplication. I guess that's
-mostly what universal PM ops are about. I'm not exactly sure how that
-would work during system resume, though. Would the PM core not invoke
-the same callback twice, once for system resume and then again (after
-allowing runtime PM again) for resume runtime?
-
-> > > These two things should allow you to cover the vast majority of cases=
- if
-> > > not all of them without messing up with the rules.
-> >
-> > One alternative that I had thought about was to just ditch the runtime
-> > PM callbacks for this. However, there's one corner case where this may
-> > break. On early Tegra generations, the two display controllers are
-> > "coupled" in that the second one doesn't work if the first one is
-> > disabled. We describe that using a device link from the second to the
-> > first controller. This causes the first controller to be automatically
-> > be runtime resumed when the second controller is used. This only works
-> > via runtime PM, so if I don't use runtime PM I'd have to add special
-> > handling for that case.
->=20
-> Runtime resume during system-wide suspend and resume is basically fine
-> unless you try to do it in the "late" suspend phase or later, but that
-> limitation is kind of artificial.  [I was talking about that at the
-> LPC this year.]  It basically cannot be carried out in the part of
-> system-wide suspend after the core regards the device and its parent
-> etc as "suspended", but the definition of that may be adjusted IMO.
->=20
-> And using PM-runtime resume during system-wide resume may be fine too,
-> basically (as long as the ordering of that is not lead to any kind of
-> loop dependencies).
->=20
-> On the other hand, there is *zero* need for runtime suspend during
-> system-wide transitions and it is known problematic.
-
-I don't quite understand this. I don't see a need to runtime resume
-during suspend, because you're actually trying to suspend devices. Most
-of the time at least. I get that in some cases you may need to resume
-devices in order to help put other devices (that depend on them) into
-suspend, but most of the time the goal is to set devices into some low
-power state so that when the system is asleep you consume less power
-than in the active state. This is more or less the same thing that you
-want with runtime PM as well, isn't it?
-
-So why do you say that there's no need for runtime suspend during system
-suspend? I always figured that runtime suspend was sort of a soft system
-suspend in that system suspend may be more aggressive, and mostly a
-superset of runtime suspend. So in pseudocode it would be roughly:
-
-	runtime_suspend(device)
-	{
-		set_low_power_mode(device);
-	}
-
-	system_suspend(device)
-	{
-		save_context(device);
-		runtime_suspend(device);
-		power_off(device);
-	}
-
-And for resume you could basically just call these in reverse order:
-
-	runtime_resume(device)
-	{
-		set_normal_mode(device);
-	}
-
-	system_resume(device)
-	{
-		power_on(device);
-		runtime_resume(device);
-		restore_context(device);
-	}
-
-I understand that this may not be true for all devices. However, in some
-cases we may even want to go further and do at runtime_suspend() what
-we do in system_suspend() because the impact may be low enough and the
-power savings worth it.
-
-> > Actually, there's another problem as well. Most of these devices use
-> > generic PM domains to power on/off the SoC partitions that they're in.
-> > If I side-step runtime PM, then I'd have to somehow find a way to
-> > explicitly control the PM domains.
->=20
-> That's a problem with genpd, I'd say.
-
-Fair enough. So far we've tried to implement things such that they work
-within the existing infrastructure, but if runtime PM turns out not to
-be what we actually need, maybe we need to just move to something
-different.
-
-> > Another alternative would be to have a kind of hybrid approach where I
-> > leave runtime PM calls in the drivers, but disconnect the runtime PM
-> > callback implementations from that. That would at least fix the issue
-> > with the generic PM domains.
-> >
-> > However, it would not fix the problem with coupled display controllers
-> > because empty runtime PM callbacks wouldn't actually power up the first
-> > display controller when it is needed by the second controller. I would
-> > have to add infrastructure that basically duplicates some of runtime PM
-> > to fix that.
-> >
-> > So the bottom line is that runtime PM is still the best solution for
-> > this problem. It works really nice and is very consistent.
-> >
-> > Do you think adding better documentation to this new flag and the
-> > accessors would help remove your concerns about this?
->=20
-> No, it wouldn't.
->=20
-> Also your arguments are mostly about PM-runtime resume, which is a
-> different story.
-
-What makes you say that? I'm equally concerned about runtime suspend
-because runtime resume alone is not good enough to resume a device that
-was never suspended. Runtime suspend will typically assert a reset for
-these devices and runtime resume will then deassert the reset. This is
-necessary to get the devices into a proper working state.
-
-Thierry
-
---5L6AZ1aJH5mDrqCQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl3hBLEACgkQ3SOs138+
-s6FSMxAAvYOyopKcvC3xHOb8GesxTxwkRbVSfuwfgRXLX07KiiGswVaHmt9Fv6L1
-UCIO0E9NLM4IAWQCVvjefZUj5/2SZvLgsC5anKVfZ6ZueSoGrkOLxBdR0195eIJd
-6LptsqkQ8jH3fMsn/8q/EmreKJiGRI0ME/BeEVIkfrtTFaSkynr9RncvLGele4EW
-SJWYQqT9feOpqHsO8gQdGcjB5Zh2JFOgeAfNa0WFM96isqoOnqLRQeriLNCyzJJt
-mP0IBLSoRiaBJOG91dGtrZGMWta/Z5JWtXcbF7CGgIwdTIUEemYOAWau/0bD3+2O
-sYbugWIy7XpbRSm7zcaqv5LiA2eFiQL6PE5XXVl8wi4L00Ft+qksI9HqxcJPwZou
-nRt4a39GChDwUAzH8yA4CtiyHH4EPnyOVRj7ejikxffhC2dfN+he/dQcxtQwUMnW
-gEoONIGeO+53VUUBil4nr7RldZECDK8vATHjlj4e7Uvlkj7lvKGM0z49sdSK/Ln5
-MKiHyPvWLqDrQ/xJWcUC/WdQTClkRZ/dwPTn2+Mix+/FWaVDF4jsT+CKA5+p2bc4
-MqK92SJPjqL4VzzwK1fNmchdaWRlXjlc1Bh1j6nwl6juVA93M+H1QcqI5zonllR+
-b3HwkOqr95QHao40L63KkOW23MX7isUOX3mt+s3gIhI1hyoWi8E=
-=ywG1
------END PGP SIGNATURE-----
-
---5L6AZ1aJH5mDrqCQ--
+> > Thx,
+> > Yangtao
