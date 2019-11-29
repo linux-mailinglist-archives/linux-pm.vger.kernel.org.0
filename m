@@ -2,28 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A75110D4D9
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 12:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ED710D4F5
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Nov 2019 12:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbfK2Lao (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Nov 2019 06:30:44 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44824 "EHLO
+        id S1726651AbfK2Le5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Nov 2019 06:34:57 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42559 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbfK2Lao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 06:30:44 -0500
+        with ESMTP id S1726215AbfK2Le5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Nov 2019 06:34:57 -0500
 Received: from 79.184.255.242.ipv4.supernova.orange.pl (79.184.255.242) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id edf759f14a6c300f; Fri, 29 Nov 2019 12:30:42 +0100
+ id 17df79a2e6cc631c; Fri, 29 Nov 2019 12:34:54 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH] cpuidle: minor Kconfig help text fixes
-Date:   Fri, 29 Nov 2019 12:30:42 +0100
-Message-ID: <13585617.HsJz9ZEzGy@kreacher>
-In-Reply-To: <b0e9d1df-8bb9-9eee-f433-c7a8e8269e06@infradead.org>
-References: <b0e9d1df-8bb9-9eee-f433-c7a8e8269e06@infradead.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v4 0/4] PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+Date:   Fri, 29 Nov 2019 12:34:54 +0100
+Message-ID: <3839981.6bSit4Rgby@kreacher>
+In-Reply-To: <cover.1574781196.git.leonard.crestez@nxp.com>
+References: <cover.1574781196.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,50 +39,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, November 28, 2019 11:38:03 PM CET Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
+On Tuesday, November 26, 2019 4:17:09 PM CET Leonard Crestez wrote:
+> Support for frequency limits in dev_pm_qos was removed when cpufreq was
+> switched to freq_qos, this series attempts to restore it by
+> reimplementing on top of freq_qos.
 > 
-> End sentences in help text with a period (aka full stop).
+> Discussion about removal is here:
+> https://lore.kernel.org/linux-pm/VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com/T/#u
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
+> The cpufreq core switched away because it needs contraints at the level
+> of a "cpufreq_policy" which cover multiple cpus so dev_pm_qos coupling
+> to struct device was not useful. Cpufreq could only use dev_pm_qos by
+> implementing an additional layer of aggregation anyway.
+> 
+> However in the devfreq subsystem scaling is always performed on a per-device
+> basis so dev_pm_qos is a very good match. Support for dev_pm_qos in devfreq
+> core is here (latest version, no dependencies outside this series):
+> 
+> 	https://patchwork.kernel.org/cover/11252409/
+> 
+> That series is RFC mostly because it needs these PM core patches.
+> Earlier versions got entangled in some locking cleanups but those are
+> not strictly necessary to get dev_pm_qos functionality.
+> 
+> In theory if freq_qos is extended to handle conflicting min/max values then
+> this sharing would be valuable. Right now freq_qos just ties two unrelated
+> pm_qos aggregations for min and max freq.
+> 
 > ---
->  drivers/cpuidle/Kconfig.arm |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> This is implemented by embeding a freq_qos_request inside dev_pm_qos_request:
+> the data field was already an union in order to deal with flag requests.
 > 
-> --- lnx-54.orig/drivers/cpuidle/Kconfig.arm
-> +++ lnx-54/drivers/cpuidle/Kconfig.arm
-> @@ -65,21 +65,21 @@ config ARM_U8500_CPUIDLE
->  	bool "Cpu Idle Driver for the ST-E u8500 processors"
->  	depends on ARCH_U8500 && !ARM64
->  	help
-> -	  Select this to enable cpuidle for ST-E u8500 processors
-> +	  Select this to enable cpuidle for ST-E u8500 processors.
->  
->  config ARM_AT91_CPUIDLE
->  	bool "Cpu Idle Driver for the AT91 processors"
->  	default y
->  	depends on ARCH_AT91 && !ARM64
->  	help
-> -	  Select this to enable cpuidle for AT91 processors
-> +	  Select this to enable cpuidle for AT91 processors.
->  
->  config ARM_EXYNOS_CPUIDLE
->  	bool "Cpu Idle Driver for the Exynos processors"
->  	depends on ARCH_EXYNOS && !ARM64
->  	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
->  	help
-> -	  Select this to enable cpuidle for Exynos processors
-> +	  Select this to enable cpuidle for Exynos processors.
->  
->  config ARM_MVEBU_V7_CPUIDLE
->  	bool "CPU Idle Driver for mvebu v7 family processors"
+> The internal freq_qos_apply is exported so that it can be called from
+> dev_pm_qos apply_constraints.
+> 
+> The dev_pm_qos_constraints_destroy function has no obvious equivalent in
+> freq_qos and the whole approach of "removing requests" is somewhat dubios:
+> request objects should be owned by consumers and the list of qos requests
+> will most likely be empty when the target device is deleted. Series follows
+> current pattern for dev_pm_qos.
+> 
+> First two patches can be applied separately.
+> 
+> Changes since v3:
+> * Fix s/QOS/QoS in patch 2 title
+> * Improves comments in kunit test
+> * Fix assertions after freq_qos_remove_request
+> * Remove (c) from NXP copyright header
+> * Wrap long lines in qos.c to be under 80 chars. This fixes checkpatch but the
+> rule is already broken by code in the files.
+> * Collect reviews
+> Link to v3: https://patchwork.kernel.org/cover/11260627/
+> 
+> Changes since v2:
+> * #define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE FREQ_QOS_MAX_DEFAULT_VALUE
+> * #define FREQ_QOS_MAX_DEFAULT_VALUE S32_MAX (in new patch)
+> * Add initial kunit test for freq_qos, validating the MAX_DEFAULT_VALUE found
+> by Matthias and another recent fix. Testing this should be easier!
+> Link to v2: https://patchwork.kernel.org/cover/11250413/
+> 
+> Changes since v1:
+> * Don't rename or EXPORT_SYMBOL_GPL the freq_qos_apply function; just
+> drop the static marker.
+> Link to v1: https://patchwork.kernel.org/cover/11212887/
+> 
+> Leonard Crestez (4):
+>   PM / QoS: Initial kunit test
+>   PM / QoS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
+>   PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+>   PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+> 
+>  drivers/base/Kconfig          |   4 ++
+>  drivers/base/power/Makefile   |   1 +
+>  drivers/base/power/qos-test.c | 117 ++++++++++++++++++++++++++++++++++
+>  drivers/base/power/qos.c      |  73 +++++++++++++++++++--
+>  include/linux/pm_qos.h        |  86 ++++++++++++++-----------
+>  kernel/power/qos.c            |   4 +-
+>  6 files changed, 242 insertions(+), 43 deletions(-)
+>  create mode 100644 drivers/base/power/qos-test.c
+> 
 > 
 
-Applied as 5.5 material, thanks!
+I have applied the whole series as 5.5 material, but I have reordered the fix
+(patch [2/4]) before the rest of it and marked it for -stable.
+
+Thanks!
 
 
 
