@@ -2,114 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D5810EFCA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 20:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D055210F12F
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 20:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727969AbfLBTGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 14:06:35 -0500
-Received: from mga03.intel.com ([134.134.136.65]:53014 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727580AbfLBTGf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Dec 2019 14:06:35 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Dec 2019 11:06:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,270,1571727600"; 
-   d="scan'208";a="213149061"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2019 11:06:33 -0800
-Date:   Mon, 2 Dec 2019 11:06:33 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v4 01/19] x86/msr-index: Clean up bit defines for
- IA32_FEATURE_CONTROL MSR
-Message-ID: <20191202190633.GG4063@linux.intel.com>
-References: <20191128014016.4389-2-sean.j.christopherson@intel.com>
- <201912010347.7tMb4moN%lkp@intel.com>
+        id S1727686AbfLBT7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 14:59:39 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39763 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727963AbfLBT7j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 14:59:39 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 77so661406oty.6;
+        Mon, 02 Dec 2019 11:59:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+7jfpF5EjP9+/bmFBnU6GGWa3nlxlWS/1/GfDBTRGdM=;
+        b=Dg5dpbmCUL5SrXdkfhx33mCy83248kmMvbj99odnFKFsBlsFYDdNzMlXZyrQDeA7G6
+         ocpTjuKAAziMDV5bFfB/eikLzpjThVey1b+S6CKbCiFNPFV+xA2BuTzk09FqQMzFpmVa
+         q0TjUMw989mbHbc/7o1geqNUfFGAjb70u+SFrqHuiWQTpUI0VD8TpyBuO/K/630UiuGu
+         +jPp3Wfxmj4gI6lucZVgHoFhdb10gQPl6yDkna996dipZWlCzcQzT32PlJXaG1u7UspA
+         JFzAA6o/OjylQ4RzoNquyMBbFmgMgGq2gSbNdTJL6SGxpNM0z2FwqQtYsHiqZ1ZMP318
+         0TsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+7jfpF5EjP9+/bmFBnU6GGWa3nlxlWS/1/GfDBTRGdM=;
+        b=QtbLqmufyfBAR2CzYc8uiKdoyufaQ/DOIjKojBVTx9pyVGiQDs8bfOfcW7c1x0DC7r
+         M9yI2qeK7fE1XYj7Ym0oUMNBr15RXYj2jtNgzepNfl8VgiNaONhbiSd/ig1qTGARYVQI
+         aZdyCal42Q1vYRPrrcbeya1X/c9py/B+EGzTJZp2dGsNEerLgZpVRw65ca5+8XZgss7l
+         WGdN9uWufuXrjjLY8hVWv1e39JHaJeZ38aGaBj9X0kTDubbQI+rQQG3WCm30Gt4z7+u6
+         4hrG7X7r2egrmJd/fPkDLppsxZqmAWbgI0WEo026nZ4AkaWr5afVjHtXg5UGWCaLWC4B
+         B55Q==
+X-Gm-Message-State: APjAAAXGuk5MSif6ibc69/MGdX4SYf6M7TK5NAG73PDxzd5QnFYtUTjc
+        4gJWBjdRb9tEj3bdwy4eaIS4VZ952nqdqArsoV2r5KMh
+X-Google-Smtp-Source: APXvYqwzj89Wpxotdt42O6ehJgO4oZi9x4+OkqAxj/3FyDXsWuTEi9VbUfbRPUnrjJStqrGlo10wYBfGOADza89y8vA=
+X-Received: by 2002:a05:6830:2116:: with SMTP id i22mr648274otc.0.1575316778439;
+ Mon, 02 Dec 2019 11:59:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201912010347.7tMb4moN%lkp@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <20190919151137.9960-1-TheSven73@gmail.com> <20190919190208.13648-1-TheSven73@gmail.com>
+ <20191202184349.GC734264@kroah.com>
+In-Reply-To: <20191202184349.GC734264@kroah.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Mon, 2 Dec 2019 14:59:26 -0500
+Message-ID: <CAGngYiVPbS9zNXPLGqWSs_=b6QbsX97u5bd=5GUMwtGedZ=fqQ@mail.gmail.com>
+Subject: Re: [PATCH 4.4 v1] power: supply: ltc2941-battery-gauge: fix use-after-free
+To:     Greg KH <greg@kroah.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Dec 01, 2019 at 04:52:53AM +0800, kbuild test robot wrote:
-> Hi Sean,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on tip/auto-latest]
-> [also build test ERROR on next-20191129]
-> [cannot apply to tip/x86/core kvm/linux-next v5.4]
-> [if your patch is applied to the wrong git tree, please drop us a note to help
-> improve the system. BTW, we also suggest to use '--base' option to specify the
-> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-cpu-Clean-up-handling-of-VMX-features/20191128-094556
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git e445033e58108a9891abfbc0dea90b066a75e4a9
-> config: x86_64-randconfig-s0-20191128 (attached as .config)
-> compiler: gcc-7 (Debian 7.4.0-14) 7.4.0
-> reproduce:
->         # save the attached .config to linux build tree
->         make ARCH=x86_64 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/x86/include/asm/processor.h:22:0,
->                     from arch/x86/include/asm/cpufeature.h:5,
->                     from arch/x86/include/asm/thread_info.h:53,
->                     from include/linux/thread_info.h:38,
->                     from arch/x86/include/asm/preempt.h:7,
->                     from include/linux/preempt.h:78,
->                     from include/linux/percpu.h:6,
->                     from include/linux/cpuidle.h:14,
->                     from drivers/idle/intel_idle.c:45:
->    drivers/idle/intel_idle.c: In function 'sklh_idle_state_table_update':
-> >> drivers/idle/intel_idle.c:1287:10: error: 'MSR_IA32_FEATURE_CONTROL' undeclared (first use in this function); did you mean 'MSR_MISC_FEATURE_CONTROL'?
->       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
->              ^
+On Mon, Dec 2, 2019 at 1:43 PM Greg KH <greg@kroah.com> wrote:
+>
+> What is the git commit id of this patch in Linus's tree?
 
-Argh, flat out missed this when doing search and replace.
+As far as I know, the mainline version of this patch is still queued up
+in Sebastian's 'fixes' branch, and has not made it out to Linus's
+tree yet.
 
->    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
->      ((val) = native_read_msr((msr)))
->                                ^~~
->    drivers/idle/intel_idle.c:1287:10: note: each undeclared identifier is reported only once for each function it appears in
->       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
->              ^
->    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
->      ((val) = native_read_msr((msr)))
->                                ^~~
-> 
-> vim +1287 drivers/idle/intel_idle.c
+https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/log/?h=fixes
