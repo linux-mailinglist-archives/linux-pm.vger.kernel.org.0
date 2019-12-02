@@ -2,37 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ED510EDD0
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 18:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D488110EDD4
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 18:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbfLBRFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 12:05:36 -0500
-Received: from mx3.freesources.org ([195.34.172.217]:36330 "EHLO
+        id S1727810AbfLBRGB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 12:06:01 -0500
+Received: from mx3.freesources.org ([195.34.172.217]:36340 "EHLO
         mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbfLBRFg (ORCPT
-        <rfc822;linux-pm@vger.kernel.ORG>); Mon, 2 Dec 2019 12:05:36 -0500
+        with ESMTP id S1727601AbfLBRGB (ORCPT
+        <rfc822;linux-pm@vger.kernel.ORG>); Mon, 2 Dec 2019 12:06:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=freesources.org; s=20160526; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Cc:To:Subject:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=imtAPl4o+FKPOJSi1wuV2NOHPm5W2xW9sOmyCAhb8kI=; b=WibdspO+TC0pJ+/I8+vhuegLVz
-        sX9zkeo3pLOeSWp6z2B46Iu5wU9ES0Xqr3FdPih6+OLgazi72l6f2o4nZtwPG9QwuWsSiYP+sfTa8
-        3wmrf6hL/9Un6pgd/U+gZlZo+liayQO9zMxV31uY1WhpKTggH5Z1qoTiUO9fmXPZtFNs=;
+        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QU1iTSSKgbmtI+liNtQJ12JM5w/B52uJWxckAp8Wu3o=; b=K0PNPiQYMBVpHkI0m5xGF9P1U3
+        U1B7cVMk4LmVTyMqa82ALps7FW4Rj+6KqVTSv+suP/J9iYdH5r1U/2WqNSUKCDzahJ7v91nbH021A
+        Ma8lOjN3VrfNVmV6hUuXUWz9ow1wIRLb6rgonx2WHDzLYj/sIXRl3fJsZahsRIRxh4Gg=;
 Received: from anon-35-121.vpn.ipredator.se ([46.246.35.121])
         by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <jonas@freesources.org>)
-        id 1ibp8c-0008Bx-17; Mon, 02 Dec 2019 17:05:30 +0000
+        id 1ibp94-0008Cg-D5; Mon, 02 Dec 2019 17:05:58 +0000
 From:   Jonas Meurer <jonas@freesources.org>
-Subject: [PATCH 0/2] PM: Add a switch for disabling/enabling sync() before
+Subject: Re: [RFC PATCH] PM: Add a switch for disabling/enabling sync() before
  suspend
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+To:     Yannik Sembritzki <yannik@sembritzki.me>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>,
-        Yannik Sembritzki <yannik@sembritzki.me>
+        Tim Dittler <tim.dittler@systemli.org>
+References: <56b2db6a-2f76-a6d3-662a-819cfb18d424@freesources.org>
+ <2847488.TR0R5COpHM@kreacher>
+ <063b2b9e-19f1-e67a-1d54-b1a813364bb8@freesources.org>
+ <3858a5b3-7e62-977e-0292-964c4dcfef5a@freesources.org>
+ <CAJZ5v0gNAONVcfvrUu4DBPBo=YzWW2NK-3774_Hv__p2JWmPgA@mail.gmail.com>
+ <9b8ac136-bd5b-aa4b-fa7f-109e4a61dd28@freesources.org>
+ <d9ac5225-51fb-8207-5661-64089ad98a4e@freesources.org>
+ <355b0fb4-47da-3ab8-bc65-5191cd8882d6@freesources.org>
+ <86d9ea4b-5f51-4c39-6b6e-6c19b5559da1@sembritzki.me>
 Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  mQINBEqFXAEBEAC+7gfLht8lDqGH1EPYoctDHvWQ4nk60UFDLfjqHmBGReL/9C7CyxYaqgY4
  V1/DXPCmsO5PvHMSi6VPn3B81alPKMT6syQhxDN6CXETh/mrxRbTPyQVSKYdD/BvA94vgwfy
@@ -117,11 +126,12 @@ Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
  ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
  tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
  2SCIHpzHfm/mpRL2
-Message-ID: <1ee5b9ef-f30e-3fde-2325-ba516a96ced5@freesources.org>
-Date:   Mon, 2 Dec 2019 18:05:27 +0100
+Message-ID: <5bf31615-7319-69fe-92f5-ece149f9d887@freesources.org>
+Date:   Mon, 2 Dec 2019 18:05:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <86d9ea4b-5f51-4c39-6b6e-6c19b5559da1@sembritzki.me>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -130,23 +140,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Hi Yannik,
 
-Introduce a new run-time sysfs switch to disable/enable sync() before
-system suspend. This is useful to avoid races and deadlocks if block
-devices have been suspended before, e.g. by 'cryptsetup luksSuspend'.
+Yannik Sembritzki:
+> thanks for the patch, it looks promising to me.
+> 
+> I'd suggest you send it to lkml for additional feedback.
 
-The second patch changes the behaviour of build-time switch
-'CONFIG_SUSPEND_SKIP_SYNC' accordingly, using the build-time switch value
-as default for our new run-time switch '/sys/power/sync_on_suspend'.
+Thanks a lot for your feedback. I have done so now.
 
-Jonas Meurer (2):
-  PM: Add a switch for disabling/enabling sync() before suspend
-  PM: CONFIG_SUSPEND_SKIP_SYNC sets default for '/sys/power/sync_on_suspend'
-
- Documentation/ABI/testing/sysfs-power | 15 +++++++++++++++
- include/linux/suspend.h               |  2 ++
- kernel/power/Kconfig                  |  5 ++++-
- kernel/power/main.c                   | 33 +++++++++++++++++++++++++++++++++
- kernel/power/suspend.c                |  2 +-
- 5 files changed, 55 insertions(+), 2 deletions(-)
+Cheers
+ jonas
