@@ -2,113 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AC710EF74
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 19:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D5810EFCA
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 20:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbfLBSny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 13:43:54 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:49879 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727783AbfLBSny (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 13:43:54 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C9E4722331;
-        Mon,  2 Dec 2019 13:43:52 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 02 Dec 2019 13:43:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=KF+LOK7Oz3IVzefSc8lu98RYXJR
-        KzI5ErcAOrK2J5A0=; b=XrAoYtFk4dG1UaDZH5jbx+GA56OEGL2NHVPSlRXZgnD
-        HId39wMAic68P1ivRJjuHAOOey8v/L4jWlfj9I6Ers/8O7AwkqtbrCC5Q6p2Ouq3
-        S+5oT8HNtJBVT6RkuJgz1lQZ26Gl55D4TEflCFDPjjW0eAL6+q4nLpXVubHZjSwe
-        zZw5Q6v3ZSJnW0hyB391D6Gk52F7bbm93xu+/Yukvlgdx/4ybqqwWQ5PSHF19L/x
-        KAwtoT7KBv74E/PZOeEyIkNIPwix08JdijA9097ejO0WwpJquMk/rnWmiLaJmFrG
-        PFi+/Y14aUtkmYSu/myyRHMFpQSHjOzs+pKqa20r+1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=KF+LOK
-        7Oz3IVzefSc8lu98RYXJRKzI5ErcAOrK2J5A0=; b=gPhBsGiCQuJIGYHEqB348u
-        ClkZMj4FFUhFB7Zz+fA3ZgUL5hi8x01D02A9fIyYQwOpGDH6JUK9USpiDXiq7/+k
-        8qK31k9cc7SqKM8tAQaLYYJjso5MdkvDpXAGkPDEEdlFeIA8XfT3i9WAXgVdi2kE
-        5GoJ40Kb1+9GejtvA5EIP4SO5uvNz1ajvRhCbesz+6YeftW6IFAdfr0mFZ7mpLGa
-        QlK3/JNuBfdRbYdcxfXmjh/ID6IMkNJkY5LmVIQmYsVV/MmaQuy5cR05A8seB+c0
-        opoBxSoXM84m28HEzf536umzhywY+xb8D/qBpAK1kvJKXWJdYlzjHXm633WoTXCQ
-        ==
-X-ME-Sender: <xms:aFvlXelWZxd61iy3KT_1RkcceG7Yl9QLHtsVr5bcwpyoHNy4eQmYdA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudejhedguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
-    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
-    ucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:aFvlXWp7_e7d_6iPiMoCOcJGmMdNjbhX8q3onbgoGwA0OKfunxVL4w>
-    <xmx:aFvlXbMIz9aDQurGmZGRZPqKv3OYOcPwiOimqbINK8vZwJ9sCVmyPg>
-    <xmx:aFvlXYayhCh3RGmiI7LI_jZkDywtnzqfy1VDHOM-3AegPkCA67ee-A>
-    <xmx:aFvlXQyflayerK7ZZ62SchT0sltSq8ObvTINqsgCSAgROLrnvX4RtA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 5B60730600BD;
-        Mon,  2 Dec 2019 13:43:52 -0500 (EST)
-Date:   Mon, 2 Dec 2019 19:43:49 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Sven Van Asbroeck <thesven73@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 4.4 v1] power: supply: ltc2941-battery-gauge: fix
- use-after-free
-Message-ID: <20191202184349.GC734264@kroah.com>
-References: <20190919151137.9960-1-TheSven73@gmail.com>
- <20190919190208.13648-1-TheSven73@gmail.com>
+        id S1727969AbfLBTGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 14:06:35 -0500
+Received: from mga03.intel.com ([134.134.136.65]:53014 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727580AbfLBTGf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Dec 2019 14:06:35 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Dec 2019 11:06:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,270,1571727600"; 
+   d="scan'208";a="213149061"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2019 11:06:33 -0800
+Date:   Mon, 2 Dec 2019 11:06:33 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v4 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191202190633.GG4063@linux.intel.com>
+References: <20191128014016.4389-2-sean.j.christopherson@intel.com>
+ <201912010347.7tMb4moN%lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190919190208.13648-1-TheSven73@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <201912010347.7tMb4moN%lkp@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 03:02:08PM -0400, Sven Van Asbroeck wrote:
-> This driver's remove path calls cancel_delayed_work().
-> However, that function does not wait until the work function
-> finishes. This could mean that the work function is still
-> running after the driver's remove function has finished,
-> which would result in a use-after-free.
+On Sun, Dec 01, 2019 at 04:52:53AM +0800, kbuild test robot wrote:
+> Hi Sean,
 > 
-> Fix by calling cancel_delayed_work_sync(), which ensures that
-> that the work is properly cancelled, no longer running, and
-> unable to re-schedule itself.
+> I love your patch! Yet something to improve:
 > 
-> This issue was detected with the help of Coccinelle.
+> [auto build test ERROR on tip/auto-latest]
+> [also build test ERROR on next-20191129]
+> [cannot apply to tip/x86/core kvm/linux-next v5.4]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 > 
-> Cc: stable <stable@vger.kernel.org>
-> Signed-off-by: Sven Van Asbroeck <TheSven73@gmail.com>
-> ---
->  drivers/power/ltc2941-battery-gauge.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-cpu-Clean-up-handling-of-VMX-features/20191128-094556
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git e445033e58108a9891abfbc0dea90b066a75e4a9
+> config: x86_64-randconfig-s0-20191128 (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-14) 7.4.0
+> reproduce:
+>         # save the attached .config to linux build tree
+>         make ARCH=x86_64 
 > 
-> diff --git a/drivers/power/ltc2941-battery-gauge.c b/drivers/power/ltc2941-battery-gauge.c
-> index da49436176cd..30a9014b2f95 100644
-> --- a/drivers/power/ltc2941-battery-gauge.c
-> +++ b/drivers/power/ltc2941-battery-gauge.c
-> @@ -449,7 +449,7 @@ static int ltc294x_i2c_remove(struct i2c_client *client)
->  {
->  	struct ltc294x_info *info = i2c_get_clientdata(client);
->  
-> -	cancel_delayed_work(&info->work);
-> +	cancel_delayed_work_sync(&info->work);
->  	power_supply_unregister(info->supply);
->  	return 0;
->  }
-> -- 
-> 2.17.1
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
 > 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/x86/include/asm/processor.h:22:0,
+>                     from arch/x86/include/asm/cpufeature.h:5,
+>                     from arch/x86/include/asm/thread_info.h:53,
+>                     from include/linux/thread_info.h:38,
+>                     from arch/x86/include/asm/preempt.h:7,
+>                     from include/linux/preempt.h:78,
+>                     from include/linux/percpu.h:6,
+>                     from include/linux/cpuidle.h:14,
+>                     from drivers/idle/intel_idle.c:45:
+>    drivers/idle/intel_idle.c: In function 'sklh_idle_state_table_update':
+> >> drivers/idle/intel_idle.c:1287:10: error: 'MSR_IA32_FEATURE_CONTROL' undeclared (first use in this function); did you mean 'MSR_MISC_FEATURE_CONTROL'?
+>       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
+>              ^
 
-What is the git commit id of this patch in Linus's tree?
+Argh, flat out missed this when doing search and replace.
 
-thanks,
-
-greg k-h
+>    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
+>      ((val) = native_read_msr((msr)))
+>                                ^~~
+>    drivers/idle/intel_idle.c:1287:10: note: each undeclared identifier is reported only once for each function it appears in
+>       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
+>              ^
+>    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
+>      ((val) = native_read_msr((msr)))
+>                                ^~~
+> 
+> vim +1287 drivers/idle/intel_idle.c
