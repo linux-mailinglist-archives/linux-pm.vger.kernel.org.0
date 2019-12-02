@@ -2,197 +2,271 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5403010ED3E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 17:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702CC10ED7E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 17:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727621AbfLBQe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 11:34:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:56198 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727438AbfLBQe6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Dec 2019 11:34:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2DB331B;
-        Mon,  2 Dec 2019 08:34:57 -0800 (PST)
-Received: from localhost (unknown [10.1.198.81])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 442633F52E;
-        Mon,  2 Dec 2019 08:34:57 -0800 (PST)
-Date:   Mon, 2 Dec 2019 16:34:55 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
-Message-ID: <20191202162232.GA9777@arm.com>
-References: <20191113124654.18122-1-ggherdovich@suse.cz>
- <20191113124654.18122-2-ggherdovich@suse.cz>
+        id S1727715AbfLBQtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 11:49:35 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42207 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727714AbfLBQtf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 11:49:35 -0500
+Received: by mail-pl1-f194.google.com with SMTP id x13so154595plr.9
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2019 08:49:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1iCCkUslfjQ47gR1lHWI0RjnwmhOr9xiRv5WvDSSwsQ=;
+        b=U8PbCcoYdOqXRXeUfIwGvOjAThj1ja+VrtwqqnDp2QF1i5PLxhTXezSDewiM+8Gc86
+         xVqRMpgAjIf3CAI+7lm0s9RuBxM+tkGHaRN9WK5LAxL3/ps7YFX3tqM5pBhkz0VwR0Ml
+         +qHkzw6C371OlFdq4M9oMqCFCIg6YZSkVUfapfhOi1SzfX2Ze8g/WkinTWXVPLQbE7rU
+         gzJqNFgC/WK0MuA1I6REqTel+GVkZbfdThX943P8xkRgqC7w4W/HGOFc2M6b+AN9GPjw
+         BgPnC5rNi/dr3GzRlN8gXinD1GQysnKKIdIUgqtKf20vREwImO6BGd6aGotXe3Ulk4qV
+         lLNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1iCCkUslfjQ47gR1lHWI0RjnwmhOr9xiRv5WvDSSwsQ=;
+        b=LsL+kwXxKM7tt5kNBs/NfA1buPQGlhbHdy0USt8lsddssb0YZ6E3NQOE6e0fzUiydI
+         u7/Gqcgn4/hu9S+cGpqz4FKQ7oVuJ3iWaX6n0Iu3nyVUYh7leWbdPVgoRY1O59d4L2nj
+         nijr7cnDTF/ZL8WVt+iqV8km44YeLAeNtywsf2qUz/fCoePrcM201eyGY2Z0E1QBJ9nH
+         BUyTxM5gGeJ0hlm2RWLBOPKO5J9rVU/M0cBZ3xiIAwcmee1X0NTKSK2EZ2RumgZRAGgT
+         A7muLPaZYzvRvN53RpbrqmcYTOymOEnCO8T7vKiI9LGU65LKcfMAV3wpm3p00g28fbOJ
+         LjDg==
+X-Gm-Message-State: APjAAAVPgPP97MLlJgYQPWQuDBzuUWaymXQh4RiTRFpWpEA4tX9WLyXD
+        9cEaPwvJlgI5URdzQICTLOcN3ubBIPLW3iuxmqtjfA==
+X-Google-Smtp-Source: APXvYqwptZntt15ZFcLi4M0jd+NOUQoHR/GaemRipdBNPvGVldZMUx8vwkrCJH71j6+L4MaxbD1YD6SIlhKKSM40Rys=
+X-Received: by 2002:a17:90a:ff02:: with SMTP id ce2mr148868pjb.117.1575305373955;
+ Mon, 02 Dec 2019 08:49:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191113124654.18122-2-ggherdovich@suse.cz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <cover.1574781196.git.leonard.crestez@nxp.com> <be196b656bb5fbf2c59a179e6453aa963b862109.1574781196.git.leonard.crestez@nxp.com>
+ <20191126200414.GD228856@google.com> <VI1PR04MB70234D1D3953E6E7C69A5ED6EE440@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB70234D1D3953E6E7C69A5ED6EE440@VI1PR04MB7023.eurprd04.prod.outlook.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 2 Dec 2019 08:49:24 -0800
+Message-ID: <CAFd5g44M=osF1C9B8heTBpb+cy-x8112Vk8RPX6ppP9j+2NtVQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] PM / QoS: Initial kunit test
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Giovanni,
+On Wed, Nov 27, 2019 at 3:40 PM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+>
+> On 26.11.2019 22:04, Matthias Kaehlcke wrote:
+> > On Tue, Nov 26, 2019 at 05:17:10PM +0200, Leonard Crestez wrote:
+> >> The pm_qos family of APIs are used in relatively difficult to reproduce
+> >> scenarios such as thermal throttling so they benefit from unit testing.
+> >>
+> >> Start by adding basic tests from the the freq_qos APIs. It includes
+> >> tests for issues that were brought up on mailing lists:
+> >>
+> >> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 
-On Wednesday 13 Nov 2019 at 13:46:49 (+0100), Giovanni Gherdovich wrote:
-[...]
-> ---
->  arch/x86/include/asm/topology.h |  23 ++++++
->  arch/x86/kernel/smpboot.c       | 176 +++++++++++++++++++++++++++++++++++++++-
->  kernel/sched/core.c             |   1 +
->  kernel/sched/sched.h            |   7 ++
->  4 files changed, 206 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> index 4b14d2318251..9b3aca463c8f 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -193,4 +193,27 @@ static inline void sched_clear_itmt_support(void)
->  }
->  #endif /* CONFIG_SCHED_MC_PRIO */
->  
-> +#ifdef CONFIG_SMP
-> +#include <asm/cpufeature.h>
-> +
-> +DECLARE_STATIC_KEY_FALSE(arch_scale_freq_key);
-> +
-> +#define arch_scale_freq_invariant() static_branch_likely(&arch_scale_freq_key)
-> +
-> +DECLARE_PER_CPU(unsigned long, arch_cpu_freq);
-> +
-> +static inline long arch_scale_freq_capacity(int cpu)
-> +{
-> +	if (arch_scale_freq_invariant())
-> +		return per_cpu(arch_cpu_freq, cpu);
-> +
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
 
-I see further down in the code that you gate the setting of
-arch_cpu_freq by arch_scale_freq_invariant() as well, so it might be
-cleaner to remove the condition here and just return the value of the
-per_cpu variable. That variable should also have an initial value of
-SCHED_FREQ_CAPACITY_SCALE (1024) and if it happens that frequency
-invariance is not enabled, then 1024 will always be returned as no code
-would have set it to anything else.
+> >> ---
+> >>   drivers/base/Kconfig          |   4 ++
+> >>   drivers/base/power/Makefile   |   1 +
+> >>   drivers/base/power/qos-test.c | 117 ++++++++++++++++++++++++++++++++++
+> >>   3 files changed, 122 insertions(+)
+> >>   create mode 100644 drivers/base/power/qos-test.c
+> >>
+> >> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> >> index e37d37684132..d4ae1c1adf69 100644
+> >> --- a/drivers/base/Kconfig
+> >> +++ b/drivers/base/Kconfig
+> >> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE
+> >>
+> >>        This option is expected to find errors and may render your system
+> >>        unusable. You should say N here unless you are explicitly looking to
+> >>        test this functionality.
+> >>
+> >> +config PM_QOS_KUNIT_TEST
+> >> +    bool "KUnit Test for PM QoS features"
+> >> +    depends on KUNIT
+> >> +
+> >>   config HMEM_REPORTING
+> >>      bool
+> >>      default n
+> >>      depends on NUMA
+> >>      help
+> >> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+> >> index ec5bb190b9d0..8fdd0073eeeb 100644
+> >> --- a/drivers/base/power/Makefile
+> >> +++ b/drivers/base/power/Makefile
+> >> @@ -2,7 +2,8 @@
+> >>   obj-$(CONFIG_PM)   += sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
+> >>   obj-$(CONFIG_PM_SLEEP)     += main.o wakeup.o wakeup_stats.o
+> >>   obj-$(CONFIG_PM_TRACE_RTC) += trace.o
+> >>   obj-$(CONFIG_PM_GENERIC_DOMAINS)   +=  domain.o domain_governor.o
+> >>   obj-$(CONFIG_HAVE_CLK)     += clock_ops.o
+> >> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+> >>
+> >>   ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
+> >> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
+> >> new file mode 100644
+> >> index 000000000000..3115db08d56b
+> >> --- /dev/null
+> >> +++ b/drivers/base/power/qos-test.c
+> >> @@ -0,0 +1,117 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Copyright 2019 NXP
+> >> + */
+> >> +#include <kunit/test.h>
+> >> +#include <linux/pm_qos.h>
+> >> +
+> >> +/* Basic test for aggregating two "min" requests */
+> >> +static void freq_qos_test_min(struct kunit *test)
+> >> +{
+> >> +    struct freq_constraints qos;
+> >> +    struct freq_qos_request req1, req2;
+> >> +    int ret;
+> >> +
+> >> +    freq_constraints_init(&qos);
+> >> +    memset(&req1, 0, sizeof(req1));
+> >> +    memset(&req2, 0, sizeof(req2));
+> >> +
+> >> +    ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
+> >> +
+> >> +    ret = freq_qos_remove_request(&req2);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
+> >> +
+> >> +    ret = freq_qos_remove_request(&req1);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
+> >> +                    FREQ_QOS_MIN_DEFAULT_VALUE);
+> >> +}
+> >> +
+> >> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */
+> >> +static void freq_qos_test_maxdef(struct kunit *test)
+> >> +{
+> >> +    struct freq_constraints qos;
+> >> +    struct freq_qos_request req1, req2;
+> >> +    int ret;
+> >> +
+> >> +    freq_constraints_init(&qos);
+> >> +    memset(&req1, 0, sizeof(req1));
+> >> +    memset(&req2, 0, sizeof(req2));
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),
+> >> +                    FREQ_QOS_MAX_DEFAULT_VALUE);
+> >> +
+> >> +    ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,
+> >> +                    FREQ_QOS_MAX_DEFAULT_VALUE);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 0);
+> >> +    ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,
+> >> +                    FREQ_QOS_MAX_DEFAULT_VALUE);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 0);
+> >> +
+> >> +    /* Add max 1000 */
+> >> +    ret = freq_qos_update_request(&req1, 1000);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> >> +
+> >> +    /* Add max 2000, no impact */
+> >> +    ret = freq_qos_update_request(&req2, 2000);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 0);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> >> +
+> >> +    /* Remove max 1000, new max 2000 */
+> >> +    ret = freq_qos_remove_request(&req1);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);
+> >
+> > nit: this last part isn't really related with MAX_DEFAULT_VALUE. It's a
+> > worthwhile test, but not necessarily in this test case. It might make more sense
+> > to set one of the constraints to FREQ_QOS_MAX_DEFAULT_VALUE again, and verify it
+> > doesn't have an impact.
+> >
+> > Just a comment, there's nothing really wrong with how it is.
+> >
+> >> +}
+> >> +
+> >> +/*
+> >> + * Test that a freq_qos_request can be added again after removal
+> >> + *
+> >> + * This issue was solved by commit 05ff1ba412fd ("PM: QoS: Invalidate frequency
+> >> + * QoS requests after removal")
+> >> + */
+> >> +static void freq_qos_test_readd(struct kunit *test)
+> >> +{
+> >> +    struct freq_constraints qos;
+> >> +    struct freq_qos_request req;
+> >> +    int ret;
+> >> +
+> >> +    freq_constraints_init(&qos);
+> >> +    memset(&req, 0, sizeof(req));
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
+> >> +                    FREQ_QOS_MIN_DEFAULT_VALUE);
+> >
+> > nit: you could do this check once in a dedicated test and omit it
+> > in other tests to de-clutter
+> >
+> >> +
+> >> +    /* Add */
+> >> +    ret = freq_qos_add_request(&qos, &req, FREQ_QOS_MIN, 1000);
+> >> +    KUNIT_EXPECT_EQ(test, ret, 1);
+> >> +    KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
+> >
+> > similar here, this test validates re-adding, another dedicated test
+> > could verify once that the aggregate value is correct after adding a single
+> > request. Checking the return value still is sensible, just in case.
+> >
+> > I guess it can be argued either way, checking the values every time is
+> > extra-safe, omitting the checks reduces clutter and might help to make it
+> > clearer what the test really intends to verify.
+>
+> The complaint of "too many assertions" is odd for an unit test; I just
+> wrote enough code to validate corectness without relying on a pile of
+> external shell scripts and DTS hacks.
 
-Also, arm64 names this cpu variable freq_scale instead of arch_cpu_freq.
-It would be nice to have the same name here, to easily understand
-similarities in this functionality on both sides.
+I think Matthias was just trying to say that it might be a little
+cleaner if each test case only had expectations corresponding to the
+particular property that the test case is asserting, which I agree
+with.
 
-If arch_cpu_freq seems more complete, you might want to rename it to
-arch_cpu_freq_scale, although longer, to clearly state that this is a
-scale value and not an absolute frequency value.
+I created the KUNIT_ASSERT_* variants just for this case; the idea is
+that you ASSERT the preconditions for the test case and you EXPECT the
+result you want. Hopefully this should make it immediately obvious
+when examining a test case what assertions/expectations correspond to
+the properties that the test is trying to prove and which are
+prerequisite.
 
-> +	return 1024 /* SCHED_CAPACITY_SCALE */;
-> +}
-> +#define arch_scale_freq_capacity arch_scale_freq_capacity
-> +
-> +extern void arch_scale_freq_tick(void);
-> +#define arch_scale_freq_tick arch_scale_freq_tick
-> +
-> +#endif
-> +
->  #endif /* _ASM_X86_TOPOLOGY_H */
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 69881b2d446c..814d7900779d 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-[...]
-> +
-> +DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
-> +
-> +static DEFINE_PER_CPU(u64, arch_prev_aperf);
-> +static DEFINE_PER_CPU(u64, arch_prev_mperf);
-> +static u64 arch_max_freq = SCHED_CAPACITY_SCALE;
-> +
+> If we had more tests then the constant checking of every single return
+> value might get tedious, but right now there are only 3 and their logic
+> is reasonably easy to follow.
 
-Same here: the scale suffix would make the math below clearer.
+I didn't have any trouble following your test. I agree with Matthias
+that these are potential minor improvements, but I also think it is
+fine as is.
 
-[...]
-> +static void intel_set_cpu_max_freq(void)
-> +{
-> +	/*
-> +	 * TODO: add support for:
-> +	 *
-> +	 * - Xeon Gold/Platinum
-> +	 * - Xeon Phi (KNM, KNL)
-> +	 * - Atom Goldmont
-> +	 * - Atom Silvermont
-> +	 *
-> +	 * which all now get by default arch_max_freq = SCHED_CAPACITY_SCALE
-> +	 */
-> +
-> +	static_branch_enable(&arch_scale_freq_key);
-> +
-> +	if (turbo_disabled() ||
-> +		x86_match_cpu(has_skx_turbo_ratio_limits) ||
-> +		x86_match_cpu(has_knl_turbo_ratio_limits) ||
-> +		x86_match_cpu(has_glm_turbo_ratio_limits))
-> +		return;
-> +
-> +	core_set_cpu_max_freq();
-> +}
-> +
-> +static void init_scale_freq(void *arg)
+> > Anyway, my comments are just about possible improvements, it's also fine
+> > as is:
+> >
+> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
-This function does not initialise the frequency scale factor so the name
-is confusing to me. How about init_counters_refs or init_fie_counters_refs
-(fie = frequency invariance engine)?
-
-> +{
-> +	u64 aperf, mperf;
-> +
-> +	rdmsrl(MSR_IA32_APERF, aperf);
-> +	rdmsrl(MSR_IA32_MPERF, mperf);
-> +
-> +	this_cpu_write(arch_prev_aperf, aperf);
-> +	this_cpu_write(arch_prev_mperf, mperf);
-> +}
-> +
-> +static void set_cpu_max_freq(void)
-
-Similarly for the name of this function: it seems to both set the max
-frequency ratio and initialise the references to the aperf and mperf
-counters. Also, in the process it enables frequency invariance.
-So this function seems to do all the preparation work for frequency
-invariance so a more generic name (init_fie/init_frequency_invariance)
-would work better in my opinion.
-
-> +{
-> +	if (smp_processor_id() != 0 || !boot_cpu_has(X86_FEATURE_APERFMPERF))
-> +		return;
-> +
-> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
-> +		intel_set_cpu_max_freq();
-
-I see above that you enable the static key (and therefore frequency
-invariance before setting the max frequency ratio (if possible) and
-before you initialise the counter references. Is there any reason for
-doing this?
-
-In my mind the more clear process is:
- - Obtain and set max frequency ratio
- - Initialise counter references
- - If all above goes well enable the static key (and frequency
-   invariance)
-
-Thanks,
-Ionela.
-
+Cheers!
