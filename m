@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA0F10ED04
+	by mail.lfdr.de (Postfix) with ESMTP id 85CE310ED05
 	for <lists+linux-pm@lfdr.de>; Mon,  2 Dec 2019 17:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727678AbfLBQVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 11:21:43 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43155 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbfLBQVn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 11:21:43 -0500
-Received: by mail-wr1-f66.google.com with SMTP id n1so45083898wra.10
-        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2019 08:21:41 -0800 (PST)
+        id S1727689AbfLBQVq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 11:21:46 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36600 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727671AbfLBQVo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 11:21:44 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z3so45034682wru.3
+        for <linux-pm@vger.kernel.org>; Mon, 02 Dec 2019 08:21:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2/SckE1LuT5fuB6gss91UGfXQhSyW3IG3sRJlwZdSOU=;
-        b=PZM1GdGn1/lJzFG0LD8rQni//3m1CWgT7LLmGrYxuS/5/QeSaDoIaSQjYpklGZKqB2
-         4cScoPDEGJ5ZfZzy6zWXDd24NvW4N9lYnA1aWs2YcOBwqcIR7fCxU+pEhWNUQkJeJ8SH
-         vUMYNenjhtW6fQk/+MPzR7K8du0wQfZM5EtI+AMRJRui1Yzow8b6vCR4XR8c/5Z9AckG
-         bxBATOzvVxQwXm6kN3BRCWp7/JvS8vVtyKt6cK/X08si8eZPsboW+LDN6zryizMlz2I7
-         tg8Z+BNQR6eP9vFLaIkX7PH03CHNFOLyXUnvl5ZHms5haEdE+bYON0NIRuUP7tjJi0MV
-         V0Qg==
+        bh=GH8jZgvcmqwZW7+ZZ9HpIyzBO+HHjblMrgUlhjTkr1o=;
+        b=wwtDicZu/7SddGtkXbL33maSZtHCYO1JIf/RboO5KNIbTfhdubKaXiB0DDzKrNXSFd
+         mvW7wprl/QvhrWIV6DVSHClsxvjmXgXb5C3Fdiom2wnOk+/ZqtUyKgua2NP3D7dgZwPl
+         W4aEAsm+q7hDiDs3N+PdYefY9Yb1gL92Tiq2cJq7I8qz/k1fcHJTM4eY56UHAgpD+E5u
+         9IM7JZegB0O6G+9j4AdIaykPuWdwa3oDEcv45hGOEq4foDjRFHRkxVfEz3St9EO7bl1m
+         5S+QFGCE96gNpq2PMDEiHRgiVmCzFnpXQNj/Mn0rfk6KsiNM7xWjEIht+gBKGoR2XUXE
+         8nkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2/SckE1LuT5fuB6gss91UGfXQhSyW3IG3sRJlwZdSOU=;
-        b=hNhoTVT0V3tKpJQ1J8znxiG3XXc/m4ZfTaQrHLkplQGpMMzjJAhnjum2EAM9D2gyYB
-         DxBesOi9uRAwxS/m22C4w6sZd4ktsGxwWOh6e0L29xD8EUrYdCPHMxeUlg4twqXc60MA
-         EqUsxjmkbK/sBim50aUDUgX0W5skcTE1lLvyvM7BRsmaQxOU0Cn9WQp1Lwhg7y1/26qJ
-         Qwpms8M2/mQ4iO3VjSWXmAyVD/8qMi2WOaxPSFpTjUB1liwiFjkgBpL32Q+4z8PsO479
-         jh3Tu0xJBk2sE89SooxyTjoh8R6TDbG0WCuHhesf1aAx0s3pb+ojk4XMKMcjURFXaVuD
-         AY5A==
-X-Gm-Message-State: APjAAAWKX+csbTi5rGXv0WMR9fD1q+ZF8CG5K8YYWAIrWBNzcNUIE9is
-        5PZepH23TSyOB7BrcR7X48buyQCHyDQ=
-X-Google-Smtp-Source: APXvYqy3xNpF3ciZicnpb/URmHtBw2s4159FTTCD7YGG1YzSJr97Sd0KRl//oaQ50TNWjJBjWYNbTw==
-X-Received: by 2002:a5d:6305:: with SMTP id i5mr8541802wru.119.1575303700457;
-        Mon, 02 Dec 2019 08:21:40 -0800 (PST)
+        bh=GH8jZgvcmqwZW7+ZZ9HpIyzBO+HHjblMrgUlhjTkr1o=;
+        b=UEDFE9+F2gHMq8dwF8TJFuQWv/cQsHTMt0Em8hTneSxykrTt+Z5C91OE/V97APaUU8
+         s2CLerchZT/d7MlgCyvLeEqQNoQ0Y9gzHTLTO+qwJY/kO+8ctlZVCWEHauMvuKX/q5aZ
+         WZSxCnsspcXQkCa4CJfFNTafkjDtgUIeNsJhPW3sQxJIvJUerD1ypBaQg+02Di5tMOmM
+         fewjil9SKqeDKfkpJ/g/IGYxh/CeurvJskbk25RmpJvvcqPQUf6n0W8NuW5HSFfquj9j
+         z9g2+iwK909nlpIyl0GWqzsYrVyHivit5fSc1QMi4ExZTou+SW9nHDaaPSGAX+mdKf3b
+         skEg==
+X-Gm-Message-State: APjAAAURmHelHh4O9aLzY2Qvr48759OhaqgSihtdOdaX+cOhti7+05S1
+        n9AZ+ojP6IonDCwWeNn1tnnBJYtzQpg=
+X-Google-Smtp-Source: APXvYqxQ41lsZfDRrcuKTvuCttSqE810g1FSOk7cNXrgWNOJ3ZSaBSAP/qUrkDe+9tsAVhFD4Yasug==
+X-Received: by 2002:adf:b19a:: with SMTP id q26mr25103882wra.79.1575303701678;
+        Mon, 02 Dec 2019 08:21:41 -0800 (PST)
 Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id i9sm39204516wrb.2.2019.12.02.08.21.39
+        by smtp.googlemail.com with ESMTPSA id i9sm39204516wrb.2.2019.12.02.08.21.40
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 02 Dec 2019 08:21:39 -0800 (PST)
+        Mon, 02 Dec 2019 08:21:41 -0800 (PST)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     linux-pm@vger.kernel.org
 Cc:     bjorn.andersson@linaro.org, agross@kernel.org, digetx@gmail.com,
@@ -51,9 +51,9 @@ Cc:     bjorn.andersson@linaro.org, agross@kernel.org, digetx@gmail.com,
         masneyb@onstation.org, sibis@codeaurora.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         georgi.djakov@linaro.org
-Subject: [PATCH v2 4/5] interconnect: Add a common helper for removing all nodes
-Date:   Mon,  2 Dec 2019 18:21:32 +0200
-Message-Id: <20191202162133.7089-4-georgi.djakov@linaro.org>
+Subject: [PATCH v2 5/5] interconnect: qcom: Use the new common helper for node removal
+Date:   Mon,  2 Dec 2019 18:21:33 +0200
+Message-Id: <20191202162133.7089-5-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191202162133.7089-1-georgi.djakov@linaro.org>
 References: <20191202162133.7089-1-georgi.djakov@linaro.org>
@@ -64,72 +64,139 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The removal of all nodes from a provider seem to be a common functionality
-for all existing users and it would make sense to factor out this into a
-a common helper function.
+There is a new helper function for removing all nodes. Let's use it instead
+of duplicating the code.
 
-Suggested-by: Dmitry Osipenko <digetx@gmail.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- drivers/interconnect/core.c           | 22 ++++++++++++++++++++++
- include/linux/interconnect-provider.h |  6 ++++++
- 2 files changed, 28 insertions(+)
+v2:
+- Don't call qnoc_remove() directly from probe. (Dmitry)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 8605c3e05b5e..2633fd223875 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -745,6 +745,28 @@ void icc_node_del(struct icc_node *node)
- }
- EXPORT_SYMBOL_GPL(icc_node_del);
+ drivers/interconnect/qcom/msm8974.c | 17 ++++-------------
+ drivers/interconnect/qcom/qcs404.c  | 17 ++++-------------
+ drivers/interconnect/qcom/sdm845.c  | 16 +++-------------
+ 3 files changed, 11 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
+index ca25f31e5f0b..3a313e11e73d 100644
+--- a/drivers/interconnect/qcom/msm8974.c
++++ b/drivers/interconnect/qcom/msm8974.c
+@@ -643,7 +643,7 @@ static int msm8974_icc_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct icc_onecell_data *data;
+ 	struct icc_provider *provider;
+-	struct icc_node *node, *tmp;
++	struct icc_node *node;
+ 	size_t num_nodes, i;
+ 	int ret;
  
-+/**
-+ * icc_nodes_remove() - remove all previously added nodes from provider
-+ * @provider: the interconnect provider we are removing nodes from
-+ *
-+ * Return: 0 on success, or an error code otherwise
-+ */
-+int icc_nodes_remove(struct icc_provider *provider)
-+{
-+	struct icc_node *n, *tmp;
-+
-+	if (WARN_ON(IS_ERR_OR_NULL(provider)))
-+		return -EINVAL;
-+
-+	list_for_each_entry_safe_reverse(n, tmp, &provider->nodes, node_list) {
-+		icc_node_del(n);
-+		icc_node_destroy(n->id);
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(icc_nodes_remove);
-+
- /**
-  * icc_provider_add() - add a new interconnect provider
-  * @provider: the interconnect provider that will be added into topology
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index 61dfb0beb409..0c494534b4d3 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -100,6 +100,7 @@ int icc_link_create(struct icc_node *node, const int dst_id);
- int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
- void icc_node_add(struct icc_node *node, struct icc_provider *provider);
- void icc_node_del(struct icc_node *node);
-+int icc_nodes_remove(struct icc_provider *provider);
- int icc_provider_add(struct icc_provider *provider);
- int icc_provider_del(struct icc_provider *provider);
+@@ -723,10 +723,7 @@ static int msm8974_icc_probe(struct platform_device *pdev)
+ 	return 0;
  
-@@ -138,6 +139,11 @@ void icc_node_del(struct icc_node *node)
+ err_del_icc:
+-	list_for_each_entry_safe(node, tmp, &provider->nodes, node_list) {
+-		icc_node_del(node);
+-		icc_node_destroy(node->id);
+-	}
++	icc_nodes_remove(provider);
+ 	icc_provider_del(provider);
+ 
+ err_disable_clks:
+@@ -738,16 +735,10 @@ static int msm8974_icc_probe(struct platform_device *pdev)
+ static int msm8974_icc_remove(struct platform_device *pdev)
  {
+ 	struct msm8974_icc_provider *qp = platform_get_drvdata(pdev);
+-	struct icc_provider *provider = &qp->provider;
+-	struct icc_node *n, *tmp;
+ 
+-	list_for_each_entry_safe(n, tmp, &provider->nodes, node_list) {
+-		icc_node_del(n);
+-		icc_node_destroy(n->id);
+-	}
++	icc_nodes_remove(&qp->provider);
+ 	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-
+-	return icc_provider_del(provider);
++	return icc_provider_del(&qp->provider);
  }
  
-+static inline int icc_nodes_remove(struct icc_provider *provider)
-+{
-+	return -ENOTSUPP;
-+}
-+
- static inline int icc_provider_add(struct icc_provider *provider)
+ static const struct of_device_id msm8974_noc_of_match[] = {
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index 9064f6bdaa69..d4769a5ea182 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -405,7 +405,7 @@ static int qnoc_probe(struct platform_device *pdev)
+ 	struct icc_provider *provider;
+ 	struct qcom_icc_node **qnodes;
+ 	struct qcom_icc_provider *qp;
+-	struct icc_node *node, *tmp;
++	struct icc_node *node;
+ 	size_t num_nodes, i;
+ 	int ret;
+ 
+@@ -485,10 +485,7 @@ static int qnoc_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ err:
+-	list_for_each_entry_safe(node, tmp, &provider->nodes, node_list) {
+-		icc_node_del(node);
+-		icc_node_destroy(node->id);
+-	}
++	icc_nodes_remove(provider);
+ 	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+ 	icc_provider_del(provider);
+ 
+@@ -498,16 +495,10 @@ static int qnoc_probe(struct platform_device *pdev)
+ static int qnoc_remove(struct platform_device *pdev)
  {
- 	return -ENOTSUPP;
+ 	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
+-	struct icc_provider *provider = &qp->provider;
+-	struct icc_node *n, *tmp;
+ 
+-	list_for_each_entry_safe(n, tmp, &provider->nodes, node_list) {
+-		icc_node_del(n);
+-		icc_node_destroy(n->id);
+-	}
++	icc_nodes_remove(&qp->provider);
+ 	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-
+-	return icc_provider_del(provider);
++	return icc_provider_del(&qp->provider);
+ }
+ 
+ static const struct of_device_id qcs404_noc_of_match[] = {
+diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+index 387267ee9648..f078cf0fce56 100644
+--- a/drivers/interconnect/qcom/sdm845.c
++++ b/drivers/interconnect/qcom/sdm845.c
+@@ -855,11 +855,7 @@ static int qnoc_probe(struct platform_device *pdev)
+ 
+ 	return ret;
+ err:
+-	list_for_each_entry(node, &provider->nodes, node_list) {
+-		icc_node_del(node);
+-		icc_node_destroy(node->id);
+-	}
+-
++	icc_nodes_remove(provider);
+ 	icc_provider_del(provider);
+ 	return ret;
+ }
+@@ -867,15 +863,9 @@ static int qnoc_probe(struct platform_device *pdev)
+ static int qnoc_remove(struct platform_device *pdev)
+ {
+ 	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
+-	struct icc_provider *provider = &qp->provider;
+-	struct icc_node *n, *tmp;
+-
+-	list_for_each_entry_safe(n, tmp, &provider->nodes, node_list) {
+-		icc_node_del(n);
+-		icc_node_destroy(n->id);
+-	}
+ 
+-	return icc_provider_del(provider);
++	icc_nodes_remove(&qp->provider);
++	return icc_provider_del(&qp->provider);
+ }
+ 
+ static const struct of_device_id qnoc_of_match[] = {
