@@ -2,101 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D746410F9C3
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 09:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C03010FAD6
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 10:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbfLCIYq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Dec 2019 03:24:46 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:42142 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfLCIYq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 03:24:46 -0500
-Received: by mail-pg1-f194.google.com with SMTP id i5so1330531pgj.9
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 00:24:46 -0800 (PST)
+        id S1726214AbfLCJhN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Dec 2019 04:37:13 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36167 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbfLCJhN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 04:37:13 -0500
+Received: by mail-wr1-f66.google.com with SMTP id z3so2789849wru.3
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 01:37:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ePyWpgO6SpDrkwgrOacCpFzQ/j20hTY+sW9Shl7aHi4=;
-        b=WrQNp+5gaTi99HubsuUWY6+TPybVxVIy7K33TJMN6dkjxskbH8MgX/EfawEULeEv2m
-         YRdy5kBChVwI2ybVNPQJwTMuCFTEqT7vqNy92OEzphn8q829Msb6uIk+5N2s9+i3tZuD
-         cJItlyjxcvybI3I9QU/ssLAvnC5hVnGceiR10V2tOx3o2kD8d80BdmCUGGBoUMheWzhm
-         zV5+HitRVdsAFOfUEKsJPuMRynuM4IIC5fqvWHfyMaHlN8RrsDjCxDjJQEevYnZgtX/N
-         cQzqDn6rBsxPQ/cyG2DXpN9rgudaaDL6dMMTfMxebOxfNqHRfh08RqY7KN0APfZ4llCc
-         z5WQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=v9aPs/wpi2L5/d1FqkD06cZ03HNvyIimtXPANJEaaic=;
+        b=UO5bhFxtDW+Yhtt76FWIlSYlZjTVcz3TshtsNuRV/UPdlkYfWUpmJjmE9LchizUrZU
+         wCdGmXa/c4WBeOrnh0ueMXSGy11K8bDqCYzH82FJgOzU/+xwDKU6+3aGexyCVbTyPGvm
+         MjAOko08FJyTVOXFEnRG2vLiTcNIVYMhy6t1mfJeatE66cVYBhp73AjBOtLbRGBuGhWk
+         kUqt51i6SfdlrIDmGX3khX6/Owm/uhw0zA3lMAJ4nr4y5xUeAJNzPLZMHE5xSvuGQdel
+         4/9lqadTADcsVtVAzqmM5Usco+DUDuQA5eU+XxItYOot0U3e8pWz3OyimG6G0PthVkmR
+         7/OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ePyWpgO6SpDrkwgrOacCpFzQ/j20hTY+sW9Shl7aHi4=;
-        b=V5iwveRBu9aCljkhJMoJ9N2UyJHxNIMB8hzFo/oJltrp1+3aMX5vSBFpcwVSITpXaw
-         ICsvELQufyuFhHaZnIsDUflg7DjQb9cwZQb2AVGEYEfFaMgv5f44GL1gjDI0ftwU9+0K
-         +3s9q7PfBuSfCcXiRUUnINUrIpLHiAmzeVSjBZ3GyotZNkV3frtC8ccose2EMSSeQVsr
-         69HfcGLRWR9AjKQbke1ipSImMQsYFkZMUpQU4chrcHSdCg6366DyeLKoFzZXISCCvVF6
-         2AhRL+Rfi3iAZTPVAYfarhcLITUYYTgIGU0s4DgGUqwNqL8haM4Xkh6M7nJFlOzVb9C4
-         smRw==
-X-Gm-Message-State: APjAAAU2Y7QqgJdIl6JyNjsm4uwyxwNjWy3G2gF+ABtTOxoIkCCejBmQ
-        7n2ZZJy+amxfY5DjId3eow/lTg==
-X-Google-Smtp-Source: APXvYqywMuHAbETMeQr0BvdpfwYyzAXKj1Ia6vHnnLBFcNh+6+z/idLccu1jFpbRBS/g1rDnpDQGpw==
-X-Received: by 2002:a62:1d90:: with SMTP id d138mr3549471pfd.223.1575361485999;
-        Tue, 03 Dec 2019 00:24:45 -0800 (PST)
-Received: from localhost ([122.171.112.123])
-        by smtp.gmail.com with ESMTPSA id u24sm2288069pfh.48.2019.12.03.00.24.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Dec 2019 00:24:45 -0800 (PST)
-Date:   Tue, 3 Dec 2019 13:54:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, rjw@rjwysocki.net, edubezval@gmail.com,
-        linux-pm@vger.kernel.org, amit.kucheria@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/4] thermal/drivers/cpu_cooling: Introduce the cpu
- idle cooling driver
-Message-ID: <20191203082443.p6aeg3ijkiva4ugb@vireshk-i7>
-References: <20191202202815.22731-1-daniel.lezcano@linaro.org>
- <20191202202815.22731-3-daniel.lezcano@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191202202815.22731-3-daniel.lezcano@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=v9aPs/wpi2L5/d1FqkD06cZ03HNvyIimtXPANJEaaic=;
+        b=TKhKJfuOfhuYAwDPZ+/tLGuh6tUpltFmu5qius/fQ+4VmBTcRM2Y4HnENKuVV/o9Cj
+         gpEKC5NZK+olbm984+w8HaUzBeqdkyholvfvvjUgwTiziEjDYSYOk1d5Zlk80RH63SvE
+         ZLdEKSx+Hqv71wBvHhRL9BH0p7jw/T3X3vuXEK4LFLfcGqmtlK6o/e4RaAd2qkdwPSd5
+         TE/12HVm7/Y6GnQxO3PCbHruzeAABOqQJ3fXh1Ag1piO9D4x2KPugxW2PCrj9YBjjNUp
+         mS1gGtLyj4O/PAFmaBzGekXcTLQFCtsRCETfVk6S8EdzElMK4gpp+599NMB9sUyP/jdX
+         GsnQ==
+X-Gm-Message-State: APjAAAUS602ThXJzyZMk+orMuZ11anFaieCx4jdjvUs6BYnETUj1yT5x
+        H3mUhMni+GiQfjtRBIDioIwIWA==
+X-Google-Smtp-Source: APXvYqyciia4aYAIG8fMfAHSsdXZfaxnHQ0iL6ucE1f1unnBidOhAr0gju8Fey54UdXU/ImqbbyLTQ==
+X-Received: by 2002:adf:f1d0:: with SMTP id z16mr3903327wro.209.1575365831350;
+        Tue, 03 Dec 2019 01:37:11 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:8196:cbcc:fb2c:4975])
+        by smtp.gmail.com with ESMTPSA id w13sm2935751wru.38.2019.12.03.01.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Dec 2019 01:37:10 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     viresh.kumar@linaro.org, rui.zhang@intel.com
+Cc:     rjw@rjwysocki.net, edubezval@gmail.com, linux-pm@vger.kernel.org,
+        amit.kucheria@linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 1/4] thermal/drivers/Kconfig: Convert the CPU cooling device to a choice
+Date:   Tue,  3 Dec 2019 10:37:01 +0100
+Message-Id: <20191203093704.7037-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-12-19, 21:28, Daniel Lezcano wrote:
-> The cpu idle cooling device offers a new method to cool down a CPU by
-> injecting idle cycles at runtime.
-> 
-> It has some similarities with the intel power clamp driver but it is
-> actually designed to be more generic and relying on the idle injection
-> powercap framework.
-> 
-> The idle injection cycle is fixed while the running cycle is variable. That
-> allows to have control on the device reactivity for the user experience.
-> 
-> An idle state powering down the CPU or the cluster will allow to drop
-> the static leakage, thus restoring the heat capacity of the SoC. It
-> can be set with a trip point between the hot and the critical points,
-> giving the opportunity to prevent a hard reset of the system when the
-> cpufreq cooling fails to cool down the CPU.
-> 
-> With more sophisticated boards having a per core sensor, the idle
-> cooling device allows to cool down a single core without throttling
-> the compute capacity of several cpus belonging to the same clock line,
-> so it could be used in collaboration with the cpufreq cooling device.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  V2:
->    - Remove idle_duration_us field and use idle_inject API instead (Viresh Kumar)
->    - Fixed function definition wheh CPU_IDLE_COOLING is not set
->    - Inverted the initialization in the init function (Viresh Kumar)
-> ---
->  drivers/thermal/cpuidle_cooling.c | 233 ++++++++++++++++++++++++++++++
+The next changes will add a new way to cool down a CPU by injecting
+idle cycles. With the current configuration, a CPU cooling device is
+the cpufreq cooling device. As we want to add a new CPU cooling
+device, let's convert the CPU cooling to a choice giving a list of CPU
+cooling devices. At this point, there is obviously only one CPU
+cooling device.
 
-This needs to go in MAINTAINERS file btw :)
+There is no functional changes.
 
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+  V2:
+    - Default CPU_FREQ_COOLING when CPU_THERMAL is set (Viresh Kumar)
+---
+ drivers/thermal/Kconfig     | 14 ++++++++++++--
+ drivers/thermal/Makefile    |  2 +-
+ include/linux/cpu_cooling.h |  6 +++---
+ 3 files changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 001a21abcc28..4e3ee036938b 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -150,8 +150,18 @@ config THERMAL_GOV_POWER_ALLOCATOR
+ 
+ config CPU_THERMAL
+ 	bool "Generic cpu cooling support"
+-	depends on CPU_FREQ
+ 	depends on THERMAL_OF
++	help
++	  Enable the CPU cooling features. If the system has no active
++	  cooling device available, this option allows to use the CPU
++	  as a cooling device.
++
++if CPU_THERMAL
++
++config CPU_FREQ_THERMAL
++	bool "CPU frequency cooling device"
++	depends on CPU_FREQ
++	default y
+ 	help
+ 	  This implements the generic cpu cooling mechanism through frequency
+ 	  reduction. An ACPI version of this already exists
+@@ -159,7 +169,7 @@ config CPU_THERMAL
+ 	  This will be useful for platforms using the generic thermal interface
+ 	  and not the ACPI interface.
+ 
+-	  If you want this support, you should say Y here.
++endif
+ 
+ config CLOCK_THERMAL
+ 	bool "Generic clock cooling support"
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 74a37c7f847a..d3b01cc96981 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -19,7 +19,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= user_space.o
+ thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
+ 
+ # cpufreq cooling
+-thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
++thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
+ 
+ # clock cooling
+ thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
+index b74732535e4b..3cdd85f987d7 100644
+--- a/include/linux/cpu_cooling.h
++++ b/include/linux/cpu_cooling.h
+@@ -19,7 +19,7 @@
+ 
+ struct cpufreq_policy;
+ 
+-#ifdef CONFIG_CPU_THERMAL
++#ifdef CONFIG_CPU_FREQ_THERMAL
+ /**
+  * cpufreq_cooling_register - function to create cpufreq cooling device.
+  * @policy: cpufreq policy.
+@@ -40,7 +40,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev);
+ struct thermal_cooling_device *
+ of_cpufreq_cooling_register(struct cpufreq_policy *policy);
+ 
+-#else /* !CONFIG_CPU_THERMAL */
++#else /* !CONFIG_CPU_FREQ_THERMAL */
+ static inline struct thermal_cooling_device *
+ cpufreq_cooling_register(struct cpufreq_policy *policy)
+ {
+@@ -58,6 +58,6 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+ {
+ 	return NULL;
+ }
+-#endif /* CONFIG_CPU_THERMAL */
++#endif /* CONFIG_CPU_FREQ_THERMAL */
+ 
+ #endif /* __CPU_COOLING_H__ */
 -- 
-viresh
+2.17.1
+
