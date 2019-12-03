@@ -2,118 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AE91102EF
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 17:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28255110321
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 18:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfLCQyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Dec 2019 11:54:10 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:36586 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfLCQyK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 11:54:10 -0500
-Received: by mail-vk1-f196.google.com with SMTP id i4so1269048vkc.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 08:54:09 -0800 (PST)
+        id S1727073AbfLCREu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Dec 2019 12:04:50 -0500
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:45092 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbfLCREu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 12:04:50 -0500
+Received: by mail-vk1-f194.google.com with SMTP id b127so1258743vkh.12
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 09:04:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AcM7UEIp8ymleTTTyVFIALYBt+4goDjQpS4y6N2B+wI=;
-        b=uoPG9cTRt/hqq0DuB5ne0h2K4POk21yL2O8Fa6xz0FrVObCVI0zSRWTUcGvf4krFI/
-         asiNumPnrPNLb7J4jVBdwacvkkz384DBFcnw7JLMkl7zvQNAImvxP21kiwvtk4e2XxeN
-         9kI7AnlY7SAN8D7iwzo6JmHQGvQHxHq7oeT/P1vwBRWUmuNX/MSDJAk8mJKiOA9QTqhS
-         JqeP6vA6UUUt7PMLJCfMTubv/VQLY3QEn8i/RNiwvMVecT/NMo1BCqWJVavnYqYI6Ogv
-         4pYiZcgGDJzgVPPp7Mfu4D8R5AFJNSw18GYlBT8lM77MTOqjwLCKpCZ6pJAKjrwCOpq7
-         JC7w==
+        bh=uKEl7qNFIi9X+QXW3XmiWYr6gtYvjeFPeIzark7e3Kc=;
+        b=SjVDebo2l6qnq7mYoXHOBDv0TSRRFcvV4BhItzIdS86qcLi/YIVmYbcnMxfknlqYhD
+         H52BgHICLzr/0f1O9mYTSo7jipwh5XdXG2e43ThUq/cg5K/QXemoWUoN1FeNo0mJ7jbH
+         NbX3nBYGI//sD+fqG/anKzbDV+iTxAlPVbm/OMzcNs7NqScICyX16MbERmNKyg37k6b6
+         7ypUIEYiPBPmYNlPgSBSN0mANQvs4b+JZgWjrUVRSN7+oqZSY5Z+qmmnBgf8J0rGztgl
+         odsRuDHvduZxdG4alX06JadsjaAZ0e6hbxAWq9Tu4Bv9CU0R7G1vkNXBxt4M9VDoyt+p
+         O+Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AcM7UEIp8ymleTTTyVFIALYBt+4goDjQpS4y6N2B+wI=;
-        b=QIzuMwOGBPeEo7E1qs3QHIZWtIDrqtB+M8/je3N56RZs3NFH+lmKvp+QWHUFaQ5H8K
-         OyF27J99Md6xn1mmk39peetcw3GHK+QQO6HklLwFO7FuWSpov16OWMWaPWFghY268shM
-         sauAC+s6o7xQLWw+auREeN+jUwNHpqV5fZqOMcEN/HH8euMMC+3RWTD41T+TyiMhzo6Y
-         5ZP0jRBrD8HmeiB6cOg3OkMLs/mhvk69pobLzpwIJR8TOUp1qFgsr11HzFeVIiD84gXC
-         Yx4/verQG4UyyRqNHDTC2/GOlNGpqUedP7qEfZMt4DoJvQWQ4YOxLqBSephJv4iGOy9g
-         cvIA==
-X-Gm-Message-State: APjAAAVbPVVt/6wnX20hY+zb0abTWIuySixv64J3jgAFsOXklpoQuk8n
-        pZYj73x+ugi9tZk9JaQmtT+lDCiGUPAdGMB563T1mQ==
-X-Google-Smtp-Source: APXvYqwWfxtECH6IzRO2KWDRHz/G7gB6OReuBEbvIF27Ze3wf/2BXsYSC4Slvqkh+Z8aSkU/Vruvxo83JKiIBbSncWs=
-X-Received: by 2002:a1f:bdd0:: with SMTP id n199mr4259634vkf.86.1575392048634;
- Tue, 03 Dec 2019 08:54:08 -0800 (PST)
+        bh=uKEl7qNFIi9X+QXW3XmiWYr6gtYvjeFPeIzark7e3Kc=;
+        b=DKIm3sQj7dw4VHJxa5R7zII66WYw8XbBnmPU6vExOytzkF4XHX2XdC3mSd1jPT7dOS
+         mNDCiMMvT3yMiOae9w7/sPrWvn3e6fIIGvpVi1eEe4mrz8YEVPE0ULdyCC0okgTFluDm
+         ceX03ej5X6wRkJSuFdZmHxtC4crykA5AqA3ke5I83C5ERJeJxWXQ90oTWHEbVVRFaqMM
+         MLUwbhnx+r/V+hNzpwtt5H/p0WuP4FpTUMmRABiZbNBFQn3iXBVec0VLMVaNMOTyvqPr
+         Mvu3rPPCydAY11PR7BtHQwYmgJUN8WJLExPT9phaVZIu4qWGccGk651wyYcGx6XDyqlM
+         4hfQ==
+X-Gm-Message-State: APjAAAV92QbNsKFz3ZMPSFgQgQ4mMDFIEnVbpRJWwkY77sE1lMRGJ4y3
+        oUgBt7FIaOvvs6fXQxBwJ/i6sQchPQa/FKMLsoLkCw==
+X-Google-Smtp-Source: APXvYqwKm8MpMl1siagRD/fOyBMzpEUip8dDd1vpjLe8Sx3Hl6Aa61T3XqlZpKdBWWKGOA+Cc/OEYNbwz3q/Vz2Kliw=
+X-Received: by 2002:ac5:c4f8:: with SMTP id b24mr3242890vkl.79.1575392688846;
+ Tue, 03 Dec 2019 09:04:48 -0800 (PST)
 MIME-Version: 1.0
-References: <1568859503-19725-1-git-send-email-thara.gopinath@linaro.org> <1568859503-19725-2-git-send-email-thara.gopinath@linaro.org>
-In-Reply-To: <1568859503-19725-2-git-send-email-thara.gopinath@linaro.org>
+References: <1571254641-13626-1-git-send-email-thara.gopinath@linaro.org> <1571254641-13626-4-git-send-email-thara.gopinath@linaro.org>
+In-Reply-To: <1571254641-13626-4-git-send-email-thara.gopinath@linaro.org>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Tue, 3 Dec 2019 22:23:57 +0530
-Message-ID: <CAHLCerMif4ZyUwO-r04Ds3AZuRQNtw5bfFjWa9nOhTovMxVYOA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: Introduce monitor-falling
- parameter to thermal trip point binding
+Date:   Tue, 3 Dec 2019 22:34:37 +0530
+Message-ID: <CAHLCerOCt9VBizAHu+y+CmzFmz-ktqCJgcB_NeC3WC4W9YBvAQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/7] thermal: core: Add late init hook to cooling
+ device ops
 To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM list <linux-pm@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 7:48 AM Thara Gopinath
+On Thu, Oct 17, 2019 at 1:07 AM Thara Gopinath
 <thara.gopinath@linaro.org> wrote:
 >
-> Introduce a new binding parameter to thermal trip point description
-> to indicate whether the temperature level specified by the trip point
-> is monitored for a rise or fall in temperature.
+> Add a hook in thermal_cooling_device_ops to be called after
+> the cooling device has been initialized and registered
+> but before binding it to a thermal zone.
 >
+> In this patch series it is used to hook up a power domain
+> to the device pointer of cooling device.
+>
+> It can be used for any other relevant late initializations
+> of a cooling device as well.
+
+Please describe WHY this hook is needed.
+
 > Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 > ---
->  Documentation/devicetree/bindings/thermal/thermal.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/thermal/thermal_core.c | 13 +++++++++++++
+>  include/linux/thermal.h        |  1 +
+>  2 files changed, 14 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt b/Documentation/devicetree/bindings/thermal/thermal.txt
-> index ca14ba9..849a2a9 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
-> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
-> @@ -90,6 +90,14 @@ Required properties:
->         "critical":     Hardware not reliable.
->    Type: string
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 886e8fa..c2ecb73 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -994,6 +994,19 @@ __thermal_cooling_device_register(struct device_node *np,
+>         list_add(&cdev->node, &thermal_cdev_list);
+>         mutex_unlock(&thermal_list_lock);
 >
-> +Optional property:
-> +- monitor-falling:     Indicate whether the system action is kick
-
-Stray space after :
-
-> +  Type: boolean                started when the temperature falls below or rises
-
-Unnecessary tab after boolean (I'll fix up the rest of the file in the
-yaml conversion)
-
-I suggest not making this boolean. Just use the property as a flag by
-itself to denote a falling trip point. No need to deal with true/false
-values.
-
-Similarly, the sysfs file would show up only in case of a trip that
-sets this flag and just contain a 1, for example.
-
-> +                       above the trip temperature level indicated in
-> +                       "temperature".If true, the trip point is monitored
-
-Add space after full stop.
-
-
-> +                       for falling temperature else the trip point is
-> +                       monitored for rising temperature.
+> +       /* Call into cdev late initialization if defined */
+> +       if (cdev->ops->late_init) {
+> +               result = cdev->ops->late_init(cdev);
+> +               if (result) {
+> +                       ida_simple_remove(&thermal_cdev_ida, cdev->id);
+> +                       put_device(&cdev->device);
+> +                       mutex_lock(&thermal_list_lock);
+> +                       list_del(&cdev->node);
+> +                       mutex_unlock(&thermal_list_lock);
+> +                       return ERR_PTR(result);
+> +               }
+> +       }
 > +
->  * Cooling device maps
+>         /* Update binding information for 'this' new cdev */
+>         bind_cdev(cdev);
 >
->  The cooling device maps node is a node to describe how cooling devices
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index e45659c..e94b3de 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -125,6 +125,7 @@ struct thermal_cooling_device_ops {
+>                            struct thermal_zone_device *, unsigned long, u32 *);
+>         int (*power2state)(struct thermal_cooling_device *,
+>                            struct thermal_zone_device *, u32, unsigned long *);
+> +       int (*late_init)(struct thermal_cooling_device *);
+>  };
+>
+>  struct thermal_cooling_device {
 > --
 > 2.1.4
 >
