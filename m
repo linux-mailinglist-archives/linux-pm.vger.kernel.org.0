@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD3C10FAD8
+	by mail.lfdr.de (Postfix) with ESMTP id A983610FAD9
 	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 10:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbfLCJhS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726365AbfLCJhS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 3 Dec 2019 04:37:18 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35719 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726365AbfLCJhR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 04:37:17 -0500
-Received: by mail-wm1-f68.google.com with SMTP id u8so2677101wmu.0
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37918 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbfLCJhS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 04:37:18 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y17so2768406wrh.5
         for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 01:37:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IggfPB+tjS7935yy1bgS/bcntfnQ1JptbLU3i0UsIps=;
-        b=ycM6jNT5oat58eevSo1aLTeLS/H7yKuoFkvX3QQYu8yed18QLxFFAZZWszYH/wG4bI
-         S+HLymrWtT1UcBKQSjdrCfkiN0MJaKGTCTJ5YWRiUBJ/QAe70A4hErXdinr7QjNEQ9hK
-         jsM5cSjY5T9P/6rPoJD+fLYax3vLOkiEIFj+SRTZA6pOwIHT57ptKictaMEeh2q3nyJh
-         9uxerGTXmloR44A/snT+0AUAgS/T8zUPKq74t/ejzEMv4aZLIUuID3YMb0OTd14/MEDK
-         gvVFvn96b5LYUcvK3a1AKEuNEZSLEi3w0UT+m6/H5j2jKKcodck6KqXmJNGORDYn85ci
-         SNwQ==
+        bh=n1V4m5uHfTZUZxbvB/zT+U3+jIt/r2ueCcg5F/IHP4U=;
+        b=E65o8GbhaN6dhsWwqzOmls+WOicYbtpQe1WLFww2Jaa7JRztNoOiGZ1KrFWIh7zroa
+         PD3m16AUfEZovja7lfC1k64JxzC1hmTdp7WHe7tGzNB9iXuyUR3Sv1Z0dH1S7tCMx30N
+         cQDUdtZNMQuQKrytVyqyB9a8sWZ4wGV55Rsvb5vj4evXM/2omPE92xA2TQ6i6L/U8YT0
+         z8QnLUuCWiyXCVpdhJS3s4LFc/YsSdeDrdNf4khoh2erPEN/qQJqXyvCEPDWgfAJePgW
+         pFHmVbBmDN9BjHHOHVcntF6yAo27fTWTeDVByAWFYHnYaLg9mdx9jz8IfIvJ3YuOdDRu
+         qP8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=IggfPB+tjS7935yy1bgS/bcntfnQ1JptbLU3i0UsIps=;
-        b=FxmGva03SJ8VFssjFiXDuQQXhgo1Encnfn44UQjgGwEvPDAwOUC3zCxjMxFJ1qLJ+w
-         h2+zyz2aYYytKFv+EKPL55Bew4RX6G2iTrl+WivuFBbZBwj3by7hufTOrZmOcsEshQpd
-         v6f3QItHJwUm7edvZ+BRxWCSgmnA2t157Jw28qUrhqNGDB4WILJ5PiT2pr5Jw4D1hcUT
-         87BEtYa01g8xo5Y733Eb0Ug4YOqjS8+O52oQMAMzf/fx1KiRVBom5KOh9ATfg8rSv4/Q
-         47zdBzBJoMjiuc8SSn4r2fkdsqdZOJgLDgwBxA5D+/Y9uEaSyFkkjRzyIoZqW5gFqLIL
-         p4Vg==
-X-Gm-Message-State: APjAAAXTL+3I1iYMvcOpVbpSZNGyWxH8YgVy5TBagAZ1H8kwfwFZavc6
-        d5fhVUNQzXU8AbpOofOF8zaQZg==
-X-Google-Smtp-Source: APXvYqz4YaVESUOlP6+tPyglnFe2+m/Syk+cFE2fo7MsdJPB6fkL+ysEMxTA1lzuBTavMkxDqqJXOA==
-X-Received: by 2002:a7b:c5d0:: with SMTP id n16mr34490278wmk.78.1575365833778;
-        Tue, 03 Dec 2019 01:37:13 -0800 (PST)
+        bh=n1V4m5uHfTZUZxbvB/zT+U3+jIt/r2ueCcg5F/IHP4U=;
+        b=hAoiTxYUGh2ETEuJpv85GM7SoyWPD1lmQaP5IVFH50timNQ6szxrWmzvzr5wsZz73+
+         QCK2L/dlvNZB6/7S0mbuj99iUn4tSWTzZ31Uxb3EhTxqHHb1tXgah1JVOTUbVFIeeGDz
+         W4JAOma3OKfwfBLiw0SSeDaDu4UqpZZqryn+YB2OWVXsaZ9JTbE93K1C68JHKgTrNc+G
+         tObsVLo3XwJWgBHJ0mhUKRrgd2RQIMh547UgZAbW856LSwLK1tgTvlKxjSi7VCnaXx+B
+         dZEoteqwuSCbqThWUi9nbzWqiL0FhfT9WI6uwu6eyk3XM5+0pJLwtxzHPw2vhnLtSzd9
+         m7Qg==
+X-Gm-Message-State: APjAAAXjkGhB5tK4bLvw3vZYJLdjTkUulOovPffREvhj3xReY9mInfo0
+        kCJ3I+HrGKASdMtUTfrEX9RXtA==
+X-Google-Smtp-Source: APXvYqwZgnSicZdtM/tuYU44eF8nODj6JRqUZHZKZa0aD8MBSp2wduQjWdsjtvzB8xzUdW3uGc7BuQ==
+X-Received: by 2002:adf:f411:: with SMTP id g17mr3958312wro.89.1575365834904;
+        Tue, 03 Dec 2019 01:37:14 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:8196:cbcc:fb2c:4975])
-        by smtp.gmail.com with ESMTPSA id w13sm2935751wru.38.2019.12.03.01.37.12
+        by smtp.gmail.com with ESMTPSA id w13sm2935751wru.38.2019.12.03.01.37.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 01:37:13 -0800 (PST)
+        Tue, 03 Dec 2019 01:37:14 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     viresh.kumar@linaro.org, rui.zhang@intel.com
 Cc:     rjw@rjwysocki.net, edubezval@gmail.com, linux-pm@vger.kernel.org,
         amit.kucheria@linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/4] thermal/drivers/cpu_cooling: Introduce the cpu idle cooling driver
-Date:   Tue,  3 Dec 2019 10:37:03 +0100
-Message-Id: <20191203093704.7037-3-daniel.lezcano@linaro.org>
+Subject: [PATCH V3 4/4] thermal/drivers/cpu_cooling: Rename to cpufreq_cooling
+Date:   Tue,  3 Dec 2019 10:37:04 +0100
+Message-Id: <20191203093704.7037-4-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191203093704.7037-1-daniel.lezcano@linaro.org>
 References: <20191203093704.7037-1-daniel.lezcano@linaro.org>
@@ -58,368 +58,122 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpu idle cooling device offers a new method to cool down a CPU by
-injecting idle cycles at runtime.
-
-It has some similarities with the intel power clamp driver but it is
-actually designed to be more generic and relying on the idle injection
-powercap framework.
-
-The idle injection cycle is fixed while the running cycle is variable. That
-allows to have control on the device reactivity for the user experience.
-
-An idle state powering down the CPU or the cluster will allow to drop
-the static leakage, thus restoring the heat capacity of the SoC. It
-can be set with a trip point between the hot and the critical points,
-giving the opportunity to prevent a hard reset of the system when the
-cpufreq cooling fails to cool down the CPU.
-
-With more sophisticated boards having a per core sensor, the idle
-cooling device allows to cool down a single core without throttling
-the compute capacity of several cpus belonging to the same clock line,
-so it could be used in collaboration with the cpufreq cooling device.
+As we introduced the idle injection cooling device called
+cpuidle_cooling, let's be consistent and rename the cpu_cooling to
+cpufreq_cooling as this one mitigates with OPPs changes.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- V3:
-   - Add missing parameter documentation (Viresh Kumar)
-   - Fixed function description (Viresh Kumar)
-   - Add entry in MAINTAINER file
- V2:
-   - Remove idle_duration_us field and use idle_inject API instead (Viresh Kumar)
-   - Fixed function definition wheh CPU_IDLE_COOLING is not set
-   - Inverted the initialization in the init function (Viresh Kumar)
+  V3:
+    - Fix missing name conversion (Viresh Kumar)
 ---
- MAINTAINERS                       |   3 +
- drivers/thermal/Kconfig           |   7 +
- drivers/thermal/Makefile          |   1 +
- drivers/thermal/cpuidle_cooling.c | 234 ++++++++++++++++++++++++++++++
- include/linux/cpu_cooling.h       |  22 +++
- 5 files changed, 267 insertions(+)
- create mode 100644 drivers/thermal/cpuidle_cooling.c
+ Documentation/driver-api/thermal/exynos_thermal.rst  | 2 +-
+ MAINTAINERS                                          | 2 +-
+ drivers/thermal/Makefile                             | 2 +-
+ drivers/thermal/clock_cooling.c                      | 2 +-
+ drivers/thermal/{cpu_cooling.c => cpufreq_cooling.c} | 6 +++---
+ include/linux/clock_cooling.h                        | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+ rename drivers/thermal/{cpu_cooling.c => cpufreq_cooling.c} (99%)
 
+diff --git a/Documentation/driver-api/thermal/exynos_thermal.rst b/Documentation/driver-api/thermal/exynos_thermal.rst
+index 5bd556566c70..d4e4a5b75805 100644
+--- a/Documentation/driver-api/thermal/exynos_thermal.rst
++++ b/Documentation/driver-api/thermal/exynos_thermal.rst
+@@ -67,7 +67,7 @@ TMU driver description:
+ The exynos thermal driver is structured as::
+ 
+ 					Kernel Core thermal framework
+-				(thermal_core.c, step_wise.c, cpu_cooling.c)
++				(thermal_core.c, step_wise.c, cpufreq_cooling.c)
+ 								^
+ 								|
+ 								|
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c570f0204b48..d2e92a0360f2 100644
+index d2e92a0360f2..26e4be914765 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16187,12 +16187,15 @@ F:	Documentation/devicetree/bindings/thermal/
- 
- THERMAL/CPU_COOLING
- M:	Amit Daniel Kachhap <amit.kachhap@gmail.com>
-+M:	Daniel Lezcano <daniel.lezcano@linaro.org>
- M:	Viresh Kumar <viresh.kumar@linaro.org>
- M:	Javi Merino <javi.merino@kernel.org>
- L:	linux-pm@vger.kernel.org
+@@ -16194,7 +16194,7 @@ L:	linux-pm@vger.kernel.org
  S:	Supported
  F:	Documentation/driver-api/thermal/cpu-cooling-api.rst
-+F:	Documentation/driver-api/thermal/cpu-idle-cooling.rst
- F:	drivers/thermal/cpu_cooling.c
-+F:	drivers/thermal/cpuidle_cooling.c
+ F:	Documentation/driver-api/thermal/cpu-idle-cooling.rst
+-F:	drivers/thermal/cpu_cooling.c
++F:	drivers/thermal/cpufreq_cooling.c
+ F:	drivers/thermal/cpuidle_cooling.c
  F:	include/linux/cpu_cooling.h
  
- THINKPAD ACPI EXTRAS DRIVER
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 4e3ee036938b..4ee9953ba5ce 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -169,6 +169,13 @@ config CPU_FREQ_THERMAL
- 	  This will be useful for platforms using the generic thermal interface
- 	  and not the ACPI interface.
- 
-+config CPU_IDLE_THERMAL
-+	bool "CPU idle cooling device"
-+	depends on IDLE_INJECT
-+	help
-+	  This implements the CPU cooling mechanism through
-+	  idle injection. This will throttle the CPU by injecting
-+	  idle cycle.
- endif
- 
- config CLOCK_THERMAL
 diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index d3b01cc96981..9c8aa2d4bd28 100644
+index 9c8aa2d4bd28..5c98472ffd8b 100644
 --- a/drivers/thermal/Makefile
 +++ b/drivers/thermal/Makefile
-@@ -20,6 +20,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
+@@ -19,7 +19,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= user_space.o
+ thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
  
  # cpufreq cooling
- thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
-+thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
+-thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
++thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpufreq_cooling.o
+ thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
  
  # clock cooling
- thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
-diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
-new file mode 100644
-index 000000000000..7d91a1b298d4
---- /dev/null
-+++ b/drivers/thermal/cpuidle_cooling.c
-@@ -0,0 +1,234 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  Copyright (C) 2019 Linaro Limited.
-+ *
-+ *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ *
-+ */
-+#include <linux/cpu_cooling.h>
-+#include <linux/cpuidle.h>
-+#include <linux/err.h>
-+#include <linux/idle_inject.h>
-+#include <linux/idr.h>
-+#include <linux/slab.h>
-+#include <linux/thermal.h>
-+
-+/**
-+ * struct cpuidle_cooling_device - data for the idle cooling device
-+ * @ii_dev: an atomic to keep track of the last task exiting the idle cycle
-+ * @state: an normalized integer giving the state of the cooling device
-+ */
-+struct cpuidle_cooling_device {
-+	struct idle_inject_device *ii_dev;
-+	unsigned long state;
-+};
-+
-+static DEFINE_IDA(cpuidle_ida);
-+
-+/**
-+ * cpuidle_cooling_runtime - Running time computation
-+ * @idle_duration_us: the idle cooling device
-+ * @state: a percentile based number
-+ *
-+ * The running duration is computed from the idle injection duration
-+ * which is fixed. If we reach 100% of idle injection ratio, that
-+ * means the running duration is zero. If we have a 50% ratio
-+ * injection, that means we have equal duration for idle and for
-+ * running duration.
-+ *
-+ * The formula is deduced as the following:
-+ *
-+ *  running = idle x ((100 / ratio) - 1)
-+ *
-+ * For precision purpose for integer math, we use the following:
-+ *
-+ *  running = (idle x 100) / ratio - idle
-+ *
-+ * For example, if we have an injected duration of 50%, then we end up
-+ * with 10ms of idle injection and 10ms of running duration.
-+ *
-+ * Returns an unsigned int for an usec based runtime duration.
-+ */
-+static unsigned int cpuidle_cooling_runtime(unsigned int idle_duration_us,
-+					    unsigned long state)
-+{
-+	if (!state)
-+		return 0;
-+
-+	return ((idle_duration_us * 100) / state) - idle_duration_us;
-+}
-+
-+/**
-+ * cpuidle_cooling_get_max_state - Get the maximum state
-+ * @cdev  : the thermal cooling device
-+ * @state : a pointer to the state variable to be filled
-+ *
-+ * The function always gives 100 as the injection ratio is percentile
-+ * based for consistency accros different platforms.
-+ *
-+ * The function can not fail, it always returns zero.
-+ */
-+static int cpuidle_cooling_get_max_state(struct thermal_cooling_device *cdev,
-+					 unsigned long *state)
-+{
-+	/*
-+	 * Depending on the configuration or the hardware, the running
-+	 * cycle and the idle cycle could be different. We want unify
-+	 * that to an 0..100 interval, so the set state interface will
-+	 * be the same whatever the platform is.
-+	 *
-+	 * The state 100% will make the cluster 100% ... idle. A 0%
-+	 * injection ratio means no idle injection at all and 50%
-+	 * means for 10ms of idle injection, we have 10ms of running
-+	 * time.
-+	 */
-+	*state = 100;
-+
-+	return 0;
-+}
-+
-+/**
-+ * cpuidle_cooling_get_cur_state - Get the current cooling state
-+ * @cdev: the thermal cooling device
-+ * @state: a pointer to the state
-+ *
-+ * The function just copy the state value from the private thermal
-+ * cooling device structure, the mapping is 1 <-> 1.
-+ *
-+ * The function can not fail, it always returns zero.
-+ */
-+static int cpuidle_cooling_get_cur_state(struct thermal_cooling_device *cdev,
-+					 unsigned long *state)
-+{
-+	struct cpuidle_cooling_device *idle_cdev = cdev->devdata;
-+
-+	*state = idle_cdev->state;
-+
-+	return 0;
-+}
-+
-+/**
-+ * cpuidle_cooling_set_cur_state - Set the current cooling state
-+ * @cdev: the thermal cooling device
-+ * @state: the target state
-+ *
-+ * The function checks first if we are initiating the mitigation which
-+ * in turn wakes up all the idle injection tasks belonging to the idle
-+ * cooling device. In any case, it updates the internal state for the
-+ * cooling device.
-+ *
-+ * The function can not fail, it always returns zero.
-+ */
-+static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
-+					 unsigned long state)
-+{
-+	struct cpuidle_cooling_device *idle_cdev = cdev->devdata;
-+	struct idle_inject_device *ii_dev = idle_cdev->ii_dev;
-+	unsigned long current_state = idle_cdev->state;
-+	unsigned int runtime_us, idle_duration_us;
-+
-+	idle_cdev->state = state;
-+
-+	idle_inject_get_duration(ii_dev, &runtime_us, &idle_duration_us);
-+
-+	runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
-+
-+	idle_inject_set_duration(ii_dev, runtime_us, idle_duration_us);
-+
-+	if (current_state == 0 && state > 0) {
-+		idle_inject_start(ii_dev);
-+	} else if (current_state > 0 && !state)  {
-+		idle_inject_stop(ii_dev);
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * cpuidle_cooling_ops - thermal cooling device ops
-+ */
-+static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
-+	.get_max_state = cpuidle_cooling_get_max_state,
-+	.get_cur_state = cpuidle_cooling_get_cur_state,
-+	.set_cur_state = cpuidle_cooling_set_cur_state,
-+};
-+
-+/**
-+ * cpuidle_of_cooling_register - Idle cooling device initialization function
-+ * @drv: a cpuidle driver structure pointer
-+ * @np: a node pointer to a device tree cooling device node
-+ *
-+ * This function is in charge of creating a cooling device per cpuidle
-+ * driver and register it to thermal framework.
-+ *
-+ * Returns a valid pointer to a thermal cooling device or a PTR_ERR
-+ * corresponding to the error detected in the underlying subsystems.
-+ */
-+struct thermal_cooling_device *
-+__init cpuidle_of_cooling_register(struct device_node *np,
-+				   struct cpuidle_driver *drv)
-+{
-+	struct idle_inject_device *ii_dev;
-+	struct cpuidle_cooling_device *idle_cdev;
-+	struct thermal_cooling_device *cdev;
-+	char dev_name[THERMAL_NAME_LENGTH];
-+	int id, ret;
-+
-+	idle_cdev = kzalloc(sizeof(*idle_cdev), GFP_KERNEL);
-+	if (!idle_cdev) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	id = ida_simple_get(&cpuidle_ida, 0, 0, GFP_KERNEL);
-+	if (id < 0) {
-+		ret = id;
-+		goto out_kfree;
-+	}
-+
-+	ii_dev = idle_inject_register(drv->cpumask);
-+	if (IS_ERR(ii_dev)) {
-+		ret = PTR_ERR(ii_dev);
-+		goto out_id;
-+	}
-+
-+	idle_inject_set_duration(ii_dev, 0, TICK_USEC);
-+	
-+	idle_cdev->ii_dev = ii_dev;
-+
-+	snprintf(dev_name, sizeof(dev_name), "thermal-idle-%d", id);
-+
-+	cdev = thermal_of_cooling_device_register(np, dev_name, idle_cdev,
-+						  &cpuidle_cooling_ops);
-+	if (IS_ERR(cdev)) {
-+		ret = PTR_ERR(cdev);
-+		goto out_unregister;
-+	}
-+
-+	return cdev;
-+
-+out_unregister:
-+	idle_inject_unregister(ii_dev);
-+out_id:
-+	ida_simple_remove(&cpuidle_ida, id);
-+out_kfree:
-+	kfree(idle_cdev);
-+out:
-+	return ERR_PTR(ret);
-+}
-+
-+/**
-+ * cpuidle_cooling_register - Idle cooling device initialization function
-+ * @drv: a cpuidle driver structure pointer
-+ *
-+ * This function is in charge of creating a cooling device per cpuidle
-+ * driver and register it to thermal framework.
-+ *
-+ * Returns a valid pointer to a thermal cooling device, a PTR_ERR
-+ * corresponding to the error detected in the underlying subsystems.
-+ */
-+struct thermal_cooling_device *
-+__init cpuidle_cooling_register(struct cpuidle_driver *drv)
-+{
-+	return cpuidle_of_cooling_register(NULL, drv);
-+}
-diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
-index 3cdd85f987d7..da0970183d1f 100644
---- a/include/linux/cpu_cooling.h
-+++ b/include/linux/cpu_cooling.h
-@@ -60,4 +60,26 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- }
- #endif /* CONFIG_CPU_FREQ_THERMAL */
+diff --git a/drivers/thermal/clock_cooling.c b/drivers/thermal/clock_cooling.c
+index 3ad3256c48fd..7cb3ae4b44ee 100644
+--- a/drivers/thermal/clock_cooling.c
++++ b/drivers/thermal/clock_cooling.c
+@@ -7,7 +7,7 @@
+  *  Copyright (C) 2013	Texas Instruments Inc.
+  *  Contact:  Eduardo Valentin <eduardo.valentin@ti.com>
+  *
+- *  Highly based on cpu_cooling.c.
++ *  Highly based on cpufreq_cooling.c.
+  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
+  *  Copyright (C) 2012  Amit Daniel <amit.kachhap@linaro.org>
+  */
+diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpufreq_cooling.c
+similarity index 99%
+rename from drivers/thermal/cpu_cooling.c
+rename to drivers/thermal/cpufreq_cooling.c
+index 6b9865c786ba..3a3f9cf94b6d 100644
+--- a/drivers/thermal/cpu_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- *  linux/drivers/thermal/cpu_cooling.c
++ *  linux/drivers/thermal/cpufreq_cooling.c
+  *
+  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
+  *
+@@ -694,7 +694,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+ 	u32 capacitance = 0;
  
-+struct cpuidle_driver;
-+
-+#ifdef CONFIG_CPU_IDLE_THERMAL
-+extern struct thermal_cooling_device *
-+__init cpuidle_cooling_register(struct cpuidle_driver *drv);
-+extern struct thermal_cooling_device *
-+__init cpuidle_of_cooling_register(struct device_node *np,
-+				   struct cpuidle_driver *drv);
-+#else /* CONFIG_CPU_IDLE_THERMAL */
-+static inline struct thermal_cooling_device *
-+__init cpuidle_cooling_register(struct cpuidle_driver *drv)
-+{
-+	return ERR_PTR(-EINVAL);
-+}
-+static inline struct thermal_cooling_device *
-+__init cpuidle_of_cooling_register(struct device_node *np,
-+				   struct cpuidle_driver *drv)
-+{
-+	return ERR_PTR(-EINVAL);
-+}
-+#endif /* CONFIG_CPU_IDLE_THERMAL */
-+
- #endif /* __CPU_COOLING_H__ */
+ 	if (!np) {
+-		pr_err("cpu_cooling: OF node not available for cpu%d\n",
++		pr_err("cpufreq_cooling: OF node not available for cpu%d\n",
+ 		       policy->cpu);
+ 		return NULL;
+ 	}
+@@ -705,7 +705,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+ 
+ 		cdev = __cpufreq_cooling_register(np, policy, capacitance);
+ 		if (IS_ERR(cdev)) {
+-			pr_err("cpu_cooling: cpu%d failed to register as cooling device: %ld\n",
++			pr_err("cpufreq_cooling: cpu%d failed to register as cooling device: %ld\n",
+ 			       policy->cpu, PTR_ERR(cdev));
+ 			cdev = NULL;
+ 		}
+diff --git a/include/linux/clock_cooling.h b/include/linux/clock_cooling.h
+index b5cebf766e02..4b0a69863656 100644
+--- a/include/linux/clock_cooling.h
++++ b/include/linux/clock_cooling.h
+@@ -7,7 +7,7 @@
+  *  Copyright (C) 2013	Texas Instruments Inc.
+  *  Contact:  Eduardo Valentin <eduardo.valentin@ti.com>
+  *
+- *  Highly based on cpu_cooling.c.
++ *  Highly based on cpufreq_cooling.c.
+  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
+  *  Copyright (C) 2012  Amit Daniel <amit.kachhap@linaro.org>
+  */
 -- 
 2.17.1
 
