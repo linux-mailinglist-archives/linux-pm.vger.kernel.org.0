@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C443010F421
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 01:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D0410F40C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 01:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbfLCAmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Dec 2019 19:42:52 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45806 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726791AbfLCAmU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 19:42:20 -0500
-Received: by mail-lj1-f195.google.com with SMTP id d20so1623106ljc.12;
-        Mon, 02 Dec 2019 16:42:19 -0800 (PST)
+        id S1726990AbfLCAmX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Dec 2019 19:42:23 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38358 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726925AbfLCAmW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Dec 2019 19:42:22 -0500
+Received: by mail-lj1-f193.google.com with SMTP id k8so1686363ljh.5;
+        Mon, 02 Dec 2019 16:42:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iAu8VzWG/+L0QpU5qi5zuwKYWMMJhtbx3vr03UqSLdU=;
-        b=hnvt7O4ur4Gc5jo6tBCMQ+373oJLCfmF0wKSyvBVPRmGra49O/M0LW6eyOrOE/Qrgf
-         qIfuGySay7GzP/LxO2BGO5KeLpJlUJvZs0MrNbCMckATerI1jaIbhiJMbATVmdFWiayG
-         gGrcE4mY7pN2Ol5OjFSRAXhLPtbdbNC1DS1QXCefXWRtdVgvtZQ8FbfDgMnGMyugbRzc
-         KhTCoraYdpLeGgM6aZxN4UfHmE77bKjAf4mqN2RWI5sSG4qoabVlF36t3c66Nhp1LpNi
-         s2M2XL3uGo+IGHaj3XWhF8w7TngbDoRDtuLCDT5+xEQ+BGFGdpqRJCYkEDTj1RZB7Nuk
-         0hFw==
+        bh=d0mK1Z7qoFE2PZhFBqu+ALZHCAnCtCbOKYMTfyLZ6ec=;
+        b=KC+5/s44yjC+sGvGgutLBMU6HME7FKCgF+Tezsa0DgIckWH2D5WXBH4REhnM3dKW6O
+         WybjWeABQ8PkL58tiYzf5k8F0v4C5KqLiLiXIxU/SsdlcDehxaRuafXhQrDq/imdelt6
+         NC6HpZ9Jr8kvlMFXHDhzYauCItMi+dYq1Crba97nMzyGyuNhWt6EjkS0joX4buTTo4EA
+         IHqGgfXV/567S3CVvv1J08p8Ivdf8uXZMmcc2CwOu6//Y/g/540ofuVI10/EZuj4cnEs
+         YNhfZp/vuZ7Vm0ZlQPVsrLvtGMfoUeP2Xp2kRDrypqqrk9f9PPjNW+dFGOU2vwOIHJsq
+         aEjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iAu8VzWG/+L0QpU5qi5zuwKYWMMJhtbx3vr03UqSLdU=;
-        b=Pg7zwT5l0m3DYADK+9FcT/WVujoT3N2gzK94dcN5lHvax/WEoTC9yjOdyTlAWKfV+3
-         Yu59VSVId7s9khoCQ9qV0GvakP78MHJh3UqxtKAfXUwc2AJ09xFpeBDMwzhE4WN0WbnA
-         3C2YO2TVOdqihEqGvbzqUKIsPkk8z6g6+Kg7ZHcxM7n7fW2GAwYvZcZlT4gvQc1Nkm5G
-         cjqwOeI9Vyfs7tGH1kdrwvjFM0jjy1VxG0LvkMic/DV3P5pyiMt+AHuYImyT7kYoAtD9
-         hfbrv1l/8VrQUgbH5I9k0MN/WuUzfA4B4rD1At9vezSGFOpC7QMgmva26ZpUMnk7BfBJ
-         TUwA==
-X-Gm-Message-State: APjAAAVtwtdESwa40CIaFOKglr9YnB/VHARewP2g1CNw0pEpPWwwRhtX
-        kBVMbFHzPv0VGO2ejpdCvaA=
-X-Google-Smtp-Source: APXvYqw9Io9lTNijDet9+E0yfZEj0NuyVytiKA1BHZLYA9S3gp5sr9w3N0StSAkPBMOmUd6kXXy6Fw==
-X-Received: by 2002:a2e:809a:: with SMTP id i26mr870450ljg.108.1575333739076;
-        Mon, 02 Dec 2019 16:42:19 -0800 (PST)
+        bh=d0mK1Z7qoFE2PZhFBqu+ALZHCAnCtCbOKYMTfyLZ6ec=;
+        b=nVZmoRQewdscguT6ATuVR1W0tN2EEB/VjxsXFZxcFjv3efr5cnvtwAXrIQ9ibmHX2c
+         0i92zwWzDTX6M4WHNgji6jFCY46b9QDzHv6FL5Lf109L8idG+X7LAy7mV/HWrOoEu6FQ
+         ahiBhmnAR9Jadj+LfSncnZKOY+cbnEeOVsITGiDj/v/q3kGePO40GkkmE1FUUnfxgo+K
+         ZwLjiEjqmthiwDubVsDNDime31UKf689zwTdQ4Bgrv6/SI9+FOTRKxtBywFttdLLsK4O
+         3gm01mCWrPgzQxfsGgfpmX4dKoo7h50kIYm6iuch2cS7TfJmVkVwyCUUN3sdzmAn8iuw
+         iikg==
+X-Gm-Message-State: APjAAAVYZzvSCMtaWVanAd7FIs9k0hvI8q4XxwAq1kwAkx6UkdVidxP4
+        QWRWEUZFMWP9rG50HLBowI8=
+X-Google-Smtp-Source: APXvYqzuOaDi1w2VYKYtjXSXPnGq/WjZ67cZD2LiTfoJD/V2fG4riQ84gJiNZOska3OXND03onH5uw==
+X-Received: by 2002:a2e:978d:: with SMTP id y13mr878257lji.103.1575333740100;
+        Mon, 02 Dec 2019 16:42:20 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id y21sm456384ljm.25.2019.12.02.16.42.18
+        by smtp.gmail.com with ESMTPSA id y21sm456384ljm.25.2019.12.02.16.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2019 16:42:18 -0800 (PST)
+        Mon, 02 Dec 2019 16:42:19 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v8 17/19] cpuidle: tegra: Disable CC6 state if LP2 unavailable
-Date:   Tue,  3 Dec 2019 03:41:14 +0300
-Message-Id: <20191203004116.11771-18-digetx@gmail.com>
+Subject: [PATCH v8 18/19] ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+Date:   Tue,  3 Dec 2019 03:41:15 +0300
+Message-Id: <20191203004116.11771-19-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191203004116.11771-1-digetx@gmail.com>
 References: <20191203004116.11771-1-digetx@gmail.com>
@@ -65,37 +65,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-LP2 suspending could be unavailable, for example if it is disabled in a
-device-tree. CC6 cpuidle state won't work in that case.
+The Tegra CPU Idle driver was moved out into driver/cpuidle/ directory and
+it is now a proper platform driver.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/cpuidle/cpuidle-tegra.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index bbd7999a3910..077ff15e32fb 100644
---- a/drivers/cpuidle/cpuidle-tegra.c
-+++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -31,6 +31,7 @@
- #include <soc/tegra/fuse.h>
- #include <soc/tegra/irq.h>
- #include <soc/tegra/pm.h>
-+#include <soc/tegra/pmc.h>
- 
- #include <asm/cpuidle.h>
- #include <asm/firmware.h>
-@@ -325,6 +326,10 @@ static void tegra_cpuidle_setup_tegra114_c7_state(void)
- 
- static int tegra_cpuidle_probe(struct platform_device *pdev)
- {
-+	/* LP2 could be disabled in device-tree */
-+	if (tegra_pmc_get_suspend_mode() < TEGRA_SUSPEND_LP2)
-+		tegra_idle_driver.states[TEGRA_CC6].disabled = true;
-+
- 	/*
- 	 * Required suspend-resume functionality, which is provided by the
- 	 * Tegra-arch core and PMC driver, is unavailable if PM-sleep option
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 24962d0e71c7..293f0cea076c 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -113,6 +113,7 @@ CONFIG_CPU_IDLE=y
+ CONFIG_ARM_CPUIDLE=y
+ CONFIG_ARM_ZYNQ_CPUIDLE=y
+ CONFIG_ARM_EXYNOS_CPUIDLE=y
++CONFIG_ARM_TEGRA_CPUIDLE=y
+ CONFIG_KERNEL_MODE_NEON=y
+ CONFIG_RASPBERRYPI_FIRMWARE=y
+ CONFIG_TRUSTED_FOUNDATIONS=y
 -- 
 2.24.0
 
