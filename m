@@ -2,45 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E431100A2
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 15:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA95A11023F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 17:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbfLCOub (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Dec 2019 09:50:31 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59926 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfLCOub (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 09:50:31 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 604DD28A0B4
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Collabora Kernel ML <kernel@collabora.com>, groeck@chromium.org,
-        bleung@chromium.org, dtor@chromium.org, gwendal@chromium.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org, Nick Vaccaro <nvaccaro@chromium.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] cros_ec: treewide: Remove 'include/linux/mfd/cros_ec.h'
-Date:   Tue,  3 Dec 2019 15:50:18 +0100
-Message-Id: <20191203145018.14015-1-enric.balletbo@collabora.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726628AbfLCQ1j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Dec 2019 11:27:39 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39349 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfLCQ1i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 11:27:38 -0500
+Received: by mail-wr1-f66.google.com with SMTP id y11so4440103wrt.6;
+        Tue, 03 Dec 2019 08:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0jfaKoGNvqeidEq8dhnq6AcI1xu7YSgIa7d+c2XneLU=;
+        b=DgeflI0xhGeQdxE6Ff9+yRak9JHCaJ+JlQW06FT4AxZZMxXnxSsKuuMBIPPlc5/0zk
+         rcq8WP4bDFUBpv1JXkCmJf4DVKLycRlHcFE3Mdf6mhIcQGdrUUH7k/m1Ch3FTsnISrx0
+         E7xF9nBP4x3hM7evKNyRckarMJwfIBVlGG0l/e1Cq/twzgtL4B1R4TQlnGeUGoNSk/hr
+         Ilq8GyyytJ58dDRfZCVFZ1Nccvuz9cGkrpPxc30TZupqBBBUTUXSTTv0vfLDEDSU+sFD
+         cNyUUEdCL+ar2jGZrLqC2G4SsN6vG2gslrYyZ1umGJUWE146OETBLEqLB3G5WvuP1C0h
+         6Zkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0jfaKoGNvqeidEq8dhnq6AcI1xu7YSgIa7d+c2XneLU=;
+        b=YUts4Ln99oNhtgAxkr6CTmp52NcoaLW2TdrK9Al2HH1+n8EJHfbIRYhzyC+nvP5Ryp
+         S3CM5mFzHb+JD2unM9A3t1urhkl/OD1RTKEQEO6vssyVZD07Yo+LMdBy4dfRqVGbsYIY
+         H3Uak2/5OeJetaBzie5Eoqyc6Lf1ZNbXJYw+Jx0nkeD0XQ1Adzb4OIXKhPJQ9PxzLKge
+         VxxH5WAWmTXBCGrrIYl3KwAELzM0mxTKjvJpu7fCFLY0d08Gm7EZncTpCQbnnGr5cMRJ
+         kxTSrDVqeHivtmW2eemWjw+QcCTIuFEjbFkBCfZFI/4rnteJ5GcQa4USE3pav+AtqbQS
+         8DDw==
+X-Gm-Message-State: APjAAAWkYkxwmepjWKdDCTioFwAf0VzQVXUH6ewNtBkEubiv3oigtTuq
+        rHk7Ia2MOplCmvni0GyH4N8=
+X-Google-Smtp-Source: APXvYqx/UGxSKekCs3iXh8mICGv/7cRs5i7A8WvP/ydE87BrhqKQsz6WpISddTAkIG1rAMzTt7I62g==
+X-Received: by 2002:a5d:6441:: with SMTP id d1mr6117959wrw.93.1575390455787;
+        Tue, 03 Dec 2019 08:27:35 -0800 (PST)
+Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
+        by smtp.gmail.com with ESMTPSA id k19sm3452068wmi.42.2019.12.03.08.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Dec 2019 08:27:34 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH 1/2] gpu: host1x: Rename "parent" to "host"
+Date:   Tue,  3 Dec 2019 17:27:32 +0100
+Message-Id: <20191203162733.1436800-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -48,323 +61,264 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This header file now only includes the cros_ec_dev struct, however, is the
-'include/linux/platform_data/cros_ec_proto.h' who contains the definition of
-all the Chrome OS EC related structs. There is no reason to have a
-separate include for this struct so move to the place where other
-structs are defined. That way, we can remove the include itself, but also
-simplify the common pattern
+From: Thierry Reding <treding@nvidia.com>
 
-    #include <linux/mfd/cros_ec.h>
-    #include <linux/platform_data/cros_ec_proto.h>
+Rename the host1x clients' parent to "host" because that more closely
+describes what it is. The parent can be confused with the parent device
+in terms of the device hierarchy. Subsequent patches will add a new
+member that refers to the parent in that hierarchy.
 
-for a single include
-
-    #include <linux/platform_data/cros_ec_proto.h>
-
-The changes to remove the cros_ec.h include were generated with the
-following shell script:
-
-    git grep -l "<linux/mfd/cros_ec.h>" | xargs sed -i '/<linux\/mfd\/cros_ec.h>/d'
-
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
+ drivers/gpu/drm/tegra/dc.c   | 6 +++---
+ drivers/gpu/drm/tegra/drm.c  | 4 ++--
+ drivers/gpu/drm/tegra/dsi.c  | 2 +-
+ drivers/gpu/drm/tegra/gr2d.c | 4 ++--
+ drivers/gpu/drm/tegra/gr3d.c | 4 ++--
+ drivers/gpu/drm/tegra/hdmi.c | 2 +-
+ drivers/gpu/drm/tegra/hub.c  | 4 ++--
+ drivers/gpu/drm/tegra/sor.c  | 2 +-
+ drivers/gpu/drm/tegra/vic.c  | 8 ++++----
+ drivers/gpu/host1x/bus.c     | 4 ++--
+ drivers/gpu/host1x/syncpt.c  | 2 +-
+ include/linux/host1x.h       | 2 +-
+ 12 files changed, 22 insertions(+), 22 deletions(-)
 
- drivers/iio/accel/cros_ec_accel_legacy.c      |  1 -
- .../common/cros_ec_sensors/cros_ec_sensors.c  |  1 -
- .../cros_ec_sensors/cros_ec_sensors_core.c    |  1 -
- drivers/iio/light/cros_ec_light_prox.c        |  1 -
- drivers/iio/pressure/cros_ec_baro.c           |  1 -
- .../media/platform/cros-ec-cec/cros-ec-cec.c  |  1 -
- drivers/mfd/cros_ec_dev.c                     |  1 -
- drivers/platform/chrome/cros_ec_chardev.c     |  1 -
- drivers/platform/chrome/cros_ec_debugfs.c     |  1 -
- drivers/platform/chrome/cros_ec_lightbar.c    |  1 -
- drivers/platform/chrome/cros_ec_sensorhub.c   |  1 -
- drivers/platform/chrome/cros_ec_sysfs.c       |  1 -
- drivers/platform/chrome/cros_ec_vbc.c         |  1 -
- drivers/platform/chrome/cros_usbpd_logger.c   |  1 -
- drivers/power/supply/cros_usbpd-charger.c     |  1 -
- drivers/rtc/rtc-cros-ec.c                     |  1 -
- include/linux/mfd/cros_ec.h                   | 35 -------------------
- include/linux/platform_data/cros_ec_proto.h   | 23 +++++++++++-
- 18 files changed, 22 insertions(+), 52 deletions(-)
- delete mode 100644 include/linux/mfd/cros_ec.h
-
-diff --git a/drivers/iio/accel/cros_ec_accel_legacy.c b/drivers/iio/accel/cros_ec_accel_legacy.c
-index 65f85faf6f31..68e847c6255e 100644
---- a/drivers/iio/accel/cros_ec_accel_legacy.c
-+++ b/drivers/iio/accel/cros_ec_accel_legacy.c
-@@ -18,7 +18,6 @@
- #include <linux/iio/trigger_consumer.h>
- #include <linux/iio/triggered_buffer.h>
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/platform_data/cros_ec_commands.h>
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-index 7dce04473467..576e45faafaf 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-@@ -16,7 +16,6 @@
- #include <linux/iio/trigger_consumer.h>
- #include <linux/iio/triggered_buffer.h>
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-index 81a7f692de2f..d3a3626c7cd8 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-@@ -13,7 +13,6 @@
- #include <linux/iio/kfifo_buf.h>
- #include <linux/iio/trigger_consumer.h>
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/platform_data/cros_ec_commands.h>
-diff --git a/drivers/iio/light/cros_ec_light_prox.c b/drivers/iio/light/cros_ec_light_prox.c
-index d85a391e50c5..7a838e2956f4 100644
---- a/drivers/iio/light/cros_ec_light_prox.c
-+++ b/drivers/iio/light/cros_ec_light_prox.c
-@@ -14,7 +14,6 @@
- #include <linux/iio/triggered_buffer.h>
- #include <linux/iio/trigger_consumer.h>
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/iio/pressure/cros_ec_baro.c b/drivers/iio/pressure/cros_ec_baro.c
-index 2354302375de..d2a67dceb996 100644
---- a/drivers/iio/pressure/cros_ec_baro.c
-+++ b/drivers/iio/pressure/cros_ec_baro.c
-@@ -14,7 +14,6 @@
- #include <linux/iio/triggered_buffer.h>
- #include <linux/iio/trigger_consumer.h>
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/platform_data/cros_ec_commands.h>
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 4a3b3810fd89..72c70f123650 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -14,7 +14,6 @@
- #include <linux/cec.h>
- #include <linux/slab.h>
- #include <linux/interrupt.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <media/cec.h>
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index c4b977a5dd96..8da4e4cef26f 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -6,7 +6,6 @@
+diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
+index 2b9a25c977c0..2983eb33f2be 100644
+--- a/drivers/gpu/drm/tegra/dc.c
++++ b/drivers/gpu/drm/tegra/dc.c
+@@ -2006,7 +2006,7 @@ static bool tegra_dc_has_window_groups(struct tegra_dc *dc)
+ 
+ static int tegra_dc_init(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	unsigned long flags = HOST1X_SYNCPT_CLIENT_MANAGED;
+ 	struct tegra_dc *dc = host1x_client_to_dc(client);
+ 	struct tegra_drm *tegra = drm->dev_private;
+@@ -2087,9 +2087,9 @@ static int tegra_dc_init(struct host1x_client *client)
+ 
+ 	/*
+ 	 * Inherit the DMA parameters (such as maximum segment size) from the
+-	 * parent device.
++	 * parent host1x device.
+ 	 */
+-	client->dev->dma_parms = client->parent->dma_parms;
++	client->dev->dma_parms = client->host->dma_parms;
+ 
+ 	return 0;
+ 
+diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
+index f455ce71e85d..aa9e49f04988 100644
+--- a/drivers/gpu/drm/tegra/drm.c
++++ b/drivers/gpu/drm/tegra/drm.c
+@@ -905,7 +905,7 @@ int tegra_drm_unregister_client(struct tegra_drm *tegra,
+ int host1x_client_iommu_attach(struct host1x_client *client)
+ {
+ 	struct iommu_domain *domain = iommu_get_domain_for_dev(client->dev);
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = drm->dev_private;
+ 	struct iommu_group *group = NULL;
+ 	int err;
+@@ -941,7 +941,7 @@ int host1x_client_iommu_attach(struct host1x_client *client)
+ 
+ void host1x_client_iommu_detach(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = drm->dev_private;
+ 	struct iommu_domain *domain;
+ 
+diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
+index a5d47e301c5f..ec475d022fa0 100644
+--- a/drivers/gpu/drm/tegra/dsi.c
++++ b/drivers/gpu/drm/tegra/dsi.c
+@@ -1030,7 +1030,7 @@ static const struct drm_encoder_helper_funcs tegra_dsi_encoder_helper_funcs = {
+ 
+ static int tegra_dsi_init(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	struct tegra_dsi *dsi = host1x_client_to_dsi(client);
+ 	int err;
+ 
+diff --git a/drivers/gpu/drm/tegra/gr2d.c b/drivers/gpu/drm/tegra/gr2d.c
+index 1fc4e56c7cc5..48363f744bb9 100644
+--- a/drivers/gpu/drm/tegra/gr2d.c
++++ b/drivers/gpu/drm/tegra/gr2d.c
+@@ -34,7 +34,7 @@ static inline struct gr2d *to_gr2d(struct tegra_drm_client *client)
+ static int gr2d_init(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	unsigned long flags = HOST1X_SYNCPT_HAS_BASE;
+ 	struct gr2d *gr2d = to_gr2d(drm);
+ 	int err;
+@@ -76,7 +76,7 @@ static int gr2d_init(struct host1x_client *client)
+ static int gr2d_exit(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = dev->dev_private;
+ 	struct gr2d *gr2d = to_gr2d(drm);
+ 	int err;
+diff --git a/drivers/gpu/drm/tegra/gr3d.c b/drivers/gpu/drm/tegra/gr3d.c
+index 24fae0f64032..c0a528be0369 100644
+--- a/drivers/gpu/drm/tegra/gr3d.c
++++ b/drivers/gpu/drm/tegra/gr3d.c
+@@ -43,7 +43,7 @@ static inline struct gr3d *to_gr3d(struct tegra_drm_client *client)
+ static int gr3d_init(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	unsigned long flags = HOST1X_SYNCPT_HAS_BASE;
+ 	struct gr3d *gr3d = to_gr3d(drm);
+ 	int err;
+@@ -85,7 +85,7 @@ static int gr3d_init(struct host1x_client *client)
+ static int gr3d_exit(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	struct gr3d *gr3d = to_gr3d(drm);
+ 	int err;
+ 
+diff --git a/drivers/gpu/drm/tegra/hdmi.c b/drivers/gpu/drm/tegra/hdmi.c
+index 50269ffbcb6b..38bf1d16095f 100644
+--- a/drivers/gpu/drm/tegra/hdmi.c
++++ b/drivers/gpu/drm/tegra/hdmi.c
+@@ -1424,8 +1424,8 @@ static const struct drm_encoder_helper_funcs tegra_hdmi_encoder_helper_funcs = {
+ 
+ static int tegra_hdmi_init(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
+ 	struct tegra_hdmi *hdmi = host1x_client_to_hdmi(client);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	int err;
+ 
+ 	hdmi->output.dev = client->dev;
+diff --git a/drivers/gpu/drm/tegra/hub.c b/drivers/gpu/drm/tegra/hub.c
+index e56c0f7d3a13..5c7545ee5a5b 100644
+--- a/drivers/gpu/drm/tegra/hub.c
++++ b/drivers/gpu/drm/tegra/hub.c
+@@ -715,7 +715,7 @@ void tegra_display_hub_atomic_commit(struct drm_device *drm,
+ static int tegra_display_hub_init(struct host1x_client *client)
+ {
+ 	struct tegra_display_hub *hub = to_tegra_display_hub(client);
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = drm->dev_private;
+ 	struct tegra_display_hub_state *state;
+ 
+@@ -733,7 +733,7 @@ static int tegra_display_hub_init(struct host1x_client *client)
+ 
+ static int tegra_display_hub_exit(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = drm->dev_private;
+ 
+ 	drm_atomic_private_obj_fini(&tegra->hub->base);
+diff --git a/drivers/gpu/drm/tegra/sor.c b/drivers/gpu/drm/tegra/sor.c
+index a68d3b36b972..956bf5d680ad 100644
+--- a/drivers/gpu/drm/tegra/sor.c
++++ b/drivers/gpu/drm/tegra/sor.c
+@@ -3053,7 +3053,7 @@ static const struct tegra_sor_ops tegra_sor_dp_ops = {
+ 
+ static int tegra_sor_init(struct host1x_client *client)
+ {
+-	struct drm_device *drm = dev_get_drvdata(client->parent);
++	struct drm_device *drm = dev_get_drvdata(client->host);
+ 	const struct drm_encoder_helper_funcs *helpers = NULL;
+ 	struct tegra_sor *sor = host1x_client_to_sor(client);
+ 	int connector = DRM_MODE_CONNECTOR_Unknown;
+diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
+index 3526c2892ddb..ade56b860cf9 100644
+--- a/drivers/gpu/drm/tegra/vic.c
++++ b/drivers/gpu/drm/tegra/vic.c
+@@ -161,7 +161,7 @@ static int vic_boot(struct vic *vic)
+ static int vic_init(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = dev->dev_private;
+ 	struct vic *vic = to_vic(drm);
+ 	int err;
+@@ -190,9 +190,9 @@ static int vic_init(struct host1x_client *client)
+ 
+ 	/*
+ 	 * Inherit the DMA parameters (such as maximum segment size) from the
+-	 * parent device.
++	 * parent host1x device.
+ 	 */
+-	client->dev->dma_parms = client->parent->dma_parms;
++	client->dev->dma_parms = client->host->dma_parms;
+ 
+ 	return 0;
+ 
+@@ -209,7 +209,7 @@ static int vic_init(struct host1x_client *client)
+ static int vic_exit(struct host1x_client *client)
+ {
+ 	struct tegra_drm_client *drm = host1x_to_drm_client(client);
+-	struct drm_device *dev = dev_get_drvdata(client->parent);
++	struct drm_device *dev = dev_get_drvdata(client->host);
+ 	struct tegra_drm *tegra = dev->dev_private;
+ 	struct vic *vic = to_vic(drm);
+ 	int err;
+diff --git a/drivers/gpu/host1x/bus.c b/drivers/gpu/host1x/bus.c
+index 2c8559ff3481..50d500345d04 100644
+--- a/drivers/gpu/host1x/bus.c
++++ b/drivers/gpu/host1x/bus.c
+@@ -120,7 +120,7 @@ static void host1x_subdev_register(struct host1x_device *device,
+ 	mutex_lock(&device->clients_lock);
+ 	list_move_tail(&client->list, &device->clients);
+ 	list_move_tail(&subdev->list, &device->active);
+-	client->parent = &device->dev;
++	client->host = &device->dev;
+ 	subdev->client = client;
+ 	mutex_unlock(&device->clients_lock);
+ 	mutex_unlock(&device->subdevs_lock);
+@@ -156,7 +156,7 @@ static void __host1x_subdev_unregister(struct host1x_device *device,
+ 	 */
+ 	mutex_lock(&device->clients_lock);
+ 	subdev->client = NULL;
+-	client->parent = NULL;
++	client->host = NULL;
+ 	list_move_tail(&subdev->list, &device->subdevs);
+ 	/*
+ 	 * XXX: Perhaps don't do this here, but rather explicitly remove it
+diff --git a/drivers/gpu/host1x/syncpt.c b/drivers/gpu/host1x/syncpt.c
+index dd1cd0142941..fce7892d5137 100644
+--- a/drivers/gpu/host1x/syncpt.c
++++ b/drivers/gpu/host1x/syncpt.c
+@@ -421,7 +421,7 @@ int host1x_syncpt_init(struct host1x *host)
+ struct host1x_syncpt *host1x_syncpt_request(struct host1x_client *client,
+ 					    unsigned long flags)
+ {
+-	struct host1x *host = dev_get_drvdata(client->parent->parent);
++	struct host1x *host = dev_get_drvdata(client->host->parent);
+ 
+ 	return host1x_syncpt_alloc(host, client, flags);
+ }
+diff --git a/include/linux/host1x.h b/include/linux/host1x.h
+index 6edeb9228c4e..470a193a9fed 100644
+--- a/include/linux/host1x.h
++++ b/include/linux/host1x.h
+@@ -44,7 +44,7 @@ struct host1x_client_ops {
   */
+ struct host1x_client {
+ 	struct list_head list;
+-	struct device *parent;
++	struct device *host;
+ 	struct device *dev;
+ 	struct iommu_group *group;
  
- #include <linux/mfd/core.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/of_platform.h>
-diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-index 74ded441bb50..c65e70bc168d 100644
---- a/drivers/platform/chrome/cros_ec_chardev.c
-+++ b/drivers/platform/chrome/cros_ec_chardev.c
-@@ -13,7 +13,6 @@
- #include <linux/init.h>
- #include <linux/device.h>
- #include <linux/fs.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
- #include <linux/notifier.h>
-diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-index 6ae484989d1f..ecfada00e6c5 100644
---- a/drivers/platform/chrome/cros_ec_debugfs.c
-+++ b/drivers/platform/chrome/cros_ec_debugfs.c
-@@ -7,7 +7,6 @@
- #include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/fs.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/platform_data/cros_ec_commands.h>
-diff --git a/drivers/platform/chrome/cros_ec_lightbar.c b/drivers/platform/chrome/cros_ec_lightbar.c
-index c0f2eec35a48..b4c110c5fee0 100644
---- a/drivers/platform/chrome/cros_ec_lightbar.c
-+++ b/drivers/platform/chrome/cros_ec_lightbar.c
-@@ -8,7 +8,6 @@
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/kobject.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/platform/chrome/cros_ec_sensorhub.c b/drivers/platform/chrome/cros_ec_sensorhub.c
-index 04d8879689e9..79fefd3bb0fa 100644
---- a/drivers/platform/chrome/cros_ec_sensorhub.c
-+++ b/drivers/platform/chrome/cros_ec_sensorhub.c
-@@ -9,7 +9,6 @@
- #include <linux/init.h>
- #include <linux/device.h>
- #include <linux/module.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_data/cros_ec_sensorhub.h>
-diff --git a/drivers/platform/chrome/cros_ec_sysfs.c b/drivers/platform/chrome/cros_ec_sysfs.c
-index 74d36b8d4f46..07dac97ad57c 100644
---- a/drivers/platform/chrome/cros_ec_sysfs.c
-+++ b/drivers/platform/chrome/cros_ec_sysfs.c
-@@ -8,7 +8,6 @@
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/kobject.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/platform/chrome/cros_ec_vbc.c b/drivers/platform/chrome/cros_ec_vbc.c
-index f11a1283e5c8..8edae465105c 100644
---- a/drivers/platform/chrome/cros_ec_vbc.c
-+++ b/drivers/platform/chrome/cros_ec_vbc.c
-@@ -6,7 +6,6 @@
- 
- #include <linux/of.h>
- #include <linux/platform_device.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/platform/chrome/cros_usbpd_logger.c b/drivers/platform/chrome/cros_usbpd_logger.c
-index 374cdd1e868a..7de3ea75ef46 100644
---- a/drivers/platform/chrome/cros_usbpd_logger.c
-+++ b/drivers/platform/chrome/cros_usbpd_logger.c
-@@ -6,7 +6,6 @@
-  */
- 
- #include <linux/ktime.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/math64.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 6cc7c3910e09..0aca0da41cb7 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -5,7 +5,6 @@
-  * Copyright (c) 2014 - 2018 Google, Inc
-  */
- 
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index d043d30f05bc..f7343c289cab 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -5,7 +5,6 @@
- // Author: Stephen Barber <smbarber@chromium.org>
- 
- #include <linux/kernel.h>
--#include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-deleted file mode 100644
-index 61c2875c2a40..000000000000
---- a/include/linux/mfd/cros_ec.h
-+++ /dev/null
-@@ -1,35 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * ChromeOS EC multi-function device
-- *
-- * Copyright (C) 2012 Google, Inc
-- */
--
--#ifndef __LINUX_MFD_CROS_EC_H
--#define __LINUX_MFD_CROS_EC_H
--
--#include <linux/device.h>
--
--/**
-- * struct cros_ec_dev - ChromeOS EC device entry point.
-- * @class_dev: Device structure used in sysfs.
-- * @ec_dev: cros_ec_device structure to talk to the physical device.
-- * @dev: Pointer to the platform device.
-- * @debug_info: cros_ec_debugfs structure for debugging information.
-- * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
-- * @cmd_offset: Offset to apply for each command.
-- * @features: Features supported by the EC.
-- */
--struct cros_ec_dev {
--	struct device class_dev;
--	struct cros_ec_device *ec_dev;
--	struct device *dev;
--	struct cros_ec_debugfs *debug_info;
--	bool has_kb_wake_angle;
--	u16 cmd_offset;
--	u32 features[2];
--};
--
--#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
--
--#endif /* __LINUX_MFD_CROS_EC_H */
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index 30098a551523..119b9951c055 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -12,7 +12,6 @@
- #include <linux/mutex.h>
- #include <linux/notifier.h>
- 
--#include <linux/mfd/cros_ec.h>
- #include <linux/platform_data/cros_ec_commands.h>
- 
- #define CROS_EC_DEV_NAME	"cros_ec"
-@@ -185,6 +184,28 @@ struct cros_ec_platform {
- 	u16 cmd_offset;
- };
- 
-+/**
-+ * struct cros_ec_dev - ChromeOS EC device entry point.
-+ * @class_dev: Device structure used in sysfs.
-+ * @ec_dev: cros_ec_device structure to talk to the physical device.
-+ * @dev: Pointer to the platform device.
-+ * @debug_info: cros_ec_debugfs structure for debugging information.
-+ * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
-+ * @cmd_offset: Offset to apply for each command.
-+ * @features: Features supported by the EC.
-+ */
-+struct cros_ec_dev {
-+	struct device class_dev;
-+	struct cros_ec_device *ec_dev;
-+	struct device *dev;
-+	struct cros_ec_debugfs *debug_info;
-+	bool has_kb_wake_angle;
-+	u16 cmd_offset;
-+	u32 features[2];
-+};
-+
-+#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
-+
- int cros_ec_suspend(struct cros_ec_device *ec_dev);
- 
- int cros_ec_resume(struct cros_ec_device *ec_dev);
 -- 
-2.20.1
+2.23.0
 
