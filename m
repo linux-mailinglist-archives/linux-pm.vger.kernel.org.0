@@ -2,193 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFB51103C2
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 18:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170CD1103E4
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Dec 2019 18:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbfLCRmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Dec 2019 12:42:35 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:33157 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbfLCRmf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 12:42:35 -0500
-Received: by mail-wr1-f67.google.com with SMTP id b6so4853890wrq.0;
-        Tue, 03 Dec 2019 09:42:32 -0800 (PST)
+        id S1726838AbfLCR4X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Dec 2019 12:56:23 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42564 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726808AbfLCR4X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Dec 2019 12:56:23 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e28so4826971ljo.9
+        for <linux-pm@vger.kernel.org>; Tue, 03 Dec 2019 09:56:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qE5r3nti027mzy0pKgrnKXkE1RSc8kUqTOaORXIdEtE=;
-        b=a40wQB7Mk7pBuIEzPBChXZl1yBZvbIVXlaeGoAaiJcl8DZczFfOnjnbH4qGRZ0lPoT
-         sRb08dAvwJLNEP5eDKxT0YBpPq2HtoE0w0BQ5jV2bXhdv76SufUrjfF1rhgxyZLThrsp
-         S9blKgXZiiYIkiuBLkMhYny1XboAMLEmBjUeD8rHJy+FiM+s8XPJ0IopkA6ylmfT1Szl
-         nwXDM1qbCCzKRRN1vUDI9Ac8ntundjbrtPnLX/IosvRrhRvDfkqzMorv7i/w36fh/01e
-         CeBmgwklnmeK9BfhSLVbKd+L0W/hQdVrkFJUhf0AWeQCw5G5psDNjeZ/3d/P7bsqKm4N
-         6Ogg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc
+         :content-transfer-encoding;
+        bh=xKJZIaHtKKjuYtXbsDuWM2Dl2PKeFrJbutUCYZbgryc=;
+        b=vY+fK0/0iOXoXphfCYAqMfmDz09jvFcyg+NSgTRbjfMEFLh5TTHOygTc+OAlKgbFtl
+         KP1JeWTXn6Nbz87qpP1lDqVKuyLJ2K9Dr2085WxZsQaVHqX0QI5r67HxcGEEu8v+dUeE
+         0sqhAcsXEiDpV38F0K+QhAgOALvhB0pXKauCiYIq9P72XGNM5ujpjdXycWrvzZXQCjC4
+         3HMwrTyvWM8l5hx7ffuhz81FeTembMKmirRAsU68ad1RDy+dlCCdlWpuwlL9k0SsxizK
+         +Z3q4tE7QyoYz0Bo4AELFwQFBjD39mqRda3XpcYC4Y6Brjwq+ZwBndwIh20jKwdI2Pq5
+         NFjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qE5r3nti027mzy0pKgrnKXkE1RSc8kUqTOaORXIdEtE=;
-        b=d3SppsbxuINEqJKZoW2zbGSKdkicLcv/C58vSdD7lHbfIzPOFq2I2GaQ8MMpasU9JM
-         0/8iKf1q9TTrBQmneSVI6Lsf3opUwbp9AY/fP6nX+bELhIW8YPJC3fLzUKzoQE+SZjYD
-         y4ABX2KUgiEwXd+24GLpKubBitPIvSfDlMaoi2XN8mxmZFbmRJ7CsSoBIMm+mEs8wpWb
-         YJGofW2qj0dYGX7ZFa8UJbOXnBsXuUj06Tg/udIUeQVENNo+pE8oA/PUupTwtrfdXY4U
-         fUJ4TwMh3lZ6tIWw52eP/Gcac3QN7pIwMg+hA5sdI2B1VM+T2JyICX5Pk5VCC61uMTW8
-         2/ag==
-X-Gm-Message-State: APjAAAU8oyk/ZqkwTmVRTWTvaTwt9fonJHV7Ai781SLje1YYnRZOg3H0
-        IaAFPgO1vPWgrvTHTaF8OLg=
-X-Google-Smtp-Source: APXvYqyirRyu04jqDg3x30rmhKDhkCSn+pJlYnYt6qaMKeOuedWuhIFZA6+FPRXQ60evaeNBBoHQdg==
-X-Received: by 2002:adf:d4ca:: with SMTP id w10mr6193149wrk.53.1575394951675;
-        Tue, 03 Dec 2019 09:42:31 -0800 (PST)
-Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
-        by smtp.gmail.com with ESMTPSA id x7sm4411960wrq.41.2019.12.03.09.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 09:42:30 -0800 (PST)
-Date:   Tue, 3 Dec 2019 18:42:29 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
-        talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function to
- get BPMP data
-Message-ID: <20191203174229.GA1721849@ulmo>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:cc:content-transfer-encoding;
+        bh=xKJZIaHtKKjuYtXbsDuWM2Dl2PKeFrJbutUCYZbgryc=;
+        b=DHMl4E27E27RUcLL5my8+mczbf1evSjEIk+3jI+u91lwAMgXeo9bq63Qq2qoqm9kbL
+         eBFL18wc0EGsvVv78ROLlMpVrN9FwKyU75NtEvPOTeKDTPOwlkN2m7JL8GADJHmVjgUS
+         12T2UHVBi7wkxQYMA1if5fisW1fI9qkJOqY6rXFUeLSJ41S0zR2Rn1aet9K8wGEUdDdf
+         un/FCkWguD0cSmxoaza05NSJ41/oui9bpKCA6AcRR2gNRGC24CSjAeBh6mym8pXuxKLs
+         q/DYy7IXPKIn13FEbp4QWmn2eH1j3tcW9QoaE/8YpTLhmhF6/gnbrZIp7zVReL9BJKgs
+         2SdQ==
+X-Gm-Message-State: APjAAAV+sHCdOf7Z/PayrmI3bTab88FpcUUOPLZz8Fngj3aZBz4/cFfX
+        9cPNCC+LVQPKKAFKATX/TbwVzjSokGKbnYWZ0cvHlT72uQo=
+X-Received: by 2002:a2e:97cf:: with SMTP id m15mt2980335ljj.130.1575395779796;
+ Tue, 03 Dec 2019 09:56:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jRHKVT23PllUwdXP"
-Content-Disposition: inline
-In-Reply-To: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191112203154.101534-1-wvw@google.com> <20191112204223.115589-1-wvw@google.com>
+ <57162b7c-cf34-2b55-a17c-40d96a0ab105@linaro.org>
+In-Reply-To: <57162b7c-cf34-2b55-a17c-40d96a0ab105@linaro.org>
+From:   Wei Wang <wei.vince.wang@gmail.com>
+Date:   Tue, 3 Dec 2019 09:55:43 -0800
+Message-ID: <CAMFybE4aSo7AK20T0Hkjo-R-BkjaYtqz-FMF8pS_p_GeLg5tJA@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: Fix deadlock in thermal thermal_zone_device_check
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Dec 3, 2019 at 9:15 AM Daniel Lezcano <daniel.lezcano@linaro.org> w=
+rote:
+>
+> On 12/11/2019 21:42, Wei Wang wrote:
+> > commit [2] changed cancel_delayed_work to cancel_delayed_work_sync to
+> > avoid a use-after-free issue. However, cancel_delayed_work_sync could b=
+e
+> > called insides the WQ causing deadlock [1].
+> >
+> > [1]
+> > [54109.642398] c0   1162 kworker/u17:1   D    0 11030      2 0x00000000
+> > [54109.642437] c0   1162 Workqueue: thermal_passive_wq thermal_zone_dev=
+ice_check
+> > [54109.642447] c0   1162 Call trace:
+> > [54109.642456] c0   1162  __switch_to+0x138/0x158
+> > [54109.642467] c0   1162  __schedule+0xba4/0x1434
+> > [54109.642480] c0   1162  schedule_timeout+0xa0/0xb28
+> > [54109.642492] c0   1162  wait_for_common+0x138/0x2e8
+> > [54109.642511] c0   1162  flush_work+0x348/0x40c
+> > [54109.642522] c0   1162  __cancel_work_timer+0x180/0x218
+> > [54109.642544] c0   1162  handle_thermal_trip+0x2c4/0x5a4
+> > [54109.642553] c0   1162  thermal_zone_device_update+0x1b4/0x25c
+> > [54109.642563] c0   1162  thermal_zone_device_check+0x18/0x24
+> > [54109.642574] c0   1162  process_one_work+0x3cc/0x69c
+> > [54109.642583] c0   1162  worker_thread+0x49c/0x7c0
+> > [54109.642593] c0   1162  kthread+0x17c/0x1b0
+> > [54109.642602] c0   1162  ret_from_fork+0x10/0x18
+> > [54109.643051] c0   1162 kworker/u17:2   D    0 16245      2 0x00000000
+> > [54109.643067] c0   1162 Workqueue: thermal_passive_wq thermal_zone_dev=
+ice_check
+> > [54109.643077] c0   1162 Call trace:
+> > [54109.643085] c0   1162  __switch_to+0x138/0x158
+> > [54109.643095] c0   1162  __schedule+0xba4/0x1434
+> > [54109.643104] c0   1162  schedule_timeout+0xa0/0xb28
+> > [54109.643114] c0   1162  wait_for_common+0x138/0x2e8
+> > [54109.643122] c0   1162  flush_work+0x348/0x40c
+> > [54109.643131] c0   1162  __cancel_work_timer+0x180/0x218
+> > [54109.643141] c0   1162  handle_thermal_trip+0x2c4/0x5a4
+> > [54109.643150] c0   1162  thermal_zone_device_update+0x1b4/0x25c
+> > [54109.643159] c0   1162  thermal_zone_device_check+0x18/0x24
+> > [54109.643167] c0   1162  process_one_work+0x3cc/0x69c
+> > [54109.643177] c0   1162  worker_thread+0x49c/0x7c0
+> > [54109.643186] c0   1162  kthread+0x17c/0x1b0
+> > [54109.643195] c0   1162  ret_from_fork+0x10/0x18
+> > [54109.644500] c0   1162 cat             D    0  7766      1 0x00000001
+> > [54109.644515] c0   1162 Call trace:
+> > [54109.644524] c0   1162  __switch_to+0x138/0x158
+> > [54109.644536] c0   1162  __schedule+0xba4/0x1434
+> > [54109.644546] c0   1162  schedule_preempt_disabled+0x80/0xb0
+> > [54109.644555] c0   1162  __mutex_lock+0x3a8/0x7f0
+> > [54109.644563] c0   1162  __mutex_lock_slowpath+0x14/0x20
+> > [54109.644575] c0   1162  thermal_zone_get_temp+0x84/0x360
+> > [54109.644586] c0   1162  temp_show+0x30/0x78
+> > [54109.644609] c0   1162  dev_attr_show+0x5c/0xf0
+> > [54109.644628] c0   1162  sysfs_kf_seq_show+0xcc/0x1a4
+> > [54109.644636] c0   1162  kernfs_seq_show+0x48/0x88
+> > [54109.644656] c0   1162  seq_read+0x1f4/0x73c
+> > [54109.644664] c0   1162  kernfs_fop_read+0x84/0x318
+> > [54109.644683] c0   1162  __vfs_read+0x50/0x1bc
+> > [54109.644692] c0   1162  vfs_read+0xa4/0x140
+> > [54109.644701] c0   1162  SyS_read+0xbc/0x144
+> > [54109.644708] c0   1162  el0_svc_naked+0x34/0x38
+> > [54109.845800] c0   1162 D 720.000s 1->7766->7766 cat [panic]
+> >
+> > Fixes commit 1851799e1d29 ("thermal: Fix use-after-free when
+> > unregistering thermal zone device") [2]
+>
+> It does not fix the problem actually. It is preferable to revert the
+> commit 1851799e1d29.
+>
+The problem as you mentioned is "This one (WQ) blocks because
+cancel_delayed_work_sync is owning the lock which in turn waits for
+the work to end"
+AFAICT, thermal_zone_device_unregister should not take tz->lock and
+either be called in WQ context.
 
---jRHKVT23PllUwdXP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Dec 03, 2019 at 11:02:26PM +0530, Sumit Gupta wrote:
-> Adding new function of_tegra_bpmp_get() to get BPMP data.
-> This function can be used by other drivers like cpufreq to
-> get BPMP data without adding any property in respective
-> drivers DT node.
-
-What's wrong with adding the property in the DT node? We already do that
-for Tegra186's CPU frequency driver, so it makes sense to continue that
-for Tegra194.
-
-Thierry
-
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/firmware/tegra/bpmp.c | 38 ++++++++++++++++++++++++++++++++++++++
->  include/soc/tegra/bpmp.h      |  5 +++++
->  2 files changed, 43 insertions(+)
->=20
-> diff --git a/drivers/firmware/tegra/bpmp.c b/drivers/firmware/tegra/bpmp.c
-> index 6741fcd..9c3d7f1 100644
-> --- a/drivers/firmware/tegra/bpmp.c
-> +++ b/drivers/firmware/tegra/bpmp.c
-> @@ -38,6 +38,44 @@ channel_to_ops(struct tegra_bpmp_channel *channel)
->  	return bpmp->soc->ops;
->  }
-> =20
-> +struct tegra_bpmp *of_tegra_bpmp_get(void)
-> +{
-> +	struct platform_device *pdev;
-> +	struct device_node *bpmp_dev;
-> +	struct tegra_bpmp *bpmp;
-> +
-> +	/* Check for bpmp device status in DT */
-> +	bpmp_dev =3D of_find_compatible_node(NULL, NULL, "nvidia,tegra186-bpmp"=
-);
-> +	if (!bpmp_dev) {
-> +		bpmp =3D ERR_PTR(-ENODEV);
-> +		goto err_out;
-> +	}
-> +	if (!of_device_is_available(bpmp_dev)) {
-> +		bpmp =3D ERR_PTR(-ENODEV);
-> +		goto err_put;
-> +	}
-> +
-> +	pdev =3D of_find_device_by_node(bpmp_dev);
-> +	if (!pdev) {
-> +		bpmp =3D ERR_PTR(-ENODEV);
-> +		goto err_put;
-> +	}
-> +
-> +	bpmp =3D platform_get_drvdata(pdev);
-> +	if (!bpmp) {
-> +		bpmp =3D ERR_PTR(-EPROBE_DEFER);
-> +		put_device(&pdev->dev);
-> +		goto err_put;
-> +	}
-> +
-> +	return bpmp;
-> +err_put:
-> +	of_node_put(bpmp_dev);
-> +err_out:
-> +	return bpmp;
-> +}
-> +EXPORT_SYMBOL_GPL(of_tegra_bpmp_get);
-> +
->  struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
->  {
->  	struct platform_device *pdev;
-> diff --git a/include/soc/tegra/bpmp.h b/include/soc/tegra/bpmp.h
-> index f2604e9..21402d9 100644
-> --- a/include/soc/tegra/bpmp.h
-> +++ b/include/soc/tegra/bpmp.h
-> @@ -107,6 +107,7 @@ struct tegra_bpmp_message {
->  };
-> =20
->  #if IS_ENABLED(CONFIG_TEGRA_BPMP)
-> +struct tegra_bpmp *of_tegra_bpmp_get(void);
->  struct tegra_bpmp *tegra_bpmp_get(struct device *dev);
->  void tegra_bpmp_put(struct tegra_bpmp *bpmp);
->  int tegra_bpmp_transfer_atomic(struct tegra_bpmp *bpmp,
-> @@ -122,6 +123,10 @@ void tegra_bpmp_free_mrq(struct tegra_bpmp *bpmp, un=
-signed int mrq,
->  			 void *data);
->  bool tegra_bpmp_mrq_is_supported(struct tegra_bpmp *bpmp, unsigned int m=
-rq);
->  #else
-> +static inline struct tegra_bpmp *of_tegra_bpmp_get(void)
-> +{
-> +	return ERR_PTR(-ENOTSUPP);
-> +}
->  static inline struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
->  {
->  	return ERR_PTR(-ENOTSUPP);
-> --=20
-> 2.7.4
->=20
-
---jRHKVT23PllUwdXP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl3mnoEACgkQ3SOs138+
-s6GpwBAAvaZJp87NoF1TROjbDypFZ2E7Oov0yzlV1zJak8mF3KIV0tKaCHoXheWI
-rcQZm8VFfh/Gqxw63Yk1Gn9nA1KJoqaIUY1On3cMHvY2wtVF7Wh/tFI+5JNXsCIi
-H9et1e5q/J9LaFHxcdNsEeYaocswM31Zy+rNIhT1bpLzvTZObIzbQp5v5eao8U6i
-VUdAUsr5XSj0vcN51HVz6CHFMpQsocQV1AsACAMUny+ajHL/FTmJYa5jvXvhqgpX
-yH593XBFitXrqAhWj3kR6okHC2U9UAd2S9ZXsu15xawQNymTi2mdqnaoeohRajFj
-z9GF5CxNbNCNOBMxvzAkF08s8dQCA/vsSkxQ518Z3BK+dPxu7Leho9yVeNs9muy/
-7fOU5sc+gIBuBB0V/fwP2xiPbvoe/wozI2LtbmDa6akd5rwxYLi3ogJOKtS1QRhN
-JHaTZ08hjuRiL64s8EAfz1VsQYF0MwkfomCfXKMoTCu+8mVXkcMuZcaotXul/Mck
-LMYlsKbCwgLpM4NrNW++q1nTewTXmQpzrLN762Ae23ud7ARns1mwaaGa6UvfxIhE
-cxZVU66dHXKEIdGsA6uSByRKUS8/1le4Iy6zRAu7O88XAbxSydYOm45/ovZTEzAz
-jAymOGgaP0NBMXICJoBLt3/Z0WwBmSAZ/Vir1cbs2jsup+XvzaE=
-=c7iN
------END PGP SIGNATURE-----
-
---jRHKVT23PllUwdXP--
+>
+> The cancel delayed work sync takes the mutex while a cat
+> /sys/class/thermal/thermal_zone0/temp happens which takes the mutex also
+> and at the same moment a thermal_zone_device_update() call is done in
+> the workqueue context. This one blocks because cancel_delayed_work_sync
+> is owning the lock which in turn waits for the work to end.
+>
+> IMO, that deserves a deeper investigation with the mutex. Probably the
+> fix would be to refcount the thermal zone device and see if we can get
+> rid of the mutex in some places. If the refcounting is used, the
+> function thermal_zone_device_unregister() will be called with the
+> guarantee nobody will use it and the mutex can be removed.
+>
+> > Signed-off-by: Wei Wang <wvw@google.com>
+> > ---
+> >  drivers/thermal/thermal_core.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_c=
+ore.c
+> > index d4481cc8958f..c28271817e43 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -304,7 +304,7 @@ static void thermal_zone_device_set_polling(struct =
+thermal_zone_device *tz,
+> >                                &tz->poll_queue,
+> >                                msecs_to_jiffies(delay));
+> >       else
+> > -             cancel_delayed_work_sync(&tz->poll_queue);
+> > +             cancel_delayed_work(&tz->poll_queue);
+> >  }
+> >
+> >  static void monitor_thermal_zone(struct thermal_zone_device *tz)
+> > @@ -1414,7 +1414,7 @@ void thermal_zone_device_unregister(struct therma=
+l_zone_device *tz)
+> >
+> >       mutex_unlock(&thermal_list_lock);
+> >
+> > -     thermal_zone_device_set_polling(tz, 0);
+> > +     cancel_delayed_work_sync(&tz->poll_queue);
+> >
+> >       thermal_set_governor(tz, NULL);
+> >
+> >
+>
+>
+> --
+>  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
+RM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
