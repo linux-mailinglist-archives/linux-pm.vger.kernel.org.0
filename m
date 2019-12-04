@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7A4112EEE
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 16:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E643C112F5D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 17:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728065AbfLDPt6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 10:49:58 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46363 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728017AbfLDPt6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 10:49:58 -0500
-Received: by mail-wr1-f65.google.com with SMTP id z7so9128311wrl.13
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 07:49:56 -0800 (PST)
+        id S1728833AbfLDQBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 11:01:55 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41260 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbfLDQBv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 11:01:51 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c9so2825524wrw.8
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 08:01:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hx7LEUWHU6YuMIbJZ+bvxfeQHzoMVMCbLHMFnb4eAkY=;
-        b=ez5AGVogZLLUW+1M1OX9mmnZJS22zA7jQ3evWk8K0ayuTu+Uzw552jnHaygpWIB3J0
-         80EO9PLNfAh/RY/h5IjRyhyv047QTtqSOOO2JfrCi5f/lI1M7hfYF6oI9SVx7qqte3vu
-         B4Gksclok5T2DnioedWnu4Je1aen7RIEjjfsLTz41kzj50x6dx2DWaqYm9yigioWacVn
-         mZXASlz8FkTFukXBoo9mm5+eFh4jhjGAaJX5dEujCtfXTVN7e/MWKTHw81cq6Qh/pkRt
-         zmYj1d4SI8cruFvSojGiwwujA7Faiep1PiwVLLOyONiTJM09VJS1XeJoHCaaefjCKwz2
-         kiBg==
+        bh=iYb6wN9lQEPhRu0HekmEpVrSJdRJ5ZqElSHZSATtrQ8=;
+        b=V96hlkUWGXx4LCz86fpc9LcXLEF/e+TZIlyLFCB/nYc5MqL3qcL2ksCRha1Mk54UrB
+         gxItVOrVbZsctkHESw2wWHpFUP9s3UcgHJFuSDLNllOElH9CslAw6QdB4alH3hKmV6GW
+         06xpyXMqv6xXaovtkXVIO1PUuqLvx9l74k0Ze0VxLTSviKUN+6sJkN1HuhDdSAHkYFkb
+         KAUZUcgxCnIjnFmD0/0svvfYjg2YjiBA5C60afqmsOrvY1fWoc6K90g2kS0F+45zXWrD
+         neW7xBvpzvVzNTPe+lzWz4Xkk54F7gZGgLg7Sb5wSnMTPZbJrKK4v/7IzPkQDR6Z0ju6
+         m4hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=hx7LEUWHU6YuMIbJZ+bvxfeQHzoMVMCbLHMFnb4eAkY=;
-        b=kpFQT95VXBl88aItnB0R206OegLjpHqSGIvw6GTTisf88+aOee8JPnkp294ZndlrLH
-         pB6zP2F4rAmlK2OxTJj2VLbkCJOhNp8nQp/0NkND8WS2pd6tSwB+pZsIAFSeB6Vfbypn
-         rp56dmY1pDKyrf90JYwD4C/dCdb8wVrWbABZhlmBIRLPg8zogHVOVwjBbQ3evdi8pYtm
-         4aNhrubkPq551FVS8HjZyn/HW7kyXocrDeQgFInxwDqEFjJVuudGPrlDehvJqG7rRDij
-         Z+ESP8wG9TZ+MkqeUZn6xYB3l+Gvt/xZbzPC0mHtzCPo/DCE1zkmSNzIgchbSVosHiJS
-         WyQw==
-X-Gm-Message-State: APjAAAWUBB6P3fhs+kggHbU5AkvDZMh7C36/HtplMNpDqOveDEIZ1BmY
-        Lda3Z/hBKHMtqkDfT1VjiD19uQ==
-X-Google-Smtp-Source: APXvYqxdmLan/eMPlIFR0XHhUC1SGj0S+7JmF1sV9ajVbZcNGUDpupJf3Tiq7ugw4aeIj9wUbGc6Ng==
-X-Received: by 2002:a5d:43c7:: with SMTP id v7mr4538732wrr.32.1575474595466;
-        Wed, 04 Dec 2019 07:49:55 -0800 (PST)
+        bh=iYb6wN9lQEPhRu0HekmEpVrSJdRJ5ZqElSHZSATtrQ8=;
+        b=KYFiV68VGIlIEEI5XpFZP7nXQerX3rlxidfiHJLPs2rAtk1GKOKANKlb3yQVCYN4Oc
+         t5W8rcGktWeaqZvcj6FItDODpP3f1aPoVLO6ldqiMfH2hnvod4jUzxPcu7XOB/hLXFi3
+         CdvhRpPKqW5XCaJllWckc4XR/rpnhD5bhDsqsgoJEP6kEWvwIYya5KJwLrZwxeLiG7GT
+         p74UO6ziWOfeWfoILqqptN2xQZ/otDwpXHU3Oyh02btgcRGWh3aKMynCHgIz/p6PLdbH
+         MRISVfvj5Gipl1+/Vxd2SULeW2/iaJsNMwATYWYsZVKhaEFFv+gE9kRG9Qd9uMGufCSL
+         G/Kw==
+X-Gm-Message-State: APjAAAViDPKjA3OSyohgwAmWh82BDD0lJ2j5eD7RGbk2baotfwHS+Q3s
+        Ps2vWqQifEIE1USaaep+Z0iNeMqFkBA=
+X-Google-Smtp-Source: APXvYqyiDZaXslgJlDsjrFh7hkFMESj8tEUDdA11U9F+g4D94gMt9Q7KOwTakz/hw0Gtk+yN5ug/fw==
+X-Received: by 2002:a5d:6b51:: with SMTP id x17mr5057857wrw.148.1575475309429;
+        Wed, 04 Dec 2019 08:01:49 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:d965:ceae:a314:6edb? ([2a01:e34:ed2f:f020:d965:ceae:a314:6edb])
-        by smtp.googlemail.com with ESMTPSA id o4sm8724114wrx.25.2019.12.04.07.49.54
+        by smtp.googlemail.com with ESMTPSA id d10sm8547653wrw.64.2019.12.04.08.01.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2019 07:49:54 -0800 (PST)
-Subject: Re: [PATCH v2 -next] thermal: power_allocator: Fix Kconfig warning
-To:     YueHaibing <yuehaibing@huawei.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, amit.kucheria@verdurent.com,
-        qperret@google.com, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191112152801.GA247051@google.com>
- <20191113105313.41616-1-yuehaibing@huawei.com>
+        Wed, 04 Dec 2019 08:01:48 -0800 (PST)
+Subject: Re: [PATCH] thermal: db8500: Depromote debug print
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
+References: <20191119074650.2664-1-linus.walleij@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -107,12 +106,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <f89d6a79-2ac6-0bea-f2a0-bd376835e785@linaro.org>
-Date:   Wed, 4 Dec 2019 16:49:53 +0100
+Message-ID: <7a463c01-8fca-894f-ca36-910e5fb7b6cd@linaro.org>
+Date:   Wed, 4 Dec 2019 17:01:47 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191113105313.41616-1-yuehaibing@huawei.com>
+In-Reply-To: <20191119074650.2664-1-linus.walleij@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -121,42 +120,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/11/2019 11:53, YueHaibing wrote:
-> When do randbuiding, we got this:
+On 19/11/2019 08:46, Linus Walleij wrote:
+> We are not interested in getting this debug print on our
+> console all the time.
 > 
-> WARNING: unmet direct dependencies detected for THERMAL_GOV_POWER_ALLOCATOR
->   Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
->   Selected by [y]:
->   - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
-> 
-> Make THERMAL_DEFAULT_GOV_POWER_ALLOCATOR depend on
-> THERMAL_DEFAULT_GOV_POWER_ALLOCATOR to fix this warning.
-> 
-> Suggested-by: Quentin Perret <qperret@google.com>
-> Fixes: a4e893e802e6 ("thermal: cpu_cooling: Migrate to using the EM framework")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Stephan Gerhold <stephan@gerhold.net>
+> Fixes: 6c375eccded4 ("thermal: db8500: Rewrite to be a pure OF sensor")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Applied with a slight message clarification.
-
-Thanks for the fix.
+Applied, thanks!
 
 > ---
->  drivers/thermal/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/thermal/db8500_thermal.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 59b79fc..79b2786 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -108,7 +108,7 @@ config THERMAL_DEFAULT_GOV_USER_SPACE
+> diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
+> index 372dbbaaafb8..21d4d6e6409a 100644
+> --- a/drivers/thermal/db8500_thermal.c
+> +++ b/drivers/thermal/db8500_thermal.c
+> @@ -152,8 +152,8 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
+>  		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
+>  					     next_low, next_high);
 >  
->  config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
->  	bool "power_allocator"
-> -	select THERMAL_GOV_POWER_ALLOCATOR
-> +	depends on THERMAL_GOV_POWER_ALLOCATOR
->  	help
->  	  Select this if you want to control temperature based on
->  	  system and device power allocation. This governor can only
+> -		dev_info(&th->tz->device,
+> -			 "PRCMU set max %ld, min %ld\n", next_high, next_low);
+> +		dev_dbg(&th->tz->device,
+> +			"PRCMU set max %ld, min %ld\n", next_high, next_low);
+>  	} else if (idx == num_points - 1)
+>  		/* So we roof out 1 degree over the max point */
+>  		th->interpolated_temp = db8500_thermal_points[idx] + 1;
 > 
 
 
