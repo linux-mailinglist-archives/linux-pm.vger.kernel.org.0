@@ -2,68 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBFB112D0C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 14:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2171D112D1C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 14:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbfLDN55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 08:57:57 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44709 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727838AbfLDN55 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 08:57:57 -0500
-Received: by mail-lj1-f194.google.com with SMTP id c19so8159610lji.11;
-        Wed, 04 Dec 2019 05:57:55 -0800 (PST)
+        id S1727915AbfLDN73 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 08:59:29 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33364 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727838AbfLDN73 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 08:59:29 -0500
+Received: by mail-lf1-f68.google.com with SMTP id n25so6260955lfl.0;
+        Wed, 04 Dec 2019 05:59:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qLSQXMzVG7swZ/e2rtQnLP6u3joRR7UaM1wgCcu+ICA=;
-        b=GBCEQDEd/RigkNNY6V8k56hcEXgv1oGrqA4Sk5jqPw9gRxAUoE6DSV4wgmVobAmjiO
-         y/hMq98ujSr9yJ0waZF6+f6Dl7e3iUTI+opAqkfR6JDRqrwIlXYKKzZBc9n0WCEbbUsr
-         JVNTa0iNMbKl8A776pXac0EnqUthD73y2pmukSmXhsx12C6/iWRzcR6vGs3+q12lqRYJ
-         Hxm67bi8j//nv+B6fjEDLYGDuDFfDhy6wJp6Af4aM/J7ctH4MudCyQkpFTfBUtILYbJa
-         xGBWDBAGV+s6WPAk9/v9/xhnX4KSwmDDKKJgXBBjBtlwkXL9/3KXHGB5w4M3wBdcFtxO
-         RhJg==
+        bh=8zHhqf7R6W4VbEhK1Fh6EJVqgzLfv6MucTwQijoUla4=;
+        b=u25w6ZjtBuftoUXGN+MQuIu1d46T6/KHTNrMtyvHVxXJxRP7x9pv303uGL/dIlrASk
+         eoptMCAfnCZnhRA3sWpYTjniGobb1ABtfR29mxPNJZRBk9x5zlgzFQBm8CnB5GSFNTNI
+         YDovwdYxZzWedDtsinctosqJGgXGI6G4Yry+H3Wk9DGUqsJdxCLUjx79U9C5pjqpv3fF
+         PDalB5S6CcW9Rc7AtgEE8MkvfCNnpjbfAI1VpuDxNpWWPic9K8ThOxs0/yanGnPoVFzB
+         YGlB48uBOJLR6pGO1Hw8sJzx9OdkFe8vreCcRV+B092zRYa+bUKw0dUppBwHgl3waiD6
+         vgFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=qLSQXMzVG7swZ/e2rtQnLP6u3joRR7UaM1wgCcu+ICA=;
-        b=snhY7uKywy+nedy+YKdN6WLfNHKt7lVdcvV29pGQIoTAqTUgTgkSM77xnO3HW8JTWb
-         thgwD2tOHsA63A2b13wv+JpH5MPnCv7OGv6FtRYv9pzSDRr2tVMm+e9S2zfgTHLJ0kGQ
-         liH8lF/TXfElXHLS4AuHBxNF6yO3hH09FvOZ4C3GDV4/fW+eJoS3EjwkHwEuuowBdj0T
-         V9zwtSNwXaVtPl07HFMOsOPlUoBhj4tG833w1uyzp22CvgsmWrTcSfitj+MtMelL/ga8
-         fwYCN9e62mX0Np/6X+lXKrYm0cZoxxWwSvzy+kh0HaPGAuc5gbfj6GUqBdiYHvM/JIyK
-         Irmg==
-X-Gm-Message-State: APjAAAVZ5cXYZXRNZT661/nox53hD8q12r5dqxe0HrzU7d0ChMgcfzM0
-        dbd6BP40eUAwfvmUyUgvUjqik148
-X-Google-Smtp-Source: APXvYqwPUyYNLY1YxBHRZjdAA1FL89xaYpCwqzoggRVxnCZoi49/FwzOsVjl7zgNf1dRjeX2HDj4Mw==
-X-Received: by 2002:a05:651c:32a:: with SMTP id b10mr2142347ljp.132.1575467875071;
-        Wed, 04 Dec 2019 05:57:55 -0800 (PST)
+        bh=8zHhqf7R6W4VbEhK1Fh6EJVqgzLfv6MucTwQijoUla4=;
+        b=PtyIMCMoFz4fIa+vmyp1C71Sabmwxw7YO6xtl7jol9h5VkVt/41o8fSZU5WINsLXEP
+         7HD3QGN2yeOV49mznUFdT8RfPZh29bZ03+XvElAbXZReOShP4/yoGENTpAU/hKOgvkJd
+         B0OKoqbmPSy4VWH+9R27w7XJIwxi4vfPcm0zYZ+cb8Pf7pROArbw1l+F3vv2XQksZL6m
+         yBDl2CrmRYoen2xqIxB6hjfsD7MT7ssFHeA7PrRcYEfsnC32IM9SGzDnnMmCsBsByPmb
+         D43JdY9gVaOgdqlKKWZtUHhoq/ez81/j3JGlZZ9PnZ7ollar9q1dwpwK3X3DOpRIIvx1
+         8WrQ==
+X-Gm-Message-State: APjAAAVHWy6PYYnAz8Kr9VEm1h4Kh6EWF/KiO8zeOo9CEUnpCWgG985r
+        ZcL6zs5LCD2SgmQ1zrVY+Jc=
+X-Google-Smtp-Source: APXvYqy85kPBJwLxdxCzYJ15kSt0dID8nFQF26japTZRpeRsDnFxO4T5/D/z9IZj52UxSN1iJcQxUg==
+X-Received: by 2002:ac2:4884:: with SMTP id x4mr2153525lfc.92.1575467966393;
+        Wed, 04 Dec 2019 05:59:26 -0800 (PST)
 Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id y23sm3238750ljk.6.2019.12.04.05.57.53
+        by smtp.googlemail.com with ESMTPSA id l28sm3317173lfk.21.2019.12.04.05.59.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2019 05:57:54 -0800 (PST)
+        Wed, 04 Dec 2019 05:59:25 -0800 (PST)
 Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>, sumitg <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
+To:     Sumit Gupta <sumitg@nvidia.com>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, catalin.marinas@arm.com, will@kernel.org,
         thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, mperttunen@nvidia.com
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     bbasu@nvidia.com, mperttunen@nvidia.com
 References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
  <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
- <20191204054043.o4ff7pnqec3fwdgu@vireshk-i7>
- <7347caa6-43a3-f761-de83-481b45f7b22a@nvidia.com>
- <20191204112749.jkwlyteal4hfvnhb@vireshk-i7>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <0b634341-ea2b-e9cd-4986-dc9a01c839bb@gmail.com>
-Date:   Wed, 4 Dec 2019 16:57:53 +0300
+Message-ID: <9f7521aa-4f9a-6dc2-60e0-2f9916656748@gmail.com>
+Date:   Wed, 4 Dec 2019 16:59:25 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191204112749.jkwlyteal4hfvnhb@vireshk-i7>
+In-Reply-To: <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,41 +69,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-04.12.2019 14:27, Viresh Kumar пишет:
-> On 04-12-19, 16:25, sumitg wrote:
->> In T194, CCPLEX doesn't have access to set clocks and the
->>
->> clk_{get|set}_rate() functions set clocks by hook to BPMP R5.
->>
->> CPU freq can be directly set by CCPLEX using MSR(NVFREQ_REQ_EL1).
->>
->> As DVFS run's on BPMP, another MSR (NVFREQ_FEEDBACK_EL1) is
->>
->> used to read the counters and calculate "actual" cpu freq at CCPLEX.
->>
->> So, "cpuinfo_cur_freq" node gives the actual cpu frequency and not
->>
->> given by node "scaling_cur_freq".
+03.12.2019 20:32, Sumit Gupta пишет:
+> Add support for CPU frequency scaling on Tegra194. The frequency
+> of each core can be adjusted by writing a clock divisor value to
+> an MSR on the core. The range of valid divisors is queried from
+> the BPMP.
 > 
-> Right, but why can't this be hidden in the CPU's clk driver instead,
-> so cpufreq driver can just do clk_get_rate() and clk_set_rate() ?
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/Kconfig.arm        |   6 +
+>  drivers/cpufreq/Makefile           |   1 +
+>  drivers/cpufreq/tegra194-cpufreq.c | 423 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 430 insertions(+)
+>  create mode 100644 drivers/cpufreq/tegra194-cpufreq.c
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index a905796..4bcd47c 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -320,6 +320,12 @@ config ARM_TEGRA186_CPUFREQ
+>  	help
+>  	  This adds the CPUFreq driver support for Tegra186 SOCs.
+>  
+> +config ARM_TEGRA194_CPUFREQ
+> +	tristate "Tegra194 CPUFreq support"
+> +	depends on ARCH_TEGRA && TEGRA_BPMP
+> +	help
+> +	  This adds CPU frequency driver support for Tegra194 SOCs.
+> +
+>  config ARM_TI_CPUFREQ
+>  	bool "Texas Instruments CPUFreq support"
+>  	depends on ARCH_OMAP2PLUS
+> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> index 9a9f5cc..433d492 100644
+> --- a/drivers/cpufreq/Makefile
+> +++ b/drivers/cpufreq/Makefile
+> @@ -85,6 +85,7 @@ obj-$(CONFIG_ARM_TANGO_CPUFREQ)		+= tango-cpufreq.o
+>  obj-$(CONFIG_ARM_TEGRA20_CPUFREQ)	+= tegra20-cpufreq.o
+>  obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
+>  obj-$(CONFIG_ARM_TEGRA186_CPUFREQ)	+= tegra186-cpufreq.o
+> +obj-$(CONFIG_ARM_TEGRA194_CPUFREQ)	+= tegra194-cpufreq.o
+>  obj-$(CONFIG_ARM_TI_CPUFREQ)		+= ti-cpufreq.o
+>  obj-$(CONFIG_ARM_VEXPRESS_SPC_CPUFREQ)	+= vexpress-spc-cpufreq.o
+>  
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> new file mode 100644
+> index 0000000..9df12f4
+> --- /dev/null
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -0,0 +1,423 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved
+> + */
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include <asm/smp_plat.h>
+> +
+> +#include <soc/tegra/bpmp.h>
+> +#include <soc/tegra/bpmp-abi.h>
+> +
+> +#define KHZ                     1000
+> +#define REF_CLK_MHZ             408 /* 408 MHz */
+> +#define US_DELAY                2000
+> +#define US_DELAY_MIN            2
+> +#define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
+> +#define MAX_CNT                 ~0U
+> +
+> +/* cpufreq transisition latency */
+> +#define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
+> +
+> +enum cluster {
+> +	CLUSTER0,
+> +	CLUSTER1,
+> +	CLUSTER2,
+> +	CLUSTER3,
+> +	MAX_CLUSTERS,
+> +};
+> +
+> +struct tegra194_cpufreq_data {
+> +	void __iomem *regs;
+> +	size_t num_clusters;
+> +	struct cpufreq_frequency_table **tables;
+> +};
+> +
+> +static DEFINE_MUTEX(cpufreq_lock);
+> +
+> +struct tegra_cpu_ctr {
+> +	u32 cpu;
+> +	u32 delay;
+> +	u32 coreclk_cnt, last_coreclk_cnt;
+> +	u32 refclk_cnt, last_refclk_cnt;
+> +};
+> +
+> +static struct workqueue_struct *read_counters_wq;
+> +struct read_counters_work {
+> +	struct work_struct work;
+> +	struct tegra_cpu_ctr c;
+> +};
+> +
+> +static enum cluster get_cpu_cluster(u8 cpu)
+> +{
+> +	return MPIDR_AFFINITY_LEVEL(cpu_logical_map(cpu), 1);
+> +}
+> +
+> +/*
+> + * Read per-core Read-only system register NVFREQ_FEEDBACK_EL1.
+> + * The register provides frequency feedback information to
+> + * determine the average actual frequency a core has run at over
+> + * a period of time.
+> + *	[31:0] PLLP counter: Counts at fixed frequency (408 MHz)
+> + *	[63:32] Core clock counter: counts on every core clock cycle
+> + *			where the core is architecturally clocking
+> + */
+> +static u64 read_freq_feedback(void)
+> +{
+> +	u64 val = 0;
+> +
+> +	asm volatile("mrs %0, s3_0_c15_c0_5" : "=r" (val) : );
+> +
+> +	return val;
+> +}
+> +
+> +u16 map_freq_to_ndiv(struct mrq_cpu_ndiv_limits_response *nltbl, u32 freq)
+> +{
+> +	return DIV_ROUND_UP(freq * nltbl->pdiv * nltbl->mdiv,
+> +			    nltbl->ref_clk_hz / KHZ);
+> +}
 
-What about to make use of dev_pm_opp_register_set_opp_helper()?
-
-
->>> - populating cpufreq table, you can probably add OPPs instead using
->>>    the same mechanism
->>
->> We are reading available frequencies from BPMP to populate
->>
->> cpufreq table and not using static opp table.
-> 
-> Right and lot of other platforms read it from firmware (I believe BBMP
-> is a firmware here), and create OPPs at runtime. Look at this for
-> example:
-> 
-> drivers/cpufreq/qcom-cpufreq-hw.c
-> 
-> and search for dev_pm_opp_add().
-> 
-
+This function isn't used anywhere.
