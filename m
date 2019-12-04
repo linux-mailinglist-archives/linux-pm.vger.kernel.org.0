@@ -2,160 +2,254 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F82113003
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 17:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9451130F9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 18:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbfLDQ3I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 11:29:08 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39205 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbfLDQ3I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 11:29:08 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y11so9349164wrt.6
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 08:29:06 -0800 (PST)
+        id S1727852AbfLDRmp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 12:42:45 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42495 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726934AbfLDRmo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 12:42:44 -0500
+Received: by mail-pl1-f193.google.com with SMTP id x13so16786plr.9;
+        Wed, 04 Dec 2019 09:42:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=D5rUamk1jRqETnVA6xkEMUx0o5lujMHw5GXFxHClaJw=;
-        b=SFaE4RCIwmDDdSz0C9bhzC30iU+zd/w4XXJA2AzOeR1+ARZdOgtzcuyR8IgqmWT2jr
-         tSSIBBgYdwJy+/ScbAlBPFWNkTK5zh7Y/ct8qIaiYNn9lVK1tx/vArTZQid8RjWdegbl
-         a6qEI4wvQ8/vObbkP8VJTj5sdoP2gWv5Rpx+mD4sYJ93Ourf2fY+UNjuPlpkWwxmVt1F
-         xjqG1DGqj6SRLZQIsx1L5atT/n2VnIRD8QsjKYU+LOcMZOMoHKFLdwMswSd69zGe307B
-         jrZ5NPTADNQj7SBcsI+MKqmlaF8QQGO5cUVZ8qF7e62rsZ5an0gr68EpJrPrfZu55APL
-         7xhA==
+        bh=gCV6yJBGuyI3vqteKeYvrMOHA0Ztd5PLf6lc7lYjUNk=;
+        b=TLpV5L/EebJf1lWmnOuhW6jmepaUXb1nk4R93u/it/HPpUOCoBjO1EBwVnh6S+h4Vi
+         VwqfcPoHdtwkpZqTZDP1DiOlIxicjBSip/i/xke3gCbbcXbmRU2r13MwOrJso6EGr5j/
+         4wDLEPCHzujzV+bv28wfDL/9JI+/n5NgiLLM0efgfFeKTLjiB1gJIc4LyFteOgSvNjQl
+         sdWw4mai3pK0olNwEF1sR0zuF61FC+AHMxW7zLMCkhuHWc10g03MBJM1/f0IWn0B3zuJ
+         2u/zhK7hTV2fezaF7qQJf0T6dY2iRoj0zw5G4QY7s/7YYxOMt9sL8U7FpUPTlapgFrUe
+         sljA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=D5rUamk1jRqETnVA6xkEMUx0o5lujMHw5GXFxHClaJw=;
-        b=SM7WUxl/CCCkyc+HKyOBhfsESqBQ8yWWX2JTvSoW2dJTw5y3IrdKoeDbSHwPF6DeOK
-         1GXFXOS57ndPx3GlfQh5OSU8jH9SclDV74uisvqFq3RbhwdQmwhvGwmN7pVxbXb2K1Ji
-         fumHtuBIrkQfLa8ERPe+O2iQB2NlaNPcrmJDsVoA0awexekAZquSfJgogoSk4hxpt/rt
-         ipmljNJjGR1Al7djtBxhavnp2flF2jSiAjCIyoAAWcxjswOBG1nmI1jxI12tKTnOPV9i
-         3twIG2Ic4PE4JM9Af7g8fg1XLHJ3ZeDmlwjMgnbL12/A5hfMfUI6ELDxNyhbxaKE7gl9
-         YOaA==
-X-Gm-Message-State: APjAAAWVGs8sCWftGonBNGZA6HSLeybx8FdKhKYlbJOOqnKqOJw33wte
-        2GcZhL1YTZmWwSn5yGZHQBpZug==
-X-Google-Smtp-Source: APXvYqxITTt4HxwKJDBAdAOuT1oxKRnN7NiezOH1hmqfYsbbHcZe+pn3Eyw/7aP7Lev4C3+bqA0x/g==
-X-Received: by 2002:a5d:4ec2:: with SMTP id s2mr4801350wrv.291.1575476945208;
-        Wed, 04 Dec 2019 08:29:05 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d965:ceae:a314:6edb? ([2a01:e34:ed2f:f020:d965:ceae:a314:6edb])
-        by smtp.googlemail.com with ESMTPSA id f24sm7269260wmb.37.2019.12.04.08.29.02
+        bh=gCV6yJBGuyI3vqteKeYvrMOHA0Ztd5PLf6lc7lYjUNk=;
+        b=oK10qqNw4bTBsJUIYfYJO+R60yiGPY/jQbGiW9wPq+VGd5n6J+lWHVpLc0Xd7ioglp
+         vjqvTwwiuzqQoVmkDu1nvuURMH8Kwmf1TMATg+Ix6IlzlCHZLh6h5faAiU6QuCzHfZ0I
+         UDUxg7p0a8j89AkPQBLSGoV8xxMI8jKchfoVhRWIgnEvz5682Ov6QsxX3909Wc9lk/aY
+         KOXHbHxQKRfnAQXuGXba78dC5FuBSYFd0zpnM7nb7lVjXafDfPChaJYMTcTHSoGTYI1q
+         7W00F3isyH3bfoxaiUqx34DvIpj6DVPgR2Kb7v2V1nCfxOyu5nu/ZE3n0fY1acgZn8x2
+         GIPg==
+X-Gm-Message-State: APjAAAUNuaeVmlQC+UBRhcjJJBUmAz994xojHCKFsQ/n9zIqVtH9b2Q5
+        q3QYJRrk2vOQRkVZOF6S7bg=
+X-Google-Smtp-Source: APXvYqxPMbSelxk2QoaTS4IEPQI6HFh2Et2riPZYOgFGt5+FQY5h5OrWMiWswdFFIeXUEDXwUnOVYA==
+X-Received: by 2002:a17:90a:f005:: with SMTP id bt5mr4565729pjb.16.1575481363552;
+        Wed, 04 Dec 2019 09:42:43 -0800 (PST)
+Received: from [10.67.50.53] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id n12sm7861367pgb.32.2019.12.04.09.42.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2019 08:29:04 -0800 (PST)
-Subject: Re: [PATCH v2 00/11] thermal: clean up output of make W=1
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, edubezval@gmail.com,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Javi Merino <javi.merino@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jun Nie <jun.nie@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <cover.1574242756.git.amit.kucheria@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <4318ca22-2e7c-c529-e97d-73eec7266376@linaro.org>
-Date:   Wed, 4 Dec 2019 17:29:02 +0100
+        Wed, 04 Dec 2019 09:42:42 -0800 (PST)
+Subject: Re: [PATCH 1/6] thermal: brcmstb_thermal: Do not use DT coefficients
+To:     Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20191030182132.25763-1-f.fainelli@gmail.com>
+ <20191030182132.25763-2-f.fainelli@gmail.com>
+ <CAHLCerP6ricempeG=x-a2_aA6__YqADPKAEG5y7qPYNcD2=47Q@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
+Message-ID: <9adf0bd8-99ee-0f38-4608-67c92ba42c88@gmail.com>
+Date:   Wed, 4 Dec 2019 09:41:16 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <cover.1574242756.git.amit.kucheria@linaro.org>
+In-Reply-To: <CAHLCerP6ricempeG=x-a2_aA6__YqADPKAEG5y7qPYNcD2=47Q@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/11/2019 16:45, Amit Kucheria wrote:
-> Cleanup output of make W=1 inside drivers/thermal. This should allow us to
-> focus on real issues that tend to get lost in the noise much better.
+On 12/4/19 12:41 AM, Amit Kucheria wrote:
+> On Wed, Oct 30, 2019 at 11:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> At the time the brcmstb_thermal driver and its binding were merged, the
+>> DT binding did not make the coefficients properties a mandatory one,
+>> therefore all users of the brcmstb_thermal driver out there have a non
+>> functional implementation with zero coefficients. Even if these
+>> properties were provided, the formula used for computation is incorrect.
+>>
+>> The coefficients are entirely process specific (right now, only 28nm is
+>> supported) and not board or SoC specific, it is therefore appropriate to
+>> hard code them in the driver given the compatibility string we are
+>> probed with which has to be updated whenever a new process is
+>> introduced.
+>>
+>> We remove the existing coefficients definition since subsequent patches
+>> are going to add support for a new process and will introduce new
+>> coefficients as well.
+>>
+>> Fixes: 9e03cf1b2dd5 ("thermal: add brcmstb AVS TMON driver")
 > 
-> There is no functional change. This series was generate on top of
-> linux-next from 20191119.
+> I think you should fix the computation formula as the first patch and
+> then merge the rest of this patch into your second patch.
 > 
-> Changes since v1:
-> - Add review tags
-> - Fixed up commit message for devfreq_cooling and samsung changes
+> I don't think the intermediate state of converting named constants to
+> magic numbers is needed just to convert it over to another set of
+> parameters.
 
-Applied, thanks!
+ok, so you would rather see this patch using the defined constants while
+fixing the formula, and in a subsequent patch getting rid of the
+constant names since they are going to be added to a per-process table,
+does that sound reasonable?
+
+> 
+> Regards,
+> Amit
+> 
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>  drivers/thermal/broadcom/brcmstb_thermal.c | 37 ++++------------------
+>>  1 file changed, 6 insertions(+), 31 deletions(-)
+>>
+>> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+>> index 5825ac581f56..42482af0422e 100644
+>> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
+>> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+>> @@ -48,15 +48,6 @@
+>>  #define AVS_TMON_TEMP_INT_CODE         0x1c
+>>  #define AVS_TMON_TP_TEST_ENABLE                0x20
+>>
+>> -/* Default coefficients */
+>> -#define AVS_TMON_TEMP_SLOPE            -487
+>> -#define AVS_TMON_TEMP_OFFSET           410040
+>> -
+>> -/* HW related temperature constants */
+>> -#define AVS_TMON_TEMP_MAX              0x3ff
+>> -#define AVS_TMON_TEMP_MIN              -88161
+>> -#define AVS_TMON_TEMP_MASK             AVS_TMON_TEMP_MAX
+>> -
+>>  enum avs_tmon_trip_type {
+>>         TMON_TRIP_TYPE_LOW = 0,
+>>         TMON_TRIP_TYPE_HIGH,
+>> @@ -108,23 +99,11 @@ struct brcmstb_thermal_priv {
+>>         struct thermal_zone_device *thermal;
+>>  };
+>>
+>> -static void avs_tmon_get_coeffs(struct thermal_zone_device *tz, int *slope,
+>> -                               int *offset)
+>> -{
+>> -       *slope = thermal_zone_get_slope(tz);
+>> -       *offset = thermal_zone_get_offset(tz);
+>> -}
+>> -
+>>  /* Convert a HW code to a temperature reading (millidegree celsius) */
+>>  static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>>                                         u32 code)
+>>  {
+>> -       const int val = code & AVS_TMON_TEMP_MASK;
+>> -       int slope, offset;
+>> -
+>> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+>> -
+>> -       return slope * val + offset;
+>> +       return (410040 - (int)((code & 0x3FF) * 487));
+>>  }
+>>
+>>  /*
+>> @@ -136,20 +115,16 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>>  static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
+>>                                         int temp, bool low)
+>>  {
+>> -       int slope, offset;
+>> -
+>> -       if (temp < AVS_TMON_TEMP_MIN)
+>> -               return AVS_TMON_TEMP_MAX; /* Maximum code value */
+>> -
+>> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+>> +       if (temp < -88161)
+>> +               return 0x3FF;   /* Maximum code value */
+>>
+>> -       if (temp >= offset)
+>> +       if (temp >= 410040)
+>>                 return 0;       /* Minimum code value */
+>>
+>>         if (low)
+>> -               return (u32)(DIV_ROUND_UP(offset - temp, abs(slope)));
+>> +               return (u32)(DIV_ROUND_UP(410040 - temp, 487));
+>>         else
+>> -               return (u32)((offset - temp) / abs(slope));
+>> +               return (u32)((410040 - temp) / 487);
+>>  }
+>>
+>>  static int brcmstb_get_temp(void *data, int *temp)
+>> --
+>> 2.17.1
+>>
 
 
 -- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Florian
