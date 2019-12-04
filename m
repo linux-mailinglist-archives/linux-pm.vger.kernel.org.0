@@ -2,65 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 329051127D9
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 10:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F55112864
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 10:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbfLDJiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 04:38:54 -0500
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:43530 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbfLDJiy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 04:38:54 -0500
-Received: by mail-vk1-f193.google.com with SMTP id s62so189220vkb.10
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 01:38:53 -0800 (PST)
+        id S1726632AbfLDJt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 04:49:59 -0500
+Received: from mail-vk1-f176.google.com ([209.85.221.176]:36345 "EHLO
+        mail-vk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725971AbfLDJt7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 04:49:59 -0500
+Received: by mail-vk1-f176.google.com with SMTP id i4so1952157vkc.3;
+        Wed, 04 Dec 2019 01:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kBM+7sKdP9ujCe9ALp3o3fbTa5VggqfmCZsELUt7gmY=;
-        b=KmCelkEDW//pN0sIHhURzAdIgLRrtV4W3ZvTphxbkEmsYa1UnJ8NBPQ6XL/j0Bldte
-         kJyRTSZQ+yPMegb0hHGLLP/ToYjBXYveq8S5Swj1BjlkIp3xFREhO+MPg+AiRGAiqibI
-         p1TqIRD0ZqDISySdUxlmYNiOhjm3vULrjvK394FDYqQym+DAcYdt61u2UBwvkjBm2J0V
-         Yo4ZP5rt0xsVN6qBRHM4UkVQX/Qo2ZiEHo0Ipxym4ZMYrruHY2nBXI0odgsaghVkmVtV
-         rsEMmkg4qNTOwmkU5ESS+kg0giexdzQjnQ9Qd2EAPb35bPQRkSChyoHVSMRHqmOKCPuG
-         g3BA==
+        bh=pPIJ9M8+mSe3OeAXCE+fj/3dGRagMu8jXvBF/uDza34=;
+        b=cXtA9Yptfjo8ePQAqvUGePG60nWRObXSX42QTc+c9FwtujDvR9ZEnH4F+TSMnpA0Wh
+         oC4zo10iCmvaHbQ2tY1mcsutd71XBkBZxHBpsa+OMIKSFjHw4DnqKkNjBnaBdNVgZviZ
+         QStk480dlgw0qkHufnq0myyOQrwFKS1amp6vOXy/nBAFHKrwjti4hyS6QMgMwxx/ASDc
+         z/w0o3d1mdWNZHgbRAbxXVgP/yR470eozuhigjg+M5z0ew7sPRoOajiP0UZ8c6N6aGgR
+         Nwcx0wY1PaA3VUwL4oum8Zse0r9sHnQx7iwt5Al5bti6ru0vs0kz9S8lEAIy5Hf4AegX
+         pBMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kBM+7sKdP9ujCe9ALp3o3fbTa5VggqfmCZsELUt7gmY=;
-        b=N524UVt0IAq6zkoMuJMX7fgR8AsNtVipV5GXW2MQ8gyFm9igXFnEzwPoOtUZOvxzT2
-         zpIaWHbYDM/LG6BXqPnLT6ld1zO6urK2hQ35cCqIibGc+RPryyb8tnth4ukbdLzigkK3
-         Bd9sNBfkhQFjiyaQ588arXM6s7Bj7XKswvnGDbjalG5xu91r8nR3lX4axfMsddwl3SIS
-         1N8IMGcbttKoMad3UwMATgo3KtmlLLfIE3afJGCAZNR1vVRijtIAyU4Fj08JA0MBu2Hs
-         pLTsRORMAqEj9rsc8WrlNsHMh8B8eSyBccKGqcblX3WtrhsgeS82wLHiS7FKaiAxqWFA
-         /gaw==
-X-Gm-Message-State: APjAAAXInQKqFnB1Lwdt5w5mrD/3mRSbclmN2WoDvsHS92m1YEBm/+DV
-        Z0qu+DYfDGf41qh5H1Sk/MRYHE6IYD7FDfgNcTg5Dw==
-X-Google-Smtp-Source: APXvYqwiUoUoPZvgpG+ifopwxSLWwG1iOG5+9d9DmpNIKyb1VOCcZCyapnluKjwiXLoMcJdRA6EYd8bNW2NVGYtZ3eU=
-X-Received: by 2002:ac5:c4f8:: with SMTP id b24mr1401815vkl.79.1575452333245;
- Wed, 04 Dec 2019 01:38:53 -0800 (PST)
+        bh=pPIJ9M8+mSe3OeAXCE+fj/3dGRagMu8jXvBF/uDza34=;
+        b=UO92pHQSGzMRcZ3RRqdt/sJVurbaeR1l5MVFaCvM6jzNAdtaSS2raLNURdgrk+rPRH
+         XReOJKAtET26Ta/Z+iW6ybXGRI4a34OFzAHGRtUTctBZqfCjVfrcnQByf5/54l/lhfiC
+         AtsWjKpotvrZP8jZQWCdHjdBE5OAitBZq9vqcV6p5aegrwINNsAbXoly4XaaWwWQ1kUZ
+         vJJRxPza9uvSnKn/JO5i9fbMD7QXlFeWCZyPom/8pEzOxjRvau0ASU8gsS+qBJdNNFBO
+         qW/6AYsXC0w/zMp4rpg6o1zd1G9lFCcmUP361xcob5IguT076RiKVa6S0oZ2Ha8E9G9v
+         BOzg==
+X-Gm-Message-State: APjAAAVngQ9dfJYI3WAG2GdRoRaDk0LE7ML8MCuge5m8X74lt/QmfOoH
+        2wjjq/dxU1plKcCR50FOV7YqofuXNKGwjhlxNJY=
+X-Google-Smtp-Source: APXvYqwcmEszgaP2f+aEFuCk64GgbEQC+Y3ruLWXWwDDA0lNHGnXECgPDn5L2c4lKmDY2WgkAnD6nw9PVtHk309L/8c=
+X-Received: by 2002:a05:6122:1065:: with SMTP id k5mr1378302vko.14.1575452997897;
+ Wed, 04 Dec 2019 01:49:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20191030182132.25763-1-f.fainelli@gmail.com> <20191030182132.25763-7-f.fainelli@gmail.com>
-In-Reply-To: <20191030182132.25763-7-f.fainelli@gmail.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 4 Dec 2019 15:08:41 +0530
-Message-ID: <CAHLCerPyJxsLs5at4dQ7GdDXpC85UijNNhJbKSoDsdLW2do00w@mail.gmail.com>
-Subject: Re: [PATCH 6/6] thermal: brcmstb_thermal: Register different ops per process
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        "maintainer:BROADCOM STB AVS TMON DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+References: <CAOuPNLh8dsSCq850afbj4OiHhZ2swBWZP=BTUrXrXhdpTjZs+A@mail.gmail.com>
+ <CAK7N6vpawfLSVcHCg_3aQ0M8L=j77ZeGfmUZ-J4hpUkWu0fkWA@mail.gmail.com>
+In-Reply-To: <CAK7N6vpawfLSVcHCg_3aQ0M8L=j77ZeGfmUZ-J4hpUkWu0fkWA@mail.gmail.com>
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Wed, 4 Dec 2019 15:19:46 +0530
+Message-ID: <CAOuPNLii26WcDnwD7ZkMX6ux7VRspw7nMEKJK0QF+j95YCHPOw@mail.gmail.com>
+Subject: Re: interrupt handler not getting called after resume
+To:     anish singh <anish198519851985@gmail.com>
+Cc:     Kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        linux-pm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -68,70 +59,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 11:52 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Wed, 4 Dec 2019 at 00:28, anish singh <anish198519851985@gmail.com> wrote:
 >
-> Since we do not have interrupts on BCM7216, we cannot have trip point
-> crossing, the thermal subsystem expects us to provide a NULL set_trips
-> operation in that case, so make it possible to provide per-process
-> thermal_zone_of_device_ops
+> On Tue, Dec 3, 2019 at 6:12 AM Pintu Agarwal <pintu.ping@gmail.com> wrote:
+> >
+> > Hi All,
+> >
+> > I have one general query.
+> >
+> > If an interrupt handler is NOT getting called (for one device) after
+> > the system resume (from snapshot image), then what could be the issue?
 >
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Most likely during resume the interrupt was not enabled. So check
+> irq status registers to see in the working and non working case.
+>
+Oh sorry, I forgot to mention one thing.
+After resume, I can see that the interrupts are visible under /proc/interrupts.
+# cat /proc/interrupts
+           CPU0       CPU1
+[...]
+416:          1          0       IPU  (null)
+417:          0          0       IPU  (null)
+418:          0          0       IPU  imx_drm  ===> HDMI
+419:       2242       2       IPU  imx_drm   ===> LCD
+[...]
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
-
-> ---
->  drivers/thermal/broadcom/brcmstb_thermal.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
-> index 64f715053ce9..a75a335d1bb3 100644
-> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
-> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
-> @@ -96,6 +96,7 @@ static struct avs_tmon_trip avs_tmon_trips[] = {
->  struct brcmstb_thermal_params {
->         unsigned int offset;
->         unsigned int mult;
-> +       const struct thermal_zone_of_device_ops *of_ops;
->  };
->
->  struct brcmstb_thermal_priv {
-> @@ -278,19 +279,25 @@ static int brcmstb_set_trips(void *data, int low, int high)
->         return 0;
->  }
->
-> -static const struct thermal_zone_of_device_ops of_ops = {
-> +static const struct thermal_zone_of_device_ops brcmstb_16nm_of_ops = {
->         .get_temp       = brcmstb_get_temp,
-> -       .set_trips      = brcmstb_set_trips,
->  };
->
->  static const struct brcmstb_thermal_params brcmstb_16nm_params = {
->         .offset = 457829,
->         .mult   = 557,
-> +       .of_ops = &brcmstb_16nm_of_ops,
-> +};
-> +
-> +static const struct thermal_zone_of_device_ops brcmstb_28nm_of_ops = {
-> +       .get_temp       = brcmstb_get_temp,
-> +       .set_trips      = brcmstb_set_trips,
->  };
->
->  static const struct brcmstb_thermal_params brcmstb_28nm_params = {
->         .offset = 410040,
->         .mult   = 487,
-> +       .of_ops = &brcmstb_28nm_of_ops,
->  };
->
->  static const struct of_device_id brcmstb_thermal_id_table[] = {
-> @@ -329,7 +336,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
->         platform_set_drvdata(pdev, priv);
->
->         thermal = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, priv,
-> -                                                      &of_ops);
-> +                                                      priv->temp_params.of_ops);
->         if (IS_ERR(thermal)) {
->                 ret = PTR_ERR(thermal);
->                 dev_err(&pdev->dev, "could not register sensor: %d\n", ret);
-> --
-> 2.17.1
->
+The interrupts are coming only for LCD display and thus its irq
+handler is getting called.
+But the interrupts are not coming for HDMI case, thus HDMI gives
+"vblank timeout issue".
+Apart from this I also tried calling enable_irq(irq) after resume, but
+it did not help much.
