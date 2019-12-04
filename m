@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C41E112DF3
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 16:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6B4112DEE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 16:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727910AbfLDPAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728151AbfLDPAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 4 Dec 2019 10:00:36 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:39377 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728042AbfLDPAf (ORCPT
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:46491 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728056AbfLDPAf (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 10:00:35 -0500
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191204150034euoutp02ea052cbc6e5ccce76fdd66073cabc1c9~dMxqdARly1386313863euoutp02A
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191204150034euoutp01cde0b4373cef416effc11ebfabed41bc~dMxq_2seg2300123001euoutp01h
         for <linux-pm@vger.kernel.org>; Wed,  4 Dec 2019 15:00:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191204150034euoutp02ea052cbc6e5ccce76fdd66073cabc1c9~dMxqdARly1386313863euoutp02A
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191204150034euoutp01cde0b4373cef416effc11ebfabed41bc~dMxq_2seg2300123001euoutp01h
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1575471634;
-        bh=Ilvsx83Eaa30z89vnb/RD9pmuq7xN4DTWNNaEyITwuw=;
+        bh=nPQrCD/mKTuifW3dUfM3C+O8poSqC0PNAFTDcneBuHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kq++Ur1JxM6diG7q6QRYnv9NW3n2jSZMNG5f36kLg4iq8QeCGFdxdercDan6lnrHk
-         3MHa6jgEuD8CLw8KOc1Yxm8xrd5yhzyD6M5u/ypm4Pt0aBm5rySE3pbOvswnO7UJmo
-         5rekXXDMGWEJZsgUEAPvA3dUWVG3t5AhH+s1YrSw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        b=EoDmdYMTfHR+Bem9OsIcWDI2Uv96pCD81dQ4NxYnPXKiEfYt0kjqABc9kIiUC4Leq
+         0nLJEFN+RHkEnKYWRYrmIz2IA1IGkejuNjk64OPocukEguMKOUc3cF0ifJEa4gdBdY
+         Zv73rfqgZDv6IhD9oACC1wAnFNnxmJfjQaG2/yAY=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191204150033eucas1p1ef9006681cd8d1f850b22d91d10dfce9~dMxqNwu2c0396203962eucas1p1v;
-        Wed,  4 Dec 2019 15:00:33 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 65.68.60698.11AC7ED5; Wed,  4
-        Dec 2019 15:00:33 +0000 (GMT)
+        20191204150034eucas1p14854d151620d20f3c57659b6d427661e~dMxqwTsWd0610306103eucas1p1e;
+        Wed,  4 Dec 2019 15:00:34 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id BB.2F.60679.21AC7ED5; Wed,  4
+        Dec 2019 15:00:34 +0000 (GMT)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191204150033eucas1p1bf11d36a89c89e3eb55c37a1a204e988~dMxp4tnPR0430304303eucas1p1g;
+        20191204150033eucas1p164374e7f15cb9a74b7432ca1a822dc10~dMxqXDJ8D0395203952eucas1p1q;
         Wed,  4 Dec 2019 15:00:33 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191204150033eusmtrp23a6c6e41d57ffb7c5d0aeeb54b4c13e2~dMxp4B2VZ2624126241eusmtrp2t;
+        20191204150033eusmtrp22d45b9edb8d4f271480512d837b65cb4~dMxqWddY12624226242eusmtrp2r;
         Wed,  4 Dec 2019 15:00:33 +0000 (GMT)
-X-AuditID: cbfec7f5-a29ff7000001ed1a-c1-5de7ca11632e
+X-AuditID: cbfec7f4-0cbff7000001ed07-76-5de7ca12a074
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 74.CF.07950.11AC7ED5; Wed,  4
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 35.CF.07950.11AC7ED5; Wed,  4
         Dec 2019 15:00:33 +0000 (GMT)
 Received: from AMDC3218.digital.local (unknown [106.120.51.18]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191204150032eusmtip127c8ce5c028f746c0cfb923aaafd8d00~dMxpYEc1g1769317693eusmtip1h;
-        Wed,  4 Dec 2019 15:00:32 +0000 (GMT)
+        20191204150033eusmtip160505c92ed8939768d69a85ef53bf05b~dMxp38OvZ1802618026eusmtip16;
+        Wed,  4 Dec 2019 15:00:33 +0000 (GMT)
 From:   Kamil Konieczny <k.konieczny@samsung.com>
 To:     k.konieczny@samsung.com
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
@@ -54,137 +54,98 @@ Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: [PATCH v2 1/3] devfreq: change time stats to 64-bit
-Date:   Wed,  4 Dec 2019 16:00:16 +0100
-Message-Id: <20191204150018.5234-2-k.konieczny@samsung.com>
+Subject: [PATCH v2 2/3] devfreq: add clearing transitions stats
+Date:   Wed,  4 Dec 2019 16:00:17 +0100
+Message-Id: <20191204150018.5234-3-k.konieczny@samsung.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191204150018.5234-1-k.konieczny@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHKsWRmVeSWpSXmKPExsWy7djPc7qCp57HGtz8p2exccZ6VovrX56z
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRmVeSWpSXmKPExsWy7djP87pCp57HGlw7KGqxccZ6VovrX56z
         Wiz4NIPV4vz5DewWZ5vesFtc3jWHzeJz7xFGi7VH7rJb3G5cwebA6bFpVSebR9+WVYwenzfJ
-        BTBHcdmkpOZklqUW6dslcGXMu/uLtWCHeEXn+tmsDYyHhbsYOTkkBEwk/rbfYOxi5OIQEljB
-        KLFu83I2COcLo0TD66XMEM5nRomtj0DKIFoWXnsPVbWcUeL0x5UILfsWrGcBqWIT0Jc4ePYk
-        mC0iIC3RuWgiE0gRs8AxJoldh/6ygiSEBWwkVnR+YAexWQRUJS5uaAWL8wpYSyxceQVoKgfQ
-        OnmJOW81QMKcQOUfX39ihCgRlDg58wnYfGagkuats8FOlRDoZpd4ehLkCZBTXST6Hu2DOltY
-        4tXxLewQtozE/53zmSDscomnC/vYIZpbGCUetH9kgUhYSxw+fpEV5AhmAU2J9bv0IcKOEiuv
-        /4e6jU/ixltBiBv4JCZtm84MEeaV6GgTgqhWlXh+qgdqk7RE1/91rBAlHhLzpstNYFScheSZ
-        WUiemYWwdgEj8ypG8dTS4tz01GLjvNRyveLE3OLSvHS95PzcTYzAVHP63/GvOxj3/Uk6xCjA
-        wajEw9uw6XmsEGtiWXFl7iFGCQ5mJRHebRJPY4V4UxIrq1KL8uOLSnNSiw8xSnOwKInzVjM8
-        iBYSSE8sSc1OTS1ILYLJMnFwSjUw+mxfazrLy//2F3c7rb06pW/8XXIXS7Hb/hMI4tfK4eYy
-        MjG5IL7OIn/Z/ZPtDTr9FXKnuzVvPjnz+Nr626rb8n7UeNY2tdzt0F5U3XEkt2NZfsGOkpef
-        E4/a8HgVLjqUrN/p8PVdbeMiLsk7Z1vCz14O/iv0g9vSz1m4LFAhX1CM7wnPFyclluKMREMt
-        5qLiRACohwUpMQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42I5/e/4XV3BU89jDZq2iltsnLGe1eL6l+es
-        Fgs+zWC1OH9+A7vF2aY37BaXd81hs/jce4TRYu2Ru+wWtxtXsDlwemxa1cnm0bdlFaPH501y
-        AcxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehnz
-        7v5iLdghXtG5fjZrA+Nh4S5GTg4JAROJhdfes3UxcnEICSxllNg/8SgzREJaovH0aiYIW1ji
-        z7UuqKJPjBKfjmxmB0mwCehLHDx7kgXEFgFq6Fw0EayBWeAMk8SvlgoQW1jARmJF5wewehYB
-        VYmLG1pZQWxeAWuJhSuvAA3lAFogLzHnrQZImBOo/OPrT4wgthBQSc/Td2wQ5YISJ2c+YYEY
-        Ly/RvHU28wRGgVlIUrOQpBYwMq1iFEktLc5Nzy020itOzC0uzUvXS87P3cQIjIltx35u2cHY
-        9S74EKMAB6MSD2/DpuexQqyJZcWVuYcYJTiYlUR4t0k8jRXiTUmsrEotyo8vKs1JLT7EaAr0
-        w0RmKdHkfGC85pXEG5oamltYGpobmxubWSiJ83YIHIwREkhPLEnNTk0tSC2C6WPi4JRqYFx6
-        s1pURIopzNtR4j37/Z3rFR8/c9RcJ5lVvjTE7E/H5Ma3mrVLTnw50fhpxslZL3mtcn8Llkrc
-        109atURmDlM/P9eaVyxFewzP9SoZT3m0y/Lx8iCx8ny+Coc9FY/92zqMVXsn+Z++ebIt8E2l
-        zFSpdL6111ZN5L0Su67CyllRJIJxD8tcGyWW4oxEQy3mouJEALveXZafAgAA
-X-CMS-MailID: 20191204150033eucas1p1bf11d36a89c89e3eb55c37a1a204e988
+        BTBHcdmkpOZklqUW6dslcGUs2CZd0MxdsWnGKrYGxomcXYycHBICJhKzFy9m6mLk4hASWMEo
+        8aLzB5TzhVFi/qqPrBDOZ0aJv1t2ssG0nOw+xAKRWM4oMffML1a4lh3z/7OAVLEJ6EscPHsS
+        zBYRkJboXDQRbC6zwDEmiV2H/rKCJIQF7CU2dUDYLAKqEs/7DzJ3MXJw8ApYS2zs5wExJQTk
+        Jea81QCp4BSwkfj4+hMjiM0rIChxcuYTsPHMQCXNW2czg4yXEOhnl9h6pY8V4lIXiVlNS9kh
+        bGGJV8e3QNkyEv93zmeCsMslni7sY4dobmGUeND+kQUiYS1x+PhFVpAjmAU0Jdbv0ocIO0os
+        +7CHCeI2PokbbwUhbuCTmLRtOjNEmFeio00IohroqVM9UJukJbr+r4O6zENi+5tm5gmMirOQ
+        fDMLyTezEPYuYGRexSieWlqcm55abJSXWq5XnJhbXJqXrpecn7uJEZhoTv87/mUH464/SYcY
+        BTgYlXh4GzY9jxViTSwrrsw9xCjBwawkwrtN4mmsEG9KYmVValF+fFFpTmrxIUZpDhYlcd5q
+        hgfRQgLpiSWp2ampBalFMFkmDk6pBsbep0WZE5+UJWmlZ4clFbcpz/mnseYOe5uLeq0lH9fD
+        Exm1n11v/KlnyjFbbCT47eSFm4vuCy3fntex++2+zDYNiQO/eHiex9nsnJvhHpkicmnLrZWa
+        toIRC8prHieGpBrM1p/RPfXp9Qdec9ZalCRceXPs/az/KSvnFD/bO13lR/TUTG9Jd10lluKM
+        REMt5qLiRACmoiQpMAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkkeLIzCtJLcpLzFFi42I5/e/4XV3BU89jDTa9MLfYOGM9q8X1L89Z
+        LRZ8msFqcf78BnaLs01v2C0u75rDZvG59wijxdojd9ktbjeuYHPg9Ni0qpPNo2/LKkaPz5vk
+        Apij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DIW
+        bJMuaOau2DRjFVsD40TOLkZODgkBE4mT3YdYQGwhgaWMErO/akDEpSUaT69mgrCFJf5c62Lr
+        YuQCqvnEKHGo+zAzSIJNQF/i4NmTYM0iQA2diyaCNTALnGGS+NVSAWILC9hLbOr4ywpiswio
+        SjzvPwjUy8HBK2AtsbGfB8SUEJCXmPMWbC2ngI3Ex9efGCHOsZboefqODcTmFRCUODnzCQvE
+        dHmJ5q2zmScwCsxCkpqFJLWAkWkVo0hqaXFuem6xkV5xYm5xaV66XnJ+7iZGYDRsO/Zzyw7G
+        rnfBhxgFOBiVeHgbNj2PFWJNLCuuzD3EKMHBrCTCu03iaawQb0piZVVqUX58UWlOavEhRlOg
+        FyYyS4km5wMjNa8k3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA2Nu
+        XYRrZ4KpRR5rk6bOEqt0/r3C+Z+PvH5xV+NuaN3OTyc+tu/fany9Jjek1dX744YcM2mz78dN
+        na6tZt+QdFPwYuiUb+InVI/NWq/ne+PS7rmz5x/8INr7x/S49xxP5clO5ror2NdVZOnqGPXW
+        hXvt/aMQzegs6fi8aV3Kx+2vu5i2pv3TmanEUpyRaKjFXFScCAC9gbGHnAIAAA==
+X-CMS-MailID: 20191204150033eucas1p164374e7f15cb9a74b7432ca1a822dc10
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191204150033eucas1p1bf11d36a89c89e3eb55c37a1a204e988
+X-RootMTR: 20191204150033eucas1p164374e7f15cb9a74b7432ca1a822dc10
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20191204150033eucas1p1bf11d36a89c89e3eb55c37a1a204e988
+X-CMS-RootMailID: 20191204150033eucas1p164374e7f15cb9a74b7432ca1a822dc10
 References: <20191204150018.5234-1-k.konieczny@samsung.com>
-        <CGME20191204150033eucas1p1bf11d36a89c89e3eb55c37a1a204e988@eucas1p1.samsung.com>
+        <CGME20191204150033eucas1p164374e7f15cb9a74b7432ca1a822dc10@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change time stats counting to bigger type by using 64-bit jiffies.
-This will make devfreq stats code look similar to cpufreq stats and
-prevents overflow (for HZ = 1000 after 49.7 days).
+Add clearing transition table and time in states devfreq statistics
+by writing to trans_stat file in devfreq sysfs.
 
 Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
 Changes in v2:
- added Acked-by, rebased on linux-next
+ instead of creating new sysfs file, add new functionality to trans_stat
+ and clear stats when anything is writen to it
 
- drivers/devfreq/devfreq.c | 14 +++++++-------
- include/linux/devfreq.h   |  4 ++--
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/devfreq/devfreq.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index bdeb4189c978..0e2030403e4a 100644
+index 0e2030403e4a..901af3b66a76 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -199,10 +199,10 @@ static int set_freq_table(struct devfreq *devfreq)
- int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
- {
- 	int lev, prev_lev, ret = 0;
--	unsigned long cur_time;
-+	unsigned long long cur_time;
+@@ -1478,7 +1478,27 @@ static ssize_t trans_stat_show(struct device *dev,
+ 					devfreq->total_trans);
+ 	return len;
+ }
+-static DEVICE_ATTR_RO(trans_stat);
++
++static ssize_t trans_stat_store(struct device *dev,
++				struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct devfreq *df = to_devfreq(dev);
++	unsigned int cnt = df->profile->max_state;
++
++	if (cnt == 0)
++		return count;
++
++	mutex_lock(&df->lock);
++	memset(df->time_in_state, 0, cnt * sizeof(u64));
++	memset(df->trans_table, 0, cnt * cnt * sizeof(int));
++	df->last_stat_updated = get_jiffies_64();
++	df->total_trans = 0;
++	mutex_unlock(&df->lock);
++
++	return count;
++}
++static DEVICE_ATTR_RW(trans_stat);
  
- 	lockdep_assert_held(&devfreq->lock);
--	cur_time = jiffies;
-+	cur_time = get_jiffies_64();
- 
- 	/* Immediately exit if previous_freq is not initialized yet. */
- 	if (!devfreq->previous_freq)
-@@ -525,7 +525,7 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
- 			msecs_to_jiffies(devfreq->profile->polling_ms));
- 
- out_update:
--	devfreq->last_stat_updated = jiffies;
-+	devfreq->last_stat_updated = get_jiffies_64();
- 	devfreq->stop_polling = false;
- 
- 	if (devfreq->profile->get_cur_freq &&
-@@ -748,7 +748,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 
- 	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
- 			devfreq->profile->max_state,
--			sizeof(unsigned long),
-+			sizeof(*devfreq->time_in_state),
- 			GFP_KERNEL);
- 	if (!devfreq->time_in_state) {
- 		mutex_unlock(&devfreq->lock);
-@@ -756,7 +756,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		goto err_devfreq;
- 	}
- 
--	devfreq->last_stat_updated = jiffies;
-+	devfreq->last_stat_updated = get_jiffies_64();
- 
- 	srcu_init_notifier_head(&devfreq->transition_notifier_list);
- 
-@@ -1470,8 +1470,8 @@ static ssize_t trans_stat_show(struct device *dev,
- 		for (j = 0; j < max_state; j++)
- 			len += sprintf(buf + len, "%10u",
- 				devfreq->trans_table[(i * max_state) + j]);
--		len += sprintf(buf + len, "%10u\n",
--			jiffies_to_msecs(devfreq->time_in_state[i]));
-+		len += sprintf(buf + len, "%10llu\n", (u64)
-+			jiffies64_to_msecs(devfreq->time_in_state[i]));
- 	}
- 
- 	len += sprintf(buf + len, "Total transition : %u\n",
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 2bae9ed3c783..b81a86e47fb9 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -174,8 +174,8 @@ struct devfreq {
- 	/* information for device frequency transition */
- 	unsigned int total_trans;
- 	unsigned int *trans_table;
--	unsigned long *time_in_state;
--	unsigned long last_stat_updated;
-+	u64 *time_in_state;
-+	unsigned long long last_stat_updated;
- 
- 	struct srcu_notifier_head transition_notifier_list;
- };
+ static struct attribute *devfreq_attrs[] = {
+ 	&dev_attr_name.attr,
 -- 
 2.24.0
 
