@@ -2,85 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 101FD112940
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 11:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28EB112953
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 11:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbfLDK0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 05:26:39 -0500
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:46670 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726893AbfLDK0j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 05:26:39 -0500
-Received: by mail-pf1-f170.google.com with SMTP id y14so2971174pfm.13
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 02:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uzsef4KJrsS+vISRoINrm5pjWR4MnJsKKjbKbFFAkQw=;
-        b=plcbcqfkYNxwTh9QWAJxdbLFK4r7wJFyd7D4RWeG7E7a0ApH3VV3/OG1vj3PObgRsx
-         Hs05DsuSr5Q1FtNmT5oEoEgDmPsmc28+kpoANcgCVsc4pdYPjmlCH+78MzURD+7Vb3BM
-         vh0LRMUtfzCvdojax+IS7luRhqOzQQgggw5MGfET5RfRdU0+9WunAeqNQOPI1v1EciAO
-         fWXlySGPRZU1OIB7Rcmi+n32F4nE5mt7wONwQ4WCCD/s/fjF4IErHM0NynPe+UFoRyn9
-         4zcj43XUBWvVdpXBUltIAq8DIHT0rgXEkzVx6KeOHbhiIzOzQ+PQMpeYstvCZz3gTOED
-         3b5w==
+        id S1727408AbfLDKfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 05:35:01 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39080 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727268AbfLDKfB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 05:35:01 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 77so5874618oty.6;
+        Wed, 04 Dec 2019 02:35:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uzsef4KJrsS+vISRoINrm5pjWR4MnJsKKjbKbFFAkQw=;
-        b=gxW5V25jyuYS15AuDrCeFJOOmJ02QcSS5q7aM7K4ux1//Tn/jhBLT/MAwGP8oUIU6M
-         +e1XKqYvXrYW+4EVgYQmJxJZAXhK9Lrhh4TpatOEDgRrzPPLPr8I1eXXmDL4/xGoEUs5
-         X/rF/RGrHy6MD/C8j14V3+RQwnO8LUbo9sSzRE3n675r9I3IFTIcLM0ueXQPWMzrKabW
-         khiqZDmtvp6kdEdHaA/NAavyELFbIhxDhF8SXzcv4+0cH91EHt8ySlZvmPq/95WVUgbJ
-         lM1ZwwMNufaB2kJD2QfMzi8JSWd5YEeWMna/srmMo7Ezy1HRVuf1iMYlPVWhCP8HsxP2
-         eq5g==
-X-Gm-Message-State: APjAAAV0Ce4VznHiZZ0CQ7vFGlI61fup5f240km3zepNxV9EL6DGA9UQ
-        UE6NYkvi8b/FjUg7psn8rLaPTA==
-X-Google-Smtp-Source: APXvYqy0xchk5KDlqBbD2ez6El0z37utXxmTy0Z4siJZjd6n2+DLGWwd0SdK8poRbiZV/8sisN14SQ==
-X-Received: by 2002:aa7:9988:: with SMTP id k8mr2637132pfh.200.1575455198334;
-        Wed, 04 Dec 2019 02:26:38 -0800 (PST)
-Received: from localhost ([122.171.112.123])
-        by smtp.gmail.com with ESMTPSA id z26sm6727403pgu.80.2019.12.04.02.26.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Dec 2019 02:26:37 -0800 (PST)
-Date:   Wed, 4 Dec 2019 15:56:35 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sumit Gupta <sumitg@nvidia.com>, rjw@rjwysocki.net,
-        catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
-        talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function to
- get BPMP data
-Message-ID: <20191204102635.4umxtgmishlijyn4@vireshk-i7>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <20191203174229.GA1721849@ulmo>
- <9404232d-84ce-a117-89dd-f2d8de80993e@kapsi.fi>
- <20191204091703.d32to5omdm3eynon@vireshk-i7>
- <cdb685a4-4d00-4635-df12-c67a6faa81e2@kapsi.fi>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=WNn4XHe9ywl5H5Cb0VGU+9qS/kYHcdC+aeiiry/1kpM=;
+        b=OI6cVXpMhdjVAbn0ZtgEAo788b6jCZ60MVD3EkSbOpIiYmo4vvbxvsmk/JXpZ3U8FS
+         Jr6Orw/vKUmcA8l675DGDr7rse2U8BfPZt49+Hce+oZ9VMWW3VxrtSxWLg9j4QvQZW/w
+         E0iaxUF1qbAw8t00wVAxKQJVLEI2/BfUShT9vilFaNiI4GLDcf6SakdtIYxF8wFtdJUN
+         Oyfg/qZlWYpvH5yoMVt26JmPbaY0fJ8DzIy6fCGABpcI079tdjahw3sEGGhrqe7+edAN
+         C8linyYdmC75/gZA33W/NGZyX+4RURAXt7ykb9TfmMCbKgVxfgWnoBdMbdAp30FG4wBd
+         z2rg==
+X-Gm-Message-State: APjAAAVf/8z+1xGInGzP/fh3D8kNN+5U21WD/WpSX/Dt40rtSmf6uB4s
+        zuNdQrvsqxIffWbH04S/6r8Ac+oOPnMkGLjcTSzThina
+X-Google-Smtp-Source: APXvYqwi/xv+2t7WJjFELHBgx2xxlAvDSPObHgOKAMie0hXPlaY8UJ7uVPjZHHOG5pB3iZgU8+48EoXBwiTvMXTp3tQ=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr1965013otd.266.1575455700009;
+ Wed, 04 Dec 2019 02:35:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cdb685a4-4d00-4635-df12-c67a6faa81e2@kapsi.fi>
-User-Agent: NeoMutt/20180716-391-311a52
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 4 Dec 2019 11:34:48 +0100
+Message-ID: <CAJZ5v0iWz6HG4C19U2Pax8KpyGm=AvwDbU__w=Yt7ij1JqQZFg@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v5.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-12-19, 12:21, Mikko Perttunen wrote:
-> Ah, it seems I was mistaken here. Thanks for the information.
+Hi Linus,
 
-Please avoid top-posting [1][2] for LKML discussions.
+Please pull from the tag
 
-Thanks.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.5-rc1-2
 
--- 
-viresh
+with top-most commit 1e4230f56dac141eb149ebec01f41b6fad27e503
 
-[1] https://en.wikipedia.org/wiki/Posting_style#Top-posting
-[2] https://web.archive.org/web/20080722025748/http://www.zip.com.au/~akpm/linux/patches/stuff/top-posting.txt
+ Merge branches 'pm-sleep', 'pm-cpuidle', 'pm-cpufreq', 'pm-devfreq'
+and 'pm-avs'
+
+on top of commit 6e9f879684b46331f51d0c76ebee981c788417db
+
+ Merge tag 'acpi-5.5-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive additional power management updates for 5.5-rc1.
+
+These fix an ACPI EC driver bug exposed by the recent rework
+of the suspend-to-idle code flow, reintroduce frequency
+constraints into device PM QoS (in preparation for adding
+QoS support to devfreq), drop a redundant field from struct
+cpuidle_state and clean up Kconfig in some places.
+
+Specifics:
+
+ - Avoid a race condition in the ACPI EC driver that may cause
+   systems to be unable to leave suspend-to-idle (Rafael Wysocki).
+
+ - Drop the "disabled" field, which is redundant, from struct
+   cpuidle_state (Rafael Wysocki).
+
+ - Reintroduce device PM QoS frequency constraints (temporarily
+   introduced and than dropped during the 5.4 cycle) in preparation
+   for adding QoS support to devfreq (Leonard Crestez).
+
+ - Clean up indentation (in multiple places) and the cpuidle drivers
+   help text in Kconfig (Krzysztof Kozlowski, Randy Dunlap).
+
+Thanks!
+
+
+---------------
+
+Krzysztof Kozlowski (3):
+      cpuidle: Fix Kconfig indentation
+      cpufreq: Fix Kconfig indentation
+      power: avs: Fix Kconfig indentation
+
+Leonard Crestez (4):
+      PM / QoS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
+      PM / QoS: Initial kunit test
+      PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+      PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+
+Marek Szyprowski (1):
+      PM / devfreq: Add missing locking while setting suspend_freq
+
+Rafael J. Wysocki (3):
+      cpuidle: Drop disabled field from struct cpuidle_state
+      ACPI: EC: Rework flushing of pending work
+      ACPI: PM: s2idle: Rework ACPI events synchronization
+
+Randy Dunlap (1):
+      cpuidle: minor Kconfig help text fixes
+
+---------------
+
+ arch/sh/kernel/cpu/shmobile/cpuidle.c |   8 +--
+ drivers/acpi/ec.c                     |  36 ++++-------
+ drivers/acpi/sleep.c                  |  26 ++++++--
+ drivers/base/Kconfig                  |   4 ++
+ drivers/base/power/Makefile           |   1 +
+ drivers/base/power/qos-test.c         | 117 ++++++++++++++++++++++++++++++++++
+ drivers/base/power/qos.c              |  73 +++++++++++++++++++--
+ drivers/cpufreq/Kconfig.powerpc       |   8 +--
+ drivers/cpufreq/Kconfig.x86           |  16 ++---
+ drivers/cpuidle/Kconfig               |  16 ++---
+ drivers/cpuidle/Kconfig.arm           |  22 +++----
+ drivers/cpuidle/cpuidle.c             |   2 +-
+ drivers/cpuidle/poll_state.c          |   1 -
+ drivers/devfreq/devfreq.c             |   4 ++
+ drivers/idle/intel_idle.c             |   6 +-
+ drivers/power/avs/Kconfig             |  12 ++--
+ include/linux/cpuidle.h               |   2 +-
+ include/linux/pm_qos.h                |  86 ++++++++++++++-----------
+ kernel/power/qos.c                    |   4 +-
+ 19 files changed, 324 insertions(+), 120 deletions(-)
