@@ -2,115 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 021CE11297A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 11:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B42B112998
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 11:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbfLDKqU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 05:46:20 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:57260 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727331AbfLDKqU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 05:46:20 -0500
-Received: from 79.184.254.100.ipv4.supernova.orange.pl (79.184.254.100) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 3362c46b8c575e9d; Wed, 4 Dec 2019 11:46:18 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 0/2] PM / devfreq: Add dev_pm_qos support with minimal changes
-Date:   Wed, 04 Dec 2019 11:46:17 +0100
-Message-ID: <5794906.l6Fuony6qs@kreacher>
-In-Reply-To: <cover.1574179738.git.leonard.crestez@nxp.com>
-References: <cover.1574179738.git.leonard.crestez@nxp.com>
+        id S1727508AbfLDK4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 05:56:05 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14728 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727446AbfLDK4F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 05:56:05 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5de790b50000>; Wed, 04 Dec 2019 02:55:49 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 04 Dec 2019 02:56:04 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 04 Dec 2019 02:56:04 -0800
+Received: from [10.24.37.103] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Dec
+ 2019 10:56:00 +0000
+Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+ <20191204054043.o4ff7pnqec3fwdgu@vireshk-i7>
+From:   sumitg <sumitg@nvidia.com>
+Message-ID: <7347caa6-43a3-f761-de83-481b45f7b22a@nvidia.com>
+Date:   Wed, 4 Dec 2019 16:25:57 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20191204054043.o4ff7pnqec3fwdgu@vireshk-i7>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1575456949; bh=ro08D4nTCDKA4g/LLllSz/rbWxxm0KL/lEFg2RZ47Wg=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=P4H8jDxrbYNjwagumhpUnHqnetpmMZzW87JXeCX1JSxVhjfywTV1YyPYsSFU4yJV5
+         98IVAqHE8ZEO4q26s7lq/9ZFuZi2cgn7mQNFNRcL3oJYTrYYGmPV9OsxjpvgcOGJEH
+         BACSgNHLeZmwUmxT3ZEm3ZNxvDPnJgEPxItaiwELRwh9fah9jVpBwyo50jyP/rEjWj
+         yNj8tu4mSPYFpY6pOlxMIXcNPQIjADM3ba4CAozwjR+xqyI5AC0eNPFlUwnflDgfCg
+         CpwT45CN/exfjs9u0qLC+GtyrqbO/OJg+EuisdZ4a9x3OTEY0dJ+nqaMkZknpFY+xR
+         I2TyXKPywKNoQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, November 19, 2019 5:12:12 PM CET Leonard Crestez wrote:
-> Add dev_pm_qos notifiers to devfreq core in order to support frequency
-> limits via dev_pm_qos_add_request.
-> 
-> Unlike the rest of devfreq the dev_pm_qos frequency is measured in kHz,
-> this is consistent with current dev_pm_qos usage for cpufreq and
-> allows frequencies above 2Ghz (pm_qos expresses limits as s32).
-> 
-> Like with cpufreq the handling of min_freq/max_freq is moved to the
-> dev_pm_qos mechanism. Constraints from userspace are no longer clamped on
-> store, instead all values can be written and we only check against OPPs in a
-> new devfreq_get_freq_range function. This is consistent with the design of
-> dev_pm_qos.
-> 
-> Notifiers from pm_qos are executed under a single global dev_pm_qos_mtx and
-> need to take devfreq->lock, this means that calls into dev_pm_qos while holding
-> devfreq->lock are not allowed (lockdep warns about possible deadlocks).
-> 
-> Fix this by only adding the qos request and notifiers after devfreq->lock is
-> released inside devfreq_add_device. In theory this means sysfs writes
-> are possible before the min/max requests are initialized so we guard
-> against that explictly. The dev_pm_qos_update_request function would
-> otherwise print a big WARN splat.
-> 
-> Alternatively devfreq initialization could be refactored to avoid taking
-> devfreq->lock but that requires several intricate changes:
-> 
-> 	https://patchwork.kernel.org/cover/11242865/
-> 
-> I considered making dev_pm_qos call notifiers outside the lock but
-> that's another complex refactoring and it's difficult to ensure
-> correctness. If two identical qos requests are made in parallel then the
-> second shouldn't return until all notifiers are completely executed for
-> the first and QOS is enforced; otherwise it mostly defeats the purpose
-> of making proactive requests.
-> 
-> This series implements the minimal changes in order to implement dev_pm_qos
-> support for devfreq. It only costs a little defensive programming.
-> 
-> This series is also marked as [RFC] because it depends on restoring
-> DEV_PM_QOS_MIN/MAX_FREQUENCY inside the pm core:
-> 
-> 	https://patchwork.kernel.org/cover/11250413/
-> 
-> ---
-> Changes since "big version" v10:
-> * Drop accepted cleanups
-> * Work with current locking approach (split cleanups into other series)
-> * Drop acks and deliberately relabel as a new series. It still incorporates
-> most previous discussion but takes a different approach to locking.
-> * Don't print errors if devfreq_dev_release is called on error cleanup from
-> devfreq_add_device, just accept that requests and notifiers might not be
-> registered yet. I wish dev_pm_qos cleanups behaved like standard "kfree" and
-> silently did nothing when there's nothing to be done.
-> Link to v10: https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=196443
-> 
-> Leonard Crestez (2):
->   PM / devfreq: Add PM QoS support
->   PM / devfreq: Use PM QoS for sysfs min/max_freq
-> 
->  drivers/devfreq/devfreq.c | 151 ++++++++++++++++++++++++++++++++++----
->  include/linux/devfreq.h   |  14 +++-
->  2 files changed, 145 insertions(+), 20 deletions(-)
+Hi Viresh,
 
-Please resend this series as non-RFC with the ACKs from Chanwoo included.
+On 04/12/19 11:10 AM, Viresh Kumar wrote:
+> Hi Sumit,
+>
+> On 03-12-19, 23:02, Sumit Gupta wrote:
+>> Add support for CPU frequency scaling on Tegra194. The frequency
+>> of each core can be adjusted by writing a clock divisor value to
+>> an MSR on the core. The range of valid divisors is queried from
+>> the BPMP.
+>>
+>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   drivers/cpufreq/Kconfig.arm        |   6 +
+>>   drivers/cpufreq/Makefile           |   1 +
+>>   drivers/cpufreq/tegra194-cpufreq.c | 423 +++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 430 insertions(+)
+>>   create mode 100644 drivers/cpufreq/tegra194-cpufreq.c
+> Overall these are the things that you are doing here in the driver:
+>
+> - open coded clk_{get|set}_rate(), why can't you implement a clock
+>    driver for the CPU and use the clk framework? You may not need the
+>    (hacky) work-queue usage then probably.
 
-It may still be viable to push it for 5.5 during the -rc period.
+In T194, CCPLEX doesn't have access to set clocks and the
 
-Thanks!
+clk_{get|set}_rate() functions set clocks by hook to BPMP R5.
 
+CPU freq can be directly set by CCPLEX using MSR(NVFREQ_REQ_EL1).
 
+As DVFS run's on BPMP, another MSR (NVFREQ_FEEDBACK_EL1) is
 
+used to read the counters and calculate "actual" cpu freq at CCPLEX.
+
+So, "cpuinfo_cur_freq" node gives the actual cpu frequency and not
+
+given by node "scaling_cur_freq".
+
+>
+> - populating cpufreq table, you can probably add OPPs instead using
+>    the same mechanism
+
+We are reading available frequencies from BPMP to populate
+
+cpufreq table and not using static opp table.
+
+>
+> - And then you can reuse the cpufreq-dt driver for your platform as
+>    well, as is the case for few other tegra platforms.
+>
