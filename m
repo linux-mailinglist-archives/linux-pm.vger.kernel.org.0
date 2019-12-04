@@ -2,183 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C386112EAC
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 16:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7A4112EEE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 16:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbfLDPjx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 10:39:53 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33912 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728471AbfLDPjw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 10:39:52 -0500
-Received: by mail-wm1-f65.google.com with SMTP id f4so5122437wmj.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 07:39:51 -0800 (PST)
+        id S1728065AbfLDPt6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 10:49:58 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46363 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728017AbfLDPt6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 10:49:58 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z7so9128311wrl.13
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 07:49:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1niKCMXXnmGnzZRABJx3hRarOaikbE/OwsjmxwSrkNE=;
-        b=c0n/xZi+mCTzNlQRlLCYjL7pSvvKCB2mFzQHqcD21Rl2yMihwatj4fu8MSQQephKYM
-         a53jHtNdVOTYqPaU2OTmrxTns5ls+7huxMeLT3DF6hgUepdwGGF+jS0dLiaXZ+apjioK
-         O6sCTN1jtZFL4PnYdDcsMiYukIKh36htiy9e2m5GzxW+GzrlyV3Fe+okrXsjG4vwpshO
-         He65muV6t5s792gfmkrfXiBfyEtlVjzecqV/9lrd6qTEiP95sdeLmpHFh6tNENFOrVqu
-         Fpz5JPkPK+doI9Ejk9P3ITy0Gz19Drwy5yrhavCIeo547Rnlrb9P8xDm0qEkJ/ut8xBm
-         NG5A==
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hx7LEUWHU6YuMIbJZ+bvxfeQHzoMVMCbLHMFnb4eAkY=;
+        b=ez5AGVogZLLUW+1M1OX9mmnZJS22zA7jQ3evWk8K0ayuTu+Uzw552jnHaygpWIB3J0
+         80EO9PLNfAh/RY/h5IjRyhyv047QTtqSOOO2JfrCi5f/lI1M7hfYF6oI9SVx7qqte3vu
+         B4Gksclok5T2DnioedWnu4Je1aen7RIEjjfsLTz41kzj50x6dx2DWaqYm9yigioWacVn
+         mZXASlz8FkTFukXBoo9mm5+eFh4jhjGAaJX5dEujCtfXTVN7e/MWKTHw81cq6Qh/pkRt
+         zmYj1d4SI8cruFvSojGiwwujA7Faiep1PiwVLLOyONiTJM09VJS1XeJoHCaaefjCKwz2
+         kiBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1niKCMXXnmGnzZRABJx3hRarOaikbE/OwsjmxwSrkNE=;
-        b=uXEGaXwIvsOqnL8MlSz6ntPAbqIU/jTL3+Yb/0If0Z5OjGAWhfsZvUCkxDZebq63xW
-         5AK1UZ95p70iD2FQ+HcbOd1/+UC1i5wxyAe5jgVgtP2VRpprTeCjB6Pr9Azt/PsDxHAQ
-         KhH9FdVYECNgTQtLBgTNAkkVMXxx914wM5bntXBwxsF/h7AM2NcdIuoKH0Phk/Lonfgr
-         VZUzpfWQ5Rb+AiPx4+SzVwglOQjj20NiqhukuQ82YI2too+mXidonfKmlA80bH8SCoQQ
-         zpTC0jj7INtkCqqaLLft4LQgKWdPK/5tICqGRtG3ekWFk2zYj5Va0OdxMH1ktlF6QapQ
-         2swg==
-X-Gm-Message-State: APjAAAVzMkYN8tFlSdMuaYEzNx9JIHNIGc9jdC9BMvm6kTWtfFiB+hwJ
-        PLPzXDZ4FoX4j9Hn+iV1Mxqqrg==
-X-Google-Smtp-Source: APXvYqzGZovPj+AGgg4lhMwHJDGfAEKbPIbXfCW4qwAbL+vEzcG67Zt+AoImghY4NiEo/jaiI/gqWw==
-X-Received: by 2002:a1c:9d4a:: with SMTP id g71mr239894wme.50.1575473990613;
-        Wed, 04 Dec 2019 07:39:50 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:a551:321a:c21f:1f92])
-        by smtp.gmail.com with ESMTPSA id f1sm8631311wrp.93.2019.12.04.07.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 07:39:50 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=hx7LEUWHU6YuMIbJZ+bvxfeQHzoMVMCbLHMFnb4eAkY=;
+        b=kpFQT95VXBl88aItnB0R206OegLjpHqSGIvw6GTTisf88+aOee8JPnkp294ZndlrLH
+         pB6zP2F4rAmlK2OxTJj2VLbkCJOhNp8nQp/0NkND8WS2pd6tSwB+pZsIAFSeB6Vfbypn
+         rp56dmY1pDKyrf90JYwD4C/dCdb8wVrWbABZhlmBIRLPg8zogHVOVwjBbQ3evdi8pYtm
+         4aNhrubkPq551FVS8HjZyn/HW7kyXocrDeQgFInxwDqEFjJVuudGPrlDehvJqG7rRDij
+         Z+ESP8wG9TZ+MkqeUZn6xYB3l+Gvt/xZbzPC0mHtzCPo/DCE1zkmSNzIgchbSVosHiJS
+         WyQw==
+X-Gm-Message-State: APjAAAWUBB6P3fhs+kggHbU5AkvDZMh7C36/HtplMNpDqOveDEIZ1BmY
+        Lda3Z/hBKHMtqkDfT1VjiD19uQ==
+X-Google-Smtp-Source: APXvYqxdmLan/eMPlIFR0XHhUC1SGj0S+7JmF1sV9ajVbZcNGUDpupJf3Tiq7ugw4aeIj9wUbGc6Ng==
+X-Received: by 2002:a5d:43c7:: with SMTP id v7mr4538732wrr.32.1575474595466;
+        Wed, 04 Dec 2019 07:49:55 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d965:ceae:a314:6edb? ([2a01:e34:ed2f:f020:d965:ceae:a314:6edb])
+        by smtp.googlemail.com with ESMTPSA id o4sm8724114wrx.25.2019.12.04.07.49.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Dec 2019 07:49:54 -0800 (PST)
+Subject: Re: [PATCH v2 -next] thermal: power_allocator: Fix Kconfig warning
+To:     YueHaibing <yuehaibing@huawei.com>, rui.zhang@intel.com,
+        edubezval@gmail.com, amit.kucheria@verdurent.com,
+        qperret@google.com, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191112152801.GA247051@google.com>
+ <20191113105313.41616-1-yuehaibing@huawei.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     edubezval@gmail.com, rui.zhang@intel.com
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        viresh.kumar@linaro.org, amit.kucheria@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V4 4/4] thermal/drivers/cpu_cooling: Rename to cpufreq_cooling
-Date:   Wed,  4 Dec 2019 16:39:30 +0100
-Message-Id: <20191204153930.9128-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191204153930.9128-1-daniel.lezcano@linaro.org>
-References: <20191204153930.9128-1-daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f89d6a79-2ac6-0bea-f2a0-bd376835e785@linaro.org>
+Date:   Wed, 4 Dec 2019 16:49:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
+MIME-Version: 1.0
+In-Reply-To: <20191113105313.41616-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As we introduced the idle injection cooling device called
-cpuidle_cooling, let's be consistent and rename the cpu_cooling to
-cpufreq_cooling as this one mitigates with OPPs changes.
+On 13/11/2019 11:53, YueHaibing wrote:
+> When do randbuiding, we got this:
+> 
+> WARNING: unmet direct dependencies detected for THERMAL_GOV_POWER_ALLOCATOR
+>   Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
+>   Selected by [y]:
+>   - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
+> 
+> Make THERMAL_DEFAULT_GOV_POWER_ALLOCATOR depend on
+> THERMAL_DEFAULT_GOV_POWER_ALLOCATOR to fix this warning.
+> 
+> Suggested-by: Quentin Perret <qperret@google.com>
+> Fixes: a4e893e802e6 ("thermal: cpu_cooling: Migrate to using the EM framework")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
----
-  V4:
-    - Added Acked-by and Reviewed-by
-  V3:
-    - Fix missing name conversion (Viresh Kumar)
----
- Documentation/driver-api/thermal/exynos_thermal.rst  | 2 +-
- MAINTAINERS                                          | 2 +-
- drivers/thermal/Makefile                             | 2 +-
- drivers/thermal/clock_cooling.c                      | 2 +-
- drivers/thermal/{cpu_cooling.c => cpufreq_cooling.c} | 6 +++---
- include/linux/clock_cooling.h                        | 2 +-
- 6 files changed, 8 insertions(+), 8 deletions(-)
- rename drivers/thermal/{cpu_cooling.c => cpufreq_cooling.c} (99%)
+Applied with a slight message clarification.
 
-diff --git a/Documentation/driver-api/thermal/exynos_thermal.rst b/Documentation/driver-api/thermal/exynos_thermal.rst
-index 5bd556566c70..d4e4a5b75805 100644
---- a/Documentation/driver-api/thermal/exynos_thermal.rst
-+++ b/Documentation/driver-api/thermal/exynos_thermal.rst
-@@ -67,7 +67,7 @@ TMU driver description:
- The exynos thermal driver is structured as::
- 
- 					Kernel Core thermal framework
--				(thermal_core.c, step_wise.c, cpu_cooling.c)
-+				(thermal_core.c, step_wise.c, cpufreq_cooling.c)
- 								^
- 								|
- 								|
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d2e92a0360f2..26e4be914765 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16194,7 +16194,7 @@ L:	linux-pm@vger.kernel.org
- S:	Supported
- F:	Documentation/driver-api/thermal/cpu-cooling-api.rst
- F:	Documentation/driver-api/thermal/cpu-idle-cooling.rst
--F:	drivers/thermal/cpu_cooling.c
-+F:	drivers/thermal/cpufreq_cooling.c
- F:	drivers/thermal/cpuidle_cooling.c
- F:	include/linux/cpu_cooling.h
- 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 9c8aa2d4bd28..5c98472ffd8b 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -19,7 +19,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= user_space.o
- thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
- 
- # cpufreq cooling
--thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
-+thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpufreq_cooling.o
- thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
- 
- # clock cooling
-diff --git a/drivers/thermal/clock_cooling.c b/drivers/thermal/clock_cooling.c
-index 3ad3256c48fd..7cb3ae4b44ee 100644
---- a/drivers/thermal/clock_cooling.c
-+++ b/drivers/thermal/clock_cooling.c
-@@ -7,7 +7,7 @@
-  *  Copyright (C) 2013	Texas Instruments Inc.
-  *  Contact:  Eduardo Valentin <eduardo.valentin@ti.com>
-  *
-- *  Highly based on cpu_cooling.c.
-+ *  Highly based on cpufreq_cooling.c.
-  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
-  *  Copyright (C) 2012  Amit Daniel <amit.kachhap@linaro.org>
-  */
-diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpufreq_cooling.c
-similarity index 99%
-rename from drivers/thermal/cpu_cooling.c
-rename to drivers/thermal/cpufreq_cooling.c
-index 6b9865c786ba..3a3f9cf94b6d 100644
---- a/drivers/thermal/cpu_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- *  linux/drivers/thermal/cpu_cooling.c
-+ *  linux/drivers/thermal/cpufreq_cooling.c
-  *
-  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
-  *
-@@ -694,7 +694,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- 	u32 capacitance = 0;
- 
- 	if (!np) {
--		pr_err("cpu_cooling: OF node not available for cpu%d\n",
-+		pr_err("cpufreq_cooling: OF node not available for cpu%d\n",
- 		       policy->cpu);
- 		return NULL;
- 	}
-@@ -705,7 +705,7 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- 
- 		cdev = __cpufreq_cooling_register(np, policy, capacitance);
- 		if (IS_ERR(cdev)) {
--			pr_err("cpu_cooling: cpu%d failed to register as cooling device: %ld\n",
-+			pr_err("cpufreq_cooling: cpu%d failed to register as cooling device: %ld\n",
- 			       policy->cpu, PTR_ERR(cdev));
- 			cdev = NULL;
- 		}
-diff --git a/include/linux/clock_cooling.h b/include/linux/clock_cooling.h
-index b5cebf766e02..4b0a69863656 100644
---- a/include/linux/clock_cooling.h
-+++ b/include/linux/clock_cooling.h
-@@ -7,7 +7,7 @@
-  *  Copyright (C) 2013	Texas Instruments Inc.
-  *  Contact:  Eduardo Valentin <eduardo.valentin@ti.com>
-  *
-- *  Highly based on cpu_cooling.c.
-+ *  Highly based on cpufreq_cooling.c.
-  *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.com)
-  *  Copyright (C) 2012  Amit Daniel <amit.kachhap@linaro.org>
-  */
+Thanks for the fix.
+
+> ---
+>  drivers/thermal/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 59b79fc..79b2786 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -108,7 +108,7 @@ config THERMAL_DEFAULT_GOV_USER_SPACE
+>  
+>  config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+>  	bool "power_allocator"
+> -	select THERMAL_GOV_POWER_ALLOCATOR
+> +	depends on THERMAL_GOV_POWER_ALLOCATOR
+>  	help
+>  	  Select this if you want to control temperature based on
+>  	  system and device power allocation. This governor can only
+> 
+
+
 -- 
-2.17.1
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
