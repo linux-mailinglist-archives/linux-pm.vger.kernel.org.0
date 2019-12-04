@@ -2,110 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4003112B46
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 13:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78561112BD8
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 13:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727554AbfLDMWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 07:22:19 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:44018 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727472AbfLDMWS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 07:22:18 -0500
-Received: by mail-ed1-f67.google.com with SMTP id dc19so6426774edb.10
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
+        id S1727781AbfLDMpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 07:45:19 -0500
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:42057 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbfLDMpT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 07:45:19 -0500
+Received: by mail-ua1-f65.google.com with SMTP id 31so2702458uas.9
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 04:45:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
-         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
-         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
-         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
-         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
-         4SHA==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I9943LC2W7GsN2VUvqciqhs/8irYc/Qkc8ElGhd6zWY=;
+        b=D1ekevAWvG+e76RI65wfYbzcBE//kYMXdoapAplUlqEKsH4lspdwwbuzCIsIT2rtnh
+         teHLwE8FcjmIdJ49WoIO3Bf/vg4AcQL7Yv79j4W0JTj/5Rx7UxGyWPInSerl/AM+bSvW
+         orZxCtyqnmw2Qq/FMPznXPj0oUldse3cTNv7YVtcHf5lhwwN/LN57yq1yI8lYTuEngev
+         VkDvmAwvtRUgHtsdWqsAYP27U9sCFGQVBeHYsA2CwWd92QIjCLCq7Mm1k9EIlW1+xtDs
+         qpsKc57ER7izsMdTaHgEOanMx2naxLKsqvXDiCbBFL3YS7pS4HlBCNYocQ/XzbAvnz83
+         ykGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=LQDx117KoZmZumpNTm50PZEN6CU+/+YgSsOSm2ldGl7jdsdoxmyIl8YtLVH1EXuDGR
-         HxtCwanl+3zfpqqaaF86dLHdzIyU9+Jn03Rxaj4q0aCzt+ayXArDuU/1u0loioegEsTF
-         JOHqokwRlzNyQy78NfQc1bWI1xtVbDVor0XObJNpmhfwJ7bl5ciV8T1EHGUxdaWNCpSA
-         KsGvcO/HzjliBhITkGdayd3IOyb2rb1xRl8X0IPILelLMYK92UIHOpqTv2bLP7BNUvHX
-         qBgSmWj9w8BgS28L9tDQQ8OyJyLtb7oXCXp4YYdeshv1A8IGOMe1AtIYtftZie0zO79m
-         TLxw==
-X-Gm-Message-State: APjAAAVH0MEsErPPxMtpwF52FoedjGu1+dlzNJfuoca/uW8B/x+WxfYG
-        wiNA8AJMvQQ7yQG4VqzgKepq4oz/ZC5rvYYcb+8=
-X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
-X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
- Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I9943LC2W7GsN2VUvqciqhs/8irYc/Qkc8ElGhd6zWY=;
+        b=l0QFXm37SiZK+TRmx4EHKO7Ac4xjyKByPeEjO3hjCtroXBlIbjz8DATpRVkH/zx1eS
+         XgWkKEar96rN9SHFjpMHsxLc7cmBkp9XJAwomD1whTo0EM2zVKGVlSfjqH8gx2b+KWc6
+         ObX7JC+eMVQNSU3P8pBraeYngYsiXHZ32Qbt9AvJGCIobpvlwHkWmXbCs6g525yX5MQ7
+         E+KTghHEn8kCn2+MDKOqug6MC3c24zQPJ+nUA6Pa3giSHFudFZ7HuRm8OBYQsi5s+AB2
+         kaLyRLhu2qNv+EQyKWnbqAAKZDuZRokLgOiW7EFwJ04sHxuH3kk7IBe3N/I/+pvTMpci
+         2fWg==
+X-Gm-Message-State: APjAAAUoTrg8GDzWKIO30sRGH3lP6xffJKCH8f+FhCEszw8I95VE3Huy
+        XddEVGriOeCDTcl6Xz0zslxCKQWdWJNuK5IhsvcxHg==
+X-Google-Smtp-Source: APXvYqzuDbb/FE6aisnhUS4N4Cr5qvRQgmOLAGnNdex1jh+7Kfj7K66vq/MMKaXX5/JENpgqwfDSOBiCzC2R8WXXQus=
+X-Received: by 2002:ab0:7027:: with SMTP id u7mr2326314ual.94.1575463517590;
+ Wed, 04 Dec 2019 04:45:17 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
- -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
-Date:   Wed, 4 Dec 2019 13:22:15 +0100
-Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
+References: <20191015061349.141448-1-wvw@google.com> <CAHLCerNffKDgJKqaVTH3Kp_QfBLtm2M4H80xFDy=2fGXTVQR+w@mail.gmail.com>
+ <CAHLCerN0CWOox-_=ywVO40R9LCahBRoU6Myg3Ca3p_TkZyJAMw@mail.gmail.com>
+ <CAGXk5yp4uSCESvve5j_LbCr7b_55DqBagjNr_Dsdi=HppSpBPg@mail.gmail.com>
+ <CAHLCerN4ymf7LOGQPRLuAwirwCUaQGynrnUMfgU6+frDswey5A@mail.gmail.com> <CAGXk5ypP0qSm-GMbHJy+hQtYN1hw6Ow6XgeO9JDni0bD1bFSVg@mail.gmail.com>
+In-Reply-To: <CAGXk5ypP0qSm-GMbHJy+hQtYN1hw6Ow6XgeO9JDni0bD1bFSVg@mail.gmail.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Wed, 4 Dec 2019 18:15:06 +0530
+Message-ID: <CAHLCerOD2wOJq7QNGBOcLvkMz4wvc1+6Hk2+ZD__NFged3tLcw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: create softlink by name for thermal_zone and cooling_device
+To:     Wei Wang <wvw@google.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attn, dear Beneficiary.
+On Mon, Nov 11, 2019 at 11:22 PM Wei Wang <wvw@google.com> wrote:
+>
+> On Sun, Nov 10, 2019 at 9:26 PM Amit Kucheria
+> <amit.kucheria@verdurent.com> wrote:
+> >
+> > On Thu, Oct 17, 2019 at 3:04 AM Wei Wang <wvw@google.com> wrote:
+> > >
+> > > On Wed, Oct 16, 2019 at 10:16 AM Amit Kucheria
+> > > <amit.kucheria@verdurent.com> wrote:
+> > > >
+> > > > On Wed, Oct 16, 2019 at 10:20 PM Amit Kucheria
+> > > > <amit.kucheria@verdurent.com> wrote:
+> > > > >
+> > > > > On Tue, Oct 15, 2019 at 11:43 AM Wei Wang <wvw@google.com> wrote:
+> > > > > >
+> > > > > > The paths thermal_zone%d and cooling_device%d are not intuitive and the
+> > > > > > numbers are subject to change due to device tree change. This usually
+> > > > > > leads to tree traversal in userspace code.
+> > > > > > The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
+> > > > > > cooling_device respectively.
+> > > > >
+> > > > > I like this.
+> > > > >
+> > > > > > Signed-off-by: Wei Wang <wvw@google.com>
+> > > > > > ---
+> > > > > >  drivers/thermal/thermal_core.c | 23 +++++++++++++++++++++--
+> > > > > >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> > > > > > index d4481cc8958f..0ff8fb1d7b0a 100644
+> > > > > > --- a/drivers/thermal/thermal_core.c
+> > > > > > +++ b/drivers/thermal/thermal_core.c
+> > > > > > @@ -22,6 +22,7 @@
+> > > > > >  #include <net/netlink.h>
+> > > > > >  #include <net/genetlink.h>
+> > > > > >  #include <linux/suspend.h>
+> > > > > > +#include <linux/kobject.h>
+> > > > > >
+> > > > > >  #define CREATE_TRACE_POINTS
+> > > > > >  #include <trace/events/thermal.h>
+> > > > > > @@ -46,6 +47,8 @@ static DEFINE_MUTEX(poweroff_lock);
+> > > > > >
+> > > > > >  static atomic_t in_suspend;
+> > > > > >  static bool power_off_triggered;
+> > > > > > +static struct kobject *cdev_link_kobj;
+> > > > > > +static struct kobject *tz_link_kobj;
+> > > > > >
+> > > > > >  static struct thermal_governor *def_governor;
+> > > > > >
+> > > > > > @@ -954,7 +957,7 @@ __thermal_cooling_device_register(struct device_node *np,
+> > > > > >         struct thermal_zone_device *pos = NULL;
+> > > > > >         int result;
+> > > > > >
+> > > > > > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> > > > > > +       if (!type || !type[0] || strlen(type) >= THERMAL_NAME_LENGTH)
+> > > > > >                 return ERR_PTR(-EINVAL);
+> > > > >
+> > > > > This should be a separate fix, if needed.
+> > > Agree, but the link now requires that "" as invalid _type_.
+> >
+> > I'm not sure I understand. What does this change have to do with
+> > adding symlinks below?
+> >
+>
+> cdev->type will be used later in sysfs_create_link and adding "" as
+> symlink is kind of bad practise AIUI.
+>
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+Perhaps I'm being dense here, in which case my apologies.
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+But what stops us from splitting the patch into two?
+1. Make type == "" as invalid by using your change above and fixing up
+the strlcpy(cdev->type....) further down.
+2. Create the actual symlinks in a separate patch.
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
+Regards,
+Amit
 
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
-
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
-
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
+> > > > >
+> > > > > >         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+> > > > > > @@ -989,9 +992,15 @@ __thermal_cooling_device_register(struct device_node *np,
+> > > > > >                 return ERR_PTR(result);
+> > > > > >         }
+> > > > > >
+> > > > > > -       /* Add 'this' new cdev to the global cdev list */
+> > > > > > +       /* Add 'this' new cdev to the global cdev list and create link*/
+> > > > > >         mutex_lock(&thermal_list_lock);
+> > > > > >         list_add(&cdev->node, &thermal_cdev_list);
+> > > > > > +       if (!cdev_link_kobj)
+> > > > > > +               cdev_link_kobj = kobject_create_and_add("cdev-by-name",
+> > > > > > +                                               cdev->device.kobj.parent);
+> > > > > > +       if (!cdev_link_kobj || sysfs_create_link(cdev_link_kobj,
+> > > > > > +                                               &cdev->device.kobj, cdev->type))
+> > > > > > +               dev_err(&cdev->device, "Failed to create cdev-by-name link\n");
+> > > > >
+> > > > > Any reason not to use the following form instead? It seems easier to read.
+> > > > >
+> > > > > if (!cdev_link_kobj) {
+> > > > >                cdev_link_kobj = kobject_create_and_add("cdev-by-name",
+> > > > >                                                cdev->device.kobj.parent);
+> > > > >               ret = sysfs_create_link(cdev_link_kobj,
+> > > > >                                               &cdev->device.kobj, cdev->type))
+> > > > >               if (ret)
+> > > > >                        dev_err(&cdev->device, "Failed to create
+> > > > > cdev-by-name link\n");
+> > > > > }
+> > > >
+> > > > I can now see why you had to do that - none of the other links would
+> > > > get created after the first one.
+> > > >
+> > > > Perhaps create the directories in the __init functions and only create
+> > > > the links here?
+> > > >
+> > > AFAICT, this is no such API except the private get_device_parent()
+> > > under driver/base/. Also the lazy initialization makes sense in such
+> > > case when there is no thermal device attached. Looks like the class
+> > > dir is also lazy-initialized when first device registered
+> > > https://elixir.bootlin.com/linux/v5.3.5/source/drivers/base/core.c#L1790.
+> >
+> > OK.
+> >
+> > > >
+> > > > > >         mutex_unlock(&thermal_list_lock);
+> > > > > >
+> > > > > >         /* Update binding information for 'this' new cdev */
+> > > > > > @@ -1157,6 +1166,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+> > > > > >                         }
+> > > > > >                 }
+> > > > > >         }
+> > > > > > +       if (cdev_link_kobj)
+> > > > > > +               sysfs_remove_link(cdev_link_kobj, cdev->type);
+> > > > > >
+> > > > > >         mutex_unlock(&thermal_list_lock);
+> > > > > >
+> > > > > > @@ -1340,6 +1351,12 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+> > > > > >
+> > > > > >         mutex_lock(&thermal_list_lock);
+> > > > > >         list_add_tail(&tz->node, &thermal_tz_list);
+> > > > > > +       if (!tz_link_kobj)
+> > > > > > +               tz_link_kobj = kobject_create_and_add("tz-by-name",
+> > > > > > +                                               tz->device.kobj.parent);
+> > > > > > +       if (!tz_link_kobj || sysfs_create_link(tz_link_kobj,
+> > > > > > +                                               &tz->device.kobj, tz->type))
+> > > > > > +               dev_err(&tz->device, "Failed to create tz-by-name link\n");
+> > > > >
+> > > > > Same as above.
+> > > > >
+> > > > > >         mutex_unlock(&thermal_list_lock);
+> > > > > >
+> > > > > >         /* Bind cooling devices for this zone */
+> > > > > > @@ -1411,6 +1428,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+> > > > > >                         }
+> > > > > >                 }
+> > > > > >         }
+> > > > > > +       if (tz_link_kobj)
+> > > > > > +               sysfs_remove_link(tz_link_kobj, tz->type);
+> > > > > >
+> > > > > >         mutex_unlock(&thermal_list_lock);
+> > > > > >
+> > > > > > --
+> > > > > > 2.23.0.700.g56cf767bdb-goog
+> > > > > >
