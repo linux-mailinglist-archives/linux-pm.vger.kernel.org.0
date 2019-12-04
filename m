@@ -2,138 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5397112569
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 09:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949EB11257D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 09:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbfLDIkF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 03:40:05 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35612 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbfLDIkC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 03:40:02 -0500
-Received: by mail-wm1-f66.google.com with SMTP id u8so6868025wmu.0
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 00:40:00 -0800 (PST)
+        id S1726217AbfLDIl1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 03:41:27 -0500
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:35310 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727119AbfLDIl0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 03:41:26 -0500
+Received: by mail-vs1-f65.google.com with SMTP id x123so4329309vsc.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 00:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=CPOGV/8IiCeIDG6XJD4N+CaTFPOjpb+amQn4DTTeuHo=;
-        b=X5Am9237hdiu6SnRkdyqee4vsw8T7ZqjCBI3yb7DZtKwSnl6ITPjk7DNLJ78DKGT6q
-         UUxb/19tu496J3HIyM0tfQgt3Z7Uo5cmy2ysTjGfxKRRX4jL3qUlikni63lqci0Jq+9H
-         VBOWmPyZG1B34OVgWLRULEqTpXB+tkGJsicr/xALm7ryx3FxY8gV4ssHm7T18th8XmOg
-         ufGepWN+N3UHP3EBWuGF7eA2QB4loRx439JDOz++RSgj7om7t7JomlM9/ezphgKwAby2
-         dhKG5ka9Qdkn8KbkVqKkkl51YJcj5xfwQiNjKb/RYQttkn4xKADSth3/N7/Txzw3jqqa
-         lX3A==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FQKWqo5Ul5HVHtOUORHbCDERxt4j9fxv7YCvpaF1TZM=;
+        b=put0ttU5VLO+EBQ6LYQzbIk0N4pidLcjzTd6Pj7xQJASCeQmIM/VssqLUy0bq0b93v
+         HtZQvs7oYlSH32sUBG5S5Lr82TM9OJ6/POfRKTbx1ViReB2+WcTmqE1ykDbro4CmDDD3
+         6MccHJGUw0+msMG4qTETOofaRI2hLJ0ZUkynpA7wHyQPFOQgoAnjiBdeO6lSGW6nQfkn
+         Pet+mmzBCMQUQ71EQiVvTQkVRTvEsHueTT3nGCLMa3SfNRYc08vQNs1R5P3LmmqZ7DPb
+         xg7CsXpWQ2Ke28nlBlnBFWaQ7P9rT/R9f8eq9MIOORW6d7bXomitJN7oh+pD65pAUBRa
+         LdhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=CPOGV/8IiCeIDG6XJD4N+CaTFPOjpb+amQn4DTTeuHo=;
-        b=TFHAxGpY58WcqLqc668+ufjUu8I5v6Uq104MXweKv38Ekq88gFEnfC6yu3u/8KWSbq
-         09gUib+2Vj7PoY/JpG2NWvCTm0Zee1L/bMSowTlycNYkEgX0zsJ/zcWiRRlZBQjJ6wtt
-         lZevMKDceEw88DUeBXS3FLo/tz7Gax3vRilE5dx879iVDw7OpoJyaIXEZK1nnQQZMtz0
-         Vrd6q9GBWONhl+zeEKRuoXneeH7/S/uCEXFor90lmIIwEDngbkR7ks5amdjadxUpq3u9
-         gjefi5CaklCN1KkkKVg5fHt3Ra0I5Y9EnQqdx+xroiJl4xbmCRWw8xNoVqfC6tjMC+JV
-         zWow==
-X-Gm-Message-State: APjAAAWQEIXW8T0BcUCATd+BG1NvS+wAbxfKWECYVlld2UCHpfWbyDOR
-        Xitp2bDklyOuHCCYnO2Y5KX19Q==
-X-Google-Smtp-Source: APXvYqzLyzOc0jQfYZK9ymAn5u/rHy2qMdZIi3s9mhmJDZdlYmd/2gz8jYS+G+K+0o1B06iSPtvJeQ==
-X-Received: by 2002:a7b:c778:: with SMTP id x24mr23525248wmk.119.1575448800004;
-        Wed, 04 Dec 2019 00:40:00 -0800 (PST)
-Received: from dell ([2.27.167.28])
-        by smtp.gmail.com with ESMTPSA id c1sm7152787wrs.24.2019.12.04.00.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 00:39:59 -0800 (PST)
-Date:   Wed, 4 Dec 2019 08:39:50 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>,
-        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
-        gwendal@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org, Nick Vaccaro <nvaccaro@chromium.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH] cros_ec: treewide: Remove 'include/linux/mfd/cros_ec.h'
-Message-ID: <20191204083950.GB3468@dell>
-References: <20191203145018.14015-1-enric.balletbo@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FQKWqo5Ul5HVHtOUORHbCDERxt4j9fxv7YCvpaF1TZM=;
+        b=H1GkcRWcQCX3PthV1mNMnOc6Y4vKqd8AcNvosKgmDJUTguKewYcOwPAmX0XB70fE+p
+         JIo2j3hkeaa57ovVBYtqrxLmm+nE03uPgNm+3JQ74yl/6qZyBeOZ2wPqYp6XoEE6y19p
+         6lRZJWRO/cWLK+DX4IMSSv9PQKViS5xLlgAaoOx666A1AKM/c5HDBvCdPnYNk7toCskd
+         r8b9VGr3FdsHcfmZmuZH9WC7hA8lrmlJxXhU3sSOOKfW2sjZqFkITanWW19PNYdA6b0w
+         YBNM1rcF41FK/DR5BfeVmKF3mjTgUYwnA65eazUK+MjPPQjNKiObu/w3jQmVVKV7Ii4e
+         u+TQ==
+X-Gm-Message-State: APjAAAW59LPPqnu2a5RdCRBFrfYvXudHaiFlhq9PE63rBP1UOdfh929y
+        UincqqK9eachu8IKMnslaBwW4z2J9ifPKPIm/Faqfw==
+X-Google-Smtp-Source: APXvYqx3ReMhc5/tnLLDNWde+euvUxoDV0VfeZHcxwaUg5zM7WwrWNoEI3QnjNkobs25W8XAc4phHgFcVksuksneb78=
+X-Received: by 2002:a67:f8cf:: with SMTP id c15mr954910vsp.27.1575448884828;
+ Wed, 04 Dec 2019 00:41:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191203145018.14015-1-enric.balletbo@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191030182132.25763-1-f.fainelli@gmail.com> <20191030182132.25763-2-f.fainelli@gmail.com>
+In-Reply-To: <20191030182132.25763-2-f.fainelli@gmail.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Wed, 4 Dec 2019 14:11:13 +0530
+Message-ID: <CAHLCerP6ricempeG=x-a2_aA6__YqADPKAEG5y7qPYNcD2=47Q@mail.gmail.com>
+Subject: Re: [PATCH 1/6] thermal: brcmstb_thermal: Do not use DT coefficients
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 03 Dec 2019, Enric Balletbo i Serra wrote:
+On Wed, Oct 30, 2019 at 11:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> At the time the brcmstb_thermal driver and its binding were merged, the
+> DT binding did not make the coefficients properties a mandatory one,
+> therefore all users of the brcmstb_thermal driver out there have a non
+> functional implementation with zero coefficients. Even if these
+> properties were provided, the formula used for computation is incorrect.
+>
+> The coefficients are entirely process specific (right now, only 28nm is
+> supported) and not board or SoC specific, it is therefore appropriate to
+> hard code them in the driver given the compatibility string we are
+> probed with which has to be updated whenever a new process is
+> introduced.
+>
+> We remove the existing coefficients definition since subsequent patches
+> are going to add support for a new process and will introduce new
+> coefficients as well.
+>
+> Fixes: 9e03cf1b2dd5 ("thermal: add brcmstb AVS TMON driver")
 
-> This header file now only includes the cros_ec_dev struct, however, is the
-> 'include/linux/platform_data/cros_ec_proto.h' who contains the definition of
-> all the Chrome OS EC related structs. There is no reason to have a
-> separate include for this struct so move to the place where other
-> structs are defined. That way, we can remove the include itself, but also
-> simplify the common pattern
-> 
->     #include <linux/mfd/cros_ec.h>
->     #include <linux/platform_data/cros_ec_proto.h>
-> 
-> for a single include
-> 
->     #include <linux/platform_data/cros_ec_proto.h>
-> 
-> The changes to remove the cros_ec.h include were generated with the
-> following shell script:
-> 
->     git grep -l "<linux/mfd/cros_ec.h>" | xargs sed -i '/<linux\/mfd\/cros_ec.h>/d'
-> 
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+I think you should fix the computation formula as the first patch and
+then merge the rest of this patch into your second patch.
+
+I don't think the intermediate state of converting named constants to
+magic numbers is needed just to convert it over to another set of
+parameters.
+
+Regards,
+Amit
+
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
-> 
->  drivers/iio/accel/cros_ec_accel_legacy.c      |  1 -
->  .../common/cros_ec_sensors/cros_ec_sensors.c  |  1 -
->  .../cros_ec_sensors/cros_ec_sensors_core.c    |  1 -
->  drivers/iio/light/cros_ec_light_prox.c        |  1 -
->  drivers/iio/pressure/cros_ec_baro.c           |  1 -
->  .../media/platform/cros-ec-cec/cros-ec-cec.c  |  1 -
->  drivers/mfd/cros_ec_dev.c                     |  1 -
-
-Acked-by: Lee Jones <lee.jones@linaro.org>
-
->  drivers/platform/chrome/cros_ec_chardev.c     |  1 -
->  drivers/platform/chrome/cros_ec_debugfs.c     |  1 -
->  drivers/platform/chrome/cros_ec_lightbar.c    |  1 -
->  drivers/platform/chrome/cros_ec_sensorhub.c   |  1 -
->  drivers/platform/chrome/cros_ec_sysfs.c       |  1 -
->  drivers/platform/chrome/cros_ec_vbc.c         |  1 -
->  drivers/platform/chrome/cros_usbpd_logger.c   |  1 -
->  drivers/power/supply/cros_usbpd-charger.c     |  1 -
->  drivers/rtc/rtc-cros-ec.c                     |  1 -
->  include/linux/mfd/cros_ec.h                   | 35 -------------------
->  include/linux/platform_data/cros_ec_proto.h   | 23 +++++++++++-
->  18 files changed, 22 insertions(+), 52 deletions(-)
->  delete mode 100644 include/linux/mfd/cros_ec.h
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>  drivers/thermal/broadcom/brcmstb_thermal.c | 37 ++++------------------
+>  1 file changed, 6 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+> index 5825ac581f56..42482af0422e 100644
+> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
+> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+> @@ -48,15 +48,6 @@
+>  #define AVS_TMON_TEMP_INT_CODE         0x1c
+>  #define AVS_TMON_TP_TEST_ENABLE                0x20
+>
+> -/* Default coefficients */
+> -#define AVS_TMON_TEMP_SLOPE            -487
+> -#define AVS_TMON_TEMP_OFFSET           410040
+> -
+> -/* HW related temperature constants */
+> -#define AVS_TMON_TEMP_MAX              0x3ff
+> -#define AVS_TMON_TEMP_MIN              -88161
+> -#define AVS_TMON_TEMP_MASK             AVS_TMON_TEMP_MAX
+> -
+>  enum avs_tmon_trip_type {
+>         TMON_TRIP_TYPE_LOW = 0,
+>         TMON_TRIP_TYPE_HIGH,
+> @@ -108,23 +99,11 @@ struct brcmstb_thermal_priv {
+>         struct thermal_zone_device *thermal;
+>  };
+>
+> -static void avs_tmon_get_coeffs(struct thermal_zone_device *tz, int *slope,
+> -                               int *offset)
+> -{
+> -       *slope = thermal_zone_get_slope(tz);
+> -       *offset = thermal_zone_get_offset(tz);
+> -}
+> -
+>  /* Convert a HW code to a temperature reading (millidegree celsius) */
+>  static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>                                         u32 code)
+>  {
+> -       const int val = code & AVS_TMON_TEMP_MASK;
+> -       int slope, offset;
+> -
+> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+> -
+> -       return slope * val + offset;
+> +       return (410040 - (int)((code & 0x3FF) * 487));
+>  }
+>
+>  /*
+> @@ -136,20 +115,16 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>  static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
+>                                         int temp, bool low)
+>  {
+> -       int slope, offset;
+> -
+> -       if (temp < AVS_TMON_TEMP_MIN)
+> -               return AVS_TMON_TEMP_MAX; /* Maximum code value */
+> -
+> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+> +       if (temp < -88161)
+> +               return 0x3FF;   /* Maximum code value */
+>
+> -       if (temp >= offset)
+> +       if (temp >= 410040)
+>                 return 0;       /* Minimum code value */
+>
+>         if (low)
+> -               return (u32)(DIV_ROUND_UP(offset - temp, abs(slope)));
+> +               return (u32)(DIV_ROUND_UP(410040 - temp, 487));
+>         else
+> -               return (u32)((offset - temp) / abs(slope));
+> +               return (u32)((410040 - temp) / 487);
+>  }
+>
+>  static int brcmstb_get_temp(void *data, int *temp)
+> --
+> 2.17.1
+>
