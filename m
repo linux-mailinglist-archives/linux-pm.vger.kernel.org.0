@@ -2,165 +2,382 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E631125B3
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 09:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2261125D7
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Dec 2019 09:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726679AbfLDIp3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 03:45:29 -0500
-Received: from mail.kapsi.fi ([91.232.154.25]:33607 "EHLO mail.kapsi.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725840AbfLDIp2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Dec 2019 03:45:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Br0dk1bpsyd+4qzgRWaxPCZRu6nFMIoIlIvyu3JM4TQ=; b=GiqY50pjtFIxFoiDaFb3QMvRk/
-        wyBqfad1DlP0jVA/tyk5o9bj6nr5Xz+phyKnxrZN8JOSDfM45yH0G3AmYRV5RSN92LrRQS2qhh6xh
-        NfZPe6jt/Qt4hBYw7duKijAgiD71N6PgoDy5m4v6FjaewWoTwkHQgcR5eLt3XUujZBDYciPNi4ljK
-        jemAMAPNEUw0AoX73KRgadG/XzvXepJIoGLh1cEdCkC1u2mrtjBCKNf97GXlPgHt3Keea7Wfy2c9m
-        aipp83JOOoZcK8bmxlsrvLbchu8oOiTjTbc4Ns09aqcaAig0zrqZsdemfLeyQtYwuqep3NHdSxN+V
-        ZQDN2+LA==;
-Received: from [193.209.96.43] (helo=[10.21.26.179])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1icQHk-0000se-Bn; Wed, 04 Dec 2019 10:45:24 +0200
-Subject: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function to
- get BPMP data
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
-        talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <20191203174229.GA1721849@ulmo>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-Message-ID: <9404232d-84ce-a117-89dd-f2d8de80993e@kapsi.fi>
-Date:   Wed, 4 Dec 2019 10:45:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1725922AbfLDItW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 03:49:22 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:51905 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbfLDItW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 03:49:22 -0500
+X-Originating-IP: 90.65.102.129
+Received: from localhost (lfbn-1-1480-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 0B3E124000F;
+        Wed,  4 Dec 2019 08:49:16 +0000 (UTC)
+Date:   Wed, 4 Dec 2019 09:49:16 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
+        gwendal@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org, Nick Vaccaro <nvaccaro@chromium.org>,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH] cros_ec: treewide: Remove 'include/linux/mfd/cros_ec.h'
+Message-ID: <20191204084916.GM909634@piout.net>
+References: <20191203145018.14015-1-enric.balletbo@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20191203174229.GA1721849@ulmo>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 193.209.96.43
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191203145018.14015-1-enric.balletbo@collabora.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The difference here is that whereas on Tegra186 the frequency is managed 
-through a specific memory-mapped device, on Tegra194 the frequency is 
-managed through a CPU MSR leaving no "specific" node for this property 
-apart from the cpu nodes itself.
-
-Now, my original patchset (which this series is based on) did add 
-nvidia,bpmp properties on the CPU DT nodes itself and query BPMP based 
-on that. A change is still required for that since tegra_bpmp_get() 
-currently takes a 'struct device *' which we don't have for a CPU DT node.
-
-Mikko
-
-On 3.12.2019 19.42, Thierry Reding wrote:
-> On Tue, Dec 03, 2019 at 11:02:26PM +0530, Sumit Gupta wrote:
->> Adding new function of_tegra_bpmp_get() to get BPMP data.
->> This function can be used by other drivers like cpufreq to
->> get BPMP data without adding any property in respective
->> drivers DT node.
+On 03/12/2019 15:50:18+0100, Enric Balletbo i Serra wrote:
+> This header file now only includes the cros_ec_dev struct, however, is the
+> 'include/linux/platform_data/cros_ec_proto.h' who contains the definition of
+> all the Chrome OS EC related structs. There is no reason to have a
+> separate include for this struct so move to the place where other
+> structs are defined. That way, we can remove the include itself, but also
+> simplify the common pattern
 > 
-> What's wrong with adding the property in the DT node? We already do that
-> for Tegra186's CPU frequency driver, so it makes sense to continue that
-> for Tegra194.
+>     #include <linux/mfd/cros_ec.h>
+>     #include <linux/platform_data/cros_ec_proto.h>
 > 
-> Thierry
+> for a single include
 > 
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   drivers/firmware/tegra/bpmp.c | 38 ++++++++++++++++++++++++++++++++++++++
->>   include/soc/tegra/bpmp.h      |  5 +++++
->>   2 files changed, 43 insertions(+)
->>
->> diff --git a/drivers/firmware/tegra/bpmp.c b/drivers/firmware/tegra/bpmp.c
->> index 6741fcd..9c3d7f1 100644
->> --- a/drivers/firmware/tegra/bpmp.c
->> +++ b/drivers/firmware/tegra/bpmp.c
->> @@ -38,6 +38,44 @@ channel_to_ops(struct tegra_bpmp_channel *channel)
->>   	return bpmp->soc->ops;
->>   }
->>   
->> +struct tegra_bpmp *of_tegra_bpmp_get(void)
->> +{
->> +	struct platform_device *pdev;
->> +	struct device_node *bpmp_dev;
->> +	struct tegra_bpmp *bpmp;
->> +
->> +	/* Check for bpmp device status in DT */
->> +	bpmp_dev = of_find_compatible_node(NULL, NULL, "nvidia,tegra186-bpmp");
->> +	if (!bpmp_dev) {
->> +		bpmp = ERR_PTR(-ENODEV);
->> +		goto err_out;
->> +	}
->> +	if (!of_device_is_available(bpmp_dev)) {
->> +		bpmp = ERR_PTR(-ENODEV);
->> +		goto err_put;
->> +	}
->> +
->> +	pdev = of_find_device_by_node(bpmp_dev);
->> +	if (!pdev) {
->> +		bpmp = ERR_PTR(-ENODEV);
->> +		goto err_put;
->> +	}
->> +
->> +	bpmp = platform_get_drvdata(pdev);
->> +	if (!bpmp) {
->> +		bpmp = ERR_PTR(-EPROBE_DEFER);
->> +		put_device(&pdev->dev);
->> +		goto err_put;
->> +	}
->> +
->> +	return bpmp;
->> +err_put:
->> +	of_node_put(bpmp_dev);
->> +err_out:
->> +	return bpmp;
->> +}
->> +EXPORT_SYMBOL_GPL(of_tegra_bpmp_get);
->> +
->>   struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
->>   {
->>   	struct platform_device *pdev;
->> diff --git a/include/soc/tegra/bpmp.h b/include/soc/tegra/bpmp.h
->> index f2604e9..21402d9 100644
->> --- a/include/soc/tegra/bpmp.h
->> +++ b/include/soc/tegra/bpmp.h
->> @@ -107,6 +107,7 @@ struct tegra_bpmp_message {
->>   };
->>   
->>   #if IS_ENABLED(CONFIG_TEGRA_BPMP)
->> +struct tegra_bpmp *of_tegra_bpmp_get(void);
->>   struct tegra_bpmp *tegra_bpmp_get(struct device *dev);
->>   void tegra_bpmp_put(struct tegra_bpmp *bpmp);
->>   int tegra_bpmp_transfer_atomic(struct tegra_bpmp *bpmp,
->> @@ -122,6 +123,10 @@ void tegra_bpmp_free_mrq(struct tegra_bpmp *bpmp, unsigned int mrq,
->>   			 void *data);
->>   bool tegra_bpmp_mrq_is_supported(struct tegra_bpmp *bpmp, unsigned int mrq);
->>   #else
->> +static inline struct tegra_bpmp *of_tegra_bpmp_get(void)
->> +{
->> +	return ERR_PTR(-ENOTSUPP);
->> +}
->>   static inline struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
->>   {
->>   	return ERR_PTR(-ENOTSUPP);
->> -- 
->> 2.7.4
->>
+>     #include <linux/platform_data/cros_ec_proto.h>
+> 
+> The changes to remove the cros_ec.h include were generated with the
+> following shell script:
+> 
+>     git grep -l "<linux/mfd/cros_ec.h>" | xargs sed -i '/<linux\/mfd\/cros_ec.h>/d'
+> 
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+> ---
+> 
+>  drivers/iio/accel/cros_ec_accel_legacy.c      |  1 -
+>  .../common/cros_ec_sensors/cros_ec_sensors.c  |  1 -
+>  .../cros_ec_sensors/cros_ec_sensors_core.c    |  1 -
+>  drivers/iio/light/cros_ec_light_prox.c        |  1 -
+>  drivers/iio/pressure/cros_ec_baro.c           |  1 -
+>  .../media/platform/cros-ec-cec/cros-ec-cec.c  |  1 -
+>  drivers/mfd/cros_ec_dev.c                     |  1 -
+>  drivers/platform/chrome/cros_ec_chardev.c     |  1 -
+>  drivers/platform/chrome/cros_ec_debugfs.c     |  1 -
+>  drivers/platform/chrome/cros_ec_lightbar.c    |  1 -
+>  drivers/platform/chrome/cros_ec_sensorhub.c   |  1 -
+>  drivers/platform/chrome/cros_ec_sysfs.c       |  1 -
+>  drivers/platform/chrome/cros_ec_vbc.c         |  1 -
+>  drivers/platform/chrome/cros_usbpd_logger.c   |  1 -
+>  drivers/power/supply/cros_usbpd-charger.c     |  1 -
+>  drivers/rtc/rtc-cros-ec.c                     |  1 -
+>  include/linux/mfd/cros_ec.h                   | 35 -------------------
+>  include/linux/platform_data/cros_ec_proto.h   | 23 +++++++++++-
+>  18 files changed, 22 insertions(+), 52 deletions(-)
+>  delete mode 100644 include/linux/mfd/cros_ec.h
+> 
+> diff --git a/drivers/iio/accel/cros_ec_accel_legacy.c b/drivers/iio/accel/cros_ec_accel_legacy.c
+> index 65f85faf6f31..68e847c6255e 100644
+> --- a/drivers/iio/accel/cros_ec_accel_legacy.c
+> +++ b/drivers/iio/accel/cros_ec_accel_legacy.c
+> @@ -18,7 +18,6 @@
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+> diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
+> index 7dce04473467..576e45faafaf 100644
+> --- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
+> +++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
+> index 81a7f692de2f..d3a3626c7cd8 100644
+> --- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
+> +++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/iio/kfifo_buf.h>
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+> diff --git a/drivers/iio/light/cros_ec_light_prox.c b/drivers/iio/light/cros_ec_light_prox.c
+> index d85a391e50c5..7a838e2956f4 100644
+> --- a/drivers/iio/light/cros_ec_light_prox.c
+> +++ b/drivers/iio/light/cros_ec_light_prox.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/iio/pressure/cros_ec_baro.c b/drivers/iio/pressure/cros_ec_baro.c
+> index 2354302375de..d2a67dceb996 100644
+> --- a/drivers/iio/pressure/cros_ec_baro.c
+> +++ b/drivers/iio/pressure/cros_ec_baro.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/iio/triggered_buffer.h>
+>  #include <linux/iio/trigger_consumer.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+> diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+> index 4a3b3810fd89..72c70f123650 100644
+> --- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+> +++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/cec.h>
+>  #include <linux/slab.h>
+>  #include <linux/interrupt.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+>  #include <media/cec.h>
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index c4b977a5dd96..8da4e4cef26f 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -6,7 +6,6 @@
+>   */
+>  
+>  #include <linux/mfd/core.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/of_platform.h>
+> diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+> index 74ded441bb50..c65e70bc168d 100644
+> --- a/drivers/platform/chrome/cros_ec_chardev.c
+> +++ b/drivers/platform/chrome/cros_ec_chardev.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/init.h>
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/miscdevice.h>
+>  #include <linux/module.h>
+>  #include <linux/notifier.h>
+> diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+> index 6ae484989d1f..ecfada00e6c5 100644
+> --- a/drivers/platform/chrome/cros_ec_debugfs.c
+> +++ b/drivers/platform/chrome/cros_ec_debugfs.c
+> @@ -7,7 +7,6 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/delay.h>
+>  #include <linux/fs.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+> diff --git a/drivers/platform/chrome/cros_ec_lightbar.c b/drivers/platform/chrome/cros_ec_lightbar.c
+> index c0f2eec35a48..b4c110c5fee0 100644
+> --- a/drivers/platform/chrome/cros_ec_lightbar.c
+> +++ b/drivers/platform/chrome/cros_ec_lightbar.c
+> @@ -8,7 +8,6 @@
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+>  #include <linux/kobject.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/platform/chrome/cros_ec_sensorhub.c b/drivers/platform/chrome/cros_ec_sensorhub.c
+> index 04d8879689e9..79fefd3bb0fa 100644
+> --- a/drivers/platform/chrome/cros_ec_sensorhub.c
+> +++ b/drivers/platform/chrome/cros_ec_sensorhub.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/init.h>
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+>  #include <linux/platform_data/cros_ec_sensorhub.h>
+> diff --git a/drivers/platform/chrome/cros_ec_sysfs.c b/drivers/platform/chrome/cros_ec_sysfs.c
+> index 74d36b8d4f46..07dac97ad57c 100644
+> --- a/drivers/platform/chrome/cros_ec_sysfs.c
+> +++ b/drivers/platform/chrome/cros_ec_sysfs.c
+> @@ -8,7 +8,6 @@
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+>  #include <linux/kobject.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/platform/chrome/cros_ec_vbc.c b/drivers/platform/chrome/cros_ec_vbc.c
+> index f11a1283e5c8..8edae465105c 100644
+> --- a/drivers/platform/chrome/cros_ec_vbc.c
+> +++ b/drivers/platform/chrome/cros_ec_vbc.c
+> @@ -6,7 +6,6 @@
+>  
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/platform/chrome/cros_usbpd_logger.c b/drivers/platform/chrome/cros_usbpd_logger.c
+> index 374cdd1e868a..7de3ea75ef46 100644
+> --- a/drivers/platform/chrome/cros_usbpd_logger.c
+> +++ b/drivers/platform/chrome/cros_usbpd_logger.c
+> @@ -6,7 +6,6 @@
+>   */
+>  
+>  #include <linux/ktime.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+> diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
+> index 6cc7c3910e09..0aca0da41cb7 100644
+> --- a/drivers/power/supply/cros_usbpd-charger.c
+> +++ b/drivers/power/supply/cros_usbpd-charger.c
+> @@ -5,7 +5,6 @@
+>   * Copyright (c) 2014 - 2018 Google, Inc
+>   */
+>  
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+> index d043d30f05bc..f7343c289cab 100644
+> --- a/drivers/rtc/rtc-cros-ec.c
+> +++ b/drivers/rtc/rtc-cros-ec.c
+> @@ -5,7 +5,6 @@
+>  // Author: Stephen Barber <smbarber@chromium.org>
+>  
+>  #include <linux/kernel.h>
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
+> deleted file mode 100644
+> index 61c2875c2a40..000000000000
+> --- a/include/linux/mfd/cros_ec.h
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * ChromeOS EC multi-function device
+> - *
+> - * Copyright (C) 2012 Google, Inc
+> - */
+> -
+> -#ifndef __LINUX_MFD_CROS_EC_H
+> -#define __LINUX_MFD_CROS_EC_H
+> -
+> -#include <linux/device.h>
+> -
+> -/**
+> - * struct cros_ec_dev - ChromeOS EC device entry point.
+> - * @class_dev: Device structure used in sysfs.
+> - * @ec_dev: cros_ec_device structure to talk to the physical device.
+> - * @dev: Pointer to the platform device.
+> - * @debug_info: cros_ec_debugfs structure for debugging information.
+> - * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
+> - * @cmd_offset: Offset to apply for each command.
+> - * @features: Features supported by the EC.
+> - */
+> -struct cros_ec_dev {
+> -	struct device class_dev;
+> -	struct cros_ec_device *ec_dev;
+> -	struct device *dev;
+> -	struct cros_ec_debugfs *debug_info;
+> -	bool has_kb_wake_angle;
+> -	u16 cmd_offset;
+> -	u32 features[2];
+> -};
+> -
+> -#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
+> -
+> -#endif /* __LINUX_MFD_CROS_EC_H */
+> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> index 30098a551523..119b9951c055 100644
+> --- a/include/linux/platform_data/cros_ec_proto.h
+> +++ b/include/linux/platform_data/cros_ec_proto.h
+> @@ -12,7 +12,6 @@
+>  #include <linux/mutex.h>
+>  #include <linux/notifier.h>
+>  
+> -#include <linux/mfd/cros_ec.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  
+>  #define CROS_EC_DEV_NAME	"cros_ec"
+> @@ -185,6 +184,28 @@ struct cros_ec_platform {
+>  	u16 cmd_offset;
+>  };
+>  
+> +/**
+> + * struct cros_ec_dev - ChromeOS EC device entry point.
+> + * @class_dev: Device structure used in sysfs.
+> + * @ec_dev: cros_ec_device structure to talk to the physical device.
+> + * @dev: Pointer to the platform device.
+> + * @debug_info: cros_ec_debugfs structure for debugging information.
+> + * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
+> + * @cmd_offset: Offset to apply for each command.
+> + * @features: Features supported by the EC.
+> + */
+> +struct cros_ec_dev {
+> +	struct device class_dev;
+> +	struct cros_ec_device *ec_dev;
+> +	struct device *dev;
+> +	struct cros_ec_debugfs *debug_info;
+> +	bool has_kb_wake_angle;
+> +	u16 cmd_offset;
+> +	u32 features[2];
+> +};
+> +
+> +#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
+> +
+>  int cros_ec_suspend(struct cros_ec_device *ec_dev);
+>  
+>  int cros_ec_resume(struct cros_ec_device *ec_dev);
+> -- 
+> 2.20.1
+> 
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
