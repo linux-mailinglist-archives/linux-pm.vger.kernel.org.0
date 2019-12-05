@@ -2,120 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAE0114378
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 16:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3A91143EC
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 16:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729047AbfLEPYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 10:24:40 -0500
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:37978 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbfLEPYk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 10:24:40 -0500
-Received: by mail-ua1-f66.google.com with SMTP id z17so1448823uac.5
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 07:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q2FMWNFt1zt70/iXYITjo1zth7yHens6Q8x9GtKkI7U=;
-        b=BPLCZYCiL3bwts6S4smiewIRilsp2BOsKBmLJc8pz5wrfBZ2a3EOtkPCjLm5/k++6+
-         ibzo8W26z8mM9JgfksD4FcsR3sFhZI5NKnoc+GKN3lCWR3rXCgJMn0Wc61We+qxYP/7k
-         PcNzrAxOHFlrhnMEcljiJZjT/3Koy7l9dQ9z4DnLol8A1Lgc8N1iZMj2DHxMTCaqfLYF
-         rhkqD/CsHa3/oUJ8EqIcKSCMpnlehsmiPIKkBHzfGcMlgI3TBxUhKJ8dFWLYoK0CG156
-         Q5LTDt1LEm8OeC9qxldiQsJwLMURKqETJAaATzaniMbQvV+XfowKXxnEyQMkiTH2IoVV
-         pYaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q2FMWNFt1zt70/iXYITjo1zth7yHens6Q8x9GtKkI7U=;
-        b=a7xRW+Q/r1UH7p67EMrLZosCb54Do2dMpTj9HIDyckZMXGB3ey424Rnu/W9XVuNeac
-         dfBX58/g1wPlv52G9cBG42JXJoYJ6tNpsZ/FSbJuMjkh/B7vieN0U91eySTgX/vFvkfz
-         NVx7g7t7rvCruiUQOH3OPITINEv0VZm3CDL0Na04nygAU01ZdAl8GNkjWBd0hrmJAWhD
-         OwY+ghas2JazkHj7+YYO6VIJJwmGDX+n1UdBE+4W9UAFSyNUN2oB1AKx604zChJ37+fs
-         xe4O/9j4XxhUgitYb7Nvsz7iCN6Blsq3B69aefVfKTazh1auDUc18ihyMm37OPRnl23N
-         8F0A==
-X-Gm-Message-State: APjAAAXbSB2K6UA7WPyxdJzoYThBRSIK4X8PX8ltS69lnzdz7nVQQyCu
-        o6ijbqjWp/RBzGaR4CqI2o0OLpUw3mmLVLA1CSpKptXagcU=
-X-Google-Smtp-Source: APXvYqzM3iLhOfE5wLyMayZyiGOnOx969gmlHmwBQmhxfp3xBcLHf4zaSc0MqMupvKiC/ibckJrJOfoQxIuft1deLE4=
-X-Received: by 2002:ab0:5510:: with SMTP id t16mr4362385uaa.15.1575559479138;
- Thu, 05 Dec 2019 07:24:39 -0800 (PST)
+        id S1726028AbfLEPof (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 10:44:35 -0500
+Received: from gateway24.websitewelcome.com ([192.185.50.93]:36867 "EHLO
+        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729899AbfLEPoe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 10:44:34 -0500
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 06C28C3F
+        for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2019 09:44:32 -0600 (CST)
+Received: from br164.hostgator.com.br ([192.185.176.180])
+        by cmsmtp with SMTP
+        id ctItiQwzf4kpjctIui1TL8; Thu, 05 Dec 2019 09:44:32 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Kono/osY8LIAISwNgMpURkYC4W/4gFk0QH7aAaQbSh4=; b=KFPZkvkv3OWyCyMPD6wcT7unhC
+        6aEdRcRYif0kIHhl0yXyKrMY0hNpFsLqZU+CGUJ72XPDGmA/z0S68k4QpNmw3eFyojrDCpCm4KDg9
+        RE3dD8aremRzo2tpfiHf/SQdqpw8UnxUTxoScV0BVsbOvOMQS+EZsyqjv81tRdnJa7jF0J4+GI51G
+        WQHoL6FVUyhm1jhXfydD+1KYUiXeakCrC5eCWoAMYVnRD28432aYw2Ol0jOTWQTci4PEb2ENaRyCR
+        fBxa7ucU20kx9IIWzJ1J2T21gWbVVlG/O8Rv/zXCxmm44uZZC8CO1cxdLdQQx5vqPj1AwSfuYSmX9
+        cPiukfrA==;
+Received: from [191.31.196.215] (port=35544 helo=castello.bz.toradex.local)
+        by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <matheus@castello.eng.br>)
+        id 1ictIs-001jEH-US; Thu, 05 Dec 2019 12:44:31 -0300
+From:   Matheus Castello <matheus@castello.eng.br>
+To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
+Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, lee.jones@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matheus Castello <matheus@castello.eng.br>
+Subject: [PATCH v8 0/5] power: supply: MAX17040: Add IRQ for low level and alert SOC changes
+Date:   Thu,  5 Dec 2019 12:44:05 -0300
+Message-Id: <20191205154410.29462-1-matheus@castello.eng.br>
+X-Mailer: git-send-email 2.24.0.rc2
 MIME-Version: 1.0
-References: <20191205115150.18836-1-rui.zhang@intel.com> <CAPDyKFqFswOjqNn0s7Y3BAeYuVr+z2NrX3fbn+yu+O1vgWb8tA@mail.gmail.com>
- <d00ea4a1636cd0cfb8c672ef0edc260e7a4759c3.camel@intel.com>
-In-Reply-To: <d00ea4a1636cd0cfb8c672ef0edc260e7a4759c3.camel@intel.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 5 Dec 2019 16:24:03 +0100
-Message-ID: <CAPDyKFq1P3RX+KDbfoF_NehHO8WWuQpdDd_orgu6PSWsnr8eRw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Add Daniel Lezcano as the thermal maintainer
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - castello.eng.br
+X-BWhitelist: no
+X-Source-IP: 191.31.196.215
+X-Source-L: No
+X-Exim-ID: 1ictIs-001jEH-US
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (castello.bz.toradex.local) [191.31.196.215]:35544
+X-Source-Auth: matheus@castello.eng.br
+X-Email-Count: 3
+X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Dec 2019 at 13:19, Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Thu, 2019-12-05 at 13:03 +0100, Ulf Hansson wrote:
-> > On Thu, 5 Dec 2019 at 12:52, Zhang Rui <rui.zhang@intel.com> wrote:
-> > >
-> > > Add Daniel Lezcano as the co-maintainer of thermal subsystem.
-> > >
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > >  MAINTAINERS | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index c8abdb50af79..0efadb61fe8b 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -16287,7 +16287,7 @@ F:      drivers/media/radio/radio-
-> > > raremono.c
-> > >
-> > >  THERMAL
-> > >  M:     Zhang Rui <rui.zhang@intel.com>
-> > > -R:     Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > +M:     Daniel Lezcano <daniel.lezcano@linaro.org>
-> > >  R:     Amit Kucheria <amit.kucheria@verdurent.com>
-> > >  L:     linux-pm@vger.kernel.org
-> > >  T:     git
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git
-> >
-> > Great!
-> >
-> > Did you guys also agree on how to work with the git tree? There is
-> > one
-> > common git, maintained by Rui?
->
-> we have a shared tree where both Daniel and I are maintaining.
-> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/
+This series add IRQ handler for low level SOC alert, define a devicetree
+binding attribute to configure the alert level threshold and check for
+changes in SOC and power supply status for send uevents.
 
-Cool, that definitely makes it easier for contributors!
+Max17043/17044 have a pin for alert host about low level state of charge and
+this alert can be configured in a threshold from 1% up to 32% of SOC.
 
->
-> thermal/linux-next branch contains all the upstream candidate, and it
-> is included in linux-next for testing.
-> Daniel and I will cherry-pick the patches from thermal/linux-next to
-> thermal/fixes or thermal/next branch, where thermal/fixes are materials
-> for next -rc and thermal/next are materials for next merge window.
+Thanks Krzysztof Kozlowski, Lee Jones, Rob Herring and Sebastian Reichel for
+your time reviewing it.
 
-You may also ask Stephen to include your fixes branch into linux-next,
-as that is being built separately in his pending-fixes branch.
+Changes since v7:
+(Suggested by Sebastian Reichel)
+- Fix unrelated change
+- Use device_property_read_u32() and simplify the code
+- Check the irq and of_device_is_compatible in the first patch
 
->
-> Daniel and I will sync privately to check who will send the PR.
->
-> thanks,
-> rui
->
-> >
-> > Just to let people aware of the workflow...
+Changes since v6:
+(Suggested by Lee Jones)
+- Use relative paths in documentation
 
-Thanks a lot for sharing the updates!
+Matheus Castello (5):
+  power: supply: max17040: Add IRQ handler for low SOC alert
+  dt-bindings: power: supply: Max17040: Add DT bindings for max17040
+    fuel gauge
+  devicetree: mfd: max14577: Add reference to max14040_battery.txt
+    descriptions
+  power: supply: max17040: Config alert SOC low level threshold from FDT
+  power: supply: max17040: Send uevent in SOC and status change
 
-Kind regards
-Uffe
+ .../devicetree/bindings/mfd/max14577.txt      |   2 +
+ .../power/supply/max17040_battery.txt         |  33 +++++
+ drivers/power/supply/max17040_battery.c       | 130 +++++++++++++++++-
+ 3 files changed, 161 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+
+--
+2.24.0.rc2
+
