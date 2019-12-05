@@ -2,79 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A78113AE0
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 05:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C02B1113B71
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 06:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbfLEEgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 23:36:16 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35582 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbfLEEgQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 23:36:16 -0500
-Received: by mail-wr1-f65.google.com with SMTP id g17so1846003wro.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 20:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=keNUPJzqbpb1zvh7gwgj7wSZGJ1RcEtCjXcl9nIyRWA=;
-        b=hEvfs86e9uivc96esO1PqMIaSDQRwe6rRSEh3UTbWwRpAfK2D9o0OHW9jyWdUe+ImC
-         KM5sjitV4VYUSsac91vLm0LvC2QACkEbjm+0bQ9Usog5c782YsT0qny4ZFJy4VNaaSPj
-         EoxT4aPxXr+CxnhTvj6mg+0gI6BMQ0BvXkUSCTtK4JWxrfURYclITMO5RB0/bJH0GV9K
-         ICalID4puBDrItEojRVXbjuKsTJ/YPJt6Xlql9wzZ9RXhh3pubq8cEt3s5sYE1KzUS8x
-         QwAVJIhhZQaZkudwl6IhRSSzAGZ1MN263zCP8gq5tnsmIZCHCa1Ve0QoErHbRHURc2er
-         kWPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=keNUPJzqbpb1zvh7gwgj7wSZGJ1RcEtCjXcl9nIyRWA=;
-        b=OCiV/xsBvAEB7XH6XmlJn+IapuhAF3qU7U2/hyIZzk2WjJ5f+n8jr1H76C0Mb1XhiI
-         1byLTMZNahx1w8sN5L1MT8jT+DNf4PG6WGxhcjyrE/D1H55Z/YwF+azhxc6E78fdQSX8
-         sl3t6TRizNaP1wIeLOtRyzOKlbPJHCZw0RbwaoRqgUvEo2EXg7b1jUFZR55xp5FCmy6x
-         kAh96tZPknv+xNAO2P3qIDxRai7gZr4J0VVYl6UPgr4OYygPgGh28EhF1dHhBIsW0les
-         ld9rCgSE8hgDrnUlZe/PoowMzPof5IQZfU+lqt4t2E/wepQhKXuAAukMqLI0IqEeFBH+
-         cPwg==
-X-Gm-Message-State: APjAAAVLw/CGs7MfFWLX8ZARhw57HP/gsb6EjYVIkXnGHlN7+fFFV8j6
-        UyWYh509aXmePwba+DDbamcFkg==
-X-Google-Smtp-Source: APXvYqyAeuNq7VceTAS9eq+u2nkne8kbzO+3NySJpdhCTng6yAxjdC53noAT+TaQdRaTXEWhj0rzog==
-X-Received: by 2002:adf:fe86:: with SMTP id l6mr7357191wrr.252.1575520573537;
-        Wed, 04 Dec 2019 20:36:13 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id j12sm11408925wrw.54.2019.12.04.20.36.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 20:36:12 -0800 (PST)
-Date:   Thu, 5 Dec 2019 04:36:09 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        id S1726102AbfLEFrq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 00:47:46 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:52748 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbfLEFrq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 00:47:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=x96gOpqCUg5wPLxbwWs7dfewlG/0CiMSE5+nMnsPO9A=; b=GjkJAE3VENnG6oHJGRTemG4Ui
+        01wxy6qCxqveivonwruo9aqvEKwfkYr8KN6BgwuIWWWDtbMbqO1i9vw0nxY/9+Pjz8Itu/MOIDXa8
+        sm8UAqHa9D60pnCE64OnLmAAykqKdiGfYzYE69/w1RFopeoLyAr6m7Iv0AbT1I52JwWJ9TxI2FFeg
+        3Adm50uENj7cesdKxQD2t2wWvvwINuBUuRbjdnnDDgtw8BC9jAkSaGG3zmThyh9FbLFRFfK7nIxUS
+        YoqhAjygauF6C2q8sPOrEG7rsJx8Jz44Rfr/F+O8t9kFpiRHV5Y/7BIs+ZJFVhleAdf+PgTa36xJc
+        Zdzp6sLHQ==;
+Received: from [2601:1c0:6280:3f0::3deb]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1icjzL-0004qz-Cd; Thu, 05 Dec 2019 05:47:43 +0000
+Subject: Re: linux-next: Tree for Nov 15 (thermal:
+ THERMAL_GOV_POWER_ALLOCATOR)
+To:     Zhang Rui <rui.zhang@intel.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Subject: Re: linux-next: Tree for Nov 15 (thermal:
- THERMAL_GOV_POWER_ALLOCATOR)
-Message-ID: <20191205043609.GA231782@google.com>
+        Amit Kucheria <amit.kucheria@verdurent.com>, qperret@google.com
 References: <20191115190525.77efdf6c@canb.auug.org.au>
  <247cd41e-a07b-adf0-4ec2-6467f0257837@infradead.org>
  <9436e207-8a65-f01b-c348-32a8a00f03d4@infradead.org>
  <6d43c93a748872293df489d397f894b77b221bc9.camel@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <8895dbb7-dd48-1076-cef2-64d53a59c081@infradead.org>
+Date:   Wed, 4 Dec 2019 21:47:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <6d43c93a748872293df489d397f894b77b221bc9.camel@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
-
-On Thursday 05 Dec 2019 at 12:27:47 (+0800), Zhang Rui wrote:
+On 12/4/19 8:27 PM, Zhang Rui wrote:
+> On Wed, 2019-12-04 at 08:25 -0800, Randy Dunlap wrote:
+>> On 11/15/19 3:44 PM, Randy Dunlap wrote:
+>>> On 11/15/19 12:05 AM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20191114:
+>>>>
+>>>
+>>> on i386:
+>>>
+>>> WARNING: unmet direct dependencies detected for
+>>> THERMAL_GOV_POWER_ALLOCATOR
+>>>   Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
+>>>   Selected by [y]:
+>>>   - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
+>>>
+>>>
+>>> THERMAL_GOV_POWER_ALLOCATOR is selected by
+>>> THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+>>> even though ENERGY_MODEL is not set/enabled.
+>>>
+>>>
+>>
+>> This Kconfig warning is still happening in linux-next of 20191204.
+>>
 > I overlooked the original report probably because I was not CCed.
 > 
 > This is introduced by commit a4e893e802e6("thermal: cpu_cooling:
@@ -110,6 +116,11 @@ On Thursday 05 Dec 2019 at 12:27:47 (+0800), Zhang Rui wrote:
 > 
 > Fixes: a4e893e802e6("thermal: cpu_cooling: Migrate to using the EM framework")
 > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
 > ---
 >  drivers/thermal/Kconfig | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -127,12 +138,9 @@ On Thursday 05 Dec 2019 at 12:27:47 (+0800), Zhang Rui wrote:
 >  	help
 >  	  Select this if you want to control temperature based on
 >  	  system and device power allocation. This governor can only
-> -- 
-> 2.17.1
+> 
 
-FWIW, a similar fix has been suggested a couple weeks back:
 
-  https://lore.kernel.org/lkml/20191113105313.41616-1-yuehaibing@huawei.com/
+-- 
+~Randy
 
-Thanks,
-Quentin
