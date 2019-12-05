@@ -2,393 +2,418 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CDE113964
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 02:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDC31139EA
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 03:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727146AbfLEBj7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 20:39:59 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:21992 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728321AbfLEBj6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 20:39:58 -0500
+        id S1728731AbfLECaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 21:30:07 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:61345 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728459AbfLECaH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 21:30:07 -0500
 Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191205013954epoutp031ef9453923854bfd7a15bee353172ba9~dVf42UBwd2823428234epoutp03x
-        for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2019 01:39:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191205013954epoutp031ef9453923854bfd7a15bee353172ba9~dVf42UBwd2823428234epoutp03x
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191205023002epoutp02f1e05cf4a8ea00a243ad3f6d977a5836~dWLppUcaM1647516475epoutp02G
+        for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2019 02:30:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191205023002epoutp02f1e05cf4a8ea00a243ad3f6d977a5836~dWLppUcaM1647516475epoutp02G
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575509995;
-        bh=Oen/BZ4nHuK59SCJ3/7TEzX5BQ5jhiau93R7/9rMCHE=;
+        s=mail20170921; t=1575513002;
+        bh=xbucTyOyREF5meUyQSLulUXE71x8nxaKe9G52STj/fU=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=P6npovJD3GV/0ZpmTG4B8cyowBN1WP2bICMwjOSSEgnpJYAXBjQJOKG0Jn2JCCiha
-         BomnjRLkmUWfcjtE5O7MOu2QH8Vn36T55YOuOMwcU5rjgaebp3fudsPb3LQM3ti3lu
-         XObLogzezbBfA0YE3AFHB+f9fpBQIB1xP4FG2pz0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191205013954epcas1p2c5fd64539222a380514069461dc4ad63~dVf4gBb1u2158221582epcas1p2i;
-        Thu,  5 Dec 2019 01:39:54 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 47Sz143sKMzMqYkj; Thu,  5 Dec
-        2019 01:39:52 +0000 (GMT)
+        b=kM3AmubES3GAbwHu2NP1Io1QtURJ/lGDaA+lBNM3Ozrdum9oLHJENbSwBnlFkagO9
+         X1WjXU4ZRWpq9ROaaCN7GOBK2L8zBvgL3GCFWm7r3g7wRJJTP5POyP/f+/6hnvNsmX
+         8GEGdutfrIKXhUb3uTmXaHkKxcgbgLPOtFHiGIQE=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191205023001epcas1p106a6b1a5dd25d446e3ef1ba24b210f38~dWLpFOQRT1269412694epcas1p1F;
+        Thu,  5 Dec 2019 02:30:01 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47T06v08VNzMqYky; Thu,  5 Dec
+        2019 02:29:59 +0000 (GMT)
 Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
         epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E3.73.48019.3EF58ED5; Thu,  5 Dec 2019 10:39:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20191205013947epcas1p41f02dd65aadd1586c7c0916877229b87~dVfxsrMSw0802308023epcas1p4j;
-        Thu,  5 Dec 2019 01:39:47 +0000 (GMT)
+        B7.12.48019.6AB68ED5; Thu,  5 Dec 2019 11:29:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191205022958epcas1p17f0a9e0e9eab0cf0a694488a6ea600e8~dWLmIOJO13049230492epcas1p1Z;
+        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191205013947epsmtrp2528896711cdce69b7c6c124dcfbf67a8~dVfxr9Fsk0448804488epsmtrp2u;
-        Thu,  5 Dec 2019 01:39:47 +0000 (GMT)
-X-AuditID: b6c32a38-23fff7000001bb93-0a-5de85fe3c5ff
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191205022958epsmtrp10453ecaaba8a07de06d53e080f850b2a~dWLmHYiXM2210222102epsmtrp1T;
+        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
+X-AuditID: b6c32a38-23fff7000001bb93-2b-5de86ba6e638
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.20.10238.3EF58ED5; Thu,  5 Dec 2019 10:39:47 +0900 (KST)
+        ED.94.10238.6AB68ED5; Thu,  5 Dec 2019 11:29:58 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191205013947epsmtip19bd04f40d2ca2aab0df997b83b31c1e5~dVfxdUZKt0562305623epsmtip1-;
-        Thu,  5 Dec 2019 01:39:47 +0000 (GMT)
-Subject: Re: [PATCH v2 3/3] devfreq: move statistics to separate struct
-To:     Kamil Konieczny <k.konieczny@samsung.com>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191205022958epsmtip2895550fb1dc64ea8aa192e53892d5d02~dWLl2eFut2086620866epsmtip2Z;
+        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
+Subject: Re: [RFC PATCH v2 09/11] devfreq: exynos-bus: Add interconnect
+ functionality to exynos-bus
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     myungjoo.ham@samsung.com, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, georgi.djakov@linaro.org,
+        leonard.crestez@nxp.com, m.szyprowski@samsung.com,
+        b.zolnierkie@samsung.com, krzk@kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <0298e7c0-72ea-ad1d-1a69-68bfaf0d62d1@samsung.com>
-Date:   Thu, 5 Dec 2019 10:46:01 +0900
+Message-ID: <1050604c-00e7-ca81-032b-1aee9a3f8c9f@samsung.com>
+Date:   Thu, 5 Dec 2019 11:36:12 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20191204150018.5234-4-k.konieczny@samsung.com>
+In-Reply-To: <9b3b21d3e4678946724531c58ad7f9c7a3993a95.camel@samsung.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmnu7j+BexBr1HNC02zljParHg0wxW
-        i/PnN7BbnG16w25xedccNovPvUcYLdYeuctucbtxBZsDh8emVZ1sHn1bVjF6fN4kF8AclW2T
-        kZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SBkkJZYk4p
-        UCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAskCvODG3uDQvXS85P9fK0MDAyBSoMCE74/q+
-        f8wF030rFmydzNLAeNO2i5GDQ0LAROLMupouRi4OIYEdjBIv2rcwdjFyAjmfGCXW/XOASHxj
-        lFgz8TMbSAKk4cWK7ywQib2MEgdPdrFCOO8ZJR6c72AFqRIWcJd4v6OJHcQWEdCVeLNjKTNI
-        EbPAPCaJN9MugBWxCWhJ7H9xA2wsv4CixNUfj8F28wrYSezvmcAMYrMIqEgcm/yOBcQWFQiT
-        OLmtBapGUOLkzCdgcU4BG4nTcxeBzWEWEJe49WQ+E4QtL7H97RywxRIC79kkzh65wgTxg4tE
-        ++oOFghbWOLV8S3sELaUxOd3e6H+rJZYefIIG0RzB6PElv0QV0sIGEvsXzqZCRR6zAKaEut3
-        6UOEFSV2/p7LCLGYT+Ld1x5WSADzSnS0CUGUKEtcfnAX6gRJicXtnWwTGJVmIXlnFpIXZiF5
-        YRbCsgWMLKsYxVILinPTU4sNC0yQY3sTIzh1alnsYNxzzucQowAHoxIPb8Om57FCrIllxZW5
-        hxglOJiVRHi3STyNFeJNSaysSi3Kjy8qzUktPsRoCgzticxSosn5wLSeVxJvaGpkbGxsYWJo
-        ZmpoqCTOy/HjYqyQQHpiSWp2ampBahFMHxMHp1QD48xaz6unW0WXv1714IiumY/OhP+BQi+7
-        bwpNstOb+eaos1KeRfeS6qcJVfUaneyCT5ifddy4q/ojXkpiwYOpT6w3G1T/iPqyRKtv5q6M
-        p3+SCg5UZJyVvXnY8RK38u/M5B41LhvfOP1lnNvyHrVeurM6IDTkwQmeuqCPO1q8l2dk6Bq4
-        zwk+pMRSnJFoqMVcVJwIAMq0bZ2zAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTvdx/ItYg32ruCw2zljParHg0wxW
-        i/PnN7BbnG16w25xedccNovPvUcYLdYeuctucbtxBZsDh8emVZ1sHn1bVjF6fN4kF8AcxWWT
-        kpqTWZZapG+XwJVxfd8/5oLpvhULtk5maWC8advFyMkhIWAi8WLFd5YuRi4OIYHdjBLPVv1k
-        hEhISky7eJS5i5EDyBaWOHy4GKLmLaNE5/LbzCA1wgLuEu93NLGD2CICuhJvdixlBiliFljA
-        JDH/5kSoqQcZJS53HGABqWIT0JLY/+IGG4jNL6AocfXHY7BtvAJ2Evt7JoBNZRFQkTg2+R1Y
-        vahAmMTOJY+ZIGoEJU7OfAIW5xSwkTg9dxHYHGYBdYk/8y4xQ9jiEreezGeCsOUltr+dwzyB
-        UXgWkvZZSFpmIWmZhaRlASPLKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4DjS0tzB
-        eHlJ/CFGAQ5GJR7ehk3PY4VYE8uKK3MPMUpwMCuJ8G6TeBorxJuSWFmVWpQfX1Sak1p8iFGa
-        g0VJnPdp3rFIIYH0xJLU7NTUgtQimCwTB6dUA6Ot5aGW5Y/4Zldcdxd59LXr5FKZzmWH8zRn
-        iHq2tVfl+0q+KIw4eWVNYPneEO5eyYKPp391Ps3K/PVsx4s9/CUy+rGRs47Z+wXOevZx9SeN
-        GbtkumMnxhow1jvc+D7RceH0g/6NmRlfqgNUPq1fazD3y2luriUaybP/7wnPuvjnZEVv7p6w
-        jR+VWIozEg21mIuKEwHjYGbQnwIAAA==
-X-CMS-MailID: 20191205013947epcas1p41f02dd65aadd1586c7c0916877229b87
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmnu6y7BexBkfmWFvcn9fKaLFxxnpW
+        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
+        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
+        HpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0t5JC
+        WWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAh
+        O2PXJO2Cg94Ve5+vYGpgbLPtYuTkkBAwkdj/qJe5i5GLQ0hgB6PEjdfL2CGcT4wSe2a9ZoVw
+        vjFKLL3dwQzTcvz+aTaIxF5Giat7t0G1vGeU2PnxKQtIlbBAqsSctdvBBosI/GeUOL1sJdgs
+        ZoFjjBJ77/wEq2IT0JLY/+IGG4jNL6AocfXHY0YQm1fATmLOnVfsIDaLgIrErM0XmEBsUYEw
+        iZPbWqBqBCVOznwCNodTwFPi7JZ3YDazgLjErSfzmSBseYnmrbPBrpAQ2Mcu8fbaWSaIJ1wk
+        Tm3+zwphC0u8Or6FHcKWknjZ3wZlV0usPHmEDaK5g1Fiy/4LUA3GEvuXTgYaxAG0QVNi/S59
+        iLCixM7fcxkhFvNJvPvawwpSIiHAK9HRJgRRoixx+cFdqBMkJRa3d7JNYFSaheSdWUhemIXk
+        hVkIyxYwsqxiFEstKM5NTy02LDBBju9NjOBUrWWxg3HPOZ9DjAIcjEo8vA2bnscKsSaWFVfm
+        HmKU4GBWEuHdJvE0Vog3JbGyKrUoP76oNCe1+BCjKTC0JzJLiSbnA/NIXkm8oamRsbGxhYmh
+        mamhoZI4L8ePi7FCAumJJanZqakFqUUwfUwcnFINjByVHvcKJxmYdO9xMG3ssVqSMOlE0fGK
+        v5c7ps9waWtcskBo+jPbPw+KTMMirv3u3N6/uvBOhWHcvLuzre+XLzmbz2p354j5uh1vr/K1
+        e/m5cS11MrFdKr7ygmVdReQkTZMNr4QZ/8d4T/28+Gx+w5LTW1o0p6f637jY0vTt+04P3zce
+        TU93f1FiKc5INNRiLipOBABRkh746wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsWy7bCSvO6y7BexBsc+iVvcn9fKaLFxxnpW
+        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
+        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
+        HsVlk5Kak1mWWqRvl8CVsWuSdsFB74q9z1cwNTC22XYxcnJICJhIHL9/mq2LkYtDSGA3o8Sf
+        ZX/ZIRKSEtMuHmXuYuQAsoUlDh8uhqh5yyixc+t0VpAaYYFUiTlrtzODJEQE/jNKPGw7xgji
+        MAscY5T4uGI9K0TLBiaJ27/6wVrYBLQk9r+4wQZi8wsoSlz98ZgRxOYVsJOYc+cV2GoWARWJ
+        WZsvMIHYogJhEjuXPGaCqBGUODnzCQuIzSngKXF2yzswm1lAXeLPvEvMELa4xK0n85kgbHmJ
+        5q2zmScwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kR
+        HLNamjsYLy+JP8QowMGoxMPbsOl5rBBrYllxZe4hRgkOZiUR3m0ST2OFeFMSK6tSi/Lji0pz
+        UosPMUpzsCiJ8z7NOxYpJJCeWJKanZpakFoEk2Xi4JRqYFze2724vVslWKfUn/l5WdSdutXi
+        pWaLDs+LN3onPj+4ZP+sT34vTnbfNahS/Pxk42fJ9hSnkIuT5ZLY9k3YeD+r+NrFmPPcNhOq
+        uH0PaGnu2Rl4LFbv1/+Ebd96u/bET8peV9Xe8cg12l+mZWFz4S5bv+V8PPuaGPNrTq2Yd8BI
+        /b/GpG63V0osxRmJhlrMRcWJAPwoDGfVAgAA
+X-CMS-MailID: 20191205022958epcas1p17f0a9e0e9eab0cf0a694488a6ea600e8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191204150034eucas1p1b6e7f43a6be59ed2e0a4e55ccdefc750
-References: <20191204150018.5234-1-k.konieczny@samsung.com>
-        <CGME20191204150034eucas1p1b6e7f43a6be59ed2e0a4e55ccdefc750@eucas1p1.samsung.com>
-        <20191204150018.5234-4-k.konieczny@samsung.com>
+X-CMS-RootMailID: 20190919142329eucas1p2e53992eab9ec6b404f716f955b3c228e
+References: <20190919142236.4071-1-a.swigon@samsung.com>
+        <CGME20190919142329eucas1p2e53992eab9ec6b404f716f955b3c228e@eucas1p2.samsung.com>
+        <20190919142236.4071-10-a.swigon@samsung.com>
+        <e004bedd-294b-172b-5e34-bf7afcfd04bc@samsung.com>
+        <9b3b21d3e4678946724531c58ad7f9c7a3993a95.camel@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/5/19 12:00 AM, Kamil Konieczny wrote:
-> Count time and transitions between devfreq frequencies in separate struct
-> for improved code readability and maintenance.
+Hi Artur,
+
+On 12/3/19 2:05 AM, Artur Świgoń wrote:
+> Hi Chanwoo,
 > 
-> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
-> ---
-> Changes in v2:
->  squash three patches into one, do not modify devfreq_profile and separate stats
->  into devfreq_stats
+> On Wed, 2019-09-25 at 16:03 +0900, Chanwoo Choi wrote:
+>> Hi,
+>>
+>> I need the time to dig the ICC framework
+>> to understand them detailed. After that, I'll review this.
 > 
->  drivers/devfreq/devfreq.c | 68 +++++++++++++++++++++++----------------
->  include/linux/devfreq.h   | 31 ++++++++++++------
->  2 files changed, 62 insertions(+), 37 deletions(-)
+> Any updates on this topic?
+
+I'm sorry for delaying the review of  this topic related to icc.
+The review and merge of devfreq pm-qos feature will be finished over soon.
+Because this series depends on the devfreq pm-qos feature
+
+I'll dig into ICC related patches for exynos and imx[1].
+[1] https://lore.kernel.org/linux-arm-kernel/008f2fa973b23fc716d678c5bd35af54@akkea.ca/T/
+[PATCH RFC v6 0/9] interconnect: Add imx support via devfreq
+
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 901af3b66a76..4d50c8f10bd2 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -198,6 +198,7 @@ static int set_freq_table(struct devfreq *devfreq)
->   */
->  int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
->  {
-> +	struct devfreq_stats *stats = devfreq->stats;
->  	int lev, prev_lev, ret = 0;
->  	unsigned long long cur_time;
->  
-> @@ -214,8 +215,8 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
->  		goto out;
->  	}
->  
-> -	devfreq->time_in_state[prev_lev] +=
-> -			 cur_time - devfreq->last_stat_updated;
-> +	stats->time_in_state[prev_lev] +=
-> +			 cur_time - stats->last_stat_updated;
->  
->  	lev = devfreq_get_freq_level(devfreq, freq);
->  	if (lev < 0) {
-> @@ -224,13 +225,12 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
->  	}
->  
->  	if (lev != prev_lev) {
-> -		devfreq->trans_table[(prev_lev *
-> -				devfreq->profile->max_state) + lev]++;
-> -		devfreq->total_trans++;
-> +		stats->trans_table[(prev_lev * stats->max_state) + lev]++;
-> +		stats->total_trans++;
->  	}
->  
->  out:
-> -	devfreq->last_stat_updated = cur_time;
-> +	stats->last_stat_updated = cur_time;
->  	return ret;
->  }
->  EXPORT_SYMBOL(devfreq_update_status);
-> @@ -525,7 +525,7 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
->  			msecs_to_jiffies(devfreq->profile->polling_ms));
->  
->  out_update:
-> -	devfreq->last_stat_updated = get_jiffies_64();
-> +	devfreq->stats->last_stat_updated = get_jiffies_64();
->  	devfreq->stop_polling = false;
->  
->  	if (devfreq->profile->get_cur_freq &&
-> @@ -735,28 +735,38 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  		goto err_out;
->  	}
->  
-> -	devfreq->trans_table = devm_kzalloc(&devfreq->dev,
-> +	devfreq->stats = devm_kzalloc(&devfreq->dev, sizeof(*devfreq->stats),
-> +				      GFP_KERNEL);
+> Regardless of the purpose of this RFC, I think patches 01-04
+> are still beneficial to devfreq. I can rebase and post them
+> as a separate series if you wish.
 
-Each devfreq has only one stats structure always. Don't need to define
-it with pointer type. It is enough to define as following without pointer type:
+Yes. please split out patch1-4 from this series
+and send them based on linux-next.git separately.
 
-	struct devfreq_stats stats;
-
-
-> +	if (!devfreq->stats) {
-> +		mutex_unlock(&devfreq->lock);
-> +		err = -ENOMEM;
-> +		goto err_devfreq;
-> +	}
-> +
-> +	devfreq->stats->freq_table = devfreq->profile->freq_table;
-> +	devfreq->stats->max_state = devfreq->profile->max_state;
-> +	devfreq->stats->trans_table = devm_kzalloc(&devfreq->dev,
->  			array3_size(sizeof(unsigned int),
-> -				    devfreq->profile->max_state,
-> -				    devfreq->profile->max_state),
-> +				    devfreq->stats->max_state,
-> +				    devfreq->stats->max_state),
->  			GFP_KERNEL);
-> -	if (!devfreq->trans_table) {
-> +	if (!devfreq->stats->trans_table) {
->  		mutex_unlock(&devfreq->lock);
->  		err = -ENOMEM;
->  		goto err_devfreq;
->  	}
->  
-> -	devfreq->time_in_state = devm_kcalloc(&devfreq->dev,
-> -			devfreq->profile->max_state,
-> -			sizeof(*devfreq->time_in_state),
-> +	devfreq->stats->time_in_state = devm_kcalloc(&devfreq->dev,
-> +			devfreq->stats->max_state,
-> +			sizeof(*devfreq->stats->time_in_state),
->  			GFP_KERNEL);
-
-Actually, this patch will be conflict with patch[1].
-[1] https://www.spinics.net/lists/arm-kernel/msg768822.html
-
-First of all, I have to merge patches[1][2] for the devfreq pm-qos
-during v5.5-rc period. It requires the linux-pm's maintainer.
-[2] https://www.spinics.net/lists/arm-kernel/msg769761.html
-
-After finishing the job[1][2], I'll merge this patch
-if finished the review of this patch. Just share the possible merge
-conflict to you.
-
-
-> -	if (!devfreq->time_in_state) {
-> +	if (!devfreq->stats->time_in_state) {
->  		mutex_unlock(&devfreq->lock);
->  		err = -ENOMEM;
->  		goto err_devfreq;
->  	}
->  
-> -	devfreq->last_stat_updated = get_jiffies_64();
-> +	devfreq->stats->last_stat_updated = get_jiffies_64();
->  
->  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
->  
-> @@ -1435,9 +1445,10 @@ static ssize_t trans_stat_show(struct device *dev,
->  			       struct device_attribute *attr, char *buf)
->  {
->  	struct devfreq *devfreq = to_devfreq(dev);
-> +	struct devfreq_stats *stats = devfreq->stats;
-> +	unsigned int max_state = stats->max_state;
->  	ssize_t len;
->  	int i, j;
-> -	unsigned int max_state = devfreq->profile->max_state;
->  
->  	if (max_state == 0)
->  		return sprintf(buf, "Not Supported.\n");
-> @@ -1454,28 +1465,28 @@ static ssize_t trans_stat_show(struct device *dev,
->  	len += sprintf(buf + len, "           :");
->  	for (i = 0; i < max_state; i++)
->  		len += sprintf(buf + len, "%10lu",
-> -				devfreq->profile->freq_table[i]);
-> +				stats->freq_table[i]);
->  
->  	len += sprintf(buf + len, "   time(ms)\n");
->  
->  	for (i = 0; i < max_state; i++) {
-> -		if (devfreq->profile->freq_table[i]
-> +		if (stats->freq_table[i]
->  					== devfreq->previous_freq) {
->  			len += sprintf(buf + len, "*");
->  		} else {
->  			len += sprintf(buf + len, " ");
->  		}
->  		len += sprintf(buf + len, "%10lu:",
-> -				devfreq->profile->freq_table[i]);
-> +				stats->freq_table[i]);
->  		for (j = 0; j < max_state; j++)
->  			len += sprintf(buf + len, "%10u",
-> -				devfreq->trans_table[(i * max_state) + j]);
-> +				stats->trans_table[(i * max_state) + j]);
->  		len += sprintf(buf + len, "%10llu\n", (u64)
-> -			jiffies64_to_msecs(devfreq->time_in_state[i]));
-> +			jiffies64_to_msecs(stats->time_in_state[i]));
->  	}
->  
->  	len += sprintf(buf + len, "Total transition : %u\n",
-> -					devfreq->total_trans);
-> +					stats->total_trans);
->  	return len;
->  }
->  
-> @@ -1484,16 +1495,17 @@ static ssize_t trans_stat_store(struct device *dev,
->  				const char *buf, size_t count)
->  {
->  	struct devfreq *df = to_devfreq(dev);
-> -	unsigned int cnt = df->profile->max_state;
-> +	struct devfreq_stats *stats = df->stats;
-> +	unsigned int cnt = stats->max_state;
->  
->  	if (cnt == 0)
->  		return count;
->  
->  	mutex_lock(&df->lock);
-> -	memset(df->time_in_state, 0, cnt * sizeof(u64));
-> -	memset(df->trans_table, 0, cnt * cnt * sizeof(int));
-> -	df->last_stat_updated = get_jiffies_64();
-> -	df->total_trans = 0;
-> +	memset(stats->time_in_state, 0, cnt * sizeof(u64));
-> +	memset(stats->trans_table, 0, cnt * cnt * sizeof(int));
-> +	stats->last_stat_updated = get_jiffies_64();
-> +	stats->total_trans = 0;
->  	mutex_unlock(&df->lock);
->  
->  	return count;
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index b81a86e47fb9..2715719924e7 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -106,6 +106,25 @@ struct devfreq_dev_profile {
->  	unsigned int max_state;
->  };
->  
-> +/**
-> + * struct devfreq_stats - Devfreq's transitions stats counters
-
-Devfreq's transitions stats counters -> Statistics of devfreq device behavior
-
-> + * @freq_table:		List of frequencies in ascending order.
-> + * @max_state:		The size of freq_table.
-> + * @total_trans:	Number of devfreq transitions.
-> + * @trans_table:	Statistics of devfreq transitions.
-> + * @time_in_state:	Statistics of devfreq states.
-> + * @last_stat_updated:	The last time stats were updated.
-> + */
-> +struct devfreq_stats {
-> +	unsigned long *freq_table;
-> +	unsigned int max_state;
-
-Acutally, I'm sorry I has not yet completely agreed to move
-'freq_table and 'max_state' from struct devfreq to struct devfreq_stats.
-It has not any critical benefit and any problem.
-So, don't move 'freq_table' and 'max_state'. 
-
-> +
-> +	unsigned int total_trans;
-> +	unsigned int *trans_table;
-> +	u64 *time_in_state;
-> +	unsigned long long last_stat_updated;
-> +};
-> +
->  /**
->   * struct devfreq - Device devfreq structure
->   * @node:	list node - contains the devices with devfreq that have been
-> @@ -131,10 +150,7 @@ struct devfreq_dev_profile {
->   * @suspend_freq:	 frequency of a device set during suspend phase.
->   * @resume_freq:	 frequency of a device set in resume phase.
->   * @suspend_count:	 suspend requests counter for a device.
-> - * @total_trans:	Number of devfreq transitions
-> - * @trans_table:	Statistics of devfreq transitions
-> - * @time_in_state:	Statistics of devfreq states
-> - * @last_stat_updated:	The last time stat updated
-> + * @stats:	Statistics of devfreq transitions and states times
-
-Statistics of devfreq transitions and states times
--> Statistics of devfreq device behavior
-
->   * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
->   *
->   * This structure stores the devfreq information for a give device.
-> @@ -171,11 +187,8 @@ struct devfreq {
->  	unsigned long resume_freq;
->  	atomic_t suspend_count;
->  
-> -	/* information for device frequency transition */
-> -	unsigned int total_trans;
-> -	unsigned int *trans_table;
-> -	u64 *time_in_state;
-> -	unsigned long long last_stat_updated;
-> +	/* information for device frequency transitions */
-> +	struct devfreq_stats *stats;
-
-Each devfreq has only one stats structure always. Don't need to define
-it with pointer type. It is enough to define as following without pointer type:
-
-	struct devfreq_stats stats;
-
->  
->  	struct srcu_notifier_head transition_notifier_list;
->  };
 > 
-
-
+>> Basically, I agree this approach. But, I'm wondering
+>> the existing binding method between 'bus_leftbus' and 'bus_dmc'.
+>> From before, I thought that devfreq framework need to
+>> enhance the binding method between parent devfreq device
+>> and passive devfreq device instead of 'devfreq' property.
+>>
+>> On this patch, use the same binding way between
+>> 'bus_leftbus' and 'bus_dmc' with 'parent' property
+>> as following:
+>>
+>> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+>> @@ -106,6 +106,7 @@
+>>  &bus_leftbus {
+>>  	devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+>>  	vdd-supply = <&buck3_reg>;
+>> +	parent = <&bus_dmc>;
+>>  	status = "okay";
+>>  };
+>>
+>> I'm not sure about continuing to use this method for new feature.
+>> If possible, hope to replace the existing binding style
+>> with new method like of_graph. Actually, I don't know the correct method.
+>>
+>>
+>> On 19. 9. 19. 오후 11:22, Artur Świgoń wrote:
+>>> From: Artur Świgoń <a.swigon@partner.samsung.com>
+>>>
+>>> This patch adds interconnect functionality to the exynos-bus devfreq
+>>> driver.
+>>>
+>>> The SoC topology is a graph (or, more specifically, a tree) and most of
+>>> its edges are taken from the devfreq parent-child hierarchy (cf.
+>>> Documentation/devicetree/bindings/devfreq/exynos-bus.txt). Due to
+>>> unspecified relative probing order, -EPROBE_DEFER may be propagated to
+>>> guarantee that a child is probed before its parent.
+>>>
+>>> Each bus is now an interconnect provider and an interconnect node as well
+>>> (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registers
+>>> itself as a node. Node IDs are not hardcoded but rather assigned at
+>>> runtime, in probing order (subject to the above-mentioned exception
+>>> regarding relative order). This approach allows for using this driver with
+>>> various Exynos SoCs.
+>>>
+>>> Frequencies requested via the interconnect API for a given node are
+>>> propagated to devfreq using dev_pm_qos_update_request(). Please note that
+>>> it is not an error when CONFIG_INTERCONNECT is 'n', in which case all
+>>> interconnect API functions are no-op.
+>>>
+>>> Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
+>>> ---
+>>>  drivers/devfreq/exynos-bus.c | 153 +++++++++++++++++++++++++++++++++++
+>>>  1 file changed, 153 insertions(+)
+>>>
+>>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+>>> index 8d44810cac69..e0232202720d 100644
+>>> --- a/drivers/devfreq/exynos-bus.c
+>>> +++ b/drivers/devfreq/exynos-bus.c
+>>> @@ -14,14 +14,19 @@
+>>>  #include <linux/devfreq-event.h>
+>>>  #include <linux/device.h>
+>>>  #include <linux/export.h>
+>>> +#include <linux/idr.h>
+>>> +#include <linux/interconnect-provider.h>
+>>>  #include <linux/module.h>
+>>>  #include <linux/of.h>
+>>>  #include <linux/pm_opp.h>
+>>> +#include <linux/pm_qos.h>
+>>>  #include <linux/platform_device.h>
+>>>  #include <linux/regulator/consumer.h>
+>>>  
+>>>  #define DEFAULT_SATURATION_RATIO	40
+>>>  
+>>> +#define icc_units_to_khz(x) ((x) / 8)
+>>> +
+>>>  struct exynos_bus {
+>>>  	struct device *dev;
+>>>  
+>>> @@ -35,6 +40,12 @@ struct exynos_bus {
+>>>  	struct opp_table *opp_table;
+>>>  	struct clk *clk;
+>>>  	unsigned int ratio;
+>>> +
+>>> +	/* One provider per bus, one node per provider */
+>>> +	struct icc_provider provider;
+>>> +	struct icc_node *node;
+>>> +
+>>> +	struct dev_pm_qos_request qos_req;
+>>>  };
+>>>  
+>>>  /*
+>>> @@ -59,6 +70,13 @@ exynos_bus_ops_edev(enable_edev);
+>>>  exynos_bus_ops_edev(disable_edev);
+>>>  exynos_bus_ops_edev(set_event);
+>>>  
+>>> +static int exynos_bus_next_id(void)
+>>> +{
+>>> +	static DEFINE_IDA(exynos_bus_icc_ida);
+>>> +
+>>> +	return ida_alloc(&exynos_bus_icc_ida, GFP_KERNEL);
+>>> +}
+>>> +
+>>>  static int exynos_bus_get_event(struct exynos_bus *bus,
+>>>  				struct devfreq_event_data *edata)
+>>>  {
+>>> @@ -171,6 +189,38 @@ static void exynos_bus_passive_exit(struct device *dev)
+>>>  	clk_disable_unprepare(bus->clk);
+>>>  }
+>>>  
+>>> +static int exynos_bus_icc_set(struct icc_node *src, struct icc_node *dst)
+>>> +{
+>>> +	struct exynos_bus *src_bus = src->data, *dst_bus = dst->data;
+>>> +	s32 src_freq = icc_units_to_khz(src->avg_bw);
+>>> +	s32 dst_freq = icc_units_to_khz(dst->avg_bw);
+>>> +
+>>> +	dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
+>>> +	dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int exynos_bus_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>>> +				    u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
+>>> +{
+>>> +	*agg_avg += avg_bw;
+>>> +	*agg_peak = max(*agg_peak, peak_bw);
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_args *spec,
+>>> +					     void *data)
+>>> +{
+>>> +	struct exynos_bus *bus = data;
+>>> +
+>>> +	if (spec->np != bus->dev->of_node)
+>>> +		return ERR_PTR(-EINVAL);
+>>> +
+>>> +	return bus->node;
+>>> +}
+>>> +
+>>>  static int exynos_bus_parent_parse_of(struct device_node *np,
+>>>  					struct exynos_bus *bus)
+>>>  {
+>>> @@ -366,6 +416,101 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+>>>  	return 0;
+>>>  }
+>>>  
+>>> +static int exynos_bus_icc_connect(struct exynos_bus *bus)
+>>> +{
+>>> +	struct device_node *np = bus->dev->of_node;
+>>> +	struct devfreq *parent_devfreq;
+>>> +	struct icc_node *parent_node = NULL;
+>>> +	struct of_phandle_args args;
+>>> +	int ret = 0;
+>>> +
+>>> +	parent_devfreq = devfreq_get_devfreq_by_phandle(bus->dev, 0);
+>>> +	if (!IS_ERR(parent_devfreq)) {
+>>> +		struct exynos_bus *parent_bus;
+>>> +
+>>> +		parent_bus = dev_get_drvdata(parent_devfreq->dev.parent);
+>>> +		parent_node = parent_bus->node;
+>>> +	} else {
+>>> +		/* Look for parent in DT */
+>>> +		int num = of_count_phandle_with_args(np, "parent",
+>>> +						     "#interconnect-cells");
+>>> +		if (num != 1)
+>>> +			goto out; /* 'parent' is optional */
+>>> +
+>>> +		ret = of_parse_phandle_with_args(np, "parent",
+>>> +						 "#interconnect-cells",
+>>> +						 0, &args);
+>>> +		if (ret < 0)
+>>> +			goto out;
+>>> +
+>>> +		of_node_put(args.np);
+>>> +
+>>> +		parent_node = of_icc_get_from_provider(&args);
+>>> +		if (IS_ERR(parent_node)) {
+>>> +			/* May be -EPROBE_DEFER */
+>>> +			ret = PTR_ERR(parent_node);
+>>> +			goto out;
+>>> +		}
+>>> +	}
+>>
+>>
+>>
+>>> +
+>>> +	ret = icc_link_create(bus->node, parent_node->id);
+>>> +
+>>> +out:
+>>> +	return ret;
+>>> +}
+>>> +
+>>> +static int exynos_bus_icc_init(struct exynos_bus *bus)
+>>> +{
+>>> +	struct device *dev = bus->dev;
+>>> +	struct icc_provider *provider = &bus->provider;
+>>> +	struct icc_node *node;
+>>> +	int id, ret;
+>>> +
+>>> +	/* Initialize the interconnect provider */
+>>> +	provider->set = exynos_bus_icc_set;
+>>> +	provider->aggregate = exynos_bus_icc_aggregate;
+>>> +	provider->xlate = exynos_bus_icc_xlate;
+>>> +	provider->dev = dev;
+>>> +	provider->data = bus;
+>>> +
+>>> +	ret = icc_provider_add(provider);
+>>> +	if (ret < 0)
+>>> +		goto out;
+>>> +
+>>> +	ret = id = exynos_bus_next_id();
+>>> +	if (ret < 0)
+>>> +		goto err_node;
+>>> +
+>>> +	node = icc_node_create(id);
+>>> +	if (IS_ERR(node)) {
+>>> +		ret = PTR_ERR(node);
+>>> +		goto err_node;
+>>> +	}
+>>> +
+>>> +	bus->node = node;
+>>> +	node->name = dev->of_node->name;
+>>> +	node->data = bus;
+>>> +	icc_node_add(node, provider);
+>>> +
+>>> +	ret = exynos_bus_icc_connect(bus);
+>>> +	if (ret < 0)
+>>> +		goto err_connect;
+>>> +
+>>> +	ret = dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus->qos_req,
+>>> +				     DEV_PM_QOS_MIN_FREQUENCY, 0);
+>>> +
+>>> +out:
+>>> +	return ret;
+>>> +
+>>> +err_connect:
+>>> +	icc_node_del(node);
+>>> +	icc_node_destroy(id);
+>>> +err_node:
+>>> +	icc_provider_del(provider);
+>>> +
+>>> +	return ret;
+>>> +}
+>>> +
+>>>  static int exynos_bus_probe(struct platform_device *pdev)
+>>>  {
+>>>  	struct device *dev = &pdev->dev;
+>>> @@ -415,6 +560,14 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>>>  	if (ret < 0)
+>>>  		goto err;
+>>>  
+>>> +	/*
+>>> +	 * Initialize interconnect provider. A return value of -ENOTSUPP means
+>>> +	 * that CONFIG_INTERCONNECT is disabled.
+>>> +	 */
+>>> +	ret = exynos_bus_icc_init(bus);
+>>> +	if (ret < 0 && ret != -ENOTSUPP)
+>>> +		goto err;
+>>> +
+>>>  	max_state = bus->devfreq->profile->max_state;
+>>>  	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
+>>>  	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
+>>>
+>>
+> 
+> Best regards,
+> 
 
 
 -- 
