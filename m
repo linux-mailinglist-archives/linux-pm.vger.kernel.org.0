@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91E11443F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 17:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9141D1144F6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 17:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbfLEQAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 11:00:25 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:56303 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729022AbfLEQAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 11:00:25 -0500
-Received: by mail-wm1-f67.google.com with SMTP id q9so4437427wmj.5
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 08:00:23 -0800 (PST)
+        id S1729535AbfLEQi4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 11:38:56 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39975 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbfLEQiz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 11:38:55 -0500
+Received: by mail-wr1-f66.google.com with SMTP id c14so4407752wrn.7
+        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 08:38:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YnnvnRu2PoYgPdq942eyS3Ax5hU9+AGDn/94VxefpYc=;
-        b=dHvUrY3jJEMo8JkEfiNhbcY+Lgr/g3UgFCURKa2aMOznUXvBnj2msoM6Der6rMaZMC
-         lYjNqKplHuaH612WbK/eIygcFkQqN5W4Mdseb1+aDEpJOvHitX70V8XwLcoEG+cHztiD
-         qpL5RqB9xyIA0GxdYQqEH2I6HHD+YYMuHb5RwUnvCYE1tYCPVSd2Jzl9eCNg8hBjc3Gd
-         pu5Mh+UhEonfyPSAauB/fdmHAf6fwImDkdBHQUuYt021rtORT6a/wyWM8Pzyq5zg0Gix
-         24u/q2gQUkFSpKPdE4TS6YXIahB6CNZLCn8vCcCjZXXy/oGuViQxqn/EnXvbu+RuNLSW
-         DxHQ==
+        bh=+rPpV85Ioqv2xtks5OONWqK+n5i6dViTlGicJhAqFfY=;
+        b=yRW0ila80HkXR5BZvLIDkxLL+sEVXfHq8Eg/gymPOM+KCLryjWVyIq9c1mgSciZMwv
+         q2GTER2tsekvw/Etk/BArSlSi1jE7iIvOMh6nMX8dDhSBD5algPqnoUAliQXfkDguyZq
+         tWAPYUBkr1m7+d4QKUfITKjxuBFP1xaF1k2ouuBe9pzosSX2ekntzu0YuIHAgP0ZfVrI
+         CmPKWJD+D+wl5h30x64ThbDDKYSegClcXt3AdCZ3VuxVB3wVCZdl3AkU56+kFYb6mnFD
+         xGAg5JYfW3gNngyBju1j5prq0ua1kprxlragbb+mql8f9ewVpoajHXoWUO40zHMxnZzf
+         VuqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=YnnvnRu2PoYgPdq942eyS3Ax5hU9+AGDn/94VxefpYc=;
-        b=BlP+UYsuj89SMeR4zkd2LF85X/pelY952CQ3HU0EgDznRQUotqlfqhIdF/i5ov6k5o
-         tQzSPjOHVHiDabBSAy8kLmTqUolbMN07PSibZdv2rxtAfDFJ1UC3TaCXbCq9ameERvPg
-         lbhRKF3iA1rN7B9auPfongzab1WEI3D+F6ti4dkL62JL6Ty+dxP/1co6z2IL+PlRJm3h
-         wkQIEnTVZhMnvBdnFYDh+AMGQ14QmB7eUrh1y/acwhAsHlP4opVbirASVQBd52vPh6tw
-         Y/mS1ylYSUySuRRWrkntZQF8Tg9HD/JU/z10YTjM1wL7+xRWQU7wVB1SUZEp3ppHzyZR
-         +ebg==
-X-Gm-Message-State: APjAAAViluP0kyOwckVub+e6KHr7P+/AAyUeLY6QK9kaVZeDbOkBt+FM
-        bifhwTDs0Gx89QiOZ5aXytnSLw==
-X-Google-Smtp-Source: APXvYqzQmAMVggpcJ2Il7o1K/oNH2/lKa1KT/fPP47Pa4O6naGVAir4yMUZcakBlKewfYJgm2+dDdw==
-X-Received: by 2002:a1c:8095:: with SMTP id b143mr6307851wmd.7.1575561622159;
-        Thu, 05 Dec 2019 08:00:22 -0800 (PST)
+        bh=+rPpV85Ioqv2xtks5OONWqK+n5i6dViTlGicJhAqFfY=;
+        b=Vo65w6zXKzdRJW45Pz5ummvAVUis14iWv8lZaJSryWYayklszFlfrETWIq8030YDgG
+         2fAQ+/Vdh9gicYn1frB5NrhD1PRzyBUGFhAjq4dMb995i8pyWjnHRD9bpnVqCX4p6TKI
+         EIncF8uMQNvbWme5VARJZT3ykNPSxuhxyDhNIvmfsWHtDdKrE+tFCc8lYxhaKAl4wYgl
+         AuWay6MS5oXUfPXIV+s6vPwNaKA0mIRSQroIms6trWluZZyV1Cnrel12WtHDP2fOk06H
+         yAebiu5zLVW4uUOuS6CedRTmJ02lOQsoCrPE4tqupMNddxSnSAJrGHSazUyxx4bEm2YD
+         u7dg==
+X-Gm-Message-State: APjAAAWXEwIVJK2+QVNLimv5xLQj4RmPJ4EU7DfmdQlC5GfhtXsVMZhB
+        a6MJU+dI4w4DEq+U4zEKIqhtcg==
+X-Google-Smtp-Source: APXvYqwyMoJrdKNhs+fUTVnbzv+O/QQJtlYzjU+/jSJsY2EZgVlKFOJ3IJS6GGGHadEc2+MywNCOKA==
+X-Received: by 2002:adf:f80c:: with SMTP id s12mr10956740wrp.1.1575563932666;
+        Thu, 05 Dec 2019 08:38:52 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:24c3:ebb3:9dd5:81c6? ([2a01:e34:ed2f:f020:24c3:ebb3:9dd5:81c6])
-        by smtp.googlemail.com with ESMTPSA id z189sm315498wmc.2.2019.12.05.08.00.20
+        by smtp.googlemail.com with ESMTPSA id m8sm417890wmf.8.2019.12.05.08.38.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2019 08:00:21 -0800 (PST)
-Subject: Re: [PATCH] [RESEND] arm64: dts: mt8173: Add dynamic power node.
-To:     michael.kao@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        Thu, 05 Dec 2019 08:38:51 -0800 (PST)
+Subject: Re: [PATCH v2 0/8] Add Mediatek thermal dirver and dtsi
+To:     "michael.kao" <michael.kao@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        linux-pm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Dawei Chien <dawei.chien@mediatek.com>
-References: <20191122090610.17015-1-michael.kao@mediatek.com>
+        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1557494826-6044-1-git-send-email-michael.kao@mediatek.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -112,12 +111,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <4aaf8cee-eaa2-5de4-37f0-094b9bc8da22@linaro.org>
-Date:   Thu, 5 Dec 2019 17:00:20 +0100
+Message-ID: <98c34033-91e0-ce9e-3245-c9b8ed2745f7@linaro.org>
+Date:   Thu, 5 Dec 2019 17:38:49 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191122090610.17015-1-michael.kao@mediatek.com>
+In-Reply-To: <1557494826-6044-1-git-send-email-michael.kao@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -127,62 +126,36 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Michael,
+What is the status of this series? Shouldn't we have a V3?
 
-
-On 22/11/2019 10:06, michael.kao@mediatek.com wrote:
-> From: "michael.kao" <michael.kao@mediatek.com>
+On 10/05/2019 15:26, michael.kao wrote:
+> This patchset supports for MT8183 chip to mtk_thermal.c.
+> Add thermal zone of all the thermal sensor in SoC for
+> another get temperatrue. They don't need to thermal throttle.
+> And we bind coolers for thermal zone nodes of cpu_thermal.
 > 
-> This device node is for calculating dynamic power in mW.
-> Since mt8173 has two clusters, there are two dynamic power
-> coefficient as well.
-
-Are you sure about the values? Usually, Big is ~x4 little, here it is ~x2.
-
-
-> Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
-> Signed-off-by: Michael.Kao <michael.kao@mediatek.com>
+> This patch series base on these patches [1][2][3][4].
 > 
-> ---
->  arch/arm64/boot/dts/mediatek/mt8173.dtsi | 4 ++++
->  1 file changed, 4 insertions(+)
+> [1]support for reading chip ID and efuse (https://patchwork.kernel.org/patch/10902131/)
+> [2]arm64: dts: mt8183: Add reset-cells in infracfg (https://patchwork.kernel.org/patch/10908653/)
+> [3]clk: reset: Modify reset-controller driver (https://patchwork.kernel.org/patch/10908657/)
+> [4]PM / AVS: SVS: Introduce SVS engine (https://patchwork.kernel.org/patch/10923289/)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> index 15f1842f6df3..b03ca5a71338 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> @@ -157,6 +157,7 @@
->  			enable-method = "psci";
->  			cpu-idle-states = <&CPU_SLEEP_0>;
->  			#cooling-cells = <2>;
-> +			dynamic-power-coefficient = <263>;
->  			clocks = <&infracfg CLK_INFRA_CA53SEL>,
->  				 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  			clock-names = "cpu", "intermediate";
-> @@ -170,6 +171,7 @@
->  			enable-method = "psci";
->  			cpu-idle-states = <&CPU_SLEEP_0>;
->  			#cooling-cells = <2>;
-> +			dynamic-power-coefficient = <263>;
->  			clocks = <&infracfg CLK_INFRA_CA53SEL>,
->  				 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  			clock-names = "cpu", "intermediate";
-> @@ -183,6 +185,7 @@
->  			enable-method = "psci";
->  			cpu-idle-states = <&CPU_SLEEP_0>;
->  			#cooling-cells = <2>;
-> +			dynamic-power-coefficient = <530>;
->  			clocks = <&infracfg CLK_INFRA_CA72SEL>,
->  				 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  			clock-names = "cpu", "intermediate";
-> @@ -196,6 +199,7 @@
->  			enable-method = "psci";
->  			cpu-idle-states = <&CPU_SLEEP_0>;
->  			#cooling-cells = <2>;
-> +			dynamic-power-coefficient = <530>;
->  			clocks = <&infracfg CLK_INFRA_CA72SEL>,
->  				 <&apmixedsys CLK_APMIXED_MAINPLL>;
->  			clock-names = "cpu", "intermediate";
+> Matthias Kaehlcke (2):
+> 	arm64: dts: mt8183: Configure CPU cooling
+> 	arm64: dts: mt8183: Increase polling frequency for CPU thermal zone
+> 
+> Michael Kao (6):
+> 	arm64: dts: mt8183: add thermal zone node
+> 	arm64: dts: mt8183: add/update dynamic power coefficients
+> 	arm64: dts: mt8183: Add #cooling-cells to CPU nodes
+> 	thermal: mediatek: mt8183: fix bank number settings
+> 	thermal: mediatek: add another get_temp ops for thermal sensors
+> 	thermal: mediatek: use spinlock to protect PTPCORESEL
+> 
+> arch/arm64/boot/dts/mediatek/mt8183.dtsi | 158 +++++++++++++++++++++++++++++++
+> drivers/thermal/mtk_thermal.c            |  82 +++++++++++++---
+> 2 files changed, 226 insertions(+), 14 deletions(-)
 > 
 
 
