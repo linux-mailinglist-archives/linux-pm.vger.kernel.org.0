@@ -2,151 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF89113AB6
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 05:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E609C113ACA
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 05:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728671AbfLEEOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 23:14:51 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:34036 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728132AbfLEEOv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 23:14:51 -0500
-Received: by mail-vs1-f65.google.com with SMTP id g15so1456291vsf.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 20:14:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YqFPHdq2JLprnKO5VwIvwEO3N5V/VX0CxYcPwY52gV4=;
-        b=vtCXI6eyS+2xdwHXSvFzMOB8Chgw85vfzPkdgVzTNU6F8HGvjWTq32MwsgZhxECGj0
-         3LfOWDNTWmx+TVkopEKRGby1mg9dlygeoCzquDCpKnj6fe4PwPuPKiqkuaJFvG/RjWEM
-         YU0GKlXnektfcf8dq11uUiPlZo9dwThQCahskH5M3cZq1VZ6i/saNFdkitvoHY9aAP/i
-         aZJJyeAMHPwe6vgt/3W+FpNXpj0jrR9Ha+DHDBO+rHil+UQWZ74lq0IMEFOo/YoDctA/
-         R8lX2rMbeQeKm75uiinD7K99xONw8jrZLCtgc8uxGd9RXgHrDTpm8zgYIfXr1EZXPYUm
-         ++7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YqFPHdq2JLprnKO5VwIvwEO3N5V/VX0CxYcPwY52gV4=;
-        b=acJuRg4h3p00A4riHnItK+veLtX+b/F+4a6VzeLWs9coqYgcb2uMRLV/ZFI1thgrPM
-         FW5ms0ktrgh6CvkUUAzre1tfHoLIwyKWdkM5wyOzyccrxjf55haAf/93q4cdArEwgZBP
-         yZUpQg3ciVRM7trVvw5VQGeWlHjcFfXfGdT2mEITOZWou8J4wEgNsTfmfbWNufuyPVjo
-         Mzz/LxlmK95coWuR2pl2iHFZvODKtav568554j4J8EvXFjDrWHqkviqAMkhtkFyOj8n+
-         GRLfiPxWfAgEVmpHLjIzy9Ne3SpKnEK05ZnyuKKyVPuCTqauCLCfp+C1vqoMXGeoc0ws
-         0gNg==
-X-Gm-Message-State: APjAAAXgSl9POB7hiNo7PW4kJEQqwrcdEPU2NXKvoI5TrLA8S2qPMvIa
-        OXIRy63DXwek8haMi+yzxSCUffMSGeVWe2ZIfV4RGw==
-X-Google-Smtp-Source: APXvYqxBdkwA3F7mInycga4o2n4t9e4RP0Hx+NDWf62MpAtgLQ71+O7tfZuLZUdPCDHljQPLDy99hXq9njxeRo82N2I=
-X-Received: by 2002:a05:6102:1261:: with SMTP id q1mr4250512vsg.182.1575519288928;
- Wed, 04 Dec 2019 20:14:48 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHLCerOD2wOJq7QNGBOcLvkMz4wvc1+6Hk2+ZD__NFged3tLcw@mail.gmail.com>
- <20191204215618.125826-1-wvw@google.com> <20191204215618.125826-3-wvw@google.com>
-In-Reply-To: <20191204215618.125826-3-wvw@google.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Thu, 5 Dec 2019 09:44:38 +0530
-Message-ID: <CAHLCerNGYy55vFVJs5u_YZ=xLu2jWwtugLkvBVjEwgP+_B0Y3g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: create softlink by name for thermal_zone
- and cooling_device
-To:     Wei Wang <wvw@google.com>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+        id S1728490AbfLEE1v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 23:27:51 -0500
+Received: from mga18.intel.com ([134.134.136.126]:40139 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728374AbfLEE1v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Dec 2019 23:27:51 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Dec 2019 20:27:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,279,1571727600"; 
+   d="scan'208";a="243106642"
+Received: from yuanwan1-mobl.ccr.corp.intel.com ([10.249.174.225])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Dec 2019 20:27:48 -0800
+Message-ID: <6d43c93a748872293df489d397f894b77b221bc9.camel@intel.com>
+Subject: Re: linux-next: Tree for Nov 15 (thermal:
+ THERMAL_GOV_POWER_ALLOCATOR)
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Amit Kucheria <amit.kucheria@verdurent.com>, qperret@google.com
+Date:   Thu, 05 Dec 2019 12:27:47 +0800
+In-Reply-To: <9436e207-8a65-f01b-c348-32a8a00f03d4@infradead.org>
+References: <20191115190525.77efdf6c@canb.auug.org.au>
+         <247cd41e-a07b-adf0-4ec2-6467f0257837@infradead.org>
+         <9436e207-8a65-f01b-c348-32a8a00f03d4@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 5, 2019 at 3:26 AM Wei Wang <wvw@google.com> wrote:
->
-> The paths thermal_zone%d and cooling_device%d are not intuitive and the
-> numbers are subject to change due to device tree change. This usually
-> leads to tree traversal in userspace code.
-> The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
-> cooling_device respectively.
->
-> Signed-off-by: Wei Wang <wvw@google.com>
+On Wed, 2019-12-04 at 08:25 -0800, Randy Dunlap wrote:
+> On 11/15/19 3:44 PM, Randy Dunlap wrote:
+> > On 11/15/19 12:05 AM, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Changes since 20191114:
+> > > 
+> > 
+> > on i386:
+> > 
+> > WARNING: unmet direct dependencies detected for
+> > THERMAL_GOV_POWER_ALLOCATOR
+> >   Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
+> >   Selected by [y]:
+> >   - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
+> > 
+> > 
+> > THERMAL_GOV_POWER_ALLOCATOR is selected by
+> > THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+> > even though ENERGY_MODEL is not set/enabled.
+> > 
+> > 
+> 
+> This Kconfig warning is still happening in linux-next of 20191204.
+> 
+I overlooked the original report probably because I was not CCed.
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+This is introduced by commit a4e893e802e6("thermal: cpu_cooling:
+Migrate to using the EM framework") which adds the dependency of
+ENERGY_MODEL for THERMAL_GOV_POWER_ALLOCATOR.
 
-> ---
->  drivers/thermal/thermal_core.c | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 64fbb59c2f44..4f55e3f16265 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -22,6 +22,7 @@
->  #include <net/netlink.h>
->  #include <net/genetlink.h>
->  #include <linux/suspend.h>
-> +#include <linux/kobject.h>
->
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/thermal.h>
-> @@ -46,6 +47,8 @@ static DEFINE_MUTEX(poweroff_lock);
->
->  static atomic_t in_suspend;
->  static bool power_off_triggered;
-> +static struct kobject *cdev_link_kobj;
-> +static struct kobject *tz_link_kobj;
->
->  static struct thermal_governor *def_governor;
->
-> @@ -997,9 +1000,15 @@ __thermal_cooling_device_register(struct device_node *np,
->                 return ERR_PTR(result);
->         }
->
-> -       /* Add 'this' new cdev to the global cdev list */
-> +       /* Add 'this' new cdev to the global cdev list and create link*/
->         mutex_lock(&thermal_list_lock);
->         list_add(&cdev->node, &thermal_cdev_list);
-> +       if (!cdev_link_kobj)
-> +               cdev_link_kobj = kobject_create_and_add("cdev-by-name",
-> +                                               cdev->device.kobj.parent);
-> +       if (!cdev_link_kobj || sysfs_create_link(cdev_link_kobj,
-> +                                               &cdev->device.kobj, cdev->type))
-> +               dev_err(&cdev->device, "Failed to create cdev-by-name link\n");
->         mutex_unlock(&thermal_list_lock);
->
->         /* Update binding information for 'this' new cdev */
-> @@ -1165,6 +1174,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->                         }
->                 }
->         }
-> +       if (cdev_link_kobj)
-> +               sysfs_remove_link(cdev_link_kobj, cdev->type);
->
->         mutex_unlock(&thermal_list_lock);
->
-> @@ -1348,6 +1359,12 @@ thermal_zone_device_register(const char *type, int trips, int mask,
->
->         mutex_lock(&thermal_list_lock);
->         list_add_tail(&tz->node, &thermal_tz_list);
-> +       if (!tz_link_kobj)
-> +               tz_link_kobj = kobject_create_and_add("tz-by-name",
-> +                                               tz->device.kobj.parent);
-> +       if (!tz_link_kobj || sysfs_create_link(tz_link_kobj,
-> +                                               &tz->device.kobj, tz->type))
-> +               dev_err(&tz->device, "Failed to create tz-by-name link\n");
->         mutex_unlock(&thermal_list_lock);
->
->         /* Bind cooling devices for this zone */
-> @@ -1419,6 +1436,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
->                         }
->                 }
->         }
-> +       if (tz_link_kobj)
-> +               sysfs_remove_link(tz_link_kobj, tz->type);
->
->         mutex_unlock(&thermal_list_lock);
->
-> --
-> 2.24.0.393.g34dc348eaf-goog
->
+To fix this, it's better to make THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+depends on THERMAL_GOV_POWER_ALLOCATOR instead.
+
+Please confirm the problem is fixed by below patch.
+
+thanks,
+rui
+
+From c9429f6e28ea2219686a4294d39f015ba373774b Mon Sep 17 00:00:00 2001
+From: Zhang Rui <rui.zhang@intel.com>
+Date: Thu, 5 Dec 2019 12:17:07 +0800
+Subject: [PATCH] thermal: fix a Kconfig warning
+
+Currently, THERMAL_GOV_POWER_ALLOCATOR is selected by
+THERMAL_DEFAULT_GOV_POWER_ALLOCATOR even if it has some unmet
+dependencies.
+
+This causes the Kconfig warning
+   WARNING: unmet direct dependencies detected for
+      THERMAL_GOV_POWER_ALLOCATOR
+      Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
+      Selected by [y]:
+      - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
+
+Fix the problem by making THERMAL_DEFAULT_GOV_POWER_ALLOCATOR depends on
+THERMAL_GOV_POWER_ALLOCATOR instead.
+
+Fixes: a4e893e802e6("thermal: cpu_cooling: Migrate to using the EM framework")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/thermal/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 59b79fc48266..79b27865c6f4 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -108,7 +108,7 @@ config THERMAL_DEFAULT_GOV_USER_SPACE
+ 
+ config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+ 	bool "power_allocator"
+-	select THERMAL_GOV_POWER_ALLOCATOR
++	depends on THERMAL_GOV_POWER_ALLOCATOR
+ 	help
+ 	  Select this if you want to control temperature based on
+ 	  system and device power allocation. This governor can only
+-- 
+2.17.1
+
+
+
