@@ -2,192 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E63114677
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 19:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CA9114678
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 19:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729047AbfLESC4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 13:02:56 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41408 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbfLESC4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 13:02:56 -0500
-Received: by mail-pf1-f194.google.com with SMTP id s18so1958280pfd.8
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 10:02:55 -0800 (PST)
+        id S1729154AbfLESDC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 13:03:02 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42759 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbfLESDC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 13:03:02 -0500
+Received: by mail-wr1-f66.google.com with SMTP id a15so4714965wrf.9
+        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 10:03:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NntSUoTKX+q7nGQOHdsVUrXLAyg3WVr9iYiJ9osLXaU=;
-        b=QaH9pSXa0aFHDT/rdpGomSfvyEcjfPzyM1IESGhiv0uXXJNybSdQv2rdA3gSC+gl6A
-         R/WS5UokvUczEkcQnWoJ3I67VSPi7IZJs2FNE6YNYzH1C46pRANxKz19t3Z6qn7EP3I4
-         J4fi0BqApaI7+Cz3QjSEVzI8b2u2ezbiR2BJA=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PbTndd+QidTobY58gwyktgPeVAc9czoOPLjMcmY0Pz0=;
+        b=DkZcgNP5fD5mN33BKMJA8NJUf+fINTsJ4tEtrnt5pO/p7Md6XSfqIUQWYt2vNWLoyb
+         g3/+YZhzt4p0rMmC0k7eYNGAdVHN1R0ZwiQ1ls/lclVEBV63ZtuXMijnhJanConS5cPn
+         my9bm9JzdTDCf20lIMfrfHR5QKcLeMN12zql75UYnfmjY+Tpn6OPK40qaT4lTq8auwqy
+         Ec01/hSioGgZS26Tb1oFKe+YkisG55l+mxljPqkqOrhOHf6zpIDAkXOvy9V1yugDz7e7
+         YrzJ62NmFt9K2CI5DsVyRhukvgszz5xWuYhHXuLN4yy4klZVmPqW6VG6UDpU40g9rU3z
+         9z1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NntSUoTKX+q7nGQOHdsVUrXLAyg3WVr9iYiJ9osLXaU=;
-        b=WNtMueLvCZWZM6RV5GeaqYYR0lQtCxF18BT6G+co5rZkVuuSqdaxVT9pn52a5WhDgp
-         0AWgYs9cgSzgOn7qQQFkWB6UZ7q4aayvei0zcdDuRlPR9L5J/YLBlrq8dDBue7QDODPY
-         i/FDnuLyIHtJd4j1TRgK2DNi0D5lzmCB8mVlzziASn6uuB5V6/Y7tsihRT9iUu4ydc1Q
-         pTZaYFPdZJUlZdZZw/qFcDMJh1hvYhhias1I/otYLqMSYdkLvC1nmizcQzM440N0WF6m
-         meQE+894zG1sNMEO3+tx1BfxCzven5sDjGtfp271w4J3VOt9V7QrHYama6EDXIMb/Huo
-         42Sg==
-X-Gm-Message-State: APjAAAW1cuI1kIyJVcn5WVTeFL8fEmvR34qmDGhHVbqeNTjYeQ2wlThK
-        mQF5qshk9prI6TmmjTqGt1u/rA==
-X-Google-Smtp-Source: APXvYqx7PiemGSUQeZz4xakKD7Li6c726xm7L7hqG1m4RJTC1fjYw1mSg4p1ltuzy6c835BWLfMdWg==
-X-Received: by 2002:a63:5056:: with SMTP id q22mr10570932pgl.20.1575568975339;
-        Thu, 05 Dec 2019 10:02:55 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id p16sm12368615pgm.8.2019.12.05.10.02.54
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=PbTndd+QidTobY58gwyktgPeVAc9czoOPLjMcmY0Pz0=;
+        b=WQBbrqlH+XpKNetXj9lUhJn9CAzmJcmKarq8XYuJf+Evejo/4fYLSh+LkD420r7cp2
+         JwXQFT3Vn+pshUEZpSG8Fw5vAMn5YOEx4vFt1J3ReJMhSEPprOovDJVOt18yf3x/Y3Mj
+         HY/936EIzpmZ3j3IILf/RVPrsIhyD3PAYHxxuOykR5v9K+FI+sS0OM3hPyjGn5lbBxnn
+         iLrc1ltZG3BI3SauQ+FuYf9e3Co7SLL2qDMKuGqsJEGMWaDYG6c3X7PZS6ZQ14mJEYI0
+         1pTPOZpsh5r0HTvzgsLahEkcJGrOnbFEolqdZ9Jj0Xw4wQUbmyj/YFmkSdpZhF1fbttZ
+         2vQw==
+X-Gm-Message-State: APjAAAXZhiWkHb2ScDueb9h8h+g4oULYadZ4+hfOAQqzzm2ci5CA72iB
+        FAC02LkT42tah8JigruOdPSgPg==
+X-Google-Smtp-Source: APXvYqwsuY06lolgE9F4L30cleoaE0K4wrnDCTh3JjvjEtuNzg1KnBvNSuj4y1lbblpDurLzSRMYTQ==
+X-Received: by 2002:adf:ef0b:: with SMTP id e11mr11497455wro.128.1575568979260;
+        Thu, 05 Dec 2019 10:02:59 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:24c3:ebb3:9dd5:81c6? ([2a01:e34:ed2f:f020:24c3:ebb3:9dd5:81c6])
+        by smtp.googlemail.com with ESMTPSA id 5sm13532198wrh.5.2019.12.05.10.02.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2019 10:02:54 -0800 (PST)
-Date:   Thu, 5 Dec 2019 10:02:53 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] PM / devfreq: Use PM QoS for sysfs min/max_freq
-Message-ID: <20191205180253.GN228856@google.com>
-References: <cover.1575540224.git.leonard.crestez@nxp.com>
- <2b9eeb4e576c45269c01826f13c7811b876faa57.1575540224.git.leonard.crestez@nxp.com>
+        Thu, 05 Dec 2019 10:02:58 -0800 (PST)
+Subject: Re: [PATCH V6 2/3] cpuidle: play_idle: Specify play_idle with an idle
+ state
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mathieu.poirier@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ulf.hansson@linaro.org
+References: <20191030075141.1039-2-daniel.lezcano@linaro.org>
+ <20191205170438.4318-1-martin.kepplinger@puri.sm>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
+ sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
+ 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
+ 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
+ 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
+ xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
+ P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
+ 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
+ wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
+ eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
+ Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
+ CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
+ CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
+ U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
+ UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
+ KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
+ ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
+ 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
+ UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
+ d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
+ 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
+ z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
+ Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
+ 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
+ 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
+ eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
+ NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
+ 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
+ gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
+ qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
+ OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
+ gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
+ 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
+ PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
+ F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
+ WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
+ 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
+ +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
+ dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
+ XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
+ bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
+ JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
+ qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
+ l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
+ BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
+ 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
+ eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
+ t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
+ i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
+ X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
+ fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
+Message-ID: <0682ae10-b7c2-5a79-5101-4daf036fbbfb@linaro.org>
+Date:   Thu, 5 Dec 2019 19:02:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
+In-Reply-To: <20191205170438.4318-1-martin.kepplinger@puri.sm>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2b9eeb4e576c45269c01826f13c7811b876faa57.1575540224.git.leonard.crestez@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 12:05:07PM +0200, Leonard Crestez wrote:
-> Switch the handling of min_freq and max_freq from sysfs to use the
-> dev_pm_qos_request interface.
+On 05/12/2019 18:04, Martin Kepplinger wrote:
+> hi Daniel,
 > 
-> Since PM QoS handles frequencies as kHz this change reduces the
-> precision of min_freq and max_freq. This shouldn't introduce problems
-> because frequencies which are not an integer number of kHz are likely
-> not an integer number of Hz either.
-> 
-> Try to ensure compatibility by rounding min values down and rounding
-> max values up.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> ---
->  drivers/devfreq/devfreq.c | 76 ++++++++++++++++++++++++++++++---------
->  include/linux/devfreq.h   |  9 ++---
->  2 files changed, 64 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index e8b943fc4259..bcb286509547 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -139,14 +139,10 @@ static void get_freq_range(struct devfreq *devfreq,
->  	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
->  	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
->  		*max_freq = min(*max_freq,
->  				(unsigned long)HZ_PER_KHZ * qos_max_freq);
->  
-> -	/* Apply constraints from sysfs */
-> -	*min_freq = max(*min_freq, devfreq->min_freq);
-> -	*max_freq = min(*max_freq, devfreq->max_freq);
-> -
->  	/* Apply constraints from OPP interface */
->  	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
->  	*max_freq = min(*max_freq, devfreq->scaling_max_freq);
->  
->  	if (*min_freq > *max_freq)
-> @@ -703,10 +699,23 @@ static void devfreq_dev_release(struct device *dev)
->  					 DEV_PM_QOS_MIN_FREQUENCY);
->  	if (err && err != -ENOENT)
->  		dev_warn(dev->parent,
->  			"Failed to remove min_freq notifier: %d\n", err);
->  
-> +	if (dev_pm_qos_request_active(&devfreq->user_max_freq_req)) {
-> +		err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
-> +		if (err)
-> +			dev_warn(dev->parent,
-> +				"Failed to remove max_freq request: %d\n", err);
-> +	}
-> +	if (dev_pm_qos_request_active(&devfreq->user_min_freq_req)) {
-> +		err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
-> +		if (err)
-> +			dev_warn(dev->parent,
-> +				"Failed to remove min_freq request: %d\n", err);
-> +	}
-> +
->  	if (devfreq->profile->exit)
->  		devfreq->profile->exit(devfreq->dev.parent);
->  
->  	mutex_destroy(&devfreq->lock);
->  	kfree(devfreq);
-> @@ -776,19 +785,17 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  	if (!devfreq->scaling_min_freq) {
->  		mutex_unlock(&devfreq->lock);
->  		err = -EINVAL;
->  		goto err_dev;
->  	}
-> -	devfreq->min_freq = devfreq->scaling_min_freq;
->  
->  	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
->  	if (!devfreq->scaling_max_freq) {
->  		mutex_unlock(&devfreq->lock);
->  		err = -EINVAL;
->  		goto err_dev;
->  	}
-> -	devfreq->max_freq = devfreq->scaling_max_freq;
->  
->  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
->  	atomic_set(&devfreq->suspend_count, 0);
->  
->  	dev_set_name(&devfreq->dev, "devfreq%d",
-> @@ -825,10 +832,20 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  
->  	srcu_init_notifier_head(&devfreq->transition_notifier_list);
->  
->  	mutex_unlock(&devfreq->lock);
->  
-> +	err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-> +				     DEV_PM_QOS_MIN_FREQUENCY, 0);
-> +	if (err < 0)
-> +		goto err_devfreq;
-> +	err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-> +				     DEV_PM_QOS_MAX_FREQUENCY,
-> +				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> +	if (err < 0)
-> +		goto err_devfreq;
-> +
->  	devfreq->nb_min.notifier_call = qos_min_notifier_call;
->  	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
->  				      DEV_PM_QOS_MIN_FREQUENCY);
->  	if (err)
->  		goto err_devfreq;
-> @@ -1418,18 +1435,26 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
->  {
->  	struct devfreq *df = to_devfreq(dev);
->  	unsigned long value;
->  	int ret;
->  
-> +	/*
-> +	 * Protect against theoretical sysfs writes between
-> +	 * device_add and dev_pm_qos_add_request
-> +	 */
-> +	if (!dev_pm_qos_request_active(&df->user_min_freq_req))
-> +		return -EINVAL;
+> Since there's been quite some changes in cpuidle recently, how's your plans
+> to move this patchset forward? I, at least, need it.
 
-The error code -EINVAL is a bit misleading. I guess it's not super
-important, especially since this is a very rare case. In case you
-re-spin you could consider returning -EAGAIN ('Resource temporarily
-unavailable') in this case from min/max_freq_store/show()
+This series was merged but instead of specifying an idle state, we
+specify an exit latency [1].
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
+The cooling device itself is at V4 with some review tags. It should be
+merged soon [2].
+
+  -- Daniel
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c55b51a06b01d67a99457bb82a8c31081c7faa23
+
+[2] https://lkml.org/lkml/2019/12/4/563
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
