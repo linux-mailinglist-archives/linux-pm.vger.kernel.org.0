@@ -2,210 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEF8113C52
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 08:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5412113C9B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 08:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbfLEH1s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 02:27:48 -0500
-Received: from mga17.intel.com ([192.55.52.151]:18797 "EHLO mga17.intel.com"
+        id S1726059AbfLEHw2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 02:52:28 -0500
+Received: from mout.web.de ([212.227.15.14]:51645 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbfLEH1s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Dec 2019 02:27:48 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Dec 2019 23:27:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,280,1571727600"; 
-   d="scan'208";a="243148474"
-Received: from yuanwan1-mobl.ccr.corp.intel.com ([10.249.174.225])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Dec 2019 23:27:46 -0800
-Message-ID: <e04fa1e5eb6b81dd99097d1fb41fd04daf44c235.camel@intel.com>
-Subject: Re: [GIT PULL] Thermal management updates for v5.5-rc1
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Date:   Thu, 05 Dec 2019 15:27:45 +0800
-In-Reply-To: <7f4da1c663268f53f2123424c1b8abdbe8316556.camel@intel.com>
-References: <7f4da1c663268f53f2123424c1b8abdbe8316556.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725974AbfLEHw2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Dec 2019 02:52:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1575532346;
+        bh=sZ1UlkJGTsc5f/5dOtfD2m6PckmthHxvK4JHBGNhF+U=;
+        h=X-UI-Sender-Class:From:Subject:To:Date;
+        b=ncdfUqVcWj7ir8rn8dD7NwtwjL11UBu9wnibV4i8mefeA4Zg7Ij7FO3QZPfomQ+Jk
+         cdwpinnjlPltcPxOnyM40OZEU33D6IiPukfboWIouQEQFdNrQeeYNhvX2qDqfpif+b
+         zer30R469z9S7TejZYBO+jiv6/+1yistzhpxqoNI=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.111.31] ([93.104.189.218]) by smtp.web.de (mrweb003
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0MOzrj-1ij4Wb0Iz9-006KPW for
+ <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 08:52:26 +0100
+From:   Guido Riedel <guido.riedel@web.de>
+Subject: baseline power consumtion kernel > 5.3.10
+To:     linux-pm@vger.kernel.org
+Message-ID: <3ebca53c-b8fa-1e7f-6d4e-abdc93cbf2a6@web.de>
+Date:   Thu, 5 Dec 2019 08:52:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: base64
+Content-Language: en-US-large
+X-Provags-ID: V03:K1:SRWBrXyI2rJbCTyB3DYn7EE8EPI52lJYYNdnL0oUinqY+ZFPPq0
+ W02OHP4pibzLetQ1raYZ17gYytv2J5symuN/u3kxbzojlaO7La159dMUn/nr9rh4aE6XTdi
+ OJag8vFYoVbsJVwfy4yjyK9yVhO1CGcvdwMAZwh0UGofDIXznExGY7ozPn05ctN7pl7gXNJ
+ FnEVe35P/5PuJ7Cq3Jhhw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:25zfVBZD6Nk=:kbhgUTrM2/kzCBjoKXkFlk
+ HnDES4vhHbk0Q0932bRM1g7D2qRo51BmNwf6hBURjziKd1DvVrcgv9+elFFbUxoV8z1lrMYI6
+ 0zHODY/0EaFyHbJKcNywAVb/hjYvCc4WzUMxEK0eitiESetWdZuEP4lvE5SaDNkAoFrQpfMVk
+ A4/N6C5q6QewpYA//gk06yGh4hkKESOIjFlh3a7DHDVX67PfsiSzYkXlcSfso/8xXKRKo3Ij9
+ lZMGNBQ+bDBYSFZAmwZW+seSKifDSi29FM1cmPx12rVfP0H8tfYP1OkUx1vWJ9j5zFUZ9bnHF
+ iXbbajzE7lMrYInqYtaYCec2BgZ4AUNpoD/ovndK5wmEqeA5yGzitns20ekAf7Hedv4GtCU0S
+ /+0I3K9NGmhIrGH/kgqBreXNPFApshxJK9xmuJP2nPhEyO2C8j6hmcg2xJQlXZG9rPQRasez5
+ vVyBSMMksf8S5dMB2kC8FGZChyk8u2J4STXSc64HvB2N5Vku/RwsT/rUJH14ycuPOTeqsPd71
+ aLOYAmovHcuRUkQomS5RBEeHQYJoeudP1bYvcQmrbo0ORbbNfdp0CVaUHmC6TkqwsVV+5jpL6
+ d5RgxD7e0DyyLGLKU5ShTa+ZlzsUUKsPbXVLrFKhFNoNwLXPrq7qpRunrWfuXmPVAwLc1qkNb
+ 7lgbmVHjg1Fnc77PMha62pM/4B/ehhsF1YVSXazdy8+Dw3SU/YsbzdjxoLP1ik/Z53wj4PSqz
+ gfTvKn9VbnL6Za10d6Rf75Tgvx898wd7KUtwhID0It2NfAbqVi+gyxZBAtuJHyfwDpfQGQV+y
+ Vl7bz2kXf+e99CrLGLdSHUIQdL3ytq/SNciM5WOEd4OfDc9dy8qUXmLl69PXqKw+v8+KiQP9c
+ CDzO1AhksYQJ5o3TikMwd78fsJ9nMUxLO5jc805QKO5glqmp9UlA78yKN1gbomSE9ZxycxqJM
+ GcfsiaxZWNrQZzHJJTzYoy3jbL4pYYd13pg11wOdNVRbS78vkd1l0kumQWNRec5qM4xJAecFv
+ DLu6735vTTAjqSLYBQyj2w2DUcZ9XZGD2d+eCKGpzufuTPvW+ciVASg8pJdMZ1BrtAvUy4/FQ
+ V4RyeXQyGbiRY3XggynzvcsHJ/7rAIdNSsXBqAytUAG4iAG/IeDqIEdCBpCSrizExMbbU+oYd
+ MFkijYBTJ2gUEzDWtfYviFC1My8gN5bZ+Pey57OkgDqyYB6c9CrQQH5FbcavH9SHYnhOmUJEA
+ 4GbMch+fsbM9dGz4ikqGULZ5u+ZHhg/BB6SO417tOIlfkfy3U3tVJoVGvZe4=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-12-04 at 14:16 +0800, Zhang Rui wrote:
-> Hi, Linus,
-> 
-> Please pull from
->   git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> thermal/next
-> 
-> to receive the latest Thermal Management updates for v5.5-rc1 with
-> top-most commit 163b00cde7cf2206e248789d2780121ad5e6a70b:
-> 
->   thermal: Fix deadlock in thermal thermal_zone_device_check (2019-
-> 11-
-> 14 22:41:09 +0800)
-> 
-> on top of commit a99d8080aaf358d5d23581244e5da23b35e340b9:
-> 
->   Linux 5.4-rc6 (2019-11-03 14:07:26 -0800)
-> 
-I still have some patches pending, which includes
-changes of MAINTAINER file to remove Eduardo Valentin <
-edubezval@gmail.com> from the co-maintainer of thermal subsystem
-because his email is bouncing, and to add Daniel Lezcano <
-daniel.lezcano@linaro.org> as the co-maintainer.
-And also another Kconfig warning fix. So there should be a second PR
-once this is merged.
-
-thanks,
-rui
-
-> Specifics:
-> 
-> - Fix a deadlock regression in thermal core framework, which is
-> introduced in 5.3. (Wei Wang)
-> 
-> - Initialize thermal control framework earlier to enable thermal
-> mitigation during boot. (Amit Kucheria)
-> 
-> - Convert the Intelligent Power Allocator (IPA) thermal governor to
-> follow the generic PM_EM instead of its own Energy Model. (Quentin
-> Perret)
-> 
-> - Introduce a new Amlogic soc thermal driver. (Guillaume La Roque)
-> 
-> - Add interrupt support for tsens thermal driver. (Amit Kucheria)
-> 
-> - Add support for MSM8956/8976 in tsens thermal driver.
-> (AngeloGioacchino Del Regno)
-> 
-> - Add support for r8a774b1 in rcar thermal driver. (Biju Das)
-> 
-> - Add support for Thermal Monitor Unit v2 in qoriq thermal driver.
-> (Yuantian Tang)
-> 
-> - Some other fixes/cleanups on thermal core framework and soc thermal
-> drivers. (Colin Ian King, Daniel Lezcano, Hsin-Yi Wang, Tian Tao)
-> 
-> thanks,
-> rui
-> 
-> ----------------------------------------------------------------
-> Amit Kucheria (13):
->       drivers: thermal: tsens: Get rid of id field in tsens_sensor
->       drivers: thermal: tsens: Simplify code flow in tsens_probe
->       drivers: thermal: tsens: Add __func__ identifier to debug
-> statements
->       drivers: thermal: tsens: Add debugfs support
->       dt-bindings: thermal: tsens: Convert over to a yaml schema
->       drivers: thermal: tsens: Create function to return sign-
-> extended
-> temperature
->       drivers: thermal: tsens: Add interrupt support
->       thermal: Remove netlink support
->       thermal: Initialize thermal subsystem earlier
->       cpufreq: Initialize the governors in core_initcall
->       cpufreq: Initialize cpufreq-dt driver earlier
->       clk: qcom: Initialize clock drivers earlier
->       cpufreq: qcom-hw: Move driver initialization earlier
-> 
-> AngeloGioacchino Del Regno (2):
->       thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976
->       dt: thermal: tsens: Document compatible for MSM8976/56
-> 
-> Biju Das (2):
->       thermal: rcar_gen3_thermal: Add r8a774b1 support
->       dt-bindings: thermal: rcar-gen3-thermal: Add r8a774b1 support
-> 
-> Colin Ian King (2):
->       thermal: qcom: tsens-v1: Fix kfree of a non-pointer value
->       drivers: thermal: tsens: fix potential integer overflow on
-> multiply
-> 
-> Daniel Lezcano (2):
->       thermal: cpu_cooling: Remove pointless dependency on CONFIG_OF
->       thermal: cpu_cooling: Reorder the header file
-> 
-> Guillaume La Roque (3):
->       dt-bindings: thermal: Add DT bindings documentation for Amlogic
-> Thermal
->       thermal: amlogic: Add thermal driver to support G12 SoCs
->       MAINTAINERS: add entry for Amlogic Thermal driver
-> 
-> Hsin-Yi Wang (1):
->       thermal-generic-adc: Silent error message for EPROBE_DEFER
-> 
-> Quentin Perret (4):
->       arm64: defconfig: Enable CONFIG_ENERGY_MODEL
->       PM / EM: Declare EM data types unconditionally
->       thermal: cpu_cooling: Make the power-related code depend on IPA
->       thermal: cpu_cooling: Migrate to using the EM framework
-> 
-> Tian Tao (1):
->       thermal: no need to set .owner when using
-> module_platform_driver
-> 
-> Wei Wang (1):
->       thermal: Fix deadlock in thermal thermal_zone_device_check
-> 
-> Yuantian Tang (1):
->       thermal: qoriq: add thermal monitor unit version 2 support
-> 
->  .../bindings/thermal/amlogic,thermal.yaml          |  54 +++
->  .../devicetree/bindings/thermal/qcom-tsens.txt     |  55 ---
->  .../devicetree/bindings/thermal/qcom-tsens.yaml    | 170 +++++++
->  .../bindings/thermal/rcar-gen3-thermal.txt         |   1 +
->  Documentation/driver-api/thermal/sysfs-api.rst     |  26 +-
->  MAINTAINERS                                        |  10 +
->  arch/arm64/configs/defconfig                       |   1 +
->  drivers/clk/qcom/clk-rpmh.c                        |   2 +-
->  drivers/clk/qcom/gcc-qcs404.c                      |   2 +-
->  drivers/clk/qcom/gcc-sdm845.c                      |   2 +-
->  drivers/cpufreq/cpufreq-dt-platdev.c               |   2 +-
->  drivers/cpufreq/cpufreq_conservative.c             |   2 +-
->  drivers/cpufreq/cpufreq_ondemand.c                 |   2 +-
->  drivers/cpufreq/cpufreq_performance.c              |   2 +-
->  drivers/cpufreq/cpufreq_powersave.c                |   2 +-
->  drivers/cpufreq/cpufreq_userspace.c                |   2 +-
->  drivers/cpufreq/qcom-cpufreq-hw.c                  |   2 +-
->  drivers/thermal/Kconfig                            |  12 +
->  drivers/thermal/Makefile                           |   1 +
->  drivers/thermal/amlogic_thermal.c                  | 333
-> +++++++++++++
->  drivers/thermal/cpu_cooling.c                      | 404 +++++++----
-> -----
->  drivers/thermal/qcom/tsens-8960.c                  |   4 +-
->  drivers/thermal/qcom/tsens-common.c                | 529
-> +++++++++++++++++++--
->  drivers/thermal/qcom/tsens-v0_1.c                  |  11 +
->  drivers/thermal/qcom/tsens-v1.c                    | 198 +++++++-
->  drivers/thermal/qcom/tsens-v2.c                    |  13 +
->  drivers/thermal/qcom/tsens.c                       |  62 ++-
->  drivers/thermal/qcom/tsens.h                       | 288 +++++++++--
->  drivers/thermal/qoriq_thermal.c                    | 120 ++++-
->  drivers/thermal/rcar_gen3_thermal.c                |   4 +
->  drivers/thermal/thermal-generic-adc.c              |   9 +-
->  drivers/thermal/thermal_core.c                     | 107 +----
->  drivers/thermal/thermal_mmio.c                     |   1 -
->  include/linux/cpu_cooling.h                        |  18 +-
->  include/linux/energy_model.h                       |   3 +-
->  include/linux/thermal.h                            |  11 -
->  kernel/sched/cpufreq_schedutil.c                   |   2 +-
->  37 files changed, 1878 insertions(+), 589 deletions(-)
->  create mode 100644
-> Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
->  delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-
-> tsens.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-
-> tsens.yaml
->  create mode 100644 drivers/thermal/amlogic_thermal.c
-> 
-
+SGksDQoNClNpbmNlIEtlcm5lbCA1LjMuMTEgSSBnb3QgYSBzaWduaWZpY2FudCBpbmNyZWFzZWQg
+YmFzZWxpbmUgUG93ZXIgDQpjb25zdW1wdGlvbi4gSSB0cmllZCB1cCB0byA1LjQuMSBvbiBhcmNo
+IGxpbnV4LiBQb3dlcnRvcCBzaG93cyBhbiANCmluY3JlYXNlIGZyb20gMy42VyBvbiA1LjMuMTAg
+dG8gNS54IFcgb24gaGlnaGVyIEtlcm5lbHMuIE15IGxhcHRvcCBmYW4gDQpzcGlucyBhIGxvdCBt
+b3JlLg0KDQpJIHJlYWQgdGhhdCBhIGxvdCBvZiBJbnRlbCBzdHVmZiBoYXMgZW50ZXJlZCB0aGUg
+S2VybmVsIGluIDUuMy4xMSwgY291bGQgDQp0aGlzIGNhdXNlIGl0PyBXaWxsIGl0IHN0YXkgbGlr
+ZSB0aGlzIGluIHRoZSBuZXh0IFZlcnNpb25zPyBDYW4gSSBtYXliZSANCnN3aXRjaCBzb21ldGhp
+bmcgb2ZmIGV0Yy4gdG8gZ2V0IGEgbG93ZXIgYmFzZWxpbmUgcG93ZXI/DQoNCkkgaG9wZSBJIHdy
+aXRlIHRvIHRoZSByaWdodCBhZGRyZXNzLCBvdGhlcndpc2Ugc29ycnkuDQoNCkdyZWV0aW5ncyBH
+dWlkbw0KDQpsc2NwdToNCg0KQXJjaGl0ZWt0dXI6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCB4ODZfNjQNCkNQVSBPcGVyYXRpb25zbW9kdXM6wqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIDMyLWJpdCwgNjQtYml0DQpCeXRlLVJlaWhlbmZvbGdlOsKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBMaXR0bGUgRW5kaWFuDQpBZHJlc3NncsO2w59lbjrCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAzOSBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZp
+cnR1YWwNCkNQVShzKTrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCA4DQpMaXN0ZSBkZXIgT25saW5lLUNQVShzKTrCoMKgwqDCoMKgwqDCoMKgIDAtNw0K
+VGhyZWFkKHMpIHBybyBLZXJuOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDINCktlcm4oZSkg
+cHJvIFNvY2tldDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA0DQpTb2NrZWw6wqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMQ0KTlVNQS1Lbm90ZW46
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxDQpBbmJpZXRlcmtlbm51
+bmc6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgR2VudWluZUludGVsDQpQcm96ZXNz
+b3JmYW1pbGllOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA2DQpNb2RlbGw6wqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMTQyDQpNb2RlbGxu
+YW1lOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBJbnRlbChSKSBD
+b3JlKFRNKSBpNy04NTUwVSBDUFUgQCAxLjgwR0h6DQpTdGVwcGluZzrCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDEwDQpDUFUgTUh6OsKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxMDcyLjE5MQ0KTWF4aW1hbGUgVGFr
+dGZyZXF1ZW56IGRlciBDUFU6wqDCoCA0MDAwLDAwMDANCk1pbmltYWxlIFRha3RmcmVxdWVueiBk
+ZXIgQ1BVOsKgwqAgNDAwLDAwMDANCkJvZ29NSVBTOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgNDAwMS42MA0KVmlydHVhbGlzaWVydW5nOsKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIFZULXgNCkwxZCBDYWNoZTrCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxMjggS2lCDQpMMWkgQ2FjaGU6wqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMTI4IEtpQg0KTDIgQ2FjaGU6wqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxIE1pQg0KTDMgQ2FjaGU6
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA4IE1pQg0KTlVN
+QS1Lbm90ZW4wIENQVShzKTrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMC03DQpWdWxuZXJhYmls
+aXR5IEwxdGY6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTWl0aWdhdGlvbjsgUFRFIEludmVy
+c2lvbjsgVk1YIA0KY29uZGl0aW9uYWwgY2FjaGUgZmx1c2hlcywgU01UIHZ1bG5lcmFibGUNClZ1
+bG5lcmFiaWxpdHkgTWRzOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgVnVsbmVyYWJsZTog
+Q2xlYXIgQ1BVIGJ1ZmZlcnMgDQphdHRlbXB0ZWQsIG5vIG1pY3JvY29kZTsgU01UIHZ1bG5lcmFi
+bGUNClZ1bG5lcmFiaWxpdHkgTWVsdGRvd246wqDCoMKgwqDCoMKgwqDCoMKgIE1pdGlnYXRpb247
+IFBUSQ0KVnVsbmVyYWJpbGl0eSBTcGVjIHN0b3JlIGJ5cGFzczogTWl0aWdhdGlvbjsgU3BlY3Vs
+YXRpdmUgU3RvcmUgQnlwYXNzIA0KZGlzYWJsZWQgdmlhIHByY3RsIGFuZCBzZWNjb21wDQpWdWxu
+ZXJhYmlsaXR5IFNwZWN0cmUgdjE6wqDCoMKgwqDCoMKgwqAgTWl0aWdhdGlvbjsgdXNlcmNvcHkv
+c3dhcGdzIGJhcnJpZXJzIA0KYW5kIF9fdXNlciBwb2ludGVyIHNhbml0aXphdGlvbg0KVnVsbmVy
+YWJpbGl0eSBTcGVjdHJlIHYyOsKgwqDCoMKgwqDCoMKgIE1pdGlnYXRpb247IEZ1bGwgZ2VuZXJp
+YyByZXRwb2xpbmUsIA0KSUJQQiBjb25kaXRpb25hbCwgSUJSU19GVywgU1RJQlAgY29uZGl0aW9u
+YWwsIFJTQiBmaWxsaW5nDQpNYXJraWVydW5nZW46wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIA0Kc2Vw
+IG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIGR0cyBhY3BpIG1teCBmeHNyIHMN
+CiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHNlIHNzZTIgc3MgaHQgdG0gcGJlIHN5c2NhbGwgbnggDQpwZHBlMWdiIHJkdHNj
+cCBsbSBjb25zdGFudF90c2MgYXJ0IGFyY2hfcGVyZm1vbiBwZWJzIGJ0cyByZXBfZ29vZCBuDQog
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBvcGwgeHRvcG9sb2d5IG5vbnN0b3BfdHNjIGNwdWlkIA0KYXBlcmZtcGVyZiBwbmkg
+cGNsbXVscWRxIGR0ZXM2NCBtb25pdG9yIGRzX2NwbCB2bXggZXN0IHRtMiBzc3NlMyBzZA0KIMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgYmcgZm1hIGN4MTYgeHRwciBwZGNtIHBjaWQgc3NlNF8xIA0Kc3NlNF8yIHgyYXBpYyBt
+b3ZiZSBwb3BjbnQgdHNjX2RlYWRsaW5lX3RpbWVyIGFlcyB4c2F2ZSBhdnggZjE2Yw0KIMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgcmRyYW5kIGxhaGZfbG0gYWJtIDNkbm93cHJlZmV0Y2ggDQpjcHVpZF9mYXVsdCBlcGIgaW52
+cGNpZF9zaW5nbGUgcHRpIHNzYmQgaWJycyBpYnBiIHN0aWJwIHRwcl9zaGFkb3cNCiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgdm5taSBmbGV4cHJpb3JpdHkgZXB0IHZwaWQgZXB0X2FkIA0KZnNnc2Jhc2UgdHNjX2FkanVz
+dCBibWkxIGF2eDIgc21lcCBibWkyIGVybXMgaW52cGNpZCBtcHggcmRzZWVkDQogwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBh
+ZHggc21hcCBjbGZsdXNob3B0IGludGVsX3B0IHhzYXZlb3B0IA0KeHNhdmVjIHhnZXRidjEgeHNh
+dmVzIGR0aGVybSBpZGEgYXJhdCBwbG4gcHRzIGh3cCBod3Bfbm90aWZ5DQogwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBod3Bf
+YWN0X3dpbmRvdyBod3BfZXBwIGZsdXNoX2wxZA0KDQo=
