@@ -2,133 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5412113C9B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 08:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9EC113CA7
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 08:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfLEHw2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 02:52:28 -0500
-Received: from mout.web.de ([212.227.15.14]:51645 "EHLO mout.web.de"
+        id S1726384AbfLEH4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 02:56:40 -0500
+Received: from mga17.intel.com ([192.55.52.151]:20787 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbfLEHw2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Dec 2019 02:52:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1575532346;
-        bh=sZ1UlkJGTsc5f/5dOtfD2m6PckmthHxvK4JHBGNhF+U=;
-        h=X-UI-Sender-Class:From:Subject:To:Date;
-        b=ncdfUqVcWj7ir8rn8dD7NwtwjL11UBu9wnibV4i8mefeA4Zg7Ij7FO3QZPfomQ+Jk
-         cdwpinnjlPltcPxOnyM40OZEU33D6IiPukfboWIouQEQFdNrQeeYNhvX2qDqfpif+b
-         zer30R469z9S7TejZYBO+jiv6/+1yistzhpxqoNI=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.111.31] ([93.104.189.218]) by smtp.web.de (mrweb003
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0MOzrj-1ij4Wb0Iz9-006KPW for
- <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 08:52:26 +0100
-From:   Guido Riedel <guido.riedel@web.de>
-Subject: baseline power consumtion kernel > 5.3.10
-To:     linux-pm@vger.kernel.org
-Message-ID: <3ebca53c-b8fa-1e7f-6d4e-abdc93cbf2a6@web.de>
-Date:   Thu, 5 Dec 2019 08:52:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: base64
-Content-Language: en-US-large
-X-Provags-ID: V03:K1:SRWBrXyI2rJbCTyB3DYn7EE8EPI52lJYYNdnL0oUinqY+ZFPPq0
- W02OHP4pibzLetQ1raYZ17gYytv2J5symuN/u3kxbzojlaO7La159dMUn/nr9rh4aE6XTdi
- OJag8vFYoVbsJVwfy4yjyK9yVhO1CGcvdwMAZwh0UGofDIXznExGY7ozPn05ctN7pl7gXNJ
- FnEVe35P/5PuJ7Cq3Jhhw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:25zfVBZD6Nk=:kbhgUTrM2/kzCBjoKXkFlk
- HnDES4vhHbk0Q0932bRM1g7D2qRo51BmNwf6hBURjziKd1DvVrcgv9+elFFbUxoV8z1lrMYI6
- 0zHODY/0EaFyHbJKcNywAVb/hjYvCc4WzUMxEK0eitiESetWdZuEP4lvE5SaDNkAoFrQpfMVk
- A4/N6C5q6QewpYA//gk06yGh4hkKESOIjFlh3a7DHDVX67PfsiSzYkXlcSfso/8xXKRKo3Ij9
- lZMGNBQ+bDBYSFZAmwZW+seSKifDSi29FM1cmPx12rVfP0H8tfYP1OkUx1vWJ9j5zFUZ9bnHF
- iXbbajzE7lMrYInqYtaYCec2BgZ4AUNpoD/ovndK5wmEqeA5yGzitns20ekAf7Hedv4GtCU0S
- /+0I3K9NGmhIrGH/kgqBreXNPFApshxJK9xmuJP2nPhEyO2C8j6hmcg2xJQlXZG9rPQRasez5
- vVyBSMMksf8S5dMB2kC8FGZChyk8u2J4STXSc64HvB2N5Vku/RwsT/rUJH14ycuPOTeqsPd71
- aLOYAmovHcuRUkQomS5RBEeHQYJoeudP1bYvcQmrbo0ORbbNfdp0CVaUHmC6TkqwsVV+5jpL6
- d5RgxD7e0DyyLGLKU5ShTa+ZlzsUUKsPbXVLrFKhFNoNwLXPrq7qpRunrWfuXmPVAwLc1qkNb
- 7lgbmVHjg1Fnc77PMha62pM/4B/ehhsF1YVSXazdy8+Dw3SU/YsbzdjxoLP1ik/Z53wj4PSqz
- gfTvKn9VbnL6Za10d6Rf75Tgvx898wd7KUtwhID0It2NfAbqVi+gyxZBAtuJHyfwDpfQGQV+y
- Vl7bz2kXf+e99CrLGLdSHUIQdL3ytq/SNciM5WOEd4OfDc9dy8qUXmLl69PXqKw+v8+KiQP9c
- CDzO1AhksYQJ5o3TikMwd78fsJ9nMUxLO5jc805QKO5glqmp9UlA78yKN1gbomSE9ZxycxqJM
- GcfsiaxZWNrQZzHJJTzYoy3jbL4pYYd13pg11wOdNVRbS78vkd1l0kumQWNRec5qM4xJAecFv
- DLu6735vTTAjqSLYBQyj2w2DUcZ9XZGD2d+eCKGpzufuTPvW+ciVASg8pJdMZ1BrtAvUy4/FQ
- V4RyeXQyGbiRY3XggynzvcsHJ/7rAIdNSsXBqAytUAG4iAG/IeDqIEdCBpCSrizExMbbU+oYd
- MFkijYBTJ2gUEzDWtfYviFC1My8gN5bZ+Pey57OkgDqyYB6c9CrQQH5FbcavH9SHYnhOmUJEA
- 4GbMch+fsbM9dGz4ikqGULZ5u+ZHhg/BB6SO417tOIlfkfy3U3tVJoVGvZe4=
+        id S1726059AbfLEH4k (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Dec 2019 02:56:40 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Dec 2019 23:56:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,280,1571727600"; 
+   d="scan'208";a="209067399"
+Received: from yuanwan1-mobl.ccr.corp.intel.com ([10.249.174.225])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Dec 2019 23:56:38 -0800
+Message-ID: <a9d9bc3b6ab7b6621157c61da92e55f9c7de0da1.camel@intel.com>
+Subject: Re: [PATCH v2 1/2] thermal: fix and clean up tz and cdev
+ registration
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Wei Wang <wvw@google.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 05 Dec 2019 15:56:37 +0800
+In-Reply-To: <CAHLCerNT0p7cj+yAhJbNbqCkQguu8AMyngwuvbxaQYTSAB5GPA@mail.gmail.com>
+References: <CAHLCerOD2wOJq7QNGBOcLvkMz4wvc1+6Hk2+ZD__NFged3tLcw@mail.gmail.com>
+         <20191204215618.125826-1-wvw@google.com>
+         <20191204215618.125826-2-wvw@google.com>
+         <CAHLCerMQ_734AFe=QCg+qi3TOvYPMB95NPP_EEHNbuODBSEfog@mail.gmail.com>
+         <CAGXk5yr=jfXq+n7oB0sc=6LT0raURmQ9rgFWqrg0hxMDKYFDig@mail.gmail.com>
+         <CAHLCerOpv3Dqd7AB6=EEUUMpTWujNeLok3=ZpLntCdvHewGyww@mail.gmail.com>
+         <CAHLCerNT0p7cj+yAhJbNbqCkQguu8AMyngwuvbxaQYTSAB5GPA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksDQoNClNpbmNlIEtlcm5lbCA1LjMuMTEgSSBnb3QgYSBzaWduaWZpY2FudCBpbmNyZWFzZWQg
-YmFzZWxpbmUgUG93ZXIgDQpjb25zdW1wdGlvbi4gSSB0cmllZCB1cCB0byA1LjQuMSBvbiBhcmNo
-IGxpbnV4LiBQb3dlcnRvcCBzaG93cyBhbiANCmluY3JlYXNlIGZyb20gMy42VyBvbiA1LjMuMTAg
-dG8gNS54IFcgb24gaGlnaGVyIEtlcm5lbHMuIE15IGxhcHRvcCBmYW4gDQpzcGlucyBhIGxvdCBt
-b3JlLg0KDQpJIHJlYWQgdGhhdCBhIGxvdCBvZiBJbnRlbCBzdHVmZiBoYXMgZW50ZXJlZCB0aGUg
-S2VybmVsIGluIDUuMy4xMSwgY291bGQgDQp0aGlzIGNhdXNlIGl0PyBXaWxsIGl0IHN0YXkgbGlr
-ZSB0aGlzIGluIHRoZSBuZXh0IFZlcnNpb25zPyBDYW4gSSBtYXliZSANCnN3aXRjaCBzb21ldGhp
-bmcgb2ZmIGV0Yy4gdG8gZ2V0IGEgbG93ZXIgYmFzZWxpbmUgcG93ZXI/DQoNCkkgaG9wZSBJIHdy
-aXRlIHRvIHRoZSByaWdodCBhZGRyZXNzLCBvdGhlcndpc2Ugc29ycnkuDQoNCkdyZWV0aW5ncyBH
-dWlkbw0KDQpsc2NwdToNCg0KQXJjaGl0ZWt0dXI6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCB4ODZfNjQNCkNQVSBPcGVyYXRpb25zbW9kdXM6wqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIDMyLWJpdCwgNjQtYml0DQpCeXRlLVJlaWhlbmZvbGdlOsKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBMaXR0bGUgRW5kaWFuDQpBZHJlc3NncsO2w59lbjrCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAzOSBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZp
-cnR1YWwNCkNQVShzKTrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCA4DQpMaXN0ZSBkZXIgT25saW5lLUNQVShzKTrCoMKgwqDCoMKgwqDCoMKgIDAtNw0K
-VGhyZWFkKHMpIHBybyBLZXJuOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDINCktlcm4oZSkg
-cHJvIFNvY2tldDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA0DQpTb2NrZWw6wqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMQ0KTlVNQS1Lbm90ZW46
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxDQpBbmJpZXRlcmtlbm51
-bmc6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgR2VudWluZUludGVsDQpQcm96ZXNz
-b3JmYW1pbGllOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA2DQpNb2RlbGw6wqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMTQyDQpNb2RlbGxu
-YW1lOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBJbnRlbChSKSBD
-b3JlKFRNKSBpNy04NTUwVSBDUFUgQCAxLjgwR0h6DQpTdGVwcGluZzrCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDEwDQpDUFUgTUh6OsKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxMDcyLjE5MQ0KTWF4aW1hbGUgVGFr
-dGZyZXF1ZW56IGRlciBDUFU6wqDCoCA0MDAwLDAwMDANCk1pbmltYWxlIFRha3RmcmVxdWVueiBk
-ZXIgQ1BVOsKgwqAgNDAwLDAwMDANCkJvZ29NSVBTOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgNDAwMS42MA0KVmlydHVhbGlzaWVydW5nOsKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIFZULXgNCkwxZCBDYWNoZTrCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxMjggS2lCDQpMMWkgQ2FjaGU6wqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMTI4IEtpQg0KTDIgQ2FjaGU6wqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxIE1pQg0KTDMgQ2FjaGU6
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA4IE1pQg0KTlVN
-QS1Lbm90ZW4wIENQVShzKTrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMC03DQpWdWxuZXJhYmls
-aXR5IEwxdGY6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTWl0aWdhdGlvbjsgUFRFIEludmVy
-c2lvbjsgVk1YIA0KY29uZGl0aW9uYWwgY2FjaGUgZmx1c2hlcywgU01UIHZ1bG5lcmFibGUNClZ1
-bG5lcmFiaWxpdHkgTWRzOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgVnVsbmVyYWJsZTog
-Q2xlYXIgQ1BVIGJ1ZmZlcnMgDQphdHRlbXB0ZWQsIG5vIG1pY3JvY29kZTsgU01UIHZ1bG5lcmFi
-bGUNClZ1bG5lcmFiaWxpdHkgTWVsdGRvd246wqDCoMKgwqDCoMKgwqDCoMKgIE1pdGlnYXRpb247
-IFBUSQ0KVnVsbmVyYWJpbGl0eSBTcGVjIHN0b3JlIGJ5cGFzczogTWl0aWdhdGlvbjsgU3BlY3Vs
-YXRpdmUgU3RvcmUgQnlwYXNzIA0KZGlzYWJsZWQgdmlhIHByY3RsIGFuZCBzZWNjb21wDQpWdWxu
-ZXJhYmlsaXR5IFNwZWN0cmUgdjE6wqDCoMKgwqDCoMKgwqAgTWl0aWdhdGlvbjsgdXNlcmNvcHkv
-c3dhcGdzIGJhcnJpZXJzIA0KYW5kIF9fdXNlciBwb2ludGVyIHNhbml0aXphdGlvbg0KVnVsbmVy
-YWJpbGl0eSBTcGVjdHJlIHYyOsKgwqDCoMKgwqDCoMKgIE1pdGlnYXRpb247IEZ1bGwgZ2VuZXJp
-YyByZXRwb2xpbmUsIA0KSUJQQiBjb25kaXRpb25hbCwgSUJSU19GVywgU1RJQlAgY29uZGl0aW9u
-YWwsIFJTQiBmaWxsaW5nDQpNYXJraWVydW5nZW46wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIA0Kc2Vw
-IG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIGR0cyBhY3BpIG1teCBmeHNyIHMN
-CiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIHNlIHNzZTIgc3MgaHQgdG0gcGJlIHN5c2NhbGwgbnggDQpwZHBlMWdiIHJkdHNj
-cCBsbSBjb25zdGFudF90c2MgYXJ0IGFyY2hfcGVyZm1vbiBwZWJzIGJ0cyByZXBfZ29vZCBuDQog
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBvcGwgeHRvcG9sb2d5IG5vbnN0b3BfdHNjIGNwdWlkIA0KYXBlcmZtcGVyZiBwbmkg
-cGNsbXVscWRxIGR0ZXM2NCBtb25pdG9yIGRzX2NwbCB2bXggZXN0IHRtMiBzc3NlMyBzZA0KIMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgYmcgZm1hIGN4MTYgeHRwciBwZGNtIHBjaWQgc3NlNF8xIA0Kc3NlNF8yIHgyYXBpYyBt
-b3ZiZSBwb3BjbnQgdHNjX2RlYWRsaW5lX3RpbWVyIGFlcyB4c2F2ZSBhdnggZjE2Yw0KIMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgcmRyYW5kIGxhaGZfbG0gYWJtIDNkbm93cHJlZmV0Y2ggDQpjcHVpZF9mYXVsdCBlcGIgaW52
-cGNpZF9zaW5nbGUgcHRpIHNzYmQgaWJycyBpYnBiIHN0aWJwIHRwcl9zaGFkb3cNCiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgdm5taSBmbGV4cHJpb3JpdHkgZXB0IHZwaWQgZXB0X2FkIA0KZnNnc2Jhc2UgdHNjX2FkanVz
-dCBibWkxIGF2eDIgc21lcCBibWkyIGVybXMgaW52cGNpZCBtcHggcmRzZWVkDQogwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBh
-ZHggc21hcCBjbGZsdXNob3B0IGludGVsX3B0IHhzYXZlb3B0IA0KeHNhdmVjIHhnZXRidjEgeHNh
-dmVzIGR0aGVybSBpZGEgYXJhdCBwbG4gcHRzIGh3cCBod3Bfbm90aWZ5DQogwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBod3Bf
-YWN0X3dpbmRvdyBod3BfZXBwIGZsdXNoX2wxZA0KDQo=
+On Thu, 2019-12-05 at 12:36 +0530, Amit Kucheria wrote:
+> On Thu, Dec 5, 2019 at 11:56 AM Amit Kucheria
+> <amit.kucheria@verdurent.com> wrote:
+> > 
+> > On Thu, Dec 5, 2019 at 11:44 AM Wei Wang <wvw@google.com> wrote:
+> > > 
+> > > On Wed, Dec 4, 2019 at 8:13 PM Amit Kucheria
+> > > <amit.kucheria@verdurent.com> wrote:
+> > > > 
+> > > > Hi Wei,
+> > > > 
+> > > > On Thu, Dec 5, 2019 at 3:26 AM Wei Wang <wvw@google.com> wrote:
+> > > > > 
+> > > > > Make cooling device registration behavior consistent with
+> > > > 
+> > > > Consistent how? Please add details.
+> > > > 
+> > > 
+> > > Consistent with
+> > > 
+https://lore.kernel.org/linux-pm/1478581767-7009-2-git-send-email-edubezval@gmail.com/
+> 
+> Studying this a bit more, git blame pointed to this SHA[1] that fixed
+> it so that NULL value for 'type' is allowed, we just check for it.
+> However, none of the users of thermal_cooling_device_register() seem
+> to pass NULL.
+> 
+> Rui, any insight into the history of why we would NOT want to create
+> a
+> sysfs attribute by passing NULL?
+
+Actually, I don't recall there is any requirement that wants to
+register a cooling_device without "type".
+
+>  Do we still need to allow for NULL
+> values or should we cleanup the API to prevent NULL values?
+> 
+well, my suggestion is to make this (do NULL check) a separate patch
+and see if we have any complains, if yes, we can revert it easily.
+
+thanks,
+rui
+
+> [1] 204dd1d39c32f39a95
+> 
+> 
+> > > 
+> > > will include aboce in next version.
+> > 
+> > Thanks.
+> > 
+> > > 
+> > > > > thermal zone. This patch also cleans up a unnecessary
+> > > > > nullptr check.
+> > > > > 
+> > > > > Signed-off-by: Wei Wang <wvw@google.com>
+> > > > > ---
+> > > > >  drivers/thermal/thermal_core.c | 16 ++++++++++++----
+> > > > >  1 file changed, 12 insertions(+), 4 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/thermal/thermal_core.c
+> > > > > b/drivers/thermal/thermal_core.c
+> > > > > index d4481cc8958f..64fbb59c2f44 100644
+> > > > > --- a/drivers/thermal/thermal_core.c
+> > > > > +++ b/drivers/thermal/thermal_core.c
+> > > > > @@ -954,8 +954,16 @@ __thermal_cooling_device_register(struct
+> > > > > device_node *np,
+> > > > >         struct thermal_zone_device *pos = NULL;
+> > > > >         int result;
+> > > > > 
+> > > > > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> > > > > -               return ERR_PTR(-EINVAL);
+> > > > > +       if (!type || !type[0]) {
+> > > > > +           pr_err("Error: No cooling device type
+> > > > > defined\n");
+> > > > > +           return ERR_PTR(-EINVAL);
+> > > > > +       }
+> > > > > +
+> > > > > +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
+> > > > > +           pr_err("Error: Cooling device name (%s) too long,
+> > > > > "
+> > > > > +                  "should be under %d chars\n", type,
+> > > > > THERMAL_NAME_LENGTH);
+> > > > 
+> > > > Consider fitting into a single greppable string as "Error:
+> > > > Cooling
+> > > > device name over %d chars: %s\n"
+> > > > 
+> > > 
+> > > Was intentionally keep it the same as this
+> > > 
+https://lore.kernel.org/linux-pm/31a29628894a14e716fff113fd9ce945fe649c05.1562876950.git.amit.kucheria@linaro.org/
+> > > Will make it shorter in both places next verion
+> > 
+> > Yes please, make it a separate patch. We didn't catch it during
+> > review.
+> > 
+> > > 
+> > > > > +           return ERR_PTR(-EINVAL);
+> > > > > +       }
+> > > > > 
+> > > > >         if (!ops || !ops->get_max_state || !ops-
+> > > > > >get_cur_state ||
+> > > > >             !ops->set_cur_state)
+> > > > > @@ -972,7 +980,7 @@ __thermal_cooling_device_register(struct
+> > > > > device_node *np,
+> > > > >         }
+> > > > > 
+> > > > >         cdev->id = result;
+> > > > > -       strlcpy(cdev->type, type ? : "", sizeof(cdev->type));
+> > > > > +       strlcpy(cdev->type, type, sizeof(cdev->type));
+> > > > >         mutex_init(&cdev->lock);
+> > > > >         INIT_LIST_HEAD(&cdev->thermal_instances);
+> > > > >         cdev->np = np;
+> > > > > @@ -1250,7 +1258,7 @@ thermal_zone_device_register(const char
+> > > > > *type, int trips, int mask,
+> > > > >                 return ERR_PTR(-EINVAL);
+> > > > >         }
+> > > > > 
+> > > > > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH) {
+> > > > > +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
+> > > > >                 pr_err("Error: Thermal zone name (%s) too
+> > > > > long, should be under %d chars\n",
+> > > > >                        type, THERMAL_NAME_LENGTH);
+> > > > >                 return ERR_PTR(-EINVAL);
+> > > > > --
+> > > > > 2.24.0.393.g34dc348eaf-goog
+> > > > > 
+
