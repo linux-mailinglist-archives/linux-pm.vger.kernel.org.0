@@ -2,417 +2,380 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDC31139EA
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 03:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F34E113A06
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 03:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728731AbfLECaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 21:30:07 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:61345 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728459AbfLECaH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 21:30:07 -0500
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191205023002epoutp02f1e05cf4a8ea00a243ad3f6d977a5836~dWLppUcaM1647516475epoutp02G
-        for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2019 02:30:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191205023002epoutp02f1e05cf4a8ea00a243ad3f6d977a5836~dWLppUcaM1647516475epoutp02G
+        id S1728560AbfLECmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 21:42:40 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:61563 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728490AbfLECmj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 21:42:39 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191205024236epoutp03f27fdd850ff62a777f075cf4aa98eea7~dWWn83LF22038720387epoutp03I
+        for <linux-pm@vger.kernel.org>; Thu,  5 Dec 2019 02:42:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191205024236epoutp03f27fdd850ff62a777f075cf4aa98eea7~dWWn83LF22038720387epoutp03I
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575513002;
-        bh=xbucTyOyREF5meUyQSLulUXE71x8nxaKe9G52STj/fU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=kM3AmubES3GAbwHu2NP1Io1QtURJ/lGDaA+lBNM3Ozrdum9oLHJENbSwBnlFkagO9
-         X1WjXU4ZRWpq9ROaaCN7GOBK2L8zBvgL3GCFWm7r3g7wRJJTP5POyP/f+/6hnvNsmX
-         8GEGdutfrIKXhUb3uTmXaHkKxcgbgLPOtFHiGIQE=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191205023001epcas1p106a6b1a5dd25d446e3ef1ba24b210f38~dWLpFOQRT1269412694epcas1p1F;
-        Thu,  5 Dec 2019 02:30:01 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47T06v08VNzMqYky; Thu,  5 Dec
-        2019 02:29:59 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        s=mail20170921; t=1575513756;
+        bh=/AV8cj+Rs9i4o/YmUSbBp9ReMoY1GecfCLegvS5bIEI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=OML49Db0atWrV5+4ve0rCS5S5qw1EHcDurQxlJqk7znjLfpXcPMU8lsU47oSuUI0F
+         ixuUP2k2m33oH7AxsL2l/19LizJUeBsgwLwjan1JGvbMPX94HQCwR8k/7qVHtzFTwl
+         U6a737NWFnAURjib+MxTm+wAm/rR8byTfx02SYho=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20191205024235epcas1p4efff8c86dda4cd5a4e7a4b84fbbecfe1~dWWnk_Msw1080810808epcas1p4S;
+        Thu,  5 Dec 2019 02:42:35 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 47T0PP46jRzMqYlx; Thu,  5 Dec
+        2019 02:42:33 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
         epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B7.12.48019.6AB68ED5; Thu,  5 Dec 2019 11:29:58 +0900 (KST)
+        DE.C5.48019.99E68ED5; Thu,  5 Dec 2019 11:42:33 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191205022958epcas1p17f0a9e0e9eab0cf0a694488a6ea600e8~dWLmIOJO13049230492epcas1p1Z;
-        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        20191205024233epcas1p17bce651f379f78abe435c2be1f1fb3e7~dWWlDdQ9m1651816518epcas1p1h;
+        Thu,  5 Dec 2019 02:42:33 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191205022958epsmtrp10453ecaaba8a07de06d53e080f850b2a~dWLmHYiXM2210222102epsmtrp1T;
-        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
-X-AuditID: b6c32a38-23fff7000001bb93-2b-5de86ba6e638
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        ED.94.10238.6AB68ED5; Thu,  5 Dec 2019 11:29:58 +0900 (KST)
+        20191205024233epsmtrp1b991c1c072a713d81582fa414d35b615~dWWlClvAz2961129611epsmtrp1R;
+        Thu,  5 Dec 2019 02:42:33 +0000 (GMT)
+X-AuditID: b6c32a38-257ff7000001bb93-86-5de86e99a8f4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.E5.06569.99E68ED5; Thu,  5 Dec 2019 11:42:33 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191205022958epsmtip2895550fb1dc64ea8aa192e53892d5d02~dWLl2eFut2086620866epsmtip2Z;
-        Thu,  5 Dec 2019 02:29:58 +0000 (GMT)
-Subject: Re: [RFC PATCH v2 09/11] devfreq: exynos-bus: Add interconnect
- functionality to exynos-bus
-To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     myungjoo.ham@samsung.com, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, georgi.djakov@linaro.org,
-        leonard.crestez@nxp.com, m.szyprowski@samsung.com,
-        b.zolnierkie@samsung.com, krzk@kernel.org
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191205024233epsmtip1dd6db9d7ecbed2a18f9ed4a6a8fcf5f4~dWWkzfi9M0534105341epsmtip1W;
+        Thu,  5 Dec 2019 02:42:32 +0000 (GMT)
+Subject: Re: [PATCH] devfreq: exynos-bus: workaround dev_pm_opp_set_rate()
+ errors on Exynos5422/5800 SoCs
 From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     Kamil Konieczny <k.konieczny@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Organization: Samsung Electronics
-Message-ID: <1050604c-00e7-ca81-032b-1aee9a3f8c9f@samsung.com>
-Date:   Thu, 5 Dec 2019 11:36:12 +0900
+Message-ID: <99bc2b8a-8977-8020-f3d9-faac93416cd8@samsung.com>
+Date:   Thu, 5 Dec 2019 11:48:47 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <9b3b21d3e4678946724531c58ad7f9c7a3993a95.camel@samsung.com>
+In-Reply-To: <635904ed-93e1-944b-9317-8c9a19844223@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmnu6y7BexBkfmWFvcn9fKaLFxxnpW
-        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
-        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
-        HpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0t5JC
-        WWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAh
-        O2PXJO2Cg94Ve5+vYGpgbLPtYuTkkBAwkdj/qJe5i5GLQ0hgB6PEjdfL2CGcT4wSe2a9ZoVw
-        vjFKLL3dwQzTcvz+aTaIxF5Giat7t0G1vGeU2PnxKQtIlbBAqsSctdvBBosI/GeUOL1sJdgs
-        ZoFjjBJ77/wEq2IT0JLY/+IGG4jNL6AocfXHY0YQm1fATmLOnVfsIDaLgIrErM0XmEBsUYEw
-        iZPbWqBqBCVOznwCNodTwFPi7JZ3YDazgLjErSfzmSBseYnmrbPBrpAQ2Mcu8fbaWSaIJ1wk
-        Tm3+zwphC0u8Or6FHcKWknjZ3wZlV0usPHmEDaK5g1Fiy/4LUA3GEvuXTgYaxAG0QVNi/S59
-        iLCixM7fcxkhFvNJvPvawwpSIiHAK9HRJgRRoixx+cFdqBMkJRa3d7JNYFSaheSdWUhemIXk
-        hVkIyxYwsqxiFEstKM5NTy02LDBBju9NjOBUrWWxg3HPOZ9DjAIcjEo8vA2bnscKsSaWFVfm
-        HmKU4GBWEuHdJvE0Vog3JbGyKrUoP76oNCe1+BCjKTC0JzJLiSbnA/NIXkm8oamRsbGxhYmh
-        mamhoZI4L8ePi7FCAumJJanZqakFqUUwfUwcnFINjByVHvcKJxmYdO9xMG3ssVqSMOlE0fGK
-        v5c7ps9waWtcskBo+jPbPw+KTMMirv3u3N6/uvBOhWHcvLuzre+XLzmbz2p354j5uh1vr/K1
-        e/m5cS11MrFdKr7ygmVdReQkTZMNr4QZ/8d4T/28+Gx+w5LTW1o0p6f637jY0vTt+04P3zce
-        TU93f1FiKc5INNRiLipOBABRkh746wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsWy7bCSvO6y7BexBsc+iVvcn9fKaLFxxnpW
-        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
-        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
-        HsVlk5Kak1mWWqRvl8CVsWuSdsFB74q9z1cwNTC22XYxcnJICJhIHL9/mq2LkYtDSGA3o8Sf
-        ZX/ZIRKSEtMuHmXuYuQAsoUlDh8uhqh5yyixc+t0VpAaYYFUiTlrtzODJEQE/jNKPGw7xgji
-        MAscY5T4uGI9K0TLBiaJ27/6wVrYBLQk9r+4wQZi8wsoSlz98ZgRxOYVsJOYc+cV2GoWARWJ
-        WZsvMIHYogJhEjuXPGaCqBGUODnzCQuIzSngKXF2yzswm1lAXeLPvEvMELa4xK0n85kgbHmJ
-        5q2zmScwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kR
-        HLNamjsYLy+JP8QowMGoxMPbsOl5rBBrYllxZe4hRgkOZiUR3m0ST2OFeFMSK6tSi/Lji0pz
-        UosPMUpzsCiJ8z7NOxYpJJCeWJKanZpakFoEk2Xi4JRqYFze2724vVslWKfUn/l5WdSdutXi
-        pWaLDs+LN3onPj+4ZP+sT34vTnbfNahS/Pxk42fJ9hSnkIuT5ZLY9k3YeD+r+NrFmPPcNhOq
-        uH0PaGnu2Rl4LFbv1/+Ebd96u/bET8peV9Xe8cg12l+mZWFz4S5bv+V8PPuaGPNrTq2Yd8BI
-        /b/GpG63V0osxRmJhlrMRcWJAPwoDGfVAgAA
-X-CMS-MailID: 20191205022958epcas1p17f0a9e0e9eab0cf0a694488a6ea600e8
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm29nOjqvV18x6G5R2KijDy1FXp8gKilrlj1EUFMo6uIMTd+Oc
+        GTWD7IKZ1ZYUpatQMUsNsZaZhbpaQomW3W9mCVrZhSJXIV2gbcfIf8/7vM/D+z7f91KE5hKp
+        pXJtTl6wcRaaVMmbb85LSii3DWUl19THshfLGhVs5XCZgvUMfCTYnp4LSvbOnk9K1jfwRME+
+        vHaKZIOHOxBb1tMuYxs6+pRs7+5acvk4va/+AKm/dGaX3t1Uj/RB3wyDfEveEjPPmXghjrdl
+        2025tpx0et0G4wqjbkEyk8AsYhfScTbOyqfTKzMMCatyLaGl6LhtnCU/RBk4UaSTli4R7PlO
+        Ps5sF53pNO8wWRyLHIkiZxXzbTmJ2XbrYiY5OUUXEm7NM/vfu0nHZ357a2sJWYiK1pegKApw
+        GtzoeiArQSpKg1sQuCvaSKkYRtB1zoOk4geCmneN6J/lpc9NSI02BNW3f8vDDQ3+gsB/gwnj
+        aJwHP7rOEmFM4njwDz0jw3gyzoS283WKsJnAvTI4PPwzYp6IZ8LjkYHIBDVeCn8aXkUMcjwb
+        AlUtEU0M3gSdzftGNZOgs3wwxFNUFF4GnoArTBN4KrwYrJBJOBb2Xj4ZWRTwQSWUnmkgpQQr
+        ofaERyHhaPhwq0kpYS289xSN4gKo6+wgJXMxgib/vVFDKvhrjsrCgwk8DxqvJUn0TLj66zSS
+        Bk+Az98PKcISwGooLtJIklnwsL9PJuFpUL3/AHkE0d4xabxjInjHRPD+H1aJ5PVoCu8QrTm8
+        yDjSxv62D0UONp5tQa13MwIIU4gery70vcvSKLht4g5rAAFF0JPVzfAmS6M2cTtcvGA3CvkW
+        XgwgXeixSwltTLY9dP42p5HRpaSmprJpzAIdw9BT1dTI/SwNzuGcfB7PO3jhn09GRWkL0aSR
+        zXbjsehjHpVqfvBtbGCN58+h6wUpFe0n+5/0Z967moH21UXji3Mf2a98fb6wMq32+rP4p/7f
+        H/oZ1y/DFq1+9reK5bFD3x53FwRblq1+zZr7Mru9hvntdPDnnaJe4fic4HS1OyWxe1dpefeF
+        jU2m6rvC2uLNrqoJMYOq466dn2i5aOaYeEIQub/Y+5mQxgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsWy7bCSnO7MvBexButu8VhsnLGe1WLBpxms
+        Fv2PXzNbnD+/gd3ibNMbdotNj6+xWlzeNYfN4nPvEUaLGef3MVmsPXKX3eJ24wo2B26PTas6
+        2Tw2L6n36NuyitHj8ya5AJYoLpuU1JzMstQifbsEroz9L/vYCt6lVuzZ08XWwNgW1MXIySEh
+        YCJxZ1MfcxcjF4eQwG5GiS9tV5kgEpIS0y4eBUpwANnCEocPF0PUvGWUWPbzMjNIjbBAtsS3
+        08vAbDYBLYn9L26wgdgiAjESX9Y0soM0MAvcZZJY9+0DE0T3NWaJ+XMWsYNU8QsoSlz98ZgR
+        xOYVsJP4u/YeWDeLgIrEoYU7WEBsUYEwiZ1LHjNB1AhKnJz5hAXkIk4Be4n+Q1UgYWYBdYk/
+        8y4xQ9jiEreezGeCsOUlmrfOZp7AKDwLSfcsJC2zkLTMQtKygJFlFaNkakFxbnpusWGBUV5q
+        uV5xYm5xaV66XnJ+7iZGcKxpae1gPHEi/hCjAAejEg/vjS3PY4VYE8uKK3MPMUpwMCuJ8G6T
+        eBorxJuSWFmVWpQfX1Sak1p8iFGag0VJnFc+/1ikkEB6YklqdmpqQWoRTJaJg1OqgTHzM8PS
+        GCbeNAdZ4f2ZaTXxTT+yt8+89uVpfbN+YeJy2/CkT7430v6Xpy/t674gwvvmZLTiRvucjE/n
+        mhYuvGXkr29u+PDT1lun2w7N2eWbO/NDXeQ9kQnv9lXN/Ces4b3hflzd4XdzTj4Qcay+YrSM
+        8XT635OfSjjd5/J5CL9tec+cGjrLMVWJpTgj0VCLuag4EQDMimubsQIAAA==
+X-CMS-MailID: 20191205024233epcas1p17bce651f379f78abe435c2be1f1fb3e7
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190919142329eucas1p2e53992eab9ec6b404f716f955b3c228e
-References: <20190919142236.4071-1-a.swigon@samsung.com>
-        <CGME20190919142329eucas1p2e53992eab9ec6b404f716f955b3c228e@eucas1p2.samsung.com>
-        <20190919142236.4071-10-a.swigon@samsung.com>
-        <e004bedd-294b-172b-5e34-bf7afcfd04bc@samsung.com>
-        <9b3b21d3e4678946724531c58ad7f9c7a3993a95.camel@samsung.com>
+X-CMS-RootMailID: 20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b
+References: <CGME20191008134950eucas1p15cfef5800efc10d5b18ec5eb37dde60b@eucas1p1.samsung.com>
+        <20191008134923.30123-1-k.konieczny@partner.samsung.com>
+        <4f14d3af-e455-d05b-fc03-cba58e001f41@samsung.com>
+        <0ce56e65-d989-18f8-af84-2fbd74ba20aa@samsung.com>
+        <d742e7be-ca79-ae9e-6cc2-dc1fae08d252@samsung.com>
+        <dd5bc937-e776-f717-1cf3-ee0e17621304@samsung.com>
+        <9e0a4aa6-46a6-3ca6-42db-11ed55b468dd@samsung.com>
+        <635904ed-93e1-944b-9317-8c9a19844223@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Artur,
+Hi Kamil,
 
-On 12/3/19 2:05 AM, Artur Świgoń wrote:
-> Hi Chanwoo,
+On 11/14/19 4:38 PM, Chanwoo Choi wrote:
+> Hi Kamil,
 > 
-> On Wed, 2019-09-25 at 16:03 +0900, Chanwoo Choi wrote:
->> Hi,
+> On 11/14/19 3:07 PM, Chanwoo Choi wrote:
+>> Hi Kamil,
 >>
->> I need the time to dig the ICC framework
->> to understand them detailed. After that, I'll review this.
-> 
-> Any updates on this topic?
-
-I'm sorry for delaying the review of  this topic related to icc.
-The review and merge of devfreq pm-qos feature will be finished over soon.
-Because this series depends on the devfreq pm-qos feature
-
-I'll dig into ICC related patches for exynos and imx[1].
-[1] https://lore.kernel.org/linux-arm-kernel/008f2fa973b23fc716d678c5bd35af54@akkea.ca/T/
-[PATCH RFC v6 0/9] interconnect: Add imx support via devfreq
-
-> 
-> Regardless of the purpose of this RFC, I think patches 01-04
-> are still beneficial to devfreq. I can rebase and post them
-> as a separate series if you wish.
-
-Yes. please split out patch1-4 from this series
-and send them based on linux-next.git separately.
-
-> 
->> Basically, I agree this approach. But, I'm wondering
->> the existing binding method between 'bus_leftbus' and 'bus_dmc'.
->> From before, I thought that devfreq framework need to
->> enhance the binding method between parent devfreq device
->> and passive devfreq device instead of 'devfreq' property.
->>
->> On this patch, use the same binding way between
->> 'bus_leftbus' and 'bus_dmc' with 'parent' property
->> as following:
->>
->> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
->> @@ -106,6 +106,7 @@
->>  &bus_leftbus {
->>  	devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
->>  	vdd-supply = <&buck3_reg>;
->> +	parent = <&bus_dmc>;
->>  	status = "okay";
->>  };
->>
->> I'm not sure about continuing to use this method for new feature.
->> If possible, hope to replace the existing binding style
->> with new method like of_graph. Actually, I don't know the correct method.
->>
->>
->> On 19. 9. 19. 오후 11:22, Artur Świgoń wrote:
->>> From: Artur Świgoń <a.swigon@partner.samsung.com>
+>> On 11/14/19 12:12 AM, Kamil Konieczny wrote:
+>>> Hi Chanwoo,
 >>>
->>> This patch adds interconnect functionality to the exynos-bus devfreq
->>> driver.
+>>> On 14.10.2019 08:46, Chanwoo Choi wrote:
+>>>> Hi Marek,
+>>>>
+>>>> On 19. 10. 11. 오후 8:33, Marek Szyprowski wrote:
+>>>>> Hi Chanwoo,
+>>>>>
+>>>>> On 10.10.2019 04:50, Chanwoo Choi wrote:
+>>>>>> On 2019년 10월 08일 22:49, k.konieczny@partner.samsung.com wrote:
+>>>>>>> Commit 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use
+>>>>>>> dev_pm_opp_set_rate()") introduced errors:
+>>>>>>> exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
+>>>>>>> exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
+>>>>>>> exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
+>>>>>>> ...
+>>>>>>> exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
+>>>>>>> exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
+>>>>>>> exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
+>>>>>>>
+>>>>>>> They are caused by incorrect PLL assigned to clock source, which results
+>>>>>>> in clock rate outside of OPP range. Add workaround for this in
+>>>>>>> exynos_bus_parse_of() by adjusting clock rate to those present in OPP.
+>>>>>> If the clock caused this issue, you can set the initial clock on DeviceTree
+>>>>>> with assigned-clock-* properties. Because the probe time of clock driver
+>>>>>> is early than the any device drivers.
+>>>>>>
+>>>>>> It is not proper to fix the clock issue on other device driver.
+>>>>>> I think you can fix it by using the supported clock properties.
+>>>>>
+>>>>> This issue is about something completely different. The OPPs defined in 
+>>>>> DT cannot be applied, because it is not possible to derive the needed 
+>>>>> clock rate from the bootloader-configured clock topology (mainly due to 
+>>>>> lack of common divisor values for some of the parent clocks). Some time 
+>>>>> ago Lukasz tried initially to redefine this clock topology using 
+>>>>> assigned-clock-rates/parents properties (see 
+>>>>> https://protect2.fireeye.com/url?k=4b80c0304459bc8e.4b814b7f-f87f1e1aee1a85c0&u=https://lkml.org/lkml/2019/7/15/276), but it has limitations and some 
+>>>>> such changes has to be done in bootloader. Until this is resolved, 
+>>>>> devfreq simply cannot set some of the defined OPPs.
+>>>>
+>>>> As you mentioned, the wrong setting in bootloader cause the this issue.
+>>>> So, this patch change the rate on exynos-bus.c in order to fix
+>>>> the issue with workaround style. 
+>>>>
+>>>> But, also, it can be fixed by initializing the clock rate on DT
+>>>> although it is not fundamental solution as you mentioned.
+>>>>
+>>>> If above two method are workaround way, I think that set the clock
+>>>> rate in DT is proper. The role of 'assigned-clock-*' properties
+>>>> is for this case in order to set the initial frequency on probe time.
 >>>
->>> The SoC topology is a graph (or, more specifically, a tree) and most of
->>> its edges are taken from the devfreq parent-child hierarchy (cf.
->>> Documentation/devicetree/bindings/devfreq/exynos-bus.txt). Due to
->>> unspecified relative probing order, -EPROBE_DEFER may be propagated to
->>> guarantee that a child is probed before its parent.
+>>> I can add 'assigned-clock-*' to DT, but the issue is caused in opp points,
+>>> so the warning from exynos-bus will still be there.
 >>>
->>> Each bus is now an interconnect provider and an interconnect node as well
->>> (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registers
->>> itself as a node. Node IDs are not hardcoded but rather assigned at
->>> runtime, in probing order (subject to the above-mentioned exception
->>> regarding relative order). This approach allows for using this driver with
->>> various Exynos SoCs.
->>>
->>> Frequencies requested via the interconnect API for a given node are
->>> propagated to devfreq using dev_pm_qos_update_request(). Please note that
->>> it is not an error when CONFIG_INTERCONNECT is 'n', in which case all
->>> interconnect API functions are no-op.
->>>
->>> Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
->>> ---
->>>  drivers/devfreq/exynos-bus.c | 153 +++++++++++++++++++++++++++++++++++
->>>  1 file changed, 153 insertions(+)
->>>
->>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->>> index 8d44810cac69..e0232202720d 100644
->>> --- a/drivers/devfreq/exynos-bus.c
->>> +++ b/drivers/devfreq/exynos-bus.c
->>> @@ -14,14 +14,19 @@
->>>  #include <linux/devfreq-event.h>
->>>  #include <linux/device.h>
->>>  #include <linux/export.h>
->>> +#include <linux/idr.h>
->>> +#include <linux/interconnect-provider.h>
->>>  #include <linux/module.h>
->>>  #include <linux/of.h>
->>>  #include <linux/pm_opp.h>
->>> +#include <linux/pm_qos.h>
->>>  #include <linux/platform_device.h>
->>>  #include <linux/regulator/consumer.h>
->>>  
->>>  #define DEFAULT_SATURATION_RATIO	40
->>>  
->>> +#define icc_units_to_khz(x) ((x) / 8)
->>> +
->>>  struct exynos_bus {
->>>  	struct device *dev;
->>>  
->>> @@ -35,6 +40,12 @@ struct exynos_bus {
->>>  	struct opp_table *opp_table;
->>>  	struct clk *clk;
->>>  	unsigned int ratio;
->>> +
->>> +	/* One provider per bus, one node per provider */
->>> +	struct icc_provider provider;
->>> +	struct icc_node *node;
->>> +
->>> +	struct dev_pm_qos_request qos_req;
->>>  };
->>>  
->>>  /*
->>> @@ -59,6 +70,13 @@ exynos_bus_ops_edev(enable_edev);
->>>  exynos_bus_ops_edev(disable_edev);
->>>  exynos_bus_ops_edev(set_event);
->>>  
->>> +static int exynos_bus_next_id(void)
->>> +{
->>> +	static DEFINE_IDA(exynos_bus_icc_ida);
->>> +
->>> +	return ida_alloc(&exynos_bus_icc_ida, GFP_KERNEL);
->>> +}
->>> +
->>>  static int exynos_bus_get_event(struct exynos_bus *bus,
->>>  				struct devfreq_event_data *edata)
->>>  {
->>> @@ -171,6 +189,38 @@ static void exynos_bus_passive_exit(struct device *dev)
->>>  	clk_disable_unprepare(bus->clk);
->>>  }
->>>  
->>> +static int exynos_bus_icc_set(struct icc_node *src, struct icc_node *dst)
->>> +{
->>> +	struct exynos_bus *src_bus = src->data, *dst_bus = dst->data;
->>> +	s32 src_freq = icc_units_to_khz(src->avg_bw);
->>> +	s32 dst_freq = icc_units_to_khz(dst->avg_bw);
->>> +
->>> +	dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
->>> +	dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int exynos_bus_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->>> +				    u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
->>> +{
->>> +	*agg_avg += avg_bw;
->>> +	*agg_peak = max(*agg_peak, peak_bw);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_args *spec,
->>> +					     void *data)
->>> +{
->>> +	struct exynos_bus *bus = data;
->>> +
->>> +	if (spec->np != bus->dev->of_node)
->>> +		return ERR_PTR(-EINVAL);
->>> +
->>> +	return bus->node;
->>> +}
->>> +
->>>  static int exynos_bus_parent_parse_of(struct device_node *np,
->>>  					struct exynos_bus *bus)
->>>  {
->>> @@ -366,6 +416,101 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
->>>  	return 0;
->>>  }
->>>  
->>> +static int exynos_bus_icc_connect(struct exynos_bus *bus)
->>> +{
->>> +	struct device_node *np = bus->dev->of_node;
->>> +	struct devfreq *parent_devfreq;
->>> +	struct icc_node *parent_node = NULL;
->>> +	struct of_phandle_args args;
->>> +	int ret = 0;
->>> +
->>> +	parent_devfreq = devfreq_get_devfreq_by_phandle(bus->dev, 0);
->>> +	if (!IS_ERR(parent_devfreq)) {
->>> +		struct exynos_bus *parent_bus;
->>> +
->>> +		parent_bus = dev_get_drvdata(parent_devfreq->dev.parent);
->>> +		parent_node = parent_bus->node;
->>> +	} else {
->>> +		/* Look for parent in DT */
->>> +		int num = of_count_phandle_with_args(np, "parent",
->>> +						     "#interconnect-cells");
->>> +		if (num != 1)
->>> +			goto out; /* 'parent' is optional */
->>> +
->>> +		ret = of_parse_phandle_with_args(np, "parent",
->>> +						 "#interconnect-cells",
->>> +						 0, &args);
->>> +		if (ret < 0)
->>> +			goto out;
->>> +
->>> +		of_node_put(args.np);
->>> +
->>> +		parent_node = of_icc_get_from_provider(&args);
->>> +		if (IS_ERR(parent_node)) {
->>> +			/* May be -EPROBE_DEFER */
->>> +			ret = PTR_ERR(parent_node);
->>> +			goto out;
->>> +		}
->>> +	}
+>>> Before this fix, devfreq will issue warning and then change clock to max
+>>> frequency within opp range. This fix mask warning, and as Marek and
+>>> Lukasz Luba wrotes, the proper fix will be to make changes in u-boot
+>>> (and connect proper PLLs to IPs).
 >>
+>> PLL could be changed by clock device driver in the linux kernel.
+>> If you don't add the supported frequency into PLL frequency table 
+>> of clock device driver, will fail to change the wanted frequency
+>> on the linux kernel. It means that it is not fixed by only touching
+>> the bootloader. 
 >>
+>> As you commented, the wrong opp points which are specified on dt
+>> cause this issue. Usually, have to initialize the clock rate on dt
+>> by using 'assigned-clocks-*' property and then use the clock
+>> with the preferable clock rate. I think that we have to fix
+>> the fundamental problem. 
 >>
->>> +
->>> +	ret = icc_link_create(bus->node, parent_node->id);
->>> +
->>> +out:
->>> +	return ret;
->>> +}
->>> +
->>> +static int exynos_bus_icc_init(struct exynos_bus *bus)
->>> +{
->>> +	struct device *dev = bus->dev;
->>> +	struct icc_provider *provider = &bus->provider;
->>> +	struct icc_node *node;
->>> +	int id, ret;
->>> +
->>> +	/* Initialize the interconnect provider */
->>> +	provider->set = exynos_bus_icc_set;
->>> +	provider->aggregate = exynos_bus_icc_aggregate;
->>> +	provider->xlate = exynos_bus_icc_xlate;
->>> +	provider->dev = dev;
->>> +	provider->data = bus;
->>> +
->>> +	ret = icc_provider_add(provider);
->>> +	if (ret < 0)
->>> +		goto out;
->>> +
->>> +	ret = id = exynos_bus_next_id();
->>> +	if (ret < 0)
->>> +		goto err_node;
->>> +
->>> +	node = icc_node_create(id);
->>> +	if (IS_ERR(node)) {
->>> +		ret = PTR_ERR(node);
->>> +		goto err_node;
->>> +	}
->>> +
->>> +	bus->node = node;
->>> +	node->name = dev->of_node->name;
->>> +	node->data = bus;
->>> +	icc_node_add(node, provider);
->>> +
->>> +	ret = exynos_bus_icc_connect(bus);
->>> +	if (ret < 0)
->>> +		goto err_connect;
->>> +
->>> +	ret = dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus->qos_req,
->>> +				     DEV_PM_QOS_MIN_FREQUENCY, 0);
->>> +
->>> +out:
->>> +	return ret;
->>> +
->>> +err_connect:
->>> +	icc_node_del(node);
->>> +	icc_node_destroy(id);
->>> +err_node:
->>> +	icc_provider_del(provider);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>>  static int exynos_bus_probe(struct platform_device *pdev)
->>>  {
->>>  	struct device *dev = &pdev->dev;
->>> @@ -415,6 +560,14 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>  	if (ret < 0)
->>>  		goto err;
->>>  
->>> +	/*
->>> +	 * Initialize interconnect provider. A return value of -ENOTSUPP means
->>> +	 * that CONFIG_INTERCONNECT is disabled.
->>> +	 */
->>> +	ret = exynos_bus_icc_init(bus);
->>> +	if (ret < 0 && ret != -ENOTSUPP)
->>> +		goto err;
->>> +
->>>  	max_state = bus->devfreq->profile->max_state;
->>>  	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
->>>  	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
->>>
+>> Without bootloader problem, you can fix it by initializing
+>> the clock on dt with 'assigned-clocks-*' property.
+>>
+>> As I knew that it is correct way and I always tried to do this method
+>> for resolving the similar clock issue.
+>>
+>> Lastly, I think that my opinion is more simple and correct.
+>> It could give the more correct information to linux kernel user
+>> which refer to the device tree file.
+>>
+>> 1. Your suggestion 
+>> 	a. Add opp-table with unsupported frequency on dt
+>> 	b. Try to change the clock rate on exynos-bus.c by using unsupported frequency from opp-table
+>> 	c. If failed, retry to change the clock rate on exynos-bus.c
+>>
+>> 2. My opinion
+>> 	a. Initialize the PLL or any clock by using assigned-clock-* property on dt
+>> 	   and add opp-table with supported frequency on dt
+>> 	b. Try to change the clock rate on exynos-bus.c by using supported frequency from opp-table
 >>
 > 
-> Best regards,
+> Just I tried to add 'assigned-clock-rates' property to initialize
+> the clock rate of some bus node as following on odroid-xu3 board:
+> 
+> diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> index 829147e320e0..9a237af5436a 100644
+> --- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> +++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> @@ -42,6 +42,8 @@
+>  };
+>  
+>  &bus_wcore {
+> +       assigned-clocks = <&clock CLK_DOUT_ACLK400_WCORE>;
+> +       assigned-clock-rates = <400000000>;
+>         devfreq-events = <&nocp_mem0_0>, <&nocp_mem0_1>,
+>                         <&nocp_mem1_0>, <&nocp_mem1_1>;
+>         vdd-supply = <&buck3_reg>;
+> @@ -50,11 +52,15 @@
+>  };
+>  
+>  &bus_noc {
+> +       assigned-clocks = <&clock CLK_DOUT_ACLK100_NOC>;
+> +       assigned-clock-rates = <100000000>;
+>         devfreq = <&bus_wcore>;
+>         status = "okay";
+>  };
+>  
+>  &bus_fsys_apb {
+> +       assigned-clocks = <&clock CLK_DOUT_PCLK200_FSYS>;
+> +       assigned-clock-rates = <200000000>;
+>         devfreq = <&bus_wcore>;
+>         status = "okay";
+>  };
+> @@ -120,6 +126,8 @@
+>  };
+>  
+>  &bus_mscl {
+> +       assigned-clocks = <&clock CLK_DOUT_ACLK400_MSCL>;
+> +       assigned-clock-rates = <400000000>;
+>         devfreq = <&bus_wcore>;
+>         status = "okay";
+>  };
+> 
+> 
+> In result,
+> [Before on v5.4-rc6, failed to set the rate by dev_pm_opp_set_rate()]
+> [    4.855811] exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
+> [    4.863374] exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
+> [    4.871240] exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
+> [    4.879509] exynos-bus: new bus device registered: soc:bus_fsys (100000 KHz ~ 200000 KHz)
+> [    4.887957] exynos-bus: new bus device registered: soc:bus_fsys2 ( 75000 KHz ~ 150000 KHz)
+> [    4.896361] exynos-bus: new bus device registered: soc:bus_mfc ( 96000 KHz ~ 333000 KHz)
+> [    4.904330] exynos-bus: new bus device registered: soc:bus_gen ( 89000 KHz ~ 267000 KHz)
+> [    4.911802] exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
+> [    4.912710] exynos-bus: new bus device registered: soc:bus_peri ( 67000 KHz ~  67000 KHz)
+> [    4.924655] exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
+> [    4.932125] exynos-bus: new bus device registered: soc:bus_g2d ( 84000 KHz ~ 333000 KHz)
+> [    4.939607] exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
+> [    4.949758] exynos-bus: new bus device registered: soc:bus_g2d_acp ( 67000 KHz ~ 267000 KHz)
+> [    4.966991] exynos-bus: new bus device registered: soc:bus_jpeg ( 75000 KHz ~ 300000 KHz)
+> [    4.975136] exynos-bus: new bus device registered: soc:bus_jpeg_apb ( 84000 KHz ~ 167000 KHz)
+> [    4.983452] exynos-bus: new bus device registered: soc:bus_disp1_fimd (120000 KHz ~ 200000 KHz)
+> [    4.992218] exynos-bus: new bus device registered: soc:bus_disp1 (120000 KHz ~ 300000 KHz)
+> [    5.000483] exynos-bus: new bus device registered: soc:bus_gscl_scaler (150000 KHz ~ 300000 KHz)
+> [    5.009331] exynos-bus: new bus device registered: soc:bus_mscl ( 84000 KHz ~ 400000 KHz)
+> [    5.020207] exynos-bus soc:bus_mscl: dev_pm_opp_set_rate: failed to find current OPP for freq 666000000 (-34)
+> 
+> [After applied the 'assigned-clock-*' patch on v5.4-rc6]
+> [    4.840571] exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
+> [    4.848099] exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
+> [    4.856016] exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
+> [    4.864307] exynos-bus: new bus device registered: soc:bus_fsys (100000 KHz ~ 200000 KHz)
+> [    4.872723] exynos-bus: new bus device registered: soc:bus_fsys2 ( 75000 KHz ~ 150000 KHz)
+> [    4.881124] exynos-bus: new bus device registered: soc:bus_mfc ( 96000 KHz ~ 333000 KHz)
+> [    4.889147] exynos-bus: new bus device registered: soc:bus_gen ( 89000 KHz ~ 267000 KHz)
+> [    4.896867] exynos-bus: new bus device registered: soc:bus_peri ( 67000 KHz ~  67000 KHz)
+> [    4.907430] exynos-bus: new bus device registered: soc:bus_g2d ( 84000 KHz ~ 333000 KHz)
+> [    4.914797] exynos-bus: new bus device registered: soc:bus_g2d_acp ( 67000 KHz ~ 267000 KHz)
+> [    4.923205] exynos-bus: new bus device registered: soc:bus_jpeg ( 75000 KHz ~ 300000 KHz)
+> [    4.931352] exynos-bus: new bus device registered: soc:bus_jpeg_apb ( 84000 KHz ~ 167000 KHz)
+> [    4.939658] exynos-bus: new bus device registered: soc:bus_disp1_fimd (120000 KHz ~ 200000 KHz)
+> [    4.948401] exynos-bus: new bus device registered: soc:bus_disp1 (120000 KHz ~ 300000 KHz)
+> [    4.956650] exynos-bus: new bus device registered: soc:bus_gscl_scaler (150000 KHz ~ 300000 KHz)
+> [    4.965573] exynos-bus: new bus device registered: soc:bus_mscl ( 84000 KHz ~ 400000 KHz)
+> 
+
+Actually, I don't want to leave this problem on mainline.
+We have to need to fix the fail of exynos-bus registration for kernel booting.
+Please reply your opinion or send the fix-up patch as I commented above.
+
+> 
+>>>
+>>> Second solution would be to write down new OPP points with currently used
+>>> frequencies, and with max one for 532 MHz.
+>>>
+>>>> I think that the previous patch[1] of Kamil Konieczny is missing
+>>>> the patches which initialize the clock rate on DT file.
+>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4294a779bd8dff6c65e7e85ffe7a1ea236e92a68
+>>>>
+>>>>>
+>>>>> This issue was there from the beginning, recent Kamil's patch only 
+>>>>> revealed it. In fact it was even worse - devfreq and common clock 
+>>>>> framework silently set lower clock than the given OPP defined.
+>>>>>
+>>>>>>> Fixes: 4294a779bd8d ("PM / devfreq: exynos-bus: Convert to use dev_pm_opp_set_rate()")
+>>>>>>> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+>>>>>>> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+>>>>>>> ---
+>>>>>>>   drivers/devfreq/exynos-bus.c | 14 +++++++++++---
+>>>>>>>   1 file changed, 11 insertions(+), 3 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+>>>>>>> index c832673273a2..37bd34d5625b 100644
+>>>>>>> --- a/drivers/devfreq/exynos-bus.c
+>>>>>>> +++ b/drivers/devfreq/exynos-bus.c
+>>>>>>> @@ -243,7 +243,7 @@ static int exynos_bus_parse_of(struct device_node *np,
+>>>>>>>   {
+>>>>>>>   	struct device *dev = bus->dev;
+>>>>>>>   	struct dev_pm_opp *opp;
+>>>>>>> -	unsigned long rate;
+>>>>>>> +	unsigned long rate, opp_rate;
+>>>>>>>   	int ret;
+>>>>>>>   
+>>>>>>>   	/* Get the clock to provide each bus with source clock */
+>>>>>>> @@ -267,13 +267,21 @@ static int exynos_bus_parse_of(struct device_node *np,
+>>>>>>>   	}
+>>>>>>>   
+>>>>>>>   	rate = clk_get_rate(bus->clk);
+>>>>>>> -
+>>>>>>> -	opp = devfreq_recommended_opp(dev, &rate, 0);
+>>>>>>> +	opp_rate = rate;
+>>>>>>> +	opp = devfreq_recommended_opp(dev, &opp_rate, 0);
+>>>>>>>   	if (IS_ERR(opp)) {
+>>>>>>>   		dev_err(dev, "failed to find dev_pm_opp\n");
+>>>>>>>   		ret = PTR_ERR(opp);
+>>>>>>>   		goto err_opp;
+>>>>>>>   	}
+>>>>>>> +	/*
+>>>>>>> +	 * FIXME: U-boot leaves clock source at incorrect PLL, this results
+>>>>>>> +	 * in clock rate outside defined OPP rate. Work around this bug by
+>>>>>>> +	 * setting clock rate to recommended one.
+>>>>>>> +	 */
+>>>>>>> +	if (rate > opp_rate)
+>>>>>>> +		clk_set_rate(bus->clk, opp_rate);
+>>>>>>> +
+>>>>>>>   	bus->curr_freq = dev_pm_opp_get_freq(opp);
+>>>>>>>   	dev_pm_opp_put(opp);
+>>>>>>>   
+>>>>>>>
+>>>>>>
+>>>>> Best regards
+>>>>>
+>>>>
+>>>>
+>>>
+>>
+>>
+> 
 > 
 
 
