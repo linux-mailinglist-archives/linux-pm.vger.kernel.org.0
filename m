@@ -2,82 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E052114784
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 20:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822D111480D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 21:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729145AbfLETMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 14:12:06 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:43136 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbfLETMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 14:12:05 -0500
-Received: by mail-oi1-f196.google.com with SMTP id x14so235065oic.10
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 11:12:05 -0800 (PST)
+        id S1729240AbfLEU0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 15:26:32 -0500
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:42394 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729145AbfLEU0c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 15:26:32 -0500
+Received: by mail-vk1-f195.google.com with SMTP id u123so1563130vkb.9
+        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 12:26:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lbTgn4jNgsokf2M6goUMgel36hy0BJM0Dor775D7GSE=;
-        b=KqaiLT61/XGnqIJhyHQusP4pG9VwXR+bKLFriLrHG7+eWANmbvM2tv0SS0gLxwZVAU
-         nsmUBgaji2JlUcHgiQDOK6v3RPwyLG7HmyQ+b7bBZfvD03vCB90Ym/p77Py1195ubD4M
-         Lzkwqu6taOKa4HIz7qyRUfhUcEEHsEUfVmZfOoE73SX7H04DnFOSEw1+af0sto1/idf7
-         z1UqhwrzFEfVZKYMRDIEFScrL5o6Fzw5U8b842jXc6f6vNOSDmB0HYWzOBuJawEHmebm
-         NViX2VGHk77eRYN+46e8IBzsNFnxcFC2VEtgC0sYd5mbWZqrXldmWhSitZUJej3nXAdd
-         kHMw==
+        bh=PRZIeGTgLYe32xwj6wCkSy8WULcrgIUyS3clF5He5As=;
+        b=Vv6YHYn/g7rA9ELgKQoYQBL4QdGjWvSx07OcIA+s9uJL79lPxzqHKScJ91kLi7GiAE
+         GXHu3NHrNsWuSxMm9shl63nmOcnQvcD4lZUYki4NMrdMbd38NJ1Hd4PrUqRxiFDuNM4N
+         uSujBoWplByotggU8Dzw/msWAkT+G02TE0YzmQdhqODbvLzKMQG3cCUT8hWM4hCtJ8N2
+         9j1EUphxgvJkCDh6nwicSDpSbCmZGOWKOU+2nTLV92i9wY3JFDrwJ8IHz3BrFr6/RXjo
+         OzPJd2Bdh7PNC7/wSbEi9b5GB5Odlo9aZDFwjDn70JelWkP3cMeEg4A0DSxQJfZrO7bx
+         cCJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lbTgn4jNgsokf2M6goUMgel36hy0BJM0Dor775D7GSE=;
-        b=Y9Q+8n6UZOm6wmG2Uxg/idW7+z7OW4kNXwrASNW62Icga88Ze9yP1Js+WkgOw3seuJ
-         roDM/1FIqVIPcpMTjruROBKkci0zdscDfgUaYP+UMUway/2CF2jXIbRq15vlBL6g5kJo
-         VujgeGppouJGw/LEFTSU0rM2TxrE/itorB6tFlNA9kJI/ysf9N+Dv/OO5Dcgfg4IDKc5
-         bAKqT68wqPsebRrDPpuu7jNg/1k8iv3VgBBs1ucieVEen1KBrGnqU0tkEweTyrzerr7h
-         kfOjeB1VzTa8IS2FghmN+SsFOvxBqp+HjVK3sOWCOgUzC7z2X2kk4X8zec8G14cynWNo
-         xlBg==
-X-Gm-Message-State: APjAAAUG2oJP454lYjQi9RarzpH4YVs6MfvcBSksrd5ZRmGujY8HlKVO
-        gtgyZkT5zo9AkqHW1rmeF0p2hChgHaA5Y+aeG3DKHg==
-X-Google-Smtp-Source: APXvYqwO24mcZkmRu8n96LRippWIZh/qu1VArRKN8KHPM7/mkUlrnXW//GsNTA2ZsMEsxE5rDQ505XtmyKjgLo6mZSc=
-X-Received: by 2002:aca:503:: with SMTP id 3mr2990513oif.24.1575573124553;
- Thu, 05 Dec 2019 11:12:04 -0800 (PST)
+        bh=PRZIeGTgLYe32xwj6wCkSy8WULcrgIUyS3clF5He5As=;
+        b=QkOGPkxIhdYbF68fxAAhueQHc11dQd4TCaQfXE6MC3526fxzOG5b7v1ur7DS6x2CiN
+         UCJi+F6yrN/q1E7zOnrXiNCMjIGaDc7I+7Yh7kC5D/p6VUgbdwT9bv41iHxH51efXJUI
+         od6TtLne/XUYebxT8gRA737HuctafcXA/7PmmVyIS26RMCzBP2b+mc385Zr8X0lujPOf
+         ehgpWN3tFrQvc+prOjmNnFvDJJTLz26hhTYFM/OzT4iNNpra8ot+x8XIBlk+G6Y1RVKE
+         x7k+tuwa8Elfvuf4/NHam0oN5F3JN5i8lKnV0ZHmtH3K+itkC1aejBqX2ftnLrPv5fbd
+         a2nQ==
+X-Gm-Message-State: APjAAAVTEepx8sZS2QCHlHRHk7ofEOySJ1d/8G+MdPV3m9tQrWQXXWuv
+        bErpxJutDPZNKniixxAL3bq89PmpqAoHwtsU3y7jkA==
+X-Google-Smtp-Source: APXvYqwJJ8Ov6kfOALtgEnyiA5wFf5YLHSlajlzw+cIFNSq6BfMBdVmzkt4dpZD618trXduh3PKpSjDTLxUI2kReD0M=
+X-Received: by 2002:a1f:2f04:: with SMTP id v4mr8247656vkv.101.1575577591049;
+ Thu, 05 Dec 2019 12:26:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-4-saravanak@google.com>
- <20191125112812.26jk5hsdwqfnofc2@vireshk-i7> <20191125112952.uwrmeukppkqu4hvm@vireshk-i7>
-In-Reply-To: <20191125112952.uwrmeukppkqu4hvm@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 5 Dec 2019 11:11:28 -0800
-Message-ID: <CAGETcx_uohJknvW8pDb6XXBkZveFqMvt5wRyecV5sye5a8vLpQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Android Kernel Team <kernel-team@android.com>,
+References: <20191127102914.18729-1-ulf.hansson@linaro.org>
+ <20191127102914.18729-11-ulf.hansson@linaro.org> <20191205183544.GB1516@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20191205183544.GB1516@e121166-lin.cambridge.arm.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 5 Dec 2019 21:25:54 +0100
+Message-ID: <CAPDyKFra-C_EKrcec6Yys2P10bB+KBtVAKNtVFgqDvV=tzbDRQ@mail.gmail.com>
+Subject: Re: [PATCH v3 10/13] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 3:29 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, 5 Dec 2019 at 19:35, Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
 >
-> On 25-11-19, 16:58, Viresh Kumar wrote:
-> > Message-Id: <8df083ca64d82ff57f778689271cc1be75aa99c4.1574681211.git.viresh.kumar@linaro.org>
-> > From: Viresh Kumar <viresh.kumar@linaro.org>
-> > Date: Mon, 25 Nov 2019 13:57:58 +0530
-> > Subject: [PATCH] opp: Allow lazy-linking of required-opps
+> On Wed, Nov 27, 2019 at 11:29:11AM +0100, Ulf Hansson wrote:
 >
-> Forgot to mention that this is based of pm/linux-next + following series
+> [...]
 >
-> https://lore.kernel.org/lkml/befccaf76d647f30e03c115ed7a096ebd5384ecd.1574074666.git.viresh.kumar@linaro.org/
+> > -static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> > +static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
+> > +                                     struct device_node *cpu_node,
+> >                                       unsigned int state_count, int cpu)
+> >  {
+> >       int i, ret = 0;
+> > @@ -118,6 +152,11 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> >               goto free_mem;
+> >       }
+> >
+> > +     /* Manage the deepest state via a dedicated enter-function. */
+> > +     if (dev)
+> > +             drv->states[state_count - 1].enter =
+> > +                     psci_enter_domain_idle_state;
+>
+>
+> It is unfortunate to make this arbitrary choice, it would be best
+> if you could detect which states are "domain" states aka are governed
+> by multiple cpus.
 
-Thanks Viresh. Is there a git I can pull a branch that has your lazy
-linking patch series and whatever dependencies it has?
+The domain states are managed and selected by the genpd providers, via
+using runtime PM reference counting. Please have a closer look at the
+code in cpuidle-psci-domain.c and in the generic PM domain, that
+should give you the needed details.
 
--Saravana
+I am overriding the enter callback for the *deepest* known idle state
+of the CPU, which is according to what you requested [1].
+
+So, unless I am missing your point, I think the above code does
+exactly what you want, no?
+
+In regards to the "arbitrary choice" of what cpuidle state to use,
+there are more details about why that is, in the changelog.
+
+>
+> This inizialization though does not belong in here, it is done at driver
+> level, it should not be done in this per-cpu path. IIUC the logic the
+> enter pointer should only be overridden if and only if all cpus managed
+> by the driver have a corresponding device associated.
+
+I think you have overlooked the fact that there are one cpuidle driver
+registered per CPU. The above doesn't make sense to me, sorry.
+
+>
+> To be frank I would even move the psci_has_osi_support() check from
+> psci_dt_attach_cpu() to this path and prevent calling
+> psci_dt_attach_cpu() and the tail of the function if
+> (!psci_has_osi_support()).
+>
+> >       data->dev = dev;
+>
+> I think Sudeep already mentioned that, by using psci_has_osi_support()
+> as above you can prevent running this code, there is really no point,
+> the data->dev NULL sentinel is already initialized.
+
+Yes, I discussed this with Sudeep, but we didn't reach a consensus.
+Let me explain the reasons behind the selected approach, once more.
+
+The data->dev is a pointer within a static declared struct. Are you
+sure it's assigned NULL by initialization? Don't we explicitly need to
+set it to NULL, else it will be undefined, no?
+
+Of course, I can move the check for psci_has_osi_support() into here
+and avoid calling psci_dt_attach_cpu(). Just wondering what that
+actually gain us, especially if we need to explicitly set the pointer
+to NULL anyway.
+
+That said, can you please confirm your thoughts around this, I will
+change to whatever you think is best.
+
+[...]
+
+Kind regards
+Uffe
+
+[1] https://www.spinics.net/lists/arm-kernel/msg770558.html
