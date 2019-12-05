@@ -2,102 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F09113A16
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 03:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF15113AB2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 05:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728490AbfLECv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Dec 2019 21:51:29 -0500
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:45573 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728393AbfLECv3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 21:51:29 -0500
-Received: by mail-pg1-f171.google.com with SMTP id b9so452692pgk.12
-        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 18:51:28 -0800 (PST)
+        id S1728449AbfLEENs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Dec 2019 23:13:48 -0500
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:45328 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbfLEENs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Dec 2019 23:13:48 -0500
+Received: by mail-ua1-f66.google.com with SMTP id 59so709455uap.12
+        for <linux-pm@vger.kernel.org>; Wed, 04 Dec 2019 20:13:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=YXOwxN1kP+K4jqhxg2yhpfqPO6sP7d2qL2AC9K9utQ4=;
-        b=qjq9QecI/wOJmuVH8+2KuOKZd77fkfhSNfn75KhTqEhICZ1dJqZObyHA6YA6REPVQI
-         qUmsq/SmFCy9XPAFYfIXDM60S+OakybcZPUjZwNhLBKA/7paGXMi9QCzMMNKwIcy84KA
-         qrUzznkALn//5SzE7Y0GRlKUOBJLtRKsJ+exXKT4ZeCTjv8MzL3d1bJ0gFGpG2AVAWW8
-         VSnlqKn3T7sw0ROo3Ch5kfswp5/6Wg/11JgpwIPSKHj2Cle8tT7pYIc3jUCsQQNHRp50
-         wcr4hxUQOifunSOuS23mTqe6Ex44OF3flMKDSiwqg0UF5UA0JxQVvbhHThGa8VT2rXIp
-         whyg==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JxvM8PAlC3uvNhbaAB15+7WItiOZ6wH5Zn3knWGZWuw=;
+        b=kCXSBxmLW+TqYCxs2sT0nBzziphSgXA3YYH5gIvHSWYjFZSzA6I5Fdq1HyTqaMxMbF
+         arIYwUzl/3ibdejY7UW4g9bRwp2MVIph3pzrL4XMMzfjea5E2jGEIpzuaus0EKmTOr5T
+         am+tMyLWXrUfKXFoEDWTUq/2zcdLVp7gUAH8Z6B+haV4odWOEJfDdrK6IiBFd7rTxpAg
+         7zLfoo9mMbVjFltpgcjSUNKXJ5nMP4ivfo5Zym9f8kwKBFVpFhsiFvQL2msPJY6vVqZm
+         3HKX+3208wOLBBzS0LFE85jGtdh59F4FX4vkSpkVXOXMDSKkgSmSynMZbYOLrsAfutpv
+         yMmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=YXOwxN1kP+K4jqhxg2yhpfqPO6sP7d2qL2AC9K9utQ4=;
-        b=E9vYBu4S7BXgCUn5YhGnScjco31eRBw8gFobUF3doqmkuLxtmccs2OgZda0XvjbHx3
-         qDBe93+Zd5D2YWqWDsf5NfVDYYS5PA30nrSqNN7SQKG+EhlLQUpcazuHJWYAviuqBKzk
-         G/xuTMWXcUdn4IaShJVpmd+0sJUHxz0FCi30gz3CJjbB/bhW7bN92UGtI4jLl+TUYVlS
-         Qgf5NPQAKhz0JPiCfXvzWcy9FpLwcqV1EClwiy54WKWQmpVJKLErGEAwyyExdjOGwsjZ
-         5x5OOPNdCVBXyJGXwkI+IUnmFjRGsquJh9y7DhiQmbQ81D5VOG9cHhPQ8Q3xsNszuRDI
-         hlKg==
-X-Gm-Message-State: APjAAAV/prPiv9NaN4DhfNpN2hbPgffrafRn/eTV0n9TS/1x0c7K1UGi
-        JHx4Q3o71dYzl6uGhOdbJJ4vtw==
-X-Google-Smtp-Source: APXvYqyiIzUgOpbu5JKLdnKDPxQgFqCYX1OfETQq1MaukN74rbD9OAIBcUgXHGPceCG2ufABoZTxow==
-X-Received: by 2002:a63:fc5d:: with SMTP id r29mr7055870pgk.282.1575514288156;
-        Wed, 04 Dec 2019 18:51:28 -0800 (PST)
-Received: from localhost ([122.171.112.123])
-        by smtp.gmail.com with ESMTPSA id o31sm6605986pgb.56.2019.12.04.18.51.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Dec 2019 18:51:27 -0800 (PST)
-Date:   Thu, 5 Dec 2019 08:21:25 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     sumitg <sumitg@nvidia.com>, rjw@rjwysocki.net,
-        catalin.marinas@arm.com, will@kernel.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
-Message-ID: <20191205025125.imxnao2qwyons5zl@vireshk-i7>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
- <20191204054043.o4ff7pnqec3fwdgu@vireshk-i7>
- <7347caa6-43a3-f761-de83-481b45f7b22a@nvidia.com>
- <20191204112749.jkwlyteal4hfvnhb@vireshk-i7>
- <0b634341-ea2b-e9cd-4986-dc9a01c839bb@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JxvM8PAlC3uvNhbaAB15+7WItiOZ6wH5Zn3knWGZWuw=;
+        b=j0/I32Ibh4r1XnmOHBEAjMMHgpQCFIltoMOFlTYCzDgi9duufvQGJjK6iN4ZUNwAcu
+         3WiXDKmV9MF/hI5HHXVpWFTP+QAr5wtP+WAgnce9AkKHQk5+/B/g5nKd2O0C5N6zsr2n
+         qAZyS34CMDP3TGnbwx3cPb/NMhMyq4Xom71tUIBVX2eTE66Tk46LEs+6L+0FnbjjJP2w
+         Wx7Llx2wBLOkFioBeb9GhjmQtW8O3bczI8w1fx58gQU5NMDLWnikt+BP/x1a30lCq+Yk
+         p8iYIzhvPN5o8VlRr6Z08G3hDhGyHtjAB1OaQbn/xEajeC3YQhrH57PaIDnhSnuCoupw
+         NC5A==
+X-Gm-Message-State: APjAAAVz4qhUZvm8I9p9zocIH16Z4+M4bk1NWpjYVqwqW18e+EjFmtxc
+        c7GMiGwy+SryY8T2Tq5+BSwpoIJPiYCmh9Er4vwVRQ==
+X-Google-Smtp-Source: APXvYqwYYa/cidXWFxshvoMEaPsB7oB/yql/7E9JhsWl1/fft6dQ6Lyu2lP6ClpVONrYxXDEmpT4o+3xxoQcO1Tt+k4=
+X-Received: by 2002:ab0:30eb:: with SMTP id d11mr5654186uam.67.1575519227435;
+ Wed, 04 Dec 2019 20:13:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0b634341-ea2b-e9cd-4986-dc9a01c839bb@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <CAHLCerOD2wOJq7QNGBOcLvkMz4wvc1+6Hk2+ZD__NFged3tLcw@mail.gmail.com>
+ <20191204215618.125826-1-wvw@google.com> <20191204215618.125826-2-wvw@google.com>
+In-Reply-To: <20191204215618.125826-2-wvw@google.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Thu, 5 Dec 2019 09:43:36 +0530
+Message-ID: <CAHLCerMQ_734AFe=QCg+qi3TOvYPMB95NPP_EEHNbuODBSEfog@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] thermal: fix and clean up tz and cdev registration
+To:     Wei Wang <wvw@google.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-12-19, 16:57, Dmitry Osipenko wrote:
-> 04.12.2019 14:27, Viresh Kumar пишет:
-> > On 04-12-19, 16:25, sumitg wrote:
-> >> In T194, CCPLEX doesn't have access to set clocks and the
-> >>
-> >> clk_{get|set}_rate() functions set clocks by hook to BPMP R5.
-> >>
-> >> CPU freq can be directly set by CCPLEX using MSR(NVFREQ_REQ_EL1).
-> >>
-> >> As DVFS run's on BPMP, another MSR (NVFREQ_FEEDBACK_EL1) is
-> >>
-> >> used to read the counters and calculate "actual" cpu freq at CCPLEX.
-> >>
-> >> So, "cpuinfo_cur_freq" node gives the actual cpu frequency and not
-> >>
-> >> given by node "scaling_cur_freq".
-> > 
-> > Right, but why can't this be hidden in the CPU's clk driver instead,
-> > so cpufreq driver can just do clk_get_rate() and clk_set_rate() ?
-> 
-> What about to make use of dev_pm_opp_register_set_opp_helper()?
+Hi Wei,
 
-It has a different purpose where we have to play with different
-regulators. And that won't help with clk_get_rate() anyway.
+On Thu, Dec 5, 2019 at 3:26 AM Wei Wang <wvw@google.com> wrote:
+>
+> Make cooling device registration behavior consistent with
 
--- 
-viresh
+Consistent how? Please add details.
+
+> thermal zone. This patch also cleans up a unnecessary
+> nullptr check.
+>
+> Signed-off-by: Wei Wang <wvw@google.com>
+> ---
+>  drivers/thermal/thermal_core.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index d4481cc8958f..64fbb59c2f44 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -954,8 +954,16 @@ __thermal_cooling_device_register(struct device_node *np,
+>         struct thermal_zone_device *pos = NULL;
+>         int result;
+>
+> -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> -               return ERR_PTR(-EINVAL);
+> +       if (!type || !type[0]) {
+> +           pr_err("Error: No cooling device type defined\n");
+> +           return ERR_PTR(-EINVAL);
+> +       }
+> +
+> +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
+> +           pr_err("Error: Cooling device name (%s) too long, "
+> +                  "should be under %d chars\n", type, THERMAL_NAME_LENGTH);
+
+Consider fitting into a single greppable string as "Error: Cooling
+device name over %d chars: %s\n"
+
+> +           return ERR_PTR(-EINVAL);
+> +       }
+>
+>         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+>             !ops->set_cur_state)
+> @@ -972,7 +980,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>         }
+>
+>         cdev->id = result;
+> -       strlcpy(cdev->type, type ? : "", sizeof(cdev->type));
+> +       strlcpy(cdev->type, type, sizeof(cdev->type));
+>         mutex_init(&cdev->lock);
+>         INIT_LIST_HEAD(&cdev->thermal_instances);
+>         cdev->np = np;
+> @@ -1250,7 +1258,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       if (type && strlen(type) >= THERMAL_NAME_LENGTH) {
+> +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
+>                 pr_err("Error: Thermal zone name (%s) too long, should be under %d chars\n",
+>                        type, THERMAL_NAME_LENGTH);
+>                 return ERR_PTR(-EINVAL);
+> --
+> 2.24.0.393.g34dc348eaf-goog
+>
