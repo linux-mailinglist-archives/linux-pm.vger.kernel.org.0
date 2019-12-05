@@ -2,89 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E61311407D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 13:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD641140A2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Dec 2019 13:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729165AbfLEMDi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Dec 2019 07:03:38 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:44319 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729099AbfLEMDi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 07:03:38 -0500
-Received: by mail-vs1-f65.google.com with SMTP id p6so2114544vsj.11
-        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 04:03:37 -0800 (PST)
+        id S1729074AbfLEMMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Dec 2019 07:12:52 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54285 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729048AbfLEMMw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Dec 2019 07:12:52 -0500
+Received: by mail-wm1-f68.google.com with SMTP id b11so3464404wmj.4
+        for <linux-pm@vger.kernel.org>; Thu, 05 Dec 2019 04:12:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uh/sTB6L//7j5NXRAkRpDvOGMYdCPg3GVgIMMAoU6SM=;
-        b=LKmIsj5Xbad6lkdgasr1aoaHZqyCIqu9l3oAjSwy0ruOAdbQjr9PgtJUX/fMoYt6RK
-         KKcBGnrcEf3KmLS3OSS7aiYivuWS4uMSc8VUauQWWR0PRNLNq4WwCp6KQivBwRtb9D0X
-         qsC0JlSPLNktXZ0QJtbDd68W7M6uNPiEMGWHULzVirTaUGGfom00u64Nnu/aAL0y0Op/
-         +ymEAK2ZFN2cIsOofbenjZgLbhz5YCArmi/iaoyLYsBbQh4HJEbtGzLRVBBlLhxtaqo4
-         0P4PXo5am6GQ6/0oeniGxIuOFkf4r0hhEQdR1V0KrXAecPqsWQtxIgtgsOIGvpFJ7AD+
-         66Mg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=a/bPYKhe1GakALad5JS+KohOI4Rn9GZiH2J9WIdwc2g=;
+        b=eQ+1PV5VQO68lWKbY0CiRjbOCXUvk9IqTevetqN1VUeD+A1udFd5dLT6cf1RvvZ6wt
+         mrufu8kKbABKImB3RGorm8BMdrWTK7tPIhGF9SLK38AwNqJAUGJJ1yx0uM+IdwT2dwov
+         46MrFSDjGsI6vCQ/h3Y/6NUELcfaa8RRoEdpVKC2Zx5kseovT7rDSDXwZW0QeB+GbzY2
+         /MPrdi5znrW6xHE8E8CjDr6PWfYRrhgB+jW8i9SK/3QFDfpwsyHc8zanEXNauIkGCpA7
+         LQRH2GiW10bv8/tzEyHGRdgfnzi8uiQ9uULSZd2Ame9NMS/zbGBUKGku3l8WJ5AivnM6
+         ZZNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uh/sTB6L//7j5NXRAkRpDvOGMYdCPg3GVgIMMAoU6SM=;
-        b=G1tCl1RZCaTM6WAc39SisHs+hWxjwF7y/KR01SfDdKB8BfbN+DZ8W7gcV1F7WgJAHL
-         VFX3GcTu8TVb4uOSjTtVDOKF9QkFwI2PD8O6hA+M3xBrT92iyev+1mmHW3tH9A2fNqiU
-         HLgkz/k+ylANtSpg4VE7URaQPr3lQ4M4bKUm8Pwk/T83PQ051qFLqOGRDg4X5JkU+a7R
-         N0xvrL7x79Um24pzF/+di25IGAMBeR7DvMMIPA5ncXw1PkU0ObzY3+EnzRQr1oX0WqfU
-         QiA29IgF6J+emA6sm4qEPy0Gy0m9Iex8grh/ClfWDOKgdE9X0easRMKtZ0fLh+C8mDwT
-         Ih2A==
-X-Gm-Message-State: APjAAAUG/ItlVyWbjPRi91VmAKvG+64gvSvCBeV13w98ImlOP6AK0tz+
-        PWA0rcvXVUaVO8s7+g0S1xhweySM2VCKdeWMwrYoCg==
-X-Google-Smtp-Source: APXvYqxKmXFZ2pxFMFxxgEft/5dJ1SHB7zIYMHUaSiT0++FIkE5acrECUfpknJOrTCnlGriN+0c+LkuN3Z9PWWmRHOc=
-X-Received: by 2002:a05:6102:5d1:: with SMTP id v17mr5211937vsf.200.1575547416765;
- Thu, 05 Dec 2019 04:03:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20191205115150.18836-1-rui.zhang@intel.com>
-In-Reply-To: <20191205115150.18836-1-rui.zhang@intel.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 5 Dec 2019 13:03:00 +0100
-Message-ID: <CAPDyKFqFswOjqNn0s7Y3BAeYuVr+z2NrX3fbn+yu+O1vgWb8tA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Add Daniel Lezcano as the thermal maintainer
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=a/bPYKhe1GakALad5JS+KohOI4Rn9GZiH2J9WIdwc2g=;
+        b=p/v+LXMRDqrGolpTmkU2iTEU/C4lV+Px0iXKaDBljkrJeQaP7V6fWVu5n87vk3F3fV
+         KFrA1rEUOePh8OYuzKhA4wocN69alJYuO2zeMInpJlgZnRpwDVH8yOk4raJa8g/25wXg
+         oNLFCh6U8X7+TQuK0jLJEvaFij9K2y7Y8R4tJwG1zwNVP8bx3z98rFkdIOcFORXCcZne
+         TgU+0kefuwgWnuM3+yjpY/d2Cl7f1CENINeOzq/IxXI+XMC2bHL3OhXnmGAGJRrh1c2H
+         uxwLfaiAvW1mVYJIZqsEOLR12YKbJBAGWqe+ugLZerF3daK/Q4n7dFlHOZCc5cRbRMMZ
+         tDyA==
+X-Gm-Message-State: APjAAAWgAggOZcabLJEFW2raq0SMBUbgqzeI+tH9PBlSGCYzn/uwoBee
+        NIRS8Awp+NjJZFR+tV/vbpD6lA==
+X-Google-Smtp-Source: APXvYqxrJ1eTzRC9uENcWl0MEdd35pt9HGUDr70Y0oxbdzxufNnPN/k0IDOyYdewbNB7eNeTLNscnA==
+X-Received: by 2002:a1c:1f51:: with SMTP id f78mr4793040wmf.60.1575547969849;
+        Thu, 05 Dec 2019 04:12:49 -0800 (PST)
+Received: from mai.imgcgcw.net ([2a01:e34:ed2f:f020:24c3:ebb3:9dd5:81c6])
+        by smtp.gmail.com with ESMTPSA id f1sm12232732wrp.93.2019.12.05.04.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2019 04:12:49 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rui.zhang@intel.com, ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: thermal: Change the git tree location
+Date:   Thu,  5 Dec 2019 13:12:27 +0100
+Message-Id: <20191205121227.19203-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAPDyKFqFswOjqNn0s7Y3BAeYuVr+z2NrX3fbn+yu+O1vgWb8tA@mail.gmail.com>
+References: <CAPDyKFqFswOjqNn0s7Y3BAeYuVr+z2NrX3fbn+yu+O1vgWb8tA@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Dec 2019 at 12:52, Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Add Daniel Lezcano as the co-maintainer of thermal subsystem.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c8abdb50af79..0efadb61fe8b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16287,7 +16287,7 @@ F:      drivers/media/radio/radio-raremono.c
->
->  THERMAL
->  M:     Zhang Rui <rui.zhang@intel.com>
-> -R:     Daniel Lezcano <daniel.lezcano@linaro.org>
-> +M:     Daniel Lezcano <daniel.lezcano@linaro.org>
->  R:     Amit Kucheria <amit.kucheria@verdurent.com>
->  L:     linux-pm@vger.kernel.org
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git
+The thermal trees were merged into a single one shared with the
+maintainer of the subsystem.
 
-Great!
+Update the location of this group git tree.
 
-Did you guys also agree on how to work with the git tree? There is one
-common git, maintained by Rui?
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Just to let people aware of the workflow...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8acaf4f205a1..10607a4f1b04 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16082,8 +16082,7 @@ M:	Zhang Rui <rui.zhang@intel.com>
+ M:	Daniel Lezcano <daniel.lezcano@linaro.org>
+ R:	Amit Kucheria <amit.kucheria@verdurent.com>
+ L:	linux-pm@vger.kernel.org
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+ Q:	https://patchwork.kernel.org/project/linux-pm/list/
+ S:	Supported
+ F:	drivers/thermal/
+-- 
+2.17.1
 
-Kind regards
-Ulf Hansson
