@@ -2,74 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5FE114E10
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 10:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AA1114E61
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 10:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726171AbfLFJRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Dec 2019 04:17:55 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:47060 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726088AbfLFJRz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 04:17:55 -0500
-Received: by mail-ed1-f68.google.com with SMTP id m8so5169931edi.13;
-        Fri, 06 Dec 2019 01:17:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZDNaxJGmzD4UaAts+lOuP1c6KYX3Yal18Eu6hgRldFE=;
-        b=W6s9eTIptdtZ0dLLkbpGfn5RZc0u81x1w2JyVnoifQYvmTnzIPl2nfWSQtrg6hWDJ/
-         2p8ayKHc6mQy5RmE+GrogVd6vE2GULIR4xweEafvxWvLPsUk7y0VqRw0cyr0ii0GFRWh
-         ajzHa41FaCNU4GZTMjxYpmM/2VlWXS4uJT8aqPEg44lc2A6M/nF1TzfAcdgbyPsloUR0
-         cbMQ7YRXVrQg1XaQ07hWD9a/JnzpTnvAEFh9bYXeOtWq11UxwKRQdYMH4tL/NSx6IEFb
-         Xp59ugS05p1HiCmUEBjaxX4j5sQYmfyIIXlMEuOTa/p6oWZnGawzGQPLZiLdDTmhFjbK
-         CDmQ==
-X-Gm-Message-State: APjAAAXMaJYqcjD5uoIpz5+I86oW9HVouiYMIclwJxemt8G1tuO0xHg2
-        nczduWhDnhMRvHoJmiCfHiM=
-X-Google-Smtp-Source: APXvYqwthFSYZky+fFl2W7INcRuVudrAxhT65DmzPiBOhsnAL6ENuF82nk2+q4RKoiNF15ld1GhDFw==
-X-Received: by 2002:a17:906:ad96:: with SMTP id la22mr14113926ejb.84.1575623873663;
-        Fri, 06 Dec 2019 01:17:53 -0800 (PST)
-Received: from pi3 ([194.230.155.234])
-        by smtp.googlemail.com with ESMTPSA id n3sm207540ejj.29.2019.12.06.01.17.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2019 01:17:53 -0800 (PST)
-Date:   Fri, 6 Dec 2019 10:17:51 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Matheus Castello <matheus@castello.eng.br>
-Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
-        lee.jones@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 4/5] power: supply: max17040: Config alert SOC low
- level threshold from FDT
-Message-ID: <20191206091751.GB1917@pi3>
-References: <20191205154410.29462-1-matheus@castello.eng.br>
- <20191205154410.29462-5-matheus@castello.eng.br>
+        id S1726397AbfLFJtj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Dec 2019 04:49:39 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:64169 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbfLFJtg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 04:49:36 -0500
+Received: from 79.184.254.100.ipv4.supernova.orange.pl (79.184.254.100) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id a94a341a3eddd6ac; Fri, 6 Dec 2019 10:49:34 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Subject: [RFC][PATCH 0/6] cpuidle: intel_idle: Use ACPI _CTS to get idle states information
+Date:   Fri, 06 Dec 2019 10:28:51 +0100
+Message-ID: <2037014.bnAicLLH9b@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191205154410.29462-5-matheus@castello.eng.br>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 12:44:09PM -0300, Matheus Castello wrote:
-> For configuration of fuel gauge alert for a low level state of charge
-> interrupt we add a function to config level threshold and a device tree
-> binding property to set it in flatned device tree node.
-> 
-> Now we can use "maxim,alert-low-soc-level" property with the values from
-> 1% up to 32% to configure alert interrupt threshold.
-> 
-> Signed-off-by: Matheus Castello <matheus@castello.eng.br>
-> ---
->  drivers/power/supply/max17040_battery.c | 52 ++++++++++++++++++++++++-
->  1 file changed, 51 insertions(+), 1 deletion(-)
+Hi All,
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+The purpose of this set of patches is to allow the intel_idle driver to use
+C-states information from ACPI _CST on systems where the processor is not
+recognized by it.
 
-Best regards,
-Krzysztof
+The first five patches are preparatory (please look into the changelogs for
+details) and are not expected to make any functional difference.
+
+The last patch adds ACPI _CST support to intel_idle so that _CST is used when
+the driver does not have a dedicated list of C-states for the given processor.
+
+The plan (for the future) is to also use _CST in some cases when there is a
+list of C-states for the given processor in intel_idle in order to produce a
+combined list in which some states may be disabled by default.
+
+This has been lightly tested on a Dell XPS13 9360 (with an additional patch to
+drop the Kaby Lake entries from intel_idle_ids[] which normally would prevent
+intel_idle from registering itself as the cpuidle driver).  The difference
+between using the idle states list from _CST and the built-in one generally is
+that in the latter case the processor spends more time in package C-state when
+the system is idle.
+
+If there are any concerns about this series, please let me know.
+
+Thanks,
+Rafael
+
+
 
