@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3C011583E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 21:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3AC115844
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 21:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726374AbfLFUn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Dec 2019 15:43:57 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46461 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbfLFUn5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 15:43:57 -0500
-Received: by mail-lj1-f194.google.com with SMTP id z17so8988939ljk.13
-        for <linux-pm@vger.kernel.org>; Fri, 06 Dec 2019 12:43:55 -0800 (PST)
+        id S1726325AbfLFUpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Dec 2019 15:45:24 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33617 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbfLFUpY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 15:45:24 -0500
+Received: by mail-lf1-f68.google.com with SMTP id n25so6294907lfl.0
+        for <linux-pm@vger.kernel.org>; Fri, 06 Dec 2019 12:45:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oF+xlo1sx9gytHOVJmZzD5EHDYm2UDoLMUn75V8RhEs=;
-        b=FI3uXTGCTF/CsvRtjzUm5SGnAxOj8iYUwPwy84nNUJAQJIy5Z6jDPZ43JCM/HizVKg
-         wjalGmSGIL0vznEvGNI1fgY2QOncXYDyRCXqkbhLZL8a9TB613Tjf+UBXDFFD4K0KOTd
-         X/6uFMhEOqGq73YaEAyW74x0y8WYPWnVAscv0=
+        bh=zMYyDKhp6K7/5SuIEY9a+3PPHyckatVY1BJEQOFbYPw=;
+        b=kLQzpX2iLT3Cw3LYn9w2xUhbQcZ1mnSOxrIeil8QWxuKB6jMDdBwqMcFQCjopElDvB
+         9xVPY7OFh1i2ZL3ZJ1/IwfRSv+r6pliXLzcDbGK1wuAftk4uOBp0N6z4sVbWHKY7TjUM
+         FDR3SKEII8ZT9AUEOqqRtcygJcuT9RKG0JZMg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oF+xlo1sx9gytHOVJmZzD5EHDYm2UDoLMUn75V8RhEs=;
-        b=BRwfQykbZa5xvslPNaQRa9YjSyN4TomB2KvZN8uBt/I5W8W8te8Ix3x/xKXGvIxAaT
-         agsFCf7PYmMM6/afA33gK0cdKj2B4AhnKlc1jRZdS+hoOXfiS+EoPf6fIVcwNTJupfgD
-         xm1caMDuG7jmHR20FnjiVlyszHya02/hMVGhhDQJAtEmfdUuctBYGkFnbSaAw4E+wCFs
-         HrnPvS0vpwBBBbx7kvAIHXu95qjoveTlB/HaDFx5N75aWj/yec9Y5o2JeNJ09D+728wZ
-         hj1i196w4l+fzdpuKZNTUlpytW/lyCEDEnwDtbRPYQ1V83IipG4TmxuuscdiQ18jeHfv
-         3FNw==
-X-Gm-Message-State: APjAAAVVZhldOcjbGF8xe2IgdnBBYVL15DpQuFig69CngymR/fCEiFb7
-        vCdxCvqysRXBy7gLoW/T8tsXxpIm2CY=
-X-Google-Smtp-Source: APXvYqwzDujzHaoMoYwZOxwsXT6fNP2HAmk0ZtwsJuGhi5NyqnTqD9o0CrRc2N27hDaLAuH8oAA//A==
-X-Received: by 2002:a2e:880c:: with SMTP id x12mr8521386ljh.44.1575665034848;
-        Fri, 06 Dec 2019 12:43:54 -0800 (PST)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id k24sm8321057ljj.27.2019.12.06.12.43.53
+        bh=zMYyDKhp6K7/5SuIEY9a+3PPHyckatVY1BJEQOFbYPw=;
+        b=dGs9SbZrRp7CpmRgknx7Y6UgAU+frJIr/hvvbvVoMeYgNwVceqwExftt+tDkPABV6z
+         WtfF5gfPf1/Htw+6aEXiQKZsNajp0Z/9bPCfcHag4cAd/DPUNg6Ncq7OPbkiJfa68kV9
+         6s1QgJse3npVrsn5tliUL3OKD8bLM1YS3gTDNKy1fHz22CdFfqZhxjy3hRtlUH4UtUMB
+         OWQBe/t1EHNo2f/nPaNwFa9IljQsA6pjpCHupxJF1vlfYa1n2mQNMSn6W5HhGMGFbHaz
+         kf3e05f4LGBinxUKpOB93IcJ3OEXTOHoaXD2RM6axm8dPxsAaxGe4kOAAlpRoxCEeDiZ
+         0tZQ==
+X-Gm-Message-State: APjAAAVDDffNXLebaU1rrOAVFQ7fD0DrA/ak5j6IbbNa7lHolDQhp5EX
+        7u3wAenC/hS+ecn5YVLskpUoasgXTOM=
+X-Google-Smtp-Source: APXvYqwgbTkLU4RTgPVVHbR3I1NEKl5FYQK6YwLr78pD8ecRdH+tEpt0/2XBzrkhZbi1TSs2PA1Q/Q==
+X-Received: by 2002:ac2:5c4a:: with SMTP id s10mr9124032lfp.88.1575665122229;
+        Fri, 06 Dec 2019 12:45:22 -0800 (PST)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id n14sm296051lfe.5.2019.12.06.12.45.21
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2019 12:43:53 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id k8so9046978ljh.5
-        for <linux-pm@vger.kernel.org>; Fri, 06 Dec 2019 12:43:53 -0800 (PST)
-X-Received: by 2002:a05:651c:285:: with SMTP id b5mr9852969ljo.14.1575665033279;
- Fri, 06 Dec 2019 12:43:53 -0800 (PST)
+        Fri, 06 Dec 2019 12:45:21 -0800 (PST)
+Received: by mail-lf1-f49.google.com with SMTP id f15so5423904lfl.13
+        for <linux-pm@vger.kernel.org>; Fri, 06 Dec 2019 12:45:21 -0800 (PST)
+X-Received: by 2002:a19:ec14:: with SMTP id b20mr5175962lfa.63.1575665120607;
+ Fri, 06 Dec 2019 12:45:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20191128134839.27606-1-georgi.djakov@linaro.org>
-In-Reply-To: <20191128134839.27606-1-georgi.djakov@linaro.org>
+References: <20191128134839.27606-1-georgi.djakov@linaro.org> <20191128134839.27606-2-georgi.djakov@linaro.org>
+In-Reply-To: <20191128134839.27606-2-georgi.djakov@linaro.org>
 From:   Evan Green <evgreen@chromium.org>
-Date:   Fri, 6 Dec 2019 12:43:17 -0800
-X-Gmail-Original-Message-ID: <CAE=gft6YoDyOFvYLh-zOmpbNJwfgB0OGugeZKCORz0euMJyS0w@mail.gmail.com>
-Message-ID: <CAE=gft6YoDyOFvYLh-zOmpbNJwfgB0OGugeZKCORz0euMJyS0w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] interconnect: Add a common standard aggregate function
+Date:   Fri, 6 Dec 2019 12:44:44 -0800
+X-Gmail-Original-Message-ID: <CAE=gft7WHWohbRLk-ungR54p_LUQz5TLeWsT1PtMVRza9M5H7w@mail.gmail.com>
+Message-ID: <CAE=gft7WHWohbRLk-ungR54p_LUQz5TLeWsT1PtMVRza9M5H7w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] interconnect: qcom: Use the standard aggregate function
 To:     Georgi Djakov <georgi.djakov@linaro.org>
 Cc:     linux-pm@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -70,11 +70,9 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Nov 28, 2019 at 5:48 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
 >
-> Currently there is one very standard aggregation method that is used by
-> several drivers. Let's add this as a common function, so that drivers
-> could just point to it, instead of copy/pasting code.
+> Now we have a common function for standard aggregation, so let's use it,
+> instead of duplicating the code.
 >
-> Suggested-by: Evan Green <evgreen@chromium.org>
 > Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
 Reviewed-by: Evan Green <evgreen@chromium.org>
