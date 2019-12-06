@@ -2,131 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C3E114EC9
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 11:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1577114FBC
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 12:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfLFKLs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Dec 2019 05:11:48 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:56007 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbfLFKLr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 05:11:47 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191206101146euoutp0268b65f21cdc083f027ee250acd0bb5e3~dwIFPzkx_0501605016euoutp02T
-        for <linux-pm@vger.kernel.org>; Fri,  6 Dec 2019 10:11:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191206101146euoutp0268b65f21cdc083f027ee250acd0bb5e3~dwIFPzkx_0501605016euoutp02T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575627106;
-        bh=pUJ+B8tPpXjSJhd2ezW888/S1hPq28299mikdXe5hNs=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=pKowX9tOuAtIh14VyWYJcVAh+rc5S7OBAoLk4Sla2yJtdsOhg8gRxB36XyGgnLXQL
-         e2VOY9NWDwPrLkycVkosoRI6KMJiyjoBVS8mnyX28+ag7pZ6Ab+LLiJtUFvubxesg8
-         laJwGTUDabpuoyrL+pdOv82VmSHtYXgJfFU8UjDU=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191206101145eucas1p17ea244f2318cff9a2f12701a6adc6e6f~dwIE_oWxJ2585325853eucas1p18;
-        Fri,  6 Dec 2019 10:11:45 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 29.4C.60698.1692AED5; Fri,  6
-        Dec 2019 10:11:45 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d~dwIEalvKY0678206782eucas1p2d;
-        Fri,  6 Dec 2019 10:11:45 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191206101145eusmtrp19b01c734a265fc9fede24f45cfa955fd~dwIEZ2dN_1595015950eusmtrp18;
-        Fri,  6 Dec 2019 10:11:45 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-0f-5dea29614af9
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 6C.25.07950.1692AED5; Fri,  6
-        Dec 2019 10:11:45 +0000 (GMT)
-Received: from AMDC3218.digital.local (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191206101144eusmtip1634d1d2d38ea75b4c6a4908131de1e4c~dwID1KgfU0621706217eusmtip10;
-        Fri,  6 Dec 2019 10:11:44 +0000 (GMT)
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-To:     k.konieczny@samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: [PATCH] devfreq: move declaration of DEVICE_ATTR_RW(min_freq)
-Date:   Fri,  6 Dec 2019 11:11:29 +0100
-Message-Id: <20191206101129.15232-1-k.konieczny@samsung.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726201AbfLFLZ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Dec 2019 06:25:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:40270 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726195AbfLFLZ5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Dec 2019 06:25:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FFFC31B;
+        Fri,  6 Dec 2019 03:25:56 -0800 (PST)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6458B3F52E;
+        Fri,  6 Dec 2019 03:25:54 -0800 (PST)
+Date:   Fri, 6 Dec 2019 11:25:49 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>
+Subject: Re: [PATCH v3 10/13] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
+Message-ID: <20191206112549.GA22964@e121166-lin.cambridge.arm.com>
+References: <20191127102914.18729-1-ulf.hansson@linaro.org>
+ <20191127102914.18729-11-ulf.hansson@linaro.org>
+ <20191205183544.GB1516@e121166-lin.cambridge.arm.com>
+ <CAPDyKFra-C_EKrcec6Yys2P10bB+KBtVAKNtVFgqDvV=tzbDRQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRmVeSWpSXmKPExsWy7djP87qJmq9iDS41mllsnLGe1eL6l+es
-        Fgs+zWC1OH9+A7vF2aY37BaXd81hs/jce4TRYu2Ru+wWtxtXsDlwemxa1cnm0bdlFaPH501y
-        AcxRXDYpqTmZZalF+nYJXBldnT9YChZxVKz5bN7A+Imti5GTQ0LAROLb651MXYxcHEICKxgl
-        ttxeD+V8YZS4cuQEG4TzmVFi8fN3jDAt37+eYIVILGeUODBxEjNcy64rDewgVWwC+hIHz55k
-        AbFFBKQlOhdNBJvLLHCMSWLXob+sIAlhATeJ/sW7gLo5OFgEVCW672uBhHkFbCTa13xiBAlL
-        CMhLzHmrAREWlDg58wnYSGagcPPW2WB7JQQ+s0kc//Ee6joXiZYZx9ghbGGJV8e3QNkyEqcn
-        97BA2OUSTxf2sUM0tzBKPGj/CJWwljh8/CIryGJmAU2J9bv0IcKOEn8/34C6h0/ixltBiBv4
-        JCZtm84MEeaV6GgTgqhWlXh+qocJwpaW6Pq/jhXC9pDo3dLFDGILCcRKbLvxlHUCo8IsJJ/N
-        QvLZLIQbFjAyr2IUTy0tzk1PLTbOSy3XK07MLS7NS9dLzs/dxAhMNKf/Hf+6g3Hfn6RDjAIc
-        jEo8vDM+v4gVYk0sK67MPcQowcGsJMKbzvcyVog3JbGyKrUoP76oNCe1+BCjNAeLkjiv8SKg
-        lEB6YklqdmpqQWoRTJaJg1OqgVH07Yul8rGfmtN/Tko0OJx1+eqGwzE3zF5dXcl99uzFl7mc
-        PXM+RlzK3bbaq3WGve/v8oD9zRYcnAaW8Qs25uwwak6IrdJ66i89+ezG1ddDdHlPHhPYnmTX
-        91GvtXRv7Nx/39zFtlapXVi+sbpMztT+j4/uyxduxdzP2Bhbbc2j1jZ/bDac/1KJpTgj0VCL
-        uag4EQCrQd7BMAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsVy+t/xu7qJmq9iDZp+ClhsnLGe1eL6l+es
-        Fgs+zWC1OH9+A7vF2aY37BaXd81hs/jce4TRYu2Ru+wWtxtXsDlwemxa1cnm0bdlFaPH501y
-        AcxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehld
-        nT9YChZxVKz5bN7A+Imti5GTQ0LAROL71xOsILaQwFJGiTOLzCHi0hKNp1czQdjCEn+udQHV
-        cwHVfGKUeLLjPzNIgk1AX+Lg2ZMsILYIUEPnoolgDcwCZ5gkfrVUgNjCAm4S/Yt3AdVzcLAI
-        qEp039cCCfMK2Ei0r/nECBKWEJCXmPNWAyIsKHFy5hMWiCnyEs1bZzNPYOSbhSQ1C0lqASPT
-        KkaR1NLi3PTcYiO94sTc4tK8dL3k/NxNjMDg3nbs55YdjF3vgg8xCnAwKvHwzvj8IlaINbGs
-        uDL3EKMEB7OSCG8638tYId6UxMqq1KL8+KLSnNTiQ4ymQKdOZJYSTc4HRl5eSbyhqaG5haWh
-        ubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGi0u59gbYffuWbnz+RPHv1HdWIc4P
-        quweCTOuCli6+FFQ4fLqzip30Y0y3Sz/N8zyVj0UoDvnbR2P/JqDscL5XJPDOhvf7p8jLvTm
-        0M2JjitbgtNPR8j9i/xW78nwwbhHdC2HY/vUh1mczVOXp+vlhiypSJwza6r8i/I14kEla7Lv
-        WUsK/NyoxFKckWioxVxUnAgAS6yZ7IQCAAA=
-X-CMS-MailID: 20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d
-References: <CGME20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFra-C_EKrcec6Yys2P10bB+KBtVAKNtVFgqDvV=tzbDRQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Declaration of DEVICE_ATTR_RW(min_freq) is placed after function
-max_freq_store. Move it to the correct place after min_freq_show.
+On Thu, Dec 05, 2019 at 09:25:54PM +0100, Ulf Hansson wrote:
+> On Thu, 5 Dec 2019 at 19:35, Lorenzo Pieralisi
+> <lorenzo.pieralisi@arm.com> wrote:
+> >
+> > On Wed, Nov 27, 2019 at 11:29:11AM +0100, Ulf Hansson wrote:
+> >
+> > [...]
+> >
+> > > -static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> > > +static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
+> > > +                                     struct device_node *cpu_node,
+> > >                                       unsigned int state_count, int cpu)
+> > >  {
+> > >       int i, ret = 0;
+> > > @@ -118,6 +152,11 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> > >               goto free_mem;
+> > >       }
+> > >
+> > > +     /* Manage the deepest state via a dedicated enter-function. */
+> > > +     if (dev)
+> > > +             drv->states[state_count - 1].enter =
+> > > +                     psci_enter_domain_idle_state;
+> >
+> >
+> > It is unfortunate to make this arbitrary choice, it would be best
+> > if you could detect which states are "domain" states aka are governed
+> > by multiple cpus.
+> 
+> The domain states are managed and selected by the genpd providers, via
+> using runtime PM reference counting. Please have a closer look at the
+> code in cpuidle-psci-domain.c and in the generic PM domain, that
+> should give you the needed details.
+> 
+> I am overriding the enter callback for the *deepest* known idle state
+> of the CPU, which is according to what you requested [1].
 
-Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
----
- drivers/devfreq/devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Overriding it yes but I have not requested to do it only for the
+deepest idle state that, I repeat, in my opinion is an arbitrary
+choice that works for the platform you are testing on but is
+not generic as it should.
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 1786a86b1779..46a7ff7c2994 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -1368,6 +1368,7 @@ static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
- 
- 	return sprintf(buf, "%lu\n", min_freq);
- }
-+static DEVICE_ATTR_RW(min_freq);
- 
- static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- 			      const char *buf, size_t count)
-@@ -1391,7 +1392,6 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- 
- 	return count;
- }
--static DEVICE_ATTR_RW(min_freq);
- 
- static ssize_t max_freq_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
--- 
-2.24.0
+You can merge it as it is but that's how things stand and adding
+a comment to the *code* would help understand its logic.
 
+> So, unless I am missing your point, I think the above code does
+> exactly what you want, no?
+> 
+> In regards to the "arbitrary choice" of what cpuidle state to use,
+> there are more details about why that is, in the changelog.
+> 
+> >
+> > This inizialization though does not belong in here, it is done at driver
+> > level, it should not be done in this per-cpu path. IIUC the logic the
+> > enter pointer should only be overridden if and only if all cpus managed
+> > by the driver have a corresponding device associated.
+> 
+> I think you have overlooked the fact that there are one cpuidle driver
+> registered per CPU. The above doesn't make sense to me, sorry.
+
+You are calling psci_dt_cpu_init_idle() for every possibile cpu.
+
+Every time psci_dt_attach_cpu() is called, we check dev and override
+the idle driver enter method. There is one driver, what I am saying
+is that it is not correct to check dev and override the enter pointer
+for *every* cpu that we try to attach to a power domain. This must
+be done once for all by checking that *all* devices could be attached
+to a power domain.
+
+> > To be frank I would even move the psci_has_osi_support() check from
+> > psci_dt_attach_cpu() to this path and prevent calling
+> > psci_dt_attach_cpu() and the tail of the function if
+> > (!psci_has_osi_support()).
+> >
+> > >       data->dev = dev;
+> >
+> > I think Sudeep already mentioned that, by using psci_has_osi_support()
+> > as above you can prevent running this code, there is really no point,
+> > the data->dev NULL sentinel is already initialized.
+> 
+> Yes, I discussed this with Sudeep, but we didn't reach a consensus.
+
+Consensus was already reached.
+
+http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf
+
+> Let me explain the reasons behind the selected approach, once more.
+> 
+> The data->dev is a pointer within a static declared struct. Are you
+> sure it's assigned NULL by initialization? Don't we explicitly need to
+> set it to NULL, else it will be undefined, no?
+
+http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1570.pdf
+
+6.7.9 (10) page 140
+
+> Of course, I can move the check for psci_has_osi_support() into here
+> and avoid calling psci_dt_attach_cpu(). Just wondering what that
+> actually gain us, especially if we need to explicitly set the pointer
+> to NULL anyway.
+
+See above.
+
+Thanks,
+Lorenzo
