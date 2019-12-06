@@ -2,121 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8216E115404
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 16:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECA11154ED
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Dec 2019 17:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbfLFPOc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Dec 2019 10:14:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:47556 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726234AbfLFPOb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Dec 2019 10:14:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C86C831B;
-        Fri,  6 Dec 2019 07:14:28 -0800 (PST)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9F2C3F718;
-        Fri,  6 Dec 2019 07:14:26 -0800 (PST)
-Date:   Fri, 6 Dec 2019 15:14:21 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Lina Iyer <lina.iyer@linaro.org>
-Subject: Re: [PATCH v3 10/13] cpuidle: psci: Prepare to use OS initiated
- suspend mode via PM domains
-Message-ID: <20191206151421.GA5288@e121166-lin.cambridge.arm.com>
-References: <20191127102914.18729-1-ulf.hansson@linaro.org>
- <20191127102914.18729-11-ulf.hansson@linaro.org>
- <20191205183544.GB1516@e121166-lin.cambridge.arm.com>
- <CAPDyKFra-C_EKrcec6Yys2P10bB+KBtVAKNtVFgqDvV=tzbDRQ@mail.gmail.com>
- <20191206112549.GA22964@e121166-lin.cambridge.arm.com>
- <CAPDyKFq0gS2fasU3Yyh+wPC7Pjnucv6_+vDN234ks+yuiURKCw@mail.gmail.com>
+        id S1726325AbfLFQRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Dec 2019 11:17:06 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:43273 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726261AbfLFQRG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Dec 2019 11:17:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1575649024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9FcmzKbZjToAadhOdw0aqboYZH5PpSClOXPEco7jAnA=;
+        b=Ay+tdUYqts4l+k2LF05M818KXfFehbDiAq4j9Y+iXZHIlDYFOay0DIQlapbVazcIa6ZSEz
+        Jt92SLwVgkxb1gfkRq1tejmOp0AraHa+nqr7wCdAE9CVZmWWV+RE6fSPxckywFln5Km5er
+        sbhwoSXEkjkxfLZmJ5rFQBhWvXA272I=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-295-AMpQHCkJMmOxhJumF-3VZw-1; Fri, 06 Dec 2019 11:16:59 -0500
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5DFB11B18BDC;
+        Fri,  6 Dec 2019 16:16:58 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-5.gru2.redhat.com [10.97.112.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 206B886B80;
+        Fri,  6 Dec 2019 16:16:58 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 56F5E1004E6;
+        Fri,  6 Dec 2019 13:07:45 -0200 (BRST)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id xB6F7fo9028164;
+        Fri, 6 Dec 2019 13:07:41 -0200
+Date:   Fri, 6 Dec 2019 13:07:41 -0200
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] cpuidle: use first valid target residency as poll time
+Message-ID: <20191206150739.GA20167@amt.cnet>
 MIME-Version: 1.0
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-MC-Unique: AMpQHCkJMmOxhJumF-3VZw-1
+X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFq0gS2fasU3Yyh+wPC7Pjnucv6_+vDN234ks+yuiURKCw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 06, 2019 at 03:26:16PM +0100, Ulf Hansson wrote:
 
-[...]
+commit 259231a045616c4101d023a8f4dcc8379af265a6 changed, by mistake,
+the target residency from the first available sleep state to the last
+available sleep state (which should be longer).
 
-> > You can merge it as it is but that's how things stand and adding
-> > a comment to the *code* would help understand its logic.
-> 
-> Okay, how about adding a comment along the lines of this:
-> 
-> "Using the deepest state for the CPU to trigger a potential selection
-> of a shared state for the domain, assumes the domain states are all
-> deeper states".
+This might cause excessive polling.
 
-Just this it should be fine (I trimmed it a bit).
+Fixes: 259231a045616c4101d023a8f4dcc8379af265a6
 
-> > > So, unless I am missing your point, I think the above code does
-> > > exactly what you want, no?
-> > >
-> > > In regards to the "arbitrary choice" of what cpuidle state to use,
-> > > there are more details about why that is, in the changelog.
-> > >
-> > > >
-> > > > This inizialization though does not belong in here, it is done at driver
-> > > > level, it should not be done in this per-cpu path. IIUC the logic the
-> > > > enter pointer should only be overridden if and only if all cpus managed
-> > > > by the driver have a corresponding device associated.
-> > >
-> > > I think you have overlooked the fact that there are one cpuidle driver
-> > > registered per CPU. The above doesn't make sense to me, sorry.
-> >
-> > You are calling psci_dt_cpu_init_idle() for every possibile cpu.
-> >
-> > Every time psci_dt_attach_cpu() is called, we check dev and override
-> > the idle driver enter method. There is one driver, what I am saying
-> > is that it is not correct to check dev and override the enter pointer
-> > for *every* cpu that we try to attach to a power domain. This must
-> > be done once for all by checking that *all* devices could be attached
-> > to a power domain.
-> 
-> Ah, now I think get your point.
-> 
-> You want me to re-iterate through all the registered cpuidle drivers,
-> which means one per CPU - and then override the enter callback for
-> each of them, but only if all devices was successfully attached to a
-> PM domain. Is that correct?
-> 
-> My only worries with this, is that we have already registered the
-> cpuidle drivers and I don't think it's a good idea to update the enter
-> callbacks, beyond that point.
-> 
-> Perhaps another option is to track whether the first CPU gets attached
-> (and then update the enter callback), but after that require all the
-> remaining CPUs to be attached as well - else bail out with an error
-> code, failing to register all the driver instances.
-> 
-> What do you think about that?
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-I was confused - now we have one cpuidle driver per cpu so this
-comment was bogus from this perspective (I was still reasoning
-wit a *single* cpuidle driver across cpus. Apologies).
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 0005be5ea2b4..15877b431143 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -382,6 +382,7 @@ u64 cpuidle_poll_time(struct cpuidle_driver *drv,
+ =09=09=09continue;
+=20
+ =09=09limit_ns =3D (u64)drv->states[i].target_residency_ns;
++=09=09break;
+ =09}
+=20
+ =09dev->poll_limit_ns =3D limit_ns;
 
-Sudeep will follow up on this but please forget this specific
-comment - I was wrong.
-
-Thanks,
-Lorenzo
