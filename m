@@ -2,118 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D48001174F9
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 19:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D8C1175D3
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 20:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbfLIS50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 13:57:26 -0500
-Received: from mail-dm6nam11on2117.outbound.protection.outlook.com ([40.107.223.117]:32321
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726354AbfLIS5Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Dec 2019 13:57:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y2w6ZXTE8zQiKMx1q6aTQ99YWUVNHW0k4H9nUDdlY+52AOmcGNLU9mDIOilHWXlG3ta5aUTS2bXx2q0FUGzh3tXmSgIiPLUqyL31MOPaa2i80F9kgEPaF/xJ1P8K2RG3qfL2mz3KvvsHl5BsLtrSk6Hsco5bKD/4VgC0WUCNcnGoy9/ftA3z/E3MlUJAgYZYftT9gmeAwfF5vbMQsTPFFJ/4gFNJfoKIdQe/k6CbKDMSnRJFurzgKoHUDwPWXAcXRX88Ss/w7SVf7pV0WTd+RZGr7w9jgow/dqDGLehEjCxH7cpnKcSGgjCK5nBbm0UAeokbeX2rAHW6kU0DyzVAUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HjP6Sw6SMOiyxFiTos0s8WzN7ZhAQOqI0eNAkHnxay4=;
- b=EHaGJmEuLJUeiEafQKN+mpR4JEJZoK+t+Elz5oOAxuCpgZpIrP+TvjO9QiifqRUDAZsx0ibEswmoJvOlmsz+AYIdldBpIS5o0jDUdmBoghpX3OqPaQ3p23Y4xSV8jLr5Cg8Dyk3ihcgexThC42PB3BpdVD6vymukHMIfB5cEAes6u+TExt8TvJWCXXcoPBSfuTPZ1j5GqhPQOvg7ExXWy+7crg0Of3Aw6VSV9VHsOwSt/gTAimuz6K1ohQUcKKsYXJvuBz9AEGBjHLKSkfsVFXce8mW+5F5995o5VGigNbDsJk/4bUNVUUJe/u0LS4XoffcleqNKdKfP4THdx1er6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lexmark.com; dmarc=pass action=none header.from=lexmark.com;
- dkim=pass header.d=lexmark.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Lexmark.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HjP6Sw6SMOiyxFiTos0s8WzN7ZhAQOqI0eNAkHnxay4=;
- b=YH9VoDK2ntESyCABwGlIMONZWBKGC0Ma4CT7Ru6KdJS2RSu9dwTDIBratPj2W0P9JUAYqJdFdv4o3YttOdNz7KvoHzk1pSePG9s+dcKRwuoNkO9jsS1oHoJM0g9KI77UfZh+tZ4mU3LDiKhOA2xaf4fuPFrzIch8/oXBR8fjMOY=
-Received: from BN8PR10MB3379.namprd10.prod.outlook.com (20.179.140.29) by
- BN8PR10MB3603.namprd10.prod.outlook.com (20.179.96.92) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.14; Mon, 9 Dec 2019 18:57:23 +0000
-Received: from BN8PR10MB3379.namprd10.prod.outlook.com
- ([fe80::9d23:4a97:d48a:7f84]) by BN8PR10MB3379.namprd10.prod.outlook.com
- ([fe80::9d23:4a97:d48a:7f84%7]) with mapi id 15.20.2516.018; Mon, 9 Dec 2019
- 18:57:23 +0000
-From:   Zak Hays <zak.hays@lexmark.com>
-CC:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] thermal: armada: clear reset in armadaxp_init
-Thread-Topic: [PATCH v3 2/2] thermal: armada: clear reset in armadaxp_init
-Thread-Index: AQHVrsGMMfmUV7zSrUWgfyKlL9CT4aeyJweT
-Date:   Mon, 9 Dec 2019 18:57:23 +0000
-Message-ID: <BN8PR10MB33797EECAC557B5018A0A6628C580@BN8PR10MB3379.namprd10.prod.outlook.com>
-References: <1575917171-11085-1-git-send-email-zhays@lexmark.com>,<1575917171-11085-2-git-send-email-zhays@lexmark.com>
-In-Reply-To: <1575917171-11085-2-git-send-email-zhays@lexmark.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=zak.hays@lexmark.com; 
-x-originating-ip: [192.146.101.90]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cc3f8f70-5ae2-4f46-4ed2-08d77cd9a03f
-x-ms-traffictypediagnostic: BN8PR10MB3603:
-x-microsoft-antispam-prvs: <BN8PR10MB3603BF2BC87BDD0FB23DCF3E8C580@BN8PR10MB3603.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:428;
-x-forefront-prvs: 02462830BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(189003)(199004)(7696005)(478600001)(54906003)(64756008)(66556008)(66476007)(316002)(9686003)(8676002)(2906002)(4326008)(33656002)(109986005)(44832011)(305945005)(81166006)(81156014)(71200400001)(71190400001)(55016002)(76116006)(86362001)(6506007)(52536014)(66946007)(5660300002)(26005)(4744005)(8936002)(66446008)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR10MB3603;H:BN8PR10MB3379.namprd10.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: lexmark.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fjlgU4pD+ww3o5DMqvq6mL6oPhZWsJzbZBUgAh90XTSBv3l+OJ+rZcvtQgL0ctWf/5Maxt+bcaGt/xxq9p1X+xzsyC7kGR+hnRZEflhId5QNlghqlUeHpPCje1RBRRt671INqOkrmc0X79G5U09UM9U9RCfUMZfKhKFV3VXE0XveUTJw85BkCt9EWL7VZGCuf2BUFgRwnn189UWtjF+e4M0VXVBLhTpl7VL9ntgwXuukQWQAbljllMD5QydJFFsXw0OL26yxH+GZogCTCLyIDEV6q/MgFJuK+1hw7To+7v4jhWKJXoxeVDY1KbsZW10mx/wfkIv8PPVQDc49KJtHFaV/r9KhL8TEE3Cv5+Sbzqmpnt8osfOFuX1+b7DRSp0d/CR6XBMsI+ZjI9ChA3VbFnVOIs/EuQkCVvm5HsJcJckr6Wq+53mHhGtyxvHCuc9M
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726743AbfLIT1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 14:27:47 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:35167 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727049AbfLIT1q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 14:27:46 -0500
+Received: by mail-pj1-f67.google.com with SMTP id w23so6311645pjd.2
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 11:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kB1Dm5QdRvo+4ntSSP2QV88L91oQIBSmXvZFFUy0ooA=;
+        b=PoJ1fJmMamJi9zmUxFThCbE3g18OtYx+ZbHroN6REARVBPp7YdFot6D8opjlokllNL
+         6N6lRGKDBdpGC06SZAXrdviGmwlAZb74nsaj5RQl/6+7s93sxu4zheqUX/1AiQzE4I3M
+         QUBedDSudYhvTsrHXcPIki6A/TIDu0zrvXaTk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kB1Dm5QdRvo+4ntSSP2QV88L91oQIBSmXvZFFUy0ooA=;
+        b=ukbD81dGEZ9KDTTy0OChe6Vm4RDbZRwWxbnMtGkBEts98R5PP/SQm5eETN1hg9khl1
+         tl6acYIdehE/uVKoOTsoXWQcAcwS1EISaxCh93Kvua+/DNvc7FnAHa1dERBqGdLY4R96
+         2hCNNuKgdwqHpvW22LOOWSdAHfov53b0oN7848ludwwvOVgkK820AtJOAs7Dac0GuCiR
+         d3J/Xo0Zu2LlzKlMsu8evAPXqnhUuMxWmE8LKjpeQ1e0z3YFrDROn1ljBMUkaRctxVbw
+         1YIYNH6DZ5ucVxd5rbaikCrneWXoRrVCpA4n/jtOPzPfDGNZdlsVPi7mXfa/dmzNWWHj
+         nSFw==
+X-Gm-Message-State: APjAAAVBbjPgAvfr9XCMGiBo17YNtIbTuEqcH4S/18vjbnCWemhozMwp
+        Sonhcw5MjVT2mHzVbJIl5Bk72w==
+X-Google-Smtp-Source: APXvYqzLvXqT8hfm/ru3JfLfbM93M1FuOEkMfJe5bZLb6DkkwtltgsbvJNl7gPppZoHhimF9CGXe7w==
+X-Received: by 2002:a17:902:9007:: with SMTP id a7mr5337266plp.46.1575919664605;
+        Mon, 09 Dec 2019 11:27:44 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id m13sm315926pga.70.2019.12.09.11.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Dec 2019 11:27:44 -0800 (PST)
+Date:   Mon, 9 Dec 2019 11:27:42 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Kamil Konieczny <k.konieczny@samsung.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH 2/4] PM / devfreq: add possibility for delayed work
+Message-ID: <20191209192742.GP228856@google.com>
+References: <20191209144425.13321-1-k.konieczny@samsung.com>
+ <CGME20191209144441eucas1p2ccd371e5861e8c0a3948cdc6640ad0d5@eucas1p2.samsung.com>
+ <20191209144425.13321-3-k.konieczny@samsung.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Lexmark.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc3f8f70-5ae2-4f46-4ed2-08d77cd9a03f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2019 18:57:23.3685
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 12709065-6e6c-41c9-9e4d-fb0a436969ce
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eXwS9LBF80UXkW0v0MJK6Heu6oWOlPHmuRQn0M3B7y7A6GTwqQOLe0tnMuVmD5r464SBTqY6B81pqYezEz3T2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3603
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191209144425.13321-3-k.konieczny@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The reset bit needs to be cleared in the init sequence otherwise it=0A=
-holds the block in reset.=0A=
-=0A=
-Signed-off-by: Zachary Hays <zhays@lexmark.com>=0A=
----=0A=
-v2: update commit title and add "Signed-off-by"=0A=
-v3: resend for clarification=0A=
----=0A=
- drivers/thermal/armada_thermal.c | 3 +++=0A=
- 1 file changed, 3 insertions(+)=0A=
-=0A=
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_ther=
-mal.c=0A=
-index 88363812033c..8c4d1244ee7a 100644=0A=
---- a/drivers/thermal/armada_thermal.c=0A=
-+++ b/drivers/thermal/armada_thermal.c=0A=
-@@ -155,6 +155,9 @@ static void armadaxp_init(struct platform_device *pdev,=
-=0A=
-=0A=
-        regmap_write(priv->syscon, data->syscon_control1_off, reg);=0A=
-=0A=
-+       reg &=3D ~PMU_TDC0_SW_RST_MASK;=0A=
-+       regmap_write(priv->syscon, data->syscon_control1_off, reg);=0A=
-+=0A=
-        /* Enable the sensor */=0A=
-        regmap_read(priv->syscon, data->syscon_status_off, &reg);=0A=
-        reg &=3D ~PMU_TM_DISABLE_MASK;=0A=
---=0A=
-2.7.4=0A=
-=0A=
+Hi,
+
+On Mon, Dec 09, 2019 at 03:44:23PM +0100, Kamil Konieczny wrote:
+> Current devfreq workqueue uses deferred timer. Introduce sysfs
+> file delayed_timer and use it for change from deferred to
+> delayed work. The default is to use old deferred one, which
+> saves power, but can miss increased demand for higher bus
+> frequency if timer was assigned to idle cpu.
+> 
+> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-devfreq | 10 ++++
+>  drivers/devfreq/devfreq.c                     | 46 ++++++++++++++++++-
+>  include/linux/devfreq.h                       |  2 +
+>  3 files changed, 57 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+> index 9758eb85ade3..07bfd0df6a4a 100644
+> --- a/Documentation/ABI/testing/sysfs-class-devfreq
+> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
+> @@ -30,6 +30,16 @@ Description:
+>  		target_freq when get_cur_freq() is not implemented by
+>  		devfreq driver.
+>  
+> +What:		/sys/class/devfreq/.../delayed_timer
+> +Date:		December 2019
+> +Contact:	Kamil Konieczny <k.konieczny@samsung.com>
+> +Description:
+> +		This ABI shows or clears timer type used by devfreq
+> +		workqueue. When 0, it uses default deferred timer.
+> +		When set to 1 devfreq will use delayed timer. Example
+> +		useage:
+> +			echo 1 > /sys/class/devfreq/.../delayed_timer
+> +
+>  What:		/sys/class/devfreq/.../target_freq
+>  Date:		September 2012
+>  Contact:	Rajagopal Venkat <rajagopal.venkat@linaro.org>
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 955949c6fc1f..c277d1770fef 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -445,7 +445,11 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+>  	if (devfreq->governor->interrupt_driven)
+>  		return;
+>  
+> -	INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
+> +	if (devfreq->delayed_timer)
+> +		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
+> +	else
+> +		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
+> +
+>  	if (devfreq->profile->polling_ms)
+>  		queue_delayed_work(devfreq_wq, &devfreq->work,
+>  			msecs_to_jiffies(devfreq->profile->polling_ms));
+> @@ -698,6 +702,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->last_status.current_frequency = profile->initial_freq;
+>  	devfreq->data = data;
+>  	devfreq->nb.notifier_call = devfreq_notifier_call;
+> +	devfreq->delayed_timer = false;
+
+devfreq is zero initialized (allocated with kzalloc()), hence this is
+unnecessary.
+
+>  
+>  	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
+>  		mutex_unlock(&devfreq->lock);
+> @@ -1288,6 +1293,44 @@ static ssize_t available_governors_show(struct device *d,
+>  }
+>  static DEVICE_ATTR_RO(available_governors);
+>  
+> +static ssize_t delayed_timer_show(struct device *dev,
+> +				  struct device_attribute *attr, char *buf)
+> +{
+> +	int i;
+> +
+> +	i = to_devfreq(dev)->delayed_timer ? 1 : 0;
+> +	return sprintf(buf, "%d\n", i);
+
+get rid of 'i' and just use df->delayed_timer in sprintf().
+
+> +}
+> +
+> +static ssize_t delayed_timer_store(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   const char *buf, size_t count)
+> +{
+> +	struct devfreq *df = to_devfreq(dev);
+> +	bool old_timer;
+
+Not a great name, the variable doesn't hold a timer. I'd suggest something
+like 'prev_val'.
+
+> +	int value, ret;
+> +
+> +	if (!df->governor)
+> +		return -EINVAL;
+> +
+> +	ret = kstrtoint(buf, 10, &value);
+> +	if (ret || (value != 1 && value != 0))
+> +		return -EINVAL;
+
+use kstrtobool() instead of partially re-implementing it.
+
+> +
+> +	mutex_lock(&df->lock);
+> +	old_timer = df->delayed_timer;
+> +	df->delayed_timer = value == 0 ? false : true;
+
+What's wrong with:
+
+df->delayed_timer = value;
+
+?
+
+> +	mutex_unlock(&df->lock);
+
+Does the locking as is actually provide any value? The use case seems to
+be concurrent setting of the sysfs attribute. The lock is released after
+the assignment, hence the value of 'df->delayed_timer' could be overwritten
+before the condition below is evaluated.
+
+If you want to protect against this case you need something like this:
+
+// don't release the lock before evaluating the condition
+
+> +	if (old_timer != df->delayed_timer) {
+  	   	mutex_unlock(&df->lock);
+> +		devfreq_monitor_stop(df);
+> +		devfreq_monitor_start(df);
+> +	}
+  	else {
+		mutex_unlock(&df->lock);
+	}
+
+I don't pretend it's pretty ;-)
