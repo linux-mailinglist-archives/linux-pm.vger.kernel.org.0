@@ -2,194 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5C1172A6
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FAB1172E0
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfLIRWV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 12:22:21 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:42399 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbfLIRWU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:22:20 -0500
-Received: by mail-wr1-f67.google.com with SMTP id a15so17075812wrf.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:22:18 -0800 (PST)
+        id S1726484AbfLIRep (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 12:34:45 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39325 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbfLIRep (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:34:45 -0500
+Received: by mail-ed1-f67.google.com with SMTP id v16so13402477edy.6
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XFwXeZZ3sMtXp8u8FxN5YyFf9dw3mMuap+mzZlGdLfA=;
-        b=vm8oc6oaSfY59aMArJ5KBydDZXyjB1yLTfzVe//92g7TQZTRqAN69D2+d+o3Y5ISGd
-         GxQ843XelIUVZRVxmBTDpf+qYNpq3l4p8woYGXzaaJV8djSM1m4MOUmDmucF5TqWd1xU
-         YNycmtD+gBsVekotKmLZFTVpYTv3Ax8LUMq1inrdUjpv0SXNoxAXZ0MUmG1L2/6nQOZc
-         gKrr+iKq2xhQMNl2WwDCB2fzNKqWbbI3MtLZbZTZ3rvv/yUPdmuPMi6tZOrrP3RegdMB
-         NVYFAFRJ0SRS1lCObyR2GlmMUZ0Y2BZF/d4dqWli+1vOLY4LK4ns+OPbvhc5EJOZV2yE
-         bGuA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MqGWgekCxDubwDbyQN/6yZHuFRZ1dg3jUzpNTfM9+xY=;
+        b=gQTZrrf4vN8IBztt71aOzBZf8fdXSZ0eVtga7ZrfIAjwHB+D4J+M5Gc6L1lqW8B1ed
+         2hCTiPcUFtkv1eE5pJ8WY5g1/EQiv133HBNom2s1cRHxGXsQzapUnWhENnTMW88DS0V0
+         X+MOu2GLoqpNrLhY1i9kD/6WjHXWDUd8rL4Okz0SphkUCDd3igh/0rzDdH9xY6iggk97
+         n/J4eEH161Cj05AB/ESQ2pCmsWfJ3Or66VZdoF6TJJXvpqjWGTkobDE7Z+WOwP/P33vo
+         1/r0SEQ509ttPWpW6Ir9mHvPzwSGe+e9bwI+Xks5GVVqRrLSU/BcZlXHZ9zeFuYKsGKH
+         sbRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=XFwXeZZ3sMtXp8u8FxN5YyFf9dw3mMuap+mzZlGdLfA=;
-        b=Y/dWbxpcbE849WFms8xUhoJvSu8WadpeMRw/SRv4f5FTJ+Wn4tCWswagqQ2cKxIyrN
-         WOWJOskCP5Kl3XpUGTQGPaRI+CdzjWgcUA1OBFCzBMUKUhxGcfRgpXLlByFqJrn704pY
-         STffO+qxRXGfqWMjblYWgQQ3dnq6f1/mx/prYsD6F5/dGEIxN838iuSWcObbCKitRLZM
-         7L+HfyfcbJ9eOR5/UkI6KwsLnV2kQ/ALgUzZMI6NWDDMv0Cu7mJ+HKEv5cJjLoVHvyT7
-         n1i0dV5zbqINJdm1Pggt/aol98ER8AUeDN9pntfK3QRoTBp5wt9M3WmZpfwRak2nBFQg
-         6iVA==
-X-Gm-Message-State: APjAAAXyq7xELSWj6vgY+RVyu755mMJrRrecLGPGsblW/BUOk1ljj05N
-        gDb1/G/TBAekMCRTLMqtiAtm/Q==
-X-Google-Smtp-Source: APXvYqzkLm2f5gkAtaeLAtk74FXKpRlJA7tuhNb0mhi7/nNAckd6tG3HD7Om6dyTAY3Jxh+UV0Vo7w==
-X-Received: by 2002:adf:e641:: with SMTP id b1mr3380556wrn.34.1575912137366;
-        Mon, 09 Dec 2019 09:22:17 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe? ([2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe])
-        by smtp.googlemail.com with ESMTPSA id o1sm123943wrn.84.2019.12.09.09.22.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 09:22:16 -0800 (PST)
-Subject: Re: cpuidle regression ?
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
-        NXP Linux Team <Linux-imx@nxp.com>
-References: <7b0313c4-0d2b-fbd9-469b-1e0ce79aacc3@linaro.org>
- <CAJZ5v0iXJz5yAbr_Dhk4k0FqGW6nhn2QF1oGf7Xi4Kfdvc83Wg@mail.gmail.com>
- <62b866a1-739f-8349-81bc-4ccff4ad3a28@linaro.org>
- <CAJZ5v0i44Rb8PeB65sZmnu=8Ctzjw4BeSHqQC2XTG5A7K2pcsw@mail.gmail.com>
- <a2f4c5f4-e416-93dd-24f9-431308a692a0@linaro.org>
- <CAJZ5v0hkdGGkioVpmMPtroBYEt-42jgkG_zMfReuZUWDH8WHYQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
- sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
- 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
- 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
- 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
- xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
- P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
- 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
- wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
- eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
- Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
- CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
- CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
- U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
- UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
- KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
- ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
- 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
- UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
- d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
- 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
- z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
- Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
- 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
- 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
- eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
- NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
- 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
- gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
- qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
- OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
- gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
- 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
- PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
- F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
- WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
- 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
- +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
- dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
- XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
- bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
- JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
- qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
- l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
- BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
- 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
- eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
- t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
- i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
- X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
- fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <c326a33d-f147-b6c2-a967-1170cf6917a3@linaro.org>
-Date:   Mon, 9 Dec 2019 18:22:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MqGWgekCxDubwDbyQN/6yZHuFRZ1dg3jUzpNTfM9+xY=;
+        b=COGxrL6akJY1dbBUG21EPK9BoBsJIzpVrq0YSjrbOuc8bwwIj1CGHYAjSn4C4CofuX
+         47OQ4Ij43t9gYOnr5eh7aRZu8Gz/D14fDoUuswIMy3iH4FZaLTIUeeWCVblZMQw3h40H
+         1wDrVUigDl6i7tn92QUHdUgD12rgOzk/J6mQ5/VDU3qZKsHPPSSjZZq1KZijAGwuETTv
+         2PC5GjGHCuVS08y7zMAcugvM5S0ibEH25/RSl3UxBpI6bYapDq220qieC37mJL4siKzA
+         0A3JeR930AgRIwZ3b2VVJkl6OchGtgd/hVhHXFMPy3pGLVTRauvNJY1sEL+OMaK25SYz
+         v+Rw==
+X-Gm-Message-State: APjAAAUkCJC0TduImDvEyWkPtu59+pl75ld0jqC9LrY9pay5/U5x+Db6
+        ZVi2Y58EF1aipUh65TmRH2zrqBwvPEL/Rk6oFcPeqA==
+X-Google-Smtp-Source: APXvYqxbnJ4K1dmT7UAnkHHGB8sYwJAHvtz+y4Cpn1GujHOMPOb23yrCn28dziXqoH6a2Nzeh2ZTilyr6s+P03U6XxU=
+X-Received: by 2002:a17:906:4881:: with SMTP id v1mr9011744ejq.329.1575912882849;
+ Mon, 09 Dec 2019 09:34:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0hkdGGkioVpmMPtroBYEt-42jgkG_zMfReuZUWDH8WHYQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20191205071953.121511-1-wvw@google.com> <20191205071953.121511-2-wvw@google.com>
+ <CAHLCerOFUTrg+sJJVaP0wpRErhDdfNebfM4OAOepH4RfXopvQg@mail.gmail.com>
+In-Reply-To: <CAHLCerOFUTrg+sJJVaP0wpRErhDdfNebfM4OAOepH4RfXopvQg@mail.gmail.com>
+From:   Wei Wang <wvw@google.com>
+Date:   Mon, 9 Dec 2019 09:34:31 -0800
+Message-ID: <CAGXk5yox+g4U-g22_+UqEOLHzpn+TZFmuPmehUNBk5SWpvNpzQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] thermal: prevent cooling device with no type to be registered
+To:     Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/12/2019 12:55, Rafael J. Wysocki wrote:
-> On Mon, Dec 9, 2019 at 12:35 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 09/12/2019 11:50, Rafael J. Wysocki wrote:
->>> On Mon, Dec 9, 2019 at 11:32 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 09/12/2019 10:26, Rafael J. Wysocki wrote:
->>>>> On Sun, Dec 8, 2019 at 11:40 AM Daniel Lezcano
->>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>
->>>>>>
->>>>>> Hi Rafael,
->>>>>>
->>>>>> the latest linux-next kernelci report indicates a kernel bug for the
->>>>>> imx6 platform. I don't have this board so it is not possible to
->>>>>> investigate it.
->>>>>>
->>>>>> https://storage.kernelci.org/next/master/next-20191208/arm/multi_v7_defconfig/gcc-8/lab-collabora/boot-imx6q-sabrelite.html
->>>>>>
->>>>>> [ ... ]
->>>>>>
->>>>>> [    3.372501] Unable to handle kernel NULL pointer dereference at
->>>>>> virtual address 00000000
->>>>>>
->>>>>> [ ... ]
->>>>>>
->>>>>> [    3.408898] PC is at _find_first_bit_le+0xc/0x2c
->>>>>> [    3.413785] LR is at cpuidle_driver_state_disabled+0x40/0xa0
->>>>>>
->>>>>>
->>>>>> Not sure if it is related to the latest changes or not.
->>>>>
->>>>> It does seem so, in which case the attached patch should address it.
->>>>>
->>>>> Is there a way to test the patch alone or do I need to push it
->>>>> somewhere to be tested?
->>>>
->>>> Is the bleeding-edge branch monitored by kernelci ?
->>>
->>> No, it is not right now, AFAICS.
->>
->> I have a imx7, I will try to reproduce the issue on it. Otherwise, I can
->> test on the 'testing' thermal branch temporarily.
-> 
-> Thanks, that'll help!
+On Sun, Dec 8, 2019 at 11:41 PM Amit Kucheria
+<amit.kucheria@verdurent.com> wrote:
+>
+> On Thu, Dec 5, 2019 at 12:50 PM Wei Wang <wvw@google.com> wrote:
+> >
+> > commit 54fa38cc2eda ("thermal: core: prevent zones with no types to be
+> > registered") added logic to prevent thermal zone with empty type to be
+> > registered. Similarly, there are APIs that rely on cdev->type.
+> > This patch prevents cooling device without valid type to be registered.
+> >
+> > Signed-off-by: Wei Wang <wvw@google.com>
+>
+> Looks better now. Thanks.
+>
 
-The imx7 kernel has an issue with cpuidle but not related to your
-changes, so I was unable to double check with a local board.
+Thanks Amit for the review and testing.
 
-However, kernelci does no longer report a regression on the baseline
-with your patch applied on my 'testing' branch.
-
-I can not guarantee the bug is fixed because I can't reproduce it
-locally and check the patch is effectively solving the issue.
-
-In order to increase the confidence on the fix, I updated the branch
-without your patch, so in a few hours, we should see the if the
-regression appears or not.
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Tested-by: Amit Kucheria <amit.kucheria@linaro.org>
+>
+> > ---
+> >  drivers/thermal/thermal_core.c | 16 +++++++++++++---
+> >  1 file changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> > index d4481cc8958f..974e2d91c30b 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -954,12 +954,22 @@ __thermal_cooling_device_register(struct device_node *np,
+> >         struct thermal_zone_device *pos = NULL;
+> >         int result;
+> >
+> > -       if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+> > +       if (!type || !type[0]) {
+> > +               pr_err("Error: No cooling device type defined\n");
+> >                 return ERR_PTR(-EINVAL);
+> > +       }
+> > +
+> > +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
+> > +               pr_err("Error: Cooling device name over %d chars: %s\n",
+> > +                       THERMAL_NAME_LENGTH, type);
+> > +               return ERR_PTR(-EINVAL);
+> > +       }
+> >
+> >         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+> > -           !ops->set_cur_state)
+> > +           !ops->set_cur_state) {
+> > +               pr_err("Error: Cooling device missing callbacks: %s\n", type);
+> >                 return ERR_PTR(-EINVAL);
+> > +       }
+> >
+> >         cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+> >         if (!cdev)
+> > @@ -972,7 +982,7 @@ __thermal_cooling_device_register(struct device_node *np,
+> >         }
+> >
+> >         cdev->id = result;
+> > -       strlcpy(cdev->type, type ? : "", sizeof(cdev->type));
+> > +       strlcpy(cdev->type, type, sizeof(cdev->type));
+> >         mutex_init(&cdev->lock);
+> >         INIT_LIST_HEAD(&cdev->thermal_instances);
+> >         cdev->np = np;
+> > --
+> > 2.24.0.393.g34dc348eaf-goog
+> >
