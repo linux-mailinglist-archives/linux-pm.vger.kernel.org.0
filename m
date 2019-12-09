@@ -2,62 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C11F117282
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD5C1172A6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfLIRLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 12:11:30 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39779 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726408AbfLIRL3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:11:29 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y11so17046114wrt.6
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:11:27 -0800 (PST)
+        id S1726354AbfLIRWV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 12:22:21 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42399 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbfLIRWU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:22:20 -0500
+Received: by mail-wr1-f67.google.com with SMTP id a15so17075812wrf.9
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:22:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mPzvy9s/xchWB5p7Eh9jGDRZOnGTThlUcyCeDW/PbvI=;
-        b=wU2NAzpCYkIaEPYjgtkBFUSWTuX5y5gQhAGA2GpJP7y3iuqfk9idi/5y4vwdczEnvn
-         D9tkkDhiL7H4QWImYUbrjuP+3zmdnidXO0MrSs+6LFO8Y62goRSiighCAyO6n26/T+Zo
-         hZaO4y4M+2/3ZaLFNDam+ljzGWYc4QHBE+n+ewz1JimHV2mFIDkx6y7vXCa7kZaa7EcC
-         76Jjlj7sEvyNNiK1pPWmf2RqCzVNvQ1s6iaLjgdh1nUtSaBDJvnlY7Z9T9t6s67TFDh5
-         ORb3T7mfZVtS/HckRlY1V+8KzScgu6JlIBAVbOqedykMWBsKLw66+e25xK7vcpw2U994
-         RsuA==
+        bh=XFwXeZZ3sMtXp8u8FxN5YyFf9dw3mMuap+mzZlGdLfA=;
+        b=vm8oc6oaSfY59aMArJ5KBydDZXyjB1yLTfzVe//92g7TQZTRqAN69D2+d+o3Y5ISGd
+         GxQ843XelIUVZRVxmBTDpf+qYNpq3l4p8woYGXzaaJV8djSM1m4MOUmDmucF5TqWd1xU
+         YNycmtD+gBsVekotKmLZFTVpYTv3Ax8LUMq1inrdUjpv0SXNoxAXZ0MUmG1L2/6nQOZc
+         gKrr+iKq2xhQMNl2WwDCB2fzNKqWbbI3MtLZbZTZ3rvv/yUPdmuPMi6tZOrrP3RegdMB
+         NVYFAFRJ0SRS1lCObyR2GlmMUZ0Y2BZF/d4dqWli+1vOLY4LK4ns+OPbvhc5EJOZV2yE
+         bGuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=mPzvy9s/xchWB5p7Eh9jGDRZOnGTThlUcyCeDW/PbvI=;
-        b=KVG+q5ekm13TrHjO9pzjpTbQmzMapVFxzqmrB6rEIqgyqTvxBblI4XLMI2JLwFhJUj
-         7q8Y98xBe54KNVOSe0FjdibxNfNH+XIV/0FXteZlwuXd5BiWXL97Avhbs3iZ8mJwv96d
-         BK49quivmvST37ZHN4DYEgGtcaUo4GsXbpphjJAWHkwxhnbZygV0pfYYbD5enScUKpxq
-         +9LS3iOa+oEKMmtp90Bjzzj35mzl0Tfrmi8Z78hlPXMdWQPgITWJzPs2Wl0Ro3tc+mZc
-         lhhVlAn2LlDyvRyjshEpEKMtkROfWLWQmD3g1x0+lMTc/LnxsTkLMZFvxnYqndVKEeul
-         m/bw==
-X-Gm-Message-State: APjAAAUSyhS86Y+Lj92IUf7K7kxV/690w9uSBqNyFHFiHuuFXiPj6GDY
-        iIrsJMr81vTpZ+I5suButoAQcA==
-X-Google-Smtp-Source: APXvYqw8F2dYy8c1CNizEqE6KdcmZfx/Q+VqKrJIGm3yLYcNybUA+/aHHicnNwxMAEDey5qyWRbPiQ==
-X-Received: by 2002:a5d:6b88:: with SMTP id n8mr3426308wrx.288.1575911486520;
-        Mon, 09 Dec 2019 09:11:26 -0800 (PST)
+        bh=XFwXeZZ3sMtXp8u8FxN5YyFf9dw3mMuap+mzZlGdLfA=;
+        b=Y/dWbxpcbE849WFms8xUhoJvSu8WadpeMRw/SRv4f5FTJ+Wn4tCWswagqQ2cKxIyrN
+         WOWJOskCP5Kl3XpUGTQGPaRI+CdzjWgcUA1OBFCzBMUKUhxGcfRgpXLlByFqJrn704pY
+         STffO+qxRXGfqWMjblYWgQQ3dnq6f1/mx/prYsD6F5/dGEIxN838iuSWcObbCKitRLZM
+         7L+HfyfcbJ9eOR5/UkI6KwsLnV2kQ/ALgUzZMI6NWDDMv0Cu7mJ+HKEv5cJjLoVHvyT7
+         n1i0dV5zbqINJdm1Pggt/aol98ER8AUeDN9pntfK3QRoTBp5wt9M3WmZpfwRak2nBFQg
+         6iVA==
+X-Gm-Message-State: APjAAAXyq7xELSWj6vgY+RVyu755mMJrRrecLGPGsblW/BUOk1ljj05N
+        gDb1/G/TBAekMCRTLMqtiAtm/Q==
+X-Google-Smtp-Source: APXvYqzkLm2f5gkAtaeLAtk74FXKpRlJA7tuhNb0mhi7/nNAckd6tG3HD7Om6dyTAY3Jxh+UV0Vo7w==
+X-Received: by 2002:adf:e641:: with SMTP id b1mr3380556wrn.34.1575912137366;
+        Mon, 09 Dec 2019 09:22:17 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe? ([2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe])
-        by smtp.googlemail.com with ESMTPSA id d19sm407477wmd.38.2019.12.09.09.11.25
+        by smtp.googlemail.com with ESMTPSA id o1sm123943wrn.84.2019.12.09.09.22.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 09:11:25 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] thermal: armada: fix register offsets for AXP
-To:     Zak Hays <zak.hays@lexmark.com>
-Cc:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1575485367-18262-1-git-send-email-zhays@lexmark.com>
- <BN8PR10MB3379A954079A4ECF574E80DE8C5D0@BN8PR10MB3379.namprd10.prod.outlook.com>
- <e2ed2a04-83c0-b346-4de0-0f92d6dd7fbf@linaro.org>
- <BN8PR10MB33792C7BA3B1D002AEDD25E08C580@BN8PR10MB3379.namprd10.prod.outlook.com>
- <6c4e79ab-313c-5bb5-1489-329d916bd947@linaro.org>
- <BN8PR10MB337975A77D726FDAFA9F13598C580@BN8PR10MB3379.namprd10.prod.outlook.com>
+        Mon, 09 Dec 2019 09:22:16 -0800 (PST)
+Subject: Re: cpuidle regression ?
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
+        NXP Linux Team <Linux-imx@nxp.com>
+References: <7b0313c4-0d2b-fbd9-469b-1e0ce79aacc3@linaro.org>
+ <CAJZ5v0iXJz5yAbr_Dhk4k0FqGW6nhn2QF1oGf7Xi4Kfdvc83Wg@mail.gmail.com>
+ <62b866a1-739f-8349-81bc-4ccff4ad3a28@linaro.org>
+ <CAJZ5v0i44Rb8PeB65sZmnu=8Ctzjw4BeSHqQC2XTG5A7K2pcsw@mail.gmail.com>
+ <a2f4c5f4-e416-93dd-24f9-431308a692a0@linaro.org>
+ <CAJZ5v0hkdGGkioVpmMPtroBYEt-42jgkG_zMfReuZUWDH8WHYQ@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -113,12 +110,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <cee7f713-681d-8b03-08e3-3b10da36d2d5@linaro.org>
-Date:   Mon, 9 Dec 2019 18:11:24 +0100
+Message-ID: <c326a33d-f147-b6c2-a967-1170cf6917a3@linaro.org>
+Date:   Mon, 9 Dec 2019 18:22:15 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <BN8PR10MB337975A77D726FDAFA9F13598C580@BN8PR10MB3379.namprd10.prod.outlook.com>
+In-Reply-To: <CAJZ5v0hkdGGkioVpmMPtroBYEt-42jgkG_zMfReuZUWDH8WHYQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -127,40 +124,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/12/2019 17:58, Zak Hays wrote:
->> On 09/12/2019 17:31, Zak Hays wrote:
->>> Hi Daniel,
->>>
->>>> Hi Zak,
+On 09/12/2019 12:55, Rafael J. Wysocki wrote:
+> On Mon, Dec 9, 2019 at 12:35 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 09/12/2019 11:50, Rafael J. Wysocki wrote:
+>>> On Mon, Dec 9, 2019 at 11:32 AM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
 >>>>
->>>> what patch to pick up? V2 or V2?
->>> I'm not sure I entirely understand your question. There are two patches:
+>>>> On 09/12/2019 10:26, Rafael J. Wysocki wrote:
+>>>>> On Sun, Dec 8, 2019 at 11:40 AM Daniel Lezcano
+>>>>> <daniel.lezcano@linaro.org> wrote:
+>>>>>>
+>>>>>>
+>>>>>> Hi Rafael,
+>>>>>>
+>>>>>> the latest linux-next kernelci report indicates a kernel bug for the
+>>>>>> imx6 platform. I don't have this board so it is not possible to
+>>>>>> investigate it.
+>>>>>>
+>>>>>> https://storage.kernelci.org/next/master/next-20191208/arm/multi_v7_defconfig/gcc-8/lab-collabora/boot-imx6q-sabrelite.html
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>> [    3.372501] Unable to handle kernel NULL pointer dereference at
+>>>>>> virtual address 00000000
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>> [    3.408898] PC is at _find_first_bit_le+0xc/0x2c
+>>>>>> [    3.413785] LR is at cpuidle_driver_state_disabled+0x40/0xa0
+>>>>>>
+>>>>>>
+>>>>>> Not sure if it is related to the latest changes or not.
+>>>>>
+>>>>> It does seem so, in which case the attached patch should address it.
+>>>>>
+>>>>> Is there a way to test the patch alone or do I need to push it
+>>>>> somewhere to be tested?
+>>>>
+>>>> Is the bleeding-edge branch monitored by kernelci ?
 >>>
->>> Zachary Hays  thermal: armada: fix register offsets for AXP
->>> Zachary Hays  thermal: armada: clear reset in armadaxp_init
+>>> No, it is not right now, AFAICS.
 >>
->> I'm seeing multiple posting of the V2 and reply to V2 with I guess a
->> changelog added.
->>
->> It is very difficult to deal with patches when it is unclear, duplicate
->> series with different changelog.
->>
->> In the future, post a resend version explaining what was missing, so it
->> is easier to understand what is happening. Or send a V3.
+>> I have a imx7, I will try to reproduce the issue on it. Otherwise, I can
+>> test on the 'testing' thermal branch temporarily.
 > 
-> Ah. I understand now. I've been fighting email issues trying to get these patches sent and
-> inadvertently sent out multiple versions of the same patches. The most recent patches
-> are correct. Sorry for that spam. Shouldn't happen again.
-> 
-> Would you like me to resend as V3 for clarity or would you prefer to continue with the
-> V2 patches?
+> Thanks, that'll help!
 
-A V3 please, so I can pick them up without ambiguity from patchwork.
+The imx7 kernel has an issue with cpuidle but not related to your
+changes, so I was unable to double check with a local board.
 
-Thanks!
+However, kernelci does no longer report a regression on the baseline
+with your patch applied on my 'testing' branch.
 
+I can not guarantee the bug is fixed because I can't reproduce it
+locally and check the patch is effectively solving the issue.
 
-
+In order to increase the confidence on the fix, I updated the branch
+without your patch, so in a few hours, we should see the if the
+regression appears or not.
 
 
 -- 
