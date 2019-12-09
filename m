@@ -2,126 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3032117853
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 22:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292221178D8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 22:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfLIVWX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 16:22:23 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43509 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfLIVWX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 16:22:23 -0500
-Received: by mail-lj1-f195.google.com with SMTP id a13so17341201ljm.10;
-        Mon, 09 Dec 2019 13:22:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hfN3ul6hjpl2dirTMlovPdIO/5/d4Exh0KyMwDDvy9s=;
-        b=aUTP4Id4O4xbxCmkQMemUqwf+A6XD+HWrtRRDtNvHeAqGPYt2T8zoBr8af50sSF/oh
-         xqCUEMME2zGnIDV506uYLvC+55NONJC2GZD3Y4rxe4Iz7tkTxtB2Za1zo36pWtR2UAEh
-         gjx4z0BLc3W/F7zrsdBmgpOORCvU/ByXEicuBJyz0by+jfoRFmEuI9CFvOZ0Kj50qJQY
-         jzcR+MEBiYLrFmGsfkRHKgFHtdCjdAuFy5AOMMmU6m4sd+r3xN+bJxRSQ5KIJHPkM4sg
-         Jmk3qM7H5wgXEyw2LPRE+jZVBCP7JeQ8boLIcTXKq72tMPsQEkRuS5pzsfl7ezpKiHn2
-         sD9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hfN3ul6hjpl2dirTMlovPdIO/5/d4Exh0KyMwDDvy9s=;
-        b=tVPAo+Zpo80nE29T3Y0EQnY1rc2uNgyxzOH2zqQPpStcA1dN7xD0k3GLWMpwpq/Ggq
-         j8Oqe0/hTNCGICwJ3+pYuV08Pj5cqofM+yVMknK+2BDzp11plZRa4409a+YHmx/BR/U+
-         2Gpd4Vj0pUd0ODG8chcx7JkCVKMEnexWRXBapo5/DumRaPIOR0Lgp3R69Upb/cdhGjHf
-         wuz4LPqabsmfF93bClID4Xfqlrk5zmxz2XyoL4qHqpfYj67XsFhvb5UB0LoAg7IHqR2Y
-         ajOqguVBaDdecWaYYuM/fQPAPOR2swZb/wYLaQxQ0v2mAsnaU4SFb1msRdMrecU5/h96
-         bA9Q==
-X-Gm-Message-State: APjAAAVm7bkayiwq6OgwQq7QjSEF5BPMhwzbofh3HPsp2Coedk11Vh9x
-        YSMC6UxJVtJZ93T5U0LEXw46gE3G
-X-Google-Smtp-Source: APXvYqzkedDuJ1mylj4K6QNH/bG8ZkXNM30pZ3tfzuwZ2lJA23WGf4luIwH5aJBrVQwHx+41Wuj0yg==
-X-Received: by 2002:a2e:7e07:: with SMTP id z7mr16979405ljc.165.1575926540462;
-        Mon, 09 Dec 2019 13:22:20 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id s16sm300639lfc.35.2019.12.09.13.22.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 13:22:19 -0800 (PST)
-Subject: Re: [PATCH v8 00/19] Consolidate and improve NVIDIA Tegra CPUIDLE
- driver(s)
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191203004116.11771-1-digetx@gmail.com>
- <20191207215216.GA9561@qmqm.qmqm.pl>
- <0b3a861d-e5e8-ddca-ac60-0a3c61a9d9dc@gmail.com>
- <20191209160420.GA24097@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <323f5f70-5249-e75a-98cc-7fdca2d375c2@gmail.com>
-Date:   Tue, 10 Dec 2019 00:22:18 +0300
+        id S1726816AbfLIVvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 16:51:02 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55408 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbfLIVu7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 16:50:59 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB9Low0i005349;
+        Mon, 9 Dec 2019 15:50:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575928258;
+        bh=lUSdxRhD6XTC7WhbY0PYaGuAAuVAsloAEADwb1YGU8w=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=YG2txRg5aS6wPIGElxOMo+yKk+nel+Uqz2sJ8oERHhEWqhkRKE/hnhpvgdUvLlnNj
+         s3MeHF+KKqrQo0qRVK0N5meBLuDmfmZD3/4XO9D1z5Xru3pnLl5hcxXKQs4UvHtXC6
+         8pnvXC2ZBMH8TlY2rMwUiZStmlA18Vfx3rgP80RI=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB9Low3I114613;
+        Mon, 9 Dec 2019 15:50:58 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 9 Dec
+ 2019 15:50:57 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 9 Dec 2019 15:50:57 -0600
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB9LovU2107056;
+        Mon, 9 Dec 2019 15:50:57 -0600
+Subject: Re: [PATCH v2 1/3] power_supply: Add additional health properties to
+ the header
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20191029200201.24483-1-dmurphy@ti.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <b1a00b89-b091-4526-fbd4-d42261f0d287@ti.com>
+Date:   Mon, 9 Dec 2019 15:48:49 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191209160420.GA24097@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20191029200201.24483-1-dmurphy@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-09.12.2019 19:04, Michał Mirosław пишет:
-> On Sun, Dec 08, 2019 at 01:56:14AM +0300, Dmitry Osipenko wrote:
->> 08.12.2019 00:52, Michał Mirosław пишет:
->>> On Tue, Dec 03, 2019 at 03:40:57AM +0300, Dmitry Osipenko wrote:
->>>> Hello,
->>>>
->>>> This series does the following:
->>>>
->>>>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
->>>>      into common drivers/cpuidle/ directory.
->>>>
->>>>   2. Enables CPU cluster power-down idling state on Tegra30.
->>>>
->>>> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
->>>> and of the Tegra's arch code in general. Please review, thanks!
->>>
->>> I did a quick smoke test for this series on top of Linus' master:
->>>  - rebuilding with the patches applied, CONFIG_ARM_TEGRA_CPUIDLE=n - works
->>>  - building with CONFIG_ARM_TEGRA_CPUIDLE=y - doesn't boot
->>>
->>> The hang is somewhere early in the boot process, before simplefb can
->>> take the console and show any logs. If I get BOOTFB to work again I might
->>> be able to get some more info.
->>
->> Thank you very much for trying these patches!
->>
->> Could you please try to make ARM_TEGRA_CPUIDLE "tristate" in the Kconfig
->> and compile it as a loadable module? That way you'll get framebuffer
->> shown before the hang happens.
->>
->> Does LP2 suspend/resume work for you? There should be
->> "nvidia,suspend-mode = <2>" in the PMC's node of device-tree.
-> 
-> Not at the moment. I also tried suspend-mode = <1> and <0>, but it
-> made no difference.
+Bump
 
-If LP2 doesn't work, then it explains why you're getting the hang.
-
-Are you using TF300T for the testing? I'm recalling that LP2 worked for
-you sometime ago on TF300T, maybe some offending change was introduced
-since then. Could you please try to do the git bisection or at least
-find out what is the last good kernel version?
-
-I rebased this series on a recent linux-next and you could find the
-rebased patches here [1].
-
-[1] https://github.com/grate-driver/linux/commits/master
-
-With [1] you should be able to remove "nvidia,suspend-mode" property
-from the device-tree to get cpuidle working with the disabled CC6 state
-(LP2). Could you please check that at least disabled CC6 works for you?
+On 10/29/19 3:01 PM, Dan Murphy wrote:
+> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> ---
+>
+> v2 - No changes
+>
+>   include/linux/power_supply.h | 3 +++
+>   1 file changed, 3 insertions(+)
+>
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 28413f737e7d..bd0d3225f245 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -61,6 +61,9 @@ enum {
+>   	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+>   	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+>   	POWER_SUPPLY_HEALTH_OVERCURRENT,
+> +	POWER_SUPPLY_HEALTH_WARM,
+> +	POWER_SUPPLY_HEALTH_COOL,
+> +	POWER_SUPPLY_HEALTH_HOT,
+>   };
+>   
+>   enum {
