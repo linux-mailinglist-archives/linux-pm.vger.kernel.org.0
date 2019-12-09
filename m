@@ -2,91 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBC4116976
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 10:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C25E11699D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 10:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbfLIJg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 04:36:29 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38190 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727160AbfLIJg3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 04:36:29 -0500
-Received: by mail-pl1-f196.google.com with SMTP id o8so5566375pls.5;
-        Mon, 09 Dec 2019 01:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=pETZ4CibeP0YCb58ZGv2YCw0xeRD6VlQA38o4DT/lXo=;
-        b=d1ABfhM9pbHlHmcr8qboRgUeErg+kOipi+ttbNVZXOZ/ClflbuFye++XDsWz5icQFC
-         pgVH/bD1aakZ8HF1stw8tYKxpUjrI5dU62OUgV0OcuYMF45oklxHA/+prsLoyijJ4eUJ
-         U1qD6kCQ68VXVdkv6Y0um0zB6f9MyeC+umE9B8pAeuWyNHCfQXyFBxW8lsv4kj8qoptl
-         3bOtZACYO+yOyT5FGV3O5CAaa0wQPAKz20cKLVkEGVLdhQKOJfG698RX+XURs7+HjRqs
-         N+DGS/8VA2kOj90rTF9oJMiL+AoFo1GFviM7wN5Vj+g1zJbhb2X/U/MA+Tc1UZ92Ox23
-         ItDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pETZ4CibeP0YCb58ZGv2YCw0xeRD6VlQA38o4DT/lXo=;
-        b=B68+L1nTlcvFfyA1RAoAoM2OnGPiCXjLYpK6wVCXD7aPqn+iRYgPMgM2UinXAwt28E
-         KpbrDomgMJYz4C28ZKIRg98BM+WE1Q3T1Q5CR1d0pdTjXvjf93A5GhaTbS6K9UFl/qtO
-         HP64FTDdk8nIQkBNqrR9P7OKmXFYsEwAcFahJQPqK/lEFb1W10lawD5P4ulMkenouaa9
-         LqB5UgPJZjpEfI1UAU+kHl15i/I7eO2Ss7PHTbekhxMDaekIBf1PzvhtKBLV3RnSy8DR
-         v9Uj2vaAEFUwb+n7wIJ4QNowbOuKp90cEK1mGjLGkEtJX4SqdGD0Uwe8cMh9enrL3CmV
-         i+Cw==
-X-Gm-Message-State: APjAAAXdzEvRLn8p31MBpc4THMCmrmIrci133MVPZ+nwEugoVgk/p0W6
-        GIrOMlZZMeuWnYAg6W+qhvUQC3nB
-X-Google-Smtp-Source: APXvYqw8XXjTPUZkYWrEdJNdbogtS/K2qEMV6M/kszxNMIYzF3sDABSoESBKujIUr5SG17GZ5wQ3XA==
-X-Received: by 2002:a17:902:322:: with SMTP id 31mr28852177pld.244.1575884188836;
-        Mon, 09 Dec 2019 01:36:28 -0800 (PST)
-Received: from localhost.localdomain ([43.224.245.181])
-        by smtp.gmail.com with ESMTPSA id m14sm12431975pjf.10.2019.12.09.01.36.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Dec 2019 01:36:28 -0800 (PST)
-From:   zhuguangqing83@gmail.com
-To:     rjw@rjwysocki.net
-Cc:     pavel@ucw.cz, len.brown@intel.com, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: [PATCH v2]PM/wakeup: Add print_wakeup_source_stats(m, &deleted_ws)
-Date:   Mon,  9 Dec 2019 17:35:23 +0800
-Message-Id: <20191209093523.15752-1-zhuguangqing83@gmail.com>
+        id S1727600AbfLIJjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 04:39:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:53430 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727578AbfLIJjW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Dec 2019 04:39:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5B00328;
+        Mon,  9 Dec 2019 01:39:21 -0800 (PST)
+Received: from e123648.NAT.warszawa.vectranet.pl (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D0E143F6CF;
+        Mon,  9 Dec 2019 01:39:19 -0800 (PST)
+From:   lukasz.luba@arm.com
+To:     linux-kernel@vger.kernel.org, krzk@kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     b.zolnierkie@samsung.com, Dietmar.Eggemann@arm.com,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: [PATCH] MAINTAINERS: update my email address
+Date:   Mon,  9 Dec 2019 09:39:07 +0000
+Message-Id: <20191209093907.6646-1-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: zhuguangqing <zhuguangqing@xiaomi.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
 
-After commit 00ee22c28915 (PM / wakeup: Use seq_open()
-to show wakeup stats), print_wakeup_source_stats(m, &deleted_ws)
-is deleted in function wakeup_sources_stats_seq_show().
+Update my email address to @arm.com in MAINTAINERS and map it correctly
+in .mailmap file.
 
-Because deleted_ws is one of wakeup sources, so it should
-also be showed. This patch add it to the end of all other
-wakeup sources.
-
-Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
-v2: modify judegment condition according to the advice of Rafael J.
+Hi Krzysztof,
 
- drivers/base/power/wakeup.c | 3 +++
- 1 file changed, 3 insertions(+)
+Could you pick it up, please?
+It is based on tag v5.5-rc1.
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 5817b51d2b15..53c0519da1e4 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -1071,6 +1071,9 @@ static void *wakeup_sources_stats_seq_next(struct seq_file *m,
- 		break;
- 	}
+Regards,
+Lukasz
+
+ .mailmap    | 1 +
+ MAINTAINERS | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/.mailmap b/.mailmap
+index c24773db04a7..6adff2db7076 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -152,6 +152,7 @@ Linus Lüssing <linus.luessing@c0d3.blue> <linus.luessing@web.de>
+ Linus Lüssing <linus.luessing@c0d3.blue> <linus.luessing@ascom.ch>
+ Li Yang <leoyang.li@nxp.com> <leo@zh-kernel.org>
+ Li Yang <leoyang.li@nxp.com> <leoli@freescale.com>
++Lukasz Luba <lukasz.luba@arm.com> <l.luba@partner.samsung.com>
+ Maciej W. Rozycki <macro@mips.com> <macro@imgtec.com>
+ Marc Zyngier <maz@kernel.org> <marc.zyngier@arm.com>
+ Marcin Nowakowski <marcin.nowakowski@mips.com> <marcin.nowakowski@imgtec.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd5847e802de..e3626bacea40 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4999,7 +4999,7 @@ F:	include/linux/dma-mapping.h
+ F:	include/linux/dma-noncoherent.h
  
-+	if (!next_ws)
-+		print_wakeup_source_stats(m, &deleted_ws);
-+
- 	return next_ws;
- }
- 
+ DMC FREQUENCY DRIVER FOR SAMSUNG EXYNOS5422
+-M:	Lukasz Luba <l.luba@partner.samsung.com>
++M:	Lukasz Luba <lukasz.luba@arm.com>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
 -- 
 2.17.1
 
