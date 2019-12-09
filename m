@@ -2,274 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4014B1164CC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 02:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C60116549
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 04:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726659AbfLIBej (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Dec 2019 20:34:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726635AbfLIBej (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 8 Dec 2019 20:34:39 -0500
-Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 02F8E206D5;
-        Mon,  9 Dec 2019 01:34:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575855278;
-        bh=sKsbh4vc/QZhOZJyY/0BORyBPkmadVe3B7hraBzztg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lKf1mIb2SqAWACNuPVUY1ktnLHHEmFexV8r6ikBgQIuFtdn0SNNzCCqj6jkas90CX
-         GceHqWOLg67Irl0jmT4GhWgGhqOiSHc9t1muWFtnYo0Rf4yHTdDybmN8Urdm5Y6iFl
-         SGFvVYsBo5WUNzVge1giUq/uPuwG8BUzIOnuN2Z0=
-Date:   Mon, 9 Dec 2019 09:34:15 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        id S1727048AbfLIDTM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Dec 2019 22:19:12 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:21918 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726748AbfLIDTM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Dec 2019 22:19:12 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191209031909epoutp01d39e279d3ea2e5324acd03c0d022f5d2~elbrbfYln0212802128epoutp01J
+        for <linux-pm@vger.kernel.org>; Mon,  9 Dec 2019 03:19:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191209031909epoutp01d39e279d3ea2e5324acd03c0d022f5d2~elbrbfYln0212802128epoutp01J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1575861549;
+        bh=Q3QpsGU7jR1eweE5LBcgNQBomTOvpKjfljutEUtPZPA=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=OIvemKyQIcZYdL4T84J+QQBj2BuvZ1Xtkrr+Kjqxta/XS3feXuUysGOCm1Gy+Qens
+         LYicZL0uRWLrzSByFDUfkWPIlL8YpIsGc30eTH46EMoLSu7sAE+PTZMW0uDUnZEjgn
+         +88rzumDAa9ly/mXObdPonXUbseZF5aFzUBlallI=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20191209031908epcas1p3f840e8a008403571a529bad6bdaa20bf~elbqoAce10221502215epcas1p3C;
+        Mon,  9 Dec 2019 03:19:08 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 47WT1k237TzMqYll; Mon,  9 Dec
+        2019 03:19:06 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        57.F1.48019.A2DBDED5; Mon,  9 Dec 2019 12:19:06 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191209031905epcas1p30d78cf7bb8ed064966b11ad4b4de4e66~elbn-FL7j3035330353epcas1p31;
+        Mon,  9 Dec 2019 03:19:05 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191209031905epsmtrp1bbe32affe15183b207d5a36ef774f975~elbn_UO2l0937109371epsmtrp1e;
+        Mon,  9 Dec 2019 03:19:05 +0000 (GMT)
+X-AuditID: b6c32a38-23fff7000001bb93-04-5dedbd2af25e
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        81.57.06569.92DBDED5; Mon,  9 Dec 2019 12:19:05 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191209031905epsmtip27caa03d735e61fba5a8b5b11355551af~elbnruT3r2189121891epsmtip2E;
+        Mon,  9 Dec 2019 03:19:05 +0000 (GMT)
+Subject: Re: [PATCH] devfreq: move declaration of DEVICE_ATTR_RW(min_freq)
+To:     Kamil Konieczny <k.konieczny@samsung.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 5/5] arm64: dts: imx8m: Add ddr controller nodes
-Message-ID: <20191209013414.GS3365@dragon>
-References: <cover.1574458460.git.leonard.crestez@nxp.com>
- <23e46c12c98947315229c20dea6784ad40d294c4.1574458460.git.leonard.crestez@nxp.com>
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c2b9991e-212c-5ba5-a160-36d698e31bee@samsung.com>
+Date:   Mon, 9 Dec 2019 12:25:32 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23e46c12c98947315229c20dea6784ad40d294c4.1574458460.git.leonard.crestez@nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20191206101129.15232-1-k.konieczny@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRju29nOjtbya2W92W2dgthiupMuj9YiKkrLQAj6Ucx10tM0d2Nn
+        M7vSVU2qJUHpsgupZFqZssyksNYgBpWKFZVJN4MM190KimjbMfLf8z7f8z7v+3zfRxHK02QC
+        VWBz8U4bZ6HJWGnrHbVOq7kZMup8NXFsc2WTjD37pVLGdnZekbP39w7K2Z72apL9ejiA2EuB
+        Pjnbu6eeXExltDQcJDOO+BpQxteW6dnEusKF+TyXxztVvC3XnldgMxvoVWtMS036+TpGy6Sx
+        qbTKxll5A70sK1u7vMAS3oBWFXEWd5jK5gSBTlq00Gl3u3hVvl1wGWjekWdxpDkSBc4quG3m
+        xFy7NZ3R6ebpw8INhfmvX9TIHcHRxRcbJu9GzTHlKIYCnAJXGq/Ky1EspcRtCPx/9knE4guC
+        z92PZWLxHcGesh+yfy3Hf99CEazENxFcrlkqij4iKKl9R0YOxuOV4OkakETwBKyFwbY6IiIi
+        8GkJDB7vijqRWAMd755EG+LwTHj0803UVYEXQfP5UFhDUVI8G2p7cyJ0PF4Lwdb9w5JxEKzq
+        l0ZwDDZA873yKE/gSfCs/4xExDPgWqg6OhfwRxI8VeekEU/Ay+Dh5ylimPHw/q5PLuIEGPCU
+        DOPtcCEYIMXeMgS+jq7h9MnQUXdMEvEhsBqa2pNEeiZc/3VqeIex8GHokEwcpYCyEqUomQU9
+        L/skIp4MNaUHyaOI9o5I4x2RwDsigff/sLNI2oAm8g7BauYFxpEy8q1bUPRvatg2dONBlh9h
+        CtFjFKr0kFEp44qErVY/AoqgJyhqK94blYo8bus23mk3Od0WXvAjffiuK4iE+Fx7+KfbXCZG
+        Py85OZlNYebrGYaepKB+dhuV2My5+EKed/DOf30SKiZhN/IqBmSZu1b7G01DmXHpwjHDPsOT
+        U9vq8Ma3meoD0yzxC3YUN52Qf08tKEXyFeWpW3Zu7qz2JAaWt26uyLlcVLXWaNa/HapvXd1/
+        bUN37O1KTWna4cDd3pev5q6oCK4vHkVkKTeFtOynnD7TNzA8X9LufiZ9vnjHVE+a+uTTXp96
+        Di0V8jlGQzgF7i+YtiFNsQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkkeLIzCtJLcpLzFFi42LZdlhJXldz79tYg2VNqhYbZ6xntVjwaQar
+        xfnzG9gtzja9Ybe4vGsOm8Xn3iOMFmuP3GW3uN24gs2Bw2PTqk42j74tqxg9Pm+SC2CO4rJJ
+        Sc3JLEst0rdL4Mp4dH8xe8FJ7oo1qyQbGDdydjFyckgImEhM+3OAsYuRi0NIYDejxMo/U5gh
+        EpIS0y4eBbI5gGxhicOHi0HCQgJvGSX2d+WD2MICXhL9F14ygdgiAroSb3YsZQaZwyywgEli
+        /s2JLBBDJzBK/Hp+iRGkik1AS2L/ixtsIDa/gKLE1R+PweK8AnYSG5e/ZQVZxiKgIrHkdhxI
+        WFQgTGLnksdMECWCEidnPmEBsTkFbCU2nukCa2UWUJf4M+8SM4QtLnHryXwmCFteYvvbOcwT
+        GIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI4gLa0d
+        jCdOxB9iFOBgVOLhVbB6GyvEmlhWXJl7iFGCg1lJhHfJxFexQrwpiZVVqUX58UWlOanFhxil
+        OViUxHnl849FCgmkJ5akZqemFqQWwWSZODilGhgbDpxP4nnOky9199TK4wem7XP7Ka/yV+Xu
+        go3urgUdDks3zFle8GXC729T957RFLEKtHu1P/W2zfTzq15PMNrZXFJrske1YL3h/+s3n9jJ
+        rHylX6/gYGuXMTV6rc+VR1aKe+epai43dK+LPqZbZn48wvv2gz/687Maj39V4bvJs6Vew7Ui
+        315HiaU4I9FQi7moOBEArTJX45wCAAA=
+X-CMS-MailID: 20191209031905epcas1p30d78cf7bb8ed064966b11ad4b4de4e66
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d
+References: <CGME20191206101145eucas1p26ed05a4d6d805c26c8ad92ad6b602f9d@eucas1p2.samsung.com>
+        <20191206101129.15232-1-k.konieczny@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 11:45:04PM +0200, Leonard Crestez wrote:
-> This is used by the imx-ddrc devfreq driver to implement dynamic
-> frequency scaling of DRAM.
+Hi Kamil,
+
+Looks good to me. Applied it.
+
+On later, better to add 'PM / ' prefix for patch title
+and use capital char for first word as following:
+
+devfreq: move declaration of DEVICE_ATTR_RW(min_freq)
+-> PM / devfreq: Move declaration of DEVICE_ATTR_RW(min_freq)
+
+On 12/6/19 7:11 PM, Kamil Konieczny wrote:
+> Declaration of DEVICE_ATTR_RW(min_freq) is placed after function
+> max_freq_store. Move it to the correct place after min_freq_show.
 > 
-> Support for proactive scaling via interconnect will come later. The
-> high-performance bus masters which need that (display, vpu, gpu) are
-> mostly not yet enabled in upstream anyway.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 18 ++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi     | 10 ++++++++
->  .../boot/dts/freescale/imx8mn-ddr4-evk.dts    | 18 ++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8mn.dtsi     | 10 ++++++++
->  arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 24 +++++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 10 ++++++++
->  6 files changed, 90 insertions(+)
+>  drivers/devfreq/devfreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index 28ab17a277bb..ecf0d385c164 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -75,10 +75,28 @@
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 1786a86b1779..46a7ff7c2994 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -1368,6 +1368,7 @@ static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
 >  
->  &A53_0 {
->  	cpu-supply = <&buck2_reg>;
->  };
+>  	return sprintf(buf, "%lu\n", min_freq);
+>  }
+> +static DEVICE_ATTR_RW(min_freq);
 >  
-> +&ddrc {
-> +	operating-points-v2 = <&ddrc_opp_table>;
-> +
-> +	ddrc_opp_table: opp-table {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp-25M {
-> +			opp-hz = /bits/ 64 <25000000>;
-> +		};
-
-As an idiomatic practice, we have newline between nodes.
-
-I fixed it up and applied the patch.
-
-Shawn
-
-> +		opp-100M {
-> +			opp-hz = /bits/ 64 <100000000>;
-> +		};
-> +		opp-750M {
-> +			opp-hz = /bits/ 64 <750000000>;
-> +		};
-> +	};
-> +};
-> +
->  &fec1 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_fec1>;
->  	phy-mode = "rgmii-id";
->  	phy-handle = <&ethphy0>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index 6edbdfe2d0d7..3d4802375715 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -856,10 +856,20 @@
->  			#interrupt-cells = <3>;
->  			interrupt-controller;
->  			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->  		};
+>  static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
+>  			      const char *buf, size_t count)
+> @@ -1391,7 +1392,6 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
 >  
-> +		ddrc: memory-controller@3d400000 {
-> +			compatible = "fsl,imx8mm-ddrc", "fsl,imx8m-ddrc";
-> +			reg = <0x3d400000 0x400000>;
-> +			clock-names = "core", "pll", "alt", "apb";
-> +			clocks = <&clk IMX8MM_CLK_DRAM_CORE>,
-> +				 <&clk IMX8MM_DRAM_PLL>,
-> +				 <&clk IMX8MM_CLK_DRAM_ALT>,
-> +				 <&clk IMX8MM_CLK_DRAM_APB>;
-> +		};
-> +
->  		ddr-pmu@3d800000 {
->  			compatible = "fsl,imx8mm-ddr-pmu", "fsl,imx8m-ddr-pmu";
->  			reg = <0x3d800000 0x400000>;
->  			interrupt-parent = <&gic>;
->  			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-> index 071949412caf..b051c927c11e 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-> @@ -15,10 +15,28 @@
+>  	return count;
+>  }
+> -static DEVICE_ATTR_RW(min_freq);
 >  
->  &A53_0 {
->  	cpu-supply = <&buck2_reg>;
->  };
->  
-> +&ddrc {
-> +	operating-points-v2 = <&ddrc_opp_table>;
-> +
-> +	ddrc_opp_table: opp-table {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp-25M {
-> +			opp-hz = /bits/ 64 <25000000>;
-> +		};
-> +		opp-100M {
-> +			opp-hz = /bits/ 64 <100000000>;
-> +		};
-> +		opp-600M {
-> +			opp-hz = /bits/ 64 <600000000>;
-> +		};
-> +	};
-> +};
-> +
->  &i2c1 {
->  	pmic@4b {
->  		compatible = "rohm,bd71847";
->  		reg = <0x4b>;
->  		pinctrl-0 = <&pinctrl_pmic>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> index e91625063f8e..3a79fdddc72b 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> @@ -757,10 +757,20 @@
->  			#interrupt-cells = <3>;
->  			interrupt-controller;
->  			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-> +		ddrc: memory-controller@3d400000 {
-> +			compatible = "fsl,imx8mn-ddrc", "fsl,imx8m-ddrc";
-> +			reg = <0x3d400000 0x400000>;
-> +			clock-names = "core", "pll", "alt", "apb";
-> +			clocks = <&clk IMX8MN_CLK_DRAM_CORE>,
-> +				 <&clk IMX8MN_DRAM_PLL>,
-> +				 <&clk IMX8MN_CLK_DRAM_ALT>,
-> +				 <&clk IMX8MN_CLK_DRAM_APB>;
-> +		};
-> +
->  		ddr-pmu@3d800000 {
->  			compatible = "fsl,imx8mn-ddr-pmu", "fsl,imx8m-ddr-pmu";
->  			reg = <0x3d800000 0x400000>;
->  			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
->  		};
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> index c36685916683..ee6dc5f07622 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> @@ -103,10 +103,34 @@
->  
->  &A53_3 {
->  	cpu-supply = <&buck2_reg>;
->  };
->  
-> +&ddrc {
-> +	operating-points-v2 = <&ddrc_opp_table>;
-> +
-> +	ddrc_opp_table: opp-table {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp-25M {
-> +			opp-hz = /bits/ 64 <25000000>;
-> +		};
-> +		opp-100M {
-> +			opp-hz = /bits/ 64 <100000000>;
-> +		};
-> +		/*
-> +		 * On imx8mq B0 PLL can't be bypassed so low bus is 166M
-> +		 */
-> +		opp-166M {
-> +			opp-hz = /bits/ 64 <166935483>;
-> +		};
-> +		opp-800M {
-> +			opp-hz = /bits/ 64 <800000000>;
-> +		};
-> +	};
-> +};
-> +
->  &fec1 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_fec1>;
->  	phy-mode = "rgmii-id";
->  	phy-handle = <&ethphy0>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> index 7f9319452b58..d1fcf9887f8b 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> @@ -1111,10 +1111,20 @@
->  			interrupt-controller;
->  			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-parent = <&gic>;
->  		};
->  
-> +		ddrc: memory-controller@3d400000 {
-> +			compatible = "fsl,imx8mq-ddrc", "fsl,imx8m-ddrc";
-> +			reg = <0x3d400000 0x400000>;
-> +			clock-names = "core", "pll", "alt", "apb";
-> +			clocks = <&clk IMX8MQ_CLK_DRAM_CORE>,
-> +				 <&clk IMX8MQ_DRAM_PLL_OUT>,
-> +				 <&clk IMX8MQ_CLK_DRAM_ALT>,
-> +				 <&clk IMX8MQ_CLK_DRAM_APB>;
-> +		};
-> +
->  		ddr-pmu@3d800000 {
->  			compatible = "fsl,imx8mq-ddr-pmu", "fsl,imx8m-ddr-pmu";
->  			reg = <0x3d800000 0x400000>;
->  			interrupt-parent = <&gic>;
->  			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-> -- 
-> 2.17.1
+>  static ssize_t max_freq_show(struct device *dev, struct device_attribute *attr,
+>  			     char *buf)
 > 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
