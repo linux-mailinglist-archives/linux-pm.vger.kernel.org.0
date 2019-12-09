@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A76F711679C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 08:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170BD1167A1
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 08:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727195AbfLIHl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 02:41:57 -0500
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:46009 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727194AbfLIHl5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 02:41:57 -0500
-Received: by mail-vs1-f66.google.com with SMTP id l24so9556477vsr.12
-        for <linux-pm@vger.kernel.org>; Sun, 08 Dec 2019 23:41:57 -0800 (PST)
+        id S1727122AbfLIHmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 02:42:40 -0500
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:46566 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbfLIHmk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 02:42:40 -0500
+Received: by mail-vs1-f67.google.com with SMTP id t12so9540784vso.13
+        for <linux-pm@vger.kernel.org>; Sun, 08 Dec 2019 23:42:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8x9z5IK3e1jLIYvYQLpPPPTrSa/xPbdbpcJwZ5RslgE=;
-        b=pmn0xhN6Tb+kX0BCG0uXmcoqG1PzozNOPt10tuMFI22HOYdzAzYOdKDB/plA1snGDK
-         Otsn3JiTjkyuuaBE0ZVIToFtEJRshz9dFzG8Chharzz8YaItxWj/H81zLPoCk/q4Na23
-         paro+DokcNAtGu+4c6AJk4PUpR8Y0/MCdxV33fFY4CNzPjECPhnt1CyP/uPvFw7zw61D
-         LaY7MKYg41sBBXBYtj7dBgMw1K7/uLnI5TaoO1LLNSiMYJdTBEFwE2KD0CgIEE1+bxbc
-         SKDlhEgDaM8dlQf4fx2ZTaG4vhOMmQHDgJDeeDOZqzt5nOsSc5hoRtMXybBJEuGeWjV2
-         2uwg==
+        bh=dMbLKo7IRv/SL96161v8eDNqnLEfqzax2XOuOcQOqhc=;
+        b=FTja3MW3/ER9SYeVjIOLRZSMzRDeb50kqmk6eqJEMPd2U9IzUhtVVfEeckJNCnm5VW
+         a+M/0AEPoBvlPc+PpIaJr+ielIXYcVqYKmrW6HbMb47XxhJrkr9AiJUZVtuL7SJcmjGB
+         GkTM8sB2Jrc4D6EvrI66m03YAfC8iu9VIusI7hqy4McY2wM3WjU3J1K1Ym32zh6JFxpa
+         jDUFu0O5010GL/7Ui98dWTseQgWrSrkSUYWAyWW0bZGylp1YwK5HL3J9WvMuZ4EMbt/6
+         FpJb6N8GZFkj0XyKYh8T2E5Axi3DKK5l34sxMRvbgfVo9t8iGYNxD962aDoY1twgASQc
+         FCGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8x9z5IK3e1jLIYvYQLpPPPTrSa/xPbdbpcJwZ5RslgE=;
-        b=Vr4C3RQYFPEmzZA/VLNMuGEy5WchsLOPolxwzMrAZGTOS0UEyE+XrZ8xPCq4EIVvc/
-         gP8RAEw/xGeFOzpTCIzu5A2uoFKRN+X7O43Tz7fXacRUi1TiDHNIPNtCIetSDGhqtrcv
-         xHFBjASpEPl/Y1arNEg+CdcP66hIYG26eV1nawGzyBZ6PPUo+qQbv1TGtOBdBZnHpEW3
-         KhLwo+KkZLy3dPASYtpwu3PjsswSyHScW0d7QsLgEuS1dW9OzI1IFdF6yy9kpAQSgwJj
-         EaRmIArPBjSwwrgMaGjgrpUN2SU5rBQo2e0sYzg1dunx/JyljMMI3/83qNE5EFVIA03P
-         QSDw==
-X-Gm-Message-State: APjAAAWPH4lxAQjTE6MsdKZRw7DJ+nfMbA6LhWNtFoI1EO/f6aiX5Ze1
-        sqbrrUqOtEsMajSjBxDLX2YCt8kcCFPMufcWJEt9tA==
-X-Google-Smtp-Source: APXvYqzibvLQiYU/9XhXADboJGPQVfHnCc7v9B8G307Ku9so1UCHwb95zqnPu46yFD9lgRFp7QQvnrT7eW3mPNMga3w=
-X-Received: by 2002:a67:fb41:: with SMTP id e1mr12561823vsr.159.1575877316661;
- Sun, 08 Dec 2019 23:41:56 -0800 (PST)
+        bh=dMbLKo7IRv/SL96161v8eDNqnLEfqzax2XOuOcQOqhc=;
+        b=C8ont2zf2HnqEZe8XGf4VWmlzE7Wh26fXblsYG7oTUAwbVL3sQ2WbwzBwU2VloQPIQ
+         wd0CeXmGMMJt3VyD2R1Du1ioXRFydnFyRt0wPuXkxVzIqZh7nfwu9xSsWTpmqMIgE3tZ
+         vPiJARmXcIQvqDxXYdKJKD2fhM4iAWdQBDySL+uJPlWE202leGBXOF+RBNqW5H5Pblod
+         MlUAtEleGA1T0J1wX4X9ozWeoZzLCAg5TtGlly8q0kxhoWz1AvDLOQi5vU6h5jlASPVy
+         EPJXcztFjuL4dgbWNkGoYQf4ijSU592izlt8vauzxFqs7CGsj9mV420trmCGpCSReOcI
+         dypw==
+X-Gm-Message-State: APjAAAXp+ip5eHDqq6KdZ2PJ2biUO/kgSVLFqilxwE/znIXWntwMovJA
+        ECNsgzyzu2oSAb1zLxu8S9/dqzTajKKlLdrPMNYl6g==
+X-Google-Smtp-Source: APXvYqxH6grHbhVceYssDE/5ixg4P6B9MfnftaQ6BBtytlXOyo9aJE1DCw5TqnD0CSbDUVaQ2+nhfNl0fMiJU/lfesM=
+X-Received: by 2002:a67:f8cf:: with SMTP id c15mr19585797vsp.27.1575877358692;
+ Sun, 08 Dec 2019 23:42:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20191205071953.121511-1-wvw@google.com> <20191205071953.121511-3-wvw@google.com>
-In-Reply-To: <20191205071953.121511-3-wvw@google.com>
+References: <20191205071953.121511-1-wvw@google.com> <20191205071953.121511-4-wvw@google.com>
+In-Reply-To: <20191205071953.121511-4-wvw@google.com>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Mon, 9 Dec 2019 13:11:45 +0530
-Message-ID: <CAHLCerOWxjG2nhyQFDy8=xXWhupL=7=juAzzTvnbAeutF=pU=g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] thermal: improve error message in thermal zone registration
+Date:   Mon, 9 Dec 2019 13:12:27 +0530
+Message-ID: <CAHLCerMdKq7wWdsZ00X1rL3y=NvocRqTJJe0W6q8708htH=pkw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] thermal: create softlink by name for thermal_zone
+ and cooling_device
 To:     Wei Wang <wvw@google.com>
 Cc:     Wei Wang <wei.vince.wang@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -62,63 +63,89 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Dec 5, 2019 at 12:50 PM Wei Wang <wvw@google.com> wrote:
 >
-> Follow up with commit 67eed44b8a8a ("thermal: Add some error messages")
-> to clean up checkpatch warning on line length and also add more message
-> for developers.
+> The paths thermal_zone%d and cooling_device%d are not intuitive and the
+> numbers are subject to change due to device tree change. This usually
+> leads to tree traversal in userspace code.
+> The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
+> cooling_device respectively.
 >
 > Signed-off-by: Wei Wang <wvw@google.com>
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
-
+Tested-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  drivers/thermal/thermal_core.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+>  drivers/thermal/thermal_core.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 974e2d91c30b..9db7f72e70f8 100644
+> index 9db7f72e70f8..7872bd527f3f 100644
 > --- a/drivers/thermal/thermal_core.c
 > +++ b/drivers/thermal/thermal_core.c
-> @@ -1255,29 +1255,33 @@ thermal_zone_device_register(const char *type, int trips, int mask,
->         int count;
->         struct thermal_governor *governor;
+> @@ -22,6 +22,7 @@
+>  #include <net/netlink.h>
+>  #include <net/genetlink.h>
+>  #include <linux/suspend.h>
+> +#include <linux/kobject.h>
 >
-> -       if (!type || strlen(type) == 0) {
-> +       if (!type || !type[0]) {
->                 pr_err("Error: No thermal zone type defined\n");
->                 return ERR_PTR(-EINVAL);
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/thermal.h>
+> @@ -46,6 +47,8 @@ static DEFINE_MUTEX(poweroff_lock);
+>
+>  static atomic_t in_suspend;
+>  static bool power_off_triggered;
+> +static struct kobject *cdev_link_kobj;
+> +static struct kobject *tz_link_kobj;
+>
+>  static struct thermal_governor *def_governor;
+>
+> @@ -999,9 +1002,15 @@ __thermal_cooling_device_register(struct device_node *np,
+>                 return ERR_PTR(result);
 >         }
 >
-> -       if (type && strlen(type) >= THERMAL_NAME_LENGTH) {
-> -               pr_err("Error: Thermal zone name (%s) too long, should be under %d chars\n",
-> -                      type, THERMAL_NAME_LENGTH);
-> +       if (strlen(type) >= THERMAL_NAME_LENGTH) {
-> +               pr_err("Error: Thermal zone name over %d chars: %s\n",
-> +                       THERMAL_NAME_LENGTH, type);
->                 return ERR_PTR(-EINVAL);
+> -       /* Add 'this' new cdev to the global cdev list */
+> +       /* Add 'this' new cdev to the global cdev list and create link*/
+>         mutex_lock(&thermal_list_lock);
+>         list_add(&cdev->node, &thermal_cdev_list);
+> +       if (!cdev_link_kobj)
+> +               cdev_link_kobj = kobject_create_and_add("cdev-by-name",
+> +                                               cdev->device.kobj.parent);
+> +       if (!cdev_link_kobj || sysfs_create_link(cdev_link_kobj,
+> +                                               &cdev->device.kobj, cdev->type))
+> +               dev_err(&cdev->device, "Failed to create cdev-by-name link\n");
+>         mutex_unlock(&thermal_list_lock);
+>
+>         /* Update binding information for 'this' new cdev */
+> @@ -1167,6 +1176,8 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+>                         }
+>                 }
 >         }
+> +       if (cdev_link_kobj)
+> +               sysfs_remove_link(cdev_link_kobj, cdev->type);
 >
->         if (trips > THERMAL_MAX_TRIPS || trips < 0 || mask >> trips) {
-> -               pr_err("Error: Incorrect number of thermal trips\n");
-> +               pr_err("Error: Incorrect number of thermal trips: %s\n", type);
->                 return ERR_PTR(-EINVAL);
+>         mutex_unlock(&thermal_list_lock);
+>
+> @@ -1354,6 +1365,12 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>
+>         mutex_lock(&thermal_list_lock);
+>         list_add_tail(&tz->node, &thermal_tz_list);
+> +       if (!tz_link_kobj)
+> +               tz_link_kobj = kobject_create_and_add("tz-by-name",
+> +                                               tz->device.kobj.parent);
+> +       if (!tz_link_kobj || sysfs_create_link(tz_link_kobj,
+> +                                               &tz->device.kobj, tz->type))
+> +               dev_err(&tz->device, "Failed to create tz-by-name link\n");
+>         mutex_unlock(&thermal_list_lock);
+>
+>         /* Bind cooling devices for this zone */
+> @@ -1425,6 +1442,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>                         }
+>                 }
 >         }
+> +       if (tz_link_kobj)
+> +               sysfs_remove_link(tz_link_kobj, tz->type);
 >
->         if (!ops) {
-> -               pr_err("Error: Thermal zone device ops not defined\n");
-> +               pr_err("Error: Thermal zone device ops not defined: %s\n",
-> +                       type);
->                 return ERR_PTR(-EINVAL);
->         }
+>         mutex_unlock(&thermal_list_lock);
 >
-> -       if (trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp))
-> +       if (trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp)) {
-> +               pr_err("Error: Thermal zone device missing callback: %s\n",
-> +                       type);
->                 return ERR_PTR(-EINVAL);
-> +       }
->
->         tz = kzalloc(sizeof(*tz), GFP_KERNEL);
->         if (!tz)
 > --
 > 2.24.0.393.g34dc348eaf-goog
 >
