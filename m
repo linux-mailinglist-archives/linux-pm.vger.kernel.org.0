@@ -2,66 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE0A116CE9
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 13:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D19D116D0E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 13:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727444AbfLIMSP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 07:18:15 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54893 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727438AbfLIMSP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 07:18:15 -0500
-Received: from 79.184.255.117.ipv4.supernova.orange.pl (79.184.255.117) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 70099c35fdbc405c; Mon, 9 Dec 2019 13:18:12 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: Make request_queue.rpm_status an enum
-Date:   Mon, 09 Dec 2019 13:18:12 +0100
-Message-ID: <2128344.f0oqsL5Bda@kreacher>
-In-Reply-To: <20191206132350.29040-1-geert+renesas@glider.be>
-References: <20191206132350.29040-1-geert+renesas@glider.be>
+        id S1727545AbfLIMYW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 07:24:22 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28356 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727232AbfLIMYV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 07:24:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1575894259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Om3e8U2zV0QaZB81qgLCidrh7Jm1jTyKjoRsq4wAO1A=;
+        b=hJo4Ozl9lp5pXnnJzTONrzOK5Ay9og1Zcl+iBlfB4ekCyCywEYOugdOpgOHFYX3nkfLyTx
+        0+dxYrAb9lmm8fgQiJ7tGrfJtQ3E4kDc6L/l7eXf+Dt7e/wKzrMJPGEXE5NoR1mHmvj26f
+        osAEjBn8UdyBvhdzXNhB3U5W0ZwTqGM=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-6-w-q9xYzaNmiOEYFDs9MlOw-1; Mon, 09 Dec 2019 07:24:17 -0500
+Received: by mail-qv1-f72.google.com with SMTP id d7so4516959qvq.12
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 04:24:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R2wkCojmmyM/eMvArR6da0gzEriG+0Vl5wpoIupE6a0=;
+        b=jXqyS90lc9FNa7OjzLrXRzptR/Aw0QcJQWCUujdmA3aNXn/Za1jtMqCXKiqQExwdqe
+         IDzI9+vZqOrN0lQ/Zj/ZjaMFeBD9Vb6dnTKnJ+q/mkMsOrMkRNmBLj5JhP1DMLYNUeI9
+         vEiQ3/OGEd2kF2UUxIYx59WkIrETvDn266TwKAZ5/9I4CAyFS26syoi7ZKjup3Gv9ls4
+         4ezpkYYXmOsc4GXWvrT5p1k3SZxwYqZBnuUu9I7/4j3wv+wLYLEZBQQ2zFNnIBA2H70s
+         B/DRayfYMiHWktHuWJFrlZP4bi7HdVxUGIWDAW9G5e18/m6J3TDBRQmzLNqMD6PKPImH
+         z7gQ==
+X-Gm-Message-State: APjAAAWkyQBsUxGzE84VWNy7bLbxbyzS2w2MOGqgUQnq55CnGUWDKcrT
+        c4OEB9v5uRHiR103HaNvp9WsabVoAebBBB50hGNPvGWj79se3i0IKLWJm/gB1bNo9jGY/AK3rmV
+        Mbp84iJX+DdqZEVTyQYpsqwPdKJLzOA8IdUk=
+X-Received: by 2002:a37:c57:: with SMTP id 84mr6830058qkm.157.1575894256892;
+        Mon, 09 Dec 2019 04:24:16 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzuZX+dUghHi7wPyOkamBRcZ36z3Od2tRPaKnHnAmGQD/DMSGgIgQOLFSwroihlGD9ll8sjWxVfTu+lqQTAIVU=
+X-Received: by 2002:a37:c57:: with SMTP id 84mr6830033qkm.157.1575894256520;
+ Mon, 09 Dec 2019 04:24:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
+ <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
+ <20191121112821.GU11621@lahna.fi.intel.com> <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
+ <20191121114610.GW11621@lahna.fi.intel.com> <CACO55ttXJgXG32HzYP_uJDfQ6T-d8zQaGjXK_AZD3kF0Rmft4g@mail.gmail.com>
+ <CAJZ5v0ibzcLEm44udUxW2uVgaF9NapdNBF8Ag+RE++u7gi2yNA@mail.gmail.com>
+ <CACO55ttBkZD9dm0Y_jT931NnzHHtDFyLz28aoo+ZG0pnLzPgbA@mail.gmail.com>
+ <CAJZ5v0jbh7jz+YQcw-gC5ztmMOc4E9+KFBCy4VGRsRFxBw-gnw@mail.gmail.com>
+ <e0eeddf4214f54dfac08e428dfb30cbd39f20680.camel@redhat.com>
+ <20191127114856.GZ11621@lahna.fi.intel.com> <CACO55tt5SAf24vk0XrKguhh2J=WuKirDsdY7T+u7PsGFCpnFxg@mail.gmail.com>
+ <e7aec10d789b322ca98f4b250923b0f14f2b8226.camel@redhat.com>
+ <CACO55tu+hT1WGbBn_nxLR=A-X6YWmeuz-UztJKw0QAFQDDV_xg@mail.gmail.com> <CAJZ5v0hcONxiWD+jpBe62H1SZ-84iNxT+QCn8mcesB1C7SVWjw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hcONxiWD+jpBe62H1SZ-84iNxT+QCn8mcesB1C7SVWjw@mail.gmail.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Mon, 9 Dec 2019 13:24:04 +0100
+Message-ID: <CACO55tu19-14nVnnCpWz3r3nf15j6tGWzHNBRmbbs2R6O4gMCA@mail.gmail.com>
+Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        Mika Westerberg <mika.westerberg@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>
+X-MC-Unique: w-q9xYzaNmiOEYFDs9MlOw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, December 6, 2019 2:23:50 PM CET Geert Uytterhoeven wrote:
-> request_queue.rpm_status is assigned values of the rpm_status enum only,
-> so reflect that in its type.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Mon, Dec 9, 2019 at 12:39 PM Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+>
+> On Mon, Dec 9, 2019 at 12:17 PM Karol Herbst <kherbst@redhat.com> wrote:
+> >
+> > anybody any other ideas?
+>
+> Not yet, but I'm trying to collect some more information.
+>
+> > It seems that both patches don't really fix
+> > the issue and I have no idea left on my side to try out. The only
+> > thing left I could do to further investigate would be to reverse
+> > engineer the Nvidia driver as they support runpm on Turing+ GPUs now,
+> > but I've heard users having similar issues to the one Lyude told us
+> > about... and I couldn't verify that the patches help there either in a
+> > reliable way.
+>
+> It looks like the newer (8+) versions of Windows expect the GPU driver
+> to prepare the GPU for power removal in some specific way and the
+> latter fails if the GPU has not been prepared as expected.
+>
+> Because testing indicates that the Windows 7 path in the platform
+> firmware works, it may be worth trying to do what it does to the PCIe
+> link before invoking the _OFF method for the power resource
+> controlling the GPU power.
+>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ohh, that actually makes sense. Didn't think of that yet.
 
-> ---
-> Perhaps this was done to avoid the need to #include <linux/pm.h>?
-> Let's see what kbuild has to report about this...
-> ---
->  include/linux/blkdev.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 397bb9bc230b6349..6419cd9523c370f8 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -466,7 +466,7 @@ struct request_queue {
->  
->  #ifdef CONFIG_PM
->  	struct device		*dev;
-> -	int			rpm_status;
-> +	enum rpm_status		rpm_status;
->  	unsigned int		nr_pending;
->  #endif
->  
-> 
+> If the Mika's theory that the Win7 path simply turns the PCIe link off
+> is correct, then whatever the _OFF method tries to do to the link
+> after that should not matter.
+>
 
+By the way, and I was only thinking about it after sending my last
+email out, do you think we should fail the runtime resume path if the
+device gets stuck in a power state?
 
+Currently pci core always calls into the driver regardless, but maybe
+for D3cold it really makes sense to just bail and refuse to resume? I
+think I tried that as an early "fix" and might even have a patch
+around. This should at least prevent crashes inside drivers trying to
+access invalid memory or getting stuck in loops.
 
+> > On Wed, Nov 27, 2019 at 8:55 PM Lyude Paul <lyude@redhat.com> wrote:
+> > >
+> > > On Wed, 2019-11-27 at 12:51 +0100, Karol Herbst wrote:
+> > > > On Wed, Nov 27, 2019 at 12:49 PM Mika Westerberg
+> > > > <mika.westerberg@intel.com> wrote:
+> > > > > On Tue, Nov 26, 2019 at 06:10:36PM -0500, Lyude Paul wrote:
+> > > > > > Hey-this is almost certainly not the right place in this thread=
+ to
+> > > > > > respond,
+> > > > > > but this thread has gotten so deep evolution can't push the sub=
+ject
+> > > > > > further to
+> > > > > > the right, heh. So I'll just respond here.
+> > > > >
+> > > > > :)
+> > > > >
+> > > > > > I've been following this and helping out Karol with testing her=
+e and
+> > > > > > there.
+> > > > > > They had me test Bjorn's PCI branch on the X1 Extreme 2nd gener=
+ation,
+> > > > > > which
+> > > > > > has a turing GPU and 8086:1901 PCI bridge.
+> > > > > >
+> > > > > > I was about to say "the patch fixed things, hooray!" but it see=
+ms that
+> > > > > > after
+> > > > > > trying runtime suspend/resume a couple times things fall apart =
+again:
+> > > > >
+> > > > > You mean $subject patch, no?
+> > > > >
+> > > >
+> > > > no, I told Lyude to test the pci/pm branch as the runpm errors we s=
+aw
+> > > > on that machine looked different. Some BAR error the GPU reported
+> > > > after it got resumed, so I was wondering if the delays were helping
+> > > > with that. But after some cycles it still caused the same issue, th=
+at
+> > > > the GPU disappeared. Later testing also showed that my patch also
+> > > > didn't seem to help with this error sadly :/
+> > > >
+> > > > > > [  686.883247] nouveau 0000:01:00.0: DRM: suspending object tre=
+e...
+> > > > > > [  752.866484] ACPI Error: Aborting method \_SB.PCI0.PEG0.PEGP.=
+NVPO due
+> > > > > > to previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
+> > > > > > [  752.866508] ACPI Error: Aborting method \_SB.PCI0.PGON due t=
+o
+> > > > > > previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
+> > > > > > [  752.866521] ACPI Error: Aborting method \_SB.PCI0.PEG0.PG00.=
+_ON due
+> > > > > > to previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
+> > > > >
+> > > > > This is probably the culprit. The same AML code fails to properly=
+ turn
+> > > > > on the device.
+> > > > >
+> > > > > Is acpidump from this system available somewhere?
+> > >
+> > > Attached it to this email
+> > >
+> > > > >
+> > > --
+> > > Cheers,
+> > >         Lyude Paul
+> >
+>
 
