@@ -2,56 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F55117279
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C11F117282
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 18:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbfLIRJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 12:09:05 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54016 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfLIRJE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:09:04 -0500
-Received: by mail-wm1-f65.google.com with SMTP id n9so88715wmd.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:09:02 -0800 (PST)
+        id S1726484AbfLIRLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 12:11:30 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39779 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726408AbfLIRL3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 12:11:29 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y11so17046114wrt.6
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 09:11:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:references:from:autocrypt:message-id:date:user-agent
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ea4/PrZomre2i6zXGutNZcRSd2/RfVCGFIF5aKKigpg=;
-        b=G89bKlHTuIczjERUM7QoxO9gQNhhCJDzRyB73CspgjnYN17lwJLCyIpIsTJ+6oCYCh
-         kMWAkZtHWnoro7FaJEYnANtUpg61L+NyU1lcpEpjb56VzXYNOSvcx5/i4eBYSwMrprGC
-         YEEWuCa19HV6p8zlpHXB6pkendQRqg1IM9Pxamz1mVs6esNBVyDM+CPBVXR8g/vVHcGM
-         OkRN+RffI5J7kn0Cn40HcOGbVtb9YUR3hU4Hjf+2kZZ/DXTCKHLOudrTXVhShPC26g60
-         ZJdnFc3xDF0g2xUs7ZuUdMgHK3TEn14Fybrrd9EFF54cUi2itgoNyB5BJQD9vOvUnp/T
-         J1bA==
+        bh=mPzvy9s/xchWB5p7Eh9jGDRZOnGTThlUcyCeDW/PbvI=;
+        b=wU2NAzpCYkIaEPYjgtkBFUSWTuX5y5gQhAGA2GpJP7y3iuqfk9idi/5y4vwdczEnvn
+         D9tkkDhiL7H4QWImYUbrjuP+3zmdnidXO0MrSs+6LFO8Y62goRSiighCAyO6n26/T+Zo
+         hZaO4y4M+2/3ZaLFNDam+ljzGWYc4QHBE+n+ewz1JimHV2mFIDkx6y7vXCa7kZaa7EcC
+         76Jjlj7sEvyNNiK1pPWmf2RqCzVNvQ1s6iaLjgdh1nUtSaBDJvnlY7Z9T9t6s67TFDh5
+         ORb3T7mfZVtS/HckRlY1V+8KzScgu6JlIBAVbOqedykMWBsKLw66+e25xK7vcpw2U994
+         RsuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ea4/PrZomre2i6zXGutNZcRSd2/RfVCGFIF5aKKigpg=;
-        b=AavDHZ5Xrz2J6Q+lOeShuIuJHRI9sZ8WRxt61WiyqqJI0NCaIOOZixixPr209DUJdy
-         7+pHjGUvnT7WRQtsmMF6RY6Ln6o1MaDTAI+sfHxqKpSOEtffNjz1e0YGFwbXADuYZgTs
-         1yCW3dK1hkvF3kwlDiwx6FlAdgzexQJaau4jX0ZDJjvXVQQEbz4nfUIUe4DOe129ABr7
-         V3kdjakIl3eCGyauL1DDRduJ8ymH2RtmnQ3xuvzqmqH2MdVSxgQexfHRfJ/WlK6I4g4L
-         W0CBouFXVemCBzYgyBavAT/eG3j16jBiWrczdoVT3zm5hcmODV3MXmZybugwQtEMoR0D
-         XfTw==
-X-Gm-Message-State: APjAAAVBYpfzT0olYmY/iTnWeOwvDXfyw5qnIhBg72Sb6C8hEHvGWHx+
-        OlFXxM50IGcVUujbF9TF9vwAH0kTmtU=
-X-Google-Smtp-Source: APXvYqweu5sJJ/Vw8xl26KkVBRmHTsmcoLCvukjF1nH+mx7H5AW5d0klOdHvbnPnd8IRnvy/l2vH0g==
-X-Received: by 2002:a7b:ce19:: with SMTP id m25mr94947wmc.6.1575911341704;
-        Mon, 09 Dec 2019 09:09:01 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=mPzvy9s/xchWB5p7Eh9jGDRZOnGTThlUcyCeDW/PbvI=;
+        b=KVG+q5ekm13TrHjO9pzjpTbQmzMapVFxzqmrB6rEIqgyqTvxBblI4XLMI2JLwFhJUj
+         7q8Y98xBe54KNVOSe0FjdibxNfNH+XIV/0FXteZlwuXd5BiWXL97Avhbs3iZ8mJwv96d
+         BK49quivmvST37ZHN4DYEgGtcaUo4GsXbpphjJAWHkwxhnbZygV0pfYYbD5enScUKpxq
+         +9LS3iOa+oEKMmtp90Bjzzj35mzl0Tfrmi8Z78hlPXMdWQPgITWJzPs2Wl0Ro3tc+mZc
+         lhhVlAn2LlDyvRyjshEpEKMtkROfWLWQmD3g1x0+lMTc/LnxsTkLMZFvxnYqndVKEeul
+         m/bw==
+X-Gm-Message-State: APjAAAUSyhS86Y+Lj92IUf7K7kxV/690w9uSBqNyFHFiHuuFXiPj6GDY
+        iIrsJMr81vTpZ+I5suButoAQcA==
+X-Google-Smtp-Source: APXvYqw8F2dYy8c1CNizEqE6KdcmZfx/Q+VqKrJIGm3yLYcNybUA+/aHHicnNwxMAEDey5qyWRbPiQ==
+X-Received: by 2002:a5d:6b88:: with SMTP id n8mr3426308wrx.288.1575911486520;
+        Mon, 09 Dec 2019 09:11:26 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe? ([2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe])
-        by smtp.googlemail.com with ESMTPSA id x6sm468505wmi.44.2019.12.09.09.09.00
+        by smtp.googlemail.com with ESMTPSA id d19sm407477wmd.38.2019.12.09.09.11.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 09:09:01 -0800 (PST)
-Subject: Re: [PATCH] thermal: rockchip: enable hwmon
-To:     schaecsn@gmx.net, rui.zhang@intel.com, edubezval@gmail.com,
-        amit.kucheria@verdurent.com, heiko@sntech.de,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20191118052413.D729B6E85603@corona.crabdance.com>
- <20191202145256.78AA06E85603@corona.crabdance.com>
+        Mon, 09 Dec 2019 09:11:25 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] thermal: armada: fix register offsets for AXP
+To:     Zak Hays <zak.hays@lexmark.com>
+Cc:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1575485367-18262-1-git-send-email-zhays@lexmark.com>
+ <BN8PR10MB3379A954079A4ECF574E80DE8C5D0@BN8PR10MB3379.namprd10.prod.outlook.com>
+ <e2ed2a04-83c0-b346-4de0-0f92d6dd7fbf@linaro.org>
+ <BN8PR10MB33792C7BA3B1D002AEDD25E08C580@BN8PR10MB3379.namprd10.prod.outlook.com>
+ <6c4e79ab-313c-5bb5-1489-329d916bd947@linaro.org>
+ <BN8PR10MB337975A77D726FDAFA9F13598C580@BN8PR10MB3379.namprd10.prod.outlook.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -107,12 +113,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <e3b6e675-14de-d020-48f4-a8ed877646ab@linaro.org>
-Date:   Mon, 9 Dec 2019 18:08:59 +0100
+Message-ID: <cee7f713-681d-8b03-08e3-3b10da36d2d5@linaro.org>
+Date:   Mon, 9 Dec 2019 18:11:24 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191202145256.78AA06E85603@corona.crabdance.com>
+In-Reply-To: <BN8PR10MB337975A77D726FDAFA9F13598C580@BN8PR10MB3379.namprd10.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -121,77 +127,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Stefan,
-
-
-On 02/12/2019 15:52, Stefan Schaeckeler wrote:
-> Hello linux power management mailing list and others,
+On 09/12/2019 17:58, Zak Hays wrote:
+>> On 09/12/2019 17:31, Zak Hays wrote:
+>>> Hi Daniel,
+>>>
+>>>> Hi Zak,
+>>>>
+>>>> what patch to pick up? V2 or V2?
+>>> I'm not sure I entirely understand your question. There are two patches:
+>>>
+>>> Zachary Hays  thermal: armada: fix register offsets for AXP
+>>> Zachary Hays  thermal: armada: clear reset in armadaxp_init
+>>
+>> I'm seeing multiple posting of the V2 and reply to V2 with I guess a
+>> changelog added.
+>>
+>> It is very difficult to deal with patches when it is unclear, duplicate
+>> series with different changelog.
+>>
+>> In the future, post a resend version explaining what was missing, so it
+>> is easier to understand what is happening. Or send a V3.
 > 
-> New month, new try. Could someone review this patch, please. I would reall=
-> y
-> like to see the Rockchip RK3399 temperature sensors hooked up to the hwmon=
->  API.
+> Ah. I understand now. I've been fighting email issues trying to get these patches sent and
+> inadvertently sent out multiple versions of the same patches. The most recent patches
+> are correct. Sorry for that spam. Shouldn't happen again.
+> 
+> Would you like me to resend as V3 for clarity or would you prefer to continue with the
+> V2 patches?
 
-I don't know what is happening but there are some spurious '3D'
-characters. Please fix it, elaborate a bit the changelog and resend.
-I'll review it.
+A V3 please, so I can pick them up without ambiguity from patchwork.
 
-Thanks
+Thanks!
 
 
->> Enable hwmon for the soc and gpu temperature sensors.
->>
->> Signed-off-by: Stefan Schaeckeler <schaecsn@gmx.net>
->>
->> ---
->>  drivers/thermal/rockchip_thermal.c | 12 +++++++++++-
->>  1 file changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockch=
-> ip_thermal.c
->> index 343c2f5c5a25..e47c60010259 100644
->> --- a/drivers/thermal/rockchip_thermal.c
->> +++ b/drivers/thermal/rockchip_thermal.c
->> @@ -19,6 +19,8 @@
->>  #include <linux/mfd/syscon.h>
->>  #include <linux/pinctrl/consumer.h>
->>
->> +#include "thermal_hwmon.h"
->> +
->>  /**
->>   * If the temperature over a period of time High,
->>   * the resulting TSHUT gave CRU module,let it reset the entire chip,
->> @@ -1321,8 +1323,15 @@ static int rockchip_thermal_probe(struct platform=
-> _device *pdev)
->>
->>  	thermal->chip->control(thermal->regs, true);
->>
->> -	for (i =3D 0; i < thermal->chip->chn_num; i++)
->> +	for (i =3D 0; i < thermal->chip->chn_num; i++) {
->>  		rockchip_thermal_toggle_sensor(&thermal->sensors[i], true);
->> +		thermal->sensors[i].tzd->tzp->no_hwmon =3D false;
->> +		error =3D thermal_add_hwmon_sysfs(thermal->sensors[i].tzd);
->> +		if (error)
->> +			dev_warn(&pdev->dev,
->> +				 "failed to register sensor %d with hwmon: %d\n",
->> +				 i, error);
->> +	}
->>
->>  	platform_set_drvdata(pdev, thermal);
->>
->> @@ -1344,6 +1353,7 @@ static int rockchip_thermal_remove(struct platform=
-> _device *pdev)
->>  	for (i =3D 0; i < thermal->chip->chn_num; i++) {
->>  		struct rockchip_thermal_sensor *sensor =3D &thermal->sensors[i];
->>
->> +		thermal_remove_hwmon_sysfs(sensor->tzd);
->>  		rockchip_thermal_toggle_sensor(sensor, false);
->>  	}
->>
->> --
->> 2.24.0
->>
+
 
 
 -- 
