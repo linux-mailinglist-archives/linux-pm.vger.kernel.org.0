@@ -2,153 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0003A116C25
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 12:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49512116C3A
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 12:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727347AbfLILR1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 06:17:27 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:42987 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727438AbfLILR0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 06:17:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575890244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gePB6fSq/rlJBPu1erNdnBIWumv6Nl4xKIQxuD48vdE=;
-        b=GN7TCP3gHbRn9UppbQ8Ygr8GVZRsXU/qfu1X+hHd8s9PPZsLHwgyoVZ7sXvq9PJ9b7r5/5
-        uVACAWVNSp9VvKGR/mGr20T8aVPYRjMrryEsbCx2/5hH5selK9PAABxEvkx9YgtXgsx44T
-        +W2KmxrJsq3HXP4pAbC1EUNvTBgF1f0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-32-2Jby0soaO5GOkFQEK9aZMQ-1; Mon, 09 Dec 2019 06:17:22 -0500
-Received: by mail-qt1-f200.google.com with SMTP id z12so5228669qts.15
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 03:17:22 -0800 (PST)
+        id S1727232AbfLILXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 06:23:41 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:33783 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726297AbfLILXl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 06:23:41 -0500
+Received: by mail-oi1-f182.google.com with SMTP id v140so6009050oie.0
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 03:23:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CWTaEBFOGggC4ce4fgk8cEZpKpRsvl0bTsvJF/j06c4=;
-        b=cBQdodzrba746S4eEny4V1eTFeCuIzDUPLndq/efc081niUyYeOmyy6qM6HSblrW92
-         h/AZi4i/ZHIsQtFwP9/rZsH6yN3BnM+iemfKP/E+XrccmiNKUsAm++8UvFu2HPkM/N5Y
-         u1RlMRuBhmV4MpZgXicN6BrbRjK/Y1ziDJTp3tn4R8ijpM3yNK8F2kPOiKOq9HStd2b5
-         pPcaH97yduSFilfOd3DZjGAuxtc89gURgknfNTYnApew9WCGK4vzydqFkWkScRYCDFFS
-         oCCWBpAzzxzVPwt1mr+f9eJfc4OgU/64BL8T5MV5sW3Uonf5q28yh+HO13TFkJIPTSxG
-         IaZA==
-X-Gm-Message-State: APjAAAV+kgrjbR6Rw63hk8rFIJu3LvaJbhloxxOrGmMK9XtSBTKK1wHP
-        MPncrbw7+FXhNlwpcwX+eP4of3/HCxOEfeIjI27VYMX3/JjiF5j/fKKDiHoqhx+v/M8GvUsKboq
-        JiGKYPnlpMz4D4oHiFFUCJYOiXrR1oFFXHVU=
-X-Received: by 2002:aed:2ae7:: with SMTP id t94mr24558832qtd.130.1575890242226;
-        Mon, 09 Dec 2019 03:17:22 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwXGTAHVNmpg6Y/t9znqJomJSvKwVnFUd+47PosvATYXQKxa2ZeO+n3zSeHQjAU94Sh/b3qhJ7zCxvn9RMxJHI=
-X-Received: by 2002:aed:2ae7:: with SMTP id t94mr24558808qtd.130.1575890241963;
- Mon, 09 Dec 2019 03:17:21 -0800 (PST)
+        bh=PVs0Mab48Fi5Cs2XOaWyWXATTx6g5oPZhpX0z076AkY=;
+        b=iORjoImR4P7PDstj++uR5MpQAfro7RzdpkI/2627IHJnSkIET7zbZG7iNe4TyTlBD0
+         8VkPp4Vxt8CzD3T5IigoEBoH4o2CO/IHrT5JsuI7N4G9Nl81Brex17gtfJShNLqlNC/W
+         1YC2k3mI72oTGU2iya3Ir+jKx10CvnaI9cBv171y2PHOUMdLZxNolldDF2UK379wOgWh
+         aZNOuOMyTBA5rlwSAMlQrRoZXXSV7lVowhCIXjEy0GnFIajx7g7MmRYkH836RRer4wsj
+         IuSLWZG5RnghlsX3b8JfSjOEBcTH+fiFErA2QWRdXcQNyoVVOucYmQw/8a40ReIg3QZ+
+         X4+g==
+X-Gm-Message-State: APjAAAXQck4SL7oti7nuU/PagkljfoCxBrN1foEEHq3cdq7cggyPhQ4i
+        OF3ZCucq1ZxnixttdeHUKjKv00UHxwQeubp71Sw=
+X-Google-Smtp-Source: APXvYqxpwNEWe/5TLgTdJT41+3+qCpot1mRH8G8ri2/P+prDLYwPStns0qanQljERV0zkQxFdoxLUjosHZzECB48QSY=
+X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr18734889oij.110.1575890620181;
+ Mon, 09 Dec 2019 03:23:40 -0800 (PST)
 MIME-Version: 1.0
-References: <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
- <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
- <20191121112821.GU11621@lahna.fi.intel.com> <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
- <20191121114610.GW11621@lahna.fi.intel.com> <CACO55ttXJgXG32HzYP_uJDfQ6T-d8zQaGjXK_AZD3kF0Rmft4g@mail.gmail.com>
- <CAJZ5v0ibzcLEm44udUxW2uVgaF9NapdNBF8Ag+RE++u7gi2yNA@mail.gmail.com>
- <CACO55ttBkZD9dm0Y_jT931NnzHHtDFyLz28aoo+ZG0pnLzPgbA@mail.gmail.com>
- <CAJZ5v0jbh7jz+YQcw-gC5ztmMOc4E9+KFBCy4VGRsRFxBw-gnw@mail.gmail.com>
- <e0eeddf4214f54dfac08e428dfb30cbd39f20680.camel@redhat.com>
- <20191127114856.GZ11621@lahna.fi.intel.com> <CACO55tt5SAf24vk0XrKguhh2J=WuKirDsdY7T+u7PsGFCpnFxg@mail.gmail.com>
- <e7aec10d789b322ca98f4b250923b0f14f2b8226.camel@redhat.com>
-In-Reply-To: <e7aec10d789b322ca98f4b250923b0f14f2b8226.camel@redhat.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Mon, 9 Dec 2019 12:17:10 +0100
-Message-ID: <CACO55tu+hT1WGbBn_nxLR=A-X6YWmeuz-UztJKw0QAFQDDV_xg@mail.gmail.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     Mika Westerberg <mika.westerberg@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Mario Limonciello <Mario.Limonciello@dell.com>
-X-MC-Unique: 2Jby0soaO5GOkFQEK9aZMQ-1
-X-Mimecast-Spam-Score: 0
+References: <DB3PR0402MB391626A8ECFDC182C6EDCF8DF54E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB3916C8F16045625489E776F4F5460@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <4087016.QifdzW7851@kreacher> <DB3PR0402MB39163BEC18FF81B06D1093BBF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAJZ5v0j_op4vELkEQzJEuXij71p8SGSFSbo0m813W5Gq1ZdYoQ@mail.gmail.com>
+ <DB3PR0402MB3916D581AFCA8D05BBED3B68F5580@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB3916EF749069E53CB1C03475F5580@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB3916EF749069E53CB1C03475F5580@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 9 Dec 2019 12:23:29 +0100
+Message-ID: <CAJZ5v0j+L_w7G=Z4K5tuWEp11uk3ggS-1c8RqQ-Px6mk1V98Pw@mail.gmail.com>
+Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Peng Fan <peng.fan@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-anybody any other ideas? It seems that both patches don't really fix
-the issue and I have no idea left on my side to try out. The only
-thing left I could do to further investigate would be to reverse
-engineer the Nvidia driver as they support runpm on Turing+ GPUs now,
-but I've heard users having similar issues to the one Lyude told us
-about... and I couldn't verify that the patches help there either in a
-reliable way.
+On Mon, Dec 9, 2019 at 11:57 AM Anson Huang <anson.huang@nxp.com> wrote:
+>
+> Forgot to mentioned that below patch on v5.4 can easily reproduce the panic() on our platforms which I think is unexpected, as the policy->cpus already be updated after governor stop, but still try to have irq work queued on it.
+>
+> static void dbs_update_util_handler(struct update_util_data *data, u64 time, unsigned int flags)
+> +       if (!cpumask_test_cpu(smp_processor_id(), policy_dbs->policy->cpus))
+> +               panic("...irq work on offline cpu %d\n", smp_processor_id());
+>         irq_work_queue(&policy_dbs->irq_work);
 
-On Wed, Nov 27, 2019 at 8:55 PM Lyude Paul <lyude@redhat.com> wrote:
->
-> On Wed, 2019-11-27 at 12:51 +0100, Karol Herbst wrote:
-> > On Wed, Nov 27, 2019 at 12:49 PM Mika Westerberg
-> > <mika.westerberg@intel.com> wrote:
-> > > On Tue, Nov 26, 2019 at 06:10:36PM -0500, Lyude Paul wrote:
-> > > > Hey-this is almost certainly not the right place in this thread to
-> > > > respond,
-> > > > but this thread has gotten so deep evolution can't push the subject
-> > > > further to
-> > > > the right, heh. So I'll just respond here.
-> > >
-> > > :)
-> > >
-> > > > I've been following this and helping out Karol with testing here an=
-d
-> > > > there.
-> > > > They had me test Bjorn's PCI branch on the X1 Extreme 2nd generatio=
-n,
-> > > > which
-> > > > has a turing GPU and 8086:1901 PCI bridge.
-> > > >
-> > > > I was about to say "the patch fixed things, hooray!" but it seems t=
-hat
-> > > > after
-> > > > trying runtime suspend/resume a couple times things fall apart agai=
-n:
-> > >
-> > > You mean $subject patch, no?
-> > >
-> >
-> > no, I told Lyude to test the pci/pm branch as the runpm errors we saw
-> > on that machine looked different. Some BAR error the GPU reported
-> > after it got resumed, so I was wondering if the delays were helping
-> > with that. But after some cycles it still caused the same issue, that
-> > the GPU disappeared. Later testing also showed that my patch also
-> > didn't seem to help with this error sadly :/
-> >
-> > > > [  686.883247] nouveau 0000:01:00.0: DRM: suspending object tree...
-> > > > [  752.866484] ACPI Error: Aborting method \_SB.PCI0.PEG0.PEGP.NVPO=
- due
-> > > > to previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
-> > > > [  752.866508] ACPI Error: Aborting method \_SB.PCI0.PGON due to
-> > > > previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
-> > > > [  752.866521] ACPI Error: Aborting method \_SB.PCI0.PEG0.PG00._ON =
-due
-> > > > to previous error (AE_AML_LOOP_TIMEOUT) (20190816/psparse-529)
-> > >
-> > > This is probably the culprit. The same AML code fails to properly tur=
-n
-> > > on the device.
-> > >
-> > > Is acpidump from this system available somewhere?
->
-> Attached it to this email
->
-> > >
-> --
-> Cheers,
->         Lyude Paul
+Yes, that is unexpected.
 
+In cpufreq_offline(), we have:
+
+    down_write(&policy->rwsem);
+    if (has_target())
+        cpufreq_stop_governor(policy);
+
+    cpumask_clear_cpu(cpu, policy->cpus);
+
+and cpufreq_stop_governor() calls policy->governor->stop(policy) which
+is cpufreq_dbs_governor_stop().
+
+That calls gov_clear_update_util(policy_dbs->policy) first, which
+invokes cpufreq_remove_update_util_hook() for each CPU in policy->cpus
+and synchronizes RCU, so after that point none of the policy->cpus is
+expected to run dbs_update_util_handler().
+
+policy->cpus is updated next and the governor is started again with
+the new policy->cpus.  Because the offline CPU is not there, it is not
+expected to run dbs_update_util_handler() again.
+
+Do you only get the original error when one of the CPUs goes back online?
