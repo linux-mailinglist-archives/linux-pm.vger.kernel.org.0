@@ -2,58 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F35681170B9
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 16:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D23F1170BF
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Dec 2019 16:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbfLIPmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 10:42:19 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45865 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbfLIPmT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 10:42:19 -0500
-Received: by mail-wr1-f67.google.com with SMTP id j42so16666095wrj.12
-        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 07:42:17 -0800 (PST)
+        id S1726290AbfLIPnB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 10:43:01 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44002 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726668AbfLIPnA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 10:43:00 -0500
+Received: by mail-wr1-f68.google.com with SMTP id d16so16689058wre.10
+        for <linux-pm@vger.kernel.org>; Mon, 09 Dec 2019 07:42:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6OVqX29GpewH/rAwljank1ZqajsZGYFS+Ms4LrRcsaE=;
-        b=qEokDnM90Ht6SMUutcaR+qwpsTtlaV3b+MjGqs/vPY1zo3o2cZnKYgwFgZAW0e6j5+
-         OXNM47i2UXADgXkCpugB+s/d1Qu0R/EIAvhyTfPXwKDBg/8Esm3r3pJxNpGc0gId+Nj1
-         R6mvU3c+lt+SMm9eIFjOu6CNDC+27Ruf8c88K/a1kHWXxDRhC6Zslz2jknpxf9ck1Asj
-         1UI46JePyaKstCG9+ATRb5kXLOofGz3bCYmrTGzouUWxqoeUzv6lS8jP85Bd5Zp4v3gg
-         sum0XBO+6VGyY423lNSsFATacy5UjtUBk1Q/DikkJ9ZKE6PEVdszOnh0VpPRFcSgrTzY
-         vNoQ==
+        bh=JyFrPNofDVcbi3MtdClYhVErkk/mZYWGaxyKjfxB5ok=;
+        b=QMMaSQsFW2URHACSpjKw1fPxV/1OYn/jceXD3S4MmmoCK2XTTvjLd3uqtkyDVbBvhS
+         HcU062f+xVjM9nLXU6oHNXZ01t+kKns9aj8h4ZV2WGj9mi2qu81cp5h/yxFZ0Z4IQRfe
+         Ypqhuf71l7veafxPxaM790ZnC6fqShOk43ol4+fQmvc6JBbUpdhI2oDZeiqqWv/Pn3zl
+         tKMh/8TgebrOPtHHklvOTrYIBKwneAMH1+X5BlLp5gX1k4q2VUAgN4h4c/cY6B7xUPjh
+         NqA5KbOYQdl2oy5TgrS1N0dpD5ME0MKUFWZJKnUNiJKFHhJKAMtFh1QcEYI1Jr1wFK9J
+         ZsQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=6OVqX29GpewH/rAwljank1ZqajsZGYFS+Ms4LrRcsaE=;
-        b=D2D8uF0t8nny4XEagCNhRm09HjUF5/xGQU/R21DWcWA7r4jSYtRaqN90WLh/KkfnwB
-         zyQvY6UDdIn/wjovyOvRTdm0nIMYdVk/OxraCdC15qJXDdBIAizCutd7oCqhjIS5IHXX
-         FpFZz7Bi1lteqDf3aTQTEQlKn3/wIOXIOo7mzE4MgAJ7N9mEO98Pst2BxOja+K/H/ACn
-         ab4/lfQ1pd6xGB/2FYTTknA0bUcvAepg7SlDGma52In860fC361coFfRgGceyIRpuScn
-         OkIXE/Gl+KQMTUIFy38+JbYt+Zq19T9JhofY6J72TqIGaxpTyGraJgsDNAxFrej0Fnpp
-         wqxg==
-X-Gm-Message-State: APjAAAXyR2T8Q4pMRyeebvH6TjrWkoK7/1SL/TkTw4Lo/BMUVPkWzCaF
-        r/F22QwuqolIl/qv987Oo5RUFQ==
-X-Google-Smtp-Source: APXvYqzExm9/F7LjTxYKSqseHjirvetDdh/NbueL5JS/6ZdeyMmgvEsXC1MC5QzX/DLxKTxBkAHpvw==
-X-Received: by 2002:adf:e2cc:: with SMTP id d12mr2814024wrj.168.1575906136150;
-        Mon, 09 Dec 2019 07:42:16 -0800 (PST)
+        bh=JyFrPNofDVcbi3MtdClYhVErkk/mZYWGaxyKjfxB5ok=;
+        b=IQ9qP1RGfYV0ydg9H9GfMa9aijaCLjnFYLPfgqLsWpUFRGzLqSbYHkigN4OqClLikR
+         nWrvdbEkpSgUoj/K5qdeABZnAYiKVspnFMDyoV8h9q9/l+ecl1Ki3mowb5XEOSQBanCB
+         Rw8SRRQ7o3FJ41Yl+23JD2rzdnkisgm+vZlBiIlwIKaljU7WD3Py715VL9mApS5KkcHp
+         zz6WPvW879UFM2k3CIVedCKdgPqfWmpqzG6dr1peP6OjQzWFqTjZgpMNBR2RlZz3DlF2
+         frZ6kaYdtfvWFJUfXTCn3fwYJc2huHN3caRaOW5u83dUklls/cijo+qcMadZM/As7iGo
+         uueQ==
+X-Gm-Message-State: APjAAAXX0Qvi25oP5VK50Se8aHZ49GNfAh/t1F3MP1UHG8LEsVgZEWCF
+        es2PZccXiDjhEE9Ug4cOBamTeQ==
+X-Google-Smtp-Source: APXvYqxzXaESjkTIFXZZzhNdfPgLl8MTPIYKIDjmeDFgwHqMzD5LKEZa7xB8DTE+w4V/y0uTAc322Q==
+X-Received: by 2002:a5d:62d1:: with SMTP id o17mr3081300wrv.9.1575906176344;
+        Mon, 09 Dec 2019 07:42:56 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe? ([2a01:e34:ed2f:f020:3114:25b8:99b8:d7fe])
-        by smtp.googlemail.com with ESMTPSA id d186sm165054wmf.7.2019.12.09.07.42.15
+        by smtp.googlemail.com with ESMTPSA id n30sm170582wmd.3.2019.12.09.07.42.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2019 07:42:15 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] thermal: armada: fix register offsets for AXP
-To:     Zak Hays <zak.hays@lexmark.com>
-Cc:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1575485367-18262-1-git-send-email-zhays@lexmark.com>
- <BN8PR10MB3379A954079A4ECF574E80DE8C5D0@BN8PR10MB3379.namprd10.prod.outlook.com>
+        Mon, 09 Dec 2019 07:42:55 -0800 (PST)
+Subject: Re: [PATCH] thermal: intel: fix unmatched pci_release_region
+To:     Chuhong Yuan <hslester96@gmail.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191206075531.18637-1-hslester96@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -109,12 +107,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <e2ed2a04-83c0-b346-4de0-0f92d6dd7fbf@linaro.org>
-Date:   Mon, 9 Dec 2019 16:42:14 +0100
+Message-ID: <e0cc4e42-1164-1a66-a1da-f97a05d816fd@linaro.org>
+Date:   Mon, 9 Dec 2019 16:42:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <BN8PR10MB3379A954079A4ECF574E80DE8C5D0@BN8PR10MB3379.namprd10.prod.outlook.com>
+In-Reply-To: <20191206075531.18637-1-hslester96@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,50 +121,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Zak,
-
-what patch to pick up? V2 or V2?
-
-What email is the correct one?
-
-	Zachary Hays <zhays@lexmark.com>
-or
-	Zak Hays <zak.hays@lexmark.com>
-
-Also waiting for Miquel to ack the patch.
-
-Thanks
-
-  -- Daniel
-
-
-On 05/12/2019 15:19, Zak Hays wrote:
-> As shown in its device tree, Armada XP has the control1 register at
-> 0x184d0, not 0x182d0.
+On 06/12/2019 08:55, Chuhong Yuan wrote:
+> The driver calls pci_request_regions() in probe and uses
+> pci_release_regions() in probe failure.
+> However, it calls pci_release_region() in remove, which does
+> match the other two calls.
+> Use pci_release_regions() instead to unify them.
 > 
-> Signed-off-by: Zachary Hays <zhays@lexmark.com>
-> ---
-> v2: update commit title and add "Signed-off-by"
-> ---
->  drivers/thermal/armada_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-> index 709a22f455e9..88363812033c 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -578,7 +578,7 @@ static const struct armada_thermal_data armadaxp_data = {
->         .coef_m = 10000000ULL,
->         .coef_div = 13825,
->         .syscon_status_off = 0xb0,
-> -       .syscon_control1_off = 0xd0,
-> +       .syscon_control1_off = 0x2d0,
->  };
-> 
->  static const struct armada_thermal_data armada370_data = {
-> --
-> 2.7.4
-> 
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+
+Applied, thanks!
 
 
 -- 
