@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AF31195FB
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 22:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F92119529
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 22:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728877AbfLJVYO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 16:24:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33036 "EHLO mail.kernel.org"
+        id S1727104AbfLJVTQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 16:19:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36688 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727500AbfLJVKz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:10:55 -0500
+        id S1728764AbfLJVMb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:12:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99D51246AE;
-        Tue, 10 Dec 2019 21:10:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC42E2077B;
+        Tue, 10 Dec 2019 21:12:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012254;
-        bh=iKHzYfg2mi5+rXn4bwwSLeTeA/Prirx9XvsHR+GrqNA=;
+        s=default; t=1576012350;
+        bh=xTn/GfSIOlOalx4DQGBotd4mEAi28u2VH+yoN/+OPzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B4sagRIvW9990KfUKB6onyejIIjyx/Xi3LNSViu1NLzmTPHrslZQizeYb0lUdOc7E
-         bsvtQgtwhOsn2x5VF/JTf8zDKhVt8gJTFplzgB1bbshq+qaXxyeuS1EblgP/lvJsn/
-         K5kWwtJF77fnLA3YCVIsTcBbUE66aaJCyjNp8uQQ=
+        b=InWQqlR9fTZHRquky7Wb+X8HH/UJInJoJn2IYR5WWed0OzfFSv2s1mW+i7+ow7cEU
+         fliSyZDdvmFOiCaHN2xHiSO8GLzeeD4kWJctZxL7NAT6dmdXj7vl1w+82fIq8XwdyR
+         jrAl/UTV4wQ4gNKVYCopONzgjp8MbqNw/yuUDYHE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ondrej Jirman <megous@megous.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 201/350] cpufreq: sun50i: Fix CPU speed bin detection
-Date:   Tue, 10 Dec 2019 16:05:06 -0500
-Message-Id: <20191210210735.9077-162-sashal@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 280/350] cpufreq: Register drivers only after CPU devices have been registered
+Date:   Tue, 10 Dec 2019 16:06:25 -0500
+Message-Id: <20191210210735.9077-241-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -45,87 +45,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ondrej Jirman <megous@megous.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit c23734487fb44ee16c1b007ba72d793c085e4ec4 ]
+[ Upstream commit 46770be0cf94149ca48be87719bda1d951066644 ]
 
-I have observed failures to boot on Orange Pi 3, because this driver
-determined that my SoC is from the normal bin, but my SoC only works
-reliably with the OPP values for the slowest bin.
+The cpufreq core heavily depends on the availability of the struct
+device for CPUs and if they aren't available at the time cpufreq driver
+is registered, we will never succeed in making cpufreq work.
 
-By querying H6 owners, it was found that e-fuse values found in the wild
-are in the range of 1-3, value of 7 was not reported, yet. From this and
-from unused defines in BSP code, it can be assumed that meaning of efuse
-values on H6 actually is:
+This happens due to following sequence of events:
 
-- 1 = slowest bin
-- 2 = normal bin
-- 3 = fastest bin
+- cpufreq_register_driver()
+  - subsys_interface_register()
+  - return 0; //successful registration of driver
 
-Vendor code actually treats 0 and 2 as invalid efuse values, but later
-treats all invalid values as a normal bin. This looks like a mistake in
-bin detection code, that was plastered over by a hack in cpufreq code,
-so let's not repeat it here. It probably only works because there are no
-SoCs in the wild with efuse value of 0, and fast bin SoCs are made to
-use normal bin OPP tables, which is also safe.
+... at a later point of time
 
-Let's play it safe and interpret 0 as the slowest bin, but fix detection
-of other bins to match this research. More research will be done before
-actual OPP tables are merged.
+- register_cpu();
+  - device_register();
+    - bus_probe_device();
+      - sif->add_dev();
+	- cpufreq_add_dev();
+	  - get_cpu_device(); //FAILS
+  - per_cpu(cpu_sys_devices, num) = &cpu->dev; //used by get_cpu_device()
+  - return 0; //CPU registered successfully
 
-Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-Acked-by: Maxime Ripard <mripard@kernel.org>
-Signed-off-by: Ondrej Jirman <megous@megous.com>
+Because the per-cpu variable cpu_sys_devices is set only after the CPU
+device is regsitered, cpufreq will never be able to get it when
+cpufreq_add_dev() is called.
+
+This patch avoids this failure by making sure device structure of at
+least CPU0 is available when the cpufreq driver is registered, else
+return -EPROBE_DEFER.
+
+Reported-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Co-developed-by: Amit Kucheria <amit.kucheria@linaro.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Tested-by: Amit Kucheria <amit.kucheria@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ drivers/cpufreq/cpufreq.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index eca32e443716c..9907a165135b7 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -25,7 +25,7 @@
- static struct platform_device *cpufreq_dt_pdev, *sun50i_cpufreq_pdev;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index bc19d6c16aaa5..a7db4f22a0771 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2634,6 +2634,13 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
+ 	if (cpufreq_disabled())
+ 		return -ENODEV;
  
- /**
-- * sun50i_cpufreq_get_efuse() - Parse and return efuse value present on SoC
-+ * sun50i_cpufreq_get_efuse() - Determine speed grade from efuse value
-  * @versions: Set to the value parsed from efuse
-  *
-  * Returns 0 if success.
-@@ -69,21 +69,16 @@ static int sun50i_cpufreq_get_efuse(u32 *versions)
- 		return PTR_ERR(speedbin);
- 
- 	efuse_value = (*speedbin >> NVMEM_SHIFT) & NVMEM_MASK;
--	switch (efuse_value) {
--	case 0b0001:
--		*versions = 1;
--		break;
--	case 0b0011:
--		*versions = 2;
--		break;
--	default:
--		/*
--		 * For other situations, we treat it as bin0.
--		 * This vf table can be run for any good cpu.
--		 */
-+
 +	/*
-+	 * We treat unexpected efuse values as if the SoC was from
-+	 * the slowest bin. Expected efuse values are 1-3, slowest
-+	 * to fastest.
++	 * The cpufreq core depends heavily on the availability of device
++	 * structure, make sure they are available before proceeding further.
 +	 */
-+	if (efuse_value >= 1 && efuse_value <= 3)
-+		*versions = efuse_value - 1;
-+	else
- 		*versions = 0;
--		break;
--	}
- 
- 	kfree(speedbin);
- 	return 0;
++	if (!get_cpu_device(0))
++		return -EPROBE_DEFER;
++
+ 	if (!driver_data || !driver_data->verify || !driver_data->init ||
+ 	    !(driver_data->setpolicy || driver_data->target_index ||
+ 		    driver_data->target) ||
 -- 
 2.20.1
 
