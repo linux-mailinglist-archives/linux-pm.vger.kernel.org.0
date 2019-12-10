@@ -2,107 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4D8119146
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 20:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7AC11916A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 21:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbfLJT6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 14:58:41 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45246 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfLJT6k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 14:58:40 -0500
-Received: by mail-lf1-f66.google.com with SMTP id 203so14695199lfa.12;
-        Tue, 10 Dec 2019 11:58:39 -0800 (PST)
+        id S1726708AbfLJUBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 15:01:51 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:40894 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbfLJUBr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 15:01:47 -0500
+Received: by mail-ed1-f66.google.com with SMTP id c93so17079908edf.7
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 12:01:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cvLA6SLf2bKE07yg0HKaHP2/grDfEpmexDJw0d9Uy8g=;
-        b=gTFrwZsVodvFApTjCQmw3UiTwNJ+4OItpxaDmYfpRqtVGCIb4WveT1bk/NpTgTqhac
-         4SDFeIxJGigGukw4OGlS+H4wren3Gw63Z17mzs7TBwuL9gsmvsxcRsIZyvS52fLCAPd5
-         5IKavCuFDp806MC+KUdTcxif4p6xKxqgk+8Kpsy0tZio7VaENp7w1xHR+8oZpx550IKq
-         4vAr5Loh8y1RuFUzv1ESwItchuI1DbAm00vd9+2KXWIHrAd6uSDNKM6IWLwRVPnOpsqB
-         3om4eNnUmaoGUfe8/CGlIDsWyptKHl8xHk2+6ldvCa36hR3HWlx+zL6j5JIIs1iUueuh
-         bD5Q==
+         :cc:content-transfer-encoding;
+        bh=/R0DvHO32Ps1xRQleCzKMKFqLHiFsSU0YTem1kX0McY=;
+        b=R7H1U1qRykpKlz90guDfnfMLQu+EzMsrV2O6YkM4xhmZeMcLM57ApewNRgw7I3oxKI
+         2aAD35/rc6ipU1JVj4R7fnWWDXdfU60Ru7OkIh/gvKcGZOMCsZoTifF7aVmY87MT6hgE
+         dD5ngP3bxwvgxaUKGXlHDjhdzIOD2MYqyaZAQ0zNBWoe41+9R24H9mu0HoZ73/j1dZHO
+         1e1NADmg1PX1InTdZK26A9BHbzzbv9g+wwZC320VhTgoMhgDSR7ws8a9GUG3L9eiWd/C
+         XjXyLoPqpEfT9KeiRzpCp3r467r5KBUq+K4z3zpDpkHtZFXjE071oLAqXrPbaYl//h7O
+         M3GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cvLA6SLf2bKE07yg0HKaHP2/grDfEpmexDJw0d9Uy8g=;
-        b=GsM/u5G1rHuTi4AO8SJko0+xEp/gSl9P+2+xMHK6ufo/tf583xNyjzYvHvlSwXOyJx
-         UMAIspnvnKVYHIU+VX4WOaN2kXQcdAr+Pxxn/Yw/uiGmHD9M8phzh8GgPMLWgtzNgxf3
-         oY0rXOWlnKyrml2QxJbuOAUe8g0RbNxpdKyW+W0XD5+NmJPBakt37CygDlDhx6aRo4TT
-         adiYqUBJPZ4ZEWSPS5UDe/yWHmLlZI4ZmpSv+Iw1DgOqeBCpbKiwiW4bqlZ8p+vik6pp
-         Xoke+pihlRYmdJDnbSUsB5oOT5qMrZ4nRMtXerrgiQ+fAJ9PbrjZZTNZjt088oVrr8sY
-         intg==
-X-Gm-Message-State: APjAAAXoss0zWzdnDY9u5MzNElRDV3Dy+PfFa7a2xbUl+I9mPOfOsM7F
-        XPxBb5of6/m5EyYJM3rnJHrZqSe6g5WKWkyqzWU=
-X-Google-Smtp-Source: APXvYqzYgV7pLzv9dyjVa9JvPpCT5tZXDSo5dUz5fNuTjRw5r8yUo3wM6afiUBHEPOCG5oAOE7kVEqUbErxmp2QLR6g=
-X-Received: by 2002:a19:784:: with SMTP id 126mr13582955lfh.191.1576007918112;
- Tue, 10 Dec 2019 11:58:38 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/R0DvHO32Ps1xRQleCzKMKFqLHiFsSU0YTem1kX0McY=;
+        b=Etozm8D11GE25lAhFhaN5FY/+mX6zRruLrDCx2iQnXF0MtkWf9GJtKBSYVApEufH1u
+         GqbDK9CzZCEuZ6vxO1iR0bTt8mSyjZTlTS2mYjYE0p0DqJxJnnyo0ahMRqyu0tefCFOP
+         Q1Vg/MU66wz80Bi1XogXt2DhB+OH2xNLoqVpwqPMnwudYTtA0rPpCjgBStpB7wajtvf2
+         jJYLM1AyL7EfEq562Btx0MonAddBSEbHq+eM+pEtUMHEvfDtO3uqGBz/EjV2nPWLbxB3
+         D4BrWRerKVXps38+sRjGxK3BSB3Q025eMIpnA6ZXEKS2xgcFVjYl8r8A1BNFGRRKuLJA
+         lEsw==
+X-Gm-Message-State: APjAAAU7m+/jbI5sfwbIcCJuoWB2sXQf+CzVuEOwnNixWxuwOp0rwQmv
+        MyH1uB2FLLUMs8HEOQDrbGYB4DVMhrhaFel4ylxoBw==
+X-Google-Smtp-Source: APXvYqw9iivvFvbh4l0R0xUIg3aOHjmVGVcBM1DAkbhY5OagPSNUaYsBKKSgVVT4xv09dpa7VBmQFMfoID9G8U35Vko=
+X-Received: by 2002:a17:906:4881:: with SMTP id v1mr5729193ejq.329.1576008104565;
+ Tue, 10 Dec 2019 12:01:44 -0800 (PST)
 MIME-Version: 1.0
-References: <CACO55ttTPi2XpRRM_NYJU5c5=OvG0=-YngFy1BiR8WpHkavwXw@mail.gmail.com>
- <CAJZ5v0h=7zu3A+ojgUSmwTH0KeXmYP5OKDL__rwkkWaWqcJcWQ@mail.gmail.com>
- <20191121112821.GU11621@lahna.fi.intel.com> <CAJZ5v0hQhj5Wf+piU11abC4pF26yM=XHGHAcDv8Jsgdx04aN-w@mail.gmail.com>
- <20191121114610.GW11621@lahna.fi.intel.com> <CACO55ttXJgXG32HzYP_uJDfQ6T-d8zQaGjXK_AZD3kF0Rmft4g@mail.gmail.com>
- <CAJZ5v0ibzcLEm44udUxW2uVgaF9NapdNBF8Ag+RE++u7gi2yNA@mail.gmail.com>
- <CACO55ttBkZD9dm0Y_jT931NnzHHtDFyLz28aoo+ZG0pnLzPgbA@mail.gmail.com>
- <CAJZ5v0jbh7jz+YQcw-gC5ztmMOc4E9+KFBCy4VGRsRFxBw-gnw@mail.gmail.com>
- <e0eeddf4214f54dfac08e428dfb30cbd39f20680.camel@redhat.com>
- <20191127114856.GZ11621@lahna.fi.intel.com> <CACO55tt5SAf24vk0XrKguhh2J=WuKirDsdY7T+u7PsGFCpnFxg@mail.gmail.com>
- <e7aec10d789b322ca98f4b250923b0f14f2b8226.camel@redhat.com>
- <CACO55tu+hT1WGbBn_nxLR=A-X6YWmeuz-UztJKw0QAFQDDV_xg@mail.gmail.com> <CAJZ5v0hcONxiWD+jpBe62H1SZ-84iNxT+QCn8mcesB1C7SVWjw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hcONxiWD+jpBe62H1SZ-84iNxT+QCn8mcesB1C7SVWjw@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 11 Dec 2019 05:58:26 +1000
-Message-ID: <CAPM=9txefUg9_EO82an3b313mZz7J7-ydTuJtWD-hOQwE4QXkQ@mail.gmail.com>
-Subject: Re: [PATCH v4] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>
+References: <20191205071953.121511-1-wvw@google.com> <69dd3a7a-c5fe-3ae7-8a4d-c3939870eed8@linaro.org>
+In-Reply-To: <69dd3a7a-c5fe-3ae7-8a4d-c3939870eed8@linaro.org>
+From:   Wei Wang <wvw@google.com>
+Date:   Tue, 10 Dec 2019 12:01:32 -0800
+Message-ID: <CAGXk5yrsmvHK_xwvp_kFNmSqKOZ7Ef3HrVBHYDMBmDsCz0FNSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] thermal: introduce by-name softlink
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 9 Dec 2019 at 21:39, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Tue, Dec 10, 2019 at 6:36 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Mon, Dec 9, 2019 at 12:17 PM Karol Herbst <kherbst@redhat.com> wrote:
+> On 05/12/2019 08:19, Wei Wang wrote:
+> > The paths thermal_zone%d and cooling_device%d are not intuitive and the
+> > numbers are subject to change due to device tree change. This usually
+> > leads to tree traversal in userspace code.
+> > The patch creates `tz-by-name' and `cdev-by-name' for thermal zone and
+> > cooling_device respectively.
+>
+> Instead of adding another ABI, I suggest we put the current one
+> deprecated with a warning in the dmesg, update the documentation and
+> change the name the next version.
+>
+>
+
+IMHO, we should keep the existing path which is a common pattern for
+sysfs interface. There are reasons we need couple thermal zone and
+cooling device in one class, but might be worth considering split as
+the latter might be used for other purposes e.g. battery current limit
+for preventive vdrop prevention. By nature, thermal zone are sensors,
+and cooling devices are usually components with potential high power
+use.
+
+
+> > Changes since v1 [1]:
+> >  * Split cooling device registration into a seperate patch
+> > Changes since v2 [2]:
+> >  * Split improve error message in thermal zone registration
 > >
-> > anybody any other ideas?
+> > [1]: v1: https://lore.kernel.org/patchwork/patch/1139450/
+> > [2]: v2: https://lkml.org/lkml/2019/12/4/1291
+> >
+> > Wei Wang (3):
+> >   thermal: prevent cooling device with no type to be registered
+> >   thermal: improve error message in thermal zone registration
+> >   thermal: create softlink by name for thermal_zone and cooling_device
+> >
+> >  drivers/thermal/thermal_core.c | 55 +++++++++++++++++++++++++++-------
+> >  1 file changed, 44 insertions(+), 11 deletions(-)
+> >
 >
-> Not yet, but I'm trying to collect some more information.
 >
-> > It seems that both patches don't really fix
-> > the issue and I have no idea left on my side to try out. The only
-> > thing left I could do to further investigate would be to reverse
-> > engineer the Nvidia driver as they support runpm on Turing+ GPUs now,
-> > but I've heard users having similar issues to the one Lyude told us
-> > about... and I couldn't verify that the patches help there either in a
-> > reliable way.
+> --
+>  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
+RM SoCs
 >
-> It looks like the newer (8+) versions of Windows expect the GPU driver
-> to prepare the GPU for power removal in some specific way and the
-> latter fails if the GPU has not been prepared as expected.
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 >
-> Because testing indicates that the Windows 7 path in the platform
-> firmware works, it may be worth trying to do what it does to the PCIe
-> link before invoking the _OFF method for the power resource
-> controlling the GPU power.
->
-
-Remember the pre Win8 path required calling a DSM method to actually
-power the card down, I think by the time we reach these methods in
-those cases the card is already gone.
-
-Dave.
