@@ -2,274 +2,346 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D54411849E
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 11:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC1C118543
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 11:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfLJKPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 05:15:18 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:32986 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbfLJKPS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 05:15:18 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191210101515euoutp02ee52028fd09e18804935af0188585449~e_wRQyZD-0125201252euoutp02E
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 10:15:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191210101515euoutp02ee52028fd09e18804935af0188585449~e_wRQyZD-0125201252euoutp02E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575972915;
-        bh=o+fqTQmHkgIUVDjeyDhnw95Z1FypZQg67lOw8oVsV0o=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=t55lIjDsL8ea3cgSnLgjghGcQj0dHWnB4Yl5Wr+I/AzGh+tkLH2XAvUqXLFmFSGdP
-         G/EkT0yjqnGIJeLMVX2L32M3KV4DyLmjsFhEbvbf7y+TCvyv3Bp68ZAku5PeBiKpPN
-         b0XvyYCZwjNO/15qPi6IY10Bk1gIgdCL4ozR51zY=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191210101515eucas1p2118cc863f5bcacd7dde33cdd5a526185~e_wRDu0EH3145931459eucas1p2l;
-        Tue, 10 Dec 2019 10:15:15 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id E8.8A.60698.3307FED5; Tue, 10
-        Dec 2019 10:15:15 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191210101515eucas1p2c867a48662a2597ad714b2bfe4144242~e_wQuhViU0250602506eucas1p2S;
-        Tue, 10 Dec 2019 10:15:15 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191210101514eusmtrp1ec79c94d50a982f319100abc592abd1e~e_wQt4zHF0822208222eusmtrp1i;
-        Tue, 10 Dec 2019 10:15:14 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-84-5def70337261
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 08.B2.08375.2307FED5; Tue, 10
-        Dec 2019 10:15:14 +0000 (GMT)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191210101514eusmtip1868593dcd3b968299b3ecf4c43b6900d~e_wQQNcxp3184431844eusmtip1S;
-        Tue, 10 Dec 2019 10:15:14 +0000 (GMT)
-Subject: Re: [PATCH 2/4] PM / devfreq: add possibility for delayed work
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-Message-ID: <1e327cd8-6b78-6973-4b24-0ed2c1ba7447@samsung.com>
-Date:   Tue, 10 Dec 2019 11:15:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S1727039AbfLJKj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 05:39:29 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:56370 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfLJKj3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 05:39:29 -0500
+Received: from 79.184.255.117.ipv4.supernova.orange.pl (79.184.255.117) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id c5e4fe321b362bf0; Tue, 10 Dec 2019 11:39:26 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@linux.vnet.ibm.com>
+Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+Date:   Tue, 10 Dec 2019 11:39:25 +0100
+Message-ID: <5310126.hg2rr5Fjtk@kreacher>
+In-Reply-To: <DB3PR0402MB3916C7E77C885343B2B961CFF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com> <40413247.HltoIgKm8r@kreacher> <DB3PR0402MB3916C7E77C885343B2B961CFF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20191209192742.GP228856@google.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsWy7djP87rGBe9jDb4cELTYOGM9q8X1L89Z
-        Lc6f38BucbbpDbvF5V1z2Cw+9x5htFh75C67xecNjxktbjeuYHPg9JjdcJHFY9OqTjaPvi2r
-        GD0+b5ILYInisklJzcksSy3St0vgypgwYRlzwWzNitUrupgaGFsVuxg5OCQETCRmdVh3MXJx
-        CAmsYJS4fOQQO4TzhVGibV8LM4TzmVGi9cMvxi5GTrCOw3s2s0EkljNKzNk7ixHCecsocW3r
-        TiaQKmEBd4nZzbdYQWwRAQ2JJ7/PgxUxCxxjkth16C9Ygk1AX+Lg2ZMsIDavgJ3E5E93wOIs
-        AqoS8/q7GEEOFBWIkDj9NRGiRFDi5MwnYOWcAoYSrQshdjELiEvcejIfypaX2P52DjPEpbvY
-        JdauVoOwXSS2rL0OFReWeHV8CzuELSNxenIPC4RdLvF0YR/Y/xICLYwSD9o/QiWsJQ4fv8gK
-        cg+zgKbE+l36EGFHiQuf5zJCwpFP4sZbQYgT+CQmbZvODBHmlehoE4KoVpV4fqqHCcKWluj6
-        v451AqPSLCSPzULyzCwkz8xC2LuAkWUVo3hqaXFuemqxcV5quV5xYm5xaV66XnJ+7iZGYCo6
-        /e/41x2M+/4kHWIU4GBU4uFd4PAuVog1say4MvcQowQHs5II7/E2oBBvSmJlVWpRfnxRaU5q
-        8SFGaQ4WJXFe40UvY4UE0hNLUrNTUwtSi2CyTBycUg2MCbpVz9Q3bDSbtPv4TccV/Mu7NboE
-        njv7T1qySHHPpv4p6xy/P/XP+OKetFDM4MC6HxEqIRcrJddq9/+c4MSokHVs2+N9Z9wXdy/z
-        udLHcuz6gabHLF67/z/ULKqb7dt9ZV7P1vRz9qrHEkyZH6mHtu4odrfNmJa9ck/sx80XG6xn
-        XEx6rrD/rRJLcUaioRZzUXEiAJ1EnF5BAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsVy+t/xu7pGBe9jDbp/mlpsnLGe1eL6l+es
-        FufPb2C3ONv0ht3i8q45bBafe48wWqw9cpfd4vOGx4wWtxtXsDlwesxuuMjisWlVJ5tH35ZV
-        jB6fN8kFsETp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp
-        2yXoZUyYsIy5YLZmxeoVXUwNjK2KXYycHBICJhKH92xm62Lk4hASWMoo8fnOC0aIhLRE4+nV
-        TBC2sMSfa11QRa8ZJXZu+MIOkhAWcJeY3XyLFcQWEdCQePL7PCNIEbPAMSaJB4teMkN0vGKU
-        eH+ugQWkik1AX+Lg2ZNgNq+AncTkT3fAulkEVCXm9XeBrRYViJB4vv0GI0SNoMTJmU/A6jkF
-        DCVaF+4EO4lZQF3iz7xLzBC2uMStJ/Oh4vIS29/OYZ7AKDQLSfssJC2zkLTMQtKygJFlFaNI
-        amlxbnpusaFecWJucWleul5yfu4mRmAMbjv2c/MOxksbgw8xCnAwKvHwLnB4FyvEmlhWXJl7
-        iFGCg1lJhPd4G1CINyWxsiq1KD++qDQntfgQoynQcxOZpUST84HpIa8k3tDU0NzC0tDc2NzY
-        zEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA6PAw7CmL1kZk/kmuW9c3i58KW951DeGF0xf
-        y3dVO7ZN/HjJXCX4fskD5V2y7FotjbpcPQKT7ldq/198es/qUv6X6YmH9MNcr8yN3fg545vr
-        WuMfscvX6AZHT4i3kjS8ssBuR5JPVpn6udP14bMuGpxbclFsxjajgv9TFmwNMglvKLk+t68n
-        J0WJpTgj0VCLuag4EQA8FUMa1wIAAA==
-X-CMS-MailID: 20191210101515eucas1p2c867a48662a2597ad714b2bfe4144242
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191209144441eucas1p2ccd371e5861e8c0a3948cdc6640ad0d5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191209144441eucas1p2ccd371e5861e8c0a3948cdc6640ad0d5
-References: <20191209144425.13321-1-k.konieczny@samsung.com>
-        <CGME20191209144441eucas1p2ccd371e5861e8c0a3948cdc6640ad0d5@eucas1p2.samsung.com>
-        <20191209144425.13321-3-k.konieczny@samsung.com>
-        <20191209192742.GP228856@google.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 09.12.2019 20:27, Matthias Kaehlcke wrote:
-> Hi,
+On Tuesday, December 10, 2019 9:51:43 AM CET Anson Huang wrote:
 > 
-> On Mon, Dec 09, 2019 at 03:44:23PM +0100, Kamil Konieczny wrote:
->> Current devfreq workqueue uses deferred timer. Introduce sysfs
->> file delayed_timer and use it for change from deferred to
->> delayed work. The default is to use old deferred one, which
->> saves power, but can miss increased demand for higher bus
->> frequency if timer was assigned to idle cpu.
->>
->> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
->> ---
->>  Documentation/ABI/testing/sysfs-class-devfreq | 10 ++++
->>  drivers/devfreq/devfreq.c                     | 46 ++++++++++++++++++-
->>  include/linux/devfreq.h                       |  2 +
->>  3 files changed, 57 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
->> index 9758eb85ade3..07bfd0df6a4a 100644
->> --- a/Documentation/ABI/testing/sysfs-class-devfreq
->> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
->> @@ -30,6 +30,16 @@ Description:
->>  		target_freq when get_cur_freq() is not implemented by
->>  		devfreq driver.
->>  
->> +What:		/sys/class/devfreq/.../delayed_timer
->> +Date:		December 2019
->> +Contact:	Kamil Konieczny <k.konieczny@samsung.com>
->> +Description:
->> +		This ABI shows or clears timer type used by devfreq
->> +		workqueue. When 0, it uses default deferred timer.
->> +		When set to 1 devfreq will use delayed timer. Example
->> +		useage:
->> +			echo 1 > /sys/class/devfreq/.../delayed_timer
->> +
->>  What:		/sys/class/devfreq/.../target_freq
->>  Date:		September 2012
->>  Contact:	Rajagopal Venkat <rajagopal.venkat@linaro.org>
->> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->> index 955949c6fc1f..c277d1770fef 100644
->> --- a/drivers/devfreq/devfreq.c
->> +++ b/drivers/devfreq/devfreq.c
->> @@ -445,7 +445,11 @@ void devfreq_monitor_start(struct devfreq *devfreq)
->>  	if (devfreq->governor->interrupt_driven)
->>  		return;
->>  
->> -	INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
->> +	if (devfreq->delayed_timer)
->> +		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
->> +	else
->> +		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
->> +
->>  	if (devfreq->profile->polling_ms)
->>  		queue_delayed_work(devfreq_wq, &devfreq->work,
->>  			msecs_to_jiffies(devfreq->profile->polling_ms));
->> @@ -698,6 +702,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>  	devfreq->last_status.current_frequency = profile->initial_freq;
->>  	devfreq->data = data;
->>  	devfreq->nb.notifier_call = devfreq_notifier_call;
->> +	devfreq->delayed_timer = false;
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rjw@rjwysocki.net>
+> > Sent: Tuesday, December 10, 2019 4:51 PM
+> > To: Anson Huang <anson.huang@nxp.com>
+> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Viresh Kumar
+> > <viresh.kumar@linaro.org>; Peng Fan <peng.fan@nxp.com>; Jacky Bai
+> > <ping.bai@nxp.com>; linux-pm@vger.kernel.org; Vincent Guittot
+> > <vincent.guittot@linaro.org>; Peter Zijlstra <peterz@infradead.org>; Paul
+> > McKenney <paulmck@linux.vnet.ibm.com>
+> > Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+> > 
+> > On Tuesday, December 10, 2019 9:45:09 AM CET Anson Huang wrote:
+> > >
+> > > > -----Original Message-----
+> > > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > > Sent: Tuesday, December 10, 2019 4:38 PM
+> > > > To: Anson Huang <anson.huang@nxp.com>
+> > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Viresh Kumar
+> > > > <viresh.kumar@linaro.org>; Peng Fan <peng.fan@nxp.com>; Rafael J.
+> > > > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>; linux-
+> > > > pm@vger.kernel.org; Vincent Guittot <vincent.guittot@linaro.org>;
+> > > > Peter Zijlstra <peterz@infradead.org>; Paul McKenney
+> > > > <paulmck@linux.vnet.ibm.com>
+> > > > Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+> > > >
+> > > > On Tue, Dec 10, 2019 at 9:29 AM Anson Huang <anson.huang@nxp.com>
+> > > > wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > > -----Original Message-----
+> > > > > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > > > > Sent: Tuesday, December 10, 2019 4:22 PM
+> > > > > > To: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > > > Cc: Peng Fan <peng.fan@nxp.com>; Rafael J. Wysocki
+> > > > > > <rafael@kernel.org>; Anson Huang <anson.huang@nxp.com>; Rafael
+> > J.
+> > > > > > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>;
+> > > > > > linux- pm@vger.kernel.org; Vincent Guittot
+> > > > > > <vincent.guittot@linaro.org>; Peter Zijlstra
+> > > > > > <peterz@infradead.org>; Paul McKenney
+> > > > > > <paulmck@linux.vnet.ibm.com>
+> > > > > > Subject: Re: About CPU hot-plug stress test failed in cpufreq
+> > > > > > driver
+> > > > > >
+> > > > > > On Tue, Dec 10, 2019 at 8:05 AM Viresh Kumar
+> > > > > > <viresh.kumar@linaro.org>
+> > > > > > wrote:
+> > > > > > >
+> > > > > > > +few more guys
+> > > > > > >
+> > > > > > > On 10-12-19, 05:53, Peng Fan wrote:
+> > > > > > > > But per
+> > > > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A
+> > > > > > > > %2F%
+> > > > > > > > 2Fel
+> > > > > > > > ixir.bootlin.com%2Flinux%2Fv5.5-
+> > > > > > rc1%2Fsource%2Fkernel%2Fsched%2Fsche
+> > > > > > > >
+> > > > > >
+> > > >
+> > d.h%23L2293&amp;data=02%7C01%7Canson.huang%40nxp.com%7C6f44900
+> > > > > > be3404
+> > > > > > > >
+> > > > > >
+> > > >
+> > e7d355708d77d4a16fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
+> > > > > > 7C637
+> > > > > > > >
+> > > > > >
+> > > >
+> > 115629475456329&amp;sdata=XXhwvuTOBb3TLmerwkr1zKbaWNA8xA%2Bl
+> > > > > > W%2Faw31
+> > > > > > > > 0AYcM%3D&amp;reserved=0
+> > > > > > > > cpu_of(rq) and smp_processor_id() is possible to not the
+> > > > > > > > same,
+> > > > > > > >
+> > > > > > > > When cpu_of(rq) is not equal to smp_processor_id(),
+> > > > > > > > dbs_update_util_handler will use irq_work_queue to
+> > > > > > > > smp_processor_id(), not cpu_of(rq). Is this expected?
+> > > > > > > > Or should the irq_work be queued to cpu_of(rq)?
+> > > > > > >
+> > > > > > > Okay, sorry for the long weekend where I couldn't get time to
+> > > > > > > reply at
+> > > > all.
+> > > > > >
+> > > > > > No worries. :-)
+> > > > > >
+> > > > > > > First of all, lets try to understand dvfs_possible_from_any_cpu.
+> > > > > > >
+> > > > > > > Who can update the frequency of a CPU ? For many
+> > > > > > > architectures/platforms the eventual code that writes to some
+> > > > > > > register to change the frequency should only run on the local
+> > > > > > > CPU, as these registers are per-cpu registers and not
+> > > > > > > something shared
+> > > > between CPUs.
+> > > > > > >
+> > > > > > > But for the ARM architecture, we have a PLL and then some more
+> > > > > > > registers to play with the clk provided to the CPU blocks and
+> > > > > > > these registers (which are updated as a result of
+> > > > > > > clk_set_rate()) are part of a
+> > > > > > block outside of the CPU blocks.
+> > > > > > > And so any CPU (even if it is not part of the same cpufreq
+> > > > > > > policy) can update it. Setting this flag allows that and
+> > > > > > > eventually we may end up updating the frequency sooner,
+> > > > > > > instead of later (which may be less effective). That was the idea of
+> > the remote-wakeup series.
+> > > > > > > This stuff is absolutely correct and so cpufreq-dt does it for
+> > everyone.
+> > > > > > >
+> > > > > > > This also means that the normal work and irq-work both can run
+> > > > > > > on any CPU for your platform and it should be okay to do that.
+> > > > > >
+> > > > > > And it the failing case all of the CPUs in the system are in the
+> > > > > > same policy anyway, so dvfs_possible_from_any_cpu is a red herring.
+> > > > > >
+> > > > > > > Now, we have necessary measures in place to make sure that
+> > > > > > > after stopping and before starting a governor, the scheduler
+> > > > > > > hooks to save the cpufreq governor pointer and updates to
+> > > > > > > policy->cpus are made properly, to make sure that we never
+> > > > > > > ever schedule a work or irq-work on a CPU which is offline.
+> > > > > > > Now it looks like this isn't working as expected and we need to find
+> > what exactly is broken here.
+> > > > > > >
+> > > > > > > And yes, I did the testing on Hikey 620, an octa-core ARM
+> > > > > > > platform which has a single cpufreq policy which has all the 8
+> > > > > > > CPUs. And yes, I am using cpufreq-dt only and I wasn't able to
+> > > > > > > reproduce the problem with mainline kernel as I explained earlier.
+> > > > > > >
+> > > > > > > The problem is somewhere between the scheduler's governor hook
+> > > > > > running
+> > > > > > > or queuing work on a CPU which is in the middle of getting
+> > > > > > > offline/online and there is some race around that. The problem
+> > > > > > > hence may not be related to just cpufreq, but a wider variety of
+> > clients.
+> > > > > >
+> > > > > > The problem is that a CPU is running a governor hook which it
+> > > > > > shouldn't be running at all.
+> > > > > >
+> > > > > > The observation that dvfs_possible_from_any_cpu makes a
+> > > > > > difference only means that the governor hook is running on a CPU
+> > > > > > that is not present in the
+> > > > > > policy->cpus mask.  On the platform(s) in question this cannot
+> > > > > > policy->happen as
+> > > > > > long as RCU works as expected.
+> > > > >
+> > > > > If I understand correctly, the governor hook ONLY be clear on the
+> > > > > CPU being offline and after governor stopped, but the CPU being
+> > > > > offline could still run into below function to help other CPU
+> > > > > update the util, and it ONLY checks the cpu_of(rq)'s governor hook
+> > > > > which is valid as that
+> > > > CPU is online.
+> > > > >
+> > > > > So the question is how to avoid the CPU being offline and already
+> > > > > finish the governor stop flow be scheduled to help other CPU
+> > > > > update the
+> > > > util.
+> > > > >
+> > > > >  static inline void cpufreq_update_util(struct rq *rq, unsigned
+> > > > > int
+> > > > > flags)  {
+> > > > >          struct update_util_data *data;
+> > > > >
+> > > > >          data =
+> > > > rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
+> > > > >                                                    cpu_of(rq)));
+> > > > >          if (data)
+> > > > >                  data->func(data, rq_clock(rq), flags);  }
+> > > >
+> > > > OK, so that's where the problem is, good catch!
+> > > >
+> > > > So what happens is that a CPU going offline runs some scheduler code
+> > > > that invokes cpufreq_update_util().  Incidentally, it is not the
+> > > > cpu_of(rq), but that CPU is still online, so the callback is invoked
+> > > > and then policy->cpus test is bypassed because of
+> > dvfs_possible_from_any_cpu.
+> > >
+> > > If this is the issue, add another check here for the current CPU's governor
+> > hook?
+> > > Or any other better place to make sure the CPU being offline NOT to be
+> > queued to irq work?
+> > 
+> > Generally, yes.
+> > 
+> > Something like the patch below should help if I'm not mistaken:
+> > 
+> > ---
+> >  include/linux/cpufreq.h |    8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > Index: linux-pm/include/linux/cpufreq.h
+> > ================================================================
+> > ===
+> > --- linux-pm.orig/include/linux/cpufreq.h
+> > +++ linux-pm/include/linux/cpufreq.h
+> > @@ -599,11 +599,13 @@ static inline bool cpufreq_this_cpu_can_  {
+> >  	/*
+> >  	 * Allow remote callbacks if:
+> > -	 * - dvfs_possible_from_any_cpu flag is set
+> >  	 * - the local and remote CPUs share cpufreq policy
+> > +	 * - dvfs_possible_from_any_cpu flag is set and the CPU running the
+> > +	 *   code is not going offline.
+> >  	 */
+> > -	return policy->dvfs_possible_from_any_cpu ||
+> > -		cpumask_test_cpu(smp_processor_id(), policy->cpus);
+> > +	return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
+> > +		(policy->dvfs_possible_from_any_cpu &&
+> > +		 !cpumask_test_cpu(smp_processor_id(), policy-
+> > >related_cpus));
+> >  }
 > 
-> devfreq is zero initialized (allocated with kzalloc()), hence this is
-> unnecessary.
+> I will start a stress test of this patch, thanks!
 
-ok, I will remove it
+OK, thanks!
 
-> 
->>  
->>  	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
->>  		mutex_unlock(&devfreq->lock);
->> @@ -1288,6 +1293,44 @@ static ssize_t available_governors_show(struct device *d,
->>  }
->>  static DEVICE_ATTR_RO(available_governors);
->>  
->> +static ssize_t delayed_timer_show(struct device *dev,
->> +				  struct device_attribute *attr, char *buf)
->> +{
->> +	int i;
->> +
->> +	i = to_devfreq(dev)->delayed_timer ? 1 : 0;
->> +	return sprintf(buf, "%d\n", i);
-> 
-> get rid of 'i' and just use df->delayed_timer in sprintf().
+Another patch to test is appended and it should be more robust.
 
-ok
+Instead of doing the related_cpus cpumask check in the previous patch (which
+only covered CPUs that belog to the target policy) it checks if the update_util
+hook is set for the local CPU (if it is not, that CPU is not expected to run
+the uodate_util code).
 
-> 
->> +}
->> +
->> +static ssize_t delayed_timer_store(struct device *dev,
->> +				   struct device_attribute *attr,
->> +				   const char *buf, size_t count)
->> +{
->> +	struct devfreq *df = to_devfreq(dev);
->> +	bool old_timer;
-> 
-> Not a great name, the variable doesn't hold a timer. I'd suggest something
-> like 'prev_val'.
+---
+ include/linux/cpufreq.h       |   11 -----------
+ include/linux/sched/cpufreq.h |    3 +++
+ kernel/sched/cpufreq.c        |   18 ++++++++++++++++++
+ 3 files changed, 21 insertions(+), 11 deletions(-)
 
-ok, will change to 'bool prev, value;'
+Index: linux-pm/include/linux/cpufreq.h
+===================================================================
+--- linux-pm.orig/include/linux/cpufreq.h
++++ linux-pm/include/linux/cpufreq.h
+@@ -595,17 +595,6 @@ struct governor_attr {
+ 			 size_t count);
+ };
+ 
+-static inline bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
+-{
+-	/*
+-	 * Allow remote callbacks if:
+-	 * - dvfs_possible_from_any_cpu flag is set
+-	 * - the local and remote CPUs share cpufreq policy
+-	 */
+-	return policy->dvfs_possible_from_any_cpu ||
+-		cpumask_test_cpu(smp_processor_id(), policy->cpus);
+-}
+-
+ /*********************************************************************
+  *                     FREQUENCY TABLE HELPERS                       *
+  *********************************************************************/
+Index: linux-pm/kernel/sched/cpufreq.c
+===================================================================
+--- linux-pm.orig/kernel/sched/cpufreq.c
++++ linux-pm/kernel/sched/cpufreq.c
+@@ -5,6 +5,8 @@
+  * Copyright (C) 2016, Intel Corporation
+  * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  */
++#include <linux/cpufreq.h>
++
+ #include "sched.h"
+ 
+ DEFINE_PER_CPU(struct update_util_data __rcu *, cpufreq_update_util_data);
+@@ -57,3 +59,19 @@ void cpufreq_remove_update_util_hook(int
+ 	rcu_assign_pointer(per_cpu(cpufreq_update_util_data, cpu), NULL);
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_remove_update_util_hook);
++
++/**
++ * cpufreq_this_cpu_can_update - Check if cpufreq policy can be updated.
++ * @policy: cpufreq policy to check.
++ *
++ * Return 'true' if:
++ * - the local and remote CPUs share @policy,
++ * - dvfs_possible_from_any_cpu is set in @policy and the local CPU is not going
++ *   offline (in which it is not expected to run cpufreq updates any more).
++ */
++bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
++{
++	return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
++		(policy->dvfs_possible_from_any_cpu &&
++		 rcu_dereference_sched(*this_cpu_ptr(&cpufreq_update_util_data)));
++}
+Index: linux-pm/include/linux/sched/cpufreq.h
+===================================================================
+--- linux-pm.orig/include/linux/sched/cpufreq.h
++++ linux-pm/include/linux/sched/cpufreq.h
+@@ -12,6 +12,8 @@
+ #define SCHED_CPUFREQ_MIGRATION	(1U << 1)
+ 
+ #ifdef CONFIG_CPU_FREQ
++struct cpufreq_policy;
++
+ struct update_util_data {
+        void (*func)(struct update_util_data *data, u64 time, unsigned int flags);
+ };
+@@ -20,6 +22,7 @@ void cpufreq_add_update_util_hook(int cp
+                        void (*func)(struct update_util_data *data, u64 time,
+ 				    unsigned int flags));
+ void cpufreq_remove_update_util_hook(int cpu);
++bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy);
+ 
+ static inline unsigned long map_util_freq(unsigned long util,
+ 					unsigned long freq, unsigned long cap)
+ 
 
-> 
->> +	int value, ret;
->> +
->> +	if (!df->governor)
->> +		return -EINVAL;
->> +
->> +	ret = kstrtoint(buf, 10, &value);
->> +	if (ret || (value != 1 && value != 0))
->> +		return -EINVAL;
-> 
-> use kstrtobool() instead of partially re-implementing it.
-
-ok
-
->> +
->> +	mutex_lock(&df->lock);
->> +	old_timer = df->delayed_timer;
->> +	df->delayed_timer = value == 0 ? false : true;
-> 
-> What's wrong with:
-> 
-> df->delayed_timer = value;
-> 
-> ?
-
-ok, when I change type of value and use above kstrtobool, this will be ok
-
-> 
->> +	mutex_unlock(&df->lock);
-> 
-> Does the locking as is actually provide any value? The use case seems to
-> be concurrent setting of the sysfs attribute. The lock is released after
-> the assignment, hence the value of 'df->delayed_timer' could be overwritten
-> before the condition below is evaluated.
-
-Good point, before send I spotted these lines and "optimized" code so it got worse...
-
-> If you want to protect against this case you need something like this:
-> 
-> // don't release the lock before evaluating the condition
-> 
->> +	if (old_timer != df->delayed_timer) {
-
-even better: if (prev != value) {
-so no need for ugly mutex_unlock in both if-else paths
-
->   	   	mutex_unlock(&df->lock);
-
->> +		devfreq_monitor_stop(df);
->> +		devfreq_monitor_start(df);
->> +	}
->   	else {
-> 		mutex_unlock(&df->lock);
-> 	}
-> 
-> I don't pretend it's pretty ;-)
-
-Thank you for review.
-
--- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
 
