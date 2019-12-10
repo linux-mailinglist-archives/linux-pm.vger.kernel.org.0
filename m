@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFE01186A2
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 12:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C74B911869C
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 12:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbfLJLku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 06:40:50 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:44518 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbfLJLkj (ORCPT
+        id S1727420AbfLJLkp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 06:40:45 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:38230 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727259AbfLJLkj (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 06:40:39 -0500
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191210114037euoutp010a70c38560557a319e357e45f92fe145~e-6y_zPhN1618016180euoutp01L
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191210114037euoutp027a2bdd71b432a030cc41a9e89d9424c9~e-6zvs1i22617226172euoutp02z
         for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 11:40:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191210114037euoutp010a70c38560557a319e357e45f92fe145~e-6y_zPhN1618016180euoutp01L
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191210114037euoutp027a2bdd71b432a030cc41a9e89d9424c9~e-6zvs1i22617226172euoutp02z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1575978037;
-        bh=aiVnQzPbPozJNU83F/hiDg/No+tUDZ/IodGWUQHWRto=;
+        bh=wQumKIz1maChZun8tmgFpr9OpnB118sw+oCKKMdPaeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEtGQbxThmIa6H2Zp9ul8AD0rVON4VzjyJruk4oO8i8jHhpMAdiZ86I+BHUbrfLg0
-         HW2xZFYrgEKc8cwqGAolK73NBXkOlMDT5sh6YHcs2ap9lrUHwlX04GLp2Nr1JCtQAL
-         dtJgJt8PWApfdsSNIRJEU4/d/ATQOolA39zVcIEA=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191210114036eucas1p22c80daa0215fa2fa06ca3dcf4bc44873~e-6yvGlTN2407724077eucas1p2l;
-        Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
+        b=PeDtc70akSeotTCIMJII6fyITMnU2aHLnxVdOVJMpKZX5zt68CDemkgUWAOwPgeQv
+         8Jtaxgnp8tLkF2KuaGgZ2DfCWIelYaJfF+AmMPCvz8zv2SLI4brmxJVfiMjeZrpZ5R
+         7i8POYtstMRcgHgtqhqPch9ZDOuw/94IGiSckf80=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191210114037eucas1p137f80e019179a09b752aa0c7de24743a~e-6zgHOQ70524805248eucas1p1e;
+        Tue, 10 Dec 2019 11:40:37 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 23.87.60698.4348FED5; Tue, 10
-        Dec 2019 11:40:36 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id CC.69.61286.5348FED5; Tue, 10
+        Dec 2019 11:40:37 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191210114036eucas1p2b0205a5dcdf1f26485235a232a5cbf20~e-6yaR9L52393723937eucas1p2m;
+        20191210114036eucas1p2fe31f68148688632d983e27bed12e7d8~e-6y1t8ej2394423944eucas1p2g;
         Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191210114036eusmtrp1652822c7a907e6a1f0ee8ed7724132f3~e-6yZj4jt2588725887eusmtrp1S;
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191210114036eusmtrp2792869c1c710493ebca4e851a4aef52b~e-6y0_6lT2532425324eusmtrp2y;
         Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-a0-5def8434f9ce
+X-AuditID: cbfec7f2-f0bff7000001ef66-32-5def8435d843
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id F3.BF.08375.4348FED5; Tue, 10
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 81.90.07950.4348FED5; Tue, 10
         Dec 2019 11:40:36 +0000 (GMT)
 Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191210114035eusmtip100b278fd846293c6cfe242055958815b~e-6x2cvR22043220432eusmtip1f;
-        Tue, 10 Dec 2019 11:40:35 +0000 (GMT)
+        20191210114036eusmtip12721cedc71aefb72d1f94113f0eacde9~e-6yUf0Qh2202222022eusmtip1E;
+        Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
 To:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
@@ -56,305 +56,428 @@ Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Doug Anderson <dianders@chromium.org>,
         Andreas Faerber <afaerber@suse.de>,
         Arjun K V <arjun.kv@samsung.com>
-Subject: [PATCH 1/2] ARM: dts: exynos: Add initial data for coupled
- regulators for Exynos5422/5800
-Date:   Tue, 10 Dec 2019 12:40:26 +0100
-Message-Id: <20191210114027.14910-2-m.szyprowski@samsung.com>
+Subject: [PATCH 2/2] ARM: dts: exynos: Add missing CPU frequencies for
+ Exynos5422/5800
+Date:   Tue, 10 Dec 2019 12:40:27 +0100
+Message-Id: <20191210114027.14910-3-m.szyprowski@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191210114027.14910-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjleLIzCtJLcpLzFFi42LZduzneV2TlvexBief61g0byq2WL5yF4vF
-        xhnrWS2uf3nOanF22UE2iwWfZrBanD+/gd3i8q45bBafe48wWsw4v4/JYu2Ru+wO3B6zGy6y
-        eGxa1cnm0bdlFaPH5tPVHp83yQWwRnHZpKTmZJalFunbJXBlfLq9j7HguG3F5kkWDYwNBl2M
-        nBwSAiYS1+cuYexi5OIQEljBKLHoyE02COcLo8TfmxeZQKqEBD4zSuzudYPpeDepG6pjOaPE
-        2o2/WeE6Vh77ywpSxSZgKNH1tosNxBYRiJd41H+XBaSIWeASk8SSxu/sIAlhgRSJjifzwBpY
-        BFQlXt24CBbnFbCVOLu9gwlinbzE6g0HmEFsTgE7iUlv+plABkkINLNL/Jp9jgWiyEWi6/hV
-        NghbWOLV8S3sELaMxOnJPSxQDYwSD8+tZYdwehglLjfNYISospY4fPwi0BkcQPdpSqzfpQ8R
-        dpRY03aQDSQsIcAnceOtIEiYGcictG06M0SYV6KjTQiiWk1i1vF1cGsPXrjEDGF7SLw9fQYa
-        phMZJfY9uMk4gVF+FsKyBYyMqxjFU0uLc9NTi43zUsv1ihNzi0vz0vWS83M3MQJTyel/x7/u
-        YNz3J+kQowAHoxIP7wKHd7FCrIllxZW5hxglOJiVRHiPtwGFeFMSK6tSi/Lji0pzUosPMUpz
-        sCiJ8xovehkrJJCeWJKanZpakFoEk2Xi4JRqYNy1SzBv76GsB9uOn4u89EF7ftyvgxveVHw9
-        deCtlYZ/Hee8ZbPsP3+YeFxdVNcnQohrfcKFHpOH8oIv9jywNTXYa75nCoP//j7RN97eZdJv
-        pQ0ZT/zImyK558rS6Rlmt+un1lecW6I1p1YphfXu9+nfJEpt/TTTg5NWfEibf8HmxqP1i/Z1
-        SXkosRRnJBpqMRcVJwIAeYD5CiEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPLMWRmVeSWpSXmKPExsVy+t/xu7omLe9jDS79ELRo3lRssXzlLhaL
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VSe0hTURjn7Hk1F9cp+WGmsNBQUFtZ3DDFIHF/FEhBaCC28qLi5mPXWSaB
+        ZmmubCaYQ6WWrWbzMV0+aki6aQ4y3dRMwxQMQRLN8kmY1rY787/f6zu/7xwOxuQr2b5YemYu
+        KcsUSwQcd1bnwG9r6Ik7y0lH27R+RLGBIrSvjCyiTaVnExNr82xi6KWJQ6hXVGzCam3lEmPG
+        Og6xWt6PCJX1HYNo7p/mxuwT1RaOsEQGXRlH9LBdh0SvBwtEqwb/ePZl99MppCQ9j5SFR19x
+        T5vqaOJk68/fmNCXo0I0EqFAbhjgEXC/SsNQIHeMjzcg+GnSsGmyhmBrcYNJk1UEhT0GtDsy
+        oh9zGVoEy8v1eyMl6iGmI8XBhaBYUnAc2BtPhm/KaZYjxMRHGaAp2uQ6DC88AV5ovjoxCw+E
+        vqn3TszDo8DaYmPTdQHQ2NrrPNQNj4bKRaVzW8BLubDd28yiQ2fhedkXLo29YMHS7sJ+8Pft
+        U9dAMYLZ4WYuTR4gGLutct0oEvosI/Y6zL5fMOiN4bR8BopmTAyHDPh+mFzydMhMO6zsrGbS
+        Mg/ulfDpdBDUWFr+15pso66ICKwfg+gHeoSgebgCVaCAmr0uNUI65EPKKWkqSQkzyethlFhK
+        yTNTw65lSQ3I/k0Gdywrb9D66FUzwjEk8OCpY34k8dniPCpfakaAMQXePEuJXeKliPNvkrKs
+        ZJlcQlJmdBBjCXx4x+u/J/HxVHEumUGS2aRs12Vgbr6FqPpQz6K/KTFH3uGxtQOW9u75rq4B
+        8bige3zO3FL5JxRTXNTlfZZuRJQdWNwuupWyeVeanUBMRtZ4Lg8pehoX4gr8w3J+rT8JPJx9
+        QVj8zPbhsfZY1cyRKWND42xd1QJFzNpO1mouTUbFJSpL57SnBJL4pli9Lbj13Cd+bEgGCFhU
+        mlgYwpRR4n/acYtEIgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrALMWRmVeSWpSXmKPExsVy+t/xu7omLe9jDT4/N7Bo3lRssXzlLhaL
         jTPWs1pc//Kc1eLssoNsFgs+zWC1OH9+A7vF5V1z2Cw+9x5htJhxfh+Txdojd9kduD1mN1xk
         8di0qpPNo2/LKkaPzaerPT5vkgtgjdKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1
-        MjJV0rezSUnNySxLLdK3S9DL+HR7H2PBcduKzZMsGhgbDLoYOTkkBEwk3k3qZuxi5OIQEljK
-        KNHyYwoTREJG4uS0BlYIW1jiz7UuNoiiT4wSS5vOsYMk2AQMJbregiQ4OUQEEiVmf5wNVsQs
-        cINJ4tLbOWCThAWSJPrnzwebxCKgKvHqxkWwZl4BW4mz2zugtslLrN5wgBnE5hSwk5j0ph8s
-        LgRUs2XpFOYJjHwLGBlWMYqklhbnpucWG+oVJ+YWl+al6yXn525iBAb2tmM/N+9gvLQx+BCj
-        AAejEg/vAod3sUKsiWXFlbmHGCU4mJVEeI+3AYV4UxIrq1KL8uOLSnNSiw8xmgIdNZFZSjQ5
-        Hxh1eSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNITS1KzU1MLUotg+pg4OKUaGPsnrU85ahWQ
-        zDIjoD1SrXGx2k7RDRK5TJ/faQRs2t91wWvjNYP5R6WYbP3Tn08KvSw1K0wxZ2cK16QKa637
-        lmeTZZI9NkVMTrwhV25+NkrZx/JI95yAJ0aLEjZ/k5oy5c5UnclBq9ROc82WnbSJa2nuesYp
-        C3lZfn58eMQkuutLreUPg/q8u0osxRmJhlrMRcWJABf6z1aCAgAA
-X-CMS-MailID: 20191210114036eucas1p2b0205a5dcdf1f26485235a232a5cbf20
+        MjJV0rezSUnNySxLLdK3S9DLuL11DVvBet+K6+t7GRsYL5p0MXJySAiYSFxcf5m5i5GLQ0hg
+        KaPE5oZfLBAJGYmT0xpYIWxhiT/Xutggij4xSlxd/w0swSZgKNH1FiTBySEikCgx++NssCJm
+        gRtMEpfezmECSQgLhEnM+LUSrIFFQFXi8O2j7CA2r4CtxPl1F6A2yEus3nCAGcTmFLCTmPSm
+        H6xXCKhmy9IpzBMY+RYwMqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQIDO1tx35u2cHY9S74
+        EKMAB6MSD+8Ch3exQqyJZcWVuYcYJTiYlUR4j7cBhXhTEiurUovy44tKc1KLDzGaAh01kVlK
+        NDkfGHd5JfGGpobmFpaG5sbmxmYWSuK8HQIHY4QE0hNLUrNTUwtSi2D6mDg4pRoYxetrJpS3
+        3Ja2jbGaHjrvzMmrV/dvMZ8TVGf8umD94ZS6g5OZin6V3LLbMSXw/rr2KN/P+6/dkBAw+Mh0
+        f534U88pv69eOGq01z7/dZHOxk9mO6+aH04tlfXhPvtislPQE73kpaJpEUudDPcz3FnyiXnb
+        8q7ZWdxfk4r0T2mk1a/3Mt3GlP5EXomlOCPRUIu5qDgRAPs19sCDAgAA
+X-CMS-MailID: 20191210114036eucas1p2fe31f68148688632d983e27bed12e7d8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191210114036eucas1p2b0205a5dcdf1f26485235a232a5cbf20
+X-RootMTR: 20191210114036eucas1p2fe31f68148688632d983e27bed12e7d8
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20191210114036eucas1p2b0205a5dcdf1f26485235a232a5cbf20
+X-CMS-RootMailID: 20191210114036eucas1p2fe31f68148688632d983e27bed12e7d8
 References: <20191210114027.14910-1-m.szyprowski@samsung.com>
-        <CGME20191210114036eucas1p2b0205a5dcdf1f26485235a232a5cbf20@eucas1p2.samsung.com>
+        <CGME20191210114036eucas1p2fe31f68148688632d983e27bed12e7d8@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Declare Exynos5422/5800 voltage ranges for opp points for big cpu core and
-bus wcore and couple their voltage supllies as vdd_arm and vdd_int should
-be in 300mV range.
+From: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
+Add missing 2.0GHz, 1.9GHz & 1.8GHz OPPs (for A15 cores) and 1.4GHz
+OPP (for A7 cores).  Also update common Odroid-XU3 Lite/XU3/XU4
+thermal cooling maps to account for new OPPs.
+
+Since some new OPPs are not available on all Exynos5422/5800 boards
+modify dts files for Odroid XU3 Lite (limited to 1.8 GHz / 1.3 GHz) &
+Peach Pi (limited to 2.0 GHz / 1.3 GHz) accordingly.
+
+This patch uses maximum voltages for new OPPs. This is a temporary
+solution till proper Exynos ASV support is added.
+
+Also while at it fix the number of cooling down steps for big cores
+(should be 11 instead of 12 on Odroid XU3 Lite and 14 on XU3/XU4).
+
+Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+[mszyprow: rebased onto v5.5-rc1 and adapted to recent dts changes,
+ fixed removal of the 1.4GHz OPP for A7s on Peach-Pi]
 Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-[k.konieczny: add missing patch description]
-Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
-This patch is the same as https://patchwork.kernel.org/patch/11172427/
-which has been dropped due to the other issues in the regulator framework.
-Those issues has been resolved now, so it is safe to apply it.
+Based on the patch from 15th Dec 2016:
+https://patchwork.kernel.org/patch/9475909/
 ---
- arch/arm/boot/dts/exynos5420.dtsi             | 34 +++++++++----------
- arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  4 +++
- arch/arm/boot/dts/exynos5800-peach-pi.dts     |  4 +++
- arch/arm/boot/dts/exynos5800.dtsi             | 32 ++++++++---------
- 4 files changed, 41 insertions(+), 33 deletions(-)
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts    | 64 +++++++--------
+ .../boot/dts/exynos5422-odroidxu3-common.dtsi | 78 +++++++++----------
+ .../boot/dts/exynos5422-odroidxu3-lite.dts    | 58 ++++++++++++++
+ arch/arm/boot/dts/exynos5800-peach-pi.dts     |  9 +++
+ arch/arm/boot/dts/exynos5800.dtsi             | 20 +++++
+ 5 files changed, 158 insertions(+), 71 deletions(-)
 
-diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-index d39907a41f78..1ae5211f7d79 100644
---- a/arch/arm/boot/dts/exynos5420.dtsi
-+++ b/arch/arm/boot/dts/exynos5420.dtsi
-@@ -48,62 +48,62 @@
- 
- 		opp-1800000000 {
- 			opp-hz = /bits/ 64 <1800000000>;
--			opp-microvolt = <1250000>;
-+			opp-microvolt = <1250000 1250000 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1700000000 {
- 			opp-hz = /bits/ 64 <1700000000>;
--			opp-microvolt = <1212500>;
-+			opp-microvolt = <1212500 1212500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1600000000 {
- 			opp-hz = /bits/ 64 <1600000000>;
--			opp-microvolt = <1175000>;
-+			opp-microvolt = <1175000 1175000 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1500000000 {
- 			opp-hz = /bits/ 64 <1500000000>;
--			opp-microvolt = <1137500>;
-+			opp-microvolt = <1137500 1137500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1400000000 {
- 			opp-hz = /bits/ 64 <1400000000>;
--			opp-microvolt = <1112500>;
-+			opp-microvolt = <1112500 1112500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1300000000 {
- 			opp-hz = /bits/ 64 <1300000000>;
--			opp-microvolt = <1062500>;
-+			opp-microvolt = <1062500 1062500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1200000000 {
- 			opp-hz = /bits/ 64 <1200000000>;
--			opp-microvolt = <1037500>;
-+			opp-microvolt = <1037500 1037500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1100000000 {
- 			opp-hz = /bits/ 64 <1100000000>;
--			opp-microvolt = <1012500>;
-+			opp-microvolt = <1012500 1012500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
--			opp-microvolt = < 987500>;
-+			opp-microvolt = < 987500 987500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-900000000 {
- 			opp-hz = /bits/ 64 <900000000>;
--			opp-microvolt = < 962500>;
-+			opp-microvolt = < 962500 962500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-800000000 {
- 			opp-hz = /bits/ 64 <800000000>;
--			opp-microvolt = < 937500>;
-+			opp-microvolt = < 937500 937500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 		opp-700000000 {
- 			opp-hz = /bits/ 64 <700000000>;
--			opp-microvolt = < 912500>;
-+			opp-microvolt = < 912500 912500 1500000>;
- 			clock-latency-ns = <140000>;
- 		};
- 	};
-@@ -1171,23 +1171,23 @@
- 
- 			opp00 {
- 				opp-hz = /bits/ 64 <84000000>;
--				opp-microvolt = <925000>;
-+				opp-microvolt = <925000 925000 1400000>;
- 			};
- 			opp01 {
- 				opp-hz = /bits/ 64 <111000000>;
--				opp-microvolt = <950000>;
-+				opp-microvolt = <950000 950000 1400000>;
- 			};
- 			opp02 {
- 				opp-hz = /bits/ 64 <222000000>;
--				opp-microvolt = <950000>;
-+				opp-microvolt = <950000 950000 1400000>;
- 			};
- 			opp03 {
- 				opp-hz = /bits/ 64 <333000000>;
--				opp-microvolt = <950000>;
-+				opp-microvolt = <950000 950000 1400000>;
- 			};
- 			opp04 {
- 				opp-hz = /bits/ 64 <400000000>;
--				opp-microvolt = <987500>;
-+				opp-microvolt = <987500 987500 1400000>;
+diff --git a/arch/arm/boot/dts/exynos5422-odroidhc1.dts b/arch/arm/boot/dts/exynos5422-odroidhc1.dts
+index d271e7548826..f163206265bb 100644
+--- a/arch/arm/boot/dts/exynos5422-odroidhc1.dts
++++ b/arch/arm/boot/dts/exynos5422-odroidhc1.dts
+@@ -72,14 +72,14 @@
+ 				 */
+ 				map1 {
+ 					trip = <&cpu0_alert1>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
  			};
  		};
+@@ -116,14 +116,14 @@
+ 				};
+ 				map1 {
+ 					trip = <&cpu1_alert1>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+@@ -160,14 +160,14 @@
+ 				};
+ 				map1 {
+ 					trip = <&cpu2_alert1>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+@@ -204,14 +204,14 @@
+ 				};
+ 				map1 {
+ 					trip = <&cpu3_alert1>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
+index 838872037493..1865a708b49f 100644
+--- a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
++++ b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
+@@ -107,7 +107,7 @@
+ 				/*
+ 				 * When reaching cpu0_alert3, reduce CPU
+ 				 * by 2 steps. On Exynos5422/5800 that would
+-				 * be: 1600 MHz and 1100 MHz.
++				 * (usually) be: 1800 MHz and 1200 MHz.
+ 				 */
+ 				map3 {
+ 					trip = <&cpu0_alert3>;
+@@ -122,19 +122,19 @@
+ 				};
+ 				/*
+ 				 * When reaching cpu0_alert4, reduce CPU
+-				 * further, down to 600 MHz (12 steps for big,
+-				 * 7 steps for LITTLE).
++				 * further, down to 600 MHz (14 steps for big,
++				 * 8 steps for LITTLE).
+ 				 */
+-				map4 {
++				cpu0_cooling_map4: map4 {
+ 					trip = <&cpu0_alert4>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+@@ -198,16 +198,16 @@
+ 							 <&cpu6 0 2>,
+ 							 <&cpu7 0 2>;
+ 				};
+-				map4 {
++				cpu1_cooling_map4: map4 {
+ 					trip = <&cpu1_alert4>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+@@ -271,16 +271,16 @@
+ 							 <&cpu6 0 2>,
+ 							 <&cpu7 0 2>;
+ 				};
+-				map4 {
++				cpu2_cooling_map4: map4 {
+ 					trip = <&cpu2_alert4>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+@@ -344,16 +344,16 @@
+ 							 <&cpu6 0 2>,
+ 							 <&cpu7 0 2>;
+ 				};
+-				map4 {
++				cpu3_cooling_map4: map4 {
+ 					trip = <&cpu3_alert4>;
+-					cooling-device = <&cpu0 3 7>,
+-							 <&cpu1 3 7>,
+-							 <&cpu2 3 7>,
+-							 <&cpu3 3 7>,
+-							 <&cpu4 3 12>,
+-							 <&cpu5 3 12>,
+-							 <&cpu6 3 12>,
+-							 <&cpu7 3 12>;
++					cooling-device = <&cpu0 3 8>,
++							 <&cpu1 3 8>,
++							 <&cpu2 3 8>,
++							 <&cpu3 3 8>,
++							 <&cpu4 3 14>,
++							 <&cpu5 3 14>,
++							 <&cpu6 3 14>,
++							 <&cpu7 3 14>;
+ 				};
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts b/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
+index a31ca2ef750f..98feecad5489 100644
+--- a/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
++++ b/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
+@@ -30,6 +30,64 @@
+ 	samsung,asv-bin = <2>;
+ };
  
-diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-index 059fa32d1a8f..8a34a861c191 100644
---- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-+++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
-@@ -601,6 +601,8 @@
- 				regulator-max-microvolt = <1500000>;
- 				regulator-always-on;
- 				regulator-boot-on;
-+				regulator-coupled-with = <&buck3_reg>;
-+				regulator-coupled-max-spread = <300000>;
- 
- 				regulator-state-mem {
- 					regulator-off-in-suspend;
-@@ -613,6 +615,8 @@
- 				regulator-max-microvolt = <1400000>;
- 				regulator-always-on;
- 				regulator-boot-on;
-+				regulator-coupled-with = <&buck2_reg>;
-+				regulator-coupled-max-spread = <300000>;
- 
- 				regulator-state-mem {
- 					regulator-off-in-suspend;
++/*
++ * Odroid XU3-Lite board uses SoC revision with lower maximum frequencies
++ * than Odroid XU3/XU4 boards: 1.8 GHz for A15 cores & 1.3 GHz for A7 cores.
++ * Therefore we need to update OPPs tables and thermal maps accordingly.
++ */
++&cluster_a15_opp_table {
++	/delete-node/opp-2000000000;
++	/delete-node/opp-1900000000;
++};
++
++&cluster_a7_opp_table {
++	/delete-node/opp-1400000000;
++};
++
++&cpu0_cooling_map4 {
++	cooling-device = <&cpu0 3 7>,
++			 <&cpu1 3 7>,
++			 <&cpu2 3 7>,
++			 <&cpu3 3 7>,
++			 <&cpu4 3 12>,
++			 <&cpu5 3 12>,
++			 <&cpu6 3 12>,
++			 <&cpu7 3 12>;
++};
++
++&cpu1_cooling_map4 {
++	cooling-device = <&cpu0 3 7>,
++			 <&cpu1 3 7>,
++			 <&cpu2 3 7>,
++			 <&cpu3 3 7>,
++			 <&cpu4 3 12>,
++			 <&cpu5 3 12>,
++			 <&cpu6 3 12>,
++			 <&cpu7 3 12>;
++};
++
++&cpu2_cooling_map4 {
++	cooling-device = <&cpu0 3 7>,
++			 <&cpu1 3 7>,
++			 <&cpu2 3 7>,
++			 <&cpu3 3 7>,
++			 <&cpu4 3 12>,
++			 <&cpu5 3 12>,
++			 <&cpu6 3 12>,
++			 <&cpu7 3 12>;
++};
++
++&cpu3_cooling_map4 {
++	cooling-device = <&cpu0 3 7>,
++			 <&cpu1 3 7>,
++			 <&cpu2 3 7>,
++			 <&cpu3 3 7>,
++			 <&cpu4 3 12>,
++			 <&cpu5 3 12>,
++			 <&cpu6 3 12>,
++			 <&cpu7 3 12>;
++};
++
+ &pwm {
+ 	/*
+ 	 * PWM 0 -- fan
 diff --git a/arch/arm/boot/dts/exynos5800-peach-pi.dts b/arch/arm/boot/dts/exynos5800-peach-pi.dts
-index 60ca3d685247..c1e38139ce4f 100644
+index c1e38139ce4f..60ab0effe474 100644
 --- a/arch/arm/boot/dts/exynos5800-peach-pi.dts
 +++ b/arch/arm/boot/dts/exynos5800-peach-pi.dts
-@@ -257,6 +257,8 @@
- 				regulator-always-on;
- 				regulator-boot-on;
- 				regulator-ramp-delay = <12500>;
-+				regulator-coupled-with = <&buck3_reg>;
-+				regulator-coupled-max-spread = <300000>;
- 				regulator-state-mem {
- 					regulator-off-in-suspend;
- 				};
-@@ -269,6 +271,8 @@
- 				regulator-always-on;
- 				regulator-boot-on;
- 				regulator-ramp-delay = <12500>;
-+				regulator-coupled-with = <&buck2_reg>;
-+				regulator-coupled-max-spread = <300000>;
- 				regulator-state-mem {
- 					regulator-off-in-suspend;
- 				};
+@@ -156,6 +156,15 @@
+ 	assigned-clock-parents = <&clock CLK_MAU_EPLL>;
+ };
+ 
++/*
++ * Peach Pi board uses SoC revision with lower maximum frequency for A7 cores
++ * (1.3 GHz instead of 1.4 GHz) than Odroid XU3/XU4 boards.  Thus we need to
++ * update A7 OPPs table accordingly.
++ */
++&cluster_a7_opp_table {
++	/delete-node/opp-1400000000;
++};
++
+ &cpu0 {
+ 	cpu-supply = <&buck2_reg>;
+ };
 diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
-index 16177d815ee4..1be7eb60439a 100644
+index 1be7eb60439a..b4fd53496450 100644
 --- a/arch/arm/boot/dts/exynos5800.dtsi
 +++ b/arch/arm/boot/dts/exynos5800.dtsi
-@@ -22,61 +22,61 @@
+@@ -21,6 +21,21 @@
+ };
  
  &cluster_a15_opp_table {
++	opp-2000000000 {
++		opp-hz = /bits/ 64 <2000000000>;
++		opp-microvolt = <1312500>;
++		clock-latency-ns = <140000>;
++	};
++	opp-1900000000 {
++		opp-hz = /bits/ 64 <1900000000>;
++		opp-microvolt = <1262500>;
++		clock-latency-ns = <140000>;
++	};
++	opp-1800000000 {
++		opp-hz = /bits/ 64 <1800000000>;
++		opp-microvolt = <1237500>;
++		clock-latency-ns = <140000>;
++	};
  	opp-1700000000 {
--		opp-microvolt = <1250000>;
-+		opp-microvolt = <1250000 1250000 1500000>;
+ 		opp-microvolt = <1250000 1250000 1500000>;
  	};
- 	opp-1600000000 {
--		opp-microvolt = <1250000>;
-+		opp-microvolt = <1250000 1250000 1500000>;
- 	};
- 	opp-1500000000 {
--		opp-microvolt = <1100000>;
-+		opp-microvolt = <1100000 1100000 1500000>;
- 	};
- 	opp-1400000000 {
--		opp-microvolt = <1100000>;
-+		opp-microvolt = <1100000 1100000 1500000>;
- 	};
- 	opp-1300000000 {
--		opp-microvolt = <1100000>;
-+		opp-microvolt = <1100000 1100000 1500000>;
- 	};
- 	opp-1200000000 {
--		opp-microvolt = <1000000>;
-+		opp-microvolt = <1000000 1000000 1500000>;
- 	};
- 	opp-1100000000 {
--		opp-microvolt = <1000000>;
-+		opp-microvolt = <1000000 1000000 1500000>;
- 	};
- 	opp-1000000000 {
--		opp-microvolt = <1000000>;
-+		opp-microvolt = <1000000 1000000 1500000>;
- 	};
- 	opp-900000000 {
--		opp-microvolt = <1000000>;
-+		opp-microvolt = <1000000 1000000 1500000>;
- 	};
- 	opp-800000000 {
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 	};
- 	opp-700000000 {
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 	};
- 	opp-600000000 {
- 		opp-hz = /bits/ 64 <600000000>;
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 		clock-latency-ns = <140000>;
- 	};
- 	opp-500000000 {
- 		opp-hz = /bits/ 64 <500000000>;
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 		clock-latency-ns = <140000>;
- 	};
- 	opp-400000000 {
- 		opp-hz = /bits/ 64 <400000000>;
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 		clock-latency-ns = <140000>;
- 	};
- 	opp-300000000 {
- 		opp-hz = /bits/ 64 <300000000>;
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 		clock-latency-ns = <140000>;
- 	};
- 	opp-200000000 {
- 		opp-hz = /bits/ 64 <200000000>;
--		opp-microvolt = <900000>;
-+		opp-microvolt = <900000 900000 1500000>;
- 		clock-latency-ns = <140000>;
- 	};
+@@ -82,6 +97,11 @@
  };
+ 
+ &cluster_a7_opp_table {
++	opp-1400000000 {
++		opp-hz = /bits/ 64 <1400000000>;
++		opp-microvolt = <1275000>;
++		clock-latency-ns = <140000>;
++	};
+ 	opp-1300000000 {
+ 		opp-microvolt = <1250000>;
+ 	};
 -- 
 2.17.1
 
