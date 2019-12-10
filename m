@@ -2,36 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2FC119A62
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 22:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0573B11971E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 22:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbfLJVHp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 16:07:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54228 "EHLO mail.kernel.org"
+        id S1728186AbfLJVJc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 16:09:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727385AbfLJVHp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:07:45 -0500
+        id S1727075AbfLJVJb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D3A9224688;
-        Tue, 10 Dec 2019 21:07:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E43A246B6;
+        Tue, 10 Dec 2019 21:09:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012064;
-        bh=Q+0BDaIJv0ZuVDo4ps/CNbx5BGyhxxCvpLyMQygSQNM=;
+        s=default; t=1576012171;
+        bh=ZkQNR1TZKmTtQmGs/IMX1SC2ZreDZnDVq2Ta/ZZTK8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ua3SBWmz7wRC5U7wUFgJlZSBY8tVjFxQ7RJH0X1/rwxVvZJSAonpnm/ihLNohhgjh
-         a6VQsd+n8MBWmp1hybObi9mVbBVm538QhGmpcnd/aG2e6ck3frAl00/cQxEZOByep4
-         zD8xKHaSZ0ddk0mBjAGmFbyR4ujCTpyB88MS2aFY=
+        b=H4xCL4TiTIpvs4gkvK5qWXoIMYF7IAO2RsNHv+LR8wvTfVMSd8pEo2QlIaPJLBedk
+         5Zlo8L1woZYpxL4fsgZTpd3FTK1TyGSsEaKBS6cg0+xSEDxAHByqVmtLAMkFjK57NF
+         cNMor3WHzt3yqoQ559Q+owcfLv6pcihKZ8p4EvGk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 046/350] tools/power/cpupower: Fix initializer override in hsw_ext_cstates
-Date:   Tue, 10 Dec 2019 16:02:31 -0500
-Message-Id: <20191210210735.9077-7-sashal@kernel.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 130/350] power: supply: cpcap-battery: Check voltage before orderly_poweroff
+Date:   Tue, 10 Dec 2019 16:03:55 -0500
+Message-Id: <20191210210735.9077-91-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -44,61 +45,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Tony Lindgren <tony@atomide.com>
 
-[ Upstream commit 7e5705c635ecfccde559ebbbe1eaf05b5cc60529 ]
+[ Upstream commit 639c1524da3b273d20c42ff2387d08eb4b12e903 ]
 
-When building cpupower with clang, the following warning appears:
+We can get the low voltage interrupt trigger sometimes way too early,
+maybe because of CPU load spikes. This causes orderly_poweroff() be
+called too easily.
 
- utils/idle_monitor/hsw_ext_idle.c:42:16: warning: initializer overrides
- prior initialization of this subobject [-Winitializer-overrides]
-                 .desc                   = N_("Processor Package C2"),
-                                              ^~~~~~~~~~~~~~~~~~~~~~
- ./utils/helpers/helpers.h:25:33: note: expanded from macro 'N_'
- #define N_(String) gettext_noop(String)
-                                 ^~~~~~
- ./utils/helpers/helpers.h:23:30: note: expanded from macro
- 'gettext_noop'
- #define gettext_noop(String) String
-                              ^~~~~~
- utils/idle_monitor/hsw_ext_idle.c:41:16: note: previous initialization
- is here
-                 .desc                   = N_("Processor Package C9"),
-                                              ^~~~~~~~~~~~~~~~~~~~~~
- ./utils/helpers/helpers.h:25:33: note: expanded from macro 'N_'
- #define N_(String) gettext_noop(String)
-                                 ^~~~~~
- ./utils/helpers/helpers.h:23:30: note: expanded from macro
- 'gettext_noop'
- #define gettext_noop(String) String
-                             ^~~~~~
- 1 warning generated.
+Let's check the voltage before orderly_poweroff in case it was not
+yet a permanent condition. We will be getting more interrupts anyways
+if the condition persists.
 
-This appears to be a copy and paste or merge mistake because the name
-and id fields both have PC9 in them, not PC2. Remove the second
-assignment to fix the warning.
+Let's also show the measured voltages for low battery and battery
+empty warnings since we have them.
 
-Fixes: 7ee767b69b68 ("cpupower: Add Haswell family 0x45 specific idle monitor to show PC8,9,10 states")
-Link: https://github.com/ClangBuiltLinux/linux/issues/718
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/power/supply/cpcap-battery.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c b/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-index 7c7451d3f494f..58dbdfd4fa13d 100644
---- a/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-@@ -39,7 +39,6 @@ static cstate_t hsw_ext_cstates[HSW_EXT_CSTATE_COUNT] = {
- 	{
- 		.name			= "PC9",
- 		.desc			= N_("Processor Package C9"),
--		.desc			= N_("Processor Package C2"),
- 		.id			= PC9,
- 		.range			= RANGE_PACKAGE,
- 		.get_count_percent	= hsw_ext_get_count_percent,
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+index 61d6447d1966f..00a96e4a1cdc3 100644
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -562,12 +562,14 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
+ 	switch (d->action) {
+ 	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
+ 		if (latest->current_ua >= 0)
+-			dev_warn(ddata->dev, "Battery low at 3.3V!\n");
++			dev_warn(ddata->dev, "Battery low at %imV!\n",
++				latest->voltage / 1000);
+ 		break;
+ 	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
+-		if (latest->current_ua >= 0) {
++		if (latest->current_ua >= 0 && latest->voltage <= 3200000) {
+ 			dev_emerg(ddata->dev,
+-				  "Battery empty at 3.1V, powering off\n");
++				  "Battery empty at %imV, powering off\n",
++				  latest->voltage / 1000);
+ 			orderly_poweroff(true);
+ 		}
+ 		break;
 -- 
 2.20.1
 
