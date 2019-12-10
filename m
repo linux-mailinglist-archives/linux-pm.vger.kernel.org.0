@@ -2,149 +2,323 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CD0117DCF
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 03:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CB0117ECD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 05:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfLJCfx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 21:35:53 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:41322 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726509AbfLJCfw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Dec 2019 21:35:52 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 47X3yP62Tzz5Y;
-        Tue, 10 Dec 2019 03:33:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1575945198; bh=28ZRq1FI2/sd4GBSEA17lEwHQUUzefEXEY1pCiKIzfA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=neQUnqb8yNbGKLEtkX5q3ZEZQq6YSwQBVg61WDjvqiehVlijufpRomrZTn9LGIo5n
-         0XIDUwy/mP8019WfJT4YL2X7N7zJlGKpBk88KfOiWmyTuA2rlOK55NAZOpN0MxaZex
-         06Y3OLlSEr4JDVTUomCd0LlcmGeUEfEVC+3+Ec8Z2D7yKovFZaPcrU0UFP7ijexRiS
-         1S7SPa8RZ/a7GpRZ4EPehhP2cZHc0DbxfE3KBtuh5cWBGfNhH8+sPlcHSNn13XL2UU
-         JHgcN/wK3LIQVsg/1Uq17zup8DiLwUNFUfqx2MhrBrTNhmbGWSXa/vuKkYUqiU1Eg5
-         TNEciPiEE6t8Q==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.4 at mail
-Date:   Tue, 10 Dec 2019 03:35:49 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 00/19] Consolidate and improve NVIDIA Tegra CPUIDLE
- driver(s)
-Message-ID: <20191210023549.GA15246@qmqm.qmqm.pl>
-References: <20191203004116.11771-1-digetx@gmail.com>
- <20191207215216.GA9561@qmqm.qmqm.pl>
- <0b3a861d-e5e8-ddca-ac60-0a3c61a9d9dc@gmail.com>
- <20191209160420.GA24097@qmqm.qmqm.pl>
- <323f5f70-5249-e75a-98cc-7fdca2d375c2@gmail.com>
+        id S1726819AbfLJEOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 23:14:11 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:13968 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbfLJEOK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 23:14:10 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191210041406epoutp016765b77d8685ec4b2454e42a7ae942c2~e508oAxCY1242812428epoutp01M
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 04:14:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191210041406epoutp016765b77d8685ec4b2454e42a7ae942c2~e508oAxCY1242812428epoutp01M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1575951246;
+        bh=8ZnAdhmubYW5U3geKUg1GbxHGDRqr4E2F3dUKd6lc18=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=JiDJQnnpEPFZtDXmG9H+DuxuoVRiKKiu6MAT3Ve+VDdW8fNKP5sWnIOFmlPi4kLJ+
+         ApfT2Ys1gTlOi0X1YL57IM1QeETCho8rWRwG/rbFiRdUG+O5umgUATRUXgk9RKLoR6
+         EKX+7kxnDu8Fa8UtAHPB0xCp7tSUBUzJAiEZNeow=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191210041406epcas1p2573bfb61527a7855c7b6aec8dde088af~e508MtcJb2988229882epcas1p2d;
+        Tue, 10 Dec 2019 04:14:06 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47X6Bh1pCmzMqYkY; Tue, 10 Dec
+        2019 04:14:04 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DC.FC.52419.C8B1FED5; Tue, 10 Dec 2019 13:14:04 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191210041403epcas1p393e978279a9c29aa550de20c7fe20bbe~e505p7wtv2140221402epcas1p3p;
+        Tue, 10 Dec 2019 04:14:03 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191210041403epsmtrp18a202e3c5061bc1510377099ea9ee898~e505o4xMi2236922369epsmtrp1S;
+        Tue, 10 Dec 2019 04:14:03 +0000 (GMT)
+X-AuditID: b6c32a37-59fff7000001ccc3-f1-5def1b8cbff1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D6.36.10238.B8B1FED5; Tue, 10 Dec 2019 13:14:03 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191210041403epsmtip1d12679440965b765de3305bac30411c1~e505RZSEm3119531195epsmtip1U;
+        Tue, 10 Dec 2019 04:14:03 +0000 (GMT)
+Subject: Re: [PATCH v3 4/4] devfreq: exynos-bus: Clean up code
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        kgene@kernel.org, krzk@kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, k.konieczny@samsung.com,
+        leonard.crestez@nxp.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <ab5cd151-0f9f-929e-fcbe-e7fe7b6c8645@samsung.com>
+Date:   Tue, 10 Dec 2019 13:20:29 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20191209104902.11904-5-a.swigon@samsung.com>
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <323f5f70-5249-e75a-98cc-7fdca2d375c2@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmvm6P9PtYg+UbOS3uz2tltNg4Yz2r
+        xaT7E1gsFnyawWrR//g1s8X58xvYLc42vWG3WHH3I6vFpsfXWC0u75rDZvG59wijxYzz+5gs
+        1h65y25xu3EFm8WMyS/ZHPg9Nq3qZPPYvKTeY+O7HUwefVtWMXp83iQXwBqVbZORmpiSWqSQ
+        mpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdK2SQlliTilQKCCxuFhJ
+        386mKL+0JFUhI7+4xFYptSAlp8CyQK84Mbe4NC9dLzk/18rQwMDIFKgwITtj1ouMgp+GFatn
+        TmFsYFyn3sXIySEhYCIxa9dK9i5GLg4hgR2MEq/au9kgnE+MEh0HnrJAON+AnLs9TDAt11cv
+        ZoVI7GWU6Fz5A6rqPaPErTnNrCBVwgJ2EssW7GACSYgIHGCUOLC+GcxhFvjCKNF84y87SBWb
+        gJbE/hc32EBsfgFFias/HjOC2LxA3f1PHzOD2CwCqhKXt28FqxcVCJM4ua0FqkZQ4uTMJywg
+        NqeAlcSqmefB5jALiEvcejKfCcKWl2jeOpsZ4u517BLTf5pB2C4SjbM3QcWFJV4d38IOYUtJ
+        vOxvg7KrJVaePAIODQmBDkaJLfsvsEIkjCX2L50MtIADaIGmxPpd+hBhRYmdv+cyQuzlk3j3
+        tYcVpERCgFeio00IokRZ4vKDu9BglJRY3N7JNoFRaRaSb2Yh+WAWkg9mISxbwMiyilEstaA4
+        Nz212LDAGDm6NzGCk7KW+Q7GDed8DjEKcDAq8fAucHgXK8SaWFZcmXuIUYKDWUmE93gbUIg3
+        JbGyKrUoP76oNCe1+BCjKTCwJzJLiSbnAzNGXkm8oamRsbGxhYmhmamhoZI4L8ePi7FCAumJ
+        JanZqakFqUUwfUwcnFINjFnbNk0NPeQb2N9wbOnaE6k+PXdMWdxS1m7YJnJqRdHCzn3L6uoD
+        s24GrwpQ3ndMMLZA+mPD3MkhT4RK/n25uet174P1GyvOOS9z0Zhs9vX0gr1/2j9F3JIweyP3
+        60D88cVrd00PFDyfPvW6caG1eDITn4F55zSr/01cKZe4eXf13OXj1Ty3c6sSS3FGoqEWc1Fx
+        IgCeXYH14AMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsWy7bCSnG639PtYg/uz5Szuz2tltNg4Yz2r
+        xaT7E1gsFnyawWrR//g1s8X58xvYLc42vWG3WHH3I6vFpsfXWC0u75rDZvG59wijxYzz+5gs
+        1h65y25xu3EFm8WMyS/ZHPg9Nq3qZPPYvKTeY+O7HUwefVtWMXp83iQXwBrFZZOSmpNZllqk
+        b5fAlTHrRUbBT8OK1TOnMDYwrlPvYuTkkBAwkbi+ejFrFyMXh5DAbkaJO5cusUMkJCWmXTzK
+        3MXIAWQLSxw+XAwSFhJ4yyixtFcTxBYWsJNYtmAHE0iviMABRonNO2czgSSYBb4wShx9Eg4x
+        dC+jxI61B1hBEmwCWhL7X9xgA7H5BRQlrv54zAhi8wJN6n/6mBnEZhFQlbi8fSvYEaICYRI7
+        lzxmgqgRlDg58wkLiM0pYCWxauZ5Nohl6hJ/5l1ihrDFJW49mQ91hLxE89bZzBMYhWchaZ+F
+        pGUWkpZZSFoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjk0tzR2Ml5fEH2IU
+        4GBU4uFd4PAuVog1say4MvcQowQHs5II7/E2oBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHep3nH
+        IoUE0hNLUrNTUwtSi2CyTBycUg2M0v4uJ+e5V0Y9bqoSuFFeO4n71iyGE6UxbP5XSkqO/Dbt
+        Kw/hVwjmebW/8tPNUJ1tlSH6LM0HlrxPm6cq8M8rsVp/9TTvXxMl/XK/u4fzuv2LVCq/ckTm
+        k+iN5/auE5tqOPJmrn5nu27vZD1m9eafu54dmvLq3bUvGzrOlE0UiKqdmm/2dNkKJZbijERD
+        Leai4kQAKr+0eskCAAA=
+X-CMS-MailID: 20191210041403epcas1p393e978279a9c29aa550de20c7fe20bbe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191209105034eucas1p277be9a40363fec76b4241d28e71e40d2
+References: <20191209104902.11904-1-a.swigon@samsung.com>
+        <CGME20191209105034eucas1p277be9a40363fec76b4241d28e71e40d2@eucas1p2.samsung.com>
+        <20191209104902.11904-5-a.swigon@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 12:22:18AM +0300, Dmitry Osipenko wrote:
-> 09.12.2019 19:04, Michał Mirosław пишет:
-> > On Sun, Dec 08, 2019 at 01:56:14AM +0300, Dmitry Osipenko wrote:
-> >> 08.12.2019 00:52, Michał Mirosław пишет:
-> >>> On Tue, Dec 03, 2019 at 03:40:57AM +0300, Dmitry Osipenko wrote:
-> >>>> Hello,
-> >>>>
-> >>>> This series does the following:
-> >>>>
-> >>>>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
-> >>>>      into common drivers/cpuidle/ directory.
-> >>>>
-> >>>>   2. Enables CPU cluster power-down idling state on Tegra30.
-> >>>>
-> >>>> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
-> >>>> and of the Tegra's arch code in general. Please review, thanks!
-> >>>
-> >>> I did a quick smoke test for this series on top of Linus' master:
-> >>>  - rebuilding with the patches applied, CONFIG_ARM_TEGRA_CPUIDLE=n - works
-> >>>  - building with CONFIG_ARM_TEGRA_CPUIDLE=y - doesn't boot
-> >>>
-> >>> The hang is somewhere early in the boot process, before simplefb can
-> >>> take the console and show any logs. If I get BOOTFB to work again I might
-> >>> be able to get some more info.
-> >>
-> >> Thank you very much for trying these patches!
-> >>
-> >> Could you please try to make ARM_TEGRA_CPUIDLE "tristate" in the Kconfig
-> >> and compile it as a loadable module? That way you'll get framebuffer
-> >> shown before the hang happens.
-> >>
-> >> Does LP2 suspend/resume work for you? There should be
-> >> "nvidia,suspend-mode = <2>" in the PMC's node of device-tree.
-> > 
-> > Not at the moment. I also tried suspend-mode = <1> and <0>, but it
-> > made no difference.
-> 
-> If LP2 doesn't work, then it explains why you're getting the hang.
-> 
-> Are you using TF300T for the testing? I'm recalling that LP2 worked for
-> you sometime ago on TF300T, maybe some offending change was introduced
-> since then. Could you please try to do the git bisection or at least
-> find out what is the last good kernel version?
-> 
-> I rebased this series on a recent linux-next and you could find the
-> rebased patches here [1].
-> 
-> [1] https://github.com/grate-driver/linux/commits/master
-> 
-> With [1] you should be able to remove "nvidia,suspend-mode" property
-> from the device-tree to get cpuidle working with the disabled CC6 state
-> (LP2). Could you please check that at least disabled CC6 works for you?
+Hi,
 
-I tested suspend with your tree merged, but CONFIG_TEGRA_CPUIDLE=n. LP2
-seems to work [1]. The same tree with CONFIG_TEGRA_CPUIDLE=y doesn't
-boot. I'll try comparing DTs, but other than that I'm blocked on BOOTFB now.
+This patch contains the clean-up code related to 'goto' style.
+Please merge the the clean-up code of 'goto' to one patch with patch3/patch4.
+- patch3 related to 'goto' clean-up code
+- patch4 related to remaining clean-up code. 
 
+And I added the comment below. Please check them.
+
+On 12/9/19 7:49 PM, Artur Świgoń wrote:
+> This patch adds minor improvements to the exynos-bus driver, including
+> cleaning up header includes, variables, and return paths.
+> 
+> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> ---
+>  drivers/devfreq/exynos-bus.c | 56 +++++++++++++++---------------------
+>  1 file changed, 23 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 0b557df63666..3eb6a043284a 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -15,11 +15,10 @@
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regulator/consumer.h>
+> -#include <linux/slab.h>
+>  
+>  #define DEFAULT_SATURATION_RATIO	40
+>  
+> @@ -178,7 +177,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>  	struct device *dev = bus->dev;
+>  	struct opp_table *opp_table;
+>  	const char *vdd = "vdd";
+> -	int i, ret, count, size;
+> +	int i, ret, count;
+>  
+>  	opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
+>  	if (IS_ERR(opp_table)) {
+> @@ -201,8 +200,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>  	}
+>  	bus->edev_count = count;
+>  
+> -	size = sizeof(*bus->edev) * count;
+> -	bus->edev = devm_kzalloc(dev, size, GFP_KERNEL);
+> +	bus->edev = devm_kcalloc(dev, count, sizeof(*bus->edev), GFP_KERNEL);
+
+ditto.
+It depends on personal style. Don't change it because we cannot
+modify them at the all device driver. If is not wrong,
+just keep the original code.
+
+
+>  	if (!bus->edev) {
+>  		ret = -ENOMEM;
+>  		goto err_regulator;
+> @@ -301,10 +299,9 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>  	profile->exit = exynos_bus_exit;
+>  
+>  	ondemand_data = devm_kzalloc(dev, sizeof(*ondemand_data), GFP_KERNEL);
+> -	if (!ondemand_data) {
+> -		ret = -ENOMEM;
+> -		goto err;
+> -	}
+> +	if (!ondemand_data)
+> +		return -ENOMEM;
+> +
+>  	ondemand_data->upthreshold = 40;
+>  	ondemand_data->downdifferential = 5;
+>  
+> @@ -314,15 +311,14 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>  						ondemand_data);
+>  	if (IS_ERR(bus->devfreq)) {
+>  		dev_err(dev, "failed to add devfreq device\n");
+> -		ret = PTR_ERR(bus->devfreq);
+> -		goto err;
+> +		return PTR_ERR(bus->devfreq);
+>  	}
+>  
+>  	/* Register opp_notifier to catch the change of OPP  */
+>  	ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to register opp notifier\n");
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+>  	/*
+> @@ -332,17 +328,16 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>  	ret = exynos_bus_enable_edev(bus);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to enable devfreq-event devices\n");
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+>  	ret = exynos_bus_set_event(bus);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to set event to devfreq-event devices\n");
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+> -err:
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+> @@ -351,7 +346,6 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+>  	struct device *dev = bus->dev;
+>  	struct devfreq_passive_data *passive_data;
+>  	struct devfreq *parent_devfreq;
+> -	int ret = 0;
+>  
+>  	/* Initialize the struct profile and governor data for passive device */
+>  	profile->target = exynos_bus_target;
+> @@ -359,30 +353,26 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+>  
+>  	/* Get the instance of parent devfreq device */
+>  	parent_devfreq = devfreq_get_devfreq_by_phandle(dev, 0);
+> -	if (IS_ERR(parent_devfreq)) {
+> -		ret = -EPROBE_DEFER;
+> -		goto err;
+> -	}
+> +	if (IS_ERR(parent_devfreq))
+> +		return -EPROBE_DEFER;
+>  
+>  	passive_data = devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);
+> -	if (!passive_data) {
+> -		ret = -ENOMEM;
+> -		goto err;
+> -	}
+> +	if (!passive_data)
+> +		return -ENOMEM;
+> +
+>  	passive_data->parent = parent_devfreq;
+>  
+>  	/* Add devfreq device for exynos bus with passive governor */
+> -	bus->devfreq = devm_devfreq_add_device(dev, profile, DEVFREQ_GOV_PASSIVE,
+> +	bus->devfreq = devm_devfreq_add_device(dev, profile,
+> +						DEVFREQ_GOV_PASSIVE,
+
+It is not clean-up. It depends on personal style. Don't change it
+because we cannot modify them at the all device driver. If is not wrong,
+just keep the original code.
+
+>  						passive_data);
+>  	if (IS_ERR(bus->devfreq)) {
+>  		dev_err(dev,
+>  			"failed to add devfreq dev with passive governor\n");
+> -		ret = PTR_ERR(bus->devfreq);
+> -		goto err;
+> +		return PTR_ERR(bus->devfreq);
+>  	}
+>  
+> -err:
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int exynos_bus_probe(struct platform_device *pdev)
+> @@ -400,18 +390,18 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
+> +	bus = devm_kzalloc(dev, sizeof(*bus), GFP_KERNEL);
+
+ditto.
+It depends on personal style. Don't change it because we cannot
+modify them at the all device driver. If is not wrong,
+just keep the original code.
+
+>  	if (!bus)
+>  		return -ENOMEM;
+>  	mutex_init(&bus->lock);
+> -	bus->dev = &pdev->dev;
+> +	bus->dev = dev;
+
+ditto.
+It depends on personal style. Don't change it because we cannot
+modify them at the all device driver. If is not wrong,
+just keep the original code.
+
+
+>  	platform_set_drvdata(pdev, bus);
+>  
+>  	profile = devm_kzalloc(dev, sizeof(*profile), GFP_KERNEL);
+>  	if (!profile)
+>  		return -ENOMEM;
+>  
+> -	node = of_parse_phandle(dev->of_node, "devfreq", 0);
+> +	node = of_parse_phandle(np, "devfreq", 0);
+>  	if (node) {
+>  		of_node_put(node);
+>  		passive = true;
+> 
+
+
+-- 
 Best Regards,
-Michał Mirosław
-
-[1] rtcwake -s 3 -d /dev/rtc0 -v -m mem
-
-(...)
-[ 2710.157919] PM: suspend entry (deep)
-[ 2710.161205] Filesystems sync: 0.000 seconds
-[ 2710.176677] Freezing user space processes ... (elapsed 0.001 seconds) done.
-[ 2710.178342] OOM killer disabled.
-[ 2710.178527] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-[ 2710.347871] Disabling non-boot CPUs ...
-[ 2710.349160] IRQ 18: no longer affine to CPU1
-[ 2710.352499] IRQ 19: no longer affine to CPU2
-[ 2710.370059] IRQ 20: no longer affine to CPU3
-[ 2710.371284] Entering suspend state LP2
-[ 2710.371556] Enabling non-boot CPUs ...
-[ 2710.373157] CPU1 is up
-[ 2710.374598] CPU2 is up
-[ 2710.375996] CPU3 is up
-[ 2710.462876] OOM killer enabled.
-[ 2710.463018] Restarting tasks ...
-[ 2710.463880] tegra-devfreq 6000c800.actmon: Failed to get emc clock
-[ 2710.464509] done.
-[ 2710.552824] asus-ec 1-0015: model         : ASUS-TF201-PAD
-[ 2710.558345] asus-ec 1-0015: FW version    : PAD-EC20T-0216
-[ 2710.562942] asus-ec 1-0015: Config format : ECFG-0001
-[ 2710.567651] asus-ec 1-0015: HW version    : TF201-PAD-SKU1
-[ 2710.572488] asus-ec 1-0015: EC FW behaviour: susb on when system wakeup
-[ 2710.769796] atkbd serio1: no of_node; not parsing pinctrl DT
-[ 2710.835629] asus-ec 5-0019: model         : ASUS-TF201-DOCK
-[ 2710.838686] asus-ec 5-0019: FW version    : DOCK-EC20N-0207
-[ 2710.841865] asus-ec 5-0019: Config format : ECFG-0001
-[ 2710.844271] asus-ec 5-0019: HW version    : PCBA-SKU-2
-[ 2710.847950] asus-ec 5-0019: EC FW behaviour: susb on when receive ec_req
-[ 2711.040935] PM: suspend exit
-
+Chanwoo Choi
+Samsung Electronics
