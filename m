@@ -2,222 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 730491182A5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 09:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60A21182C9
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 09:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfLJIpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 03:45:18 -0500
-Received: from mail-eopbgr40043.outbound.protection.outlook.com ([40.107.4.43]:64679
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726750AbfLJIpS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Dec 2019 03:45:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GXZRoLXlV5FOmhCu1YrO+iso+98idim8kPLmRrPgqk26mlhClvHJhKcpWToObk+xKn7VLUxPBAitwM3D7S5uXrrUInS67/s2AcEeI7RJ4pL0wiAdncB5y4ViD/CS/UEIi/tjiWcmor/7G3e/tlKSPeRATTCs2I1fRS5qQ+gv7ydoGy2Df/YlUuiKwBMO8IUEN0jlf9WuLU37jswVmePE2eyM1cY9hfUXFggU+R2nRGKBOxIt9V5QL34avJCr3sTDb9ArcuEK0AbxlQc+X9z0MbFJoAIBbioEYQ4tZTWpbgj8IUeQYk5fclRtPpwiV+y+b4vrzMHJqcJ1oFhFdoQ5Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fGdcZaXoYS9Msi3m9J9anbICxw67QNMq/gYtRkYmTLA=;
- b=NBm18M/tWofiiJHxtWDTcXvw7lZ6FZkYWS7ISnHH2Gtqv0d4jDuQd26TTI8JCRRC2zzuHByiPlA4laJc7y2Evx3u2KcF3zPIjc4MCppwUGkFx+Fw6NsR3AY/fHs0w5n7H+XLOL6OLnS8N0fJC8m7Y/f3XCK9W+CpHd4R1nHbARGbMsf4Nx3lZbkz5esrzCN86EL8GsPYLg/Wt2E45PKG07SNsEHpmEUtzuzzSES1GbgUnG07JX0bqxGvZQ1VhndWP25CH1WNjPW+cm7e8qvH16MFpW6vy85/JhOPO8/W+5PiCtXwnoznsZoUFl3ZX898NzMlKDJWwVW9cjWXtTqD5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fGdcZaXoYS9Msi3m9J9anbICxw67QNMq/gYtRkYmTLA=;
- b=fjFthWQ+OyG2UOUk+Og2jzLLogEm2OWjs7itTtr3hhV+OOtBMG4tgFM7lSZ1s+giJ2FQH6ff7fbUrlhgGnkW0nepBHbxWkRRYbrWSKRys1+JC9xwori+PCgam5e5NoLDtlsbcYsLS8BjWdr9ONmRQaoG0XL77+kwNed32z8iOyw=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3657.eurprd04.prod.outlook.com (52.134.69.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.12; Tue, 10 Dec 2019 08:45:10 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::b5ce:fe6b:6c06:fdb1]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::b5ce:fe6b:6c06:fdb1%6]) with mapi id 15.20.2516.018; Tue, 10 Dec 2019
- 08:45:09 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Jacky Bai <ping.bai@nxp.com>,
+        id S1727016AbfLJIuh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 03:50:37 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61915 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbfLJIug (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 03:50:36 -0500
+Received: from 79.184.255.117.ipv4.supernova.orange.pl (79.184.255.117) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id b9c8827cb86f8bf1; Tue, 10 Dec 2019 09:50:33 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Paul McKenney <paulmck@linux.vnet.ibm.com>
-Subject: RE: About CPU hot-plug stress test failed in cpufreq driver
-Thread-Topic: About CPU hot-plug stress test failed in cpufreq driver
-Thread-Index: AdWgM3EuFQeyF1SHRka5sBhDxaFShQAG6J6AAAAKxPAAAq52AAAAFLaAACYwDoAACh8qAAAASXeAAJxYEgAAxubCAAAEUtUgASMyDZAABHGSAAAFLgggAAVyLYAAvd+WYAAA3omQAAEGDYAAAmWbRgAAcGGAACPMEXAAAqbAgAACrQEAAAAfUXAAAG2mAAAAIzIA
-Date:   Tue, 10 Dec 2019 08:45:09 +0000
-Message-ID: <DB3PR0402MB3916781D19ECB96C530B410DF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <4087016.QifdzW7851@kreacher>
- <DB3PR0402MB39163BEC18FF81B06D1093BBF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <CAJZ5v0j_op4vELkEQzJEuXij71p8SGSFSbo0m813W5Gq1ZdYoQ@mail.gmail.com>
- <DB3PR0402MB3916D581AFCA8D05BBED3B68F5580@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <DB3PR0402MB3916EF749069E53CB1C03475F5580@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <CAJZ5v0j+L_w7G=Z4K5tuWEp11uk3ggS-1c8RqQ-Px6mk1V98Pw@mail.gmail.com>
- <0EF688DF-FD00-456C-8CE1-C4F825651275@nxp.com>
- <CAJZ5v0iKpJBs71EKL42nL4F0EFaxvbZziwUz73WS45uDYKEpdA@mail.gmail.com>
- <AM0PR04MB4481518A4F89540B3ABA56A1885B0@AM0PR04MB4481.eurprd04.prod.outlook.com>
- <20191210070535.bvfzigolydhyz2ix@vireshk-i7>
- <CAJZ5v0hQeZDOiQC=UT+nEOc27E7Rn0O_7tLbeO1YMinCntDFCQ@mail.gmail.com>
- <DB3PR0402MB39164E6ACFEAE98961EB70E4F55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <CAJZ5v0hmaCPNX3O=Yvwh6zt13F9-sFApZn1Rnqx=_xzPde34Pw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hmaCPNX3O=Yvwh6zt13F9-sFApZn1Rnqx=_xzPde34Pw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 87ba2874-b8cf-4055-ca2d-08d77d4d43d0
-x-ms-traffictypediagnostic: DB3PR0402MB3657:|DB3PR0402MB3657:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB36573585935E10040287BB27F55B0@DB3PR0402MB3657.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02475B2A01
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(52314003)(13464003)(189003)(199004)(305945005)(71190400001)(71200400001)(4326008)(26005)(186003)(478600001)(966005)(45080400002)(33656002)(7696005)(6506007)(53546011)(5660300002)(52536014)(76116006)(8936002)(6916009)(81166006)(66476007)(64756008)(66556008)(66446008)(81156014)(66946007)(86362001)(44832011)(55016002)(2906002)(229853002)(54906003)(316002)(8676002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3657;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vKqFd8hYpR0Kzqclk9mkNfh0RGs18T9NeofvijtBUYNAp0qQNk0yUI388/h+ejwZssp5PGPinppRFuDn085B8tYMmPWEfAiLFcqGvxaW/u338ceNISd3fbH9haMBIyH99lY7wmZNTcpCBaohJzgmtJP9lzdM3tG408h919EMx34Il4wTx8WfBpMtySE9uJc6MHPCXtdjy6eiIH5sJDu6QGaYmGQRJxJyYSz0YngYr8wDBWaE8utWkAUPTOmVoBif5SMmot72Dg/WInkkVAaASH7FCBSrb3FQZBWh7UQRmvesCl/hQTsgafHkRM8ok6yManGdaZzrHi2mHs5WZ1CxkPHPeqlIz7M4pxvnZ5K9YY/gq8iMwWSYCpkBeRsLOCcjxBeKtUQOOqHqXbmkWlTGC7Vchh4lW13lg/TQuZ5ysiwAGdXmg+P3ZdkVn47WKiBvMBfTkrqKGJ3CTYZnMpqK6Jiq21mLQkYhaSlNxUSasvIpDMESfWUUz65eqpIbv63SSLJ3cEXsNR3f0Pv3H4UqOw==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+Date:   Tue, 10 Dec 2019 09:50:33 +0100
+Message-ID: <40413247.HltoIgKm8r@kreacher>
+In-Reply-To: <DB3PR0402MB3916781D19ECB96C530B410DF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com> <CAJZ5v0hmaCPNX3O=Yvwh6zt13F9-sFApZn1Rnqx=_xzPde34Pw@mail.gmail.com> <DB3PR0402MB3916781D19ECB96C530B410DF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87ba2874-b8cf-4055-ca2d-08d77d4d43d0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2019 08:45:09.8885
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aWYBOrEG4T28nPUHRRlix4OZ1+e0iIbWg15Zl9q2lQvULRlLxHzCsmwUQxz8dYal6CtxXlA/P6AcY8/RxxprRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3657
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmFmYWVsIEouIFd5c29j
-a2kgPHJhZmFlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBEZWNlbWJlciAxMCwgMjAx
-OSA0OjM4IFBNDQo+IFRvOiBBbnNvbiBIdWFuZyA8YW5zb24uaHVhbmdAbnhwLmNvbT4NCj4gQ2M6
-IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz47IFZpcmVzaCBLdW1hcg0KPiA8
-dmlyZXNoLmt1bWFyQGxpbmFyby5vcmc+OyBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT47IFJh
-ZmFlbCBKLg0KPiBXeXNvY2tpIDxyandAcmp3eXNvY2tpLm5ldD47IEphY2t5IEJhaSA8cGluZy5i
-YWlAbnhwLmNvbT47IGxpbnV4LQ0KPiBwbUB2Z2VyLmtlcm5lbC5vcmc7IFZpbmNlbnQgR3VpdHRv
-dCA8dmluY2VudC5ndWl0dG90QGxpbmFyby5vcmc+OyBQZXRlcg0KPiBaaWpsc3RyYSA8cGV0ZXJ6
-QGluZnJhZGVhZC5vcmc+OyBQYXVsIE1jS2VubmV5DQo+IDxwYXVsbWNrQGxpbnV4LnZuZXQuaWJt
-LmNvbT4NCj4gU3ViamVjdDogUmU6IEFib3V0IENQVSBob3QtcGx1ZyBzdHJlc3MgdGVzdCBmYWls
-ZWQgaW4gY3B1ZnJlcSBkcml2ZXINCj4gDQo+IE9uIFR1ZSwgRGVjIDEwLCAyMDE5IGF0IDk6Mjkg
-QU0gQW5zb24gSHVhbmcgPGFuc29uLmh1YW5nQG54cC5jb20+DQo+IHdyb3RlOg0KPiA+DQo+ID4N
-Cj4gPg0KPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+IEZyb206IFJhZmFl
-bCBKLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz4NCj4gPiA+IFNlbnQ6IFR1ZXNkYXksIERl
-Y2VtYmVyIDEwLCAyMDE5IDQ6MjIgUE0NCj4gPiA+IFRvOiBWaXJlc2ggS3VtYXIgPHZpcmVzaC5r
-dW1hckBsaW5hcm8ub3JnPg0KPiA+ID4gQ2M6IFBlbmcgRmFuIDxwZW5nLmZhbkBueHAuY29tPjsg
-UmFmYWVsIEouIFd5c29ja2kNCj4gPiA+IDxyYWZhZWxAa2VybmVsLm9yZz47IEFuc29uIEh1YW5n
-IDxhbnNvbi5odWFuZ0BueHAuY29tPjsgUmFmYWVsIEouDQo+ID4gPiBXeXNvY2tpIDxyandAcmp3
-eXNvY2tpLm5ldD47IEphY2t5IEJhaSA8cGluZy5iYWlAbnhwLmNvbT47IGxpbnV4LQ0KPiA+ID4g
-cG1Admdlci5rZXJuZWwub3JnOyBWaW5jZW50IEd1aXR0b3QgPHZpbmNlbnQuZ3VpdHRvdEBsaW5h
-cm8ub3JnPjsNCj4gPiA+IFBldGVyIFppamxzdHJhIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz47IFBh
-dWwgTWNLZW5uZXkNCj4gPiA+IDxwYXVsbWNrQGxpbnV4LnZuZXQuaWJtLmNvbT4NCj4gPiA+IFN1
-YmplY3Q6IFJlOiBBYm91dCBDUFUgaG90LXBsdWcgc3RyZXNzIHRlc3QgZmFpbGVkIGluIGNwdWZy
-ZXEgZHJpdmVyDQo+ID4gPg0KPiA+ID4gT24gVHVlLCBEZWMgMTAsIDIwMTkgYXQgODowNSBBTSBW
-aXJlc2ggS3VtYXINCj4gPiA+IDx2aXJlc2gua3VtYXJAbGluYXJvLm9yZz4NCj4gPiA+IHdyb3Rl
-Og0KPiA+ID4gPg0KPiA+ID4gPiArZmV3IG1vcmUgZ3V5cw0KPiA+ID4gPg0KPiA+ID4gPiBPbiAx
-MC0xMi0xOSwgMDU6NTMsIFBlbmcgRmFuIHdyb3RlOg0KPiA+ID4gPiA+IEJ1dCBwZXINCj4gPiA+
-ID4gPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9
-aHR0cHMlM0ElMkYlDQo+ID4gPiA+ID4gMkZlbA0KPiA+ID4gPiA+IGl4aXIuYm9vdGxpbi5jb20l
-MkZsaW51eCUyRnY1LjUtDQo+ID4gPiByYzElMkZzb3VyY2UlMkZrZXJuZWwlMkZzY2hlZCUyRnNj
-aGUNCj4gPiA+ID4gPg0KPiA+ID4NCj4gZC5oJTIzTDIyOTMmYW1wO2RhdGE9MDIlN0MwMSU3Q2Fu
-c29uLmh1YW5nJTQwbnhwLmNvbSU3QzZmNDQ5MDANCj4gPiA+IGJlMzQwNA0KPiA+ID4gPiA+DQo+
-ID4gPg0KPiBlN2QzNTU3MDhkNzdkNGExNmZhJTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMz
-MDE2MzUlN0MwJTdDMCUNCj4gPiA+IDdDNjM3DQo+ID4gPiA+ID4NCj4gPiA+DQo+IDExNTYyOTQ3
-NTQ1NjMyOSZhbXA7c2RhdGE9WFhod3Z1VE9CYjNUTG1lcndrcjF6S2JhV05BOHhBJTJCbA0KPiA+
-ID4gVyUyRmF3MzENCj4gPiA+ID4gPiAwQVljTSUzRCZhbXA7cmVzZXJ2ZWQ9MA0KPiA+ID4gPiA+
-IGNwdV9vZihycSkgYW5kIHNtcF9wcm9jZXNzb3JfaWQoKSBpcyBwb3NzaWJsZSB0byBub3QgdGhl
-IHNhbWUsDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBXaGVuIGNwdV9vZihycSkgaXMgbm90IGVxdWFs
-IHRvIHNtcF9wcm9jZXNzb3JfaWQoKSwNCj4gPiA+ID4gPiBkYnNfdXBkYXRlX3V0aWxfaGFuZGxl
-ciB3aWxsIHVzZSBpcnFfd29ya19xdWV1ZSB0bw0KPiA+ID4gPiA+IHNtcF9wcm9jZXNzb3JfaWQo
-KSwgbm90IGNwdV9vZihycSkuIElzIHRoaXMgZXhwZWN0ZWQ/DQo+ID4gPiA+ID4gT3Igc2hvdWxk
-IHRoZSBpcnFfd29yayBiZSBxdWV1ZWQgdG8gY3B1X29mKHJxKT8NCj4gPiA+ID4NCj4gPiA+ID4g
-T2theSwgc29ycnkgZm9yIHRoZSBsb25nIHdlZWtlbmQgd2hlcmUgSSBjb3VsZG4ndCBnZXQgdGlt
-ZSB0byByZXBseSBhdA0KPiBhbGwuDQo+ID4gPg0KPiA+ID4gTm8gd29ycmllcy4gOi0pDQo+ID4g
-Pg0KPiA+ID4gPiBGaXJzdCBvZiBhbGwsIGxldHMgdHJ5IHRvIHVuZGVyc3RhbmQgZHZmc19wb3Nz
-aWJsZV9mcm9tX2FueV9jcHUuDQo+ID4gPiA+DQo+ID4gPiA+IFdobyBjYW4gdXBkYXRlIHRoZSBm
-cmVxdWVuY3kgb2YgYSBDUFUgPyBGb3IgbWFueQ0KPiA+ID4gPiBhcmNoaXRlY3R1cmVzL3BsYXRm
-b3JtcyB0aGUgZXZlbnR1YWwgY29kZSB0aGF0IHdyaXRlcyB0byBzb21lDQo+ID4gPiA+IHJlZ2lz
-dGVyIHRvIGNoYW5nZSB0aGUgZnJlcXVlbmN5IHNob3VsZCBvbmx5IHJ1biBvbiB0aGUgbG9jYWwg
-Q1BVLA0KPiA+ID4gPiBhcyB0aGVzZSByZWdpc3RlcnMgYXJlIHBlci1jcHUgcmVnaXN0ZXJzIGFu
-ZCBub3Qgc29tZXRoaW5nIHNoYXJlZA0KPiBiZXR3ZWVuIENQVXMuDQo+ID4gPiA+DQo+ID4gPiA+
-IEJ1dCBmb3IgdGhlIEFSTSBhcmNoaXRlY3R1cmUsIHdlIGhhdmUgYSBQTEwgYW5kIHRoZW4gc29t
-ZSBtb3JlDQo+ID4gPiA+IHJlZ2lzdGVycyB0byBwbGF5IHdpdGggdGhlIGNsayBwcm92aWRlZCB0
-byB0aGUgQ1BVIGJsb2NrcyBhbmQNCj4gPiA+ID4gdGhlc2UgcmVnaXN0ZXJzICh3aGljaCBhcmUg
-dXBkYXRlZCBhcyBhIHJlc3VsdCBvZiBjbGtfc2V0X3JhdGUoKSkNCj4gPiA+ID4gYXJlIHBhcnQg
-b2YgYQ0KPiA+ID4gYmxvY2sgb3V0c2lkZSBvZiB0aGUgQ1BVIGJsb2Nrcy4NCj4gPiA+ID4gQW5k
-IHNvIGFueSBDUFUgKGV2ZW4gaWYgaXQgaXMgbm90IHBhcnQgb2YgdGhlIHNhbWUgY3B1ZnJlcSBw
-b2xpY3kpDQo+ID4gPiA+IGNhbiB1cGRhdGUgaXQuIFNldHRpbmcgdGhpcyBmbGFnIGFsbG93cyB0
-aGF0IGFuZCBldmVudHVhbGx5IHdlIG1heQ0KPiA+ID4gPiBlbmQgdXAgdXBkYXRpbmcgdGhlIGZy
-ZXF1ZW5jeSBzb29uZXIsIGluc3RlYWQgb2YgbGF0ZXIgKHdoaWNoIG1heQ0KPiA+ID4gPiBiZSBs
-ZXNzIGVmZmVjdGl2ZSkuIFRoYXQgd2FzIHRoZSBpZGVhIG9mIHRoZSByZW1vdGUtd2FrZXVwIHNl
-cmllcy4NCj4gPiA+ID4gVGhpcyBzdHVmZiBpcyBhYnNvbHV0ZWx5IGNvcnJlY3QgYW5kIHNvIGNw
-dWZyZXEtZHQgZG9lcyBpdCBmb3IgZXZlcnlvbmUuDQo+ID4gPiA+DQo+ID4gPiA+IFRoaXMgYWxz
-byBtZWFucyB0aGF0IHRoZSBub3JtYWwgd29yayBhbmQgaXJxLXdvcmsgYm90aCBjYW4gcnVuIG9u
-DQo+ID4gPiA+IGFueSBDUFUgZm9yIHlvdXIgcGxhdGZvcm0gYW5kIGl0IHNob3VsZCBiZSBva2F5
-IHRvIGRvIHRoYXQuDQo+ID4gPg0KPiA+ID4gQW5kIGl0IHRoZSBmYWlsaW5nIGNhc2UgYWxsIG9m
-IHRoZSBDUFVzIGluIHRoZSBzeXN0ZW0gYXJlIGluIHRoZQ0KPiA+ID4gc2FtZSBwb2xpY3kgYW55
-d2F5LCBzbyBkdmZzX3Bvc3NpYmxlX2Zyb21fYW55X2NwdSBpcyBhIHJlZCBoZXJyaW5nLg0KPiA+
-ID4NCj4gPiA+ID4gTm93LCB3ZSBoYXZlIG5lY2Vzc2FyeSBtZWFzdXJlcyBpbiBwbGFjZSB0byBt
-YWtlIHN1cmUgdGhhdCBhZnRlcg0KPiA+ID4gPiBzdG9wcGluZyBhbmQgYmVmb3JlIHN0YXJ0aW5n
-IGEgZ292ZXJub3IsIHRoZSBzY2hlZHVsZXIgaG9va3MgdG8NCj4gPiA+ID4gc2F2ZSB0aGUgY3B1
-ZnJlcSBnb3Zlcm5vciBwb2ludGVyIGFuZCB1cGRhdGVzIHRvIHBvbGljeS0+Y3B1cyBhcmUNCj4g
-PiA+ID4gbWFkZSBwcm9wZXJseSwgdG8gbWFrZSBzdXJlIHRoYXQgd2UgbmV2ZXIgZXZlciBzY2hl
-ZHVsZSBhIHdvcmsgb3INCj4gPiA+ID4gaXJxLXdvcmsgb24gYSBDUFUgd2hpY2ggaXMgb2ZmbGlu
-ZS4gTm93IGl0IGxvb2tzIGxpa2UgdGhpcyBpc24ndA0KPiA+ID4gPiB3b3JraW5nIGFzIGV4cGVj
-dGVkIGFuZCB3ZSBuZWVkIHRvIGZpbmQgd2hhdCBleGFjdGx5IGlzIGJyb2tlbiBoZXJlLg0KPiA+
-ID4gPg0KPiA+ID4gPiBBbmQgeWVzLCBJIGRpZCB0aGUgdGVzdGluZyBvbiBIaWtleSA2MjAsIGFu
-IG9jdGEtY29yZSBBUk0gcGxhdGZvcm0NCj4gPiA+ID4gd2hpY2ggaGFzIGEgc2luZ2xlIGNwdWZy
-ZXEgcG9saWN5IHdoaWNoIGhhcyBhbGwgdGhlIDggQ1BVcy4gQW5kDQo+ID4gPiA+IHllcywgSSBh
-bSB1c2luZyBjcHVmcmVxLWR0IG9ubHkgYW5kIEkgd2Fzbid0IGFibGUgdG8gcmVwcm9kdWNlIHRo
-ZQ0KPiA+ID4gPiBwcm9ibGVtIHdpdGggbWFpbmxpbmUga2VybmVsIGFzIEkgZXhwbGFpbmVkIGVh
-cmxpZXIuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZSBwcm9ibGVtIGlzIHNvbWV3aGVyZSBiZXR3ZWVu
-IHRoZSBzY2hlZHVsZXIncyBnb3Zlcm5vciBob29rDQo+ID4gPiBydW5uaW5nDQo+ID4gPiA+IG9y
-IHF1ZXVpbmcgd29yayBvbiBhIENQVSB3aGljaCBpcyBpbiB0aGUgbWlkZGxlIG9mIGdldHRpbmcN
-Cj4gPiA+ID4gb2ZmbGluZS9vbmxpbmUgYW5kIHRoZXJlIGlzIHNvbWUgcmFjZSBhcm91bmQgdGhh
-dC4gVGhlIHByb2JsZW0NCj4gPiA+ID4gaGVuY2UgbWF5IG5vdCBiZSByZWxhdGVkIHRvIGp1c3Qg
-Y3B1ZnJlcSwgYnV0IGEgd2lkZXIgdmFyaWV0eSBvZiBjbGllbnRzLg0KPiA+ID4NCj4gPiA+IFRo
-ZSBwcm9ibGVtIGlzIHRoYXQgYSBDUFUgaXMgcnVubmluZyBhIGdvdmVybm9yIGhvb2sgd2hpY2gg
-aXQNCj4gPiA+IHNob3VsZG4ndCBiZSBydW5uaW5nIGF0IGFsbC4NCj4gPiA+DQo+ID4gPiBUaGUg
-b2JzZXJ2YXRpb24gdGhhdCBkdmZzX3Bvc3NpYmxlX2Zyb21fYW55X2NwdSBtYWtlcyBhIGRpZmZl
-cmVuY2UNCj4gPiA+IG9ubHkgbWVhbnMgdGhhdCB0aGUgZ292ZXJub3IgaG9vayBpcyBydW5uaW5n
-IG9uIGEgQ1BVIHRoYXQgaXMgbm90DQo+ID4gPiBwcmVzZW50IGluIHRoZQ0KPiA+ID4gcG9saWN5
-LT5jcHVzIG1hc2suICBPbiB0aGUgcGxhdGZvcm0ocykgaW4gcXVlc3Rpb24gdGhpcyBjYW5ub3QN
-Cj4gPiA+IHBvbGljeS0+aGFwcGVuIGFzDQo+ID4gPiBsb25nIGFzIFJDVSB3b3JrcyBhcyBleHBl
-Y3RlZC4NCj4gPg0KPiA+IElmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHksIHRoZSBnb3Zlcm5vciBo
-b29rIE9OTFkgYmUgY2xlYXIgb24gdGhlIENQVQ0KPiA+IGJlaW5nIG9mZmxpbmUgYW5kIGFmdGVy
-IGdvdmVybm9yIHN0b3BwZWQsIGJ1dCB0aGUgQ1BVIGJlaW5nIG9mZmxpbmUNCj4gPiBjb3VsZCBz
-dGlsbCBydW4gaW50byBiZWxvdyBmdW5jdGlvbiB0byBoZWxwIG90aGVyIENQVSB1cGRhdGUgdGhl
-IHV0aWwsDQo+ID4gYW5kIGl0IE9OTFkgY2hlY2tzIHRoZSBjcHVfb2YocnEpJ3MgZ292ZXJub3Ig
-aG9vayB3aGljaCBpcyB2YWxpZCBhcyB0aGF0DQo+IENQVSBpcyBvbmxpbmUuDQo+ID4NCj4gPiBT
-byB0aGUgcXVlc3Rpb24gaXMgaG93IHRvIGF2b2lkIHRoZSBDUFUgYmVpbmcgb2ZmbGluZSBhbmQg
-YWxyZWFkeQ0KPiA+IGZpbmlzaCB0aGUgZ292ZXJub3Igc3RvcCBmbG93IGJlIHNjaGVkdWxlZCB0
-byBoZWxwIG90aGVyIENQVSB1cGRhdGUgdGhlDQo+IHV0aWwuDQo+ID4NCj4gPiAgc3RhdGljIGlu
-bGluZSB2b2lkIGNwdWZyZXFfdXBkYXRlX3V0aWwoc3RydWN0IHJxICpycSwgdW5zaWduZWQgaW50
-DQo+ID4gZmxhZ3MpICB7DQo+ID4gICAgICAgICAgc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgKmRh
-dGE7DQo+ID4NCj4gPiAgICAgICAgICBkYXRhID0NCj4gcmN1X2RlcmVmZXJlbmNlX3NjaGVkKCpw
-ZXJfY3B1X3B0cigmY3B1ZnJlcV91cGRhdGVfdXRpbF9kYXRhLA0KPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNwdV9vZihycSkpKTsNCj4gPiAg
-ICAgICAgICBpZiAoZGF0YSkNCj4gPiAgICAgICAgICAgICAgICAgIGRhdGEtPmZ1bmMoZGF0YSwg
-cnFfY2xvY2socnEpLCBmbGFncyk7ICB9DQo+IA0KPiBPSywgc28gdGhhdCdzIHdoZXJlIHRoZSBw
-cm9ibGVtIGlzLCBnb29kIGNhdGNoIQ0KPiANCj4gU28gd2hhdCBoYXBwZW5zIGlzIHRoYXQgYSBD
-UFUgZ29pbmcgb2ZmbGluZSBydW5zIHNvbWUgc2NoZWR1bGVyIGNvZGUgdGhhdA0KPiBpbnZva2Vz
-IGNwdWZyZXFfdXBkYXRlX3V0aWwoKS4gIEluY2lkZW50YWxseSwgaXQgaXMgbm90IHRoZSBjcHVf
-b2YocnEpLCBidXQgdGhhdA0KPiBDUFUgaXMgc3RpbGwgb25saW5lLCBzbyB0aGUgY2FsbGJhY2sg
-aXMgaW52b2tlZCBhbmQgdGhlbiBwb2xpY3ktPmNwdXMgdGVzdCBpcw0KPiBieXBhc3NlZCBiZWNh
-dXNlIG9mIGR2ZnNfcG9zc2libGVfZnJvbV9hbnlfY3B1Lg0KDQpJZiB0aGlzIGlzIHRoZSBpc3N1
-ZSwgYWRkIGFub3RoZXIgY2hlY2sgaGVyZSBmb3IgdGhlIGN1cnJlbnQgQ1BVJ3MgZ292ZXJub3Ig
-aG9vaz8NCk9yIGFueSBvdGhlciBiZXR0ZXIgcGxhY2UgdG8gbWFrZSBzdXJlIHRoZSBDUFUgYmVp
-bmcgb2ZmbGluZSBOT1QgdG8gYmUgcXVldWVkIHRvIGlycSB3b3JrPw0KDQpBbnNvbg0KDQo=
+On Tuesday, December 10, 2019 9:45:09 AM CET Anson Huang wrote:
+> 
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Tuesday, December 10, 2019 4:38 PM
+> > To: Anson Huang <anson.huang@nxp.com>
+> > Cc: Rafael J. Wysocki <rafael@kernel.org>; Viresh Kumar
+> > <viresh.kumar@linaro.org>; Peng Fan <peng.fan@nxp.com>; Rafael J.
+> > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>; linux-
+> > pm@vger.kernel.org; Vincent Guittot <vincent.guittot@linaro.org>; Peter
+> > Zijlstra <peterz@infradead.org>; Paul McKenney
+> > <paulmck@linux.vnet.ibm.com>
+> > Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+> > 
+> > On Tue, Dec 10, 2019 at 9:29 AM Anson Huang <anson.huang@nxp.com>
+> > wrote:
+> > >
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > > Sent: Tuesday, December 10, 2019 4:22 PM
+> > > > To: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > Cc: Peng Fan <peng.fan@nxp.com>; Rafael J. Wysocki
+> > > > <rafael@kernel.org>; Anson Huang <anson.huang@nxp.com>; Rafael J.
+> > > > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>; linux-
+> > > > pm@vger.kernel.org; Vincent Guittot <vincent.guittot@linaro.org>;
+> > > > Peter Zijlstra <peterz@infradead.org>; Paul McKenney
+> > > > <paulmck@linux.vnet.ibm.com>
+> > > > Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
+> > > >
+> > > > On Tue, Dec 10, 2019 at 8:05 AM Viresh Kumar
+> > > > <viresh.kumar@linaro.org>
+> > > > wrote:
+> > > > >
+> > > > > +few more guys
+> > > > >
+> > > > > On 10-12-19, 05:53, Peng Fan wrote:
+> > > > > > But per
+> > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%
+> > > > > > 2Fel
+> > > > > > ixir.bootlin.com%2Flinux%2Fv5.5-
+> > > > rc1%2Fsource%2Fkernel%2Fsched%2Fsche
+> > > > > >
+> > > >
+> > d.h%23L2293&amp;data=02%7C01%7Canson.huang%40nxp.com%7C6f44900
+> > > > be3404
+> > > > > >
+> > > >
+> > e7d355708d77d4a16fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
+> > > > 7C637
+> > > > > >
+> > > >
+> > 115629475456329&amp;sdata=XXhwvuTOBb3TLmerwkr1zKbaWNA8xA%2Bl
+> > > > W%2Faw31
+> > > > > > 0AYcM%3D&amp;reserved=0
+> > > > > > cpu_of(rq) and smp_processor_id() is possible to not the same,
+> > > > > >
+> > > > > > When cpu_of(rq) is not equal to smp_processor_id(),
+> > > > > > dbs_update_util_handler will use irq_work_queue to
+> > > > > > smp_processor_id(), not cpu_of(rq). Is this expected?
+> > > > > > Or should the irq_work be queued to cpu_of(rq)?
+> > > > >
+> > > > > Okay, sorry for the long weekend where I couldn't get time to reply at
+> > all.
+> > > >
+> > > > No worries. :-)
+> > > >
+> > > > > First of all, lets try to understand dvfs_possible_from_any_cpu.
+> > > > >
+> > > > > Who can update the frequency of a CPU ? For many
+> > > > > architectures/platforms the eventual code that writes to some
+> > > > > register to change the frequency should only run on the local CPU,
+> > > > > as these registers are per-cpu registers and not something shared
+> > between CPUs.
+> > > > >
+> > > > > But for the ARM architecture, we have a PLL and then some more
+> > > > > registers to play with the clk provided to the CPU blocks and
+> > > > > these registers (which are updated as a result of clk_set_rate())
+> > > > > are part of a
+> > > > block outside of the CPU blocks.
+> > > > > And so any CPU (even if it is not part of the same cpufreq policy)
+> > > > > can update it. Setting this flag allows that and eventually we may
+> > > > > end up updating the frequency sooner, instead of later (which may
+> > > > > be less effective). That was the idea of the remote-wakeup series.
+> > > > > This stuff is absolutely correct and so cpufreq-dt does it for everyone.
+> > > > >
+> > > > > This also means that the normal work and irq-work both can run on
+> > > > > any CPU for your platform and it should be okay to do that.
+> > > >
+> > > > And it the failing case all of the CPUs in the system are in the
+> > > > same policy anyway, so dvfs_possible_from_any_cpu is a red herring.
+> > > >
+> > > > > Now, we have necessary measures in place to make sure that after
+> > > > > stopping and before starting a governor, the scheduler hooks to
+> > > > > save the cpufreq governor pointer and updates to policy->cpus are
+> > > > > made properly, to make sure that we never ever schedule a work or
+> > > > > irq-work on a CPU which is offline. Now it looks like this isn't
+> > > > > working as expected and we need to find what exactly is broken here.
+> > > > >
+> > > > > And yes, I did the testing on Hikey 620, an octa-core ARM platform
+> > > > > which has a single cpufreq policy which has all the 8 CPUs. And
+> > > > > yes, I am using cpufreq-dt only and I wasn't able to reproduce the
+> > > > > problem with mainline kernel as I explained earlier.
+> > > > >
+> > > > > The problem is somewhere between the scheduler's governor hook
+> > > > running
+> > > > > or queuing work on a CPU which is in the middle of getting
+> > > > > offline/online and there is some race around that. The problem
+> > > > > hence may not be related to just cpufreq, but a wider variety of clients.
+> > > >
+> > > > The problem is that a CPU is running a governor hook which it
+> > > > shouldn't be running at all.
+> > > >
+> > > > The observation that dvfs_possible_from_any_cpu makes a difference
+> > > > only means that the governor hook is running on a CPU that is not
+> > > > present in the
+> > > > policy->cpus mask.  On the platform(s) in question this cannot
+> > > > policy->happen as
+> > > > long as RCU works as expected.
+> > >
+> > > If I understand correctly, the governor hook ONLY be clear on the CPU
+> > > being offline and after governor stopped, but the CPU being offline
+> > > could still run into below function to help other CPU update the util,
+> > > and it ONLY checks the cpu_of(rq)'s governor hook which is valid as that
+> > CPU is online.
+> > >
+> > > So the question is how to avoid the CPU being offline and already
+> > > finish the governor stop flow be scheduled to help other CPU update the
+> > util.
+> > >
+> > >  static inline void cpufreq_update_util(struct rq *rq, unsigned int
+> > > flags)  {
+> > >          struct update_util_data *data;
+> > >
+> > >          data =
+> > rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
+> > >                                                    cpu_of(rq)));
+> > >          if (data)
+> > >                  data->func(data, rq_clock(rq), flags);  }
+> > 
+> > OK, so that's where the problem is, good catch!
+> > 
+> > So what happens is that a CPU going offline runs some scheduler code that
+> > invokes cpufreq_update_util().  Incidentally, it is not the cpu_of(rq), but that
+> > CPU is still online, so the callback is invoked and then policy->cpus test is
+> > bypassed because of dvfs_possible_from_any_cpu.
+> 
+> If this is the issue, add another check here for the current CPU's governor hook?
+> Or any other better place to make sure the CPU being offline NOT to be queued to irq work?
+
+Generally, yes.
+
+Something like the patch below should help if I'm not mistaken:
+
+---
+ include/linux/cpufreq.h |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+Index: linux-pm/include/linux/cpufreq.h
+===================================================================
+--- linux-pm.orig/include/linux/cpufreq.h
++++ linux-pm/include/linux/cpufreq.h
+@@ -599,11 +599,13 @@ static inline bool cpufreq_this_cpu_can_
+ {
+ 	/*
+ 	 * Allow remote callbacks if:
+-	 * - dvfs_possible_from_any_cpu flag is set
+ 	 * - the local and remote CPUs share cpufreq policy
++	 * - dvfs_possible_from_any_cpu flag is set and the CPU running the
++	 *   code is not going offline.
+ 	 */
+-	return policy->dvfs_possible_from_any_cpu ||
+-		cpumask_test_cpu(smp_processor_id(), policy->cpus);
++	return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
++		(policy->dvfs_possible_from_any_cpu &&
++		 !cpumask_test_cpu(smp_processor_id(), policy->related_cpus));
+ }
+ 
+ /*********************************************************************
+
+
+
