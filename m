@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CFF118DF9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 17:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72656118DFB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 17:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbfLJQmO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 11:42:14 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:32800 "EHLO
+        id S1727766AbfLJQmQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 11:42:16 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41780 "EHLO
         mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727756AbfLJQmN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 11:42:13 -0500
-Received: by mail-pg1-f195.google.com with SMTP id 6so9173608pgk.0;
-        Tue, 10 Dec 2019 08:42:13 -0800 (PST)
+        with ESMTP id S1727764AbfLJQmP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 11:42:15 -0500
+Received: by mail-pg1-f195.google.com with SMTP id x8so9159249pgk.8;
+        Tue, 10 Dec 2019 08:42:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KrHHV8WagrQw//LLkgB8ANSCBK2Q9bQ9Pa7bMN8q10Q=;
-        b=sNq8+BmRFRIpUJlu7Y61TqM613g3/K9Xa44jR5RpgWtbW+U/9hu4ydJ1NmwezZK1E1
-         U+LVihdsXKe5IOaSX1+0wk2Do8WlQlspWMnh6jPkf6ThBlk0+i0eCBBVkYLH0gX+6Ess
-         ZpoY2fopIkshVVjNnl9BGufqrK9SWARJLURBXxdsWgO8gQ3w2edeCjf7+EOffytsFIZC
-         s6xa94kxIETdANklRB/MHmyUYL77K0re0+pDsnsYzRAKrQzbFNzyotODOi+OZ0HvRUJN
-         4RkA+gsSHnxev0R2feRBCbtPBaOwAYBAia4tDK5Txi+0W3EOYyhP3L1FNowZQIltwiT1
-         TWCA==
+        bh=6kNjFdHXf8jZm7sjagZ2hATQl5PtTR6d1QOCcaqLh2I=;
+        b=mOIiF9oPquNnCy4V6LIjRZvWTVS5vV33CcpIUt8APDh+1oFKSKWx3dE3e8OM6H0gYe
+         FjKc0F319QN/um7fHtsnuO4wgEM7zsILukEF4PylaQh+P+eQK8MN0y5QTtVaU9avXrlA
+         5Q4rCrcXPs+825DlJNMvjz11hHhYUt7kTpbD9h8Rx5uJj7ii/mDClvOlC3KaT064oTAY
+         Npp+ghUgG+pStWpPeYLs7LlI4Abf3acFZY+4ZaiRpWhrDwegweNEDAJkGnbc9yB3hv3f
+         pSWV6qrMfscpVZhdZslfjP2aACSlo7/JFr1cUMqf9vo5sdniamNDPrf2+cN2pErkBgzO
+         t8Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KrHHV8WagrQw//LLkgB8ANSCBK2Q9bQ9Pa7bMN8q10Q=;
-        b=NuEs0C8ljkL6I/ulnVIvXkAgIggB+OsnSz+jhQGAe5SUpNx/VUIyG4xWgPyN04GKNi
-         UfljwTODzXcNPgvQG/+LZIANrTW2+hcbWdSEzAwkM0s5XdN8ZHvi6WJ84+XJuVYn+pi5
-         ETbmweCq/OiNs2Q5L7nKAfDSdIcoaf/F5mjI5Tk1A0YpT66ctUkxcZ1HYJRVAnOklV5H
-         P9b2Ulmiitf9YyVjvIr4DoqwOMWYGP8tVWw0pGSsnHCin2VinKUv9dhidbevDsV5jb+V
-         EGjoz7QSqLjXeiXaaSS21IUVgmrUBI8XVWVYGpF6i6DmSHTCh8AB1W+ys1XOAP3a4/iQ
-         6UXQ==
-X-Gm-Message-State: APjAAAXZaTli3WckMbBvy6wN0Fa53HcElfvrJRtEkKd9HQ6JSwD0pJ8L
-        epoP7ni+DW3KrhmJoPhX/VE=
-X-Google-Smtp-Source: APXvYqxyi9b/k2Vg/oO5+FvVdGeeUDa+i4WKHQaorgFlG57MNypLssR4bNffFqPzHTASi7VIfmlm9A==
-X-Received: by 2002:a63:fa04:: with SMTP id y4mr25730627pgh.413.1575996133176;
-        Tue, 10 Dec 2019 08:42:13 -0800 (PST)
+        bh=6kNjFdHXf8jZm7sjagZ2hATQl5PtTR6d1QOCcaqLh2I=;
+        b=ZAdtyQS6WCuVvJM157QO+0HhohivI556F3S15xWijp3uODlbncZUw7kIiQXDcg990o
+         AZGlfw9x++eldtfNGpqdFbdEokG01ZZ5Ibw+BiPQbWIeNEdB7CFMsdHFHneQHjEBgPJJ
+         KaMDX23rjYGJrppLEhSspmVPBdo9R8U663pHCvY16R/52xqnnNsFz9Uy/dtwbQB9j6Me
+         NqE3RXRLYXKfuf7L07Hap8jlFQQg/i5mOPvjTRAM+duNBGemYd+iHn1McqjL0KXE59qU
+         2FO1YQItrvHtYkZZjyqWKUsMBBDEeIxM2dZRIXjwjv5DgZkKMd7LEsKfOrBBUFm0eOpf
+         ynyA==
+X-Gm-Message-State: APjAAAWDo6AgFZAx3Y6/9uRIHzNLgWj7Lhu+zPKQZZGx00kVdJ9G8/kL
+        zp1R3/PI2MYH/VP2a4BlKTM=
+X-Google-Smtp-Source: APXvYqw7kNA6VaT0g+YqyUQMqtJyNciwqVJCBpHydxtARq7ao18awyG9LMIIEfCeFLNN5E9ywC0sdA==
+X-Received: by 2002:a63:3089:: with SMTP id w131mr26268693pgw.453.1575996134840;
+        Tue, 10 Dec 2019 08:42:14 -0800 (PST)
 Received: from localhost.localdomain (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
-        by smtp.gmail.com with ESMTPSA id j38sm4034634pgj.27.2019.12.10.08.42.11
+        by smtp.gmail.com with ESMTPSA id j38sm4034634pgj.27.2019.12.10.08.42.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 08:42:11 -0800 (PST)
+        Tue, 10 Dec 2019 08:42:13 -0800 (PST)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Angus Ainslie <angus@akkea.ca>, linux-imx@nxp.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 03/12] thermal: qoriq: Add local struct qoriq_sensor pointer
-Date:   Tue, 10 Dec 2019 08:41:44 -0800
-Message-Id: <20191210164153.10463-4-andrew.smirnov@gmail.com>
+Subject: [PATCH v8 04/12] thermal: qoriq: Embed per-sensor data into struct qoriq_tmu_data
+Date:   Tue, 10 Dec 2019 08:41:45 -0800
+Message-Id: <20191210164153.10463-5-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20191210164153.10463-1-andrew.smirnov@gmail.com>
 References: <20191210164153.10463-1-andrew.smirnov@gmail.com>
@@ -66,8 +66,10 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add local struct qoriq_sensor pointer in qoriq_tmu_register_tmu_zone()
-for brevity.
+Embed per-sensor data into struct qoriq_tmu_data so we can drop the
+code allocating it. This also allows us to get rid of per-sensor back
+reference to struct qoriq_tmu_data since now its address can be
+calculated using container_of().
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Chris Healy <cphealy@gmail.com>
@@ -80,41 +82,73 @@ Cc: linux-imx@nxp.com
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/thermal/qoriq_thermal.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/thermal/qoriq_thermal.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 2f2f5ffa8f26..61733d820e1b 100644
+index 61733d820e1b..9886daf8ac97 100644
 --- a/drivers/thermal/qoriq_thermal.c
 +++ b/drivers/thermal/qoriq_thermal.c
-@@ -162,18 +162,22 @@ static int qoriq_tmu_register_tmu_zone(struct platform_device *pdev)
+@@ -104,13 +104,10 @@ struct qoriq_tmu_regs_v2 {
+ 	u32 ttrcr[4];	/* Temperature Range Control Register */
+ };
+ 
+-struct qoriq_tmu_data;
+-
+ /*
+  * Thermal zone data
+  */
+ struct qoriq_sensor {
+-	struct qoriq_tmu_data		*qdata;
+ 	int				id;
+ };
+ 
+@@ -120,9 +117,14 @@ struct qoriq_tmu_data {
+ 	struct qoriq_tmu_regs_v2 __iomem *regs_v2;
+ 	struct clk *clk;
+ 	bool little_endian;
+-	struct qoriq_sensor	*sensor[SITES_MAX];
++	struct qoriq_sensor	sensor[SITES_MAX];
+ };
+ 
++static struct qoriq_tmu_data *qoriq_sensor_to_data(struct qoriq_sensor *s)
++{
++	return container_of(s, struct qoriq_tmu_data, sensor[s->id]);
++}
++
+ static void tmu_write(struct qoriq_tmu_data *p, u32 val, void __iomem *addr)
+ {
+ 	if (p->little_endian)
+@@ -142,7 +144,7 @@ static u32 tmu_read(struct qoriq_tmu_data *p, void __iomem *addr)
+ static int tmu_get_temp(void *p, int *temp)
+ {
+ 	struct qoriq_sensor *qsensor = p;
+-	struct qoriq_tmu_data *qdata = qsensor->qdata;
++	struct qoriq_tmu_data *qdata = qoriq_sensor_to_data(qsensor);
+ 	u32 val;
+ 
+ 	val = tmu_read(qdata, &qdata->regs->site[qsensor->id].tritsr);
+@@ -162,19 +164,10 @@ static int qoriq_tmu_register_tmu_zone(struct platform_device *pdev)
  
  	for (id = 0; id < SITES_MAX; id++) {
  		struct thermal_zone_device *tzd;
-+		struct qoriq_sensor *sensor;
+-		struct qoriq_sensor *sensor;
++		struct qoriq_sensor *sensor = &qdata->sensor[id];
  		int ret;
  
--		qdata->sensor[id] = devm_kzalloc(&pdev->dev,
--				sizeof(struct qoriq_sensor), GFP_KERNEL);
-+		sensor = devm_kzalloc(&pdev->dev,
-+				      sizeof(struct qoriq_sensor),
-+				      GFP_KERNEL);
- 		if (!qdata->sensor[id])
- 			return -ENOMEM;
- 
--		qdata->sensor[id]->id = id;
--		qdata->sensor[id]->qdata = qdata;
-+		qdata->sensor[id] = sensor;
-+
-+		sensor->id = id;
-+		sensor->qdata = qdata;
+-		sensor = devm_kzalloc(&pdev->dev,
+-				      sizeof(struct qoriq_sensor),
+-				      GFP_KERNEL);
+-		if (!qdata->sensor[id])
+-			return -ENOMEM;
+-
+-		qdata->sensor[id] = sensor;
+-
+ 		sensor->id = id;
+-		sensor->qdata = qdata;
  
  		tzd = devm_thermal_zone_of_sensor_register(&pdev->dev, id,
--							   qdata->sensor[id],
-+							   sensor,
- 							   &tmu_tz_ops);
- 		ret = PTR_ERR_OR_ZERO(tzd);
- 		if (ret) {
+ 							   sensor,
 -- 
 2.21.0
 
