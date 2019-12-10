@@ -2,168 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D51D117D57
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 02:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CD0117DCF
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 03:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbfLJBs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Dec 2019 20:48:28 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:53865 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726637AbfLJBs1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Dec 2019 20:48:27 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191210014824epoutp02ac738b12ff40cf9dfedbae9d25d6cacc~e31vHpxPh2029420294epoutp02M
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 01:48:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191210014824epoutp02ac738b12ff40cf9dfedbae9d25d6cacc~e31vHpxPh2029420294epoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575942504;
-        bh=k7AI/Lr2qas6OzGrBYygZV3pRf4kGqEMg5Ib9WF0vSA=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Gf5MMXByDEkWTwXDWn1ybxIwWLxfeGevpI5k+vXs8otz2A0pfgRVIiOdJqyG5UxDL
-         CXcdpQa6+O4ygLifI2ZwZR3r8X8cZWqoq8LoVv/MZ3g+H4+Z7cn8iQCWWdKQ5jQH0x
-         py7RkPm1pKvQuitFhn8Hz86LFtZZYwUFZwGmrSkY=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191210014824epcas1p12e25b46c851a1f484ddc1ea0bbe00cf1~e31uz4jt41395913959epcas1p1o;
-        Tue, 10 Dec 2019 01:48:24 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47X2yZ2MHYzMqYkn; Tue, 10 Dec
-        2019 01:48:22 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        ED.71.57028.C59FEED5; Tue, 10 Dec 2019 10:48:12 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191210014812epcas1p28ba190c592a7a17efb59b17c0a060255~e31jMOl2S2756727567epcas1p2M;
-        Tue, 10 Dec 2019 01:48:12 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191210014812epsmtrp10257692d72b7427f91000afadd93138b~e31jLc9mr1565015650epsmtrp1K;
-        Tue, 10 Dec 2019 01:48:12 +0000 (GMT)
-X-AuditID: b6c32a35-50bff7000001dec4-c1-5deef95c8264
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.7C.10238.B59FEED5; Tue, 10 Dec 2019 10:48:11 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191210014811epsmtip1de99097e6676eceb4887da936929a30e~e31i_MbGR2302523025epsmtip1j;
-        Tue, 10 Dec 2019 01:48:11 +0000 (GMT)
-Subject: Re: [PATCH 3/4] PM / devfreq: Kconfig: add DEVFREQ_DELAYED_TIMER
- option
-To:     Kamil Konieczny <k.konieczny@samsung.com>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <4b1b94e9-890a-cce1-c33d-33864c7ed230@samsung.com>
-Date:   Tue, 10 Dec 2019 10:54:38 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726623AbfLJCfx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Dec 2019 21:35:53 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:41322 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726509AbfLJCfw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Dec 2019 21:35:52 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 47X3yP62Tzz5Y;
+        Tue, 10 Dec 2019 03:33:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1575945198; bh=28ZRq1FI2/sd4GBSEA17lEwHQUUzefEXEY1pCiKIzfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=neQUnqb8yNbGKLEtkX5q3ZEZQq6YSwQBVg61WDjvqiehVlijufpRomrZTn9LGIo5n
+         0XIDUwy/mP8019WfJT4YL2X7N7zJlGKpBk88KfOiWmyTuA2rlOK55NAZOpN0MxaZex
+         06Y3OLlSEr4JDVTUomCd0LlcmGeUEfEVC+3+Ec8Z2D7yKovFZaPcrU0UFP7ijexRiS
+         1S7SPa8RZ/a7GpRZ4EPehhP2cZHc0DbxfE3KBtuh5cWBGfNhH8+sPlcHSNn13XL2UU
+         JHgcN/wK3LIQVsg/1Uq17zup8DiLwUNFUfqx2MhrBrTNhmbGWSXa/vuKkYUqiU1Eg5
+         TNEciPiEE6t8Q==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Tue, 10 Dec 2019 03:35:49 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 00/19] Consolidate and improve NVIDIA Tegra CPUIDLE
+ driver(s)
+Message-ID: <20191210023549.GA15246@qmqm.qmqm.pl>
+References: <20191203004116.11771-1-digetx@gmail.com>
+ <20191207215216.GA9561@qmqm.qmqm.pl>
+ <0b3a861d-e5e8-ddca-ac60-0a3c61a9d9dc@gmail.com>
+ <20191209160420.GA24097@qmqm.qmqm.pl>
+ <323f5f70-5249-e75a-98cc-7fdca2d375c2@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191209144425.13321-4-k.konieczny@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmnm7Mz3exBpNOSlhsnLGe1WLBpxms
-        FufPb2C3ONv0ht3i8q45bBafe48wWqw9cpfd4nbjCjYHDo9NqzrZPPq2rGL0+LxJLoA5Ktsm
-        IzUxJbVIITUvOT8lMy/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB+gCJYWyxJxS
-        oFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpBSk6BZYFecWJucWleul5yfq6VoYGBkSlQYUJ2xq95
-        i9gLOvkq9ncvZ21gnMzdxcjJISFgIvF992KWLkYuDiGBHYwSu862MkM4nxglXnd0MUI43xgl
-        rnX2MMG0XFl/FCqxl1Hi/47b7BDOe0aJhb1L2ECqhAWCJN59+QxmiwjoSrzZsRRsLrPAPCaJ
-        N9MusIIk2AS0JPa/uAFWxC+gKHH1x2NGEJtXwE5i3aunYDUsAqoSfY0P2EFsUYEwiZPbWqBq
-        BCVOznzCAmJzCthK3Nu4Eew8ZgFxiVtP5kPZ8hLb384BWywh8JpN4ubE+4wQP7hI3DhxBsoW
-        lnh1fAs7hC0l8bK/Dcqullh58ggbRHMHo8SW/RBXSwgYS+xfOhloAwfQBk2J9bv0IcKKEjt/
-        z2WEWMwn8e5rDytIiYQAr0RHmxBEibLE5Qd3ocEoKbG4vZNtAqPSLCTvzELywiwkL8xCWLaA
-        kWUVo1hqQXFuemqxYYEhcnxvYgSnTy3THYxTzvkcYhTgYFTi4V3g8C5WiDWxrLgy9xCjBAez
-        kgjv8TagEG9KYmVValF+fFFpTmrxIUZTYGhPZJYSTc4Hpva8knhDUyNjY2MLE0MzU0NDJXFe
-        jh8XY4UE0hNLUrNTUwtSi2D6mDg4pRoYSx9xR/vu8PtUv0T847uqFVxZOhqtbDtj1q8V5560
-        7AJ3UFkPi4zO7pDmA8Yb2KKspx//ZbPgvmk2p03f9BgXgb3SfTcPsjzk7T5r9fBMc7es7Oe6
-        WwwuV7r7NSbctXPe51nmfFgwcmOMj5l2+Xm5KcrMKvcEAqYum//zH5vpFz7ZbQem/I1RYinO
-        SDTUYi4qTgQALuCLbbUDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTjf657tYg3efbCw2zljParHg0wxW
-        i/PnN7BbnG16w25xedccNovPvUcYLdYeuctucbtxBZsDh8emVZ1sHn1bVjF6fN4kF8AcxWWT
-        kpqTWZZapG+XwJXxa94i9oJOvor93ctZGxgnc3cxcnJICJhIXFl/lLGLkYtDSGA3o8S91Y3s
-        EAlJiWkXjzJ3MXIA2cIShw8XQ9S8ZZR41NXKBFIjLBAk8e7LZzYQW0RAV+LNjqXMIEXMAguY
-        JObfnMgC0XGYUaL3y09WkCo2AS2J/S9ugHXwCyhKXP3xmBHE5hWwk1j36ilYDYuAqkRf4wOw
-        K0QFwiR2LnnMBFEjKHFy5hMWEJtTwFbi3saNYHFmAXWJP/MuMUPY4hK3nsyHistLbH87h3kC
-        o/AsJO2zkLTMQtIyC0nLAkaWVYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwXGkpbmD
-        8fKS+EOMAhyMSjy8CxzexQqxJpYVV+YeYpTgYFYS4T3eBhTiTUmsrEotyo8vKs1JLT7EKM3B
-        oiTO+zTvWKSQQHpiSWp2ampBahFMlomDU6qB0YltQ0nMuTfqNR7RZ4//Dt3oP+30gZ3H/y1X
-        P97NM7M6LeO6sIJyzrVQ6ZIrBzjKGGaa8fQJ680NShVoX/uoz4Dd7O97baHJmV03GrXSkhqu
-        Z0xy1NroX7tQTXUHx736+9/d/pvMebw2L0s3g2ndtQ/sTElrt1/dzy6XKq5h5vOsYspC/4P/
-        lViKMxINtZiLihMBAcMNIp8CAAA=
-X-CMS-MailID: 20191210014812epcas1p28ba190c592a7a17efb59b17c0a060255
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191209144442eucas1p1e4f5cf4a1716262e2b6715fb41876f91
-References: <20191209144425.13321-1-k.konieczny@samsung.com>
-        <CGME20191209144442eucas1p1e4f5cf4a1716262e2b6715fb41876f91@eucas1p1.samsung.com>
-        <20191209144425.13321-4-k.konieczny@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <323f5f70-5249-e75a-98cc-7fdca2d375c2@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/9/19 11:44 PM, Kamil Konieczny wrote:
-> Add Kconfig option DEVFREQ_DELAYED_TIMER. If set, devfreq workqueue
-> will use delayed timer from its start.
+On Tue, Dec 10, 2019 at 12:22:18AM +0300, Dmitry Osipenko wrote:
+> 09.12.2019 19:04, Michał Mirosław пишет:
+> > On Sun, Dec 08, 2019 at 01:56:14AM +0300, Dmitry Osipenko wrote:
+> >> 08.12.2019 00:52, Michał Mirosław пишет:
+> >>> On Tue, Dec 03, 2019 at 03:40:57AM +0300, Dmitry Osipenko wrote:
+> >>>> Hello,
+> >>>>
+> >>>> This series does the following:
+> >>>>
+> >>>>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
+> >>>>      into common drivers/cpuidle/ directory.
+> >>>>
+> >>>>   2. Enables CPU cluster power-down idling state on Tegra30.
+> >>>>
+> >>>> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
+> >>>> and of the Tegra's arch code in general. Please review, thanks!
+> >>>
+> >>> I did a quick smoke test for this series on top of Linus' master:
+> >>>  - rebuilding with the patches applied, CONFIG_ARM_TEGRA_CPUIDLE=n - works
+> >>>  - building with CONFIG_ARM_TEGRA_CPUIDLE=y - doesn't boot
+> >>>
+> >>> The hang is somewhere early in the boot process, before simplefb can
+> >>> take the console and show any logs. If I get BOOTFB to work again I might
+> >>> be able to get some more info.
+> >>
+> >> Thank you very much for trying these patches!
+> >>
+> >> Could you please try to make ARM_TEGRA_CPUIDLE "tristate" in the Kconfig
+> >> and compile it as a loadable module? That way you'll get framebuffer
+> >> shown before the hang happens.
+> >>
+> >> Does LP2 suspend/resume work for you? There should be
+> >> "nvidia,suspend-mode = <2>" in the PMC's node of device-tree.
+> > 
+> > Not at the moment. I also tried suspend-mode = <1> and <0>, but it
+> > made no difference.
 > 
-> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
-> ---
->  drivers/devfreq/Kconfig | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> If LP2 doesn't work, then it explains why you're getting the hang.
 > 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 38a94df749a2..c799917c34c9 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -74,6 +74,18 @@ config DEVFREQ_GOV_PASSIVE
->  	  through sysfs entries. The passive governor recommends that
->  	  devfreq device uses the OPP table to get the frequency/voltage.
->  
-> +comment "DEVFREQ Options"
-> +
-> +config DEVFREQ_DELAYED_TIMER
-> +	bool "Use delayed timer in Simple Ondemand Governor"
-> +	default false
-> +	help
-> +	  Simple Ondemand Governor uses polling for reading buses counters.
-> +	  A default timer used is deferred, which saves power, but can
-> +	  miss increased demand for higher bus frequency if timer was
-> +	  assigned to idle cpu. If you want to change this to delayed
-> +	  timer at the cost of more power used, say Yes here.
-> +
->  comment "DEVFREQ Drivers"
-
-I don't think that we cannot choice the all options in Kconfig
-at the build time. If we add something like this patch,
-
-we can choice the any options in Kconfig as following:
-- polling time (millisecond)
-- up threshold
-- down threshold
-- type of workqueue
-- etc ...
-
-Also, there are too much optional value and selectable value 
-in the linux kernel. 
-
-As I said, If you suggest the reasonable data with test result,
-I will add the new flag to 'struct devfreq_dev_profile'.
-
->  
->  config ARM_EXYNOS_BUS_DEVFREQ
+> Are you using TF300T for the testing? I'm recalling that LP2 worked for
+> you sometime ago on TF300T, maybe some offending change was introduced
+> since then. Could you please try to do the git bisection or at least
+> find out what is the last good kernel version?
 > 
+> I rebased this series on a recent linux-next and you could find the
+> rebased patches here [1].
+> 
+> [1] https://github.com/grate-driver/linux/commits/master
+> 
+> With [1] you should be able to remove "nvidia,suspend-mode" property
+> from the device-tree to get cpuidle working with the disabled CC6 state
+> (LP2). Could you please check that at least disabled CC6 works for you?
 
+I tested suspend with your tree merged, but CONFIG_TEGRA_CPUIDLE=n. LP2
+seems to work [1]. The same tree with CONFIG_TEGRA_CPUIDLE=y doesn't
+boot. I'll try comparing DTs, but other than that I'm blocked on BOOTFB now.
 
--- 
 Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Michał Mirosław
+
+[1] rtcwake -s 3 -d /dev/rtc0 -v -m mem
+
+(...)
+[ 2710.157919] PM: suspend entry (deep)
+[ 2710.161205] Filesystems sync: 0.000 seconds
+[ 2710.176677] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[ 2710.178342] OOM killer disabled.
+[ 2710.178527] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[ 2710.347871] Disabling non-boot CPUs ...
+[ 2710.349160] IRQ 18: no longer affine to CPU1
+[ 2710.352499] IRQ 19: no longer affine to CPU2
+[ 2710.370059] IRQ 20: no longer affine to CPU3
+[ 2710.371284] Entering suspend state LP2
+[ 2710.371556] Enabling non-boot CPUs ...
+[ 2710.373157] CPU1 is up
+[ 2710.374598] CPU2 is up
+[ 2710.375996] CPU3 is up
+[ 2710.462876] OOM killer enabled.
+[ 2710.463018] Restarting tasks ...
+[ 2710.463880] tegra-devfreq 6000c800.actmon: Failed to get emc clock
+[ 2710.464509] done.
+[ 2710.552824] asus-ec 1-0015: model         : ASUS-TF201-PAD
+[ 2710.558345] asus-ec 1-0015: FW version    : PAD-EC20T-0216
+[ 2710.562942] asus-ec 1-0015: Config format : ECFG-0001
+[ 2710.567651] asus-ec 1-0015: HW version    : TF201-PAD-SKU1
+[ 2710.572488] asus-ec 1-0015: EC FW behaviour: susb on when system wakeup
+[ 2710.769796] atkbd serio1: no of_node; not parsing pinctrl DT
+[ 2710.835629] asus-ec 5-0019: model         : ASUS-TF201-DOCK
+[ 2710.838686] asus-ec 5-0019: FW version    : DOCK-EC20N-0207
+[ 2710.841865] asus-ec 5-0019: Config format : ECFG-0001
+[ 2710.844271] asus-ec 5-0019: HW version    : PCBA-SKU-2
+[ 2710.847950] asus-ec 5-0019: EC FW behaviour: susb on when receive ec_req
+[ 2711.040935] PM: suspend exit
+
