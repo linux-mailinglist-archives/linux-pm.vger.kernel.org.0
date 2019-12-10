@@ -2,101 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C90B1185D7
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 12:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDDA11869F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 12:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfLJLIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 06:08:11 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38693 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfLJLIL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 06:08:11 -0500
-Received: by mail-oi1-f196.google.com with SMTP id b8so9410731oiy.5
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 03:08:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qcPPmAhprIChcpRlQSOWJI+yE90HvISBIojdfa1OL1g=;
-        b=BbVMdAxpI/eehTHNW5kjfH1rvtpanjv7SVveHGlQeTnmOYUTGsB632+L20RHe2x79T
-         E8GTFEOIygwcO1KeSlG4qTvYCTca3NQ+jUHrRonYUB8O+uTuduU+Wu7fw+E+BYVVYeZs
-         Xl/4HVpg+e9cNtQh3gBcgyH5zXs0soM4qq+12JBNYflUGubE2Ln+dKyuwiGGKsKH2ihY
-         +tDA4zeq2Fk74O/A3XWXu+vLV7dOjDaQVGe2EvP68A9vZhAROSGFGtLXFXWnxcPpPeyC
-         T3N9QvT2XO8NivX9JcR3c2Sz/GlYl9IzOWYnvgq+qFnVYoxHV6VRnIZpCTuGVnha3i3C
-         pRQA==
-X-Gm-Message-State: APjAAAX2E+QnCO3Y4c5lTvMmoEkf0BpBQIfmG8venByGRWHmMfqUFk1D
-        9QegAPpx0irmltqVsG/AM3+YZRZ+7R8aTippDkc=
-X-Google-Smtp-Source: APXvYqxdd41nvl5s085pMGotMSEy4DciMtxt8mmrGj7IPeP/wt/g+y2wjTSwXQLRHHl8coXNmvUVq7yWUQHp5Wm+8gA=
-X-Received: by 2002:aca:cd92:: with SMTP id d140mr3344017oig.68.1575976089770;
- Tue, 10 Dec 2019 03:08:09 -0800 (PST)
-MIME-Version: 1.0
-References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <40413247.HltoIgKm8r@kreacher> <DB3PR0402MB3916C7E77C885343B2B961CFF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <5310126.hg2rr5Fjtk@kreacher> <20191210105450.avv2gvygl7kj5auu@vireshk-i7>
-In-Reply-To: <20191210105450.avv2gvygl7kj5auu@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Dec 2019 12:07:58 +0100
-Message-ID: <CAJZ5v0ih4U+=U27jgLgqfMRaz5Wi2OAMTKmE=rd=RYOj+OCXVg@mail.gmail.com>
-Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Anson Huang <anson.huang@nxp.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726957AbfLJLku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 06:40:50 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:44508 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbfLJLki (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 06:40:38 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191210114036euoutp01ab2919760ea335271a8bd1a172e6ad23~e-6ypbEzv1696816968euoutp01h
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191210114036euoutp01ab2919760ea335271a8bd1a172e6ad23~e-6ypbEzv1696816968euoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1575978036;
+        bh=JtCJWwEi1CPoda3M+GLc9u0h5w24RpweKEwZL1HKZEk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=I0EFpuvEazSmsGnyqKB56Ujf8phQCvQlPTK22/2INI1xjM7ViOKqklRayZi9NJfbi
+         Pz1PcQIQ6/6Jt+O6Tko40kxP+GADYgA1LlyS0JxZT/v7dYfmDis5q1U9SjAm20hp3P
+         j3/BKtznqrR7V2zYql3BH1WjpIM19cux9Ya915CE=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191210114036eucas1p1b6c95c79043519d983936bd1bc3e8052~e-6yXYkw31996319963eucas1p1D;
+        Tue, 10 Dec 2019 11:40:36 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 38.12.60679.4348FED5; Tue, 10
+        Dec 2019 11:40:36 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28~e-6x2oviZ1762217622eucas1p2C;
+        Tue, 10 Dec 2019 11:40:35 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191210114035eusmtrp15b1aedd6a70c05ef76dce6c22634f581~e-6x1zXcX2588725887eusmtrp1Q;
+        Tue, 10 Dec 2019 11:40:35 +0000 (GMT)
+X-AuditID: cbfec7f4-0e5ff7000001ed07-99-5def843473a6
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 03.BF.08375.3348FED5; Tue, 10
+        Dec 2019 11:40:35 +0000 (GMT)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191210114035eusmtip11301166fc8e654d698753be197bc39be~e-6xXZDBv2202322023eusmtip1C;
+        Tue, 10 Dec 2019 11:40:35 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Kamil Konieczny <k.konieczny@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Andreas Faerber <afaerber@suse.de>,
+        Arjun K V <arjun.kv@samsung.com>
+Subject: [PATCH 0/2] Increase CPU frequency in Exynos5422/5800 SoCs
+Date:   Tue, 10 Dec 2019 12:40:25 +0100
+Message-Id: <20191210114027.14910-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZduznOV2TlvexBj8fClg0byq2WL5yF4vF
+        xhnrWS2uf3nOanF22UE2iwWfZrBanD+/gd3i8q45bBafe48wWsw4v4/JYu2Ru+wO3B6zGy6y
+        eGxa1cnm0bdlFaPH5tPVHp83yQWwRnHZpKTmZJalFunbJXBlLDm8n71gE0/F2T9zWBsYG7i6
+        GDk4JARMJFZcsO9i5OQQEljBKDH5I3sXIxeQ/YVRYn3PA1YI5zOjxJLtu1hBqkAabtzdyQKR
+        WM4oceT6QRa4lsZlS9lBqtgEDCW63naxgdgiAvESj/rvghUxC1xikljS+B2sSFjAWeLZ5Pdg
+        Y1kEVCXWvu9gArF5BWwlnrTNY4dYJy+xesMBZpBmCYH3bBInJrQyQyRcJH5veQJ1k7DEq+Nb
+        oBpkJE5P7mGBaGhmlHh4bi07hNPDKHG5aQYjRJW1xOHjF1lBQcAsoCmxfpc+RNhRYt7em4yQ
+        kOGTuPFWECTMDGRO2jadGSLMK9HRJgRRrSYx6/g6uLUHL1yCOs1DonXHP3ZIoMZKrH5+nW0C
+        o9wshF0LGBlXMYqnlhbnpqcWG+WllusVJ+YWl+al6yXn525iBCaM0/+Of9nBuOtP0iFGAQ5G
+        JR7eBQ7vYoVYE8uKK3MPMUpwMCuJ8B5vAwrxpiRWVqUW5ccXleakFh9ilOZgURLnNV70MlZI
+        ID2xJDU7NbUgtQgmy8TBKdXA2N5Wm+GXH6S2uu/D2yfty2r0Q66w/S1ZdHL9jCrNf+uXP3ki
+        tcoogLtxb8RC6Xsz3sx1P6A1746h1+y59rvLDs2Z2/6Kk2n+qZlry86XezF1LNPXtT++p33B
+        BpHoq1fDTjp+cdiqKjtbX/JcYsNU7rM18U81a6pcCyb+k97XW3lhV/yqgmZvdiWW4oxEQy3m
+        ouJEACIOCugUAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsVy+t/xu7rGLe9jDa7e1bdo3lRssXzlLhaL
+        jTPWs1pc//Kc1eLssoNsFgs+zWC1OH9+A7vF5V1z2Cw+9x5htJhxfh+Txdojd9kduD1mN1xk
+        8di0qpPNo2/LKkaPzaerPT5vkgtgjdKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1
+        MjJV0rezSUnNySxLLdK3S9DLWHJ4P3vBJp6Ks3/msDYwNnB1MXJySAiYSNy4u5Oli5GLQ0hg
+        KaPE56uvmSASMhInpzWwQtjCEn+udbFBFH1ilFg9awo7SIJNwFCi6y1IgpNDRCBRYvbH2WBF
+        zAI3mCQuvZ0DNklYwFni2eT3YJNYBFQl1r7vAIvzCthKPGmbxw6xQV5i9YYDzBMYeRYwMqxi
+        FEktLc5Nzy021CtOzC0uzUvXS87P3cQIDNVtx35u3sF4aWPwIUYBDkYlHt4FDu9ihVgTy4or
+        cw8xSnAwK4nwHm8DCvGmJFZWpRblxxeV5qQWH2I0BVo+kVlKNDkfGEd5JfGGpobmFpaG5sbm
+        xmYWSuK8HQIHY4QE0hNLUrNTUwtSi2D6mDg4pRoYzVsdPfSdebk5uVPaIt+WbNaL/2L5161J
+        x0L9/otn6j8O/2t5aMY3QVV+6QN97w8vllkta+NavmKxsdm6K8tPRy68959d+47akvn5cbPf
+        f3BR2ZMqVrgn1G1WuIsEf+zHjeny6lnnGXQ8yxa9fuz04eTkDNdVOhMt49t3enz6tunGd55w
+        3sUHlViKMxINtZiLihMBSCqCE2sCAAA=
+X-CMS-MailID: 20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28
+References: <CGME20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 11:54 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 10-12-19, 11:39, Rafael J. Wysocki wrote:
-> > Index: linux-pm/kernel/sched/cpufreq.c
-> > ===================================================================
-> > --- linux-pm.orig/kernel/sched/cpufreq.c
-> > +++ linux-pm/kernel/sched/cpufreq.c
-> > @@ -5,6 +5,8 @@
-> >   * Copyright (C) 2016, Intel Corporation
-> >   * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >   */
-> > +#include <linux/cpufreq.h>
-> > +
-> >  #include "sched.h"
-> >
-> >  DEFINE_PER_CPU(struct update_util_data __rcu *, cpufreq_update_util_data);
-> > @@ -57,3 +59,19 @@ void cpufreq_remove_update_util_hook(int
-> >       rcu_assign_pointer(per_cpu(cpufreq_update_util_data, cpu), NULL);
-> >  }
-> >  EXPORT_SYMBOL_GPL(cpufreq_remove_update_util_hook);
-> > +
-> > +/**
-> > + * cpufreq_this_cpu_can_update - Check if cpufreq policy can be updated.
-> > + * @policy: cpufreq policy to check.
-> > + *
-> > + * Return 'true' if:
-> > + * - the local and remote CPUs share @policy,
-> > + * - dvfs_possible_from_any_cpu is set in @policy and the local CPU is not going
-> > + *   offline (in which it is not expected to run cpufreq updates any more).
-> > + */
-> > +bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
-> > +{
-> > +     return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
-> > +             (policy->dvfs_possible_from_any_cpu &&
->
-> > +              rcu_dereference_sched(*this_cpu_ptr(&cpufreq_update_util_data)));
->
-> I somehow feel that doing this particular check in cpufreq_update_util() maybe
-> better. Or maybe we can call cpufreq_this_cpu_can_update() itself right from
-> cpufreq_update_util() instead and remove it from multiple places in the
-> governors.
+Dear All,
 
-First, there are two places actually.
+This patchset is a resurrection of the patch posted about 3 years ago:
+https://patchwork.kernel.org/patch/9475909/
 
-Second, the point is that the presence of the hook only needs to be
-checked if dvfs_possible_from_any_cpu is set and checking that in
-cpufreq_update_util() would be kind of obnoxious IMO.
+That time it was not possible to merge it, because a few minor pieces
+were still missing in mainline kernel. This has been finally resolved
+and there should be no blockers for adding the higher CPU frequencies
+in Exynos5422/5800 SoCs:
+
+1. support for coupled regulators (and all its dependencies) landed
+   in the regulator framework and patch #1 adds needed coupling for
+   the Exynos5422/5800 based boards;
+
+2. support for the Exynos ASV has been merged to v5.4
+
+Patches has been rebased onto the v5.5-rc1 kernel release. They were
+tested on the following boards: Odroid XU3, XU3-lite, XU4, HC1 and
+Chromebook Pi.
+
+Best regards
+Marek Szyprowski
+Samsung R&D Institute Poland
+
+
+Patch summary:
+
+Bartlomiej Zolnierkiewicz (1):
+  ARM: dts: exynos: Add missing CPU frequencies for Exynos5422/5800
+
+Marek Szyprowski (1):
+  ARM: dts: exynos: Add initial data for coupled regulators for
+    Exynos5422/5800
+
+ arch/arm/boot/dts/exynos5420.dtsi             | 34 ++++----
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  4 +
+ arch/arm/boot/dts/exynos5422-odroidhc1.dts    | 64 +++++++--------
+ .../boot/dts/exynos5422-odroidxu3-common.dtsi | 78 +++++++++----------
+ .../boot/dts/exynos5422-odroidxu3-lite.dts    | 58 ++++++++++++++
+ arch/arm/boot/dts/exynos5800-peach-pi.dts     | 13 ++++
+ arch/arm/boot/dts/exynos5800.dtsi             | 52 +++++++++----
+ 7 files changed, 199 insertions(+), 104 deletions(-)
+
+-- 
+2.17.1
+
