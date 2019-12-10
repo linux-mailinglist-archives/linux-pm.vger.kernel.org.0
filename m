@@ -2,177 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A14D61183C9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 10:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717AE1183AE
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 10:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbfLJJjT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 04:39:19 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:46251 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727174AbfLJJjT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 04:39:19 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191210093917euoutp0293c75fb3998eba5d3e40433e29990a0e~e_Q3F1aJs0992409924euoutp02X
-        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 09:39:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191210093917euoutp0293c75fb3998eba5d3e40433e29990a0e~e_Q3F1aJs0992409924euoutp02X
+        id S1727083AbfLJJgB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 04:36:01 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:20654 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbfLJJgA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 04:36:00 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20191210093557epoutp04406ec4b089179c74c3dceabef3f0592d~e_N800N1I2620926209epoutp04r
+        for <linux-pm@vger.kernel.org>; Tue, 10 Dec 2019 09:35:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20191210093557epoutp04406ec4b089179c74c3dceabef3f0592d~e_N800N1I2620926209epoutp04r
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575970757;
-        bh=F0z+QAlm0CEiQ1aizr+w2Zw8aUWhjedLWNcx+ym5BWo=;
+        s=mail20170921; t=1575970557;
+        bh=S/zcAwknwHag4hPCqjtT6WQekQdAA80vjLRcE8LWAp4=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=UfJNLvLKtJytLRbG4R7z2/jqqh2RH+CyqeYWh4D1zpNneEhLaH+4HfuGcvpHwC5eV
-         Pkv290qBp4wqGaigpLHqxHfhafm5Tqdix3cPe1hcvrxRC39CINEKiMaFYCWdCu1s2V
-         4noNrNGPPkFxcAYfH+IWq4S+wtOZySPlQnD+U3t0=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191210093916eucas1p2373b150fa34a77df18406dc23fe8af50~e_Q2y9wFw1754517545eucas1p2C;
-        Tue, 10 Dec 2019 09:39:16 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 9E.46.61286.4C76FED5; Tue, 10
-        Dec 2019 09:39:16 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191210093916eucas1p189d01ac35e2c93731f9d6a446cf777bd~e_Q2eweYV2385123851eucas1p1Z;
-        Tue, 10 Dec 2019 09:39:16 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191210093916eusmtrp1a0604489d600515da443f6124c0be1e6~e_Q2eK0rx2000920009eusmtrp1v;
-        Tue, 10 Dec 2019 09:39:16 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-71-5def67c483af
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BF.DC.08375.4C76FED5; Tue, 10
-        Dec 2019 09:39:16 +0000 (GMT)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191210093916eusmtip1b5817b00398b8129dfb354eee82b01d2~e_Q2C7sL31723417234eusmtip1w;
-        Tue, 10 Dec 2019 09:39:16 +0000 (GMT)
-Subject: Re: [PATCH 3/4] PM / devfreq: Kconfig: add DEVFREQ_DELAYED_TIMER
- option
-To:     Matthias Kaehlcke <mka@chromium.org>
+        b=LZuhUqL7T5RkowSsjFYg9BVm1Z1nncir7cRagsw76lp99oRoGlmMHk6RmUp+VMqAi
+         fE1IA6i92xCSiT/GTj7QzFzLTw5NSeUL/9OX2eLMhYjda8pKi2ZBmmruPC176vqTP8
+         oVOkW4piLgCxfpF15fEP4uDdsiAiqujyE80HIqH0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191210093556epcas1p1960e9dc4ab635df8eedac28b2832c497~e_N8RS-ui1079610796epcas1p16;
+        Tue, 10 Dec 2019 09:35:56 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 47XFL23XDTzMqYkn; Tue, 10 Dec
+        2019 09:35:54 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FA.8E.48019.AF66FED5; Tue, 10 Dec 2019 18:35:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191210093553epcas1p37d23659cdd8782d951c4e004d300fc0f~e_N5kAIHH2199621996epcas1p3S;
+        Tue, 10 Dec 2019 09:35:53 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191210093552epsmtrp1be3673b26ce9f3320c8f4d6b00e32080~e_N4p4EFo0605106051epsmtrp1B;
+        Tue, 10 Dec 2019 09:35:52 +0000 (GMT)
+X-AuditID: b6c32a38-23fff7000001bb93-08-5def66faddf5
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        24.65.06569.8F66FED5; Tue, 10 Dec 2019 18:35:52 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191210093552epsmtip2b5edd78e8d7497be702d5b9873b16ebd~e_N4XdZ-C1063110631epsmtip2F;
+        Tue, 10 Dec 2019 09:35:52 +0000 (GMT)
+Subject: Re: [PATCH 1/4] PM / devfreq: reuse system workqueue machanism
+To:     Kamil Konieczny <k.konieczny@samsung.com>
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-Message-ID: <4c998511-e825-f2da-cfce-7242cdb63902@samsung.com>
-Date:   Tue, 10 Dec 2019 10:39:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <6a8daabc-4a18-36de-8070-77803271e681@samsung.com>
+Date:   Tue, 10 Dec 2019 18:42:18 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20191209193432.GQ228856@google.com>
+In-Reply-To: <1e6f7bcd-78ef-17e2-c470-a546d58c70fa@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPKsWRmVeSWpSXmKPExsWy7djPc7pH0t/HGvx+Y2SxccZ6VovrX56z
-        Wpw/v4Hd4mzTG3aLy7vmsFl87j3CaLH2yF12i88bHjNa3G5cwebA6TG74SKLx6ZVnWwefVtW
-        MXp83iQXwBLFZZOSmpNZllqkb5fAlTHt7UymgpkCFT+6tzM3MH7i6WLk5JAQMJHYsuIXWxcj
-        F4eQwApGib5Fi5ghnC+MEs23nrFDOJ8ZJbZcb2SFabm9dCkTRGI5o8SVH3egnLeMEpfWfmUC
-        qRIWCJJ49+UzG4gtIqAh8eT3eUaQImaBY0wSuw79BRvFJqAvcfDsSRYQm1fATuLb5v1gcRYB
-        VYneh3OBmjk4RAUiJE5/TYQoEZQ4OfMJC0iYU8BQ4sE5K5Aws4C4xK0n85kgbHmJ7W/ngL0g
-        IbCPXWLyz9fsEFe7SEw62c0CYQtLvDq+BSouI3F6cg9UvFzi6cI+dojmFkaJB+0foRLWEoeP
-        X2QFWcwsoCmxfpc+RNhR4uCO1WBnSgjwSdx4KwhxA5/EpG3TmSHCvBIdbUIQ1aoSz0/1MEHY
-        0hJd/9exTmBUmoXksVlIvpmF5JtZCHsXMLKsYhRPLS3OTU8tNsxLLdcrTswtLs1L10vOz93E
-        CExGp/8d/7SD8eulpEOMAhyMSjy8CxzexQqxJpYVV+YeYpTgYFYS4T3eBhTiTUmsrEotyo8v
-        Ks1JLT7EKM3BoiTOa7zoZayQQHpiSWp2ampBahFMlomDU6qBMe33l1TGxwJPPmV+vlfClbWW
-        7YP0DIbC9pN/kiocHjtu1sxax7zTYGO4yI/kPvscTkXzOqYmHZfEsAVSqzt+Wy7Y+cjJ0LxO
-        XmHBkeJZKk1nH561drj09/YTz5w/SzUyndcsTGm79jjQprH0rPISC90Kvh0/eUq/KH9mPaV8
-        4hd/9p9MlzJnJZbijERDLeai4kQAZwaM3UIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMIsWRmVeSWpSXmKPExsVy+t/xu7pH0t/HGqw7K2uxccZ6VovrX56z
-        Wpw/v4Hd4mzTG3aLy7vmsFl87j3CaLH2yF12i88bHjNa3G5cwebA6TG74SKLx6ZVnWwefVtW
-        MXp83iQXwBKlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqk
-        b5eglzHt7UymgpkCFT+6tzM3MH7i6WLk5JAQMJG4vXQpUxcjF4eQwFJGiQUPpzJCJKQlGk+v
-        ZoKwhSX+XOtigyh6zShxc8VEZpCEsECQxLsvn9lAbBEBDYknv88zghQxCxxjkniw6CUzRMcr
-        RokN176BdbAJ6EscPHuSBcTmFbCT+LZ5PyuIzSKgKtH7cC7YJFGBCInn228wQtQISpyc+QSo
-        noODU8BQ4sE5K5Aws4C6xJ95l5ghbHGJW0/mM0HY8hLb385hnsAoNAtJ9ywkLbOQtMxC0rKA
-        kWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYARuO/Zz8w7GSxuDDzEKcDAq8fAucHgXK8Sa
-        WFZcmXuIUYKDWUmE93gbUIg3JbGyKrUoP76oNCe1+BCjKdBvE5mlRJPzgckhryTe0NTQ3MLS
-        0NzY3NjMQkmct0PgYIyQQHpiSWp2ampBahFMHxMHp1QDY+e/4HvK/p5vGJYs2LTzdZSzrsEm
-        402F5e4CS50uTGhc071vZURw9ZIv9pbXRLuW/7HLWJIvKjrBZM6a+vSqGZe05JVWsLg+W+jg
-        K9Kh+rVFMuRIU/li5u32r6Mbph8t0/yXFHJh5WPb+XN2PQn8GsubWvTp35cH0frdHG7iZgw5
-        O6zW5IglK7EUZyQaajEXFScCAHDjVirWAgAA
-X-CMS-MailID: 20191210093916eucas1p189d01ac35e2c93731f9d6a446cf777bd
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm29k5O0arr6n5uh+ppwskmTvp6iiZdjcyEQKDSuykJyfuxs4m
+        drEsS81aN7vosBqEVOuqiZlUlkmyJE1WYFeiu6YN7IIVRduOkv+e9/K8z/t830sTqlOUms43
+        WgWLkdcz1Dh5072Zmphfm7xZGu9fNVdffYXknEPVJNfdfVXBPdw1oOA8LbUU99XejrhL7S8V
+        3POd56gUOrXBtZdKPdDoQqlfG6ZkEGsL5usEPlewRArGHFNuvjEviVm5Ontxtnauho1hE7h5
+        TKSRNwhJzJK0jJhl+XrfBkxkIa+3+VIZvCgysQvmW0w2qxCpM4nWJEYw5+rNCebZIm8Qbca8
+        2TkmQyKr0czR+ho3FOh2Xe4lzeURRQ9KNSWoLbwSBdGA46G6pV5WicbRKtyMwHH/nEIKhhAM
+        u98iKfiB4Mirn9Qo5X1VHyUVbiGob+8coXgRvLE/9A2j6WC8HG5dy/QTQnAMDDTXEf4eAp+S
+        wcDxR6S/QOFoaP3UG5g6EUfBk2G/HE0r8QJ4fULpT8vxdHBW2mV+HIozwd20G/mxEk8Cd807
+        uR8H4WQ4ar8dwAQOg2fvTsskHAHXB2sDuoC9FNRefBzYDfAS+OM0SWaCob+jUSFhNfQdLBvB
+        W+G8u52SuBUIGlulnQHHQWtdVWAOgWfClZZYKR0FN36fRJLuBPjyfT8pSSmhokwltUwFz+uX
+        MgmHw5nyvdQhxDjGuHGMceAY48DxX8yJ5C40WTCLhjxBZM3xY/+6AQVuM5prRje70toQphEz
+        XulM+ZKlIvlCcbOhDQFNMCHKjjJfSpnLb94iWEzZFpteENuQ1vfYhwl1aI7Jd+lGazarnRMX
+        F8fFs3O1LMuEKenhniwVzuOtQoEgmAXLKE9GB6lLUEt5UbXXuezYmhd3t8UX15H93VU4+M3n
+        86XMtHQyvTs8NnPpxo89xe6zybZ1sz5QqR0LucGTz3oG6jzvJ3ZuT8txpdxVDTr6/3b+uZBc
+        Y1ox9annx3rF929U4p0dQyHppasu7TF7aid0NfUtn3F5S8iTVp0ttNeVYE8kP4bt64r6vIiR
+        izqejSYsIv8PbuYWX7EDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJXvdH2vtYg9XfFS02zljParHg0wxW
+        i/PnN7BbnG16w25xedccNovPvUcYLdYeuctucbtxBZsDh8emVZ1sHn1bVjF6fN4kF8AcxWWT
+        kpqTWZZapG+XwJXRtO4Ga0G7fMWpZoMGxkOSXYycHBICJhJPJ79k62Lk4hAS2M0ocb5pKyNE
+        QlJi2sWjzF2MHEC2sMThw8UQNW8ZJR4f+MEKEhcWcJfYuzkMpFxEQFfizY6lzCA1zAILmCTm
+        35zIApIQEpjOLLH1VQWIzSagJbH/xQ02EJtfQFHi6o/HjCBzeAXsJB5M5wUJswioSizo6mUC
+        sUUFwiR2LnkMZvMKCEqcnPkEbCSngL3ElN59YDazgLrEn3mXmCFscYlbT+YzQdjyEtvfzmGe
+        wCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnD8aGnt
+        YDxxIv4QowAHoxIPr4fdu1gh1sSy4srcQ4wSHMxKIrzH24BCvCmJlVWpRfnxRaU5qcWHGKU5
+        WJTEeeXzj0UKCaQnlqRmp6YWpBbBZJk4OKUaGCecK58zxWmP7gpmiYfqJ/iF9tW/4daX1lzD
+        LpX401XtdrLNnKfORmUvwuKntqssEsiXSji++dNtlrZZ/Cd0ImYnLWqM+7tJi+tM3MzrXLt4
+        lpx88st3HVPbobsXnDlllD7PuCZ7zCzm6iylS5LvloR6/V/P3KK4QDwt7r7v1fn6K5MSVgWr
+        RCmxFGckGmoxFxUnAgAl1itXmwIAAA==
+X-CMS-MailID: 20191210093553epcas1p37d23659cdd8782d951c4e004d300fc0f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191209144442eucas1p1e4f5cf4a1716262e2b6715fb41876f91
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191209144442eucas1p1e4f5cf4a1716262e2b6715fb41876f91
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191209144441eucas1p16945780c1a1ff3302a233414ae6aace2
 References: <20191209144425.13321-1-k.konieczny@samsung.com>
-        <CGME20191209144442eucas1p1e4f5cf4a1716262e2b6715fb41876f91@eucas1p1.samsung.com>
-        <20191209144425.13321-4-k.konieczny@samsung.com>
-        <20191209193432.GQ228856@google.com>
+        <CGME20191209144441eucas1p16945780c1a1ff3302a233414ae6aace2@eucas1p1.samsung.com>
+        <20191209144425.13321-2-k.konieczny@samsung.com>
+        <2eab8a20-1701-94dc-410a-bb072a5f5b4e@samsung.com>
+        <6ead2998-ebe1-704b-7d89-3b0cf8beca70@samsung.com>
+        <9926005a-c030-a823-fd65-6b8578e39218@samsung.com>
+        <1e6f7bcd-78ef-17e2-c470-a546d58c70fa@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 09.12.2019 20:34, Matthias Kaehlcke wrote:
-> On Mon, Dec 09, 2019 at 03:44:24PM +0100, Kamil Konieczny wrote:
->> Add Kconfig option DEVFREQ_DELAYED_TIMER. If set, devfreq workqueue
->> will use delayed timer from its start.
+On 12/10/19 6:28 PM, Kamil Konieczny wrote:
+> Hi Chanwoo,
 > 
-> s/from its start/by default/
-> 
-
-thank you for review, I will correct this
-
+> On 10.12.2019 08:53, Chanwoo Choi wrote:
+>> On 12/10/19 4:28 PM, Kamil Konieczny wrote:
+>>> On 10.12.2019 02:41, Chanwoo Choi wrote:
+>>>> On 12/9/19 11:44 PM, Kamil Konieczny wrote:
+>>>>> There is no need for creating another workqueue, it is enough
+>>>>> to reuse system_freezable_power_efficient one.
+>>>>>
+>>>>> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
+>>>>> ---
+>>>>>  drivers/devfreq/devfreq.c | 6 +++---
+>>>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>>>>> index 46a7ff7c2994..955949c6fc1f 100644
+>>>>> --- a/drivers/devfreq/devfreq.c
+>>>>> +++ b/drivers/devfreq/devfreq.c
+>>>>> @@ -1532,11 +1532,11 @@ static int __init devfreq_init(void)
+>>>>>  		return PTR_ERR(devfreq_class);
+>>>>>  	}
+>>>>>  
+>>>>> -	devfreq_wq = create_freezable_workqueue("devfreq_wq");
+>>>>> +	devfreq_wq = system_freezable_power_efficient_wq;
+>>>>
+>>>> It affect the behaviors of whole device drivers using devfreq subsystem.
+>>>> It is not good to change the workqueue type without any reasonable
+>>>> data like experiment result, power-consumption result and performance
+>>>> result for almost device drivers using devfreq subsystem.
+>>>>
+>>>> Are there any problem or any benefit to change workqueue type?
+>>>
+>>> The workqueue is freezable with additional capability of 'power_efficient',
+>>> it is already developed by linux community so why not reuse it ?
 >>
->> Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
->> ---
->>  drivers/devfreq/Kconfig | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
+>> As you agreed below, why don't you suggest the any reasonable test result
+>> with this patch? As I commented, it affects the all device drivers. 
+>> It is necessary to suggest the test result on multiple scenarios
+>> in order to prevent the any power-consumption and performance regression.
+>> It is not easy to change them without any data.
 >>
->> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
->> index 38a94df749a2..c799917c34c9 100644
->> --- a/drivers/devfreq/Kconfig
->> +++ b/drivers/devfreq/Kconfig
->> @@ -74,6 +74,18 @@ config DEVFREQ_GOV_PASSIVE
->>  	  through sysfs entries. The passive governor recommends that
->>  	  devfreq device uses the OPP table to get the frequency/voltage.
->>  
->> +comment "DEVFREQ Options"
->> +
->> +config DEVFREQ_DELAYED_TIMER
->> +	bool "Use delayed timer in Simple Ondemand Governor"
+>> Frankly, if you test almost scenarios and suggest the reasonable result
+>> that anyone can understand, like there are never difference
+>> between "create_freezable_workqueue("devfreq_wq");" and system_freezable_power_efficient_wq.
+>> But you don't suggest any data.
 > 
-> Is the use really limited to the Simple Ondemand Governor? I don't think
-> so, at least the Tegra devfreq driver also does monitoring and others
-> might follow.
+> I agree about tests data needed for deciding about change. As I already wrote in other
+> letter, I do not have such tests procedures, so if you have them and you may share
+> them with me or Marek, I can run them and gather tests results.
+> 
+>> - The original devfreq_wq include the only work related to devfreq.
+>> - system_freezable_power_efficient_wq include the all works registered
+>> from both other subsystem and device drivers in linux kernel.
+> 
+> I do not know that good system wq, devfreq_wq have only one work item so
+> imho it is not beneficial to use separate wq. Seperate wq can be good
+> during debugging problems with wq.
 
-There are currently:
+No, devfreq_wq has not ony one work item. If one target use the multiple
+devfreq device with simple_ondemand governor, devfreq_wq has the 
+the multiple work item. It depends on the number of devfreq device
+with simple_ondemand governor.
 
-simple_ondemand
-performance
-powersave
-userspace
-passive
+> 
+>>>> Actually, it is not simple to change the like just one device driver
+>>>> because devfreq subsytem is very important for both performance
+>>>> and power-consumption.
+>>>
+>>> I agree. The name of this wq promises what you want, both freezable
+>>> and power efficiency.
+>>>
+>>>> If you hope to change the feature related to both performance 
+>>>> and power-consumption, please suggest the reasonable data
+>>>> with fundamental reason.
+>>>>
+>>>> So, I can't agree it.
+>>>>
+>>>>
+>>>>>  	if (!devfreq_wq) {
+>>>>>  		class_destroy(devfreq_class);
+>>>>> -		pr_err("%s: couldn't create workqueue\n", __FILE__);
+>>>>> -		return -ENOMEM;
+>>>>> +		pr_err("%s: system_freezable_power_efficient_wq isn't initialized\n", __FILE__);
+>>>>> +		return -EINVAL;
+>>>>>  	}
+>>>>>  	devfreq_class->dev_groups = devfreq_groups;
+> 
 
-From them perfomance, powersave and userspace are fixed max, min or user provided,
-so only left simple_ondemand and passive which could benefit from change.
-
->> +	default false
->> +	help
->> +	  Simple Ondemand Governor uses polling for reading buses counters.
->> +	  A default timer used is deferred, which saves power, but can
->> +	  miss increased demand for higher bus frequency if timer was
->> +	  assigned to idle cpu. If you want to change this to delayed
->> +	  timer at the cost of more power used, say Yes here.
->> +
->>  comment "DEVFREQ Drivers"
->>  
->>  config ARM_EXYNOS_BUS_DEVFREQ
-> 
-> 
-> This patch on it's own does nothing. Squash it with '[4/4] PM / devfreq:
-> use delayed work if DEVFREQ_DELAYED_TIMER set'.
-> 
-> 
 
 -- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
