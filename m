@@ -2,312 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F591187D9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 13:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809951187A4
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Dec 2019 13:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfLJMNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Dec 2019 07:13:32 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41772 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727224AbfLJMNc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 07:13:32 -0500
-Received: from 79.184.255.117.ipv4.supernova.orange.pl (79.184.255.117) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 785dde6ab70efc65; Tue, 10 Dec 2019 13:13:30 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Subject: [RFC v2][PATCH 6/9] intel_idle: Use ACPI _CST for processor models without C-state tables
-Date:   Tue, 10 Dec 2019 13:06:25 +0100
-Message-ID: <3789365.7kqZenubyC@kreacher>
-In-Reply-To: <35821518.IbFVMVmUy3@kreacher>
-References: <35821518.IbFVMVmUy3@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1727231AbfLJMIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Dec 2019 07:08:15 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:34812 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727223AbfLJMIP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Dec 2019 07:08:15 -0500
+Received: by mail-pl1-f196.google.com with SMTP id x17so1980804pln.1;
+        Tue, 10 Dec 2019 04:08:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=l5uHiV+Yi1b/Weaw8ObG18hI7s+mQL2W7TckPvD0Lmw=;
+        b=i4Vp1W98Nl1Bui3BDaWfwjqHavE+84yuA5Oq/NNngoDymHqy40lpX0wJWRF15laQ3H
+         RK8TOdxrCq4G/QeARICf2XgwZof7eTk1qmGv7X9T40sSWaDdIYBFm60zecRsPFFbXCKT
+         +hNlW/WYxHPKhZFf+N3HsnpbTlkrLmQ8DpTB9b2Aa+VGMvCvvr+B7kNBkx17bmB8nYtx
+         7tmApRoh8ZzY8VIiDzw6wyJOfFVCYELv6VeMJwjrHPNe2hiMgUfoNRAV18a/Y86mIuUF
+         xQust9GBGsSVyXNjUqu0yU0aB6E8D+XaNme3V++1hR5w2Ipz0qRLJZPF7fVnFZpqMWxp
+         xU2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l5uHiV+Yi1b/Weaw8ObG18hI7s+mQL2W7TckPvD0Lmw=;
+        b=KYJygE0nYzym2qy9Z9jLEYLFwFZi1LVdApKq6bWNmp3xwsb8ALoeguEogc0qd7FHTq
+         ZkNe+GPA0UkhRSIf9bsDK6zWc0kqw1W6R/oP5v/hKLUqxJq+yPGA5dwmpMOOQPadZiUh
+         lROd9dxcAFRlwt8vmz+YkdVUiwGMVcl0YA8/2FD/CHTDEYNcxv25UjuTIqRw8gEE5PTw
+         SiQc9eKFmPMGKc46iIT0smKZMnh+4Kmj2J5B0Gu6W+AnJhXFoNdh2bAaChzhXa74KKUU
+         nuvvPmu7qh8rjG3UGGsXeRVbhXF1csvpoxDLAMe9/Gx3MeOpgm0lQG9ueG+odT4Nkd3d
+         F7gA==
+X-Gm-Message-State: APjAAAUPKNu6+Shm7Wmc3J8+ZLmF/lHUVJKU26fm7WLd2jG2IYJAX82+
+        +mkLf2pHB9LqTkoga3G2brM=
+X-Google-Smtp-Source: APXvYqzMbUr5xi4SJjUYbbZL+R0wEZ6fVbQcFoDtmRRcltk45AuEjKcpMO2nVrmYiwGmXZkR4VhLGg==
+X-Received: by 2002:a17:90a:8903:: with SMTP id u3mr4968272pjn.137.1575979694925;
+        Tue, 10 Dec 2019 04:08:14 -0800 (PST)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id r193sm3440295pfr.100.2019.12.10.04.08.09
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 10 Dec 2019 04:08:13 -0800 (PST)
+From:   Baolin Wang <baolin.wang7@gmail.com>
+To:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     orsonzhai@gmail.com, baolin.wang@linaro.org,
+        baolin.wang7@gmail.com, freeman.liu@unisoc.com,
+        zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: thermal: sprd: Add the Spreadtrum thermal documentation
+Date:   Tue, 10 Dec 2019 20:07:17 +0800
+Message-Id: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Baolin Wang <baolin.wang@unisoc.com>
 
-Modify the intel_idle driver to get the C-states information from ACPI
-_CST if the processor model is not recognized by it.
+Add the Spreadtrum thermal documentation.
 
-The processor is still required to support MWAIT and the information
-from ACPI _CST will only be used if all of the C-states listed by
-_CST are of the ACPI_CSTATE_FFH type (which means that they are
-expected to be entered via MWAIT).
-
-Moreover, the driver assumes that the _CST information is the same
-for all CPUs in the system, so it is sufficient to evaluate _CST for
-one of them and extract the common list of C-states from there.
-Also _CST is evaluated once at the system initialization time and
-the driver does not respond to _CST change notifications (that can
-be changed in the future).
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Baolin Wang <baolin.wang@unisoc.com>
+Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
 ---
-
-Changes from the previous version:
-
- - Append "_ACPI" to the names of the C-states coming from _CST.
- - For ACPI C-states types other than C1 set target_residency as 4 times
-   the exit latency (which is closer to the numbers used by intel_idle for
-   "known" processors).
-
+Changes from v1:
+ - Change to yaml format.
 ---
- drivers/idle/intel_idle.c |  181 ++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 153 insertions(+), 28 deletions(-)
+ .../devicetree/bindings/thermal/sprd-thermal.yaml  |   97 ++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
 
-Index: linux-pm/drivers/idle/intel_idle.c
-===================================================================
---- linux-pm.orig/drivers/idle/intel_idle.c
-+++ linux-pm/drivers/idle/intel_idle.c
-@@ -41,6 +41,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/acpi.h>
- #include <linux/kernel.h>
- #include <linux/cpuidle.h>
- #include <linux/tick.h>
-@@ -1111,6 +1112,120 @@ static const struct x86_cpu_id intel_idl
- 	{}
- };
- 
-+#define INTEL_CPU_FAM6_MWAIT \
-+	{ X86_VENDOR_INTEL, 6, X86_MODEL_ANY, X86_FEATURE_MWAIT, 0 }
+diff --git a/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml b/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
+new file mode 100644
+index 0000000..92d208a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/sprd-thermal.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/sprd-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+static const struct x86_cpu_id intel_mwait_ids[] __initconst = {
-+	INTEL_CPU_FAM6_MWAIT,
-+	{}
-+};
++title: Spreadtrum thermal sensor controller bindings
 +
-+static bool intel_idle_max_cstate_reached(int cstate)
-+{
-+	if (cstate + 1 > max_cstate) {
-+		pr_info("max_cstate %d reached\n", max_cstate);
-+		return true;
-+	}
-+	return false;
-+}
++maintainers:
++  - Orson Zhai <orsonzhai@gmail.com>
++  - Baolin Wang <baolin.wang7@gmail.com>
++  - Chunyan Zhang <zhang.lyra@gmail.com>
 +
-+#ifdef CONFIG_ACPI_PROCESSOR_CSTATE
-+#include <acpi/processor.h>
++properties:
++  compatible:
++    const: sprd,ums512-thermal
 +
-+static struct acpi_processor_power acpi_state_table;
++  reg:
++    maxItems: 1
 +
-+/**
-+ * intel_idle_cst_usable - Check if the _CST information can be used.
-+ *
-+ * Check if all of the C-states listed by _CST in the max_cstate range are
-+ * ACPI_CSTATE_FFH, which means that they should be entered via MWAIT.
-+ */
-+static bool intel_idle_cst_usable(void)
-+{
-+	int cstate, limit;
++  clocks:
++    maxItems: 1
 +
-+	limit = min_t(int, min_t(int, CPUIDLE_STATE_MAX, max_cstate + 1),
-+		      acpi_state_table.count);
++  clock-names:
++    items:
++      - const: enable
 +
-+	for (cstate = 1; cstate < limit; cstate++) {
-+		struct acpi_processor_cx *cx = &acpi_state_table.states[cstate];
++  nvmem-cells:
++    maxItems: 2
++    description:
++      Reference to nvmem nodes for the calibration data.
 +
-+		if (cx->entry_method != ACPI_CSTATE_FFH)
-+			return false;
-+	}
++  nvmem-cells-names:
++    maxItems: 2
++    items:
++      - const: thm_sign_cal
++      - const: thm_ratio_cal
 +
-+	return true;
-+}
++  "#thermal-sensor-cells":
++    const: 1
 +
-+static bool intel_idle_acpi_cst_extract(void)
-+{
-+	unsigned int cpu;
++  child-node:
++    description: Represent one thermal sensor.
 +
-+	for_each_possible_cpu(cpu) {
-+		struct acpi_processor *pr = per_cpu(processors, cpu);
++    properties:
++      reg:
++        description: Specify the sensor id.
++        maxItems: 1
 +
-+		if (!pr)
-+			continue;
++      nvmem-cells:
++        maxItems: 1
++        description:
++          Reference to an nvmem node for the calibration data.
 +
-+		if (acpi_processor_evaluate_cst(pr->handle, cpu, &acpi_state_table))
-+			continue;
++      nvmem-cells-names:
++        maxItems: 1
++        items:
++          - const: sen_delta_cal
 +
-+		acpi_state_table.count++;
++    required:
++      - reg
++      - nvmem-cells
++      - nvmem-cells-names
 +
-+		if (!intel_idle_cst_usable())
-+			continue;
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - nvmem-cells
++  - nvmem-cells-names
++  - "#thermal-sensor-cells"
 +
-+		if (!acpi_processor_claim_cst_control()) {
-+			acpi_state_table.count = 0;
-+			return false;
-+		}
++examples:
++  - |
++        ap_thm0: thermal@32200000 {
++                compatible = "sprd,ums512-thermal";
++                reg = <0 0x32200000 0 0x10000>;
++                clock-names = "enable";
++                clocks = <&aonapb_gate 32>;
++                #thermal-sensor-cells = <1>;
++                nvmem-cells = <&thm0_sign>, <&thm0_ratio>;
++                nvmem-cell-names = "thm_sign_cal", "thm_ratio_cal";
 +
-+		return true;
-+	}
++                prometheus0-sensor@0 {
++                        reg = <0>;
++                        nvmem-cells = <&thm0_sen0>;
++                        nvmem-cell-names = "sen_delta_cal";
++                };
 +
-+	pr_debug("ACPI _CST not found or not usable\n");
-+	return false;
-+}
-+
-+static void intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
-+{
-+	int cstate, limit = min_t(int, CPUIDLE_STATE_MAX, acpi_state_table.count);
-+
-+	/*
-+	 * If limit > 0, intel_idle_cst_usable() has returned 'true', so all of
-+	 * the interesting states are ACPI_CSTATE_FFH.
-+	 */
-+	for (cstate = 1; cstate < limit; cstate++) {
-+		struct acpi_processor_cx *cx;
-+		struct cpuidle_state *state;
-+
-+		if (intel_idle_max_cstate_reached(cstate))
-+			break;
-+
-+		cx = &acpi_state_table.states[cstate];
-+
-+		state = &drv->states[drv->state_count++];
-+
-+		snprintf(state->name, CPUIDLE_NAME_LEN, "C%d_ACPI", cstate);
-+		strlcpy(state->desc, cx->desc, CPUIDLE_DESC_LEN);
-+		state->exit_latency = cx->latency;
-+		state->target_residency = cx->latency;
-+		if (cx->type > ACPI_STATE_C1)
-+			state->target_residency *= 4;
-+
-+		state->flags = MWAIT2flg(cx->address);
-+		if (cx->type > ACPI_STATE_C2)
-+			state->flags |= CPUIDLE_FLAG_TLB_FLUSHED;
-+
-+		state->enter = intel_idle;
-+		state->enter_s2idle = intel_idle_s2idle;
-+	}
-+}
-+#else /* !CONFIG_ACPI_PROCESSOR_CSTATE */
-+static inline bool intel_idle_acpi_cst_extract(void) { return false; }
-+static inline void intel_idle_init_cstates_acpi(struct cpuidle_driver *drv) { }
-+#endif /* !CONFIG_ACPI_PROCESSOR_CSTATE */
-+
- /*
-  * intel_idle_probe()
-  */
-@@ -1125,17 +1240,15 @@ static int __init intel_idle_probe(void)
- 	}
- 
- 	id = x86_match_cpu(intel_idle_ids);
--	if (!id) {
--		if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
--		    boot_cpu_data.x86 == 6)
--			pr_debug("does not run on family %d model %d\n",
--				 boot_cpu_data.x86, boot_cpu_data.x86_model);
--		return -ENODEV;
--	}
--
--	if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
--		pr_debug("Please enable MWAIT in BIOS SETUP\n");
--		return -ENODEV;
-+	if (id) {
-+		if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
-+			pr_debug("Please enable MWAIT in BIOS SETUP\n");
-+			return -ENODEV;
-+		}
-+	} else {
-+		id = x86_match_cpu(intel_mwait_ids);
-+		if (!id)
-+			return -ENODEV;
- 	}
- 
- 	if (boot_cpu_data.cpuid_level < CPUID_MWAIT_LEAF)
-@@ -1151,7 +1264,10 @@ static int __init intel_idle_probe(void)
- 	pr_debug("MWAIT substates: 0x%x\n", mwait_substates);
- 
- 	icpu = (const struct idle_cpu *)id->driver_data;
--	cpuidle_state_table = icpu->state_table;
-+	if (icpu)
-+		cpuidle_state_table = icpu->state_table;
-+	else if (!intel_idle_acpi_cst_extract())
-+		return -ENODEV;
- 
- 	pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
- 		 boot_cpu_data.x86_model);
-@@ -1333,31 +1449,19 @@ static void intel_idle_state_table_updat
- 	}
- }
- 
--/*
-- * intel_idle_cpuidle_driver_init()
-- * allocate, initialize cpuidle_states
-- */
--static void __init intel_idle_cpuidle_driver_init(void)
-+static void intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- {
- 	int cstate;
--	struct cpuidle_driver *drv = &intel_idle_driver;
--
--	intel_idle_state_table_update();
--
--	cpuidle_poll_state_init(drv);
--	drv->state_count = 1;
- 
- 	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
- 		unsigned int mwait_hint;
- 
--		if (!cpuidle_state_table[cstate].enter &&
--		    !cpuidle_state_table[cstate].enter_s2idle)
-+		if (intel_idle_max_cstate_reached(cstate))
- 			break;
- 
--		if (cstate + 1 > max_cstate) {
--			pr_info("max_cstate %d reached\n", max_cstate);
-+		if (!cpuidle_state_table[cstate].enter &&
-+		    !cpuidle_state_table[cstate].enter_s2idle)
- 			break;
--		}
- 
- 		/* If marked as unusable, skip this state. */
- 		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_UNUSABLE) {
-@@ -1380,6 +1484,24 @@ static void __init intel_idle_cpuidle_dr
- 	}
- }
- 
-+/*
-+ * intel_idle_cpuidle_driver_init()
-+ * allocate, initialize cpuidle_states
-+ */
-+static void __init intel_idle_cpuidle_driver_init(void)
-+{
-+	struct cpuidle_driver *drv = &intel_idle_driver;
-+
-+	intel_idle_state_table_update();
-+
-+	cpuidle_poll_state_init(drv);
-+	drv->state_count = 1;
-+
-+	if (icpu)
-+		intel_idle_init_cstates_icpu(drv);
-+	else
-+		intel_idle_init_cstates_acpi(drv);
-+}
- 
- /*
-  * intel_idle_cpu_init()
-@@ -1398,6 +1520,9 @@ static int intel_idle_cpu_init(unsigned
- 		return -EIO;
- 	}
- 
-+	if (!icpu)
-+		return 0;
-+
- 	if (icpu->auto_demotion_disable_flags)
- 		auto_demotion_disable();
- 
-
-
++                ank1-sensor@1 {
++                        reg = <1>;
++                        nvmem-cells = <&thm0_sen1>;
++                        nvmem-cell-names = "sen_delta_cal";
++                };
++        };
++...
+-- 
+1.7.9.5
 
