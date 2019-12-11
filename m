@@ -2,65 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC5B11BED7
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 22:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A715411BF46
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 22:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbfLKVLo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 16:11:44 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35139 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbfLKVLn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 16:11:43 -0500
-Received: by mail-wr1-f65.google.com with SMTP id g17so243954wro.2
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 13:11:41 -0800 (PST)
+        id S1726687AbfLKVdT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 16:33:19 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36114 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbfLKVdT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 16:33:19 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z3so296536wru.3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 13:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+Anxrztkidu84QaCwRdDgeR9GC/EpOxuuPVnCKxK8UI=;
-        b=V9jnpMFdlin1CFUBFcJYiMJm3EeDpCEQumbYnwFwHNa9FHg5OY7ULLJcvnw1TCXbSa
-         430mR106lVcuKd/LKV1hU6LojNpxeF+H/KUNd1CkIkGDJQsyvytGKQtVqO8jkreu31OM
-         IbphNoEWecB2iGBZ+Hua0dAoWOW1pXrSuu/gBRkrS/O7CacU//G14uJHKpR1LwuEeREb
-         ILN75folD0WJKAT80rVTn8fqzEV6R6HyQ3N93nNGYZxQmujvqSASVIm4sk3ubVyPQS0j
-         C1Jj4z/37ipnW8xKRTY6wMliN9MwWjXtLEenqibtkIF/18jjFMgsswIAVbg4/QICrO8g
-         Xlxg==
+        bh=UIlb0xm6F2ClOlwUvhdHSqiwkOQWVRrYeLYoTxepVsI=;
+        b=uGLX2wPsCQ5AZISedP5FK4SSdmM6dOOfInHwYLnal6tPyBkaaK76TYYV8VbGH7CX0S
+         2Ce4uXI12HGINGBcmXBkX43F4NEL9uTkgl3UoQrygHLzzyDwB1ghvgWs65CfZnol0xiA
+         HCLTeQyp+O8ipd14j9MOIH4xD0XFJ3Rf3+CSP9aXKl+QNIFwt8HF+HusFBOO0USLhF47
+         KePi8KHGFGeM6aSmPVxuX/r7gvT40W1sMYxKrTRqr5CCGmr21mVmEcxvL1045lk/RJqQ
+         BM+W6CIJ88VpP798MEqnuCfYs7AK5hlQIkYn7GiXmFE2lVLvSNQjd3O8udXeAdCR/0AR
+         f4jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=+Anxrztkidu84QaCwRdDgeR9GC/EpOxuuPVnCKxK8UI=;
-        b=gxx4CI5VSJHgD/sMiAcR8pRwDxhjp2ANEJDDVLFEOJ9vNfAJJvwY4D7IxYF94vKHBu
-         wPS5PscGmSLtoNaAd4ObNBvAfDqiqAxPGrUd8n488iv0hanDLe75SvkPkCsPWI0j0UV7
-         JAXU4xayJXpmNdFpRDudevUSN1pOX0A0MPGuxV65efXkNCaUhQFD0RKWl3/fx02JHDi9
-         HQ7A3znJInQe05d3uRYFX+W0ue5MWGRDaPZlbjh9IrytXYwIuA8spNr6gtC7UnFlT+yc
-         K/Vk+kh/6OOV4a0myp3ayoN9pX1Ki1jmuuBM4ActOcyxculE0sv5X2AOc2XrM4VJAwQM
-         Qg+Q==
-X-Gm-Message-State: APjAAAXFrAoUC5J+U0wjOEhUe5zKB41x7Dj1D/p4HCOxzCJHtu4MrwXz
-        Qg/VAmEW+tROqkV1uwWqIPdrsg==
-X-Google-Smtp-Source: APXvYqy+daJofrsLcthdtlWmODPbxA25i3Gm3psoHa/j/a7pX9fmnGBhAeP3ZOEKueglVa1WuJ9AbA==
-X-Received: by 2002:adf:a308:: with SMTP id c8mr1960289wrb.240.1576098700586;
-        Wed, 11 Dec 2019 13:11:40 -0800 (PST)
+        bh=UIlb0xm6F2ClOlwUvhdHSqiwkOQWVRrYeLYoTxepVsI=;
+        b=PjvlnLbq+ULI84rLxND8VITEKFdGfNeXZ5nsfZYjN2HsJKpe3UtRLkvmIp7gsYVU7v
+         F7vtanfViCQwOc2mYLfhAuYJ9/zJKGub+VdFhrCVS1V04TqGd6v65HqFI5+hRv04ibA+
+         9aHJobV+npSHsgYnrIYklSVri02bbzOxC005QKoX0dNMZSRHrphyNzjMc3gxrkRwa1WE
+         dTnWDESuFJSfVI3B/hkgxFUwzvA4hNUnyT2wLXWkO2kl2jZWoY2HqHYyPQvhrLOuTU7e
+         /t03irvJvStpYziiHxn5iYXd8R4WRmt9oW/sEqoGbOklaI8P7K6uFKQ60H5VgS5fvt06
+         ZpGQ==
+X-Gm-Message-State: APjAAAWeLYnkLTMC5h8Ukko9IsMs9LhFo/0uFfOVmdg/RXvTBoEULgZe
+        NipioicbE1BuqpM6ESpiywbCyQ==
+X-Google-Smtp-Source: APXvYqyR89jRx25UUwKFHGQy89lE9daXHU/xaUfFUt+A03+Grvg9N6cK5+rWwQLlNhsl3AAW5jGLaw==
+X-Received: by 2002:adf:fc4b:: with SMTP id e11mr2059266wrs.326.1576099996164;
+        Wed, 11 Dec 2019 13:33:16 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:9048:8:c450:f5a0? ([2a01:e34:ed2f:f020:9048:8:c450:f5a0])
-        by smtp.googlemail.com with ESMTPSA id i8sm3688944wro.47.2019.12.11.13.11.38
+        by smtp.googlemail.com with ESMTPSA id a16sm3567899wrt.37.2019.12.11.13.33.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2019 13:11:39 -0800 (PST)
-Subject: Re: [PATCH v3 0/3] thermal: introduce by-name softlink
-To:     Wei Wang <wvw@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20191205071953.121511-1-wvw@google.com>
- <69dd3a7a-c5fe-3ae7-8a4d-c3939870eed8@linaro.org>
- <CAGXk5yrsmvHK_xwvp_kFNmSqKOZ7Ef3HrVBHYDMBmDsCz0FNSQ@mail.gmail.com>
- <0603228e-5f0b-d335-30ce-67cf0626a489@linaro.org>
- <20191211085400.GB500800@kroah.com>
- <CAGXk5yrFp1eeeadhJar_qJqJ9G1q2mn+5m8JW4705ouQDLqzsw@mail.gmail.com>
+        Wed, 11 Dec 2019 13:33:15 -0800 (PST)
+Subject: Re: [PATCH V4 4/4] thermal/drivers/cpu_cooling: Rename to
+ cpufreq_cooling
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, edubezval@gmail.com,
+        rui.zhang@intel.com
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        viresh.kumar@linaro.org, amit.kucheria@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20191204153930.9128-4-daniel.lezcano@linaro.org>
+ <20191206113315.18954-1-martin.kepplinger@puri.sm>
+ <e6cbe4fb-8b04-cff6-f2af-6c5829d9deb1@linaro.org>
+ <7ae753bd-8330-6652-0207-0c884d722a6c@puri.sm>
+ <2beb4758-d66d-e8d9-a64d-86ce361aa57f@linaro.org>
+ <45b69f61-3a1f-be1f-ece9-4d1b79389353@linaro.org>
+ <6599c416-e4c3-e87e-0952-3dd1c412f212@puri.sm>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -116,12 +114,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <f0ebc98d-25f2-6326-c0d8-8dda543c4091@linaro.org>
-Date:   Wed, 11 Dec 2019 22:11:36 +0100
+Message-ID: <0f78c19b-9013-a20e-35c8-b39f86de48c0@linaro.org>
+Date:   Wed, 11 Dec 2019 22:33:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <CAGXk5yrFp1eeeadhJar_qJqJ9G1q2mn+5m8JW4705ouQDLqzsw@mail.gmail.com>
+In-Reply-To: <6599c416-e4c3-e87e-0952-3dd1c412f212@puri.sm>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -130,82 +128,159 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/12/2019 21:11, Wei Wang wrote:
-> On Wed, Dec 11, 2019 at 12:54 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> On Tue, Dec 10, 2019 at 09:54:11PM +0100, Daniel Lezcano wrote:
->>> On 10/12/2019 21:01, Wei Wang wrote:
->>>> On Tue, Dec 10, 2019 at 6:36 AM Daniel Lezcano
->>>> <daniel.lezcano@linaro.org> wrote:
+
+Hi Martin,
+
+I've a bug in the code.
+
+
+diff --git a/drivers/thermal/cpuidle_cooling.c
+b/drivers/thermal/cpuidle_cooling.c
+index 369c5c613f6b..628ad707f247 100644
+--- a/drivers/thermal/cpuidle_cooling.c
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -192,7 +192,7 @@ __init cpuidle_of_cooling_register(struct
+device_node *np,
+                goto out_id;
+        }
+
+-       idle_inject_set_duration(ii_dev, 0, TICK_USEC);
++       idle_inject_set_duration(ii_dev, TICK_USEC, TICK_USEC);
+
+        idle_cdev->ii_dev = ii_dev;
+
+
+Let me know if that solves your issue.
+
+  -- Daniel
+
+On 10/12/2019 09:57, Martin Kepplinger wrote:
+> 
+> 
+> On 09.12.19 20:29, Daniel Lezcano wrote:
+>> On 09/12/2019 13:03, Daniel Lezcano wrote:
+>>> On 09/12/2019 10:54, Martin Kepplinger wrote:
+>>>>
+>>>>
+>>>> On 06.12.19 15:15, Daniel Lezcano wrote:
+>>>>> On 06/12/2019 12:33, Martin Kepplinger wrote:
+>>>>>> I tested this on the librem5-devkit and see the
+>>>>>> cooling devices in sysfs. I configure ARM_PSCI_CPUIDLE, not ARM_CPUIDLE and
+>>>>>> add the patch below in register the cooling device there. "psci_idle"
+>>>>>> is listed as the cpuidle_driver.
+>>>>>>
+>>>>>> That's what I'm running, in case you want to see it all:
+>>>>>> https://source.puri.sm/martin.kepplinger/linux-next/commits/next-20191205/librem5_cpuidle_mainline_atf
+>>>>>>
+>>>>>> so I add a trip temperature description like this:
+>>>>>> https://source.puri.sm/martin.kepplinger/linux-next/commit/361f49f93ae2c477fd012790831cabd0ed976660
+>>>>>>
+>>>>>> When I let the SoC heat up, cpuidle cooling won't kick it. In sysfs:
+>>>>>>
+>>>>>> catting the relevant files in /sys/class/thermal after heating up,
+>>>>>> if that makes sense:
+>>>>>>
+>>>>>> 87000
+>>>>>> 85000
+>>>>>> 85000
+>>>>>> thermal-cpufreq-0
+>>>>>> 1
+>>>>>> thermal-idle-0
+>>>>>> 0
+>>>>>> thermal-idle-1                                                                  
+>>>>>> 0                                                                               
+>>>>>> thermal-idle-2
+>>>>>> 0
+>>>>>> thermal-idle-3
+>>>>>> 0
+>>>>>>
+>>>>>> with ARM_CPUIDLE instead of ARM_PSCI_CPUIDLE (and registering the cooling dev
+>>>>>> during cpuidle-arm.c init) I won't have a cpuidle driver and thus no cpu-sleep
+>>>>>> state at all.
+>>>>>>
+>>>>>> Can you see where the problem here lies?
 >>>>>
->>>>> On 05/12/2019 08:19, Wei Wang wrote:
->>>>>> The paths thermal_zone%d and cooling_device%d are not intuitive and the
->>>>>> numbers are subject to change due to device tree change. This usually
->>>>>> leads to tree traversal in userspace code.
+>>>>> Yes, I removed the registration via the DT.
+>>>>>
+>>>>> Can you try the following:
+>>>>>
+>>>>> diff --git a/drivers/cpuidle/dt_idle_states.c
+>>>>> b/drivers/cpuidle/dt_idle_states.c
+>>>>> index d06d21a9525d..01367ddec49a 100644
+>>>>> --- a/drivers/cpuidle/dt_idle_states.c
+>>>>> +++ b/drivers/cpuidle/dt_idle_states.c
+>>>>> @@ -13,6 +13,7 @@
+>>>>>  #include <linux/errno.h>
+>>>>>  #include <linux/kernel.h>
+>>>>>  #include <linux/module.h>
+>>>>> +#include <linux/cpu_cooling.h>
+>>>>>  #include <linux/of.h>
+>>>>>  #include <linux/of_device.h>
+>>>>>
+>>>>> @@ -205,6 +206,9 @@ int dt_init_idle_driver(struct cpuidle_driver *drv,
+>>>>>  			err = -EINVAL;
+>>>>>  			break;
+>>>>>  		}
+>>>>> +
+>>>>> +		cpuidle_of_cooling_register(state_node, drv);
+>>>>> +
+>>>>>  		of_node_put(state_node);
+>>>>>  	}
+>>>>>
+>>>>> That's a hack for the moment.
+>>>>>
+>>>>
+>>>> thanks. I could test that successfully. The only question would be: Is
+>>>> is intentional how "non-aggressive" the cooling driver cools? I would
+>>>> have expected it to basically inject more idle cycles earlier. I'd set
+>>>> 75 degrees as trip point and at 85 degress is would only inject about 30
+>>>> (of 100).
 >>
->> tree traversal is supposed to be done in userspace code :)
->>
-> Yes, that can be done in userspace, but given the amount of thermal
-> zones we have in some mobile devices, this will bring a lot of
-> convenience.
-
-But usually all these thermal zones are fixed and building the name<->tz
-association is just a question of a few lines of code from userspace,
-no? What would be the benefit of adding more ABI?
-
-If there is a thermal zone change, then a notification can be used, so
-the userspace code rebuild the name<->tz, no?
-
-> e.g. this is on Pixel 4 XL:
-> coral:/ # ls  /sys/devices/virtual/thermal/
-> cdev-by-name      cooling_device15  cooling_device22  cooling_device3
->  cooling_device9  thermal_zone15  thermal_zone22  thermal_zone3
-> thermal_zone37  thermal_zone44  thermal_zone51  thermal_zone59
-> thermal_zone66  thermal_zone73  thermal_zone80  thermal_zone88
-> cooling_device0   cooling_device16  cooling_device23  cooling_device30
->  thermal_zone0    thermal_zone16  thermal_zone23  thermal_zone30
-> thermal_zone38  thermal_zone45  thermal_zone52  thermal_zone6
-> thermal_zone67  thermal_zone74  thermal_zone81  thermal_zone9
-> cooling_device1   cooling_device17  cooling_device24  cooling_device31
->  thermal_zone1    thermal_zone17  thermal_zone24  thermal_zone31
-> thermal_zone39  thermal_zone46  thermal_zone53  thermal_zone60
-> thermal_zone68  thermal_zone75  thermal_zone82  tz-by-name
-> cooling_device10  cooling_device18  cooling_device25  cooling_device4
->  thermal_zone10   thermal_zone18  thermal_zone25  thermal_zone32
-> thermal_zone4   thermal_zone47  thermal_zone54  thermal_zone61
-> thermal_zone69  thermal_zone76  thermal_zone83
-> cooling_device11  cooling_device19  cooling_device26  cooling_device5
->  thermal_zone11   thermal_zone19  thermal_zone26  thermal_zone33
-> thermal_zone40  thermal_zone48  thermal_zone55  thermal_zone62
-> thermal_zone7   thermal_zone77  thermal_zone84
-> cooling_device12  cooling_device2   cooling_device27  cooling_device6
->  thermal_zone12   thermal_zone2   thermal_zone27  thermal_zone34
-> thermal_zone41  thermal_zone49  thermal_zone56  thermal_zone63
-> thermal_zone70  thermal_zone78  thermal_zone85
-> cooling_device13  cooling_device20  cooling_device28  cooling_device7
->  thermal_zone13   thermal_zone20  thermal_zone28  thermal_zone35
-> thermal_zone42  thermal_zone5   thermal_zone57  thermal_zone64
-> thermal_zone71  thermal_zone79  thermal_zone86
-> cooling_device14  cooling_device21  cooling_device29  cooling_device8
->  thermal_zone14   thermal_zone21  thermal_zone29  thermal_zone36
-> thermal_zone43  thermal_zone50  thermal_zone58  thermal_zone65
-> thermal_zone72  thermal_zone8   thermal_zone87
+>> By the way, how many CPUs are injecting idle cycle when the mitigation
+>> happens ?
 > 
+> all 4 are injecting the same.
 > 
->> But what userspace code needs to do this, and for what?
-> In Android, thermal daemon and thermal HAL as well as some init.rc
-> script would use those thermal paths for managing and monitoring
-> thermal. The daemon/HAL could have logic pipled in, however Android's
-> init.rc script would be really tricky.
-> On a related note, we also create /dev/block/by-name links from userspace.
+>>
+>>>> You describe the "config values" in question in the documentation, but
+>>>> I'm not sure what's the correct way to change them.
+>>>
+>>> That is difficult to say without knowing the board behavior. Are you
+>>> able to profile the temperature with the load? How fast the temperature
+>>> increases? The aggressive behavior of the cooling device will depend on
+>>> the governor which depends on the slope of the temperature increase and
+>>> the sampling.
+>>>
+>>> Can you give the pointer to the git tree with the DT definition of your
+>>> board?
 > 
-> Thanks!
-> -Wei
->>
->> thanks,
->>
->> greg k-h
+> https://source.puri.sm/martin.kepplinger/linux-next/blob/next-20191205/librem5_cpuidle_mainline_atf/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
+> 
+> you can browse in that branch.
+> 
+>>>
+>>> You can try by changing the idle duration to 10ms instead of the default
+>>> 4ms.
+> 
+> where is that set?
+> 
+>>>
+>>> You can also change the cooling states in the DT <&state 20 70>, so it
+>>> will begin to mitigate at state 20. But I wouldn't recommend that.
+> 
+> where would we assign that? I'm not sure who reads that -.-
+> it's still something to consider, but a longer idle duration makes more
+> sense, yes.
+> 
+>>>
+>>> Do you have the energy power model, so we can try with the IPA governor?
+>>>
+>>>
+> 
+> thanks for the reminder. I'd look at that later.
+> 
+>                                martin
+> 
 
 
 -- 
