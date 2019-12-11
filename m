@@ -2,497 +2,480 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D43111A754
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 10:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94BD11A7BE
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 10:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbfLKJgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 04:36:25 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42244 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727493AbfLKJgZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 04:36:25 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 66so18221312otd.9
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 01:36:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5v/V1j5G85ien6p4lq+TatwrjzuO6wf75tSVQ3zRMPU=;
-        b=FWlghPvzS5f7HVXcuZo2MdED9lprGrzazRi25Ch1xAuANhc8t2nRvlL1/u8YvMkQPW
-         ffC326fT+cAhRDRY7kR7HDgEfFIGaUOp6htVPgvZjNoUBz2zbi3gkg2+5HKbcxLD2mFi
-         AUyc2xABMDqo4+GGeUkLAwiCaW5AY9oRqe1sTJ5uQZMJxu01XW5sgqn+cRuT8yI+/0yX
-         6iO1kYSZKqnFA105fNqbGrSnlv08H6M2qCTymCm7cUscWpbCdwcWkZ9Nnhf4EBdOfRO9
-         xSrnfCTCIo19aUk7tRoNZE1+gYFIFF7s2JpgGcH6jaMeK9NIQLCYTazSZc1Vtc6RibOU
-         d9mQ==
-X-Gm-Message-State: APjAAAVCW0jko0K3Aikz/Bm5n5LULK7RwYkSuVjepayyL6jz4Vzze3a0
-        T6fMhaRwdabAyAc2VD/SnpJo6k8q42KllDFSLuxlZA==
-X-Google-Smtp-Source: APXvYqx5GZqWblJRUb/42J6S70q29yxpOigXTAJhhq80Ppw/udU0DD9g2xyzbYw1G51Qd2iBzPAjOYjY1s44WUCFXks=
-X-Received: by 2002:a05:6830:95:: with SMTP id a21mr1472257oto.167.1576056983367;
- Wed, 11 Dec 2019 01:36:23 -0800 (PST)
-MIME-Version: 1.0
-References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <DB3PR0402MB3916C7E77C885343B2B961CFF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <5310126.hg2rr5Fjtk@kreacher> <7233060.oySJ2cjCuV@kreacher> <AM0PR04MB4481EDA9EB0374E698A6754C885A0@AM0PR04MB4481.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB4481EDA9EB0374E698A6754C885A0@AM0PR04MB4481.eurprd04.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 Dec 2019 10:36:12 +0100
-Message-ID: <CAJZ5v0g15AupBe05kN5Mp8NRQYgTEwd80QoJ3kTajnnfD51O6w@mail.gmail.com>
-Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1728104AbfLKJoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 04:44:03 -0500
+Received: from mail-eopbgr40080.outbound.protection.outlook.com ([40.107.4.80]:65133
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728420AbfLKJoD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Dec 2019 04:44:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lm06nydkgZkyusIqBQK5BaC96VwB1x+3yA1IzUmy3wFO9oH912/dmWRAsB+prHD/JNMpr6Za7mnbwf7DSiruvaI+LzsKqqnZkbyK+zdFyx6MAaifcybJO7OVKW4BBUmhYF7C8IMWk50j1JwpTZQJsTvlQJ8ebJzEU6mQwMV9eqcdw49fSY3EBsp1/XxTv10ff5kD1LFUgvKMsxtm2EYA4r9XwS80eld7IqzMq5TGu+2RO+Nzn7oiweo1iuEUsl3Vy14mw8lo+b5kS5Ewo9mfTNyQyUjh7qonXG/u9kRWTPZ+qAbtsLta1s2xrpJuj+8FGL/xp0490OkYCoF/PD3SgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ds3qYmPIqHMlLGTidN5zUdBhKAqmjB5/lGnJz/vnVdQ=;
+ b=SjtVjjGBrwjEU9IjicTx127WQLwu3eM0e1nuDZ8QFIJs7O/1usKUPWzUPaAug4Tyxp0+greA0Sz6sWYHBHpyrw8KCOau+4LRTD2QOHRaZ3fuVd/1v7kpMnZ+JFaJF6P2bHDY/6hzT1dxrggI3hv9cafcdT02F5Af/+KHywHqBYafToahvbaSuD95T51j2LCe9i/V6kgfxjIo6XDCtjXNW4GiAEpWrEMU1+uyMID/t+odb8sv+zRvkIntc+Q10v+VMQJLiPlqmL83VFfdT0FzFsfqxuF91j/V31ewsr+aY34w3Tl+HyKw18HGZ24bCTKIEgpiAAQ8po2EI/3vZlJfpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ds3qYmPIqHMlLGTidN5zUdBhKAqmjB5/lGnJz/vnVdQ=;
+ b=nLcMl95j+eCeUGdVK1uP/e897Jt0tOP7X6nU0McLXkAEyTauu/h8uPLrVmKiKsBX+hRweZsRhrKsWJvMGqy+DrTaFeXlLMIieOJVTgSRE9iOK1nD4/EAZraLbMxQVq6lX505k6mSxQLqDeCKbFyCEUbx5A6oK1+yU0C36EEbxLE=
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB4162.eurprd04.prod.outlook.com (52.134.95.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.15; Wed, 11 Dec 2019 09:43:51 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::505:87e7:6b49:3d29]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::505:87e7:6b49:3d29%7]) with mapi id 15.20.2516.018; Wed, 11 Dec 2019
+ 09:43:51 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Anson Huang <anson.huang@nxp.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Jacky Bai <ping.bai@nxp.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Paul McKenney <paulmck@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: About CPU hot-plug stress test failed in cpufreq driver
+Thread-Topic: About CPU hot-plug stress test failed in cpufreq driver
+Thread-Index: AdWgM3EuFQeyF1SHRka5sBhDxaFShQAG6J6AAAAKxPAAAq52AAAAFLaAACYwDoAACh8qAAAASXeAAJxYEgAAxubCAAAEUtUgASMyDZAABHGSAAAFLgggAAVyLYAAvd+WYAAA3omQAAEGDYAAAmWbRgAAcGGAACPMEXAAAqbAgAACrQEAAAAfUXAAAG2mAAAAIzIAAABNT4AAAAalAAADxrOAAACJ1gAALbeWIAAB0/sAAAAOURA=
+Date:   Wed, 11 Dec 2019 09:43:51 +0000
+Message-ID: <AM0PR04MB4481ACE3187E2698145A7784885A0@AM0PR04MB4481.eurprd04.prod.outlook.com>
+References: <DB3PR0402MB39165E1B832597ADBAB241AAF55C0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB3916C7E77C885343B2B961CFF55B0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <5310126.hg2rr5Fjtk@kreacher> <7233060.oySJ2cjCuV@kreacher>
+ <AM0PR04MB4481EDA9EB0374E698A6754C885A0@AM0PR04MB4481.eurprd04.prod.outlook.com>
+ <CAJZ5v0g15AupBe05kN5Mp8NRQYgTEwd80QoJ3kTajnnfD51O6w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g15AupBe05kN5Mp8NRQYgTEwd80QoJ3kTajnnfD51O6w@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 9529c038-6d08-468e-7b49-08d77e1ea130
+x-ms-traffictypediagnostic: AM0PR04MB4162:|AM0PR04MB4162:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB416209DD7B74DA77026B4229885A0@AM0PR04MB4162.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 024847EE92
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(13464003)(52314003)(199004)(189003)(52536014)(33656002)(54906003)(316002)(966005)(45080400002)(478600001)(55016002)(86362001)(44832011)(9686003)(5660300002)(26005)(4326008)(2906002)(81166006)(8676002)(6506007)(7696005)(66946007)(66446008)(64756008)(66556008)(76116006)(81156014)(30864003)(8936002)(6916009)(186003)(66476007)(71200400001)(53546011)(579004);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4162;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Wn0tc+000XncORtXcBi1Wv5Ymj/6itGVCIx1PFa0Q4wqAZOhBOf6KJLcUoF6JD7NMN0NjQFfha5c0I9ZN+DUq8p6x16uZRojejbqPCG3Tgq36aR1hbhdmbXzP/MxelUbIihXc1p0EAgf5TIk7n6wCEQtFQFsYms/MVMFIpR1XQ9ZXFp7Pggd8KxoPzbOAY9N+qcFYSO1d7U7tBgiOa318tfdLfgkl0CNv/FoWE1w6pE5B573AivdR3m7zK8MVOEz4J+YF2lCdScf5VjILAulSXEVcP6e6sHZETRTzZfTjPztp1/0kS3UZ8QvHBTThJTSX4mYoIkNf5w2LeA/PxzYrlDDXSI0QAC0K1Jefn+AiNzoAcNd3DDIgsAzx1GSVWlGTTBRzQ1amsabh1aGVFxbyaIk4/FaXoD196i9YtujYpkR3sLunT4QnIYKbQWihvU3ws/JY76ocJ7JaVww8lDDE1UXksAd1DvJwF3omNug9LPHoNhWx/gnyEfaFnVfpxFSZYQbHdNDu/EN5dpe/QtBIw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9529c038-6d08-468e-7b49-08d77e1ea130
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Dec 2019 09:43:51.2343
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0mdiN7BZp1t3ElmMFsfzKzg9MzL7ESxATkVZPFgicuFZskm3K17gIrlkhLQLPm0xTO5KX8i7sYT9pxcWoQFmjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4162
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 9:59 AM Peng Fan <peng.fan@nxp.com> wrote:
->
-> > Subject: Re: About CPU hot-plug stress test failed in cpufreq driver
-> >
-> > On Tuesday, December 10, 2019 11:39:25 AM CET Rafael J. Wysocki wrote:
-> > > On Tuesday, December 10, 2019 9:51:43 AM CET Anson Huang wrote:
-> > > >
-> > > > > -----Original Message-----
-> > > > > From: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > > > > Sent: Tuesday, December 10, 2019 4:51 PM
-> > > > > To: Anson Huang <anson.huang@nxp.com>
-> > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Viresh Kumar
-> > > > > <viresh.kumar@linaro.org>; Peng Fan <peng.fan@nxp.com>; Jacky Bai
-> > > > > <ping.bai@nxp.com>; linux-pm@vger.kernel.org; Vincent Guittot
-> > > > > <vincent.guittot@linaro.org>; Peter Zijlstra
-> > > > > <peterz@infradead.org>; Paul McKenney
-> > <paulmck@linux.vnet.ibm.com>
-> > > > > Subject: Re: About CPU hot-plug stress test failed in cpufreq
-> > > > > driver
-> > > > >
-> > > > > On Tuesday, December 10, 2019 9:45:09 AM CET Anson Huang wrote:
-> > > > > >
-> > > > > > > -----Original Message-----
-> > > > > > > From: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > > Sent: Tuesday, December 10, 2019 4:38 PM
-> > > > > > > To: Anson Huang <anson.huang@nxp.com>
-> > > > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Viresh Kumar
-> > > > > > > <viresh.kumar@linaro.org>; Peng Fan <peng.fan@nxp.com>; Rafael
-> > J.
-> > > > > > > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>;
-> > > > > > > linux- pm@vger.kernel.org; Vincent Guittot
-> > > > > > > <vincent.guittot@linaro.org>; Peter Zijlstra
-> > > > > > > <peterz@infradead.org>; Paul McKenney
-> > > > > > > <paulmck@linux.vnet.ibm.com>
-> > > > > > > Subject: Re: About CPU hot-plug stress test failed in cpufreq
-> > > > > > > driver
-> > > > > > >
-> > > > > > > On Tue, Dec 10, 2019 at 9:29 AM Anson Huang
-> > > > > > > <anson.huang@nxp.com>
-> > > > > > > wrote:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > > -----Original Message-----
-> > > > > > > > > From: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > > > > Sent: Tuesday, December 10, 2019 4:22 PM
-> > > > > > > > > To: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > > > > > > Cc: Peng Fan <peng.fan@nxp.com>; Rafael J. Wysocki
-> > > > > > > > > <rafael@kernel.org>; Anson Huang <anson.huang@nxp.com>;
-> > > > > > > > > Rafael
-> > > > > J.
-> > > > > > > > > Wysocki <rjw@rjwysocki.net>; Jacky Bai <ping.bai@nxp.com>;
-> > > > > > > > > linux- pm@vger.kernel.org; Vincent Guittot
-> > > > > > > > > <vincent.guittot@linaro.org>; Peter Zijlstra
-> > > > > > > > > <peterz@infradead.org>; Paul McKenney
-> > > > > > > > > <paulmck@linux.vnet.ibm.com>
-> > > > > > > > > Subject: Re: About CPU hot-plug stress test failed in
-> > > > > > > > > cpufreq driver
-> > > > > > > > >
-> > > > > > > > > On Tue, Dec 10, 2019 at 8:05 AM Viresh Kumar
-> > > > > > > > > <viresh.kumar@linaro.org>
-> > > > > > > > > wrote:
-> > > > > > > > > >
-> > > > > > > > > > +few more guys
-> > > > > > > > > >
-> > > > > > > > > > On 10-12-19, 05:53, Peng Fan wrote:
-> > > > > > > > > > > But per
-> > > > > > > > > > > https://eur01.safelinks.protection.outlook.com/?url=ht
-> > > > > > > > > > > tps%3A
-> > > > > > > > > > > %2F%
-> > > > > > > > > > > 2Fel
-> > > > > > > > > > > ixir.bootlin.com%2Flinux%2Fv5.5-
-> > > > > > > > > rc1%2Fsource%2Fkernel%2Fsched%2Fsche
-> > > > > > > > > > >
-> > > > > > > > >
-> > > > > > >
-> > > > >
-> > d.h%23L2293&amp;data=02%7C01%7Canson.huang%40nxp.com%7C6f4490
-> > 0
-> > > > > > > > > be3404
-> > > > > > > > > > >
-> > > > > > > > >
-> > > > > > >
-> > > > >
-> > e7d355708d77d4a16fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0
-> > %
-> > > > > > > > > 7C637
-> > > > > > > > > > >
-> > > > > > > > >
-> > > > > > >
-> > > > >
-> > 115629475456329&amp;sdata=XXhwvuTOBb3TLmerwkr1zKbaWNA8xA%2Bl
-> > > > > > > > > W%2Faw31
-> > > > > > > > > > > 0AYcM%3D&amp;reserved=0
-> > > > > > > > > > > cpu_of(rq) and smp_processor_id() is possible to not
-> > > > > > > > > > > the same,
-> > > > > > > > > > >
-> > > > > > > > > > > When cpu_of(rq) is not equal to smp_processor_id(),
-> > > > > > > > > > > dbs_update_util_handler will use irq_work_queue to
-> > > > > > > > > > > smp_processor_id(), not cpu_of(rq). Is this expected?
-> > > > > > > > > > > Or should the irq_work be queued to cpu_of(rq)?
-> > > > > > > > > >
-> > > > > > > > > > Okay, sorry for the long weekend where I couldn't get
-> > > > > > > > > > time to reply at
-> > > > > > > all.
-> > > > > > > > >
-> > > > > > > > > No worries. :-)
-> > > > > > > > >
-> > > > > > > > > > First of all, lets try to understand dvfs_possible_from_any_cpu.
-> > > > > > > > > >
-> > > > > > > > > > Who can update the frequency of a CPU ? For many
-> > > > > > > > > > architectures/platforms the eventual code that writes to
-> > > > > > > > > > some register to change the frequency should only run on
-> > > > > > > > > > the local CPU, as these registers are per-cpu registers
-> > > > > > > > > > and not something shared
-> > > > > > > between CPUs.
-> > > > > > > > > >
-> > > > > > > > > > But for the ARM architecture, we have a PLL and then
-> > > > > > > > > > some more registers to play with the clk provided to the
-> > > > > > > > > > CPU blocks and these registers (which are updated as a
-> > > > > > > > > > result of
-> > > > > > > > > > clk_set_rate()) are part of a
-> > > > > > > > > block outside of the CPU blocks.
-> > > > > > > > > > And so any CPU (even if it is not part of the same
-> > > > > > > > > > cpufreq
-> > > > > > > > > > policy) can update it. Setting this flag allows that and
-> > > > > > > > > > eventually we may end up updating the frequency sooner,
-> > > > > > > > > > instead of later (which may be less effective). That was
-> > > > > > > > > > the idea of
-> > > > > the remote-wakeup series.
-> > > > > > > > > > This stuff is absolutely correct and so cpufreq-dt does
-> > > > > > > > > > it for
-> > > > > everyone.
-> > > > > > > > > >
-> > > > > > > > > > This also means that the normal work and irq-work both
-> > > > > > > > > > can run on any CPU for your platform and it should be okay to
-> > do that.
-> > > > > > > > >
-> > > > > > > > > And it the failing case all of the CPUs in the system are
-> > > > > > > > > in the same policy anyway, so dvfs_possible_from_any_cpu is a
-> > red herring.
-> > > > > > > > >
-> > > > > > > > > > Now, we have necessary measures in place to make sure
-> > > > > > > > > > that after stopping and before starting a governor, the
-> > > > > > > > > > scheduler hooks to save the cpufreq governor pointer and
-> > > > > > > > > > updates to
-> > > > > > > > > > policy->cpus are made properly, to make sure that we
-> > > > > > > > > > policy->never
-> > > > > > > > > > ever schedule a work or irq-work on a CPU which is offline.
-> > > > > > > > > > Now it looks like this isn't working as expected and we
-> > > > > > > > > > need to find
-> > > > > what exactly is broken here.
-> > > > > > > > > >
-> > > > > > > > > > And yes, I did the testing on Hikey 620, an octa-core
-> > > > > > > > > > ARM platform which has a single cpufreq policy which has
-> > > > > > > > > > all the 8 CPUs. And yes, I am using cpufreq-dt only and
-> > > > > > > > > > I wasn't able to reproduce the problem with mainline kernel as
-> > I explained earlier.
-> > > > > > > > > >
-> > > > > > > > > > The problem is somewhere between the scheduler's
-> > > > > > > > > > governor hook
-> > > > > > > > > running
-> > > > > > > > > > or queuing work on a CPU which is in the middle of
-> > > > > > > > > > getting offline/online and there is some race around
-> > > > > > > > > > that. The problem hence may not be related to just
-> > > > > > > > > > cpufreq, but a wider variety of
-> > > > > clients.
-> > > > > > > > >
-> > > > > > > > > The problem is that a CPU is running a governor hook which
-> > > > > > > > > it shouldn't be running at all.
-> > > > > > > > >
-> > > > > > > > > The observation that dvfs_possible_from_any_cpu makes a
-> > > > > > > > > difference only means that the governor hook is running on
-> > > > > > > > > a CPU that is not present in the
-> > > > > > > > > policy->cpus mask.  On the platform(s) in question this
-> > > > > > > > > policy->cannot happen as
-> > > > > > > > > long as RCU works as expected.
-> > > > > > > >
-> > > > > > > > If I understand correctly, the governor hook ONLY be clear
-> > > > > > > > on the CPU being offline and after governor stopped, but the
-> > > > > > > > CPU being offline could still run into below function to
-> > > > > > > > help other CPU update the util, and it ONLY checks the
-> > > > > > > > cpu_of(rq)'s governor hook which is valid as that
-> > > > > > > CPU is online.
-> > > > > > > >
-> > > > > > > > So the question is how to avoid the CPU being offline and
-> > > > > > > > already finish the governor stop flow be scheduled to help
-> > > > > > > > other CPU update the
-> > > > > > > util.
-> > > > > > > >
-> > > > > > > >  static inline void cpufreq_update_util(struct rq *rq,
-> > > > > > > > unsigned int
-> > > > > > > > flags)  {
-> > > > > > > >          struct update_util_data *data;
-> > > > > > > >
-> > > > > > > >          data =
-> > > > > > > rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
-> > > > > > > >
-> > cpu_of(rq)));
-> > > > > > > >          if (data)
-> > > > > > > >                  data->func(data, rq_clock(rq), flags);  }
-> > > > > > >
-> > > > > > > OK, so that's where the problem is, good catch!
-> > > > > > >
-> > > > > > > So what happens is that a CPU going offline runs some
-> > > > > > > scheduler code that invokes cpufreq_update_util().
-> > > > > > > Incidentally, it is not the cpu_of(rq), but that CPU is still
-> > > > > > > online, so the callback is invoked and then policy->cpus test
-> > > > > > > is bypassed because of
-> > > > > dvfs_possible_from_any_cpu.
-> > > > > >
-> > > > > > If this is the issue, add another check here for the current
-> > > > > > CPU's governor
-> > > > > hook?
-> > > > > > Or any other better place to make sure the CPU being offline NOT
-> > > > > > to be
-> > > > > queued to irq work?
-> > > > >
-> > > > > Generally, yes.
-> > > > >
-> > > > > Something like the patch below should help if I'm not mistaken:
-> > > > >
-> > > > > ---
-> > > > >  include/linux/cpufreq.h |    8 +++++---
-> > > > >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > Index: linux-pm/include/linux/cpufreq.h
-> > > > >
-> > ==============================================================
-> > ==
-> > > > > ===
-> > > > > --- linux-pm.orig/include/linux/cpufreq.h
-> > > > > +++ linux-pm/include/linux/cpufreq.h
-> > > > > @@ -599,11 +599,13 @@ static inline bool cpufreq_this_cpu_can_  {
-> > > > >         /*
-> > > > >          * Allow remote callbacks if:
-> > > > > -        * - dvfs_possible_from_any_cpu flag is set
-> > > > >          * - the local and remote CPUs share cpufreq policy
-> > > > > +        * - dvfs_possible_from_any_cpu flag is set and the CPU running
-> > the
-> > > > > +        *   code is not going offline.
-> > > > >          */
-> > > > > -       return policy->dvfs_possible_from_any_cpu ||
-> > > > > -               cpumask_test_cpu(smp_processor_id(), policy->cpus);
-> > > > > +       return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
-> > > > > +               (policy->dvfs_possible_from_any_cpu &&
-> > > > > +                !cpumask_test_cpu(smp_processor_id(), policy-
-> > > > > >related_cpus));
-> > > > >  }
-> > > >
-> > > > I will start a stress test of this patch, thanks!
-> > >
-> > > OK, thanks!
-> > >
-> > > Another patch to test is appended and it should be more robust.
-> > >
-> > > Instead of doing the related_cpus cpumask check in the previous patch
-> > > (which only covered CPUs that belog to the target policy) it checks if
-> > > the update_util hook is set for the local CPU (if it is not, that CPU
-> > > is not expected to run the uodate_util code).
-> >
-> > One more thing.
-> >
-> > Both of the previous patches would not fix the schedutil governor in which
-> > cpufreq_this_cpu_can_update() only is called in the fast_switch case and that
-> > is not when irq_works are used.
-> >
-> > So please discard the patch I have just posted and here is an updated patch
-> > that covers schedutil too, so please test this one instead.
-> >
-> > ---
-> >  include/linux/cpufreq.h          |   11 -----------
-> >  include/linux/sched/cpufreq.h    |    3 +++
-> >  kernel/sched/cpufreq.c           |   18 ++++++++++++++++++
-> >  kernel/sched/cpufreq_schedutil.c |    8 +++-----
-> >  4 files changed, 24 insertions(+), 16 deletions(-)
-> >
-> > Index: linux-pm/include/linux/cpufreq.h
-> > ==============================================================
-> > =====
-> > --- linux-pm.orig/include/linux/cpufreq.h
-> > +++ linux-pm/include/linux/cpufreq.h
-> > @@ -595,17 +595,6 @@ struct governor_attr {
-> >                        size_t count);
-> >  };
-> >
-> > -static inline bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
-> > -{
-> > -     /*
-> > -      * Allow remote callbacks if:
-> > -      * - dvfs_possible_from_any_cpu flag is set
-> > -      * - the local and remote CPUs share cpufreq policy
-> > -      */
-> > -     return policy->dvfs_possible_from_any_cpu ||
-> > -             cpumask_test_cpu(smp_processor_id(), policy->cpus);
-> > -}
-> > -
-> >
-> > /*************************************************************
-> > ********
-> >   *                     FREQUENCY TABLE HELPERS
-> > *
-> >
-> > **************************************************************
-> > *******/
-> > Index: linux-pm/kernel/sched/cpufreq.c
-> > ==============================================================
-> > =====
-> > --- linux-pm.orig/kernel/sched/cpufreq.c
-> > +++ linux-pm/kernel/sched/cpufreq.c
-> > @@ -5,6 +5,8 @@
-> >   * Copyright (C) 2016, Intel Corporation
-> >   * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >   */
-> > +#include <linux/cpufreq.h>
-> > +
-> >  #include "sched.h"
-> >
-> >  DEFINE_PER_CPU(struct update_util_data __rcu *,
-> > cpufreq_update_util_data); @@ -57,3 +59,19 @@ void
-> > cpufreq_remove_update_util_hook(int
-> >       rcu_assign_pointer(per_cpu(cpufreq_update_util_data, cpu), NULL);  }
-> > EXPORT_SYMBOL_GPL(cpufreq_remove_update_util_hook);
-> > +
-> > +/**
-> > + * cpufreq_this_cpu_can_update - Check if cpufreq policy can be updated.
-> > + * @policy: cpufreq policy to check.
-> > + *
-> > + * Return 'true' if:
-> > + * - the local and remote CPUs share @policy,
-> > + * - dvfs_possible_from_any_cpu is set in @policy and the local CPU is not
-> > going
-> > + *   offline (in which it is not expected to run cpufreq updates any more).
-> > + */
-> > +bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy) {
-> > +     return cpumask_test_cpu(smp_processor_id(), policy->cpus) ||
-> > +             (policy->dvfs_possible_from_any_cpu &&
-> > +
-> > rcu_dereference_sched(*this_cpu_ptr(&cpufreq_update_util_data)));
-> > +}
-> > Index: linux-pm/include/linux/sched/cpufreq.h
-> > ==============================================================
-> > =====
-> > --- linux-pm.orig/include/linux/sched/cpufreq.h
-> > +++ linux-pm/include/linux/sched/cpufreq.h
-> > @@ -12,6 +12,8 @@
-> >  #define SCHED_CPUFREQ_MIGRATION      (1U << 1)
-> >
-> >  #ifdef CONFIG_CPU_FREQ
-> > +struct cpufreq_policy;
-> > +
-> >  struct update_util_data {
-> >         void (*func)(struct update_util_data *data, u64 time, unsigned int
-> > flags);  }; @@ -20,6 +22,7 @@ void cpufreq_add_update_util_hook(int cp
-> >                         void (*func)(struct update_util_data *data, u64
-> > time,
-> >                                   unsigned int flags));
-> >  void cpufreq_remove_update_util_hook(int cpu);
-> > +bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy);
-> >
-> >  static inline unsigned long map_util_freq(unsigned long util,
-> >                                       unsigned long freq, unsigned long cap)
-> > Index: linux-pm/kernel/sched/cpufreq_schedutil.c
-> > ==============================================================
-> > =====
-> > --- linux-pm.orig/kernel/sched/cpufreq_schedutil.c
-> > +++ linux-pm/kernel/sched/cpufreq_schedutil.c
-> > @@ -82,12 +82,10 @@ static bool sugov_should_update_freq(str
-> >        * by the hardware, as calculating the frequency is pointless if
-> >        * we cannot in fact act on it.
-> >        *
-> > -      * For the slow switching platforms, the kthread is always scheduled on
-> > -      * the right set of CPUs and any CPU can find the next frequency and
-> > -      * schedule the kthread.
-> > +      * This is needed on the slow switching platforms too to prevent CPUs
-> > +      * going offline from leaving stale IRQ work items behind.
-> >        */
-> > -     if (sg_policy->policy->fast_switch_enabled &&
-> > -         !cpufreq_this_cpu_can_update(sg_policy->policy))
-> > +     if (!cpufreq_this_cpu_can_update(sg_policy->policy))
-> >               return false;
-> >
-> >       if (unlikely(sg_policy->limits_changed)) {
->
-> So we will not queue irq_work on the offlining CPU in your patch.
->
-> When we met issue on CPU3, it is CPU3 has irq_work pending,
-> but the SGI IRQ_WORK interrupt is not handled because irq is
-> always disabled, see stack in idle irq disabled state.
->
-> [  227.344678] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.4.0-03554-gbb1159fa5556-dirty #95
-> [  227.344682] Hardware name: Freescale i.MX8QXP MEK (DT)
-> [  227.344686] Call trace:
-> [  227.344701]  dump_backtrace+0x0/0x140
-> [  227.344708]  show_stack+0x14/0x20
-> [  227.344717]  dump_stack+0xb4/0xf8
-> [  227.344730]  dbs_update_util_handler+0x150/0x180
-> [  227.344739]  update_load_avg+0x38c/0x3c8
-> [  227.344746]  enqueue_task_fair+0xcc/0x3a0
-> [  227.344756]  activate_task+0x5c/0xa0
-> [  227.344766]  ttwu_do_activate.isra.0+0x4c/0x70
-> [  227.344776]  try_to_wake_up+0x2d8/0x410
-> [  227.344786]  wake_up_process+0x14/0x20
-> [  227.344794]  swake_up_locked.part.0+0x18/0x38
-> [  227.344801]  swake_up_one+0x30/0x48
-> [  227.344808]  rcu_gp_kthread_wake+0x5c/0x80
-> [  227.344815]  rcu_report_qs_rsp+0x40/0x50
-> [  227.344825]  rcu_report_qs_rnp+0x120/0x148
-> [  227.344832]  rcu_report_dead+0x120/0x130
-> [  227.344841]  cpuhp_report_idle_dead+0x3c/0x80
-> [  227.344847]  do_idle+0x198/0x280
-> [  227.344856]  cpu_startup_entry+0x24/0x40
-> [  227.344865]  secondary_start_kernel+0x154/0x190
-> [  227.344905] CPU3: shutdown
-> [  227.444015] psci: CPU3 killed.
->
->
-> I also met CPU1 offlining have irq_work queued, but CPU1
-> not trigger issue, because SGI IRQ_WORK interrupt is handled.
->
-> There are multiple path to run into dbs_update_util_handler
-> irq_work_queue, the path might will enable interrupt, might not.
->
-> Seem do_idle is the only path that will trigger cpu_die for HOTPLUG
-> ARM/ARM64.
->
-> So do we need to use idle as flag to queue irq_work or not?
-> In this way, we could still inject irq work on offlining/offline cpu, until
-> it runs into idle to cpu_die.
-
-To be honest, I'm not sure what you mean.
-
-In cpufreq we cannot just avoid queuing up an IRQ work, because we've
-already made changes in preparation for it to run.  We need to decide
-whether or not to carry out the entire utilization update upfront.
-
-But preventing CPUs with NULL cpufreq_update_util_data pointers from
-running cpufreq utilization update code at all (like in the last
-patch) should be sufficient to address this problem entirely.  At
-least I don't see why not.
-
-Thanks!
+PiBTdWJqZWN0OiBSZTogQWJvdXQgQ1BVIGhvdC1wbHVnIHN0cmVzcyB0ZXN0IGZhaWxlZCBpbiBj
+cHVmcmVxIGRyaXZlcg0KPiANCj4gT24gV2VkLCBEZWMgMTEsIDIwMTkgYXQgOTo1OSBBTSBQZW5n
+IEZhbiA8cGVuZy5mYW5AbnhwLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiA+IFN1YmplY3Q6IFJlOiBB
+Ym91dCBDUFUgaG90LXBsdWcgc3RyZXNzIHRlc3QgZmFpbGVkIGluIGNwdWZyZXEgZHJpdmVyDQo+
+ID4gPg0KPiA+ID4gT24gVHVlc2RheSwgRGVjZW1iZXIgMTAsIDIwMTkgMTE6Mzk6MjUgQU0gQ0VU
+IFJhZmFlbCBKLiBXeXNvY2tpDQo+IHdyb3RlOg0KPiA+ID4gPiBPbiBUdWVzZGF5LCBEZWNlbWJl
+ciAxMCwgMjAxOSA5OjUxOjQzIEFNIENFVCBBbnNvbiBIdWFuZyB3cm90ZToNCj4gPiA+ID4gPg0K
+PiA+ID4gPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+ID4gPiA+IEZyb206
+IFJhZmFlbCBKLiBXeXNvY2tpIDxyandAcmp3eXNvY2tpLm5ldD4NCj4gPiA+ID4gPiA+IFNlbnQ6
+IFR1ZXNkYXksIERlY2VtYmVyIDEwLCAyMDE5IDQ6NTEgUE0NCj4gPiA+ID4gPiA+IFRvOiBBbnNv
+biBIdWFuZyA8YW5zb24uaHVhbmdAbnhwLmNvbT4NCj4gPiA+ID4gPiA+IENjOiBSYWZhZWwgSi4g
+V3lzb2NraSA8cmFmYWVsQGtlcm5lbC5vcmc+OyBWaXJlc2ggS3VtYXINCj4gPiA+ID4gPiA+IDx2
+aXJlc2gua3VtYXJAbGluYXJvLm9yZz47IFBlbmcgRmFuIDxwZW5nLmZhbkBueHAuY29tPjsgSmFj
+a3kNCj4gPiA+ID4gPiA+IEJhaSA8cGluZy5iYWlAbnhwLmNvbT47IGxpbnV4LXBtQHZnZXIua2Vy
+bmVsLm9yZzsgVmluY2VudA0KPiA+ID4gPiA+ID4gR3VpdHRvdCA8dmluY2VudC5ndWl0dG90QGxp
+bmFyby5vcmc+OyBQZXRlciBaaWpsc3RyYQ0KPiA+ID4gPiA+ID4gPHBldGVyekBpbmZyYWRlYWQu
+b3JnPjsgUGF1bCBNY0tlbm5leQ0KPiA+ID4gPHBhdWxtY2tAbGludXgudm5ldC5pYm0uY29tPg0K
+PiA+ID4gPiA+ID4gU3ViamVjdDogUmU6IEFib3V0IENQVSBob3QtcGx1ZyBzdHJlc3MgdGVzdCBm
+YWlsZWQgaW4gY3B1ZnJlcQ0KPiA+ID4gPiA+ID4gZHJpdmVyDQo+ID4gPiA+ID4gPg0KPiA+ID4g
+PiA+ID4gT24gVHVlc2RheSwgRGVjZW1iZXIgMTAsIDIwMTkgOTo0NTowOSBBTSBDRVQgQW5zb24g
+SHVhbmcNCj4gd3JvdGU6DQo+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gLS0tLS1Pcmln
+aW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+ID4gPiA+ID4gPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2Nr
+aSA8cmFmYWVsQGtlcm5lbC5vcmc+DQo+ID4gPiA+ID4gPiA+ID4gU2VudDogVHVlc2RheSwgRGVj
+ZW1iZXIgMTAsIDIwMTkgNDozOCBQTQ0KPiA+ID4gPiA+ID4gPiA+IFRvOiBBbnNvbiBIdWFuZyA8
+YW5zb24uaHVhbmdAbnhwLmNvbT4NCj4gPiA+ID4gPiA+ID4gPiBDYzogUmFmYWVsIEouIFd5c29j
+a2kgPHJhZmFlbEBrZXJuZWwub3JnPjsgVmlyZXNoIEt1bWFyDQo+ID4gPiA+ID4gPiA+ID4gPHZp
+cmVzaC5rdW1hckBsaW5hcm8ub3JnPjsgUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+Ow0KPiA+
+ID4gPiA+ID4gPiA+IFJhZmFlbA0KPiA+ID4gSi4NCj4gPiA+ID4gPiA+ID4gPiBXeXNvY2tpIDxy
+andAcmp3eXNvY2tpLm5ldD47IEphY2t5IEJhaSA8cGluZy5iYWlAbnhwLmNvbT47DQo+ID4gPiA+
+ID4gPiA+ID4gbGludXgtIHBtQHZnZXIua2VybmVsLm9yZzsgVmluY2VudCBHdWl0dG90DQo+ID4g
+PiA+ID4gPiA+ID4gPHZpbmNlbnQuZ3VpdHRvdEBsaW5hcm8ub3JnPjsgUGV0ZXIgWmlqbHN0cmEN
+Cj4gPiA+ID4gPiA+ID4gPiA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+OyBQYXVsIE1jS2VubmV5DQo+
+ID4gPiA+ID4gPiA+ID4gPHBhdWxtY2tAbGludXgudm5ldC5pYm0uY29tPg0KPiA+ID4gPiA+ID4g
+PiA+IFN1YmplY3Q6IFJlOiBBYm91dCBDUFUgaG90LXBsdWcgc3RyZXNzIHRlc3QgZmFpbGVkIGlu
+DQo+ID4gPiA+ID4gPiA+ID4gY3B1ZnJlcSBkcml2ZXINCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4g
+PiA+ID4gPiA+IE9uIFR1ZSwgRGVjIDEwLCAyMDE5IGF0IDk6MjkgQU0gQW5zb24gSHVhbmcNCj4g
+PiA+ID4gPiA+ID4gPiA8YW5zb24uaHVhbmdAbnhwLmNvbT4NCj4gPiA+ID4gPiA+ID4gPiB3cm90
+ZToNCj4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+
+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gRnJvbTogUmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbEBrZXJuZWwub3Jn
+Pg0KPiA+ID4gPiA+ID4gPiA+ID4gPiBTZW50OiBUdWVzZGF5LCBEZWNlbWJlciAxMCwgMjAxOSA0
+OjIyIFBNDQo+ID4gPiA+ID4gPiA+ID4gPiA+IFRvOiBWaXJlc2ggS3VtYXIgPHZpcmVzaC5rdW1h
+ckBsaW5hcm8ub3JnPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiBDYzogUGVuZyBGYW4gPHBlbmcuZmFu
+QG54cC5jb20+OyBSYWZhZWwgSi4gV3lzb2NraQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiA8cmFmYWVs
+QGtlcm5lbC5vcmc+OyBBbnNvbiBIdWFuZw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA8YW5zb24uaHVh
+bmdAbnhwLmNvbT47IFJhZmFlbA0KPiA+ID4gPiA+ID4gSi4NCj4gPiA+ID4gPiA+ID4gPiA+ID4g
+V3lzb2NraSA8cmp3QHJqd3lzb2NraS5uZXQ+OyBKYWNreSBCYWkNCj4gPiA+ID4gPiA+ID4gPiA+
+ID4gPHBpbmcuYmFpQG54cC5jb20+Ow0KPiA+ID4gPiA+ID4gPiA+ID4gPiBsaW51eC0gcG1Admdl
+ci5rZXJuZWwub3JnOyBWaW5jZW50IEd1aXR0b3QNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPHZpbmNl
+bnQuZ3VpdHRvdEBsaW5hcm8ub3JnPjsgUGV0ZXIgWmlqbHN0cmENCj4gPiA+ID4gPiA+ID4gPiA+
+ID4gPHBldGVyekBpbmZyYWRlYWQub3JnPjsgUGF1bCBNY0tlbm5leQ0KPiA+ID4gPiA+ID4gPiA+
+ID4gPiA8cGF1bG1ja0BsaW51eC52bmV0LmlibS5jb20+DQo+ID4gPiA+ID4gPiA+ID4gPiA+IFN1
+YmplY3Q6IFJlOiBBYm91dCBDUFUgaG90LXBsdWcgc3RyZXNzIHRlc3QgZmFpbGVkIGluDQo+ID4g
+PiA+ID4gPiA+ID4gPiA+IGNwdWZyZXEgZHJpdmVyDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4g
+PiA+ID4gPiA+ID4gPiA+IE9uIFR1ZSwgRGVjIDEwLCAyMDE5IGF0IDg6MDUgQU0gVmlyZXNoIEt1
+bWFyDQo+ID4gPiA+ID4gPiA+ID4gPiA+IDx2aXJlc2gua3VtYXJAbGluYXJvLm9yZz4NCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gd3JvdGU6DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+
+ID4gPiA+ID4gPiArZmV3IG1vcmUgZ3V5cw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+
+ID4gPiA+ID4gPiA+ID4gT24gMTAtMTItMTksIDA1OjUzLCBQZW5nIEZhbiB3cm90ZToNCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiA+IEJ1dCBwZXINCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+IGh0dHBz
+Oi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VyDQo+ID4gPiA+ID4g
+PiA+ID4gPiA+ID4gPiBsPWh0DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiB0cHMlM0ENCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiA+ICUyRiUNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+IDJGZWwNCj4g
+PiA+ID4gPiA+ID4gPiA+ID4gPiA+IGl4aXIuYm9vdGxpbi5jb20lMkZsaW51eCUyRnY1LjUtDQo+
+ID4gPiA+ID4gPiA+ID4gPiA+IHJjMSUyRnNvdXJjZSUyRmtlcm5lbCUyRnNjaGVkJTJGc2NoZQ0K
+PiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+
+ID4gPg0KPiA+ID4gPiA+ID4NCj4gPiA+DQo+IGQuaCUyM0wyMjkzJmFtcDtkYXRhPTAyJTdDMDEl
+N0NhbnNvbi5odWFuZyU0MG54cC5jb20lN0M2ZjQ0OTANCj4gPiA+IDANCj4gPiA+ID4gPiA+ID4g
+PiA+ID4gYmUzNDA0DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4g
+Pg0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPg0KPiA+ID4NCj4gZTdkMzU1NzA4ZDc3ZDRh
+MTZmYSU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzANCj4gPiA+ICUN
+Cj4gPiA+ID4gPiA+ID4gPiA+ID4gN0M2MzcNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4g
+PiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+DQo+ID4gPg0KPiAx
+MTU2Mjk0NzU0NTYzMjkmYW1wO3NkYXRhPVhYaHd2dVRPQmIzVExtZXJ3a3IxektiYVdOQTh4QSUy
+QmwNCj4gPiA+ID4gPiA+ID4gPiA+ID4gVyUyRmF3MzENCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+
+IDBBWWNNJTNEJmFtcDtyZXNlcnZlZD0wDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiBjcHVfb2Yo
+cnEpIGFuZCBzbXBfcHJvY2Vzc29yX2lkKCkgaXMgcG9zc2libGUgdG8NCj4gPiA+ID4gPiA+ID4g
+PiA+ID4gPiA+IG5vdCB0aGUgc2FtZSwNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiBXaGVuIGNwdV9vZihycSkgaXMgbm90IGVxdWFsIHRvDQo+ID4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiBzbXBfcHJvY2Vzc29yX2lkKCksIGRic191cGRhdGVfdXRpbF9oYW5k
+bGVyIHdpbGwNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+IHVzZSBpcnFfd29ya19xdWV1ZSB0byBz
+bXBfcHJvY2Vzc29yX2lkKCksIG5vdA0KPiBjcHVfb2YocnEpLiBJcyB0aGlzIGV4cGVjdGVkPw0K
+PiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gT3Igc2hvdWxkIHRoZSBpcnFfd29yayBiZSBxdWV1ZWQg
+dG8gY3B1X29mKHJxKT8NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4g
+PiA+IE9rYXksIHNvcnJ5IGZvciB0aGUgbG9uZyB3ZWVrZW5kIHdoZXJlIEkgY291bGRuJ3QNCj4g
+PiA+ID4gPiA+ID4gPiA+ID4gPiBnZXQgdGltZSB0byByZXBseSBhdA0KPiA+ID4gPiA+ID4gPiA+
+IGFsbC4NCj4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gTm8gd29ycmll
+cy4gOi0pDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gRmlyc3Qg
+b2YgYWxsLCBsZXRzIHRyeSB0byB1bmRlcnN0YW5kDQo+IGR2ZnNfcG9zc2libGVfZnJvbV9hbnlf
+Y3B1Lg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gV2hvIGNh
+biB1cGRhdGUgdGhlIGZyZXF1ZW5jeSBvZiBhIENQVSA/IEZvciBtYW55DQo+ID4gPiA+ID4gPiA+
+ID4gPiA+ID4gYXJjaGl0ZWN0dXJlcy9wbGF0Zm9ybXMgdGhlIGV2ZW50dWFsIGNvZGUgdGhhdA0K
+PiA+ID4gPiA+ID4gPiA+ID4gPiA+IHdyaXRlcyB0byBzb21lIHJlZ2lzdGVyIHRvIGNoYW5nZSB0
+aGUgZnJlcXVlbmN5DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gc2hvdWxkIG9ubHkgcnVuIG9uIHRo
+ZSBsb2NhbCBDUFUsIGFzIHRoZXNlIHJlZ2lzdGVycw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IGFy
+ZSBwZXItY3B1IHJlZ2lzdGVycyBhbmQgbm90IHNvbWV0aGluZyBzaGFyZWQNCj4gPiA+ID4gPiA+
+ID4gPiBiZXR3ZWVuIENQVXMuDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4g
+PiA+ID4gPiBCdXQgZm9yIHRoZSBBUk0gYXJjaGl0ZWN0dXJlLCB3ZSBoYXZlIGEgUExMIGFuZCB0
+aGVuDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gc29tZSBtb3JlIHJlZ2lzdGVycyB0byBwbGF5IHdp
+dGggdGhlIGNsayBwcm92aWRlZCB0bw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IHRoZSBDUFUgYmxv
+Y2tzIGFuZCB0aGVzZSByZWdpc3RlcnMgKHdoaWNoIGFyZQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+
+IHVwZGF0ZWQgYXMgYSByZXN1bHQgb2YNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBjbGtfc2V0X3Jh
+dGUoKSkgYXJlIHBhcnQgb2YgYQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiBibG9jayBvdXRzaWRlIG9m
+IHRoZSBDUFUgYmxvY2tzLg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IEFuZCBzbyBhbnkgQ1BVIChl
+dmVuIGlmIGl0IGlzIG5vdCBwYXJ0IG9mIHRoZSBzYW1lDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
+Y3B1ZnJlcQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IHBvbGljeSkgY2FuIHVwZGF0ZSBpdC4gU2V0
+dGluZyB0aGlzIGZsYWcgYWxsb3dzIHRoYXQNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBhbmQgZXZl
+bnR1YWxseSB3ZSBtYXkgZW5kIHVwIHVwZGF0aW5nIHRoZSBmcmVxdWVuY3kNCj4gPiA+ID4gPiA+
+ID4gPiA+ID4gPiBzb29uZXIsIGluc3RlYWQgb2YgbGF0ZXIgKHdoaWNoIG1heSBiZSBsZXNzDQo+
+ID4gPiA+ID4gPiA+ID4gPiA+ID4gZWZmZWN0aXZlKS4gVGhhdCB3YXMgdGhlIGlkZWEgb2YNCj4g
+PiA+ID4gPiA+IHRoZSByZW1vdGUtd2FrZXVwIHNlcmllcy4NCj4gPiA+ID4gPiA+ID4gPiA+ID4g
+PiBUaGlzIHN0dWZmIGlzIGFic29sdXRlbHkgY29ycmVjdCBhbmQgc28gY3B1ZnJlcS1kdA0KPiA+
+ID4gPiA+ID4gPiA+ID4gPiA+IGRvZXMgaXQgZm9yDQo+ID4gPiA+ID4gPiBldmVyeW9uZS4NCj4g
+PiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IFRoaXMgYWxzbyBtZWFu
+cyB0aGF0IHRoZSBub3JtYWwgd29yayBhbmQgaXJxLXdvcmsNCj4gPiA+ID4gPiA+ID4gPiA+ID4g
+PiBib3RoIGNhbiBydW4gb24gYW55IENQVSBmb3IgeW91ciBwbGF0Zm9ybSBhbmQgaXQNCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiBzaG91bGQgYmUgb2theSB0bw0KPiA+ID4gZG8gdGhhdC4NCj4gPiA+
+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gQW5kIGl0IHRoZSBmYWlsaW5nIGNh
+c2UgYWxsIG9mIHRoZSBDUFVzIGluIHRoZSBzeXN0ZW0NCj4gPiA+ID4gPiA+ID4gPiA+ID4gYXJl
+IGluIHRoZSBzYW1lIHBvbGljeSBhbnl3YXksIHNvDQo+ID4gPiA+ID4gPiA+ID4gPiA+IGR2ZnNf
+cG9zc2libGVfZnJvbV9hbnlfY3B1IGlzIGENCj4gPiA+IHJlZCBoZXJyaW5nLg0KPiA+ID4gPiA+
+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IE5vdywgd2UgaGF2ZSBuZWNlc3Nhcnkg
+bWVhc3VyZXMgaW4gcGxhY2UgdG8gbWFrZQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IHN1cmUgdGhh
+dCBhZnRlciBzdG9wcGluZyBhbmQgYmVmb3JlIHN0YXJ0aW5nIGENCj4gPiA+ID4gPiA+ID4gPiA+
+ID4gPiBnb3Zlcm5vciwgdGhlIHNjaGVkdWxlciBob29rcyB0byBzYXZlIHRoZSBjcHVmcmVxDQo+
+ID4gPiA+ID4gPiA+ID4gPiA+ID4gZ292ZXJub3IgcG9pbnRlciBhbmQgdXBkYXRlcyB0bw0KPiA+
+ID4gPiA+ID4gPiA+ID4gPiA+IHBvbGljeS0+Y3B1cyBhcmUgbWFkZSBwcm9wZXJseSwgdG8gbWFr
+ZSBzdXJlIHRoYXQgd2UNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBwb2xpY3ktPm5ldmVyDQo+ID4g
+PiA+ID4gPiA+ID4gPiA+ID4gZXZlciBzY2hlZHVsZSBhIHdvcmsgb3IgaXJxLXdvcmsgb24gYSBD
+UFUgd2hpY2ggaXMgb2ZmbGluZS4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBOb3cgaXQgbG9va3Mg
+bGlrZSB0aGlzIGlzbid0IHdvcmtpbmcgYXMgZXhwZWN0ZWQgYW5kDQo+ID4gPiA+ID4gPiA+ID4g
+PiA+ID4gd2UgbmVlZCB0byBmaW5kDQo+ID4gPiA+ID4gPiB3aGF0IGV4YWN0bHkgaXMgYnJva2Vu
+IGhlcmUuDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBBbmQg
+eWVzLCBJIGRpZCB0aGUgdGVzdGluZyBvbiBIaWtleSA2MjAsIGFuDQo+ID4gPiA+ID4gPiA+ID4g
+PiA+ID4gb2N0YS1jb3JlIEFSTSBwbGF0Zm9ybSB3aGljaCBoYXMgYSBzaW5nbGUgY3B1ZnJlcQ0K
+PiA+ID4gPiA+ID4gPiA+ID4gPiA+IHBvbGljeSB3aGljaCBoYXMgYWxsIHRoZSA4IENQVXMuIEFu
+ZCB5ZXMsIEkgYW0gdXNpbmcNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBjcHVmcmVxLWR0IG9ubHkg
+YW5kIEkgd2Fzbid0IGFibGUgdG8gcmVwcm9kdWNlIHRoZQ0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+
+IHByb2JsZW0gd2l0aCBtYWlubGluZSBrZXJuZWwgYXMNCj4gPiA+IEkgZXhwbGFpbmVkIGVhcmxp
+ZXIuDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBUaGUgcHJv
+YmxlbSBpcyBzb21ld2hlcmUgYmV0d2VlbiB0aGUgc2NoZWR1bGVyJ3MNCj4gPiA+ID4gPiA+ID4g
+PiA+ID4gPiBnb3Zlcm5vciBob29rDQo+ID4gPiA+ID4gPiA+ID4gPiA+IHJ1bm5pbmcNCj4gPiA+
+ID4gPiA+ID4gPiA+ID4gPiBvciBxdWV1aW5nIHdvcmsgb24gYSBDUFUgd2hpY2ggaXMgaW4gdGhl
+IG1pZGRsZSBvZg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IGdldHRpbmcgb2ZmbGluZS9vbmxpbmUg
+YW5kIHRoZXJlIGlzIHNvbWUgcmFjZSBhcm91bmQNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiB0aGF0
+LiBUaGUgcHJvYmxlbSBoZW5jZSBtYXkgbm90IGJlIHJlbGF0ZWQgdG8ganVzdA0KPiA+ID4gPiA+
+ID4gPiA+ID4gPiA+IGNwdWZyZXEsIGJ1dCBhIHdpZGVyIHZhcmlldHkgb2YNCj4gPiA+ID4gPiA+
+IGNsaWVudHMuDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+IFRoZSBw
+cm9ibGVtIGlzIHRoYXQgYSBDUFUgaXMgcnVubmluZyBhIGdvdmVybm9yIGhvb2sNCj4gPiA+ID4g
+PiA+ID4gPiA+ID4gd2hpY2ggaXQgc2hvdWxkbid0IGJlIHJ1bm5pbmcgYXQgYWxsLg0KPiA+ID4g
+PiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiBUaGUgb2JzZXJ2YXRpb24gdGhhdCBk
+dmZzX3Bvc3NpYmxlX2Zyb21fYW55X2NwdSBtYWtlcw0KPiA+ID4gPiA+ID4gPiA+ID4gPiBhIGRp
+ZmZlcmVuY2Ugb25seSBtZWFucyB0aGF0IHRoZSBnb3Zlcm5vciBob29rIGlzDQo+ID4gPiA+ID4g
+PiA+ID4gPiA+IHJ1bm5pbmcgb24gYSBDUFUgdGhhdCBpcyBub3QgcHJlc2VudCBpbiB0aGUNCj4g
+PiA+ID4gPiA+ID4gPiA+ID4gcG9saWN5LT5jcHVzIG1hc2suICBPbiB0aGUgcGxhdGZvcm0ocykg
+aW4gcXVlc3Rpb24NCj4gPiA+ID4gPiA+ID4gPiA+ID4gcG9saWN5LT50aGlzIGNhbm5vdCBoYXBw
+ZW4gYXMNCj4gPiA+ID4gPiA+ID4gPiA+ID4gbG9uZyBhcyBSQ1Ugd29ya3MgYXMgZXhwZWN0ZWQu
+DQo+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gSWYgSSB1bmRlcnN0YW5kIGNv
+cnJlY3RseSwgdGhlIGdvdmVybm9yIGhvb2sgT05MWSBiZQ0KPiA+ID4gPiA+ID4gPiA+ID4gY2xl
+YXIgb24gdGhlIENQVSBiZWluZyBvZmZsaW5lIGFuZCBhZnRlciBnb3Zlcm5vcg0KPiA+ID4gPiA+
+ID4gPiA+ID4gc3RvcHBlZCwgYnV0IHRoZSBDUFUgYmVpbmcgb2ZmbGluZSBjb3VsZCBzdGlsbCBy
+dW4gaW50bw0KPiA+ID4gPiA+ID4gPiA+ID4gYmVsb3cgZnVuY3Rpb24gdG8gaGVscCBvdGhlciBD
+UFUgdXBkYXRlIHRoZSB1dGlsLCBhbmQgaXQNCj4gPiA+ID4gPiA+ID4gPiA+IE9OTFkgY2hlY2tz
+IHRoZSBjcHVfb2YocnEpJ3MgZ292ZXJub3IgaG9vayB3aGljaCBpcw0KPiA+ID4gPiA+ID4gPiA+
+ID4gdmFsaWQgYXMgdGhhdA0KPiA+ID4gPiA+ID4gPiA+IENQVSBpcyBvbmxpbmUuDQo+ID4gPiA+
+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gU28gdGhlIHF1ZXN0aW9uIGlzIGhvdyB0byBh
+dm9pZCB0aGUgQ1BVIGJlaW5nIG9mZmxpbmUNCj4gPiA+ID4gPiA+ID4gPiA+IGFuZCBhbHJlYWR5
+IGZpbmlzaCB0aGUgZ292ZXJub3Igc3RvcCBmbG93IGJlIHNjaGVkdWxlZA0KPiA+ID4gPiA+ID4g
+PiA+ID4gdG8gaGVscCBvdGhlciBDUFUgdXBkYXRlIHRoZQ0KPiA+ID4gPiA+ID4gPiA+IHV0aWwu
+DQo+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gIHN0YXRpYyBpbmxpbmUgdm9p
+ZCBjcHVmcmVxX3VwZGF0ZV91dGlsKHN0cnVjdCBycSAqcnEsDQo+ID4gPiA+ID4gPiA+ID4gPiB1
+bnNpZ25lZCBpbnQNCj4gPiA+ID4gPiA+ID4gPiA+IGZsYWdzKSAgew0KPiA+ID4gPiA+ID4gPiA+
+ID4gICAgICAgICAgc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgKmRhdGE7DQo+ID4gPiA+ID4gPiA+
+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgZGF0YSA9DQo+ID4gPiA+ID4gPiA+ID4g
+cmN1X2RlcmVmZXJlbmNlX3NjaGVkKCpwZXJfY3B1X3B0cigmY3B1ZnJlcV91cGRhdGVfdXRpbF9k
+YQ0KPiA+ID4gPiA+ID4gPiA+IHRhLA0KPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+IGNwdV9vZihy
+cSkpKTsNCj4gPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgIGlmIChkYXRhKQ0KPiA+ID4gPiA+ID4g
+PiA+ID4gICAgICAgICAgICAgICAgICBkYXRhLT5mdW5jKGRhdGEsIHJxX2Nsb2NrKHJxKSwgZmxh
+Z3MpOw0KPiA+ID4gPiA+ID4gPiA+ID4gfQ0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+
+ID4gT0ssIHNvIHRoYXQncyB3aGVyZSB0aGUgcHJvYmxlbSBpcywgZ29vZCBjYXRjaCENCj4gPiA+
+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IFNvIHdoYXQgaGFwcGVucyBpcyB0aGF0IGEgQ1BV
+IGdvaW5nIG9mZmxpbmUgcnVucyBzb21lDQo+ID4gPiA+ID4gPiA+ID4gc2NoZWR1bGVyIGNvZGUg
+dGhhdCBpbnZva2VzIGNwdWZyZXFfdXBkYXRlX3V0aWwoKS4NCj4gPiA+ID4gPiA+ID4gPiBJbmNp
+ZGVudGFsbHksIGl0IGlzIG5vdCB0aGUgY3B1X29mKHJxKSwgYnV0IHRoYXQgQ1BVIGlzDQo+ID4g
+PiA+ID4gPiA+ID4gc3RpbGwgb25saW5lLCBzbyB0aGUgY2FsbGJhY2sgaXMgaW52b2tlZCBhbmQg
+dGhlbg0KPiA+ID4gPiA+ID4gPiA+IHBvbGljeS0+Y3B1cyB0ZXN0IGlzIGJ5cGFzc2VkIGJlY2F1
+c2Ugb2YNCj4gPiA+ID4gPiA+IGR2ZnNfcG9zc2libGVfZnJvbV9hbnlfY3B1Lg0KPiA+ID4gPiA+
+ID4gPg0KPiA+ID4gPiA+ID4gPiBJZiB0aGlzIGlzIHRoZSBpc3N1ZSwgYWRkIGFub3RoZXIgY2hl
+Y2sgaGVyZSBmb3IgdGhlIGN1cnJlbnQNCj4gPiA+ID4gPiA+ID4gQ1BVJ3MgZ292ZXJub3INCj4g
+PiA+ID4gPiA+IGhvb2s/DQo+ID4gPiA+ID4gPiA+IE9yIGFueSBvdGhlciBiZXR0ZXIgcGxhY2Ug
+dG8gbWFrZSBzdXJlIHRoZSBDUFUgYmVpbmcgb2ZmbGluZQ0KPiA+ID4gPiA+ID4gPiBOT1QgdG8g
+YmUNCj4gPiA+ID4gPiA+IHF1ZXVlZCB0byBpcnEgd29yaz8NCj4gPiA+ID4gPiA+DQo+ID4gPiA+
+ID4gPiBHZW5lcmFsbHksIHllcy4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBTb21ldGhpbmcg
+bGlrZSB0aGUgcGF0Y2ggYmVsb3cgc2hvdWxkIGhlbHAgaWYgSSdtIG5vdCBtaXN0YWtlbjoNCj4g
+PiA+ID4gPiA+DQo+ID4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiA+ICBpbmNsdWRlL2xpbnV4L2Nw
+dWZyZXEuaCB8ICAgIDggKysrKystLS0NCj4gPiA+ID4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgNSBp
+bnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IElu
+ZGV4OiBsaW51eC1wbS9pbmNsdWRlL2xpbnV4L2NwdWZyZXEuaA0KPiA+ID4gPiA+ID4NCj4gPiA+
+DQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09DQo+ID4gPiA9PQ0KPiA+ID4gPiA+ID4gPT09DQo+ID4gPiA+ID4gPiAtLS0gbGlu
+dXgtcG0ub3JpZy9pbmNsdWRlL2xpbnV4L2NwdWZyZXEuaA0KPiA+ID4gPiA+ID4gKysrIGxpbnV4
+LXBtL2luY2x1ZGUvbGludXgvY3B1ZnJlcS5oDQo+ID4gPiA+ID4gPiBAQCAtNTk5LDExICs1OTks
+MTMgQEAgc3RhdGljIGlubGluZSBib29sIGNwdWZyZXFfdGhpc19jcHVfY2FuXw0KPiB7DQo+ID4g
+PiA+ID4gPiAgICAgICAgIC8qDQo+ID4gPiA+ID4gPiAgICAgICAgICAqIEFsbG93IHJlbW90ZSBj
+YWxsYmFja3MgaWY6DQo+ID4gPiA+ID4gPiAtICAgICAgICAqIC0gZHZmc19wb3NzaWJsZV9mcm9t
+X2FueV9jcHUgZmxhZyBpcyBzZXQNCj4gPiA+ID4gPiA+ICAgICAgICAgICogLSB0aGUgbG9jYWwg
+YW5kIHJlbW90ZSBDUFVzIHNoYXJlIGNwdWZyZXEgcG9saWN5DQo+ID4gPiA+ID4gPiArICAgICAg
+ICAqIC0gZHZmc19wb3NzaWJsZV9mcm9tX2FueV9jcHUgZmxhZyBpcyBzZXQgYW5kIHRoZQ0KPiA+
+ID4gPiA+ID4gKyBDUFUgcnVubmluZw0KPiA+ID4gdGhlDQo+ID4gPiA+ID4gPiArICAgICAgICAq
+ICAgY29kZSBpcyBub3QgZ29pbmcgb2ZmbGluZS4NCj4gPiA+ID4gPiA+ICAgICAgICAgICovDQo+
+ID4gPiA+ID4gPiAtICAgICAgIHJldHVybiBwb2xpY3ktPmR2ZnNfcG9zc2libGVfZnJvbV9hbnlf
+Y3B1IHx8DQo+ID4gPiA+ID4gPiAtICAgICAgICAgICAgICAgY3B1bWFza190ZXN0X2NwdShzbXBf
+cHJvY2Vzc29yX2lkKCksDQo+IHBvbGljeS0+Y3B1cyk7DQo+ID4gPiA+ID4gPiArICAgICAgIHJl
+dHVybiBjcHVtYXNrX3Rlc3RfY3B1KHNtcF9wcm9jZXNzb3JfaWQoKSwNCj4gcG9saWN5LT5jcHVz
+KSB8fA0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIChwb2xpY3ktPmR2ZnNfcG9zc2libGVf
+ZnJvbV9hbnlfY3B1ICYmDQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgICFjcHVtYXNrX3Rl
+c3RfY3B1KHNtcF9wcm9jZXNzb3JfaWQoKSwNCj4gcG9saWN5LQ0KPiA+ID4gPiA+ID4gPnJlbGF0
+ZWRfY3B1cykpOw0KPiA+ID4gPiA+ID4gIH0NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEkgd2lsbCBz
+dGFydCBhIHN0cmVzcyB0ZXN0IG9mIHRoaXMgcGF0Y2gsIHRoYW5rcyENCj4gPiA+ID4NCj4gPiA+
+ID4gT0ssIHRoYW5rcyENCj4gPiA+ID4NCj4gPiA+ID4gQW5vdGhlciBwYXRjaCB0byB0ZXN0IGlz
+IGFwcGVuZGVkIGFuZCBpdCBzaG91bGQgYmUgbW9yZSByb2J1c3QuDQo+ID4gPiA+DQo+ID4gPiA+
+IEluc3RlYWQgb2YgZG9pbmcgdGhlIHJlbGF0ZWRfY3B1cyBjcHVtYXNrIGNoZWNrIGluIHRoZSBw
+cmV2aW91cw0KPiA+ID4gPiBwYXRjaCAod2hpY2ggb25seSBjb3ZlcmVkIENQVXMgdGhhdCBiZWxv
+ZyB0byB0aGUgdGFyZ2V0IHBvbGljeSkgaXQNCj4gPiA+ID4gY2hlY2tzIGlmIHRoZSB1cGRhdGVf
+dXRpbCBob29rIGlzIHNldCBmb3IgdGhlIGxvY2FsIENQVSAoaWYgaXQgaXMNCj4gPiA+ID4gbm90
+LCB0aGF0IENQVSBpcyBub3QgZXhwZWN0ZWQgdG8gcnVuIHRoZSB1b2RhdGVfdXRpbCBjb2RlKS4N
+Cj4gPiA+DQo+ID4gPiBPbmUgbW9yZSB0aGluZy4NCj4gPiA+DQo+ID4gPiBCb3RoIG9mIHRoZSBw
+cmV2aW91cyBwYXRjaGVzIHdvdWxkIG5vdCBmaXggdGhlIHNjaGVkdXRpbCBnb3Zlcm5vciBpbg0K
+PiA+ID4gd2hpY2gNCj4gPiA+IGNwdWZyZXFfdGhpc19jcHVfY2FuX3VwZGF0ZSgpIG9ubHkgaXMg
+Y2FsbGVkIGluIHRoZSBmYXN0X3N3aXRjaCBjYXNlDQo+ID4gPiBhbmQgdGhhdCBpcyBub3Qgd2hl
+biBpcnFfd29ya3MgYXJlIHVzZWQuDQo+ID4gPg0KPiA+ID4gU28gcGxlYXNlIGRpc2NhcmQgdGhl
+IHBhdGNoIEkgaGF2ZSBqdXN0IHBvc3RlZCBhbmQgaGVyZSBpcyBhbg0KPiA+ID4gdXBkYXRlZCBw
+YXRjaCB0aGF0IGNvdmVycyBzY2hlZHV0aWwgdG9vLCBzbyBwbGVhc2UgdGVzdCB0aGlzIG9uZSBp
+bnN0ZWFkLg0KPiA+ID4NCj4gPiA+IC0tLQ0KPiA+ID4gIGluY2x1ZGUvbGludXgvY3B1ZnJlcS5o
+ICAgICAgICAgIHwgICAxMSAtLS0tLS0tLS0tLQ0KPiA+ID4gIGluY2x1ZGUvbGludXgvc2NoZWQv
+Y3B1ZnJlcS5oICAgIHwgICAgMyArKysNCj4gPiA+ICBrZXJuZWwvc2NoZWQvY3B1ZnJlcS5jICAg
+ICAgICAgICB8ICAgMTggKysrKysrKysrKysrKysrKysrDQo+ID4gPiAga2VybmVsL3NjaGVkL2Nw
+dWZyZXFfc2NoZWR1dGlsLmMgfCAgICA4ICsrKy0tLS0tDQo+ID4gPiAgNCBmaWxlcyBjaGFuZ2Vk
+LCAyNCBpbnNlcnRpb25zKCspLCAxNiBkZWxldGlvbnMoLSkNCj4gPiA+DQo+ID4gPiBJbmRleDog
+bGludXgtcG0vaW5jbHVkZS9saW51eC9jcHVmcmVxLmgNCj4gPiA+DQo+ID09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo+ID4gPiA9
+PT09PQ0KPiA+ID4gLS0tIGxpbnV4LXBtLm9yaWcvaW5jbHVkZS9saW51eC9jcHVmcmVxLmgNCj4g
+PiA+ICsrKyBsaW51eC1wbS9pbmNsdWRlL2xpbnV4L2NwdWZyZXEuaA0KPiA+ID4gQEAgLTU5NSwx
+NyArNTk1LDYgQEAgc3RydWN0IGdvdmVybm9yX2F0dHIgew0KPiA+ID4gICAgICAgICAgICAgICAg
+ICAgICAgICBzaXplX3QgY291bnQpOyAgfTsNCj4gPiA+DQo+ID4gPiAtc3RhdGljIGlubGluZSBi
+b29sIGNwdWZyZXFfdGhpc19jcHVfY2FuX3VwZGF0ZShzdHJ1Y3QNCj4gPiA+IGNwdWZyZXFfcG9s
+aWN5ICpwb2xpY3kpIC17DQo+ID4gPiAtICAgICAvKg0KPiA+ID4gLSAgICAgICogQWxsb3cgcmVt
+b3RlIGNhbGxiYWNrcyBpZjoNCj4gPiA+IC0gICAgICAqIC0gZHZmc19wb3NzaWJsZV9mcm9tX2Fu
+eV9jcHUgZmxhZyBpcyBzZXQNCj4gPiA+IC0gICAgICAqIC0gdGhlIGxvY2FsIGFuZCByZW1vdGUg
+Q1BVcyBzaGFyZSBjcHVmcmVxIHBvbGljeQ0KPiA+ID4gLSAgICAgICovDQo+ID4gPiAtICAgICBy
+ZXR1cm4gcG9saWN5LT5kdmZzX3Bvc3NpYmxlX2Zyb21fYW55X2NwdSB8fA0KPiA+ID4gLSAgICAg
+ICAgICAgICBjcHVtYXNrX3Rlc3RfY3B1KHNtcF9wcm9jZXNzb3JfaWQoKSwgcG9saWN5LT5jcHVz
+KTsNCj4gPiA+IC19DQo+ID4gPiAtDQo+ID4gPg0KPiA+ID4NCj4gLyoqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioNCj4gPiA+ICoqKioq
+KioqDQo+ID4gPiAgICogICAgICAgICAgICAgICAgICAgICBGUkVRVUVOQ1kgVEFCTEUgSEVMUEVS
+Uw0KPiA+ID4gKg0KPiA+ID4NCj4gPiA+DQo+ICoqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqDQo+ID4gPiAqKioqKioqLw0KPiA+ID4g
+SW5kZXg6IGxpbnV4LXBtL2tlcm5lbC9zY2hlZC9jcHVmcmVxLmMNCj4gPiA+DQo+ID09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo+
+ID4gPiA9PT09PQ0KPiA+ID4gLS0tIGxpbnV4LXBtLm9yaWcva2VybmVsL3NjaGVkL2NwdWZyZXEu
+Yw0KPiA+ID4gKysrIGxpbnV4LXBtL2tlcm5lbC9zY2hlZC9jcHVmcmVxLmMNCj4gPiA+IEBAIC01
+LDYgKzUsOCBAQA0KPiA+ID4gICAqIENvcHlyaWdodCAoQykgMjAxNiwgSW50ZWwgQ29ycG9yYXRp
+b24NCj4gPiA+ICAgKiBBdXRob3I6IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWwuai53eXNvY2tp
+QGludGVsLmNvbT4NCj4gPiA+ICAgKi8NCj4gPiA+ICsjaW5jbHVkZSA8bGludXgvY3B1ZnJlcS5o
+Pg0KPiA+ID4gKw0KPiA+ID4gICNpbmNsdWRlICJzY2hlZC5oIg0KPiA+ID4NCj4gPiA+ICBERUZJ
+TkVfUEVSX0NQVShzdHJ1Y3QgdXBkYXRlX3V0aWxfZGF0YSBfX3JjdSAqLA0KPiA+ID4gY3B1ZnJl
+cV91cGRhdGVfdXRpbF9kYXRhKTsgQEAgLTU3LDMgKzU5LDE5IEBAIHZvaWQNCj4gPiA+IGNwdWZy
+ZXFfcmVtb3ZlX3VwZGF0ZV91dGlsX2hvb2soaW50DQo+ID4gPiAgICAgICByY3VfYXNzaWduX3Bv
+aW50ZXIocGVyX2NwdShjcHVmcmVxX3VwZGF0ZV91dGlsX2RhdGEsIGNwdSksDQo+ID4gPiBOVUxM
+KTsgIH0gRVhQT1JUX1NZTUJPTF9HUEwoY3B1ZnJlcV9yZW1vdmVfdXBkYXRlX3V0aWxfaG9vayk7
+DQo+ID4gPiArDQo+ID4gPiArLyoqDQo+ID4gPiArICogY3B1ZnJlcV90aGlzX2NwdV9jYW5fdXBk
+YXRlIC0gQ2hlY2sgaWYgY3B1ZnJlcSBwb2xpY3kgY2FuIGJlDQo+IHVwZGF0ZWQuDQo+ID4gPiAr
+ICogQHBvbGljeTogY3B1ZnJlcSBwb2xpY3kgdG8gY2hlY2suDQo+ID4gPiArICoNCj4gPiA+ICsg
+KiBSZXR1cm4gJ3RydWUnIGlmOg0KPiA+ID4gKyAqIC0gdGhlIGxvY2FsIGFuZCByZW1vdGUgQ1BV
+cyBzaGFyZSBAcG9saWN5LA0KPiA+ID4gKyAqIC0gZHZmc19wb3NzaWJsZV9mcm9tX2FueV9jcHUg
+aXMgc2V0IGluIEBwb2xpY3kgYW5kIHRoZSBsb2NhbCBDUFUNCj4gPiA+ICtpcyBub3QNCj4gPiA+
+IGdvaW5nDQo+ID4gPiArICogICBvZmZsaW5lIChpbiB3aGljaCBpdCBpcyBub3QgZXhwZWN0ZWQg
+dG8gcnVuIGNwdWZyZXEgdXBkYXRlcyBhbnkNCj4gbW9yZSkuDQo+ID4gPiArICovDQo+ID4gPiAr
+Ym9vbCBjcHVmcmVxX3RoaXNfY3B1X2Nhbl91cGRhdGUoc3RydWN0IGNwdWZyZXFfcG9saWN5ICpw
+b2xpY3kpIHsNCj4gPiA+ICsgICAgIHJldHVybiBjcHVtYXNrX3Rlc3RfY3B1KHNtcF9wcm9jZXNz
+b3JfaWQoKSwgcG9saWN5LT5jcHVzKSB8fA0KPiA+ID4gKyAgICAgICAgICAgICAocG9saWN5LT5k
+dmZzX3Bvc3NpYmxlX2Zyb21fYW55X2NwdSAmJg0KPiA+ID4gKw0KPiA+ID4gcmN1X2RlcmVmZXJl
+bmNlX3NjaGVkKCp0aGlzX2NwdV9wdHIoJmNwdWZyZXFfdXBkYXRlX3V0aWxfZGF0YSkpKTsNCj4g
+PiA+ICt9DQo+ID4gPiBJbmRleDogbGludXgtcG0vaW5jbHVkZS9saW51eC9zY2hlZC9jcHVmcmVx
+LmgNCj4gPiA+DQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09DQo+ID4gPiA9PT09PQ0KPiA+ID4gLS0tIGxpbnV4LXBtLm9yaWcv
+aW5jbHVkZS9saW51eC9zY2hlZC9jcHVmcmVxLmgNCj4gPiA+ICsrKyBsaW51eC1wbS9pbmNsdWRl
+L2xpbnV4L3NjaGVkL2NwdWZyZXEuaA0KPiA+ID4gQEAgLTEyLDYgKzEyLDggQEANCj4gPiA+ICAj
+ZGVmaW5lIFNDSEVEX0NQVUZSRVFfTUlHUkFUSU9OICAgICAgKDFVIDw8IDEpDQo+ID4gPg0KPiA+
+ID4gICNpZmRlZiBDT05GSUdfQ1BVX0ZSRVENCj4gPiA+ICtzdHJ1Y3QgY3B1ZnJlcV9wb2xpY3k7
+DQo+ID4gPiArDQo+ID4gPiAgc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgew0KPiA+ID4gICAgICAg
+ICB2b2lkICgqZnVuYykoc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgKmRhdGEsIHU2NCB0aW1lLA0K
+PiA+ID4gdW5zaWduZWQgaW50IGZsYWdzKTsgIH07IEBAIC0yMCw2ICsyMiw3IEBAIHZvaWQNCj4g
+Y3B1ZnJlcV9hZGRfdXBkYXRlX3V0aWxfaG9vayhpbnQgY3ANCj4gPiA+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIHZvaWQgKCpmdW5jKShzdHJ1Y3QgdXBkYXRlX3V0aWxfZGF0YSAqZGF0YSwNCj4g
+PiA+IHU2NCB0aW1lLA0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVu
+c2lnbmVkIGludCBmbGFncykpOyAgdm9pZA0KPiA+ID4gY3B1ZnJlcV9yZW1vdmVfdXBkYXRlX3V0
+aWxfaG9vayhpbnQgY3B1KTsNCj4gPiA+ICtib29sIGNwdWZyZXFfdGhpc19jcHVfY2FuX3VwZGF0
+ZShzdHJ1Y3QgY3B1ZnJlcV9wb2xpY3kgKnBvbGljeSk7DQo+ID4gPg0KPiA+ID4gIHN0YXRpYyBp
+bmxpbmUgdW5zaWduZWQgbG9uZyBtYXBfdXRpbF9mcmVxKHVuc2lnbmVkIGxvbmcgdXRpbCwNCj4g
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdW5zaWduZWQgbG9uZyBm
+cmVxLA0KPiB1bnNpZ25lZA0KPiA+ID4gbG9uZyBjYXApDQo+ID4gPiBJbmRleDogbGludXgtcG0v
+a2VybmVsL3NjaGVkL2NwdWZyZXFfc2NoZWR1dGlsLmMNCj4gPiA+DQo+ID09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo+ID4gPiA9
+PT09PQ0KPiA+ID4gLS0tIGxpbnV4LXBtLm9yaWcva2VybmVsL3NjaGVkL2NwdWZyZXFfc2NoZWR1
+dGlsLmMNCj4gPiA+ICsrKyBsaW51eC1wbS9rZXJuZWwvc2NoZWQvY3B1ZnJlcV9zY2hlZHV0aWwu
+Yw0KPiA+ID4gQEAgLTgyLDEyICs4MiwxMCBAQCBzdGF0aWMgYm9vbCBzdWdvdl9zaG91bGRfdXBk
+YXRlX2ZyZXEoc3RyDQo+ID4gPiAgICAgICAgKiBieSB0aGUgaGFyZHdhcmUsIGFzIGNhbGN1bGF0
+aW5nIHRoZSBmcmVxdWVuY3kgaXMgcG9pbnRsZXNzIGlmDQo+ID4gPiAgICAgICAgKiB3ZSBjYW5u
+b3QgaW4gZmFjdCBhY3Qgb24gaXQuDQo+ID4gPiAgICAgICAgKg0KPiA+ID4gLSAgICAgICogRm9y
+IHRoZSBzbG93IHN3aXRjaGluZyBwbGF0Zm9ybXMsIHRoZSBrdGhyZWFkIGlzIGFsd2F5cw0KPiBz
+Y2hlZHVsZWQgb24NCj4gPiA+IC0gICAgICAqIHRoZSByaWdodCBzZXQgb2YgQ1BVcyBhbmQgYW55
+IENQVSBjYW4gZmluZCB0aGUgbmV4dCBmcmVxdWVuY3kNCj4gYW5kDQo+ID4gPiAtICAgICAgKiBz
+Y2hlZHVsZSB0aGUga3RocmVhZC4NCj4gPiA+ICsgICAgICAqIFRoaXMgaXMgbmVlZGVkIG9uIHRo
+ZSBzbG93IHN3aXRjaGluZyBwbGF0Zm9ybXMgdG9vIHRvIHByZXZlbnQNCj4gQ1BVcw0KPiA+ID4g
+KyAgICAgICogZ29pbmcgb2ZmbGluZSBmcm9tIGxlYXZpbmcgc3RhbGUgSVJRIHdvcmsgaXRlbXMg
+YmVoaW5kLg0KPiA+ID4gICAgICAgICovDQo+ID4gPiAtICAgICBpZiAoc2dfcG9saWN5LT5wb2xp
+Y3ktPmZhc3Rfc3dpdGNoX2VuYWJsZWQgJiYNCj4gPiA+IC0gICAgICAgICAhY3B1ZnJlcV90aGlz
+X2NwdV9jYW5fdXBkYXRlKHNnX3BvbGljeS0+cG9saWN5KSkNCj4gPiA+ICsgICAgIGlmICghY3B1
+ZnJlcV90aGlzX2NwdV9jYW5fdXBkYXRlKHNnX3BvbGljeS0+cG9saWN5KSkNCj4gPiA+ICAgICAg
+ICAgICAgICAgcmV0dXJuIGZhbHNlOw0KPiA+ID4NCj4gPiA+ICAgICAgIGlmICh1bmxpa2VseShz
+Z19wb2xpY3ktPmxpbWl0c19jaGFuZ2VkKSkgew0KPiA+DQo+ID4gU28gd2Ugd2lsbCBub3QgcXVl
+dWUgaXJxX3dvcmsgb24gdGhlIG9mZmxpbmluZyBDUFUgaW4geW91ciBwYXRjaC4NCj4gPg0KPiA+
+IFdoZW4gd2UgbWV0IGlzc3VlIG9uIENQVTMsIGl0IGlzIENQVTMgaGFzIGlycV93b3JrIHBlbmRp
+bmcsIGJ1dCB0aGUNCj4gPiBTR0kgSVJRX1dPUksgaW50ZXJydXB0IGlzIG5vdCBoYW5kbGVkIGJl
+Y2F1c2UgaXJxIGlzIGFsd2F5cyBkaXNhYmxlZCwNCj4gPiBzZWUgc3RhY2sgaW4gaWRsZSBpcnEg
+ZGlzYWJsZWQgc3RhdGUuDQo+ID4NCj4gPiBbICAyMjcuMzQ0Njc4XSBDUFU6IDMgUElEOiAwIENv
+bW06IHN3YXBwZXIvMyBOb3QgdGFpbnRlZA0KPiA+IDUuNC4wLTAzNTU0LWdiYjExNTlmYTU1NTYt
+ZGlydHkgIzk1IFsgIDIyNy4zNDQ2ODJdIEhhcmR3YXJlIG5hbWU6DQo+ID4gRnJlZXNjYWxlIGku
+TVg4UVhQIE1FSyAoRFQpIFsgIDIyNy4zNDQ2ODZdIENhbGwgdHJhY2U6DQo+ID4gWyAgMjI3LjM0
+NDcwMV0gIGR1bXBfYmFja3RyYWNlKzB4MC8weDE0MCBbICAyMjcuMzQ0NzA4XQ0KPiA+IHNob3df
+c3RhY2srMHgxNC8weDIwIFsgIDIyNy4zNDQ3MTddICBkdW1wX3N0YWNrKzB4YjQvMHhmOCBbDQo+
+ID4gMjI3LjM0NDczMF0gIGRic191cGRhdGVfdXRpbF9oYW5kbGVyKzB4MTUwLzB4MTgwDQo+ID4g
+WyAgMjI3LjM0NDczOV0gIHVwZGF0ZV9sb2FkX2F2ZysweDM4Yy8weDNjOCBbICAyMjcuMzQ0NzQ2
+XQ0KPiA+IGVucXVldWVfdGFza19mYWlyKzB4Y2MvMHgzYTAgWyAgMjI3LjM0NDc1Nl0gIGFjdGl2
+YXRlX3Rhc2srMHg1Yy8weGEwDQo+IFsNCj4gPiAyMjcuMzQ0NzY2XSAgdHR3dV9kb19hY3RpdmF0
+ZS5pc3JhLjArMHg0Yy8weDcwIFsgIDIyNy4zNDQ3NzZdDQo+ID4gdHJ5X3RvX3dha2VfdXArMHgy
+ZDgvMHg0MTAgWyAgMjI3LjM0NDc4Nl0NCj4gd2FrZV91cF9wcm9jZXNzKzB4MTQvMHgyMCBbDQo+
+ID4gMjI3LjM0NDc5NF0gIHN3YWtlX3VwX2xvY2tlZC5wYXJ0LjArMHgxOC8weDM4IFsgIDIyNy4z
+NDQ4MDFdDQo+ID4gc3dha2VfdXBfb25lKzB4MzAvMHg0OCBbICAyMjcuMzQ0ODA4XQ0KPiByY3Vf
+Z3Bfa3RocmVhZF93YWtlKzB4NWMvMHg4MCBbDQo+ID4gMjI3LjM0NDgxNV0gIHJjdV9yZXBvcnRf
+cXNfcnNwKzB4NDAvMHg1MCBbICAyMjcuMzQ0ODI1XQ0KPiA+IHJjdV9yZXBvcnRfcXNfcm5wKzB4
+MTIwLzB4MTQ4IFsgIDIyNy4zNDQ4MzJdDQo+ID4gcmN1X3JlcG9ydF9kZWFkKzB4MTIwLzB4MTMw
+IFsgIDIyNy4zNDQ4NDFdDQo+ID4gY3B1aHBfcmVwb3J0X2lkbGVfZGVhZCsweDNjLzB4ODAgWyAg
+MjI3LjM0NDg0N10NCj4gZG9faWRsZSsweDE5OC8weDI4MCBbDQo+ID4gMjI3LjM0NDg1Nl0gIGNw
+dV9zdGFydHVwX2VudHJ5KzB4MjQvMHg0MCBbICAyMjcuMzQ0ODY1XQ0KPiA+IHNlY29uZGFyeV9z
+dGFydF9rZXJuZWwrMHgxNTQvMHgxOTANCj4gPiBbICAyMjcuMzQ0OTA1XSBDUFUzOiBzaHV0ZG93
+bg0KPiA+IFsgIDIyNy40NDQwMTVdIHBzY2k6IENQVTMga2lsbGVkLg0KPiA+DQo+ID4NCj4gPiBJ
+IGFsc28gbWV0IENQVTEgb2ZmbGluaW5nIGhhdmUgaXJxX3dvcmsgcXVldWVkLCBidXQgQ1BVMSBu
+b3QgdHJpZ2dlcg0KPiA+IGlzc3VlLCBiZWNhdXNlIFNHSSBJUlFfV09SSyBpbnRlcnJ1cHQgaXMg
+aGFuZGxlZC4NCj4gPg0KPiA+IFRoZXJlIGFyZSBtdWx0aXBsZSBwYXRoIHRvIHJ1biBpbnRvIGRi
+c191cGRhdGVfdXRpbF9oYW5kbGVyDQo+ID4gaXJxX3dvcmtfcXVldWUsIHRoZSBwYXRoIG1pZ2h0
+IHdpbGwgZW5hYmxlIGludGVycnVwdCwgbWlnaHQgbm90Lg0KPiA+DQo+ID4gU2VlbSBkb19pZGxl
+IGlzIHRoZSBvbmx5IHBhdGggdGhhdCB3aWxsIHRyaWdnZXIgY3B1X2RpZSBmb3IgSE9UUExVRw0K
+PiA+IEFSTS9BUk02NC4NCj4gPg0KPiA+IFNvIGRvIHdlIG5lZWQgdG8gdXNlIGlkbGUgYXMgZmxh
+ZyB0byBxdWV1ZSBpcnFfd29yayBvciBub3Q/DQo+ID4gSW4gdGhpcyB3YXksIHdlIGNvdWxkIHN0
+aWxsIGluamVjdCBpcnEgd29yayBvbiBvZmZsaW5pbmcvb2ZmbGluZSBjcHUsDQo+ID4gdW50aWwg
+aXQgcnVucyBpbnRvIGlkbGUgdG8gY3B1X2RpZS4NCj4gDQo+IFRvIGJlIGhvbmVzdCwgSSdtIG5v
+dCBzdXJlIHdoYXQgeW91IG1lYW4uDQoNClNvcnJ5IHRvIGJlIG5vdCBjbGVhci4gSSBkaWQgYSB0
+cml2aWFsIHBhdGNoIHRvIHZlcmlmeSB0aGUgaXNzdWUgb25seSBoYXBwZW4NCndoZW4gdGhlIGNv
+ZGUgcnVucyBpbiBpZGxlIHByb2Nlc3MgY29udGV4dC4NCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+Y3B1ZnJlcS9jcHVmcmVxX2dvdmVybm9yLmMgYi9kcml2ZXJzL2NwdWZyZXEvY3B1ZnJlcV9nb3Zl
+cm5vci5jDQppbmRleCA0YmIwNTRkMGNiNDMuLjg1ZTc4ZGE3ZmEyZSAxMDA2NDQNCi0tLSBhL2Ry
+aXZlcnMvY3B1ZnJlcS9jcHVmcmVxX2dvdmVybm9yLmMNCisrKyBiL2RyaXZlcnMvY3B1ZnJlcS9j
+cHVmcmVxX2dvdmVybm9yLmMNCkBAIC0xNSw2ICsxNSw3IEBADQoNCiAjaW5jbHVkZSA8bGludXgv
+ZXhwb3J0Lmg+DQogI2luY2x1ZGUgPGxpbnV4L2tlcm5lbF9zdGF0Lmg+DQorI2luY2x1ZGUgPGxp
+bnV4L3NjaGVkLmg+DQogI2luY2x1ZGUgPGxpbnV4L3NsYWIuaD4NCg0KICNpbmNsdWRlICJjcHVm
+cmVxX2dvdmVybm9yLmgiDQpAQCAtMzE2LDYgKzMxNywxMCBAQCBzdGF0aWMgdm9pZCBkYnNfdXBk
+YXRlX3V0aWxfaGFuZGxlcihzdHJ1Y3QgdXBkYXRlX3V0aWxfZGF0YSAqZGF0YSwgdTY0IHRpbWUs
+DQoNCiAgICAgICAgcG9saWN5X2Ricy0+bGFzdF9zYW1wbGVfdGltZSA9IHRpbWU7DQogICAgICAg
+IHBvbGljeV9kYnMtPndvcmtfaW5fcHJvZ3Jlc3MgPSB0cnVlOw0KKyNpZmRlZiBDT05GSUdfSE9U
+UExVR19DUFUNCisgICAgICAgaWYgKGlzX2lkbGVfdGFzayhjdXJyZW50KSkNCisgICAgICAgICAg
+ICAgICByZXR1cm47DQorI2VuZGlmDQogICAgICAgIGlycV93b3JrX3F1ZXVlKCZwb2xpY3lfZGJz
+LT5pcnFfd29yayk7DQogfQ0KDQpJdCBwYXNzZWQgNTAwMCsgdGltZXMgY3B1IG9ubGluZS9vZmZs
+aW5lIHRlc3QuDQoNCj4gDQo+IEluIGNwdWZyZXEgd2UgY2Fubm90IGp1c3QgYXZvaWQgcXVldWlu
+ZyB1cCBhbiBJUlEgd29yaywgYmVjYXVzZSB3ZSd2ZQ0KPiBhbHJlYWR5IG1hZGUgY2hhbmdlcyBp
+biBwcmVwYXJhdGlvbiBmb3IgaXQgdG8gcnVuLiAgV2UgbmVlZCB0byBkZWNpZGUNCj4gd2hldGhl
+ciBvciBub3QgdG8gY2Fycnkgb3V0IHRoZSBlbnRpcmUgdXRpbGl6YXRpb24gdXBkYXRlIHVwZnJv
+bnQuDQo+IA0KPiBCdXQgcHJldmVudGluZyBDUFVzIHdpdGggTlVMTCBjcHVmcmVxX3VwZGF0ZV91
+dGlsX2RhdGEgcG9pbnRlcnMgZnJvbQ0KPiBydW5uaW5nIGNwdWZyZXEgdXRpbGl6YXRpb24gdXBk
+YXRlIGNvZGUgYXQgYWxsIChsaWtlIGluIHRoZSBsYXN0DQo+IHBhdGNoKSBzaG91bGQgYmUgc3Vm
+ZmljaWVudCB0byBhZGRyZXNzIHRoaXMgcHJvYmxlbSBlbnRpcmVseS4gIEF0IGxlYXN0IEkgZG9u
+J3QNCj4gc2VlIHdoeSBub3QuDQoNCkkganVzdCB0aGluayB0aGUgc2NoZWR1bGVyIHdhbnQgdG8g
+aW5qZWN0IGlycV93b3JrIG9uIHRoZSBjcHUgZXZlbiBkdXJpbmcgdGhlDQpjcHUgb2ZmbGluaW5n
+IHByb2Nlc3MsIGJ1dCB3ZSBub3QgaW5qZWN0IGlycSB3b3JrIHdpdGggeW91ciBwYXRjaC4gSXMg
+dGhpcyByaWdodD8NCg0KVGhhbmtzLA0KUGVuZy4NCg0KPiANCj4gVGhhbmtzIQ0K
