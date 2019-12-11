@@ -2,79 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A35C11AB55
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 13:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBB811ABBF
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 14:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729312AbfLKMyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 07:54:25 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:59031 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729298AbfLKMyZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 07:54:25 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1N4Qg2-1hgpT044jG-011S0Q; Wed, 11 Dec 2019 13:54:13 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: tegra: add COMMON_CLK dependency
-Date:   Wed, 11 Dec 2019 13:54:04 +0100
-Message-Id: <20191211125411.1857250-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1729478AbfLKNLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 08:11:43 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38116 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729481AbfLKNLi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 08:11:38 -0500
+Received: by mail-lj1-f193.google.com with SMTP id k8so23943564ljh.5
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 05:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UY+imPHDB8WeevZ0Flfagq9t3Ob1szdVUH2cd1S5NF8=;
+        b=Q4o6YOLsW1sg2YAloOsKqiOH61baSZ9/0R6Sxy9Avq5UlIlLgBLwrRJtipworvGBNr
+         9CzSXMaAR0/tqz7clfV2+x1vYorpIT99So4h8WOJB8eqdUyN5C9HffgpoQuW1lNGpqIM
+         52hQAVAOhjzkuI9qn48QdvVVH+94bX3usMg7RA4n/Wjx8YzNtr0L4X875myUU9QyTbFW
+         rV4sdNHJaniFPUnRX5wT/6oy11Vxm0+6GUFvohEqjtb1p+e42SviBxgv+3r6r4omj81l
+         2mgQdliHL18UKGmO21ERl3HbIt6BDsrKghajzsHlpmufSAmPC3a5POLHdxN6a4Aw5E9g
+         dS1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UY+imPHDB8WeevZ0Flfagq9t3Ob1szdVUH2cd1S5NF8=;
+        b=MMGXZd070A/Iez7We317FIkXKzAq3v3AWBakuNhzlG4Y3wemIfwzoS25DEHpb56pft
+         rtyiFuNbtdaqdzUPmsgk0Bxr1rrodtYGneqJ9Vn6nQRGOYWiz+tLfZFXH6eUEZ40ohvs
+         VL4FCgSEwU8Sh5u/DKDbo3Lz3fGoy0oLFO03XZ8I3E6NrUtLxF7Tv7Tp0PRqm6tw+w0D
+         w7o8OSIyfC9iKmoLPnv2YD6bmi/GU7teAvb7NsfC7Tg2xoicTjg0ZCDrGpvGmqOSGfNR
+         opElwHLy5dxw1tU8xoXxqdjzYR3bwIb0zXvy1BUJGUIQ5NOEDwch45riprqBcXrnyHne
+         qN5g==
+X-Gm-Message-State: APjAAAUp2bCNIUjmeG28WRj7mb1DwN8B5w5VEARKkldu+UVrWxa8Xrgd
+        sfpWRmbp6CRkPtkJQodK4hjDy2V/KK9c4DjaZuA=
+X-Google-Smtp-Source: APXvYqzhYhFMAwiTD5/K5UZBsByu6W1X9YrnKi4YESeXhBDQePUbmOOmJNcYs7ivQ5doiods0kAWgoYUAsH/sA+Rvyw=
+X-Received: by 2002:a2e:924e:: with SMTP id v14mr1987126ljg.7.1576069896460;
+ Wed, 11 Dec 2019 05:11:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:sP9VUyPZgvStU62dAlKy08xLXzFdkJka9Q5nGaK/wb5wuFnVPT8
- shTcHY3PhXY8zJATgm8XtoMAoKopzMg4scNkDssxMTottbiV+AtePfeHxDbwfaB1CItv/fy
- gu0mspEk19RgqnyEcz89MvnD773Ztm2tCKryufHQosrXloVVV9Zs71C1ErMAHeXisjbUSam
- M9GZpT/B9Fu6kTVh/RS4A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zg9yD6HNEx8=:N1kwQltLc4Jwr/NpJXDYkL
- Fkxc/q4nBsRp08NfLNz7d+/ka0ccgZ5FO1bL4Tppbtd5Wm9PX4DKpnea0edq2tx78b/3y/mGy
- 8oziLFjz9ussoBPJ5ywnJEZ9UvbIA45VDK5TqM1bUscsFgirSGlLoq64fAFR0w44fEeZX6fUY
- Z8iTA/l+st5VU/rPwCmwLbIpMu3QSN/leTDp7OAAFWqlV6IQ+TvGxF1ZVt3lUpYfMgE10R10z
- ZVWUuD9YMiCpXah0k9zg8icSU6xqLfW3pI2jdDBAmQHHbSMprxcRk/9REYnNmjNFOu4wELJm7
- BfSjml6NuU3MB1WOoHqIgTdtHrZkr//40Ywg3yj+SHkEuMHxMcgSNeTsNRDSuejUlr1OCLxR0
- 8KT8uUNVLYkdTNS9ITsZdbewu9ajK/pyt8rtAlmuraly6jMDbfQc+WVhGadEsXnlCUtD7IjwK
- d7mD8bw6QBvvUG1RgyEZnXN+v1ujWx/lSfPExow19CeDUJIpvxlDI+R3EjHDWZ2dVjKJmw/kz
- sn5vEaPTIljeNvZBKCtuCS72BJRxhrwWr0xvnS7Z/5+byP/aaVljtB7+6Fpn4zPp25O0h9MFx
- hJT0UFgBRWHT8uKV7z805WGQS72SCzwucuk7aEH4LaEw20MtL6q0kcNS4DhxHpWpH80TxZ+CW
- aXeqg4TJ6QcIDM2J2K65we5JtM6Gv9rx8+XqmwULdpArs8+SQiyV3bfs8jQOfPi/yNALnoaM9
- 5mwD+qESf+hqG9grrTQUzELPy7+KgDk1wZSy3yJeMiYfjQZs3nx+Kvdq2edhYj6EGhXWTOBlb
- dJdqyRs4uIfHTy4SXMYh2sh+sSOxNUGTkYgp55rusxKcHQsmsmNSChqRiJm3hRyU6ys8crtoi
- uzIXydiJRqTYTiGhznCQ==
+Received: by 2002:ab3:5718:0:0:0:0:0 with HTTP; Wed, 11 Dec 2019 05:11:35
+ -0800 (PST)
+Reply-To: goodluckafavour1@gmail.com
+From:   Ruben Jim <rubenjim111@gmail.com>
+Date:   Wed, 11 Dec 2019 14:11:35 +0100
+Message-ID: <CAESfuKXtCwrZ99cT17yM+JKD-qCE-S+7kvogD=vdXmgJbzTFXA@mail.gmail.com>
+Subject: Contact for your ATM card payment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Compile-testing this driver fails if CONFIG_COMMON_CLK is not set:
+Attn: Dear
 
-drivers/devfreq/tegra30-devfreq.o: In function `tegra_devfreq_target':
-tegra30-devfreq.c:(.text+0x164): undefined reference to `clk_set_min_rate'
+This is to inform you that your outstanding Inheritance fund valued at
+$8.900,000, 00. (Eight Million nine Hundred Thousand USA Dollars) Have
+been approved for immediate payment by the Director Telex/Foreign
+Operation Through ATM CARD Payment system which you will make a
+withdrawal of your fund in any ATM machine in your Country.
 
-Fixes: 35f8dbc72721 ("PM / devfreq: tegra: Enable COMPILE_TEST for the driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/devfreq/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Now, you are advice to contact the UBA Bank of Benin with the
+following information stated below, Contact immediate for your ATM
+card payment will be delivered to you.
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index defe1d438710..f712c3de0876 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -98,6 +98,7 @@ config ARM_TEGRA_DEVFREQ
- 		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
- 		ARCH_TEGRA_210_SOC || \
- 		COMPILE_TEST
-+	depends on COMMON_CLK
- 	select PM_OPP
- 	help
- 	  This adds the DEVFREQ driver for the Tegra family of SoCs.
--- 
-2.20.0
+It will cost you only  $198
 
+UBA Bank ATM Payment Department.
+Contact Person: Mr Goodluck Favour
+Email: goodluckafavour1@gmail.com
+
+Contact with your below information to proceed by delivering your ATM
+card through your postal address.
+
+
+1::Your full name::
+2::Your home address were you them to send the atmcard::
+3::Current occupation::
+4::Age::
+5::Your current home telephone number/mobile phone number::
+6::A Copy of your identification::
+7::Your Country::
+
+Regards,
+Ruben Jim.
+Director Telex/Foreign Operation. UBA
