@@ -2,200 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E21511AA04
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 12:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A35C11AB55
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 13:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727365AbfLKLi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 06:38:59 -0500
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:47085 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728128AbfLKLi7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 06:38:59 -0500
-Received: by mail-vk1-f195.google.com with SMTP id u6so6674037vkn.13
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 03:38:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6RcaHRsz9KM3vdOHBT0ida8e9taZHqDHpxMchzY+Agc=;
-        b=KS0BRqR78va0hw29CIS9GUW4RX0wS6yA+N/8gSThWX2uutlGOdcv4aAmfiXXxSgnBa
-         YxZKPsnKzJfQs64mHU+ZhzibHfgU6TBybre4qaBQCFdWEy2OQE8T8zmLpyOxLTgfPM1h
-         636lOYAhi4b3IZMAH+HDQKX+3xBvINLpDfH1XPmyEl1AIAOXusemAZSUzPwJ49Cif21W
-         cNCLcIqX7Pg3L/5f2C9KubTF0eNQBm4eZfbY9saujLa8cRbwpYi7lKoevMslGypUneik
-         WRBs7mjxly4A4MuuXgoJu6qKc5hf1Gvs+KmIeES16yMHapidxjCCkcBB1bPylAtsJVe9
-         w0UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6RcaHRsz9KM3vdOHBT0ida8e9taZHqDHpxMchzY+Agc=;
-        b=reStpGPLyIenKpQpZQztmv8NboI8RMEKMEKdduNC4lhjp8FqWcm2NSLVtEu8hZrmWG
-         Pkj1jaLFHEDXDZjltFvQlqiz2l3MyJupiWtMiopepURfZ9guEJQN3TUU0ECaKM5esRF3
-         U1OnxEygcMF2q1JYxbjyYclZTMPNFdDwqESsVjLFL9GNm/PNuaIZ/HMHq5H3NZaeT5Sk
-         Ov8udDHXzJWUQhjTTCyG6sEwMyW9x4tbOuFBEqyvv7rUxJwm68A7/2pQI/5U0nkr73g5
-         gIxzLbLSTtb5HeyFVV5gWZTo3lrKmDpvZ2XPunnRIEGiSgvFgPaRL6MJEsDTHYETFAzw
-         1h/w==
-X-Gm-Message-State: APjAAAW6W3U7MIXOZHmPtvhWmEpfhur6lvobwFO5VIca7DvNBdEZz6CG
-        zijCrkAhxH/xGqlmhnnqCXcuqNp6Gg0bnaU2IBm0JuYEhoA=
-X-Google-Smtp-Source: APXvYqwqbNuUfs4jU5ey3OT7K1GTYAbbhFH6VtuEUgfvhdq0V28j6NjWA4nrOWTWpi2Iwvq/cA1uc1pDssR0h5ZU3L0=
-X-Received: by 2002:a1f:4541:: with SMTP id s62mr2901064vka.59.1576064337968;
- Wed, 11 Dec 2019 03:38:57 -0800 (PST)
+        id S1729312AbfLKMyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 07:54:25 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:59031 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729298AbfLKMyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 07:54:25 -0500
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1N4Qg2-1hgpT044jG-011S0Q; Wed, 11 Dec 2019 13:54:13 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] PM / devfreq: tegra: add COMMON_CLK dependency
+Date:   Wed, 11 Dec 2019 13:54:04 +0100
+Message-Id: <20191211125411.1857250-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-References: <20191205103330.27166-1-ulf.hansson@linaro.org>
- <20191205180653.GA1516@e121166-lin.cambridge.arm.com> <CAPDyKFpvkjVKFSMRNgen7JWi5DMvTC3H1nqwcSoR3dQkHzfQZw@mail.gmail.com>
-In-Reply-To: <CAPDyKFpvkjVKFSMRNgen7JWi5DMvTC3H1nqwcSoR3dQkHzfQZw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 11 Dec 2019 12:38:22 +0100
-Message-ID: <CAPDyKFp7Cmwvat0PXK9-2nmp4u2s0t=V+p1sOfdz-OQ66dr6zQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Support CPU hotplug for the hierarchical model
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:sP9VUyPZgvStU62dAlKy08xLXzFdkJka9Q5nGaK/wb5wuFnVPT8
+ shTcHY3PhXY8zJATgm8XtoMAoKopzMg4scNkDssxMTottbiV+AtePfeHxDbwfaB1CItv/fy
+ gu0mspEk19RgqnyEcz89MvnD773Ztm2tCKryufHQosrXloVVV9Zs71C1ErMAHeXisjbUSam
+ M9GZpT/B9Fu6kTVh/RS4A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zg9yD6HNEx8=:N1kwQltLc4Jwr/NpJXDYkL
+ Fkxc/q4nBsRp08NfLNz7d+/ka0ccgZ5FO1bL4Tppbtd5Wm9PX4DKpnea0edq2tx78b/3y/mGy
+ 8oziLFjz9ussoBPJ5ywnJEZ9UvbIA45VDK5TqM1bUscsFgirSGlLoq64fAFR0w44fEeZX6fUY
+ Z8iTA/l+st5VU/rPwCmwLbIpMu3QSN/leTDp7OAAFWqlV6IQ+TvGxF1ZVt3lUpYfMgE10R10z
+ ZVWUuD9YMiCpXah0k9zg8icSU6xqLfW3pI2jdDBAmQHHbSMprxcRk/9REYnNmjNFOu4wELJm7
+ BfSjml6NuU3MB1WOoHqIgTdtHrZkr//40Ywg3yj+SHkEuMHxMcgSNeTsNRDSuejUlr1OCLxR0
+ 8KT8uUNVLYkdTNS9ITsZdbewu9ajK/pyt8rtAlmuraly6jMDbfQc+WVhGadEsXnlCUtD7IjwK
+ d7mD8bw6QBvvUG1RgyEZnXN+v1ujWx/lSfPExow19CeDUJIpvxlDI+R3EjHDWZ2dVjKJmw/kz
+ sn5vEaPTIljeNvZBKCtuCS72BJRxhrwWr0xvnS7Z/5+byP/aaVljtB7+6Fpn4zPp25O0h9MFx
+ hJT0UFgBRWHT8uKV7z805WGQS72SCzwucuk7aEH4LaEw20MtL6q0kcNS4DhxHpWpH80TxZ+CW
+ aXeqg4TJ6QcIDM2J2K65we5JtM6Gv9rx8+XqmwULdpArs8+SQiyV3bfs8jQOfPi/yNALnoaM9
+ 5mwD+qESf+hqG9grrTQUzELPy7+KgDk1wZSy3yJeMiYfjQZs3nx+Kvdq2edhYj6EGhXWTOBlb
+ dJdqyRs4uIfHTy4SXMYh2sh+sSOxNUGTkYgp55rusxKcHQsmsmNSChqRiJm3hRyU6ys8crtoi
+ uzIXydiJRqTYTiGhznCQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Dec 2019 at 20:09, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Thu, 5 Dec 2019 at 19:07, Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com> wrote:
-> >
-> > On Thu, Dec 05, 2019 at 11:33:30AM +0100, Ulf Hansson wrote:
-> > > When the hierarchical CPU topology is used and when a CPU is put offline,
-> > > that CPU prevents its PM domain from being powered off, which is because
-> > > genpd observes the corresponding attached device as being active from a
-> > > runtime PM point of view. Furthermore, any potential master PM domains are
-> > > also prevented from being powered off.
-> > >
-> > > To address this limitation, let's add add a new CPU hotplug state
-> > > (CPUHP_AP_CPU_PM_STARTING) and register up/down callbacks for it, which
-> > > allows us to deal with runtime PM accordingly.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >
-> > > Lorenzo, Sudeep, Rafael, Daniel,
-> > >
-> > > Note that, this patch is based upon a recently posted series [1] and the intent
-> > > is to queue it on top. I can fold it into the series and resend it all, if that
-> > > makes it easier for people. Just tell me what you prefer.
-> > >
-> > > Kind regards
-> > > Uffe
-> > >
-> > > [1]
-> > > https://patchwork.kernel.org/cover/11263735/
-> > >
-> > > ---
-> > >  drivers/cpuidle/cpuidle-psci.c | 45 +++++++++++++++++++++++++++++++++-
-> > >  include/linux/cpuhotplug.h     |  1 +
-> > >  2 files changed, 45 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > index 835c7c3aa118..46b481c524cc 100644
-> > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > @@ -8,6 +8,7 @@
-> > >
-> > >  #define pr_fmt(fmt) "CPUidle PSCI: " fmt
-> > >
-> > > +#include <linux/cpuhotplug.h>
-> > >  #include <linux/cpuidle.h>
-> > >  #include <linux/cpumask.h>
-> > >  #include <linux/cpu_pm.h>
-> > > @@ -31,6 +32,7 @@ struct psci_cpuidle_data {
-> > >
-> > >  static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
-> > >  static DEFINE_PER_CPU(u32, domain_state);
-> > > +static bool psci_cpuidle_use_cpuhp;
-> > >
-> > >  void psci_set_domain_state(u32 state)
-> > >  {
-> > > @@ -72,6 +74,44 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> > >       return ret;
-> > >  }
-> > >
-> > > +static int psci_idle_cpuhp_up(unsigned int cpu)
-> > > +{
-> > > +     struct device *pd_dev = __this_cpu_read(psci_cpuidle_data.dev);
-> > > +
-> > > +     if (pd_dev)
-> > > +             pm_runtime_get_sync(pd_dev);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int psci_idle_cpuhp_down(unsigned int cpu)
-> > > +{
-> > > +     struct device *pd_dev = __this_cpu_read(psci_cpuidle_data.dev);
-> > > +
-> > > +     if (pd_dev) {
-> > > +             pm_runtime_put_sync(pd_dev);
-> > > +             /* Clear domain state to start fresh at next online. */
-> > > +             psci_set_domain_state(0);
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static void psci_idle_init_cpuhp(void)
-> > > +{
-> > > +     int err;
-> > > +
-> > > +     if (!psci_cpuidle_use_cpuhp)
-> > > +             return;
-> > > +
-> > > +     err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
-> > > +                                     "cpuidle/psci:online",
-> > > +                                     psci_idle_cpuhp_up,
-> > > +                                     psci_idle_cpuhp_down);
-> >
-> > I would make it a cpuhp_setup_state() call and remove
-> >
-> > if (cpu_online(cpu))
-> >         pm_runtime_get_sync_dev(dev);
-> >
-> > in check in psci_dt_attach_cpu().
-> >
-> > Lorenzo
->
-> Thanks for the suggestion, but that doesn't work when
-> CONFIG_CPU_HOTPLUG is unset.
->
-> As a matter of fact, I just realized that I haven't tried to compile
-> without that Kconfig option. I should probably add a stub for
-> psci_idle_init_cpuhp() to address that.
+Compile-testing this driver fails if CONFIG_COMMON_CLK is not set:
 
-Just forget about what I said above, it's nonsense.
+drivers/devfreq/tegra30-devfreq.o: In function `tegra_devfreq_target':
+tegra30-devfreq.c:(.text+0x164): undefined reference to `clk_set_min_rate'
 
-cpuhp_setup_state() and friends works fine even if CONFIG_CPU_HOTPLUG
-is unset. I did test this, but some reason I forgot about it.
+Fixes: 35f8dbc72721 ("PM / devfreq: tegra: Enable COMPILE_TEST for the driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/devfreq/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-However, there is another problem with your proposal above, which is
-that the CPUHP callback is assigned after the cpuidle drivers (one per
-CPU) have been registered. Which means, CPUs may enter idle even
-before the CPUHP callbacks are registered. In other words, we need to
-keep the call to pm_runtime_get_sync_dev() in psci_dt_attach_cpu() as
-to properly reflect the state of the CPU.
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index defe1d438710..f712c3de0876 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -98,6 +98,7 @@ config ARM_TEGRA_DEVFREQ
+ 		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
+ 		ARCH_TEGRA_210_SOC || \
+ 		COMPILE_TEST
++	depends on COMMON_CLK
+ 	select PM_OPP
+ 	help
+ 	  This adds the DEVFREQ driver for the Tegra family of SoCs.
+-- 
+2.20.0
 
-[...]
-
-BTW, I am about to post a new version in a couple of hours. Any other
-thing you want to point out, before the next submission?
-
-Kind regards
-Uffe
