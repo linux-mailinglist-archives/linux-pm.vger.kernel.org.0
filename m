@@ -2,89 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C115A11BB91
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 19:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9A211BB95
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 19:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729296AbfLKSUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 13:20:25 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:41430 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728912AbfLKSUY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 13:20:24 -0500
-Received: by mail-ed1-f67.google.com with SMTP id c26so20220083eds.8;
-        Wed, 11 Dec 2019 10:20:23 -0800 (PST)
+        id S1731128AbfLKSVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 13:21:01 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:33176 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729877AbfLKSVB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 13:21:01 -0500
+Received: by mail-ed1-f68.google.com with SMTP id r21so9590203edq.0;
+        Wed, 11 Dec 2019 10:20:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cCq+YLmjndsqzVRfIXx595cSZyYTIfyoVBGa1n3MlZo=;
-        b=csOvR/hhPlWuwKRi5xvRzIXhe54IBHinIQVS++u/nqij0gEe7+NhVVrdwAPiYX1tm/
-         qhsyxp4hwZhIqmmDNi+llI8SyQc9n9+eJAjpCQlw19B4H4Y/NuSBsRydcebyYenFQf4z
-         J/4YOYDF2l53ju3wm7OQGr6s9x3hmbCiyM7hbaYQ7sSgxsC0QnlI/S+1PU+ciZnrWq+D
-         lW7ULnqTMY8YH1p8wqJ4vXoJ6vLqA8iSMh46qZkD6M4Ojpprso6VrBI+e4gl4rfkuqcq
-         ppDEQ52H4NBo8RGIuqDo5vjFWM/LYNKJ/BM5cY71Wtm/zWKiq+XsmTGYhHGJto0GAccv
-         bjOg==
-X-Gm-Message-State: APjAAAXdM85IdqATnJJ3Pg+v9xodkLAciDgdgFCCCi0RXOV+QJTGtGqU
-        QL1Q9UZkTuJxyMq8OIeKbjA=
-X-Google-Smtp-Source: APXvYqxSrBfPuZyxedBUFXHa4HwHCjZ0I74AtbkA+bPFUbpLrYb2Uyy2G8q4PvOG2wVqT+P/uDRiBA==
-X-Received: by 2002:a17:906:c791:: with SMTP id cw17mr4796655ejb.69.1576088422783;
-        Wed, 11 Dec 2019 10:20:22 -0800 (PST)
+        bh=M9sVToONd+fTEwhYvsJ/8k0wg86wy07LtQtX5S1NlxU=;
+        b=KBGSx15+7gGmDC1XdV2rKOqYqA6FhTb0qs633B65HiQgs+uYWtvKQusjC9QlqphqJv
+         mh6pcCbw3J2ILk9r7h2uCKBuVCMdYiEsNRdhFJJO+t0GGoGtIoG+DQQdA8K8kuICKjxH
+         P02JfyiexWFeKFcLULHIBFHHVtcWZA851KcANe67B+s6z5FPZQrTyDtfOV43AZeGBxZ4
+         qBuXxUVVmErhqYQfBYq66G+pqbsdbhxqqKFcro2ApUnDwHpzRtHDQMBotzq9fRLCh8gh
+         eiNNiN/4r152UQZ0h6riLUisz5+HG4rIlBiSjC3dVCxVXlAd2BhgGtq5OqqjefT2Lp5d
+         5aJg==
+X-Gm-Message-State: APjAAAXjCnyicd14+5kYfrSp/uzpZ5L+CiNVB9hlkl/FpOhDpUiLeAh8
+        Y0KLuDZDRlSM/YVoK+4OyX0=
+X-Google-Smtp-Source: APXvYqwVUE8J5FCuoKASkA48pjyAQ91Qg6Fc1R2pY0YltL8SDnG4jJfjRhmh/4RHa1sFybNMqZ48pA==
+X-Received: by 2002:a05:6402:1659:: with SMTP id s25mr4814152edx.219.1576088459075;
+        Wed, 11 Dec 2019 10:20:59 -0800 (PST)
 Received: from kozik-lap ([194.230.155.234])
-        by smtp.googlemail.com with ESMTPSA id b17sm67400edr.42.2019.12.11.10.20.21
+        by smtp.googlemail.com with ESMTPSA id 2sm65676edv.87.2019.12.11.10.20.57
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Dec 2019 10:20:22 -0800 (PST)
-Date:   Wed, 11 Dec 2019 19:20:19 +0100
+        Wed, 11 Dec 2019 10:20:58 -0800 (PST)
+Date:   Wed, 11 Dec 2019 19:20:56 +0100
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Kamil Konieczny <k.konieczny@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Andreas Faerber <afaerber@suse.de>,
-        Arjun K V <arjun.kv@samsung.com>
-Subject: Re: [PATCH 0/2] Increase CPU frequency in Exynos5422/5800 SoCs
-Message-ID: <20191211182019.GA2427@kozik-lap>
-References: <CGME20191210114035eucas1p213dc81b3934969baf2bb9235d5ab8d28@eucas1p2.samsung.com>
- <20191210114027.14910-1-m.szyprowski@samsung.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org, vireshk@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com
+Subject: Re: [PATCH 2/3] ARM: dts: exynos: Remove syscon compatible from
+ chipid node on Exynos5
+Message-ID: <20191211182056.GB2427@kozik-lap>
+References: <20191028152050.10220-1-s.nawrocki@samsung.com>
+ <CGME20191028152059eucas1p2b48166c35f61dfc8edfa99f54434e8ee@eucas1p2.samsung.com>
+ <20191028152050.10220-2-s.nawrocki@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191210114027.14910-1-m.szyprowski@samsung.com>
+In-Reply-To: <20191028152050.10220-2-s.nawrocki@samsung.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 12:40:25PM +0100, Marek Szyprowski wrote:
-> Dear All,
+On Mon, Oct 28, 2019 at 04:20:49PM +0100, Sylwester Nawrocki wrote:
+> The "syscon" compatible string was introduced in commit ("cdcce1ee977b
+> ARM: dts: exynos: Add "syscon" compatible string to chipid node on Exynos5")
+> to allow sharing of the CHIPID IO region between multiple drivers.
+> However, such sharing can be also done without an additional compatible
+> so remove the syscon entry.
 > 
-> This patchset is a resurrection of the patch posted about 3 years ago:
-> https://patchwork.kernel.org/patch/9475909/
-> 
-> That time it was not possible to merge it, because a few minor pieces
-> were still missing in mainline kernel. This has been finally resolved
-> and there should be no blockers for adding the higher CPU frequencies
-> in Exynos5422/5800 SoCs:
-> 
-> 1. support for coupled regulators (and all its dependencies) landed
->    in the regulator framework and patch #1 adds needed coupling for
->    the Exynos5422/5800 based boards;
-> 
-> 2. support for the Exynos ASV has been merged to v5.4
-> 
-> Patches has been rebased onto the v5.5-rc1 kernel release. They were
-> tested on the following boards: Odroid XU3, XU3-lite, XU4, HC1 and
-> Chromebook Pi.
-> 
-> Best regards
-> Marek Szyprowski
-> Samsung R&D Institute Poland
-> 
+> Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
+>  arch/arm/boot/dts/exynos5.dtsi | 2 +-
 
-Thanks, applied both.
+Thanks, applied.
 
 Best regards,
 Krzysztof
