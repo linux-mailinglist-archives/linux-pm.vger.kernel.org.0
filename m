@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 133F511BDF0
+	by mail.lfdr.de (Postfix) with ESMTP id 8222B11BDF1
 	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 21:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfLKUb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 15:31:56 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38414 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbfLKUb4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 15:31:56 -0500
-Received: by mail-pl1-f193.google.com with SMTP id a17so39121pls.5;
-        Wed, 11 Dec 2019 12:31:56 -0800 (PST)
+        id S1727548AbfLKUcA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Dec 2019 15:32:00 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38436 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726242AbfLKUb6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 15:31:58 -0500
+Received: by mail-pg1-f195.google.com with SMTP id a33so11085378pgm.5;
+        Wed, 11 Dec 2019 12:31:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=3/hSvLwudWoN+XB6HWteXACnz1YCPLXglnwpmxopZ+U=;
-        b=orgHVXb3Fpmfg7W8yttF3NemcT87svc1e27QdNm2SE6bOsNJk83szXiD4eT3iS6Cg0
-         zpj9sfIWomAbpFUpRGeXDHCLV/yulMMmqhKceF1wYi0olUR10GZSjm/wpHjzYFmjHuUD
-         eRBQa+aXghUUtmZSGpJv8ICRRkg9Lz87i9GEn13ahz63SWSsvPMjOwDrAjPEYX+mWKai
-         OehB+EhlcdWumJ8b7TpB+LkoN21NJY5y3+5X8hdYYIkwCVbAxiZQsWUitSauCb2Lqktu
-         ecZ/wVBxiUXVxDPDo9hCZLlYx0aNgVfZkI/M8ymac0NMVwLLNHxPEzj/vmlI20vszSRh
-         OP7w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=bUI3dxAJmLbR2verpuQbHht/NnNgFc4Xm8emQetKLeY=;
+        b=ru6rpApkxWfLsDVpgRwLBm4hAo2TQvM8KsODhFgI3HwZBxEcNZ5tUFLlmKttn5uwFM
+         2BnIPYTi5ylFrBcB8s09BZOmdUoYAJ7SQzUX7QqXg/iBpnqnloIPazKEXMdqVc4bujlN
+         Kq08lbQl1wloiSnT8//5Ag0zpIfIBzeqVEgLpz1nNeQTUIRLw3+D+S+CKMEDBPezdokE
+         wXLoS6KpgtIHgCaFUTTsBCmQ91mSWrWmkDuIQZR733e6sYdfmrrN10bGqqEW7+OAdsJ1
+         ZzuGjMwRMEJfX9r8syaV0xN1yskgFxDejnGZ80dv7+agP88A7BjgumoMFyKNc9Fi3nvt
+         pH9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3/hSvLwudWoN+XB6HWteXACnz1YCPLXglnwpmxopZ+U=;
-        b=PgvXlQyUEL/wfRfIp7KfkRT76Hou0RK/U/EU2A/ohceU+y5YoccAnkSwi7nbkpc8RA
-         aMUzSJ8oKj9Ackf+Ux88RuoOa6RA9FC4NS2lE+VerWkhb72XoM3VqOBBl1M4Edx0Q4HN
-         MJwJWwsPnsU2Z7agDHGTWobpuvN75JTDqO5rd9GogR+Jy+sBw9k08Y9WPC2xH+QatsCm
-         GDY9sZFA7tp3NqqTAU4l2iz1FO9Q941HcA9unMUEJ4VZtXzS6/ni0Gkz7ORx006/oci/
-         KkUR4E0kOapaHCmCrCx0frHEe0SrxxcEXb5sUbfalUGBQYolls/DUZn1AAISqTyQVU+1
-         nScA==
-X-Gm-Message-State: APjAAAXk6Rl5bDZIP2xSctqTChinRqNnVeWZmFf9HMjZ66v+MSyu4QLf
-        vHrMQoGcJg8yFXxDcUJYoHM=
-X-Google-Smtp-Source: APXvYqz9LDJfuBSN3rWSsIsBVJ8ollAAEg3nqsBeGqaPCp5Jf59583LSmX1aTye4SdtIkza1iG4nGQ==
-X-Received: by 2002:a17:902:7207:: with SMTP id ba7mr5476246plb.254.1576096315871;
-        Wed, 11 Dec 2019 12:31:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=bUI3dxAJmLbR2verpuQbHht/NnNgFc4Xm8emQetKLeY=;
+        b=cspYKXoO6shyhttB2xZALawBc8C5YfnJmVIZitowV3MtU3lNtAYyDYWWBFDgvCizb3
+         yp9ziszzUGWgP4uhQAWaRRxEJxmV29z6/p33WsjDOM6o8IOxg6uxcn5rOpHwxMy1SL/1
+         ndm+6Gi9/vIi8LtJZPsTIFlcT+yx5NQpR4SnRJV99Qm9HBCWAGvkbNe9TtFakvD9iJ8M
+         5N09TqNI5SnEpAFq2ccarW6eyx4XITDjnesKIxupIW+n9r8aggS1XHmfn8TEtmpi7+oI
+         VcnTwy6IVkl4yALWaNN6mqsSitpOqA0VOtKI8t9Am1QiOZ7uqsXEe3VVZ54avEPjwntg
+         xN9w==
+X-Gm-Message-State: APjAAAXYYhW2LWJdLqI7CYbq3mPBFsBa7OeXhdD8W8/n6GvyfMQAL7lZ
+        GYRA0ZWL0g147UhWLCDgJiI=
+X-Google-Smtp-Source: APXvYqyQ8PN4Yo0D5f0TxdtgaqutssAvFXy5lB6UXK07VypUBLW+9PLuwlCGTEr6LBLosXGwZ9rWLA==
+X-Received: by 2002:a63:214e:: with SMTP id s14mr6207807pgm.428.1576096317292;
+        Wed, 11 Dec 2019 12:31:57 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a19sm917570pju.11.2019.12.11.12.31.54
+        by smtp.gmail.com with ESMTPSA id a19sm917570pju.11.2019.12.11.12.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 12:31:55 -0800 (PST)
+        Wed, 11 Dec 2019 12:31:56 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org, daniel.lezcano@linaro.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -55,43 +56,105 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-pm@vger.kernel.org (open list:BROADCOM STB AVS TMON DRIVER),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 0/6] brcmstb_thermal updates for new processes
-Date:   Wed, 11 Dec 2019 12:31:37 -0800
-Message-Id: <20191211203143.2952-1-f.fainelli@gmail.com>
+Subject: [PATCH v2 1/6] thermal: brcmstb_thermal: Do not use DT coefficients
+Date:   Wed, 11 Dec 2019 12:31:38 -0800
+Message-Id: <20191211203143.2952-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191211203143.2952-1-f.fainelli@gmail.com>
+References: <20191211203143.2952-1-f.fainelli@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+At the time the brcmstb_thermal driver and its binding were merged, the
+DT binding did not make the coefficients properties a mandatory one,
+therefore all users of the brcmstb_thermal driver out there have a non
+functional implementation with zero coefficients. Even if these
+properties were provided, the formula used for computation is incorrect.
 
-This patch series contains a bug fix for the existing platforms and then
-paves the way for adding support for Broadcom STB's latest chips in 16nm
-processes, and finally updates the driver with pecularities introduced
-with the 16nm, like the lack of interrupt notification from the HW.
+The coefficients are entirely process specific (right now, only 28nm is
+supported) and not board or SoC specific, it is therefore appropriate to
+hard code them in the driver given the compatibility string we are
+probed with which has to be updated whenever a new process is
+introduced.
 
-Please queue up the first patch for -stable if you want, thanks!
+We remove the existing coefficients definition since subsequent patches
+are going to add support for a new process and will introduce new
+coefficients as well.
 
-Changes in v2:
+Fixes: 9e03cf1b2dd5 ("thermal: add brcmstb AVS TMON driver")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 31 +++++++---------------
+ 1 file changed, 9 insertions(+), 22 deletions(-)
 
-- kept defined constants in patch #1 and keep using them for subsequent
-  patches
-- add Reviewed-by tags to patches #3 through #6
-- rebase against v5.5.-rc1
-
-Florian Fainelli (6):
-  thermal: brcmstb_thermal: Do not use DT coefficients
-  thermal: brcmstb_thermal: Prepare to support a different process
-  dt-bindings: thermal: Define BCM7216 thermal sensor compatible
-  thermal: brcmstb_thermal: Add 16nm process thermal parameters
-  thermal: brcmstb_thermal: Restructure interrupt registration
-  thermal: brcmstb_thermal: Register different ops per process
-
- .../bindings/thermal/brcm,avs-tmon.txt        |  8 +-
- drivers/thermal/broadcom/brcmstb_thermal.c    | 99 ++++++++++++-------
- 2 files changed, 67 insertions(+), 40 deletions(-)
-
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index 5825ac581f56..680f1a070606 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -49,7 +49,7 @@
+ #define AVS_TMON_TP_TEST_ENABLE		0x20
+ 
+ /* Default coefficients */
+-#define AVS_TMON_TEMP_SLOPE		-487
++#define AVS_TMON_TEMP_SLOPE		487
+ #define AVS_TMON_TEMP_OFFSET		410040
+ 
+ /* HW related temperature constants */
+@@ -108,23 +108,12 @@ struct brcmstb_thermal_priv {
+ 	struct thermal_zone_device *thermal;
+ };
+ 
+-static void avs_tmon_get_coeffs(struct thermal_zone_device *tz, int *slope,
+-				int *offset)
+-{
+-	*slope = thermal_zone_get_slope(tz);
+-	*offset = thermal_zone_get_offset(tz);
+-}
+-
+ /* Convert a HW code to a temperature reading (millidegree celsius) */
+ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+ 					u32 code)
+ {
+-	const int val = code & AVS_TMON_TEMP_MASK;
+-	int slope, offset;
+-
+-	avs_tmon_get_coeffs(tz, &slope, &offset);
+-
+-	return slope * val + offset;
++	return (AVS_TMON_TEMP_OFFSET -
++		(int)((code & AVS_TMON_TEMP_MAX) * AVS_TMON_TEMP_SLOPE));
+ }
+ 
+ /*
+@@ -136,20 +125,18 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+ static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
+ 					int temp, bool low)
+ {
+-	int slope, offset;
+-
+ 	if (temp < AVS_TMON_TEMP_MIN)
+-		return AVS_TMON_TEMP_MAX; /* Maximum code value */
+-
+-	avs_tmon_get_coeffs(tz, &slope, &offset);
++		return AVS_TMON_TEMP_MAX;	/* Maximum code value */
+ 
+-	if (temp >= offset)
++	if (temp >= AVS_TMON_TEMP_OFFSET)
+ 		return 0;	/* Minimum code value */
+ 
+ 	if (low)
+-		return (u32)(DIV_ROUND_UP(offset - temp, abs(slope)));
++		return (u32)(DIV_ROUND_UP(AVS_TMON_TEMP_OFFSET - temp,
++					  AVS_TMON_TEMP_SLOPE));
+ 	else
+-		return (u32)((offset - temp) / abs(slope));
++		return (u32)((AVS_TMON_TEMP_OFFSET - temp) /
++			      AVS_TMON_TEMP_SLOPE);
+ }
+ 
+ static int brcmstb_get_temp(void *data, int *temp)
 -- 
 2.17.1
 
