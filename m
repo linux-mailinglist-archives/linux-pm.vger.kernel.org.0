@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A22C311B3A5
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 16:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B84B11B3A8
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Dec 2019 16:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732036AbfLKPoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2388358AbfLKPoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 11 Dec 2019 10:44:00 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34966 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388761AbfLKPn6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 10:43:58 -0500
-Received: by mail-lj1-f195.google.com with SMTP id j6so24622655lja.2
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 07:43:56 -0800 (PST)
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37095 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387474AbfLKPoA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 10:44:00 -0500
+Received: by mail-lf1-f68.google.com with SMTP id b15so17063791lfc.4
+        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 07:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=rTyFfehsHZ4NrOw6RaeXcNkMIHnoS8zNHPnwBdHCVW4=;
-        b=p5CrlKDt3mkO5z+JaPTIxWFp1zu66so+e8FkAUrFkoA8GpcVCIRnRFbgMKzLoaHzlW
-         HCv+6p5dqkThhU/6+gENScBRN2Ij182cE77XbziWSrktZRYLrulaWpBFRO4l1Fr/ITes
-         XMrApT04irJm6q/vvKyw0CjHNrtvRz3jxX/ux2yCHAbH4j8a7VSuUN91m7v6KQevqpWh
-         5rwME1geedwsSxeTd32eFCIwPYPb4gns9rdDMoY7+L46ViaYCQfjBTlJ8omHwMW+vMl9
-         Yuel0R2OWPSUCRoJTIy9gsQF8SUuIS6aAYxo8lNs+lJ8yiQsqFiaDuKhBwv2/9lre3TK
-         1qUA==
+        bh=Ofbrgz68OSPrbND6/WhbxfBKi0bLlwB+/hz0+n8YJzw=;
+        b=KVepL9vstN03XHppcxydjSKRLkFgwNOhFqMhTEnVlF1MReXK/9bNoLInJ8YP4E/Oja
+         ZsW6VRW6o1OTBRvvY3Pk+F5pawI/QV//nAh+XSUsYvZyyHcT4x89o5sJIBMcUQRb2GmY
+         q3FFC/XGyS6X8bjQylLBcBwEoXtkItkLrJCdTELVIh9uptrXS8Y6bz7BCWQUJCiWuS9+
+         0HnCy/45OUr7AwyD/twItRhW6qCTqBU1ffy810aL/t37q+e8zskOr9aZG8I/TMXTfhT0
+         IgHIUiScQLkUlvprt8NBTDMSwKQ0ZagBxHs/8xctCRVLEI7+GdKbAawY6YKngYrmAxEc
+         zIhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=rTyFfehsHZ4NrOw6RaeXcNkMIHnoS8zNHPnwBdHCVW4=;
-        b=kfX/S/fymelbc+2UuPgV+qHcDx1RGOCd1RJatwGLx3J5T21goJq5f7oA3jfFRYF5JD
-         K9U29N+qFsjs9lC5XuBnuh8xl/OVFLBxrjekIGOgCZFZnEiRschlPJHWl2vDSWHKqp1H
-         grSnTqPUWnT+uie2YddWmBqNDWkzsL70sNnZ878oLDesrVYA6mOZmI9BM5sQ6zE5GQFQ
-         99H+F/aV/M3F4XWjDV12Zhs8It/1Amlo0tZhRuLqUQYiNx9cMwn5OkyjM0Ruy8gYDGQP
-         h7tfF6G2SYWNWjLAkjbkegvxv8UwOKWF8RLGM7xa63ZR6KxZb4eH+ND8aZw4qFeZXlCV
-         RAFw==
-X-Gm-Message-State: APjAAAXIH52/oNl1Jf/UdMZw5ojjtav3cPbhY8tWIs0kQgxKf8+Keb81
-        WFcNc3+DgABmJ2ppu383uoHhYQ==
-X-Google-Smtp-Source: APXvYqyuPt21/xnIK8FG2LgE0sYaNL0lj+qHjE9ysH3DMI2EmfAOl/ZGGEJEhFZhyeNFNpE1jzEoxQ==
-X-Received: by 2002:a2e:9a51:: with SMTP id k17mr2389984ljj.206.1576079035828;
-        Wed, 11 Dec 2019 07:43:55 -0800 (PST)
+        bh=Ofbrgz68OSPrbND6/WhbxfBKi0bLlwB+/hz0+n8YJzw=;
+        b=KgQW4qtWKm0nmrcPtHn2hAxCpMJovkaYUiG/g6mM6dsLRSHr0TnRYK1heIuGl8Jn/W
+         t3rWFxcbahyP2odRdsS7ovRnpvjyRfSzHJqzR7qKcOvbRNGicy3ZElNzyULewj7bhncV
+         mmuGP0ttNHV1JI+aEifVxXdQXb1Abov7rqoF37s12n98bE+ZvW3yqeLhiNhY6FaHGvW8
+         g2oaxB1awPGxlS6pvstW1zhalaR5YiPCpT5ezDfaog7Xs+J3ZZ2TUfDWCVBZxMjNZ1fH
+         M146YbuivusFxZK5zdEYTB71hG1TlKl5bDOvbVIsngpyGGIu21J7tJANZV5l3Nk1kLKK
+         OuJw==
+X-Gm-Message-State: APjAAAW5b0oZnNzqiEhOHzvUVjSrXfd8FPjn2ByBIVPNpGbi8D1y+MBZ
+        T7RA2bv6kYpqDdhT5QqkzWvTWA==
+X-Google-Smtp-Source: APXvYqz89XHVxkLmuyY/NWdcwtGhitRaQeBPBPqirkbVbNQySVcoy9ANADV7MYrC0JZJfJfwa4yKGw==
+X-Received: by 2002:a05:6512:21d:: with SMTP id a29mr2713494lfo.186.1576079037661;
+        Wed, 11 Dec 2019 07:43:57 -0800 (PST)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id b14sm1389608lff.68.2019.12.11.07.43.54
+        by smtp.gmail.com with ESMTPSA id b14sm1389608lff.68.2019.12.11.07.43.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 07:43:55 -0800 (PST)
+        Wed, 11 Dec 2019 07:43:57 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -57,10 +57,11 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v4 03/14] firmware: psci: Export functions to manage the OSI mode
-Date:   Wed, 11 Dec 2019 16:43:32 +0100
-Message-Id: <20191211154343.29765-4-ulf.hansson@linaro.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
+Subject: [PATCH v4 04/14] of: base: Add of_get_cpu_state_node() to get idle states for a CPU node
+Date:   Wed, 11 Dec 2019 16:43:33 +0100
+Message-Id: <20191211154343.29765-5-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191211154343.29765-1-ulf.hansson@linaro.org>
 References: <20191211154343.29765-1-ulf.hansson@linaro.org>
@@ -69,15 +70,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To allow subsequent changes to implement support for OSI mode through the
-cpuidle-psci driver, export the existing psci_has_osi_support(). Export
-also a new function, psci_set_osi_mode(), that allows its caller to enable
-the OS-initiated CPU-suspend mode in the PSCI FW.
+The CPU's idle state nodes are currently parsed at the common cpuidle DT
+library, but also when initializing data for specific CPU idle operations,
+as in the PSCI cpuidle driver case and qcom-spm cpuidle case.
 
-To deal with backwards compatibility for a kernel started through a kexec
-call, default to set the CPU-suspend mode to the Platform Coordinated mode
-during boot.
+To avoid open-coding, let's introduce of_get_cpu_state_node(), which takes
+the device node for the CPU and the index to the requested idle state node,
+as in-parameters. In case a corresponding idle state node is found, it
+returns the node with the refcount incremented for it, else it returns
+NULL.
 
+Moreover, for PSCI there are two options to describe the CPU's idle states
+[1], either via a flattened description or a hierarchical layout. Hence,
+let's take both options into account.
+
+[1] Documentation/devicetree/bindings/arm/psci.yaml
+
+Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
+Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
@@ -86,68 +99,83 @@ Changes in v4:
 	- None.
 
 ---
- drivers/firmware/psci/psci.c | 18 ++++++++++++++++--
- include/linux/psci.h         |  2 ++
- 2 files changed, 18 insertions(+), 2 deletions(-)
+ drivers/of/base.c  | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/of.h |  8 ++++++++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index b3b6c15e7b36..2937d44b5df4 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -97,7 +97,7 @@ static inline bool psci_has_ext_power_state(void)
- 				PSCI_1_0_FEATURES_CPU_SUSPEND_PF_MASK;
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index db7fbc0c0893..614f0c674995 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -489,6 +489,42 @@ int of_cpu_node_to_id(struct device_node *cpu_node)
  }
+ EXPORT_SYMBOL(of_cpu_node_to_id);
  
--static inline bool psci_has_osi_support(void)
-+bool psci_has_osi_support(void)
- {
- 	return psci_cpu_suspend_feature & PSCI_1_0_OS_INITIATED;
- }
-@@ -162,6 +162,15 @@ static u32 psci_get_version(void)
- 	return invoke_psci_fn(PSCI_0_2_FN_PSCI_VERSION, 0, 0, 0);
- }
- 
-+int psci_set_osi_mode(void)
++/**
++ * of_get_cpu_state_node - Get CPU's idle state node at the given index
++ *
++ * @cpu_node: The device node for the CPU
++ * @index: The index in the list of the idle states
++ *
++ * Two generic methods can be used to describe a CPU's idle states, either via
++ * a flattened description through the "cpu-idle-states" binding or via the
++ * hierarchical layout, using the "power-domains" and the "domain-idle-states"
++ * bindings. This function check for both and returns the idle state node for
++ * the requested index.
++ *
++ * In case an idle state node is found at @index, the refcount is incremented
++ * for it, so call of_node_put() on it when done. Returns NULL if not found.
++ */
++struct device_node *of_get_cpu_state_node(struct device_node *cpu_node,
++					  int index)
 +{
++	struct of_phandle_args args;
 +	int err;
 +
-+	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
-+			     PSCI_1_0_SUSPEND_MODE_OSI, 0, 0);
-+	return psci_to_linux_errno(err);
-+}
++	err = of_parse_phandle_with_args(cpu_node, "power-domains",
++					"#power-domain-cells", 0, &args);
++	if (!err) {
++		struct device_node *state_node =
++			of_parse_phandle(args.np, "domain-idle-states", index);
 +
- static int psci_cpu_suspend(u32 state, unsigned long entry_point)
- {
- 	int err;
-@@ -544,9 +553,14 @@ static int __init psci_1_0_init(struct device_node *np)
- 	if (err)
- 		return err;
- 
--	if (psci_has_osi_support())
-+	if (psci_has_osi_support()) {
- 		pr_info("OSI mode supported.\n");
- 
-+		/* Default to PC mode. */
-+		invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
-+			       PSCI_1_0_SUSPEND_MODE_PC, 0, 0);
++		of_node_put(args.np);
++		if (state_node)
++			return state_node;
 +	}
 +
- 	return 0;
++	return of_parse_phandle(cpu_node, "cpu-idle-states", index);
++}
++EXPORT_SYMBOL(of_get_cpu_state_node);
++
+ /**
+  * __of_device_is_compatible() - Check if the node matches given constraints
+  * @device: pointer to node
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 844f89e1b039..c669c0a4732f 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -351,6 +351,8 @@ extern const void *of_get_property(const struct device_node *node,
+ 				int *lenp);
+ extern struct device_node *of_get_cpu_node(int cpu, unsigned int *thread);
+ extern struct device_node *of_get_next_cpu_node(struct device_node *prev);
++extern struct device_node *of_get_cpu_state_node(struct device_node *cpu_node,
++						 int index);
+ 
+ #define for_each_property_of_node(dn, pp) \
+ 	for (pp = dn->properties; pp != NULL; pp = pp->next)
+@@ -765,6 +767,12 @@ static inline struct device_node *of_get_next_cpu_node(struct device_node *prev)
+ 	return NULL;
  }
  
-diff --git a/include/linux/psci.h b/include/linux/psci.h
-index ebe0a881d13d..a67712b73b6c 100644
---- a/include/linux/psci.h
-+++ b/include/linux/psci.h
-@@ -18,6 +18,8 @@ bool psci_tos_resident_on(int cpu);
- 
- int psci_cpu_suspend_enter(u32 state);
- bool psci_power_state_is_valid(u32 state);
-+int psci_set_osi_mode(void);
-+bool psci_has_osi_support(void);
- 
- enum smccc_version {
- 	SMCCC_VERSION_1_0,
++static inline struct device_node *of_get_cpu_state_node(struct device_node *cpu_node,
++					int index)
++{
++	return NULL;
++}
++
+ static inline int of_n_addr_cells(struct device_node *np)
+ {
+ 	return 0;
 -- 
 2.17.1
 
