@@ -2,28 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9162311C6DE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 09:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502C111C6E7
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 09:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbfLLIQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 03:16:46 -0500
-Received: from comms.puri.sm ([159.203.221.185]:48208 "EHLO comms.puri.sm"
+        id S1728160AbfLLIR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 03:17:29 -0500
+Received: from comms.puri.sm ([159.203.221.185]:48236 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726382AbfLLIQq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Dec 2019 03:16:46 -0500
+        id S1726382AbfLLIR3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 03:17:29 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 3D198E01F3;
-        Thu, 12 Dec 2019 00:16:44 -0800 (PST)
+        by comms.puri.sm (Postfix) with ESMTP id 59FAFE01F3;
+        Thu, 12 Dec 2019 00:17:28 -0800 (PST)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IVaT9x0ILVlj; Thu, 12 Dec 2019 00:16:43 -0800 (PST)
-Subject: Re: [PATCH V5 1/3] thermal/drivers/cpu_cooling: Add idle cooling
- device documentation
+        with ESMTP id r6kXsETnmb9G; Thu, 12 Dec 2019 00:17:27 -0800 (PST)
+Subject: Re: [PATCH V5 2/3] thermal/drivers/cpu_cooling: Introduce the cpu
+ idle cooling driver
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
 Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
         viresh.kumar@linaro.org, amit.kucheria@linaro.org,
         linux-kernel@vger.kernel.org
 References: <20191211224347.1001-1-daniel.lezcano@linaro.org>
+ <20191211224347.1001-2-daniel.lezcano@linaro.org>
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
  mQINBFULfZABEADRxJqDOYAHfrp1w8Egcv88qoru37k1x0Ugy8S6qYtKLAAt7boZW+q5gPv3
@@ -99,235 +100,46 @@ Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
  uV2Xzgbi3VEbw3GZr+EnDC7XNE2wUrnlD/w2W6RzVYjVT6IX4SamNlV+MWX0/1fYCutfqZl8
  6BSKmJjlWpfkPKzyzjhGQVZrTZYnKAu471hRv8/6Dx5JuZJgDCnYanNx3DDreRMu/nq6TfaO
  ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
-Message-ID: <6206b0c7-0f3a-80df-efa8-4f88939615d4@puri.sm>
-Date:   Thu, 12 Dec 2019 09:16:39 +0100
+Message-ID: <5075876b-17d2-61ba-c383-38a6ddae076f@puri.sm>
+Date:   Thu, 12 Dec 2019 09:17:24 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
-In-Reply-To: <20191211224347.1001-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20191211224347.1001-2-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-
 On 11.12.19 23:43, Daniel Lezcano wrote:
-> Provide some documentation for the idle injection cooling effect in
-> order to let people to understand the rational of the approach for the
-> idle injection CPU cooling device.
+> The cpu idle cooling device offers a new method to cool down a CPU by
+> injecting idle cycles at runtime.
+> 
+> It has some similarities with the intel power clamp driver but it is
+> actually designed to be more generic and relying on the idle injection
+> powercap framework.
+> 
+> The idle injection duration is fixed while the running duration is
+> variable. That allows to have control on the device reactivity for the
+> user experience.
+> 
+> An idle state powering down the CPU or the cluster will allow to drop
+> the static leakage, thus restoring the heat capacity of the SoC. It
+> can be set with a trip point between the hot and the critical points,
+> giving the opportunity to prevent a hard reset of the system when the
+> cpufreq cooling fails to cool down the CPU.
+> 
+> With more sophisticated boards having a per core sensor, the idle
+> cooling device allows to cool down a single core without throttling
+> the compute capacity of several cpus belonging to the same clock line,
+> so it could be used in collaboration with the cpufreq cooling device.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Reviewed-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
 thanks
-
-> ---
->   V4:
->     - Fixed typos, replaced 'period' per 'duty cycles', clarified some
->       wording (Amit Kucheria)
-> ---
->  .../driver-api/thermal/cpu-idle-cooling.rst   | 189 ++++++++++++++++++
->  1 file changed, 189 insertions(+)
->  create mode 100644 Documentation/driver-api/thermal/cpu-idle-cooling.rst
-> 
-> diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-> new file mode 100644
-> index 000000000000..13d7fe4e8de8
-> --- /dev/null
-> +++ b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-> @@ -0,0 +1,189 @@
-> +
-> +Situation:
-> +----------
-> +
-> +Under certain circumstances a SoC can reach a critical temperature
-> +limit and is unable to stabilize the temperature around a temperature
-> +control. When the SoC has to stabilize the temperature, the kernel can
-> +act on a cooling device to mitigate the dissipated power. When the
-> +critical temperature is reached, a decision must be taken to reduce
-> +the temperature, that, in turn impacts performance.
-> +
-> +Another situation is when the silicon temperature continues to
-> +increase even after the dynamic leakage is reduced to its minimum by
-> +clock gating the component. This runaway phenomenon can continue due
-> +to the static leakage. The only solution is to power down the
-> +component, thus dropping the dynamic and static leakage that will
-> +allow the component to cool down.
-> +
-> +Last but not least, the system can ask for a specific power budget but
-> +because of the OPP density, we can only choose an OPP with a power
-> +budget lower than the requested one and under-utilize the CPU, thus
-> +losing performance. In other words, one OPP under-utilizes the CPU
-> +with a power less than the requested power budget and the next OPP
-> +exceeds the power budget. An intermediate OPP could have been used if
-> +it were present.
-> +
-> +Solutions:
-> +----------
-> +
-> +If we can remove the static and the dynamic leakage for a specific
-> +duration in a controlled period, the SoC temperature will
-> +decrease. Acting on the idle state duration or the idle cycle
-> +injection period, we can mitigate the temperature by modulating the
-> +power budget.
-> +
-> +The Operating Performance Point (OPP) density has a great influence on
-> +the control precision of cpufreq, however different vendors have a
-> +plethora of OPP density, and some have large power gap between OPPs,
-> +that will result in loss of performance during thermal control and
-> +loss of power in other scenarios.
-> +
-> +At a specific OPP, we can assume that injecting idle cycle on all CPUs
-> +belong to the same cluster, with a duration greater than the cluster
-> +idle state target residency, we lead to dropping the static and the
-> +dynamic leakage for this period (modulo the energy needed to enter
-> +this state). So the sustainable power with idle cycles has a linear
-> +relation with the OPP’s sustainable power and can be computed with a
-> +coefficient similar to:
-> +
-> +	    Power(IdleCycle) = Coef x Power(OPP)
-> +
-> +Idle Injection:
-> +---------------
-> +
-> +The base concept of the idle injection is to force the CPU to go to an
-> +idle state for a specified time each control cycle, it provides
-> +another way to control CPU power and heat in addition to
-> +cpufreq. Ideally, if all CPUs belonging to the same cluster, inject
-> +their idle cycles synchronously, the cluster can reach its power down
-> +state with a minimum power consumption and reduce the static leakage
-> +to almost zero.  However, these idle cycles injection will add extra
-> +latencies as the CPUs will have to wakeup from a deep sleep state.
-> +
-> +We use a fixed duration of idle injection that gives an acceptable
-> +performance penalty and a fixed latency. Mitigation can be increased
-> +or decreased by modulating the duty cycle of the idle injection.
-> +
-> +     ^
-> +     |
-> +     |
-> +     |-------                         -------
-> +     |_______|_______________________|_______|___________
-> +
-> +     <------>
-> +       idle  <---------------------->
-> +                    running
-> +
-> +      <----------------------------->
-> +              duty cycle 25%
-> +
-> +	      
-> +The implementation of the cooling device bases the number of states on
-> +the duty cycle percentage. When no mitigation is happening the cooling
-> +device state is zero, meaning the duty cycle is 0%.
-> +
-> +When the mitigation begins, depending on the governor's policy, a
-> +starting state is selected. With a fixed idle duration and the duty
-> +cycle (aka the cooling device state), the running duration can be
-> +computed.
-> +
-> +The governor will change the cooling device state thus the duty cycle
-> +and this variation will modulate the cooling effect.
-> +
-> +     ^
-> +     |
-> +     |
-> +     |-------                 -------
-> +     |_______|_______________|_______|___________
-> +
-> +     <------>
-> +       idle  <-------------->
-> +                running
-> +
-> +      <----------------------------->
-> +              duty cycle 33%
-> +
-> +
-> +     ^
-> +     |
-> +     |
-> +     |-------         -------
-> +     |_______|_______|_______|___________
-> +
-> +     <------>
-> +       idle  <------>
-> +              running
-> +
-> +      <------------->
-> +       duty cycle 50%
-> +
-> +The idle injection duration value must comply with the constraints:
-> +
-> +- It is less than or equal to the latency we tolerate when the
-> +  mitigation begins. It is platform dependent and will depend on the
-> +  user experience, reactivity vs performance trade off we want. This
-> +  value should be specified.
-> +
-> +- It is greater than the idle state’s target residency we want to go
-> +  for thermal mitigation, otherwise we end up consuming more energy.
-> +
-> +Power considerations
-> +--------------------
-> +  
-> +When we reach the thermal trip point, we have to sustain a specified
-> +power for a specific temperature but at this time we consume:
-> +
-> + Power = Capacitance x Voltage^2 x Frequency x Utilisation
-> +
-> +... which is more than the sustainable power (or there is something
-> +wrong in the system setup). The ‘Capacitance’ and ‘Utilisation’ are a
-> +fixed value, ‘Voltage’ and the ‘Frequency’ are fixed artificially
-> +because we don’t want to change the OPP. We can group the
-> +‘Capacitance’ and the ‘Utilisation’ into a single term which is the
-> +‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have:
-> +
-> + Pdyn = Cdyn x Voltage^2 x Frequency
-> +
-> +The power allocator governor will ask us somehow to reduce our power
-> +in order to target the sustainable power defined in the device
-> +tree. So with the idle injection mechanism, we want an average power
-> +(Ptarget) resulting in an amount of time running at full power on a
-> +specific OPP and idle another amount of time. That could be put in a
-> +equation:
-> +
-> + P(opp)target = ((Trunning x (P(opp)running) + (Tidle x P(opp)idle)) /
-> +			(Trunning + Tidle)
-> +  ...
-> +
-> + Tidle = Trunning x ((P(opp)running / P(opp)target) - 1)
-> +
-> +At this point if we know the running period for the CPU, that gives us
-> +the idle injection we need. Alternatively if we have the idle
-> +injection duration, we can compute the running duration with:
-> +
-> + Trunning = Tidle / ((P(opp)running / P(opp)target) - 1)
-> +
-> +Practically, if the running power is less than the targeted power, we
-> +end up with a negative time value, so obviously the equation usage is
-> +bound to a power reduction, hence a higher OPP is needed to have the
-> +running power greater than the targeted power.
-> +
-> +However, in this demonstration we ignore three aspects:
-> +
-> + * The static leakage is not defined here, we can introduce it in the
-> +   equation but assuming it will be zero most of the time as it is
-> +   difficult to get the values from the SoC vendors
-> +
-> + * The idle state wake up latency (or entry + exit latency) is not
-> +   taken into account, it must be added in the equation in order to
-> +   rigorously compute the idle injection
-> +
-> + * The injected idle duration must be greater than the idle state
-> +   target residency, otherwise we end up consuming more energy and
-> +   potentially invert the mitigation effect
-> +
-> +So the final equation is:
-> +
-> + Trunning = (Tidle - Twakeup ) x
-> +		(((P(opp)dyn + P(opp)static ) - P(opp)target) / P(opp)target )
-> 
