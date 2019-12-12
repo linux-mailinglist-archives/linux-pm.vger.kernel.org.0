@@ -2,127 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CFB11C664
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 08:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE1D11C67E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 08:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728107AbfLLH3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 02:29:14 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:36187 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728052AbfLLH3O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 02:29:14 -0500
-Received: by mail-wr1-f68.google.com with SMTP id z3so1549223wru.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Dec 2019 23:29:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=brI+4IufuruMkMfwAJIkYSNuk48oYROgkBkVJlhkW/o=;
-        b=lOJQREGKnp2geXVH3y7iphkPqm/y2TtHyA+SZ5OC2lYGffPqeZHK6kmxlryhMK5CQ3
-         69fIjjmDgtM0YyMzI4Lu2GQ740PxKKKZj/P2W//zHd/GpzjMGtY2dcbBm1SrbgbR3Wfi
-         flv9HbL44RWXfDDaY7MhtXV6go16yrANSMezPkXI/vTwo+vYJn2ECY8W+Y8a2KG1u6l4
-         X1bbp0ee9scfCjY2Z7ztePo+5ULOvZShN9kPg/O+bg2kAUGOm3ljKBm2/mELSdLySZbp
-         fTFJ8eqXoLy8F8X6rVWlwp/q4iAXi6soLlCI1sQBdBznY3h/OBOc1EtyS85Nt9AazALL
-         3Vvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=brI+4IufuruMkMfwAJIkYSNuk48oYROgkBkVJlhkW/o=;
-        b=MD5z4zAjv7WrDrqqFq583fvN9b+s00SGNsdivXW1PuyEICisokLRBE8HeT5D6y72Aa
-         2EN48SzdQAYAEaUMU+ilvq4EXHsblbOJ5GtiViftimvjz8wuBarjXrA/05p6lpki5Kwq
-         Xs/SLuOW1k4yOAfJNe84iX8eNKHTDRtN+/hUXymSgdulEVNr7JefT3HeTkH2wTXlwZZo
-         IgPeBzBuaVsbwd8aiyYlvxkhNDTwMOzmFEnqXtey7jGo9AQQDSUbV5lscOmaQxlfvao4
-         3l4Sr8AkqDs/8/V+vw5zFzB9fsaGUlqle8XY7NNJHfFdYYYQs3yDwDfv7WrzVVNvEwiF
-         Biog==
-X-Gm-Message-State: APjAAAXq9r8dXuyqTpDXG0eXOrJX/fwzJEMjc6oM8kIvDMsOLliD5K3Q
-        vZhkTYaLKznz8SoEMOJKa9/UnQ==
-X-Google-Smtp-Source: APXvYqyTtfpB3GkyHBIz36pIKXXEP0Z8wEYbyZKMrsagiB4X3i8r2XVlDY6rj3XKKd/rPTjHzUfu5w==
-X-Received: by 2002:a05:6000:f:: with SMTP id h15mr4278391wrx.90.1576135750944;
-        Wed, 11 Dec 2019 23:29:10 -0800 (PST)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id b10sm4989163wrt.90.2019.12.11.23.29.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Dec 2019 23:29:10 -0800 (PST)
-Subject: Re: [PATCH RFC v6 4/9] interconnect: Add imx core driver
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1573761527.git.leonard.crestez@nxp.com>
- <ddfa004340787f8b138c54d89af486d9232dfff9.1573761527.git.leonard.crestez@nxp.com>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- mQINBFjTuRcBEACyAOVzghvyN19Sa/Nit4LPBWkICi5W20p6bwiZvdjhtuh50H5q4ktyxJtp
- 1+s8dMSa/j58hAWhrc2SNL3fttOCo+MM1bQWwe8uMBQJP4swgXf5ZUYkSssQlXxGKqBSbWLB
- uFHOOBTzaQBaNgsdXo+mQ1h8UCgM0zQOmbs2ort8aHnH2i65oLs5/Xgv/Qivde/FcFtvEFaL
- 0TZ7odM67u+M32VetH5nBVPESmnEDjRBPw/DOPhFBPXtal53ZFiiRr6Bm1qKVu3dOEYXHHDt
- nF13gB+vBZ6x5pjl02NUEucSHQiuCc2Aaavo6xnuBc3lnd4z/xk6GLBqFP3P/eJ56eJv4d0B
- 0LLgQ7c1T3fU4/5NDRRCnyk6HJ5+HSxD4KVuluj0jnXW4CKzFkKaTxOp7jE6ZD/9Sh74DM8v
- etN8uwDjtYsM07I3Szlh/I+iThxe/4zVtUQsvgXjwuoOOBWWc4m4KKg+W4zm8bSCqrd1DUgL
- f67WiEZgvN7tPXEzi84zT1PiUOM98dOnmREIamSpKOKFereIrKX2IcnZn8jyycE12zMkk+Sc
- ASMfXhfywB0tXRNmzsywdxQFcJ6jblPNxscnGMh2VlY2rezmqJdcK4G4Lprkc0jOHotV/6oJ
- mj9h95Ouvbq5TDHx+ERn8uytPygDBR67kNHs18LkvrEex/Z1cQARAQABtChHZW9yZ2kgRGph
- a292IDxnZW9yZ2kuZGpha292QGxpbmFyby5vcmc+iQI+BBMBAgAoBQJY07kXAhsDBQkHhM4A
- BgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRCyi/eZcnWWUuvsD/4miikUeAO6fU2Xy3fT
- l7RUCeb2Uuh1/nxYoE1vtXcow6SyAvIVTD32kHXucJJfYy2zFzptWpvD6Sa0Sc58qe4iLY4j
- M54ugOYK7XeRKkQHFqqR2T3g/toVG1BOLS2atooXEU+8OFbpLkBXbIdItqJ1M1SEw8YgKmmr
- JlLAaKMq3hMb5bDQx9erq7PqEKOB/Va0nNu17IL58q+Q5Om7S1x54Oj6LiG/9kNOxQTklOQZ
- t61oW1Ewjbl325fW0/Lk0QzmfLCrmGXXiedFEMRLCJbVImXVKdIt/Ubk6SAAUrA5dFVNBzm2
- L8r+HxJcfDeEpdOZJzuwRyFnH96u1Xz+7X2V26zMU6Wl2+lhvr2Tj7spxjppR+nuFiybQq7k
- MIwyEF0mb75RLhW33sdGStCZ/nBsXIGAUS7OBj+a5fm47vQKv6ekg60oRTHWysFSJm1mlRyq
- exhI6GwUo5GM/vE36rIPSJFRRgkt6nynoba/1c4VXxfhok2rkP0x3CApJ5RimbvITTnINY0o
- CU6f1ng1I0A1UTi2YcLjFq/gmCdOHExT4huywfu1DDf0p1xDyPA1FJaii/gJ32bBP3zK53hM
- dj5S7miqN7F6ZpvGSGXgahQzkGyYpBR5pda0m0k8drV2IQn+0W8Qwh4XZ6/YdfI81+xyFlXc
- CJjljqsMCJW6PdgEH7kCDQRY07kXARAAvupGd4Jdd8zRRiF+jMpv6ZGz8L55Di1fl1YRth6m
- lIxYTLwGf0/p0oDLIRldKswena3fbWh5bbTMkJmRiOQ/hffhPSNSyyh+WQeLY2kzl6geiHxD
- zbw37e2hd3rWAEfVFEXOLnmenaUeJFyhA3Wd8OLdRMuoV+RaLhNfeHctiEn1YGy2gLCq4VNb
- 4Wj5hEzABGO7+LZ14hdw3hJIEGKtQC65Jh/vTayGD+qdwedhINnIqslk9tCQ33a+jPrCjXLW
- X29rcgqigzsLHH7iVHWA9R5Aq7pCy5hSFsl4NBn1uV6UHlyOBUuiHBDVwTIAUnZ4S8EQiwgv
- WQxEkXEWLM850V+G6R593yZndTr3yydPgYv0xEDACd6GcNLR/x8mawmHKzNmnRJoOh6Rkfw2
- fSiVGesGo83+iYq0NZASrXHAjWgtZXO1YwjW9gCQ2jYu9RGuQM8zIPY1VDpQ6wJtjO/KaOLm
- NehSR2R6tgBJK7XD9it79LdbPKDKoFSqxaAvXwWgXBj0Oz+Y0BqfClnAbxx3kYlSwfPHDFYc
- R/ppSgnbR5j0Rjz/N6Lua3S42MDhQGoTlVkgAi1btbdV3qpFE6jglJsJUDlqnEnwf03EgjdJ
- 6KEh0z57lyVcy5F/EUKfTAMZweBnkPo+BF2LBYn3Qd+CS6haZAWaG7vzVJu4W/mPQzsAEQEA
- AYkCJQQYAQIADwUCWNO5FwIbDAUJB4TOAAAKCRCyi/eZcnWWUhlHD/0VE/2x6lKh2FGP+QHH
- UTKmiiwtMurYKJsSJlQx0T+j/1f+zYkY3MDX+gXa0d0xb4eFv8WNlEjkcpSPFr+pQ7CiAI33
- 99kAVMQEip/MwoTYvM9NXSMTpyRJ/asnLeqa0WU6l6Z9mQ41lLzPFBAJ21/ddT4xeBDv0dxM
- GqaH2C6bSnJkhSfSja9OxBe+F6LIAZgCFzlogbmSWmUdLBg+sh3K6aiBDAdZPUMvGHzHK3fj
- gHK4GqGCFK76bFrHQYgiBOrcR4GDklj4Gk9osIfdXIAkBvRGw8zg1zzUYwMYk+A6v40gBn00
- OOB13qJe9zyKpReWMAhg7BYPBKIm/qSr82aIQc4+FlDX2Ot6T/4tGUDr9MAHaBKFtVyIqXBO
- xOf0vQEokkUGRKWBE0uA3zFVRfLiT6NUjDQ0vdphTnsdA7h01MliZLQ2lLL2Mt5lsqU+6sup
- Tfql1omgEpjnFsPsyFebzcKGbdEr6vySGa3Cof+miX06hQXKe99a5+eHNhtZJcMAIO89wZmj
- 7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
- E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
- KEmKjLDvB0pePJkdTw==
-Message-ID: <48136159-21ba-c3b7-52c9-1d9d711644f7@linaro.org>
-Date:   Thu, 12 Dec 2019 09:29:07 +0200
-MIME-Version: 1.0
-In-Reply-To: <ddfa004340787f8b138c54d89af486d9232dfff9.1573761527.git.leonard.crestez@nxp.com>
+        id S1728096AbfLLHeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 02:34:50 -0500
+Received: from comms.puri.sm ([159.203.221.185]:46580 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728176AbfLLHes (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 02:34:48 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 61B00E01F3;
+        Wed, 11 Dec 2019 23:34:46 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Y4_vRQLnNxqd; Wed, 11 Dec 2019 23:34:45 -0800 (PST)
+Subject: Re: [PATCH V4 4/4] thermal/drivers/cpu_cooling: Rename to
+ cpufreq_cooling
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, edubezval@gmail.com,
+        rui.zhang@intel.com
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        viresh.kumar@linaro.org, amit.kucheria@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20191204153930.9128-4-daniel.lezcano@linaro.org>
+ <20191206113315.18954-1-martin.kepplinger@puri.sm>
+ <e6cbe4fb-8b04-cff6-f2af-6c5829d9deb1@linaro.org>
+ <7ae753bd-8330-6652-0207-0c884d722a6c@puri.sm>
+ <2beb4758-d66d-e8d9-a64d-86ce361aa57f@linaro.org>
+ <45b69f61-3a1f-be1f-ece9-4d1b79389353@linaro.org>
+ <6599c416-e4c3-e87e-0952-3dd1c412f212@puri.sm>
+ <0f78c19b-9013-a20e-35c8-b39f86de48c0@linaro.org>
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
+ 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
+ ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
+Message-ID: <80090fb7-baa5-7bf0-1a1c-673e989a3f5b@puri.sm>
+Date:   Thu, 12 Dec 2019 08:34:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+In-Reply-To: <0f78c19b-9013-a20e-35c8-b39f86de48c0@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -131,467 +120,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
 
-Thank you for your continuous work on the patches and sorry for not reviewing
-this earlier.
 
-On 11/14/19 22:09, Leonard Crestez wrote:
-> This adds support for i.MX SoC family to interconnect framework.
+On 11.12.19 22:33, Daniel Lezcano wrote:
 > 
-> Platform drivers can describe the interconnect graph and several
-> adjustment knobs where icc node bandwidth is converted to a
-> DEV_PM_QOS_MIN_FREQUENCY request.
+> Hi Martin,
 > 
-> The interconnect provider is probed through the main NOC device and
-> other adjustable nodes on the same graph are found from a
-> fsl,scalable-nodes phandle array property.
+> I've a bug in the code.
 > 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
->  drivers/interconnect/Kconfig      |   1 +
->  drivers/interconnect/Makefile     |   1 +
->  drivers/interconnect/imx/Kconfig  |   5 +
->  drivers/interconnect/imx/Makefile |   1 +
->  drivers/interconnect/imx/imx.c    | 301 ++++++++++++++++++++++++++++++
->  drivers/interconnect/imx/imx.h    |  60 ++++++
->  6 files changed, 369 insertions(+)
->  create mode 100644 drivers/interconnect/imx/Kconfig
->  create mode 100644 drivers/interconnect/imx/Makefile
->  create mode 100644 drivers/interconnect/imx/imx.c
->  create mode 100644 drivers/interconnect/imx/imx.h
 > 
-> diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
-> index bfa4ca3ab7a9..e61802230f90 100644
-> --- a/drivers/interconnect/Kconfig
-> +++ b/drivers/interconnect/Kconfig
-> @@ -10,7 +10,8 @@ menuconfig INTERCONNECT
->  	  If unsure, say no.
->  
->  if INTERCONNECT
->  
->  source "drivers/interconnect/qcom/Kconfig"
-> +source "drivers/interconnect/imx/Kconfig"
->  
->  endif
-> diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
-> index 28f2ab0824d5..20a13b7eb37f 100644
-> --- a/drivers/interconnect/Makefile
-> +++ b/drivers/interconnect/Makefile
-> @@ -2,5 +2,6 @@
->  
->  icc-core-objs				:= core.o
->  
->  obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
->  obj-$(CONFIG_INTERCONNECT_QCOM)		+= qcom/
-> +obj-$(CONFIG_INTERCONNECT_IMX)		+= imx/
-> diff --git a/drivers/interconnect/imx/Kconfig b/drivers/interconnect/imx/Kconfig
-> new file mode 100644
-> index 000000000000..7d81d3c83a61
-> --- /dev/null
-> +++ b/drivers/interconnect/imx/Kconfig
-> @@ -0,0 +1,5 @@
-> +config INTERCONNECT_IMX
-> +	bool "i.MX interconnect drivers"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	help
-> +	  Generic interconnect driver for i.MX SOCs
-> diff --git a/drivers/interconnect/imx/Makefile b/drivers/interconnect/imx/Makefile
-> new file mode 100644
-> index 000000000000..bb92fd9fe4a5
-> --- /dev/null
-> +++ b/drivers/interconnect/imx/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_INTERCONNECT_IMX) += imx.o
-> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-> new file mode 100644
-> index 000000000000..d08e64c239cd
-> --- /dev/null
-> +++ b/drivers/interconnect/imx/imx.c
-> @@ -0,0 +1,301 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Interconnect framework driver for i.MX SoC
-> + *
-> + * Copyright (c) 2019, BayLibre
-> + * Copyright (c) 2019, NXP
-> + * Author: Alexandre Bailon <abailon@baylibre.com>
-> + * Author: Leonard Crestez <leonard.crestez@nxp.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_qos.h>
-> +
-> +#include "imx.h"
-> +
-> +/* private icc_node data */
-> +struct imx_icc_node {
-> +	const struct imx_icc_node_desc *desc;
-> +	struct device *qos_dev;
-> +	struct dev_pm_qos_request qos_req;
-> +};
-> +
-> +static int imx_icc_aggregate(struct icc_node *node, u32 tag,
-> +			     u32 avg_bw, u32 peak_bw,
-> +			     u32 *agg_avg, u32 *agg_peak)
-> +{
-> +	*agg_avg += avg_bw;
-> +	*agg_peak = max(*agg_peak, peak_bw);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx_icc_node_set(struct icc_node *node)
-> +{
-> +	struct device *dev = node->provider->dev;
-> +	struct imx_icc_node *node_data = node->data;
-> +	u64 freq;
-> +
-> +	if (!node_data->qos_dev)
-> +		return 0;
-> +
-> +	freq = (node->avg_bw + node->peak_bw) * node_data->desc->adj->bw_mul;
-> +	do_div(freq, node_data->desc->adj->bw_div);
-> +	dev_dbg(dev, "node %s device %s avg_bw %ukBps peak_bw %ukBps min_freq %llukHz\n",
-> +			node->name, dev_name(node_data->qos_dev),
-> +			node->avg_bw, node->peak_bw, freq);
-
-Nit: Please align all dev_dbg/dev_err to the open parenthesis.
-
-> +
-> +	if (freq > S32_MAX) {
-> +		dev_err(dev, "%s can't request more than S32_MAX freq\n",
-> +				node->name);
-> +		return -ERANGE;
-> +	}
-> +
-> +	dev_pm_qos_update_request(&node_data->qos_req, freq);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	return imx_icc_node_set(dst);
-> +}
-> +
-> +/* imx_icc_node_destroy() - Destroy an imx icc_node, including private data */
-> +static void imx_icc_node_destroy(struct icc_node *node)
-> +{
-> +	struct imx_icc_node *node_data = node->data;
-> +
-> +	if (dev_pm_qos_request_active(&node_data->qos_req))
-> +		dev_pm_qos_remove_request(&node_data->qos_req);
-> +	put_device(node_data->qos_dev);
-> +	icc_node_del(node);
-> +	icc_node_destroy(node->id);
-> +}
-> +
-> +static int imx_icc_node_init_qos(struct icc_provider *provider,
-> +				 struct icc_node *node)
-> +{
-> +	struct imx_icc_node *node_data = node->data;
-> +	struct device *dev = provider->dev;
-> +	struct device_node *dn = NULL;
-> +	struct platform_device *pdev;
-> +	int i, count;
-> +	u32 node_id;
-> +	int ret;
-> +
-> +	count = of_property_count_u32_elems(dev->of_node,
-> +					    "fsl,scalable-node-ids");
-> +	if (count < 0) {
-> +		dev_err(dev, "Failed to parse fsl,scalable-node-ids: %d\n",
-> +			count);
-> +		return count;
-> +	}
-> +
-> +	for (i = 0; i < count; i++) {
-> +		ret = of_property_read_u32_index(dev->of_node,
-> +						 "fsl,scalable-node-ids",
-> +						 i, &node_id);
-> +
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to parse fsl,scalable-node-ids[%d]: %d\n",
-> +				i, ret);
-> +			return ret;
-> +		}
-> +		if (node_id != node->id)
-> +			continue;
-> +
-> +		dn = of_parse_phandle(dev->of_node, "fsl,scalable-nodes", i);
-
-Why is this needed? I would expect that the interconnect provider driver already
-knows which nodes are scalable based on the platform compatible string.
-Then maybe this driver should create devfreq devices for each node that is scalable?
-
-> +		if (IS_ERR(dn)) {
-> +			dev_err(dev, "Failed to parse fsl,scalable-nodes[%d]: %ld\n",
-> +				i, PTR_ERR(dn));
-> +			return PTR_ERR(dn);
-> +		}
-> +		break;
-> +	}
-> +
-> +	/* Allow scaling to be disabled on a per-node basis */
-> +	if (!dn || !of_device_is_available(dn))
-> +		return 0;
-> +
-> +	pdev = of_find_device_by_node(dn);
-> +	of_node_put(dn);
-> +	if (!pdev) {
-> +		dev_warn(dev, "node %s[%d] missing device for %pOF\n",
-> +				node->name, node->id, dn);
-> +		return -EPROBE_DEFER;
-> +	}
-> +
-> +	node_data->qos_dev = &pdev->dev;
-> +	dev_info(dev, "node %s[%d] has device node %pOF\n",
-> +		 node->name, node->id, dn);
-> +	return dev_pm_qos_add_request(node_data->qos_dev,
-> +				      &node_data->qos_req,
-> +				      DEV_PM_QOS_MIN_FREQUENCY, 0);
-> +}
-> +
-> +static struct icc_node *imx_icc_node_add(
-> +		struct icc_provider *provider,
-
-Nit: Move this after the open parenthesis on the line above and then align
-the line below to the parenthesis and ignore the 80 cols rule.
-
-> +		const struct imx_icc_node_desc *node_desc)
-> +{
-> +	struct device *dev = provider->dev;
-> +	struct imx_icc_node *node_data;
-> +	struct icc_node *node;
-> +	int ret;
-> +
-> +	node = icc_node_create(node_desc->id);
-> +	if (IS_ERR(node)) {
-> +		dev_err(dev, "failed to create node %d\n", node_desc->id);
-> +		return node;
-> +	}
-> +
-> +	if (node->data) {
-> +		dev_err(dev, "already created node %s id=%d\n",
-> +				node_desc->name, node_desc->id);
-> +		return ERR_PTR(-EEXIST);
-> +	}
-> +
-> +	node_data = devm_kzalloc(dev, sizeof(*node_data), GFP_KERNEL);
-> +	if (!node_data) {
-> +		icc_node_destroy(node->id);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	node->name = node_desc->name;
-> +	node->data = node_data;
-> +	node_data->desc = node_desc;
-> +	icc_node_add(node, provider);
-> +
-> +	if (node_desc->adj) {
-> +		ret = imx_icc_node_init_qos(provider, node);
-> +		if (ret < 0) {
-> +			imx_icc_node_destroy(node);
-> +			return ERR_PTR(ret);
-> +		}
-> +	}
-> +
-> +	return node;
-> +}
-> +
-> +static void imx_icc_unregister_nodes(struct icc_provider *provider)
-> +{
-> +	struct icc_node *node, *tmp;
-> +
-> +	list_for_each_entry_safe(node, tmp, &provider->nodes, node_list)
-> +		imx_icc_node_destroy(node);
-> +}
-> +
-> +static int imx_icc_register_nodes(struct icc_provider *provider,
-> +				  const struct imx_icc_node_desc *descs,
-> +				  int count)
-> +{
-> +	struct icc_onecell_data *provider_data = provider->data;
-> +	int ret;
-> +	int i;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		struct icc_node *node;
-> +		const struct imx_icc_node_desc *node_desc = &descs[i];
-> +		size_t j;
-> +
-> +		node = imx_icc_node_add(provider, node_desc);
-> +		if (IS_ERR(node)) {
-> +			ret = PTR_ERR(node);
-> +			if (ret != -EPROBE_DEFER)
-> +				dev_err(provider->dev, "failed to add %s: %d\n",
-> +					node_desc->name, ret);
-> +			goto err;
-> +		}
-> +		provider_data->nodes[node->id] = node;
-> +
-> +		for (j = 0; j < node_desc->num_links; j++) {
-> +			ret = icc_link_create(node, node_desc->links[j]);
-> +			if (ret) {
-> +				dev_err(provider->dev, "failed to link node %d to %d: %d\n",
-> +					node->id, node_desc->links[j], ret);
-> +				goto err;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +err:
-> +	imx_icc_unregister_nodes(provider);
-> +
-> +	return ret;
-> +}
-> +
-> +static int get_max_node_id(struct imx_icc_node_desc *nodes, int nodes_count)
-> +{
-> +	int i, ret = 0;
-> +
-> +	for (i = 0; i < nodes_count; ++i)
-> +		if (nodes[i].id > ret)
-> +			ret = nodes[i].id;
-> +
-> +	return ret;
-> +}
-> +
-> +int imx_icc_register(struct platform_device *pdev,
-> +		     struct imx_icc_node_desc *nodes, int nodes_count)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct icc_onecell_data *data;
-> +	struct icc_provider *provider;
-> +	int max_node_id;
-> +	int ret;
-> +
-> +	/* icc_onecell_data is indexed by node_id, unlike nodes param */
-> +	max_node_id = get_max_node_id(nodes, nodes_count);
-> +	data = devm_kzalloc(dev, struct_size(data, nodes, max_node_id),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +	data->num_nodes = max_node_id;
-> +
-> +	provider = devm_kzalloc(dev, sizeof(*provider), GFP_KERNEL);
-> +	if (!provider)
-> +		return -ENOMEM;
-> +	provider->set = imx_icc_set;
-> +	provider->aggregate = imx_icc_aggregate;
-> +	provider->xlate = of_icc_xlate_onecell;
-> +	provider->data = data;
-> +	provider->dev = dev->parent;
-> +	platform_set_drvdata(pdev, provider);
-> +
-> +	ret = icc_provider_add(provider);
-> +	if (ret) {
-> +		dev_err(dev, "error adding interconnect provider: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = imx_icc_register_nodes(provider, nodes, nodes_count);
-> +	if (ret)
-> +		goto provider_del;
-> +
-> +	pr_info("registered %s\n", pdev->name);
-> +
-> +	return 0;
-> +
-> +provider_del:
-> +	icc_provider_del(provider);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(imx_icc_register);
-> +
-> +int imx_icc_unregister(struct platform_device *pdev)
-> +{
-> +	struct icc_provider *provider = platform_get_drvdata(pdev);
-> +
-> +	icc_provider_del(provider);
-> +	imx_icc_unregister_nodes(provider);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(imx_icc_unregister);
-> diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
-> new file mode 100644
-> index 000000000000..9f06c54ac2c8
-> --- /dev/null
-> +++ b/drivers/interconnect/imx/imx.h
-> @@ -0,0 +1,60 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Interconnect framework driver for i.MX SoC
-> + *
-> + * Copyright (c) 2019, BayLibre
-> + * Copyright (c) 2019, NXP
-> + * Author: Alexandre Bailon <abailon@baylibre.com>
-> + * Author: Leonard Crestez <leonard.crestez@nxp.com>
-> + */
-> +#ifndef __DRIVERS_INTERCONNECT_IMX_H
-> +#define __DRIVERS_INTERCONNECT_IMX_H
-> +
-> +#include <linux/kernel.h>
-> +
-> +#define IMX_ICC_MAX_LINKS	4
-> +
-> +/*
-> + * struct imx_icc_node_adj - Describe a dynamic adjustment knob
-> + */
-> +struct imx_icc_node_adj_desc {
-> +	unsigned int bw_mul, bw_div;
-> +};
-> +
-> +/*
-> + * struct imx_icc_node - Describe an interconnect node
-> + * @name: name of the node
-> + * @id: an unique id to identify the node
-> + * @links: an array of slaves' node id
-> + * @num_links: number of id defined in links
-> + */
-> +struct imx_icc_node_desc {
-> +	const char *name;
-> +	u16 id;
-> +	u16 links[IMX_ICC_MAX_LINKS];
-> +	u16 num_links;
-> +
-> +	const struct imx_icc_node_adj_desc *adj;
-> +};
-> +
-> +#define DEFINE_BUS_INTERCONNECT(_name, _id, _adj, ...)			\
-> +	{								\
-> +		.id = _id,						\
-> +		.name = _name,						\
-> +		.adj = _adj,						\
-> +		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
-> +		.links = { __VA_ARGS__ },				\
-> +	}
-> +
-> +#define DEFINE_BUS_MASTER(_name, _id, _dest_id)				\
-> +	DEFINE_BUS_INTERCONNECT(_name, _id, NULL, _dest_id)
-> +
-> +#define DEFINE_BUS_SLAVE(_name, _id, _adj)				\
-> +	DEFINE_BUS_INTERCONNECT(_name, _id, _adj)
-> +
-> +int imx_icc_register(struct platform_device *pdev,
-> +		     struct imx_icc_node_desc *nodes,
-> +		     int nodes_count);
-> +int imx_icc_unregister(struct platform_device *pdev);
-> +
-> +#endif /* __DRIVERS_INTERCONNECT_IMX_H */
+> diff --git a/drivers/thermal/cpuidle_cooling.c
+> b/drivers/thermal/cpuidle_cooling.c
+> index 369c5c613f6b..628ad707f247 100644
+> --- a/drivers/thermal/cpuidle_cooling.c
+> +++ b/drivers/thermal/cpuidle_cooling.c
+> @@ -192,7 +192,7 @@ __init cpuidle_of_cooling_register(struct
+> device_node *np,
+>                 goto out_id;
+>         }
+> 
+> -       idle_inject_set_duration(ii_dev, 0, TICK_USEC);
+> +       idle_inject_set_duration(ii_dev, TICK_USEC, TICK_USEC);
+> 
+>         idle_cdev->ii_dev = ii_dev;
+> 
+> 
+> Let me know if that solves your issue.
 > 
 
-The rest look ok to me. We just need to figure out the scalable nodes thing.
+It does. I now won't heat up over the hot trip point at all. That's what
+I was expecting. thanks!
 
-Thanks,
-Georgi
+                                   martin
+
