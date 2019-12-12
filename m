@@ -2,92 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1506911C912
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 10:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459BA11C943
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 10:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728361AbfLLJZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 04:25:16 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:47846 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728344AbfLLJZQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Dec 2019 04:25:16 -0500
-Received: from zn.tnic (p200300EC2F0A5A00984E1B37A4E020FA.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:5a00:984e:1b37:a4e0:20fa])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E4F41EC0985;
-        Thu, 12 Dec 2019 10:25:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1576142714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+dYA8drbIsiT7giIEQe7BBpW6cQ7yCAKZaHUc/zBWRM=;
-        b=K/BGdkTbgGNJ3oJxIP+zDsGaBijLUTL6eRRcQn81scGw+OHe8dzUUZE+q0t39gaKxHUqX+
-        VD4HI9lFACMrJGt79F9WU4np/Bgsd+KgljTPCLospi5QIiX4hEdaTV+g05+UjlIMz/lofV
-        F7Prs7AFNWlxF1UddZrrXLCUK9F8y9A=
-Date:   Thu, 12 Dec 2019 10:25:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v4 01/19] x86/msr-index: Clean up bit defines for
- IA32_FEATURE_CONTROL MSR
-Message-ID: <20191212092509.GB4991@zn.tnic>
-References: <20191128014016.4389-2-sean.j.christopherson@intel.com>
- <201912010347.7tMb4moN%lkp@intel.com>
- <20191202190633.GG4063@linux.intel.com>
+        id S1728392AbfLLJf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 04:35:59 -0500
+Received: from a27-10.smtp-out.us-west-2.amazonses.com ([54.240.27.10]:34314
+        "EHLO a27-10.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728230AbfLLJf7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 04:35:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1576143358;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:MIME-Version:Content-Type;
+        bh=w0FazNewqkNs8YdPQjOHQnKwKkuu3mZLl8EwXAI4GQ4=;
+        b=ANJXc3Rky85I9YFunNSO+qsBYLsG26dEyqi4DVTEFxuEXm365azWY4/7L0D6V3lG
+        fmDWR5y68QWknZZm1zREOsmWBeDRD87eVvdEgRcJjM8jCah8QohJi+UoU9E/x2a5zZi
+        7Z1eQEUOwk26Ko71vdCpwOcKH+TjXzQw3xeTKWRs=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1576143358;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:MIME-Version:Content-Type:Feedback-ID;
+        bh=w0FazNewqkNs8YdPQjOHQnKwKkuu3mZLl8EwXAI4GQ4=;
+        b=VPS3XteqH6TtUXFQws12fTJfuumjnJm16BnDtmB/dfTdGCxOPBCGkdVC6Zrkw6NW
+        0qmY8g2xesHE8E+1iUPUITx7lLK2Q8ovn8dGVrPz5KTNAFY7VJfAJnvwwktyJcnNEVe
+        QWk4rfnwSSKF2NeHxmQ3aLi2AZCAqFX7nEC92sHg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2A814C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>
+Subject: Re: [PATCH v3 09/12] wireless: iwlegacy: use <linux/units.h> helpers
+References: <1576075099-3441-1-git-send-email-akinobu.mita@gmail.com>
+        <1576075099-3441-10-git-send-email-akinobu.mita@gmail.com>
+Date:   Thu, 12 Dec 2019 09:35:58 +0000
+In-Reply-To: <1576075099-3441-10-git-send-email-akinobu.mita@gmail.com>
+        (Akinobu Mita's message of "Wed, 11 Dec 2019 23:38:16 +0900")
+Message-ID: <0101016ef9770a79-8bb3d210-14d0-491a-ba0e-e5eea30ddfaa-000000@us-west-2.amazonses.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191202190633.GG4063@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-SES-Outgoing: 2019.12.12-54.240.27.10
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 02, 2019 at 11:06:33AM -0800, Sean Christopherson wrote:
-> Argh, flat out missed this when doing search and replace.
+Akinobu Mita <akinobu.mita@gmail.com> writes:
 
-There are more. What always works reliably for me is git grep:
+> This switches the iwlegacy driver to use celsius_to_kelvin() and
+> kelvin_to_celsius() in <linux/units.h>.
+>
+> Cc: Kalle Valo <kvalo@codeaurora.org>
+> Cc: Stanislaw Gruszka <sgruszka@redhat.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 
-$ git grep MSR_IA32_FEATURE_CONTROL
-drivers/idle/intel_idle.c:1287:         rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
-tools/arch/x86/include/asm/msr-index.h:561:#define MSR_IA32_FEATURE_CONTROL        0x0000003a
-tools/power/x86/turbostat/turbostat.c:4502:     if (!get_msr(base_cpu, MSR_IA32_FEATURE_CONTROL, &msr))
-tools/power/x86/turbostat/turbostat.c:4503:             fprintf(outf, "cpu%d: MSR_IA32_FEATURE_CONTROL: 0x%08llx (%sLocked %s)\n",
-tools/testing/selftests/kvm/include/x86_64/processor.h:771:#define MSR_IA32_FEATURE_CONTROL        0x0000003a
-tools/testing/selftests/kvm/lib/x86_64/vmx.c:162:       feature_control = rdmsr(MSR_IA32_FEATURE_CONTROL);
-tools/testing/selftests/kvm/lib/x86_64/vmx.c:164:               wrmsr(MSR_IA32_FEATURE_CONTROL, feature_control | required);
+It's enough to say "iwlegacy: ", no need to have "wireless:" in the title.
 
-those additional ones won't break the build but it is perhaps worth
-unifying them all since we're at it, anyway.
-
-Thx.
+Acked-by: Kalle Valo <kvalo@codeaurora.org>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
