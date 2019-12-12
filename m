@@ -2,141 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF0011C39E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 03:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB7A11C5E2
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 07:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbfLLCvm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Dec 2019 21:51:42 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:48670 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727599AbfLLCvl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Dec 2019 21:51:41 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191212025139epoutp02da48281e3224a685b06458a90b1d2963~ff-hTz5h-1223312233epoutp02W
-        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2019 02:51:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191212025139epoutp02da48281e3224a685b06458a90b1d2963~ff-hTz5h-1223312233epoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576119099;
-        bh=GnrJ15q/HFwDIHL3gFZLsi8o81NU126LeWMf5E0LJ5c=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=JFJiKm5hOnM7amp9ocV7Wp2WD8TY6eWsHbMvfQlfarNLztP7GRIXzZjr1O1auz1I9
-         ZaEBt81uPPs3LOE1g4CsPRC+cw550RnSoCS6SpY5JhqGVANjecU7jV5sVhWVwy01hI
-         DShwLN5GmUbhGMsoYr4CgObnROAQbQCiCvbZUMLI=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191212025138epcas1p1858adcc8b9206ae31b3012d76f86ffd7~ff-g131vi0821908219epcas1p1h;
-        Thu, 12 Dec 2019 02:51:38 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 47YJGc3trDzMqYkc; Thu, 12 Dec
-        2019 02:51:36 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        80.37.48498.83BA1FD5; Thu, 12 Dec 2019 11:51:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191212025135epcas1p274ba7bab1a68bb734e41db188027270a~ff-eOv5JT0287002870epcas1p2I;
-        Thu, 12 Dec 2019 02:51:35 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191212025135epsmtrp1af88fc2491b136ce6d1856e8ce60fed6~ff-eOFwhy1625416254epsmtrp1D;
-        Thu, 12 Dec 2019 02:51:35 +0000 (GMT)
-X-AuditID: b6c32a36-a55ff7000001bd72-00-5df1ab380e70
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        19.AB.10238.73BA1FD5; Thu, 12 Dec 2019 11:51:35 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191212025135epsmtip239f283f5bdacfa75b85dab823f22caa1~ff-eCmZop1206312063epsmtip2n;
-        Thu, 12 Dec 2019 02:51:35 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: tegra: add COMMON_CLK dependency
-To:     Arnd Bergmann <arnd@arndb.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <e046bf10-f683-c230-471f-cd7768db3b11@samsung.com>
-Date:   Thu, 12 Dec 2019 11:58:05 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20191211125411.1857250-1-arnd@arndb.de>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmrq7F6o+xBoeuSVn8nXSMHch5zGhx
-        tukNu8XlXXPYLD73HmG0uN24gs1i86apzA7sHr9/TWL02DnrLrvHu3Pn2D36tqxi9Pi8SS6A
-        NSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoDCWF
-        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgWWBXnFibnFpXrpecn6ulaGBgZEpUGFC
-        dsaNvlvMBV/YK7pO/mVqYNzF1sXIySEhYCKxsr+LvYuRi0NIYAejxNZPO9kgnE+MEuvW3IDK
-        fGOU2HntC1zLqjXLGSESexklXv7dD9XynlFi3u5nzF2MHBzCAs4S/74ngsRFBOYySix/8Bus
-        m1kgSeJW22oWEJtNQEti/4sbYHF+AUWJqz8eM4L08grYSdx74AgSZhFQlfh1pYcJxBYVCJM4
-        ua2FEcTmFRCUODnzCdgYTgFTibfT/zNBjBeXuPVkPpQtL7H97RxmkBskBN6zSay/NIMZ4gMX
-        iZuTvkLZwhKvjm9hh7ClJF72t0HZ1RIrTx5hg2juYJTYsv8CK0TCWGL/0slMIIcyC2hKrN+l
-        DxFWlNj5ey4jxGI+iXdfe1hBSiQEeCU62oQgSpQlLj+4ywRhS0osbu9km8CoNAvJO7OQvDAL
-        yQuzEJYtYGRZxSiWWlCcm55abFhghBzbmxjBSVTLbAfjonM+hxgFOBiVeHgfSH+MFWJNLCuu
-        zD3EKMHBrCTCe7ztXawQb0piZVVqUX58UWlOavEhRlNgaE9klhJNzgcm+LySeENTI2NjYwsT
-        QzNTQ0MlcV6OHxdjhQTSE0tSs1NTC1KLYPqYODilGhhnH5l56trUSo8ChfQNHfK1Rxe/rfMp
-        /GDVquQ3x2et86EHjY5nMq7k5SStq7Ra1NKpLjZjQau1RobydE+Z7g16/66ovDiXIRG74tvj
-        0H6WT29kdbvO1y55Pi3t6Z9f3fZ+rQuMN0WIfGL951ey/riJgZ9N7KNsjR0OBfNN1m24uH3h
-        NbMLnYFKLMUZiYZazEXFiQDpjLeCuAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJXtd89cdYg1XduhZ/Jx1jt1j98TGj
-        xdmmN+wWl3fNYbP43HuE0eJ24wo2i82bpjI7sHv8/jWJ0WPnrLvsHu/OnWP36NuyitHj8ya5
-        ANYoLpuU1JzMstQifbsErowbfbeYC76wV3Sd/MvUwLiLrYuRk0NCwERi1ZrljF2MXBxCArsZ
-        JT5OPcEKkZCUmHbxKHMXIweQLSxx+HAxRM1bRon1f6eBxYUFnCX+fU8EiYsIzGaUOHX2KNhQ
-        ZoEkiUnzrrOD2EICHYwSXS/B4mwCWhL7X9wAs/kFFCWu/njMCDKHV8BO4t4DR5Awi4CqxK8r
-        PUwgtqhAmMTOJY/BbF4BQYmTM5+wgNicAqYSb6f/Z4JYpS7xZ94lZghbXOLWk/lQcXmJ7W/n
-        ME9gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOJa0
-        NHcwXl4Sf4hRgINRiYd3hvrHWCHWxLLiytxDjBIczEoivMfb3sUK8aYkVlalFuXHF5XmpBYf
-        YpTmYFES532adyxSSCA9sSQ1OzW1ILUIJsvEwSnVwJgpuI/78pPozwp8doIrLwuZqAffzbFh
-        +ikSy5fpfdU3+OyLmN6fuWHXuFqOCcb086xaG1g965fUhFAfqVLTh7wzK/S8n2+057u2WPmC
-        6DkmZ1bdVLZ/oQcYWn1msb64F3kgwah/aptP+fqXjlXz5C4oznl8ZE5OLLfetvNLkt++4Qqq
-        ejrvvBJLcUaioRZzUXEiAH5oOJShAgAA
-X-CMS-MailID: 20191212025135epcas1p274ba7bab1a68bb734e41db188027270a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191211125428epcas1p3200de29d1a7566ebd443cd0477ca594e
-References: <CGME20191211125428epcas1p3200de29d1a7566ebd443cd0477ca594e@epcas1p3.samsung.com>
-        <20191211125411.1857250-1-arnd@arndb.de>
+        id S1726833AbfLLGR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 01:17:57 -0500
+Received: from mout.gmx.net ([212.227.15.15]:54087 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbfLLGR5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 01:17:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1576131461;
+        bh=KL73YRrT7LLHVsznmPTHt/klCRSoc1CVMKSMBDmBo6I=;
+        h=X-UI-Sender-Class:From:To:Subject:Reply-to:Date;
+        b=Tpc3ARXxO+7BOveLypF/SVr8mN0m+AgXaOl5a/zuwIZlfLxkuOvwxPmPNtZTI8OmQ
+         nDRZjvPdrzU/X4npI+hF0EyGJwd5ehZq1GlZxO5AxGFBzuVzlmxWmnPGmnlGHdYwb1
+         HYnuKO8tdTiqRXa1KWzBzRHzBv9dUZucJV/kZpbQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from corona.crabdance.com ([173.228.106.20]) by mail.gmx.com
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MKbgE-1iQujo3OOq-00KwkB; Thu, 12 Dec 2019 07:17:41 +0100
+Received: by corona.crabdance.com (Postfix, from userid 1001)
+        id BFE2D6E85603; Wed, 11 Dec 2019 22:17:02 -0800 (PST)
+From:   Stefan Schaeckeler <schaecsn@gmx.net>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] thermal: rockchip: enable hwmon
+Content-Type: text/plain
+Reply-to: schaecsn@gmx.net
+Message-Id: <20191212061702.BFE2D6E85603@corona.crabdance.com>
+Date:   Wed, 11 Dec 2019 22:17:02 -0800 (PST)
+X-Provags-ID: V03:K1:kW48YWv2at+CtoZ29KlwFzvfojnYn+Z2kTPJCrfxCVA5Rh90eXV
+ aM0gPv8hwKLUJ2iDVrZbWVOWIqDS4KVTl38TNMvJV32rVUullnP6dlrbKMYeIcndtHucyom
+ MSUCZDZU+Xu4+kEiA13utXDD/2NBQynNtjXJeU09nBD+OkbsLck4KpO2RGz+HrIqDiZSCgj
+ fKIBwKd4KkB87Z94yizRg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8lU53RZXNGc=:sHRJzAdIaFHRXzs8mtVvzs
+ f6InwGCn/l5BZMSCxMyTXAhaoZ7dS9F6qxUBsgCvr3SSROiqGwCvMl5Qe9plRrS0XFICiO4lr
+ dyCIIF/Qk0ByJPzjOC/m+CA203m/i2Qu0Qve5T9s/k/MCXqsov2QFvZ6na17H1rYprH91OSe8
+ g68xOoJIFDDEJDGSI4v8DA3hg0MbacLSrkpP4GUeJEOpXWFUT9NAIyHSa+iIIH+SCUQn/doqy
+ BZzt4R6NvLndpk3bNnjgYWOgVqUakjsPdsacPEQOQk10BpQhiqYwi+lMIITxLyty2F/v0Y/Ww
+ rnnobEPvXAZsbYJV3e9j5dpWQCCOeAqIGeKbgavxyNXA8DP+gIodRZc05eoovlGpaHXuAza82
+ fyhnX9zAg3YvOPcYglyMFHBlGytIgwyKBIPld5+cqtUJ0HH5vQF1JQKwHSQSEX0zBIEQO/rdB
+ 4dKC3BWAkssdJrJXpRsAR0Dil7A3WBWpxtsBdRy4t04OuhlBKAnmdh6cjHwR5pWTDPIt7zWYU
+ v1CQwY1XY15Cu+upIUnbPmxEx+DCYxYwr5xn++HpuCvY5w/bukbqw/S0k66g1icYQm/seM0Fa
+ 3ziE1uH00dSP1q7pQ/3MQ5NvPyMEFGQSQMBt4ZtHb6ByFABsEAK+pRD8a7YtkI7P+IxDkK9d5
+ IFpBK4OryV0yYSWKuqxS3y6aoTYOKN8Qi36v3Ji9dGZiwOf5e9fxwvnHbBADNqd6LclyTRrVJ
+ svdqUX0ikEm9/aCN/mGbnzEunSwrd2m0EX0z6taP58gWYUqJ5WWSl3RSDW28B5FUB+A4pbR5i
+ U7d9h33aiVTOG/ffx3xnq8skbj9jCt2VVwk7i1OXlFXD0Dt0532yR//0rifOqE5bp3h89p5BC
+ WeB2dzdi/yFIfVfUaSMhB8h9M48KK9D/IKtiUKaIxBA6tTVKzSwHk7NucxKfoI70T0p5QUfho
+ obCWmGjdX/KP25fo3T3fFJXPQqyn6ERXmeToAhWnq1s+GgT77LuWVWRuXuSWbJCTWTB6bdI97
+ HI7hCrFDAhnhgJJ9bjjD7/qMnBpk5/GjlNuzPZBOQpIgZCx85l7Fm58MU+aViFSzB4fcP9glY
+ uftxD3KXeknjou9mPmBr3Xbg3xsY+mb0fN1zgs5z1VzvJhIVAja8gZernjZ/rNZk9jsg4bD5B
+ vG+uAdgqho/YkxhO6smQ4268B3zsB2vUx5EXqIBVHhrpZ+0fs9WmbFoWTI3nF9EbwivaZZq7A
+ tRfztC7BrfN3WKncCMrtszSwpEAy4cdLGOJFu0nXcrIKT+YanoRLnHNl8dNk=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/11/19 9:54 PM, Arnd Bergmann wrote:
-> Compile-testing this driver fails if CONFIG_COMMON_CLK is not set:
-> 
-> drivers/devfreq/tegra30-devfreq.o: In function `tegra_devfreq_target':
-> tegra30-devfreq.c:(.text+0x164): undefined reference to `clk_set_min_rate'
-> 
-> Fixes: 35f8dbc72721 ("PM / devfreq: tegra: Enable COMPILE_TEST for the driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/devfreq/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index defe1d438710..f712c3de0876 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -98,6 +98,7 @@ config ARM_TEGRA_DEVFREQ
->  		ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
->  		ARCH_TEGRA_210_SOC || \
->  		COMPILE_TEST
-> +	depends on COMMON_CLK
->  	select PM_OPP
->  	help
->  	  This adds the DEVFREQ driver for the Tegra family of SoCs.
-> 
+By default, of-based thermal drivers do not enable hwmon.
+Explicitly enable hwmon for both, the soc and gpu temperature
+sensor.
 
-Applied it. Thanks.
+Signed-off-by: Stefan Schaeckeler <schaecsn@gmx.net>
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+=2D--
+ drivers/thermal/rockchip_thermal.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip=
+_thermal.c
+index 343c2f5c5a25..e47c60010259 100644
+=2D-- a/drivers/thermal/rockchip_thermal.c
++++ b/drivers/thermal/rockchip_thermal.c
+@@ -19,6 +19,8 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/pinctrl/consumer.h>
+
++#include "thermal_hwmon.h"
++
+ /**
+  * If the temperature over a period of time High,
+  * the resulting TSHUT gave CRU module,let it reset the entire chip,
+@@ -1321,8 +1323,15 @@ static int rockchip_thermal_probe(struct platform_d=
+evice *pdev)
+
+ 	thermal->chip->control(thermal->regs, true);
+
+-	for (i =3D 0; i < thermal->chip->chn_num; i++)
++	for (i =3D 0; i < thermal->chip->chn_num; i++) {
+ 		rockchip_thermal_toggle_sensor(&thermal->sensors[i], true);
++		thermal->sensors[i].tzd->tzp->no_hwmon =3D false;
++		error =3D thermal_add_hwmon_sysfs(thermal->sensors[i].tzd);
++		if (error)
++			dev_warn(&pdev->dev,
++				 "failed to register sensor %d with hwmon: %d\n",
++				 i, error);
++	}
+
+ 	platform_set_drvdata(pdev, thermal);
+
+@@ -1344,6 +1353,7 @@ static int rockchip_thermal_remove(struct platform_d=
+evice *pdev)
+ 	for (i =3D 0; i < thermal->chip->chn_num; i++) {
+ 		struct rockchip_thermal_sensor *sensor =3D &thermal->sensors[i];
+
++		thermal_remove_hwmon_sysfs(sensor->tzd);
+ 		rockchip_thermal_toggle_sensor(sensor, false);
+ 	}
+
+=2D-
+2.24.0
+
