@@ -2,83 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CAB11CCE3
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 13:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CDD11CD20
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 13:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729004AbfLLMRu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 07:17:50 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:40678 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728996AbfLLMRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 07:17:50 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 136581C246E; Thu, 12 Dec 2019 13:17:48 +0100 (CET)
-Date:   Thu, 12 Dec 2019 13:17:47 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 130/350] power: supply: cpcap-battery: Check
- voltage before orderly_poweroff
-Message-ID: <20191212121747.GA17876@duo.ucw.cz>
-References: <20191210210735.9077-1-sashal@kernel.org>
- <20191210210735.9077-91-sashal@kernel.org>
+        id S1729191AbfLLM0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 07:26:53 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:47930 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729092AbfLLM0x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 07:26:53 -0500
+Received: from zn.tnic (p200300EC2F0A5A00CC48E6B3BEAE7272.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:5a00:cc48:e6b3:beae:7272])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7E6341EC0CF2;
+        Thu, 12 Dec 2019 13:26:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1576153611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4nnUQORr01dv2OD8c5wfMXkKjRS70BcFeDE2vIOENyE=;
+        b=GGQjyQxlr2BIjMsm/DkgrYML2PlbdeQ23AAj8AL8zZsLdEGFpqWklMdrOSA1p6kXHl+0TD
+        4PVP3GRB/BU+2Op9INl4DrlIzJ+CHVnIuFZKeWSOLRXXKPlcR5QLp51FWpJ2Z1kEbJ5f/a
+        PRoHbEAVfhpA3Ic5/DUpTCVH6h3re90=
+Date:   Thu, 12 Dec 2019 13:26:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v4 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using
+ VMX_FEATURES_*
+Message-ID: <20191212122646.GE4991@zn.tnic>
+References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
+ <20191128014016.4389-12-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191210210735.9077-91-sashal@kernel.org>
+In-Reply-To: <20191128014016.4389-12-sean.j.christopherson@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Nov 27, 2019 at 05:40:08PM -0800, Sean Christopherson wrote:
+> Add support for generating VMX feature names in capflags.c and use the
+> resulting x86_vmx_flags to print the VMX flags in /proc/cpuinfo.  Don't
+> print VMX flags if no bits are set in word 0, which holds Pin Controls.
+> Pin Control's INTR and NMI exiting are fundamental pillars of VMX, if
+> they are not supported then the CPU is broken, it does not actually
+> support VMX, or the kernel wasn't built with support for the target CPU.
+> 
+> Print the features in a dedicated "vmx flags" line to avoid polluting
+> the common "flags" and to avoid having to prefix all flags with "vmx_",
+> which results in horrendously long names.
+> 
+> Keep synthetic VMX flags in cpufeatures to preserve /proc/cpuinfo's ABI
+> for those flags.  This means that "flags" and "vmx flags" will have
+> duplicate entries for tpr_shadow (virtual_tpr), vnmi (virtual_nmis),
+> ept, flexpriority, vpid and ept_ad, but caps the pollution of "flags" at
+> those six VMX features.  The vendor specific code that populates the
+> synthetic flags will be consolidated in a future patch to futher
+								^
 
---huq684BweRXVnRxX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+further
 
-On Tue 2019-12-10 16:03:55, Sasha Levin wrote:
-> From: Tony Lindgren <tony@atomide.com>
->=20
-> [ Upstream commit 639c1524da3b273d20c42ff2387d08eb4b12e903 ]
->=20
-> We can get the low voltage interrupt trigger sometimes way too early,
-> maybe because of CPU load spikes. This causes orderly_poweroff() be
-> called too easily.
->=20
-> Let's check the voltage before orderly_poweroff in case it was not
-> yet a permanent condition. We will be getting more interrupts anyways
-> if the condition persists.
->=20
-> Let's also show the measured voltages for low battery and battery
-> empty warnings since we have them.
+> +#ifdef CONFIG_X86_VMX_FEATURE_NAMES
+> +	if (cpu_has(c, X86_FEATURE_VMX) && c->vmx_capability[0]) {
+> +		seq_puts(m, "\nvmx flags\t:");
+> +		for (i = 0; i < 32*NVMXINTS; i++) {
+> +			if (test_bit(i, (unsigned long *)c->vmx_capability) &&
+> +			    x86_vmx_flags[i] != NULL)
+> +				seq_printf(m, " %s", x86_vmx_flags[i]);
+> +		}
+> +	}
+> +#endif
 
-This is a tweak of power management parameters, not a fix for serious
-bug.
+Oh well, some could be shorter:
 
-Plus, it needs a lot of testing it did not get, yet.
+vmx flags       : virtual_nmis preemption_timer invvpid ept_x_only ept_ad ept_1gb flexpriority tsc_offsetting virtual_tpr mtf virt_apic_accesses ept vpid unrestricted_guest ple shadow_vmcs pml mode_based_ept_exec
 
-Please drop from stable.
-								Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+virtual_nmis		-> vnmis
+preemption_timer	-> preempt_tmr
+flexpriority		-> flexprio
+tsc_offsetting		-> tsc_ofs
+virtual_tpr		-> vtpr
+virt_apic_accesses	-> vapic
+unrestricted_guest	-> unres_guest
 
---huq684BweRXVnRxX
-Content-Type: application/pgp-signature; name="signature.asc"
+and so on. Those are just my examples - I betcha the SDM is more
+creative here with abbreviations. But you guys are going to grep for
+them. If it were me, I'd save on typing. :-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+Regards/Gruss,
+    Boris.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXfIv6wAKCRAw5/Bqldv6
-8neQAKCuma2iqj3Mcwse+dL2ttWbLhR9vACglinMiBDLg/OwKBaFGXYSaNEjmiI=
-=7UBu
------END PGP SIGNATURE-----
-
---huq684BweRXVnRxX--
+https://people.kernel.org/tglx/notes-about-netiquette
