@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 502C111C6E7
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 09:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29A211C6FD
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 09:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728160AbfLLIR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 03:17:29 -0500
-Received: from comms.puri.sm ([159.203.221.185]:48236 "EHLO comms.puri.sm"
+        id S1727922AbfLLISR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 03:18:17 -0500
+Received: from comms.puri.sm ([159.203.221.185]:48292 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726382AbfLLIR3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Dec 2019 03:17:29 -0500
+        id S1726382AbfLLISR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 03:18:17 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 59FAFE01F3;
-        Thu, 12 Dec 2019 00:17:28 -0800 (PST)
+        by comms.puri.sm (Postfix) with ESMTP id E79C8DF770;
+        Thu, 12 Dec 2019 00:18:15 -0800 (PST)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id r6kXsETnmb9G; Thu, 12 Dec 2019 00:17:27 -0800 (PST)
-Subject: Re: [PATCH V5 2/3] thermal/drivers/cpu_cooling: Introduce the cpu
- idle cooling driver
+        with ESMTP id yRYXdCgWVgih; Thu, 12 Dec 2019 00:18:15 -0800 (PST)
+Subject: Re: [PATCH V5 3/3] thermal/drivers/cpu_cooling: Rename to
+ cpufreq_cooling
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
 Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
         viresh.kumar@linaro.org, amit.kucheria@linaro.org,
         linux-kernel@vger.kernel.org
 References: <20191211224347.1001-1-daniel.lezcano@linaro.org>
- <20191211224347.1001-2-daniel.lezcano@linaro.org>
+ <20191211224347.1001-3-daniel.lezcano@linaro.org>
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
  mQINBFULfZABEADRxJqDOYAHfrp1w8Egcv88qoru37k1x0Ugy8S6qYtKLAAt7boZW+q5gPv3
@@ -100,11 +100,11 @@ Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
  uV2Xzgbi3VEbw3GZr+EnDC7XNE2wUrnlD/w2W6RzVYjVT6IX4SamNlV+MWX0/1fYCutfqZl8
  6BSKmJjlWpfkPKzyzjhGQVZrTZYnKAu471hRv8/6Dx5JuZJgDCnYanNx3DDreRMu/nq6TfaO
  ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
-Message-ID: <5075876b-17d2-61ba-c383-38a6ddae076f@puri.sm>
-Date:   Thu, 12 Dec 2019 09:17:24 +0100
+Message-ID: <99a02f54-63ea-11a3-855b-b7ae5aeba390@puri.sm>
+Date:   Thu, 12 Dec 2019 09:18:12 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
-In-Reply-To: <20191211224347.1001-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20191211224347.1001-3-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -113,32 +113,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
 On 11.12.19 23:43, Daniel Lezcano wrote:
-> The cpu idle cooling device offers a new method to cool down a CPU by
-> injecting idle cycles at runtime.
-> 
-> It has some similarities with the intel power clamp driver but it is
-> actually designed to be more generic and relying on the idle injection
-> powercap framework.
-> 
-> The idle injection duration is fixed while the running duration is
-> variable. That allows to have control on the device reactivity for the
-> user experience.
-> 
-> An idle state powering down the CPU or the cluster will allow to drop
-> the static leakage, thus restoring the heat capacity of the SoC. It
-> can be set with a trip point between the hot and the critical points,
-> giving the opportunity to prevent a hard reset of the system when the
-> cpufreq cooling fails to cool down the CPU.
-> 
-> With more sophisticated boards having a per core sensor, the idle
-> cooling device allows to cool down a single core without throttling
-> the compute capacity of several cpus belonging to the same clock line,
-> so it could be used in collaboration with the cpufreq cooling device.
+> As we introduced the idle injection cooling device called
+> cpuidle_cooling, let's be consistent and rename the cpu_cooling to
+> cpufreq_cooling as this one mitigates with OPPs changes.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>   V4:
+>     - Added Acked-by and Reviewed-by
+>   V3:
+>     - Fix missing name conversion (Viresh Kumar)
 
 Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
