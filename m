@@ -2,123 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED5411D195
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 16:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2741A11D2A8
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 17:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729599AbfLLP5T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 10:57:19 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:22264 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729507AbfLLP5T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 10:57:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576166237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rRNrufMF5ZmcT+/5HZMlWib9qPtBnpXc+naU09rmhxc=;
-        b=I/1D3NeyxiyZlMNbK4bu4WwA5RQCzhKoRFQo8VNt3mEFce0g//irADh5p+53pDACxO2wIy
-        NMgItXamgQAxJuD8tZ1r/rL9RN+1xBW8xioK2s1u7fgyoFYP6xvAk4Nu7uEUnkJWShBAJw
-        N0zHG8T4c4sf6JA0bGDl4jWpGJhcOr4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-322-WWB_7KBMMvK6eyFVLvFdyQ-1; Thu, 12 Dec 2019 10:57:16 -0500
-X-MC-Unique: WWB_7KBMMvK6eyFVLvFdyQ-1
-Received: by mail-wr1-f71.google.com with SMTP id c6so1190780wrm.18
-        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2019 07:57:16 -0800 (PST)
+        id S1729903AbfLLQs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 11:48:27 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:41137 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729874AbfLLQs1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 11:48:27 -0500
+Received: by mail-oi1-f193.google.com with SMTP id i1so24871oie.8;
+        Thu, 12 Dec 2019 08:48:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rRNrufMF5ZmcT+/5HZMlWib9qPtBnpXc+naU09rmhxc=;
-        b=GICyeqfSq8YSMzpwNRexZTjhUh6NAKiLhNxbwm5Vs1YJmfBRJQvAIFcMjiyNjtplxO
-         LIta3vBhVl5aKFnBwvoeFCI2KW0Y+ZH75pco6AGNMrTmn0g1KDn4Op8lL86kDLExTRpG
-         wWaC8trs2MuiXLk/Ks+pyW8RfcCgmW7h36cL/L3b5jGIHwHdWndIqL1OorjkEm/k5uau
-         3+xuiMqBQX5sElZfFQVo2X3DFebBClmegP2k4KWlO0IeQ0XFeNZ1sthtMctYB8M3VbNd
-         BOb4edix3ekvbGzw98Mkp0LEn7876k3iuXelDL5ZxslqJA08kIbZWU7Xyk3imvoKu/15
-         z81A==
-X-Gm-Message-State: APjAAAWbUU7ELxE4FtE7c3dukksJGVmW/G3dcUb5NZG5uZEeRtL6dlW9
-        1tqTsORDSpwS15jZN+Y21MOV0L6BBGHeqLKxH8kO9Qgun/A56l8R9ZDBtwCRPLpSwgUBLn1uJS2
-        efVgGbiIeFOe6IDeHOGE=
-X-Received: by 2002:adf:e6c6:: with SMTP id y6mr7226961wrm.284.1576166235415;
-        Thu, 12 Dec 2019 07:57:15 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxCcJblbdBpu6fVRmTMMxd9YCps91vlO3a/KrWqDMJ5D1GjIwC7bcnVpKVuMe+qGktQ2LnvbA==
-X-Received: by 2002:adf:e6c6:: with SMTP id y6mr7226922wrm.284.1576166235182;
-        Thu, 12 Dec 2019 07:57:15 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:e9bb:92e9:fcc3:7ba9? ([2001:b07:6468:f312:e9bb:92e9:fcc3:7ba9])
-        by smtp.gmail.com with ESMTPSA id s10sm6451431wrw.12.2019.12.12.07.57.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Dec 2019 07:57:14 -0800 (PST)
-Subject: Re: [PATCH v4 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using
- VMX_FEATURES_*
-To:     Liran Alon <liran.alon@oracle.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
- <20191128014016.4389-12-sean.j.christopherson@intel.com>
- <20191212122646.GE4991@zn.tnic>
- <d0b21e7e-69f5-09f9-3e1c-14d49fa42b9f@redhat.com>
- <4A24DE75-4E68-4EC6-B3F3-4ACB0EE82BF0@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <17c6569e-d0af-539c-6d63-f4c07367d8d1@redhat.com>
-Date:   Thu, 12 Dec 2019 16:57:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wjt4lItRqFacWsQt7v1P7M8uY8SdNlW1FI4JcWAB9cg=;
+        b=W25SuvyzASkf1N/Nqhj4V8tCx8oys9boPdvQC3lJVdqlqCggoLAOCkLx0qzemhIhVG
+         AM6Y0OJLUHK2Gr5FG0MFwXj+Sfh/fjVjPWQOWEeuNtaRh98FZSwwTVFDhGNuOiGhMhur
+         puUj1UNTPga0I+ygiqzEGpPD9ohsF2HSZR/Dyw3gUlx41PvCjDonndUN7UJuiQrPAFAj
+         wgpKtcRWel1VMrc8dDuTvi3hAYTps/UCByOhexLy7q+iNkxJfruc6VFxski2nAPcFp0v
+         upv30g6UPfTCJdHSqS9d5Pr5agv+5kqCE4xdxbWxOeR3Qt5hR7UQCe/2OOOYUDbx2C4x
+         4MeA==
+X-Gm-Message-State: APjAAAWCkHeXFjt0juM7tKnJTCaSVaZOwFf55uXdLNmcz5gC9bB55JyU
+        CTsRv2sFqoRBfva10siu3p3593FE93Scs1RyMkA=
+X-Google-Smtp-Source: APXvYqzhLuqtxFrHpTXnVzGWfbF0p1GWuNhl8OxvrrmXH4N5/NFgSppxHw5/WLukxvz2bdzYziU7WSw55RG2N9rHWPQ=
+X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr5721539oij.110.1576169306476;
+ Thu, 12 Dec 2019 08:48:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <4A24DE75-4E68-4EC6-B3F3-4ACB0EE82BF0@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20191209130336.2257506-1-thierry.reding@gmail.com>
+ <20191209130336.2257506-2-thierry.reding@gmail.com> <CAPDyKFp6cnpn4yFaEBDPBdHc1siQvJbmwedbhRNCdDBVAc2qUA@mail.gmail.com>
+ <20191212123352.GA3322354@ulmo> <CAPDyKFodOjta0JnEEMrC0j5=XeB-wLjTNvPFtmDtUBZBMTJvQg@mail.gmail.com>
+In-Reply-To: <CAPDyKFodOjta0JnEEMrC0j5=XeB-wLjTNvPFtmDtUBZBMTJvQg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Dec 2019 17:48:15 +0100
+Message-ID: <CAJZ5v0hA6mz7r93_HVpfP-=72wARf9=NN1jNG3KHtzM_+oT9LA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/tegra: Do not implement runtime PM
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/12/19 16:52, Liran Alon wrote:
->>> virt_apic_accesses	-> vapic
->> apicv
-> Frankly, I dislike APICv terminology. I prefer to enumerate the
-> various VMX features which are collectively called APICv by KVM. 
-> APICv currently represents in KVM terminology the combination of
-> APIC-register virtualization, virtual-interrupt-delivery and
-> posted-interrupts (See cpu_has_vmx_apicv()).
-> 
-> In fact, the coupling of “enable_apicv” module parameter have made me
-> multiple times to need to disable entire APICv features when there
-> for example was only a bug in posted-interrupts.
-> 
-> Even you got confused as virtualize-apic-access is not part of KVM’s
-> APICv terminology but rather it’s enablement depend on
-> flexpriority_enabled (See cpu_need_virtualize_apic_accesses()). i.e.
-> It can be used for faster intercept handling of accesses to guest
-> xAPIC MMIO page.
+On Thu, Dec 12, 2019 at 2:32 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Thu, 12 Dec 2019 at 13:33, Thierry Reding <thierry.reding@gmail.com> wrote:
+> >
+> > On Thu, Dec 12, 2019 at 09:52:22AM +0100, Ulf Hansson wrote:
+> > > On Mon, 9 Dec 2019 at 14:03, Thierry Reding <thierry.reding@gmail.com> wrote:
+> > > >
+> > > > From: Thierry Reding <treding@nvidia.com>
+> > > >
+> > > > The Tegra DRM driver heavily relies on the implementations for runtime
+> > > > suspend/resume to be called at specific times. Unfortunately, there are
+> > > > some cases where that doesn't work. One example is if the user disables
+> > > > runtime PM for a given subdevice. Another example is that the PM core
+> > > > acquires a reference to runtime PM during system sleep, effectively
+> > > > preventing devices from going into low power modes. This is intentional
+> > > > to avoid nasty race conditions, but it also causes system sleep to not
+> > > > function properly on all Tegra systems.
+> > >
+> > > Are the problems you refer to above, solely for system suspend/resume?
+> >
+> > No, this patch also fixes potential issues with regular operation of the
+> > display driver. The problem is that parts of the driver rely on being
+> > able to shut down the hardware during runtime operations, such as
+> > disabling an output. Under some circumstances part of this shutdown will
+> > imply a reset and, at least on some platforms, we rely on that reset to
+> > put the device into a known good state.
+> >
+> > So if a user decides to prevent the device from runtime suspending, we
+> > can potentially run into a situation where we can't properly set a
+> > display mode at runtime since we weren't allowed to reset the device.
+>
+> Thanks for clarifying!
+>
+> We have very similar issues for SDIO functional drivers (WiFi
+> drivers). Typically, at some point there needs to be a guarantee that
+> the power has been cut in between a "put" and "get", as to be able to
+> re-program a FW.
+>
+> My worry in regards to this, is that we may reinvent the wheel over
+> and over again, just because runtime PM today isn't a good fit.
+>
+> In principle, if you could, somehow forbid user-space from preventing
+> the device from being runtime suspended, that would do the trick,
+> wouldn't it?
 
-Right, I got confused with APIC-register virtualization.  Virtualize
-APIC accesses is another one I wouldn't bother putting in /proc/cpuinfo,
-since it's usually present together with flexpriority.
+Treating pm_runtime_suspend() and pm_runtime_resume() as the low-level
+device power off and power on routines for the given platform is a
+mistake.  It has always been a mistake and I'm not going to accept
+changes trying to make it look like it isn't a mistake.
 
-Paolo
+If any generic power off and power on helpers for DT-based platforms
+are needed, add them and make PM-runtime use them.  That should be
+straightforward enough.
 
+Thanks!
