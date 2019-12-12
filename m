@@ -2,92 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E07B11D5A2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 19:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9ED11D73D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 20:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730454AbfLLSco (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 13:32:44 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:47250 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730211AbfLLSco (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Dec 2019 13:32:44 -0500
-Received: from zn.tnic (p200300EC2F0A5A0010289BED6992E3B4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:5a00:1028:9bed:6992:e3b4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 62E201EC01AD;
-        Thu, 12 Dec 2019 19:32:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1576175562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=1vhjna/rh+rVgKI+zkzgMfp5mWRrD9pxqEOzOJXpA4Y=;
-        b=kzsW8/3fnaWojTpWx+xOZuFE5jkvWcgtWb0zHWdGQvHha8Z3n16k6oLdIOkrt3LZWH/mbE
-        40RXHatBBtsZbAG2t/5SMWP8ndSe6ntSi7+6wLxah6GSy4g0pqbbHSZpsh98GMHiVzGYvm
-        Z5LGh7kWizRyKULfw1bLYt/9PqDVdYU=
-Date:   Thu, 12 Dec 2019 19:32:41 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Liran Alon <liran.alon@oracle.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v4 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using
- VMX_FEATURES_*
-Message-ID: <20191212183241.GI4991@zn.tnic>
-References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
- <20191128014016.4389-12-sean.j.christopherson@intel.com>
- <20191212122646.GE4991@zn.tnic>
- <d0b21e7e-69f5-09f9-3e1c-14d49fa42b9f@redhat.com>
- <4A24DE75-4E68-4EC6-B3F3-4ACB0EE82BF0@oracle.com>
- <17c6569e-d0af-539c-6d63-f4c07367d8d1@redhat.com>
- <20191212174357.GE3163@linux.intel.com>
- <52dd758d-a590-52a6-4248-22d6852b75cd@redhat.com>
- <DA429131-7A4C-4B74-A020-6CE7622ED2F8@oracle.com>
+        id S1730636AbfLLThb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 14:37:31 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40599 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730610AbfLLTha (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 14:37:30 -0500
+Received: by mail-lj1-f195.google.com with SMTP id s22so3582969ljs.7
+        for <linux-pm@vger.kernel.org>; Thu, 12 Dec 2019 11:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dvGJ0797Qz8DUFLYM8Rit14ij9aZ1vENIS91EYjNpec=;
+        b=MThukkqGbJH0JqQq7NvRMwiKjEvckHmmxf4wk/k+CyqysQALPXBquylwgn1+SkKOux
+         hYds4XHtiXiqnLjBZTCZHVaMufoABT/oCOU20kwUAus7U+22gMzRkYcbyaBccoa7KyYv
+         12+iTzwdpt/manm3sKQDH7pyNVNLBK7zrgfczpEB0qxEGoyOp2RO1/x10LHuQJ2M7UF8
+         xwcczLh07pEx03HMT6hiKGSuIJDAsez0N1uPaJIkQaw89JkglxUV7L09rhWo2MmtWhMp
+         GIqxgm0dT3TxGD4WfuTEc14eHGp2Q5ogVIoDDyp9Pxly8HOvzkn+Q7nAi1hlWOskTmam
+         XFGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dvGJ0797Qz8DUFLYM8Rit14ij9aZ1vENIS91EYjNpec=;
+        b=PxHS9x3Kn0DYz6U6tVSybgIJhcilNlTx6MVHk3X6woUcpj47gNZRhw+si4q4n22DJV
+         8pkLeJEK2+DP1TYGGyXiiXSJSdW0B6CeGSYB9DhUwLhUn9UKMaR35q5WzpJBdRQvraQD
+         YikviYylBWrkz/D3+1lk8mLW+j/90zwMypC+aDi4DBC14XdOQTHV9vj6z08Aew1zCCvB
+         qDGSwViVqNVQwbEOVjuGu88n9B5mtgApQqYb7VO/iB9baJ0HoE0qItblivVZNLm3NwTL
+         OYsXOndkuh7t/5MELjoeoOGiNn4jI3PgNSTaXpSz1KW5By/Xlozzuz46qm4R8fvqoR6s
+         swTg==
+X-Gm-Message-State: APjAAAVg1wxruskicG5XwAqLQaLtm/+hJVaJN7goMx1glamKxJNdeFB4
+        rU8jDidRfnMC++NP4YHNIauOwzbK+Vf9zlCIUhXzZQ==
+X-Google-Smtp-Source: APXvYqz4Z1nagdLRuefbsVS4snEWX7fyZkbq/3ND7xotrEE30d//QZNUnTbwcm2mnmu/6tLOV8m1Zcho9bqz56n4Swo=
+X-Received: by 2002:a2e:9e03:: with SMTP id e3mr7189882ljk.186.1576179448269;
+ Thu, 12 Dec 2019 11:37:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DA429131-7A4C-4B74-A020-6CE7622ED2F8@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1563568344-1274-1-git-send-email-daidavid1@codeaurora.org>
+ <1563568344-1274-3-git-send-email-daidavid1@codeaurora.org>
+ <20190721191305.GI7234@tuxbook-pro> <0ecba781-ad08-0f09-f4a8-83473569a4c5@codeaurora.org>
+In-Reply-To: <0ecba781-ad08-0f09-f4a8-83473569a4c5@codeaurora.org>
+From:   Evan Green <evgreen@google.com>
+Date:   Thu, 12 Dec 2019 11:36:52 -0800
+Message-ID: <CAE=gft57S_2yKQdP6x=R9nVUaHWvreS-ENKkKrKmOzhJYLpzEQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: sdm845: Redefine interconnect provider DT nodes
+To:     David Dai <daidavid1@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        Alex Elder <elder@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 07:52:55PM +0200, Liran Alon wrote:
-> Why should CPU VMX features be treated differently than standard CPUID
-> deduced features? CPU SVM features are also present in /proc/cpuinfo
-> today (Because they are deduced from CPUID leafs). So it should be
-> similar.
+On Tue, Jul 23, 2019 at 11:24 AM David Dai <daidavid1@codeaurora.org> wrote:
+>
+> Thanks for looking over this, Bjorn.
+>
+> On 7/21/2019 12:13 PM, Bjorn Andersson wrote:
+> > On Fri 19 Jul 13:32 PDT 2019, David Dai wrote:
+> >
+> >> Add the DT nodes for each of the Network-On-Chip interconnect
+> >> buses found on SDM845 based platform and redefine the rsc_hlos
+> >> child node as a bcm-voter device to better represent the hardware.
+> >>
+> >> Signed-off-by: David Dai <daidavid1@codeaurora.org>
+> >> ---
+> >>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 61 ++++++++++++++++++++++++++++++++++--
+> >>   1 file changed, 58 insertions(+), 3 deletions(-)
+> >>
 
-Well, VMX features are not CPUID bits apparently because <reasons>. And
-Intel hw folk will give you a bunch, I bet. So Sean needs to do all this
-dancing to get them to be more usable to other kernel code.
-
-SVM feature bits are proper CPUID bits and this is what the cpufeatures
-glue does - mirro CPUID bits, mainly.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+What happened to this series? Is it abandoned?
+-Evan
