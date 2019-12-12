@@ -2,74 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4C211D900
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 23:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A0711D989
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Dec 2019 23:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731216AbfLLWDu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Dec 2019 17:03:50 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55846 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730779AbfLLWDu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Dec 2019 17:03:50 -0500
-Received: from 79.184.255.82.ipv4.supernova.orange.pl (79.184.255.82) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id d1780aa828de6562; Thu, 12 Dec 2019 23:03:47 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Shiyang Ruan <ruansy.fnst@cn.fujitsu.com>
-Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        Cao jin <caoj.fnst@cn.fujitsu.com>, linux-acpi@vger.kernel.org
-Subject: Re: [RFC PATCH] x86/acpi: Drop duplicate BOOT table initialization
-Date:   Thu, 12 Dec 2019 23:03:47 +0100
-Message-ID: <24266640.LfmLNjZWAc@kreacher>
-In-Reply-To: <20191115092424.17356-1-ruansy.fnst@cn.fujitsu.com>
-References: <20191115092424.17356-1-ruansy.fnst@cn.fujitsu.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1730809AbfLLWjK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Dec 2019 17:39:10 -0500
+Received: from mga04.intel.com ([192.55.52.120]:35642 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730707AbfLLWjK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Dec 2019 17:39:10 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 14:39:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,307,1571727600"; 
+   d="scan'208";a="220787450"
+Received: from gayuk-dev-mach.sc.intel.com ([10.3.79.172])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Dec 2019 14:39:09 -0800
+From:   Gayatri Kammela <gayatri.kammela@intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, alex.hung@canonical.com,
+        linux-acpi@vger.kernel.org, lenb@kernel.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, charles.d.prestopine@intel.com,
+        dvhart@infradead.org, Gayatri Kammela <gayatri.kammela@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Subject: [PATCH v1 0/4] drivers: Add Tiger Lake hardware IDs to support acpi,
+Date:   Thu, 12 Dec 2019 14:37:16 -0800
+Message-Id: <cover.1576189376.git.gayatri.kammela@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, November 15, 2019 10:24:24 AM CET Shiyang Ruan wrote:
-> From: Cao jin <caoj.fnst@cn.fujitsu.com>
-> 
-> ACPI BOOT table is initialized in both acpi_boot_table_init &
-> acpi_boot_init of setup_arch, but its usage is quite late at the end of
-> start_kernel. It should be safe to drop one of them. Since it is less
-> related with table init, drop it from there.
+Hi,
 
-Well, "It should be safe to drop one of them" is kind of a weak justification.
+Tiger Lake supports devices whose hardware IDs are changed for various
+drivers. Hence, add the new hardware IDs.
 
-I need to be convinced that one of them is redundant.  At this point I am not.
+Patch 1: Add Tiger Lake support to DPTF driver
+Patch 2: Add Tiger Lake support to fan driver
+Patch 3: Add Tiger Lake support to Intel's HID driver
+Patch 4: Add Tiger Lake support to thermal driver
 
-> Signed-off-by: Cao jin <caoj.fnst@cn.fujitsu.com>
-> Cc: <linux-acpi@vger.kernel.org>
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@cn.fujitsu.com>
-> ---
->  arch/x86/kernel/acpi/boot.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> It existed since git repo is built, so it might has its reason? The
-> patch is not tested since I don't have BOOT table in my firmware.
-> 
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 04205ce127a1..ca1c15bb0b48 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -1558,8 +1558,6 @@ void __init acpi_boot_table_init(void)
->  		return;
->  	}
->  
-> -	acpi_table_parse(ACPI_SIG_BOOT, acpi_parse_sbf);
-> -
->  	/*
->  	 * blacklist may disable ACPI entirely
->  	 */
-> 
+Gayatri Kammela (4):
+  acpi: dptf: Add new Tiger Lake hardware IDs to support DPTF drivers in
+    acpi
+  acpi: fan: Add new Tiger Lake hardware ID to support fan driver in
+    acpi
+  platform/x86: intel-hid: Add new Tiger Lake hardware ID to support HID
+    driver
+  thermal: int340x_thermal: Add new Tiger Lake hardware IDs to support
+    thermal driver
 
+ drivers/acpi/dptf/dptf_power.c                          | 1 +
+ drivers/acpi/dptf/int340x_thermal.c                     | 4 ++++
+ drivers/acpi/fan.c                                      | 1 +
+ drivers/platform/x86/intel-hid.c                        | 1 +
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
+ drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
+ 6 files changed, 9 insertions(+)
 
-
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+-- 
+2.17.1
 
