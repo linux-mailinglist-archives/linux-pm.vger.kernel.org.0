@@ -2,97 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C61611EC76
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 22:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5AE11EDBC
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 23:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfLMVEs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Dec 2019 16:04:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43278 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbfLMVEr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 13 Dec 2019 16:04:47 -0500
-Received: from localhost (mobile-166-170-223-177.mycingular.net [166.170.223.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2DC0E24671;
-        Fri, 13 Dec 2019 21:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576271086;
-        bh=jGaknKI2p6ySPPNrx4LgH2LEzLiiBRKmoA+G6qX4sg8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=V5qO4dpTOr+Y0MyaI985XkHn6hStk1ZCBgjBEmRsdxbCSaizywPoA9ofNJvPpXDL3
-         iU+FnCV7XBd01K3zCdRWCQQUwTZP6gEVlzn53URnNZoK8O+vmprUx6SY7dA4dsukj1
-         ujR86f/lLDtqi1ixHox4uQRzllvNOoOwnqdrO2M8=
-Date:   Fri, 13 Dec 2019 15:04:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, mika.westerberg@linux.intel.com
-Subject: Re: [PATCH v2 1/2] PCI: add generic quirk function for increasing
- D3hot delay
-Message-ID: <20191213210445.GA199960@google.com>
+        id S1726404AbfLMW37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Dec 2019 17:29:59 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34515 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfLMW37 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 17:29:59 -0500
+Received: by mail-ot1-f66.google.com with SMTP id a15so918539otf.1;
+        Fri, 13 Dec 2019 14:29:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rR+gZbOwT0EsEu0FOYdJuiAybFzLvdlDbKJo+AcjvAY=;
+        b=C+U1C0tE55TCA8ZuEv9mz8dY7gaSC3q/Si3knElFZo1eq6sB4xHIobqpJaQxcgp4rA
+         7Ur99e2pOyDLXquhyTIMci2XoPAN2je31Pm3iIukKbUf2C8zD0Oi3/5YRuxGE1htVmwP
+         B1YJ5pwaYvTQp15zadZTxPbKw3fgj4LfMFUR58bUhP/zq5mVN6Xjg/nvjt963EZ0oZh5
+         PHNrPuyQ9klTT48ukhNnlWrTjtc6yioo2C5Y6//nyQNU7xXeLd7XXhqDmsTzJuiUaRif
+         +uUnGRuClkLXHJyLJdRVmheN/Mk9nFn6593TTYibRUa+iqwKK7JoohjD8SN44SwOKSJK
+         b0Sw==
+X-Gm-Message-State: APjAAAU95cILOtq4atSnI14+lr1PTT3jQwh8xT5aNugnncmMOvTA6ZYK
+        FPCzt53SjqFA925UkjrTuxU8AW4=
+X-Google-Smtp-Source: APXvYqz/BOJnsfjRa1QIsTdoyon+mgLtBUzCEcJlYdRndVcChgXQfvNXFKkQfnQ7B8mLoWutEbZ+oQ==
+X-Received: by 2002:a05:6830:2006:: with SMTP id e6mr16336398otp.367.1576276198049;
+        Fri, 13 Dec 2019 14:29:58 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g25sm3807433otr.8.2019.12.13.14.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 14:29:57 -0800 (PST)
+Date:   Fri, 13 Dec 2019 16:29:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rajan Vaja <rajan.vaja@xilinx.com>
+Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        michal.simek@xilinx.com, jolly.shah@xilinx.com,
+        tejas.patel@xilinx.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rajan Vaja <rajan.vaja@xilinx.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: xilinx: Add bindings
+ for ipi mailbox
+Message-ID: <20191213222956.GA10172@bogus>
+References: <1574412258-17988-1-git-send-email-rajan.vaja@xilinx.com>
+ <1575283131-9339-1-git-send-email-rajan.vaja@xilinx.com>
+ <1575283131-9339-2-git-send-email-rajan.vaja@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191127053836.31624-1-drake@endlessm.com>
+In-Reply-To: <1575283131-9339-2-git-send-email-rajan.vaja@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 01:38:35PM +0800, Daniel Drake wrote:
-> Separate the D3 delay increase functionality out of quirk_radeon_pm() into
-> its own function so that it can be shared with other quirks, including
-> the AMD Ryzen XHCI quirk that will be introduced in a followup commit.
+On Mon,  2 Dec 2019 02:38:50 -0800, Rajan Vaja wrote:
+> Add IPI mailbox property and its example in xilinx zynqmp-power
+> documentation.
 > 
-> Tweak the function name and message to indicate more clearly that the
-> delay relates to a D3hot-to-D0 transition.
-> 
-> Signed-off-by: Daniel Drake <drake@endlessm.com>
-
-I applied both of these to pci/misc for v5.6, thanks!
-
+> Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
 > ---
->  drivers/pci/quirks.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
+> Changes in v2:
+>  - Correct order of tx and rx in mbox-names property.
+>  - Add interrupts property in example.
+> ---
+>  .../bindings/power/reset/xlnx,zynqmp-power.txt     | 43 ++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 3 deletions(-)
 > 
-> v2: tweaked function name and message to emphasize D3hot state
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 320255e5e8f89..3b4021e719530 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -1871,16 +1871,21 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x2609, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260a, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260b, quirk_intel_pcie_pm);
->  
-> +static void quirk_d3hot_delay(struct pci_dev *dev, unsigned int delay)
-> +{
-> +	if (dev->d3_delay >= delay)
-> +		return;
-> +
-> +	dev->d3_delay = delay;
-> +	pci_info(dev, "extending delay after power-on from D3hot to %d msec\n",
-> +		 dev->d3_delay);
-> +}
-> +
->  static void quirk_radeon_pm(struct pci_dev *dev)
->  {
->  	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
-> -	    dev->subsystem_device == 0x00e2) {
-> -		if (dev->d3_delay < 20) {
-> -			dev->d3_delay = 20;
-> -			pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
-> -				 dev->d3_delay);
-> -		}
-> -	}
-> +	    dev->subsystem_device == 0x00e2)
-> +		quirk_d3hot_delay(dev, 20);
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
->  
-> -- 
-> 2.20.1
-> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
