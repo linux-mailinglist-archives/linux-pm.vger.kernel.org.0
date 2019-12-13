@@ -2,118 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F0711E48C
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 14:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DA911E6E2
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 16:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727407AbfLMN1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Dec 2019 08:27:52 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39893 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbfLMN1v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 08:27:51 -0500
-Received: by mail-lf1-f68.google.com with SMTP id y1so1953827lfb.6;
-        Fri, 13 Dec 2019 05:27:50 -0800 (PST)
+        id S1727907AbfLMPmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Dec 2019 10:42:00 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:41298 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727796AbfLMPl7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 10:41:59 -0500
+Received: by mail-il1-f193.google.com with SMTP id z90so2411214ilc.8;
+        Fri, 13 Dec 2019 07:41:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3a5X/HsBz/Jc1tMHJpbmDEO9eAeGDYj6GdIi3XHqmgk=;
-        b=UDTr9nd5YdTb0v4Cj17QdUNasXorhaf3wFgqaZW+mh5qHk9tgTFVfXJT3QqZ8MIpvH
-         NXrAFiKT68JxWuNnIA8IIhJnY7IzP/mqtAac+7QkKHZn9Lq2MatgeODHqxVT8wRzBf8X
-         BTbQ+1JjFqPAuOCOxaM1SIWCiadtPhAh/mL8CBZF9dEP4iKqO4i1aEB71Hg5xEXWJNVL
-         U7I02pje8D8nu0w09x5OxgiF3FQTxuMy0pb+5B1x9/VLA0I57ZgxX/RMGrnlSuTmtQvD
-         DAxtqUoNakVHTLZkYfajb/4DJJbmIlSUifZCZV0UJb1rj0qEiCqUKiA0IxE8s8BPvs7P
-         74Yg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yHFriWwVf2bpxF8jwq7dYnH8TViQ3A2S0W8/bFkGrXk=;
+        b=uy1iVBwF5qVEjnordVcIXzD6+GC42UB/aLnp1utugxlHKBypM+B2oVMmWYF9Fwhyck
+         fzcQ/3dWMofY1YSJluLV0zdkMwBIs6YM27G1ksMcOmD4iNEgx73faeivK1equeR2rLay
+         Jx1LboWVnDiCAOlZMzAlqOL7QcRqtEgr0LmVhQkcfXwpizeHvtmxh1x3TCYLRBPQeGsf
+         CnWXzBO5soVgh93FPTDopuxNIC1euJ2ScGt6v4RQ3qBIldjr/A06HIEWH8TlMYwwUiLW
+         WQV3j1KcU0HNCVHyjeTdtFpFD1wfg39bby/vYuZ3OcvJMiS+xAhr2VUpOzYJs6mAhLao
+         PuIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3a5X/HsBz/Jc1tMHJpbmDEO9eAeGDYj6GdIi3XHqmgk=;
-        b=YtZj4dp+J0YPfl+CSLp9LLkKCh8mjqwydIvN9bLDQYUC7fP42RBoKjtwukeeuDPNb2
-         mOYhyGp76vGdkNvCKN4iYo0ky8KYH4s5epLOJhYlkIuPsN5KARt44eK1/3UKPyclRCb0
-         hpe71YzI7HNiJWjjabUF66Dos9a6WZ20BMeVW30JF0gt0XdcnuxIPYqYbn18eJG5lig2
-         +RP3x0GItlCgmN3o/cTkNDItZtczbhIgRWcLCdMxrqXH4Zjx6lg8UOgdU+8rPZRcCqUo
-         WpIDduxAe+jJwxJFIK9hurcAwIoI5z/l/U19coatG3iYGoKyemxAc1gA/v8t0S7qKMTW
-         yjIQ==
-X-Gm-Message-State: APjAAAV3Ekm4EjCe24191+mjtaGXiNri+HOT88M4e+Yh5D8bwaCL3Ihb
-        QC0pYAsHPmZfduix3tuTpdWoOJWH
-X-Google-Smtp-Source: APXvYqzdJxJTo1vC8tE/6X67cFm/2BzOhMPwQfT4615iB1t6JDsbDMiKJl5e+NhYNhJGVufp+Zj/Fw==
-X-Received: by 2002:a19:4ac2:: with SMTP id x185mr2761270lfa.131.1576243669708;
-        Fri, 13 Dec 2019 05:27:49 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id 2sm4774272ljq.38.2019.12.13.05.27.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2019 05:27:48 -0800 (PST)
-Subject: Re: [PATCH v5 07/11] cpufreq: dt-platdev: Blacklist NVIDIA Tegra20
- and Tegra30 SoCs
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191118164512.8676-1-digetx@gmail.com>
- <20191118164512.8676-8-digetx@gmail.com>
- <2776e3c7-999e-5e6f-3a0e-211226dc30e6@gmail.com>
-Message-ID: <aee736a0-444c-3d1a-1e51-c5b5259eb1b5@gmail.com>
-Date:   Fri, 13 Dec 2019 16:27:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yHFriWwVf2bpxF8jwq7dYnH8TViQ3A2S0W8/bFkGrXk=;
+        b=Z6YE78oOkD8GJ/00wVFxXHhpb9tRUDoGhW6ebC2hylOppMFP7J300WcAJlW5WNpYWc
+         rJi50YjjUOLYCDoPaS+COrLkIGGoEjRuMm3ztYTKHyI6rZPy7hqVdLUeU2SUmhMVEWhk
+         sbgujeYqHUR2qww1FffpdVUkl1mxiAh1fsDoDO7o9YTCOcCo86NoXZuEx+uO2ge+NTn6
+         InRMaZZg1P/DFrfnS09ERoh5zyJXoUCmg90jkeXA368xuFsg0CPHz8+i93LTS5PCNhQY
+         1TpW7yTRvBDglfIgqKXCBbNVkm7KgFY2WnvjMUWIAgEXmCTq56uOC0KcQVRO9nEcwpET
+         rFcA==
+X-Gm-Message-State: APjAAAVbE/P0Ze8Zk01j4EWdc8L2/0P/165nd8hQcRzp9hBYnsFKRlhh
+        WoXNIvqP0bCfimFcBwmd1/Yb2pRla6j184RP0oM=
+X-Google-Smtp-Source: APXvYqzYQQrOqzq0lGlikGdKHOscdMMUlYZqW+h4DlZuPmBdDG28bYhGZKbxxSS7VizcvE2SXU3vAnQLc/C5vPctLEU=
+X-Received: by 2002:a92:d38e:: with SMTP id o14mr14108231ilo.238.1576251718323;
+ Fri, 13 Dec 2019 07:41:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <2776e3c7-999e-5e6f-3a0e-211226dc30e6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20191213074533.27048-1-maxime@cerno.tech>
+In-Reply-To: <20191213074533.27048-1-maxime@cerno.tech>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Fri, 13 Dec 2019 23:41:46 +0800
+Message-ID: <CAEExFWunpXqKDyxqhHGJhtcQ7pwEYkWL0wvwUp==_jrd9wACbQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: interconnect: Convert Allwinner MBUS
+ controller to a schema
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        georgi.djakov@linaro.org, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-18.11.2019 19:51, Dmitry Osipenko пишет:
-> 18.11.2019 19:45, Dmitry Osipenko пишет:
->> Both NVIDIA Tegra20 and Tegra30 SoCs should be blacklisted because CPU
->> OPPs use supported_hw and thus platdev isn't suitable for these SoCs.
->> Currently cpufreq-dt driver produces a bit annoying warning splats
->> during boot because valid OPPs are not found, this will be fixed once
->> tegra20-cpufreq driver will be update to support cpufreq-dt. The warnings
->> will also happen on older stable kernels using newer device-trees, thus
->> this patch should be backported to stable kernels as well.
->>
->> Cc: <stable@vger.kernel.org>
->> Reported-by: Jon Hunter <jonathanh@nvidia.com>
->> Fixes: 4053aa65c517 ("ARM: tegra: cardhu-a04: Add CPU Operating Performance Points")
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
->> index f1d170dcf4d3..aba591d57c67 100644
->> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
->> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
->> @@ -121,6 +121,8 @@ static const struct of_device_id blacklist[] __initconst = {
->>  	{ .compatible = "mediatek,mt8176", },
->>  	{ .compatible = "mediatek,mt8183", },
->>  
->> +	{ .compatible = "nvidia,tegra20", },
->> +	{ .compatible = "nvidia,tegra30", },
->>  	{ .compatible = "nvidia,tegra124", },
->>  	{ .compatible = "nvidia,tegra210", },
->>  
->>
-> 
-> Hello Viresh,
-> 
-> Could you please pick up this patch for v5.5 fixes? Thanks in advance!
-> 
+On Fri, Dec 13, 2019 at 3:45 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> The older Allwinner SoCs have an MBUS controller that is used by Linux,
+> with a matching Device Tree binding.
+>
+> Now that we have the DT validation in place, let's convert the device tree
+> bindings for that controller over to a YAML schemas.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   | 65 +++++++++++++++++++
+>  .../bindings/arm/sunxi/sunxi-mbus.txt         | 37 -----------
+>  2 files changed, 65 insertions(+), 37 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
+>
+> diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
+> new file mode 100644
+> index 000000000000..9370e64992dd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/sunxi/allwinner,sun4i-a10-mbus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner Memory Bus (MBUS) controller
+> +
+> +maintainers:
+> +  - Chen-Yu Tsai <wens@csie.org>
+> +  - Maxime Ripard <mripard@kernel.org>
+> +
+> +description: |
+> +  The MBUS controller drives the MBUS that other devices in the SoC
+> +  will use to perform DMA. It also has a register interface that
+> +  allows to monitor and control the bandwidth and priorities for
+> +  masters on that bus.
+> +
+> +  Each device having to perform their DMA through the MBUS must have
+> +  the interconnects and interconnect-names properties set to the MBUS
+> +  controller and with "dma-mem" as the interconnect name.
+> +
+> +properties:
+> +  "#interconnect-cells":
+> +    const: 1
+> +    description:
+> +      The content of the cell is the MBUS ID.
+> +
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun5i-a13-mbus
+> +      - allwinner,sun8i-h3-mbus
 
-Viresh / Rafael? Maybe I should send that patch separately?
+Is there a driver in mainline  for it?
+
+Thx,
+Yangtao
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  dma-ranges:
+> +    description:
+> +      See section 2.3.9 of the DeviceTree Specification.
+> +
+> +required:
+> +  - "#interconnect-cells"
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - dma-ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sun5i-ccu.h>
+> +
+> +    mbus: dram-controller@1c01000 {
+> +        compatible = "allwinner,sun5i-a13-mbus";
+> +        reg = <0x01c01000 0x1000>;
+> +        clocks = <&ccu CLK_MBUS>;
+> +        dma-ranges = <0x00000000 0x40000000 0x20000000>;
+> +        #interconnect-cells = <1>;
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt b/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
+> deleted file mode 100644
+> index 2005bb486705..000000000000
+> --- a/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
+> +++ /dev/null
+> @@ -1,37 +0,0 @@
+> -Allwinner Memory Bus (MBUS) controller
+> -
+> -The MBUS controller drives the MBUS that other devices in the SoC will
+> -use to perform DMA. It also has a register interface that allows to
+> -monitor and control the bandwidth and priorities for masters on that
+> -bus.
+> -
+> -Required properties:
+> - - compatible: Must be one of:
+> -       - allwinner,sun5i-a13-mbus
+> -       - allwinner,sun8i-h3-mbus
+> - - reg: Offset and length of the register set for the controller
+> - - clocks: phandle to the clock driving the controller
+> - - dma-ranges: See section 2.3.9 of the DeviceTree Specification
+> - - #interconnect-cells: Must be one, with the argument being the MBUS
+> -   port ID
+> -
+> -Each device having to perform their DMA through the MBUS must have the
+> -interconnects and interconnect-names properties set to the MBUS
+> -controller and with "dma-mem" as the interconnect name.
+> -
+> -Example:
+> -
+> -mbus: dram-controller@1c01000 {
+> -       compatible = "allwinner,sun5i-a13-mbus";
+> -       reg = <0x01c01000 0x1000>;
+> -       clocks = <&ccu CLK_MBUS>;
+> -       dma-ranges = <0x00000000 0x40000000 0x20000000>;
+> -       #interconnect-cells = <1>;
+> -};
+> -
+> -fe0: display-frontend@1e00000 {
+> -       compatible = "allwinner,sun5i-a13-display-frontend";
+> -       ...
+> -       interconnects = <&mbus 19>;
+> -       interconnect-names = "dma-mem";
+> -};
+> --
+> 2.23.0
+>
