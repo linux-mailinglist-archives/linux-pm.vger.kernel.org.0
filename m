@@ -2,54 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D68A11EE4A
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2019 00:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B801F11EE7B
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2019 00:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbfLMXKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Dec 2019 18:10:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725818AbfLMXKM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 13 Dec 2019 18:10:12 -0500
-Subject: Re: [GIT PULL] Power management updates for v5.5-rc2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576278611;
-        bh=3VDMKaOSGPTkNpHGoDx3v+RrnjumjThjkba1A8KfkFc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=BkHi6nt36Apy1lP/ei9pr9TOOqlTGXJPjrwyZZNQh+18CKzwwrxqVjwubnHqgYN/+
-         I8QhRrt+EclosNFSkHNrtevejA8tBdIn5g3Z31/m6nfie6YWDOQ2Gk9tujK3ByQwiY
-         hp10230KRdUBAFeAVMauSiNEwUZrQXDz18uKCOc0=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
-References: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc2
-X-PR-Tracked-Commit-Id: 4c84515da8099f4bab5d9312a0ffaf40f14aa87b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6bd2c87aaffe0b58ce65233fe922b9eb5f7d9a85
-Message-Id: <157627861190.1837.9258292989054106751.pr-tracker-bot@kernel.org>
-Date:   Fri, 13 Dec 2019 23:10:11 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726762AbfLMX1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Dec 2019 18:27:04 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35194 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726704AbfLMX1E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 18:27:04 -0500
+Received: by mail-ot1-f67.google.com with SMTP id o9so1068765ote.2;
+        Fri, 13 Dec 2019 15:27:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TYp5sqcfkiifjsMp1o5uJlv1/2yExoosYWzgSPwTvDU=;
+        b=MG6NmJueQ9BrjuZSQKM5uT7eb8YEXEHru3L2FCsctgotN7tteTy8gF0XwoM0O85jmI
+         qBh2R2hCmy8pS3t1F3+LyCaanYUjyd/hHC8zrrfQft2ASozZBImGBvpi92x+ISdvU1FP
+         sln1MxL1u3wlY+tSxdTHdMP/wNWFCUKCRobVQ7XRGU4ao2zxHCzTMsDs4swcGZBB+MT2
+         gok4aSR/vlF6yXrLx8Xgqz9Z49NWX83m1cxBcSYhl0SuXZMEE+C/9bDe5JBVXIvS34y7
+         i7iMHxMv1zDBzSMxZvEXtAQSugfQhpN5ZLEan69vfsPIFvkA2VfW34L4eSiZSMsUF0JC
+         QNLQ==
+X-Gm-Message-State: APjAAAWfVZkUAyoId5WUoMl3PdP7nkdSs/+r0w76OpQQL1gmMoG1GCcq
+        9PtcUhbzeFovZXk/sjeLeg==
+X-Google-Smtp-Source: APXvYqyGpF5zXlBMXF7YOJcUxQgwuziR4mu9FJxfXVqud5UO3DL8TXG5Inzr2scO0w0CkanlhM/Lxw==
+X-Received: by 2002:a9d:768b:: with SMTP id j11mr17480041otl.116.1576279623911;
+        Fri, 13 Dec 2019 15:27:03 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id r24sm3881140ota.61.2019.12.13.15.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 15:27:03 -0800 (PST)
+Date:   Fri, 13 Dec 2019 17:27:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
+Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm, "Angus Ainslie (Purism)" <angus@akkea.ca>
+Subject: Re: [PATCH 2/2] dts: bindings: max17042_battery: add all of the
+ compatible strings
+Message-ID: <20191213232702.GA22495@bogus>
+References: <20191202152520.27558-1-angus@akkea.ca>
+ <20191202152520.27558-3-angus@akkea.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191202152520.27558-3-angus@akkea.ca>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 13 Dec 2019 10:53:45 +0100:
+On Mon,  2 Dec 2019 08:25:20 -0700, "Angus Ainslie (Purism)" wrote:
+> The bindings are missing documentation for some of the compatible
+> strings.
+> 
+> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
+> ---
+>  .../devicetree/bindings/power/supply/max17042_battery.txt   | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6bd2c87aaffe0b58ce65233fe922b9eb5f7d9a85
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Acked-by: Rob Herring <robh@kernel.org>
