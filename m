@@ -2,65 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BC511E142
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 10:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFCF11E0EA
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 10:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbfLMJzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Dec 2019 04:55:47 -0500
-Received: from paleale.coelho.fi ([176.9.41.70]:52134 "EHLO
-        farmhouse.coelho.fi" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725747AbfLMJzr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 04:55:47 -0500
-X-Greylist: delayed 2039 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 04:55:45 EST
-Received: from 91-156-6-193.elisa-laajakaista.fi ([91.156.6.193] helo=redipa)
-        by farmhouse.coelho.fi with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.92.2)
-        (envelope-from <luca@coelho.fi>)
-        id 1ifh8p-0002Lp-1I; Fri, 13 Dec 2019 11:21:43 +0200
-Message-ID: <3fc87add008ee42892f747bc247f15e09f6ed2d4.camel@coelho.fi>
-From:   Luca Coelho <luca@coelho.fi>
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>
-Date:   Fri, 13 Dec 2019 11:21:40 +0200
-In-Reply-To: <1576075099-3441-11-git-send-email-akinobu.mita@gmail.com>
-References: <1576075099-3441-1-git-send-email-akinobu.mita@gmail.com>
-         <1576075099-3441-11-git-send-email-akinobu.mita@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.1-2+b1 
+        id S1726833AbfLMJfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Dec 2019 04:35:08 -0500
+Received: from mga14.intel.com ([192.55.52.115]:13644 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726802AbfLMJfH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Dec 2019 04:35:07 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Dec 2019 01:34:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,309,1571727600"; 
+   d="scan'208";a="208406553"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 13 Dec 2019 01:34:37 -0800
+Received: from andy by smile with local (Exim 4.93-RC7)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ifhLJ-00066h-JG; Fri, 13 Dec 2019 11:34:37 +0200
+Date:   Fri, 13 Dec 2019 11:34:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Gayatri Kammela <gayatri.kammela@intel.com>
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        alex.hung@canonical.com, linux-acpi@vger.kernel.org,
+        lenb@kernel.org, rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        charles.d.prestopine@intel.com, dvhart@infradead.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Subject: Re: [PATCH v1 1/4] acpi: dptf: Add new Tiger Lake hardware IDs to
+ support DPTF drivers in acpi
+Message-ID: <20191213093437.GO32742@smile.fi.intel.com>
+References: <cover.1576189376.git.gayatri.kammela@intel.com>
+ <baaa3d7d1d1129a31c5a000578d1ad8198ca3881.1576189376.git.gayatri.kammela@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on farmhouse.coelho.fi
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        TVD_RCVD_IP,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.2
-Subject: Re: [PATCH v3 10/12] wireless: iwlwifi: use <linux/units.h> helpers
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <baaa3d7d1d1129a31c5a000578d1ad8198ca3881.1576189376.git.gayatri.kammela@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-12-11 at 23:38 +0900, Akinobu Mita wrote:
-> This switches the iwlwifi driver to use celsius_to_kelvin() and
-> kelvin_to_celsius() in <linux/units.h>.
-> 
-> Cc: Kalle Valo <kvalo@codeaurora.org>
-> Cc: Johannes Berg <johannes.berg@intel.com>
-> Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-> Cc: Luca Coelho <luciano.coelho@intel.com>
-> Cc: Intel Linux Wireless <linuxwifi@intel.com>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> ---
+On Thu, Dec 12, 2019 at 02:37:17PM -0800, Gayatri Kammela wrote:
+> Tiger Lake has new unique hardware IDs that are needed to support
+> DPTF drivers. Hence, add them.
 
-Acked-by: Luca Coelho <luciano.coelho@intel.com>
+>  	{"INT3407", 0},
+> +	{"INT1047", 0},
 
---
-Cheers,
-Luca.
+Can we keep them in sorted order?
+
+>  	{"INT3409"},
+>  	{"INT340A"},
+>  	{"INT340B"},
+> +	{"INT1040"},
+> +	{"INT1043"},
+> +	{"INT1044"},
+> +	{"INT1047"},
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
