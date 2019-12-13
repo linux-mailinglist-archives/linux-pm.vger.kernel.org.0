@@ -2,73 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5AE11EDBC
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Dec 2019 23:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D68A11EE4A
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2019 00:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbfLMW37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Dec 2019 17:29:59 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34515 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfLMW37 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Dec 2019 17:29:59 -0500
-Received: by mail-ot1-f66.google.com with SMTP id a15so918539otf.1;
-        Fri, 13 Dec 2019 14:29:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rR+gZbOwT0EsEu0FOYdJuiAybFzLvdlDbKJo+AcjvAY=;
-        b=C+U1C0tE55TCA8ZuEv9mz8dY7gaSC3q/Si3knElFZo1eq6sB4xHIobqpJaQxcgp4rA
-         7Ur99e2pOyDLXquhyTIMci2XoPAN2je31Pm3iIukKbUf2C8zD0Oi3/5YRuxGE1htVmwP
-         B1YJ5pwaYvTQp15zadZTxPbKw3fgj4LfMFUR58bUhP/zq5mVN6Xjg/nvjt963EZ0oZh5
-         PHNrPuyQ9klTT48ukhNnlWrTjtc6yioo2C5Y6//nyQNU7xXeLd7XXhqDmsTzJuiUaRif
-         +uUnGRuClkLXHJyLJdRVmheN/Mk9nFn6593TTYibRUa+iqwKK7JoohjD8SN44SwOKSJK
-         b0Sw==
-X-Gm-Message-State: APjAAAU95cILOtq4atSnI14+lr1PTT3jQwh8xT5aNugnncmMOvTA6ZYK
-        FPCzt53SjqFA925UkjrTuxU8AW4=
-X-Google-Smtp-Source: APXvYqz/BOJnsfjRa1QIsTdoyon+mgLtBUzCEcJlYdRndVcChgXQfvNXFKkQfnQ7B8mLoWutEbZ+oQ==
-X-Received: by 2002:a05:6830:2006:: with SMTP id e6mr16336398otp.367.1576276198049;
-        Fri, 13 Dec 2019 14:29:58 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g25sm3807433otr.8.2019.12.13.14.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 14:29:57 -0800 (PST)
-Date:   Fri, 13 Dec 2019 16:29:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rajan Vaja <rajan.vaja@xilinx.com>
-Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        michal.simek@xilinx.com, jolly.shah@xilinx.com,
-        tejas.patel@xilinx.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rajan Vaja <rajan.vaja@xilinx.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: xilinx: Add bindings
- for ipi mailbox
-Message-ID: <20191213222956.GA10172@bogus>
-References: <1574412258-17988-1-git-send-email-rajan.vaja@xilinx.com>
- <1575283131-9339-1-git-send-email-rajan.vaja@xilinx.com>
- <1575283131-9339-2-git-send-email-rajan.vaja@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1575283131-9339-2-git-send-email-rajan.vaja@xilinx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726786AbfLMXKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Dec 2019 18:10:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725818AbfLMXKM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Dec 2019 18:10:12 -0500
+Subject: Re: [GIT PULL] Power management updates for v5.5-rc2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576278611;
+        bh=3VDMKaOSGPTkNpHGoDx3v+RrnjumjThjkba1A8KfkFc=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=BkHi6nt36Apy1lP/ei9pr9TOOqlTGXJPjrwyZZNQh+18CKzwwrxqVjwubnHqgYN/+
+         I8QhRrt+EclosNFSkHNrtevejA8tBdIn5g3Z31/m6nfie6YWDOQ2Gk9tujK3ByQwiY
+         hp10230KRdUBAFeAVMauSiNEwUZrQXDz18uKCOc0=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
+References: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0g-xo1f2yPWGzFnrGQKFuHV=aDk_nV6s7hpWNnhnqyv5g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc2
+X-PR-Tracked-Commit-Id: 4c84515da8099f4bab5d9312a0ffaf40f14aa87b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6bd2c87aaffe0b58ce65233fe922b9eb5f7d9a85
+Message-Id: <157627861190.1837.9258292989054106751.pr-tracker-bot@kernel.org>
+Date:   Fri, 13 Dec 2019 23:10:11 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon,  2 Dec 2019 02:38:50 -0800, Rajan Vaja wrote:
-> Add IPI mailbox property and its example in xilinx zynqmp-power
-> documentation.
-> 
-> Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
-> ---
-> Changes in v2:
->  - Correct order of tx and rx in mbox-names property.
->  - Add interrupts property in example.
-> ---
->  .../bindings/power/reset/xlnx,zynqmp-power.txt     | 43 ++++++++++++++++++++--
->  1 file changed, 40 insertions(+), 3 deletions(-)
-> 
+The pull request you sent on Fri, 13 Dec 2019 10:53:45 +0100:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6bd2c87aaffe0b58ce65233fe922b9eb5f7d9a85
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
