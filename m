@@ -2,126 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 426DA11F2BB
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2019 17:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1AA11F36A
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Dec 2019 19:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbfLNQDN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Dec 2019 11:03:13 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:39122 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbfLNQDN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Dec 2019 11:03:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=XBaM42oBNhOSXJ0EDeTAvIyXJwZ5pDoXlUcg9BjVjf4=; b=jDBRPuIDc8BvevpOBxnzvFVDN
-        kqWQFf8kWtSZEY0dvIYfsmPdloFnbm8H8WV6Rx3rxIOaMVtzWititWXRwHKNZJcuAZAM1Q5mMC6dM
-        JyxhVaKxpvUoHVO5rAlZ6xNutdlXAyIUIBSx5XAAcIWCbvFlCSUBiznE9NZCpVe50J+bfd0ygsCp1
-        Igdv4rdAAocY+vS3kWrd5GyLQx44ZVYKnpPAJmWPhjP+5ZpXljO85eujDTBwyrM8WhmS3iF2JJ0kQ
-        GhSixTjyaPer9emU5/TW0RnD79AybIg/hwXVDgamv+368rscWeMHYZLndesrXti6hZsWuOhNI48Gq
-        PXx1xV0zA==;
-Received: from [2601:1c0:6280:3f0::fee9]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ig9su-0005KH-TW; Sat, 14 Dec 2019 16:03:12 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2] devfreq: fix multiple kernel-doc warnings
-Message-ID: <a6cbc380-0f88-1c97-83f2-c06f47eb18fa@infradead.org>
-Date:   Sat, 14 Dec 2019 08:03:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726799AbfLNSLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Dec 2019 13:11:34 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:37223 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725972AbfLNSLe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Dec 2019 13:11:34 -0500
+Received: by mail-pj1-f67.google.com with SMTP id ep17so1139818pjb.4;
+        Sat, 14 Dec 2019 10:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=v1jzw3cTgARl5UtByan28qHh9GkTIdbeMdcGnEnNuqQ=;
+        b=nJtCJighcBW7qQ0mUEAJ+mt8TIpyIXMY4sumdT4LQ3mKPCkagjoGjn2/CdUIK4ZVI5
+         VIx1bvfJi1AA6AFFxhP1zt43mog6ji/gwenI530G5DagqKmcWQBd7GCKxbuZJxbzRPxQ
+         BcPgsvhKQlRubwxNqhuN3/hSMl5kYOng9thJetOaergkSAyaofdC0jRZPQNfKZes/7XT
+         oQKYpwlPN+wPBYkwtoUyTvRGvwQZglorntRKlPsm/TY6eJ7isjWA74TFxG5Nx590LCdS
+         I1/lSTh8C6nkBBKa3UJ2gZZgiLf7I4NVAyudgR5hWzVrx+aaEhYt6J4HcMChKWYbdmn4
+         E3/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=v1jzw3cTgARl5UtByan28qHh9GkTIdbeMdcGnEnNuqQ=;
+        b=qFkf1bKZSjtHaKT9ay1kQL9L2RjCNH6t33J2yGi1dcMrMyp6XI0SUj4jn05uQ1G161
+         WsUJVz9nHnnE9OfeUNzZGutgM+kez/yGqlTxvVJjgvSe9Q8OP74JCy74/q0WGqBp3HEK
+         eoTYls4LPSo7Pcs73/RAsHDNWG00mNIcNkM4gZusjbz6QiLH9AoNjqPs1ETjy7XJrb6i
+         NuD8OSZv1tMSSzg2gpoz7PFSmASszVqs8GCXcpu8vh1BARP+6QQqmh+Q0UUF8he47zvB
+         QXQVBzE7D5TiW2f1+4kXM69MAesUG0InAyHfbEPEorDWyISUwHSJMRaOHQUIRip9d8ln
+         5CyA==
+X-Gm-Message-State: APjAAAXGCfiwaEyrvo7+tHkHTvXl9mK1WV19Hbrn4D8U/NvxOzOE3fPO
+        Kdm6x5vnEsndVN+1XcPgUfI=
+X-Google-Smtp-Source: APXvYqzws7Irzz8SVSeA5eeveXWvkJ2t4wz1lTz0HCd8Gn3Nu+eQpYu7QiRwV5E7bR75avFW+NGUeQ==
+X-Received: by 2002:a17:902:8693:: with SMTP id g19mr6130524plo.116.1576347094175;
+        Sat, 14 Dec 2019 10:11:34 -0800 (PST)
+Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
+        by smtp.gmail.com with ESMTPSA id b73sm16427814pfb.72.2019.12.14.10.11.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 14 Dec 2019 10:11:33 -0800 (PST)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, heiko@sntech.de
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH 1/2] PM / devfreq: rockchip-dfi: add missing of_node_put()
+Date:   Sat, 14 Dec 2019 18:11:29 +0000
+Message-Id: <20191214181130.25808-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+of_node_put needs to be called when the device node which is got
+from of_parse_phandle has finished using.
 
-Fix kernel-doc warnings in devfreq files.
-Also fix a typo.
-
-../include/linux/devfreq.h:181: warning: Function parameter or member 'last_status' not described in 'devfreq'
-
-../drivers/devfreq/devfreq.c:1687: warning: bad line:         - Resource-managed devfreq_register_notifier()
-../drivers/devfreq/devfreq.c:1723: warning: bad line:         - Resource-managed devfreq_unregister_notifier()
-../drivers/devfreq/devfreq-event.c:355: warning: Function parameter or member 'edev' not described in 'devfreq_event_remove_edev'
-../drivers/devfreq/devfreq-event.c:355: warning: Excess function parameter 'dev' description in 'devfreq_event_remove_edev'
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Cc: linux-pm@vger.kernel.org
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
-v2: update for latest devfreq tree
+ drivers/devfreq/event/rockchip-dfi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/devfreq/devfreq-event.c |    4 ++--
- drivers/devfreq/devfreq.c       |    4 ++--
- include/linux/devfreq.h         |    3 ++-
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
---- linux-next-20191213.orig/drivers/devfreq/devfreq.c
-+++ linux-next-20191213/drivers/devfreq/devfreq.c
-@@ -1852,7 +1852,7 @@ static void devm_devfreq_notifier_releas
- 
- /**
-  * devm_devfreq_register_notifier()
--	- Resource-managed devfreq_register_notifier()
-+ *	- Resource-managed devfreq_register_notifier()
-  * @dev:	The devfreq user device. (parent of devfreq)
-  * @devfreq:	The devfreq object.
-  * @nb:		The notifier block to be unregistered.
-@@ -1888,7 +1888,7 @@ EXPORT_SYMBOL(devm_devfreq_register_noti
- 
- /**
-  * devm_devfreq_unregister_notifier()
--	- Resource-managed devfreq_unregister_notifier()
-+ *	- Resource-managed devfreq_unregister_notifier()
-  * @dev:	The devfreq user device. (parent of devfreq)
-  * @devfreq:	The devfreq object.
-  * @nb:		The notifier block to be unregistered.
---- linux-next-20191213.orig/drivers/devfreq/devfreq-event.c
-+++ linux-next-20191213/drivers/devfreq/devfreq-event.c
-@@ -346,9 +346,9 @@ EXPORT_SYMBOL_GPL(devfreq_event_add_edev
- 
- /**
-  * devfreq_event_remove_edev() - Remove the devfreq-event device registered.
-- * @dev		: the devfreq-event device
-+ * @edev	: the devfreq-event device
-  *
-- * Note that this function remove the registered devfreq-event device.
-+ * Note that this function removes the registered devfreq-event device.
-  */
- int devfreq_event_remove_edev(struct devfreq_event_dev *edev)
- {
---- linux-next-20191213.orig/include/linux/devfreq.h
-+++ linux-next-20191213/include/linux/devfreq.h
-@@ -136,6 +136,7 @@ struct devfreq_stats {
-  *		devfreq.nb to the corresponding register notifier call chain.
-  * @work:	delayed work for load monitoring.
-  * @previous_freq:	previously configured frequency value.
-+ * @last_status:	devfreq user device info, performance statistics
-  * @data:	Private data of the governor. The devfreq framework does not
-  *		touch this.
-  * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
-@@ -151,7 +152,7 @@ struct devfreq_stats {
-  * @nb_min:		Notifier block for DEV_PM_QOS_MIN_FREQUENCY
-  * @nb_max:		Notifier block for DEV_PM_QOS_MAX_FREQUENCY
-  *
-- * This structure stores the devfreq information for a give device.
-+ * This structure stores the devfreq information for a given device.
-  *
-  * Note that when a governor accesses entries in struct devfreq in its
-  * functions except for the context of callbacks defined in struct
+diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+index 5d1042188727..45b190e443d8 100644
+--- a/drivers/devfreq/event/rockchip-dfi.c
++++ b/drivers/devfreq/event/rockchip-dfi.c
+@@ -200,6 +200,7 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+ 	if (node) {
+ 		data->regmap_pmu = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(data->regmap_pmu))
+ 			return PTR_ERR(data->regmap_pmu);
+ 	}
+-- 
+2.17.1
 
