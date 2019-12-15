@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BED1711F878
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2019 16:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD1011F87C
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2019 16:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbfLOPbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Dec 2019 10:31:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57806 "EHLO mail.kernel.org"
+        id S1726551AbfLOPcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Dec 2019 10:32:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726125AbfLOPbg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 15 Dec 2019 10:31:36 -0500
+        id S1726548AbfLOPcK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 15 Dec 2019 10:32:10 -0500
 Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F3302465B;
-        Sun, 15 Dec 2019 15:31:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6138206D3;
+        Sun, 15 Dec 2019 15:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576423895;
-        bh=LgHeGbyJrYWU3ryipXZAEWbKr4XnV0pc7CZo8nwe71o=;
+        s=default; t=1576423929;
+        bh=LsdE1olfUWAg8NbQgwIIgsdHBueTtS886MJUXIF7248=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i5Cutc5J5C/5aYfb3pnqldlule1dkMTiFtdLJQQf0csa7oyzCh7cQOCYG07GcSVZ9
-         IqhCNmw8CkN/a/xa4PpC8UyV1eVrvlsHUwUDR3+xpHamO7llyTLZV0IjgaarW3NFPu
-         smNpvbffdnRweEOQ/u/ZeoB1inTYavFVuPAUA4iU=
-Received: by mail-lj1-f178.google.com with SMTP id h23so3967503ljc.8;
-        Sun, 15 Dec 2019 07:31:35 -0800 (PST)
-X-Gm-Message-State: APjAAAVsIYOgOb/Muw/9yMUEjVfjYTAUGVU8EbdnvV8zjQ2UWTG9nmvH
-        BocPKACnfdoRNuJvziYnELhBgiDEObBzqUZqH0A=
-X-Google-Smtp-Source: APXvYqw2DbqZ9mPFhwyFC3xGwQKN0FgHbG3yv4TEKTv/RS3DYTfQCkrygxKAvb9/4K7Pve0MBgrcu0ELakg7Nt6nOu8=
-X-Received: by 2002:a05:651c:208:: with SMTP id y8mr16919184ljn.36.1576423893690;
- Sun, 15 Dec 2019 07:31:33 -0800 (PST)
+        b=1JbZ8zWQwRQdlNDMhXLyawJKgoPkUq82atf12KDHnNl4Ez+XlVN9k5/BersF7i2xF
+         doZmwRzrKjAQ2ft+LIC+WmQZmTy/ptRyJm6TL6/K3u4BKX9xyo4vfHzi6NYKe40szC
+         eA1aZs7ybyYhmC+WBYJjDX7IklYj62Rd6EirCuII=
+Received: by mail-lj1-f178.google.com with SMTP id d20so3947331ljc.12;
+        Sun, 15 Dec 2019 07:32:08 -0800 (PST)
+X-Gm-Message-State: APjAAAVmdqniUdjEu7Q1hpV0r7vG0PZaTmK8mMV0VZ/k+A32o0JZ6wHc
+        I/nD7jr7SHtPSQ9EjYq4hDNcZEBbhyexsEzLv+I=
+X-Google-Smtp-Source: APXvYqyWeNlmS1ZKv6+Ukw2JuBgBJGRUtDQIF2wJpsNpVrW3pbEJ53qh+dW02vND3+h1b34iKThbbVA7gJWofj5IECg=
+X-Received: by 2002:a2e:91cb:: with SMTP id u11mr16917581ljg.82.1576423927151;
+ Sun, 15 Dec 2019 07:32:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20191214181130.25808-1-tiny.windzz@gmail.com>
-In-Reply-To: <20191214181130.25808-1-tiny.windzz@gmail.com>
+References: <20191214181130.25808-1-tiny.windzz@gmail.com> <20191214181130.25808-2-tiny.windzz@gmail.com>
+In-Reply-To: <20191214181130.25808-2-tiny.windzz@gmail.com>
 From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Mon, 16 Dec 2019 00:30:57 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH2CS6o-zaHXReKJXzxsU_jfYKg2WL7uGpzyaFNhgTSVbg@mail.gmail.com>
-Message-ID: <CAGTfZH2CS6o-zaHXReKJXzxsU_jfYKg2WL7uGpzyaFNhgTSVbg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM / devfreq: rockchip-dfi: add missing of_node_put()
+Date:   Mon, 16 Dec 2019 00:31:30 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH0XQ_V6i3+=nksK5E38XX+Qk5nvZfeb0ec4kVb6-Jn5ZQ@mail.gmail.com>
+Message-ID: <CAGTfZH0XQ_V6i3+=nksK5E38XX+Qk5nvZfeb0ec4kVb6-Jn5ZQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM / devfreq: rk3399_dmc: add missing of_node_put()
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -57,21 +57,20 @@ X-Mailing-List: linux-pm@vger.kernel.org
 2019=EB=85=84 12=EC=9B=94 15=EC=9D=BC (=EC=9D=BC) =EC=98=A4=EC=A0=84 3:12, =
 Yangtao Li <tiny.windzz@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 >
-> of_node_put needs to be called when the device node which is got
+> of_node_put() needs to be called when the device node which is got
 > from of_parse_phandle has finished using.
 >
 > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  drivers/devfreq/event/rockchip-dfi.c | 1 +
+>  drivers/devfreq/rk3399_dmc.c | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
-/rockchip-dfi.c
-> index 5d1042188727..45b190e443d8 100644
-> --- a/drivers/devfreq/event/rockchip-dfi.c
-> +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -200,6 +200,7 @@ static int rockchip_dfi_probe(struct platform_device =
-*pdev)
+> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+> index 2e65d7279d79..2f1027c5b647 100644
+> --- a/drivers/devfreq/rk3399_dmc.c
+> +++ b/drivers/devfreq/rk3399_dmc.c
+> @@ -372,6 +372,7 @@ static int rk3399_dmcfreq_probe(struct platform_devic=
+e *pdev)
 >         node =3D of_parse_phandle(np, "rockchip,pmu", 0);
 >         if (node) {
 >                 data->regmap_pmu =3D syscon_node_to_regmap(node);
@@ -83,7 +82,7 @@ Yangtao Li <tiny.windzz@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 > 2.17.1
 >
 
-Applied it. Better to use the capital letter for first char of sentence.
+Applied it.
 
 --=20
 Best Regards,
