@@ -2,69 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88874120403
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 12:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DF6120529
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 13:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbfLPLex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 06:34:53 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49632 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbfLPLex (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 06:34:53 -0500
-Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 3930d591b1240d67; Mon, 16 Dec 2019 12:34:51 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Subject: [PATCH] ACPI: processor: Make ACPI_PROCESSOR_CSTATE depend on ACPI_PROCESSOR
-Date:   Mon, 16 Dec 2019 12:34:50 +0100
-Message-ID: <16614264.JRhOIQ9zEg@kreacher>
+        id S1727501AbfLPMNZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 07:13:25 -0500
+Received: from mga18.intel.com ([134.134.136.126]:20168 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727425AbfLPMNZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 16 Dec 2019 07:13:25 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 04:13:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,321,1571727600"; 
+   d="scan'208";a="217147072"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006.jf.intel.com with ESMTP; 16 Dec 2019 04:13:20 -0800
+Received: from andy by smile with local (Exim 4.93-RC7)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1igpFY-0006Ou-DM; Mon, 16 Dec 2019 14:13:20 +0200
+Date:   Mon, 16 Dec 2019 14:13:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Gayatri Kammela <gayatri.kammela@intel.com>
+Cc:     linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        alex.hung@canonical.com, linux-acpi@vger.kernel.org,
+        lenb@kernel.org, rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        charles.d.prestopine@intel.com, dvhart@infradead.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Subject: Re: [PATCH v2 3/4] platform/x86: intel-hid: Add new Tiger Lake
+ hardware ID to support HID driver
+Message-ID: <20191216121320.GQ32742@smile.fi.intel.com>
+References: <cover.1576260216.git.gayatri.kammela@intel.com>
+ <a70a856e9a87c89ba92da514c1dda1f46f10b0de.1576260216.git.gayatri.kammela@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a70a856e9a87c89ba92da514c1dda1f46f10b0de.1576260216.git.gayatri.kammela@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Dec 13, 2019 at 10:14:22AM -0800, Gayatri Kammela wrote:
+> Tiger Lake has a new unique hardware ID to support Intel's HID event
+> filter driver. Hence, add it.
+> 
 
-To avoid build errors when CONFIG_ACPI_PROCESSOR_CSTATE is set and
-CONFIG_ACPI_PROCESSOR is not (that may appear in randconfig builds),
-make the former depend on the latter.
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+> Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
+> ---
+>  drivers/platform/x86/intel-hid.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/platform/x86/intel-hid.c b/drivers/platform/x86/intel-hid.c
+> index ef6d4bd77b1a..43d590250228 100644
+> --- a/drivers/platform/x86/intel-hid.c
+> +++ b/drivers/platform/x86/intel-hid.c
+> @@ -19,6 +19,7 @@ MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Alex Hung");
+>  
+>  static const struct acpi_device_id intel_hid_ids[] = {
+> +	{"INT1051", 0},
+>  	{"INT33D5", 0},
+>  	{"", 0},
+>  };
+> -- 
+> 2.17.1
+> 
 
-The build issues addressed by this patch are exposed by the series adding ACPI
-support to intel_idle:
-
-https://lore.kernel.org/linux-pm/3950312.2WmFeOdZGY@kreacher/T/#t
-
-so it has been added to the intel_idle+acpi branch (which has been rebased on
-top of 5.5-rc2).
-
----
- drivers/acpi/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
-
-Index: linux-pm/drivers/acpi/Kconfig
-===================================================================
---- linux-pm.orig/drivers/acpi/Kconfig
-+++ linux-pm/drivers/acpi/Kconfig
-@@ -241,6 +241,7 @@ config ACPI_CPU_FREQ_PSS
- 
- config ACPI_PROCESSOR_CSTATE
- 	def_bool y
-+	depends on ACPI_PROCESSOR
- 	depends on IA64 || X86
- 
- config ACPI_PROCESSOR_IDLE
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
