@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 525E71209FB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 16:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF93120A01
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 16:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728402AbfLPPpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 10:45:01 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:34211 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbfLPPpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 10:45:01 -0500
-Received: by mail-wm1-f68.google.com with SMTP id f4so165474wmj.1
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 07:44:59 -0800 (PST)
+        id S1728381AbfLPPpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 10:45:49 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40726 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728275AbfLPPpt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 10:45:49 -0500
+Received: by mail-wm1-f67.google.com with SMTP id t14so7214434wmi.5
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 07:45:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t78O/sHoDiuGPtxdAbBx7V4J3Cxi3U7o9fq7ypbtNjM=;
-        b=DLLKLxUIJI/iexWg79uTe6L2gQXXNFyuI93jXJgRyCUPeYk9ljXTUwJgJovjY62yO/
-         ZaFM1gwYFRAqLRQiRQNsZcX7Y/PwBq+OySF5QYHitzerYU0Tf4VaEo8EDyj7re4zcVAa
-         kFQdUfEiQmdITHI8EXHcLvfy9A8SQJpxqdN/1LQnKJiUjwiK69jtgbb4/nW6jsdbBMXz
-         ig0yCKbu8uA6Y8wvBDgvUAaYBFko09Q2pOxiwR259dNg0FlM0tQH6Vg/dTPt9y3yvjWX
-         sUJzFyLxnteQPNhBb4ofZrkRa6TZkdAv2CmAuN/Dsie35NoQJAMgi23/ppC215vDkQCd
-         ddpw==
+        bh=WmrNaYP9Hx5glhC3paMeFCc+WwPLO77pT36royNH+8I=;
+        b=odOqf42O15ar/+44Dzx7XdUIc+TudEsu7PFbI8J1EL5cmzXM8zii3oKNzltCoiTmL/
+         C2c/1abTsmEQQ2NEgmlgkV1IQxKQ7bPLRibZSFAiTA70FzObfmYfaSQg/LpWZzta9efW
+         ZORYZVM6Cu410keAYYrD8qUve0DcTNpJSwztCRLvDmjjt1DvARpOy/JcuzXIHX20Q+8V
+         nTPEMUyNIUKHLHalQyCCBKahlj7WV3roUBQfNAPLIgYeZJ3O0c7aKnG+W9qBbzbh6EeM
+         TgrWRC8xtkjyzEszyIBJvo4p/EDUop0H385DlbVvDLo6QNHLJcZ7xeft3oxoRX6coGwh
+         +k/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=t78O/sHoDiuGPtxdAbBx7V4J3Cxi3U7o9fq7ypbtNjM=;
-        b=rLe9d1mn+r9CnXIIm+g8jP10gvJisWCtw8S5FJSVPM+8EdK8WgbB50aYQ+GgzsTn3A
-         Vu3gigestVxn4T4HnzSI3QBC6htMsSXjGHBz5ORYP36fdPzCULZBKPV/oTVKgQ4XYEuJ
-         uUzvvryYxzMSbESUMcxUkwjhiP1MbXFWX1lTy7GcNCn06vfXT7uN/gF2AhSl/PIKT/71
-         M8IxN+EdpZuv1ETP0z9Elxf9dU5UobLKUY8re6AZYMeNGm3YaV2ich36RKvQqWv5NBZx
-         kACmcyz6InHNc3QXKmMHMT2QjF7XZ+90BiFrrKjnPk0SaCW/qzUDRJsZbYpenc2nj+lC
-         UDeQ==
-X-Gm-Message-State: APjAAAVfSBQ7i0mz/Xq8IGydowPGulYMA1X5IA6uLnhpDmN/VA5o7uoM
-        38hjOL3Sv5ly1RT5VEUYpxDxgg==
-X-Google-Smtp-Source: APXvYqxJMZd/6K9ce64sf7V+owuZ78/WspKZ4vg29IA1lWfuqGA+1hoMKCoSH1ZjcPQz9jsLifqBUA==
-X-Received: by 2002:a1c:6585:: with SMTP id z127mr30929628wmb.113.1576511098324;
-        Mon, 16 Dec 2019 07:44:58 -0800 (PST)
+        bh=WmrNaYP9Hx5glhC3paMeFCc+WwPLO77pT36royNH+8I=;
+        b=tVK0po9fWqr1JMrpntS1+qP7pvsaqiIQACCiqLrQJzYu+qGchPJql1ouuuZs3JIYmB
+         PPuoTYZnr2VBfb+9UMP5416WUC5qF0uIYe9Ec3zLwy//zAjptYMkOMzCimQRdwBkIEiD
+         YG72N0hWSYLPely9XBRPIbjGvr67OBigpECwAnDTbH0naIJik1OrPuCwU7MDdTmDF+qh
+         BW/mV8uOsOq+uY2Tk3KpnIDbFqp4X/4OekuwOUPnNsXf4r3wzKz6D6O/4vSEwpG1QyRj
+         qtjQSZT9DzjhCRM4eIiy87v4vcSp8Ci8jMQvPdH5EM7iWBz5pi3+y4RJXy9bPEiWeKmX
+         vuug==
+X-Gm-Message-State: APjAAAUIFEAVxgjS1Da2ChhoX4uP91rkOcGaKyZgG7jE79V6eOh+RzC7
+        M+bptb4+sOf8xQADWXX++haDbw==
+X-Google-Smtp-Source: APXvYqzGwctICcrVgDEtEX66mp3NUrJZ47FErD4dYKFd4NrXyLNNEH7ksiUsTmM2AUgpXiy6ugEJ6w==
+X-Received: by 2002:a1c:a702:: with SMTP id q2mr31798864wme.6.1576511146024;
+        Mon, 16 Dec 2019 07:45:46 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:44d6:972c:f996:2f15? ([2a01:e34:ed2f:f020:44d6:972c:f996:2f15])
-        by smtp.googlemail.com with ESMTPSA id q3sm5089492wmc.47.2019.12.16.07.44.57
+        by smtp.googlemail.com with ESMTPSA id a9sm12104626wmm.15.2019.12.16.07.45.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2019 07:44:57 -0800 (PST)
-Subject: Re: [PATCH] cpuidle: clps711x: convert to
+        Mon, 16 Dec 2019 07:45:45 -0800 (PST)
+Subject: Re: [PATCH 1/2] cpuidle: kirkwood: convert to
  devm_platform_ioremap_resource
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Yangtao Li <tiny.windzz@gmail.com>
 Cc:     shc_work@mail.ru, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20191215130206.30265-1-tiny.windzz@gmail.com>
- <5309821.Xs2qqjuCkx@kreacher>
+ <20191215130206.30265-2-tiny.windzz@gmail.com> <6350875.0eM1BVzdex@kreacher>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -108,12 +108,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <19ceef1b-1f70-9a2b-3610-a8389b72f0cc@linaro.org>
-Date:   Mon, 16 Dec 2019 16:44:56 +0100
+Message-ID: <a2121917-c9e3-5695-3e35-1c95a635dc88@linaro.org>
+Date:   Mon, 16 Dec 2019 16:45:44 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <5309821.Xs2qqjuCkx@kreacher>
+In-Reply-To: <6350875.0eM1BVzdex@kreacher>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -122,40 +122,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/12/2019 12:20, Rafael J. Wysocki wrote:
-> On Sunday, December 15, 2019 2:02:05 PM CET Yangtao Li wrote:
+On 16/12/2019 12:21, Rafael J. Wysocki wrote:
+> On Sunday, December 15, 2019 2:02:06 PM CET Yangtao Li wrote:
 >> Use devm_platform_ioremap_resource() to simplify code.
 >>
 >> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 >> ---
->>  drivers/cpuidle/cpuidle-clps711x.c | 5 +----
+>>  drivers/cpuidle/cpuidle-kirkwood.c | 5 +----
 >>  1 file changed, 1 insertion(+), 4 deletions(-)
 >>
->> diff --git a/drivers/cpuidle/cpuidle-clps711x.c b/drivers/cpuidle/cpuidle-clps711x.c
->> index 6e36740f5719..fc22c59b6c73 100644
->> --- a/drivers/cpuidle/cpuidle-clps711x.c
->> +++ b/drivers/cpuidle/cpuidle-clps711x.c
->> @@ -37,10 +37,7 @@ static struct cpuidle_driver clps711x_idle_driver = {
->>  
->>  static int __init clps711x_cpuidle_probe(struct platform_device *pdev)
+>> diff --git a/drivers/cpuidle/cpuidle-kirkwood.c b/drivers/cpuidle/cpuidle-kirkwood.c
+>> index d23d8f468c12..511c4f46027a 100644
+>> --- a/drivers/cpuidle/cpuidle-kirkwood.c
+>> +++ b/drivers/cpuidle/cpuidle-kirkwood.c
+>> @@ -55,10 +55,7 @@ static struct cpuidle_driver kirkwood_idle_driver = {
+>>  /* Initialize CPU idle by registering the idle states */
+>>  static int kirkwood_cpuidle_probe(struct platform_device *pdev)
 >>  {
 >> -	struct resource *res;
 >> -
 >> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> -	clps711x_halt = devm_ioremap_resource(&pdev->dev, res);
->> +	clps711x_halt = devm_platform_ioremap_resource(pdev, 0);
->>  	if (IS_ERR(clps711x_halt))
->>  		return PTR_ERR(clps711x_halt);
+>> -	ddr_operation_base = devm_ioremap_resource(&pdev->dev, res);
+>> +	ddr_operation_base = devm_platform_ioremap_resource(pdev, 0);
+>>  	if (IS_ERR(ddr_operation_base))
+>>  		return PTR_ERR(ddr_operation_base);
 >>  
 >>
 > 
 > Daniel, any concerns here?
 
-I'm fine with those changes also. Maybe a bit more elaborated changelog,
-but not sure it is worth to resend a new patch for that. May be you can
-just update it with an answer and Rafael can take it into account.
-
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
