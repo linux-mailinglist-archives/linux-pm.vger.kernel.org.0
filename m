@@ -2,90 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCAA120871
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 15:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1A1120877
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 15:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728143AbfLPOT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 09:19:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:56976 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728091AbfLPOT0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Dec 2019 09:19:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E33131FB;
-        Mon, 16 Dec 2019 06:19:25 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.37.12.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 11A353F718;
-        Mon, 16 Dec 2019 06:19:23 -0800 (PST)
-From:   lukasz.luba@arm.com
-To:     linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Cc:     amit.kucheria@verdurent.com, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com
-Subject: [PATCH  2/2] thermal: devfreq_cooling: Add device node reclaiming in devfreq_cooling_register()
-Date:   Mon, 16 Dec 2019 14:19:09 +0000
-Message-Id: <20191216141909.30063-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191216141909.30063-1-lukasz.luba@arm.com>
-References: <20191216141909.30063-1-lukasz.luba@arm.com>
+        id S1728012AbfLPOV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 09:21:57 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:41905 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727995AbfLPOV5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 09:21:57 -0500
+Received: by mail-oi1-f193.google.com with SMTP id i1so3400321oie.8;
+        Mon, 16 Dec 2019 06:21:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SaHjW4n0zvwoawguKMSzzinC58G2gxyriauO/X4GMCM=;
+        b=MW885Dak5dsQioDYXdbfU3nhTqapSRqr7FbHhXdegeeN5z91ISQpyizEXp4Loq3Qir
+         6ZkBC3ujouZmYcTkKwkmgqt3elY2JpM+eipY3uarzqY9XEOfkdW9ML4iYRVeyHqy4mw2
+         M0h0HzW2o4wBT+F0WQpfUmb4zC714xKjriIFBwvVXPf8axjEAUtcT5B481NXIEyDj2bv
+         qn1FAVEHmULzkjv3yiySWeeB+66EKYfz5Qxgy/OWYpcvv3yW8iZa6tqhqNbyvOnehzGU
+         mcwBKLTv98kS9AhvpoPE3iURtYVSoDL19m2iwNnoF1QzLiCsYnE5y+TC67A7v+koenFq
+         erBg==
+X-Gm-Message-State: APjAAAV2zkZEYkFhOYB/mGJ+LuEU6XFSYiX++SeHJpzhdLk42dSSNgnZ
+        nu9bn0mt1x+Yast+pmwkrdzMT+FWtgcgPY8cbkRvKw==
+X-Google-Smtp-Source: APXvYqx7e1cUSJQewGZjGCWSnzYCUwFNC6T/ar6UamMUtChiL1yRn9RrIJ5esh13a0l7XzpmylQ57sR31ILTFk2gVgU=
+X-Received: by 2002:a05:6808:1c5:: with SMTP id x5mr9945222oic.57.1576506116067;
+ Mon, 16 Dec 2019 06:21:56 -0800 (PST)
+MIME-Version: 1.0
+References: <201912162148.hTRbNfPp%lkp@intel.com>
+In-Reply-To: <201912162148.hTRbNfPp%lkp@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 16 Dec 2019 15:21:45 +0100
+Message-ID: <CAJZ5v0iTOSnvZqKuL7gy7QBtdHxcM7wPS8qdgbvs6+sQxZX5yg@mail.gmail.com>
+Subject: Re: [pm:intel_idle+acpi 4/10] acpi_processor.c:undefined reference to `acpi_processor_ffh_cstate_probe'
+To:     kbuild test robot <lkp@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kbuild-all@lists.01.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Lukasz Luba <lukasz.luba@arm.com>
+On Mon, Dec 16, 2019 at 2:26 PM kbuild test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_idle+acpi
+> head:   dcedc03145600b929a32acb85b212131b079bc46
+> commit: 0300cf31f061e6287810c894337f29df2e200e2d [4/10] ACPI: processor: Export acpi_processor_evaluate_cst()
 
-Since the devfreq device parent might have the proper device node, devfreq
-cooling registration can re-use it. This will allow thermal bind function
-to pin thermal zone with cooling device based on definition in the device
-tree automatically. It will simplify registration of cooling device in
-drivers code.
-Fix also 'unregister path' and add IS_ERR_OR_NULL() check.
+Outdated.  Please stop sending these.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/thermal/devfreq_cooling.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-index 1861241c7ef5..c29056cb4a71 100644
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -574,7 +574,24 @@ EXPORT_SYMBOL_GPL(of_devfreq_cooling_register);
-  */
- struct thermal_cooling_device *devfreq_cooling_register(struct devfreq *df)
- {
--	return of_devfreq_cooling_register(NULL, df);
-+	struct thermal_cooling_device *dfc;
-+	struct device_node *np = NULL;
-+	struct device *dev;
-+
-+	if (IS_ERR_OR_NULL(df))
-+		return ERR_PTR(-EINVAL);
-+
-+	dev = df->dev.parent;
-+
-+	if (dev && dev->of_node)
-+		np = of_node_get(dev->of_node);
-+
-+	dfc = of_devfreq_cooling_register(np, df);
-+
-+	if (np)
-+		of_node_put(np);
-+
-+	return dfc;
- }
- EXPORT_SYMBOL_GPL(devfreq_cooling_register);
- 
-@@ -586,7 +603,7 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- {
- 	struct devfreq_cooling_device *dfc;
- 
--	if (!cdev)
-+	if (IS_ERR_OR_NULL(cdev))
- 		return;
- 
- 	dfc = cdev->devdata;
--- 
-2.17.1
-
+> config: x86_64-randconfig-b002-20191216 (attached as .config)
+> compiler: gcc-7 (Debian 7.5.0-1) 7.5.0
+> reproduce:
+>         git checkout 0300cf31f061e6287810c894337f29df2e200e2d
+>         # save the attached .config to linux build tree
+>         make ARCH=x86_64
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    ld: drivers/acpi/acpi_processor.o: in function `acpi_processor_evaluate_cst':
+> >> acpi_processor.c:(.text+0x542): undefined reference to `acpi_processor_ffh_cstate_probe'
+>
+> ---
+> 0-DAY kernel test infrastructure                 Open Source Technology Center
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
