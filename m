@@ -2,382 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DCB1209B7
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 16:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 525E71209FB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 16:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728248AbfLPPaq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 10:30:46 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60898 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728225AbfLPPaq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 10:30:46 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id D5B2928F6D2
-Subject: Re: [PATCH] cros_ec: treewide: Remove 'include/linux/mfd/cros_ec.h'
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Collabora Kernel ML <kernel@collabora.com>, groeck@chromium.org,
-        bleung@chromium.org, dtor@chromium.org, gwendal@chromium.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org, Nick Vaccaro <nvaccaro@chromium.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-References: <20191203145018.14015-1-enric.balletbo@collabora.com>
-Message-ID: <8905c6a9-95aa-2efc-52df-8a88f952e2e2@collabora.com>
-Date:   Mon, 16 Dec 2019 16:30:36 +0100
+        id S1728402AbfLPPpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 10:45:01 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34211 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728374AbfLPPpB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 10:45:01 -0500
+Received: by mail-wm1-f68.google.com with SMTP id f4so165474wmj.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 07:44:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t78O/sHoDiuGPtxdAbBx7V4J3Cxi3U7o9fq7ypbtNjM=;
+        b=DLLKLxUIJI/iexWg79uTe6L2gQXXNFyuI93jXJgRyCUPeYk9ljXTUwJgJovjY62yO/
+         ZaFM1gwYFRAqLRQiRQNsZcX7Y/PwBq+OySF5QYHitzerYU0Tf4VaEo8EDyj7re4zcVAa
+         kFQdUfEiQmdITHI8EXHcLvfy9A8SQJpxqdN/1LQnKJiUjwiK69jtgbb4/nW6jsdbBMXz
+         ig0yCKbu8uA6Y8wvBDgvUAaYBFko09Q2pOxiwR259dNg0FlM0tQH6Vg/dTPt9y3yvjWX
+         sUJzFyLxnteQPNhBb4ofZrkRa6TZkdAv2CmAuN/Dsie35NoQJAMgi23/ppC215vDkQCd
+         ddpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=t78O/sHoDiuGPtxdAbBx7V4J3Cxi3U7o9fq7ypbtNjM=;
+        b=rLe9d1mn+r9CnXIIm+g8jP10gvJisWCtw8S5FJSVPM+8EdK8WgbB50aYQ+GgzsTn3A
+         Vu3gigestVxn4T4HnzSI3QBC6htMsSXjGHBz5ORYP36fdPzCULZBKPV/oTVKgQ4XYEuJ
+         uUzvvryYxzMSbESUMcxUkwjhiP1MbXFWX1lTy7GcNCn06vfXT7uN/gF2AhSl/PIKT/71
+         M8IxN+EdpZuv1ETP0z9Elxf9dU5UobLKUY8re6AZYMeNGm3YaV2ich36RKvQqWv5NBZx
+         kACmcyz6InHNc3QXKmMHMT2QjF7XZ+90BiFrrKjnPk0SaCW/qzUDRJsZbYpenc2nj+lC
+         UDeQ==
+X-Gm-Message-State: APjAAAVfSBQ7i0mz/Xq8IGydowPGulYMA1X5IA6uLnhpDmN/VA5o7uoM
+        38hjOL3Sv5ly1RT5VEUYpxDxgg==
+X-Google-Smtp-Source: APXvYqxJMZd/6K9ce64sf7V+owuZ78/WspKZ4vg29IA1lWfuqGA+1hoMKCoSH1ZjcPQz9jsLifqBUA==
+X-Received: by 2002:a1c:6585:: with SMTP id z127mr30929628wmb.113.1576511098324;
+        Mon, 16 Dec 2019 07:44:58 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:44d6:972c:f996:2f15? ([2a01:e34:ed2f:f020:44d6:972c:f996:2f15])
+        by smtp.googlemail.com with ESMTPSA id q3sm5089492wmc.47.2019.12.16.07.44.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2019 07:44:57 -0800 (PST)
+Subject: Re: [PATCH] cpuidle: clps711x: convert to
+ devm_platform_ioremap_resource
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     shc_work@mail.ru, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20191215130206.30265-1-tiny.windzz@gmail.com>
+ <5309821.Xs2qqjuCkx@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <19ceef1b-1f70-9a2b-3610-a8389b72f0cc@linaro.org>
+Date:   Mon, 16 Dec 2019 16:44:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191203145018.14015-1-enric.balletbo@collabora.com>
+In-Reply-To: <5309821.Xs2qqjuCkx@kreacher>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lee, Sebastian, Alexandre, Hans and Jonathan,
+On 16/12/2019 12:20, Rafael J. Wysocki wrote:
+> On Sunday, December 15, 2019 2:02:05 PM CET Yangtao Li wrote:
+>> Use devm_platform_ioremap_resource() to simplify code.
+>>
+>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+>> ---
+>>  drivers/cpuidle/cpuidle-clps711x.c | 5 +----
+>>  1 file changed, 1 insertion(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/cpuidle/cpuidle-clps711x.c b/drivers/cpuidle/cpuidle-clps711x.c
+>> index 6e36740f5719..fc22c59b6c73 100644
+>> --- a/drivers/cpuidle/cpuidle-clps711x.c
+>> +++ b/drivers/cpuidle/cpuidle-clps711x.c
+>> @@ -37,10 +37,7 @@ static struct cpuidle_driver clps711x_idle_driver = {
+>>  
+>>  static int __init clps711x_cpuidle_probe(struct platform_device *pdev)
+>>  {
+>> -	struct resource *res;
+>> -
+>> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> -	clps711x_halt = devm_ioremap_resource(&pdev->dev, res);
+>> +	clps711x_halt = devm_platform_ioremap_resource(pdev, 0);
+>>  	if (IS_ERR(clps711x_halt))
+>>  		return PTR_ERR(clps711x_halt);
+>>  
+>>
+> 
+> Daniel, any concerns here?
 
-On 3/12/19 15:50, Enric Balletbo i Serra wrote:
-> This header file now only includes the cros_ec_dev struct, however, is the
-> 'include/linux/platform_data/cros_ec_proto.h' who contains the definition of
-> all the Chrome OS EC related structs. There is no reason to have a
-> separate include for this struct so move to the place where other
-> structs are defined. That way, we can remove the include itself, but also
-> simplify the common pattern
-> 
->     #include <linux/mfd/cros_ec.h>
->     #include <linux/platform_data/cros_ec_proto.h>
-> 
-> for a single include
-> 
->     #include <linux/platform_data/cros_ec_proto.h>
-> 
-> The changes to remove the cros_ec.h include were generated with the
-> following shell script:
-> 
->     git grep -l "<linux/mfd/cros_ec.h>" | xargs sed -i '/<linux\/mfd\/cros_ec.h>/d'
-> 
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+I'm fine with those changes also. Maybe a bit more elaborated changelog,
+but not sure it is worth to resend a new patch for that. May be you can
+just update it with an answer and Rafael can take it into account.
 
-Once collected all the acks, are you fine if this goes through the
-chrome-platform tree.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Thanks,
- Enric
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> ---
-> 
->  drivers/iio/accel/cros_ec_accel_legacy.c      |  1 -
->  .../common/cros_ec_sensors/cros_ec_sensors.c  |  1 -
->  .../cros_ec_sensors/cros_ec_sensors_core.c    |  1 -
->  drivers/iio/light/cros_ec_light_prox.c        |  1 -
->  drivers/iio/pressure/cros_ec_baro.c           |  1 -
->  .../media/platform/cros-ec-cec/cros-ec-cec.c  |  1 -
->  drivers/mfd/cros_ec_dev.c                     |  1 -
->  drivers/platform/chrome/cros_ec_chardev.c     |  1 -
->  drivers/platform/chrome/cros_ec_debugfs.c     |  1 -
->  drivers/platform/chrome/cros_ec_lightbar.c    |  1 -
->  drivers/platform/chrome/cros_ec_sensorhub.c   |  1 -
->  drivers/platform/chrome/cros_ec_sysfs.c       |  1 -
->  drivers/platform/chrome/cros_ec_vbc.c         |  1 -
->  drivers/platform/chrome/cros_usbpd_logger.c   |  1 -
->  drivers/power/supply/cros_usbpd-charger.c     |  1 -
->  drivers/rtc/rtc-cros-ec.c                     |  1 -
->  include/linux/mfd/cros_ec.h                   | 35 -------------------
->  include/linux/platform_data/cros_ec_proto.h   | 23 +++++++++++-
->  18 files changed, 22 insertions(+), 52 deletions(-)
->  delete mode 100644 include/linux/mfd/cros_ec.h
-> 
-> diff --git a/drivers/iio/accel/cros_ec_accel_legacy.c b/drivers/iio/accel/cros_ec_accel_legacy.c
-> index 65f85faf6f31..68e847c6255e 100644
-> --- a/drivers/iio/accel/cros_ec_accel_legacy.c
-> +++ b/drivers/iio/accel/cros_ec_accel_legacy.c
-> @@ -18,7 +18,6 @@
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/iio/triggered_buffer.h>
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-> index 7dce04473467..576e45faafaf 100644
-> --- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-> +++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-> @@ -16,7 +16,6 @@
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/iio/triggered_buffer.h>
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-> index 81a7f692de2f..d3a3626c7cd8 100644
-> --- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-> +++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-> @@ -13,7 +13,6 @@
->  #include <linux/iio/kfifo_buf.h>
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> diff --git a/drivers/iio/light/cros_ec_light_prox.c b/drivers/iio/light/cros_ec_light_prox.c
-> index d85a391e50c5..7a838e2956f4 100644
-> --- a/drivers/iio/light/cros_ec_light_prox.c
-> +++ b/drivers/iio/light/cros_ec_light_prox.c
-> @@ -14,7 +14,6 @@
->  #include <linux/iio/triggered_buffer.h>
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/iio/pressure/cros_ec_baro.c b/drivers/iio/pressure/cros_ec_baro.c
-> index 2354302375de..d2a67dceb996 100644
-> --- a/drivers/iio/pressure/cros_ec_baro.c
-> +++ b/drivers/iio/pressure/cros_ec_baro.c
-> @@ -14,7 +14,6 @@
->  #include <linux/iio/triggered_buffer.h>
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> index 4a3b3810fd89..72c70f123650 100644
-> --- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> +++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> @@ -14,7 +14,6 @@
->  #include <linux/cec.h>
->  #include <linux/slab.h>
->  #include <linux/interrupt.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
->  #include <media/cec.h>
-> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-> index c4b977a5dd96..8da4e4cef26f 100644
-> --- a/drivers/mfd/cros_ec_dev.c
-> +++ b/drivers/mfd/cros_ec_dev.c
-> @@ -6,7 +6,6 @@
->   */
->  
->  #include <linux/mfd/core.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/of_platform.h>
-> diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-> index 74ded441bb50..c65e70bc168d 100644
-> --- a/drivers/platform/chrome/cros_ec_chardev.c
-> +++ b/drivers/platform/chrome/cros_ec_chardev.c
-> @@ -13,7 +13,6 @@
->  #include <linux/init.h>
->  #include <linux/device.h>
->  #include <linux/fs.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/miscdevice.h>
->  #include <linux/module.h>
->  #include <linux/notifier.h>
-> diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-> index 6ae484989d1f..ecfada00e6c5 100644
-> --- a/drivers/platform/chrome/cros_ec_debugfs.c
-> +++ b/drivers/platform/chrome/cros_ec_debugfs.c
-> @@ -7,7 +7,6 @@
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/fs.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> diff --git a/drivers/platform/chrome/cros_ec_lightbar.c b/drivers/platform/chrome/cros_ec_lightbar.c
-> index c0f2eec35a48..b4c110c5fee0 100644
-> --- a/drivers/platform/chrome/cros_ec_lightbar.c
-> +++ b/drivers/platform/chrome/cros_ec_lightbar.c
-> @@ -8,7 +8,6 @@
->  #include <linux/device.h>
->  #include <linux/fs.h>
->  #include <linux/kobject.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/platform/chrome/cros_ec_sensorhub.c b/drivers/platform/chrome/cros_ec_sensorhub.c
-> index 04d8879689e9..79fefd3bb0fa 100644
-> --- a/drivers/platform/chrome/cros_ec_sensorhub.c
-> +++ b/drivers/platform/chrome/cros_ec_sensorhub.c
-> @@ -9,7 +9,6 @@
->  #include <linux/init.h>
->  #include <linux/device.h>
->  #include <linux/module.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
->  #include <linux/platform_data/cros_ec_sensorhub.h>
-> diff --git a/drivers/platform/chrome/cros_ec_sysfs.c b/drivers/platform/chrome/cros_ec_sysfs.c
-> index 74d36b8d4f46..07dac97ad57c 100644
-> --- a/drivers/platform/chrome/cros_ec_sysfs.c
-> +++ b/drivers/platform/chrome/cros_ec_sysfs.c
-> @@ -8,7 +8,6 @@
->  #include <linux/device.h>
->  #include <linux/fs.h>
->  #include <linux/kobject.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/platform/chrome/cros_ec_vbc.c b/drivers/platform/chrome/cros_ec_vbc.c
-> index f11a1283e5c8..8edae465105c 100644
-> --- a/drivers/platform/chrome/cros_ec_vbc.c
-> +++ b/drivers/platform/chrome/cros_ec_vbc.c
-> @@ -6,7 +6,6 @@
->  
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/platform/chrome/cros_usbpd_logger.c b/drivers/platform/chrome/cros_usbpd_logger.c
-> index 374cdd1e868a..7de3ea75ef46 100644
-> --- a/drivers/platform/chrome/cros_usbpd_logger.c
-> +++ b/drivers/platform/chrome/cros_usbpd_logger.c
-> @@ -6,7 +6,6 @@
->   */
->  
->  #include <linux/ktime.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/math64.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-> index 6cc7c3910e09..0aca0da41cb7 100644
-> --- a/drivers/power/supply/cros_usbpd-charger.c
-> +++ b/drivers/power/supply/cros_usbpd-charger.c
-> @@ -5,7 +5,6 @@
->   * Copyright (c) 2014 - 2018 Google, Inc
->   */
->  
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-> index d043d30f05bc..f7343c289cab 100644
-> --- a/drivers/rtc/rtc-cros-ec.c
-> +++ b/drivers/rtc/rtc-cros-ec.c
-> @@ -5,7 +5,6 @@
->  // Author: Stephen Barber <smbarber@chromium.org>
->  
->  #include <linux/kernel.h>
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/module.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  #include <linux/platform_data/cros_ec_proto.h>
-> diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-> deleted file mode 100644
-> index 61c2875c2a40..000000000000
-> --- a/include/linux/mfd/cros_ec.h
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/*
-> - * ChromeOS EC multi-function device
-> - *
-> - * Copyright (C) 2012 Google, Inc
-> - */
-> -
-> -#ifndef __LINUX_MFD_CROS_EC_H
-> -#define __LINUX_MFD_CROS_EC_H
-> -
-> -#include <linux/device.h>
-> -
-> -/**
-> - * struct cros_ec_dev - ChromeOS EC device entry point.
-> - * @class_dev: Device structure used in sysfs.
-> - * @ec_dev: cros_ec_device structure to talk to the physical device.
-> - * @dev: Pointer to the platform device.
-> - * @debug_info: cros_ec_debugfs structure for debugging information.
-> - * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
-> - * @cmd_offset: Offset to apply for each command.
-> - * @features: Features supported by the EC.
-> - */
-> -struct cros_ec_dev {
-> -	struct device class_dev;
-> -	struct cros_ec_device *ec_dev;
-> -	struct device *dev;
-> -	struct cros_ec_debugfs *debug_info;
-> -	bool has_kb_wake_angle;
-> -	u16 cmd_offset;
-> -	u32 features[2];
-> -};
-> -
-> -#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
-> -
-> -#endif /* __LINUX_MFD_CROS_EC_H */
-> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-> index 30098a551523..119b9951c055 100644
-> --- a/include/linux/platform_data/cros_ec_proto.h
-> +++ b/include/linux/platform_data/cros_ec_proto.h
-> @@ -12,7 +12,6 @@
->  #include <linux/mutex.h>
->  #include <linux/notifier.h>
->  
-> -#include <linux/mfd/cros_ec.h>
->  #include <linux/platform_data/cros_ec_commands.h>
->  
->  #define CROS_EC_DEV_NAME	"cros_ec"
-> @@ -185,6 +184,28 @@ struct cros_ec_platform {
->  	u16 cmd_offset;
->  };
->  
-> +/**
-> + * struct cros_ec_dev - ChromeOS EC device entry point.
-> + * @class_dev: Device structure used in sysfs.
-> + * @ec_dev: cros_ec_device structure to talk to the physical device.
-> + * @dev: Pointer to the platform device.
-> + * @debug_info: cros_ec_debugfs structure for debugging information.
-> + * @has_kb_wake_angle: True if at least 2 accelerometer are connected to the EC.
-> + * @cmd_offset: Offset to apply for each command.
-> + * @features: Features supported by the EC.
-> + */
-> +struct cros_ec_dev {
-> +	struct device class_dev;
-> +	struct cros_ec_device *ec_dev;
-> +	struct device *dev;
-> +	struct cros_ec_debugfs *debug_info;
-> +	bool has_kb_wake_angle;
-> +	u16 cmd_offset;
-> +	u32 features[2];
-> +};
-> +
-> +#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
-> +
->  int cros_ec_suspend(struct cros_ec_device *ec_dev);
->  
->  int cros_ec_resume(struct cros_ec_device *ec_dev);
-> 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
