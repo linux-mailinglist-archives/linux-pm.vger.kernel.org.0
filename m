@@ -2,167 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2724E11FC8D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 02:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF8511FD02
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 03:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfLPBYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Dec 2019 20:24:40 -0500
-Received: from mail-eopbgr70081.outbound.protection.outlook.com ([40.107.7.81]:35386
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726299AbfLPBYk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 15 Dec 2019 20:24:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bIxVA1J4UKpcpH8yZlw7/zrYbl0kk2E35RBcqcLqqo/ll4TwlfxPejRYymHM0DlH1Ft0/pqlv3ar7Crhtlo6/ozVil6jYHUvECMj9Dbqrdq86Ww5zdI2UJjjQsUvO6XrZ8vffRsIrQrgUR72bPqAu1ub2j4HTXF84tb7DEJsMtqqx5PsZrFyNW7+A//d/3yj6c45vVaskuryhgVQO9imCBhhjjNZUdi3U70FPErX9dexlr/0boMGLwCMM6Zowlp8LwzfDgFl+u21+nGOVg/f3+Iu0suqyerSm7gPRcU1Yebmw501PQkBDyP8JWqjc0LVeQ+B3frhNqBQi+5LUfXqnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RWcz42ePjnkuxrDXmlXo+w8oHCACf/paQLTWyda5P7M=;
- b=aLMxnA2q0IQdF/WP24MujUcl4xAiFZOuOihYVGn5JmtD6IPsCDSbJsylhtnble2eRz4XYCBWj1XqWhJYK34EFA7fGiIq6STb/nWpGQk40g4dUTTKYcWUwPRGegM1twsF/Riek7Om2uhJhrvWtcd9jtqheL1uSzj+JDgCpFUlPdzKJ4s2KTKbw+JqwHdtmvg+9j5U/Px4jFWQadOm3T6KdjjXlefZiCcem+1cO/rlgHJjyV3N8fYJRJ0ahWZjwxc5DwF7H2jFpNhApWPXvMDOQnPZFAox7+H1MVuvXNsra1QarGP44fRcp3Df3JTmsRzins7nAMZcbkPASarnUzMkTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RWcz42ePjnkuxrDXmlXo+w8oHCACf/paQLTWyda5P7M=;
- b=aMfTO5H70W4SE10xSDJjGQkP9/MKA1NpVwBZNZDWeUCvNk35AadQLgC4cb5FO+fkGuIqYRGEBvaITUezmMY2QRva8he07GUVa5a+aDGK381my+njj11qufO9QLBC8PTvYf4MCsFQr1LBUYw7gVX8xSKZCkD+JJOIXJ6I/0x1CG0=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB3229.eurprd04.prod.outlook.com (10.170.231.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.17; Mon, 16 Dec 2019 01:24:35 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2538.019; Mon, 16 Dec 2019
- 01:24:35 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "od@zcrc.me" <od@zcrc.me>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-Thread-Topic: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-Thread-Index: AQHVsDrKPWSbvY6T+0OJ94dLsbCA8qe2ObMAgAJTXYCAA3BKkA==
-Date:   Mon, 16 Dec 2019 01:24:35 +0000
-Message-ID: <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20191211155032.167032-1-paul@crapouillou.net>
-        <20191211155032.167032-3-paul@crapouillou.net>
-        <20191212091814.GA7035@b29397-desktop> <1576270147.3.0@crapouillou.net>
-In-Reply-To: <1576270147.3.0@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 35b637ed-a5e1-4c42-4b53-08d781c6b631
-x-ms-traffictypediagnostic: VI1PR04MB3229:
-x-microsoft-antispam-prvs: <VI1PR04MB3229D387431E7EF62D46BC518B510@VI1PR04MB3229.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 02530BD3AA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(189003)(199004)(7696005)(478600001)(4326008)(5660300002)(33656002)(26005)(52536014)(6506007)(6916009)(66556008)(86362001)(66946007)(316002)(54906003)(64756008)(76116006)(186003)(44832011)(9686003)(7416002)(8676002)(71200400001)(55016002)(8936002)(66476007)(66446008)(81166006)(81156014)(2906002)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3229;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3Yl6s7ezAOyhIYkO9aQAEbwLzL9dZWre+IfcSs9QoOZXbWuEvIkCdU30lBef8T7CmCJAVS8xhRTLzDg7MRJ8ao+0Yh3WuSZu8oIMWspfpPj+YZIiO1SOqstzBOBR+q8b/6T7xYTLKlybrhmE4V75Gs87Shcbrczrzr2Pa1Xv541Sukl0wd+fnJvPC/IFcvMSKcmh62YOXcceR2cV2N3pJiDqcntqZFrghGBb1KDeAM3Dlu9r6zKsrONuI7emimIOM3quw+lAO41bQYCaYbHmrJySrLlhNdUKcrlJACgVMXF7cYeCwJymebF1E1+TwY0V4tTDholEZhkaoJRQ4beANtFRgoKO0zI/aJ/Lv6KOz52IAN0xM0Yb/1c+QdMbigt2bzr/G5DQsFbLSsfCzZBo1EhnJ5BbVl6hEGbVMqfR1w7B6zoqjNTJE6aRq+yk3Wd+Fu7wnUrf1iQc5b45ti/Fd2EoobXY/a6yyqe8jmxT+OsY8EbGKdWvDvSmldIWU68p
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726618AbfLPCwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Dec 2019 21:52:51 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:14046 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbfLPCwv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Dec 2019 21:52:51 -0500
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191216025246epoutp0129c603800a343dc654f170cfc7d89b11~gulpSqKdT1373613736epoutp01c
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 02:52:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191216025246epoutp0129c603800a343dc654f170cfc7d89b11~gulpSqKdT1373613736epoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576464766;
+        bh=/PWYmeUhh3ou+AZOp2VAT0jkte7v9srIXdaSGzR3udg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=p4xhlFqFTdkJYKSnAHwZxP4JU3aaRY33TG4wrQ8DRF/npI3l34PtV3cTl0SKuUmlX
+         UUg+SriHTpvY5BP/tEW89C2Rk4vE+zV4gV3t/YZ32nKlz5EdHvZtocZxvChXgCxzia
+         ma6SwbgGVYNwGedbUb1TexDvZLBAsJNJ1vc+Horo=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20191216025246epcas1p3eff9b42f49bcd6e27e8c91891e9f4c31~gulotuucC2925429254epcas1p3I;
+        Mon, 16 Dec 2019 02:52:46 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47bm626JyYzMqYkV; Mon, 16 Dec
+        2019 02:52:42 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        42.10.48019.A71F6FD5; Mon, 16 Dec 2019 11:52:42 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20191216025242epcas1p4af6a46c4d50f5e41a44d50b0fdfc1825~gullMawfQ1584215842epcas1p4B;
+        Mon, 16 Dec 2019 02:52:42 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191216025242epsmtrp182ab11862d87b6219cde22d349bbaad6~gullKire_1347813478epsmtrp1F;
+        Mon, 16 Dec 2019 02:52:42 +0000 (GMT)
+X-AuditID: b6c32a38-23fff7000001bb93-0c-5df6f17a2b32
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F0.A6.06569.A71F6FD5; Mon, 16 Dec 2019 11:52:42 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191216025242epsmtip2ef8a4df971d610f9c2658d0b080c8238~gulk84ytd2221022210epsmtip22;
+        Mon, 16 Dec 2019 02:52:42 +0000 (GMT)
+Subject: Re: [RFC PATCH v2 08/11] arm: dts: exynos: Add parents and
+ #interconnect-cells to Exynos4412
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     myungjoo.ham@samsung.com, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, georgi.djakov@linaro.org,
+        leonard.crestez@nxp.com, m.szyprowski@samsung.com,
+        b.zolnierkie@samsung.com, krzk@kernel.org
+Organization: Samsung Electronics
+Message-ID: <eecc5d38-f6ab-b1ea-1a08-0afb2dcddbef@samsung.com>
+Date:   Mon, 16 Dec 2019 11:59:17 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35b637ed-a5e1-4c42-4b53-08d781c6b631
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2019 01:24:35.4737
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4wEwjRdPxSS3hdbP9zP6/Kl1zt7l/1aF8fcGEMAsDFs19CzoEUj179+mz+2/GTfyvSlL2MT0UNzhZVFMBxKenQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3229
+In-Reply-To: <693e250d-9656-df67-9685-188020b43542@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGJsWRmVeSWpSXmKPExsWy7bCmgW7Vx2+xBjuXmFjcn9fKaLFxxnpW
+        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
+        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
+        HpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0t5JC
+        WWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAh
+        O+Nv3yWmgitaFT233zE3MC5Q7GLk5JAQMJG4sOYscxcjF4eQwA5GiZl7T0A5nxglFp5vY4Fw
+        vjFKbL+6lRWm5eLJ71BVexkl/l1+yAaSEBJ4zyix54I/iC0skC5xvfMTE4jNJqAlsf/FDTaQ
+        BhGB/4wSp5etZAVxmAWOMUrsvfOTBaSKX0BR4uqPx4wgNq+AncTMc7vBprIIqEosXHsAbJKo
+        QJjEyW0tUDWCEidnPgHr5RSwl/g2axoziM0sIC5x68l8JghbXqJ562xmiLMPsUvcWm7RxcgB
+        ZLtIHNiWDhEWlnh1fAs7hC0l8bK/Dcqullh58gjY0RICHYwSW/ZfgHrfWGL/0slMIHOYBTQl
+        1u/ShwgrSuz8PZcRYi2fxLuvPawQq3glOtqEIEqUJS4/uMsEYUtKLG7vZJvAqDQLyTOzkDww
+        C8kDsxCWLWBkWcUollpQnJueWmxYYIIc25sYwWlay2IH455zPocYBTgYlXh4X2R8ixViTSwr
+        rsw9xCjBwawkwpuq/TlWiDclsbIqtSg/vqg0J7X4EKMpMKwnMkuJJucDc0heSbyhqZGxsbGF
+        iaGZqaGhkjgvx4+LsUIC6YklqdmpqQWpRTB9TBycUg2MWkdTU5UD35r9mTk3s0CapziH/4rd
+        xyYfi89eMmnXN+w3Or1NIplB41bI+zdvJt4+czxqodS68/8L36hd7+lfvPHEhosm2unxYZ+W
+        tapqC1ixXZmywOZ6/fOJnnc4p1+aOIl3Bcuk2yvy5JdIvt06q76s9ted9k2dXFHWRSWtT8w9
+        O1xm6HBrKbEUZyQaajEXFScCAMLL5vvpAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMIsWRmVeSWpSXmKPExsWy7bCSvG7Vx2+xBhvO81jcn9fKaLFxxnpW
+        i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
+        sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
+        HsVlk5Kak1mWWqRvl8CV8bfvElPBFa2KntvvmBsYFyh2MXJySAiYSFw8+Z25i5GLQ0hgN6NE
+        97a/LBAJSYlpF48CJTiAbGGJw4eLIWreMkqs3tfNCFIjLJAucb3zExOIzSagJbH/xQ02kCIR
+        gf+MEg/bjjGCOMwCxxglPq5YzwrR/oFRYvLz36wgLfwCihJXfzwGG8UrYCcx89xuNhCbRUBV
+        YuHaA2BjRQXCJHYuecwEUSMocXLmE7DzOAXsJb7NmsYMYjMLqEv8mXcJyhaXuPVkPhOELS/R
+        vHU28wRG4VlI2mchaZmFpGUWkpYFjCyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGC
+        o1ZLawfjiRPxhxgFOBiVeHgdsr/FCrEmlhVX5h5ilOBgVhLhTdX+HCvEm5JYWZValB9fVJqT
+        WnyIUZqDRUmcVz7/WKSQQHpiSWp2ampBahFMlomDU6qBUUPjxK3mjDfvVZKe+dXzbP/113KJ
+        34lbYRLqM86rrfg2+9juqfv+buT880pySfiEaJtd//9FLyj6oqUbOuX4FI2nPfOFuc7wRmxw
+        O8TELxituFHy0POzoenpK8t9go/e3CF4eP0Xw+nKBzI9uU3M9RgOPDuyv27rkpm6Z+vmPrHW
+        4TE9FXFvs4QSS3FGoqEWc1FxIgA03wJD1gIAAA==
+X-CMS-MailID: 20191216025242epcas1p4af6a46c4d50f5e41a44d50b0fdfc1825
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190919142329eucas1p299762f99dd55a5d625633ceec84219f9
+References: <20190919142236.4071-1-a.swigon@samsung.com>
+        <CGME20190919142329eucas1p299762f99dd55a5d625633ceec84219f9@eucas1p2.samsung.com>
+        <20190919142236.4071-9-a.swigon@samsung.com>
+        <693e250d-9656-df67-9685-188020b43542@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=20
-> >>  +
-> >>  +	desc =3D &charger->desc;
-> >>  +	desc->name =3D "usb-charger";
-> >>  +	desc->properties =3D usb_charger_properties;
-> >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
-> >>  +	desc->get_property =3D usb_charger_get_property;
-> >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
-> >
-> > What's your further plan for this generic USB charger?
-> > To support BC1.2, we need to know charger type, and how we could get
-> > it?
-> >
-> > Peter
->=20
-> Well I don't really know. The USB role framework does not give any info a=
-bout
-> what's plugged.
->=20
+Hi,
 
-What's the use case for this patch set? How it be used?
+On 12/16/19 9:51 AM, Chanwoo Choi wrote:
+> On 9/19/19 11:22 PM, Artur Świgoń wrote:
+>> From: Artur Świgoń <a.swigon@partner.samsung.com>
+>>
+>> This patch adds two fields to the Exynos4412 DTS:
+>>   - parent: to declare connections between nodes that are not in a
+>>     parent-child relation in devfreq;
+>>   - #interconnect-cells: required by the interconnect framework.
+>>
+>> Please note that #interconnect-cells is always zero and node IDs are not
+>> hardcoded anywhere. The above-mentioned parent-child relation in devfreq
+>> means that there is a shared power line ('devfreq' property). The 'parent'
+>> property only signifies an interconnect connection.
+>>
+>> Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
+>> ---
+>>  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
+>>  arch/arm/boot/dts/exynos4412.dtsi               | 9 +++++++++
+>>  2 files changed, 10 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+>> index ea55f377d17c..bdd61ae86103 100644
+>> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+>> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+>> @@ -106,6 +106,7 @@
+>>  &bus_leftbus {
+>>  	devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+>>  	vdd-supply = <&buck3_reg>;
+>> +	parent = <&bus_dmc>;
+> 
+> As I mentioned on other reply,
+> I'm not sure to use the specific 'parent' property to make
+> the connection between buses. If possible, you better to
+> use the standard way like OF graph. Except for making
+> the connection between buses by 'parent' property,
+> looks good to me.
 
-Thanks,
-Peter
+I tried to think it continuously. I withdraw the my opinion
+using OF graph. If you make the property name like the following
+example, it is possible for exynos.
+- exynos,interconnect-parent-node = <&bus_dmc>; or other proper name.
 
-> -Paul
->=20
->=20
-> >
-> >>  +
-> >>  +	charger->charger =3D devm_power_supply_register(dev, desc, &cfg);
-> >>  +	if (IS_ERR(charger->charger)) {
-> >>  +		dev_err(dev, "Unable to register charger");
-> >>  +		return PTR_ERR(charger->charger);
-> >>  +	}
-> >>  +
-> >>  +	err =3D usb_role_switch_register_notifier(charger->role,
-> >> &charger->nb);
-> >>  +	if (err) {
-> >>  +		dev_err(dev, "Unable to register USB role switch notifier");
-> >>  +		return err;
-> >>  +	}
-> >>  +
-> >>  +	return devm_add_action_or_reset(dev, usb_charger_unregister,
-> >> charger);
-> >>  +}
-> >>  +
-> >>  +static const struct of_device_id usb_charger_of_match[] =3D {
-> >>  +	{ .compatible =3D "usb-charger" },
-> >>  +	{ /* sentinel */ },
-> >>  +};
-> >>  +MODULE_DEVICE_TABLE(of, usb_charger_of_match);  +  +static struct
-> >> platform_driver usb_charger_driver =3D {
-> >>  +	.driver =3D {
-> >>  +		.name =3D "usb-charger",
-> >>  +		.of_match_table =3D of_match_ptr(usb_charger_of_match),
-> >>  +	},
-> >>  +	.probe =3D usb_charger_probe,
-> >>  +};
-> >>  +module_platform_driver(usb_charger_driver);
-> >>  +
-> >>  +MODULE_DESCRIPTION("Simple USB charger driver");
-> >> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-> >> +MODULE_LICENSE("GPL");
-> >>  --
-> >>  2.24.0
-> >>
-> >
-> > --
-> >
-> > Thanks,
-> > Peter Chen
->=20
+Regardless of existing 'devfreq' property, I think you better to
+make the connection between buses for only interconnect as following
+example: This make it possible user can draw the correct tree by tracking
+the 'exynos,interconnect-parent-node' value.
 
+diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+index ea55f377d17c..53f87f46e161 100644
+--- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
++++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+@@ -90,6 +90,7 @@
+ &bus_dmc {
+        devfreq-events = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+        vdd-supply = <&buck1_reg>;
++       #interconnect-cells = <0>;
+        status = "okay";
+ };
+ 
+@@ -106,6 +107,8 @@
+ &bus_leftbus {
+        devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+        vdd-supply = <&buck3_reg>;
++       exynos,interconnect-parent-node = <&bus_dmc>;
++       #interconnect-cells = <0>;
+        status = "okay";
+ };
+ 
+@@ -116,6 +119,8 @@
+ 
+ &bus_display {
+        devfreq = <&bus_leftbus>;
++       exynos,interconnect-parent-node = <&bus_leftbus>;
++       #interconnect-cells = <0>;
+        status = "okay";
+ };
+
+
+> 
+> 
+>>  	status = "okay";
+>>  };
+>>  
+>> diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
+>> index d20db2dfe8e2..a70a671acacd 100644
+>> --- a/arch/arm/boot/dts/exynos4412.dtsi
+>> +++ b/arch/arm/boot/dts/exynos4412.dtsi
+>> @@ -390,6 +390,7 @@
+>>  			clocks = <&clock CLK_DIV_DMC>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_dmc_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -398,6 +399,7 @@
+>>  			clocks = <&clock CLK_DIV_ACP>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_acp_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -406,6 +408,7 @@
+>>  			clocks = <&clock CLK_DIV_C2C>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_dmc_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -459,6 +462,7 @@
+>>  			clocks = <&clock CLK_DIV_GDL>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_leftbus_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -467,6 +471,7 @@
+>>  			clocks = <&clock CLK_DIV_GDR>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_leftbus_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -475,6 +480,7 @@
+>>  			clocks = <&clock CLK_ACLK160>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_display_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -483,6 +489,7 @@
+>>  			clocks = <&clock CLK_ACLK133>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_fsys_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -491,6 +498,7 @@
+>>  			clocks = <&clock CLK_ACLK100>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_peri_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>> @@ -499,6 +507,7 @@
+>>  			clocks = <&clock CLK_SCLK_MFC>;
+>>  			clock-names = "bus";
+>>  			operating-points-v2 = <&bus_leftbus_opp_table>;
+>> +			#interconnect-cells = <0>;
+>>  			status = "disabled";
+>>  		};
+>>  
+>>
+> 
+> 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
