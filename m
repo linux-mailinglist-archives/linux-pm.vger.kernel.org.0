@@ -2,142 +2,266 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A203F12011F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 10:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8D5120233
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 11:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbfLPJ2N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 04:28:13 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37053 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727274AbfLPJ2N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 04:28:13 -0500
-Received: by mail-wr1-f65.google.com with SMTP id w15so6344696wru.4
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 01:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HKgaKFvzVnMf8Fep7rLjESTFRX5FlsKByugoFxPEX+Q=;
-        b=tguXRnUtty/NeZCDDc1tjGsX0/RigtL2RoDbPUqnUkylyzYfEOzMchvua4eCOFsmr1
-         TD3uVNfmVIfxHHbzpTYI3asZNBylUmzG11akmDnLo6eeuB9bVm4c9ubCnI06nmF4y+Tm
-         dfB28eQM6bmUWvvdWSqHTj3URODh4Ym0EjF+FGGHE7DiW9WqorzB/SKN0dJrWBZGzKrs
-         FYJkJPzWZno3F8nDPHSFzNVXEPfetKK+5SyhTONDs4PbqvZsKv4LkcyqZQrwdFE8AfE8
-         BofXIHS+2IC3lv7IQQq8GQbFFoCIXNku9js3REkdkAt+Krk159jh8jCNiXsDlXWKmE71
-         iAGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HKgaKFvzVnMf8Fep7rLjESTFRX5FlsKByugoFxPEX+Q=;
-        b=QNp+Ziqj518VMc2MkQqVPIqTlm3mvz3ZDkXTmgrhN3Mqh2hSnnnmMdq9Da5WzWf27f
-         QiM+dtBCp7W8PQrkXKbxGWpTJcwKsVTmspEs22zs820Rw/ugmt/jNIbvax3lfCmxjjYf
-         /4UX7yVBmMAMKtOOo3urtqS9SI35tLTVEjJJwumsR4flqi6ds20kCUdurVSgUNvV1bwB
-         KjVrluGdIQL7OSjxom2CI/4+R+c1MjD7aejt05JJs0//ftud/i67AOb9Fs+iKf00eMpW
-         1fTo/hPRp9q6aX00A+FNopUkdd+NV/5Z9z9ocejJd5/cUrLqQ5u65g90ICaBt9tSX+Uv
-         Q2Xw==
-X-Gm-Message-State: APjAAAU7WFGRjkmC9i0dGgwriz8smA1XCqaYig7vdkYljMj4N1h175t5
-        ZA/ts7TSOBQ2STpcrDl348qx6M/LN+8=
-X-Google-Smtp-Source: APXvYqzw05Ue1vhGzja88dxMD7DZNCdY7g6P2bOsTX2WubzK+Dhvb+tdDWvPII2t0je9y705rqsNeA==
-X-Received: by 2002:adf:d184:: with SMTP id v4mr29096486wrc.76.1576488490480;
-        Mon, 16 Dec 2019 01:28:10 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:44d6:972c:f996:2f15? ([2a01:e34:ed2f:f020:44d6:972c:f996:2f15])
-        by smtp.googlemail.com with ESMTPSA id e18sm20739696wrr.95.2019.12.16.01.28.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2019 01:28:09 -0800 (PST)
-Subject: Re: [PATCH v2] drivers: thermal: tsens: Work with old DTBs
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org, swboyd@chromium.org,
-        stephan@gerhold.net, olof@lixom.net
-Cc:     linux-pm@vger.kernel.org
-References: <cover.1576146898.git.amit.kucheria@linaro.org>
- <cea3317c5d793db312064d68b261ad420a4a81b1.1576146898.git.amit.kucheria@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <be07b05d-421f-35a7-0582-a04a226c8c2c@linaro.org>
-Date:   Mon, 16 Dec 2019 10:28:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1727198AbfLPKUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 05:20:08 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:42253 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727381AbfLPKUG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 05:20:06 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191216102004euoutp0134a477379f30b811db1dad1036da6663~g0sMKa2ii2473624736euoutp01f
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 10:20:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191216102004euoutp0134a477379f30b811db1dad1036da6663~g0sMKa2ii2473624736euoutp01f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576491604;
+        bh=nYOnw7VM3AQaKXg0AwDk97XPBQ6saxFKGxNXr/emicY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=eYHRni0uoMBWA/X1vsq4VNG/nZqULQ2XRnpoTF3+Knm+ORvTWrk9j1mHS9JlbVjvT
+         HrI3jHsXbwpZ9sP0hBeci/GS6KJ4h6dNb5oWNwOQPxcMVlu0B7s9O2Qx5YXIGLnc7S
+         Ea55FK4exGkgLKm40eF7BiOwlcxX8ip8vQu3vSGw=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191216102004eucas1p175ff0eda6b41ee4262332d32b0f962ed~g0sLycfGg2772827728eucas1p1T;
+        Mon, 16 Dec 2019 10:20:04 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id A1.30.61286.45A57FD5; Mon, 16
+        Dec 2019 10:20:04 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191216102003eucas1p280d2bb32bc439a52353536dca87246f0~g0sLan12Q0541205412eucas1p2e;
+        Mon, 16 Dec 2019 10:20:03 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191216102003eusmtrp16a1c99a4a2ca4667d022a438920f5bf0~g0sLZmPfB2660126601eusmtrp1C;
+        Mon, 16 Dec 2019 10:20:03 +0000 (GMT)
+X-AuditID: cbfec7f2-f0bff7000001ef66-1e-5df75a54ffd3
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 89.7C.07950.35A57FD5; Mon, 16
+        Dec 2019 10:20:03 +0000 (GMT)
+Received: from AMDC3555.digital.local (unknown [106.120.51.67]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191216102003eusmtip2c309d38f4ba35a8edcad52d2a6e88463~g0sKs93hs0560005600eusmtip2U;
+        Mon, 16 Dec 2019 10:20:03 +0000 (GMT)
+From:   =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, kgene@kernel.org, krzk@kernel.org,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com
+Subject: [PATCH] devfreq: exynos-bus: Clean up code
+Date:   Mon, 16 Dec 2019 11:19:48 +0100
+Message-Id: <20191216101948.526-1-a.swigon@samsung.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <cea3317c5d793db312064d68b261ad420a4a81b1.1576146898.git.amit.kucheria@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfSxVcRjH+91zzr2HdTkum8dL2N2sqeVl2jobNZpx/ZP+aNPYXQ7OsOtt
+        96D4QyIqI0ZeK2tlsktzXdy4ouZa1sj1HmuGiZvUH15vlpTrUP77/J7n+31+3+e3H4lJOglH
+        MiE5jVUmM4lSoSWufb9jOHctwiT37umzoefq8hHdWt1C0J82jQRdNleK0yWLqxhtMKhF9Mfc
+        7yJaszhF0OO6J0J6o7gf0dWGXgH9qn9WRH++0yikq8tXhAFWMo3qgVDWVn9b9rBdhWQbGper
+        eISlfyybmJDBKr0uRVnGm0ZFqWvSWxPGeiwHfXMqRBYkUOdBr3+LCpElKaEaETS8bsX4wyaC
+        7oIRzKySUBsI/tSFHTlmt8cEvOglgpaqOuE/x/iaGplVQioQyirmRWa2o/IR1OSeNjNGVQqg
+        tTvAzLaUL3Qb8vY1JIlT7jCpcjeXxdQFaGpsFPCXuUKT+h3G123gQ80XnB/jCnkdjw+SAqUV
+        Qf1eD8EbgqC4fUjEsy18G2g/ZGcYLC/CeeZgqWuO4M05CDQN/Rjf8AP9wChhDoRRHtCi8+LL
+        gTDzS3uQEygrmP5hw2ewgjJtFcaXxXC/QMKjFHQ1VrwRILdp6nC2DIYfVeL8c8qhbeGeqBS5
+        1R5brPbYYrX/IzxDmArZs+lcUhzL+SSzNz05JolLT47zjElJ0qD9/zS4N7DeibbGovsQRSLp
+        SXGAYlsuIZgMLjOpDwGJSe3EnW4muUQcy2RmscqUG8r0RJbrQ04kLrUX+z5fkUuoOCaNVbBs
+        Kqs86gpIC8ccFLUcqrJWdsmcqqYvljHWXxeKfup3HYzEVna4TWhwebqw1FSykuHjGZQdkbpX
+        c9kvzCXSOiT0hCO3rOuP+x096S1wHX+qvr4bM3n2yrAif3Urz7iz3D71omp+JJJqDsFsjRUZ
+        Q/Onspil9bsegpk34l7thElh6HD2Z5sdgnXhUpyLZ3zOYEqO+Qu/1w7cSwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRmVeSWpSXmKPExsVy+t/xe7rBUd9jDb4uNbG4P6+V0WLjjPWs
+        Fte/PGe1mHR/AotF/+PXzBbnz29gtzjb9IbdYtPja6wWl3fNYbP43HuE0WLG+X1MFmuP3GW3
+        uN24gs1ixuSXbA58HptWdbJ5bF5S79G3ZRWjx+dNcgEsUXo2RfmlJakKGfnFJbZK0YYWRnqG
+        lhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZ3y+yF3xUqrjyfAlzA+Mr6S5GTg4JAROJ
+        u98uMXUxcnEICSxllNjf+ZoVIiEh8XH9DShbWOLPtS42iKJPjBJXFm4FS7AJOEpMmvqAHSQh
+        ItDJKNG1+RzYKGaBRUwSDR+fMIFUCQsYS+w+3wxUxcHBIqAqcXWVKkiYV8BcYvWKFUwQG+Ql
+        Vm84wAwRF5Q4OfMJC0g5s4C6xPp5QiBhZqCS5q2zmScw8s9CUjULoWoWkqoFjMyrGEVSS4tz
+        03OLjfSKE3OLS/PS9ZLzczcxAmNp27GfW3Ywdr0LPsQowMGoxMPrkP0tVog1say4MvcQowQH
+        s5II7w6F77FCvCmJlVWpRfnxRaU5qcWHGE2BPpjILCWanA+M87ySeENTQ3MLS0NzY3NjMwsl
+        cd4OgYMxQgLpiSWp2ampBalFMH1MHJxSDYz75r49H/SsaGvczvwvWgIrLvxQ1/0b0r89IGJ/
+        SJyfs9ovkTMnrE5Gz/JSvCfySb5NZ7/V7KpdEpm8Z490WcmtTV00c2WAOIcl7y1bM/fnB9Py
+        VokXsL9cI8Rfx9vIwfYjy8Zv2s/v9iVsndtn7bAtcl7aIPio/lUf869H37sK38/b/jPxeo4S
+        S3FGoqEWc1FxIgBq4pRUuwIAAA==
+X-CMS-MailID: 20191216102003eucas1p280d2bb32bc439a52353536dca87246f0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191216102003eucas1p280d2bb32bc439a52353536dca87246f0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191216102003eucas1p280d2bb32bc439a52353536dca87246f0
+References: <CGME20191216102003eucas1p280d2bb32bc439a52353536dca87246f0@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/12/2019 11:38, Amit Kucheria wrote:
-> In order for the old DTBs to continue working, the new interrupt code
-> must not return an error if interrupts are not defined. Don't return an
-> error in case of -ENXIO.
-> 
-> Fixes: 634e11d5b450a ("drivers: thermal: tsens: Add interrupt support")
-> Suggested-by: Stephan Gerhold <stephan@gerhold.net>
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+This patch improves code readability by changing the following construct:
 
-Applied.
+>    if (cond)
+>        goto passive;
+>    foo();
+>    goto out;
+> passive:
+>    bar();
+> out:
 
+into this:
 
+>    if (cond)
+>        bar();
+>    else
+>        foo();
+
+as well as eliminating a few more goto statements and fixing header
+includes.
+
+Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+---
+ drivers/devfreq/exynos-bus.c | 54 +++++++++++++-----------------------
+ 1 file changed, 19 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index 19d9f9f8ced2..7f5917d59072 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -15,11 +15,10 @@
+ #include <linux/device.h>
+ #include <linux/export.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/pm_opp.h>
+ #include <linux/platform_device.h>
+ #include <linux/regulator/consumer.h>
+-#include <linux/slab.h>
+ 
+ #define DEFAULT_SATURATION_RATIO	40
+ 
+@@ -301,10 +300,9 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+ 	profile->exit = exynos_bus_exit;
+ 
+ 	ondemand_data = devm_kzalloc(dev, sizeof(*ondemand_data), GFP_KERNEL);
+-	if (!ondemand_data) {
+-		ret = -ENOMEM;
+-		goto err;
+-	}
++	if (!ondemand_data)
++		return -ENOMEM;
++
+ 	ondemand_data->upthreshold = 40;
+ 	ondemand_data->downdifferential = 5;
+ 
+@@ -314,15 +312,14 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+ 						ondemand_data);
+ 	if (IS_ERR(bus->devfreq)) {
+ 		dev_err(dev, "failed to add devfreq device\n");
+-		ret = PTR_ERR(bus->devfreq);
+-		goto err;
++		return PTR_ERR(bus->devfreq);
+ 	}
+ 
+ 	/* Register opp_notifier to catch the change of OPP  */
+ 	ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to register opp notifier\n");
+-		goto err;
++		return ret;
+ 	}
+ 
+ 	/*
+@@ -332,17 +329,16 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+ 	ret = exynos_bus_enable_edev(bus);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to enable devfreq-event devices\n");
+-		goto err;
++		return ret;
+ 	}
+ 
+ 	ret = exynos_bus_set_event(bus);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to set event to devfreq-event devices\n");
+-		goto err;
++		return ret;
+ 	}
+ 
+-err:
+-	return ret;
++	return 0;
+ }
+ 
+ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+@@ -351,7 +347,6 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+ 	struct device *dev = bus->dev;
+ 	struct devfreq_passive_data *passive_data;
+ 	struct devfreq *parent_devfreq;
+-	int ret = 0;
+ 
+ 	/* Initialize the struct profile and governor data for passive device */
+ 	profile->target = exynos_bus_target;
+@@ -359,16 +354,13 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+ 
+ 	/* Get the instance of parent devfreq device */
+ 	parent_devfreq = devfreq_get_devfreq_by_phandle(dev, 0);
+-	if (IS_ERR(parent_devfreq)) {
+-		ret = -EPROBE_DEFER;
+-		goto err;
+-	}
++	if (IS_ERR(parent_devfreq))
++		return -EPROBE_DEFER;
+ 
+ 	passive_data = devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);
+-	if (!passive_data) {
+-		ret = -ENOMEM;
+-		goto err;
+-	}
++	if (!passive_data)
++		return -ENOMEM;
++
+ 	passive_data->parent = parent_devfreq;
+ 
+ 	/* Add devfreq device for exynos bus with passive governor */
+@@ -377,12 +369,10 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+ 	if (IS_ERR(bus->devfreq)) {
+ 		dev_err(dev,
+ 			"failed to add devfreq dev with passive governor\n");
+-		ret = PTR_ERR(bus->devfreq);
+-		goto err;
++		return PTR_ERR(bus->devfreq);
+ 	}
+ 
+-err:
+-	return ret;
++	return 0;
+ }
+ 
+ static int exynos_bus_probe(struct platform_device *pdev)
+@@ -427,19 +417,13 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 		goto err_reg;
+ 
+ 	if (passive)
+-		goto passive;
+-
+-	ret = exynos_bus_profile_init(bus, profile);
+-	if (ret < 0)
+-		goto err;
++		ret = exynos_bus_profile_init_passive(bus, profile);
++	else
++		ret = exynos_bus_profile_init(bus, profile);
+ 
+-	goto out;
+-passive:
+-	ret = exynos_bus_profile_init_passive(bus, profile);
+ 	if (ret < 0)
+ 		goto err;
+ 
+-out:
+ 	max_state = bus->devfreq->profile->max_state;
+ 	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
+ 	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
 -- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.17.1
 
