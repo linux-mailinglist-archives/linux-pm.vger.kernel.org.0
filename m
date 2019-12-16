@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F40D911FC40
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 01:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F55F11FC4D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 01:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726445AbfLPApc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Dec 2019 19:45:32 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:61469 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfLPApb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Dec 2019 19:45:31 -0500
+        id S1726299AbfLPAsl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Dec 2019 19:48:41 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:51907 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726373AbfLPAsl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Dec 2019 19:48:41 -0500
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191216004528epoutp02c271c8dd01919a131a706aa060b90dd2~gs2ffW1y-1304813048epoutp02S
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 00:45:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191216004528epoutp02c271c8dd01919a131a706aa060b90dd2~gs2ffW1y-1304813048epoutp02S
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191216004837epoutp0145e562fbf6e547330acd546be6e56984~gs5P8e6yA1035910359epoutp01i
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 00:48:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191216004837epoutp0145e562fbf6e547330acd546be6e56984~gs5P8e6yA1035910359epoutp01i
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576457128;
-        bh=8SrOS0uNXUB2064t8Tnx6zhtsjBJWxM95cvkex1+2Ew=;
+        s=mail20170921; t=1576457317;
+        bh=U46RYH5Ir7QePRkd4DNR6PbEF9ch+pNSpdpoJ6yOfuE=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=HmShdL8ANtJE85uKW5k2r81+JX/mfv4FtW4PoWN3Mw3vVkG/TtphhMQUkRrICwezq
-         WWrgckvyNZv5f5LFyjSnrMvCdjAd9I/QwAB5heOi3MtRHRCV1c4JN7MvYusc7OhQ4s
-         qf7hAyvtRAER81v6N3vbUM7ORGG8LKlNiMyz706Q=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20191216004527epcas1p4efe5964a2622230fc39c68110c5adf1d~gs2eVX1NW1662016620epcas1p4K;
-        Mon, 16 Dec 2019 00:45:27 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 47bjH752xxzMqYm3; Mon, 16 Dec
-        2019 00:45:23 +0000 (GMT)
+        b=o6hbFN8P404aMsrvvqJ21NQYP1saniqafyu0Vn8Q48N8XOiFVNpwTOE2XHQK8XTQA
+         WeRtQnlanhkNL9BQRwgEyzThnG3sA9cPzVtg2zu1RRd9666OcgAhcxxCqon562mAut
+         1gEXOYnlHn/k6/BSXuqqqqXPxboBGuayW5AXBriQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20191216004837epcas1p3a5b08c2345a9838ff368c8bad1a59d72~gs5Pg2yDF0412704127epcas1p39;
+        Mon, 16 Dec 2019 00:48:37 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 47bjLn4yGbzMqYkd; Mon, 16 Dec
+        2019 00:48:33 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        87.EC.48019.3A3D6FD5; Mon, 16 Dec 2019 09:45:23 +0900 (KST)
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6E.1A.51241.164D6FD5; Mon, 16 Dec 2019 09:48:33 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20191216004522epcas1p3dd06bfb24212c2fee558e7a7a23cf65c~gs2aaPWXQ2782227822epcas1p3L;
-        Mon, 16 Dec 2019 00:45:22 +0000 (GMT)
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191216004833epcas1p1b594c5fdd00b683c18babd188fb563c3~gs5LxveXl0983709837epcas1p1p;
+        Mon, 16 Dec 2019 00:48:33 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191216004522epsmtrp195288207fd38caf8dc6ee3651a632978~gs2aZcB2Y2107121071epsmtrp19;
-        Mon, 16 Dec 2019 00:45:22 +0000 (GMT)
-X-AuditID: b6c32a38-257ff7000001bb93-52-5df6d3a38a79
+        20191216004833epsmtrp16d3a93010cb15881b0164c12e4bcf7f5~gs5Lw39_o2216622166epsmtrp13;
+        Mon, 16 Dec 2019 00:48:33 +0000 (GMT)
+X-AuditID: b6c32a39-5bab39c00001c829-40-5df6d46123e3
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        81.C8.10238.2A3D6FD5; Mon, 16 Dec 2019 09:45:22 +0900 (KST)
+        05.F8.10238.164D6FD5; Mon, 16 Dec 2019 09:48:33 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191216004522epsmtip2a349e34b2a186331be05484d1c596d08~gs2aHWWc12795527955epsmtip2n;
-        Mon, 16 Dec 2019 00:45:22 +0000 (GMT)
+        20191216004832epsmtip20cbc07c0bc599c8bbc98b5d37a351388~gs5Lay3th2795527955epsmtip2z;
+        Mon, 16 Dec 2019 00:48:32 +0000 (GMT)
 Subject: Re: [RFC PATCH v2 08/11] arm: dts: exynos: Add parents and
  #interconnect-cells to Exynos4412
 To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
@@ -60,45 +60,45 @@ Cc:     myungjoo.ham@samsung.com, inki.dae@samsung.com,
         b.zolnierkie@samsung.com, krzk@kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <693e250d-9656-df67-9685-188020b43542@samsung.com>
-Date:   Mon, 16 Dec 2019 09:51:58 +0900
+Message-ID: <f0453b39-fd05-9824-ee24-39b6bd587876@samsung.com>
+Date:   Mon, 16 Dec 2019 09:55:08 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
 In-Reply-To: <20190919142236.4071-9-a.swigon@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGJsWRmVeSWpSXmKPExsWy7bCmvu7iy99iDfZe0LC4P6+V0WLjjPWs
-        FvOPnGO1uPL1PZvF9L2b2Cwm3Z/AYnH+/AZ2ixV3P7JabHp8jdXi8q45bBafe48wWsw4v4/J
-        Yu2Ru+wWtxtXsFnMmPySzYHfY9OqTjaPO9f2sHnc7z7O5LF5Sb3Hxnc7mDz6tqxi9Pi8SS6A
-        PSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfobiWF
-        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgWWBXnFibnFpXrpecn6ulaGBgZEpUGFC
-        dsaqyfNYCvrkKmbMmcbWwLhQvIuRk0NCwERi2vf/bF2MXBxCAjsYJd71vWEGSQgJfGKUmN4f
-        BpH4xihxp/07M0xH/7o2RojEXkaJrgmtUM57RonzXx6zgVQJC6RLXO/8xASSEBH4zyhxetlK
-        VhCHWeAYo8TeOz9ZQKrYBLQk9r+4AdbBL6AocfXHY0YQm1fATuLtvadMIDaLgKrEp7NXweKi
-        AmESJ7e1QNUISpyc+QRoDgcHp4ClROdsfZAws4C4xK0n85kgbHmJ5q2zoc7exS4xaZ0qhO0i
-        8WdDLzuELSzx6vgWKFtK4mV/G5RdLbHy5BFwwEgIdDBKbNl/gRUiYSyxf+lkJpC9zAKaEut3
-        6UOEFSV2/p7LCLGXT+Ld1x5WkBIJAV6JjjYhiBJlicsP7jJB2JISi9s72SYwKs1C8swsJB/M
-        QvLBLIRlCxhZVjGKpRYU56anFhsWmCDH9iZGcJrWstjBuOeczyFGAQ5GJR7eFxnfYoVYE8uK
-        K3MPMUpwMCuJ8KZqf44V4k1JrKxKLcqPLyrNSS0+xGgKDOuJzFKiyfnAHJJXEm9oamRsbGxh
-        YmhmamioJM7L8eNirJBAemJJanZqakFqEUwfEwenVANjbBfLzxqn93mu+0qKTX8UWjoLZ7/O
-        dekWjwi+U+qpytI+wXL2zXPzGbZfE/4Rl2g1Z/UlWcXpLRt3qi8OzBD+1swyI8p83Y7opp6b
-        K49b5SdX3Sq8/uuN68T59UdK/23ZHvLg2LkP1XVB0atn1antT+MK+Vq4WJcr7bRJm9Me6T2P
-        naIvvAlQYinOSDTUYi4qTgQAXewU4OkDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsWy7bCSvO6iy99iDZo+aVncn9fKaLFxxnpW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOJsWRmVeSWpSXmKPExsWy7bCmvm7ilW+xBjtOaljcn9fKaLFxxnpW
         i/lHzrFaXPn6ns1i+t5NbBaT7k9gsTh/fgO7xYq7H1ktNj2+xmpxedccNovPvUcYLWac38dk
         sfbIXXaL240r2CxmTH7J5sDvsWlVJ5vHnWt72Dzudx9n8ti8pN5j47sdTB59W1YxenzeJBfA
-        HsVlk5Kak1mWWqRvl8CVsWryPJaCPrmKGXOmsTUwLhTvYuTkkBAwkehf18bYxcjFISSwm1Hi
-        ypG5LBAJSYlpF48ydzFyANnCEocPF0PUvGWUmNHbwgpSIyyQLnG98xMTSEJE4D+jxMO2Y2CT
-        mAWOMUp8XLGeFW7sgqMPmUBa2AS0JPa/uMEGYvMLKEpc/fGYEcTmFbCTeHvvKVgNi4CqxKez
-        V8HiogJhEjuXPGaCqBGUODnzCQvISZwClhKds/VBwswC6hJ/5l1ihrDFJW49mc8EYctLNG+d
-        zTyBUXgWku5ZSFpmIWmZhaRlASPLKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4JjV
-        0tzBeHlJ/CFGAQ5GJR5eh+xvsUKsiWXFlbmHGCU4mJVEeFO1P8cK8aYkVlalFuXHF5XmpBYf
-        YpTmYFES532adyxSSCA9sSQ1OzW1ILUIJsvEwSnVwBj76rf0OfvNDTY1mfliR3v2OvZpVap/
-        t+Q58FRp2wzGm6sC0jt/zpeUZwx/mz1jf9PK7d69e7R8fxsVGH8Xv70nNeD4jCs9O5IlXh3+
-        FONhE8Rz89xV+Yld4imrir30TJcskbt7o2OFE98udVlduRCD3woCT329tB7ecLx40d+r3Hlq
-        XF/+dCWW4oxEQy3mouJEAE1MdK/VAgAA
-X-CMS-MailID: 20191216004522epcas1p3dd06bfb24212c2fee558e7a7a23cf65c
+        HpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0t5JC
+        WWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAh
+        O+Pem/NsBVPkKu4t287ewLhYvIuRk0NCwERixYZHLF2MXBxCAjsYJb6dmcsI4XxilFjVdZoR
+        pEpI4BujRMfhSpiOP4v/MkMU7WWUWHfnAiuE855Ron36E2aQKmGBdInrnZ+YQBIiAv8ZJU4v
+        WwlWxSxwjFFi752fLCBVbAJaEvtf3GADsfkFFCWu/ngMto9XwE5i28tf7CA2i4CqxMmPJ8Cm
+        igqESZzc1gJVIyhxcuYToDkcHJwClhKds/VBwswC4hK3nsxngrDlJZq3zgY7VUJgH7vErf/H
+        2CB+cJFYPnkfE4QtLPHq+BZ2CFtK4mV/G5RdLbHy5BE2iOYORokt+0H+BEkYS+xfOpkJZDGz
+        gKbE+l36EGFFiZ2/5zJCLOaTePe1hxWkREKAV6KjTQiiRFni8oO7UGslJRa3d7JNYFSaheSb
+        WUhemIXkhVkIyxYwsqxiFEstKM5NTy02LDBFju5NjOBErWW5g/HYOZ9DjAIcjEo8vA7Z32KF
+        WBPLiitzDzFKcDArifCman+OFeJNSaysSi3Kjy8qzUktPsRoCgzsicxSosn5wCySVxJvaGpk
+        bGxsYWJoZmpoqCTOy/HjYqyQQHpiSWp2ampBahFMHxMHp1QDY7oVW/ESuamLD1W8s1Wz+9mb
+        WOn1wvDhzbN26vFuv83UhXuirzdvdnWvvLGtaoHqxIW+VS82FJ3L+LNQvdpNhMXPLmJuWCbj
+        xXVrZPuqbsa8N090z9Q3ub3yxtK4m4c+79JY4r5zeXlqydHKJTc+rk1hrb+4TJQj0bX1+P6W
+        HS36JtN+nj56RomlOCPRUIu5qDgRAMnSFTfqAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsWy7bCSvG7ilW+xBv0X2C3uz2tltNg4Yz2r
+        xfwj51gtrnx9z2Yxfe8mNotJ9yewWJw/v4HdYsXdj6wWmx5fY7W4vGsOm8Xn3iOMFjPO72Oy
+        WHvkLrvF7cYVbBYzJr9kc+D32LSqk83jzrU9bB73u48zeWxeUu+x8d0OJo++LasYPT5vkgtg
+        j+KySUnNySxLLdK3S+DKuPfmPFvBFLmKe8u2szcwLhbvYuTkkBAwkfiz+C9zFyMXh5DAbkaJ
+        Z2+/skEkJCWmXTwKlOAAsoUlDh8uhqh5yyhxZmoLM0iNsEC6xPXOT0wgCRGB/4wSD9uOMYI4
+        zALHGCU+rljPCjd2wdGHTCAtbAJaEvtf3ABbwS+gKHH1x2NGEJtXwE5i28tf7CA2i4CqxMmP
+        J8BWiAqESexc8pgJokZQ4uTMJywgJ3EKWEp0ztYHCTMLqEv8mXeJGcIWl7j1ZD4ThC0v0bx1
+        NvMERuFZSLpnIWmZhaRlFpKWBYwsqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxgmNW
+        S3MH4+Ul8YcYBTgYlXh4HbK/xQqxJpYVV+YeYpTgYFYS4U3V/hwrxJuSWFmVWpQfX1Sak1p8
+        iFGag0VJnPdp3rFIIYH0xJLU7NTUgtQimCwTB6dUA6PTy5WLC+Pad8o6vjxarV8dEdJ2Y8fC
+        WuOpE9gZb664ZHDC71f5hs9rb9TNKo+YbKuy6XWm9I4/3h3n+AvPdXh8KuXQ/aoxmzn2j4T4
+        62eii6+6q/ttf/x8VUjozbcXzk0/lah/hqPjnI9hiPkjxon58SURysm7Fl/SFZrDYrRXloll
+        783lCiZKLMUZiYZazEXFiQDggDtC1QIAAA==
+X-CMS-MailID: 20191216004833epcas1p1b594c5fdd00b683c18babd188fb563c3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
@@ -113,6 +113,8 @@ Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+Hi,
 
 On 9/19/19 11:22 PM, Artur Świgoń wrote:
 > From: Artur Świgoń <a.swigon@partner.samsung.com>
@@ -143,13 +145,11 @@ On 9/19/19 11:22 PM, Artur Świgoń wrote:
 >  	vdd-supply = <&buck3_reg>;
 > +	parent = <&bus_dmc>;
 
-As I mentioned on other reply,
-I'm not sure to use the specific 'parent' property to make
-the connection between buses. If possible, you better to
-use the standard way like OF graph. Except for making
-the connection between buses by 'parent' property,
-looks good to me.
-
+As I mentioned on other patch,
+I'm not sure to use 'parent' property for this driver.
+If possible, we better to use the standard way like OF graph
+in order to make the tree between buses. Except for making
+the connection between the buses with 'parent', looks good to me.
 
 >  	status = "okay";
 >  };
