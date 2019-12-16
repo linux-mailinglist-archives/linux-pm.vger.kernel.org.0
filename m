@@ -2,206 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2618011F908
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Dec 2019 17:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1711D11FC00
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Dec 2019 01:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbfLOQe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Dec 2019 11:34:28 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39731 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbfLOQe1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Dec 2019 11:34:27 -0500
-Received: by mail-pg1-f195.google.com with SMTP id b137so2275193pga.6
-        for <linux-pm@vger.kernel.org>; Sun, 15 Dec 2019 08:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ghT5Kc9OBgiGOqjlQfLZvwFJmWLdIUaugH1WNia88Pg=;
-        b=aaN0huOTqTAcMz2Z7rDunI9m2I0+1zBw8WlRPQ4oAztbBV51n15fDrnHoDDf9qmFWy
-         x3lM5Y17kCSR0YAokyyHZUzduAle1cqL375xDr6kcF8ddLuFN6jjI1R1G/lrlMvg3ceb
-         Lu3f58QI+iYA8Bm3Gixlt9pG5/6KAQfOu0m6s2RZf8VuHuqrAb629dXu7D1uuw6ZvdtN
-         eaAIeL0c2gU1azxZiHWfD06/4b5ZOgh/HDftzzMhMuWz6UZRd4OJWzzOgSYXhKKArtf8
-         3KTEbf9aVdTC1oviHSODmqBAbnHXd8MF1z2xrkJN04WsMIEUAfjVSW3uPALOqDzIVlSD
-         ANrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ghT5Kc9OBgiGOqjlQfLZvwFJmWLdIUaugH1WNia88Pg=;
-        b=C5IqgfsK989lfKTUlVJ7rJnKW7E7nMQ+Ivp72PiUgijkWwP+hltbdpuirDcFl71s1L
-         m+fK5Y+O5f+tKWkrGMs4KnIGv0C6H0b+bjsmBAgk2R5Y5PUPlsH2gatoLiPQpwUyH4UB
-         flbU13UY/Ii4f9QsmRehVFYGi7cLnuMY0SWqpySRIjUYHhAFMWcKz8iywGnrLB9HyL6I
-         HBwwLAbeso3VuYJxUxF4KQsg2UaDDJu+7G/5IIuYyqBl8hmIADNWZD9rTvcJ6MATg6QP
-         5tDzrwFgp3h8uVgkOzPVyxpCAeZJ2VAKBKBJ1CWi2hRIbORF1T5VMcDvLl0DfAuucG5J
-         11Pw==
-X-Gm-Message-State: APjAAAWQQo8Jk5rpiuOcQEPdD04/Ep0XDnkJRw+QRc5tGjDKMnQWHjly
-        maM1ZM2Lu/8R3lQJlBtDMbbPpg==
-X-Google-Smtp-Source: APXvYqxaeqjmzDCYUp2kbqW3li8Zq9eq9xVaQ/aWJQ7p70BQNpwES4jXFX1ZCsVQ6EvdVK5NNaFtBQ==
-X-Received: by 2002:aa7:9355:: with SMTP id 21mr11723007pfn.61.1576427667041;
-        Sun, 15 Dec 2019 08:34:27 -0800 (PST)
-Received: from localhost ([66.167.121.235])
-        by smtp.gmail.com with ESMTPSA id p16sm18304339pgi.50.2019.12.15.08.34.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2019 08:34:26 -0800 (PST)
-Date:   Sun, 15 Dec 2019 08:34:22 -0800
-From:   Sandeep Patil <sspatil@android.com>
-To:     Wei Wang <wvw@google.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, rui.zhang@intel.com,
-        edubezval@gmail.com, amit.kucheria@verdurent.com,
-        rjw@rjwysocki.net, daniel.lezcano@linaro.org
-Subject: Re: [PATCH v3 0/3] thermal: introduce by-name softlink
-Message-ID: <20191215163422.GC9148@google.com>
-References: <20191205071953.121511-1-wvw@google.com>
- <69dd3a7a-c5fe-3ae7-8a4d-c3939870eed8@linaro.org>
- <CAGXk5yrsmvHK_xwvp_kFNmSqKOZ7Ef3HrVBHYDMBmDsCz0FNSQ@mail.gmail.com>
- <0603228e-5f0b-d335-30ce-67cf0626a489@linaro.org>
- <20191211085400.GB500800@kroah.com>
- <CAGXk5yrFp1eeeadhJar_qJqJ9G1q2mn+5m8JW4705ouQDLqzsw@mail.gmail.com>
- <f0ebc98d-25f2-6326-c0d8-8dda543c4091@linaro.org>
- <CAGXk5yosq5saYWdsz2k+uCYZ5CNTR4zNR2nB3H7-=TQs07u8Sw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXk5yosq5saYWdsz2k+uCYZ5CNTR4zNR2nB3H7-=TQs07u8Sw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726426AbfLPAGH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Dec 2019 19:06:07 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:44164 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbfLPAGG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Dec 2019 19:06:06 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191216000603epoutp025bde8e819f54c32ae36f0c5afd4ca764~gsUFLZ-kT1533615336epoutp02k
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2019 00:06:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191216000603epoutp025bde8e819f54c32ae36f0c5afd4ca764~gsUFLZ-kT1533615336epoutp02k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576454763;
+        bh=yiZ2VagM8HQOxVfhO1tU2xkE4O7iWivvMoYcoWs9/co=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=QQGWYhJpqLx1u0TBnVvZeIz8cZd8yI/KunSJU6bTlEWjbmSqvNTQRdGEUt9LDmBHW
+         LAqVw4YFx0jP9jwxOOpalhDtuTwi5ZumqPdphTR7YGmVgQ20kwxqFZODMhZ34tL68K
+         OLFr6LTEVhDcQKaJ044NAGadCrD4GZeyFv4PNk7c=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191216000602epcas1p10a7aa2bd1d5ff5310c1200db1fd2a49c~gsUEMmMTR0396103961epcas1p1c;
+        Mon, 16 Dec 2019 00:06:02 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 47bhPg3ySvzMqYkc; Mon, 16 Dec
+        2019 00:05:59 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1C.E2.48019.66AC6FD5; Mon, 16 Dec 2019 09:05:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191216000557epcas1p1f82e6da04e99a0299a67a95f9abbfe7a~gsT-PEuY41073410734epcas1p1F;
+        Mon, 16 Dec 2019 00:05:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191216000557epsmtrp2747362009f1df9cf95c20b48d088a95b~gsT-LeGz72725127251epsmtrp2R;
+        Mon, 16 Dec 2019 00:05:57 +0000 (GMT)
+X-AuditID: b6c32a38-257ff7000001bb93-05-5df6ca66be89
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2C.66.10238.46AC6FD5; Mon, 16 Dec 2019 09:05:57 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191216000556epsmtip29edfa6046ffefe886e1ef5c8fd3a4e63~gsT_-5Ikl0780607806epsmtip2R;
+        Mon, 16 Dec 2019 00:05:56 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org
+Cc:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PM / devfreq: rk3399_dmc: Add COMPILE_TEST and
+ HAVE_ARM_SMCCC dependency
+Date:   Mon, 16 Dec 2019 09:12:28 +0900
+Message-Id: <20191216001228.5258-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMKsWRmVeSWpSXmKPExsWy7bCmnm7aqW+xBjO3iFpc//Kc1eJs0xt2
+        i8u75rBZfO49wmhxu3EFmwOrR9+WVYwenzfJBTBFZdtkpCampBYppOYl56dk5qXbKnkHxzvH
+        m5oZGOoaWlqYKynkJeam2iq5+AToumXmAG1TUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gq
+        pRak5BRYFugVJ+YWl+al6yXn51oZGhgYmQIVJmRnvFiyka1gEm/F4RdPmRsYO7i7GDk5JARM
+        JObs/83SxcjFISSwg1Hixfsj7CAJIYFPjBLvXjBCJL4xStw+f40dpuPx/7OsEIm9jBKf+7ZB
+        tX9hlDiytosVpIpNQEti/4sbbCC2iICMxNQr+8HizAJ5Emuv7AKLCwvESTSun8QIYrMIqEr8
+        erMcLM4rYCmx8tclJoht8hKrNxxgBlkgIfCQVaKv5zvUGS4Sz56vhrKFJV4d3wJlS0l8freX
+        DcKullh58ggbRHMHo8SW/RdYIRLGEvuXTgbawAF0kabE+l36EGFFiZ2/5zJCHMon8e5rDytI
+        iYQAr0RHmxBEibLE5Qd3oW6TlFjc3skGUeIh8XV1OSTkYiUeTfzBOoFRdhbC/AWMjKsYxVIL
+        inPTU4sNC0yQI2kTIzgBaVnsYNxzzucQowAHoxIP74uMb7FCrIllxZW5hxglOJiVRHhTtT/H
+        CvGmJFZWpRblxxeV5qQWH2I0BQbeRGYp0eR8YHLMK4k3NDUyNja2MDE0MzU0VBLn5fhxMVZI
+        ID2xJDU7NbUgtQimj4mDU6qB0fLHS9ZC7n07vm723Glib2z0mqVfxuBcx+KA1I06mVvPmy0J
+        vD1/duiUZ+sN5s1dv+/EFjPnuCVcLJcLr8W1OW7TlHXTmn0nS57x7rEFxdvCOvaGt0X/uON3
+        dWr8Zc1pWTkq377m31fXvWqR1/kpbfnvX5fiDAUFLx+TLvgxydIrNuBGzRTZPUosxRmJhlrM
+        RcWJAGTjS5ZWAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAJMWRmVeSWpSXmKPExsWy7bCSvG7qqW+xBut3MFlc//Kc1eJs0xt2
+        i8u75rBZfO49wmhxu3EFmwOrR9+WVYwenzfJBTBFcdmkpOZklqUW6dslcGW8WLKRrWASb8Xh
+        F0+ZGxg7uLsYOTkkBEwkHv8/ywpiCwnsZpR4vFgfIi4pMe3iUeYuRg4gW1ji8OHiLkYuoJJP
+        jBLHvh0Aq2cT0JLY/+IGG4gtIiAjMfXKfrA4s0CRxMntD9hBeoUFYiT2LHAFCbMIqEr8erMc
+        rJxXwFJi5a9LTBCr5CVWbzjAPIGRZwEjwypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxN
+        jOBw0NLcwXh5SfwhRgEORiUeXofsb7FCrIllxZW5hxglOJiVRHhTtT/HCvGmJFZWpRblxxeV
+        5qQWH2KU5mBREud9mncsUkggPbEkNTs1tSC1CCbLxMEp1cCYc0fUh9/CS/uY91fnlX8Ofnv8
+        MmNbO5ds3eneKd2b1+x5rxMr80/2d67XszO7ddfuedl+ZE/NhM55P/rrjDi+vHSpOTOH+VS4
+        4FwuneMvnm9/8sOFx25p1PM3J16bzZmnnP8/zfH5t/QfiesPn7nMnRIvwHixMIL5xd8mP30Z
+        cY/YuxybNweLK7EUZyQaajEXFScCAH0wsRMDAgAA
+X-CMS-MailID: 20191216000557epcas1p1f82e6da04e99a0299a67a95f9abbfe7a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191216000557epcas1p1f82e6da04e99a0299a67a95f9abbfe7a
+References: <CGME20191216000557epcas1p1f82e6da04e99a0299a67a95f9abbfe7a@epcas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wei,
+To build test, add COMPILE_TEST depedency to both ARM_RK3399_DMC_DEVFREQ
+and DEVFREQ_EVENT_ROCKCHIP_DFI configuration. And ARM_RK3399_DMC_DEVFREQ
+used the SMCCC interface so that add HAVE_ARM_SMCCC dependency to prevent
+the build break.
 
-(resending because I accidentally replied only to you. Also adding everyone
-else back in the thread, not sure what happened before).
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+---
+Changes from v1:
+- Add HAVE_ARM_SMCCC dependency because this driver used SMCCC interface.
+  It was reportd from kbuild test robot.
 
-On Wed, Dec 11, 2019 at 02:19:03PM -0800, Wei Wang wrote:
-> On Wed, Dec 11, 2019 at 1:11 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 11/12/2019 21:11, Wei Wang wrote:
-> > > On Wed, Dec 11, 2019 at 12:54 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > >>
-> > >> On Tue, Dec 10, 2019 at 09:54:11PM +0100, Daniel Lezcano wrote:
-> > >>> On 10/12/2019 21:01, Wei Wang wrote:
-> > >>>> On Tue, Dec 10, 2019 at 6:36 AM Daniel Lezcano
-> > >>>> <daniel.lezcano@linaro.org> wrote:
-> > >>>>>
-> > >>>>> On 05/12/2019 08:19, Wei Wang wrote:
-> > >>>>>> The paths thermal_zone%d and cooling_device%d are not intuitive and the
-> > >>>>>> numbers are subject to change due to device tree change. This usually
-> > >>>>>> leads to tree traversal in userspace code.
-> > >>
-> > >> tree traversal is supposed to be done in userspace code :)
-> > >>
-> > > Yes, that can be done in userspace, but given the amount of thermal
-> > > zones we have in some mobile devices, this will bring a lot of
-> > > convenience.
-> >
-> > But usually all these thermal zones are fixed and building the name<->tz
-> > association is just a question of a few lines of code from userspace,
-> > no? What would be the benefit of adding more ABI?
-> 
-> 
-> code reuse as tz mapping is per device tree setup and we try to use
-> the same _type_  in thermal zone in shared client code for Android
-> thermal API.
+ drivers/devfreq/Kconfig       | 3 ++-
+ drivers/devfreq/event/Kconfig | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-CMIIW, but the tz mapping today can still be done by parsing through the
-directory the other way? (i.e. tz->type) instead of type->tz?
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index 8485f948caeb..1526f758daeb 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -125,7 +125,8 @@ config ARM_TEGRA20_DEVFREQ
+ 
+ config ARM_RK3399_DMC_DEVFREQ
+ 	tristate "ARM RK3399 DMC DEVFREQ Driver"
+-	depends on ARCH_ROCKCHIP
++	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
++		(COMPILE_TEST && HAVE_ARM_SMCCC)
+ 	select DEVFREQ_EVENT_ROCKCHIP_DFI
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	select PM_DEVFREQ_EVENT
+diff --git a/drivers/devfreq/event/Kconfig b/drivers/devfreq/event/Kconfig
+index cef2cf5347ca..a53e0a6ffdfe 100644
+--- a/drivers/devfreq/event/Kconfig
++++ b/drivers/devfreq/event/Kconfig
+@@ -34,7 +34,7 @@ config DEVFREQ_EVENT_EXYNOS_PPMU
+ 
+ config DEVFREQ_EVENT_ROCKCHIP_DFI
+ 	tristate "ROCKCHIP DFI DEVFREQ event Driver"
+-	depends on ARCH_ROCKCHIP
++	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	help
+ 	  This add the devfreq-event driver for Rockchip SoC. It provides DFI
+ 	  (DDR Monitor Module) driver to count ddr load.
+-- 
+2.17.1
 
-Also, I understand the resistance to add a new ABI since it will have to be
-kept around forever. What would be worth knowing is if these mappings are
-static (built once) or you have to go through and parse the directories every
-time? AFAIU, the parsing (map creation) seems to only happen once during
-boot, so we (Android) should be ok?
-
-> 
-> >
-> > If there is a thermal zone change, then a notification can be used, so
-> > the userspace code rebuild the name<->tz, no?
-> 
-> 
-> Assuming you meant for type<->tz, this mapping won't change in runtime
-> in our case (not unloading things), but it could be changed due to
-> device tree change, e.g. adding/removing thermal zones.
-
-I actually think we might need this after all. This assumes all tz devices
-are registered when userspace (thermal hal/daemon) is coming up. However,
-that may soon not be the case and we have to adjust for devices being added
-in parallel with userspace?
-
-So, may be we need to start monitoring uevents like we do for power supplies
-too? In that case, the mapping can also be done dynamically.
-
-Lastly, I think we can make a case further if there are benefits we can share
-here other than convenience. Like startup time, handing hardware variations
-etc? (Also point to the current userspace code that uses this)
-
-- ssp
-> 
-> 
-> >
-> > > e.g. this is on Pixel 4 XL:
-> > > coral:/ # ls  /sys/devices/virtual/thermal/
-> > > cdev-by-name      cooling_device15  cooling_device22  cooling_device3
-> > >  cooling_device9  thermal_zone15  thermal_zone22  thermal_zone3
-> > > thermal_zone37  thermal_zone44  thermal_zone51  thermal_zone59
-> > > thermal_zone66  thermal_zone73  thermal_zone80  thermal_zone88
-> > > cooling_device0   cooling_device16  cooling_device23  cooling_device30
-> > >  thermal_zone0    thermal_zone16  thermal_zone23  thermal_zone30
-> > > thermal_zone38  thermal_zone45  thermal_zone52  thermal_zone6
-> > > thermal_zone67  thermal_zone74  thermal_zone81  thermal_zone9
-> > > cooling_device1   cooling_device17  cooling_device24  cooling_device31
-> > >  thermal_zone1    thermal_zone17  thermal_zone24  thermal_zone31
-> > > thermal_zone39  thermal_zone46  thermal_zone53  thermal_zone60
-> > > thermal_zone68  thermal_zone75  thermal_zone82  tz-by-name
-> > > cooling_device10  cooling_device18  cooling_device25  cooling_device4
-> > >  thermal_zone10   thermal_zone18  thermal_zone25  thermal_zone32
-> > > thermal_zone4   thermal_zone47  thermal_zone54  thermal_zone61
-> > > thermal_zone69  thermal_zone76  thermal_zone83
-> > > cooling_device11  cooling_device19  cooling_device26  cooling_device5
-> > >  thermal_zone11   thermal_zone19  thermal_zone26  thermal_zone33
-> > > thermal_zone40  thermal_zone48  thermal_zone55  thermal_zone62
-> > > thermal_zone7   thermal_zone77  thermal_zone84
-> > > cooling_device12  cooling_device2   cooling_device27  cooling_device6
-> > >  thermal_zone12   thermal_zone2   thermal_zone27  thermal_zone34
-> > > thermal_zone41  thermal_zone49  thermal_zone56  thermal_zone63
-> > > thermal_zone70  thermal_zone78  thermal_zone85
-> > > cooling_device13  cooling_device20  cooling_device28  cooling_device7
-> > >  thermal_zone13   thermal_zone20  thermal_zone28  thermal_zone35
-> > > thermal_zone42  thermal_zone5   thermal_zone57  thermal_zone64
-> > > thermal_zone71  thermal_zone79  thermal_zone86
-> > > cooling_device14  cooling_device21  cooling_device29  cooling_device8
-> > >  thermal_zone14   thermal_zone21  thermal_zone29  thermal_zone36
-> > > thermal_zone43  thermal_zone50  thermal_zone58  thermal_zone65
-> > > thermal_zone72  thermal_zone8   thermal_zone87
-> > >
-> > >
-> > >> But what userspace code needs to do this, and for what?
-> > > In Android, thermal daemon and thermal HAL as well as some init.rc
-> > > script would use those thermal paths for managing and monitoring
-> > > thermal. The daemon/HAL could have logic pipled in, however Android's
-> > > init.rc script would be really tricky.
-> > > On a related note, we also create /dev/block/by-name links from userspace.
-> > >
-> > > Thanks!
-> > > -Wei
-> > >>
-> > >> thanks,
-> > >>
-> > >> greg k-h
-> >
-> >
-> > --
-> >  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> >
-> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> > <http://twitter.com/#!/linaroorg> Twitter |
-> > <http://www.linaro.org/linaro-blog/> Blog
-> >
