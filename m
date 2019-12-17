@@ -2,48 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD15122698
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 09:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030521226A0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 09:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbfLQIX1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Dec 2019 03:23:27 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42954 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbfLQIX1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 03:23:27 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 66so12750373otd.9;
-        Tue, 17 Dec 2019 00:23:26 -0800 (PST)
+        id S1725805AbfLQI0E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 03:26:04 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41278 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725769AbfLQI0D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 03:26:03 -0500
+Received: by mail-ot1-f67.google.com with SMTP id r27so12741344otc.8
+        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 00:26:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JMeW8IXOTJKgWI7xudgMEupdZiEmd53J2UWjz91+kjc=;
-        b=sM31rMZapetO6Ni7ou9+CBdLG1gbYNU7NYP1rj0l3aQkRWzwQX4AqGDtp6TSm4D5Z8
-         ilF31TiA9TODiPMBav1uFEhOPdBeE3eWrBtwNbsQVTeizf3fguOVSly4Z4y3LyEhe8Jg
-         qe0SebMMheb1ukEK/hZzg/BOJVhR8G0rcN5uOScP51ux06GZnB2KbrJVDeNVoojInObz
-         QefH0vJu3H4Rp0bdj5ERsn9NVd//T5pfrOe+wfPiZ2sb18eSXmwTrMgUsNRtkQ0RcSl0
-         QhZAI10XzQDoze1QEXjbUntUez1xxnPWEfDBk9A5dKO72GfzwEUE4jGAmucWxGOOs97T
-         CPWQ==
-X-Gm-Message-State: APjAAAXI/l0wKvViqQZnMrGMoHqgf+HeLzpEeDgt9l9T+l+OC5N4zq4w
-        5b78rlVPOiBjIHpjljY4+ShwDmBmZ218sph8RNyNtw==
-X-Google-Smtp-Source: APXvYqwU6UFXX7ZWRxkmNxJknYkkQQJcxP69ST8Knq9cN3tyhoz7l2BTSbOZP1Sd1lP9XXAK5Dfdz1cAJ0+8CWWQ6uA=
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr37484806otd.266.1576571006380;
- Tue, 17 Dec 2019 00:23:26 -0800 (PST)
+        bh=7RCsXWRQL8MbBqA3nzPedeUVktcXE433aFjMdMK6P0Q=;
+        b=DBw+LYPNzcqaRXRQzhFJQ5nNFxbEpVkv8OAt/J5i9G+JRkKTjWxhrRANwTGWeysADg
+         2mdBgmmbcnrrIZZ2YdH5wnbx2XRJ2G5hd80mSQX+6RaELYSWcbu35QziGWy6K0nxWIig
+         JrvECyy08q0/Pmr5Z/XG7cEf1Lc3w7vd0/p09cCo8hd9LpGtdlR0xUGSUXTvA/MhALSq
+         6OqtJMK5sLormwb9w29EHoZ+ffMxfNhYmnlmXqCJy/09YbcsW9cP2MRXW36Uu724f/+Y
+         beBIO9gcSP9+o608ZR+51lKGvHjZHF/DasAABejcXPVo+3IgpBNlwJjA1ousZMTaixfC
+         5zaA==
+X-Gm-Message-State: APjAAAWLXi6nO53JgO/LO1zwPbVACVkLe+gg6ghImlpnfOMAgislEUGV
+        /1B0fO9Oi2NHcc2PGHMdmbdgnMD04UncMnSIMcE=
+X-Google-Smtp-Source: APXvYqxHgOE+1lmkd8stwyEcR2aK625Dy6IAxDSXIlZJCmV/iI4jQG1Lk+VEOc+6SzEyQGLgbqop1ZcrKJXKZOz5ahk=
+X-Received: by 2002:a05:6830:18cd:: with SMTP id v13mr35337790ote.118.1576571163148;
+ Tue, 17 Dec 2019 00:26:03 -0800 (PST)
 MIME-Version: 1.0
-References: <201912162148.hTRbNfPp%lkp@intel.com> <CAJZ5v0iTOSnvZqKuL7gy7QBtdHxcM7wPS8qdgbvs6+sQxZX5yg@mail.gmail.com>
- <831EE4E5E37DCC428EB295A351E66249522A215D@shsmsx102.ccr.corp.intel.com>
-In-Reply-To: <831EE4E5E37DCC428EB295A351E66249522A215D@shsmsx102.ccr.corp.intel.com>
+References: <20191217015623.10073-1-rui.zhang@intel.com>
+In-Reply-To: <20191217015623.10073-1-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Dec 2019 09:23:14 +0100
-Message-ID: <CAJZ5v0gFbjbqTOD845RjzpJQXQY=ko=9GxwVxoqw0fPccfig4w@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [pm:intel_idle+acpi 4/10] acpi_processor.c:undefined
- reference to `acpi_processor_ffh_cstate_probe'
-To:     "Li, Philip" <philip.li@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, lkp <lkp@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+Date:   Tue, 17 Dec 2019 09:25:51 +0100
+Message-ID: <CAJZ5v0iXJjpw78rddpnyvr5zhpZAWMpWR+Wxz96Wiso36BpGKQ@mail.gmail.com>
+Subject: Re: [PATCH] powercap/intel_rapl: add support for TigerLake Mobile
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -51,23 +45,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 1:31 AM Li, Philip <philip.li@intel.com> wrote:
+On Tue, Dec 17, 2019 at 2:56 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> > Subject: [kbuild-all] Re: [pm:intel_idle+acpi 4/10] acpi_processor.c:undefined
-> > reference to `acpi_processor_ffh_cstate_probe'
-> >
-> > On Mon, Dec 16, 2019 at 2:26 PM kbuild test robot <lkp@intel.com> wrote:
-> > >
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-> > intel_idle+acpi
-> > > head:   dcedc03145600b929a32acb85b212131b079bc46
-> > > commit: 0300cf31f061e6287810c894337f29df2e200e2d [4/10] ACPI: processor:
-> > Export acpi_processor_evaluate_cst()
-> >
-> > Outdated.  Please stop sending these.
-> thanks for the input Rafael, we will ignore the following tests on it.
+> Add TigerLake Mobile support in intel_rapl driver.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index a67701ed93e8..9f4119c42651 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -980,6 +980,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+>         INTEL_CPU_FAM6(ICELAKE_D, rapl_defaults_hsw_server),
+>         INTEL_CPU_FAM6(COMETLAKE_L, rapl_defaults_core),
+>         INTEL_CPU_FAM6(COMETLAKE, rapl_defaults_core),
+> +       INTEL_CPU_FAM6(TIGERLAKE_L, rapl_defaults_core),
+>
+>         INTEL_CPU_FAM6(ATOM_SILVERMONT, rapl_defaults_byt),
+>         INTEL_CPU_FAM6(ATOM_AIRMONT, rapl_defaults_cht),
+> --
 
-Well, the branch has been rebased since then and effectively it is a new one.
-
-My point is that if something like that happens, the script should
-discard the old branch and pull the new one from scratch.
+Applying as 5.6 material, thanks!
