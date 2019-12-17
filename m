@@ -2,281 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0B912208E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 01:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B50122195
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 02:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbfLQAzx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Dec 2019 19:55:53 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:18906 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728271AbfLQAzw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Dec 2019 19:55:52 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20191217005549epoutp047feaeedc9f8b2ab64bee3434a5c14961~hAo0Gkvis2981329813epoutp04K
-        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 00:55:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20191217005549epoutp047feaeedc9f8b2ab64bee3434a5c14961~hAo0Gkvis2981329813epoutp04K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576544149;
-        bh=oFf0YYzg3Q++/l5wAcm1gQIa8Dip0K8klEz+CMiY2uU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=oVj4QtwTxOP7dZj7FfYVzNaSv/P3KE1FxZ+K0+g2uCrNdPOhoNhgDRnVofxMsf8gj
-         KPSzQpPPtc/tw8pYE37mPT3x8FwU6pagHNlcHvWO4TAOVU/H/tqFxxcVKVxFbRr50f
-         l1QCpVeTkmD9sqm7jzJvnAyH9HVpaJiUSr20/RTc=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20191217005548epcas1p3502dd60c4de05b0d074be784667f1190~hAozER2VM0323703237epcas1p3r;
-        Tue, 17 Dec 2019 00:55:48 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 47cKSb0Kw5zMqYkV; Tue, 17 Dec
-        2019 00:55:43 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.55.52419.E8728FD5; Tue, 17 Dec 2019 09:55:42 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191217005542epcas1p1f47ed6dca37b3d2ab75e104422a56e10~hAoto31vY2788827888epcas1p1m;
-        Tue, 17 Dec 2019 00:55:42 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191217005542epsmtrp1d5cc432890e46bd7569132726f3ae08f~hAotnqVIa2513225132epsmtrp1U;
-        Tue, 17 Dec 2019 00:55:42 +0000 (GMT)
-X-AuditID: b6c32a37-59fff7000001ccc3-ae-5df8278e2135
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B6.E2.10238.E8728FD5; Tue, 17 Dec 2019 09:55:42 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191217005541epsmtip22dd3f67a2dff10d4a9e7442998571c76~hAotJX7Cb1453214532epsmtip2k;
-        Tue, 17 Dec 2019 00:55:41 +0000 (GMT)
-Subject: Re: [PATCH RFC v6 3/9] PM / devfreq: imx: Register interconnect
- device
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
+        id S1725805AbfLQBdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Dec 2019 20:33:07 -0500
+Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:16475
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726016AbfLQBdH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 16 Dec 2019 20:33:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DpGMOiV9f/+Y6ciCJ5kAf1khuX4SW6P+jhcTC+MG7i7AhgLzm7vLGEz2N+3P0QpH6ZihDnE5QgaQNzKfTmGaqv2SPIaou4VT2tkXcAU+7SNfHc5uUfQcEFZlFqKDtsUSgbiqVom8bCbIa9ofjhMbIl2AVklvIGtPDHLSdXSiXgdZTG2/txsmKgNenrgep3wqIZpQDgjD7JsI6T+moMlREXQmpFXDSwu9YpwEIhavbTYXSrNcakh1RGngKlkajiJ874jor5opvuPXfx1B7aOhT78TBTYkPcSrqVXWZ/fHy6ZRhTBXFGBF2/VatxtCiq3OKQ4ZUYVmOE+EeTB5vNUIKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmodkr6+NhGoXf4aikQiVvsxgOdD3BMoaKluZ1LwlXA=;
+ b=I5+JMMlOVupFpqFvbpHAo3vbTashW6DCnAH9L74mFbQPz1EBOOU/vOmnLLSDul2exhCG1UW1viIky2Zxu1UOnZAXj8TpKNgrl1EJy+70Sb/gkJWJHGI1j+aA0w+59T06KawATQ3/mba3lWRQjCLGG3fXhlsqUkPVlEny16C3O/qo+wRrNiFJCKLG7+nsuIaDEvPUT4RO7GCOxC+gAP1FlMXuh7y0XMgQdPODSaiwhhA/IRRgqk60GbEtTiscVoUCB3QfLu3j6MMggUjjpIQy512vUIK10mvv55FrUCh26vzc5RC2CYAbUxTgDwa0JZCmP46Jx05fkOd4SgIub1Qg1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmodkr6+NhGoXf4aikQiVvsxgOdD3BMoaKluZ1LwlXA=;
+ b=jH2PhbE3BDwDvja9JnZorB07ftgl5Z5Kqw1Q/MefXE80a9SHNiHYEwF2u5Kjg3zfBdwFv+2k43qMzz1anKEp87uHdhC5BnRJrnibxC0ppmhmMWnEtIxvEyYwe33Fkwyu0SNrMYENBrYV0Og+xHXQR1rdRnR81tzfd2kKkofJvTQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4496.eurprd04.prod.outlook.com (20.177.54.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.14; Tue, 17 Dec 2019 01:32:24 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2538.019; Tue, 17 Dec 2019
+ 01:32:24 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "od@zcrc.me" <od@zcrc.me>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <60fe19c6-6e73-4133-ed7e-a13a875589c0@samsung.com>
-Date:   Tue, 17 Dec 2019 10:02:16 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB7023F511BAE7D1EDF971CC48EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="iso-8859-2"
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
+Thread-Topic: [PATCH v2 3/3] power/supply: Add generic USB charger driver
+Thread-Index: AQHVsDrKPWSbvY6T+0OJ94dLsbCA8qe2ObMAgAJTXYCAA3BKkIAAn/jzgAD0ddA=
+Date:   Tue, 17 Dec 2019 01:32:23 +0000
+Message-ID: <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20191211155032.167032-1-paul@crapouillou.net>
+        <20191211155032.167032-3-paul@crapouillou.net>
+        <20191212091814.GA7035@b29397-desktop>
+ <1576270147.3.0@crapouillou.net>
+        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <1576493525.3.0@crapouillou.net>
+In-Reply-To: <1576493525.3.0@crapouillou.net>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH8+u9vb0Qq9duyG/NMso1zIiBcVcYv7mxLBHNTTYTcNH4SMNu
-        4A4IfdkLyJxhbKETmrG5YGno3DqDGGB10oc8HKQROhdQgW7hETochKmgGzh5iNWpLbdL+t/n
-        nN/3nJPv+eWQmOJLmZIs1ZfzJj2npYl4vGvw+fS0c89taDJG6xBa+24YoM9v3QBo1fo1hubv
-        BgHqbi5EDv+IFLk8QRzZ+t0E6rD24mh0tFOGfjh9X4baZh5KkXt+QoosoXYMrTT4AWqdDEjQ
-        RNsFKVrpnAcoMPwyCp5qI9DVkW8IdGnViiFzv1+GLAOPCPTvhAtHC95E1NoygSHXGntwO2u1
-        tAHWedkJ2OUps4y9WBPA2SvuCtbdUU+wdyb6CNbz2UnWtdQjYc8/ymBDgwnsOW8HYFfcO/Lk
-        b5ftL+G5It6k4vWFhqJSfXEOfehIwUsFWXsymDRmL8qmVXpOx+fQuYfz0l4p1Yb3QasqOW1F
-        OJXHCQK968B+k6GinFeVGITyHJo3FmmNe43pAqcTKvTF6YUG3YtMRsburLDwaFlJ0BMijJd3
-        Vn3V4JHWgNkdFhBHQioTroc8uAXEkwqqB8Dl/xplYvAHgF84QtKISkGtAzg3WPm4YqT7ASaK
-        +gG0d/mjwTKAAXc7iKi2UPlwtP6GLMJbqbdg3/XbeIQx6nsSXv/JEGGCSoW+hSkiwk9RyXB8
-        Y36zVk4dgIPma1iEcSoFNvd/LIlwAvUGHOqqjWqehkPN9zZ7xlEaaL41IxH7p8Ofh+3RWYlw
-        +p4jmk+C3Q8+wUQHXhLO2qpFzoVz6/8QIm+Bv970ykRWwsXzZ6J8ArYP+YmISUjVAej1jUnF
-        BzX0tTZKRE6GvX9fAuKwJ+HS2tmwhgzn5bDujEKUPAtvz85E5dtgy4f1xEeAtsfYscdYsMdY
-        sMdYuALwDvAMbxR0xbzAGNWx3+0Gm8eSmt0DOkcODwCKBPQTcmPlnxqFlKsUjusGACQxequ8
-        RxVOyYu44+/zJkOBqULLCwMgK7zuC5gyodAQPj19eQGTtVutVqNMZk8Ww9CJcnIjoFFQxVw5
-        X8bzRt70uE5CxilrgPFgvHPfMdXJQ85rJ5IWbO8xL9SM+zQlTgUt/5TtXT36Zne1Mv+X3OR9
-        k6cDOfdT3h1uakkONny7WPhX01T+2u+21/Os47aW7Y3TntqrjpRq39LDudfSdk5WVTnMP4aO
-        BXR3bn6QNA0Wz1pq+7L1p7bNj93NHFO9+ptradeRQJNJ8w6NCyUck4qZBO5/i1gcsEIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA03SXUhTUQAHcM7ux67L0W0mHi20VrayslaGp9LqoeC+JEUWFEhd2m1Gbo5d
-        Z9lLGhg4UCta5qzU1DKzcnflR2WZc0VGUyetjyVJM1BRo6bWLCWvFvj2O//z/8N5OBSmuEJE
-        UMf1GZxRz6YpSRle71BGrS1Q/UpZ31IUjMZetwN00+0EaNTyCEO+z16AGoqPotI2F4Fsdi+O
-        ipoFEtVYmnDU0VEnRW/ODklRdc93Agk+D4HME7cx5M9vA6jqXZcEeaovEMhf5wOoq30X8uZU
-        k+iO6zmJro1aMJTb3CZF5tZJEk15bDjqfxCGqio8GLKNMTsWMxZzNWBqr9cC5tv7XClTkt2F
-        M2WCiRFq8kjmk+cJydgrzzC2kUYJUzi5nplwhDIFD2oA4xci98gPyRI0XNrxTM64btsRWarX
-        PkEarq849TDfTmSD3kgzCKIgHQddDcOYaAX9GMAf4ztn83B4ucs5nVPTDoEOBz9bGQbQdv+Y
-        6BB6L+zIc0pFL6QPwpcDo4QZyCiM7qRgp9UvFQ8KelACS4QPpNgi6Rj4rP/9jOfTS+HbXz4g
-        Wk5vg47cezOPwOloWNx8SSI6lD4Amyp9ktnOAviquA8XHUSnwFx3z0yO0WvgOX/5P4fBj32l
-        /xwFG4avYudBiHXO3DpnYp0zsc6ZlAG8BoRzBl6n1fFqg1rPnYzlWR1v0mtjj6brBDDzX2JW
-        NYLuysOtgKaAMlgOM36mKAg2k8/StQJIYcqF8sYl05Fcw2ad5ozph42mNI5vBYsoXBkm/6p/
-        cVBBa9kM7gTHGTjj/1sJFRSRDbbUC727IzWBAK0cWalYfrbEcsOZLKQvGIuOfssGfsfddRet
-        rlNp9yXvf0rGaAfNiu3LcrwV3eMuFQhNf8Go/CasNJDkjf/THL95w9DFRF/8x6tZ5RpOPTlp
-        admUF7/WNbg3obDbrV6eOM/mVkXfuhkaQQxMtXzZGpy0sUIzpcT5VFYdgxl59i9b/dZvKwMA
-        AA==
-X-CMS-MailID: 20191217005542epcas1p1f47ed6dca37b3d2ab75e104422a56e10
-X-Msg-Generator: CA
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191114201049epcas5p370853a1d78584bf00d8493ce20320bf9
-References: <cover.1573761527.git.leonard.crestez@nxp.com>
-        <CGME20191114201049epcas5p370853a1d78584bf00d8493ce20320bf9@epcas5p3.samsung.com>
-        <e0e6a1685ccdad95c9d0c922801afdda8adb9f05.1573761527.git.leonard.crestez@nxp.com>
-        <4d45cd39-24df-1714-0a27-5019c1367063@samsung.com>
-        <VI1PR04MB7023F511BAE7D1EDF971CC48EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: cadfeda2-5c47-4915-9c77-08d78290f7cd
+x-ms-traffictypediagnostic: VI1PR04MB4496:
+x-microsoft-antispam-prvs: <VI1PR04MB449605E5A354797DA6C784558B500@VI1PR04MB4496.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 02543CD7CD
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(199004)(189003)(8676002)(2906002)(8936002)(81156014)(81166006)(6506007)(33656002)(7416002)(5660300002)(86362001)(66446008)(64756008)(66476007)(66556008)(4326008)(76116006)(66946007)(7696005)(52536014)(186003)(6916009)(55016002)(9686003)(44832011)(54906003)(26005)(478600001)(316002)(71200400001)(66574012)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4496;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /GFpltcX4roxBZAXTbPhSaYUbwSkMV/72W+F95S78GCcRRSeGFnGwDhK2mVh4MhX/5L0iE6k1yvPLn1lWJl/b/PEMorI4tEWyKJZ/1KMDLyTSBQyQTd/UHdC0OHyBSge8vpDwSviQmxs/7ZfamCTj/wsEJcEuuIe3arTWZePRjrrQ3e57K35WK2hHpc7tSvcAiaJwZ2DVu4E4F1//E3C5Lzrh6ye3Ld6sdo7lW6MUXOMvMmmq999LAxRCVtT8SUpwAowQ6PfxtT2/OSBDVe7n/7BloZMDnlZXV3SrfYum52TpNekg2AsqW3r+gr5So/WtN/CDgtlBwZp9j8W4vaCb214BAsOODNRI1FgO/CLq3GEJPORPInX7A+TANo0Pu6s90aTL7oePc0WD2zcG7RbXGyoLZQD59l+llyfIP26X2Ky2HlNB+WrElsXmeLfU45fzfTN39ZRdEd8kV2POKJHcRzhZt7xI8GhIsTn+w0cjfFG+J80eunFCmQcVSvNyfoz
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cadfeda2-5c47-4915-9c77-08d78290f7cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2019 01:32:23.9214
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6jOkljhrQPTm1fpB80dj8KrYcbidr6KhTKOWD+VpjnmlmTJokq47WPwT+u1TkfezOW5QkDNYaEIHEv6ScS3/kA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4496
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/17/19 12:00 AM, Leonard Crestez wrote:
-> On 13.12.2019 06:22, Chanwoo Choi wrote:
->> Hi,
->>
->> On 11/15/19 5:09 AM, Leonard Crestez wrote:
->>> There is no single device which can represent the imx interconnect.
->>> Instead of adding a virtual one just make the main &noc act as the
->>> global interconnect provider.
->>>
->>> The imx interconnect provider driver will scale the NOC and DDRC based
->>> on bandwidth request. More scalable nodes can be added in the future,
->>> for example for audio/display/vpu/gpu NICs.
->>>
->>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
->>> ---
->>>   drivers/devfreq/imx-devfreq.c | 37 +++++++++++++++++++++++++++++++++++
->>>   1 file changed, 37 insertions(+)
->>>
->>> diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx-devfreq.c
->>> index 620b344e87aa..585d340c0f6e 100644
->>> --- a/drivers/devfreq/imx-devfreq.c
->>> +++ b/drivers/devfreq/imx-devfreq.c
->>> @@ -15,10 +15,11 @@
->>>   struct imx_devfreq {
->>>   	struct devfreq_dev_profile profile;
->>>   	struct devfreq *devfreq;
->>>   	struct clk *clk;
->>>   	struct devfreq_passive_data passive_data;
->>> +	struct platform_device *icc_pdev;
->>>   };
->>>   
->>>   static int imx_devfreq_target(struct device *dev,
->>>   			      unsigned long *freq, u32 flags)
->>>   {
->>> @@ -60,11 +61,40 @@ static int imx_devfreq_get_dev_status(struct device *dev,
->>>   	return 0;
->>>   }
->>>   
->>>   static void imx_devfreq_exit(struct device *dev)
->>>   {
->>> +	struct imx_devfreq *priv = dev_get_drvdata(dev);
->>> +
->>>   	dev_pm_opp_of_remove_table(dev);
->>> +	platform_device_unregister(priv->icc_pdev);
->>> +}
->>> +
->>> +/* imx_devfreq_init_icc() - register matching icc provider if required */
->>> +static int imx_devfreq_init_icc(struct device *dev)
->>> +{
->>> +	struct imx_devfreq *priv = dev_get_drvdata(dev);
->>> +	const char *icc_driver_name;
->>> +
->>> +	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX))
->>> +		return 0;
->>
->> It is not proper to check the enable state of CONFIG_INTERCONNECT_IMX configuration
->> on device driver. Why don't you add the 'select CONFIG_INTERCONNECT_IMX' on Kconfig?
-> 
-> Because it's optional.
-> 
-> You can disable interconnect support and just tweak frequencies using 
-> the devfreq sysfs API. But indeed would only really be useful for debugging.
+=20
+> Le lun., d=E9c. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a =E9c=
+rit :
+> >
+> >>  >>  +
+> >>  >>  +	desc =3D &charger->desc;
+> >>  >>  +	desc->name =3D "usb-charger";
+> >>  >>  +	desc->properties =3D usb_charger_properties;
+> >>  >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
+> >>  >>  +	desc->get_property =3D usb_charger_get_property;
+> >>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
+> >>  >
+> >>  > What's your further plan for this generic USB charger?
+> >>  > To support BC1.2, we need to know charger type, and how we could
+> >> get  > it?
+> >>  >
+> >>  > Peter
+> >>
+> >>  Well I don't really know. The USB role framework does not give any
+> >> info about  what's plugged.
+> >>
+> >
+> > What's the use case for this patch set? How it be used?
+>=20
+> My devicetree:
+>=20
+> usb_otg: usb@13440000 {
+> 	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
+> 	reg =3D <0x13440000 0x10000>;
+> 	[...]
+>=20
+> 	usb-role-switch;
+>=20
+> 	connector {
+> 		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
+> 		label =3D "mini-USB";
+> 		type =3D "mini";
+>=20
+> 		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
+> 		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
+> 		[...]
+> 	};
+>=20
+> 	usb_charger: usb-charger {
+> 		compatible =3D "usb-charger";
+> 	};
+> };
+>=20
+> The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect in
+> which state (device, host, unconnected) a OTG connector is. However,
+> that means I cannot use the standard gpio-charger driver to detect the
+> presence of a charger based on the state of the VBUS gpio, since it's
+> already requested here. So the point of this patchset is to provide an
+> alternative to gpio-charger that works with OTG controllers compatible
+> with 'usb-role-switch'.
+>=20
 
-Even if it's optional, I don't prefer to use 'IS_ENABLED' macro.
+Thanks for explaining it.
 
-Generally, add or delete the property or value at DT file
-to either enable or disable the some feature provided by device driver
-instead of checking the configuration.
+What's the user for this USB charger,  PMIC or what else? How the user uses
+this USB charger interface?
 
-If user adds the property/value related to interconnect
-and imx-bus.c configuration is enabled, the behavior
-related to interconnect on imx-bus.c doesn't work. It make some confusion.
+Peter
 
-The imx-bus.c have to add the 'select CONFIG_INTERCONNECT_IMX'
-and hand over the right which use the interconnect feature or not, to user.
+>=20
+>=20
+> >>  >
+> >>  >>  +
+> >>  >>  +	charger->charger =3D devm_power_supply_register(dev, desc,
+> >> &cfg);
+> >>  >>  +	if (IS_ERR(charger->charger)) {
+> >>  >>  +		dev_err(dev, "Unable to register charger");
+> >>  >>  +		return PTR_ERR(charger->charger);
+> >>  >>  +	}
+> >>  >>  +
+> >>  >>  +	err =3D usb_role_switch_register_notifier(charger->role,
+> >>  >> &charger->nb);
+> >>  >>  +	if (err) {
+> >>  >>  +		dev_err(dev, "Unable to register USB role switch notifier");
+> >>  >>  +		return err;
+> >>  >>  +	}
+> >>  >>  +
+> >>  >>  +	return devm_add_action_or_reset(dev, usb_charger_unregister,
+> >>  >> charger);
+> >>  >>  +}
+> >>  >>  +
+> >>  >>  +static const struct of_device_id usb_charger_of_match[] =3D {
+> >>  >>  +	{ .compatible =3D "usb-charger" },
+> >>  >>  +	{ /* sentinel */ },
+> >>  >>  +};
+> >>  >>  +MODULE_DEVICE_TABLE(of, usb_charger_of_match);  +  +static
+> >> struct
+> >>  >> platform_driver usb_charger_driver =3D {
+> >>  >>  +	.driver =3D {
+> >>  >>  +		.name =3D "usb-charger",
+> >>  >>  +		.of_match_table =3D of_match_ptr(usb_charger_of_match),
+> >>  >>  +	},
+> >>  >>  +	.probe =3D usb_charger_probe,
+> >>  >>  +};
+> >>  >>  +module_platform_driver(usb_charger_driver);
+> >>  >>  +
+> >>  >>  +MODULE_DESCRIPTION("Simple USB charger driver");
+> >>  >> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
+> >>  >> +MODULE_LICENSE("GPL");
+> >>  >>  --
+> >>  >>  2.24.0
+> >>  >>
+> >>  >
+> >>  > --
+> >>  >
+> >>  > Thanks,
+> >>  > Peter Chen
+> >>
+> >
+>=20
 
-If there are any requirement to add the additional property
-to check whether interconnect feature will be used or not,
-you can add the extra property. But, I think that it is enough
-to check the '#interconnect-cells'.
-
-In result, I think that it is right to decide the usage of feature
-of device driver by user on Devicetree.
-
-> 
->>> +	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
->>> +		return 0;
->>> +
->>> +	icc_driver_name = of_device_get_match_data(dev);
->>> +	if (!icc_driver_name)
->>> +		return 0;
->>> +
->>> +	priv->icc_pdev = platform_device_register_data(
->>> +			dev, icc_driver_name, 0, NULL, 0);
->>> +	if (IS_ERR(priv->icc_pdev)) {
->>> +		dev_err(dev, "failed to register icc provider %s: %ld\n",
->>> +				icc_driver_name, PTR_ERR(priv->devfreq));
->>> +		return PTR_ERR(priv->devfreq);
->>> +	}
->>> +
->>> +	return 0;
->>>   }
->>>   
->>>   static int imx_devfreq_probe(struct platform_device *pdev)
->>>   {
->>>   	struct device *dev = &pdev->dev;
->>> @@ -120,18 +150,25 @@ static int imx_devfreq_probe(struct platform_device *pdev)
->>>   		ret = PTR_ERR(priv->devfreq);
->>>   		dev_err(dev, "failed to add devfreq device: %d\n", ret);
->>>   		goto err;
->>>   	}
->>>   
->>> +	ret = imx_devfreq_init_icc(dev);
->>> +	if (ret)
->>> +		goto err;
->>> +
->>>   	return 0;
->>>   
->>>   err:
->>>   	dev_pm_opp_of_remove_table(dev);
->>>   	return ret;
->>>   }
->>>   
->>>   static const struct of_device_id imx_devfreq_of_match[] = {
->>> +	{ .compatible = "fsl,imx8mq-noc", .data = "imx8mq-interconnect", },
->>> +	{ .compatible = "fsl,imx8mm-noc", .data = "imx8mm-interconnect", },
->>> +	{ .compatible = "fsl,imx8mn-noc", .data = "imx8mn-interconnect", },
->>>   	{ .compatible = "fsl,imx8m-noc", },
->>>   	{ .compatible = "fsl,imx8m-nic", },
->>>   	{ /* sentinel */ },
->>>   };
->>>   MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
-> 
-> 
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
