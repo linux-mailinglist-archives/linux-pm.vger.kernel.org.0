@@ -2,63 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E7E12304D
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 16:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F8A1232F3
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 17:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727571AbfLQP3z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 17 Dec 2019 10:29:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:17746 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727546AbfLQP3z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Dec 2019 10:29:55 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 07:29:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,325,1571727600"; 
-   d="scan'208";a="247520868"
-Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Dec 2019 07:29:54 -0800
-Received: from fmsmsx113.amr.corp.intel.com (10.18.116.7) by
- FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 17 Dec 2019 07:29:54 -0800
-Received: from fmsmsx101.amr.corp.intel.com ([169.254.1.124]) by
- FMSMSX113.amr.corp.intel.com ([169.254.13.86]) with mapi id 14.03.0439.000;
- Tue, 17 Dec 2019 07:29:54 -0800
-From:   "Brown, Len" <len.brown@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-CC:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Subject: RE: [PATCH] ACPI: processor: Make ACPI_PROCESSOR_CSTATE depend on
- ACPI_PROCESSOR
-Thread-Topic: [PATCH] ACPI: processor: Make ACPI_PROCESSOR_CSTATE depend on
- ACPI_PROCESSOR
-Thread-Index: AQHVtATgr90L2ltRnU+72Mog3gPr5qe+dYVw
-Date:   Tue, 17 Dec 2019 15:29:53 +0000
-Message-ID: <1A7043D5F58CCB44A599DFD55ED4C9487D6EF6A5@fmsmsx101.amr.corp.intel.com>
-References: <16614264.JRhOIQ9zEg@kreacher>
-In-Reply-To: <16614264.JRhOIQ9zEg@kreacher>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiOWE5OGVmMTEtNTY1Yy00ZGQ3LTljZDAtMWI2ZTUzNWNmZmU3IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoicTlXY1gyckZVYXNNUFJ6QVwvSzBVb2FCaVFpVlwvRURpRnhLbzBuWGxwVXVuNXFtbmthWnlQYkhDbHJhNE5zdVwvaSJ9
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.1.200.107]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1727241AbfLQQvV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 11:51:21 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46062 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727161AbfLQQvV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 11:51:21 -0500
+Received: by mail-oi1-f196.google.com with SMTP id v10so5867082oiv.12;
+        Tue, 17 Dec 2019 08:51:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fcVtd0PQXwawV2kFABB1V3X1mbUitghtCZjt3Z3mtPs=;
+        b=lWC6UtxSoWLH+yUKo3hRs7a9kzsOvEh/n2qjLLWBCQZlr820zoa5IDQhY013Wdgeyr
+         nYYI0gN01hsGekfo7ylo/d0fD3SXGG2/SdwVnWsTYcRQ39utxTTnR8AY6uuA+tZPfcrg
+         5R/TADPMRwvaGOuGM8262sBrfoLYMKpSAijP6WJk36ViUvTUCPgN5bJZzaicOGg6TkXs
+         Py1Y1rD/wSxRAVMQsp9dY1vdV8cPytEW4fOXOQRxAtpDDIIeZjIYQ0i54HOHV0SdSRwn
+         5FrQ5mJoid5MegJFA9XqDGfWJjqaVOUVvYHATu4fqnTdsZZ6k1vrBC9XKYsNYP9Rfcwx
+         byvw==
+X-Gm-Message-State: APjAAAWDvswZIxFaH/JS7hwIqRUUGLtqtZL1MdaiyLD+Wai7ZiFLVdz3
+        phPKM/T98zuUtaBpCj56NBaZZoNDmhDuI/scnGg=
+X-Google-Smtp-Source: APXvYqxDoKJO/my3WhR6r0OHazOflJZTa5BuhPVYLFlrsFtii/atvi20YYByN9lvFhU35WIAryD5o7GaShaSfmcDBZI=
+X-Received: by 2002:aca:d6c8:: with SMTP id n191mr1000217oig.103.1576601480290;
+ Tue, 17 Dec 2019 08:51:20 -0800 (PST)
 MIME-Version: 1.0
+References: <20191217143834.19797-1-huntbag@linux.vnet.ibm.com>
+In-Reply-To: <20191217143834.19797-1-huntbag@linux.vnet.ibm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Dec 2019 17:51:09 +0100
+Message-ID: <CAJZ5v0jmMwRGDY70EV3sqpw7uJ4R+VomoWtJ9rWzNTVuV3AUxQ@mail.gmail.com>
+Subject: Re: [RFC] cpuidle : Add debugfs support for cpuidle core
+To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, svaidy@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Acked-by: Len Brown <len.brown@intel.com>
+On Tue, Dec 17, 2019 at 3:42 PM Abhishek Goel
+<huntbag@linux.vnet.ibm.com> wrote:
+>
+> Up until now, we did not have a way to tune cpuidle attribute like
+> residency in kernel. This patch adds support for debugfs in cpuidle core.
+> Thereby providing support for tuning cpuidle attributes like residency in
+> kernel at runtime.
 
+This is not a good idea in my view, for a couple of reasons.
+
+First off, if the target residency of an idle state is changed, it
+effectively becomes a different one and all of the statistics
+regarding it become outdated at that point.  Synchronizing that would
+be a pain.
+
+Next, governors may get confused if idle state parameters are changed
+on the fly.  In particular, the statistics collected by the teo
+governor depend on the target residencies of idle states, so if one of
+them changes, the governor needs to be reloaded.
+
+Next, idle states are expected to be ordered by the target residency
+(and by the exit latency), so their parameters cannot be allowed to
+change freely anyway.
+
+Finally, the idle state parameters are expected to reflect the
+properties of the hardware, which wouldn't hold any more if they were
+allowed to change at any time.
+
+> For example: Tuning residency at runtime can be used to quantify governors
+> decision making as governor uses residency as one of the parameter to
+> take decision about the state that needs to be entered while idling.
+
+IMO it would be better to introduce a testing cpuidle driver with an
+artificial set of idle states (or even such that the set of idle
+states to be used by it can be defined by the user e.g. via module
+parameters) for this purpose.
