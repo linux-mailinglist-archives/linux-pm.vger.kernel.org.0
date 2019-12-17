@@ -2,141 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB95122D22
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 14:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1CB122ED3
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 15:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728539AbfLQNkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Dec 2019 08:40:18 -0500
-Received: from mail-eopbgr760051.outbound.protection.outlook.com ([40.107.76.51]:65351
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        id S1727127AbfLQOd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 09:33:58 -0500
+Received: from mail-eopbgr70050.outbound.protection.outlook.com ([40.107.7.50]:10086
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728011AbfLQNkR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Dec 2019 08:40:17 -0500
+        id S1727029AbfLQOd6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Dec 2019 09:33:58 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BY3i0y5iSqA6GUyTT91ItczGVwWFALZlPUmiEqbLBbfQjCN+Oyzfg9lgk1PzngoHdPzGYLTmz+qiX9fd3qnhnwZDG22LeHFlieQztlM2BEnRQSPhbj0m4R49f6w6rq0QFoW+gMriG4tp4aeWrlUwZsMMhxd8z4nqyLraZiJ/gHbLxUVyJSYQao/uDpzUh2Jh4kV9imVjNbBpkdJkJz4fR6NKVI+b9F8wShCCWi0FfbgW+yvEShUPJAZ1SLy/jDquEYcBTW1tnagH+RND/UGUJF3FGt3exgEqBCghf2KKJ8wCKnc9pRvppdzOL0Q955N1xqQ+FYC3H2paqxo81nnqAg==
+ b=iAFNgzKIJoRvNuhTqtN+AEnIfYt3BaHIb1xlz63RafhKFB2Py6AkQXj/+SbW/pxo6Q+8rGUAkhEB+kRuRewuw+3d17s2pyGE28rt+vJ5FNq1D5rIlJh9aiduIXfPI/R1rEicjACSg7qaBvc4Am3WlM2epSseZPZc3BsT0CkcHUnCyFoM4GpsiwXmRfOQld1dFZurCwg2kJ60O9IbgOP/MOfe0l92y7YIJEu2BqlBKSA1iFg+TJzSqBwLmCbLRvmQO1gRg0G07bnQktg11SJABmQGz8zYW/NhB8YvUyJT0YXkrpticDkElEFy1C80f1YgC+Vb5tAvwkp8vkkDhV347Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6I4/TRESJ1IE0o5Z8+a8Z1I/i6193Gvyu8oh9mHdJkY=;
- b=Z2k+rZEpu2WfABBp6J/uJXTFRqXzfu4Y3B3kmMIO5pkdo6rH+MDRV91KFgyVDBfGj8rrxuv3X0clW5oUXz/fe2pdwjg7VHNmj5Il2hxnpDUdyd5bcPkG3n40gfTXsIJNcEkNtW7L8OFuVThwHSOANd1X0OVFO8cUAs+I6GlHlRkkPiVIYStgJrDOAhTDVHRXUr6qNJbAAAZiYdWM1XA/xMjoi9M7csy8IjMeYW2JiF5XagWnou0N4LOSbQiGmgsHEDTAY1syn8O/CZkJo/U9Phoxv0Ad6F/d4/E75vqPzheJ6+pqbrT4VFDwXEwfbIzUYQFZxb5pxdqQutvVhcclCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ bh=a67BXvFyL5lSprSXzZpMAHmyDRdW/sb9BrE3UvsM554=;
+ b=m8zkFz++YpeGQyTjQQPJqRfzZGfJbPM+sVDcbR2yRbsWQgBIfAMVEWmrFioHaPDpPMjINNOfJ/x9eifLUqpSDypc/wXlykBqumV4i3kcPUKD+hsjDiBWbfyffw2hKlL4mfXlKM2V9ekZNWoqa059342EOREogCyipKX/owCec5r2kKi65ysSHvhcMnX8uQ+WfA92bDuuSpf9njNcHBejpE1wnyHvzXQrZGgv++QZZVp69EQQT/2NmQXAkI/uC9zwNRNMqKAstjhUDMAuTek/u1T/q40mctWEZSb1VCCZ8h6fdk4pmIMZdFa0tV23puBpyZvzIWPRKGzjcpUTnQ+hyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6I4/TRESJ1IE0o5Z8+a8Z1I/i6193Gvyu8oh9mHdJkY=;
- b=OqqNbjP5bpi5SI6OaHhyrrIEQ5nRvRJh0icOw+RGB1KEfnp9saE+zs5jMEttKrDWkrZ9mGgx1iJCaBcGO6tTobGdf7g410bHtBSdd/JqJEqVqsw8ffpuH8pOvTAF5PY9p1UZvTMtHbrqBqTzncKE0o7OEm/qR66vslXw7AgpYXk=
-Received: from MN2PR16CA0022.namprd16.prod.outlook.com (2603:10b6:208:134::35)
- by MWHPR02MB2605.namprd02.prod.outlook.com (2603:10b6:300:42::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.16; Tue, 17 Dec
- 2019 13:40:14 +0000
-Received: from BL2NAM02FT025.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:134:cafe::33) by MN2PR16CA0022.outlook.office365.com
- (2603:10b6:208:134::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.15 via Frontend
- Transport; Tue, 17 Dec 2019 13:40:13 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT025.mail.protection.outlook.com (10.152.77.151) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2538.14
- via Frontend Transport; Tue, 17 Dec 2019 13:40:13 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1ihD5A-0000e8-Oj; Tue, 17 Dec 2019 05:40:12 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1ihD55-0000mG-LL; Tue, 17 Dec 2019 05:40:07 -0800
-Received: from xsj-pvapsmtp01 (mailman.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xBHDe3Bm010609;
-        Tue, 17 Dec 2019 05:40:04 -0800
-Received: from [172.30.17.107]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1ihD51-0000ZE-FN; Tue, 17 Dec 2019 05:40:03 -0800
-Subject: Re: [PATCH v3 0/2] drivers: soc: xilinx: Add support for init suspend
-To:     Rajan Vaja <rajan.vaja@xilinx.com>, sre@kernel.org,
-        robh+dt@kernel.org, mark.rutland@arm.com, michal.simek@xilinx.com,
-        jolly.shah@xilinx.com, tejas.patel@xilinx.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1574412258-17988-1-git-send-email-rajan.vaja@xilinx.com>
- <1575283131-9339-1-git-send-email-rajan.vaja@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <4528868a-d443-b761-a334-b0f6035da790@xilinx.com>
-Date:   Tue, 17 Dec 2019 14:40:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <1575283131-9339-1-git-send-email-rajan.vaja@xilinx.com>
-Content-Type: text/plain; charset=utf-8
+ bh=a67BXvFyL5lSprSXzZpMAHmyDRdW/sb9BrE3UvsM554=;
+ b=VZf0Iayo2fYacEUCid43vgViRZXQiK8CcDk2PbIhvsAGmu4PPoTG8Hfg7vvU7CPbpBVuTzMUJ4thqz+m+rWw0LCWrRb6ziP2aHyDZ9NGUZdX5GCRvoCVWIdPoSamG6meOZpoTlt3AoZWIxdarLULrVPhxApFPDoSDj4JjMSAkEo=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB5359.eurprd04.prod.outlook.com (20.178.122.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.17; Tue, 17 Dec 2019 14:33:52 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::2c49:44c8:2c02:68b1]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::2c49:44c8:2c02:68b1%5]) with mapi id 15.20.2538.019; Tue, 17 Dec 2019
+ 14:33:52 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+        "a.swigon@samsung.com" <a.swigon@samsung.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "kgene@kernel.org" <kgene@kernel.org>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "kyungmin.park@samsung.com" <kyungmin.park@samsung.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH 2/9] PM / devfreq: Remove devfreq_get_devfreq_by_phandle
+ function
+Thread-Topic: [PATCH 2/9] PM / devfreq: Remove devfreq_get_devfreq_by_phandle
+ function
+Thread-Index: AQHVtJ3+QgbB6+oDD0SBl418fSrNCQ==
+Date:   Tue, 17 Dec 2019 14:33:52 +0000
+Message-ID: <VI1PR04MB70231FA16F12ACA3A3C01772EE500@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <20191217055738.28445-1-cw00.choi@samsung.com>
+ <CGME20191217055105epcas1p2d2930402a559e381a7854f515a683d15@epcas1p2.samsung.com>
+ <20191217055738.28445-3-cw00.choi@samsung.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(136003)(39860400002)(346002)(189003)(199004)(6636002)(15650500001)(478600001)(8676002)(81156014)(2616005)(81166006)(336012)(2906002)(36756003)(70586007)(44832011)(26005)(356004)(426003)(70206006)(4744005)(5660300002)(4326008)(186003)(316002)(9786002)(8936002)(31696002)(31686004);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR02MB2605;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 00d88661-8ba2-4d89-bb53-08d782f6a4cf
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2605:
-X-Microsoft-Antispam-PRVS: <MWHPR02MB2605F29836D1FC64C3CE0E65C6500@MWHPR02MB2605.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-Forefront-PRVS: 02543CD7CD
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jvjdYcPCwaINo4HtpFHvJsvzil1FvZslnZaHwZ0d64KUvpQocCanzEzMc2dPaccK4p4A+nkDXGOgzRkj+oDx/DERrBQTmyVR2STvTazKF+gIBDL7AHLKAEBumq4BbntzP+lGNLdPkL3Q3Ktm3r0ckHiHhA4okIuac8huGTullttRs8+fedWbcKmxCEuZugFxaXAx02Nq1l7g2amtrS/d3Ctp3wMtIx88UVQITdnX8kb+58xGxygFmtRwpZNeggnWsbJUsnTQXtb8m7E2pJkuzMXeytDGEaYgCZQj/YGAyKZgWNxeNnYYBOYRV1YSzM6okU+oXRp6bFah4fpwbAhr3DDoQ5B3LgRvtIVDyuFwVslexd937/8TcnPb7pY+WN4RepYtKkG6BtdwIOzaPGJw2PE4ep7v1+fzp00KkE0HqjpwgTd7ksmgTcRv4c8iTuqq
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2019 13:40:13.3116
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 87c4335f-9303-4162-ffab-08d782fe2352
+x-ms-traffictypediagnostic: VI1PR04MB5359:
+x-microsoft-antispam-prvs: <VI1PR04MB53598C0A2E09F242C3EBE713EE500@VI1PR04MB5359.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2958;
+x-forefront-prvs: 02543CD7CD
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(199004)(189003)(8676002)(478600001)(6506007)(53546011)(86362001)(52536014)(5660300002)(186003)(8936002)(4326008)(81156014)(91956017)(55016002)(316002)(7416002)(76116006)(54906003)(110136005)(66946007)(66446008)(9686003)(64756008)(26005)(66556008)(66476007)(2906002)(44832011)(33656002)(7696005)(71200400001)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5359;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kaGmMq+qiqRfPVQdn72HkdkScAhoAYVLa3DcRyr26+4wclZT/udrnlICDOwuJOQqkqtzG7CjIGdL/xd4wPPMoFdH+kPvaR6QCkX5ya+reIsDyD3Fr9YjVgnuxlgCNu8+YByclMIf9eGhjMDVvwtFuLY3BdryN/2Nasdawn81ZRyegeSJptP0puza1I0c2bTUPcear6VZwEYt5jfwIkrENCrxdyav2YCA7IXzFzZJ3ji6XZi5r7inpnSAlEMZt2Wsg0gUBwmyMI849UyT2j9n3j83CsXwCj9tJEe6gKms8JtmhbV96xaOp2u44cwVSyQ6lS89E8LxK8ogXmrnv5dUN/LfcLWnZlkFAq21h1IKutnIWV7PQwS9MrvDz/YCO+GRINmssKz97y/Pfub4QksBK+fBpIbpuUDEOHjUr7gTmVM9VAlw7g/kFvh9OEKZ3Q+V
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87c4335f-9303-4162-ffab-08d782fe2352
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2019 14:33:52.0428
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00d88661-8ba2-4d89-bb53-08d782f6a4cf
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2605
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hD8RERiaMu7LEB27PHVR24KtbWvJDBWmUGf0gwwyfvvy1uHj12fk8lTfZXyEPD8VpnL3ycjOkskGVRqsYz35yQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5359
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02. 12. 19 11:38, Rajan Vaja wrote:
-> Add support for init suspend in xilinx soc driver. Also update
-> documentation of zynqmp-power with IPI mailbox property.
-> 
-> Changes in v3:
->  - [PATCH v2 2/2] :
->    - select MAILBOX and ZYNQMP_IPI_MBOX as it is required in zynqmp
->      power driver.
-> Changes in v2:
->  - [PATCH 1/2] :
->    - Correct order of tx and rx in mbox-names property.
->    - Add interrupts property in example.
-> 
-> Rajan Vaja (1):
->   dt-bindings: power: reset: xilinx: Add bindings for ipi mailbox
-> 
-> Tejas Patel (1):
->   drivers: soc: xilinx: Use mailbox IPI callback
-> 
->  .../bindings/power/reset/xlnx,zynqmp-power.txt     |  43 +++++++-
->  drivers/soc/xilinx/Kconfig                         |   6 +-
->  drivers/soc/xilinx/zynqmp_power.c                  | 119 ++++++++++++++++++---
->  3 files changed, 151 insertions(+), 17 deletions(-)
-> 
-
-Queue for v5.6 and added to zynqmp/soc branch.
-
-Thanks,
-Michal
+On 17.12.2019 07:51, Chanwoo Choi wrote:=0A=
+> Previously, devfreq core support 'devfreq' property in order to get=0A=
+> the devfreq device by phandle. But, 'devfreq' property name is not proper=
+=0A=
+> on devicetree binding because this name doesn't mean the any h/w attribut=
+e.=0A=
+> =0A=
+> The devfreq core hand over the right to decide the property name=0A=
+> for getting the devfreq device on devicetree. Each devfreq driver=0A=
+> will decide the property name on devicetree binding and then get=0A=
+> the devfreq device by using devfreq_get_devfreq_by_node().=0A=
+> =0A=
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>=0A=
+> ---=0A=
+>   drivers/devfreq/devfreq.c    | 35 -----------------------------------=
+=0A=
+>   drivers/devfreq/exynos-bus.c | 14 ++++++++++++--=0A=
+>   include/linux/devfreq.h      |  8 --------=0A=
+>   3 files changed, 12 insertions(+), 45 deletions(-)=0A=
+> =0A=
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c=0A=
+> index cb8ca81c8973..c3d3c7c802a0 100644=0A=
+> --- a/drivers/devfreq/devfreq.c=0A=
+> +++ b/drivers/devfreq/devfreq.c=0A=
+> @@ -991,48 +991,13 @@ struct devfreq *devfreq_get_devfreq_by_node(struct =
+device_node *node)=0A=
+>   =0A=
+>   	return ERR_PTR(-ENODEV);=0A=
+>   }=0A=
+> -=0A=
+> -/*=0A=
+> - * devfreq_get_devfreq_by_phandle - Get the devfreq device from devicetr=
+ee=0A=
+> - * @dev - instance to the given device=0A=
+> - * @index - index into list of devfreq=0A=
+> - *=0A=
+> - * return the instance of devfreq device=0A=
+> - */=0A=
+> -struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int i=
+ndex)=0A=
+> -{=0A=
+> -	struct device_node *node;=0A=
+> -	struct devfreq *devfreq;=0A=
+> -=0A=
+> -	if (!dev)=0A=
+> -		return ERR_PTR(-EINVAL);=0A=
+> -=0A=
+> -	if (!dev->of_node)=0A=
+> -		return ERR_PTR(-EINVAL);=0A=
+> -=0A=
+> -	node =3D of_parse_phandle(dev->of_node, "devfreq", index);=0A=
+> -	if (!node)=0A=
+> -		return ERR_PTR(-ENODEV);=0A=
+> -=0A=
+> -	devfreq =3D devfreq_get_devfreq_by_node(node);=0A=
+> -	of_node_put(node);=0A=
+> -=0A=
+> -	return devfreq;=0A=
+> -}=0A=
+> -=0A=
+>   #else=0A=
+>   struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)=
+=0A=
+>   {=0A=
+>   	return ERR_PTR(-ENODEV);=0A=
+>   }=0A=
+> -=0A=
+> -struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int i=
+ndex)=0A=
+> -{=0A=
+> -	return ERR_PTR(-ENODEV);=0A=
+> -}=0A=
+>   #endif /* CONFIG_OF */=0A=
+>   EXPORT_SYMBOL_GPL(devfreq_get_devfreq_by_node);=0A=
+> -EXPORT_SYMBOL_GPL(devfreq_get_devfreq_by_phandle);=0A=
+>   =0A=
+>   /**=0A=
+>    * devm_devfreq_remove_device() - Resource-managed devfreq_remove_devic=
+e()=0A=
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c=
+=0A=
+> index 7f5917d59072..9aac2db956d5 100644=0A=
+> --- a/drivers/devfreq/exynos-bus.c=0A=
+> +++ b/drivers/devfreq/exynos-bus.c=0A=
+> @@ -146,6 +146,16 @@ static int exynos_bus_get_dev_status(struct device *=
+dev,=0A=
+>   	return ret;=0A=
+>   }=0A=
+>   =0A=
+> +static struct devfreq *get_parent_devfreq_by_node(struct device_node *np=
+)=0A=
+> +{=0A=
+> +	struct device_node *node =3D of_parse_phandle(np, "devfreq", 0);=0A=
+> +=0A=
+> +	if (!node)=0A=
+> +		return ERR_PTR(-ENODEV);=0A=
+> +=0A=
+> +	return devfreq_get_devfreq_by_node(node);=0A=
+> +}=0A=
+=0A=
+The _by_node suffix here is confusing because it actually fetches a =0A=
+property of the node unlike devfreq_get_devfreq_by_node. Maybe call this =
+=0A=
+get_parent_devfreq_from_node?=0A=
+=0A=
+Since it's a static function it could just be called get_parent_devfreq?=0A=
+=0A=
+> +=0A=
+>   static void exynos_bus_exit(struct device *dev)=0A=
+>   {=0A=
+>   	struct exynos_bus *bus =3D dev_get_drvdata(dev);=0A=
+> @@ -353,8 +363,8 @@ static int exynos_bus_profile_init_passive(struct exy=
+nos_bus *bus,=0A=
+>   	profile->exit =3D exynos_bus_passive_exit;=0A=
+>   =0A=
+>   	/* Get the instance of parent devfreq device */=0A=
+> -	parent_devfreq =3D devfreq_get_devfreq_by_phandle(dev, 0);=0A=
+> -	if (IS_ERR(parent_devfreq))=0A=
+> +	parent_devfreq =3D get_parent_devfreq_by_node(dev->of_node);=0A=
+> +	if (IS_ERR(parent_devfreq)) {=0A=
+>   		return -EPROBE_DEFER;=0A=
+>   =0A=
+>   	passive_data =3D devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);=
+=0A=
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h=0A=
+> index e3633ae43349..3ed96426302e 100644=0A=
+> --- a/include/linux/devfreq.h=0A=
+> +++ b/include/linux/devfreq.h=0A=
+> @@ -254,8 +254,6 @@ extern void devm_devfreq_unregister_notifier(struct d=
+evice *dev,=0A=
+>   				struct notifier_block *nb,=0A=
+>   				unsigned int list);=0A=
+>   extern struct devfreq *devfreq_get_devfreq_by_node(struct device_node *=
+node);=0A=
+> -extern struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev=
+,=0A=
+> -						int index);=0A=
+>   =0A=
+>   #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)=0A=
+>   /**=0A=
+> @@ -413,12 +411,6 @@ struct devfreq *devfreq_get_devfreq_by_node(struct d=
+evice_node *node)=0A=
+>   	return ERR_PTR(-ENODEV);=0A=
+>   }=0A=
+>   =0A=
+> -static inline struct devfreq *devfreq_get_devfreq_by_phandle(struct devi=
+ce *dev,=0A=
+> -							int index)=0A=
+> -{=0A=
+> -	return ERR_PTR(-ENODEV);=0A=
+> -}=0A=
+> -=0A=
+>   static inline int devfreq_update_stats(struct devfreq *df)=0A=
+>   {=0A=
+>   	return -EINVAL;=0A=
+> =0A=
+=0A=
