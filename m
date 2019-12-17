@@ -2,131 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AA6122626
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 09:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD15122698
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 09:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfLQIDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Dec 2019 03:03:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726281AbfLQIDI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Dec 2019 03:03:08 -0500
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 672EA21D7D;
-        Tue, 17 Dec 2019 08:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576569787;
-        bh=25HsI9t+Bqog4y9A5SHa9MC0k7uJ8M9CNTOiEeQd6Js=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DvMpZbB7IMXqeX4QWcO8IidCczC9xn9mkLwwqoYLgM5vsug6dsyrsPkNlUjElcdjj
-         o7hy5AimWrV23+EW+uPpkq77mQ7qWPhxDGeFqm4k5dgwaFkhibUekR6YfYCfhrZZsp
-         wyJwXhekHJQfP01vpqFUQkUgm9WV1sjfrFo2bYIw=
-Received: by mail-wr1-f49.google.com with SMTP id w15so10224332wru.4;
-        Tue, 17 Dec 2019 00:03:07 -0800 (PST)
-X-Gm-Message-State: APjAAAVVrMW1Qcj9xvbCUQF6/3K0eGjAVTxKjKexu0rU+MxL14AMcRAE
-        X7cDs/r0MjYy4zzfPJb/Tk/cE4tEAxnNYpbq4SE=
-X-Google-Smtp-Source: APXvYqzf3OsaJa9aVxYfyxYMjeroNjRrzOjIIzFzUrGof8GRCCHuk/JVJP69n/Ph+I/wKcqIgvXDGi2L7XlZJ9tfLAY=
-X-Received: by 2002:a05:6000:11c6:: with SMTP id i6mr36083863wrx.178.1576569785910;
- Tue, 17 Dec 2019 00:03:05 -0800 (PST)
+        id S1725870AbfLQIX1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 03:23:27 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42954 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbfLQIX1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 03:23:27 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 66so12750373otd.9;
+        Tue, 17 Dec 2019 00:23:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JMeW8IXOTJKgWI7xudgMEupdZiEmd53J2UWjz91+kjc=;
+        b=sM31rMZapetO6Ni7ou9+CBdLG1gbYNU7NYP1rj0l3aQkRWzwQX4AqGDtp6TSm4D5Z8
+         ilF31TiA9TODiPMBav1uFEhOPdBeE3eWrBtwNbsQVTeizf3fguOVSly4Z4y3LyEhe8Jg
+         qe0SebMMheb1ukEK/hZzg/BOJVhR8G0rcN5uOScP51ux06GZnB2KbrJVDeNVoojInObz
+         QefH0vJu3H4Rp0bdj5ERsn9NVd//T5pfrOe+wfPiZ2sb18eSXmwTrMgUsNRtkQ0RcSl0
+         QhZAI10XzQDoze1QEXjbUntUez1xxnPWEfDBk9A5dKO72GfzwEUE4jGAmucWxGOOs97T
+         CPWQ==
+X-Gm-Message-State: APjAAAXI/l0wKvViqQZnMrGMoHqgf+HeLzpEeDgt9l9T+l+OC5N4zq4w
+        5b78rlVPOiBjIHpjljY4+ShwDmBmZ218sph8RNyNtw==
+X-Google-Smtp-Source: APXvYqwU6UFXX7ZWRxkmNxJknYkkQQJcxP69ST8Knq9cN3tyhoz7l2BTSbOZP1Sd1lP9XXAK5Dfdz1cAJ0+8CWWQ6uA=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr37484806otd.266.1576571006380;
+ Tue, 17 Dec 2019 00:23:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20191217052328.25633-1-wens@kernel.org> <7f2be28d-9bf5-79a8-8720-4615a4e9f463@linaro.org>
-In-Reply-To: <7f2be28d-9bf5-79a8-8720-4615a4e9f463@linaro.org>
-From:   Chen-Yu Tsai <wens@kernel.org>
-Date:   Tue, 17 Dec 2019 16:02:53 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65TA0patyNO_xw0gpWR62N4Q_40amFW9OUh7jat3f9J8g@mail.gmail.com>
-Message-ID: <CAGb2v65TA0patyNO_xw0gpWR62N4Q_40amFW9OUh7jat3f9J8g@mail.gmail.com>
-Subject: Re: [PATCH] thermal: rockchip: enable hwmon
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Chen-Yu Tsai <wens@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <201912162148.hTRbNfPp%lkp@intel.com> <CAJZ5v0iTOSnvZqKuL7gy7QBtdHxcM7wPS8qdgbvs6+sQxZX5yg@mail.gmail.com>
+ <831EE4E5E37DCC428EB295A351E66249522A215D@shsmsx102.ccr.corp.intel.com>
+In-Reply-To: <831EE4E5E37DCC428EB295A351E66249522A215D@shsmsx102.ccr.corp.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Dec 2019 09:23:14 +0100
+Message-ID: <CAJZ5v0gFbjbqTOD845RjzpJQXQY=ko=9GxwVxoqw0fPccfig4w@mail.gmail.com>
+Subject: Re: [kbuild-all] Re: [pm:intel_idle+acpi 4/10] acpi_processor.c:undefined
+ reference to `acpi_processor_ffh_cstate_probe'
+To:     "Li, Philip" <philip.li@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, lkp <lkp@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 4:01 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Tue, Dec 17, 2019 at 1:31 AM Li, Philip <philip.li@intel.com> wrote:
 >
->
-> Hi Chen-Yu,
->
-> On 17/12/2019 06:23, Chen-Yu Tsai wrote:
-> > From: Chen-Yu Tsai <wens@csie.org>
+> > Subject: [kbuild-all] Re: [pm:intel_idle+acpi 4/10] acpi_processor.c:undefined
+> > reference to `acpi_processor_ffh_cstate_probe'
 > >
-> > By default of-based thermal driver do not have hwmon entries registered=
-.
+> > On Mon, Dec 16, 2019 at 2:26 PM kbuild test robot <lkp@intel.com> wrote:
+> > >
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+> > intel_idle+acpi
+> > > head:   dcedc03145600b929a32acb85b212131b079bc46
+> > > commit: 0300cf31f061e6287810c894337f29df2e200e2d [4/10] ACPI: processor:
+> > Export acpi_processor_evaluate_cst()
 > >
-> > Do this explicitly so users can use standard hwmon interfaces and tools
-> > to read the temperature.
-> >
-> > This is based on similar changes for bcm2835_thermal in commit
-> > d56c19d07e0b ("thermal: bcm2835: enable hwmon explicitly").
->
-> Thanks for submitting this patch, but it is duplicate with:
->
-> https://lore.kernel.org/linux-arm-kernel/20191212061702.BFE2D6E85603@coro=
-na.crabdance.com/
->
-> which I picked up.
+> > Outdated.  Please stop sending these.
+> thanks for the input Rafael, we will ignore the following tests on it.
 
-No problem. Thanks for the pointer.
+Well, the branch has been rebased since then and effectively it is a new one.
 
-ChenYu
-
->   -- Daniel
->
->
-> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> > ---
-> >  drivers/thermal/rockchip_thermal.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockc=
-hip_thermal.c
-> > index 9ed8085bb792..d53ba7dabf16 100644
-> > --- a/drivers/thermal/rockchip_thermal.c
-> > +++ b/drivers/thermal/rockchip_thermal.c
-> > @@ -19,6 +19,8 @@
-> >  #include <linux/mfd/syscon.h>
-> >  #include <linux/pinctrl/consumer.h>
-> >
-> > +#include "thermal_hwmon.h"
-> > +
-> >  /*
-> >   * If the temperature over a period of time High,
-> >   * the resulting TSHUT gave CRU module,let it reset the entire chip,
-> > @@ -1210,7 +1212,11 @@ rockchip_thermal_register_sensor(struct platform=
-_device *pdev,
-> >               return error;
-> >       }
-> >
-> > -     return 0;
-> > +     /* thermal_zone doesn't enable hwmon as default, enable it here *=
-/
-> > +     sensor->tzd->tzp->no_hwmon =3D false;
-> > +     error =3D thermal_add_hwmon_sysfs(sensor->tzd);
-> > +
-> > +     return error;
-> >  }
-> >
-> >  /**
-> >
->
->
-> --
->  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
-RM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+My point is that if something like that happens, the script should
+discard the old branch and pull the new one from scratch.
