@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51633122441
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 06:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3ED12242C
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 06:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727684AbfLQFvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Dec 2019 00:51:46 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:41271 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727715AbfLQFvM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 00:51:12 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191217055110epoutp021e2123a560a0376cb42fbec1957e0624~hEqr6DI9e1042510425epoutp022
-        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 05:51:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191217055110epoutp021e2123a560a0376cb42fbec1957e0624~hEqr6DI9e1042510425epoutp022
+        id S1727749AbfLQFvU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 00:51:20 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:31692 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727957AbfLQFvT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 00:51:19 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191217055117epoutp03b5698abb2b513ed02deeff0a49845dc8~hEqyt4w9j0699406994epoutp035
+        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 05:51:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191217055117epoutp03b5698abb2b513ed02deeff0a49845dc8~hEqyt4w9j0699406994epoutp035
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576561870;
-        bh=nGSJ5w822pCglHvhnwLfPBtgNRhZr8PB7pTR8TBMR48=;
+        s=mail20170921; t=1576561877;
+        bh=5DAWCwub0agRvHw0ZRiJq2GNiwn9aICERFH8BXH9Wzg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gAeukFSC259T+sgj+jDzB8LmZwunkPFRHH/1cEb56riZgeKWy/yl9v3jhBtjeuUFM
-         tFTTMt/CqN2Qma42BsgBjTLevM2J3QnwwOkwCo+PF+fOUPFnIpx0gDNjak7pB3+iYv
-         nKteElpUAEoLnrP12pAG4MUe5sPVPw6z67PMxIGY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        b=BRPQ7DqoQtZ3EGsEfrzQXyAhCFUJmavJ1AGDDAKp+fc3+4YkDBWNX2/qKMGLEake1
+         BlvIes4YZCDEhr9s6G70od86BqQ4azjz5o98PxBSAViPu65VJiCWlNd9fgOFcNP/m/
+         jcws1yZz40WQT+4o6+DUwIZp186gDyJPg0BvnwDc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20191217055109epcas1p462d7e01e1ad5b4eddafebcf477aa0b1c~hEqrVg3g51997419974epcas1p4e;
-        Tue, 17 Dec 2019 05:51:09 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 47cS1Q5x0zzMqYm6; Tue, 17 Dec
-        2019 05:51:06 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3D.64.48019.ACC68FD5; Tue, 17 Dec 2019 14:51:06 +0900 (KST)
+        20191217055116epcas1p42667adfcf3230efd28c309ed093c4b5d~hEqx16nop2266522665epcas1p4i;
+        Tue, 17 Dec 2019 05:51:16 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 47cS1Z1V8mzMqYkf; Tue, 17 Dec
+        2019 05:51:14 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        92.0F.52419.ACC68FD5; Tue, 17 Dec 2019 14:51:06 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9~hEqoLZb7-2681226812epcas1p1j;
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20191217055106epcas1p4b50ca647af9b54465e5c0a0bebb165b8~hEqoW_1e02005920059epcas1p4p;
         Tue, 17 Dec 2019 05:51:06 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191217055106epsmtrp2c1bdf5a4c64c04a6584f34e2a38e42db~hEqoKfFG81905819058epsmtrp2_;
+        20191217055106epsmtrp23a1955f62eab1b150feaf4ca418cc2aa~hEqoWGH4N1947419474epsmtrp2F;
         Tue, 17 Dec 2019 05:51:06 +0000 (GMT)
-X-AuditID: b6c32a38-257ff7000001bb93-6d-5df86cca6a2f
+X-AuditID: b6c32a37-5b7ff7000001ccc3-1d-5df86ccac98c
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1D.5D.10238.9CC68FD5; Tue, 17 Dec 2019 14:51:05 +0900 (KST)
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DD.7E.06569.ACC68FD5; Tue, 17 Dec 2019 14:51:06 +0900 (KST)
 Received: from localhost.localdomain (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191217055105epsmtip1d5f0fbcc1d04c09ba10d9876a0fb3ad2~hEqn6muP-3162031620epsmtip11;
+        20191217055105epsmtip1d20a715834983bff8f30ff86863323d4~hEqoDeIJG3103131031epsmtip1a;
         Tue, 17 Dec 2019 05:51:05 +0000 (GMT)
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 To:     krzk@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -57,169 +57,148 @@ Cc:     a.swigon@samsung.com, m.szyprowski@samsung.com, kgene@kernel.org,
         linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH 4/9] PM / devfreq: exynos-bus: Replace deprecated 'devfreq'
- property
-Date:   Tue, 17 Dec 2019 14:57:33 +0900
-Message-Id: <20191217055738.28445-5-cw00.choi@samsung.com>
+Subject: [PATCH 5/9] PM / devfreq: exynos-bus: Replace deprecated
+ 'devfreq-events' property
+Date:   Tue, 17 Dec 2019 14:57:34 +0900
+Message-Id: <20191217055738.28445-6-cw00.choi@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191217055738.28445-1-cw00.choi@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0wUZxTNN7PzwLg6Xa29YCLrtNpIgjAuq58oBIIxa/QHxqRNSAlMYLog
-        +8rMYoomVbEo4AvRROIDSnwEF1C7Ul3IIgY2tZggWlPsa1sKLYjQjQIiUSvuMGv037nnnvu+
-        LGnw0DFsocMtyQ7RxtNzdNe7ViTE37FNZyf+4Tfiv2rLEH44OUzhusBdCs8MjFL46OAoiXt7
-        rzK4p3SMwQ3BpxT2DvZR+EHbGRpPHA4gPN4/Q+Ka3psEri/9hsHNgSCDLzy8T+Df9zbQuKw9
-        wKQZLE21Tcji9VTQlmvnd1u+C/kIy5EWD7Lc6KslLRPeJZlMVtH6AknMl2Sj5Mhz5hc6rCn8
-        5m05GTnm1YlCvLAWr+GNDtEupfAbtmTGbyy0hcfgjTtEW3GYyhQVhU9IXS87i92SscCpuFN4
-        yZVvc611rVREu1LssK7Mc9qThcTEVeawMLeooOfEE+T6cfFXrUPdaA9qXFSJoljgkqC+6hpT
-        ieawBs6HoLT0OK0Z4wj8Q4OUZkwhqL9yLGywsyH/v07X+HYEYy9qIqJJBJO+G4yal+bioOPR
-        L7SKF3JfQ12Xj1BFJPcrAf6ffqNUxwLuMzjbM0WqWXXcMhgZylJpPZcMbXV/67T+YqHx6i1S
-        xVHcOhi+PjqbB7iXNHhuh2hNtAF+LqsiNLwAHt9uYTQcAxOh9ohmF1zqDtBacDmClo57lOYw
-        QceF44TaBMmtgCttCRq9FFpfnkUqJrl5EHp2KDK9Hsr3GzTJx/CgPxgpGw3nDlRESlmgvPFJ
-        ZClHEDRUH2Wq0JJT7yp8i5AHLZJcit0qKYIr6f2TedHsn8ZhH/Lf3dKJOBbxc/Xgfp5toMQd
-        Som9EwFL8gv1PmOY0ueLJTsl2ZkjF9skpROZw5s8RsZ8mOcMf73DnSOYV5lMJpwkrDYLAv+R
-        np2+n23grKJbKpIklyS/jSPYqJg9KPBB58Vl9Ke5f6bVOOIe5clfWJUzBzNePW1O2npv+0mi
-        aabP+8Ot3OCgbm/Fq51QbyZG5DuxOlNJ6uh416ZzuolL0aTStNtWNzVwc/vk6YHW50Wp/+yr
-        +DK2emTudPrn6fMvC9H/jZ3+9/vkx/6MT7r7hz3VY/uWV6aF6IbudM9w0MDrlAJRiCNlRXwD
-        3H3Hsr0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSnO6pnB+xBp0aFvfntTJaXP/ynNVi
-        /pFzrBb/H71mteh//JrZ4vz5DewWZ5vesFusuPuR1WLT42usFpd3zWGz+Nx7hNHi04P/zBYz
-        zu9jsljY1MJusfbIXXaLpdcvMlncblzBZtG69wi7g5DHmnlrGD02repk89i8pN5j47sdTB59
-        W1Yxemy/No/Z4/MmuQD2KC6blNSczLLUIn27BK6Ms1M+MBackK7Y+ewkYwPjarEuRg4OCQET
-        ib//HLsYuTiEBHYzSpz+vYWxi5ETKC4pMe3iUWaIGmGJw4eLIWo+MUpc3XCWGaSGTUBLYv+L
-        G2wgtohAG6PEku9yIDazwHMmiX1dZiC2sECIxJ3D88HmsAioSrx8FgUS5hWwktg1/yELxCp5
-        idUbDoCN5BSwlni+7TUTiC0EVPNz6jPWCYx8CxgZVjFKphYU56bnFhsWGOallusVJ+YWl+al
-        6yXn525iBIe7luYOxstL4g8xCnAwKvHwSpR8jxViTSwrrsw9xCjBwawkwrtDASjEm5JYWZVa
-        lB9fVJqTWnyIUZqDRUmc92nesUghgfTEktTs1NSC1CKYLBMHp1QDY/uDWZJOB+8/tFl62bqd
-        pXfuL9mtO39faaywmSjD+SL6qkSNcaIeu+qd3SYhCWu/vMzMW6vzltP81prw7+Zvfr25rBN0
-        cGO60e+NQhr1HY6K206cFfnwR7Qse33FPhbdr24MXvs+Ls66JNRXHjCxq1rInMVgrthVj92q
-        AU+Opk28/+ceR3L5LCWW4oxEQy3mouJEAMT/au1zAgAA
-X-CMS-MailID: 20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0wTWRTO7XQeoDWTgnrEROvoxoCCjLV6UTEajWkiRpY1SjQEJzChSDtt
+        Oi3xLaL4CqJoSFiyFo2aSNcHImIlIopV8IlIfIu64CIB06D1gcEE206N/vvOd75zz3fOPQyh
+        dVMxTK7kEO2SYOaoSHXd9dj4+NvmgYzEg32T8WtXEcJPPr0jcaX3PomHOvtIvL+rj8CtrdU0
+        vlf4nsYnOz6QuKbrMYnb6/+hsH+fF+GPb4YIXN56RYWPFu6g8WlvB41PPGlT4RfbTlK4qMFL
+        z9caT7lOIWONew9lPH98q/Gcz6MyltS6kfHiYxdh9NeMS6VX5c01iUK2aNeJUpY1O1fKSeaW
+        /JW5MNMwM5GP55PwLE4nCRYxmVuUkhq/ONccGIPT5QtmZ4BKFWSZmzZvrt3qdIg6k1V2JHOi
+        LdtsS7IlyIJFdko5CVlWy2w+MXG6ISBck2fquvSSsBWPXbf97bACVDpqL4pggJ0B3ef66b0o
+        ktGyHgQXKrYRSvARwfeCG+HgC4IWV4/6Z0lhTzmlJBoQlF2oCqs+IehvL0dBFcXGQWPPUyqI
+        o9ktUHndowqKCPaZCi4/fE4GE1FsBnR4eokgVrN/QPeNslCxhp0NxwtLkdJuPPxbfTWkiWDn
+        wLu6PpXCD1Fws9Op4EVQd+87peAo6G2upRUcA35fQ5jfCFW3vCHbwO5GUNv4gFQSemg8cSjw
+        KBNwFwtn66cp9AS4NHg45IFgR4DvczEZlACrgd07tYpkIrS/6QjbGQPHdu0JtzKC68yx8FJK
+        EPzdVk8fQOMqfnU4gpAbjRJtsiVHlHmb/vcvq0GhO42b5UHV91OaEMsgbrjGlv81Q0sK+fJ6
+        SxMChuCiNR5dgNJkC+s3iHZrpt1pFuUmZAhsspSIGZllDVy95MjkDdP1ej2ewc808Dw3WsMM
+        tGVo2RzBIeaJok20/6xTMRExBWhFbGenxbR0MN1f253S2+z/v67JEz2hKi3p9pfi8W/T9VrR
+        rkpfMKmFMUeVPoqrvPIs4fzqo2mRZUV/qsv7/Xcu++dtXrOZXFHyqH7H5Pxv7pXvpbVTKwci
+        mj2H/ULRq55BTTsZxaYlT1n5X8Gyg8vvtszx+RZeo5IWbDow4tsD6RrPqWWTwMcRdln4AUYt
+        E/W9AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrILMWRmVeSWpSXmKPExsWy7bCSnO6pnB+xBg17OS3uz2tltLj+5Tmr
+        xfwj51gt/j96zWrR//g1s8X58xvYLc42vWG3WHH3I6vFpsfXWC0u75rDZvG59wijxacH/5kt
+        Zpzfx2SxsKmF3WLtkbvsFkuvX2SyuN24gs2ide8RdgchjzXz1jB6bFrVyeaxeUm9x8Z3O5g8
+        +rasYvTYfm0es8fnTXIB7FFcNimpOZllqUX6dglcGY933mEu6JGuaH7C3cA4UayLkZNDQsBE
+        ounFDLYuRi4OIYHdjBJnGt4zQSQkJaZdPMrcxcgBZAtLHD5cDFHziVGiaccUNpAaNgEtif0v
+        boDZIgJtjBJLvsuB2MwCz5kk9nWZgfQKC0RLXDkSDhJmEVCVeHZ0KiOIzStgJbGkaSIjxCp5
+        idUbDjCD2JwC1hLPt70GO0EIqObn1GesExj5FjAyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L
+        10vOz93ECA54La0djCdOxB9iFOBgVOLhlSj5HivEmlhWXJl7iFGCg1lJhHeHAlCINyWxsiq1
+        KD++qDQntfgQozQHi5I4r3z+sUghgfTEktTs1NSC1CKYLBMHp1QDo3T1jO3Su2Y90o+MW9ey
+        Yml/W8fpO8wL09/3WlZazZnQm/Ju1+H/z2PPMu674BFQ1tsbsORB+o0t+cXCc6acqf+9ruZ4
+        vLP71qW51w+Xx4noCwvOOfP/ukf30qY+JTHOOdOWTbh5gKFaObBc7Xqvm9KcN+q3ed4nWHwX
+        f9ty/lv5rUeJE3qc/yixFGckGmoxFxUnAgDEYpQTdAIAAA==
+X-CMS-MailID: 20191217055106epcas1p4b50ca647af9b54465e5c0a0bebb165b8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9
+X-CMS-RootMailID: 20191217055106epcas1p4b50ca647af9b54465e5c0a0bebb165b8
 References: <20191217055738.28445-1-cw00.choi@samsung.com>
-        <CGME20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9@epcas1p1.samsung.com>
+        <CGME20191217055106epcas1p4b50ca647af9b54465e5c0a0bebb165b8@epcas1p4.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order to remove the deprecated 'devfreq' property, replace with
-new 'exynos,parent-bus' property in order to get the parent devfreq device
-in devicetree file instead of 'devfreq' property. But, to guarantee the
-backward-compatibility, keep the support 'devfreq' property.
+In order to remove the deprecated 'devfreq-events' property, replace with
+new 'exynos,ppmu-device' property in order to get the devfreq-event device
+in devicetree file instead of 'devfreq-events' property. But, to guarantee
+the backward-compatibility, keep the support 'devfreq-events' property.
 
 Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
- .../bindings/devfreq/exynos-bus.txt           | 16 +++++++--------
- drivers/devfreq/exynos-bus.c                  | 20 ++++++++++++-------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+ .../bindings/devfreq/exynos-bus.txt           |  6 ++--
+ drivers/devfreq/exynos-bus.c                  | 32 ++++++++++++++-----
+ 2 files changed, 27 insertions(+), 11 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-index e71f752cc18f..c948cee01124 100644
+index c948cee01124..c6c2dd0e77c8 100644
 --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
 +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-@@ -45,7 +45,7 @@ Required properties only for parent bus device:
+@@ -41,7 +41,7 @@ Required properties for all bus devices:
+ 
+ Required properties only for parent bus device:
+ - vdd-supply: the regulator to provide the buses with the voltage.
+-- devfreq-events: the devfreq-event device to monitor the current utilization
++- exynos,ppmu-device: the devfreq-event device to monitor the current utilization
    of buses.
  
  Required properties only for passive bus device:
--- devfreq: the parent bus device.
-+- exynos,parent-bus: the parent bus device.
+@@ -374,13 +374,13 @@ Example2 :
+ 	in exynos3250-rinato.dts is listed below:
  
- Optional properties only for parent bus device:
- - exynos,saturation-ratio: the percentage value which is used to calibrate
-@@ -386,36 +386,36 @@ Example2 :
- 	};
- 
- 	&bus_rightbus {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
+ 	&bus_dmc {
+-		devfreq-events = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
++		exynos,ppmu-device = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+ 		vdd-supply = <&buck1_reg>;	/* VDD_MIF */
  		status = "okay";
  	};
  
- 	&bus_lcd0 {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
- 		status = "okay";
- 	};
- 
- 	&bus_fsys {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
- 		status = "okay";
- 	};
- 
- 	&bus_mcuisp {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
- 		status = "okay";
- 	};
- 
- 	&bus_isp {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
- 		status = "okay";
- 	};
- 
- 	&bus_peril {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
- 		status = "okay";
- 	};
- 
- 	&bus_mfc {
--		devfreq = <&bus_leftbus>;
-+		exynos,parent-bus = <&bus_leftbus>;
+ 	&bus_leftbus {
+-		devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
++		exynos,ppmu-device = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+ 		vdd-supply = <&buck3_reg>;
  		status = "okay";
  	};
 diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 7893c3b99e60..60d61b168153 100644
+index 60d61b168153..0683bee64eb6 100644
 --- a/drivers/devfreq/exynos-bus.c
 +++ b/drivers/devfreq/exynos-bus.c
-@@ -148,11 +148,17 @@ static int exynos_bus_get_dev_status(struct device *dev,
- 
- static struct devfreq *get_parent_devfreq_by_node(struct device_node *np)
+@@ -165,11 +165,18 @@ static struct devfreq *get_parent_devfreq_by_node(struct device_node *np)
+ static struct devfreq_event_dev *get_edev_by_node(struct device_node *np,
+ 							int index)
  {
--	struct device_node *node = of_parse_phandle(np, "devfreq", 0);
--
+-	struct device_node *node = of_parse_phandle(np, "devfreq-events",
+-							index);
++	struct device_node *node = of_parse_phandle(np,
++					"exynos,ppmu-device", index);
+ 
 -	if (!node)
 -		return ERR_PTR(-ENODEV);
--
-+	struct device_node *node = of_parse_phandle(np, "exynos,parent-bus", 0);
-+
 +	if (!node) {
 +		/*
-+		 * Check the deprecated 'devfreq' property
++		 * Check the deprecated 'devfreq-events' property
 +		 * to support backward-compatibility.
 +		 */
-+		node = of_parse_phandle(np, "devfreq", 0);
++		node = of_parse_phandle(np, "devfreq-events", index);
 +		if (!node)
 +			return ERR_PTR(-ENODEV);
 +	}
- 	return devfreq_get_devfreq_by_node(node);
+ 	return devfreq_event_get_edev_by_node(node);
  }
  
-@@ -376,7 +382,7 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+@@ -220,11 +227,20 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+ 	 * buses. This raw data will be used in devfreq ondemand governor.
+ 	 */
+ 	count = of_property_count_elems_of_size(dev->of_node,
+-					"devfreq-events", sizeof(u32));
++					"exynos,ppmu-device", sizeof(u32));
+ 	if (count < 0) {
+-		dev_err(dev, "failed to get the count of devfreq-event dev\n");
+-		ret = count;
+-		goto err_regulator;
++		/*
++		 * Check the deprecated 'devfreq-events' property
++		 * to support backward-compatibility.
++		 */
++		count = of_property_count_elems_of_size(dev->of_node,
++					"devfreq-events", sizeof(u32));
++		if (count < 0) {
++			dev_err(dev,
++				"failed to get the count of devfreq-event dev\n");
++			ret = count;
++			goto err_regulator;
++		}
+ 	}
+ 	bus->edev_count = count;
  
- 	/* Get the instance of parent devfreq device */
- 	parent_devfreq = get_parent_devfreq_by_node(dev->of_node);
--	if (IS_ERR(parent_devfreq)) {
-+	if (IS_ERR(parent_devfreq))
- 		return -EPROBE_DEFER;
- 
- 	passive_data = devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);
-@@ -423,7 +429,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
- 	if (!profile)
- 		return -ENOMEM;
- 
--	node = of_parse_phandle(dev->of_node, "devfreq", 0);
-+	node = of_parse_phandle(dev->of_node, "exynos,parent-bus", 0);
- 	if (node) {
- 		of_node_put(node);
- 		passive = true;
 -- 
 2.17.1
 
