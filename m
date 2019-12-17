@@ -2,261 +2,431 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1CB122ED3
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 15:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BD8122F07
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2019 15:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbfLQOd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Dec 2019 09:33:58 -0500
-Received: from mail-eopbgr70050.outbound.protection.outlook.com ([40.107.7.50]:10086
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727029AbfLQOd6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Dec 2019 09:33:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iAFNgzKIJoRvNuhTqtN+AEnIfYt3BaHIb1xlz63RafhKFB2Py6AkQXj/+SbW/pxo6Q+8rGUAkhEB+kRuRewuw+3d17s2pyGE28rt+vJ5FNq1D5rIlJh9aiduIXfPI/R1rEicjACSg7qaBvc4Am3WlM2epSseZPZc3BsT0CkcHUnCyFoM4GpsiwXmRfOQld1dFZurCwg2kJ60O9IbgOP/MOfe0l92y7YIJEu2BqlBKSA1iFg+TJzSqBwLmCbLRvmQO1gRg0G07bnQktg11SJABmQGz8zYW/NhB8YvUyJT0YXkrpticDkElEFy1C80f1YgC+Vb5tAvwkp8vkkDhV347Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a67BXvFyL5lSprSXzZpMAHmyDRdW/sb9BrE3UvsM554=;
- b=m8zkFz++YpeGQyTjQQPJqRfzZGfJbPM+sVDcbR2yRbsWQgBIfAMVEWmrFioHaPDpPMjINNOfJ/x9eifLUqpSDypc/wXlykBqumV4i3kcPUKD+hsjDiBWbfyffw2hKlL4mfXlKM2V9ekZNWoqa059342EOREogCyipKX/owCec5r2kKi65ysSHvhcMnX8uQ+WfA92bDuuSpf9njNcHBejpE1wnyHvzXQrZGgv++QZZVp69EQQT/2NmQXAkI/uC9zwNRNMqKAstjhUDMAuTek/u1T/q40mctWEZSb1VCCZ8h6fdk4pmIMZdFa0tV23puBpyZvzIWPRKGzjcpUTnQ+hyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a67BXvFyL5lSprSXzZpMAHmyDRdW/sb9BrE3UvsM554=;
- b=VZf0Iayo2fYacEUCid43vgViRZXQiK8CcDk2PbIhvsAGmu4PPoTG8Hfg7vvU7CPbpBVuTzMUJ4thqz+m+rWw0LCWrRb6ziP2aHyDZ9NGUZdX5GCRvoCVWIdPoSamG6meOZpoTlt3AoZWIxdarLULrVPhxApFPDoSDj4JjMSAkEo=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB5359.eurprd04.prod.outlook.com (20.178.122.92) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.17; Tue, 17 Dec 2019 14:33:52 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1%5]) with mapi id 15.20.2538.019; Tue, 17 Dec 2019
- 14:33:52 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-        "a.swigon@samsung.com" <a.swigon@samsung.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "kgene@kernel.org" <kgene@kernel.org>,
-        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-        "kyungmin.park@samsung.com" <kyungmin.park@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH 2/9] PM / devfreq: Remove devfreq_get_devfreq_by_phandle
- function
-Thread-Topic: [PATCH 2/9] PM / devfreq: Remove devfreq_get_devfreq_by_phandle
- function
-Thread-Index: AQHVtJ3+QgbB6+oDD0SBl418fSrNCQ==
-Date:   Tue, 17 Dec 2019 14:33:52 +0000
-Message-ID: <VI1PR04MB70231FA16F12ACA3A3C01772EE500@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <20191217055738.28445-1-cw00.choi@samsung.com>
- <CGME20191217055105epcas1p2d2930402a559e381a7854f515a683d15@epcas1p2.samsung.com>
- <20191217055738.28445-3-cw00.choi@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 87c4335f-9303-4162-ffab-08d782fe2352
-x-ms-traffictypediagnostic: VI1PR04MB5359:
-x-microsoft-antispam-prvs: <VI1PR04MB53598C0A2E09F242C3EBE713EE500@VI1PR04MB5359.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2958;
-x-forefront-prvs: 02543CD7CD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(199004)(189003)(8676002)(478600001)(6506007)(53546011)(86362001)(52536014)(5660300002)(186003)(8936002)(4326008)(81156014)(91956017)(55016002)(316002)(7416002)(76116006)(54906003)(110136005)(66946007)(66446008)(9686003)(64756008)(26005)(66556008)(66476007)(2906002)(44832011)(33656002)(7696005)(71200400001)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5359;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kaGmMq+qiqRfPVQdn72HkdkScAhoAYVLa3DcRyr26+4wclZT/udrnlICDOwuJOQqkqtzG7CjIGdL/xd4wPPMoFdH+kPvaR6QCkX5ya+reIsDyD3Fr9YjVgnuxlgCNu8+YByclMIf9eGhjMDVvwtFuLY3BdryN/2Nasdawn81ZRyegeSJptP0puza1I0c2bTUPcear6VZwEYt5jfwIkrENCrxdyav2YCA7IXzFzZJ3ji6XZi5r7inpnSAlEMZt2Wsg0gUBwmyMI849UyT2j9n3j83CsXwCj9tJEe6gKms8JtmhbV96xaOp2u44cwVSyQ6lS89E8LxK8ogXmrnv5dUN/LfcLWnZlkFAq21h1IKutnIWV7PQwS9MrvDz/YCO+GRINmssKz97y/Pfub4QksBK+fBpIbpuUDEOHjUr7gTmVM9VAlw7g/kFvh9OEKZ3Q+V
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87c4335f-9303-4162-ffab-08d782fe2352
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2019 14:33:52.0428
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hD8RERiaMu7LEB27PHVR24KtbWvJDBWmUGf0gwwyfvvy1uHj12fk8lTfZXyEPD8VpnL3ycjOkskGVRqsYz35yQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5359
+        id S1728560AbfLQOmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Dec 2019 09:42:46 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31276 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728532AbfLQOmq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Dec 2019 09:42:46 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBHEgOMe102644
+        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 09:42:44 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wwe37frkw-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2019 09:42:44 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
+        Tue, 17 Dec 2019 14:42:41 -0000
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 17 Dec 2019 14:42:39 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBHEgcxU47186300
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Dec 2019 14:42:38 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85B07A405B;
+        Tue, 17 Dec 2019 14:42:38 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A69EA4060;
+        Tue, 17 Dec 2019 14:42:37 +0000 (GMT)
+Received: from ltc-wspoon6.aus.stglabs.ibm.com (unknown [9.40.193.95])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Dec 2019 14:42:37 +0000 (GMT)
+From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        ego@linux.vnet.ibm.com, oohall@gmail.com, mpe@ellerman.id.au,
+        svaidy@linux.ibm.com, Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Subject: [RFC] cpuidle : Add debugfs support for cpuidle core
+Date:   Tue, 17 Dec 2019 08:38:34 -0600
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 19121714-0016-0000-0000-000002D5D1D9
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121714-0017-0000-0000-000033380B9A
+Message-Id: <20191217143834.19797-1-huntbag@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-17_02:2019-12-17,2019-12-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ impostorscore=0 clxscore=1011 mlxlogscore=999 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912170124
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17.12.2019 07:51, Chanwoo Choi wrote:=0A=
-> Previously, devfreq core support 'devfreq' property in order to get=0A=
-> the devfreq device by phandle. But, 'devfreq' property name is not proper=
-=0A=
-> on devicetree binding because this name doesn't mean the any h/w attribut=
-e.=0A=
-> =0A=
-> The devfreq core hand over the right to decide the property name=0A=
-> for getting the devfreq device on devicetree. Each devfreq driver=0A=
-> will decide the property name on devicetree binding and then get=0A=
-> the devfreq device by using devfreq_get_devfreq_by_node().=0A=
-> =0A=
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>=0A=
-> ---=0A=
->   drivers/devfreq/devfreq.c    | 35 -----------------------------------=
-=0A=
->   drivers/devfreq/exynos-bus.c | 14 ++++++++++++--=0A=
->   include/linux/devfreq.h      |  8 --------=0A=
->   3 files changed, 12 insertions(+), 45 deletions(-)=0A=
-> =0A=
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c=0A=
-> index cb8ca81c8973..c3d3c7c802a0 100644=0A=
-> --- a/drivers/devfreq/devfreq.c=0A=
-> +++ b/drivers/devfreq/devfreq.c=0A=
-> @@ -991,48 +991,13 @@ struct devfreq *devfreq_get_devfreq_by_node(struct =
-device_node *node)=0A=
->   =0A=
->   	return ERR_PTR(-ENODEV);=0A=
->   }=0A=
-> -=0A=
-> -/*=0A=
-> - * devfreq_get_devfreq_by_phandle - Get the devfreq device from devicetr=
-ee=0A=
-> - * @dev - instance to the given device=0A=
-> - * @index - index into list of devfreq=0A=
-> - *=0A=
-> - * return the instance of devfreq device=0A=
-> - */=0A=
-> -struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int i=
-ndex)=0A=
-> -{=0A=
-> -	struct device_node *node;=0A=
-> -	struct devfreq *devfreq;=0A=
-> -=0A=
-> -	if (!dev)=0A=
-> -		return ERR_PTR(-EINVAL);=0A=
-> -=0A=
-> -	if (!dev->of_node)=0A=
-> -		return ERR_PTR(-EINVAL);=0A=
-> -=0A=
-> -	node =3D of_parse_phandle(dev->of_node, "devfreq", index);=0A=
-> -	if (!node)=0A=
-> -		return ERR_PTR(-ENODEV);=0A=
-> -=0A=
-> -	devfreq =3D devfreq_get_devfreq_by_node(node);=0A=
-> -	of_node_put(node);=0A=
-> -=0A=
-> -	return devfreq;=0A=
-> -}=0A=
-> -=0A=
->   #else=0A=
->   struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)=
-=0A=
->   {=0A=
->   	return ERR_PTR(-ENODEV);=0A=
->   }=0A=
-> -=0A=
-> -struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int i=
-ndex)=0A=
-> -{=0A=
-> -	return ERR_PTR(-ENODEV);=0A=
-> -}=0A=
->   #endif /* CONFIG_OF */=0A=
->   EXPORT_SYMBOL_GPL(devfreq_get_devfreq_by_node);=0A=
-> -EXPORT_SYMBOL_GPL(devfreq_get_devfreq_by_phandle);=0A=
->   =0A=
->   /**=0A=
->    * devm_devfreq_remove_device() - Resource-managed devfreq_remove_devic=
-e()=0A=
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c=
-=0A=
-> index 7f5917d59072..9aac2db956d5 100644=0A=
-> --- a/drivers/devfreq/exynos-bus.c=0A=
-> +++ b/drivers/devfreq/exynos-bus.c=0A=
-> @@ -146,6 +146,16 @@ static int exynos_bus_get_dev_status(struct device *=
-dev,=0A=
->   	return ret;=0A=
->   }=0A=
->   =0A=
-> +static struct devfreq *get_parent_devfreq_by_node(struct device_node *np=
-)=0A=
-> +{=0A=
-> +	struct device_node *node =3D of_parse_phandle(np, "devfreq", 0);=0A=
-> +=0A=
-> +	if (!node)=0A=
-> +		return ERR_PTR(-ENODEV);=0A=
-> +=0A=
-> +	return devfreq_get_devfreq_by_node(node);=0A=
-> +}=0A=
-=0A=
-The _by_node suffix here is confusing because it actually fetches a =0A=
-property of the node unlike devfreq_get_devfreq_by_node. Maybe call this =
-=0A=
-get_parent_devfreq_from_node?=0A=
-=0A=
-Since it's a static function it could just be called get_parent_devfreq?=0A=
-=0A=
-> +=0A=
->   static void exynos_bus_exit(struct device *dev)=0A=
->   {=0A=
->   	struct exynos_bus *bus =3D dev_get_drvdata(dev);=0A=
-> @@ -353,8 +363,8 @@ static int exynos_bus_profile_init_passive(struct exy=
-nos_bus *bus,=0A=
->   	profile->exit =3D exynos_bus_passive_exit;=0A=
->   =0A=
->   	/* Get the instance of parent devfreq device */=0A=
-> -	parent_devfreq =3D devfreq_get_devfreq_by_phandle(dev, 0);=0A=
-> -	if (IS_ERR(parent_devfreq))=0A=
-> +	parent_devfreq =3D get_parent_devfreq_by_node(dev->of_node);=0A=
-> +	if (IS_ERR(parent_devfreq)) {=0A=
->   		return -EPROBE_DEFER;=0A=
->   =0A=
->   	passive_data =3D devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);=
-=0A=
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h=0A=
-> index e3633ae43349..3ed96426302e 100644=0A=
-> --- a/include/linux/devfreq.h=0A=
-> +++ b/include/linux/devfreq.h=0A=
-> @@ -254,8 +254,6 @@ extern void devm_devfreq_unregister_notifier(struct d=
-evice *dev,=0A=
->   				struct notifier_block *nb,=0A=
->   				unsigned int list);=0A=
->   extern struct devfreq *devfreq_get_devfreq_by_node(struct device_node *=
-node);=0A=
-> -extern struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev=
-,=0A=
-> -						int index);=0A=
->   =0A=
->   #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)=0A=
->   /**=0A=
-> @@ -413,12 +411,6 @@ struct devfreq *devfreq_get_devfreq_by_node(struct d=
-evice_node *node)=0A=
->   	return ERR_PTR(-ENODEV);=0A=
->   }=0A=
->   =0A=
-> -static inline struct devfreq *devfreq_get_devfreq_by_phandle(struct devi=
-ce *dev,=0A=
-> -							int index)=0A=
-> -{=0A=
-> -	return ERR_PTR(-ENODEV);=0A=
-> -}=0A=
-> -=0A=
->   static inline int devfreq_update_stats(struct devfreq *df)=0A=
->   {=0A=
->   	return -EINVAL;=0A=
-> =0A=
-=0A=
+Up until now, we did not have a way to tune cpuidle attribute like
+residency in kernel. This patch adds support for debugfs in cpuidle core.
+Thereby providing support for tuning cpuidle attributes like residency in
+kernel at runtime.
+For example: Tuning residency at runtime can be used to quantify governors
+decision making as governor uses residency as one of the parameter to
+take decision about the state that needs to be entered while idling.
+
+Currently, Only residency have been added in debugfs framework. We can
+later on add attributes like latency too.
+
+Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+---
+ drivers/cpuidle/Kconfig           |   8 ++
+ drivers/cpuidle/Makefile          |   1 +
+ drivers/cpuidle/cpuidle-debugfs.c | 188 ++++++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle.c         |  19 ++-
+ drivers/cpuidle/cpuidle.h         |  24 ++++
+ include/linux/cpuidle.h           |   3 +
+ 6 files changed, 241 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/cpuidle/cpuidle-debugfs.c
+
+diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
+index 88727b7c0d59..630a5a90744b 100644
+--- a/drivers/cpuidle/Kconfig
++++ b/drivers/cpuidle/Kconfig
+@@ -71,6 +71,14 @@ config HALTPOLL_CPUIDLE
+          before halting in the guest (more efficient than polling in the
+          host via halt_poll_ns for some scenarios).
+ 
++config CPUIDLE_DEBUG_FS
++	bool "cpuidle state debugging information in debugfs"
++	default y
++	depends on DEBUG_FS
++	help
++	Include cpuidle state debugging information in debugfs. This is mostly
++	useful for kernel developers, but it does not incur any cost at runtime.
++
+ endif
+ 
+ config ARCH_NEEDS_CPU_IDLE_COUPLED
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index ee70d5cc5b99..8b5a3f4fe7ec 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
+ obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
+ obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
+ obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
++obj-$(CONFIG_CPUIDLE_DEBUG_FS)		  += cpuidle-debugfs.o
+ 
+ ##################################################################################
+ # ARM SoC drivers
+diff --git a/drivers/cpuidle/cpuidle-debugfs.c b/drivers/cpuidle/cpuidle-debugfs.c
+new file mode 100644
+index 000000000000..4ebb9d6debae
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-debugfs.c
+@@ -0,0 +1,188 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * cpuidle-debugfs : Debugfs for cpuidle driver
++ */
++#include <linux/kernel.h>
++#include <linux/cpu.h>
++#include <linux/cpuidle.h>
++#include <linux/debugfs.h>
++#include <linux/uaccess.h>
++
++#include "cpuidle.h"
++
++#define BUFF_SIZE 12
++
++static int residency_show(void *data, struct seq_file *m)
++{
++	struct cpuidle_state *state = data;
++	char op[BUFF_SIZE];
++
++	snprintf(op, BUFF_SIZE, "%llu\n",
++			ktime_to_us(state->target_residency_ns));
++	seq_puts(m, op);
++	return 0;
++}
++
++static ssize_t residency_write(void *data, const char __user *buf,
++			       size_t count, loff_t *ppos)
++{
++	struct cpuidle_driver *drv = cpuidle_get_driver();
++	struct cpuidle_state *state = data;
++	char opbuf[BUFF_SIZE] = { }, *op;
++	unsigned long long res;
++	int err, i, curr_index = INT_MAX;
++
++	if (count >= BUFF_SIZE) {
++		pr_err("%s: operation too long", __func__);
++		return -EINVAL;
++	}
++
++	if (copy_from_user(opbuf, buf, count))
++		return -EFAULT;
++
++	op = strstrip(opbuf);
++	err = kstrtoull(op, 0, &res);
++	if (err)
++		return err;
++
++	for (i = 0; i < drv->state_count; i++) {
++		if (&drv->states[i] == state) {
++			curr_index = i;
++			break;
++		}
++	}
++	if (curr_index == INT_MAX) {
++		pr_err("state not found\n");
++		return -EFAULT;
++	}
++
++	/* Maintain linearity of residency values */
++	mutex_lock(&cpuidle_lock);
++	if (curr_index && curr_index < drv->state_count - 1) {
++		if (drv->states[curr_index - 1].target_residency < res &&
++		    drv->states[curr_index + 1].target_residency > res) {
++			/* Update both the residency and residency_ns */
++			state->target_residency = (unsigned int)res;
++			state->target_residency_ns =
++				state->target_residency * NSEC_PER_USEC;
++		} else {
++			goto inval;
++		}
++	} else if (!curr_index) {
++		if (drv->states[curr_index + 1].target_residency > res) {
++			state->target_residency = (unsigned int)res;
++			state->target_residency_ns =
++				state->target_residency * NSEC_PER_USEC;
++		} else {
++			goto inval;
++		}
++	} else {
++		if (drv->states[curr_index - 1].target_residency < res) {
++			state->target_residency = (unsigned int)res;
++			state->target_residency_ns =
++				state->target_residency * NSEC_PER_USEC;
++		} else {
++			goto inval;
++		}
++	}
++
++	mutex_unlock(&cpuidle_lock);
++	return count;
++
++inval:
++	pr_err("Input value out of bound\n");
++	mutex_unlock(&cpuidle_lock);
++	return -EINVAL;
++}
++
++static int cpuidle_debugfs_show(struct seq_file *m, void *v)
++{
++	const struct cpuidle_debugfs_attr *attr = m->private;
++	void *data = d_inode(m->file->f_path.dentry->d_parent)->i_private;
++
++	return attr->show(data, m);
++}
++
++static ssize_t cpuidle_debugfs_write(struct file *file, const char __user *buf,
++				     size_t count, loff_t *ppos)
++{
++	struct seq_file *m = file->private_data;
++	const struct cpuidle_debugfs_attr *attr = m->private;
++	void *data = d_inode(file->f_path.dentry->d_parent)->i_private;
++
++	if (!attr->write)
++		return -EPERM;
++
++	return attr->write(data, buf, count, ppos);
++}
++
++static int cpuidle_debugfs_open(struct inode *inode, struct file *file)
++{
++	const struct cpuidle_debugfs_attr *attr = inode->i_private;
++
++	if (WARN_ON_ONCE(!attr->show))
++		return -EPERM;
++
++	return single_open(file, cpuidle_debugfs_show, inode->i_private);
++}
++
++
++static const struct file_operations cpuidle_debugfs_fops = {
++	.open		= cpuidle_debugfs_open,
++	.read		= seq_read,
++	.write		= cpuidle_debugfs_write,
++};
++
++static const struct cpuidle_debugfs_attr cpuidle_debugfs_attrs[] = {
++	{ "target_residency", 0600, residency_show, residency_write},
++	/* We can add other attributes like latency in future */
++	{ },
++};
++
++static void debugfs_create_files(struct dentry *parent, void *data,
++				 const struct cpuidle_debugfs_attr *attr)
++{
++	if (IS_ERR_OR_NULL(parent))
++		return;
++
++	d_inode(parent)->i_private = data;
++
++	for (; attr->name; attr++)
++		debugfs_create_file(attr->name, attr->mode, parent,
++				   (void *)attr, &cpuidle_debugfs_fops);
++}
++
++/*
++ * cpuidle_state_debugfs_unregister : creates a debugfs instance for each
++ *				      cpuidle state for cpuidle driver
++ * @index : index of cpuidle state
++ */
++void cpuidle_state_debugfs_unregister(int index)
++{
++	struct cpuidle_driver *drv;
++
++	drv = cpuidle_get_driver();
++	debugfs_remove_recursive(drv->states[index].debugfs_dir);
++}
++
++/*
++ * cpuidle_state_debugfs_register : creates a debugfs instance for each cpuidle
++ *				    state for cpuidle driver
++ * @index : index of cpuidle state
++ */
++void cpuidle_state_debugfs_register(int index)
++{
++	struct cpuidle_driver *drv;
++	struct cpuidle_state *state;
++	char state_name[BUFF_SIZE];
++
++	drv = cpuidle_get_driver();
++	state = &drv->states[index];
++
++	snprintf(state_name, BUFF_SIZE, "state%d", index);
++	state->debugfs_dir = debugfs_create_dir(state_name,
++						cpuidle_debugfs_root);
++
++	debugfs_create_files(state->debugfs_dir, state, cpuidle_debugfs_attrs);
++}
++
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 569dbac443bd..33d7fb25d879 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -23,6 +23,7 @@
+ #include <linux/suspend.h>
+ #include <linux/tick.h>
+ #include <trace/events/power.h>
++#include <linux/debugfs.h>
+ 
+ #include "cpuidle.h"
+ 
+@@ -32,6 +33,10 @@ DEFINE_PER_CPU(struct cpuidle_device, cpuidle_dev);
+ DEFINE_MUTEX(cpuidle_lock);
+ LIST_HEAD(cpuidle_detected_devices);
+ 
++#ifdef CONFIG_DEBUG_FS
++struct dentry *cpuidle_debugfs_root;
++#endif
++
+ static int enabled_devices;
+ static int off __read_mostly;
+ static int initialized __read_mostly;
+@@ -666,9 +671,12 @@ EXPORT_SYMBOL_GPL(cpuidle_unregister_device);
+  */
+ void cpuidle_unregister(struct cpuidle_driver *drv)
+ {
+-	int cpu;
++	int cpu, i;
+ 	struct cpuidle_device *device;
+ 
++	for (i = 0; i < drv->state_count; i++)
++		cpuidle_state_debugfs_unregister(i);
++
+ 	for_each_cpu(cpu, drv->cpumask) {
+ 		device = &per_cpu(cpuidle_dev, cpu);
+ 		cpuidle_unregister_device(device);
+@@ -692,7 +700,7 @@ EXPORT_SYMBOL_GPL(cpuidle_unregister);
+ int cpuidle_register(struct cpuidle_driver *drv,
+ 		     const struct cpumask *const coupled_cpus)
+ {
+-	int ret, cpu;
++	int ret, cpu, i;
+ 	struct cpuidle_device *device;
+ 
+ 	ret = cpuidle_register_driver(drv);
+@@ -724,6 +732,9 @@ int cpuidle_register(struct cpuidle_driver *drv,
+ 		break;
+ 	}
+ 
++	for (i = 0; i < drv->state_count; i++)
++		cpuidle_state_debugfs_register(i);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(cpuidle_register);
+@@ -774,6 +785,10 @@ static int __init cpuidle_init(void)
+ 
+ 	latency_notifier_init(&cpuidle_latency_notifier);
+ 
++#ifdef CONFIG_DEBUG_FS
++	cpuidle_debugfs_root = debugfs_create_dir("cpuidle", NULL);
++#endif
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
+index 9f336af17fa6..781a9d0f4b43 100644
+--- a/drivers/cpuidle/cpuidle.h
++++ b/drivers/cpuidle/cpuidle.h
+@@ -37,6 +37,30 @@ extern void cpuidle_remove_device_sysfs(struct cpuidle_device *device);
+ extern int cpuidle_add_sysfs(struct cpuidle_device *dev);
+ extern void cpuidle_remove_sysfs(struct cpuidle_device *dev);
+ 
++#ifdef CONFIG_CPUIDLE_DEBUG_FS
++
++#include <linux/seq_file.h>
++
++extern struct dentry *cpuidle_debugfs_root;
++
++struct cpuidle_debugfs_attr {
++	const char *name;
++	umode_t mode;
++	int (*show)(void *, struct seq_file *);
++	ssize_t (*write)(void *, const char __user *, size_t, loff_t *);
++};
++
++extern void cpuidle_state_debugfs_register(int index);
++extern void cpuidle_state_debugfs_unregister(int index);
++#else
++void cpuidle_state_debugfs_register(int index)
++{
++}
++void cpuidle_state_debugfs_unregister(int index)
++{
++}
++#endif
++
+ #ifdef CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED
+ bool cpuidle_state_is_coupled(struct cpuidle_driver *drv, int state);
+ int cpuidle_coupled_state_verify(struct cpuidle_driver *drv);
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index 2dbe46b7c213..fc4f2d7d7419 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -70,6 +70,9 @@ struct cpuidle_state {
+ 	void (*enter_s2idle) (struct cpuidle_device *dev,
+ 			      struct cpuidle_driver *drv,
+ 			      int index);
++#ifdef CONFIG_CPUIDLE_DEBUG_FS
++	struct dentry	*debugfs_dir;
++#endif
+ };
+ 
+ /* Idle State Flags */
+-- 
+2.17.1
+
