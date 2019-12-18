@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D8A125348
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 21:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6CF12532E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 21:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfLRUWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 15:22:32 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46871 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbfLRUWH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 15:22:07 -0500
-Received: by mail-lf1-f66.google.com with SMTP id f15so2606052lfl.13;
-        Wed, 18 Dec 2019 12:22:05 -0800 (PST)
+        id S1727675AbfLRUWK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 15:22:10 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44266 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727608AbfLRUWI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 15:22:08 -0500
+Received: by mail-lj1-f194.google.com with SMTP id u71so3580412lje.11;
+        Wed, 18 Dec 2019 12:22:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JOvh1jiKDepC3yJC5nY3q65+eBnyGCERyjo984OFVEE=;
-        b=PNJZuPEz2g/6rZevWNKJRoOXVwhYsAWGbX3DcjYbUt1JI3gTqN1W8HDFJMFQZFh+Xz
-         Xvpx5N4a9p2nb0+Tf780ZuZzUeu7GU14ZzC/1vpkshZRCbGI3LmNl97NcanZlkF7fKmf
-         DLv/q0s+enln1FsK/lxadSasOLBW/PRQfEdyqBZbRGUSFHs0Ei8GaVOZdFg7gVIPtXFe
-         9zFKr4V5qWC9annujvm0ZFY4InP68coqA7/dBUQJMtQmghQl7mGT+CpqZ7XQ3wRLrzfE
-         FPHzLRKtj8LmvNNfE9NsVmiPggyrShtdaUzWCWh7XojI/s5goKLI+TlAZ6VR31R80Pet
-         uN7g==
+        bh=+VS0hDmeQXhAmkJq5950YTYXxFjVBKr1yL5L6K4MJW0=;
+        b=dZCt5akt7NinmUFRtXOZGeL/jOKHueYlmrvy/OFIdrr86GFypQeWBMhzZrI4jwblZN
+         SjqSDlxAeVSt4svEQUEw2abFZNyWvvuRuM/uqsT8TmYPhk9Ja1qo082OqPzX5+7pSayh
+         A6luVAzQHn7+YGvnhgSTpGefy5BR58c6oxnZbW+VTXLrNKXfsN+GeGiSJbTkecs9na/M
+         QanZOpQZuxmPQSZFTtERhHU7R5a/ewS87w9WYKRgguFwg6MQj3DTkFQwKF1YRCCpQ1qZ
+         2P+o1XZt7XlK0xpqbLmFqNup9YUxfAgQVqa/8Vo2qyoH59L5cmNZu2ATQ1Uvwo0+R7n0
+         HwOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JOvh1jiKDepC3yJC5nY3q65+eBnyGCERyjo984OFVEE=;
-        b=dToWB2PQkPPnqBJ4hLUTI9bX+newX5fnyrrkLPBEZlf3IHCa9CQLuv2f9BVJl1rnJS
-         /nQzoyRqQ4/2e01dgQsZ+CfbXk4pwmGkrnYEtTt3I0rLdmCnJq6gilVRWMghTIJlfqtn
-         BjbAsN9iMXNeeJVhzvEoiDDEF/0K9l/fXkwjZ1Z1BTldd3nxWEjbZJiEIy8eRvncytas
-         zz+MCJusr087uButrhbjjvF2gRcWzVgtFh8pTNfj8G+T6Oa6Aa0PUNftWAs+NsFSEWgS
-         4mskanpNRPoTZJAzv/+D04u6M+sFg++RiNlsNE5fPbZUgqdghvYm03VcaJkUwJ9MgUiN
-         cJUg==
-X-Gm-Message-State: APjAAAVTSZK7xlA+0Zh4ZclUx5q8uOdvVzwsBU1qIHlj7ctra5NJydeC
-        lPhTZUW+SN/H8SgVDnoQ0xw=
-X-Google-Smtp-Source: APXvYqywGSO74/vMKn0pZYHkm86dgV5cIW701c5aIJUh139oXzIl20t8c1aGR9jBM4nNfXjCEVuxpg==
-X-Received: by 2002:ac2:5e9b:: with SMTP id b27mr2998954lfq.147.1576700525243;
-        Wed, 18 Dec 2019 12:22:05 -0800 (PST)
+        bh=+VS0hDmeQXhAmkJq5950YTYXxFjVBKr1yL5L6K4MJW0=;
+        b=r5pwX2A63rKY1AdEFRErOEjFy0E5O/5BhY4S3Sdd+CAGeH47D4qgbdS5c5AMTpmB5o
+         x6gvPp0YaFjvvqC66biTJn2WEassKeWmPFMt9JQqsCpn386W/EjrbBhJpLi4NbqWVXfn
+         Tu7zBgrxlQ7ixcssJ+OYGYdoW4f9hLbJ7yS1IdNy0TT9g7PX0mCDTvOEAD5zBq4e0LrO
+         fbHFWpV3O3K0nSgHqah3gXj8afM8hIH7F4rFilxGNiyu7J9WnGCNi3DohVIBQ8xEErcl
+         /blGU3yJCzNDS1VTf/+jPE0X36iZIOxbn4M6TbiGSXDqjXHUHxrqsYVN+K4muPCcqrMA
+         9FNg==
+X-Gm-Message-State: APjAAAVbPkBrHvVT8Z9ravQYF9dOJ4j5WyQuMsRfPh2p8Akm6Ymlzf1I
+        6RXkYmVboDj+x/Qbq6V+Q84=
+X-Google-Smtp-Source: APXvYqyVuPEDqaRNv4qy6csyA6tsC1q5PJjWvsjVl55QFxJFUDzWy1MB0OAvj8xoTA9d/xNjHrIvRQ==
+X-Received: by 2002:a2e:9ad1:: with SMTP id p17mr3297973ljj.26.1576700526408;
+        Wed, 18 Dec 2019 12:22:06 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id m15sm1766993ljg.4.2019.12.18.12.22.04
+        by smtp.gmail.com with ESMTPSA id m15sm1766993ljg.4.2019.12.18.12.22.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 12:22:04 -0800 (PST)
+        Wed, 18 Dec 2019 12:22:05 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -58,9 +58,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 07/12] ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
-Date:   Wed, 18 Dec 2019 23:21:37 +0300
-Message-Id: <20191218202142.11717-8-digetx@gmail.com>
+Subject: [PATCH v6 08/12] dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
+Date:   Wed, 18 Dec 2019 23:21:38 +0300
+Message-Id: <20191218202142.11717-9-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191218202142.11717-1-digetx@gmail.com>
 References: <20191218202142.11717-1-digetx@gmail.com>
@@ -71,48 +71,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PLLX may be kept disabled if cpufreq driver selects some other clock for
-CPU. In that case PLLX will be disabled later in the resume path by the
-CLK driver, which also can enable PLLX if necessary by itself. Thus there
-is no need to enable PLLX early during resume. Tegra114/124 CLK drivers do
-not manage PLLX on resume and thus they are left untouched by this patch.
+Add device-tree binding that describes CPU frequency-scaling hardware
+found on NVIDIA Tegra20/30 SoCs.
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/sleep-tegra30.S | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ .../cpufreq/nvidia,tegra20-cpufreq.txt        | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
 
-diff --git a/arch/arm/mach-tegra/sleep-tegra30.S b/arch/arm/mach-tegra/sleep-tegra30.S
-index 9a20c93abe48..4f073869b8ac 100644
---- a/arch/arm/mach-tegra/sleep-tegra30.S
-+++ b/arch/arm/mach-tegra/sleep-tegra30.S
-@@ -358,7 +358,6 @@ _no_pll_iddq_exit:
- 
- 	pll_enable r1, r0, CLK_RESET_PLLM_BASE, CLK_RESET_PLLM_MISC
- 	pll_enable r1, r0, CLK_RESET_PLLC_BASE, CLK_RESET_PLLC_MISC
--	pll_enable r1, r0, CLK_RESET_PLLX_BASE, CLK_RESET_PLLX_MISC
- 
- _pll_m_c_x_done:
- 	pll_enable r1, r0, CLK_RESET_PLLP_BASE, CLK_RESET_PLLP_MISC
-@@ -368,8 +367,18 @@ _pll_m_c_x_done:
- 	pll_locked r1, r0, CLK_RESET_PLLP_BASE
- 	pll_locked r1, r0, CLK_RESET_PLLA_BASE
- 	pll_locked r1, r0, CLK_RESET_PLLC_BASE
+diff --git a/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+new file mode 100644
+index 000000000000..daeca6ae6b76
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+@@ -0,0 +1,56 @@
++Binding for NVIDIA Tegra20 CPUFreq
++==================================
 +
-+	/*
-+	 * CPUFreq driver could select other PLL for CPU. PLLX will be
-+	 * enabled by the Tegra30 CLK driver on an as-needed basis, see
-+	 * tegra30_cpu_clock_resume().
-+	 */
-+	cmp	r10, #TEGRA30
-+	beq	_pll_m_c_x_locked
++Required properties:
++- clocks: Must contain an entry for the CPU clock.
++  See ../clocks/clock-bindings.txt for details.
++- operating-points-v2: See ../bindings/opp/opp.txt for details.
++- #cooling-cells: Should be 2. See ../thermal/thermal.txt for details.
 +
- 	pll_locked r1, r0, CLK_RESET_PLLX_BASE
- 
-+_pll_m_c_x_locked:
- 	mov32	r7, TEGRA_TMRUS_BASE
- 	ldr	r1, [r7]
- 	add	r1, r1, #LOCK_DELAY
++For each opp entry in 'operating-points-v2' table:
++- opp-supported-hw: Two bitfields indicating:
++	On Tegra20:
++	1. CPU process ID mask
++	2. SoC speedo ID mask
++
++	On Tegra30:
++	1. CPU process ID mask
++	2. CPU speedo ID mask
++
++	A bitwise AND is performed against these values and if any bit
++	matches, the OPP gets enabled.
++
++- opp-microvolt: CPU voltage triplet.
++
++Optional properties:
++- cpu-supply: Phandle to the CPU power supply.
++
++Example:
++	regulators {
++		cpu_reg: regulator0 {
++			regulator-name = "vdd_cpu";
++		};
++	};
++
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++
++		opp@456000000 {
++			clock-latency-ns = <125000>;
++			opp-microvolt = <825000 825000 1125000>;
++			opp-supported-hw = <0x03 0x0001>;
++			opp-hz = /bits/ 64 <456000000>;
++		};
++
++		...
++	};
++
++	cpus {
++		cpu@0 {
++			compatible = "arm,cortex-a9";
++			clocks = <&tegra_car TEGRA20_CLK_CCLK>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			cpu-supply = <&cpu_reg>;
++			#cooling-cells = <2>;
++		};
++	};
 -- 
 2.24.0
 
