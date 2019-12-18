@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2420125421
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 22:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF475125434
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 22:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbfLRVG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 16:06:57 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36757 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726768AbfLRVG4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 16:06:56 -0500
-Received: by mail-lf1-f68.google.com with SMTP id n12so2731491lfe.3;
-        Wed, 18 Dec 2019 13:06:53 -0800 (PST)
+        id S1726936AbfLRVHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 16:07:15 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40726 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726783AbfLRVG5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 16:06:57 -0500
+Received: by mail-lj1-f193.google.com with SMTP id u1so3721697ljk.7;
+        Wed, 18 Dec 2019 13:06:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IbVgAPLOz+y1TErbfXn4LY3y4NYTQMJANj0F8Noy+ac=;
-        b=BVbAvLopk3bbx1nvxLZ/jZf32/drURlqO3kntTEt1clCHLv7W6+qkLnfO+te6TVuKo
-         xMZm9/nLYKFJZKkXLz2NyZXieYTo/Gbc9sCnJVMFKTOTZScFZzI77bq+e0SxLH8o0/0u
-         URiZjhyH8HEqMY3xa64j4E/0F5g1Rpc/c4TvjTOnMBboCufiYQ6KDHkXS99EuxES0RSI
-         rO8DmAqnFet6qnsQ9ijnDGfpxy4qeOq0xQ07BgL8oOqNQleYw5pLBtbB5Cyf+jBV6pE3
-         3JiN6Gu4aQ6ZQRxCfpxG9D1uFrGnPUlXRe0NSYJZLyv/6lLYx755r1OjdQKYNTCYBUH4
-         CNdg==
+        bh=GwsNI4LvQI1c69zCIIaOFlz4DGunlB3qWDZP4g6/4Qc=;
+        b=F3LPCd7YpEuxEDrLw7H9RGBdA7T/Vk99WDB/pkCqdOuX5+OKnPD3B1cokZIcoQAXYu
+         TY7wLVaYl9D42/3xLGmeyQ8VaNiYjMWjSlc+1W7PXfsJ1IoXSs0lSO4grhu6qKCvxdNU
+         m1WJt4cp1z2CYJ3Vcn2g8D+Je+c6Yi2N85I4rFBnTogXKUdF4zDhD+TtaDHPqD2sd697
+         rKCtkSPvtS3a0hQhCWWtXfp1nq79vdTvI37+AmE4OTGkxKIM23R9+2kM4PBhneJGHVFu
+         GeXP9pTlrrssn6+WQ/ybwaaRjQBwy+VgdIU5YtwBIA1gKtG2GJ3MOK8WEceea767YrdJ
+         0wQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IbVgAPLOz+y1TErbfXn4LY3y4NYTQMJANj0F8Noy+ac=;
-        b=SnHhK/OW8+IsoXCdjCR+m/7lwPD0CVI3H7L3tRicxFyOGoKpO39I532+24KcttfJVY
-         nwrEaRL6laQkPBcjkjHP7XB7QNAHL97oCvBm98WVSXCOINpJNlsKC/8SCKeWYhhY0jIy
-         8qw3sYs9FphnF+yY1WppfyAReDY4M7n9CyPji1yJnSJOdedYEwqbD3JU2ny851XtbCiz
-         KrrTV0uoRPIkiK8D6648RUFHTvvdhKmQaMKSN9suuM631b/LyX47FF5+SXQTWyah4omL
-         3O7B58kR0IY0dGn0rbstigdWG8nSwhqyz5EWtyob3hn4dRtuJlqAJhyXqs9VH2fyzCuf
-         BOwQ==
-X-Gm-Message-State: APjAAAUs22cPK69lunY4M2pvVKr5AcdaRoNyKNgCk4iPBAc+WoYZ2tLi
-        SxMnQZatgQs/5hLHCiI5SMA=
-X-Google-Smtp-Source: APXvYqweqDGf/BKKYf8Uk0N1Zk6r6eZbYoE90oenzdF71rZu3FlWX/R83Uxve8PPAEkGK6tS0Uh8BQ==
-X-Received: by 2002:a19:c697:: with SMTP id w145mr2994772lff.54.1576703212356;
-        Wed, 18 Dec 2019 13:06:52 -0800 (PST)
+        bh=GwsNI4LvQI1c69zCIIaOFlz4DGunlB3qWDZP4g6/4Qc=;
+        b=baFn0Qxn8/2cyd+aB7Emp1nfFRtFJRDfe/zbIaGVLdLC0OFt2xuwL30ynoNXLTIjhr
+         Vq9jXb+rw9sq2Ep3Lna0bLJ3NNZFRJmjuYf6Er4Lgf5M7rMolwwPkz2w4wCNf4fboaXE
+         66nIZr230j7BSg5K11kwBA6K3LbuPAQ1kxFIc2FOaLNhQ9zc/Gb58H6+UzoZoXIzyQc8
+         iih0M1mlRbGf+05UHK04N4zdeyDVIu7J4bJFtF/smUFUFu6cbqHueUHX6IxdQrJY/3gA
+         4cFWCqc1et/jfjXUnaZEMOaMyDvWvZB9gTWFp1tCLht0ggA0hXk+dVuw3gM0cqHGIJmn
+         rx5A==
+X-Gm-Message-State: APjAAAX3xa5H9qgr0Okwhutelr5FfkO4MuFWwJvg/a1KqKr+NsDLXm2H
+        hd7DxrK7BO5YDeY0j1FqbjQ=
+X-Google-Smtp-Source: APXvYqxYC/O9AtgrtsKHcQ7b8FAJEWvcKbpggfwcu5tKyuewDbxovTEMVZqljRmnhW3XYbvD7hShBA==
+X-Received: by 2002:a2e:9f47:: with SMTP id v7mr3247846ljk.124.1576703213266;
+        Wed, 18 Dec 2019 13:06:53 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id r15sm1754648ljk.3.2019.12.18.13.06.51
+        by smtp.gmail.com with ESMTPSA id r15sm1754648ljk.3.2019.12.18.13.06.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 13:06:51 -0800 (PST)
+        Wed, 18 Dec 2019 13:06:52 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 12/17] cpuidle: Refactor and move out NVIDIA Tegra20 driver into drivers/cpuidle
-Date:   Thu, 19 Dec 2019 00:04:58 +0300
-Message-Id: <20191218210503.6689-13-digetx@gmail.com>
+Subject: [PATCH v9 13/17] cpuidle: tegra: Squash Tegra30 driver into the common driver
+Date:   Thu, 19 Dec 2019 00:04:59 +0300
+Message-Id: <20191218210503.6689-14-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191218210503.6689-1-digetx@gmail.com>
 References: <20191218210503.6689-1-digetx@gmail.com>
@@ -66,47 +66,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver's code is refactored in a way that will make it easy to
-support Tegra30/114/124 SoCs by this unified driver later on. The
-current functionality is equal to the old Tegra20 driver, only the
-code's structure changed a tad. This is also a proper platform driver
-now.
+Tegra20 and Terga30 SoCs have common C1 and CC6 idling states and thus
+share the same code paths, there is no point in having separate drivers
+for a similar hardware. This patch merely moves functionality of the old
+driver into the new, although the CC6 state is kept disabled for now since
+old driver had a rudimentary support for this state (allowing to enter
+into CC6 only when secondary CPUs are put offline), while new driver can
+provide a full-featured support. The new feature will be enabled by
+another patch.
 
 Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
  arch/arm/mach-tegra/Makefile          |   3 -
- arch/arm/mach-tegra/cpuidle-tegra20.c | 216 --------------------
- arch/arm/mach-tegra/cpuidle.c         |  14 +-
- arch/arm/mach-tegra/cpuidle.h         |   4 -
- drivers/cpuidle/Kconfig.arm           |   8 +
- drivers/cpuidle/Makefile              |   1 +
- drivers/cpuidle/cpuidle-tegra.c       | 277 ++++++++++++++++++++++++++
- include/soc/tegra/cpuidle.h           |   2 +-
- 8 files changed, 289 insertions(+), 236 deletions(-)
- delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
- create mode 100644 drivers/cpuidle/cpuidle-tegra.c
+ arch/arm/mach-tegra/cpuidle-tegra30.c | 123 --------------------------
+ arch/arm/mach-tegra/cpuidle.c         |   5 +-
+ arch/arm/mach-tegra/cpuidle.h         |   1 -
+ drivers/cpuidle/cpuidle-tegra.c       |  74 ++++++++++++++--
+ 5 files changed, 70 insertions(+), 136 deletions(-)
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
 
 diff --git a/arch/arm/mach-tegra/Makefile b/arch/arm/mach-tegra/Makefile
-index 965862608ff6..8425bb5608d5 100644
+index 8425bb5608d5..99c5f4274e5c 100644
 --- a/arch/arm/mach-tegra/Makefile
 +++ b/arch/arm/mach-tegra/Makefile
-@@ -12,9 +12,6 @@ obj-y					+= sleep-tegra20.o
- obj-y					+= sleep-tegra30.o
+@@ -13,9 +13,6 @@ obj-y					+= sleep-tegra30.o
  obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
  obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= pm-tegra20.o
--ifeq ($(CONFIG_CPU_IDLE),y)
--obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= cpuidle-tegra20.o
--endif
  obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= pm-tegra30.o
- ifeq ($(CONFIG_CPU_IDLE),y)
- obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= cpuidle-tegra30.o
-diff --git a/arch/arm/mach-tegra/cpuidle-tegra20.c b/arch/arm/mach-tegra/cpuidle-tegra20.c
+-ifeq ($(CONFIG_CPU_IDLE),y)
+-obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= cpuidle-tegra30.o
+-endif
+ obj-$(CONFIG_SMP)			+= platsmp.o
+ obj-$(CONFIG_HOTPLUG_CPU)               += hotplug.o
+ 
+diff --git a/arch/arm/mach-tegra/cpuidle-tegra30.c b/arch/arm/mach-tegra/cpuidle-tegra30.c
 deleted file mode 100644
-index f8f14c0b79ff..000000000000
---- a/arch/arm/mach-tegra/cpuidle-tegra20.c
+index 80ae64bcdf50..000000000000
+--- a/arch/arm/mach-tegra/cpuidle-tegra30.c
 +++ /dev/null
-@@ -1,216 +0,0 @@
+@@ -1,123 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
 - * CPU idle driver for Tegra CPUs
@@ -124,10 +123,8 @@ index f8f14c0b79ff..000000000000
 -#include <linux/cpuidle.h>
 -#include <linux/cpu_pm.h>
 -#include <linux/kernel.h>
--#include <linux/ktime.h>
 -#include <linux/module.h>
 -
--#include <soc/tegra/flowctrl.h>
 -#include <soc/tegra/pm.h>
 -
 -#include <asm/cpuidle.h>
@@ -135,158 +132,79 @@ index f8f14c0b79ff..000000000000
 -#include <asm/suspend.h>
 -
 -#include "cpuidle.h"
--#include "iomap.h"
--#include "irq.h"
--#include "reset.h"
 -#include "sleep.h"
 -
 -#ifdef CONFIG_PM_SLEEP
--static atomic_t abort_flag;
--static atomic_t abort_barrier;
--static int tegra20_idle_lp2_coupled(struct cpuidle_device *dev,
--				    struct cpuidle_driver *drv,
--				    int index);
--#define TEGRA20_MAX_STATES 2
--#else
--#define TEGRA20_MAX_STATES 1
+-static int tegra30_idle_lp2(struct cpuidle_device *dev,
+-			    struct cpuidle_driver *drv,
+-			    int index);
 -#endif
 -
 -static struct cpuidle_driver tegra_idle_driver = {
 -	.name = "tegra_idle",
 -	.owner = THIS_MODULE,
--	.states = {
--		ARM_CPUIDLE_WFI_STATE_PWR(600),
 -#ifdef CONFIG_PM_SLEEP
--		{
--			.enter            = tegra20_idle_lp2_coupled,
--			.exit_latency     = 5000,
--			.target_residency = 10000,
--			.power_usage      = 0,
--			.flags            = CPUIDLE_FLAG_COUPLED |
--			                    CPUIDLE_FLAG_TIMER_STOP,
--			.name             = "powered-down",
--			.desc             = "CPU power gated",
+-	.state_count = 2,
+-#else
+-	.state_count = 1,
+-#endif
+-	.states = {
+-		[0] = ARM_CPUIDLE_WFI_STATE_PWR(600),
+-#ifdef CONFIG_PM_SLEEP
+-		[1] = {
+-			.enter			= tegra30_idle_lp2,
+-			.exit_latency		= 2000,
+-			.target_residency	= 2200,
+-			.power_usage		= 0,
+-			.flags			= CPUIDLE_FLAG_TIMER_STOP,
+-			.name			= "powered-down",
+-			.desc			= "CPU power gated",
 -		},
 -#endif
 -	},
--	.state_count = TEGRA20_MAX_STATES,
--	.safe_state_index = 0,
 -};
 -
 -#ifdef CONFIG_PM_SLEEP
--#ifdef CONFIG_SMP
--static void tegra20_wake_cpu1_from_reset(void)
--{
--	/* enable cpu clock on cpu */
--	tegra_enable_cpu_clock(1);
--
--	/* take the CPU out of reset */
--	tegra_cpu_out_of_reset(1);
--
--	/* unhalt the cpu */
--	flowctrl_write_cpu_halt(1, 0);
--}
--#else
--static inline void tegra20_wake_cpu1_from_reset(void)
--{
--}
--#endif
--
--static void tegra20_report_cpus_state(void)
--{
--	unsigned long cpu, lcpu, csr;
--
--	for_each_cpu(lcpu, cpu_possible_mask) {
--		cpu = cpu_logical_map(lcpu);
--		csr = flowctrl_read_cpu_csr(cpu);
--
--		pr_err("cpu%lu: online=%d flowctrl_csr=0x%08lx\n",
--		       cpu, cpu_online(lcpu), csr);
--	}
--}
--
--static int tegra20_wait_for_secondary_cpu_parking(void)
--{
--	unsigned int retries = 3;
--
--	while (retries--) {
--		ktime_t timeout = ktime_add_ms(ktime_get(), 500);
--
--		/*
--		 * The primary CPU0 core shall wait for the secondaries
--		 * shutdown in order to power-off CPU's cluster safely.
--		 * The timeout value depends on the current CPU frequency,
--		 * it takes about 40-150us  in average and over 1000us in
--		 * a worst case scenario.
--		 */
--		do {
--			if (tegra_cpu_rail_off_ready())
--				return 0;
--
--		} while (ktime_before(ktime_get(), timeout));
--
--		pr_err("secondary CPU taking too long to park\n");
--
--		tegra20_report_cpus_state();
--	}
--
--	pr_err("timed out waiting secondaries to park\n");
--
--	return -ETIMEDOUT;
--}
--
--static bool tegra20_cpu_cluster_power_down(struct cpuidle_device *dev,
+-static bool tegra30_cpu_cluster_power_down(struct cpuidle_device *dev,
 -					   struct cpuidle_driver *drv,
 -					   int index)
 -{
--	bool ret;
--
--	if (tegra20_wait_for_secondary_cpu_parking())
+-	/* All CPUs entering LP2 is not working.
+-	 * Don't let CPU0 enter LP2 when any secondary CPU is online.
+-	 */
+-	if (num_online_cpus() > 1 || !tegra_cpu_rail_off_ready()) {
+-		cpu_do_idle();
 -		return false;
+-	}
 -
--	ret = !tegra_pm_enter_lp2();
--
--	if (cpu_online(1))
--		tegra20_wake_cpu1_from_reset();
--
--	return ret;
+-	return !tegra_pm_enter_lp2();
 -}
 -
 -#ifdef CONFIG_SMP
--static bool tegra20_idle_enter_lp2_cpu_1(struct cpuidle_device *dev,
--					 struct cpuidle_driver *drv,
--					 int index)
+-static bool tegra30_cpu_core_power_down(struct cpuidle_device *dev,
+-					struct cpuidle_driver *drv,
+-					int index)
 -{
--	cpu_suspend(dev->cpu, tegra_pm_park_secondary_cpu);
+-	smp_wmb();
+-
+-	cpu_suspend(0, tegra30_pm_secondary_cpu_suspend);
 -
 -	return true;
 -}
 -#else
--static inline bool tegra20_idle_enter_lp2_cpu_1(struct cpuidle_device *dev,
--						struct cpuidle_driver *drv,
--						int index)
+-static inline bool tegra30_cpu_core_power_down(struct cpuidle_device *dev,
+-					       struct cpuidle_driver *drv,
+-					       int index)
 -{
 -	return true;
 -}
 -#endif
 -
--static int tegra20_idle_lp2_coupled(struct cpuidle_device *dev,
--				    struct cpuidle_driver *drv,
--				    int index)
+-static int tegra30_idle_lp2(struct cpuidle_device *dev,
+-			    struct cpuidle_driver *drv,
+-			    int index)
 -{
 -	bool entered_lp2 = false;
--
--	if (tegra_pending_sgi())
--		atomic_set(&abort_flag, 1);
--
--	cpuidle_coupled_parallel_barrier(dev, &abort_barrier);
--
--	if (atomic_read(&abort_flag)) {
--		cpuidle_coupled_parallel_barrier(dev, &abort_barrier);
--		/* clean flag for next coming */
--		atomic_set(&abort_flag, 0);
--		return -EINTR;
--	}
 -
 -	local_fiq_disable();
 -
@@ -294,415 +212,180 @@ index f8f14c0b79ff..000000000000
 -	cpu_pm_enter();
 -
 -	if (dev->cpu == 0)
--		entered_lp2 = tegra20_cpu_cluster_power_down(dev, drv, index);
+-		entered_lp2 = tegra30_cpu_cluster_power_down(dev, drv, index);
 -	else
--		entered_lp2 = tegra20_idle_enter_lp2_cpu_1(dev, drv, index);
+-		entered_lp2 = tegra30_cpu_core_power_down(dev, drv, index);
 -
 -	cpu_pm_exit();
 -	tegra_pm_clear_cpu_in_lp2();
 -
 -	local_fiq_enable();
 -
--	return entered_lp2 ? index : 0;
+-	return (entered_lp2) ? index : 0;
 -}
 -#endif
 -
--/*
-- * Tegra20 HW appears to have a bug such that PCIe device interrupts, whether
-- * they are legacy IRQs or MSI, are lost when LP2 is enabled. To work around
-- * this, simply disable LP2 if the PCI driver and DT node are both enabled.
-- */
--void tegra20_cpuidle_pcie_irqs_in_use(void)
+-int __init tegra30_cpuidle_init(void)
 -{
--	pr_info_once(
--		"Disabling cpuidle LP2 state, since PCIe IRQs are in use\n");
--	cpuidle_driver_state_disabled(&tegra_idle_driver, 1, true);
--}
--
--int __init tegra20_cpuidle_init(void)
--{
--	return cpuidle_register(&tegra_idle_driver, cpu_possible_mask);
+-	return cpuidle_register(&tegra_idle_driver, NULL);
 -}
 diff --git a/arch/arm/mach-tegra/cpuidle.c b/arch/arm/mach-tegra/cpuidle.c
-index d565c44cfc93..eee85d517783 100644
+index eee85d517783..fa0dcf3c2c45 100644
 --- a/arch/arm/mach-tegra/cpuidle.c
 +++ b/arch/arm/mach-tegra/cpuidle.c
-@@ -14,6 +14,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/platform_device.h>
- 
- #include <soc/tegra/fuse.h>
- 
-@@ -23,8 +24,7 @@ void __init tegra_cpuidle_init(void)
+@@ -24,11 +24,8 @@ void __init tegra_cpuidle_init(void)
  {
  	switch (tegra_get_chip_id()) {
  	case TEGRA20:
--		if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC))
--			tegra20_cpuidle_init();
+-		platform_device_register_simple("tegra-cpuidle", -1, NULL, 0);
+-		break;
+ 	case TEGRA30:
+-		if (IS_ENABLED(CONFIG_ARCH_TEGRA_3x_SOC))
+-			tegra30_cpuidle_init();
 +		platform_device_register_simple("tegra-cpuidle", -1, NULL, 0);
  		break;
- 	case TEGRA30:
- 		if (IS_ENABLED(CONFIG_ARCH_TEGRA_3x_SOC))
-@@ -38,13 +38,3 @@ void __init tegra_cpuidle_init(void)
- 		break;
- 	}
- }
--
--void tegra_cpuidle_pcie_irqs_in_use(void)
--{
--	switch (tegra_get_chip_id()) {
--	case TEGRA20:
--		if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC))
--			tegra20_cpuidle_pcie_irqs_in_use();
--		break;
--	}
--}
+ 	case TEGRA114:
+ 	case TEGRA124:
 diff --git a/arch/arm/mach-tegra/cpuidle.h b/arch/arm/mach-tegra/cpuidle.h
-index 4e1f459f5bd8..eeb37baf18e1 100644
+index eeb37baf18e1..5423a05a69f6 100644
 --- a/arch/arm/mach-tegra/cpuidle.h
 +++ b/arch/arm/mach-tegra/cpuidle.h
-@@ -7,15 +7,11 @@
+@@ -7,7 +7,6 @@
  #define __MACH_TEGRA_CPUIDLE_H
  
  #ifdef CONFIG_CPU_IDLE
--int tegra20_cpuidle_init(void);
--void tegra20_cpuidle_pcie_irqs_in_use(void);
- int tegra30_cpuidle_init(void);
+-int tegra30_cpuidle_init(void);
  int tegra114_cpuidle_init(void);
  void tegra_cpuidle_init(void);
--void tegra_cpuidle_pcie_irqs_in_use(void);
  #else
- static inline void tegra_cpuidle_init(void) {}
--static inline void tegra_cpuidle_pcie_irqs_in_use(void) {}
- #endif
- 
- #endif
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index a224d33dda7f..74350d415cd6 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -86,3 +86,11 @@ config ARM_MVEBU_V7_CPUIDLE
- 	depends on ARCH_MVEBU && !ARM64
- 	help
- 	  Select this to enable cpuidle on Armada 370, 38x and XP processors.
-+
-+config ARM_TEGRA_CPUIDLE
-+	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
-+	depends on ARCH_TEGRA && !ARM64
-+	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
-+	select ARM_CPU_SUSPEND
-+	help
-+	  Select this to enable cpuidle for NVIDIA Tegra20/30/114/124 SoCs.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index ee70d5cc5b99..a15e4808d295 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
- obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
- obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
- obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
-+obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
- 
- ###############################################################################
- # MIPS drivers
 diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-new file mode 100644
-index 000000000000..a58d2773d45f
---- /dev/null
+index a58d2773d45f..59398c76cf68 100644
+--- a/drivers/cpuidle/cpuidle-tegra.c
 +++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * CPU idle driver for Tegra CPUs
-+ *
-+ * Copyright (c) 2010-2013, NVIDIA Corporation.
-+ * Copyright (c) 2011 Google, Inc.
-+ * Author: Colin Cross <ccross@android.com>
-+ *         Gary King <gking@nvidia.com>
-+ *
-+ * Rework for 3.3 by Peter De Schrijver <pdeschrijver@nvidia.com>
-+ *
-+ * Tegra20/124 driver unification by Dmitry Osipenko <digetx@gmail.com>
-+ */
-+
-+#define pr_fmt(fmt)	"tegra-cpuidle: " fmt
-+
-+#include <linux/atomic.h>
-+#include <linux/cpuidle.h>
-+#include <linux/cpumask.h>
-+#include <linux/cpu_pm.h>
-+#include <linux/errno.h>
-+#include <linux/ktime.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+
-+#include <linux/clk/tegra.h>
-+
-+#include <soc/tegra/cpuidle.h>
-+#include <soc/tegra/flowctrl.h>
-+#include <soc/tegra/fuse.h>
-+#include <soc/tegra/irq.h>
-+#include <soc/tegra/pm.h>
-+
-+#include <asm/cpuidle.h>
-+#include <asm/smp_plat.h>
-+#include <asm/suspend.h>
-+
-+enum tegra_state {
-+	TEGRA_C1,
-+	TEGRA_CC6,
-+	TEGRA_STATE_COUNT,
-+};
-+
-+static atomic_t tegra_idle_barrier;
-+static atomic_t tegra_abort_flag;
-+
-+static void tegra_cpuidle_report_cpus_state(void)
+@@ -37,6 +37,7 @@
+ 
+ enum tegra_state {
+ 	TEGRA_C1,
++	TEGRA_C7,
+ 	TEGRA_CC6,
+ 	TEGRA_STATE_COUNT,
+ };
+@@ -119,6 +120,11 @@ static int tegra_cpuidle_cc6_enter(unsigned int cpu)
+ 	return ret;
+ }
+ 
++static int tegra_cpuidle_c7_enter(void)
 +{
-+	unsigned long cpu, lcpu, csr;
-+
-+	for_each_cpu(lcpu, cpu_possible_mask) {
-+		cpu = cpu_logical_map(lcpu);
-+		csr = flowctrl_read_cpu_csr(cpu);
-+
-+		pr_err("cpu%lu: online=%d flowctrl_csr=0x%08lx\n",
-+		       cpu, cpu_online(lcpu), csr);
-+	}
++	return cpu_suspend(0, tegra30_pm_secondary_cpu_suspend);
 +}
 +
-+static int tegra_cpuidle_wait_for_secondary_cpus_parking(void)
+ static int tegra_cpuidle_coupled_barrier(struct cpuidle_device *dev)
+ {
+ 	if (tegra_pending_sgi()) {
+@@ -166,6 +172,10 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+ 	cpu_pm_enter();
+ 
+ 	switch (index) {
++	case TEGRA_C7:
++		ret = tegra_cpuidle_c7_enter();
++		break;
++
+ 	case TEGRA_CC6:
+ 		ret = tegra_cpuidle_cc6_enter(cpu);
+ 		break;
+@@ -182,6 +192,24 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+ 	return ret;
+ }
+ 
++static int tegra_cpuidle_adjust_state_index(int index, unsigned int cpu)
 +{
-+	unsigned int retries = 3;
++	/*
++	 * On Tegra30 CPU0 can't be power-gated separately from secondary
++	 * cores because it gates the whole CPU cluster.
++	 */
++	if (cpu > 0 || index != TEGRA_C7 || tegra_get_chip_id() != TEGRA30)
++		return index;
 +
-+	while (retries--) {
-+		ktime_t timeout = ktime_add_ms(ktime_get(), 500);
++	/* put CPU0 into C1 if C7 is requested and secondaries are online */
++	if (!IS_ENABLED(CONFIG_PM_SLEEP) || num_online_cpus() > 1)
++		index = TEGRA_C1;
++	else
++		index = TEGRA_CC6;
 +
-+		/*
-+		 * The primary CPU0 core shall wait for the secondaries
-+		 * shutdown in order to power-off CPU's cluster safely.
-+		 * The timeout value depends on the current CPU frequency,
-+		 * it takes about 40-150us in average and over 1000us in
-+		 * a worst case scenario.
-+		 */
-+		do {
-+			if (tegra_cpu_rail_off_ready())
-+				return 0;
-+
-+		} while (ktime_before(ktime_get(), timeout));
-+
-+		pr_err("secondary CPU taking too long to park\n");
-+
-+		tegra_cpuidle_report_cpus_state();
-+	}
-+
-+	pr_err("timed out waiting secondaries to park\n");
-+
-+	return -ETIMEDOUT;
++	return index;
 +}
 +
-+static void tegra_cpuidle_unpark_secondary_cpus(void)
-+{
-+	unsigned int cpu, lcpu;
+ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+ 			       struct cpuidle_driver *drv,
+ 			       int index)
+@@ -189,10 +217,17 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+ 	unsigned int cpu = cpu_logical_map(dev->cpu);
+ 	int err;
+ 
+-	err = tegra_cpuidle_state_enter(dev, index, cpu);
+-	if (err && err != -EINTR)
+-		pr_err_once("cpu%u failed to enter idle state %d err: %d\n",
+-			    cpu, index, err);
++	index = tegra_cpuidle_adjust_state_index(index, cpu);
++	if (dev->states_usage[index].disable)
++		return -1;
 +
-+	for_each_cpu(lcpu, cpu_online_mask) {
-+		cpu = cpu_logical_map(lcpu);
++	if (index == TEGRA_C1)
++		err = arm_cpuidle_simple_enter(dev, drv, index);
++	else
++		err = tegra_cpuidle_state_enter(dev, index, cpu);
 +
-+		if (cpu > 0) {
-+			tegra_enable_cpu_clock(cpu);
-+			tegra_cpu_out_of_reset(cpu);
-+			flowctrl_write_cpu_halt(cpu, 0);
-+		}
++	if (err && (err != -EINTR || index != TEGRA_CC6))
++		pr_err_once("failed to enter state %d err: %d\n", index, err);
+ 
+ 	return err ? -1 : index;
+ }
+@@ -218,6 +253,15 @@ static struct cpuidle_driver tegra_idle_driver = {
+ 	.name = "tegra_idle",
+ 	.states = {
+ 		[TEGRA_C1] = ARM_CPUIDLE_WFI_STATE_PWR(600),
++		[TEGRA_C7] = {
++			.enter			= tegra_cpuidle_enter,
++			.exit_latency		= 2000,
++			.target_residency	= 2200,
++			.power_usage		= 100,
++			.flags			= CPUIDLE_FLAG_TIMER_STOP,
++			.name			= "C7",
++			.desc			= "CPU core powered off",
++		},
+ 		[TEGRA_CC6] = {
+ 			.enter			= tegra_cpuidle_enter,
+ 			.exit_latency		= 5000,
+@@ -262,8 +306,28 @@ static int tegra_cpuidle_probe(struct platform_device *pdev)
+ 	 * Tegra-arch core and PMC driver, is unavailable if PM-sleep option
+ 	 * is disabled.
+ 	 */
+-	if (!IS_ENABLED(CONFIG_PM_SLEEP))
++	if (!IS_ENABLED(CONFIG_PM_SLEEP)) {
++		tegra_cpuidle_disable_state(TEGRA_C7);
+ 		tegra_cpuidle_disable_state(TEGRA_CC6);
 +	}
-+}
-+
-+static int tegra_cpuidle_cc6_enter(unsigned int cpu)
-+{
-+	int ret;
-+
-+	if (cpu > 0) {
-+		ret = cpu_suspend(cpu, tegra_pm_park_secondary_cpu);
-+	} else {
-+		ret = tegra_cpuidle_wait_for_secondary_cpus_parking();
-+		if (!ret)
-+			ret = tegra_pm_enter_lp2();
-+
-+		tegra_cpuidle_unpark_secondary_cpus();
-+	}
-+
-+	return ret;
-+}
-+
-+static int tegra_cpuidle_coupled_barrier(struct cpuidle_device *dev)
-+{
-+	if (tegra_pending_sgi()) {
-+		/*
-+		 * CPU got local interrupt that will be lost after GIC's
-+		 * shutdown because GIC driver doesn't save/restore the
-+		 * pending SGI state across CPU cluster PM.  Abort and retry
-+		 * next time.
-+		 */
-+		atomic_set(&tegra_abort_flag, 1);
-+	}
-+
-+	cpuidle_coupled_parallel_barrier(dev, &tegra_idle_barrier);
-+
-+	if (atomic_read(&tegra_abort_flag)) {
-+		cpuidle_coupled_parallel_barrier(dev, &tegra_idle_barrier);
-+		atomic_set(&tegra_abort_flag, 0);
-+		return -EINTR;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
-+				     int index, unsigned int cpu)
-+{
-+	int ret;
 +
 +	/*
-+	 * CC6 state is the "CPU cluster power-off" state.  In order to
-+	 * enter this state, at first the secondary CPU cores need to be
-+	 * parked into offline mode, then the last CPU should clean out
-+	 * remaining dirty cache lines into DRAM and trigger Flow Controller
-+	 * logic that turns off the cluster's power domain (which includes
-+	 * CPU cores, GIC and L2 cache).
++	 * Generic WFI state (also known as C1 or LP3) and the coupled CPU
++	 * cluster power-off (CC6 or LP2) states are common for all Tegra SoCs.
 +	 */
-+	if (index == TEGRA_CC6) {
-+		ret = tegra_cpuidle_coupled_barrier(dev);
-+		if (ret)
-+			return ret;
-+	}
++	switch (tegra_get_chip_id()) {
++	case TEGRA20:
++		/* Tegra20 isn't capable to power-off individual CPU cores */
++		tegra_cpuidle_disable_state(TEGRA_C7);
++		break;
 +
-+	local_fiq_disable();
-+	tegra_pm_set_cpu_in_lp2();
-+	cpu_pm_enter();
-+
-+	switch (index) {
-+	case TEGRA_CC6:
-+		ret = tegra_cpuidle_cc6_enter(cpu);
++	case TEGRA30:
++		tegra_cpuidle_disable_state(TEGRA_CC6);
 +		break;
 +
 +	default:
-+		ret = -EINVAL;
-+		break;
++		return -EINVAL;
 +	}
-+
-+	cpu_pm_exit();
-+	tegra_pm_clear_cpu_in_lp2();
-+	local_fiq_enable();
-+
-+	return ret;
-+}
-+
-+static int tegra_cpuidle_enter(struct cpuidle_device *dev,
-+			       struct cpuidle_driver *drv,
-+			       int index)
-+{
-+	unsigned int cpu = cpu_logical_map(dev->cpu);
-+	int err;
-+
-+	err = tegra_cpuidle_state_enter(dev, index, cpu);
-+	if (err && err != -EINTR)
-+		pr_err_once("cpu%u failed to enter idle state %d err: %d\n",
-+			    cpu, index, err);
-+
-+	return err ? -1 : index;
-+}
-+
-+/*
-+ * The previous versions of Tegra CPUIDLE driver used a different "legacy"
-+ * terminology for naming of the idling states, while this driver uses the
-+ * new terminology.
-+ *
-+ * Mapping of the old terms into the new ones:
-+ *
-+ * Old | New
-+ * ---------
-+ * LP3 | C1	(CPU core clock gating)
-+ * LP2 | C7	(CPU core power gating)
-+ * LP2 | CC6	(CPU cluster power gating)
-+ *
-+ * Note that that the older CPUIDLE driver versions didn't explicitly
-+ * differentiate the LP2 states because these states either used the same
-+ * code path or because CC6 wasn't supported.
-+ */
-+static struct cpuidle_driver tegra_idle_driver = {
-+	.name = "tegra_idle",
-+	.states = {
-+		[TEGRA_C1] = ARM_CPUIDLE_WFI_STATE_PWR(600),
-+		[TEGRA_CC6] = {
-+			.enter			= tegra_cpuidle_enter,
-+			.exit_latency		= 5000,
-+			.target_residency	= 10000,
-+			.power_usage		= 0,
-+			.flags			= CPUIDLE_FLAG_TIMER_STOP |
-+						  CPUIDLE_FLAG_COUPLED,
-+			.name			= "CC6",
-+			.desc			= "CPU cluster powered off",
-+		},
-+	},
-+	.state_count = TEGRA_STATE_COUNT,
-+	.safe_state_index = TEGRA_C1,
-+};
-+
-+static inline void tegra_cpuidle_disable_state(enum tegra_state state)
-+{
-+	cpuidle_driver_state_disabled(&tegra_idle_driver, state, true);
-+}
-+
-+/*
-+ * Tegra20 HW appears to have a bug such that PCIe device interrupts, whether
-+ * they are legacy IRQs or MSI, are lost when CC6 is enabled.  To work around
-+ * this, simply disable CC6 if the PCI driver and DT node are both enabled.
-+ */
-+void tegra_cpuidle_pcie_irqs_in_use(void)
-+{
-+	struct cpuidle_state *state_cc6 = &tegra_idle_driver.states[TEGRA_CC6];
-+
-+	if ((state_cc6->flags & CPUIDLE_FLAG_UNUSABLE) ||
-+	    tegra_get_chip_id() != TEGRA20)
-+		return;
-+
-+	pr_info("disabling CC6 state, since PCIe IRQs are in use\n");
-+	tegra_cpuidle_disable_state(TEGRA_CC6);
-+}
-+
-+static int tegra_cpuidle_probe(struct platform_device *pdev)
-+{
-+	/*
-+	 * Required suspend-resume functionality, which is provided by the
-+	 * Tegra-arch core and PMC driver, is unavailable if PM-sleep option
-+	 * is disabled.
-+	 */
-+	if (!IS_ENABLED(CONFIG_PM_SLEEP))
-+		tegra_cpuidle_disable_state(TEGRA_CC6);
-+
-+	return cpuidle_register(&tegra_idle_driver, cpu_possible_mask);
-+}
-+
-+static struct platform_driver tegra_cpuidle_driver = {
-+	.probe = tegra_cpuidle_probe,
-+	.driver = {
-+		.name = "tegra-cpuidle",
-+	},
-+};
-+builtin_platform_driver(tegra_cpuidle_driver);
-diff --git a/include/soc/tegra/cpuidle.h b/include/soc/tegra/cpuidle.h
-index 029ba1f4b2cc..5665975015d8 100644
---- a/include/soc/tegra/cpuidle.h
-+++ b/include/soc/tegra/cpuidle.h
-@@ -6,7 +6,7 @@
- #ifndef __SOC_TEGRA_CPUIDLE_H__
- #define __SOC_TEGRA_CPUIDLE_H__
  
--#if defined(CONFIG_ARM) && defined(CONFIG_ARCH_TEGRA) && defined(CONFIG_CPU_IDLE)
-+#ifdef CONFIG_ARM_TEGRA_CPUIDLE
- void tegra_cpuidle_pcie_irqs_in_use(void);
- #else
- static inline void tegra_cpuidle_pcie_irqs_in_use(void)
+ 	return cpuidle_register(&tegra_idle_driver, cpu_possible_mask);
+ }
 -- 
 2.24.0
 
