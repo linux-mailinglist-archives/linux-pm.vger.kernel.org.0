@@ -2,312 +2,530 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CA41244DB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 11:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F205F1244F4
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 11:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfLRKl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 05:41:59 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:47277 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726735AbfLRKl7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 05:41:59 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191218104157euoutp027dd452baa7e0f8547bd8bfbc10e5b155~hcR3P5eNk2274822748euoutp02v
-        for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2019 10:41:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191218104157euoutp027dd452baa7e0f8547bd8bfbc10e5b155~hcR3P5eNk2274822748euoutp02v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576665717;
-        bh=Sxav5XdUuDNJs7Nh+FfUteZxECChMUkMQvjWcB/cqHs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=CtAT4jvVcJ7/Y4kliXgiQnt6LIQS/eDQJi94vlwvmb1nHvliXw25KtuvhB++xp6TH
-         z+o3T9pA8U2j0mx+sM7VwnHjrn7gDKk/v0+iw8NJnlEBVN2xOq98fXxqylEBXkY576
-         gk9+YWqX6z8xFbTnuAFkG30QT0FQYbGlMq/4vRBo=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191218104157eucas1p277d37f84989ba383582145d3251b377b~hcR2487XC2587625876eucas1p2l;
-        Wed, 18 Dec 2019 10:41:57 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 6C.C8.60679.4720AFD5; Wed, 18
-        Dec 2019 10:41:56 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191218104156eucas1p263ec61eeadbfcde28c2a1943bd056cc2~hcR2RfokS2651926519eucas1p2B;
-        Wed, 18 Dec 2019 10:41:56 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191218104156eusmtrp24d855852c19e6a2c772002de7ca53893~hcR2Ql8Q50735107351eusmtrp2J;
-        Wed, 18 Dec 2019 10:41:56 +0000 (GMT)
-X-AuditID: cbfec7f4-0e5ff7000001ed07-ab-5dfa027459d7
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 53.5F.08375.4720AFD5; Wed, 18
-        Dec 2019 10:41:56 +0000 (GMT)
-Received: from AMDC3555 (unknown [106.120.51.67]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20191218104155eusmtip11ec6b8e60f79079b8e0777fe9af237bb~hcR1noTQ62671826718eusmtip1T;
-        Wed, 18 Dec 2019 10:41:55 +0000 (GMT)
-Message-ID: <803d0920cf24eb9b4c87bb1d5e894cc3c9c88e72.camel@samsung.com>
-Subject: Re: [RFC PATCH v2 08/11] arm: dts: exynos: Add parents and
- #interconnect-cells to Exynos4412
-From:   Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
-To:     Chanwoo Choi <chanwoo@kernel.org>
+        id S1726141AbfLRKqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 05:46:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44932 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbfLRKqn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Dec 2019 05:46:43 -0500
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61D7A21D7D;
+        Wed, 18 Dec 2019 10:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576666001;
+        bh=t3BuBmJtudO7kILghIPfb9pvWfLw6Uj+314GFyjQVAE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ezLzhYf2BF2G4IVquL5sVKU/8ZqPqrc/m6X6hGSFGIrVFyG8Zj88JMAGesH4ntW5q
+         Am+z5JcpApZcP2Dev9SZYElZSCk0I3pAicQk5QwHvYTNZg1W4VKOuq1HpNjhjsfU9D
+         5bRx011knFXb3uKbBKKqUJHyrcCfbLSDgNfbWilE=
+Received: by mail-lj1-f173.google.com with SMTP id h23so1566982ljc.8;
+        Wed, 18 Dec 2019 02:46:41 -0800 (PST)
+X-Gm-Message-State: APjAAAWuQi8IgcTj2sKr3m18sqY5H+ibB9C7H4CZYo4KzOY+IEvhEvbp
+        9zirKMD2Rx/nlLghTMdaMcqbIwe5DFck1wAsbF8=
+X-Google-Smtp-Source: APXvYqzejIuRiEww/awCSGwkBpVa5ICePPC15zvH6VINO1+Eac/6rRLo/b78REi36ldedgzzEhfqkku3+Vzu+gvMBs4=
+X-Received: by 2002:a2e:9b05:: with SMTP id u5mr1239937lji.59.1576665999414;
+ Wed, 18 Dec 2019 02:46:39 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1573761527.git.leonard.crestez@nxp.com> <CGME20191114201049epcas5p4a24607634af7b31e6a2dbdb4166dd862@epcas5p4.samsung.com>
+ <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
+ <8734a934-79e2-7445-c3e5-a0bb59afd4a8@samsung.com> <047990a5-263d-d447-7f0a-77a99e4b1f63@samsung.com>
+ <25e3177f-e2b9-6be4-cfb8-24f87ccba45b@samsung.com> <VI1PR04MB702396D09FCED6CBA49B6AE7EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <698357b4-32e7-7f4b-3e67-59f5890f574a@samsung.com> <VI1PR04MB7023F0CCD7FAF5EEA74C7873EE500@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <f4267efa-1345-4fab-e6a7-73fca674dd72@samsung.com> <VI1PR04MB7023AE8CE3E05FE3E70D1FEEEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB7023AE8CE3E05FE3E70D1FEEEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Date:   Wed, 18 Dec 2019 19:46:02 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH1QGe7ahQQnhR8b=NM+dpsWednPokKPTr3oq11660mm2Q@mail.gmail.com>
+Message-ID: <CAGTfZH1QGe7ahQQnhR8b=NM+dpsWednPokKPTr3oq11660mm2Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling driver
+To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        georgi.djakov@linaro.org,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 18 Dec 2019 11:41:55 +0100
-In-Reply-To: <CAGTfZH1=gk1jm4wmX+xMZfkrPR_UDumaDEfmddrpbig4VnN8FQ@mail.gmail.com>
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SaUhUYRTte9s8p548R8mLhtFImm1jJfSiRYt+vPBPRRIIZmM91HKpeWoZ
-        kSuihqbTDycLjai0sVwmFTVtmdShtAYZHQszCbHSNB03MFxyfBP279xzz7nnXrg0rugiPejo
-        uARBE6eOUVJyor59zrwjAfsT5m/7uY+r0VWRXOGnboLrnf5BcqWtH0mue2ac4opaDBSnHSgg
-        OLO5WsaV99tIzjBoJTlL0z2Km8prRZzO/BLjnrX2y7i+tHKK090epoJY3qDPofgv1maKH7hp
-        wvjnD1P4mt8NGJ9fq0f8lMHruCxUfuC8EBOdJGhUh87Kox5pB7FLaUFXv1lLsFRUuS0XOdHA
-        BkCn0YJykZxWsOUI3mXUkFIxjWBqaByTiikEL8tsxD9LfWapw1KGoL2tmpCK7wh0aVZkVzEs
-        DxU9oyvYlY2E3pxJzI4pNhA+9M2uYDd2M1RPtq/k4WwhCeX1i8sGmiaWG5aW9XaNE3sCDG/e
-        YlLydhh7n0/YJQzrAgsNrnYaZzdCRt1dXJLMyMBS6C3ho/D6lkkmYVcYMdU68AZYaix1jBRh
-        qHFgZQVgUxEYHrc6Bu2Ht6Yu0p6Fs35Q1aSS6MOQ9bRIZqeBdYZPYy7SCs6grS/CJZqB7CyF
-        BJXQdMdZMgKkV1gds3mYyenECtCm4tVTiv87pXg19T7C9chdSBRjIwVxd5xwZaeojhUT4yJ3
-        nouPNaDlR+tYNE03oKb5CCNiaaRcx/ivmQtTkOokMTnWiIDGlW5MX/YyxZxXJ18TNPHhmsQY
-        QTQiT5pQujN7HgyHKdhIdYJwURAuCZp/XYx28khFwZ3aAOfs7Ccm98ALQsdkpv/riYnwR3Vz
-        TDx6VeJu9Wm2+aavqbjenaE/ol+7cCoorznUJ3x2S1txoidWd/mzuWTpa8+2+YQzqsqTvDzT
-        +ONcnapZGDzWorOpXliCvTxa9o6OhEQ8qNXy35NTQoqGfU+HLI7MMd5+xK/ogzc065WEGKXe
-        tRXXiOq/6KutBWQDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRmVeSWpSXmKPExsVy+t/xu7olTL9iDe5/FbbYOGM9q8XEG1dY
-        LK5/ec5qMf/IOVaLK1/fs1lM37uJzWLS/QksFufPb2C3WHH3I6vFpsfXWC0u75rDZvG59wij
-        xYzz+5gs1h65y25xu3EFm8WMyS/ZHAQ8Nq3qZPO4c20Pm8f97uNMHpuX1HtsfLeDyaNvyypG
-        j8+b5ALYo/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/Tt
-        EvQylk56zFTQ6FDx8No8pgbGddpdjJwcEgImEtta5jN2MXJxCAksZZQ4/gHEAUlISHxcf4MV
-        whaW+HOtiw2i6AmjxKW+sywgCV4BD4nVV9+ANQgLpEtc7/zEBGKzCdhLnL39DcwWEVCV2PDp
-        GCtIM7PARFaJw/sfAU3i4GABSlzeKwZSwykQKLHp4GEmiAUbmSW6Xm1kBkkwC2hKtG7/zQ5x
-        hY7E21N9LCC9vAKCEn93CEOUyEs0b53NPIFRcBaSjlkIVbOQVC1gZF7FKJJaWpybnltsqFec
-        mFtcmpeul5yfu4kRGK/bjv3cvIPx0sbgQ4wCHIxKPLwGDD9jhVgTy4orcw8xSnAwK4nw3u4A
-        CvGmJFZWpRblxxeV5qQWH2I0BXpnIrOUaHI+MJXklcQbmhqaW1gamhubG5tZKInzdggcjBES
-        SE8sSc1OTS1ILYLpY+LglGpg1NOrkA4wOzzpvECl9eFWnnamc60Vp6OCrY9ZTLO58CLg/unM
-        T2qT/4s6pdccSrtaHWen0XpT4KiOZ0509FmFVt65bWc9/l/4t8lJ6eiVZb3f8qac3dj97CSH
-        QdXiTVvZzTtWr3msKb3jZvOpZqkGlUfL8tUTNZPbl/WLBF+4Vv/II6g8Km+hEktxRqKhFnNR
-        cSIAJXEZIu0CAAA=
-X-CMS-MailID: 20191218104156eucas1p263ec61eeadbfcde28c2a1943bd056cc2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190919142329eucas1p299762f99dd55a5d625633ceec84219f9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190919142329eucas1p299762f99dd55a5d625633ceec84219f9
-References: <20190919142236.4071-1-a.swigon@samsung.com>
-        <CGME20190919142329eucas1p299762f99dd55a5d625633ceec84219f9@eucas1p2.samsung.com>
-        <20190919142236.4071-9-a.swigon@samsung.com>
-        <693e250d-9656-df67-9685-188020b43542@samsung.com>
-        <eecc5d38-f6ab-b1ea-1a08-0afb2dcddbef@samsung.com>
-        <2008dca684ccb1dd740e6e6b88e56727d0d1c435.camel@samsung.com>
-        <CAGTfZH1=gk1jm4wmX+xMZfkrPR_UDumaDEfmddrpbig4VnN8FQ@mail.gmail.com>
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Silvano Di Ninno <silvano.dininno@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-12-18 at 19:29 +0900, Chanwoo Choi wrote:
-> Hi
-> 
-> 2019년 12월 18일 (수) 오후 7:18, Artur Świgoń <a.swigon@samsung.com>님이 작성:
-> > 
-> > Hi,
-> > 
-> > On Mon, 2019-12-16 at 11:59 +0900, Chanwoo Choi wrote:
-> > > Hi,
-> > > 
-> > > On 12/16/19 9:51 AM, Chanwoo Choi wrote:
-> > > > On 9/19/19 11:22 PM, Artur Świgoń wrote:
-> > > > > From: Artur Świgoń <a.swigon@partner.samsung.com>
-> > > > > 
-> > > > > This patch adds two fields to the Exynos4412 DTS:
-> > > > >   - parent: to declare connections between nodes that are not in a
-> > > > >     parent-child relation in devfreq;
-> > > > >   - #interconnect-cells: required by the interconnect framework.
-> > > > > 
-> > > > > Please note that #interconnect-cells is always zero and node IDs are not
-> > > > > hardcoded anywhere. The above-mentioned parent-child relation in devfreq
-> > > > > means that there is a shared power line ('devfreq' property). The 'parent'
-> > > > > property only signifies an interconnect connection.
-> > > > > 
-> > > > > Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
-> > > > > ---
-> > > > >  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
-> > > > >  arch/arm/boot/dts/exynos4412.dtsi               | 9 +++++++++
-> > > > >  2 files changed, 10 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > > > index ea55f377d17c..bdd61ae86103 100644
-> > > > > --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > > > +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > > > @@ -106,6 +106,7 @@
-> > > > >  &bus_leftbus {
-> > > > >   devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
-> > > > >   vdd-supply = <&buck3_reg>;
-> > > > > + parent = <&bus_dmc>;
-> > > > 
-> > > > As I mentioned on other reply,
-> > > > I'm not sure to use the specific 'parent' property to make
-> > > > the connection between buses. If possible, you better to
-> > > > use the standard way like OF graph. Except for making
-> > > > the connection between buses by 'parent' property,
-> > > > looks good to me.
-> > > 
-> > > I tried to think it continuously. I withdraw the my opinion
-> > > using OF graph. If you make the property name like the following
-> > > example, it is possible for exynos.
-> > > - exynos,interconnect-parent-node = <&bus_dmc>; or other proper name.
-> > > 
-> > > Regardless of existing 'devfreq' property, I think you better to
-> > > make the connection between buses for only interconnect as following
-> > > example: This make it possible user can draw the correct tree by tracking
-> > > the 'exynos,interconnect-parent-node' value.
-> > 
-> > OK, for v3 I will add 'exynos,interconnect-parent-node' to bus_dmc,
-> > bus_leftbus and bus_display as you suggested below and change the code
-> > so that the 'devfreq' (or the upcoming 'exynos,parent-bus') property is
-> > not taken into account.
-> 
-> I'd like you to make the v3 based on my patches[1]
-> [1]  https://protect2.fireeye.com/url?k=3fbd62a4-6276e59a-3fbce9eb-0cc47a31309a-5329151b98fc2653&u=https://lkml.org/lkml/2019/12/17/21
-> - [PATCH 0/9] PM / devfreq: Remove deprecated 'devfreq' and
-> 'devfreq-events' properties
-> 
-> I uploaded the patches to devfreq-testing branch[2]
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
+Hi,
 
-OK.
+2019=EB=85=84 12=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:11, =
+Leonard Crestez <leonard.crestez@nxp.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
+>
+> On 18.12.2019 05:08, Chanwoo Choi wrote:
+> > On 12/18/19 6:05 AM, Leonard Crestez wrote:
+> >> On 17.12.2019 02:35, Chanwoo Choi wrote:
+> >>> On 12/16/19 11:57 PM, Leonard Crestez wrote:
+> >>>> On 16.12.2019 03:00, Chanwoo Choi wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> Also, I think that 'devfreq' word is not proper for device driver n=
+ame.
+> >>>>> imx-bus.c or imx-noc.c or others to inform the role of this driver =
+of developer.
+> >>>>
+> >>>> I'll rename to "imx-bus". Calling it "imx-noc" is not appropriate
+> >>>> because I also want to use it for PL301 NICs.
+> >>>
+> >>> OK.
+> >>>
+> >>>>
+> >>>>> And, I have a question.
+> >>>>> This driver adds the devfreq device with either passive governor
+> >>>>> or userspace governor.
+> >>>>>
+> >>>>> As I understood, the devfreq device with passive governor
+> >>>>> will be operated with imx8m-ddrc.c driver.
+> >>>>> But, when is operating with userspace governor?
+> >>>>
+> >>>> There are multiple scalable buses inside the SOC, for example there'=
+s a
+> >>>> NIC for display controllers and one for (pci+usb). They can use
+> >>>> userspace governor for explicit frequency control.
+> >>>>
+> >>>>> I think that you better to add the explanation to description
+> >>>>> for two scenarios how to operate with interconnect provider
+> >>>>> on either passive governor or userspace governor usage case.
+> >>>>
+> >>>> I'll elaborate the example in bindings.
+> >>>
+> >>> OK.
+> >>>
+> >>>>
+> >>>>> On 12/13/19 10:51 AM, Chanwoo Choi wrote:
+> >>>>>> On 12/13/19 10:30 AM, Chanwoo Choi wrote:
+> >>>>>>> Hi,
+> >>>>>>>
+> >>>>>>> On 11/15/19 5:09 AM, Leonard Crestez wrote:
+> >>>>>>>> Add initial support for dynamic frequency switching on pieces of=
+ the imx
+> >>>>>>>> interconnect fabric.
+> >>>>>>>>
+> >>>>>>>> All this driver does is set a clk rate based on an opp table, it=
+ does
+> >>>>>>>> not map register areas.
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> >>>>>>>> ---
+> >>>>>>>>     drivers/devfreq/Kconfig       |   9 ++
+> >>>>>>>>     drivers/devfreq/Makefile      |   1 +
+> >>>>>>>>     drivers/devfreq/imx-devfreq.c | 150 ++++++++++++++++++++++++=
+++++++++++
+> >>>>>>>>     3 files changed, 160 insertions(+)
+> >>>>>>>>     create mode 100644 drivers/devfreq/imx-devfreq.c
+> >>>>>>>>
+> >>>>>>>> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> >>>>>>>> index 923a6132e741..fef5ce831e90 100644
+> >>>>>>>> --- a/drivers/devfreq/Kconfig
+> >>>>>>>> +++ b/drivers/devfreq/Kconfig
+> >>>>>>>> @@ -98,10 +98,19 @@ config ARM_IMX8M_DDRC_DEVFREQ
+> >>>>>>>>        select DEVFREQ_GOV_USERSPACE
+> >>>>>>>>        help
+> >>>>>>>>          This adds the DEVFREQ driver for the i.MX8M DDR Control=
+ler. It allows
+> >>>>>>>>          adjusting DRAM frequency.
+> >>>>>>>>
+> >>>>>>>> +config ARM_IMX_DEVFREQ
+> >>>>>>>> +      tristate "i.MX Generic DEVFREQ Driver"
+> >>>>>>>> +      depends on ARCH_MXC || COMPILE_TEST
+> >>>>>>>> +      select DEVFREQ_GOV_PASSIVE
+> >>>>>>>> +      select DEVFREQ_GOV_USERSPACE
+> >>>>>>>> +      help
+> >>>>>>>> +        This adds the generic DEVFREQ driver for i.MX interconn=
+ects. It
+> >>>>>>>> +        allows adjusting NIC/NOC frequency.
+> >>>>>>>> +
+> >>>>>>>>     config ARM_TEGRA_DEVFREQ
+> >>>>>>>>        tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+> >>>>>>>>        depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
+> >>>>>>>>                ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
+> >>>>>>>>                ARCH_TEGRA_210_SOC || \
+> >>>>>>>> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+> >>>>>>>> index 3eb4d5e6635c..61d0edee16f7 100644
+> >>>>>>>> --- a/drivers/devfreq/Makefile
+> >>>>>>>> +++ b/drivers/devfreq/Makefile
+> >>>>>>>> @@ -8,10 +8,11 @@ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)  +=3D gove=
+rnor_userspace.o
+> >>>>>>>>     obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)  +=3D governor_passive.o
+> >>>>>>>>
+> >>>>>>>>     # DEVFREQ Drivers
+> >>>>>>>>     obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)       +=3D exynos-bus.o
+> >>>>>>>>     obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)       +=3D imx8m-ddrc.o
+> >>>>>>>> +obj-$(CONFIG_ARM_IMX_DEVFREQ)         +=3D imx-devfreq.o
+> >>>>>>>>     obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)       +=3D rk3399_dmc.o
+> >>>>>>>>     obj-$(CONFIG_ARM_TEGRA_DEVFREQ)            +=3D tegra30-devf=
+req.o
+> >>>>>>>>     obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)  +=3D tegra20-devfreq.o
+> >>>>>>>>
+> >>>>>>>>     # DEVFREQ Event Drivers
+> >>>>>>>> diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx=
+-devfreq.c
+> >>>>>>>> new file mode 100644
+> >>>>>>>> index 000000000000..620b344e87aa
+> >>>>>>>> --- /dev/null
+> >>>>>>>> +++ b/drivers/devfreq/imx-devfreq.c
+> >>>>>>>> @@ -0,0 +1,150 @@
+> >>>>>>>> +// SPDX-License-Identifier: GPL-2.0
+> >>>>>>>> +/*
+> >>>>>>>> + * Copyright 2019 NXP
+> >>>>>>>> + */
+> >>>>>>>> +
+> >>>>>>>> +#include <linux/clk.h>
+> >>>>>>>> +#include <linux/devfreq.h>
+> >>>>>>>> +#include <linux/device.h>
+> >>>>>>>> +#include <linux/module.h>
+> >>>>>>>> +#include <linux/of_device.h>
+> >>>>>>>> +#include <linux/pm_opp.h>
+> >>>>>>>> +#include <linux/platform_device.h>
+> >>>>>>>> +#include <linux/slab.h>
+> >>>>>>>> +
+> >>>>>>>> +struct imx_devfreq {
+> >>>>>>>> +      struct devfreq_dev_profile profile;
+> >>>>>>>> +      struct devfreq *devfreq;
+> >>>>>>>> +      struct clk *clk;
+> >>>>>>>> +      struct devfreq_passive_data passive_data;
+> >>>>>>>> +};
+> >>>>>>>> +
+> >>>>>>>> +static int imx_devfreq_target(struct device *dev,
+> >>>>>>>> +                            unsigned long *freq, u32 flags)
+> >>>>>>>
+> >>>>>>> Don't use space for the indentation. Please use only tab.
+> >>>>
+> >>>> OK
+> >>
+> >> The spaces are required in order to align arguments to open paranthesi=
+s.
+> >> Should I drop that?
+> >>
+> >> It seems that check_patch.pl and process/coding-style.rst doesn't have=
+ a
+> >> strong opinion on this; my personal preference is for long argument
+> >> lists to just use double indentation.
+> >
+> > Generally, almost patches use the tab for the indentation.
+> > I don't use space for the indentation. If use the tab
+> > for the indentation, it is not harmful for the readability.
+> >
+> > If use the space for the pretty to make the alignment between parameter=
+,
+> > I think it it not good.
+>
+> OK, I'll just use two tabs. This also matches my personal preference.
+>
+> >>>>>>>> +{
+> >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
+> >>>>>>>> +      struct dev_pm_opp *new_opp;
+> >>>>>>>> +      unsigned long new_freq;
+> >>>>>>>> +      int ret;
+> >>>>>>>> +
+> >>>>>>>> +      new_opp =3D devfreq_recommended_opp(dev, freq, flags);
+> >>>>>>>> +      if (IS_ERR(new_opp)) {
+> >>>>>>>> +              ret =3D PTR_ERR(new_opp);
+> >>>>>>>> +              dev_err(dev, "failed to get recommended opp: %d\n=
+", ret);
+> >>>>>>>> +              return ret;
+> >>>>>>>> +      }
+> >>>>>>>> +      new_freq =3D dev_pm_opp_get_freq(new_opp);
+> >>>>>>>> +      dev_pm_opp_put(new_opp);
+> >>>>>>>> +
+> >>>>>>>> +      return clk_set_rate(priv->clk, new_freq);
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static int imx_devfreq_get_cur_freq(struct device *dev, unsigne=
+d long *freq)
+> >>>>>>>> +{
+> >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
+> >>>>>>>> +
+> >>>>>>>> +      *freq =3D clk_get_rate(priv->clk);
+> >>>>>>>> +
+> >>>>>>>> +      return 0;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static int imx_devfreq_get_dev_status(struct device *dev,
+> >>>>>>>> +                                    struct devfreq_dev_status *=
+stat)
+> >>>>>>>
+> >>>>>>> ditto. Please use tab for the indentation.
+> >>>>>>>
+> >>>>>>>> +{
+> >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
+> >>>>>>>> +
+> >>>>>>>> +      stat->busy_time =3D 0;
+> >>>>>>>> +      stat->total_time =3D 0;
+> >>>>>>>> +      stat->current_frequency =3D clk_get_rate(priv->clk);
+> >>>>>>>> +
+> >>>>>>>> +      return 0;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static void imx_devfreq_exit(struct device *dev)
+> >>>>>>>> +{
+> >>>>>>>> +      dev_pm_opp_of_remove_table(dev);
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static int imx_devfreq_probe(struct platform_device *pdev)
+> >>>>>>>> +{
+> >>>>>>>> +      struct device *dev =3D &pdev->dev;
+> >>>>>>>> +      struct imx_devfreq *priv;
+> >>>>>>>
+> >>>>>>> How about changing the variable name 'priv' to 'imx' or 'imx_data=
+'?
+> >>>>>>> because it is not easy to catch the role of 'priv' from variable =
+name.
+> >>>>
+> >>>> The name "priv" refers to private data of current device: it is shor=
+t
+> >>>> and not ambiguous in this context. I don't think that mentioning "im=
+x"
+> >>>> adds any additional useful information.
+> >>>>
+> >>>> It doesn't seem like there's much of a convention for "local variabl=
+e
+> >>>> containing private data", for example exynos-bus.c uses "struct
+> >>>> exynos_bus* bus" internally.
+> >>>
+> >>> OK. it is nitpick. Keep your style.
+> >>>
+> >>>>
+> >>>>>>>
+> >>>>>>>> +      const char *gov =3D DEVFREQ_GOV_USERSPACE;
+> >>>>>>>> +      void *govdata =3D NULL;
+> >>>>>>>
+> >>>>>>> How about changing the variable name 'govdata' to 'gov_data'?
+> >>>>>>> - govdata -> gov_data
+> >>>>
+> >>>> OK
+> >>>>
+> >>>>>>>> +      int ret;
+> >>>>>>>> +
+> >>>>>>>> +      priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> >>>>>>>> +      if (!priv)
+> >>>>>>>> +              return -ENOMEM;
+> >>>>>>>> +
+> >>>>>>>> +      priv->clk =3D devm_clk_get(dev, NULL);
+> >>>>>>>
+> >>>>>>> nitpick: because the clock-name is not mandatory.
+> >>>>>>> Don't need to specify the clock name to inform the role of clock
+> >>>>>>> of other developer/user?
+> >>>>>>>
+> >>>>>>> For example, "ddr", "bus" and so on.
+> >>>>
+> >>>> I'll call this bus, but I'm not sure it's useful when a single clock=
+ is
+> >>>> involved.
+> >>>>
+> >>>>>> And, this driver doesn't include the 'clk_prepare_enable'.
+> >>>>>> how to enable the clock?
+> >>>>
+> >>>> Clocks are either always on or perhaps controlled by some other
+> >>>> peripheral. This driver only provides scaling.
+> >>>
+> >>> It is not proper use-case of clock. If device driver
+> >>> want to control the clock, it have to be enabled on device driver.
+> >>
+> >>> Even it clock is always, the user don't know the state of clock.
+> >>> Also, user can't know what kind of device driver control the clock.
+> >>>
+> >>> It have to be controlled on this device driver
+> >>> before changing the clock frequency.
+> >>
+> >>   From clock framework perspective prepare/enable and rate bits can be
+> >> controlled separately.
+> >>
+> >> Many peripherals are grouped with their own bus (for example a PL301
+> >> NIC) which is normally off and only gets enabled when explicitly
+> >> requested by drivers. If this devfreq driver always enabled bus clocks
+> >> then it would waste power for no reason.
+> >
+> > You can save the power with following sequence.
+> > You are keeping the following sequence without any problem.
+> >       clk_prepare_enable()
+> >       clk_set_rate()
+> >       clk_disable_unprepare()
+> >
+> > clk API support the reference count for the clock user.
+> > It doesn't affect the any behavior of other device sharing the bus cloc=
+k
+> > and waste any power-consumption because it will always restore
+> > the reference count after changing the clock rate.
+>
+> But this doesn't serve any purpose?
+>
+> In some cases (depending on clock flags like CLK_SET_RATE_GATE or
+> CLK_SET_RATE_UNGATE flags) the clk_set_rate function can require than
+> clocks are either on or off and otherwise return an error.
+>
+> For imx bus clocks there is no such requirement.
 
-> 
-> > 
-> > > diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > index ea55f377d17c..53f87f46e161 100644
-> > > --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > > @@ -90,6 +90,7 @@
-> > >  &bus_dmc {
-> > >         devfreq-events = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
-> > >         vdd-supply = <&buck1_reg>;
-> > > +       #interconnect-cells = <0>;
-> > >         status = "okay";
-> > >  };
-> > > 
-> > > @@ -106,6 +107,8 @@
-> > >  &bus_leftbus {
-> > >         devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
-> > >         vdd-supply = <&buck3_reg>;
-> > > +       exynos,interconnect-parent-node = <&bus_dmc>;
-> > > +       #interconnect-cells = <0>;
-> > >         status = "okay";
-> > >  };
-> > > 
-> > > @@ -116,6 +119,8 @@
-> > > 
-> > >  &bus_display {
-> > >         devfreq = <&bus_leftbus>;
-> > > +       exynos,interconnect-parent-node = <&bus_leftbus>;
-> > > +       #interconnect-cells = <0>;
-> > >         status = "okay";
-> > >  };
-> > > 
-> > > 
-> > > > 
-> > > > 
-> > > > >   status = "okay";
-> > > > >  };
-> > > > > 
-> > > > > diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
-> > > > > index d20db2dfe8e2..a70a671acacd 100644
-> > > > > --- a/arch/arm/boot/dts/exynos4412.dtsi
-> > > > > +++ b/arch/arm/boot/dts/exynos4412.dtsi
-> > > > > @@ -390,6 +390,7 @@
-> > > > >                   clocks = <&clock CLK_DIV_DMC>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_dmc_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -398,6 +399,7 @@
-> > > > >                   clocks = <&clock CLK_DIV_ACP>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_acp_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -406,6 +408,7 @@
-> > > > >                   clocks = <&clock CLK_DIV_C2C>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_dmc_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -459,6 +462,7 @@
-> > > > >                   clocks = <&clock CLK_DIV_GDL>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_leftbus_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -467,6 +471,7 @@
-> > > > >                   clocks = <&clock CLK_DIV_GDR>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_leftbus_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -475,6 +480,7 @@
-> > > > >                   clocks = <&clock CLK_ACLK160>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_display_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -483,6 +489,7 @@
-> > > > >                   clocks = <&clock CLK_ACLK133>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_fsys_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -491,6 +498,7 @@
-> > > > >                   clocks = <&clock CLK_ACLK100>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_peri_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > @@ -499,6 +507,7 @@
-> > > > >                   clocks = <&clock CLK_SCLK_MFC>;
-> > > > >                   clock-names = "bus";
-> > > > >                   operating-points-v2 = <&bus_leftbus_opp_table>;
-> > > > > +                 #interconnect-cells = <0>;
-> > > > >                   status = "disabled";
-> > > > >           };
-> > > > > 
-> > > > > 
+If you guarantee that it is not required on all board related to imx,
+please add this comment when calling clk_set_rate().
+Because the user who don't know the history and character,
+don't understand why don't enable or disable for clock.
 
--- 
-Artur Świgoń
-Samsung R&D Institute Poland
-Samsung Electronics
+I'll agree if you add the comment why don't need to
+enable/disable control on this driver.
 
 
+>
+> >> For example a display controller will first enable clocks to allow
+> >> access to device registers, then configure a resolution and make a
+> >> bandwith request which gets translated a min_freq request. Then when t=
+he
+> >> display is blanked the entire display bus should be powered off, even =
+if
+> >> this makes control registers inaccessible.
+> >>
+> >> This series only enables scaling for the main NOC which can't be turne=
+d
+> >> off anyway.
+> >>
+> >>>>>>>> +      if (IS_ERR(priv->clk)) {
+> >>>>>>>> +              ret =3D PTR_ERR(priv->clk);
+> >>>>>>>> +              dev_err(dev, "failed to fetch clk: %d\n", ret);
+> >>>>>>>> +              return ret;
+> >>>>>>>> +      }
+> >>>>>>>> +      platform_set_drvdata(pdev, priv);
+> >>>>>>>> +
+> >>>>>>>> +      ret =3D dev_pm_opp_of_add_table(dev);
+> >>>>>>>> +      if (ret < 0) {
+> >>>>>>>> +              dev_err(dev, "failed to get OPP table\n");
+> >>>>>>>> +              return ret;
+> >>>>>>>> +      }
+> >>>>>>>> +
+> >>>>>>>> +      priv->profile.polling_ms =3D 1000;
+> >>>>>>>> +      priv->profile.target =3D imx_devfreq_target;
+> >>>>>>>> +      priv->profile.get_dev_status =3D imx_devfreq_get_dev_stat=
+us;
+> >>>>>>>> +      priv->profile.exit =3D imx_devfreq_exit;
+> >>>>>>>> +      priv->profile.get_cur_freq =3D imx_devfreq_get_cur_freq;
+> >>>>>>>> +      priv->profile.initial_freq =3D clk_get_rate(priv->clk);
+> >>>>>>>> +
+> >>>>>>>> +      /* Handle passive devfreq parent link */
+> >>>>>>>> +      priv->passive_data.parent =3D devfreq_get_devfreq_by_phan=
+dle(dev, 0);
+> >>>>>>>> +      if (!IS_ERR(priv->passive_data.parent)) {
+> >>>>>>>> +              dev_info(dev, "setup passive link to %s\n",
+> >>>>>>>> +                       dev_name(priv->passive_data.parent->dev.=
+parent));
+> >>>>>>>> +              gov =3D DEVFREQ_GOV_PASSIVE;
+> >>>>>>>> +              govdata =3D &priv->passive_data;
+> >>>>>>>> +      } else if (priv->passive_data.parent !=3D ERR_PTR(-ENODEV=
+)) {
+> >>>>>>>> +              // -ENODEV means no parent: not an error.
+> >>>>>>>> +              ret =3D PTR_ERR(priv->passive_data.parent);
+> >>>>>>>> +              if (ret !=3D -EPROBE_DEFER)
+> >>>>>>>> +                      dev_warn(dev, "failed to get initialize p=
+assive parent: %d\n",
+> >>>>>>>> +                               ret);
+> >>>>>>>> +              goto err;
+> >>>>>>>> +      }
+> >>>>>>>
+> >>>>>>> You better to change the exception handling as following: It is m=
+ore simple.
+> >>>>>>>
+> >>>>>>>         } else if (PTR_ERR(priv->passive_data.parent) =3D=3D -EPR=
+OBE_DEFER)
+> >>>>>>>                         || PTR_ERR(priv->passive_data.parent) =3D=
+=3D -ENODEV) {
+> >>>>>>>                 goto err;
+> >>>>>>>         } else {
+> >>>>>>>                 ret =3D PTR_ERR(priv->passive_data.parent);
+> >>>>>>>                 dev_err(dev, "failed to get initialize passive pa=
+rent: %d\n", ret);
+> >>>>>>>                 goto err;
+> >>>>>>>         }
+> >>>>
+> >>>> But -ENODEV is not an error, it means no passive parent was found.
+> >>>
+> >>> OK. just I want to make 'if statement' more simple. This style
+> >>> is complicated.
+> >>
+> >> I can avoid handling EPROBE_DEFER in a nested if.
+> >
+> > Anyway, if you make the exception more simple, I'm ok.
+> >
+> >>
+> >>>>>>>> +      priv->devfreq =3D devm_devfreq_add_device(dev, &priv->pro=
+file,
+> >>>>>>>> +                                              gov, govdata);
+> >>>>>>>> +      if (IS_ERR(priv->devfreq)) {
+> >>>>>>>> +              ret =3D PTR_ERR(priv->devfreq);
+> >>>>>>>> +              dev_err(dev, "failed to add devfreq device: %d\n"=
+, ret);
+> >>>>>>>> +              goto err;
+> >>>>>>>> +      }
+> >>>>>>>> +
+> >>>>>>>> +      return 0;
+> >>>>>>>> +
+> >>>>>>>> +err:
+> >>>>>>>> +      dev_pm_opp_of_remove_table(dev);
+> >>>>>>>> +      return ret;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static const struct of_device_id imx_devfreq_of_match[] =3D {
+> >>>>>>>> +      { .compatible =3D "fsl,imx8m-noc", },
+> >>>>>>>> +      { .compatible =3D "fsl,imx8m-nic", },
+> >>>>>>>> +      { /* sentinel */ },
+> >>>>>>>> +};
+> >>>>>>>> +MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
+> >>>>>>>> +
+> >>>>>>>> +static struct platform_driver imx_devfreq_platdrv =3D {
+> >>>>>>>> +      .probe          =3D imx_devfreq_probe,
+> >>>>>>>> +      .driver =3D {
+> >>>>>>>> +              .name   =3D "imx-devfreq",
+> >>>>>>>> +              .of_match_table =3D of_match_ptr(imx_devfreq_of_m=
+atch),
+> >>>>>>>> +      },
+> >>>>>>>> +};
+> >>>>>>>> +module_platform_driver(imx_devfreq_platdrv);
+> >>>>>>>> +
+> >>>>>>>> +MODULE_DESCRIPTION("Generic i.MX bus frequency driver");
+> >>>>>>>
+> >>>>>>> If this driver is for bus frequency, you better to use 'bus' for =
+the clock-name
+> >>>>>>> for the readability.
+> >>
+> >>
+> >>
+> >>
+> >
+> >
+>
+
+
+--=20
+Best Regards,
+Chanwoo Choi
