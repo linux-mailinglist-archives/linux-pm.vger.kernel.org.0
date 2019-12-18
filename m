@@ -2,51 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC26124ED0
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 18:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA65E124EE0
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 18:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbfLRRHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 12:07:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727173AbfLRRHH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Dec 2019 12:07:07 -0500
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 133D424685;
-        Wed, 18 Dec 2019 17:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576688823;
-        bh=MzHE6ufhhPkKhgLUUVDED2/ALVNXq0b79zlJSu4P+FY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Xq0SsJI8bACPGxZXwnpkGKCWehh6Y0nqDCxugxyubZdAGLh7o4uJN82BGDzZ7/9P8
-         IE9lRxBB+8TsfPcCkMsyvQsDbaWLs7r9gt6k5ZEPRNzcMztUyAzuvEGHe2XvaIVUoX
-         DHDekuzFstlz7glyxGOT0BVkGkgpk6yfghslXh8A=
-Received: by mail-lj1-f176.google.com with SMTP id u17so2972602lja.4;
-        Wed, 18 Dec 2019 09:07:02 -0800 (PST)
-X-Gm-Message-State: APjAAAX2VVP5bFMfHc8AqfHNK6Q91k73IaFTA8Gr1qbuV5wC88PpVf/x
-        dXNGvdTiUodq7diEWwfk3byN1nCIUc6TjhUCqOU=
-X-Google-Smtp-Source: APXvYqzJhmoDoMQLQ2+3FWc+IaDWTox5GeEEhmtDKr/J0cz6bFDB7PmdQciMN6D9OtoGzLdd/uMfIdI7BG9+8qRWAF8=
-X-Received: by 2002:a2e:9b05:: with SMTP id u5mr2597911lji.59.1576688820891;
- Wed, 18 Dec 2019 09:07:00 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1573761527.git.leonard.crestez@nxp.com> <CGME20191114201049epcas5p4a24607634af7b31e6a2dbdb4166dd862@epcas5p4.samsung.com>
- <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
- <8734a934-79e2-7445-c3e5-a0bb59afd4a8@samsung.com> <047990a5-263d-d447-7f0a-77a99e4b1f63@samsung.com>
- <25e3177f-e2b9-6be4-cfb8-24f87ccba45b@samsung.com> <VI1PR04MB702396D09FCED6CBA49B6AE7EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <698357b4-32e7-7f4b-3e67-59f5890f574a@samsung.com> <VI1PR04MB7023F0CCD7FAF5EEA74C7873EE500@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <f4267efa-1345-4fab-e6a7-73fca674dd72@samsung.com> <VI1PR04MB7023AE8CE3E05FE3E70D1FEEEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <CAGTfZH1QGe7ahQQnhR8b=NM+dpsWednPokKPTr3oq11660mm2Q@mail.gmail.com>
-In-Reply-To: <CAGTfZH1QGe7ahQQnhR8b=NM+dpsWednPokKPTr3oq11660mm2Q@mail.gmail.com>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Thu, 19 Dec 2019 02:06:24 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH3Yqb-8R81H7=KzPp6WDB4F+P_oUq1CvcULiD+VEGh96w@mail.gmail.com>
-Message-ID: <CAGTfZH3Yqb-8R81H7=KzPp6WDB4F+P_oUq1CvcULiD+VEGh96w@mail.gmail.com>
-Subject: Re: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling driver
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
+        id S1726985AbfLRRNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 12:13:38 -0500
+Received: from mail-eopbgr70057.outbound.protection.outlook.com ([40.107.7.57]:37446
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726960AbfLRRNi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Dec 2019 12:13:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cfqt2J2dzWZsh8bQBSebe/xUu6RFf2juw2IuL2u+1+jwxNtjHIhN4Mzn+dsZqzzxbmf7LGAA7tpUU8pCaRWwvT1b53tm1oZrGUA1TtCfFV2293EMWC4Bcg7mo9WUzHoDfNVh5tkIjHRu36VPlchghiw45pB0Sbk7hxl/AGqXXYUYj13MV5lGii/tIQM2g+lj4V6uWrE0VXqI43xf06NmC1qh094cf6dgKjgwT5qATgWI/GqykbBkpQ9wuXt0+ZBNRpzWRGN4d5iicve2dZp0wD8tI9NVlO/YXIWfYlQBUgmIGpY1rebWjV5+ltdRlUT6u5J5fNDA9YCTLTYBsiwCmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8M7jWWbYdprhFwXLnYqSVUa/WdXz0TZG3xv7L7rNTRQ=;
+ b=PE4UOlEsunToWBJrCSHfKeNfU0pVfZDslpQkGTLGW9uCN1Lh4nv7Qi3jJiz+PJkWNRyD99StFikMHfU2VWfkmhAfRDJ9TTlaWRGAnycuv1nwlvdod8URJTmAo5m6OI8Ru7lySZHYM1SK5aw8Pl4F/zPJ70s3YJ14ysQ+imNKwMLzUCrEYGJMXBTiUuHzRhkF4QU+G1CHq6klvzqK/lCVi/ydf2q7aljt7fjhC8+grvOw1YV6j+7lyR5BkAbiU52tnZlI4UUN85xCAfMOGASwbY3sBZcoe/bESNbrElN8Om3z/qiPsumxrnhv60nXtvU1Y+TburfsRMZxjwCJMOjjOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8M7jWWbYdprhFwXLnYqSVUa/WdXz0TZG3xv7L7rNTRQ=;
+ b=P/IIVCxc39rFL7IegH2mEHfve2Y2aRrHJeKDNu8Rt2LK/m/3k0Knq97TNvp1dtNxjnj27h3TnL2zwvxOcRP8PHc5fpeJz91+DQLohq3gAC6LTfetzyWaTp5B4/nkJWFvvkZIFdqr8JpdHiFWVvApLJpL9wlA9AIDFHvgfzK0s8I=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB4926.eurprd04.prod.outlook.com (20.177.48.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2538.20; Wed, 18 Dec 2019 17:13:24 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::2c49:44c8:2c02:68b1]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::2c49:44c8:2c02:68b1%5]) with mapi id 15.20.2559.012; Wed, 18 Dec 2019
+ 17:13:24 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <chanwoo@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+CC:     Chanwoo Choi <cw00.choi@samsung.com>,
         Rob Herring <robh+dt@kernel.org>,
         Alexandre Bailon <abailon@baylibre.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -74,487 +65,182 @@ Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC v6 3/9] PM / devfreq: imx: Register interconnect
+ device
+Thread-Topic: [PATCH RFC v6 3/9] PM / devfreq: imx: Register interconnect
+ device
+Thread-Index: AQHVmyeZRYeaOo08e0y/DVNQANceVQ==
+Date:   Wed, 18 Dec 2019 17:13:24 +0000
+Message-ID: <VI1PR04MB7023B782510853FE0FDDEFEEEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <cover.1573761527.git.leonard.crestez@nxp.com>
+ <CGME20191114201049epcas5p370853a1d78584bf00d8493ce20320bf9@epcas5p3.samsung.com>
+ <e0e6a1685ccdad95c9d0c922801afdda8adb9f05.1573761527.git.leonard.crestez@nxp.com>
+ <4d45cd39-24df-1714-0a27-5019c1367063@samsung.com>
+ <VI1PR04MB7023F511BAE7D1EDF971CC48EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <60fe19c6-6e73-4133-ed7e-a13a875589c0@samsung.com>
+ <VI1PR04MB7023DAC69C8B4B7CF144F29EEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <CAGTfZH1omr9jqRv9JX+X253YardFx_B26Hm-cT8UNF2J7eC_og@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a13e83ca-d15e-4861-e547-08d783dd9756
+x-ms-traffictypediagnostic: VI1PR04MB4926:|VI1PR04MB4926:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4926C3D05CA1BCE7AB18DFD5EE530@VI1PR04MB4926.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0255DF69B9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(51444003)(199004)(189003)(66446008)(64756008)(86362001)(66556008)(91956017)(66946007)(186003)(76116006)(7416002)(55016002)(9686003)(5660300002)(53546011)(54906003)(26005)(6506007)(66476007)(44832011)(33656002)(8676002)(2906002)(52536014)(478600001)(7696005)(81156014)(110136005)(81166006)(4326008)(8936002)(316002)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4926;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rmyMP62vFMtAJtZ41gzGevjTEIe3QRvRpVODedwD+HVmaOw/+9LCGvm1njwsKDVKNR2wVygxFuXlBtmczy4UmFKGx9CmYHRl0Tkx7vu0tGKOnYyanyq3er7415PyInWqZCKSK0cfh35DBPzn9WfTiqAnf5Org0fl57IybJYqJ9bs3pOCJuIC+Bo2DSACOIVjHunU12Qb6oUs+gNqat7IhiIYKujq5UjUU4yNUFrcUtVHDM7iAL0HyL/9LKzEGE/FQ8GV7Ls4MnNHPe09zPF95e19UMiRE/qhJWjsHHlBmFN0yKxin/JZi5zRoKAeCHbZ79GqNdGwhys0NfmZ5l8UyDVwhc0vTk3lZXQe1vglrN7CTaYP7SuPph1Hfxn+1csYjgpQRpXFcmC6NICxuFa7urzMCuKNDSRvuecQK/7zTJdMCx3OFFUc/xqNXrTOK6l+5Q4A4BZROOlpuKrIdRTlODZzT1DIpRsWugThOmKm7HcAUqhtAt8NHzb2cjIQtiex
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a13e83ca-d15e-4861-e547-08d783dd9756
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 17:13:24.5503
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ijzG876/Ao/3bKaVSyjH6lAoa6OIhsHqVUskkgKpCKO6V/zEmy9vF7+Rm/plJY9OEIn0eCAps5HNOIvDSJv93g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4926
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=EB=85=84 12=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:46, =
-Chanwoo Choi <chanwoo@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hi,
->
-> 2019=EB=85=84 12=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:11=
-, Leonard Crestez <leonard.crestez@nxp.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=
-=84=B1:
-> >
-> > On 18.12.2019 05:08, Chanwoo Choi wrote:
-> > > On 12/18/19 6:05 AM, Leonard Crestez wrote:
-> > >> On 17.12.2019 02:35, Chanwoo Choi wrote:
-> > >>> On 12/16/19 11:57 PM, Leonard Crestez wrote:
-> > >>>> On 16.12.2019 03:00, Chanwoo Choi wrote:
-> > >>>>> Hi,
-> > >>>>>
-> > >>>>> Also, I think that 'devfreq' word is not proper for device driver=
- name.
-> > >>>>> imx-bus.c or imx-noc.c or others to inform the role of this drive=
-r of developer.
-> > >>>>
-> > >>>> I'll rename to "imx-bus". Calling it "imx-noc" is not appropriate
-> > >>>> because I also want to use it for PL301 NICs.
-> > >>>
-> > >>> OK.
-> > >>>
-> > >>>>
-> > >>>>> And, I have a question.
-> > >>>>> This driver adds the devfreq device with either passive governor
-> > >>>>> or userspace governor.
-> > >>>>>
-> > >>>>> As I understood, the devfreq device with passive governor
-> > >>>>> will be operated with imx8m-ddrc.c driver.
-> > >>>>> But, when is operating with userspace governor?
-> > >>>>
-> > >>>> There are multiple scalable buses inside the SOC, for example ther=
-e's a
-> > >>>> NIC for display controllers and one for (pci+usb). They can use
-> > >>>> userspace governor for explicit frequency control.
-> > >>>>
-> > >>>>> I think that you better to add the explanation to description
-> > >>>>> for two scenarios how to operate with interconnect provider
-> > >>>>> on either passive governor or userspace governor usage case.
-> > >>>>
-> > >>>> I'll elaborate the example in bindings.
-> > >>>
-> > >>> OK.
-> > >>>
-> > >>>>
-> > >>>>> On 12/13/19 10:51 AM, Chanwoo Choi wrote:
-> > >>>>>> On 12/13/19 10:30 AM, Chanwoo Choi wrote:
-> > >>>>>>> Hi,
-> > >>>>>>>
-> > >>>>>>> On 11/15/19 5:09 AM, Leonard Crestez wrote:
-> > >>>>>>>> Add initial support for dynamic frequency switching on pieces =
-of the imx
-> > >>>>>>>> interconnect fabric.
-> > >>>>>>>>
-> > >>>>>>>> All this driver does is set a clk rate based on an opp table, =
-it does
-> > >>>>>>>> not map register areas.
-> > >>>>>>>>
-> > >>>>>>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> > >>>>>>>> ---
-> > >>>>>>>>     drivers/devfreq/Kconfig       |   9 ++
-> > >>>>>>>>     drivers/devfreq/Makefile      |   1 +
-> > >>>>>>>>     drivers/devfreq/imx-devfreq.c | 150 ++++++++++++++++++++++=
-++++++++++++
-> > >>>>>>>>     3 files changed, 160 insertions(+)
-> > >>>>>>>>     create mode 100644 drivers/devfreq/imx-devfreq.c
-> > >>>>>>>>
-> > >>>>>>>> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> > >>>>>>>> index 923a6132e741..fef5ce831e90 100644
-> > >>>>>>>> --- a/drivers/devfreq/Kconfig
-> > >>>>>>>> +++ b/drivers/devfreq/Kconfig
-> > >>>>>>>> @@ -98,10 +98,19 @@ config ARM_IMX8M_DDRC_DEVFREQ
-> > >>>>>>>>        select DEVFREQ_GOV_USERSPACE
-> > >>>>>>>>        help
-> > >>>>>>>>          This adds the DEVFREQ driver for the i.MX8M DDR Contr=
-oller. It allows
-> > >>>>>>>>          adjusting DRAM frequency.
-> > >>>>>>>>
-> > >>>>>>>> +config ARM_IMX_DEVFREQ
-> > >>>>>>>> +      tristate "i.MX Generic DEVFREQ Driver"
-> > >>>>>>>> +      depends on ARCH_MXC || COMPILE_TEST
-> > >>>>>>>> +      select DEVFREQ_GOV_PASSIVE
-> > >>>>>>>> +      select DEVFREQ_GOV_USERSPACE
-> > >>>>>>>> +      help
-> > >>>>>>>> +        This adds the generic DEVFREQ driver for i.MX interco=
-nnects. It
-> > >>>>>>>> +        allows adjusting NIC/NOC frequency.
-> > >>>>>>>> +
-> > >>>>>>>>     config ARM_TEGRA_DEVFREQ
-> > >>>>>>>>        tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
-> > >>>>>>>>        depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
-> > >>>>>>>>                ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
-> > >>>>>>>>                ARCH_TEGRA_210_SOC || \
-> > >>>>>>>> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefi=
-le
-> > >>>>>>>> index 3eb4d5e6635c..61d0edee16f7 100644
-> > >>>>>>>> --- a/drivers/devfreq/Makefile
-> > >>>>>>>> +++ b/drivers/devfreq/Makefile
-> > >>>>>>>> @@ -8,10 +8,11 @@ obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)  +=3D go=
-vernor_userspace.o
-> > >>>>>>>>     obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)  +=3D governor_passive.o
-> > >>>>>>>>
-> > >>>>>>>>     # DEVFREQ Drivers
-> > >>>>>>>>     obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)       +=3D exynos-bus=
-.o
-> > >>>>>>>>     obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)       +=3D imx8m-ddrc=
-.o
-> > >>>>>>>> +obj-$(CONFIG_ARM_IMX_DEVFREQ)         +=3D imx-devfreq.o
-> > >>>>>>>>     obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)       +=3D rk3399_dmc=
-.o
-> > >>>>>>>>     obj-$(CONFIG_ARM_TEGRA_DEVFREQ)            +=3D tegra30-de=
-vfreq.o
-> > >>>>>>>>     obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)  +=3D tegra20-devfreq.o
-> > >>>>>>>>
-> > >>>>>>>>     # DEVFREQ Event Drivers
-> > >>>>>>>> diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/i=
-mx-devfreq.c
-> > >>>>>>>> new file mode 100644
-> > >>>>>>>> index 000000000000..620b344e87aa
-> > >>>>>>>> --- /dev/null
-> > >>>>>>>> +++ b/drivers/devfreq/imx-devfreq.c
-> > >>>>>>>> @@ -0,0 +1,150 @@
-> > >>>>>>>> +// SPDX-License-Identifier: GPL-2.0
-> > >>>>>>>> +/*
-> > >>>>>>>> + * Copyright 2019 NXP
-> > >>>>>>>> + */
-> > >>>>>>>> +
-> > >>>>>>>> +#include <linux/clk.h>
-> > >>>>>>>> +#include <linux/devfreq.h>
-> > >>>>>>>> +#include <linux/device.h>
-> > >>>>>>>> +#include <linux/module.h>
-> > >>>>>>>> +#include <linux/of_device.h>
-> > >>>>>>>> +#include <linux/pm_opp.h>
-> > >>>>>>>> +#include <linux/platform_device.h>
-> > >>>>>>>> +#include <linux/slab.h>
-> > >>>>>>>> +
-> > >>>>>>>> +struct imx_devfreq {
-> > >>>>>>>> +      struct devfreq_dev_profile profile;
-> > >>>>>>>> +      struct devfreq *devfreq;
-> > >>>>>>>> +      struct clk *clk;
-> > >>>>>>>> +      struct devfreq_passive_data passive_data;
-> > >>>>>>>> +};
-> > >>>>>>>> +
-> > >>>>>>>> +static int imx_devfreq_target(struct device *dev,
-> > >>>>>>>> +                            unsigned long *freq, u32 flags)
-> > >>>>>>>
-> > >>>>>>> Don't use space for the indentation. Please use only tab.
-> > >>>>
-> > >>>> OK
-> > >>
-> > >> The spaces are required in order to align arguments to open paranthe=
-sis.
-> > >> Should I drop that?
-> > >>
-> > >> It seems that check_patch.pl and process/coding-style.rst doesn't ha=
-ve a
-> > >> strong opinion on this; my personal preference is for long argument
-> > >> lists to just use double indentation.
-> > >
-> > > Generally, almost patches use the tab for the indentation.
-> > > I don't use space for the indentation. If use the tab
-> > > for the indentation, it is not harmful for the readability.
-> > >
-> > > If use the space for the pretty to make the alignment between paramet=
-er,
-> > > I think it it not good.
-> >
-> > OK, I'll just use two tabs. This also matches my personal preference.
-> >
-> > >>>>>>>> +{
-> > >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
-> > >>>>>>>> +      struct dev_pm_opp *new_opp;
-> > >>>>>>>> +      unsigned long new_freq;
-> > >>>>>>>> +      int ret;
-> > >>>>>>>> +
-> > >>>>>>>> +      new_opp =3D devfreq_recommended_opp(dev, freq, flags);
-> > >>>>>>>> +      if (IS_ERR(new_opp)) {
-> > >>>>>>>> +              ret =3D PTR_ERR(new_opp);
-> > >>>>>>>> +              dev_err(dev, "failed to get recommended opp: %d=
-\n", ret);
-> > >>>>>>>> +              return ret;
-> > >>>>>>>> +      }
-> > >>>>>>>> +      new_freq =3D dev_pm_opp_get_freq(new_opp);
-> > >>>>>>>> +      dev_pm_opp_put(new_opp);
-> > >>>>>>>> +
-> > >>>>>>>> +      return clk_set_rate(priv->clk, new_freq);
-> > >>>>>>>> +}
-> > >>>>>>>> +
-> > >>>>>>>> +static int imx_devfreq_get_cur_freq(struct device *dev, unsig=
-ned long *freq)
-> > >>>>>>>> +{
-> > >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
-> > >>>>>>>> +
-> > >>>>>>>> +      *freq =3D clk_get_rate(priv->clk);
-> > >>>>>>>> +
-> > >>>>>>>> +      return 0;
-> > >>>>>>>> +}
-> > >>>>>>>> +
-> > >>>>>>>> +static int imx_devfreq_get_dev_status(struct device *dev,
-> > >>>>>>>> +                                    struct devfreq_dev_status=
- *stat)
-> > >>>>>>>
-> > >>>>>>> ditto. Please use tab for the indentation.
-> > >>>>>>>
-> > >>>>>>>> +{
-> > >>>>>>>> +      struct imx_devfreq *priv =3D dev_get_drvdata(dev);
-> > >>>>>>>> +
-> > >>>>>>>> +      stat->busy_time =3D 0;
-> > >>>>>>>> +      stat->total_time =3D 0;
-> > >>>>>>>> +      stat->current_frequency =3D clk_get_rate(priv->clk);
-> > >>>>>>>> +
-> > >>>>>>>> +      return 0;
-> > >>>>>>>> +}
-> > >>>>>>>> +
-> > >>>>>>>> +static void imx_devfreq_exit(struct device *dev)
-> > >>>>>>>> +{
-> > >>>>>>>> +      dev_pm_opp_of_remove_table(dev);
-> > >>>>>>>> +}
-> > >>>>>>>> +
-> > >>>>>>>> +static int imx_devfreq_probe(struct platform_device *pdev)
-> > >>>>>>>> +{
-> > >>>>>>>> +      struct device *dev =3D &pdev->dev;
-> > >>>>>>>> +      struct imx_devfreq *priv;
-> > >>>>>>>
-> > >>>>>>> How about changing the variable name 'priv' to 'imx' or 'imx_da=
-ta'?
-> > >>>>>>> because it is not easy to catch the role of 'priv' from variabl=
-e name.
-> > >>>>
-> > >>>> The name "priv" refers to private data of current device: it is sh=
-ort
-> > >>>> and not ambiguous in this context. I don't think that mentioning "=
-imx"
-> > >>>> adds any additional useful information.
-> > >>>>
-> > >>>> It doesn't seem like there's much of a convention for "local varia=
-ble
-> > >>>> containing private data", for example exynos-bus.c uses "struct
-> > >>>> exynos_bus* bus" internally.
-> > >>>
-> > >>> OK. it is nitpick. Keep your style.
-> > >>>
-> > >>>>
-> > >>>>>>>
-> > >>>>>>>> +      const char *gov =3D DEVFREQ_GOV_USERSPACE;
-> > >>>>>>>> +      void *govdata =3D NULL;
-> > >>>>>>>
-> > >>>>>>> How about changing the variable name 'govdata' to 'gov_data'?
-> > >>>>>>> - govdata -> gov_data
-> > >>>>
-> > >>>> OK
-> > >>>>
-> > >>>>>>>> +      int ret;
-> > >>>>>>>> +
-> > >>>>>>>> +      priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > >>>>>>>> +      if (!priv)
-> > >>>>>>>> +              return -ENOMEM;
-> > >>>>>>>> +
-> > >>>>>>>> +      priv->clk =3D devm_clk_get(dev, NULL);
-> > >>>>>>>
-> > >>>>>>> nitpick: because the clock-name is not mandatory.
-> > >>>>>>> Don't need to specify the clock name to inform the role of cloc=
-k
-> > >>>>>>> of other developer/user?
-> > >>>>>>>
-> > >>>>>>> For example, "ddr", "bus" and so on.
-> > >>>>
-> > >>>> I'll call this bus, but I'm not sure it's useful when a single clo=
-ck is
-> > >>>> involved.
-> > >>>>
-> > >>>>>> And, this driver doesn't include the 'clk_prepare_enable'.
-> > >>>>>> how to enable the clock?
-> > >>>>
-> > >>>> Clocks are either always on or perhaps controlled by some other
-> > >>>> peripheral. This driver only provides scaling.
-> > >>>
-> > >>> It is not proper use-case of clock. If device driver
-> > >>> want to control the clock, it have to be enabled on device driver.
-> > >>
-> > >>> Even it clock is always, the user don't know the state of clock.
-> > >>> Also, user can't know what kind of device driver control the clock.
-> > >>>
-> > >>> It have to be controlled on this device driver
-> > >>> before changing the clock frequency.
-> > >>
-> > >>   From clock framework perspective prepare/enable and rate bits can =
-be
-> > >> controlled separately.
-> > >>
-> > >> Many peripherals are grouped with their own bus (for example a PL301
-> > >> NIC) which is normally off and only gets enabled when explicitly
-> > >> requested by drivers. If this devfreq driver always enabled bus cloc=
-ks
-> > >> then it would waste power for no reason.
-> > >
-> > > You can save the power with following sequence.
-> > > You are keeping the following sequence without any problem.
-> > >       clk_prepare_enable()
-> > >       clk_set_rate()
-> > >       clk_disable_unprepare()
-> > >
-> > > clk API support the reference count for the clock user.
-> > > It doesn't affect the any behavior of other device sharing the bus cl=
-ock
-> > > and waste any power-consumption because it will always restore
-> > > the reference count after changing the clock rate.
-> >
-> > But this doesn't serve any purpose?
-
-Again thinking, it show the at least sequence to control the clock.
-To do this sequence, it doesn't affect the behavior of any device driver
-which share the clock. And it show the clock is well-controlled by
-this device driver.
-
-> >
-> > In some cases (depending on clock flags like CLK_SET_RATE_GATE or
-> > CLK_SET_RATE_UNGATE flags) the clk_set_rate function can require than
-> > clocks are either on or off and otherwise return an error.
-> >
-> > For imx bus clocks there is no such requirement.
-
-Usually, the clock is enabled before using it. It doesn't depend on
-the any arch or SoC.
-CCF define the this rule for the clock control.
-
->
-> If you guarantee that it is not required on all board related to imx,
-> please add this comment when calling clk_set_rate().
-> Because the user who don't know the history and character,
-> don't understand why don't enable or disable for clock.
->
-> I'll agree if you add the comment why don't need to
-> enable/disable control on this driver.
->
->
-> >
-> > >> For example a display controller will first enable clocks to allow
-> > >> access to device registers, then configure a resolution and make a
-> > >> bandwith request which gets translated a min_freq request. Then when=
- the
-> > >> display is blanked the entire display bus should be powered off, eve=
-n if
-> > >> this makes control registers inaccessible.
-> > >>
-> > >> This series only enables scaling for the main NOC which can't be tur=
-ned
-> > >> off anyway.
-> > >>
-> > >>>>>>>> +      if (IS_ERR(priv->clk)) {
-> > >>>>>>>> +              ret =3D PTR_ERR(priv->clk);
-> > >>>>>>>> +              dev_err(dev, "failed to fetch clk: %d\n", ret);
-> > >>>>>>>> +              return ret;
-> > >>>>>>>> +      }
-> > >>>>>>>> +      platform_set_drvdata(pdev, priv);
-> > >>>>>>>> +
-> > >>>>>>>> +      ret =3D dev_pm_opp_of_add_table(dev);
-> > >>>>>>>> +      if (ret < 0) {
-> > >>>>>>>> +              dev_err(dev, "failed to get OPP table\n");
-> > >>>>>>>> +              return ret;
-> > >>>>>>>> +      }
-> > >>>>>>>> +
-> > >>>>>>>> +      priv->profile.polling_ms =3D 1000;
-> > >>>>>>>> +      priv->profile.target =3D imx_devfreq_target;
-> > >>>>>>>> +      priv->profile.get_dev_status =3D imx_devfreq_get_dev_st=
-atus;
-> > >>>>>>>> +      priv->profile.exit =3D imx_devfreq_exit;
-> > >>>>>>>> +      priv->profile.get_cur_freq =3D imx_devfreq_get_cur_freq=
-;
-> > >>>>>>>> +      priv->profile.initial_freq =3D clk_get_rate(priv->clk);
-> > >>>>>>>> +
-> > >>>>>>>> +      /* Handle passive devfreq parent link */
-> > >>>>>>>> +      priv->passive_data.parent =3D devfreq_get_devfreq_by_ph=
-andle(dev, 0);
-> > >>>>>>>> +      if (!IS_ERR(priv->passive_data.parent)) {
-> > >>>>>>>> +              dev_info(dev, "setup passive link to %s\n",
-> > >>>>>>>> +                       dev_name(priv->passive_data.parent->de=
-v.parent));
-> > >>>>>>>> +              gov =3D DEVFREQ_GOV_PASSIVE;
-> > >>>>>>>> +              govdata =3D &priv->passive_data;
-> > >>>>>>>> +      } else if (priv->passive_data.parent !=3D ERR_PTR(-ENOD=
-EV)) {
-> > >>>>>>>> +              // -ENODEV means no parent: not an error.
-> > >>>>>>>> +              ret =3D PTR_ERR(priv->passive_data.parent);
-> > >>>>>>>> +              if (ret !=3D -EPROBE_DEFER)
-> > >>>>>>>> +                      dev_warn(dev, "failed to get initialize=
- passive parent: %d\n",
-> > >>>>>>>> +                               ret);
-> > >>>>>>>> +              goto err;
-> > >>>>>>>> +      }
-> > >>>>>>>
-> > >>>>>>> You better to change the exception handling as following: It is=
- more simple.
-> > >>>>>>>
-> > >>>>>>>         } else if (PTR_ERR(priv->passive_data.parent) =3D=3D -E=
-PROBE_DEFER)
-> > >>>>>>>                         || PTR_ERR(priv->passive_data.parent) =
-=3D=3D -ENODEV) {
-> > >>>>>>>                 goto err;
-> > >>>>>>>         } else {
-> > >>>>>>>                 ret =3D PTR_ERR(priv->passive_data.parent);
-> > >>>>>>>                 dev_err(dev, "failed to get initialize passive =
-parent: %d\n", ret);
-> > >>>>>>>                 goto err;
-> > >>>>>>>         }
-> > >>>>
-> > >>>> But -ENODEV is not an error, it means no passive parent was found.
-> > >>>
-> > >>> OK. just I want to make 'if statement' more simple. This style
-> > >>> is complicated.
-> > >>
-> > >> I can avoid handling EPROBE_DEFER in a nested if.
-> > >
-> > > Anyway, if you make the exception more simple, I'm ok.
-> > >
-> > >>
-> > >>>>>>>> +      priv->devfreq =3D devm_devfreq_add_device(dev, &priv->p=
-rofile,
-> > >>>>>>>> +                                              gov, govdata);
-> > >>>>>>>> +      if (IS_ERR(priv->devfreq)) {
-> > >>>>>>>> +              ret =3D PTR_ERR(priv->devfreq);
-> > >>>>>>>> +              dev_err(dev, "failed to add devfreq device: %d\=
-n", ret);
-> > >>>>>>>> +              goto err;
-> > >>>>>>>> +      }
-> > >>>>>>>> +
-> > >>>>>>>> +      return 0;
-> > >>>>>>>> +
-> > >>>>>>>> +err:
-> > >>>>>>>> +      dev_pm_opp_of_remove_table(dev);
-> > >>>>>>>> +      return ret;
-> > >>>>>>>> +}
-> > >>>>>>>> +
-> > >>>>>>>> +static const struct of_device_id imx_devfreq_of_match[] =3D {
-> > >>>>>>>> +      { .compatible =3D "fsl,imx8m-noc", },
-> > >>>>>>>> +      { .compatible =3D "fsl,imx8m-nic", },
-> > >>>>>>>> +      { /* sentinel */ },
-> > >>>>>>>> +};
-> > >>>>>>>> +MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);
-> > >>>>>>>> +
-> > >>>>>>>> +static struct platform_driver imx_devfreq_platdrv =3D {
-> > >>>>>>>> +      .probe          =3D imx_devfreq_probe,
-> > >>>>>>>> +      .driver =3D {
-> > >>>>>>>> +              .name   =3D "imx-devfreq",
-> > >>>>>>>> +              .of_match_table =3D of_match_ptr(imx_devfreq_of=
-_match),
-> > >>>>>>>> +      },
-> > >>>>>>>> +};
-> > >>>>>>>> +module_platform_driver(imx_devfreq_platdrv);
-> > >>>>>>>> +
-> > >>>>>>>> +MODULE_DESCRIPTION("Generic i.MX bus frequency driver");
-> > >>>>>>>
-> > >>>>>>> If this driver is for bus frequency, you better to use 'bus' fo=
-r the clock-name
-> > >>>>>>> for the readability.
-> > >>
-> > >>
-> > >>
-> > >>
-> > >
-> > >
-> >
->
->
-> --
-> Best Regards,
-> Chanwoo Choi
-
-
-
---=20
-Best Regards,
-Chanwoo Choi
+T24gMTguMTIuMjAxOSAxMzowNiwgQ2hhbndvbyBDaG9pIHdyb3RlOgo+IDIwMTmz4iAxMr/5IDE4
+wM8gKLz2KSC/wMjEIDc6MTQsIExlb25hcmQgQ3Jlc3RleiA8bGVvbmFyZC5jcmVzdGV6QG54cC5j
+b20+tNTAzCDA27y6Ogo+PiBPbiAxNy4xMi4yMDE5IDAyOjU1LCBDaGFud29vIENob2kgd3JvdGU6
+Cj4+PiBPbiAxMi8xNy8xOSAxMjowMCBBTSwgTGVvbmFyZCBDcmVzdGV6IHdyb3RlOgo+Pj4+IE9u
+IDEzLjEyLjIwMTkgMDY6MjIsIENoYW53b28gQ2hvaSB3cm90ZToKPj4+Pj4gT24gMTEvMTUvMTkg
+NTowOSBBTSwgTGVvbmFyZCBDcmVzdGV6IHdyb3RlOgo+Pj4+Pj4gVGhlcmUgaXMgbm8gc2luZ2xl
+IGRldmljZSB3aGljaCBjYW4gcmVwcmVzZW50IHRoZSBpbXggaW50ZXJjb25uZWN0Lgo+Pj4+Pj4g
+SW5zdGVhZCBvZiBhZGRpbmcgYSB2aXJ0dWFsIG9uZSBqdXN0IG1ha2UgdGhlIG1haW4gJm5vYyBh
+Y3QgYXMgdGhlCj4+Pj4+PiBnbG9iYWwgaW50ZXJjb25uZWN0IHByb3ZpZGVyLgo+Pj4+Pj4KPj4+
+Pj4+IFRoZSBpbXggaW50ZXJjb25uZWN0IHByb3ZpZGVyIGRyaXZlciB3aWxsIHNjYWxlIHRoZSBO
+T0MgYW5kIEREUkMgYmFzZWQKPj4+Pj4+IG9uIGJhbmR3aWR0aCByZXF1ZXN0LiBNb3JlIHNjYWxh
+YmxlIG5vZGVzIGNhbiBiZSBhZGRlZCBpbiB0aGUgZnV0dXJlLAo+Pj4+Pj4gZm9yIGV4YW1wbGUg
+Zm9yIGF1ZGlvL2Rpc3BsYXkvdnB1L2dwdSBOSUNzLgo+Pj4+Pj4KPj4+Pj4+IFNpZ25lZC1vZmYt
+Ynk6IExlb25hcmQgQ3Jlc3RleiA8bGVvbmFyZC5jcmVzdGV6QG54cC5jb20+Cj4+Pj4+PiAtLS0K
+Pj4+Pj4+ICAgICBkcml2ZXJzL2RldmZyZXEvaW14LWRldmZyZXEuYyB8IDM3ICsrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrCj4+Pj4+PiAgICAgMSBmaWxlIGNoYW5nZWQsIDM3IGlu
+c2VydGlvbnMoKykKPj4+Pj4+Cj4+Pj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9kZXZmcmVxL2lt
+eC1kZXZmcmVxLmMgYi9kcml2ZXJzL2RldmZyZXEvaW14LWRldmZyZXEuYwo+Pj4+Pj4gaW5kZXgg
+NjIwYjM0NGU4N2FhLi41ODVkMzQwYzBmNmUgMTAwNjQ0Cj4+Pj4+PiAtLS0gYS9kcml2ZXJzL2Rl
+dmZyZXEvaW14LWRldmZyZXEuYwo+Pj4+Pj4gKysrIGIvZHJpdmVycy9kZXZmcmVxL2lteC1kZXZm
+cmVxLmMKPj4+Pj4+IEBAIC0xNSwxMCArMTUsMTEgQEAKPj4+Pj4+ICAgICBzdHJ1Y3QgaW14X2Rl
+dmZyZXEgewo+Pj4+Pj4gICAgICAgICAgICAgc3RydWN0IGRldmZyZXFfZGV2X3Byb2ZpbGUgcHJv
+ZmlsZTsKPj4+Pj4+ICAgICAgICAgICAgIHN0cnVjdCBkZXZmcmVxICpkZXZmcmVxOwo+Pj4+Pj4g
+ICAgICAgICAgICAgc3RydWN0IGNsayAqY2xrOwo+Pj4+Pj4gICAgICAgICAgICAgc3RydWN0IGRl
+dmZyZXFfcGFzc2l2ZV9kYXRhIHBhc3NpdmVfZGF0YTsKPj4+Pj4+ICsgIHN0cnVjdCBwbGF0Zm9y
+bV9kZXZpY2UgKmljY19wZGV2Owo+Pj4+Pj4gICAgIH07Cj4+Pj4+Pgo+Pj4+Pj4gICAgIHN0YXRp
+YyBpbnQgaW14X2RldmZyZXFfdGFyZ2V0KHN0cnVjdCBkZXZpY2UgKmRldiwKPj4+Pj4+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1bnNpZ25lZCBsb25nICpmcmVxLCB1MzIgZmxh
+Z3MpCj4+Pj4+PiAgICAgewo+Pj4+Pj4gQEAgLTYwLDExICs2MSw0MCBAQCBzdGF0aWMgaW50IGlt
+eF9kZXZmcmVxX2dldF9kZXZfc3RhdHVzKHN0cnVjdCBkZXZpY2UgKmRldiwKPj4+Pj4+ICAgICAg
+ICAgICAgIHJldHVybiAwOwo+Pj4+Pj4gICAgIH0KPj4+Pj4+Cj4+Pj4+PiAgICAgc3RhdGljIHZv
+aWQgaW14X2RldmZyZXFfZXhpdChzdHJ1Y3QgZGV2aWNlICpkZXYpCj4+Pj4+PiAgICAgewo+Pj4+
+Pj4gKyAgc3RydWN0IGlteF9kZXZmcmVxICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKGRldik7Cj4+
+Pj4+PiArCj4+Pj4+PiAgICAgICAgICAgICBkZXZfcG1fb3BwX29mX3JlbW92ZV90YWJsZShkZXYp
+Owo+Pj4+Pj4gKyAgcGxhdGZvcm1fZGV2aWNlX3VucmVnaXN0ZXIocHJpdi0+aWNjX3BkZXYpOwo+
+Pj4+Pj4gK30KPj4+Pj4+ICsKPj4+Pj4+ICsvKiBpbXhfZGV2ZnJlcV9pbml0X2ljYygpIC0gcmVn
+aXN0ZXIgbWF0Y2hpbmcgaWNjIHByb3ZpZGVyIGlmIHJlcXVpcmVkICovCj4+Pj4+PiArc3RhdGlj
+IGludCBpbXhfZGV2ZnJlcV9pbml0X2ljYyhzdHJ1Y3QgZGV2aWNlICpkZXYpCj4+Pj4+PiArewo+
+Pj4+Pj4gKyAgc3RydWN0IGlteF9kZXZmcmVxICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKGRldik7
+Cj4+Pj4+PiArICBjb25zdCBjaGFyICppY2NfZHJpdmVyX25hbWU7Cj4+Pj4+PiArCj4+Pj4+PiAr
+ICBpZiAoIUlTX0VOQUJMRUQoQ09ORklHX0lOVEVSQ09OTkVDVF9JTVgpKQo+Pj4+Pj4gKyAgICAg
+ICAgICByZXR1cm4gMDsKPj4+Pj4KPj4+Pj4gSXQgaXMgbm90IHByb3BlciB0byBjaGVjayB0aGUg
+ZW5hYmxlIHN0YXRlIG9mIENPTkZJR19JTlRFUkNPTk5FQ1RfSU1YIGNvbmZpZ3VyYXRpb24KPj4+
+Pj4gb24gZGV2aWNlIGRyaXZlci4gV2h5IGRvbid0IHlvdSBhZGQgdGhlICdzZWxlY3QgQ09ORklH
+X0lOVEVSQ09OTkVDVF9JTVgnIG9uIEtjb25maWc/Cj4+Pj4KPj4+PiBCZWNhdXNlIGl0J3Mgb3B0
+aW9uYWwuCj4+Pj4KPj4+PiBZb3UgY2FuIGRpc2FibGUgaW50ZXJjb25uZWN0IHN1cHBvcnQgYW5k
+IGp1c3QgdHdlYWsgZnJlcXVlbmNpZXMgdXNpbmcKPj4+PiB0aGUgZGV2ZnJlcSBzeXNmcyBBUEku
+IEJ1dCBpbmRlZWQgd291bGQgb25seSByZWFsbHkgYmUgdXNlZnVsIGZvciBkZWJ1Z2dpbmcuCj4+
+Pgo+Pj4gRXZlbiBpZiBpdCdzIG9wdGlvbmFsLCBJIGRvbid0IHByZWZlciB0byB1c2UgJ0lTX0VO
+QUJMRUQnIG1hY3JvLgo+Pj4KPj4+IEdlbmVyYWxseSwgYWRkIG9yIGRlbGV0ZSB0aGUgcHJvcGVy
+dHkgb3IgdmFsdWUgYXQgRFQgZmlsZQo+Pj4gdG8gZWl0aGVyIGVuYWJsZSBvciBkaXNhYmxlIHRo
+ZSBzb21lIGZlYXR1cmUgcHJvdmlkZWQgYnkgZGV2aWNlIGRyaXZlcgo+Pj4gaW5zdGVhZCBvZiBj
+aGVja2luZyB0aGUgY29uZmlndXJhdGlvbi4KPj4+Cj4+PiBJZiB1c2VyIGFkZHMgdGhlIHByb3Bl
+cnR5L3ZhbHVlIHJlbGF0ZWQgdG8gaW50ZXJjb25uZWN0Cj4+PiBhbmQgaW14LWJ1cy5jIGNvbmZp
+Z3VyYXRpb24gaXMgZW5hYmxlZCwgdGhlIGJlaGF2aW9yCj4+PiByZWxhdGVkIHRvIGludGVyY29u
+bmVjdCBvbiBpbXgtYnVzLmMgZG9lc24ndCB3b3JrLiBJdCBtYWtlIHNvbWUgY29uZnVzaW9uLgo+
+Pgo+PiBNYXliZSBJIGNvdWxkIHByaW50IGEgd2FybmluZyBpZiAjaW50ZXJjb25uZWN0LWNlbGxz
+IGlzIHByZXNlbnQgYnV0Cj4+IENPTkZJR19JTlRFUkNPTk5FQ1RfSU1YIGlzIG9mZj8KPiAKPiBB
+Y3R1YWxseSwgdXNlciBtaWdodCB0aGluayB0aGF0IGlmIGlteC1idXMuYyBpcyBlbmFibGVkCj4g
+LCBDT05GSUdfSU5URVJDT05ORUNUX01JWCBpcyBlbmFibGVkLgo+IEJlY2F1c2UsIHRoZSBkdCBi
+aW5kaW5nIGRvY3VtZW50IG9mIGlteC1idXMuYyB3aWxsCj4gY29udGFpbiB0aGUgcHJvcGVydHkg
+Zm9yIGludGVyY29ubmVjdC4KPiAKPiBJZiBkZXZpY2UgZHJpdmVyIHN1cHBvcnQgdGhlIHZhcmlv
+dXMgZmVhdHVyZSwKPiB0aGUgZGV2aWNlIGRyaXZlciBoYXZlIHRvIGVuYWJsZSBhbGwgY29uZmln
+dXJhdGlvbgo+IGluIG9yZGVyIHRvIHN1cHBvcnQgdGhlIGZlYXR1cmVzIGZvciB1c2VyLgoKCj4+
+IEFuIGV4cGxpY2l0IHNlbGVjdCBpbiBLY29uZmlnIHNlZW1zIGxpa2UgYSBwb2ludGxlc3MgbGlt
+aXRhdGlvbiBidXQgaW4KPj4gcHJhY3RpY2UgaXQgd291bGQgYWxtb3N0IG5ldmVyIGJlIHVzZWZ1
+bCB0byBidWlsZCBvbmUgd2l0aG91dCB0aGUgb3RoZXIuCj4gCj4gVGhpcyBwYXRjaCBpcyBmb3Ig
+dGhlIHNvbWUgQ09ORklHX0lOVEVSQ09OTkVDVF9JTVggZHJpdmVyLgo+IEkgZG9uJ3QgdW5kZXJz
+dGFuZCB3aHkgaXMgbm90IG1lYW5pbmdmdWwgdG8gc2VsZWN0IENPTkZJR19JTlRFUkNPTk5FQ1Rf
+SU1YCj4gaW4gS2NvbmZpZz8KCk9uZSBpc3N1ZSBpcyB0aGF0IHRoZSBpbnRlcmNvbm5lY3QgZ3Jh
+cGggaXMgZGVzY3JpYmVkIHBlci1zb2MgYW5kIHRoZXJlIAphcmUgcGVyLXNvYyBjb25maWcgb3B0
+aW9ucyB3aGlsZSBpbXgtYnVzIGFwcGxpZXMgdG8gYWxsLiBTbyB0aGUgImlmIiAKY29uZGl0aW9u
+IGlzIG5vdCBzdWZmaWNpZW50IGVpdGhlcjsgaWYgdGhlIHBlci1zb2MgaW50ZXJjb25uZWN0IGRy
+aXZlciAKaXMgb21pdHRlZCB0aGVuIHRoZSBwbGF0Zm9ybSBkZXZpY2Ugd2lsbCBiZSBhZGRlZCBi
+dXQgbm8gZHJpdmVyIHdpbGwgYmUgCmV2ZXIgYmUgZm91bmQuCgpUaGVyZSBhcmUgd2F5cyBhcm91
+bmQgdGhpczogZm9yIGV4YW1wbGUgYWxsIG9mIGlteCBpbnRlcmNvbm5lY3QgY291bGQgYmUgCmJ1
+aWx0IGFzIGEgc2luZ2xlIG1vZHVsZS4gQnV0IEkgdGhpbmsgaXQncyByZWFzb25hYmxlIGZvciBk
+ZXZpY2VzIHRvIGJlIApwYXJ0aWFsbHkgZnVuY3Rpb25hbCBpZiBzb21lIGNvbmZpZyBvcHRpb25z
+IGFyZSBtaXNzaW5nIGFuZCBoZWF2eSBjb25maWcgCmN1c3RvbWl6YXRpb24gc29tZXRpbWVzIHJl
+cXVpcmVzIGEgYml0IG9mIGRlYnVnZ2luZy4KClRoZXJlIGFyZSB2YXJpb3VzIGlzc3VlcyB3aGVu
+IGJ1aWxkaW5nIHRoZSBjdXJyZW50IHNlcmllcyBhcyAibSIgYnV0IEkgCmNhbiBzb2x2ZSB0aGVt
+IGFuZCBwb3N0IGEgZmluYWwgcGF0Y2ggd2hpY2ggc2V0cyBhbGwgdGhlIHJlbGV2YW50IApvcHRp
+b25zIG9uICJtIiBpbiBhcm02NCBkZWZjb25maWcuIFRoZSBpdCB3aWxsIGFsbCAianVzdCB3b3Jr
+IiBvdXQgb2YgCnRoZSBib3guCgo+Pj4gVGhlIGlteC1idXMuYyBoYXZlIHRvIGFkZCB0aGUgJ3Nl
+bGVjdCBDT05GSUdfSU5URVJDT05ORUNUX0lNWCcKPj4+IGFuZCBoYW5kIG92ZXIgdGhlIHJpZ2h0
+IHdoaWNoIHVzZSB0aGUgaW50ZXJjb25uZWN0IGZlYXR1cmUgb3Igbm90LCB0byB1c2VyLgo+Pj4K
+Pj4+IElmIHRoZXJlIGFyZSBhbnkgcmVxdWlyZW1lbnQgdG8gYWRkIHRoZSBhZGRpdGlvbmFsIHBy
+b3BlcnR5Cj4+PiB0byBjaGVjayB3aGV0aGVyIGludGVyY29ubmVjdCBmZWF0dXJlIHdpbGwgYmUg
+dXNlZCBvciBub3QsCj4+PiB5b3UgY2FuIGFkZCB0aGUgZXh0cmEgcHJvcGVydHkuIEJ1dCwgSSB0
+aGluayB0aGF0IGl0IGlzIGVub3VnaAo+Pj4gdG8gY2hlY2sgdGhlICcjaW50ZXJjb25uZWN0LWNl
+bGxzJy4KPj4+Cj4+PiBJbiByZXN1bHQsIEkgdGhpbmsgdGhhdCBpdCBpcyByaWdodCB0byBkZWNp
+ZGUgdGhlIHVzYWdlIG9mIGZlYXR1cmUKPj4+IG9mIGRldmljZSBkcml2ZXIgYnkgdXNlciBvbiBE
+ZXZpY2V0cmVlLgo+Pj4KPj4+Pgo+Pj4+Pj4gKyAgaWYgKCFvZl9nZXRfcHJvcGVydHkoZGV2LT5v
+Zl9ub2RlLCAiI2ludGVyY29ubmVjdC1jZWxscyIsIDApKQo+Pj4+Pj4gKyAgICAgICAgICByZXR1
+cm4gMDsKPj4+Pj4+ICsKPj4+Pj4+ICsgIGljY19kcml2ZXJfbmFtZSA9IG9mX2RldmljZV9nZXRf
+bWF0Y2hfZGF0YShkZXYpOwo+Pj4+Pj4gKyAgaWYgKCFpY2NfZHJpdmVyX25hbWUpCj4+Pj4+PiAr
+ICAgICAgICAgIHJldHVybiAwOwo+Pj4+Pj4gKwo+Pj4+Pj4gKyAgcHJpdi0+aWNjX3BkZXYgPSBw
+bGF0Zm9ybV9kZXZpY2VfcmVnaXN0ZXJfZGF0YSgKPj4+Pj4+ICsgICAgICAgICAgICAgICAgICBk
+ZXYsIGljY19kcml2ZXJfbmFtZSwgMCwgTlVMTCwgMCk7Cj4+Pj4+PiArICBpZiAoSVNfRVJSKHBy
+aXYtPmljY19wZGV2KSkgewo+Pj4+Pj4gKyAgICAgICAgICBkZXZfZXJyKGRldiwgImZhaWxlZCB0
+byByZWdpc3RlciBpY2MgcHJvdmlkZXIgJXM6ICVsZFxuIiwKPj4+Pj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgIGljY19kcml2ZXJfbmFtZSwgUFRSX0VSUihwcml2LT5kZXZmcmVxKSk7Cj4+
+Pj4+PiArICAgICAgICAgIHJldHVybiBQVFJfRVJSKHByaXYtPmRldmZyZXEpOwo+Pj4+Pj4gKyAg
+fQo+Pj4+Pj4gKwo+Pj4+Pj4gKyAgcmV0dXJuIDA7Cj4+Pj4+PiAgICAgfQo+Pj4+Pj4KPj4+Pj4+
+ICAgICBzdGF0aWMgaW50IGlteF9kZXZmcmVxX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
+KnBkZXYpCj4+Pj4+PiAgICAgewo+Pj4+Pj4gICAgICAgICAgICAgc3RydWN0IGRldmljZSAqZGV2
+ID0gJnBkZXYtPmRldjsKPj4+Pj4+IEBAIC0xMjAsMTggKzE1MCwyNSBAQCBzdGF0aWMgaW50IGlt
+eF9kZXZmcmVxX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4+Pj4+PiAgICAg
+ICAgICAgICAgICAgICAgIHJldCA9IFBUUl9FUlIocHJpdi0+ZGV2ZnJlcSk7Cj4+Pj4+PiAgICAg
+ICAgICAgICAgICAgICAgIGRldl9lcnIoZGV2LCAiZmFpbGVkIHRvIGFkZCBkZXZmcmVxIGRldmlj
+ZTogJWRcbiIsIHJldCk7Cj4+Pj4+PiAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyOwo+Pj4+
+Pj4gICAgICAgICAgICAgfQo+Pj4+Pj4KPj4+Pj4+ICsgIHJldCA9IGlteF9kZXZmcmVxX2luaXRf
+aWNjKGRldik7Cj4+Pj4+PiArICBpZiAocmV0KQo+Pj4+Pj4gKyAgICAgICAgICBnb3RvIGVycjsK
+Pj4+Pj4+ICsKPj4+Pj4+ICAgICAgICAgICAgIHJldHVybiAwOwo+Pj4+Pj4KPj4+Pj4+ICAgICBl
+cnI6Cj4+Pj4+PiAgICAgICAgICAgICBkZXZfcG1fb3BwX29mX3JlbW92ZV90YWJsZShkZXYpOwo+
+Pj4+Pj4gICAgICAgICAgICAgcmV0dXJuIHJldDsKPj4+Pj4+ICAgICB9Cj4+Pj4+Pgo+Pj4+Pj4g
+ICAgIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGlteF9kZXZmcmVxX29mX21hdGNo
+W10gPSB7Cj4+Pj4+PiArICB7IC5jb21wYXRpYmxlID0gImZzbCxpbXg4bXEtbm9jIiwgLmRhdGEg
+PSAiaW14OG1xLWludGVyY29ubmVjdCIsIH0sCj4+Pj4+PiArICB7IC5jb21wYXRpYmxlID0gImZz
+bCxpbXg4bW0tbm9jIiwgLmRhdGEgPSAiaW14OG1tLWludGVyY29ubmVjdCIsIH0sCj4+Pj4+PiAr
+ICB7IC5jb21wYXRpYmxlID0gImZzbCxpbXg4bW4tbm9jIiwgLmRhdGEgPSAiaW14OG1uLWludGVy
+Y29ubmVjdCIsIH0sCj4+Pj4+PiAgICAgICAgICAgICB7IC5jb21wYXRpYmxlID0gImZzbCxpbXg4
+bS1ub2MiLCB9LAo+Pj4+Pj4gICAgICAgICAgICAgeyAuY29tcGF0aWJsZSA9ICJmc2wsaW14OG0t
+bmljIiwgfSwKPj4+Pj4+ICAgICAgICAgICAgIHsgLyogc2VudGluZWwgKi8gfSwKPj4+Pj4+ICAg
+ICB9Owo+Pj4+Pj4gICAgIE1PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIGlteF9kZXZmcmVxX29mX21h
+dGNoKTsK
