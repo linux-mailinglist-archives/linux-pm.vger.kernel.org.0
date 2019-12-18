@@ -2,463 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AAA12455B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 12:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B288124880
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 14:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbfLRLIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 06:08:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49926 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726551AbfLRLIt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Dec 2019 06:08:49 -0500
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC99821D7D;
-        Wed, 18 Dec 2019 11:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576667328;
-        bh=tUaeqcN6CkS43pagf5qs7h+ZistztqDqO0wjuHQPfEA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lrImmIoFd+NrnZ9DpifGyXM3GIbpnVAIKNC9vRU6KiPqFVthAzltRKmAJsvo414SP
-         cBL2TiGnNpr9Wkasn5LXyDGweB2zVBfTvv1CxMTkIj3rdo4ijmOuUCrS1DIXXyG+ge
-         BThU+akJfCGPMGwHz4RBaNs0V1NNo6KBjkeYyH9g=
-Received: by mail-lj1-f175.google.com with SMTP id z17so1632180ljk.13;
-        Wed, 18 Dec 2019 03:08:47 -0800 (PST)
-X-Gm-Message-State: APjAAAXnEikjIOWIoqdbSDK2YUwqR9+ltm9DavhvXaCx8P4TTHiq9D3d
-        e6YihBbuvk+UYQPnQgjMjFNoQNpOSS3QQoCpSxk=
-X-Google-Smtp-Source: APXvYqzzwkok4ysLB1UQSv2NrLCMMmJMEEkUWjEi1zn1zHAKMRYnIIpHYHZgMKhx1IkyluFOt6OFdYUDfYSvwOE37r8=
-X-Received: by 2002:a05:651c:106f:: with SMTP id y15mr1330269ljm.63.1576667326015;
- Wed, 18 Dec 2019 03:08:46 -0800 (PST)
+        id S1727130AbfLRNfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 08:35:25 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:33570 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726774AbfLRNfY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 08:35:24 -0500
+Received: by mail-il1-f193.google.com with SMTP id v15so1724359iln.0;
+        Wed, 18 Dec 2019 05:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gkEKgt/GZK2xmOcGzjWTpOOcB/kiPGj9OjuqfsdNIfE=;
+        b=sssgw8nWNunrDFpKcaAgWjMyHej/RR2H11AeBSC/xDwY5ZQyBYSBn7hi5kkzz+yFeV
+         Orw4J1cfsiRpDTz+nz5Yd4p+y9tN5Us8s7/YgtEqzXqLyg9IY1+hOVGQsWW3b9z5m6NS
+         oCYbOVpV/WBdLxBl9O3Q5fnjj+YHPt6YdVVH743B9pKQiW5D1CJHwAcPvgNwk8JkVvdX
+         n5Kh71LHQkGED5QDvSluKxYpxxAzI91qBTS2BqphYFDS3WP11Uxw/IY6tlzxUBE3+DJs
+         r+FQf7OkHhU8X8qcWBNZfzBmBkv2lI25T6rtlMxc0Y86ICf4ml1CARcOu2HAs783IYI4
+         mXYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gkEKgt/GZK2xmOcGzjWTpOOcB/kiPGj9OjuqfsdNIfE=;
+        b=ufbJJCznjL9wdmCjEn7zQ2MzYfNTv/GP1D5Lk1wU58jS+ktbMDXx1ugt/4RE66bXyl
+         sZhSLqrlqWyQO5OKxH/x8GdAy+E35FqggrNZzkQFgQguLwDcCW3Z5UPoexYeHYkm+Qrv
+         rY+n5oKPoKRSWDWFPzj2osZDfYLbop90mS0wd8UphGdr2GvzOGVk/Mu2gDJYHlUeGp0V
+         VZ+ETmHeM2MuRj7Fx1q+vrMz006dlaJE7SKf2Aj3pweoQq+fh+1a7G7UXQZDc9wN4YmU
+         +LDXGkvNg30Gdn+2VprrTTSulp7rjX5MmvoYPh88KvY+L45j0Faa1kivRyRppmoBBCWI
+         qrrQ==
+X-Gm-Message-State: APjAAAWvUA51Oqbmpo11x1fXOYXeaZhK2hYpfGyvliAHUBPVaJt2as1/
+        qFcFDJDkhz/rZJg3+lBicULYFFOPkWU4UVJjrCKE2jlw
+X-Google-Smtp-Source: APXvYqwJAf46d/C9VjYfkHpeuMrtLbleQhk2rMy5HqEUAoJqtaKfqLVyH8Z8d5F1MGmKJXZT8+I9ntTVoI/PjfKQtVI=
+X-Received: by 2002:a92:4095:: with SMTP id d21mr1831507ill.158.1576676123483;
+ Wed, 18 Dec 2019 05:35:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20190919142236.4071-1-a.swigon@samsung.com> <CGME20190919142329eucas1p2e53992eab9ec6b404f716f955b3c228e@eucas1p2.samsung.com>
- <20190919142236.4071-10-a.swigon@samsung.com> <35053bad-3f08-190a-0ffa-9aacd16da272@samsung.com>
- <95ac6056bc6c790b1de7e975f44faa320fd9876f.camel@samsung.com>
- <CAGTfZH1wVKBQAantrpqPP7+penwxeJud=gjH=5vVmKbzTGE=cQ@mail.gmail.com> <c3c161af17023a90e0fd7a0f925dbdad8b928ff4.camel@samsung.com>
-In-Reply-To: <c3c161af17023a90e0fd7a0f925dbdad8b928ff4.camel@samsung.com>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Wed, 18 Dec 2019 20:08:09 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH1SbN2FkQ9SuaT3zONhvmdRGz0MVD3oqHjyuYDXsfkjfg@mail.gmail.com>
-Message-ID: <CAGTfZH1SbN2FkQ9SuaT3zONhvmdRGz0MVD3oqHjyuYDXsfkjfg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 09/11] devfreq: exynos-bus: Add interconnect
- functionality to exynos-bus
-To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+References: <cover.1574458460.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1574458460.git.leonard.crestez@nxp.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 18 Dec 2019 07:35:12 -0600
+Message-ID: <CAHCN7xKNwit8ueUO0OkebfYh=4hsL7_+DRWEbn2dEt0H322W4w@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr controller
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+        linux-pm@vger.kernel.org, Martin Kepplinger <martink@posteo.de>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri, Nov 22, 2019 at 3:45 PM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+>
+> This adds support for dynamic scaling of the DDR Controller (ddrc)
+> present on i.MX8M series chips. Actual frequency switching is
+> implemented inside TF-A, this driver wraps the SMC calls and
+> synchronizes the clk tree.
+>
+> DRAM frequency switching requires clock manipulation but during this operation
+> DRAM itself is briefly inaccessible so this operation is performed a SMC call
+> to by TF-A which runs from a SRAM area. Upon returning to linux the clock tree
+> is updated to correspond to hardware configuration.
+>
+> This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are handled
+> manually: the driver will prepare/enable the new parents ahead of switching (so
+> that the expected roots are enabled) and afterwards it will call clk_set_parent
+> to ensure the parents in clock framework are up-to-date.
+>
+> This series is useful standalone and roughly similar to devfreq drivers for
+> tegra and rockchip.
+>
+> Running at lower dram rates saves power but can affect the functionality of
+> other blocks in the chip (display, vpu etc). Support for in-kernel constraints
+> will some separately.
+>
+> This series has no dependencies outside linux-next. The driver depends
+> on features from the NXP branch of TF-A and will cleanly fail to probe
+> on mainline. There are also plans to upstream dram dvfs in TF-A.
+>
+> Changes since v6:
+> * Replace ARCH_MXC || COMPILE_TEST with ARCH_MXC && HAVE_ARM_SMCCC
+> * Collect reviews
+> Link to v6: https://patchwork.kernel.org/cover/11244283/
+>
+> I'd rather not fix COMPILE_TEST with ifdefs for this driver, if anything
+> that should be fixed in smccc header. ARCH_MXC doesn't imply SMCCC, it
+> also covers some very old chips which don't have it.
+>
+> Resending full series because that's the standard method.
+>
+> Changes since v5:
+> * Fix a dram_apb/dram_alt mixup in imx8m_ddrc_set_freq
+> * Make clk_get_parent_by_index static (kbuild robot)
+> * Adjust messages in imx8m_ddrc_set_freq
+> * Use a for loop inside imx8m_ddrc_check_opps instead of while
+> * More elaborate description in dt-bindings file.
+> Link to v5: https://patchwork.kernel.org/cover/11240289/
+>
+> Changes since v4:
+> * Restore empty _get_dev_status: testing shows this is *NOT* optional. If
+> absent then switching to simple_ondemand governor will trigger an Oops.
+> * Keep clk registration on single-line in clk-imx8m* for consistency with rest
+> of the file.
+> * Drop explicit "select PM_OPP"
+> * Check for NULL new_dram_core_parent
+> * Rename "out_dis_" labels to out_disable_*
+> * Use dev_warn on imx8m_ddrc_set_freq error paths after SMC call (where
+> operation is not abandoned).
+> * More elaborate error messages in imx8m_ddrc_target
+> * More elaborate checks when fetching clks in imx8m_ddrc_set_freq
+> * Rename ddrc nodes to memory-controller@* as per devicetree.org "Generic Names
+> Recommendation"
+> * Defer perf support, it requires perf changes to fetch PMU by DT
+> Link to v4: https://patchwork.kernel.org/cover/11235685/
+>
+> Changes since v3:
+> * Rename to imx8m-ddrc. Similar blocks are present on imx7d and imx8qxp/imx8qm
+> but soc integration is different.
+> * Move dt bindings to /memory-controllers/fsl/
+> * Fix dt validation issues
+> * Fix imx8mm.dtsi ddrc referencing ddrc_opp_table which is only defined in evk
+> * Move opps to child of ddrc device node
+> * Only add imx_ddrc_get_dev_status in perf patch.
+> * Adjust print messages
+> Link to v3: https://patchwork.kernel.org/cover/11221935/
+>
+> Changes since v2:
+> * Add support for entire imx8m family including imx8mq B0.
+> * Also mark dram PLLs as CLK_GET_RATE_NO_CACHE (required for imx8mq b0 low OPP)
+> * Explicitly update dram pll rate at the end of imx_ddrc_set_freq.
+> * Use do_div in imx-ddrc (kbuild robot)
+> * Improve explanations around adding CLK_GET_RATE_NO_CACHE to dram clks.
+> (Stephen Boyd)
+> * Handle ddrc devfreq-events earlier for fewer probe defers.
+> * Validate DDRC opp tables versus firmware: supported OPPs depend on board and
+> SOC revision.
+> * Move DDRC opp tables to board dts because they can vary based on ram type on
+> board.
+> * Verify DDRC rate is changed in clk tree and otherwise report an error.
+> * Change imx_ddrc_freq.rate to be measure in MT/s and round down from HZ in
+> imx_ddrc_find_freq instead.
+> * Split away from NOC scaling and interconnect support.
+> Link to v2: https://patchwork.kernel.org/cover/11104113/
+>
+> Changes since v1:
+> * bindings: Stop using "contains" for "compatible"
+> * bindings: Set "additionalProperties: false" and document missing stuff.
+> * Remove (c) from NXP copyright notice
+> * Fix various checkpatch issues
+> * Remove unused dram_alt_root clk from imx-ddrc
+> Link to v1: https://patchwork.kernel.org/cover/11090649/
+>
+> Leonard Crestez (5):
+>   clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks
+>   clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACHE
+>   dt-bindings: memory: Add bindings for imx8m ddr controller
+>   PM / devfreq: Add dynamic scaling for imx8m ddr controller
+>   arm64: dts: imx8m: Add ddr controller nodes
+>
+>  .../memory-controllers/fsl/imx8m-ddrc.yaml    |  72 +++
+>  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +
+>  .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +
+>  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  10 +
+>  arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +
+>  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  10 +
+>  drivers/clk/imx/clk-imx8mm.c                  |  11 +-
+>  drivers/clk/imx/clk-imx8mn.c                  |  12 +-
+>  drivers/clk/imx/clk-imx8mq.c                  |  12 +-
+>  drivers/clk/imx/clk-pll14xx.c                 |   7 +
+>  drivers/clk/imx/clk.h                         |   1 +
+>  drivers/devfreq/Kconfig                       |   9 +
 
-If possible, I'd like to apply these patches to v5.6-rc1.
-It is very useful feature to support the QoS for user device using memory b=
-us.
+Since there is a Kconfig change, should there me a defconfig change?
 
-2019=EB=85=84 12=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:48, =
-Artur =C5=9Awigo=C5=84 <a.swigon@samsung.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=
-=EC=84=B1:
->
-> On Wed, 2019-12-18 at 19:39 +0900, Chanwoo Choi wrote:
-> > Hi,
-> >
-> > 2019=EB=85=84 12=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:=
-19, Artur =C5=9Awigo=C5=84 <a.swigon@samsung.com>=EB=8B=98=EC=9D=B4 =EC=9E=
-=91=EC=84=B1:
-> > >
-> > > Hi,
-> > >
-> > > Thank you for the review.
-> > >
-> > > On Mon, 2019-12-16 at 09:44 +0900, Chanwoo Choi wrote:
-> > > > Hi,
-> > > >
-> > > > On 9/19/19 11:22 PM, Artur =C5=9Awigo=C5=84 wrote:
-> > > > > From: Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>
-> > > > >
-> > > > > This patch adds interconnect functionality to the exynos-bus devf=
-req
-> > > > > driver.
-> > > > >
-> > > > > The SoC topology is a graph (or, more specifically, a tree) and m=
-ost of
-> > > > > its edges are taken from the devfreq parent-child hierarchy (cf.
-> > > > > Documentation/devicetree/bindings/devfreq/exynos-bus.txt). Due to
-> > > > > unspecified relative probing order, -EPROBE_DEFER may be propagat=
-ed to
-> > > > > guarantee that a child is probed before its parent.
-> > > > >
-> > > > > Each bus is now an interconnect provider and an interconnect node=
- as well
-> > > > > (cf. Documentation/interconnect/interconnect.rst), i.e. every bus=
- registers
-> > > > > itself as a node. Node IDs are not hardcoded but rather assigned =
-at
-> > > > > runtime, in probing order (subject to the above-mentioned excepti=
-on
-> > > > > regarding relative order). This approach allows for using this dr=
-iver with
-> > > > > various Exynos SoCs.
-> > > > >
-> > > > > Frequencies requested via the interconnect API for a given node a=
-re
-> > > > > propagated to devfreq using dev_pm_qos_update_request(). Please n=
-ote that
-> > > > > it is not an error when CONFIG_INTERCONNECT is 'n', in which case=
- all
-> > > > > interconnect API functions are no-op.
-> > > > >
-> > > > > Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.c=
-om>
-> > > > > ---
-> > > > >  drivers/devfreq/exynos-bus.c | 153 +++++++++++++++++++++++++++++=
-++++++
-> > > > >  1 file changed, 153 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exyno=
-s-bus.c
-> > > > > index 8d44810cac69..e0232202720d 100644
-> > > > > --- a/drivers/devfreq/exynos-bus.c
-> > > > > +++ b/drivers/devfreq/exynos-bus.c
-> > > > > @@ -14,14 +14,19 @@
-> > > > >  #include <linux/devfreq-event.h>
-> > > > >  #include <linux/device.h>
-> > > > >  #include <linux/export.h>
-> > > > > +#include <linux/idr.h>
-> > > > > +#include <linux/interconnect-provider.h>
-> > > > >  #include <linux/module.h>
-> > > > >  #include <linux/of.h>
-> > > > >  #include <linux/pm_opp.h>
-> > > > > +#include <linux/pm_qos.h>
-> > > > >  #include <linux/platform_device.h>
-> > > > >  #include <linux/regulator/consumer.h>
-> > > > >
-> > > > >  #define DEFAULT_SATURATION_RATIO   40
-> > > > >
-> > > > > +#define icc_units_to_khz(x) ((x) / 8)
-> > > >
-> > > > icc_units_to_khz() -> kpbs_to_khz()
-> > >
-> > > OK
-> > >
-> > > > > +
-> > > > >  struct exynos_bus {
-> > > > >     struct device *dev;
-> > > > >
-> > > > > @@ -35,6 +40,12 @@ struct exynos_bus {
-> > > > >     struct opp_table *opp_table;
-> > > > >     struct clk *clk;
-> > > > >     unsigned int ratio;
-> > > > > +
-> > > > > +   /* One provider per bus, one node per provider */
-> > > > > +   struct icc_provider provider;
-> > > > > +   struct icc_node *node;
-> > > > > +
-> > > > > +   struct dev_pm_qos_request qos_req;
-> > > > >  };
-> > > > >
-> > > > >  /*
-> > > > > @@ -59,6 +70,13 @@ exynos_bus_ops_edev(enable_edev);
-> > > > >  exynos_bus_ops_edev(disable_edev);
-> > > > >  exynos_bus_ops_edev(set_event);
-> > > > >
-> > > > > +static int exynos_bus_next_id(void)
-> > > > > +{
-> > > > > +   static DEFINE_IDA(exynos_bus_icc_ida);
-> > > > > +
-> > > > > +   return ida_alloc(&exynos_bus_icc_ida, GFP_KERNEL);
-> > > > > +}
-> > > > > +
-> > > > >  static int exynos_bus_get_event(struct exynos_bus *bus,
-> > > > >                             struct devfreq_event_data *edata)
-> > > > >  {
-> > > > > @@ -171,6 +189,38 @@ static void exynos_bus_passive_exit(struct d=
-evice *dev)
-> > > > >     clk_disable_unprepare(bus->clk);
-> > > > >  }
-> > > > >
-> > > > > +static int exynos_bus_icc_set(struct icc_node *src, struct icc_n=
-ode *dst)
-> > > > > +{
-> > > > > +   struct exynos_bus *src_bus =3D src->data, *dst_bus =3D dst->d=
-ata;
-> > > > > +   s32 src_freq =3D icc_units_to_khz(src->avg_bw);
-> > > > > +   s32 dst_freq =3D icc_units_to_khz(dst->avg_bw);
-> > > > > +
-> > > > > +   dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
-> > > >
-> > > > Have to check the return value.
-> > > > If return error, show the waring with dev_warn.
-> > >
-> > > OK, I will change it to:
-> > >
-> > > ret =3D dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
-> > > if (ret < 0) {
-> > >         dev_warn(src_bus->dev, "failed to update PM QoS request");
-> > >         return ret;
-> >
-> > If you return right after, better to use dev_err.
-> > If you use dev_warn, just show the warning message without return.
->
-> OK, I will use dev_err().
->
-> > > }
-> > >
-> > > > > +   dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
-> > > >
-> > > > ditto.
-> > >
-> > > OK (same as above).
-> >
-> > ditto.
-> >
-> > >
-> > > > > +
-> > > > > +   return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int exynos_bus_icc_aggregate(struct icc_node *node, u32 t=
-ag, u32 avg_bw,
-> > > > > +                               u32 peak_bw, u32 *agg_avg, u32 *a=
-gg_peak)
-> > > > > +{
-> > > > > +   *agg_avg +=3D avg_bw;
-> > > > > +   *agg_peak =3D max(*agg_peak, peak_bw);
-> > > > > +
-> > > > > +   return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_a=
-rgs *spec,
-> > > > > +                                        void *data)
-> > > > > +{
-> > > > > +   struct exynos_bus *bus =3D data;
-> > > > > +
-> > > > > +   if (spec->np !=3D bus->dev->of_node)
-> > > > > +           return ERR_PTR(-EINVAL);
-> > > > > +
-> > > > > +   return bus->node;
-> > > > > +}
-> > > > > +
-> > > > >  static int exynos_bus_parent_parse_of(struct device_node *np,
-> > > > >                                     struct exynos_bus *bus)
-> > > > >  {
-> > > > > @@ -366,6 +416,101 @@ static int exynos_bus_profile_init_passive(=
-struct exynos_bus *bus,
-> > > > >     return 0;
-> > > > >  }
-> > > > >
-> > > > > +static int exynos_bus_icc_connect(struct exynos_bus *bus)
-> > > > > +{
-> > > > > +   struct device_node *np =3D bus->dev->of_node;
-> > > > > +   struct devfreq *parent_devfreq;
-> > > > > +   struct icc_node *parent_node =3D NULL;
-> > > > > +   struct of_phandle_args args;
-> > > > > +   int ret =3D 0;
-> > > > > +
-> > > > > +   parent_devfreq =3D devfreq_get_devfreq_by_phandle(bus->dev, 0=
-);
-> > > > > +   if (!IS_ERR(parent_devfreq)) {
-> > > > > +           struct exynos_bus *parent_bus;
-> > > > > +
-> > > > > +           parent_bus =3D dev_get_drvdata(parent_devfreq->dev.pa=
-rent);
-> > > > > +           parent_node =3D parent_bus->node;
-> > > > > +   } else {
-> > > > > +           /* Look for parent in DT */
-> > > > > +           int num =3D of_count_phandle_with_args(np, "parent",
-> > > > > +                                                "#interconnect-c=
-ells");
-> > > > > +           if (num !=3D 1)
-> > > > > +                   goto out; /* 'parent' is optional */
-> > > > > +
-> > > > > +           ret =3D of_parse_phandle_with_args(np, "parent",
-> > > > > +                                            "#interconnect-cells=
-",
-> > > > > +                                            0, &args);
-> > > >
-> > > >
-> > > > Actually, I agree your approach. I think that it is very useful
-> > > > and necessary to guarantee the PM QoS requirements between devices.
-> > > >
-> > > > But,
-> > > > As I already commented, I'm not sure that the "parent" property
-> > > > is proper for only this driver. If possible, you better to get
-> > > > the parent phandle through other way like OF graph.
-> > > >
-> > > > If you suggest the standard way to make the tree between
-> > > > the exynos-bus, I'll agree.
-> > >
-> > > As I commented in the answer to patch 08, I will use the
-> > > 'exynos,interconnect-parent-node' property for bus_display,
-> > > bus_leftbus and bus_dmc.
-> >
-> > OK.
-> >
-> > >
-> > > > Also, for interconnect path, you have to add the connection
-> > > > between 'bus_display' and 'bus_leftbus' regardless
-> > > > of the existing 'devfreq' property.
-> > > > - bus_display - bus_leftbus - bus_dmc
-> > > >
-> > > > > +           if (ret < 0)
-> > > > > +                   goto out;
-> > > > > +
-> > > > > +           of_node_put(args.np);
-> > > > > +
-> > > > > +           parent_node =3D of_icc_get_from_provider(&args);
-> > > > > +           if (IS_ERR(parent_node)) {
-> > > > > +                   /* May be -EPROBE_DEFER */
-> > > > > +                   ret =3D PTR_ERR(parent_node);
-> > > > > +                   goto out;
-> > > > > +           }
-> > > > > +   }
-> > > > > +
-> > > > > +   ret =3D icc_link_create(bus->node, parent_node->id);
-> > > > > +
-> > > > > +out:
-> > > > > +   return ret;
-> > > > > +}
-> > > > > +
-> > > > > +static int exynos_bus_icc_init(struct exynos_bus *bus)
-> > > > > +{
-> > > > > +   struct device *dev =3D bus->dev;
-> > > > > +   struct icc_provider *provider =3D &bus->provider;
-> > > > > +   struct icc_node *node;
-> > > > > +   int id, ret;
-> > > > > +
-> > > > > +   /* Initialize the interconnect provider */
-> > > > > +   provider->set =3D exynos_bus_icc_set;
-> > > > > +   provider->aggregate =3D exynos_bus_icc_aggregate;
-> > > > > +   provider->xlate =3D exynos_bus_icc_xlate;
-> > > > > +   provider->dev =3D dev;
-> > > > > +   provider->data =3D bus;
-> > > > > +
-> > > > > +   ret =3D icc_provider_add(provider);
-> > > > > +   if (ret < 0)
-> > > > > +           goto out;
-> > > >
-> > > > Return error without goto because there is no any requirement
-> > > > to free the resource before.
-> > >
-> > > OK.
-> > >
-> > > > > +
-> > > > > +   ret =3D id =3D exynos_bus_next_id();
-> > > > > +   if (ret < 0)
-> > > > > +           goto err_node;
-> > > > > +
-> > > > > +   node =3D icc_node_create(id);
-> > > > > +   if (IS_ERR(node)) {
-> > > > > +           ret =3D PTR_ERR(node);
-> > > > > +           goto err_node;
-> > > > > +   }
-> > > > > +
-> > > > > +   bus->node =3D node;
-> > > > > +   node->name =3D dev->of_node->name;
-> > > > > +   node->data =3D bus;
-> > > > > +   icc_node_add(node, provider);
-> > > > > +
-> > > > > +   ret =3D exynos_bus_icc_connect(bus);
-> > > > > +   if (ret < 0)
-> > > > > +           goto err_connect;
-> > > > > +
-> > > > > +   ret =3D dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus=
-->qos_req,
-> > > >
-> > > > Check whether this line is over 80 char.
-> > >
-> > > It looks like 77 columns to me.
-> > >
-> > > >
-> > > > > +                                DEV_PM_QOS_MIN_FREQUENCY, 0);
-> > > >
-> > > >       Check the return value.
-> > >
-> > > OK.
-> > >
-> > > >
-> > > > > +
-> > > > > +out:
-> > > >
-> > > > Remove this goto due to not necessary.
-> > > >
-> > > > > +   return ret;
-> > > >
-> > > >       return 0;
-> > >
-> > > OK.
-> > >
-> > > Please also note that this function as well as exynos_bus_icc_connect=
-()
-> > > will
-> > > slightly change in v3 due to the changes regarding DT properties.
-> > >
-> > > >
-> > > > > +
-> > > > > +err_connect:
-> > > > > +   icc_node_del(node);
-> > > > > +   icc_node_destroy(id);
-> > > > > +err_node:
-> > > > > +   icc_provider_del(provider);
-> > > > > +
-> > > > > +   return ret;
-> > > > > +}
-> > > > > +
-> > > > >  static int exynos_bus_probe(struct platform_device *pdev)
-> > > > >  {
-> > > > >     struct device *dev =3D &pdev->dev;
-> > > > > @@ -415,6 +560,14 @@ static int exynos_bus_probe(struct platform_=
-device *pdev)
-> > > > >     if (ret < 0)
-> > > > >             goto err;
-> > > > >
-> > > > > +   /*
-> > > > > +    * Initialize interconnect provider. A return value of -ENOTS=
-UPP means
-> > > > > +    * that CONFIG_INTERCONNECT is disabled.
-> > > > > +    */
-> > > > > +   ret =3D exynos_bus_icc_init(bus);
-> > > > > +   if (ret < 0 && ret !=3D -ENOTSUPP)
-> > > > > +           goto err;
-> > > >
-> > > > Print error message.
-> > > >       dev_err(dev, "failed to initialize the interconnect provider"=
-);
-> > >
-> > > OK.
-> > >
-> > > >
-> > > > > +
-> > > > >     max_state =3D bus->devfreq->profile->max_state;
-> > > > >     min_freq =3D (bus->devfreq->profile->freq_table[0] / 1000);
-> > > > >     max_freq =3D (bus->devfreq->profile->freq_table[max_state - 1=
-] / 1000);
-> > > > >
+>  drivers/devfreq/Makefile                      |   1 +
+>  drivers/devfreq/imx8m-ddrc.c                  | 465 ++++++++++++++++++
+>  15 files changed, 670 insertions(+), 10 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/fsl/imx8m-ddrc.yaml
+>  create mode 100644 drivers/devfreq/imx8m-ddrc.c
+
+I applied the whole series against 5.5-rc1 and I am trying to test it.
+I know the 4.14 kernel NXP posted on Code Aurora is capable to
+lowering the DDRC controller to 25MHz on the 8MM when the video is
+off.  Since there is no video support yet for the 8MM, I was expecting
+to see the DDRC clock to be at or around 25MHz.
+
+Using debug FS, I can see the dram core clock is still running at
+750MHz, and measuring power, it shows something consistent with what I
+see on the Code Aurora kernel with video turned on and the clock at
+750MHz.
+
+Is there some way to get the dram_core_clk to drop to 25MHz to see
+some power reduction?  The same commands used in the Yocto build don't
+apply here since we don't have video.
+
+thanks,
+
+adam
 >
 > --
-> Artur =C5=9Awigo=C5=84
-> Samsung R&D Institute Poland
-> Samsung Electronics
+> 2.17.1
 >
 >
-
-
---=20
-Best Regards,
-Chanwoo Choi
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
