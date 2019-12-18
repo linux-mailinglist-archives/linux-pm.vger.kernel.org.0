@@ -2,275 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D6512440C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 11:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CF012441E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2019 11:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbfLRKNu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 05:13:50 -0500
-Received: from mail-eopbgr60067.outbound.protection.outlook.com ([40.107.6.67]:57336
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725785AbfLRKNu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Dec 2019 05:13:50 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q2UgUqbn1hoZtsEbwueegj+a737V4bzYcUerZzW2qfeHyvnR7wL0o/0POAe+lbHLz0wK7FKmBnsW7qBNrcgp0QGFsSCyjrofMezstatiSqtpnt7nzo2+KqaBFtETVY/bk6kwBZ3oCnb/S3+oL7u9kYSqlGvfLZtT+nBC53SBimRu73ZTBgOO2u9PsRsIGnR+0Te89zTnmQl7x1Tdt5+EKkiccIpZnxbSe6l/nr3FAJv2Ic1Y8o5sRZBJQ6FI8zS0+K8X5t6h+kXpzX7TE5nZKSBF92ANet6q/tMxJmJcAK5y23F8sx7571WZOT/K/tv8eICapqqA5yhphPMve//1tA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xn/ZxTBaBAaDZAsPjn+2rDktcN7KRP50Wh4CQoSfqqc=;
- b=Nqi3bgRmfNLpMi4Bo9S+PaprvBAl1Kz9pvno+cjhiFCkjy+U46vFIF/ZzXctucmrEtxxW2N9UEtciGGyf+kuXk9YtaXSrFKSf02XEJcebryLMdvmT8WKP6pC4O95mgfG4MRvhjEQBGxZAhhki8MNgmuc8TfqaRCSGOkZf7Ehdz/anDEGtsdCrw7VPi3E+77MfAzU/a3rnBZIX87ygfweqo65n9M6FwDwTvBjoGEYHny5d8/0HlFvq5dJ0d4p+EOYyJwhXqQN99QKT9Ja13VrqvkODpYuEfpNTtCtGAF2G+3YWD+yE6eRqG+52Xf0PbbxU76XznC1v+jgcOXB1LqWcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xn/ZxTBaBAaDZAsPjn+2rDktcN7KRP50Wh4CQoSfqqc=;
- b=GPf2sCHgZzGxueuBYoK8BkyOBWbGIkeo1HepK5b8CSkE48QVnQoziJ/V4Xkvp44yXYgiU3tF8LBXIafjsP8Y+MBFK+1IuxiiyopSzbUrvWRinWFW8LmNitDFQLUHBqpVcAdIwqd6y2VQCR4A41HMqgAc4ukn9aFGdozBfFAEjTE=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB5056.eurprd04.prod.outlook.com (20.177.50.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.15; Wed, 18 Dec 2019 10:13:44 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1%5]) with mapi id 15.20.2559.012; Wed, 18 Dec 2019
- 10:13:44 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH RFC v6 3/9] PM / devfreq: imx: Register interconnect
- device
-Thread-Topic: [PATCH RFC v6 3/9] PM / devfreq: imx: Register interconnect
- device
-Thread-Index: AQHVmyeZRYeaOo08e0y/DVNQANceVQ==
-Date:   Wed, 18 Dec 2019 10:13:44 +0000
-Message-ID: <VI1PR04MB7023DAC69C8B4B7CF144F29EEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1573761527.git.leonard.crestez@nxp.com>
- <CGME20191114201049epcas5p370853a1d78584bf00d8493ce20320bf9@epcas5p3.samsung.com>
- <e0e6a1685ccdad95c9d0c922801afdda8adb9f05.1573761527.git.leonard.crestez@nxp.com>
- <4d45cd39-24df-1714-0a27-5019c1367063@samsung.com>
- <VI1PR04MB7023F511BAE7D1EDF971CC48EE510@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <60fe19c6-6e73-4133-ed7e-a13a875589c0@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [2a04:241e:500:9200:9d5e:ad7d:41e0:989]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9dc84553-3088-4dda-f653-08d783a2f6ea
-x-ms-traffictypediagnostic: VI1PR04MB5056:|VI1PR04MB5056:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB5056853CC7847ED32F5EDA45EE530@VI1PR04MB5056.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0255DF69B9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(51444003)(189003)(199004)(7696005)(81166006)(81156014)(33656002)(54906003)(5660300002)(86362001)(8676002)(44832011)(4326008)(186003)(7416002)(71200400001)(64756008)(66476007)(53546011)(91956017)(66946007)(52536014)(2906002)(6506007)(316002)(478600001)(76116006)(110136005)(9686003)(8936002)(66446008)(66556008)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5056;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uQs+bnRlX37yPajnJHvrGo8lBFwRM7CZnrZVZNvYzt60o1VPaFR6JribkR20XgI0CjBboBPOlkhVgAWfe1c7IagmYIycs2lCJoBxKedt/M1zYiJQUtX8iYT0MzHNWM9p1L4JzYCzDc/rfSzDAvO9kyglFxtbtO1dfFPoUJsNz336PF503XljLIITNVRjF47IiSv+e8+bZkKCr0FRrn0sWY/rjleBjrwMW5PWq1/oRQ4UpEY0ziFsk0zP5m712tCbDRNWbn4T0/hSd999EZ1W4TKV5D+CZCZl8Z/euIXMi9+BUL0VJC5yM+wChQtogz6LQavejggxxyrfSCxHbPC/upXRAhAYYWT47JCqbANZQYJb7d7S7ENJy5wEdSkhzXsclb10FaWPrjEcubTcRQz+NvQz3IyaBz8D599Xgr8ZAJ+jjfGQIa8d2HBuMlqX9OB59vo81NwIeaI/FobkGXIh7XzNTaFA30REeDL9GN48mtIP574r1gbxnR3hN07QZCrI
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9dc84553-3088-4dda-f653-08d783a2f6ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 10:13:44.4369
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OU2doQwDWcqLoO6GYzkuUUAvyDcgCssbfba3djVBGccSBFLzmYWMJBFOXxXe/sEA38CXKXfsUc70DzI73008cQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5056
+        id S1726799AbfLRKRl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 05:17:41 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:36379 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726551AbfLRKRk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 05:17:40 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191218101738euoutp022b1a952e6b4ed756749e9ca7cff8fde2~hb8o2mhnk0591005910euoutp022
+        for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2019 10:17:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191218101738euoutp022b1a952e6b4ed756749e9ca7cff8fde2~hb8o2mhnk0591005910euoutp022
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576664258;
+        bh=bwThtk0xrgCsolgLeuyMVr0819OsND3qMnr6RqwdLMI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=p5MfTccR7x2zDiVthDlRg0OA59ALTtVDv/9uyDrQ9mgRbJAuR6jkp2Kk5VOqn5D5F
+         FBXKEcXBbOrlb4mcfs9w7M0g7WC3GeTk6U8WXP3KsX/UOuby1YnorMw63Qn3T5jGuS
+         dFZglzpM+DMU13wmLJCksvvfTBk7cKOf7h22fj6s=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20191218101738eucas1p2100dfedc2594bf3efb8d9e38a2824564~hb8oejBVD2968829688eucas1p28;
+        Wed, 18 Dec 2019 10:17:38 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 01.33.61286.2CCF9FD5; Wed, 18
+        Dec 2019 10:17:38 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191218101738eucas1p1b3abcd2bb6c825e6fb27b77df48d0100~hb8oIAUqA2842828428eucas1p1-;
+        Wed, 18 Dec 2019 10:17:38 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191218101738eusmtrp139b535987309e190528b9eb39679ce25~hb8oHBlKA2290422904eusmtrp1p;
+        Wed, 18 Dec 2019 10:17:38 +0000 (GMT)
+X-AuditID: cbfec7f2-ef1ff7000001ef66-2a-5df9fcc2122a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3C.DC.07950.1CCF9FD5; Wed, 18
+        Dec 2019 10:17:37 +0000 (GMT)
+Received: from AMDC3555 (unknown [106.120.51.67]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20191218101737eusmtip17fd69f11846ed085ae840ddc8c972528~hb8nc9z0T0982809828eusmtip1q;
+        Wed, 18 Dec 2019 10:17:37 +0000 (GMT)
+Message-ID: <2008dca684ccb1dd740e6e6b88e56727d0d1c435.camel@samsung.com>
+Subject: Re: [RFC PATCH v2 08/11] arm: dts: exynos: Add parents and
+ #interconnect-cells to Exynos4412
+From:   Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     myungjoo.ham@samsung.com, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, georgi.djakov@linaro.org,
+        leonard.crestez@nxp.com, m.szyprowski@samsung.com,
+        b.zolnierkie@samsung.com, krzk@kernel.org
+Date:   Wed, 18 Dec 2019 11:17:36 +0100
+In-Reply-To: <eecc5d38-f6ab-b1ea-1a08-0afb2dcddbef@samsung.com>
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SaUhUYRSG++Yucx0a/RzDOWgYTavSotSPT6zMCLmBRRBBBKZjXibJUZnr
+        UhK4JKKWYmppJhQtJlaok5pjKzYmmSaZ2NRoVqaSoeZWjWXm7Rr17znvOe9Z4HCUpo3x4KJi
+        4gVTjD5ax6ro+ieO5+ubfjpCfX/kupOakiqGvJoaYshF63OGdE2PsaT4vpklBX35NOnoqFaS
+        it5xhpj7uxnysrGMJZO5VkRKOh4oyC1rr5LY0ypYUlL4id3uwpsrs1m+p/sey/edalHwt6+m
+        8DWjDQo+r7YS8ZNmr73Kg6otkUJ0VKJg2rgtXHXk2t1bbNw732P2dAubil6vzEFOHODNcMU2
+        QOcgFafBFQg6782wcjCFIG3q80JmEsGs4xT6a2l9+JaSWIOvI2ht95WLBhFUT0zTUkKNeWie
+        nPljcMMGeJU9oZCYxYHQbv+qkAxL8CiCjw+/UFJA4ScI7vc4/rhpvAoq31jm3RznNO9oHPaX
+        J6+DkdY8WpLV2BVmG9wkmcLL4GTdBUouGVeCpYjIvBP6bd2MzG4w3FKrlHkpPCs8TcsswoCl
+        j5FWAJyKwFxuXWgUAI9bXjDSLAp7Q1XjRlkOgsybxUpJBuwMthFXeQVnKKgvpmRZDVmZGhl1
+        0HjeWTYCpN/oXujNw3R2myIfLS/9d0rpf6eU/pt6CVGVSCskiEaDIPrFCEkbRL1RTIgxbDgc
+        azSj+R979qtlogFNd0Y0Icwh3WK17yJHqIbRJ4rHjU0IOEq3RG3PmpfUkfrjyYIpNsyUEC2I
+        TciTo3Va9abLn0I12KCPF44KQpxg+ptVcE4eqWh1lEW7ddzf4b42Ir/9TlpXPeudnNwTGGz3
+        /uDZY7i55vJ+5eCJtqFvqt1J+/Jc8aGA2NQk0h6eUp5eu+J9c1hNRHhpK6LOuZwJnRujI4ML
+        8dlHc8bv2qKqwAfFwSHjL4+eu8T5dBKvrh0CVaa1HXganBG0p8gYbdtVN+ESkmHV0eIRvZ8P
+        ZRL1vwHzZKQfXwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGIsWRmVeSWpSXmKPExsVy+t/xu7oH//yMNbi/y8pi44z1rBbXvzxn
+        tZh/5ByrxZWv79kspu/dxGYx6f4EFovz5zewW6y4+5HVYtPja6wWl3fNYbP43HuE0WLG+X1M
+        FmuP3GW3uN24gs1ixuSXbA78HptWdbJ53Lm2h83jfvdxJo/NS+o9Nr7bweTRt2UVo8fnTXIB
+        7FF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GUt3
+        r2UreGBQcbtpJ1sD402VLkZODgkBE4lT++8xdzFycQgJLGWUWDbhGDtEQkLi4/obrBC2sMSf
+        a11sEEVPGCU+nroIluAV8JA4+vkXI4gtLJAucb3zExOIzSZgL3H29jcmkAYRgfeMEh+2v2MH
+        cZgFTjBK7Lz2nA2kikVAVWLVrZ1A3RwcnEAdu15ZQmxYySSx4kQfM0gNs4CmROv231An6Ui8
+        PdXHAlLPKyAo8XeHMESJvETz1tnMExgFZyHpmIVQNQtJ1QJG5lWMIqmlxbnpucVGesWJucWl
+        eel6yfm5mxiBcbrt2M8tOxi73gUfYhTgYFTi4b3x90esEGtiWXFl7iFGCQ5mJRHe2x0/Y4V4
+        UxIrq1KL8uOLSnNSiw8xmgK9M5FZSjQ5H5hC8kriDU0NzS0sDc2NzY3NLJTEeTsEDsYICaQn
+        lqRmp6YWpBbB9DFxcEo1MKbWbxbuPFLAMentsYdGCiocjuIzXpkWSbplsJxhnWSk3bX9oZVM
+        yssVR7XeJ/zoKnyQnnDG1aZPQ9nyTe+OOJXDRYmX+qecObBJrMT6+TupL2dWVXKaGzdx7ll7
+        dkUl4/fjHxgncWzfIbNwzx0XzzNT/m/QWdt3pDx5f+i7LGWb+83qcxJSwpRYijMSDbWYi4oT
+        AUu4vzbpAgAA
+X-CMS-MailID: 20191218101738eucas1p1b3abcd2bb6c825e6fb27b77df48d0100
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190919142329eucas1p299762f99dd55a5d625633ceec84219f9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190919142329eucas1p299762f99dd55a5d625633ceec84219f9
+References: <20190919142236.4071-1-a.swigon@samsung.com>
+        <CGME20190919142329eucas1p299762f99dd55a5d625633ceec84219f9@eucas1p2.samsung.com>
+        <20190919142236.4071-9-a.swigon@samsung.com>
+        <693e250d-9656-df67-9685-188020b43542@samsung.com>
+        <eecc5d38-f6ab-b1ea-1a08-0afb2dcddbef@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17.12.2019 02:55, Chanwoo Choi wrote:=0A=
-> On 12/17/19 12:00 AM, Leonard Crestez wrote:=0A=
->> On 13.12.2019 06:22, Chanwoo Choi wrote:=0A=
->>> Hi,=0A=
->>>=0A=
->>> On 11/15/19 5:09 AM, Leonard Crestez wrote:=0A=
->>>> There is no single device which can represent the imx interconnect.=0A=
->>>> Instead of adding a virtual one just make the main &noc act as the=0A=
->>>> global interconnect provider.=0A=
->>>>=0A=
->>>> The imx interconnect provider driver will scale the NOC and DDRC based=
-=0A=
->>>> on bandwidth request. More scalable nodes can be added in the future,=
-=0A=
->>>> for example for audio/display/vpu/gpu NICs.=0A=
->>>>=0A=
->>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
->>>> ---=0A=
->>>>    drivers/devfreq/imx-devfreq.c | 37 ++++++++++++++++++++++++++++++++=
-+++=0A=
->>>>    1 file changed, 37 insertions(+)=0A=
->>>>=0A=
->>>> diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx-devfr=
-eq.c=0A=
->>>> index 620b344e87aa..585d340c0f6e 100644=0A=
->>>> --- a/drivers/devfreq/imx-devfreq.c=0A=
->>>> +++ b/drivers/devfreq/imx-devfreq.c=0A=
->>>> @@ -15,10 +15,11 @@=0A=
->>>>    struct imx_devfreq {=0A=
->>>>    	struct devfreq_dev_profile profile;=0A=
->>>>    	struct devfreq *devfreq;=0A=
->>>>    	struct clk *clk;=0A=
->>>>    	struct devfreq_passive_data passive_data;=0A=
->>>> +	struct platform_device *icc_pdev;=0A=
->>>>    };=0A=
->>>>    =0A=
->>>>    static int imx_devfreq_target(struct device *dev,=0A=
->>>>    			      unsigned long *freq, u32 flags)=0A=
->>>>    {=0A=
->>>> @@ -60,11 +61,40 @@ static int imx_devfreq_get_dev_status(struct devic=
-e *dev,=0A=
->>>>    	return 0;=0A=
->>>>    }=0A=
->>>>    =0A=
->>>>    static void imx_devfreq_exit(struct device *dev)=0A=
->>>>    {=0A=
->>>> +	struct imx_devfreq *priv =3D dev_get_drvdata(dev);=0A=
->>>> +=0A=
->>>>    	dev_pm_opp_of_remove_table(dev);=0A=
->>>> +	platform_device_unregister(priv->icc_pdev);=0A=
->>>> +}=0A=
->>>> +=0A=
->>>> +/* imx_devfreq_init_icc() - register matching icc provider if require=
-d */=0A=
->>>> +static int imx_devfreq_init_icc(struct device *dev)=0A=
->>>> +{=0A=
->>>> +	struct imx_devfreq *priv =3D dev_get_drvdata(dev);=0A=
->>>> +	const char *icc_driver_name;=0A=
->>>> +=0A=
->>>> +	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX))=0A=
->>>> +		return 0;=0A=
->>>=0A=
->>> It is not proper to check the enable state of CONFIG_INTERCONNECT_IMX c=
-onfiguration=0A=
->>> on device driver. Why don't you add the 'select CONFIG_INTERCONNECT_IMX=
-' on Kconfig?=0A=
->>=0A=
->> Because it's optional.=0A=
->>=0A=
->> You can disable interconnect support and just tweak frequencies using=0A=
->> the devfreq sysfs API. But indeed would only really be useful for debugg=
-ing.=0A=
-> =0A=
-> Even if it's optional, I don't prefer to use 'IS_ENABLED' macro.=0A=
-> =0A=
-> Generally, add or delete the property or value at DT file=0A=
-> to either enable or disable the some feature provided by device driver=0A=
-> instead of checking the configuration.=0A=
-> =0A=
-> If user adds the property/value related to interconnect=0A=
-> and imx-bus.c configuration is enabled, the behavior=0A=
-> related to interconnect on imx-bus.c doesn't work. It make some confusion=
-.=0A=
-=0A=
-Maybe I could print a warning if #interconnect-cells is present but =0A=
-CONFIG_INTERCONNECT_IMX is off?=0A=
-=0A=
-An explicit select in Kconfig seems like a pointless limitation but in =0A=
-practice it would almost never be useful to build one without the other.=0A=
-=0A=
-> The imx-bus.c have to add the 'select CONFIG_INTERCONNECT_IMX'=0A=
-> and hand over the right which use the interconnect feature or not, to use=
-r.=0A=
-> =0A=
-> If there are any requirement to add the additional property=0A=
-> to check whether interconnect feature will be used or not,=0A=
-> you can add the extra property. But, I think that it is enough=0A=
-> to check the '#interconnect-cells'.=0A=
-> =0A=
-> In result, I think that it is right to decide the usage of feature=0A=
-> of device driver by user on Devicetree.=0A=
-> =0A=
->>=0A=
->>>> +	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))=0A=
->>>> +		return 0;=0A=
->>>> +=0A=
->>>> +	icc_driver_name =3D of_device_get_match_data(dev);=0A=
->>>> +	if (!icc_driver_name)=0A=
->>>> +		return 0;=0A=
->>>> +=0A=
->>>> +	priv->icc_pdev =3D platform_device_register_data(=0A=
->>>> +			dev, icc_driver_name, 0, NULL, 0);=0A=
->>>> +	if (IS_ERR(priv->icc_pdev)) {=0A=
->>>> +		dev_err(dev, "failed to register icc provider %s: %ld\n",=0A=
->>>> +				icc_driver_name, PTR_ERR(priv->devfreq));=0A=
->>>> +		return PTR_ERR(priv->devfreq);=0A=
->>>> +	}=0A=
->>>> +=0A=
->>>> +	return 0;=0A=
->>>>    }=0A=
->>>>    =0A=
->>>>    static int imx_devfreq_probe(struct platform_device *pdev)=0A=
->>>>    {=0A=
->>>>    	struct device *dev =3D &pdev->dev;=0A=
->>>> @@ -120,18 +150,25 @@ static int imx_devfreq_probe(struct platform_dev=
-ice *pdev)=0A=
->>>>    		ret =3D PTR_ERR(priv->devfreq);=0A=
->>>>    		dev_err(dev, "failed to add devfreq device: %d\n", ret);=0A=
->>>>    		goto err;=0A=
->>>>    	}=0A=
->>>>    =0A=
->>>> +	ret =3D imx_devfreq_init_icc(dev);=0A=
->>>> +	if (ret)=0A=
->>>> +		goto err;=0A=
->>>> +=0A=
->>>>    	return 0;=0A=
->>>>    =0A=
->>>>    err:=0A=
->>>>    	dev_pm_opp_of_remove_table(dev);=0A=
->>>>    	return ret;=0A=
->>>>    }=0A=
->>>>    =0A=
->>>>    static const struct of_device_id imx_devfreq_of_match[] =3D {=0A=
->>>> +	{ .compatible =3D "fsl,imx8mq-noc", .data =3D "imx8mq-interconnect",=
- },=0A=
->>>> +	{ .compatible =3D "fsl,imx8mm-noc", .data =3D "imx8mm-interconnect",=
- },=0A=
->>>> +	{ .compatible =3D "fsl,imx8mn-noc", .data =3D "imx8mn-interconnect",=
- },=0A=
->>>>    	{ .compatible =3D "fsl,imx8m-noc", },=0A=
->>>>    	{ .compatible =3D "fsl,imx8m-nic", },=0A=
->>>>    	{ /* sentinel */ },=0A=
->>>>    };=0A=
->>>>    MODULE_DEVICE_TABLE(of, imx_devfreq_of_match);=0A=
->>=0A=
->>=0A=
-> =0A=
-> =0A=
-=0A=
+Hi,
+
+On Mon, 2019-12-16 at 11:59 +0900, Chanwoo Choi wrote:
+> Hi,
+> 
+> On 12/16/19 9:51 AM, Chanwoo Choi wrote:
+> > On 9/19/19 11:22 PM, Artur Świgoń wrote:
+> > > From: Artur Świgoń <a.swigon@partner.samsung.com>
+> > > 
+> > > This patch adds two fields to the Exynos4412 DTS:
+> > >   - parent: to declare connections between nodes that are not in a
+> > >     parent-child relation in devfreq;
+> > >   - #interconnect-cells: required by the interconnect framework.
+> > > 
+> > > Please note that #interconnect-cells is always zero and node IDs are not
+> > > hardcoded anywhere. The above-mentioned parent-child relation in devfreq
+> > > means that there is a shared power line ('devfreq' property). The 'parent'
+> > > property only signifies an interconnect connection.
+> > > 
+> > > Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
+> > > ---
+> > >  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
+> > >  arch/arm/boot/dts/exynos4412.dtsi               | 9 +++++++++
+> > >  2 files changed, 10 insertions(+)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > index ea55f377d17c..bdd61ae86103 100644
+> > > --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > @@ -106,6 +106,7 @@
+> > >  &bus_leftbus {
+> > >  	devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+> > >  	vdd-supply = <&buck3_reg>;
+> > > +	parent = <&bus_dmc>;
+> > 
+> > As I mentioned on other reply,
+> > I'm not sure to use the specific 'parent' property to make
+> > the connection between buses. If possible, you better to
+> > use the standard way like OF graph. Except for making
+> > the connection between buses by 'parent' property,
+> > looks good to me.
+> 
+> I tried to think it continuously. I withdraw the my opinion
+> using OF graph. If you make the property name like the following
+> example, it is possible for exynos.
+> - exynos,interconnect-parent-node = <&bus_dmc>; or other proper name.
+> 
+> Regardless of existing 'devfreq' property, I think you better to
+> make the connection between buses for only interconnect as following
+> example: This make it possible user can draw the correct tree by tracking
+> the 'exynos,interconnect-parent-node' value.
+
+OK, for v3 I will add 'exynos,interconnect-parent-node' to bus_dmc,
+bus_leftbus and bus_display as you suggested below and change the code
+so that the 'devfreq' (or the upcoming 'exynos,parent-bus') property is
+not taken into account.
+
+> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> index ea55f377d17c..53f87f46e161 100644
+> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> @@ -90,6 +90,7 @@
+>  &bus_dmc {
+>         devfreq-events = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+>         vdd-supply = <&buck1_reg>;
+> +       #interconnect-cells = <0>;
+>         status = "okay";
+>  };
+>  
+> @@ -106,6 +107,8 @@
+>  &bus_leftbus {
+>         devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
+>         vdd-supply = <&buck3_reg>;
+> +       exynos,interconnect-parent-node = <&bus_dmc>;
+> +       #interconnect-cells = <0>;
+>         status = "okay";
+>  };
+>  
+> @@ -116,6 +119,8 @@
+>  
+>  &bus_display {
+>         devfreq = <&bus_leftbus>;
+> +       exynos,interconnect-parent-node = <&bus_leftbus>;
+> +       #interconnect-cells = <0>;
+>         status = "okay";
+>  };
+> 
+> 
+> > 
+> > 
+> > >  	status = "okay";
+> > >  };
+> > >  
+> > > diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
+> > > index d20db2dfe8e2..a70a671acacd 100644
+> > > --- a/arch/arm/boot/dts/exynos4412.dtsi
+> > > +++ b/arch/arm/boot/dts/exynos4412.dtsi
+> > > @@ -390,6 +390,7 @@
+> > >  			clocks = <&clock CLK_DIV_DMC>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_dmc_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -398,6 +399,7 @@
+> > >  			clocks = <&clock CLK_DIV_ACP>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_acp_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -406,6 +408,7 @@
+> > >  			clocks = <&clock CLK_DIV_C2C>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_dmc_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -459,6 +462,7 @@
+> > >  			clocks = <&clock CLK_DIV_GDL>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_leftbus_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -467,6 +471,7 @@
+> > >  			clocks = <&clock CLK_DIV_GDR>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_leftbus_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -475,6 +480,7 @@
+> > >  			clocks = <&clock CLK_ACLK160>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_display_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -483,6 +489,7 @@
+> > >  			clocks = <&clock CLK_ACLK133>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_fsys_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -491,6 +498,7 @@
+> > >  			clocks = <&clock CLK_ACLK100>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_peri_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > @@ -499,6 +507,7 @@
+> > >  			clocks = <&clock CLK_SCLK_MFC>;
+> > >  			clock-names = "bus";
+> > >  			operating-points-v2 = <&bus_leftbus_opp_table>;
+> > > +			#interconnect-cells = <0>;
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > 
+> > 
+> > 
+> 
+
+Best regards,
+-- 
+Artur Świgoń
+Samsung R&D Institute Poland
+Samsung Electronics
+
+
