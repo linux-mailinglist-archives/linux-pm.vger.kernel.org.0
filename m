@@ -2,82 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAB81263A2
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 14:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFF5126448
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 15:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbfLSNf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 08:35:58 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:46990 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbfLSNf6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 08:35:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=YSWZcOq3c4tDpa7LmbcYDgqZaDKNh9WKgBSxITrGWH0=; b=VMU3axBiD4FRvBTUAvat9++sh
-        QduzMQrNMhpyhtVc5RAWKPuxaPWfFYkdKhazG/Ft7Rb2DcgDwcNM6GB1Y+LXthA2qM1qd2DA1S3Go
-        pBDLF+l0FeQ8QKOt6JpebPmTPqCHKQVdfGynuJOJRihcWND6FmluJqXwRRlAxAJXBJtDpV7B3vIIQ
-        HyjLGsUezYfLMMJT6ecEqBRXmLtrO3r6tw9kZGnggFfNCAPXD0vvnCbm/e2tWk2lwkSdLuHxAXKNC
-        MzM0SeXj8f6KIEsepVLCK4CRpfDa490tRRci4kujDYCTdi9wAoiKDa4FtyDHyFb1Au2y4UcUyqPt5
-        itF3fF1fw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ihvxC-0000aR-0J; Thu, 19 Dec 2019 13:34:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B60D3304D00;
-        Thu, 19 Dec 2019 14:33:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4501F2B3E168F; Thu, 19 Dec 2019 14:34:52 +0100 (CET)
-Date:   Thu, 19 Dec 2019 14:34:52 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Garnier <thgarnie@chromium.org>
-Cc:     kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
-        keescook@chromium.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Hellstrom <thellstrom@vmware.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Will Deacon <will@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v10 00/11] x86: PIE support to extend KASLR randomization
-Message-ID: <20191219133452.GM2827@hirez.programming.kicks-ass.net>
-References: <20191205000957.112719-1-thgarnie@chromium.org>
+        id S1726840AbfLSOI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 09:08:58 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36235 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726712AbfLSOI6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 09:08:58 -0500
+Received: by mail-wm1-f67.google.com with SMTP id p17so5769755wma.1
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 06:08:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2uR6rr15BRHMymaEFYOUXLS9zgKBwEyVcNbBJdvAbQc=;
+        b=Bb/L/S4fYQHASJ/GdXo2WT5fJmxkJwntmSjTgOnG3+zZcI5Inm1M4YpVkMBVINC447
+         IfX53PW8aolujo8C+oDe/WQFZRBFDvSSCKxuoilufndGobxRIW13C55Ls5EsvTlumWkt
+         TfifHFX7AHMgDG+dyhSfhxm1eZBrN1Hmc833PZ61Euvt+gNSx0IIDmTwGkQs46ZLu0D/
+         jSL89fr1i82fYvyLu+cUse8kyKakmF77ARE/ml9D0Nlay0nXVacdn1Ad9UbEDfqe4rit
+         xBGhucfXL1oHToSnyCoemqSuD4qER98uHVsb0376+D30EMWxDw9T+w9iyC0Kj8LdjVBz
+         wmaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2uR6rr15BRHMymaEFYOUXLS9zgKBwEyVcNbBJdvAbQc=;
+        b=c6qmxZPUCwgbbqCqono6tKP7vxlWSntZy/mdRpZWzWfbTK3WuoNV9W2WUfZK/44rAc
+         XOeYvg8w9zCZNeQB+PL+EthXZMY8uaY1NhUr7ELmzenLBEc2NVObO17kPUPV9VWwo5ht
+         SBTwipGyvyNZ94aFYzUnS4Ij+YOsmQQW87h++7n5WiBjv/7ZmApAZJIomacHi8qP1Nal
+         hzboNAuxAisre8+qmVvtYUmPy1+sw0N7Gunsg6HhCtVJ8DErzGlfMAct3BYekEn6pxrY
+         49+eTTjGbqv80XIDCgI7sUqTDd+7MGXKcY8mCwZqlLu5AOAnxw/1rFdnYMt0JjyA8gAY
+         lwig==
+X-Gm-Message-State: APjAAAVENir3GOSo+9nw9NrM+yCPxwPOvs4CUtQjw+NOMwmG4hDK9Gjv
+        i+gFknR/3X3UJIL6J9/BtZZn5GlMSRzB9I0XeCo=
+X-Google-Smtp-Source: APXvYqwzp9AGIa8WY6Dkv+xFw3jIexVWORQiJf5K1b78kyjD9mbfmE8s22yFWllpEuzfJdDbiazXoE8m0qNUg95Ryjk=
+X-Received: by 2002:a1c:e909:: with SMTP id q9mr10734150wmc.30.1576764536436;
+ Thu, 19 Dec 2019 06:08:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191205000957.112719-1-thgarnie@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+ <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
+ <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
+ <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com> <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com>
+In-Reply-To: <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 19 Dec 2019 09:08:44 -0500
+Message-ID: <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chunming Zhou <David1.Zhou@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 04, 2019 at 04:09:37PM -0800, Thomas Garnier wrote:
-> Minor changes based on feedback and rebase from v9.
-> 
-> Splitting the previous serie in two. This part contains assembly code
-> changes required for PIE but without any direct dependencies with the
-> rest of the patchset.
+On Mon, Dec 16, 2019 at 4:00 AM Daniel Drake <drake@endlessm.com> wrote:
+>
+> Hi Alex,
+>
+> On Mon, Nov 25, 2019 at 1:17 PM Daniel Drake <drake@endlessm.com> wrote:
+> > Unfortunately not. The original issue still exists (dead gfx after
+> > resume from s2idle) and also when I trigger execution of the suspend
+> > or runtime suspend routines the power usage increases around 1.5W as
+> > before.
+> >
+> > Have you confirmed that amdgpu s2idle is working on platforms you have in hand?
+>
+> Any further ideas here? Or any workarounds that you would consider?
 
-ISTR suggestion you add an objtool pass that verifies there are no
-absolute text references left. Otherwise we'll forever be chasing that
-last one..
+I think there may be some AMD specific handling needed in
+drivers/acpi/sleep.c.  My understanding from reading the modern
+standby documents from MS is that each vendor needs to provide a
+platform specific PEP driver.  I'm not sure how much of that current
+code is Intel specific or not.
+
+Alex
+
+>
+> This platform has been rather tricky but all of the other problems are
+> now solved:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f897e60a12f0b9146357780d317879bce2a877dc
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d21b8adbd475dba19ac2086d3306327b4a297418
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=406857f773b082bc88edfd24967facf4ed07ac85
+> https://patchwork.kernel.org/patch/11263477/
+>
+> amdgpu is the only breakage left before Linux can be shipped on this
+> family of products.
+>
+> Thanks
+> Daniel
