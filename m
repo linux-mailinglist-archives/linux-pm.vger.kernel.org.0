@@ -2,277 +2,428 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4111270EF
+	by mail.lfdr.de (Postfix) with ESMTP id BCEB71270F0
 	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 23:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727056AbfLSWx1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 17:53:27 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38272 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfLSWx1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 17:53:27 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y17so7617717wrh.5
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 14:53:24 -0800 (PST)
+        id S1726930AbfLSWx2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 17:53:28 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:41332 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726952AbfLSWx2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 17:53:28 -0500
+Received: by mail-wr1-f66.google.com with SMTP id c9so7594274wrw.8
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 14:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IDTZTqQqMM7njfiIlWdMkGGJ0GW+H7WGtwJONF+jRcI=;
-        b=gXww8OgR3jaOVzm1bdVnzGpziMjOfqsoJ3buYVbCkQpdcU7kHpBo11pXA7QEGMur4D
-         lOemboPgvPyq0Tdhv6alZ1QAp6qLs1mMEQfDFeK/vbNRrTT21uf0HpX0sipcTltqXUmD
-         vBl4u5BK0+BUcNzcCywRaJqW0GzytZr6UqCQ0JNubVzHAh7RsDozzIUettUXyX3rdlkY
-         +WP1u/WgPLaRm5nDf9jm2NidYg24lYMAdi+pSShZ0w2WzJmxFp87c1gYM5QTLQCCTPRD
-         k0cQRKDbS86L2XNsn/AeYsU4Ofzkrvn5XiKfSP5Q8NO5g0P8sqTT7wj3ehW8Gc9cwDT/
-         eHyw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=NESEgMCPpx7LsIUuhGkki9z39II2Nb7qI1us82kFX+c=;
+        b=UynOsnzIPgir0ubSDp0xgFJjQxJNSuPbPNhPxuS+G37ssejX9PtwihJOsp7pMcfae/
+         2ZzEOyNNq1xGj5ltgpszlbDhCTDIChTMj0TzdCH5dUHpcBEez0ilh8E8eI9Y+Zo22X2C
+         1DdAqHDJVokUxbPKP3vRHVoeZG7YMbGjhc9rPHrb8eifg1hTUeomPKiCGFW50ZgXqj1J
+         6y9e4uMExZC5O30abzB7yg4p6MLRgCW3q4fGGcTAIAhpifSbQCGhOoyZTEDqCPWxJzFX
+         z5KBG/gyrJRP7MCW1cp37H2OXhbRP0yb11SHS8RXgAKcb+sNMAN589xWymdHUeEvFAK4
+         MC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IDTZTqQqMM7njfiIlWdMkGGJ0GW+H7WGtwJONF+jRcI=;
-        b=rKGJ3xB3xIXnATIh4Zb6qWz4MussHNqo+1MJ6SMJ+Zc/3Ez1UoKn0JIzPiev808Oib
-         XPnvC9Vc+XDhxPXLwSZlg7bm8Lif1feHtXxylfV2ObSwSHtU0faeBKJLPP+/2oB9wLcx
-         +EzEKmAPZCx8hRGCe8IDv5KE8P9FEUDZFuvfihk9QvuKtlCOiBLHPcTrsZdsTnaC6Dx6
-         k16trrguvwAGN1Zua0ZvCHrGhyXXzZsjahfyyUgLpQhsb03L7QfgA3gmtLC79LqWt/hj
-         HbAjmUUuCm3xG0NFgklKHa5p9ArZlrRPg36KfCa9k+QeXFDvLYmZ2KjxqulHn8Qapjb3
-         ZvMA==
-X-Gm-Message-State: APjAAAWNYsFPaEPoeGHmo9HmAuujHAM+Ms6dWbjETZoGvOyffTR/gvbt
-        x8/xmQP1zM+tWHzoSzmYIWt+lw==
-X-Google-Smtp-Source: APXvYqw1rjUSza+ufhIg18IVD1GZcPODoMAvSUwgehTB1c3FIGfJxQJBDx8//zB5nAyt0lyUvnRwMQ==
-X-Received: by 2002:a5d:480b:: with SMTP id l11mr11996674wrq.129.1576796003635;
-        Thu, 19 Dec 2019 14:53:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=NESEgMCPpx7LsIUuhGkki9z39II2Nb7qI1us82kFX+c=;
+        b=Krn/yIYca5BoUFf5aBOflQN0GC/lAHDObToAamuI8GB8iG/vO9vqTFhfnlUK80Pv10
+         MN8/gaw/jEI8JS3TdCaVZcg8kr5LUn5jD7UJg2WlnNHp+aGmvxZ9Lodnq9YtoWTklj4Z
+         tC6z/TUrWEyncMhAz4lcOreyNx0gB70El7IuQxoUlZUiv4sE3OpeHMJBrFN4PvQpKoKe
+         PYI9LFzQrhgizG8OR8w6fis0jQYRS5ufHJEZy8QMLml1YLsNjFNgxs+IunvHL/4mX722
+         hZHUsG7+EWJDepKHECx75vd9E+cA0glKyV0NColZc88W3Sths37jLNE1szW1RUfMmqxb
+         wWLg==
+X-Gm-Message-State: APjAAAU/nX/fhOiDoohsSG928mttDlm8zWJK7+DvywOcpKRGY7jQ1K68
+        T9AbRgKww+ToZEYUP5yKgG0iuZBIiPY=
+X-Google-Smtp-Source: APXvYqxAk4oy7U/y/LEtpnEPzdzz8li0OAPChR8jTuYUBUlJ11yysvmaUHN93dNPL5tysblegqnXWw==
+X-Received: by 2002:adf:f606:: with SMTP id t6mr11385041wrp.85.1576796004832;
+        Thu, 19 Dec 2019 14:53:24 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:58d:4e9b:2833:86c3])
-        by smtp.gmail.com with ESMTPSA id p15sm7581930wma.40.2019.12.19.14.53.22
+        by smtp.gmail.com with ESMTPSA id p15sm7581930wma.40.2019.12.19.14.53.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 14:53:23 -0800 (PST)
+        Thu, 19 Dec 2019 14:53:24 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
 Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
         viresh.kumar@linaro.org, amit.kucheria@linaro.org,
         linux-kernel@vger.kernel.org, martin.kepplinger@puri.sm
-Subject: [PATCH V6 1/3] thermal/drivers/cpu_cooling: Add idle cooling device documentation
-Date:   Thu, 19 Dec 2019 23:53:15 +0100
-Message-Id: <20191219225317.17158-1-daniel.lezcano@linaro.org>
+Subject: [PATCH V6 2/3] thermal/drivers/cpu_cooling: Introduce the cpu idle cooling driver
+Date:   Thu, 19 Dec 2019 23:53:16 +0100
+Message-Id: <20191219225317.17158-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191219225317.17158-1-daniel.lezcano@linaro.org>
+References: <20191219225317.17158-1-daniel.lezcano@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Provide some documentation for the idle injection cooling effect in
-order to let people to understand the rational of the approach for the
-idle injection CPU cooling device.
+The cpu idle cooling device offers a new method to cool down a CPU by
+injecting idle cycles at runtime.
+
+It has some similarities with the intel power clamp driver but it is
+actually designed to be more generic and relying on the idle injection
+powercap framework.
+
+The idle injection duration is fixed while the running duration is
+variable. That allows to have control on the device reactivity for the
+user experience.
+
+An idle state powering down the CPU or the cluster will allow to drop
+the static leakage, thus restoring the heat capacity of the SoC. It
+can be set with a trip point between the hot and the critical points,
+giving the opportunity to prevent a hard reset of the system when the
+cpufreq cooling fails to cool down the CPU.
+
+With more sophisticated boards having a per core sensor, the idle
+cooling device allows to cool down a single core without throttling
+the compute capacity of several cpus belonging to the same clock line,
+so it could be used in collaboration with the cpufreq cooling device.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
+ V6:
+   - Removed __init annotatations to prevent section mismatch
+   - Converted register functions to return an integer instead of a pointer
  V5:
-   - Fix trailing withspace
+   - Fixed NULL pointer check from idle_inject_register
+   - Fixed invalid zero value passed to idle_inject_set_duration
  V4:
-   - Fixed typos, replaced 'period' per 'duty cycles', clarified some
-     wording (Amit Kucheria)
+   - Fixed typos in the kernel-doc and clarified the changelog (Amit Kucheria)
+ V3:
+   - Add missing parameter documentation (Viresh Kumar)
+   - Fixed function description (Viresh Kumar)
+   - Add entry in MAINTAINER file
+ V2:
+   - Remove idle_duration_us field and use idle_inject API instead (Viresh Kumar)
+   - Fixed function definition wheh CPU_IDLE_COOLING is not set
+   - Inverted the initialization in the init function (Viresh Kumar)
 ---
- .../driver-api/thermal/cpu-idle-cooling.rst   | 189 ++++++++++++++++++
- 1 file changed, 189 insertions(+)
- create mode 100644 Documentation/driver-api/thermal/cpu-idle-cooling.rst
+ MAINTAINERS                       |   3 +
+ drivers/thermal/Kconfig           |   7 +
+ drivers/thermal/Makefile          |   1 +
+ drivers/thermal/cpuidle_cooling.c | 232 ++++++++++++++++++++++++++++++
+ include/linux/cpu_cooling.h       |  18 +++
+ 5 files changed, 261 insertions(+)
+ create mode 100644 drivers/thermal/cpuidle_cooling.c
 
-diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd5847e802de..d92e9eb14131 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16330,12 +16330,15 @@ F:	Documentation/devicetree/bindings/thermal/
+ 
+ THERMAL/CPU_COOLING
+ M:	Amit Daniel Kachhap <amit.kachhap@gmail.com>
++M:	Daniel Lezcano <daniel.lezcano@linaro.org>
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+ M:	Javi Merino <javi.merino@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+ F:	Documentation/driver-api/thermal/cpu-cooling-api.rst
++F:	Documentation/driver-api/thermal/cpu-idle-cooling.rst
+ F:	drivers/thermal/cpu_cooling.c
++F:	drivers/thermal/cpuidle_cooling.c
+ F:	include/linux/cpu_cooling.h
+ 
+ THERMAL DRIVER FOR AMLOGIC SOCS
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 702b33dcdb35..0d93c652014f 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -170,6 +170,13 @@ config CPU_FREQ_THERMAL
+ 	  This will be useful for platforms using the generic thermal interface
+ 	  and not the ACPI interface.
+ 
++config CPU_IDLE_THERMAL
++	bool "CPU idle cooling device"
++	depends on IDLE_INJECT
++	help
++	  This implements the CPU cooling mechanism through
++	  idle injection. This will throttle the CPU by injecting
++	  idle cycle.
+ endif
+ 
+ config CLOCK_THERMAL
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 3f3533c01aa3..6929e6fad1ac 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -20,6 +20,7 @@ thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
+ 
+ # cpufreq cooling
+ thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpu_cooling.o
++thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
+ 
+ # clock cooling
+ thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
 new file mode 100644
-index 000000000000..e4f0859486c7
+index 000000000000..0bb843246f59
 --- /dev/null
-+++ b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-@@ -0,0 +1,189 @@
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  Copyright (C) 2019 Linaro Limited.
++ *
++ *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
++ *
++ */
++#include <linux/cpu_cooling.h>
++#include <linux/cpuidle.h>
++#include <linux/err.h>
++#include <linux/idle_inject.h>
++#include <linux/idr.h>
++#include <linux/slab.h>
++#include <linux/thermal.h>
 +
-+Situation:
-+----------
++/**
++ * struct cpuidle_cooling_device - data for the idle cooling device
++ * @ii_dev: an atomic to keep track of the last task exiting the idle cycle
++ * @state: a normalized integer giving the state of the cooling device
++ */
++struct cpuidle_cooling_device {
++	struct idle_inject_device *ii_dev;
++	unsigned long state;
++};
 +
-+Under certain circumstances a SoC can reach a critical temperature
-+limit and is unable to stabilize the temperature around a temperature
-+control. When the SoC has to stabilize the temperature, the kernel can
-+act on a cooling device to mitigate the dissipated power. When the
-+critical temperature is reached, a decision must be taken to reduce
-+the temperature, that, in turn impacts performance.
++static DEFINE_IDA(cpuidle_ida);
 +
-+Another situation is when the silicon temperature continues to
-+increase even after the dynamic leakage is reduced to its minimum by
-+clock gating the component. This runaway phenomenon can continue due
-+to the static leakage. The only solution is to power down the
-+component, thus dropping the dynamic and static leakage that will
-+allow the component to cool down.
++/**
++ * cpuidle_cooling_runtime - Running time computation
++ * @idle_duration_us: the idle cooling device
++ * @state: a percentile based number
++ *
++ * The running duration is computed from the idle injection duration
++ * which is fixed. If we reach 100% of idle injection ratio, that
++ * means the running duration is zero. If we have a 50% ratio
++ * injection, that means we have equal duration for idle and for
++ * running duration.
++ *
++ * The formula is deduced as follows:
++ *
++ *  running = idle x ((100 / ratio) - 1)
++ *
++ * For precision purpose for integer math, we use the following:
++ *
++ *  running = (idle x 100) / ratio - idle
++ *
++ * For example, if we have an injected duration of 50%, then we end up
++ * with 10ms of idle injection and 10ms of running duration.
++ *
++ * Return: An unsigned int for a usec based runtime duration.
++ */
++static unsigned int cpuidle_cooling_runtime(unsigned int idle_duration_us,
++					    unsigned long state)
++{
++	if (!state)
++		return 0;
 +
-+Last but not least, the system can ask for a specific power budget but
-+because of the OPP density, we can only choose an OPP with a power
-+budget lower than the requested one and under-utilize the CPU, thus
-+losing performance. In other words, one OPP under-utilizes the CPU
-+with a power less than the requested power budget and the next OPP
-+exceeds the power budget. An intermediate OPP could have been used if
-+it were present.
++	return ((idle_duration_us * 100) / state) - idle_duration_us;
++}
 +
-+Solutions:
-+----------
++/**
++ * cpuidle_cooling_get_max_state - Get the maximum state
++ * @cdev  : the thermal cooling device
++ * @state : a pointer to the state variable to be filled
++ *
++ * The function always returns 100 as the injection ratio. It is
++ * percentile based for consistency accross different platforms.
++ *
++ * Return: The function can not fail, it is always zero
++ */
++static int cpuidle_cooling_get_max_state(struct thermal_cooling_device *cdev,
++					 unsigned long *state)
++{
++	/*
++	 * Depending on the configuration or the hardware, the running
++	 * cycle and the idle cycle could be different. We want to
++	 * unify that to an 0..100 interval, so the set state
++	 * interface will be the same whatever the platform is.
++	 *
++	 * The state 100% will make the cluster 100% ... idle. A 0%
++	 * injection ratio means no idle injection at all and 50%
++	 * means for 10ms of idle injection, we have 10ms of running
++	 * time.
++	 */
++	*state = 100;
 +
-+If we can remove the static and the dynamic leakage for a specific
-+duration in a controlled period, the SoC temperature will
-+decrease. Acting on the idle state duration or the idle cycle
-+injection period, we can mitigate the temperature by modulating the
-+power budget.
++	return 0;
++}
 +
-+The Operating Performance Point (OPP) density has a great influence on
-+the control precision of cpufreq, however different vendors have a
-+plethora of OPP density, and some have large power gap between OPPs,
-+that will result in loss of performance during thermal control and
-+loss of power in other scenarios.
++/**
++ * cpuidle_cooling_get_cur_state - Get the current cooling state
++ * @cdev: the thermal cooling device
++ * @state: a pointer to the state
++ *
++ * The function just copies  the state value from the private thermal
++ * cooling device structure, the mapping is 1 <-> 1.
++ *
++ * Return: The function can not fail, it is always zero
++ */
++static int cpuidle_cooling_get_cur_state(struct thermal_cooling_device *cdev,
++					 unsigned long *state)
++{
++	struct cpuidle_cooling_device *idle_cdev = cdev->devdata;
 +
-+At a specific OPP, we can assume that injecting idle cycle on all CPUs
-+belong to the same cluster, with a duration greater than the cluster
-+idle state target residency, we lead to dropping the static and the
-+dynamic leakage for this period (modulo the energy needed to enter
-+this state). So the sustainable power with idle cycles has a linear
-+relation with the OPP’s sustainable power and can be computed with a
-+coefficient similar to:
++	*state = idle_cdev->state;
 +
-+	    Power(IdleCycle) = Coef x Power(OPP)
++	return 0;
++}
 +
-+Idle Injection:
-+---------------
++/**
++ * cpuidle_cooling_set_cur_state - Set the current cooling state
++ * @cdev: the thermal cooling device
++ * @state: the target state
++ *
++ * The function checks first if we are initiating the mitigation which
++ * in turn wakes up all the idle injection tasks belonging to the idle
++ * cooling device. In any case, it updates the internal state for the
++ * cooling device.
++ *
++ * Return: The function can not fail, it is always zero
++ */
++static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
++					 unsigned long state)
++{
++	struct cpuidle_cooling_device *idle_cdev = cdev->devdata;
++	struct idle_inject_device *ii_dev = idle_cdev->ii_dev;
++	unsigned long current_state = idle_cdev->state;
++	unsigned int runtime_us, idle_duration_us;
 +
-+The base concept of the idle injection is to force the CPU to go to an
-+idle state for a specified time each control cycle, it provides
-+another way to control CPU power and heat in addition to
-+cpufreq. Ideally, if all CPUs belonging to the same cluster, inject
-+their idle cycles synchronously, the cluster can reach its power down
-+state with a minimum power consumption and reduce the static leakage
-+to almost zero.  However, these idle cycles injection will add extra
-+latencies as the CPUs will have to wakeup from a deep sleep state.
++	idle_cdev->state = state;
 +
-+We use a fixed duration of idle injection that gives an acceptable
-+performance penalty and a fixed latency. Mitigation can be increased
-+or decreased by modulating the duty cycle of the idle injection.
++	idle_inject_get_duration(ii_dev, &runtime_us, &idle_duration_us);
 +
-+     ^
-+     |
-+     |
-+     |-------                         -------
-+     |_______|_______________________|_______|___________
++	runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
 +
-+     <------>
-+       idle  <---------------------->
-+                    running
++	idle_inject_set_duration(ii_dev, runtime_us, idle_duration_us);
 +
-+      <----------------------------->
-+              duty cycle 25%
++	if (current_state == 0 && state > 0) {
++		idle_inject_start(ii_dev);
++	} else if (current_state > 0 && !state)  {
++		idle_inject_stop(ii_dev);
++	}
 +
++	return 0;
++}
 +
-+The implementation of the cooling device bases the number of states on
-+the duty cycle percentage. When no mitigation is happening the cooling
-+device state is zero, meaning the duty cycle is 0%.
++/**
++ * cpuidle_cooling_ops - thermal cooling device ops
++ */
++static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
++	.get_max_state = cpuidle_cooling_get_max_state,
++	.get_cur_state = cpuidle_cooling_get_cur_state,
++	.set_cur_state = cpuidle_cooling_set_cur_state,
++};
 +
-+When the mitigation begins, depending on the governor's policy, a
-+starting state is selected. With a fixed idle duration and the duty
-+cycle (aka the cooling device state), the running duration can be
-+computed.
++/**
++ * cpuidle_of_cooling_register - Idle cooling device initialization function
++ * @drv: a cpuidle driver structure pointer
++ * @np: a node pointer to a device tree cooling device node
++ *
++ * This function is in charge of creating a cooling device per cpuidle
++ * driver and register it to thermal framework.
++ *
++ * Return: zero on success, or negative value corresponding to the
++ * error detected in the underlying subsystems.
++ */
++int cpuidle_of_cooling_register(struct device_node *np,
++				struct cpuidle_driver *drv)
++{
++	struct idle_inject_device *ii_dev;
++	struct cpuidle_cooling_device *idle_cdev;
++	struct thermal_cooling_device *cdev;
++	char dev_name[THERMAL_NAME_LENGTH];
++	int id, ret;
 +
-+The governor will change the cooling device state thus the duty cycle
-+and this variation will modulate the cooling effect.
++	idle_cdev = kzalloc(sizeof(*idle_cdev), GFP_KERNEL);
++	if (!idle_cdev) {
++		ret = -ENOMEM;
++		goto out;
++	}
 +
-+     ^
-+     |
-+     |
-+     |-------                 -------
-+     |_______|_______________|_______|___________
++	id = ida_simple_get(&cpuidle_ida, 0, 0, GFP_KERNEL);
++	if (id < 0) {
++		ret = id;
++		goto out_kfree;
++	}
 +
-+     <------>
-+       idle  <-------------->
-+                running
++	ii_dev = idle_inject_register(drv->cpumask);
++	if (!ii_dev) {
++		ret = -EINVAL;
++		goto out_id;
++	}
 +
-+      <----------------------------->
-+              duty cycle 33%
++	idle_inject_set_duration(ii_dev, TICK_USEC, TICK_USEC);
 +
++	idle_cdev->ii_dev = ii_dev;
 +
-+     ^
-+     |
-+     |
-+     |-------         -------
-+     |_______|_______|_______|___________
++	snprintf(dev_name, sizeof(dev_name), "thermal-idle-%d", id);
 +
-+     <------>
-+       idle  <------>
-+              running
++	cdev = thermal_of_cooling_device_register(np, dev_name, idle_cdev,
++						  &cpuidle_cooling_ops);
++	if (IS_ERR(cdev)) {
++		ret = PTR_ERR(cdev);
++		goto out_unregister;
++	}
 +
-+      <------------->
-+       duty cycle 50%
++	return 0;
 +
-+The idle injection duration value must comply with the constraints:
++out_unregister:
++	idle_inject_unregister(ii_dev);
++out_id:
++	ida_simple_remove(&cpuidle_ida, id);
++out_kfree:
++	kfree(idle_cdev);
++out:
++	return ret;
++}
 +
-+- It is less than or equal to the latency we tolerate when the
-+  mitigation begins. It is platform dependent and will depend on the
-+  user experience, reactivity vs performance trade off we want. This
-+  value should be specified.
++/**
++ * cpuidle_cooling_register - Idle cooling device initialization function
++ * @drv: a cpuidle driver structure pointer
++ *
++ * This function is in charge of creating a cooling device per cpuidle
++ * driver and register it to thermal framework.
++ *
++ * Return: zero on success, or negative value corresponding to the
++ * error detected in the underlying subsystems.
++ */
++int cpuidle_cooling_register(struct cpuidle_driver *drv)
++{
++	return cpuidle_of_cooling_register(NULL, drv);
++}
+diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
+index 3cdd85f987d7..65501d8f9778 100644
+--- a/include/linux/cpu_cooling.h
++++ b/include/linux/cpu_cooling.h
+@@ -60,4 +60,22 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+ }
+ #endif /* CONFIG_CPU_FREQ_THERMAL */
+ 
++struct cpuidle_driver;
 +
-+- It is greater than the idle state’s target residency we want to go
-+  for thermal mitigation, otherwise we end up consuming more energy.
++#ifdef CONFIG_CPU_IDLE_THERMAL
++int cpuidle_cooling_register(struct cpuidle_driver *drv);
++int cpuidle_of_cooling_register(struct device_node *np,
++				struct cpuidle_driver *drv);
++#else /* CONFIG_CPU_IDLE_THERMAL */
++static inline int cpuidle_cooling_register(struct cpuidle_driver *drv)
++{
++	return 0;
++}
++static inline int cpuidle_of_cooling_register(struct device_node *np,
++					      struct cpuidle_driver *drv)
++{
++	return 0;
++}
++#endif /* CONFIG_CPU_IDLE_THERMAL */
 +
-+Power considerations
-+--------------------
-+
-+When we reach the thermal trip point, we have to sustain a specified
-+power for a specific temperature but at this time we consume:
-+
-+ Power = Capacitance x Voltage^2 x Frequency x Utilisation
-+
-+... which is more than the sustainable power (or there is something
-+wrong in the system setup). The ‘Capacitance’ and ‘Utilisation’ are a
-+fixed value, ‘Voltage’ and the ‘Frequency’ are fixed artificially
-+because we don’t want to change the OPP. We can group the
-+‘Capacitance’ and the ‘Utilisation’ into a single term which is the
-+‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have:
-+
-+ Pdyn = Cdyn x Voltage^2 x Frequency
-+
-+The power allocator governor will ask us somehow to reduce our power
-+in order to target the sustainable power defined in the device
-+tree. So with the idle injection mechanism, we want an average power
-+(Ptarget) resulting in an amount of time running at full power on a
-+specific OPP and idle another amount of time. That could be put in a
-+equation:
-+
-+ P(opp)target = ((Trunning x (P(opp)running) + (Tidle x P(opp)idle)) /
-+			(Trunning + Tidle)
-+  ...
-+
-+ Tidle = Trunning x ((P(opp)running / P(opp)target) - 1)
-+
-+At this point if we know the running period for the CPU, that gives us
-+the idle injection we need. Alternatively if we have the idle
-+injection duration, we can compute the running duration with:
-+
-+ Trunning = Tidle / ((P(opp)running / P(opp)target) - 1)
-+
-+Practically, if the running power is less than the targeted power, we
-+end up with a negative time value, so obviously the equation usage is
-+bound to a power reduction, hence a higher OPP is needed to have the
-+running power greater than the targeted power.
-+
-+However, in this demonstration we ignore three aspects:
-+
-+ * The static leakage is not defined here, we can introduce it in the
-+   equation but assuming it will be zero most of the time as it is
-+   difficult to get the values from the SoC vendors
-+
-+ * The idle state wake up latency (or entry + exit latency) is not
-+   taken into account, it must be added in the equation in order to
-+   rigorously compute the idle injection
-+
-+ * The injected idle duration must be greater than the idle state
-+   target residency, otherwise we end up consuming more energy and
-+   potentially invert the mitigation effect
-+
-+So the final equation is:
-+
-+ Trunning = (Tidle - Twakeup ) x
-+		(((P(opp)dyn + P(opp)static ) - P(opp)target) / P(opp)target )
+ #endif /* __CPU_COOLING_H__ */
 -- 
 2.17.1
 
