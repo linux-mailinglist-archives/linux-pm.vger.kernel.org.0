@@ -2,84 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B04126833
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566BF126885
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbfLSRdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 12:33:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52626 "EHLO mail.kernel.org"
+        id S1726818AbfLSR6W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 12:58:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:41548 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726818AbfLSRdY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 19 Dec 2019 12:33:24 -0500
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F14EB21655;
-        Thu, 19 Dec 2019 17:33:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576776803;
-        bh=Y3xByJTEgCOaNoNsGe4pKVIS9XI0ZCLfbAdIESGvlxM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A7XHdThvled/qPuJrHfh8WDRBCGmbBlX8Qm16xJmq4b3/auOSP0X0WdRi7kcVRQft
-         AxxquNXIx9tq78P+zTe7QRWMJYF+DCqi0KUdHrYBZVNzlVKfUcGChxMp8Lyc+CYNEM
-         ObsJprmDL5/iDJDSnRhoA7meyAwq3o+5Ydrsv7vs=
-Date:   Thu, 19 Dec 2019 18:33:21 +0100
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
+        id S1726880AbfLSR6W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Dec 2019 12:58:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FAD81FB;
+        Thu, 19 Dec 2019 09:58:21 -0800 (PST)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7588F3F67D;
+        Thu, 19 Dec 2019 09:58:19 -0800 (PST)
+Date:   Thu, 19 Dec 2019 17:58:14 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 0/7] add thermal sensor driver for A64, A83T, H3, H5,
- H6, R40
-Message-ID: <20191219173321.bni4tbrhfkkphv7k@gilmour.lan>
-References: <20191219172823.1652600-1-anarsoul@gmail.com>
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v4 14/14] arm64: dts: Convert to the hierarchical CPU
+ topology layout for MSM8916
+Message-ID: <20191219175757.GA21846@bogus>
+References: <20191211154343.29765-1-ulf.hansson@linaro.org>
+ <20191211154343.29765-15-ulf.hansson@linaro.org>
+ <20191219143446.GG20746@bogus>
+ <CAPDyKFpkSjq5RzuxCvj8wawU6Q15qq3qiBcrGz=H2X+1Wf3t8w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="w5q3jazkvks4ahe3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191219172823.1652600-1-anarsoul@gmail.com>
+In-Reply-To: <CAPDyKFpkSjq5RzuxCvj8wawU6Q15qq3qiBcrGz=H2X+1Wf3t8w@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Dec 19, 2019 at 04:48:47PM +0100, Ulf Hansson wrote:
+> On Thu, 19 Dec 2019 at 15:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Wed, Dec 11, 2019 at 04:43:43PM +0100, Ulf Hansson wrote:
+> > > To enable the OS to better support PSCI OS initiated CPU suspend mode,
+> > > let's convert from the flattened layout to the hierarchical layout.
+> > >
+> > > In the hierarchical layout, let's create a power domain provider per CPU
+> > > and describe the idle states for each CPU inside the power domain provider
+> > > node. To group the CPUs into a cluster, let's add another power domain
+> > > provider and make it act as the master domain. Note that, the CPU's idle
+> > > states remains compatible with "arm,idle-state", while the cluster's idle
+> > > state becomes compatible with "domain-idle-state".
+> > >
+> > > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+> > > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >
+> > > Changes in v4:
+> > >       - None.
+> > >
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/msm8916.dtsi | 57 +++++++++++++++++++++++++--
+> > >  1 file changed, 53 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> > > index 8686e101905c..282c36c8fa3b 100644
+> > > --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> > > @@ -102,10 +102,11 @@
+> > >                       reg = <0x0>;
+> > >                       next-level-cache = <&L2_0>;
+> > >                       enable-method = "psci";
+> > > -                     cpu-idle-states = <&CPU_SLEEP_0>;
+> > >                       clocks = <&apcs>;
+> > >                       operating-points-v2 = <&cpu_opp_table>;
+> > >                       #cooling-cells = <2>;
+> > > +                     power-domains = <&CPU_PD0>;
+> > > +                     power-domain-names = "psci";
+> > >               };
+> > >
+> > >               CPU1: cpu@1 {
+> > > @@ -114,10 +115,11 @@
+> > >                       reg = <0x1>;
+> > >                       next-level-cache = <&L2_0>;
+> > >                       enable-method = "psci";
+> > > -                     cpu-idle-states = <&CPU_SLEEP_0>;
+> > >                       clocks = <&apcs>;
+> > >                       operating-points-v2 = <&cpu_opp_table>;
+> > >                       #cooling-cells = <2>;
+> > > +                     power-domains = <&CPU_PD1>;
+> > > +                     power-domain-names = "psci";
+> > >               };
+> > >
+> > >               CPU2: cpu@2 {
+> > > @@ -126,10 +128,11 @@
+> > >                       reg = <0x2>;
+> > >                       next-level-cache = <&L2_0>;
+> > >                       enable-method = "psci";
+> > > -                     cpu-idle-states = <&CPU_SLEEP_0>;
+> > >                       clocks = <&apcs>;
+> > >                       operating-points-v2 = <&cpu_opp_table>;
+> > >                       #cooling-cells = <2>;
+> > > +                     power-domains = <&CPU_PD2>;
+> > > +                     power-domain-names = "psci";
+> > >               };
+> > >
+> > >               CPU3: cpu@3 {
+> > > @@ -138,10 +141,11 @@
+> > >                       reg = <0x3>;
+> > >                       next-level-cache = <&L2_0>;
+> > >                       enable-method = "psci";
+> > > -                     cpu-idle-states = <&CPU_SLEEP_0>;
+> > >                       clocks = <&apcs>;
+> > >                       operating-points-v2 = <&cpu_opp_table>;
+> > >                       #cooling-cells = <2>;
+> > > +                     power-domains = <&CPU_PD3>;
+> > > +                     power-domain-names = "psci";
+> > >               };
+> > >
+> > >               L2_0: l2-cache {
+> > > @@ -161,12 +165,57 @@
+> > >                               min-residency-us = <2000>;
+> > >                               local-timer-stop;
+> > >                       };
+> > > +
+> > > +                     CLUSTER_RET: cluster-retention {
+> > > +                             compatible = "domain-idle-state";
+> > > +                             arm,psci-suspend-param = <0x41000012>;
+> >
+> > If I followed the thread correctly, we are now just using the param as is
+> > without any extra logic like ORing like before. i.e. The domain state
+> > parameter overrides the any param below it in the hierarchy.
+> >
+> > If that's correct, then
+>
+> That's correct!
+>
 
---w5q3jazkvks4ahe3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the confirmation.
 
-Hi,
-
-On Thu, Dec 19, 2019 at 09:28:16AM -0800, Vasily Khoruzhick wrote:
-> This patchset adds driver for thermal sensor in A64, A83T, H3, H5,
-> H6 and R40 SoCs.
-
-Thanks again for working on this.
-
-I'll merge the DT patches when the driver will have been merged.
-
-Maxime
-
---w5q3jazkvks4ahe3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXfu0YQAKCRDj7w1vZxhR
-xb1VAP4xjI8YI2zdKwYfiKElxYGUogPWWoFs7p5Em1VmwApCcwEAv4GZSBrUwgDf
-iL9xxj+jWVL/hIbcgq1jXocUjXhSiQY=
-=1zC1
------END PGP SIGNATURE-----
-
---w5q3jazkvks4ahe3--
+--
+Regards,
+Sudeep
