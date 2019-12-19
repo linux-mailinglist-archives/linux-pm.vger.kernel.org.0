@@ -2,180 +2,659 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C3C1270FE
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 23:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E1612711E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 00:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfLSW5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 17:57:09 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40544 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726880AbfLSW5I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 17:57:08 -0500
-Received: by mail-wm1-f65.google.com with SMTP id t14so7320373wmi.5
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 14:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l3jdDT7PSb2SnKaIBXuzxAAJB0WnU3CdgPU5NfDxII8=;
-        b=PywwbSYCCUJv3kVYfUhdS9qVZeBAD72fDQV51NthW+N8MqW8OZgsesK0GWgCSkdZor
-         RI6kSPJ+Pz2hpgJshGp6WAfcK5/CvaQcxWCoVoxFli34FVfdsJsoXMg2nfoH27k4qUJx
-         Xyfa1yGrCDU9K5VpNWpLrPUcwKRz3CIQWv2K5HdfN7zu1/Q6D7BgUYtvWX9mTkz0eBdf
-         mxBeAMOzAIc1JO54WOVlClW5/p+oIPHavVsINNjzl8Bj6Aaljy70jbfI6vsE931ZnXcQ
-         Baudo1F+pB+q9I7YIFlZY/q298L5taQt6G3Xt9W5uZ2uDBY469JRU+CfXVCdhKbNfStT
-         GxvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=l3jdDT7PSb2SnKaIBXuzxAAJB0WnU3CdgPU5NfDxII8=;
-        b=j8TY8Fnf/NivgB3JSaB7H7xcpaf/tkML4YlEKspJMoPtZdGVbKvLvkd/l84IXXDwVQ
-         mL5nNpOO7hAXOTV5g4edZLCUONQRHYkOp5SdoYc3mFfi3SQio3rRlWkl7OQPHNxNM+7c
-         jbj2By5nctOZqxOmCJDp2KkbiKIGUTM0fAqOu3WUjMx0gvPLxE1S73RZoBT8lOHp8uD5
-         UiYUyrPMfkC/P+nyTyce53y+RSBhNVOZsHMUYn6K+Iw1m5HDBLyyiO3OVDFMSN9TSW3c
-         DFuKo+CuaBbbJTNawEl9BEslV4DFh2DAhZ4wt7zkuFF0hCJ3cnOjIP1scsHEkFiMud7Y
-         sLVg==
-X-Gm-Message-State: APjAAAXD3y8SF2YQxRfChFTc/MYGyI4KluroJeyYHU3qYnNthim7T5sI
-        XyukX9B08cwIq8hUG4piXZIrvA==
-X-Google-Smtp-Source: APXvYqxwz8wY4e54xzWSkjgtONc87AnBglmNyXJap6okiLTfTindPZM9l4wBPRYKV+IYgoQyFvn4EQ==
-X-Received: by 2002:a1c:3c45:: with SMTP id j66mr12218981wma.2.1576796225983;
-        Thu, 19 Dec 2019 14:57:05 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d0dd:3c81:4925:289e? ([2a01:e34:ed2f:f020:d0dd:3c81:4925:289e])
-        by smtp.googlemail.com with ESMTPSA id u14sm7935053wrm.51.2019.12.19.14.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2019 14:57:05 -0800 (PST)
-Subject: Re: [PATCH 2/2] thermal: cpuidle: Register cpuidle cooling device
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20191219221932.15930-1-daniel.lezcano@linaro.org>
- <20191219221932.15930-2-daniel.lezcano@linaro.org>
- <20191219225103.GZ228856@google.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <c08b76d1-5525-7d0e-7d11-da3584d2adcc@linaro.org>
-Date:   Thu, 19 Dec 2019 23:57:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-In-Reply-To: <20191219225103.GZ228856@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727151AbfLSXDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 18:03:06 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:35918 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbfLSXDG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 18:03:06 -0500
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191219230302epoutp02e000c9f59beffd54796fdc4439f33c1e~h6CNAZYby1273612736epoutp02B
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 23:03:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191219230302epoutp02e000c9f59beffd54796fdc4439f33c1e~h6CNAZYby1273612736epoutp02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576796582;
+        bh=GEAkY+ue1gNZs0B5obdcYdEyJxTIapY+2YlSllCpMHY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HMVB7VR+7BNCjx0OxrNWPMVLfCn9Uvdz3kCldYpOen1482JxfDOfrJyQ91LFVqg52
+         m7B+Cr+S+bK9r9nXLLEwHU7CVnqpvEajhKi76oxMfjhy+lYOVBT5wC7kI6odilSeh/
+         Cc2RzP8H1b74+DEBnWjw69I2jOkQcIaj9jgsfRQw=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20191219230302epcas1p4e96cc8ec9a04a75ec54bbfdcd83d4ebd~h6CMiyaQP0556405564epcas1p4j;
+        Thu, 19 Dec 2019 23:03:02 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 47f6q6582vzMqYkY; Thu, 19 Dec
+        2019 23:02:58 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EF.A6.51241.2A10CFD5; Fri, 20 Dec 2019 08:02:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191219230258epcas1p16ec64c3a06eafd9f0a3784d18541ce5c~h6CIzF3dD2546225462epcas1p1l;
+        Thu, 19 Dec 2019 23:02:58 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191219230258epsmtrp2ec51bc1e0265f93473e099688ad54978~h6CIxvxes2882328823epsmtrp28;
+        Thu, 19 Dec 2019 23:02:58 +0000 (GMT)
+X-AuditID: b6c32a39-14bff7000001c829-cf-5dfc01a27067
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7E.E7.06569.2A10CFD5; Fri, 20 Dec 2019 08:02:58 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191219230257epsmtip14bf74683d89c4f280a48c22d75c4d04e~h6CIn2SQO1140211402epsmtip1B;
+        Thu, 19 Dec 2019 23:02:57 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        leonard.crestez@nxp.com, cw00.choi@samsung.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Subject: [v8 PATCH] PM / devfreq: Add dynamic scaling for imx8m ddr
+ controller
+Date:   Fri, 20 Dec 2019 08:09:19 +0900
+Message-Id: <20191219230919.16037-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <c0b332b85560e39d7dbb5e88b99bbed1d1b32373.1574458460.git.leonard.crestez@nxp.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmvu4ixj+xBmvPaVpc//Kc1WL+kXOs
+        Fmeb3rBbrLj7kdXi8q45bBafe48wWtxuXMHmwO6x8d0OJo++LasYPT5vkgtgjsq2yUhNTEkt
+        UkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAFarqRQlphTChQKSCwu
+        VtK3synKLy1JVcjILy6xVUotSMkpsCzQK07MLS7NS9dLzs+1MjQwMDIFKkzIzrh18xVjwb5W
+        xoodb4oaGB9mdDFyckgImEi0LL/P1sXIxSEksINR4uT+n4wQzidGiXmfDkE53xglFq3/zQ7T
+        8nROJytEYi+jxK5dk6CqvjBKnDu7DqyKTUBLYv+LG2wgtoiAjMTUK/vBOpgFljJKHF5ykgkk
+        ISwQIPHqwGoWEJtFQFWi9xfIck4OXgEridVPXkKtk5dYveEAcxcjBwenQJzE5gU1EOEZbBLN
+        HxghbBeJpi2nmSBsYYlXx7dAtUpJfH63lw3CrpZYefII2KMSAh2MElv2X2CFSBhL7F86mQlk
+        PrOApsT6XfoQYUWJnb/ngs1nFuCTePe1hxWkREKAV6KjTQiiRFni8oO7UGslJRa3d0Kt8pC4
+        1jMfbLqQwEZGiVWbSyYwys1CWLCAkXEVo1hqQXFuemqxYYEpcoxtYgQnLi3LHYzHzvkcYhTg
+        YFTi4XVI+x0rxJpYVlyZe4hRgoNZSYT3dsfPWCHelMTKqtSi/Pii0pzU4kOMpsBwnMgsJZqc
+        D0yqeSXxhqZGxsbGFiaGZqaGhkrivBw/LsYKCaQnlqRmp6YWpBbB9DFxcEo1MEpqll9W7XTf
+        I3bu8or1v1X3JSbnlVU8iJn3493ym0X5V7KEt3LIJcevLWkQ63qYtc2z3Npo+UdpG01m6c2i
+        bieO9LCpL5367xO7YO3ZnLhNGorLK+olVVkrwj9v2LNn6oFKgaD479P5XAqEPUtDJnzdwnXw
+        6FUfbrU9p4qihV8821++2O7kJyWW4oxEQy3mouJEADtIwPRyAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJLMWRmVeSWpSXmKPExsWy7bCSnO4ixj+xBt3zWCyuf3nOajH/yDlW
+        i7NNb9gtVtz9yGpxedccNovPvUcYLW43rmBzYPfY+G4Hk0ffllWMHp83yQUwR3HZpKTmZJal
+        FunbJXBl3Lr5irFgXytjxY43RQ2MDzO6GDk5JARMJJ7O6WTtYuTiEBLYzSix9PoxdoiEpMS0
+        i0eZuxg5gGxhicOHiyFqPjFKzL62hwWkhk1AS2L/ixtsILaIgIzE1Cv7wQYxC6xmlLhw7Cwr
+        SEJYwE9i87FOJhCbRUBVovfXT0YQm1fASmL1k5dQy+QlVm84ALaMUyBOYvOCGpCwkECsxO4j
+        v1kmMPItYGRYxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHGBaWjsYT5yIP8QowMGo
+        xMPrkPY7Vog1say4MvcQowQHs5II7+2On7FCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeeXzj0UK
+        CaQnlqRmp6YWpBbBZJk4OKUaGD2VWO/9UdvYcHbynN151xZ+Pld2KcOdJ7RE99HxGXmZeYLP
+        BGcs7D37hHPV2kcvchYfE5vcUGil3H0vJJD9nIDnG99kN9PI+asNY2c+U6yIvnJg6t0paV9v
+        9q9bsSc7bJHsf8ugJnWZc1f3p8/e/+joQ/dLzn8vZ1y+lzjx/BG59ma+u40vm/8osRRnJBpq
+        MRcVJwIAJwPYFywCAAA=
+X-CMS-MailID: 20191219230258epcas1p16ec64c3a06eafd9f0a3784d18541ce5c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191219230258epcas1p16ec64c3a06eafd9f0a3784d18541ce5c
+References: <c0b332b85560e39d7dbb5e88b99bbed1d1b32373.1574458460.git.leonard.crestez@nxp.com>
+        <CGME20191219230258epcas1p16ec64c3a06eafd9f0a3784d18541ce5c@epcas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/12/2019 23:51, Matthias Kaehlcke wrote:
-> Hi Daniel,
-> 
-> On Thu, Dec 19, 2019 at 11:19:28PM +0100, Daniel Lezcano wrote:
->> The cpuidle driver can be used as a cooling device by injecting idle
->> cycles. The DT binding for the idle state added an optional
->>
->> When the property is set, register the cpuidle driver with the idle
->> state node pointer as a cooling device. The thermal framework will do
->> the association automatically with the thermal zone via the
->> cooling-device defined in the device tree cooling-maps section.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>  drivers/cpuidle/dt_idle_states.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
->> index d06d21a9525d..34bd65197342 100644
->> --- a/drivers/cpuidle/dt_idle_states.c
->> +++ b/drivers/cpuidle/dt_idle_states.c
->> @@ -8,6 +8,7 @@
->>  
->>  #define pr_fmt(fmt) "DT idle-states: " fmt
->>  
->> +#include <linux/cpu_cooling.h>
->>  #include <linux/cpuidle.h>
->>  #include <linux/cpumask.h>
->>  #include <linux/errno.h>
->> @@ -205,6 +206,13 @@ int dt_init_idle_driver(struct cpuidle_driver *drv,
->>  			err = -EINVAL;
->>  			break;
->>  		}
->> +
->> +		if (of_find_property(state_node, "#cooling-cells", NULL)) {
->> +			err = cpuidle_of_cooling_register(state_node, drv);
-> 
-> cpuidle_of_cooling_register() returns a struct thermal_cooling_device *,
-> so you probably want to use PTR_ERR() here.
+From: Leonard Crestez <leonard.crestez@nxp.com>
 
-Right, I'm about the send the V6 which returns an int.
+Add driver for dynamic scaling the DDR Controller on imx8m chips. Actual
+frequency switching is implemented inside TF-A, this driver wraps the
+SMC calls and synchronizes the clk tree.
 
-> Could it be a problem that the cooling device isn't unregistered even when all
-> associated cores are taken offline?
+The DRAM clocks on imx8m have the following structure (abridged):
 
-The cooling device relies on the powercap/idle_inject.c which is based
-on the smpboot API. This one takes care of parking the per cpu pinned
-tasks. So AFAICS, it is fine.
+ +----------+       |\            +------+
+ | dram_pll |-------|M| dram_core |      |
+ +----------+       |U|---------->| D    |
+                 /--|X|           |  D   |
+   dram_alt_root |  |/            |   R  |
+                 |                |    C |
+            +---------+           |      |
+            |FIX DIV/4|           |      |
+            +---------+           |      |
+  composite:     |                |      |
+ +----------+    |                |      |
+ | dram_alt |----/                |      |
+ +----------+                     |      |
+ | dram_apb |-------------------->|      |
+ +----------+                     +------+
 
+The dram_pll is used for higher rates and dram_alt is used for lower
+rates. The dram_alt and dram_apb clocks are "imx composite" and their
+parent can also be modified.
+
+This driver will prepare/enable the new parents ahead of switching (so
+that the expected roots are enabled) and afterwards it will call
+clk_set_parent to ensure the parents in clock framework are up-to-date.
+
+The driver relies on dram_pll dram_alt and dram_apb being marked with
+CLK_GET_RATE_NOCACHE for rate updates.
+
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+[cw00.choi: Edit the COMPILE_TEST module dependency in Kconfig]
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+---
+Changes from v7:
+- Squash patch[1] to this patch
+[1] https://patchwork.kernel.org/patch/11303869/
+- [PATCH] PM / devfreq: imx8m-ddrc: Fix argument swap in error print
+
+ drivers/devfreq/Kconfig      |  10 +
+ drivers/devfreq/Makefile     |   1 +
+ drivers/devfreq/imx8m-ddrc.c | 465 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 476 insertions(+)
+ create mode 100644 drivers/devfreq/imx8m-ddrc.c
+
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index ca45d57ad947..8485f948caeb 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -91,6 +91,16 @@ config ARM_EXYNOS_BUS_DEVFREQ
+ 	  and adjusts the operating frequencies and voltages with OPP support.
+ 	  This does not yet operate with optimal voltages.
+ 
++config ARM_IMX8M_DDRC_DEVFREQ
++	tristate "i.MX8M DDRC DEVFREQ Driver"
++	depends on (ARCH_MXC && HAVE_ARM_SMCCC) || \
++		(COMPILE_TEST && HAVE_ARM_SMCCC)
++	select DEVFREQ_GOV_SIMPLE_ONDEMAND
++	select DEVFREQ_GOV_USERSPACE
++	help
++	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allows
++	  adjusting DRAM frequency.
++
+ config ARM_TEGRA_DEVFREQ
+ 	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+ 	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
+diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+index 338ae8440db6..3eb4d5e6635c 100644
+--- a/drivers/devfreq/Makefile
++++ b/drivers/devfreq/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
+ 
+ # DEVFREQ Drivers
+ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
++obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
+ obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
+ obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+ obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
+diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
+new file mode 100644
+index 000000000000..01ff9afdc8bf
+--- /dev/null
++++ b/drivers/devfreq/imx8m-ddrc.c
+@@ -0,0 +1,465 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2019 NXP
++ */
++
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/devfreq.h>
++#include <linux/pm_opp.h>
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/arm-smccc.h>
++
++#define IMX_SIP_DDR_DVFS			0xc2000004
++
++/* Values starting from 0 switch to specific frequency */
++#define IMX_SIP_DDR_FREQ_SET_HIGH		0x00
++
++/* Deprecated after moving IRQ handling to ATF */
++#define IMX_SIP_DDR_DVFS_WAIT_CHANGE		0x0F
++
++/* Query available frequencies. */
++#define IMX_SIP_DDR_DVFS_GET_FREQ_COUNT		0x10
++#define IMX_SIP_DDR_DVFS_GET_FREQ_INFO		0x11
++
++/*
++ * This should be in a 1:1 mapping with devicetree OPPs but
++ * firmware provides additional info.
++ */
++struct imx8m_ddrc_freq {
++	unsigned long rate;
++	unsigned long smcarg;
++	int dram_core_parent_index;
++	int dram_alt_parent_index;
++	int dram_apb_parent_index;
++};
++
++/* Hardware limitation */
++#define IMX8M_DDRC_MAX_FREQ_COUNT 4
++
++/*
++ * i.MX8M DRAM Controller clocks have the following structure (abridged):
++ *
++ * +----------+       |\            +------+
++ * | dram_pll |-------|M| dram_core |      |
++ * +----------+       |U|---------->| D    |
++ *                 /--|X|           |  D   |
++ *   dram_alt_root |  |/            |   R  |
++ *                 |                |    C |
++ *            +---------+           |      |
++ *            |FIX DIV/4|           |      |
++ *            +---------+           |      |
++ *  composite:     |                |      |
++ * +----------+    |                |      |
++ * | dram_alt |----/                |      |
++ * +----------+                     |      |
++ * | dram_apb |-------------------->|      |
++ * +----------+                     +------+
++ *
++ * The dram_pll is used for higher rates and dram_alt is used for lower rates.
++ *
++ * Frequency switching is implemented in TF-A (via SMC call) and can change the
++ * configuration of the clocks, including mux parents. The dram_alt and
++ * dram_apb clocks are "imx composite" and their parent can change too.
++ *
++ * We need to prepare/enable the new mux parents head of switching and update
++ * their information afterwards.
++ */
++struct imx8m_ddrc {
++	struct devfreq_dev_profile profile;
++	struct devfreq *devfreq;
++
++	/* For frequency switching: */
++	struct clk *dram_core;
++	struct clk *dram_pll;
++	struct clk *dram_alt;
++	struct clk *dram_apb;
++
++	int freq_count;
++	struct imx8m_ddrc_freq freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];
++};
++
++static struct imx8m_ddrc_freq *imx8m_ddrc_find_freq(struct imx8m_ddrc *priv,
++						    unsigned long rate)
++{
++	struct imx8m_ddrc_freq *freq;
++	int i;
++
++	/*
++	 * Firmware reports values in MT/s, so we round-down from Hz
++	 * Rounding is extra generous to ensure a match.
++	 */
++	rate = DIV_ROUND_CLOSEST(rate, 250000);
++	for (i = 0; i < priv->freq_count; ++i) {
++		freq = &priv->freq_table[i];
++		if (freq->rate == rate ||
++				freq->rate + 1 == rate ||
++				freq->rate - 1 == rate)
++			return freq;
++	}
++
++	return NULL;
++}
++
++static void imx8m_ddrc_smc_set_freq(int target_freq)
++{
++	struct arm_smccc_res res;
++	u32 online_cpus = 0;
++	int cpu;
++
++	local_irq_disable();
++
++	for_each_online_cpu(cpu)
++		online_cpus |= (1 << (cpu * 8));
++
++	/* change the ddr freqency */
++	arm_smccc_smc(IMX_SIP_DDR_DVFS, target_freq, online_cpus,
++			0, 0, 0, 0, 0, &res);
++
++	local_irq_enable();
++}
++
++static struct clk *clk_get_parent_by_index(struct clk *clk, int index)
++{
++	struct clk_hw *hw;
++
++	hw = clk_hw_get_parent_by_index(__clk_get_hw(clk), index);
++
++	return hw ? hw->clk : NULL;
++}
++
++static int imx8m_ddrc_set_freq(struct device *dev, struct imx8m_ddrc_freq *freq)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++	struct clk *new_dram_core_parent;
++	struct clk *new_dram_alt_parent;
++	struct clk *new_dram_apb_parent;
++	int ret;
++
++	/*
++	 * Fetch new parents
++	 *
++	 * new_dram_alt_parent and new_dram_apb_parent are optional but
++	 * new_dram_core_parent is not.
++	 */
++	new_dram_core_parent = clk_get_parent_by_index(
++			priv->dram_core, freq->dram_core_parent_index - 1);
++	if (!new_dram_core_parent) {
++		dev_err(dev, "failed to fetch new dram_core parent\n");
++		return -EINVAL;
++	}
++	if (freq->dram_alt_parent_index) {
++		new_dram_alt_parent = clk_get_parent_by_index(
++				priv->dram_alt,
++				freq->dram_alt_parent_index - 1);
++		if (!new_dram_alt_parent) {
++			dev_err(dev, "failed to fetch new dram_alt parent\n");
++			return -EINVAL;
++		}
++	} else
++		new_dram_alt_parent = NULL;
++
++	if (freq->dram_apb_parent_index) {
++		new_dram_apb_parent = clk_get_parent_by_index(
++				priv->dram_apb,
++				freq->dram_apb_parent_index - 1);
++		if (!new_dram_apb_parent) {
++			dev_err(dev, "failed to fetch new dram_apb parent\n");
++			return -EINVAL;
++		}
++	} else
++		new_dram_apb_parent = NULL;
++
++	/* increase reference counts and ensure clks are ON before switch */
++	ret = clk_prepare_enable(new_dram_core_parent);
++	if (ret) {
++		dev_err(dev, "failed to enable new dram_core parent: %d\n",
++			ret);
++		goto out;
++	}
++	ret = clk_prepare_enable(new_dram_alt_parent);
++	if (ret) {
++		dev_err(dev, "failed to enable new dram_alt parent: %d\n",
++			ret);
++		goto out_disable_core_parent;
++	}
++	ret = clk_prepare_enable(new_dram_apb_parent);
++	if (ret) {
++		dev_err(dev, "failed to enable new dram_apb parent: %d\n",
++			ret);
++		goto out_disable_alt_parent;
++	}
++
++	imx8m_ddrc_smc_set_freq(freq->smcarg);
++
++	/* update parents in clk tree after switch. */
++	ret = clk_set_parent(priv->dram_core, new_dram_core_parent);
++	if (ret)
++		dev_warn(dev, "failed to set dram_core parent: %d\n", ret);
++	if (new_dram_alt_parent) {
++		ret = clk_set_parent(priv->dram_alt, new_dram_alt_parent);
++		if (ret)
++			dev_warn(dev, "failed to set dram_alt parent: %d\n",
++				 ret);
++	}
++	if (new_dram_apb_parent) {
++		ret = clk_set_parent(priv->dram_apb, new_dram_apb_parent);
++		if (ret)
++			dev_warn(dev, "failed to set dram_apb parent: %d\n",
++				 ret);
++	}
++
++	/*
++	 * Explicitly refresh dram PLL rate.
++	 *
++	 * Even if it's marked with CLK_GET_RATE_NOCACHE the rate will not be
++	 * automatically refreshed when clk_get_rate is called on children.
++	 */
++	clk_get_rate(priv->dram_pll);
++
++	/*
++	 * clk_set_parent transfer the reference count from old parent.
++	 * now we drop extra reference counts used during the switch
++	 */
++	clk_disable_unprepare(new_dram_apb_parent);
++out_disable_alt_parent:
++	clk_disable_unprepare(new_dram_alt_parent);
++out_disable_core_parent:
++	clk_disable_unprepare(new_dram_core_parent);
++out:
++	return ret;
++}
++
++static int imx8m_ddrc_target(struct device *dev, unsigned long *freq, u32 flags)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++	struct imx8m_ddrc_freq *freq_info;
++	struct dev_pm_opp *new_opp;
++	unsigned long old_freq, new_freq;
++	int ret;
++
++	new_opp = devfreq_recommended_opp(dev, freq, flags);
++	if (IS_ERR(new_opp)) {
++		ret = PTR_ERR(new_opp);
++		dev_err(dev, "failed to get recommended opp: %d\n", ret);
++		return ret;
++	}
++	dev_pm_opp_put(new_opp);
++
++	old_freq = clk_get_rate(priv->dram_core);
++	if (*freq == old_freq)
++		return 0;
++
++	freq_info = imx8m_ddrc_find_freq(priv, *freq);
++	if (!freq_info)
++		return -EINVAL;
++
++	/*
++	 * Read back the clk rate to verify switch was correct and so that
++	 * we can report it on all error paths.
++	 */
++	ret = imx8m_ddrc_set_freq(dev, freq_info);
++
++	new_freq = clk_get_rate(priv->dram_core);
++	if (ret)
++		dev_err(dev, "ddrc failed freq switch to %lu from %lu: error %d. now at %lu\n",
++			*freq, old_freq, ret, new_freq);
++	else if (*freq != new_freq)
++		dev_err(dev, "ddrc failed freq update to %lu from %lu, now at %lu\n",
++			*freq, old_freq, new_freq);
++	else
++		dev_dbg(dev, "ddrc freq set to %lu (was %lu)\n",
++			*freq, old_freq);
++
++	return ret;
++}
++
++static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned long *freq)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++
++	*freq = clk_get_rate(priv->dram_core);
++
++	return 0;
++}
++
++static int imx8m_ddrc_get_dev_status(struct device *dev,
++				     struct devfreq_dev_status *stat)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++
++	stat->busy_time = 0;
++	stat->total_time = 0;
++	stat->current_frequency = clk_get_rate(priv->dram_core);
++
++	return 0;
++}
++
++static int imx8m_ddrc_init_freq_info(struct device *dev)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++	struct arm_smccc_res res;
++	int index;
++
++	/* An error here means DDR DVFS API not supported by firmware */
++	arm_smccc_smc(IMX_SIP_DDR_DVFS, IMX_SIP_DDR_DVFS_GET_FREQ_COUNT,
++			0, 0, 0, 0, 0, 0, &res);
++	priv->freq_count = res.a0;
++	if (priv->freq_count <= 0 ||
++			priv->freq_count > IMX8M_DDRC_MAX_FREQ_COUNT)
++		return -ENODEV;
++
++	for (index = 0; index < priv->freq_count; ++index) {
++		struct imx8m_ddrc_freq *freq = &priv->freq_table[index];
++
++		arm_smccc_smc(IMX_SIP_DDR_DVFS, IMX_SIP_DDR_DVFS_GET_FREQ_INFO,
++			      index, 0, 0, 0, 0, 0, &res);
++		/* Result should be strictly positive */
++		if ((long)res.a0 <= 0)
++			return -ENODEV;
++
++		freq->rate = res.a0;
++		freq->smcarg = index;
++		freq->dram_core_parent_index = res.a1;
++		freq->dram_alt_parent_index = res.a2;
++		freq->dram_apb_parent_index = res.a3;
++
++		/* dram_core has 2 options: dram_pll or dram_alt_root */
++		if (freq->dram_core_parent_index != 1 &&
++				freq->dram_core_parent_index != 2)
++			return -ENODEV;
++		/* dram_apb and dram_alt have exactly 8 possible parents */
++		if (freq->dram_alt_parent_index > 8 ||
++				freq->dram_apb_parent_index > 8)
++			return -ENODEV;
++		/* dram_core from alt requires explicit dram_alt parent */
++		if (freq->dram_core_parent_index == 2 &&
++				freq->dram_alt_parent_index == 0)
++			return -ENODEV;
++	}
++
++	return 0;
++}
++
++static int imx8m_ddrc_check_opps(struct device *dev)
++{
++	struct imx8m_ddrc *priv = dev_get_drvdata(dev);
++	struct imx8m_ddrc_freq *freq_info;
++	struct dev_pm_opp *opp;
++	unsigned long freq;
++	int i, opp_count;
++
++	/* Enumerate DT OPPs and disable those not supported by firmware */
++	opp_count = dev_pm_opp_get_opp_count(dev);
++	if (opp_count < 0)
++		return opp_count;
++	for (i = 0, freq = 0; i < opp_count; ++i, ++freq) {
++		opp = dev_pm_opp_find_freq_ceil(dev, &freq);
++		if (IS_ERR(opp)) {
++			dev_err(dev, "Failed enumerating OPPs: %ld\n",
++				PTR_ERR(opp));
++			return PTR_ERR(opp);
++		}
++		dev_pm_opp_put(opp);
++
++		freq_info = imx8m_ddrc_find_freq(priv, freq);
++		if (!freq_info) {
++			dev_info(dev, "Disable unsupported OPP %luHz %luMT/s\n",
++					freq, DIV_ROUND_CLOSEST(freq, 250000));
++			dev_pm_opp_disable(dev, freq);
++		}
++	}
++
++	return 0;
++}
++
++static void imx8m_ddrc_exit(struct device *dev)
++{
++	dev_pm_opp_of_remove_table(dev);
++}
++
++static int imx8m_ddrc_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct imx8m_ddrc *priv;
++	const char *gov = DEVFREQ_GOV_USERSPACE;
++	int ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, priv);
++
++	ret = imx8m_ddrc_init_freq_info(dev);
++	if (ret) {
++		dev_err(dev, "failed to init firmware freq info: %d\n", ret);
++		return ret;
++	}
++
++	priv->dram_core = devm_clk_get(dev, "core");
++	priv->dram_pll = devm_clk_get(dev, "pll");
++	priv->dram_alt = devm_clk_get(dev, "alt");
++	priv->dram_apb = devm_clk_get(dev, "apb");
++	if (IS_ERR(priv->dram_core) ||
++		IS_ERR(priv->dram_pll) ||
++		IS_ERR(priv->dram_alt) ||
++		IS_ERR(priv->dram_apb)) {
++		ret = PTR_ERR(priv->devfreq);
++		dev_err(dev, "failed to fetch clocks: %d\n", ret);
++		return ret;
++	}
++
++	ret = dev_pm_opp_of_add_table(dev);
++	if (ret < 0) {
++		dev_err(dev, "failed to get OPP table\n");
++		return ret;
++	}
++
++	ret = imx8m_ddrc_check_opps(dev);
++	if (ret < 0)
++		goto err;
++
++	priv->profile.polling_ms = 1000;
++	priv->profile.target = imx8m_ddrc_target;
++	priv->profile.get_dev_status = imx8m_ddrc_get_dev_status;
++	priv->profile.exit = imx8m_ddrc_exit;
++	priv->profile.get_cur_freq = imx8m_ddrc_get_cur_freq;
++	priv->profile.initial_freq = clk_get_rate(priv->dram_core);
++
++	priv->devfreq = devm_devfreq_add_device(dev, &priv->profile,
++						gov, NULL);
++	if (IS_ERR(priv->devfreq)) {
++		ret = PTR_ERR(priv->devfreq);
++		dev_err(dev, "failed to add devfreq device: %d\n", ret);
++		goto err;
++	}
++
++	return 0;
++
++err:
++	dev_pm_opp_of_remove_table(dev);
++	return ret;
++}
++
++static const struct of_device_id imx8m_ddrc_of_match[] = {
++	{ .compatible = "fsl,imx8m-ddrc", },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);
++
++static struct platform_driver imx8m_ddrc_platdrv = {
++	.probe		= imx8m_ddrc_probe,
++	.driver = {
++		.name	= "imx8m-ddrc-devfreq",
++		.of_match_table = of_match_ptr(imx8m_ddrc_of_match),
++	},
++};
++module_platform_driver(imx8m_ddrc_platdrv);
++
++MODULE_DESCRIPTION("i.MX8M DDR Controller frequency driver");
++MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");
++MODULE_LICENSE("GPL v2");
 -- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.17.1
 
