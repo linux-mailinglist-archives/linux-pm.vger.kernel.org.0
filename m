@@ -2,99 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B9B125859
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 01:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4940412585E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 01:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfLSARK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 19:17:10 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38894 "EHLO
+        id S1726609AbfLSASA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 19:18:00 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38946 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfLSARK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 19:17:10 -0500
+        with ESMTP id S1726463AbfLSASA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 19:18:00 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 26F1C2929BD
+        with ESMTPSA id D427A291E6E
 Received: by earth.universe (Postfix, from userid 1000)
-        id 35B703C0C7B; Thu, 19 Dec 2019 01:17:06 +0100 (CET)
-Date:   Thu, 19 Dec 2019 01:17:06 +0100
+        id 61A363C0C7B; Thu, 19 Dec 2019 01:17:56 +0100 (CET)
+Date:   Thu, 19 Dec 2019 01:17:56 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: pda_power: add missed
- usb_unregister_notifier
-Message-ID: <20191219001706.aqbugbkgahhqmoyk@earth.universe>
-References: <20191115062515.7087-1-hslester96@gmail.com>
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, od@zcrc.me, stable@vger.kernel.org
+Subject: Re: [PATCH v3] power/supply: ingenic-battery: Don't change scale if
+ there's only one
+Message-ID: <20191219001756.vuvmrepmbrd7zjix@earth.universe>
+References: <20191116135619.9545-1-paul@crapouillou.net>
+ <d5d13a62c1652ce109136dcb3b2e1e51@artur-rojek.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f4docmszilkkqxav"
+        protocol="application/pgp-signature"; boundary="qvszxbgcfqgngyks"
 Content-Disposition: inline
-In-Reply-To: <20191115062515.7087-1-hslester96@gmail.com>
+In-Reply-To: <d5d13a62c1652ce109136dcb3b2e1e51@artur-rojek.eu>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---f4docmszilkkqxav
+--qvszxbgcfqgngyks
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Nov 15, 2019 at 02:25:15PM +0800, Chuhong Yuan wrote:
-> The driver forgets to unregister the notifier in remove.
-> Add the call to fix it.
+On Sat, Nov 16, 2019 at 03:08:46PM +0100, Artur Rojek wrote:
+> On 2019-11-16 14:56, Paul Cercueil wrote:
+> > The ADC in the JZ4740 can work either in high-precision mode with a 2.5V
+> > range, or in low-precision mode with a 7.5V range. The code in place in
+> > this driver will select the proper scale according to the maximum
+> > voltage of the battery.
+> >=20
+> > The JZ4770 however only has one mode, with a 6.6V range. If only one
+> > scale is available, there's no need to change it (and nothing to change
+> > it to), and trying to do so will fail with -EINVAL.
+> >=20
+> > Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery
+> > driver.")
+> >=20
+> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > Cc: stable@vger.kernel.org
 >=20
-> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> ---
+> Looks good to me!
+>=20
+> Acked-by: Artur Rojek <contact@artur-rojek.eu>
 
 Thanks, queued to power-supply's for-next branch.
 
 -- Sebastian
 
->  drivers/power/supply/pda_power.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_=
-power.c
-> index 3ae5707d39fa..03a37fd6be27 100644
-> --- a/drivers/power/supply/pda_power.c
-> +++ b/drivers/power/supply/pda_power.c
-> @@ -429,6 +429,10 @@ static int pda_power_probe(struct platform_device *p=
-dev)
-> =20
->  static int pda_power_remove(struct platform_device *pdev)
->  {
-> +#if IS_ENABLED(CONFIG_USB_PHY)
-> +	if (!IS_ERR_OR_NULL(transceiver) && pdata->use_otg_notifier)
-> +		usb_unregister_notifier(transceiver, &otg_nb);
-> +#endif
->  	if (pdata->is_usb_online && usb_irq)
->  		free_irq(usb_irq->start, pda_psy_usb);
->  	if (pdata->is_ac_online && ac_irq)
-> --=20
-> 2.24.0
->=20
+> > ---
+> >=20
+> > Notes:
+> >     v2: Rebased on v5.4-rc7
+> >     v3: Move code after check for max scale voltage
+> >=20
+> >  drivers/power/supply/ingenic-battery.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/ingenic-battery.c
+> > b/drivers/power/supply/ingenic-battery.c
+> > index 35816d4b3012..2748715c4c75 100644
+> > --- a/drivers/power/supply/ingenic-battery.c
+> > +++ b/drivers/power/supply/ingenic-battery.c
+> > @@ -100,10 +100,17 @@ static int ingenic_battery_set_scale(struct
+> > ingenic_battery *bat)
+> >  		return -EINVAL;
+> >  	}
+> >=20
+> > -	return iio_write_channel_attribute(bat->channel,
+> > -					   scale_raw[best_idx],
+> > -					   scale_raw[best_idx + 1],
+> > -					   IIO_CHAN_INFO_SCALE);
+> > +	/* Only set scale if there is more than one (fractional) entry */
+> > +	if (scale_len > 2) {
+> > +		ret =3D iio_write_channel_attribute(bat->channel,
+> > +						  scale_raw[best_idx],
+> > +						  scale_raw[best_idx + 1],
+> > +						  IIO_CHAN_INFO_SCALE);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	return 0;
+> >  }
+> >=20
+> >  static enum power_supply_property ingenic_battery_properties[] =3D {
 
---f4docmszilkkqxav
+--qvszxbgcfqgngyks
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl36wYIACgkQ2O7X88g7
-+po3UQ/+ISbvFHfheQl6Tkshh0G7pDFueKpZBvcFzwbBeOFc005KU0whEcYS7j24
-geeQFw+pM08ppAx+9J/Ud84FzksWgkHeRIdQVHfli3rvuW+P/r5I0zPpqTWf5naD
-uuVfiDGZ7uXEaZBMyZ2NF3yNy7D9HU6G+IOFzA0XlNCKt/c8QFOb7NWRGCLTPoZI
-eRtapu+zK2eMLXxlNFgrcLx/xqAUBnXQZ1zHQiBq+qGeQTkacQH8zvhi7ctzqSXM
-7wr/7ehp3PmsjF1Sl9thDTAI9uMv7rt+nFdhr2YZ0pCmNKkopukA04r9JxweOQEz
-lwbkkxBjT1+taMLBl62MZm7EeXlVm6sTTzg7eSbvPAArIkNZi+ZZT1JqdKcxPZCp
-gb4tcOP1RvsXqn4WVaP4iUunX8L5GidwIsQU9FcD9rUsDGcYyv+crpG+Un0zgBY0
-/jVvKQb197///lgMD/sUgN46O5lGx6U1YkrIJXYcgU86GTyjn22E0ey8gcWD38nY
-BYJhBZEFVFLLc8J2jE0yvDTolI2wCL2svpD0JlFU+P5E55uVHBA721c0H1/kOwWC
-eMk/z8IJKkyRzTWqQ24MWa6fWU87/aScWhzI3smMX2peux0y+keTE2nVWDcoBZrU
-xrzWtJ5zPBWLwVNCnT/ocemnol2FpTmGVHbaliiDdsxCEEM9phQ=
-=r9B5
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl36wbQACgkQ2O7X88g7
++prTHg/8DFNUybhomQ90wJsZPhq1g25jJsiwcHMP/q3IcK6OXrEGVGbE6+1x4qRB
++xH5cbOBgDuDdDdZAYj/Iu0L6QSZu/UZ0KTrMforsKCPmktsL32+5R0/ib4nPIAd
+gucIo8VEt83wE/meSqFBsRaJ1YZk8UuIjgnl4iylK5E8jQdkbbVaM26SxaZim5qw
+8WgJ6evF2OMeG9az6cVVxDhTDFOh9+HNTzrELeXrGtKbOJAUYFOIFTIDvLJFw+gk
+91FnchNd6m//5bXcnz5m84G/vtfRiLMTlVKorsxoExG50shH6DuR4i2p8cI9orbx
+OG8zZKePdc26ePN/vGdUpfrUbWoFC69T1hCGzsAvDg3QlOG3lUD2ngP9cOwJr1ln
+drFprmhpylvb84+Fjb60aAsig0rIBLC4uUJwgJSpIaG+9NM5i2TzPWppwVMGmyRj
+H3WcciftA1osgQnkMjVuHQZEIztgAAnzi/KdiBPe3iWoRPS5NFzztGv+nimzHh+6
+ks+qHtQCIG6Elo9UVD71IwvowrAu4aHJs9nDmHwVRQtAth18E3kCE8Xxj7550NQn
+uywIoFLkdftq9WIE/liiIbWyvg1B5Wqad7ukjS2LTW0Yy/ySSRuclQ4HGle9pByK
+1W5BTTTxCk029b8MGBJuTJA/IcjIUTi3iqMaFVXLMneQjZPDFHI=
+=WUfr
 -----END PGP SIGNATURE-----
 
---f4docmszilkkqxav--
+--qvszxbgcfqgngyks--
