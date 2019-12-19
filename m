@@ -2,133 +2,424 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A367A125D31
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 10:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AD4125D26
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 10:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbfLSJES (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 04:04:18 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36985 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbfLSJER (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 04:04:17 -0500
-Received: by mail-ot1-f68.google.com with SMTP id k14so6357845otn.4;
-        Thu, 19 Dec 2019 01:04:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D6QwxL5ClmQL4963/vA00A1Z54S2MxdwBMrb2WwDQJM=;
-        b=lUGzeUYMhQYRQ1hwnz1wkac/WdshW3PxupG3ojWF8FTpofqW50HGoBg66jUhYwL7Av
-         kYWAfsO/tGMqu9pvTx8DWaQ30dFNQ960qrkOBYslWqo5gK8mJf2RONfPFS/i7z8iixAY
-         4e349JkE1rpdrObKEs14n6vTP3tnJ+1h5Ijzyx8DQoHysGsqdpSJrrAHxlRcK9EIPKMt
-         CR/BLGfsgDXI5SNl18mdzvm6bfzTCHeI/mbDtEkMr38e5om+2X2anZ3c+8iT4Wqq/Y5t
-         Zkoe21EItNY5cmD+VZ2C+IYxdVgp59Q4IsgHnShn0BZ9A9fy3OiyA0MDJdCSpY9DF3JQ
-         v6sg==
-X-Gm-Message-State: APjAAAXn8DkhekqLs2GSdEL6gSKlVlaPQ8ybMrnGOlZQSkPF1i5LgiJZ
-        H3VHWovUi3+l7tVW6A1lKG45BgrP5KN0aHPQEGk=
-X-Google-Smtp-Source: APXvYqxvtmzZrthi55RZESVFF79UCbetBABF1q44daYEavcKPrTABMYDhSDR84TWl4LOGpRuihuWcoxcT7mLKXxlFqU=
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr7909990otd.266.1576746256795;
- Thu, 19 Dec 2019 01:04:16 -0800 (PST)
+        id S1726648AbfLSJAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 04:00:43 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:18640 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbfLSJAn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 04:00:43 -0500
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191219090040epoutp0274f57aa55e620a4f30d1fab1b2f38b8b~huiuFsS6u2016120161epoutp02d
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 09:00:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191219090040epoutp0274f57aa55e620a4f30d1fab1b2f38b8b~huiuFsS6u2016120161epoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576746040;
+        bh=qUe64HH6eQC1rH67+6iFAZoEBHMzxsVFkSdlibI2LcI=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=LiPE0ifsfRgLFjEULOZhgh6XbYZ0oUp+y5CPAEAgtfNsVuk30R8dZhwFW4r/mAJJN
+         NDjr1wUNYs8vTSv27jxzjjPKcF4ylOfZmrflb4qZqgOkWjYRDZVBF4aabLkKjB4BHp
+         shNyxAz90HpxYe5DYDG7AU64Kgv4jO/Fn3EKg9WU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20191219090040epcas1p433ddb371b35a63400e480e828b506858~huityjSaq2604026040epcas1p4l;
+        Thu, 19 Dec 2019 09:00:40 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 47dm786G9KzMqYlx; Thu, 19 Dec
+        2019 09:00:36 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        92.C0.57028.43C3BFD5; Thu, 19 Dec 2019 18:00:36 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191219090036epcas1p18c57c13cc4ae50542a77e6c6b5c86c86~huiqAkkd61675816758epcas1p1I;
+        Thu, 19 Dec 2019 09:00:36 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191219090036epsmtrp19b344314116b1e8eac9076d1bac9f761~huip-8BXu1106211062epsmtrp1P;
+        Thu, 19 Dec 2019 09:00:36 +0000 (GMT)
+X-AuditID: b6c32a35-50bff7000001dec4-6f-5dfb3c3430b8
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.7C.06569.43C3BFD5; Thu, 19 Dec 2019 18:00:36 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191219090036epsmtip27fdd46901d2e942dc58bc482f472b3ad~huip2q47G2793827938epsmtip2b;
+        Thu, 19 Dec 2019 09:00:36 +0000 (GMT)
+Subject: Re: [PATCH 2/2] ARM: dts: exynos: Adjust bus related OPPs to the
+ values correct for Odroids
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Kamil Konieczny <k.konieczny@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <9ff5cf7a-1dea-4f35-c4d3-066c87fbe896@samsung.com>
+Date:   Thu, 19 Dec 2019 18:07:08 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <20191217143834.19797-1-huntbag@linux.vnet.ibm.com>
- <CAJZ5v0jmMwRGDY70EV3sqpw7uJ4R+VomoWtJ9rWzNTVuV3AUxQ@mail.gmail.com> <CAOSf1CF9F1iViKCCoJXOPmkbj+kLXnJJz5b5B7xLgrLpCZoB3w@mail.gmail.com>
-In-Reply-To: <CAOSf1CF9F1iViKCCoJXOPmkbj+kLXnJJz5b5B7xLgrLpCZoB3w@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Dec 2019 10:04:05 +0100
-Message-ID: <CAJZ5v0iMutsf1UK+01dsZa1WDZAVK_fvOZJ-2FgiYXwWDqdnig@mail.gmail.com>
-Subject: Re: [RFC] cpuidle : Add debugfs support for cpuidle core
-To:     "Oliver O'Halloran" <oohall@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191219082927.11898-3-m.szyprowski@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUhTURjGObvb3VVa3Va2N4laVwsazby61S1UgqyESgRBSJB10dMUt7ux
+        OyUzwiJsmdl32VITQqiFZbZKhTLMDPuYmSX2YUVJlGKSVvhVtO0u8r/fe3ie9+E551CEuoqM
+        pPIEJ3YIvIUhw+W37q+I0RsSprJiXaUG7nrlNQVXO1qp4Lq6GpRcT0sVyY0daUdcZdddGVff
+        3q9cr0xp9BwiUyq8HpQy1rg4jcjMT8jFfA52aLGQbcvJE8yJzJZ00waTcXUsq2fXcmsYrcBb
+        cSKTvDVNvynP4g9ntIW8pcB/lMaLIrMqKcFhK3Biba5NdCYy2J5jsa+1x4i8VSwQzDHZNus6
+        NjY2zugX7sjPney7orCPbdo1UHVYWYJOGcpQGAW0AWouXZWXoXBKTTchaPHeU0rDKILBoQek
+        NPxC8Lvfo/hnOfuoImS5g+Dx9J+QagSBr9wrD6jm0Tuht3mUCPB8ugLBZK82ICLocgR1Hd+D
+        q0haB61f+sgAz6GXwsvxTyjAKjoJzv78JguwnF4G3UfPBxdF0BnQeetASDMXOs8NBMPC/HrP
+        hC+oIWgNvB64IJN4CdweriICwUC/J2H46We/mfIPydDxg5PqzIPBh16lxJHw9WhpiIvhcmc7
+        KXldCLytz0L946G17qQssIegV8C1llXS8VJonqpGUu5s+PazXCFFqcBVqpYkUdDzoV8m8UK4
+        ePAQeQwx7hlt3DMauGc0cP8Pq0VyD1qA7aLVjEXWzs587kYU/Jk6YxM65dvahmgKMbNU4xsn
+        s9QKvlAssrYhoAhmvuqNayJLrcrhi3Zjh83kKLBgsQ0Z/Zd9nIiMyLb5/7ngNLHGuPj4eM7A
+        rjayLKNRUePdWWrazDtxPsZ27Pjnk1FhkSXo7oYb4y+WnHBtVpZE6DrqD190pX7cXrNIX6h5
+        NxxdtLzoZnr0rj1N5j5jY/Wn6qFmtal8G5n3cCTzTzJ+ixoqNQ1HdLMz9wqbo6bOp/p6O/VN
+        Q4aw8MEz+HnxK82zupO1GW5X2cv9Sb3dPe37puMmvmz0rVdVTK9pGXlyY6VcOF3MyMVcntUR
+        DpH/C7yTO4uvAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJXtfE5neswbH3PBYbZ6xntVjwaQar
+        xfnzG9gtLu+aw2bxufcIo8WM8/uYLNYeucvuwO6xaVUnm0ffllWMHp83yQUwR3HZpKTmZJal
+        FunbJXBl/LqxmrXgs1vFkznd7A2MU0y6GDk5JARMJKaf6mPpYuTiEBLYzSixfP98ZoiEpMS0
+        i0eBbA4gW1ji8OFiiJq3jBKTX0xhAakRFkiTuLbzE1i9iEAfo8T1WwEgNjOIPeMnE0TDUUaJ
+        M91HGUESbAJaEvtf3GADsfkFFCWu/ngMFucVsJOY/vUdE4jNIqAqcbF/NthQUYEwiZ1LHjNB
+        1AhKnJz5BGwxJ1D9qp/nmCGWqUv8mXcJyhaXuPVkPhOELS+x/e0c5gmMwrOQtM9C0jILScss
+        JC0LGFlWMUqmFhTnpucWGxYY5aWW6xUn5haX5qXrJefnbmIEx46W1g7GEyfiDzEKcDAq8fD+
+        cP0VK8SaWFZcmXuIUYKDWUmE93bHz1gh3pTEyqrUovz4otKc1OJDjNIcLErivPL5xyKFBNIT
+        S1KzU1MLUotgskwcnFINjLKHzgVuKH52YW2Ols1546cd39Z/frc3fCl7YtDMpZu66threHqK
+        7+zcnqzn8OqHzB6H714CSXr5eQYB069tOfJk8v5PR3+as23cs+jOumcez9N8Kr/sPjFv55eb
+        q3kUpyeFTv2XkKJV84CjJ3/qeu8YU7t9Zz9VqKgGx1797VEebBF918Rc85USS3FGoqEWc1Fx
+        IgAdUFRmmQIAAA==
+X-CMS-MailID: 20191219090036epcas1p18c57c13cc4ae50542a77e6c6b5c86c86
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191219082939eucas1p2afc32535df1512dc21ca983daa012568
+References: <20191219082927.11898-1-m.szyprowski@samsung.com>
+        <CGME20191219082939eucas1p2afc32535df1512dc21ca983daa012568@eucas1p2.samsung.com>
+        <20191219082927.11898-3-m.szyprowski@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 3:26 PM Oliver O'Halloran <oohall@gmail.com> wrote:
->
-> On Wed, Dec 18, 2019 at 3:51 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Dec 17, 2019 at 3:42 PM Abhishek Goel
-> > <huntbag@linux.vnet.ibm.com> wrote:
-> > >
-> > > Up until now, we did not have a way to tune cpuidle attribute like
-> > > residency in kernel. This patch adds support for debugfs in cpuidle core.
-> > > Thereby providing support for tuning cpuidle attributes like residency in
-> > > kernel at runtime.
-> >
-> > This is not a good idea in my view, for a couple of reasons.
-> >
-> > First off, if the target residency of an idle state is changed, it
-> > effectively becomes a different one and all of the statistics
-> > regarding it become outdated at that point.  Synchronizing that would
-> > be a pain.
-> >
-> > Next, governors may get confused if idle state parameters are changed
-> > on the fly.  In particular, the statistics collected by the teo
-> > governor depend on the target residencies of idle states, so if one of
-> > them changes, the governor needs to be reloaded.
-> >
-> > Next, idle states are expected to be ordered by the target residency
-> > (and by the exit latency), so their parameters cannot be allowed to
-> > change freely anyway.
-> >
-> > Finally, the idle state parameters are expected to reflect the
-> > properties of the hardware, which wouldn't hold any more if they were
-> > allowed to change at any time.
->
-> Certainly does sound like a headache.
->
-> > > For example: Tuning residency at runtime can be used to quantify governors
-> > > decision making as governor uses residency as one of the parameter to
-> > > take decision about the state that needs to be entered while idling.
-> >
-> > IMO it would be better to introduce a testing cpuidle driver with an
-> > artificial set of idle states (or even such that the set of idle
-> > states to be used by it can be defined by the user e.g. via module
-> > parameters) for this purpose.
->
-> The motivation for this patch isn't really a desire to test / tune the
-> governor. It's intended to allow working around a performance problem
-> caused by using high-latency idle states on some interrupt heavy GPU
-> workload. The interrupts occur around ~30ms apart which is long enough
-> for the governor to put the CPU into the deeper states and over the
-> course of long job the additional wakeup latency adds up. The initial
-> fix someone came up with was cooking the residency values so the
-> high-latency states had a residency of +50ms to prevent the govenor
-> from using them. However, that fix is supposed to go into a bit of
-> firmware I maintain and I'm not terribly happy with the idea. I'm
-> fairly sure that ~30ms value is workload dependent and personally I
-> don't think firmware should be making up numbers to trick specific
-> kernel versions into doing specific things.
->
-> My impression is the right solution is to have the GPU driver set a PM
-> QoS constraint on the CPUs receiving interrupts while a job is
-> on-going.
+Hi Marek,
 
-Yes, that would address the GPU problem.
+On 12/19/19 5:29 PM, Marek Szyprowski wrote:
+> Hardkernel's Odroid XU3/XU4/HC1 boards use bootloader, which configures top
+> PLLs to the following values: MPLL: 532MHz, CPLL: 666MHz and DPLL: 600MHz.
+> 
+> Adjust all bus related OPPs to the values that are possible to derive from
+> the top PLL configured by the bootloader. Also add a comment for each bus
+> describing which PLL is used for it.
+> 
+> The most significant change is the highest rate for wcore bus. It has been
+> increased to 532MHz as this is the value configured initially by the
+> bootloader. Also the voltage for this OPP is changed to match the value
+> set by the bootloader.
+> 
+> This patch finally allows the buses to operate on the rates matching the
+> values set for each OPP and fixes the following warnings observed on boot:
+> 
+> exynos-bus: new bus device registered: soc:bus_wcore ( 84000 KHz ~ 400000 KHz)
+> exynos-bus: new bus device registered: soc:bus_noc ( 67000 KHz ~ 100000 KHz)
+> exynos-bus: new bus device registered: soc:bus_fsys_apb (100000 KHz ~ 200000 KHz)
+> ...
+> exynos-bus soc:bus_wcore: dev_pm_opp_set_rate: failed to find current OPP for freq 532000000 (-34)
+> exynos-bus soc:bus_noc: dev_pm_opp_set_rate: failed to find current OPP for freq 111000000 (-34)
+> exynos-bus soc:bus_fsys_apb: dev_pm_opp_set_rate: failed to find current OPP for freq 222000000 (-34)
+> 
+> The problem with setting incorrect (in some cases much lower) clock rate
+> for the defined OPP were there from the beginning, but went unnoticed
+> because the only way to observe it was to manually check the rate of the
+> respective clocks. The commit 4294a779bd8d ("PM / devfreq: exynos-bus:
+> Convert to use dev_pm_opp_set_rate()") finally revealed it, because it
+> enabled use of the generic code from the OPP framework, which issues the
+> above mentioned warnings.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 75 +++++++++++--------
+>  1 file changed, 45 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> index 663a38d53c9e..b6d6022e8735 100644
+> --- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> +++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> @@ -38,42 +38,44 @@
+>  	bus_wcore_opp_table: opp_table2 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 532MHz MPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <84000000>;
+> +			opp-hz = /bits/ 64 <88700000>;
+>  			opp-microvolt = <925000 925000 1400000>;
+>  		};
+>  		opp01 {
+> -			opp-hz = /bits/ 64 <111000000>;
+> +			opp-hz = /bits/ 64 <133000000>;
+>  			opp-microvolt = <950000 950000 1400000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <222000000>;
+> +			opp-hz = /bits/ 64 <177400000>;
+>  			opp-microvolt = <950000 950000 1400000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <333000000>;
+> +			opp-hz = /bits/ 64 <266000000>;
+>  			opp-microvolt = <950000 950000 1400000>;
+>  		};
+>  		opp04 {
+> -			opp-hz = /bits/ 64 <400000000>;
+> -			opp-microvolt = <987500 987500 1400000>;
+> +			opp-hz = /bits/ 64 <532000000>;
+> +			opp-microvolt = <1000000 1000000 1400000>;
+>  		};
+>  	};
+>  
+>  	bus_noc_opp_table: opp_table3 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <67000000>;
+> +			opp-hz = /bits/ 64 <66600000>;
+>  		};
+>  		opp01 {
+> -			opp-hz = /bits/ 64 <75000000>;
+> +			opp-hz = /bits/ 64 <74000000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <86000000>;
+> +			opp-hz = /bits/ 64 <83250000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> +			opp-hz = /bits/ 64 <111000000>;
+>  		};
+>  	};
+>  
+> @@ -81,39 +83,42 @@
+>  		compatible = "operating-points-v2";
+>  		opp-shared;
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> +			opp-hz = /bits/ 64 <111000000>;
+>  		};
+>  		opp01 {
+> -			opp-hz = /bits/ 64 <200000000>;
+> +			opp-hz = /bits/ 64 <222000000>;
+>  		};
+>  	};
+>  
+>  	bus_fsys2_opp_table: opp_table5 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 600MHz DPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <75000000>;
+>  		};
+>  		opp01 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> +			opp-hz = /bits/ 64 <120000000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <150000000>;
+> +			opp-hz = /bits/ 64 <200000000>;
+>  		};
+>  	};
+>  
+>  	bus_mfc_opp_table: opp_table6 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <96000000>;
+> +			opp-hz = /bits/ 64 <83250000>;
+>  		};
+>  		opp01 {
+>  			opp-hz = /bits/ 64 <111000000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <167000000>;
+> +			opp-hz = /bits/ 64 <166500000>;
+>  		};
+>  		opp03 {
+>  			opp-hz = /bits/ 64 <222000000>;
+> @@ -126,8 +131,9 @@
+>  	bus_gen_opp_table: opp_table7 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 532MHz MPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <89000000>;
+> +			opp-hz = /bits/ 64 <88700000>;
+>  		};
+>  		opp01 {
+>  			opp-hz = /bits/ 64 <133000000>;
+> @@ -136,32 +142,34 @@
+>  			opp-hz = /bits/ 64 <178000000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <267000000>;
+> +			opp-hz = /bits/ 64 <266000000>;
+>  		};
+>  	};
+>  
+>  	bus_peri_opp_table: opp_table8 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <67000000>;
+> +			opp-hz = /bits/ 64 <66600000>;
+>  		};
+>  	};
+>  
+>  	bus_g2d_opp_table: opp_table9 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <84000000>;
+> +			opp-hz = /bits/ 64 <83250000>;
+>  		};
+>  		opp01 {
+> -			opp-hz = /bits/ 64 <167000000>;
+> +			opp-hz = /bits/ 64 <111000000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <222000000>;
+> +			opp-hz = /bits/ 64 <166500000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <300000000>;
+> +			opp-hz = /bits/ 64 <222000000>;
+>  		};
+>  		opp04 {
+>  			opp-hz = /bits/ 64 <333000000>;
+> @@ -171,8 +179,9 @@
+>  	bus_g2d_acp_opp_table: opp_table10 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 532MHz MPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <67000000>;
+> +			opp-hz = /bits/ 64 <66500000>;
+>  		};
+>  		opp01 {
+>  			opp-hz = /bits/ 64 <133000000>;
+> @@ -181,13 +190,14 @@
+>  			opp-hz = /bits/ 64 <178000000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <267000000>;
+> +			opp-hz = /bits/ 64 <266000000>;
+>  		};
+>  	};
+>  
+>  	bus_jpeg_opp_table: opp_table11 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 600MHz DPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <75000000>;
+>  		};
+> @@ -205,23 +215,25 @@
+>  	bus_jpeg_apb_opp_table: opp_table12 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+> -			opp-hz = /bits/ 64 <84000000>;
+> +			opp-hz = /bits/ 64 <83250000>;
+>  		};
+>  		opp01 {
+>  			opp-hz = /bits/ 64 <111000000>;
+>  		};
+>  		opp02 {
+> -			opp-hz = /bits/ 64 <134000000>;
+> +			opp-hz = /bits/ 64 <133000000>;
+>  		};
+>  		opp03 {
+> -			opp-hz = /bits/ 64 <167000000>;
+> +			opp-hz = /bits/ 64 <166500000>;
+>  		};
+>  	};
+>  
+>  	bus_disp1_fimd_opp_table: opp_table13 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 600MHz DPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <120000000>;
+>  		};
+> @@ -233,6 +245,7 @@
+>  	bus_disp1_opp_table: opp_table14 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 600MHz DPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <120000000>;
+>  		};
+> @@ -247,6 +260,7 @@
+>  	bus_gscl_opp_table: opp_table15 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 600MHz DPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <150000000>;
+>  		};
+> @@ -261,6 +275,7 @@
+>  	bus_mscl_opp_table: opp_table16 {
+>  		compatible = "operating-points-v2";
+>  
+> +		/* derived from 666MHz CPLL */
+>  		opp00 {
+>  			opp-hz = /bits/ 64 <84000000>;
+>  		};
+> @@ -274,7 +289,7 @@
+>  			opp-hz = /bits/ 64 <333000000>;
+>  		};
+>  		opp04 {
+> -			opp-hz = /bits/ 64 <400000000>;
+> +			opp-hz = /bits/ 64 <666000000>;
+>  		};
+>  	};
+>  
+> @@ -398,7 +413,7 @@
+>  };
+>  
+>  &bus_fsys {
+> -	operating-points-v2 = <&bus_fsys_apb_opp_table>;
+> +	operating-points-v2 = <&bus_fsys2_opp_table>;
 
-> However, interrupt latency sensitivity isn't something
-> that's unique to GPUs so I'm wondering it it makes sense to have the
-> governor factor in interrupt traffic when deciding what state to use.
-> Is that something that's been tried before?
 
-Yes, that is in the works.
+Need to remove 'opp-shared' property in bus_fsys_apb_opp_table.
+And need to add 'opp-shared' property to bus_fsys2_opp_table.
 
-The existing governors should take interrupts into account too in the
-form of the expected idle duration corrections, but that may not be
-particularly precise.  If the governor currently in use (I guess menu)
-doesn't to that, you may try an alternative one (e.g. teo).
 
-That said, work is in progress on taking the actual interrupt
-frequency into account in idle duration prediction.
+>  	devfreq = <&bus_wcore>;
+>  	status = "okay";
+>  };
+> 
 
-Thanks!
+If you fix the things related to 'opp-shared', Looks good to me.
+Tested-by: Chanwoo Choi <cw00.choi@samsung.com>
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
