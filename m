@@ -2,185 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C5F125D8F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 10:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CE2125F22
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 11:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbfLSJYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 04:24:51 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:18139 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726620AbfLSJYv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 04:24:51 -0500
-X-UUID: 35ff8c3b0f264c079a34f5de706f77df-20191219
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PzE8Jigjcr7qmAjdAVnZQtdly9WAOx8geY5bzYg6u2Q=;
-        b=ji2Z5HYCAWoLLg3hWzRKp0+JxycpxVvk8yPqpDoc8Pq99Nla1JAcB+g0tw7uatGhlY+CVknQc831UIewuy2fWEcH0VaxPtvKT7KkUwcaqHaXHvPZPsX0B0NMfen3u14lCezfMm2IJRdLpsJivYsp0m7IczR8NHBTymLjj7AiVtA=;
-X-UUID: 35ff8c3b0f264c079a34f5de706f77df-20191219
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1428346128; Thu, 19 Dec 2019 17:24:44 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 19 Dec 2019 17:24:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 19 Dec 2019 17:24:39 +0800
-From:   Michael Kao <michael.kao@mediatek.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <linux-pm@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Louis Yu <louis.yu@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>
-Subject: [RESEND][PATCH] thermal: mediatek: add suspend/resume callback
-Date:   Thu, 19 Dec 2019 17:24:31 +0800
-Message-ID: <20191219092431.8935-2-michael.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20191219092431.8935-1-michael.kao@mediatek.com>
-References: <20191219092431.8935-1-michael.kao@mediatek.com>
+        id S1726855AbfLSKfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 05:35:12 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47234 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726708AbfLSKfL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 05:35:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576751711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=grytLlF1DJ8ixVXUMMRXrV+hvL2jNyAGRxO10pwO3Kk=;
+        b=fCHJPhRVkHy2Qvsi175/1njWytpqzCLIC6waz/1W08jYtRZirzyYE6raPwTfBLJLjXH9MV
+        ZvswhanbyqaiMgd9RxOLb3RRE/a+lXLYMuqQBF17GmKJe4KhJULsqDD4HBfz4c81U9LNer
+        mH2tJPyjpTp9e81CNw0LOPyhhYGhlNY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-103-Mz7PsgyVNMSc7P7vkBLzbA-1; Thu, 19 Dec 2019 05:35:06 -0500
+X-MC-Unique: Mz7PsgyVNMSc7P7vkBLzbA-1
+Received: by mail-wr1-f69.google.com with SMTP id f10so1280218wro.14
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 02:35:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=grytLlF1DJ8ixVXUMMRXrV+hvL2jNyAGRxO10pwO3Kk=;
+        b=iQ7HkomGqJidkKt/nZhlT4rGtY+t030lgXIfFLaF+nrlTDPSMRLTb5ip7V/xxMiViL
+         sryE8LA6MzsgfVk5VvjznLnCOF3LCQfqANb+YYnsFTG0S/945QXtLHK/YlVVsFo3fRbZ
+         s1e+vxXoEW2cJQBQMsD6IoFaHmGXS40hStzWFUuy05cnhowSF51kKpib+4UNh+66Nd9l
+         1PNPkG2adxPFCTXotykdHFY5qXIIKKlrHcD/uOS1uU5DD3b8lzLBfegRSGqRfPHBnjA4
+         gjwnheWVP/YBp9wLvxY28esjX3ytieqimZdY+4O4zT9DOThRLrO81xLjDM+prEFZ/bBg
+         WwKg==
+X-Gm-Message-State: APjAAAXKVEkfrUsVRugGjh2dV80wwLs2lpSABCqIOaFPxXrC6nLrlH9U
+        IPB4sWvshhkhMjWI6zMNIR1OXz/FsqkVvdoKFN3NFYh8WWmM+fu0c8L1A19m+WDPRf1b0US4i9t
+        Hrrb2ohxE7jrErRx5Jp0=
+X-Received: by 2002:a5d:690e:: with SMTP id t14mr8532974wru.65.1576751704392;
+        Thu, 19 Dec 2019 02:35:04 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyRIN6jrjB2zwl/YVEf01195wmi63mQXP7jnb1nOJ++QqxEfgXl6pGOygsE+eeyF7zb41K3zQ==
+X-Received: by 2002:a5d:690e:: with SMTP id t14mr8532922wru.65.1576751703925;
+        Thu, 19 Dec 2019 02:35:03 -0800 (PST)
+Received: from localhost.localdomain ([151.29.30.195])
+        by smtp.gmail.com with ESMTPSA id o7sm5513625wmh.11.2019.12.19.02.35.02
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 19 Dec 2019 02:35:03 -0800 (PST)
+Date:   Thu, 19 Dec 2019 11:35:00 +0100
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Claudio Scordino <c.scordino@evidence.eu.com>,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux Kernel
+ IV edition (OSPM-summit 2020)
+Message-ID: <20191219103500.GC13724@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogTG91aXMgWXUgPGxvdWlzLnl1QG1lZGlhdGVrLmNvbT4NCg0KQWRkIHN1c3BlbmQvcmVz
-dW1lIGNhbGxiYWNrIHRvIGRpc2FibGUvZW5hYmxlIE1lZGlhdGVrIHRoZXJtYWwgc2Vuc29yDQpy
-ZXNwZWN0aXZlbHkuIFNpbmNlIHRoZXJtYWwgcG93ZXIgZG9tYWluIGlzIG9mZiBpbiBzdXNwZW5k
-LCB0aGVybWFsIGRyaXZlcg0KbmVlZHMgcmUtaW5pdGlhbGl6YXRpb24gZHVyaW5nIHJlc3VtZS4N
-Cg0KU2lnbmVkLW9mZi1ieTogTG91aXMgWXUgPGxvdWlzLnl1QG1lZGlhdGVrLmNvbT4NClNpZ25l
-ZC1vZmYtYnk6IE1pY2hhZWwgS2FvIDxtaWNoYWVsLmthb0BtZWRpYXRlay5jb20+DQotLS0NCiBk
-cml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwuYyB8IDEzNCArKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrLS0tDQogMSBmaWxlIGNoYW5nZWQsIDEyNSBpbnNlcnRpb25zKCspLCA5IGRlbGV0
-aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL210a190aGVybWFsLmMgYi9k
-cml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwuYw0KaW5kZXggYWNmNDg1NGNiYjhiLi4yYmI4YjEz
-NTkxYWEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwuYw0KKysrIGIv
-ZHJpdmVycy90aGVybWFsL210a190aGVybWFsLmMNCkBAIC0yMiw2ICsyMiw3IEBADQogI2luY2x1
-ZGUgPGxpbnV4L3RoZXJtYWwuaD4NCiAjaW5jbHVkZSA8bGludXgvcmVzZXQuaD4NCiAjaW5jbHVk
-ZSA8bGludXgvdHlwZXMuaD4NCisjaW5jbHVkZSA8bGludXgvaW9wb2xsLmg+DQogDQogLyogQVVY
-QURDIFJlZ2lzdGVycyAqLw0KICNkZWZpbmUgQVVYQURDX0NPTjFfU0VUX1YJMHgwMDgNCkBAIC0z
-MSw2ICszMiw4IEBADQogDQogI2RlZmluZSBBUE1JWEVEX1NZU19UU19DT04xCTB4NjA0DQogDQor
-I2RlZmluZSBBUE1JWEVEX1NZU19UU19DT04xX0JVRkZFUl9PRkYJMHgzMA0KKw0KIC8qIFRoZXJt
-YWwgQ29udHJvbGxlciBSZWdpc3RlcnMgKi8NCiAjZGVmaW5lIFRFTVBfTU9OQ1RMMAkJMHgwMDAN
-CiAjZGVmaW5lIFRFTVBfTU9OQ1RMMQkJMHgwMDQNCkBAIC0zOCw2ICs0MSw3IEBADQogI2RlZmlu
-ZSBURU1QX01PTklERVQwCQkweDAxNA0KICNkZWZpbmUgVEVNUF9NT05JREVUMQkJMHgwMTgNCiAj
-ZGVmaW5lIFRFTVBfTVNSQ1RMMAkJMHgwMzgNCisjZGVmaW5lIFRFTVBfTVNSQ1RMMQkJMHgwM2MN
-CiAjZGVmaW5lIFRFTVBfQUhCUE9MTAkJMHgwNDANCiAjZGVmaW5lIFRFTVBfQUhCVE8JCTB4MDQ0
-DQogI2RlZmluZSBURU1QX0FEQ1BOUDAJCTB4MDQ4DQpAQCAtODcsNiArOTEsOSBAQA0KICNkZWZp
-bmUgVEVNUF9BRENWQUxJRE1BU0tfVkFMSURfSElHSAkJQklUKDUpDQogI2RlZmluZSBURU1QX0FE
-Q1ZBTElETUFTS19WQUxJRF9QT1MoYml0KQkoYml0KQ0KIA0KKyNkZWZpbmUgVEVNUF9NU1JDVEwx
-X0JVU19TVEEJKEJJVCgwKSB8IEJJVCg3KSkNCisjZGVmaW5lIFRFTVBfTVNSQ1RMMV9TRU5TSU5H
-X1BPSU5UU19QQVVTRQkweDEwRQ0KKw0KIC8qIE1UODE3MyB0aGVybWFsIHNlbnNvcnMgKi8NCiAj
-ZGVmaW5lIE1UODE3M19UUzEJMA0KICNkZWZpbmUgTVQ4MTczX1RTMgkxDQpAQCAtMjUwLDYgKzI1
-NywxMCBAQCBzdHJ1Y3QgbXRrX3RoZXJtYWxfZGF0YSB7DQogc3RydWN0IG10a190aGVybWFsIHsN
-CiAJc3RydWN0IGRldmljZSAqZGV2Ow0KIAl2b2lkIF9faW9tZW0gKnRoZXJtYWxfYmFzZTsNCisJ
-dm9pZCBfX2lvbWVtICphcG1peGVkX2Jhc2U7DQorCXZvaWQgX19pb21lbSAqYXV4YWRjX2Jhc2U7
-DQorCXU2NCBhcG1peGVkX3BoeXNfYmFzZTsNCisJdTY0IGF1eGFkY19waHlzX2Jhc2U7DQogDQog
-CXN0cnVjdCBjbGsgKmNsa19wZXJpX3RoZXJtOw0KIAlzdHJ1Y3QgY2xrICpjbGtfYXV4YWRjOw0K
-QEAgLTc0Niw2ICs3NTcsNDIgQEAgc3RhdGljIHZvaWQgbXRrX3RoZXJtYWxfaW5pdF9iYW5rKHN0
-cnVjdCBtdGtfdGhlcm1hbCAqbXQsIGludCBudW0sDQogCW10a190aGVybWFsX3B1dF9iYW5rKGJh
-bmspOw0KIH0NCiANCitzdGF0aWMgaW50IG10a190aGVybWFsX2Rpc2FibGVfc2Vuc2luZyhzdHJ1
-Y3QgbXRrX3RoZXJtYWwgKm10LCBpbnQgbnVtKQ0KK3sNCisJc3RydWN0IG10a190aGVybWFsX2Jh
-bmsgKmJhbmsgPSAmbXQtPmJhbmtzW251bV07DQorCXUzMiB2YWw7DQorCXVuc2lnbmVkIGxvbmcg
-dGltZW91dDsNCisJdm9pZCBfX2lvbWVtICphZGRyOw0KKwlpbnQgcmV0ID0gMDsNCisNCisJYmFu
-ay0+aWQgPSBudW07DQorCWJhbmstPm10ID0gbXQ7DQorDQorCW10a190aGVybWFsX2dldF9iYW5r
-KGJhbmspOw0KKw0KKwl2YWwgPSByZWFkbChtdC0+dGhlcm1hbF9iYXNlICsgVEVNUF9NU1JDVEwx
-KTsNCisJLyogcGF1c2UgcGVyaW9kaWMgdGVtcGVyYXR1cmUgbWVhc3VyZW1lbnQgZm9yIHNlbnNp
-bmcgcG9pbnRzICovDQorCXdyaXRlbCh2YWwgfCBURU1QX01TUkNUTDFfU0VOU0lOR19QT0lOVFNf
-UEFVU0UsDQorCSAgICAgICBtdC0+dGhlcm1hbF9iYXNlICsgVEVNUF9NU1JDVEwxKTsNCisNCisJ
-Lyogd2FpdCB1bnRpbCB0ZW1wZXJhdHVyZSBtZWFzdXJlbWVudCBidXMgaWRsZSAqLw0KKwl0aW1l
-b3V0ID0gamlmZmllcyArIEhaOw0KKwlhZGRyID0gbXQtPnRoZXJtYWxfYmFzZSArIFRFTVBfTVNS
-Q1RMMTsNCisNCisJcmV0ID0gcmVhZGxfcG9sbF90aW1lb3V0KGFkZHIsIHZhbCwgKHZhbCAmIFRF
-TVBfTVNSQ1RMMV9CVVNfU1RBKSA9PSAweDAsDQorCQkJCSAwLCB0aW1lb3V0KTsNCisJaWYgKHJl
-dCA8IDApDQorCQlnb3RvIG91dDsNCisNCisJLyogZGlzYWJsZSBwZXJpb2RpYyB0ZW1wZXJhdHVy
-ZSBtZWF1c3JlbWVudCBvbiBzZW5zaW5nIHBvaW50cyAqLw0KKwl3cml0ZWwoMHgwLCBtdC0+dGhl
-cm1hbF9iYXNlICsgVEVNUF9NT05DVEwwKTsNCisNCitvdXQ6DQorCW10a190aGVybWFsX3B1dF9i
-YW5rKGJhbmspOw0KKw0KKwlyZXR1cm4gcmV0Ow0KK30NCisNCiBzdGF0aWMgdTY0IG9mX2dldF9w
-aHlzX2Jhc2Uoc3RydWN0IGRldmljZV9ub2RlICpucCkNCiB7DQogCXU2NCBzaXplNjQ7DQpAQCAt
-ODY4LDcgKzkxNSw2IEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldikNCiAJc3RydWN0IGRldmljZV9ub2RlICphdXhhZGMsICphcG1peGVk
-c3lzLCAqbnAgPSBwZGV2LT5kZXYub2Zfbm9kZTsNCiAJc3RydWN0IG10a190aGVybWFsICptdDsN
-CiAJc3RydWN0IHJlc291cmNlICpyZXM7DQotCXU2NCBhdXhhZGNfcGh5c19iYXNlLCBhcG1peGVk
-X3BoeXNfYmFzZTsNCiAJc3RydWN0IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6ZGV2Ow0KIA0KIAlt
-dCA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKm10KSwgR0ZQX0tFUk5FTCk7DQpA
-QCAtOTA0LDExICs5NTAsMTEgQEAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9wcm9iZShzdHJ1Y3Qg
-cGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KIAkJcmV0dXJuIC1FTk9ERVY7DQogCX0NCiANCi0JYXV4
-YWRjX3BoeXNfYmFzZSA9IG9mX2dldF9waHlzX2Jhc2UoYXV4YWRjKTsNCisJbXQtPmF1eGFkY19w
-aHlzX2Jhc2UgPSBvZl9nZXRfcGh5c19iYXNlKGF1eGFkYyk7DQogDQogCW9mX25vZGVfcHV0KGF1
-eGFkYyk7DQogDQotCWlmIChhdXhhZGNfcGh5c19iYXNlID09IE9GX0JBRF9BRERSKSB7DQorCWlm
-IChtdC0+YXV4YWRjX3BoeXNfYmFzZSA9PSBPRl9CQURfQUREUikgew0KIAkJZGV2X2VycigmcGRl
-di0+ZGV2LCAiQ2FuJ3QgZ2V0IGF1eGFkYyBwaHlzIGFkZHJlc3NcbiIpOw0KIAkJcmV0dXJuIC1F
-SU5WQUw7DQogCX0NCkBAIC05MTksMTEgKzk2NSwxMiBAQCBzdGF0aWMgaW50IG10a190aGVybWFs
-X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogCQlyZXR1cm4gLUVOT0RFVjsN
-CiAJfQ0KIA0KLQlhcG1peGVkX3BoeXNfYmFzZSA9IG9mX2dldF9waHlzX2Jhc2UoYXBtaXhlZHN5
-cyk7DQorCW10LT5hcG1peGVkX3BoeXNfYmFzZSA9IG9mX2dldF9waHlzX2Jhc2UoYXBtaXhlZHN5
-cyk7DQorCW10LT5hcG1peGVkX2Jhc2UgPSBvZl9pb21hcChhcG1peGVkc3lzLCAwKTsNCiANCiAJ
-b2Zfbm9kZV9wdXQoYXBtaXhlZHN5cyk7DQogDQotCWlmIChhcG1peGVkX3BoeXNfYmFzZSA9PSBP
-Rl9CQURfQUREUikgew0KKwlpZiAobXQtPmFwbWl4ZWRfcGh5c19iYXNlID09IE9GX0JBRF9BRERS
-KSB7DQogCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJDYW4ndCBnZXQgYXV4YWRjIHBoeXMgYWRkcmVz
-c1xuIik7DQogCQlyZXR1cm4gLUVJTlZBTDsNCiAJfQ0KQEAgLTkzNSwxOSArOTgyLDE5IEBAIHN0
-YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikN
-CiAJcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKG10LT5jbGtfYXV4YWRjKTsNCiAJaWYgKHJldCkg
-ew0KIAkJZGV2X2VycigmcGRldi0+ZGV2LCAiQ2FuJ3QgZW5hYmxlIGF1eGFkYyBjbGs6ICVkXG4i
-LCByZXQpOw0KLQkJcmV0dXJuIHJldDsNCisJCWdvdG8gZXJyX2Rpc2FibGVfY2xrX2F1eGFkYzsN
-CiAJfQ0KIA0KIAlyZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUobXQtPmNsa19wZXJpX3RoZXJtKTsN
-CiAJaWYgKHJldCkgew0KIAkJZGV2X2VycigmcGRldi0+ZGV2LCAiQ2FuJ3QgZW5hYmxlIHBlcmkg
-Y2xrOiAlZFxuIiwgcmV0KTsNCi0JCWdvdG8gZXJyX2Rpc2FibGVfY2xrX2F1eGFkYzsNCisJCWdv
-dG8gZXJyX2Rpc2FibGVfY2xrX3BlcmlfdGhlcm07DQogCX0NCiANCiAJZm9yIChjdHJsX2lkID0g
-MDsgY3RybF9pZCA8IG10LT5jb25mLT5udW1fY29udHJvbGxlciA7IGN0cmxfaWQrKykNCiAJCWZv
-ciAoaSA9IDA7IGkgPCBtdC0+Y29uZi0+bnVtX2JhbmtzOyBpKyspDQotCQkJbXRrX3RoZXJtYWxf
-aW5pdF9iYW5rKG10LCBpLCBhcG1peGVkX3BoeXNfYmFzZSwNCi0JCQkJCSAgICAgIGF1eGFkY19w
-aHlzX2Jhc2UsIGN0cmxfaWQpOw0KKwkJCW10a190aGVybWFsX2luaXRfYmFuayhtdCwgaSwgbXQt
-PmFwbWl4ZWRfcGh5c19iYXNlLA0KKwkJCQkJICAgICAgbXQtPmF1eGFkY19waHlzX2Jhc2UsIGN0
-cmxfaWQpOw0KIA0KIAlwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBtdCk7DQogDQpAQCAtOTc4
-LDExICsxMDI1LDgwIEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcmVtb3ZlKHN0cnVjdCBwbGF0
-Zm9ybV9kZXZpY2UgKnBkZXYpDQogCXJldHVybiAwOw0KIH0NCiANCitzdGF0aWMgaW50IF9fbWF5
-YmVfdW51c2VkIG10a190aGVybWFsX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KK3sNCisJ
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiA9IHRvX3BsYXRmb3JtX2RldmljZShkZXYpOw0K
-KwlzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10ID0gcGxhdGZvcm1fZ2V0X2RydmRhdGEocGRldik7DQor
-CWludCBpLCByZXQ7DQorDQorCWZvciAoaSA9IDA7IGkgPCBtdC0+Y29uZi0+bnVtX2JhbmtzOyBp
-KyspIHsNCisJCXJldCA9IG10a190aGVybWFsX2Rpc2FibGVfc2Vuc2luZyhtdCwgaSk7DQorCQlp
-ZiAocmV0KQ0KKwkJCWdvdG8gb3V0Ow0KKwl9DQorDQorCS8qIGRpc2FibGUgYnVmZmVyICovDQor
-CXdyaXRlbChyZWFkbChtdC0+YXBtaXhlZF9iYXNlICsgQVBNSVhFRF9TWVNfVFNfQ09OMSkgfA0K
-KwkgICAgICAgQVBNSVhFRF9TWVNfVFNfQ09OMV9CVUZGRVJfT0ZGLA0KKwkgICAgICAgbXQtPmFw
-bWl4ZWRfYmFzZSArIEFQTUlYRURfU1lTX1RTX0NPTjEpOw0KKw0KKwljbGtfZGlzYWJsZV91bnBy
-ZXBhcmUobXQtPmNsa19wZXJpX3RoZXJtKTsNCisJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKG10LT5j
-bGtfYXV4YWRjKTsNCisNCisJcmV0dXJuIDA7DQorDQorb3V0Og0KKwlkZXZfZXJyKCZwZGV2LT5k
-ZXYsICJGYWlsZWQgdG8gd2FpdCB1bnRpbCBidXMgaWRsZVxuIik7DQorDQorCXJldHVybiByZXQ7
-DQorfQ0KKw0KK3N0YXRpYyBpbnQgX19tYXliZV91bnVzZWQgbXRrX3RoZXJtYWxfcmVzdW1lKHN0
-cnVjdCBkZXZpY2UgKmRldikNCit7DQorCXN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYgPSB0
-b19wbGF0Zm9ybV9kZXZpY2UoZGV2KTsNCisJc3RydWN0IG10a190aGVybWFsICptdCA9IHBsYXRm
-b3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KKwlpbnQgaSwgcmV0LCBjdHJsX2lkOw0KKw0KKwlyZXQg
-PSBkZXZpY2VfcmVzZXQoJnBkZXYtPmRldik7DQorCWlmIChyZXQpDQorCQlyZXR1cm4gcmV0Ow0K
-Kw0KKwlyZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUobXQtPmNsa19hdXhhZGMpOw0KKwlpZiAocmV0
-KSB7DQorCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJDYW4ndCBlbmFibGUgYXV4YWRjIGNsazogJWRc
-biIsIHJldCk7DQorCQlnb3RvIGVycl9kaXNhYmxlX2Nsa19hdXhhZGM7DQorCX0NCisNCisJcmV0
-ID0gY2xrX3ByZXBhcmVfZW5hYmxlKG10LT5jbGtfcGVyaV90aGVybSk7DQorCWlmIChyZXQpIHsN
-CisJCWRldl9lcnIoJnBkZXYtPmRldiwgIkNhbid0IGVuYWJsZSBwZXJpIGNsazogJWRcbiIsIHJl
-dCk7DQorCQlnb3RvIGVycl9kaXNhYmxlX2Nsa19wZXJpX3RoZXJtOw0KKwl9DQorDQorCWZvciAo
-Y3RybF9pZCA9IDA7IGN0cmxfaWQgPCBtdC0+Y29uZi0+bnVtX2NvbnRyb2xsZXIgOyBjdHJsX2lk
-KyspDQorCQlmb3IgKGkgPSAwOyBpIDwgbXQtPmNvbmYtPm51bV9iYW5rczsgaSsrKQ0KKwkJCW10
-a190aGVybWFsX2luaXRfYmFuayhtdCwgaSwgbXQtPmFwbWl4ZWRfcGh5c19iYXNlLA0KKwkJCQkJ
-ICAgICAgbXQtPmF1eGFkY19waHlzX2Jhc2UsIGN0cmxfaWQpOw0KKw0KKwlyZXR1cm4gMDsNCisN
-CitlcnJfZGlzYWJsZV9jbGtfcGVyaV90aGVybToNCisJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKG10
-LT5jbGtfcGVyaV90aGVybSk7DQorZXJyX2Rpc2FibGVfY2xrX2F1eGFkYzoNCisJY2xrX2Rpc2Fi
-bGVfdW5wcmVwYXJlKG10LT5jbGtfYXV4YWRjKTsNCisNCisJcmV0dXJuIHJldDsNCit9DQorDQor
-c3RhdGljIFNJTVBMRV9ERVZfUE1fT1BTKG10a190aGVybWFsX3BtX29wcywNCisJCQkgbXRrX3Ro
-ZXJtYWxfc3VzcGVuZCwgbXRrX3RoZXJtYWxfcmVzdW1lKTsNCisNCiBzdGF0aWMgc3RydWN0IHBs
-YXRmb3JtX2RyaXZlciBtdGtfdGhlcm1hbF9kcml2ZXIgPSB7DQogCS5wcm9iZSA9IG10a190aGVy
-bWFsX3Byb2JlLA0KIAkucmVtb3ZlID0gbXRrX3RoZXJtYWxfcmVtb3ZlLA0KIAkuZHJpdmVyID0g
-ew0KIAkJLm5hbWUgPSAibXRrLXRoZXJtYWwiLA0KKwkJLnBtID0gJm10a190aGVybWFsX3BtX29w
-cywNCiAJCS5vZl9tYXRjaF90YWJsZSA9IG10a190aGVybWFsX29mX21hdGNoLA0KIAl9LA0KIH07
-DQotLSANCjIuMTguMA0K
+Power Management and Scheduling in the Linux Kernel (OSPM-summit) IV edition
+
+May 11-13, 2019
+Scuola Superiore Sant'Anna
+Pisa, Italy
+
+---
+
+.:: FOCUS
+
+The IV edition of the Power Management and Scheduling in the Linux
+Kernel (OSPM) summit aims at fostering discussions on power management
+and (real-time) scheduling techniques. Summit will be held in Pisa
+(Italy) on May 11-13, 2020.
+
+Although scheduler techniques for reducing energy consumption while
+meeting performance and latency requirements are the prime interest of
+the summit, we welcome anybody interested in having discussions on the
+broader scope of real-time systems, real-time and non-real-time
+scheduling, tooling, debugging and tracing.
+
+Feel free to have a look at what happened previous years:
+
+ I   edition - https://lwn.net/Articles/721573/
+ II  edition - https://lwn.net/Articles/754923/
+ III edition - https://lwn.net/Articles/793281/
+
+.:: FORMAT
+
+The summit is organized to cover three days of discussions and talks.
+
+The list of topics of interest includes (but it is not limited to):
+
+ * Power management techniques
+ * Real-time and non real-time scheduling techniques
+ * Energy consumption and CPU capacity aware scheduling
+ * Real-time virtualization
+ * Mobile/Server power management real-world use cases (successes and
+   failures)
+ * Power management and scheduling tooling (configuration, integration,
+   testing, etc.)
+ * Tracing
+ * Recap/lightning talks
+
+Presentations can cover recently developed technologies, ongoing work
+and new ideas. Please understand that this workshop is not intended for
+presenting sales and marketing pitches.
+
+.:: ATTENDING
+
+Attending the OSPM-summit is free of charge, but registration to the
+event is mandatory. The event can allow a maximum of 50 people (so, be
+sure to register early!). Registrations open on February 24th, 2020.
+
+To register fill in the registration form available at
+https://forms.gle/7LfFY8oNyRxV1wuQ7
+
+While it is not strictly required to submit a topic/presentation (see
+below), registrations with a topic/presentation proposal will take
+precedence.
+
+.:: SUBMIT A TOPIC/PRESENTATION
+
+To submit a topic/presentation add its details to this list:
+https://docs.google.com/spreadsheets/d/1pPU2ybHHoQjqicYLTaNanPz9H5fv6mQTtrzOqwP9uHs/edit?usp=sharing
+
+Or, if you prefer, simply reply (only to me, please :) to this email
+specifying:
+
+- name/surname
+- affiliation
+- short bio
+- email address
+- title
+- abstract
+- 30min or 50min slot
+
+Deadline for submitting topics/presentations is 10th of February 2019.
+Notifications for accepted topics/presentations will be sent out on 24th
+of February 2019.
+
+.:: VENUE
+
+The workshop will take place at ReTiS Lab*, Scuola Superiore Sant'Anna,
+Pisa, Italy. Pisa is a small town, walking distance from the city center
+to the venue is 20 minutes, walking distance from the airport to the
+city center is 30 minutes. More details are available from the summit
+web page: http://retis.sssup.it/ospm-summit/#site
+
+* https://goo.gl/maps/2pPXG2v7Lfp
+
+.:: ORGANIZERS (in alphabetical order)
+
+Luca Abeni (SSSA)
+Tommaso Cucinotta (SSSA)
+Dietmar Eggemann (Arm)
+Sudeep Holla (Arm)
+Juri Lelli (Red Hat)
+Lorenzo Pieralisi (Arm)
+Morten Rasmussen (Arm)
+Claudio Scordino (Evidence SRL)
 
