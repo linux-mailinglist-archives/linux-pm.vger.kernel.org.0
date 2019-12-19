@@ -2,59 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED621264BE
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 15:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7450D1264C4
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 15:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbfLSOaN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 09:30:13 -0500
-Received: from mga11.intel.com ([192.55.52.93]:35948 "EHLO mga11.intel.com"
+        id S1726824AbfLSOak (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 09:30:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:39320 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbfLSOaN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 19 Dec 2019 09:30:13 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Dec 2019 06:30:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,332,1571727600"; 
-   d="scan'208";a="248336325"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Dec 2019 06:30:09 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH 2/2] turbostat: add support for Icelake server
-Date:   Thu, 19 Dec 2019 22:29:18 +0800
-Message-Id: <20191219142918.10021-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726767AbfLSOak (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Dec 2019 09:30:40 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFA7831B;
+        Thu, 19 Dec 2019 06:30:39 -0800 (PST)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C35DC3F6CF;
+        Thu, 19 Dec 2019 06:30:37 -0800 (PST)
+Date:   Thu, 19 Dec 2019 14:30:32 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 08/14] cpuidle: psci: Add a helper to attach a CPU to
+ its PM domain
+Message-ID: <20191219143032.GA20746@bogus>
+References: <20191211154343.29765-1-ulf.hansson@linaro.org>
+ <20191211154343.29765-9-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191211154343.29765-9-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reuse the code of Skylake server for Icelake server.
+On Wed, Dec 11, 2019 at 04:43:37PM +0100, Ulf Hansson wrote:
+> Introduce a PSCI DT helper function, psci_dt_attach_cpu(), which takes a
+> CPU number as an in-parameter and tries to attach the CPU's struct device
+> to its corresponding PM domain.
+>
+> Let's makes use of dev_pm_domain_attach_by_name(), as it allows us to
+> specify "psci" as the "name" of the PM domain to attach to. Additionally,
+> let's also prepare the attached device to be power managed via runtime PM.
+>
+> Note that, the implementation of the new helper function is in a new
+> separate c-file, which may seems a bit too much at this point. However,
+> subsequent changes that implements the remaining part of the PM domain
+> support for cpuidle-psci, helps to justify this split.
+>
 
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 3 +++
- 1 file changed, 3 insertions(+)
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 520cd486e5a4..6876305f9e19 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4620,6 +4620,9 @@ unsigned int intel_model_duplicates(unsigned int model)
- 
- 	case INTEL_FAM6_ATOM_TREMONT_D:
- 		return INTEL_FAM6_ATOM_GOLDMONT_D;
-+
-+	case INTEL_FAM6_ICELAKE_X:
-+		return INTEL_FAM6_SKYLAKE_X;
- 	}
- 	return model;
- }
--- 
-2.17.1
-
+--
+Regards,
+Sudeep
