@@ -2,162 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E13125902
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34C012590C
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfLSBDZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 20:03:25 -0500
-Received: from vps.xff.cz ([195.181.215.36]:41788 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726518AbfLSBDY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Dec 2019 20:03:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1576717401; bh=hTtYEKPfKcEQF9zxM3iLzPQCOmc0v1ZBKSXbqSJHaxk=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=U716KQDW0NA1TYZk7/LCB8IjiqPyVfh9ZWp0+sI9GXC506EcUxTq1F+OZsKQRtAu/
-         Yajp1L7cH5MqaUqoqofwt4pNzAdsOS9z3h8zPpFu6tlAYgFipDLkk7z6riPtwr9VNd
-         zTYBOItSg+xmlAc37i9nGe0+tpt1nuvwHkQ2C2Iw=
-Date:   Thu, 19 Dec 2019 02:03:21 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 6/7] arm64: dts: allwinner: h6: Add thermal sensor and
- thermal zones
-Message-ID: <20191219010321.kri5e7knjhc5d6ts@core.my.home>
-Mail-Followup-To: Vasily Khoruzhick <anarsoul@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20191218042121.1471954-1-anarsoul@gmail.com>
- <20191218042121.1471954-7-anarsoul@gmail.com>
- <CAGb2v65Qv6_KQ_MPg0u37P+o5gnnQWhbifOrY6g5FiWvnadmiw@mail.gmail.com>
- <CA+E=qVdKwkUSsG9WA_4x5QntaOxQqfH1eZQ7TEeUrM_3W5mqTg@mail.gmail.com>
+        id S1726599AbfLSBEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 20:04:53 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39384 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfLSBEx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 20:04:53 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 9073D2911A3
+Received: by earth.universe (Postfix, from userid 1000)
+        id 2F2903C0C7B; Thu, 19 Dec 2019 02:04:49 +0100 (CET)
+Date:   Thu, 19 Dec 2019 02:04:49 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] power: reset: Fix Kconfig indentation
+Message-ID: <20191219010449.hqwpyconyywymrti@earth.universe>
+References: <1574306395-12906-1-git-send-email-krzk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6vs4cusmq2csjes2"
 Content-Disposition: inline
-In-Reply-To: <CA+E=qVdKwkUSsG9WA_4x5QntaOxQqfH1eZQ7TEeUrM_3W5mqTg@mail.gmail.com>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+In-Reply-To: <1574306395-12906-1-git-send-email-krzk@kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 03:18:51PM -0800, Vasily Khoruzhick wrote:
-> On Tue, Dec 17, 2019 at 8:32 PM Chen-Yu Tsai <wens@csie.org> wrote:
-> >
-> > On Wed, Dec 18, 2019 at 12:22 PM Vasily Khoruzhick <anarsoul@gmail.com> wrote:
-> > >
-> > > From: Ondrej Jirman <megous@megous.com>
-> > >
-> > > There are two sensors, one for CPU, one for GPU.
-> > >
-> > > Signed-off-by: Ondrej Jirman <megous@megous.com>
-> > > Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
-> > > ---
-> > >  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 33 ++++++++++++++++++++
-> > >  1 file changed, 33 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-> > > index 29824081b43b..cdcb1a36301a 100644
-> > > --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-> > > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-> > > @@ -11,6 +11,7 @@
-> > >  #include <dt-bindings/reset/sun50i-h6-ccu.h>
-> > >  #include <dt-bindings/reset/sun50i-h6-r-ccu.h>
-> > >  #include <dt-bindings/reset/sun8i-de2.h>
-> > > +#include <dt-bindings/thermal/thermal.h>
-> > >
-> > >  / {
-> > >         interrupt-parent = <&gic>;
-> > > @@ -233,6 +234,12 @@ dma: dma-controller@3002000 {
-> > >                 sid: efuse@3006000 {
-> > >                         compatible = "allwinner,sun50i-h6-sid";
-> > >                         reg = <0x03006000 0x400>;
-> > > +                       #address-cells = <1>;
-> > > +                       #size-cells = <1>;
-> > > +
-> > > +                       ths_calibration: thermal-sensor-calibration@14 {
-> > > +                               reg = <0x14 0x6>;
-> >
-> > Nit: my preference is to use words as the smallest increment, so this
-> > would have a size of 8 instead of 6. Same goes for the A64 dts.
-> >
-> > AFAICT this doesn't impact the driver in any way.
-> 
-> H6 has only 2 sensors, so it should be 4. That's my overlook, I'll
-> change it to 4 for H6 and to 8 for A64.
 
-No it's correct. There's 2 bytes reference temperature and 2x 2 byte
-values for individual sensor calibration constants.
+--6vs4cusmq2csjes2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-regards,
-	o.
+Hi,
 
-> >
-> > ChenYu
-> >
-> >
-> > > +                       };
-> > >                 };
-> > >
-> > >                 watchdog: watchdog@30090a0 {
-> > > @@ -856,5 +863,31 @@ r_i2c: i2c@7081400 {
-> > >                         #address-cells = <1>;
-> > >                         #size-cells = <0>;
-> > >                 };
-> > > +
-> > > +               ths: thermal-sensor@5070400 {
-> > > +                       compatible = "allwinner,sun50i-h6-ths";
-> > > +                       reg = <0x05070400 0x100>;
-> > > +                       interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                       clocks = <&ccu CLK_BUS_THS>;
-> > > +                       clock-names = "bus";
-> > > +                       resets = <&ccu RST_BUS_THS>;
-> > > +                       nvmem-cells = <&ths_calibration>;
-> > > +                       nvmem-cell-names = "calibration";
-> > > +                       #thermal-sensor-cells = <1>;
-> > > +               };
-> > > +       };
-> > > +
-> > > +       thermal-zones {
-> > > +               cpu-thermal {
-> > > +                       polling-delay-passive = <0>;
-> > > +                       polling-delay = <0>;
-> > > +                       thermal-sensors = <&ths 0>;
-> > > +               };
-> > > +
-> > > +               gpu-thermal {
-> > > +                       polling-delay-passive = <0>;
-> > > +                       polling-delay = <0>;
-> > > +                       thermal-sensors = <&ths 1>;
-> > > +               };
-> > >         };
-> > >  };
-> > > --
-> > > 2.24.1
-> > >
+On Thu, Nov 21, 2019 at 04:19:55AM +0100, Krzysztof Kozlowski wrote:
+> Adjust indentation from spaces to tab (+optional two spaces) as in
+> coding style with command like:
+> 	$ sed -e 's/^        /\t/' -i */Kconfig
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+> Changes since v1:
+> 1. Fix also 7-space and tab+1 space indentation issues.
+> ---
+>  drivers/power/reset/Kconfig | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index c721939767eb..0498363203e8 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -141,14 +141,14 @@ config POWER_RESET_LTC2952
+>  	  down via the LTC2952. Bindings are made in the device tree.
+> =20
+>  config POWER_RESET_MT6323
+> -       bool "MediaTek MT6323 power-off driver"
+> -       depends on MFD_MT6397
+> -       help
+> -         The power-off driver is responsible for externally shutdown down
+> -         the power of a remote MediaTek SoC MT6323 is connected to throu=
+gh
+> -         controlling a tiny circuit BBPU inside MT6323 RTC.
+> -
+> -         Say Y if you have a board where MT6323 could be found.
+> +	bool "MediaTek MT6323 power-off driver"
+> +	depends on MFD_MT6397
+> +	help
+> +	  The power-off driver is responsible for externally shutdown down
+> +	  the power of a remote MediaTek SoC MT6323 is connected to through
+> +	  controlling a tiny circuit BBPU inside MT6323 RTC.
+> +
+> +	  Say Y if you have a board where MT6323 could be found.
+> =20
+>  config POWER_RESET_QNAP
+>  	bool "QNAP power-off driver"
+> --=20
+> 2.7.4
+>=20
+
+--6vs4cusmq2csjes2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl36zLEACgkQ2O7X88g7
++pogZg//VdCdZ79V71shkba9VYra6IoHJseyBBTafueLgDSUgMz1ue4W7wTIiOpw
+jzUsaLuaV4jnXaL8fqzAJuCgylOfSLdpHDZkkzWW2YARB7hgshieOIwBrWzgfQAk
+E++BEbTdjXbcxna3CpuaSiwuWmh6jfb+YoMu+oSzY2KvbTg8EmiSbfNh8WvNgXBP
+XNSqEtNlLtdvfkbDvtX1HScGvcF7KlCvacax/2PXBOwywC5DEw7XTENd0Jpqyl96
+zD7c9rVZZhk9w9rYXD7fk//xvKrKAdSfG9Ub6BWW/AncpU1RGxPreBje7KMAtRp6
+cQ4cgoIlNitrD+tNheRRdii7fyDqyIl2YRwZ+Ckgj4LcwhoDMNDwOpLdZR1fOtxA
++dgrmitmEv6KSwyrmNTDIN9rQFlKOSFkokxn9GCP0WfDj710tsShNBHn7NGtOZ9y
+c5i33dQNBcUPL+Ep8B+tb8nwLrPm3OrR2ptN7AJ82CYIBH9O+6cT1nl4Bjt+DU9N
+NVdhVrACsu4Feutx8gHzlqF5lJYx9HWg84ngEi1cYhSVK25kv2rOMufPxanK+ULC
+QEJiFWWlcyMmuVHdHglgzSZBFFnmPZkVoDo27/DchVIYUOnevTBzxxOIG6/MyP5p
+CUarJceGzYNSnf3qESDp6IAQ5debhOPi+B71MjkNfHirsXG9ZNg=
+=PQMd
+-----END PGP SIGNATURE-----
+
+--6vs4cusmq2csjes2--
