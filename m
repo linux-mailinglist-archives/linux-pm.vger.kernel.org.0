@@ -2,136 +2,558 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7278712626B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 13:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D45712629E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 13:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbfLSMlV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 07:41:21 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:41341 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726699AbfLSMlV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 07:41:21 -0500
-Received: by mail-ed1-f65.google.com with SMTP id c26so4728413eds.8
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 04:41:18 -0800 (PST)
+        id S1726760AbfLSMxM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 07:53:12 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:42947 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726736AbfLSMxM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 07:53:12 -0500
+Received: by mail-ed1-f67.google.com with SMTP id e10so4764034edv.9
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 04:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:mime-version
+        h=from:subject:to:cc:references:message-id:date:mime-version
          :in-reply-to:content-language:content-transfer-encoding;
-        bh=NLiipgEST5BEg37TFrXdhty71tDMIsDUb5lR7VrvgPU=;
-        b=DMdLTMAsClKKY64ymPKjgXGwxYmow5VbF5ojHoZOVhPkg3KziWUkjubBs6/DKC1RZS
-         7z+ZVth6u0bKRfEDwETxds9rXwuh2ZRGh8eYj81FkSU08rW58f2TwaQX9SjYt86ZpHug
-         KOSeh+gY5zvEokkNh2phGhuMEjwvRcHNyNjKWoglWBhUNvbnPVG+InyRJfQuciv24YTB
-         DA05CraD1H9bxSA4El9nHszkIMTnFvWwumH72pdybQ7vpsSFoUC6YFadEwZtRhqKfcOR
-         HW7rtrxc8jDVqQzNOYq+cr2anbpIx6HBgDbRgUB/3h6/hk4ulGmUr36avZbnX268fPtE
-         tBkQ==
+        bh=fTAqZRYEHX+3JVEQkz90JpovJds8zZZ7Bh/pDCSqmbk=;
+        b=j8rdB2jv1o9Cno0mE7IdLZ6IZ8JbiUjzskl2aekOzny+KLt3yVqQZOO3/GSY+laMGJ
+         tc2LUj2LA2iUe6nBjfMN5gJbq5rExWQ4fopqC6BTTRQBbXw8VvhBo5m9X/bjVAFU/NHV
+         mdkUeB31eYiNqI+dD79F3qO3kkT8jCTYtxJ+ERh7vHkwROriruLHVeQh8CcrFC5uZumJ
+         9/rcKoc5NEMaaRxLtzN/JUb8LNeh1lqKNdIfYscCat6tWTbunBezkFv5SKj5yECI/IHo
+         nd2k79sd5zHGqkkTC0pc40M1qqr59yqSnibG1op4bGADK6E9K99YagEwuSmUlsdZbn95
+         eaQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NLiipgEST5BEg37TFrXdhty71tDMIsDUb5lR7VrvgPU=;
-        b=jFgt6v071xoP4iuSFaisZ0vu1PPu458QhAl2ySZ8pJHykQH5ILwpAa3v+Bpig1yj4F
-         jsdRuG1AH+cWCdr4Zd8i/eWuSRkidwWe1GrDWVREv/iIK9CWUnB0xXeuUWIW8QGhHPdC
-         xYWiQ9XJwwJRFwPfq1OWbcknAIKK9GehicJEd4hDwfY9sFTKEW1rzhc5zSL2H3rlr7jr
-         eutM0fZOazvFUN/1+ebSzDKpPgfLD5t5LC7kuGr/wHhOm8cg/hy0gyhz6ukC82sa21la
-         /qVwz3sZY0O4w1RYxGtQHziEQbgBYsWvA4ejxT6QAeGhHtoZN6mjivsKB9XIhtr6Qd4s
-         u4cw==
-X-Gm-Message-State: APjAAAU062DNLT+NCvLBLJVMVEy6r+83ac/4D9UmTe0YBsIPFHFGSPSN
-        8bJS+7v0xqZm7RSmQ7VeQTEPLw==
-X-Google-Smtp-Source: APXvYqwPGS/aS1Q7CIrAbE5cA68n6FrMopk9q0NOvuhtpzZF0/nMyvWoM1TF17KqzRGh7VA0rmbkAg==
-X-Received: by 2002:a17:906:1356:: with SMTP id x22mr9304826ejb.55.1576759277597;
-        Thu, 19 Dec 2019 04:41:17 -0800 (PST)
+        bh=fTAqZRYEHX+3JVEQkz90JpovJds8zZZ7Bh/pDCSqmbk=;
+        b=nD0CN/E5Odjkasw3BMNtJXE77TCyu8CBC+DcyQYKd3PN///UM40P5wVgW0NjYNWfla
+         9Iw31zR6ejaCmVkwqMJ78rKxB/kWFf0ztYHwqovJqsC5l4j9244TgnTlDeOGbMH/2Rfz
+         /+sDKTPMWjQuNr/atNbh5h3WQdboMCmP0jJ5LWU+4wXEPcMEXyqeM0McCnkfnolg+lFv
+         ocd0gcPlj2O6mI7acZTFUrHv1CqGO9rS/EHNdv2yql8w7lx3cZJdvTEk0aSjwGt051Pc
+         a8OEI7ZQn+8aAF53zWr5aT5hpzeMtVDatLu63dJMhdL4DfgMGpD+7bUpEG3fuzLYOwtQ
+         veJw==
+X-Gm-Message-State: APjAAAWEYBVEhCSSLfmnWkImoAcVrCZvoHzT8eFTHBadHTQPFCtlVaAo
+        uMI+T6AaOdITLmUkMLPEZA8Q4jA3Zn0=
+X-Google-Smtp-Source: APXvYqwt2xRIGijsSP7kuMSxozPCUjIWbw7fAgOL4dzH1Ivm8kWM4CbnHr8DZDI6zUTN2+4kvBWThg==
+X-Received: by 2002:a17:906:3519:: with SMTP id r25mr9559587eja.47.1576759988435;
+        Thu, 19 Dec 2019 04:53:08 -0800 (PST)
 Received: from [192.168.27.135] ([37.157.136.193])
-        by smtp.googlemail.com with ESMTPSA id m24sm379267edr.83.2019.12.19.04.41.15
+        by smtp.googlemail.com with ESMTPSA id u13sm463006ejz.69.2019.12.19.04.53.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2019 04:41:16 -0800 (PST)
-Subject: Re: [PATCH V1 2/2] interconnect: qcom: Add SC7180 interconnect
- provider driver
-To:     Odelu Kukatla <okukatla@codeaurora.org>, daidavid1@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@google.com, sboyd@kernel.org,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     ilina@codeaurora.org, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-arm-msm-owner@vger.kernel.org
-References: <1574780408-21282-1-git-send-email-okukatla@codeaurora.org>
- <0101016ea83b71b7-4a22a4a7-cab8-4047-a18a-c0327edbe707-000000@us-west-2.amazonses.com>
+        Thu, 19 Dec 2019 04:53:07 -0800 (PST)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
-Message-ID: <791798fa-a1d9-9a8a-b4e6-0f5b705a3d78@linaro.org>
-Date:   Thu, 19 Dec 2019 14:41:13 +0200
+Subject: Re: [PATCH v1 2/4] interconnect: qcom: Consolidate interconnect RPMh
+ support
+To:     David Dai <daidavid1@codeaurora.org>, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org
+Cc:     evgreen@google.com, sboyd@kernel.org, ilina@codeaurora.org,
+        seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+References: <1576475925-20601-1-git-send-email-daidavid1@codeaurora.org>
+ <1576475925-20601-3-git-send-email-daidavid1@codeaurora.org>
+Message-ID: <5fafbd7f-b523-7cf4-48e3-2e381945f41c@linaro.org>
+Date:   Thu, 19 Dec 2019 14:53:05 +0200
 MIME-Version: 1.0
-In-Reply-To: <0101016ea83b71b7-4a22a4a7-cab8-4047-a18a-c0327edbe707-000000@us-west-2.amazonses.com>
+In-Reply-To: <1576475925-20601-3-git-send-email-daidavid1@codeaurora.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Odelu,
+Hi David,
 
-On 26.11.19 г. 17:01 ч., Odelu Kukatla wrote:
-> Add driver for the Qualcomm interconnect buses found in SC7180 based
-> platforms. The topology consists of three NoCs that are controlled by
+Thank you for updating this patch series!
 
-Just three NoCs, really?
-
-> a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
+On 16.12.19 7:58, David Dai wrote:
+> Add bcm voter driver and add support for RPMh specific interconnect providers
+> which implements the set and aggregate functionalities that translates
+> bandwidth requests into RPMh messages. These modules provide a common set of
+> functionalities for all Qualcomm RPMh based interconnect providers and
+> should help reduce code duplication when adding new providers.
 > 
-> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> Signed-off-by: David Dai <daidavid1@codeaurora.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+
+Not really. Please remove.
+
 > ---
->   drivers/interconnect/qcom/Kconfig  |  10 +
->   drivers/interconnect/qcom/Makefile |   2 +
->   drivers/interconnect/qcom/sc7180.c | 843 +++++++++++++++++++++++++++++++++++++
->   3 files changed, 855 insertions(+)
->   create mode 100644 drivers/interconnect/qcom/sc7180.c
+>  drivers/interconnect/qcom/Kconfig     |   8 +
+>  drivers/interconnect/qcom/Makefile    |   6 +
+>  drivers/interconnect/qcom/bcm-voter.c | 356 ++++++++++++++++++++++++++++++++++
+>  drivers/interconnect/qcom/bcm-voter.h |  28 +++
+>  drivers/interconnect/qcom/icc-rpmh.c  | 158 +++++++++++++++
+>  drivers/interconnect/qcom/icc-rpmh.h  | 150 ++++++++++++++
+>  6 files changed, 706 insertions(+)
+>  create mode 100644 drivers/interconnect/qcom/bcm-voter.c
+>  create mode 100644 drivers/interconnect/qcom/bcm-voter.h
+>  create mode 100644 drivers/interconnect/qcom/icc-rpmh.c
+>  create mode 100644 drivers/interconnect/qcom/icc-rpmh.h
 > 
 > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> index 8ff255d..6f12713 100644
+> index 2f9304d..e5af199 100644
 > --- a/drivers/interconnect/qcom/Kconfig
 > +++ b/drivers/interconnect/qcom/Kconfig
-> @@ -14,6 +14,16 @@ config INTERCONNECT_QCOM_QCS404
->   	  This is a driver for the Qualcomm Network-on-Chip on qcs404-based
->   	  platforms.
->   
-> +config INTERCONNECT_QCOM_SC7180
-> +	tristate "Qualcomm SC7180 interconnect driver"
-> +	depends on INTERCONNECT_QCOM
-> +	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
+> @@ -27,9 +27,17 @@ config INTERCONNECT_QCOM_SDM845
+>  	tristate "Qualcomm SDM845 interconnect driver"
+>  	depends on INTERCONNECT_QCOM
+>  	depends on (QCOM_RPMH && QCOM_COMMAND_DB && OF) || COMPILE_TEST
 > +	select INTERCONNECT_QCOM_RPMH
 > +	select INTERCONNECT_QCOM_BCM_VOTER
-> +	help
-> +	  This is a driver for the Qualcomm Network-on-Chip on sc7180-based
-> +	  platforms.
+>  	help
+>  	  This is a driver for the Qualcomm Network-on-Chip on sdm845-based
+>  	  platforms.
+>  
+> +config INTERCONNECT_QCOM_BCM_VOTER
+> +	tristate
 > +
->   config INTERCONNECT_QCOM_SDM845
->   	tristate "Qualcomm SDM845 interconnect driver"
->   	depends on INTERCONNECT_QCOM
+> +config INTERCONNECT_QCOM_RPMH
+> +	tristate
+> +
+
+Let's try to keep alphabetical order, so move these up.
+
+>  config INTERCONNECT_QCOM_SMD_RPM
+>  	tristate
 > diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-> index 0f5e88d..793ca42 100644
+> index 9adf9e3..e921b13 100644
 > --- a/drivers/interconnect/qcom/Makefile
 > +++ b/drivers/interconnect/qcom/Makefile
-> @@ -1,12 +1,14 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
->   qnoc-qcs404-objs			:= qcs404.o
-> +qnoc-sc7180-objs			:= sc7180.o
->   qnoc-sdm845-objs			:= sdm845.o
->   icc-smd-rpm-objs			:= smd-rpm.o
->   bcm-voter-objs				:= bcm-voter.o
->   icc-rpmh-obj				:= icc-rpmh.o
->   
->   obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
-> +obj-$(CONFIG_INTERCONNECT_QCOM_SC7180) += qnoc-sc7180.o
->   obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
->   obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
->   obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += bcm-voter.o
-> diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
+> @@ -4,8 +4,14 @@ qnoc-msm8974-objs			:= msm8974.o
+>  qnoc-qcs404-objs			:= qcs404.o
+>  qnoc-sdm845-objs			:= sdm845.o
+>  icc-smd-rpm-objs			:= smd-rpm.o
+> +icc-bcm-voter-objs			:= bcm-voter.o
+> +icc-rpmh-obj				:= icc-rpmh.o
+> +icc-smd-rpm-objs			:= smd-rpm.o
+
+Duplicate? Please remove.
+
+>  
+> +obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += icc-bcm-voter.o
+> +obj-$(CONFIG_INTERCONNECT_QCOM_MSM8916) += qnoc-msm8916.o
+
+Unrelated change?
+
+>  obj-$(CONFIG_INTERCONNECT_QCOM_MSM8974) += qnoc-msm8974.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
+> +obj-$(CONFIG_INTERCONNECT_QCOM_RPMH) += icc-rpmh.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SMD_RPM) += icc-smd-rpm.o
+> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
 > new file mode 100644
-> index 0000000..e14492e
+> index 0000000..7a8764e
 > --- /dev/null
-> +++ b/drivers/interconnect/qcom/sc7180.c
-> @@ -0,0 +1,843 @@
+> +++ b/drivers/interconnect/qcom/bcm-voter.c
+> @@ -0,0 +1,356 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + *
+> + */
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/list_sort.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <soc/qcom/rpmh.h>
+> +#include <soc/qcom/tcs.h>
+> +
+> +#include "bcm-voter.h"
+> +#include "icc-rpmh.h"
+> +
+> +static LIST_HEAD(bcm_voters);
+> +
+> +/**
+> + * struct bcm_voter - Bus Clock Manager voter
+> + * @dev: reference to the device that communicates with the BCM
+> + * @np: reference to the device node to match bcm voters
+> + * @lock: mutex to protect commit and wake/sleep lists in the voter
+> + * @commit_list: list containing bcms to be committed to hardware
+> + * @ws_list: list containing bcms that have different wake/sleep votes
+> + * @voter_node: list of bcm voters
+> + */
+> +struct bcm_voter {
+> +	struct device *dev;
+> +	struct device_node *np;
+> +	struct mutex lock;
+> +	struct list_head commit_list;
+> +	struct list_head ws_list;
+> +	struct list_head voter_node;
+> +};
+> +
+> +static int cmp_vcd(void *priv, struct list_head *a, struct list_head *b)
+> +{
+> +	const struct qcom_icc_bcm *bcm_a =
+> +			list_entry(a, struct qcom_icc_bcm, list);
+> +	const struct qcom_icc_bcm *bcm_b =
+> +			list_entry(b, struct qcom_icc_bcm, list);
+> +
+> +	if (bcm_a->aux_data.vcd < bcm_b->aux_data.vcd)
+> +		return -1;
+> +	else if (bcm_a->aux_data.vcd == bcm_b->aux_data.vcd)
+> +		return 0;
+> +	else
+> +		return 1;
+> +}
+> +
+> +static void bcm_aggregate(struct qcom_icc_bcm *bcm)
+> +{
+> +	size_t i, bucket;
+> +	u64 agg_avg[QCOM_ICC_NUM_BUCKETS] = {0};
+> +	u64 agg_peak[QCOM_ICC_NUM_BUCKETS] = {0};
+> +	u64 temp;
+> +
+> +	for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
+> +		for (i = 0; i < bcm->num_nodes; i++) {
+> +			temp = bcm->nodes[i]->sum_avg[bucket] * bcm->aux_data.width;
+> +			do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
+> +			agg_avg[bucket] = max(agg_avg[bucket], temp);
+> +
+> +			temp = bcm->nodes[i]->max_peak[bucket] * bcm->aux_data.width;
+> +			do_div(temp, bcm->nodes[i]->buswidth);
+> +			agg_peak[bucket] = max(agg_peak[bucket], temp);
+> +		}
+> +
+> +		temp = agg_avg[bucket] * 1000ULL;
+> +		do_div(temp, bcm->aux_data.unit);
+> +		bcm->vote_x[bucket] = temp;
+> +
+> +		temp = agg_peak[bucket] * 1000ULL;
+> +		do_div(temp, bcm->aux_data.unit);
+> +		bcm->vote_y[bucket] = temp;
+> +	}
+> +
+> +	if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
+> +	    bcm->vote_y[QCOM_ICC_BUCKET_AMC] == 0) {
+> +		bcm->vote_x[QCOM_ICC_BUCKET_AMC] = 1;
+> +		bcm->vote_x[QCOM_ICC_BUCKET_WAKE] = 1;
+> +		bcm->vote_y[QCOM_ICC_BUCKET_AMC] = 1;
+> +		bcm->vote_y[QCOM_ICC_BUCKET_WAKE] = 1;
+> +	}
+> +}
+> +
+> +static inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
+> +			u32 addr, bool commit)
+> +{
+> +	bool valid = true;
+> +
+> +	if (!cmd)
+> +		return;
+> +
+> +	if (vote_x == 0 && vote_y == 0)
+> +		valid = false;
+> +
+> +	if (vote_x > BCM_TCS_CMD_VOTE_MASK)
+> +		vote_x = BCM_TCS_CMD_VOTE_MASK;
+> +
+> +	if (vote_y > BCM_TCS_CMD_VOTE_MASK)
+> +		vote_y = BCM_TCS_CMD_VOTE_MASK;
+> +
+> +	cmd->addr = addr;
+> +	cmd->data = BCM_TCS_CMD(commit, valid, vote_x, vote_y);
+> +
+> +	/*
+> +	 * Set the wait for completion flag on command that need to be completed
+> +	 * before the next command.
+> +	 */
+> +	if (commit)
+> +		cmd->wait = true;
+> +}
+> +
+> +static void tcs_list_gen(struct list_head *bcm_list, int bucket,
+> +			 struct tcs_cmd tcs_list[MAX_VCD],
+> +			 int n[MAX_VCD])
+> +{
+> +	struct qcom_icc_bcm *bcm;
+> +	bool commit;
+> +	size_t idx = 0, batch = 0, cur_vcd_size = 0;
+> +
+> +	memset(n, 0, sizeof(int) * MAX_VCD);
+> +
+> +	list_for_each_entry(bcm, bcm_list, list) {
+> +		commit = false;
+> +		cur_vcd_size++;
+> +		if ((list_is_last(&bcm->list, bcm_list)) ||
+> +		    bcm->aux_data.vcd != list_next_entry(bcm, list)->aux_data.vcd) {
+> +			commit = true;
+> +			cur_vcd_size = 0;
+> +		}
+> +		tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
+> +			    bcm->vote_y[bucket], bcm->addr, commit);
+> +		idx++;
+> +		n[batch]++;
+> +		/*
+> +		 * Batch the BCMs in such a way that we do not split them in
+> +		 * multiple payloads when they are under the same VCD. This is
+> +		 * to ensure that every BCM is committed since we only set the
+> +		 * commit bit on the last BCM request of every VCD.
+> +		 */
+> +		if (n[batch] >= MAX_RPMH_PAYLOAD) {
+> +			if (!commit) {
+> +				n[batch] = cur_vcd_size;
+> +				n[batch + 1] = cur_vcd_size;
+> +			}
+> +			batch++;
+> +		}
+> +	}
+> +}
+> +
+> +/**
+> + * of_bcm_voter_get - gets a bcm voter handle from DT node
+> + * @dev: device pointer for the consumer device
+> + * @name: name for the bcm voter device
+> + *
+> + * This function will match a device_node pointer for the phandle
+> + * specified in the device DT and return a bcm_voter handle on success.
+> + *
+> + * Returns bcm_voter pointer or ERR_PTR() on error. EPROBE_DEFER is returned
+> + * when matching bcm voter is yet to be found.
+> + */
+> +struct bcm_voter *of_bcm_voter_get(struct device *dev, const char *name)
+> +{
+> +	struct bcm_voter *voter = ERR_PTR(-EPROBE_DEFER);
+> +	struct bcm_voter *temp;
+> +	struct device_node *np, *node;
+> +	int idx = 0;
+> +
+> +	if (!dev || !dev->of_node)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	np = dev->of_node;
+> +
+> +	if (name) {
+> +		idx = of_property_match_string(np, "qcom,bcm-voter-names", name);
+> +		if (idx < 0)
+> +			return ERR_PTR(idx);
+> +	}
+> +
+> +	node = of_parse_phandle(np, "qcom,bcm-voters", idx);
+> +
+> +	list_for_each_entry(temp, &bcm_voters, voter_node) {
+> +		if (temp->np == node) {
+> +			voter = temp;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return voter;
+> +}
+> +EXPORT_SYMBOL_GPL(of_bcm_voter_get);
+> +
+> +/**
+> + * qcom_icc_bcm_voter_add - queues up the bcm nodes that require updates
+> + * @voter: voter that the bcms are being added to
+> + * @bcm: bcm to add to the commit and wake sleep list
+> + */
+> +void qcom_icc_bcm_voter_add(struct bcm_voter *voter, struct qcom_icc_bcm *bcm)
+> +{
+> +	if (!voter)
+> +		return;
+> +
+> +	mutex_lock(&voter->lock);
+> +	list_add_tail(&bcm->list, &voter->commit_list);
+
+Isn't there a problem if we try to add the same bcm to the commit list?
+
+> +
+> +	if (list_empty(&bcm->ws_list))
+> +		list_add_tail(&bcm->ws_list, &voter->ws_list);
+> +
+> +	mutex_unlock(&voter->lock);
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_bcm_voter_add);
+> +
+> +/**
+> + * qcom_icc_bcm_voter_commit - generates and commits tcs cmds based on bcms
+> + * @voter: voter that needs flushing
+> + *
+> + * This function generates a set of AMC commands and flushes to the BCM device
+> + * associated with the voter. It conditionally generate WAKE and SLEEP commands
+> + * based on deltas between WAKE/SLEEP requirements. The ws_list persists
+> + * through multiple commit requests and bcm nodes are removed only when the
+> + * requirements for WAKE matches SLEEP.
+> + *
+> + * Returns 0 on success, or an appropriate error code otherwise.
+> + */
+> +int qcom_icc_bcm_voter_commit(struct bcm_voter *voter)
+> +{
+> +	struct qcom_icc_bcm *bcm;
+> +	struct qcom_icc_bcm *bcm_tmp;
+> +	int commit_idx[MAX_VCD];
+> +	struct tcs_cmd cmds[MAX_BCMS];
+> +	int ret = 0;
+> +
+> +	if (!voter)
+> +		return 0;
+> +
+> +	mutex_lock(&voter->lock);
+> +	list_for_each_entry(bcm, &voter->commit_list, list)
+> +		bcm_aggregate(bcm);
+> +
+> +	/*
+> +	 * Pre sort the BCMs based on VCD for ease of generating a command list
+> +	 * that groups the BCMs with the same VCD together. VCDs are numbered
+> +	 * with lowest being the most expensive time wise, ensuring that
+> +	 * those commands are being sent the earliest in the queue. This needs
+> +	 * to be sorted every commit since we can't guarantee the order in which
+> +	 * the BCMs are added to the list.
+> +	 */
+> +	list_sort(NULL, &voter->commit_list, cmp_vcd);
+> +
+> +	/*
+> +	 * Construct the command list based on a pre ordered list of BCMs
+> +	 * based on VCD.
+> +	 */
+> +	tcs_list_gen(&voter->commit_list, QCOM_ICC_BUCKET_AMC, cmds, commit_idx);
+> +
+> +	if (!commit_idx[0])
+> +		goto out;
+> +
+> +	ret = rpmh_invalidate(voter->dev);
+> +	if (ret) {
+> +		pr_err("Error invalidating RPMH client (%d)\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	ret = rpmh_write_batch(voter->dev, RPMH_ACTIVE_ONLY_STATE,
+> +			       cmds, commit_idx);
+> +	if (ret) {
+> +		pr_err("Error sending AMC RPMH requests (%d)\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	INIT_LIST_HEAD(&voter->commit_list);
+> +
+> +	list_for_each_entry_safe(bcm, bcm_tmp, &voter->ws_list, ws_list) {
+> +		/*
+> +		 * Only generate WAKE and SLEEP commands if a resource's
+> +		 * requirements change as the execution environment transitions
+> +		 * between different power states.
+> +		 */
+> +		if (bcm->vote_x[QCOM_ICC_BUCKET_WAKE] !=
+> +		    bcm->vote_x[QCOM_ICC_BUCKET_SLEEP] ||
+> +		    bcm->vote_y[QCOM_ICC_BUCKET_WAKE] !=
+> +		    bcm->vote_y[QCOM_ICC_BUCKET_SLEEP])
+> +			list_add_tail(&bcm->list, &voter->commit_list);
+> +		else
+> +			list_del_init(&bcm->ws_list);
+> +	}
+> +
+> +	if (list_empty(&voter->commit_list))
+> +		goto out;
+> +
+> +	list_sort(NULL, &voter->commit_list, cmp_vcd);
+> +
+> +	tcs_list_gen(&voter->commit_list, QCOM_ICC_BUCKET_WAKE, cmds, commit_idx);
+> +
+> +	ret = rpmh_write_batch(voter->dev, RPMH_WAKE_ONLY_STATE, cmds, commit_idx);
+> +	if (ret) {
+> +		pr_err("Error sending WAKE RPMH requests (%d)\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	tcs_list_gen(&voter->commit_list, QCOM_ICC_BUCKET_SLEEP, cmds, commit_idx);
+> +
+> +	ret = rpmh_write_batch(voter->dev, RPMH_SLEEP_STATE, cmds, commit_idx);
+> +	if (ret) {
+> +		pr_err("Error sending SLEEP RPMH requests (%d)\n", ret);
+> +		goto out;
+> +	}
+> +
+> +out:
+> +	INIT_LIST_HEAD(&voter->commit_list);
+> +	mutex_unlock(&voter->lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_bcm_voter_commit);
+> +
+> +static int qcom_icc_bcm_voter_probe(struct platform_device *pdev)
+> +{
+> +	struct bcm_voter *voter;
+> +
+> +	voter = devm_kzalloc(&pdev->dev, sizeof(*voter), GFP_KERNEL);
+> +	if (!voter)
+> +		return -ENOMEM;
+> +
+> +	voter->dev = &pdev->dev;
+> +	voter->np = pdev->dev.of_node;
+> +	mutex_init(&voter->lock);
+> +	INIT_LIST_HEAD(&voter->commit_list);
+> +	INIT_LIST_HEAD(&voter->ws_list);
+> +	list_add_tail(&voter->voter_node, &bcm_voters);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id bcm_voter_of_match[] = {
+> +	{ .compatible = "qcom,sdm845-bcm-voter" },
+> +	{ },
+> +};
+> +
+> +static struct platform_driver qcom_icc_bcm_voter_driver = {
+> +	.probe = qcom_icc_bcm_voter_probe,
+> +	.driver = {
+> +		.name		= "sdm845_bcm_voter",
+> +		.of_match_table = bcm_voter_of_match,
+> +	},
+> +};
+> +module_platform_driver(qcom_icc_bcm_voter_driver);
+> +MODULE_AUTHOR("David Dai <daidavid1@codeaurora.org>");
+> +MODULE_DESCRIPTION("Qualcomm BCM Voter interconnect driver");
+> +MODULE_LICENSE("GPL v2");
+> +
+> diff --git a/drivers/interconnect/qcom/bcm-voter.h b/drivers/interconnect/qcom/bcm-voter.h
+> new file mode 100644
+> index 0000000..bb687b7
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/bcm-voter.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + *
+> + */
+> +
+> +#ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_BCM_VOTER_H__
+> +#define __DRIVERS_INTERCONNECT_QCOM_ICC_BCM_VOTER_H__
+
+This doesn't match the path and filename.
+
+> +
+> +#include <soc/qcom/cmd-db.h>
+> +#include <soc/qcom/rpmh.h>
+> +#include <soc/qcom/tcs.h>
+> +
+> +#include "icc-rpmh.h"
+> +
+> +#define DEFINE_QBCM(_name, _bcmname, _keepalive, _numnodes, ...)	\
+> +		static struct qcom_icc_bcm _name = {			\
+> +		.name = _bcmname,					\
+> +		.keepalive = _keepalive,				\
+> +		.num_nodes = _numnodes,					\
+> +		.nodes = { __VA_ARGS__ },				\
+> +	}
+> +
+> +struct bcm_voter *of_bcm_voter_get(struct device *dev, const char *name);
+> +void qcom_icc_bcm_voter_add(struct bcm_voter *voter, struct qcom_icc_bcm *bcm);
+> +int qcom_icc_bcm_voter_commit(struct bcm_voter *voter);
+> +
+> +#endif
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> new file mode 100644
+> index 0000000..0041deb
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -0,0 +1,158 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
@@ -139,868 +561,324 @@ Just three NoCs, really?
 > + */
 > +
 > +#include <asm/div64.h>
-
-Is this used?
-
-> +#include <dt-bindings/interconnect/qcom,sc7180.h>
-> +#include <linux/device.h>
+> +#include <dt-bindings/interconnect/qcom,sdm845.h>
 > +#include <linux/interconnect.h>
 > +#include <linux/interconnect-provider.h>
-> +#include <linux/io.h>
-
-unused?
-
 > +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/sort.h>
-
-unused?
-
 > +
 > +#include "icc-rpmh.h"
 > +#include "bcm-voter.h"
-> +
-> +DEFINE_QNODE(qhm_a1noc_cfg, MASTER_A1NOC_CFG, 1, 4, 1,
-> +		SLAVE_SERVICE_A1NOC);
 
-Nit: Doesn't this fit on a single line? If you prefer to keep
-it this way, please align to the open parenthesis.
+Move above icc-rpmh.h to keep the alphabetical order.
 
-> +DEFINE_QNODE(qhm_qspi, MASTER_QSPI, 1, 4, 1,
-> +		SLAVE_A1NOC_SNOC);
-> +DEFINE_QNODE(qhm_qup_0, MASTER_QUP_0, 1, 4, 1,
-> +		SLAVE_A1NOC_SNOC);
-> +DEFINE_QNODE(xm_sdc2, MASTER_SDCC_2, 1, 8, 1,
-> +		SLAVE_A1NOC_SNOC);
-> +DEFINE_QNODE(xm_emmc, MASTER_EMMC, 1, 8, 1,
-> +		SLAVE_A1NOC_SNOC);
-> +DEFINE_QNODE(xm_ufs_mem, MASTER_UFS_MEM, 1, 8, 1,
-> +		SLAVE_A1NOC_SNOC);
-> +DEFINE_QNODE(qhm_a2noc_cfg, MASTER_A2NOC_CFG, 1, 4, 1,
-> +		SLAVE_SERVICE_A2NOC);
-> +DEFINE_QNODE(qhm_qdss_bam, MASTER_QDSS_BAM, 1, 4, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(qhm_qup_1, MASTER_QUP_1, 1, 4, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(qxm_crypto, MASTER_CRYPTO, 1, 8, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(qxm_ipa, MASTER_IPA, 1, 8, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(xm_qdss_etr, MASTER_QDSS_ETR, 1, 8, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(qhm_usb3, MASTER_USB3, 1, 8, 1,
-> +		SLAVE_A2NOC_SNOC);
-> +DEFINE_QNODE(qxm_camnoc_hf0_uncomp, MASTER_CAMNOC_HF0_UNCOMP, 1, 32, 1,
-> +		SLAVE_CAMNOC_UNCOMP);
-> +DEFINE_QNODE(qxm_camnoc_hf1_uncomp, MASTER_CAMNOC_HF1_UNCOMP, 1, 32, 1,
-> +		SLAVE_CAMNOC_UNCOMP);
-> +DEFINE_QNODE(qxm_camnoc_sf_uncomp, MASTER_CAMNOC_SF_UNCOMP, 1, 32, 1,
-> +		SLAVE_CAMNOC_UNCOMP);
-> +DEFINE_QNODE(qnm_npu, MASTER_NPU, 2, 32, 1,
-> +		SLAVE_CDSP_GEM_NOC);
-> +DEFINE_QNODE(qxm_npu_dsp, MASTER_NPU_PROC, 1, 8, 1,
-> +		SLAVE_CDSP_GEM_NOC);
-> +DEFINE_QNODE(qnm_snoc, MASTER_SNOC_CNOC, 1, 8, 51,
-> +		SLAVE_A1NOC_CFG, SLAVE_A2NOC_CFG,
-> +		SLAVE_AHB2PHY_SOUTH, SLAVE_AHB2PHY_CENTER,
-> +		SLAVE_AOP, SLAVE_AOSS,
-> +		SLAVE_BOOT_ROM, SLAVE_CAMERA_CFG,
-> +		SLAVE_CAMERA_NRT_THROTTLE_CFG, SLAVE_CAMERA_RT_THROTTLE_CFG,
-> +		SLAVE_CLK_CTL, SLAVE_RBCPR_CX_CFG,
-> +		SLAVE_RBCPR_MX_CFG, SLAVE_CRYPTO_0_CFG,
-> +		SLAVE_DCC_CFG, SLAVE_CNOC_DDRSS,
-> +		SLAVE_DISPLAY_CFG, SLAVE_DISPLAY_RT_THROTTLE_CFG,
-> +		SLAVE_DISPLAY_THROTTLE_CFG, SLAVE_EMMC_CFG,
-> +		SLAVE_GLM, SLAVE_GFX3D_CFG,
-> +		SLAVE_IMEM_CFG, SLAVE_IPA_CFG,
-> +		SLAVE_CNOC_MNOC_CFG, SLAVE_CNOC_MSS,
-> +		SLAVE_NPU_CFG, SLAVE_NPU_DMA_BWMON_CFG,
-> +		SLAVE_NPU_PROC_BWMON_CFG, SLAVE_PDM,
-> +		SLAVE_PIMEM_CFG, SLAVE_PRNG,
-> +		SLAVE_QDSS_CFG, SLAVE_QM_CFG,
-> +		SLAVE_QM_MPU_CFG, SLAVE_QSPI_0,
-> +		SLAVE_QUP_0, SLAVE_QUP_1,
-> +		SLAVE_SDCC_2, SLAVE_SECURITY,
-> +		SLAVE_SNOC_CFG, SLAVE_TCSR,
-> +		SLAVE_TLMM_WEST, SLAVE_TLMM_NORTH,
-> +		SLAVE_TLMM_SOUTH, SLAVE_UFS_MEM_CFG,
-> +		SLAVE_USB3, SLAVE_VENUS_CFG,
-> +		SLAVE_VENUS_THROTTLE_CFG, SLAVE_VSENSE_CTRL_CFG,
-> +		SLAVE_SERVICE_CNOC);
-> +DEFINE_QNODE(xm_qdss_dap, MASTER_QDSS_DAP, 1, 8, 51,
-> +		SLAVE_A1NOC_CFG, SLAVE_A2NOC_CFG,
-> +		SLAVE_AHB2PHY_SOUTH, SLAVE_AHB2PHY_CENTER,
-> +		SLAVE_AOP, SLAVE_AOSS,
-> +		SLAVE_BOOT_ROM, SLAVE_CAMERA_CFG,
-> +		SLAVE_CAMERA_NRT_THROTTLE_CFG, SLAVE_CAMERA_RT_THROTTLE_CFG,
-> +		SLAVE_CLK_CTL, SLAVE_RBCPR_CX_CFG,
-> +		SLAVE_RBCPR_MX_CFG, SLAVE_CRYPTO_0_CFG,
-> +		SLAVE_DCC_CFG, SLAVE_CNOC_DDRSS,
-> +		SLAVE_DISPLAY_CFG, SLAVE_DISPLAY_RT_THROTTLE_CFG,
-> +		SLAVE_DISPLAY_THROTTLE_CFG, SLAVE_EMMC_CFG,
-> +		SLAVE_GLM, SLAVE_GFX3D_CFG,
-> +		SLAVE_IMEM_CFG, SLAVE_IPA_CFG,
-> +		SLAVE_CNOC_MNOC_CFG, SLAVE_CNOC_MSS,
-> +		SLAVE_NPU_CFG, SLAVE_NPU_DMA_BWMON_CFG,
-> +		SLAVE_NPU_PROC_BWMON_CFG, SLAVE_PDM,
-> +		SLAVE_PIMEM_CFG, SLAVE_PRNG,
-> +		SLAVE_QDSS_CFG, SLAVE_QM_CFG,
-> +		SLAVE_QM_MPU_CFG, SLAVE_QSPI_0,
-> +		SLAVE_QUP_0, SLAVE_QUP_1,
-> +		SLAVE_SDCC_2, SLAVE_SECURITY,
-> +		SLAVE_SNOC_CFG, SLAVE_TCSR,
-> +		SLAVE_TLMM_WEST, SLAVE_TLMM_NORTH,
-> +		SLAVE_TLMM_SOUTH, SLAVE_UFS_MEM_CFG,
-> +		SLAVE_USB3, SLAVE_VENUS_CFG,
-> +		SLAVE_VENUS_THROTTLE_CFG, SLAVE_VSENSE_CTRL_CFG,
-> +		SLAVE_SERVICE_CNOC);
-> +DEFINE_QNODE(qhm_cnoc_dc_noc, MASTER_CNOC_DC_NOC, 1, 4, 2,
-> +		SLAVE_GEM_NOC_CFG, SLAVE_LLCC_CFG);
-> +DEFINE_QNODE(acm_apps0, MASTER_APPSS_PROC, 1, 16, 2,
-> +		SLAVE_GEM_NOC_SNOC, SLAVE_LLCC);
-> +DEFINE_QNODE(acm_sys_tcu, MASTER_SYS_TCU, 1, 8, 2,
-> +		SLAVE_GEM_NOC_SNOC, SLAVE_LLCC);
-> +DEFINE_QNODE(qhm_gemnoc_cfg, MASTER_GEM_NOC_CFG, 1, 4, 2,
-> +		SLAVE_MSS_PROC_MS_MPU_CFG, SLAVE_SERVICE_GEM_NOC);
-> +DEFINE_QNODE(qnm_cmpnoc, MASTER_COMPUTE_NOC, 1, 32, 2,
-> +		SLAVE_GEM_NOC_SNOC, SLAVE_LLCC);
-> +DEFINE_QNODE(qnm_mnoc_hf, MASTER_MNOC_HF_MEM_NOC, 1, 32, 1,
-> +		SLAVE_LLCC);
-> +DEFINE_QNODE(qnm_mnoc_sf, MASTER_MNOC_SF_MEM_NOC, 1, 32, 2,
-> +		SLAVE_GEM_NOC_SNOC, SLAVE_LLCC);
-> +DEFINE_QNODE(qnm_snoc_gc, MASTER_SNOC_GC_MEM_NOC, 1, 8, 1,
-> +		SLAVE_LLCC);
-> +DEFINE_QNODE(qnm_snoc_sf, MASTER_SNOC_SF_MEM_NOC, 1, 16, 1,
-> +		SLAVE_LLCC);
-> +DEFINE_QNODE(qxm_gpu, MASTER_GFX3D, 2, 32, 2,
-> +		SLAVE_GEM_NOC_SNOC, SLAVE_LLCC);
-> +DEFINE_QNODE(ipa_core_master, MASTER_IPA_CORE, 1, 8, 1,
-> +		SLAVE_IPA_CORE);
-> +DEFINE_QNODE(llcc_mc, MASTER_LLCC, 2, 4, 1,
-> +		SLAVE_EBI1);
-> +DEFINE_QNODE(qhm_mnoc_cfg, MASTER_CNOC_MNOC_CFG, 1, 4, 1,
-> +		SLAVE_SERVICE_MNOC);
-> +DEFINE_QNODE(qxm_camnoc_hf0, MASTER_CAMNOC_HF0, 2, 32, 1,
-> +		SLAVE_MNOC_HF_MEM_NOC);
-> +DEFINE_QNODE(qxm_camnoc_hf1, MASTER_CAMNOC_HF1, 2, 32, 1,
-> +		SLAVE_MNOC_HF_MEM_NOC);
-> +DEFINE_QNODE(qxm_camnoc_sf, MASTER_CAMNOC_SF, 1, 32, 1,
-> +		SLAVE_MNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(qxm_mdp0, MASTER_MDP0, 1, 32, 1,
-> +		SLAVE_MNOC_HF_MEM_NOC);
-> +DEFINE_QNODE(qxm_rot, MASTER_ROTATOR, 1, 16, 1,
-> +		SLAVE_MNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(qxm_venus0, MASTER_VIDEO_P0, 1, 32, 1,
-> +		SLAVE_MNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(qxm_venus_arm9, MASTER_VIDEO_PROC, 1, 8, 1,
-> +		SLAVE_MNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(amm_npu_sys, MASTER_NPU_SYS, 2, 32, 1,
-> +		SLAVE_NPU_COMPUTE_NOC);
-> +DEFINE_QNODE(qhm_npu_cfg, MASTER_NPU_NOC_CFG, 1, 4, 8,
-> +		SLAVE_NPU_CAL_DP0, SLAVE_NPU_CP,
-> +		SLAVE_NPU_INT_DMA_BWMON_CFG, SLAVE_NPU_DPM,
-> +		SLAVE_ISENSE_CFG, SLAVE_NPU_LLM_CFG,
-> +		SLAVE_NPU_TCM, SLAVE_SERVICE_NPU_NOC);
-> +DEFINE_QNODE(qup_core_master_1, MASTER_QUP_CORE_0, 1, 4, 1,
-> +		SLAVE_QUP_CORE_0);
-> +DEFINE_QNODE(qup_core_master_2, MASTER_QUP_CORE_1, 1, 4, 1,
-> +		SLAVE_QUP_CORE_1);
-> +DEFINE_QNODE(qhm_snoc_cfg, MASTER_SNOC_CFG, 1, 4, 1,
-> +		SLAVE_SERVICE_SNOC);
-> +DEFINE_QNODE(qnm_aggre1_noc, MASTER_A1NOC_SNOC, 1, 16, 6,
-> +		SLAVE_APPSS, SLAVE_SNOC_CNOC,
-> +		SLAVE_SNOC_GEM_NOC_SF, SLAVE_IMEM,
-> +		SLAVE_PIMEM, SLAVE_QDSS_STM);
-> +DEFINE_QNODE(qnm_aggre2_noc, MASTER_A2NOC_SNOC, 1, 16, 7,
-> +		SLAVE_APPSS, SLAVE_SNOC_CNOC,
-> +		SLAVE_SNOC_GEM_NOC_SF, SLAVE_IMEM,
-> +		SLAVE_PIMEM, SLAVE_QDSS_STM,
-> +		SLAVE_TCU);
-> +DEFINE_QNODE(qnm_gemnoc, MASTER_GEM_NOC_SNOC, 1, 8, 6,
-> +		SLAVE_APPSS, SLAVE_SNOC_CNOC,
-> +		SLAVE_IMEM, SLAVE_PIMEM,
-> +		SLAVE_QDSS_STM, SLAVE_TCU);
-> +DEFINE_QNODE(qxm_pimem, MASTER_PIMEM, 1, 8, 2,
-> +		SLAVE_SNOC_GEM_NOC_GC, SLAVE_IMEM);
 > +
-> +DEFINE_QNODE(qns_a1noc_snoc, SLAVE_A1NOC_SNOC, 1, 16, 1,
-> +		MASTER_A1NOC_SNOC);
-> +DEFINE_QNODE(srvc_aggre1_noc, SLAVE_SERVICE_A1NOC, 1, 4, 0);
-> +DEFINE_QNODE(qns_a2noc_snoc, SLAVE_A2NOC_SNOC, 1, 16, 1,
-> +		MASTER_A2NOC_SNOC);
-> +DEFINE_QNODE(srvc_aggre2_noc, SLAVE_SERVICE_A2NOC, 1, 4, 0);
-> +DEFINE_QNODE(qns_camnoc_uncomp, SLAVE_CAMNOC_UNCOMP, 1, 32, 0);
-> +DEFINE_QNODE(qns_cdsp_gemnoc, SLAVE_CDSP_GEM_NOC, 1, 32, 1,
-> +		MASTER_COMPUTE_NOC);
-> +DEFINE_QNODE(qhs_a1_noc_cfg, SLAVE_A1NOC_CFG, 1, 4, 1,
-> +		MASTER_A1NOC_CFG);
-> +DEFINE_QNODE(qhs_a2_noc_cfg, SLAVE_A2NOC_CFG, 1, 4, 1,
-> +		MASTER_A2NOC_CFG);
-> +DEFINE_QNODE(qhs_ahb2phy0, SLAVE_AHB2PHY_SOUTH, 1, 4, 0);
-> +DEFINE_QNODE(qhs_ahb2phy2, SLAVE_AHB2PHY_CENTER, 1, 4, 0);
-> +DEFINE_QNODE(qhs_aop, SLAVE_AOP, 1, 4, 0);
-> +DEFINE_QNODE(qhs_aoss, SLAVE_AOSS, 1, 4, 0);
-> +DEFINE_QNODE(qhs_boot_rom, SLAVE_BOOT_ROM, 1, 4, 0);
-> +DEFINE_QNODE(qhs_camera_cfg, SLAVE_CAMERA_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_camera_nrt_throttle_cfg,
-> +		SLAVE_CAMERA_NRT_THROTTLE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_camera_rt_throttle_cfg,
-> +		SLAVE_CAMERA_RT_THROTTLE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_clk_ctl, SLAVE_CLK_CTL, 1, 4, 0);
-> +DEFINE_QNODE(qhs_cpr_cx, SLAVE_RBCPR_CX_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_cpr_mx, SLAVE_RBCPR_MX_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_crypto0_cfg, SLAVE_CRYPTO_0_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_dcc_cfg, SLAVE_DCC_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_ddrss_cfg, SLAVE_CNOC_DDRSS, 1, 4, 1,
-> +		MASTER_CNOC_DC_NOC);
-> +DEFINE_QNODE(qhs_display_cfg, SLAVE_DISPLAY_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_display_rt_throttle_cfg,
-> +		SLAVE_DISPLAY_RT_THROTTLE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_display_throttle_cfg, SLAVE_DISPLAY_THROTTLE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_emmc_cfg, SLAVE_EMMC_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_glm, SLAVE_GLM, 1, 4, 0);
-> +DEFINE_QNODE(qhs_gpuss_cfg, SLAVE_GFX3D_CFG, 1, 8, 0);
-> +DEFINE_QNODE(qhs_imem_cfg, SLAVE_IMEM_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_ipa, SLAVE_IPA_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_mnoc_cfg, SLAVE_CNOC_MNOC_CFG, 1, 4, 1,
-> +		MASTER_CNOC_MNOC_CFG);
-> +DEFINE_QNODE(qhs_mss_cfg, SLAVE_CNOC_MSS, 1, 4, 0);
-> +DEFINE_QNODE(qhs_npu_cfg, SLAVE_NPU_CFG, 1, 4, 1,
-> +		MASTER_NPU_NOC_CFG);
-> +DEFINE_QNODE(qhs_npu_dma_throttle_cfg, SLAVE_NPU_DMA_BWMON_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_npu_dsp_throttle_cfg, SLAVE_NPU_PROC_BWMON_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_pdm, SLAVE_PDM, 1, 4, 0);
-> +DEFINE_QNODE(qhs_pimem_cfg, SLAVE_PIMEM_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_prng, SLAVE_PRNG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qdss_cfg, SLAVE_QDSS_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qm_cfg, SLAVE_QM_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qm_mpu_cfg, SLAVE_QM_MPU_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qspi, SLAVE_QSPI_0, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qup0, SLAVE_QUP_0, 1, 4, 0);
-> +DEFINE_QNODE(qhs_qup1, SLAVE_QUP_1, 1, 4, 0);
-> +DEFINE_QNODE(qhs_sdc2, SLAVE_SDCC_2, 1, 4, 0);
-> +DEFINE_QNODE(qhs_security, SLAVE_SECURITY, 1, 4, 0);
-> +DEFINE_QNODE(qhs_snoc_cfg, SLAVE_SNOC_CFG, 1, 4, 1,
-> +		MASTER_SNOC_CFG);
-> +DEFINE_QNODE(qhs_tcsr, SLAVE_TCSR, 1, 4, 0);
-> +DEFINE_QNODE(qhs_tlmm_1, SLAVE_TLMM_WEST, 1, 4, 0);
-> +DEFINE_QNODE(qhs_tlmm_2, SLAVE_TLMM_NORTH, 1, 4, 0);
-> +DEFINE_QNODE(qhs_tlmm_3, SLAVE_TLMM_SOUTH, 1, 4, 0);
-> +DEFINE_QNODE(qhs_ufs_mem_cfg, SLAVE_UFS_MEM_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_usb3, SLAVE_USB3, 1, 4, 0);
-> +DEFINE_QNODE(qhs_venus_cfg, SLAVE_VENUS_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_venus_throttle_cfg, SLAVE_VENUS_THROTTLE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_vsense_ctrl_cfg, SLAVE_VSENSE_CTRL_CFG, 1, 4, 0);
-> +DEFINE_QNODE(srvc_cnoc, SLAVE_SERVICE_CNOC, 1, 4, 0);
-> +DEFINE_QNODE(qhs_gemnoc, SLAVE_GEM_NOC_CFG, 1, 4, 1,
-> +		MASTER_GEM_NOC_CFG);
-> +DEFINE_QNODE(qhs_llcc, SLAVE_LLCC_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_mdsp_ms_mpu_cfg, SLAVE_MSS_PROC_MS_MPU_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qns_gem_noc_snoc, SLAVE_GEM_NOC_SNOC, 1, 8, 1,
-> +		MASTER_GEM_NOC_SNOC);
-> +DEFINE_QNODE(qns_llcc, SLAVE_LLCC, 1, 16, 1,
-> +		MASTER_LLCC);
-> +DEFINE_QNODE(srvc_gemnoc, SLAVE_SERVICE_GEM_NOC, 1, 4, 0);
-> +DEFINE_QNODE(ipa_core_slave, SLAVE_IPA_CORE, 1, 8, 0);
-> +DEFINE_QNODE(ebi, SLAVE_EBI1, 2, 4, 0);
-> +DEFINE_QNODE(qns_mem_noc_hf, SLAVE_MNOC_HF_MEM_NOC, 1, 32, 1,
-> +		MASTER_MNOC_HF_MEM_NOC);
-> +DEFINE_QNODE(qns_mem_noc_sf, SLAVE_MNOC_SF_MEM_NOC, 1, 32, 1,
-> +		MASTER_MNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(srvc_mnoc, SLAVE_SERVICE_MNOC, 1, 4, 0);
-> +DEFINE_QNODE(qhs_cal_dp0, SLAVE_NPU_CAL_DP0, 1, 4, 0);
-> +DEFINE_QNODE(qhs_cp, SLAVE_NPU_CP, 1, 4, 0);
-> +DEFINE_QNODE(qhs_dma_bwmon, SLAVE_NPU_INT_DMA_BWMON_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_dpm, SLAVE_NPU_DPM, 1, 4, 0);
-> +DEFINE_QNODE(qhs_isense, SLAVE_ISENSE_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_llm, SLAVE_NPU_LLM_CFG, 1, 4, 0);
-> +DEFINE_QNODE(qhs_tcm, SLAVE_NPU_TCM, 1, 4, 0);
-> +DEFINE_QNODE(qns_npu_sys, SLAVE_NPU_COMPUTE_NOC, 2, 32, 0);
-> +DEFINE_QNODE(srvc_noc, SLAVE_SERVICE_NPU_NOC, 1, 4, 0);
-> +DEFINE_QNODE(qup_core_slave_1, SLAVE_QUP_CORE_0, 1, 4, 0);
-> +DEFINE_QNODE(qup_core_slave_2, SLAVE_QUP_CORE_1, 1, 4, 0);
-> +DEFINE_QNODE(qhs_apss, SLAVE_APPSS, 1, 8, 0);
-> +DEFINE_QNODE(qns_cnoc, SLAVE_SNOC_CNOC, 1, 8, 1,
-> +		MASTER_SNOC_CNOC);
-> +DEFINE_QNODE(qns_gemnoc_gc, SLAVE_SNOC_GEM_NOC_GC, 1, 8, 1,
-> +		MASTER_SNOC_GC_MEM_NOC);
-> +DEFINE_QNODE(qns_gemnoc_sf, SLAVE_SNOC_GEM_NOC_SF, 1, 16, 1,
-> +		MASTER_SNOC_SF_MEM_NOC);
-> +DEFINE_QNODE(qxs_imem, SLAVE_IMEM, 1, 8, 0);
-> +DEFINE_QNODE(qxs_pimem, SLAVE_PIMEM, 1, 8, 0);
-> +DEFINE_QNODE(srvc_snoc, SLAVE_SERVICE_SNOC, 1, 4, 0);
-> +DEFINE_QNODE(xs_qdss_stm, SLAVE_QDSS_STM, 1, 4, 0);
-> +DEFINE_QNODE(xs_sys_tcu_cfg, SLAVE_TCU, 1, 8, 0);
-> +
-> +DEFINE_QBCM(bcm_acv, "ACV", false, 1,
-> +		&ebi);
-> +DEFINE_QBCM(bcm_mc0, "MC0", true, 1,
-> +		&ebi);
-> +DEFINE_QBCM(bcm_sh0, "SH0", true, 1,
-> +		&qns_llcc);
-> +DEFINE_QBCM(bcm_mm0, "MM0", false, 1,
-> +		&qns_mem_noc_hf);
-> +DEFINE_QBCM(bcm_ce0, "CE0", false, 1,
-> +		&qxm_crypto);
-> +DEFINE_QBCM(bcm_ip0, "IP0", false, 1,
-> +		&ipa_core_slave);
-> +DEFINE_QBCM(bcm_cn0, "CN0", true, 48,
-> +		&qnm_snoc, &xm_qdss_dap, &qhs_a1_noc_cfg,
-> +		&qhs_a2_noc_cfg, &qhs_ahb2phy0, &qhs_aop,
-> +		&qhs_aoss, &qhs_boot_rom, &qhs_camera_cfg,
-> +		&qhs_camera_nrt_throttle_cfg,
-> +		&qhs_camera_rt_throttle_cfg, &qhs_clk_ctl,
-> +		&qhs_cpr_cx, &qhs_cpr_mx, &qhs_crypto0_cfg,
-> +		&qhs_dcc_cfg, &qhs_ddrss_cfg, &qhs_display_cfg,
-> +		&qhs_display_rt_throttle_cfg,
-> +		&qhs_display_throttle_cfg, &qhs_glm,
-> +		&qhs_gpuss_cfg, &qhs_imem_cfg, &qhs_ipa,
-> +		&qhs_mnoc_cfg, &qhs_mss_cfg, &qhs_npu_cfg,
-> +		&qhs_npu_dma_throttle_cfg, &qhs_npu_dsp_throttle_cfg,
-> +		&qhs_pimem_cfg, &qhs_prng, &qhs_qdss_cfg, &qhs_qm_cfg,
-> +		&qhs_qm_mpu_cfg, &qhs_qup0, &qhs_qup1,
-> +		&qhs_security, &qhs_snoc_cfg, &qhs_tcsr,
-> +		&qhs_tlmm_1, &qhs_tlmm_2, &qhs_tlmm_3,
-> +		&qhs_ufs_mem_cfg, &qhs_usb3, &qhs_venus_cfg,
-> +		&qhs_venus_throttle_cfg, &qhs_vsense_ctrl_cfg, &srvc_cnoc);
-> +DEFINE_QBCM(bcm_mm1, "MM1", false, 8,
-> +		&qxm_camnoc_hf0_uncomp, &qxm_camnoc_hf1_uncomp,
-> +		&qxm_camnoc_sf_uncomp, &qhm_mnoc_cfg, &qxm_mdp0,
-> +		&qxm_rot, &qxm_venus0, &qxm_venus_arm9);
-> +DEFINE_QBCM(bcm_sh2, "SH2", false, 1,
-> +		&acm_sys_tcu);
-> +DEFINE_QBCM(bcm_mm2, "MM2", false, 1,
-> +		&qns_mem_noc_sf);
-> +DEFINE_QBCM(bcm_qup0, "QUP0", false, 2,
-> +		&qup_core_master_1, &qup_core_master_2);
-> +DEFINE_QBCM(bcm_sh3, "SH3", false, 1,
-> +		&qnm_cmpnoc);
-> +DEFINE_QBCM(bcm_sh4, "SH4", false, 1,
-> +		&acm_apps0);
-> +DEFINE_QBCM(bcm_sn0, "SN0", true, 1,
-> +		&qns_gemnoc_sf);
-> +DEFINE_QBCM(bcm_co0, "CO0", false, 1,
-> +		&qns_cdsp_gemnoc);
-> +DEFINE_QBCM(bcm_sn1, "SN1", false, 1,
-> +		&qxs_imem);
-> +DEFINE_QBCM(bcm_cn1, "CN1", false, 8,
-> +		&qhm_qspi, &xm_sdc2, &xm_emmc,
-> +		&qhs_ahb2phy2, &qhs_emmc_cfg,
-> +		&qhs_pdm, &qhs_qspi, &qhs_sdc2);
-> +DEFINE_QBCM(bcm_sn2, "SN2", false, 2,
-> +		&qxm_pimem, &qns_gemnoc_gc);
-> +DEFINE_QBCM(bcm_co2, "CO2", false, 1,
-> +		&qnm_npu);
-> +DEFINE_QBCM(bcm_sn3, "SN3", false, 1,
-> +		&qxs_pimem);
-> +DEFINE_QBCM(bcm_co3, "CO3", false, 1,
-> +		&qxm_npu_dsp);
-> +DEFINE_QBCM(bcm_sn4, "SN4", false, 1,
-> +		&xs_qdss_stm);
-> +DEFINE_QBCM(bcm_sn7, "SN7", false, 1,
-> +		&qnm_aggre1_noc);
-> +DEFINE_QBCM(bcm_sn9, "SN9", false, 1,
-> +		&qnm_aggre2_noc);
-> +DEFINE_QBCM(bcm_sn12, "SN12", false, 1,
-> +		&qnm_gemnoc);
-> +
-> +static struct qcom_icc_bcm *aggre1_noc_bcms[] = {
-> +	&bcm_cn1,
-> +};
-> +
-> +static struct qcom_icc_node *aggre1_noc_nodes[] = {
-> +	[MASTER_A1NOC_CFG] = &qhm_a1noc_cfg,
-> +	[MASTER_QSPI] = &qhm_qspi,
-> +	[MASTER_QUP_0] = &qhm_qup_0,
-> +	[MASTER_SDCC_2] = &xm_sdc2,
-> +	[MASTER_EMMC] = &xm_emmc,
-> +	[MASTER_UFS_MEM] = &xm_ufs_mem,
-> +	[SLAVE_A1NOC_SNOC] = &qns_a1noc_snoc,
-> +	[SLAVE_SERVICE_A1NOC] = &srvc_aggre1_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_aggre1_noc = {
-> +	.nodes = aggre1_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
-> +	.bcms = aggre1_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *aggre2_noc_bcms[] = {
-> +	&bcm_ce0,
-> +};
-> +
-> +static struct qcom_icc_node *aggre2_noc_nodes[] = {
-> +	[MASTER_A2NOC_CFG] = &qhm_a2noc_cfg,
-> +	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
-> +	[MASTER_QUP_1] = &qhm_qup_1,
-> +	[MASTER_USB3] = &qhm_usb3,
-> +	[MASTER_CRYPTO] = &qxm_crypto,
-> +	[MASTER_IPA] = &qxm_ipa,
-> +	[MASTER_QDSS_ETR] = &xm_qdss_etr,
-> +	[SLAVE_A2NOC_SNOC] = &qns_a2noc_snoc,
-> +	[SLAVE_SERVICE_A2NOC] = &srvc_aggre2_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_aggre2_noc = {
-> +	.nodes = aggre2_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
-> +	.bcms = aggre2_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *camnoc_virt_bcms[] = {
-> +	&bcm_mm1,
-> +};
-> +
-> +static struct qcom_icc_node *camnoc_virt_nodes[] = {
-> +	[MASTER_CAMNOC_HF0_UNCOMP] = &qxm_camnoc_hf0_uncomp,
-> +	[MASTER_CAMNOC_HF1_UNCOMP] = &qxm_camnoc_hf1_uncomp,
-> +	[MASTER_CAMNOC_SF_UNCOMP] = &qxm_camnoc_sf_uncomp,
-> +	[SLAVE_CAMNOC_UNCOMP] = &qns_camnoc_uncomp,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_camnoc_virt = {
-> +	.nodes = camnoc_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
-> +	.bcms = camnoc_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(camnoc_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *compute_noc_bcms[] = {
-> +	&bcm_co0,
-> +	&bcm_co2,
-> +	&bcm_co3,
-> +};
-> +
-> +static struct qcom_icc_node *compute_noc_nodes[] = {
-> +	[MASTER_NPU] = &qnm_npu,
-> +	[MASTER_NPU_PROC] = &qxm_npu_dsp,
-> +	[SLAVE_CDSP_GEM_NOC] = &qns_cdsp_gemnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_compute_noc = {
-> +	.nodes = compute_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
-> +	.bcms = compute_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(compute_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *config_noc_bcms[] = {
-> +	&bcm_cn0,
-> +	&bcm_cn1,
-> +};
-> +
-> +static struct qcom_icc_node *config_noc_nodes[] = {
-> +	[MASTER_SNOC_CNOC] = &qnm_snoc,
-> +	[MASTER_QDSS_DAP] = &xm_qdss_dap,
-> +	[SLAVE_A1NOC_CFG] = &qhs_a1_noc_cfg,
-> +	[SLAVE_A2NOC_CFG] = &qhs_a2_noc_cfg,
-> +	[SLAVE_AHB2PHY_SOUTH] = &qhs_ahb2phy0,
-> +	[SLAVE_AHB2PHY_CENTER] = &qhs_ahb2phy2,
-> +	[SLAVE_AOP] = &qhs_aop,
-> +	[SLAVE_AOSS] = &qhs_aoss,
-> +	[SLAVE_BOOT_ROM] = &qhs_boot_rom,
-> +	[SLAVE_CAMERA_CFG] = &qhs_camera_cfg,
-> +	[SLAVE_CAMERA_NRT_THROTTLE_CFG] = &qhs_camera_nrt_throttle_cfg,
-> +	[SLAVE_CAMERA_RT_THROTTLE_CFG] = &qhs_camera_rt_throttle_cfg,
-> +	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
-> +	[SLAVE_RBCPR_CX_CFG] = &qhs_cpr_cx,
-> +	[SLAVE_RBCPR_MX_CFG] = &qhs_cpr_mx,
-> +	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
-> +	[SLAVE_DCC_CFG] = &qhs_dcc_cfg,
-> +	[SLAVE_CNOC_DDRSS] = &qhs_ddrss_cfg,
-> +	[SLAVE_DISPLAY_CFG] = &qhs_display_cfg,
-> +	[SLAVE_DISPLAY_RT_THROTTLE_CFG] = &qhs_display_rt_throttle_cfg,
-> +	[SLAVE_DISPLAY_THROTTLE_CFG] = &qhs_display_throttle_cfg,
-> +	[SLAVE_EMMC_CFG] = &qhs_emmc_cfg,
-> +	[SLAVE_GLM] = &qhs_glm,
-> +	[SLAVE_GFX3D_CFG] = &qhs_gpuss_cfg,
-> +	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
-> +	[SLAVE_IPA_CFG] = &qhs_ipa,
-> +	[SLAVE_CNOC_MNOC_CFG] = &qhs_mnoc_cfg,
-> +	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
-> +	[SLAVE_NPU_CFG] = &qhs_npu_cfg,
-> +	[SLAVE_NPU_DMA_BWMON_CFG] = &qhs_npu_dma_throttle_cfg,
-> +	[SLAVE_NPU_PROC_BWMON_CFG] = &qhs_npu_dsp_throttle_cfg,
-> +	[SLAVE_PDM] = &qhs_pdm,
-> +	[SLAVE_PIMEM_CFG] = &qhs_pimem_cfg,
-> +	[SLAVE_PRNG] = &qhs_prng,
-> +	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
-> +	[SLAVE_QM_CFG] = &qhs_qm_cfg,
-> +	[SLAVE_QM_MPU_CFG] = &qhs_qm_mpu_cfg,
-> +	[SLAVE_QSPI_0] = &qhs_qspi,
-> +	[SLAVE_QUP_0] = &qhs_qup0,
-> +	[SLAVE_QUP_1] = &qhs_qup1,
-> +	[SLAVE_SDCC_2] = &qhs_sdc2,
-> +	[SLAVE_SECURITY] = &qhs_security,
-> +	[SLAVE_SNOC_CFG] = &qhs_snoc_cfg,
-> +	[SLAVE_TCSR] = &qhs_tcsr,
-> +	[SLAVE_TLMM_WEST] = &qhs_tlmm_1,
-> +	[SLAVE_TLMM_NORTH] = &qhs_tlmm_2,
-> +	[SLAVE_TLMM_SOUTH] = &qhs_tlmm_3,
-> +	[SLAVE_UFS_MEM_CFG] = &qhs_ufs_mem_cfg,
-> +	[SLAVE_USB3] = &qhs_usb3,
-> +	[SLAVE_VENUS_CFG] = &qhs_venus_cfg,
-> +	[SLAVE_VENUS_THROTTLE_CFG] = &qhs_venus_throttle_cfg,
-> +	[SLAVE_VSENSE_CTRL_CFG] = &qhs_vsense_ctrl_cfg,
-> +	[SLAVE_SERVICE_CNOC] = &srvc_cnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_config_noc = {
-> +	.nodes = config_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(config_noc_nodes),
-> +	.bcms = config_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(config_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *dc_noc_bcms[] = {
-> +};
-> +
-> +static struct qcom_icc_node *dc_noc_nodes[] = {
-> +	[MASTER_CNOC_DC_NOC] = &qhm_cnoc_dc_noc,
-> +	[SLAVE_GEM_NOC_CFG] = &qhs_gemnoc,
-> +	[SLAVE_LLCC_CFG] = &qhs_llcc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_dc_noc = {
-> +	.nodes = dc_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
-> +	.bcms = dc_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(dc_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *gem_noc_bcms[] = {
-> +	&bcm_sh0,
-> +	&bcm_sh2,
-> +	&bcm_sh3,
-> +	&bcm_sh4,
-> +};
-> +
-> +static struct qcom_icc_node *gem_noc_nodes[] = {
-> +	[MASTER_APPSS_PROC] = &acm_apps0,
-> +	[MASTER_SYS_TCU] = &acm_sys_tcu,
-> +	[MASTER_GEM_NOC_CFG] = &qhm_gemnoc_cfg,
-> +	[MASTER_COMPUTE_NOC] = &qnm_cmpnoc,
-> +	[MASTER_MNOC_HF_MEM_NOC] = &qnm_mnoc_hf,
-> +	[MASTER_MNOC_SF_MEM_NOC] = &qnm_mnoc_sf,
-> +	[MASTER_SNOC_GC_MEM_NOC] = &qnm_snoc_gc,
-> +	[MASTER_SNOC_SF_MEM_NOC] = &qnm_snoc_sf,
-> +	[MASTER_GFX3D] = &qxm_gpu,
-> +	[SLAVE_MSS_PROC_MS_MPU_CFG] = &qhs_mdsp_ms_mpu_cfg,
-> +	[SLAVE_GEM_NOC_SNOC] = &qns_gem_noc_snoc,
-> +	[SLAVE_LLCC] = &qns_llcc,
-> +	[SLAVE_SERVICE_GEM_NOC] = &srvc_gemnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_gem_noc = {
-> +	.nodes = gem_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
-> +	.bcms = gem_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *ipa_virt_bcms[] = {
-> +	&bcm_ip0,
-> +};
-> +
-> +static struct qcom_icc_node *ipa_virt_nodes[] = {
-> +	[MASTER_IPA_CORE] = &ipa_core_master,
-> +	[SLAVE_IPA_CORE] = &ipa_core_slave,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_ipa_virt = {
-> +	.nodes = ipa_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(ipa_virt_nodes),
-> +	.bcms = ipa_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(ipa_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *mc_virt_bcms[] = {
-> +	&bcm_acv,
-> +	&bcm_mc0,
-> +};
-> +
-> +static struct qcom_icc_node *mc_virt_nodes[] = {
-> +	[MASTER_LLCC] = &llcc_mc,
-> +	[SLAVE_EBI1] = &ebi,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_mc_virt = {
-> +	.nodes = mc_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
-> +	.bcms = mc_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *mmss_noc_bcms[] = {
-> +	&bcm_mm0,
-> +	&bcm_mm1,
-> +	&bcm_mm2,
-> +};
-> +
-> +static struct qcom_icc_node *mmss_noc_nodes[] = {
-> +	[MASTER_CNOC_MNOC_CFG] = &qhm_mnoc_cfg,
-> +	[MASTER_CAMNOC_HF0] = &qxm_camnoc_hf0,
-> +	[MASTER_CAMNOC_HF1] = &qxm_camnoc_hf1,
-> +	[MASTER_CAMNOC_SF] = &qxm_camnoc_sf,
-> +	[MASTER_MDP0] = &qxm_mdp0,
-> +	[MASTER_ROTATOR] = &qxm_rot,
-> +	[MASTER_VIDEO_P0] = &qxm_venus0,
-> +	[MASTER_VIDEO_PROC] = &qxm_venus_arm9,
-> +	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
-> +	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
-> +	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_mmss_noc = {
-> +	.nodes = mmss_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
-> +	.bcms = mmss_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *npu_noc_bcms[] = {
-
-No bcms?
-
-> +};
-> +
-> +static struct qcom_icc_node *npu_noc_nodes[] = {
-> +	[MASTER_NPU_SYS] = &amm_npu_sys,
-> +	[MASTER_NPU_NOC_CFG] = &qhm_npu_cfg,
-> +	[SLAVE_NPU_CAL_DP0] = &qhs_cal_dp0,
-> +	[SLAVE_NPU_CP] = &qhs_cp,
-> +	[SLAVE_NPU_INT_DMA_BWMON_CFG] = &qhs_dma_bwmon,
-> +	[SLAVE_NPU_DPM] = &qhs_dpm,
-> +	[SLAVE_ISENSE_CFG] = &qhs_isense,
-> +	[SLAVE_NPU_LLM_CFG] = &qhs_llm,
-> +	[SLAVE_NPU_TCM] = &qhs_tcm,
-> +	[SLAVE_NPU_COMPUTE_NOC] = &qns_npu_sys,
-> +	[SLAVE_SERVICE_NPU_NOC] = &srvc_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_npu_noc = {
-> +	.nodes = npu_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(npu_noc_nodes),
-> +	.bcms = npu_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(npu_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *qup_virt_bcms[] = {
-> +	&bcm_qup0,
-> +};
-> +
-> +static struct qcom_icc_node *qup_virt_nodes[] = {
-> +	[MASTER_QUP_CORE_0] = &qup_core_master_1,
-> +	[MASTER_QUP_CORE_1] = &qup_core_master_2,
-> +	[SLAVE_QUP_CORE_0] = &qup_core_slave_1,
-> +	[SLAVE_QUP_CORE_1] = &qup_core_slave_2,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_qup_virt = {
-> +	.nodes = qup_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(qup_virt_nodes),
-> +	.bcms = qup_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(qup_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *system_noc_bcms[] = {
-> +	&bcm_sn0,
-> +	&bcm_sn1,
-> +	&bcm_sn2,
-> +	&bcm_sn3,
-> +	&bcm_sn4,
-> +	&bcm_sn7,
-> +	&bcm_sn9,
-> +	&bcm_sn12,
-> +};
-> +
-> +static struct qcom_icc_node *system_noc_nodes[] = {
-> +	[MASTER_SNOC_CFG] = &qhm_snoc_cfg,
-> +	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
-> +	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
-> +	[MASTER_GEM_NOC_SNOC] = &qnm_gemnoc,
-> +	[MASTER_PIMEM] = &qxm_pimem,
-> +	[SLAVE_APPSS] = &qhs_apss,
-> +	[SLAVE_SNOC_CNOC] = &qns_cnoc,
-> +	[SLAVE_SNOC_GEM_NOC_GC] = &qns_gemnoc_gc,
-> +	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
-> +	[SLAVE_IMEM] = &qxs_imem,
-> +	[SLAVE_PIMEM] = &qxs_pimem,
-> +	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-> +	[SLAVE_QDSS_STM] = &xs_qdss_stm,
-> +	[SLAVE_TCU] = &xs_sys_tcu_cfg,
-> +};
-> +
-> +static struct qcom_icc_desc sc7180_system_noc = {
-> +	.nodes = system_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(system_noc_nodes),
-> +	.bcms = system_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(system_noc_bcms),
-> +};
-> +
-> +static int qnoc_probe(struct platform_device *pdev)
+> +/**
+> + * qcom_icc_pre_aggregate - cleans up stale values from prior icc_set
+> + * @node: icc node to operate on
+> + */
+> +void qcom_icc_pre_aggregate(struct icc_node *node)
 > +{
-> +	const struct qcom_icc_desc *desc;
-> +	struct icc_onecell_data *data;
-> +	struct icc_provider *provider;
-> +	struct qcom_icc_node **qnodes;
+> +	size_t i;
+> +	struct qcom_icc_node *qn;
+> +
+> +	qn = node->data;
+> +
+> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +		qn->sum_avg[i] = 0;
+> +		qn->max_peak[i] = 0;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate); > +
+> +/**
+> + * qcom_icc_aggregate - aggregate bw for buckets indicated by tag
+> + * @node: node to aggregate
+> + * @tag: tag to indicate which buckets to aggregate
+> + * @avg_bw: new bw to sum aggregate
+> + * @peak_bw: new bw to max aggregate
+> + * @agg_avg: existing aggregate avg bw val
+> + * @agg_peak: existing aggregate peak bw val
+> + */
+> +int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+> +		       u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
+> +{
+> +	size_t i;
+> +	struct qcom_icc_node *qn;
+> +	struct qcom_icc_provider *qp;
+> +
+> +	qn = node->data;
+> +	qp = to_qcom_provider(node->provider);
+> +
+> +	if (!tag)
+> +		tag = QCOM_ICC_TAG_ALWAYS;
+> +
+> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +		if (tag & BIT(i)) {
+> +			qn->sum_avg[i] += avg_bw;
+> +			qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
+> +		}
+> +	}
+> +
+> +	*agg_avg += avg_bw;
+> +	*agg_peak = max_t(u32, *agg_peak, peak_bw);
+> +
+> +	for (i = 0; i < qn->num_bcms; i++)
+> +		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
+> +
+> +/**
+> + * qcom_icc_set - set the constraints based on path
+> + * @src: source node for the path to set constraints on
+> + * @dst: destination node for the path to set constraints on
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+> +{
 > +	struct qcom_icc_provider *qp;
 > +	struct icc_node *node;
-> +	size_t num_nodes, i;
-> +	int ret;
+> +	int ret = 0;
 > +
-> +	desc = of_device_get_match_data(&pdev->dev);
-> +	if (!desc)
-> +		return -EINVAL;
+> +	if (!src)
+> +		node = dst;
+> +	else
+> +		node = src;
 > +
-> +	qnodes = desc->nodes;
-> +	num_nodes = desc->num_nodes;
+> +	qp = to_qcom_provider(node->provider);
 > +
-> +	qp = devm_kzalloc(&pdev->dev, sizeof(*qp), GFP_KERNEL);
-> +	if (!qp)
-> +		return -ENOMEM;
+> +	qcom_icc_bcm_voter_commit(qp->voter);
 > +
-> +	data = devm_kcalloc(&pdev->dev, num_nodes, sizeof(*node), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	provider = &qp->provider;
-> +	provider->dev = &pdev->dev;
-> +	provider->set = qcom_icc_set;
-> +	provider->aggregate = qcom_icc_aggregate;
-> +	provider->xlate = of_icc_xlate_onecell;
-> +	INIT_LIST_HEAD(&provider->nodes);
-> +	provider->data = data;
-> +
-> +	qp->dev = &pdev->dev;
-> +	qp->bcms = desc->bcms;
-> +	qp->num_bcms = desc->num_bcms;
-> +
-> +	qp->voter = of_bcm_voter_get(qp->dev, NULL);
-> +	if (IS_ERR(qp->voter))
-> +		return PTR_ERR(qp->voter);
-> +
-> +	ret = icc_provider_add(provider);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "error adding interconnect provider\n");
-> +		return ret;
-> +	}
-> +
-> +	for (i = 0; i < num_nodes; i++) {
-> +		size_t j;
-> +
-> +		if (!qnodes[i])
-> +			continue;
-> +
-> +		node = icc_node_create(qnodes[i]->id);
-> +		if (IS_ERR(node)) {
-> +			ret = PTR_ERR(node);
-> +			goto err;
-> +		}
-> +
-> +		node->name = qnodes[i]->name;
-> +		node->data = qnodes[i];
-> +		icc_node_add(node, provider);
-> +
-> +		dev_dbg(&pdev->dev, "registered node %pK %s %d\n", node,
-> +			qnodes[i]->name, node->id);
-> +
-> +		/* populate links */
-> +		for (j = 0; j < qnodes[i]->num_links; j++)
-> +			icc_link_create(node, qnodes[i]->links[j]);
-> +
-> +		data->nodes[i] = node;
-> +	}
-> +	data->num_nodes = num_nodes;
-> +
-> +	for (i = 0; i < qp->num_bcms; i++)
-> +		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-> +
-> +	platform_set_drvdata(pdev, qp);
-> +
-> +	dev_dbg(&pdev->dev, "Registered SC7180 ICC\n");
-> +
-> +	return ret;
-> +err:
-> +	list_for_each_entry(node, &provider->nodes, node_list) {
-> +		icc_node_del(node);
-> +		icc_node_destroy(node->id);
-> +	}
-
-You can use the new icc_nodes_remove() helper here..
-
-> +
-> +	icc_provider_del(provider);
 > +	return ret;
 > +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_set);
 > +
-> +static int qnoc_remove(struct platform_device *pdev)
+> +/**
+> + * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+> + * @bcm: bcm to be initialized
+> + * @dev: associated provider device
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev)
 > +{
-> +	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
-> +	struct icc_provider *provider = &qp->provider;
-> +	struct icc_node *n;
+> +	struct qcom_icc_node *qn;
+> +	const struct bcm_db *data;
+> +	size_t data_count;
+> +	int i;
 > +
-> +	list_for_each_entry(n, &provider->nodes, node_list) {
-> +		icc_node_del(n);
-> +		icc_node_destroy(n->id);
+> +	bcm->addr = cmd_db_read_addr(bcm->name);
+> +	if (!bcm->addr) {
+> +		dev_err(dev, "%s could not find RPMh address\n",
+> +			bcm->name);
+> +		return -EINVAL;
 > +	}
-
-..and here too.
-
 > +
-> +	return icc_provider_del(provider);
+> +	data = cmd_db_read_aux_data(bcm->name, &data_count);
+> +	if (IS_ERR(data)) {
+> +		dev_err(dev, "%s command db read error (%ld)\n",
+> +			bcm->name, PTR_ERR(data));
+> +		return PTR_ERR(data);
+> +	}
+> +	if (!data_count) {
+> +		dev_err(dev, "%s command db missing or partial aux data\n",
+> +			bcm->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	bcm->aux_data.unit = le32_to_cpu(data->unit);
+> +	bcm->aux_data.width = le16_to_cpu(data->width);
+> +	bcm->aux_data.vcd = data->vcd;
+> +	bcm->aux_data.reserved = data->reserved;
+> +	INIT_LIST_HEAD(&bcm->list);
+> +	INIT_LIST_HEAD(&bcm->ws_list);
+> +
+> +	/*
+> +	 * Link Qnodes to their respective BCMs
+> +	 */
+> +	for (i = 0; i < bcm->num_nodes; i++) {
+> +		qn = bcm->nodes[i];
+> +		qn->bcms[qn->num_bcms] = bcm;
+> +		qn->num_bcms++;
+> +	}
+> +
+> +	return 0;
 > +}
-> +static const struct of_device_id qnoc_of_match[] = {
-> +	{ .compatible = "qcom,sc7180-aggre1-noc",
-> +	  .data = &sc7180_aggre1_noc},
-> +	{ .compatible = "qcom,sc7180-aggre2-noc",
-> +	  .data = &sc7180_aggre2_noc},
-> +	{ .compatible = "qcom,sc7180-camnoc-virt",
-> +	  .data = &sc7180_camnoc_virt},
-> +	{ .compatible = "qcom,sc7180-compute-noc",
-> +	  .data = &sc7180_compute_noc},
-> +	{ .compatible = "qcom,sc7180-config-noc",
-> +	  .data = &sc7180_config_noc},
-> +	{ .compatible = "qcom,sc7180-dc-noc",
-> +	  .data = &sc7180_dc_noc},
-> +	{ .compatible = "qcom,sc7180-gem-noc",
-> +	  .data = &sc7180_gem_noc},
-> +	{ .compatible = "qcom,sc7180-ipa-virt",
-> +	  .data = &sc7180_ipa_virt},
-> +	{ .compatible = "qcom,sc7180-mc-virt",
-> +	  .data = &sc7180_mc_virt},
-> +	{ .compatible = "qcom,sc7180-mmss-noc",
-> +	  .data = &sc7180_mmss_noc},
-> +	{ .compatible = "qcom,sc7180-npu-noc",
-> +	  .data = &sc7180_npu_noc},
-> +	{ .compatible = "qcom,sc7180-qup-virt",
-> +	  .data = &sc7180_qup_virt},
-> +	{ .compatible = "qcom,sc7180-system-noc",
-> +	  .data = &sc7180_system_noc},
-
-Nit: I would put these on a same line and ignore the 80 cols, but
-it's up to you.
-
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
+> +EXPORT_SYMBOL_GPL(qcom_icc_bcm_init);
 > +
-> +static struct platform_driver qnoc_driver = {
-> +	.probe = qnoc_probe,
-> +	.remove = qnoc_remove,
+> +static struct platform_driver qcom_icc_rpmh_driver = {
 > +	.driver = {
-> +		.name = "qnoc-sc7180",
-> +		.of_match_table = qnoc_of_match,
+> +		.name		= "icc_rpmh",
 > +	},
 > +};
-> +module_platform_driver(qnoc_driver);
-> +
-> +MODULE_DESCRIPTION("Qualcomm SC7180 NoC driver");
+> +module_platform_driver(qcom_icc_rpmh_driver);
 > +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> new file mode 100644
+> index 0000000..b32c7e3
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> @@ -0,0 +1,150 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + *
+> + */
+> +
+> +#ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_RPMH_H__
+> +#define __DRIVERS_INTERCONNECT_QCOM_ICC_RPMH_H__
+> +
+> +#define to_qcom_provider(_provider) \
+> +	container_of(_provider, struct qcom_icc_provider, provider)
+> +
+> +/**
+> + * struct qcom_icc_provider - Qualcomm specific interconnect provider
+> + * @dev: reference to the NoC device
+> + * @bcms: list of bcms that maps to the provider
+> + * @num_bcms: number of @bcms
+> + * @voter: bcm voter targeted by this provider
+> + */
+> +struct qcom_icc_provider {
+> +	struct icc_provider provider;
+
+This is missing in the kerneldoc above.
+
+> +	struct device *dev;
+> +	struct qcom_icc_bcm **bcms;
+> +	size_t num_bcms;
+> +	struct bcm_voter *voter;
+> +};
+> +
+> +/**
+> + * struct bcm_db - Auxiliary data pertaining to each Bus Clock Manager (BCM)
+> + * @unit: divisor used to convert bytes/sec bw value to an RPMh msg
+> + * @width: multiplier used to convert bytes/sec bw value to an RPMh msg
+> + * @vcd: virtual clock domain that this bcm belongs to
+> + * @reserved: reserved field
+> + */
+> +struct bcm_db {
+> +	__le32 unit;
+> +	__le16 width;
+> +	u8 vcd;
+> +	u8 reserved;
+> +};
+> +
+> +#define MAX_LINKS		128
+> +#define MAX_BCMS		64
+> +#define MAX_BCM_PER_NODE	3
+> +#define MAX_VCD			10
+> +
+> +/*
+> + * The AMC bucket denotes constraints that are applied to hardware when
+> + * icc_set_bw() completes, whereas the WAKE and SLEEP constraints are applied
+> + * when the execution environment transitions between active and low power mode.
+> + */
+> +#define QCOM_ICC_BUCKET_AMC		0
+> +#define QCOM_ICC_BUCKET_WAKE		1
+> +#define QCOM_ICC_BUCKET_SLEEP		2
+> +#define QCOM_ICC_NUM_BUCKETS		3
+> +#define QCOM_ICC_TAG_AMC		BIT(QCOM_ICC_BUCKET_AMC)
+> +#define QCOM_ICC_TAG_WAKE		BIT(QCOM_ICC_BUCKET_WAKE)
+> +#define QCOM_ICC_TAG_SLEEP		BIT(QCOM_ICC_BUCKET_SLEEP)
+> +#define QCOM_ICC_TAG_ACTIVE_ONLY	(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
+
+Seems unused?
+
+> +#define QCOM_ICC_TAG_ALWAYS		(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
+> +					 QCOM_ICC_TAG_SLEEP)
+> +
+> +/**
+> + * struct qcom_icc_node - Qualcomm specific interconnect nodes
+> + * @name: the node name used in debugfs
+> + * @links: an array of nodes where we can go next while traversing
+> + * @id: a unique node identifier
+> + * @num_links: the total number of @links
+> + * @channels: num of channels at this node
+> + * @buswidth: width of the interconnect between a node and the bus
+> + * @sum_avg: current sum aggregate value of all avg bw requests
+> + * @max_peak: current max aggregate value of all peak bw requests
+> + * @bcms: list of bcms associated with this logical node
+> + * @num_bcms: num of @bcms
+> + */
+> +struct qcom_icc_node {
+> +	const char *name;
+> +	u16 links[MAX_LINKS];
+> +	u16 id;
+> +	u16 num_links;
+> +	u16 channels;
+> +	u16 buswidth;
+> +	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+> +	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+> +	struct qcom_icc_bcm *bcms[MAX_BCM_PER_NODE];
+> +	size_t num_bcms;
+> +};
+> +
+> +/**
+> + * struct qcom_icc_bcm - Qualcomm specific hardware accelerator nodes
+> + * known as Bus Clock Manager (BCM)
+> + * @name: the bcm node name used to fetch BCM data from command db
+> + * @type: latency or bandwidth bcm
+> + * @addr: address offsets used when voting to RPMH
+> + * @vote_x: aggregated threshold values, represents sum_bw when @type is bw bcm
+> + * @vote_y: aggregated threshold values, represents peak_bw when @type is bw bcm
+> + * @dirty: flag used to indicate whether the bcm needs to be committed
+> + * @keepalive: flag used to indicate whether a keepalive is required
+> + * @aux_data: auxiliary data used when calculating threshold values and
+> + * communicating with RPMh
+> + * @list: used to link to other bcms when compiling lists for commit
+> + * @ws_list: used to keep track of bcms that may transition between wake/sleep
+> + * @num_nodes: total number of @num_nodes
+> + * @nodes: list of qcom_icc_nodes that this BCM encapsulates
+> + */
+> +struct qcom_icc_bcm {
+> +	const char *name;
+> +	u32 type;
+> +	u32 addr;
+> +	u64 vote_x[QCOM_ICC_NUM_BUCKETS];
+> +	u64 vote_y[QCOM_ICC_NUM_BUCKETS];
+> +	bool dirty;
+> +	bool keepalive;
+> +	struct bcm_db aux_data;
+> +	struct list_head list;
+> +	struct list_head ws_list;
+> +	size_t num_nodes;
+> +	struct qcom_icc_node *nodes[];
+> +};
+> +
+> +struct qcom_icc_fabric {
+> +	struct qcom_icc_node **nodes;
+> +	size_t num_nodes;
+> +};
+> +
+> +struct qcom_icc_desc {
+> +	struct qcom_icc_node **nodes;
+> +	size_t num_nodes;
+> +	struct qcom_icc_bcm **bcms;
+> +	size_t num_bcms;
+> +};
+> +
+> +#define DEFINE_QNODE(_name, _id, _channels, _buswidth,			\
+> +			_numlinks, ...)					\
+> +		static struct qcom_icc_node _name = {			\
+> +		.id = _id,						\
+> +		.name = #_name,						\
+> +		.channels = _channels,					\
+> +		.buswidth = _buswidth,					\
+> +		.num_links = _numlinks,					\
+> +		.links = { __VA_ARGS__ },				\
+> +	}
+> +
+> +int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+> +			      u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+
+Nit: Please align to the open parenthesis.
+
+> +int qcom_icc_set(struct icc_node *src, struct icc_node *dst);
+> +int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev);
+> +void qcom_icc_pre_aggregate(struct icc_node *node);
+> +
+> +#endif
 > 
 
 Thanks,
