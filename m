@@ -2,79 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A001265D7
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 16:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD0C1265F4
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 16:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfLSPfl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 10:35:41 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46291 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbfLSPfl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 10:35:41 -0500
-Received: by mail-ot1-f66.google.com with SMTP id c22so7649109otj.13;
-        Thu, 19 Dec 2019 07:35:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ErDknmMuF0Y4DYta2Y5PJm8gsBoKkVPkmKx+Bgb4CMs=;
-        b=DR05MC1cuke2C49GlmneIwuDy2HXuMYyD9zKhI1r+5FdlNGkZL8p1pr/pikwxqNkuD
-         ltoK58KRrPkPTJUQe18yu/nzo0gELwczQ7qosnqqfrjeTqlLNCkKGvfpzQ9m9WPrRmNK
-         jkqmg8J1j+aH42JZhjhyAlQyWI/X5brhpn+DPIyeJk9Ht4qgDKTTkpSHQg0IgqiFUPR+
-         byHnM8dpS1c3W16/eE8OrJzEfyfkRQxTSlVHQjIbhoTwVjnrXoB7BWfyVzjdGK175NMN
-         RmzbIvBeWfMWcHiX5WZuFPb6ser8t03t1CUUoUmSpS1VnBeQhTr3h2UHNK82mT7nh2lu
-         wtRA==
-X-Gm-Message-State: APjAAAVck521V8hNu1cf/mh+7SOHAxxuXvz31dedde5/LYVTo0w2z+/N
-        ubHpkZ+RfL1BM8OGzKj1/5x/ZPxoBnuqonIZmvFygFuR
-X-Google-Smtp-Source: APXvYqynVHxeLHCdmJUQljuDV26Ut1wFJwJYt9GPhppbUH4fXjlL+kt2mWKxWt15Ou7AABhTCabhzWtgOR3w2yAnx6w=
-X-Received: by 2002:a05:6830:1cd3:: with SMTP id p19mr7397244otg.118.1576769740744;
- Thu, 19 Dec 2019 07:35:40 -0800 (PST)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Dec 2019 16:35:29 +0100
-Message-ID: <CAJZ5v0hm1D5CJq81Ew9YjGc_ik8nw9Q_-w0a+7iMdarwPmsH7A@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v5.5-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726767AbfLSPmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 10:42:52 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:56510 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726757AbfLSPmw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Dec 2019 10:42:52 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 70EDA1A0B95;
+        Thu, 19 Dec 2019 16:42:50 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 63AC01A079C;
+        Thu, 19 Dec 2019 16:42:50 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 8290E203C8;
+        Thu, 19 Dec 2019 16:42:49 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Adam Ford <aford173@gmail.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        Jacky Bai <ping.bai@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] PM / devfreq: imx8m-ddrc: Remove unused defines
+Date:   Thu, 19 Dec 2019 17:42:47 +0200
+Message-Id: <9e89485ca173e1d118748dbe5cfc7068f74079bf.1576769985.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+The IMX_SIP_DDR_DVFS_WAIT_CHANGE and IMX_SIP_DDR_FREQ_SET_HIGH defines
+are not used so they can be removed.
 
-Please pull from the tag
+Fixes: 518e99e2a22e ("PM / devfreq: Add dynamic scaling for imx8m ddr controller")
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.5-rc3
+Reported-by: Shawn Guo <shawn.guo@kernel.org>
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+---
+ drivers/devfreq/imx8m-ddrc.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-with top-most commit 505b308b6944a91fa8437a3fd9f2dab29b5c3c88
+diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
+index fea169619c59..ecbb1db05ea0 100644
+--- a/drivers/devfreq/imx8m-ddrc.c
++++ b/drivers/devfreq/imx8m-ddrc.c
+@@ -13,16 +13,10 @@
+ #include <linux/clk-provider.h>
+ #include <linux/arm-smccc.h>
+ 
+ #define IMX_SIP_DDR_DVFS			0xc2000004
+ 
+-/* Values starting from 0 switch to specific frequency */
+-#define IMX_SIP_DDR_FREQ_SET_HIGH		0x00
+-
+-/* Deprecated after moving IRQ handling to ATF */
+-#define IMX_SIP_DDR_DVFS_WAIT_CHANGE		0x0F
+-
+ /* Query available frequencies. */
+ #define IMX_SIP_DDR_DVFS_GET_FREQ_COUNT		0x10
+ #define IMX_SIP_DDR_DVFS_GET_FREQ_INFO		0x11
+ 
+ /*
+-- 
+2.17.1
 
- Merge branch 'pm-cpufreq'
-
-on top of commit 4c84515da8099f4bab5d9312a0ffaf40f14aa87b
-
- Merge branches 'pm-cpuidle' and 'acpi-pm'
-
-to receive a power management fix for 5.5-rc3.
-
-This fixes a problem related to CPU offline/online and cpufreq
-governors that in some system configurations may lead to a
-system-wide deadlock during CPU online.
-
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (1):
-      cpufreq: Avoid leaving stale IRQ work items during CPU offline
-
----------------
-
- include/linux/cpufreq.h          | 11 -----------
- include/linux/sched/cpufreq.h    |  3 +++
- kernel/sched/cpufreq.c           | 18 ++++++++++++++++++
- kernel/sched/cpufreq_schedutil.c |  8 +++-----
- 4 files changed, 24 insertions(+), 16 deletions(-)
