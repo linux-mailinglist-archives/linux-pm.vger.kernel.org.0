@@ -2,54 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 463B11270F8
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 23:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C3C1270FE
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 23:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbfLSWzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 17:55:54 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51514 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726830AbfLSWzy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 17:55:54 -0500
-Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id ee0c570a228e0dac; Thu, 19 Dec 2019 23:55:51 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH] mailmap: Add entry for <rjw@sisk.pl>
-Date:   Thu, 19 Dec 2019 23:55:51 +0100
-Message-ID: <5262239.5eEoY8XddG@kreacher>
+        id S1726930AbfLSW5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 17:57:09 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40544 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbfLSW5I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 17:57:08 -0500
+Received: by mail-wm1-f65.google.com with SMTP id t14so7320373wmi.5
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 14:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=l3jdDT7PSb2SnKaIBXuzxAAJB0WnU3CdgPU5NfDxII8=;
+        b=PywwbSYCCUJv3kVYfUhdS9qVZeBAD72fDQV51NthW+N8MqW8OZgsesK0GWgCSkdZor
+         RI6kSPJ+Pz2hpgJshGp6WAfcK5/CvaQcxWCoVoxFli34FVfdsJsoXMg2nfoH27k4qUJx
+         Xyfa1yGrCDU9K5VpNWpLrPUcwKRz3CIQWv2K5HdfN7zu1/Q6D7BgUYtvWX9mTkz0eBdf
+         mxBeAMOzAIc1JO54WOVlClW5/p+oIPHavVsINNjzl8Bj6Aaljy70jbfI6vsE931ZnXcQ
+         Baudo1F+pB+q9I7YIFlZY/q298L5taQt6G3Xt9W5uZ2uDBY469JRU+CfXVCdhKbNfStT
+         GxvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=l3jdDT7PSb2SnKaIBXuzxAAJB0WnU3CdgPU5NfDxII8=;
+        b=j8TY8Fnf/NivgB3JSaB7H7xcpaf/tkML4YlEKspJMoPtZdGVbKvLvkd/l84IXXDwVQ
+         mL5nNpOO7hAXOTV5g4edZLCUONQRHYkOp5SdoYc3mFfi3SQio3rRlWkl7OQPHNxNM+7c
+         jbj2By5nctOZqxOmCJDp2KkbiKIGUTM0fAqOu3WUjMx0gvPLxE1S73RZoBT8lOHp8uD5
+         UiYUyrPMfkC/P+nyTyce53y+RSBhNVOZsHMUYn6K+Iw1m5HDBLyyiO3OVDFMSN9TSW3c
+         DFuKo+CuaBbbJTNawEl9BEslV4DFh2DAhZ4wt7zkuFF0hCJ3cnOjIP1scsHEkFiMud7Y
+         sLVg==
+X-Gm-Message-State: APjAAAXD3y8SF2YQxRfChFTc/MYGyI4KluroJeyYHU3qYnNthim7T5sI
+        XyukX9B08cwIq8hUG4piXZIrvA==
+X-Google-Smtp-Source: APXvYqxwz8wY4e54xzWSkjgtONc87AnBglmNyXJap6okiLTfTindPZM9l4wBPRYKV+IYgoQyFvn4EQ==
+X-Received: by 2002:a1c:3c45:: with SMTP id j66mr12218981wma.2.1576796225983;
+        Thu, 19 Dec 2019 14:57:05 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d0dd:3c81:4925:289e? ([2a01:e34:ed2f:f020:d0dd:3c81:4925:289e])
+        by smtp.googlemail.com with ESMTPSA id u14sm7935053wrm.51.2019.12.19.14.57.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Dec 2019 14:57:05 -0800 (PST)
+Subject: Re: [PATCH 2/2] thermal: cpuidle: Register cpuidle cooling device
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20191219221932.15930-1-daniel.lezcano@linaro.org>
+ <20191219221932.15930-2-daniel.lezcano@linaro.org>
+ <20191219225103.GZ228856@google.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <c08b76d1-5525-7d0e-7d11-da3584d2adcc@linaro.org>
+Date:   Thu, 19 Dec 2019 23:57:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20191219225103.GZ228856@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The old email address I contributed to the kernel from in the past
-has not been functional for a few years, so add a .mailmap entry
-for it.
+On 19/12/2019 23:51, Matthias Kaehlcke wrote:
+> Hi Daniel,
+> 
+> On Thu, Dec 19, 2019 at 11:19:28PM +0100, Daniel Lezcano wrote:
+>> The cpuidle driver can be used as a cooling device by injecting idle
+>> cycles. The DT binding for the idle state added an optional
+>>
+>> When the property is set, register the cpuidle driver with the idle
+>> state node pointer as a cooling device. The thermal framework will do
+>> the association automatically with the thermal zone via the
+>> cooling-device defined in the device tree cooling-maps section.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>  drivers/cpuidle/dt_idle_states.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
+>> index d06d21a9525d..34bd65197342 100644
+>> --- a/drivers/cpuidle/dt_idle_states.c
+>> +++ b/drivers/cpuidle/dt_idle_states.c
+>> @@ -8,6 +8,7 @@
+>>  
+>>  #define pr_fmt(fmt) "DT idle-states: " fmt
+>>  
+>> +#include <linux/cpu_cooling.h>
+>>  #include <linux/cpuidle.h>
+>>  #include <linux/cpumask.h>
+>>  #include <linux/errno.h>
+>> @@ -205,6 +206,13 @@ int dt_init_idle_driver(struct cpuidle_driver *drv,
+>>  			err = -EINVAL;
+>>  			break;
+>>  		}
+>> +
+>> +		if (of_find_property(state_node, "#cooling-cells", NULL)) {
+>> +			err = cpuidle_of_cooling_register(state_node, drv);
+> 
+> cpuidle_of_cooling_register() returns a struct thermal_cooling_device *,
+> so you probably want to use PTR_ERR() here.
 
-Signed-off-by: Rafael J. Wysocki <rjw@rjwysocki.net>
----
- .mailmap |    1 +
- 1 file changed, 1 insertion(+)
+Right, I'm about the send the V6 which returns an int.
 
-Index: linux-pm/.mailmap
-===================================================================
---- linux-pm.orig/.mailmap
-+++ linux-pm/.mailmap
-@@ -216,6 +216,7 @@ Praveen BP <praveenbp@ti.com>
- Punit Agrawal <punitagrawal@gmail.com> <punit.agrawal@arm.com>
- Qais Yousef <qsyousef@gmail.com> <qais.yousef@imgtec.com>
- Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
-+Rafael J. Wysocki <rjw@rjwysocki.net> <rjw@sisk.pl>
- Rajesh Shah <rajesh.shah@intel.com>
- Ralf Baechle <ralf@linux-mips.org>
- Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+> Could it be a problem that the cooling device isn't unregistered even when all
+> associated cores are taken offline?
 
+The cooling device relies on the powercap/idle_inject.c which is based
+on the smpboot API. This one takes care of parking the per cpu pinned
+tasks. So AFAICS, it is fine.
 
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
