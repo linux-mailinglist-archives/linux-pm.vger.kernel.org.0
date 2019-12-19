@@ -2,29 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C942E125956
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCDE125958
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfLSBqA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 20:46:00 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:40006 "EHLO huawei.com"
+        id S1726730AbfLSBqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 20:46:06 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7712 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726463AbfLSBqA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Dec 2019 20:46:00 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B8231A306D61336F4726;
-        Thu, 19 Dec 2019 09:45:58 +0800 (CST)
+        id S1726463AbfLSBqG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Dec 2019 20:46:06 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id B14AAB727CA01EDE59BB;
+        Thu, 19 Dec 2019 09:46:03 +0800 (CST)
 Received: from linux-lmwb.huawei.com (10.175.103.112) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 19 Dec 2019 09:45:49 +0800
+ 14.3.439.0; Thu, 19 Dec 2019 09:45:55 +0800
 From:   Ma Feng <mafeng.ma@huawei.com>
 To:     Sebastian Reichel <sre@kernel.org>
 CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Ma Feng <mafeng.ma@huawei.com>
-Subject: [PATCH 1/3] power: supply: ab8500: Remove unneeded semicolon
-Date:   Thu, 19 Dec 2019 09:46:29 +0800
-Message-ID: <1576719991-109247-1-git-send-email-mafeng.ma@huawei.com>
+Subject: [PATCH 2/3] power: supply: ab8500_charger: Remove unneeded semicolon
+Date:   Thu, 19 Dec 2019 09:46:30 +0800
+Message-ID: <1576719991-109247-2-git-send-email-mafeng.ma@huawei.com>
 X-Mailer: git-send-email 2.6.2
+In-Reply-To: <1576719991-109247-1-git-send-email-mafeng.ma@huawei.com>
+References: <1576719991-109247-1-git-send-email-mafeng.ma@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.103.112]
@@ -36,82 +38,47 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Fixes coccicheck warning:
 
-drivers/power/supply/ab8500_fg.c:2224:5-6: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2227:4-5: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2334:3-4: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2342:3-4: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2350:3-4: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2358:3-4: Unneeded semicolon
-drivers/power/supply/ab8500_fg.c:2366:3-4: Unneeded semicolon
+drivers/power/supply/ab8500_charger.c:1082:2-3: Unneeded semicolon
+drivers/power/supply/ab8500_charger.c:792:2-3: Unneeded semicolon
+drivers/power/supply/ab8500_charger.c:2430:2-3: Unneeded semicolon
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Ma Feng <mafeng.ma@huawei.com>
 ---
- drivers/power/supply/ab8500_fg.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/power/supply/ab8500_charger.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index c3912ee..b96f90a 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2221,10 +2221,10 @@ static int ab8500_fg_get_ext_psy_data(struct device *dev, void *data)
- 						ab8500_fg_update_cap_scalers(di);
- 					queue_work(di->fg_wq, &di->fg_work);
- 					break;
--				};
-+				}
- 			default:
- 				break;
--			};
-+			}
- 			break;
- 		case POWER_SUPPLY_PROP_TECHNOLOGY:
- 			switch (ext->desc->type) {
-@@ -2331,7 +2331,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
- 		if (ret) {
- 			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_MAX_TIME_REG\n", __func__);
- 			goto out;
--		};
-+		}
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index 8a0f9d7..f69550d 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -789,7 +789,7 @@ static int ab8500_charger_max_usb_curr(struct ab8500_charger *di,
+ 		di->max_usb_in_curr.usb_type_max = USB_CH_IP_CUR_LVL_0P05;
+ 		ret = -ENXIO;
+ 		break;
+-	};
++	}
  
- 		ret = abx500_set_register_interruptible(di->dev, AB8500_RTC,
- 			AB8505_RTC_PCUT_FLAG_TIME_REG, di->bm->fg_params->pcut_flag_time);
-@@ -2339,7 +2339,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
- 		if (ret) {
- 			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_FLAG_TIME_REG\n", __func__);
- 			goto out;
--		};
-+		}
- 
- 		ret = abx500_set_register_interruptible(di->dev, AB8500_RTC,
- 			AB8505_RTC_PCUT_RESTART_REG, di->bm->fg_params->pcut_max_restart);
-@@ -2347,7 +2347,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
- 		if (ret) {
- 			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_RESTART_REG\n", __func__);
- 			goto out;
--		};
-+		}
- 
- 		ret = abx500_set_register_interruptible(di->dev, AB8500_RTC,
- 			AB8505_RTC_PCUT_DEBOUNCE_REG, di->bm->fg_params->pcut_debounce_time);
-@@ -2355,7 +2355,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
- 		if (ret) {
- 			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_DEBOUNCE_REG\n", __func__);
- 			goto out;
--		};
-+		}
- 
- 		ret = abx500_set_register_interruptible(di->dev, AB8500_RTC,
- 			AB8505_RTC_PCUT_CTL_STATUS_REG, di->bm->fg_params->pcut_enable);
-@@ -2363,7 +2363,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
- 		if (ret) {
- 			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_CTL_STATUS_REG\n", __func__);
- 			goto out;
--		};
-+		}
- 	}
- out:
+ 	di->max_usb_in_curr.set_max = di->max_usb_in_curr.usb_type_max;
+ 	dev_dbg(di->dev, "USB Type - 0x%02x MaxCurr: %d",
+@@ -1079,7 +1079,7 @@ static int ab8500_charger_get_usb_cur(struct ab8500_charger *di)
+ 		di->max_usb_in_curr.usb_type_max = USB_CH_IP_CUR_LVL_0P05;
+ 		ret = -EPERM;
+ 		break;
+-	};
++	}
+ 	di->max_usb_in_curr.set_max = di->max_usb_in_curr.usb_type_max;
  	return ret;
+ }
+@@ -2427,7 +2427,7 @@ static void ab8500_charger_usb_state_changed_work(struct work_struct *work)
+ 
+ 	default:
+ 		break;
+-	};
++	}
+ }
+ 
+ /**
 -- 
 2.6.2
 
