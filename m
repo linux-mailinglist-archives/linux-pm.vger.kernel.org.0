@@ -2,118 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1B0125926
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B1A12592A
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbfLSBTc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 20:19:32 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39472 "EHLO
+        id S1726641AbfLSBWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 20:22:17 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39482 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726616AbfLSBTc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 20:19:32 -0500
+        with ESMTP id S1726616AbfLSBWR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 20:22:17 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 49B76292A17
+        with ESMTPSA id AEABD28B5FF
 Received: by earth.universe (Postfix, from userid 1000)
-        id 2483B3C0C7B; Thu, 19 Dec 2019 02:19:29 +0100 (CET)
-Date:   Thu, 19 Dec 2019 02:19:29 +0100
+        id 5AADC3C0C7B; Thu, 19 Dec 2019 02:22:13 +0100 (CET)
+Date:   Thu, 19 Dec 2019 02:22:13 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/7] power: supply: sbs-battery: add force_load as a dts
- property
-Message-ID: <20191219011929.yyzpkhkskoy4nzmr@earth.universe>
+Subject: Re: [PATCH 7/7] dt-bindings: power: sbs-battery: add
+ disable-charger-broadcasts doc
+Message-ID: <20191219012213.miigcybtgvhwa7cx@earth.universe>
 References: <20191101190705.13393-1-jeff.dagenais@gmail.com>
- <20191101190705.13393-3-jeff.dagenais@gmail.com>
+ <20191101190705.13393-7-jeff.dagenais@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v2gq722r6du4j2te"
+        protocol="application/pgp-signature"; boundary="psh47eokbjxiuxwq"
 Content-Disposition: inline
-In-Reply-To: <20191101190705.13393-3-jeff.dagenais@gmail.com>
+In-Reply-To: <20191101190705.13393-7-jeff.dagenais@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---v2gq722r6du4j2te
+--psh47eokbjxiuxwq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Nov 01, 2019 at 03:07:01PM -0400, Jean-Francois Dagenais wrote:
-> This extends the behaviour of the existing module param so that system
-> integrators can specify the flag in device-tree.
->=20
-> Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-> ---
-
-sbs,force-load is not a hardware description and does not belong
-into DT. OTOH "hot-plug-capable;" would be a hardware description
-and carry the same information. Please respin the patch(es) and CC
-Rob Herring <robh+dt@kernel.org> and devicetree@vger.kernel.org.
+This is missing a long patch description and not CC'd to DT binding
+maintainers.
 
 -- Sebastian
 
->  drivers/power/supply/sbs-battery.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+On Fri, Nov 01, 2019 at 03:07:05PM -0400, Jean-Francois Dagenais wrote:
+> Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+> ---
+>  .../devicetree/bindings/power/supply/sbs_sbs-battery.txt        | 2 ++
+>  1 file changed, 2 insertions(+)
 >=20
-> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
-s-battery.c
-> index f9e8c14ac830..f92b98d900d2 100644
-> --- a/drivers/power/supply/sbs-battery.c
-> +++ b/drivers/power/supply/sbs-battery.c
-> @@ -814,6 +814,7 @@ static int sbs_probe(struct i2c_client *client,
->  	struct power_supply_desc *sbs_desc;
->  	struct sbs_platform_data *pdata =3D client->dev.platform_data;
->  	struct power_supply_config psy_cfg =3D {};
-> +	bool force_load;
->  	int rc;
->  	int irq;
+> diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-batte=
+ry.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> index 62ec842325b4..578643f49b0a 100644
+> --- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> @@ -17,6 +17,7 @@ Optional properties :
+>     a flag specifying its polarity.
+>   - sbs,force-load : Same as the module param, makes the probe skip the
+>     detection of the battery and assume it is (or will be) present.
+> + - sbs,disable-charger-broadcasts: for systems without sbs compliant cha=
+rgers
 > =20
-> @@ -858,6 +859,9 @@ static int sbs_probe(struct i2c_client *client,
+>  Example:
+> =20
+> @@ -27,4 +28,5 @@ Example:
+>  		sbs,poll-retry-count =3D <10>;
+>  		sbs,battery-detect-gpios =3D <&gpio-controller 122 1>;
+>  		sbs,force-load;
+> +		sbs,disable-charger-broadcasts;
 >  	}
->  	chip->i2c_retry_count =3D chip->i2c_retry_count + 1;
-> =20
-> +	force_load =3D of_property_read_bool(client->dev.of_node,
-> +					   "sbs,force-load");
-> +
->  	chip->gpio_detect =3D devm_gpiod_get_optional(&client->dev,
->  			"sbs,battery-detect", GPIOD_IN);
->  	if (IS_ERR(chip->gpio_detect)) {
-> @@ -890,7 +894,7 @@ static int sbs_probe(struct i2c_client *client,
->  	 * Before we register, we might need to make sure we can actually talk
->  	 * to the battery.
->  	 */
-> -	if (!(param_force_load || chip->gpio_detect)) {
-> +	if (!(param_force_load || force_load || chip->gpio_detect)) {
->  		rc =3D sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-> =20
->  		if (rc < 0) {
 > --=20
 > 2.23.0
 >=20
 
---v2gq722r6du4j2te
+--psh47eokbjxiuxwq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl360CAACgkQ2O7X88g7
-+po24RAAp0YGhYcnSNzRhM1fUWrahTEUNusqZ+vz2izgaeueK4c72bSy2xdwHUmi
-g86bkAI2kRjAEXkLDQ5aXsXshvT4Sx8WmpVLWiWj6UKKSE8S+1Mj3oRdAIKMtwLV
-BOckOgpdpRFOrKSnel2JLl7nU2hfRYLzF4qwo/QU+7eHPPP4KNOvxyqJUUNaoTPw
-droz8vrEF2xJSlRScWIs6tkdR7kHiCQxHX1ZOttYtXERgI00fRW+IcnMG5PMayPG
-hkHt2DM49vX9Oguus2h3pDwCcdmsCNABdaQgWikTq36Cbb4JuFk3tmSxfW8VbCSG
-SffUAkg38Mgu8WnAnC6/sEpBH7FlPESuOg7lIBDu+e39nYgGlPD4rcdLuNF9rfre
-OV67GpiAZz76daXec7Cr3B0A8nAA4Ue2WWhkhXnnkrlvYSG/B7fVonNRkLVCNqqi
-MpydYVJFElpprlCfaKE1wvqTgmEIT9xK4IgzKcAcXmrvzWWT7yi5SB1X4RIcWOSX
-55r+Hwpmki2zew6aVZWz0BKg6b6l0S8afJ7RqxC9rCTIiaI2RxeEZNW3Csl72xAd
-bYe29OVhFzXff2v+xS4ZkEwQ98ULLszAlWkpIK6e8He/8IIj2epqCANX7l727/sj
-rzu3UvRZ16Pw0RwrrMkmDgrunnssj2xlBjEoLz8FS7RuUJa0viI=
-=TPxd
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl360MUACgkQ2O7X88g7
++pos2Q/+NSoG6eVlKVLlcTn/BGFagnqha7PErVhGjDIB7QZABXfm6+JzStIqEIRO
+uxSmaJazSSnnIJ/t4C8gEEHjbyYDzSNBGkAAdWhdOL03HJblP2f17r8kqNZYaSn2
+u0Emp57oJo/eW9qY2YbdOn25o/uvQqFZ5jjbkmoQzJGU9hycZ8uM2PO5m8yTSnx8
+j3vieW6f/qurCM+ZS45EpxXHNBZgtnrSgbLFJEGPt7rlG3brYGVrkUjFYMUHXhVt
+RcwUroZmlFYjBDDpzXlxc0bI5PuQc0FqbhB5QB8w3X0SZFIFz6i6etoqEIG03Fgb
+AnsM05wxilEexsCyBQVakPzhWj2CxaPOG1iHhGqZ+ju+rSHwB6fMWefN69+X0SfF
+0LcHyE3AWpbLmFhuO6NZBCwJLVbzZvGTY3l0Lw6iEi6cCVXBwYV1mZ2ZGPyUNqOt
+mmnebjyL2op7G80gjo2AChXLjPtXSemRw5kkl3Xj8j3aqSDP6EgfLi6ZXTcqkSf5
+/ORtzDAIiS5Nz+mQlqFbyRjcy++4akOniiCj63gUfa2NlqeYxi4RfmohobHmxnxf
+/CRfJ73w7Zdj+sbzITpsWipzT1KHwN0baRmjct+Kj7Xs4XMiEdcbmvHQSWfBqvVK
+xbIV0RaXsREAuEE6+7Tt7/SU1H+0Cu4MiDzKeXI3oiOHgtWlH20=
+=w9bL
 -----END PGP SIGNATURE-----
 
---v2gq722r6du4j2te--
+--psh47eokbjxiuxwq--
