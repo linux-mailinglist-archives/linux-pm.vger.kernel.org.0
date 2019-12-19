@@ -2,193 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8D81267EB
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C371267FA
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbfLSRWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 12:22:30 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49590 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726906AbfLSRWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 12:22:30 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 33E7228E9F9
-Received: by earth.universe (Postfix, from userid 1000)
-        id EEF183C0C7B; Thu, 19 Dec 2019 18:22:25 +0100 (CET)
-Date:   Thu, 19 Dec 2019 18:22:25 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add the bq2515x family dt
- bindings
-Message-ID: <20191219172225.7euto3vschdisyzo@earth.universe>
-References: <20191029200201.24483-1-dmurphy@ti.com>
- <20191029200201.24483-2-dmurphy@ti.com>
+        id S1726873AbfLSR2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 12:28:34 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36473 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726818AbfLSR2e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 12:28:34 -0500
+Received: by mail-pg1-f195.google.com with SMTP id k3so3482110pgc.3;
+        Thu, 19 Dec 2019 09:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FC3/QPaa5PZhaNcHhuFDAdfq0OHIUK1TdSdCzAHajCc=;
+        b=dy9R8z7vc/XXAEH3Rhv/7Zz2UzI+4YT7FYRMRYG4QOIcJ85CI0668ysW86zR7kZEwp
+         ryjCWDY/mOdSghg39/lNRhMPhF6u8IoZhXyvn5ahot+dLntHgepthUNUhRhty3H1FN1d
+         PEsSKcw8HruBh2pyfrfxxPgInCOU0e55yG3nARfoUOeTZGSUdHRBoOgSKkHs+1a5UkKr
+         Xs415JZcJ9xGShIbk4spwpHIOR93+/gIGju4C2xG/sQcxD0Ew9Ruudwr0dCJq5b5Kllp
+         NhI914BZRknzkfc+PSNBTN9GqkTfw8me85QmidXJQtJBx5stTy4O5krcjCjikPWHkvsg
+         WUeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FC3/QPaa5PZhaNcHhuFDAdfq0OHIUK1TdSdCzAHajCc=;
+        b=MoY/dTFAin7PESF/hwVlMnXQguQzUV9cVtbYu1arpu1g7HFcw7dXJuGEHrIKRhZbao
+         Fp5J+2nnsljEt4qdDeAlnKkDKjzW5EmNmCTsFaf58j/cTSnrdDNBe1jqsiBL/acEsmql
+         2ccTynJiGmGV8pqyek/yQHtDIhBVo9X+2jPepv/YmH0N/hlFovIogWlHFKcaYM+Q22SI
+         UoqEH749PgpUIvoWjquTMT0VjBN2V5kGWoFNwsbSmQwAAqnIPq2skXRGv1+rEkgwQZnG
+         RJsKEBy9lJAAfuKpKHAMuJHNnozEw2mE3NDvzQx/E4rxFSjUqRSnxCap9EW64p6k32ct
+         MCbQ==
+X-Gm-Message-State: APjAAAXJMDyNJHR5JAaULlg+YvdMoDGg7QOK72OT1x5nXAw/v/hJ1SrY
+        WL+hIDqOd47VI1IZdBraNKA=
+X-Google-Smtp-Source: APXvYqwsCwPHwOMp7hPK2BsRkPhtgmogTJE3yEjGSSPfL3FD3QcZJks5+w9l7rUtELd8fzk8Qz74UQ==
+X-Received: by 2002:a62:5547:: with SMTP id j68mr11289653pfb.6.1576776513100;
+        Thu, 19 Dec 2019 09:28:33 -0800 (PST)
+Received: from anarsoul-thinkpad.lan (216-71-213-236.dyn.novuscom.net. [216.71.213.236])
+        by smtp.gmail.com with ESMTPSA id v143sm536209pfc.71.2019.12.19.09.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 09:28:32 -0800 (PST)
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megous@megous.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>
+Subject: [PATCH v8 0/7] add thermal sensor driver for A64, A83T, H3, H5, H6, R40
+Date:   Thu, 19 Dec 2019 09:28:16 -0800
+Message-Id: <20191219172823.1652600-1-anarsoul@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qlxjxuzmhifdjwwc"
-Content-Disposition: inline
-In-Reply-To: <20191029200201.24483-2-dmurphy@ti.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patchset adds driver for thermal sensor in A64, A83T, H3, H5,
+H6 and R40 SoCs.
 
---qlxjxuzmhifdjwwc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v8:
+	- [vasily] Address more Maxime's comments for dt-schema
+	- [vasily] Add myself to MAINTAINERS for the driver and schema
+	- [vasily] Round calibration data size to word boundary for H6 and A64
+	- [vasily] Change offset for A64 since it reports too low temp otherwise.
+	           Likely conversion formula in user manual is not correct.
 
-Hi,
+v7:
+	- [vasily] Address Maxime's comments for dt-schema
+	- [vasily] Move common part of H3 and H5 dts into sunxi-h3-h5.dtsi
+	- [vasily] Add Maxime's a-b to the driver patch 
 
-On Tue, Oct 29, 2019 at 03:02:00PM -0500, Dan Murphy wrote:
-> Add the bindings for the bq25150 and bq25155 500mA
-> charging ICs from Texas Instruments.
->=20
-> Datasheet:
-> http://www.ti.com/lit/ds/symlink/bq25150.pdf
-> http://www.ti.com/lit/ds/symlink/bq25155.pdf
->=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> CC: Rob Herring <robh@kernel.org>
-> ---
->=20
-> v2 - Converted to yaml format and removed ti,* properties for already def=
-ined
-> properties
->=20
->  .../bindings/power/supply/bq2515x.yaml        | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515=
-x.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> new file mode 100644
-> index 000000000000..4e6225056f45
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) 2019 Texas Instruments Incorporated
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/supply/bq2515x.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: TI bq2515x 500-mA Linear charger family
-> +
-> +maintainers:
-> +  - Dan Murphy <dmurphy@ti.com>
-> +
-> +description: |
-> +  The BQ2515x family is a highly integrated battery charge management IC=
- that
-> +  integrates the most common functions for wearable devices, namely a ch=
-arger,
-> +  an output voltage rail, ADC for battery and system monitoring, and
-> +  push-button controller.
-> +
-> +  Specifications about the charger can be found at:
-> +    http://www.ti.com/lit/ds/symlink/bq25150.pdf
-> +    http://www.ti.com/lit/ds/symlink/bq25155.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,bq25150
-> +      - ti,bq25155
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  pg-gpios:
-> +    description: |
-> +       GPIO used for connecting the bq2515x device PG (Power Good)
-> +       pin.  This pin should be used if possible as this is the
-> +       recommended way to obtain the charger's input PG state.
-> +       If this pin is not specified a software-based approach for PG
-> +       detection is used.
-> +
-> +  reset-gpios:
-> +    description: |
-> +       GPIO used for hardware reset.
-> +
-> +  low-power-gpios:
-> +    description: |
-> +       GPIO used for low power mode of IC.
-> +
-> +  charge-enable-gpios:
-> +    description: |
-> +       GPIO used to turn on and off charging.
+v6:
+	- [ondrej, vasily] Squash all driver related changes into a
+			   single patch
+	- [ondrej] Rename calib -> calibration
+	- [ondrej] Fix thermal zone registration check
+	- [ondrej] Lower rate of sensor data interrupts to 4/sec/sensor
+	- [ondrej] Rework scale/offset values, H6 calibration
+	- [ondrej] Explicitly set mod clock to 24 MHz
+	- [ondrej] Set undocumented bits in CTRL0 for H6
+	- [ondrej] Add support for A83T
+	- [ondrej] Add dts changes for A83T, H3, H5, H6
+	- [vasily] Add dts changes for A64
+	- [vasily] Address Maxime's comments for YAML scheme
+	- [vasily] Make .calc_temp callback mandatory
+	- [vasily] Set .max_register in regmap config, so regs can be
+		   inspected using debugfs
 
-Above looks ok to me.
+Ondrej Jirman (4):
+  ARM: dts: sun8i-a83t: Add thermal sensor and thermal zones
+  ARM: dts: sun8i-h3: Add thermal sensor and thermal zones
+  arm64: dts: allwinner: h5: Add thermal sensor and thermal zones
+  arm64: dts: allwinner: h6: Add thermal sensor and thermal zones
 
-> +  constant-charge-current-max-microamp:
-> +    description: |
-> +       Maximum charging current in micro Amps.
-> +    minimum: 50000
-> +    maximum: 600000
-> +
-> +  voltage-max-design-microvolt:
-> +    description: |
-> +       Maximum charging voltage in micro volts.
-> +    minimum: 3600000
-> +    maximum: 4600000
+Vasily Khoruzhick (1):
+  arm64: dts: allwinner: a64: Add thermal sensors and thermal zones
 
-These two should use the simple-battery binding, as seen in
-Documentation/devicetree/bindings/power/supply/battery.txt
+Yangtao Li (2):
+  thermal: sun8i: add thermal driver for H6/H5/H3/A64/A83T/R40
+  dt-bindings: thermal: add YAML schema for sun8i-thermal driver
+    bindings
 
--- Sebastian
+ .../thermal/allwinner,sun8i-a83t-ths.yaml     | 160 +++++
+ MAINTAINERS                                   |   8 +
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  36 +
+ arch/arm/boot/dts/sun8i-h3.dtsi               |  20 +
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi            |   6 +
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  42 ++
+ arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |  26 +
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |  33 +
+ drivers/thermal/Kconfig                       |  14 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/sun8i_thermal.c               | 639 ++++++++++++++++++
+ 11 files changed, 985 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+ create mode 100644 drivers/thermal/sun8i_thermal.c
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    i2c0 {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +      charger@6b {
-> +          compatible =3D "ti,bq25150";
-> +          reg =3D <0x6b>;
-> +
-> +          pg-gpios =3D <&gpio1 28 GPIO_ACTIVE_HIGH>;
-> +          reset-gpios =3D <&gpio0 14 GPIO_ACTIVE_HIGH>;
-> +          low-power-gpios =3D <&gpio0 15 GPIO_ACTIVE_HIGH>;
-> +          charge-enable-gpios =3D <&gpio0 13 GPIO_ACTIVE_LOW>;
-> +          constant-charge-current-max-microamp =3D <300000>;
-> +          voltage-max-design-microvolt =3D <4200000>;
-> +      };
-> +    };
-> --=20
-> 2.22.0.214.g8dca754b1e
->=20
+-- 
+2.24.1
 
---qlxjxuzmhifdjwwc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl37sdEACgkQ2O7X88g7
-+pphvw//R58CcnL63L2y7BnPANjwO1EqYpxXouuxE78m1FqZs+NUvlptobyl0DBy
-BuZPO3WRCHsstFTDyePyeLbaXl739olOJh+HE5aD6lDdK3TqhFbAslFAS8+w6ubZ
-n5B5B6NT2PAPayEQ75O8Gj8MZr8ERoaaEfIjFkVWzfPVEiYS4ZDBq7YPeeZIJX3u
-2+kF6kV+ly51KZR2e6pl2UMg9NPnBgo6nBqgIaUTWwP+diVVSaWFFp8I1iuzmPqD
-tw3jHrt4yqoB9NgGOwYQU5fT2GmB1Tnqr1Z7q/zf2tWkPPbbNIZeLyNsHUgaqwU3
-HKULLv1Aa4IUC69wSfNFUBe23MgRpV4y8upCFDs0WHtIENgDzyh7jIuVacnVgLZS
-PfLqEC4fNDB//qgK+I4HgdudVOlJ4KCKmeg20GFH7TGD5XGchPYwFc59DfSO1enq
-R8s1SdgJT9ZiHSqZp0HD2A5ooMUHBFQ5hcO1muZnYjcx+aKqEcgs5GUq6vrLEihf
-9n6O3uruZnMXQYk9IVPHbjz5deCFXevQq8Exr7nMu6737kR7GQcpXE+vHy98v1Xj
-BMgSRwPQ4QCi3M11AW5AtfOWOqDvJ8CqTk5YQ9o0phQ3Hebal+tpeX5EN29jVJ5c
-aYFv1pQLrNPr9iMPQpFmLhXpFQphWzNhK+u9qUVdbz4H1J2cfcI=
-=iONg
------END PGP SIGNATURE-----
-
---qlxjxuzmhifdjwwc--
