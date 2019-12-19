@@ -2,100 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CDD125930
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B5D125942
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 02:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfLSBX0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 20:23:26 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39522 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbfLSBX0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 20:23:26 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 28403292930
-Received: by earth.universe (Postfix, from userid 1000)
-        id E49D33C0C7B; Thu, 19 Dec 2019 02:23:22 +0100 (CET)
-Date:   Thu, 19 Dec 2019 02:23:22 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH 4/7] devicetree: bindings: sbs-battery: add
- sbs,force-load property
-Message-ID: <20191219012322.2iii3g4yqnblun2x@earth.universe>
-References: <20191101190705.13393-1-jeff.dagenais@gmail.com>
- <20191101190705.13393-4-jeff.dagenais@gmail.com>
+        id S1726694AbfLSBeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 20:34:20 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41444 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbfLSBeU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 20:34:20 -0500
+Received: by mail-qk1-f193.google.com with SMTP id x129so3304039qke.8;
+        Wed, 18 Dec 2019 17:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BCSxFafqPE5ERz3UrkP5uxFwiwYg6nGJeQKlM4gvCAU=;
+        b=AoTnognSO/nELYlSs55Y0LZS7ZwnLR5p+y/QO74XN/A8K+7vHMvE/jiJ+Jq/Ul+2PG
+         5lVjCcDYkgFxpv5+gGYSmHBhcLXB/DndFqGxcOG/DzvMHX+eugQO7oKigvLAr1b2i2/H
+         GyYgJbImMczndYXzKJFqkkhF+a6/XZoXyH3T2ZCXFQrs5wg9uh+guHpnfIPQ+xHsUmpz
+         0uCXqlYH5+TfkA1fIxeJ31XpiNlGyjW9y5Vg+wAH4OGeedzEcgW/RYM5m2D2KfPDNYx0
+         r9YaHHczYY/cfgwyNEN2HSGZSynOtTFNrFiGqEzSYKqnvA15hd2wlery0iVYpYzO+eGL
+         R8fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BCSxFafqPE5ERz3UrkP5uxFwiwYg6nGJeQKlM4gvCAU=;
+        b=VKBx77XWRqOl+EkGxo8G5/rggbWC9jOfWT4UpgCviUxaGDgc+nnZacW4o9yPS8q2UN
+         AI+yYdSl9VYdRHF+ebWfMqWoARN2t+jYjxuWY4tk6WoQwQNBdIaVpnu3OBB4KA00FoA2
+         MzrJpqKLqhEXogrmhj56E8g9pLWlCtM3tDWrbvKO5jkblp6eWEQtHSzggeQcX380anrt
+         euIg/phGVaXkjbJAT6Pcm6u7KaOQTMhAm7kk5iMkkBZF4JJjuqtkgBX/c3yqRwufS16y
+         tYKPpha1+ThJ2nvUH725l37GZsRNwmpUVyanVf3LCKk/89iep4MXfWEFmcmJgXqtCSln
+         Ad8A==
+X-Gm-Message-State: APjAAAXVfGpBAAyAM9dVTSg2KunOCbAwW0u4K8G1x92eqnx+4X3AtWeQ
+        FyoF2naJnNO7pcQOwFJXrb9uOQbQLc6dftN6hbsq+tDg
+X-Google-Smtp-Source: APXvYqxaN0OeO3c7GsQVcs5292WIZw+d+djvRDMX1ntmlnFQbkJKQmSjBMrY06hv/6U6pVL+GUm82/OqYtsDB6kdL24=
+X-Received: by 2002:a37:8e03:: with SMTP id q3mr5803812qkd.395.1576719259097;
+ Wed, 18 Dec 2019 17:34:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6x3rkjgpaw7jsuwb"
-Content-Disposition: inline
-In-Reply-To: <20191101190705.13393-4-jeff.dagenais@gmail.com>
+References: <cover.1575863274.git.baolin.wang7@gmail.com> <20191219005439.63nk4fpraveoeqyv@earth.universe>
+In-Reply-To: <20191219005439.63nk4fpraveoeqyv@earth.universe>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Thu, 19 Dec 2019 09:34:07 +0800
+Message-ID: <CADBw62oQ8FaoVXCe7w9rAYy7mR6j8vOAUoeM_K3u4XC0JwTe3g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] Improve the SC27XX fuel gauge controller
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        yuanjiang.yu@unisoc.com, Baolin Wang <baolin.wang@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Sebastian,
 
---6x3rkjgpaw7jsuwb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 19, 2019 at 8:54 AM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Mon, Dec 09, 2019 at 11:56:20AM +0800, Baolin Wang wrote:
+> > This patch set adds one battery resistance-temperature table to optimize
+> > the real battery internal resistance in different tempertures, and
+> > calibrates the resistance of coulomb counter to improve the accuracy
+> > of the coulomb counter.
+> >
+> > Any comments are welcome. Thanks.
+>
+> Thanks, queued to power-supply's for-next branch. I changed the
+> comment for struct sc27xx_fgu_data, so that it states calib_resist
+> being in uOhm instead of mOhm.
 
-Hi,
-
-Kernel patches should always have a long description.
-
--- Sebastian
-
-On Fri, Nov 01, 2019 at 03:07:02PM -0400, Jean-Francois Dagenais wrote:
-> Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-> ---
->  .../devicetree/bindings/power/supply/sbs_sbs-battery.txt       | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-batte=
-ry.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-> index 4e78e51018eb..62ec842325b4 100644
-> --- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-> @@ -15,6 +15,8 @@ Optional properties :
->     after an external change notification.
->   - sbs,battery-detect-gpios : The gpio which signals battery detection a=
-nd
->     a flag specifying its polarity.
-> + - sbs,force-load : Same as the module param, makes the probe skip the
-> +   detection of the battery and assume it is (or will be) present.
-> =20
->  Example:
-> =20
-> @@ -24,4 +26,5 @@ Example:
->  		sbs,i2c-retry-count =3D <2>;
->  		sbs,poll-retry-count =3D <10>;
->  		sbs,battery-detect-gpios =3D <&gpio-controller 122 1>;
-> +		sbs,force-load;
->  	}
-> --=20
-> 2.23.0
->=20
-
---6x3rkjgpaw7jsuwb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl360QoACgkQ2O7X88g7
-+prSHg/9GS8Bo8srUAv4SeiOxeWeb4Au0KPNU3Q+2Zk9XgWc14RfL/HmlwKnz1tY
-h/V/DwM8898JFTEPx0FdirZswJZCJkhfR2NPb3XKckT8rEEr1WxAT8j6R9lD7+JJ
-8pNzyJLsPB5TwUVFofIg7bcrjhkNSEQcM2IjZnuihlHouR/UjmoaoYPjAhJxjAR5
-LgppPIHqWWmlPVFnWn7sxv4iAGUouvPq+1x5VykfdmvXCzTf0bgHj9WfzASA1dWr
-22G3bjIsILFVvIFLkdxYRrY3ixEX4y/qqM35xZ1uyDyl2lHGTGSh6Lw2XB0dKwNA
-UZgwRNJKkn8iMQq6GUvgEJAUUz1K3ug8oEWvnvqc8u+eXdoR0/fhw0Asnk1c+kh7
-Z00BOA17ffBmyiIu6Stx5d6WdNChNkVQQbQzvHeGAwse3wXcaNX8cg0IVmCEUU0W
-3SNNVPzMM1m9SK33PspAmQ++JHJQGR4biRQ7OuBKeL8boFn4D77J4cJrdGVA6fK3
-b/U9DF8MLjZKIi7hZ6dmoD0sakjEQ71+Md4eKVbCaOQkeN8/pgDiag2wx3FJwLxm
-JfGM7pQrEjBZwovNy9WtIlsg6uNVQfiqYAD0WryT/NwmoELvehMgrM+5VMwRwC1/
-qcpuJI5lLaEpQMYvV0M5dpNgxCwSznitqZFHN3QmCmpcs80DHEc=
-=hERp
------END PGP SIGNATURE-----
-
---6x3rkjgpaw7jsuwb--
+OK. Thanks.
