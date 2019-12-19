@@ -2,107 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF34C125856
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 01:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B9B125859
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 01:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfLSAQ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Dec 2019 19:16:27 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38888 "EHLO
+        id S1726616AbfLSARK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Dec 2019 19:17:10 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38894 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbfLSAQ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 19:16:26 -0500
+        with ESMTP id S1726518AbfLSARK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Dec 2019 19:17:10 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 45E6F2929BD
+        with ESMTPSA id 26F1C2929BD
 Received: by earth.universe (Postfix, from userid 1000)
-        id E4A793C0C7B; Thu, 19 Dec 2019 01:16:22 +0100 (CET)
-Date:   Thu, 19 Dec 2019 01:16:22 +0100
+        id 35B703C0C7B; Thu, 19 Dec 2019 01:17:06 +0100 (CET)
+Date:   Thu, 19 Dec 2019 01:17:06 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     Chuhong Yuan <hslester96@gmail.com>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: reset: gpio-restart: don't error on deferral
-Message-ID: <20191219001622.ymsv54rnnrmgkvnt@earth.universe>
-References: <20191029201726.12786-1-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] power: supply: pda_power: add missed
+ usb_unregister_notifier
+Message-ID: <20191219001706.aqbugbkgahhqmoyk@earth.universe>
+References: <20191115062515.7087-1-hslester96@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bbcvvkyn2dmty7za"
+        protocol="application/pgp-signature"; boundary="f4docmszilkkqxav"
 Content-Disposition: inline
-In-Reply-To: <20191029201726.12786-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20191115062515.7087-1-hslester96@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bbcvvkyn2dmty7za
+--f4docmszilkkqxav
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Oct 30, 2019 at 09:17:26AM +1300, Chris Packham wrote:
-> Don't generate an error message when devm_gpiod_get fails with
-> -EPROBE_DEFER.
+On Fri, Nov 15, 2019 at 02:25:15PM +0800, Chuhong Yuan wrote:
+> The driver forgets to unregister the notifier in remove.
+> Add the call to fix it.
 >=20
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 > ---
 
 Thanks, queued to power-supply's for-next branch.
 
 -- Sebastian
 
+>  drivers/power/supply/pda_power.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >=20
-> Notes:
->     Changes in v2:
->     - use PTR_ERR_OR_ZERO() to avoid excessive PTR_ERR()
->=20
->  drivers/power/reset/gpio-restart.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/reset/gpio-restart.c b/drivers/power/reset/gpi=
-o-restart.c
-> index 308ca9d9d276..5466eeea261c 100644
-> --- a/drivers/power/reset/gpio-restart.c
-> +++ b/drivers/power/reset/gpio-restart.c
-> @@ -64,9 +64,11 @@ static int gpio_restart_probe(struct platform_device *=
-pdev)
+> diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_=
+power.c
+> index 3ae5707d39fa..03a37fd6be27 100644
+> --- a/drivers/power/supply/pda_power.c
+> +++ b/drivers/power/supply/pda_power.c
+> @@ -429,6 +429,10 @@ static int pda_power_probe(struct platform_device *p=
+dev)
 > =20
->  	gpio_restart->reset_gpio =3D devm_gpiod_get(&pdev->dev, NULL,
->  			open_source ? GPIOD_IN : GPIOD_OUT_LOW);
-> -	if (IS_ERR(gpio_restart->reset_gpio)) {
-> -		dev_err(&pdev->dev, "Could not get reset GPIO\n");
-> -		return PTR_ERR(gpio_restart->reset_gpio);
-> +	ret =3D PTR_ERR_OR_ZERO(gpio_restart->reset_gpio);
-> +	if (ret) {
-> +		if (ret !=3D -EPROBE_DEFER)
-> +			dev_err(&pdev->dev, "Could not get reset GPIO\n");
-> +		return ret;
->  	}
-> =20
->  	gpio_restart->restart_handler.notifier_call =3D gpio_restart_notify;
+>  static int pda_power_remove(struct platform_device *pdev)
+>  {
+> +#if IS_ENABLED(CONFIG_USB_PHY)
+> +	if (!IS_ERR_OR_NULL(transceiver) && pdata->use_otg_notifier)
+> +		usb_unregister_notifier(transceiver, &otg_nb);
+> +#endif
+>  	if (pdata->is_usb_online && usb_irq)
+>  		free_irq(usb_irq->start, pda_psy_usb);
+>  	if (pdata->is_ac_online && ac_irq)
 > --=20
-> 2.23.0
+> 2.24.0
 >=20
 
---bbcvvkyn2dmty7za
+--f4docmszilkkqxav
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl36wVYACgkQ2O7X88g7
-+pr9KA/+LmLaWD+a8hdmp0lQVGOdig5qGUaN+qIhDOJ6uudR2m15nhe/bgN6Vdf+
-xUXXsb18SEHAKDJqK0k2pdHySbbhCHM0r8J/ThwbB5AopW2/1cotus+5ndBYF17o
-Bv6NrDB7ClHxw78vgPvfx6TavBRrv+O1G2BeclYOT1CiC3yib1sDlOIwFnUJ9iZg
-FmiMlSSgT2arxod3kjGPteL2LhUFNXb8GUve2KheexvnYCcHL8WC1zj7DTiNXl1W
-HOjmR0cmDnMusQY4vgXBulRPF6vz3LTrRv0qtx88DnXVwM3c4dfkRX0/KKy93cAv
-TAf5FwqIu6aAAV0MAuRRPUEzjOIUqJ6h4hLSp2MIA4fAubLYhZbyTNAqz3xboZZg
-3Q/ONParYlnS9M3vqZ/cX0nDf5Vc1/TtlUdnAksotUM+sy4C3HEW8uzqO8vAitM/
-OMgeyjIHQ9/6TcY83f2geoTy+LD7zafOW8kTOIfElNFfRQ7d26ENcPf88497NpEd
-+W6GEAQQwCM4ZU4Ah4uIWI6LjpU3N5UGYMFC2AYpjubZvrSoUMTLuNfn956lhj1D
-3qkKdgxYTdNaKTFP91RP6HUF/v39oYlddROIOs3qEKb8W6U/aqOoHXrKWC2DU+we
-lHJ+udbHrrRQNWJTerSMo0ro8xvCv6jTrYYjnip5HyejNbr2Y28=
-=d+tO
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl36wYIACgkQ2O7X88g7
++po3UQ/+ISbvFHfheQl6Tkshh0G7pDFueKpZBvcFzwbBeOFc005KU0whEcYS7j24
+geeQFw+pM08ppAx+9J/Ud84FzksWgkHeRIdQVHfli3rvuW+P/r5I0zPpqTWf5naD
+uuVfiDGZ7uXEaZBMyZ2NF3yNy7D9HU6G+IOFzA0XlNCKt/c8QFOb7NWRGCLTPoZI
+eRtapu+zK2eMLXxlNFgrcLx/xqAUBnXQZ1zHQiBq+qGeQTkacQH8zvhi7ctzqSXM
+7wr/7ehp3PmsjF1Sl9thDTAI9uMv7rt+nFdhr2YZ0pCmNKkopukA04r9JxweOQEz
+lwbkkxBjT1+taMLBl62MZm7EeXlVm6sTTzg7eSbvPAArIkNZi+ZZT1JqdKcxPZCp
+gb4tcOP1RvsXqn4WVaP4iUunX8L5GidwIsQU9FcD9rUsDGcYyv+crpG+Un0zgBY0
+/jVvKQb197///lgMD/sUgN46O5lGx6U1YkrIJXYcgU86GTyjn22E0ey8gcWD38nY
+BYJhBZEFVFLLc8J2jE0yvDTolI2wCL2svpD0JlFU+P5E55uVHBA721c0H1/kOwWC
+eMk/z8IJKkyRzTWqQ24MWa6fWU87/aScWhzI3smMX2peux0y+keTE2nVWDcoBZrU
+xrzWtJ5zPBWLwVNCnT/ocemnol2FpTmGVHbaliiDdsxCEEM9phQ=
+=r9B5
 -----END PGP SIGNATURE-----
 
---bbcvvkyn2dmty7za--
+--f4docmszilkkqxav--
