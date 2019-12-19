@@ -2,83 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B26126357
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 14:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAB81263A2
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 14:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbfLSNVL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 08:21:11 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:54714 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726744AbfLSNVL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 08:21:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576761670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f9QuhHETPe7h5O5S9p4/hJNro5uBVjObNxSM6kbHGs0=;
-        b=M8ZLEXNh6zU+k+ikTgrVxJSdXd42PZcPDOw0npbcP9BJnn51YSeUxHqNQA3zQ5H+x29gPg
-        T4qewjDA/Cs0YZZMSyqO57JJ9yC6hrMM3XPCA4QtRlRxiWJzf0hauTiaXGuN45D10SsN3z
-        J14a/gQ94XA56ua32+OAWuWQyWqAV78=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-406-VVuxAuNbMg-CtqdyA0ZLtA-1; Thu, 19 Dec 2019 08:21:08 -0500
-X-MC-Unique: VVuxAuNbMg-CtqdyA0ZLtA-1
-Received: by mail-wm1-f70.google.com with SMTP id b9so1358259wmj.6
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2019 05:21:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f9QuhHETPe7h5O5S9p4/hJNro5uBVjObNxSM6kbHGs0=;
-        b=g+YXAOMCgKg5AFvmYNJondolWdwOmZjB0JzRt/D8EER0lG0uDHN9fNCwYJMDxPtEMg
-         KMc0KkReyb+X1IPTf//DHFkAdP0Z5hzvCjnTHtgAUnFZYWtgKwt64IOsX1Z20UilB7NN
-         rh+cyBudGP9G+S+8VRw6M4UukHgTQGTdBrgM7Tjbay8K/qms7ycCSuUEvv66T8NYvgHi
-         a4nypZPgulHVYr9uEGfHIPCnHrVmoVBp7Dj1aY32M7cItgV1oxLILrqZjlIsZsSbUFCV
-         5Ev4P9/9Rwb2vz/UTHxddZHbS8A1/zz4er4Nv/dbZWK7xohl8h2y56UU87d3NhgVTk3m
-         dM/Q==
-X-Gm-Message-State: APjAAAV7gZ+ZniumZ4babjPvIN5cBMIfuYLwgJIQs/jUAxpE5YR4gEi3
-        szo1k8qCRm2VUmGwHPViFfw4WFVWTNGt4fucUFR7VkaqthKcGw6NaX+F6HLqyb09CDwfxmV2JvM
-        dJHh1hB7ZD3xRD0/uCKs=
-X-Received: by 2002:a5d:6551:: with SMTP id z17mr9922288wrv.269.1576761667270;
-        Thu, 19 Dec 2019 05:21:07 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyYsmkicq1CgpePFwwJNc2lMQupRm5P+aon/r1P4LvdWHpza4ghagzA9OygT/h18nUeOHn+jg==
-X-Received: by 2002:a5d:6551:: with SMTP id z17mr9922266wrv.269.1576761667016;
-        Thu, 19 Dec 2019 05:21:07 -0800 (PST)
-Received: from localhost.localdomain ([151.29.30.195])
-        by smtp.gmail.com with ESMTPSA id 188sm6488919wmd.1.2019.12.19.05.21.05
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 19 Dec 2019 05:21:05 -0800 (PST)
-Date:   Thu, 19 Dec 2019 14:21:03 +0100
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Claudio Scordino <c.scordino@evidence.eu.com>,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>
-Subject: Re: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux
- Kernel IV edition (OSPM-summit 2020)
-Message-ID: <20191219132103.GD13724@localhost.localdomain>
-References: <20191219103500.GC13724@localhost.localdomain>
+        id S1726778AbfLSNf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 08:35:58 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:46990 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726744AbfLSNf6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 08:35:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=YSWZcOq3c4tDpa7LmbcYDgqZaDKNh9WKgBSxITrGWH0=; b=VMU3axBiD4FRvBTUAvat9++sh
+        QduzMQrNMhpyhtVc5RAWKPuxaPWfFYkdKhazG/Ft7Rb2DcgDwcNM6GB1Y+LXthA2qM1qd2DA1S3Go
+        pBDLF+l0FeQ8QKOt6JpebPmTPqCHKQVdfGynuJOJRihcWND6FmluJqXwRRlAxAJXBJtDpV7B3vIIQ
+        HyjLGsUezYfLMMJT6ecEqBRXmLtrO3r6tw9kZGnggFfNCAPXD0vvnCbm/e2tWk2lwkSdLuHxAXKNC
+        MzM0SeXj8f6KIEsepVLCK4CRpfDa490tRRci4kujDYCTdi9wAoiKDa4FtyDHyFb1Au2y4UcUyqPt5
+        itF3fF1fw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ihvxC-0000aR-0J; Thu, 19 Dec 2019 13:34:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B60D3304D00;
+        Thu, 19 Dec 2019 14:33:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4501F2B3E168F; Thu, 19 Dec 2019 14:34:52 +0100 (CET)
+Date:   Thu, 19 Dec 2019 14:34:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Garnier <thgarnie@chromium.org>
+Cc:     kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
+        keescook@chromium.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Will Deacon <will@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v10 00/11] x86: PIE support to extend KASLR randomization
+Message-ID: <20191219133452.GM2827@hirez.programming.kicks-ass.net>
+References: <20191205000957.112719-1-thgarnie@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191219103500.GC13724@localhost.localdomain>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20191205000957.112719-1-thgarnie@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/12/19 11:35, Juri Lelli wrote:
-> Power Management and Scheduling in the Linux Kernel (OSPM-summit) IV edition
+On Wed, Dec 04, 2019 at 04:09:37PM -0800, Thomas Garnier wrote:
+> Minor changes based on feedback and rebase from v9.
 > 
-> May 11-13, 2019
+> Splitting the previous serie in two. This part contains assembly code
+> changes required for PIE but without any direct dependencies with the
+> rest of the patchset.
 
-Argh! s/2019/2020/g of course. :-/
-
+ISTR suggestion you add an objtool pass that verifies there are no
+absolute text references left. Otherwise we'll forever be chasing that
+last one..
