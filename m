@@ -2,89 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CC212679B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237C81267AF
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2019 18:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfLSRE3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Dec 2019 12:04:29 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49484 "EHLO
+        id S1727002AbfLSRHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Dec 2019 12:07:07 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49494 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726760AbfLSRE3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 12:04:29 -0500
+        with ESMTP id S1726840AbfLSRHH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Dec 2019 12:07:07 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 63C77292B37
+        with ESMTPSA id 53F6726016E
 Received: by earth.universe (Postfix, from userid 1000)
-        id CCDED3C0C7B; Thu, 19 Dec 2019 18:04:24 +0100 (CET)
-Date:   Thu, 19 Dec 2019 18:04:24 +0100
+        id 27B883C0C7B; Thu, 19 Dec 2019 18:07:03 +0100 (CET)
+Date:   Thu, 19 Dec 2019 18:07:03 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] at91-sama5d2_shdwc shutdown controller
-Message-ID: <20191219170424.lx42pzdysqjwzoal@earth.universe>
-References: <1576765674-22070-1-git-send-email-claudiu.beznea@microchip.com>
+To:     Ma Feng <mafeng.ma@huawei.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] power: supply: ab8500: Remove unneeded semicolon
+Message-ID: <20191219170703.ek57v3o6z6ivsxaz@earth.universe>
+References: <1576719991-109247-1-git-send-email-mafeng.ma@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cbfgrqhlxasynysk"
+        protocol="application/pgp-signature"; boundary="keot7hlxufh2vqqy"
 Content-Disposition: inline
-In-Reply-To: <1576765674-22070-1-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1576719991-109247-1-git-send-email-mafeng.ma@huawei.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---cbfgrqhlxasynysk
+--keot7hlxufh2vqqy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Dec 19, 2019 at 04:27:52PM +0200, Claudiu Beznea wrote:
-> PMC master clock register offset is different b/w sam9x60 and
-> other SoCs. Since there is a need of this register offset in
-> shutdown procedure we need to have it per SoC. This is what
-> this series does.
+On Thu, Dec 19, 2019 at 09:46:29AM +0800, Ma Feng wrote:
+> Fixes coccicheck warning:
+>=20
+> drivers/power/supply/ab8500_fg.c:2224:5-6: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2227:4-5: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2334:3-4: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2342:3-4: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2350:3-4: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2358:3-4: Unneeded semicolon
+> drivers/power/supply/ab8500_fg.c:2366:3-4: Unneeded semicolon
+>=20
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Ma Feng <mafeng.ma@huawei.com>
+> ---
 
-Patches look good to me, but I will wait a bit to give Nicolas
-and Alexandre a chance to review/test the changes.
+Thanks, I queued all 3 patches to power-supply's for-next branch.
 
 -- Sebastian
 
-> Claudiu Beznea (2):
->   power: reset: at91-sama5d2_shdwc: introduce struct shdwc_reg_config
->   power: reset: at91-sama5d2_shdwc: use proper master clock register
->     offset
+>  drivers/power/supply/ab8500_fg.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 >=20
->  drivers/power/reset/at91-sama5d2_shdwc.c | 75 +++++++++++++++++++++-----=
-------
->  1 file changed, 49 insertions(+), 26 deletions(-)
->=20
+> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
+00_fg.c
+> index c3912ee..b96f90a 100644
+> --- a/drivers/power/supply/ab8500_fg.c
+> +++ b/drivers/power/supply/ab8500_fg.c
+> @@ -2221,10 +2221,10 @@ static int ab8500_fg_get_ext_psy_data(struct devi=
+ce *dev, void *data)
+>  						ab8500_fg_update_cap_scalers(di);
+>  					queue_work(di->fg_wq, &di->fg_work);
+>  					break;
+> -				};
+> +				}
+>  			default:
+>  				break;
+> -			};
+> +			}
+>  			break;
+>  		case POWER_SUPPLY_PROP_TECHNOLOGY:
+>  			switch (ext->desc->type) {
+> @@ -2331,7 +2331,7 @@ static int ab8500_fg_init_hw_registers(struct ab850=
+0_fg *di)
+>  		if (ret) {
+>  			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_MAX_TIME_REG\n", __=
+func__);
+>  			goto out;
+> -		};
+> +		}
+> =20
+>  		ret =3D abx500_set_register_interruptible(di->dev, AB8500_RTC,
+>  			AB8505_RTC_PCUT_FLAG_TIME_REG, di->bm->fg_params->pcut_flag_time);
+> @@ -2339,7 +2339,7 @@ static int ab8500_fg_init_hw_registers(struct ab850=
+0_fg *di)
+>  		if (ret) {
+>  			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_FLAG_TIME_REG\n", _=
+_func__);
+>  			goto out;
+> -		};
+> +		}
+> =20
+>  		ret =3D abx500_set_register_interruptible(di->dev, AB8500_RTC,
+>  			AB8505_RTC_PCUT_RESTART_REG, di->bm->fg_params->pcut_max_restart);
+> @@ -2347,7 +2347,7 @@ static int ab8500_fg_init_hw_registers(struct ab850=
+0_fg *di)
+>  		if (ret) {
+>  			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_RESTART_REG\n", __f=
+unc__);
+>  			goto out;
+> -		};
+> +		}
+> =20
+>  		ret =3D abx500_set_register_interruptible(di->dev, AB8500_RTC,
+>  			AB8505_RTC_PCUT_DEBOUNCE_REG, di->bm->fg_params->pcut_debounce_time);
+> @@ -2355,7 +2355,7 @@ static int ab8500_fg_init_hw_registers(struct ab850=
+0_fg *di)
+>  		if (ret) {
+>  			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_DEBOUNCE_REG\n", __=
+func__);
+>  			goto out;
+> -		};
+> +		}
+> =20
+>  		ret =3D abx500_set_register_interruptible(di->dev, AB8500_RTC,
+>  			AB8505_RTC_PCUT_CTL_STATUS_REG, di->bm->fg_params->pcut_enable);
+> @@ -2363,7 +2363,7 @@ static int ab8500_fg_init_hw_registers(struct ab850=
+0_fg *di)
+>  		if (ret) {
+>  			dev_err(di->dev, "%s write failed AB8505_RTC_PCUT_CTL_STATUS_REG\n", =
+__func__);
+>  			goto out;
+> -		};
+> +		}
+>  	}
+>  out:
+>  	return ret;
 > --=20
-> 2.7.4
+> 2.6.2
 >=20
 
---cbfgrqhlxasynysk
+--keot7hlxufh2vqqy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl37rZIACgkQ2O7X88g7
-+ppKTQ//WW4FUtcXIE3pmAzAQCHDm6oLLp1IgXG6CBKRP9apk/d5HxS1lDCRwC7M
-lK2MQp23XVxO6dhUTrAaC51//Esv4qrouga7pdnQT1ruYXGuCP9YivvENv4WZYQK
-qLpFCFeK853DKEbh6R/vqWAhTxcZeeFLjs51DpCFDNGGBP6A09CvrvodAaAf/NBH
-NteprA/W29YjYoo1WImBALdgiaB2kMH9dzXTJhRHjvEjkMCg+KNe9GC0A8t5n5TK
-0UXa7NxJIun5ISzJKzZYFF4qxAlDE7cY2mfBA2YKsL/UdE2CaM/k4gGB55eMv5Q4
-m6h836d5Ypq6Xt1P3cQgB8wr4r+p4W5oxA7dosSTx487H7QRcrSUkZ4vhBp8/d5O
-kL0vuD8qdViMyVE9klommHijvKTxdZdKxG2bxZxMUljyhjmlEAs8bQule/Og2Xzp
-NqubWnlofcOyGZpSiBIvPfzfaWmRsZdWByxTnXl9Im5NUIivQOMkpeP48lVCNPa3
-KMWGHIvUxfNvVL6dEuh73O2FXctutcmt9xYKlyl0V5p+mhQRyKWR5nSiAnEUBV2p
-uLanxn+IitxK7tLZ5n6DEjQmGk1g8vxAoA7h36sjhK6Vt7M6ruZI5EE8O2rfwbmb
-j4DKfsU8zxj8hyHKFIbkrMsJJNZuAZmStjY36J5M8Cpzbc+vRUI=
-=Rjmv
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl37rjYACgkQ2O7X88g7
++pon0Q/9GwN9ypvJIfPFYDZeydD3Hx4mkQ6j2A4tLvUNfcU5rduPBdoDZqeYJAif
+DyzT4JPhPjlVuAHCDFf1V9Y+57C8OYdWTyaRKW6LPOCI5yB+zerpgp1NQNlIYmrS
+9A4s2W6X5SIZA32d3AfmV9imKb9CDvNUQzlMgFPoKKGILnX52bULTk33IsY+Ojey
+JjtIX7hNBwRS6w0IxnbHIKosDIr5L8GTUOZ3Ydnr6VuLrdbefiUqqQHu6UVYcDjA
+KInMKkQDmgP10XiEmyilJNwGTQBN2lbt/COS3FMRU578XJjDTAxDWvm06/w340Fn
+5JS2N67qBMlfyinPhl5aKEglLrFRPDvWBm3Nq70Bj/H8CXwI/5VXIU9D42Tm4cX8
+WYWtXvqslZWAWVKIa/MLhm4pWIEEMA/pPiWUC1poKXjm5EKNl0kJCUg+G73bAQco
+0+gXxg7fyKBdpHCvZMIOzx0DVkc72yfrGEh1EQts+fguJTuemhqx3SV2qgh+WRGp
+EMTNcwDK3dFQqXlCoZJF3Pf1quUj+IGzjStqxuW556gA+2mte9TgSHHqblQV6372
+o+AT5z/VDzRNFMXzLlzn/7pdzuiui2dlIwJxkMTOtr9aziHQpT/W+TZQ+hi6eews
+C4rkgn9bbsCcg4GXn6jg2kfi0qvrN7xE0A31XDcJs+6RqDc3pXo=
+=7CSx
 -----END PGP SIGNATURE-----
 
---cbfgrqhlxasynysk--
+--keot7hlxufh2vqqy--
