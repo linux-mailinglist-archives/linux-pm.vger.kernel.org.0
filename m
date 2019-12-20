@@ -2,27 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F8F1277E0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDED41277E7
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbfLTJSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 04:18:30 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49918 "EHLO
+        id S1727179AbfLTJTd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 04:19:33 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45643 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727177AbfLTJS3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:18:29 -0500
+        with ESMTP id S1727177AbfLTJTd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:19:33 -0500
 Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 401c98b8ae270856; Fri, 20 Dec 2019 10:18:27 +0100
+ id b09be8de9d95ff35; Fri, 20 Dec 2019 10:19:31 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM / sleep: switch to rtc_time64_to_tm/rtc_tm_to_time64
-Date:   Fri, 20 Dec 2019 10:18:27 +0100
-Message-ID: <1750207.ZPif39L95I@kreacher>
-In-Reply-To: <20191210170540.3006422-1-alexandre.belloni@bootlin.com>
-References: <20191210170540.3006422-1-alexandre.belloni@bootlin.com>
+To:     zhuguangqing83@gmail.com
+Cc:     pavel@ucw.cz, len.brown@intel.com, gregkh@linuxfoundation.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing <zhuguangqing@xiaomi.com>
+Subject: Re: [PATCH v2]PM/wakeup: Add print_wakeup_source_stats(m, &deleted_ws)
+Date:   Fri, 20 Dec 2019 10:19:31 +0100
+Message-ID: <2830760.UpLSkk7Ke6@kreacher>
+In-Reply-To: <20191209093523.15752-1-zhuguangqing83@gmail.com>
+References: <20191209093523.15752-1-zhuguangqing83@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -31,43 +32,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, December 10, 2019 6:05:40 PM CET Alexandre Belloni wrote:
-> Call the 64bit versions of rtc_tm time conversion to avoid the y2038 issue.
+On Monday, December 9, 2019 10:35:23 AM CET zhuguangqing83@gmail.com wrote:
+> From: zhuguangqing <zhuguangqing@xiaomi.com>
 > 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> After commit 00ee22c28915 (PM / wakeup: Use seq_open()
+> to show wakeup stats), print_wakeup_source_stats(m, &deleted_ws)
+> is deleted in function wakeup_sources_stats_seq_show().
+> 
+> Because deleted_ws is one of wakeup sources, so it should
+> also be showed. This patch add it to the end of all other
+> wakeup sources.
+> 
+> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
 > ---
->  kernel/power/suspend_test.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> v2: modify judegment condition according to the advice of Rafael J.
 > 
-> diff --git a/kernel/power/suspend_test.c b/kernel/power/suspend_test.c
-> index 60564b58de07..e1ed58adb69e 100644
-> --- a/kernel/power/suspend_test.c
-> +++ b/kernel/power/suspend_test.c
-> @@ -70,7 +70,7 @@ static void __init test_wakealarm(struct rtc_device *rtc, suspend_state_t state)
->  	static char info_test[] __initdata =
->  		KERN_INFO "PM: test RTC wakeup from '%s' suspend\n";
->  
-> -	unsigned long		now;
-> +	time64_t		now;
->  	struct rtc_wkalrm	alm;
->  	int			status;
->  
-> @@ -81,10 +81,10 @@ static void __init test_wakealarm(struct rtc_device *rtc, suspend_state_t state)
->  		printk(err_readtime, dev_name(&rtc->dev), status);
->  		return;
+>  drivers/base/power/wakeup.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 5817b51d2b15..53c0519da1e4 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -1071,6 +1071,9 @@ static void *wakeup_sources_stats_seq_next(struct seq_file *m,
+>  		break;
 >  	}
-> -	rtc_tm_to_time(&alm.time, &now);
-> +	now = rtc_tm_to_time64(&alm.time);
 >  
->  	memset(&alm, 0, sizeof alm);
-> -	rtc_time_to_tm(now + TEST_SUSPEND_SECONDS, &alm.time);
-> +	rtc_time64_to_tm(now + TEST_SUSPEND_SECONDS, &alm.time);
->  	alm.enabled = true;
+> +	if (!next_ws)
+> +		print_wakeup_source_stats(m, &deleted_ws);
+> +
+>  	return next_ws;
+>  }
 >  
->  	status = rtc_set_alarm(rtc, &alm);
 > 
 
-Applied (with a slightly modified changelog) as 5.6 material, thanks!
+Applied as 5.6 material with some subject and changelog modifications, thanks!
 
 
 
