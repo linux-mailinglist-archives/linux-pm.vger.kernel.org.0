@@ -2,85 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BAA12812A
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 18:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADDE128292
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 20:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbfLTRNO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 12:13:14 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33737 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727391AbfLTRNO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 12:13:14 -0500
-Received: by mail-wr1-f66.google.com with SMTP id b6so10168688wrq.0
-        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 09:13:13 -0800 (PST)
+        id S1727390AbfLTTEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 14:04:30 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:55645 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727422AbfLTTEa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 14:04:30 -0500
+Received: by mail-pj1-f65.google.com with SMTP id d5so4501959pjz.5
+        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 11:04:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CnU4xvfoNnMFHRMSFrsXcG1YgG1fyn/xauqN1cixU2I=;
-        b=uYwyK2VtKQBp/NbuJmih9sxLppLZ6LHHB56L7qjb11pFtES/khKnUpWxpALlmCtVYp
-         pmUQVraNEl5aowRXY8HqyZNdCi4v4LbGRsex6T3o1Xg39qtzJk7Y9v3VW/xx0F/pujK4
-         exHrBOwT3H93AQRVHyQHL/gOoq0udEoM37PYXqoOJpKlD1PFbzw94NSWVlZYWdH+On1N
-         iDnCf/0KlnBFKVlWv4DqAYnBEOVzKV4MklX+0seFQpxMmpTHXdPBUodW34ObneBcIjqv
-         WmIw8turqV+UOsiThIS2tkpX8ouPcNxQulPAWbQ7bWJK7FQzK+t3a978irbB/Y8ASENU
-         t9hw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qGjb7eWoCkZSqsMkOMbh0emAlLhfNF+XZ0Dr2/fwtoA=;
+        b=TGomQ9fFTiqX2VOyWk437Wi8Jo5ypgF7XDqRU+xa96kpKduPCd6PaJsmUCnNrz/wXX
+         FRHkyWn2qIhKM5nIuGM3ctTolrpcNhhMNYuzDl1kzW6UBYupI8DnJVGdEEcAFeDXFtP6
+         T1qCJwjEc31LWZWPuiPQJOr/mLInHC+UXSLY7rBWrdZc8eQ1NRIu1Uugog/4KhfwJ58u
+         akT5RL2PCWMxASEyobnHn9/hOxXoIn2SLvJR3RMadPTP9QpyQNllsZ/A03FW0fkHqRCu
+         SzSihvCIAzAWnH0m3XlMZskEUM+Ced6YWCQSrbrOc6fUva4ICP3C6/z5a+PtTW2By8wr
+         KavQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CnU4xvfoNnMFHRMSFrsXcG1YgG1fyn/xauqN1cixU2I=;
-        b=Zko1W9mIW1DgHfg3p/hFTsk3GGwrlyFNxx7LtCnnI86ENmYbMdLn+bizvRNNtqXJx3
-         ckbP27BVRRue/3QpMUsge22nZ4nRc5aFKpsh3rDeR/gc7ScQqXDL2SLmm+vXS0kXoqL3
-         zz4Qe1xJCb+E524qjD2FzBZ1Af6vZvsxRbalGC2nBGk8mZcd/9s8mHgtAWsdzt4GxcnC
-         n6Wi6Q/YvuCqRYo/9cvTSlryJ9QuytdO8QN1Sw1DL3tAY8K2iOJNKQSVRcxudqZyKbGa
-         0gL3ijDIqrt6LRf4scjl6rrepKgpKav69Xlf/8POZQTbIfrds8EEoVU6uOTmLex7ia7l
-         e3+w==
-X-Gm-Message-State: APjAAAVBj+BqK/GnAs2EfwXo6BOzsJ+wyxw/4LLdIitSiDhpAbgrUOLg
-        IR+wDBRcbZdw4pdRlYtYMQuHXN6fqEs=
-X-Google-Smtp-Source: APXvYqxmxO9UFUF3xQfA5fp0bQKpI1PQbCxM6J/wAH6gpIdilo8iKFwjXyrtVbdIMu0087TFGHx0Rg==
-X-Received: by 2002:adf:e5ca:: with SMTP id a10mr16179218wrn.347.1576861992379;
-        Fri, 20 Dec 2019 09:13:12 -0800 (PST)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id k13sm10276085wrx.59.2019.12.20.09.13.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 20 Dec 2019 09:13:11 -0800 (PST)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, evgreen@chromium.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qGjb7eWoCkZSqsMkOMbh0emAlLhfNF+XZ0Dr2/fwtoA=;
+        b=m71q7QYwLpiGcnTdNKKQH/bi9nyttL1yF63moWHkImjwBLMEcJndwwX0ASwfpuasI7
+         ysQZc8RhASHai9+oIc6Y6ZWwB6xVN+7LVMDRB882UeSzY0npU7/+tySiYO1/ijcD8fQn
+         6XA0/A8tXskVw7S5ZqZRue5+LQVvyapSB33I4VnGh9UDLakSAnQjPZ0LIZA3oj4eBcRG
+         yhwecfAgf78r0LrD1ZxEnGUHV3S1nhpshkBosD15AQw/mnw/dZpHDrBglvxgy2ZWowEd
+         GLWcXsEbc+ZCTNVj9ZUFfnn7x1BqtmPFtOQI/rEwSqHpwIXX5/A1FuqsR7jB5uBZYVEJ
+         D+cw==
+X-Gm-Message-State: APjAAAUpsr5OB7YOgQeGP4WgHFtBU2L5rTMLiu5xHvaCUjdYeN4UXZ9U
+        cQwlkpaKlR+O4pJnkJ7ppUil8Q==
+X-Google-Smtp-Source: APXvYqzj/ieFQoyLUA0Oa0WPwtOBqCvbXDqpN+HBNirj9Qp2WbSOWzuFCEJ2uvBjwxdDq5q2WV103Q==
+X-Received: by 2002:a17:902:7c0d:: with SMTP id x13mr16807903pll.85.1576868669546;
+        Fri, 20 Dec 2019 11:04:29 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id m22sm13172633pgn.8.2019.12.20.11.04.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 11:04:28 -0800 (PST)
+Date:   Fri, 20 Dec 2019 11:04:26 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, evgreen@chromium.org,
         daidavid1@codeaurora.org, okukatla@codeaurora.org,
-        jcrouse@codeaurora.org, georgi.djakov@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: Check for valid path in icc_set_bw()
-Date:   Fri, 20 Dec 2019 19:13:10 +0200
-Message-Id: <20191220171310.24169-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.24.1
+        jcrouse@codeaurora.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: Check for valid path in icc_set_bw()
+Message-ID: <20191220190426.GE549437@yoga>
+References: <20191220171310.24169-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191220171310.24169-1-georgi.djakov@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use IS_ERR() to ensure that the path passed to icc_set_bw() is valid.
+On Fri 20 Dec 09:13 PST 2019, Georgi Djakov wrote:
 
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> Use IS_ERR() to ensure that the path passed to icc_set_bw() is valid.
+> 
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+>  drivers/interconnect/core.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 63c164264b73..14a6f7ade44a 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -498,6 +498,11 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+>  	if (!path || !path->num_nodes)
+>  		return 0;
+>  
+> +	if (IS_ERR(path)) {
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 63c164264b73..14a6f7ade44a 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -498,6 +498,11 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 	if (!path || !path->num_nodes)
- 		return 0;
- 
-+	if (IS_ERR(path)) {
-+		pr_err("%s: invalid path=%ld\n", __func__, PTR_ERR(path));
-+		return -EINVAL;
-+	}
-+
- 	mutex_lock(&icc_lock);
- 
- 	old_avg = path->reqs[0].avg_bw;
+This is a sign of a logical error, and the print is likely to be
+ignored/lost in the noise. So I think the response should aid to help
+the developer hitting this to resolve the issue.
+
+So I think this is more visible and more useful as:
+
+	if (WARN_ON(IS_ERR(path)))
+		return -EINVAL;
+
+
+PS. Doesn't path->num_nodes == 0 fall in this category as well? When
+would you have a path object with no nodes passed to this function?
+
+Regards,
+Bjorn
+
+> +		pr_err("%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+> +		return -EINVAL;
+> +	}
+> +
+>  	mutex_lock(&icc_lock);
+>  
+>  	old_avg = path->reqs[0].avg_bw;
