@@ -2,166 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DD3127FAF
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 16:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7AC128049
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 17:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727756AbfLTPm6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 10:42:58 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:33433 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727499AbfLTPm6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 10:42:58 -0500
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  Nicolas.Ferre@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Nicolas.Ferre@microchip.com";
-  x-sender="Nicolas.Ferre@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Nicolas.Ferre@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa6.microchip.iphmx.com; spf=Pass smtp.mailfrom=Nicolas.Ferre@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: M0Hyt6PFH1+Hh5y5QpdAUVHBwX0oof4z6LFWlmER6HNSDEP8mDCut8z9HDHAKP0kQfJDu5mhx3
- If+qvGTRrQkobUQNqFLGWs7UxVKk8lZBGM78GvsidrYCyrFIwDZAdXJJ1RM459EowHhvxU9DHE
- 8RmQJ/MnqTvO77R41VzwmSSbclXT6ydQOHtAO+6L63oX+xeweopu2opNpGKULA5Z8QZmk5U5sI
- E+ZiHQIlG+DW9PQ1TuHVGYT46f1XI2m5RB/q02E/t57nvjURUGynHQqW/gHpT57IP9bbjfwd1O
- fhI=
-X-IronPort-AV: E=Sophos;i="5.69,336,1571727600"; 
-   d="scan'208";a="58491975"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Dec 2019 08:42:53 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 20 Dec 2019 08:42:53 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 20 Dec 2019 08:42:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C+fzk2VqJBhRr6AoklcN4GJyk1S6ZFSylj+2aTyJdDAE+V9yq5Mq3U6DNu7G9iOzBxi0CQIpnnf15ZQo+1FHAC6UPjyHdov+u3x3xG/tU1mB4/Kp0rmT+JFbuQVd7pgukkL7fdnsga3whu9W8ShS5Sg40CLYJumyPRUv92/rdlyX86LPROmxjpkQrbqdNd2rwJmtbnhgeWDDH8BgB4f7+acop0o0WiR3p67V4TuZqibdVsp5msrcScakwXpDevRhE0juT3+lH8mL+hlTTgdqQLK4AAow60jtDDnys/n1JkW0Qid8vR5gIYfaZXTjdDTaminGOIheKx3nZ9Su5/SLcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CqlAQ468WIxJsojOaPe7rimIbfd61BbTcsTr3pv8f2c=;
- b=fOwtCfJMGMB0eaS7Wkv0abjANP9oSZ9k2uhBFq9r3UpEBFZ8w0P6m9aze9C//CnekKfURwvwY+P56gJf7vppnbx1HxVeY0FgxQkqYA8777nh9/5jCimCuLMl8euZWVKpdSa4NBcFwd8fP01AVegXXPUMskxbvjV7h5QRosCfH1dJlhDF/bFGu9n7GRlb9bThl96am/NcHGajR3BoXGkzdFwMeigSJlU+ZZfSQQWQvjK6Ji6BufxOMjjswtjeSq4VOK3nYy5nQncV5i++EAbVe4F2rm9tYfvK9UQsK8DukmpdxCAZCV2wIJmejFZXenpZ/r3i1kyFE4SUay4uSxI7PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CqlAQ468WIxJsojOaPe7rimIbfd61BbTcsTr3pv8f2c=;
- b=UUJm3XUxpTfrRNsLzv87c9f2aSskZPQ3Gd3Ter6cDDJukzEUjKu9sZEX7PMyrGtxC+U/Dhs3dVQSnFxeT8rr/rcdmiRTvJZbsShEYjuG5tTuWBe4tbK74HgVmcZT6X6A2ufDYtWPw32VCV1aG3DiDSLR3k9Edn0gLChQ90gaVA0=
-Received: from SN6PR11MB2830.namprd11.prod.outlook.com (52.135.91.21) by
- SN6PR11MB2909.namprd11.prod.outlook.com (52.135.126.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2559.14; Fri, 20 Dec 2019 15:42:52 +0000
-Received: from SN6PR11MB2830.namprd11.prod.outlook.com
- ([fe80::9439:53a6:d896:d176]) by SN6PR11MB2830.namprd11.prod.outlook.com
- ([fe80::9439:53a6:d896:d176%7]) with mapi id 15.20.2559.012; Fri, 20 Dec 2019
- 15:42:52 +0000
-From:   <Nicolas.Ferre@microchip.com>
-To:     <Claudiu.Beznea@microchip.com>, <sre@kernel.org>,
-        <alexandre.belloni@bootlin.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] power: reset: at91-poweroff: use proper master
- clock register offset
-Thread-Topic: [PATCH v2 2/2] power: reset: at91-poweroff: use proper master
- clock register offset
-Thread-Index: AQHVt0qPDKkOca/Pv0mQOG+YXJXpwKfDKa6A
-Date:   Fri, 20 Dec 2019 15:42:52 +0000
-Message-ID: <ccdb9e9163a37b25202412668a9cd4b4d1a51d16.camel@microchip.com>
-References: <1576855878-13213-1-git-send-email-claudiu.beznea@microchip.com>
-         <1576855878-13213-3-git-send-email-claudiu.beznea@microchip.com>
-In-Reply-To: <1576855878-13213-3-git-send-email-claudiu.beznea@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.41.198.74]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69a0b734-e25f-4d3b-7ad6-08d78563461f
-x-ms-traffictypediagnostic: SN6PR11MB2909:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR11MB29090255E2055A07AA8B664CE02D0@SN6PR11MB2909.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 025796F161
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(376002)(346002)(136003)(39860400002)(189003)(199004)(110136005)(5660300002)(186003)(54906003)(71200400001)(4326008)(316002)(86362001)(6486002)(76116006)(91956017)(66446008)(64756008)(66556008)(66476007)(66946007)(36756003)(81166006)(81156014)(8676002)(6512007)(2906002)(2616005)(26005)(8936002)(6506007)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR11MB2909;H:SN6PR11MB2830.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QOuCCLLhKP4EQCschKKMcJzkeUqOn55aQVheJ4X/5JJ+XecN6eyPXMV7On7X8B1+4OGjgqxXmHp8zWczWz32ijP0IWqSuST+YYGIpM1S1xT9+69P6zg8jjcD09lslHzTOV+q/SS0r4Xg8+OLylIkrNCllLKvDDCUGS/X5ZBCw8pcESP/Igp80y1DhDgTC5R0QT0/DB7BBDx9c6qfe/1FWA/6ZJE1Ejn4gP6wR7EVQSpkin2vGujqh0f0QHaNsMH5avJFGSDQqTaJEze6zwxmPYGHy7DrgVsjg9b5RAeHWonkJZGMOgj9IfnqweVCNbTVoSSdv9yHiLa/riz+y6lAXbdXclonXQrCA+XNbNzmmWWKsTYI8BiHuv8qyFPK0a0dzP7HG+ff9XI8voG6DE48ky5S8mDLOzMohRSEA/UoXD8ax+z/hNca5BnYHapU0SqC
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <412D3FC4C7EB884CA77BD0D628E1725E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727435AbfLTQDF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 11:03:05 -0500
+Received: from mx3.freesources.org ([195.34.172.217]:36564 "EHLO
+        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727428AbfLTQDF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 11:03:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=freesources.org; s=20160526; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=j/FbFBZtYk7i73dKsm9YyHs43O6PdSVPc5T6gGGwdf0=; b=MrT9n+H1oVAScKR0YGYpkN5XDU
+        ZanTSnFG6Wj4CbrfyxAafVdAZxG/r4P/HBdVEl3iTWkgI9ta2cxZUui0N/jdKWXyXVwOWIRBMFuI/
+        9pK/RP0z7cTTESmVnt+N8FkueRXP4owG3rR9i6xVAg0YKLYu3a7dHioar00x7IZo1jOk=;
+Received: from anon-62-247.vpn.ipredator.se ([46.246.62.247])
+        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <jonas@freesources.org>)
+        id 1iiKjx-0000V8-SN; Fri, 20 Dec 2019 16:02:57 +0000
+From:   Jonas Meurer <jonas@freesources.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>,
+        Yannik Sembritzki <yannik@sembritzki.me>
+Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
+ 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
+ 2SCIHpzHfm/mpRL2
+Subject: [PATCH v2] PM: Add a switch for disabling/enabling sync() before
+ suspend
+Message-ID: <d34ad8b1-8c0a-99d9-dc3e-319600c0bc39@freesources.org>
+Date:   Fri, 20 Dec 2019 17:02:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69a0b734-e25f-4d3b-7ad6-08d78563461f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2019 15:42:52.0279
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xPvLIQrIaO0umr9vgzbVGSgLGGk9NoUohzRiK8F8Xl3AnoBFBGIOhMhdDV/Xez7coItPVDVj+9xt/N0ZVoEw3QCYZ5kmK4qc2FOZAYuvCgg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2909
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-TGUgdmVuZHJlZGkgMjAgZMOpY2VtYnJlIDIwMTkgw6AgMTc6MzEgKzAyMDAsIENsYXVkaXUgQmV6
-bmVhIGEgw6ljcml0IDoNCj4gU0FNOVg2MCdzIFBNQyB1c2VzIGRpZmZlcmVudCBvZmZzZXQgZm9y
-IG1hc3RlciBjbG9jayByZWdpc3Rlci4NCj4gQWRkIGEgbWVtYmVyIG9mIHR5cGUgc3RydWN0IHBt
-Y19yZWdfY29uZmlnIGluIHN0cnVjdCByZWdfY29uZmlnLA0KPiBmaWxsIGl0IGNvcnJlc3BvbmRp
-bmdseSBmb3IgU0FNQTVEMiBhbmQgU0FNOVg2MCBhbmQgdXNlIGl0IGluDQo+IHBvd2Vyb2ZmKCkg
-ZnVuY3Rpb24uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5i
-ZXpuZWFAbWljcm9jaGlwLmNvbT4NCg0KQWNrZWQtYnk6IE5pY29sYXMgRmVycmUgPG5pY29sYXMu
-ZmVycmVAbWljcm9jaGlwLmNvbT4NCg0KPiAtLS0NCj4gIGRyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5
-MS1zYW1hNWQyX3NoZHdjLmMgfCAxOCArKysrKysrKysrKysrKystLS0NCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5MS1zYW1hNWQyX3NoZHdjLmMNCj4gYi9kcml2ZXJzL3Bv
-d2VyL3Jlc2V0L2F0OTEtc2FtYTVkMl9zaGR3Yy5jDQo+IGluZGV4IDg0ODA2ZDIwODQ2Yi4uMmZl
-M2E2MjdjYjUzIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtc2FtYTVk
-Ml9zaGR3Yy5jDQo+ICsrKyBiL2RyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5MS1zYW1hNWQyX3NoZHdj
-LmMNCj4gQEAgLTc0LDggKzc0LDEzIEBAIHN0cnVjdCBzaGR3Y19yZWdfY29uZmlnIHsNCj4gIAl1
-OCBzcl9ydHR3a19zaGlmdDsNCj4gIH07DQo+ICANCj4gK3N0cnVjdCBwbWNfcmVnX2NvbmZpZyB7
-DQo+ICsJdTggbWNrcjsNCj4gK307DQo+ICsNCj4gIHN0cnVjdCByZWdfY29uZmlnIHsNCj4gIAlz
-dHJ1Y3Qgc2hkd2NfcmVnX2NvbmZpZyBzaGR3YzsNCj4gKwlzdHJ1Y3QgcG1jX3JlZ19jb25maWcg
-cG1jOw0KPiAgfTsNCj4gIA0KPiAgc3RydWN0IHNoZHdjIHsNCj4gQEAgLTEzNiw5ICsxNDEsOSBA
-QCBzdGF0aWMgdm9pZCBhdDkxX3Bvd2Vyb2ZmKHZvaWQpDQo+ICAJCSIJc3RyCSUxLCBbJTAsICMi
-IF9fc3RyaW5naWZ5KEFUOTFfRERSU0RSQ19MUFIpICJdXG5cdCINCj4gIA0KPiAgCQkvKiBTd2l0
-Y2ggdGhlIG1hc3RlciBjbG9jayBzb3VyY2UgdG8gc2xvdyBjbG9jay4gKi8NCj4gLQkJIjE6CWxk
-cglyNiwgWyU0LCAjIiBfX3N0cmluZ2lmeShBVDkxX1BNQ19NQ0tSKQ0KPiAiXVxuXHQiDQo+ICsJ
-CSIxOglsZHIJcjYsIFslNCwgJTVdXG5cdCINCj4gIAkJIgliaWMJcjYsIHI2LCAgIyIgX19zdHJp
-bmdpZnkoQVQ5MV9QTUNfQ1NTKSAiXG5cdCINCj4gLQkJIglzdHIJcjYsIFslNCwgIyIgX19zdHJp
-bmdpZnkoQVQ5MV9QTUNfTUNLUikgIl1cblx0Ig0KPiArCQkiCXN0cglyNiwgWyU0LCAlNV1cblx0
-Ig0KPiAgCQkvKiBXYWl0IGZvciBjbG9jayBzd2l0Y2guICovDQo+ICAJCSIyOglsZHIJcjYsIFsl
-NCwgIyIgX19zdHJpbmdpZnkoQVQ5MV9QTUNfU1IpICJdXG5cdCINCj4gIAkJIgl0c3QJcjYsICMi
-CSAgICBfX3N0cmluZ2lmeShBVDkxX1BNQ19NQ0tSRFkpICJcblx0Ig0KPiBAQCAtMTUzLDcgKzE1
-OCw4IEBAIHN0YXRpYyB2b2lkIGF0OTFfcG93ZXJvZmYodm9pZCkNCj4gIAkJICAiciIgY3B1X3Rv
-X2xlMzIoQVQ5MV9ERFJTRFJDX0xQRERSMl9QV09GRiksDQo+ICAJCSAgInIiIChhdDkxX3NoZHdj
-LT5zaGR3Y19iYXNlKSwNCj4gIAkJICAiciIgY3B1X3RvX2xlMzIoQVQ5MV9TSERXX0tFWSB8IEFU
-OTFfU0hEV19TSERXKSwNCj4gLQkJICAiciIgKGF0OTFfc2hkd2MtPnBtY19iYXNlKQ0KPiArCQkg
-ICJyIiAoYXQ5MV9zaGR3Yy0+cG1jX2Jhc2UpLA0KPiArCQkgICJyIiAoYXQ5MV9zaGR3Yy0+cmNm
-Zy0+cG1jLm1ja3IpDQo+ICAJCTogInI2Iik7DQo+ICB9DQo+ICANCj4gQEAgLTI1Myw2ICsyNTks
-OSBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHJlZ19jb25maWcgc2FtYTVkMl9yZWdfY29uZmlnID0g
-ew0KPiAgCQkuc3JfcnRjd2tfc2hpZnQgPSA1LA0KPiAgCQkuc3JfcnR0d2tfc2hpZnQgPSBTSERX
-X0NGR19OT1RfVVNFRCwNCj4gIAl9LA0KPiArCS5wbWMgPSB7DQo+ICsJCS5tY2tyCQk9IDB4MzAs
-DQo+ICsJfSwNCj4gIH07DQo+ICANCj4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgcmVnX2NvbmZpZyBz
-YW05eDYwX3JlZ19jb25maWcgPSB7DQo+IEBAIC0yNjMsNiArMjcyLDkgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCByZWdfY29uZmlnIHNhbTl4NjBfcmVnX2NvbmZpZyA9IHsNCj4gIAkJLnNyX3J0Y3dr
-X3NoaWZ0ID0gNSwNCj4gIAkJLnNyX3J0dHdrX3NoaWZ0ID0gNCwNCj4gIAl9LA0KPiArCS5wbWMg
-PSB7DQo+ICsJCS5tY2tyCQk9IDB4MjgsDQo+ICsJfSwNCj4gIH07DQo+ICANCj4gIHN0YXRpYyBj
-b25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGF0OTFfc2hkd2Nfb2ZfbWF0Y2hbXSA9IHsNCg==
+The switch allows to enable or disable the final sync() from the suspend.c
+Linux Kernel system suspend implementation. This is useful to avoid race
+conditions if block devices have been suspended before. Be aware that you
+have to take care of sync() yourself before suspending the system if you
+disable it here.
+
+Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
+is slightly changed: It now configures the default for fun-time switch
+'/sys/power/sync_on_suspend'.
+
+Signed-off-by: Jonas Meurer <jonas@freesources.org>
+---
+ Documentation/ABI/testing/sysfs-power | 15 ++++++++++++
+ include/linux/suspend.h               |  2 ++
+ kernel/power/Kconfig                  |  5 +++-
+ kernel/power/main.c                   | 33 +++++++++++++++++++++++++++
+ kernel/power/suspend.c                |  2 +-
+ 5 files changed, 55 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+index 6f87b9dd384b..783b3ce8eb06 100644
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -407,3 +407,18 @@ Contact:	Kalesh Singh <kaleshsingh96@gmail.com>
+ Description:
+ 		The /sys/power/suspend_stats/last_failed_step file contains
+ 		the last failed step in the suspend/resume path.
++
++What:		/sys/power/sync_on_suspend
++Date:		October 2019
++Contact:	Jonas Meurer <jonas@freesources.org>
++Description:
++		This file controls the switch to enable or disable the final
++		sync() before system suspend. This is useful to avoid race
++		conditions if block devices have been suspended before. Be
++		aware that you have to take care of sync() yourself before
++		suspending the system if you disable it here.
++
++		Writing a "1" to this file enables the sync() and writing a
++		"0" disables it. Reads from the file return the current value.
++		The default is "1" but can be configured with the build-time
++		config flag "SUSPEND_SKIP_SYNC".
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 6fc8843f1c9e..4a230c2f1c31 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -329,6 +329,7 @@ extern void arch_suspend_disable_irqs(void);
+ extern void arch_suspend_enable_irqs(void);
+ 
+ extern int pm_suspend(suspend_state_t state);
++extern bool sync_on_suspend_enabled;
+ #else /* !CONFIG_SUSPEND */
+ #define suspend_valid_only_mem	NULL
+ 
+@@ -342,6 +343,7 @@ static inline bool pm_suspend_default_s2idle(void) { return false; }
+ 
+ static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
+ static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
++static inline bool sync_on_suspend_enabled(void) { return true; }
+ static inline bool idle_should_enter_s2idle(void) { return false; }
+ static inline void __init pm_states_init(void) {}
+ static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index d3667b4075c1..7cbfbeacd68a 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
+ 	  Skip the kernel sys_sync() before freezing user processes.
+ 	  Some systems prefer not to pay this cost on every invocation
+ 	  of suspend, or they are content with invoking sync() from
+-	  user-space before invoking suspend.  Say Y if that's your case.
++	  user-space before invoking suspend.  There's a run-time switch
++	  at '/sys/power/sync_on_suspend' to configure this behaviour.
++	  This setting changes the default for the run-tim switch. Say Y
++	  to change the default to disable the kernel sys_sync().
+ 
+ config HIBERNATE_CALLBACKS
+ 	bool
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index e26de7af520b..69b7a8aeca3b 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -190,6 +190,38 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
+ }
+ 
+ power_attr(mem_sleep);
++
++/*
++ * sync_on_suspend: invoke ksys_sync_helper() before suspend.
++ *
++ * show() returns whether ksys_sync_helper() is invoked before suspend.
++ * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
++ */
++bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
++
++static ssize_t sync_on_suspend_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
++}
++
++static ssize_t sync_on_suspend_store(struct kobject *kobj,
++				    struct kobj_attribute *attr,
++				    const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	if (val > 1)
++		return -EINVAL;
++
++	sync_on_suspend_enabled = !!val;
++	return n;
++}
++
++power_attr(sync_on_suspend);
+ #endif /* CONFIG_SUSPEND */
+ 
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+@@ -855,6 +887,7 @@ static struct attribute * g[] = {
+ 	&wakeup_count_attr.attr,
+ #ifdef CONFIG_SUSPEND
+ 	&mem_sleep_attr.attr,
++	&sync_on_suspend_attr.attr,
+ #endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index f3b7239f1892..2c47280fbfc7 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
+ 	if (state == PM_SUSPEND_TO_IDLE)
+ 		s2idle_begin();
+ 
+-	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
++	if (sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+ 		ksys_sync_helper();
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+-- 
+2.20.1
+
+
