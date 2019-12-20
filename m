@@ -2,275 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C15127A01
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 12:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD760127A7E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 13:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbfLTLdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 06:33:42 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:46064 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbfLTLdm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 06:33:42 -0500
-Received: by mail-vs1-f65.google.com with SMTP id b4so5374250vsa.12
-        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 03:33:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RuIcFhrvJDAEaBnYEqmk1r8HnhTJZEKs9iySn9v6Ztg=;
-        b=ibDtl8/FLvAQvR7P/wSHoa11rPwILCfwEnqHWKLPQzOOycLXzZJXTWtIzoSB4AXDw1
-         rN+EjUvBusU+hFZbHbBMAu+H84ptP0WxFGzw2Rct4X/Py0nBqHsB8nD02MRrOEMKX2E9
-         caGuWVB1vxPR+1yIFc+xVgXXQsmWICfDV432B3BwM910JX7kdum6tgRjS2ILCzf/14IC
-         cRKK3aOT+9D5wjPUfgDupTYMzeezK42bL5d8apTDGXIAjGzxZ0U7wN12ryy0wpscni8v
-         f9ZmMenLwLhFffneupk8HXpqvhGEWIkd3bgy4OtxuW7p4Ee2vn69fjFKfyC2sszTDMpF
-         G2Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RuIcFhrvJDAEaBnYEqmk1r8HnhTJZEKs9iySn9v6Ztg=;
-        b=LATYt8v2Ju4p/eF1utCAPzGPnhC7Tc75jPuxJ5zcL/oaSyTYO7PMp5S6YkJhjGWhnJ
-         1MDSM4h1RlF/DP7Vvf4k8mOHaY3ElzWBYL4LmT74QBTBsnTSO8/qLAx5G2xNGKcMo8ai
-         dGUnc3zU+DnGMrSMrDYanSEJz6q1QW8YyKo6n+aklA+FKk0EbbnFezyqs9uFYJAMIZ5g
-         2Dfb4jEuYK5cZYsnvCK4OSKhkcFe9gzXQwfzs8Angk6eLP1CTz10BikDBMy+Li+VoJw5
-         QI462J3P4Gfvsx/VRGWF1rOgNNhJH92C+jJhGF7Fi7dsj8g3v0ePX/+c4E2d7yX0MNBO
-         zDVw==
-X-Gm-Message-State: APjAAAXrmvwXr81kTZr7gLQHFrqIjp/bPlye0u4B5/D8Xe3DUohbQVj+
-        6LGbGO8DxBlmoqJeqSC1sfXz+k5J1FiEc74pWjDTMg==
-X-Google-Smtp-Source: APXvYqzSl1GU5/1o3ceHUdofiPut6ttn1dAJbNxnE/tuL5Bwi0UOSbD1LEgG6+TCYsHDOi0JnLKM61/VWA4pzLobXaQ=
-X-Received: by 2002:a67:314e:: with SMTP id x75mr2640082vsx.35.1576841620684;
- Fri, 20 Dec 2019 03:33:40 -0800 (PST)
+        id S1727262AbfLTMBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 07:01:43 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:36362 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727276AbfLTMBn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 07:01:43 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191220120141euoutp015a15e05e072f72591697e743174c0f6f~iEqDhQMEO1021410214euoutp01A
+        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 12:01:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191220120141euoutp015a15e05e072f72591697e743174c0f6f~iEqDhQMEO1021410214euoutp01A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576843301;
+        bh=o8kqTbI3GWwahjeMr7ptW3eNW7y3qIfdXJX6mSqJ8GU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=fRG9JCy6XCwtp4ZdCi7PJzn3R5kwHooe2fVk+33c3GV2959QFdWTCqaNwlbgWfID7
+         x7aVTbQ7JBD6/EAlSUIW/oDTWydvAN84A76DH2owSsHzXq6WucpD3pTV6Ldm9YRMrt
+         /K4K6HSAMKBeJ35F+6m9rHHNYXmHBfhWHPQ219uo=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191220120141eucas1p1346b57898e6b86bf808788dc151be72e~iEqDHDdLL2294822948eucas1p15;
+        Fri, 20 Dec 2019 12:01:41 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 5E.84.60679.528BCFD5; Fri, 20
+        Dec 2019 12:01:41 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191220120140eucas1p14ad33c20882f8f48e02337ea16754d91~iEqC0-4Uz1895118951eucas1p1f;
+        Fri, 20 Dec 2019 12:01:40 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191220120140eusmtrp2e53173ce4cb4fe4f518a9ac1d5e90469~iEqC0RcnC2149221492eusmtrp2q;
+        Fri, 20 Dec 2019 12:01:40 +0000 (GMT)
+X-AuditID: cbfec7f4-0e5ff7000001ed07-18-5dfcb8251d32
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 7D.58.07950.428BCFD5; Fri, 20
+        Dec 2019 12:01:40 +0000 (GMT)
+Received: from AMDC3555.digital.local (unknown [106.120.51.67]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191220120140eusmtip2d5da1c65c2cb57bed1af99b2eb661293~iEqCD-7rN2783527835eusmtip2t;
+        Fri, 20 Dec 2019 12:01:40 +0000 (GMT)
+From:   =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        georgi.djakov@linaro.org, leonard.crestez@nxp.com,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com, krzk@kernel.org
+Subject: [RFC PATCH v3 0/7] PM / devfreq: Simple QoS for exynos-bus using
+ interconnect
+Date:   Fri, 20 Dec 2019 12:56:46 +0100
+Message-Id: <20191220115653.6487-1-a.swigon@samsung.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20191211154343.29765-1-ulf.hansson@linaro.org>
- <20191211154343.29765-11-ulf.hansson@linaro.org> <20191219143154.GC20746@bogus>
- <CAPDyKForeHdXPTocvAgFDbX+94UQWbJixUpKLY=0MbnF5XUAMA@mail.gmail.com>
- <20191219180133.GB21846@bogus> <CAPDyKFoM+SccsawV+0hHF+ku+P=5WuVaUCnKV=ftCgBRmRPseA@mail.gmail.com>
- <20191220100137.GA6731@bogus>
-In-Reply-To: <20191220100137.GA6731@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Dec 2019 12:33:04 +0100
-Message-ID: <CAPDyKFofsbcPL2R+igxb66bU+QbEmsakV_Ee5AVu_VSZSP1rLw@mail.gmail.com>
-Subject: Re: [PATCH v4 10/14] cpuidle: psci: Prepare to use OS initiated
- suspend mode via PM domains
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRTH++3u3l1XG3dT6LReNhJKqGUW/KJlT+pC9KKIiEZNu6jkVuxm
+        pQVNI7GVJSvxkahUpJiyuXzMsSRkZA/UzEfho4WPSqOsfESmmbdrj/++53vO5/zOOfxoQt1C
+        auhY80nOYjbGaSm5tPLR98ZlIe5xw4qer0rsz7uIcFmWg8Qvh9+RON/XQOKWkUEKZz5wUdju
+        T5fixkanDBd1fSGxq6eNxM2eXAoPpfkQzmqskeBSX5cMdyQVUTjrej+1gWFdxZcotrPNS7H+
+        y3US9v6d82zZJ7eEvVpejNgh14LdsoNy/VEuLvYUZ9FFHJHHZLb60YnWhWeeVDVRVuTV2BBN
+        A7MK7Jl7bUhOq5kiBKMTo0gMhhHYurtkNhQwFQwhGOnfKWgBqM9Io8SiQgQp7fXkX6Jiwi8R
+        qihmI9gz3siERBDjQ3C9YFAqBASTK4HUS4VSoSqQOQAjpQ2/CSkTArc9DkLQCgZD37U3EvG9
+        hXDP+XDaV8GT7N7fLDHlX6i4SQhNgWmXwQuHG4nAFuj61kuJOhAG6splop4Hk9X500156Kv2
+        kyJsReC66yPExFrobBijhNMQzFJweHSivREmur0y8WJKePVRJc6gBHtlJiHaCkhNUYtSC55s
+        pQgCJN9rm+7NwttnkxLxogboaXIQ6Sg457/Fcv5bLOffCAWIKEazuXjeFM3xK83c6eW80cTH
+        m6OXRx03udDUX3v2s27YjTzjkbWIoZF2luJ91A+DmjSe4hNMtQhoQhuk6Ej9blArjhoTEjnL
+        8cOW+DiOr0Vzaal2tiL8Vr9BzUQbT3LHOO4EZ/mTldABGiuqeD4+4+zoxZr1j8dG9gWXbK5/
+        XaA5xxauduq/lfCqqjrLoq1Rm3evzGtODI9xNkekdG5KomynN7lqmcjPyvnjQVd026t3ZHeH
+        vQ70WZ9GDSzRx9+YGVl5O91btV8+FjrnzoKBdWkBW8N20TElodt0KoN6W0pG1p416/XJi999
+        KFUd0kr5GGNYKGHhjb8ABpOM6GcDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsVy+t/xe7oqO/7EGnR+sbC4P6+V0WLjjPWs
+        Fte/PGe1mH/kHKvFla/v2Sym793EZjHp/gQWi/PnN7BbrLj7kdVi0+NrrBaXd81hs/jce4TR
+        Ysb5fUwWa4/cZbe43biCzWLG5JdsDgIem1Z1snncubaHzeN+93Emj81L6j02vtvB5NG3ZRWj
+        x+dNcgHsUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2
+        CXoZ06/eZyy4Kl9xcvtFtgbGPVJdjJwcEgImEmen9rJ1MXJxCAksZZT4e/U6K0RCQuLj+htQ
+        trDEn2tdUEWfGCXe/H/IBpJgE3CUmDT1ATtIQkTgFKPE1uXnwBLMAiuYJPrnCHcxcnAIC4RJ
+        TGu0AwmzCKhKLN61nhnE5hWwkHja/4AJYoG8xOoNB6DighInZz5hAWllFlCXWD9PCGKivETz
+        1tnMExj5ZyGpmoVQNQtJ1QJG5lWMIqmlxbnpucVGesWJucWleel6yfm5mxiB0bft2M8tOxi7
+        3gUfYhTgYFTi4XVI+x0rxJpYVlyZe4hRgoNZSYT3dsfPWCHelMTKqtSi/Pii0pzU4kOMpkAv
+        TGSWEk3OByaGvJJ4Q1NDcwtLQ3Njc2MzCyVx3g6BgzFCAumJJanZqakFqUUwfUwcnFINjBr2
+        Dx57/DiTwdi84qhswTQp9p3WRiujzs2c/+KI4zWmvcc1OhiTQ2v0wj+knFu91eJd/sTTP1Zt
+        7Pm+9EJZo5lGfvjPwy9+iB2rfv+/pufUhxunrvouOjPTze+tQkHsvXlvnHwD9t7azCASW594
+        /MOvhKlBNUrfreqDP7zZJLbTaiZ/kHXW791KLMUZiYZazEXFiQAR5L591AIAAA==
+X-CMS-MailID: 20191220120140eucas1p14ad33c20882f8f48e02337ea16754d91
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191220120140eucas1p14ad33c20882f8f48e02337ea16754d91
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191220120140eucas1p14ad33c20882f8f48e02337ea16754d91
+References: <CGME20191220120140eucas1p14ad33c20882f8f48e02337ea16754d91@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 20 Dec 2019 at 11:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Dec 19, 2019 at 10:33:34PM +0100, Ulf Hansson wrote:
-> > On Thu, 19 Dec 2019 at 19:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Thu, Dec 19, 2019 at 04:48:13PM +0100, Ulf Hansson wrote:
-> > > > On Thu, 19 Dec 2019 at 15:32, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > >
-> > > > > On Wed, Dec 11, 2019 at 04:43:39PM +0100, Ulf Hansson wrote:
-> > > > > > The per CPU variable psci_power_state, contains an array of fixed values,
-> > > > > > which reflects the corresponding arm,psci-suspend-param parsed from DT, for
-> > > > > > each of the available CPU idle states.
-> > > > > >
-> > > > > > This isn't sufficient when using the hierarchical CPU topology in DT, in
-> > > > > > combination with having PSCI OS initiated (OSI) mode enabled. More
-> > > > > > precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
-> > > > > > idle state the cluster (a group of CPUs) should enter, while in PSCI
-> > > > > > Platform Coordinated (PC) mode, each CPU independently votes for an idle
-> > > > > > state of the cluster.
-> > > > > >
-> > > > > > For this reason, introduce a per CPU variable called domain_state and
-> > > > > > implement two helper functions to read/write its value. Then let the
-> > > > > > domain_state take precedence over the regular selected state, when entering
-> > > > > > and idle state.
-> > > > > >
-> > > > > > To avoid executing the above OSI specific code in the ->enter() callback,
-> > > > > > while operating in the default PSCI Platform Coordinated mode, let's also
-> > > > > > add a new enter-function and use it for OSI.
-> > > > > >
-> > > > > > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-> > > > > > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
-> > > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > > ---
-> > > > > >
-> > > > > > Changes in v4:
-> > > > > >       - Rebased on top of earlier changes.
-> > > > > >       - Add comment about using the deepest cpuidle state for the domain state
-> > > > > >       selection.
-> > > > > >
-> > > > > > ---
-> > > > > >  drivers/cpuidle/cpuidle-psci.c | 56 ++++++++++++++++++++++++++++++----
-> > > > > >  1 file changed, 50 insertions(+), 6 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > > > > index 6a87848be3c3..9600fe674a89 100644
-> > > > > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > > > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > > > > @@ -29,14 +29,47 @@ struct psci_cpuidle_data {
-> > > > > >  };
-> > > > > >
-> > > > > >  static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
-> > > > > > +static DEFINE_PER_CPU(u32, domain_state);
-> > > > > > +
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > > +static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> > > > > > +                                     struct cpuidle_driver *drv, int idx)
-> > > > > > +{
-> > > > > > +     struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
-> > > > > > +     u32 *states = data->psci_states;
-> > > > >
-> > > > > Why can't the above be like this for consistency(see below in
-> > > > > psci_enter_idle_state) ?
-> > > >
-> > > > You have a point, however in patch11 I am adding this line below.
-> > > >
-> > > > struct device *pd_dev = data->dev;
-> > > >
-> > > > So I don't think it matters much, agree?
-> > > >
-> > >
-> > > Ah OK, looked odd as part of this patch, may be you could have moved
-> > > this change into that patch. Anyways fine as is.
-> >
-> > Okay, then I rather just keep it.
-> >
-> > >
-> > > > >
-> > > > >         u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
-> > > > >
-> > > > > > +     u32 state = psci_get_domain_state();
-> > > > > > +     int ret;
-> > > > > > +
-> > > > > > +     if (!state)
-> > > > > > +             state = states[idx];
-> > > > > > +
-> > > > > > +     ret = psci_enter_state(idx, state);
-> > > > > > +
-> > > > > > +     /* Clear the domain state to start fresh when back from idle. */
-> > > > > > +     psci_set_domain_state(0);
-> > > > > > +     return ret;
-> > > > > > +}
-> > > > > >
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > > @@ -118,6 +152,15 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
-> > > > > >                       ret = PTR_ERR(data->dev);
-> > > > > >                       goto free_mem;
-> > > > > >               }
-> > > > > > +
-> > > > > > +             /*
-> > > > > > +              * Using the deepest state for the CPU to trigger a potential
-> > > > > > +              * selection of a shared state for the domain, assumes the
-> > > > > > +              * domain states are all deeper states.
-> > > > > > +              */
-> > > > > > +             if (data->dev)
-> > > > >
-> > > > > You can drop this check as return on error above.
-> > > >
-> > > > Actually not, because if OSI is supported, there is still a
-> > > > possibility that the PM domain topology isn't used.
-> > > >
-> > >
-> > > And how do we support that ? I am missing something here.
-> > >
-> > > > This means ->data->dev is NULL.
-> > > >
-> > >
-> > > I don't get that.
-> >
-> > This is quite similar to the existing limited support we have for OSI today.
-> >
-> > We are using the idle states for the CPU, but ignoring the idle states
-> > for the cluster. If you just skip applying the DTS patch14, this is
-> > what happens.
-> >
->
-> No if psci_set_osi fails, we shouldn't create genpd domain as we don't
-> enter any cluster state. The default mode(same as PC) should work which
-> don't need any genpd domains. Adding one which is unused is just confusion.
-> Please avoid that.
+The following patchset adds interconnect[1][2] framework support to the
+exynos-bus devfreq driver. Extending the devfreq driver with
+interconnect functionality started as a response to the issue referenced
+in [3]. The patches can be subdivided into three groups:
 
-I am deferring to the other thread to continue this discussion.
+(a) Tweaking the interconnect framework to support the exynos-bus use
+case (patches 01--03/07). Exporting of_icc_get_from_provider() allows to
+avoid hardcoding every single graph edge in the DT or driver source, and
+relaxing the requirement on #interconnect-cells removes the need to
+provide dummy node IDs in the DT. A new field in struct icc_provider is
+used to explicitly allow configuring node pairs from two different
+providers.
 
->
-> > >
-> > > > >
-> > > > > > +                     drv->states[state_count - 1].enter =
-> > > > > > +                             psci_enter_domain_idle_state;
-> > > > >
-> > > > > I see the comment above but this potential blocks retention mode at
-> > > > > cluster level when all cpu enter retention at CPU level. I don't like
-> > > > > this assumption, but I don't have any better suggestion. Please add the
-> > > > > note that we can't enter RETENTION state at cluster/domain level when
-> > > > > all CPUs enter at CPU level.
-> > > >
-> > > > You are correct, but I think the comment a few lines above (agreed to
-> > > > be added by Lorenzo in the previous version) should be enough to
-> > > > explain that. No?
-> > > >
-> > > > The point is, this is only a problem if cluster RETENTION is
-> > > > considered to be a shallower state that CPU power off, for example.
-> > > >
-> > >
-> > > Yes, but give examples makes it better and helps people who may be
-> > > wondering why cluster retention state is not being entered. You can just
-> > > add to the above comment:
-> > >
-> > > "e.g. If CPU Retention is one of the shallower state, then we can't enter
-> > > any of the allowed domain states."
-> >
-> > Hmm, that it's not a correct statement I think, let me elaborate.
-> >
-> > The problem is, that in case the CPU has both RETENTION and POWER OFF
-> > (deepest CPU state), we would only be able to reach a cluster state
-> > (RETENTION or POWER OFF) when the CPUs are in CPU POWER OFF (as that's
-> > the deepest).
-> >
->
-> Sorry for the poor choice of words. What I meant is only one can be
-> deepest and it will be CPU POWER OFF if it exist at the CPU level.
-> RETENTION(again if exist) is shallower(rather deeper but not deepest
-> state).
->
-> > This is okay, as long as a cluster RETENTION state is considered being
-> > "deeper" than the CPU POWER OFF state. However, if that isn't the
-> > case, it means  the cluster RETENTION state is not considered in the
-> > correct order, but it's still possible to reach as a "domain state".
-> >
->
-> Again sorry for not being clear, I was referring CPU RET + CLUSTER RET.
->
-> > I think this all is kind of summarized in the comment I agreed upon
-> > with Lorenzo, but if you still think there is some clarification
-> > needed I happy to add it.
-> >
-> > Makes sense?
-> >
->
-> OK, if you happy, that's fine. I just wanted to clearly state CPU RET
-> + CLUSTER RET is not possible with the implementation.
+(b) Implementing interconnect providers in the exynos-bus devfreq driver
+and adding required DT properties for one selected platform, namely
+Exynos4412 (patches 04--05/07). Due to the fact that this aims to be a
+generic driver for various Exynos SoCs, node IDs are generated
+dynamically (rather than hardcoded).
 
-Okay!
+(c) Implementing a sample interconnect consumer for exynos-mixer
+targeted at solving the issue referenced in [3], again with DT
+properties only for Exynos4412 (patches 06--07/07).
 
-I will then leave this as is. When/if you find a better wording of the
-comment, you can always send a patch on top.
+Integration of devfreq and interconnect frameworks is achieved by using
+the dev_pm_qos_*() API. When CONFIG_INTERCONNECT is 'n' (such as in
+exynos_defconfig) all interconnect API functions are no-ops.
 
-Kind regards
-Uffe
+This series depends on these three patches (merged into devfreq-next[6]):
+* https://patchwork.kernel.org/patch/11279087/
+* https://patchwork.kernel.org/patch/11279093/
+* https://patchwork.kernel.org/patch/11293765/
+and on this series:
+* https://patchwork.kernel.org/cover/11304545/
+(which does not apply cleanly on next-20191220, adding
+--exclude=arch/arm/boot/dts/exynos5422-odroid-core.dtsi to 'git am' is a
+quick workaround)
+
+---
+Changes since v2 [5]:
+* Use icc_std_aggregate().
+* Implement a different modification of apply_constraints() in
+  drivers/interconnect/core.c (patch 03).
+* Use 'exynos,interconnect-parent-node' in the DT instead of
+  'devfreq'/'parent', depending on the bus.
+* Rebase on DT patches that deprecate the 'devfreq' DT property.
+* Improve error handling, including freeing generated IDs on failure.
+* Remove exynos_bus_icc_connect() and add exynos_bus_icc_get_parent().
+
+---
+Changes since v1 [4]:
+* Rebase on coupled regulators patches.
+* Use dev_pm_qos_*() API instead of overriding frequency in
+  exynos_bus_target().
+* Use IDR for node ID allocation.
+* Reverse order of multiplication and division in
+  mixer_set_memory_bandwidth() (patch 07) to avoid integer overflow.
+
+---
+Artur Świgoń
+Samsung R&D Institute Poland
+Samsung Electronics
+
+---
+References:
+[1] Documentation/interconnect/interconnect.rst
+[2] Documentation/devicetree/bindings/interconnect/interconnect.txt
+[3] https://patchwork.kernel.org/patch/10861757/ (original issue)
+[4] https://patchwork.kernel.org/cover/11054417/ (v1 of this RFC)
+[5] https://patchwork.kernel.org/cover/11152595/ (v2 of this RFC)
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-next
+
+Artur Świgoń (6):
+  interconnect: Export of_icc_get_from_provider()
+  interconnect: Relax requirement in of_icc_get_from_provider()
+  interconnect: Allow inter-provider pairs to be configured
+  arm: dts: exynos: Add interconnect bindings for Exynos4412
+  devfreq: exynos-bus: Add interconnect functionality to exynos-bus
+  arm: dts: exynos: Add interconnects to Exynos4412 mixer
+
+Marek Szyprowski (1):
+  drm: exynos: mixer: Add interconnect support
+
+ .../boot/dts/exynos4412-odroid-common.dtsi    |   5 +
+ arch/arm/boot/dts/exynos4412.dtsi             |   1 +
+ drivers/devfreq/exynos-bus.c                  | 144 ++++++++++++++++++
+ drivers/gpu/drm/exynos/exynos_mixer.c         |  71 ++++++++-
+ drivers/interconnect/core.c                   |  16 +-
+ include/linux/interconnect-provider.h         |   8 +
+ 6 files changed, 232 insertions(+), 13 deletions(-)
+
+--
+2.17.1
+
