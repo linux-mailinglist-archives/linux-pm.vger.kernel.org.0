@@ -2,72 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDED41277E7
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943EF127818
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfLTJTd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 04:19:33 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:45643 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727177AbfLTJTd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:19:33 -0500
-Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id b09be8de9d95ff35; Fri, 20 Dec 2019 10:19:31 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     zhuguangqing83@gmail.com
-Cc:     pavel@ucw.cz, len.brown@intel.com, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: Re: [PATCH v2]PM/wakeup: Add print_wakeup_source_stats(m, &deleted_ws)
-Date:   Fri, 20 Dec 2019 10:19:31 +0100
-Message-ID: <2830760.UpLSkk7Ke6@kreacher>
-In-Reply-To: <20191209093523.15752-1-zhuguangqing83@gmail.com>
-References: <20191209093523.15752-1-zhuguangqing83@gmail.com>
+        id S1727276AbfLTJ1J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 04:27:09 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:50862 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727167AbfLTJ1J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 20 Dec 2019 04:27:09 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 251A4338C9E44F655816;
+        Fri, 20 Dec 2019 17:27:07 +0800 (CST)
+Received: from euler.huawei.com (10.175.104.193) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 20 Dec 2019 17:27:00 +0800
+From:   Chen Wandun <chenwandun@huawei.com>
+To:     <sebastian.reichel@collabora.com>, <l.stach@pengutronix.de>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <chenwandun@huawei.com>
+Subject: [PATCH next] power: suppy: ucs1002: Make the symbol 'ucs1002_regulator_enable' static
+Date:   Fri, 20 Dec 2019 17:41:44 +0800
+Message-ID: <20191220094144.41142-1-chenwandun@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
+X-Originating-IP: [10.175.104.193]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, December 9, 2019 10:35:23 AM CET zhuguangqing83@gmail.com wrote:
-> From: zhuguangqing <zhuguangqing@xiaomi.com>
-> 
-> After commit 00ee22c28915 (PM / wakeup: Use seq_open()
-> to show wakeup stats), print_wakeup_source_stats(m, &deleted_ws)
-> is deleted in function wakeup_sources_stats_seq_show().
-> 
-> Because deleted_ws is one of wakeup sources, so it should
-> also be showed. This patch add it to the end of all other
-> wakeup sources.
-> 
-> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
-> ---
-> v2: modify judegment condition according to the advice of Rafael J.
-> 
->  drivers/base/power/wakeup.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 5817b51d2b15..53c0519da1e4 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -1071,6 +1071,9 @@ static void *wakeup_sources_stats_seq_next(struct seq_file *m,
->  		break;
->  	}
->  
-> +	if (!next_ws)
-> +		print_wakeup_source_stats(m, &deleted_ws);
-> +
->  	return next_ws;
->  }
->  
-> 
+Fix the following sparse warning:
 
-Applied as 5.6 material with some subject and changelog modifications, thanks!
+drivers/power/supply/ucs1002_power.c:492:5: warning: symbol 'ucs1002_regulator_enable' was not declared. Should it be static?
 
+Fixes: a3d70dacc727 ("power: suppy: ucs1002: disable power when maxcurrent is 0")
+Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+---
+ drivers/power/supply/ucs1002_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
+index 0ca80d00b80a..cdb9a23d825f 100644
+--- a/drivers/power/supply/ucs1002_power.c
++++ b/drivers/power/supply/ucs1002_power.c
+@@ -489,7 +489,7 @@ static irqreturn_t ucs1002_alert_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
+-int ucs1002_regulator_enable(struct regulator_dev *rdev)
++static int ucs1002_regulator_enable(struct regulator_dev *rdev)
+ {
+ 	struct ucs1002_info *info = rdev_get_drvdata(rdev);
+ 
+-- 
+2.17.1
 
