@@ -2,31 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFCC127826
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83097127849
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727291AbfLTJb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 04:31:56 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44708 "EHLO
+        id S1727344AbfLTJfU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 04:35:20 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45391 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727167AbfLTJb4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:31:56 -0500
+        with ESMTP id S1727205AbfLTJfT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:35:19 -0500
 Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id fe89d39e7f44edc6; Fri, 20 Dec 2019 10:31:54 +0100
+ id 648bf26c0baafb8f; Fri, 20 Dec 2019 10:35:16 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     Niklas Cassel <nks@flawful.org>, linux-arm-msm@vger.kernel.org,
-        amit.kucheria@linaro.org, sboyd@kernel.org, vireshk@kernel.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/5] dt-bindings: power: avs: Add support for CPR (Core Power Reduction)
-Date:   Fri, 20 Dec 2019 10:31:53 +0100
-Message-ID: <121319954.uyNvbQYpoT@kreacher>
-In-Reply-To: <20191129213917.1301110-2-niklas.cassel@linaro.org>
-References: <20191129213917.1301110-1-niklas.cassel@linaro.org> <20191129213917.1301110-2-niklas.cassel@linaro.org>
+To:     Jonas Meurer <jonas@freesources.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>,
+        Yannik Sembritzki <yannik@sembritzki.me>
+Subject: Re: [PATCH 2/2] PM: CONFIG_SUSPEND_SKIP_SYNC sets default for, '/sys/power/sync_on_suspend'
+Date:   Fri, 20 Dec 2019 10:35:16 +0100
+Message-ID: <5078963.9SuZRVoKLz@kreacher>
+In-Reply-To: <5c3996e1-eee7-1b8f-51bf-a6401d229bff@freesources.org>
+References: <1ee5b9ef-f30e-3fde-2325-ba516a96ced5@freesources.org> <5c3996e1-eee7-1b8f-51bf-a6401d229bff@freesources.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -35,163 +33,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, November 29, 2019 10:39:11 PM CET Niklas Cassel wrote:
-> Add DT bindings to describe the CPR HW found on certain Qualcomm SoCs.
+On Monday, December 2, 2019 6:07:43 PM CET Jonas Meurer wrote:
+> Slightly change the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC:
+> Make it configure the default for '/sys/power/sync_on_suspend', now that we
+> have a run-time switch for it.
 > 
-> Co-developed-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Jonas Meurer <jonas@freesources.org>
 > ---
-> Changes since v6:
-> -Picked up Bjorn's and Ulf's Reviewed-by.
+>  Documentation/ABI/testing/sysfs-power | 7 ++++---
+>  kernel/power/Kconfig                  | 5 ++++-
+>  kernel/power/main.c                   | 2 +-
+>  kernel/power/suspend.c                | 2 +-
+>  4 files changed, 10 insertions(+), 6 deletions(-)
 > 
->  .../bindings/power/avs/qcom,cpr.txt           | 130 ++++++++++++++++++
->  1 file changed, 130 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt b/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
-> new file mode 100644
-> index 000000000000..ab0d5ebbad4e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
-> @@ -0,0 +1,130 @@
-> +QCOM CPR (Core Power Reduction)
-> +
-> +CPR (Core Power Reduction) is a technology to reduce core power on a CPU
-> +or other device. Each OPP of a device corresponds to a "corner" that has
-> +a range of valid voltages for a particular frequency. While the device is
-> +running at a particular frequency, CPR monitors dynamic factors such as
-> +temperature, etc. and suggests adjustments to the voltage to save power
-> +and meet silicon characteristic requirements.
-> +
-> +- compatible:
-> +	Usage: required
-> +	Value type: <string>
-> +	Definition: should be "qcom,qcs404-cpr", "qcom,cpr" for qcs404
-> +
-> +- reg:
-> +	Usage: required
-> +	Value type: <prop-encoded-array>
-> +	Definition: base address and size of the rbcpr register region
-> +
-> +- interrupts:
-> +	Usage: required
-> +	Value type: <prop-encoded-array>
-> +	Definition: should specify the CPR interrupt
-> +
-> +- clocks:
-> +	Usage: required
-> +	Value type: <prop-encoded-array>
-> +	Definition: phandle to the reference clock
-> +
-> +- clock-names:
-> +	Usage: required
-> +	Value type: <stringlist>
-> +	Definition: must be "ref"
-> +
-> +- vdd-apc-supply:
-> +	Usage: required
-> +	Value type: <phandle>
-> +	Definition: phandle to the vdd-apc-supply regulator
-> +
-> +- #power-domain-cells:
-> +	Usage: required
-> +	Value type: <u32>
-> +	Definition: should be 0
-> +
-> +- operating-points-v2:
-> +	Usage: required
-> +	Value type: <phandle>
-> +	Definition: A phandle to the OPP table containing the
-> +		    performance states supported by the CPR
-> +		    power domain
-> +
-> +- acc-syscon:
-> +	Usage: optional
-> +	Value type: <phandle>
-> +	Definition: phandle to syscon for writing ACC settings
-> +
-> +- nvmem-cells:
-> +	Usage: required
-> +	Value type: <phandle>
-> +	Definition: phandle to nvmem cells containing the data
-> +		    that makes up a fuse corner, for each fuse corner.
-> +		    As well as the CPR fuse revision.
-> +
-> +- nvmem-cell-names:
-> +	Usage: required
-> +	Value type: <stringlist>
-> +	Definition: should be "cpr_quotient_offset1", "cpr_quotient_offset2",
-> +		    "cpr_quotient_offset3", "cpr_init_voltage1",
-> +		    "cpr_init_voltage2", "cpr_init_voltage3", "cpr_quotient1",
-> +		    "cpr_quotient2", "cpr_quotient3", "cpr_ring_osc1",
-> +		    "cpr_ring_osc2", "cpr_ring_osc3", "cpr_fuse_revision"
-> +		    for qcs404.
-> +
-> +Example:
-> +
-> +	cpr_opp_table: cpr-opp-table {
-> +		compatible = "operating-points-v2-qcom-level";
-> +
-> +		cpr_opp1: opp1 {
-> +			opp-level = <1>;
-> +			qcom,opp-fuse-level = <1>;
-> +		};
-> +		cpr_opp2: opp2 {
-> +			opp-level = <2>;
-> +			qcom,opp-fuse-level = <2>;
-> +		};
-> +		cpr_opp3: opp3 {
-> +			opp-level = <3>;
-> +			qcom,opp-fuse-level = <3>;
-> +		};
-> +	};
-> +
-> +	power-controller@b018000 {
-> +		compatible = "qcom,qcs404-cpr", "qcom,cpr";
-> +		reg = <0x0b018000 0x1000>;
-> +		interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
-> +		clocks = <&xo_board>;
-> +		clock-names = "ref";
-> +		vdd-apc-supply = <&pms405_s3>;
-> +		#power-domain-cells = <0>;
-> +		operating-points-v2 = <&cpr_opp_table>;
-> +		acc-syscon = <&tcsr>;
-> +
-> +		nvmem-cells = <&cpr_efuse_quot_offset1>,
-> +			<&cpr_efuse_quot_offset2>,
-> +			<&cpr_efuse_quot_offset3>,
-> +			<&cpr_efuse_init_voltage1>,
-> +			<&cpr_efuse_init_voltage2>,
-> +			<&cpr_efuse_init_voltage3>,
-> +			<&cpr_efuse_quot1>,
-> +			<&cpr_efuse_quot2>,
-> +			<&cpr_efuse_quot3>,
-> +			<&cpr_efuse_ring1>,
-> +			<&cpr_efuse_ring2>,
-> +			<&cpr_efuse_ring3>,
-> +			<&cpr_efuse_revision>;
-> +		nvmem-cell-names = "cpr_quotient_offset1",
-> +			"cpr_quotient_offset2",
-> +			"cpr_quotient_offset3",
-> +			"cpr_init_voltage1",
-> +			"cpr_init_voltage2",
-> +			"cpr_init_voltage3",
-> +			"cpr_quotient1",
-> +			"cpr_quotient2",
-> +			"cpr_quotient3",
-> +			"cpr_ring_osc1",
-> +			"cpr_ring_osc2",
-> +			"cpr_ring_osc3",
-> +			"cpr_fuse_revision";
-> +	};
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index f164a364e89a..783b3ce8eb06 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -418,6 +418,7 @@ Description:
+>  		aware that you have to take care of sync() yourself before
+>  		suspending the system if you disable it here.
+>  
+> -		Writing a "1" (default) to this file enables the sync() and
+> -		writing a "0" disables it. Reads from the file return the
+> -		current value.
+> +		Writing a "1" to this file enables the sync() and writing a
+> +		"0" disables it. Reads from the file return the current value.
+> +		The default is "1" but can be configured with the build-time
+> +		config flag "SUSPEND_SKIP_SYNC".
+> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> index d3667b4075c1..7cbfbeacd68a 100644
+> --- a/kernel/power/Kconfig
+> +++ b/kernel/power/Kconfig
+> @@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
+>  	  Skip the kernel sys_sync() before freezing user processes.
+>  	  Some systems prefer not to pay this cost on every invocation
+>  	  of suspend, or they are content with invoking sync() from
+> -	  user-space before invoking suspend.  Say Y if that's your case.
+> +	  user-space before invoking suspend.  There's a run-time switch
+> +	  at '/sys/power/sync_on_suspend' to configure this behaviour.
+> +	  This setting changes the default for the run-tim switch. Say Y
+> +	  to change the default to disable the kernel sys_sync().
+>  
+>  config HIBERNATE_CALLBACKS
+>  	bool
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 7d9d579a8e6f..69b7a8aeca3b 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -197,7 +197,7 @@ power_attr(mem_sleep);
+>   * show() returns whether ksys_sync_helper() is invoked before suspend.
+>   * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
+>   */
+> -bool sync_on_suspend_enabled = true;
+> +bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
+>  
+>  static ssize_t sync_on_suspend_show(struct kobject *kobj,
+>  				   struct kobj_attribute *attr, char *buf)
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 503d56419a69..2c47280fbfc7 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
+>  	if (state == PM_SUSPEND_TO_IDLE)
+>  		s2idle_begin();
+>  
+> -	if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC) && sync_on_suspend_enabled) {
+> +	if (sync_on_suspend_enabled) {
+>  		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+>  		ksys_sync_helper();
+>  		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
 > 
 
-I have queued up this one and the [2/5] for 5.6, but if you'd rather want them
-to go in via a different patch, please let me know and I'll drop them.
+I don't see much value in splitting the changes into two patches.
+On the contrary, this patch is a logical part of the full change, so IMO
+it should be folded into the [1/2].
+
+Please do so and resubmit.
 
 Thanks!
 
