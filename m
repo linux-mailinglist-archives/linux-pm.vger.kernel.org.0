@@ -2,28 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E3C1277D9
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F8F1277E0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 10:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbfLTJRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 04:17:18 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:45585 "EHLO
+        id S1726111AbfLTJSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 04:18:30 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:49918 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727167AbfLTJRS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:17:18 -0500
+        with ESMTP id S1727177AbfLTJS3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 04:18:29 -0500
 Received: from 79.184.253.1.ipv4.supernova.orange.pl (79.184.253.1) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id b0db5a8dbd577916; Fri, 20 Dec 2019 10:17:15 +0100
+ id 401c98b8ae270856; Fri, 20 Dec 2019 10:18:27 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     daniel.lezcano@linaro.org, shc_work@mail.ru,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: clps711x: convert to devm_platform_ioremap_resource
-Date:   Fri, 20 Dec 2019 10:17:15 +0100
-Message-ID: <1695381.X16qlkCt6g@kreacher>
-In-Reply-To: <20191215130206.30265-1-tiny.windzz@gmail.com>
-References: <20191215130206.30265-1-tiny.windzz@gmail.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM / sleep: switch to rtc_time64_to_tm/rtc_tm_to_time64
+Date:   Fri, 20 Dec 2019 10:18:27 +0100
+Message-ID: <1750207.ZPif39L95I@kreacher>
+In-Reply-To: <20191210170540.3006422-1-alexandre.belloni@bootlin.com>
+References: <20191210170540.3006422-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,33 +31,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sunday, December 15, 2019 2:02:05 PM CET Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On Tuesday, December 10, 2019 6:05:40 PM CET Alexandre Belloni wrote:
+> Call the 64bit versions of rtc_tm time conversion to avoid the y2038 issue.
 > 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->  drivers/cpuidle/cpuidle-clps711x.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  kernel/power/suspend_test.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/cpuidle/cpuidle-clps711x.c b/drivers/cpuidle/cpuidle-clps711x.c
-> index 6e36740f5719..fc22c59b6c73 100644
-> --- a/drivers/cpuidle/cpuidle-clps711x.c
-> +++ b/drivers/cpuidle/cpuidle-clps711x.c
-> @@ -37,10 +37,7 @@ static struct cpuidle_driver clps711x_idle_driver = {
+> diff --git a/kernel/power/suspend_test.c b/kernel/power/suspend_test.c
+> index 60564b58de07..e1ed58adb69e 100644
+> --- a/kernel/power/suspend_test.c
+> +++ b/kernel/power/suspend_test.c
+> @@ -70,7 +70,7 @@ static void __init test_wakealarm(struct rtc_device *rtc, suspend_state_t state)
+>  	static char info_test[] __initdata =
+>  		KERN_INFO "PM: test RTC wakeup from '%s' suspend\n";
 >  
->  static int __init clps711x_cpuidle_probe(struct platform_device *pdev)
->  {
-> -	struct resource *res;
-> -
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	clps711x_halt = devm_ioremap_resource(&pdev->dev, res);
-> +	clps711x_halt = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(clps711x_halt))
->  		return PTR_ERR(clps711x_halt);
+> -	unsigned long		now;
+> +	time64_t		now;
+>  	struct rtc_wkalrm	alm;
+>  	int			status;
 >  
+> @@ -81,10 +81,10 @@ static void __init test_wakealarm(struct rtc_device *rtc, suspend_state_t state)
+>  		printk(err_readtime, dev_name(&rtc->dev), status);
+>  		return;
+>  	}
+> -	rtc_tm_to_time(&alm.time, &now);
+> +	now = rtc_tm_to_time64(&alm.time);
+>  
+>  	memset(&alm, 0, sizeof alm);
+> -	rtc_time_to_tm(now + TEST_SUSPEND_SECONDS, &alm.time);
+> +	rtc_time64_to_tm(now + TEST_SUSPEND_SECONDS, &alm.time);
+>  	alm.enabled = true;
+>  
+>  	status = rtc_set_alarm(rtc, &alm);
 > 
 
-Applied as 5.6 material, thanks!
+Applied (with a slightly modified changelog) as 5.6 material, thanks!
 
 
 
