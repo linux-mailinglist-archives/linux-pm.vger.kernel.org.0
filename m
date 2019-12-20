@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE7C1279F0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 12:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C15127A01
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2019 12:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727364AbfLTL2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 06:28:18 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:36302 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727360AbfLTL2R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 06:28:17 -0500
-Received: by mail-ua1-f68.google.com with SMTP id k33so3115573uag.3
-        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 03:28:16 -0800 (PST)
+        id S1727192AbfLTLdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Dec 2019 06:33:42 -0500
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:46064 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727198AbfLTLdm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Dec 2019 06:33:42 -0500
+Received: by mail-vs1-f65.google.com with SMTP id b4so5374250vsa.12
+        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2019 03:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9SoaqXYMJ2KJjwtoaTvh1hc5Ly1metVQsNfISjMQGVM=;
-        b=DVWYCQ9ZtZ5OXtI6/AEoCXE3k1GAsj8mb3tmZvQOnVteij53YoFdBLPC8c9kSJXmlA
-         NQ5XLQynQ/L43YdfpuB9AE6odH792nuHpJtWTCRoyYwJf2z0tJfc05IXs1HEGLDCxSQR
-         o9a6DhLodrPPUil9Gg/54+cKfqD/nJ7wamDo1xIhS/XoG+SktL3fMi70d36AEzu+oTYz
-         VOlSx5uvLmNo5PQG7W6dmowfttLeN6GF7CCz21+nX6tillWvcTGXJC1gMNGiy1CXLXRa
-         USJLqYmqV7VgsPYhj3GCPXW9VlKzm7su+8wZYFB746EkyhbtGXV/6F28bVasuthLd1X9
-         4bog==
+        bh=RuIcFhrvJDAEaBnYEqmk1r8HnhTJZEKs9iySn9v6Ztg=;
+        b=ibDtl8/FLvAQvR7P/wSHoa11rPwILCfwEnqHWKLPQzOOycLXzZJXTWtIzoSB4AXDw1
+         rN+EjUvBusU+hFZbHbBMAu+H84ptP0WxFGzw2Rct4X/Py0nBqHsB8nD02MRrOEMKX2E9
+         caGuWVB1vxPR+1yIFc+xVgXXQsmWICfDV432B3BwM910JX7kdum6tgRjS2ILCzf/14IC
+         cRKK3aOT+9D5wjPUfgDupTYMzeezK42bL5d8apTDGXIAjGzxZ0U7wN12ryy0wpscni8v
+         f9ZmMenLwLhFffneupk8HXpqvhGEWIkd3bgy4OtxuW7p4Ee2vn69fjFKfyC2sszTDMpF
+         G2Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9SoaqXYMJ2KJjwtoaTvh1hc5Ly1metVQsNfISjMQGVM=;
-        b=PdGNqLriKBDls1KQPn/YFXQPa/m3PrCzKmheczCBLJOPlIdtu7nkvKstBb79gTMbo3
-         7L70jbdNEGJ8XbfAclK9OsRqwZqcDshOrKtI6HA9D3nonslkKJy+QmTsSeZGbFSJO6PH
-         0K8odY5YRop/7D8K4lXKjFuK+DRdDaOVEqhQyCTiuwPX7ON9mJsZZLEarDwG7H70q3Bw
-         g3kXPRVmrjYvf2YYeoS7+6mRhV+TtKmBjA49kFdVLSbhabtY9ANEk5V/lUReVTKF435y
-         9tFwqqJ2rz9P/ZKhvuLFInyhfHNYlwp/wbuH1YCWg+Qi4IlUh38MDNjjKP0tmgrxsiaZ
-         uXpA==
-X-Gm-Message-State: APjAAAXywTzStadSwx8T6l5MenpUsNbE5Z6Q5NM2bvOZ/vA9X9//aMXZ
-        upqoOe2DqK8AmFBT1J02F5W8Yj3Z5Dx8wetuHRON2Q==
-X-Google-Smtp-Source: APXvYqzH1TQHl0wUKww+AFC9ZLq3Qenc8XAI8BZOQgGZwTKeGy36slqW2h7XqGaAzeKItHoRzNzsgznzc3DqlBo5i90=
-X-Received: by 2002:ab0:20a:: with SMTP id 10mr8720811uas.19.1576841295791;
- Fri, 20 Dec 2019 03:28:15 -0800 (PST)
+        bh=RuIcFhrvJDAEaBnYEqmk1r8HnhTJZEKs9iySn9v6Ztg=;
+        b=LATYt8v2Ju4p/eF1utCAPzGPnhC7Tc75jPuxJ5zcL/oaSyTYO7PMp5S6YkJhjGWhnJ
+         1MDSM4h1RlF/DP7Vvf4k8mOHaY3ElzWBYL4LmT74QBTBsnTSO8/qLAx5G2xNGKcMo8ai
+         dGUnc3zU+DnGMrSMrDYanSEJz6q1QW8YyKo6n+aklA+FKk0EbbnFezyqs9uFYJAMIZ5g
+         2Dfb4jEuYK5cZYsnvCK4OSKhkcFe9gzXQwfzs8Angk6eLP1CTz10BikDBMy+Li+VoJw5
+         QI462J3P4Gfvsx/VRGWF1rOgNNhJH92C+jJhGF7Fi7dsj8g3v0ePX/+c4E2d7yX0MNBO
+         zDVw==
+X-Gm-Message-State: APjAAAXrmvwXr81kTZr7gLQHFrqIjp/bPlye0u4B5/D8Xe3DUohbQVj+
+        6LGbGO8DxBlmoqJeqSC1sfXz+k5J1FiEc74pWjDTMg==
+X-Google-Smtp-Source: APXvYqzSl1GU5/1o3ceHUdofiPut6ttn1dAJbNxnE/tuL5Bwi0UOSbD1LEgG6+TCYsHDOi0JnLKM61/VWA4pzLobXaQ=
+X-Received: by 2002:a67:314e:: with SMTP id x75mr2640082vsx.35.1576841620684;
+ Fri, 20 Dec 2019 03:33:40 -0800 (PST)
 MIME-Version: 1.0
 References: <20191211154343.29765-1-ulf.hansson@linaro.org>
- <20191211154343.29765-14-ulf.hansson@linaro.org> <20191219143427.GF20746@bogus>
- <CAPDyKFpPmtXkP6LSNWBbfyTJowjQXF39_4LN5YEcDtW1BzVw-g@mail.gmail.com>
- <20191219180629.GC21846@bogus> <CAPDyKFrtrkASV4d2+x+A2P=TMrnLGh4LK9nzNeqZCg71Hs2TEQ@mail.gmail.com>
- <20191220100745.GB6731@bogus>
-In-Reply-To: <20191220100745.GB6731@bogus>
+ <20191211154343.29765-11-ulf.hansson@linaro.org> <20191219143154.GC20746@bogus>
+ <CAPDyKForeHdXPTocvAgFDbX+94UQWbJixUpKLY=0MbnF5XUAMA@mail.gmail.com>
+ <20191219180133.GB21846@bogus> <CAPDyKFoM+SccsawV+0hHF+ku+P=5WuVaUCnKV=ftCgBRmRPseA@mail.gmail.com>
+ <20191220100137.GA6731@bogus>
+In-Reply-To: <20191220100137.GA6731@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Dec 2019 12:27:39 +0100
-Message-ID: <CAPDyKFqaH8otvkRH-+AM6qJyT4TLc+S-qR2-ZCfTT56pWXVfaA@mail.gmail.com>
-Subject: Re: [PATCH v4 13/14] cpuidle: psci: Add support for PM domains by
- using genpd
+Date:   Fri, 20 Dec 2019 12:33:04 +0100
+Message-ID: <CAPDyKFofsbcPL2R+igxb66bU+QbEmsakV_Ee5AVu_VSZSP1rLw@mail.gmail.com>
+Subject: Re: [PATCH v4 10/14] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
 To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -73,34 +73,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 20 Dec 2019 at 11:07, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Fri, 20 Dec 2019 at 11:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Thu, Dec 19, 2019 at 11:02:40PM +0100, Ulf Hansson wrote:
-> > On Thu, 19 Dec 2019 at 19:06, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> On Thu, Dec 19, 2019 at 10:33:34PM +0100, Ulf Hansson wrote:
+> > On Thu, 19 Dec 2019 at 19:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > > >
-> > > On Thu, Dec 19, 2019 at 04:48:39PM +0100, Ulf Hansson wrote:
-> > > > On Thu, 19 Dec 2019 at 15:34, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > On Thu, Dec 19, 2019 at 04:48:13PM +0100, Ulf Hansson wrote:
+> > > > On Thu, 19 Dec 2019 at 15:32, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > > > > >
-> > > > > On Wed, Dec 11, 2019 at 04:43:42PM +0100, Ulf Hansson wrote:
-> > > > > > When the hierarchical CPU topology layout is used in DT and the PSCI OSI
-> > > > > > mode is supported by the PSCI FW, let's initialize a corresponding PM
-> > > > > > domain topology by using genpd. This enables a CPU and a group of CPUs,
-> > > > > > when attached to the topology, to be power-managed accordingly.
+> > > > > On Wed, Dec 11, 2019 at 04:43:39PM +0100, Ulf Hansson wrote:
+> > > > > > The per CPU variable psci_power_state, contains an array of fixed values,
+> > > > > > which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> > > > > > each of the available CPU idle states.
 > > > > > >
-> > > > > > To trigger the attempt to initialize the genpd data structures let's use a
-> > > > > > subsys_initcall, which should be early enough to allow CPUs, but also other
-> > > > > > devices to be attached.
+> > > > > > This isn't sufficient when using the hierarchical CPU topology in DT, in
+> > > > > > combination with having PSCI OS initiated (OSI) mode enabled. More
+> > > > > > precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> > > > > > idle state the cluster (a group of CPUs) should enter, while in PSCI
+> > > > > > Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> > > > > > state of the cluster.
 > > > > > >
-> > > > > > The initialization consists of parsing the PSCI OF node for the topology
-> > > > > > and the "domain idle states" DT bindings. In case the idle states are
-> > > > > > compatible with "domain-idle-state", the initialized genpd becomes
-> > > > > > responsible of selecting an idle state for the PM domain, via assigning it
-> > > > > > a genpd governor.
+> > > > > > For this reason, introduce a per CPU variable called domain_state and
+> > > > > > implement two helper functions to read/write its value. Then let the
+> > > > > > domain_state take precedence over the regular selected state, when entering
+> > > > > > and idle state.
 > > > > > >
-> > > > > > Note that, a successful initialization of the genpd data structures, is
-> > > > > > followed by a call to psci_set_osi_mode(), as to try to enable the OSI mode
-> > > > > > in the PSCI FW. In case this fails, we fall back into a degraded mode
-> > > > > > rather than bailing out and returning an error code.
+> > > > > > To avoid executing the above OSI specific code in the ->enter() callback,
+> > > > > > while operating in the default PSCI Platform Coordinated mode, let's also
+> > > > > > add a new enter-function and use it for OSI.
 > > > > > >
 > > > > > > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
 > > > > > > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
@@ -108,147 +108,169 @@ On Fri, 20 Dec 2019 at 11:07, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > > > > > > ---
 > > > > > >
 > > > > > > Changes in v4:
-> > > > > >       - None.
+> > > > > >       - Rebased on top of earlier changes.
+> > > > > >       - Add comment about using the deepest cpuidle state for the domain state
+> > > > > >       selection.
 > > > > > >
 > > > > > > ---
-> > > > > >  drivers/cpuidle/cpuidle-psci-domain.c | 267 ++++++++++++++++++++++++++
-> > > > > >  drivers/cpuidle/cpuidle-psci.c        |   4 +-
-> > > > > >  drivers/cpuidle/cpuidle-psci.h        |   5 +
-> > > > > >  3 files changed, 274 insertions(+), 2 deletions(-)
+> > > > > >  drivers/cpuidle/cpuidle-psci.c | 56 ++++++++++++++++++++++++++++++----
+> > > > > >  1 file changed, 50 insertions(+), 6 deletions(-)
 > > > > > >
-> > > > > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > index 656ef3d59149..c2f94ba42222 100644
-> > > > > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > > @@ -7,14 +7,281 @@
-> > > > > >   *
-> > > > > >   */
+> > > > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> > > > > > index 6a87848be3c3..9600fe674a89 100644
+> > > > > > --- a/drivers/cpuidle/cpuidle-psci.c
+> > > > > > +++ b/drivers/cpuidle/cpuidle-psci.c
+> > > > > > @@ -29,14 +29,47 @@ struct psci_cpuidle_data {
+> > > > > >  };
 > > > > > >
-> > > > > > +#define pr_fmt(fmt) "CPUidle PSCI: " fmt
-> > > > > > +
-> > > > > >  #include <linux/cpu.h>
-> > > > > >  #include <linux/device.h>
-> > > > > >  #include <linux/kernel.h>
-> > > > > >  #include <linux/pm_domain.h>
-> > > > > >  #include <linux/pm_runtime.h>
-> > > > > > +#include <linux/psci.h>
-> > > > > > +#include <linux/slab.h>
-> > > > > > +#include <linux/string.h>
-> > > > > >
-> > > > > >  #include "cpuidle-psci.h"
-> > > > > >
-> > > > > > +struct psci_pd_provider {
-> > > > > > +     struct list_head link;
-> > > > > > +     struct device_node *node;
-> > > > > > +};
-> > > > > > +
-> > > > > > +static LIST_HEAD(psci_pd_providers);
-> > > > > > +static bool osi_mode_enabled;
-> > > > > > +
-> > > > > > +static int psci_pd_power_off(struct generic_pm_domain *pd)
-> > > > > > +{
-> > > > > > +     struct genpd_power_state *state = &pd->states[pd->state_idx];
-> > > > > > +     u32 *pd_state;
-> > > > > > +
-> > > > > > +     /* If we have failed to enable OSI mode, then abort power off. */
-> > > > > > +     if (!osi_mode_enabled)
-> > > > > > +             return -EBUSY;
+> > > > > >  static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
+> > > > > > +static DEFINE_PER_CPU(u32, domain_state);
 > > > > > > +
 > > > > >
-> > > > > Why is above check needed ? Shouldn't we have disable/remove pd of
-> > > > > OSI is not enabled ?
+> > > > > [...]
+> > > > >
+> > > > > > +static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
+> > > > > > +                                     struct cpuidle_driver *drv, int idx)
+> > > > > > +{
+> > > > > > +     struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
+> > > > > > +     u32 *states = data->psci_states;
+> > > > >
+> > > > > Why can't the above be like this for consistency(see below in
+> > > > > psci_enter_idle_state) ?
 > > > >
-> > > > Well, failing to enable OSI should in practice not happen, while it
-> > > > theoretically it could.
+> > > > You have a point, however in patch11 I am adding this line below.
+> > > >
+> > > > struct device *pd_dev = data->dev;
+> > > >
+> > > > So I don't think it matters much, agree?
 > > > >
 > > >
-> > > I won't assume that. Since it's new and not tested yet, I prefer to assume
-> > > it can fail.
+> > > Ah OK, looked odd as part of this patch, may be you could have moved
+> > > this change into that patch. Anyways fine as is.
 > >
-> > Yes, I agree. Hence the degraded mode.
+> > Okay, then I rather just keep it.
 > >
 > > >
-> > > > My approach to this has been to fall back to use a "degraded mode",
-> > > > which seems quite common for these kind of situations. The degraded
-> > > > mode means, we are preventing domain states from being used.
+> > > > >
+> > > > >         u32 *states = __this_cpu_read(psci_cpuidle_data.psci_states);
+> > > > >
+> > > > > > +     u32 state = psci_get_domain_state();
+> > > > > > +     int ret;
+> > > > > > +
+> > > > > > +     if (!state)
+> > > > > > +             state = states[idx];
+> > > > > > +
+> > > > > > +     ret = psci_enter_state(idx, state);
+> > > > > > +
+> > > > > > +     /* Clear the domain state to start fresh when back from idle. */
+> > > > > > +     psci_set_domain_state(0);
+> > > > > > +     return ret;
+> > > > > > +}
+> > > > > >
+> > > > >
+> > > > > [...]
+> > > > >
+> > > > > > @@ -118,6 +152,15 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> > > > > >                       ret = PTR_ERR(data->dev);
+> > > > > >                       goto free_mem;
+> > > > > >               }
+> > > > > > +
+> > > > > > +             /*
+> > > > > > +              * Using the deepest state for the CPU to trigger a potential
+> > > > > > +              * selection of a shared state for the domain, assumes the
+> > > > > > +              * domain states are all deeper states.
+> > > > > > +              */
+> > > > > > +             if (data->dev)
+> > > > >
+> > > > > You can drop this check as return on error above.
+> > > >
+> > > > Actually not, because if OSI is supported, there is still a
+> > > > possibility that the PM domain topology isn't used.
 > > > >
 > > >
-> > > But why can't we just fail registering or remove if already added.
+> > > And how do we support that ? I am missing something here.
+> > >
+> > > > This means ->data->dev is NULL.
+> > > >
+> > >
+> > > I don't get that.
 > >
-> > We can, but there are more problems with that than leaving this in a
-> > degraded mode, I think. See more below.
+> > This is quite similar to the existing limited support we have for OSI today.
 > >
-> > > They are useless for "degraded mode" anyways. And it will ensure that
-> > > data->dev is NULL. Sorry now I see why you said it can be NULL but I
-> > > would rather not leave those unused genpd in place in case of error.
-> >
-> > data->dev would not be NULL in this case, because the
-> > dev_pm_domain_attach_by_name() which is called when we attach the CPU
-> > is going to return an error code, not NULL.
-> >
-> > That's because the connection is there in the DTB and thus it must
-> > fail, in this case it would be with -EPROBE_DEFER (waiting for a genpd
-> > provider to be registered).
-> >
-> > That would then lead to that the entire cpuidle-psci driver would fail
-> > to initiate/probe. In my opinion, I think it's better to fall back
-> > into a degraded mode, using all the idle states for the CPUs, but just
-> > preventing the cluster idle states.
-> >
-> > Just wanted to make this more clear for you to consider. I am happy to
-> > change in any way you suggest, but please confirm that you really want
-> > another behaviour than the degraded mode.
+> > We are using the idle states for the CPU, but ignoring the idle states
+> > for the cluster. If you just skip applying the DTS patch14, this is
+> > what happens.
 > >
 >
-> Sorry but if OSI set failed in firmware, it will be operating in default/
-> PC mode and I *don't* want to create genpd for that. It's confusing.
+> No if psci_set_osi fails, we shouldn't create genpd domain as we don't
+> enter any cluster state. The default mode(same as PC) should work which
+> don't need any genpd domains. Adding one which is unused is just confusion.
+> Please avoid that.
 
-Alright, so that will cause some additional changes - let's agree how
-to make those.
-
-> Even if you don't create all these genpd domains, it is still degraded
-> mode and we are anyway not changing that. Let me know if my understanding
-> is wrong here.
-
-Your understanding is wrong.
-
-If I remove the genpds because psci_set_osi_mode() fails, then in the
-current suggested initialization path, that will lead to that the
-entire cpuidle-psci driver will fail to initiate (which is because
-psci_dt_attach_cpu() returns an error). In other words, only WFI state
-will be used by cpuidle as there will be no cpuidle driver registered
-at all.
-
-That would not be an acceptable behaviour, as it would make the
-situation worse than today.
-
-What we want in this scenario is to keep using all the idle states for
-the CPUs, but ignores those for the cluster. That we both agree on,
-right?
+I am deferring to the other thread to continue this discussion.
 
 >
-> I am sure, DTB may get copied to different platform and the firmware may
-> not support OSI. I know we have logs, but creating and leaving those
-> genpd domains unused will be just confusing. Please change that.
+> > >
+> > > > >
+> > > > > > +                     drv->states[state_count - 1].enter =
+> > > > > > +                             psci_enter_domain_idle_state;
+> > > > >
+> > > > > I see the comment above but this potential blocks retention mode at
+> > > > > cluster level when all cpu enter retention at CPU level. I don't like
+> > > > > this assumption, but I don't have any better suggestion. Please add the
+> > > > > note that we can't enter RETENTION state at cluster/domain level when
+> > > > > all CPUs enter at CPU level.
+> > > >
+> > > > You are correct, but I think the comment a few lines above (agreed to
+> > > > be added by Lorenzo in the previous version) should be enough to
+> > > > explain that. No?
+> > > >
+> > > > The point is, this is only a problem if cluster RETENTION is
+> > > > considered to be a shallower state that CPU power off, for example.
+> > > >
+> > >
+> > > Yes, but give examples makes it better and helps people who may be
+> > > wondering why cluster retention state is not being entered. You can just
+> > > add to the above comment:
+> > >
+> > > "e.g. If CPU Retention is one of the shallower state, then we can't enter
+> > > any of the allowed domain states."
+> >
+> > Hmm, that it's not a correct statement I think, let me elaborate.
+> >
+> > The problem is, that in case the CPU has both RETENTION and POWER OFF
+> > (deepest CPU state), we would only be able to reach a cluster state
+> > (RETENTION or POWER OFF) when the CPUs are in CPU POWER OFF (as that's
+> > the deepest).
+> >
+>
+> Sorry for the poor choice of words. What I meant is only one can be
+> deepest and it will be CPU POWER OFF if it exist at the CPU level.
+> RETENTION(again if exist) is shallower(rather deeper but not deepest
+> state).
+>
+> > This is okay, as long as a cluster RETENTION state is considered being
+> > "deeper" than the CPU POWER OFF state. However, if that isn't the
+> > case, it means  the cluster RETENTION state is not considered in the
+> > correct order, but it's still possible to reach as a "domain state".
+> >
+>
+> Again sorry for not being clear, I was referring CPU RET + CLUSTER RET.
+>
+> > I think this all is kind of summarized in the comment I agreed upon
+> > with Lorenzo, but if you still think there is some clarification
+> > needed I happy to add it.
+> >
+> > Makes sense?
+> >
+>
+> OK, if you happy, that's fine. I just wanted to clearly state CPU RET
+> + CLUSTER RET is not possible with the implementation.
 
-We are not creating any genpds unless OSI mode is supported. We do not
-even try to attach CPUs to the PM domains, unless OSI mode is
-supported. So this should already work according to your expectations
-and previous requests.
+Okay!
 
-To address your concern about removing genpds when psci_set_osi_mode()
-fails, we also need to address the problems we get when calling
-psci_dt_attach_cpu(). There are two viable options as I see it.
-
-1. Prevent calling psci_dt_attach_cpu() altogether when
-psci_set_osi_mode() failed. This means another function needs to be
-shared from cpuidle-psci-domain.c to let cpuidle-psci.c know about it.
-
-2. We can let psci_dt_attach_cpu() return NULL, when
-psci_set_osi_mode() failed - as this information is already known by
-cpuidle-psci-domain.c.
-
-I vote for option 2, but what do you think?
+I will then leave this as is. When/if you find a better wording of the
+comment, you can always send a patch on top.
 
 Kind regards
 Uffe
