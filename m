@@ -2,179 +2,348 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF021128AEF
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 19:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0EC128B3C
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 20:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbfLUS5U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Dec 2019 13:57:20 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39061 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfLUS5U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Dec 2019 13:57:20 -0500
-Received: by mail-wr1-f66.google.com with SMTP id y11so12561405wrt.6
-        for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2019 10:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VWt5yigT+cCw4dw4/HlKC+lWVzml8wRGgGlnMZdfHMQ=;
-        b=IKtW18kThgMeRl8P8eOVURrgsKbJTofwQ/ngssSeKgexyRBTuZyY9ak3Ch/aPCdz8K
-         nkdXIyHYvqs1eBYhVydQ9G1AI+wJ7B7ljgD1/Voi6VqOZ6soVhSb7S9RR/jd69xhkrLX
-         Re7A+Ja3uG2B1nYC3P5YcPqPY4f4DMfpjIF9RnzHXCeHERKRYDe8Uz+z5ablHXG8OLQk
-         3YWvk9EDVmZE06u1dRrROQ40MB/199hocCGoW9TynG2zjLx9SfsKoAjYq+GDKEwXsCwn
-         48NID++nEYYJNL6z9MuIErPv3P0ivmsJOZokSzrQzp38GmJK3LEsvUNPwqWp0G123gER
-         QbLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VWt5yigT+cCw4dw4/HlKC+lWVzml8wRGgGlnMZdfHMQ=;
-        b=FIimZ9M7aQAAgtqDusz/kuyTWLM3IGy/RhEEb/EjxiEc9RXEGz6+12+YGxlwmgH4A2
-         oXkWfTq1YKaYoGY00nE1Y1PejdnTVQazJYQukHxP3xoD28nSyKMe97sywS/+cRGrHB5b
-         A7Q37U6P1QRkUhw3zgm+bg8GkrCUp3mk0hEc1A3Upprrq1xcdww/M9lQUf2uhWhkFatX
-         UT3a7OXnBYcAZZEWPg/rb1pQBZ0B4Avf1ezkeWVmm2VJUAxBmUHV3qawaR56xi+Npila
-         LIdJHYK+12gLjra8MgcDr3BRedGDkA3Oq/0ndML/kLcIhyzVt2l93u9omtC0DOHjXXzZ
-         ejbw==
-X-Gm-Message-State: APjAAAV6N7iQjBEmlDr00BfaLwfXxr2iWWCGljnj+JHtCufkVDbIfvRc
-        bGVM6+aWcvzVM10FFFc1EKvLi+8Eeps=
-X-Google-Smtp-Source: APXvYqx3iX1UHFBBdsw6dhSXgzKI5Fr18CzSfey9f218BHXMsUjM6SyfDtJ6EIKgITyaQZK20JEjww==
-X-Received: by 2002:a5d:4807:: with SMTP id l7mr22294415wrq.64.1576954637639;
-        Sat, 21 Dec 2019 10:57:17 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:4d09:d7c4:65d5:cab0? ([2a01:e34:ed2f:f020:4d09:d7c4:65d5:cab0])
-        by smtp.googlemail.com with ESMTPSA id q11sm14401390wrp.24.2019.12.21.10.57.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Dec 2019 10:57:17 -0800 (PST)
-Subject: Re: [PATCH] thermal: fix indentation in makefile
-To:     Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191221173737.30906-1-tiny.windzz@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <19c1277f-f0b1-899d-6db0-5c7ff4fe7512@linaro.org>
-Date:   Sat, 21 Dec 2019 19:57:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726829AbfLUTyL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Dec 2019 14:54:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35990 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726107AbfLUTyL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 21 Dec 2019 14:54:11 -0500
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF1F22070C;
+        Sat, 21 Dec 2019 19:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576958050;
+        bh=3mvIp7eCgLyIgK3WlQH2he9am3EJW5RwfOxvQvZgdQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B391l5osAlZ5SHO53Qp5utmrFhMkaaWLzybm7nhAAvfonipqlqYeqpDr1hlOeslMd
+         1YO6IshupLISWoe6WVamFvNJtmbIz5AJWZ6ppXMIzpzoytK2kTOXsBqf6oEzFewu1U
+         zGJOrQ/ifjZqGLdrlSIM3BpeNW5vCYNOmShBHo/c=
+Received: by mail-lf1-f48.google.com with SMTP id n12so9644560lfe.3;
+        Sat, 21 Dec 2019 11:54:09 -0800 (PST)
+X-Gm-Message-State: APjAAAXrJjKhQ47ZPp745o2XZbnjrHdsZaqpjEqi6pgCNquUukJt0kGA
+        VtR4Wo1XhiPp2I9EkuYbiq/JoMr9+8N8u3WKc3c=
+X-Google-Smtp-Source: APXvYqyuxa6OGfJkXcrWQ9dn2GfMjOFQrnG53Uc8++kOXDZUm7kXUGyZziVIKkCNJaMpvwFgSgYrK0m9/y2baLAXPHI=
+X-Received: by 2002:ac2:5498:: with SMTP id t24mr12216807lfk.84.1576958047872;
+ Sat, 21 Dec 2019 11:54:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191221173737.30906-1-tiny.windzz@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CGME20191220120145eucas1p295af63eed7b23982d8c49fcf875cec8c@eucas1p2.samsung.com>
+ <20191220115653.6487-1-a.swigon@samsung.com> <20191220115653.6487-6-a.swigon@samsung.com>
+In-Reply-To: <20191220115653.6487-6-a.swigon@samsung.com>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Date:   Sun, 22 Dec 2019 04:53:31 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH0M5yJ3e2mEEc6XE89zV1289C6FvhqVEcuBdi2OgeMtig@mail.gmail.com>
+Message-ID: <CAGTfZH0M5yJ3e2mEEc6XE89zV1289C6FvhqVEcuBdi2OgeMtig@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 5/7] devfreq: exynos-bus: Add interconnect
+ functionality to exynos-bus
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/12/2019 18:37, Yangtao Li wrote:
-> To unify code style.
-> 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Hi,
+
+On Fri, Dec 20, 2019 at 9:02 PM Artur =C5=9Awigo=C5=84 <a.swigon@samsung.co=
+m> wrote:
+>
+> This patch adds interconnect functionality to the exynos-bus devfreq
+> driver.
+>
+> The SoC topology is a graph (or, more specifically, a tree) and its
+> edges are specified using the 'exynos,interconnect-parent-node' in the
+> DT. Due to unspecified relative probing order, -EPROBE_DEFER may be
+> propagated to ensure that the parent is probed before its children.
+>
+> Each bus is now an interconnect provider and an interconnect node as well
+> (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registe=
+rs
+> itself as a node. Node IDs are not hardcoded but rather assigned at
+> runtime, in probing order (subject to the above-mentioned exception
+> regarding relative order). This approach allows for using this driver wit=
+h
+> various Exynos SoCs.
+>
+> Frequencies requested via the interconnect API for a given node are
+> propagated to devfreq using dev_pm_qos_update_request(). Please note that
+> it is not an error when CONFIG_INTERCONNECT is 'n', in which case all
+> interconnect API functions are no-op.
+>
+> Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@samsung.com>
 > ---
->  drivers/thermal/Makefile | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index baeb70bf0568..ab9389bc42b2 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -5,7 +5,7 @@
->  
->  obj-$(CONFIG_THERMAL)		+= thermal_sys.o
->  thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
-> -					thermal_helpers.o
-> +				   thermal_helpers.o
+>  drivers/devfreq/exynos-bus.c | 144 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+>
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 9fdb188915e8..694a9581dcdb 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -14,14 +14,19 @@
+>  #include <linux/devfreq-event.h>
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+> +#include <linux/idr.h>
+> +#include <linux/interconnect-provider.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/pm_opp.h>
+> +#include <linux/pm_qos.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regulator/consumer.h>
+>
+>  #define DEFAULT_SATURATION_RATIO       40
+>
+> +#define kbps_to_khz(x) ((x) / 8)
+> +
+>  struct exynos_bus {
+>         struct device *dev;
+>
+> @@ -35,6 +40,12 @@ struct exynos_bus {
+>         struct opp_table *opp_table;
+>         struct clk *clk;
+>         unsigned int ratio;
+> +
+> +       /* One provider per bus, one node per provider */
+> +       struct icc_provider provider;
+> +       struct icc_node *node;
+> +
+> +       struct dev_pm_qos_request qos_req;
+>  };
+>
+>  /*
+> @@ -205,6 +216,39 @@ static void exynos_bus_passive_exit(struct device *d=
+ev)
+>         clk_disable_unprepare(bus->clk);
+>  }
+>
+> +static int exynos_bus_icc_set(struct icc_node *src, struct icc_node *dst=
+)
+> +{
+> +       struct exynos_bus *src_bus =3D src->data, *dst_bus =3D dst->data;
+> +       s32 src_freq =3D kbps_to_khz(src->avg_bw);
+> +       s32 dst_freq =3D kbps_to_khz(dst->avg_bw);
+> +       int ret;
+> +
+> +       ret =3D dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
+> +       if (ret < 0) {
+> +               dev_err(src_bus->dev, "failed to update PM QoS request");
 
-Here a tabulation is replaced with spaces.
+To catch the correct error point, better to add 'src node' to error message
+as following:
 
->  # interface to/from other layers providing sensors
->  thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
-> @@ -25,11 +25,11 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
->  thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
->  
->  # devfreq cooling
-> -thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
-> +thermal_sys-$(CONFIG_DEVFREQ_THERMAL)	+= devfreq_cooling.o
->  
->  # platform thermal drivers
->  obj-y				+= broadcom/
-> -obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
-> +obj-$(CONFIG_THERMAL_MMIO)	+= thermal_mmio.o
->  obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
->  obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
->  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
-> @@ -49,9 +49,9 @@ obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
->  obj-y				+= st/
->  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->  obj-y				+= tegra/
-> -obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> +obj-$(CONFIG_HISI_THERMAL)	+= hisi_thermal.o
->  obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
->  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->  obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
->  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
-> -obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> +obj-$(CONFIG_AMLOGIC_THERMAL)	+= amlogic_thermal.o
-> 
+dev_err(src_bus->dev, "failed to update PM QoS of %s\n",
+                                               dev_name(src_bus->dev.parent=
+))
+
+> +               return ret;
+> +       }
+> +
+> +       ret =3D dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
+> +       if (ret < 0) {
+> +               dev_err(dst_bus->dev, "failed to update PM QoS request");
+
+ditto.
+
+dev_err(src_bus->dev, "failed to update PM QoS of %s\n",
+                                               dev_name(dst_bus->dev.parent=
+))
 
 
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_args *spe=
+c,
+> +                                            void *data)
+> +{
+> +       struct exynos_bus *bus =3D data;
+> +
+> +       if (spec->np !=3D bus->dev->of_node)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       return bus->node;
+> +}
+> +
+>  static int exynos_bus_parent_parse_of(struct device_node *np,
+>                                         struct exynos_bus *bus)
+>  {
+> @@ -419,6 +463,96 @@ static int exynos_bus_profile_init_passive(struct ex=
+ynos_bus *bus,
+>         return 0;
+>  }
+>
+> +static struct icc_node *exynos_bus_icc_get_parent(struct exynos_bus *bus=
+)
+> +{
+> +       struct device_node *np =3D bus->dev->of_node;
+> +       struct of_phandle_args args;
+> +       int num, ret;
+> +
+> +       num =3D of_count_phandle_with_args(np, "exynos,interconnect-paren=
+t-node",
+> +                                       "#interconnect-cells");
+> +       if (num !=3D 1)
+> +               return NULL; /* parent nodes are optional */
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+You better to add the comment before calling exynos_bus_icc_get_parent
+and remove '/* parent nodes are optional */'. Actually, it is not enough
+to understand the role of 'interconnect-parent-node' with '/* parent
+nodes are optional */'.
+And I add my opinion about this comment below.
 
+And I expect that you will add the description and example for
+'exynos,interconnect-parent-node' on exynos-bus dt-binding document.
+
+> +
+> +       ret =3D of_parse_phandle_with_args(np, "exynos,interconnect-paren=
+t-node",
+> +                                       "#interconnect-cells", 0, &args);
+> +       if (ret < 0)
+> +               return ERR_PTR(ret);
+> +
+> +       of_node_put(args.np);
+> +
+> +       return of_icc_get_from_provider(&args);
+> +}
+> +
+> +static int exynos_bus_icc_init(struct exynos_bus *bus)
+> +{
+> +       static DEFINE_IDA(ida);
+> +
+> +       struct device *dev =3D bus->dev;
+> +       struct icc_provider *provider =3D &bus->provider;
+> +       struct icc_node *node, *parent_node;
+> +       int id, ret;
+> +
+> +       /* Initialize the interconnect provider */
+> +       provider->set =3D exynos_bus_icc_set;
+> +       provider->aggregate =3D icc_std_aggregate;
+> +       provider->xlate =3D exynos_bus_icc_xlate;
+> +       provider->dev =3D dev;
+> +       provider->inter_set =3D true;
+> +       provider->data =3D bus;
+> +
+> +       ret =3D icc_provider_add(provider);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret =3D id =3D ida_alloc(&ida, GFP_KERNEL);
+> +       if (ret < 0)
+> +               goto err_id;
+> +
+> +       node =3D icc_node_create(id);
+> +       if (IS_ERR(node)) {
+> +               ret =3D PTR_ERR(node);
+> +               goto err_node;
+> +       }
+> +
+> +       bus->node =3D node;
+> +       node->name =3D dev->of_node->name;
+> +       node->data =3D bus;
+> +       icc_node_add(node, provider);
+> +
+
+Better to add the following comment. If you add following comment
+before calling exynos_bus_icc_get_parent, don't need to add the
+same comment into exynos_bus_icc.
+    /* If interconnect parent node is not existing, don't use
+interconnect feature */
+
+> +       parent_node =3D exynos_bus_icc_get_parent(bus);
+> +       if (IS_ERR(parent_node)) {
+> +               ret =3D PTR_ERR(parent_node);
+> +               goto err_parent;
+> +       }
+> +
+> +       if (parent_node) {
+
+Better to change this if statement as following:
+else if (parent_node)
+
+
+> +               ret =3D icc_link_create(node, parent_node->id);
+> +               if (ret < 0)
+> +                       goto err_parent;
+> +       }
+> +
+> +       ret =3D dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus->qo=
+s_req,
+> +                                       DEV_PM_QOS_MIN_FREQUENCY, 0);
+
+Is it necessary if interconnect-parent-node is not existing?
+
+
+> +       if (ret < 0)
+> +               goto err_request;
+> +
+> +       return 0;
+> +
+> +err_request:
+> +       if (parent_node)
+> +               icc_link_destroy(node, parent_node);
+> +err_parent:
+> +       icc_node_del(node);
+> +       icc_node_destroy(id);
+> +err_node:
+> +       ida_free(&ida, id);
+> +err_id:
+> +       icc_provider_del(provider);
+> +
+> +       return ret;
+> +}
+> +
+>  static int exynos_bus_probe(struct platform_device *pdev)
+>  {
+>         struct device *dev =3D &pdev->dev;
+> @@ -468,6 +602,16 @@ static int exynos_bus_probe(struct platform_device *=
+pdev)
+>         if (ret < 0)
+>                 goto err;
+>
+> +       /*
+> +        * Initialize interconnect provider. A return value of -ENOTSUPP =
+means
+> +        * that CONFIG_INTERCONNECT is disabled.
+> +        */
+> +       ret =3D exynos_bus_icc_init(bus);
+> +       if (ret < 0 && ret !=3D -ENOTSUPP) {
+> +               dev_err(dev, "failed to initialize the interconnect provi=
+der");
+> +               goto err;
+> +       }
+> +
+>         max_state =3D bus->devfreq->profile->max_state;
+>         min_freq =3D (bus->devfreq->profile->freq_table[0] / 1000);
+>         max_freq =3D (bus->devfreq->profile->freq_table[max_state - 1] / =
+1000);
+> --
+> 2.17.1
+>
+
+
+--=20
+Best Regards,
+Chanwoo Choi
