@@ -2,104 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C72A5128A8D
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 18:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD87128AA5
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 18:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbfLURVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Dec 2019 12:21:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48028 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726319AbfLURVD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 21 Dec 2019 12:21:03 -0500
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9080521D7D;
-        Sat, 21 Dec 2019 17:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576948862;
-        bh=ygQ+LLKc6onkKQohUjB4VeER1S5nL8ISyedIw3igvFQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=x96NU+fxBzmg38mKk0TGitI2DkyJtAaQKY/5VTvgo818kI3m0Av9s6mvDML47ta94
-         P1eHg6Bp/jv5P0xoqarNn0EvL7tEDDphKBnvcv1WmbmRKyCHkjtqHCfJCQwI+86fG9
-         w1y42YhGVRdJIfTYdIwHvOCJNRQyDKTs2czaTwV0=
-Received: by mail-lj1-f169.google.com with SMTP id a13so13238963ljm.10;
-        Sat, 21 Dec 2019 09:21:02 -0800 (PST)
-X-Gm-Message-State: APjAAAXmnrWyTbJZoTZm1CArPqxhG91zVQlrxv5/ufx0j2uGkmkYZCYz
-        2uX8pAVJoTFlvnXkfXTppSEf+lpm6npC++VPFus=
-X-Google-Smtp-Source: APXvYqzxQbblDkSAhXsYJzBSq3hDVzSm7VnGs1SPM1HBdZJYbyVd5kmZbEvVMHb9JsKwPhMwlDsc1nNYruHS7j121S0=
-X-Received: by 2002:a2e:8551:: with SMTP id u17mr8218439ljj.165.1576948860712;
- Sat, 21 Dec 2019 09:21:00 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20191220120142eucas1p1f43c7a862d9c0faa72e14b21d7d697e9@eucas1p1.samsung.com>
- <20191220115653.6487-1-a.swigon@samsung.com> <20191220115653.6487-3-a.swigon@samsung.com>
-In-Reply-To: <20191220115653.6487-3-a.swigon@samsung.com>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Sun, 22 Dec 2019 02:20:24 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH2mh4xcUUa+z=thdnrFsEgZ7NR5nmL4sK2ybARndhn01A@mail.gmail.com>
-Message-ID: <CAGTfZH2mh4xcUUa+z=thdnrFsEgZ7NR5nmL4sK2ybARndhn01A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/7] interconnect: Relax requirement in of_icc_get_from_provider()
-To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726593AbfLURhl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Dec 2019 12:37:41 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43185 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbfLURhl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Dec 2019 12:37:41 -0500
+Received: by mail-pf1-f196.google.com with SMTP id x6so5900090pfo.10;
+        Sat, 21 Dec 2019 09:37:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=L9fyvYyivbBa5nndc7noKKMmXslny54OD1MjJbuNarE=;
+        b=sIalyB7FZZ+F+NMXsRx+5f9uLho0AUi3hMtJnZ7fRMMWhNgEyhEgdxRhV8f2o5IWhI
+         WkEhCc4n0Oodbm1E6hpebzp8XQHZPX9eIKG7LyyHwkuRBHjbkcEgsmryYZLKWwHOppEH
+         oU80GxbureGkjaaHFfiTNdbqQhDDFAAsFg7lgRnof+fBtjqfCZbaUQA+EqFVa4sBsWl2
+         TvsDKI5OsKsW/suwXNoeJv3EXx8FvpUAA/BPRu2BABlx2UrkOAtvpvwoTq3Y22DaX+7q
+         LP18XD4PugQ5r+SgY01/vfkizSqnC2gNX6CWOY5kWMZSorfxNwa242M4YhsgK+dDQJiK
+         OvhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=L9fyvYyivbBa5nndc7noKKMmXslny54OD1MjJbuNarE=;
+        b=GEZ40a6QhZctilPBf9BFGaozgY49HZDijcx3Yrahrx3CaWzifjnysRENOgLgHTaQfN
+         jYHcx5hm/QXB4ZyARXHrlGZa42XOHVyLMXvvqXxbClscBGtJaMmhTiknRpnU23jzMoKk
+         +AYLw6TF8+udTXMBCUSIRh3A+5g1na74BWUN1aDIonX1uTMyite9I6fa3a/LjPhG2iDt
+         9d1jWbdA574lREeIzmKy583FoDEyGtcSH+XKB1EFfpccF0n7R02tQh8IieCxMWHS/9Cq
+         UWeWcXa6IOKsEbl8biVv0uSeshBCLHqaGuipmgFYh/oultjl5Kgxoyc/CKyXQ1Y4ZVi6
+         Niqw==
+X-Gm-Message-State: APjAAAWRhpxMWKpLYYDI1/Croy0Vb3YI6LRKsp5WhVCELRo7YWBu8qer
+        2RKl52EkZ26xyAgTtoKhblU=
+X-Google-Smtp-Source: APXvYqyXxyFHn14Ls5Uip9ujwcZ0DlZpOxupxXFamGQQljUfbdjRdLMbzW5ZmZ7jD9ApqYdXlPxIXw==
+X-Received: by 2002:a63:e545:: with SMTP id z5mr21608990pgj.209.1576949860845;
+        Sat, 21 Dec 2019 09:37:40 -0800 (PST)
+Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
+        by smtp.gmail.com with ESMTPSA id u5sm16826904pfm.115.2019.12.21.09.37.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 21 Dec 2019 09:37:40 -0800 (PST)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH] thermal: fix indentation in makefile
+Date:   Sat, 21 Dec 2019 17:37:37 +0000
+Message-Id: <20191221173737.30906-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+To unify code style.
 
-On Fri, Dec 20, 2019 at 9:03 PM Artur =C5=9Awigo=C5=84 <a.swigon@samsung.co=
-m> wrote:
->
-> This patch relaxes the condition in of_icc_get_from_provider() so that it
-> is no longer required to set #interconnect-cells =3D <1> in the DT. In ca=
-se
-> of the devfreq driver for exynos-bus, #interconnect-cells is always zero.
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+---
+ drivers/thermal/Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-It doesn't contain why don't need to require it. If you add more detailed
-description, it is better to understand.
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index baeb70bf0568..ab9389bc42b2 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -5,7 +5,7 @@
+ 
+ obj-$(CONFIG_THERMAL)		+= thermal_sys.o
+ thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
+-					thermal_helpers.o
++				   thermal_helpers.o
+ 
+ # interface to/from other layers providing sensors
+ thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
+@@ -25,11 +25,11 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
+ thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+ 
+ # devfreq cooling
+-thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
++thermal_sys-$(CONFIG_DEVFREQ_THERMAL)	+= devfreq_cooling.o
+ 
+ # platform thermal drivers
+ obj-y				+= broadcom/
+-obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
++obj-$(CONFIG_THERMAL_MMIO)	+= thermal_mmio.o
+ obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
+ obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
+ obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
+@@ -49,9 +49,9 @@ obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
+ obj-y				+= st/
+ obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+ obj-y				+= tegra/
+-obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
++obj-$(CONFIG_HISI_THERMAL)	+= hisi_thermal.o
+ obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+ obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
+ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+-obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
++obj-$(CONFIG_AMLOGIC_THERMAL)	+= amlogic_thermal.o
+-- 
+2.17.1
 
->
-> Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@samsung.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  drivers/interconnect/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index e6035c199369..74c68898a350 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -335,7 +335,7 @@ struct icc_node *of_icc_get_from_provider(struct of_p=
-handle_args *spec)
->         struct icc_node *node =3D ERR_PTR(-EPROBE_DEFER);
->         struct icc_provider *provider;
->
-> -       if (!spec || spec->args_count !=3D 1)
-> +       if (!spec)
->                 return ERR_PTR(-EINVAL);
->
->         mutex_lock(&icc_lock);
-> --
-> 2.17.1
->
-
-
---=20
-Best Regards,
-Chanwoo Choi
