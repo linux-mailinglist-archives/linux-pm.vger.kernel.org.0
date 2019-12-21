@@ -2,94 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F03331286FB
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 05:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D89A1287B7
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 07:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727382AbfLUEqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Dec 2019 23:46:11 -0500
-Received: from mga03.intel.com ([134.134.136.65]:31841 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726709AbfLUEqJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 20 Dec 2019 23:46:09 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="222620136"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:08 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v5 19/19] KVM: VMX: Allow KVM_INTEL when building for Centaur and/or Zhaoxin CPUs
-Date:   Fri, 20 Dec 2019 20:45:13 -0800
-Message-Id: <20191221044513.21680-20-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191221044513.21680-1-sean.j.christopherson@intel.com>
-References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
+        id S1725829AbfLUGOU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Dec 2019 01:14:20 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:52656
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725773AbfLUGOT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Dec 2019 01:14:19 -0500
+X-IronPort-AV: E=Sophos;i="5.69,338,1571695200"; 
+   d="scan'208";a="333931587"
+Received: from abo-154-110-68.mrs.modulonet.fr (HELO hadrien) ([85.68.110.154])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Dec 2019 07:14:13 +0100
+Date:   Sat, 21 Dec 2019 07:14:12 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Niklas Cassel <niklas.cassel@linaro.org>
+cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        devel@acpica.org, linux-acpi@vger.kernel.org,
+        kbuild-all@lists.01.org
+Subject: [pm:bleeding-edge 59/60] drivers/power/avs/qcom-cpr.c:1539:5-21:
+ WARNING: Unsigned expression compared with zero: drv -> num_corners < 0
+ (fwd)
+Message-ID: <alpine.DEB.2.21.1912210710140.2559@hadrien>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change the dependency for KVM_INTEL, i.e. KVM w/ VMX, from Intel CPUs to
-any CPU that supports the IA32_FEAT_CTL MSR and thus VMX functionality.
-This effectively allows building KVM_INTEL for Centaur and Zhaoxin CPUs.
+Please see line 1539.  It seems that the num_corners field is unsigned, so
+it will not be less than 0.
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+julia
+
+
+
+---------- Forwarded message ----------
+Date: Sat, 21 Dec 2019 06:52:19 +0800
+From: kbuild test robot <lkp@intel.com>
+To: kbuild@lists.01.org
+Cc: Julia Lawall <julia.lawall@lip6.fr>
+Subject: [pm:bleeding-edge 59/60] drivers/power/avs/qcom-cpr.c:1539:5-21:
+    WARNING: Unsigned expression compared with zero: drv -> num_corners < 0
+
+CC: kbuild-all@lists.01.org
+CC: linux-acpi@vger.kernel.org
+CC: devel@acpica.org
+CC: linux-pm@vger.kernel.org
+TO: Niklas Cassel <niklas.cassel@linaro.org>
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC: "Jorge Ramirez-Ortiz" <jorge.ramirez-ortiz@linaro.org>
+CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+CC: Ulf Hansson <ulf.hansson@linaro.org>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   89eba9e38dc4ed4576eaf7711c60403568663291
+commit: bf6910abf54871b0e976e52f56fb3b3dd1b90e48 [59/60] power: avs: Add support for CPR (Core Power Reduction)
+:::::: branch date: 13 hours ago
+:::::: commit date: 13 hours ago
+
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+
+>> drivers/power/avs/qcom-cpr.c:1539:5-21: WARNING: Unsigned expression compared with zero: drv -> num_corners < 0
+
+# https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=bf6910abf54871b0e976e52f56fb3b3dd1b90e48
+git remote add pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+git remote update pm
+git checkout bf6910abf54871b0e976e52f56fb3b3dd1b90e48
+vim +1539 drivers/power/avs/qcom-cpr.c
+
+bf6910abf54871 Niklas Cassel 2019-11-29  1487
+bf6910abf54871 Niklas Cassel 2019-11-29  1488  static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
+bf6910abf54871 Niklas Cassel 2019-11-29  1489  			     struct device *dev)
+bf6910abf54871 Niklas Cassel 2019-11-29  1490  {
+bf6910abf54871 Niklas Cassel 2019-11-29  1491  	struct cpr_drv *drv = container_of(domain, struct cpr_drv, pd);
+bf6910abf54871 Niklas Cassel 2019-11-29  1492  	const struct acc_desc *acc_desc = drv->acc_desc;
+bf6910abf54871 Niklas Cassel 2019-11-29  1493  	int ret = 0;
+bf6910abf54871 Niklas Cassel 2019-11-29  1494
+bf6910abf54871 Niklas Cassel 2019-11-29  1495  	mutex_lock(&drv->lock);
+bf6910abf54871 Niklas Cassel 2019-11-29  1496
+bf6910abf54871 Niklas Cassel 2019-11-29  1497  	dev_dbg(drv->dev, "attach callback for: %s\n", dev_name(dev));
+bf6910abf54871 Niklas Cassel 2019-11-29  1498
+bf6910abf54871 Niklas Cassel 2019-11-29  1499  	/*
+bf6910abf54871 Niklas Cassel 2019-11-29  1500  	 * This driver only supports scaling voltage for a CPU cluster
+bf6910abf54871 Niklas Cassel 2019-11-29  1501  	 * where all CPUs in the cluster share a single regulator.
+bf6910abf54871 Niklas Cassel 2019-11-29  1502  	 * Therefore, save the struct device pointer only for the first
+bf6910abf54871 Niklas Cassel 2019-11-29  1503  	 * CPU device that gets attached. There is no need to do any
+bf6910abf54871 Niklas Cassel 2019-11-29  1504  	 * additional initialization when further CPUs get attached.
+bf6910abf54871 Niklas Cassel 2019-11-29  1505  	 */
+bf6910abf54871 Niklas Cassel 2019-11-29  1506  	if (drv->attached_cpu_dev)
+bf6910abf54871 Niklas Cassel 2019-11-29  1507  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1508
+bf6910abf54871 Niklas Cassel 2019-11-29  1509  	/*
+bf6910abf54871 Niklas Cassel 2019-11-29  1510  	 * cpr_scale_voltage() requires the direction (if we are changing
+bf6910abf54871 Niklas Cassel 2019-11-29  1511  	 * to a higher or lower OPP). The first time
+bf6910abf54871 Niklas Cassel 2019-11-29  1512  	 * cpr_set_performance_state() is called, there is no previous
+bf6910abf54871 Niklas Cassel 2019-11-29  1513  	 * performance state defined. Therefore, we call
+bf6910abf54871 Niklas Cassel 2019-11-29  1514  	 * cpr_find_initial_corner() that gets the CPU clock frequency
+bf6910abf54871 Niklas Cassel 2019-11-29  1515  	 * set by the bootloader, so that we can determine the direction
+bf6910abf54871 Niklas Cassel 2019-11-29  1516  	 * the first time cpr_set_performance_state() is called.
+bf6910abf54871 Niklas Cassel 2019-11-29  1517  	 */
+bf6910abf54871 Niklas Cassel 2019-11-29  1518  	drv->cpu_clk = devm_clk_get(dev, NULL);
+bf6910abf54871 Niklas Cassel 2019-11-29  1519  	if (IS_ERR(drv->cpu_clk)) {
+bf6910abf54871 Niklas Cassel 2019-11-29  1520  		ret = PTR_ERR(drv->cpu_clk);
+bf6910abf54871 Niklas Cassel 2019-11-29  1521  		if (ret != -EPROBE_DEFER)
+bf6910abf54871 Niklas Cassel 2019-11-29  1522  			dev_err(drv->dev, "could not get cpu clk: %d\n", ret);
+bf6910abf54871 Niklas Cassel 2019-11-29  1523  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1524  	}
+bf6910abf54871 Niklas Cassel 2019-11-29  1525  	drv->attached_cpu_dev = dev;
+bf6910abf54871 Niklas Cassel 2019-11-29  1526
+bf6910abf54871 Niklas Cassel 2019-11-29  1527  	dev_dbg(drv->dev, "using cpu clk from: %s\n",
+bf6910abf54871 Niklas Cassel 2019-11-29  1528  		dev_name(drv->attached_cpu_dev));
+bf6910abf54871 Niklas Cassel 2019-11-29  1529
+bf6910abf54871 Niklas Cassel 2019-11-29  1530  	/*
+bf6910abf54871 Niklas Cassel 2019-11-29  1531  	 * Everything related to (virtual) corners has to be initialized
+bf6910abf54871 Niklas Cassel 2019-11-29  1532  	 * here, when attaching to the power domain, since we need to know
+bf6910abf54871 Niklas Cassel 2019-11-29  1533  	 * the maximum frequency for each fuse corner, and this is only
+bf6910abf54871 Niklas Cassel 2019-11-29  1534  	 * available after the cpufreq driver has attached to us.
+bf6910abf54871 Niklas Cassel 2019-11-29  1535  	 * The reason for this is that we need to know the highest
+bf6910abf54871 Niklas Cassel 2019-11-29  1536  	 * frequency associated with each fuse corner.
+bf6910abf54871 Niklas Cassel 2019-11-29  1537  	 */
+bf6910abf54871 Niklas Cassel 2019-11-29  1538  	drv->num_corners = dev_pm_opp_get_opp_count(&drv->pd.dev);
+bf6910abf54871 Niklas Cassel 2019-11-29 @1539  	if (drv->num_corners < 0) {
+bf6910abf54871 Niklas Cassel 2019-11-29  1540  		ret = drv->num_corners;
+bf6910abf54871 Niklas Cassel 2019-11-29  1541  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1542  	}
+bf6910abf54871 Niklas Cassel 2019-11-29  1543  	if (drv->num_corners < 2) {
+bf6910abf54871 Niklas Cassel 2019-11-29  1544  		dev_err(drv->dev, "need at least 2 OPPs to use CPR\n");
+bf6910abf54871 Niklas Cassel 2019-11-29  1545  		ret = -EINVAL;
+bf6910abf54871 Niklas Cassel 2019-11-29  1546  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1547  	}
+bf6910abf54871 Niklas Cassel 2019-11-29  1548
+bf6910abf54871 Niklas Cassel 2019-11-29  1549  	dev_dbg(drv->dev, "number of OPPs: %d\n", drv->num_corners);
+bf6910abf54871 Niklas Cassel 2019-11-29  1550
+bf6910abf54871 Niklas Cassel 2019-11-29  1551  	drv->corners = devm_kcalloc(drv->dev, drv->num_corners,
+bf6910abf54871 Niklas Cassel 2019-11-29  1552  				    sizeof(*drv->corners),
+bf6910abf54871 Niklas Cassel 2019-11-29  1553  				    GFP_KERNEL);
+bf6910abf54871 Niklas Cassel 2019-11-29  1554  	if (!drv->corners) {
+bf6910abf54871 Niklas Cassel 2019-11-29  1555  		ret = -ENOMEM;
+bf6910abf54871 Niklas Cassel 2019-11-29  1556  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1557  	}
+bf6910abf54871 Niklas Cassel 2019-11-29  1558
+bf6910abf54871 Niklas Cassel 2019-11-29  1559  	ret = cpr_corner_init(drv);
+bf6910abf54871 Niklas Cassel 2019-11-29  1560  	if (ret)
+bf6910abf54871 Niklas Cassel 2019-11-29  1561  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1562
+bf6910abf54871 Niklas Cassel 2019-11-29  1563  	cpr_set_loop_allowed(drv);
+bf6910abf54871 Niklas Cassel 2019-11-29  1564
+bf6910abf54871 Niklas Cassel 2019-11-29  1565  	ret = cpr_init_parameters(drv);
+bf6910abf54871 Niklas Cassel 2019-11-29  1566  	if (ret)
+bf6910abf54871 Niklas Cassel 2019-11-29  1567  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1568
+bf6910abf54871 Niklas Cassel 2019-11-29  1569  	/* Configure CPR HW but keep it disabled */
+bf6910abf54871 Niklas Cassel 2019-11-29  1570  	ret = cpr_config(drv);
+bf6910abf54871 Niklas Cassel 2019-11-29  1571  	if (ret)
+bf6910abf54871 Niklas Cassel 2019-11-29  1572  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1573
+bf6910abf54871 Niklas Cassel 2019-11-29  1574  	ret = cpr_find_initial_corner(drv);
+bf6910abf54871 Niklas Cassel 2019-11-29  1575  	if (ret)
+bf6910abf54871 Niklas Cassel 2019-11-29  1576  		goto unlock;
+bf6910abf54871 Niklas Cassel 2019-11-29  1577
+bf6910abf54871 Niklas Cassel 2019-11-29  1578  	if (acc_desc->config)
+bf6910abf54871 Niklas Cassel 2019-11-29  1579  		regmap_multi_reg_write(drv->tcsr, acc_desc->config,
+bf6910abf54871 Niklas Cassel 2019-11-29  1580  				       acc_desc->num_regs_per_fuse);
+bf6910abf54871 Niklas Cassel 2019-11-29  1581
+bf6910abf54871 Niklas Cassel 2019-11-29  1582  	/* Enable ACC if required */
+bf6910abf54871 Niklas Cassel 2019-11-29  1583  	if (acc_desc->enable_mask)
+bf6910abf54871 Niklas Cassel 2019-11-29  1584  		regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
+bf6910abf54871 Niklas Cassel 2019-11-29  1585  				   acc_desc->enable_mask,
+bf6910abf54871 Niklas Cassel 2019-11-29  1586  				   acc_desc->enable_mask);
+bf6910abf54871 Niklas Cassel 2019-11-29  1587
+bf6910abf54871 Niklas Cassel 2019-11-29  1588  unlock:
+bf6910abf54871 Niklas Cassel 2019-11-29  1589  	mutex_unlock(&drv->lock);
+bf6910abf54871 Niklas Cassel 2019-11-29  1590
+bf6910abf54871 Niklas Cassel 2019-11-29  1591  	return ret;
+bf6910abf54871 Niklas Cassel 2019-11-29  1592  }
+bf6910abf54871 Niklas Cassel 2019-11-29  1593
+
 ---
- arch/x86/kvm/Kconfig | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-index 840e12583b85..991019d5eee1 100644
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -60,13 +60,11 @@ config KVM
- 	  If unsure, say N.
- 
- config KVM_INTEL
--	tristate "KVM for Intel processors support"
--	depends on KVM
--	# for perf_guest_get_msrs():
--	depends on CPU_SUP_INTEL
-+	tristate "KVM for Intel (and compatible) processors support"
-+	depends on KVM && IA32_FEAT_CTL
- 	---help---
--	  Provides support for KVM on Intel processors equipped with the VT
--	  extensions.
-+	  Provides support for KVM on processors equipped with Intel's VT
-+	  extensions, a.k.a. Virtual Machine Extensions (VMX).
- 
- 	  To compile this as a module, choose M here: the module
- 	  will be called kvm-intel.
--- 
-2.24.1
-
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
