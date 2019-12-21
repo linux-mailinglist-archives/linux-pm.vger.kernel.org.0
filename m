@@ -2,106 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD87128AA5
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 18:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCFF128ABF
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2019 19:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfLURhl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Dec 2019 12:37:41 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43185 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726114AbfLURhl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Dec 2019 12:37:41 -0500
-Received: by mail-pf1-f196.google.com with SMTP id x6so5900090pfo.10;
-        Sat, 21 Dec 2019 09:37:41 -0800 (PST)
+        id S1726567AbfLUSS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Dec 2019 13:18:59 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35598 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfLUSS7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Dec 2019 13:18:59 -0500
+Received: by mail-pg1-f196.google.com with SMTP id l24so6660059pgk.2;
+        Sat, 21 Dec 2019 10:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=L9fyvYyivbBa5nndc7noKKMmXslny54OD1MjJbuNarE=;
-        b=sIalyB7FZZ+F+NMXsRx+5f9uLho0AUi3hMtJnZ7fRMMWhNgEyhEgdxRhV8f2o5IWhI
-         WkEhCc4n0Oodbm1E6hpebzp8XQHZPX9eIKG7LyyHwkuRBHjbkcEgsmryYZLKWwHOppEH
-         oU80GxbureGkjaaHFfiTNdbqQhDDFAAsFg7lgRnof+fBtjqfCZbaUQA+EqFVa4sBsWl2
-         TvsDKI5OsKsW/suwXNoeJv3EXx8FvpUAA/BPRu2BABlx2UrkOAtvpvwoTq3Y22DaX+7q
-         LP18XD4PugQ5r+SgY01/vfkizSqnC2gNX6CWOY5kWMZSorfxNwa242M4YhsgK+dDQJiK
-         OvhQ==
+        bh=bwbzx/0lyuLyDgYjlpKZwdoDwlYToxmSNQqN2Jns3/U=;
+        b=iafzJSRx/Oh+GsjR2eJ4ZkqzB5Pw0i+xDji0iUrPwKNsBXCMR/h7rRSPzD0vZlMela
+         6/GMUqYS/4BARhHl0hNwVUAuXSKviN70XHxuqnmaSokLKcW9GMr20YleqNvxBuI05GMI
+         5zefIMIKTzIXxMx1KYw33LQnboH+Qj+LodgB1d/l5GsN91jedf/bt1b0T37ydml6moDG
+         6Rz/1uEp+h1r+qtjE2LEIwjE4ZCpMCGJmpVplFWbTp7QPtfj4vWS5X60x1xEP3Dcl4iG
+         iRzdyYLvTo1d6oXwKTshMXs/0+TZySPVTUTiCF5Weqvp/egm7AyJIzQplp8tvj1gIA9+
+         D+Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=L9fyvYyivbBa5nndc7noKKMmXslny54OD1MjJbuNarE=;
-        b=GEZ40a6QhZctilPBf9BFGaozgY49HZDijcx3Yrahrx3CaWzifjnysRENOgLgHTaQfN
-         jYHcx5hm/QXB4ZyARXHrlGZa42XOHVyLMXvvqXxbClscBGtJaMmhTiknRpnU23jzMoKk
-         +AYLw6TF8+udTXMBCUSIRh3A+5g1na74BWUN1aDIonX1uTMyite9I6fa3a/LjPhG2iDt
-         9d1jWbdA574lREeIzmKy583FoDEyGtcSH+XKB1EFfpccF0n7R02tQh8IieCxMWHS/9Cq
-         UWeWcXa6IOKsEbl8biVv0uSeshBCLHqaGuipmgFYh/oultjl5Kgxoyc/CKyXQ1Y4ZVi6
-         Niqw==
-X-Gm-Message-State: APjAAAWRhpxMWKpLYYDI1/Croy0Vb3YI6LRKsp5WhVCELRo7YWBu8qer
-        2RKl52EkZ26xyAgTtoKhblU=
-X-Google-Smtp-Source: APXvYqyXxyFHn14Ls5Uip9ujwcZ0DlZpOxupxXFamGQQljUfbdjRdLMbzW5ZmZ7jD9ApqYdXlPxIXw==
-X-Received: by 2002:a63:e545:: with SMTP id z5mr21608990pgj.209.1576949860845;
-        Sat, 21 Dec 2019 09:37:40 -0800 (PST)
+        bh=bwbzx/0lyuLyDgYjlpKZwdoDwlYToxmSNQqN2Jns3/U=;
+        b=kU714BccProNuH96ZlAgh9hMCBERV0W1FX5CRBIK26KuMoRJ36wxAjj8hXTqyOpU7x
+         UFmc8fxiNNaHDy1zrAze05U76YNgCqAVAc7EaS9np/iMd3nEAmTxSsd096WdW5H/aY0d
+         nHUr9HfhNLV13V0pP39tIBpV11vtV0GK1e4KTnsFRZNjTKQo4qdBtfW2Ym4cdJ3JAFzw
+         Y3jQ/HMMLj12MTirGVgGcEeW4fcu4hhRY9xQpxON0AZXO6OnN34ewzdHdag5TB39YJQv
+         ZuSJ+Fo8eG53hWbmuTuR5YpXJ2Lzqq4AAwCO6kOAmxjpXJjE7WNYalDLvgZAjOVg51cF
+         lZAg==
+X-Gm-Message-State: APjAAAUr9kxH6QxWG0amaf6lhNu/zWUQ2TmSD6rQ8NNWUkZozKyN7tx5
+        zHzV/ygucP1dwf23AgkOl6U=
+X-Google-Smtp-Source: APXvYqwCQ2pikuGus5t9NRDx8dicrxR/iMjGdpMtjiAyPYt4OsDp/uwZ/85qHhf7prm6ugOwlBoVNA==
+X-Received: by 2002:a65:488f:: with SMTP id n15mr23158105pgs.61.1576952338290;
+        Sat, 21 Dec 2019 10:18:58 -0800 (PST)
 Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
-        by smtp.gmail.com with ESMTPSA id u5sm16826904pfm.115.2019.12.21.09.37.40
+        by smtp.gmail.com with ESMTPSA id m71sm17264906pje.0.2019.12.21.10.18.57
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 21 Dec 2019 09:37:40 -0800 (PST)
+        Sat, 21 Dec 2019 10:18:57 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, kgene@kernel.org, krzk@kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH] thermal: fix indentation in makefile
-Date:   Sat, 21 Dec 2019 17:37:37 +0000
-Message-Id: <20191221173737.30906-1-tiny.windzz@gmail.com>
+Subject: [PATCH 1/2] PM / devfreq: rk3399_dmc: Add missing devfreq_event_disable_edev
+Date:   Sat, 21 Dec 2019 18:18:54 +0000
+Message-Id: <20191221181855.31380-1-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To unify code style.
+The probe process may fail, but the devfreq event device remains
+enabled. Call devfreq_event_disable_edev on the error return path.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/thermal/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/devfreq/rk3399_dmc.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index baeb70bf0568..ab9389bc42b2 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -5,7 +5,7 @@
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 2f1027c5b647..4f4e7c041888 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -364,7 +364,8 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 			if (res.a0) {
+ 				dev_err(dev, "Failed to set dram param: %ld\n",
+ 					res.a0);
+-				return -EINVAL;
++				ret = -EINVAL;
++				goto err_disable_edev;
+ 			}
+ 		}
+ 	}
+@@ -373,8 +374,10 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	if (node) {
+ 		data->regmap_pmu = syscon_node_to_regmap(node);
+ 		of_node_put(node);
+-		if (IS_ERR(data->regmap_pmu))
+-			return PTR_ERR(data->regmap_pmu);
++		if (IS_ERR(data->regmap_pmu)) {
++			ret = PTR_ERR(data->regmap_pmu);
++			goto err_disable_edev;
++		}
+ 	}
  
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
- thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
--					thermal_helpers.o
-+				   thermal_helpers.o
+ 	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+@@ -392,7 +395,8 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 		data->odt_dis_freq = data->timing.lpddr4_odt_dis_freq;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_disable_edev;
+ 	};
  
- # interface to/from other layers providing sensors
- thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
-@@ -25,11 +25,11 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
- thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+ 	arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, 0, 0,
+@@ -426,7 +430,8 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	 */
+ 	if (dev_pm_opp_of_add_table(dev)) {
+ 		dev_err(dev, "Invalid operating-points in device tree.\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_disable_edev;
+ 	}
  
- # devfreq cooling
--thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
-+thermal_sys-$(CONFIG_DEVFREQ_THERMAL)	+= devfreq_cooling.o
+ 	of_property_read_u32(np, "upthreshold",
+@@ -464,6 +469,8 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
  
- # platform thermal drivers
- obj-y				+= broadcom/
--obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
-+obj-$(CONFIG_THERMAL_MMIO)	+= thermal_mmio.o
- obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
- obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
- obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
-@@ -49,9 +49,9 @@ obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
- obj-y				+= st/
- obj-$(CONFIG_QCOM_TSENS)	+= qcom/
- obj-y				+= tegra/
--obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-+obj-$(CONFIG_HISI_THERMAL)	+= hisi_thermal.o
- obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
- obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
- obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
- obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
--obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-+obj-$(CONFIG_AMLOGIC_THERMAL)	+= amlogic_thermal.o
+ 	return 0;
+ 
++err_disable_edev:
++	devfreq_event_disable_edev(data->edev);
+ err_free_opp:
+ 	dev_pm_opp_of_remove_table(&pdev->dev);
+ 	return ret;
 -- 
 2.17.1
 
