@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4A3128F87
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Dec 2019 19:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407E1128F89
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Dec 2019 19:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbfLVSuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Dec 2019 13:50:39 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42610 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726048AbfLVSui (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Dec 2019 13:50:38 -0500
-Received: by mail-pg1-f193.google.com with SMTP id s64so7691303pgb.9;
-        Sun, 22 Dec 2019 10:50:38 -0800 (PST)
+        id S1726764AbfLVSul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Dec 2019 13:50:41 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37701 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726048AbfLVSul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Dec 2019 13:50:41 -0500
+Received: by mail-pg1-f194.google.com with SMTP id q127so7710116pga.4;
+        Sun, 22 Dec 2019 10:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1MMK/7Lq6Q5MHtrU9nSWhUsHgp2FaIobPnqB6i1bmvU=;
-        b=bnPRKiD/QwgUAYoz9VJpDVZ/p49jbueKzMRH23UoBCumqWMJaoMPQ6dZKsx2LUpLwd
-         6qLyEJnGymgKxrVXAQeUZyzLjfPstF428bDfW7u4w83ytM7jXae42VT7aKfH8v9Ojho9
-         ZSeJZpy8feXZePbc8zB0MwLGIxxFHWStinLBTA8nmHI456Nx8CLH5QDFlb6qaKkxsi/t
-         Ik/qjSa8zXDnH7xdgx+rQp5xifmJLeqiEKxY/Lg7e7u82xnxV7U9847OOQQ0ks/JX05+
-         5WxkfOP9ggtKlWEpQ4xuDMToMznSBf61l3CgigFqEoUnTL4tC7tWGNmrbXdOGihgMBOJ
-         kJaQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=UYJMcCSP2xqM3DCf7A/aaQtY9AM0A3U6ItqKBHen71c=;
+        b=VayjpuFUrgdgU4fvbiVH8S3vP3Kc8cakjFEBT0Zel7kuingvSZcvJD7Uqb4oH65Alc
+         ux5vVXmvdS0WecQgYoOET7cvNbt8w3n/m+lts3VNk60W3ubceku2WEvbTeHqILyAHZfD
+         FYAECI3LUY4btBcRcIiOCwfMlxBmnh7LY1Y9IAzQkKgX7n+5moSt17ntif6C8YlcUrcO
+         fvdESi+Ykpr14f083qpPWwKRXyVarWL7WspdirdvgF040RlnSb8BGYX50Sk8ziO9u5vv
+         wiPUicg9NF1+H1zBoDdNbTq9Xh1Z9oPDLK14ToGsC+Zcr+V96UBt8b/PvR/Xsnwjihko
+         st4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1MMK/7Lq6Q5MHtrU9nSWhUsHgp2FaIobPnqB6i1bmvU=;
-        b=RR/L2BCKk6FmmJam92YFG00oIAClCtloxxPF2mpUA0qANMlwAdXrhdxZZ6di76BW30
-         QY5E+j4rW98e8wlHo+d45MJ7mVoAVG46j8bPvJX2kv+VMlXGpBbt73bfqJvtVDjVQOOz
-         IimUa50HDgxiDZx/+4jB7VRbAXYqQjy9WA8qLLponoM6acG6DJmOjKYLfhn9DhVXddTD
-         UK1cZkiMnJf/rIIJm9E6WxOcqyEB7JTl4IBVSkGqA9lVXSM0ti3l88wjWYAIHmCKVS3M
-         74hA2IZ9q4zWxZJNMBYDbfFyKInflmqbI9+nPB5vCOFSejFaP/uEin/Qj/Xhtcs6oGg7
-         aJyA==
-X-Gm-Message-State: APjAAAW4P81dYvVWj1lXeYIl9clVh8VC3q4JT9r/zErEOv/Jqma3hZM4
-        jGhhCpMDAF5Vr/MDavqBWzc=
-X-Google-Smtp-Source: APXvYqylTRiXM3UuNPaW1PQbCJGvvGrSq2F3X2MYO9m7QdlL5O965z+77yHko+WYYeaRM/Y4Tq4vxQ==
-X-Received: by 2002:a65:4381:: with SMTP id m1mr27847656pgp.68.1577040637744;
-        Sun, 22 Dec 2019 10:50:37 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=UYJMcCSP2xqM3DCf7A/aaQtY9AM0A3U6ItqKBHen71c=;
+        b=AclHhQ9W99xmCtozfEQ60VQhLzWVN2+P1rNRygSkfc7pbAblbgOssZlZjnk5CPSuLv
+         +gi4uHcgtDjmGAvXIabMzSWardxws2rOl5zFnj8UX04WoHeIOdL+rX96zDGhQUkOWqAJ
+         SgUlMp+DOAE/W2q7yHc1LLb+lV1LuX+RBOEHZYd6XxJImVbkxE1wmowEON34OZLsCN9S
+         rEIU+vu1MFKn4U+HdHwnWKHMKYbA6g9gJAXNOhR++Knk5i47Qilmy8a4Q7xEJm6DhLO2
+         LDenKOl7qWtxpiwdr0a0QoxSd1pK88qkfFXI9VszaePX4uP4Qmux02qm2O0IhJhcxi8v
+         IWxg==
+X-Gm-Message-State: APjAAAUIglrzaCiZgzZcGo6Sm8GICb+nG2vwA96dySGliSUdcCw/vHyL
+        ioRAgc7Hf3pYQ/lIxFj+uDE=
+X-Google-Smtp-Source: APXvYqyrXDL6rPmdg4u1kOSJN24AutsewRcg7DL4++UhnjYbNwRfwWeVlRtWZJBYBtLD7vHFGdAtow==
+X-Received: by 2002:a63:9548:: with SMTP id t8mr26359191pgn.205.1577040640148;
+        Sun, 22 Dec 2019 10:50:40 -0800 (PST)
 Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
-        by smtp.gmail.com with ESMTPSA id t63sm21401643pfb.70.2019.12.22.10.50.36
+        by smtp.gmail.com with ESMTPSA id p17sm20557901pfn.31.2019.12.22.10.50.39
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 22 Dec 2019 10:50:37 -0800 (PST)
+        Sun, 22 Dec 2019 10:50:39 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     ssantosh@kernel.org, paul@crapouillou.net, matthias.bgg@gmail.com,
         rogerq@ti.com, tony@atomide.com, lukasz.luba@arm.com,
@@ -56,10 +57,12 @@ To:     ssantosh@kernel.org, paul@crapouillou.net, matthias.bgg@gmail.com,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org
 Cc:     Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH 1/9] memory: emif: convert to devm_platform_ioremap_resource
-Date:   Sun, 22 Dec 2019 18:50:26 +0000
-Message-Id: <20191222185034.4665-1-tiny.windzz@gmail.com>
+Subject: [PATCH 2/9] memory: jz4780_nemc: convert to devm_platform_ioremap_resource
+Date:   Sun, 22 Dec 2019 18:50:27 +0000
+Message-Id: <20191222185034.4665-2-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191222185034.4665-1-tiny.windzz@gmail.com>
+References: <20191222185034.4665-1-tiny.windzz@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -69,31 +72,31 @@ Use devm_platform_ioremap_resource() to simplify code.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/memory/emif.c | 4 +---
+ drivers/memory/jz4780-nemc.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
-index 9d9127bf2a59..9a8463716a54 100644
---- a/drivers/memory/emif.c
-+++ b/drivers/memory/emif.c
-@@ -1537,7 +1537,6 @@ static struct emif_data *__init_or_module get_device_details(
- static int __init_or_module emif_probe(struct platform_device *pdev)
+diff --git a/drivers/memory/jz4780-nemc.c b/drivers/memory/jz4780-nemc.c
+index b232ed279fc3..857a9fa5cba5 100644
+--- a/drivers/memory/jz4780-nemc.c
++++ b/drivers/memory/jz4780-nemc.c
+@@ -269,7 +269,6 @@ static int jz4780_nemc_probe(struct platform_device *pdev)
  {
- 	struct emif_data	*emif;
--	struct resource		*res;
- 	int			irq;
- 
- 	if (pdev->dev.of_node)
-@@ -1557,8 +1556,7 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
- 	emif->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, emif);
+ 	struct device *dev = &pdev->dev;
+ 	struct jz4780_nemc *nemc;
+-	struct resource *res;
+ 	struct device_node *child;
+ 	const __be32 *prop;
+ 	unsigned int bank;
+@@ -287,8 +286,7 @@ static int jz4780_nemc_probe(struct platform_device *pdev)
+ 	spin_lock_init(&nemc->lock);
+ 	nemc->dev = dev;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	emif->base = devm_ioremap_resource(emif->dev, res);
-+	emif->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(emif->base))
- 		goto error;
- 
+-	nemc->base = devm_ioremap_resource(dev, res);
++	nemc->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(nemc->base)) {
+ 		dev_err(dev, "failed to get I/O memory\n");
+ 		return PTR_ERR(nemc->base);
 -- 
 2.17.1
 
