@@ -2,101 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D491295A6
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 12:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8059E129641
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 14:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726679AbfLWLoj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Dec 2019 06:44:39 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:47076 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbfLWLoj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 06:44:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1577101475; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uVdlO9cJhU3uZR9PsalU+9sk35dl6Zqn8751jyDz6hE=;
-        b=jX9LJcjWIqPnnuyZly5BdZOoj2/inQqbVjiES4HFwhniV6JNaGO+ALAE433xhQmOf7hoHr
-        74R9G8HAr3LeKzr0sbxjFJVOggyg28MPxpD0DHH9YfttM3lvpC+gmVq6n3+Ac/2Iy0eHBk
-        VXMTWUiAs8EHGfFQgFmRp6lvylZSZUE=
-Date:   Mon, 23 Dec 2019 12:44:26 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 2/9] memory: jz4780_nemc: convert to
- devm_platform_ioremap_resource
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     ssantosh@kernel.org, matthias.bgg@gmail.com, rogerq@ti.com,
-        tony@atomide.com, lukasz.luba@arm.com, kgene@kernel.org,
-        krzk@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        allison@lohutok.net, tglx@linutronix.de, yong.wu@mediatek.com,
-        jroedel@suse.de, evgreen@chromium.org, rfontana@redhat.com,
-        digetx@gmail.com, pdeschrijver@nvidia.com, john@phrozen.org,
-        alexios.zavras@intel.com, sboyd@kernel.org,
-        kstewart@linuxfoundation.org, info@metux.net,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Message-Id: <1577101466.3.0@crapouillou.net>
-In-Reply-To: <20191222185034.4665-2-tiny.windzz@gmail.com>
-References: <20191222185034.4665-1-tiny.windzz@gmail.com>
-        <20191222185034.4665-2-tiny.windzz@gmail.com>
+        id S1726676AbfLWNHy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Dec 2019 08:07:54 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:34613 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbfLWNHy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 08:07:54 -0500
+Received: by mail-lf1-f65.google.com with SMTP id l18so4409015lfc.1;
+        Mon, 23 Dec 2019 05:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5eJH2So2Y3KqY/K1ixMNRpaPpKx0b38bhcNlkypecC0=;
+        b=N7FN0ncLXb065P3FN14ZDLucMWMpNKGbWPL84vdRLA17Kc3XtT8pnSKLjbseUPj918
+         b9yDdgKBeG55jltDFLk9cDzyCHWPNVXrw4qoKL0NK/RoO24MAp8q04nFdEJcZpgaT5BF
+         Q15J2JBVrmMrQx4zFr9FLZw/VeElcbpyV3hIkGOi1aH3of4W5V7Pz5pv99zVfEeU/F0K
+         SoqCCo4ejdPWZ5XPiDBHIxGsbm8jsgy1f4YZ0a2rDR8r1ttquMOBRfzWSCRjKNS9W/oB
+         PELHjv9r8rJchpunfS3Od1m02nbafGGlA5trUX/4PLKhVRONJM6uv5xUiPD//ox37mFL
+         dK4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5eJH2So2Y3KqY/K1ixMNRpaPpKx0b38bhcNlkypecC0=;
+        b=PWdt69KWzpEnD7AY/7sODWcRHrQjmvZQqUo9v3BCfB6qr7YNZvk+29EOm3Ua821tJ+
+         BE+CG8YXe1VVGx4DVPZli06E/rRWBmmnwsaAxsQZ1q5xtOeYGMTKVfQ1tmsa9NQRTy87
+         vQuEIQCuS1XP+lSHNQ7L43sgNayRHsqrRkOTgPbeaznDsnfADIDpq45myeI49hpL5F2f
+         yjvW73cZ63P8XXcYS/SeFSjXVyIoU363G60MdJ7Yt0EHX0ejCpAjW3cM5tYpHyUhvXsC
+         3wah0m5ZeFz/yKZxJ+QknTvg/tCMwJ5qBnPmvwEkElYfYYy5XBaJBZzCW11U4TjLykvl
+         FtFA==
+X-Gm-Message-State: APjAAAVvB1MMveyg0c/S7qajWwsCOm8QX/dEnxbxul/mgvRJvqaX4ssi
+        8/Ov7Gy+lrdjfOVWPfsLNz4FAomiyjRseJKc2Wo=
+X-Google-Smtp-Source: APXvYqx35NtG2msl9BoMH2SPDevhyYA9MZsbmqBAxBohTRg/NXhM9CHIaYC1N0ZR9f0Dh28z9OhNSEDQtt4irLWQGH0=
+X-Received: by 2002:ac2:4a89:: with SMTP id l9mr16617018lfp.121.1577106471345;
+ Mon, 23 Dec 2019 05:07:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <1576386975-7941-1-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <1576386975-7941-1-git-send-email-akinobu.mita@gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Mon, 23 Dec 2019 22:07:39 +0900
+Message-ID: <CAC5umygqpmb0s8zHC+TFEFffQmsU4N1hUs_XWGDLtqkJEccfBw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/12] add header file for kelvin to/from Celsius
+ conversion helpers
+To:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Andrew,
 
+Could you take a look at this series, and consider including into -mm tree?
 
-Le dim., d=E9c. 22, 2019 at 18:50, Yangtao Li <tiny.windzz@gmail.com> a=20
-=E9crit :
-> Use devm_platform_ioremap_resource() to simplify code.
->=20
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-
-> ---
->  drivers/memory/jz4780-nemc.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/memory/jz4780-nemc.c=20
-> b/drivers/memory/jz4780-nemc.c
-> index b232ed279fc3..857a9fa5cba5 100644
-> --- a/drivers/memory/jz4780-nemc.c
-> +++ b/drivers/memory/jz4780-nemc.c
-> @@ -269,7 +269,6 @@ static int jz4780_nemc_probe(struct=20
-> platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
->  	struct jz4780_nemc *nemc;
-> -	struct resource *res;
->  	struct device_node *child;
->  	const __be32 *prop;
->  	unsigned int bank;
-> @@ -287,8 +286,7 @@ static int jz4780_nemc_probe(struct=20
-> platform_device *pdev)
->  	spin_lock_init(&nemc->lock);
->  	nemc->dev =3D dev;
->=20
-> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	nemc->base =3D devm_ioremap_resource(dev, res);
-> +	nemc->base =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(nemc->base)) {
->  		dev_err(dev, "failed to get I/O memory\n");
->  		return PTR_ERR(nemc->base);
-> --
-> 2.17.1
->=20
-
-=
-
+2019=E5=B9=B412=E6=9C=8815=E6=97=A5(=E6=97=A5) 14:16 Akinobu Mita <akinobu.=
+mita@gmail.com>:
+>
+> There are several helper macros to convert kelvin to/from Celsius in
+> <linux/thermal.h> for thermal drivers.  These are useful for any other
+> drivers or subsystems, but it's odd to include <linux/thermal.h> just for
+> the helpers.
+>
+> This adds a new <linux/units.h> that provides the equivalent inline
+> functions for any drivers or subsystems, and switches all the users of
+> conversion helpers in <linux/thermal.h> to use <linux/units.h>
+> helpers.
