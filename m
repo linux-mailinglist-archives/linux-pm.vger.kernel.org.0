@@ -2,99 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C0312927B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 08:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D491295A6
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 12:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfLWHsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Dec 2019 02:48:15 -0500
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:43475 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfLWHsP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 02:48:15 -0500
-Received: by mail-qt1-f196.google.com with SMTP id d18so12034944qtj.10;
-        Sun, 22 Dec 2019 23:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2FJiERJq8seSOSllZH5YEQwwR1oj81w19nx1TE+EiOU=;
-        b=DLtTzH9MNQBe0QaZgTDVJi1ZZHB9hfP3crI9OK2Y0wAG9ltJOO/KTTAH+Ers5VFoWc
-         vCsPz/gxO1GKNLyLLT2INRzujN8gbcoLHi794Klpqqhrf5aUh9kCQY61m0q5FOMv7pWL
-         4vliKQtnC+QVtiSFA7lZB7mraLCi3TbUVbumJioSAWZ7wrBAgfD51yFr+0OHd3dwjbM/
-         DZ4+tTzwy+z3BJpGVwgr1o64tavDOeMuBwh2ciffMRDfutiy0CKnH+ZVPvj88ySgYG+d
-         RZNZDrRjJoo/WcNQcEakrBYwN8Hf2CiU3dsO6AQaY6jsuGIXeJEaWCt2UJfhc+75m/gW
-         tuSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2FJiERJq8seSOSllZH5YEQwwR1oj81w19nx1TE+EiOU=;
-        b=bSMSQfQ6VqjTE8YOte9Pb3Jwt7sHYpN+dpZjRnO+7KztDO0mnjF3mqpi7nWMMlrnnh
-         1oTetJ5+zk9TOnmJ0sCjsljnyFTCep3UcGchvpzYb7ilL8BZddmL9JHN9PB9RBonMI+I
-         w6m9NjfptDvyqfTOtFgJYSHlzvp2muqRTQfW6DPr89C6VOJ+J9v3KeA+lYQegvoxXsSX
-         aVIgy+YTXbphMISjkSM8O5azofxif8XR8cjiuUTWQbGlGfLsCtrnnYkuztwQ7NbRZ2QL
-         DydG2E8ytlDHU6oDl8KRCKMcInMqeRp/fHtTh+mokGM4/SKlTQbqwfXcjbQU8J80hc52
-         9nwQ==
-X-Gm-Message-State: APjAAAU92GSzLsuy3xdYJ3VTE+4JT9vV+PA4AcfYi3TY9pMRZS0aq8WU
-        2oDk/LqgEMOPqjVtgsCyz73En9Ian9uIL5n8V8k=
-X-Google-Smtp-Source: APXvYqyvf3vxurJvXfLOn2BfIE0NvTSP3CZXj/aOJrKdFo9xEcgZ7fdeYCMSQNPTYo8AeyffGkTIQU2xcVU6QMYEmyI=
-X-Received: by 2002:ac8:541a:: with SMTP id b26mr22512155qtq.276.1577087294188;
- Sun, 22 Dec 2019 23:48:14 -0800 (PST)
+        id S1726679AbfLWLoj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Dec 2019 06:44:39 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:47076 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbfLWLoj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 06:44:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1577101475; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uVdlO9cJhU3uZR9PsalU+9sk35dl6Zqn8751jyDz6hE=;
+        b=jX9LJcjWIqPnnuyZly5BdZOoj2/inQqbVjiES4HFwhniV6JNaGO+ALAE433xhQmOf7hoHr
+        74R9G8HAr3LeKzr0sbxjFJVOggyg28MPxpD0DHH9YfttM3lvpC+gmVq6n3+Ac/2Iy0eHBk
+        VXMTWUiAs8EHGfFQgFmRp6lvylZSZUE=
+Date:   Mon, 23 Dec 2019 12:44:26 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/9] memory: jz4780_nemc: convert to
+ devm_platform_ioremap_resource
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     ssantosh@kernel.org, matthias.bgg@gmail.com, rogerq@ti.com,
+        tony@atomide.com, lukasz.luba@arm.com, kgene@kernel.org,
+        krzk@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        allison@lohutok.net, tglx@linutronix.de, yong.wu@mediatek.com,
+        jroedel@suse.de, evgreen@chromium.org, rfontana@redhat.com,
+        digetx@gmail.com, pdeschrijver@nvidia.com, john@phrozen.org,
+        alexios.zavras@intel.com, sboyd@kernel.org,
+        kstewart@linuxfoundation.org, info@metux.net,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Message-Id: <1577101466.3.0@crapouillou.net>
+In-Reply-To: <20191222185034.4665-2-tiny.windzz@gmail.com>
+References: <20191222185034.4665-1-tiny.windzz@gmail.com>
+        <20191222185034.4665-2-tiny.windzz@gmail.com>
 MIME-Version: 1.0
-References: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
- <dd3303a956e7dd5c065ac2b92b1dea7ee5d1df17.1575978484.git.baolin.wang7@gmail.com>
- <CADBw62o3vW_hdFwcMdQFJqx2HpNhCEHOxADQO9LztzpqCVQBpg@mail.gmail.com> <547d91fa-66c5-e3bb-4028-2578f070695c@linaro.org>
-In-Reply-To: <547d91fa-66c5-e3bb-4028-2578f070695c@linaro.org>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Mon, 23 Dec 2019 15:48:02 +0800
-Message-ID: <CADBw62pcYZ_GR1OrS3VG-Y1T8CYOcL4pRzTwBt6of4ZmzhhNng@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: sprd: Add Spreadtrum thermal driver support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>, freeman.liu@unisoc.com,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi,
 
-On Mon, Dec 23, 2019 at 3:42 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Baolin,
->
-> On 23/12/2019 07:31, Baolin Wang wrote:
-> > Hi Rui and Daniel,
-> >
-> > On Tue, Dec 10, 2019 at 8:08 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
-> >>
-> >> From: Freeman Liu <freeman.liu@unisoc.com>
-> >>
-> >> This patch adds the support for Spreadtrum thermal sensor controller,
-> >> which can support maximum 8 sensors.
-> >>
-> >> Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
-> >> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
-> >> ---
-> >> Changes from v1:
-> >>  - None.
-> >> ---
-> >
-> > Any comments for this patch? Thanks.
->
-> as it is a new driver, it takes a bit more time for the review.
 
-Sure, thanks.
+Le dim., d=E9c. 22, 2019 at 18:50, Yangtao Li <tiny.windzz@gmail.com> a=20
+=E9crit :
+> Use devm_platform_ioremap_resource() to simplify code.
+>=20
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 
->
-> By the way, is there any open documentation for the hardware?
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-Unfortunately, our company did not supply public documentation for
-thermal until now.
+Cheers,
+-Paul
+
+
+> ---
+>  drivers/memory/jz4780-nemc.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/memory/jz4780-nemc.c=20
+> b/drivers/memory/jz4780-nemc.c
+> index b232ed279fc3..857a9fa5cba5 100644
+> --- a/drivers/memory/jz4780-nemc.c
+> +++ b/drivers/memory/jz4780-nemc.c
+> @@ -269,7 +269,6 @@ static int jz4780_nemc_probe(struct=20
+> platform_device *pdev)
+>  {
+>  	struct device *dev =3D &pdev->dev;
+>  	struct jz4780_nemc *nemc;
+> -	struct resource *res;
+>  	struct device_node *child;
+>  	const __be32 *prop;
+>  	unsigned int bank;
+> @@ -287,8 +286,7 @@ static int jz4780_nemc_probe(struct=20
+> platform_device *pdev)
+>  	spin_lock_init(&nemc->lock);
+>  	nemc->dev =3D dev;
+>=20
+> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	nemc->base =3D devm_ioremap_resource(dev, res);
+> +	nemc->base =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(nemc->base)) {
+>  		dev_err(dev, "failed to get I/O memory\n");
+>  		return PTR_ERR(nemc->base);
+> --
+> 2.17.1
+>=20
+
+=
+
