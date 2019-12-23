@@ -2,165 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBB7129250
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 08:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C30129272
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 08:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbfLWHm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Dec 2019 02:42:28 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44830 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbfLWHm2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 02:42:28 -0500
-Received: by mail-wr1-f66.google.com with SMTP id q10so15603925wrm.11
-        for <linux-pm@vger.kernel.org>; Sun, 22 Dec 2019 23:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B7MhgklmZCrPbbqS/pKVyP354ExcRksnV1dKdfpxX5I=;
-        b=H0AEK2BZ/sYN7YxLoJV2Qe1/OGh/22gwgDyFDoMnIOzIXmR7Q3HA9WyLcQrLJmsWay
-         GdiUo8VXNKs/05lzozP8LDVai17iGjuGbPv5ycfSnYU3bzk1CkX8gQ7SM+Iz/s8fAf7f
-         x8fNjpUw6BIQNZXT3+pQ1o3FmQ5WihCgTfGuTcIHLZhOFK+mvLiOcmuFm3GKHcCZPFXm
-         eDpvzZaer7iW5/2koabOR0uKdrRSjCaPnA5PEBfyw1g8um7s0dXVgb8+/egox0GPZCbQ
-         u7PYI89a5OelvI59Dzx+bNF8mS8AiHPD8ApCF84rKgOimJI9jXXrJFpyyjaa1tZ0M3Ip
-         xLDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=B7MhgklmZCrPbbqS/pKVyP354ExcRksnV1dKdfpxX5I=;
-        b=Xsa/0+1/5+bKWD/xuztHkQjKVMNq2UyEkzkcWV3KylNKNUDFOgPIAZIcYAdWV9i+iF
-         aEC3WnqPO6HTucF9Rt4BSJA6rWK5jR3zfaPu4p005Z+0v0l2Woa9HjE/ReeMbMmxdGur
-         2gdg7C+iqX9jQC7Js5bTWbo59aIZoHCSRA6wKCyYqrvbZeeaFsu2GD0D00rqOc4CkCaH
-         pvlEG6ivE/lBGuODmyKyzdBH8UKMYP7+FkJbXe9NAqDbTw9xvU4JkMC5dYeHckpezlI5
-         85cYHP59ryUF06AhUxbqFHxpRQmdDG6dmhT0tJMLJ5KtnH9R3BrxPkcUWX6iZ5sBOXmG
-         LuLQ==
-X-Gm-Message-State: APjAAAWHUJnUpJiLPdChALhf9VcwQS7c0eM2uLwKoH+4U1tH9CV4h9Z+
-        IxRkQw4NSHpkzWaVU5n/CEC6RA==
-X-Google-Smtp-Source: APXvYqxtfO4cE2U4uyPvbdPNLIBNI662rU1jPVd3Vx1sJSagG1BRMpEBRFNIuErzxRzuBsph8f1AhA==
-X-Received: by 2002:a5d:6284:: with SMTP id k4mr28131008wru.398.1577086945356;
-        Sun, 22 Dec 2019 23:42:25 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ed50:970:f4f3:dfc0? ([2a01:e34:ed2f:f020:ed50:970:f4f3:dfc0])
-        by smtp.googlemail.com with ESMTPSA id z124sm12765994wmc.20.2019.12.22.23.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Dec 2019 23:42:24 -0800 (PST)
-Subject: Re: [PATCH v2 2/2] thermal: sprd: Add Spreadtrum thermal driver
- support
-To:     Baolin Wang <baolin.wang7@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, amit.kucheria@verdurent.com,
-        robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>, freeman.liu@unisoc.com,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
- <dd3303a956e7dd5c065ac2b92b1dea7ee5d1df17.1575978484.git.baolin.wang7@gmail.com>
- <CADBw62o3vW_hdFwcMdQFJqx2HpNhCEHOxADQO9LztzpqCVQBpg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <547d91fa-66c5-e3bb-4028-2578f070695c@linaro.org>
-Date:   Mon, 23 Dec 2019 08:42:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1725855AbfLWHr1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Dec 2019 02:47:27 -0500
+Received: from cmta18.telus.net ([209.171.16.91]:52828 "EHLO cmta18.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725810AbfLWHr0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Dec 2019 02:47:26 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id jIQvigyuAgu2QjIQwi7ZIf; Mon, 23 Dec 2019 00:47:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1577087243; bh=Jwgvbo2U0qvOJ93hl0IUKtykoHW9JqN+wX2qOdwH8Ck=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=atoawWD3g1EFWdhUpjQlAmMEY/KZtDoP8PpeV3CEt9cunTw+2c/m/I+LR/7SRpibc
+         Oe590VVc6I65pPMg4L5fGmU7v0uy8gdfwC2RRdJ9jvPUrgWcv21fQSR+wGPI6CWcuk
+         4ooI6SS2h7NJpXrNjW0/o8eCY9EwWlEFMCo/kFsFtihuDTQMG+xYIubdLYh0R5e/T2
+         jDSp/2au70uyLNxSVN3mniNmUF+FxjLCiB4Pq5D/2ErmlMFlhZYtK9GE+nymRRZPkN
+         RO+yuRJ2cS2bVVa71xBHkRFp2QPDRV3K3jTQKwQ5vF7SYyyVsP1UAQ0EZzpLQzxAAJ
+         Z8duWUVl+cu4w==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=QIcWuTDL c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=FGbulvE0AAAA:8 a=97DWnaIJ-xXPV0tYBjcA:9
+ a=yO5PLp8mKzlI0jgp:21 a=qNIUBZJt_dAcIzSL:21 a=QEXdDO2ut3YA:10
+ a=-iX3Hlif3BsA:10 a=svzTaB3SJmTkU8mK-ULk:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Qais Yousef'" <qais.yousef@arm.com>
+Cc:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>, <x86@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Mel Gorman'" <mgorman@techsingularity.net>,
+        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Paul Turner'" <pjt@google.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Quentin Perret'" <qperret@qperret.net>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+References: <20191113124654.18122-1-ggherdovich@suse.cz> <20191113124654.18122-2-ggherdovich@suse.cz> <000001d5a29b$c944fd70$5bcef850$@net> <1574697961.16378.5.camel@suse.cz> <000801d5a41e$a7fce2c0$f7f6a840$@net> <1574781600.7677.2.camel@suse.cz> <001d01d5a4f4$d96b21b0$8c416510$@net> <003d01d5a63d$f6ab3950$e401abf0$@net> <20191219104813.6fr34qavpaplecoz@e107158-lin>
+In-Reply-To: <20191219104813.6fr34qavpaplecoz@e107158-lin>
+Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+Date:   Sun, 22 Dec 2019 23:47:16 -0800
+Message-ID: <000701d5b965$361b6c60$a2524520$@net>
 MIME-Version: 1.0
-In-Reply-To: <CADBw62o3vW_hdFwcMdQFJqx2HpNhCEHOxADQO9LztzpqCVQBpg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdW2WdRzAEmdSsEeRaWFEpFfJzpcegCu7A3A
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfICamaUgJKJFZSB+OEa/gIupSuooeItkWqTX/mXcvgwl9Vor4lT+ktWAAnKSVdOszOWIGi+kvwAiXh9IEG0SfqUdaCCWk2OpbvhC7GhJCcPP3mZ0wRiU
+ wp1w4KrqJJZux1Ey5DL1eDUrBFWwqZAcqNoXfafZuPHTUVwxOvTAvLEMv5EdDWB9YtuPHmU0eY4tI02BF78SW0W5SD5IcIilynhutfx6IeI3Q0M4z5nUJxxM
+ 1kom94wEYZCecwqDTsgJV+dapMLxuHR5zG2TBCWj1NzSrxaj13r8b1Sfpa2aQUZ4wJmcPU1NXXph1OyMfaUOhLcTrUZvdki9Oi3bJpex//CPXGAG0eHTiVmv
+ zh0PspgrmBcFpEtVTPk2pjjol3MDbr9aL8p+UyXZcHzrdrht0DdAiWEw21xJMi8qpJFTDigw80NCdSeQrE3vzZi69TGJJap9Nn/9Ezl8ZbUpXY5OkNw84nCQ
+ kkT+uLXNYs81INW7/rk1it62teIZ3yDiRvv8AkldwKFbxCMhUcak6V8gShhmjTAZDAkz+rISMK/h/Q8NhFs3oAJL0emHmbbJG+UVeXqEeMvl32fuAKFqiwOp
+ 3WfoEMHNjd2Ag3QJg2BL9kW8TtVF6dE38Uh3QCQvUDKsPBE+8vsq2cmRpNBAaUCUkJAMNKkclsyrJZ6UWT1CohEyOXtmHwDall8pStgojjzgfvgZFP7kGmmg
+ 636okUVg/I1E0owN80OQ4IlRpPLN5ii0UybRoqlfa7ceSVK/AxNMc6HvdB0zfghUwrSWH2isJ2A=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Qais,
 
-Hi Baolin,
+Thank you for your follow up.
 
-On 23/12/2019 07:31, Baolin Wang wrote:
-> Hi Rui and Daniel,
-> 
-> On Tue, Dec 10, 2019 at 8:08 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
->>
->> From: Freeman Liu <freeman.liu@unisoc.com>
->>
->> This patch adds the support for Spreadtrum thermal sensor controller,
->> which can support maximum 8 sensors.
->>
->> Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
->> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
->> ---
->> Changes from v1:
->>  - None.
->> ---
-> 
-> Any comments for this patch? Thanks.
+On 2019.12.19 02:48 Qais Yousef wrote:
+> On 11/28/19 14:48, Doug Smythies wrote:
+>> Summary: There never was an issue here.
+>> 
+>> Sorry for the noise of this thread, and the resulting waste of time.
+>> 
+>> On 2019.11.26 23:33 Doug Smythies wrote:
+>>> On 2019.11.26 07:20 Giovanni Gherdovich wrote:
+>>>> On Mon, 2019-11-25 at 21:59 -0800, Doug Smythies wrote:
+>>>>> [...]
+>>>>> The issue with the schedutil governor not working properly in the 5.4 RC series
+>>>>> appears to be hardware dependant.
+>> 
+>> No it 's not.
+>> 
+>> Issues with my Sandy Bridge, i7-2600K, test computer and kernel 5.4
+>> seem to be because it is running an older Ubuntu server version,
+>> apparently somewhat dependant on cgroup V1 and their cgmanager package.
+>> I am unable to remove the package to test further because I do use VMs
+>> that seem to depend on it.
+>> 
+>> In the kernel configuration when CONFIG_UCLAMP_TASK_GROUP=y
+>> the computer behaves as though the new parameter "cpu.uclamp.min"
+>> is set to max rather than 0, but I can not prove it.
+>
+> I just noticed this. This option shouldn't cause any problem, if it does there
+> might be a bug that we need to fix.
+>
+> So cpu.uclamp.min reads 0 but you think it's not taking effect, correct?
 
-as it is a new driver, it takes a bit more time for the review.
+Actually, on the i7-2600K older distro test computer, I couldn't find
+cpu.uclamp.min to read its setting. However, yes the behaviour of the governor
+was as though that value was set to maximum (read on).
 
-By the way, is there any open documentation for the hardware?
+>
+> In the quotes above I see 5.4 RC, if you haven't tried this against the final
+> 5.4 release, do you mind trying to see if you can reproduce? Trying 5.5-rc2
+> would be helpful too if 5.4 fails.
 
-Thanks
+My test setup and baseline distribution versions have changed since November,
+when I did those tests. However, I was able to rig up a bootable old ssd
+and was able to reproduce the issue with kernel 5.5-rc2. More importantly,
+I was to reproduce the issue with the current i7-2600K test computer
+(Ubuntu server 20.04 development, upgraded version) and kernel 5.5-rc2.
+Note that I have access to another i5-9600K based test computer (Ubuntu
+server 20.04 development, fresh install), that does not show this issue.
 
-  -- Daniel
+Detail:
 
+If formatting gets messed up in this e-mail, then the content,
+and links to more details, is also here:
+http://www.smythies.com/~doug/linux/single-threaded/k54regression/qais.html
 
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+CPU frequency scaling driver: intel_pstate, in passive (intel-cpufreq) mode.
+CPU frequency scaling governor: various.
+CPU Idle driver: intel_idle; Governor: teo.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+kernels ("stock", "notset" and "nocgv1"):
+stock: CONFIG_UCLAMP_TASK_GROUP=y
+notset: # CONFIG_UCLAMP_TASK_GROUP is not set
+nocgv1: is "stock" booted with "cgroup_no_v1=all" on the grub kernel command line.
+
+Linux s15 5.5.0-rc2-stock #768 SMP PREEMPT Fri Dec 20 16:19:44 PST 2019 x86_64 x86_64 x86_64 GNU/Linux
+Linux s18 5.5.0-rc2-notset #769 SMP PREEMPT Fri Dec 20 18:43:59 PST 2019 x86_64 x86_64 x86_64 GNU/Linux
+
+kernel configuration differences:
+
+doug@s15:~/temp-k-git/linux$ scripts/diffconfig /boot/config-5.5.0-rc2-stock /boot/config-5.5.0-rc2-notset
+ UCLAMP_TASK_GROUP y -> n
+doug@s15:~/temp-k-git/linux$
+
+Test methods used herein are greatly sped up, by switching
+to just a couple of PID per seconds samples, instead of
+a great many. Also disk I/O is not used, eliminating any
+access time related non-repeatability, and saving thrashing
+my SSD. Note that several governors had CPU frequency variations
+with time, resulting in variability in the PIDs per second number.
+
+There are two tests, the performance metric being
+the number of PIDs per second consumed:
+
+test 1:
+
+Dountil terminated:
+   launch a null program (uses a new PID per call).
+   Wait for it to finish
+Enduntil
+
+test 2:
+
+Dountil terminated:
+   launch a program with a package of work to do (uses a new PID per call).
+   Wait for it to finish
+Enduntil
+
+The assumed fastest and master reference test run is using the performance governor
+and forcing CPU affinity. All other calculations are relative to this result.
+
+Results:
+
+i7-2600K computer booted with Ubuntu server 16.04.6, test 1 only:
+
+Governor	kernel
+		notset	stock			notset
+		PID/S ratio	PID/S ratio		PID/S ratio
+schedutil	1650 2.4	3935 1.0 FAIL	1645 2.4
+ondemand	2787 1.4	2787 1.4		2787 1.4
+performance	3925 1.0	3940 1.0		3940 1.0
+conservative2545 1.5	2540 1.5		2530 1.6
+powersave	1645 2.4	1655 2.4		1650 2.4
+reference	3934 1.0	3917 1.0		3950 1.0
+
+i7-2600K computer booted with Ubuntu server 20.04 dev, test 1:
+
+Governor	kernel
+		stock			notset		stock		notset	nocgv1
+		PID/S ratio		PID/S ratio	PID/S ratio		PID/S ratio	PID/S ratio
+schedutil	3310 1.1 FAIL	1455 2.4	3250 1.1 FAIL	1465 2.4	3220 1.1 FAIL
+ondemand	2510 1.4		2485 1.4	2495 1.4		2490 1.4	2460 1.4
+performance	3333 1.1		3254 1.1	3250 1.1		3360 1.0	3220 1.1
+conservative2230 1.6		2260 1.5	2280 1.5		2220 1.6	2230 1.6
+powersave	1470 2.4		1455 2.4	1460 2.4		1470 2.4	1450 2.4
+reference	3521 1.0		3500 1.0	3526 1.0		3500 1.0	3500 1.0
+
+i7-2600K computer booted with Ubuntu server 20.04 dev, test 2:
+
+Governor	kernel
+		stock			notset		nocgv1
+		PID/S ratio		PID/S ratio	PID/S ratio
+schedutil	405 1.1 FAIL	177 2.4		405 1.1 FAIL
+ondemand	371 1.1		371 1.1		371 1.1
+performance	408 1.0		405 1.0		405 1.0
+conservative362 1.2		365 1.2		365 1.2
+powersave	177 2.4		177 2.4		177 2.4
+reference	423 1.0		423 1.0		423 1.0
+
+The "nocgv1" (cgroup_no_v1=all) kernel is of particular interest because
+now uclamp variables are available:
+
+root@s15:/sys/fs/cgroup/user.slice# echo "+cpu" > cgroup.subtree_control
+root@s15:/sys/fs/cgroup/user.slice# cat cgroup.subtree_control
+cpu memory pids
+root@s15:/sys/fs/cgroup/user.slice# grep . cpu\.uclamp*
+cpu.uclamp.max:max
+cpu.uclamp.min:0.00
+
+This is repeatable:
+To make the schedutil governor respond as expected thereafter
+and until the next re-boot, do this:
+
+# echo 0 > cpu.uclamp.min
+
+Attempts to kick the schedutil governor response via
+/sys/devices/system/cpu/intel_pstate/max_perf_pct and
+/sys/devices/system/cpu/intel_pstate/min_perf_pct didn't.
+Other modifications of the cpu.uclamp.min and max variables also
+kick the schedutil governor out of whatever state it was in.
+
+This test was done 5 times:
+
+Re-boot to the nocgv1 (stock + cgroup_no_v1=all) kernel.
+set the schedutil governor.
+launch test 2 and related monitoring tools.
+verify performance governor like behavior.
+echo 0 > /sys/fs/cgroup/user.slice/cpu.uclamp.min 
+verify schedutil governor like behaviour.
+
+... Doug
+
 
