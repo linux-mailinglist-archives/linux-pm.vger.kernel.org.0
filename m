@@ -2,82 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73496129A54
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 20:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C14129B4A
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 22:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfLWTT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Dec 2019 14:19:26 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42588 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726787AbfLWTT0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Dec 2019 14:19:26 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 4so9615555pfz.9;
-        Mon, 23 Dec 2019 11:19:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=4psQtWa90JQilxXsmGId8ARflofhAVS5Nu5SDmjn/4g=;
-        b=cdxjrTgxNE4436krgq5tzOVmG2nYo+ZXj9106NQMnj/n7qcx0yGRnpiPPSV0NMwTMz
-         8QGY/kv3u/vbc7/dILKMb3h1h0l7xBmgZSNRucKj5D//JpIcyel9Ztjcv2I4o9LI8+PI
-         bPmw5aV9lS+Gh80O2TFL/0FxwoP/zJA57WaNbDC72FndUeiEuHQGo6FtHCOTyCm5vyyI
-         GDUjzD7nrEij04BTpH18qWhML9jhKQTqPRWx6h2yQ96TZQKINLJpfv6m53860V14vBjB
-         k9Xqmxcl4c8MdibdpKSUXCoa/GvwHKTbdT9eP78OgM7j2ZAUBIrvTkq6dtXHIcs7Ld2z
-         qW0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4psQtWa90JQilxXsmGId8ARflofhAVS5Nu5SDmjn/4g=;
-        b=sR5CsmxqHHRp4Vpm2hDXHPjfTnR/s8sZeimimmEUkJmYMxHk/kMNOeBUIoDARHy1T0
-         eR6xercH8I+EWDvs5Ny4NYxRbitwLlNv/ecLW2j83ufBZ8U/ien06Wj8X3YwCmSsgpui
-         uz9GOfM+sUPpZbyKma3bogLoXUlOJa6bZzVuBZ8x/+YJM51NSA24yp3ZOIyvXJb74Y+1
-         UXSj1l9YChXj95XQvPxntVl/9zQnYNYjQoifZAcuiumpXI1dqzyVpRiG3yx4nfFA9FPk
-         zo3v6FLVTNKLkWj1eo9GsxB+AmmHlQ5CU2Kh7pUvz68SDkZjesQ9CDH4d6IqMOUJPke2
-         bvCg==
-X-Gm-Message-State: APjAAAXK8RN1agJHQMo0NLcgagueWP/89sqJc/QHnoKSFlpjHN9rnOlP
-        qfRKA8+Ko/XHkgFS53TrIFo=
-X-Google-Smtp-Source: APXvYqxJoI9edkamQRQwobrhpyZtT7J3qbiDFkybKTc/HflCC2LJMWXBcj1bU3zoVC3UyW+JX9lxKw==
-X-Received: by 2002:a63:7b44:: with SMTP id k4mr32966608pgn.140.1577128765493;
-        Mon, 23 Dec 2019 11:19:25 -0800 (PST)
-Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
-        by smtp.gmail.com with ESMTPSA id h7sm27175292pfq.36.2019.12.23.11.19.24
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Dec 2019 11:19:24 -0800 (PST)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, kgene@kernel.org, krzk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH] PM / devfreq: exynos-bus: Add error log when get event fails
-Date:   Mon, 23 Dec 2019 19:19:23 +0000
-Message-Id: <20191223191923.10450-1-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726833AbfLWVvA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Dec 2019 16:51:00 -0500
+Received: from mail.sig21.net ([80.244.240.74]:45610 "EHLO mail.sig21.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726817AbfLWVvA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Dec 2019 16:51:00 -0500
+X-Greylist: delayed 2252 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Dec 2019 16:50:58 EST
+Received: from localhorst ([127.0.0.1])
+         by mail.sig21.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+         (Exim 4.84_2)
+        (envelope-from <js@sig21.net>)
+         id 1ijV0u-0001NK-V1 ; Mon, 23 Dec 2019 22:13:24 +0100
+Received: from js by abc.local with local (Exim 4.93)
+        (envelope-from <js@sig21.net>)
+        id 1ijV0n-0001I3-5o; Mon, 23 Dec 2019 22:13:09 +0100
+Date:   Mon, 23 Dec 2019 22:13:09 +0100
+From:   Johannes Stezenbach <js@sig21.net>
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexander Potapenko <glider@google.com>
+Subject: init_on_free breaks hibernate
+Message-ID: <20191223211309.GA4609@sig21.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-21-Score: -2.9 (--)
+X-Spam-21-Report: No, score=-2.9 required=8.0 tests=ALL_TRUSTED=-1,BAYES_00=-1.9 autolearn=ham autolearn_force=no
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Adding an error log makes it easier to trace the function's error path.
-Because the error code may be rewritten on return, print error code here.
+Hi,
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
----
- drivers/devfreq/exynos-bus.c | 2 ++
- 1 file changed, 2 insertions(+)
+I upgraded the kernel on one of my machines to 5.3.18 (from 5.2.x)
+and found it failed after resume from hibernate due to what seemed
+to be memory corruption. I had a hunch it could be related to
+CONFIG_INIT_ON_ALLOC_DEFAULT_ON or CONFIG_INIT_ON_FREE_DEFAULT_ON,
+and a quick web search found this which seems to confirm:
+https://bbs.archlinux.org/viewtopic.php?pid=1877845#p1877845
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 948e9340f91c..634d63fd00ea 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -126,6 +126,8 @@ static int exynos_bus_get_dev_status(struct device *dev,
- 
- 	ret = exynos_bus_get_event(bus, &edata);
- 	if (ret < 0) {
-+		dev_err(dev, "failed to get event from devfreq-event devices %d\n",
-+			ret);
- 		stat->total_time = stat->busy_time = 0;
- 		goto err;
- 	}
--- 
-2.17.1
+I rebuilt the kernel with CONFIG_INIT_ON_FREE_DEFAULT_ON disabled,
+and hibernate works again.  I'm fine with this workaround and
+just wanted to share this information.
 
+The commit that introduces CONFIG_INIT_ON_FREE_DEFAULT_ON:
+6471384af2a6 mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options
+
+FWIW, these errors made it into /var/log/kern.log after resume before
+I had to press the reset button:
+
+
+[ 3358.077382][ T6925] PM: hibernation exit
+[ 3358.079444][ T7273] date[7273]: segfault at 9 ip 00007f140fac0fae sp 00007ffef896b1d0 error 6 in ld-2.29.so[7f140fabf000+1e000]
+[ 3358.079462][ T7273] Code: 74 17 48 83 f8 22 77 d3 48 89 14 c1 48 8b 42 10 48 83 c2 10 48 85 c0 75 e9 49 8b 07 48 85 c0 74 71 49 8b 57 60 48 85 d2 74 04 <48> 01 42 08 49 8b 57 58 48 85 d2 74 04 48 01 42 08 49 8b 57 68 48
+[ 3358.082454][ T2290] BUG: unable to handle page fault for address: ffffee07c6b58028
+[ 3358.082463][ T2290] #PF: supervisor read access in kernel mode
+[ 3358.082467][ T2290] #PF: error_code(0x0000) - not-present page
+[ 3358.082470][ T2290] PGD 0 P4D 0 
+[ 3358.082476][ T2290] Oops: 0000 [#1] PREEMPT SMP PTI
+[ 3358.082481][ T2290] CPU: 3 PID: 2290 Comm: systemd-udevd Not tainted 5.3.18 #1
+[ 3358.082484][ T2290] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
+[ 3358.082491][ T2290] RIP: 0010:copy_page_range+0x412/0xae0
+[ 3358.082496][ T2290] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
+[ 3358.082499][ T2290] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
+[ 3358.082504][ T2290] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
+[ 3358.082507][ T2290] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
+[ 3358.082510][ T2290] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
+[ 3358.082513][ T2290] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3358.082516][ T2290] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
+[ 3358.082520][ T2290] FS:  00007fd608a51880(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
+[ 3358.082523][ T2290] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3358.082527][ T2290] CR2: ffffee07c6b58028 CR3: 00000002142a0002 CR4: 00000000001606e0
+[ 3358.082530][ T2290] Call Trace:
+[ 3358.082538][ T2290]  ? sched_clock_cpu+0x10/0xd0
+[ 3358.082556][ T2290]  dup_mm+0x3b1/0x500
+[ 3358.082566][ T2290]  copy_process+0x1920/0x1e10
+[ 3358.082577][ T2290]  _do_fork+0x74/0x450
+[ 3358.082584][ T2290]  ? __set_current_blocked+0x2b/0x50
+[ 3358.082590][ T2290]  ? sched_clock+0x5/0x10
+[ 3358.082594][ T2290]  ? sched_clock_cpu+0x10/0xd0
+[ 3358.082598][ T2290]  ? sigprocmask+0x72/0xa0
+[ 3358.082604][ T2290]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3358.082608][ T2290]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3358.082613][ T2290]  __se_sys_clone+0x6b/0x90
+[ 3358.082622][ T2290]  do_syscall_64+0x50/0x120
+[ 3358.082626][ T2290]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[ 3358.082631][ T2290] RIP: 0033:0x7fd608f90c50
+[ 3358.082635][ T2290] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
+[ 3358.082638][ T2290] RSP: 002b:00007ffc75fc5ab0 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+[ 3358.082642][ T2290] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fd608f90c50
+[ 3358.082645][ T2290] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+[ 3358.082648][ T2290] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007fd608a51880
+[ 3358.082652][ T2290] R10: 00007fd608a51b50 R11: 0000000000000246 R12: 0000000000000000
+[ 3358.082655][ T2290] R13: 0000000000000000 R14: 0000000000000000 R15: 00007ffc75fc5b00
+[ 3358.082664][ T2290] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
+[ 3358.082679][ T2290] CR2: ffffee07c6b58028
+[ 3358.082684][ T2290] ---[ end trace 132618ad38ffc1cb ]---
+[ 3358.082689][ T2290] RIP: 0010:copy_page_range+0x412/0xae0
+[ 3358.082692][ T2290] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
+[ 3358.082696][ T2290] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
+[ 3358.082699][ T2290] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
+[ 3358.082703][ T2290] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
+[ 3358.082706][ T2290] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
+[ 3358.082708][ T2290] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3358.082711][ T2290] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
+[ 3358.082715][ T2290] FS:  00007fd608a51880(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
+[ 3358.082718][ T2290] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3358.082721][ T2290] CR2: ffffee07c6b58028 CR3: 00000002142a0002 CR4: 00000000001606e0
+[ 3362.924200][ T3635] general protection fault: 0000 [#2] PREEMPT SMP PTI
+[ 3362.924210][ T3635] CPU: 3 PID: 3635 Comm: xscreensaver Tainted: G      D           5.3.18 #1
+[ 3362.924213][ T3635] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
+[ 3362.924222][ T3635] RIP: 0010:copy_page_range+0x3ba/0xae0
+[ 3362.924226][ T3635] Code: 83 e0 fb 48 83 f8 63 0f 85 a3 05 00 00 48 8b 44 24 38 48 c7 84 24 f8 00 00 00 00 00 00 00 48 c7 84 24 00 01 00 00 00 00 00 00 <48> 8b 10 48 f7 c2 9f ff ff ff 0f 84 9c 03 00 00 48 b9 00 f0 ff ff
+[ 3362.924230][ T3635] RSP: 0018:ffffb52f003d7bc0 EFLAGS: 00010246
+[ 3362.924234][ T3635] RAX: 000f9c8d3c0daf28 RBX: ffff9c8f9290c528 RCX: 0000000191c80067
+[ 3362.924238][ T3635] RDX: fff0000000000fff RSI: 000ffffffffff000 RDI: ffff9c8f9434ef28
+[ 3362.924241][ T3635] RBP: ffff9c8f91698d00 R08: 0000000000000001 R09: 0000000000000000
+[ 3362.924244][ T3635] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3362.924247][ T3635] R13: 00007f297cb60000 R14: 0000000000000000 R15: 00007f297cb60000
+[ 3362.924250][ T3635] FS:  00007f297d20b7c0(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
+[ 3362.924254][ T3635] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3362.924257][ T3635] CR2: 00007fe8b5d67000 CR3: 0000000214352005 CR4: 00000000001606e0
+[ 3362.924260][ T3635] Call Trace:
+[ 3362.924281][ T3635]  dup_mm+0x3b1/0x500
+[ 3362.924290][ T3635]  copy_process+0x1920/0x1e10
+[ 3362.924301][ T3635]  _do_fork+0x74/0x450
+[ 3362.924308][ T3635]  ? preempt_count_sub+0xa1/0xe0
+[ 3362.924315][ T3635]  ? _raw_spin_unlock_irq+0x34/0x50
+[ 3362.924319][ T3635]  ? do_sigaction+0xf2/0x240
+[ 3362.924324][ T3635]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3362.924328][ T3635]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3362.924334][ T3635]  __se_sys_clone+0x6b/0x90
+[ 3362.924342][ T3635]  do_syscall_64+0x50/0x120
+[ 3362.924346][ T3635]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[ 3362.924351][ T3635] RIP: 0033:0x7f297d763c50
+[ 3362.924355][ T3635] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
+[ 3362.924358][ T3635] RSP: 002b:00007ffd29757910 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+[ 3362.924363][ T3635] RAX: ffffffffffffffda RBX: 0000000040800000 RCX: 00007f297d763c50
+[ 3362.924366][ T3635] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+[ 3362.924369][ T3635] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007f297d20b7c0
+[ 3362.924372][ T3635] R10: 00007f297d20ba90 R11: 0000000000000246 R12: 0000000000000000
+[ 3362.924375][ T3635] R13: 00005616a1027840 R14: 0000000000000000 R15: 00005616a1007620
+[ 3362.924384][ T3635] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
+[ 3362.924400][ T3635] ---[ end trace 132618ad38ffc1cc ]---
+[ 3362.924404][ T3635] RIP: 0010:copy_page_range+0x412/0xae0
+[ 3362.924408][ T3635] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
+[ 3362.924412][ T3635] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
+[ 3362.924416][ T3635] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
+[ 3362.924419][ T3635] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
+[ 3362.924422][ T3635] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
+[ 3362.924425][ T3635] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3362.924428][ T3635] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
+[ 3362.924431][ T3635] FS:  00007f297d20b7c0(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
+[ 3362.924435][ T3635] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3362.924438][ T3635] CR2: 00007fe8b5d67000 CR3: 0000000214352005 CR4: 00000000001606e0
+[ 3422.347880][ T7277] traps: modprobe[7277] general protection fault ip:7f2bff44c3d2 sp:7ffde3b51f80 error:0 in ld-2.29.so[7f2bff44a000+1e000]
+[ 3422.358926][ T7280] traps: run-parts[7280] general protection fault ip:7f2d45220a25 sp:7ffcb8f33a10 error:0 in libc-2.29.so[7f2d451c3000+147000]
+[ 3450.922042][ T7287] traps: htop[7287] general protection fault ip:7f5f03536026 sp:7ffd371abcc0 error:0 in libc-2.29.so[7f5f0352b000+147000]
+[ 3456.097730][ T6796] general protection fault: 0000 [#3] PREEMPT SMP PTI
+[ 3456.097796][ T6796] CPU: 2 PID: 6796 Comm: apt-compat Tainted: G      D           5.3.18 #1
+[ 3456.097860][ T6796] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
+[ 3456.097934][ T6796] RIP: 0010:copy_page_range+0x3ba/0xae0
+[ 3456.097979][ T6796] Code: 83 e0 fb 48 83 f8 63 0f 85 a3 05 00 00 48 8b 44 24 38 48 c7 84 24 f8 00 00 00 00 00 00 00 48 c7 84 24 00 01 00 00 00 00 00 00 <48> 8b 10 48 f7 c2 9f ff ff ff 0f 84 9c 03 00 00 48 b9 00 f0 ff ff
+[ 3456.098115][ T6796] RSP: 0018:ffffb52f00fe3bc0 EFLAGS: 00010246
+[ 3456.098163][ T6796] RAX: 000f2a3bd1864888 RBX: ffff9c8f9287a4f8 RCX: 0000000215980067
+[ 3456.098221][ T6796] RDX: fff0000000000fff RSI: 000ffffffffff000 RDI: ffff9c8f9178f888
+[ 3456.098280][ T6796] RBP: ffff9c8f9203e180 R08: 0000000000000001 R09: 0000000000000000
+[ 3456.098338][ T6796] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3456.098397][ T6796] R13: 00005627e236e000 R14: 0000000000000000 R15: 00005627e236e000
+[ 3456.098456][ T6796] FS:  00007fbb47190580(0000) GS:ffff9c8f97a00000(0000) knlGS:0000000000000000
+[ 3456.098521][ T6796] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3456.098571][ T6796] CR2: 00007fbb47188ca0 CR3: 0000000191d6a001 CR4: 00000000001606e0
+[ 3456.098630][ T6796] Call Trace:
+[ 3456.098676][ T6796]  dup_mm+0x3b1/0x500
+[ 3456.098715][ T6796]  copy_process+0x1920/0x1e10
+[ 3456.098759][ T6796]  _do_fork+0x74/0x450
+[ 3456.098798][ T6796]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3456.098845][ T6796]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
+[ 3456.098895][ T6796]  __se_sys_clone+0x6b/0x90
+[ 3456.098936][ T6796]  do_syscall_64+0x50/0x120
+[ 3456.098973][ T6796]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[ 3456.099020][ T6796] RIP: 0033:0x7fbb47096c50
+[ 3456.099057][ T6796] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
+[ 3456.099192][ T6796] RSP: 002b:00007fff1d417530 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+[ 3456.099255][ T6796] RAX: ffffffffffffffda RBX: 00005627e26619c0 RCX: 00007fbb47096c50
+[ 3456.099314][ T6796] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+[ 3456.099372][ T6796] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007fbb47190580
+[ 3456.099430][ T6796] R10: 00007fbb47190850 R11: 0000000000000246 R12: 0000000000000000
+[ 3456.099489][ T6796] R13: 0000000000000000 R14: 00007fff1d4175f0 R15: 0000000000000001
+[ 3456.099554][ T6796] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
+[ 3456.099705][ T6796] ---[ end trace 132618ad38ffc1cd ]---
+[ 3456.099753][ T6796] RIP: 0010:copy_page_range+0x412/0xae0
+[ 3456.099798][ T6796] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
+[ 3456.099935][ T6796] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
+[ 3456.099982][ T6796] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
+[ 3456.100041][ T6796] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
+[ 3456.100100][ T6796] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
+[ 3456.100159][ T6796] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[ 3456.100217][ T6796] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
+[ 3456.100277][ T6796] FS:  00007fbb47190580(0000) GS:ffff9c8f97a00000(0000) knlGS:0000000000000000
+[ 3456.100342][ T6796] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3456.100392][ T6796] CR2: 00007fbb47188ca0 CR3: 0000000191d6a001 CR4: 00000000001606e0
+
+Johannes
