@@ -2,92 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 437A812A03F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 12:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D6512A190
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 14:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbfLXLIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Dec 2019 06:08:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:51084 "EHLO foss.arm.com"
+        id S1726272AbfLXNDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Dec 2019 08:03:24 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:35750 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbfLXLIk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Dec 2019 06:08:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C14C31FB;
-        Tue, 24 Dec 2019 03:08:39 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 56E813F534;
-        Tue, 24 Dec 2019 03:08:37 -0800 (PST)
-Date:   Tue, 24 Dec 2019 11:08:35 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     'Giovanni Gherdovich' <ggherdovich@suse.cz>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        'Mel Gorman' <mgorman@techsingularity.net>,
-        'Matt Fleming' <matt@codeblueprint.co.uk>,
-        'Viresh Kumar' <viresh.kumar@linaro.org>,
-        'Juri Lelli' <juri.lelli@redhat.com>,
-        'Paul Turner' <pjt@google.com>,
-        'Peter Zijlstra' <peterz@infradead.org>,
-        'Vincent Guittot' <vincent.guittot@linaro.org>,
-        'Quentin Perret' <qperret@qperret.net>,
-        'Dietmar Eggemann' <dietmar.eggemann@arm.com>,
-        'Srinivas Pandruvada' <srinivas.pandruvada@linux.intel.com>,
-        'Thomas Gleixner' <tglx@linutronix.de>,
-        'Ingo Molnar' <mingo@redhat.com>,
-        'Borislav Petkov' <bp@suse.de>, 'Len Brown' <lenb@kernel.org>,
-        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
-Message-ID: <20191224110834.rgibtqm6dr6kmu5y@e107158-lin.cambridge.arm.com>
-References: <1574781600.7677.2.camel@suse.cz>
- <001d01d5a4f4$d96b21b0$8c416510$@net>
- <003d01d5a63d$f6ab3950$e401abf0$@net>
- <20191219104813.6fr34qavpaplecoz@e107158-lin>
- <000701d5b965$361b6c60$a2524520$@net>
- <20191223140743.o2wfoqtf56g4yrk5@e107158-lin.cambridge.arm.com>
- <20191223144043.ticfxfgbolsqk74i@e107158-lin.cambridge.arm.com>
- <000301d5b9ae$cd8f5b30$68ae1190$@net>
- <20191223191014.g7lnxafuadwtcqub@e107158-lin.cambridge.arm.com>
- <000401d5b9f7$cf3782c0$6da68840$@net>
+        id S1726224AbfLXNDX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Dec 2019 08:03:23 -0500
+Received: from zn.tnic (p200300EC2F0ED600C09669CD883F0A9D.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:d600:c096:69cd:883f:a9d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 395AF1EC0AE5;
+        Tue, 24 Dec 2019 14:03:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1577192598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RPmKXDdfeilER4Cgaeoi2HiLWA8B3GNUxDgJuxdBXfU=;
+        b=reF83Q8gQU8d8BbbxQtuMbOFtz4tNW0TWem/vVoR96GaFFqKuP34eCfMKbkHGHhpKGdri3
+        pyPpxWQoCT/9pskvQWyrWoFHiWRqJx3nXMkEvHac9OE4eXfjVFUgDyv9Abz9tEzv8ew26N
+        WtLUvAmpJ1NPS+Gi5gUtfB2R8Ui/FNQ=
+Date:   Tue, 24 Dec 2019 14:03:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Garnier <thgarnie@chromium.org>
+Cc:     kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
+        keescook@chromium.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v10 00/11] x86: PIE support to extend KASLR randomization
+Message-ID: <20191224130310.GE21017@zn.tnic>
+References: <20191205000957.112719-1-thgarnie@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <000401d5b9f7$cf3782c0$6da68840$@net>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20191205000957.112719-1-thgarnie@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/23/19 17:16, Doug Smythies wrote:
-> Yes, it fixes the schedutil governor behaving like the performance governor
-> problem on my i7-2600K test system.
+On Wed, Dec 04, 2019 at 04:09:37PM -0800, Thomas Garnier wrote:
+> Minor changes based on feedback and rebase from v9.
 > 
-> I re-ran the tests several times, and re-booted back to the stock (problem)
-> kernel to verify incorrect schedutil governor performance (i.e. I toggled
-> back and forth, 2 times for each of 2 kernels, tests 1 and 2, total 8 tests).
-> Kernel 5.5-rc2: 4 tests FAILED (as expected).
-> Kernel 5.5-rc2 + this patch: 4 tests PASSED.
+> Splitting the previous serie in two. This part contains assembly code
+> changes required for PIE but without any direct dependencies with the
+> rest of the patchset.
 
-Great! Thanks for testing it, I'll send a proper patch shortly.
+Ok, modulo the minor commit message and comments fixup, this looks ok
+and passes testing here.
 
-> 
-> Accidentally tested:
-> Kernel 5.5-rc2 + this patch + command line "cgroup_no_v1=all": 1 test PASS.
+I'm going to queue patches 2-11 of the next version unless someone
+complains.
 
-I think this cgroup_no_v1 is a happy accident. It has nothing to do with the
-fault, but for your case maybe helped observing things in a better way. FWIW,
-I reproduced the issue on Juno Arm64 using Debian and Buildroot rootfs.
+Thx.
 
-What is actually required to trigger the bug is to create a cpu controller and
-add all system tasks to it to create some noise - which Ubuntu and Debian do by
-default at boot time. In Buildroot when I did that manually I could see the
-frequency going to max most of the time.
+-- 
+Regards/Gruss,
+    Boris.
 
-I'll add away to test this scenario.
-
-Thanks for your detailed report.
-
-Happy holidays!
-
---
-Qais Yousef
+https://people.kernel.org/tglx/notes-about-netiquette
