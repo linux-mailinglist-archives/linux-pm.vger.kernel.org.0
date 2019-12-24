@@ -2,211 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C14129B4A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2019 22:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E67129C57
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 02:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbfLWVvA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Dec 2019 16:51:00 -0500
-Received: from mail.sig21.net ([80.244.240.74]:45610 "EHLO mail.sig21.net"
+        id S1726995AbfLXBQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Dec 2019 20:16:49 -0500
+Received: from cmta17.telus.net ([209.171.16.90]:54769 "EHLO cmta17.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726817AbfLWVvA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Dec 2019 16:51:00 -0500
-X-Greylist: delayed 2252 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Dec 2019 16:50:58 EST
-Received: from localhorst ([127.0.0.1])
-         by mail.sig21.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-         (Exim 4.84_2)
-        (envelope-from <js@sig21.net>)
-         id 1ijV0u-0001NK-V1 ; Mon, 23 Dec 2019 22:13:24 +0100
-Received: from js by abc.local with local (Exim 4.93)
-        (envelope-from <js@sig21.net>)
-        id 1ijV0n-0001I3-5o; Mon, 23 Dec 2019 22:13:09 +0100
-Date:   Mon, 23 Dec 2019 22:13:09 +0100
-From:   Johannes Stezenbach <js@sig21.net>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexander Potapenko <glider@google.com>
-Subject: init_on_free breaks hibernate
-Message-ID: <20191223211309.GA4609@sig21.net>
+        id S1726959AbfLXBQt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Dec 2019 20:16:49 -0500
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id jYoTi09cHbg38jYoUiySaO; Mon, 23 Dec 2019 18:16:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1577150207; bh=ODYwhfPt6MsqQtLICXCUgpmiQneAod/Apsuhk4WGCHo=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=CtvNc+4euCofzl27ngb+DtU6etJm2HqxrArEbNO9p/SsOH4jAWvGCkRBG4SmmwXex
+         bOqnuOGE9DuyoD3Z/dyFz6UrWqxWwgvsQVk9adjIzqAJ/E6AV0Wbu/swFDdIgPBIoP
+         D27el1CaI2WlYdk5vu8m5yeHReS7zeXmM/jfL18lB6SzGcriU/j8xp6BOuWrZf3Bax
+         bEZ92idlEpeN5xUcOhqF899cdrcAlBW94c8fCEYICWusj4kkyNg7aRGtxSPRZfT/HX
+         ehLPauagEBiEbKjlr3YppaZn+i2oTXnOaKShqlVVQSVZ5ckSIaY3TjosVThM+0Olud
+         2iNZKNDmDufig==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=O/1HQy1W c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=njV4EcZ6lGp_ohjWBiQA:9 a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Qais Yousef'" <qais.yousef@arm.com>
+Cc:     "'Giovanni Gherdovich'" <ggherdovich@suse.cz>, <x86@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Mel Gorman'" <mgorman@techsingularity.net>,
+        "'Matt Fleming'" <matt@codeblueprint.co.uk>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Juri Lelli'" <juri.lelli@redhat.com>,
+        "'Paul Turner'" <pjt@google.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Quentin Perret'" <qperret@qperret.net>,
+        "'Dietmar Eggemann'" <dietmar.eggemann@arm.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Borislav Petkov'" <bp@suse.de>, "'Len Brown'" <lenb@kernel.org>,
+        "'Rafael J . Wysocki'" <rjw@rjwysocki.net>
+References: <1574697961.16378.5.camel@suse.cz> <000801d5a41e$a7fce2c0$f7f6a840$@net> <1574781600.7677.2.camel@suse.cz> <001d01d5a4f4$d96b21b0$8c416510$@net> <003d01d5a63d$f6ab3950$e401abf0$@net> <20191219104813.6fr34qavpaplecoz@e107158-lin> <000701d5b965$361b6c60$a2524520$@net> <20191223140743.o2wfoqtf56g4yrk5@e107158-lin.cambridge.arm.com> <20191223144043.ticfxfgbolsqk74i@e107158-lin.cambridge.arm.com> <000301d5b9ae$cd8f5b30$68ae1190$@net> <20191223191014.g7lnxafuadwtcqub@e107158-lin.cambridge.arm.com>
+In-Reply-To: <20191223191014.g7lnxafuadwtcqub@e107158-lin.cambridge.arm.com>
+Subject: RE: [PATCH v4 1/6] x86,sched: Add support for frequency invariance
+Date:   Mon, 23 Dec 2019 17:16:39 -0800
+Message-ID: <000401d5b9f7$cf3782c0$6da68840$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-21-Score: -2.9 (--)
-X-Spam-21-Report: No, score=-2.9 required=8.0 tests=ALL_TRUSTED=-1,BAYES_00=-1.9 autolearn=ham autolearn_force=no
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdW5xJ+eVDznPQtVRyqEVUJp7cpgLgAL7hNA
+X-CMAE-Envelope: MS4wfLW1bqXgFcdCQxme3c2zQBvwtsoXAea/u7GIOR0AXN1Dm0TTtTWQTweIHX/qoLPu7TPCRdrMp/L2qPXAHdVYEDHjx1Jqqf7B7BU/kw/ccL1WClkg+rHe
+ NIWpDKAAu0MqwJfpLHQcMXzFOaGwsIIyoJWbIeHxQTLH5fWEQp5AofX9bYTPt24DuA3dRZpQMgpYj0H9IFEZ/qLuggfik6hr/FryUt0M8QqznWCu6scf1/U5
+ IyKh93PBMcglSb5DVqdzBMWnhd3uAlXLa3w6/4squhasyTfTPDgszgpE4gp1PdIpzWjy6Vrv9yeV1Oh8njlcsJR5qzZhqawDTIyov1BYZRVpgtjkSJf5tY2P
+ lC4iA2oDDOcQQP4u2r77e+imoigouFUw1O7wcNTPBaH78w7SU49KSqB+rshCFUbigJyfpZxzJ/znXvZb3Dmsb14csFyD39g0TnOUzK5HjsemRu4ep0bsIXHZ
+ avemi0pbySKy/oPcUCWEoA25AsiiR99vZdMwnmx0GFPM9UFT6mgzjneXG4E0xtAA9CgaHUUdotTjFPJvJPyLyOrX2QVrpZT0fqpfIjxaGP3zua1fVjAnlKQ2
+ LOLeFpD2Xxe4vWW7WV1xqyzLY1a99P56qhittRqjdSL/1PNsoVowycwai4pFZ4yNpihY1TXZEx+N8TByyYk70cZ7wDUU8q3aAKQK1wP7MpIaDS2KSoDZ7pqZ
+ 3BZpvqxfKRgTSf5AVOu9ySyJtOJPH3LucsagPERMy35X+OQeDckhqF703p7NQ4EBj4kH8eV0AqU=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 2019.12.23 11:10 Qais Yousef wrote:
+> On 12/23/19 08:34, Doug Smythies wrote:
+>> On 2019.12.23 06:41 Qais Yousef wrote:
+>>> On 12/23/19 14:07, Qais Yousef wrote:
+>>>>> Re-boot to the nocgv1 (stock + cgroup_no_v1=all) kernel.
+>>>>> set the schedutil governor.
+>>>>> launch test 2 and related monitoring tools.
+>>>>> verify performance governor like behavior.
+>>>> 
+>>>> So as stated above, by default uclamp_{min, max} = (0, 1024). So it wouldn't
+>>>> act as performance governor by default unless you explicitly write 1024 to
+>>>> uclamp.min.
+>>>> 
+>>>> Let me go find Ubuntu mainline tree to see if they applied anything extra in
+>>>> there. If they modified the default behavior that could explain what you see.
+>>>
+>>> Actually I see what you were saying now that you copy the config. So I think
+>>>  I misunderstood and you are running Linus' 5.5-rc2 + Ubuntu PPA config.
+>> 
+>> Yes, exactly.
+>> I have a clone of the main Linus git branch, but steal the kernel
+>> configuration from the Ubuntu mainline PPA.
+>
+> I think I managed to reproduce it. The below seems to fix it for me, can you
+> try it out please?
 
-I upgraded the kernel on one of my machines to 5.3.18 (from 5.2.x)
-and found it failed after resume from hibernate due to what seemed
-to be memory corruption. I had a hunch it could be related to
-CONFIG_INIT_ON_ALLOC_DEFAULT_ON or CONFIG_INIT_ON_FREE_DEFAULT_ON,
-and a quick web search found this which seems to confirm:
-https://bbs.archlinux.org/viewtopic.php?pid=1877845#p1877845
+Yes, it fixes the schedutil governor behaving like the performance governor
+problem on my i7-2600K test system.
 
-I rebuilt the kernel with CONFIG_INIT_ON_FREE_DEFAULT_ON disabled,
-and hibernate works again.  I'm fine with this workaround and
-just wanted to share this information.
+I re-ran the tests several times, and re-booted back to the stock (problem)
+kernel to verify incorrect schedutil governor performance (i.e. I toggled
+back and forth, 2 times for each of 2 kernels, tests 1 and 2, total 8 tests).
+Kernel 5.5-rc2: 4 tests FAILED (as expected).
+Kernel 5.5-rc2 + this patch: 4 tests PASSED.
 
-The commit that introduces CONFIG_INIT_ON_FREE_DEFAULT_ON:
-6471384af2a6 mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options
+Accidentally tested:
+Kernel 5.5-rc2 + this patch + command line "cgroup_no_v1=all": 1 test PASS.
 
-FWIW, these errors made it into /var/log/kern.log after resume before
-I had to press the reset button:
+> I think what's going on is that the child group default util_min value isn't
+> propagated correctly after it's created, so we end up using the root_task_group
+> values which is 1024 for both min and max.
+
+O.K. thanks.
+
+> ---
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 90e4b00ace89..cf9d9106d1b5 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -7100,6 +7100,11 @@ static int cpu_cgroup_css_online(struct cgroup_subsys_state *css)
+>
+>        if (parent)
+>                sched_online_group(tg, parent);
+> +
+> +#ifdef CONFIG_UCLAMP_TASK_GROUP
+> +       cpu_util_update_eff(css);
+> +#endif
+> +
+>        return 0;
+>  }
+
+... Doug
 
 
-[ 3358.077382][ T6925] PM: hibernation exit
-[ 3358.079444][ T7273] date[7273]: segfault at 9 ip 00007f140fac0fae sp 00007ffef896b1d0 error 6 in ld-2.29.so[7f140fabf000+1e000]
-[ 3358.079462][ T7273] Code: 74 17 48 83 f8 22 77 d3 48 89 14 c1 48 8b 42 10 48 83 c2 10 48 85 c0 75 e9 49 8b 07 48 85 c0 74 71 49 8b 57 60 48 85 d2 74 04 <48> 01 42 08 49 8b 57 58 48 85 d2 74 04 48 01 42 08 49 8b 57 68 48
-[ 3358.082454][ T2290] BUG: unable to handle page fault for address: ffffee07c6b58028
-[ 3358.082463][ T2290] #PF: supervisor read access in kernel mode
-[ 3358.082467][ T2290] #PF: error_code(0x0000) - not-present page
-[ 3358.082470][ T2290] PGD 0 P4D 0 
-[ 3358.082476][ T2290] Oops: 0000 [#1] PREEMPT SMP PTI
-[ 3358.082481][ T2290] CPU: 3 PID: 2290 Comm: systemd-udevd Not tainted 5.3.18 #1
-[ 3358.082484][ T2290] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
-[ 3358.082491][ T2290] RIP: 0010:copy_page_range+0x412/0xae0
-[ 3358.082496][ T2290] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
-[ 3358.082499][ T2290] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
-[ 3358.082504][ T2290] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
-[ 3358.082507][ T2290] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
-[ 3358.082510][ T2290] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
-[ 3358.082513][ T2290] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3358.082516][ T2290] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
-[ 3358.082520][ T2290] FS:  00007fd608a51880(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
-[ 3358.082523][ T2290] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3358.082527][ T2290] CR2: ffffee07c6b58028 CR3: 00000002142a0002 CR4: 00000000001606e0
-[ 3358.082530][ T2290] Call Trace:
-[ 3358.082538][ T2290]  ? sched_clock_cpu+0x10/0xd0
-[ 3358.082556][ T2290]  dup_mm+0x3b1/0x500
-[ 3358.082566][ T2290]  copy_process+0x1920/0x1e10
-[ 3358.082577][ T2290]  _do_fork+0x74/0x450
-[ 3358.082584][ T2290]  ? __set_current_blocked+0x2b/0x50
-[ 3358.082590][ T2290]  ? sched_clock+0x5/0x10
-[ 3358.082594][ T2290]  ? sched_clock_cpu+0x10/0xd0
-[ 3358.082598][ T2290]  ? sigprocmask+0x72/0xa0
-[ 3358.082604][ T2290]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3358.082608][ T2290]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3358.082613][ T2290]  __se_sys_clone+0x6b/0x90
-[ 3358.082622][ T2290]  do_syscall_64+0x50/0x120
-[ 3358.082626][ T2290]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-[ 3358.082631][ T2290] RIP: 0033:0x7fd608f90c50
-[ 3358.082635][ T2290] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
-[ 3358.082638][ T2290] RSP: 002b:00007ffc75fc5ab0 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-[ 3358.082642][ T2290] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fd608f90c50
-[ 3358.082645][ T2290] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-[ 3358.082648][ T2290] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007fd608a51880
-[ 3358.082652][ T2290] R10: 00007fd608a51b50 R11: 0000000000000246 R12: 0000000000000000
-[ 3358.082655][ T2290] R13: 0000000000000000 R14: 0000000000000000 R15: 00007ffc75fc5b00
-[ 3358.082664][ T2290] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
-[ 3358.082679][ T2290] CR2: ffffee07c6b58028
-[ 3358.082684][ T2290] ---[ end trace 132618ad38ffc1cb ]---
-[ 3358.082689][ T2290] RIP: 0010:copy_page_range+0x412/0xae0
-[ 3358.082692][ T2290] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
-[ 3358.082696][ T2290] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
-[ 3358.082699][ T2290] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
-[ 3358.082703][ T2290] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
-[ 3358.082706][ T2290] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
-[ 3358.082708][ T2290] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3358.082711][ T2290] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
-[ 3358.082715][ T2290] FS:  00007fd608a51880(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
-[ 3358.082718][ T2290] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3358.082721][ T2290] CR2: ffffee07c6b58028 CR3: 00000002142a0002 CR4: 00000000001606e0
-[ 3362.924200][ T3635] general protection fault: 0000 [#2] PREEMPT SMP PTI
-[ 3362.924210][ T3635] CPU: 3 PID: 3635 Comm: xscreensaver Tainted: G      D           5.3.18 #1
-[ 3362.924213][ T3635] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
-[ 3362.924222][ T3635] RIP: 0010:copy_page_range+0x3ba/0xae0
-[ 3362.924226][ T3635] Code: 83 e0 fb 48 83 f8 63 0f 85 a3 05 00 00 48 8b 44 24 38 48 c7 84 24 f8 00 00 00 00 00 00 00 48 c7 84 24 00 01 00 00 00 00 00 00 <48> 8b 10 48 f7 c2 9f ff ff ff 0f 84 9c 03 00 00 48 b9 00 f0 ff ff
-[ 3362.924230][ T3635] RSP: 0018:ffffb52f003d7bc0 EFLAGS: 00010246
-[ 3362.924234][ T3635] RAX: 000f9c8d3c0daf28 RBX: ffff9c8f9290c528 RCX: 0000000191c80067
-[ 3362.924238][ T3635] RDX: fff0000000000fff RSI: 000ffffffffff000 RDI: ffff9c8f9434ef28
-[ 3362.924241][ T3635] RBP: ffff9c8f91698d00 R08: 0000000000000001 R09: 0000000000000000
-[ 3362.924244][ T3635] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3362.924247][ T3635] R13: 00007f297cb60000 R14: 0000000000000000 R15: 00007f297cb60000
-[ 3362.924250][ T3635] FS:  00007f297d20b7c0(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
-[ 3362.924254][ T3635] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3362.924257][ T3635] CR2: 00007fe8b5d67000 CR3: 0000000214352005 CR4: 00000000001606e0
-[ 3362.924260][ T3635] Call Trace:
-[ 3362.924281][ T3635]  dup_mm+0x3b1/0x500
-[ 3362.924290][ T3635]  copy_process+0x1920/0x1e10
-[ 3362.924301][ T3635]  _do_fork+0x74/0x450
-[ 3362.924308][ T3635]  ? preempt_count_sub+0xa1/0xe0
-[ 3362.924315][ T3635]  ? _raw_spin_unlock_irq+0x34/0x50
-[ 3362.924319][ T3635]  ? do_sigaction+0xf2/0x240
-[ 3362.924324][ T3635]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3362.924328][ T3635]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3362.924334][ T3635]  __se_sys_clone+0x6b/0x90
-[ 3362.924342][ T3635]  do_syscall_64+0x50/0x120
-[ 3362.924346][ T3635]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-[ 3362.924351][ T3635] RIP: 0033:0x7f297d763c50
-[ 3362.924355][ T3635] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
-[ 3362.924358][ T3635] RSP: 002b:00007ffd29757910 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-[ 3362.924363][ T3635] RAX: ffffffffffffffda RBX: 0000000040800000 RCX: 00007f297d763c50
-[ 3362.924366][ T3635] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-[ 3362.924369][ T3635] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007f297d20b7c0
-[ 3362.924372][ T3635] R10: 00007f297d20ba90 R11: 0000000000000246 R12: 0000000000000000
-[ 3362.924375][ T3635] R13: 00005616a1027840 R14: 0000000000000000 R15: 00005616a1007620
-[ 3362.924384][ T3635] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
-[ 3362.924400][ T3635] ---[ end trace 132618ad38ffc1cc ]---
-[ 3362.924404][ T3635] RIP: 0010:copy_page_range+0x412/0xae0
-[ 3362.924408][ T3635] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
-[ 3362.924412][ T3635] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
-[ 3362.924416][ T3635] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
-[ 3362.924419][ T3635] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
-[ 3362.924422][ T3635] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
-[ 3362.924425][ T3635] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3362.924428][ T3635] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
-[ 3362.924431][ T3635] FS:  00007f297d20b7c0(0000) GS:ffff9c8f97c00000(0000) knlGS:0000000000000000
-[ 3362.924435][ T3635] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3362.924438][ T3635] CR2: 00007fe8b5d67000 CR3: 0000000214352005 CR4: 00000000001606e0
-[ 3422.347880][ T7277] traps: modprobe[7277] general protection fault ip:7f2bff44c3d2 sp:7ffde3b51f80 error:0 in ld-2.29.so[7f2bff44a000+1e000]
-[ 3422.358926][ T7280] traps: run-parts[7280] general protection fault ip:7f2d45220a25 sp:7ffcb8f33a10 error:0 in libc-2.29.so[7f2d451c3000+147000]
-[ 3450.922042][ T7287] traps: htop[7287] general protection fault ip:7f5f03536026 sp:7ffd371abcc0 error:0 in libc-2.29.so[7f5f0352b000+147000]
-[ 3456.097730][ T6796] general protection fault: 0000 [#3] PREEMPT SMP PTI
-[ 3456.097796][ T6796] CPU: 2 PID: 6796 Comm: apt-compat Tainted: G      D           5.3.18 #1
-[ 3456.097860][ T6796] Hardware name: System manufacturer System Product Name/P8H77-V, BIOS 1905 10/27/2014
-[ 3456.097934][ T6796] RIP: 0010:copy_page_range+0x3ba/0xae0
-[ 3456.097979][ T6796] Code: 83 e0 fb 48 83 f8 63 0f 85 a3 05 00 00 48 8b 44 24 38 48 c7 84 24 f8 00 00 00 00 00 00 00 48 c7 84 24 00 01 00 00 00 00 00 00 <48> 8b 10 48 f7 c2 9f ff ff ff 0f 84 9c 03 00 00 48 b9 00 f0 ff ff
-[ 3456.098115][ T6796] RSP: 0018:ffffb52f00fe3bc0 EFLAGS: 00010246
-[ 3456.098163][ T6796] RAX: 000f2a3bd1864888 RBX: ffff9c8f9287a4f8 RCX: 0000000215980067
-[ 3456.098221][ T6796] RDX: fff0000000000fff RSI: 000ffffffffff000 RDI: ffff9c8f9178f888
-[ 3456.098280][ T6796] RBP: ffff9c8f9203e180 R08: 0000000000000001 R09: 0000000000000000
-[ 3456.098338][ T6796] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3456.098397][ T6796] R13: 00005627e236e000 R14: 0000000000000000 R15: 00005627e236e000
-[ 3456.098456][ T6796] FS:  00007fbb47190580(0000) GS:ffff9c8f97a00000(0000) knlGS:0000000000000000
-[ 3456.098521][ T6796] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3456.098571][ T6796] CR2: 00007fbb47188ca0 CR3: 0000000191d6a001 CR4: 00000000001606e0
-[ 3456.098630][ T6796] Call Trace:
-[ 3456.098676][ T6796]  dup_mm+0x3b1/0x500
-[ 3456.098715][ T6796]  copy_process+0x1920/0x1e10
-[ 3456.098759][ T6796]  _do_fork+0x74/0x450
-[ 3456.098798][ T6796]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3456.098845][ T6796]  ? entry_SYSCALL_64_after_hwframe+0x3e/0xbe
-[ 3456.098895][ T6796]  __se_sys_clone+0x6b/0x90
-[ 3456.098936][ T6796]  do_syscall_64+0x50/0x120
-[ 3456.098973][ T6796]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-[ 3456.099020][ T6796] RIP: 0033:0x7fbb47096c50
-[ 3456.099057][ T6796] Code: ed 0f 85 1b 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 ac 00 00 00 41 89 c5 85 c0 0f 85 b9 00 00
-[ 3456.099192][ T6796] RSP: 002b:00007fff1d417530 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-[ 3456.099255][ T6796] RAX: ffffffffffffffda RBX: 00005627e26619c0 RCX: 00007fbb47096c50
-[ 3456.099314][ T6796] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-[ 3456.099372][ T6796] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007fbb47190580
-[ 3456.099430][ T6796] R10: 00007fbb47190850 R11: 0000000000000246 R12: 0000000000000000
-[ 3456.099489][ T6796] R13: 0000000000000000 R14: 00007fff1d4175f0 R15: 0000000000000001
-[ 3456.099554][ T6796] Modules linked in: uas mt76x0u mt76x0_common mt76x02_usb mt76_usb mt76x02_lib mt76 mac80211 kvm_intel cfg80211 kvm irqbypass xhci_pci ehci_pci xhci_hcd ehci_hcd
-[ 3456.099705][ T6796] ---[ end trace 132618ad38ffc1cd ]---
-[ 3456.099753][ T6796] RIP: 0010:copy_page_range+0x412/0xae0
-[ 3456.099798][ T6796] Code: f7 d8 48 31 d0 f6 c2 80 48 0f 45 cf 48 21 c8 4c 89 fb 48 c1 e8 06 48 03 05 0b 78 2c 01 48 c1 eb 09 48 21 ca 81 e3 f8 0f 00 00 <48> 8b 68 28 48 8b 05 03 78 2c 01 48 89 ef 48 01 d8 48 01 d0 49 89
-[ 3456.099935][ T6796] RSP: 0018:ffffb52f002a7bc0 EFLAGS: 00010202
-[ 3456.099982][ T6796] RAX: ffffee07c6b58000 RBX: 0000000000000958 RCX: 000fffffffe00000
-[ 3456.100041][ T6796] RDX: 000f8dae52800000 RSI: 000ffffffffff000 RDI: 000fffffffe00000
-[ 3456.100100][ T6796] RBP: ffff9c8f9169ce00 R08: 0000000000000001 R09: 0000000000000000
-[ 3456.100159][ T6796] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-[ 3456.100217][ T6796] R13: 000055622792b000 R14: 0000000000000000 R15: 000055622792b000
-[ 3456.100277][ T6796] FS:  00007fbb47190580(0000) GS:ffff9c8f97a00000(0000) knlGS:0000000000000000
-[ 3456.100342][ T6796] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3456.100392][ T6796] CR2: 00007fbb47188ca0 CR3: 0000000191d6a001 CR4: 00000000001606e0
-
-Johannes
