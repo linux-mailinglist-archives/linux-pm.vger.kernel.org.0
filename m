@@ -2,129 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B0512A29F
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 15:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B7312A3E8
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 19:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbfLXOvn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Dec 2019 09:51:43 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41501 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbfLXOvm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Dec 2019 09:51:42 -0500
-Received: by mail-io1-f65.google.com with SMTP id c16so15751044ioo.8;
-        Tue, 24 Dec 2019 06:51:42 -0800 (PST)
+        id S1726184AbfLXSbC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Dec 2019 13:31:02 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41544 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbfLXSbC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Dec 2019 13:31:02 -0500
+Received: by mail-wr1-f65.google.com with SMTP id c9so20435955wrw.8
+        for <linux-pm@vger.kernel.org>; Tue, 24 Dec 2019 10:30:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HA9SF07pomUf/mhFGeOHvPX1/YV6Atxy36iIR2tYUwc=;
-        b=vIZYFYQdzUfJmTpJC+q5NIi8BYa6+DWw959lZLAuayQW3H+rhE9SRRujDIn3jIB7/u
-         +UK4PiTNIrzYzzNO+Cq1xIqvuQlbnA1oMKm0XzqSs+J6wCVhQ87fZe6V/7y9nzE9HSVr
-         Et8HQGgg3B90f77+UO0CLaJlWcubtJoq8Z1dBGIteQElbBYxA+BI/QHaW/KAXyJGOD0l
-         3U8nc6e2Uaa9QwmniMP53YaE8uFTXY4ExSArH/Ro37qvbAhZL5/9A9Unop+xBkuiFREv
-         KGW5+qjFYgmZLMbjD1qEdd7kHvyjMH7qtkCwtP0m1eN8tmq4C/5nESdZ8XHLtbSAjILj
-         oajg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wAw5WOf2bEvt5pRL1MYuAu8CM5vXA8BPYFF+l6mKaiE=;
+        b=cYwTZo1f9VTC5TagEPzaD3+Idykvxq9LU3MPLtYeSVnhzs23WX8EVKeIEDywbdWb+K
+         UsfmzNkKLb0akfSceNy/yysa4HryNWZfl9rFInshGSr58Lq0bqbXMG9nvj5hnsgtAZHv
+         bDKjsv/USmUmUzOX9uzr4NuqwECXBwA2ayu2f5GLcuKZx40+78xMpl130W4Ng9QzzZz+
+         ZOVMQAduoE/F/LmPozFcodiVZVGTVX+/FcX+xrbuYcRL5lPQm5+DTHcEo/L0efpzKsul
+         GtF28MC8g2y2h3xkZJPG8v2ZbU1kanUPrHmN6hH5z8ad42VDC/xRRLah3yyc7pHMOkfO
+         sBrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HA9SF07pomUf/mhFGeOHvPX1/YV6Atxy36iIR2tYUwc=;
-        b=av1aqDNtZGPgvTEudoYlF8ggwzFoWbrUPEpFFGIexhrPEyDy9FjZNSxzd0Z6rChgsZ
-         MWi/NbH2aCd1Zpl8+sGW0YpiUa0kW4jp/S72WozJR76AXaTc1xLC6GuYbfvO3GKB5abD
-         1iBfSzlEIyXsw/7PrrRjTkLLSl3FAwMJ5gHQuTTR6Vpvt2M9h3NUaQ3u9cuqgUlr65Gb
-         JDE1Th8yUZXrNHHaqlvbN8W0k6M0RlbQFoQg/oElmL6COupDibUmV+UNO4K7tWO9UXlu
-         9bUNl0kUyBl8n85+Y1xM3mW8nb/NGxoaXUSozl//IfROgN+6y086h9arOzRF6PeCXakF
-         Ujug==
-X-Gm-Message-State: APjAAAX4DoYmeJ0FoBJWNjgBbFTB5L7XHktWnLtKP8UepssOAErbqvuJ
-        u7VtlxQ2KYFHOriUa4Og+7G9YjZcoT99Ak+NPvo=
-X-Google-Smtp-Source: APXvYqyTA0h9UaY01CHPo22LrNq/F1xXrEI8zP9Isq32dA7+ynxUzAzjdJ1cR2bA+G2udw/5Th5u66brm9gGwVDtkeU=
-X-Received: by 2002:a5d:9eda:: with SMTP id a26mr24747238ioe.238.1577199101880;
- Tue, 24 Dec 2019 06:51:41 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=wAw5WOf2bEvt5pRL1MYuAu8CM5vXA8BPYFF+l6mKaiE=;
+        b=nNCWzNmhYK79I/eUptimEleBt9sGNTPh0WquJyS0lHTttb2Jxijn4C6cwymI6oSX78
+         Tp0ER2CyWRBwqX2imvICgj/kg7GHG7eIwkgVPFNpDELk2q+SXcgPnAqYVlH3FIcYc9lU
+         dtOd8lG0APEjS4QNgWwcjl0ylPZznrdjEnWF+lDUX4bVEGGWalf9qBQYzsRjeDDhCkmq
+         IxyKGERutYEjjCJ7wME48WJa/vcMFtzvBiq0AzjFnrG2UDkZh70x3G9RvQaXl/hjGDkD
+         d3WhfujSvJnW+Ful9D0M5H76XxrpFG4cS6SCbmjPaNmw3vd7/tgME3V1jA/sPhmXbrBS
+         91og==
+X-Gm-Message-State: APjAAAW7/ZMS8qBl3iIRzLC+5xpOPYBD3vrRNI5Rfcunb5bTu4YFH3E7
+        luNQd6ulHGlVvbyFxZz3Sw2KxQ==
+X-Google-Smtp-Source: APXvYqyOOyAVLFWo/nLSIyHHbWCg3hsFTiLZxhcPXf6ymGikYxFkogC3dKZKFjF5I0mUz7FlIeO40w==
+X-Received: by 2002:a05:6000:50:: with SMTP id k16mr35793935wrx.145.1577212258992;
+        Tue, 24 Dec 2019 10:30:58 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:bd3f:fbf4:2d47:b114? ([2a01:e34:ed2f:f020:bd3f:fbf4:2d47:b114])
+        by smtp.googlemail.com with ESMTPSA id 2sm25616634wrq.31.2019.12.24.10.30.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Dec 2019 10:30:58 -0800 (PST)
+Subject: Re: [PATCH v8 0/7] add thermal sensor driver for A64, A83T, H3, H5,
+ H6, R40
+To:     Maxime Ripard <mripard@kernel.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megous@megous.com>,
+        linux-kernel@vger.kernel.org
+References: <20191219172823.1652600-1-anarsoul@gmail.com>
+ <20191219173321.bni4tbrhfkkphv7k@gilmour.lan>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
+ sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
+ 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
+ 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
+ 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
+ xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
+ P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
+ 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
+ wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
+ eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
+ Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
+ CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
+ CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
+ U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
+ UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
+ KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
+ ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
+ 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
+ UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
+ d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
+ 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
+ z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
+ Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
+ 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
+ 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
+ eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
+ NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
+ 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
+ gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
+ qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
+ OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
+ gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
+ 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
+ PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
+ F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
+ WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
+ 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
+ +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
+ dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
+ XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
+ bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
+ JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
+ qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
+ l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
+ BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
+ 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
+ eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
+ t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
+ i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
+ X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
+ fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
+Message-ID: <4015380d-33ef-312c-a886-6e8bf65c976a@linaro.org>
+Date:   Tue, 24 Dec 2019 19:30:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-References: <CGME20191223191928epcas1p128d39bb875b8654d61ae21364e466ec7@epcas1p1.samsung.com>
- <20191223191923.10450-1-tiny.windzz@gmail.com> <7230b556-7a96-14d1-ed22-43b5a6cd5a71@samsung.com>
-In-Reply-To: <7230b556-7a96-14d1-ed22-43b5a6cd5a71@samsung.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Tue, 24 Dec 2019 22:51:30 +0800
-Message-ID: <CAEExFWs6Wtg9dJbx9nwq4F53Lc5e__rzRn0QedJt2ffJTKU3uA@mail.gmail.com>
-Subject: Re: [PATCH] PM / devfreq: exynos-bus: Add error log when get event fails
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191219173321.bni4tbrhfkkphv7k@gilmour.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 24, 2019 at 12:00 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->
+On 19/12/2019 18:33, Maxime Ripard wrote:
 > Hi,
->
-> I think that you better to use 'devfreq-event' instead of just 'event'
-> as following:
->
-> PM / devfreq: exynos-bus: Add error log when fail to get devfreq-event
->
-> On 12/24/19 4:19 AM, Yangtao Li wrote:
-> > Adding an error log makes it easier to trace the function's error path.
-> > Because the error code may be rewritten on return, print error code here.
-> >
-> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > ---
-> >  drivers/devfreq/exynos-bus.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> > index 948e9340f91c..634d63fd00ea 100644
-> > --- a/drivers/devfreq/exynos-bus.c
-> > +++ b/drivers/devfreq/exynos-bus.c
-> > @@ -126,6 +126,8 @@ static int exynos_bus_get_dev_status(struct device *dev,
-> >
-> >       ret = exynos_bus_get_event(bus, &edata);
-> >       if (ret < 0) {
-> > +             dev_err(dev, "failed to get event from devfreq-event devices %d\n",
-> > +                     ret);
+> 
+> On Thu, Dec 19, 2019 at 09:28:16AM -0800, Vasily Khoruzhick wrote:
+>> This patchset adds driver for thermal sensor in A64, A83T, H3, H5,
+>> H6 and R40 SoCs.
+> 
+> Thanks again for working on this.
+> 
+> I'll merge the DT patches when the driver will have been merged.
 
-Emmm, it looks a bit strange to me...
-V2 has been sent.
+I've applied patches 1 & 2.
 
-Yours,
-Yangtao
+They are in the testing branch and will go to the linux-next branch as
+soon as the kernelci passes.
 
 
->
-> Better to make it under 80 char as following:
->
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index f5d4c369c7fb..10f4fa1a0363 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -126,7 +126,8 @@ static int exynos_bus_get_dev_status(struct device *dev,
->
->         ret = exynos_bus_get_event(bus, &edata);
->         if (ret < 0) {
-> -               dev_err(dev, "failed to get event from devfreq-event devices %d\n",
-> +               dev_err(dev,
-> +                       "failed to get event from devfreq-event devices %d\n",
->                         ret);
->                 stat->total_time = stat->busy_time = 0;
->                 goto err;
->
->
-> >               stat->total_time = stat->busy_time = 0;
-> >               goto err;
-> >       }
-> >
->
->
-> --
-> Best Regards,
-> Chanwoo Choi
-> Samsung Electronics
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
