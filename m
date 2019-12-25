@@ -2,69 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C01612A44D
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2019 23:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C3E12A6A0
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Dec 2019 08:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbfLXWTI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Dec 2019 17:19:08 -0500
-Received: from mga12.intel.com ([192.55.52.136]:44885 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726316AbfLXWTI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Dec 2019 17:19:08 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Dec 2019 14:19:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,353,1571727600"; 
-   d="scan'208";a="214256959"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Dec 2019 14:19:06 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1ijsW9-000GjQ-CF; Wed, 25 Dec 2019 06:19:05 +0800
-Date:   Wed, 25 Dec 2019 06:18:34 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [RFC PATCH pm] power: avs: cpr_get_opp_hz_for_req() can be static
-Message-ID: <20191224221834.qtzuikxnnfh7twji@4978f4969bb8>
-References: <201912250622.SScsrif7%lkp@intel.com>
+        id S1726407AbfLYHo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Dec 2019 02:44:29 -0500
+Received: from mail01.vodafone.es ([217.130.24.71]:45671 "EHLO
+        mail01.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbfLYHo3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Dec 2019 02:44:29 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Dec 2019 02:44:27 EST
+IronPort-SDR: wTtgnz2tQJteB0jJ46uTkIDvUbPDqHTYo7+WU2usQKtESJeTx0oClLH1OX7j0AJIrAAaQwgIbZ
+ P1XFcVqiK81A==
+IronPort-PHdr: =?us-ascii?q?9a23=3AEz0D0h8kJmZauf9uRHKM819IXTAuvvDOBiVQ1K?=
+ =?us-ascii?q?B30+8cTK2v8tzYMVDF4r011RmVBN6dsagfwLSN+4nbGkU4qa6bt34DdJEeHz?=
+ =?us-ascii?q?Qksu4x2zIaPcieFEfgJ+TrZSFpVO5LVVti4m3peRMNQJW2aFLduGC94iAPER?=
+ =?us-ascii?q?vjKwV1Ov71GonPhMiryuy+4ZLebxhGiTanf79+Mhu7oQrQu8QYnIBvNrs/xh?=
+ =?us-ascii?q?zVr3VSZu9Y33loJVWdnxb94se/4ptu+DlOtvwi6sBNT7z0c7w3QrJEAjsmNX?=
+ =?us-ascii?q?s15NDwuhnYUQSP/HocXX4InRdOHgPI8Qv1Xpb1siv9q+p9xCyXNtD4QLwoRT?=
+ =?us-ascii?q?iv6bpgRRn1gykFKjE56nnahMJwgqJBvhyvpAFxzIHIb4+aL/d+YqHQcs8GSW?=
+ =?us-ascii?q?ZdQspdSSpMCZ68YYsVCOoBOP5VoY/nqFATtxW+HwisBObuyj9Uh3/2w7c12P?=
+ =?us-ascii?q?kmHAHawQwgG84BsHXJo9rvL6cfSuW1w7PJzTXHdf9WxSny6IzWfRA5u/6DQa?=
+ =?us-ascii?q?h8cdLNyUQ2EQ7Ok1aeqZT9Mj+Ly+gAsXKX4/duWO6zkWIrtQ58riKhy8osjI?=
+ =?us-ascii?q?TCm5gbxUre9SpjxYY4Pdi4SElmbtG6CJZQrCSaN5duQsMlXmFopD42yr0Ytp?=
+ =?us-ascii?q?6/eygH0JEnyATea/yDaYiH/BbjWPqeLDtimnJlf6+wiAy88UinzO3zSNO430?=
+ =?us-ascii?q?hRriZdk9nMsG4C1wDL58SZV/dw/F2t1SuB2gzP8O1IP085mbDVJpMh2rIwk4?=
+ =?us-ascii?q?AcsUXHHi/4gkX2i6qWe104+ui17+TofrTmqYKGOI9vkQz+N74hms27AegiLg?=
+ =?us-ascii?q?gBQWyb9vqk1LL54UL1Wq1KjuEunqnDrJ/aPdgbprK+AwJN1oYj6hC/Dyqp0d?=
+ =?us-ascii?q?gBhXkHKUlIeAyIj4f3IVHCOvP4Aumlg1Sqjjhrw+rKPrr7ApXCfTD/l+LlfL?=
+ =?us-ascii?q?Bg+wtEzSItwt1FoZFZELcMJLT0QECijtHACg4FNFmQyq7fEtR4158fR2vHVq?=
+ =?us-ascii?q?uQKLnTtF6U5/wmLvKkdogVvzP0Kvxj6uO43lEjnlpIWaDh5YEWbXGkH+pvax?=
+ =?us-ascii?q?GFfH7ng9sICk8Ptws6CvDnjFCaWDUVf2rkDPF03S0yFI/zVdSLfYuqmrHUhC?=
+ =?us-ascii?q?o=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2GEKgCDEQNelyMYgtllgkQBGAEBgns?=
+ =?us-ascii?q?3GyASk0JUBnUdihKFM4N8FYYaDIFbDQEBAQEBNQIBAYRAgiIkOBMCAw0BAQU?=
+ =?us-ascii?q?BAQEBAQUEAQECEAEBAQEBCBYGhXNCAQwBgWsihBeBA4EsgwOCUymtIBoChSO?=
+ =?us-ascii?q?EdIE2AYwYGnmBB4FEgjKFAgESAWyFIQSNRSGIS2GXfoI+BJYwDYIpAYw4A4J?=
+ =?us-ascii?q?UiRGnIoI3VYELgQpxTTiBchmBHU8YDY0sji1AgRYQAk+FQIdcgjIBAQ?=
+X-IPAS-Result: =?us-ascii?q?A2GEKgCDEQNelyMYgtllgkQBGAEBgns3GyASk0JUBnUdi?=
+ =?us-ascii?q?hKFM4N8FYYaDIFbDQEBAQEBNQIBAYRAgiIkOBMCAw0BAQUBAQEBAQUEAQECE?=
+ =?us-ascii?q?AEBAQEBCBYGhXNCAQwBgWsihBeBA4EsgwOCUymtIBoChSOEdIE2AYwYGnmBB?=
+ =?us-ascii?q?4FEgjKFAgESAWyFIQSNRSGIS2GXfoI+BJYwDYIpAYw4A4JUiRGnIoI3VYELg?=
+ =?us-ascii?q?QpxTTiBchmBHU8YDY0sji1AgRYQAk+FQIdcgjIBAQ?=
+X-IronPort-AV: E=Sophos;i="5.69,353,1571695200"; 
+   d="scan'208";a="298571396"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail01.vodafone.es with ESMTP; 25 Dec 2019 08:39:24 +0100
+Received: (qmail 32263 invoked from network); 25 Dec 2019 04:33:51 -0000
+Received: from unknown (HELO 192.168.1.88) (seigo@[217.217.179.17])
+          (envelope-sender <tulcidas@mail.telepac.pt>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <linux-pm@vger.kernel.org>; 25 Dec 2019 04:33:51 -0000
+Date:   Wed, 25 Dec 2019 05:33:42 +0100 (CET)
+From:   La Primitiva <tulcidas@mail.telepac.pt>
+Reply-To: La Primitiva <laprimitivaes@zohomail.eu>
+To:     linux-pm@vger.kernel.org
+Message-ID: <9063364.259391.1577248423235.JavaMail.javamailuser@localhost>
+Subject: Take home 750,000 Euros this end of year
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201912250622.SScsrif7%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Attn: Email User,
 
-Fixes: bf6910abf548 ("power: avs: Add support for CPR (Core Power Reduction)")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- qcom-cpr.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+You have won, you are to reply back with your name and phone number for
+claim.
 
-diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/power/avs/qcom-cpr.c
-index a3187973bbb5fd..98c9ee4075ae9d 100644
---- a/drivers/power/avs/qcom-cpr.c
-+++ b/drivers/power/avs/qcom-cpr.c
-@@ -1078,8 +1078,8 @@ static unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
- 	return fuse_corner;
- }
- 
--unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
--				     struct device *cpu_dev)
-+static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
-+					    struct device *cpu_dev)
- {
- 	u64 rate = 0;
- 	struct device_node *ref_np;
+La Primitiva
+
+
+
+
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
+
