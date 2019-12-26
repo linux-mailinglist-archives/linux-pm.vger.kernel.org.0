@@ -2,149 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4E912ACAE
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2019 15:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A691012AD57
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2019 16:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbfLZOEc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Dec 2019 09:04:32 -0500
-Received: from mail-eopbgr30051.outbound.protection.outlook.com ([40.107.3.51]:53250
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726074AbfLZOEc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Dec 2019 09:04:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q1lEAqOi+u5enHhacTjsCnAhwFhfkjh4QbbAHSZB7Ebq2aVTwbyfI2+M4KjqUS6ec6aR3GOlBONhgJ/oF9KN5vDEQEEGpZc2k1S/wHqPsPkSC4rACcuIsC+nd0BjlMBC/En8muzaKLaQm7xGu34ekka1zBbNZP3SeOHl9jBxNpHN09FyH97ykcdVx505wIj9vZjNxJSiyiJlX076aBX3Ui1r4z0tSd76OsbTcW19zMAlVI1HhdPwluYHpTw5uKQOEjxkcjMBy3zC2TeQPQl9AaLObyCREVOr8T0LZpu0z7jXmkHz/mbtlP10RCfScqG+H1MWpxk9pzR8F1JYChztIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HdeEwGufP9ZrXewH9YszJbbm5IsOTiS9gXj7hzsa+DY=;
- b=azwmVgNydjLnh9Zro9CRKwPGelGkN6fDdTBA1lWn8yLTvJspQq6pI3UyO0q5TpQIjezQZl1MvmwvdQYaX7a9lLnoZc1M5o+TLhzY83u5jlQrTUBYbqLH5Sd6l9O8NLuOPUV+871vB6w1WlysXKM7SgeXL/X2sRRoXM45tc+oHvgtgQd3swPZ8g4kBzC5mgS7aqf9bOqBmfCztmu1xy0n+ZksxF9e5S11mBmoJNWGAURSGBlQmjEiRXgzkgtgMNetSCjgU23t8LYJ8q1P71WLpRZDzgZ5LTkCfPRlnBSiYWcEhj8LNG+wPL3R833y6uHAWzIaBTUFUGSPk4ni0MpNJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HdeEwGufP9ZrXewH9YszJbbm5IsOTiS9gXj7hzsa+DY=;
- b=RNaQ1gJQD0er9jF4aar5VugS4UidfFHafySUZ2eCsjzKEVjHOGClG6z3GFvTlgM2Zh/K5uzFfs5UTPnTiiSSTqZzm0TjScLGOAqJQC4E89wWXacwSnf7InevFUU1A/6Ig4blaOohZjAZtvHS/cGJWjLFovhXd8SDBItSXByJA3s=
-Received: from AM0PR04MB5779.eurprd04.prod.outlook.com (20.178.202.151) by
- AM0PR04MB5060.eurprd04.prod.outlook.com (20.177.41.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2581.11; Thu, 26 Dec 2019 14:04:28 +0000
-Received: from AM0PR04MB5779.eurprd04.prod.outlook.com
- ([fe80::6d52:5678:e02f:95f4]) by AM0PR04MB5779.eurprd04.prod.outlook.com
- ([fe80::6d52:5678:e02f:95f4%3]) with mapi id 15.20.2581.007; Thu, 26 Dec 2019
- 14:04:28 +0000
-Received: from localhost (89.37.124.34) by AM5PR0601CA0032.eurprd06.prod.outlook.com (2603:10a6:203:68::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2581.11 via Frontend Transport; Thu, 26 Dec 2019 14:04:27 +0000
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>
-CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] cpufreq: imx-cpufreq-dt: Add i.MX8MP support
-Thread-Topic: [PATCH 2/2] cpufreq: imx-cpufreq-dt: Add i.MX8MP support
-Thread-Index: AQHVu7mKaZLuFaepI0S7Z4SaC6NlIKfMc1AA
-Date:   Thu, 26 Dec 2019 14:04:28 +0000
-Message-ID: <20191226140426.ip2vb6dom5hckenc@fsr-ub1664-175>
-References: <1577343167-16376-1-git-send-email-Anson.Huang@nxp.com>
- <1577343167-16376-2-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1577343167-16376-2-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM5PR0601CA0032.eurprd06.prod.outlook.com
- (2603:10a6:203:68::18) To AM0PR04MB5779.eurprd04.prod.outlook.com
- (2603:10a6:208:131::23)
-x-originating-ip: [89.37.124.34]
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=abel.vesa@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d51eed90-c363-43d2-ff4e-08d78a0c8568
-x-ms-traffictypediagnostic: AM0PR04MB5060:|AM0PR04MB5060:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB50609D366D9596CAD6282654F62B0@AM0PR04MB5060.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 02638D901B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(396003)(366004)(346002)(136003)(39860400002)(376002)(189003)(199004)(5660300002)(66446008)(186003)(16526019)(2906002)(66476007)(8936002)(6862004)(86362001)(1076003)(52116002)(81166006)(6496006)(8676002)(53546011)(66946007)(64756008)(66556008)(26005)(81156014)(71200400001)(54906003)(316002)(44832011)(6486002)(4326008)(956004)(478600001)(33716001)(6636002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5060;H:AM0PR04MB5779.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CEhE1rkYukRZOPVEANut4o4U8hFudjiGvGqIt2XArQr0PBaWE1cvDjR6ZE6qQ0Y5nYlzXx7tGZkZmBzzKGC6i0hWyd/PMS0cUK/le6r7/uV3cf1ajohvQ5T9/S+u8+oJ/T6FVe/P9t3TIr72H/9Dejb3dgCTIN2GXW2iNtyO6+6LtyxcIZLyRLjBPobjTn4m+RebxoJyk2LQSfUoWXFa8feBeaHPjlJrUG08/JYb638sWXKJiDZXLyMNrY2Lm4Zf0aFfP8dpvegzxjwkGfBlO7Nq0D4Lxz8Co+NvoaEVWtu0RkGfypEInz/Ez93X5rlzapxnQmsPYu3xufq2LDwFrGbkwLWgRwPFR2sPAbP1napU7JAjsENtjjKAvBTcUSzoVgBXP8KBt+TuSCkqWu8cnsHiUEO4sRYnA5GzIIfKankMqQrj53AVNODsoj+gg97K
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8F23C618A82F824C80C1441332F2773D@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726475AbfLZPy2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Dec 2019 10:54:28 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38356 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726450AbfLZPy1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Dec 2019 10:54:27 -0500
+Received: by mail-pf1-f196.google.com with SMTP id x185so13357480pfc.5;
+        Thu, 26 Dec 2019 07:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/6vaIkge0g4/LG/LGYfpxBu59tVj0p6kWQdY5gEb6BY=;
+        b=hhXwRTlfIU+lLocihsj8EjTZHM6SUS3g+Dg39uPqEUu/9kZIo+qAFc9EHFy/mpPtTb
+         6B+PmReIDIncdjxcUZn9GygU9exb5/ZnRNmaXKU5l/xEkRb19vzy9gtsfXGbYlTI1R+4
+         s4FtAiNNAqsknl8hubvUz9BQ2QfMKDbRh3Re0i3h2yBbK6UQL54TACIyboWEQ+VSHhjt
+         OKR+tf9IsDZWCRB9ap6rW3X6mSFTEXdPs54nP9ieQWA3Y1Bu8j3fgmn7+Lo5nZprM1+M
+         /h3q+raEo3/HXu89wGTpb2tqzsKEfBOde8w1SOLl+G0dSYiWn7qJa1tJYrUiNQVKfP8F
+         yVEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/6vaIkge0g4/LG/LGYfpxBu59tVj0p6kWQdY5gEb6BY=;
+        b=HwUWXalyniK+LsP7nfvYIQzhY1Ev/btos7bfG8PxoHyovr7NRWWxpH6CDV+upsECjd
+         ZGFQ/CGwFvRuOFbhQPAoY8xWkcMUwGp8n9pyuQe6b3YCIeuQsA4Ahj1mb1ekoOuxaNkq
+         95QVXiyH/bry4wQeSC4ynMMElTL3bp8dfZOx9yOrvh3riZMGDGQJ3ATrTwfU+EGmXSZ0
+         OJpCX5F2NIDjwoUmJ3geLCMrZcjoVbYNzzYFlumii4+G1g+e2HQUnXNIsMqprsHXE3EZ
+         5Eh2UU4K6MQDOdGtObrDZ+zNPEBJmARrGuheCd4ZgG/jU0rKBmXT6SBG6oyP+6Pi5DeB
+         6ykQ==
+X-Gm-Message-State: APjAAAV6YLor6f3k1bKRQl4TTGkrYyvWQS2OJrFY0bBq3gO3SqAPdKv+
+        Dq8dPx3WVcrWkFyYIEJyrIo1tOPd
+X-Google-Smtp-Source: APXvYqzuezKkplo73OZwR3/hfOO/XIznV7i5DaZmMNGnkV8NiqrHmV+QvIrC6JYAE/t6fCgnD2KB4w==
+X-Received: by 2002:a63:465b:: with SMTP id v27mr50230402pgk.257.1577375666685;
+        Thu, 26 Dec 2019 07:54:26 -0800 (PST)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id u128sm14885906pfu.60.2019.12.26.07.54.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Dec 2019 07:54:25 -0800 (PST)
+Subject: Re: [PATCH v2 0/6] brcmstb_thermal updates for new processes
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, daniel.lezcano@linaro.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20191211203143.2952-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; keydata=
+ mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
+ xGlkaOSDuu09rxuW+69Y2f1TzjFuGpBk4ysWOR85O2Nx8AJ6fYGCoeTbovrNlGT1M9obSFGQ
+ X3IzRnWoqlfudjTO5TKoqkbOgpYqIo5n1QbEjCCwCwCg3DOH/4ug2AUUlcIT9/l3pGvoRJ0E
+ AICDzi3l7pmC5IWn2n1mvP5247urtHFs/uusE827DDj3K8Upn2vYiOFMBhGsxAk6YKV6IP0d
+ ZdWX6fqkJJlu9cSDvWtO1hXeHIfQIE/xcqvlRH783KrihLcsmnBqOiS6rJDO2x1eAgC8meAX
+ SAgsrBhcgGl2Rl5gh/jkeA5ykwbxA/9u1eEuL70Qzt5APJmqVXR+kWvrqdBVPoUNy/tQ8mYc
+ nzJJ63ng3tHhnwHXZOu8hL4nqwlYHRa9eeglXYhBqja4ZvIvCEqSmEukfivk+DlIgVoOAJbh
+ qIWgvr3SIEuR6ayY3f5j0f2ejUMYlYYnKdiHXFlF9uXm1ELrb0YX4GMHz7QnRmxvcmlhbiBG
+ YWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+iGYEExECACYCGyMGCwkIBwMCBBUCCAME
+ FgIDAQIeAQIXgAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2DvCVAJ4u4/bPF4P3jxb4qEY8I2gS
+ 6hG0gACffNWlqJ2T4wSSn+3o7CCZNd7SLSC5BA0ESM+4EhAQAL/o09boR9D3Vk1Tt7+gpYr3
+ WQ6hgYVON905q2ndEoA2J0dQxJNRw3snabHDDzQBAcqOvdi7YidfBVdKi0wxHhSuRBfuOppu
+ pdXkb7zxuPQuSveCLqqZWRQ+Cc2QgF7SBqgznbe6Ngout5qXY5Dcagk9LqFNGhJQzUGHAsIs
+ hap1f0B1PoUyUNeEInV98D8Xd/edM3mhO9nRpUXRK9Bvt4iEZUXGuVtZLT52nK6Wv2EZ1TiT
+ OiqZlf1P+vxYLBx9eKmabPdm3yjalhY8yr1S1vL0gSA/C6W1o/TowdieF1rWN/MYHlkpyj9c
+ Rpc281gAO0AP3V1G00YzBEdYyi0gaJbCEQnq8Vz1vDXFxHzyhgGz7umBsVKmYwZgA8DrrB0M
+ oaP35wuGR3RJcaG30AnJpEDkBYHznI2apxdcuTPOHZyEilIRrBGzDwGtAhldzlBoBwE3Z3MY
+ 31TOpACu1ZpNOMysZ6xiE35pWkwc0KYm4hJA5GFfmWSN6DniimW3pmdDIiw4Ifcx8b3mFrRO
+ BbDIW13E51j9RjbO/nAaK9ndZ5LRO1B/8Fwat7bLzmsCiEXOJY7NNpIEpkoNoEUfCcZwmLrU
+ +eOTPzaF6drw6ayewEi5yzPg3TAT6FV3oBsNg3xlwU0gPK3v6gYPX5w9+ovPZ1/qqNfOrbsE
+ FRuiSVsZQ5s3AAMFD/9XjlnnVDh9GX/r/6hjmr4U9tEsM+VQXaVXqZuHKaSmojOLUCP/YVQo
+ 7IiYaNssCS4FCPe4yrL4FJJfJAsbeyDykMN7wAnBcOkbZ9BPJPNCbqU6dowLOiy8AuTYQ48m
+ vIyQ4Ijnb6GTrtxIUDQeOBNuQC/gyyx3nbL/lVlHbxr4tb6YkhkO6shjXhQh7nQb33FjGO4P
+ WU11Nr9i/qoV8QCo12MQEo244RRA6VMud06y/E449rWZFSTwGqb0FS0seTcYNvxt8PB2izX+
+ HZA8SL54j479ubxhfuoTu5nXdtFYFj5Lj5x34LKPx7MpgAmj0H7SDhpFWF2FzcC1bjiW9mjW
+ HaKaX23Awt97AqQZXegbfkJwX2Y53ufq8Np3e1542lh3/mpiGSilCsaTahEGrHK+lIusl6mz
+ Joil+u3k01ofvJMK0ZdzGUZ/aPMZ16LofjFA+MNxWrZFrkYmiGdv+LG45zSlZyIvzSiG2lKy
+ kuVag+IijCIom78P9jRtB1q1Q5lwZp2TLAJlz92DmFwBg1hyFzwDADjZ2nrDxKUiybXIgZp9
+ aU2d++ptEGCVJOfEW4qpWCCLPbOT7XBr+g/4H3qWbs3j/cDDq7LuVYIe+wchy/iXEJaQVeTC
+ y5arMQorqTFWlEOgRA8OP47L9knl9i4xuR0euV6DChDrguup2aJVU4hPBBgRAgAPAhsMBQJU
+ X9LxBQkeXB3fAAoJEGFXmRW1Y3YOj4UAn3nrFLPZekMeqX5aD/aq/dsbXSfyAKC45Go0YyxV
+ HGuUuzv+GKZ6nsysJ7kCDQRXG8fwARAA6q/pqBi5PjHcOAUgk2/2LR5LjjesK50bCaD4JuNc
+ YDhFR7Vs108diBtsho3w8WRd9viOqDrhLJTroVckkk74OY8r+3t1E0Dd4wHWHQZsAeUvOwDM
+ PQMqTUBFuMi6ydzTZpFA2wBR9x6ofl8Ax+zaGBcFrRlQnhsuXLnM1uuvS39+pmzIjasZBP2H
+ UPk5ifigXcpelKmj6iskP3c8QN6x6GjUSmYx+xUfs/GNVSU1XOZn61wgPDbgINJd/THGdqiO
+ iJxCLuTMqlSsmh1+E1dSdfYkCb93R/0ZHvMKWlAx7MnaFgBfsG8FqNtZu3PCLfizyVYYjXbV
+ WO1A23riZKqwrSJAATo5iTS65BuYxrFsFNPrf7TitM8E76BEBZk0OZBvZxMuOs6Z1qI8YKVK
+ UrHVGFq3NbuPWCdRul9SX3VfOunr9Gv0GABnJ0ET+K7nspax0xqq7zgnM71QEaiaH17IFYGS
+ sG34V7Wo3vyQzsk7qLf9Ajno0DhJ+VX43g8+AjxOMNVrGCt9RNXSBVpyv2AMTlWCdJ5KI6V4
+ KEzWM4HJm7QlNKE6RPoBxJVbSQLPd9St3h7mxLcne4l7NK9eNgNnneT7QZL8fL//s9K8Ns1W
+ t60uQNYvbhKDG7+/yLcmJgjF74XkGvxCmTA1rW2bsUriM533nG9gAOUFQjURkwI8jvMAEQEA
+ AYkCaAQYEQIACQUCVxvH8AIbAgIpCRBhV5kVtWN2DsFdIAQZAQIABgUCVxvH8AAKCRCH0Jac
+ RAcHBIkHD/9nmfog7X2ZXMzL9ktT++7x+W/QBrSTCTmq8PK+69+INN1ZDOrY8uz6htfTLV9+
+ e2W6G8/7zIvODuHk7r+yQ585XbplgP0V5Xc8iBHdBgXbqnY5zBrcH+Q/oQ2STalEvaGHqNoD
+ UGyLQ/fiKoLZTPMur57Fy1c9rTuKiSdMgnT0FPfWVDfpR2Ds0gpqWePlRuRGOoCln5GnREA/
+ 2MW2rWf+CO9kbIR+66j8b4RUJqIK3dWn9xbENh/aqxfonGTCZQ2zC4sLd25DQA4w1itPo+f5
+ V/SQxuhnlQkTOCdJ7b/mby/pNRz1lsLkjnXueLILj7gNjwTabZXYtL16z24qkDTI1x3g98R/
+ xunb3/fQwR8FY5/zRvXJq5us/nLvIvOmVwZFkwXc+AF+LSIajqQz9XbXeIP/BDjlBNXRZNdo
+ dVuSU51ENcMcilPr2EUnqEAqeczsCGpnvRCLfVQeSZr2L9N4svNhhfPOEscYhhpHTh0VPyxI
+ pPBNKq+byuYPMyk3nj814NKhImK0O4gTyCK9b+gZAVvQcYAXvSouCnTZeJRrNHJFTgTgu6E0
+ caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
+ 6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9qfUATKC9NgZjRvBztfqy4
+ a9BQwACgnzGuH1BVeT2J0Ra+ZYgkx7DaPR0=
+Message-ID: <277b5f3d-b25b-89b0-9fc1-e520242b3380@gmail.com>
+Date:   Thu, 26 Dec 2019 07:54:14 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d51eed90-c363-43d2-ff4e-08d78a0c8568
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Dec 2019 14:04:28.1254
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BCiT2gmbSgN40DgIsZSYRCnUW5fHfLnfeJwjKRtrNQcUQzEwQScM5pkTc3WsjQGWDiekjn9UbaBKWY8SAST0aQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5060
+In-Reply-To: <20191211203143.2952-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-12-26 14:52:47, Anson Huang wrote:
-> Add i.MX8MP cpufreq DT support for speed grading and market
-> segment check.
->=20
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/cpufreq/imx-cpufreq-dt.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufr=
-eq-dt.c
-> index 85a6efd..912e93d 100644
-> --- a/drivers/cpufreq/imx-cpufreq-dt.c
-> +++ b/drivers/cpufreq/imx-cpufreq-dt.c
-> @@ -35,7 +35,7 @@ static int imx_cpufreq_dt_probe(struct platform_device =
-*pdev)
->  	if (ret)
->  		return ret;
-> =20
-> -	if (of_machine_is_compatible("fsl,imx8mn"))
-> +	if (of_machine_is_compatible("fsl,imx8mn") || of_machine_is_compatible(=
-"fsl,imx8mp"))
 
-Is there a way we could do this more generic so we won't have to add
-another of_machine_is_compatible if a new imx8m comes around ?
 
-If not, please drop the second one on a new line to follow the 80 chars rul=
-e.
+On 12/11/2019 12:31 PM, Florian Fainelli wrote:
+> Hi,
+> 
+> This patch series contains a bug fix for the existing platforms and then
+> paves the way for adding support for Broadcom STB's latest chips in 16nm
+> processes, and finally updates the driver with pecularities introduced
+> with the 16nm, like the lack of interrupt notification from the HW.
+> 
+> Please queue up the first patch for -stable if you want, thanks!
 
-Then you can add:
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Amit, Daniel, Rui, does this look acceptable to you now? Thank you
 
->  		speed_grade =3D (cell_value & IMX8MN_OCOTP_CFG3_SPEED_GRADE_MASK)
->  			      >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
->  	else
-> @@ -54,7 +54,8 @@ static int imx_cpufreq_dt_probe(struct platform_device =
-*pdev)
->  		if (of_machine_is_compatible("fsl,imx8mm") ||
->  		    of_machine_is_compatible("fsl,imx8mq"))
->  			speed_grade =3D 1;
-> -		if (of_machine_is_compatible("fsl,imx8mn"))
-> +		if (of_machine_is_compatible("fsl,imx8mn") ||
-> +			of_machine_is_compatible("fsl,imx8mp"))
->  			speed_grade =3D 0xb;
->  	}
-> =20
-> --=20
-> 2.7.4
->=20
+> 
+> Changes in v2:
+> 
+> - kept defined constants in patch #1 and keep using them for subsequent
+>   patches
+> - add Reviewed-by tags to patches #3 through #6
+> - rebase against v5.5.-rc1
+> 
+> Florian Fainelli (6):
+>   thermal: brcmstb_thermal: Do not use DT coefficients
+>   thermal: brcmstb_thermal: Prepare to support a different process
+>   dt-bindings: thermal: Define BCM7216 thermal sensor compatible
+>   thermal: brcmstb_thermal: Add 16nm process thermal parameters
+>   thermal: brcmstb_thermal: Restructure interrupt registration
+>   thermal: brcmstb_thermal: Register different ops per process
+> 
+>  .../bindings/thermal/brcm,avs-tmon.txt        |  8 +-
+>  drivers/thermal/broadcom/brcmstb_thermal.c    | 99 ++++++++++++-------
+>  2 files changed, 67 insertions(+), 40 deletions(-)
+> 
+
+-- 
+Florian
