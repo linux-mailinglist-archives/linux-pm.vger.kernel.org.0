@@ -2,207 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C80412A979
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2019 02:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A913412AA73
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2019 07:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfLZBWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Dec 2019 20:22:07 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:42846 "EHLO
+        id S1725263AbfLZGBN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Dec 2019 01:01:13 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:17771 "EHLO
         mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbfLZBWH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Dec 2019 20:22:07 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191226012204epoutp02f04fe85752a7257a0456ca72dd9bb81a~jxzTsMb-o2927829278epoutp02x
-        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2019 01:22:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191226012204epoutp02f04fe85752a7257a0456ca72dd9bb81a~jxzTsMb-o2927829278epoutp02x
+        with ESMTP id S1725268AbfLZGBN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Dec 2019 01:01:13 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191226060110epoutp02c7104fa1006f30eec9cb68f3d1b6fdaf~j1m-ZxdvC1034410344epoutp02J
+        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2019 06:01:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191226060110epoutp02c7104fa1006f30eec9cb68f3d1b6fdaf~j1m-ZxdvC1034410344epoutp02J
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1577323324;
-        bh=A4Y74hU4stuVNxeQUffqt8qHn8nJgO4jOxqfu0/HH5Y=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=XAPVSLRyj8kRjJrGksf+vqkBxtr2fFfK5uKytEJwM7CCnxGFXGQyPMOGxgYIMGNuo
-         hT8BSfTbAQ6x5gXMMqHwfrwmUUWgOosSDjcqyhQlrGxE/7rRlI/sK1aq66cxgwYgqH
-         ugNvkIIelEajk7huVX91dQQpob0BOMo6bb0XFdjs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20191226012203epcas1p48d589dd2b963a40ab84a01f0dd14b944~jxzTFXyQo2035320353epcas1p49;
-        Thu, 26 Dec 2019 01:22:03 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47jsck4bzCzMqYkn; Thu, 26 Dec
-        2019 01:21:58 +0000 (GMT)
+        s=mail20170921; t=1577340070;
+        bh=dHFvzogDJz1bLpDXKt9tZ9jlT21InoGtwFH7mUeuB4A=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TbPuFWffRX4PTFB3mOu0PDRtxiNm1kKUV19QushjuBhcXVCcY92lY/v9unh6XT8RN
+         gK7PTpqkWd/4zKERvNRvtsgX59765In0wByJisHiOpkZEEo/95ddZmxEqvJaso+OC1
+         /oko4/NGTq0VwL5TLeoiPTz51QWn6/zvZoUdf5HI=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191226060110epcas1p128da2b8c2e75b9216e3e879be5050e37~j1m-EaS1y3228432284epcas1p1a;
+        Thu, 26 Dec 2019 06:01:10 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 47jzpn1ytbzMqYkx; Thu, 26 Dec
+        2019 06:01:05 +0000 (GMT)
 Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        17.FE.48019.33B040E5; Thu, 26 Dec 2019 10:21:55 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191226012154epcas1p2edbed9b0b041607bc0d1d88eba93b973~jxzKLrWO-1488114881epcas1p2j;
-        Thu, 26 Dec 2019 01:21:54 +0000 (GMT)
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2E.BD.57028.E9C440E5; Thu, 26 Dec 2019 15:01:02 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20191226060101epcas1p11a225c00bb7ab2f6b7895b4cb00b9871~j1m3RhlGt2350123501epcas1p1b;
+        Thu, 26 Dec 2019 06:01:01 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191226012154epsmtrp1c06d5ade9063e3531597b1a23c5f98dd~jxzKJKHA-2279122791epsmtrp1-;
-        Thu, 26 Dec 2019 01:21:54 +0000 (GMT)
-X-AuditID: b6c32a38-257ff7000001bb93-a3-5e040b332ad8
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191226060101epsmtrp29cbc59650a2f32b477118a47814aa326~j1m3QhJuG1959119591epsmtrp23;
+        Thu, 26 Dec 2019 06:01:01 +0000 (GMT)
+X-AuditID: b6c32a35-50bff7000001dec4-a6-5e044c9e6c31
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        68.A9.06569.23B040E5; Thu, 26 Dec 2019 10:21:54 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191226012154epsmtip28ffab25f041e7a9971337debd09c038a~jxzJ_8Ogh0334903349epsmtip2X;
-        Thu, 26 Dec 2019 01:21:54 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: exynos-bus: Add error log when get event
- fails
-To:     Frank Lee <tiny.windzz@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        6C.89.06569.D9C440E5; Thu, 26 Dec 2019 15:01:01 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191226060101epsmtip1899b6c3efa575f8c81496045646b0ed4~j1m3GCQ2t3047630476epsmtip1x;
+        Thu, 26 Dec 2019 06:01:01 +0000 (GMT)
 From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <583cb300-ec4a-0c94-d597-4efcdf9e31ee@samsung.com>
-Date:   Thu, 26 Dec 2019 10:28:44 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <CAEExFWs6Wtg9dJbx9nwq4F53Lc5e__rzRn0QedJt2ffJTKU3uA@mail.gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxNYRzHPfece+4pLo+r9JONOpZNUzrdLsdLDZldL7NM84dNObpH9+q+
-        uedmYYZILwspW1y1zMukFnWFimrSpjJCmHnZkJG3myG7W8I5nUz/fZ7v8/3u93yf56EJXQ0V
-        SlvsbsFl560MFUhevTUrKko/lkyJye4P5I70fiK47u5aDXc3+7OG8/Y+UXM9TWUU9/1QO+KO
-        d7eouOf7KimufLCIWhxgbPS81Bi9VfmU8fLZPcbD9VXI+N07LUm9IWORWeBNgitMsKc5TBZ7
-        ejyzal1qYqphbgwbxc7n5jFhdt4mxDPLVidFLbdYpfMwYdt5a6YkJfGiyMxJWORyZLqFMLND
-        dMczgtNkdc53Rou8Tcy0p0enOWwL2JiYWINk3JRh9hbmU86Pk7M6+vvIvciPC1AADTgOShs7
-        SJl1uAFBR/2aAhQo8TcElx/6NMriJ4Ivj1rU/xIFdTkqZaMZQXHlj5FFvxSprkWyaxJeB61D
-        z4c5CEfAyfPnh00E9qng7ot+jbxB4Uho7XtKyTwBh8Njf+9wQIsT4Nq7HkmnaVIKn7gRJMvB
-        eD10Xj0wYpkInSfekrIlAK+Ffe1OWSZwCDx7W6FSeDpc+1JGyGMB/6GguW6IVBosg9ybNUjh
-        SfDxdr1G4VD4cOTgCO+CC53tlBLOQ1Dfen+kvh5az5Wo5MEEngWXmuYocjg0DpYjZfB48A0U
-        qmULYC3kHdQplhnQ8+qlSuEpcCY3nypCjGdUG8+oCp5RFTz/h51CZBWaLDhFW7ogss640Y/t
-        RcNfNZJrQDfurW5DmEbMOG3tFiJFp+a3iztsbQhoggnSVrtQik5r4nfsFFyOVFemVRDbkEG6
-        66NEaHCaQ/r4dncqa4jV6/VcHDvXwLJMiJb2P9iow+m8W8gQBKfg+pdT0QGhexF3zNeedWno
-        XPmUmpxoTQdDn+qanROZ3HLy96o60V8ysLshIrzkdR5fuqQp4fWdK7bEInO2ruJO0piu8IGc
-        +xf7BpO3nY6vfWNM3BIroEL/zCdjApN/5U7wFW8iCy1E8PW8IMerkJpHX7ct3J/1ftfS2ytm
-        bt28kjdNtVR/tU4r7mpmSNHMs5GES+T/AqkGpADAAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsWy7bCSvK4RN0ucwcZmEYv+x6+ZLc6f38Bu
-        cbbpDbvFpsfXWC0u75rDZvG59wijxYzz+5gsbjeuYLOY+3sCmwOnx85Zd9k9Nq3qZPPYvKTe
-        o2/LKkaPz5vkAlijuGxSUnMyy1KL9O0SuDI29XSyFbwSqzjx/gVLA+MPgS5GTg4JAROJro2t
-        TF2MXBxCArsZJT5v38cIkZCUmHbxKHMXIweQLSxx+HAxRM1bRolbRyezg9QICwRL7P97G6xe
-        REBVYvby5WCDmAXeMUmsa1zLCpIQEuhikujabwliswloSex/cYMNxOYXUJS4+uMxWDOvgJ3E
-        9meX2UCWsQANmrlHBCQsKhAmsXPJYyaIEkGJkzOfsICUcAoESjQeKQAJMwuoS/yZd4kZwhaX
-        uPVkPhOELS+x/e0c5gmMwrOQdM9C0jILScssJC0LGFlWMUqmFhTnpucWGxYY5aWW6xUn5haX
-        5qXrJefnbmIER5eW1g7GEyfiDzEKcDAq8fBuSGOOE2JNLCuuzD3EKMHBrCTCu7qIMU6INyWx
-        siq1KD++qDQntfgQozQHi5I4r3z+sUghgfTEktTs1NSC1CKYLBMHp1QDo4C/z7QDSwSX7LIy
-        UJdN0pG/dXkPY/D0zSynuRR/nGLQiJf0m/Tup2u37KbQNpljW7z6X0emrN+SOemu2y5pm/2q
-        SiePXLnf8bA7YovBohBjTw/rkOPmzq+NZeXtnxufqXC9UDj1kER/XbrTq7IvN614hRvWxj7m
-        ythuKGP2mJ/neerMmLfCSizFGYmGWsxFxYkAA+r9J6oCAAA=
-X-CMS-MailID: 20191226012154epcas1p2edbed9b0b041607bc0d1d88eba93b973
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     cw00.choi@samsung.com, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Subject: [PATCH] PM / devfreq: Add debugfs support with devfreq_summary file
+Date:   Thu, 26 Dec 2019 15:07:49 +0900
+Message-Id: <20191226060749.13881-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLKsWRmVeSWpSXmKPExsWy7bCmru5CH5Y4g/Or+C0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsDmwem1Z1snn0bVnF6PF5k1wAc1S2TUZqYkpqkUJqXnJ+
+        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
+        fmlJqkJGfnGJrVJqQUpOgWWBXnFibnFpXrpecn6ulaGBgZEpUGFCdsbE/siC11oVc09cZGtg
+        nKLQxcjJISFgInF5w0XWLkYuDiGBHYwS+ydsYoNwPjFKLPx0nRHC+cYocWr1LlaYlnU7lzBD
+        JPYySlyfsxuq5QujxP0vt9hBqtgEtCT2v7jBBmKLCFhJnP7fwQxiMwukSPT/PsMCYgsL+Ejc
+        OnWEEcRmEVCVWH58ElgvL1D9t02tbBDb5CVWbzjADGE/ZZX4OcMIwnaR2LByCwuELSzx6vgW
+        dghbSuLzu71QvdUSK08eATtOQqCDUWLL/gtQLxhL7F86mamLkQPoIE2J9bv0IcKKEjt/z2WE
+        uJNP4t3XHlaQEgkBXomONiGIEmWJyw/uMkHYkhKL2zuhVnlIPP66HCwuJBAr8eLoHtYJjLKz
+        EBYsYGRcxSiWWlCcm55abFhgiBxJmxjBSUnLdAfjlHM+hxgFOBiVeHg3pDHHCbEmlhVX5h5i
+        lOBgVhLhXV3EGCfEm5JYWZValB9fVJqTWnyI0RQYeBOZpUST84EJM68k3tDUyNjY2MLE0MzU
+        0FBJnJfjx8VYIYH0xJLU7NTUgtQimD4mDk6pBsZTMjYrDu6v2rzF83P09nvGUxyC/U6/WcNm
+        JWBy6c3lH6vq6hmv7Cp2P1+83+tRnU7Nnhml5j+4uWbMOhvhU5fzuzmKf1XA0Q8LtM226714
+        ZD8/9H/r4a+dCX8vnUnOmrkj5kTf8bvrAwT2bzz1+MPvI1IV7/rWXFQ2/J1ZcyvCk4/9w97T
+        wgxBSizFGYmGWsxFxYkAKXnQHmADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBJMWRmVeSWpSXmKPExsWy7bCSnO5cH5Y4g5VfVS0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsDmwem1Z1snn0bVnF6PF5k1wAcxSXTUpqTmZZapG+XQJX
+        xsT+yILXWhVzT1xka2CcotDFyMkhIWAisW7nEmYQW0hgN6PExsn1EHFJiWkXjwLFOYBsYYnD
+        h4shSj4xSsx47Q5iswloSex/cYMNxBYRsJG4u/gaC0g5s0CGxP/lSiBhYQEfiVunjjCC2CwC
+        qhLLj09iB7F5Bawkvm1qZYPYJC+xesMB5gmMPAsYGVYxSqYWFOem5xYbFhjlpZbrFSfmFpfm
+        pesl5+duYgSHh5bWDsYTJ+IPMQpwMCrx8G5IY44TYk0sK67MPcQowcGsJMK7uogxTog3JbGy
+        KrUoP76oNCe1+BCjNAeLkjivfP6xSCGB9MSS1OzU1ILUIpgsEwenVAOjorBwX/aMM11ZDhlL
+        fEqaNRuXOZ9wM37f/Gh7bobSw8olu+eeiK5MbN+Rzp522yN9/zfZEluFbX99Uuere2/62hPP
+        FRjtWqrGVyzp+qHrZfMN25MLm5t8TzXXTL3LVhcVtDejmC2zu7Ft9jL/eN79wWx965lviafZ
+        RErdn8GrFr9HYlbMWiWW4oxEQy3mouJEAGAKtvELAgAA
+X-CMS-MailID: 20191226060101epcas1p11a225c00bb7ab2f6b7895b4cb00b9871
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191223191928epcas1p128d39bb875b8654d61ae21364e466ec7
-References: <CGME20191223191928epcas1p128d39bb875b8654d61ae21364e466ec7@epcas1p1.samsung.com>
-        <20191223191923.10450-1-tiny.windzz@gmail.com>
-        <7230b556-7a96-14d1-ed22-43b5a6cd5a71@samsung.com>
-        <CAEExFWs6Wtg9dJbx9nwq4F53Lc5e__rzRn0QedJt2ffJTKU3uA@mail.gmail.com>
+X-CMS-RootMailID: 20191226060101epcas1p11a225c00bb7ab2f6b7895b4cb00b9871
+References: <CGME20191226060101epcas1p11a225c00bb7ab2f6b7895b4cb00b9871@epcas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/24/19 11:51 PM, Frank Lee wrote:
-> On Tue, Dec 24, 2019 at 12:00 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->>
->> Hi,
->>
->> I think that you better to use 'devfreq-event' instead of just 'event'
->> as following:
->>
->> PM / devfreq: exynos-bus: Add error log when fail to get devfreq-event
->>
->> On 12/24/19 4:19 AM, Yangtao Li wrote:
->>> Adding an error log makes it easier to trace the function's error path.
->>> Because the error code may be rewritten on return, print error code here.
->>>
->>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
->>> ---
->>>  drivers/devfreq/exynos-bus.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->>> index 948e9340f91c..634d63fd00ea 100644
->>> --- a/drivers/devfreq/exynos-bus.c
->>> +++ b/drivers/devfreq/exynos-bus.c
->>> @@ -126,6 +126,8 @@ static int exynos_bus_get_dev_status(struct device *dev,
->>>
->>>       ret = exynos_bus_get_event(bus, &edata);
->>>       if (ret < 0) {
->>> +             dev_err(dev, "failed to get event from devfreq-event devices %d\n",
->>> +                     ret);
-> 
-> Emmm, it looks a bit strange to me...
+Add debugfs interface to provide debugging information of devfreq device.
+It contains 'devfreq_summary' entry to show the summary of registered
+devfreq devices as following: And the additional debugfs file will be added.
+- /sys/kernel/debug/devfreq/devfreq_summary
 
-If don't show the error value, it is possible to make it
-until 81 char. I edit it as following and applied it with
-modified patch title.
+[For example on Exynos5422-based Odroid-XU3 board]
+- In order to show the multiple governors on devfreq_summay result,
+change the governor of devfreq0 from simple_ondemand to userspace.
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 1259a0da7db7..8fa8eb541373 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -126,6 +126,7 @@ static int exynos_bus_get_dev_status(struct device *dev,
+$ cat /sys/kernel/debug/devfreq/devfreq_summary
+dev name                       dev        parent dev governor        cur_freq     min_freq     max_freq
+------------------------------ ---------- ---------- --------------- ------------ ------------ ------------
+10c20000.memory-controller     devfreq0              userspace       165000000    165000000    825000000
+soc:bus_wcore                  devfreq1              simple_ondemand 400000000    84000000     400000000
+soc:bus_noc                    devfreq2   devfreq1   passive         100000000    67000000     100000000
+soc:bus_fsys_apb               devfreq3   devfreq1   passive         200000000    100000000    200000000
+soc:bus_fsys                   devfreq4   devfreq1   passive         200000000    100000000    200000000
+soc:bus_fsys2                  devfreq5   devfreq1   passive         150000000    75000000     150000000
+soc:bus_mfc                    devfreq6   devfreq1   passive         333000000    96000000     333000000
+soc:bus_gen                    devfreq7   devfreq1   passive         267000000    89000000     267000000
+soc:bus_peri                   devfreq8   devfreq1   passive         67000000     67000000     67000000
+soc:bus_g2d                    devfreq9   devfreq1   passive         333000000    84000000     333000000
+soc:bus_g2d_acp                devfreq10  devfreq1   passive         267000000    67000000     267000000
+soc:bus_jpeg                   devfreq11  devfreq1   passive         300000000    75000000     300000000
+soc:bus_jpeg_apb               devfreq12  devfreq1   passive         167000000    84000000     167000000
+soc:bus_disp1_fimd             devfreq13  devfreq1   passive         200000000    120000000    200000000
+soc:bus_disp1                  devfreq14  devfreq1   passive         300000000    120000000    300000000
+soc:bus_gscl_scaler            devfreq15  devfreq1   passive         300000000    150000000    300000000
+soc:bus_mscl                   devfreq16  devfreq1   passive         400000000    84000000     400000000
 
-        ret = exynos_bus_get_event(bus, &edata);
-        if (ret < 0) {
-+               dev_err(dev, "failed to get event from devfreq-event devices\n");
-                stat->total_time = stat->busy_time = 0;
-                goto err;
-        }
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+---
+ drivers/devfreq/devfreq.c | 65 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-> V2 has been sent.
-> 
-> Yours,
-> Yangtao
-> 
-> 
->>
->> Better to make it under 80 char as following:
->>
->> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->> index f5d4c369c7fb..10f4fa1a0363 100644
->> --- a/drivers/devfreq/exynos-bus.c
->> +++ b/drivers/devfreq/exynos-bus.c
->> @@ -126,7 +126,8 @@ static int exynos_bus_get_dev_status(struct device *dev,
->>
->>         ret = exynos_bus_get_event(bus, &edata);
->>         if (ret < 0) {
->> -               dev_err(dev, "failed to get event from devfreq-event devices %d\n",
->> +               dev_err(dev,
->> +                       "failed to get event from devfreq-event devices %d\n",
->>                         ret);
->>                 stat->total_time = stat->busy_time = 0;
->>                 goto err;
->>
->>
->>>               stat->total_time = stat->busy_time = 0;
->>>               goto err;
->>>       }
->>>
->>
->>
->> --
->> Best Regards,
->> Chanwoo Choi
->> Samsung Electronics
-> 
-> 
-
-
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index acd21345a070..d7177cc0a914 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -10,6 +10,7 @@
+ #include <linux/kernel.h>
+ #include <linux/kmod.h>
+ #include <linux/sched.h>
++#include <linux/debugfs.h>
+ #include <linux/errno.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
+@@ -33,6 +34,7 @@
+ #define HZ_PER_KHZ	1000
+ 
+ static struct class *devfreq_class;
++static struct dentry *devfreq_debugfs;
+ 
+ /*
+  * devfreq core provides delayed work based load monitoring helper
+@@ -1670,6 +1672,62 @@ static struct attribute *devfreq_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(devfreq);
+ 
++static int devfreq_summary_show(struct seq_file *s, void *data)
++{
++	struct devfreq *devfreq;
++	struct devfreq *parent_devfreq;
++	unsigned long cur_freq, min_freq, max_freq;
++
++	seq_printf(s, "%-30s %-10s %-10s %-15s %-12s %-12s %-12s\n",
++			"dev name",
++			"dev",
++			"parent dev",
++			"governor",
++			"cur_freq",
++			"min_freq",
++			"max_freq");
++	seq_printf(s, "%-30s %-10s %-10s %-15s %-12s %-12s %-12s\n",
++			"------------------------------",
++			"----------",
++			"----------",
++			"---------------",
++			"------------",
++			"------------",
++			"------------");
++
++	mutex_lock(&devfreq_list_lock);
++
++	list_for_each_entry_reverse(devfreq, &devfreq_list, node) {
++#if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
++		if (!strncmp(devfreq->governor_name, DEVFREQ_GOV_PASSIVE,
++							DEVFREQ_NAME_LEN)) {
++			struct devfreq_passive_data *data = devfreq->data;
++			parent_devfreq = data->parent;
++		} else {
++			parent_devfreq = NULL;
++		}
++#endif
++		mutex_lock(&devfreq->lock);
++		cur_freq = devfreq->previous_freq,
++		get_freq_range(devfreq, &min_freq, &max_freq);
++		mutex_unlock(&devfreq->lock);
++
++		seq_printf(s, "%-30s %-10s %-10s %-15s %-12ld %-12ld %-12ld\n",
++			dev_name(devfreq->dev.parent),
++			dev_name(&devfreq->dev),
++			parent_devfreq ? dev_name(&parent_devfreq->dev) : "",
++			devfreq->governor_name,
++			cur_freq,
++			min_freq,
++			max_freq);
++	}
++
++	mutex_unlock(&devfreq_list_lock);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(devfreq_summary);
++
+ static int __init devfreq_init(void)
+ {
+ 	devfreq_class = class_create(THIS_MODULE, "devfreq");
+@@ -1686,6 +1744,13 @@ static int __init devfreq_init(void)
+ 	}
+ 	devfreq_class->dev_groups = devfreq_groups;
+ 
++	devfreq_debugfs = debugfs_create_dir("devfreq", NULL);
++	if (PTR_ERR(devfreq_debugfs) != -ENODEV && IS_ERR(devfreq_debugfs))
++		pr_warn("%s: couldn't create debugfs dir\n", __FILE__);
++
++	debugfs_create_file("devfreq_summary", 0444, devfreq_debugfs, NULL,
++			&devfreq_summary_fops);
++
+ 	return 0;
+ }
+ subsys_initcall(devfreq_init);
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+2.17.1
+
