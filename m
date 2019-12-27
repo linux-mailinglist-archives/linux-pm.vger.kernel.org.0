@@ -2,80 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 863F312B3D0
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 11:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A0812B40A
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 11:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfL0KVs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Dec 2019 05:21:48 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42876 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbfL0KVs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Dec 2019 05:21:48 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 66so35813457otd.9;
-        Fri, 27 Dec 2019 02:21:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=BNozEkFQwJDe/ZH+qVhHoHwdDuhlvg4ivwtzO8Pa6xg=;
-        b=I1jYO6Sf3zSHEdGxe7mJ7K2cxjZrYOo3OJkjeWvSRyariGUUx4GuWa4h/M4bqZmGf6
-         GVDq6UNCLFVpJKtaF/dOkainsyRckz/1sfuwHaR0nEO7cR8TptRUlAC4b0ssozDdcEsk
-         S/glSkQljhZwUwDM0dVdq6HazTOHLCWKYGtj5rBXlDNphCf6QQGoM/hR6lApVmVPo3Ir
-         jYGktUO5uDX0+g7HjLLMKg3ChDKYKOyNjXdsztB2hiNxKliIuOLD033GVORsC7sZkPvj
-         MN5TcQ9kJzMcnYZZ5r5xbAEQwW8Uai0Tt6wneahM5ovC6PoOO1sR+qVAcjc5FPywFEGH
-         hwRA==
-X-Gm-Message-State: APjAAAVY4ekIdLUlk0iGziIjxUntovA1z9g0j34HaEiNEJlmzJWx48Dh
-        LLL60Mh8Ufb7LyXhLT0QoY2hKPzQjbLjHwyrgppw+rV5
-X-Google-Smtp-Source: APXvYqxlydIBPjCsSMvnEjO+VOHBR4LNZQiX+rMNcvWG42Wv+Jgl6P9tBnssQ1bkjK8cb/PRZS646jD50rmGEuixb9E=
-X-Received: by 2002:a05:6830:1e67:: with SMTP id m7mr52522912otr.262.1577442107741;
- Fri, 27 Dec 2019 02:21:47 -0800 (PST)
+        id S1726354AbfL0Kkn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Dec 2019 05:40:43 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:62862 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbfL0Kkn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Dec 2019 05:40:43 -0500
+Received: from 79.184.255.87.ipv4.supernova.orange.pl (79.184.255.87) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id 17a46f8e8f570a8f; Fri, 27 Dec 2019 11:40:40 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH] cpuidle: Drop unused cpuidle_driver_ref/unref() functions
+Date:   Fri, 27 Dec 2019 11:40:40 +0100
+Message-ID: <2529185.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 27 Dec 2019 11:21:37 +0100
-Message-ID: <CAJZ5v0i02hjtkXqxo=38XByY=G7LEDxdMbagAAvf207tSHXA2w@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.5-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Please pull from the tag
+The cpuidle_driver_ref() and cpuidle_driver_unref() functions are not
+used and the refcnt field in struct cpuidle_driver operated by them
+is not updated anywhere else (so it is permanently equal to 0), so
+drop both of them along with refcnt.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.5-rc4
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpuidle/driver.c |   46 ----------------------------------------------
+ include/linux/cpuidle.h  |    5 -----
+ 2 files changed, 51 deletions(-)
 
-with top-most commit 2cb7bfc1ca9a34ca148ed77f5f6f07373312bb0a
+Index: linux-pm/drivers/cpuidle/driver.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/driver.c
++++ linux-pm/drivers/cpuidle/driver.c
+@@ -155,8 +155,6 @@ static void __cpuidle_driver_init(struct
+ {
+ 	int i;
+ 
+-	drv->refcnt = 0;
+-
+ 	/*
+ 	 * Use all possible CPUs as the default, because if the kernel boots
+ 	 * with some CPUs offline and then we online one of them, the CPU
+@@ -240,9 +238,6 @@ static int __cpuidle_register_driver(str
+  */
+ static void __cpuidle_unregister_driver(struct cpuidle_driver *drv)
+ {
+-	if (WARN_ON(drv->refcnt > 0))
+-		return;
+-
+ 	if (drv->bctimer) {
+ 		drv->bctimer = 0;
+ 		on_each_cpu_mask(drv->cpumask, cpuidle_setup_broadcast_timer,
+@@ -350,47 +345,6 @@ struct cpuidle_driver *cpuidle_get_cpu_d
+ EXPORT_SYMBOL_GPL(cpuidle_get_cpu_driver);
+ 
+ /**
+- * cpuidle_driver_ref - get a reference to the driver.
+- *
+- * Increment the reference counter of the cpuidle driver associated with
+- * the current CPU.
+- *
+- * Returns a pointer to the driver, or NULL if the current CPU has no driver.
+- */
+-struct cpuidle_driver *cpuidle_driver_ref(void)
+-{
+-	struct cpuidle_driver *drv;
+-
+-	spin_lock(&cpuidle_driver_lock);
+-
+-	drv = cpuidle_get_driver();
+-	if (drv)
+-		drv->refcnt++;
+-
+-	spin_unlock(&cpuidle_driver_lock);
+-	return drv;
+-}
+-
+-/**
+- * cpuidle_driver_unref - puts down the refcount for the driver
+- *
+- * Decrement the reference counter of the cpuidle driver associated with
+- * the current CPU.
+- */
+-void cpuidle_driver_unref(void)
+-{
+-	struct cpuidle_driver *drv;
+-
+-	spin_lock(&cpuidle_driver_lock);
+-
+-	drv = cpuidle_get_driver();
+-	if (drv && !WARN_ON(drv->refcnt <= 0))
+-		drv->refcnt--;
+-
+-	spin_unlock(&cpuidle_driver_lock);
+-}
+-
+-/**
+  * cpuidle_driver_state_disabled - Disable or enable an idle state
+  * @drv: cpuidle driver owning the state
+  * @idx: State index
+Index: linux-pm/include/linux/cpuidle.h
+===================================================================
+--- linux-pm.orig/include/linux/cpuidle.h
++++ linux-pm/include/linux/cpuidle.h
+@@ -116,7 +116,6 @@ DECLARE_PER_CPU(struct cpuidle_device, c
+ struct cpuidle_driver {
+ 	const char		*name;
+ 	struct module 		*owner;
+-	int                     refcnt;
+ 
+         /* used by the cpuidle framework to setup the broadcast timer */
+ 	unsigned int            bctimer:1;
+@@ -148,8 +147,6 @@ extern u64 cpuidle_poll_time(struct cpui
+ 
+ extern int cpuidle_register_driver(struct cpuidle_driver *drv);
+ extern struct cpuidle_driver *cpuidle_get_driver(void);
+-extern struct cpuidle_driver *cpuidle_driver_ref(void);
+-extern void cpuidle_driver_unref(void);
+ extern void cpuidle_driver_state_disabled(struct cpuidle_driver *drv, int idx,
+ 					bool disable);
+ extern void cpuidle_unregister_driver(struct cpuidle_driver *drv);
+@@ -187,8 +184,6 @@ static inline u64 cpuidle_poll_time(stru
+ static inline int cpuidle_register_driver(struct cpuidle_driver *drv)
+ {return -ENODEV; }
+ static inline struct cpuidle_driver *cpuidle_get_driver(void) {return NULL; }
+-static inline struct cpuidle_driver *cpuidle_driver_ref(void) {return NULL; }
+-static inline void cpuidle_driver_unref(void) {}
+ static inline void cpuidle_driver_state_disabled(struct cpuidle_driver *drv,
+ 					       int idx, bool disable) { }
+ static inline void cpuidle_unregister_driver(struct cpuidle_driver *drv) { }
 
- Merge tag 'devfreq-fixes-for-5.5-rc4' of
-git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux
-
-on top of commit 46cf053efec6a3a5f343fead837777efe8252a46
-
- Linux 5.5-rc3
-
-to receive power management fixes for 5.5-rc4.
-
-These fix compile test of the Tegra devfreq driver (Arnd Bergmann)
-and remove redundant Kconfig dependencies from multiple devfreq
-drivers (Leonard Crestez).
-
-Thanks!
 
 
----------------
-
-Arnd Bergmann (1):
-      PM / devfreq: tegra: Add COMMON_CLK dependency
-
-Leonard Crestez (1):
-      PM / devfreq: Drop explicit selection of PM_OPP
-
----------------
-
- drivers/devfreq/Kconfig | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
