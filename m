@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA7512B227
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 07:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32FB12B22D
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 07:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbfL0GxD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Dec 2019 01:53:03 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35514 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbfL0GxD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Dec 2019 01:53:03 -0500
-Received: by mail-pg1-f196.google.com with SMTP id l24so14030275pgk.2
-        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2019 22:53:03 -0800 (PST)
+        id S1726156AbfL0G46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Dec 2019 01:56:58 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44530 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726165AbfL0G46 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Dec 2019 01:56:58 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 195so13453793pfw.11
+        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2019 22:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=D+tJQxVCKPg9Rb8jS+mkus5u9l3JL2diBZpHYaUBhgU=;
-        b=UfubnGc5ZieYDJrua9hILu02gNJl8OLeeUO4liQPJWviXNh47yp5SIKsEQUjA+8dXg
-         S+x/DXv4u4lUiW5VaaElly+9FVLVZcyQWcz4tuDqNCnMx+VGMn+x/G23TDvp2OL0TX2S
-         gU6L4KTyGAofNFcj5oYj/stpsVeNIb7IFRtWAOBI9NzTsg5RCm8WiiYUFp3xGKnbecEG
-         XXzeWRll+rPiAVvxwT7uALE3rESHHcCdCS/LtR9pvpMiVwsPx5iNAvUYWSIM7VDhIdCj
-         LPXL9sxsq6FkMBlACzFWwuLVPPr0a8qi9gWscfzAY6nRS64xerjR1eq0i0yjtSb1GCqN
-         bnDQ==
+        bh=QJHhq9PnWmsC3qWUqBCMwKHMICd+cwEFxCtyiFSIzhI=;
+        b=Gy9c/7mNWBcoSXG5JdMpERe6Mi4Mk+j0A9qoBUgPrAxt1ObYc0s03lONaOs3iBZsu0
+         IS/M59dnNuwfb2hLDg+DLciLU3NfgvUN8GYTsc+Y8f2/SfLnFpHpJhs3hZ05nDoic5V6
+         PEIL4MG4Vs+5baZjOg2hQCFbKyV1jJaRXR8BqLaqgLibEgMI0HnvoKtIbDiH4wjuPKSK
+         inZXg2SAOpNdiQYY4baJ699X8ggCO+F3alcQeHhNkM3k/Jmmy1hnbUra+725qVhBBHqa
+         MXoBcSjR03/9wfKv6KsQM1XkMYcjP7MlSbYRoPPftxUyadT78etLKnSYoucuNNvZ0DBh
+         Q/Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=D+tJQxVCKPg9Rb8jS+mkus5u9l3JL2diBZpHYaUBhgU=;
-        b=m+5HvCN8kx9KuRL0IOX93XaH7YifYfypQKAx9tTnEzuqmqSmExTKvIalKaWG0pqCEE
-         nVKn5CgiK7VTOfII/DeEZQsLaV+rSfD8pR2t8nboi9X6CasmRnIfjb3AvIioyrQxaBfr
-         mMGS6IOxgkh8/0/FjfAgdPtsZhdU5+yYo09u8C/Wz31djzsewW7NZlyHbzsHiRIZDLiZ
-         QMhPGd+6jNZZbcd2XvCz7OuKiCcRYZ/hTplct5m006fxzZtuzgR8KR49i6HsCcyCjp7J
-         cjWDvkpyRrYNPhgs47DmuZY1ULt3FG8vTs3ilVEJIFvasPNdpqZdnV7LHo5QPwhNj7R/
-         35zA==
-X-Gm-Message-State: APjAAAVHiJ8GJs40gG84gOnbj/bws9ORJJgmHOqfV39SzIjYh8BRjqvg
-        FNrdfi2WnKZYzlc7Z1jnpr7Tdg==
-X-Google-Smtp-Source: APXvYqw/f7yBMM9QmcJ7bi5ktc8XPVS2HIrEJ20Zpj/mkYQx4ERk06gyCsWLjUjBuMtrYpDSPZQeaA==
-X-Received: by 2002:a63:455a:: with SMTP id u26mr53844216pgk.282.1577429582913;
-        Thu, 26 Dec 2019 22:53:02 -0800 (PST)
+        bh=QJHhq9PnWmsC3qWUqBCMwKHMICd+cwEFxCtyiFSIzhI=;
+        b=IagKWflmgwytOAMEbbmPkDaIw/CO/vRP2wqIioD6mncRDfowkh5x6PuwrvV4xcp6+e
+         2IEi5eVwLNGO/UFMEJWm31C9Dg5gJZFrGZSmlRWrLNTQY8QbOFEwTRjShkjutqfNUl9Z
+         Z+c9RS9IJxp7MT9e3Bmal42pzL9QHti2lFxs9Hihwx6jjhfg221eyvFKh9ZjUUuDrZwT
+         7mInT8CFnYPD71dFDGB2h7mN0d5rt+WNcZa94pq42vGn92B4B7xjlza5FrpMwhAP63HH
+         bZzE2FPgZk4LVR1LiLrPmlYplDYF4qA7xbLhTIfDrmGfSi6933U6p3l/ZzDKA7wrT+Sp
+         Aobg==
+X-Gm-Message-State: APjAAAXDRKlrxBSYcgCYQJ7tlSUl/+KUSInj7VcxmU8kXr393QrHj3Xm
+        zGbYfRj8QdF9RwTMm0V0gRmNvPhhuVw=
+X-Google-Smtp-Source: APXvYqxRAJ2vRRMp4XiDMooEXngMMAys9nnNPFEVMme7jTBcfs3W3fzAIF2up5EZCAJl3zz+GH/p7Q==
+X-Received: by 2002:aa7:8d14:: with SMTP id j20mr37973171pfe.207.1577429817761;
+        Thu, 26 Dec 2019 22:56:57 -0800 (PST)
 Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c14sm12832361pjr.24.2019.12.26.22.53.01
+        by smtp.gmail.com with ESMTPSA id c199sm39927727pfb.126.2019.12.26.22.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2019 22:53:02 -0800 (PST)
-Date:   Thu, 26 Dec 2019 22:52:48 -0800
+        Thu, 26 Dec 2019 22:56:57 -0800 (PST)
+Date:   Thu, 26 Dec 2019 22:56:43 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Niklas Cassel <nks@flawful.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/5] power: avs: qcom-cpr: remove set but unused variable
-Message-ID: <20191227065248.GM1908628@ripper>
+Subject: Re: [PATCH 5/5] power: avs: qcom-cpr: make cpr_get_opp_hz_for_req()
+ static
+Message-ID: <20191227065643.GN1908628@ripper>
 References: <20191223141934.19837-1-nks@flawful.org>
- <20191223141934.19837-5-nks@flawful.org>
+ <20191223141934.19837-6-nks@flawful.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=windows-1252
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191223141934.19837-5-nks@flawful.org>
+In-Reply-To: <20191223141934.19837-6-nks@flawful.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -66,11 +67,13 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon 23 Dec 06:19 PST 2019, Niklas Cassel wrote:
 
-> drivers/power/avs/qcom-cpr.c:896:35:
-> warning: variable ‘prev’ set but not used
+> drivers/power/avs/qcom-cpr.c:1081:15:
+> warning: no previous prototype for ‘cpr_get_opp_hz_for_req’
 > 
 > Detected when running make with W=1.
 > 
+
+And now also Reported-by: kbuild test robot <lkp@intel.com>
 
 Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
@@ -80,27 +83,20 @@ Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/power/avs/qcom-cpr.c
-> index 232836a1ef27..484dd498f8b9 100644
+> index 484dd498f8b9..9247f53550b3 100644
 > --- a/drivers/power/avs/qcom-cpr.c
 > +++ b/drivers/power/avs/qcom-cpr.c
-> @@ -893,7 +893,7 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
->  	int i;
->  	unsigned int step_volt;
->  	struct fuse_corner_data *fdata;
-> -	struct fuse_corner *fuse, *end, *prev;
-> +	struct fuse_corner *fuse, *end;
->  	int uV;
->  	const struct reg_sequence *accs;
->  	int ret;
-> @@ -909,7 +909,7 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
->  	end = &fuse[desc->num_fuse_corners - 1];
->  	fdata = desc->cpr_fuses.fuse_corner_data;
+> @@ -1078,8 +1078,8 @@ static unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
+>  	return fuse_corner;
+>  }
 >  
-> -	for (i = 0, prev = NULL; fuse <= end; fuse++, fuses++, i++, fdata++) {
-> +	for (i = 0; fuse <= end; fuse++, fuses++, i++, fdata++) {
->  		/*
->  		 * Update SoC voltages: platforms might choose a different
->  		 * regulators than the one used to characterize the algorithms
+> -unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+> -				     struct device *cpu_dev)
+> +static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
+> +					    struct device *cpu_dev)
+>  {
+>  	u64 rate = 0;
+>  	struct device_node *ref_np;
 > -- 
 > 2.24.1
 > 
