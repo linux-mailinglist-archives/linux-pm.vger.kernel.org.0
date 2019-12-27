@@ -2,181 +2,734 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E3412AFD4
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 01:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50FA12B1BB
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Dec 2019 07:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbfL0ADQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Dec 2019 19:03:16 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:25213 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726806AbfL0ADQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Dec 2019 19:03:16 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191227000313epoutp02ffabffeaef4a3f566158b9823714b89e~kEXvbxdGs0200302003epoutp02O
-        for <linux-pm@vger.kernel.org>; Fri, 27 Dec 2019 00:03:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191227000313epoutp02ffabffeaef4a3f566158b9823714b89e~kEXvbxdGs0200302003epoutp02O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1577404993;
-        bh=WA59LNYJUt2fnjJ+DhnIp9dd0bE/LhrRH5GQ+S7fr+8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=LujLXdySbgmVSnLvmbx0qEdxSXjnpK5LREJVtstvOlodTCHAdnWOfnKD8bje6BbPr
-         D6a12SfNG2i+wSQDFuXaruUWnDr0rhY11C235N3cG6O+pf6ocVRqv1/z7b5N+Iyc0w
-         ZZkGzlhZW5fd+7OPUZMFTiu47iaRSaaiUnMRoRm4=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20191227000312epcas1p4173878ecd8739fcbb83c0ade834d68fe~kEXu6yDgY2314223142epcas1p4K;
-        Fri, 27 Dec 2019 00:03:12 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47kRqL0DZZzMqYkg; Fri, 27 Dec
-        2019 00:03:10 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.D2.52419.D3A450E5; Fri, 27 Dec 2019 09:03:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191227000309epcas1p145ab877d7254a2e5e29c1a33b02dd583~kEXrrYIFK2734127341epcas1p1W;
-        Fri, 27 Dec 2019 00:03:09 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191227000309epsmtrp14501116d06ad2fdf45a87ae9326beeaf~kEXrqBTRL0742607426epsmtrp1R;
-        Fri, 27 Dec 2019 00:03:09 +0000 (GMT)
-X-AuditID: b6c32a37-59fff7000001ccc3-8b-5e054a3d28a2
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1A.41.10238.C3A450E5; Fri, 27 Dec 2019 09:03:09 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191227000308epsmtip2d2aa064d3f8397a927215c21eb2df2a5~kEXraFDV_2373323733epsmtip2Y;
-        Fri, 27 Dec 2019 00:03:08 +0000 (GMT)
-Subject: Re: [PATCH 4/9] PM / devfreq: exynos-bus: Replace deprecated
- 'devfreq' property
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzk@kernel.org, mark.rutland@arm.com, heiko@sntech.de,
-        leonard.crestez@nxp.com, lukasz.luba@arm.com, a.swigon@samsung.com,
-        m.szyprowski@samsung.com, kgene@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <a54e4275-012e-77d9-bdbe-1aab64b5c12b@samsung.com>
-Date:   Fri, 27 Dec 2019 09:09:58 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726396AbfL0GWl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Dec 2019 01:22:41 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39303 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbfL0GWk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Dec 2019 01:22:40 -0500
+Received: by mail-pl1-f195.google.com with SMTP id g6so8403492plp.6
+        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2019 22:22:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kSr9mOsoSEnmbzL9sPT40m2QkkfYAnlyHFJj5NZPWNU=;
+        b=Ds3MWX7K5VZ17E0RrNX8tRbeEyCEgSWJ4t7WfmNhE1CUEIDnQsmPKJvFp08frN9neN
+         WihaVs0+SolAZRZQmuLgOflrjqtSi3LDnA7l8vfXVPOHl9hNLyZjCCkF6k72yi9ebibP
+         tNb+D8p4SaVyZjWpHQ5MMOuNnIOt/IagCWsfdsSBkesRLPxDphVM/fMs7wMXg6ssiQ3W
+         NXjASXM0J9YfN8ja0cmqEoMSWyTMkL6K5E3MS7hwhu0eW4dkjIrMYVWotzuqkaLcKNMc
+         f+aPKLySIU3Hsuz4qGwLnh8yTALZucvtc7Y0gsxAerTnLOMysM3GY8FvH9hjMDQml8DQ
+         FZdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kSr9mOsoSEnmbzL9sPT40m2QkkfYAnlyHFJj5NZPWNU=;
+        b=XFSw1VDp1U1palmyAcj0p1v/GQYjhhVhS4iS6WvikwnHyBeaH5K6QNOMD8uju16IPB
+         gHz7UHSgL+rTewg/IOUYKDHL/JQsJXhCNnj9de4E33ISvrbtcZnY3Qm4tmyRLKEfnPrh
+         7r/vvjAUEdQHM18FYWRmK8VRUkqUYmL9cif9sIDwYHtc3oIC791npoXn5zEkBih9DtJf
+         sWJq/R+CSGICSzfYNlMBTXK2UUJBP9TDBYkapnynX9DsP+4Jukj2fByrDCQEW7Lfm2In
+         k18wmW+M/7NKjbbLU9G4nh92codeu6sWFqmwxwHhEeH6AOWnRBT4gffXlXZbdC1HWde1
+         DCnw==
+X-Gm-Message-State: APjAAAUJNZQMvTIS5vpuZZ++V5G0xLk+iPNKMnqA7uXcgGVsUtKHBhON
+        H7xXoZ606fhviGX9Yy5Sdrpnhw==
+X-Google-Smtp-Source: APXvYqy5NmPkkw2TYwp4DZVgwdJToq40tZNIT3DUjWj4HOafdx8i2VZLXcb55SeUdddApCbH68Wqug==
+X-Received: by 2002:a17:90b:438e:: with SMTP id in14mr23541131pjb.83.1577427758920;
+        Thu, 26 Dec 2019 22:22:38 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id g67sm35825321pfb.66.2019.12.26.22.22.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Dec 2019 22:22:38 -0800 (PST)
+Date:   Thu, 26 Dec 2019 22:22:35 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rajeshwari <rkambl@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sanm@codeaurora.org, sivaa@codeaurora.org, manafm@codeaurora.org
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7180:  Add critical interrupt
+ and cooling maps for TSENS in SC7180.
+Message-ID: <20191227062235.GM549437@yoga>
+References: <1577106871-19863-1-git-send-email-rkambl@codeaurora.org>
+ <1577106871-19863-2-git-send-email-rkambl@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20191226210119.GA8706@bogus>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAJsWRmVeSWpSXmKPExsWy7bCmrq6tF2ucQcMSG4v781oZLeYfOcdq
-        8f/Ra1aL/sevmS3On9/AbnG26Q27xYq7H1ktNj2+xmpxedccNovPvUcYLT49+M9sMeP8PiaL
-        hU0t7BZrj9xlt1h6/SKTxe3GFWwW//fsYHcQ9Fgzbw2jx6ZVnWwem5fUe2x8t4PJo2/LKkaP
-        7dfmMXt83iQXwB6VbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+Ti
-        E6DrlpkD9IGSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CyQK84Mbe4NC9dLzk/
-        18rQwMDIFKgwITvj8fMXbAV/RSpWH/3B0sA4XbCLkZNDQsBEYuP9Y+wgtpDADkaJ0x99uhi5
-        gOxPjBI7Vr9hhXC+MUrMOPIPyOEA6/i0yREivpdR4tXM34wQzntGidkfG9lARgkLRElsO7CI
-        FcQWEVCU+N02DWwSs8AaZom2Kb9ZQBJsAloS+1/cAGvgByq6+uMxI4jNK2An8fbsBGYQm0VA
-        VeLIkWdg9aICYRInt7VA1QhKnJz5BCzOCTTnxcqPYMuYBcQlbj2ZzwRhy0tsfzuHGWSxhMAx
-        dokzE5uZIJ52kZh6+SiULSzx6vgWdghbSuJlfxuUXS2x8uQRNojmDkaJLfsvsEIkjCX2L53M
-        BAoLZgFNifW79CHCihI7f89lhFjMJ/Huaw80uHglOtqEIEqUJS4/uAu1VlJicXsn2wRGpVlI
-        3pmF5IVZSF6YhbBsASPLKkax1ILi3PTUYsMCY+TY3sQITt1a5jsYN5zzOcQowMGoxMPbsYsl
-        Tog1say4MvcQowQHs5II7+oixjgh3pTEyqrUovz4otKc1OJDjKbA0J7ILCWanA/MK3kl8Yam
-        RsbGxhYmhmamhoZK4rwcPy7GCgmkJ5akZqemFqQWwfQxcXBKNTB26X883hietu9N98/8E4fc
-        wqRVJ0coJCxLXtK6eLrp24KzflmPPZM/X4xSm3NQ6In2al/Bkm+7835WSdQWfeCcsGrKnM+e
-        018y5PR0ZcXsd9ISuPbeg0PjEot6xNH6pMKEK7vbYwtkuf68+7lb7f/Ch9tetLiVz2e1XGgw
-        sf+qnOPRRQvuXjVUYinOSDTUYi4qTgQAq4eALvMDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsWy7bCSvK6tF2ucwdIgi/vzWhkt5h85x2rx
-        /9FrVov+x6+ZLc6f38BucbbpDbvFirsfWS02Pb7GanF51xw2i8+9RxgtPj34z2wx4/w+JouF
-        TS3sFmuP3GW3WHr9IpPF7cYVbBb/9+xgdxD0WDNvDaPHplWdbB6bl9R7bHy3g8mjb8sqRo/t
-        1+Yxe3zeJBfAHsVlk5Kak1mWWqRvl8CV8fj5C7aCvyIVq4/+YGlgnC7YxcjBISFgIvFpk2MX
-        IxeHkMBuRomdFxezdTFyAsUlJaZdPMoMUSMscfhwMUTNW0aJ7R8fgtUIC0RJbDuwiBXEFhFQ
-        lPjdNo0VpIhZYA2zxPmebhaIjruMEvt2NTGCVLEJaEnsf3EDrJsfqOPqj8dgcV4BO4m3Zycw
-        g9gsAqoSR448YwGxRQXCJHYuecwEUSMocXLmE7A4J9CcFys/gm1mFlCX+DPvEjOELS5x68l8
-        JghbXmL72znMExiFZyFpn4WkZRaSlllIWhYwsqxilEwtKM5Nzy02LDDMSy3XK07MLS7NS9dL
-        zs/dxAiOYS3NHYyXl8QfYhTgYFTi4e3YxRInxJpYVlyZe4hRgoNZSYR3dRFjnBBvSmJlVWpR
-        fnxRaU5q8SFGaQ4WJXHep3nHIoUE0hNLUrNTUwtSi2CyTBycUg2MTirzBWe0Xu0+nLptsdTs
-        Qm2R/PmtLFvbtWQeWgp3hQZnGHKcWx+yj8X37o9JHbd0twWIsTetFbt/fJnz7L8WQYyWfsaL
-        RA3a0nL8Zpzl704O/TFRYrqBQvF82fBN/bOfH5XkY9ko5yYcVLpn0wuF/Wb99YqVYWEfXaRC
-        /at45d7G3vqp8FeJpTgj0VCLuag4EQA70uBv3QIAAA==
-X-CMS-MailID: 20191227000309epcas1p145ab877d7254a2e5e29c1a33b02dd583
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9
-References: <20191217055738.28445-1-cw00.choi@samsung.com>
-        <CGME20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9@epcas1p1.samsung.com>
-        <20191217055738.28445-5-cw00.choi@samsung.com> <20191226210119.GA8706@bogus>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1577106871-19863-2-git-send-email-rkambl@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/27/19 6:01 AM, Rob Herring wrote:
-> On Tue, Dec 17, 2019 at 02:57:33PM +0900, Chanwoo Choi wrote:
->> In order to remove the deprecated 'devfreq' property, replace with
->> new 'exynos,parent-bus' property in order to get the parent devfreq device
->> in devicetree file instead of 'devfreq' property. But, to guarantee the
->> backward-compatibility, keep the support 'devfreq' property.
->>
->> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
->> ---
->>  .../bindings/devfreq/exynos-bus.txt           | 16 +++++++--------
->>  drivers/devfreq/exynos-bus.c                  | 20 ++++++++++++-------
->>  2 files changed, 21 insertions(+), 15 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
->> index e71f752cc18f..c948cee01124 100644
->> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
->> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
->> @@ -45,7 +45,7 @@ Required properties only for parent bus device:
->>    of buses.
->>  
->>  Required properties only for passive bus device:
->> -- devfreq: the parent bus device.
->> +- exynos,parent-bus: the parent bus device.
+On Mon 23 Dec 05:14 PST 2019, Rajeshwari wrote:
+
+This patch adds critical interrupt to tsens nodes, add cooling maps,
+renames nodes and renames labels.
+
+While the end result looks reasonable I would like to see this split in
+a few different patches - and perhaps a line or two in the commit
+message describing the new naming scheme for the renames.
+
+Thanks,
+Bjorn
+
+> Signed-off-by: Rajeshwari <rkambl@codeaurora.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 289 +++++++++++++++++++++++++++++------
+>  1 file changed, 239 insertions(+), 50 deletions(-)
 > 
-> If you are going to do something new, why not use the interconnect 
-> binding here?
-
-As I knew, interconnect make the data path among multiple nodes
-and set the average and peak bandwidth to the specific data path.
-
-It means that some data will be flowed from node_a to node_d
-or the reverse way because each node has the tightly coupled
-dependency for data flow.
-
-	node_a <-> node_b <-> node_c <-> node_d
-
-
-On the other hand, exynos-bus.c driver is not related to 'data path'.
-Each bus just need to control the their own frequency and voltage.
-But, share the power line (regulator) between exynos-bus device
-even if there are no any dependency of data flow.
-
-'exynos,parent-bus' property just indicate the specific
-devfreq device(parent bus device) which controls
-the shared power line(regulator) in order to prevent
-the h/w problem due to the wrong pair of frequency and voltage.
-
-'exynos,parent-bus' property is only used to catch
-the change timing of shared power line.
-
-
-And,
-as you commented, there are some data path among the exynos-bus
-devices for the display h/w as following:
-
-	bus_display -> bus_leftbus -> bus_dmc
-
-In order to make the data path between bus devices,
-interconnect binding is required. This approach[1] was posted.
-[1] https://patchwork.kernel.org/cover/11305265/
-- [RFC,v3,0/7] PM / devfreq: Simple QoS for exynos-bus using interconnect
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index 3676bfd..e419ca0 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -10,6 +10,7 @@
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/phy/phy-qcom-qusb2.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/thermal/thermal.h>
+>  
+>  / {
+>  	interrupt-parent = <&intc>;
+> @@ -78,6 +79,7 @@
+>  			reg = <0x0 0x0>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_0: l2-cache {
+>  				compatible = "cache";
+> @@ -94,6 +96,7 @@
+>  			reg = <0x0 0x100>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_100>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_100: l2-cache {
+>  				compatible = "cache";
+> @@ -107,6 +110,7 @@
+>  			reg = <0x0 0x200>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_200>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_200: l2-cache {
+>  				compatible = "cache";
+> @@ -120,6 +124,7 @@
+>  			reg = <0x0 0x300>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_300>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_300: l2-cache {
+>  				compatible = "cache";
+> @@ -133,6 +138,7 @@
+>  			reg = <0x0 0x400>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_400>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_400: l2-cache {
+>  				compatible = "cache";
+> @@ -146,6 +152,7 @@
+>  			reg = <0x0 0x500>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_500>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			L2_500: l2-cache {
+>  				compatible = "cache";
+> @@ -159,6 +166,7 @@
+>  			reg = <0x0 0x600>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_600>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			L2_600: l2-cache {
+>  				compatible = "cache";
+> @@ -172,6 +180,7 @@
+>  			reg = <0x0 0x700>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_700>;
+> +			#cooling-cells = <2>;
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			L2_700: l2-cache {
+>  				compatible = "cache";
+> @@ -1058,8 +1067,9 @@
+>  			reg = <0 0x0c263000 0 0x1ff>, /* TM */
+>  				<0 0x0c222000 0 0x1ff>; /* SROT */
+>  			#qcom,sensors = <15>;
+> -			interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "uplow";
+> +			interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "uplow","critical";
+>  			#thermal-sensor-cells = <1>;
+>  		};
+>  
+> @@ -1068,8 +1078,9 @@
+>  			reg = <0 0x0c265000 0 0x1ff>, /* TM */
+>  				<0 0x0c223000 0 0x1ff>; /* SROT */
+>  			#qcom,sensors = <10>;
+> -			interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "uplow";
+> +			interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 509 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "uplow","critical";
+>  			#thermal-sensor-cells = <1>;
+>  		};
+>  
+> @@ -1301,277 +1312,455 @@
+>  	};
+>  
+>  	thermal-zones {
+> -		cpu0-thermal {
+> +		cpu_0_0-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 1>;
+>  
+>  			trips {
+> -				cpu0_alert0: trip-point0 {
+> +				cpu_0_0_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu0_alert1: trip-point1 {
+> +				cpu_0_0_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu0_crit: cpu_crit {
+> +				cpu_0_0_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_0_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_0_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu1-thermal {
+> +		cpu_0_1-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 2>;
+>  
+>  			trips {
+> -				cpu1_alert0: trip-point0 {
+> +				cpu_0_1_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu1_alert1: trip-point1 {
+> +				cpu_0_1_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu1_crit: cpu_crit {
+> +				cpu_0_1_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_1_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_1_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu2-thermal {
+> +		cpu_0_2-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 3>;
+>  
+>  			trips {
+> -				cpu2_alert0: trip-point0 {
+> +				cpu_0_2_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu2_alert1: trip-point1 {
+> +				cpu_0_2_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu2_crit: cpu_crit {
+> +				cpu_0_2_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_2_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_2_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu3-thermal {
+> +		cpu_0_3-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 4>;
+>  
+>  			trips {
+> -				cpu3_alert0: trip-point0 {
+> +				cpu_0_3_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu3_alert1: trip-point1 {
+> +				cpu_0_3_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu3_crit: cpu_crit {
+> +				cpu_0_3_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_3_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_3_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu4-thermal {
+> +		cpu_0_4-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 5>;
+>  
+>  			trips {
+> -				cpu4_alert0: trip-point0 {
+> +				cpu_0_4_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu4_alert1: trip-point1 {
+> +				cpu_0_4_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu4_crit: cpu_crit {
+> +				cpu_0_4_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_4_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_4_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu5-thermal {
+> +		cpu_0_5-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 6>;
+>  
+>  			trips {
+> -				cpu5_alert0: trip-point0 {
+> +				cpu_0_5_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu5_alert1: trip-point1 {
+> +				cpu_0_5_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu5_crit: cpu_crit {
+> +				cpu_0_5_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_0_5_alert0>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_0_5_alert1>;
+> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu6-thermal {
+> +		cpu_1_0-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 9>;
+>  
+>  			trips {
+> -				cpu6_alert0: trip-point0 {
+> +				cpu_1_0_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu6_alert1: trip-point1 {
+> +				cpu_1_0_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu6_crit: cpu_crit {
+> +				cpu_1_0_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_1_0_alert0>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_1_0_alert1>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu7-thermal {
+> +		cpu_1_1-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 10>;
+>  
+>  			trips {
+> -				cpu7_alert0: trip-point0 {
+> +				cpu_1_1_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu7_alert1: trip-point1 {
+> +				cpu_1_1_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu7_crit: cpu_crit {
+> +				cpu_1_1_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_1_1_alert0>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_1_1_alert1>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu8-thermal {
+> +		cpu_1_2-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 11>;
+>  
+>  			trips {
+> -				cpu8_alert0: trip-point0 {
+> +				cpu_1_2_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu8_alert1: trip-point1 {
+> +				cpu_1_2_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu8_crit: cpu_crit {
+> +				cpu_1_2_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_1_2_alert0>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_1_2_alert1>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		cpu9-thermal {
+> +		cpu_1_3-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+>  			thermal-sensors = <&tsens0 12>;
+>  
+>  			trips {
+> -				cpu9_alert0: trip-point0 {
+> +				cpu_1_3_alert0: trip-point0 {
+>  					temperature = <90000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu9_alert1: trip-point1 {
+> +				cpu_1_3_alert1: trip-point1 {
+>  					temperature = <95000>;
+>  					hysteresis = <2000>;
+>  					type = "passive";
+>  				};
+>  
+> -				cpu9_crit: cpu_crit {
+> +				cpu_1_3_crit: cpu_crit {
+>  					temperature = <110000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_1_3_alert0>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +				map1 {
+> +					trip = <&cpu_1_3_alert1>;
+> +					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+> -		aoss0-thermal {
+> +		aoss_0-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> @@ -1586,7 +1775,7 @@
+>  			};
+>  		};
+>  
+> -		cpuss0-thermal {
+> +		cpuss_0-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> @@ -1606,7 +1795,7 @@
+>  			};
+>  		};
+>  
+> -		cpuss1-thermal {
+> +		cpuss_1-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> @@ -1626,7 +1815,7 @@
+>  			};
+>  		};
+>  
+> -		gpuss0-thermal {
+> +		gpuss_0-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> @@ -1641,7 +1830,7 @@
+>  			};
+>  		};
+>  
+> -		gpuss1-thermal {
+> +		gpuss_1-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> @@ -1656,7 +1845,7 @@
+>  			};
+>  		};
+>  
+> -		aoss1-thermal {
+> +		aoss_1-thermal {
+>  			polling-delay-passive = <250>;
+>  			polling-delay = <1000>;
+>  
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
