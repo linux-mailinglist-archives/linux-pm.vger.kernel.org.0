@@ -2,193 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B93EE12BD93
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2019 13:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 920BC12BE25
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2019 18:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbfL1Mrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Dec 2019 07:47:47 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43708 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbfL1Mrr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Dec 2019 07:47:47 -0500
-Received: by mail-pf1-f195.google.com with SMTP id x6so14956662pfo.10
-        for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2019 04:47:47 -0800 (PST)
+        id S1726248AbfL1RTI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Dec 2019 12:19:08 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46499 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbfL1RTI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Dec 2019 12:19:08 -0500
+Received: by mail-pg1-f193.google.com with SMTP id z124so15963447pgb.13;
+        Sat, 28 Dec 2019 09:19:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pI3bHdhVC4jD/lCQfsvWohXAM7HBD6rFo3cPOHaRtUA=;
-        b=QVkGkqqEH87ZRVIkAEShKMvsKKVZNX3dS2U0uju+4fPWtxkNOzqcSBsgWgH/qH0xx7
-         6ABx1O2t8a111JC8iprulan++JxYGdfgd8eAAEOe8SlCcgI4xzG+4HxLJTLkZzbYpgEu
-         Q12NgaT8kiSSsge8TFG315XsnQEsCkX/ij05bS1KgMkPTXyOso8IUTyb8p6OyOOhc4DV
-         EvvLkucc9tFKXhCfY53doHLlw/iFswMpc4pVCf3yJ8UHEOcghpjz6P093iO0G9H1Le+d
-         RGbDr+BgnufQ9veq9n0dia+mxDpqqML2sQYx/N89OXntI2NhisxWaY304KxnrXqDUm0r
-         DfsA==
+        h=from:to:cc:subject:date:message-id;
+        bh=FiMHugGI2SCi9C3dDQzjMOwRF2K4ZM/Z5Jm8OBdk0Go=;
+        b=RZCly8ji31p7Xt4Hj6EkPS3N/kCphrM6mBe92jJuH4ze8P4XehMlOrBzu4vLwl2DBh
+         UxNZorHnafSVoOGoaJZswMeYJxotcXUg9mFaqnTEzvAyCTt5Jy1ioG0Q+pc3xruykGKC
+         OhF8CvmVkuf1WuQLPitVKHzCRkJsjnzEeQV6lnW4/Odfy+4Ah2j0HP2Ba14fCPGoy+lo
+         dKchkjUWWTOIPjoyq3fzx+dWfHSEOnA5woAORiVCFRslmymAfNVqWz+a1XHew/w8h6Tc
+         qgCRwtXKD2JkWQ0g4nY2ve1rCqASylKAr7nlx50y8Q0tqjEk4lu/w5MI+RmIxAkh5sAx
+         nP5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pI3bHdhVC4jD/lCQfsvWohXAM7HBD6rFo3cPOHaRtUA=;
-        b=JzwEb+e++2VvQ0xRkFk4g3nEzj+VrYUyb7VIzzUAvSccJpiu59wNZNhsw61mtlY5sw
-         rU0gxxE+wnTQ067/hjNwUDavyLUvCpvFT+alO4M8y4ozRURgbdrotBMpozmDc7JT9VFu
-         837j+lo8r1sjHj2OYfscJpDuVXog7Yo4iMkBs7pupSggibw9n4ZL/oVxYCBu8H2aT/cg
-         EKoLl0XGyoTQJfM62iim6oGMRanoeSG/UIB4Zr1LdlH2c+tcB4PmbUzIV1iAnvJJ9/Q9
-         IN0TRJr9tPnZomAaURk6qpK5LUJ2vbs5Qtw9yXB8VP/wBM4fZEWFgIGrSPOe6w9uiBB8
-         y8WA==
-X-Gm-Message-State: APjAAAU5AL+kCoFYThwbnuaSzqqlZ81ixNAqj05nGvjs/l4og/3aEYxh
-        UPJSjcSki5Mgqm/BxJ/ahuo=
-X-Google-Smtp-Source: APXvYqy0MYnN0gshVmCs8u0rVFEs4Ra4zcPjqBFATbA/kqGev/XZffwqJFL5m+vwVEEOZ44bOiSHfg==
-X-Received: by 2002:a63:1e47:: with SMTP id p7mr59163570pgm.339.1577537266826;
-        Sat, 28 Dec 2019 04:47:46 -0800 (PST)
-Received: from localhost ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id e19sm17900399pjr.10.2019.12.28.04.47.45
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 28 Dec 2019 04:47:46 -0800 (PST)
-Date:   Sat, 28 Dec 2019 20:47:44 +0800
-From:   chenqiwu <qiwuchen55@gmail.com>
-To:     mmayer@broadcom.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        f.fainelli@gmail.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: brcmstb-avs-cpufreq: avoid a stuck risk and UAF
- issue in brcm_avs_cpufreq_get()
-Message-ID: <20191228124744.GA3491@cqw-OptiPlex-7050>
-References: <1577513730-14254-1-git-send-email-qiwuchen55@gmail.com>
- <201912281807.gbP6xHJ1%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201912281807.gbP6xHJ1%lkp@intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FiMHugGI2SCi9C3dDQzjMOwRF2K4ZM/Z5Jm8OBdk0Go=;
+        b=W6CnqmCSChASjmetumxOO8bfu4mmEi7xoF59zBHeCwMkckBSD/DVjVCwsl4zGhVG2A
+         JKrox5P239NZpKZjPgI+g7KP/DWFXleX2NGEbirLbI5fieeTX+4nFc1UTKA8C1P9aNcI
+         8tUWkCGpL4qMOujjNvL9wfj26Q5VBVVyXorvM+mL1lyFwGXMBem8ZXo3ENbLuoDFlPJl
+         1huY+EITiR+QKkfAQUdcj0fCQUKnKJMwxPPmXZpOT+PeIwmW+nHKIkEKBTzk/vHjikBM
+         MeYN1vyHYkLXKOza5r+ehgh3LqUbsx5YIgqZIBEZN1zZPMgQAPT1wESiZrJuIdyjzr2B
+         CcfQ==
+X-Gm-Message-State: APjAAAU8HYnnyWVI315ksgVyELhVpsg1huO6rHmFUvRdC3r35m59rDFo
+        ccJ/sPi1JEiut19pKudA1bE=
+X-Google-Smtp-Source: APXvYqxjy3BTwgLF7BDkuN5JUeHsAIUKWbiir6L5CsL8HKEj3UN2B09QCkFrBemJGGf5KPtSwT2VYw==
+X-Received: by 2002:a63:4f59:: with SMTP id p25mr60354435pgl.230.1577553547545;
+        Sat, 28 Dec 2019 09:19:07 -0800 (PST)
+Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
+        by smtp.gmail.com with ESMTPSA id t65sm45802140pfd.178.2019.12.28.09.19.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 28 Dec 2019 09:19:06 -0800 (PST)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, mripard@kernel.org, wens@csie.org,
+        anarsoul@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH] thermal: sun8i: Add hwmon support
+Date:   Sat, 28 Dec 2019 17:19:04 +0000
+Message-Id: <20191228171904.24618-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 28, 2019 at 06:20:25PM +0800, kbuild test robot wrote:
-> Hi,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on pm/linux-next]
-> [also build test ERROR on v5.5-rc3 next-20191220]
-> [if your patch is applied to the wrong git tree, please drop us a note to help
-> improve the system. BTW, we also suggest to use '--base' option to specify the
-> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-> 
-> url:    https://github.com/0day-ci/linux/commits/qiwuchen55-gmail-com/cpufreq-brcmstb-avs-cpufreq-avoid-a-stuck-risk-and-UAF-issue-in-brcm_avs_cpufreq_get/20191228-141943
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> config: arm-allmodconfig (attached as .config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 7.5.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         GCC_VERSION=7.5.0 make.cross ARCH=arm 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All error/warnings (new ones prefixed by >>):
-> 
->    In file included from include/linux/pm_qos.h:10:0,
->                     from include/linux/cpufreq.h:16,
->                     from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
->    drivers/cpufreq/brcmstb-avs-cpufreq.c: In function 'brcm_avs_cpufreq_get':
-> >> drivers/cpufreq/brcmstb-avs-cpufreq.c:459:12: error: 'dev' undeclared (first use in this function); did you mean 'sev'?
->       dev_warn(dev, "cpu %d: CPUFreq policy not found\n", cpu);
->                ^
->    include/linux/device.h:1776:12: note: in definition of macro 'dev_warn'
->      _dev_warn(dev, dev_fmt(fmt), ##__VA_ARGS__)
->                ^~~
->    drivers/cpufreq/brcmstb-avs-cpufreq.c:459:12: note: each undeclared identifier is reported only once for each function it appears in
->       dev_warn(dev, "cpu %d: CPUFreq policy not found\n", cpu);
->                ^
->    include/linux/device.h:1776:12: note: in definition of macro 'dev_warn'
->      _dev_warn(dev, dev_fmt(fmt), ##__VA_ARGS__)
->                ^~~
->    In file included from include/uapi/linux/posix_types.h:5:0,
->                     from include/uapi/linux/types.h:14,
->                     from include/linux/compiler.h:180,
->                     from include/linux/err.h:5,
->                     from include/linux/clk.h:12,
->                     from include/linux/cpufreq.h:11,
->                     from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
-> >> include/linux/stddef.h:8:14: warning: return makes integer from pointer without a cast [-Wint-conversion]
->     #define NULL ((void *)0)
->                  ^
-> >> drivers/cpufreq/brcmstb-avs-cpufreq.c:460:10: note: in expansion of macro 'NULL'
->       return NULL;
->              ^~~~
-> >> include/linux/stddef.h:8:14: warning: return makes integer from pointer without a cast [-Wint-conversion]
->     #define NULL ((void *)0)
->                  ^
->    drivers/cpufreq/brcmstb-avs-cpufreq.c:465:10: note: in expansion of macro 'NULL'
->       return NULL;
->              ^~~~
-> --
->    In file included from include/linux/pm_qos.h:10:0,
->                     from include/linux/cpufreq.h:16,
->                     from drivers//cpufreq/brcmstb-avs-cpufreq.c:44:
->    drivers//cpufreq/brcmstb-avs-cpufreq.c: In function 'brcm_avs_cpufreq_get':
->    drivers//cpufreq/brcmstb-avs-cpufreq.c:459:12: error: 'dev' undeclared (first use in this function); did you mean 'sev'?
->       dev_warn(dev, "cpu %d: CPUFreq policy not found\n", cpu);
->                ^
->    include/linux/device.h:1776:12: note: in definition of macro 'dev_warn'
->      _dev_warn(dev, dev_fmt(fmt), ##__VA_ARGS__)
->                ^~~
->    drivers//cpufreq/brcmstb-avs-cpufreq.c:459:12: note: each undeclared identifier is reported only once for each function it appears in
->       dev_warn(dev, "cpu %d: CPUFreq policy not found\n", cpu);
->                ^
->    include/linux/device.h:1776:12: note: in definition of macro 'dev_warn'
->      _dev_warn(dev, dev_fmt(fmt), ##__VA_ARGS__)
->                ^~~
->    In file included from include/uapi/linux/posix_types.h:5:0,
->                     from include/uapi/linux/types.h:14,
->                     from include/linux/compiler.h:180,
->                     from include/linux/err.h:5,
->                     from include/linux/clk.h:12,
->                     from include/linux/cpufreq.h:11,
->                     from drivers//cpufreq/brcmstb-avs-cpufreq.c:44:
-> >> include/linux/stddef.h:8:14: warning: return makes integer from pointer without a cast [-Wint-conversion]
->     #define NULL ((void *)0)
->                  ^
->    drivers//cpufreq/brcmstb-avs-cpufreq.c:460:10: note: in expansion of macro 'NULL'
->       return NULL;
->              ^~~~
-> >> include/linux/stddef.h:8:14: warning: return makes integer from pointer without a cast [-Wint-conversion]
->     #define NULL ((void *)0)
->                  ^
->    drivers//cpufreq/brcmstb-avs-cpufreq.c:465:10: note: in expansion of macro 'NULL'
->       return NULL;
->              ^~~~
-> 
-> vim +459 drivers/cpufreq/brcmstb-avs-cpufreq.c
-> 
->    452	
->    453	static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
->    454	{
->    455		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
->    456		struct private_data *priv;
->    457	
->    458		if (!policy) {
->  > 459			dev_warn(dev, "cpu %d: CPUFreq policy not found\n", cpu);
->  > 460			return NULL;
->    461		}
->    462	
->    463		priv = policy->driver_data;
->    464		if (!priv || !priv->base)
->    465			return NULL;
->    466	
->    467		return brcm_avs_get_frequency(priv->base);
->    468	}
->    469	
-> 
-> ---
-> 0-DAY kernel test infrastructure                 Open Source Technology Center
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+Expose sun8i thermal as a HWMON device.
 
-So sorry, I sent the wrong patch file, and resend correct patch which compile ok.
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+---
+ drivers/thermal/sun8i_thermal.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks!
-Qiwu
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 23a5f4aa4be4..619e75cb41b0 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -20,6 +20,8 @@
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+ 
++#include "thermal_hwmon.h"
++
+ #define MAX_SENSOR_NUM	4
+ 
+ #define FT_TEMP_MASK				GENMASK(11, 0)
+@@ -477,6 +479,10 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+ 							     &ths_ops);
+ 		if (IS_ERR(tmdev->sensor[i].tzd))
+ 			return PTR_ERR(tmdev->sensor[i].tzd);
++
++		if (devm_thermal_add_hwmon_sysfs(tmdev->sensor[i].tzd))
++			dev_warn(tmdev->dev,
++				 "Failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	return 0;
+-- 
+2.17.1
+
