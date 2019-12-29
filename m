@@ -2,26 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C274712CB32
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2019 23:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B17312CB35
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2019 23:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbfL2Wps (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Dec 2019 17:45:48 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:60152 "EHLO
+        id S1726586AbfL2Wrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Dec 2019 17:47:49 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:54102 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbfL2Wps (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Dec 2019 17:45:48 -0500
+        with ESMTP id S1726584AbfL2Wrt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Dec 2019 17:47:49 -0500
 Received: from 79.184.253.116.ipv4.supernova.orange.pl (79.184.253.116) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 81928a0b399995ab; Sun, 29 Dec 2019 23:45:46 +0100
+ id b3a5fd46b8adb14e; Sun, 29 Dec 2019 23:47:47 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Niklas Cassel <nks@flawful.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/5] qcom-cpr fixes for rjw bleeding-edge
-Date:   Sun, 29 Dec 2019 23:45:46 +0100
-Message-ID: <3833311.45NX9LJ36M@kreacher>
-In-Reply-To: <20191223141934.19837-1-nks@flawful.org>
-References: <20191223141934.19837-1-nks@flawful.org>
+To:     Hanjun Guo <guohanjun@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Subject: Re: [PATCH 1/2] cpufreq : cppc: Break out if we match the HiSilicon cppc workaround
+Date:   Sun, 29 Dec 2019 23:47:47 +0100
+Message-ID: <2965934.S1MOicRWCW@kreacher>
+In-Reply-To: <1577152590-25574-1-git-send-email-guohanjun@huawei.com>
+References: <1577152590-25574-1-git-send-email-guohanjun@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -30,39 +33,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, December 23, 2019 3:19:29 PM CET Niklas Cassel wrote:
-> Hello Rafael,
+On Tuesday, December 24, 2019 2:56:29 AM CET Hanjun Guo wrote:
+> Bail out if we match the OEM information, to save some possible
+> extra iteration. And update the code to fix minor coding style issue.
 > 
-> Here comes some bug fixes for qcom-cpr that were detected
-> once the driver got some more build testing.
+> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> Patches 1-2 fix warnings detected by the intel test robot.
-> 
-> Patch 3 fixes an error I detected when doing an allnoconfig
-> and enabling simply the qcom-cpr driver.
-> 
-> Patches 4-5 are only detected when building with W=1.
-> However, I decided to fix these as well, in order to hopefully
-> avoid any further build test reports.
-> 
-> The series is based on your bleeding-edge branch.
-> Feel free to squash them with the existing commit if you
-> so desire.
-> 
-> Niklas Cassel (5):
->   power: avs: qcom-cpr: fix invalid printk specifier in debug print
->   power: avs: qcom-cpr: fix unsigned expression compared with zero
->   power: avs: qcom-cpr: make sure that regmap is available
->   power: avs: qcom-cpr: remove set but unused variable
->   power: avs: qcom-cpr: make cpr_get_opp_hz_for_req() static
-> 
->  drivers/power/avs/Kconfig    |  1 +
->  drivers/power/avs/qcom-cpr.c | 18 ++++++++++--------
->  2 files changed, 11 insertions(+), 8 deletions(-)
-> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 8d8da76..d0ca300 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -39,7 +39,7 @@
+>  static struct cppc_cpudata **all_cpu_data;
+>  
+>  struct cppc_workaround_oem_info {
+> -	char oem_id[ACPI_OEM_ID_SIZE +1];
+> +	char oem_id[ACPI_OEM_ID_SIZE + 1];
+>  	char oem_table_id[ACPI_OEM_TABLE_ID_SIZE + 1];
+>  	u32 oem_revision;
+>  };
+> @@ -93,8 +93,10 @@ static void cppc_check_hisi_workaround(void)
+>  	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
+>  		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
+>  		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
+> -		    wa_info[i].oem_revision == tbl->oem_revision)
+> +		    wa_info[i].oem_revision == tbl->oem_revision) {
+>  			apply_hisi_workaround = true;
+> +			break;
+> +		}
+>  	}
+>  }
+>  
 > 
 
-All patches in the series applied as 5.6 material, thanks!
+Both this and the [2/2] applies as 5.6 material with reworked
+subjects and changelog changes.  Thanks!
 
 
 
