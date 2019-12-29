@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B49C512C244
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2019 12:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FAF12C246
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2019 12:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbfL2LRM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Dec 2019 06:17:12 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41042 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726084AbfL2LRM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Dec 2019 06:17:12 -0500
-Received: by mail-pf1-f195.google.com with SMTP id w62so16994661pfw.8;
-        Sun, 29 Dec 2019 03:17:12 -0800 (PST)
+        id S1726395AbfL2LRP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Dec 2019 06:17:15 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43517 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbfL2LRO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Dec 2019 06:17:14 -0500
+Received: by mail-pf1-f194.google.com with SMTP id x6so15904385pfo.10;
+        Sun, 29 Dec 2019 03:17:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=9kYL0AbI0K/3Y35gdAZ0mqdn7JZ3azuVmXkrAEbJZuQ=;
-        b=JQ29jlrFR8SmXfg0BMdcNCVX/kFNDiG4O7lwF5Hpi9xG51ONSXfv6ZhILyXCGQR+Y8
-         ft9/y2PpOKfbHaeFDCr2mIm6KIOJqoPnXtqSBe7xhTclymKj8lz1AgKEAxmou9HFt51Q
-         R2L/FH5jjlcRrtjRTqIvMRbdRhfQwSBB3Mu3MOn/VRW+ySpog/PHlA9dY8ZC9+Ma1HKT
-         EiaLAy40oeAdF9Y7j/d5yqESi7wK/TxtZ0NYloopLqJpj0eQAuLPOBQJWyqRZSFps1UG
-         BXKSi2o/+KFGXSjVzj2R3zyTO4W4esoTeslIVVrWeYu3J45RgFXbLW8zwJsMBZX8m+3N
-         pPCQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=CWcFnXWGF5wNXnWL6+mku0hEs4gyByTrr98UCBl3J8k=;
+        b=s6B6hYhmAqvRF/SCprnVyHpS6bysZxdnjpdCh+f14JrSZESME8pGx9OuMy4vz4uJJv
+         wV8sGUlYu13+vM6rSlG5+B1f4PAXf1+L+fJsXv/pRbNqV2uxaYa+8PKZlGl9SAgiD0rt
+         vfdttf4ORy+nrDCZxC6NA/wHrfEcArU9TL9hw4lyEmjPjV7Rui3akpKWED3KVNvXrIX/
+         ioIc6CNj3YL8L/Q2QxFOIL379LRRDWJ4zxZf123HlK9GPTEa1CKdAC8VXmrZJdWNwHDM
+         b9MJNvUvS+WUtm7lHALJa/9K9WFYv5RfX9uNFElGGWzRq0iAYokddATijdmAc0DmPl9S
+         zCkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9kYL0AbI0K/3Y35gdAZ0mqdn7JZ3azuVmXkrAEbJZuQ=;
-        b=p4TooFZYNZPl/z/OqkKaVDpm2aeIo54n1LLGFVhlfUusEjZHPg8zl6826KV3FVZJqD
-         RtLmC0DE7LbfmLER1bzpZefXpDCMTineTwuzVd5Cdo8hRA+PtqDQb6ATWWR8JACfqJu9
-         MsVp4e49sXXNPwUXJaTFot/5afcCpseOeSVucgxC5lGt2N2cyU0R+eQNr5X8MUsAUWZp
-         PfwmjvISpFftN/olUbfWoslIBtkbCdOAgThDbt0i3YigZwIqIyer7Rt9mc9caUJyiCsd
-         4kwa0ajTssI6lEHp0D+UrF7OiZsEJH5XeDWoVwKrSztTM3uQTssvNxRXQ+StufALT84y
-         nVOQ==
-X-Gm-Message-State: APjAAAU135Iz+uekTAVzZvu9zUYQRcXM6mK5koD3unfnKcOiFun3dVzD
-        0Nuj7bnlhBxVz+0HmxAued8=
-X-Google-Smtp-Source: APXvYqzmFJSzaHjRWVCpHp2zsBHqqe7XHajN63Yudc2qAPEpuZfxjnD0DoLGNIQpwwh8FSkBtsOyew==
-X-Received: by 2002:a63:551a:: with SMTP id j26mr65069179pgb.370.1577618231815;
-        Sun, 29 Dec 2019 03:17:11 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=CWcFnXWGF5wNXnWL6+mku0hEs4gyByTrr98UCBl3J8k=;
+        b=Kcu5H2Y/h9il7eNMg0Le8WvrZx1YAsUA3jIbEljt6s3iPyoNRMmVLZMUL3+nCW4KpK
+         KI//WQZ242GgdpsIHFYB8AhmSsT10iF/gR32Tb2g/mIGjwkHfqiocCVFe+Pz5GRIL0k5
+         s32U8clMJ0EFfI57EAbu/j3HWMpSNytoAPmV6J1zVvtinn93qTS1iIK5YKuK8lx7E7mp
+         ejClX+j55hP9ulx3naVLq9DX7dTx1y3DLE/njeyzXI8NyZYfzol6YaEBLJ3HsRAMNAxq
+         qKvAgMwrhyW311ivEStTzqoBhZEGSLKfsfL8WO4VkbHrq3OASgL+AiCHRmV+/I/c/qrx
+         GekA==
+X-Gm-Message-State: APjAAAWm4jfzqUTX7+fg6S+qG80dEvZ4VDuqZtFFC47xvs5L1pS5PUxl
+        xl2BlNe3aFOwDn4+1gvyb3g=
+X-Google-Smtp-Source: APXvYqwT9xK+ZGyFuhdZ2wLiXj9H1+mGiq49z7Hp29rcIkeDYbasZfv4ZBZcp7vOfBHA3DIC/zyigA==
+X-Received: by 2002:a62:cece:: with SMTP id y197mr67311817pfg.9.1577618234053;
+        Sun, 29 Dec 2019 03:17:14 -0800 (PST)
 Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
-        by smtp.gmail.com with ESMTPSA id d1sm20867030pjx.6.2019.12.29.03.17.10
+        by smtp.gmail.com with ESMTPSA id q7sm20794572pjd.3.2019.12.29.03.17.13
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 29 Dec 2019 03:17:10 -0800 (PST)
+        Sun, 29 Dec 2019 03:17:13 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     linux@armlinux.org.uk, mripard@kernel.org, wens@csie.org,
         catalin.marinas@arm.com, will@kernel.org,
@@ -53,10 +54,12 @@ To:     linux@armlinux.org.uk, mripard@kernel.org, wens@csie.org,
         anarsoul@gmail.com, rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amit.kucheria@verdurent.com, p.zabel@pengutronix.de
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 1/2] arm64: defconfig: Enable CONFIG_SUN8I_THERMAL
-Date:   Sun, 29 Dec 2019 11:17:06 +0000
-Message-Id: <20191229111707.16574-1-tiny.windzz@gmail.com>
+Subject: [PATCH 2/2] ARM: sunxi: Enable CONFIG_SUN8I_THERMAL
+Date:   Sun, 29 Dec 2019 11:17:07 +0000
+Message-Id: <20191229111707.16574-2-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191229111707.16574-1-tiny.windzz@gmail.com>
+References: <20191229111707.16574-1-tiny.windzz@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -66,21 +69,21 @@ Many sunxi based board needs CONFIG_SUN8I_THERMAL for thermal support.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- arch/arm64/configs/defconfig | 1 +
+ arch/arm/configs/sunxi_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 6a83ba2aea3e..c3c1cc900d4d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -438,6 +438,7 @@ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+diff --git a/arch/arm/configs/sunxi_defconfig b/arch/arm/configs/sunxi_defconfig
+index 3f5d727efc41..e9fb57374b9f 100644
+--- a/arch/arm/configs/sunxi_defconfig
++++ b/arch/arm/configs/sunxi_defconfig
+@@ -85,6 +85,7 @@ CONFIG_BATTERY_AXP20X=y
+ CONFIG_AXP20X_POWER=y
+ CONFIG_THERMAL=y
  CONFIG_CPU_THERMAL=y
- CONFIG_THERMAL_EMULATION=y
- CONFIG_QORIQ_THERMAL=m
 +CONFIG_SUN8I_THERMAL=y
- CONFIG_ROCKCHIP_THERMAL=m
- CONFIG_RCAR_THERMAL=y
- CONFIG_RCAR_GEN3_THERMAL=y
+ CONFIG_WATCHDOG=y
+ CONFIG_SUNXI_WATCHDOG=y
+ CONFIG_MFD_AC100=y
 -- 
 2.17.1
 
