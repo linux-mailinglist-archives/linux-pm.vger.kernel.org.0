@@ -2,97 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2864712D191
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 16:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FB912D20B
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 17:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727531AbfL3PoL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 30 Dec 2019 10:44:11 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:34938 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfL3PoL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Dec 2019 10:44:11 -0500
-Received: by mail-ed1-f65.google.com with SMTP id f8so32952131edv.2;
-        Mon, 30 Dec 2019 07:44:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=BqjpB17I4FAVcCVel4kRRM5u2ZSN97epJBsAntRnbvo=;
-        b=BGn6eLF/ceEdI0HWKQ3q+meVBxDTd6TvXMlQzyPYeivJZclIvXpfkNIIqj+qDDzuYv
-         m6jGEvK4vVkZN1IKn1y9P/3Ru/yNsr1vaXaZcBXydbKN5lv4Bbbozaown/breSai8p9B
-         OBQjMa6c4axPG+fc+4XIhbcEcH6+hlVpAauTKwjTNYcP03AA0MMYVtSOv4tKWUmXWhAo
-         OmXBAqvc8Sw/DLIHQwLdxXpy/vYN2nOl2Q5xd96KZuvH03ps2tyY5dwQvBTt8WczcXpM
-         f+FbpO6CCK6USHKxGMpw8sgSWIqoqvdxJSZkL9a3Wn5Nu3/DFc+cOoHdjjc8NWalOQlq
-         siGg==
-X-Gm-Message-State: APjAAAVp6kz88B1Wr09Sb3FgDCDii+WVuf3rUYZhtbakI0kCSkawVJU3
-        LRhzkMXdl7ColV0t674FpG+L7LnN
-X-Google-Smtp-Source: APXvYqxzo56maTlSxQsNU5A2SyQb7P5FV8UkAKWQclUCoOB2bQNqmZBjZSuWqej4dQDiaLucch6EvA==
-X-Received: by 2002:a17:906:2649:: with SMTP id i9mr71611722ejc.120.1577720649214;
-        Mon, 30 Dec 2019 07:44:09 -0800 (PST)
-Received: from pi3 ([194.230.155.138])
-        by smtp.googlemail.com with ESMTPSA id t1sm5651917ejg.32.2019.12.30.07.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2019 07:44:08 -0800 (PST)
-Date:   Mon, 30 Dec 2019 16:44:05 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        georgi.djakov@linaro.org, leonard.crestez@nxp.com,
-        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
-Subject: Re: [RFC PATCH v3 4/7] arm: dts: exynos: Add interconnect bindings
- for Exynos4412
-Message-ID: <20191230154405.GC4918@pi3>
-References: <20191220115653.6487-1-a.swigon@samsung.com>
- <CGME20191220120144eucas1p119ececf161a6d45a6a194e432bbbd1f9@eucas1p1.samsung.com>
- <20191220115653.6487-5-a.swigon@samsung.com>
+        id S1727217AbfL3QfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Dec 2019 11:35:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:56426 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726597AbfL3QfL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Dec 2019 11:35:11 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72C4631B;
+        Mon, 30 Dec 2019 08:35:10 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77BCB3F703;
+        Mon, 30 Dec 2019 08:35:08 -0800 (PST)
+Date:   Mon, 30 Dec 2019 16:35:03 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 10/15] cpuidle: psci: Prepare to use OS initiated
+ suspend mode via PM domains
+Message-ID: <20191230163503.GA16256@bogus>
+References: <20191230144402.30195-1-ulf.hansson@linaro.org>
+ <20191230144402.30195-11-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20191220115653.6487-5-a.swigon@samsung.com>
+In-Reply-To: <20191230144402.30195-11-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 12:56:50PM +0100, Artur Świgoń wrote:
-> This patch adds the following properties to the Exynos4412 DT:
->   - exynos,interconnect-parent-node: to declare connections between
->     nodes in order to guarantee PM QoS requirements between nodes;
->   - #interconnect-cells: required by the interconnect framework.
+On Mon, Dec 30, 2019 at 03:43:57PM +0100, Ulf Hansson wrote:
+> The per CPU variable psci_power_state, contains an array of fixed values,
+> which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> each of the available CPU idle states.
 > 
-> Note that #interconnect-cells is always zero and node IDs are not
-> hardcoded anywhere.
+> This isn't sufficient when using the hierarchical CPU topology in DT, in
+> combination with having PSCI OS initiated (OSI) mode enabled. More
+> precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> idle state the cluster (a group of CPUs) should enter, while in PSCI
+> Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> state of the cluster.
 > 
-> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> For this reason, introduce a per CPU variable called domain_state and
+> implement two helper functions to read/write its value. Then let the
+> domain_state take precedence over the regular selected state, when entering
+> and idle state.
+> 
+> To avoid executing the above OSI specific code in the ->enter() callback,
+> while operating in the default PSCI Platform Coordinated mode, let's also
+> add a new enter-function and use it for OSI.
+> 
+> Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+> Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 5 +++++
->  1 file changed, 5 insertions(+)
-
-The order of patches is confusing. Patches 4 and 6 are split - do the
-depend on 5? I doubt but...
-
-Adjust the title to match the contents - you are not adding bindings but
-properties to bus nodes. Also the prefix is ARM: (look at recent
-commits).
-
 > 
-> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> index 4ce3d77a6704..d9d70eacfcaf 100644
-> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> @@ -90,6 +90,7 @@
->  &bus_dmc {
->  	exynos,ppmu-device = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
->  	vdd-supply = <&buck1_reg>;
-> +	#interconnect-cells = <0>;
+> Changes in v5:
+> 	- None.
+> 
+> ---
+>  drivers/cpuidle/cpuidle-psci.c | 56 ++++++++++++++++++++++++++++++----
+>  1 file changed, 50 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index 6a87848be3c3..9600fe674a89 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -29,14 +29,47 @@ struct psci_cpuidle_data {
+>  };
+>  
+>  static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
+> +static DEFINE_PER_CPU(u32, domain_state);
+> +
+> +static inline void psci_set_domain_state(u32 state)
+> +{
+> +	__this_cpu_write(domain_state, state);
+> +}
+> +
+> +static inline u32 psci_get_domain_state(void)
+> +{
+> +	return __this_cpu_read(domain_state);
+> +}
+> +
+> +static inline int psci_enter_state(int idx, u32 state)
+> +{
+> +	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
+> +}
+> +
+> +static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
+> +					struct cpuidle_driver *drv, int idx)
+> +{
+> +	struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
+> +	u32 *states = data->psci_states;
+> +	u32 state = psci_get_domain_state();
+> +	int ret;
+> +
+> +	if (!state)
+> +		state = states[idx];
+> +
+> +	ret = psci_enter_state(idx, state);
+> +
+> +	/* Clear the domain state to start fresh when back from idle. */
+> +	psci_set_domain_state(0);
+> +	return ret;
+> +}
+>  
+>  static int psci_enter_idle_state(struct cpuidle_device *dev,
+>  				struct cpuidle_driver *drv, int idx)
+>  {
+>  	u32 *state = __this_cpu_read(psci_cpuidle_data.psci_states);
+>  
+> -	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
+> -					   idx, state[idx]);
+> +	return psci_enter_state(idx, state[idx]);
+>  }
+>  
+>  static struct cpuidle_driver psci_idle_driver __initdata = {
+> @@ -79,7 +112,8 @@ static int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
+>  	return 0;
+>  }
+>  
+> -static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+> +static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
+> +					struct device_node *cpu_node,
+>  					unsigned int state_count, int cpu)
+>  {
+>  	int i, ret = 0;
+> @@ -118,6 +152,15 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+>  			ret = PTR_ERR(data->dev);
+>  			goto free_mem;
+>  		}
+> +
+> +		/*
+> +		 * Using the deepest state for the CPU to trigger a potential
+> +		 * selection of a shared state for the domain, assumes the
+> +		 * domain states are all deeper states.
+> +		 */
+> +		if (data->dev)
 
-This does not look like property of Odroid but Exynos4412 or Exynos4.
+Do we still need this check ? I thought we won't attach genpd if OSI is
+not enabled. If possible, please drop the check.
 
-Best regards,
-Krzysztof
+Other than that, looks good to me.
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+--
+Regards,
+Sudeep
