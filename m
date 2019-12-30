@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EF812D0FD
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 15:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F4912D0FE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 15:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbfL3OoY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Dec 2019 09:44:24 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:35516 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727577AbfL3OoY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Dec 2019 09:44:24 -0500
-Received: by mail-lj1-f196.google.com with SMTP id j1so26137307lja.2
-        for <linux-pm@vger.kernel.org>; Mon, 30 Dec 2019 06:44:22 -0800 (PST)
+        id S1727610AbfL3OoZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Dec 2019 09:44:25 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:44343 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727607AbfL3OoZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Dec 2019 09:44:25 -0500
+Received: by mail-lj1-f195.google.com with SMTP id u71so33510098lje.11
+        for <linux-pm@vger.kernel.org>; Mon, 30 Dec 2019 06:44:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=neea4kQTvG+Bpgec4NpbRFMjAla+zHuzZZgjs6GRGkc=;
-        b=CY8w9n0qANi3pwpse5njlfUuAXhBW7I2P8v6T8Momocn6zaJyS9eUNpXR6rklTo6dg
-         sq+oD3qSYMqB0wdHlDpE3jkyYaDDnJHCkfrXPBz1GfhmtlV7apr9LScWjde4LbAIiZx0
-         RLOWOqpMSJiQcd3lmVt5H67wYDzWg+AdVC9P1T20yfcXI8ABlEREGNiOd4yO4jG7QCUI
-         bkADMMLprTLR0eR+X7OmdFXwjGSeYM0Ngk65Ev77A+7MtvMrv27NP0obM/n5DvFCWGYy
-         5z7X2a5X9oYhJZ3SAkZHCYhKtbgKBoaNCtXSM71AdSInmuszfBFuZrl7vxgoyZ5wjZ4m
-         6I+g==
+        bh=F62eMHvAlv7nF3GieiDqKuJt4z4o+7t76tdVx5DtOc8=;
+        b=xKKUKeIOyuo2s2W+neuN/sbW173fQNrou3tC+j6v7Ko/GuV217MXietDZKhjA3Uskq
+         +oGLDtucefGKWLnVAkdy0EhggOa4EVlAW3GgnRf3Q///TpMXhcvS47NgjBgaWEZcvHEa
+         sNPyCIaZTNdpqI7KOnRBwON5a3hrpogrN9d9Ws+HKMrAubG/J+RRvvjmiuXp2X5RAeLx
+         6xSd9DNxkiJYPcmnO5P1a2Ljaf0kWX0Uv0AmAJhO8VjFrwyPTyVlJYM0h5cT5tIv0xYm
+         DOGryt9AIk3n2s3w+VoyOqVcAFEb685q0iz4QCXHyot3S9+MEpZiMmxb1W2IxQea5VsV
+         oLOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=neea4kQTvG+Bpgec4NpbRFMjAla+zHuzZZgjs6GRGkc=;
-        b=U5yK4xvgOvxyTFQ+HIyXkFdpOrecWKHJsgFE5jD0pfr1OFno5pLIdJ/QD9FgeGCGjm
-         aK1tr1ZW/TZzRXmikCN+qrEd4NwBOI3BVBFO4II985gDK6/D4+LaCkMboTPD1Nl1NSRA
-         3DlrfQtjEv9Nl/Z+4nysentd8fMPT0NdCZp0TG4YZJCYasHPIYwBZP7KTIEMuBJooY9B
-         vsn0ywGbS/DZ/oCa8Eo3P5DIXwU4uW/edMC8qxgJ0sgpgg2OGmwfhOsNKk00hRshUIcw
-         5Ao+hIHH4uAGwPiZ8GYXw8wBOs6AeL3twEk/pJIvzg9pmJthLwPle+Pxqky/Dzsrfv9W
-         YKAA==
-X-Gm-Message-State: APjAAAU2qaYEE9eSSiUVlMg9CquKYaM2um0z+Cw4LmIVGSLXKxrU3CKR
-        IQzLLlpAccK5g3QZLqcdNLZZtQ==
-X-Google-Smtp-Source: APXvYqz4pHdrSZYvR9LPkn6aBxofeWRY+5WpuR/T2iFRqr3dH9alwMysRzcX9iPHqQj6c18Apu+KPg==
-X-Received: by 2002:a2e:93d5:: with SMTP id p21mr40357019ljh.50.1577717061929;
-        Mon, 30 Dec 2019 06:44:21 -0800 (PST)
+        bh=F62eMHvAlv7nF3GieiDqKuJt4z4o+7t76tdVx5DtOc8=;
+        b=Qz/Cp93DkwYf79DcfnGuflKxwZuKm6IdXdt8UkaKsyeeCZB6zwyis90xUVgtoGWSPJ
+         utG7hH2yc/gwtQdft9MHiHZVSmCWVvfT/bLokUDzg5U9t8rpxibfriyD6yCiHR3PM6Ic
+         Ss7CA+95alkTPnEi6pT6knYIVpx3XzYuwu0vfbP8P5KYC6vTw9Y5QfEVTwbvDBmubGOe
+         hAxyfyxC07BCr03z4TChY+X6X1NE6x2b1GiH8Kj+haGGeDkbpCf2vExvcW8l0O+1SJzB
+         KpDWrXa4ngHAmzE3vr5hlGeOaYEAbwbRIZWlifQvIn+syNjRPdVwywBbs+uJYUgGswBM
+         bYDQ==
+X-Gm-Message-State: APjAAAUgpvp3xRhvkLViWgCbMbI2ezYEL+P5Y0MbIAXlc9/Uc1SA+o6J
+        7htUO3CmKoSMg9MBujRslfySMQ==
+X-Google-Smtp-Source: APXvYqx5ku6KI9MfPdQZ+SWjpmvOotL42D1PWyIwc9k7LE5GzctpSfHSXBO4s15SrZ/WJeAsBlX0Ug==
+X-Received: by 2002:a2e:8e22:: with SMTP id r2mr32224867ljk.51.1577717063226;
+        Mon, 30 Dec 2019 06:44:23 -0800 (PST)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id a21sm18744931lfg.44.2019.12.30.06.44.20
+        by smtp.gmail.com with ESMTPSA id a21sm18744931lfg.44.2019.12.30.06.44.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2019 06:44:21 -0800 (PST)
+        Mon, 30 Dec 2019 06:44:22 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -58,9 +58,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 08/15] cpuidle: psci: Add a helper to attach a CPU to its PM domain
-Date:   Mon, 30 Dec 2019 15:43:55 +0100
-Message-Id: <20191230144402.30195-9-ulf.hansson@linaro.org>
+Subject: [PATCH v5 09/15] cpuidle: psci: Attach CPU devices to their PM domains
+Date:   Mon, 30 Dec 2019 15:43:56 +0100
+Message-Id: <20191230144402.30195-10-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191230144402.30195-1-ulf.hansson@linaro.org>
 References: <20191230144402.30195-1-ulf.hansson@linaro.org>
@@ -69,104 +69,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce a PSCI DT helper function, psci_dt_attach_cpu(), which takes a
-CPU number as an in-parameter and tries to attach the CPU's struct device
-to its corresponding PM domain.
+In order to enable a CPU to be power managed through its PM domain, let's
+try to attach it by calling psci_dt_attach_cpu() during the cpuidle
+initialization.
 
-Let's makes use of dev_pm_domain_attach_by_name(), as it allows us to
-specify "psci" as the "name" of the PM domain to attach to. Additionally,
-let's also prepare the attached device to be power managed via runtime PM.
-
-Note that, the implementation of the new helper function is in a new
-separate c-file, which may seems a bit too much at this point. However,
-subsequent changes that implements the remaining part of the PM domain
-support for cpuidle-psci, helps to justify this split.
+psci_dt_attach_cpu() returns a pointer to the attached struct device, which
+later should be used for runtime PM, hence we need to store it somewhere.
+Rather than adding yet another per CPU variable, let's create a per CPU
+struct to collect the relevant per CPU variables.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
 
 Changes in v5:
-	- Declare psci_dt_attach_cpu() as __init.
+	- None.
 
 ---
- drivers/cpuidle/Makefile              |  4 +++-
- drivers/cpuidle/cpuidle-psci-domain.c | 31 +++++++++++++++++++++++++++
- drivers/cpuidle/cpuidle-psci.h        | 12 +++++++++++
- 3 files changed, 46 insertions(+), 1 deletion(-)
- create mode 100644 drivers/cpuidle/cpuidle-psci-domain.c
- create mode 100644 drivers/cpuidle/cpuidle-psci.h
+ drivers/cpuidle/cpuidle-psci.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index ee70d5cc5b99..cc8c769d7fa9 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -21,7 +21,9 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
- obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
- obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
- obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
--obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
-+obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
-+cpuidle_psci-y				:= cpuidle-psci.o
-+cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index 830995b8a56f..6a87848be3c3 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -20,14 +20,20 @@
  
- ###############################################################################
- # MIPS drivers
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-new file mode 100644
-index 000000000000..87f881c21af1
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * PM domains for CPUs via genpd - managed by cpuidle-psci.
-+ *
-+ * Copyright (C) 2019 Linaro Ltd.
-+ * Author: Ulf Hansson <ulf.hansson@linaro.org>
-+ *
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+
+ #include <asm/cpuidle.h>
+ 
 +#include "cpuidle-psci.h"
-+
-+struct device __init *psci_dt_attach_cpu(int cpu)
-+{
+ #include "dt_idle_states.h"
+ 
+-static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
++struct psci_cpuidle_data {
++	u32 *psci_states;
 +	struct device *dev;
++};
 +
-+	dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
-+	if (IS_ERR_OR_NULL(dev))
-+		return dev;
++static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, psci_cpuidle_data);
+ 
+ static int psci_enter_idle_state(struct cpuidle_device *dev,
+ 				struct cpuidle_driver *drv, int idx)
+ {
+-	u32 *state = __this_cpu_read(psci_power_state);
++	u32 *state = __this_cpu_read(psci_cpuidle_data.psci_states);
+ 
+ 	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
+ 					   idx, state[idx]);
+@@ -79,6 +85,7 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+ 	int i, ret = 0;
+ 	u32 *psci_states;
+ 	struct device_node *state_node;
++	struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
+ 
+ 	state_count++; /* Add WFI state too */
+ 	psci_states = kcalloc(state_count, sizeof(*psci_states), GFP_KERNEL);
+@@ -104,8 +111,17 @@ static int __init psci_dt_cpu_init_idle(struct device_node *cpu_node,
+ 		goto free_mem;
+ 	}
+ 
+-	/* Idle states parsed correctly, initialize per-cpu pointer */
+-	per_cpu(psci_power_state, cpu) = psci_states;
++	/* Currently limit the hierarchical topology to be used in OSI mode. */
++	if (psci_has_osi_support()) {
++		data->dev = psci_dt_attach_cpu(cpu);
++		if (IS_ERR(data->dev)) {
++			ret = PTR_ERR(data->dev);
++			goto free_mem;
++		}
++	}
 +
-+	pm_runtime_irq_safe(dev);
-+	if (cpu_online(cpu))
-+		pm_runtime_get_sync(dev);
-+
-+	return dev;
-+}
-diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
-new file mode 100644
-index 000000000000..8609482cf490
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-psci.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __CPUIDLE_PSCI_H
-+#define __CPUIDLE_PSCI_H
-+
-+#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
-+struct device __init *psci_dt_attach_cpu(int cpu);
-+#else
-+static inline struct device __init *psci_dt_attach_cpu(int cpu) { return NULL; }
-+#endif
-+
-+#endif /* __CPUIDLE_PSCI_H */
++	/* Idle states parsed correctly, store them in the per-cpu struct. */
++	data->psci_states = psci_states;
+ 	return 0;
+ 
+ free_mem:
 -- 
 2.17.1
 
