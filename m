@@ -2,211 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 521A012D10D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 15:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2864712D191
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2019 16:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727630AbfL3Oog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Dec 2019 09:44:36 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40860 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727543AbfL3Oof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Dec 2019 09:44:35 -0500
-Received: by mail-lj1-f193.google.com with SMTP id u1so33494975ljk.7
-        for <linux-pm@vger.kernel.org>; Mon, 30 Dec 2019 06:44:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=pFHyotJ6IeS0NnPGUwSrCQs8d27XE2yrJ5nxr3VtYic=;
-        b=s5zzc4Lzvw9BL4eBPMqCkzI1609Ctjtx+HMMegsZzrLbvJR3PQGlrle85pbQIAjvQv
-         spD0gMVv3McQxNFa9n7sHSB0CtaQvF20UZS6K5kWhrw/1n0QclJEHvtiB5eSVvJ3yfWG
-         lTg1kc+5OHIy3eladTvA82JxUYopI+/UzQCz8HJiivLaVAl3CPevey+/gcyxcbXuu4lo
-         Ae882oP6a3qVoJHFFKttCYL4xHchd0e9DRbh+BmiqVAJGnXrXoajVof6Mep88AChD8nP
-         bMhjSjVl8YnbU5WlaYGRh8onvQMHN7Gi3m37K1wv4IZidNEBKaAgQzZaK9dNoDXCyQtA
-         EXtw==
+        id S1727531AbfL3PoL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 30 Dec 2019 10:44:11 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:34938 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727397AbfL3PoL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Dec 2019 10:44:11 -0500
+Received: by mail-ed1-f65.google.com with SMTP id f8so32952131edv.2;
+        Mon, 30 Dec 2019 07:44:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=pFHyotJ6IeS0NnPGUwSrCQs8d27XE2yrJ5nxr3VtYic=;
-        b=BQtfEKVlVKXh8Rk9z2N2jdgmAtnUyvnWdIAHgbxhfeMu9+bZOS67PaCYLyd7CL1hSF
-         apYMtT3BC1+owF3xRuSrvfnvdcGpmJOkfYiEbuWuhhdqTy8t12nP+4S+PAwR6Suu+Sg3
-         gdlGMQfYWHvwe/aSj/lz5hORuQ/0L68XtO8Heek8XzUypreD0Pgsn8XActMNjDt4VxjW
-         mj92+VPEQLGlanxdOWjwwGWqXeGbCSFN9uq7tTCKhOjA9koUDJRTQ9SN5eQsLjXWOeVv
-         qZMak/B6+wUm2m2w5pxody1N56qobrzXpGYh0C/obCw/dHYUumMKdCeyFZCBEr606Rx0
-         cbPw==
-X-Gm-Message-State: APjAAAXCBD+8OXwcGGURBAwcxtSzHDmbD0KXcVY+Szc8nLuYw+TfsXqa
-        FQurgxcYGFQMdnGiP8yTKUMDeA==
-X-Google-Smtp-Source: APXvYqxdwGv5e3gJirom9yUfoCDD87334k/2EA5omu7hFVl0AB/wYbg/vlbug4VqdBA+bheY1tQrbA==
-X-Received: by 2002:a2e:9a01:: with SMTP id o1mr37050340lji.247.1577717072600;
-        Mon, 30 Dec 2019 06:44:32 -0800 (PST)
-Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id a21sm18744931lfg.44.2019.12.30.06.44.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=BqjpB17I4FAVcCVel4kRRM5u2ZSN97epJBsAntRnbvo=;
+        b=BGn6eLF/ceEdI0HWKQ3q+meVBxDTd6TvXMlQzyPYeivJZclIvXpfkNIIqj+qDDzuYv
+         m6jGEvK4vVkZN1IKn1y9P/3Ru/yNsr1vaXaZcBXydbKN5lv4Bbbozaown/breSai8p9B
+         OBQjMa6c4axPG+fc+4XIhbcEcH6+hlVpAauTKwjTNYcP03AA0MMYVtSOv4tKWUmXWhAo
+         OmXBAqvc8Sw/DLIHQwLdxXpy/vYN2nOl2Q5xd96KZuvH03ps2tyY5dwQvBTt8WczcXpM
+         f+FbpO6CCK6USHKxGMpw8sgSWIqoqvdxJSZkL9a3Wn5Nu3/DFc+cOoHdjjc8NWalOQlq
+         siGg==
+X-Gm-Message-State: APjAAAVp6kz88B1Wr09Sb3FgDCDii+WVuf3rUYZhtbakI0kCSkawVJU3
+        LRhzkMXdl7ColV0t674FpG+L7LnN
+X-Google-Smtp-Source: APXvYqxzo56maTlSxQsNU5A2SyQb7P5FV8UkAKWQclUCoOB2bQNqmZBjZSuWqej4dQDiaLucch6EvA==
+X-Received: by 2002:a17:906:2649:: with SMTP id i9mr71611722ejc.120.1577720649214;
+        Mon, 30 Dec 2019 07:44:09 -0800 (PST)
+Received: from pi3 ([194.230.155.138])
+        by smtp.googlemail.com with ESMTPSA id t1sm5651917ejg.32.2019.12.30.07.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2019 06:44:32 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>
-Subject: [PATCH v5 15/15] arm64: dts: Convert to the hierarchical CPU topology layout for MSM8916
-Date:   Mon, 30 Dec 2019 15:44:02 +0100
-Message-Id: <20191230144402.30195-16-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191230144402.30195-1-ulf.hansson@linaro.org>
-References: <20191230144402.30195-1-ulf.hansson@linaro.org>
+        Mon, 30 Dec 2019 07:44:08 -0800 (PST)
+Date:   Mon, 30 Dec 2019 16:44:05 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        georgi.djakov@linaro.org, leonard.crestez@nxp.com,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
+Subject: Re: [RFC PATCH v3 4/7] arm: dts: exynos: Add interconnect bindings
+ for Exynos4412
+Message-ID: <20191230154405.GC4918@pi3>
+References: <20191220115653.6487-1-a.swigon@samsung.com>
+ <CGME20191220120144eucas1p119ececf161a6d45a6a194e432bbbd1f9@eucas1p1.samsung.com>
+ <20191220115653.6487-5-a.swigon@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191220115653.6487-5-a.swigon@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To enable the OS to better support PSCI OS initiated CPU suspend mode,
-let's convert from the flattened layout to the hierarchical layout.
+On Fri, Dec 20, 2019 at 12:56:50PM +0100, Artur Świgoń wrote:
+> This patch adds the following properties to the Exynos4412 DT:
+>   - exynos,interconnect-parent-node: to declare connections between
+>     nodes in order to guarantee PM QoS requirements between nodes;
+>   - #interconnect-cells: required by the interconnect framework.
+> 
+> Note that #interconnect-cells is always zero and node IDs are not
+> hardcoded anywhere.
+> 
+> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> ---
+>  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-In the hierarchical layout, let's create a power domain provider per CPU
-and describe the idle states for each CPU inside the power domain provider
-node. To group the CPUs into a cluster, let's add another power domain
-provider and make it act as the master domain. Note that, the CPU's idle
-states remains compatible with "arm,idle-state", while the cluster's idle
-state becomes compatible with "domain-idle-state".
+The order of patches is confusing. Patches 4 and 6 are split - do the
+depend on 5? I doubt but...
 
-Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
----
+Adjust the title to match the contents - you are not adding bindings but
+properties to bus nodes. Also the prefix is ARM: (look at recent
+commits).
 
-Changes in v5:
-	- None.
+> 
+> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> index 4ce3d77a6704..d9d70eacfcaf 100644
+> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> @@ -90,6 +90,7 @@
+>  &bus_dmc {
+>  	exynos,ppmu-device = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+>  	vdd-supply = <&buck1_reg>;
+> +	#interconnect-cells = <0>;
 
----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 57 +++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 4 deletions(-)
+This does not look like property of Odroid but Exynos4412 or Exynos4.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 8686e101905c..282c36c8fa3b 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -102,10 +102,11 @@
- 			reg = <0x0>;
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&CPU_SLEEP_0>;
- 			clocks = <&apcs>;
- 			operating-points-v2 = <&cpu_opp_table>;
- 			#cooling-cells = <2>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU1: cpu@1 {
-@@ -114,10 +115,11 @@
- 			reg = <0x1>;
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&CPU_SLEEP_0>;
- 			clocks = <&apcs>;
- 			operating-points-v2 = <&cpu_opp_table>;
- 			#cooling-cells = <2>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU2: cpu@2 {
-@@ -126,10 +128,11 @@
- 			reg = <0x2>;
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&CPU_SLEEP_0>;
- 			clocks = <&apcs>;
- 			operating-points-v2 = <&cpu_opp_table>;
- 			#cooling-cells = <2>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU3: cpu@3 {
-@@ -138,10 +141,11 @@
- 			reg = <0x3>;
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
--			cpu-idle-states = <&CPU_SLEEP_0>;
- 			clocks = <&apcs>;
- 			operating-points-v2 = <&cpu_opp_table>;
- 			#cooling-cells = <2>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 		};
- 
- 		L2_0: l2-cache {
-@@ -161,12 +165,57 @@
- 				min-residency-us = <2000>;
- 				local-timer-stop;
- 			};
-+
-+			CLUSTER_RET: cluster-retention {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000012>;
-+				entry-latency-us = <500>;
-+				exit-latency-us = <500>;
-+				min-residency-us = <2000>;
-+			};
-+
-+			CLUSTER_PWRDN: cluster-gdhs {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000032>;
-+				entry-latency-us = <2000>;
-+				exit-latency-us = <2000>;
-+				min-residency-us = <6000>;
-+			};
- 		};
- 	};
- 
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: cpu-pd0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD1: cpu-pd1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD2: cpu-pd2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD3: cpu-pd3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP_0>;
-+		};
-+
-+		CLUSTER_PD: cluster-pd {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
-+		};
- 	};
- 
- 	pmu {
--- 
-2.17.1
-
+Best regards,
+Krzysztof
