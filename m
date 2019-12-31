@@ -2,192 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C2912D73C
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2019 10:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFB812D75B
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2019 10:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfLaJAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Dec 2019 04:00:03 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:26606 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726619AbfLaJAD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Dec 2019 04:00:03 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1577782803; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=mBwAPIc5W10c/SxyhAEscSWTZOm3fmLRnox3jUftHDU=; b=GpIX6ZxzK69Ayw1baesS7zG+hd3ENaG0Mh7RHrqrJac3AEvOvAk23VlvT2caAN5mGTbsmrFh
- 7O1sQo2CwHlSW+4ctlbJum4o+miu30WRk6gsJx8VgAL9BjDJpfBiCE+YwcrI3ulb0GWc2o12
- iqHumZp4LLqxBP6LnusKnvybggw=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e0b0e0c.7f34277eff48-smtp-out-n02;
- Tue, 31 Dec 2019 08:59:56 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 30CE6C433CB; Tue, 31 Dec 2019 08:59:56 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 40819C433A2;
-        Tue, 31 Dec 2019 08:59:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 40819C433A2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
-        elder@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Subject: [V2, 3/3] arm64: dts: sc7180: Add interconnect provider DT nodes
-Date:   Tue, 31 Dec 2019 14:28:57 +0530
-Message-Id: <1577782737-32068-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1577782737-32068-1-git-send-email-okukatla@codeaurora.org>
-References: <1577782737-32068-1-git-send-email-okukatla@codeaurora.org>
+        id S1726334AbfLaJXA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 31 Dec 2019 04:23:00 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:33427 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbfLaJW7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Dec 2019 04:22:59 -0500
+Received: by mail-ed1-f68.google.com with SMTP id r21so34818172edq.0;
+        Tue, 31 Dec 2019 01:22:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=zcMF0DszYjdAAeSzpwgiwYYj0Rmxb5AATwzX117pufo=;
+        b=tp4tCPQqUUtrCUnBKOQ2hDTX5hSvi6k/POqxIqU8innGP4rro8a/dWwaydpd4O9XNS
+         mnLoYBZL+FEl/mV9XqJtWs37/+cc+PaVaRPFFwRqQ66mj38Uhrvf1F3ImtD1N8oO5fH8
+         TkQEDwbGnknv+AeVr9d+S/tPP8zzZ3wX9yml4nuDFflSbsTGKQjm05Pz8TJj3GzTPQ6J
+         NmzL0QvJCJ7JWVy25EA19RQXp5XfkQtoyl/0op5sW75QKDUW3FYay1eaZRs+n6jhf5b4
+         iSjN6x1TMno7z1EXAX55WBU3y0QWzlBEMxBkrDsklk6j+YzQuBmU/yGanfGg4fU5I/qI
+         2HQA==
+X-Gm-Message-State: APjAAAXnmYGksETNYv4hFNlSnDTR19e/fjZKK0xeP+prHxu5oodin03v
+        C3L5ixW3vh2F8iFDqOVC+Dk=
+X-Google-Smtp-Source: APXvYqzgzVpvRf+8IP6z3ujB3SZIWKfFAGfLl8aejvQf9p703WelAn4funQmIQW8H6z6pzmhM0Yc6w==
+X-Received: by 2002:a17:906:1fd5:: with SMTP id e21mr44856105ejt.97.1577784177492;
+        Tue, 31 Dec 2019 01:22:57 -0800 (PST)
+Received: from pi3 ([194.230.155.138])
+        by smtp.googlemail.com with ESMTPSA id x15sm5693555edl.48.2019.12.31.01.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Dec 2019 01:22:56 -0800 (PST)
+Date:   Tue, 31 Dec 2019 10:22:54 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        georgi.djakov@linaro.org, leonard.crestez@nxp.com,
+        m.szyprowski@samsung.com, b.zolnierkie@samsung.com
+Subject: Re: [RFC PATCH v3 4/7] arm: dts: exynos: Add interconnect bindings
+ for Exynos4412
+Message-ID: <20191231092254.GA6939@pi3>
+References: <20191220115653.6487-1-a.swigon@samsung.com>
+ <CGME20191220120144eucas1p119ececf161a6d45a6a194e432bbbd1f9@eucas1p1.samsung.com>
+ <20191220115653.6487-5-a.swigon@samsung.com>
+ <20191230154405.GC4918@pi3>
+ <2922135223b01126277ef92a53e6b294bc17bb5c.camel@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <2922135223b01126277ef92a53e6b294bc17bb5c.camel@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the DT nodes for the network-on-chip interconnect buses found
-on sc7180-based platforms.
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 96 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+On Tue, Dec 31, 2019 at 08:18:01AM +0100, Artur Świgoń wrote:
+> Hi,
+> 
+> On Mon, 2019-12-30 at 16:44 +0100, Krzysztof Kozlowski wrote:
+> > On Fri, Dec 20, 2019 at 12:56:50PM +0100, Artur Świgoń wrote:
+> > > This patch adds the following properties to the Exynos4412 DT:
+> > >   - exynos,interconnect-parent-node: to declare connections between
+> > >     nodes in order to guarantee PM QoS requirements between nodes;
+> > >   - #interconnect-cells: required by the interconnect framework.
+> > > 
+> > > Note that #interconnect-cells is always zero and node IDs are not
+> > > hardcoded anywhere.
+> > > 
+> > > Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> > > ---
+> > >  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > 
+> > The order of patches is confusing. Patches 4 and 6 are split - do the
+> > depend on 5? I doubt but...
+> 
+> Let me elaborate:
+> 
+> The order of the patches in this series is such that every subsequent
+> patch adds some functionality (and, of course, applying patches one-by-one
+> yields a working kernel at every step). Specifically for patches 04--07:
+> 
+>  -- patch 04 adds interconnect _provider_ properties for Exynos4412;
+>  -- patch 05 implements interconnect provider logic (depends on patch 04);
+>  -- patch 06 adds interconnect _consumer_ properties for Exynos4412 mixer;
+>  -- patch 07 implements interconnect consumer logic (depends on patches
+>     05 & 06);
+> 
+> My reasoning is that this order allows to e.g., merge the interconnect
+> provider for exynos-bus and leave the consumers for later (not limited to
+> the mixer). I hope this makes sense.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 3676bfd..077b1e5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/clock/qcom,gcc-sc7180.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interconnect/qcom,sc7180.h>
- #include <dt-bindings/phy/phy-qcom-qusb2.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
- 
-@@ -1286,6 +1287,10 @@
- 				clock-names = "xo";
- 				#clock-cells = <1>;
- 			};
-+
-+			apps_bcm_voter: bcm_voter {
-+				compatible = "qcom,sc7180-bcm-voter";
-+			};
- 		};
- 
- 		cpufreq_hw: cpufreq@18323000 {
-@@ -1298,6 +1303,97 @@
- 
- 			#freq-domain-cells = <1>;
- 		};
-+
-+		config_noc: interconnect@1500000 {
-+			compatible = "qcom,sc7180-config-noc";
-+			reg = <0 0x01500000 0 0x28000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		system_noc: interconnect@1620000 {
-+			compatible = "qcom,sc7180-system-noc";
-+			reg = <0 0x01620000 0 0x17080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mc_virt: interconnect@1630000 {
-+			compatible = "qcom,sc7180-mc-virt";
-+			reg = <0 0x01630000 0 0x4000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		qup_virt: interconnect@1650000 {
-+			compatible = "qcom,sc7180-qup-virt";
-+			reg = <0 0x01650000 0 0x4000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre1_noc: interconnect@16e0000 {
-+			compatible = "qcom,sc7180-aggre1-noc";
-+			reg = <0 0x016e0000 0 0x15080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre2_noc: interconnect@1700000 {
-+			compatible = "qcom,sc7180-aggre2-noc";
-+			reg = <0 0x01700000 0 0x1f880>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		compute_noc: interconnect@170e000 {
-+			compatible = "qcom,sc7180-compute-noc";
-+			reg = <0 0x0170e000 0 0x11880>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mmss_noc: interconnect@1740000 {
-+			compatible = "qcom,sc7180-mmss-noc";
-+			reg = <0 0x01740000 0 0x1c100>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		ipa_virt: interconnect@1e00000 {
-+			compatible = "qcom,sc7180-ipa-virt";
-+			reg = <0 0x01e00000 0 0x4000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		dc_noc: interconnect@9160000 {
-+			compatible = "qcom,sc7180-dc-noc";
-+			reg = <0 0x09160000 0 0x03200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		gem_noc: interconnect@9680000 {
-+			compatible = "qcom,sc7180-gem-noc";
-+			reg = <0 0x09680000 0 0x3e200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		npu_noc: interconnect@9990000 {
-+			compatible = "qcom,sc7180-npu-noc";
-+			reg = <0 0x09990000 0 0x1600>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		camnoc_virt: interconnect@ac00000 {
-+			compatible = "qcom,sc7180-camnoc-virt";
-+			reg = <0 0x0ac00000 0 0x4000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
- 	};
- 
- 	thermal-zones {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+It is wrong. The driver should not depend on DTS changes because:
+1. DTS always go through separate branch and tree, so last patch
+   will have to wait up to 3 cycles (!!!),
+2. You break backward compatibility.
+
+In certain cases dependency on DTS changes is ok:
+1. Cleaning up deprecated properties,
+2. Ignoring the backward compatibility for e.g. new platforms.
+
+None of these are applicable here.
+
+You need to rework it, put DTS changes at the end. This clearly shows
+that there is no wrong dependency.
+
+> 
+> > Adjust the title to match the contents - you are not adding bindings but
+> > properties to bus nodes. Also the prefix is ARM: (look at recent
+> > commits).
+> 
+> OK.
+> 
+> > > 
+> > > diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > index 4ce3d77a6704..d9d70eacfcaf 100644
+> > > --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
+> > > @@ -90,6 +90,7 @@
+> > >  &bus_dmc {
+> > >  	exynos,ppmu-device = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+> > >  	vdd-supply = <&buck1_reg>;
+> > > +	#interconnect-cells = <0>;
+> > 
+> > This does not look like property of Odroid but Exynos4412 or Exynos4.
+> 
+> Strangely enough, this file is where the 'exynos,parent-bus' (aka. 'devfreq')
+> properties are located (and everything in this RFC concerns devfreq).
+
+I cannot find exynos,parent-bus in exynos4412-odroid-common.dtsi. Can
+you elaborate?
+
+Best regards,
+Krzysztof
