@@ -2,151 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0FD12E6EF
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 14:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4912812E76C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 15:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728369AbgABNxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jan 2020 08:53:55 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34952 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728342AbgABNxz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 08:53:55 -0500
-Received: by mail-wm1-f65.google.com with SMTP id p17so5721278wmb.0;
-        Thu, 02 Jan 2020 05:53:53 -0800 (PST)
+        id S1728532AbgABOyn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jan 2020 09:54:43 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39960 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728528AbgABOym (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 09:54:42 -0500
+Received: by mail-pl1-f196.google.com with SMTP id s21so15166366plr.7
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2020 06:54:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UWP8T2dSY7on4bhuJvvJczYvJx5ExaoKE13WYmlRLaE=;
-        b=BpAs5Ymn625eA/7UDL2mngUe6FHCqNi1N5DPpTwF++MjAalqhYw13VZ121XTxdW3bc
-         k8XUmRiv8I/FedSc6Z4suNRUXX70I53CVZXDmBIbOaN3+WvwJfRqxu7CJTqxlJQOsX5w
-         oKyuAo9tHeP2XALMiOaRJIyKsgirGl96iFYh7ACCMujtTGqKdCQC48ImRJ7UsqB4u5EY
-         QxpwwRl5coiAMuozQqicMQxMsvRhOk5KPvqUUulgtNY3GOZoKevSI3F2UMdYeZs/y4u8
-         CvHPtK7IZk6u9KQbPqjOuZ5w6eiaHGTfIdy8WzjjtuOZ6viGLVL30rkCth30aDrWxMX2
-         QlAg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VtDUTQjwQa4iJtNbmp2oh8w540jx+9fBWmE0OFJWN5s=;
+        b=BWwaYA6vNRkCdYaWQy6Xo1X1nAgYmYYaM7X09iTP5li6SWvSHs5nZvbJsVKpQvMHtf
+         zdojI0OK6raZEtT6w9mR+8Iv9LXNaDdjuqH+91QIsfVVe4MvXLCFAurL+c7CCjzyENzQ
+         kwzjzxbnG8sqoqAZ914QuEGjIGupcxixZHb9tgEYMcr6CiV6QCbTwgQbluB/1DdDAksf
+         OCqWkgsX6l21elKxZdelw+vznZzdX4Cr6nfppWMGyohTlMS4ijaU1KN9VwnRizKqOgU/
+         rh07FXy3kdW819H5vP4skfEhulDJhhdsrEt/19qEEVo1mx67TB66sZsNrrdwPSRFcQPf
+         z9WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UWP8T2dSY7on4bhuJvvJczYvJx5ExaoKE13WYmlRLaE=;
-        b=dmh+oSGhA+dWujlajUY8HMRwoW+akNUJQ6VvdPPI0QUjSH9EKRPQbItGVlNdueMz2V
-         NCuxQoL13TA6LmAm2FjKrVyEYO+ImAW1Z1HR3NKhawGnwU2/AQDtloCNav7i8dlXnGyc
-         IByiLM7fIRBtaFMVXV8CQD/jkM+ynCEohwFyqN1Ap4al73ST+SJLrNozcbl2dI78LBKs
-         wXCEEOGkm3odDIIXYPn85ROUiRutGwMTIY5tIkw0u8XwH9pJnLVD+McGVDCtxkdrZU2W
-         I+hUCHsEwkcSeK3uyyzGmtsGRkLZP1hY0BaO/9y/JdcMAZXrD3GmQ+ZvVs8G/54UT4Zq
-         0YfQ==
-X-Gm-Message-State: APjAAAUMKEttCUSmxcW4V9uV74v2ZTV3WMVzqbfFOU2zJXdZwWr4zuLi
-        k/9TtMJEOd2feH2Sv4d+wD3OZFxXsog=
-X-Google-Smtp-Source: APXvYqxufgSY0u9Yp9j7987C/5ccAx6l5mQEkU9dAfV0VueShs93vukz+XU6wUh2h1CSSgsoa0ZKlw==
-X-Received: by 2002:a1c:4d18:: with SMTP id o24mr14415612wmh.35.1577973232941;
-        Thu, 02 Jan 2020 05:53:52 -0800 (PST)
-Received: from localhost.localdomain ([46.216.160.87])
-        by smtp.gmail.com with ESMTPSA id a184sm8755176wmf.29.2020.01.02.05.53.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VtDUTQjwQa4iJtNbmp2oh8w540jx+9fBWmE0OFJWN5s=;
+        b=GUlNrBDN1qk+OT9LEzVWEFj6oz0sOkIBOifIJtKB1EBVBhsDcVWECnxgqbFmX4q4B/
+         YGdqI0ZJu47Cbd7pXrNQbvuXo1x7zkGb5nhMeV/NoEpZHILW/ha42GWJ5M5g17tLUDGP
+         3VB4pIdvL2ZojBuSp2a9VyMrBGOFjKZOf4tezinjPoGsinVfmfBZoI1VOyEaToP8EOVW
+         WzLuFElIXjuB/WE0E4DvMT1Agl7VJSqeloEMcE1KaCADTfkzS2+G/N+TVM46IJRsEfdN
+         ymzSa8gAqEksFKbo/SL+yG8qzoVzWL5xV5iSmeja2ePXpfxQZ+qOFFoY8isnSh5n486z
+         XL4w==
+X-Gm-Message-State: APjAAAVzTKCLwH8PUzdGgGlDzcZJnLfMx5fDZU8HjprfyRlbmwjwB8+0
+        bykn+QJZpr5m7c5Bxf+DQXImqg==
+X-Google-Smtp-Source: APXvYqx/t9weau/82TBMzffkI1Rt4tlViNW0WGABJ+oSXsGqWDmmqCdMRwpjK0DHHZU1ry16gVuZxg==
+X-Received: by 2002:a17:902:bf49:: with SMTP id u9mr32469865pls.199.1577976880635;
+        Thu, 02 Jan 2020 06:54:40 -0800 (PST)
+Received: from localhost ([103.195.202.148])
+        by smtp.gmail.com with ESMTPSA id q25sm65113198pfg.41.2020.01.02.06.54.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 05:53:52 -0800 (PST)
-Received: from [127.0.0.1] (helo=jeknote.loshitsa1.net)
-        by localhost.localdomain with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <jekhor@gmail.com>)
-        id 1in0v8-00055Z-WC; Thu, 02 Jan 2020 16:53:51 +0300
-Date:   Thu, 2 Jan 2020 16:53:35 +0300
-From:   Yauhen Kharuzhy <jekhor@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] power: supply: bq25890_charger: Add support of
- BQ25892 and BQ25896 chips
-Message-ID: <20200102135335.GA13218@jeknote.loshitsa1.net>
-References: <20200101224627.12093-1-jekhor@gmail.com>
+        Thu, 02 Jan 2020 06:54:40 -0800 (PST)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/9] thermal: tsens: Handle critical interrupts
+Date:   Thu,  2 Jan 2020 20:24:25 +0530
+Message-Id: <cover.1577976221.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200101224627.12093-1-jekhor@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 02, 2020 at 01:46:25AM +0300, Yauhen Kharuzhy wrote:
-> Support BQ25892 and BQ25896 chips by this driver. They shared one chip
-> ID 0, so distinquish them by device revisions (2 for 25896 and 1 for
-> 25892).
-> 
-> Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
-> ---
->  drivers/power/supply/bq25890_charger.c | 97 ++++++++++++++++++++------
->  1 file changed, 76 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> index 9d1ec8d677de..a3dcd4eb1287 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -25,12 +25,20 @@
->  #define BQ25895_ID			7
->  #define BQ25896_ID			0
->  
-> +enum bq25890_chip_version {
-> +	BQ25890,
-> +	BQ25892,
-> +	BQ25895,
-> +	BQ25896,
-> +};
-> +
-...
-> +static int bq25890_get_chip_version(struct bq25890_device *bq)
-> +{
-> +	int id, rev;
-> +
-> +	id = bq25890_field_read(bq, F_PN);
-> +	if (id < 0) {
-> +		dev_err(bq->dev, "Cannot read chip ID.\n");
-> +		return id;
-> +	}
-> +
-> +	rev = bq25890_field_read(bq, F_DEV_REV);
-> +	if (rev < 0) {
-> +		dev_err(bq->dev, "Cannot read chip revision.\n");
-> +		return id;
-> +	}
-> +
-> +	switch (id) {
-> +	case BQ25890_ID:
-> +		bq->chip_version = BQ25890;
-> +		break;
-> +
-> +	/* BQ25892 and BQ25896 share same ID 0 */
-> +	case BQ25896_ID:
-> +		switch (rev) {
-> +		case 0:
-Sorry, typo here: should be 2 for 25896, I will fix this in v2.
+TSENS IP v2.x supports critical interrupts and v2.3+ adds watchdog support
+in case the FSM is stuck. Enable support in the driver.
 
-> +			bq->chip_version = BQ25896;
-> +			break;
-> +		case 1:
-> +			bq->chip_version = BQ25892;
-> +			break;
-> +		default:
-> +			dev_err(bq->dev,
-> +				"Unknown device revision %d, assume BQ25892\n",
-> +				rev);
-> +			bq->chip_version = BQ25892;
-> +		}
-> +		break;
-> +
-> +	case BQ25895_ID:
-> +		bq->chip_version = BQ25895;
-> +		break;
-> +
-> +	default:
-> +		dev_err(bq->dev, "Unknown chip ID %d\n", id);
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-...
+This series was generated on top of linux-next from 20191202 to capture
+const changes for msm8976 that is queued currently.
+
+Changes from v2:
+- Handle old DTBs w/o critical irq in the same way as fix sent for 5.5
+
+Changes from v1:
+- Make tsens_features non-const to allow run time detection of features
+- Pass tsens_sensor around as a const
+- Fix a bug to release dev pointer in success path
+- Address review comments from Bjorn and Stephen (thanks for the review)
+- Add msm8998 and msm8996 DTSI changes for critical interrupts
+
+
+Amit Kucheria (9):
+  drivers: thermal: tsens: De-constify struct tsens_features
+  drivers: thermal: tsens: Pass around struct tsens_sensor as a constant
+  drivers: thermal: tsens: use simpler variables
+  drivers: thermal: tsens: Release device in success path
+  drivers: thermal: tsens: Add critical interrupt support
+  drivers: thermal: tsens: Add watchdog support
+  arm64: dts: sdm845: thermal: Add critical interrupt support
+  arm64: dts: msm8996: thermal: Add critical interrupt support
+  arm64: dts: msm8998: thermal: Add critical interrupt support
+
+ arch/arm64/boot/dts/qcom/msm8996.dtsi |  10 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi |  10 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi  |  10 +-
+ drivers/thermal/qcom/tsens-8960.c     |   4 +-
+ drivers/thermal/qcom/tsens-common.c   | 188 +++++++++++++++++++++++---
+ drivers/thermal/qcom/tsens-v0_1.c     |   6 +-
+ drivers/thermal/qcom/tsens-v1.c       |   6 +-
+ drivers/thermal/qcom/tsens-v2.c       |  24 +++-
+ drivers/thermal/qcom/tsens.c          |  24 +++-
+ drivers/thermal/qcom/tsens.h          | 104 ++++++++++++--
+ 10 files changed, 330 insertions(+), 56 deletions(-)
 
 -- 
-Yauhen Kharuzhy
+2.20.1
+
