@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E70712EA78
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 20:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF67D12EA96
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 20:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728239AbgABT33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jan 2020 14:29:29 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:44995 "EHLO
+        id S1728367AbgABTp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jan 2020 14:45:57 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36345 "EHLO
         mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728430AbgABT33 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 14:29:29 -0500
-Received: by mail-pl1-f194.google.com with SMTP id az3so18163450plb.11
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2020 11:29:28 -0800 (PST)
+        with ESMTP id S1728362AbgABTp4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 14:45:56 -0500
+Received: by mail-pl1-f194.google.com with SMTP id a6so17462943plm.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2020 11:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NvU0yti40S840n5QG3gVP/0HZjtdrLIA9EgmtFMdjeY=;
-        b=zu8FI6S0upnpm0ix25G3oaUOc0+/iGH++sv5Bcj2kBLoEdj4G5VLPaG3P9qofdE3jM
-         kGUCcRTgL2gpIFpgfYy8+7EBIN+kA18SrgprqG1Hx2JUlzDb9GtY/RrrYMUXbtDVY2DB
-         5cY4cvup5gLoGT5jtbYCYsnjZNTuWdUlxaDvbCd8bANScYTV7mYZG90qRPPJleqWen+C
-         ZZpw+5VbdODX/MT7Q74c02z/z69qpq5ZkU6j45apQgPvUEMPYVW2IwjU0LH0Klr6uZx5
-         EclAgxpf4f65o/gcdnf98we6dlSPeYiAHl1H1Mx+nTezrYAoOEKzzFbKGKSohdq2K+s/
-         YwTw==
+        bh=M+UN3qSYQcOwifkJGz4pMANPbaDE0ymHSNwCAW4vn8M=;
+        b=Bh0JFpDVMQfGNXJ6TawXCTCGql4PIYiM/cBEign3YIXDdqzMyCbunqXhFmynhp+LfT
+         8QgB3La0G5k2z/pxLE6LXt7tgmSnpODZxT3yS0HGwo3OiQHfk/b+7D6QiVeb8OpAC4Ug
+         3tJRpbznFCIuQBmQ0gHNoFSVHoxv/XBm55WnTLyufj1uxjYj1V3U7qPSzm1yD/kO/rnK
+         w4fhxokpUAvezWLk0aZ0hYgpJM0Z2bEFzkcQ2s0S9xRery/UMOEKqbehMvPSBBfiArSk
+         jiT7frF2CwlyzSFVghXzEyzzdNULpIUfH6OVTexr3p6WfadD8o8+jw7kYJorAI/7keey
+         +/4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NvU0yti40S840n5QG3gVP/0HZjtdrLIA9EgmtFMdjeY=;
-        b=ZjDsjDbGqZcDmS7SwCE8wFKHydttnyNM7MWCp/YR/uS/gZ6pPnQLxtn3KJ1PLR3Evt
-         JeD9D0jQdJNNo2zV9T0k2vWpADdYAWNdXR877KX8GCOMiaMuZvZ63n1tWJKDXIFgsPbX
-         9AnfHbru75fXM8Gw8jb/vtICIKSBUJ/zfVPmivlQwJXWPofHczP9bB5rlD1iYogssx/x
-         YW5WaJLRhoUPLeInc07jdoVmff6xgStAY2Sv48SZdTen6wyNhl7BvA/8hYk2FTqJzIwS
-         p8w8GPShXkTYHTO3MOTiVBubZ/nW6fOrRB2RXklVI79Am9S3vxUBobYbv1pab9yKnC9x
-         DG/g==
-X-Gm-Message-State: APjAAAWttOnZJjkIn9MUbKdo3iZw2B+n/eLUREk2n8SLeM/EL+we6PON
-        gF8vjbvH/+7Xps9LJU1CwEiL4w==
-X-Google-Smtp-Source: APXvYqzK6klpqUHj5VLLlr49JBuhy2FCQTzFaMgfn5/VXfd20M9M3/Lj/GoFiNaoEiw0ndMfgfZ6Mg==
-X-Received: by 2002:a17:902:aa46:: with SMTP id c6mr88130383plr.200.1577993368332;
-        Thu, 02 Jan 2020 11:29:28 -0800 (PST)
+        bh=M+UN3qSYQcOwifkJGz4pMANPbaDE0ymHSNwCAW4vn8M=;
+        b=FpEf3+igl7t2rqgxsH05XXemBuAws3KF/B/v1fzAuG03QM9m4C7YF6GxbeyYaSWrzo
+         ozq9wqMVsc5KqvKwBY+JLvdLMjRe5RohBl/v29N7vlGOQhDf0iHQawlSLIjdQYbdMvSC
+         ge2D8IkcaIgPKO0VDgrK9pSkpMx2YY21a9NueeVUCDC8QxPFsa1kwHqh/AmFaoIE1RqO
+         VUHJZsRfPKgGIw/u7GiWkskPlFB4ifhLNXiOVDMYigrf1mRM3vYRGsl6vl3av9iqtcUo
+         MqL4bZjtYR3ndszbcg/wKpn2/SWVhvIj+TAwH16ubF5OXGuFlPJIGJgqVmcd98tRrGsk
+         XJpA==
+X-Gm-Message-State: APjAAAVRAQv2K6YVws5tJ+uNlH4yt75UC8wg2Sso4u2JlZUm99vX7iAN
+        eFMNA6SzYipeXYdSTmw8qsq07A==
+X-Google-Smtp-Source: APXvYqyEZGFGg9QbEMGWLdIG0/KtFjJac81L7sBMO5nSmou3U6fUVHcsSIcWFATw94ablkbJiWCkrA==
+X-Received: by 2002:a17:90a:8a0e:: with SMTP id w14mr22075729pjn.51.1577994355911;
+        Thu, 02 Jan 2020 11:45:55 -0800 (PST)
 Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id b193sm56938366pfb.57.2020.01.02.11.29.27
+        by smtp.gmail.com with ESMTPSA id b4sm65899367pfd.18.2020.01.02.11.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 11:29:27 -0800 (PST)
-Date:   Thu, 2 Jan 2020 11:29:25 -0800
+        Thu, 02 Jan 2020 11:45:55 -0800 (PST)
+Date:   Thu, 2 Jan 2020 11:45:52 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Amit Kucheria <amit.kucheria@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
@@ -52,15 +52,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 4/9] drivers: thermal: tsens: Release device in
- success path
-Message-ID: <20200102192925.GC988120@minitux>
+Subject: Re: [PATCH v3 5/9] drivers: thermal: tsens: Add critical interrupt
+ support
+Message-ID: <20200102194552.GD988120@minitux>
 References: <cover.1577976221.git.amit.kucheria@linaro.org>
- <0a969ecd48910dac4da81581eff45b5e579b2bfc.1577976221.git.amit.kucheria@linaro.org>
+ <9e3527ac0f6baa64aeda8eb634ca5020ea7478e5.1577976221.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a969ecd48910dac4da81581eff45b5e579b2bfc.1577976221.git.amit.kucheria@linaro.org>
+In-Reply-To: <9e3527ac0f6baa64aeda8eb634ca5020ea7478e5.1577976221.git.amit.kucheria@linaro.org>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -68,48 +68,169 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu 02 Jan 06:54 PST 2020, Amit Kucheria wrote:
+[..]
+> @@ -189,6 +197,9 @@ static void tsens_set_interrupt_v1(struct tsens_priv *priv, u32 hw_id,
+>  	case LOWER:
+>  		index = LOW_INT_CLEAR_0 + hw_id;
+>  		break;
+> +	case CRITICAL:
+> +		/* No critical interrupts before v2 */
+> +		break;
 
-> We don't currently call put_device in case of successfully initialising
-> the device.
-> 
-> Allow control to fall through so we can use same code for success and
-> error paths to put_device.
-> 
+You need to break harder, right now you're just attempting to write
+"enable" to VER_MAJOR in this case.
 
-Given the relationship between priv->dev and op I think this wouldn't be
-a problem in practice, but there's two devm_ioremap_resource() done on
-op->dev in this function. So you're depending on op->dev to stick
-around, but with this patch you're no longer expressing that dependency.
+>  	}
+>  	regmap_field_write(priv->rf[index], enable ? 0 : 1);
+>  }
+[..]
+> @@ -321,6 +357,64 @@ static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
+>  	return 0;
+>  }
+>  
+> +/**
+> + * tsens_critical_irq_thread - Threaded interrupt handler for critical interrupts
 
-That said, it looks iffy to do devm_ioremap_resource() on op->dev and
-then create a regmap on priv->dev using that resource. So I think it
-would be better to do platform_get_source() on op, and then
-devm_ioremap_resource() on priv->dev, in which case the regmap backing
-memory will be related to the same struct device as the regmap and it
-makes perfect sense to put_device() the op->dev when you're done
-inspecting it's resources.
+() on the function name to denote it being a function.
+
+> + * @irq: irq number
+> + * @data: tsens controller private data
+> + *
+> + * Check all sensors to find ones that violated their critical threshold limits.
+> + * Clear and then re-enable the interrupt.
+> + *
+> + * The level-triggered interrupt might deassert if the temperature returned to
+> + * within the threshold limits by the time the handler got scheduled. We
+> + * consider the irq to have been handled in that case.
+> + *
+> + * Return: IRQ_HANDLED
+> + */
+> +irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+> +{
+> +	struct tsens_priv *priv = data;
+> +	struct tsens_irq_data d;
+> +	unsigned long flags;
+> +	int temp, ret, i;
+> +
+> +	for (i = 0; i < priv->num_sensors; i++) {
+> +		const struct tsens_sensor *s = &priv->sensor[i];
+> +		u32 hw_id = s->hw_id;
+> +
+> +		if (IS_ERR(s->tzd))
+> +			continue;
+> +		if (!tsens_threshold_violated(priv, hw_id, &d))
+> +			continue;
+> +		ret = get_temp_tsens_valid(s, &temp);
+> +		if (ret) {
+> +			dev_err(priv->dev, "[%u] %s: error reading sensor\n", hw_id, __func__);
+> +			continue;
+> +		}
+> +
+> +		spin_lock_irqsave(&priv->ul_lock, flags);
+
+You meant crit_lock here?
+
+But perhaps more importantly, why do you need a lock here?
+
+> +
+> +		tsens_read_irq_state(priv, hw_id, s, &d);
+> +
+> +		if (d.crit_viol &&
+> +		    !masked_irq(hw_id, d.crit_irq_mask, tsens_version(priv))) {
+> +			tsens_set_interrupt(priv, hw_id, CRITICAL, false);
+> +			if (d.crit_thresh > temp) {
+> +				dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
+> +					hw_id, __func__);
+> +			} else {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +					hw_id, __func__, temp);
+> +			}
+> +			tsens_set_interrupt(priv, hw_id, CRITICAL, true);
+> +		}
+> +
+> +		spin_unlock_irqrestore(&priv->crit_lock, flags);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+[..]
+> @@ -125,6 +125,28 @@ static int tsens_register(struct tsens_priv *priv)
+>  		goto err_put_device;
+>  	}
+>  
+> +	if (priv->feat->crit_int) {
+> +		irq_crit = platform_get_irq_byname(pdev, "critical");
+> +		if (irq_crit < 0) {
+> +			ret = irq_crit;
+> +			/* For old DTs with no IRQ defined */
+> +			if (irq_crit == -ENXIO)
+> +				ret = 0;
+> +			goto err_crit_int;
+> +		}
+> +		ret = devm_request_threaded_irq(&pdev->dev, irq_crit,
+> +						NULL, tsens_critical_irq_thread,
+> +						IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+
+You should omit the IRQF_TRIGGER_HIGH here, it will be provided by the
+system configuration (DT).
+
+> +						dev_name(&pdev->dev), priv);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "%s: failed to get critical irq\n", __func__);
+> +			goto err_crit_int;
+> +		}
+> +
+> +		enable_irq_wake(irq_crit);
+> +	}
+> +
+> +err_crit_int:
+>  	enable_irq_wake(irq);
+>  
+>  err_put_device:
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+[..]
+> @@ -460,6 +526,8 @@ struct tsens_context {
+>   * @srot_map: pointer to SROT register address space
+>   * @tm_offset: deal with old device trees that don't address TM and SROT
+>   *             address space separately
+> + * @ul_lock: lock while processing upper/lower threshold interrupts
+
+This looks like an unrelated fixup to a previous patch? Please keep it
+separate.
+
+> + * @crit_lock: lock while processing critical threshold interrupts
+>   * @rf: array of regmap_fields used to store value of the field
+>   * @ctx: registers to be saved and restored during suspend/resume
+>   * @feat: features of the IP
+> @@ -479,6 +547,9 @@ struct tsens_priv {
+>  	/* lock for upper/lower threshold interrupts */
+>  	spinlock_t			ul_lock;
+>  
+> +	/* lock for critical threshold interrupts */
+> +	spinlock_t			crit_lock;
+
+You're lacking a spin_lock_init() of this.
+
+> +
+>  	struct regmap_field		*rf[MAX_REGFIELDS];
+>  	struct tsens_context		ctx;
+>  	struct tsens_features		*feat;
+> @@ -500,6 +571,7 @@ int tsens_enable_irq(struct tsens_priv *priv);
+>  void tsens_disable_irq(struct tsens_priv *priv);
+>  int tsens_set_trips(void *_sensor, int low, int high);
+>  irqreturn_t tsens_irq_thread(int irq, void *data);
+> +irqreturn_t tsens_critical_irq_thread(int irq, void *data);
+
+I think you should squash tsens.c and tsens-common.c into one file, so
+you don't need to keep adding these extern declarations for every
+function - separate of this series of course.
 
 Regards,
 Bjorn
 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  drivers/thermal/qcom/tsens-common.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> index 1cbc5a6e5b4f..e84e94a6f1a7 100644
-> --- a/drivers/thermal/qcom/tsens-common.c
-> +++ b/drivers/thermal/qcom/tsens-common.c
-> @@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
->  	tsens_enable_irq(priv);
->  	tsens_debug_init(op);
 >  
-> -	return 0;
-> -
->  err_put_device:
->  	put_device(&op->dev);
->  	return ret;
+>  /* TSENS target */
+>  extern struct tsens_plat_data data_8960;
 > -- 
 > 2.20.1
 > 
