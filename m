@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DDB12E775
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 15:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2634212E77D
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2020 15:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728606AbgABOyw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jan 2020 09:54:52 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:32872 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728591AbgABOyv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 09:54:51 -0500
-Received: by mail-pf1-f195.google.com with SMTP id z16so22163312pfk.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2020 06:54:51 -0800 (PST)
+        id S1728560AbgABOy4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jan 2020 09:54:56 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:55632 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728615AbgABOyz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jan 2020 09:54:55 -0500
+Received: by mail-pj1-f67.google.com with SMTP id d5so3338520pjz.5
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2020 06:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EjOF1oUSrrO0URh0mj4+ZNJlrmQRUgZsgYN9DFASUmw=;
-        b=OUjZ+/Z3trmas3K38X08vZdhWSVxLFcdDC4Vc//HoLDX4rxQqVIf4Tb47d0OzLNuZm
-         Bc6LZxRWPBdGnRsSgXqCsD4UAPQbo0QsBAYNby6WycX4c0ykyK3P1NfIIzP/wlyVopec
-         4jP+WrTcitu+1Up81c4GyLcsDBl54OWLS1RY3bpXdp0xmhf+5vxMrCiSHGwu5W7j1gNk
-         s4xnHuCqEz8RRhamhtFWya22394C75t2zX2d4vCVM65A7T3lkIh2yQS2Mt7KizoUVksf
-         mcnbxEbY+Kwx+W+/xGKKfW0mZKdbXO8zUT25WBiJ1d2hMelHiPZZG2F4++H5uLy9lTlN
-         EVzw==
+        bh=fBoLG1yNGX8O84D+YcSt5B+i5/exbpkdJTkAsAGAlGk=;
+        b=qCXuNdiSR16NjCl2MfuL4UuKLIGqC+aI6fJyLyPkOWfXERE1srFvi+G65shbWPvUUB
+         yak7t+K9YILtB2M5FMNMR0YVzag6Juq+ocVuPWl4xIQl5Eg6pHAvopOBMrsQm2p6dinN
+         4vqGMMaqasKh/O+sWbMJj6uYO5QmuxYeiWAjg+56ly2wJAU/THpVF1vGf/phd7stDSx8
+         oor7SODucz0k2ufCAhJSTm4r8ryWa8AEXXGZcImfJq3LhB6ZQRv4sGTStymGBlnryzLe
+         5PEr+I6wFkGsD+I8Oi1wwF49AmSc9yM5qb+3h28Jt2WDCaESn9e2horyLYCaeeEVC9dF
+         gYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EjOF1oUSrrO0URh0mj4+ZNJlrmQRUgZsgYN9DFASUmw=;
-        b=iHis7CDMhFWw3xDdE3AGIah/qMi02jsSPkWOuZLZknmmJpEEsh5q7p1RWh8HQG3Tlu
-         buu/XolsxTZ55gxvh/KX2IdA+eHr045p8pp1tygl54/+9Oy7KtcbkbqtW9H9mPHHs1s8
-         Wlbx5UwW7UyY+jdzJgUh8TK4WrYW91+kKC7WhhSc1mqXrWqDZS1EVDAhm167CcXDVp/o
-         zduCKJ2uTbE/hQPAK3dc0bXobkytlaLbPVP4ZdGecftHmrfEGzdQct42ockbqG2PekxA
-         X6wgnEzQQBH5r+pCKBRAUjrEPh0dIuc6pcU9k3n9Teb9xhSWn+hWnBnv6PXpoY2GrvDe
-         MY+Q==
-X-Gm-Message-State: APjAAAWRicnygpual/0oVDS9PD4kchJGeshe9tbheUkku9oK9RikTwPT
-        FIA2gEHXtwSZ8IuwI85TyKLDWA==
-X-Google-Smtp-Source: APXvYqwlvaympWHfPGjB6g1AcZQTDfAAvQcu0Ua50SZ5Ouow2P0IMHFFkmzhdtLSzyH2/OMx+0G9jQ==
-X-Received: by 2002:a63:d108:: with SMTP id k8mr88808304pgg.434.1577976891078;
-        Thu, 02 Jan 2020 06:54:51 -0800 (PST)
+        bh=fBoLG1yNGX8O84D+YcSt5B+i5/exbpkdJTkAsAGAlGk=;
+        b=ioXYlduP5aFlBTThP8BF9mrP7tpQvpPo79+aCw1iNTEq0V9qo2ec5CSgxtFuQjz+E2
+         trSVD9qwhtmvgd2yB8rXlCg+e2TUIo6lxdFn5yjCFCjg9UAryAxAHFjy7JW0D1TOajXY
+         +yQ5fOtfET+Ungq3sQ1LN5APFzFckQ5bnRLV0fgTc6DZEFBG1vFeedm1/VpMYSb3CcA3
+         kdumBN8Cb7n62Bgthn+x6BuJ5oeBr4WtZbtcyGi3XT9zT751Mukg6qSb71TXuv3A/RTo
+         Up9BcRh+oKGY5qIkArrRtTUZku4Y1+kEu0WYRS+z5RPugwDyzu3TcbCvaHhGbCCn7usr
+         qi7Q==
+X-Gm-Message-State: APjAAAVE07nSLCKW6SPlZ8fFHaf70Y2xd4HS5X9K8yIt1mXAjRO/W56o
+        +ldGCnKjDjOesZ3t6+jXd9Llfg==
+X-Google-Smtp-Source: APXvYqzqhn/VAN3Br6Oz2bcdlCFgzIT2moGT2q0uNq4nk+Ht9Z8UyjO9WjWb12H49524M/mjfLgVNg==
+X-Received: by 2002:a17:90a:26ec:: with SMTP id m99mr20400488pje.130.1577976894354;
+        Thu, 02 Jan 2020 06:54:54 -0800 (PST)
 Received: from localhost ([103.195.202.148])
-        by smtp.gmail.com with ESMTPSA id b42sm11581627pjc.27.2020.01.02.06.54.50
+        by smtp.gmail.com with ESMTPSA id h128sm66808306pfe.172.2020.01.02.06.54.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 06:54:50 -0800 (PST)
+        Thu, 02 Jan 2020 06:54:53 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, swboyd@chromium.org,
         sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
 Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v3 3/9] drivers: thermal: tsens: use simpler variables
-Date:   Thu,  2 Jan 2020 20:24:28 +0530
-Message-Id: <09ac47eea963e84bd3eb630897c2b77f3868b90b.1577976221.git.amit.kucheria@linaro.org>
+Subject: [PATCH v3 4/9] drivers: thermal: tsens: Release device in success path
+Date:   Thu,  2 Jan 2020 20:24:29 +0530
+Message-Id: <0a969ecd48910dac4da81581eff45b5e579b2bfc.1577976221.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1577976221.git.amit.kucheria@linaro.org>
 References: <cover.1577976221.git.amit.kucheria@linaro.org>
@@ -63,54 +63,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We already dereference the sensor and save it into a variable. Use the
-variable directly to make the code easier to read.
+We don't currently call put_device in case of successfully initialising
+the device.
+
+Allow control to fall through so we can use same code for success and
+error paths to put_device.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/qcom/tsens-common.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/thermal/qcom/tsens-common.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-index c2df30a08b9e..1cbc5a6e5b4f 100644
+index 1cbc5a6e5b4f..e84e94a6f1a7 100644
 --- a/drivers/thermal/qcom/tsens-common.c
 +++ b/drivers/thermal/qcom/tsens-common.c
-@@ -368,7 +368,7 @@ irqreturn_t tsens_irq_thread(int irq, void *data)
- 			tsens_set_interrupt(priv, hw_id, UPPER, disable);
- 			if (d.up_thresh > temp) {
- 				dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
--					priv->sensor[i].hw_id, __func__);
-+					hw_id, __func__);
- 				tsens_set_interrupt(priv, hw_id, UPPER, enable);
- 			} else {
- 				trigger = true;
-@@ -379,7 +379,7 @@ irqreturn_t tsens_irq_thread(int irq, void *data)
- 			tsens_set_interrupt(priv, hw_id, LOWER, disable);
- 			if (d.low_thresh < temp) {
- 				dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
--					priv->sensor[i].hw_id, __func__);
-+					hw_id, __func__);
- 				tsens_set_interrupt(priv, hw_id, LOWER, enable);
- 			} else {
- 				trigger = true;
-@@ -392,7 +392,7 @@ irqreturn_t tsens_irq_thread(int irq, void *data)
- 		if (trigger) {
- 			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
- 				hw_id, __func__, temp);
--			thermal_zone_device_update(priv->sensor[i].tzd,
-+			thermal_zone_device_update(s->tzd,
- 						   THERMAL_EVENT_UNSPECIFIED);
- 		} else {
- 			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-@@ -435,7 +435,7 @@ int tsens_set_trips(void *_sensor, int low, int high)
- 	spin_unlock_irqrestore(&priv->ul_lock, flags);
+@@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
+ 	tsens_enable_irq(priv);
+ 	tsens_debug_init(op);
  
- 	dev_dbg(dev, "[%u] %s: (%d:%d)->(%d:%d)\n",
--		s->hw_id, __func__, d.low_thresh, d.up_thresh, cl_low, cl_high);
-+		hw_id, __func__, d.low_thresh, d.up_thresh, cl_low, cl_high);
- 
- 	return 0;
- }
+-	return 0;
+-
+ err_put_device:
+ 	put_device(&op->dev);
+ 	return ret;
 -- 
 2.20.1
 
