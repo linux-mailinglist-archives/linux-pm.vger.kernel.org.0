@@ -2,42 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32AAE12F6E5
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 11:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007AF12FA09
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 16:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727456AbgACKxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jan 2020 05:53:21 -0500
-Received: from web209.your-webhost.nl ([84.241.177.149]:33420 "EHLO
-        web209.your-webhost.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727220AbgACKxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jan 2020 05:53:21 -0500
-X-Greylist: delayed 3645 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jan 2020 05:53:21 EST
-Received: from qb209324 by web209.your-webhost.nl with local (Exim 4.92)
-        (envelope-from <mathieux@universe-it.be>)
-        id 1inJdC-002DOq-Cx
-        for linux-pm@vger.kernel.org; Fri, 03 Jan 2020 10:52:34 +0100
-To:     linux-pm@vger.kernel.org
-Subject: =?utf-8?Q?Kopie_van:_=D0=92=D0=B5=D0=B0utiful_w=D0=BEm=D0=B5n_f=D0=BEr_se?=  =?utf-8?Q?x_in_=D1=83=D0=BEur_town_=D0=A1=D0=B0nad=D0=B0:_https://darknes?=  =?utf-8?Q?str.com/sexinyourcity204157?=
-X-PHP-Script: creatieftuinieren.be/index.php for 84.17.53.22
-X-PHP-Filename: /var/www/qb209324/data/www/creatieftuinieren.be/index.php REMOTE_ADDR: 84.17.53.22
-Date:   Fri, 3 Jan 2020 10:52:34 +0100
-From:   Creatief Tuinieren <mathieux@universe-it.be>
-Reply-To: linux-pm@vger.kernel.org
-Message-ID: <70d12b310bdf27a37963beba5cc040a3@creatieftuinieren.be>
-X-Priority: 3
-X-Mailer: PHPMailer 5.2.9 (https://github.com/PHPMailer/PHPMailer/)
+        id S1727733AbgACPzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jan 2020 10:55:16 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:59624 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727539AbgACPzQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jan 2020 10:55:16 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07487;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0TmkFDOs_1578066907;
+Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0TmkFDOs_1578066907)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 03 Jan 2020 23:55:13 +0800
+From:   Wen Yang <wenyang@linux.alibaba.com>
+To:     rjw@rjwysocki.net, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     Wen Yang <wenyang@linux.alibaba.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/power/snapshot.c: improve arithmetic divisions
+Date:   Fri,  3 Jan 2020 23:54:58 +0800
+Message-Id: <20200103155458.21707-1-wenyang@linux.alibaba.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dit is een kopie van het volgende bericht dat door u gestuurd is aan Contact Us via Creatief Tuinieren
+do_div() does a 64-by-32 division. Use div64_u64() instead of
+do_div() if the divisor is u64, to avoid truncation to 32-bit.
+This change also cleans up code a tad.
 
-Dit is een e-mailbericht via http://creatieftuinieren.be/ van:
-Meet seху girls in уоur city AU: https://1borsa.com/sexinyourcity143945 <linux-pm@vger.kernel.org>
+Signed-off-by: Wen Yang <wenyang@linux.alibaba.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ kernel/power/snapshot.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Dating fоr sеx | Grеаt Britain: https://links.wtf/aEPv
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 26b9168..8a6eaf7 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1566,9 +1566,7 @@ static unsigned long preallocate_image_highmem(unsigned long nr_pages)
+  */
+ static unsigned long __fraction(u64 x, u64 multiplier, u64 base)
+ {
+-	x *= multiplier;
+-	do_div(x, base);
+-	return (unsigned long)x;
++	return div64_u64(x * multiplier, base);
+ }
+ 
+ static unsigned long preallocate_highmem_fraction(unsigned long nr_pages,
+-- 
+1.8.3.1
 
