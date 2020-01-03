@@ -2,144 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A8912FD20
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 20:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC2612FDCB
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 21:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbgACTg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jan 2020 14:36:26 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:14131 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728488AbgACTgX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Jan 2020 14:36:23 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 47qFWn074BzJf;
-        Fri,  3 Jan 2020 20:36:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1578080181; bh=WlFGQ9P8prWFa6CvEQ+uJYVkZQz0/FIh1Zkijr+EcIw=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=Ylp4VpqJCIcbkxk/NePZyFq9GAuIM/miWnraMy0CIBf3Gjobl56vY5VprhAAUmF3G
-         9cdWHtm6N3kf0M7Hvy/7q8sv1DeIj4/lc+6acXNlrDS3vosq27NdvD/rVlNOkRx20Z
-         WPj51r+d07qC1TV4634m0ILyi5aVS+SSX7Qfa8Mr5C9bSwJdPd1AQQ4DmbvYBDTzuc
-         Lk/FuqJjSMLXtRlHOu1w6ZHK0IYu1i18e7NfMFnugy5MuRQLcGBFMA6GKJeqP39fMD
-         Cjcl/nhZS2FMjPHArZE+AWBa65ETPJ+NRMRo7PBDUSWQo+eF9bnP7XDm3Ho1C9GiYK
-         Oy3+1LyKfguAA==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.4 at mail
-Date:   Fri, 03 Jan 2020 20:36:20 +0100
-Message-Id: <5c2d6548aef35c690535fd8c985b980316745e91.1578077228.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <a8060fe5b23929e2e5c9bf5735e63b302124f66c.1578077228.git.mirq-linux@rere.qmqm.pl>
-References: <a8060fe5b23929e2e5c9bf5735e63b302124f66c.1578077228.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH 2/2] opp: quiet down WARN when no valid OPPs remain
+        id S1728746AbgACUUU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jan 2020 15:20:20 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:36441 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728742AbgACUUJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jan 2020 15:20:09 -0500
+Received: by mail-qk1-f194.google.com with SMTP id a203so35086066qkc.3
+        for <linux-pm@vger.kernel.org>; Fri, 03 Jan 2020 12:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
+         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
+         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
+         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
+         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
+         hUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=UnBwe3l4xVbK4TS36c036OiueT44R4mqJrTi/7/1kPg15nHV2QSgPOf9zRNULk+4UM
+         BgiT2N0jxAwJsLjHoORZ83WtKkyIq+7xKlkQ4gI6e+4tA6QCo6ax6YXVEDk63RHrYu2L
+         vEzqCxtiZ7FXgr9ODQGwJcb8+446LLVSZDS0j6RqiC/yIlkYupGPbiA0O2gEB6iKQVYf
+         Ti3an2H9ae3NA2qy/xH1/IjKll1mHcQm7APqA3BbKTFa6ffcWUvGk+CX8w35uF71wWn9
+         MSedlNqcnKrtdkbeUsOBOc0nYqAtP9NnsF7maGFB+R5NHPezFeeSjunjGFpcbO5UYnjs
+         izmw==
+X-Gm-Message-State: APjAAAWrPnSAO1caJ6ywnyS+ZVDar62jPaImXAEgmBP307wV+G8gCJlJ
+        5Ltxi94kzPyOziOxU0amMKJMLubJr5WRU6zF3NU=
+X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
+X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
+ Fri, 03 Jan 2020 12:20:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:20:08 +0100
+Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Per CPU screenful of backtraces is not really that useful. Replace
-WARN with a diagnostic discriminating common causes of empty OPP table.
+Dear Friend
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
- drivers/opp/of.c | 39 +++++++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 14 deletions(-)
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index fba515e432a4..59d7667b56f0 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -534,12 +534,13 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
-  * Return:
-  * Valid OPP pointer:
-  *		On success
-- * NULL:
-+ * ERR_PTR(-EBUSY):
-  *		Duplicate OPPs (both freq and volt are same) and opp->available
-- *		OR if the OPP is not supported by hardware.
-  * ERR_PTR(-EEXIST):
-  *		Freq are same and volt are different OR
-  *		Duplicate OPPs (both freq and volt are same) and !opp->available
-+ * ERR_PTR(-ENODEV):
-+ *		The OPP is not supported by hardware.
-  * ERR_PTR(-ENOMEM):
-  *		Memory allocation failure
-  * ERR_PTR(-EINVAL):
-@@ -583,6 +584,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- 	/* Check if the OPP supports hardware's hierarchy of versions or not */
- 	if (!_opp_is_supported(dev, opp_table, np)) {
- 		dev_dbg(dev, "OPP not supported by hardware: %llu\n", rate);
-+		ret = -ENODEV;
- 		goto free_opp;
- 	}
- 
-@@ -607,12 +609,8 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- 		new_opp->pstate = pm_genpd_opp_to_performance_state(dev, new_opp);
- 
- 	ret = _opp_add(dev, new_opp, opp_table, rate_not_available);
--	if (ret) {
--		/* Don't return error for duplicate OPPs */
--		if (ret == -EBUSY)
--			ret = 0;
-+	if (ret)
- 		goto free_required_opps;
--	}
- 
- 	/* OPP to select on device suspend */
- 	if (of_property_read_bool(np, "opp-suspend")) {
-@@ -658,7 +656,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
- {
- 	struct device_node *np;
--	int ret, count = 0, pstate_count = 0;
-+	int ret, count = 0, filtered = 0, pstate_count = 0;
- 	struct dev_pm_opp *opp;
- 
- 	/* OPP table is already initialized for the device */
-@@ -677,19 +675,32 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
- 	/* We have opp-table node now, iterate over it and add OPPs */
- 	for_each_available_child_of_node(opp_table->np, np) {
- 		opp = _opp_add_static_v2(opp_table, dev, np);
--		if (IS_ERR(opp)) {
--			ret = PTR_ERR(opp);
-+		ret = PTR_ERR_OR_ZERO(opp);
-+		if (!ret) {
-+			count++;
-+		} else if (ret == -ENODEV) {
-+			filtered++;
-+		} else if (ret != -EBUSY) {
- 			dev_err(dev, "%s: Failed to add OPP, %d\n", __func__,
- 				ret);
- 			return ret;
--		} else if (opp) {
--			count++;
- 		}
- 	}
- 
--	/* There should be one of more OPP defined */
--	if (WARN_ON(!count))
-+	/* There should be one or more OPPs defined */
-+	if (!count) {
-+		if (!filtered)
-+			/* all can't be duplicates, so there must be none */
-+			dev_err(dev, "%s: OPP table empty", __func__);
-+		else if (!opp_table->supported_hw)
-+			dev_err(dev,
-+				"%s: all OPPs match hw version, but platform did not provide it",
-+				__func__);
-+		else
-+			dev_err(dev, "%s: no supported OPPs", __func__);
-+
- 		return -ENOENT;
-+	}
- 
- 	list_for_each_entry(opp, &opp_table->opp_list, node)
- 		pstate_count += !!opp->pstate;
--- 
-2.20.1
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
 
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
+
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
+
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
+
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
+
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
+Best regards,
+Rev.Dr, George Adadar
