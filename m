@@ -2,150 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B037712FB51
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 18:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AC812FB8B
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 18:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728307AbgACRMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jan 2020 12:12:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47998 "EHLO mail.kernel.org"
+        id S1728111AbgACRYr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jan 2020 12:24:47 -0500
+Received: from mout.gmx.net ([212.227.17.22]:46351 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728320AbgACRMq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Jan 2020 12:12:46 -0500
-Received: from localhost.localdomain (unknown [194.230.155.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 59D3B22522;
-        Fri,  3 Jan 2020 17:12:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578071566;
-        bh=/tnEtZ/TQAfcjo0cVjVkZvyHZiO0bR42EkUMFvapC2Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=th77NZk1JmSUU4wgbn/QlglppOJamM8QXam/SHCjt871c0DsOwBJisl3Qf8ZuqYiQ
-         FM1oGJ90M66QTi2wrZJN7VsuAwGf5htwMQlVem+qCdh7zsVlyBbZfQpyLBpVbYyqMg
-         QlkJwbXG9RkAppksJIElwhpk9kg494it4zFWNGms=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 12/19] devfreq: exynos: Rename Exynos to lowercase
-Date:   Fri,  3 Jan 2020 18:11:24 +0100
-Message-Id: <20200103171131.9900-13-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200103171131.9900-1-krzk@kernel.org>
-References: <20200103171131.9900-1-krzk@kernel.org>
+        id S1728107AbgACRYr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Jan 2020 12:24:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1578072273;
+        bh=SlxHbcR5TTdJrE3L2sr/2KEiiH3jS9RDoj5DX5HulYk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=ClmE7JEK1ogZWlN7rGyvHtqjYn+xJVtABWvRLa+dNq02yaIrYa7ZZLabxOY/YSbwX
+         FsIA9NE1lifn652C01TBXBFfqY2ZsWyogz3X+fqR/t7PeVWImytGGGa9AN2tZuyqdG
+         jCJ6yEljbWICbZARB0Cq1UMgOcEt939HDCtig7vI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.154]) by mail.gmx.com
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MC34X-1iscIP3Oaj-00CQmn; Fri, 03 Jan 2020 18:24:32 +0100
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V2 0/4] ARM: Enable thermal support for Raspberry Pi 4
+Date:   Fri,  3 Jan 2020 18:23:52 +0100
+Message-Id: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:12HdYsYoJ0u6byqvhEy/wc/ooNO+V6TRtJVP2T4JA1f0XwtUax7
+ ckPbMtL1092GPkMoUBO6sYykRWlJFgVLWyPMIfuRp3Lc1HITGVf/i0rt9+dFGrEA+3oN6Fl
+ UkVFg3gxV0lKjVXJHWw/5qf8OErTwyo9iiTAsyaWjcN2Pb8mqcRLr0LdIggax8FYDpjRdsJ
+ WAvQ72eZ02OqvPns4mEew==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8ebFM6rRjnw=:WTtjqG3osUdeuQ8yGhh8dE
+ PY3gJNU9NwJGERVZqoki2EGDX3n4rUHKglBPCieYO4B5RsAYJBft11awp440k2KC8p4I7KzM9
+ 59iKYKLIpDWmet7arE8pB9IHnkbcXZiW80UeykGA3UaV//J1BSw5HISPbXCH4cg8okTgeGXET
+ Vg3JEZHrRFfymdmVTgMD41IjqQFDcYdCkygy6/8sCox7Gm+oGoZ+s7ybRWTWD7JDuNy0cXYe3
+ L1U6j6VtB/j60Bqmt/RfF2kk3dZH9J3YafzjMknXhvQyAFNFgEzqRtwm9TONa+bC+H9s0gUA7
+ F+TNaROrsSOfiWZatvYlB35SUBDdiM9hYe3hg6AI/6+PfqcqlYugtg2JLk/5gbS59yrbzWZQE
+ mjICRLltD9lEDtvVGnFdDO+2Cra1uUxDi3ZLQQMcVIonYgqTvc2AjD+PsIVEk310TKMt11w4k
+ IYaRMY7NI75oACGAUWEr2iTVVsS/awFgjaykyeFdG4HSxHS/h8cj3XGiho1AAyNpq1276CzGJ
+ csF9odyP0aWNYsgjiXPyFBkQmGwLt/cAg3JxlMHEjaPC9TYJhVaw2KmAq+ZcyXloWywWJ/3wv
+ 0d+sWkzy86QAZp4jmuwAQvqWNfthiBcdwqNZ5w9SxvJ6LXWrWmRe8gw/XnRo21IB3jXED/PwP
+ /+5WPvz7WAQCoa1GECAnbtXpmMQf+k79VP1cWODQXEpnPxWjHJ4mazQHybGfMEuZ+lx7/E3U1
+ rFIKJRJIaKZFz/GbVvJ9sIHfTUJTY9JPJaS+M8/ZbXxJrBAgl5rhJadP19urDeUtYDfyBilTC
+ yzOxKoEzsb1S8yuyQwF3ZxzScjY10fHAF6pc7g/gSb2NE2d40ovqWMNFzVVE/CRMKhwqc3pEE
+ 8jspwVISOPizknqA6dBA73Dyn7hTyNY3TGiXdkCZz/3Bs2nf+8tFJTc6rUVz6mHMuNl/3R3z9
+ +0qeHbtDn7ojlPUXl5ReJnXQ27XxRf08C2+H8KvWYkEHzHMcGDU97NruTNC2jv7i6sQo7xyeT
+ BBSmhW/vSsrk8UAfyA1bhOM55gY1W9lMNaOLFaFwipvzDs0YmhoaRDs/cshl3xHNwKkyRWI+g
+ T8FdbnfAthhtx5FT8sZ/BkBlhetuzYkJwz0ECufKOdDCc7k6m2tLNbJxIDjuhrGel8x+7Ghhz
+ 0cFM6Kx4ChMlrCbPiC3KmC6Z7Y9MqixbphDsK1Wn5xE4NQymyyEDtcPzVnZ8GXatyq2nSgXal
+ sDy2rWvMTQNDxsPIZeWxTsvoniRNwsWD9pM2gTQ==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix up inconsistent usage of upper and lowercase letters in "Exynos"
-name.
+This series enables thermal support for the Raspberry Pi 4. Neither the
+bcm2835_thermal nor the brcmstb_thermal are suitable for the BCM2711.
+So add a new thermal driver to read out the SoC temperature from the
+AVS RO block of the BCM2711.
 
-"EXYNOS" is not an abbreviation but a regular trademarked name.
-Therefore it should be written with lowercase letters starting with
-capital letter.
+Changes in V2:
+- rebase on thermal/linux-next
+- convert binding to YAML
+- make AVS RO block a subnode of AVS monitor and access it via syscon
+- drop unnecessary TSENS clock and get the rid of remove callback
+- add Florian's reviewed-by to last/unchanged patch
 
-The lowercase "Exynos" name is promoted by its manufacturer Samsung
-Electronics Co., Ltd., in advertisement materials and on website.
+Stefan Wahren (4):
+  dt-bindings: Add Broadcom AVS RO thermal
+  thermal: Add BCM2711 thermal driver
+  ARM: dts: bcm2711: Enable thermal
+  ARM: configs: Build BCM2711 thermal as module
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/devfreq/Kconfig             | 2 +-
- drivers/devfreq/event/Kconfig       | 4 ++--
- drivers/devfreq/event/exynos-nocp.c | 2 +-
- drivers/devfreq/event/exynos-nocp.h | 2 +-
- drivers/devfreq/event/exynos-ppmu.c | 2 +-
- drivers/devfreq/event/exynos-ppmu.h | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ .../bindings/thermal/brcm,avs-ro-thermal.yaml      |  45 +++++++
+ arch/arm/boot/dts/bcm2711.dtsi                     |  12 ++
+ arch/arm/configs/multi_v7_defconfig                |   1 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/thermal/broadcom/Kconfig                   |   7 ++
+ drivers/thermal/broadcom/Makefile                  |   1 +
+ drivers/thermal/broadcom/bcm2711_thermal.c         | 129 ++++++++++++++++=
++++++
+ 7 files changed, 196 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-=
+thermal.yaml
+ create mode 100644 drivers/thermal/broadcom/bcm2711_thermal.c
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 1526f758daeb..0b1df12e0f21 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -77,7 +77,7 @@ config DEVFREQ_GOV_PASSIVE
- comment "DEVFREQ Drivers"
- 
- config ARM_EXYNOS_BUS_DEVFREQ
--	tristate "ARM EXYNOS Generic Memory Bus DEVFREQ Driver"
-+	tristate "ARM Exynos Generic Memory Bus DEVFREQ Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select DEVFREQ_GOV_PASSIVE
-diff --git a/drivers/devfreq/event/Kconfig b/drivers/devfreq/event/Kconfig
-index a53e0a6ffdfe..878825372f6f 100644
---- a/drivers/devfreq/event/Kconfig
-+++ b/drivers/devfreq/event/Kconfig
-@@ -15,7 +15,7 @@ menuconfig PM_DEVFREQ_EVENT
- if PM_DEVFREQ_EVENT
- 
- config DEVFREQ_EVENT_EXYNOS_NOCP
--	tristate "EXYNOS NoC (Network On Chip) Probe DEVFREQ event Driver"
-+	tristate "Exynos NoC (Network On Chip) Probe DEVFREQ event Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select PM_OPP
- 	select REGMAP_MMIO
-@@ -24,7 +24,7 @@ config DEVFREQ_EVENT_EXYNOS_NOCP
- 	  (Network on Chip) Probe counters to measure the bandwidth of AXI bus.
- 
- config DEVFREQ_EVENT_EXYNOS_PPMU
--	tristate "EXYNOS PPMU (Platform Performance Monitoring Unit) DEVFREQ event Driver"
-+	tristate "Exynos PPMU (Platform Performance Monitoring Unit) DEVFREQ event Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select PM_OPP
- 	help
-diff --git a/drivers/devfreq/event/exynos-nocp.c b/drivers/devfreq/event/exynos-nocp.c
-index 1c565926db9f..ccc531ee6938 100644
---- a/drivers/devfreq/event/exynos-nocp.c
-+++ b/drivers/devfreq/event/exynos-nocp.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * exynos-nocp.c - EXYNOS NoC (Network On Chip) Probe support
-+ * exynos-nocp.c - Exynos NoC (Network On Chip) Probe support
-  *
-  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-nocp.h b/drivers/devfreq/event/exynos-nocp.h
-index 55cc96284a36..2d6f08cfd0c5 100644
---- a/drivers/devfreq/event/exynos-nocp.h
-+++ b/drivers/devfreq/event/exynos-nocp.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * exynos-nocp.h - EXYNOS NoC (Network on Chip) Probe header file
-+ * exynos-nocp.h - Exynos NoC (Network on Chip) Probe header file
-  *
-  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-index 055deea42c37..17ed980d9099 100644
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * exynos_ppmu.c - EXYNOS PPMU (Platform Performance Monitoring Unit) support
-+ * exynos_ppmu.c - Exynos PPMU (Platform Performance Monitoring Unit) support
-  *
-  * Copyright (c) 2014-2015 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-ppmu.h b/drivers/devfreq/event/exynos-ppmu.h
-index 284420047455..97f667d0cbdd 100644
---- a/drivers/devfreq/event/exynos-ppmu.h
-+++ b/drivers/devfreq/event/exynos-ppmu.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * exynos_ppmu.h - EXYNOS PPMU header file
-+ * exynos_ppmu.h - Exynos PPMU header file
-  *
-  * Copyright (c) 2015 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
--- 
-2.17.1
+=2D-
+2.7.4
 
