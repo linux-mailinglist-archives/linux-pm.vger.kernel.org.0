@@ -2,100 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC2612FDCB
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2020 21:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87A713008F
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2020 04:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728746AbgACUUU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jan 2020 15:20:20 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:36441 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728742AbgACUUJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jan 2020 15:20:09 -0500
-Received: by mail-qk1-f194.google.com with SMTP id a203so35086066qkc.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Jan 2020 12:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
-         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
-         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
-         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
-         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
-         hUyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=UnBwe3l4xVbK4TS36c036OiueT44R4mqJrTi/7/1kPg15nHV2QSgPOf9zRNULk+4UM
-         BgiT2N0jxAwJsLjHoORZ83WtKkyIq+7xKlkQ4gI6e+4tA6QCo6ax6YXVEDk63RHrYu2L
-         vEzqCxtiZ7FXgr9ODQGwJcb8+446LLVSZDS0j6RqiC/yIlkYupGPbiA0O2gEB6iKQVYf
-         Ti3an2H9ae3NA2qy/xH1/IjKll1mHcQm7APqA3BbKTFa6ffcWUvGk+CX8w35uF71wWn9
-         MSedlNqcnKrtdkbeUsOBOc0nYqAtP9NnsF7maGFB+R5NHPezFeeSjunjGFpcbO5UYnjs
-         izmw==
-X-Gm-Message-State: APjAAAWrPnSAO1caJ6ywnyS+ZVDar62jPaImXAEgmBP307wV+G8gCJlJ
-        5Ltxi94kzPyOziOxU0amMKJMLubJr5WRU6zF3NU=
-X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
-X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
- Fri, 03 Jan 2020 12:20:08 -0800 (PST)
+        id S1727467AbgADDg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jan 2020 22:36:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37104 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727450AbgADDg2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:36:28 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7439724649;
+        Sat,  4 Jan 2020 03:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578108988;
+        bh=b2eOfSgSncfP0ixbUgB0onIfccQpoxK4H/MyNkW/f1o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wCJOhuDaah9GZsup960QIhaZVOgliiJhr2LtQf2LubZumZ1Tdm998HjYwp1YizPG+
+         w6VmsLDPfOAmEP7dZx52d2jSQivLr+DoPjn5zAP0nsPps25R0bK7V3z3EAXM9eiul9
+         0aT1+H6BxXNd8HQeNjIAp/nb2BrkaaLP+Ui7z5g8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 06/10] PM / devfreq: tegra: Add COMMON_CLK dependency
+Date:   Fri,  3 Jan 2020 22:36:15 -0500
+Message-Id: <20200104033620.10977-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200104033620.10977-1-sashal@kernel.org>
+References: <20200104033620.10977-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:20:08 +0100
-Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Friend
+From: Arnd Bergmann <arnd@arndb.de>
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
+[ Upstream commit 5fdb0684b5b0f41402161f068d3d84bf6ed1c3f4 ]
 
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
+Compile-testing this driver fails if CONFIG_COMMON_CLK is not set:
 
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
+drivers/devfreq/tegra30-devfreq.o: In function `tegra_devfreq_target':
+tegra30-devfreq.c:(.text+0x164): undefined reference to `clk_set_min_rate'
 
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
+Fixes: 35f8dbc72721 ("PM / devfreq: tegra: Enable COMPILE_TEST for the driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/devfreq/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index defe1d438710..af4a3ccb96b3 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -99,6 +99,7 @@ config ARM_TEGRA_DEVFREQ
+ 		ARCH_TEGRA_210_SOC || \
+ 		COMPILE_TEST
+ 	select PM_OPP
++	depends on COMMON_CLK
+ 	help
+ 	  This adds the DEVFREQ driver for the Tegra family of SoCs.
+ 	  It reads ACTMON counters of memory controllers and adjusts the
+-- 
+2.20.1
 
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
