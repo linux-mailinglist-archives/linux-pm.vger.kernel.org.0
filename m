@@ -2,150 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC84130320
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2020 16:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AEA13038A
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2020 17:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbgADPWo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Jan 2020 10:22:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60764 "EHLO mail.kernel.org"
+        id S1726054AbgADQ2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Jan 2020 11:28:02 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:3383 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgADPWo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 4 Jan 2020 10:22:44 -0500
-Received: from localhost.localdomain (unknown [194.230.155.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D89D224670;
-        Sat,  4 Jan 2020 15:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578151363;
-        bh=/tnEtZ/TQAfcjo0cVjVkZvyHZiO0bR42EkUMFvapC2Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uCjQ1su6dl11XuyF3/k0rBXB/c+9gCY1BmI2mHLizi5V4D9v0RMEnC3etCR/ylhu5
-         fm4SxxKKoAqRMBCR9+Gkcpmd9ZqdoA+WjRVLfUqZOxye4OUINKx6ZIOLRA96wMzM9r
-         E6YWHu43tywYMyUGyqR/e80eGb8X9kt3BEcdJxWU=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 13/20] devfreq: exynos: Rename Exynos to lowercase
-Date:   Sat,  4 Jan 2020 16:21:00 +0100
-Message-Id: <20200104152107.11407-14-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200104152107.11407-1-krzk@kernel.org>
-References: <20200104152107.11407-1-krzk@kernel.org>
+        id S1726004AbgADQ2C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 4 Jan 2020 11:28:02 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 47qnHx6lz9zGW;
+        Sat,  4 Jan 2020 17:27:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1578155279; bh=GLCJ+xn1C18+8zix7hQRYKYNNDap+S2nPn1PT1f0fAo=;
+        h=Date:From:Subject:To:Cc:From;
+        b=EXfdxlNhkqjQRtYM8nO5nXcAQgeOkSeHTz1Gq2GdzrL5BuaTmIpoVK/bU+FxolnXb
+         Q/UNlWv+tg+WljGOfuiCgAxugAWpso8C6fXgm5DRMAu+3syGS1GdIBjA6eebokd7Qx
+         bFN6TzSwrnd6ubV+l3fHAw1NfgUPbpuVYqMTfIpf+sWchUkooPebRhYUEcAGhB1X55
+         FOEiliVRbYVaFHRRbQgxT3aql8NHcAkBpTvVoShqLYzScy1gqCwAASVDJl2DRbUYWU
+         L7ADjnp+dduBD13sUXL4HRk3NCJsx+4tHhJTZIpYdJkYXKhdgUk+K5uaah/qAd/bhh
+         b4590hMWlokZg==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Sat, 04 Jan 2020 17:27:57 +0100
+Message-Id: <cb199a03895f8a11d9039209e6ac1cd92b1d1fb9.1578155207.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH] PM-runtime: add tracepoints for usage_count changes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix up inconsistent usage of upper and lowercase letters in "Exynos"
-name.
+Add tracepoints to remaining places where device's power.usage_count
+is changed. This helps debugging where and why autosuspend is prevented.
 
-"EXYNOS" is not an abbreviation but a regular trademarked name.
-Therefore it should be written with lowercase letters starting with
-capital letter.
-
-The lowercase "Exynos" name is promoted by its manufacturer Samsung
-Electronics Co., Ltd., in advertisement materials and on website.
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/devfreq/Kconfig             | 2 +-
- drivers/devfreq/event/Kconfig       | 4 ++--
- drivers/devfreq/event/exynos-nocp.c | 2 +-
- drivers/devfreq/event/exynos-nocp.h | 2 +-
- drivers/devfreq/event/exynos-ppmu.c | 2 +-
- drivers/devfreq/event/exynos-ppmu.h | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/base/power/runtime.c | 13 +++++++++++--
+ include/trace/events/rpm.h   |  6 ++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 1526f758daeb..0b1df12e0f21 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -77,7 +77,7 @@ config DEVFREQ_GOV_PASSIVE
- comment "DEVFREQ Drivers"
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 48616f358854..16134a69bf6f 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1006,8 +1006,10 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
+ 	int retval;
  
- config ARM_EXYNOS_BUS_DEVFREQ
--	tristate "ARM EXYNOS Generic Memory Bus DEVFREQ Driver"
-+	tristate "ARM Exynos Generic Memory Bus DEVFREQ Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select DEVFREQ_GOV_PASSIVE
-diff --git a/drivers/devfreq/event/Kconfig b/drivers/devfreq/event/Kconfig
-index a53e0a6ffdfe..878825372f6f 100644
---- a/drivers/devfreq/event/Kconfig
-+++ b/drivers/devfreq/event/Kconfig
-@@ -15,7 +15,7 @@ menuconfig PM_DEVFREQ_EVENT
- if PM_DEVFREQ_EVENT
+ 	if (rpmflags & RPM_GET_PUT) {
+-		if (!atomic_dec_and_test(&dev->power.usage_count))
++		if (!atomic_dec_and_test(&dev->power.usage_count)) {
++			trace_rpm_usage_rcuidle(dev, rpmflags);
+ 			return 0;
++		}
+ 	}
  
- config DEVFREQ_EVENT_EXYNOS_NOCP
--	tristate "EXYNOS NoC (Network On Chip) Probe DEVFREQ event Driver"
-+	tristate "Exynos NoC (Network On Chip) Probe DEVFREQ event Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select PM_OPP
- 	select REGMAP_MMIO
-@@ -24,7 +24,7 @@ config DEVFREQ_EVENT_EXYNOS_NOCP
- 	  (Network on Chip) Probe counters to measure the bandwidth of AXI bus.
+ 	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
+@@ -1038,8 +1040,10 @@ int __pm_runtime_suspend(struct device *dev, int rpmflags)
+ 	int retval;
  
- config DEVFREQ_EVENT_EXYNOS_PPMU
--	tristate "EXYNOS PPMU (Platform Performance Monitoring Unit) DEVFREQ event Driver"
-+	tristate "Exynos PPMU (Platform Performance Monitoring Unit) DEVFREQ event Driver"
- 	depends on ARCH_EXYNOS || COMPILE_TEST
- 	select PM_OPP
- 	help
-diff --git a/drivers/devfreq/event/exynos-nocp.c b/drivers/devfreq/event/exynos-nocp.c
-index 1c565926db9f..ccc531ee6938 100644
---- a/drivers/devfreq/event/exynos-nocp.c
-+++ b/drivers/devfreq/event/exynos-nocp.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * exynos-nocp.c - EXYNOS NoC (Network On Chip) Probe support
-+ * exynos-nocp.c - Exynos NoC (Network On Chip) Probe support
-  *
-  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-nocp.h b/drivers/devfreq/event/exynos-nocp.h
-index 55cc96284a36..2d6f08cfd0c5 100644
---- a/drivers/devfreq/event/exynos-nocp.h
-+++ b/drivers/devfreq/event/exynos-nocp.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * exynos-nocp.h - EXYNOS NoC (Network on Chip) Probe header file
-+ * exynos-nocp.h - Exynos NoC (Network on Chip) Probe header file
-  *
-  * Copyright (c) 2016 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-index 055deea42c37..17ed980d9099 100644
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * exynos_ppmu.c - EXYNOS PPMU (Platform Performance Monitoring Unit) support
-+ * exynos_ppmu.c - Exynos PPMU (Platform Performance Monitoring Unit) support
-  *
-  * Copyright (c) 2014-2015 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
-diff --git a/drivers/devfreq/event/exynos-ppmu.h b/drivers/devfreq/event/exynos-ppmu.h
-index 284420047455..97f667d0cbdd 100644
---- a/drivers/devfreq/event/exynos-ppmu.h
-+++ b/drivers/devfreq/event/exynos-ppmu.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * exynos_ppmu.h - EXYNOS PPMU header file
-+ * exynos_ppmu.h - Exynos PPMU header file
-  *
-  * Copyright (c) 2015 Samsung Electronics Co., Ltd.
-  * Author : Chanwoo Choi <cw00.choi@samsung.com>
+ 	if (rpmflags & RPM_GET_PUT) {
+-		if (!atomic_dec_and_test(&dev->power.usage_count))
++		if (!atomic_dec_and_test(&dev->power.usage_count)) {
++			trace_rpm_usage_rcuidle(dev, rpmflags);
+ 			return 0;
++		}
+ 	}
+ 
+ 	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
+@@ -1101,6 +1105,7 @@ int pm_runtime_get_if_in_use(struct device *dev)
+ 	retval = dev->power.disable_depth > 0 ? -EINVAL :
+ 		dev->power.runtime_status == RPM_ACTIVE
+ 			&& atomic_inc_not_zero(&dev->power.usage_count);
++	trace_rpm_usage_rcuidle(dev, 0);
+ 	spin_unlock_irqrestore(&dev->power.lock, flags);
+ 	return retval;
+ }
+@@ -1434,6 +1439,8 @@ void pm_runtime_allow(struct device *dev)
+ 	dev->power.runtime_auto = true;
+ 	if (atomic_dec_and_test(&dev->power.usage_count))
+ 		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
++	else
++		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
+ 
+  out:
+ 	spin_unlock_irq(&dev->power.lock);
+@@ -1501,6 +1508,8 @@ static void update_autosuspend(struct device *dev, int old_delay, int old_use)
+ 		if (!old_use || old_delay >= 0) {
+ 			atomic_inc(&dev->power.usage_count);
+ 			rpm_resume(dev, 0);
++		} else {
++			trace_rpm_usage_rcuidle(dev, 0);
+ 		}
+ 	}
+ 
+diff --git a/include/trace/events/rpm.h b/include/trace/events/rpm.h
+index 26927a560eab..3c716214dab1 100644
+--- a/include/trace/events/rpm.h
++++ b/include/trace/events/rpm.h
+@@ -74,6 +74,12 @@ DEFINE_EVENT(rpm_internal, rpm_idle,
+ 
+ 	TP_ARGS(dev, flags)
+ );
++DEFINE_EVENT(rpm_internal, rpm_usage,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++);
+ 
+ TRACE_EVENT(rpm_return_int,
+ 	TP_PROTO(struct device *dev, unsigned long ip, int ret),
 -- 
-2.17.1
+2.20.1
 
