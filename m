@@ -2,115 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 095DD1303D9
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2020 19:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B05C1304D6
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2020 23:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbgADSV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Jan 2020 13:21:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36924 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726118AbgADSVZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 4 Jan 2020 13:21:25 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B87E8222C4;
-        Sat,  4 Jan 2020 18:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578162085;
-        bh=OffE6GW1fEHEsKz4lJ2UtasvfPdaubXshXY9rYrJGGw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hFkVpF4CJX1T67ffFbREBgsanbynhohqOoCBZyn4eKk7wE3YQXY1LqUrOH1ZS85GO
-         qP0fXt6AlakACLEvz6FbVhYPVOEsUVf1OQDKgA0HBLBqE7Um/QEQiMkuEB/JwsETuJ
-         6fHnD1eXtpd3+0Xs3C948YuQhDcUXQfctb9GC80U=
-Date:   Sat, 4 Jan 2020 19:21:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM-runtime: add tracepoints for usage_count changes
-Message-ID: <20200104182123.GA1485543@kroah.com>
-References: <cb199a03895f8a11d9039209e6ac1cd92b1d1fb9.1578155207.git.mirq-linux@rere.qmqm.pl>
+        id S1726240AbgADWBq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Jan 2020 17:01:46 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:39321 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbgADWBp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Jan 2020 17:01:45 -0500
+Received: by mail-io1-f67.google.com with SMTP id c16so14942627ioh.6
+        for <linux-pm@vger.kernel.org>; Sat, 04 Jan 2020 14:01:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fnzuX2UXDHqVoWZIcnjy9706qM97ViaNzviNWp3fBBw=;
+        b=k52WhigsG/qIex18oR53fYO9dJo1mITCGgdD5aSqv3e09mlysA+XA4luDJvjT/Wjga
+         ANxxr6Hywya1Z/RxNC20J/cGxm8U0XpzhbZ6TgOt07a+y27+O78b3mtiFnLkd+1aekef
+         GkEwrfTWB3+T/VpLiiUifRB+6s+3jnnivae68yfNI3U08xwypJ2njXs/cdigv7KiI+Aw
+         KO9UKgIFlAKn20h4l4WFlSxRGbKxJn9cfQHos91AgSxL15K4Xt+5eKKg3/qapslotk0h
+         Qq+Ih1xf2WOF3nwL44FOXOxwEl2v/gSHfXcW3WtPFg6udYnNpBUJjx/8cfgZEFrA33ug
+         0IwA==
+X-Gm-Message-State: APjAAAUIRpY2UZWisVRi/r7LzmUlnSpO5GwYvOuP402eDr4w5ZBgeZAu
+        qM9c7zz2GbGOiMO8iNOrRSuzrd0=
+X-Google-Smtp-Source: APXvYqyJ7zGhdY4cFT8RR1apcn5f3nkp2CYxuJaIl2/82mfHAlS31H1n9FAqSE+yeLgN53+sPMkSCA==
+X-Received: by 2002:a6b:d20c:: with SMTP id q12mr62061375iob.143.1578175304645;
+        Sat, 04 Jan 2020 14:01:44 -0800 (PST)
+Received: from rob-hp-laptop ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id k78sm22281070ila.80.2020.01.04.14.01.43
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jan 2020 14:01:44 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2219b7
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Sat, 04 Jan 2020 15:01:42 -0700
+Date:   Sat, 4 Jan 2020 15:01:42 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@google.com,
+        Andy Gross <agross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [V2, 1/3] dt-bindings: interconnect: Add Qualcomm SC7180 DT
+ bindings
+Message-ID: <20200104220142.GA28701@bogus>
+References: <1577782737-32068-1-git-send-email-okukatla@codeaurora.org>
+ <1577782737-32068-2-git-send-email-okukatla@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cb199a03895f8a11d9039209e6ac1cd92b1d1fb9.1578155207.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <1577782737-32068-2-git-send-email-okukatla@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jan 04, 2020 at 05:27:57PM +0100, Michał Mirosław wrote:
-> Add tracepoints to remaining places where device's power.usage_count
-> is changed. This helps debugging where and why autosuspend is prevented.
+On Tue, Dec 31, 2019 at 02:28:55PM +0530, Odelu Kukatla wrote:
+> The Qualcomm SC7180 platform has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
 > 
-> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
 > ---
->  drivers/base/power/runtime.c | 13 +++++++++++--
->  include/trace/events/rpm.h   |  6 ++++++
->  2 files changed, 17 insertions(+), 2 deletions(-)
+>  .../bindings/interconnect/qcom,bcm-voter.yaml      |   1 +
+>  .../bindings/interconnect/qcom,sc7180.yaml         | 155 ++++++++++++++++++++
+>  include/dt-bindings/interconnect/qcom,sc7180.h     | 161 +++++++++++++++++++++
+>  3 files changed, 317 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sc7180.h
 > 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 48616f358854..16134a69bf6f 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1006,8 +1006,10 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
->  	int retval;
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> index 74f0715..55c9f34 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+> @@ -19,6 +19,7 @@ description: |
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,sc7180-bcm-voter
+>        - qcom,sdm845-bcm-voter
 >  
->  	if (rpmflags & RPM_GET_PUT) {
-> -		if (!atomic_dec_and_test(&dev->power.usage_count))
-> +		if (!atomic_dec_and_test(&dev->power.usage_count)) {
-> +			trace_rpm_usage_rcuidle(dev, rpmflags);
+>  required:
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+> new file mode 100644
+> index 0000000..487da5e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+> @@ -0,0 +1,155 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-Who and what is really going to use these tracepoints?
+Dual license new bindings:
 
-And putting them in these if statements seems odd, are you sure that's
-the correct place?  What do these show to userspace?
+(GPL-2.0-only OR BSD-2-Clause)
 
->  			return 0;
-> +		}
->  	}
->  
->  	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
-> @@ -1038,8 +1040,10 @@ int __pm_runtime_suspend(struct device *dev, int rpmflags)
->  	int retval;
->  
->  	if (rpmflags & RPM_GET_PUT) {
-> -		if (!atomic_dec_and_test(&dev->power.usage_count))
-> +		if (!atomic_dec_and_test(&dev->power.usage_count)) {
-> +			trace_rpm_usage_rcuidle(dev, rpmflags);
->  			return 0;
-> +		}
->  	}
->  
->  	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
-> @@ -1101,6 +1105,7 @@ int pm_runtime_get_if_in_use(struct device *dev)
->  	retval = dev->power.disable_depth > 0 ? -EINVAL :
->  		dev->power.runtime_status == RPM_ACTIVE
->  			&& atomic_inc_not_zero(&dev->power.usage_count);
-> +	trace_rpm_usage_rcuidle(dev, 0);
+With that,
 
-Why this one?
-
-
->  	spin_unlock_irqrestore(&dev->power.lock, flags);
->  	return retval;
->  }
-> @@ -1434,6 +1439,8 @@ void pm_runtime_allow(struct device *dev)
->  	dev->power.runtime_auto = true;
->  	if (atomic_dec_and_test(&dev->power.usage_count))
->  		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
-> +	else
-> +		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
-
-Are you sure this is correct?
-
-These feel odd...
-
-thanks,
-
-greg k-h
+Reviewed-by: Rob Herring <robh@kernel.org>
