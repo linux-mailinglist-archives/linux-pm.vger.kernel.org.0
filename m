@@ -2,110 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C06F6130809
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 13:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88155130812
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 14:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgAEMu5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jan 2020 07:50:57 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39870 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725990AbgAEMu5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jan 2020 07:50:57 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q10so25657536pfs.6
-        for <linux-pm@vger.kernel.org>; Sun, 05 Jan 2020 04:50:56 -0800 (PST)
+        id S1726143AbgAENAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Jan 2020 08:00:46 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:46143 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbgAENAq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jan 2020 08:00:46 -0500
+Received: by mail-lj1-f194.google.com with SMTP id m26so45769600ljc.13;
+        Sun, 05 Jan 2020 05:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=O73F02mr1vEr7ShVhQ/rPt/DWjk1N7vtrWpN2HwbxPw=;
-        b=RxnpqQhvQ5bv7z0xIAnD8gdhFyHKqKqpdXwTBhsUdEpg4sSugA+Vrg+Lmzf2NpnmLO
-         k22F3pGksCJ5uQ+ueN0NIRXsZNOZuD1vRoDmkDrxuHiRk6/pl0MzljAmGMdmWfGPQFjF
-         MZWdUkytwQeduUN8GEa4mwe+wZ2F3Krq2JVCeI+/Pyf/cuxId0btKL3aCfzLBsSwv1rp
-         slF/9GvYZkEQ5yxavZwbu0zKrbowEHUqxJ4GsYFcAcxmKtp90yi1nke2ieHiW/Y7W8rs
-         Pv0qHXykJtQjq3Ag0JxThiJ0f+3T4jeeYm2rTkdjGLbaIp/Z0LZ6y8p/qj/x0xjdFpBB
-         QY8g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wtj4ycfHH4tNcald6Hu3wfTW6bDI5OTHJjc7dzUfoq0=;
+        b=meOv6NbxWkh2QWiN19ICU9RrFOj8sUAIx0weTKNSjxrNhTKdZhtHhN4TVLEDBDqAs3
+         7KzeubXZ4ueV9A0YSa0gdaBYC7IlB6YgaiYbfwr9IUL3GobCmcnLZHBy8PTUHsDp4B3G
+         ELln8M4CfcVt70mY8YO+yYVtYVsgCDFxJOxSo3ljD15KNsjvdrnrQol7BtXVi8bDJ9F1
+         ub8M2R0ZQ82ESmbQWq+fw9lH1SL/dV1M1l0yU59c/xT2APU49eZnEru0hMqmxwuH2m2Y
+         23c25jZB3BiBuxHDk+u1R8ZQrz3ZK2FmEiM6aDsXYWDJTzBAa0Cut7J7bRVqY1HU3G2g
+         AokQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=O73F02mr1vEr7ShVhQ/rPt/DWjk1N7vtrWpN2HwbxPw=;
-        b=E3UvgFNvK+6BOo40nYuUikmmW0ZEsxfokChijKmNEmyMlHPd47sExMGrHbkSKauaqx
-         8kMwYRP8/rWF2VLg6tL/tRvKzT/Hj/jQBjo3ZLpziCR47z4/O9XsDEqKJlkSDEhe1mgI
-         bHDlrLUC64P8T/7p9DR6WazvyvW23eMhCa2q0kjIKsfnnUSuhB3697ukXhAMJZLzX8Ye
-         rq/koyP1IMv9yJomw01ANzjbjsnomdqF00LeuXzCax8Mxi1NtHJztGZRFe6jILWh97pA
-         BVgL6JlBHoIf0DbQP1D+Y5/B3wy4MnuDCzrvlMN+aT61gEXV0avXY0qmYKeCTg19irab
-         kWmA==
-X-Gm-Message-State: APjAAAXvH9DfqYOddhIpYVPyoLPih3C/34E/ihKw1Vjq6Afj5oFxtd4O
-        crf4SIUWLgNQnE7XB4HluOE=
-X-Google-Smtp-Source: APXvYqxUgpmdlnIXGhbVIEYm+2ZG/SLeZ4ocWYD5rb0O++qhXkZAxHm0/oxmD2mMWohAObY+FG5NaQ==
-X-Received: by 2002:a62:e908:: with SMTP id j8mr93764073pfh.55.1578228656502;
-        Sun, 05 Jan 2020 04:50:56 -0800 (PST)
-Received: from localhost ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id z130sm70081453pgz.6.2020.01.05.04.50.55
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 05 Jan 2020 04:50:56 -0800 (PST)
-From:   qiwuchen55@gmail.com
-To:     mmayer@broadcom.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        f.fainelli@gmail.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chenqiwu <chenqiwu@xiaomi.com>
-Subject: [PATCH v2] cpufreq: brcmstb-avs-cpufreq: avoid potential stuck and UAF risk
-Date:   Sun,  5 Jan 2020 20:50:50 +0800
-Message-Id: <1578228650-17157-1-git-send-email-qiwuchen55@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wtj4ycfHH4tNcald6Hu3wfTW6bDI5OTHJjc7dzUfoq0=;
+        b=HGRELdr1HqkM4zO5zCnstcj0VYAy0V2dkLXYgwFj95MWxD5kTeVUmjju62zPemIMBC
+         mjNlKPF2vnItVHl0Gd+NvIdribi13fFs0P8sulyO194dFbjXzwMYXEu+QiJcbZPLRv8t
+         xhQDEkFCVBXLA3YDaScuswaxLMNXw0vk0iaGzm2PscjWF7jIXIUO36zmibjKZBnTbNYu
+         hHETX6Dl+xHVr283kLW5Nr2GS+8NVjFJ6C6fam3LFGqzSv/Qh6LIc/Zj6tQZ97iMgORq
+         VWQ/dOYO59f+b0e7fvW8IOJRmIGgvAqYBYdUUD0NUeDvTNI67Z+pH5WiWciYhFMjNFmk
+         di9A==
+X-Gm-Message-State: APjAAAUfOi9/XUJjU34DAA5DTDRyrWhyab9tj0ZSLJ+oMwshmraPhqCm
+        aPpBBXTY2OQdkoJbEXhLss5pFOgnCWZ3xHqCu0g=
+X-Google-Smtp-Source: APXvYqxLzGCvQ7IBDoin+iaNIeacu1bK/X/6zdfCpgWpTUtPRqxu/mEv7lEFYRmG+unV4mfFAHxTXgC1OAZQvXNIC8Y=
+X-Received: by 2002:a2e:8544:: with SMTP id u4mr54341659ljj.70.1578229243841;
+ Sun, 05 Jan 2020 05:00:43 -0800 (PST)
+MIME-Version: 1.0
+References: <20200105012416.23296-1-samuel@sholland.org> <20200105012416.23296-3-samuel@sholland.org>
+In-Reply-To: <20200105012416.23296-3-samuel@sholland.org>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Mon, 6 Jan 2020 00:00:32 +1100
+Message-ID: <CAGRGNgXeenNYMNXY0dewQaeG2QecUPgE_MOofURg7HzcND782w@mail.gmail.com>
+Subject: Re: [linux-sunxi] [PATCH v2 2/9] power: supply: axp20x_ac_power: Fix
+ reporting online status
+To:     samuel@sholland.org
+Cc:     Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Oskari Lemmela <oskari@lemmela.net>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: chenqiwu <chenqiwu@xiaomi.com>
+Hi Samuel,
 
-brcm_avs_cpufreq_get() calls cpufreq_cpu_get() to get cpufreq policy,
-meanwhile, it also increments the kobject reference count of policy to
-mark it busy. However, a corresponding call of cpufreq_cpu_put() is
-ignored to decrement the kobject reference count back, which may lead
-to a potential stuck risk that percpu cpuhp thread deadly waits for
-dropping of kobject refcount when percpu cpufreq policy free.
+On Sun, Jan 5, 2020 at 12:24 PM Samuel Holland <samuel@sholland.org> wrote:
+>
+> AXP803/AXP813 have a flag that enables/disables the AC power supply
+> input. This flag does not affect the status bits in PWR_INPUT_STATUS.
+> Its effect can be verified by checking the battery charge/discharge
+> state (bit 2 of PWR_INPUT_STATUS), or by examining the current draw on
+> the AC input.
+>
+> Take this flag into account when getting the ONLINE property of the AC
+> input, on PMICs where this flag is present.
+>
+> Fixes: 7693b5643fd2 ("power: supply: add AC power supply driver for AXP813")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>  drivers/power/supply/axp20x_ac_power.c | 31 +++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
+> index 0d34a932b6d5..ca0a28f72a27 100644
+> --- a/drivers/power/supply/axp20x_ac_power.c
+> +++ b/drivers/power/supply/axp20x_ac_power.c
+> @@ -23,6 +23,8 @@
+>  #define AXP20X_PWR_STATUS_ACIN_PRESENT BIT(7)
+>  #define AXP20X_PWR_STATUS_ACIN_AVAIL   BIT(6)
+>
+> +#define AXP813_ACIN_PATH_SEL           BIT(7)
+> +
+>  #define AXP813_VHOLD_MASK              GENMASK(5, 3)
+>  #define AXP813_VHOLD_UV_TO_BIT(x)      ((((x) / 100000) - 40) << 3)
+>  #define AXP813_VHOLD_REG_TO_UV(x)      \
+> @@ -40,6 +42,7 @@ struct axp20x_ac_power {
+>         struct power_supply *supply;
+>         struct iio_channel *acin_v;
+>         struct iio_channel *acin_i;
+> +       bool has_acin_path_sel;
+>  };
+>
+>  static irqreturn_t axp20x_ac_power_irq(int irq, void *devid)
+> @@ -86,6 +89,17 @@ static int axp20x_ac_power_get_property(struct power_supply *psy,
+>                         return ret;
+>
+>                 val->intval = !!(reg & AXP20X_PWR_STATUS_ACIN_AVAIL);
+> +
+> +               /* ACIN_PATH_SEL disables ACIN even if ACIN_AVAIL is set. */
+> +               if (power->has_acin_path_sel) {
 
-The call trace of stuck risk could be:
-cpufreq_online()  //If cpufreq online failed, goto out_free_policy.
-    ->cpufreq_policy_free()     //Do cpufreq_policy free.
-        ->cpufreq_policy_put_kobj()
-            ->kobject_put()       //Skip if policy kfref count is not 1.
-                ->cpufreq_sysfs_release()
-                    ->complete()  //Complete policy->kobj_unregister.
-                ->wait_for_completion() //Wait for policy->kobj_unregister.
+Do we need to check this bit if ACIN_AVAIL is not set?
 
-A simple way to avoid this stuck risk is use cpufreq_cpu_get_raw()
-instead of cpufreq_cpu_get(), since this can be easily exercised by
-attempting to force an unbind of the CPUfreq driver.
+> +                       ret = regmap_read(power->regmap, AXP813_ACIN_PATH_CTRL,
+> +                                         &reg);
+> +                       if (ret)
+> +                               return ret;
+> +
+> +                       val->intval &= !!(reg & AXP813_ACIN_PATH_SEL);
 
-Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
----
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+If we only check this bit if ACIN_AVAIL is set, then we don't need the
+"&" in the "&=". (I'm assuming that val->intval is an int, not a bool,
+otherwise this is the wrong operator)
 
-diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-index 77b0e5d..6d2bf5c 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -452,8 +452,15 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
- 
- static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
- {
--	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
--	struct private_data *priv = policy->driver_data;
-+	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-+	struct private_data *priv;
-+
-+	if (!policy)
-+		return 0;
-+
-+	priv = policy->driver_data;
-+	if (!priv || !priv->base)
-+		return 0;
- 
- 	return brcm_avs_get_frequency(priv->base);
- }
+Thanks,
+
 -- 
-1.9.1
+Julian Calaby
 
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
