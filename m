@@ -2,54 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE5313056D
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 02:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5FD13056C
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 02:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgAEBY7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Jan 2020 20:24:59 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:38875 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726205AbgAEBYS (ORCPT
+        id S1726333AbgAEBYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Jan 2020 20:24:18 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:39455 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726264AbgAEBYS (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Jan 2020 20:24:18 -0500
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4A79C21B6A;
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4AF99680A;
         Sat,  4 Jan 2020 20:24:17 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
   by compute5.internal (MEProxy); Sat, 04 Jan 2020 20:24:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=GKK6wqE4U1lTliVglqZDNGDO+1
-        0THmTKZg0GRYtue70=; b=Yz/15x6bvTrs+8MyRAf6WIx/31jwMPNCmSpJv+UFxI
-        O1VQsQW22vxWmN1dVGOPYf2cztd0iMQUqDYp2cMUldC7bys7IgDUb/pE5VZdpdAh
-        dOs11XzoLpL2ews0EuE4kMEF+cjZEsG22YJpeyUAS1Gx7w13u4jtotVOxJjPFyej
-        cKh5YV80Li8isHROhBxv5g0v5K105YYjS1fL4SyN8uiPV9Z+MipsPHXMqQMYGGaW
-        SiPk4JS7jpWztSqyploZBPDfraxQmDBUHDMkc0r3YQphGuhyUiiI5s4gaXi7LuCK
-        8O4GTg9gFz0vA15rV0G2AWFn0490N6VzSnN9LMsrin7w==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=Dy/48p0+s/ET+
+        odKrtmc7mwr7XKM2LA6Yht3eu1MaYw=; b=QpxIgctnPZ3mHAnssfna7Js1Rr7DD
+        UaQ8O6wSZcj840SbVEGu2CyHLfvnmpPqgJva4qDcrcFbCEG84NeOCLSCCuhmufo6
+        rujogvd3Ln/JDbe8tHo+cSBi5lf/jQXVBI+G0dTTo5cHNCab/V/TSmy/bIhg1lUC
+        LrPeJIlKLGn7iHz+razqXb+AEq52XC29CLKMO/6gNSDqrG5PJNDceUA+IvIwDxJr
+        OFTZXnllTcwjSmFxb6QNmIn+IcJ2bBSf9lkK/kzDjIpcnzolq1OhCgfNPQ8OHQpX
+        t+osBJlBj3TphvJlPJUmnW7eb9RQxYXSHlb/vdpqdswdkhRplxnoH3ptQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=GKK6wqE4U1lTliVgl
-        qZDNGDO+10THmTKZg0GRYtue70=; b=nhkAjP3WTI3+wuu1os8CTZAxHbz9OqDDK
-        Igi9BZlfz/V5q43owWwXZPpYahvBfyopwkRry6vpC0MjTtYj1o086ScHoHHvLOsT
-        uJhLn5RRGHsLWkqJxW3b0aZ5bPRgqm+kXCHHfKmc7JoXNeoS2bUoJOnOPZeLgWuJ
-        EWTptDNTSYZkRu0PX72+AFp5EmeU9ntzKEzH1i0KuXBr+EsiBmh+AkGz7BEjHRS3
-        0qzbRy0KHGEOL8T3yzOyUQAJEKjESPhOPJP/qcEkLZKZyQOYIz3L+N/gEot9Olg6
-        55llBVraOll/ZTuN5MPxKwg5ChjpkyhbHWLKtD/Uxr+p6bGn455gA==
-X-ME-Sender: <xms:wDoRXv3MPrtKB6dgPteitwwoMHHxvvSmsNIEGaoZITAjjcLGIQcv-w>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=Dy/48p0+s/ET+odKrtmc7mwr7XKM2LA6Yht3eu1MaYw=; b=We0UrstP
+        9RSLZMwzNQ3GPWwdRcK+ZsyRJn7TH4hmnMsY2IfLjA0yh+ydXqse/zC+UGWcRTaA
+        vYyPcla2157BdGD5+8sYhGM5gIE4SpHZrIa8W1287KtlJ4bqHtRN8fzrBUathnNy
+        gGBcAmas+tx0oLAL6GqKljCd1gdht04cJtHtpdmcXT6nJ7sp8aWBT3tqYOhNuqu2
+        BBqAKKUjRNxPlTxBN45Gp2cFNagXW53gjBoeGrL3mM2zxBX65see6yjWiP4p5A79
+        UIDAxQqQOnBjvozfH6TYpIAHy37GJNBdo+ewtfhd+GjSFMf0i7WaWyKOZEF3tmVD
+        in55fiszPhJ/Gw==
+X-ME-Sender: <xms:wToRXuVB0CQQ7RKmAH6IQSR3LWraGPU9GbCYPBtLRi_xK21kwKL1ow>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdegiedgfeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkphepje
-    dtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgv
-    lhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:wDoRXhAeDaGg_SDgRU--beqAwqvd0BZrLJBeQExgckxmzBmxh1loAQ>
-    <xmx:wDoRXmped2Wrg1Pzl_um9F5bhsBREE9f4DSW3HQgcnQ_Ic0zkaZ7Kg>
-    <xmx:wDoRXu_rOFhwIz1f8_hxs0orq7KM4u6xwEHbpDbsBBJB1VnKY8PTaQ>
-    <xmx:wToRXlvCI7zTeQTxhlv-uSfv2bESCx2gxbnFgIe1T94OTNe7-4KxNg>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkph
+    epjedtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghm
+    uhgvlhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:wToRXlwK--yvya4Ajp_ACqEm5d8aO_uV-Z2hS6K-TU4rhrS0DNALOA>
+    <xmx:wToRXmOPOgMaZCfszGAPsmn5xfG7nemDZISJcSq01lmT8tPoBk0qlA>
+    <xmx:wToRXvoEs-TBCmVYue37oRYkrtKIyBgqs5j8FRMQq72qd5ghDeIC1g>
+    <xmx:wToRXvrzSl-CIxZlW76y3_CyZU3LO6OEXttpY0eK5wvedo8Q_LTQ8w>
 Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id AE0438005C;
-        Sat,  4 Jan 2020 20:24:15 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6D58A80059;
+        Sat,  4 Jan 2020 20:24:16 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
@@ -57,11 +58,14 @@ To:     Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>,
         Oskari Lemmela <oskari@lemmela.net>,
         Quentin Schulz <quentin.schulz@bootlin.com>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 0/9] X-Powers Power Supply Improvements
-Date:   Sat,  4 Jan 2020 19:24:07 -0600
-Message-Id: <20200105012416.23296-1-samuel@sholland.org>
+        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/9] mfd: axp20x: Mark AXP20X_VBUS_IPSOUT_MGMT as volatile
+Date:   Sat,  4 Jan 2020 19:24:08 -0600
+Message-Id: <20200105012416.23296-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200105012416.23296-1-samuel@sholland.org>
+References: <20200105012416.23296-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -69,48 +73,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds some improvements to the axp20x* power supply drivers
-to better support suspend/resume and use on mobile devices.
+On AXP288 and newer PMICs, bit 7 of AXP20X_VBUS_IPSOUT_MGMT can be set
+to prevent using the VBUS input. However, when the VBUS unplugged and
+plugged back in, the bit automatically resets to zero.
 
-The first two patches fix bugs I found while testing the ONLINE control
-added in later patches.
+We need to set the register as volatile to prevent regmap from caching
+that bit. Otherwise, regcache will think the bit is already set and not
+write the register.
 
-Patches 3 and 7 allow userspace to take the power supplies offline.
-Patches 4 and 8 allow userspace to control the wakeup behavior.
+Fixes: cd53216625a0 ("mfd: axp20x: Fix axp288 volatile ranges")
+Cc: stable@vger.kernel.org
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+ drivers/mfd/axp20x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch 9 avoids polling USB VBUS presence when possible. While working on
-the RSB driver, I was seeing ~50 transfers per second, while idle and
-tracked it down to this VBUS polling (20 reads/second). The polling
-often caused the CPU to clock up and back down, which triggered the
-remaining transfers (changes to the CPU voltage).
-
-Unfortunately, I don't see a way to avoid the polling when running on
-battery (where it matters most), other than to move the polling back to
-the USB PHY driver.
-
-Changes since v1:
- - Add patches 1-2
- - Shift value properly in calls to regmap_update_bits (3, 7)
- - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
- - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
- - Poll once on resume, in case the state changed during suspend (9)
-
-Samuel Holland (9):
-  mfd: axp20x: Mark AXP20X_VBUS_IPSOUT_MGMT as volatile
-  power: supply: axp20x_ac_power: Fix reporting online status
-  power: supply: axp20x_ac_power: Allow offlining
-  power: supply: axp20x_ac_power: Add wakeup control
-  power: supply: axp20x_usb_power: Remove unused device_node
-  power: supply: axp20x_usb_power: Use a match structure
-  power: supply: axp20x_usb_power: Allow offlining
-  power: supply: axp20x_usb_power: Add wakeup control
-  power: supply: axp20x_usb_power: Only poll while offline
-
- drivers/mfd/axp20x.c                    |   2 +-
- drivers/power/supply/axp20x_ac_power.c  | 131 +++++++++++---
- drivers/power/supply/axp20x_usb_power.c | 220 ++++++++++++++++++------
- 3 files changed, 276 insertions(+), 77 deletions(-)
-
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index a4aaadaa0cb0..aa59496e4376 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -126,7 +126,7 @@ static const struct regmap_range axp288_writeable_ranges[] = {
+ static const struct regmap_range axp288_volatile_ranges[] = {
+ 	regmap_reg_range(AXP20X_PWR_INPUT_STATUS, AXP288_POWER_REASON),
+ 	regmap_reg_range(AXP288_BC_GLOBAL, AXP288_BC_GLOBAL),
+-	regmap_reg_range(AXP288_BC_DET_STAT, AXP288_BC_DET_STAT),
++	regmap_reg_range(AXP288_BC_DET_STAT, AXP20X_VBUS_IPSOUT_MGMT),
+ 	regmap_reg_range(AXP20X_CHRG_BAK_CTRL, AXP20X_CHRG_BAK_CTRL),
+ 	regmap_reg_range(AXP20X_IRQ1_EN, AXP20X_IPSOUT_V_HIGH_L),
+ 	regmap_reg_range(AXP20X_TIMER_CTRL, AXP20X_TIMER_CTRL),
 -- 
 2.23.0
 
