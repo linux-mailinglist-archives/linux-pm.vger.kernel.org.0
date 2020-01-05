@@ -2,78 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7381308D0
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 16:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAB8130955
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2020 18:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgAEPgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jan 2020 10:36:03 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:35147 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726212AbgAEPgD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jan 2020 10:36:03 -0500
-X-Greylist: delayed 530 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Jan 2020 10:36:02 EST
+        id S1726293AbgAERry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Jan 2020 12:47:54 -0500
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:47033 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726264AbgAERry (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jan 2020 12:47:54 -0500
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 63D3C5FF;
-        Sun,  5 Jan 2020 10:27:11 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id AE5C75D9;
+        Sun,  5 Jan 2020 12:47:52 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 05 Jan 2020 10:27:12 -0500
+  by compute5.internal (MEProxy); Sun, 05 Jan 2020 12:47:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=s
-        rCX085Fcg6QJTzWvKbgSzWWkOVQY8YF3nspHYJ3mXw=; b=Qxq6/1zuezyfGDttK
-        nc1Vq/vhSPg4CkwsygWouH1ePqasr9TRJK6trM7L4myM5U9V5cTWiq4C+li1C6Qw
-        wY+/6AShZLzd+fgZWyTXWVrBG3TGFCsi2eNoIJAqVOV14Dni982Xfo3hM3PA2p5l
-        zFgg+/Hh+D49f1OtPT/Ng1eNNmnvuLgjNg9nqhxWKao/YxKlFWT/CqWxxkVus2u9
-        g+DkJTC2Zsq4mR3EIpwhvg+xHaWE7afbbOfT9BqBzfo80a6hfye/Q8czX+qw8TjB
-        +Z4kY/mramtceQE9TJ9z57s4/vHsjIZzaUjETvF2ZLjQY1S4yi0/gsMO1P/au2Y4
-        RKedQ==
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=e
+        AIzG6BE28y2J69mx9B796bBuUAd67pkMdQXZJ/2kB0=; b=BLGL9J1TIHOU2+3NU
+        +uBQZPXApr8+EvTaVkw1rX+FnqIMhpWRuuggv0MbMbLIqK6sx8yEo9YdraeUusuU
+        6UB8e3y/7oLuHaCD8ajpN76sSfOhE33j7/Y5JL4L4irekDDy69vhWYVc5EmegWzO
+        WK7FeFgTTbCzsmNBylP/ysdpSImInkgG0mJx0yGR+3WkRUzCShV6CjGg7hgWEasm
+        PbD6QRPq4hI+Fd7MXm8Vcv937SUHfG1to5s+WlVqH7qxyE+SS7pbK/wEvALncOmv
+        UVDp3JBzIWr/Qoahk3CWKbFUB+bCWXtEW+EcWiWly5WEE+Ks9vjsNzGfoM/r+kLK
+        1qkGA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:from:in-reply-to:message-id:mime-version:references
         :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=srCX085Fcg6QJTzWvKbgSzWWkOVQY8YF3nspHYJ3m
-        Xw=; b=hDIr/GEvNuapESIHqigtM6hwqUp2RUbAxrYzhTjDnsOpPwpugMyvaXQKi
-        y+/o6YHMq13fiQhzj3SXatTz5/OqSeXy8F6cicajp+idf4eTgv2GyBGiiHbCavVT
-        jSZ9LHWFSfVPMuspnEfIZWNO4m8zLCSIOwOXHu7isyMQi5QG6bz4/gF/6bkmW3K2
-        X85QbmCh7+NVTfTZnwmpROE1rVg+ZGjIYjekaY1y0CQHpTx46hkUQk0N6YP8Bvop
-        x6YoHvtFAQTYrwXQQvHbuQprUpZuk4ZuRXK+v68pwVG3VH27EuyU5L3k0bZG6mj5
-        Wvuhiufl9mKn2yyrILk4aI38kVb+Q==
-X-ME-Sender: <xms:TgASXmFgVFdIyq29-ziqQ8h2HizIwQbZYGSjm8s9QZsmnT2t9JzVRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdegkedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecukf
-    hppeejtddrudefhedrudegkedrudehudenucfrrghrrghmpehmrghilhhfrhhomhepshgr
-    mhhuvghlsehshhholhhlrghnugdrohhrghenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:TgASXu7-gUu1DRRRgVIFZLrTjbFm0eN-GQPT0Ijo2WzKpI2Qdcr0Ig>
-    <xmx:TgASXvxpdnMllh4roMW0NVo2UlX8JP2FJsoGfaYyor9_bnFl--BRNg>
-    <xmx:TgASXs3npnzidKxoiEPlPzgR8irJH567GW5peUBTQydu75wyRCq__Q>
-    <xmx:TwASXlC_kvP64e2oXAp_bZyfIGHaKGmXmuU_O2WL6tOSMssT-58Eq9E-zFs>
+        :x-sasl-enc; s=fm1; bh=eAIzG6BE28y2J69mx9B796bBuUAd67pkMdQXZJ/2k
+        B0=; b=Wfr6EvI8ffs2zkJj/CMcdZGGFG372GtrNU1lteh9hxHu78AQl4q26L008
+        v160FxynM4b1hd6r0D5VUWWBm8wErM7GmcnaVOx3+H0DqyjZuJcxxe43pW5fDINd
+        vVEGSLDvHk8imZqlxNPE9N7UolpXVXL2u575Toc9Cb3wr9vbtP+tTH7m1gZjWaP8
+        UpMicl93BnMOXu7ZsgG40MEWPTox+bcc11ddIlxPjkFxTUYf+A29UdXz9QBGHMLE
+        bpkpZpF3kaUYHafqT7z/ukN5/bNoYhr6PKz+2XczdIFLAxzopya/Aug7Eh81AlEF
+        O1ZZHsZJ27E7eAR7nj6tTMeMrux4A==
+X-ME-Sender: <xms:RyESXnUB3WyicUnL8IX30wUhwsPnICpoKuOu9sXGrewXmEZRPH-chA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdegkedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    fkphepjedtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehs
+    rghmuhgvlhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:RyESXpgCfFiVOTkjiTSr7UQbi--GXiM7Mu6vyzJzpqe0brUaqtNbbA>
+    <xmx:RyESXlS0IGMwIp4tBOATq5nDvbFXXuxfLua0y0xXeFmTwgLhiMceWg>
+    <xmx:RyESXty-Z4JsgISIJFZKfgzEVbvA-m7wucDV61L1JkpM-jXX9XO0Jw>
+    <xmx:SCESXuywb8GSjCPS17TbxgIeFSArW3A6ecPvn6-dxuwE9TR5PP0Fng>
 Received: from [192.168.50.169] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id CE31B30602DB;
-        Sun,  5 Jan 2020 10:27:09 -0500 (EST)
-Subject: Re: [linux-sunxi] [PATCH v2 2/9] power: supply: axp20x_ac_power: Fix
- reporting online status
-To:     Julian Calaby <julian.calaby@gmail.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>,
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2738630602DB;
+        Sun,  5 Jan 2020 12:47:51 -0500 (EST)
+Subject: Re: [linux-sunxi] [PATCH v2 7/9] power: supply: axp20x_usb_power:
+ Allow offlining
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Oskari Lemmela <oskari@lemmela.net>,
         Quentin Schulz <quentin.schulz@bootlin.com>,
-        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        stable@vger.kernel.org
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>
 References: <20200105012416.23296-1-samuel@sholland.org>
- <20200105012416.23296-3-samuel@sholland.org>
- <CAGRGNgXeenNYMNXY0dewQaeG2QecUPgE_MOofURg7HzcND782w@mail.gmail.com>
+ <20200105012416.23296-8-samuel@sholland.org>
+ <CAGb2v67esqWZnKa8QNQAp8w-fhN+hM=zO9kUdzO9vFgr0FbfEQ@mail.gmail.com>
 From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <6e299dd3-3d70-9306-8581-798927241779@sholland.org>
-Date:   Sun, 5 Jan 2020 09:27:07 -0600
+Message-ID: <f0c5e260-dcc3-2744-21cd-305e4534f2be@sholland.org>
+Date:   Sun, 5 Jan 2020 11:47:50 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <CAGRGNgXeenNYMNXY0dewQaeG2QecUPgE_MOofURg7HzcND782w@mail.gmail.com>
+In-Reply-To: <CAGb2v67esqWZnKa8QNQAp8w-fhN+hM=zO9kUdzO9vFgr0FbfEQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -82,79 +81,119 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Julian,
+On 1/5/20 4:40 AM, Chen-Yu Tsai wrote:
+> On Sun, Jan 5, 2020 at 9:24 AM Samuel Holland <samuel@sholland.org> wrote:
+>>
+>> AXP803/AXP813 have a flag that enables/disables the USB power supply
+>> input. Allow control of this flag via the ONLINE property on those
+>> variants.
+>>
+>> It may be necessary to offline the USB power supply input when using
+>> the USB port in OTG mode, or to allow userspace to disable charging.
+> 
+> Any idea how the former would be implemented? AFAIK this isn't allowed
+> right now.
 
-On 1/5/20 7:00 AM, Julian Calaby wrote:
-> On Sun, Jan 5, 2020 at 12:24 PM Samuel Holland <samuel@sholland.org> wrote:
+Pinephone currently has AXP N_VBUSEN/DRIVEVBUS floating, so the hardware doesn't
+automatically disable the VBUS path when enabling the boost regulator driving
+it. This doubles the current draw from the battery.
+
+The USB PHY driver would need to call:
+
+    union power_supply_propval val = { .intval = false };
+    power_supply_set_property(data->vbus_power_supply,
+                              POWER_SUPPLY_PROP_ONLINE, &val);
+
+or similar to set VBUS offline in sun4i_usb_phy_power_on(), and set it back
+online in sun4i_usb_phy_power_off().
+
+> As for disabling charging, wouldn't it make more sense to disable the
+> charger?
+
+Yes, I see now that there's a bit at 33H[7] for this. I don't see an obvious
+property to hook it up to, though. Maybe POWER_SUPPLY_PROP_CHARGE_TYPE ==
+POWER_SUPPLY_CHARGE_TYPE_NONE?
+
+> Either way, these are not directly related to the changes. I'm just curious.
+> 
+>> When the USB VBUS input is disabled via the PATH_SEL bit, the VBUS_USED
+>> bit in PWR_INPUT_STATUS is cleared, so there is no change needed when
+>> getting the property.
 >>
->> AXP803/AXP813 have a flag that enables/disables the AC power supply
->> input. This flag does not affect the status bits in PWR_INPUT_STATUS.
->> Its effect can be verified by checking the battery charge/discharge
->> state (bit 2 of PWR_INPUT_STATUS), or by examining the current draw on
->> the AC input.
->>
->> Take this flag into account when getting the ONLINE property of the AC
->> input, on PMICs where this flag is present.
->>
->> Fixes: 7693b5643fd2 ("power: supply: add AC power supply driver for AXP813")
->> Cc: stable@vger.kernel.org
 >> Signed-off-by: Samuel Holland <samuel@sholland.org>
 >> ---
->>  drivers/power/supply/axp20x_ac_power.c | 31 +++++++++++++++++++++-----
->>  1 file changed, 25 insertions(+), 6 deletions(-)
+>>  drivers/power/supply/axp20x_usb_power.c | 27 +++++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
 >>
->> diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
->> index 0d34a932b6d5..ca0a28f72a27 100644
->> --- a/drivers/power/supply/axp20x_ac_power.c
->> +++ b/drivers/power/supply/axp20x_ac_power.c
->> @@ -23,6 +23,8 @@
->>  #define AXP20X_PWR_STATUS_ACIN_PRESENT BIT(7)
->>  #define AXP20X_PWR_STATUS_ACIN_AVAIL   BIT(6)
+>> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+>> index 2d7272e19a87..68443f264dff 100644
+>> --- a/drivers/power/supply/axp20x_usb_power.c
+>> +++ b/drivers/power/supply/axp20x_usb_power.c
+>> @@ -29,6 +29,9 @@
 >>
->> +#define AXP813_ACIN_PATH_SEL           BIT(7)
+>>  #define AXP20X_USB_STATUS_VBUS_VALID   BIT(2)
+>>
+>> +#define AXP20X_VBUS_PATH_SEL           BIT(7)
+>> +#define AXP20X_VBUS_PATH_SEL_OFFSET    7
 >> +
->>  #define AXP813_VHOLD_MASK              GENMASK(5, 3)
->>  #define AXP813_VHOLD_UV_TO_BIT(x)      ((((x) / 100000) - 40) << 3)
->>  #define AXP813_VHOLD_REG_TO_UV(x)      \
->> @@ -40,6 +42,7 @@ struct axp20x_ac_power {
->>         struct power_supply *supply;
->>         struct iio_channel *acin_v;
->>         struct iio_channel *acin_i;
->> +       bool has_acin_path_sel;
->>  };
+>>  #define AXP20X_VBUS_VHOLD_uV(b)                (4000000 + (((b) >> 3) & 7) * 100000)
+>>  #define AXP20X_VBUS_VHOLD_MASK         GENMASK(5, 3)
+>>  #define AXP20X_VBUS_VHOLD_OFFSET       3
+>> @@ -263,6 +266,16 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+>>         return 0;
+>>  }
 >>
->>  static irqreturn_t axp20x_ac_power_irq(int irq, void *devid)
->> @@ -86,6 +89,17 @@ static int axp20x_ac_power_get_property(struct power_supply *psy,
->>                         return ret;
->>
->>                 val->intval = !!(reg & AXP20X_PWR_STATUS_ACIN_AVAIL);
+>> +static int axp813_usb_power_set_online(struct axp20x_usb_power *power,
+>> +                                      int intval)
+>> +{
+>> +       int val = !intval << AXP20X_VBUS_PATH_SEL_OFFSET;
 >> +
->> +               /* ACIN_PATH_SEL disables ACIN even if ACIN_AVAIL is set. */
->> +               if (power->has_acin_path_sel) {
+>> +       return regmap_update_bits(power->regmap,
+>> +                                 AXP20X_VBUS_IPSOUT_MGMT,
+>> +                                 AXP20X_VBUS_PATH_SEL, val);
+>> +}
+>> +
+>>  static int axp20x_usb_power_set_voltage_min(struct axp20x_usb_power *power,
+>>                                             int intval)
+>>  {
+>> @@ -344,6 +357,9 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
+>>         struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
+>>
+>>         switch (psp) {
+>> +       case POWER_SUPPLY_PROP_ONLINE:
+>> +               return axp813_usb_power_set_online(power, val->intval);
+>> +
 > 
-> Do we need to check this bit if ACIN_AVAIL is not set?
+> I would add a comment here pointing to the next change as to why there's
+> only an axp813-specific callback used here.
 
-No, we don't. However due to regcache this won't actually cause another read
-from the device. If I send a v3, I'll move the && to  the if statement.
+I'll add this for v3.
 
->> +                       ret = regmap_read(power->regmap, AXP813_ACIN_PATH_CTRL,
->> +                                         &reg);
->> +                       if (ret)
->> +                               return ret;
+>>         case POWER_SUPPLY_PROP_VOLTAGE_MIN:
+>>                 return axp20x_usb_power_set_voltage_min(power, val->intval);
+>>
+>> @@ -363,6 +379,17 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
+>>  static int axp20x_usb_power_prop_writeable(struct power_supply *psy,
+>>                                            enum power_supply_property psp)
+>>  {
+>> +       struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
 >> +
->> +                       val->intval &= !!(reg & AXP813_ACIN_PATH_SEL);
+>> +       /*
+>> +        * Both AXP2xx and AXP8xx have a VBUS path select flag.
+>> +        * On AXP2xx, setting the flag enables VBUS (ignoring N_VBUSEN).
+>> +        * On AXP8xx, setting the flag disables VBUS (ignoring N_VBUSEN).
+>> +        * So we only expose the control on AXP8xx where it is meaningful.
+>> +        */
+>> +       if (psp == POWER_SUPPLY_PROP_ONLINE)
+>> +               return power->axp20x_id == AXP813_ID;
+>> +
+>>         return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN ||
+>>                psp == POWER_SUPPLY_PROP_CURRENT_MAX;
+>>  }
+>> --
 > 
-> If we only check this bit if ACIN_AVAIL is set, then we don't need the
-> "&" in the "&=". (I'm assuming that val->intval is an int, not a bool,
-> otherwise this is the wrong operator)
-
-val->intval is an int, but it only ever takes the values 0 or 1. The !!
-expression coerces an integer to the range of a boolean. So the two ways of
-deriving the value ("&=" here vs "&& val->intval" in the if statement) are
-equivalent.
-
-> Thanks,
-
-Thanks!
-Samuel
+> Otherwise,
+> 
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+> 
 
