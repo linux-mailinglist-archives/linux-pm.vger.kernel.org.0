@@ -2,108 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C54EA1316FE
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 18:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B851A131708
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 18:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgAFRpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jan 2020 12:45:22 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:39588 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726496AbgAFRpV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 12:45:21 -0500
-Received: by mail-io1-f66.google.com with SMTP id c16so19623915ioh.6;
-        Mon, 06 Jan 2020 09:45:21 -0800 (PST)
+        id S1726612AbgAFRqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jan 2020 12:46:44 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38107 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgAFRqn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 12:46:43 -0500
+Received: by mail-pg1-f195.google.com with SMTP id a33so27189278pgm.5;
+        Mon, 06 Jan 2020 09:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iXctLlmYdrdKmfjjRbd044M1gc5IPMj+HwF01t2aLxE=;
-        b=lKMWg3HLOmvwWxJ0QtPLD+d5uVW21/HD+VV4LSzKxccmAVHU752JGwACLfCOx4foBp
-         GFOqdq9A+iruNNxsN2JqU2Eb1oTMSzmj0WFCtWM+lEOnByEwBEKHUK9UuzeYh8ppDgB1
-         2Eqw9dntUU+zlnSMUDRGFDFrc044zk4qIXmoPVQpgfWUs82Ebmrzslu7vl10SIte5Hq0
-         UrDk+034ryO0R86w1j1MoG33EKI7rsNLmJepg+tmeb2EVey2rUkNYU2bnEFtILqAoKmI
-         mN31+OxzTYyvUzE4Y9ZgmRC8dY03A9szlx8By3srCtGGNwXRyGLcYl15FUWZ2RSDd9n9
-         VhCg==
+        h=from:to:cc:subject:date:message-id;
+        bh=YdPHerSYFOJLKYefQHipXAmsHXvXtkbfyGcWcsin/Eo=;
+        b=t0vgrTSVmmj/57ZBr/Sm79BsA7lylrWcfhlGn3rqkCJQCiNewUgV8qMRVWd8rd+egl
+         y4YVUkO7FONNsn1TClHXBiMGXvlSzd8EjZHCxDyfZ8/ypJCvTGSy8kp4u/luDiWgNpte
+         /xuomSpMzKHv0y+ZJvGamupdnU4OhCIJqHfkhjDpnrsSs1rV4bksqvmVVGeldtCqIFk/
+         819/hKDzWB8e247vq3PjjUkLt61zIYtkRKmSMFad+FWT6x6C6Jcsl1fq+RH6GheqS9+k
+         1403NTO1gKuKwNcYpL902uwwL6oQ+rariS58bn2hsAqJ3rxjl1Eqtojz7ewaRqFZIAVH
+         LL/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iXctLlmYdrdKmfjjRbd044M1gc5IPMj+HwF01t2aLxE=;
-        b=TKkiR8OlSm1XF6EtG7Q6Lt8RFHJodT+0V75xe+hW/CaC3AgFlaUQSsN5R6rpK8bULT
-         SoR51nFSC+FnFkiG7KBtCdmWdGyheDZrepud94od3/B4hNOouGnaXYVCAV4Xs8pcBI4E
-         TlRHruSHhDhsmYVIwoyGWCpjCInoCGA5u/1BMezX5F8o06Tfb1YZsdsBsrjpzF8FfZTw
-         RpEzpeu/RFdjQ7HvP4gztVMFHIGUFSpq1yw/eTgwH0hxMyM8p3LmmGbdb7RtJirIMFP9
-         lczMOZE1tTVItSXcUOGGKeS1nnxmz0rBOnTKY4K9wBHJvcKu/hnF8Wnzwz8HLf5R3v9C
-         Zk1g==
-X-Gm-Message-State: APjAAAVBOBTS4jmS0H0WahhNJn9KPTMNoH2GDC92pB0Xv6Ed2tmszjxk
-        akRduvvGbaRfRU+XVVODx2XkkBZGEVAFiscteJ8=
-X-Google-Smtp-Source: APXvYqxBbtoShLII8AtDZh3j+6a1iS1Iq+kxojCr5tNwKmFK+J2CfVlfliqXAlghSpaB31l+fm+LyLpoIZV/nJ2y0l8=
-X-Received: by 2002:a6b:b941:: with SMTP id j62mr72571643iof.168.1578332721008;
- Mon, 06 Jan 2020 09:45:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20200106172254.20271-1-tiny.windzz@gmail.com> <CA+E=qVciDPXrHCGsHR7mjFuaGrv_K21ZAdWW28_fnSV3CvEDCg@mail.gmail.com>
-In-Reply-To: <CA+E=qVciDPXrHCGsHR7mjFuaGrv_K21ZAdWW28_fnSV3CvEDCg@mail.gmail.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Tue, 7 Jan 2020 01:45:09 +0800
-Message-ID: <CAEExFWtD_wOJ9sSvXd3uGD5ZXAOPX3kenoRdv-fKpqjZXp22Dw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: sun8i: fix r40 ths number
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YdPHerSYFOJLKYefQHipXAmsHXvXtkbfyGcWcsin/Eo=;
+        b=pOwWaKC7mQ2CfgaJItXKNrop3Muuhm0LdQvXWhraQrgUDnNhhFkNOqmbpcn0rUcn2v
+         +TM8LNPZSAS37Rlyp/p7ltcQG7DGsWWzh2FYTra6jSujrxFFLAfhWx8DfLSlf2mQeFOU
+         eDV/yman44bQaqOxgb350jQhcrY8CjMM8BRbFzO9TRnSwOiIIxwNdEXD9Tbq6TgvVR6v
+         QE3RhAkEUgY5aI3iKNKeV69xz31BdZ9gxMvGb4+xv++MrK8ZbUo0mDwAMKrvlbdAFXdB
+         gQmp0bs2ykyVTVthrkiOfRvdk6bGOHEbIhrQHirUYNj3gHa9Yn/i5HVuDbmEQlmjhkTz
+         Ablg==
+X-Gm-Message-State: APjAAAXpyVoc7RK98S0L3q8XbjbZuWy7KIm1JR8oyMTq7q/26/RM4TBj
+        Up1QFblKZuymomVBqlb7Z7o=
+X-Google-Smtp-Source: APXvYqwNzPNo38qKaDE4TWjCFQ11EAzeBDsfFL07gxRaNNMnBA7f1Wmk2ubLY9y2gRba8Y9FzmQz5w==
+X-Received: by 2002:aa7:874a:: with SMTP id g10mr91607578pfo.205.1578332803309;
+        Mon, 06 Jan 2020 09:46:43 -0800 (PST)
+Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
+        by smtp.gmail.com with ESMTPSA id z4sm25051105pjn.29.2020.01.06.09.46.42
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 06 Jan 2020 09:46:42 -0800 (PST)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, mripard@kernel.org,
+        wens@csie.org, anarsoul@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        megous@megous.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH v2 1/2] thermal: sun8i: fix r40 ths number
+Date:   Mon,  6 Jan 2020 17:46:38 +0000
+Message-Id: <20200106174639.20862-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 7, 2020 at 1:29 AM Vasily Khoruzhick <anarsoul@gmail.com> wrote=
-:
->
-> On Mon, Jan 6, 2020 at 9:23 AM Yangtao Li <tiny.windzz@gmail.com> wrote:
-> >
-> > According to the spec, r40 has 2 thermal sensors.
-> > Sensor0 located in the CPU, another in the GPU.
-> >
-> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
->
-> You should also add "Fixes" tag here.
+According to the spec, r40 has 2 thermal sensors.
+Sensor0 located in the CPU, another in the GPU.
 
-Since the driver has not yet entered the merge window......
-Thanks for reminding=EF=BC=8C =EF=BC=9AD
+Fixes: 730a45ccd9322 ("thermal/drivers/sun8i: Add thermal driver for H6/H5/H3/A64/A83T/R40")
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Tested-on: sun8i-r40-bananapi-m2-ultra
+---
+ drivers/thermal/sun8i_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yangtao
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 23a5f4aa4be4..c5661d7c3e20 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -565,7 +565,7 @@ static const struct ths_thermal_chip sun8i_h3_ths = {
+ };
+ 
+ static const struct ths_thermal_chip sun8i_r40_ths = {
+-	.sensor_num = 3,
++	.sensor_num = 2,
+ 	.offset = 251086,
+ 	.scale = 1130,
+ 	.has_mod_clk = true,
+-- 
+2.17.1
 
->
-> > Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-> > Tested-on: sun8i-r40-bananapi-m2-ultra
-> > ---
-> >  drivers/thermal/sun8i_thermal.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_th=
-ermal.c
-> > index 23a5f4aa4be4..c5661d7c3e20 100644
-> > --- a/drivers/thermal/sun8i_thermal.c
-> > +++ b/drivers/thermal/sun8i_thermal.c
-> > @@ -565,7 +565,7 @@ static const struct ths_thermal_chip sun8i_h3_ths =
-=3D {
-> >  };
-> >
-> >  static const struct ths_thermal_chip sun8i_r40_ths =3D {
-> > -       .sensor_num =3D 3,
-> > +       .sensor_num =3D 2,
-> >         .offset =3D 251086,
-> >         .scale =3D 1130,
-> >         .has_mod_clk =3D true,
-> > --
-> > 2.17.1
-> >
