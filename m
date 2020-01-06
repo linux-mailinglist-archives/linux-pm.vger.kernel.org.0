@@ -2,63 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B5131B7E
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 23:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A01131B9A
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 23:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgAFWbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jan 2020 17:31:01 -0500
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:35651 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726858AbgAFWbB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 17:31:01 -0500
-Received: by mail-pf1-f174.google.com with SMTP id i23so22169946pfo.2;
-        Mon, 06 Jan 2020 14:31:00 -0800 (PST)
+        id S1727218AbgAFWjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jan 2020 17:39:13 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:40979 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbgAFWjM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 17:39:12 -0500
+Received: by mail-ed1-f66.google.com with SMTP id c26so48778672eds.8;
+        Mon, 06 Jan 2020 14:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FaYo5uioq23UptVjabEwXrkJMzgn7mxBNMtKYIbmUGQ=;
-        b=UiqcpdDT7pzHKIKrHvknUULpPW2mQOBf3LH6CForodRxPWP6FI1TRy86eNhDmq0UUE
-         LUC//NSYIF6uYZ+Kys9mvcazx0OpzsabBlS27tG5GtGsh1gBmxTHjTT4QK34sStZr0Qi
-         1SfvZP0GRnmPGUr/J5b88P3F7BO8AShuv/uPp9zZNdTaY3nsHMUHiAFAKmtxDDG+RTjE
-         7l8l5k8oLEf0qeOVPgZ5vOM4BNfLsJgE0+NSxaGPnYgzPJel3Dn4+IOQ5OVwH6//SRlh
-         jixWqu1MhsDmxJ5qwzuzHMMHEyRti1KvLLcDfyxo8d6xNsPT74bbR7a76olOJh6ViyoK
-         Tc5Q==
+        bh=dAwWL/UZ+UP43HvCaxGLXUFspUAniiikv0iFuviJOG4=;
+        b=NNM5XbE5q1853b/+ApS7xs1yfG1n0TovZ0ary4zCrgsTUqRnFcaD0KN9S1unUBuASn
+         Lb0bixkylhA7kLhs3Iev+SDaH74fm/zlbFFV6akLC7a2j5yB0CF3Xw9/I9SFB2F8Jp7P
+         oMpqo7ddM6m0Sz7plwsKLuP+obSvIntY262zNRStvCGyIq+jUcfBblDFtPK+7HsGaYX5
+         0PdnyaV/kT0QwkkJXlsFyifj0YzsAYFswwOxpUeFZWxaeosXUUyFZRXVciN1vNgOaizp
+         Zbk0yEzak5VAts07wwZhBeJ/NBT+jrW4tJehvhDLgIFD88r8s2AqDiwqCoBSlL+fG24W
+         8ytg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=FaYo5uioq23UptVjabEwXrkJMzgn7mxBNMtKYIbmUGQ=;
-        b=kpnY3XSL1/Jcgn/8U31CCbihEPzlpKxvy2f/UKHhkyO5PZCOi2TS+McPKLa4ZKn9jO
-         TmrqcdeFsql/3aI6yJQ4snldSHC0u9mIcXIUZOublnhkedECFZxz6x+u9TAnRb/0e1lC
-         zMixcs5qISypc55aabhnH7/6R6EE+zp56x4Vr+9ePxhlR7yHU6YcD+YF7nSV147MHE20
-         cEjiDsGYdH9Ur5uAuGrGtzFkedW5cK61X/uwEu7yYNxte4owcjPeiY7yNrZMVM+2Ul17
-         s96ofjpoRNG+bDYNx4Ak02qscab1UVwX4Zy9BPaeV8Z5OytV+y4M1MP+zIxv+hTovqAG
-         GIOg==
-X-Gm-Message-State: APjAAAUCqEkriJ5ceRj2yDjrtP0PZ83CU4D7TnxhuV1VtLoz6A1SoedA
-        BonSSV6F0P2I0+GcXHhHlU5Kv8Lg
-X-Google-Smtp-Source: APXvYqzhrZpa+hD1Pr43RPhVivc0C7sL/ggizKKWrjcsbYvmlZws/5Bi8eANF0epKwCRdRwMRa29Xw==
-X-Received: by 2002:a63:541e:: with SMTP id i30mr109968368pgb.183.1578349859936;
-        Mon, 06 Jan 2020 14:30:59 -0800 (PST)
+        bh=dAwWL/UZ+UP43HvCaxGLXUFspUAniiikv0iFuviJOG4=;
+        b=PC9OZFX182DOko9O2cHNhmspKcBg/sE3KyEgwKMGrVGGxrxsuFKJvtzn4MoOr1sSV2
+         1DeaYBWqai7X/KsmU7kPM5VinlQDhDTUQAzEBqrtbTdxBzV4l3E8NRrXzYe3pc3UUceS
+         mrE37/ThWJP+NKBX/D5dQ36RaUhr4+6/QqcACL0arViEby1AvM9edCgKXe0n22eFFma0
+         2r7Ojx0kPDqKvo+egqzmKOy7aOh6yg92ghFotvny3t45Z7J8m72hc/xAiJjk5BryI4bN
+         7+Z4c5J3OO9Lz3UBB+isum6K28w2/rUHGqypCXRS3DA10l9I46JI70MhKs+Kxh1ifwtr
+         1R6A==
+X-Gm-Message-State: APjAAAVHldwLqCnWDprmY8gDBYDVjcU8DDAukqMAhN4UKM7aogQV9o4/
+        5EU9197btreWIKePM05kXY/XvtwV
+X-Google-Smtp-Source: APXvYqzZd44UoAmJUNrzv+5V/2nXa5tIL7N5TtP0i4GCJ+7DX2DaCgM2dHkgUvZl0C2JijBJTCcaMQ==
+X-Received: by 2002:a50:ef17:: with SMTP id m23mr107504932eds.106.1578350349976;
+        Mon, 06 Jan 2020 14:39:09 -0800 (PST)
 Received: from [10.67.50.41] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h11sm72220863pgv.38.2020.01.06.14.30.58
+        by smtp.googlemail.com with ESMTPSA id n10sm7920445ejc.58.2020.01.06.14.39.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2020 14:30:59 -0800 (PST)
-Subject: Re: [PATCH V2 2/4] thermal: Add BCM2711 thermal driver
+        Mon, 06 Jan 2020 14:39:09 -0800 (PST)
+Subject: Re: [PATCH V2 0/4] ARM: Enable thermal support for Raspberry Pi 4
 To:     Stefan Wahren <wahrenst@gmx.net>, Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
 Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org
 References: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
- <1578072236-31820-3-git-send-email-wahrenst@gmx.net>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -114,12 +112,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <98b424ff-040c-b68c-04d3-823c771986fa@gmail.com>
-Date:   Mon, 6 Jan 2020 14:30:56 -0800
+Message-ID: <5e9b13f0-fac1-b5e1-8985-080297311d32@gmail.com>
+Date:   Mon, 6 Jan 2020 14:39:05 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <1578072236-31820-3-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -128,41 +126,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Stefan,
-
 On 1/3/20 9:23 AM, Stefan Wahren wrote:
-> This adds the thermal sensor driver for the Broadcom BCM2711 SoC,
-> which is placed on the Raspberry Pi 4. The driver only provides
-> SoC temperature reading so far.
+> This series enables thermal support for the Raspberry Pi 4. Neither the
+> bcm2835_thermal nor the brcmstb_thermal are suitable for the BCM2711.
+> So add a new thermal driver to read out the SoC temperature from the
+> AVS RO block of the BCM2711.
 > 
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Changes in V2:
+> - rebase on thermal/linux-next
+> - convert binding to YAML
+> - make AVS RO block a subnode of AVS monitor and access it via syscon
+> - drop unnecessary TSENS clock and get the rid of remove callback
+> - add Florian's reviewed-by to last/unchanged patch
 
-This looks good, I just have a couple of nits that you can address since
-the binding needs to be re-spun, see below, in any case:
+After your resubmit to address Rob's feedback on the binding, I would be
+keen on taking patches 3 and 4 since they do look good to me, and
+patches 1-2 can be applied to the thermal tree.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks Stefan.
 
-[snip]
+> 
+> Stefan Wahren (4):
+>   dt-bindings: Add Broadcom AVS RO thermal
+>   thermal: Add BCM2711 thermal driver
+>   ARM: dts: bcm2711: Enable thermal
+>   ARM: configs: Build BCM2711 thermal as module
+> 
+>  .../bindings/thermal/brcm,avs-ro-thermal.yaml      |  45 +++++++
+>  arch/arm/boot/dts/bcm2711.dtsi                     |  12 ++
+>  arch/arm/configs/multi_v7_defconfig                |   1 +
+>  arch/arm64/configs/defconfig                       |   1 +
+>  drivers/thermal/broadcom/Kconfig                   |   7 ++
+>  drivers/thermal/broadcom/Makefile                  |   1 +
+>  drivers/thermal/broadcom/bcm2711_thermal.c         | 129 ++++++++++++++++=
+> +++++
+>  7 files changed, 196 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-=
+> thermal.yaml
+>  create mode 100644 drivers/thermal/broadcom/bcm2711_thermal.c
+> 
+> =2D-
+> 2.7.4
+> 
 
-> +	of_node_put(parent);
-> +	if (IS_ERR(regmap)) {
-> +		dev_err(dev, "failed to get regmap (error %ld)\n",
-> +			PTR_ERR(regmap));
 
-Here we use %ld
-
-> +		return PTR_ERR(regmap);
-> +	}
-> +	priv->regmap = regmap;
-> +	priv->dev = dev;
-> +
-> +	thermal = devm_thermal_zone_of_sensor_register(dev, 0, priv,
-> +						       &bcm2711_thermal_of_ops);
-> +	if (IS_ERR(thermal)) {
-> +		ret = PTR_ERR(thermal);
-> +		dev_err(dev, "could not register sensor: %d\n", ret);
-
-and here we do an implicit cast into int, thus using %d, could we just
-make both consistent and use %d?
 -- 
 Florian
