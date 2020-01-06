@@ -2,130 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCDC130FB3
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 10:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF13130FD6
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 11:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgAFJo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jan 2020 04:44:26 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44716 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbgAFJo0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 04:44:26 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 195so25872308pfw.11;
-        Mon, 06 Jan 2020 01:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=KtGrKb7t1nXkvA9RAp03OXaiGM0Udf6t6g9rmOrwqQA=;
-        b=h3uH4bw2GU+o7uTeRb6skr6Lw6iWOzi9RYNZW+55FiG0+SlNjQei6NHPEjTEDs+5nI
-         HxYgS7bX6DgDzLlZRkirtbIM6O4tvP+ZtsdYxpaHg34HubMIlgcROK9AjKM+YESs6juR
-         4FA4EJiZq2VK5wshg1aBt5whcBt33ETeDV9DxiBzYCd9vyiMm7dWgfpK++DrsLul5NCz
-         +gSjZOjPIr0sgF+BpSEIE/Hei4C82qIjjGUfC+ATL4FqVOV5fbfk8NXlcqehG2W85uUe
-         uqBbmBXCt9uqRNSWkCTDWHtpZ2NovetviHdgDzrlhKnoc6MJl4mCF0vnyXMdyV9yS5U/
-         Ya8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=KtGrKb7t1nXkvA9RAp03OXaiGM0Udf6t6g9rmOrwqQA=;
-        b=c6cvt6kXh15w2RlLb/bYt0dqwLzdOMuwRiASEKFf6dWzLiWxbkGuZjo9+zfq7G6cUH
-         sJNGgyJaDTDsSxhSs2fYwxmL7ox6Z7I+JB6II8OBdWPc9lqHRuTOHaPT2jztlTv5FjJ1
-         1YZrxzNDLCZw7+AR9ZHKWeee1F+JEPfzt71y4H/M6MDGj886p3o72PJtTPiO7Q4ahdpj
-         iy4vBH8gk0Bal+N3lY7YvXdjqHlyptfX2MaJ6GGwwjLJeux8kddHnAmVopwcLv/MhCqk
-         rn40r6NFBqM6ImM1hE7vwlm4ZZZBo433P6aa+eo82RywEveE+rB/+DxGQPFRyNcho6cS
-         iPNQ==
-X-Gm-Message-State: APjAAAUzeAlePa0IKTRre6Jq9iTOkr7RR0qMpmx8+ir1hx+EMjZn8xEj
-        yYFonlY6pAZaZRztC2GGOck=
-X-Google-Smtp-Source: APXvYqwXV771FUqOJJoDqNegv2vvgsnsYNEq3vey/xKO088jvc38DW99nYZ6CpWk+IyeSVRKLC6AAQ==
-X-Received: by 2002:a63:6c82:: with SMTP id h124mr109322399pgc.328.1578303865779;
-        Mon, 06 Jan 2020 01:44:25 -0800 (PST)
-Received: from localhost ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id u26sm74215521pfn.46.2020.01.06.01.44.24
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 06 Jan 2020 01:44:25 -0800 (PST)
-From:   qiwuchen55@gmail.com
-To:     kgene@kernel.org, krzk@kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        chenqiwu <chenqiwu@xiaomi.com>
-Subject: [PATCH v2] cpufreq: s3c: avoid use after free issue in xxx_cpufreq_reboot_notifier_evt()
-Date:   Mon,  6 Jan 2020 17:44:21 +0800
-Message-Id: <1578303861-7217-1-git-send-email-qiwuchen55@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1725821AbgAFKAL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jan 2020 05:00:11 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:58440 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgAFKAL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Jan 2020 05:00:11 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 47rrbW64m1zV6;
+        Mon,  6 Jan 2020 11:00:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1578304808; bh=cL4mF1jHUeGe0pKz/0D4gMOsnENC81lNvvo2kdmArbw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SQSRAtimoT4S5oqIEhtwVHIDIIABk1PQ+gDFywwA12mVBxFRczNTPkaAVOfE3ufl9
+         L3RIGEGymoOXMqIelWI+HgGTlo1tSmjBaF6zL8sBarb/8EqOcqC3c4Ek45kH9eEo0V
+         zvLNihcBDd0dE7h0G/k7j1iFKP9Vc2Hbt3GKqjUt0CeZypoxOnm+HVbPS0r5y2XSwm
+         YdmfgMAK+ZclPu0b52QY6ekXCCopqoKk0jPQl6AsgRtxQELwtc31nTeXpQujcCOR6a
+         ExD7P1+Ri/LBqJCZ9U5sGe1Nh8jdFaat+iG86csKydya9ziBgCzYXal0U9ndRyUjQS
+         jmKoMoJwdhxtw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Mon, 6 Jan 2020 11:00:04 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM-runtime: add tracepoints for usage_count changes
+Message-ID: <20200106100004.GA10946@qmqm.qmqm.pl>
+References: <cb199a03895f8a11d9039209e6ac1cd92b1d1fb9.1578155207.git.mirq-linux@rere.qmqm.pl>
+ <20200104182123.GA1485543@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200104182123.GA1485543@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: chenqiwu <chenqiwu@xiaomi.com>
+On Sat, Jan 04, 2020 at 07:21:23PM +0100, Greg Kroah-Hartman wrote:
+> On Sat, Jan 04, 2020 at 05:27:57PM +0100, Micha³ Miros³aw wrote:
+> > Add tracepoints to remaining places where device's power.usage_count
+> > is changed. This helps debugging where and why autosuspend is prevented.
+> > 
+> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+> > ---
+> >  drivers/base/power/runtime.c | 13 +++++++++++--
+> >  include/trace/events/rpm.h   |  6 ++++++
+> >  2 files changed, 17 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > index 48616f358854..16134a69bf6f 100644
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -1006,8 +1006,10 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
+> >  	int retval;
+> >  
+> >  	if (rpmflags & RPM_GET_PUT) {
+> > -		if (!atomic_dec_and_test(&dev->power.usage_count))
+> > +		if (!atomic_dec_and_test(&dev->power.usage_count)) {
+> > +			trace_rpm_usage_rcuidle(dev, rpmflags);
+> 
+> Who and what is really going to use these tracepoints?
+> 
+> And putting them in these if statements seems odd, are you sure that's
+> the correct place?  What do these show to userspace?
+> 
+> >  			return 0;
+> > +		}
+> >  	}
+> >  
+> >  	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
+> > @@ -1038,8 +1040,10 @@ int __pm_runtime_suspend(struct device *dev, int rpmflags)
+> >  	int retval;
+> >  
+> >  	if (rpmflags & RPM_GET_PUT) {
+> > -		if (!atomic_dec_and_test(&dev->power.usage_count))
+> > +		if (!atomic_dec_and_test(&dev->power.usage_count)) {
+> > +			trace_rpm_usage_rcuidle(dev, rpmflags);
+> >  			return 0;
+> > +		}
+> >  	}
+> >  
+> >  	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
+> > @@ -1101,6 +1105,7 @@ int pm_runtime_get_if_in_use(struct device *dev)
+> >  	retval = dev->power.disable_depth > 0 ? -EINVAL :
+> >  		dev->power.runtime_status == RPM_ACTIVE
+> >  			&& atomic_inc_not_zero(&dev->power.usage_count);
+> > +	trace_rpm_usage_rcuidle(dev, 0);
+> 
+> Why this one?
+> 
+> 
+> >  	spin_unlock_irqrestore(&dev->power.lock, flags);
+> >  	return retval;
+> >  }
+> > @@ -1434,6 +1439,8 @@ void pm_runtime_allow(struct device *dev)
+> >  	dev->power.runtime_auto = true;
+> >  	if (atomic_dec_and_test(&dev->power.usage_count))
+> >  		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
+> > +	else
+> > +		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
+> 
+> Are you sure this is correct?
+> 
+> These feel odd...
 
-There is a potential UAF issue in xxx_cpufreq_reboot_notifier_evt() that
-the cpufreq policy of cpu0 has been released before using it. So we should
-make a judgement to avoid it.
+This covers all places where power.usage_count might have changed.
+If atomic_dec_and_test() decrements usage_count but not to zero,
+the new value will be traced in rpm_idle(). But if the value drops to
+zero, then we need to trace it explicitly to be able to have all changes
+accounted for in the trace.
 
-Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
----
-changes in v2:
- - use the combination of cpufreq_cpu_get() and cpufreq_cpu_put()
-   instead of cpufreq_get_policy() in s3c2416-cpufreq.c
----
- drivers/cpufreq/s3c2416-cpufreq.c | 12 +++++++++++-
- drivers/cpufreq/s5pv210-cpufreq.c | 11 ++++++++++-
- 2 files changed, 21 insertions(+), 2 deletions(-)
+I actually used this patch to track down why USB storage device was
+not autosuspending correctly.
 
-diff --git a/drivers/cpufreq/s3c2416-cpufreq.c b/drivers/cpufreq/s3c2416-cpufreq.c
-index 1069103..f07c5d1 100644
---- a/drivers/cpufreq/s3c2416-cpufreq.c
-+++ b/drivers/cpufreq/s3c2416-cpufreq.c
-@@ -304,6 +304,7 @@ static int s3c2416_cpufreq_reboot_notifier_evt(struct notifier_block *this,
- {
- 	struct s3c2416_data *s3c_freq = &s3c2416_cpufreq;
- 	int ret;
-+	struct cpufreq_policy *policy;
- 
- 	mutex_lock(&cpufreq_lock);
- 
-@@ -318,7 +319,16 @@ static int s3c2416_cpufreq_reboot_notifier_evt(struct notifier_block *this,
- 	 */
- 	if (s3c_freq->is_dvs) {
- 		pr_debug("cpufreq: leave dvs on reboot\n");
--		ret = cpufreq_driver_target(cpufreq_cpu_get(0), FREQ_SLEEP, 0);
-+
-+		policy = cpufreq_cpu_get(0);
-+		if (!policy) {
-+			pr_debug("cpufreq: get no policy for cpu0\n");
-+			return NOTIFY_BAD;
-+		}
-+
-+		ret = cpufreq_driver_target(&policy, FREQ_SLEEP, 0);
-+		cpufreq_cpu_put(policy);
-+
- 		if (ret < 0)
- 			return NOTIFY_BAD;
- 	}
-diff --git a/drivers/cpufreq/s5pv210-cpufreq.c b/drivers/cpufreq/s5pv210-cpufreq.c
-index 5d10030..e84281e 100644
---- a/drivers/cpufreq/s5pv210-cpufreq.c
-+++ b/drivers/cpufreq/s5pv210-cpufreq.c
-@@ -555,8 +555,17 @@ static int s5pv210_cpufreq_reboot_notifier_event(struct notifier_block *this,
- 						 unsigned long event, void *ptr)
- {
- 	int ret;
-+	struct cpufreq_policy *policy;
-+
-+	policy = cpufreq_cpu_get(0);
-+	if (!policy) {
-+		pr_debug("cpufreq: get no policy for cpu0\n");
-+		return NOTIFY_BAD;
-+	}
-+
-+	ret = cpufreq_driver_target(policy, SLEEP_FREQ, 0);
-+	cpufreq_cpu_put(policy);
- 
--	ret = cpufreq_driver_target(cpufreq_cpu_get(0), SLEEP_FREQ, 0);
- 	if (ret < 0)
- 		return NOTIFY_BAD;
- 
--- 
-1.9.1
-
+Best Regards,
+Micha³ Miros³aw
