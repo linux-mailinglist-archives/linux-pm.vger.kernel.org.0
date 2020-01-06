@@ -2,99 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 125AB131879
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 20:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8018A131AA3
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2020 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgAFTPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jan 2020 14:15:54 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39740 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbgAFTPx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 14:15:53 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q10so27373085pfs.6
-        for <linux-pm@vger.kernel.org>; Mon, 06 Jan 2020 11:15:53 -0800 (PST)
+        id S1726713AbgAFVpX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jan 2020 16:45:23 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44109 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbgAFVpV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jan 2020 16:45:21 -0500
+Received: by mail-lf1-f68.google.com with SMTP id v201so37335809lfa.11
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jan 2020 13:45:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ebYvaopqdPQE4iTnO1QzF+XjovTSGvUJKDf1PFA/Ysc=;
-        b=Pm7zqWzCezSNB83fb8CFkcOFMzH9M9mVXfza3NE3Afqi0/3y5dQQmFsVZCldUllf8A
-         4WN0ip3LDbI7gPMFIbe30Ur6dUWDgkLjCYAscilpgsGJ/E9KcoLmUVbcFn3G993zDsJP
-         e4zonurP3cAPpwUgnuDER6YeaO9btWzuZOVv+oZYzMPXaPykI/xqm/rycO8S6lPPWlyt
-         wA4C2IjQSfvyC5SZ2YqaiSf3OrVCN2BBW9TDKH6gEUKME27aSBv6rjFkVFcWA5hYtErn
-         m5wSxj7J3z6CP9BJnyzPcI/XwrCJ3Hm+T+mNT57BfS6jSEoWs3IEO8BGMhXDDphqaeXC
-         ZQ2A==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZjQqjrgkh7UnNQJ1G1FfRv0Qnrcc+UBzR3ffHuWmJLo=;
+        b=T0Cp49iNhBPtry9RRB9H+4/H9Cnci8jBAdb1agffxxbBZu6dSlRujUOlO6q/7+po8t
+         NukgfrM75WAPZX1AMqK16k1GbqFYWxukeGtta3bKoaYbWTZfheDRoEVQpqgjbqrwy3vD
+         qu9KIfq92QbOMNPQ6wY4GF+gKyepaOsnp5LmA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ebYvaopqdPQE4iTnO1QzF+XjovTSGvUJKDf1PFA/Ysc=;
-        b=N2ALHmndexpNgSZe0Cwuz+Z87Bpsm+SyOQ58Shz0xIVzDJwZ2iaH6F1mDR43JV5qlp
-         p4zDCcG5nzTfjnKuwR/bC/cgGOKjFlDoHYLPCyYk9k35SVHxOAwUOtaLYYdRtexCxhKX
-         14okFlNGzDv6MOhEW45N6AfM8TFmeAeeCJn/Tbit9ffIyd0ESY9wBlsRGzyB95c/RKUc
-         2dMdS4M9W2w9etmOogm4XCCeZsYeoztFSP/FQ/oD4qxHfSQLloeQ2HSRcbpuYXPYokuB
-         4uA0yTLhFWXjnMQ7eXtMc6aPm9cL/fTjYKZe7D4wxLN7p52dzBxidyOImjES/O7gcEkm
-         PgWg==
-X-Gm-Message-State: APjAAAUte+ZpMV7FxbpuvO0/rQ2ZlbPai8nu0mwHDYkciSGLSeR4W4A4
-        CcupqwOiAimWLHdmJZCbQt1kCw==
-X-Google-Smtp-Source: APXvYqyTrMUuggjcjCVjWZThwMhUiBXsZlVSJjWQLamuL2PeE7k0ysia04/f3gpOxFjmjbjAKfnkBg==
-X-Received: by 2002:a63:fe50:: with SMTP id x16mr93985603pgj.31.1578338153208;
-        Mon, 06 Jan 2020 11:15:53 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id k9sm25088975pjo.19.2020.01.06.11.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 11:15:52 -0800 (PST)
-Date:   Mon, 6 Jan 2020 11:15:50 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rajeshwari <rkambl@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sanm@codeaurora.org, sivaa@codeaurora.org, manaf@codeaurora.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: thermal: tsens: Add configuration in
- yaml
-Message-ID: <20200106191550.GW3755841@builder>
-References: <1578317369-16045-1-git-send-email-rkambl@codeaurora.org>
- <1578317369-16045-3-git-send-email-rkambl@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZjQqjrgkh7UnNQJ1G1FfRv0Qnrcc+UBzR3ffHuWmJLo=;
+        b=c7ScjwTnlucnEwV6wD5Bxq5bhOpnkZvNe7objlk9+ho6zJvMP5sldd5qdJy96TxXSA
+         zMGPLr+JD2xXQVC24YNJ0SCbBz4WZ4qKZ3aj/jPrCHtVzvQAaXRX0+Vhk6jUL98tQuJO
+         X1qtL1gSoFndEKix+XrF+cITk+laiES2LJ2Cwnv/uWZaADW8TP8pYpL8h2KDPjbD4nQu
+         fBIFM6BaT1wd2q5eJWwiiGO1zEQ5MdvR9ZPpduJpMLDsgfbqj2/S/qLT/6oNfrRT6AFZ
+         p3pti+PDZjL0z7sZYE+nxRP6qNfhjBN6/6LRDJKWaE39jkvkAqeHi4WxdaXoG2Hbgk10
+         TYXA==
+X-Gm-Message-State: APjAAAXXn7vlFmTbAx0GcgkSYeEFqtc67Oz3kbm8wcL1q76on1ph1AC+
+        EsieAbq6841Kw6/VifhWxl30uf2cuks=
+X-Google-Smtp-Source: APXvYqyNRbWJBCKQs0mRGMXSY3HNlVR0bLylR0XZpoFavUBVuJSaj/hWs4HKBuQIJ71Mv2rDlidAkQ==
+X-Received: by 2002:a19:2d0d:: with SMTP id k13mr56397645lfj.12.1578347119004;
+        Mon, 06 Jan 2020 13:45:19 -0800 (PST)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id z13sm2701560lfi.69.2020.01.06.13.45.17
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jan 2020 13:45:18 -0800 (PST)
+Received: by mail-lj1-f182.google.com with SMTP id m26so50031286ljc.13
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jan 2020 13:45:17 -0800 (PST)
+X-Received: by 2002:a2e:9e4c:: with SMTP id g12mr60097737ljk.15.1578347117398;
+ Mon, 06 Jan 2020 13:45:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1578317369-16045-3-git-send-email-rkambl@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20200106172746.19803-1-georgi.djakov@linaro.org>
+In-Reply-To: <20200106172746.19803-1-georgi.djakov@linaro.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Mon, 6 Jan 2020 13:44:41 -0800
+X-Gmail-Original-Message-ID: <CAE=gft60FwXEVxS5DohqBaQTFOfCZ7co3b3KEQyongGNB==E0Q@mail.gmail.com>
+Message-ID: <CAE=gft60FwXEVxS5DohqBaQTFOfCZ7co3b3KEQyongGNB==E0Q@mail.gmail.com>
+Subject: Re: [PATCH v2] interconnect: Check for valid path in icc_set_bw()
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon 06 Jan 05:29 PST 2020, Rajeshwari wrote:
+On Mon, Jan 6, 2020 at 9:27 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+>
+> Use IS_ERR() to ensure that the path passed to icc_set_bw() is valid.
+>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-> Added configuration in dt-bindings for SC7180.
-> 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> Signed-off-by: Rajeshwari <rkambl@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index eef13b9..c0ed030 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -38,6 +38,7 @@ properties:
->            - enum:
->                - qcom,msm8996-tsens
->                - qcom,msm8998-tsens
-> +              - qcom,sc7180-tsens
->                - qcom,sdm845-tsens
->            - const: qcom,tsens-v2
->  
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+Reviewed-by: Evan Green <evgreen@chromium.org>
