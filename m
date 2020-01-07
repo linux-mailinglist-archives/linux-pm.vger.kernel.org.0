@@ -2,139 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC381324C8
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 12:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771DE1324D5
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 12:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727273AbgAGL07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 06:26:59 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43998 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726937AbgAGL07 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 06:26:59 -0500
-Received: by mail-ot1-f65.google.com with SMTP id p8so39585360oth.10;
-        Tue, 07 Jan 2020 03:26:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cAUfx1aIe7RBiFOSHapSzF1uJyIPOjyTww0Bo3Kja2A=;
-        b=Dzn8kRWi+QCwAGZmH/a12zusfnG1WrbLKdjnmvsURBUSsOpJyWmA1/Olzfhhdi0Tkl
-         T7URqc9FYpN9QIa4P3EWaIJlJ/x7hqeX0t7ee71usEJTD04Rg3o6OihEWGNcPPw5IyID
-         2u3JhUR5jKSJRyG5eKxBoFYHZ0E6uK6aaGTmuygG/4LmsEJhWKRkX9mSkOF0z8HV0s7p
-         nGPKJTqKplHw6Ra5vDE0ZQ7ZAO2ioJhlpUt8Ll6AuD+D/rK5ex4s03y891Z4gPTdk4Xd
-         73hTkj4IH+i77MC5D4OQN4tFWwv2tqJUIclNGrtl5fQpyhGLBcCtawk0G2kMnin1mO8g
-         xK2A==
-X-Gm-Message-State: APjAAAXKsH9FUEhaOae6WzGf7vgVVshg8z1c6byyLDDM/1ov3O0/k0Ko
-        lBBIyDV2NYG/yl11ELgPQgnY7dKf16a+YCtWLBrtmw+u
-X-Google-Smtp-Source: APXvYqwJPQ2cz2D0sSUp6x7JKo3CcWa0Xq6ze3e+llEbh893asmCDMik+vyO7p3DkSbtzw4GddrWgTAagpmZmTM5hIo=
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr123636942otd.266.1578396418166;
- Tue, 07 Jan 2020 03:26:58 -0800 (PST)
+        id S1727932AbgAGL2a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 06:28:30 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46414 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727273AbgAGL23 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Jan 2020 06:28:29 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id C7BACAD07;
+        Tue,  7 Jan 2020 11:28:27 +0000 (UTC)
+Message-ID: <f14bad2513cde4e57af21fdc971638c74db9ba50.camel@suse.de>
+Subject: Re: [PATCH V2 2/4] thermal: Add BCM2711 thermal driver
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org
+Date:   Tue, 07 Jan 2020 12:28:26 +0100
+In-Reply-To: <98b424ff-040c-b68c-04d3-823c771986fa@gmail.com>
+References: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
+         <1578072236-31820-3-git-send-email-wahrenst@gmx.net>
+         <98b424ff-040c-b68c-04d3-823c771986fa@gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-QjE9SpdH7vcQ556S/L5J"
+User-Agent: Evolution 3.34.2 
 MIME-Version: 1.0
-References: <20191230223645.1.I79ea8bb1c5a70c04c810d8305f5f7dee4ebed577@changeid>
-In-Reply-To: <20191230223645.1.I79ea8bb1c5a70c04c810d8305f5f7dee4ebed577@changeid>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Jan 2020 12:26:47 +0100
-Message-ID: <CAJZ5v0h+i0xXPnkbu4NPwxMAZVO9S3exF66+J6SFEb-M6y=0FA@mail.gmail.com>
-Subject: Re: [PATCH] powercap/intel_rapl: refine RAPL error handling to
- respect initial CPU matching
-To:     Harry Pan <harry.pan@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Harry Pan <gs0622@gmail.com>,
-        Stable <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 3:37 PM Harry Pan <harry.pan@intel.com> wrote:
->
-> RAPL MMIO support depends on RAPL common driver, in case a new generation
-> of CPU is booting but not in the RAPL support list, the processor_thermal
-> driver invokes CPU hotplug API to enforce RAPL common driver adding new
-> RAPL domain which would cause kernel crash by null pointer dereference
-> because the internal RAPL domain resource mapping is not initialized after
-> the common init.
->
-> Add error handling to detect non initialized RAPL domain resource mapping
-> and return error code to the caller; such that, it avoids early crash for
-> new CPU and leave error messages through processor_thermal driver.
->
-> Before:
-> [    4.188566] BUG: kernel NULL pointer dereference, address: 0000000000000020
-> ...snip...
-> [    4.189555] RIP: 0010:rapl_add_package+0x223/0x574
-> [    4.189555] Code: b5 a0 31 c0 49 8b 4d 78 48 01 d9 48 8b 0c c1 49 89 4c c6 10 48 ff c0 48 83 f8 05 75 e7 49 83 ff 03 75 15 48 8b 05 09 bc 18 01 <8b> 70 20 41 89 b6 0c 05 00 00 85 f6 75 1a 49 81 c6 18 9
-> [    4.189555] RSP: 0000:ffffb3adc00b3d90 EFLAGS: 00010246
-> [    4.189555] RAX: 0000000000000000 RBX: 0000000000000098 RCX: 0000000000000000
-> [    4.267161] usb 1-1: New USB device found, idVendor=2109, idProduct=2812, bcdDevice= b.e0
-> [    4.189555] RDX: 0000000000001000 RSI: 0000000000000000 RDI: ffff9340caafd000
-> [    4.189555] RBP: ffffb3adc00b3df8 R08: ffffffffa0246e28 R09: ffff9340caafc000
-> [    4.189555] R10: 000000000000024a R11: ffffffff9ff1f6f2 R12: 00000000ffffffed
-> [    4.189555] R13: ffff9340caa94800 R14: ffff9340caafc518 R15: 0000000000000003
-> [    4.189555] FS:  0000000000000000(0000) GS:ffff9340ce200000(0000) knlGS:0000000000000000
-> [    4.189555] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    4.189555] CR2: 0000000000000020 CR3: 0000000302c14001 CR4: 00000000003606f0
-> [    4.189555] Call Trace:
-> [    4.189555]  ? __switch_to_asm+0x40/0x70
-> [    4.189555]  rapl_mmio_cpu_online+0x47/0x64
-> [    4.189555]  ? rapl_mmio_write_raw+0x33/0x33
-> [    4.281059] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [    4.189555]  cpuhp_invoke_callback+0x29f/0x66f
-> [    4.189555]  ? __schedule+0x46d/0x6a0
-> [    4.189555]  cpuhp_thread_fun+0xb9/0x11c
-> [    4.189555]  smpboot_thread_fn+0x17d/0x22f
-> [    4.297006] usb 1-1: Product: USB2.0 Hub
-> [    4.189555]  ? cpu_report_death+0x43/0x43
-> [    4.189555]  kthread+0x137/0x13f
-> [    4.189555]  ? cpu_report_death+0x43/0x43
-> [    4.189555]  ? kthread_blkcg+0x2e/0x2e
-> [    4.312951] usb 1-1: Manufacturer: VIA Labs, Inc.
-> [    4.189555]  ret_from_fork+0x1f/0x40
-> [    4.189555] Modules linked in:
-> [    4.189555] CR2: 0000000000000020
-> [    4.189555] ---[ end trace 01bb812aabc791f4 ]---
->
-> After:
-> [    0.787125] intel_rapl_common: driver does not support CPU family 6 model 166
-> ...snip...
-> [    4.245273] proc_thermal 0000:00:04.0: failed to add RAPL MMIO interface
->
-> Note:
-> This example above is on a v5.4 branch without below two CML commits yet:
-> commit f84fdcbc8ec0 ("powercap/intel_rapl: add support for Cometlake desktop")
-> commit cae478114fbe ("powercap/intel_rapl: add support for CometLake Mobile")
->
-> Fixes: 555c45fe0d04 ("int340X/processor_thermal_device: add support for MMIO RAPL")
->
-> Cc: <stable@vger.kernel.org> # v5.3+
-> Signed-off-by: Harry Pan <harry.pan@intel.com>
 
-Applied as a fix for 5.5-rc with rewritten subject and changelog (new
-subject: "powercap: intel_rapl: add NULL pointer check to
-rapl_mmio_cpu_online()").
+--=-QjE9SpdH7vcQ556S/L5J
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->
->  drivers/powercap/intel_rapl_common.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 318d023a6a11..aa0a8de413b1 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1294,6 +1294,9 @@ struct rapl_package *rapl_add_package(int cpu, struct rapl_if_priv *priv)
->         struct cpuinfo_x86 *c = &cpu_data(cpu);
->         int ret;
->
-> +       if (!rapl_defaults)
-> +               return ERR_PTR(-ENODEV);
-> +
->         rp = kzalloc(sizeof(struct rapl_package), GFP_KERNEL);
->         if (!rp)
->                 return ERR_PTR(-ENOMEM);
-> --
-> 2.24.1
->
+On Mon, 2020-01-06 at 14:30 -0800, Florian Fainelli wrote:
+> Hi Stefan,
+>=20
+> On 1/3/20 9:23 AM, Stefan Wahren wrote:
+> > This adds the thermal sensor driver for the Broadcom BCM2711 SoC,
+> > which is placed on the Raspberry Pi 4. The driver only provides
+> > SoC temperature reading so far.
+> >=20
+> > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>=20
+> This looks good, I just have a couple of nits that you can address since
+> the binding needs to be re-spun, see below, in any case:
+>=20
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>=20
+> [snip]
+>=20
+> > +	of_node_put(parent);
+> > +	if (IS_ERR(regmap)) {
+> > +		dev_err(dev, "failed to get regmap (error %ld)\n",
+> > +			PTR_ERR(regmap));
+>=20
+> Here we use %ld
+>=20
+> > +		return PTR_ERR(regmap);
+> > +	}
+> > +	priv->regmap =3D regmap;
+> > +	priv->dev =3D dev;
+> > +
+> > +	thermal =3D devm_thermal_zone_of_sensor_register(dev, 0, priv,
+> > +						       &bcm2711_thermal_of_ops);
+> > +	if (IS_ERR(thermal)) {
+> > +		ret =3D PTR_ERR(thermal);
+> > +		dev_err(dev, "could not register sensor: %d\n", ret);
+>=20
+> and here we do an implicit cast into int, thus using %d, could we just
+> make both consistent and use %d?
+
+Extra nit since you're changing this. I'd suggest keeping the same format
+between error messages (i.e. one encloses the error message between parenth=
+eses
+and the other uses a colon).
+
+Regards,
+Nicolas
+
+
+--=-QjE9SpdH7vcQ556S/L5J
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl4Ua1oACgkQlfZmHno8
+x/6Jbwf/QlXAMb6Zv08I/d4SuxsyX/MIGxjH4v6pfSY51sJLUr0J11bNSN6daz1l
+b4RTVB6nAM/n7yvKXG4Fqfcp3w1N6xWYf6kuWXB5j1gzhkVzDofs/yDsJeWcMKzn
+r8paTRm0gVZOIuaqrglBzRAqSL/atjROV5KWbaOxehbNYglvhBoVKNxY60v4DGs5
+LqHdU2jEIO3oBc8oaPgNJS5riO91XiXVbGHw7MKAht2+mViCE3sBRmn1J1bFHxXE
+coiPM7/+6iZ4+TJ6hiyDs7Ebu9x6UvAxm9HeTCHcMIeNTs7d3h2Rp1q+/vsex8OP
+kjZoS4Ua9IlkqJFZAzSC5JDDlocxaw==
+=/JB6
+-----END PGP SIGNATURE-----
+
+--=-QjE9SpdH7vcQ556S/L5J--
+
