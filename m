@@ -2,68 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA8713286B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 15:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E28C132890
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 15:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbgAGOEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 09:04:53 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:2519 "EHLO rere.qmqm.pl"
+        id S1728206AbgAGOOp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 09:14:45 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51730 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727658AbgAGOEx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 7 Jan 2020 09:04:53 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 47sYzQ4YNdz81;
-        Tue,  7 Jan 2020 15:04:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1578405890; bh=XfoQMUnXZ3Glt0sRfyK+w1caLMhptVW6zmno8kSOLR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iiXv+F6/UQ1utYIz0/MoMQiF00RNjS+x1Y13YR+LMrW23hG+aZM+pDS14pDXDyUtN
-         QXjGg6DdaJBUSKsVIG1/1k+KOE2bgrPre75Yfg4L2X7iOSmAtY4YXX+S+LYNXrTMHn
-         kRlU3FVIisXO0hoc3nwgsF1eWQuTcrlelzf1E/gqsQQdKBH55ozSTZ9eHukMvxgpMs
-         H6lKUnyEsMWDDMQOt9WWbFo0kd3wzO7CnAa2kjmT2eyV3t2OSnyq0aVq5ys0+is7V2
-         IcgWiuhp64/gJ1x4YFZJ9Rw4riP6UC9KI3s4dZKMiU8M6n7TZTCplDML+0weDNIWyU
-         cK+dk4iclft3Q==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.4 at mail
-Date:   Tue, 7 Jan 2020 15:04:49 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] opp: fix of_node leak for unsupported entries
-Message-ID: <20200107140449.GB20159@qmqm.qmqm.pl>
-References: <a8060fe5b23929e2e5c9bf5735e63b302124f66c.1578077228.git.mirq-linux@rere.qmqm.pl>
- <20200107063616.a3qpepc46viejxhw@vireshk-i7>
+        id S1727658AbgAGOOp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Jan 2020 09:14:45 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 70DA3AC50;
+        Tue,  7 Jan 2020 14:14:43 +0000 (UTC)
+Message-ID: <8cef3ff20485a084ab395533f28eb0c51b47925d.camel@suse.de>
+Subject: Re: [PATCH V2 0/4] ARM: Enable thermal support for Raspberry Pi 4
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Stefan Wahren <wahrenst@gmx.net>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org
+Date:   Tue, 07 Jan 2020 15:14:41 +0100
+In-Reply-To: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
+References: <1578072236-31820-1-git-send-email-wahrenst@gmx.net>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-XJAu1+XbK2gXuacraTLW"
+User-Agent: Evolution 3.34.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200107063616.a3qpepc46viejxhw@vireshk-i7>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 12:06:16PM +0530, Viresh Kumar wrote:
-> Discard my earlier reply, it wasn't accurate/correct.
-> 
-> On 03-01-20, 20:36, Micha³ Miros³aw wrote:
-> > When parsing OPP v2 table, unsupported entries return NULL from
-> > _opp_add_static_v2().
-> 
-> Right, as we don't want parsing to fail here.
-> 
-> > In this case node reference is leaked.
-> 
-> Why do you think so ?
 
-for_each_available_child_of_node() returns nodes with refcount
-increased, and _opp_add_static_v2() returning NULL does not store the
-pointer anywhere - the created (temporary) OPP structure is freed,
-but _opp_free() does not release node at opp->np.
+--=-XJAu1+XbK2gXuacraTLW
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I guess maybe the _opp_free() should be fixed instead?
+On Fri, 2020-01-03 at 18:23 +0100, Stefan Wahren wrote:
+> This series enables thermal support for the Raspberry Pi 4. Neither the
+> bcm2835_thermal nor the brcmstb_thermal are suitable for the BCM2711.
+> So add a new thermal driver to read out the SoC temperature from the
+> AVS RO block of the BCM2711.
+>=20
+> Changes in V2:
+> - rebase on thermal/linux-next
+> - convert binding to YAML
+> - make AVS RO block a subnode of AVS monitor and access it via syscon
+> - drop unnecessary TSENS clock and get the rid of remove callback
+> - add Florian's reviewed-by to last/unchanged patch
+>=20
+> Stefan Wahren (4):
+>   dt-bindings: Add Broadcom AVS RO thermal
+>   thermal: Add BCM2711 thermal driver
+>   ARM: dts: bcm2711: Enable thermal
+>   ARM: configs: Build BCM2711 thermal as module
+>=20
+>  .../bindings/thermal/brcm,avs-ro-thermal.yaml      |  45 +++++++
+>  arch/arm/boot/dts/bcm2711.dtsi                     |  12 ++
+>  arch/arm/configs/multi_v7_defconfig                |   1 +
+>  arch/arm64/configs/defconfig                       |   1 +
+>  drivers/thermal/broadcom/Kconfig                   |   7 ++
+>  drivers/thermal/broadcom/Makefile                  |   1 +
+>  drivers/thermal/broadcom/bcm2711_thermal.c         | 129
+> +++++++++++++++++++++
+>  7 files changed, 196 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro=
+-
+> thermal.yaml
+>  create mode 100644 drivers/thermal/broadcom/bcm2711_thermal.c
+>=20
+> --
+> 2.7.4
+>=20
 
-Best Regards,
-Micha³ Miros³aw
+Minus the small changes mentioned you can add my:
+
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Tested-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+
+Many Thanks!
+Nicolas
+
+
+--=-XJAu1+XbK2gXuacraTLW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl4UklEACgkQlfZmHno8
+x/4CQAgAgO+zhdwQWVLtIsszrQRrZ0kfdbdfbJNrCOokDEca2VetcAHeJAL/cuw5
+n3TWr7fqVt2u38R7e9T8lleri5Yn8ZLkzhi97Azuhox7HDYTyLU2SjRQEnrWJ4T9
+1lrotXzonE48X7aouECdmfPI3RkL/wRu9wPzsgbrMC3adYZEoK8ZXLlOdGyq64bc
+pdp+kF7P7DKDTmAtcpCi2XTnWlPi5OgoK+eGn0MrobV1DMKeEvo+Guq8aEeDfMbJ
+QReBzmmcFf3BFrqy50L10s77vtSQ1HBU/GrIJPviPlHRfd6NCD4FIl/CiARF7RIk
+abmzDRMNNKuqw00mOD69A/mIKZTd2w==
+=6C0G
+-----END PGP SIGNATURE-----
+
+--=-XJAu1+XbK2gXuacraTLW--
+
