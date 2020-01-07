@@ -2,173 +2,336 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0424133311
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 22:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3421334E4
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 22:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbgAGVQI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 16:16:08 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45611 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729731AbgAGVQC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 16:16:02 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so465341pfg.12
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2020 13:16:02 -0800 (PST)
+        id S1726778AbgAGVbf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 16:31:35 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33898 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726389AbgAGVbf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 16:31:35 -0500
+Received: by mail-lf1-f67.google.com with SMTP id l18so860009lfc.1;
+        Tue, 07 Jan 2020 13:31:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aH3BVcM50df5G1nQCXtC0QKONcgriIhHLD8BWRsnpVk=;
-        b=nET9u1hvWGviYYJ+/wTZQ2eFsZRKBNliZfmQXXO3ZptiJuiksmoXEXDBz/bDVwQt80
-         HFDli5ZYHMREC9aNjKyxr7RnwbxZ8/bHjW5gb/W3Xmxj3w6163iW6m2PWoWL2HQ3L2gn
-         YwutCfKQBrUM+4ojgdOgUIXkkXHbl+GL0MT41zdqnbkssW/i+4FHLzVEvYOs+6NDTPTf
-         mZvgpkRqS/wZOflWMcF3CFZpJXz3BEUoV0gzARxmbF5tZSOprJnG3eeg6/ldQDLKYQAq
-         H8mbDgem9xa/SuL+lzPiDlA3OiNLXSns8rvwSkBt/Ou4zD+Qg4Tfl+H0Y/14qkf0rsHE
-         9vRQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ndo3ngO0Jwi+A5ZK5R0unBiVsHre3YGn+c1daP6kx+U=;
+        b=TklxvwlptMdpZ+6rrnc5AoJ8lGDyMlLKZnh1aGHW1pbC7zQC4jsdqkkznEoHZ/3NcJ
+         PwDdc58T+IlkDEREAuqqeaKtJZPhNqaOj+G5rMaadINvT/y0K16pDSwy+EXa025I+Wip
+         LKjWFFD5dZ3vrQ04WeRBKCfm6m+IzlCLaZjuEh6o+SR7W8PnwVUzY/B3g8coFE0CAWex
+         8Jy+fuTr+Szk9iM25vOGf2A8ftKEKpwhv4I0ZqQuOYdKA4hBG7Vum7G0cLHrWhhCjCrf
+         fLWZg/ReX3FBPuXZ4m4rVnVIEvJDeb0NLmlbWdqInE4TYYsKoqiYnzOBokdP6o/DdzDm
+         djmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aH3BVcM50df5G1nQCXtC0QKONcgriIhHLD8BWRsnpVk=;
-        b=ACEcvm6U/pK+sqDGJPb3Vvz8vsaWnU3NnekR70jsPgmeVS/zzxDf8jSxzGXJexXie9
-         tydfKuRoFWObk1nV5+lcnw70ifmXZusINuz1XkW/bI9PCkrO3I1N9MHlaQ3Jks3NguWl
-         UQuMf6sWDfb/X6LaysVrNBKk8FhCxqDRvAMQYDOQ7qkgmwu544bwzG8eJ6GwGY8Fe87Q
-         krCL0hCcN6yLUs8hvj5KNOV3HSeAhZE75oK8PM6cfbm9q0LwN9cEmf+TSQ6JAqpepiXn
-         o+ZyUfoLNkgssMS0xKxrBEI45i/w4vev2lKd4tq4a6fT054fXn93Dakqan/HEZlhkX2w
-         eNiQ==
-X-Gm-Message-State: APjAAAUFwdgc0HMtpCDVviSkCYPcpHDBog2lSVXKqToPqCMrex7FB44V
-        87N0yVwlHkeIXb1M4CnxN9ogHQ==
-X-Google-Smtp-Source: APXvYqwKI2P9klMDEXPPIFpXdnapCHhs8o+rT/bfatbGhOdHFU+rXR5KH0IGNTSGWwHYzsC85KcBdw==
-X-Received: by 2002:a63:a019:: with SMTP id r25mr1467077pge.400.1578431761548;
-        Tue, 07 Jan 2020 13:16:01 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id f81sm482916pfa.118.2020.01.07.13.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 13:16:00 -0800 (PST)
-Date:   Tue, 7 Jan 2020 13:15:58 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        leonard.crestez@nxp.com, lukasz.luba@arm.com, a.swigon@samsung.com,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ndo3ngO0Jwi+A5ZK5R0unBiVsHre3YGn+c1daP6kx+U=;
+        b=RhMLZeDqf9SU4TSdfEN8W0J7tR8YQp8FyPkwfAQu6ag6C4mgKithqCbGkpPzK4AS/R
+         K00yQ0ZbP6Agg5DJyxqLha2ZblefEkm0kUYjEstlsrRl8AIDuTMFEW98xyQFMnFBfU4E
+         iL6HNpuqZWfLi0DjT3BcUPTvHL0ndkF69at8NDPXBppfRf+sfxRo2LZPX5LeorkhIiY1
+         aGIomGbyWZ+4Uvrx/S1I2IryoHLMPBBaGI5P/G2YttMMwAEbE/sHoiAVRdnqLxMI36Sh
+         7aO03aqUdT+3v7jAxPHeXzVOkZhReQe9WjDQoMs5iZu8VXOQl0A5yPBMpCw5xmpzjmU5
+         HUkA==
+X-Gm-Message-State: APjAAAUYSVJd8i98iFyD8KGVqVP91etDj/8mrlNjmmBnLQJqcBqXZ5BL
+        5GZR5nYpxzrq/IejSWMnl8w=
+X-Google-Smtp-Source: APXvYqxqdFmxCAhDL9VtM6NNduerrH4n4GKUMEeesHig6Twk7oJqWcihiUYaaAjNQ03gTAz5FiroTw==
+X-Received: by 2002:a19:491a:: with SMTP id w26mr858491lfa.98.1578432691516;
+        Tue, 07 Jan 2020 13:31:31 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id r12sm316428ljh.105.2020.01.07.13.31.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jan 2020 13:31:30 -0800 (PST)
+Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com, a.swigon@samsung.com,
         m.szyprowski@samsung.com, enric.balletbo@collabora.com,
-        hl@rock-chips.com, digetx@gmail.com, jcrouse@codeaurora.org,
-        chanwoo@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Subject: Re: [PATCH 1/2] PM / devfreq: Add debugfs support with
- devfreq_summary file
-Message-ID: <20200107211558.GA738324@yoga>
+        hl@rock-chips.com, bjorn.andersson@linaro.org,
+        jcrouse@codeaurora.org, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
 References: <20200107090519.3231-1-cw00.choi@samsung.com>
- <CGME20200107085812epcas1p12121f8ef6492ed78053dea4977216788@epcas1p1.samsung.com>
- <20200107090519.3231-2-cw00.choi@samsung.com>
+ <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
+ <20200107090519.3231-3-cw00.choi@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <2c259936-f099-a239-9d6b-08f9b253644f@gmail.com>
+Date:   Wed, 8 Jan 2020 00:31:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107090519.3231-2-cw00.choi@samsung.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200107090519.3231-3-cw00.choi@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 07 Jan 01:05 PST 2020, Chanwoo Choi wrote:
+Hello Chanwoo,
 
-> Add debugfs interface to provide debugging information of devfreq device.
-> It contains 'devfreq_summary' entry to show the summary of registered
-> devfreq devices as following and the additional debugfs file will be added.
-> - /sys/kernel/debug/devfreq/devfreq_summary
+07.01.2020 12:05, Chanwoo Choi пишет:
+> Add new devfreq_transitions debugfs file to track the frequency transitions
+> of all devfreq devices for the simple profiling as following:
+> - /sys/kernel/debug/devfreq/devfreq_transitions
 > 
-> [Detailed description of each field of 'devfreq_summary' debugfs file]
+> And the user can decide the storage size (CONFIG_NR_DEVFREQ_TRANSITIONS)
+> in Kconfig in order to save the transition history.
+> 
+> [Detailed description of each field of 'devfreq_transitions' debugfs file]
+> - time_ms	: Change time of frequency transition. (unit: millisecond)
 > - dev_name	: Device name of h/w.
 > - dev		: Device name made by devfreq core.
 > - parent_dev	: If devfreq device uses the passive governor,
 > 		  show parent devfreq device name.
-> - governor	: Devfreq governor.
-> - polling_ms	: If devfreq device uses the simple_ondemand governor,
-> 		  polling_ms is necessary for the period. (unit: millisecond)
-> - cur_freq_hz	: Current Frequency (unit: hz)
+> - load_%	: If devfreq device uses the simple_ondemand governor,
+> 		  load is used by governor whene deciding the new frequency.
+> 		  (unit: percentage)
 > - old_freq_hz	: Frequency before changing. (unit: hz)
 > - new_freq_hz	: Frequency after changed. (unit: hz)
 > 
 > [For example on Exynos5422-based Odroid-XU3 board]
-> - In order to show the multiple governors on devfreq_summay result,
-> change the governor of devfreq0 from simple_ondemand to userspace.
+> $ cat /sys/kernel/debug/devfreq/devfreq_transitions
+> time_ms    dev_name                       dev        parent_dev load_% old_freq_hz  new_freq_hz
+> ---------- ------------------------------ ---------- ---------- ---------- ------------ ------------
+> 14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000    67000000
+> 14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
+> 14600      soc:bus_fsys                   devfreq4   devfreq1   0      200000000    100000000
+> 14600      soc:bus_fsys2                  devfreq5   devfreq1   0      150000000    75000000
+> 14602      soc:bus_mfc                    devfreq6   devfreq1   0      222000000    96000000
+> 14602      soc:bus_gen                    devfreq7   devfreq1   0      267000000    89000000
+> 14602      soc:bus_g2d                    devfreq9   devfreq1   0      300000000    84000000
+> 14602      soc:bus_g2d_acp                devfreq10  devfreq1   0      267000000    67000000
+> 14602      soc:bus_jpeg                   devfreq11  devfreq1   0      300000000    75000000
+> 14602      soc:bus_jpeg_apb               devfreq12  devfreq1   0      167000000    84000000
+> 14603      soc:bus_disp1_fimd             devfreq13  devfreq1   0      200000000    120000000
+> 14603      soc:bus_disp1                  devfreq14  devfreq1   0      300000000    120000000
+> 14606      soc:bus_gscl_scaler            devfreq15  devfreq1   0      300000000    150000000
+> 14606      soc:bus_mscl                   devfreq16  devfreq1   0      333000000    84000000
+> 14608      soc:bus_wcore                  devfreq1              9      333000000    84000000
+> 14783      10c20000.memory-controller     devfreq0              35     825000000    633000000
+> 15873      soc:bus_wcore                  devfreq1              41     84000000     400000000
+> 15873      soc:bus_noc                    devfreq2   devfreq1   0      67000000     100000000
+> [snip]
 > 
-> $ cat /sys/kernel/debug/devfreq/devfreq_summary
-> dev_name                       dev        parent_dev governor        polling_ms cur_freq_hz  min_freq_hz  max_freq_hz
-> ------------------------------ ---------- ---------- --------------- ---------- ------------ ------------ ------------
-> 10c20000.memory-controller     devfreq0              userspace       0          206000000    165000000    825000000
-> soc:bus_wcore                  devfreq1              simple_ondemand 50         532000000    88700000     532000000
-> soc:bus_noc                    devfreq2   devfreq1   passive         0          111000000    66600000     111000000
-> soc:bus_fsys_apb               devfreq3   devfreq1   passive         0          222000000    111000000    222000000
-> soc:bus_fsys                   devfreq4   devfreq1   passive         0          200000000    75000000     200000000
-> soc:bus_fsys2                  devfreq5   devfreq1   passive         0          200000000    75000000     200000000
-> soc:bus_mfc                    devfreq6   devfreq1   passive         0          333000000    83250000     333000000
-> soc:bus_gen                    devfreq7   devfreq1   passive         0          266000000    88700000     266000000
-> soc:bus_peri                   devfreq8   devfreq1   passive         0          66600000     66600000     66600000
-> soc:bus_g2d                    devfreq9   devfreq1   passive         0          0            83250000     333000000
-> soc:bus_g2d_acp                devfreq10  devfreq1   passive         0          0            66500000     266000000
-> soc:bus_jpeg                   devfreq11  devfreq1   passive         0          0            75000000     300000000
-> soc:bus_jpeg_apb               devfreq12  devfreq1   passive         0          0            83250000     166500000
-> soc:bus_disp1_fimd             devfreq13  devfreq1   passive         0          0            120000000    200000000
-> soc:bus_disp1                  devfreq14  devfreq1   passive         0          0            120000000    300000000
-> soc:bus_gscl_scaler            devfreq15  devfreq1   passive         0          0            150000000    300000000
-> soc:bus_mscl                   devfreq16  devfreq1   passive         0          0            84000000     666000000
-
-This looks quite useful.
-
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-
-May I ask how the build test robot came up with this idea?
-
 > Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 > ---
->  drivers/devfreq/devfreq.c | 80 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
+>  drivers/devfreq/Kconfig            |  13 +++
+>  drivers/devfreq/devfreq.c          | 126 +++++++++++++++++++++++++++++
+>  drivers/devfreq/governor.h         |   3 +
+>  drivers/devfreq/governor_passive.c |   2 +
+>  include/linux/devfreq.h            |   1 +
+>  5 files changed, 145 insertions(+)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-[..]
-> +/**
-> + * devfreq_summary_show() - Show the summary of the registered devfreq devices
-> + *				via 'devfreq_summary' debugfs file.
-
-Please make this proper kerneldoc, i.e:
-
- * func() - short description
- * @s:
- * @data:
- * 
- * Long description
- * 
- * Return: foo on bar
-
-[..]
-> @@ -1733,6 +1803,16 @@ static int __init devfreq_init(void)
->  	}
->  	devfreq_class->dev_groups = devfreq_groups;
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index 0b1df12e0f21..84936eec0ef9 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -74,6 +74,19 @@ config DEVFREQ_GOV_PASSIVE
+>  	  through sysfs entries. The passive governor recommends that
+>  	  devfreq device uses the OPP table to get the frequency/voltage.
 >  
-> +	devfreq_debugfs = debugfs_create_dir("devfreq", NULL);
-> +	if (PTR_ERR(devfreq_debugfs) != -ENODEV && IS_ERR(devfreq_debugfs)) {
-
-Don't PTR_ERR() before IS_ERR().
-
-> +		devfreq_debugfs = NULL;
-
-I don't think you need this, given that debugfs_create_file() will fail
-gracefully when passed and IS_ERR()
-
-> +		pr_warn("%s: couldn't create debugfs dir\n", __FILE__);
-
-Afaict debugfs_create_() won't fail without printing a message already.
-
-> +	} else {
-> +		debugfs_create_file("devfreq_summary", 0444,
-> +				devfreq_debugfs, NULL,
-> +				&devfreq_summary_fops);
-> +	}
+> +comment "DEVFREQ Debugging"
 > +
->  	return 0;
+> +config NR_DEVFREQ_TRANSITIONS
+> +	int "Maximum storage size to save DEVFREQ Transitions (10-1000)"
+> +	depends on DEBUG_FS
+> +	range 10 1000
+> +	default "100"
+> +	help
+> +	  Show the frequency transitions of all devfreq devices via
+> +	  '/sys/kernel/debug/devfreq/devfreq_transitions' for the simple
+> +	  profiling. It needs to decide the storage size to save transition
+> +	  history of all devfreq devices.
+> +
+>  comment "DEVFREQ Drivers"
+>  
+>  config ARM_EXYNOS_BUS_DEVFREQ
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index c7f5e4e06420..7abaae06fa65 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -268,6 +268,57 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
 >  }
->  subsys_initcall(devfreq_init);
+>  EXPORT_SYMBOL(devfreq_update_status);
+> +/**
+> + * devfreq_update_transitions() - Update frequency transitions for debugfs file
+> + * @devfreq:	the devfreq instance
+> + * @old_freq:	the previous frequency before changing the frequency
+> + * @new_freq:	the new frequency after frequency is changed
+> + */
+> +struct devfreq_transitions {
+> +	struct devfreq *devfreq;
+> +	struct devfreq_freqs freqs;
+> +	unsigned long load;
+> +} debugfs_transitions[CONFIG_NR_DEVFREQ_TRANSITIONS];
+> +
+> +static spinlock_t devfreq_debugfs_lock;
 
-Regards,
-Bjorn
+This could be:
+
+static DEFINE_SPINLOCK(devfreq_debugfs_lock);
+
+and then spin_lock_init() isn't needed.
+
+
+Also, The "<linux/spinlock.h>" should be included directly by devfreq.c
+
+> +static int debugfs_transitions_index;
+> +
+> +void devfreq_update_transitions(struct devfreq *devfreq,
+> +			unsigned long old_freq, unsigned long new_freq,
+> +			unsigned long busy_time, unsigned long total_time)
+> +{
+> +	unsigned long load;
+> +	int i;
+> +
+> +	if (!devfreq_debugfs || !devfreq || (old_freq == new_freq))
+> +		return;
+> +
+> +	spin_lock_nested(&devfreq_debugfs_lock, SINGLE_DEPTH_NESTING);
+> +
+> +	i = debugfs_transitions_index;
+> +
+> +	/*
+> +	 * Calculate the load and if load is larger than 100,
+> +	 * initialize to 100 because the unit of load is percentage.
+> +	 */
+> +	load = (total_time == 0 ? 0 : (100 * busy_time) / total_time);
+> +	if (load > 100)
+> +		load = 100;
+> +
+> +	debugfs_transitions[i].devfreq = devfreq;
+> +	debugfs_transitions[i].freqs.time = ktime_to_ms(ktime_get());
+> +	debugfs_transitions[i].freqs.old = old_freq;
+> +	debugfs_transitions[i].freqs.new = new_freq;
+> +	debugfs_transitions[i].load = load;
+> +
+> +	if (++i == CONFIG_NR_DEVFREQ_TRANSITIONS)
+> +		i = 0;
+> +	debugfs_transitions_index = i;
+> +
+> +	spin_unlock(&devfreq_debugfs_lock);
+> +}
+> +EXPORT_SYMBOL(devfreq_update_transitions);
+
+What about EXPORT_SYMBOL_GPL()?
+
+>  /**
+>   * find_devfreq_governor() - Find devfreq governor from name
+>   * @name:	name of the governor
+> @@ -401,6 +452,10 @@ static int set_target(struct devfreq *devfreq,
+>  		return err;
+>  	}
+>  
+> +	devfreq_update_transitions(devfreq, cur_freq, new_freq,
+> +					devfreq->last_status.busy_time,
+> +					devfreq->last_status.total_time);
+> +
+>  	freqs.new = new_freq;
+>  	notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
+>  
+> @@ -1787,6 +1842,72 @@ static int devfreq_summary_show(struct seq_file *s, void *data)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(devfreq_summary);
+>  
+> +/**
+> + * devfreq_transitions_show() - Show the frequency transitions of the registered
+> + *			devfreq devices via 'devfreq_transitions' debugfs file.
+> + */
+> +static int devfreq_transitions_show(struct seq_file *s, void *data)
+> +{
+> +	struct devfreq *devfreq = NULL;
+> +	struct devfreq *p_devfreq = NULL;
+> +	struct devfreq_freqs *freqs = NULL;
+> +	unsigned long load;
+> +	int i = debugfs_transitions_index;
+> +	int count;
+> +
+> +	seq_printf(s, "%-10s %-30s %-10s %-10s %-6s %-12s %-12s\n",
+> +			"time_ms",
+> +			"dev_name",
+> +			"dev",
+> +			"parent_dev",
+> +			"load_%",
+> +			"old_freq_hz",
+> +			"new_freq_hz");
+> +	seq_printf(s, "%-10s %-30s %-10s %-10s %-6s %-12s %-12s\n",
+> +			"----------",
+> +			"------------------------------",
+> +			"----------",
+> +			"----------",
+> +			"----------",
+> +			"------------",
+> +			"------------");
+> +
+> +	spin_lock(&devfreq_debugfs_lock);> +	for (count = 0; count < CONFIG_NR_DEVFREQ_TRANSITIONS; count++) {
+> +		devfreq = debugfs_transitions[i].devfreq;
+> +		freqs = &debugfs_transitions[i].freqs;
+> +		load = debugfs_transitions[i].load;
+> +
+> +		i = (CONFIG_NR_DEVFREQ_TRANSITIONS == ++i) ? 0 : i;
+> +		if (!devfreq)
+> +			continue;
+> +
+> +#if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
+> +		if (!strncmp(devfreq->governor_name,
+> +				DEVFREQ_GOV_PASSIVE, DEVFREQ_NAME_LEN)) {
+> +			struct devfreq_passive_data *data = devfreq->data;
+> +
+> +			if (data)
+> +				p_devfreq = data->parent;
+> +		} else {
+> +			p_devfreq = NULL;
+> +		}
+> +#endif
+> +		seq_printf(s, "%-10lld %-30s %-10s %-10s %-6ld %-12ld %-12ld\n",
+> +			freqs->time,
+> +			dev_name(devfreq->dev.parent),
+> +			dev_name(&devfreq->dev),
+> +			p_devfreq ? dev_name(&p_devfreq->dev) : "",
+> +			load,
+> +			freqs->old,
+> +			freqs->new);
+> +	}
+> +	spin_unlock(&devfreq_debugfs_lock);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(devfreq_transitions);
+> +
+>  static int __init devfreq_init(void)
+>  {
+>  	devfreq_class = class_create(THIS_MODULE, "devfreq");
+> @@ -1808,9 +1929,14 @@ static int __init devfreq_init(void)
+>  		devfreq_debugfs = NULL;
+>  		pr_warn("%s: couldn't create debugfs dir\n", __FILE__);
+>  	} else {
+> +		spin_lock_init(&devfreq_debugfs_lock);
+> +
+>  		debugfs_create_file("devfreq_summary", 0444,
+>  				devfreq_debugfs, NULL,
+>  				&devfreq_summary_fops);
+> +		debugfs_create_file("devfreq_transitions", 0444,
+> +				devfreq_debugfs, NULL,
+> +				&devfreq_transitions_fops);
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> index dc7533ccc3db..01eecfdaf2d6 100644
+> --- a/drivers/devfreq/governor.h
+> +++ b/drivers/devfreq/governor.h
+> @@ -68,6 +68,9 @@ extern int devfreq_add_governor(struct devfreq_governor *governor);
+>  extern int devfreq_remove_governor(struct devfreq_governor *governor);
+>  
+>  extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
+> +extern void devfreq_update_transitions(struct devfreq *devfreq,
+> +			unsigned long old_freq, unsigned long new_freq,
+> +			unsigned long busy_time, unsigned long total_time);
+
+The 'extern' attribute isn't needed for function prototypes defined in
+header files.
