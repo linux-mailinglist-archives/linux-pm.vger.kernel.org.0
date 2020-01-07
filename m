@@ -2,79 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E22A132B96
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 17:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818CB132E23
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 19:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728464AbgAGQxe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 11:53:34 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:33086 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728386AbgAGQxe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 11:53:34 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 007GrVCC021331;
-        Tue, 7 Jan 2020 10:53:31 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1578416011;
-        bh=ijxKYPu7aitvqea0/41zctHTvqZLXaM+vZDKrOkjRsQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ykqA+fap61DZYsXo07WKHpClVOPNL9neXBRncMFLINcuPdiv7MgVq7vts1HNv5bNM
-         g36WbCu01UBSCG+v4aTcXVf6P8vOTLR1+kH5oh6LEJuMFd8qCmpIkonEWA0k+W3VTv
-         n7bi/kHuYnhqrUMz5Brode7Jw+/h7EtW+FMcvV4I=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 007GrVur112005
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Jan 2020 10:53:31 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 7 Jan
- 2020 10:53:30 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 7 Jan 2020 10:53:30 -0600
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 007GrUni017504;
-        Tue, 7 Jan 2020 10:53:30 -0600
-Subject: Re: [PATCH v2 1/3] power_supply: Add additional health properties to
- the header
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20191029200201.24483-1-dmurphy@ti.com>
- <20191219171910.wbx4ry6hgip6g4fm@earth.universe>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <852a3e66-3773-0bfe-33b9-87cc514a4a11@ti.com>
-Date:   Tue, 7 Jan 2020 10:50:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <20191219171910.wbx4ry6hgip6g4fm@earth.universe>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1727925AbgAGSQS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 13:16:18 -0500
+Received: from mout.gmx.net ([212.227.15.15]:53391 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728358AbgAGSQS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Jan 2020 13:16:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1578420964;
+        bh=fStf+8RF6qmT38/5o2VMhgNCxx4YDKOqS+6ymSk2hVA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=d9HAQrSHcd8IpQHrnD7QnLWvY34o9aZGluK5xDCOfkXl/ctDqARxBO039GMtLY6p8
+         4b1dgvRfu8liXH5Sd4umlA1YgbS7OujTTja38Esiy9gCnKDzIqRxUH50o6udP4Vpn+
+         fdZXnzQFcmCibON1iNWwO0ggMgR3NxaYqumiaA1M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.154]) by mail.gmx.com
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MTAFh-1jHAwl1fqx-00UXyY; Tue, 07 Jan 2020 19:16:04 +0100
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V3 0/4] ARM: Enable thermal support for Raspberry Pi 4
+Date:   Tue,  7 Jan 2020 19:15:53 +0100
+Message-Id: <1578420957-32229-1-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:xkFz0dLUtTbMvdFsQps4ETe/MuVllBCYSLf/H/6OpwsfMs6tNd3
+ X6PXvReYKhvwDSzLeprp9PesTWWsWfWB5Mkt87VssaeyetCzrSlQ8A4oX4Y6Ttkfz+VUObT
+ rooWqxyoOcHxc2KFR6nigDhPGGfIgXaiM5Bj8aRB64sLA4ybf5r3nS/stlYgzy8O5GY6X1L
+ UsOGhE69KexYdQRATkT9A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WIesbUME1I0=:JFzG6lFhRvAeiyna9slav0
+ mYylMG+lG39zpj0pqbGUrF0+eF9YfjFSr+H4N01Av1elAtoRK6AUStVwP7oW0C3wz+YIdkh8k
+ TjVti9j3GBJ6+4PDN84kj+FU3F5N2z297iobibGRAtVMlFM/D8tulsoqpYMWO55fgZvxqms6a
+ ahcYsWKqG2SzzMXjMUEmz5GjcnKSw3aikD8IAvS8pcSuRrtTHmg3iwfRd6pYBLzJihedkA0pe
+ H/Q5a86O+3joTklgCO0A8BzALBWv/p6IqxWC/yQjF5gLUgvn49YnSQXgujREA2siVEtIVt6Xq
+ TA6qMH/4KB9+CCRdvGHjZcXQhX94kc6p/pWH6ThPb6r6PqNpUe6ZhS9CpMqSwqu/6hCIXtBad
+ EkAbwBAN5RimQlydCtvo+k7gT7Ob38p+sffQ9s6SxTnlTn4YNd9UbQxYo2yxS0mepGvZNZRjg
+ 3BbqRkj6ZkoqE5uXWZIyHfMUjEWdTdjwiavlW+SXSplrWjwuQG5BDrgPIsigFzGaXsXwdyTmX
+ mldBdohc0x4HtyLZoA3HHW1tWNz4/noA/XB28FSpIh0fwjN98mx/u7iULeEMK9ICfOw2E817K
+ OCBgPNRvAbgolZes3oW5TuzJL54zeCTqDG1KKMg07i9xg6dEoH0oEsfYdrwEz6cIAgEU+h/ak
+ FQ5VgifCAtEMYRvTE1ykThGY/IbqzbthkNJMSx7gpfeOJijZ0vfGe+P5gmDuzCAY2fwzSughh
+ c6klPCMDscqZod6FPanG0VkpnVT0CYDEOOBQ0y1wAgk5c8A7EptnQ8Cranysoz8MeF541FcnS
+ m+wJbn7bAunCBP7/6u4R7DbQij0I2VWkns9EXmE1BkVWYurNvIDxCwYiOVlI1mNBUhox83k7T
+ C63zidmO7y/GNSsQnrgfmgAt2S549/zWHyfUvaQJnRRS8WGs08KkN4mbRSKag9vplfCV0bLHl
+ uXap25Tupjzppe23e9oyBmKXo6j8/pnvXSGKnzws+UC5ev3y/2ooqceJnIMzhB43GbUGkWkNA
+ VyzAs6+Lyd8WeILoNip4Wa+tYHG2xS3ceTGw9yzYsMSGJJgMd0n2lc6v1FRECoD+z615aE624
+ /RzGwNmXe9txKmx7Ynw7NLWM9WFd8+0Zt5XtJ4Tbdlku544Yt3yJRgaZqAMc0A+RfX950YbzS
+ uz1Z2SFir2axcrKnlO9tYeq7vnU5HF//M+ck+JtvwH8yVgyt1vUXulh/vl4gwTGYxyigjvOBK
+ 7/Eyh/gKcnRbDez7QxE13FM/hi8MkSjT6TBddIA==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian
+This series enables thermal support for the Raspberry Pi 4. Neither the
+bcm2835_thermal nor the brcmstb_thermal are suitable for the BCM2711.
+So add a new thermal driver to read out the SoC temperature from the
+AVS RO block of the BCM2711.
 
-On 12/19/19 11:19 AM, Sebastian Reichel wrote:
-> Hi Dan,
->
-> On Tue, Oct 29, 2019 at 03:01:59PM -0500, Dan Murphy wrote:
->> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
->>
->> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->> ---
-> This needs to update /sys/class/power_supply/<supply_name>/health
-> entry in Documentation/ABI/testing/sysfs-class-power. Also it needs
+Changes in V3:
+- add Rob's, Florian's and Nicolas' reviewed-by/tested-by
+- adjust binding license
+- make error pointer handling consistent
 
-I noticed "Over Current" was missing from the ABI doc.  Do you want that 
-addition in a separate patch or can I add it in my update?
+Changes in V2:
+- rebase on thermal/linux-next
+- convert binding to YAML
+- make AVS RO block a subnode of AVS monitor and access it via syscon
+- drop unnecessary TSENS clock and get the rid of remove callback
+- add Florian's reviewed-by to last/unchanged patch
 
-Dan
+Stefan Wahren (4):
+  dt-bindings: Add Broadcom AVS RO thermal
+  thermal: Add BCM2711 thermal driver
+  ARM: dts: bcm2711: Enable thermal
+  ARM: configs: Build BCM2711 thermal as module
 
-<snip>
+ .../bindings/thermal/brcm,avs-ro-thermal.yaml      |  45 +++++++
+ arch/arm/boot/dts/bcm2711.dtsi                     |  12 ++
+ arch/arm/configs/multi_v7_defconfig                |   1 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/thermal/broadcom/Kconfig                   |   7 ++
+ drivers/thermal/broadcom/Makefile                  |   1 +
+ drivers/thermal/broadcom/bcm2711_thermal.c         | 129 ++++++++++++++++=
++++++
+ 7 files changed, 196 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-=
+thermal.yaml
+ create mode 100644 drivers/thermal/broadcom/bcm2711_thermal.c
+
+=2D-
+2.7.4
 
