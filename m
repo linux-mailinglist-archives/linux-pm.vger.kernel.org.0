@@ -2,78 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C7F132FE8
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2F513306F
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2020 21:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728660AbgAGTyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 14:54:21 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:39561 "EHLO
+        id S1728566AbgAGUOo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 15:14:44 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:43494 "EHLO
         mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728369AbgAGTyU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 14:54:20 -0500
-Received: by mail-ed1-f68.google.com with SMTP id t17so617965eds.6
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
-         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
-         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
-         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
-         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
-         86YA==
+        with ESMTP id S1728358AbgAGUOo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 15:14:44 -0500
+Received: by mail-ed1-f68.google.com with SMTP id dc19so640593edb.10;
+        Tue, 07 Jan 2020 12:14:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=Fko1rOISi4DSSX6+F3XQ1Lu+S/i8SfCOygHyNcM7TnzyG/q8noFhbarPI7T4jZaZRy
-         4j13OJtTsxdSxrlAQMQx4RS5uylcVvX/fpr2rmGbIYhbs1FdHVBEyue/UTCURX43Zbh9
-         cQ4SVKBQhH4XQYgEPcskS0mX+AeuXgfe00+f1uFPY/eVbUY+4N4Jo77vtxisfxhEd49G
-         kLE4XNOMkXoaH7P+IaCT/waku9h1qbh2fZ3I+ufkSbWQpn+cOmAae4bnNidm9Z+f/6fl
-         QJsoZ9NEz8quehR3ACbzgFlD/fsrdTPvtx+//Y3XqYeiLq4j6eALprN1YaRi0pzO4Q5E
-         eY9A==
-X-Gm-Message-State: APjAAAWYbwr1IIB2tjskKceeg/NYkek/EmhqWjwNX4TmGABOVTtT4dak
-        I++4h16Nxyl2u/V5tla4iCo/Yjg5u0Sle/rXNG4=
-X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
-X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
- Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=shdUU23K0IEf7ZFJ8JLqr2RIvpPkSrbg6xdebmpUuBk=;
+        b=CE7JxfLxTCbq+CfKqig1FP7+uAICGegXA38mgHVhFcu8tIDzOnK2DmN/87NzcKkdLi
+         S0yqEQucpHBMl5gcGJimsDnPnWDP5f8keVWyaxsAGHKYpc5eos/i0VoaeEzmyROQqNZu
+         ZBc1ROaM/nHDqbEQxk+x7x8hOH712yObovXaEF3Cysoz77j6ua5rtY5OtdrtWmq2FbGM
+         B/IsiLzExLIa/R7bTkdHvm6s0GqR/ov4ITSSuWoY55Oz+igPWKwRGsFYx5J+SAkqC3en
+         cMpJElxEVCs9gv5kH9LG6xaEDoV6o96mOb5aCV4ZUNhvL56X37VFKI60fEOrAvSppDYm
+         rJrw==
+X-Gm-Message-State: APjAAAWpNsK3LqcVyNQO1DxQFlCGrYX9p3h1mJJn5UYPjWPF49S1kNr5
+        ibQLVw7t0fTQuux9mzLXoGVBYcBr
+X-Google-Smtp-Source: APXvYqxvhO+xtcJuzGv5TR4UrQN67+VzGE8I0ZqMCIB4xGEAsxpokcN4a/8SFQaVXLRtd6nc5VnFtg==
+X-Received: by 2002:a17:906:1181:: with SMTP id n1mr1218322eja.218.1578428081904;
+        Tue, 07 Jan 2020 12:14:41 -0800 (PST)
+Received: from kozik-book ([194.230.155.149])
+        by smtp.googlemail.com with ESMTPSA id h5sm12464ejt.91.2020.01.07.12.14.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 Jan 2020 12:14:41 -0800 (PST)
+Date:   Tue, 7 Jan 2020 21:14:39 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Kukjin Kim <kgene@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/20] ARM: samsung: Rename Samsung and Exynos to
+ lowercase
+Message-ID: <20200107201439.GC8636@kozik-book>
+References: <20200104152107.11407-1-krzk@kernel.org>
+ <20200104152107.11407-5-krzk@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
- -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:54:18 +0100
-Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200104152107.11407-5-krzk@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
-to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $50.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+On Sat, Jan 04, 2020 at 04:20:51PM +0100, Krzysztof Kozlowski wrote:
+> Fix up inconsistent usage of upper and lowercase letters in "Samsung"
+> and "Exynos" names.
+> 
+> "SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
+> names.  Therefore they should be written with lowercase letters starting
+> with capital letter.
+> 
+> The lowercase "Exynos" name is promoted by its manufacturer Samsung
+> Electronics Co., Ltd., in advertisement materials and on website.
+> 
+> Although advertisement materials usually use uppercase "SAMSUNG", the
+> lowercase version is used in all legal aspects (e.g. on Wikipedia and in
+> privacy/legal statements on
+> https://www.samsung.com/semiconductor/privacy-global/).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  arch/arm/mach-exynos/Kconfig                  | 36 +++++++++----------
+>  arch/arm/mach-exynos/common.h                 |  2 +-
+>  arch/arm/mach-exynos/exynos.c                 |  4 +--
+>  arch/arm/mach-exynos/include/mach/map.h       |  2 +-
+>  arch/arm/mach-exynos/pm.c                     |  2 +-
+>  arch/arm/mach-exynos/smc.h                    |  2 +-
+>  arch/arm/mach-exynos/suspend.c                |  2 +-
+>  arch/arm/mach-s3c24xx/Kconfig                 | 16 ++++-----
+>  arch/arm/plat-samsung/adc.c                   |  2 +-
+>  arch/arm/plat-samsung/devs.c                  |  2 +-
+>  arch/arm/plat-samsung/gpio-samsung.c          |  2 +-
+>  .../plat-samsung/include/plat/samsung-time.h  |  2 +-
+
+Applied.
+
+Best regards,
+Krzysztof
+
