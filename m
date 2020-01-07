@@ -2,209 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F06561337AC
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 00:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3F91337AD
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 00:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727562AbgAGXqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jan 2020 18:46:03 -0500
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:5234 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727563AbgAGXqC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 18:46:02 -0500
+        id S1727767AbgAGXqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jan 2020 18:46:06 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40151 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727761AbgAGXqG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jan 2020 18:46:06 -0500
+Received: by mail-lj1-f195.google.com with SMTP id u1so1397765ljk.7
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2020 15:46:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1578440763; x=1609976763;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C+JaTHQLVFTnM8u9L8ZSkRBth8A1GrfPB1444d3zUEk=;
-  b=Sr9NWBfYr6ulkMkmcFHEzSiwvc0g0eAjiTkqpLLBYc2/3t4/dVKFqR95
-   Do7mIs2bQBbtpyX5AUEL3C5jVkolmJ6faHxFTbFlZ/Pza6obA4kGp2B5r
-   JChND7g4GwILW0PlTH91rspBZ0sB3LgcHihQr23kjXX0aOamypKS61tRf
-   0=;
-IronPort-SDR: tgZkjPccZ3NN32ilYfpUAqXwfPAg3ycN79+7mbg/yBELHAIIAEhZkb41aLfWqiI5YJOmjh5N2D
- RKzL0UoG9vhw==
-X-IronPort-AV: E=Sophos;i="5.69,407,1571702400"; 
-   d="scan'208";a="8919095"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 07 Jan 2020 23:46:01 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id 04022A2516;
-        Tue,  7 Jan 2020 23:45:52 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 7 Jan 2020 23:45:26 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 7 Jan 2020 23:45:26 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1367.3 via Frontend Transport; Tue, 7 Jan 2020 23:45:26 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 982CE40E65; Tue,  7 Jan 2020 23:45:26 +0000 (UTC)
-Date:   Tue, 7 Jan 2020 23:45:26 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
-        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <kamatam@amazon.com>,
-        <sstabellini@kernel.org>, <konrad.wilk@oracle.co>,
-        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
-        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
-        <anchalag@amazon.com>, <xen-devel@lists.xenproject.org>,
-        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>,
-        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>
-CC:     <anchalag@amazon.com>
-Subject: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in
- hibernation
-Message-ID: <20200107234526.GA19034@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HQMY8R3LoWt/DsrAqKQp49rhgXtLc3e3mn4wK30Z9bk=;
+        b=gkmbpd8bIKIIQEgsb7PEU+2r4ebECX1mH3jgU38dGjJQ8bwXIJG5GKLnoLrnX3Q1Tp
+         v1SDB6I1ZXgqhUT4odQ8aVr64tXRhQzQKUJB+gim+8tzuQBIEEgYa0NEh52zxV9MySl4
+         8hPqbEMycxVGQOzMT2ZoovSrn2sYCBWsQ2InRnJJnXhziW8CiS8uBVxVuagMUfjKujCp
+         HniHcll8yMXWX4ecEITXFam+QamI4BHfLL7Gcvl7S+kf3c4RHt8RoST1Bi3vdrXuETyI
+         Kn2nFOF6G8BTDLxmpQhXEOKSQ8HHgKI3g4y9E8Ezgf28cpYXwn+lC6jP8DwKEiXAfN4W
+         io5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HQMY8R3LoWt/DsrAqKQp49rhgXtLc3e3mn4wK30Z9bk=;
+        b=BJXZzvl74opj0LVrbrzuZ0BDYCrkpBivuO8Co3jYBXiMtLdmqs75Vm7rl/cvI9xPt6
+         KNWpZsfdIwl7XjXC/oF4A2jtvJemUMMCWKWiU6Xi3NiYjTocc3VjHGB0ZpHPF6fD+buR
+         FWdZbG3CR+dpwDnoBHS5dvkRJ6qSs/ZqD6//q658NZ9XfjJO4YeC06AXfc0ESyt5Yq0e
+         FKNobBMvvAidSH1jUaJEz9ZUtwB1QP9kajVOE7zYkEyo7kKUTSsKXmOjo++4g/yAYGYx
+         dBOFIK8QKBUWxrbruivpQNLWl7wvxy0GmUUs2sCDA8mWAwDUWM+Rjkb49idd2+XuMyLp
+         puzA==
+X-Gm-Message-State: APjAAAWtGAAlvNZG4BP1imWqR8bGyfQftBGMgXFBjag901jamFJhdw3g
+        CQvVrhGqVhhQmON7atcVDHvdMelDXZZbgAXCy+IX2w==
+X-Google-Smtp-Source: APXvYqzbmu2DObIlWLfaO9ELFQorRtShpVBsWWzBcZIoobIaBkYXNLSVmLfU7WKSlp/DDnONAcCNR9yJlu88wu2FxpQ=
+X-Received: by 2002:a2e:9e03:: with SMTP id e3mr1170522ljk.186.1578440764122;
+ Tue, 07 Jan 2020 15:46:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <1576475925-20601-1-git-send-email-daidavid1@codeaurora.org>
+In-Reply-To: <1576475925-20601-1-git-send-email-daidavid1@codeaurora.org>
+From:   Evan Green <evgreen@google.com>
+Date:   Tue, 7 Jan 2020 15:45:27 -0800
+Message-ID: <CAE=gft6sxsZfvPZZXKqbEMjCH_hGKXp_1MS3qTAz6hmMPfn09A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] Split SDM845 interconnect nodes and consolidate
+ RPMh support
+To:     David Dai <daidavid1@codeaurora.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, sboyd@kernel.org,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        Alex Elder <elder@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Eduardo Valentin <eduval@amazon.com>
+On Sun, Dec 15, 2019 at 9:59 PM David Dai <daidavid1@codeaurora.org> wrote:
+>
+> While there are no current consumers of the SDM845 interconnect device in
+> devicetree, take this opportunity to redefine the interconnect device nodes
+> as the previous definitions of using a single child node under the apps_rsc
+> device did not accurately capture the description of the hardware.
+> The Network-On-Chip (NoC) interconnect devices should be represented in a
+> manner akin to QCS404 platforms[1] where there is a separation of NoC devices
+> and its RPM/RPMh counterparts.
+>
+> The bcm-voter devices are representing the RPMh devices that the interconnect
+> providers need to communicate with and there can be more than one instance of
+> the Bus Clock Manager (BCM) which can live under different instances of Resource
+> State Coordinators (RSC). There are display use cases where consumers may need
+> to target a different bcm-voter (Some display specific RSC) than the default,
+> and there needs to be a way to represent this connection in devicetree.
 
-System instability are seen during resume from hibernation when system
-is under heavy CPU load. This is due to the lack of update of sched
-clock data, and the scheduler would then think that heavy CPU hog
-tasks need more time in CPU, causing the system to freeze
-during the unfreezing of tasks. For example, threaded irqs,
-and kernel processes servicing network interface may be delayed
-for several tens of seconds, causing the system to be unreachable.
+So for my own understanding, the problem here is that things want to
+vote for interconnect bandwidth within a specific RSC context? Where
+normally the RSC context is simply "Apps@EL1", we might also have
+"Apps@EL3" for trustzone, or in the case we're coding for,
+"display-specific RSC context". I guess this context might stay on
+even if Apps@EL1 votes are entirely discounted or off? So then would
+there be an additional interconnect provider for "display context RSC"
+next to apps_bcm_voter? Would that expose all the same nodes as
+apps_bcm_voter, or a different set of nodes?
 
-Situation like this can be reported by using lockup detectors
-such as workqueue lockup detectors:
-
-[root@ip-172-31-67-114 ec2-user]# echo disk > /sys/power/state
-
-Message from syslogd@ip-172-31-67-114 at May  7 18:23:21 ...
- kernel:BUG: workqueue lockup - pool cpus=0 node=0 flags=0x0 nice=0 stuck for 57s!
-
-Message from syslogd@ip-172-31-67-114 at May  7 18:23:21 ...
- kernel:BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 57s!
-
-Message from syslogd@ip-172-31-67-114 at May  7 18:23:21 ...
- kernel:BUG: workqueue lockup - pool cpus=3 node=0 flags=0x1 nice=0 stuck for 57s!
-
-Message from syslogd@ip-172-31-67-114 at May  7 18:29:06 ...
- kernel:BUG: workqueue lockup - pool cpus=3 node=0 flags=0x1 nice=0 stuck for 403s!
-
-The fix for this situation is to mark the sched clock as unstable
-as early as possible in the resume path, leaving it unstable
-for the duration of the resume process. This will force the
-scheduler to attempt to align the sched clock across CPUs using
-the delta with time of day, updating sched clock data. In a post
-hibernation event, we can then mark the sched clock as stable
-again, avoiding unnecessary syncs with time of day on systems
-in which TSC is reliable.
-
-Reviewed-by: Erik Quanstrom <quanstro@amazon.com>
-Reviewed-by: Frank van der Linden <fllinden@amazon.com>
-Reviewed-by: Balbir Singh <sblbir@amazon.com>
-Reviewed-by: Munehisa Kamata <kamatam@amazon.com>
-Tested-by: Anchal Agarwal <anchalag@amazon.com>
-Signed-off-by: Eduardo Valentin <eduval@amazon.com>
----
- arch/x86/kernel/tsc.c       | 29 +++++++++++++++++++++++++++++
- include/linux/sched/clock.h |  5 +++++
- kernel/sched/clock.c        |  4 ++--
- 3 files changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 7e322e2daaf5..ae77b8bc4e46 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -14,6 +14,7 @@
- #include <linux/percpu.h>
- #include <linux/timex.h>
- #include <linux/static_key.h>
-+#include <linux/suspend.h>
- 
- #include <asm/hpet.h>
- #include <asm/timer.h>
-@@ -1534,3 +1535,31 @@ unsigned long calibrate_delay_is_known(void)
- 	return 0;
- }
- #endif
-+
-+static int tsc_pm_notifier(struct notifier_block *notifier,
-+			    unsigned long pm_event, void *unused)
-+{
-+	switch (pm_event) {
-+	case PM_HIBERNATION_PREPARE:
-+		clear_sched_clock_stable();
-+		break;
-+	case PM_POST_HIBERNATION:
-+		/* Set back to the default */
-+		if (!check_tsc_unstable())
-+			set_sched_clock_stable();
-+		break;
-+	}
-+
-+	return 0;
-+};
-+
-+static struct notifier_block tsc_pm_notifier_block = {
-+       .notifier_call = tsc_pm_notifier,
-+};
-+
-+static int tsc_setup_pm_notifier(void)
-+{
-+       return register_pm_notifier(&tsc_pm_notifier_block);
-+}
-+
-+subsys_initcall(tsc_setup_pm_notifier);
-diff --git a/include/linux/sched/clock.h b/include/linux/sched/clock.h
-index 867d588314e0..902654ac5f7e 100644
---- a/include/linux/sched/clock.h
-+++ b/include/linux/sched/clock.h
-@@ -32,6 +32,10 @@ static inline void clear_sched_clock_stable(void)
- {
- }
- 
-+static inline void set_sched_clock_stable(void)
-+{
-+}
-+
- static inline void sched_clock_idle_sleep_event(void)
- {
- }
-@@ -51,6 +55,7 @@ static inline u64 local_clock(void)
- }
- #else
- extern int sched_clock_stable(void);
-+extern void set_sched_clock_stable(void);
- extern void clear_sched_clock_stable(void);
- 
- /*
-diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
-index 1152259a4ca0..374d40e5b1a2 100644
---- a/kernel/sched/clock.c
-+++ b/kernel/sched/clock.c
-@@ -116,7 +116,7 @@ static void __scd_stamp(struct sched_clock_data *scd)
- 	scd->tick_raw = sched_clock();
- }
- 
--static void __set_sched_clock_stable(void)
-+void set_sched_clock_stable(void)
- {
- 	struct sched_clock_data *scd;
- 
-@@ -236,7 +236,7 @@ static int __init sched_clock_init_late(void)
- 	smp_mb(); /* matches {set,clear}_sched_clock_stable() */
- 
- 	if (__sched_clock_stable_early)
--		__set_sched_clock_stable();
-+		set_sched_clock_stable();
- 
- 	return 0;
- }
--- 
-2.15.3.AMZN
-
+Assuming it's exposing some of the same nodes as apps_bcm_voter, the
+other way to do this would be increasing #interconnect-cells, and
+putting the RSC context there. Did you choose not to go that way
+because nearly all the clients would end up specifying the same thing
+of "Apps@EL1"?
