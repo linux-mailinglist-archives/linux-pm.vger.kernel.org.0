@@ -2,124 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B720113413D
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 12:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02731344A2
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 15:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727349AbgAHLyO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jan 2020 06:54:14 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:18538 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgAHLyO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 06:54:14 -0500
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200108115411epoutp04b385b0a577d77be998b4cc9ce5d2b672~n5z7KcS2K0314103141epoutp04a
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jan 2020 11:54:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200108115411epoutp04b385b0a577d77be998b4cc9ce5d2b672~n5z7KcS2K0314103141epoutp04a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1578484451;
-        bh=E+xYphWDk51rG6p9tUxpQQhRIWmuC8pU8XdEZwNuIYo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JyQC4KlPgMZbZqBmlyZQR3F0UKM1P2DXxM1DB3cqoUQN5Kyc1j/h1RcFKuniC60H5
-         9Tw6hrATvHtHj4cxagpxVMZPaCxUatSzMybC7PbrfD28HLJRnIxRjmoACFUWU1d4QY
-         6009kRdqRGzOwLtVtk4Qogt56wwy1N8E0zEgnaOw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200108115410epcas1p133239b8d06846a1ed4cb4e127c5c8b21~n5z6hcZf41987819878epcas1p1J;
-        Wed,  8 Jan 2020 11:54:10 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 47t7283BBjzMqYlm; Wed,  8 Jan
-        2020 11:54:08 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        27.E9.51241.0E2C51E5; Wed,  8 Jan 2020 20:54:08 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200108115407epcas1p282f5f030bd277a1fe42a51b675679de2~n5z4Bwjx61269712697epcas1p2L;
-        Wed,  8 Jan 2020 11:54:07 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200108115407epsmtrp213193ac176de8796a442dfa7b73235c0~n5z4A86BK0259302593epsmtrp22;
-        Wed,  8 Jan 2020 11:54:07 +0000 (GMT)
-X-AuditID: b6c32a39-14bff7000001c829-a8-5e15c2e0d320
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B6.19.06569.FD2C51E5; Wed,  8 Jan 2020 20:54:07 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200108115407epsmtip13a66c989c2d5977912a1e13e41138767~n5z3w0tZB0448304483epsmtip1R;
-        Wed,  8 Jan 2020 11:54:07 +0000 (GMT)
+        id S1727905AbgAHOKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jan 2020 09:10:46 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43305 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbgAHOKq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 09:10:46 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 9so2534703lfq.10;
+        Wed, 08 Jan 2020 06:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lccogS9yuZeqO6yaDuLngyZoEXMXcecoK7V3LfOAwng=;
+        b=Q/yEIhePWop6iZnuc/p7XpzRa7dbBAZtPfY1oDh5x6gRFUhfQQaOf14s3r7ejc2rgl
+         ihT2O8+2aUc+h6K94nKKlGTjXK2BojDW2oV/gEF3C/Pd9hDx2ZXEZE0fOg1X61SLN1fO
+         O6s0Fj8bUk1AD5fr6gOMCjj4ISnK1MTF55UmqstVFbihYti3WzprO80V4XWiX/lYRwIY
+         /7LfrnuWY0HOW/RtVU4TzwH9uW8wwt/i9V1TZSnqrOGc9pH370TkC1vy4BdEPO6+nHCS
+         h2vHLbf62Q7THejpw0QknGFnARAgoVnWAy1n14tBvt+flMFUPcMuWw+XtvXKN9o9XpBP
+         KVSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lccogS9yuZeqO6yaDuLngyZoEXMXcecoK7V3LfOAwng=;
+        b=E16Lv73f4bhr1IeqDNf5vGBIDUVo5A31ZM82myll6IeNNe2YASlfDPrHbw7aZJFl94
+         LYmFRB4N9inBhdWL1VEmM0R24ZZSW5JCQqPhg71v4bSVWdY9sRA7EpU0vT/ciLz6MvPn
+         Mt2EkDHXCXqm3WdsfhTqaaVi8/5bINUVoP6ZG93r46B0C+DTpFjfY8Hn/fT1U0Qkv2Pt
+         0Ju6Jb1dcIlUBUZwcAmUytTbXcxA3vGSnsZ8u8Wy3E/vVyl4TNJ5sKcOWW8ic9AaB8SQ
+         A+CXMJm5v4T9jLnRL1nA9c5Dsn9RqAY+lacPMLZMAFNR0yi0hnL/I5Gor105BNjJuNBw
+         W6ww==
+X-Gm-Message-State: APjAAAU/bWXdUBkdQUGim1W8uEGk6yQZ/NTUk5qLyfZ/R01MCuyayAeL
+        1bzXW0DYh2Fo8XW6UIvZo9I=
+X-Google-Smtp-Source: APXvYqy57EpODYVmCv5z+9GaBm/mCc9xTqG20VUlxfJcT/wJGEFqctdcZLlQoiGshlJ5tGcDCcNjkA==
+X-Received: by 2002:ac2:4d04:: with SMTP id r4mr2942157lfi.77.1578492643361;
+        Wed, 08 Jan 2020 06:10:43 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id m11sm1456718lfj.89.2020.01.08.06.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2020 06:10:42 -0800 (PST)
 Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com, a.swigon@samsung.com,
         m.szyprowski@samsung.com, enric.balletbo@collabora.com,
         hl@rock-chips.com, bjorn.andersson@linaro.org,
         jcrouse@codeaurora.org, chanwoo@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Organization: Samsung Electronics
-Message-ID: <e58888d7-9803-da5e-1054-690fe52284a1@samsung.com>
-Date:   Wed, 8 Jan 2020 21:01:14 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+References: <20200107090519.3231-1-cw00.choi@samsung.com>
+ <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
+ <20200107090519.3231-3-cw00.choi@samsung.com>
+ <b64bf3d4-5b46-243b-495a-e1060af7a266@gmail.com>
+ <9cfbdb8a-1326-e7e3-3a65-c3f8c45eaf19@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e93f6e16-e18d-bafd-5761-ffc8a2642149@gmail.com>
+Date:   Wed, 8 Jan 2020 17:10:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <92367824-d0ac-1be3-e432-292ea1796143@samsung.com>
+In-Reply-To: <9cfbdb8a-1326-e7e3-3a65-c3f8c45eaf19@samsung.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIJsWRmVeSWpSXmKPExsWy7bCmge6DQ6JxBjt/ilvcn9fKaHF6/zsW
-        i4k3rrBYrP74mNFize1DjBY/Npxitti4INvibNMbdosVdz+yWlzeNYfN4nPvEUaLhU0t7BZr
-        j9xlt7jduILNgc9jzbw1jB6X+3qZPHbcXcLosXPWXXaPTas62TzuXNvD5rHx3Q4mj7+z9rN4
-        9G1ZxejxeZNcAFdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKL
-        T4CuW2YO0AdKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnALLAr3ixNzi0rx0veT8
-        XCtDAwMjU6DChOyMyde3sRZ0RFTMeLuMtYHxh3MXIyeHhICJRPeE4+xdjFwcQgI7GCUW/joE
-        5XxilOhtbmeBcL4xStydPJWxi5EDrOXN8kCI+F5Gia/fNzFDOO8ZJdbP/ckCMldYwFtiftcS
-        MJtNQEti/4sbbCC2iECCxJE//5hAGpgFpjBJzD3dywyS4BdQlLj64zEjiM0rYCdx//gPVhCb
-        RUBFYv/hC+wgtqhAmMTJbS1QNYISJ2c+AVvAKWAvseHoDLA5zALiEreezGeCsOUlmrfOBrtO
-        QuAUu8Sn/pNsEF+7SEzfvpMJwhaWeHV8CzuELSXx+d1eqJpqiZUnj7BBNHcwSmzZf4EVImEs
-        sX/pZCZQWDALaEqs36UPEVaU2Pl7LiPEYj6Jd197WCHBxSvR0SYEUaIscfnBXai1khKL2zvZ
-        JjAqzULyziwkL8xC8sIshGULGFlWMYqlFhTnpqcWGxaYIkf3JkZw8tay3MF47JzPIUYBDkYl
-        Ht4fi0XihFgTy4orcw8xSnAwK4nwaukAhXhTEiurUovy44tKc1KLDzGaAkN7IrOUaHI+MLPk
-        lcQbmhoZGxtbmBiamRoaKonzcvy4GCskkJ5YkpqdmlqQWgTTx8TBKdXAaLiy6RLHhdzrf4S9
-        Jk1U7FPba7Lasmf266SrFw5/eSpec1z5sMT+h7WcR1x/BHxqCL33f8Jz6cayz88c9UqW+qy4
-        sSX3eNebdkaGmpzFrNx9x/zvarOv3v30x56dzXHSN00SJgZU3pOPPvPCcIGE8gudmoQlS+d/
-        /bfFqLQo/VuP5VxOnh09IkosxRmJhlrMRcWJAA3R9XL0AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsWy7bCSnO79Q6JxBtdnGVjcn9fKaHF6/zsW
-        i4k3rrBYrP74mNFize1DjBY/Npxitti4INvibNMbdosVdz+yWlzeNYfN4nPvEUaLhU0t7BZr
-        j9xlt7jduILNgc9jzbw1jB6X+3qZPHbcXcLosXPWXXaPTas62TzuXNvD5rHx3Q4mj7+z9rN4
-        9G1ZxejxeZNcAFcUl01Kak5mWWqRvl0CV8bk69tYCzoiKma8XcbawPjDuYuRg0NCwETizfLA
-        LkYuDiGB3YwSS/vWMXcxcgLFJSWmXTzKDFEjLHH4cDFEzVtGiU17f7CD1AgLeEvM71rCAmKz
-        CWhJ7H9xgw3EFhFIkPj7/yMjSAOzwBQmiTm9txghupcySTy+8wysg19AUeLqj8eMIDavgJ3E
-        /eM/WEFsFgEVif2HL4BtEBUIk9i55DETRI2gxMmZT8B6OQXsJTYcnQF2KbOAusSfeZegbHGJ
-        W0/mM0HY8hLNW2czT2AUnoWkfRaSlllIWmYhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0
-        L10vOT93EyM4irW0djCeOBF/iFGAg1GJh3fBQpE4IdbEsuLK3EOMEhzMSiK8WjpAId6UxMqq
-        1KL8+KLSnNTiQ4zSHCxK4rzy+ccihQTSE0tSs1NTC1KLYLJMHJxSDYzzEmRSJKMKV94z/2oW
-        oPFuRcPlmldrD6RtnjtBjFG1zrrd3lJ111LVlksvtxXLP3zFkXrR+azxQgf7vccqd3xt3dLJ
-        ++eJrYxa8YZZ749VJgovyFFdYLtH5XvwnspMnSR+7S6Jj1uf7LCvmRfEveD+8dBt9ZdmzeaT
-        +x9xovDT3ocqJfb/DrcosRRnJBpqMRcVJwIA1sTlid4CAAA=
-X-CMS-MailID: 20200108115407epcas1p282f5f030bd277a1fe42a51b675679de2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea
-References: <20200107090519.3231-1-cw00.choi@samsung.com>
-        <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
-        <20200107090519.3231-3-cw00.choi@samsung.com>
-        <2c259936-f099-a239-9d6b-08f9b253644f@gmail.com>
-        <92367824-d0ac-1be3-e432-292ea1796143@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/8/20 7:56 PM, Chanwoo Choi wrote:
-> Hi,
-> 
-> On 1/8/20 6:31 AM, Dmitry Osipenko wrote:
->> Hello Chanwoo,
->>
+08.01.2020 14:22, Chanwoo Choi пишет:
+> On 1/8/20 6:56 AM, Dmitry Osipenko wrote:
 >> 07.01.2020 12:05, Chanwoo Choi пишет:
 >>> Add new devfreq_transitions debugfs file to track the frequency transitions
 >>> of all devfreq devices for the simple profiling as following:
@@ -204,6 +159,7 @@ On 1/8/20 7:56 PM, Chanwoo Choi wrote:
 >>> @@ -268,6 +268,57 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
 >>>  }
 >>>  EXPORT_SYMBOL(devfreq_update_status);
+>>>  
 >>> +/**
 >>> + * devfreq_update_transitions() - Update frequency transitions for debugfs file
 >>> + * @devfreq:	the devfreq instance
@@ -217,22 +173,6 @@ On 1/8/20 7:56 PM, Chanwoo Choi wrote:
 >>> +} debugfs_transitions[CONFIG_NR_DEVFREQ_TRANSITIONS];
 >>> +
 >>> +static spinlock_t devfreq_debugfs_lock;
->>
->> This could be:
->>
->> static DEFINE_SPINLOCK(devfreq_debugfs_lock);
->>
->> and then spin_lock_init() isn't needed.
-> 
-> OK
-> 
->>
->>
->> Also, The "<linux/spinlock.h>" should be included directly by devfreq.c
-> 
-> OK.
-> 
->>
 >>> +static int debugfs_transitions_index;
 >>> +
 >>> +void devfreq_update_transitions(struct devfreq *devfreq,
@@ -270,16 +210,7 @@ On 1/8/20 7:56 PM, Chanwoo Choi wrote:
 >>> +	spin_unlock(&devfreq_debugfs_lock);
 >>> +}
 >>> +EXPORT_SYMBOL(devfreq_update_transitions);
->>
->> What about EXPORT_SYMBOL_GPL()?
-> 
-> I'll remove it.
-
-Ah. It is needed to support module build.
-it is used by passive governor.
-
-> 
->>
+>>> +
 >>>  /**
 >>>   * find_devfreq_governor() - Find devfreq governor from name
 >>>   * @name:	name of the governor
@@ -327,8 +258,22 @@ it is used by passive governor.
 >>> +			"----------",
 >>> +			"------------",
 >>> +			"------------");
->>> +
->>> +	spin_lock(&devfreq_debugfs_lock);> +	for (count = 0; count < CONFIG_NR_DEVFREQ_TRANSITIONS; count++) {
+>>
+>> Isn't this needed here?
+>>
+>> mutex_lock(&devfreq_list_lock);
+> 
+> It doesn't touch the devfreq instance of devfreq_list.
+> So, it is not necessary locked of devfreq_list_lock.
+
+What stops devfreq device to be removed by another CPU thread while this
+function is in a process of execution?
+
+This condition is unlikely to happen in practice ever, but technically
+it should be possible to happen.
+
+>>> +	spin_lock(&devfreq_debugfs_lock);
+>>> +	for (count = 0; count < CONFIG_NR_DEVFREQ_TRANSITIONS; count++) {
 >>> +		devfreq = debugfs_transitions[i].devfreq;
 >>> +		freqs = &debugfs_transitions[i].freqs;
 >>> +		load = debugfs_transitions[i].load;
@@ -336,74 +281,34 @@ it is used by passive governor.
 >>> +		i = (CONFIG_NR_DEVFREQ_TRANSITIONS == ++i) ? 0 : i;
 >>> +		if (!devfreq)
 >>> +			continue;
->>> +
->>> +#if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
->>> +		if (!strncmp(devfreq->governor_name,
->>> +				DEVFREQ_GOV_PASSIVE, DEVFREQ_NAME_LEN)) {
->>> +			struct devfreq_passive_data *data = devfreq->data;
->>> +
->>> +			if (data)
->>> +				p_devfreq = data->parent;
->>> +		} else {
->>> +			p_devfreq = NULL;
->>> +		}
->>> +#endif
->>> +		seq_printf(s, "%-10lld %-30s %-10s %-10s %-6ld %-12ld %-12ld\n",
->>> +			freqs->time,
->>> +			dev_name(devfreq->dev.parent),
->>> +			dev_name(&devfreq->dev),
->>> +			p_devfreq ? dev_name(&p_devfreq->dev) : "",
->>> +			load,
->>> +			freqs->old,
->>> +			freqs->new);
->>> +	}
->>> +	spin_unlock(&devfreq_debugfs_lock);
->>> +
->>> +	return 0;
->>> +}
->>> +DEFINE_SHOW_ATTRIBUTE(devfreq_transitions);
->>> +
->>>  static int __init devfreq_init(void)
->>>  {
->>>  	devfreq_class = class_create(THIS_MODULE, "devfreq");
->>> @@ -1808,9 +1929,14 @@ static int __init devfreq_init(void)
->>>  		devfreq_debugfs = NULL;
->>>  		pr_warn("%s: couldn't create debugfs dir\n", __FILE__);
->>>  	} else {
->>> +		spin_lock_init(&devfreq_debugfs_lock);
->>> +
->>>  		debugfs_create_file("devfreq_summary", 0444,
->>>  				devfreq_debugfs, NULL,
->>>  				&devfreq_summary_fops);
->>> +		debugfs_create_file("devfreq_transitions", 0444,
->>> +				devfreq_debugfs, NULL,
->>> +				&devfreq_transitions_fops);
->>>  	}
->>>  
->>>  	return 0;
->>> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
->>> index dc7533ccc3db..01eecfdaf2d6 100644
->>> --- a/drivers/devfreq/governor.h
->>> +++ b/drivers/devfreq/governor.h
->>> @@ -68,6 +68,9 @@ extern int devfreq_add_governor(struct devfreq_governor *governor);
->>>  extern int devfreq_remove_governor(struct devfreq_governor *governor);
->>>  
->>>  extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
->>> +extern void devfreq_update_transitions(struct devfreq *devfreq,
->>> +			unsigned long old_freq, unsigned long new_freq,
->>> +			unsigned long busy_time, unsigned long total_time);
 >>
->> The 'extern' attribute isn't needed for function prototypes defined in
->> header files.
->>
->>
+>> I suppose debugfs_transitions[i].devfreq should be set to NULL when
+>> devfreq device is removed, but I don't see it happening anywhere in this
+>> patch.
 > 
-> Right. I'll remove it.
+> When debugfs_transitions[] array is not fully filled out
+> by devfreq_update_transitions(), debugfs_transitions[i].devfreq is NULL.
+> In this case, if user execute 'cat /sys/kernel/debug/devfreq/devfreq_transitions',
+> devfreq_transitions_show() need to check the debugfs_transitions[i].devfreq
+> is NULL or not.
 > 
-> 
+> After filled out the debugfs_transitions[] array,
+> actually, 'if(!devfreq)' is not necessary. Maybe, this style is inefficient
+> It need to rework. I'll think again.
 
+Imagine this situation:
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+1. there is a devfreq device, let's name it defreq123
+
+2. the debugfs_transitions array is getting filled and now it has this
+entry:
+
+	debugfs_transitions[0].devfreq = defreq123
+
+3. user removes defreq123 driver module
+
+	# rmmod defreq123
+
+4. the defreq123 is released now
+
+5. at what memory location debugfs_transitions[0].devfreq is pointing now?
