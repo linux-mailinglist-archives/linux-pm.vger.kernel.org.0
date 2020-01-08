@@ -2,150 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 116DD134DB7
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 21:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D413B134ED0
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 22:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbgAHUid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jan 2020 15:38:33 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42149 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbgAHUic (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 15:38:32 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 66so4909476otd.9
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2020 12:38:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fYbMCE8GKhztIwg7FUhSFbp5MPOuXQT9UONOLwZL9bI=;
-        b=EA/yAFRJdOsf35CMdZHcTQrza/QoIuOcsZDmpjX6mvA+wa5iGfr1BaA4KdKHBeXdG1
-         HzdOvPh7OoSgXhhRnPdROqDY3I9CIIVQnuoXCwPDGx7mmQV9qCN3sdxpvFXzFAVQD3nk
-         WjuQssLOT4vCHcgs651DyWNAuXXD7b+arn5h9o8LzxAoDT3Jz3y4FzZxD3ra5xVToeVW
-         6NXvzp2E06Eiz/o+RIY/aHLaiJodhvXp+Qzp/6m/WYfc3YIO0QR3dEEYlNxb1PqbzE/W
-         wwTz8eDH7umPX1ktDihmSxTh5BCLFkG6xXwVUcv0aa+WPM9wpNJd/Iz9dq8QPZ/2OQbO
-         Ga+A==
-X-Gm-Message-State: APjAAAUuVcTFCnMEsUH7cz4ZhZ0lz+JUL89pK/lm+7p50jm6/Pq7us13
-        cF0xsLgJBBWlVebJ0sT/dS6WuvI=
-X-Google-Smtp-Source: APXvYqzOyENdRNnY3lEhmdWEYVndriUZIFUq8OJ92Mgv6h2GiSMeDuShx00aqhCAgUHJpyon+BYKTw==
-X-Received: by 2002:a9d:1c95:: with SMTP id l21mr5535426ota.271.1578515911493;
-        Wed, 08 Jan 2020 12:38:31 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n25sm1428128oic.6.2020.01.08.12.38.29
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2020 12:38:30 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 220333
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Wed, 08 Jan 2020 14:38:29 -0600
-Date:   Wed, 8 Jan 2020 14:38:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: soc: add mtk svs dt-bindings
-Message-ID: <20200108203829.GA18987@bogus>
-References: <20200107070154.1574-1-roger.lu@mediatek.com>
- <20200107070154.1574-2-roger.lu@mediatek.com>
+        id S1727521AbgAHVYj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jan 2020 16:24:39 -0500
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:37467 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgAHVYj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 16:24:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1578518679; x=1610054679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OYjFFo0DrFCWzOOz/gny+i2vR66GYQHB2pkG1xclaIo=;
+  b=OJVRLUnMY4FBNgKCTu4ANWl63mxgUTWlPxTcoT8D+rnGkNhiTfNzUrtO
+   T2mhu9CkXSd5lIRlUpOdSqKpC5Cul6w7MGnG0pL0zPjAeqML3OzsfKEGW
+   C6Q6NY9QVkLBoU1nekIVIVzw+v4o7qifaJzq6eqAfV9Faq1pXesRy1kau
+   I=;
+IronPort-SDR: pEvaeQmguSuyTaI/dz/YeUORvZXYn05WOkURz0oliguYx//z58wUrptZSkzkMPSfNKtLeXWNlj
+ Vptfrbuz+gvw==
+X-IronPort-AV: E=Sophos;i="5.69,411,1571702400"; 
+   d="scan'208";a="11513237"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-a7fdc47a.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 08 Jan 2020 21:24:35 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-a7fdc47a.us-west-2.amazon.com (Postfix) with ESMTPS id 95D21C5B6F;
+        Wed,  8 Jan 2020 21:24:33 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 8 Jan 2020 21:24:18 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 8 Jan 2020 21:24:17 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ Server id 15.0.1367.3 via Frontend Transport; Wed, 8 Jan 2020 21:24:17 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id DE4FD40E78; Wed,  8 Jan 2020 21:24:17 +0000 (UTC)
+Date:   Wed, 8 Jan 2020 21:24:17 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <x86@kernel.org>, <boris.ostrovsky@oracle.com>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.co>, <roger.pau@citrix.com>, <axboe@kernel.dk>,
+        <davem@davemloft.net>, <rjw@rjwysocki.net>, <len.brown@intel.com>,
+        <pavel@ucw.cz>, <peterz@infradead.org>, <eduval@amazon.com>,
+        <sblbir@amazon.com>, <xen-devel@lists.xenproject.org>,
+        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <fllinden@amazon.com>, <anchalag@amazon.com>
+Subject: Re: [RFC PATCH V2 09/11] xen: Clear IRQD_IRQ_STARTED flag during
+ shutdown PIRQs
+Message-ID: <20200108212417.GA22381@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <20200107234420.GA18738@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <877e22ezv6.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200107070154.1574-2-roger.lu@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <877e22ezv6.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 03:01:52PM +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
+On Wed, Jan 08, 2020 at 04:23:25PM +0100, Thomas Gleixner wrote:
+> Anchal Agarwal <anchalag@amazon.com> writes:
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->  .../devicetree/bindings/power/mtk-svs.txt     | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+> > shutdown_pirq is invoked during hibernation path and hence
+> > PIRQs should be restarted during resume.
+> > Before this commit'020db9d3c1dc0a' xen/events: Fix interrupt lost
+> > during irq_disable and irq_enable startup_pirq was automatically
+> > called during irq_enable however, after this commit pirq's did not
+> > get explicitly started once resumed from hibernation.
+> >
+> > chip->irq_startup is called only if IRQD_IRQ_STARTED is unset during
+> > irq_startup on resume. This flag gets cleared by free_irq->irq_shutdown
+> > during suspend. free_irq() never gets explicitly called for ioapic-edge
+> > and ioapic-level interrupts as respective drivers do nothing during
+> > suspend/resume. So we shut them down explicitly in the first place in
+> > syscore_suspend path to clear IRQ<>event channel mapping. shutdown_pirq
+> > being called explicitly during suspend does not clear this flags, hence
+> > .irq_enable is called in irq_startup during resume instead and pirq's
+> > never start up.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> new file mode 100644
-> index 000000000000..9a3e81b9e1d2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> @@ -0,0 +1,76 @@
-> +* Mediatek Smart Voltage Scaling (MTK SVS)
-> +
-> +This describes the device tree binding for the MTK SVS controller (bank)
-> +which helps provide the optimized CPU/GPU/CCI voltages. This device also
-> +needs thermal data to calculate thermal slope for accurately compensate
-> +the voltages when temperature change.
-> +
-> +Required properties:
-> +- compatible:
-> +  - "mediatek,mt8183-svs" : For MT8183 family of SoCs
-> +- reg: Address range of the MTK SVS controller.
-> +- interrupts: IRQ for the MTK SVS controller.
-> +- clocks, clock-names: Clocks needed for the svs hardware. required
-> +                       clocks are:
-> +		       "main": Main clock for svs controller to work.
-> +- nvmem-cells: Phandle to the calibration data provided by a nvmem device.
-> +- nvmem-cell-names: Should be "svs-calibration-data" and "calibration-data"
-> +
-> +Subnodes:
-> +- svs-cpu-little: SVS bank device node of little CPU
-> +  compatible: "mediatek,mt8183-svs-cpu-little"
-> +  operating-points-v2: OPP table hooked by SVS little CPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcpu-little-supply: PMIC buck of little CPU
-> +- svs-cpu-big: SVS bank device node of big CPU
-> +  compatible: "mediatek,mt8183-svs-cpu-big"
-> +  operating-points-v2: OPP table hooked by SVS big CPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcpu-big-supply: PMIC buck of big CPU
-> +- svs-cci: SVS bank device node of CCI
-> +  compatible: "mediatek,mt8183-svs-cci"
-> +  operating-points-v2: OPP table hooked by SVS CCI bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcci-supply: PMIC buck of CCI
-> +- svs-gpu: SVS bank device node of GPU
-> +  compatible: "mediatek,mt8183-svs-gpu"
-> +  operating-points-v2: OPP table hooked by SVS GPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vgpu-supply: PMIC buck of GPU
-> +
-> +Example:
-> +
-> +	svs: svs@1100b000 {
-> +		compatible = "mediatek,mt8183-svs";
-> +		reg = <0 0x1100b000 0 0x1000>;
-> +		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&infracfg CLK_INFRA_THERM>;
-> +		clock-names = "main_clk";
-> +		nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
-> +		nvmem-cell-names = "svs-calibration-data", "calibration-data";
-> +
-> +		svs_cpu_little: svs-cpu-little {
-> +			compatible = "mediatek,mt8183-svs-cpu-little";
-> +			operating-points-v2 = <&cluster0_opp>;
-> +			vcpu-little-supply = <&mt6358_vproc12_reg>;
-> +		};
+> What? 
+> 
+> > +void irq_state_clr_started(struct irq_desc *desc)
+> >  {
+> >  	irqd_clear(&desc->irq_data, IRQD_IRQ_STARTED);
+> >  }
+> > +EXPORT_SYMBOL_GPL(irq_state_clr_started);
+> 
+> This is core internal state and not supposed to be fiddled with by
+> drivers.
+> 
+> irq_chip has irq_suspend/resume/pm_shutdown callbacks for a reason.
+>
+I agree, as its mentioned in the previous patch {[RFC PATCH V2 08/11]} this is 
+one way of explicitly shutting down legacy devices without introducing too much 
+code for each of the legacy devices. . for eg. in case of floppy there 
+is no suspend/freeze handler which should have done the needful.
+.
+Either we implement them for all the legacy devices that have them missing or
+explicitly shutdown pirqs. I have choosen later for simplicity. I understand
+that ideally we should enable/disable devices interrupts in suspend/resume 
+devices but that requires adding code for doing that to few drivers[and I may
+not know all of them either]
 
-I don't think this is a good binding. This information already exists 
-elsewhere in the DT, so your driver should just look in those nodes. 
-For example the regulator can be in the cpu nodes or the OPP table 
-itself.
+Now I discovered during the flow in hibernation_platform_enter under resume 
+devices that for such devices irq_startup is called which checks for 
+IRQD_IRQ_STARTED flag and based on that it calls irq_enable or irq_startup.
+They are only restarted if the flag is not set which is cleared during shutdown. 
+shutdown_pirq does not do that. Only masking/unmasking of evtchn does not work 
+as pirq needs to be restarted.
+xen-pirq.enable_irq is called rather than stratup_pirq. On resume if these pirqs
+are not restarted in this case ACPI SCI interrupts, I do not see receiving 
+any interrupts under cat /proc/interrupts even though host keeps generating 
+S4 ACPI events. 
+Does that makes sense?
 
-Rob
+Thanks,
+Anchal
+> Thanks,
+> 
+>        tglx
