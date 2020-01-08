@@ -2,91 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3577133E83
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 10:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F2F133EC1
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 10:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbgAHJpx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jan 2020 04:45:53 -0500
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:46036 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726087AbgAHJpx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 04:45:53 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 2550D3F4AC;
-        Wed,  8 Jan 2020 10:45:49 +0100 (CET)
-Authentication-Results: pio-pvt-msa1.bahnhof.se;
-        dkim=pass (1024-bit key; unprotected) header.d=flawful.org header.i=@flawful.org header.b="hSnh9X1+";
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.099
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.099 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
-        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, URIBL_BLOCKED=0.001]
-        autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0b6EX6t8R-PL; Wed,  8 Jan 2020 10:45:48 +0100 (CET)
-Received: from flawful.org (ua-84-217-220-205.bbcust.telenor.se [84.217.220.205])
-        (Authenticated sender: mb274189)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 29CF53F322;
-        Wed,  8 Jan 2020 10:45:46 +0100 (CET)
-Received: by flawful.org (Postfix, from userid 1001)
-        id BF694234; Wed,  8 Jan 2020 10:45:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flawful.org; s=mail;
-        t=1578476745; bh=b8ABfWyk18Jn/VMg7nHgfFeaiagOwhh3UDBYQ/J+09E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hSnh9X1+rz2qVIYAFOcfVuwVtxldo91kSc4g8LK9aEstmdx7AP7hCJrLIcHtKOOVw
-         BFwBtd0SgGnYsXCvD++zJ/AWkh/PaG1B3baUHRNORGjy1Jdjg3+n0TmenXSkEtVGcf
-         C5foHsAQKMQcRLeA098+/L3Faybs5R/aDOLi+pcA=
-Date:   Wed, 8 Jan 2020 10:45:45 +0100
-From:   Niklas Cassel <nks@flawful.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nishanth Menon <nm@ti.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] power: avs: qcom-cpr: remove duplicated include
- from qcom-cpr.c
-Message-ID: <20200108094545.o5o4tpwt4eu5fpye@flawful.org>
-References: <20200108015849.54289-1-yuehaibing@huawei.com>
+        id S1727039AbgAHJ6c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jan 2020 04:58:32 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42377 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726902AbgAHJ6c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 04:58:32 -0500
+Received: by mail-io1-f66.google.com with SMTP id n11so2510813iom.9
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2020 01:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QAtR7WNLGbja1kZFYbC1LM6r/2gOOz73oNIxwZf1sK8=;
+        b=LGhwTuIZMsvckUaUhJ+tDGp6Y0jn0LYn/xbxleZUSDMkTwotTTy+1Fg5ZHuiCgbnuW
+         ABixaa78LQAMQqSXxlOdTlfDx+n2+WrJQM9cCO+dERP4pTnItxTE5IlWAuVhshqD5D0f
+         0ZiCF95TJ+fR3w2e37nT74ePbWYE2y6TFcorU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QAtR7WNLGbja1kZFYbC1LM6r/2gOOz73oNIxwZf1sK8=;
+        b=g3Yu7oId0UAtOdjp+cRFdxQOrjDZUBiOxNWuTmme1Sq1NtujXhWzxtZuUdNHq2On25
+         o6mgUH7JL5RWyc/fB+aApMiDn9Mj1ymAHIFwlLPsPSGaiFXrw7BEx1o+Q78h50ZhiaWk
+         uzTKkwxhG/yajHh2NImsZccSUaq7mW3cqawQA2KADwrhl5aYV/KU/cUvXM+u8C5yaQ8e
+         x4qylnxdCydkAuCbaAyBuJKVtC0HzOle6LX8z6ny31rJip+XxnuO8y9EplV3AwqXeGl7
+         r17z/OU1OqETGmFmejUu7JbxmxeeUHkYxg44oWKsnolh91RlMaNYYBVWHkkvzO1cfcbM
+         E1jQ==
+X-Gm-Message-State: APjAAAU06crMeUWgZW8uDdEMy8UJQFOznkewWpXziZim+C93133vCz5I
+        rO/oNJxWl+Pe/sidrYklTVk97Hb4Kmn4UE2IwAmDcg==
+X-Google-Smtp-Source: APXvYqwH5rufYzM9JfRPQjj7bRhJ6sm9RgJQyx7qvhgpJjalHtt1/UbVPcBLfTvCu23laYbDf4TKavfcetdwMpGEoRY=
+X-Received: by 2002:a6b:3845:: with SMTP id f66mr2819729ioa.102.1578477511547;
+ Wed, 08 Jan 2020 01:58:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200108015849.54289-1-yuehaibing@huawei.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20200103064407.19861-1-michael.kao@mediatek.com> <20200103064407.19861-7-michael.kao@mediatek.com>
+In-Reply-To: <20200103064407.19861-7-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 8 Jan 2020 17:58:05 +0800
+Message-ID: <CAJMQK-hQ5BWp7isGDTz_Y4ttxfoM0guqfcAEFrh3Eq7SMcNM5w@mail.gmail.com>
+Subject: Re: [PATCH v3,6/8] thermal: mediatek: mt8183: fix bank number settings
+To:     Michael Kao <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 01:58:49AM +0000, YueHaibing wrote:
-> Remove duplicated include.
-> 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Fri, Jan 3, 2020 at 2:44 PM Michael Kao <michael.kao@mediatek.com> wrote:
+>
+> MT8183_NUM_ZONES should be set to 1
+> because MT8183 doesn't have multiple banks.
+>
+> Fixes: a4ffe6b52d27 ("thermal: mediatek: add support for MT8183")
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 > ---
->  drivers/power/avs/qcom-cpr.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/power/avs/qcom-cpr.c
-> index 9247f53550b3..9b1d7d919ee9 100644
-> --- a/drivers/power/avs/qcom-cpr.c
-> +++ b/drivers/power/avs/qcom-cpr.c
-> @@ -25,7 +25,6 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/clk.h>
->  #include <linux/nvmem-consumer.h>
-> -#include <linux/bitops.h>
->  
->  /* Register Offsets for RB-CPR and Bit Definitions */
-> 
-> 
-> 
-
-Thank you for this fix.
-
-Acked-by: Niklas Cassel <nks@flawful.org>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
