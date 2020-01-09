@@ -2,63 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5DB13618D
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 21:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E6E136258
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 22:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725763AbgAIUIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 15:08:39 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39294 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728832AbgAIUIi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 15:08:38 -0500
-Received: by mail-wm1-f66.google.com with SMTP id 20so4218452wmj.4
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 12:08:37 -0800 (PST)
+        id S1727854AbgAIVRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 16:17:48 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35814 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgAIVRs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 16:17:48 -0500
+Received: by mail-wr1-f66.google.com with SMTP id g17so8973861wro.2
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 13:17:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cfTQKwhDn39Z9BPcDt5HjRV6ynzFTUIrt1bOiAf4Bjk=;
-        b=dJYcvEmJbcE97RqtVcw5loINNavY94FeTJInKLsHXn4oLH/YTcsByTUafTpo48YZY1
-         M7/CYR7M2bqciWZNqW0Q7QqfP+QqTcgCfb2IPIzBE8XtwbH+ZFSil+tvlQUxq4yvAvrf
-         ulHpxs1qUKzKaLvEr86yt6mTsvKluJeo794UVlCWaS1MQWDeLzDPVm3dGIrzTzvuArWa
-         mq2gtt0SHw7miuA7XDSyJWQTyexVs4as9tBh/V5MAr4EIGq5yPTDnz0z/sSVS3LEEVHO
-         82gSlT5ymZV+l0X62pe2BttJ0IurJ+CLI5x1YFsNx5auxhlEsBxvShjshDCuwnwnvqmX
-         o6jA==
+        bh=qyCXD4vr+CxrllLBvsL4+jVtHYuViKNKBfxikWr3PLM=;
+        b=oRoij5JnWSAzDoK+ggWMXcAqnWhKoBf/TwQrJL3Gd9j4PxZIOAR8KqBO9MB8uHfGnX
+         Y2GZwLjcQRCIbMmjJwv/OkYagNEIppnFmO/sF4Fzm0lch6vUJAVdgELnxoVwH/KhEyg3
+         ekOZUKipGGhrY1E8z5yBttQpWCLLqlAu6UwxZod69xVmwITFG0j+68LltOp0Dp2UoAT7
+         MivWhDveT1P6FYVNCC6fZJWaY5z1njBz6tk+Xyv9vnuOBIlPfHoyziSlBYXhcAtBOoWv
+         3Rd/SfD9LCLBH6pa7FdWVhBGoEb7rtV2Krpre7Hj8Q83qdxLt6swFg69HCsloczWJv1q
+         EM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=cfTQKwhDn39Z9BPcDt5HjRV6ynzFTUIrt1bOiAf4Bjk=;
-        b=kU8np/aTGO73yanvWmx3wUlMGQi/1TQ7I4LYGHSnBzki2IJ1iip55rCvIIgVQbXy/o
-         UN5SmGAbrC7i27FqKHcJcwTymAkD2R4S26iwVV/zixqgKvbh6T+uu2FCVZpNfG/tG4Al
-         IQ5X/gxs1r7qZc09rL05uivCyonu0c8fY7B75Hcg1kRe04wtIw9maqtpwJg4P1epp+lu
-         NczxprxhITyeyXm5AcIL/t2C84Vt8tmfiIoc81pDet7iDWtLavCt9HrWv41rqcH848AS
-         B9sLUjGHpRlJMf80P5H/WE4s6Ff5J+suSmL8i/q8CEGXfwI5ayshXXzRc6gkH2K9kaWo
-         +6kQ==
-X-Gm-Message-State: APjAAAUUGdBL+0XlEIxvr686onhxxcVh/jIyaQRoNcEw2ICpFNesnIZh
-        k6VjhK6EXdZyKctssrXut7AS9wtEic+NdA==
-X-Google-Smtp-Source: APXvYqyg8t+euJPl04/VCZ2VF/CO4WtGVGnXLLqxBZPedKnLK6Ny1yVCXvbanvzqJFw0Rrb2u1aJHQ==
-X-Received: by 2002:a1c:b603:: with SMTP id g3mr6481314wmf.133.1578600516558;
-        Thu, 09 Jan 2020 12:08:36 -0800 (PST)
+        bh=qyCXD4vr+CxrllLBvsL4+jVtHYuViKNKBfxikWr3PLM=;
+        b=lL1d+4l/U3WrMNO00LZvBfAL3Nn7/iERxFEbJVGJswNufvemqUvI4yPyk+NCpR6jKO
+         HO5CcP7G/PT0Z53IZ3XkQEwZgc9a/0MiYSEyz49+nYCWYKrvTVOpmV6519frvR0BgYZe
+         jU3hQLonOmWNnuGpLgOzuceklDUu5Gtw6I+toQlaREUU71y0fimFABMhM5RwkSRof/s2
+         7XrlagVkpSnGhhshJDeXj21Ux+EErKny4gVaHkg6XW3Z7C6SRgFp45a2Q7fW8C1cHX+F
+         xYfHUKhsi8oYXjho5ke3NrX0Xc1ABcgopr1aj6ie14QMPd3ghxd604hAtKErZ2QWoKNU
+         8tgQ==
+X-Gm-Message-State: APjAAAVDVnlnoxqbPkcLOWrDQb/c1eZ0LdKmE55xIwfXW1fcCl4jXAAt
+        AMy171bub4OusVNZDERnYrfDSg==
+X-Google-Smtp-Source: APXvYqxsXWMWUZCh/HEmygjcgJ8fi+WlzDrhxZ5x0b/eKvFt06A6uu6ebKswkzOKN89tLFRMo+/RVg==
+X-Received: by 2002:a5d:6748:: with SMTP id l8mr13221008wrw.188.1578604664754;
+        Thu, 09 Jan 2020 13:17:44 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
-        by smtp.googlemail.com with ESMTPSA id h2sm9613168wrt.45.2020.01.09.12.08.35
+        by smtp.googlemail.com with ESMTPSA id m7sm4111134wma.39.2020.01.09.13.17.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 12:08:36 -0800 (PST)
-Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i-r40: Add thermal sensor and
- thermal zones
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, anarsoul@gmail.com,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        megous@megous.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200106174639.20862-1-tiny.windzz@gmail.com>
- <20200106174639.20862-2-tiny.windzz@gmail.com>
- <20200107075816.ly6exfd4qtvfxxua@gilmour.lan>
- <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
- <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan>
+        Thu, 09 Jan 2020 13:17:44 -0800 (PST)
+Subject: Re: [PATCH v2 2/6] thermal: brcmstb_thermal: Prepare to support a
+ different process
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20191211203143.2952-1-f.fainelli@gmail.com>
+ <20191211203143.2952-3-f.fainelli@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -114,13 +118,13 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <af4bca3b-ba95-aa10-5601-753f1c5275b3@linaro.org>
-Date:   Thu, 9 Jan 2020 21:08:34 +0100
+Message-ID: <a8e6cb1a-fa03-a443-eaa2-2a6385ac6a37@linaro.org>
+Date:   Thu, 9 Jan 2020 22:17:41 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20191211203143.2952-3-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -128,30 +132,169 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/01/2020 14:13, Maxime Ripard wrote:
-> Hi Daniel,
+On 11/12/2019 21:31, Florian Fainelli wrote:
+> The driver is currently assuming that it is operating with a 28nm
+> process chip, which has a specific formula to convert temperature to a
+> code and vice versa. Update the code to support providing two key
+> values: offset and multiplier to derive the correct formulas.
 > 
-> On Thu, Jan 09, 2020 at 12:51:27PM +0100, Daniel Lezcano wrote:
->> On 07/01/2020 08:58, Maxime Ripard wrote:
->>> On Mon, Jan 06, 2020 at 05:46:39PM +0000, Yangtao Li wrote:
->>>> There are two sensors, sensor0 for CPU, sensor1 for GPU.
->>>>
->>>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
->>>> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
->>>> Tested-on: sun8i-r40-bananapi-m2-ultra
->>>
->>> As far as I know, tested-on is not documented anywhere (and isn't
->>> really used either). I've removed it and applied, thanks!
->>
->> I think this patch should go through my tree as it refers to a commit in
->> my branch.
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  drivers/thermal/broadcom/brcmstb_thermal.c | 54 ++++++++++++++++------
+>  1 file changed, 39 insertions(+), 15 deletions(-)
 > 
-> I'm not quite sure to get why. Even though that patch depends on the
-> one affecting the driver to be functional, it doesn't break anything
-> when merged through arm-soc, and similarly yours doesn't affect any
-> other tree if it's merged through your tree, so there's no dependency?
+> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+> index 680f1a070606..68f89f7c7e7f 100644
+> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
+> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+> @@ -102,18 +102,27 @@ static struct avs_tmon_trip avs_tmon_trips[] = {
+>  	},
+>  };
+>  
+> +struct brcmstb_thermal_params {
+> +	unsigned int offset;
+> +	unsigned int mult;
+> +};
+> +
+>  struct brcmstb_thermal_priv {
+>  	void __iomem *tmon_base;
+>  	struct device *dev;
+>  	struct thermal_zone_device *thermal;
+> +	/* Process specific thermal parameters used for calculations */
+> +	struct brcmstb_thermal_params temp_params;
+>  };
+>  
+>  /* Convert a HW code to a temperature reading (millidegree celsius) */
+> -static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+> +static inline int avs_tmon_code_to_temp(struct brcmstb_thermal_priv *priv,
+>  					u32 code)
+>  {
+> -	return (AVS_TMON_TEMP_OFFSET -
+> -		(int)((code & AVS_TMON_TEMP_MAX) * AVS_TMON_TEMP_SLOPE));
+> +	int offset = priv->temp_params.offset;
+> +	int mult = priv->temp_params.mult;
+> +
+> +	return (offset - (int)((code & AVS_TMON_TEMP_MASK) * mult));
+>  }
+>  
+>  /*
+> @@ -122,21 +131,22 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>   * @temp: temperature to convert
+>   * @low: if true, round toward the low side
+>   */
+> -static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
+> +static inline u32 avs_tmon_temp_to_code(struct brcmstb_thermal_priv *priv,
+>  					int temp, bool low)
+>  {
+> +	int offset = priv->temp_params.offset;
+> +	int mult = priv->temp_params.mult;
+> +
+>  	if (temp < AVS_TMON_TEMP_MIN)
+> -		return AVS_TMON_TEMP_MAX;	/* Maximum code value */
+> +		return AVS_TMON_TEMP_MASK;	/* Maximum code value */
 
-Sorry, I puzzled myself, I thought you meant you applied patch 1/2
+Why this change?
+
+>  
+> -	if (temp >= AVS_TMON_TEMP_OFFSET)
+> +	if (temp >= offset)
+>  		return 0;	/* Minimum code value */
+>  
+>  	if (low)
+> -		return (u32)(DIV_ROUND_UP(AVS_TMON_TEMP_OFFSET - temp,
+> -					  AVS_TMON_TEMP_SLOPE));
+> +		return (u32)(DIV_ROUND_UP(offset - temp, mult));
+>  	else
+> -		return (u32)((AVS_TMON_TEMP_OFFSET - temp) /
+> -			      AVS_TMON_TEMP_SLOPE);
+> +		return (u32)((offset - temp) / mult);
+>  }
+>  
+>  static int brcmstb_get_temp(void *data, int *temp)
+> @@ -154,7 +164,7 @@ static int brcmstb_get_temp(void *data, int *temp)
+>  
+>  	val = (val & AVS_TMON_STATUS_data_msk) >> AVS_TMON_STATUS_data_shift;
+>  
+> -	t = avs_tmon_code_to_temp(priv->thermal, val);
+> +	t = avs_tmon_code_to_temp(priv, val);
+>  	if (t < 0)
+>  		*temp = 0;
+>  	else
+> @@ -188,7 +198,7 @@ static int avs_tmon_get_trip_temp(struct brcmstb_thermal_priv *priv,
+>  	val &= trip->reg_msk;
+>  	val >>= trip->reg_shift;
+>  
+> -	return avs_tmon_code_to_temp(priv->thermal, val);
+> +	return avs_tmon_code_to_temp(priv, val);
+>  }
+>  
+>  static void avs_tmon_set_trip_temp(struct brcmstb_thermal_priv *priv,
+> @@ -201,7 +211,7 @@ static void avs_tmon_set_trip_temp(struct brcmstb_thermal_priv *priv,
+>  	dev_dbg(priv->dev, "set temp %d to %d\n", type, temp);
+>  
+>  	/* round toward low temp for the low interrupt */
+> -	val = avs_tmon_temp_to_code(priv->thermal, temp,
+> +	val = avs_tmon_temp_to_code(priv, temp,
+>  				    type == TMON_TRIP_TYPE_LOW);
+>  
+>  	val <<= trip->reg_shift;
+> @@ -218,7 +228,7 @@ static int avs_tmon_get_intr_temp(struct brcmstb_thermal_priv *priv)
+>  	u32 val;
+>  
+>  	val = __raw_readl(priv->tmon_base + AVS_TMON_TEMP_INT_CODE);
+> -	return avs_tmon_code_to_temp(priv->thermal, val);
+> +	return avs_tmon_code_to_temp(priv, val);
+>  }
+>  
+>  static irqreturn_t brcmstb_tmon_irq_thread(int irq, void *data)
+> @@ -282,19 +292,32 @@ static const struct thermal_zone_of_device_ops of_ops = {
+>  	.set_trips	= brcmstb_set_trips,
+>  };
+>  
+> +static const struct brcmstb_thermal_params brcmstb_28nm_params = {
+> +	.offset	= 410040,
+> +	.mult	= 487,
+> +};
+> +
+>  static const struct of_device_id brcmstb_thermal_id_table[] = {
+> -	{ .compatible = "brcm,avs-tmon" },
+> +	{ .compatible = "brcm,avs-tmon", .data = &brcmstb_28nm_params },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, brcmstb_thermal_id_table);
+>  
+>  static int brcmstb_thermal_probe(struct platform_device *pdev)
+>  {
+> +	const struct brcmstb_thermal_params *params;
+> +	const struct of_device_id *of_id = NULL;
+>  	struct thermal_zone_device *thermal;
+>  	struct brcmstb_thermal_priv *priv;
+>  	struct resource *res;
+>  	int irq, ret;
+>  
+> +	of_id = of_match_node(brcmstb_thermal_id_table, pdev->dev.of_node);
+> +	if (!of_id || !of_id->data)
+> +		return -EINVAL;
+
+of_device_get_match_data(&pdev->dev) ?
+
+> +	params = of_id->data;
+> +
+>  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+> @@ -304,6 +327,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+>  	if (IS_ERR(priv->tmon_base))
+>  		return PTR_ERR(priv->tmon_base);
+>  
+> +	memcpy(&priv->temp_params, params, sizeof(priv->temp_params));
+
+Do you really need a copy here? Why not convert to a pointer and assign it?
+
+>  	priv->dev = &pdev->dev;
+>  	platform_set_drvdata(pdev, priv);
+>  
+> 
 
 
 -- 
