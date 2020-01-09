@@ -2,67 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E6E136258
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 22:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8A01362F4
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 23:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727854AbgAIVRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 16:17:48 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35814 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbgAIVRs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 16:17:48 -0500
-Received: by mail-wr1-f66.google.com with SMTP id g17so8973861wro.2
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 13:17:45 -0800 (PST)
+        id S1729169AbgAIWBJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 17:01:09 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43483 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbgAIWBI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 17:01:08 -0500
+Received: by mail-wr1-f65.google.com with SMTP id d16so9032785wre.10
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 14:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qyCXD4vr+CxrllLBvsL4+jVtHYuViKNKBfxikWr3PLM=;
-        b=oRoij5JnWSAzDoK+ggWMXcAqnWhKoBf/TwQrJL3Gd9j4PxZIOAR8KqBO9MB8uHfGnX
-         Y2GZwLjcQRCIbMmjJwv/OkYagNEIppnFmO/sF4Fzm0lch6vUJAVdgELnxoVwH/KhEyg3
-         ekOZUKipGGhrY1E8z5yBttQpWCLLqlAu6UwxZod69xVmwITFG0j+68LltOp0Dp2UoAT7
-         MivWhDveT1P6FYVNCC6fZJWaY5z1njBz6tk+Xyv9vnuOBIlPfHoyziSlBYXhcAtBOoWv
-         3Rd/SfD9LCLBH6pa7FdWVhBGoEb7rtV2Krpre7Hj8Q83qdxLt6swFg69HCsloczWJv1q
-         EM5g==
+        bh=HYhKED7gjIosye2MaUk+v+lXpfi1rPRPPZ4smJ2ypTU=;
+        b=UDwX8cAJYL+gbMbRi+eYQTD74y3UGftX4eqKEV52Z4bj1Sz9EehagSoE0r5zOnrs5P
+         VvZ+p6507DSKzhz6GtdZj1RsPtI+oFSWydKcr8LVbGpw6IXqe7GpzrDSHdajyHGUygwS
+         bgrV3ZBbTGfCeygvB9zRjRGVAuyL5nDHJTN2C6bvXUwpcuON6zZejkG5DtRy5LM/USBV
+         b0NGHEStwWu3c1naep+9mYxDl9xrRFenqigWSoljCH8B0h8CIIKvstjeS8g3dXk2TtLA
+         oDGiBY4CaAWQ1mlFR0nt4Zb4v0J4gxUIWzi1vYaoBd6hP7dlO2h+8yBAtuu2kpWXmajj
+         hODw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=qyCXD4vr+CxrllLBvsL4+jVtHYuViKNKBfxikWr3PLM=;
-        b=lL1d+4l/U3WrMNO00LZvBfAL3Nn7/iERxFEbJVGJswNufvemqUvI4yPyk+NCpR6jKO
-         HO5CcP7G/PT0Z53IZ3XkQEwZgc9a/0MiYSEyz49+nYCWYKrvTVOpmV6519frvR0BgYZe
-         jU3hQLonOmWNnuGpLgOzuceklDUu5Gtw6I+toQlaREUU71y0fimFABMhM5RwkSRof/s2
-         7XrlagVkpSnGhhshJDeXj21Ux+EErKny4gVaHkg6XW3Z7C6SRgFp45a2Q7fW8C1cHX+F
-         xYfHUKhsi8oYXjho5ke3NrX0Xc1ABcgopr1aj6ie14QMPd3ghxd604hAtKErZ2QWoKNU
-         8tgQ==
-X-Gm-Message-State: APjAAAVDVnlnoxqbPkcLOWrDQb/c1eZ0LdKmE55xIwfXW1fcCl4jXAAt
-        AMy171bub4OusVNZDERnYrfDSg==
-X-Google-Smtp-Source: APXvYqxsXWMWUZCh/HEmygjcgJ8fi+WlzDrhxZ5x0b/eKvFt06A6uu6ebKswkzOKN89tLFRMo+/RVg==
-X-Received: by 2002:a5d:6748:: with SMTP id l8mr13221008wrw.188.1578604664754;
-        Thu, 09 Jan 2020 13:17:44 -0800 (PST)
+        bh=HYhKED7gjIosye2MaUk+v+lXpfi1rPRPPZ4smJ2ypTU=;
+        b=XMUTxBhQbRqFHuCTEnjz3ukDX111ZS8H8h5/dKMNJO+UKL7N1/WbJvrmLHQ5K/0wa6
+         mjMNz/5nz2w+NxGlNC4xeJH6yW7/0VnhcMhXkNJyN9shUBNOMlN2sUds4Qg3Yfw6wpd8
+         nCcq7aU4vXT7PYsmc2o7OCK04yVf5SR98Fn6ck8HDPknxcAuZi/x00HAhzkMEEJ5heNN
+         +q8yvsA+XnxNnivg+TYryIaie18+tdUK6NSf5Guh0rVkafg6S0g3jN/sxZiS28r+YcYZ
+         NLVYYlZwYSYDMi3quqoG/G3YRtZOuqJuoIGuNgf0uz6ehFcrpnp1VyTXCUjE2mrw7EFZ
+         NiNA==
+X-Gm-Message-State: APjAAAXkGHDhpP5lxX6xq8mW3VC13R1taOZEZcrGWgq4Al6FhtSerN5x
+        vwpWi/fSHeaYwT9/wrK1RK0Qhg==
+X-Google-Smtp-Source: APXvYqz5cERRuNL66+5/ZLcyck68yNOEs4dBfNIkA+OLlLoihHzNBE8eDy/JQRecYEfCFF5YO0aocA==
+X-Received: by 2002:a5d:5267:: with SMTP id l7mr13975362wrc.84.1578607265516;
+        Thu, 09 Jan 2020 14:01:05 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
-        by smtp.googlemail.com with ESMTPSA id m7sm4111134wma.39.2020.01.09.13.17.41
+        by smtp.googlemail.com with ESMTPSA id x16sm4254202wmk.35.2020.01.09.14.01.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 13:17:44 -0800 (PST)
-Subject: Re: [PATCH v2 2/6] thermal: brcmstb_thermal: Prepare to support a
- different process
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Markus Mayer <mmayer@broadcom.com>,
-        "maintainer:BROADCOM STB AVS TMON DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
+        Thu, 09 Jan 2020 14:01:04 -0800 (PST)
+Subject: Re: [PATCH V3 1/4] dt-bindings: Add Broadcom AVS RO thermal
+To:     Stefan Wahren <wahrenst@gmx.net>, Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20191211203143.2952-1-f.fainelli@gmail.com>
- <20191211203143.2952-3-f.fainelli@gmail.com>
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org
+References: <1578420957-32229-1-git-send-email-wahrenst@gmx.net>
+ <1578420957-32229-2-git-send-email-wahrenst@gmx.net>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -118,12 +113,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <a8e6cb1a-fa03-a443-eaa2-2a6385ac6a37@linaro.org>
-Date:   Thu, 9 Jan 2020 22:17:41 +0100
+Message-ID: <f0e475fc-c155-7f03-5069-aa769b37b38d@linaro.org>
+Date:   Thu, 9 Jan 2020 23:01:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191211203143.2952-3-f.fainelli@gmail.com>
+In-Reply-To: <1578420957-32229-2-git-send-email-wahrenst@gmx.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -132,168 +127,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/12/2019 21:31, Florian Fainelli wrote:
-> The driver is currently assuming that it is operating with a 28nm
-> process chip, which has a specific formula to convert temperature to a
-> code and vice versa. Update the code to support providing two key
-> values: offset and multiplier to derive the correct formulas.
+On 07/01/2020 19:15, Stefan Wahren wrote:
+> Since the BCM2711 doesn't have a AVS TMON block, the thermal information
+> must be retrieved from the AVS ring oscillator block. This block is part
+> of the AVS monitor which contains a bunch of raw sensors.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  drivers/thermal/broadcom/brcmstb_thermal.c | 54 ++++++++++++++++------
->  1 file changed, 39 insertions(+), 15 deletions(-)
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> =2D--
+
+There are spurious characters in the patch.
+
+>  .../bindings/thermal/brcm,avs-ro-thermal.yaml      | 45 +++++++++++++++++=
+> +++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-=
+> thermal.yaml
 > 
-> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
-> index 680f1a070606..68f89f7c7e7f 100644
-> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
-> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
-> @@ -102,18 +102,27 @@ static struct avs_tmon_trip avs_tmon_trips[] = {
->  	},
->  };
->  
-> +struct brcmstb_thermal_params {
-> +	unsigned int offset;
-> +	unsigned int mult;
-> +};
+> diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal=
+> .yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> new file mode 100644
+> index 0000000..98e7b57
+> =2D-- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/brcm,avs-ro-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  struct brcmstb_thermal_priv {
->  	void __iomem *tmon_base;
->  	struct device *dev;
->  	struct thermal_zone_device *thermal;
-> +	/* Process specific thermal parameters used for calculations */
-> +	struct brcmstb_thermal_params temp_params;
->  };
->  
->  /* Convert a HW code to a temperature reading (millidegree celsius) */
-> -static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
-> +static inline int avs_tmon_code_to_temp(struct brcmstb_thermal_priv *priv,
->  					u32 code)
->  {
-> -	return (AVS_TMON_TEMP_OFFSET -
-> -		(int)((code & AVS_TMON_TEMP_MAX) * AVS_TMON_TEMP_SLOPE));
-> +	int offset = priv->temp_params.offset;
-> +	int mult = priv->temp_params.mult;
+> +title: Broadcom AVS ring oscillator thermal
 > +
-> +	return (offset - (int)((code & AVS_TMON_TEMP_MASK) * mult));
->  }
->  
->  /*
-> @@ -122,21 +131,22 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
->   * @temp: temperature to convert
->   * @low: if true, round toward the low side
->   */
-> -static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
-> +static inline u32 avs_tmon_temp_to_code(struct brcmstb_thermal_priv *priv,
->  					int temp, bool low)
->  {
-> +	int offset = priv->temp_params.offset;
-> +	int mult = priv->temp_params.mult;
+> +maintainers:
+> +  - Stefan Wahren <wahrenst@gmx.net>
 > +
->  	if (temp < AVS_TMON_TEMP_MIN)
-> -		return AVS_TMON_TEMP_MAX;	/* Maximum code value */
-> +		return AVS_TMON_TEMP_MASK;	/* Maximum code value */
-
-Why this change?
-
->  
-> -	if (temp >= AVS_TMON_TEMP_OFFSET)
-> +	if (temp >= offset)
->  		return 0;	/* Minimum code value */
->  
->  	if (low)
-> -		return (u32)(DIV_ROUND_UP(AVS_TMON_TEMP_OFFSET - temp,
-> -					  AVS_TMON_TEMP_SLOPE));
-> +		return (u32)(DIV_ROUND_UP(offset - temp, mult));
->  	else
-> -		return (u32)((AVS_TMON_TEMP_OFFSET - temp) /
-> -			      AVS_TMON_TEMP_SLOPE);
-> +		return (u32)((offset - temp) / mult);
->  }
->  
->  static int brcmstb_get_temp(void *data, int *temp)
-> @@ -154,7 +164,7 @@ static int brcmstb_get_temp(void *data, int *temp)
->  
->  	val = (val & AVS_TMON_STATUS_data_msk) >> AVS_TMON_STATUS_data_shift;
->  
-> -	t = avs_tmon_code_to_temp(priv->thermal, val);
-> +	t = avs_tmon_code_to_temp(priv, val);
->  	if (t < 0)
->  		*temp = 0;
->  	else
-> @@ -188,7 +198,7 @@ static int avs_tmon_get_trip_temp(struct brcmstb_thermal_priv *priv,
->  	val &= trip->reg_msk;
->  	val >>= trip->reg_shift;
->  
-> -	return avs_tmon_code_to_temp(priv->thermal, val);
-> +	return avs_tmon_code_to_temp(priv, val);
->  }
->  
->  static void avs_tmon_set_trip_temp(struct brcmstb_thermal_priv *priv,
-> @@ -201,7 +211,7 @@ static void avs_tmon_set_trip_temp(struct brcmstb_thermal_priv *priv,
->  	dev_dbg(priv->dev, "set temp %d to %d\n", type, temp);
->  
->  	/* round toward low temp for the low interrupt */
-> -	val = avs_tmon_temp_to_code(priv->thermal, temp,
-> +	val = avs_tmon_temp_to_code(priv, temp,
->  				    type == TMON_TRIP_TYPE_LOW);
->  
->  	val <<= trip->reg_shift;
-> @@ -218,7 +228,7 @@ static int avs_tmon_get_intr_temp(struct brcmstb_thermal_priv *priv)
->  	u32 val;
->  
->  	val = __raw_readl(priv->tmon_base + AVS_TMON_TEMP_INT_CODE);
-> -	return avs_tmon_code_to_temp(priv->thermal, val);
-> +	return avs_tmon_code_to_temp(priv, val);
->  }
->  
->  static irqreturn_t brcmstb_tmon_irq_thread(int irq, void *data)
-> @@ -282,19 +292,32 @@ static const struct thermal_zone_of_device_ops of_ops = {
->  	.set_trips	= brcmstb_set_trips,
->  };
->  
-> +static const struct brcmstb_thermal_params brcmstb_28nm_params = {
-> +	.offset	= 410040,
-> +	.mult	= 487,
-> +};
+> +description: |+
+> +  The thermal node should be the child of a syscon node with the
+> +  required property:
 > +
->  static const struct of_device_id brcmstb_thermal_id_table[] = {
-> -	{ .compatible = "brcm,avs-tmon" },
-> +	{ .compatible = "brcm,avs-tmon", .data = &brcmstb_28nm_params },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, brcmstb_thermal_id_table);
->  
->  static int brcmstb_thermal_probe(struct platform_device *pdev)
->  {
-> +	const struct brcmstb_thermal_params *params;
-> +	const struct of_device_id *of_id = NULL;
->  	struct thermal_zone_device *thermal;
->  	struct brcmstb_thermal_priv *priv;
->  	struct resource *res;
->  	int irq, ret;
->  
-> +	of_id = of_match_node(brcmstb_thermal_id_table, pdev->dev.of_node);
-> +	if (!of_id || !of_id->data)
-> +		return -EINVAL;
-
-of_device_get_match_data(&pdev->dev) ?
-
-> +	params = of_id->data;
+> +  - compatible: Should be one of the following:
+> +                "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
 > +
->  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
->  		return -ENOMEM;
-> @@ -304,6 +327,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->tmon_base))
->  		return PTR_ERR(priv->tmon_base);
->  
-> +	memcpy(&priv->temp_params, params, sizeof(priv->temp_params));
-
-Do you really need a copy here? Why not convert to a pointer and assign it?
-
->  	priv->dev = &pdev->dev;
->  	platform_set_drvdata(pdev, priv);
->  
+> +  Refer to the the bindings described in
+> +  Documentation/devicetree/bindings/mfd/syscon.txt
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,bcm2711-thermal
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +        avs-monitor@7d5d2000 {
+> +                compatible =3D "brcm,bcm2711-avs-monitor",
+> +                             "syscon", "simple-mfd";
+> +                reg =3D <0x7d5d2000 0xf00>;
+> +
+> +                thermal: thermal {
+> +                        compatible =3D "brcm,bcm2711-thermal";
+> +                        #thermal-sensor-cells =3D <0>;
+> +                };
+> +        };
+> +...
+> =2D-
+> 2.7.4
 > 
 
 
