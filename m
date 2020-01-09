@@ -2,81 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D27134F61
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2020 23:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493E413507A
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 01:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgAHW3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jan 2020 17:29:37 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40524 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726390AbgAHW3g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 17:29:36 -0500
-Received: by mail-oi1-f193.google.com with SMTP id c77so4164835oib.7;
-        Wed, 08 Jan 2020 14:29:36 -0800 (PST)
+        id S1726930AbgAIAcl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jan 2020 19:32:41 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34240 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726913AbgAIAcl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 19:32:41 -0500
+Received: by mail-ot1-f65.google.com with SMTP id a15so5536364otf.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2020 16:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JR/KjA7bK/5h1lh8mNM1kPx+FAOViYqnY1kccdyZdpw=;
+        b=j3Da9P8d6imGyd0RYW8XhpvMCLsnXjixXfOCLE3kkbxwt1ezf4AwTmT7cEHJyR3X76
+         WaENdtnmoyTLZkc9+2qBd/HwZksA2/TAv4sm0QDsCkDDKJfC5dRhEU7dSE65q/6UEJrQ
+         fTc5jJhrsn68YZmWE6QCc8hPsC49BA/vfvgwscRgULKmYnNp7Ku8jYVMZpZuQhojobWe
+         7VEhv5inC6tLvFVwc5hXLh/Ml4bMs4pxNIRenfeWVj/gWRSr1Uz3pZbw9qp8TWL/vAK/
+         OQYD+roonfdZoU4Yrnq6Lj02lb/0P9RzkTndH5AzDkPJWe6Q0xo9qBlQeikjmB5BfA1P
+         Sj0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UeapDn2neSVVmjVhMtHBGmaBFxVH5TlGqSgnHl2gmvg=;
-        b=ISthhoxPi1qe5hssu5fsgXT4wPcr1tOQQMZOAKOuwyAW19hUuqW4NbXlCO4RXhdMYI
-         z/RyH+99qPZgI6PmOVn9txwW2bGXQssE3EaiHBOLnyTNw6f3Zuhq6UaPIogQGZIPpPww
-         3dQsvJm0BQ9GoQ7bjtndn4/6LQMGzPGBXKwJTDUvsCP0wjmgaVjiL5YUpqmIDk72QjE5
-         JFBSlpLBU1YIstWKg1OWW5nmhAYPFNiowRevldXVC+pUaiSnyW9N6pDhk4YP8LYcfh9H
-         CEgbvfx/XckZ54yKrPsaP9ANoajwuLDMMRw2o8ZMBQoO692qRDIamAH5S/ASeQNsz+QV
-         FSDg==
-X-Gm-Message-State: APjAAAUPIxCENgCabNy9cH/SZTaTzr9uJIzoNWS15s9u13/2Dwpy4/0A
-        rz5O1h3RHxMkfmHMjPL/AUI8PLI2XO+qcn1bIEY=
-X-Google-Smtp-Source: APXvYqyLGaQVxY7IVmewU+GjiPA/3nr9z17jC7S4FzD7080BKYAtcP1rJuZYvT1d3ocWawNIoTfwS398cimsxE9i8rE=
-X-Received: by 2002:a54:488d:: with SMTP id r13mr681737oic.115.1578522575967;
- Wed, 08 Jan 2020 14:29:35 -0800 (PST)
+        bh=JR/KjA7bK/5h1lh8mNM1kPx+FAOViYqnY1kccdyZdpw=;
+        b=FamNS8tTkBqi95sO6DlvwtEsY96myM23mUgBKS+H1TWkiS1Q9vxZaLTk2cH2++lYbh
+         2DezpqYmvEKh0ZX+wQogg2Gc0IKg5Tme7wN6k/2iYKYW77e/M+q/wN4p0Bexb990eNO4
+         3Z+UhbK69cIu+Pk9S6fi1F09MHTGPHAXuNfG46nf1SrZME7MRBrp9VO+419+fWyD6Ppk
+         TAxCeyMK45r6MWbR7rlwWaEzwaOcAbFtn0M2348i+mWVD0r4D7/KY66FK68t2QAunRvB
+         nvVinYK1i27PayJe2tJc8fIihiAQkUA/UkvoZ9okiiAT9d2PIaxFMx6gLld1T1WS1DCY
+         EcmA==
+X-Gm-Message-State: APjAAAUM/WW3D81hL4pXkTEKvt3Ib1UNNb4T9a9LznKM6ogvVdljNwTB
+        x+adPSeQdM1DEVknnX5D58jgcldFCIAUFZeeTnpTAg==
+X-Google-Smtp-Source: APXvYqwCihk5u4K5/SRutO9DNp8bfrDx57oO32s94aeDDqmeM0UX5oFd6QJyaXZ8ATE8dF9bYKlJVbqXEUPF7PCj5Xg=
+X-Received: by 2002:a05:6830:1e09:: with SMTP id s9mr6498126otr.139.1578529959892;
+ Wed, 08 Jan 2020 16:32:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20200108053418.tjc62uppube6q4q3@kili.mountain>
-In-Reply-To: <20200108053418.tjc62uppube6q4q3@kili.mountain>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Jan 2020 23:29:24 +0100
-Message-ID: <CAJZ5v0hwo_NzspnM551DjJOKsJNV8ssT_FKwpj3qfhZ+r-ebJg@mail.gmail.com>
-Subject: Re: [PATCH] power: avs: qcom-cpr: Fix error code in cpr_fuse_corner_init()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
+References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-2-saravanak@google.com>
+ <20200108103210.oyrqxlybrdbelkne@vireshk-i7>
+In-Reply-To: <20200108103210.oyrqxlybrdbelkne@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 8 Jan 2020 16:32:03 -0800
+Message-ID: <CAGETcx-fcKmMj4YF7U+zqr47zhAVoSTG_2R-1szik6nVqLykhg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: opp: Introduce opp-peak-kBps and
+ opp-avg-kBps bindings
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 8, 2020 at 6:34 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Wed, Jan 8, 2020 at 2:32 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> We're returning the wrong variable.  "ret" isn't initialized.
+> On 06-12-19, 16:24, Saravana Kannan wrote:
+> > Interconnects often quantify their performance points in terms of
+> > bandwidth. So, add opp-peak-kBps (required) and opp-avg-kBps (optional) to
+> > allow specifying Bandwidth OPP tables in DT.
+> >
+> > opp-peak-kBps is a required property that replaces opp-hz for Bandwidth OPP
+> > tables.
+> >
+> > opp-avg-kBps is an optional property that can be used in Bandwidth OPP
+> > tables.
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/opp/opp.txt     | 15 ++++++++++++---
+> >  .../devicetree/bindings/property-units.txt        |  4 ++++
+> >  2 files changed, 16 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> > index 68592271461f..dbad8eb6c746 100644
+> > --- a/Documentation/devicetree/bindings/opp/opp.txt
+> > +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> > @@ -83,9 +83,14 @@ properties.
+> >
+> >  Required properties:
+> >  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+> > -  required property for all device nodes but devices like power domains. The
+> > -  power domain nodes must have another (implementation dependent) property which
+> > -  uniquely identifies the OPP nodes.
+> > +  required property for all device nodes except for devices like power domains
+> > +  or bandwidth opp tables.
 >
-> Fixes: bf6910abf548 ("power: avs: Add support for CPR (Core Power Reduction)")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/power/avs/qcom-cpr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Fine until here.
 >
-> diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/power/avs/qcom-cpr.c
-> index 9247f53550b3..0321729431a5 100644
-> --- a/drivers/power/avs/qcom-cpr.c
-> +++ b/drivers/power/avs/qcom-cpr.c
-> @@ -922,7 +922,7 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
->                 uV = cpr_read_fuse_uV(desc, fdata, fuses->init_voltage,
->                                       step_volt, drv);
->                 if (uV < 0)
-> -                       return ret;
-> +                       return uV;
+> > The power domain nodes must have another
+> > +  (implementation dependent) property which uniquely identifies the OPP nodes.
+> > +  The interconnect opps are required to have the opp-peak-kBps property.
 >
->                 fuse->min_uV = fdata->min_uV;
->                 fuse->max_uV = fdata->max_uV;
-> --
+> Maybe rewrite it as:
+>
+> The devices which don't have this property must have another
+> (implementation dependent) property which uniquely identifies the OPP
+> nodes.
+>
+> So we won't be required to update this again for another property.
+>
+> > +
+> > +- opp-peak-kBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
+> > +  big-endian integer.
+>
+> > This is a required property for all devices that don't
+> > +  have opp-hz.
+>
+> This statement is surely incorrect, isn't it ? What about power-domain
+> tables ?
+>
+> Suggest rewriting it as:
+>
+> This is a required property for bandwidth OPP tables.
+>
 
-Thanks for the fix, but this issue has been fixed already.
+Agree with all the suggestions. Will fix in the next version.
+
+-Saravana
