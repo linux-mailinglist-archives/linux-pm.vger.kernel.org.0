@@ -2,173 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAA7135F2E
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 18:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9522113603B
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 19:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387899AbgAIRWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 12:22:02 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33660 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728280AbgAIRWB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 12:22:01 -0500
-Received: by mail-pl1-f196.google.com with SMTP id ay11so2792592plb.0
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 09:22:01 -0800 (PST)
+        id S1731093AbgAISfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 13:35:39 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:36075 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730918AbgAISfi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 13:35:38 -0500
+Received: by mail-oi1-f196.google.com with SMTP id c16so6763328oic.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 10:35:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dBdr2bp2TFFl7ixkJ4W5VJTz5FDx1fLRLzXxqlfP9iI=;
-        b=npSHhg5A7HysiwSFyABUiyDkUmg4MLsPZoUv1MSZi9gKkTxm23jfd5zTUvt85lapYj
-         HENesQpqw5u4MCVmxWw0chtIQ9NK2g9mS+VMKXUd/mkJV5t88qg4EWZiDQImvB5wXALe
-         fiK8qANw36Mv3BH9C2JJHm2DymHIqvVZ+nUcJIkTEq/WtLTqTagVE4JdTOD8VtaNmp+P
-         JDCf2DogfkW3U1yDf/Bb2sm/pjQTQMIy6Nm+jOb8EODYjxifhQTyfrK7VeGlfAfEV19f
-         9vPPGNrUSnbP2kjINgcICq4asllAgVlSJJNN6G52aRIFxutCGyhTsk9mgbWsZgp0VTVf
-         M/gw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wmvSr2mzmrRq+l3ZQk2B1GL9COS1rF8Vn1oWheNtkZE=;
+        b=oC6Q4lA6oU3JAgCnxLfNSA+TF08QnqsuxqJZbgwHEudI2pEIZsQ1nrGaP4A7mI0EJY
+         M0S5bEhrCBW0uTR2PHP7zKG9Ngm9vY3hPp3uhle+w7AQwtvbKuyrx1BfvXBJ+LkDRHeL
+         0tjHmjwYpC9W1AmPxoWMY3OQzMA2IJVcmngkURv7vtXk0WFhQFKkKS7+Jh7y3yeIqP1M
+         mZKJe7ltjGyiHXY20XPpAZRFkr6QXJLy63PwWmYlBWb5nirmCCVzXYnmPfT6z/OFv11S
+         6r7n6bKj4NbCpotN5hJ/cQZO5TSoZVh5ZPcsvJdmkr1kg1I2DhAvh4nI4On9Y5zSxsiG
+         /NfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dBdr2bp2TFFl7ixkJ4W5VJTz5FDx1fLRLzXxqlfP9iI=;
-        b=FzlZEt2S6CVjhg6gur93HL7eGRhoy3pPrC1LXz4by/bpFvBEIUnvvAiKWzwJIbC1ej
-         1DLpcNPZ6Jg0uXDhJGK9PQrbSzX5t4pGxcazF+g4Ey7zj0nD9OgnaNsupBVLq29Dz7af
-         N5xwIqW7f0F/EP3IhlhX7KB5SESRFOOlCpgAGpOFj5PLtq9B1qci0zQMr4IoC3jl7cGi
-         P74BYXnWhgo+dw03SdNySoks10AkAYuRRSwOWmr9aTMr7QCAokuz2skK4QgO8athst62
-         n/A5n82gsegRpLB+btd5KvISFdoIt1n4Dj2ZTJJfhMCyD/ZUSn8yaz13aC+qFNN5k1oJ
-         YMxw==
-X-Gm-Message-State: APjAAAUmyFruJQ7maumUuRJ2UsIe8fh6YWTlfFVJ/xtk5kZDj9RMRiGe
-        l2cF5mrJ7xb1mq2ZTHljh5nrpw==
-X-Google-Smtp-Source: APXvYqxPmVDqKmgHApiW2w+JPHBVuxxXFebEJOSq68HFM3InB9WAF+9eHewkQRvNO7oYMCtnr8l56A==
-X-Received: by 2002:a17:90a:e397:: with SMTP id b23mr6465809pjz.135.1578590520746;
-        Thu, 09 Jan 2020 09:22:00 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id b1sm4003998pjw.4.2020.01.09.09.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 09:21:59 -0800 (PST)
-Date:   Thu, 9 Jan 2020 09:21:57 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, leonard.crestez@nxp.com,
-        lukasz.luba@arm.com, a.swigon@samsung.com,
-        m.szyprowski@samsung.com, enric.balletbo@collabora.com,
-        hl@rock-chips.com, jcrouse@codeaurora.org, chanwoo@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
-Message-ID: <20200109172157.GM738324@yoga>
-References: <20200107090519.3231-1-cw00.choi@samsung.com>
- <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
- <20200107090519.3231-3-cw00.choi@samsung.com>
- <20200107214834.GB738324@yoga>
- <c1e6f324-b0c2-41ff-a015-7ba0b29ad42c@gmail.com>
- <9c3574e8-945b-56c4-3425-28e68cd3d2a9@samsung.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wmvSr2mzmrRq+l3ZQk2B1GL9COS1rF8Vn1oWheNtkZE=;
+        b=ZskNj2G4WIh6o6c6kVIsnyQVE7zbDTqeETc8zLw+QfkGBCnWoMAZFvHd2vE4vAJ/wA
+         XqL11d4D5xGYtHKEbmL0QlRx4E2CBoEmZycKfRfDVXYz1owi3HjgXraJf78Zg/29kIGs
+         myOnw5G4SuUQT31GoIbiiaiy0bD7r4QUU9O8RsqmeA1/3pOE5PlW2IaTUV0SxSzXgWYU
+         58HwoVgNBZoMeBup3OVXhDYghzjrpaoyi/3eL4s63WAzKKGX5QaUJJGiU5ThM69BO0la
+         u3xSk487SF4uNqe+mPYri86dhIs21/L1Ndbgfq0amswvQBHU9fbzRJg/p4vAsS3Z0DNE
+         1Gyw==
+X-Gm-Message-State: APjAAAX1+Z8mpw/qB07AasaPniT2b3cu/V1bDIWboFmE2vNiVqkUCvtb
+        sRyINcCukzWkTPt4JWrU2hr1mwavOtlIf9L2svQ95g==
+X-Google-Smtp-Source: APXvYqxeg43koNnpBHaMggqdEav07DfYLsSu2xOzoP2Y/zzJzAcGHBEJCOpPO7lKIokUUug4FsP0h1PlowvFAuyIvYk=
+X-Received: by 2002:aca:d4c1:: with SMTP id l184mr4437841oig.172.1578594937570;
+ Thu, 09 Jan 2020 10:35:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c3574e8-945b-56c4-3425-28e68cd3d2a9@samsung.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-3-saravanak@google.com>
+ <20200108105348.p4y3s2mbuchiu4mf@vireshk-i7> <CAGETcx8QEV+_+d2yt_+bE09mi4qyHZDHPJqPiDXv_HgJPgQJoQ@mail.gmail.com>
+ <20200109043108.fzvk3hp7vodtw6zy@vireshk-i7>
+In-Reply-To: <20200109043108.fzvk3hp7vodtw6zy@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 9 Jan 2020 10:35:01 -0800
+Message-ID: <CAGETcx_1B8AfxBuJ9Mbq8BNx-fYyP8pOnF6caN=ooyPARaaJ3A@mail.gmail.com>
+Subject: Re: [PATCH v6 2/3] OPP: Add support for bandwidth OPP tables
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 09 Jan 00:07 PST 2020, Chanwoo Choi wrote:
+On Wed, Jan 8, 2020 at 8:31 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 08-01-20, 16:58, Saravana Kannan wrote:
+> > On Wed, Jan 8, 2020 at 2:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 06-12-19, 16:24, Saravana Kannan wrote:
+> > > > Not all devices quantify their performance points in terms of frequency.
+> > > > Devices like interconnects quantify their performance points in terms of
+> > > > bandwidth. We need a way to represent these bandwidth levels in OPP. So,
+> > > > add support for parsing bandwidth OPPs from DT.
+> > > >
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > ---
+> > > >  drivers/opp/core.c | 15 +++++++++--
+> > > >  drivers/opp/of.c   | 63 ++++++++++++++++++++++++++++++++--------------
+> > > >  drivers/opp/opp.h  |  5 ++++
+> > > >  3 files changed, 62 insertions(+), 21 deletions(-)
+> > > >
+> > > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > > > index be7a7d332332..c79bbfac7289 100644
+> > > > --- a/drivers/opp/core.c
+> > > > +++ b/drivers/opp/core.c
+> > > > @@ -1282,11 +1282,21 @@ static bool _opp_supported_by_regulators(struct dev_pm_opp *opp,
+> > > >       return true;
+> > > >  }
+> > > >
+> > > > +int opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2)
+> > > > +{
+> > > > +     if (opp1->rate != opp2->rate)
+> > > > +             return opp1->rate < opp2->rate ? -1 : 1;
+> > > > +     if (opp1->peak_bw != opp2->peak_bw)
+> > > > +             return opp1->peak_bw < opp2->peak_bw ? -1 : 1;
+> > >
+> > > Please also add level here.
+> >
+> > I can, but I vaguely remember finding opp-levels could have
+> > duplicates? Am I wrong? If so I can add the opp-level comparison too.
+>
+> No they can't have duplicates.
+>
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > >  static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
+> > > >                            struct opp_table *opp_table,
+> > > >                            struct list_head **head)
+> > > >  {
+> > > >       struct dev_pm_opp *opp;
+> > > > +     int opp_cmp;
+> > > >
+> > > >       /*
+> > > >        * Insert new OPP in order of increasing frequency and discard if
+> > > > @@ -1297,12 +1307,13 @@ static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
+> > > >        * loop.
+> > > >        */
+> > > >       list_for_each_entry(opp, &opp_table->opp_list, node) {
+> > > > -             if (new_opp->rate > opp->rate) {
+> > > > +             opp_cmp = opp_compare_key(new_opp, opp);
+> > > > +             if (opp_cmp > 0) {
+> > > >                       *head = &opp->node;
+> > > >                       continue;
+> > > >               }
+> > > >
+> > > > -             if (new_opp->rate < opp->rate)
+> > > > +             if (opp_cmp < 0)
+> > > >                       return 0;
+> > > >
+> > > >               /* Duplicate OPPs */
+> > > > diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> > > > index 1cbb58240b80..b565da5a2b1f 100644
+> > > > --- a/drivers/opp/of.c
+> > > > +++ b/drivers/opp/of.c
+> > > > @@ -521,6 +521,44 @@ void dev_pm_opp_of_remove_table(struct device *dev)
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+> > > >
+> > > > +static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
+> > > > +                      bool *rate_not_available)
+> > > > +{
+> > > > +     int ret;
+> > > > +     u64 rate;
+> > > > +     u32 bw;
+> > > > +
+> > > > +     ret = of_property_read_u64(np, "opp-hz", &rate);
+> > > > +     if (!ret) {
+> > > > +             /*
+> > > > +              * Rate is defined as an unsigned long in clk API, and so
+> > > > +              * casting explicitly to its type. Must be fixed once rate is 64
+> > > > +              * bit guaranteed in clk API.
+> > > > +              */
+> > > > +             new_opp->rate = (unsigned long)rate;
+> > > > +             goto out;
+> > > > +     }
+> > > > +
+> > > > +     ret = of_property_read_u32(np, "opp-peak-kBps", &bw);
+> > > > +     if (!ret) {
+> > > > +             new_opp->peak_bw = bw;
+> > > > +
+> > > > +             if (!of_property_read_u32(np, "opp-avg-kBps", &bw))
+> > > > +                     new_opp->avg_bw = bw;
+> > >
+> > > Maybe
+> > >                 of_property_read_u32(np, "opp-avg-kBps", &new_opp->avg_bw);
+> > >
+> > > and same for opp-peak-kbps as well.
+> >
+> > But those are not u32. Is it always safe to directly read into it
+> > across all endian-ness and unsigned int sizes? I get tripped up by
+> > that occasionally.
+>
+> It may not be safe.
 
-> Hi Bjorn and Dmitry,
-> 
-> I replied from Bjorn and Dmitry opinion.
-> 
-> On 1/8/20 11:20 PM, Dmitry Osipenko wrote:
-> > 08.01.2020 00:48, Bjorn Andersson ??????????:
-> >> On Tue 07 Jan 01:05 PST 2020, Chanwoo Choi wrote:
-> >>
-> >>> Add new devfreq_transitions debugfs file to track the frequency transitions
-> >>> of all devfreq devices for the simple profiling as following:
-> >>> - /sys/kernel/debug/devfreq/devfreq_transitions
-> >>>
-> >>> And the user can decide the storage size (CONFIG_NR_DEVFREQ_TRANSITIONS)
-> >>> in Kconfig in order to save the transition history.
-> >>>
-> >>> [Detailed description of each field of 'devfreq_transitions' debugfs file]
-> >>> - time_ms	: Change time of frequency transition. (unit: millisecond)
-> >>> - dev_name	: Device name of h/w.
-> >>> - dev		: Device name made by devfreq core.
-> >>> - parent_dev	: If devfreq device uses the passive governor,
-> >>> 		  show parent devfreq device name.
-> >>> - load_%	: If devfreq device uses the simple_ondemand governor,
-> >>> 		  load is used by governor whene deciding the new frequency.
-> >>> 		  (unit: percentage)
-> >>> - old_freq_hz	: Frequency before changing. (unit: hz)
-> >>> - new_freq_hz	: Frequency after changed. (unit: hz)
-> >>>
-> >>> [For example on Exynos5422-based Odroid-XU3 board]
-> >>> $ cat /sys/kernel/debug/devfreq/devfreq_transitions
-> >>> time_ms    dev_name                       dev        parent_dev load_% old_freq_hz  new_freq_hz
-> >>> ---------- ------------------------------ ---------- ---------- ---------- ------------ ------------
-> >>> 14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000    67000000
-> >>> 14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
-> >>> 14600      soc:bus_fsys                   devfreq4   devfreq1   0      200000000    100000000
-> >>> 14600      soc:bus_fsys2                  devfreq5   devfreq1   0      150000000    75000000
-> >>> 14602      soc:bus_mfc                    devfreq6   devfreq1   0      222000000    96000000
-> >>> 14602      soc:bus_gen                    devfreq7   devfreq1   0      267000000    89000000
-> >>> 14602      soc:bus_g2d                    devfreq9   devfreq1   0      300000000    84000000
-> >>> 14602      soc:bus_g2d_acp                devfreq10  devfreq1   0      267000000    67000000
-> >>> 14602      soc:bus_jpeg                   devfreq11  devfreq1   0      300000000    75000000
-> >>> 14602      soc:bus_jpeg_apb               devfreq12  devfreq1   0      167000000    84000000
-> >>> 14603      soc:bus_disp1_fimd             devfreq13  devfreq1   0      200000000    120000000
-> >>> 14603      soc:bus_disp1                  devfreq14  devfreq1   0      300000000    120000000
-> >>> 14606      soc:bus_gscl_scaler            devfreq15  devfreq1   0      300000000    150000000
-> >>> 14606      soc:bus_mscl                   devfreq16  devfreq1   0      333000000    84000000
-> >>> 14608      soc:bus_wcore                  devfreq1              9      333000000    84000000
-> >>> 14783      10c20000.memory-controller     devfreq0              35     825000000    633000000
-> >>> 15873      soc:bus_wcore                  devfreq1              41     84000000     400000000
-> >>> 15873      soc:bus_noc                    devfreq2   devfreq1   0      67000000     100000000
-> >>> [snip]
-> >>>
-> >>
-> >> Wouldn't it make more sense to expose this through the tracing
-> >> framework - like many other subsystems does?
-> > 
-> > I think devfreq core already has some tracing support and indeed it
-> > should be better to extend it rather than duplicate.
-> > 
-> 
-> First of all, thanks for comments.
-> 
-> Before developing it, I have considered what is better to
-> support debugging features for devfreq device. As you commented,
-> trace event is more general way to catch the detailed behavior.
-> 
+Ok, so I'll leave it as is then.
 
-It's more general, it has already dealt with the locking and life cycle
-questions that was brought up by others and it allows getting traces
-devfreq traces in the same timeline as other events (to give insight in
-cross-framework behavior).
+>
+> > > > +     }
+> > > > +
+> > > > +out:
+> > > > +     *rate_not_available = !!ret;
+> > > > +     /*
+> > > > +      * If ret is 0 at this point, we have already found a key. If we
+> > > > +      * haven't found a key yet, then ret already has an error value. In
+> > > > +      * either case, we don't need to update ret.
+> > > > +      */
+> > > > +     of_property_read_u32(np, "opp-level", &new_opp->level);
+> > >
+> > > Yes, it wasn't done earlier but we should do it now. Check level as
+> > > well and treat it as any other key.
+> > >
+> > > I think add a preparatory patch first which does all the cleanup
+> > > before bandwidth thing is added.
+> >
+> > Ah come on man! You are making this too painful. It's okay to add a
+> > few more error checks as part of implementing a new feature. Please
+> > don't make me add more patches before this.
+>
+> It will only make your life easier and not painful in my opinion as
+> the reviews are getting mixed/confused between the new things and the
+> old fields right now. With a separate patch introducing just the
+> bandwidth part, it will get reviewed in maximum 1-2 versions, else you
+> will keep updating the unrelated patch and I will keep reviewing it as
+> it is all a single patch.
+>
+> It is always suggested to break patches into the smallest possible
+> meaningful separate things you want to achieve. You are introducing
+> something here and adding cleanup to that.
 
-> But, I hope to provide the very easy simple profiling way
-> for user if it is not harmful to the principle of linux kernel.
-> 
+Ok I completely misunderstood (in a stupid way) what you were asking
+me to do. I don't mind breaking it up into smaller patches at all.
+Will do so.
 
-You would achieve the same simplicity by integrating with the trace
-framework instead of rolling your own subset of the functionality.
+> > > > +
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > >  /**
+> > > >   * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
+> > > >   * @opp_table:       OPP table
+> > > > @@ -558,26 +596,12 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+> > > >       if (!new_opp)
+> > > >               return ERR_PTR(-ENOMEM);
+> > > >
+> > > > -     ret = of_property_read_u64(np, "opp-hz", &rate);
+> > > > -     if (ret < 0) {
+> > > > -             /* "opp-hz" is optional for devices like power domains. */
+> > > > -             if (!opp_table->is_genpd) {
+> > > > -                     dev_err(dev, "%s: opp-hz not found\n", __func__);
+> > > > -                     goto free_opp;
+> > > > -             }
+> > > > -
+> > > > -             rate_not_available = true;
+> > > > -     } else {
+> > > > -             /*
+> > > > -              * Rate is defined as an unsigned long in clk API, and so
+> > > > -              * casting explicitly to its type. Must be fixed once rate is 64
+> > > > -              * bit guaranteed in clk API.
+> > > > -              */
+> > > > -             new_opp->rate = (unsigned long)rate;
+> > > > +     ret = _read_opp_key(new_opp, np, &rate_not_available);
+> > > > +     if (ret) {
+> > > > +             dev_err(dev, "%s: opp key field not found\n", __func__);
+> > > > +             goto free_opp;
+> > > >       }
+> > > >
+> > > > -     of_property_read_u32(np, "opp-level", &new_opp->level);
+> > > > -
+> > > >       /* Check if the OPP supports hardware's hierarchy of versions or not */
+> > > >       if (!_opp_is_supported(dev, opp_table, np)) {
+> > > >               dev_dbg(dev, "OPP not supported by hardware: %llu\n", rate);
+> > > > @@ -616,7 +640,8 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+> > > >       if (of_property_read_bool(np, "opp-suspend")) {
+> > > >               if (opp_table->suspend_opp) {
+> > > >                       /* Pick the OPP with higher rate as suspend OPP */
+> > > > -                     if (new_opp->rate > opp_table->suspend_opp->rate) {
+> > > > +                     if (opp_compare_key(new_opp,
+> > > > +                                         opp_table->suspend_opp) > 1) {
+> > >
+> > > Maybe leave this place as is as we never want to compare anything else
+> > > but rate.
+> >
+> > We do want to support suspend bandwidth.
+>
+> Yeah, I understood that from a later patch.
+>
+> > So I think I should have this
+> > fix here so it works in general. Also, why not suspend opp-level?
+>
+> Because we don't want/need to set a specific value to the
+> voltage-corners during suspend directly from the PM domain driver.
+> This should happen automatically via a call from the underlying
+> cpufreq or device driver.
 
-I know that it's the principle of the Linux kernel that everyone should
-have their own ring buffer implementation, but you should try to use the
-existing ones when it makes sense. And in my view this is a prime
-example - with many additional benefits of doing so.
+Agreed for the example you are giving where PM domains/voltages are
+dropped automatically when dropping the device freq to suspend freq.
+I'm just wondering about a different scenario where if some power
+domain needed to be at say 0.5v when it's suspended (no consumer using
+it) to not lose state, or to come back up without brownouts, etc then
+suspend OPP for PM domains might be useful. But I don't know enough
+about that to speak with authority, so I'll leave it at this.
 
-> In order to prevent the performance regression when DEBUG_FS is enabled,
-> I will add the CONFIG_DEVFREQ_TRANSITIONS_DEBUG for 'devfreq_transitions'
-> to make it selectable.
-> 
+> And that's what I expected out of the interconnect thing. For example,
+> say during suspend you put the interconnect or PM domains to a low
+> bandwidth/level value, while the underlying device driver (which uses
+> the interconnect or domain) never requested for it. Who will be
+> responsible to restore the value during resume as we would be out of
+> sync here.
 
-The tracing framework has both static and dynamic mechanisms for
-avoiding performance penalties when tracing is disabled and does provide
-better performance than your proposal when active.
+I see this suspend-opp as a way to mark to what level the bandwidth
+needs to be dropped to/brought back up from during suspend/resume by
+the driver making interconnect bandwidth requests. For example, what
+if the CPU -> DDR needed to be at some level to avoid suspend/resume
+issues (say CPU bug with respect to timing/latencies)? In this
+example, the CPU driver would be the one making bandwidth requests for
+CPU -> DDR bandwidth during normal operation and during
+suspend/resume. So it's basically exactly the same way it would treat
+CPU freq OPP.
 
-Relying on a Kconfig option means that with e.g. arm64 devices being
-built from a single defconfig we will either all be missing this feature
-or we will all always keep logging devfreq transitions to your buffer.
+Btw, I don't have a strong opinion on this. But, even if we do only a
+rate comparison, what does it even mean to compare rates for genpd or
+BW opp tables? It's just weird. So I think it's nicer to just allow
+marking any OPP as suspend OPP in any OPP table type. If there's a
+need people can use it, if not, nothing is lost.
 
-Regards,
-Bjorn
+-Saravana
