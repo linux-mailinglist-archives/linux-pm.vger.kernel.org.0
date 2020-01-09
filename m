@@ -2,214 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 207DA13605C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 19:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5DB13618D
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 21:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730531AbgAISol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 13:44:41 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41113 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729778AbgAISoi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 13:44:38 -0500
-Received: by mail-ot1-f68.google.com with SMTP id r27so8252566otc.8
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 10:44:38 -0800 (PST)
+        id S1725763AbgAIUIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 15:08:39 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39294 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728832AbgAIUIi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 15:08:38 -0500
+Received: by mail-wm1-f66.google.com with SMTP id 20so4218452wmj.4
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 12:08:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8XTYu6dx3P7+neGNkEsuHx7Hl39JFzGEmh9FvOI/6t8=;
-        b=U8I2YmCRoAq67WWxoFFCJ3k3gOrykE2YQwTErZWVe+5AoPziMhEmwKx1VMD0KMFPCX
-         +jbhGCIi7LaCyRozBXGg67tWcEshu9t/nV+5GRwcrDrqaDPVF/q7WB8dwyvMqzHqXwXh
-         vrxb+U/3GbD3UJN8t4zfHH1mfu+g+1u0RsxmiGudZ7HOzTAUZJgwQCEkmMzHDz3VZVLP
-         1NJnm0l580uFrBULSlvulQKs3TC7T5fJclJfMNd+rdGx7VAt3rjC3csdddytt5qAtS3Z
-         elFxbmidwN6O0NCzzqYHweFXkI8SZ4G5Gp6oB6GfQmpbRyFtz4PI/ZFnReNOyC4mjr8l
-         abGQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cfTQKwhDn39Z9BPcDt5HjRV6ynzFTUIrt1bOiAf4Bjk=;
+        b=dJYcvEmJbcE97RqtVcw5loINNavY94FeTJInKLsHXn4oLH/YTcsByTUafTpo48YZY1
+         M7/CYR7M2bqciWZNqW0Q7QqfP+QqTcgCfb2IPIzBE8XtwbH+ZFSil+tvlQUxq4yvAvrf
+         ulHpxs1qUKzKaLvEr86yt6mTsvKluJeo794UVlCWaS1MQWDeLzDPVm3dGIrzTzvuArWa
+         mq2gtt0SHw7miuA7XDSyJWQTyexVs4as9tBh/V5MAr4EIGq5yPTDnz0z/sSVS3LEEVHO
+         82gSlT5ymZV+l0X62pe2BttJ0IurJ+CLI5x1YFsNx5auxhlEsBxvShjshDCuwnwnvqmX
+         o6jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8XTYu6dx3P7+neGNkEsuHx7Hl39JFzGEmh9FvOI/6t8=;
-        b=cnqG3IlIIsAUwRgBh5eu03w4LM+P6h5QRmvbpIy0o8ICnxE3fPBeSHa2P3z7C/6rJS
-         YwiPUF30X+3HPcPR9LKDphrSC2IwCLh94LV0Xx+o3DQr9u/mTlXWWM+zTXbHJWlEWbBF
-         AbW9X8KiMtj3ekR6aBIgRmpUO6OWXTmKA8KmfZ7p3yEU7EKVUjZZT5uZeRxxACQEs/0O
-         iBH1IYb7vrMXERBQ/lRBQ8xvjysv0txaW2EO6P3QnEsdUrXd8Zmh1HwcBL1qZIl1Mtuz
-         /WYHH6b8t35OtoTXtV9VeoAA0fc8kYuajJp3Enj7auDgAtVC7aKgughkIqePA0s0Od7l
-         esxQ==
-X-Gm-Message-State: APjAAAXT3DRNW6uM3VnLjzQRj0gYrQ3PqGJ0KmuRsLWFQDWv/iiAS89x
-        +TR9q+mm1K+OUY5zb32Sc+q58xaZyoEj3zrQ0PF0kA==
-X-Google-Smtp-Source: APXvYqwbORFOz9hNPUv86p8ax7GkF+op9OEIJjbOBrv/fGZR+RsiVZt588/jpZ7zEUY+jEIrhutCl+sw14/o5poL9tg=
-X-Received: by 2002:a05:6830:121a:: with SMTP id r26mr9606498otp.225.1578595477678;
- Thu, 09 Jan 2020 10:44:37 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=cfTQKwhDn39Z9BPcDt5HjRV6ynzFTUIrt1bOiAf4Bjk=;
+        b=kU8np/aTGO73yanvWmx3wUlMGQi/1TQ7I4LYGHSnBzki2IJ1iip55rCvIIgVQbXy/o
+         UN5SmGAbrC7i27FqKHcJcwTymAkD2R4S26iwVV/zixqgKvbh6T+uu2FCVZpNfG/tG4Al
+         IQ5X/gxs1r7qZc09rL05uivCyonu0c8fY7B75Hcg1kRe04wtIw9maqtpwJg4P1epp+lu
+         NczxprxhITyeyXm5AcIL/t2C84Vt8tmfiIoc81pDet7iDWtLavCt9HrWv41rqcH848AS
+         B9sLUjGHpRlJMf80P5H/WE4s6Ff5J+suSmL8i/q8CEGXfwI5ayshXXzRc6gkH2K9kaWo
+         +6kQ==
+X-Gm-Message-State: APjAAAUUGdBL+0XlEIxvr686onhxxcVh/jIyaQRoNcEw2ICpFNesnIZh
+        k6VjhK6EXdZyKctssrXut7AS9wtEic+NdA==
+X-Google-Smtp-Source: APXvYqyg8t+euJPl04/VCZ2VF/CO4WtGVGnXLLqxBZPedKnLK6Ny1yVCXvbanvzqJFw0Rrb2u1aJHQ==
+X-Received: by 2002:a1c:b603:: with SMTP id g3mr6481314wmf.133.1578600516558;
+        Thu, 09 Jan 2020 12:08:36 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
+        by smtp.googlemail.com with ESMTPSA id h2sm9613168wrt.45.2020.01.09.12.08.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2020 12:08:36 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i-r40: Add thermal sensor and
+ thermal zones
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, wens@csie.org, anarsoul@gmail.com,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        megous@megous.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20200106174639.20862-1-tiny.windzz@gmail.com>
+ <20200106174639.20862-2-tiny.windzz@gmail.com>
+ <20200107075816.ly6exfd4qtvfxxua@gilmour.lan>
+ <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
+ <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <af4bca3b-ba95-aa10-5601-753f1c5275b3@linaro.org>
+Date:   Thu, 9 Jan 2020 21:08:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-4-saravanak@google.com>
- <20200108111947.q5aafrlz26tnk3nq@vireshk-i7> <CAGETcx_T7VONkSd-r9CY-5OpZBZ2iD0tFoCf0+d8CY2b5zgr9g@mail.gmail.com>
- <20200109044051.62ocfpt44q25q6qi@vireshk-i7>
-In-Reply-To: <20200109044051.62ocfpt44q25q6qi@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 9 Jan 2020 10:44:01 -0800
-Message-ID: <CAGETcx-UWFSaZ8q1iiFVFUEPLN8t1uFb-u6v4VJiMarS21RLRQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] OPP: Add helper function for bandwidth OPP tables
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
-        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 8, 2020 at 8:40 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 08-01-20, 16:58, Saravana Kannan wrote:
-> > On Wed, Jan 8, 2020 at 3:19 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >  /**
-> > > >   * dev_pm_opp_get_level() - Gets the level corresponding to an available opp
-> > > >   * @opp:     opp for which level value has to be returned for
-> > > > @@ -299,6 +322,34 @@ unsigned long dev_pm_opp_get_suspend_opp_freq(struct device *dev)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_get_suspend_opp_freq);
-> > > >
-> > > > +/**
-> > > > + * dev_pm_opp_get_suspend_opp_bw() - Get peak bandwidth of suspend opp in kBps
-> > >
-> > > Hmm, I wasn't expecting this. So the interconnects will also have a
-> > > suspend OPP ?
-> >
-> > Yes, device voting for interconnect paths might want to lower the
-> > bandwidth to a suspend bandwidth when they suspend.
->
-> That's exactly what I was saying, the request for a change during
-> suspend should come from the device
+On 09/01/2020 14:13, Maxime Ripard wrote:
+> Hi Daniel,
+> 
+> On Thu, Jan 09, 2020 at 12:51:27PM +0100, Daniel Lezcano wrote:
+>> On 07/01/2020 08:58, Maxime Ripard wrote:
+>>> On Mon, Jan 06, 2020 at 05:46:39PM +0000, Yangtao Li wrote:
+>>>> There are two sensors, sensor0 for CPU, sensor1 for GPU.
+>>>>
+>>>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+>>>> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+>>>> Tested-on: sun8i-r40-bananapi-m2-ultra
+>>>
+>>> As far as I know, tested-on is not documented anywhere (and isn't
+>>> really used either). I've removed it and applied, thanks!
+>>
+>> I think this patch should go through my tree as it refers to a commit in
+>> my branch.
+> 
+> I'm not quite sure to get why. Even though that patch depends on the
+> one affecting the driver to be functional, it doesn't break anything
+> when merged through arm-soc, and similarly yours doesn't affect any
+> other tree if it's merged through your tree, so there's no dependency?
 
-Agree. And this tells the device requesting for bandwidth, what
-bandwidth to vote for when it's suspending. Keep in mind that these
-bandwidth OPP tables are used by the consumers of the interconnects to
-pick from a list of bandwidths to vote for.
+Sorry, I puzzled myself, I thought you meant you applied patch 1/2
 
-> and you can't do it here, i.e.
-> they should lower their frequency requirement, which should lead to a
-> low bandwidth automatically.
 
-Agree, the OPP framework itself shouldn't be responsible. And I'm not
-doing anything here? Just giving those devices a way to look up what
-their suspend bandwidth is? So they can vote for it when they suspend?
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> > > > + * @dev:     device for which we do this operation
-> > > > + * @avg_bw:  Pointer where the corresponding average bandwidth is stored.
-> > > > + *           Can be NULL.
-> > > > + *
-> > > > + * Return: This function returns the peak bandwidth of the OPP marked as
-> > > > + * suspend_opp if one is available, else returns 0;
-> > > > + */
-> > > > +unsigned long dev_pm_opp_get_suspend_opp_bw(struct device *dev,
-> > > > +                                         unsigned long *avg_bw)
-> > > > +{
-> > > > +     struct opp_table *opp_table;
-> > > > +     unsigned long peak_bw = 0;
-> > > > +
-> > > > +     opp_table = _find_opp_table(dev);
-> > > > +     if (IS_ERR(opp_table))
-> > > > +             return 0;
-> > > > +
-> > > > +     if (opp_table->suspend_opp && opp_table->suspend_opp->available)
-> > > > +             peak_bw = dev_pm_opp_get_bw(opp_table->suspend_opp, avg_bw);
-> > > > +
-> > > > +     dev_pm_opp_put_opp_table(opp_table);
-> > > > +
-> > > > +     return peak_bw;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(dev_pm_opp_get_suspend_opp_bw);
-> > > > +
-> > > >  int _get_opp_count(struct opp_table *opp_table)
-> > > >  {
-> > > >       struct dev_pm_opp *opp;
-> > > > @@ -343,6 +394,40 @@ int dev_pm_opp_get_opp_count(struct device *dev)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_get_opp_count);
-> > > >
-> > >
-> > > I think we should add function header here instead of the helpers
-> > > which get exact match for freq, bw or level. And then pass a enum
-> > > value to it, which tells what we are looking to compare. After that
-> > > rest of the routines will be just one liners, make them macros in
-> > > header file itself.
-> >
-> > Not sure I understand what you are saying here.
->
-> Okay, lemme try again with proper example.
->
-> enum opp_key_type {
->         OPP_KEY_FREQ = 0x1,
->         OPP_KEY_LEVEL= 0x2,
->         OPP_KEY_BW   = 0x4,
->         OPP_KEY_ALL  = 0x7,
-> }
->
-> /**
->  * Add function header here..
->  */
-> struct dev_pm_opp *dev_pm_opp_find_opp_exact(struct device *dev,
->                                              enum opp_key_type key,
->                                              unsigned long key_value,
->                                              bool available)
-> {
->        struct opp_table *opp_table;
->        struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
->
->        opp_table = _find_opp_table(dev);
->        if (IS_ERR(opp_table)) {
->                int r = PTR_ERR(opp_table);
->
->                dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
->                return ERR_PTR(r);
->        }
->
->        mutex_lock(&opp_table->lock);
->
->        list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
->                if (temp_opp->available == available &&
->                    !opp_compare_key(temp_opp, key, key_value)) {
->                        opp = temp_opp;
->
->                        /* Increment the reference count of OPP */
->                        dev_pm_opp_get(opp);
->                        break;
->                }
->        }
->
->        mutex_unlock(&opp_table->lock);
->        dev_pm_opp_put_opp_table(opp_table);
->
->        return opp;
-> }
->
-> //Now in header file
->
-> #define dev_pm_opp_find_freq_exact(dev, freq, available)        dev_pm_opp_find_opp_exact(dev, OPP_KEY_FREQ, freq, available);
-> #define dev_pm_opp_find_level_exact(dev, level, available)      dev_pm_opp_find_opp_exact(dev, OPP_KEY_LEVEL, level, available);
-> #define dev_pm_opp_find_bw_exact(dev, bw, available)            dev_pm_opp_find_opp_exact(dev, OPP_KEY_BW, bw, available);
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Ok, but you want this done only for "exact" or for all the other
-helpers too? Also, this means that I'll have to implement a
-_opp_compare_key2() or whatever because the generic one that
-automatically picks the key is still needed for the generic code. Is
-that fine by you?
-
-Also, ack to your other response.
-
--Saravana
