@@ -2,56 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C4F136359
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 23:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB98213635E
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 23:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727876AbgAIWnZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 17:43:25 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38072 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgAIWnY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 17:43:24 -0500
-Received: by mail-wm1-f65.google.com with SMTP id u2so4630312wmc.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 14:43:22 -0800 (PST)
+        id S1725807AbgAIWqT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 17:46:19 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46231 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728324AbgAIWqS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 17:46:18 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z7so9106714wrl.13
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 14:46:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t/bY2L+lT9cEkRxc3Db1rJxtgV2j+9NNeMib8nWiYgY=;
-        b=x/5Ut+zwliQPZPU0JkolFxzy6+AoWe05Plhn7Z3dukh72Nge04r0u+Bg6eLu7aFAEU
-         oTuK1GG6sMwH2F47qkYNE+ASM8tUaj3PABfjLd2jswr1E2Gdnh7LW02FmlUrjFh26g+J
-         I4FIU/ZZWksEvNmeDwUKXWIDprOuk05IWZirmIFWBDWpkYyM70q/ZxaNtMEphEF3Nidk
-         tbr4yWA5B+T5YoElG7CA1k3B2PGuSpSexbdZVMIlE5h/uNVWhb8aXH3XvzsgSsME92Cd
-         ciTKGlgY1rg9DT/WK/HCiwSGAJeVVD/TLFWcOfhIPzvC+/HHMvXIRtNIProNVvqFZ0lL
-         1DlA==
+        bh=IDLYJpNn9gDDVDsAw8JkYnVzGkE3sq6/3kOzxLaB4f0=;
+        b=FaLhyKPa3tNpOCqhBodsSnP5nYvHJf5yurTgiOKV0GJBOLCWo72fgLccduC8u/YD6I
+         X0hFP9UIZZnjoLkjW7fgOjM/L2Xv2DVfWK0SDsqF2ht3HjQA72VnL3iel9ZyLVWhvtf8
+         WGdTZjy2N1isiMqRsbf6hQ0GYywjonN8LyQsVxNgyEc/EZvXETMmNwON/9VkvAGdxtf0
+         QaRJxKN4z6CK31neCtkJY76RmVmGPGXNBHBjFjFX3K/PSFWfZMciSZCNn13lsMAMGVUm
+         KJf/rXp9hibfTMIyKHJDetcXQtUriyk4aF5VVn+6UpUyjXHBsSf6RRhEvsxtml5gd65s
+         ouyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=t/bY2L+lT9cEkRxc3Db1rJxtgV2j+9NNeMib8nWiYgY=;
-        b=Sc7WOK4XDzsIPhTH3jdkl9C+i3wIspnnX366+nRawHAfaZHpISB/JX4egyIXo+64d4
-         UkHz0IEGjWJsYuoWLRCpyhROOmZvZQctwvUuwm0vSzcYAnWcZObJggFmGyPNwTqGV6PQ
-         5z+AjZvO4d5surdTJNYpde2ZKQ58rTVrfC9ypjBEo08HwmtwtPChc4maskI4+E0bnGZF
-         wDwhgAxBJa8O04tgF0zeEyk3gFwzUmqZN1S4xqcjD55T1UdGaAL/q3vWGVK4nsuhbuT6
-         gFhiuNihJpkopm8PKKbiynmoWgpwqRdp+ZN6HKrs0KXWQyX/9Fb4sdaUn5/o8AYyUMBK
-         qqKg==
-X-Gm-Message-State: APjAAAW9GZBw0swb/JGI6hJTCrZMhemw7saF3dTGcKA1xmBVB9YXMFhF
-        r2fyXAEnHY2TCeyWLJM2whlbsQ==
-X-Google-Smtp-Source: APXvYqx1ZGuMxmqhMTPuffNDBAesqJDnzDxI5Ny+lKxkSUKU9am1NkfMRibRNBm1B//RMRNl46hKFg==
-X-Received: by 2002:a1c:3c8b:: with SMTP id j133mr261882wma.66.1578609802135;
-        Thu, 09 Jan 2020 14:43:22 -0800 (PST)
+        bh=IDLYJpNn9gDDVDsAw8JkYnVzGkE3sq6/3kOzxLaB4f0=;
+        b=g6beEOLK5F04DIgJ75G5SiY1IgspYd03bAYOqzyeSsoL6p+MhX2YZhTrni1Bd3qHsv
+         mEbLZZwdfsnXpOn8kAimZ9E/vd4tvrWrF7yxHduDc0zb5GgnuXGOA/zqWH8AOqyAmDxQ
+         UTpLNE7XZekuEJUSEBwtoG+ZsWbNhgI+vZoq/M73WuSOBKgRvHvJSqu1t+WzFDES9aII
+         vrkmBWTtTqnj/dANBdyLbaEGHCU+1+f9OVoRcpMqsngQi+XjVpqCpRc4uWJ0YpFcSIvF
+         FbudyE308nbEmdyMV+fFo2LkjceWnm8FQSFBI4EsTDKXbiurWENultLINtOCVKJ0x39w
+         0hzA==
+X-Gm-Message-State: APjAAAX31ajMReE7idrz/lTwfbOLLn8OqR6P8sl44muuvLcesfNzX0T6
+        TyDWmrP0cR4yd5amsayYYKR5aIv/66nbqg==
+X-Google-Smtp-Source: APXvYqwPECMzq2M03v5tdkaTCLcf22HejkDuHcrfDSqdeGR5+/vd7DZeqwzDg5m3dRq19bPAWNWJtw==
+X-Received: by 2002:a5d:5044:: with SMTP id h4mr118585wrt.4.1578609976095;
+        Thu, 09 Jan 2020 14:46:16 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
-        by smtp.googlemail.com with ESMTPSA id j12sm9773419wrt.55.2020.01.09.14.43.20
+        by smtp.googlemail.com with ESMTPSA id w20sm34428wmk.34.2020.01.09.14.46.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 14:43:21 -0800 (PST)
-Subject: Re: [PATCH 0/2] make generic-adc-thermal less noisy
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        jeff.dagenais@gmail.com, edubezval@gmail.com
-References: <20200107232044.889075-1-martin.blumenstingl@googlemail.com>
+        Thu, 09 Jan 2020 14:46:15 -0800 (PST)
+Subject: Re: [PATCH] drivers: thermal: step_wise: add support for hysteresis
+To:     Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org, j-keerthy@ti.com,
+        thara.gopinath@linaro.org, Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     Lina Iyer <ilina@codeaurora.org>, linux-pm@vger.kernel.org
+References: <8e812065f4a76325097c5f9c17f3386736d8c1d4.1574315190.git.amit.kucheria@linaro.org>
+ <962d48d2-87fd-1236-0623-148352a98de6@linaro.org>
+ <4f75a862-4525-fe11-ed03-f53a13926c15@codeaurora.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -107,12 +112,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <15378eed-d8d1-a37f-7f4c-88c112ecde0b@linaro.org>
-Date:   Thu, 9 Jan 2020 23:43:20 +0100
+Message-ID: <211a066d-f801-fb21-a14d-2b00765d2547@linaro.org>
+Date:   Thu, 9 Jan 2020 23:46:13 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200107232044.889075-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <4f75a862-4525-fe11-ed03-f53a13926c15@codeaurora.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -121,33 +126,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/01/2020 00:20, Martin Blumenstingl wrote:
-> I want to use generic-adc-thermal on the 32-bit Amlogic SoCs in the
-> future. These have a thermal sensors which can be read through the
-> SAR ADC (for which we have an IIO driver) on those SoCs.
-> 
-> While testing I found the generic-adc-thermal driver to be a bit
-> noisy when operating in well supported environment:
-> - the SoC temperature sensor on the 32-bit Amlogic SoCs is typically
->   loaded late because of it's dependencies (it needs data from the
->   eFuse and a syscon to calibrate). Yet I still got a message stating
->   there's no lookup table for the generic-adc-thermal defined (which
->   is expected and perfectly valid on these Amlogic SoCs, as the IIO
->   channel returns the temperature).
-> - the IIO channel is correctly defined with type IIO_TEMP, yet the
->   generic-adc-thermal driver still prints a message which first lead
->   me to believe that I passed an incorrect IIO channel (one that
->   returns a voltage).
+On 08/01/2020 01:31, Ram Chandrasekar wrote:
 > 
 > 
-> Martin Blumenstingl (2):
->   thermal: generic-adc: silence "no lookup table" on deferred probe
->   thermal: generic-adc: silence info message for IIO_TEMP channels
+> On 12/11/2019 6:35 AM, Daniel Lezcano wrote:
+>> On 21/11/2019 06:50, Amit Kucheria wrote:
+>>> From: Ram Chandrasekar <rkumbako@codeaurora.org>
+>>>
+>>> Currently, step wise governor increases the mitigation when the
+>>> temperature goes above a threshold and decreases the mitigation when the
+>>> temperature goes below the threshold.
+>>>
+>>> If there is a case where the
+>>> temperature is wavering around the threshold, the mitigation will be
+>>> applied and removed every iteration, which is not very efficient.
+>>>
+>>> The use of hysteresis temperature could avoid this ping-pong of
+>>> mitigation by relaxing the mitigation to happen only when the
+>>> temperature goes below this lower hysteresis value.
+>>
+>> What I'm worried about is how the hysteresis is used in the current
+>> code, where the destination of this data is to set the value in the
+>> sensor hardware if it is supported.
+>>
+>> Using the hysteresis in the governor seems like abusing the initial
+>> purpose of this information.
+>>
+>> Moreover, the hysteresis creates a gray area where the above algorithm
+>> (DROPPING && !throttle) => state-- or (RAISING && throttle) => state++
+>> may drop the performances because we will continue mitigating even below
+>> the threshold.
+>>
+>> As the governor is an open-loop controller, I'm not sure if we can do
+>> something except adding some kind of low pass filter to prevent
+>> mitigation bounces.
+>>
 > 
->  drivers/thermal/thermal-generic-adc.c | 20 ++++++++++++--------
->  1 file changed, 12 insertions(+), 8 deletions(-)
+> We have two different use cases for the step wise algorithm, and the
+> hysteresis makes sense only in one.
+> 
+> For example, say we are controlling CPU junction temperature at 95C.
+> When using step wise, mitigation is applied iteratively and there is a
+> possibility that temperature can shoot up before the algorithm can reach
+> an optimal mitigation level to keep the temperature near threshold.
+> 
+> In order to help this state machine, we use a second back stop rule in
+> the same thermal zone at a higher temperature (say 105C) with a
+> hysteresis of 10C to mitigate CPU to a fixed value, by specifying
+> upper/lower limit to be the same. The idea is that the second rule will
+> place a hard hammer to bring the temperature down close to 95C and then
+> it will remove the mitigation. Once mitigation is removed, the junction
+> temperature rule state machine will re-adjust from that point to an
+> optimal mitigation level. The junction temperature rule doesn’t use
+> hysteresis.
+> 
+> Another example is skin temperature mitigation for mobile devices, where
+> the step wise algorithm with hysteresis just reduces the operating max
+> frequency to a fixed value, when the threshold is reached. And the
+> junction temperature rule starts mitigating from this operating max.
+> 
+> That is the reason we have not generalized or mandated the hysteresis
+> usage in this patch. The idea is to use it selectively based on use case.
 
-Applied, thanks
+Did you ever try the IPA governor?
+
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
