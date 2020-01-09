@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9522113603B
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 19:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207DA13605C
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 19:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731093AbgAISfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 13:35:39 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36075 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730918AbgAISfi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 13:35:38 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c16so6763328oic.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 10:35:38 -0800 (PST)
+        id S1730531AbgAISol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 13:44:41 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41113 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729778AbgAISoi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 13:44:38 -0500
+Received: by mail-ot1-f68.google.com with SMTP id r27so8252566otc.8
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 10:44:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wmvSr2mzmrRq+l3ZQk2B1GL9COS1rF8Vn1oWheNtkZE=;
-        b=oC6Q4lA6oU3JAgCnxLfNSA+TF08QnqsuxqJZbgwHEudI2pEIZsQ1nrGaP4A7mI0EJY
-         M0S5bEhrCBW0uTR2PHP7zKG9Ngm9vY3hPp3uhle+w7AQwtvbKuyrx1BfvXBJ+LkDRHeL
-         0tjHmjwYpC9W1AmPxoWMY3OQzMA2IJVcmngkURv7vtXk0WFhQFKkKS7+Jh7y3yeIqP1M
-         mZKJe7ltjGyiHXY20XPpAZRFkr6QXJLy63PwWmYlBWb5nirmCCVzXYnmPfT6z/OFv11S
-         6r7n6bKj4NbCpotN5hJ/cQZO5TSoZVh5ZPcsvJdmkr1kg1I2DhAvh4nI4On9Y5zSxsiG
-         /NfA==
+        bh=8XTYu6dx3P7+neGNkEsuHx7Hl39JFzGEmh9FvOI/6t8=;
+        b=U8I2YmCRoAq67WWxoFFCJ3k3gOrykE2YQwTErZWVe+5AoPziMhEmwKx1VMD0KMFPCX
+         +jbhGCIi7LaCyRozBXGg67tWcEshu9t/nV+5GRwcrDrqaDPVF/q7WB8dwyvMqzHqXwXh
+         vrxb+U/3GbD3UJN8t4zfHH1mfu+g+1u0RsxmiGudZ7HOzTAUZJgwQCEkmMzHDz3VZVLP
+         1NJnm0l580uFrBULSlvulQKs3TC7T5fJclJfMNd+rdGx7VAt3rjC3csdddytt5qAtS3Z
+         elFxbmidwN6O0NCzzqYHweFXkI8SZ4G5Gp6oB6GfQmpbRyFtz4PI/ZFnReNOyC4mjr8l
+         abGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wmvSr2mzmrRq+l3ZQk2B1GL9COS1rF8Vn1oWheNtkZE=;
-        b=ZskNj2G4WIh6o6c6kVIsnyQVE7zbDTqeETc8zLw+QfkGBCnWoMAZFvHd2vE4vAJ/wA
-         XqL11d4D5xGYtHKEbmL0QlRx4E2CBoEmZycKfRfDVXYz1owi3HjgXraJf78Zg/29kIGs
-         myOnw5G4SuUQT31GoIbiiaiy0bD7r4QUU9O8RsqmeA1/3pOE5PlW2IaTUV0SxSzXgWYU
-         58HwoVgNBZoMeBup3OVXhDYghzjrpaoyi/3eL4s63WAzKKGX5QaUJJGiU5ThM69BO0la
-         u3xSk487SF4uNqe+mPYri86dhIs21/L1Ndbgfq0amswvQBHU9fbzRJg/p4vAsS3Z0DNE
-         1Gyw==
-X-Gm-Message-State: APjAAAX1+Z8mpw/qB07AasaPniT2b3cu/V1bDIWboFmE2vNiVqkUCvtb
-        sRyINcCukzWkTPt4JWrU2hr1mwavOtlIf9L2svQ95g==
-X-Google-Smtp-Source: APXvYqxeg43koNnpBHaMggqdEav07DfYLsSu2xOzoP2Y/zzJzAcGHBEJCOpPO7lKIokUUug4FsP0h1PlowvFAuyIvYk=
-X-Received: by 2002:aca:d4c1:: with SMTP id l184mr4437841oig.172.1578594937570;
- Thu, 09 Jan 2020 10:35:37 -0800 (PST)
+        bh=8XTYu6dx3P7+neGNkEsuHx7Hl39JFzGEmh9FvOI/6t8=;
+        b=cnqG3IlIIsAUwRgBh5eu03w4LM+P6h5QRmvbpIy0o8ICnxE3fPBeSHa2P3z7C/6rJS
+         YwiPUF30X+3HPcPR9LKDphrSC2IwCLh94LV0Xx+o3DQr9u/mTlXWWM+zTXbHJWlEWbBF
+         AbW9X8KiMtj3ekR6aBIgRmpUO6OWXTmKA8KmfZ7p3yEU7EKVUjZZT5uZeRxxACQEs/0O
+         iBH1IYb7vrMXERBQ/lRBQ8xvjysv0txaW2EO6P3QnEsdUrXd8Zmh1HwcBL1qZIl1Mtuz
+         /WYHH6b8t35OtoTXtV9VeoAA0fc8kYuajJp3Enj7auDgAtVC7aKgughkIqePA0s0Od7l
+         esxQ==
+X-Gm-Message-State: APjAAAXT3DRNW6uM3VnLjzQRj0gYrQ3PqGJ0KmuRsLWFQDWv/iiAS89x
+        +TR9q+mm1K+OUY5zb32Sc+q58xaZyoEj3zrQ0PF0kA==
+X-Google-Smtp-Source: APXvYqwbORFOz9hNPUv86p8ax7GkF+op9OEIJjbOBrv/fGZR+RsiVZt588/jpZ7zEUY+jEIrhutCl+sw14/o5poL9tg=
+X-Received: by 2002:a05:6830:121a:: with SMTP id r26mr9606498otp.225.1578595477678;
+ Thu, 09 Jan 2020 10:44:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-3-saravanak@google.com>
- <20200108105348.p4y3s2mbuchiu4mf@vireshk-i7> <CAGETcx8QEV+_+d2yt_+bE09mi4qyHZDHPJqPiDXv_HgJPgQJoQ@mail.gmail.com>
- <20200109043108.fzvk3hp7vodtw6zy@vireshk-i7>
-In-Reply-To: <20200109043108.fzvk3hp7vodtw6zy@vireshk-i7>
+References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-4-saravanak@google.com>
+ <20200108111947.q5aafrlz26tnk3nq@vireshk-i7> <CAGETcx_T7VONkSd-r9CY-5OpZBZ2iD0tFoCf0+d8CY2b5zgr9g@mail.gmail.com>
+ <20200109044051.62ocfpt44q25q6qi@vireshk-i7>
+In-Reply-To: <20200109044051.62ocfpt44q25q6qi@vireshk-i7>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 9 Jan 2020 10:35:01 -0800
-Message-ID: <CAGETcx_1B8AfxBuJ9Mbq8BNx-fYyP8pOnF6caN=ooyPARaaJ3A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/3] OPP: Add support for bandwidth OPP tables
+Date:   Thu, 9 Jan 2020 10:44:01 -0800
+Message-ID: <CAGETcx-UWFSaZ8q1iiFVFUEPLN8t1uFb-u6v4VJiMarS21RLRQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] OPP: Add helper function for bandwidth OPP tables
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -73,247 +73,143 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 8, 2020 at 8:31 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Jan 8, 2020 at 8:40 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > On 08-01-20, 16:58, Saravana Kannan wrote:
-> > On Wed, Jan 8, 2020 at 2:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 06-12-19, 16:24, Saravana Kannan wrote:
-> > > > Not all devices quantify their performance points in terms of frequency.
-> > > > Devices like interconnects quantify their performance points in terms of
-> > > > bandwidth. We need a way to represent these bandwidth levels in OPP. So,
-> > > > add support for parsing bandwidth OPPs from DT.
-> > > >
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > ---
-> > > >  drivers/opp/core.c | 15 +++++++++--
-> > > >  drivers/opp/of.c   | 63 ++++++++++++++++++++++++++++++++--------------
-> > > >  drivers/opp/opp.h  |  5 ++++
-> > > >  3 files changed, 62 insertions(+), 21 deletions(-)
-> > > >
-> > > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > > > index be7a7d332332..c79bbfac7289 100644
-> > > > --- a/drivers/opp/core.c
-> > > > +++ b/drivers/opp/core.c
-> > > > @@ -1282,11 +1282,21 @@ static bool _opp_supported_by_regulators(struct dev_pm_opp *opp,
-> > > >       return true;
+> > On Wed, Jan 8, 2020 at 3:19 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >  /**
+> > > >   * dev_pm_opp_get_level() - Gets the level corresponding to an available opp
+> > > >   * @opp:     opp for which level value has to be returned for
+> > > > @@ -299,6 +322,34 @@ unsigned long dev_pm_opp_get_suspend_opp_freq(struct device *dev)
 > > > >  }
+> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_get_suspend_opp_freq);
 > > > >
-> > > > +int opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2)
-> > > > +{
-> > > > +     if (opp1->rate != opp2->rate)
-> > > > +             return opp1->rate < opp2->rate ? -1 : 1;
-> > > > +     if (opp1->peak_bw != opp2->peak_bw)
-> > > > +             return opp1->peak_bw < opp2->peak_bw ? -1 : 1;
+> > > > +/**
+> > > > + * dev_pm_opp_get_suspend_opp_bw() - Get peak bandwidth of suspend opp in kBps
 > > >
-> > > Please also add level here.
+> > > Hmm, I wasn't expecting this. So the interconnects will also have a
+> > > suspend OPP ?
 > >
-> > I can, but I vaguely remember finding opp-levels could have
-> > duplicates? Am I wrong? If so I can add the opp-level comparison too.
+> > Yes, device voting for interconnect paths might want to lower the
+> > bandwidth to a suspend bandwidth when they suspend.
 >
-> No they can't have duplicates.
->
-> > > > +     return 0;
-> > > > +}
+> That's exactly what I was saying, the request for a change during
+> suspend should come from the device
+
+Agree. And this tells the device requesting for bandwidth, what
+bandwidth to vote for when it's suspending. Keep in mind that these
+bandwidth OPP tables are used by the consumers of the interconnects to
+pick from a list of bandwidths to vote for.
+
+> and you can't do it here, i.e.
+> they should lower their frequency requirement, which should lead to a
+> low bandwidth automatically.
+
+Agree, the OPP framework itself shouldn't be responsible. And I'm not
+doing anything here? Just giving those devices a way to look up what
+their suspend bandwidth is? So they can vote for it when they suspend?
+
+> > > > + * @dev:     device for which we do this operation
+> > > > + * @avg_bw:  Pointer where the corresponding average bandwidth is stored.
+> > > > + *           Can be NULL.
+> > > > + *
+> > > > + * Return: This function returns the peak bandwidth of the OPP marked as
+> > > > + * suspend_opp if one is available, else returns 0;
+> > > > + */
+> > > > +unsigned long dev_pm_opp_get_suspend_opp_bw(struct device *dev,
+> > > > +                                         unsigned long *avg_bw)
+> > > > +{
+> > > > +     struct opp_table *opp_table;
+> > > > +     unsigned long peak_bw = 0;
 > > > > +
-> > > >  static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
-> > > >                            struct opp_table *opp_table,
-> > > >                            struct list_head **head)
+> > > > +     opp_table = _find_opp_table(dev);
+> > > > +     if (IS_ERR(opp_table))
+> > > > +             return 0;
+> > > > +
+> > > > +     if (opp_table->suspend_opp && opp_table->suspend_opp->available)
+> > > > +             peak_bw = dev_pm_opp_get_bw(opp_table->suspend_opp, avg_bw);
+> > > > +
+> > > > +     dev_pm_opp_put_opp_table(opp_table);
+> > > > +
+> > > > +     return peak_bw;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(dev_pm_opp_get_suspend_opp_bw);
+> > > > +
+> > > >  int _get_opp_count(struct opp_table *opp_table)
 > > > >  {
 > > > >       struct dev_pm_opp *opp;
-> > > > +     int opp_cmp;
-> > > >
-> > > >       /*
-> > > >        * Insert new OPP in order of increasing frequency and discard if
-> > > > @@ -1297,12 +1307,13 @@ static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
-> > > >        * loop.
-> > > >        */
-> > > >       list_for_each_entry(opp, &opp_table->opp_list, node) {
-> > > > -             if (new_opp->rate > opp->rate) {
-> > > > +             opp_cmp = opp_compare_key(new_opp, opp);
-> > > > +             if (opp_cmp > 0) {
-> > > >                       *head = &opp->node;
-> > > >                       continue;
-> > > >               }
-> > > >
-> > > > -             if (new_opp->rate < opp->rate)
-> > > > +             if (opp_cmp < 0)
-> > > >                       return 0;
-> > > >
-> > > >               /* Duplicate OPPs */
-> > > > diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> > > > index 1cbb58240b80..b565da5a2b1f 100644
-> > > > --- a/drivers/opp/of.c
-> > > > +++ b/drivers/opp/of.c
-> > > > @@ -521,6 +521,44 @@ void dev_pm_opp_of_remove_table(struct device *dev)
+> > > > @@ -343,6 +394,40 @@ int dev_pm_opp_get_opp_count(struct device *dev)
 > > > >  }
-> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+> > > >  EXPORT_SYMBOL_GPL(dev_pm_opp_get_opp_count);
 > > > >
-> > > > +static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
-> > > > +                      bool *rate_not_available)
-> > > > +{
-> > > > +     int ret;
-> > > > +     u64 rate;
-> > > > +     u32 bw;
-> > > > +
-> > > > +     ret = of_property_read_u64(np, "opp-hz", &rate);
-> > > > +     if (!ret) {
-> > > > +             /*
-> > > > +              * Rate is defined as an unsigned long in clk API, and so
-> > > > +              * casting explicitly to its type. Must be fixed once rate is 64
-> > > > +              * bit guaranteed in clk API.
-> > > > +              */
-> > > > +             new_opp->rate = (unsigned long)rate;
-> > > > +             goto out;
-> > > > +     }
-> > > > +
-> > > > +     ret = of_property_read_u32(np, "opp-peak-kBps", &bw);
-> > > > +     if (!ret) {
-> > > > +             new_opp->peak_bw = bw;
-> > > > +
-> > > > +             if (!of_property_read_u32(np, "opp-avg-kBps", &bw))
-> > > > +                     new_opp->avg_bw = bw;
 > > >
-> > > Maybe
-> > >                 of_property_read_u32(np, "opp-avg-kBps", &new_opp->avg_bw);
-> > >
-> > > and same for opp-peak-kbps as well.
+> > > I think we should add function header here instead of the helpers
+> > > which get exact match for freq, bw or level. And then pass a enum
+> > > value to it, which tells what we are looking to compare. After that
+> > > rest of the routines will be just one liners, make them macros in
+> > > header file itself.
 > >
-> > But those are not u32. Is it always safe to directly read into it
-> > across all endian-ness and unsigned int sizes? I get tripped up by
-> > that occasionally.
+> > Not sure I understand what you are saying here.
 >
-> It may not be safe.
-
-Ok, so I'll leave it as is then.
-
+> Okay, lemme try again with proper example.
 >
-> > > > +     }
-> > > > +
-> > > > +out:
-> > > > +     *rate_not_available = !!ret;
-> > > > +     /*
-> > > > +      * If ret is 0 at this point, we have already found a key. If we
-> > > > +      * haven't found a key yet, then ret already has an error value. In
-> > > > +      * either case, we don't need to update ret.
-> > > > +      */
-> > > > +     of_property_read_u32(np, "opp-level", &new_opp->level);
-> > >
-> > > Yes, it wasn't done earlier but we should do it now. Check level as
-> > > well and treat it as any other key.
-> > >
-> > > I think add a preparatory patch first which does all the cleanup
-> > > before bandwidth thing is added.
-> >
-> > Ah come on man! You are making this too painful. It's okay to add a
-> > few more error checks as part of implementing a new feature. Please
-> > don't make me add more patches before this.
+> enum opp_key_type {
+>         OPP_KEY_FREQ = 0x1,
+>         OPP_KEY_LEVEL= 0x2,
+>         OPP_KEY_BW   = 0x4,
+>         OPP_KEY_ALL  = 0x7,
+> }
 >
-> It will only make your life easier and not painful in my opinion as
-> the reviews are getting mixed/confused between the new things and the
-> old fields right now. With a separate patch introducing just the
-> bandwidth part, it will get reviewed in maximum 1-2 versions, else you
-> will keep updating the unrelated patch and I will keep reviewing it as
-> it is all a single patch.
+> /**
+>  * Add function header here..
+>  */
+> struct dev_pm_opp *dev_pm_opp_find_opp_exact(struct device *dev,
+>                                              enum opp_key_type key,
+>                                              unsigned long key_value,
+>                                              bool available)
+> {
+>        struct opp_table *opp_table;
+>        struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
 >
-> It is always suggested to break patches into the smallest possible
-> meaningful separate things you want to achieve. You are introducing
-> something here and adding cleanup to that.
-
-Ok I completely misunderstood (in a stupid way) what you were asking
-me to do. I don't mind breaking it up into smaller patches at all.
-Will do so.
-
-> > > > +
-> > > > +     return ret;
-> > > > +}
-> > > > +
-> > > >  /**
-> > > >   * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
-> > > >   * @opp_table:       OPP table
-> > > > @@ -558,26 +596,12 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
-> > > >       if (!new_opp)
-> > > >               return ERR_PTR(-ENOMEM);
-> > > >
-> > > > -     ret = of_property_read_u64(np, "opp-hz", &rate);
-> > > > -     if (ret < 0) {
-> > > > -             /* "opp-hz" is optional for devices like power domains. */
-> > > > -             if (!opp_table->is_genpd) {
-> > > > -                     dev_err(dev, "%s: opp-hz not found\n", __func__);
-> > > > -                     goto free_opp;
-> > > > -             }
-> > > > -
-> > > > -             rate_not_available = true;
-> > > > -     } else {
-> > > > -             /*
-> > > > -              * Rate is defined as an unsigned long in clk API, and so
-> > > > -              * casting explicitly to its type. Must be fixed once rate is 64
-> > > > -              * bit guaranteed in clk API.
-> > > > -              */
-> > > > -             new_opp->rate = (unsigned long)rate;
-> > > > +     ret = _read_opp_key(new_opp, np, &rate_not_available);
-> > > > +     if (ret) {
-> > > > +             dev_err(dev, "%s: opp key field not found\n", __func__);
-> > > > +             goto free_opp;
-> > > >       }
-> > > >
-> > > > -     of_property_read_u32(np, "opp-level", &new_opp->level);
-> > > > -
-> > > >       /* Check if the OPP supports hardware's hierarchy of versions or not */
-> > > >       if (!_opp_is_supported(dev, opp_table, np)) {
-> > > >               dev_dbg(dev, "OPP not supported by hardware: %llu\n", rate);
-> > > > @@ -616,7 +640,8 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
-> > > >       if (of_property_read_bool(np, "opp-suspend")) {
-> > > >               if (opp_table->suspend_opp) {
-> > > >                       /* Pick the OPP with higher rate as suspend OPP */
-> > > > -                     if (new_opp->rate > opp_table->suspend_opp->rate) {
-> > > > +                     if (opp_compare_key(new_opp,
-> > > > +                                         opp_table->suspend_opp) > 1) {
-> > >
-> > > Maybe leave this place as is as we never want to compare anything else
-> > > but rate.
-> >
-> > We do want to support suspend bandwidth.
+>        opp_table = _find_opp_table(dev);
+>        if (IS_ERR(opp_table)) {
+>                int r = PTR_ERR(opp_table);
 >
-> Yeah, I understood that from a later patch.
+>                dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
+>                return ERR_PTR(r);
+>        }
 >
-> > So I think I should have this
-> > fix here so it works in general. Also, why not suspend opp-level?
+>        mutex_lock(&opp_table->lock);
 >
-> Because we don't want/need to set a specific value to the
-> voltage-corners during suspend directly from the PM domain driver.
-> This should happen automatically via a call from the underlying
-> cpufreq or device driver.
+>        list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
+>                if (temp_opp->available == available &&
+>                    !opp_compare_key(temp_opp, key, key_value)) {
+>                        opp = temp_opp;
+>
+>                        /* Increment the reference count of OPP */
+>                        dev_pm_opp_get(opp);
+>                        break;
+>                }
+>        }
+>
+>        mutex_unlock(&opp_table->lock);
+>        dev_pm_opp_put_opp_table(opp_table);
+>
+>        return opp;
+> }
+>
+> //Now in header file
+>
+> #define dev_pm_opp_find_freq_exact(dev, freq, available)        dev_pm_opp_find_opp_exact(dev, OPP_KEY_FREQ, freq, available);
+> #define dev_pm_opp_find_level_exact(dev, level, available)      dev_pm_opp_find_opp_exact(dev, OPP_KEY_LEVEL, level, available);
+> #define dev_pm_opp_find_bw_exact(dev, bw, available)            dev_pm_opp_find_opp_exact(dev, OPP_KEY_BW, bw, available);
 
-Agreed for the example you are giving where PM domains/voltages are
-dropped automatically when dropping the device freq to suspend freq.
-I'm just wondering about a different scenario where if some power
-domain needed to be at say 0.5v when it's suspended (no consumer using
-it) to not lose state, or to come back up without brownouts, etc then
-suspend OPP for PM domains might be useful. But I don't know enough
-about that to speak with authority, so I'll leave it at this.
+Ok, but you want this done only for "exact" or for all the other
+helpers too? Also, this means that I'll have to implement a
+_opp_compare_key2() or whatever because the generic one that
+automatically picks the key is still needed for the generic code. Is
+that fine by you?
 
-> And that's what I expected out of the interconnect thing. For example,
-> say during suspend you put the interconnect or PM domains to a low
-> bandwidth/level value, while the underlying device driver (which uses
-> the interconnect or domain) never requested for it. Who will be
-> responsible to restore the value during resume as we would be out of
-> sync here.
-
-I see this suspend-opp as a way to mark to what level the bandwidth
-needs to be dropped to/brought back up from during suspend/resume by
-the driver making interconnect bandwidth requests. For example, what
-if the CPU -> DDR needed to be at some level to avoid suspend/resume
-issues (say CPU bug with respect to timing/latencies)? In this
-example, the CPU driver would be the one making bandwidth requests for
-CPU -> DDR bandwidth during normal operation and during
-suspend/resume. So it's basically exactly the same way it would treat
-CPU freq OPP.
-
-Btw, I don't have a strong opinion on this. But, even if we do only a
-rate comparison, what does it even mean to compare rates for genpd or
-BW opp tables? It's just weird. So I think it's nicer to just allow
-marking any OPP as suspend OPP in any OPP table type. If there's a
-need people can use it, if not, nothing is lost.
+Also, ack to your other response.
 
 -Saravana
