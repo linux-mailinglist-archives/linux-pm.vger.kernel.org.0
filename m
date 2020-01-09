@@ -2,79 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 998F8135151
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 03:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2BA135201
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 04:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgAIC2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jan 2020 21:28:10 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:17409 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726758AbgAIC2K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 21:28:10 -0500
-X-UUID: 8efac21a52b6424690e94ac0a754df04-20200109
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=838Cc8+KqcxYDVnAL0XU6OJBKM3nfNiVLnoFblbQyZw=;
-        b=ljvBMHd1pKAcKBG1lWVx336Jjl2GJ+HSNn4bHAqZjzvEAtBA8fS687I9MTAn/dOT3eo5UttZinpAJXlWMHKeiEGLmf8JNvTt8bO5FYb6UX/MFiyEsx5vLgswg2xwG7s6J+DxVvqY/6dk5NfiQ2dZ4EtHa6iSOenNMAp19GJ2/Wk=;
-X-UUID: 8efac21a52b6424690e94ac0a754df04-20200109
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1912375700; Thu, 09 Jan 2020 10:27:57 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 9 Jan
- 2020 10:24:17 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 9 Jan 2020 10:28:13 +0800
-Message-ID: <1578536872.21256.25.camel@mhfsdcap03>
-Subject: Re: [PATCH] usb: common: usb-conn-gpio: Register charger
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <od@zcrc.me>,
-        <linux-usb@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 9 Jan 2020 10:27:52 +0800
-In-Reply-To: <1578504370.3.1@crapouillou.net>
-References: <20200107002901.940297-1-paul@crapouillou.net>
-         <20200108165323.GA2506374@kroah.com> <1578504370.3.1@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727838AbgAIDha (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jan 2020 22:37:30 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:38760 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727821AbgAIDh3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jan 2020 22:37:29 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l9so4703882oii.5
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2020 19:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EBxPdPI6aGH8o6hu5DCWy787QjzgPIZLXI5gO+WcD1Y=;
+        b=QriXxRhHliJ3F/O3q0F2UmNA0QcFD7cijma9/Wt6o+qK90uPmfucUNK0n87888Y3Ke
+         3aufsx2bK7ekHdLdoK4qcpIJbn1zaW7R5dXT9D7tbxC2KwIgg/F5SWxbkCpRZn23VNxI
+         VYfYenU2XvlqEaadnZWM1rkSQtrCbBveapwdS5lWiBh5rTbellnWqG72eF/z3hrr5c7n
+         /x8YuKYUEt0jWq0gKzxLSniEMZi4/A16mjHl8/j4hu+L7eSeLXr3e8xTWP6dHmGeurQg
+         sTo9pbNc2bfNfN7pBwDkbCoywkC+LzWeOz+aIAbkYKK4DYiXEzke9wl26C6FNRT47X9z
+         PmhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EBxPdPI6aGH8o6hu5DCWy787QjzgPIZLXI5gO+WcD1Y=;
+        b=XCZR8etboXAzkb/WmKJloTg3gTsIUYK+lpnOt84QOeiu/kCPanB/oaBxH1Gm0RCdx0
+         0E0gt8h0H585Ng93EnoP9xpYxe1QXTqs3tbJSzwXYEC+CZdxim22yh8DqwZfpYg2tRGU
+         ZUtL4TxM2ZYRe96HQKJtXTswQmELo/TuxpkwUcaHF161uHUurgVXFoPCKENrnQZ6Y+Tf
+         Yla2Kmmel3OMX/YM5MEZb+sNJE0jrXxUi3cjkbFx1I5Ngoe4fZIaamIhPuemN941otq4
+         Fs22RdDXjG04o06fqG3J/qfhCwoRKUno1IUGIpzKX/d9Gs5eoQFJB9HhzOL3VFFZOV2S
+         hwMQ==
+X-Gm-Message-State: APjAAAUUak+bdVQKFoq/vtcYiD2U0R4TVE8l2vRQ/Scvy2wHm4o+bLVX
+        jQuLNsbriRiPaMs+25WZM9sUMrQMYU7ynyDHwWanXA==
+X-Google-Smtp-Source: APXvYqx3Uob/RWYjP3Mq5nseaUALTA1i4stN0ZiBAI3/wbVgdUWsj38KXuEm4Va+vnVVWxZ1CTr9+sKRSuUfGnQT+hg=
+X-Received: by 2002:aca:5490:: with SMTP id i138mr1579922oib.69.1578541048669;
+ Wed, 08 Jan 2020 19:37:28 -0800 (PST)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 40D221BFADE0B52CB83D97C4692C5266B11D679C287C449086D5AC23C5A64CFC2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20191207002424.201796-1-saravanak@google.com> <20191207002424.201796-4-saravanak@google.com>
+ <20200108111947.q5aafrlz26tnk3nq@vireshk-i7> <CAGETcx_T7VONkSd-r9CY-5OpZBZ2iD0tFoCf0+d8CY2b5zgr9g@mail.gmail.com>
+In-Reply-To: <CAGETcx_T7VONkSd-r9CY-5OpZBZ2iD0tFoCf0+d8CY2b5zgr9g@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 8 Jan 2020 19:36:52 -0800
+Message-ID: <CAGETcx8cro3FHqZhbia6ZUy41XGHwMMSTZgX7QN_2wToWa-Yww@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] OPP: Add helper function for bandwidth OPP tables
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgUGF1bCwNCg0KT24gV2VkLCAyMDIwLTAxLTA4IGF0IDE0OjI2IC0wMzAwLCBQYXVsIENlcmN1
-ZWlsIHdyb3RlOg0KPiBIaSBHcmVnLA0KPiANCj4gDQo+IExlIG1lci4sIGphbnYuIDgsIDIwMjAg
-YXQgMTc6NTMsIEdyZWcgS3JvYWgtSGFydG1hbiANCj4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
-b3JnPiBhIMOpY3JpdCA6DQo+ID4gT24gVHVlLCBKYW4gMDcsIDIwMjAgYXQgMDE6Mjk6MDFBTSAr
-MDEwMCwgUGF1bCBDZXJjdWVpbCB3cm90ZToNCj4gPj4gIFJlZ2lzdGVyIGEgcG93ZXIgc3VwcGx5
-IGNoYXJnZXIsIHdob3NlIG9ubGluZSBzdGF0ZSBkZXBlbmRzIG9uIA0KPiA+PiB3aGV0aGVyDQo+
-ID4+ICB0aGUgVVNCIHJvbGUgaXMgc2V0IHRvIGRldmljZSBvciBub3QuDQo+ID4gDQo+ID4gVGhh
-dCBzYXlzIF93aGF0XyB5b3UgYXJlIGRvaW5nLCBidXQgSSBoYXZlIG5vIGlkZWEgX3doeV8geW91
-IHdhbnQgdG8gDQo+ID4gZG8NCj4gPiB0aGlzLg0KPiA+IA0KPiA+IFdoYXQgaXMgdGhpcyBnb2lu
-ZyB0byBjYXVzZSB0byBoYXZlIGhhcHBlbj8gIFdoYXQgbmV3IHVzZXJzcGFjZSBhcGkgaXMNCj4g
-PiBnb2luZyB0byByZXN1bHQ/ICBXaGF0IHdpbGwgYSB1c2VyIGRvIHdpdGggdGhpcz8NCj4gDQo+
-IFRoaXMgaXMgdXNlZnVsIHdoZW4gdGhlIFVTQiByb2xlIGlzIHRoZSBvbmx5IHdheSB0byBrbm93
-IGlmIHRoZSBkZXZpY2UgDQo+IGlzIGNoYXJnaW5nIGZyb20gVVNCLg0KVGhlcmUgaXMgbm8gY2hh
-cmdlciBJQyBvbiB5b3VyIHBsYXRmb3JtPw0KDQo+IA0KPiBUaGUgQVBJIGlzIHRoZSBzdGFuZGFy
-ZCBwb3dlciBzdXBwbHkgY2hhcmdlciBBUEksIHlvdSBnZXQgYSANCj4gL3N5cy9jbGFzcy9wb3dl
-cl9zdXBwbHkveHh4L29ubGluZSBub2RlIHdoaWNoIHRlbGxzIHlvdSB0aGUgc3RhdGUgb2YgDQo+
-IHRoZSBjaGFyZ2VyLg0KPiANCj4gVGhlIHNvbGUgcHVycG9zZSBvZiB0aGlzIGlzIHRvIGdpdmUg
-dXNlcnNwYWNlIGFwcGxpY2F0aW9ucyBhIHdheSB0byANCj4ga25vdyB3aGV0aGVyIG9yIG5vdCB0
-aGUgY2hhcmdlciBpcyBwbHVnZ2VkLg0KPiANCj4gPiBJcyB0aGlzIGdvaW5nIHRvIGFsd2F5cyBz
-aG93IHVwLCBubyBtYXR0ZXIgaWYgdGhlIHJvbGUgaXMgbm90IGV2ZW4NCj4gPiByZWxldmFudCBm
-b3IgYSBwb3dlciBzdXBwbHk/DQo+IA0KPiBJIGd1ZXNzIGl0J2QgYWx3YXlzIHNob3cgdXAsIHll
-cy4gSW4gd2hpY2ggY2FzZSB3b3VsZCB0aGUgcm9sZSBub3QgYmUgDQo+IHJlbGV2YW50IGZvciBh
-IHBvd2VyIHN1cHBseT8gDQpEbyB5b3UgYWxzbyBuZWVkIGl0IGlmIHRoZSBwbGF0Zm9ybSBkb24n
-dCBoYXZlIGJhdHRlcnk/DQoNCg0KPiBJcyBncGlvLWItY29ubmVjdG9yIG5vdCBhbHdheXMgdXNl
-ZCBmb3IgDQo+IE9URyBjb25uZWN0b3JzPw0KSXQgYWxzbyBzdXBwb3J0cyBkZXZpY2Ugb25seSBt
-b2RlLCB1c3VhbGx5IHVzZXMgdkJ1cyBwaW4gdG8NCmVuYWJsZS9kaXNhYmxlIGNvbnRyb2xsZXIN
-Cg0KPiANCj4gQ2hlZXJzLA0KPiAtUGF1bA0KPiANCj4gDQo+ID4gWW91IG5lZWQgYSBsb3QgbW9y
-ZSB0ZXh0IGhlcmUgdG8gbWFrZSB0aGlzIG1lcmdhYmxlLg0KPiA+IA0KPiA+IHRoYW5rcywNCj4g
-PiANCj4gPiBncmVnIGstaA0KPiANCj4gDQoNCg==
+On Wed, Jan 8, 2020 at 4:58 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, Jan 8, 2020 at 3:19 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 06-12-19, 16:24, Saravana Kannan wrote:
+> > > The frequency OPP tables have helper functions to search for entries in the
+> > > table based on frequency and get the frequency values for a given (or
+> > > suspend) OPP entry.
+> > >
+> > > Add similar helper functions for bandwidth OPP tables to search for entries
+> > > in the table based on peak bandwidth and to get the peak and average
+> > > bandwidth for a given (or suspend) OPP entry.
+> > >
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ---
+> > >  drivers/opp/core.c     | 301 +++++++++++++++++++++++++++++++++++------
+> > >  include/linux/pm_opp.h |  43 ++++++
+> > >  2 files changed, 305 insertions(+), 39 deletions(-)
+> > >
+> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > > index c79bbfac7289..3ff33a08198e 100644
+> > > --- a/drivers/opp/core.c
+> > > +++ b/drivers/opp/core.c
+> > > @@ -127,6 +127,29 @@ unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
+> > >
+> > > +/**
+> > > + * dev_pm_opp_get_bw() - Gets the bandwidth corresponding to an available opp
+> > > + * @opp:     opp for which peak bandwidth has to be returned for
+> >
+> > s/peak //
+>
+> Ack
 
+Actually, isn't this correct as is? peak bandwidth is "returned".
+Average bandwidth is updated through the pointer.
+
+-Saravana
