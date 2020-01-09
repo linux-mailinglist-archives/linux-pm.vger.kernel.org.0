@@ -2,62 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8A01362F4
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 23:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C4F136359
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 23:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729169AbgAIWBJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 17:01:09 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43483 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbgAIWBI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 17:01:08 -0500
-Received: by mail-wr1-f65.google.com with SMTP id d16so9032785wre.10
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 14:01:06 -0800 (PST)
+        id S1727876AbgAIWnZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 17:43:25 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38072 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbgAIWnY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 17:43:24 -0500
+Received: by mail-wm1-f65.google.com with SMTP id u2so4630312wmc.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 14:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HYhKED7gjIosye2MaUk+v+lXpfi1rPRPPZ4smJ2ypTU=;
-        b=UDwX8cAJYL+gbMbRi+eYQTD74y3UGftX4eqKEV52Z4bj1Sz9EehagSoE0r5zOnrs5P
-         VvZ+p6507DSKzhz6GtdZj1RsPtI+oFSWydKcr8LVbGpw6IXqe7GpzrDSHdajyHGUygwS
-         bgrV3ZBbTGfCeygvB9zRjRGVAuyL5nDHJTN2C6bvXUwpcuON6zZejkG5DtRy5LM/USBV
-         b0NGHEStwWu3c1naep+9mYxDl9xrRFenqigWSoljCH8B0h8CIIKvstjeS8g3dXk2TtLA
-         oDGiBY4CaAWQ1mlFR0nt4Zb4v0J4gxUIWzi1vYaoBd6hP7dlO2h+8yBAtuu2kpWXmajj
-         hODw==
+        bh=t/bY2L+lT9cEkRxc3Db1rJxtgV2j+9NNeMib8nWiYgY=;
+        b=x/5Ut+zwliQPZPU0JkolFxzy6+AoWe05Plhn7Z3dukh72Nge04r0u+Bg6eLu7aFAEU
+         oTuK1GG6sMwH2F47qkYNE+ASM8tUaj3PABfjLd2jswr1E2Gdnh7LW02FmlUrjFh26g+J
+         I4FIU/ZZWksEvNmeDwUKXWIDprOuk05IWZirmIFWBDWpkYyM70q/ZxaNtMEphEF3Nidk
+         tbr4yWA5B+T5YoElG7CA1k3B2PGuSpSexbdZVMIlE5h/uNVWhb8aXH3XvzsgSsME92Cd
+         ciTKGlgY1rg9DT/WK/HCiwSGAJeVVD/TLFWcOfhIPzvC+/HHMvXIRtNIProNVvqFZ0lL
+         1DlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=HYhKED7gjIosye2MaUk+v+lXpfi1rPRPPZ4smJ2ypTU=;
-        b=XMUTxBhQbRqFHuCTEnjz3ukDX111ZS8H8h5/dKMNJO+UKL7N1/WbJvrmLHQ5K/0wa6
-         mjMNz/5nz2w+NxGlNC4xeJH6yW7/0VnhcMhXkNJyN9shUBNOMlN2sUds4Qg3Yfw6wpd8
-         nCcq7aU4vXT7PYsmc2o7OCK04yVf5SR98Fn6ck8HDPknxcAuZi/x00HAhzkMEEJ5heNN
-         +q8yvsA+XnxNnivg+TYryIaie18+tdUK6NSf5Guh0rVkafg6S0g3jN/sxZiS28r+YcYZ
-         NLVYYlZwYSYDMi3quqoG/G3YRtZOuqJuoIGuNgf0uz6ehFcrpnp1VyTXCUjE2mrw7EFZ
-         NiNA==
-X-Gm-Message-State: APjAAAXkGHDhpP5lxX6xq8mW3VC13R1taOZEZcrGWgq4Al6FhtSerN5x
-        vwpWi/fSHeaYwT9/wrK1RK0Qhg==
-X-Google-Smtp-Source: APXvYqz5cERRuNL66+5/ZLcyck68yNOEs4dBfNIkA+OLlLoihHzNBE8eDy/JQRecYEfCFF5YO0aocA==
-X-Received: by 2002:a5d:5267:: with SMTP id l7mr13975362wrc.84.1578607265516;
-        Thu, 09 Jan 2020 14:01:05 -0800 (PST)
+        bh=t/bY2L+lT9cEkRxc3Db1rJxtgV2j+9NNeMib8nWiYgY=;
+        b=Sc7WOK4XDzsIPhTH3jdkl9C+i3wIspnnX366+nRawHAfaZHpISB/JX4egyIXo+64d4
+         UkHz0IEGjWJsYuoWLRCpyhROOmZvZQctwvUuwm0vSzcYAnWcZObJggFmGyPNwTqGV6PQ
+         5z+AjZvO4d5surdTJNYpde2ZKQ58rTVrfC9ypjBEo08HwmtwtPChc4maskI4+E0bnGZF
+         wDwhgAxBJa8O04tgF0zeEyk3gFwzUmqZN1S4xqcjD55T1UdGaAL/q3vWGVK4nsuhbuT6
+         gFhiuNihJpkopm8PKKbiynmoWgpwqRdp+ZN6HKrs0KXWQyX/9Fb4sdaUn5/o8AYyUMBK
+         qqKg==
+X-Gm-Message-State: APjAAAW9GZBw0swb/JGI6hJTCrZMhemw7saF3dTGcKA1xmBVB9YXMFhF
+        r2fyXAEnHY2TCeyWLJM2whlbsQ==
+X-Google-Smtp-Source: APXvYqx1ZGuMxmqhMTPuffNDBAesqJDnzDxI5Ny+lKxkSUKU9am1NkfMRibRNBm1B//RMRNl46hKFg==
+X-Received: by 2002:a1c:3c8b:: with SMTP id j133mr261882wma.66.1578609802135;
+        Thu, 09 Jan 2020 14:43:22 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
-        by smtp.googlemail.com with ESMTPSA id x16sm4254202wmk.35.2020.01.09.14.01.03
+        by smtp.googlemail.com with ESMTPSA id j12sm9773419wrt.55.2020.01.09.14.43.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 14:01:04 -0800 (PST)
-Subject: Re: [PATCH V3 1/4] dt-bindings: Add Broadcom AVS RO thermal
-To:     Stefan Wahren <wahrenst@gmx.net>, Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org
-References: <1578420957-32229-1-git-send-email-wahrenst@gmx.net>
- <1578420957-32229-2-git-send-email-wahrenst@gmx.net>
+        Thu, 09 Jan 2020 14:43:21 -0800 (PST)
+Subject: Re: [PATCH 0/2] make generic-adc-thermal less noisy
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        jeff.dagenais@gmail.com, edubezval@gmail.com
+References: <20200107232044.889075-1-martin.blumenstingl@googlemail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -113,12 +107,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <f0e475fc-c155-7f03-5069-aa769b37b38d@linaro.org>
-Date:   Thu, 9 Jan 2020 23:01:03 +0100
+Message-ID: <15378eed-d8d1-a37f-7f4c-88c112ecde0b@linaro.org>
+Date:   Thu, 9 Jan 2020 23:43:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <1578420957-32229-2-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <20200107232044.889075-1-martin.blumenstingl@googlemail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -127,80 +121,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/01/2020 19:15, Stefan Wahren wrote:
-> Since the BCM2711 doesn't have a AVS TMON block, the thermal information
-> must be retrieved from the AVS ring oscillator block. This block is part
-> of the AVS monitor which contains a bunch of raw sensors.
+On 08/01/2020 00:20, Martin Blumenstingl wrote:
+> I want to use generic-adc-thermal on the 32-bit Amlogic SoCs in the
+> future. These have a thermal sensors which can be read through the
+> SAR ADC (for which we have an IIO driver) on those SoCs.
 > 
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> =2D--
-
-There are spurious characters in the patch.
-
->  .../bindings/thermal/brcm,avs-ro-thermal.yaml      | 45 +++++++++++++++++=
-> +++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-=
-> thermal.yaml
+> While testing I found the generic-adc-thermal driver to be a bit
+> noisy when operating in well supported environment:
+> - the SoC temperature sensor on the 32-bit Amlogic SoCs is typically
+>   loaded late because of it's dependencies (it needs data from the
+>   eFuse and a syscon to calibrate). Yet I still got a message stating
+>   there's no lookup table for the generic-adc-thermal defined (which
+>   is expected and perfectly valid on these Amlogic SoCs, as the IIO
+>   channel returns the temperature).
+> - the IIO channel is correctly defined with type IIO_TEMP, yet the
+>   generic-adc-thermal driver still prints a message which first lead
+>   me to believe that I passed an incorrect IIO channel (one that
+>   returns a voltage).
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal=
-> .yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-> new file mode 100644
-> index 0000000..98e7b57
-> =2D-- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/brcm,avs-ro-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom AVS ring oscillator thermal
-> +
-> +maintainers:
-> +  - Stefan Wahren <wahrenst@gmx.net>
-> +
-> +description: |+
-> +  The thermal node should be the child of a syscon node with the
-> +  required property:
-> +
-> +  - compatible: Should be one of the following:
-> +                "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
-> +
-> +  Refer to the the bindings described in
-> +  Documentation/devicetree/bindings/mfd/syscon.txt
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm2711-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +        avs-monitor@7d5d2000 {
-> +                compatible =3D "brcm,bcm2711-avs-monitor",
-> +                             "syscon", "simple-mfd";
-> +                reg =3D <0x7d5d2000 0xf00>;
-> +
-> +                thermal: thermal {
-> +                        compatible =3D "brcm,bcm2711-thermal";
-> +                        #thermal-sensor-cells =3D <0>;
-> +                };
-> +        };
-> +...
-> =2D-
-> 2.7.4
 > 
+> Martin Blumenstingl (2):
+>   thermal: generic-adc: silence "no lookup table" on deferred probe
+>   thermal: generic-adc: silence info message for IIO_TEMP channels
+> 
+>  drivers/thermal/thermal-generic-adc.c | 20 ++++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
 
+Applied, thanks
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
