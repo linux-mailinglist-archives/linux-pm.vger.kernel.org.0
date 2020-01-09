@@ -2,65 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B61113584C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 12:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFE6135879
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 12:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728584AbgAILp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 06:45:27 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43415 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728567AbgAILp0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 06:45:26 -0500
-Received: by mail-wr1-f68.google.com with SMTP id d16so7016897wre.10
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 03:45:25 -0800 (PST)
+        id S1728809AbgAILvb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 06:51:31 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:55771 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728836AbgAILvb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 06:51:31 -0500
+Received: by mail-wm1-f67.google.com with SMTP id q9so2565831wmj.5
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2020 03:51:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=M+Hleybvc0xNgkFFNo5eVdjk4X0NArxdjlsDgPzB5xM=;
-        b=QMff/w1W9s6CsJj7ISgeRx7ZokETKM1nkN+g0axCcpzfZHTd12c1zJ5D+3CHxqwvXE
-         s0k66KlUh3BR7eP7CwGA8+3/BP5ELuADkxMGo4M9/GAGivWntmJQpYwH1TUumw8gW2Da
-         3WioL9jhSPLhwcj2yKVHIpVfXrXXrXdKWEU/rsXeQEHoej8vPyA/iKLBu5AzX0QoFZYm
-         0vyPMJVvnmx3ktn8dFkHTuaGOw9HziD5NrSodSgOWBcH+SiJA7RsOHSNrHnzUSdOFciK
-         QFm7Ly+EYGZMZa72e0H9rkgadLLCSDC+kWdBvN8Cp6kQ0zdj4xD2Y9OangAPTDz9kiWC
-         +0oA==
+        bh=kl2MTIeJMU1iQBgeRNaRu3TA7s6vXGZZw5P4CMy8fhI=;
+        b=BMFuya7MEsXMazjcNdJZ9J1GwzMeTkVvtUi+75T8Ao1dOpZVB1nESH4srZNCTPWlb1
+         Wdd+bsR2/L6iIfqqQLa0flhZ+TIsW4pW6bxihiKwDlRWXqNzgx0YyO7wCanglTaAZ5kA
+         YdvnC//DGV9UUbcvliEdERxJYfmcpxwGjbddx6OvhEBDw4MczcNlnetE1+WP2vwEPMdF
+         lkg/auFUngS2NfDGf+FKhiOUOdkssvVrtFWGf3DP1OJGWT/gSNUAOMGA/acsDvUfv0MU
+         fs3vZVQNooB1YmbBPm/3dmHJ6u76Xg/YIN7xFSQHrD13JZPIygDm69VbyRz5Podinwe6
+         Cfow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=M+Hleybvc0xNgkFFNo5eVdjk4X0NArxdjlsDgPzB5xM=;
-        b=hhqwSgcg+zHiESUkO6301EN9+pW3HqZmDoSwqNT/c5vBmGvEj+D9sLdLKCCfX2hAxV
-         L2xr4q83pP0uISovexaU+cxgfJ7zRp31GRfY72Rd6BYiyLgizQH6n6dls0eKrQ7sG1yY
-         9f4Qrq1foFsjt3qO9OoRDLyCndOXSPh923Jl2cCjxmrxSZoOZe9ndiPaEd+Xwo4KkR0k
-         /8B///aZJHba9uQ4NJ3vWr/6Js1SAySv+JeFtMTLknUA6nDoNSoq4cWhF8UBlly9JFLf
-         +t/C7arlWPo9pvyWyG5RDhPkLTZ81FxRJX1CrilBS/HuosndEsIzWmIRsNb0mN41QZRt
-         /Pwg==
-X-Gm-Message-State: APjAAAUrfFnlB1R4mxJ/TXpGWD5Cz4izCud3haIWaRHOfI9O2V7Um8Ny
-        1asXRecVgTDfj0xsk0OAdFgXbw==
-X-Google-Smtp-Source: APXvYqz13xiaB2c/AHMygGlCgFvL4DXkCGf0TFO1taGJ+xr9xsy5Q8LnIcRYOXeQIqh7/inPIHKmNw==
-X-Received: by 2002:a5d:6886:: with SMTP id h6mr10473834wru.154.1578570325074;
-        Thu, 09 Jan 2020 03:45:25 -0800 (PST)
+        bh=kl2MTIeJMU1iQBgeRNaRu3TA7s6vXGZZw5P4CMy8fhI=;
+        b=b3ItkWIGQboYEki+owKTyrREaFZIBp4Iv61aR2zCaFndQCdwz8WBsY5n69Ad9ekXF4
+         otzkxCq/iSLt+0Jra0ZSG8AayfmiNcNHIwK/yWJ11rVdg+RA7l8F/GzwpXw2T7ZO58bU
+         abFvO+TzT1agjydwZ8Per7f7Ju1aQBtA8Q9MTw1v5WTFexftkNlVsebGh7rfXCFehPQw
+         dm90t2cmsFCUUqAbE20X9CVlGM6GkWsNoI34RXSi9AnyYKyennmJPpA5ACUp7sRZZzL5
+         YkLAaYQFzI4fNTtOtDkW+gZQGUiLVKoOk8Y+IyBo54Im/ezV8N+qlLfc9rpFoTJDrvW9
+         sfcQ==
+X-Gm-Message-State: APjAAAVWDmHORO5XXYlUMSptLDDPu6h1LQYTr7YgdaCZcbJbR/JWOcCV
+        zNtoOY/ppVjB21Zu8ICfEgpl2MAafiFs2Q==
+X-Google-Smtp-Source: APXvYqwTshqSv9A6F8d2MMvmoqOT+WHhze5YCGY0HK5n2ufql7Ypp2c07THfNFJhHXamz2mfr9BbaA==
+X-Received: by 2002:a05:600c:54b:: with SMTP id k11mr4363524wmc.63.1578570689468;
+        Thu, 09 Jan 2020 03:51:29 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d? ([2a01:e34:ed2f:f020:f1d5:61e0:e9d8:1c3d])
-        by smtp.googlemail.com with ESMTPSA id b16sm8163491wrj.23.2020.01.09.03.45.22
+        by smtp.googlemail.com with ESMTPSA id s128sm2686191wme.39.2020.01.09.03.51.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 03:45:24 -0800 (PST)
-Subject: Re: [PATCH v2 06/20] thermal: exynos: Rename Samsung and Exynos to
- lowercase
-To:     Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, Kukjin Kim <kgene@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20200104152107.11407-1-krzk@kernel.org>
- <20200104152107.11407-7-krzk@kernel.org>
+        Thu, 09 Jan 2020 03:51:28 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i-r40: Add thermal sensor and
+ thermal zones
+To:     Maxime Ripard <mripard@kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, wens@csie.org,
+        anarsoul@gmail.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, megous@megous.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20200106174639.20862-1-tiny.windzz@gmail.com>
+ <20200106174639.20862-2-tiny.windzz@gmail.com>
+ <20200107075816.ly6exfd4qtvfxxua@gilmour.lan>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -116,13 +112,13 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <7a61f167-07be-f60d-ec8e-cca171caeb94@linaro.org>
-Date:   Thu, 9 Jan 2020 12:45:21 +0100
+Message-ID: <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
+Date:   Thu, 9 Jan 2020 12:51:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200104152107.11407-7-krzk@kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200107075816.ly6exfd4qtvfxxua@gilmour.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -130,27 +126,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/01/2020 16:20, Krzysztof Kozlowski wrote:
-> Fix up inconsistent usage of upper and lowercase letters in "Samsung"
-> and "Exynos" names.
+On 07/01/2020 08:58, Maxime Ripard wrote:
+> On Mon, Jan 06, 2020 at 05:46:39PM +0000, Yangtao Li wrote:
+>> There are two sensors, sensor0 for CPU, sensor1 for GPU.
+>>
+>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+>> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+>> Tested-on: sun8i-r40-bananapi-m2-ultra
 > 
-> "SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
-> names.  Therefore they should be written with lowercase letters starting
-> with capital letter.
-> 
-> The lowercase "Exynos" name is promoted by its manufacturer Samsung
-> Electronics Co., Ltd., in advertisement materials and on website.
-> 
-> Although advertisement materials usually use uppercase "SAMSUNG", the
-> lowercase version is used in all legal aspects (e.g. on Wikipedia and in
-> privacy/legal statements on
-> https://www.samsung.com/semiconductor/privacy-global/).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
+> As far as I know, tested-on is not documented anywhere (and isn't
+> really used either). I've removed it and applied, thanks!
 
-Applied.
-
+I think this patch should go through my tree as it refers to a commit in
+my branch.
 
 
 -- 
