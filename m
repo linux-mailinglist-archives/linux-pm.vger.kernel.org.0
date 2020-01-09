@@ -2,85 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82591135906
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 13:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB161359D1
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2020 14:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730249AbgAIMRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jan 2020 07:17:49 -0500
-Received: from mail-lj1-f169.google.com ([209.85.208.169]:43837 "EHLO
-        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728974AbgAIMRt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jan 2020 07:17:49 -0500
-Received: by mail-lj1-f169.google.com with SMTP id a13so6962841ljm.10;
-        Thu, 09 Jan 2020 04:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kJr9DdZZf2/ANld+Ul9RudgAsohen5RqZzNVnbAqTsg=;
-        b=mjvHnzbEaIbsQ0NrLtzCJRIhUTVzBGpQVrz43beSCllrFgzbAODIdEWPM6fiwSkcIu
-         xD/gC+72yKJXiV0m/oD9K9IyhwgwpCMl2rrp0ynPOetXgn3z4+wy5Frbb36/2PqTqZHn
-         HcHBVnCKltDcjjTRy+NsKATYq8umfzgbRbIroF1FYyTOLdBhKJsARpLUQ/uDGdqqtnRj
-         x6IL2kwuJCygf3xZtI5IguBxcK4MlZjaYTVcrO9+PrG2dTV90SlbpjXZByf6qskfTMDL
-         OqSqTQJLRYLbZkRDtN7X6jbLlHh+aBwkl7O0axkckjmj46m89yeyNbKH73C2Pohga2Pk
-         CpfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kJr9DdZZf2/ANld+Ul9RudgAsohen5RqZzNVnbAqTsg=;
-        b=mmnLCRenYuIpPcCYNIcskTbby5qXek840Tuo5PVMhsabt/6hLGMiFda6f0AtuoWMOv
-         4tgklh8KVwQerUkA9xC54GCqeOHfxSqiMjxF3ky46RV/9x9rkBJePy6zGAvSn3Wo2NcP
-         uK6MZaaayT2g70Ol0SErzZKaIs8C1WxxAzj87AuIJM9J2Jjd0C595kCwwzaBL3cjl+Uj
-         qIAbfHvIzYWtEXtO6SQDSXssZ6O+vZqNNjQ8lDjAurxIeOiG47DDj0FFAbFh+DgMLPG4
-         OLkRG6iFzaX9oYn+VzNxeP80kk2QiGzTn7zy7JLxdU5jf9BJUbplX69fe9w/c2Jq7gyH
-         +dOw==
-X-Gm-Message-State: APjAAAWsOdZ/DKgQL8pGsPnLn6IdT/t3ACzHPs4IDw6bdsFSPcdHohcX
-        J7ttc8iXIwwhS8LTPTu4PRCuF/IP6UIVthhCeQE=
-X-Google-Smtp-Source: APXvYqwTcIlvIE0lUCJi3FRLOlS1u3VgGMOmgYWiU57KWCLBT1IzZv7XrENayxwaVo2Wm+OfP7BbhpaMMuEa7apsGDA=
-X-Received: by 2002:a2e:943:: with SMTP id 64mr6356480ljj.17.1578572266871;
- Thu, 09 Jan 2020 04:17:46 -0800 (PST)
+        id S1730540AbgAINNr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jan 2020 08:13:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729266AbgAINNq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Jan 2020 08:13:46 -0500
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B2872072A;
+        Thu,  9 Jan 2020 13:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578575626;
+        bh=N89fqm/wSNPygiHhvlyg6BX8W3BVH5DxNVHnix5I0q4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VUmOXFJKEVw4ngBhuV61AJyMW263sFDGLq3mPSQlVnntw+BcrUeoN/nPzHQeIMbQk
+         DanmK4fpneCdJOfhYjy1YMkRL1yqZ/og4NTxthy+l+mzX+VJG67l+M2mJ6lQgTHvJu
+         5ALFsbNQpFxBuIGF6bVy79urSlWQurdkYuutl/Zc=
+Date:   Thu, 9 Jan 2020 14:13:43 +0100
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, wens@csie.org, anarsoul@gmail.com,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        megous@megous.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i-r40: Add thermal sensor and
+ thermal zones
+Message-ID: <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan>
+References: <20200106174639.20862-1-tiny.windzz@gmail.com>
+ <20200106174639.20862-2-tiny.windzz@gmail.com>
+ <20200107075816.ly6exfd4qtvfxxua@gilmour.lan>
+ <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
 MIME-Version: 1.0
-References: <08794fde-cdd0-287c-62bf-e2e3b8c80686@gmail.com>
- <20191203101509.wte47aad5k4mqu2y@pengutronix.de> <CAOMZO5Cn993y9VeFN6hPO3-cfNnUKiuFd_rqAZ8htz=dO6t6ig@mail.gmail.com>
- <CAOMZO5BniszDhWKkoWY=P62kv9cY160r9P=pjpbSOZasxJvdBA@mail.gmail.com> <77fff313-3f40-6b5e-fe30-5a65a189bdff@gmail.com>
-In-Reply-To: <77fff313-3f40-6b5e-fe30-5a65a189bdff@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 9 Jan 2020 09:17:35 -0300
-Message-ID: <CAOMZO5DyJ_niuoBX62B1NLkKRpYQQtKUiX06L62TmA6PNMKO5A@mail.gmail.com>
-Subject: Re: Issue with imx_get_temp()
-To:     Igor Plyatov <plyatov@gmail.com>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rudrzmim3rv4efom"
+Content-Disposition: inline
+In-Reply-To: <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Igor,
 
-On Tue, Dec 3, 2019 at 11:36 AM Igor Plyatov <plyatov@gmail.com> wrote:
->
-> Dear Fabio,
->
-> > Does the following patch help?
-> > http://code.bulix.org/l3rz2e-982595
->
-> Thank you!
->
-> Patch applied and will be tested.
->
-> I will inform you about results.
+--rudrzmim3rv4efom
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Have you had a chance to test the patch?
+Hi Daniel,
+
+On Thu, Jan 09, 2020 at 12:51:27PM +0100, Daniel Lezcano wrote:
+> On 07/01/2020 08:58, Maxime Ripard wrote:
+> > On Mon, Jan 06, 2020 at 05:46:39PM +0000, Yangtao Li wrote:
+> >> There are two sensors, sensor0 for CPU, sensor1 for GPU.
+> >>
+> >> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> >> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> >> Tested-on: sun8i-r40-bananapi-m2-ultra
+> >
+> > As far as I know, tested-on is not documented anywhere (and isn't
+> > really used either). I've removed it and applied, thanks!
+>
+> I think this patch should go through my tree as it refers to a commit in
+> my branch.
+
+I'm not quite sure to get why. Even though that patch depends on the
+one affecting the driver to be functional, it doesn't break anything
+when merged through arm-soc, and similarly yours doesn't affect any
+other tree if it's merged through your tree, so there's no dependency?
+
+Maxime
+
+--rudrzmim3rv4efom
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXhcnBwAKCRDj7w1vZxhR
+xcImAQDNbSqcmxp2wB1rwCZU6HKqVaiK8UsFDVOYa38x/E7CiAEAxs5cMCPyNob1
+HngPtTnq7ckkkdz5yvv7IEl2Ak4wcgE=
+=9f/6
+-----END PGP SIGNATURE-----
+
+--rudrzmim3rv4efom--
