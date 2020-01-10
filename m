@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2755B136B83
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2E6136B8B
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbgAJK6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jan 2020 05:58:00 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54097 "EHLO
+        id S1727762AbgAJK6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jan 2020 05:58:01 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:58753 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727745AbgAJK6A (ORCPT
+        with ESMTP id S1727709AbgAJK6A (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 05:58:00 -0500
 Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id 7037ea166fca5e63; Fri, 10 Jan 2020 11:57:58 +0100
+ id 6634a672c62481b0; Fri, 10 Jan 2020 11:57:57 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Len Brown <len.brown@intel.com>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 1/8] intel_idle: Eliminate __setup_broadcast_timer()
-Date:   Fri, 10 Jan 2020 11:43:23 +0100
-Message-ID: <26343594.6IAkRYhI4F@kreacher>
+Subject: [PATCH 2/8] intel_idle: Fold intel_idle_probe() into intel_idle_init()
+Date:   Fri, 10 Jan 2020 11:44:58 +0100
+Message-ID: <1620893.3AGvmZJH3P@kreacher>
 In-Reply-To: <14127826.m9lEolTOYu@kreacher>
 References: <14127826.m9lEolTOYu@kreacher>
 MIME-Version: 1.0
@@ -34,48 +34,138 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The __setup_broadcast_timer() static function is only called in one
-place and "true" is passed to it as the argument in there, so
-effectively it is a wrapper arround tick_broadcast_enable().
-
-To simplify the code, call tick_broadcast_enable() directly instead
-of __setup_broadcast_timer() and drop the latter.
+There is no particular reason why intel_idle_probe() needs to be
+a separate function and folding it into intel_idle_init() causes
+the code to be somewhat easier to follow, so do just that.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/idle/intel_idle.c |   10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/idle/intel_idle.c |   97 +++++++++++++++++++---------------------------
+ 1 file changed, 42 insertions(+), 55 deletions(-)
 
 Index: linux-pm/drivers/idle/intel_idle.c
 ===================================================================
 --- linux-pm.orig/drivers/idle/intel_idle.c
 +++ linux-pm/drivers/idle/intel_idle.c
-@@ -967,14 +967,6 @@ static bool intel_idle_verify_cstate(uns
- 	return true;
- }
+@@ -1297,58 +1297,6 @@ static inline bool intel_idle_off_by_def
+ #endif /* !CONFIG_ACPI_PROCESSOR_CSTATE */
  
--static void __setup_broadcast_timer(bool on)
+ /*
+- * intel_idle_probe()
+- */
+-static int __init intel_idle_probe(void)
 -{
--	if (on)
--		tick_broadcast_enable();
--	else
--		tick_broadcast_disable();
+-	unsigned int eax, ebx, ecx;
+-	const struct x86_cpu_id *id;
+-
+-	if (max_cstate == 0) {
+-		pr_debug("disabled\n");
+-		return -EPERM;
+-	}
+-
+-	id = x86_match_cpu(intel_idle_ids);
+-	if (id) {
+-		if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
+-			pr_debug("Please enable MWAIT in BIOS SETUP\n");
+-			return -ENODEV;
+-		}
+-	} else {
+-		id = x86_match_cpu(intel_mwait_ids);
+-		if (!id)
+-			return -ENODEV;
+-	}
+-
+-	if (boot_cpu_data.cpuid_level < CPUID_MWAIT_LEAF)
+-		return -ENODEV;
+-
+-	cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &mwait_substates);
+-
+-	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED) ||
+-	    !(ecx & CPUID5_ECX_INTERRUPT_BREAK) ||
+-	    !mwait_substates)
+-			return -ENODEV;
+-
+-	pr_debug("MWAIT substates: 0x%x\n", mwait_substates);
+-
+-	icpu = (const struct idle_cpu *)id->driver_data;
+-	if (icpu) {
+-		cpuidle_state_table = icpu->state_table;
+-		if (icpu->use_acpi)
+-			intel_idle_acpi_cst_extract();
+-	} else if (!intel_idle_acpi_cst_extract()) {
+-		return -ENODEV;
+-	}
+-
+-	pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
+-		 boot_cpu_data.x86_model);
+-
+-	return 0;
 -}
 -
- static void auto_demotion_disable(void)
+-/*
+  * intel_idle_cpuidle_devices_uninit()
+  * Unregisters the cpuidle devices.
+  */
+@@ -1632,15 +1580,54 @@ static int intel_idle_cpu_online(unsigne
+ 
+ static int __init intel_idle_init(void)
  {
- 	unsigned long long msr_bits;
-@@ -1624,7 +1616,7 @@ static int intel_idle_cpu_online(unsigne
- 	struct cpuidle_device *dev;
++	const struct x86_cpu_id *id;
++	unsigned int eax, ebx, ecx;
+ 	int retval;
  
- 	if (lapic_timer_reliable_states != LAPIC_TIMER_ALWAYS_RELIABLE)
--		__setup_broadcast_timer(true);
-+		tick_broadcast_enable();
+ 	/* Do not load intel_idle at all for now if idle= is passed */
+ 	if (boot_option_idle_override != IDLE_NO_OVERRIDE)
+ 		return -ENODEV;
  
- 	/*
- 	 * Some systems can hotplug a cpu at runtime after
+-	retval = intel_idle_probe();
+-	if (retval)
+-		return retval;
++	if (max_cstate == 0) {
++		pr_debug("disabled\n");
++		return -EPERM;
++	}
++
++	id = x86_match_cpu(intel_idle_ids);
++	if (id) {
++		if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
++			pr_debug("Please enable MWAIT in BIOS SETUP\n");
++			return -ENODEV;
++		}
++	} else {
++		id = x86_match_cpu(intel_mwait_ids);
++		if (!id)
++			return -ENODEV;
++	}
++
++	if (boot_cpu_data.cpuid_level < CPUID_MWAIT_LEAF)
++		return -ENODEV;
++
++	cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &mwait_substates);
++
++	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED) ||
++	    !(ecx & CPUID5_ECX_INTERRUPT_BREAK) ||
++	    !mwait_substates)
++			return -ENODEV;
++
++	pr_debug("MWAIT substates: 0x%x\n", mwait_substates);
++
++	icpu = (const struct idle_cpu *)id->driver_data;
++	if (icpu) {
++		cpuidle_state_table = icpu->state_table;
++		if (icpu->use_acpi)
++			intel_idle_acpi_cst_extract();
++	} else if (!intel_idle_acpi_cst_extract()) {
++		return -ENODEV;
++	}
++
++	pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
++		 boot_cpu_data.x86_model);
+ 
+ 	intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
+ 	if (intel_idle_cpuidle_devices == NULL)
 
 
 
