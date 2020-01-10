@@ -2,102 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A3B136AD5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A25136AFA
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727588AbgAJKQh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jan 2020 05:16:37 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:23052 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727452AbgAJKQg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 05:16:36 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00AAE3Yq031197;
-        Fri, 10 Jan 2020 11:16:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=AAD/GToJl17SoA/ncPjv8bRydogH2ZBtCfUpPZ40ub0=;
- b=zpzL2mKRX3XGn9bOo1I7gmQD4k8aW36S5+loLQuhg/U2FX8Zy9tx3LU9PvGDkccAfS3L
- nMQyx8AO/LbrSHjrFvlp8s5SWocc15VluEjiN6j9OZM5WHGW81paA0Qtd4pUuiCn188w
- ZPsF7j0IWLJgh3SYnzlfDisKc0MG/+p6WSOnaHQNUpn0w+iEA2fiSm9dkvQowp1/1rMs
- GG6k3bPmUujVOdYPXcrvMOJhCC9cxc1lehVrKdV1k/GqRSZ7Krj9aCTtpBXy5kGcMs5t
- iSZR1hTQRBc1OphTho7YI3NKeg8ouiv6/FYHeH+pDuu/ky3AtbrGiWWtD47VNKC6eXoA 7g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2xepyt83ft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jan 2020 11:16:18 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BFA92100038;
-        Fri, 10 Jan 2020 11:16:12 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag6node2.st.com [10.75.127.17])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B1AFE2A7907;
-        Fri, 10 Jan 2020 11:16:12 +0100 (CET)
-Received: from localhost (10.75.127.45) by SFHDAG6NODE2.st.com (10.75.127.17)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 10 Jan 2020 11:16:12
- +0100
-From:   Pascal Paillet <p.paillet@st.com>
-To:     <rui.zhang@intel.com>, <edubezval@gmail.com>,
-        <daniel.lezcano@linaro.org>, <amit.kucheria@verdurent.com>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
-        <p.paillet@st.com>, <david.hernandezsanchez@st.com>,
-        <horms+renesas@verge.net.au>, <wsa+renesas@sang-engineering.com>,
-        <linux-pm@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH_V3 6/6] thermal: stm32: fix low threshold interrupt flood
-Date:   Fri, 10 Jan 2020 11:16:05 +0100
-Message-ID: <20200110101605.24984-7-p.paillet@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200110101605.24984-1-p.paillet@st.com>
-References: <20200110101605.24984-1-p.paillet@st.com>
+        id S1727345AbgAJKXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jan 2020 05:23:41 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34985 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727240AbgAJKXk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 05:23:40 -0500
+Received: by mail-ot1-f66.google.com with SMTP id i15so1467583oto.2;
+        Fri, 10 Jan 2020 02:23:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rU/nzWaAkvUKYiZR6iZ7M9rKwj74Is/miQ7jfGzneiY=;
+        b=l8DQFgL/Kwe5QJCs5SBn68Xy1T/Cy4FjMdmDOpeVvwogevKP8Getm75hQ8oRTACFA/
+         zKa3enGTVeI9iTmkqvp6seV7XnyYu8JYYsDI1pGE4hWY152sQ4eeYSW92QIWn4l2fpD1
+         ZZDQdmoEWADxlScRCTEn+PA2G3f13xfijonL+4ZMGftuegG8kz+YFsBOOj50rGvM9C+Q
+         81fJL5RL1dhKZ6WOloqW6pZeBbF0H7yFdKM+EpRr1LJ39iyeW7QBWw192E2qKTfRKCq3
+         3tF78zlnyMctd3UpzSpzH7E10/2YqjNFDatVnWjs3ykdpM/7r/YdWjLEaJGwAKHna8aw
+         J0tQ==
+X-Gm-Message-State: APjAAAWL/3oQL3HQLiLDtxxoNtvJdV1coqJHydkWK9nLOjJUTDaVL8G/
+        qpWiBpO5XpCzaL9/vvqEEK4Ap4UxKvOiXaRlcKuaQqQ/
+X-Google-Smtp-Source: APXvYqwFQ1xvUY+GiJkE0vgl4fCLQfKuMnYxU9W2I8OYUiqIeuHcOwLzNlxLs+1ijGdLu70UoWShKm1JfUzJw+7GRxU=
+X-Received: by 2002:a9d:62c7:: with SMTP id z7mr1885562otk.189.1578651820305;
+ Fri, 10 Jan 2020 02:23:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG6NODE2.st.com
- (10.75.127.17)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-10_01:2020-01-10,2020-01-09 signatures=0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Jan 2020 11:23:29 +0100
+Message-ID: <CAJZ5v0g27E7+wsrMXw1KhUQV6PZJhWcSQ5VG_HTZ5JgYejh15w@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.5-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the STM32 thermal peripheral, it is not possible to dump the
-temperature that has caused the interrupt.
-When the temperature reaches the low threshold, we generally read
-a temperature that is a little bit higher than the low threshold.
-This maybe due to sampling precision, and also because the CPU becomes
-hotter when it quits WFI mode.
-In that case, the framework does not change the trip points. This leads
-to a lot of low threshold interrupts.
+Hi Linus,
 
-The fix is to set the low threshold value 0.5 degrees Celsius
-below the actual request.
+Please pull from the tag
 
-The problem is not so frequent with the high threshold and it would
-no be a good idea to set the threshold value higher than the request.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.5-rc6
 
-Signed-off-by: Pascal Paillet <p.paillet@st.com>
----
- drivers/thermal/st/stm_thermal.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+with top-most commit 10674d97c4e266e8c50ce794d1c470c26228d52b
 
-diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-index aaf25ca2f118..1cc5e6c5709e 100644
---- a/drivers/thermal/st/stm_thermal.c
-+++ b/drivers/thermal/st/stm_thermal.c
-@@ -321,7 +321,8 @@ static int stm_thermal_set_trips(void *data, int low, int high)
- 
- 	if (low > -INT_MAX) {
- 		sensor->low_temp_enabled = 1;
--		ret = stm_thermal_calculate_threshold(sensor, low, &th);
-+		/* add 0.5 of hysteresis due to measurement error */
-+		ret = stm_thermal_calculate_threshold(sensor, low - 500, &th);
- 		if (ret)
- 			return ret;
- 
--- 
-2.17.1
+ Merge branch 'powercap'
 
+on top of commit c79f46a282390e0f5b306007bf7b11a46d529538
+
+ Linux 5.5-rc5
+
+to receive power management fixes for 5.5-rc6.
+
+These prevent the cpufreq-dt driver from probing Tegra20/30 (Dmitry
+Osipenko) and prevent the Intel RAPL power capping driver from
+crashing during CPU initialization due to a NULL pointer dereference
+if the processor model in use is not known to it (Harry Pan).
+
+Thanks!
+
+
+---------------
+
+Dmitry Osipenko (1):
+      cpufreq: dt-platdev: Blacklist NVIDIA Tegra20 and Tegra30 SoCs
+
+Harry Pan (1):
+      powercap: intel_rapl: add NULL pointer check to rapl_mmio_cpu_online()
+
+---------------
+
+ drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
+ drivers/powercap/intel_rapl_common.c | 3 +++
+ 2 files changed, 5 insertions(+)
