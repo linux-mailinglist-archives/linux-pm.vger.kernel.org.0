@@ -2,152 +2,322 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C37136B15
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BFA136B28
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 11:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbgAJKbZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jan 2020 05:31:25 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34104 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727490AbgAJKbZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 05:31:25 -0500
-Received: by mail-wr1-f67.google.com with SMTP id t2so1310661wrr.1
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2020 02:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:cc:from:subject:autocrypt:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=/Y2utiUMnfVSvbEiROhsF2K80JwlmfplQDOQoYF7tu8=;
-        b=ZgUgSAXtECzideI4ox3iVdIiSimDDmQjC1i09NUIexGXYUI8aMda/NacKp1bibF1+2
-         clczJ+SQ/ynkBSXCPa1NdUoDxqH0+gVUdiXTd0JpANCMHNttrOgc5VLLbPxLFY0IPN4B
-         ehzvJM0bm2b5PIx0gUfqiPMe8625J3TaOxttBQ0E6Hot2SKhLpBiJC/IxntZUIPy0UPh
-         ZcPnqC9N7UtDUVLHE050GkT9A+XcgOPQyhgQolO3lC+2lUxm1FIJIu8yJgSl5uu7It2e
-         E/Wf+PMi0HmAfx4Z66OQyi+XU0cr1FWm0Sugft9STk4T+/FnpenxwpNxVipKh/l/PrXb
-         9ipw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:autocrypt:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=/Y2utiUMnfVSvbEiROhsF2K80JwlmfplQDOQoYF7tu8=;
-        b=CQSiKJDEkRdb5zSawWtsrEUKflhmTddaT5Bd/e1itf8egQK47N4UW+dwqruS/LsyPb
-         f+gaEYZWF0FzSh4EJzA2oD7Hr8lx4LltcuZ4WBE3ewNGH1B/JxbTcxXJrbZMGO3TjZub
-         CBz4gcthASYsUpkeDbdvSwtU5Zfk5FgSj6uk+mKujiJUTPzROG4Jk4ew7QHWnijYp50T
-         n68VKTP1e6X1svcHbpW2MOk3LfrWqlbS5NWIM1ZAY6a+euYH2s21u3r2IZazso8RRhEK
-         JLSX5Tot4VvjXBURhrG1YWoOetXEDXhq1SKo0fmwukKYtd8PjyerIscctiuNUX56e94e
-         ZMdw==
-X-Gm-Message-State: APjAAAUOzhniQCF6u7oXY/k8KMNRs+sXFhNHm5Pi8m2aLn4pqMb+QL7n
-        UAUUb07s9b6QQ9xk+fHzUek03HJ9Ij32SQ==
-X-Google-Smtp-Source: APXvYqzhvfPj5ExAiKGD0pXKsy+voDC3CvPzXUFWZYdZeJxAmzGQg6k9HI8PPUX3roHdoEzl7IDamg==
-X-Received: by 2002:adf:ea05:: with SMTP id q5mr2767352wrm.48.1578652282376;
-        Fri, 10 Jan 2020 02:31:22 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:a10f:f166:3981:1da4? ([2a01:e34:ed2f:f020:a10f:f166:3981:1da4])
-        by smtp.googlemail.com with ESMTPSA id z4sm1731937wma.2.2020.01.10.02.31.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2020 02:31:21 -0800 (PST)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal fixes for v5.5-rc6
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <dae56d94-114b-18b3-92dd-0c390b0cbe86@linaro.org>
-Date:   Fri, 10 Jan 2020 11:31:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727562AbgAJKfX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 10 Jan 2020 05:35:23 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42638 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbgAJKfW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 05:35:22 -0500
+Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id 14b9680682bab4c8; Fri, 10 Jan 2020 11:35:19 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2] Documentation: admin-guide: PM: Add intel_idle document
+Date:   Fri, 10 Jan 2020 11:35:19 +0100
+Message-ID: <1754251.4pWRGBvRWM@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The following changes since commit c79f46a282390e0f5b306007bf7b11a46d529538:
+Add an admin-guide document for the intel_idle driver to describe
+how it works: how it enumerates idle states, what happens during the
+initialization of it, how it can be controlled via the kernel command
+line and so on.
 
-  Linux 5.5-rc5 (2020-01-05 14:23:27 -0800)
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+---
 
-are available in the Git repository at:
+-> v2:
+  * Rewrite the description of the "noacpi" module parameter (Randy).
+  * Reduce the level of detail in the description of driver actions in some
+    places (to address review comments from Randy).
+  * Add R-by from Randy.
+
+---
+ Documentation/admin-guide/pm/intel_idle.rst    |  246 +++++++++++++++++++++++++
+ Documentation/admin-guide/pm/working-state.rst |    1 
+ 2 files changed, 247 insertions(+)
+
+Index: linux-pm/Documentation/admin-guide/pm/working-state.rst
+===================================================================
+--- linux-pm.orig/Documentation/admin-guide/pm/working-state.rst
++++ linux-pm/Documentation/admin-guide/pm/working-state.rst
+@@ -8,6 +8,7 @@ Working-State Power Management
+    :maxdepth: 2
+ 
+    cpuidle
++   intel_idle
+    cpufreq
+    intel_pstate
+    intel_epb
+Index: linux-pm/Documentation/admin-guide/pm/intel_idle.rst
+===================================================================
+--- /dev/null
++++ linux-pm/Documentation/admin-guide/pm/intel_idle.rst
+@@ -0,0 +1,246 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. include:: <isonum.txt>
++
++==============================================
++``intel_idle`` CPU Idle Time Management Driver
++==============================================
++
++:Copyright: |copy| 2020 Intel Corporation
++
++:Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++
++
++General Information
++===================
++
++``intel_idle`` is a part of the
++:doc:`CPU idle time management subsystem <cpuidle>` in the Linux kernel
++(``CPUIdle``).  It is the default CPU idle time management driver for the
++Nehalem and later generations of Intel processors, but the level of support for
++a particular processor model in it depends on whether or not it recognizes that
++processor model and may also depend on information coming from the platform
++firmware.  [To understand ``intel_idle`` it is necessary to know how ``CPUIdle``
++works in general, so this is the time to get familiar with :doc:`cpuidle` if you
++have not done that yet.]
++
++``intel_idle`` uses the ``MWAIT`` instruction to inform the processor that the
++logical CPU executing it is idle and so it may be possible to put some of the
++processor's functional blocks into low-power states.  That instruction takes two
++arguments (passed in the ``EAX`` and ``ECX`` registers of the target CPU), the
++first of which, referred to as a *hint*, can be used by the processor to
++determine what can be done (for details refer to Intel Software Developer’s
++Manual [1]_).  Accordingly, ``intel_idle`` refuses to work with processors in
++which the support for the ``MWAIT`` instruction has been disabled (for example,
++via the platform firmware configuration menu) or which do not support that
++instruction at all.
++
++``intel_idle`` is not modular, so it cannot be unloaded, which means that the
++only way to pass early-configuration-time parameters to it is via the kernel
++command line.
++
++
++.. _intel-idle-enumeration-of-states:
++
++Enumeration of Idle States
++==========================
++
++Each ``MWAIT`` hint value is interpreted by the processor as a license to
++reconfigure itself in a certain way in order to save energy.  The processor
++configurations (with reduced power draw) resulting from that are referred to
++as C-states (in the ACPI terminology) or idle states.  The list of meaningful
++``MWAIT`` hint values and idle states (i.e. low-power configurations of the
++processor) corresponding to them depends on the processor model and it may also
++depend on the configuration of the platform.
++
++In order to create a list of available idle states required by the ``CPUIdle``
++subsystem (see :ref:`idle-states-representation` in :doc:`cpuidle`),
++``intel_idle`` can use two sources of information: static tables of idle states
++for different processor models included in the driver itself and the ACPI tables
++of the system.  The former are always used if the processor model at hand is
++recognized by ``intel_idle`` and the latter are used if that is required for
++the given processor model (which is the case for all server processor models
++recognized by ``intel_idle``) or if the processor model is not recognized.
++
++If the ACPI tables are going to be used for building the list of available idle
++states, ``intel_idle`` first looks for a ``_CST`` object under one of the ACPI
++objects corresponding to the CPUs in the system (refer to the ACPI specification
++[2]_ for the description of ``_CST`` and its output package).  Because the
++``CPUIdle`` subsystem expects that the list of idle states supplied by the
++driver will be suitable for all of the CPUs handled by it and ``intel_idle`` is
++registered as the ``CPUIdle`` driver for all of the CPUs in the system, the
++driver looks for the first ``_CST`` object returning at least one valid idle
++state description and such that all of the idle states included in its return
++package are of the FFH (Functional Fixed Hardware) type, which means that the
++``MWAIT`` instruction is expected to be used to tell the processor that it can
++enter one of them.  The return package of that ``_CST`` is then assumed to be
++applicable to all of the other CPUs in the system and the idle state
++descriptions extracted from it are stored in a preliminary list of idle states
++coming from the ACPI tables.  [This step is skipped if ``intel_idle`` is
++configured to ignore the ACPI tables; see `below <intel-idle-parameters_>`_.]
++
++Next, the first (index 0) entry in the list of available idle states is
++initialized to represent a "polling idle state" (a pseudo-idle state in which
++the target CPU continuously fetches and executes instructions), and the
++subsequent (real) idle state entries are populated as follows.
++
++If the processor model at hand is recognized by ``intel_idle``, there is a
++(static) table of idle state descriptions for it in the driver.  In that case,
++the "internal" table is the primary source of information on idle states and the
++information from it is copied to the final list of available idle states.  If
++using the ACPI tables for the enumeration of idle states is not required
++(depending on the processor model), all of the listed idle state are enabled by
++default (so all of them will be taken into consideration by ``CPUIdle``
++governors during CPU idle state selection).  Otherwise, some of the listed idle
++states may not be enabled by default if there are no matching entries in the
++preliminary list of idle states coming from the ACPI tables.  In that case user
++space still can enable them later (on a per-CPU basis) with the help of
++the ``disable`` idle state attribute in ``sysfs`` (see
++:ref:`idle-states-representation` in :doc:`cpuidle`).  This basically means that
++the idle states "known" to the driver may not be enabled by default if they have
++not been exposed by the platform firmware (through the ACPI tables).
++
++If the given processor model is not recognized by ``intel_idle``, but it
++supports ``MWAIT``, the preliminary list of idle states coming from the ACPI
++tables is used for building the final list that will be supplied to the
++``CPUIdle`` core during driver registration.  For each idle state in that list,
++the description, ``MWAIT`` hint and exit latency are copied to the corresponding
++entry in the final list of idle states.  The name of the idle state represented
++by it (to be returned by the ``name`` idle state attribute in ``sysfs``) is
++"CX_ACPI", where X is the index of that idle state in the final list (note that
++the minimum value of X is 1, because 0 is reserved for the "polling" state), and
++its target residency is based on the exit latency value.  Specifically, for
++C1-type idle states the exit latency value is also used as the target residency
++(for compatibility with the majority of the "internal" tables of idle states for
++various processor models recognized by ``intel_idle``) and for the other idle
++state types (C2 and C3) the target residency value is 3 times the exit latency
++(again, that is because it reflects the target residency to exit latency ratio
++in the majority of cases for the processor models recognized by ``intel_idle``).
++All of the idle states in the final list are enabled by default in this case.
++
++
++.. _intel-idle-initialization-and-quirks:
++
++Initialization
++==============
++
++The initialization of ``intel_idle`` starts with checking if the kernel command
++line options forbid the use of the ``MWAIT`` instruction.  If that is the case,
++an error code is returned right away.
++
++The next step is to check whether or not the processor model is known to the
++driver, which determines the idle states enumeration method (see
++`above <intel-idle-enumeration-of-states_>`_), and whether or not the processor
++supports ``MWAIT`` (the initialization fails if that is not the case).  Then,
++the ``MWAIT`` support in the processor is enumerated through ``CPUID`` and the
++driver initialization fails if the level of support is not as expected (for
++example, if the total number of ``MWAIT`` substates returned is 0).
++
++Next, if the driver is not configured to ignore the ACPI tables (see
++`below <intel-idle-parameters_>`_), the idle states information provided by the
++platform firmware is extracted from them.
++
++Then, ``CPUIdle`` device objects are allocated for all CPUs and the list of
++available idle states is created as explained
++`above <intel-idle-enumeration-of-states_>`_.
++
++Finally, ``intel_idle`` is registered with the help of cpuidle_register_driver()
++as the ``CPUIdle`` driver for all CPUs in the system and a CPU online callback
++for configuring individual CPUs is registered via cpuhp_setup_state(), which
++(among other things) causes the callback routine to be invoked for all of the
++CPUs present in the system at that time (each CPU executes its own instance of
++the callback routine).  That routine registers a ``CPUIdle`` device for the CPU
++running it (which enables the ``CPUIdle`` subsystem to operate that CPU) and
++optionally performs some CPU-specific initialization actions that may be
++required for the given processor model.
++
++
++.. _intel-idle-parameters:
++
++Kernel Command Line Options and Module Parameters
++=================================================
++
++The *x86* architecture support code recognizes three kernel command line
++options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
++and ``idle=nomwait``.  If any of them is present in the kernel command line, the
++``MWAIT`` instruction is not allowed to be used, so the initialization of
++``intel_idle`` will fail.
++
++Apart from that there are two module parameters recognized by ``intel_idle``
++itself that can be set via the kernel command line (they cannot be updated via
++sysfs, so that is the only way to change their values).
++
++The ``max_cstate`` parameter value is the maximum idle state index in the list
++of idle states supplied to the ``CPUIdle`` core during the registration of the
++driver.  It is also the maximum number of regular (non-polling) idle states that
++can be used by ``intel_idle``, so the enumeration of idle states is terminated
++after finding that number of usable idle states (the other idle states that
++potentially might have been used if ``max_cstate`` had been greater are not
++taken into consideration at all).  Setting ``max_cstate`` can prevent
++``intel_idle`` from exposing idle states that are regarded as "too deep" for
++some reason to the ``CPUIdle`` core, but it does so by making them effectively
++invisible until the system is shut down and started again which may not always
++be desirable.  In practice, it is only really necessary to do that if the idle
++states in question cannot be enabled during system startup, because in the
++working state of the system the CPU power management quality of service (PM
++QoS) feature can be used to prevent ``CPUIdle`` from touching those idle states
++even if they have been enumerated (see :ref:`cpu-pm-qos` in :doc:`cpuidle`).
++Setting ``max_cstate`` to 0 causes the ``intel_idle`` initialization to fail.
++
++The ``noacpi`` module parameter (which is recognized by ``intel_idle`` if the
++kernel has been configured with ACPI support), can be set to make the driver
++ignore the system's ACPI tables entirely (it is unset by default).
++
++
++.. _intel-idle-core-and-package-idle-states:
++
++Core and Package Levels of Idle States
++======================================
++
++Typically, in a processor supporting the ``MWAIT`` instruction there are (at
++least) two levels of idle states (or C-states).  One level, referred to as
++"core C-states", covers individual cores in the processor, whereas the other
++level, referred to as "package C-states", covers the entire processor package
++and it may also involve other components of the system (GPUs, memory
++controllers, I/O hubs etc.).
++
++Some of the ``MWAIT`` hint values allow the processor to use core C-states only
++(most importantly, that is the case for the ``MWAIT`` hint value corresponding
++to the ``C1`` idle state), but the majority of them give it a license to put
++the target core (i.e. the core containing the logical CPU executing ``MWAIT``
++with the given hint value) into a specific core C-state and then (if possible)
++to enter a specific package C-state at the deeper level.  For example, the
++``MWAIT`` hint value representing the ``C3`` idle state allows the processor to
++put the target core into the low-power state referred to as "core ``C3``" (or
++``CC3``), which happens if all of the logical CPUs (SMT siblings) in that core
++have executed ``MWAIT`` with the ``C3`` hint value (or with a hint value
++representing a deeper idle state), and in addition to that (in the majority of
++cases) it gives the processor a license to put the entire package (possibly
++including some non-CPU components such as a GPU or a memory controller) into the
++low-power state referred to as "package ``C3``" (or ``PC3``), which happens if
++all of the cores have gone into the ``CC3`` state and (possibly) some additional
++conditions are satisfied (for instance, if the GPU is covered by ``PC3``, it may
++be required to be in a certain GPU-specific low-power state for ``PC3`` to be
++reachable).
++
++As a rule, there is no simple way to make the processor use core C-states only
++if the conditions for entering the corresponding package C-states are met, so
++the logical CPU executing ``MWAIT`` with a hint value that is not core-level
++only (like for ``C1``) must always assume that this may cause the processor to
++enter a package C-state.  [That is why the exit latency and target residency
++values corresponding to the majority of ``MWAIT`` hint values in the "internal"
++tables of idle states in ``intel_idle`` reflect the properties of package
++C-states.]  If using package C-states is not desirable at all, either
++:ref:`PM QoS <cpu-pm-qos>` or the ``max_cstate`` module parameter of
++``intel_idle`` described `above <intel-idle-parameters_>`_ must be used to
++restrict the range of permissible idle states to the ones with core-level only
++``MWAIT`` hint values (like ``C1``).
++
++
++References
++==========
++
++.. [1] *Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 2B*,
++       https://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-vol-2b-manual.html
++
++.. [2] *Advanced Configuration and Power Interface (ACPI) Specification*,
++       https://uefi.org/specifications
 
 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-tags/thermal-v5.5-rc5
-
-for you to fetch changes up to 344fa0bad6932204146d305607790340f2324a90:
-
-  drivers: thermal: tsens: Work with old DTBs (2020-01-07 08:22:35 +0100)
-
-----------------------------------------------------------------
-
-- Fix backward compatibility with old DTBs on QCOM tsens (Amit Kucheria)
-
-----------------------------------------------------------------
-Amit Kucheria (1):
-      drivers: thermal: tsens: Work with old DTBs
-
- drivers/thermal/qcom/tsens.c | 3 +++
- 1 file changed, 3 insertions(+)
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
