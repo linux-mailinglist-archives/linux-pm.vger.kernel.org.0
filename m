@@ -2,426 +2,381 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC701136944
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 09:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB791369FE
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2020 10:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727181AbgAJI4f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jan 2020 03:56:35 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:48336 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727179AbgAJI4f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 03:56:35 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200110085632euoutp024d4c321267db6099cfed8ce61e488e0c~oerY2TY6n3269532695euoutp02L
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2020 08:56:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200110085632euoutp024d4c321267db6099cfed8ce61e488e0c~oerY2TY6n3269532695euoutp02L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1578646592;
-        bh=gjYrnibyVonHjD0K8flrXfXLZ6vyR+EocTb65Lq+ARk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=IxloGf2Za8rDtz3E8dbHQMCFMWBudBUEaahlvThKSy6JcN3tLnhpZmy5EQEzWF4rg
-         TWmPOAnTw0F/whsRLZZM9jP9CSpBtdpC4IucU6OGxUAN0q4hFqwaHU40zsNbNUX/6X
-         CENFZe9btyKiCwg78O3wydAhF5wH6rSPD5sFUtrU=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200110085632eucas1p1e5c13bf04532c7df0c10c9296903d13e~oerYj0LCs1164811648eucas1p1M;
-        Fri, 10 Jan 2020 08:56:32 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id A7.F0.61286.04C381E5; Fri, 10
-        Jan 2020 08:56:32 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200110085631eucas1p28523b3a56f6f9431c822871aba68f617~oerX-CsiE1007610076eucas1p24;
-        Fri, 10 Jan 2020 08:56:31 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200110085631eusmtrp20b02490cb95e1a9076d5aafb06681986~oerX_E0010176101761eusmtrp2h;
-        Fri, 10 Jan 2020 08:56:31 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-79-5e183c40d100
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B6.74.08375.F3C381E5; Fri, 10
-        Jan 2020 08:56:31 +0000 (GMT)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200110085630eusmtip139a887c89a328d5e10753829e49a18f6~oerXLXub31728917289eusmtip1J;
-        Fri, 10 Jan 2020 08:56:30 +0000 (GMT)
-Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
-To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com, a.swigon@samsung.com,
-        m.szyprowski@samsung.com, enric.balletbo@collabora.com,
-        hl@rock-chips.com, digetx@gmail.com, bjorn.andersson@linaro.org,
-        jcrouse@codeaurora.org, chanwoo@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-Message-ID: <5e7db176-48c4-09a1-f9f4-6d92df636753@samsung.com>
-Date:   Fri, 10 Jan 2020 09:56:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.0
+        id S1727186AbgAJJaQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 10 Jan 2020 04:30:16 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:52320 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726759AbgAJJaQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jan 2020 04:30:16 -0500
+Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id e70d34360224fc07; Fri, 10 Jan 2020 10:30:12 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: admin-guide: PM: Add intel_idle document
+Date:   Fri, 10 Jan 2020 10:30:12 +0100
+Message-ID: <2544395.vurE42ssns@kreacher>
+In-Reply-To: <d89dd544-77c9-4b80-d91f-c44fc2f83144@infradead.org>
+References: <2011307.aCGEDdB8HR@kreacher> <d89dd544-77c9-4b80-d91f-c44fc2f83144@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20200107090519.3231-3-cw00.choi@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+3bOtuNw9jkve9FuzCxK1MQuJ1MpqDgRUfZXdDGPelqiTttc
-        WQSpeKlhkhaVM5y3zNRSh5mKYg7LzNTK0DW1xDIrsjAVspu1HSX/+/E878vzPh8fRcjGhG5U
-        lCqBU6vYGIVIQtY9mun23hoIoeuS8kj6TX4aojtbvpB0tvklSfdPjQnpiom3iK4cMCH6e/UT
-        gq4piKa7Uj6L6bKhCSHd23hDRE9ebEN0YUqqmL7TNiSmB5LLRFsXM5X5lYjpzbooYOqHShDT
-        oB8SM8byCyJmsK9JxNR8qRcwv/UtJJNVW46YSeOyfZKDksBILibqJKf2DQ6THB+1aOMnDyfO
-        pNWJk9DITh2yowCvh9d3csU6JKFkuAzB49o8wmrI8BSCtpKNvDGJ4HpHFTG/kVNUIeCNWwiu
-        DPSL+I1xBDM9blZ2wrvBoCshreyMwyGv/p5tgcClAuh4b7YZIuwLrV0dNpbiYLiaPYusTGJP
-        SKst/scU5YIPQOc0y484QkfuO9u4HQ6AwvRxWy6B5WB5ZxDwvBzuj9+YOzSbgu7qAzxvhw+t
-        lwU8O8Gn9loxz0tgtsEwp5+C0cIs21MATkUwnDFB8sYWGOz+IbLeQ+A1UNXoy8vboMpYLLDK
-        gB3APO7In+AAOXXXCF6Wwvl0GT/tCWNPMueS3EE3e1d4CSn0C4rpF5TRLyij/59bgMhyJOe0
-        mlglp/FTcad8NGysRqtS+kTExRrRv+/X+af9Wz2afhFuQphCCnvpAxd5qEzIntScjjUhoAiF
-        s/Sh2TVUJo1kT5/h1HFH1doYTmNC7hSpkEv9iz4ekWElm8BFc1w8p553BZSdWxJSSuQGr/uH
-        QqKdSqubI0POOWZYilX+5u6I8B1HP4wmeUb17O3bNLghNTkg2CNnRXS+erj59maPsNGgTtfV
-        gd5PV7i8Io5FHClKf77LUBFQMNLUssn+hMfZ8ETLhpVBpr3sro9LRr4GlC5a9WuNq/bms58h
-        lsY9XmWZiSG6UHNrzdL9swpSc5z1W0uoNexfgDPBrXoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRmVeSWpSXmKPExsVy+t/xu7r2NhJxBm++S1jcn9fKaHF6/zsW
-        i4k3rrBYXP/ynNVi9cfHjBZrbh9itPix4RSzxcYF2RZnm96wW6y4+5HV4vKuOWwWn3uPMFos
-        bGpht1h75C67xe3GFWwO/B5r5q1h9Ljc18vksePuEkaPnbPusntsWtXJ5nHn2h42j43vdjB5
-        /J21n8Wjb8sqRo/Pm+QCuKL0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTt
-        bFJSczLLUov07RL0Mp7eKi34HFPxs3UbewPjI7cuRk4OCQETiUmLVjN1MXJxCAksZZQ4eqmD
-        CSIhLdF4ejWULSzx51oXG4gtJPCaUeLtlkgQW1jAW2J+1xIWEFtEIElix5QmZpBBzALLmCRO
-        PGljhpi6l1FiwdK7YN1sAvoSB8+eBOvgFbCTmDbxPyOIzSKgKtG6ZTGYLSoQIfF8+w1GiBpB
-        iZMzn4DVcwpYSSxsews2h1lAXeLPvEvMELa4xK0n85kgbHmJ7W/nME9gFJqFpH0WkpZZSFpm
-        IWlZwMiyilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzDqtx37uXkH46WNwYcYBTgYlXh4D4iK
-        xwmxJpYVV+YeYpTgYFYS4T16QyxOiDclsbIqtSg/vqg0J7X4EKMp0HMTmaVEk/OBCSmvJN7Q
-        1NDcwtLQ3Njc2MxCSZy3Q+BgjJBAemJJanZqakFqEUwfEwenVAPjhF7f9TxbF086yiKxYdfu
-        HOP/jT+unH/vWMtlukL6wLecr4GsN2u6VfqN771VeHsk//NatmD2wMlPFE+F9p/eGbfsW6vS
-        Px2bzsl3tod2+ejuFy32yedIOC1SuXbK1nBev6lWJ8tO7JrGxtMyoerfwQ+995Q/rZ149sV/
-        1ga5Mt3SrGcOjaV/lViKMxINtZiLihMBEU4KyhADAAA=
-X-CMS-MailID: 20200110085631eucas1p28523b3a56f6f9431c822871aba68f617
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea
-References: <20200107090519.3231-1-cw00.choi@samsung.com>
-        <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
-        <20200107090519.3231-3-cw00.choi@samsung.com>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
-
-On 07.01.2020 10:05, Chanwoo Choi wrote:
-> Add new devfreq_transitions debugfs file to track the frequency transitions
-> of all devfreq devices for the simple profiling as following:
-> - /sys/kernel/debug/devfreq/devfreq_transitions
+On Friday, January 10, 2020 2:49:37 AM CET Randy Dunlap wrote:
+> Hi Rafael,
 > 
-> And the user can decide the storage size (CONFIG_NR_DEVFREQ_TRANSITIONS)
-> in Kconfig in order to save the transition history.
+> On 1/9/20 4:13 PM, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > 
+> > Add an admin-guide document for the intel_idle driver to describe
+> > how it works: how it enumerates idle states, what happens during the
+> > initialization of it, how it can be controlled via the kernel command
+> > line and so on.
+> > 
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> > 
+> > The document introduced by this patch matches the driver code behavior
+> > after the changes recently added to linux-next.
+> > 
+> > ---
+> >  Documentation/admin-guide/pm/intel_idle.rst    |  268 +++++++++++++++++++++++++
+> >  Documentation/admin-guide/pm/working-state.rst |    1 
+> >  2 files changed, 269 insertions(+)
+> > 
+> > Index: linux-pm/Documentation/admin-guide/pm/working-state.rst
+> > ===================================================================
+> > --- linux-pm.orig/Documentation/admin-guide/pm/working-state.rst
+> > +++ linux-pm/Documentation/admin-guide/pm/working-state.rst
+> > @@ -8,6 +8,7 @@ Working-State Power Management
+> >     :maxdepth: 2
+> >  
+> >     cpuidle
+> > +   intel_idle
+> >     cpufreq
+> >     intel_pstate
+> >     intel_epb
+> > Index: linux-pm/Documentation/admin-guide/pm/intel_idle.rst
+> > ===================================================================
+> > --- /dev/null
+> > +++ linux-pm/Documentation/admin-guide/pm/intel_idle.rst
+> > @@ -0,0 +1,268 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +.. include:: <isonum.txt>
+> > +
+> > +==============================================
+> > +``intel_idle`` CPU Idle Time Management Driver
+> > +==============================================
+> > +
+> > +:Copyright: |copy| 2020 Intel Corporation
+> > +
+> > +:Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > +
+> > +
+> > +General Information
+> > +===================
+> > +
+> > +``intel_idle`` is a part of the
+> > +:doc:`CPU idle time management subsystem <cpuidle>` in the Linux kernel
+> > +(``CPUIdle``).  It is the default CPU idle time management driver for the
+> > +Nehalem and later generations of Intel processors, but the level of support for
+> > +a particular processor model in it depends on whether or not it recognizes that
+> > +processor model and may also depend on information coming from the platform
+> > +firmware.  [To understand ``intel_idle`` it is necessary to know how ``CPUIdle``
+> > +works in general, so this is the time to get familiar with :doc:`cpuidle` if you
+> > +have not done that yet.]
+> > +
+> > +``intel_idle`` uses the ``MWAIT`` instruction to inform the processor that the
+> > +logical CPU executing it is idle and so it may be possible to put some of the
+> > +processor's functional blocks into low-power states.  That instruction takes two
+> > +arguments (passed in the ``EAX`` and ``ECX`` registers of the target CPU), the
+> > +first of which, referred to as a *hint*, can be used by the processor to
+> > +determine what can be done (for details refer to Intel Software Developer’s
+> > +Manual [1]_).  Accordingly, ``intel_idle`` refuses to work with processors in
+> > +which the support for the ``MWAIT`` instruction has been disabled (for example,
+> > +via the platform firmware configuration menu) or which do not support that
+> > +instruction at all.
+> > +
+> > +``intel_idle`` is not modular, so it cannot be unloaded, which means that the
+> > +only way to pass early-configuration-time parameters to it is via the kernel
+> > +command line.
+> > +
+> > +
+> > +.. _intel-idle-enumeration-of-states:
+> > +
+> > +Enumeration of Idle States
+> > +==========================
+> > +
+> > +Each ``MWAIT`` hint value is interpreted by the processor as a license to
+> > +reconfigure itself in a certain way in order to save energy.  The processor
+> > +configurations (with reduced power draw) resulting from that are referred to
+> > +as C-states (in the ACPI terminology) or idle states.  The list of meaningful
+> > +``MWAIT`` hint values and idle states (i.e. low-power configurations of the
+> > +processor) corresponding to them depends on the processor model and it may also
+> > +depend on the configuration of the platform.
+> > +
+> > +In order to create a list of available idle states required by the ``CPUIdle``
+> > +subsystem (see :ref:`idle-states-representation` in :doc:`cpuidle`),
+> > +``intel_idle`` can use two sources of information: static tables of idle states
+> > +for different processor models included in the driver itself and the ACPI tables
+> > +of the system.  The former are always used if the processor model at hand is
+> > +recognized by ``intel_idle`` and the latter are used if that is required for
+> > +the given processor model (which is the case for all server processor models
+> > +recognized by ``intel_idle``) or if the processor model is not recognized.
+> > +
+> > +If the ACPI tables are going to be used for building the list of available idle
+> > +states, ``intel_idle`` first looks for a ``_CST`` object under one of the ACPI
+> > +objects corresponding to the CPUs in the system (refer to the ACPI specification
+> > +[2]_ for the description of ``_CST`` and its output package).  Because the
+> > +``CPUIdle`` subsystem expects that the list of idle states supplied by the
+> > +driver will be suitable for all of the CPUs handled by it and ``intel_idle`` is
+> > +registered as the ``CPUIdle`` driver for all of the CPUs in the system, the
+> > +driver looks for the first ``_CST`` object returning at least one valid idle
+> > +state description and such that all of the idle states included in its return
+> > +package are of the FFH (Functional Fixed Hardware) type, which means that the
+> > +``MWAIT`` instruction is expected to be used to tell the processor that it can
+> > +enter one of them.  The return package of that ``_CST`` is then assumed to be
+> > +applicable to all of the other CPUs in the system and the idle state
+> > +descriptions extracted from it are stored in a preliminary list of idle states
+> > +coming from the ACPI tables.  [This step is skipped if ``intel_idle`` is
+> > +configured to ignore the ACPI tables; see `below <intel-idle-parameters_>`_.]
+> > +
+> > +Next, the first (index 0) entry in the list of available idle states is
+> > +initialized to represent a "polling idle state", which means that its
+> > +``->enter()`` routine executes a special "pause" sequence of instructions in a
+> > +tight loop (it is a pseudo-idle state in which the target CPU continuously
+> > +fetches and executes instructions), and the subsequent (real) idle state entries
+> > +are populated as follows.
+> > +
+> > +If the processor model at hand is recognized by ``intel_idle``, there is a
+> > +(static) table of idle state descriptions for it in the driver.  In that case,
+> > +the "internal" table is the primary source of information on idle states and all
+> > +of the entries from it (that are not marked as "unusable" after applying quirks
+> > +and the number of ``MWAIT`` substates for them is not zero; see
+> > +`below <intel-idle-initialization-and-quirks_>`_) are copied to the final list
+> > +of available idle states.  If using the ACPI tables for the enumeration of idle
+> > +states is not required (depending on the processor model), all of them are
+> > +enabled by default (so all of them will be taken into consideration by
+> > +``CPUIdle`` governors during CPU idle state selection).  Otherwise, the idle
+> > +states specifically marked as the ones that should be always enabled by default
+> > +are enabled by default and for each of the other idle states the ``MWAIT`` hint
+> > +included in its description is compared with the ``MWAIT`` hints in the
+> > +preliminary list of idle states coming from the ACPI tables.  If there is a
+> > +match (i.e. one of the ``MWAIT`` hint values exposed by the platform firmware is
+> > +equal to the given idle state's ``MWAIT`` hint), the given idle state will be
+> > +enabled by default.  If that is not the case, it will be disabled initially, but
+> > +user space will be able to enable it later (on a per-CPU basis) with the help of
+> > +the ``disable`` idle state attribute in ``sysfs`` (see
+> > +:ref:`idle-states-representation` in :doc:`cpuidle`).  This basically means that
+> > +the idle states "known" to the driver are enabled by default if they have
+> > +also been exposed by the platform firmware (through the ACPI tables) or if they
+> > +are specifically marked to be always enabled by default.
+> > +
+> > +If the given processor model is not recognized by ``intel_idle``, but it
+> > +supports ``MWAIT``, the preliminary list of idle states coming from the ACPI
+> > +tables is used for building the final list that will be supplied to the
+> > +``CPUIdle`` core during driver registration.  For each idle state in that list,
+> > +the description, ``MWAIT`` hint and exit latency are copied to the corresponding
+> > +entry in the final list of idle states.  The name of the idle state represented
+> > +by it (to be returned by the ``name`` idle state attribute in ``sysfs``) is
+> > +"CX_ACPI", where X is the index of that idle state in the final list (note that
+> > +the minimum value of X is 1, because 0 is reserved for the "polling" state), and
+> > +its target residency is based on the exit latency value.  Specifically, for
+> > +C1-type idle states the exit latency value is also used as the target residency
+> > +(for compatibility with the majority of the "internal" tables of idle states for
+> > +various processor models recognized by ``intel_idle``) and for the other idle
+> > +state types (C2 and C3) the target residency value is 3 times the exit latency
+> > +(again, that is because it reflects the target residency to exit latency ratio
+> > +in the majority of cases for the processor models recognized by ``intel_idle``).
+> > +All of the idle states in the final list are enabled by default in this case.
+> > +
+> > +
+> > +.. _intel-idle-initialization-and-quirks:
+> > +
+> > +Initialization
+> > +==============
+> > +
+> > +The initialization of ``intel_idle`` starts with checking if the kernel command
+> > +line options forbid the use of the ``MWAIT`` instruction.  If that is the case,
+> > +an error code is returned right away.
+> > +
+> > +The next step is to check whether or not the processor model is known to the
+> > +driver, which determines the idle states enumeration method (see
+> > +`above <intel-idle-enumeration-of-states_>`_), and whether or not the processor
+> > +supports ``MWAIT`` (the initialization fails if that is not the case).  Then,
+> > +the ``MWAIT`` support in the processor is enumerated through ``CPUID`` and the
+> > +driver initialization fails if the level of support is not as expected (for
+> > +example, if the total number of ``MWAIT`` substates returned is 0).
+> > +
+> > +Next, if the driver is not configured to ignore the ACPI tables (see
+> > +`below <intel-idle-parameters_>`_), the idle states information provided by the
+> > +platform firmware is extracted from them.
+> > +
+> > +Then, ``CPUIdle`` device objects are allocated for all CPUs, quirks are applied
+> > +to the "internal" idle states table matching the given processor model (if it is
+> > +recognized by the driver) and the list of idle states is created (see
+> > +`above <intel-idle-enumeration-of-states_>`_).
+> > +
+> > +The quirks are needed in the cases when the same "internal" table of idle states
+> > +is used for multiple processor models and some of those idle states may not be
+> > +supported in some processor configurations (in which case, if the affected
+> > +processor configuration is detected, the idle states in question are marked
+> > +as "unusable") or the list of idle states to use depends on the number of
+> > +processor sockets in the system.  There is also a special way to obtain the
+> > +exit latency value for some idle states of Broxton processors that can be used
+> > +for updating the "internal" idle states table before using it for the
+> > +enumeration of idle states.
+> > +
+> > +Next, ``intel_idle`` is registered with the help of cpuidle_register_driver() as
+> > +the ``CPUIdle`` driver for all CPUs in the system and a CPU online callback for
+> > +configuring individual CPUs is registered via cpuhp_setup_state(), which (among
+> > +other things) causes the callback routine to be invoked for all of the CPUs
+> > +present in the system at that time (each CPU executes its own instance of the
+> > +callback routine).  That routine registers a ``CPUIdle`` device for the CPU
+> > +running it and if the processor model is recognized by ``intel_idle``, it
+> > +modifies the model-specific registers (MSRs) of that CPU in order to disable
+> > +auto-demotion of idle states or auto-promotion to the ``C1E`` idle state (or
+> > +both) if that needs to be done for the processor model at hand.
+> > +
+> > +
+> > +.. _intel-idle-parameters:
+> > +
+> > +Kernel Command Line Options and Module Parameters
+> > +=================================================
+> > +
+> > +The *x86* architecture support code recognizes three kernel command line
+> > +options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
+> > +and ``idle=nomwait``.  If any of them is present in the kernel command line, the
+> > +``MWAIT`` instruction is not allowed to be used, so the initialization of
+> > +``intel_idle`` will fail.
+> > +
+> > +Apart from that there are two module parameters recognized by ``intel_idle``
+> > +itself that can be set via the kernel command line (they cannot be updated via
+> > +sysfs, so that is the only way to set them).
+> > +
+> > +The ``max_cstate`` parameter value is the maximum idle state index in the list
+> > +of idle states supplied to the ``CPUIdle`` core during the registration of the
+> > +driver.  It is also the maximum number of regular (non-polling) idle states that
+> > +can be used by ``intel_idle``, so the enumeration of idle states is terminated
+> > +after finding that number of usable idle states (the other idle states that
+> > +potentially might have been used if ``max_cstate`` had been greater are not
+> > +taken into consideration at all).  Setting ``max_cstate`` can prevent
+> > +``intel_idle`` from exposing idle states that are regarded as "too deep" for
+> > +some reason to the ``CPUIdle`` core, but it does so by making them effectively
+> > +invisible until the system is shut down and started again which may not always
+> > +be desirable.  In practice, it is only really necessary to do that if the idle
+> > +states in question cannot be enabled during system startup, because in the
+> > +working state of the system the CPU power management quality of service (PM
+> > +QoS) feature can be used to prevent ``CPUIdle`` from touching those idle states
+> > +even if they have been enumerated (see :ref:`cpu-pm-qos` in :doc:`cpuidle`).
+> > +Setting ``max_cstate`` to 0 causes the ``intel_idle`` initialization to fail.
+> > +
+> > +The ``noacpi`` parameter (which is recognized if the kernel has been configured
+> > +with ACPI support) can be used to make ``intel_idle`` ignore the system's ACPI
+> > +tables (which is the case if that parameter is equal to 1).
 > 
-> [Detailed description of each field of 'devfreq_transitions' debugfs file]
-> - time_ms	: Change time of frequency transition. (unit: millisecond)
-> - dev_name	: Device name of h/w.
-> - dev		: Device name made by devfreq core.
-> - parent_dev	: If devfreq device uses the passive governor,
-> 		  show parent devfreq device name.
-> - load_%	: If devfreq device uses the simple_ondemand governor,
-> 		  load is used by governor whene deciding the new frequency.
-> 		  (unit: percentage)
-> - old_freq_hz	: Frequency before changing. (unit: hz)
+> Where is this "noacpi" parameter?  Is this an intel_idel param?  I see
+> libata.noacpi and pci=noacpi but nothing like this for intel_idle.
 
-s/hz/Hz/
+I thought that the "Apart from that there are two module parameters recognized
+by ``intel_idle`` ..." paragraph would make that clear enough.  This is a module
+parameter of intel_idle (in linux-next only at this point).
 
-> - new_freq_hz	: Frequency after changed. (unit: hz)
+> Also, the wording is a little confusing.  What does it mean "if that parameter is equal
+> to 1"?  It's basically a word that is entered without a value AFAICT.
 
-s/hz/Hz/
+I'll rewrite this paragraph to make it clearer (hopefully).
 
 > 
-> [For example on Exynos5422-based Odroid-XU3 board]
-> $ cat /sys/kernel/debug/devfreq/devfreq_transitions
-> time_ms    dev_name                       dev        parent_dev load_% old_freq_hz  new_freq_hz
-
-s/hz/Hz/
-
-> ---------- ------------------------------ ---------- ---------- ---------- ------------ ------------
-> 14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000    67000000
-> 14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
-
-Imho it is better to align freq numbers to right, for example:
-
-14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000     67000000
-14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
-
-> 14600      soc:bus_fsys                   devfreq4   devfreq1   0      200000000    100000000
-> 14600      soc:bus_fsys2                  devfreq5   devfreq1   0      150000000    75000000
-> 14602      soc:bus_mfc                    devfreq6   devfreq1   0      222000000    96000000
-> 14602      soc:bus_gen                    devfreq7   devfreq1   0      267000000    89000000
-> 14602      soc:bus_g2d                    devfreq9   devfreq1   0      300000000    84000000
-> 14602      soc:bus_g2d_acp                devfreq10  devfreq1   0      267000000    67000000
-> 14602      soc:bus_jpeg                   devfreq11  devfreq1   0      300000000    75000000
-> 14602      soc:bus_jpeg_apb               devfreq12  devfreq1   0      167000000    84000000
-> 14603      soc:bus_disp1_fimd             devfreq13  devfreq1   0      200000000    120000000
-> 14603      soc:bus_disp1                  devfreq14  devfreq1   0      300000000    120000000
-> 14606      soc:bus_gscl_scaler            devfreq15  devfreq1   0      300000000    150000000
-> 14606      soc:bus_mscl                   devfreq16  devfreq1   0      333000000    84000000
-> 14608      soc:bus_wcore                  devfreq1              9      333000000    84000000
-> 14783      10c20000.memory-controller     devfreq0              35     825000000    633000000
-> 15873      soc:bus_wcore                  devfreq1              41     84000000     400000000
-> 15873      soc:bus_noc                    devfreq2   devfreq1   0      67000000     100000000
-> [snip]
+> > +
+> > +
+> > +.. _intel-idle-core-and-package-idle-states:
+> > +
+> > +Core and Package Levels of Idle States
+> > +======================================
+> > +
+> > +Typically, in a processor supporting the ``MWAIT`` instruction there are (at
+> > +least) two levels of idle states (or C-states).  One level, referred to as
+> > +"core C-states", covers individual cores in the processor, whereas the other
+> > +level, referred to as "package C-states", covers the entire processor package
+> > +and it may also involve other components of the system (GPUs, memory
+> > +controllers, I/O hubs etc.).
+> > +
+> > +Some of the ``MWAIT`` hint values allow the processor to use core C-states only
+> > +(most importantly, that is the case for the ``MWAIT`` hint value corresponding
+> > +to the ``C1`` idle state), but the majority of them give it a license to put
+> > +the target core (i.e. the core containing the logical CPU executing ``MWAIT``
+> > +with the given hint value) into a specific core C-state and then (if possible)
+> > +to enter a specific package C-state at the deeper level.  For example, the
+> > +``MWAIT`` hint value representing the ``C3`` idle state allows the processor to
+> > +put the target core into the low-power state referred to as "core ``C3``" (or
+> > +``CC3``), which happens if all of the logical CPUs (SMT siblings) in that core
+> > +have executed ``MWAIT`` with the ``C3`` hint value (or with a hint value
+> > +representing a deeper idle state), and in addition to that (in the majority of
+> > +cases) it gives the processor a license to put the entire package (possibly
+> > +including some non-CPU components such as a GPU or a memory controller) into the
+> > +low-power state referred to as "package ``C3``" (or ``PC3``), which happens if
+> > +all of the cores have gone into the ``CC3`` state and (possibly) some additional
+> > +conditions are satisfied (for instance, if the GPU is covered by ``PC3``, it may
+> > +be required to be in a certain GPU-specific low-power state for ``PC3`` to be
+> > +reachable).
+> > +
+> > +As a rule, there is no simple way to make the processor use core-level C-states
+> > +only if the conditions for entering the corresponding package C-states are met,
+> > +so the logical CPU executing ``MWAIT`` with a hint value that is not core-level
+> > +only (like for ``C1``) must always assume that this may cause the processor to
+> > +enter a package C-state.  That is why the exit latency and target residency
+> > +values corresponding to the majority of ``MWAIT`` hint values in the "internal"
+> > +tables of idle states in ``intel_idle`` reflect the properties of package
+> > +C-states.  If using package C-states is not desirable at all, either
+> > +:ref:`PM QoS <cpu-pm-qos>` or the ``max_cstate`` module parameter of
+> > +``intel_idle`` described `above <intel-idle-parameters_>`_ must be used to
+> > +restrict the range of permissible idle states to the ones with core-level only
+> > +``MWAIT`` hint values (like ``C1``).
+> > +
+> > +
+> > +References
+> > +==========
+> > +
+> > +.. [1] *Intel® 64 and IA-32 Architectures Software Developer’s Manual Volume 2B*,
+> > +       https://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-vol-2b-manual.html
+> > +
+> > +.. [2] *Advanced Configuration and Power Interface (ACPI) Specification*,
+> > +       https://uefi.org/specifications
+> > 
+> > 
+> > 
 > 
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-> ---
->  drivers/devfreq/Kconfig            |  13 +++
->  drivers/devfreq/devfreq.c          | 126 +++++++++++++++++++++++++++++
->  drivers/devfreq/governor.h         |   3 +
->  drivers/devfreq/governor_passive.c |   2 +
->  include/linux/devfreq.h            |   1 +
->  5 files changed, 145 insertions(+)
+> drop ending blank lines....
+
+They are not there in the patch, must have been added by the email client.
+
+> This contains lots of good info, but I don't see all of it as admin-guide/ material.
+> Lots of it is driver-development info, not admin info.  IMHO.
+
+Well, one of the goals here is to explain what the admin can see in sysfs (like for
+example why some of the idle states may be disabled by default etc.).
+
+I think I can reduce the level of detail in some places, let me try to do that.
+
 > 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 0b1df12e0f21..84936eec0ef9 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -74,6 +74,19 @@ config DEVFREQ_GOV_PASSIVE
->  	  through sysfs entries. The passive governor recommends that
->  	  devfreq device uses the OPP table to get the frequency/voltage.
->  
-> +comment "DEVFREQ Debugging"
-> +
-> +config NR_DEVFREQ_TRANSITIONS
-> +	int "Maximum storage size to save DEVFREQ Transitions (10-1000)"
-> +	depends on DEBUG_FS
-> +	range 10 1000
-> +	default "100"
-> +	help
-> +	  Show the frequency transitions of all devfreq devices via
-> +	  '/sys/kernel/debug/devfreq/devfreq_transitions' for the simple
-> +	  profiling. It needs to decide the storage size to save transition
-> +	  history of all devfreq devices.
-> +
->  comment "DEVFREQ Drivers"
->  
->  config ARM_EXYNOS_BUS_DEVFREQ
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index c7f5e4e06420..7abaae06fa65 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -268,6 +268,57 @@ int devfreq_update_status(struct devfreq *devfreq, unsigned long freq)
->  }
->  EXPORT_SYMBOL(devfreq_update_status);
->  
-> +/**
-> + * devfreq_update_transitions() - Update frequency transitions for debugfs file
-> + * @devfreq:	the devfreq instance
-> + * @old_freq:	the previous frequency before changing the frequency
-> + * @new_freq:	the new frequency after frequency is changed
-> + */
-> +struct devfreq_transitions {
-> +	struct devfreq *devfreq;
-> +	struct devfreq_freqs freqs;
-> +	unsigned long load;
-> +} debugfs_transitions[CONFIG_NR_DEVFREQ_TRANSITIONS];
-> +
-> +static spinlock_t devfreq_debugfs_lock;
-> +static int debugfs_transitions_index;
-> +
-> +void devfreq_update_transitions(struct devfreq *devfreq,
-> +			unsigned long old_freq, unsigned long new_freq,
-> +			unsigned long busy_time, unsigned long total_time)
-> +{
-> +	unsigned long load;
-> +	int i;
-> +
-> +	if (!devfreq_debugfs || !devfreq || (old_freq == new_freq))
-> +		return;
-> +
-> +	spin_lock_nested(&devfreq_debugfs_lock, SINGLE_DEPTH_NESTING);
-> +
-> +	i = debugfs_transitions_index;
-> +
-> +	/*
-> +	 * Calculate the load and if load is larger than 100,
-> +	 * initialize to 100 because the unit of load is percentage.
-> +	 */
+> Anyway:
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-Remove this comment, it is better to print numbers as they are so one can
-find a problem.
+Thanks!
 
-> +	load = (total_time == 0 ? 0 : (100 * busy_time) / total_time);
-> +	if (load > 100)
-> +		load = 100;
 
-Imho it should always be busy_time <= total_time, so
-
-	if (load > 100) {
-		WARN_ONCE(busy_time > total_time, "devfreq: busy_time > total_time");
-		load = 100;
-	}
-
-Or drop this "if (load > 100) load=100;" and print load as is in logs.
-
-> +
-> +	debugfs_transitions[i].devfreq = devfreq;
-> +	debugfs_transitions[i].freqs.time = ktime_to_ms(ktime_get());
-> +	debugfs_transitions[i].freqs.old = old_freq;
-> +	debugfs_transitions[i].freqs.new = new_freq;
-> +	debugfs_transitions[i].load = load;
-> +
-> +	if (++i == CONFIG_NR_DEVFREQ_TRANSITIONS)
-> +		i = 0;
-> +	debugfs_transitions_index = i;
-> +
-> +	spin_unlock(&devfreq_debugfs_lock);
-> +}
-> +EXPORT_SYMBOL(devfreq_update_transitions);
-> +
->  /**
->   * find_devfreq_governor() - Find devfreq governor from name
->   * @name:	name of the governor
-> @@ -401,6 +452,10 @@ static int set_target(struct devfreq *devfreq,
->  		return err;
->  	}
->  
-> +	devfreq_update_transitions(devfreq, cur_freq, new_freq,
-> +					devfreq->last_status.busy_time,
-> +					devfreq->last_status.total_time);
-> +
->  	freqs.new = new_freq;
->  	notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
->  
-> @@ -1787,6 +1842,72 @@ static int devfreq_summary_show(struct seq_file *s, void *data)
->  }
->  DEFINE_SHOW_ATTRIBUTE(devfreq_summary);
->  
-> +/**
-> + * devfreq_transitions_show() - Show the frequency transitions of the registered
-> + *			devfreq devices via 'devfreq_transitions' debugfs file.
-> + */
-> +static int devfreq_transitions_show(struct seq_file *s, void *data)
-> +{
-> +	struct devfreq *devfreq = NULL;
-> +	struct devfreq *p_devfreq = NULL;
-> +	struct devfreq_freqs *freqs = NULL;
-> +	unsigned long load;
-> +	int i = debugfs_transitions_index;
-> +	int count;
-> +
-> +	seq_printf(s, "%-10s %-30s %-10s %-10s %-6s %-12s %-12s\n",
-> +			"time_ms",
-> +			"dev_name",
-> +			"dev",
-> +			"parent_dev",
-> +			"load_%",
-> +			"old_freq_hz",
-> +			"new_freq_hz");
-> +	seq_printf(s, "%-10s %-30s %-10s %-10s %-6s %-12s %-12s\n",
-> +			"----------",
-> +			"------------------------------",
-> +			"----------",
-> +			"----------",
-> +			"----------",
-> +			"------------",
-> +			"------------");
-> +
-> +	spin_lock(&devfreq_debugfs_lock);
-> +	for (count = 0; count < CONFIG_NR_DEVFREQ_TRANSITIONS; count++) {
-> +		devfreq = debugfs_transitions[i].devfreq;
-> +		freqs = &debugfs_transitions[i].freqs;
-> +		load = debugfs_transitions[i].load;
-> +
-> +		i = (CONFIG_NR_DEVFREQ_TRANSITIONS == ++i) ? 0 : i;
-> +		if (!devfreq)
-> +			continue;
-> +
-> +#if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
-> +		if (!strncmp(devfreq->governor_name,
-> +				DEVFREQ_GOV_PASSIVE, DEVFREQ_NAME_LEN)) {
-> +			struct devfreq_passive_data *data = devfreq->data;
-> +
-> +			if (data)
-> +				p_devfreq = data->parent;
-> +		} else {
-> +			p_devfreq = NULL;
-> +		}
-> +#endif
-> +		seq_printf(s, "%-10lld %-30s %-10s %-10s %-6ld %-12ld %-12ld\n",
-> +			freqs->time,
-> +			dev_name(devfreq->dev.parent),
-> +			dev_name(&devfreq->dev),
-> +			p_devfreq ? dev_name(&p_devfreq->dev) : "",
-> +			load,
-> +			freqs->old,
-> +			freqs->new);
-> +	}
-> +	spin_unlock(&devfreq_debugfs_lock);
-> +
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(devfreq_transitions);
-> +
->  static int __init devfreq_init(void)
->  {
->  	devfreq_class = class_create(THIS_MODULE, "devfreq");
-> @@ -1808,9 +1929,14 @@ static int __init devfreq_init(void)
->  		devfreq_debugfs = NULL;
->  		pr_warn("%s: couldn't create debugfs dir\n", __FILE__);
->  	} else {
-> +		spin_lock_init(&devfreq_debugfs_lock);
-> +
->  		debugfs_create_file("devfreq_summary", 0444,
->  				devfreq_debugfs, NULL,
->  				&devfreq_summary_fops);
-> +		debugfs_create_file("devfreq_transitions", 0444,
-> +				devfreq_debugfs, NULL,
-> +				&devfreq_transitions_fops);
->  	}
->  
->  	return 0;
-> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index dc7533ccc3db..01eecfdaf2d6 100644
-> --- a/drivers/devfreq/governor.h
-> +++ b/drivers/devfreq/governor.h
-> @@ -68,6 +68,9 @@ extern int devfreq_add_governor(struct devfreq_governor *governor);
->  extern int devfreq_remove_governor(struct devfreq_governor *governor);
->  
->  extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
-> +extern void devfreq_update_transitions(struct devfreq *devfreq,
-> +			unsigned long old_freq, unsigned long new_freq,
-> +			unsigned long busy_time, unsigned long total_time);
->  
->  static inline int devfreq_update_stats(struct devfreq *df)
->  {
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index be6eeab9c814..05fa654239f5 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -109,6 +109,8 @@ static int update_devfreq_passive(struct devfreq *devfreq, unsigned long freq)
->  	if (ret < 0)
->  		goto out;
->  
-> +	devfreq_update_transitions(devfreq, devfreq->previous_freq, freq, 0, 0);
-> +
->  	if (devfreq->profile->freq_table
->  		&& (devfreq_update_status(devfreq, freq)))
->  		dev_err(&devfreq->dev,
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 49cdb2378030..933692e5d867 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -196,6 +196,7 @@ struct devfreq {
->  };
->  
->  struct devfreq_freqs {
-> +	s64 time;
-
-Imho is should be moved to struct devfreq_transitions.
-Or do you plan to change load calculations based on time ?
-
->  	unsigned long old;
->  	unsigned long new;
->  };
-> 
-
--- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
 
