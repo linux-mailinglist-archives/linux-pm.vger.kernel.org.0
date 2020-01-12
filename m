@@ -2,85 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 581C61386D4
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2020 15:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED87513872A
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2020 18:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733016AbgALOpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Jan 2020 09:45:44 -0500
-Received: from mail01.vodafone.es ([217.130.24.71]:55146 "EHLO
-        mail01.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733028AbgALOpn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jan 2020 09:45:43 -0500
-IronPort-SDR: GExzujQipyDp4uXBLXXIUUufEJRCuJTGa5cdofzuSljgi2+cTEwkiQ27enlfotTlEGVYgV9OSD
- nlONB7z9mKOA==
-IronPort-PHdr: =?us-ascii?q?9a23=3A0CLgFR+u2UisGf9uRHKM819IXTAuvvDOBiVQ1K?=
- =?us-ascii?q?B32+scTK2v8tzYMVDF4r011RmVBN6dsawUwLSJ+4nbGkU4qa6bt34DdJEeHz?=
- =?us-ascii?q?Qksu4x2zIaPcieFEfgJ+TrZSFpVO5LVVti4m3peRMNQJW2aFLduGC94iAPER?=
- =?us-ascii?q?vjKwV1Ov71GonPhMiryuy+4ZLebxhGiTanf79/LRa7oQrQu8QUnIBvNrs/xh?=
- =?us-ascii?q?zVr3VSZu9Y33loJVWdnxb94se/4ptu+DlOtvwi6sBNT7z0c7w3QrJEAjsmNX?=
- =?us-ascii?q?s15NDwuhnYUQSP/HocXX4InRdOHgPI8Qv1Xpb1siv9q+p9xCyXNtD4QLwoRT?=
- =?us-ascii?q?iv6bpgRBnvhCkaKzE26mTXi8xpgK9FpxKhvQR/w4nOYI6PKPpxYLrRcs0cRW?=
- =?us-ascii?q?ZYQstRSzBBDZmgYIsPEeUBOPhXr4/hp1cXsxS+AxCgCuToyj9OmHD33bQ23P?=
- =?us-ascii?q?onEQrb2AAtEc4CvGjRoNjzKawcU/26zLPQwDvNb/1Wwynz5ovVfB8uvf6CUq?=
- =?us-ascii?q?l9cdbTxEYzCw/JkkmcpZLjMjiI1uoNqW+b7+94WOy1lWEntx9+oiKyzcgsjY?=
- =?us-ascii?q?nJgI0VwU3D+CVh3ok1OcO3SFR1YN6jFptQuDqXN4ttQsw5X25kojo1yroDuZ?=
- =?us-ascii?q?KhfCgKy40qyhjCYPKEa4iF+gzvWPuTLDtimX5odq6ziwys/UWv0OHwSNS43V?=
- =?us-ascii?q?RMoyFYiNfDrGoN2AbW6sWfT/t9+Vqu1iiX2gDI7+FEPVg0la3GK5492rIwlo?=
- =?us-ascii?q?QcsUDEHiLunUX5lq6WdkE++ue27+TrfrvrqoWCN49zlw7xKKoumsu5AesmKA?=
- =?us-ascii?q?QBQXOb9fy91L3l40L5XK1HguMrnqTbqpzWOMoWqrKjDwNL3Ysv8QizAyqk3d?=
- =?us-ascii?q?gAmHkINlNFeBaJj4jzPFHOJej1De+hjFSwjjhr3f7HPrrnApXCNXXDkKzhcq?=
- =?us-ascii?q?1h5EJG1AUzytVf64hUCrECOP7zQFP+tMTEDh8lNAy52+LnCNR71oMDVmODG7?=
- =?us-ascii?q?eZMKbJvF+W6eIgPfOMaJUWuDnjMfgl4eDhjXsjlV8aZ6mp0shfVHftGvVgPl?=
- =?us-ascii?q?XceX/EnNgMCyEJsxA4Qeisj0eNAgRef3KjY6Vp3jwnBZjuMoDFScj5mKPYg3?=
- =?us-ascii?q?fnTsZ+aWVPC1TKGnDtIdaqQfAJPRqfPsJ72gMDU7fpH5csyRy0qwj8xJJnNe?=
- =?us-ascii?q?DfvCYfsNTj144mtKXoiRgu+GktXIym2GaXQjQvxjsF?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2HhAgBpMBteXdkYgtlNGBoBAQEBAQE?=
- =?us-ascii?q?BAQEDAQEBAREBAQECAgEBAQGBaAQBAQEBCwEBARgBAYEugU1SIBKNOYdkH4F?=
- =?us-ascii?q?KgXmLY4EAggqBFBWGBxQMgVsNAQEBAQEbGgIBAYRATgEXgTM1CA4CAw0BAQU?=
- =?us-ascii?q?BAQEBAQUEAQECAxoWBYV0QgEBBAcBgU0MHgEEAQEBAQMDAwEBDAGDXQcZDzk?=
- =?us-ascii?q?pIUwBDgEET4VPAQEznUMBhASJAA0NAoUdgkUECoEJgRojgTYBjDKBQT+BIyG?=
- =?us-ascii?q?CKwgBggGCfwESAWyCSIJZBI1CEiGBB4gpmBeCQQR2iUyMAoI3AQ+IAYQxAxC?=
- =?us-ascii?q?CRQ4BHG2IA4ROgX2jN1d0AYEecTMagiYagSBPGA2WSECBFhACT4RNgUmFJII?=
- =?us-ascii?q?yAQE?=
-X-IPAS-Result: =?us-ascii?q?A2HhAgBpMBteXdkYgtlNGBoBAQEBAQEBAQEDAQEBAREBA?=
- =?us-ascii?q?QECAgEBAQGBaAQBAQEBCwEBARgBAYEugU1SIBKNOYdkH4FKgXmLY4EAggqBF?=
- =?us-ascii?q?BWGBxQMgVsNAQEBAQEbGgIBAYRATgEXgTM1CA4CAw0BAQUBAQEBAQUEAQECA?=
- =?us-ascii?q?xoWBYV0QgEBBAcBgU0MHgEEAQEBAQMDAwEBDAGDXQcZDzkpIUwBDgEET4VPA?=
- =?us-ascii?q?QEznUMBhASJAA0NAoUdgkUECoEJgRojgTYBjDKBQT+BIyGCKwgBggGCfwESA?=
- =?us-ascii?q?WyCSIJZBI1CEiGBB4gpmBeCQQR2iUyMAoI3AQ+IAYQxAxCCRQ4BHG2IA4ROg?=
- =?us-ascii?q?X2jN1d0AYEecTMagiYagSBPGA2WSECBFhACT4RNgUmFJIIyAQE?=
-X-IronPort-AV: E=Sophos;i="5.69,425,1571695200"; 
-   d="scan'208";a="304185890"
-Received: from smtp.iservicesmail.com (HELO mailrel03.vodafone.es) ([217.130.24.217])
-  by mail01.vodafone.es with ESMTP; 12 Jan 2020 15:45:41 +0100
-Received: (qmail 27572 invoked from network); 12 Jan 2020 14:45:38 -0000
-Received: from unknown (HELO 192.168.1.3) (quesosbelda@[217.217.179.17])
-          (envelope-sender <peterwong@hsbc.com.hk>)
-          by mailrel03.vodafone.es (qmail-ldap-1.03) with SMTP
-          for <linux-pm@vger.kernel.org>; 12 Jan 2020 14:45:38 -0000
-Date:   Sun, 12 Jan 2020 15:45:41 +0100 (CET)
-From:   Peter Wong <peterwong@hsbc.com.hk>
-Reply-To: Peter Wong <pw178483@gmail.com>
-To:     linux-pm@vger.kernel.org
-Message-ID: <17253342.558776.1578840341320.JavaMail.cash@217.130.24.55>
-Subject: Investment opportunity
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1728734AbgALRNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Jan 2020 12:13:22 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44667 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728512AbgALRNW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jan 2020 12:13:22 -0500
+Received: by mail-pg1-f193.google.com with SMTP id x7so3532089pgl.11;
+        Sun, 12 Jan 2020 09:13:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id;
+        bh=5tkpOty7Kcf+owtmT5rJiVn1mp+mm6nEXaLj/KELc+E=;
+        b=s4qL3hA5ExwgUDIEKIczvpQfJixy3CL+qa+2tn945x63QiXL7pnfENtLJR7Md2q7bi
+         yaOwoK0OLmkSMfx4yat9MSuYoppwA1HjobiSiTyyo3ultSwnBG8RP8O8RU9bdPmHGUsd
+         lO9ZWZ6xQsXg6xjZJBI7Z3fxdQxbHAaWMYSvPb+nBExwH1Iyt5ZuHt/PJk2EqBXjZtsH
+         /AyI/YuIjEKZpYq5eL0wcgHGTEBlZFyvUcJGWDQKQQ5OomhRMEjUZ0pl52o3wdhSB/yz
+         zxcExwqo9UMaUHTQ8Oiw2LCsnT80oEpWs2WnrS9if0oSVzPt69aJA6yhPYHpClQfgn6s
+         8TlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=5tkpOty7Kcf+owtmT5rJiVn1mp+mm6nEXaLj/KELc+E=;
+        b=DaKac6LSHuQCkn3+6dPuavpH/4nUux3LoaPiMAJfDUACmTVcDOSK/9KUYQIn2K9m0p
+         xAbEuKvzJ9YfNr2ref9rQxQkUuAD17zRXGrVnAM85ilmQLVYt28UC++lSTAhjBr5qkSn
+         BpKBhDsTYXwv8Ae22fD9/SSGxSeuhFh4/1X68LbskZA9jxzpiGeER1OFEB2DDUlxTasd
+         syBs+HFT/poKgw5n+bTyG+FzJw9CNa9t0tR7kl2QtnbIjGIj/QHV45TfTs3g4szXbGUX
+         SfYYjtMqmVqAfK5mR2Vd9fVi2eG0+EEf4aiS+Ud6sonOwIeCTk96Y8q2x+8P+gofVEOV
+         sYUQ==
+X-Gm-Message-State: APjAAAU0El7UjeMDdqJ61tjlYXt0PYmUNAkSewnjX4y06EDZaYF/BO+n
+        eDfoO/VmDJMJyRhgo2tzw1n7aeMnG38=
+X-Google-Smtp-Source: APXvYqwXQyPBbsQvZdE3cVme0/0ISaLS049ySFwXhAoEuHbV4j0l0wD8lmi61p1T2l4e2ayVL9tGaw==
+X-Received: by 2002:a62:1552:: with SMTP id 79mr15677180pfv.156.1578849201813;
+        Sun, 12 Jan 2020 09:13:21 -0800 (PST)
+Received: from localhost ([2001:19f0:6001:12c8:5400:2ff:fe72:6403])
+        by smtp.gmail.com with ESMTPSA id ep12sm10125706pjb.7.2020.01.12.09.13.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 12 Jan 2020 09:13:21 -0800 (PST)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        mripard@kernel.org, wens@csie.org, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: sun8i: fix using plain integer as NULL pointer in sun8i_ths_resource_init
+Date:   Sun, 12 Jan 2020 17:13:18 +0000
+Message-Id: <20200112171318.23025-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings,
-Please read the attached investment proposal and reply for more details.
-Are you interested in loan?
-Sincerely: Peter Wong
+To fix:
 
+drivers/thermal/sun8i_thermal.c:341:60: sparse: sparse: Using plain
+integer as NULL pointer
 
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+---
+ drivers/thermal/sun8i_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-----------------------------------------------------
-This email was sent by the shareware version of Postman Professional.
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index c5661d7c3e20..4bcde9491edb 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -338,7 +338,7 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ 		return PTR_ERR(tmdev->regmap);
+ 
+ 	if (tmdev->chip->has_bus_clk_reset) {
+-		tmdev->reset = devm_reset_control_get(dev, 0);
++		tmdev->reset = devm_reset_control_get(dev, NULL);
+ 		if (IS_ERR(tmdev->reset))
+ 			return PTR_ERR(tmdev->reset);
+ 
+-- 
+2.17.1
 
