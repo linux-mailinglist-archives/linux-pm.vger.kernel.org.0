@@ -2,90 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F33B5139BCA
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 22:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F116139BDC
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 22:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgAMVpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 16:45:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35462 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726488AbgAMVpM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 Jan 2020 16:45:12 -0500
-Received: from localhost (mobile-166-170-223-177.mycingular.net [166.170.223.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BC8FA20CC7;
-        Mon, 13 Jan 2020 21:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578951912;
-        bh=cNM+trifQppQVmWLHDIheU3838+ouIqu4KohlNVE2W8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OWYviWPlsbpybgnWy3g5GklkweM1lBUCM8pjfgSeXL/HKpXS2Odrs2N1yLhGZ7q0I
-         Gvk/wcS0SZ0KR9EN771+zEkpnHodZAoo8HayesnR+fCRjRSYqTXzj/1jAg4+kR/b1+
-         BOxPqHsePpONqH+K4Srs266/9ZzdFSCUJC5RhD54=
-Date:   Mon, 13 Jan 2020 15:45:10 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/PM: Print the pci config space of devices before
- suspend
-Message-ID: <20200113214510.GA119378@google.com>
+        id S1728780AbgAMVvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 16:51:12 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34788 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbgAMVvL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 16:51:11 -0500
+Received: by mail-ot1-f65.google.com with SMTP id a15so10514615otf.1;
+        Mon, 13 Jan 2020 13:51:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ffKiZp7TgACphMkCDUm1FD5yMgsxVZ6Ff6N1urk4jWc=;
+        b=deFlpVMUp8KPg/GoPHcDInQsdO2DE3pW1dltR5BS+dQWI6Zfumqd6IaxGvnF/jQNK1
+         JxwTl6yG5pKob2Kpni0NmwZhZMt+1baYy+a2n4sUXoO4h0ODYrNiynQ+AFJJh8y7jFGD
+         8rWlRFPMy0k3zS+LbblyK/w2r6Pk7XF7O0QgccnBy/WoJw6fII4AJehYAy3BC1TiR860
+         PWn9GpSkBlMQNVDGiS9c+DaGrC35F4w1Ya1GeThKk/NhzvwRpkcGzS/YUhkVfXNkhMTC
+         DW7UFg/YXGBuirigcFU1mOPa3KhkHpvT5hOsfmPF+Zj7CYeIpiZTImxe9I5JTzM670Hn
+         okKQ==
+X-Gm-Message-State: APjAAAWTuT559MLu0l1TK5pr1WjoB5TzR77tzOlIm3Oi+VkeOTL9o1dy
+        PFWppNRUgL7xnF6VPL7FSPmBtfG7/gn5HoRrePo=
+X-Google-Smtp-Source: APXvYqzboRxdkjdj+vWtBhL4TgciiCHxHfLR6hQIa9NC97Z5QPZwbV5+qGJCzmxQC2fQg0RpLiUiJ5XFNlHcaKaz1Xg=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr15083303otd.266.1578952270976;
+ Mon, 13 Jan 2020 13:51:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200113060724.19571-1-yu.c.chen@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200107234526.GA19034@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200108105011.GY2827@hirez.programming.kicks-ass.net> <20200110153520.GC8214@u40b0340c692b58f6553c.ant.amazon.com>
+ <20200113101609.GT2844@hirez.programming.kicks-ass.net> <857b42b2e86b2ae09a23f488daada3b1b2836116.camel@amazon.com>
+ <20200113124247.GG2827@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200113124247.GG2827@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Jan 2020 22:50:59 +0100
+Message-ID: <CAJZ5v0jv+5aLY3N4wFSitu61o9S8tJWEWGGn1Xyw-P82_TwFdQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in hibernation
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Singh, Balbir" <sblbir@amazon.com>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Agarwal, Anchal" <anchalag@amazon.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com" 
+        <Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "jgross@suse.com" <jgross@suse.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "konrad.wilk@oracle.co" <konrad.wilk@oracle.co>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "fllinden@amaozn.com" <fllinden@amaozn.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 02:07:24PM +0800, Chen Yu wrote:
-> The pci config space was found to be insane during resume
-> from hibernation(S4, or suspend to disk) on a VM:
-> 
->  serial 0000:00:16.3: restoring config space at offset 0x14
->  (was 0x9104e000, writing 0xffffffff)
-> 
-> Either the snapshot on the disk has been scribbled or the pci
-> config space becomes invalid before suspend. To narrow down
-> and benefit future debugging, print the pci config space
-> being saved before suspend, which is symmetric to the log
-> in pci_restore_config_dword().
-> 
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+On Mon, Jan 13, 2020 at 1:43 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Jan 13, 2020 at 11:43:18AM +0000, Singh, Balbir wrote:
+> > For your original comment, just wanted to clarify the following:
+> >
+> > 1. After hibernation, the machine can be resumed on a different but compatible
+> > host (these are VM images hibernated)
+> > 2. This means the clock between host1 and host2 can/will be different
+> >
+> > In your comments are you making the assumption that the host(s) is/are the
+> > same? Just checking the assumptions being made and being on the same page with
+> > them.
+>
+> I would expect this to be the same problem we have as regular suspend,
+> after power off the TSC will have been reset, so resume will have to
+> somehow bridge that gap. I've no idea if/how it does that.
 
-Applied to pci/pm for v5.6, thanks!
+In general, this is done by timekeeping_resume() and the only special
+thing done for the TSC appears to be the tsc_verify_tsc_adjust(true)
+call in tsc_resume().
 
-> ---
->  drivers/pci/pci.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index e87196cc1a7f..34cde70440c3 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1372,8 +1372,11 @@ int pci_save_state(struct pci_dev *dev)
->  {
->  	int i;
->  	/* XXX: 100% dword access ok here? */
-> -	for (i = 0; i < 16; i++)
-> +	for (i = 0; i < 16; i++) {
->  		pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
-> +		pci_dbg(dev, "saving config space at offset %#x (reading %#x)\n",
-> +			i * 4, dev->saved_config_space[i]);
-> +	}
->  	dev->state_saved = true;
->  
->  	i = pci_save_pcie_state(dev);
-> -- 
-> 2.17.1
-> 
+> I remember some BIOSes had crazy TSC ideas for suspend2ram, and we grew
+> tsc_restore_sched_clock_state() for it.
+>
+> Playing crazy games like what you're doing just isn't it though.
+
+Right.
