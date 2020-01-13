@@ -2,73 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 240C9138F76
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 11:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35332138F7F
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 11:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728826AbgAMKoW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 05:44:22 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46907 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727331AbgAMKoW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 05:44:22 -0500
-Received: by mail-oi1-f196.google.com with SMTP id 13so7744311oij.13;
-        Mon, 13 Jan 2020 02:44:21 -0800 (PST)
+        id S1726109AbgAMKqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 05:46:44 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38794 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbgAMKqo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 05:46:44 -0500
+Received: by mail-ot1-f66.google.com with SMTP id z9so6379420oth.5;
+        Mon, 13 Jan 2020 02:46:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HEnbMshqr7AnMOxCyyxMuTDrOAfleJ5v6/STbjwGwzM=;
-        b=lJEqlBeLsndQtien74qIzpslbY85KmR9XoyUZQBknjOai3wLkf3All2l7MUpuKEodh
-         4sSNTaV3mnwvOt/F8W0FFeKjmbTMXDqMQ4chpRZ7t9m33MEZZ/tzE0vx+VR657/A1pFt
-         5koXAuag7+t8Mb17lz8M6oHY3lERhjdFqyy1ZdBsL68bSjLtN60gFl/NNjqpPjKcytch
-         xL/gza7zKqEzrcy4rwN7cZ7wbkTc2r6FdaqDahRouU7yvrEKsFw4IsgzPNRNY1ph+eTO
-         GYXiPaKuUVwT2JA2oqhcSrv7vEbF4uKU1s2X8gPqqP3Jj2m2R33+XIbwTmFtEuKDj6sP
-         UDGA==
-X-Gm-Message-State: APjAAAWYJCd7KN0Dyg4Ee/hlApLNtCy0jPtG20Gwkj69EVLMT9wgWKVP
-        n7TqUOxmMSpM3C0KgH8ZL/ASyoCi24JcqW8ZNg526A==
-X-Google-Smtp-Source: APXvYqyiZCdCzQpXVYnCf6pQB7KZdVUv2zazGXrVSy9+MjtOMihy4cgpphS8MSGTZKEzENG3jqfdYirsnxxVuBvvwh4=
-X-Received: by 2002:aca:cd92:: with SMTP id d140mr11806704oig.68.1578912261632;
- Mon, 13 Jan 2020 02:44:21 -0800 (PST)
+        bh=O3bZpE/ufziUWjC9uszYknO9uvEa5cBsIBbMoZQZJ7k=;
+        b=ROd5+XJeJ0DKIIyGT7/VkhtaQUQh0+1hIARN8o44TmrupoVfkbovzXaN61ISrA98Qz
+         UpkQ9ZGaA741mnTT7O/NX53bfgeNn8VxMvzEVXtLvePCI/ig0hDq1weJH9sYqv9i3jBT
+         WuQpgdUeVtqI7mHDEaGH+JyKBFZ8AJd2Gujh/HFLA9T5FCe3ycHHsZpuGYhtZVxUcEoC
+         BAzPNonnbrQhBFFe+2M8zn0b+3RRT8tL9sYbSvk1cSS0h80DRU6+TUCtsJOOmKEVKvse
+         TxKk7DttcuCYwpPa3Bm5RaHiegdaRcDjXj0S2QEX1gV0mIrLEu1XXk17nKu3q1vmunqB
+         2wjQ==
+X-Gm-Message-State: APjAAAVjPYl+ud/QZ4ymwEKxKjj4zQMv/64ldOXCmS3/QCAAyRCz3Zfq
+        YKBegIRQFgfKXSv1/tli1mdnxSrzrMEYdY/rLss=
+X-Google-Smtp-Source: APXvYqwH+pvhAPxpctM2feYU9YWH9LSAQ8FM08ynn/WnToFcMkxV1/nNSQYMLhQMRIplaUlWJITa6Nn+IwUe+RTwfyo=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr13030835otd.266.1578912403187;
+ Mon, 13 Jan 2020 02:46:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20200110174712.7019-1-ikjn@chromium.org>
-In-Reply-To: <20200110174712.7019-1-ikjn@chromium.org>
+References: <20200113182228.1.I3c4155635fe990891a2c98c874cc4a270c82fe1b@changeid>
+In-Reply-To: <20200113182228.1.I3c4155635fe990891a2c98c874cc4a270c82fe1b@changeid>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Jan 2020 11:44:10 +0100
-Message-ID: <CAJZ5v0hc37cSNidhQUnJr5Gp4D-wjhNdgpLQvXv=9ESu9NGb4g@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: teo: bugfix in intervals[] array indexing
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "RafaelJ . Wysocki" <rafael.j.wysocki@intel.com>,
-        DanielLezcano <daniel.lezcano@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 13 Jan 2020 11:46:32 +0100
+Message-ID: <CAJZ5v0i3Yu9GbbQ4Rubobbitvte1bJ0ARfq8jGJPQxRckx+hZQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: fix spelling mistake: "Whethet" -> "Whether"
+To:     Harry Pan <harry.pan@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Harry Pan <gs0622@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 6:47 PM Ikjoon Jang <ikjn@chromium.org> wrote:
+On Mon, Jan 13, 2020 at 11:22 AM Harry Pan <harry.pan@intel.com> wrote:
 >
-> Fix a simple bug in rotating array index.
+> Fix a spelling typo in the comment, no function change.
 >
-> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> Signed-off-by: Harry Pan <harry.pan@intel.com>
+>
 > ---
->  drivers/cpuidle/governors/teo.c | 2 +-
+>
+>  drivers/cpufreq/intel_pstate.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index de7e706efd46..6deaaf5f05b5 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -198,7 +198,7 @@ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
->          * pattern detection.
->          */
->         cpu_data->intervals[cpu_data->interval_idx++] = measured_ns;
-> -       if (cpu_data->interval_idx > INTERVALS)
-> +       if (cpu_data->interval_idx >= INTERVALS)
->                 cpu_data->interval_idx = 0;
->  }
->
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 8ab31702cf6a..4bd9cb33132c 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -172,7 +172,7 @@ struct vid_data {
+>  /**
+>   * struct global_params - Global parameters, mostly tunable via sysfs.
+>   * @no_turbo:          Whether or not to use turbo P-states.
+> - * @turbo_disabled:    Whethet or not turbo P-states are available at all,
+> + * @turbo_disabled:    Whether or not turbo P-states are available at all,
+>   *                     based on the MSR_IA32_MISC_ENABLE value and whether or
+>   *                     not the maximum reported turbo P-state is different from
+>   *                     the maximum reported non-turbo one.
 > --
 
-Applied as a fix for 5,5 and "stable", thanks!
+Applied as 5.6 material, thanks!
