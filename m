@@ -2,279 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E1B138C47
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 08:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC49138CF4
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 09:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728598AbgAMHYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 02:24:18 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:17267 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727494AbgAMHYS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 02:24:18 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200113072416epoutp0212b6f6071990c34dd216f37e194d745f~pYWrn6uxU2024920249epoutp021
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2020 07:24:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200113072416epoutp0212b6f6071990c34dd216f37e194d745f~pYWrn6uxU2024920249epoutp021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1578900256;
-        bh=mKkCNEw53noy6Xok6B1I9aGQSGiwVBHGf8BaRhxoex8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=WUmbC7NkylrtDorKFm91l42Wi470dzLu0AgxxrI8ifq15kJBSyEJYLa837t385yq7
-         OdEh7ISjOfrhuH7jNtpm89qO/0nb1YsUMqmZSWkuS2GuuuZQtkFOnx+R9/9aA3lU4W
-         k3HTodCwtP2ukkwK6s+XaH8d+XtCZjh0jpQAwZSs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20200113072415epcas1p36d95d1150b7a95f424212c042458d0b9~pYWrL0EhH1997319973epcas1p3F;
-        Mon, 13 Jan 2020 07:24:15 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47x4pP3JXJzMqYkr; Mon, 13 Jan
-        2020 07:24:13 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.2D.57028.B1B1C1E5; Mon, 13 Jan 2020 16:24:11 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20200113072410epcas1p465a60b58e4cab7a6e8c977128b743d0b~pYWmRrniX0741307413epcas1p4s;
-        Mon, 13 Jan 2020 07:24:10 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200113072410epsmtrp178497ab1e6f00494ed7e89f7bb916e74~pYWmQ4OiA2006920069epsmtrp1X;
-        Mon, 13 Jan 2020 07:24:10 +0000 (GMT)
-X-AuditID: b6c32a35-4f3ff7000001dec4-41-5e1c1b1ade6d
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DD.0C.06569.A1B1C1E5; Mon, 13 Jan 2020 16:24:10 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200113072410epsmtip132931acebb404c008a9575a233c6de1b~pYWmFSgqL1933119331epsmtip1X;
-        Mon, 13 Jan 2020 07:24:10 +0000 (GMT)
-Subject: Re: [PATCH 2/2] PM / devfreq: Use exclusively PM QoS to determine
- frequency limits
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <c793c2e5-dd0e-bff4-9769-26344afe914e@samsung.com>
-Date:   Mon, 13 Jan 2020 16:31:26 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1728765AbgAMIeI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 03:34:08 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:35425 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728699AbgAMIeI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 03:34:08 -0500
+Received: by mail-ed1-f65.google.com with SMTP id f8so7708906edv.2;
+        Mon, 13 Jan 2020 00:34:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pwiky2V1HXRMgUMF8ZYenJSpk8xqF9IZsi12qqtxDSo=;
+        b=fd5DUeIDDm+CQTs37RXNuHsLos0XQ7KTVgM4m3jBRdz9BG3CjjEvOGam+l/fNpHmEe
+         rQXy+DS5Q+saka31qhZmDF16fxtQHpDBdXk5vspxkcdCh+In7ichPQQKK+bvXxaF7oDs
+         v16ZKejP86ci/iAGwkn2FQoBaJT0K3U8I4LwRdVtc+Irf+6iCxFdw+KFMKUljKPVvUmv
+         xaBmPWMJeKuFstg96LB9Wocd4aPVkrlxDOYDqegrhEt+tjQqsdmfTrF6ygOm3hRVwpG0
+         q3w4krAZBXtdGiF0vLO88H0KcxFsJNHPvZSI/j6DaLfzsYmKPjS3XeKPYMZCXGhL2DY5
+         IE1w==
+X-Gm-Message-State: APjAAAXiMxbt8EnWFI+aHLZBaTdX30VrumHt7BDHbh3X6776V3njcnCV
+        ZZBzX7RsN2ZmcaSktv62x6UZzg7sw6Y=
+X-Google-Smtp-Source: APXvYqzUQpNNjJExK/G4N7n06llOe2EgioVrrlEkmNYk0/kj7RSvUBziADQn4BpMSCo3rhZmQYBPWA==
+X-Received: by 2002:a17:906:66c9:: with SMTP id k9mr12247747ejp.341.1578904445904;
+        Mon, 13 Jan 2020 00:34:05 -0800 (PST)
+Received: from pi3 ([194.230.155.229])
+        by smtp.googlemail.com with ESMTPSA id m5sm399916ede.10.2020.01.13.00.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 00:34:05 -0800 (PST)
+Date:   Mon, 13 Jan 2020 09:34:03 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH] power: supply: max17040: Correct IRQ wake handling
+Message-ID: <20200113083403.GA1320@pi3>
+References: <CGME20200110100620eucas1p12fff62b485570e93b283e23c7a9e5b57@eucas1p1.samsung.com>
+ <20200110100540.27371-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20200110094913.2.Ie8eacf976ce7a13e421592f5c1ab8dbdc537da5c@changeid>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te2xLcRTOr4/bW1GuGju6se4uJBabXlu5ExOxoTF/zCMI0brpbrpaX+nt
-        MIISZltQMhK6eWxjbIRZtplltLYiJYZgkXmErOIRI7aMeQS3vRX77zvnfOd85/s9cLGyFVPh
-        ZpuLddoYC4mNkLR0TtWkxMXF6zXBGzj9reu7iD4xMJG+t+ujjD734ouUftRWidED+wOIHmjo
-        RfSznecwOvT6ADZPrqtwP5Toatrfi3TPu9sx3eVPrSLdgaZ6pCu5XaQbaJyUK1tTMCefZfJY
-        p5q1Ge15Zpspk8xZbsgyaGdqqBQqg55Fqm2Mlc0ks5fkpiw0W/jFSPVGxlLIp3IZjiOnz53j
-        tBe6WHW+nXNlkqwjz+LIcKRyjJUrtJlSjXbrbEqjmaHliesL8h//7hY7yqdtDt3rk7rRk6Qy
-        JMeBSIf7nmZJGCuJVgR73GvL0Age9yO47m+QCMFXBEHfbtm/jjdVgzKhcA1BcV8ACcFnBKVt
-        XnGYNZZYB57a3ggrhvjFz/38O1IQEya41fkjMgojksH37ikWxqOJRHgy1IvCWEHMhYuBzghH
-        QkyG/uZAJD+OWAnBlt1RzhgIHgtFFpcTy6DXWy0R5sdCT+ikSMAJcKWvUhxeAoi9MujvqRUJ
-        HrKhr+VOFI+FD7ebot5U8N5THMVboS4YwITmEgRNvgdSoZAGvjPlfDPOK0yFS23ThXQiXP15
-        HAnCo+DT4D5pmAKEAkqKlQIlCR69ehGVnQA1e0uxg4j0DrPjHWbBO8yC97/YKSSpR+NZB2c1
-        sRzloIZfdyOKvNpkbSs63LWkAxE4Ikcq/Fvi9Eops5ErsnYgwMVkjKKxS6VXKvKYoi2s025w
-        FlpYrgNp+dM+JFaNM9r5P2BzGSjtjLS0NDqdmqmlKDJWgQ89XKckTIyLLWBZB+v81yfC5So3
-        8nSnxkxcEJ+7zbqq33aq/emz6qxpzffv1HfZE5r0fn/t6pEJyxe9zTl5oezuHzhhlJf3uH1V
-        DQxz4bJ+MKvyTCxz8/zpbE1MxssWQ6L5JbNjQ3eVJT1EViOzNedsxZHSTc4VRfN/LF46aafH
-        G6/ebjxagobqlk2pO7zKE0zZ7LeSEi6foZLFTo75C2yT6dTLAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSnK6UtEycwYMjwhbfz/1kspj3Wdbi
-        bNMbdosVdz+yWlzeNYfN4nPvEUaLzxseM1rcblzBZvHkYR+bA6fH7IaLLB6L97xk8rhzbQ+b
-        x8Z3O5g8+rasYvToOF7p8XmTXAB7FJdNSmpOZllqkb5dAlfGlX/XmAsm61Q8OfuWtYHxqnIX
-        IyeHhICJxNOFX9m7GLk4hAR2M0os773HCJGQlJh28ShzFyMHkC0scfhwMUTNW0aJlQv3M4PU
-        CAvESvQvewzWLCLwj1Gi+eYWNpAEs0C6xPN1B5nhOlrndzOBJNgEtCT2v7gBVsQvoChx9cdj
-        sG28AnYS644cZgexWQRUJT5tPQIWFxUIk9i55DETRI2gxMmZT1hAbE6BIInHsxaxQCxTl/gz
-        7xIzhC0ucevJfCYIW15i+9s5zBMYhWchaZ+FpGUWkpZZSFoWMLKsYpRMLSjOTc8tNiwwykst
-        1ytOzC0uzUvXS87P3cQIjjotrR2MJ07EH2IU4GBU4uE9UCUdJ8SaWFZcmXuIUYKDWUmEd9M5
-        qTgh3pTEyqrUovz4otKc1OJDjNIcLErivPL5xyKFBNITS1KzU1MLUotgskwcnFINjFOcuL4K
-        PRG+/GZ7BL8F419H2ej1166UBkmsytzmcKJr4ZWHJssmzrSscJi+/oTMwkZ57o+FWiZzJnwT
-        VKjSuPmxqP1R2F6ufR8EKuLZ9VyO7maRFn/SFfttNc+CJJcdPWEVoX+dtxdcnPvIXfv8K1FV
-        jn0/jkRUJ24revtadndAApfKpZLgKCWW4oxEQy3mouJEAA9fP7e2AgAA
-X-CMS-MailID: 20200113072410epcas1p465a60b58e4cab7a6e8c977128b743d0b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200110174932epcas1p345b0e750b48cc9e351dca14e0dd4de86
-References: <20200110094913.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
-        <CGME20200110174932epcas1p345b0e750b48cc9e351dca14e0dd4de86@epcas1p3.samsung.com>
-        <20200110094913.2.Ie8eacf976ce7a13e421592f5c1ab8dbdc537da5c@changeid>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200110100540.27371-1-m.szyprowski@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-
-Any device driver except for devfreq_cooling.c might
-use dev_pm_opp_enable/disable interface. 
-So, don't need to remove the devfreq->scaling_max_freq
-and devfreq->scaling_min_freq for supporting OPP interface.
-
-Regards,
-Chanwoo Choi
-
-On 1/11/20 2:49 AM, Matthias Kaehlcke wrote:
-> Traditionally devfreq cooling devices dynamically disabled OPPs
-> that shouldn't be used because of thermal pressure. Devfreq cooling
-> devices now use PM QoS to set frequency limits, hence the devfreq
-> code dealing that deals with disabled OPPs can be removed.
+On Fri, Jan 10, 2020 at 11:05:40AM +0100, Marek Szyprowski wrote:
+> Don't disable IRQ wake feature without prior enabling it.
 > 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> This fixes following warning observed on Exynos3250-based Rinato board:
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 1288 at kernel/irq/manage.c:724 irq_set_irq_wake+0xfc/0x134
+> Unbalanced IRQ 83 wake disable
+> Modules linked in:
+> CPU: 0 PID: 1288 Comm: rtcwake Not tainted 5.5.0-rc5-next-20200110-00031-g6289fffbb3f5 #7266
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> [<c0112e48>] (unwind_backtrace) from [<c010e090>] (show_stack+0x10/0x14)
+> [<c010e090>] (show_stack) from [<c0b25b28>] (dump_stack+0xa4/0xd0)
+> [<c0b25b28>] (dump_stack) from [<c0128088>] (__warn+0xf4/0x10c)
+> [<c0128088>] (__warn) from [<c0128114>] (warn_slowpath_fmt+0x74/0xb8)
+> [<c0128114>] (warn_slowpath_fmt) from [<c019e9a0>] (irq_set_irq_wake+0xfc/0x134)
+> [<c019e9a0>] (irq_set_irq_wake) from [<c0772708>] (max17040_suspend+0x50/0x58)
+> [<c0772708>] (max17040_suspend) from [<c05f55ac>] (dpm_run_callback+0xb4/0x400)
+> [<c05f55ac>] (dpm_run_callback) from [<c05f5e38>] (__device_suspend+0x140/0x814)
+> [<c05f5e38>] (__device_suspend) from [<c05f9548>] (dpm_suspend+0x16c/0x564)
+> [<c05f9548>] (dpm_suspend) from [<c05fa2e4>] (dpm_suspend_start+0x90/0x98)
+> [<c05fa2e4>] (dpm_suspend_start) from [<c01977f4>] (suspend_devices_and_enter+0xec/0xc0c)
+> [<c01977f4>] (suspend_devices_and_enter) from [<c019862c>] (pm_suspend+0x318/0x3e8)
+> [<c019862c>] (pm_suspend) from [<c01963cc>] (state_store+0x68/0xc8)
+> [<c01963cc>] (state_store) from [<c03531a4>] (kernfs_fop_write+0x10c/0x220)
+> [<c03531a4>] (kernfs_fop_write) from [<c02b44c4>] (__vfs_write+0x2c/0x1c4)
+> [<c02b44c4>] (__vfs_write) from [<c02b7288>] (vfs_write+0xa4/0x180)
+> [<c02b7288>] (vfs_write) from [<c02b74d0>] (ksys_write+0x58/0xcc)
+> [<c02b74d0>] (ksys_write) from [<c0101000>] (ret_fast_syscall+0x0/0x28)
+> Exception stack(0xd6e83fa8 to 0xd6e83ff0)
+> ...
+> irq event stamp: 18028
+> hardirqs last  enabled at (18027): [<c014b99c>] cancel_delayed_work+0x84/0xf8
+> hardirqs last disabled at (18028): [<c0b49b1c>] _raw_spin_lock_irqsave+0x1c/0x58
+> softirqs last  enabled at (17876): [<c01026d8>] __do_softirq+0x4f0/0x5e4
+> softirqs last disabled at (17869): [<c0130d34>] irq_exit+0x16c/0x170
+> ---[ end trace 0728005730004e60 ]---
+> 
+> Fixes: 2e17ed94de68 ("power: supply: max17040: Add IRQ handler for low SOC alert")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
-> 
->  drivers/devfreq/devfreq.c | 75 +++++----------------------------------
->  include/linux/devfreq.h   |  4 ---
->  2 files changed, 8 insertions(+), 71 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 57f6944d65a6..ec66e2c27cc4 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -73,34 +73,6 @@ static struct devfreq *find_device_devfreq(struct device *dev)
->  	return ERR_PTR(-ENODEV);
->  }
->  
-> -static unsigned long find_available_min_freq(struct devfreq *devfreq)
-> -{
-> -	struct dev_pm_opp *opp;
-> -	unsigned long min_freq = 0;
-> -
-> -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
-> -	if (IS_ERR(opp))
-> -		min_freq = 0;
-> -	else
-> -		dev_pm_opp_put(opp);
-> -
-> -	return min_freq;
-> -}
-> -
-> -static unsigned long find_available_max_freq(struct devfreq *devfreq)
-> -{
-> -	struct dev_pm_opp *opp;
-> -	unsigned long max_freq = ULONG_MAX;
-> -
-> -	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
-> -	if (IS_ERR(opp))
-> -		max_freq = 0;
-> -	else
-> -		dev_pm_opp_put(opp);
-> -
-> -	return max_freq;
-> -}
-> -
->  /**
->   * get_freq_range() - Get the current freq range
->   * @devfreq:	the devfreq instance
-> @@ -141,10 +113,6 @@ static void get_freq_range(struct devfreq *devfreq,
->  		*max_freq = min(*max_freq,
->  				(unsigned long)HZ_PER_KHZ * qos_max_freq);
->  
-> -	/* Apply constraints from OPP interface */
-> -	*min_freq = max(*min_freq, devfreq->scaling_min_freq);
-> -	*max_freq = min(*max_freq, devfreq->scaling_max_freq);
-> -
->  	if (*min_freq > *max_freq)
->  		*min_freq = *max_freq;
->  }
-> @@ -610,23 +578,10 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
->  				 void *devp)
->  {
->  	struct devfreq *devfreq = container_of(nb, struct devfreq, nb);
-> -	int err = -EINVAL;
-> +	int err;
->  
->  	mutex_lock(&devfreq->lock);
-> -
-> -	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-> -	if (!devfreq->scaling_min_freq)
-> -		goto out;
-> -
-> -	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-> -	if (!devfreq->scaling_max_freq) {
-> -		devfreq->scaling_max_freq = ULONG_MAX;
-> -		goto out;
-> -	}
-> -
->  	err = update_devfreq(devfreq);
-> -
-> -out:
->  	mutex_unlock(&devfreq->lock);
->  	if (err)
->  		dev_err(devfreq->dev.parent,
-> @@ -781,19 +736,15 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  		mutex_lock(&devfreq->lock);
->  	}
->  
-> -	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-> -	if (!devfreq->scaling_min_freq) {
-> -		mutex_unlock(&devfreq->lock);
-> -		err = -EINVAL;
-> +	err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-> +				     DEV_PM_QOS_MIN_FREQUENCY, 0);
-> +	if (err < 0)
->  		goto err_dev;
-> -	}
-> -
-> -	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-> -	if (!devfreq->scaling_max_freq) {
-> -		mutex_unlock(&devfreq->lock);
-> -		err = -EINVAL;
-> +	err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-> +				     DEV_PM_QOS_MAX_FREQUENCY,
-> +				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> +	if (err < 0)
->  		goto err_dev;
-> -	}
->  
->  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
->  	atomic_set(&devfreq->suspend_count, 0);
-> @@ -834,16 +785,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  
->  	mutex_unlock(&devfreq->lock);
->  
-> -	err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-> -				     DEV_PM_QOS_MIN_FREQUENCY, 0);
-> -	if (err < 0)
-> -		goto err_devfreq;
-> -	err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-> -				     DEV_PM_QOS_MAX_FREQUENCY,
-> -				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> -	if (err < 0)
-> -		goto err_devfreq;
-> -
->  	devfreq->nb_min.notifier_call = qos_min_notifier_call;
->  	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
->  				      DEV_PM_QOS_MIN_FREQUENCY);
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index fb376b5b7281..cb75f23ad2f4 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -126,8 +126,6 @@ struct devfreq_dev_profile {
->   *		touch this.
->   * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
->   * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
-> - * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-> - * @scaling_max_freq:	Limit maximum frequency requested by OPP interface
->   * @stop_polling:	 devfreq polling status of a device.
->   * @suspend_freq:	 frequency of a device set during suspend phase.
->   * @resume_freq:	 frequency of a device set in resume phase.
-> @@ -166,8 +164,6 @@ struct devfreq {
->  
->  	struct dev_pm_qos_request user_min_freq_req;
->  	struct dev_pm_qos_request user_max_freq_req;
-> -	unsigned long scaling_min_freq;
-> -	unsigned long scaling_max_freq;
->  	bool stop_polling;
->  
->  	unsigned long suspend_freq;
-> 
+>  drivers/power/supply/max17040_battery.c | 16 ++++------------
+>  1 file changed, 4 insertions(+), 12 deletions(-)
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Best regards,
+Krzysztof
+
