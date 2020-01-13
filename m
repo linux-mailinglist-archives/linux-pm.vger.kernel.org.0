@@ -2,230 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3355139055
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 12:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D3A13905B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 12:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgAMLpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 06:45:40 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40771 "EHLO
+        id S1726236AbgAMLsU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 06:48:20 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42546 "EHLO
         mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbgAMLpk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 06:45:40 -0500
-Received: by mail-ot1-f67.google.com with SMTP id w21so8624270otj.7;
-        Mon, 13 Jan 2020 03:45:39 -0800 (PST)
+        with ESMTP id S1726180AbgAMLsU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 06:48:20 -0500
+Received: by mail-ot1-f67.google.com with SMTP id 66so8635587otd.9;
+        Mon, 13 Jan 2020 03:48:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WunI6mk4pmK/ShQ0y2XYQNmAEGKYY8aPuYK3+E8KjOo=;
-        b=MXjxWOr9BCfVqppiwyIwizs4bY2TlTjEJjeHPueOTaSjkz5Ib2M250ndvg8JpuRHtv
-         iJ9QWpKnCaaHGUFNRNQDJmrZCIvcZeGuz+2OFaP8gxV9gxTtzGlSX/TDPkFwk6tIvsc8
-         yKBkNY4OIn0yiZ6N03hbRXOt161KjjvHh7pQED1T7Aly3H643R6aV2VtsWcGpV00i3jR
-         R1eybdRmWXd3hKnvxQTARE3E9qVpc4GLhabNIycw/Y5KSG6dsgHiHxSS9ddMrEBWG92l
-         PrUaE/Cbc2fBV4/4q0Lc0qQ7hu6tf7h92HG5YK7Pn47g4xx/hvOsw/6/raHO4ys6un+k
-         B8Qw==
-X-Gm-Message-State: APjAAAU78iQUcrTw17cIwrS4k1pvyTbzLkg4/J5TGUK/0ohzz71JTdXu
-        3EYVO8kehDKjH49LgAFC7aiQJPwC2J0vcsC6H/Y=
-X-Google-Smtp-Source: APXvYqwE3K/KnAY4PHlsIHtQQsuExd3cxSB5V2Y7/wwG9BJLJQDNgzmur6hFT73EjaNHd5NpCR9LAZ8+HXafga+OIN0=
-X-Received: by 2002:a05:6830:1e67:: with SMTP id m7mr12962729otr.262.1578915938616;
- Mon, 13 Jan 2020 03:45:38 -0800 (PST)
+        bh=LxnhZqYlYpH5Vy9lVIo6OhZ32kMjzMITo+VXkeln1fw=;
+        b=pgtg9JnHLBwCYyAZ5RFYQGgsl66M/mj7yM4MaFDspS6YKEdB6ROJMmAjIIAEXYkksF
+         KzKUHo82O4P/9hmKRMftjCb4Bg13udYWoRS5mI7ymCEb0qYb2lsDeBQ9aJ8c03P6YYu3
+         RpWLNKYlDqjUndZh+iMRoeNY3reI9vvAUIlyGZWXv2/dZ88XegVLV2+nIr7XuhSrBLiF
+         ATtFSmI6LuVhD2SVTvG9pcezEIeyuJj62e0CIabQLIBbsHYv0TvFCPjTS+bcTY3OqRt5
+         zu2UluqGJWQF1SD/cHUMRL91/W2L5V5U0lQnKwRg4sqLYLXhn6jHzMlRP5NmGkJWY3B5
+         GQTg==
+X-Gm-Message-State: APjAAAUxBfUnWj5LxEpGzaWPJZmSoYX9m1hVevSpYeSTEhxL4qZfH0ho
+        tN+Wn8dJGaZVxT2lIoutfhcA2CamCqh4dboRlVE=
+X-Google-Smtp-Source: APXvYqw3Qgw3VCVDMPHWyRb4A+fn8GcFRFWgD+RozWxW13+tMz8RTbaH9oz22LVJAtTKMJUr2mfSKOEXlhCa9eU2PHs=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr13198440otd.266.1578916099461;
+ Mon, 13 Jan 2020 03:48:19 -0800 (PST)
 MIME-Version: 1.0
-References: <d34ad8b1-8c0a-99d9-dc3e-319600c0bc39@freesources.org>
-In-Reply-To: <d34ad8b1-8c0a-99d9-dc3e-319600c0bc39@freesources.org>
+References: <20200107234526.GA19034@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200108105011.GY2827@hirez.programming.kicks-ass.net> <20200110153520.GC8214@u40b0340c692b58f6553c.ant.amazon.com>
+ <20200113101609.GT2844@hirez.programming.kicks-ass.net> <857b42b2e86b2ae09a23f488daada3b1b2836116.camel@amazon.com>
+In-Reply-To: <857b42b2e86b2ae09a23f488daada3b1b2836116.camel@amazon.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Jan 2020 12:45:27 +0100
-Message-ID: <CAJZ5v0gFJ09rLU4JRsf49wTRu-6dPMV67ZCTkGi1J7VJVMhrZQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: Add a switch for disabling/enabling sync() before suspend
-To:     Jonas Meurer <jonas@freesources.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>,
-        Yannik Sembritzki <yannik@sembritzki.me>
+Date:   Mon, 13 Jan 2020 12:48:08 +0100
+Message-ID: <CAJZ5v0jkaw1jJVahWbvcqcYhcwWLqajm7gchn4L4WOngHJcbUA@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in hibernation
+To:     "Singh, Balbir" <sblbir@amazon.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Agarwal, Anchal" <anchalag@amazon.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com" 
+        <Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "jgross@suse.com" <jgross@suse.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "konrad.wilk@oracle.co" <konrad.wilk@oracle.co>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "fllinden@amaozn.com" <fllinden@amaozn.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 5:03 PM Jonas Meurer <jonas@freesources.org> wrote:
+On Mon, Jan 13, 2020 at 12:43 PM Singh, Balbir <sblbir@amazon.com> wrote:
 >
-> The switch allows to enable or disable the final sync() from the suspend.c
-> Linux Kernel system suspend implementation. This is useful to avoid race
-> conditions if block devices have been suspended before. Be aware that you
-> have to take care of sync() yourself before suspending the system if you
-> disable it here.
+> On Mon, 2020-01-13 at 11:16 +0100, Peter Zijlstra wrote:
+> > On Fri, Jan 10, 2020 at 07:35:20AM -0800, Eduardo Valentin wrote:
+> > > Hey Peter,
+> > >
+> > > On Wed, Jan 08, 2020 at 11:50:11AM +0100, Peter Zijlstra wrote:
+> > > > On Tue, Jan 07, 2020 at 11:45:26PM +0000, Anchal Agarwal wrote:
+> > > > > From: Eduardo Valentin <eduval@amazon.com>
+> > > > >
+> > > > > System instability are seen during resume from hibernation when system
+> > > > > is under heavy CPU load. This is due to the lack of update of sched
+> > > > > clock data, and the scheduler would then think that heavy CPU hog
+> > > > > tasks need more time in CPU, causing the system to freeze
+> > > > > during the unfreezing of tasks. For example, threaded irqs,
+> > > > > and kernel processes servicing network interface may be delayed
+> > > > > for several tens of seconds, causing the system to be unreachable.
+> > > > > The fix for this situation is to mark the sched clock as unstable
+> > > > > as early as possible in the resume path, leaving it unstable
+> > > > > for the duration of the resume process. This will force the
+> > > > > scheduler to attempt to align the sched clock across CPUs using
+> > > > > the delta with time of day, updating sched clock data. In a post
+> > > > > hibernation event, we can then mark the sched clock as stable
+> > > > > again, avoiding unnecessary syncs with time of day on systems
+> > > > > in which TSC is reliable.
+> > > >
+> > > > This makes no frigging sense what so bloody ever. If the clock is
+> > > > stable, we don't care about sched_clock_data. When it is stable you get
+> > > > a linear function of the TSC without complicated bits on.
+> > > >
+> > > > When it is unstable, only then do we care about the sched_clock_data.
+> > > >
+> > >
+> > > Yeah, maybe what is not clear here is that we covering for situation
+> > > where clock stability changes over time, e.g. at regular boot clock is
+> > > stable, hibernation happens, then restore happens in a non-stable clock.
+> >
+> > Still confused, who marks the thing unstable? The patch seems to suggest
+> > you do yourself, but it is not at all clear why.
+> >
+> > If TSC really is unstable, then it needs to remain unstable. If the TSC
+> > really is stable then there is no point in marking is unstable.
+> >
+> > Either way something is off, and you're not telling me what.
+> >
 >
-> Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
-> is slightly changed: It now configures the default for fun-time switch
-> '/sys/power/sync_on_suspend'.
+> Hi, Peter
 >
-> Signed-off-by: Jonas Meurer <jonas@freesources.org>
-
-First, I would use a slightly different subject.  What about "PM:
-suspend: Add sysfs attribute to control the "sync on suspend"
-behavior"?
-
-Then, I would write in the changelog that whether or not filesystems
-are synced before system suspend by the kernel depends on a Kconfig
-option which is not flexible enough, because there are cases in which
-user space may want to decide whether or not the sync in the kernel
-should be carried out.
-
-Actually, in the example case given by you, it is not clear enough why
-you cannot build the kernel with CONFIG_SUSPEND_SKIP_SYNC set, so it
-would be good to explain that.  Or give a different example.
-
-Then I would say that the existing CONFIG_SUSPEND_SKIP_SYNC will be
-used to set the default value of the new sysfs attribute after the
-patch.
-
-> ---
->  Documentation/ABI/testing/sysfs-power | 15 ++++++++++++
->  include/linux/suspend.h               |  2 ++
->  kernel/power/Kconfig                  |  5 +++-
->  kernel/power/main.c                   | 33 +++++++++++++++++++++++++++
->  kernel/power/suspend.c                |  2 +-
->  5 files changed, 55 insertions(+), 2 deletions(-)
+> For your original comment, just wanted to clarify the following:
 >
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index 6f87b9dd384b..783b3ce8eb06 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -407,3 +407,18 @@ Contact:   Kalesh Singh <kaleshsingh96@gmail.com>
->  Description:
->                 The /sys/power/suspend_stats/last_failed_step file contains
->                 the last failed step in the suspend/resume path.
-> +
-> +What:          /sys/power/sync_on_suspend
-> +Date:          October 2019
-> +Contact:       Jonas Meurer <jonas@freesources.org>
-> +Description:
-> +               This file controls the switch to enable or disable the final
-> +               sync() before system suspend. This is useful to avoid race
-> +               conditions if block devices have been suspended before. Be
-> +               aware that you have to take care of sync() yourself before
-> +               suspending the system if you disable it here.
+> 1. After hibernation, the machine can be resumed on a different but compatible
+> host (these are VM images hibernated)
+> 2. This means the clock between host1 and host2 can/will be different
 
-I'm not entirely happy with the paragraph above.
+So the problem is specific to this particular use case.
 
-It basically doesn't have to explain what the feature is useful for,
-but if you waht to give an example, I would write something like this:
-
-"This file controls whether or not the kernel will sync() filesystems
-during system suspend (after freezing user space and before suspending
-devices).  For example, user space may want to prevent the kernel from
-syncing filesystems at that time in cases when system suspend works
-reliably and is carried out relatively often, so doing a system-wide
-filesystem sync every time it happens is not really useful."
-
-
-> +
-> +               Writing a "1" to this file enables the sync() and writing a
-> +               "0" disables it. Reads from the file return the current value.
-> +               The default is "1" but can be configured with the build-time
-> +               config flag "SUSPEND_SKIP_SYNC".
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 6fc8843f1c9e..4a230c2f1c31 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -329,6 +329,7 @@ extern void arch_suspend_disable_irqs(void);
->  extern void arch_suspend_enable_irqs(void);
->
->  extern int pm_suspend(suspend_state_t state);
-> +extern bool sync_on_suspend_enabled;
->  #else /* !CONFIG_SUSPEND */
->  #define suspend_valid_only_mem NULL
->
-> @@ -342,6 +343,7 @@ static inline bool pm_suspend_default_s2idle(void) { return false; }
->
->  static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
->  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-> +static inline bool sync_on_suspend_enabled(void) { return true; }
->  static inline bool idle_should_enter_s2idle(void) { return false; }
->  static inline void __init pm_states_init(void) {}
->  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index d3667b4075c1..7cbfbeacd68a 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
->           Skip the kernel sys_sync() before freezing user processes.
->           Some systems prefer not to pay this cost on every invocation
->           of suspend, or they are content with invoking sync() from
-> -         user-space before invoking suspend.  Say Y if that's your case.
-> +         user-space before invoking suspend.  There's a run-time switch
-> +         at '/sys/power/sync_on_suspend' to configure this behaviour.
-> +         This setting changes the default for the run-tim switch. Say Y
-> +         to change the default to disable the kernel sys_sync().
->
->  config HIBERNATE_CALLBACKS
->         bool
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index e26de7af520b..69b7a8aeca3b 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -190,6 +190,38 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
->  }
->
->  power_attr(mem_sleep);
-> +
-> +/*
-> + * sync_on_suspend: invoke ksys_sync_helper() before suspend.
-> + *
-> + * show() returns whether ksys_sync_helper() is invoked before suspend.
-> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
-> + */
-> +bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
-> +
-> +static ssize_t sync_on_suspend_show(struct kobject *kobj,
-> +                                  struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-> +}
-> +
-> +static ssize_t sync_on_suspend_store(struct kobject *kobj,
-> +                                   struct kobj_attribute *attr,
-> +                                   const char *buf, size_t n)
-> +{
-> +       unsigned long val;
-> +
-> +       if (kstrtoul(buf, 10, &val))
-> +               return -EINVAL;
-> +
-> +       if (val > 1)
-> +               return -EINVAL;
-> +
-> +       sync_on_suspend_enabled = !!val;
-> +       return n;
-> +}
-> +
-> +power_attr(sync_on_suspend);
->  #endif /* CONFIG_SUSPEND */
->
->  #ifdef CONFIG_PM_SLEEP_DEBUG
-> @@ -855,6 +887,7 @@ static struct attribute * g[] = {
->         &wakeup_count_attr.attr,
->  #ifdef CONFIG_SUSPEND
->         &mem_sleep_attr.attr,
-> +       &sync_on_suspend_attr.attr,
->  #endif
->  #ifdef CONFIG_PM_AUTOSLEEP
->         &autosleep_attr.attr,
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index f3b7239f1892..2c47280fbfc7 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
->         if (state == PM_SUSPEND_TO_IDLE)
->                 s2idle_begin();
->
-> -       if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
-> +       if (sync_on_suspend_enabled) {
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
->                 ksys_sync_helper();
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-> --
-
-The patch itself looks fine to me.
+I'm not sure why to impose this hack on hibernation in all cases.
