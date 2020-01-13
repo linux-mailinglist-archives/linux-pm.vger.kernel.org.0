@@ -2,165 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 918DD139048
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 12:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3355139055
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 12:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728641AbgAMLna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 06:43:30 -0500
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:35125 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728516AbgAMLna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 06:43:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1578915809; x=1610451809;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=6XSa5GpL3gh4h8YvwELtoJ+sfZcbWRXkFc5y4pfehoc=;
-  b=H7UzrQnHQV07GhWJ+7S7zpRigS14pbS0EBNq/WvUy+nCwkE+jWJkHg/k
-   6yUUkvZ+9sq5At9GMk0twnajn2w+dZm9TX68EFrsUSoTkeoW63aFLnhm3
-   0TUQ/5y9Asnj0DsDxWMADyC9taaFQlYBJHCH6/M6TPd07M0x7ooXN62Ky
-   M=;
-IronPort-SDR: R+BlWp6nTHVVhaIhMU2TJ0LB4YSRTLQsATI0sOMiyFM4iSh27yUGPwc+8iW49sp1OvtUIhwKnD
- k40Idn6O/1kA==
-X-IronPort-AV: E=Sophos;i="5.69,428,1571702400"; 
-   d="scan'208";a="12102670"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1a-821c648d.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 13 Jan 2020 11:43:27 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1a-821c648d.us-east-1.amazon.com (Postfix) with ESMTPS id 9A4CDA1D45;
-        Mon, 13 Jan 2020 11:43:19 +0000 (UTC)
-Received: from EX13D05UWB003.ant.amazon.com (10.43.161.26) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 13 Jan 2020 11:43:18 +0000
-Received: from EX13D01UWB002.ant.amazon.com (10.43.161.136) by
- EX13D05UWB003.ant.amazon.com (10.43.161.26) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 13 Jan 2020 11:43:18 +0000
-Received: from EX13D01UWB002.ant.amazon.com ([10.43.161.136]) by
- EX13d01UWB002.ant.amazon.com ([10.43.161.136]) with mapi id 15.00.1367.000;
- Mon, 13 Jan 2020 11:43:18 +0000
-From:   "Singh, Balbir" <sblbir@amazon.com>
-To:     "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>
-CC:     "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Agarwal, Anchal" <anchalag@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com" 
-        <Woodhouse@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "jgross@suse.com" <jgross@suse.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "konrad.wilk@oracle.co" <konrad.wilk@oracle.co>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "fllinden@amaozn.com" <fllinden@amaozn.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-Subject: Re: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in
- hibernation
-Thread-Topic: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in
- hibernation
-Thread-Index: AQHVxbSKwN2FtiBCp0yRN06uTqctz6fgl2OAgAN0VQCABF3RgIAAGFiA
-Date:   Mon, 13 Jan 2020 11:43:18 +0000
-Message-ID: <857b42b2e86b2ae09a23f488daada3b1b2836116.camel@amazon.com>
-References: <20200107234526.GA19034@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-         <20200108105011.GY2827@hirez.programming.kicks-ass.net>
-         <20200110153520.GC8214@u40b0340c692b58f6553c.ant.amazon.com>
-         <20200113101609.GT2844@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200113101609.GT2844@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.162.119]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <842199D22376DB4B847E04A9819A1D72@amazon.com>
-Content-Transfer-Encoding: base64
+        id S1728689AbgAMLpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 06:45:40 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40771 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726985AbgAMLpk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 06:45:40 -0500
+Received: by mail-ot1-f67.google.com with SMTP id w21so8624270otj.7;
+        Mon, 13 Jan 2020 03:45:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WunI6mk4pmK/ShQ0y2XYQNmAEGKYY8aPuYK3+E8KjOo=;
+        b=MXjxWOr9BCfVqppiwyIwizs4bY2TlTjEJjeHPueOTaSjkz5Ib2M250ndvg8JpuRHtv
+         iJ9QWpKnCaaHGUFNRNQDJmrZCIvcZeGuz+2OFaP8gxV9gxTtzGlSX/TDPkFwk6tIvsc8
+         yKBkNY4OIn0yiZ6N03hbRXOt161KjjvHh7pQED1T7Aly3H643R6aV2VtsWcGpV00i3jR
+         R1eybdRmWXd3hKnvxQTARE3E9qVpc4GLhabNIycw/Y5KSG6dsgHiHxSS9ddMrEBWG92l
+         PrUaE/Cbc2fBV4/4q0Lc0qQ7hu6tf7h92HG5YK7Pn47g4xx/hvOsw/6/raHO4ys6un+k
+         B8Qw==
+X-Gm-Message-State: APjAAAU78iQUcrTw17cIwrS4k1pvyTbzLkg4/J5TGUK/0ohzz71JTdXu
+        3EYVO8kehDKjH49LgAFC7aiQJPwC2J0vcsC6H/Y=
+X-Google-Smtp-Source: APXvYqwE3K/KnAY4PHlsIHtQQsuExd3cxSB5V2Y7/wwG9BJLJQDNgzmur6hFT73EjaNHd5NpCR9LAZ8+HXafga+OIN0=
+X-Received: by 2002:a05:6830:1e67:: with SMTP id m7mr12962729otr.262.1578915938616;
+ Mon, 13 Jan 2020 03:45:38 -0800 (PST)
 MIME-Version: 1.0
+References: <d34ad8b1-8c0a-99d9-dc3e-319600c0bc39@freesources.org>
+In-Reply-To: <d34ad8b1-8c0a-99d9-dc3e-319600c0bc39@freesources.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Jan 2020 12:45:27 +0100
+Message-ID: <CAJZ5v0gFJ09rLU4JRsf49wTRu-6dPMV67ZCTkGi1J7VJVMhrZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: Add a switch for disabling/enabling sync() before suspend
+To:     Jonas Meurer <jonas@freesources.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>,
+        Yannik Sembritzki <yannik@sembritzki.me>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTAxLTEzIGF0IDExOjE2ICswMTAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToN
-Cj4gT24gRnJpLCBKYW4gMTAsIDIwMjAgYXQgMDc6MzU6MjBBTSAtMDgwMCwgRWR1YXJkbyBWYWxl
-bnRpbiB3cm90ZToNCj4gPiBIZXkgUGV0ZXIsDQo+ID4gDQo+ID4gT24gV2VkLCBKYW4gMDgsIDIw
-MjAgYXQgMTE6NTA6MTFBTSArMDEwMCwgUGV0ZXIgWmlqbHN0cmEgd3JvdGU6DQo+ID4gPiBPbiBU
-dWUsIEphbiAwNywgMjAyMCBhdCAxMTo0NToyNlBNICswMDAwLCBBbmNoYWwgQWdhcndhbCB3cm90
-ZToNCj4gPiA+ID4gRnJvbTogRWR1YXJkbyBWYWxlbnRpbiA8ZWR1dmFsQGFtYXpvbi5jb20+DQo+
-ID4gPiA+IA0KPiA+ID4gPiBTeXN0ZW0gaW5zdGFiaWxpdHkgYXJlIHNlZW4gZHVyaW5nIHJlc3Vt
-ZSBmcm9tIGhpYmVybmF0aW9uIHdoZW4gc3lzdGVtDQo+ID4gPiA+IGlzIHVuZGVyIGhlYXZ5IENQ
-VSBsb2FkLiBUaGlzIGlzIGR1ZSB0byB0aGUgbGFjayBvZiB1cGRhdGUgb2Ygc2NoZWQNCj4gPiA+
-ID4gY2xvY2sgZGF0YSwgYW5kIHRoZSBzY2hlZHVsZXIgd291bGQgdGhlbiB0aGluayB0aGF0IGhl
-YXZ5IENQVSBob2cNCj4gPiA+ID4gdGFza3MgbmVlZCBtb3JlIHRpbWUgaW4gQ1BVLCBjYXVzaW5n
-IHRoZSBzeXN0ZW0gdG8gZnJlZXplDQo+ID4gPiA+IGR1cmluZyB0aGUgdW5mcmVlemluZyBvZiB0
-YXNrcy4gRm9yIGV4YW1wbGUsIHRocmVhZGVkIGlycXMsDQo+ID4gPiA+IGFuZCBrZXJuZWwgcHJv
-Y2Vzc2VzIHNlcnZpY2luZyBuZXR3b3JrIGludGVyZmFjZSBtYXkgYmUgZGVsYXllZA0KPiA+ID4g
-PiBmb3Igc2V2ZXJhbCB0ZW5zIG9mIHNlY29uZHMsIGNhdXNpbmcgdGhlIHN5c3RlbSB0byBiZSB1
-bnJlYWNoYWJsZS4NCj4gPiA+ID4gVGhlIGZpeCBmb3IgdGhpcyBzaXR1YXRpb24gaXMgdG8gbWFy
-ayB0aGUgc2NoZWQgY2xvY2sgYXMgdW5zdGFibGUNCj4gPiA+ID4gYXMgZWFybHkgYXMgcG9zc2li
-bGUgaW4gdGhlIHJlc3VtZSBwYXRoLCBsZWF2aW5nIGl0IHVuc3RhYmxlDQo+ID4gPiA+IGZvciB0
-aGUgZHVyYXRpb24gb2YgdGhlIHJlc3VtZSBwcm9jZXNzLiBUaGlzIHdpbGwgZm9yY2UgdGhlDQo+
-ID4gPiA+IHNjaGVkdWxlciB0byBhdHRlbXB0IHRvIGFsaWduIHRoZSBzY2hlZCBjbG9jayBhY3Jv
-c3MgQ1BVcyB1c2luZw0KPiA+ID4gPiB0aGUgZGVsdGEgd2l0aCB0aW1lIG9mIGRheSwgdXBkYXRp
-bmcgc2NoZWQgY2xvY2sgZGF0YS4gSW4gYSBwb3N0DQo+ID4gPiA+IGhpYmVybmF0aW9uIGV2ZW50
-LCB3ZSBjYW4gdGhlbiBtYXJrIHRoZSBzY2hlZCBjbG9jayBhcyBzdGFibGUNCj4gPiA+ID4gYWdh
-aW4sIGF2b2lkaW5nIHVubmVjZXNzYXJ5IHN5bmNzIHdpdGggdGltZSBvZiBkYXkgb24gc3lzdGVt
-cw0KPiA+ID4gPiBpbiB3aGljaCBUU0MgaXMgcmVsaWFibGUuDQo+ID4gPiANCj4gPiA+IFRoaXMg
-bWFrZXMgbm8gZnJpZ2dpbmcgc2Vuc2Ugd2hhdCBzbyBibG9vZHkgZXZlci4gSWYgdGhlIGNsb2Nr
-IGlzDQo+ID4gPiBzdGFibGUsIHdlIGRvbid0IGNhcmUgYWJvdXQgc2NoZWRfY2xvY2tfZGF0YS4g
-V2hlbiBpdCBpcyBzdGFibGUgeW91IGdldA0KPiA+ID4gYSBsaW5lYXIgZnVuY3Rpb24gb2YgdGhl
-IFRTQyB3aXRob3V0IGNvbXBsaWNhdGVkIGJpdHMgb24uDQo+ID4gPiANCj4gPiA+IFdoZW4gaXQg
-aXMgdW5zdGFibGUsIG9ubHkgdGhlbiBkbyB3ZSBjYXJlIGFib3V0IHRoZSBzY2hlZF9jbG9ja19k
-YXRhLg0KPiA+ID4gDQo+ID4gDQo+ID4gWWVhaCwgbWF5YmUgd2hhdCBpcyBub3QgY2xlYXIgaGVy
-ZSBpcyB0aGF0IHdlIGNvdmVyaW5nIGZvciBzaXR1YXRpb24NCj4gPiB3aGVyZSBjbG9jayBzdGFi
-aWxpdHkgY2hhbmdlcyBvdmVyIHRpbWUsIGUuZy4gYXQgcmVndWxhciBib290IGNsb2NrIGlzDQo+
-ID4gc3RhYmxlLCBoaWJlcm5hdGlvbiBoYXBwZW5zLCB0aGVuIHJlc3RvcmUgaGFwcGVucyBpbiBh
-IG5vbi1zdGFibGUgY2xvY2suDQo+IA0KPiBTdGlsbCBjb25mdXNlZCwgd2hvIG1hcmtzIHRoZSB0
-aGluZyB1bnN0YWJsZT8gVGhlIHBhdGNoIHNlZW1zIHRvIHN1Z2dlc3QNCj4geW91IGRvIHlvdXJz
-ZWxmLCBidXQgaXQgaXMgbm90IGF0IGFsbCBjbGVhciB3aHkuDQo+IA0KPiBJZiBUU0MgcmVhbGx5
-IGlzIHVuc3RhYmxlLCB0aGVuIGl0IG5lZWRzIHRvIHJlbWFpbiB1bnN0YWJsZS4gSWYgdGhlIFRT
-Qw0KPiByZWFsbHkgaXMgc3RhYmxlIHRoZW4gdGhlcmUgaXMgbm8gcG9pbnQgaW4gbWFya2luZyBp
-cyB1bnN0YWJsZS4NCj4gDQo+IEVpdGhlciB3YXkgc29tZXRoaW5nIGlzIG9mZiwgYW5kIHlvdSdy
-ZSBub3QgdGVsbGluZyBtZSB3aGF0Lg0KPiANCg0KSGksIFBldGVyDQoNCkZvciB5b3VyIG9yaWdp
-bmFsIGNvbW1lbnQsIGp1c3Qgd2FudGVkIHRvIGNsYXJpZnkgdGhlIGZvbGxvd2luZzoNCg0KMS4g
-QWZ0ZXIgaGliZXJuYXRpb24sIHRoZSBtYWNoaW5lIGNhbiBiZSByZXN1bWVkIG9uIGEgZGlmZmVy
-ZW50IGJ1dCBjb21wYXRpYmxlDQpob3N0ICh0aGVzZSBhcmUgVk0gaW1hZ2VzIGhpYmVybmF0ZWQp
-DQoyLiBUaGlzIG1lYW5zIHRoZSBjbG9jayBiZXR3ZWVuIGhvc3QxIGFuZCBob3N0MiBjYW4vd2ls
-bCBiZSBkaWZmZXJlbnQNCg0KSW4geW91ciBjb21tZW50cyBhcmUgeW91IG1ha2luZyB0aGUgYXNz
-dW1wdGlvbiB0aGF0IHRoZSBob3N0KHMpIGlzL2FyZSB0aGUNCnNhbWU/IEp1c3QgY2hlY2tpbmcg
-dGhlIGFzc3VtcHRpb25zIGJlaW5nIG1hZGUgYW5kIGJlaW5nIG9uIHRoZSBzYW1lIHBhZ2Ugd2l0
-aA0KdGhlbS4NCg0KQmFsYmlyIFNpbmdoLg0KDQo+ID4gPiA+IFJldmlld2VkLWJ5OiBFcmlrIFF1
-YW5zdHJvbSA8cXVhbnN0cm9AYW1hem9uLmNvbT4NCj4gPiA+ID4gUmV2aWV3ZWQtYnk6IEZyYW5r
-IHZhbiBkZXIgTGluZGVuIDxmbGxpbmRlbkBhbWF6b24uY29tPg0KPiA+ID4gPiBSZXZpZXdlZC1i
-eTogQmFsYmlyIFNpbmdoIDxzYmxiaXJAYW1hem9uLmNvbT4NCj4gPiA+ID4gUmV2aWV3ZWQtYnk6
-IE11bmVoaXNhIEthbWF0YSA8a2FtYXRhbUBhbWF6b24uY29tPg0KPiA+ID4gPiBUZXN0ZWQtYnk6
-IEFuY2hhbCBBZ2Fyd2FsIDxhbmNoYWxhZ0BhbWF6b24uY29tPg0KPiA+ID4gPiBTaWduZWQtb2Zm
-LWJ5OiBFZHVhcmRvIFZhbGVudGluIDxlZHV2YWxAYW1hem9uLmNvbT4NCj4gPiA+ID4gLS0tDQo+
-ID4gPiANCj4gPiA+IE5BSywgdGhlIGNvZGUgdmVyeSBtdWNoIHJlbGllcyBvbiBuZXZlciBnZXR0
-aW5nIG1hcmtlZCBzdGFibGUgYWdhaW4NCj4gPiA+IGFmdGVyIGl0IGdldHMgc2V0IHRvIHVuc3Rh
-YmxlLg0KPiA+ID4gDQo+ID4gDQo+ID4gV2VsbCBhY3R1YWxseSwgYXQgdGhlIFBNX1BPU1RfSElC
-RVJOQVRJT04sIHdlIGRvIHRoZSBjaGVjayBhbmQgc2V0IHN0YWJsZQ0KPiA+IGlmDQo+ID4ga25v
-d24gdG8gYmUgc3RhYmxlLg0KPiA+IA0KPiA+IFRoZSBpc3N1ZSBvbmx5IHJlYWxseSBoYXBwZW5z
-IGR1cmluZyB0aGUgcmVzdG9yYXRpb24gcGF0aCB1bmRlciBzY2hlZHVsaW5nDQo+ID4gcHJlc3N1
-cmUsDQo+ID4gd2hpY2ggdGFrZXMgZm9yZXZlciB0byBmaW5pc2gsIGFzIGRlc2NyaWJlZCBpbiB0
-aGUgY29tbWl0Lg0KPiA+IA0KPiA+IERvIHlvdSBzZWUgYSBiZXR0ZXIgc29sdXRpb24gZm9yIHRo
-aXMgaXNzdWU/DQo+IA0KPiBJIHN0aWxsIGhhdmUgbm8gY2x1ZSB3aGF0IHlvdXIgYWN0dWFsIHBy
-b2JsZW0gaXMuIFlvdSBzYXkgc2NoZWR1bGluZw0KPiBnb2VzIHdvYmJseSBiZWNhdXNlIHNjaGVk
-X2Nsb2NrX2RhdGEgaXMgc3RhbGUsIGJ1dCB3aGVuIHN0YWJsZSB0aGF0DQo+IGRvZXNuJ3QgbWF0
-dGVyLg0KPiANCj4gU28gd2hhdCBpcyB0aGUgYWN0dWFsIHByb2JsZW0/DQo=
+On Fri, Dec 20, 2019 at 5:03 PM Jonas Meurer <jonas@freesources.org> wrote:
+>
+> The switch allows to enable or disable the final sync() from the suspend.c
+> Linux Kernel system suspend implementation. This is useful to avoid race
+> conditions if block devices have been suspended before. Be aware that you
+> have to take care of sync() yourself before suspending the system if you
+> disable it here.
+>
+> Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
+> is slightly changed: It now configures the default for fun-time switch
+> '/sys/power/sync_on_suspend'.
+>
+> Signed-off-by: Jonas Meurer <jonas@freesources.org>
+
+First, I would use a slightly different subject.  What about "PM:
+suspend: Add sysfs attribute to control the "sync on suspend"
+behavior"?
+
+Then, I would write in the changelog that whether or not filesystems
+are synced before system suspend by the kernel depends on a Kconfig
+option which is not flexible enough, because there are cases in which
+user space may want to decide whether or not the sync in the kernel
+should be carried out.
+
+Actually, in the example case given by you, it is not clear enough why
+you cannot build the kernel with CONFIG_SUSPEND_SKIP_SYNC set, so it
+would be good to explain that.  Or give a different example.
+
+Then I would say that the existing CONFIG_SUSPEND_SKIP_SYNC will be
+used to set the default value of the new sysfs attribute after the
+patch.
+
+> ---
+>  Documentation/ABI/testing/sysfs-power | 15 ++++++++++++
+>  include/linux/suspend.h               |  2 ++
+>  kernel/power/Kconfig                  |  5 +++-
+>  kernel/power/main.c                   | 33 +++++++++++++++++++++++++++
+>  kernel/power/suspend.c                |  2 +-
+>  5 files changed, 55 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index 6f87b9dd384b..783b3ce8eb06 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -407,3 +407,18 @@ Contact:   Kalesh Singh <kaleshsingh96@gmail.com>
+>  Description:
+>                 The /sys/power/suspend_stats/last_failed_step file contains
+>                 the last failed step in the suspend/resume path.
+> +
+> +What:          /sys/power/sync_on_suspend
+> +Date:          October 2019
+> +Contact:       Jonas Meurer <jonas@freesources.org>
+> +Description:
+> +               This file controls the switch to enable or disable the final
+> +               sync() before system suspend. This is useful to avoid race
+> +               conditions if block devices have been suspended before. Be
+> +               aware that you have to take care of sync() yourself before
+> +               suspending the system if you disable it here.
+
+I'm not entirely happy with the paragraph above.
+
+It basically doesn't have to explain what the feature is useful for,
+but if you waht to give an example, I would write something like this:
+
+"This file controls whether or not the kernel will sync() filesystems
+during system suspend (after freezing user space and before suspending
+devices).  For example, user space may want to prevent the kernel from
+syncing filesystems at that time in cases when system suspend works
+reliably and is carried out relatively often, so doing a system-wide
+filesystem sync every time it happens is not really useful."
+
+
+> +
+> +               Writing a "1" to this file enables the sync() and writing a
+> +               "0" disables it. Reads from the file return the current value.
+> +               The default is "1" but can be configured with the build-time
+> +               config flag "SUSPEND_SKIP_SYNC".
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 6fc8843f1c9e..4a230c2f1c31 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -329,6 +329,7 @@ extern void arch_suspend_disable_irqs(void);
+>  extern void arch_suspend_enable_irqs(void);
+>
+>  extern int pm_suspend(suspend_state_t state);
+> +extern bool sync_on_suspend_enabled;
+>  #else /* !CONFIG_SUSPEND */
+>  #define suspend_valid_only_mem NULL
+>
+> @@ -342,6 +343,7 @@ static inline bool pm_suspend_default_s2idle(void) { return false; }
+>
+>  static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
+>  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
+> +static inline bool sync_on_suspend_enabled(void) { return true; }
+>  static inline bool idle_should_enter_s2idle(void) { return false; }
+>  static inline void __init pm_states_init(void) {}
+>  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> index d3667b4075c1..7cbfbeacd68a 100644
+> --- a/kernel/power/Kconfig
+> +++ b/kernel/power/Kconfig
+> @@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
+>           Skip the kernel sys_sync() before freezing user processes.
+>           Some systems prefer not to pay this cost on every invocation
+>           of suspend, or they are content with invoking sync() from
+> -         user-space before invoking suspend.  Say Y if that's your case.
+> +         user-space before invoking suspend.  There's a run-time switch
+> +         at '/sys/power/sync_on_suspend' to configure this behaviour.
+> +         This setting changes the default for the run-tim switch. Say Y
+> +         to change the default to disable the kernel sys_sync().
+>
+>  config HIBERNATE_CALLBACKS
+>         bool
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index e26de7af520b..69b7a8aeca3b 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -190,6 +190,38 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
+>  }
+>
+>  power_attr(mem_sleep);
+> +
+> +/*
+> + * sync_on_suspend: invoke ksys_sync_helper() before suspend.
+> + *
+> + * show() returns whether ksys_sync_helper() is invoked before suspend.
+> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
+> + */
+> +bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
+> +
+> +static ssize_t sync_on_suspend_show(struct kobject *kobj,
+> +                                  struct kobj_attribute *attr, char *buf)
+> +{
+> +       return sprintf(buf, "%d\n", sync_on_suspend_enabled);
+> +}
+> +
+> +static ssize_t sync_on_suspend_store(struct kobject *kobj,
+> +                                   struct kobj_attribute *attr,
+> +                                   const char *buf, size_t n)
+> +{
+> +       unsigned long val;
+> +
+> +       if (kstrtoul(buf, 10, &val))
+> +               return -EINVAL;
+> +
+> +       if (val > 1)
+> +               return -EINVAL;
+> +
+> +       sync_on_suspend_enabled = !!val;
+> +       return n;
+> +}
+> +
+> +power_attr(sync_on_suspend);
+>  #endif /* CONFIG_SUSPEND */
+>
+>  #ifdef CONFIG_PM_SLEEP_DEBUG
+> @@ -855,6 +887,7 @@ static struct attribute * g[] = {
+>         &wakeup_count_attr.attr,
+>  #ifdef CONFIG_SUSPEND
+>         &mem_sleep_attr.attr,
+> +       &sync_on_suspend_attr.attr,
+>  #endif
+>  #ifdef CONFIG_PM_AUTOSLEEP
+>         &autosleep_attr.attr,
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index f3b7239f1892..2c47280fbfc7 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
+>         if (state == PM_SUSPEND_TO_IDLE)
+>                 s2idle_begin();
+>
+> -       if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
+> +       if (sync_on_suspend_enabled) {
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+>                 ksys_sync_helper();
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+> --
+
+The patch itself looks fine to me.
