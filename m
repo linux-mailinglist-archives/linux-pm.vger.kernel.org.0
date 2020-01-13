@@ -2,63 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2153138A02
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 04:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A791389F3
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2020 04:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387525AbgAMDxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2387513AbgAMDxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sun, 12 Jan 2020 22:53:13 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:51067 "EHLO
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:53451 "EHLO
         out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387415AbgAMDxN (ORCPT
+        by vger.kernel.org with ESMTP id S2387494AbgAMDxN (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jan 2020 22:53:13 -0500
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2F74C21C1B;
+        by mailout.nyi.internal (Postfix) with ESMTP id 418C421C1E;
         Sun, 12 Jan 2020 22:53:12 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
   by compute5.internal (MEProxy); Sun, 12 Jan 2020 22:53:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=vCm43OVqh1tdf1g+1ymIQ+gacG
-        hvIUXgumdmJE6p1gg=; b=Q8EoaAJx/buSkJA12CwUm6dqAm86cDJK632cl3DuuB
-        THZMgGlFS+05Djk7Y0O+UQXBLX+CVdSzhfiwQ9qEF2ynmVc8YCAtbqdBUzO9nURb
-        PItLMLayCvUwvdfL2wBPHUyYKrOjj1Pa79WtJt4aEv55cIL0lG8hAVkZ6muM9QuV
-        o3JzExcqAxy9fpEA5A24XQ19Sg5y1RGiTwzc+Jf26Axb1Zf7EUcwvDGa39fEeqUT
-        t5CmD1lJvKWuqJep9d5e6qKwZTJi+ZQAM8XNHmcSzYTaIWD+9bgTTeCTSscFGNW4
-        eEvGu72hJTAeKlQ+P2PjNNgs3OJSPpkufP2LVy6esd4w==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=m4PaaL1uSYSw4
+        MJXUFb/Hne13RaJ0dX5yeTCgehScLE=; b=AatXWb4iAOlWuYpCHWxYKhzBu031b
+        a3UcZsvV9x/Qh/JxeSMG4YcukEpYcWMP9o8L5LhENM1ajFowudpTQrQB8qdVvq5j
+        TVFKgky1ZUOcWvNphMTbNRvAFyFXI37X2fxCx2GX5iyY15TOG1DO6NXxTFyPVGzF
+        04Y7srUIuVFMvsU6zJlPxeVuQc70cUeyKYAjeYDnUdTCUSpQb0PnzvCalAK/I4FM
+        awjWbalm6FqfXdSPs88lKvBX2hSWYwoo9U2Rch2N8K++rlRQlzbGUJ5wd1nMM6WY
+        nxMnRs2iDm6eEfUMiC0lsxB+mTaIi9PWkdM42Nm9l+pGelh3ufOHWXjoA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=vCm43OVqh1tdf1g+1
-        ymIQ+gacGhvIUXgumdmJE6p1gg=; b=cSEIE+rt3kDCiy3VkOFlDc3v2WI0WmA2j
-        ZcLSzw248FK9dnaXqZ6owZ/L60SfMJiWcAWSfzPTebndhgkvQ9SxszbRtkXpnUJD
-        1IOlFysvlWVW1xNP6DxUxTofrNDhk6549/5dTyeRog/Q3bH3nBqCd77sJW043Zl3
-        9TzBGhuPEIvkawBSE1u3yzYLmIcwHldUGshS/Rn99G1MMmhAkermbbjshAspO1Aq
-        DX46cQpvVoxa7sARq53u/hPCkAWfSq6JgSy/1OQfjnzJOWtLseaPkekQ+kCGP6+C
-        NuZSUm1BKSv05cOiJhO9Jj5Q2ozD5zCTNc2k28kQSRujVPKJ92DFQ==
-X-ME-Sender: <xms:p-kbXnqt20zVQ-jZidwpNrfPFM9A56TyueatdfMlJFpzyx3vX7YP0A>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=m4PaaL1uSYSw4MJXUFb/Hne13RaJ0dX5yeTCgehScLE=; b=gflvmVMs
+        2HLOEIj0Fbr+WRqUsM39j/MKmq/8SjUkxlOjZSQNdYCUHH8Bp2YA+AJY6fUCRs6q
+        7RP50/tWf4HO7yyhQVk6cOv1uAdt8CEd9Nh79BKzkrqzpQJqAIJcV/WWifN3zLuy
+        xGOJYLKGivuJfBButcVpiLvofNzWdLqJdiI3a2eDAcGW9C2wwKtjvOdoQDGaeaDb
+        oAgaSX25Vu8OjoYsxOkkZphl33WjKzvtFI5qCU3LDIk0hHU3m3qlFGvYIzPkL5Ff
+        eMGcbXf9DABRoPDjuDIeRkY2Sn9otlCXmKD0U7onCj+vKKzH/c7QTMwKowk2JjlW
+        pavBcnAFJGxC7Q==
+X-ME-Sender: <xms:qOkbXrrCkR29pmi6t3HcTNX-cznYZm7CqFVQTfSev7STqhlh7hzikQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdeiledgieeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkphepje
-    dtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgv
-    lhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:p-kbXvIorP9uOhhwxE-FS2-Rmli_6Dwxg1owlXvtX0IX64Ux9m06fQ>
-    <xmx:p-kbXgTxoy6sIm87M0Zt_9Fnd6ANrC_qeS--boT7FpU3pZQpu8pzmw>
-    <xmx:p-kbXoIeeGyILxtC5yeJXqbrwipS9GI6Q5DnIFi4zG527c0Qv42igg>
-    <xmx:qOkbXmclPClu0UfSeo5TuY174vVbKkw8_Gskg1DEihtZ2nBoRjCBJQ>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkph
+    epjedtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghm
+    uhgvlhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:qOkbXtUdbMJsqq-W__VU_izvYsEbnIahqnxuMt9W0Grgjb_8KXwNeQ>
+    <xmx:qOkbXib-RB1VKU1s_kdEZl8vGjlHYewnkjIV3nzybAjE07Y_0OxT2g>
+    <xmx:qOkbXuFdSeTkFzSAAbuQlxOxigCGfc_sxntXYuoroV1tPSqJhBLwXQ>
+    <xmx:qOkbXqetzqGkmg42jdwM8jE3fmCiN5IrkwWFR33NaWBSgalU5heQpA>
 Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 403248005C;
+        by mail.messagingengine.com (Postfix) with ESMTPA id A3A0580062;
         Sun, 12 Jan 2020 22:53:11 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>,
         Oskari Lemmela <oskari@lemmela.net>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 0/8] X-Powers Power Supply Improvements
-Date:   Sun, 12 Jan 2020 21:53:02 -0600
-Message-Id: <20200113035310.18950-1-samuel@sholland.org>
+        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v3 1/8] power: supply: axp20x_ac_power: Fix reporting online status
+Date:   Sun, 12 Jan 2020 21:53:03 -0600
+Message-Id: <20200113035310.18950-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200113035310.18950-1-samuel@sholland.org>
+References: <20200113035310.18950-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -66,55 +70,101 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds some improvements to the axp20x* power supply drivers
-to better support suspend/resume and use on mobile devices.
+AXP803/AXP813 have a flag that enables/disables the AC power supply
+input. This flag does not affect the status bits in PWR_INPUT_STATUS.
+Its effect can be verified by checking the battery charge/discharge
+state (bit 2 of PWR_INPUT_STATUS), or by examining the current draw on
+the AC input.
 
-The first two patches fix bugs I found while testing the ONLINE control
-added in later patches.
+Take this flag into account when getting the ONLINE property of the AC
+input, on PMICs where this flag is present.
 
-Patches 3 and 7 allow userspace to take the power supplies offline.
-Patches 4 and 8 allow userspace to control the wakeup behavior.
+Fixes: 7693b5643fd2 ("power: supply: add AC power supply driver for AXP813")
+Cc: stable@vger.kernel.org
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+ drivers/power/supply/axp20x_ac_power.c | 31 +++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
-Patch 9 avoids polling USB VBUS presence when possible. While working on
-the RSB driver, I was seeing ~50 transfers per second, while idle and
-tracked it down to this VBUS polling (20 reads/second). The polling
-often caused the CPU to clock up and back down, which triggered the
-remaining transfers (changes to the CPU voltage).
-
-Unfortunately, I don't see a way to avoid the polling when running on
-battery (where it matters most), other than to move the polling back to
-the USB PHY driver.
-
-Changes since v2:
- - Patch 1 was merged
- - Only check ACIN_PATH_SEL when necessary (1)
- - Update commit message (5)
- - Avoided reordering lines until/unless necessary (5, 7)
- - Update comment and add ID check in axp20x_usb_power_set_property
-   (it seemed more correct than adding another comment) (6)
- - Add Reviewed-by where there were no comments (2-4, 7-8)
-
-Changes since v1:
- - Add patches 1-2
- - Shift value properly in calls to regmap_update_bits (3, 7)
- - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
- - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
- - Poll once on resume, in case the state changed during suspend (9)
-
-Samuel Holland (8):
-  power: supply: axp20x_ac_power: Fix reporting online status
-  power: supply: axp20x_ac_power: Allow offlining
-  power: supply: axp20x_ac_power: Add wakeup control
-  power: supply: axp20x_usb_power: Remove unused device_node
-  power: supply: axp20x_usb_power: Use a match structure
-  power: supply: axp20x_usb_power: Allow offlining
-  power: supply: axp20x_usb_power: Add wakeup control
-  power: supply: axp20x_usb_power: Only poll while offline
-
- drivers/power/supply/axp20x_ac_power.c  | 131 +++++++++++---
- drivers/power/supply/axp20x_usb_power.c | 219 ++++++++++++++++++------
- 2 files changed, 276 insertions(+), 74 deletions(-)
-
+diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
+index 0d34a932b6d5..f74b0556bb6b 100644
+--- a/drivers/power/supply/axp20x_ac_power.c
++++ b/drivers/power/supply/axp20x_ac_power.c
+@@ -23,6 +23,8 @@
+ #define AXP20X_PWR_STATUS_ACIN_PRESENT	BIT(7)
+ #define AXP20X_PWR_STATUS_ACIN_AVAIL	BIT(6)
+ 
++#define AXP813_ACIN_PATH_SEL		BIT(7)
++
+ #define AXP813_VHOLD_MASK		GENMASK(5, 3)
+ #define AXP813_VHOLD_UV_TO_BIT(x)	((((x) / 100000) - 40) << 3)
+ #define AXP813_VHOLD_REG_TO_UV(x)	\
+@@ -40,6 +42,7 @@ struct axp20x_ac_power {
+ 	struct power_supply *supply;
+ 	struct iio_channel *acin_v;
+ 	struct iio_channel *acin_i;
++	bool has_acin_path_sel;
+ };
+ 
+ static irqreturn_t axp20x_ac_power_irq(int irq, void *devid)
+@@ -86,6 +89,17 @@ static int axp20x_ac_power_get_property(struct power_supply *psy,
+ 			return ret;
+ 
+ 		val->intval = !!(reg & AXP20X_PWR_STATUS_ACIN_AVAIL);
++
++		/* ACIN_PATH_SEL disables ACIN even if ACIN_AVAIL is set. */
++		if (val->intval && power->has_acin_path_sel) {
++			ret = regmap_read(power->regmap, AXP813_ACIN_PATH_CTRL,
++					  &reg);
++			if (ret)
++				return ret;
++
++			val->intval = !!(reg & AXP813_ACIN_PATH_SEL);
++		}
++
+ 		return 0;
+ 
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+@@ -224,21 +238,25 @@ static const struct power_supply_desc axp813_ac_power_desc = {
+ struct axp_data {
+ 	const struct power_supply_desc	*power_desc;
+ 	bool				acin_adc;
++	bool				acin_path_sel;
+ };
+ 
+ static const struct axp_data axp20x_data = {
+-	.power_desc = &axp20x_ac_power_desc,
+-	.acin_adc = true,
++	.power_desc	= &axp20x_ac_power_desc,
++	.acin_adc	= true,
++	.acin_path_sel	= false,
+ };
+ 
+ static const struct axp_data axp22x_data = {
+-	.power_desc = &axp22x_ac_power_desc,
+-	.acin_adc = false,
++	.power_desc	= &axp22x_ac_power_desc,
++	.acin_adc	= false,
++	.acin_path_sel	= false,
+ };
+ 
+ static const struct axp_data axp813_data = {
+-	.power_desc = &axp813_ac_power_desc,
+-	.acin_adc = false,
++	.power_desc	= &axp813_ac_power_desc,
++	.acin_adc	= false,
++	.acin_path_sel	= true,
+ };
+ 
+ static int axp20x_ac_power_probe(struct platform_device *pdev)
+@@ -282,6 +300,7 @@ static int axp20x_ac_power_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	power->regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	power->has_acin_path_sel = axp_data->acin_path_sel;
+ 
+ 	platform_set_drvdata(pdev, power);
+ 
 -- 
 2.23.0
 
