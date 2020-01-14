@@ -2,137 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BE313A76A
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 11:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847C413A76C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 11:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbgANKey (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 05:34:54 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37088 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727285AbgANKey (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 05:34:54 -0500
-Received: by mail-pf1-f196.google.com with SMTP id p14so6385744pfn.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 02:34:52 -0800 (PST)
+        id S1729140AbgANKe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 05:34:59 -0500
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:51678 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727285AbgANKe6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 05:34:58 -0500
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="Claudiu.Beznea@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa5.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: DDSGWrywoZTokcwV4dW9DBihRMl0GXwzfrFLTrLo9bCy3Sto4hFg7dZQUK/OqtAjRgE7isRgKw
+ OBZiiREYUJpzLVZbn4PfeVLsghT1cFKzhuTKfCZGWmb1F1FvrzrUBfVbu5G0fMVrZUABcOSY85
+ wSFzGuVZQxbVFDElYRqKgsdC6q8vUQDpwWrnNp6YOuweqVQCBTN3cZ1jXarilgzzUGqqut7yrr
+ lmvMs1dCLBzX+LteyuMsFuj7D8Vtf6tUOva3izSgKmuM9eZ8k3k7itr8a/D8mK0FzZASptBiC6
+ QnU=
+X-IronPort-AV: E=Sophos;i="5.69,432,1571727600"; 
+   d="scan'208";a="61850594"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2020 03:34:59 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 14 Jan 2020 03:34:56 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 14 Jan 2020 03:34:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kiKAYpCEshGIRPDttJWriYbvtnE4kwS0CosVFVnXhMemILuo/6xqbRnENp/J1aB/jPqYrvot7y43zwrpX4zzmXpNWZH4s0xT6khkVazXNG9j6fXMxyEXQAaPIEgBg1y7yivBwCu+EMONozn36QnJoi15lQMBTJXSgsrBap9LaoEqKx/s0c795wEHh61uI4TnNB5ljcI9UufvIPs3FmApLjGWR1sOS/QTTpdTR4o871YBccEItpm1i1+mRs6dIlTiSbKd1gDl+Z1OEQZlhw1AzTg8VeLMlNkL0K/EoiGHS+LujOfu/GDvUpUURNNUvnEYsh5X1C+Kj1qdNiy5yT4pNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QeLnPu96GbS6z+HSg7BcsDx2fhpQ5INKuxNSjU9p3gQ=;
+ b=nu5SPSPPIehUbqQJ1G1/XQuO0RuQ5tHwH1h1lvNCQkg9FZHX6DGEq25vGaBXaXXPPoh7INuz0of7F+P9hBb0qo+1Uh588jkzLibRgZo/1/xyDbZrkoUrE37zqkYBUXHKf3V2JoqgSBZQAiLy48im94QjPexighC5+mBW3K6lhPsCIttjW0YT+FhajTYZB3PagRO37ny3nysuno5htKfmXQVTLPWXmdYZZ1a0QyijazOEir0zNgUfohfddK9WSdOrOvQgiFv28xw9sakxUDK68fW8Vya4/0EvwWhIt9NnEg8mlE9Anj5nkC1YeoCSZ1x2TDiw6Ae9BE9e1kBYsdHvTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6WEFAP/ApgeJPueS6Gwwt3D0c6EozVsVjbD7xwCYDMU=;
-        b=jwYJRLnx31hznR5hOFu8AioG9hqIqaf7k2DcfPbD3O8HfcTL9Q4y5r7HAQ7I5Rd/JX
-         nq08HH8qf7mLFDLvXFIY6+ZPUZSzszeUAy0KJOKzW6+2HqLumlMhF0FdUiCRe+10goY5
-         +zbSgzWFwO21bcTFU/LWVACI19dkAwqLmY/2JmPN4k/zzHFUVsEYoRSZI/ZR/mF6nCqZ
-         vOLikz16Cx7JZFlC4SiZzzott0saT9FrIynGeQxSYHERd9Whw3B5FGclUPkbn4Q/IQhI
-         Vvlinrd6GIxLe4Z9JSG022SbvfOqP6rziyhdl9ki1hPjHscOyYJm4iIE4Qt7590Bzhfk
-         9W6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6WEFAP/ApgeJPueS6Gwwt3D0c6EozVsVjbD7xwCYDMU=;
-        b=n5PwtxPSTP4DkZlKpJWL+SANzauRGOa9kkhaM4Uh85r1P6YKJ3su/SL6HHkX6tBdh3
-         uPQbzi/P3kdQHKi5l9YS6xToa6J6hx7sPp7tX+CsGP45gM/VQka+IvwPDQp9lkYr50p0
-         57ynwQNRRR6ebe3UbQqDmaQVrtN9bWdXhcnbxPaYpnMqHJnBYmlsXyB8rU1SdKLGuMgP
-         X0AkEwYJraeeXB4YWPQWo1vhxiWvszFRHAOyoHtvbSE7OS/LNJ42NZAwzhuMT1S32bRt
-         yM/YchpHvJagybbNruvKVIfW9+qUv2aLNkNSnTrhenYwk7DzHj2qXXnaxmqqLvqpvBNm
-         4Qew==
-X-Gm-Message-State: APjAAAX9ZZl9B01g3pxBFP2lDufoVVVQquvsHsgifaVVWJlztweRz64N
-        vkphYjtJtX8FuJbfeyGQ1ASEwA==
-X-Google-Smtp-Source: APXvYqxyC3sfXYgjfIHc/g5DWfKMYs4YAP31hjMYEZtc13r8kBnIiS+sBTrIKQKYIA9GFDXA3LMrEw==
-X-Received: by 2002:a63:6e04:: with SMTP id j4mr25629136pgc.175.1578998092064;
-        Tue, 14 Jan 2020 02:34:52 -0800 (PST)
-Received: from localhost ([122.172.140.51])
-        by smtp.gmail.com with ESMTPSA id m19sm16555830pjv.10.2020.01.14.02.34.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 Jan 2020 02:34:51 -0800 (PST)
-Date:   Tue, 14 Jan 2020 16:04:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
-        daidavid1@codeaurora.org, adharmap@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/3] Introduce Bandwidth OPPs for interconnects
-Message-ID: <20200114103448.odnvqawnqb3twst5@vireshk-i7>
-References: <20191207002424.201796-1-saravanak@google.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QeLnPu96GbS6z+HSg7BcsDx2fhpQ5INKuxNSjU9p3gQ=;
+ b=BCxGd/BhB6vKySe2M19L+7N2dFXSSJ4LMTHSp+tWsFl5WozSRl/bx6GySrJkAzFwkMG4hn00w9vn3cQvZIOZJ5d+ecrAf8LqQDh+oZuV5PRUDWKqPPT9ukCDG0jmER6A9hM1pKkLfoeUT7WO4ELfL6wTHVyom0Y9Icgejw2RwsY=
+Received: from DM6PR11MB3225.namprd11.prod.outlook.com (20.176.120.224) by
+ DM6PR11MB4092.namprd11.prod.outlook.com (20.176.124.216) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2623.9; Tue, 14 Jan 2020 10:34:55 +0000
+Received: from DM6PR11MB3225.namprd11.prod.outlook.com
+ ([fe80::106f:424f:ac54:1dbb]) by DM6PR11MB3225.namprd11.prod.outlook.com
+ ([fe80::106f:424f:ac54:1dbb%7]) with mapi id 15.20.2623.015; Tue, 14 Jan 2020
+ 10:34:55 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Nicolas.Ferre@microchip.com>, <sre@kernel.org>,
+        <alexandre.belloni@bootlin.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] at91-sama5d2_shdwc shutdown controller
+Thread-Topic: [PATCH v2 0/2] at91-sama5d2_shdwc shutdown controller
+Thread-Index: AQHVysZDZbGFbsffUkC4vg24P85XXQ==
+Date:   Tue, 14 Jan 2020 10:34:55 +0000
+Message-ID: <3d0c5a04-25fb-5ae6-fd3a-4049e293eab1@microchip.com>
+References: <1576855878-13213-1-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1576855878-13213-1-git-send-email-claudiu.beznea@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b365253c-6d12-4ad0-682f-08d798dd65a6
+x-ms-traffictypediagnostic: DM6PR11MB4092:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB4092657FF99AC8BB6835C88287340@DM6PR11MB4092.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 028256169F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(346002)(376002)(396003)(366004)(136003)(199004)(189003)(91956017)(76116006)(64756008)(66446008)(86362001)(110136005)(81156014)(26005)(6506007)(66556008)(81166006)(66476007)(8676002)(316002)(66946007)(31696002)(8936002)(31686004)(186003)(4326008)(54906003)(6512007)(36756003)(71200400001)(2616005)(6486002)(2906002)(53546011)(5660300002)(4744005)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR11MB4092;H:DM6PR11MB3225.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LuNh8Ia/sGDQHyQ5TZylAckrz9m1e5JlFN9zbAu2ax0MzxdSyqGJ2CmCvXhVGbrV74XdsqRsNuGs9782UUt+ajlWiuq1NW2in6MmMdTcavGz+G6HF/9A8yDdFzZ3f6UVzcmbiu4eRRzM+IjsFWcZIgDwf/O8BbqAjMGE03PXLh5KlTDT29/yOcEiiu2wvd8u/FHH+N2XQ880JJZci8QLM1HF2mRoANQdTXT8KubTup7wXPLlTaLb7ZU/gC0aEi7ouGZJlwpXoAEXkK3qWMyIL4Rge05g9quHk2FBzcl60ZFhvd9DZGC+oXziC0jXECkhubjNC5w1wtxOzh4Nac75A6yb2sanmsYd4tmzBzc38v88Y95L2matwg0NcDQuzxIaJeDHwHZaHgSRnTR6UxgF5g9cHsn5t692poIrKqrUwX8C39SJZsjjHs93Ei2YUe1y
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <070D50FB6C034041BF1B2B8EF00DC9E7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191207002424.201796-1-saravanak@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+X-MS-Exchange-CrossTenant-Network-Message-Id: b365253c-6d12-4ad0-682f-08d798dd65a6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2020 10:34:55.6123
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ji/wBafUwkCOKtLnPfePJsm8fehsjPBazOKL1eQb7npMNoC0rHFyqHp1RKIh0JzNbws/MbuiVa3OXnfUuTQ55N8SBj39YomVxr0/5wStZcY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4092
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06-12-19, 16:24, Saravana Kannan wrote:
-> gpu_cache_opp_table: gpu_cache_opp_table {
-> 	compatible = "operating-points-v2";
-> 
-> 	gpu_cache_3000: opp-3000 {
-> 		opp-peak-KBps = <3000000>;
-> 		opp-avg-KBps = <1000000>;
-> 	};
-> 	gpu_cache_6000: opp-6000 {
-> 		opp-peak-KBps = <6000000>;
-> 		opp-avg-KBps = <2000000>;
-> 	};
-> 	gpu_cache_9000: opp-9000 {
-> 		opp-peak-KBps = <9000000>;
-> 		opp-avg-KBps = <9000000>;
-> 	};
-> };
-> 
-> gpu_ddr_opp_table: gpu_ddr_opp_table {
-> 	compatible = "operating-points-v2";
-> 
-> 	gpu_ddr_1525: opp-1525 {
-> 		opp-peak-KBps = <1525000>;
-> 		opp-avg-KBps = <452000>;
-> 	};
-> 	gpu_ddr_3051: opp-3051 {
-> 		opp-peak-KBps = <3051000>;
-> 		opp-avg-KBps = <915000>;
-> 	};
-> 	gpu_ddr_7500: opp-7500 {
-> 		opp-peak-KBps = <7500000>;
-> 		opp-avg-KBps = <3000000>;
-> 	};
-> };
-> 
-> gpu_opp_table: gpu_opp_table {
-> 	compatible = "operating-points-v2";
-> 	opp-shared;
-> 
-> 	opp-200000000 {
-> 		opp-hz = /bits/ 64 <200000000>;
-> 	};
-> 	opp-400000000 {
-> 		opp-hz = /bits/ 64 <400000000>;
-> 	};
-> };
-> 
-> gpu@7864000 {
-> 	...
-> 	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
-
-Okay, I got confused a bit again after some interaction with Sibi
-today. The multiple phandle thing in the operating-points-v2 property
-is there specifically for nodes that can provide multiple devices,
-like PM domains where the provider may end up providing multiple
-domains.
-
-But I am not sure what you are going to do with the list of phandles
-you have set for the GPU here.
-
-We can not add multiple OPP tables for a single device right now.
-
--- 
-viresh
+SGkgU2ViYXN0aWVuLA0KDQpJIGtub3cgeW91IG1heSBidXN5LCBJIGp1c3Qgd2FudCB0byBiZSBz
+dXJlIHRoYXQgeW91IGRpZG4ndCBmb3Jnb3QgdGhpcyBzZXJpZXMuDQoNClRoYW5rIHlvdSwNCkNs
+YXVkaXUgQmV6bmVhDQoNCk9uIDIwLjEyLjIwMTkgMTc6MzEsIENsYXVkaXUgQmV6bmVhIHdyb3Rl
+Og0KPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVu
+dHMgdW5sZXNzIHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFBNQyBtYXN0ZXIg
+Y2xvY2sgcmVnaXN0ZXIgb2Zmc2V0IGlzIGRpZmZlcmVudCBiL3cgc2FtOXg2MCBhbmQNCj4gb3Ro
+ZXIgU29Dcy4gU2luY2UgdGhlcmUgaXMgYSBuZWVkIG9mIHRoaXMgcmVnaXN0ZXIgb2Zmc2V0IGlu
+DQo+IHNodXRkb3duIHByb2NlZHVyZSB3ZSBuZWVkIHRvIGhhdmUgaXQgcGVyIFNvQy4gVGhpcyBp
+cyB3aGF0DQo+IHRoaXMgc2VyaWVzIGRvZXMuDQo+IA0KPiBDaGFuZ2VzIGluIHYyOg0KPiAtIGRv
+IG5vdCB1c2UgcjUgYXMgaW50ZXJtZWRpYXJ5IHJlZ2lzdGVycyBpbiBhdDkxX3Bvd2Vyb2ZmDQo+
+IA0KPiBDbGF1ZGl1IEJlem5lYSAoMik6DQo+ICAgcG93ZXI6IHJlc2V0OiBhdDkxLXBvd2Vyb2Zm
+OiBpbnRyb2R1Y2Ugc3RydWN0IHNoZHdjX3JlZ19jb25maWcNCj4gICBwb3dlcjogcmVzZXQ6IGF0
+OTEtcG93ZXJvZmY6IHVzZSBwcm9wZXIgbWFzdGVyIGNsb2NrIHJlZ2lzdGVyIG9mZnNldA0KPiAN
+Cj4gIGRyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5MS1zYW1hNWQyX3NoZHdjLmMgfCA3MiArKysrKysr
+KysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDQ3IGluc2VydGlv
+bnMoKyksIDI1IGRlbGV0aW9ucygtKQ0KPiANCj4gLS0NCj4gMi43LjQNCj4gDQo+IA==
