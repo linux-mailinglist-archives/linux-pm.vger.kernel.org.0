@@ -2,87 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0C8139D77
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 00:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441D1139DED
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 01:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729091AbgAMXkX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 18:40:23 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40195 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728977AbgAMXkW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 18:40:22 -0500
-Received: by mail-pf1-f194.google.com with SMTP id q8so5630218pfh.7
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2020 15:40:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=sO+iqS5at4kQoqKYaj93x28+XPq7u/VZF7pgBa0PTKw=;
-        b=Ox+WPUIgcZKuEnZWTkLLPQgzYp0JAP6+RHmNZarXHOR1VEGRUFuB3vTek415XOepq0
-         T1NSsiZB7v7KbLRXYYYv/0yKmrgtGstw2OHUg4uo193MIY3mW8dAuo2BhttsmEdDXsGf
-         hQY1jh58eJp6Zex+n1KUCz+YfneiZYP3+vOcHHdcShOZx9YPW6qyBfEKE4Q7I22oj8SX
-         Ixg+YB3Zxv98M4zeXiWrXtWbgOXkobDXN5OsDDK11D1EdvzjpcfSb4HbnYYcx9lhXceA
-         uZHFuRjkq6c5LEX6Vi3iY9gOP2qzhfbfu16G9H1LoHOT0rLJ6zfFU4XYyn5ed/BPFvX8
-         aKEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=sO+iqS5at4kQoqKYaj93x28+XPq7u/VZF7pgBa0PTKw=;
-        b=GDl/PSELtbE1FAXGdHKp+KL9YRW7ncBuN1jg0/DJPjbrq34GA4/xftBxlKoMQfmYbj
-         Z6WrpVeXmi2Lx/YnVYqIOKzI85McvcgtJRO+CDHOZ3YcryTQqkSNbeAyVWik/zOrExKO
-         NYXTgP94x2GJGCZMiX+Qrjnpew1uE3VK6/iK5T+HICOHciieMx0/WmQsqmfOhWmRpWEH
-         IeAIUTWfDi6qKiXNXGZSinB25zZHlgwe45VPmsR3rcOIcyffMzmYAf/GCrKyfKTafh+8
-         7D8Fd1JjP2N0wXUqsb8Ru7Nk/izEtxgNBR9ft+Whf+KfChcDEscN79LVHTiAjlxGKJq6
-         aIww==
-X-Gm-Message-State: APjAAAXMPA/Xdprgm6hR0lKyF/GF8p7AIkIPPpsF/MrTGq99O48BFUHq
-        xytD88JTBjQ6z77VEBIHzutrEQ==
-X-Google-Smtp-Source: APXvYqxOFnkt4NJld1GAc3enPtDOXFGVXS9iJaH6cGEgh6sJnOSmCeK3VGF0VCf5MdcABcrSc1YLIA==
-X-Received: by 2002:a63:114a:: with SMTP id 10mr23486632pgr.250.1578958822095;
-        Mon, 13 Jan 2020 15:40:22 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id 144sm16256684pfc.124.2020.01.13.15.40.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 Jan 2020 15:40:21 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        id S1729388AbgANARb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 19:17:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59662 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729274AbgANARb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Jan 2020 19:17:31 -0500
+Received: from earth.universe (dyndsl-091-096-060-001.ewe-ip-backbone.de [91.96.60.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04320214AF;
+        Tue, 14 Jan 2020 00:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578961051;
+        bh=PtgZWKN3HLoAj4bzYvKrd3jaasZfRYVf+RTzNAmTs2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QteWwwAH8b5g/+NP79H3E25fFvu8uK40gphEPX/MrT/Xbxfisl6JWPxpiIjSnsIG/
+         aaHU/LUYo70sDosPXCAB6+ZUcO65vo4sK0tu5auxRWD0JCJrGLCKapUnIFjwnBKKam
+         SsqC3CqipYoNGEfrjKd+JtvVmppxCti25nmg+BVU=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 3B08F3C0C7C; Tue, 14 Jan 2020 01:17:29 +0100 (CET)
+Date:   Tue, 14 Jan 2020 01:17:29 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Oskari Lemmela <oskari@lemmela.net>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Jian Hu <jian.hu@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH v5 0/4] arm64: meson: add support for A1 Power Domains
-In-Reply-To: <1573532930-39505-1-git-send-email-jianxin.pan@amlogic.com>
-References: <1573532930-39505-1-git-send-email-jianxin.pan@amlogic.com>
-Date:   Mon, 13 Jan 2020 15:40:21 -0800
-Message-ID: <7h7e1vdixm.fsf@baylibre.com>
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v3 0/8] X-Powers Power Supply Improvements
+Message-ID: <20200114001729.dgozjk4eaxjp7fzz@earth.universe>
+References: <20200113035310.18950-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sqzuoh7u67ekm2kz"
+Content-Disposition: inline
+In-Reply-To: <20200113035310.18950-1-samuel@sholland.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Jianxin Pan <jianxin.pan@amlogic.com> writes:
 
-> This patchset introduces a "Secure Power Doamin Controller". In A1/C1, power
-> controller registers such as PWRCTRL_FOCRSTN, PWRCTRL_PWR_OFF, PWRCTRL_MEM_PD
-> and PWRCTRL_ISO_EN, are in the secure domain, and should be accessed from ATF
-> by smc.
->
-> Changes since v4 at [3]:                                                         
->  - add SM_A1_ prefix for PWRC_SET/GET
->  - rename variable and update comments
+--sqzuoh7u67ekm2kz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for those updates
+Hi,
 
-After the bindings issues are worked out, this is ready for merge.
+I queued patches 1-4, patch 5 does not apply and seems to be based
+on an older tree.
 
-Kevin
+-- Sebastian
+
+On Sun, Jan 12, 2020 at 09:53:02PM -0600, Samuel Holland wrote:
+> This series adds some improvements to the axp20x* power supply drivers
+> to better support suspend/resume and use on mobile devices.
+>=20
+> The first two patches fix bugs I found while testing the ONLINE control
+> added in later patches.
+>=20
+> Patches 3 and 7 allow userspace to take the power supplies offline.
+> Patches 4 and 8 allow userspace to control the wakeup behavior.
+>=20
+> Patch 9 avoids polling USB VBUS presence when possible. While working on
+> the RSB driver, I was seeing ~50 transfers per second, while idle and
+> tracked it down to this VBUS polling (20 reads/second). The polling
+> often caused the CPU to clock up and back down, which triggered the
+> remaining transfers (changes to the CPU voltage).
+>=20
+> Unfortunately, I don't see a way to avoid the polling when running on
+> battery (where it matters most), other than to move the polling back to
+> the USB PHY driver.
+>=20
+> Changes since v2:
+>  - Patch 1 was merged
+>  - Only check ACIN_PATH_SEL when necessary (1)
+>  - Update commit message (5)
+>  - Avoided reordering lines until/unless necessary (5, 7)
+>  - Update comment and add ID check in axp20x_usb_power_set_property
+>    (it seemed more correct than adding another comment) (6)
+>  - Add Reviewed-by where there were no comments (2-4, 7-8)
+>=20
+> Changes since v1:
+>  - Add patches 1-2
+>  - Shift value properly in calls to regmap_update_bits (3, 7)
+>  - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
+>  - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
+>  - Poll once on resume, in case the state changed during suspend (9)
+>=20
+> Samuel Holland (8):
+>   power: supply: axp20x_ac_power: Fix reporting online status
+>   power: supply: axp20x_ac_power: Allow offlining
+>   power: supply: axp20x_ac_power: Add wakeup control
+>   power: supply: axp20x_usb_power: Remove unused device_node
+>   power: supply: axp20x_usb_power: Use a match structure
+>   power: supply: axp20x_usb_power: Allow offlining
+>   power: supply: axp20x_usb_power: Add wakeup control
+>   power: supply: axp20x_usb_power: Only poll while offline
+>=20
+>  drivers/power/supply/axp20x_ac_power.c  | 131 +++++++++++---
+>  drivers/power/supply/axp20x_usb_power.c | 219 ++++++++++++++++++------
+>  2 files changed, 276 insertions(+), 74 deletions(-)
+>=20
+> --=20
+> 2.23.0
+>=20
+
+--sqzuoh7u67ekm2kz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4dCJEACgkQ2O7X88g7
++poyhBAAnNnSwxvQGB617t1H1P7IT/YIV8ip8AASUUZrCjrICzsyBVlUur0gYnpx
+TZlGnd/kjQk9ZMuPjdEMwhCWaprfZElCZqacKNWdPM9F1/7BGAc4sfaStWjkc2MI
+yw4QH+qL6mSexEQRksxUd4LvjlGMxNkmUhH41vN1LNkvdSsD4l7Tv0I4281Fjwpk
+xSp9ld6eItYp43JVo8zFa6UDaZQO18D1nVPOMHvrGv3AFaBGTf3XIvSbq6FwaMJq
+8l3R9YIOdczB1AKLP5dneIR8w8t6sM6Ta0RwmMs2B70LOM31+i6HV0mnxjPNr+/e
+y4YA5Q2tTA6EWR/zKMcGC6Sd/TA8eYeJ5LKS1WyBADHolHDvhmqJp9uhxxrS3otP
+acXuujRMpr/dGVmb3KWAyjcMDp4WlHuZzhTxOJCXIqt2ZiKy+rLpyXccLHT2o6Bo
+imKge3VQTK9R2A01zJ/eVyzK/PntgLGHJD+WmJ7m5w8kTQJiAXnr+rKXolXvjqlP
+eAh7wLNVracG7Qu4WOl8kLBuk3tYCor95uxDO7esCLrL1118biXvVxcLRg8JfOxh
+KRd8hEjwNA5CAWKFAnvc0jW0m0ScT5PSh4e6A+aFGOIbJ2QNvwai11KKkiY60g8l
+ohqjjzPtCMVP4dNcI5KGCy4BtjtqXrie4LsaiWYa/THt7m/Rcl8=
+=3fN1
+-----END PGP SIGNATURE-----
+
+--sqzuoh7u67ekm2kz--
