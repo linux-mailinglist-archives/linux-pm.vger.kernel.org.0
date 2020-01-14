@@ -2,184 +2,433 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D9E13A9B9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 13:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF95813AB75
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 14:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgANMwN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 07:52:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:51958 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726121AbgANMwN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jan 2020 07:52:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74FA91435;
-        Tue, 14 Jan 2020 04:52:12 -0800 (PST)
-Received: from [10.37.12.134] (unknown [10.37.12.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E70B3F534;
-        Tue, 14 Jan 2020 04:52:04 -0800 (PST)
-Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "a.swigon@samsung.com" <a.swigon@samsung.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
-        "hl@rock-chips.com" <hl@rock-chips.com>,
-        "jcrouse@codeaurora.org" <jcrouse@codeaurora.org>,
-        "chanwoo@kernel.org" <chanwoo@kernel.org>,
-        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-        "kyungmin.park@samsung.com" <kyungmin.park@samsung.com>
-References: <20200107090519.3231-1-cw00.choi@samsung.com>
- <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
- <20200107090519.3231-3-cw00.choi@samsung.com> <20200107214834.GB738324@yoga>
- <c1e6f324-b0c2-41ff-a015-7ba0b29ad42c@gmail.com>
- <ddbc54d1-c657-747c-265d-3c7bd5924e59@arm.com>
- <VI1PR04MB70232D962B603DC882388B92EE350@VI1PR04MB7023.eurprd04.prod.outlook.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d71e5268-7d5d-cba6-9ce3-ec11e65905d7@arm.com>
-Date:   Tue, 14 Jan 2020 12:52:00 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728831AbgANNyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 08:54:13 -0500
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:38894 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728813AbgANNyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 08:54:12 -0500
+Received: by mail-yw1-f67.google.com with SMTP id 10so9022137ywv.5
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 05:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1xmtWp6vBPkN/74fZt+HR0Ttw/ns84mVuIZzx55xcLM=;
+        b=gMsSqGq+F3BjgqDJwYN+GooSBpKDZR4BKcDqC8OZNBkpMkQBHl/gVtiGTyyU1plR43
+         72Wrnu/qzBs0GAdLG6sj26ZLaMN/+yVR5xpwo9Vjml2qYbJ2MZVuwXHA7TXZ10jesC//
+         3Edg69hVBz9ebd8aPBHWEHEfkB0D1AeAmHUF8vdcTLvvlUlynroj874mrB+JQlU+PVM2
+         vsLBhEza4XjwiKOF/h9DtH7NEs4CiMchSfvL9bKKenQgyypeL7YvhmvoZuYT4Tv+ISyX
+         EnkJ3XXxpWZvYFlGczfma7TxAxXJvjt86kNvjqK3wErDmjRdqeQCdSj0sNGE3UL2iKUU
+         Clsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1xmtWp6vBPkN/74fZt+HR0Ttw/ns84mVuIZzx55xcLM=;
+        b=Y4JeGcIYRQdvTFXhAx0wP0+/AuP/5h9+BCynRx6dMKNOzKeEsbUzeEhdPneN/6FIs8
+         0nTgrcZBlyfDyF9MafztzFTGljrB/ghDDZg2yStSD+wPaUsb19tWn9CHhzWODWcLNaiE
+         D3SQDytbbVSJdcaWdGatcekCIFjcfDsBKByO7lFItjXUOKI8JPz/oQcamKETICnbBZy9
+         lIQaGSIJXKJHrOSCwj1Q4J2dd5KAqLzvNSPXSIFqy/9eeDyYvw3SguA8aobmA82a8UFm
+         Onxh5rDbN67hIuMlrSVEOEbz9BLRpv9zs+I/ICCGYke2pR396hKfrDPu6pxcfUJeY3F3
+         Ofdw==
+X-Gm-Message-State: APjAAAWXcX0reuUVFp/HQxIijGp3F8fy7KGMOEXu9Qqg3gLgXLJlfISl
+        NkXKwQHsuCVF+ros6PQgGQNHmFOwyCKFMeLFvrSesw==
+X-Google-Smtp-Source: APXvYqw4djG0flx1K0kTj4DZuiy0f1ICRBCrA6V0h0eJs1DZ6OvSzi5br2Or+7jyI2ZWdkYF1k0YZhLP7CSrQUlIlEo=
+X-Received: by 2002:a0d:f147:: with SMTP id a68mr17125349ywf.371.1579010051130;
+ Tue, 14 Jan 2020 05:54:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB70232D962B603DC882388B92EE350@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=koi8-r; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200114110620.164861-1-hsinyi@chromium.org>
+In-Reply-To: <20200114110620.164861-1-hsinyi@chromium.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 14 Jan 2020 05:54:00 -0800
+Message-ID: <CABXOdTcx4S4vWEEeYZWdtqZnCTjnZYUL_8a+SXOXfcz8+BR_OA@mail.gmail.com>
+Subject: Re: [PATCH RESEND v4] reboot: support offline CPUs before reboot
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Pavankumar Kondeti <pkondeti@codeaurora.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Aaro Koskinen <aaro.koskinen@nokia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
+On Tue, Jan 14, 2020 at 3:07 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> Currently system reboots uses architecture specific codes (smp_send_stop)
+> to offline non reboot CPUs. Most architecture's implementation is looping
+> through all non reboot online CPUs and call ipi function to each of them. Some
+> architecture like arm64, arm, and x86... would set offline masks to cpu without
+> really offline them. This causes some race condition and kernel warning comes
+> out sometimes when system reboots.
+>
+> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
+> migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
+> checking online cpus would be an empty loop. If architecture don't enable this
+> config, or some cpus somehow fails to offline, it would fallback to ipi
+> function.
+>
+> Opt in this config for architectures that support CONFIG_HOTPLUG_CPU.
+>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+> Resend v4:
+> * Cc more people and mailing lists. Also fix a few nits from v4.
+>
+> Change from v3:
+> * Opt in config for architectures that support CONFIG_HOTPLUG_CPU
+> * Merge function offline_secondary_cpus() and freeze_secondary_cpus()
+>   with an additional flag.
+>
+> Change from v2:
+> * Add another config instead of configed by CONFIG_HOTPLUG_CPU
+>
+> Previous related discussion on list:
+> https://lore.kernel.org/lkml/20190727164450.GA11726@roeck-us.net/
+> https://lore.kernel.org/patchwork/patch/1117201/
+> ---
+>  arch/Kconfig                          |  5 +++++
+>  arch/arm/Kconfig                      |  1 +
+>  arch/arm64/Kconfig                    |  1 +
+>  arch/arm64/kernel/hibernate.c         |  2 +-
+>  arch/csky/Kconfig                     |  1 +
+>  arch/ia64/Kconfig                     |  1 +
+>  arch/mips/Kconfig                     |  1 +
+>  arch/parisc/Kconfig                   |  1 +
+>  arch/powerpc/Kconfig                  |  1 +
+>  arch/s390/Kconfig                     |  1 +
+>  arch/sh/Kconfig                       |  1 +
+>  arch/sparc/Kconfig                    |  1 +
+>  arch/x86/Kconfig                      |  1 +
+>  arch/xtensa/Kconfig                   |  1 +
+>  drivers/power/reset/sc27xx-poweroff.c |  2 +-
+>  include/linux/cpu.h                   |  9 ++++++---
+>  kernel/cpu.c                          | 12 ++++++++----
+>  kernel/reboot.c                       |  8 ++++++++
+>  18 files changed, 41 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 48b5e103bdb0..210095ce2d92 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -255,6 +255,11 @@ config ARCH_HAS_UNCACHED_SEGMENT
+>         select ARCH_HAS_DMA_PREP_COHERENT
+>         bool
+>
+> +# Select to do a full offline on secondary CPUs before reboot.
+> +config ARCH_OFFLINE_CPUS_ON_REBOOT
+> +       bool "Support for offline CPUs before reboot"
 
-On 1/13/20 5:19 PM, Leonard Crestez wrote:
-> On 08.01.2020 17:44, Lukasz Luba wrote:
->> On 1/8/20 2:20 PM, Dmitry Osipenko wrote:
->>> 08.01.2020 00:48, Bjorn Andersson пишет:
->>>> On Tue 07 Jan 01:05 PST 2020, Chanwoo Choi wrote:
->>>>
->>>>> Add new devfreq_transitions debugfs file to track the frequency transitions
->>>>> of all devfreq devices for the simple profiling as following:
->>>>> - /sys/kernel/debug/devfreq/devfreq_transitions
->>>>>
->>>>> And the user can decide the storage size (CONFIG_NR_DEVFREQ_TRANSITIONS)
->>>>> in Kconfig in order to save the transition history.
->>>>>
->>>>> [Detailed description of each field of 'devfreq_transitions' debugfs file]
->>>>> - time_ms	: Change time of frequency transition. (unit: millisecond)
->>>>> - dev_name	: Device name of h/w.
->>>>> - dev		: Device name made by devfreq core.
->>>>> - parent_dev	: If devfreq device uses the passive governor,
->>>>> 		  show parent devfreq device name.
->>>>> - load_%	: If devfreq device uses the simple_ondemand governor,
->>>>> 		  load is used by governor whene deciding the new frequency.
->>>>> 		  (unit: percentage)
->>>>> - old_freq_hz	: Frequency before changing. (unit: hz)
->>>>> - new_freq_hz	: Frequency after changed. (unit: hz)
->>>>>
->>>>> [For example on Exynos5422-based Odroid-XU3 board]
->>>>> $ cat /sys/kernel/debug/devfreq/devfreq_transitions
->>>>> time_ms    dev_name                       dev        parent_dev load_% old_freq_hz  new_freq_hz
->>>>> ---------- ------------------------------ ---------- ---------- ---------- ------------ ------------
->>>>> 14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000    67000000
->>>>> 14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
->>>>> 14600      soc:bus_fsys                   devfreq4   devfreq1   0      200000000    100000000
->>>>> 14600      soc:bus_fsys2                  devfreq5   devfreq1   0      150000000    75000000
->>>>> 14602      soc:bus_mfc                    devfreq6   devfreq1   0      222000000    96000000
->>>>> 14602      soc:bus_gen                    devfreq7   devfreq1   0      267000000    89000000
->>>>> 14602      soc:bus_g2d                    devfreq9   devfreq1   0      300000000    84000000
->>>>> 14602      soc:bus_g2d_acp                devfreq10  devfreq1   0      267000000    67000000
->>>>> 14602      soc:bus_jpeg                   devfreq11  devfreq1   0      300000000    75000000
->>>>> 14602      soc:bus_jpeg_apb               devfreq12  devfreq1   0      167000000    84000000
->>>>> 14603      soc:bus_disp1_fimd             devfreq13  devfreq1   0      200000000    120000000
->>>>> 14603      soc:bus_disp1                  devfreq14  devfreq1   0      300000000    120000000
->>>>> 14606      soc:bus_gscl_scaler            devfreq15  devfreq1   0      300000000    150000000
->>>>> 14606      soc:bus_mscl                   devfreq16  devfreq1   0      333000000    84000000
->>>>> 14608      soc:bus_wcore                  devfreq1              9      333000000    84000000
->>>>> 14783      10c20000.memory-controller     devfreq0              35     825000000    633000000
->>>>> 15873      soc:bus_wcore                  devfreq1              41     84000000     400000000
->>>>> 15873      soc:bus_noc                    devfreq2   devfreq1   0      67000000     100000000
->>>>> [snip]
->>>>>
->>>>
->>>> Wouldn't it make more sense to expose this through the tracing
->>>> framework - like many other subsystems does?
->>>
->>> I think devfreq core already has some tracing support and indeed it
->>> should be better to extend it rather than duplicate.
-> 
-> +1 for tracing
->> In my opinion this debugfs interface should be considered as a helpful
->> validation entry point. We had some issues with wrong bootloader
->> configurations in clock tree, where some frequencies could not be set
->> in the kernel. Similar useful description can be find in clock subsystem
->> where there is clock tree summary file.
->>
->> It is much cheaper to poke a few files in debug dir by some automated
->> test than starting tracing, provoking desired code flow in the
->> devfreq for every device, paring the results... A simple boot test
->> which reads only these new files can be enough to rise the flag.
-> 
-> Tracepoints are also very powerful for debugging boot issues! You can
-> add "tp_printk trace_event=devfreq:*" to boot arguments and you will see
-> console messages for all relevant events. This works even if boot fails
-> before userspace is available to mount debugfs.
-> 
->> Secondly the tracing is not always compiled.
-> 
-> Tracing is deliberately light-weight and should be enabled even on
-> production systems.
-> 
->> It could capture old/wrong bootloaders which pinned devices
->> improperly to PLLs or wrong DT values in OPP table.
->> (a workaround for Odroid xu4 patchset:
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2019%2F7%2F15%2F276&amp;data=02%7C01%7Cleonard.crestez%40nxp.com%7C8397d37b41474137f8cf08d79451a007%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637140950611913278&amp;sdata=rcbWCyFmf0ZO7LU27D05mftTf8YdSvGPYNsst1GnNjQ%3D&amp;reserved=0
->> )
->>
->> Chanwoo what do think about some sanity check summary?
->> It could be presented in a 3rd file: 'devfreq_sanity', which
->> could report if the devices could set their registered OPPs
->> and got the same values, i.e. set 166MHz --> set to 150MHz
->> in reality. If a config option i.e. DEVFREQ_SANITY is set
->> then during the registration of a new device it checks OPPs
->> if they are possible to set. It could be done before assigning
->> the governor for the device and results present in of of your files.
-> 
-> The new devfreq_transition tracepoint could include a field for
-> "new_effective freq" next to "old_freq" and "new_requested_freq".
+Doesn't the text make it show up in menuconfig ? Is that really what
+you want ? If so, I think you might need a help text as well.
 
-I would suggest to keep it aligned with cpufreq trace. The timestamps
-in trace would tell you the history, 'old_freq' is not needed.
-The trace_devfreq_monitor that I have added should give you this
-information when you parse all the events.
+Guenter
 
-> 
-> For imx8m-ddrc I handled this inside the target() function: clk_get_rate
-> is called after the transition and an error is reported if rate doesn't
-> match.
-
-Interesting driver, it uses ARM SMCCC like rk3399.
-It handles this validation of DT OPPs vs firmware OPPs and disables
-not matched frequencies. Small nit. The error is printed when the 'ret'
-is 0 and freq does not match, but then 'ret' is returned from target().
-You don't also revert the update parent stuff in such case.
-Maybe you can also check the res.a0 != SMCCC_RET_SUCCESS in
-static void imx8m_ddrc_smc_set_freq(int target_freq)
-to bail out earlier and not switch to new parents when the freq
-switch failed or does not match. Or I am missing something.
-You can also reorder the includes alphabetically.
-
-Regards,
-Lukasz
-
-> 
-> It might make sense for devfreq core to handle this internally by
-> calling get_cur_freq instead.
-> 
+> +       depends on HOTPLUG_CPU
+> +
+>  # Select if arch init_task must go in the __init_task_data section
+>  config ARCH_TASK_STRUCT_ON_STACK
+>         bool
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 69950fb5be64..d53cc8cb47e3 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -28,6 +28,7 @@ config ARM
+>         select ARCH_KEEP_MEMBLOCK if HAVE_ARCH_PFN_VALID || KEXEC
+>         select ARCH_MIGHT_HAVE_PC_PARPORT
+>         select ARCH_NO_SG_CHAIN if !ARM_HAS_SG_CHAIN
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+>         select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 9af26ac75d19..9f913bc5c1f6 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -61,6 +61,7 @@ config ARM64
+>         select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
+>         select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+>         select ARCH_KEEP_MEMBLOCK
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_USE_CMPXCHG_LOCKREF
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+> diff --git a/arch/arm64/kernel/hibernate.c b/arch/arm64/kernel/hibernate.c
+> index 590963c9c609..f7245dfa09d9 100644
+> --- a/arch/arm64/kernel/hibernate.c
+> +++ b/arch/arm64/kernel/hibernate.c
+> @@ -581,5 +581,5 @@ int hibernate_resume_nonboot_cpu_disable(void)
+>                 return -ENODEV;
+>         }
+>
+> -       return freeze_secondary_cpus(sleep_cpu);
+> +       return freeze_secondary_cpus(sleep_cpu, false);
+>  }
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 4acef4088de7..0f03e5c3f2fc 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -5,6 +5,7 @@ config CSKY
+>         select ARCH_HAS_DMA_PREP_COHERENT
+>         select ARCH_HAS_SYNC_DMA_FOR_CPU
+>         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_USE_BUILTIN_BSWAP
+>         select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
+>         select COMMON_CLK
+> diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+> index bab7cd878464..f12b4b11ee98 100644
+> --- a/arch/ia64/Kconfig
+> +++ b/arch/ia64/Kconfig
+> @@ -10,6 +10,7 @@ config IA64
+>         bool
+>         select ARCH_MIGHT_HAVE_PC_PARPORT
+>         select ARCH_MIGHT_HAVE_PC_SERIO
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ACPI
+>         select ACPI_NUMA if NUMA
+>         select ARCH_SUPPORTS_ACPI
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index b6b5f83af169..9bb2556d21fc 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -8,6 +8,7 @@ config MIPS
+>         select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>         select ARCH_HAS_UBSAN_SANITIZE_ALL
+>         select ARCH_HAS_FORTIFY_SOURCE
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_SUPPORTS_UPROBES
+>         select ARCH_USE_BUILTIN_BSWAP
+>         select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index 71034b54d74e..41609f00b057 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -13,6 +13,7 @@ config PARISC
+>         select ARCH_HAS_STRICT_KERNEL_RWX
+>         select ARCH_HAS_UBSAN_SANITIZE_ALL
+>         select ARCH_NO_SG_CHAIN
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_SUPPORTS_MEMORY_FAILURE
+>         select RTC_CLASS
+>         select RTC_DRV_GENERIC
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 658e0324d256..a6b76dd82a2d 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -142,6 +142,7 @@ config PPC
+>         select ARCH_KEEP_MEMBLOCK
+>         select ARCH_MIGHT_HAVE_PC_PARPORT
+>         select ARCH_MIGHT_HAVE_PC_SERIO
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT      if HOTPLUG_CPU
+>         select ARCH_OPTIONAL_KERNEL_RWX         if ARCH_HAS_STRICT_KERNEL_RWX
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+>         select ARCH_USE_BUILTIN_BSWAP
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index 287714d51b47..19eec37b1682 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -102,6 +102,7 @@ config S390
+>         select ARCH_INLINE_WRITE_UNLOCK_IRQ
+>         select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE
+>         select ARCH_KEEP_MEMBLOCK
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_SAVE_PAGE_KEYS if HIBERNATION
+>         select ARCH_STACKWALK
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+> index 9ece111b0254..4ed1e0ca83a2 100644
+> --- a/arch/sh/Kconfig
+> +++ b/arch/sh/Kconfig
+> @@ -18,6 +18,7 @@ config SUPERH
+>         select ARCH_HAVE_CUSTOM_GPIO_H
+>         select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
+>         select ARCH_HAS_GCOV_PROFILE_ALL
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select PERF_USE_VMALLOC
+>         select HAVE_DEBUG_KMEMLEAK
+>         select HAVE_KERNEL_GZIP
+> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+> index e8c3ea01c12f..f31700309621 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -30,6 +30,7 @@ config SPARC
+>         select RTC_SYSTOHC
+>         select HAVE_ARCH_JUMP_LABEL if SPARC64
+>         select GENERIC_IRQ_SHOW
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_WANT_IPC_PARSE_VERSION
+>         select GENERIC_PCI_IOMAP
+>         select HAVE_NMI_WATCHDOG if SPARC64
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index b595ecb21a0f..e8edab974f67 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -85,6 +85,7 @@ config X86
+>         select ARCH_MIGHT_HAVE_ACPI_PDC         if ACPI
+>         select ARCH_MIGHT_HAVE_PC_PARPORT
+>         select ARCH_MIGHT_HAVE_PC_SERIO
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT      if HOTPLUG_CPU
+>         select ARCH_STACKWALK
+>         select ARCH_SUPPORTS_ACPI
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+> index 1c645172b4b5..c862dfa69ed9 100644
+> --- a/arch/xtensa/Kconfig
+> +++ b/arch/xtensa/Kconfig
+> @@ -7,6 +7,7 @@ config XTENSA
+>         select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
+>         select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
+>         select ARCH_HAS_UNCACHED_SEGMENT if MMU
+> +       select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+>         select ARCH_WANT_FRAME_POINTERS
+> diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc27xx-poweroff.c
+> index 29fb08b8faa0..d6cdf837235c 100644
+> --- a/drivers/power/reset/sc27xx-poweroff.c
+> +++ b/drivers/power/reset/sc27xx-poweroff.c
+> @@ -30,7 +30,7 @@ static void sc27xx_poweroff_shutdown(void)
+>  #ifdef CONFIG_PM_SLEEP_SMP
+>         int cpu = smp_processor_id();
+>
+> -       freeze_secondary_cpus(cpu);
+> +       freeze_secondary_cpus(cpu, false);
+>  #endif
+>  }
+>
+> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+> index 1ca2baf817ed..9c62274a4db9 100644
+> --- a/include/linux/cpu.h
+> +++ b/include/linux/cpu.h
+> @@ -137,11 +137,14 @@ static inline void cpu_hotplug_done(void) { cpus_write_unlock(); }
+>  static inline void get_online_cpus(void) { cpus_read_lock(); }
+>  static inline void put_online_cpus(void) { cpus_read_unlock(); }
+>
+> +#if defined(CONFIG_PM_SLEEP_SMP) || defined(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+> +extern int freeze_secondary_cpus(int primary, bool reboot);
+> +#endif
+> +
+>  #ifdef CONFIG_PM_SLEEP_SMP
+> -extern int freeze_secondary_cpus(int primary);
+>  static inline int disable_nonboot_cpus(void)
+>  {
+> -       return freeze_secondary_cpus(0);
+> +       return freeze_secondary_cpus(0, false);
+>  }
+>  extern void enable_nonboot_cpus(void);
+>
+> @@ -152,7 +155,7 @@ static inline int suspend_disable_secondary_cpus(void)
+>         if (IS_ENABLED(CONFIG_PM_SLEEP_SMP_NONZERO_CPU))
+>                 cpu = -1;
+>
+> -       return freeze_secondary_cpus(cpu);
+> +       return freeze_secondary_cpus(cpu, false);
+>  }
+>  static inline void suspend_enable_secondary_cpus(void)
+>  {
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 9c706af713fb..52d04e4e1aab 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -1209,10 +1209,10 @@ int cpu_up(unsigned int cpu)
+>  }
+>  EXPORT_SYMBOL_GPL(cpu_up);
+>
+> -#ifdef CONFIG_PM_SLEEP_SMP
+> +#if defined(CONFIG_PM_SLEEP_SMP) || defined(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+>  static cpumask_var_t frozen_cpus;
+>
+> -int freeze_secondary_cpus(int primary)
+> +int freeze_secondary_cpus(int primary, bool reboot)
+>  {
+>         int cpu, error = 0;
+>
+> @@ -1237,11 +1237,13 @@ int freeze_secondary_cpus(int primary)
+>                 if (cpu == primary)
+>                         continue;
+>
+> -               if (pm_wakeup_pending()) {
+> +#ifdef CONFIG_PM_SLEEP
+> +               if (!reboot && pm_wakeup_pending()) {
+>                         pr_info("Wakeup pending. Abort CPU freeze\n");
+>                         error = -EBUSY;
+>                         break;
+>                 }
+> +#endif
+>
+>                 trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
+>                 error = _cpu_down(cpu, 1, CPUHP_OFFLINE);
+> @@ -1250,7 +1252,9 @@ int freeze_secondary_cpus(int primary)
+>                         cpumask_set_cpu(cpu, frozen_cpus);
+>                 else {
+>                         pr_err("Error taking CPU%d down: %d\n", cpu, error);
+> -                       break;
+> +                       /* When rebooting, offline as many CPUs as possible. */
+> +                       if (!reboot)
+> +                               break;
+>                 }
+>         }
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index c4d472b7f1b4..12f643b66e57 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -7,6 +7,7 @@
+>
+>  #define pr_fmt(fmt)    "reboot: " fmt
+>
+> +#include <linux/cpu.h>
+>  #include <linux/ctype.h>
+>  #include <linux/export.h>
+>  #include <linux/kexec.h>
+> @@ -220,7 +221,9 @@ void migrate_to_reboot_cpu(void)
+>         /* The boot cpu is always logical cpu 0 */
+>         int cpu = reboot_cpu;
+>
+> +#if !IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+>         cpu_hotplug_disable();
+> +#endif
+>
+>         /* Make certain the cpu I'm about to reboot on is online */
+>         if (!cpu_online(cpu))
+> @@ -231,6 +234,11 @@ void migrate_to_reboot_cpu(void)
+>
+>         /* Make certain I only run on the appropriate processor */
+>         set_cpus_allowed_ptr(current, cpumask_of(cpu));
+> +
+> +#if IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+> +       /* Offline other cpus if possible */
+> +       freeze_secondary_cpus(cpu, true);
+> +#endif
+>  }
+>
+>  /**
 > --
-> Regards,
-> Leonard
-> 
+> 2.25.0.rc1.283.g88dfdc4193-goog
+>
