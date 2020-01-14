@@ -2,256 +2,325 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C09E013B10E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 18:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E2713B16F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 18:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgANRg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 12:36:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgANRg3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jan 2020 12:36:29 -0500
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBBE02467C;
-        Tue, 14 Jan 2020 17:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579023388;
-        bh=a9R3hUWXn3kAB+DS0N+9xFdgrpDwftcTX/kWypdj37U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dYMr4g7yJ5aOXktTFjc1j2XEGesBlPo9euxdwpbPfcFul0dglZnApPzzchTHX40zn
-         MIsuubK1uTrkCyAj3aH9ygJGyv5fQQhLwrNFp3Xg1tPWohwQVGDL+edgGaTUk8kOs9
-         jQjVrzAsazVrPPQ/KkmurqpRN3vX0RaP4GX8PQaU=
-Received: by mail-lf1-f50.google.com with SMTP id r14so10486002lfm.5;
-        Tue, 14 Jan 2020 09:36:27 -0800 (PST)
-X-Gm-Message-State: APjAAAW1HjhLUKOZUF2k/LXzW4zdcV1K+ORFtyaIjInJ7zJfOSMi3vTi
-        yc3TJfTjCB7bt7ReLMO0pDiF9phTv9yTeVlSQQU=
-X-Google-Smtp-Source: APXvYqxsDsO+lIIfwcNPo350CZUzBBMBQ0YQ6cSV/DYGyUOUba2f/Vb0dvS/IajiFBdN2w69nUq9HITTtVYz4jSKItE=
-X-Received: by 2002:ac2:5582:: with SMTP id v2mr2461646lfg.183.1579023385769;
- Tue, 14 Jan 2020 09:36:25 -0800 (PST)
+        id S1728633AbgANRzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 12:55:08 -0500
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:35690 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgANRzI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 12:55:08 -0500
+Received: by mail-vs1-f67.google.com with SMTP id x123so8802227vsc.2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 09:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Jrn5Sa8iiFTwrMlmlHmDfU+9ZYlUjhau9Mnp3Wo+QY=;
+        b=HhobiIe9g3ecP3LijGr0BeCgYxkMFMKYOcohPXy+D6G1nTay+aQiNg2wGW8V7/DRcD
+         LX93cz44ibwJn2xG8cGWLNInOuwPjzQIv5eEFcE0Xh/D9P0ndxwfdObLZkXrFIcitTLh
+         SWUZILFCOjZKCzmfDsfLoOGeS9Kkmq68Im48QQTmnbHmwDpY7IX/wM3Pc2LKWHBxdpEa
+         bzR67oQGvS1lmlseYFl38GFB6pcOM2L+7jNQfGs7/Wf9YXHalU50jK+DMEpJ6RQzMoW2
+         6ouW4MS09ODOoZ3ikbgyNhq9v02kTHm3AG4VnHy+jP5FvQDylJ5Qcj7bTJ8szIhVt9RK
+         wLng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Jrn5Sa8iiFTwrMlmlHmDfU+9ZYlUjhau9Mnp3Wo+QY=;
+        b=OsYsK79QtR/WeKHKEdZ7RW8Jwt39ZdJlvaIN32G+UVEoxLTHje0CW3EoSTeyqKhR5S
+         Urh5lwqZMPLN+0JhSTsKQpOsDUDJtUtZG6KUD3+pmDPvnoH/NAAqAHkeWoF82oLRQfqv
+         ztg+EBFb7ELDy0hm2XFzyZIvi2j0oM9XBKt6QTPISjijb8xdNBe27JS1MV7GnGrCaXYs
+         TLvlH5WmKNjEvWUQLYDbyvD4cURdn9sNzKHjWw7Hf7JFBDOi9oWVdLQNWx/x+GlfAP3e
+         41voyITj0Dlko3/xPjd848e3raEpHoAHPlAiUY6BPeow1zvooqSIPZkh1pb4UXeoTbEm
+         6S4A==
+X-Gm-Message-State: APjAAAWn56griJgDi6/npKrm1qostfMppzoFu7QdUXaUubSN6XolZ0pf
+        34x2LvA9l1MCdTb37HEebJ1O+7Wv7UWjPWjZJh9iNg==
+X-Google-Smtp-Source: APXvYqxsvoLx0ArjCX6G7zFtHfviUTO5Vs1jW0CkdQ9t5PBD0y1Q3W3OcnF50SeD3BlhMjo0CVZKuVj4RvirpkOsEb0=
+X-Received: by 2002:a67:cd96:: with SMTP id r22mr1986767vsl.165.1579024506419;
+ Tue, 14 Jan 2020 09:55:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20200110094913.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
- <CGME20200110174932epcas1p345b0e750b48cc9e351dca14e0dd4de86@epcas1p3.samsung.com>
- <20200110094913.2.Ie8eacf976ce7a13e421592f5c1ab8dbdc537da5c@changeid>
- <c793c2e5-dd0e-bff4-9769-26344afe914e@samsung.com> <VI1PR04MB702308C23513581F33EFE697EE340@VI1PR04MB7023.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB702308C23513581F33EFE697EE340@VI1PR04MB7023.eurprd04.prod.outlook.com>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Wed, 15 Jan 2020 02:35:48 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH1YvkSQtVTCrCYyWyBNUvKoTk8Vfrc2hHYsH=3AHr-tqw@mail.gmail.com>
-Message-ID: <CAGTfZH1YvkSQtVTCrCYyWyBNUvKoTk8Vfrc2hHYsH=3AHr-tqw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM / devfreq: Use exclusively PM QoS to determine
- frequency limits
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+References: <20191230144402.30195-1-ulf.hansson@linaro.org>
+ <20191230144402.30195-3-ulf.hansson@linaro.org> <CAL_Jsq+cAKEGOMnBwwvLt03zx8Gcxh4ijziaBnnY5TPEG0Mekg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+cAKEGOMnBwwvLt03zx8Gcxh4ijziaBnnY5TPEG0Mekg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 14 Jan 2020 18:54:30 +0100
+Message-ID: <CAPDyKFr_7qmKjpWcFegVBsfKBJePtukuriwW-8KX6c2a24ojEA@mail.gmail.com>
+Subject: Re: [PATCH v5 02/15] dt: psci: Update DT bindings to support
+ hierarchical PSCI states
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 1:08 AM Leonard Crestez <leonard.crestez@nxp.com> wrote:
+On Mon, 13 Jan 2020 at 20:53, Rob Herring <robh+dt@kernel.org> wrote:
 >
-> On 13.01.2020 09:24, Chanwoo Choi wrote:
-> > Hi,
+> On Mon, Dec 30, 2019 at 8:44 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > >
-> > Any device driver except for devfreq_cooling.c might
-> > use dev_pm_opp_enable/disable interface.
-> > So, don't need to remove the devfreq->scaling_max_freq
-> > and devfreq->scaling_min_freq for supporting OPP interface.
->
-> It seems that devfreq_cooling was the only upstream user of
-> dev_pm_opp_enable and the remaining callers of dev_pm_opp_disable are
-> probe-time checks.
-
-OPP interface has still dev_pm_opp_enable and dev_pm_opp_disable
-function. As long as remains them, any device driver related to devfreq
-could call them at some time. The devfreq supports the OPP interface,
-not just for only devfreq_cooling.
-
->
-> > Regards,
-> > Chanwoo Choi
+> > Update PSCI DT bindings to allow to represent idle states for CPUs and the
+> > CPU topology, by using a hierarchical layout. Primarily this is done by
+> > re-using the existing DT bindings for PM domains [1] and for PM domain idle
+> > states [2].
 > >
-> > On 1/11/20 2:49 AM, Matthias Kaehlcke wrote:
-> >> Traditionally devfreq cooling devices dynamically disabled OPPs
-> >> that shouldn't be used because of thermal pressure. Devfreq cooling
-> >> devices now use PM QoS to set frequency limits, hence the devfreq
-> >> code dealing that deals with disabled OPPs can be removed.
-> >>
-> >> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> >> ---
-> >>
-> >>   drivers/devfreq/devfreq.c | 75 +++++----------------------------------
-> >>   include/linux/devfreq.h   |  4 ---
-> >>   2 files changed, 8 insertions(+), 71 deletions(-)
-> >>
-> >> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> >> index 57f6944d65a6..ec66e2c27cc4 100644
-> >> --- a/drivers/devfreq/devfreq.c
-> >> +++ b/drivers/devfreq/devfreq.c
-> >> @@ -73,34 +73,6 @@ static struct devfreq *find_device_devfreq(struct device *dev)
-> >>      return ERR_PTR(-ENODEV);
-> >>   }
-> >>
-> >> -static unsigned long find_available_min_freq(struct devfreq *devfreq)
-> >> -{
-> >> -    struct dev_pm_opp *opp;
-> >> -    unsigned long min_freq = 0;
-> >> -
-> >> -    opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
-> >> -    if (IS_ERR(opp))
-> >> -            min_freq = 0;
-> >> -    else
-> >> -            dev_pm_opp_put(opp);
-> >> -
-> >> -    return min_freq;
-> >> -}
-> >> -
-> >> -static unsigned long find_available_max_freq(struct devfreq *devfreq)
-> >> -{
-> >> -    struct dev_pm_opp *opp;
-> >> -    unsigned long max_freq = ULONG_MAX;
-> >> -
-> >> -    opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
-> >> -    if (IS_ERR(opp))
-> >> -            max_freq = 0;
-> >> -    else
-> >> -            dev_pm_opp_put(opp);
-> >> -
-> >> -    return max_freq;
-> >> -}
-> >> -
-> >>   /**
-> >>    * get_freq_range() - Get the current freq range
-> >>    * @devfreq:       the devfreq instance
-> >> @@ -141,10 +113,6 @@ static void get_freq_range(struct devfreq *devfreq,
-> >>              *max_freq = min(*max_freq,
-> >>                              (unsigned long)HZ_PER_KHZ * qos_max_freq);
-> >>
-> >> -    /* Apply constraints from OPP interface */
-> >> -    *min_freq = max(*min_freq, devfreq->scaling_min_freq);
-> >> -    *max_freq = min(*max_freq, devfreq->scaling_max_freq);
-> >> -
-> >>      if (*min_freq > *max_freq)
-> >>              *min_freq = *max_freq;
-> >>   }
-> >> @@ -610,23 +578,10 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
-> >>                               void *devp)
-> >>   {
-> >>      struct devfreq *devfreq = container_of(nb, struct devfreq, nb);
-> >> -    int err = -EINVAL;
-> >> +    int err;
-> >>
-> >>      mutex_lock(&devfreq->lock);
-> >> -
-> >> -    devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-> >> -    if (!devfreq->scaling_min_freq)
-> >> -            goto out;
-> >> -
-> >> -    devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-> >> -    if (!devfreq->scaling_max_freq) {
-> >> -            devfreq->scaling_max_freq = ULONG_MAX;
-> >> -            goto out;
-> >> -    }
-> >> -
-> >>      err = update_devfreq(devfreq);
-> >> -
-> >> -out:
-> >>      mutex_unlock(&devfreq->lock);
-> >>      if (err)
-> >>              dev_err(devfreq->dev.parent,
-> >> @@ -781,19 +736,15 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >>              mutex_lock(&devfreq->lock);
-> >>      }
-> >>
-> >> -    devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-> >> -    if (!devfreq->scaling_min_freq) {
-> >> -            mutex_unlock(&devfreq->lock);
-> >> -            err = -EINVAL;
-> >> +    err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-> >> +                                 DEV_PM_QOS_MIN_FREQUENCY, 0);
-> >> +    if (err < 0)
-> >>              goto err_dev;
-> >> -    }
-> >> -
-> >> -    devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-> >> -    if (!devfreq->scaling_max_freq) {
-> >> -            mutex_unlock(&devfreq->lock);
-> >> -            err = -EINVAL;
-> >> +    err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-> >> +                                 DEV_PM_QOS_MAX_FREQUENCY,
-> >> +                                 PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> >> +    if (err < 0)
-> >>              goto err_dev;
-> >> -    }
-> >>
-> >>      devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-> >>      atomic_set(&devfreq->suspend_count, 0);
-> >> @@ -834,16 +785,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >>
-> >>      mutex_unlock(&devfreq->lock);
-> >>
-> >> -    err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-> >> -                                 DEV_PM_QOS_MIN_FREQUENCY, 0);
-> >> -    if (err < 0)
-> >> -            goto err_devfreq;
-> >> -    err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-> >> -                                 DEV_PM_QOS_MAX_FREQUENCY,
-> >> -                                 PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> >> -    if (err < 0)
-> >> -            goto err_devfreq;
-> >> -
->
-> Performing PM QoS initialization under devfreq->lock triggers lockdep
-> warnings for me. The warnings seem to be legitimate:
->
-> 1) At init time &dev_pm_qos_mtx is taken under &devfreq->lock;
-> 2) At update time &devfreq->lock is called under &dev_pm_qos_mtx (it's
-> held while notifiers are called).
->
-> It's not clear why you moved dev_pm_qos_add_request higher?
->
-> >>      devfreq->nb_min.notifier_call = qos_min_notifier_call;
-> >>      err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
-> >>                                    DEV_PM_QOS_MIN_FREQUENCY);
-> >> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> >> index fb376b5b7281..cb75f23ad2f4 100644
-> >> --- a/include/linux/devfreq.h
-> >> +++ b/include/linux/devfreq.h
-> >> @@ -126,8 +126,6 @@ struct devfreq_dev_profile {
-> >>    *         touch this.
-> >>    * @user_min_freq_req:     PM QoS minimum frequency request from user (via sysfs)
-> >>    * @user_max_freq_req:     PM QoS maximum frequency request from user (via sysfs)
-> >> - * @scaling_min_freq:       Limit minimum frequency requested by OPP interface
-> >> - * @scaling_max_freq:       Limit maximum frequency requested by OPP interface
-> >>    * @stop_polling:   devfreq polling status of a device.
-> >>    * @suspend_freq:   frequency of a device set during suspend phase.
-> >>    * @resume_freq:    frequency of a device set in resume phase.
-> >> @@ -166,8 +164,6 @@ struct devfreq {
-> >>
-> >>      struct dev_pm_qos_request user_min_freq_req;
-> >>      struct dev_pm_qos_request user_max_freq_req;
-> >> -    unsigned long scaling_min_freq;
-> >> -    unsigned long scaling_max_freq;
-> >>      bool stop_polling;
-> >>
-> >>      unsigned long suspend_freq;
-> >>
+> > Let's also add an example into the document for the PSCI DT bindings, to
+> > clearly show the new hierarchical based layout. The currently supported
+> > flattened layout, is already described in the ARM idle states bindings [3],
+> > so let's leave that as is.
 > >
+> > [1] Documentation/devicetree/bindings/power/power_domain.txt
+> > [2] Documentation/devicetree/bindings/power/domain-idle-state.txt
+> > [3] Documentation/devicetree/bindings/arm/idle-states.txt
+> >
+> > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
+> > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > Changes in v5:
+> >         - None.
 >
+> First I'm seeing this as the DT list was not copied. The example has
+> problems when running 'make dt_binding_check':
+>
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@0:
+> compatible: Additional items are not allowed ('arm,armv8' was
+> unexpected)
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@0:
+> compatible: ['arm,cortex-a53', 'arm,armv8'] is too long
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@1:
+> compatible: Additional items are not allowed ('arm,armv8' was
+> unexpected)
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@1:
+> compatible: ['arm,cortex-a57', 'arm,armv8'] is too long
+>
+> 'arm,armv8' is only valid for s/w models.
 
+Perhaps you have a different version of the tools than I have (I have
+tried both on v.5.5-rc5 and todays linux-next), because I can't
+reproduce these errors at my side when running "make
+dt_binding_check".
 
--- 
-Best Regards,
-Chanwoo Choi
+Can you please check again?
+
+>
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml:
+> idle-states: cluster-retention:compatible:0: 'arm,idle-state' was
+> expected
+> Documentation/devicetree/bindings/arm/psci.example.dt.yaml:
+> idle-states: cluster-power-down:compatible:0: 'arm,idle-state' was
+> expected
+>
+> The last 2 are due to my conversion of the idle-states binding which
+> is in my tree now. Probably need to add 'domain-idle-state' as a
+> compatible at a minimum. It looks like domain-idle-state.txt is pretty
+> much the same as arm/idle-state.txt, so we should perhaps merge them.
+
+Ahh, so maybe *all* of the above problems are caused by conflicts in
+the arm-soc tree with changes from your tree!?
+
+In regards to merging files, I am fine by that if that helps.
+
+>
+> There's some bigger issues though.
+>
+> > ---
+> >  .../devicetree/bindings/arm/cpus.yaml         |  15 +++
+> >  .../devicetree/bindings/arm/psci.yaml         | 104 ++++++++++++++++++
+> >  2 files changed, 119 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > index c23c24ff7575..7a9c3ce2dbef 100644
+> > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> > @@ -242,6 +242,21 @@ properties:
+> >
+> >        where voltage is in V, frequency is in MHz.
+> >
+> > +  power-domains:
+> > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > +    description:
+> > +      List of phandles and PM domain specifiers, as defined by bindings of the
+> > +      PM domain provider (see also ../power_domain.txt).
+> > +
+> > +  power-domain-names:
+> > +    $ref: '/schemas/types.yaml#/definitions/string-array'
+> > +    description:
+> > +      A list of power domain name strings sorted in the same order as the
+> > +      power-domains property.
+> > +
+> > +      For PSCI based platforms, the name corresponding to the index of the PSCI
+> > +      PM domain provider, must be "psci".
+> > +
+> >    qcom,saw:
+> >      $ref: '/schemas/types.yaml#/definitions/phandle'
+> >      description: |
+> > diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
+> > index 7abdf58b335e..8ef85420b2ab 100644
+> > --- a/Documentation/devicetree/bindings/arm/psci.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/psci.yaml
+> > @@ -102,6 +102,34 @@ properties:
+> >        [1] Kernel documentation - ARM idle states bindings
+> >          Documentation/devicetree/bindings/arm/idle-states.txt
+> >
+> > +  "#power-domain-cells":
+>
+> This is wrong because you are saying the /psci node should have these
+> properties. You need to define the child nodes (at least a pattern you
+> can match on) and put these properties there.
+
+Right, good point.
+
+I searched for some similar examples for how to encode this, but
+couldn't really find something useful. One more thing, it seems like
+this change is also needed for the common power-domain bindings, as
+that also specifies parent/childs domains.
+
+Anyway, I would really appreciate if you can suggest something more
+detailed for you think this should be done!?
+
+>
+> > +    description:
+> > +      The number of cells in a PM domain specifier as per binding in [3].
+> > +      Must be 0 as to represent a single PM domain.
+> > +
+> > +      ARM systems can have multiple cores, sometimes in an hierarchical
+> > +      arrangement. This often, but not always, maps directly to the processor
+> > +      power topology of the system. Individual nodes in a topology have their
+> > +      own specific power states and can be better represented hierarchically.
+> > +
+> > +      For these cases, the definitions of the idle states for the CPUs and the
+> > +      CPU topology, must conform to the binding in [3]. The idle states
+> > +      themselves must conform to the binding in [4] and must specify the
+> > +      arm,psci-suspend-param property.
+> > +
+> > +      It should also be noted that, in PSCI firmware v1.0 the OS-Initiated
+> > +      (OSI) CPU suspend mode is introduced. Using a hierarchical representation
+> > +      helps to implement support for OSI mode and OS implementations may choose
+> > +      to mandate it.
+> > +
+> > +      [3] Documentation/devicetree/bindings/power/power_domain.txt
+> > +      [4] Documentation/devicetree/bindings/power/domain-idle-state.txt
+> > +
+> > +  power-domains:
+> > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > +    description:
+> > +      List of phandles and PM domain specifiers, as defined by bindings of the
+> > +      PM domain provider.
+>
+> A schema for 'domain-idle-states' property is missing.
+
+Right, let's figure out the best way for how to add that.
+
+>
+> >
+> >  required:
+> >    - compatible
+> > @@ -160,4 +188,80 @@ examples:
+> >        cpu_on = <0x95c10002>;
+> >        cpu_off = <0x95c10001>;
+> >      };
+> > +
+> > +  - |+
+> > +
+> > +    // Case 4: CPUs and CPU idle states described using the hierarchical model.
+> > +
+> > +    cpus {
+> > +      #size-cells = <0>;
+> > +      #address-cells = <1>;
+> > +
+> > +      CPU0: cpu@0 {
+> > +        device_type = "cpu";
+> > +        compatible = "arm,cortex-a53", "arm,armv8";
+> > +        reg = <0x0>;
+> > +        enable-method = "psci";
+> > +        power-domains = <&CPU_PD0>;
+> > +        power-domain-names = "psci";
+> > +      };
+> > +
+> > +      CPU1: cpu@1 {
+> > +        device_type = "cpu";
+> > +        compatible = "arm,cortex-a57", "arm,armv8";
+> > +        reg = <0x100>;
+> > +        enable-method = "psci";
+> > +        power-domains = <&CPU_PD1>;
+> > +        power-domain-names = "psci";
+> > +      };
+> > +
+> > +      idle-states {
+> > +
+> > +        CPU_PWRDN: cpu-power-down {
+> > +          compatible = "arm,idle-state";
+> > +          arm,psci-suspend-param = <0x0000001>;
+> > +          entry-latency-us = <10>;
+> > +          exit-latency-us = <10>;
+> > +          min-residency-us = <100>;
+> > +        };
+> > +
+> > +        CLUSTER_RET: cluster-retention {
+> > +          compatible = "domain-idle-state";
+> > +          arm,psci-suspend-param = <0x1000011>;
+> > +          entry-latency-us = <500>;
+> > +          exit-latency-us = <500>;
+> > +          min-residency-us = <2000>;
+> > +        };
+> > +
+> > +        CLUSTER_PWRDN: cluster-power-down {
+> > +          compatible = "domain-idle-state";
+> > +          arm,psci-suspend-param = <0x1000031>;
+> > +          entry-latency-us = <2000>;
+> > +          exit-latency-us = <2000>;
+> > +          min-residency-us = <6000>;
+> > +        };
+> > +      };
+> > +    };
+> > +
+> > +    psci {
+> > +      compatible = "arm,psci-1.0";
+> > +      method = "smc";
+> > +
+> > +      CPU_PD0: cpu-pd0 {
+> > +        #power-domain-cells = <0>;
+> > +        domain-idle-states = <&CPU_PWRDN>;
+> > +        power-domains = <&CLUSTER_PD>;
+> > +      };
+> > +
+> > +      CPU_PD1: cpu-pd1 {
+> > +        #power-domain-cells = <0>;
+> > +        domain-idle-states =  <&CPU_PWRDN>;
+> > +        power-domains = <&CLUSTER_PD>;
+> > +      };
+> > +
+> > +      CLUSTER_PD: cluster-pd {
+> > +        #power-domain-cells = <0>;
+> > +        domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
+> > +      };
+> > +    };
+> >  ...
+> > --
+> > 2.17.1
+> >
+
+Thanks for your feedback!
+
+Kind regards
+Uffe
