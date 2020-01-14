@@ -2,269 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E7A13A433
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 10:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A5813A56C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 11:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgANJtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 04:49:21 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40160 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725956AbgANJtV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:49:21 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 33EE5AC52;
-        Tue, 14 Jan 2020 09:49:18 +0000 (UTC)
-From:   Thomas Renninger <trenn@suse.de>
-To:     linux-pm@vger.kernel.org
-Cc:     shuah@kernel.org, Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v2] cpupower: Revert library ABI changes from commit ae2917093fb60bdc1ed3e
-Date:   Tue, 14 Jan 2020 10:49:05 +0100
-Message-ID: <2924229.7vsBmOEbcj@skinner.arch.suse.de>
+        id S1730090AbgANKHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 05:07:32 -0500
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:40431 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729615AbgANKHb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 05:07:31 -0500
+Received: by mail-wm1-f47.google.com with SMTP id t14so12967679wmi.5
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 02:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1+lSOJ02OVX3YT6g7066pemLn3Yqrwk342Rp+oY/5V0=;
+        b=VQ4Mui+lUW2MrxjWen9nR8vJngQ31b9sTsv/TfXEulKdvQVLYqMhsbsQVf4HaNoC+A
+         ks091jrnpiTdWelOyuhdceCf4n5mnwew8zvwCqKN4bJmkRgoxnEMU6aSfYGuKWBrbs9w
+         L/8ZTOVCSI43LMonIwjg5jNjNULreksDU8hbF+INV2ZZgVFIlVKQBNSYFV+oElXt1CoZ
+         q7p0NtzZ7KVJPOs14gnqZDkJnSZzmuMDGL+WeT715PyirAT/YjDfEik4XdByzGHmlPnx
+         CY9SK+E6eRKqBomD4uavDJi6eWBav0YgxVhO0eZnLZJQ4kv8BwLZ0n2QL07/wGrzriBJ
+         1IOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1+lSOJ02OVX3YT6g7066pemLn3Yqrwk342Rp+oY/5V0=;
+        b=Ui2jjG74cfS1u9tmT6YyCdphJD62gL+Itfw0mSmyyt6vgHN7+Jz4Gr61Q84j+ZX9bG
+         fy+atg3mRvFSX1s91k8t152gi7WKBuss6/NuWv0QjROlHEl7CGW+1O+JXSevStv/xMYB
+         eRUXo6aQU8hroLfPr/1PVhVw2FxyxOJq+n4t5qF4FCyy5sse7JVNF6Igk7NOQKM7GxlX
+         nmZb6Gg0zhoUhTdziPviUPAkwTradF+S+ihMUpFAI0SfR6mU/Bhi1KjTsykch5Tgc7TT
+         SGTjCPCxDXu1cNaEdVSKdyn/G9brAFnxto0vEl+xd64X6uv7KohO057dwpjEdmdy2IS2
+         CxBA==
+X-Gm-Message-State: APjAAAXePLLAeijwcpdFsEDiH3ihV2sUc2NEmY8pxQDpOLr9YCFjWFIU
+        wgNR7uR86oF80a4YVxYP63OoINDKQovY6ypeSZqpTw==
+X-Google-Smtp-Source: APXvYqxy0RpB/nt/jc6EA9ztk6i6WDr9odhU4lbUOGxvph7YggwiBT3Ij+MwVQ09c9nENpgej0sHDvhojl9gRgYiuCM=
+X-Received: by 2002:a7b:c3d8:: with SMTP id t24mr407712wmj.175.1578996449850;
+ Tue, 14 Jan 2020 02:07:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20191223211309.GA4609@sig21.net> <20200113092604.GA26365@sig21.net>
+ <CAG_fn=WSUGq_UZZOCQRbaKDE01yA6dLLqToOBWZ=0s5uxMwatw@mail.gmail.com>
+ <CAG_fn=V0nTqsFxYAuH0K3cJxx3nWitG50VkYOQ8MHNO+H8hfKQ@mail.gmail.com> <20200113171557.GA8544@sig21.net>
+In-Reply-To: <20200113171557.GA8544@sig21.net>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 14 Jan 2020 11:07:18 +0100
+Message-ID: <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
+Subject: Re: init_on_free breaks hibernate
+To:     Johannes Stezenbach <js@sig21.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit ae2917093fb60bdc1ed3e modified the library function:
-    
-struct cpufreq_available_frequencies
-*cpufreq_get_available_frequencies(unsigned int cpu)
+On Mon, Jan 13, 2020 at 6:16 PM Johannes Stezenbach <js@sig21.net> wrote:
+>
+> On Mon, Jan 13, 2020 at 04:41:27PM +0100, Alexander Potapenko wrote:
+> > > Resuming doesn't work for me in your setup with upstream kernel and
+> > > init_on_alloc/init_on_free disabled.
+> > > To hibernate, I did:
+> >
+> > Ok, I've managed to resume by running QEMU with -append "... resume=3D/=
+dev/vda".
+>
+> Strange about the resume=3D/dev/vda, it worked for me the way I described=
+ it.
+> Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda=
+.
+Indeed, for me it's 253:0, and resuming from console works with that number=
+.
 
-to
-struct cpufreq_frequencies
-*cpufreq_get_frequencies(const char *type, unsigned int cpu)
-
-This patch recovers the old API and implements the new functionality
-in a newly introduce method:
-struct cpufreq_boost_frequencies
-*cpufreq_get_available_frequencies(unsigned int cpu)
-
-
-This one should get merged into stable kernels back to 5.0 when
-commit ae2917093fb60bdc1ed3e had been introduced.
-
-Fixes: ae2917093fb6 ("tools/power/cpupower: Display boost frequency 
-separately")
-
-Cc: stable@vger.kernel.org
-
-v2: - Add fixes: tag
-    - Add [PATCH] and cpupower in title
-
-diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
-index 2f55d4d23446..6e04304560ca 100644
---- a/tools/power/cpupower/lib/cpufreq.c
-+++ b/tools/power/cpupower/lib/cpufreq.c
-@@ -332,21 +332,74 @@ void cpufreq_put_available_governors(struct cpufreq_available_governors *any)
- }
- 
- 
--struct cpufreq_frequencies
--*cpufreq_get_frequencies(const char *type, unsigned int cpu)
-+struct cpufreq_available_frequencies
-+*cpufreq_get_available_frequencies(unsigned int cpu)
- {
--	struct cpufreq_frequencies *first = NULL;
--	struct cpufreq_frequencies *current = NULL;
-+	struct cpufreq_available_frequencies *first = NULL;
-+	struct cpufreq_available_frequencies *current = NULL;
- 	char one_value[SYSFS_PATH_MAX];
- 	char linebuf[MAX_LINE_LEN];
--	char fname[MAX_LINE_LEN];
- 	unsigned int pos, i;
- 	unsigned int len;
- 
--	snprintf(fname, MAX_LINE_LEN, "scaling_%s_frequencies", type);
-+	len = sysfs_cpufreq_read_file(cpu, "scaling_available_frequencies",
-+				      linebuf, sizeof(linebuf));
-+	if (len == 0)
-+		return NULL;
- 
--	len = sysfs_cpufreq_read_file(cpu, fname,
--				linebuf, sizeof(linebuf));
-+	pos = 0;
-+	for (i = 0; i < len; i++) {
-+		if (linebuf[i] == ' ' || linebuf[i] == '\n') {
-+			if (i - pos < 2)
-+				continue;
-+			if (i - pos >= SYSFS_PATH_MAX)
-+				goto error_out;
-+			if (current) {
-+				current->next = malloc(sizeof(*current));
-+				if (!current->next)
-+					goto error_out;
-+				current = current->next;
-+			} else {
-+				first = malloc(sizeof(*first));
-+				if (!first)
-+					goto error_out;
-+				current = first;
-+			}
-+			current->first = first;
-+			current->next = NULL;
-+
-+			memcpy(one_value, linebuf + pos, i - pos);
-+			one_value[i - pos] = '\0';
-+			if (sscanf(one_value, "%lu", &current->frequency) != 1)
-+				goto error_out;
-+
-+			pos = i + 1;
-+		}
-+	}
-+
-+	return first;
-+
-+ error_out:
-+	while (first) {
-+		current = first->next;
-+		free(first);
-+		first = current;
-+	}
-+	return NULL;
-+}
-+
-+struct cpufreq_available_frequencies
-+*cpufreq_get_boost_frequencies(unsigned int cpu)
-+{
-+	struct cpufreq_available_frequencies *first = NULL;
-+	struct cpufreq_available_frequencies *current = NULL;
-+	char one_value[SYSFS_PATH_MAX];
-+	char linebuf[MAX_LINE_LEN];
-+	unsigned int pos, i;
-+	unsigned int len;
-+
-+	len = sysfs_cpufreq_read_file(cpu, "scaling_boost_frequencies",
-+				      linebuf, sizeof(linebuf));
- 	if (len == 0)
- 		return NULL;
- 
-@@ -391,9 +444,9 @@ struct cpufreq_frequencies
- 	return NULL;
- }
- 
--void cpufreq_put_frequencies(struct cpufreq_frequencies *any)
-+void cpufreq_put_available_frequencies(struct cpufreq_available_frequencies *any)
- {
--	struct cpufreq_frequencies *tmp, *next;
-+	struct cpufreq_available_frequencies *tmp, *next;
- 
- 	if (!any)
- 		return;
-@@ -406,6 +459,11 @@ void cpufreq_put_frequencies(struct cpufreq_frequencies *any)
- 	}
- }
- 
-+void cpufreq_put_boost_frequencies(struct cpufreq_available_frequencies *any)
-+{
-+	cpufreq_put_available_frequencies(any);
-+}
-+
- static struct cpufreq_affected_cpus *sysfs_get_cpu_list(unsigned int cpu,
- 							const char *file)
- {
-diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
-index a55f0d19215b..95f4fd9e2656 100644
---- a/tools/power/cpupower/lib/cpufreq.h
-+++ b/tools/power/cpupower/lib/cpufreq.h
-@@ -20,10 +20,10 @@ struct cpufreq_available_governors {
- 	struct cpufreq_available_governors *first;
- };
- 
--struct cpufreq_frequencies {
-+struct cpufreq_available_frequencies {
- 	unsigned long frequency;
--	struct cpufreq_frequencies *next;
--	struct cpufreq_frequencies *first;
-+	struct cpufreq_available_frequencies *next;
-+	struct cpufreq_available_frequencies *first;
- };
- 
- 
-@@ -124,11 +124,17 @@ void cpufreq_put_available_governors(
-  * cpufreq_put_frequencies after use.
-  */
- 
--struct cpufreq_frequencies
--*cpufreq_get_frequencies(const char *type, unsigned int cpu);
-+struct cpufreq_available_frequencies
-+*cpufreq_get_available_frequencies(unsigned int cpu);
- 
--void cpufreq_put_frequencies(
--		struct cpufreq_frequencies *first);
-+void cpufreq_put_available_frequencies(
-+		struct cpufreq_available_frequencies *first);
-+
-+struct cpufreq_available_frequencies
-+*cpufreq_get_boost_frequencies(unsigned int cpu);
-+
-+void cpufreq_put_boost_frequencies(
-+		struct cpufreq_available_frequencies *first);
- 
- 
- /* determine affected CPUs
-diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-index e63cf55f81cf..6efc0f6b1b11 100644
---- a/tools/power/cpupower/utils/cpufreq-info.c
-+++ b/tools/power/cpupower/utils/cpufreq-info.c
-@@ -244,14 +244,14 @@ static int get_boost_mode_x86(unsigned int cpu)
- 
- static int get_boost_mode(unsigned int cpu)
- {
--	struct cpufreq_frequencies *freqs;
-+	struct cpufreq_available_frequencies *freqs;
- 
- 	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD ||
- 	    cpupower_cpu_info.vendor == X86_VENDOR_HYGON ||
- 	    cpupower_cpu_info.vendor == X86_VENDOR_INTEL)
- 		return get_boost_mode_x86(cpu);
- 
--	freqs = cpufreq_get_frequencies("boost", cpu);
-+	freqs = cpufreq_get_boost_frequencies(cpu);
- 	if (freqs) {
- 		printf(_("  boost frequency steps: "));
- 		while (freqs->next) {
-@@ -261,7 +261,7 @@ static int get_boost_mode(unsigned int cpu)
- 		}
- 		print_speed(freqs->frequency);
- 		printf("\n");
--		cpufreq_put_frequencies(freqs);
-+		cpufreq_put_available_frequencies(freqs);
- 	}
- 
- 	return 0;
-@@ -475,7 +475,7 @@ static int get_latency(unsigned int cpu, unsigned int human)
- 
- static void debug_output_one(unsigned int cpu)
- {
--	struct cpufreq_frequencies *freqs;
-+	struct cpufreq_available_frequencies *freqs;
- 
- 	get_driver(cpu);
- 	get_related_cpus(cpu);
-@@ -483,7 +483,7 @@ static void debug_output_one(unsigned int cpu)
- 	get_latency(cpu, 1);
- 	get_hardware_limits(cpu, 1);
- 
--	freqs = cpufreq_get_frequencies("available", cpu);
-+	freqs = cpufreq_get_available_frequencies(cpu);
- 	if (freqs) {
- 		printf(_("  available frequency steps:  "));
- 		while (freqs->next) {
-@@ -493,7 +493,7 @@ static void debug_output_one(unsigned int cpu)
- 		}
- 		print_speed(freqs->frequency);
- 		printf("\n");
--		cpufreq_put_frequencies(freqs);
-+		cpufreq_put_available_frequencies(freqs);
- 	}
- 
- 	get_available_governors(cpu);
+> > The memory corruption is also reproducible for me, taking a look.
+>
+> Great!
+>
+> Johannes
 
 
 
+--=20
+Alexander Potapenko
+Software Engineer
 
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
