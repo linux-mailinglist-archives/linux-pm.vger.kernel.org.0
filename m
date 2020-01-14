@@ -2,221 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B87B13B25B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 19:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB0213B279
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 19:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728721AbgANSvF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 13:51:05 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:39478 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727092AbgANSvF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 13:51:05 -0500
-Received: by mail-pj1-f67.google.com with SMTP id e11so4728713pjt.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 10:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8RHb25MFJpPZhJdjI8xQKql5/uxFuwEOzuS1j12SrJk=;
-        b=Ow6Bjq+PMUgyYD4Z7oS58hmebH/2FCuoQLR5BmldOvhqhhrktMYHsU7MqISY/Qc4mR
-         ksHt82V82HrQHDybguDhh42mdUaf5i9sfnxS+IGXGYaPLFU4CxrQ68v65EapYscHtN2L
-         T4xvsI4/pL2FSbDcYfrS9dURi2fnRLTNNwjbk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8RHb25MFJpPZhJdjI8xQKql5/uxFuwEOzuS1j12SrJk=;
-        b=rrZo/NYt0r2GnP7NLUnUHLa2klHxa08uhgIPmy6BSbX4oOXf0dFM/nR9a/AkTzxByi
-         Fwq+0VWjsLXqyyFC2G7I513rnbXefGnczTv4j3DjQCBz2EI7bddzuL183C1JQKs4OsJ+
-         HGFzUJJZdXQ+GQHn9JedgggfJE4XDQ4Arza3OX0l08ljc5gs2/cYEd15fQw4kPFZjnMA
-         RYT2tg7fjIoZknvAvPlaQlIR55glfqwVjSHt1XfLmCZv7Tx2o1LKGjFEHBpOMD6kol4Q
-         oeuAWeyiXPUkip3x7OYPs3xfmYbBfaps4x74KlVfEHJqyai0hR8d1jDSIdy0yCVl+zP2
-         6FDg==
-X-Gm-Message-State: APjAAAW6WnjsNDsP8uneDLkhwRY1oBh7iRrqSeG1e+cSC7MC2M07/3gK
-        tz/4gKR3FZF4OoiscAHc2dZp4A==
-X-Google-Smtp-Source: APXvYqwyGpqR1K6wjcjKgJO0oKzp9z8mLoiE+SZlVD3ctdnXJ8HANMRK5I9mc5T6ayqXehxYp1DYKw==
-X-Received: by 2002:a17:90a:7781:: with SMTP id v1mr15038696pjk.108.1579027864707;
-        Tue, 14 Jan 2020 10:51:04 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id b185sm19678208pfa.102.2020.01.14.10.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2020 10:51:04 -0800 (PST)
-Date:   Tue, 14 Jan 2020 10:51:02 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: devfreq_cooling: Use PM QoS to set
- frequency limits
-Message-ID: <20200114185102.GJ89495@google.com>
-References: <CGME20200110174931epcas1p49c79567945e125829188174293d99850@epcas1p4.samsung.com>
- <20200110094913.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
- <bae154ef-cbe6-de24-26c7-a7d4338bd55e@samsung.com>
+        id S1728797AbgANS6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 13:58:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43760 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726053AbgANS6M (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jan 2020 13:58:12 -0500
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B93C524672;
+        Tue, 14 Jan 2020 18:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579028291;
+        bh=tf/o2SOslhx05jLtLdGaZMcY/dh7CAZd9De5mDkeMf4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rhHPwkDsEYo5s9OaBOs8zWlRq1ckApWqZBX6XG5ON2yMQCrS0rVFA3Oq4GbC81lMC
+         k4fdwcZntrM+DImSAtEzIlVzTcp8eX64KU/Lvq0wTsx4+p35gL9opG8cMGcRXj3riC
+         sTdrKifhnvYLTAsuwrV4+sJ9bMoEAkJLnsIEMt78=
+Received: by mail-lf1-f48.google.com with SMTP id y19so10664157lfl.9;
+        Tue, 14 Jan 2020 10:58:10 -0800 (PST)
+X-Gm-Message-State: APjAAAXCrQIPlnIk0EvCCBETpQkuoV/9CtFag35bpQ2EDdvstQA2HIjv
+        adfgYabIJznBapPNHZXnw2mIrk+IZjJ1hsMFP5k=
+X-Google-Smtp-Source: APXvYqwHQ2f4elu47X/7QicsiPxxCMwcNqD1zJyF4zqRmDXWzwTdd9U1U4qAAURR3V9bYvYPHyPXbFdnwTsZfi93v+4=
+X-Received: by 2002:a19:c80a:: with SMTP id y10mr2322353lff.177.1579028288854;
+ Tue, 14 Jan 2020 10:58:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bae154ef-cbe6-de24-26c7-a7d4338bd55e@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191217055738.28445-1-cw00.choi@samsung.com> <CGME20191217055106epcas1p11f2bc81d6bb2db3fc4bc257d78c337b9@epcas1p1.samsung.com>
+ <20191217055738.28445-5-cw00.choi@samsung.com> <20191226210119.GA8706@bogus>
+ <a54e4275-012e-77d9-bdbe-1aab64b5c12b@samsung.com> <76616499-7c19-06b1-461a-28ae17a76c60@samsung.com>
+In-Reply-To: <76616499-7c19-06b1-461a-28ae17a76c60@samsung.com>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Date:   Wed, 15 Jan 2020 03:57:30 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH0K65ON0FQGUjQbr71_9VWJXTmRbih1gko6Pcuy+PL63Q@mail.gmail.com>
+Message-ID: <CAGTfZH0K65ON0FQGUjQbr71_9VWJXTmRbih1gko6Pcuy+PL63Q@mail.gmail.com>
+Subject: Re: [PATCH 4/9] PM / devfreq: exynos-bus: Replace deprecated
+ 'devfreq' property
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Leonard Crestez <leonard.crestez@nxp.com>, lukasz.luba@arm.com,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 04:25:17PM +0900, Chanwoo Choi wrote:
-> Hi,
-> 
-> On 1/11/20 2:49 AM, Matthias Kaehlcke wrote:
-> > Now that devfreq supports limiting the frequency range of a device
-> > through PM QoS make use of it instead of disabling OPPs that should
-> > not be used.
-> > 
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> > 
-> >  drivers/thermal/devfreq_cooling.c | 66 ++++++++++---------------------
-> >  1 file changed, 20 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> > index ef59256887ff..3a63603afcf2 100644
-> > --- a/drivers/thermal/devfreq_cooling.c
-> > +++ b/drivers/thermal/devfreq_cooling.c
-> > @@ -24,11 +24,13 @@
-> >  #include <linux/idr.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/pm_opp.h>
-> > +#include <linux/pm_qos.h>
-> >  #include <linux/thermal.h>
-> >  
-> >  #include <trace/events/thermal.h>
-> >  
-> > -#define SCALE_ERROR_MITIGATION 100
-> > +#define HZ_PER_KHZ		1000
-> > +#define SCALE_ERROR_MITIGATION	100
-> >  
-> >  static DEFINE_IDA(devfreq_ida);
-> >  
-> > @@ -65,49 +67,9 @@ struct devfreq_cooling_device {
-> >  	struct devfreq_cooling_power *power_ops;
-> >  	u32 res_util;
-> >  	int capped_state;
-> > +	struct dev_pm_qos_request req_max_freq;
-> 
-> Need to add the description of 'req_max_freq'.
+Hi Rob,
 
-will add the description
+On Mon, Jan 6, 2020 at 10:32 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>
+> Hi Rob,
+>
+> Gently Ping.
 
-> >  };
-> >  
-> > -/**
-> > - * partition_enable_opps() - disable all opps above a given state
-> > - * @dfc:	Pointer to devfreq we are operating on
-> > - * @cdev_state:	cooling device state we're setting
-> > - *
-> > - * Go through the OPPs of the device, enabling all OPPs until
-> > - * @cdev_state and disabling those frequencies above it.
-> > - */
-> > -static int partition_enable_opps(struct devfreq_cooling_device *dfc,
-> > -				 unsigned long cdev_state)
-> > -{
-> > -	int i;
-> > -	struct device *dev = dfc->devfreq->dev.parent;
-> > -
-> > -	for (i = 0; i < dfc->freq_table_size; i++) {
-> > -		struct dev_pm_opp *opp;
-> > -		int ret = 0;
-> > -		unsigned int freq = dfc->freq_table[i];
-> > -		bool want_enable = i >= cdev_state ? true : false;
-> > -
-> > -		opp = dev_pm_opp_find_freq_exact(dev, freq, !want_enable);
-> > -
-> > -		if (PTR_ERR(opp) == -ERANGE)
-> > -			continue;
-> > -		else if (IS_ERR(opp))
-> > -			return PTR_ERR(opp);
-> > -
-> > -		dev_pm_opp_put(opp);
-> > -
-> > -		if (want_enable)
-> > -			ret = dev_pm_opp_enable(dev, freq);
-> > -		else
-> > -			ret = dev_pm_opp_disable(dev, freq);
-> > -
-> > -		if (ret)
-> > -			return ret;
-> > -	}
-> > -
-> > -	return 0;
-> > -}
-> > -
-> >  static int devfreq_cooling_get_max_state(struct thermal_cooling_device *cdev,
-> >  					 unsigned long *state)
-> >  {
-> > @@ -134,7 +96,7 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
-> >  	struct devfreq_cooling_device *dfc = cdev->devdata;
-> >  	struct devfreq *df = dfc->devfreq;
-> >  	struct device *dev = df->dev.parent;
-> > -	int ret;
-> > +	unsigned long freq;
-> >  
-> >  	if (state == dfc->cooling_state)
-> >  		return 0;
-> > @@ -144,9 +106,10 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
-> >  	if (state >= dfc->freq_table_size)
-> >  		return -EINVAL;
-> >  
-> > -	ret = partition_enable_opps(dfc, state);
-> > -	if (ret)
-> > -		return ret;
-> > +	freq = dfc->freq_table[state];
-> > +
-> > +	dev_pm_qos_update_request(&dfc->req_max_freq,
-> > +				  DIV_ROUND_UP(freq, HZ_PER_KHZ));
-> >  
-> >  	dfc->cooling_state = state;
-> >  
-> > @@ -529,6 +492,12 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
-> >  	if (err)
-> >  		goto free_dfc;
-> >  
-> > +	err = dev_pm_qos_add_request(df->dev.parent, &dfc->req_max_freq,
-> > +				     DEV_PM_QOS_MAX_FREQUENCY,
-> > +				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> > +	if (err < 0)
-> > +		goto remove_qos_req;
-> 
-> Jump 'free_table' instead of 'remove_qos_req'.
+Once again, ping. Could you please review?
 
-ack
+On v2[1], made separate patches for dt-binding.
+[1] https://patchwork.kernel.org/cover/11304545/
 
-> > +
-> >  	err = ida_simple_get(&devfreq_ida, 0, 0, GFP_KERNEL);
-> >  	if (err < 0)
-> >  		goto free_tables;
-> 
-> Jump remove_qos_req.
+>
+> On 12/27/19 9:09 AM, Chanwoo Choi wrote:
+> > On 12/27/19 6:01 AM, Rob Herring wrote:
+> >> On Tue, Dec 17, 2019 at 02:57:33PM +0900, Chanwoo Choi wrote:
+> >>> In order to remove the deprecated 'devfreq' property, replace with
+> >>> new 'exynos,parent-bus' property in order to get the parent devfreq device
+> >>> in devicetree file instead of 'devfreq' property. But, to guarantee the
+> >>> backward-compatibility, keep the support 'devfreq' property.
+> >>>
+> >>> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+> >>> ---
+> >>>  .../bindings/devfreq/exynos-bus.txt           | 16 +++++++--------
+> >>>  drivers/devfreq/exynos-bus.c                  | 20 ++++++++++++-------
+> >>>  2 files changed, 21 insertions(+), 15 deletions(-)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> >>> index e71f752cc18f..c948cee01124 100644
+> >>> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> >>> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> >>> @@ -45,7 +45,7 @@ Required properties only for parent bus device:
+> >>>    of buses.
+> >>>
+> >>>  Required properties only for passive bus device:
+> >>> -- devfreq: the parent bus device.
+> >>> +- exynos,parent-bus: the parent bus device.
+> >>
+> >> If you are going to do something new, why not use the interconnect
+> >> binding here?
+> >
+> > As I knew, interconnect make the data path among multiple nodes
+> > and set the average and peak bandwidth to the specific data path.
+> >
+> > It means that some data will be flowed from node_a to node_d
+> > or the reverse way because each node has the tightly coupled
+> > dependency for data flow.
+> >
+> >       node_a <-> node_b <-> node_c <-> node_d
+> >
+> >
+> > On the other hand, exynos-bus.c driver is not related to 'data path'.
+> > Each bus just need to control the their own frequency and voltage.
+> > But, share the power line (regulator) between exynos-bus device
+> > even if there are no any dependency of data flow.
+> >
+> > 'exynos,parent-bus' property just indicate the specific
+> > devfreq device(parent bus device) which controls
+> > the shared power line(regulator) in order to prevent
+> > the h/w problem due to the wrong pair of frequency and voltage.
+> >
+> > 'exynos,parent-bus' property is only used to catch
+> > the change timing of shared power line.
+> >
+> >
+> > And,
+> > as you commented, there are some data path among the exynos-bus
+> > devices for the display h/w as following:
+> >
+> >       bus_display -> bus_leftbus -> bus_dmc
+> >
+> > In order to make the data path between bus devices,
+> > interconnect binding is required. This approach[1] was posted.
+> > [1] https://patchwork.kernel.org/cover/11305265/
+> > - [RFC,v3,0/7] PM / devfreq: Simple QoS for exynos-bus using interconnect
+> >
+>
+> Are there any other commentss?
+>
+>
+> --
+> Best Regards,
+> Chanwoo Choi
+> Samsung Electronics
 
-ack
 
-> > @@ -552,6 +521,10 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
-> >  
-> >  release_ida:
-> >  	ida_simple_remove(&devfreq_ida, dfc->id);
-> > +
-> > +remove_qos_req:
-> > +	dev_pm_qos_remove_request(&dfc->req_max_freq);
-> > +
-> >  free_tables:
-> >  	kfree(dfc->power_table);
-> >  	kfree(dfc->freq_table);
-> > @@ -600,6 +573,7 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
-> >  
-> >  	thermal_cooling_device_unregister(dfc->cdev);
-> >  	ida_simple_remove(&devfreq_ida, dfc->id);
-> > +	dev_pm_qos_remove_request(&dfc->req_max_freq);
-> >  	kfree(dfc->power_table);
-> >  	kfree(dfc->freq_table);
+
+-- 
+Best Regards,
+Chanwoo Choi
