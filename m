@@ -2,106 +2,269 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD1013A3D8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 10:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E7A13A433
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 10:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728959AbgANJbn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 04:31:43 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:46818 "EHLO mail.skyhub.de"
+        id S1726044AbgANJtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 04:49:21 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40160 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgANJbn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:31:43 -0500
-Received: from zn.tnic (p200300EC2F0C7700ADC3CAC9BB95AB92.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7700:adc3:cac9:bb95:ab92])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A64AF1EC0C76;
-        Tue, 14 Jan 2020 10:31:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1578994301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oVOv19JYih/7QBdhQIDrcxH7dJf1wRTSDlsNoAXaOY4=;
-        b=Op5S07B1bBe9uvsJbhwmhBQEjTQO/NCR8xUCHou3ZSrFKAX+wG5Tf6vbvL+7qyFBL/OmxC
-        PHOEsU9albCCnI2LsgCfGkS94dnIF/pSH1b+TKBWi8bA+gpaWrVZWGaixC6QAc9QstNw5e
-        AZNv5TI9m4WNJxduf+OlljIIB6zhMPk=
-Date:   Tue, 14 Jan 2020 10:31:38 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH] KVM: VMX: Rename define to CPU_BASED_USE_TSC_OFFSETTING
-Message-ID: <20200114093138.GB31032@zn.tnic>
-References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
- <20191221044513.21680-18-sean.j.christopherson@intel.com>
- <20200113183228.GO13310@zn.tnic>
- <20200113183705.GL1175@linux.intel.com>
- <20200113183823.GP13310@zn.tnic>
- <20200113184217.GA2216@linux.intel.com>
- <20200113185216.GQ13310@zn.tnic>
- <20200113201610.GE2322@linux.intel.com>
+        id S1725956AbgANJtV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jan 2020 04:49:21 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 33EE5AC52;
+        Tue, 14 Jan 2020 09:49:18 +0000 (UTC)
+From:   Thomas Renninger <trenn@suse.de>
+To:     linux-pm@vger.kernel.org
+Cc:     shuah@kernel.org, Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v2] cpupower: Revert library ABI changes from commit ae2917093fb60bdc1ed3e
+Date:   Tue, 14 Jan 2020 10:49:05 +0100
+Message-ID: <2924229.7vsBmOEbcj@skinner.arch.suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200113201610.GE2322@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 12:16:10PM -0800, Sean Christopherson wrote:
-> On Mon, Jan 13, 2020 at 07:52:16PM +0100, Borislav Petkov wrote:
-> > On Mon, Jan 13, 2020 at 10:42:17AM -0800, Sean Christopherson wrote:
-> > > > Doesn't bother me, I could do it in a patch ontop. But your call.
-> > > 
-> > > No objection here.
-> > 
-> > Something like this:
-> > 
-> > ---
-> > From: Borislav Petkov <bp@suse.de>
-> > 
-> > ... so that "offsetting" is spelled the same as the respective VMX feature
-> > bit VMX_FEATURE_TSC_OFFSETTING.
-> > 
-> > No functional changes.
-> > 
-> > Signed-off-by: Borislav Petkov <bp@suse.de>
-> > ---
-> 
-> Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Commit ae2917093fb60bdc1ed3e modified the library function:
+    
+struct cpufreq_available_frequencies
+*cpufreq_get_available_frequencies(unsigned int cpu)
 
-Yah, so I tried to do a test-merge with linux-next to see what surprises should
-I be prepared for and there's the first one:
+to
+struct cpufreq_frequencies
+*cpufreq_get_frequencies(const char *type, unsigned int cpu)
 
-5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING")
+This patch recovers the old API and implements the new functionality
+in a newly introduce method:
+struct cpufreq_boost_frequencies
+*cpufreq_get_available_frequencies(unsigned int cpu)
 
-which is already in Paolo's tree. Dropping it on my side.
 
--- 
-Regards/Gruss,
-    Boris.
+This one should get merged into stable kernels back to 5.0 when
+commit ae2917093fb60bdc1ed3e had been introduced.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Fixes: ae2917093fb6 ("tools/power/cpupower: Display boost frequency 
+separately")
+
+Cc: stable@vger.kernel.org
+
+v2: - Add fixes: tag
+    - Add [PATCH] and cpupower in title
+
+diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+index 2f55d4d23446..6e04304560ca 100644
+--- a/tools/power/cpupower/lib/cpufreq.c
++++ b/tools/power/cpupower/lib/cpufreq.c
+@@ -332,21 +332,74 @@ void cpufreq_put_available_governors(struct cpufreq_available_governors *any)
+ }
+ 
+ 
+-struct cpufreq_frequencies
+-*cpufreq_get_frequencies(const char *type, unsigned int cpu)
++struct cpufreq_available_frequencies
++*cpufreq_get_available_frequencies(unsigned int cpu)
+ {
+-	struct cpufreq_frequencies *first = NULL;
+-	struct cpufreq_frequencies *current = NULL;
++	struct cpufreq_available_frequencies *first = NULL;
++	struct cpufreq_available_frequencies *current = NULL;
+ 	char one_value[SYSFS_PATH_MAX];
+ 	char linebuf[MAX_LINE_LEN];
+-	char fname[MAX_LINE_LEN];
+ 	unsigned int pos, i;
+ 	unsigned int len;
+ 
+-	snprintf(fname, MAX_LINE_LEN, "scaling_%s_frequencies", type);
++	len = sysfs_cpufreq_read_file(cpu, "scaling_available_frequencies",
++				      linebuf, sizeof(linebuf));
++	if (len == 0)
++		return NULL;
+ 
+-	len = sysfs_cpufreq_read_file(cpu, fname,
+-				linebuf, sizeof(linebuf));
++	pos = 0;
++	for (i = 0; i < len; i++) {
++		if (linebuf[i] == ' ' || linebuf[i] == '\n') {
++			if (i - pos < 2)
++				continue;
++			if (i - pos >= SYSFS_PATH_MAX)
++				goto error_out;
++			if (current) {
++				current->next = malloc(sizeof(*current));
++				if (!current->next)
++					goto error_out;
++				current = current->next;
++			} else {
++				first = malloc(sizeof(*first));
++				if (!first)
++					goto error_out;
++				current = first;
++			}
++			current->first = first;
++			current->next = NULL;
++
++			memcpy(one_value, linebuf + pos, i - pos);
++			one_value[i - pos] = '\0';
++			if (sscanf(one_value, "%lu", &current->frequency) != 1)
++				goto error_out;
++
++			pos = i + 1;
++		}
++	}
++
++	return first;
++
++ error_out:
++	while (first) {
++		current = first->next;
++		free(first);
++		first = current;
++	}
++	return NULL;
++}
++
++struct cpufreq_available_frequencies
++*cpufreq_get_boost_frequencies(unsigned int cpu)
++{
++	struct cpufreq_available_frequencies *first = NULL;
++	struct cpufreq_available_frequencies *current = NULL;
++	char one_value[SYSFS_PATH_MAX];
++	char linebuf[MAX_LINE_LEN];
++	unsigned int pos, i;
++	unsigned int len;
++
++	len = sysfs_cpufreq_read_file(cpu, "scaling_boost_frequencies",
++				      linebuf, sizeof(linebuf));
+ 	if (len == 0)
+ 		return NULL;
+ 
+@@ -391,9 +444,9 @@ struct cpufreq_frequencies
+ 	return NULL;
+ }
+ 
+-void cpufreq_put_frequencies(struct cpufreq_frequencies *any)
++void cpufreq_put_available_frequencies(struct cpufreq_available_frequencies *any)
+ {
+-	struct cpufreq_frequencies *tmp, *next;
++	struct cpufreq_available_frequencies *tmp, *next;
+ 
+ 	if (!any)
+ 		return;
+@@ -406,6 +459,11 @@ void cpufreq_put_frequencies(struct cpufreq_frequencies *any)
+ 	}
+ }
+ 
++void cpufreq_put_boost_frequencies(struct cpufreq_available_frequencies *any)
++{
++	cpufreq_put_available_frequencies(any);
++}
++
+ static struct cpufreq_affected_cpus *sysfs_get_cpu_list(unsigned int cpu,
+ 							const char *file)
+ {
+diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
+index a55f0d19215b..95f4fd9e2656 100644
+--- a/tools/power/cpupower/lib/cpufreq.h
++++ b/tools/power/cpupower/lib/cpufreq.h
+@@ -20,10 +20,10 @@ struct cpufreq_available_governors {
+ 	struct cpufreq_available_governors *first;
+ };
+ 
+-struct cpufreq_frequencies {
++struct cpufreq_available_frequencies {
+ 	unsigned long frequency;
+-	struct cpufreq_frequencies *next;
+-	struct cpufreq_frequencies *first;
++	struct cpufreq_available_frequencies *next;
++	struct cpufreq_available_frequencies *first;
+ };
+ 
+ 
+@@ -124,11 +124,17 @@ void cpufreq_put_available_governors(
+  * cpufreq_put_frequencies after use.
+  */
+ 
+-struct cpufreq_frequencies
+-*cpufreq_get_frequencies(const char *type, unsigned int cpu);
++struct cpufreq_available_frequencies
++*cpufreq_get_available_frequencies(unsigned int cpu);
+ 
+-void cpufreq_put_frequencies(
+-		struct cpufreq_frequencies *first);
++void cpufreq_put_available_frequencies(
++		struct cpufreq_available_frequencies *first);
++
++struct cpufreq_available_frequencies
++*cpufreq_get_boost_frequencies(unsigned int cpu);
++
++void cpufreq_put_boost_frequencies(
++		struct cpufreq_available_frequencies *first);
+ 
+ 
+ /* determine affected CPUs
+diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
+index e63cf55f81cf..6efc0f6b1b11 100644
+--- a/tools/power/cpupower/utils/cpufreq-info.c
++++ b/tools/power/cpupower/utils/cpufreq-info.c
+@@ -244,14 +244,14 @@ static int get_boost_mode_x86(unsigned int cpu)
+ 
+ static int get_boost_mode(unsigned int cpu)
+ {
+-	struct cpufreq_frequencies *freqs;
++	struct cpufreq_available_frequencies *freqs;
+ 
+ 	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD ||
+ 	    cpupower_cpu_info.vendor == X86_VENDOR_HYGON ||
+ 	    cpupower_cpu_info.vendor == X86_VENDOR_INTEL)
+ 		return get_boost_mode_x86(cpu);
+ 
+-	freqs = cpufreq_get_frequencies("boost", cpu);
++	freqs = cpufreq_get_boost_frequencies(cpu);
+ 	if (freqs) {
+ 		printf(_("  boost frequency steps: "));
+ 		while (freqs->next) {
+@@ -261,7 +261,7 @@ static int get_boost_mode(unsigned int cpu)
+ 		}
+ 		print_speed(freqs->frequency);
+ 		printf("\n");
+-		cpufreq_put_frequencies(freqs);
++		cpufreq_put_available_frequencies(freqs);
+ 	}
+ 
+ 	return 0;
+@@ -475,7 +475,7 @@ static int get_latency(unsigned int cpu, unsigned int human)
+ 
+ static void debug_output_one(unsigned int cpu)
+ {
+-	struct cpufreq_frequencies *freqs;
++	struct cpufreq_available_frequencies *freqs;
+ 
+ 	get_driver(cpu);
+ 	get_related_cpus(cpu);
+@@ -483,7 +483,7 @@ static void debug_output_one(unsigned int cpu)
+ 	get_latency(cpu, 1);
+ 	get_hardware_limits(cpu, 1);
+ 
+-	freqs = cpufreq_get_frequencies("available", cpu);
++	freqs = cpufreq_get_available_frequencies(cpu);
+ 	if (freqs) {
+ 		printf(_("  available frequency steps:  "));
+ 		while (freqs->next) {
+@@ -493,7 +493,7 @@ static void debug_output_one(unsigned int cpu)
+ 		}
+ 		print_speed(freqs->frequency);
+ 		printf("\n");
+-		cpufreq_put_frequencies(freqs);
++		cpufreq_put_available_frequencies(freqs);
+ 	}
+ 
+ 	get_available_governors(cpu);
+
+
+
+
