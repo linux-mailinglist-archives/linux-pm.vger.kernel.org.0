@@ -2,183 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E82B13B5C8
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 00:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9459B13B5F3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 00:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgANX1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 18:27:44 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44288 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbgANX1o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 18:27:44 -0500
-Received: by mail-pg1-f195.google.com with SMTP id x7so7136109pgl.11
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 15:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FjlR2GDiNviLLUnZLpM2xF4e4vLYisf90J5psoo45v0=;
-        b=gBSNJE45auewf9yu41Jxx90LA/dvCD7dhGxGpC0eEVxntCV/YQ1saVcFOQRaaeA7cl
-         K7kwv+IypGXC1ddYEe/94PFryKsx+mNaK26ojYkMpzLutPE8YylmoKQN40y8pW6gcPPo
-         mayG3BljWAw0auet19NA/z1PwsDttjdENN8T4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FjlR2GDiNviLLUnZLpM2xF4e4vLYisf90J5psoo45v0=;
-        b=KQBQUPeTG95/Yf6gO9I8JDGccU5Bck07S58puQ1Gc2MbkJVYZihMUD7xZoqGnjfrLh
-         7qZsPTe2DbHgllC1lZ0bKLY8I/D8aRd/SaPnuJU6hd0juLWZl+ylfruFtRkkckFjnUf2
-         a/thAp8FaNMPu0sZS9AAzeUuLJbVw6ZlaC9uydOlprRG35GSwXgFesDaYhMFFhLTq7Gn
-         QDR/P0XzcYfcQ8zWk2gcireR9OXGh70XPRJGco7XCBS4m3lgazOXP/dPpnHeYPUpclcp
-         jJ2kgoBlx4KHwTEyZH2iQWG0QyhUM0nioLPF2aw+nNZO1jrRr8Cop5k7wPvM5WyNrVKs
-         KxVQ==
-X-Gm-Message-State: APjAAAVURBmCDxfbWSbYiSoLk6R1lM810ywVGk8xwuvczYXDC0o0S/rp
-        Ub2Zihr7skdCc8EUybLmRILwZQ==
-X-Google-Smtp-Source: APXvYqwDndS4zrqzZ5mZ3UDWbotPnktd3lqLLQgqXHTAGMncnphjRT6TtzP6jzd9nW4y1L/PNIqsCw==
-X-Received: by 2002:a63:484b:: with SMTP id x11mr30224921pgk.148.1579044463438;
-        Tue, 14 Jan 2020 15:27:43 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:172e:4646:c089:ce59])
-        by smtp.gmail.com with ESMTPSA id u18sm18521839pgn.9.2020.01.14.15.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 15:27:43 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     enric.balletbo@collabora.com, groeck@chromium.org,
-        bleung@chromium.org, lee.jones@linaro.org, sre@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jon Flatley <jflat@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>
-Subject: [PATCH v6 3/3] power: supply: cros-ec-usbpd-charger: Fix host events
-Date:   Tue, 14 Jan 2020 15:22:22 -0800
-Message-Id: <20200114232219.93171-3-pmalani@chromium.org>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-In-Reply-To: <20200114232219.93171-1-pmalani@chromium.org>
-References: <20200114232219.93171-1-pmalani@chromium.org>
+        id S1728746AbgANXg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 18:36:28 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:35726 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728757AbgANXgY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 18:36:24 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579044983; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=7+8Ma8yfcl2diOB4I5famBBLS13KA3B5gNUsRjC85BE=; b=tgOcFVfA4qpnrmUsjd7xH5z4P2sUDqkFNJB4mR+hv2pzWC+6fi8zNMZkuZqgBPfnIxzU4bee
+ /ANYff1hnVWZ6QliXsc4eTr8i9rYf/jcdkimnV358QQjZ/E5unIX9XUNjvHJ43QX+Xz4JgtE
+ uqbe9mXmpmFjqEKe7aNS4zTo790=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e1e5076.7fad57bb9960-smtp-out-n02;
+ Tue, 14 Jan 2020 23:36:22 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A47C1C4479F; Tue, 14 Jan 2020 23:36:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.46.162.237] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: daidavid1)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6722CC433CB;
+        Tue, 14 Jan 2020 23:36:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6722CC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=daidavid1@codeaurora.org
+Subject: Re: [PATCH v1 0/4] Split SDM845 interconnect nodes and consolidate
+ RPMh support
+To:     Evan Green <evgreen@google.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, sboyd@kernel.org,
+        Lina Iyer <ilina@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        Alex Elder <elder@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+References: <1576475925-20601-1-git-send-email-daidavid1@codeaurora.org>
+ <CAE=gft6sxsZfvPZZXKqbEMjCH_hGKXp_1MS3qTAz6hmMPfn09A@mail.gmail.com>
+From:   David Dai <daidavid1@codeaurora.org>
+Message-ID: <df9e58ef-7b97-7456-09fb-c13f53207cbb@codeaurora.org>
+Date:   Tue, 14 Jan 2020 15:36:19 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE=gft6sxsZfvPZZXKqbEMjCH_hGKXp_1MS3qTAz6hmMPfn09A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jon Flatley <jflat@chromium.org>
+Hi Evan,
 
-There's a bug on ACPI platforms where host events from the ECPD ACPI
-device never make their way to the cros-ec-usbpd-charger driver. This
-makes it so the only time the charger driver updates its state is when
-user space accesses its sysfs attributes.
+On 1/7/2020 3:45 PM, Evan Green wrote:
+> On Sun, Dec 15, 2019 at 9:59 PM David Dai <daidavid1@codeaurora.org> wrote:
+>> While there are no current consumers of the SDM845 interconnect device in
+>> devicetree, take this opportunity to redefine the interconnect device nodes
+>> as the previous definitions of using a single child node under the apps_rsc
+>> device did not accurately capture the description of the hardware.
+>> The Network-On-Chip (NoC) interconnect devices should be represented in a
+>> manner akin to QCS404 platforms[1] where there is a separation of NoC devices
+>> and its RPM/RPMh counterparts.
+>>
+>> The bcm-voter devices are representing the RPMh devices that the interconnect
+>> providers need to communicate with and there can be more than one instance of
+>> the Bus Clock Manager (BCM) which can live under different instances of Resource
+>> State Coordinators (RSC). There are display use cases where consumers may need
+>> to target a different bcm-voter (Some display specific RSC) than the default,
+>> and there needs to be a way to represent this connection in devicetree.
+> So for my own understanding, the problem here is that things want to
+> vote for interconnect bandwidth within a specific RSC context? Where
+> normally the RSC context is simply "Apps@EL1", we might also have
+> "Apps@EL3" for trustzone, or in the case we're coding for,
+> "display-specific RSC context". I guess this context might stay on
+> even if Apps@EL1 votes are entirely discounted or off?
+That's correct, the state of those votes are tied to the state of that 
+execution environment. So even if the Apps CPU goes into a low power 
+mode, other context specific vote will still stick.
+>   So then would
+> there be an additional interconnect provider for "display context RSC"
+> next to apps_bcm_voter? Would that expose all the same nodes as
+> apps_bcm_voter, or a different set of nodes?
 
-Now that these events have been unified into a single notifier chain on
-both ACPI and non-ACPI platforms, update the charger driver to use this
-new notifier.
+We trim down the topology to what each execution environment needs, so 
+each EE really only "sees" a subset of the entire SoC's topology. In 
+this specific case, the display context RSC would only expose a small 
+subset of the topology that Apps@EL1 would see.
 
-Signed-off-by: Jon Flatley <jflat@chromium.org>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+>
+> Assuming it's exposing some of the same nodes as apps_bcm_voter, the
+> other way to do this would be increasing #interconnect-cells, and
+> putting the RSC context there. Did you choose not to go that way
+> because nearly all the clients would end up specifying the same thing
+> of "Apps@EL1"?
+That's correct, the majority of the consumers will stay with default 
+Apps@EL1 context.
 
-Changes in v6(pmalani@chromium.org):
-- Patch first introduced into the series in v6.
-
- drivers/power/supply/Kconfig              |  2 +-
- drivers/power/supply/cros_usbpd-charger.c | 50 ++++++++---------------
- 2 files changed, 19 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 27164a1d3c7c4..ba74ddd793c3d 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -659,7 +659,7 @@ config CHARGER_RT9455
- 
- config CHARGER_CROS_USBPD
- 	tristate "ChromeOS EC based USBPD charger"
--	depends on CROS_EC
-+	depends on CROS_USBPD_NOTIFY
- 	default n
- 	help
- 	  Say Y here to enable ChromeOS EC based USBPD charger
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 6cc7c3910e098..7f7e051262170 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -8,6 +8,7 @@
- #include <linux/mfd/cros_ec.h>
- #include <linux/module.h>
- #include <linux/platform_data/cros_ec_commands.h>
-+#include <linux/platform_data/cros_usbpd_notify.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
-@@ -524,32 +525,21 @@ static int cros_usbpd_charger_property_is_writeable(struct power_supply *psy,
- }
- 
- static int cros_usbpd_charger_ec_event(struct notifier_block *nb,
--				       unsigned long queued_during_suspend,
-+				       unsigned long host_event,
- 				       void *_notify)
- {
--	struct cros_ec_device *ec_device;
--	struct charger_data *charger;
--	u32 host_event;
-+	struct charger_data *charger = container_of(nb, struct charger_data,
-+						    notifier);
- 
--	charger = container_of(nb, struct charger_data, notifier);
--	ec_device = charger->ec_device;
--
--	host_event = cros_ec_get_host_event(ec_device);
--	if (host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU)) {
--		cros_usbpd_charger_power_changed(charger->ports[0]->psy);
--		return NOTIFY_OK;
--	} else {
--		return NOTIFY_DONE;
--	}
-+	cros_usbpd_charger_power_changed(charger->ports[0]->psy);
-+	return NOTIFY_OK;
- }
- 
- static void cros_usbpd_charger_unregister_notifier(void *data)
- {
- 	struct charger_data *charger = data;
--	struct cros_ec_device *ec_device = charger->ec_device;
- 
--	blocking_notifier_chain_unregister(&ec_device->event_notifier,
--					   &charger->notifier);
-+	cros_usbpd_unregister_notify(&charger->notifier);
- }
- 
- static int cros_usbpd_charger_probe(struct platform_device *pd)
-@@ -683,21 +673,17 @@ static int cros_usbpd_charger_probe(struct platform_device *pd)
- 		goto fail;
- 	}
- 
--	if (ec_device->mkbp_event_supported) {
--		/* Get PD events from the EC */
--		charger->notifier.notifier_call = cros_usbpd_charger_ec_event;
--		ret = blocking_notifier_chain_register(
--						&ec_device->event_notifier,
--						&charger->notifier);
--		if (ret < 0) {
--			dev_warn(dev, "failed to register notifier\n");
--		} else {
--			ret = devm_add_action_or_reset(dev,
--					cros_usbpd_charger_unregister_notifier,
--					charger);
--			if (ret < 0)
--				goto fail;
--		}
-+	/* Get PD events from the EC */
-+	charger->notifier.notifier_call = cros_usbpd_charger_ec_event;
-+	ret = cros_usbpd_register_notify(&charger->notifier);
-+	if (ret < 0) {
-+		dev_warn(dev, "failed to register notifier\n");
-+	} else {
-+		ret = devm_add_action_or_reset(dev,
-+				cros_usbpd_charger_unregister_notifier,
-+				charger);
-+		if (ret < 0)
-+			goto fail;
- 	}
- 
- 	return 0;
 -- 
-2.25.0.341.g760bfbb309-goog
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
