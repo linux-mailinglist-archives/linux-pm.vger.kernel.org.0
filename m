@@ -2,68 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B8913B55B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 23:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342CB13B558
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 23:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgANWhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 17:37:02 -0500
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:11109 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727072AbgANWhC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 17:37:02 -0500
-X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Jan 2020 17:37:02 EST
-X-Halon-ID: 8811a98b-371d-11ea-b6d8-005056917f90
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p54ac5d7b.dip0.t-ipconnect.de [84.172.93.123])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 8811a98b-371d-11ea-b6d8-005056917f90;
-        Tue, 14 Jan 2020 23:30:56 +0100 (CET)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     linux-pm@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 2/2] thermal: rcar_gen3_thermal: Remove temperature bound
-Date:   Tue, 14 Jan 2020 23:29:45 +0100
-Message-Id: <20200114222945.3128250-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200114222945.3128250-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20200114222945.3128250-1-niklas.soderlund+renesas@ragnatech.se>
+        id S1727102AbgANWgE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 17:36:04 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57416 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727072AbgANWgE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 17:36:04 -0500
+Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id 0a93bb85a3dfdab7; Tue, 14 Jan 2020 23:36:01 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Johannes Stezenbach <js@sig21.net>, Pavel Machek <pavel@ucw.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org
+Subject: Re: init_on_free breaks hibernate
+Date:   Tue, 14 Jan 2020 23:36:01 +0100
+Message-ID: <38519837.OfHf9z5LDp@kreacher>
+In-Reply-To: <CAG_fn=VjzJSguf4ZB2x8Xn=U9MCHyfyqd2DVwPPC36t5+S+VsQ@mail.gmail.com>
+References: <20191223211309.GA4609@sig21.net> <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com> <CAG_fn=VjzJSguf4ZB2x8Xn=U9MCHyfyqd2DVwPPC36t5+S+VsQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The hardware manual states that the operation of the sensor is not
-guaranteed with temperatures above 125°C, not that the readings are
-invalid. Remove the bound check and try to deliver temperature readings
-even if we are outside the guaranteed operation range.
+On Tuesday, January 14, 2020 12:38:53 PM CET Alexander Potapenko wrote:
+> > > Strange about the resume=/dev/vda, it worked for me the way I described it.
+> > > Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda.
+> > Indeed, for me it's 253:0, and resuming from console works with that number.
+> >
+> > > > The memory corruption is also reproducible for me, taking a look.
+> > >
+> 
+> I think I know what is causing the problem.
+> Upon resume the free pages may contain stale information from the
+> kernel that initiated the resume.
+> There's clear_free_pages()
+> (https://elixir.bootlin.com/linux/latest/source/kernel/power/snapshot.c#L1148)
+> that clears the pages in the case CONFIG_PAGE_POISONING_ZERO is
+> enabled, we just need to reuse it for init_on_free.
+> See the potential fix below.
+> 
+> Rafael, Pavel, I've noticed that in the setup suggested by Johannes
+> even the defconfig kernel with heap initialization cannot hibernate
+> more than twice, the third hibernate hangs.
+> Is that a known problem?
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/thermal/rcar_gen3_thermal.c | 4 ----
- 1 file changed, 4 deletions(-)
+No, it is not.
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 1460cf9d9f1c397b..0f69ff676838a999 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -182,10 +182,6 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
- 				tsc->coef.a2);
- 	mcelsius = FIXPT_TO_MCELSIUS(val);
- 
--	/* Make sure we are inside specifications */
--	if ((mcelsius < MCELSIUS(-40)) || (mcelsius > MCELSIUS(125)))
--		return -EIO;
--
- 	/* Round value to device granularity setting */
- 	*temp = rcar_gen3_thermal_round(mcelsius);
- 
--- 
-2.24.1
+
 
