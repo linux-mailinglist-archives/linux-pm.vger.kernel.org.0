@@ -2,121 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 844B113A88A
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 12:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D9E13A9B9
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 13:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728779AbgANLjH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 06:39:07 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44837 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgANLjH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 06:39:07 -0500
-Received: by mail-wr1-f65.google.com with SMTP id q10so11819088wrm.11
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 03:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tgfw4WcAZhA82/kw+SEL3pFweCri8T0MlotixdbWMso=;
-        b=VbYwHC4uJlDPmqvi/xXbfRLLq/0sf+oZcBXNGxIewa3VGSYHnVnNb12XfNnjSjBu1j
-         ObcAVnNmVMLpB7h5daN49U7Un9kGIfoXxzNz2KewVNjE4meaEdcHaxGWm/egrjdJ+bUl
-         +vaJg6MpISxTEg+I07orw1hZ1YnOygr5WWy+DF/fUy797aIDuBfrF3GzUfFkFgX8cDck
-         UDJ+IHzIRHJOBBX4wU2u9VvSHokM+kT75n3KzHhjOEzalkwjvcjcF05H9bNnzvStuZ9b
-         0MYSje4qr8YM5OesdwqZJcj3Ns6Og7005NGAY3wD/BhKxBGI1ezz8grl+uXQ6YgKMlGq
-         nidA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tgfw4WcAZhA82/kw+SEL3pFweCri8T0MlotixdbWMso=;
-        b=Wzd6+9XrASPjCyE4oc2lKPhQm5UCMynAhICED6VuXXtfcrTtldBwuckG3TOMcHZaah
-         Cyn8s5+IoC2XWuy8ABYK5FdNaqHX/VKwohdkppdlXMBOY1cROBYETKo7rqHu0d/w+iGs
-         yklO8x3XLZJA0E6dWIeTOwwueHwiXyGxcX1wz+Rrl50FwgyrQ1vH9CTIp++uZG4IKV/7
-         bmyyqul4/0gF2iGD1LqMoTY5Q42we3d/+uQkgPFmrAGVEIePXjfqwXLyuBXKPyJLMh2b
-         ZNZzMP2I8x2FrPX1snntQh+0j6Lzjr1GvFalBI4iQjsDI9tET0gJ2kQ0+vrRPUpoVbuz
-         DTkQ==
-X-Gm-Message-State: APjAAAUuXH9o3L0eGDbS9Hj4E8tPUtP8uuhjAsFLKjy8cKr1rpOggwiY
-        7knEzBmREVtmR1ApWMp6dadUbufZsIr6+BHDVffMBg==
-X-Google-Smtp-Source: APXvYqw1RI7FSM88eJ2Vekj0L4T73CeOxZkK9xJzHtrwXY3+CkBEkFfgsmDhbRuneSucAmows+/eefFnSQn9r2Nsou4=
-X-Received: by 2002:adf:f28c:: with SMTP id k12mr24176978wro.360.1579001945135;
- Tue, 14 Jan 2020 03:39:05 -0800 (PST)
+        id S1726156AbgANMwN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 07:52:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:51958 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726121AbgANMwN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jan 2020 07:52:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74FA91435;
+        Tue, 14 Jan 2020 04:52:12 -0800 (PST)
+Received: from [10.37.12.134] (unknown [10.37.12.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E70B3F534;
+        Tue, 14 Jan 2020 04:52:04 -0800 (PST)
+Subject: Re: [PATCH 2/2] PM / devfreq: Add devfreq_transitions debugfs file
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "a.swigon@samsung.com" <a.swigon@samsung.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
+        "hl@rock-chips.com" <hl@rock-chips.com>,
+        "jcrouse@codeaurora.org" <jcrouse@codeaurora.org>,
+        "chanwoo@kernel.org" <chanwoo@kernel.org>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "kyungmin.park@samsung.com" <kyungmin.park@samsung.com>
+References: <20200107090519.3231-1-cw00.choi@samsung.com>
+ <CGME20200107085812epcas1p4670ae2265573d887aa75cab36c04b1ea@epcas1p4.samsung.com>
+ <20200107090519.3231-3-cw00.choi@samsung.com> <20200107214834.GB738324@yoga>
+ <c1e6f324-b0c2-41ff-a015-7ba0b29ad42c@gmail.com>
+ <ddbc54d1-c657-747c-265d-3c7bd5924e59@arm.com>
+ <VI1PR04MB70232D962B603DC882388B92EE350@VI1PR04MB7023.eurprd04.prod.outlook.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d71e5268-7d5d-cba6-9ce3-ec11e65905d7@arm.com>
+Date:   Tue, 14 Jan 2020 12:52:00 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191223211309.GA4609@sig21.net> <20200113092604.GA26365@sig21.net>
- <CAG_fn=WSUGq_UZZOCQRbaKDE01yA6dLLqToOBWZ=0s5uxMwatw@mail.gmail.com>
- <CAG_fn=V0nTqsFxYAuH0K3cJxx3nWitG50VkYOQ8MHNO+H8hfKQ@mail.gmail.com>
- <20200113171557.GA8544@sig21.net> <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
-In-Reply-To: <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 14 Jan 2020 12:38:53 +0100
-Message-ID: <CAG_fn=VjzJSguf4ZB2x8Xn=U9MCHyfyqd2DVwPPC36t5+S+VsQ@mail.gmail.com>
-Subject: Re: init_on_free breaks hibernate
-To:     Johannes Stezenbach <js@sig21.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <VI1PR04MB70232D962B603DC882388B92EE350@VI1PR04MB7023.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=koi8-r; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> > Strange about the resume=/dev/vda, it worked for me the way I described it.
-> > Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda.
-> Indeed, for me it's 253:0, and resuming from console works with that number.
->
-> > > The memory corruption is also reproducible for me, taking a look.
-> >
+Hi Leonard,
 
-I think I know what is causing the problem.
-Upon resume the free pages may contain stale information from the
-kernel that initiated the resume.
-There's clear_free_pages()
-(https://elixir.bootlin.com/linux/latest/source/kernel/power/snapshot.c#L1148)
-that clears the pages in the case CONFIG_PAGE_POISONING_ZERO is
-enabled, we just need to reuse it for init_on_free.
-See the potential fix below.
+On 1/13/20 5:19 PM, Leonard Crestez wrote:
+> On 08.01.2020 17:44, Lukasz Luba wrote:
+>> On 1/8/20 2:20 PM, Dmitry Osipenko wrote:
+>>> 08.01.2020 00:48, Bjorn Andersson пишет:
+>>>> On Tue 07 Jan 01:05 PST 2020, Chanwoo Choi wrote:
+>>>>
+>>>>> Add new devfreq_transitions debugfs file to track the frequency transitions
+>>>>> of all devfreq devices for the simple profiling as following:
+>>>>> - /sys/kernel/debug/devfreq/devfreq_transitions
+>>>>>
+>>>>> And the user can decide the storage size (CONFIG_NR_DEVFREQ_TRANSITIONS)
+>>>>> in Kconfig in order to save the transition history.
+>>>>>
+>>>>> [Detailed description of each field of 'devfreq_transitions' debugfs file]
+>>>>> - time_ms	: Change time of frequency transition. (unit: millisecond)
+>>>>> - dev_name	: Device name of h/w.
+>>>>> - dev		: Device name made by devfreq core.
+>>>>> - parent_dev	: If devfreq device uses the passive governor,
+>>>>> 		  show parent devfreq device name.
+>>>>> - load_%	: If devfreq device uses the simple_ondemand governor,
+>>>>> 		  load is used by governor whene deciding the new frequency.
+>>>>> 		  (unit: percentage)
+>>>>> - old_freq_hz	: Frequency before changing. (unit: hz)
+>>>>> - new_freq_hz	: Frequency after changed. (unit: hz)
+>>>>>
+>>>>> [For example on Exynos5422-based Odroid-XU3 board]
+>>>>> $ cat /sys/kernel/debug/devfreq/devfreq_transitions
+>>>>> time_ms    dev_name                       dev        parent_dev load_% old_freq_hz  new_freq_hz
+>>>>> ---------- ------------------------------ ---------- ---------- ---------- ------------ ------------
+>>>>> 14600      soc:bus_noc                    devfreq2   devfreq1   0      100000000    67000000
+>>>>> 14600      soc:bus_fsys_apb               devfreq3   devfreq1   0      200000000    100000000
+>>>>> 14600      soc:bus_fsys                   devfreq4   devfreq1   0      200000000    100000000
+>>>>> 14600      soc:bus_fsys2                  devfreq5   devfreq1   0      150000000    75000000
+>>>>> 14602      soc:bus_mfc                    devfreq6   devfreq1   0      222000000    96000000
+>>>>> 14602      soc:bus_gen                    devfreq7   devfreq1   0      267000000    89000000
+>>>>> 14602      soc:bus_g2d                    devfreq9   devfreq1   0      300000000    84000000
+>>>>> 14602      soc:bus_g2d_acp                devfreq10  devfreq1   0      267000000    67000000
+>>>>> 14602      soc:bus_jpeg                   devfreq11  devfreq1   0      300000000    75000000
+>>>>> 14602      soc:bus_jpeg_apb               devfreq12  devfreq1   0      167000000    84000000
+>>>>> 14603      soc:bus_disp1_fimd             devfreq13  devfreq1   0      200000000    120000000
+>>>>> 14603      soc:bus_disp1                  devfreq14  devfreq1   0      300000000    120000000
+>>>>> 14606      soc:bus_gscl_scaler            devfreq15  devfreq1   0      300000000    150000000
+>>>>> 14606      soc:bus_mscl                   devfreq16  devfreq1   0      333000000    84000000
+>>>>> 14608      soc:bus_wcore                  devfreq1              9      333000000    84000000
+>>>>> 14783      10c20000.memory-controller     devfreq0              35     825000000    633000000
+>>>>> 15873      soc:bus_wcore                  devfreq1              41     84000000     400000000
+>>>>> 15873      soc:bus_noc                    devfreq2   devfreq1   0      67000000     100000000
+>>>>> [snip]
+>>>>>
+>>>>
+>>>> Wouldn't it make more sense to expose this through the tracing
+>>>> framework - like many other subsystems does?
+>>>
+>>> I think devfreq core already has some tracing support and indeed it
+>>> should be better to extend it rather than duplicate.
+> 
+> +1 for tracing
+>> In my opinion this debugfs interface should be considered as a helpful
+>> validation entry point. We had some issues with wrong bootloader
+>> configurations in clock tree, where some frequencies could not be set
+>> in the kernel. Similar useful description can be find in clock subsystem
+>> where there is clock tree summary file.
+>>
+>> It is much cheaper to poke a few files in debug dir by some automated
+>> test than starting tracing, provoking desired code flow in the
+>> devfreq for every device, paring the results... A simple boot test
+>> which reads only these new files can be enough to rise the flag.
+> 
+> Tracepoints are also very powerful for debugging boot issues! You can
+> add "tp_printk trace_event=devfreq:*" to boot arguments and you will see
+> console messages for all relevant events. This works even if boot fails
+> before userspace is available to mount debugfs.
+> 
+>> Secondly the tracing is not always compiled.
+> 
+> Tracing is deliberately light-weight and should be enabled even on
+> production systems.
+> 
+>> It could capture old/wrong bootloaders which pinned devices
+>> improperly to PLLs or wrong DT values in OPP table.
+>> (a workaround for Odroid xu4 patchset:
+>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2019%2F7%2F15%2F276&amp;data=02%7C01%7Cleonard.crestez%40nxp.com%7C8397d37b41474137f8cf08d79451a007%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637140950611913278&amp;sdata=rcbWCyFmf0ZO7LU27D05mftTf8YdSvGPYNsst1GnNjQ%3D&amp;reserved=0
+>> )
+>>
+>> Chanwoo what do think about some sanity check summary?
+>> It could be presented in a 3rd file: 'devfreq_sanity', which
+>> could report if the devices could set their registered OPPs
+>> and got the same values, i.e. set 166MHz --> set to 150MHz
+>> in reality. If a config option i.e. DEVFREQ_SANITY is set
+>> then during the registration of a new device it checks OPPs
+>> if they are possible to set. It could be done before assigning
+>> the governor for the device and results present in of of your files.
+> 
+> The new devfreq_transition tracepoint could include a field for
+> "new_effective freq" next to "old_freq" and "new_requested_freq".
 
-Rafael, Pavel, I've noticed that in the setup suggested by Johannes
-even the defconfig kernel with heap initialization cannot hibernate
-more than twice, the third hibernate hangs.
-Is that a known problem?
+I would suggest to keep it aligned with cpufreq trace. The timestamps
+in trace would tell you the history, 'old_freq' is not needed.
+The trace_devfreq_monitor that I have added should give you this
+information when you parse all the events.
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 26b9168321e7..d65f2d5ab694 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1147,24 +1147,24 @@ void free_basic_memory_bitmaps(void)
+> 
+> For imx8m-ddrc I handled this inside the target() function: clk_get_rate
+> is called after the transition and an error is reported if rate doesn't
+> match.
 
- void clear_free_pages(void)
- {
--#ifdef CONFIG_PAGE_POISONING_ZERO
-        struct memory_bitmap *bm = free_pages_map;
-        unsigned long pfn;
+Interesting driver, it uses ARM SMCCC like rk3399.
+It handles this validation of DT OPPs vs firmware OPPs and disables
+not matched frequencies. Small nit. The error is printed when the 'ret'
+is 0 and freq does not match, but then 'ret' is returned from target().
+You don't also revert the update parent stuff in such case.
+Maybe you can also check the res.a0 != SMCCC_RET_SUCCESS in
+static void imx8m_ddrc_smc_set_freq(int target_freq)
+to bail out earlier and not switch to new parents when the freq
+switch failed or does not match. Or I am missing something.
+You can also reorder the includes alphabetically.
 
-        if (WARN_ON(!(free_pages_map)))
-                return;
+Regards,
+Lukasz
 
--       memory_bm_position_reset(bm);
--       pfn = memory_bm_next_pfn(bm);
--       while (pfn != BM_END_OF_MAP) {
--               if (pfn_valid(pfn))
--                       clear_highpage(pfn_to_page(pfn));
--
-+       if (IS_ENABLED(CONFIG_PAGE_POISONING_ZERO) || want_init_on_free()) {
-+               memory_bm_position_reset(bm);
-                pfn = memory_bm_next_pfn(bm);
-+               while (pfn != BM_END_OF_MAP) {
-+                       if (pfn_valid(pfn))
-+                               clear_highpage(pfn_to_page(pfn));
-+
-+                       pfn = memory_bm_next_pfn(bm);
-+               }
-+               memory_bm_position_reset(bm);
-+               pr_info("free pages cleared after restore\n");
-        }
--       memory_bm_position_reset(bm);
--       pr_info("free pages cleared after restore\n");
--#endif /* PAGE_POISONING_ZERO */
- }
+> 
+> It might make sense for devfreq core to handle this internally by
+> calling get_cur_freq instead.
+> 
+> --
+> Regards,
+> Leonard
+> 
