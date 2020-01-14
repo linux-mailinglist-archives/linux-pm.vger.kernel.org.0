@@ -2,65 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC9E139FAF
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 04:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C87139FBD
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 04:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729485AbgANDE2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jan 2020 22:04:28 -0500
-Received: from mga12.intel.com ([192.55.52.136]:31656 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729224AbgANDE2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 Jan 2020 22:04:28 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jan 2020 19:04:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,431,1571727600"; 
-   d="scan'208";a="397354511"
-Received: from unknown (HELO chenyu-office) ([10.239.158.173])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2020 19:04:25 -0800
-Date:   Tue, 14 Jan 2020 11:04:00 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI/PM: Print the pci config space of devices before
- suspend
-Message-ID: <20200114030400.GA5065@chenyu-office>
-References: <20200113060724.19571-1-yu.c.chen@intel.com>
- <CAJZ5v0jgdfAG_BDefdSQFV9hM61o68Aj31PxShNxxcpsYFpxgw@mail.gmail.com>
+        id S1729304AbgANDL2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jan 2020 22:11:28 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:47518 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729253AbgANDL1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jan 2020 22:11:27 -0500
+Received: from [10.18.29.227] (10.18.29.227) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 14 Jan
+ 2020 11:11:52 +0800
+Subject: Re: [PATCH v5 1/4] dt-bindings: power: add Amlogic secure power
+ domains bindings
+To:     Kevin Hilman <khilman@baylibre.com>,
+        <linux-amlogic@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1573532930-39505-1-git-send-email-jianxin.pan@amlogic.com>
+ <1573532930-39505-2-git-send-email-jianxin.pan@amlogic.com>
+ <7ha76rdj35.fsf@baylibre.com>
+From:   Jianxin Pan <jianxin.pan@amlogic.com>
+Message-ID: <61dcfe1a-e987-aa40-34da-71150554f708@amlogic.com>
+Date:   Tue, 14 Jan 2020 11:11:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jgdfAG_BDefdSQFV9hM61o68Aj31PxShNxxcpsYFpxgw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <7ha76rdj35.fsf@baylibre.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.227]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-On Mon, Jan 13, 2020 at 11:01:28AM +0100, Rafael J. Wysocki wrote:
-> On Mon, Jan 13, 2020 at 7:08 AM Chen Yu <yu.c.chen@intel.com> wrote:
-> >
-> > The pci config space was found to be insane during resume
-> 
-> I wouldn't call it "insane".
-> 
-> It probably means that the device was not present or not accessible
-> during hibernation and now it appears to be present (maybe the restore
-> kernel found it and configured it).
-> 
-Right, thanks for the hint. If this is the case, it should not
-save any pci config settings if that device is not accessible,
-otherwise there's risk of pci config hard confliction after resumed.
-I've applied the patch and wait for the issue to be reproduced
-(not 100%) and will send the result later.
+HI Kevin,
 
-Thanks,
-Chenyu
+Thanks for your review, I will put pwrc under secure-monitor node.
+
+On 2020/1/14 7:37, Kevin Hilman wrote:
+> Jianxin Pan <jianxin.pan@amlogic.com> writes:
+> 
+>> Add the bindings for the Amlogic Secure power domains, controlling the
+>> secure power domains.
+>>
+>> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
+>> power domain registers are in secure world.
+>>
+>> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+>> ---
+>>  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 37 ++++++++++++++++++++++
+>>  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++++
+>>  2 files changed, 69 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>>  create mode 100644 include/dt-bindings/power/meson-a1-power.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>> new file mode 100644
+>> index 00000000..2ed269f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +# Copyright (c) 2019 Amlogic, Inc
+>> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Amlogic Meson Secure Power Domains
+>> +
+>> +maintainers:
+>> +  - Jianxin Pan <jianxin.pan@amlogic.com>
+>> +
+>> +description: |+
+>> +  Meson Secure Power Domains used in A1/C1 SoCs.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - amlogic,meson-a1-pwrc
+>> +
+>> +  "#power-domain-cells":
+>> +    const: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - "#power-domain-cells"
+>> +
+>> +examples:
+>> +  - |
+>> +    pwrc: power-controller {
+>> +          compatible = "amlogic,meson-a1-pwrc";
+>> +          #power-domain-cells = <1>;
+>> +          secure-monitor = <&sm>;
+> 
+> As requested by Rob, please put this under the secure-monitor node.
+> 
+> Kevin
+> 
+> .
+> 
+
