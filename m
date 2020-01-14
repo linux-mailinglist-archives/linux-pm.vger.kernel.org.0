@@ -2,98 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A5813A56C
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 11:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BE313A76A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2020 11:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730090AbgANKHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 05:07:32 -0500
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:40431 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729615AbgANKHb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 05:07:31 -0500
-Received: by mail-wm1-f47.google.com with SMTP id t14so12967679wmi.5
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 02:07:30 -0800 (PST)
+        id S1729399AbgANKey (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 05:34:54 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37088 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727285AbgANKey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 05:34:54 -0500
+Received: by mail-pf1-f196.google.com with SMTP id p14so6385744pfn.4
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 02:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1+lSOJ02OVX3YT6g7066pemLn3Yqrwk342Rp+oY/5V0=;
-        b=VQ4Mui+lUW2MrxjWen9nR8vJngQ31b9sTsv/TfXEulKdvQVLYqMhsbsQVf4HaNoC+A
-         ks091jrnpiTdWelOyuhdceCf4n5mnwew8zvwCqKN4bJmkRgoxnEMU6aSfYGuKWBrbs9w
-         L/8ZTOVCSI43LMonIwjg5jNjNULreksDU8hbF+INV2ZZgVFIlVKQBNSYFV+oElXt1CoZ
-         q7p0NtzZ7KVJPOs14gnqZDkJnSZzmuMDGL+WeT715PyirAT/YjDfEik4XdByzGHmlPnx
-         CY9SK+E6eRKqBomD4uavDJi6eWBav0YgxVhO0eZnLZJQ4kv8BwLZ0n2QL07/wGrzriBJ
-         1IOA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6WEFAP/ApgeJPueS6Gwwt3D0c6EozVsVjbD7xwCYDMU=;
+        b=jwYJRLnx31hznR5hOFu8AioG9hqIqaf7k2DcfPbD3O8HfcTL9Q4y5r7HAQ7I5Rd/JX
+         nq08HH8qf7mLFDLvXFIY6+ZPUZSzszeUAy0KJOKzW6+2HqLumlMhF0FdUiCRe+10goY5
+         +zbSgzWFwO21bcTFU/LWVACI19dkAwqLmY/2JmPN4k/zzHFUVsEYoRSZI/ZR/mF6nCqZ
+         vOLikz16Cx7JZFlC4SiZzzott0saT9FrIynGeQxSYHERd9Whw3B5FGclUPkbn4Q/IQhI
+         Vvlinrd6GIxLe4Z9JSG022SbvfOqP6rziyhdl9ki1hPjHscOyYJm4iIE4Qt7590Bzhfk
+         9W6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1+lSOJ02OVX3YT6g7066pemLn3Yqrwk342Rp+oY/5V0=;
-        b=Ui2jjG74cfS1u9tmT6YyCdphJD62gL+Itfw0mSmyyt6vgHN7+Jz4Gr61Q84j+ZX9bG
-         fy+atg3mRvFSX1s91k8t152gi7WKBuss6/NuWv0QjROlHEl7CGW+1O+JXSevStv/xMYB
-         eRUXo6aQU8hroLfPr/1PVhVw2FxyxOJq+n4t5qF4FCyy5sse7JVNF6Igk7NOQKM7GxlX
-         nmZb6Gg0zhoUhTdziPviUPAkwTradF+S+ihMUpFAI0SfR6mU/Bhi1KjTsykch5Tgc7TT
-         SGTjCPCxDXu1cNaEdVSKdyn/G9brAFnxto0vEl+xd64X6uv7KohO057dwpjEdmdy2IS2
-         CxBA==
-X-Gm-Message-State: APjAAAXePLLAeijwcpdFsEDiH3ihV2sUc2NEmY8pxQDpOLr9YCFjWFIU
-        wgNR7uR86oF80a4YVxYP63OoINDKQovY6ypeSZqpTw==
-X-Google-Smtp-Source: APXvYqxy0RpB/nt/jc6EA9ztk6i6WDr9odhU4lbUOGxvph7YggwiBT3Ij+MwVQ09c9nENpgej0sHDvhojl9gRgYiuCM=
-X-Received: by 2002:a7b:c3d8:: with SMTP id t24mr407712wmj.175.1578996449850;
- Tue, 14 Jan 2020 02:07:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6WEFAP/ApgeJPueS6Gwwt3D0c6EozVsVjbD7xwCYDMU=;
+        b=n5PwtxPSTP4DkZlKpJWL+SANzauRGOa9kkhaM4Uh85r1P6YKJ3su/SL6HHkX6tBdh3
+         uPQbzi/P3kdQHKi5l9YS6xToa6J6hx7sPp7tX+CsGP45gM/VQka+IvwPDQp9lkYr50p0
+         57ynwQNRRR6ebe3UbQqDmaQVrtN9bWdXhcnbxPaYpnMqHJnBYmlsXyB8rU1SdKLGuMgP
+         X0AkEwYJraeeXB4YWPQWo1vhxiWvszFRHAOyoHtvbSE7OS/LNJ42NZAwzhuMT1S32bRt
+         yM/YchpHvJagybbNruvKVIfW9+qUv2aLNkNSnTrhenYwk7DzHj2qXXnaxmqqLvqpvBNm
+         4Qew==
+X-Gm-Message-State: APjAAAX9ZZl9B01g3pxBFP2lDufoVVVQquvsHsgifaVVWJlztweRz64N
+        vkphYjtJtX8FuJbfeyGQ1ASEwA==
+X-Google-Smtp-Source: APXvYqxyC3sfXYgjfIHc/g5DWfKMYs4YAP31hjMYEZtc13r8kBnIiS+sBTrIKQKYIA9GFDXA3LMrEw==
+X-Received: by 2002:a63:6e04:: with SMTP id j4mr25629136pgc.175.1578998092064;
+        Tue, 14 Jan 2020 02:34:52 -0800 (PST)
+Received: from localhost ([122.172.140.51])
+        by smtp.gmail.com with ESMTPSA id m19sm16555830pjv.10.2020.01.14.02.34.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Jan 2020 02:34:51 -0800 (PST)
+Date:   Tue, 14 Jan 2020 16:04:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] Introduce Bandwidth OPPs for interconnects
+Message-ID: <20200114103448.odnvqawnqb3twst5@vireshk-i7>
+References: <20191207002424.201796-1-saravanak@google.com>
 MIME-Version: 1.0
-References: <20191223211309.GA4609@sig21.net> <20200113092604.GA26365@sig21.net>
- <CAG_fn=WSUGq_UZZOCQRbaKDE01yA6dLLqToOBWZ=0s5uxMwatw@mail.gmail.com>
- <CAG_fn=V0nTqsFxYAuH0K3cJxx3nWitG50VkYOQ8MHNO+H8hfKQ@mail.gmail.com> <20200113171557.GA8544@sig21.net>
-In-Reply-To: <20200113171557.GA8544@sig21.net>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 14 Jan 2020 11:07:18 +0100
-Message-ID: <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
-Subject: Re: init_on_free breaks hibernate
-To:     Johannes Stezenbach <js@sig21.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191207002424.201796-1-saravanak@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 6:16 PM Johannes Stezenbach <js@sig21.net> wrote:
->
-> On Mon, Jan 13, 2020 at 04:41:27PM +0100, Alexander Potapenko wrote:
-> > > Resuming doesn't work for me in your setup with upstream kernel and
-> > > init_on_alloc/init_on_free disabled.
-> > > To hibernate, I did:
-> >
-> > Ok, I've managed to resume by running QEMU with -append "... resume=3D/=
-dev/vda".
->
-> Strange about the resume=3D/dev/vda, it worked for me the way I described=
- it.
-> Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda=
-.
-Indeed, for me it's 253:0, and resuming from console works with that number=
-.
+On 06-12-19, 16:24, Saravana Kannan wrote:
+> gpu_cache_opp_table: gpu_cache_opp_table {
+> 	compatible = "operating-points-v2";
+> 
+> 	gpu_cache_3000: opp-3000 {
+> 		opp-peak-KBps = <3000000>;
+> 		opp-avg-KBps = <1000000>;
+> 	};
+> 	gpu_cache_6000: opp-6000 {
+> 		opp-peak-KBps = <6000000>;
+> 		opp-avg-KBps = <2000000>;
+> 	};
+> 	gpu_cache_9000: opp-9000 {
+> 		opp-peak-KBps = <9000000>;
+> 		opp-avg-KBps = <9000000>;
+> 	};
+> };
+> 
+> gpu_ddr_opp_table: gpu_ddr_opp_table {
+> 	compatible = "operating-points-v2";
+> 
+> 	gpu_ddr_1525: opp-1525 {
+> 		opp-peak-KBps = <1525000>;
+> 		opp-avg-KBps = <452000>;
+> 	};
+> 	gpu_ddr_3051: opp-3051 {
+> 		opp-peak-KBps = <3051000>;
+> 		opp-avg-KBps = <915000>;
+> 	};
+> 	gpu_ddr_7500: opp-7500 {
+> 		opp-peak-KBps = <7500000>;
+> 		opp-avg-KBps = <3000000>;
+> 	};
+> };
+> 
+> gpu_opp_table: gpu_opp_table {
+> 	compatible = "operating-points-v2";
+> 	opp-shared;
+> 
+> 	opp-200000000 {
+> 		opp-hz = /bits/ 64 <200000000>;
+> 	};
+> 	opp-400000000 {
+> 		opp-hz = /bits/ 64 <400000000>;
+> 	};
+> };
+> 
+> gpu@7864000 {
+> 	...
+> 	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
 
-> > The memory corruption is also reproducible for me, taking a look.
->
-> Great!
->
-> Johannes
+Okay, I got confused a bit again after some interaction with Sibi
+today. The multiple phandle thing in the operating-points-v2 property
+is there specifically for nodes that can provide multiple devices,
+like PM domains where the provider may end up providing multiple
+domains.
 
+But I am not sure what you are going to do with the list of phandles
+you have set for the GPU here.
 
+We can not add multiple OPP tables for a single device right now.
 
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+-- 
+viresh
