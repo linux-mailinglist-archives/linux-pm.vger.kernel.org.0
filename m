@@ -2,88 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E588113BC18
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 10:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1432913BCC3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 10:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729026AbgAOJLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 04:11:01 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34525 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbgAOJLA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 04:11:00 -0500
-Received: by mail-wm1-f65.google.com with SMTP id w5so4231553wmi.1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 01:11:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UeuN6KDh+6iCs0yefxABXjKIW5aWbQor/ERBSv2qacI=;
-        b=GDTFY4dcCmTGGPSve+M1bTEAQjvCBU/tMypr2r8kI4cMCcX1vmAscW8m45Y4d1tbqC
-         NSNJBQR9867sr7kP+diomY2SqBZzJKrnW7xtimTg42x033rdCBK6VoozdhSsiG8l2gBC
-         uKhZ9YvcBBLnnd8OKFAWvowD7om/bFRVOI/beizGki0g4idHkl6+Xpg/CT+A0f6PDuG/
-         pHLPSrhJU6G7Aqlb9Hn1z+4nkLBwowXzIr9j1DWSldK75NFC6Uj4+FAAcCu016ZJS2PZ
-         J2qSAx3h8mhWTSfU+ny9wFcBM1OMEITKifu91YxCivJD7CzonD4O1x6LN33uc92NbSi1
-         +kzQ==
+        id S1729575AbgAOJta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 04:49:30 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35278 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729559AbgAOJta (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 04:49:30 -0500
+Received: by mail-oi1-f193.google.com with SMTP id k4so14830271oik.2;
+        Wed, 15 Jan 2020 01:49:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UeuN6KDh+6iCs0yefxABXjKIW5aWbQor/ERBSv2qacI=;
-        b=JLAxAptHuNUAxjvtdujbDa30VQaHbAp019T0qX86lDPeAhI6VrhUy1/SA7iHMEVRoa
-         npCAjZbrqt7D2MMCbggorvsuqv5kqihgEvX84wVjvIZnzc2+uaWehClNpFMwnv/EmLlO
-         X//Wb/9lQqpU3rMYvnkB/9rpGZVJuFpIYG5jFxPv/B66tBdcN/q7isy8MCDErLkwPE4b
-         O36aMx665thIrMQUI+JaBop8u7lWCM9eOtJAR+ktP8P6lvLnF0AhX+uhP/GfyrwARDHw
-         71luN30mS/C+Qq2sU4b1CmnnErFWzDTyOuV3ocVBwRyzUXURQj62OzI12f2iV9u6lH1x
-         7xvA==
-X-Gm-Message-State: APjAAAUyJl2OxR5m+MkypWJJ/0trMDjcsFlnu5RjV/I0bdnAyQAQ88TW
-        wncfN1MVrwrbeW3J8bWcNOqS6ll/VwSJURsn8a97WQ==
-X-Google-Smtp-Source: APXvYqyl/Un01NOPl2ocAmtn/GIeu1fCN1+833Wd4YgI+7a/clfr9xxom1NobiU+MF7o8Dfbe+pnloJ5zaD/x950+iM=
-X-Received: by 2002:a7b:cb46:: with SMTP id v6mr31994910wmj.117.1579079459339;
- Wed, 15 Jan 2020 01:10:59 -0800 (PST)
+        bh=xlblpk3Q7AFTy8Enno95ZSx0IUH147BofZyxZsTxPpQ=;
+        b=TucKJXUCA3iBOurtQTxVBa/z8C9REkYA7BJC4bLHsU20pWHX8G0CPEON/zgGfgROz8
+         jwyhbLr5j2JjwsgdL2GIT3EzLxo7Di8fOQrERkdEJ7U7/QiPIC90oZ50fmH92oivcX4w
+         4nk8FEs52YgRW4roJaXdtPnaDSiUZuO+jsaSeqw5obwUuylTkiKm+kAy0NqZaqaEbJGp
+         HyvO4SXZNtNmMLSezXxOt1GFZUvU8xOr9u0riNPtbG6A2o43vIEf5c94v4ZdcUQ/+rNA
+         09NbTz5Mgy/U+8mMr6AAl1/vUPkueJt0UHwsbWG3+q7l+/SeT1Za/tB2usl63ImC6Iqf
+         Y4Og==
+X-Gm-Message-State: APjAAAVX1XL4PXVWExXRv2a3FQ2mHbtqRNbZ2YgU8z0/8nYn4u+xpCf+
+        7f32MQtaREYqi5KzILq3sFk0XhhtpRHD3q7EPg8=
+X-Google-Smtp-Source: APXvYqzvsE9JWkTyA/qGCPe6FC5SfX/eWtD++abCAXNNUKmVhLTpM4TrHUCIWNo6kY2HmIQTdm2QXbcLDAmQBj9bi24=
+X-Received: by 2002:aca:d6c8:: with SMTP id n191mr21412346oig.103.1579081768509;
+ Wed, 15 Jan 2020 01:49:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20191223211309.GA4609@sig21.net> <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
- <CAG_fn=VjzJSguf4ZB2x8Xn=U9MCHyfyqd2DVwPPC36t5+S+VsQ@mail.gmail.com> <38519837.OfHf9z5LDp@kreacher>
-In-Reply-To: <38519837.OfHf9z5LDp@kreacher>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 15 Jan 2020 10:10:48 +0100
-Message-ID: <CAG_fn=UwBjv94QKjrMR1cd_ZvzX-SuTYoMo7pHFSZNGuQvUxxg@mail.gmail.com>
-Subject: Re: init_on_free breaks hibernate
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Johannes Stezenbach <js@sig21.net>, Pavel Machek <pavel@ucw.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org
+References: <20200115063410.131692-1-hsinyi@chromium.org>
+In-Reply-To: <20200115063410.131692-1-hsinyi@chromium.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Jan 2020 10:49:17 +0100
+Message-ID: <CAJZ5v0jng1hpPzYUcPj96G9c8aqNYCwDqLHyQEVC9tD=F1dObw@mail.gmail.com>
+Subject: Re: [PATCH v5] reboot: support offline CPUs before reboot
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Pavankumar Kondeti <pkondeti@codeaurora.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Aaro Koskinen <aaro.koskinen@nokia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 11:36 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Wed, Jan 15, 2020 at 7:35 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 >
-> On Tuesday, January 14, 2020 12:38:53 PM CET Alexander Potapenko wrote:
-> > > > Strange about the resume=/dev/vda, it worked for me the way I described it.
-> > > > Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda.
-> > > Indeed, for me it's 253:0, and resuming from console works with that number.
-> > >
-> > > > > The memory corruption is also reproducible for me, taking a look.
-> > > >
-> >
-> > I think I know what is causing the problem.
-> > Upon resume the free pages may contain stale information from the
-> > kernel that initiated the resume.
-> > There's clear_free_pages()
-> > (https://elixir.bootlin.com/linux/latest/source/kernel/power/snapshot.c#L1148)
-> > that clears the pages in the case CONFIG_PAGE_POISONING_ZERO is
-> > enabled, we just need to reuse it for init_on_free.
-> > See the potential fix below.
-> >
-> > Rafael, Pavel, I've noticed that in the setup suggested by Johannes
-> > even the defconfig kernel with heap initialization cannot hibernate
-> > more than twice, the third hibernate hangs.
-> > Is that a known problem?
+> Currently system reboots uses architecture specific codes (smp_send_stop)
+> to offline non reboot CPUs. Most architecture's implementation is looping
+> through all non reboot online CPUs and call ipi function to each of them. Some
+> architecture like arm64, arm, and x86... would set offline masks to cpu without
+> really offline them. This causes some race condition and kernel warning comes
+> out sometimes when system reboots.
 >
-> No, it is not.
+> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
+> migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
+> checking online cpus would be an empty loop. If architecture don't enable this
+> config, or some cpus somehow fails to offline, it would fallback to ipi
+> function.
+>
+> Opt in this config for architectures that support CONFIG_HOTPLUG_CPU.
+>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+> Change from v4:
+> * fix a few nits: naming, comments, remove Kconfig text...
+>
+> Change from v3:
+> * Opt in config for architectures that support CONFIG_HOTPLUG_CPU
+> * Merge function offline_secondary_cpus() and freeze_secondary_cpus()
+>   with an additional flag.
 
-Sorry for the typo. Actually, the defconfig _without_ heap
-initialization cannot hibernate more than twice.
+This does not seem to be a very good idea, since
+freeze_secondary_cpus() does much more than you need for reboot.
+
+For reboot, you basically only need to do something like this AFAICS:
+
+cpu_maps_update_begin();
+
+for_each_online_cpu(i) {
+        if (i != cpu)
+                _cpu_down(i, 1, CPUHP_OFFLINE);
+}
+cpu_hotplug_disabled++;
+
+cpu_maps_update_done();
+
+And you may put this into a function defined outside of CONFIG_PM_SLEEP.
+
+>
+> Change from v2:
+> * Add another config instead of configed by CONFIG_HOTPLUG_CPU
+
+So why exactly is this new Kconfig option needed?
+
+Everybody supporting CPU hotplug seems to opt in anyway.
+
+[cut]
+
+>
+> -int freeze_secondary_cpus(int primary)
+> +int freeze_secondary_cpus(int primary, bool reboot)
+>  {
+>         int cpu, error = 0;
+>
+> @@ -1237,11 +1237,13 @@ int freeze_secondary_cpus(int primary)
+>                 if (cpu == primary)
+>                         continue;
+>
+> -               if (pm_wakeup_pending()) {
+> +#ifdef CONFIG_PM_SLEEP
+> +               if (!reboot && pm_wakeup_pending()) {
+>                         pr_info("Wakeup pending. Abort CPU freeze\n");
+>                         error = -EBUSY;
+>                         break;
+>                 }
+> +#endif
+
+Please avoid using #ifdefs in function bodies.  This makes the code
+hard to maintain in the long term.
+
+>
+>                 trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
+>                 error = _cpu_down(cpu, 1, CPUHP_OFFLINE);
+> @@ -1250,7 +1252,9 @@ int freeze_secondary_cpus(int primary)
+>                         cpumask_set_cpu(cpu, frozen_cpus);
+>                 else {
+>                         pr_err("Error taking CPU%d down: %d\n", cpu, error);
+> -                       break;
+> +                       /* When rebooting, offline as many CPUs as possible. */
+> +                       if (!reboot)
+> +                               break;
+>                 }
+>         }
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index c4d472b7f1b4..12f643b66e57 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -7,6 +7,7 @@
+>
+>  #define pr_fmt(fmt)    "reboot: " fmt
+>
+> +#include <linux/cpu.h>
+>  #include <linux/ctype.h>
+>  #include <linux/export.h>
+>  #include <linux/kexec.h>
+> @@ -220,7 +221,9 @@ void migrate_to_reboot_cpu(void)
+>         /* The boot cpu is always logical cpu 0 */
+>         int cpu = reboot_cpu;
+>
+> +#if !IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+>         cpu_hotplug_disable();
+> +#endif
+
+You can write this as
+
+if (!IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT))
+        cpu_hotplug_disable();
+
+That's what IS_ENABLED() is there for.
+
+>
+>         /* Make certain the cpu I'm about to reboot on is online */
+>         if (!cpu_online(cpu))
+> @@ -231,6 +234,11 @@ void migrate_to_reboot_cpu(void)
+>
+>         /* Make certain I only run on the appropriate processor */
+>         set_cpus_allowed_ptr(current, cpumask_of(cpu));
+> +
+> +#if IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+> +       /* Offline other cpus if possible */
+> +       freeze_secondary_cpus(cpu, true);
+> +#endif
+
+The above comment applies here too.
+
+>  }
+>
+>  /**
+> --
