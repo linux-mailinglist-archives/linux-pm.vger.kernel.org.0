@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352C13B836
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 04:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6F413B83C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 04:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729077AbgAODkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 22:40:51 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:59385 "EHLO
+        id S1728911AbgAODlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 22:41:12 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:56633 "EHLO
         out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729045AbgAODkv (ORCPT
+        by vger.kernel.org with ESMTP id S1729048AbgAODkv (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 22:40:51 -0500
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 44B732213F;
+        by mailout.nyi.internal (Postfix) with ESMTP id 957DD22131;
         Tue, 14 Jan 2020 22:40:50 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
   by compute5.internal (MEProxy); Tue, 14 Jan 2020 22:40:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=1dk5aijTk6w4v
-        CQgyLDInAxNbaNiMI7LvAOenwMv7lM=; b=YddlsDuS3TEiWMDGBvt7Sbx60qxiM
-        2A+9yvh2j+O7FBwABKkaPc5KR8WkMJwgVzNeysXQ/ck9BBkJyoJhcERz17Ur8+WQ
-        Z8TY+2YVWT4/NdFzpkZMcvfnRh8Mzylda5HWks5Qkt25PmWfrpT2XW5jKrorev2m
-        KLpF2Zg6L/vmkpCHDBWqaQlAcx85lk4pqPXovDuxTxIDlqMwg1BqkULaWzQRwYWZ
-        JLjeh4etx7cRqKIAJLEoSvy4bIdIVs+1RWyBoAn4dydyX7uYD/k1IDTrlmzizsR8
-        PNlTrFXYQ6moFZ35Odd1J85+YtycVJkxkz996eYsJK2riOPaZZgQPVy0A==
+        :mime-version:content-transfer-encoding; s=fm1; bh=xScHInzV3pGYC
+        GSlKPZMPOWxtY3Fnc4q0/FsYlG3OLs=; b=ahJ0WMUaBq5GJoBURKIBPxBWo+VkF
+        SsOOGKRlG2c+CR6dyZR7Eft4RVTDgPdLZu8zIHTgTZDn0a2ENIKuUNTLlBYkPbli
+        dfYpSiQ2m3RTHaeRer5YgoTmDfQIz3nJa3t2Yv2ugHqFUyD0+Ac+rZTFHUUMe1gb
+        YNyoKHmZ5T1y7uRJw0Fsn69dokf/wwYOWiAhAvWW6rwi1C42qUd7gFOTgYwGR9Sk
+        l65zfDLsCmDYDaPj7RURLF09kV8V/S8BCkbC7QeZjY24fLwHRw+eT1DKHZMQ6CvP
+        7OFqneqa2pf7AaR9yzvlEP7lKkBwTQC8mm4Ds6adjiTJ7y2OwdA2sW44g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=1dk5aijTk6w4vCQgyLDInAxNbaNiMI7LvAOenwMv7lM=; b=OlJUdP6t
-        gBxPK8GM31/AoobOTrFPvkp3BYnmmJYeOyOA2oXOxIMm3Wo36ts++D9At/ljRtUa
-        CGgXEs3TvPm3gU6Y6qL4Q5cV2vZJtAOhNH8mmSRSMwlVFXXLArbc4/QVyxMr37ay
-        9wXyaphK9fdYl7KtzFWPHMzIykHoZ7h3v5sV5SqV3w+fq2pfth3yfbyYTG1wWJlD
-        4WvUL8LuGDaQgeOdT02S3/zG43MAB+SYqR1Uza/gSG5YS/OrxIaWggtjcHIyYA5g
-        iwDlhBv1kCwj6qfSi+EpZY2CmPYUVbQ96aHnsNSvlI7qyQjsIUkSam71/qbxVo0M
-        mziuMAYFjsdAmA==
-X-ME-Sender: <xms:wokeXioT-QrPuBhblJbvXrk_ROS-jjQRHTf6Z9eC_Wb4aLLVQZVS1A>
+        fm1; bh=xScHInzV3pGYCGSlKPZMPOWxtY3Fnc4q0/FsYlG3OLs=; b=wXzqhRwu
+        k4x5z8PuP1ucVTKBjnwPRyG2sWniGCl1O7GFrUvRMvM6IPwQ9PnstkxGSXhJUtjA
+        KHH+An/Ie2dnRlN2DkUC5gSV8UVxVO2GwfU1jYm8gzdJpP3Q2NdaLXdvcZcSvTw0
+        2WdLGZs4NE8xz5X4TOG4pvB3Bm7MsfKYkYEky+73SVYWOfQuxoUPi2SX5jPz3y1y
+        gJW1xW2V5+quCyCeDp4Yt7FnNBroy8e4f9oq9VdtBpdXsUigdnYzwzrRwDHRBUAN
+        P7PLG5LLCdfgJStGYywGTPw8cBI2VZxUL4uYnFE1nvxJmQkKKR8csfqBcWXNilUU
+        xw1QD2TYAD42Vg==
+X-ME-Sender: <xms:wokeXvpoO37uIL5n04N2WI6qZm9i72SF2tVIKxuE4NYKl2r0w8QXvg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtddvgdeitdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -44,21 +44,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtddvgdeitdcutefuodetggdote
     ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecukfhppe
     ejtddrudefhedrudegkedrudehudenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhu
     vghlsehshhholhhlrghnugdrohhrghenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:wokeXsUbLFhCSwGKXhwknfiVKLEL-8O0WfbZT3C8TgEQEny28xxSgg>
-    <xmx:wokeXvPEBgyoIYtkkVoU_k53L9_IUzQXl0n8LOU7x7_7THH8LsjNDg>
-    <xmx:wokeXgC9ksIfPf-PwJgy_aVLQHLyzGK94sKfguts2nXR8w7vartxNA>
-    <xmx:wokeXvsHvgr0jgXVqF281rlhgaq4VibBve-XPWTwBPLxBZfIWGelYQ>
+X-ME-Proxy: <xmx:wokeXhAUaetD-urlZghgWgtQe44fqbnYmjDAINQgs6uZQnbJdovmtg>
+    <xmx:wokeXoM483QPS5a2ii-TRFxxuU6j4i2LAh5403H-0JmAsIagKPFFIA>
+    <xmx:wokeXshWnvZbhRnjF4fUMjYe3XtYzUp3cm24lSE1HqptfUo2OKsipQ>
+    <xmx:wokeXlxEyVpqA8c6bwBMB7nSx9N1YpWNRXoHu1gGoi7HIjFcYhIAzg>
 Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id C6B0C30607B0;
-        Tue, 14 Jan 2020 22:40:49 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 259FB30607CD;
+        Tue, 14 Jan 2020 22:40:50 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>
 Cc:     Oskari Lemmela <oskari@lemmela.net>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v4 1/4] power: supply: axp20x_usb_power: Use a match structure
-Date:   Tue, 14 Jan 2020 21:40:45 -0600
-Message-Id: <20200115034048.24901-2-samuel@sholland.org>
+Subject: [PATCH v4 2/4] power: supply: axp20x_usb_power: Allow offlining
+Date:   Tue, 14 Jan 2020 21:40:46 -0600
+Message-Id: <20200115034048.24901-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200115034048.24901-1-samuel@sholland.org>
 References: <20200115034048.24901-1-samuel@sholland.org>
@@ -69,174 +69,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Instead of ad-hoc variant ID checks throughout the code, let's start
-moving the variant-specific details to a match structure. This allows
-for future flexibility, and it better matches the other axp20x power
-supply drivers.
+AXP803/AXP813 have a flag that enables/disables the USB power supply
+input. Allow control of this flag via the ONLINE property on those
+variants.
 
-This commit removes most variant checks from axp20x_usb_power_probe().
-Other parts of the driver still do ID matching; they are left unchanged
-for now.
+It may be necessary to offline the USB power supply input when using
+the USB port in OTG mode, or to allow userspace to disable charging.
+
+When the USB VBUS input is disabled via the PATH_SEL bit, the VBUS_USED
+bit in PWR_INPUT_STATUS is cleared, so there is no change needed when
+getting the property.
 
 Reviewed-by: Chen-Yu Tsai <wens@csie.org>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
- drivers/power/supply/axp20x_usb_power.c | 86 ++++++++++++++++---------
- 1 file changed, 57 insertions(+), 29 deletions(-)
+ drivers/power/supply/axp20x_usb_power.c | 30 +++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index dd3f3f12e41d..cd7071057457 100644
+index cd7071057457..f14736041c41 100644
 --- a/drivers/power/supply/axp20x_usb_power.c
 +++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -405,6 +405,50 @@ static const struct power_supply_desc axp22x_usb_power_desc = {
- 	.set_property = axp20x_usb_power_set_property,
- };
+@@ -29,6 +29,9 @@
  
-+static const char * const axp20x_irq_names[] = {
-+	"VBUS_PLUGIN",
-+	"VBUS_REMOVAL",
-+	"VBUS_VALID",
-+	"VBUS_NOT_VALID",
-+	NULL
-+};
+ #define AXP20X_USB_STATUS_VBUS_VALID	BIT(2)
+ 
++#define AXP20X_VBUS_PATH_SEL		BIT(7)
++#define AXP20X_VBUS_PATH_SEL_OFFSET	7
 +
-+static const char * const axp22x_irq_names[] = {
-+	"VBUS_PLUGIN",
-+	"VBUS_REMOVAL",
-+	NULL
-+};
+ #define AXP20X_VBUS_VHOLD_uV(b)		(4000000 + (((b) >> 3) & 7) * 100000)
+ #define AXP20X_VBUS_VHOLD_MASK		GENMASK(5, 3)
+ #define AXP20X_VBUS_VHOLD_OFFSET	3
+@@ -263,6 +266,16 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+ 	return 0;
+ }
+ 
++static int axp813_usb_power_set_online(struct axp20x_usb_power *power,
++				       int intval)
++{
++	int val = !intval << AXP20X_VBUS_PATH_SEL_OFFSET;
 +
-+struct axp_data {
-+	const struct power_supply_desc	*power_desc;
-+	const char * const		*irq_names;
-+	enum axp20x_variants		axp20x_id;
-+};
++	return regmap_update_bits(power->regmap,
++				  AXP20X_VBUS_IPSOUT_MGMT,
++				  AXP20X_VBUS_PATH_SEL, val);
++}
 +
-+static const struct axp_data axp202_data = {
-+	.power_desc	= &axp20x_usb_power_desc,
-+	.irq_names	= axp20x_irq_names,
-+	.axp20x_id	= AXP202_ID,
-+};
-+
-+static const struct axp_data axp221_data = {
-+	.power_desc	= &axp22x_usb_power_desc,
-+	.irq_names	= axp22x_irq_names,
-+	.axp20x_id	= AXP221_ID,
-+};
-+
-+static const struct axp_data axp223_data = {
-+	.power_desc	= &axp22x_usb_power_desc,
-+	.irq_names	= axp22x_irq_names,
-+	.axp20x_id	= AXP223_ID,
-+};
-+
-+static const struct axp_data axp813_data = {
-+	.power_desc	= &axp22x_usb_power_desc,
-+	.irq_names	= axp22x_irq_names,
-+	.axp20x_id	= AXP813_ID,
-+};
-+
- static int configure_iio_channels(struct platform_device *pdev,
- 				  struct axp20x_usb_power *power)
+ static int axp20x_usb_power_set_voltage_min(struct axp20x_usb_power *power,
+ 					    int intval)
  {
-@@ -440,12 +484,7 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
- 	struct power_supply_config psy_cfg = {};
- 	struct axp20x_usb_power *power;
--	static const char * const axp20x_irq_names[] = { "VBUS_PLUGIN",
--		"VBUS_REMOVAL", "VBUS_VALID", "VBUS_NOT_VALID", NULL };
--	static const char * const axp22x_irq_names[] = {
--		"VBUS_PLUGIN", "VBUS_REMOVAL", NULL };
--	const char * const *irq_names;
--	const struct power_supply_desc *usb_power_desc;
-+	const struct axp_data *axp_data;
- 	int i, irq, ret;
+@@ -344,6 +357,11 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
+ 	struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
  
- 	if (!of_device_is_available(pdev->dev.of_node))
-@@ -461,9 +500,9 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_ONLINE:
++		if (power->axp20x_id != AXP813_ID)
++			return -EINVAL;
++		return axp813_usb_power_set_online(power, val->intval);
++
+ 	case POWER_SUPPLY_PROP_VOLTAGE_MIN:
+ 		return axp20x_usb_power_set_voltage_min(power, val->intval);
  
- 	platform_set_drvdata(pdev, power);
--	power->axp20x_id = (enum axp20x_variants)of_device_get_match_data(
--								&pdev->dev);
- 
-+	axp_data = of_device_get_match_data(&pdev->dev);
-+	power->axp20x_id = axp_data->axp20x_id;
- 	power->regmap = axp20x->regmap;
- 
- 	if (power->axp20x_id == AXP202_ID) {
-@@ -481,18 +520,6 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 
- 		if (ret)
- 			return ret;
--
--		usb_power_desc = &axp20x_usb_power_desc;
--		irq_names = axp20x_irq_names;
--	} else if (power->axp20x_id == AXP221_ID ||
--		   power->axp20x_id == AXP223_ID ||
--		   power->axp20x_id == AXP813_ID) {
--		usb_power_desc = &axp22x_usb_power_desc;
--		irq_names = axp22x_irq_names;
--	} else {
--		dev_err(&pdev->dev, "Unsupported AXP variant: %ld\n",
--			axp20x->variant);
--		return -EINVAL;
- 	}
- 
- 	if (power->axp20x_id == AXP813_ID) {
-@@ -504,17 +531,18 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 	psy_cfg.of_node = pdev->dev.of_node;
- 	psy_cfg.drv_data = power;
- 
--	power->supply = devm_power_supply_register(&pdev->dev, usb_power_desc,
-+	power->supply = devm_power_supply_register(&pdev->dev,
-+						   axp_data->power_desc,
- 						   &psy_cfg);
- 	if (IS_ERR(power->supply))
- 		return PTR_ERR(power->supply);
- 
- 	/* Request irqs after registering, as irqs may trigger immediately */
--	for (i = 0; irq_names[i]; i++) {
--		irq = platform_get_irq_byname(pdev, irq_names[i]);
-+	for (i = 0; axp_data->irq_names[i]; i++) {
-+		irq = platform_get_irq_byname(pdev, axp_data->irq_names[i]);
- 		if (irq < 0) {
- 			dev_warn(&pdev->dev, "No IRQ for %s: %d\n",
--				 irq_names[i], irq);
-+				 axp_data->irq_names[i], irq);
- 			continue;
- 		}
- 		irq = regmap_irq_get_virq(axp20x->regmap_irqc, irq);
-@@ -522,7 +550,7 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 				axp20x_usb_power_irq, 0, DRVNAME, power);
- 		if (ret < 0)
- 			dev_warn(&pdev->dev, "Error requesting %s IRQ: %d\n",
--				 irq_names[i], ret);
-+				 axp_data->irq_names[i], ret);
- 	}
- 
- 	INIT_DELAYED_WORK(&power->vbus_detect, axp20x_usb_power_poll_vbus);
-@@ -544,16 +572,16 @@ static int axp20x_usb_power_remove(struct platform_device *pdev)
- static const struct of_device_id axp20x_usb_power_match[] = {
- 	{
- 		.compatible = "x-powers,axp202-usb-power-supply",
--		.data = (void *)AXP202_ID,
-+		.data = &axp202_data,
- 	}, {
- 		.compatible = "x-powers,axp221-usb-power-supply",
--		.data = (void *)AXP221_ID,
-+		.data = &axp221_data,
- 	}, {
- 		.compatible = "x-powers,axp223-usb-power-supply",
--		.data = (void *)AXP223_ID,
-+		.data = &axp223_data,
- 	}, {
- 		.compatible = "x-powers,axp813-usb-power-supply",
--		.data = (void *)AXP813_ID,
-+		.data = &axp813_data,
- 	}, { /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, axp20x_usb_power_match);
+@@ -363,6 +381,18 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
+ static int axp20x_usb_power_prop_writeable(struct power_supply *psy,
+ 					   enum power_supply_property psp)
+ {
++	struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
++
++	/*
++	 * The VBUS path select flag works differently on on AXP288 and newer:
++	 *  - On AXP20x and AXP22x, the flag enables VBUS (ignoring N_VBUSEN).
++	 *  - On AXP288 and AXP8xx, the flag disables VBUS (ignoring N_VBUSEN).
++	 * We only expose the control on variants where it can be used to force
++	 * the VBUS input offline.
++	 */
++	if (psp == POWER_SUPPLY_PROP_ONLINE)
++		return power->axp20x_id == AXP813_ID;
++
+ 	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN ||
+ 	       psp == POWER_SUPPLY_PROP_CURRENT_MAX;
+ }
 -- 
 2.23.0
 
