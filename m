@@ -2,165 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B7913B833
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 04:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF61613B949
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 06:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729098AbgAODkz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 22:40:55 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:38093 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728879AbgAODkw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 22:40:52 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 422AD22139;
-        Tue, 14 Jan 2020 22:40:51 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 14 Jan 2020 22:40:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=Zmlb3PnzNuoK+
-        2LPTUjNJAzFl9+II7eFSLO3XnnS27A=; b=IieO7eXKZqxx0fy3qymRj23Uteh7L
-        iDCLZQ8kHa9H0AQmVQTQ/gWT4Do7lZ4CUD6EBChy3hlvq93hpiNjymAGli1ce4GI
-        863oISQYFjCuPuhOrgClHsOrF8LI+faJPa+Y8H1nphH3WZ/BOeOZ5iCbXFOL1MQD
-        NAWJwBfaLRMwdqbK0SZdaFpu1nh3XfItqPi5J9BTZ5wYXUuG9Q5WLptZer3Cpape
-        +HaYz+/mRdosD844XSrzEZXeNy0HFZqNSDHzDTeM5TXvA8XCO69YmNrniw4WZqE2
-        /P8l/jTPLSlGB8KemIk7a0syfzMoT2yi0DfxQQSJZafWt1YBiJ4PnYGeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=Zmlb3PnzNuoK+2LPTUjNJAzFl9+II7eFSLO3XnnS27A=; b=CnqsbRPU
-        mazQZmpw5MqgXc8McNp2AqNohxEDbY9AOy3AZIC+f0RmGygTUR/sb38lT8JHxClj
-        BVPk6CbXM8TlvDCSIq3lD98on4A2Ulfmk2RZ5I6GvvjY6BKUXyTosP+SxtUzvKHi
-        ejVohwqkPNvGqFrg0964OTs0PzEkdrMv3OUOUjckJmfgz6FwYwBCv0XGJ9E/rHa8
-        COAwJX8z6/LqOoEbi3L2CoGNH1AMpIWbce6WIns5DA+BWoSEloym0bmWLXtx2etC
-        OPGNaUIJGvBGmzCQgvrOAb+wJ1jBeJx7AeetDfKndZZWTRjaB+ZAQnQT4Y5IoB0E
-        /7qQImf/d74pnw==
-X-ME-Sender: <xms:w4keXkRxoafwSxP0KLNQbxr895fzcuxsulD7bKIjp0deDVXsW7MVBg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtddvgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecukfhppe
-    ejtddrudefhedrudegkedrudehudenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhu
-    vghlsehshhholhhlrghnugdrohhrghenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:w4keXgp5oNEsZvfI0_dYYqpizp8D-SYmdM9G62VpqQdlaiLGOoSfQg>
-    <xmx:w4keXiMRwZS8vk1iKI5RO-XUA6G8H08X4Yqp9ltsRcjexvIymGxSNQ>
-    <xmx:w4keXtDGIh0WBqdLAAXaapzovdoy-Q8oH_RFnWxPsvsdGpkZcl6WdQ>
-    <xmx:w4keXoERIz429ytckg4sUwSMe6cjSkeXfrKHSdIg4qPcP9KCGCemmA>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id CA4C530607B0;
-        Tue, 14 Jan 2020 22:40:50 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc:     Oskari Lemmela <oskari@lemmela.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v4 4/4] power: supply: axp20x_usb_power: Only poll while offline
-Date:   Tue, 14 Jan 2020 21:40:48 -0600
-Message-Id: <20200115034048.24901-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200115034048.24901-1-samuel@sholland.org>
-References: <20200115034048.24901-1-samuel@sholland.org>
+        id S1726100AbgAOF6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 00:58:14 -0500
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:38951 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbgAOF6O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 00:58:14 -0500
+Received: by mail-ua1-f65.google.com with SMTP id 73so5809026uac.6
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 21:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e5xJRkqeZeVuqWjzuTjcTAvJI4fzZrcr+Isw3uqYLKg=;
+        b=o+vsV3oMBFRJ1mv7DjQiU8XPXWxqrhMJgML2HsKufa6V56I+MLrFTdPDjwZPSsgTGb
+         RPljyQh7++xAIXl+sjGHAcqYF7B8DzcB6Oo1DobaDz5W3DISZkeQpCFAmjS/FVTzaYfX
+         Lv4sSGxgPS+oxOZUR98FZokoBK0xXYuvPjAG/rV/Q+TOE5lOD9un0NuMfpcsCn3ySND0
+         AihW5IkU4QPEm66XCcNbaNWP82U5XaVpK/uGPVa4LI14xAFQVafishSL6JyPxtozxAgL
+         5lw5wlrwYUp0QXBNutVanw8TNPbMb5mYYPFGp1yOm9cZ2Inl7eOyR6eD7frdc9XswOGW
+         sY4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e5xJRkqeZeVuqWjzuTjcTAvJI4fzZrcr+Isw3uqYLKg=;
+        b=aBUEFBP0+liyDH4aRJ4DVL8BKYVVpAK/5HyM3rMe51xl7hO+nNcDU6S65JJM9Me0pD
+         VETQVR1pMIm6loUwrLx6/gQU9Y/vp+20sW9WeLoUFh51Hs8RyScnvJFAnW+5Hbd5mGoP
+         yn/6TrZPiqYxDkrr7sGCNEkiA5CjwY0NKGBvco0o2m6yzk3QZu8TJyNSBrEl6BmLhLAP
+         wu3oRGOXTjpdQBjVoxvi+yp5sM2fiYlEIsP9zAqOs8rmrapYDqOBzEvG09PaIbvJPVDm
+         sx8fofSmJtGbLBl284moU/pGmaMP/A/bQnMulRjjXc/+7LyvhdBdtnwfMnaZ2fLMH2U9
+         yUkw==
+X-Gm-Message-State: APjAAAVDbpp5Sgq3XhJj8gJEayu8O7VExHeIRDF+ceHcm4XqTbk7QSoz
+        xM6onzb4eEWa0CxbCyB/veW10/Brxabyk9K+QQIwwQ==
+X-Google-Smtp-Source: APXvYqyHRDquLaL0bEm7oQ9JtTMteQmR4X4JG9yvX/H3A2qtA1O/wnBD9raOEACyIMcJLv3MZehD7pa6uUYuo68Tdw4=
+X-Received: by 2002:ab0:2252:: with SMTP id z18mr12952463uan.60.1579067893051;
+ Tue, 14 Jan 2020 21:58:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200114190607.29339-1-f.fainelli@gmail.com> <20200114190607.29339-2-f.fainelli@gmail.com>
+In-Reply-To: <20200114190607.29339-2-f.fainelli@gmail.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Wed, 15 Jan 2020 11:28:02 +0530
+Message-ID: <CAHLCerO1OARY9OMDpGudSfBdmtRfeP_pYaE9=-Sn-10ZVjgXKA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] thermal: brcmstb_thermal: Do not use DT coefficients
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Investigation on the AXP803 shows that VBUS_PLUGIN/VBUS_REMOVAL IRQs are
-triggered on the rising/falling edge of AXP20X_PWR_STATUS_VBUS_USED. The
-reason IRQs do not arrive while N_VBUSEN/DRIVEVBUS is high is because
-AXP20X_PWR_STATUS_VBUS_USED also never goes high.
+On Wed, Jan 15, 2020 at 12:36 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> At the time the brcmstb_thermal driver and its binding were merged, the
+> DT binding did not make the coefficients properties a mandatory one,
+> therefore all users of the brcmstb_thermal driver out there have a non
+> functional implementation with zero coefficients. Even if these
+> properties were provided, the formula used for computation is incorrect.
+>
+> The coefficients are entirely process specific (right now, only 28nm is
+> supported) and not board or SoC specific, it is therefore appropriate to
+> hard code them in the driver given the compatibility string we are
+> probed with which has to be updated whenever a new process is
+> introduced.
+>
+> We remove the existing coefficients definition since subsequent patches
+> are going to add support for a new process and will introduce new
+> coefficients as well.
+>
+> Fixes: 9e03cf1b2dd5 ("thermal: add brcmstb AVS TMON driver")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-This also means that if VBUS is online, a VBUS_REMOVAL IRQ is received
-immediately on setting N_VBUSEN/DRIVEVBUS high (and VBUS_PLUGIN shortly
-after it is set back low). This was also verified to be the case when
-manually offlining VBUS through AXP20X_VBUS_PATH_SELECT.
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-As long as VBUS is online, a present->absent transition necessarily
-implies an online->offline transition. Since will cause an IRQ, there is
-no need to poll while VBUS is online.
-
-To ensure the driver's view of VBUS online status remains accurate,
-unconditionally poll once when receiving an IRQ and when resuming. If
-VBUS is still online at that time, polling will cease until the next
-VBUS_REMOVAL IRQ.
-
-Reviewed-by: Chen-Yu Tsai <wens@csie.org>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
- drivers/power/supply/axp20x_usb_power.c | 30 +++++++++++++++++--------
- 1 file changed, 21 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index 1732304bc96e..4fde24b5f35a 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -68,16 +68,32 @@ struct axp20x_usb_power {
- 	struct iio_channel *vbus_i;
- 	struct delayed_work vbus_detect;
- 	unsigned int old_status;
-+	unsigned int online;
- 	unsigned int num_irqs;
- 	unsigned int irqs[];
- };
- 
-+static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
-+{
-+	/*
-+	 * Polling is only necessary while VBUS is offline. While online, a
-+	 * present->absent transition implies an online->offline transition
-+	 * and will triger the VBUS_REMOVAL IRQ.
-+	 */
-+	if (power->axp20x_id >= AXP221_ID && !power->online)
-+		return true;
-+
-+	return false;
-+}
-+
- static irqreturn_t axp20x_usb_power_irq(int irq, void *devid)
- {
- 	struct axp20x_usb_power *power = devid;
- 
- 	power_supply_changed(power->supply);
- 
-+	mod_delayed_work(system_wq, &power->vbus_detect, DEBOUNCE_TIME);
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -97,17 +113,11 @@ static void axp20x_usb_power_poll_vbus(struct work_struct *work)
- 		power_supply_changed(power->supply);
- 
- 	power->old_status = val;
-+	power->online = val & AXP20X_PWR_STATUS_VBUS_USED;
- 
- out:
--	mod_delayed_work(system_wq, &power->vbus_detect, DEBOUNCE_TIME);
--}
--
--static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
--{
--	if (power->axp20x_id >= AXP221_ID)
--		return true;
--
--	return false;
-+	if (axp20x_usb_vbus_needs_polling(power))
-+		mod_delayed_work(system_wq, &power->vbus_detect, DEBOUNCE_TIME);
- }
- 
- static int axp20x_get_current_max(struct axp20x_usb_power *power, int *val)
-@@ -515,6 +525,8 @@ static int axp20x_usb_power_resume(struct device *dev)
- 	while (i < power->num_irqs)
- 		enable_irq(power->irqs[i++]);
- 
-+	mod_delayed_work(system_wq, &power->vbus_detect, DEBOUNCE_TIME);
-+
- 	return 0;
- }
- #endif
--- 
-2.23.0
-
+> ---
+>  drivers/thermal/broadcom/brcmstb_thermal.c | 31 +++++++---------------
+>  1 file changed, 9 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+> index 5825ac581f56..680f1a070606 100644
+> --- a/drivers/thermal/broadcom/brcmstb_thermal.c
+> +++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+> @@ -49,7 +49,7 @@
+>  #define AVS_TMON_TP_TEST_ENABLE                0x20
+>
+>  /* Default coefficients */
+> -#define AVS_TMON_TEMP_SLOPE            -487
+> +#define AVS_TMON_TEMP_SLOPE            487
+>  #define AVS_TMON_TEMP_OFFSET           410040
+>
+>  /* HW related temperature constants */
+> @@ -108,23 +108,12 @@ struct brcmstb_thermal_priv {
+>         struct thermal_zone_device *thermal;
+>  };
+>
+> -static void avs_tmon_get_coeffs(struct thermal_zone_device *tz, int *slope,
+> -                               int *offset)
+> -{
+> -       *slope = thermal_zone_get_slope(tz);
+> -       *offset = thermal_zone_get_offset(tz);
+> -}
+> -
+>  /* Convert a HW code to a temperature reading (millidegree celsius) */
+>  static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>                                         u32 code)
+>  {
+> -       const int val = code & AVS_TMON_TEMP_MASK;
+> -       int slope, offset;
+> -
+> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+> -
+> -       return slope * val + offset;
+> +       return (AVS_TMON_TEMP_OFFSET -
+> +               (int)((code & AVS_TMON_TEMP_MAX) * AVS_TMON_TEMP_SLOPE));
+>  }
+>
+>  /*
+> @@ -136,20 +125,18 @@ static inline int avs_tmon_code_to_temp(struct thermal_zone_device *tz,
+>  static inline u32 avs_tmon_temp_to_code(struct thermal_zone_device *tz,
+>                                         int temp, bool low)
+>  {
+> -       int slope, offset;
+> -
+>         if (temp < AVS_TMON_TEMP_MIN)
+> -               return AVS_TMON_TEMP_MAX; /* Maximum code value */
+> -
+> -       avs_tmon_get_coeffs(tz, &slope, &offset);
+> +               return AVS_TMON_TEMP_MAX;       /* Maximum code value */
+>
+> -       if (temp >= offset)
+> +       if (temp >= AVS_TMON_TEMP_OFFSET)
+>                 return 0;       /* Minimum code value */
+>
+>         if (low)
+> -               return (u32)(DIV_ROUND_UP(offset - temp, abs(slope)));
+> +               return (u32)(DIV_ROUND_UP(AVS_TMON_TEMP_OFFSET - temp,
+> +                                         AVS_TMON_TEMP_SLOPE));
+>         else
+> -               return (u32)((offset - temp) / abs(slope));
+> +               return (u32)((AVS_TMON_TEMP_OFFSET - temp) /
+> +                             AVS_TMON_TEMP_SLOPE);
+>  }
+>
+>  static int brcmstb_get_temp(void *data, int *temp)
+> --
+> 2.17.1
+>
