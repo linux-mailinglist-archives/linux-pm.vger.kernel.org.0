@@ -2,65 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA1213C268
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 14:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E35213C270
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 14:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728894AbgAONQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 08:16:58 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34615 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726088AbgAONQ6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 08:16:58 -0500
-Received: by mail-wr1-f67.google.com with SMTP id t2so15723967wrr.1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 05:16:56 -0800 (PST)
+        id S1729037AbgAONRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 08:17:18 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42155 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbgAONRR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 08:17:17 -0500
+Received: by mail-wr1-f65.google.com with SMTP id q6so15638032wro.9
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 05:17:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Febzu48nm38swSB4yv53w8ZbAHsNiPuEZoET1MIdbFk=;
-        b=I5cyLWbG9/E2JpulXcIZacAJox+S7cUlJ2UB4DTHo/LzT2Pl+r5lD13gYCgjdmJDd3
-         MU7eFD4CI1Q1APzsgnZvguLppOq9MUKMbswK+KCn6vJIEeMM9q3ArZjS4KSNBVJv3F1/
-         zxYyJpioAR2LZciUGfMqplo/+wai/B8yAwGVJGpaPYdfPu2aJT/LTKrI1JDZvKsNxrEi
-         mWE+rpK4d5d+MLQo8Ydi0bmW+M5ktMk9yFoHardnQPWLVCB//H8Xd3YL+XeGU5hlp61V
-         VT+HAfUMpgqB26ps31YHZd6hJYP5QcDpuA0QRJEcq3/mLar3J1EkWYC+s7jCEmbhFhsn
-         iOQg==
+        bh=47hCYL70WTpNP7Akm85PDFCwata8ahjVYsDrpIntcWE=;
+        b=qd3uTQ1T83OFbtoQnVV+IV6ZDGMFyymqNr2oMcSseX8vVi9cSJmW0PHP8p+cbBFgfK
+         Tlq2asGySjyuBzsuUkt2TasDhsjLfiqNQhuEi2VLGS16rMUCjkUSXSFLuQoibjvYGiUx
+         nBei54/f75wpBdRDYfEO+ynfxHfGHe+cq8Y8uoNL1TEenlD3tFpzGCXzTZmiag6pmDCP
+         DMxoMqEMj5afTYj8SxvrocJXVKcjzjykiiDHqbHhtqTpoLJjlZefH1SYociI33bcUjaF
+         EKKjRC5NwViCk2yYRcxSDTby03wquDHmr3eGKoChnpWIC3r8pv46t3WAL0x8je6rSU+r
+         oHXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Febzu48nm38swSB4yv53w8ZbAHsNiPuEZoET1MIdbFk=;
-        b=Y+lHBW/3WIRPnLb2Hl2MCYH2nW60KYWTtw/wod04msgH6qHGviM16DI5SHVc3rvCoL
-         Fh5H8MCFBX9oPScg56ADLZ3YMIgq2/0h6a1imxmNsh/SabnPfBJVkwR1lQv4EfnTRZtH
-         lGZdGnObNQdbxZRq4TXWZ8fWsNEPhYAvSb61y8ofYAmt6vZsTAfx4ieCv1Vy2NtJDJ6H
-         yJ+33XgHqcgsumfv3grGuTfgPn9hVKK3wBujpbV/z2Xy4uQh5ojOvjIAF022ImWdB5Js
-         99NeZVQmkdwqTXWqtvJ3qooAdtrWYURurz9y1gSZnHdCDjcJ4hj4hGMnbPNto0anu6f5
-         ZJig==
-X-Gm-Message-State: APjAAAXbzWguIybpeWoXK2Oh+wVEdcpfC12uNI3AmwPxId9Zol+FHwjj
-        5Y9+PBy/1c3v+i2pYdiQS4w3WA==
-X-Google-Smtp-Source: APXvYqydHIlsnNzw8ziGzauCIehBfk85fBq4qN64mM8vv0zB41OXrtzXFh+Gfj/9aP9P1XlXyNPvHg==
-X-Received: by 2002:adf:fc08:: with SMTP id i8mr32834739wrr.82.1579094216052;
-        Wed, 15 Jan 2020 05:16:56 -0800 (PST)
+        bh=47hCYL70WTpNP7Akm85PDFCwata8ahjVYsDrpIntcWE=;
+        b=mjdI/Ha/km4VRVymesrb5wVcWockXY9pfDoON8A7vaHBgV/d9q1oOp3NpQ3ZN8GYdn
+         9pLauyIc5K64+wXgMp2ZxgnTnvPY7w4yXSEfYcM5hpJ3O6+eIcst9uWaLX8aOJZiQjzH
+         qSHavxYQjIrI455NXc2v3t1gp+WvoOCwGrgk4J3wpzGPj2xwW7Qc5G5V4UzbULkulNxi
+         PdUOTlABbxz6HLUFcYHHCJ1goUCpEiSYCoRYJqlfMwrQ9gMaS8fuxHy1o3xJuB3LseW0
+         Axs1hYZ7U2U4h/tI3PXU/T79IMd+g3dq2BAiWJmuL3uqfQyiUVJrEa0vOZoyjkcfozJq
+         wT+g==
+X-Gm-Message-State: APjAAAXAuPaalaz96FoMMGyDK4m43YJDbFgbUjv1OpHi5sT6USkUul5g
+        tKgyI9g+W5kCyTrobeJNoVm+Pg==
+X-Google-Smtp-Source: APXvYqzGkd7OWJa2tDkeMu9YeeEjZwvNadbTG5GzFgmm/KAxBLlFoPbgA7VGXtyC0jQmxltswYp7nA==
+X-Received: by 2002:a5d:50cf:: with SMTP id f15mr28994855wrt.381.1579094235856;
+        Wed, 15 Jan 2020 05:17:15 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:ac8b:fcee:b80:ebae? ([2a01:e34:ed2f:f020:ac8b:fcee:b80:ebae])
-        by smtp.googlemail.com with ESMTPSA id z124sm25444607wmc.20.2020.01.15.05.16.54
+        by smtp.googlemail.com with ESMTPSA id w13sm24302200wru.38.2020.01.15.05.17.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2020 05:16:55 -0800 (PST)
-Subject: Re: [PATCH v3 0/6] brcmstb_thermal updates for new processes
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Markus Mayer <mmayer@broadcom.com>,
-        "maintainer:BROADCOM STB AVS TMON DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
+        Wed, 15 Jan 2020 05:17:15 -0800 (PST)
+Subject: Re: [PATCH] thermal: rcar_thermal: Use usleep_range() instead of
+ udelay()
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20200114190607.29339-1-f.fainelli@gmail.com>
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20200115125417.5263-1-geert+renesas@glider.be>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -116,12 +110,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <a8f71294-b223-f24d-ca19-6b3324b9ace0@linaro.org>
-Date:   Wed, 15 Jan 2020 14:16:54 +0100
+Message-ID: <09365ed8-6fcc-cd9a-c2b7-2e12a2a12017@linaro.org>
+Date:   Wed, 15 Jan 2020 14:17:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200114190607.29339-1-f.fainelli@gmail.com>
+In-Reply-To: <20200115125417.5263-1-geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -130,46 +124,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/01/2020 20:06, Florian Fainelli wrote:
-> Hi,
+On 15/01/2020 13:54, Geert Uytterhoeven wrote:
+> rcar_thermal_update_temp() takes a mutex, so it is always called in a
+> context that can sleep.  Hence replace the 300 µs busy loop by a call to
+> usleep_range(), to allow other threads to run.
 > 
-> This patch series contains a bug fix for the existing platforms and then
-> paves the way for adding support for Broadcom STB's latest chips in 16nm
-> processes, and finally updates the driver with pecularities introduced
-> with the 16nm, like the lack of interrupt notification from the HW.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/thermal/rcar_thermal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Please queue up the first patch for -stable if you want, thanks!
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index d0873de718da9218..a8dd96d2d24c4ce5 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -219,7 +219,7 @@ static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
+>  		 * to get stable temperature.
+>  		 * see "Usage Notes" on datasheet
+>  		 */
+> -		udelay(300);
+> +		usleep_range(300, 400);
+>  
+>  		new = rcar_thermal_read(priv, THSSR) & CTEMP;
+>  		if (new == old) {
 > 
-> Changes in v3:
-> - do not change AVS_TMON_TEMP_MAX with AVS_TMON_TEMP_MASK
-> - use of of_device_get_match_data
-> - maintain function pointers back to of_device_id::data
-> 
-> Changes in v2:
-> 
-> - kept defined constants in patch #1 and keep using them for subsequent
->   patches
-> - add Reviewed-by tags to patches #3 through #6
-> - rebase against v5.5.-rc1
-> 
-> Florian Fainelli (6):
->   thermal: brcmstb_thermal: Do not use DT coefficients
->   thermal: brcmstb_thermal: Prepare to support a different process
->   dt-bindings: thermal: Define BCM7216 thermal sensor compatible
->   thermal: brcmstb_thermal: Add 16nm process thermal parameters
->   thermal: brcmstb_thermal: Restructure interrupt registration
->   thermal: brcmstb_thermal: Register different ops per process
-> 
->  .../bindings/thermal/brcm,avs-tmon.txt        |  8 +-
->  drivers/thermal/broadcom/brcmstb_thermal.c    | 96 +++++++++++--------
->  2 files changed, 64 insertions(+), 40 deletions(-)
 
 Applied to the testing branch. If there is no problem it will be merged
 to the linux-next branch.
 
   -- Daniel
-
-
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
