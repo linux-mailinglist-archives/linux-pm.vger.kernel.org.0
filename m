@@ -2,119 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9459B13B5F3
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 00:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1C713B70D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 02:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728746AbgANXg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 18:36:28 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:35726 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728757AbgANXgY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 18:36:24 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1579044983; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=7+8Ma8yfcl2diOB4I5famBBLS13KA3B5gNUsRjC85BE=; b=tgOcFVfA4qpnrmUsjd7xH5z4P2sUDqkFNJB4mR+hv2pzWC+6fi8zNMZkuZqgBPfnIxzU4bee
- /ANYff1hnVWZ6QliXsc4eTr8i9rYf/jcdkimnV358QQjZ/E5unIX9XUNjvHJ43QX+Xz4JgtE
- uqbe9mXmpmFjqEKe7aNS4zTo790=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e1e5076.7fad57bb9960-smtp-out-n02;
- Tue, 14 Jan 2020 23:36:22 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A47C1C4479F; Tue, 14 Jan 2020 23:36:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.46.162.237] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: daidavid1)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6722CC433CB;
-        Tue, 14 Jan 2020 23:36:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6722CC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=daidavid1@codeaurora.org
-Subject: Re: [PATCH v1 0/4] Split SDM845 interconnect nodes and consolidate
- RPMh support
-To:     Evan Green <evgreen@google.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, sboyd@kernel.org,
-        Lina Iyer <ilina@codeaurora.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>,
-        Alex Elder <elder@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-pm@vger.kernel.org
-References: <1576475925-20601-1-git-send-email-daidavid1@codeaurora.org>
- <CAE=gft6sxsZfvPZZXKqbEMjCH_hGKXp_1MS3qTAz6hmMPfn09A@mail.gmail.com>
-From:   David Dai <daidavid1@codeaurora.org>
-Message-ID: <df9e58ef-7b97-7456-09fb-c13f53207cbb@codeaurora.org>
-Date:   Tue, 14 Jan 2020 15:36:19 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1728879AbgAOBhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 20:37:53 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33536 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728848AbgAOBhx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 20:37:53 -0500
+Received: by mail-pl1-f195.google.com with SMTP id ay11so6068903plb.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 17:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zdsjxjvH/tUzmnwmoZCV321rPDTpQdI6rQfaTbsVcek=;
+        b=QtF3py1rm3eu6XA5nji+v+VyJkcjLjIc3YXtcyDs5jPzHYtKdo+D4Ih/7ihMTj17pA
+         ByVQfA4PTcgJVCJAg6UrUwuzDis4Ls9IjBJF/FTJyZQpAsyFwAAjPtz+NME9DIVzStb5
+         b1Vr3ZrPcqLk2YVpSdY91aK8x+hpToNe5mfhQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zdsjxjvH/tUzmnwmoZCV321rPDTpQdI6rQfaTbsVcek=;
+        b=U0Zik/Ns369ngT7U0eE3Z9qtzse7Rt+D/VIUtq4cxkis10h/qojj/GmkeEoO9GTsfi
+         xNaITlaOHHIRPBNXix7HtDyhy5YATFNQsvbpGw37XALnIFTIhIsNdL23pZDrw++yS8oJ
+         AxhiL7wJZp8gmJOLf4Ifod/NHCJyeAD2vS7WFbUYcMd0zY1rqY4I2uSzu2g4jJDOy2Dp
+         6hcMLv/Pyo33/UjWpiqifV9MYcB8xsFfcs0YtsCsXqmiWGsbnD6kODgbbsfUiPhvXQMV
+         lME3RYz9Lvp3/2RM3Ss00SNH0QggD6DCDaDSvBBEWyD7J2seeV0dwqPtkzxJCnmkC+Q9
+         go4Q==
+X-Gm-Message-State: APjAAAUxzf6M+GHD27p72nJvD8wNmSAnF/qgygkfQSyyb7vyZDmB0BDy
+        w/mDtjIyGr1AnKvXbxtBYBXLoA==
+X-Google-Smtp-Source: APXvYqz28WpmXl65RH3fAV23Fy7l4mAowqzKZ18QFkXC1WuOSJjgmtIlb3J9Cy51syq+QYmwbMGRLQ==
+X-Received: by 2002:a17:902:b087:: with SMTP id p7mr30291576plr.10.1579052272503;
+        Tue, 14 Jan 2020 17:37:52 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id y76sm19949275pfc.87.2020.01.14.17.37.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2020 17:37:52 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH] drivers: qcom: rpmh-rsc: Use rcuidle tracepoints for rpmh
+Date:   Tue, 14 Jan 2020 17:37:51 -0800
+Message-Id: <20200115013751.249588-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft6sxsZfvPZZXKqbEMjCH_hGKXp_1MS3qTAz6hmMPfn09A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Evan,
+This tracepoint is hit now that we call into the rpmh code from the cpu
+idle path. Let's move this to be an rcuidle tracepoint so that we avoid
+the RCU idle splat below
 
-On 1/7/2020 3:45 PM, Evan Green wrote:
-> On Sun, Dec 15, 2019 at 9:59 PM David Dai <daidavid1@codeaurora.org> wrote:
->> While there are no current consumers of the SDM845 interconnect device in
->> devicetree, take this opportunity to redefine the interconnect device nodes
->> as the previous definitions of using a single child node under the apps_rsc
->> device did not accurately capture the description of the hardware.
->> The Network-On-Chip (NoC) interconnect devices should be represented in a
->> manner akin to QCS404 platforms[1] where there is a separation of NoC devices
->> and its RPM/RPMh counterparts.
->>
->> The bcm-voter devices are representing the RPMh devices that the interconnect
->> providers need to communicate with and there can be more than one instance of
->> the Bus Clock Manager (BCM) which can live under different instances of Resource
->> State Coordinators (RSC). There are display use cases where consumers may need
->> to target a different bcm-voter (Some display specific RSC) than the default,
->> and there needs to be a way to represent this connection in devicetree.
-> So for my own understanding, the problem here is that things want to
-> vote for interconnect bandwidth within a specific RSC context? Where
-> normally the RSC context is simply "Apps@EL1", we might also have
-> "Apps@EL3" for trustzone, or in the case we're coding for,
-> "display-specific RSC context". I guess this context might stay on
-> even if Apps@EL1 votes are entirely discounted or off?
-That's correct, the state of those votes are tied to the state of that 
-execution environment. So even if the Apps CPU goes into a low power 
-mode, other context specific vote will still stick.
->   So then would
-> there be an additional interconnect provider for "display context RSC"
-> next to apps_bcm_voter? Would that expose all the same nodes as
-> apps_bcm_voter, or a different set of nodes?
+ =============================
+ WARNING: suspicious RCU usage
+ 5.4.10 #68 Tainted: G S
+ -----------------------------
+ drivers/soc/qcom/trace-rpmh.h:72 suspicious rcu_dereference_check() usage!
 
-We trim down the topology to what each execution environment needs, so 
-each EE really only "sees" a subset of the entire SoC's topology. In 
-this specific case, the display context RSC would only expose a small 
-subset of the topology that Apps@EL1 would see.
+ other info that might help us debug this:
 
->
-> Assuming it's exposing some of the same nodes as apps_bcm_voter, the
-> other way to do this would be increasing #interconnect-cells, and
-> putting the RSC context there. Did you choose not to go that way
-> because nearly all the clients would end up specifying the same thing
-> of "Apps@EL1"?
-That's correct, the majority of the consumers will stay with default 
-Apps@EL1 context.
+ RCU used illegally from idle CPU!
+ rcu_scheduler_active = 2, debug_locks = 1
+ RCU used illegally from extended quiescent state!
+ 5 locks held by swapper/2/0:
+  #0: ffffff81745d6ee8 (&(&genpd->slock)->rlock){+.+.}, at: genpd_lock_spin+0x1c/0x2c
+  #1: ffffff81745da6e8 (&(&genpd->slock)->rlock/1){....}, at: genpd_lock_nested_spin+0x24/0x34
+  #2: ffffff8174f2ca20 (&(&genpd->slock)->rlock/2){....}, at: genpd_lock_nested_spin+0x24/0x34
+  #3: ffffff8174f2c300 (&(&drv->client.cache_lock)->rlock){....}, at: rpmh_flush+0x48/0x24c
+  #4: ffffff8174f2c150 (&(&tcs->lock)->rlock){+.+.}, at: rpmh_rsc_write_ctrl_data+0x74/0x270
 
+ stack backtrace:
+ CPU: 2 PID: 0 Comm: swapper/2 Tainted: G S                5.4.10 #68
+ Call trace:
+  dump_backtrace+0x0/0x174
+  show_stack+0x20/0x2c
+  dump_stack+0xc8/0x124
+  lockdep_rcu_suspicious+0xe4/0x104
+  __tcs_buffer_write+0x230/0x2d0
+  rpmh_rsc_write_ctrl_data+0x210/0x270
+  rpmh_flush+0x84/0x24c
+  rpmh_domain_power_off+0x78/0x98
+  _genpd_power_off+0x40/0xc0
+  genpd_power_off+0x168/0x208
+  genpd_power_off+0x1e0/0x208
+  genpd_power_off+0x1e0/0x208
+  genpd_runtime_suspend+0x1ac/0x220
+  __rpm_callback+0x70/0xfc
+  rpm_callback+0x34/0x8c
+  rpm_suspend+0x218/0x4a4
+  __pm_runtime_suspend+0x88/0xac
+  psci_enter_domain_idle_state+0x3c/0xb4
+  cpuidle_enter_state+0xb8/0x284
+  cpuidle_enter+0x38/0x4c
+  call_cpuidle+0x3c/0x68
+  do_idle+0x194/0x260
+  cpu_startup_entry+0x24/0x28
+  secondary_start_kernel+0x150/0x15c
+
+Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+Reported-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+I think the commit that this is "Fixes"ing is a stable commit, but I'm
+not positive.
+
+ drivers/soc/qcom/rpmh-rsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+index e278fc11fe5c..b71822131f59 100644
+--- a/drivers/soc/qcom/rpmh-rsc.c
++++ b/drivers/soc/qcom/rpmh-rsc.c
+@@ -277,7 +277,7 @@ static void __tcs_buffer_write(struct rsc_drv *drv, int tcs_id, int cmd_id,
+ 		write_tcs_cmd(drv, RSC_DRV_CMD_MSGID, tcs_id, j, msgid);
+ 		write_tcs_cmd(drv, RSC_DRV_CMD_ADDR, tcs_id, j, cmd->addr);
+ 		write_tcs_cmd(drv, RSC_DRV_CMD_DATA, tcs_id, j, cmd->data);
+-		trace_rpmh_send_msg(drv, tcs_id, j, msgid, cmd);
++		trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
+ 	}
+ 
+ 	write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, tcs_id, cmd_complete);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Sent by a computer, using git, on the internet
+
