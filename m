@@ -2,15 +2,15 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D46D13BE79
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 12:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBDB13BE76
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 12:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730114AbgAOLam (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 06:30:42 -0500
+        id S1730133AbgAOLao (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 06:30:44 -0500
 Received: from mail-sh.amlogic.com ([58.32.228.43]:38651 "EHLO
         mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729841AbgAOLal (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 06:30:41 -0500
+        with ESMTP id S1730009AbgAOLan (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 06:30:43 -0500
 Received: from droid13.amlogic.com (116.236.93.172) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 15 Jan 2020
  19:31:03 +0800
@@ -28,9 +28,9 @@ CC:     Jianxin Pan <jianxin.pan@amlogic.com>,
         Hanjie Lin <hanjie.lin@amlogic.com>,
         Victor Wan <victor.wan@amlogic.com>,
         Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: [PATCH v6 2/4] dt-bindings: power: add Amlogic secure power domains bindings
-Date:   Wed, 15 Jan 2020 19:30:29 +0800
-Message-ID: <1579087831-94965-3-git-send-email-jianxin.pan@amlogic.com>
+Subject: [PATCH v6 3/4] soc: amlogic: Add support for Secure power domains controller
+Date:   Wed, 15 Jan 2020 19:30:30 +0800
+Message-ID: <1579087831-94965-4-git-send-email-jianxin.pan@amlogic.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1579087831-94965-1-git-send-email-jianxin.pan@amlogic.com>
 References: <1579087831-94965-1-git-send-email-jianxin.pan@amlogic.com>
@@ -42,104 +42,260 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the bindings for the Amlogic Secure power domains, controlling the
-secure power domains.
-
-The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
-power domain registers are in secure world.
+Add support for the Amlogic Secure Power controller. In A1/C1 series, power
+control registers are in secure domain, and should be accessed by smc.
 
 Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
 ---
- .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 40 ++++++++++++++++++++++
- include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
- 2 files changed, 72 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
- create mode 100644 include/dt-bindings/power/meson-a1-power.h
+ drivers/soc/amlogic/Kconfig             |  13 ++
+ drivers/soc/amlogic/Makefile            |   1 +
+ drivers/soc/amlogic/meson-secure-pwrc.c | 204 ++++++++++++++++++++++++++++++++
+ 3 files changed, 218 insertions(+)
+ create mode 100644 drivers/soc/amlogic/meson-secure-pwrc.c
 
-diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+diff --git a/drivers/soc/amlogic/Kconfig b/drivers/soc/amlogic/Kconfig
+index bc2c912..6cb06e7 100644
+--- a/drivers/soc/amlogic/Kconfig
++++ b/drivers/soc/amlogic/Kconfig
+@@ -48,6 +48,19 @@ config MESON_EE_PM_DOMAINS
+ 	  Say yes to expose Amlogic Meson Everything-Else Power Domains as
+ 	  Generic Power Domains.
+ 
++config MESON_SECURE_PM_DOMAINS
++	bool "Amlogic Meson Secure Power Domains driver"
++	depends on ARCH_MESON || COMPILE_TEST
++	depends on PM && OF
++	depends on HAVE_ARM_SMCCC
++	default ARCH_MESON
++	select PM_GENERIC_DOMAINS
++	select PM_GENERIC_DOMAINS_OF
++	help
++	  Support for the power controller on Amlogic A1/C1 series.
++	  Say yes to expose Amlogic Meson Secure Power Domains as Generic
++	  Power Domains.
++
+ config MESON_MX_SOCINFO
+ 	bool "Amlogic Meson MX SoC Information driver"
+ 	depends on ARCH_MESON || COMPILE_TEST
+diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+index de79d044..7b8c5d3 100644
+--- a/drivers/soc/amlogic/Makefile
++++ b/drivers/soc/amlogic/Makefile
+@@ -5,3 +5,4 @@ obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+ obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+ obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+ obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
++obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
 new file mode 100644
-index 00000000..af32209
+index 00000000..5fb29a4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+# Copyright (c) 2019 Amlogic, Inc
-+# Author: Jianxin Pan <jianxin.pan@amlogic.com>
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Amlogic Meson Secure Power Domains
-+
-+maintainers:
-+  - Jianxin Pan <jianxin.pan@amlogic.com>
-+
-+description: |+
-+  Secure Power Domains used in Meson A1/C1 SoCs, and should be the child node
-+  of secure-monitor.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,meson-a1-pwrc
-+
-+  "#power-domain-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - "#power-domain-cells"
-+
-+examples:
-+  - |
-+    secure-monitor {
-+        compatible = "amlogic,meson-gxbb-sm";
-+
-+        pwrc: power-controller {
-+            compatible = "amlogic,meson-a1-pwrc";
-+            #power-domain-cells = <1>;
-+        };
-+    }
-+
-diff --git a/include/dt-bindings/power/meson-a1-power.h b/include/dt-bindings/power/meson-a1-power.h
-new file mode 100644
-index 00000000..6cf50bf
---- /dev/null
-+++ b/include/dt-bindings/power/meson-a1-power.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
++++ b/drivers/soc/amlogic/meson-secure-pwrc.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2019 Amlogic, Inc.
 + * Author: Jianxin Pan <jianxin.pan@amlogic.com>
 + */
 +
-+#ifndef _DT_BINDINGS_MESON_A1_POWER_H
-+#define _DT_BINDINGS_MESON_A1_POWER_H
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+#define PWRC_DSPA_ID	8
-+#define PWRC_DSPB_ID	9
-+#define PWRC_UART_ID	10
-+#define PWRC_DMC_ID	11
-+#define PWRC_I2C_ID	12
-+#define PWRC_PSRAM_ID	13
-+#define PWRC_ACODEC_ID	14
-+#define PWRC_AUDIO_ID	15
-+#define PWRC_OTP_ID	16
-+#define PWRC_DMA_ID	17
-+#define PWRC_SD_EMMC_ID	18
-+#define PWRC_RAMA_ID	19
-+#define PWRC_RAMB_ID	20
-+#define PWRC_IR_ID	21
-+#define PWRC_SPICC_ID	22
-+#define PWRC_SPIFC_ID	23
-+#define PWRC_USB_ID	24
-+#define PWRC_NIC_ID	25
-+#define PWRC_PDMIN_ID	26
-+#define PWRC_RSA_ID	27
-+#define PWRC_MAX_ID	28
++#include <linux/io.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm_domain.h>
++#include <dt-bindings/power/meson-a1-power.h>
++#include <linux/arm-smccc.h>
++#include <linux/firmware/meson/meson_sm.h>
 +
-+#endif
++#define PWRC_ON		1
++#define PWRC_OFF	0
++
++struct meson_secure_pwrc_domain {
++	struct generic_pm_domain base;
++	unsigned int index;
++	struct meson_secure_pwrc *pwrc;
++};
++
++struct meson_secure_pwrc {
++	struct meson_secure_pwrc_domain *domains;
++	struct genpd_onecell_data xlate;
++	struct meson_sm_firmware *fw;
++};
++
++struct meson_secure_pwrc_domain_desc {
++	unsigned int index;
++	unsigned int flags;
++	char *name;
++	bool (*is_off)(struct meson_secure_pwrc_domain *pwrc_domain);
++};
++
++struct meson_secure_pwrc_domain_data {
++	unsigned int count;
++	struct meson_secure_pwrc_domain_desc *domains;
++};
++
++static bool pwrc_secure_is_off(struct meson_secure_pwrc_domain *pwrc_domain)
++{
++	int is_off = 1;
++
++	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_A1_PWRC_GET, &is_off,
++			  pwrc_domain->index, 0, 0, 0, 0) < 0)
++		pr_err("failed to get power domain status\n");
++
++	return is_off;
++}
++
++static int meson_secure_pwrc_off(struct generic_pm_domain *domain)
++{
++	int ret = 0;
++	struct meson_secure_pwrc_domain *pwrc_domain =
++		container_of(domain, struct meson_secure_pwrc_domain, base);
++
++	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_A1_PWRC_SET, NULL,
++			  pwrc_domain->index, PWRC_OFF, 0, 0, 0) < 0) {
++		pr_err("failed to set power domain off\n");
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++static int meson_secure_pwrc_on(struct generic_pm_domain *domain)
++{
++	int ret = 0;
++	struct meson_secure_pwrc_domain *pwrc_domain =
++		container_of(domain, struct meson_secure_pwrc_domain, base);
++
++	if (meson_sm_call(pwrc_domain->pwrc->fw, SM_A1_PWRC_SET, NULL,
++			  pwrc_domain->index, PWRC_ON, 0, 0, 0) < 0) {
++		pr_err("failed to set power domain on\n");
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++#define SEC_PD(__name, __flag)			\
++[PWRC_##__name##_ID] =				\
++{						\
++	.name = #__name,			\
++	.index = PWRC_##__name##_ID,		\
++	.is_off = pwrc_secure_is_off,	\
++	.flags = __flag,			\
++}
++
++static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
++	SEC_PD(DSPA,	0),
++	SEC_PD(DSPB,	0),
++	/* UART should keep working in ATF after suspend and before resume */
++	SEC_PD(UART,	GENPD_FLAG_ALWAYS_ON),
++	/* DMC is for DDR PHY ana/dig and DMC, and should be always on */
++	SEC_PD(DMC,	GENPD_FLAG_ALWAYS_ON),
++	SEC_PD(I2C,	0),
++	SEC_PD(PSRAM,	0),
++	SEC_PD(ACODEC,	0),
++	SEC_PD(AUDIO,	0),
++	SEC_PD(OTP,	0),
++	SEC_PD(DMA,	0),
++	SEC_PD(SD_EMMC,	0),
++	SEC_PD(RAMA,	0),
++	/* SRAMB is used as ATF runtime memory, and should be always on */
++	SEC_PD(RAMB,	GENPD_FLAG_ALWAYS_ON),
++	SEC_PD(IR,	0),
++	SEC_PD(SPICC,	0),
++	SEC_PD(SPIFC,	0),
++	SEC_PD(USB,	0),
++	/* NIC is for the Arm NIC-400 interconnect, and should be always on */
++	SEC_PD(NIC,	GENPD_FLAG_ALWAYS_ON),
++	SEC_PD(PDMIN,	0),
++	SEC_PD(RSA,	0),
++};
++
++static int meson_secure_pwrc_probe(struct platform_device *pdev)
++{
++	int i;
++	struct device_node *sm_np;
++	struct meson_secure_pwrc *pwrc;
++	const struct meson_secure_pwrc_domain_data *match;
++
++	match = of_device_get_match_data(&pdev->dev);
++	if (!match) {
++		dev_err(&pdev->dev, "failed to get match data\n");
++		return -ENODEV;
++	}
++
++	sm_np = of_find_compatible_node(NULL, NULL, "amlogic,meson-gxbb-sm");
++	if (!sm_np) {
++		dev_err(&pdev->dev, "no secure-monitor node\n");
++		return -ENODEV;
++	}
++
++	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
++	if (!pwrc)
++		return -ENOMEM;
++
++	pwrc->fw = meson_sm_get(sm_np);
++	of_node_put(sm_np);
++	if (!pwrc->fw)
++		return -EPROBE_DEFER;
++
++	pwrc->xlate.domains = devm_kcalloc(&pdev->dev, match->count,
++					   sizeof(*pwrc->xlate.domains),
++					   GFP_KERNEL);
++	if (!pwrc->xlate.domains)
++		return -ENOMEM;
++
++	pwrc->domains = devm_kcalloc(&pdev->dev, match->count,
++				     sizeof(*pwrc->domains), GFP_KERNEL);
++	if (!pwrc->domains)
++		return -ENOMEM;
++
++	pwrc->xlate.num_domains = match->count;
++	platform_set_drvdata(pdev, pwrc);
++
++	for (i = 0 ; i < match->count ; ++i) {
++		struct meson_secure_pwrc_domain *dom = &pwrc->domains[i];
++
++		if (!match->domains[i].index)
++			continue;
++
++		dom->pwrc = pwrc;
++		dom->index = match->domains[i].index;
++		dom->base.name = match->domains[i].name;
++		dom->base.flags = match->domains[i].flags;
++		dom->base.power_on = meson_secure_pwrc_on;
++		dom->base.power_off = meson_secure_pwrc_off;
++
++		pm_genpd_init(&dom->base, NULL, match->domains[i].is_off(dom));
++
++		pwrc->xlate.domains[i] = &dom->base;
++	}
++
++	return of_genpd_add_provider_onecell(pdev->dev.of_node, &pwrc->xlate);
++}
++
++static struct meson_secure_pwrc_domain_data meson_secure_a1_pwrc_data = {
++	.domains = a1_pwrc_domains,
++	.count = ARRAY_SIZE(a1_pwrc_domains),
++};
++
++static const struct of_device_id meson_secure_pwrc_match_table[] = {
++	{
++		.compatible = "amlogic,meson-a1-pwrc",
++		.data = &meson_secure_a1_pwrc_data,
++	},
++	{ /* sentinel */ }
++};
++
++static struct platform_driver meson_secure_pwrc_driver = {
++	.probe = meson_secure_pwrc_probe,
++	.driver = {
++		.name		= "meson_secure_pwrc",
++		.of_match_table	= meson_secure_pwrc_match_table,
++	},
++};
++builtin_platform_driver(meson_secure_pwrc_driver);
 -- 
 2.7.4
 
