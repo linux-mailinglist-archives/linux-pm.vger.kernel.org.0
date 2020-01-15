@@ -2,138 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7B113BA71
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 08:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E588113BC18
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 10:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbgAOHow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 02:44:52 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:33327 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726088AbgAOHow (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 02:44:52 -0500
-Received: by mail-qk1-f196.google.com with SMTP id d71so14850278qkc.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 23:44:51 -0800 (PST)
+        id S1729026AbgAOJLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 04:11:01 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:34525 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbgAOJLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 04:11:00 -0500
+Received: by mail-wm1-f65.google.com with SMTP id w5so4231553wmi.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 01:11:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LTVIYeQ6AAaOMzE6Dr4mFcbzclaVh9FA4XP4/GSMGwo=;
-        b=TAhdPkwdP+lOPnPQhyn6iJBFNZ4wBz8+zXiyysfz1KEJoDMd8LosaF14Eqgwle9Wvh
-         /tYpzFKHdXMc3D+g96wMtv5pAv832YmU3YDFTIACU8Dc4qVMpbnV0cYIKkbRkzqqhkYF
-         QE5ItFnyXfS0OBMjn0ypeGfDpP9kgJKcgmCcUJCsSFBeWtoG3AlLI68AminHhFwysxiP
-         gHywwAvbjJfgjCBUKjLa01odKz7fc5uZUkUGDJM5tGRcN9X48V05EH1WeiTLDDooCSWj
-         Bj++DInpQqRbYvRZPT4y2rxul5CzpnKF2xuAP8prwCcbXaSlUPUwU4UrIZZ96WRASX2T
-         qdeg==
+        bh=UeuN6KDh+6iCs0yefxABXjKIW5aWbQor/ERBSv2qacI=;
+        b=GDTFY4dcCmTGGPSve+M1bTEAQjvCBU/tMypr2r8kI4cMCcX1vmAscW8m45Y4d1tbqC
+         NSNJBQR9867sr7kP+diomY2SqBZzJKrnW7xtimTg42x033rdCBK6VoozdhSsiG8l2gBC
+         uKhZ9YvcBBLnnd8OKFAWvowD7om/bFRVOI/beizGki0g4idHkl6+Xpg/CT+A0f6PDuG/
+         pHLPSrhJU6G7Aqlb9Hn1z+4nkLBwowXzIr9j1DWSldK75NFC6Uj4+FAAcCu016ZJS2PZ
+         J2qSAx3h8mhWTSfU+ny9wFcBM1OMEITKifu91YxCivJD7CzonD4O1x6LN33uc92NbSi1
+         +kzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LTVIYeQ6AAaOMzE6Dr4mFcbzclaVh9FA4XP4/GSMGwo=;
-        b=azh2lJG/8L0yYDaPddHFjk1SatTxJ1LvcfKvA6i280rXScIhkQ8cioL7zinvFlAqzy
-         ZAnOqU8lOvtcNEZAZPhg1i3ykZoQyV2bMD/M4a22OhNLO5h15rgdEtpNMin5asnWB+HR
-         hu1tQ4ViSm20p8+JM8SJH1eAALLRgaixKJhF9iMF/T0TDiA/IcXFKmwk89vxsrOwqqC4
-         gsyiWuadvnQ/l5RmkyjJvFHITOYqozFr05bX1gvxyjWZJg7owoKACCD50FvaDLVhnLgp
-         PltWl6ph3Rls67OMdEtcX8DOHR3lffy6F/kdgyOmFvPZ9FZMUxPtWkToMueXdm4QvXrJ
-         PZLg==
-X-Gm-Message-State: APjAAAXtbwSgquXOg5KzZn7GUjg6dYB0/y2+s3T3l+ZKWEHCJI/s+/fy
-        in48jQqXxXefr8p9XZE1uc4H1rOugM6eR8V2iwSk4g==
-X-Google-Smtp-Source: APXvYqwrUfbScoyVZBBbQjT7My45ZO3JYPfT0OQJZ0tiAMVJJkFQNgCiI1RYTDY1ZGHFHLvLSkzKWpV9AvEJ96llcck=
-X-Received: by 2002:a37:9ec2:: with SMTP id h185mr25663168qke.14.1579074290928;
- Tue, 14 Jan 2020 23:44:50 -0800 (PST)
+        bh=UeuN6KDh+6iCs0yefxABXjKIW5aWbQor/ERBSv2qacI=;
+        b=JLAxAptHuNUAxjvtdujbDa30VQaHbAp019T0qX86lDPeAhI6VrhUy1/SA7iHMEVRoa
+         npCAjZbrqt7D2MMCbggorvsuqv5kqihgEvX84wVjvIZnzc2+uaWehClNpFMwnv/EmLlO
+         X//Wb/9lQqpU3rMYvnkB/9rpGZVJuFpIYG5jFxPv/B66tBdcN/q7isy8MCDErLkwPE4b
+         O36aMx665thIrMQUI+JaBop8u7lWCM9eOtJAR+ktP8P6lvLnF0AhX+uhP/GfyrwARDHw
+         71luN30mS/C+Qq2sU4b1CmnnErFWzDTyOuV3ocVBwRyzUXURQj62OzI12f2iV9u6lH1x
+         7xvA==
+X-Gm-Message-State: APjAAAUyJl2OxR5m+MkypWJJ/0trMDjcsFlnu5RjV/I0bdnAyQAQ88TW
+        wncfN1MVrwrbeW3J8bWcNOqS6ll/VwSJURsn8a97WQ==
+X-Google-Smtp-Source: APXvYqyl/Un01NOPl2ocAmtn/GIeu1fCN1+833Wd4YgI+7a/clfr9xxom1NobiU+MF7o8Dfbe+pnloJ5zaD/x950+iM=
+X-Received: by 2002:a7b:cb46:: with SMTP id v6mr31994910wmj.117.1579079459339;
+ Wed, 15 Jan 2020 01:10:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
- <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
- <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
- <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com>
- <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com> <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
-In-Reply-To: <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Wed, 15 Jan 2020 15:44:39 +0800
-Message-ID: <CAD8Lp44FKuEsmdK+zDX_-ZYQEnqjQM-z6nnfE-CJ62mutd+scA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Chunming Zhou <David1.Zhou@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20191223211309.GA4609@sig21.net> <CAG_fn=UgU3vibsaug6p35Xs1dzLgBecA48t-PqS9OtRTHNu54g@mail.gmail.com>
+ <CAG_fn=VjzJSguf4ZB2x8Xn=U9MCHyfyqd2DVwPPC36t5+S+VsQ@mail.gmail.com> <38519837.OfHf9z5LDp@kreacher>
+In-Reply-To: <38519837.OfHf9z5LDp@kreacher>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 15 Jan 2020 10:10:48 +0100
+Message-ID: <CAG_fn=UwBjv94QKjrMR1cd_ZvzX-SuTYoMo7pHFSZNGuQvUxxg@mail.gmail.com>
+Subject: Re: init_on_free breaks hibernate
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Johannes Stezenbach <js@sig21.net>, Pavel Machek <pavel@ucw.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Michal Hocko <mhocko@suse.cz>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 10:08 PM Alex Deucher <alexdeucher@gmail.com> wrote:
-> I think there may be some AMD specific handling needed in
-> drivers/acpi/sleep.c.  My understanding from reading the modern
-> standby documents from MS is that each vendor needs to provide a
-> platform specific PEP driver.  I'm not sure how much of that current
-> code is Intel specific or not.
+On Tue, Jan 14, 2020 at 11:36 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Tuesday, January 14, 2020 12:38:53 PM CET Alexander Potapenko wrote:
+> > > > Strange about the resume=/dev/vda, it worked for me the way I described it.
+> > > > Maybe device numbers are dynamic, 254:0 is what I got from ls -l /dev/vda.
+> > > Indeed, for me it's 253:0, and resuming from console works with that number.
+> > >
+> > > > > The memory corruption is also reproducible for me, taking a look.
+> > > >
+> >
+> > I think I know what is causing the problem.
+> > Upon resume the free pages may contain stale information from the
+> > kernel that initiated the resume.
+> > There's clear_free_pages()
+> > (https://elixir.bootlin.com/linux/latest/source/kernel/power/snapshot.c#L1148)
+> > that clears the pages in the case CONFIG_PAGE_POISONING_ZERO is
+> > enabled, we just need to reuse it for init_on_free.
+> > See the potential fix below.
+> >
+> > Rafael, Pavel, I've noticed that in the setup suggested by Johannes
+> > even the defconfig kernel with heap initialization cannot hibernate
+> > more than twice, the third hibernate hangs.
+> > Is that a known problem?
+>
+> No, it is not.
 
-I don't think there is anything Intel-specific in drivers/acpi/sleep.c.
-
-Reading more about PEP, I see that Linux supports PEP devices with
-ACPI ID INT33A1 or PNP0D80. Indeed the Intel platforms we work with
-have INT33A1 devices in their ACPI tables.
-
-This product has a \_SB.PEP ACPI device with _HID AMD0004 and _CID
-PNP0D80. Full acpidump:
-https://gist.github.com/dsd/ff3dfc0f63cdd9eba4a0fbd9e776e8be (see
-ssdt7)
-
-This PEP device responds to a _DSM with UUID argument
-"e3f32452-febc-43ce-9039-932122d37721", which is not the one
-documented at https://uefi.org/sites/default/files/resources/Intel_ACPI_Low_Power_S0_Idle.pdf
-
-Nevertheless, there is some data about the GPU:
-                    Package (0x04)
-                    {
-                        One,
-                        "\\_SB.PCI0.GP17.VGA",
-                        Zero,
-                        0x03
-                    },
-
-However since this data is identical to many other devices that
-suspend and resume just fine, I wonder if it is really important.
-
-The one supported method does offer two calls which may mirror the
-Display Off/On Notifications in the above spec:
-                        Case (0x02)
-                        {
-                            \_SB.PCI0.SBRG.EC0.CSEE (0xB7)
-                            Return (Zero)
-                        }
-                        Case (0x03)
-                        {
-                            \_SB.PCI0.SBRG.EC0.CSEE (0xB8)
-                            Notify (\_SB.PCI0.SBRG.EC0.LID, 0x80) //
-Status Change
-                            Return (Zero)
-                        }
-
-but I tried executing this code after suspending amdgpu, and the
-problem still stands, amdgpu cannot wakeup correctly.
-
-There's nothing else really interesting in the PEP device as far as I can see.
-
-PEP things aside, I am still quite suspicious about the fact that
-calling amdgpu_device_suspend() then amdgpu_device_resume() on
-multiple products (not just this one) fails. It seems that this code
-flow is relying on the BIOS doing something in the S3 suspend/resume
-path in order to make the device resumable by amdgpu_device_resume(),
-which is why we have only encountered this issue for the first time on
-our first AMD platform that does not support S3 suspend.
-
-With that in mind, and lacking any better info, wouldn't it make sense
-for amdgpu_device_resume() to always call reset? Maybe it's not
-necessary in the S3 case, but it shouldn't harm anything. Or perhaps
-it could check if the device is alive and reset it if it's not?
-
-Alternatively do you have any other contacts within AMD that could
-help us figure out the underlying question of how to correctly suspend
-and resume these devices? Happy to ship an affected product sample
-your way.
-
-Thanks
-Daniel
+Sorry for the typo. Actually, the defconfig _without_ heap
+initialization cannot hibernate more than twice.
