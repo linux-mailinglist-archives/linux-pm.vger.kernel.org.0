@@ -2,166 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA4A13CE45
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8394113CE4D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729367AbgAOUu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 15:50:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34302 "EHLO mail.kernel.org"
+        id S1729697AbgAOUwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 15:52:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728939AbgAOUu6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jan 2020 15:50:58 -0500
+        id S1728596AbgAOUwV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jan 2020 15:52:21 -0500
 Received: from earth.universe (dyndsl-095-033-170-011.ewe-ip-backbone.de [95.33.170.11])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3852F2051A;
-        Wed, 15 Jan 2020 20:50:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C1AE2077B;
+        Wed, 15 Jan 2020 20:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579121457;
-        bh=IGaSv9YovIQR3MVH6A8i1W4/xbBl3F5OhDJks5gzi1c=;
+        s=default; t=1579121540;
+        bh=YAMT4GqllrslSkD9BR0wa3v1n8fnVFdaxgMWcQCGiFU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1gc1bFTtZbRnHs0dFsDSkqdFh96xdHNLPC6Vm8IA70ltCpFlEh6A+WaeNajEOgGSo
-         zvhAj1bzqJAxov982IuLn/7Eot3OdgL3Xvf+MaNFmwmInuOjPi+5PHD4YseqUdh40J
-         yUzPqBsem7la16TnnSwPOaPwDdnXABXGjWr1jae8=
+        b=KR2jHDWtMzKMC7+luRtgc6uzI7E6RL2RYXkwvgtrQ/OrPejSuosrT52kbz/rj3h7x
+         H9tGv4hgT3iLXADTCVU2fbGkm4lfGc7FrLM7D2TM9dT8btIuWYCs5MAzLvx99Ddg0N
+         MfRSPDhyfWchBxm2p04Pi62WjWw3G2SuLTo4yUw8=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 8F46F3C0C7C; Wed, 15 Jan 2020 21:50:55 +0100 (CET)
-Date:   Wed, 15 Jan 2020 21:50:55 +0100
+        id 8BE583C0C7C; Wed, 15 Jan 2020 21:52:18 +0100 (CET)
+Date:   Wed, 15 Jan 2020 21:52:18 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Yauhen Kharuzhy <jekhor@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] power: supply: bq25890_charger: Add support of
- BQ25892 and BQ25896 chips
-Message-ID: <20200115205055.f5dgjeenj3r2l2f4@earth.universe>
-References: <20200101224627.12093-1-jekhor@gmail.com>
- <20200102135335.GA13218@jeknote.loshitsa1.net>
+To:     Claudiu.Beznea@microchip.com
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] at91-sama5d2_shdwc shutdown controller
+Message-ID: <20200115205218.wudf5dai2sj6pvvk@earth.universe>
+References: <1576855878-13213-1-git-send-email-claudiu.beznea@microchip.com>
+ <3d0c5a04-25fb-5ae6-fd3a-4049e293eab1@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wc3ztikgyf3eauw5"
+        protocol="application/pgp-signature"; boundary="yd3evbzfobjk36fk"
 Content-Disposition: inline
-In-Reply-To: <20200102135335.GA13218@jeknote.loshitsa1.net>
+In-Reply-To: <3d0c5a04-25fb-5ae6-fd3a-4049e293eab1@microchip.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---wc3ztikgyf3eauw5
+--yd3evbzfobjk36fk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi
 
-Thanks, queued to power-supply's for-next branch.
-
-On Thu, Jan 02, 2020 at 04:53:35PM +0300, Yauhen Kharuzhy wrote:
-> On Thu, Jan 02, 2020 at 01:46:25AM +0300, Yauhen Kharuzhy wrote:
-> > Support BQ25892 and BQ25896 chips by this driver. They shared one chip
-> > ID 0, so distinquish them by device revisions (2 for 25896 and 1 for
-> > 25892).
-> >=20
-> > Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
-> > ---
-> >  drivers/power/supply/bq25890_charger.c | 97 ++++++++++++++++++++------
-> >  1 file changed, 76 insertions(+), 21 deletions(-)
-> >=20
-> > diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/sup=
-ply/bq25890_charger.c
-> > index 9d1ec8d677de..a3dcd4eb1287 100644
-> > --- a/drivers/power/supply/bq25890_charger.c
-> > +++ b/drivers/power/supply/bq25890_charger.c
-> > @@ -25,12 +25,20 @@
-> >  #define BQ25895_ID			7
-> >  #define BQ25896_ID			0
-> > =20
-> > +enum bq25890_chip_version {
-> > +	BQ25890,
-> > +	BQ25892,
-> > +	BQ25895,
-> > +	BQ25896,
-> > +};
-> > +
-> ...
-> > +static int bq25890_get_chip_version(struct bq25890_device *bq)
-> > +{
-> > +	int id, rev;
-> > +
-> > +	id =3D bq25890_field_read(bq, F_PN);
-> > +	if (id < 0) {
-> > +		dev_err(bq->dev, "Cannot read chip ID.\n");
-> > +		return id;
-> > +	}
-> > +
-> > +	rev =3D bq25890_field_read(bq, F_DEV_REV);
-> > +	if (rev < 0) {
-> > +		dev_err(bq->dev, "Cannot read chip revision.\n");
-> > +		return id;
-> > +	}
-> > +
-> > +	switch (id) {
-> > +	case BQ25890_ID:
-> > +		bq->chip_version =3D BQ25890;
-> > +		break;
-> > +
-> > +	/* BQ25892 and BQ25896 share same ID 0 */
-> > +	case BQ25896_ID:
-> > +		switch (rev) {
-> > +		case 0:
-> Sorry, typo here: should be 2 for 25896, I will fix this in v2.
-
-I fixed this while applying.
+It wasn't lost, I just did not yet collect patches for the next
+merge window. I queued the complete patchset to my for-next branch
+now.
 
 -- Sebastian
 
-> > +			bq->chip_version =3D BQ25896;
-> > +			break;
-> > +		case 1:
-> > +			bq->chip_version =3D BQ25892;
-> > +			break;
-> > +		default:
-> > +			dev_err(bq->dev,
-> > +				"Unknown device revision %d, assume BQ25892\n",
-> > +				rev);
-> > +			bq->chip_version =3D BQ25892;
-> > +		}
-> > +		break;
-> > +
-> > +	case BQ25895_ID:
-> > +		bq->chip_version =3D BQ25895;
-> > +		break;
-> > +
-> > +	default:
-> > +		dev_err(bq->dev, "Unknown chip ID %d\n", id);
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> ...
+On Tue, Jan 14, 2020 at 10:34:55AM +0000, Claudiu.Beznea@microchip.com wrot=
+e:
+> Hi Sebastian,
 >=20
-> --=20
-> Yauhen Kharuzhy
+> I know you may busy, I just want to be sure that you didn't forgot this s=
+eries.
+>=20
+> Thank you,
+> Claudiu Beznea
+>=20
+> On 20.12.2019 17:31, Claudiu Beznea wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >=20
+> > PMC master clock register offset is different b/w sam9x60 and
+> > other SoCs. Since there is a need of this register offset in
+> > shutdown procedure we need to have it per SoC. This is what
+> > this series does.
+> >=20
+> > Changes in v2:
+> > - do not use r5 as intermediary registers in at91_poweroff
+> >=20
+> > Claudiu Beznea (2):
+> >   power: reset: at91-poweroff: introduce struct shdwc_reg_config
+> >   power: reset: at91-poweroff: use proper master clock register offset
+> >=20
+> >  drivers/power/reset/at91-sama5d2_shdwc.c | 72 +++++++++++++++++++++---=
+--------
+> >  1 file changed, 47 insertions(+), 25 deletions(-)
+> >=20
+> > --
+> > 2.7.4
+> >=20
+> >=20
 
---wc3ztikgyf3eauw5
+--yd3evbzfobjk36fk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4fey8ACgkQ2O7X88g7
-+ppMihAAlbu7Cj5kznupKUuThBs3gO5ztHxbvrKZFRByg+VOKZrlZiSsRBW4xiBP
-uRVBNauM9UIxTb3pCtIuC4goV2sL0v6vBW21+xChmvFXkk0y9DBTpuw5w7mNVPRt
-tGo6kdZ4qrbqUt0yzumysR3XA5OFgKwH4QeDuw/VciSUS15TFLEViC8kEc5PMhtr
-J8FGh1RPDVPKJ1plggE7aJBKWB2cXG1Z/BPISVc/eoDdUKUCF6dc4aF6x2l1E6BQ
-eiZCI0m/62dF7f9hXUxtHO+w3UL0SlF94Q2GjutD4WDLQp0tymtI7bZmlIJ6C8KA
-BirDA6DUzllAsjUuDvaLYzoqIG9VA2ew9OAreYadOxopZgTZgozLMt4Y181RxJ9R
-TMvzsJgZa0+aWcETPCzX9v1UNvdYFig5Fsd5OBM1ntV4ddqNkqleG01BjRCFi4zs
-KfpAZFCgl/n7VGR04NSjCq+7pXDawpkkme3K61Jf65zfoYmb3sedZWy7UuKArAep
-R3iWBHPp/+Z8Lw7cdurykYodwd8+9AN3N2YT3Efzmf+0JHwUvsgpzMcjF+jcS11x
-+RTYDvpuBxHoztwAhm03KBBbTmpTOe5O3BAaIC7zQRI0E/0d9QXX6KWVYVfNJvsD
-8oI/F7xnYqEs7/tZziiUAU1Arzt5XRFqedX2SMAs9NGXtpjmZUQ=
-=zGq6
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4fe4IACgkQ2O7X88g7
++pop7w//bJTENOImq1Uw2WD17tRxI1UogZR6C7G3iQuBCimiyvw+QTNFwOzSmIkp
+P6zhrTeWBvyfYHWOFGynGfA99ISNYf8Ok3mFxLI7ov44JIHJkSoHOcIW6OFjloDz
+0G9Udiz88HCZ11gPIidfmhCdS5dLXmic0XCC/C1wiaVs1taJ358wQMStq5c4S7CE
+7E+sM/TUvC4/Zx9g3zrW/bitFaqbWVPk80V3odBhl9FFh8i640xbiU+U8uQ/Leak
++J6K/BqO1uI2CVwU9d+NaADCUjSzQJelWM06PG21OkaFq8VFeFiRyxOtvStmQpDd
+BXByY4HxHPlGdvhVwSE1+VBSxK+r+NbN3MESBK4rE9jisfPvxvWK8osx8jmoivDM
+2VAHluRnUI4OS5Ab/HyxwcecX8tczdrTkmgCvK+EYthhqHZx5GPAKz2k4/qKq6Jo
+6+SLbKg2l2tT7vxR+dGLRD4uie8QtQvxHwIReCT1oLXB3qDoWMRc7iqfx5TOQpm6
+hYDjshmM2FhqU9+zJpxwXUC1KZUkiccvRpAPPfCyGN9vOEeaD2PLRRTGFrKBGTOd
+sA0uh55hfIlwWVh/qNBL6CQs58VeHUgznbDX1C8B9zX3QGmEX0grP7n/Z933d8ZC
+o/glSnVJ/+r0L0goB5p+J1PEv7WLs6jbplZXlngyP12Dg4+KZGw=
+=F7P+
 -----END PGP SIGNATURE-----
 
---wc3ztikgyf3eauw5--
+--yd3evbzfobjk36fk--
