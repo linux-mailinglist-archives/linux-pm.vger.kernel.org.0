@@ -2,120 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A72313CE3B
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA4A13CE45
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbgAOUsx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 15:48:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55984 "EHLO mail.kernel.org"
+        id S1729367AbgAOUu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 15:50:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728939AbgAOUsx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jan 2020 15:48:53 -0500
+        id S1728939AbgAOUu6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jan 2020 15:50:58 -0500
 Received: from earth.universe (dyndsl-095-033-170-011.ewe-ip-backbone.de [95.33.170.11])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3001E2081E;
-        Wed, 15 Jan 2020 20:48:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3852F2051A;
+        Wed, 15 Jan 2020 20:50:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579121332;
-        bh=nwKS0zW1NjzVj+K/jTMff6/lN/RQqdLUaC940w/PiHc=;
+        s=default; t=1579121457;
+        bh=IGaSv9YovIQR3MVH6A8i1W4/xbBl3F5OhDJks5gzi1c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KvLE67+tXTbGZAkxNOFcfvVDgYRMHBam2zj35egGoSJ/t7FE6jfYIlNZN0KJPUcI5
-         RmRaWoPN9ZlzSpwemZeH62eV12863YhMl2rxfwFpT77gLYAIZbgNVrAA9AQQsTTuEx
-         cWLhcn5iKhz3aeUccSabMjFYxWLlSehq9zR9YEpM=
+        b=1gc1bFTtZbRnHs0dFsDSkqdFh96xdHNLPC6Vm8IA70ltCpFlEh6A+WaeNajEOgGSo
+         zvhAj1bzqJAxov982IuLn/7Eot3OdgL3Xvf+MaNFmwmInuOjPi+5PHD4YseqUdh40J
+         yUzPqBsem7la16TnnSwPOaPwDdnXABXGjWr1jae8=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 59E763C0C7C; Wed, 15 Jan 2020 21:48:50 +0100 (CET)
-Date:   Wed, 15 Jan 2020 21:48:50 +0100
+        id 8F46F3C0C7C; Wed, 15 Jan 2020 21:50:55 +0100 (CET)
+Date:   Wed, 15 Jan 2020 21:50:55 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Oskari Lemmela <oskari@lemmela.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com
-Subject: Re: [PATCH v4 0/4] X-Powers Power Supply Improvements
-Message-ID: <20200115204850.7innme3d4agbay2r@earth.universe>
-References: <20200115034048.24901-1-samuel@sholland.org>
+To:     Yauhen Kharuzhy <jekhor@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] power: supply: bq25890_charger: Add support of
+ BQ25892 and BQ25896 chips
+Message-ID: <20200115205055.f5dgjeenj3r2l2f4@earth.universe>
+References: <20200101224627.12093-1-jekhor@gmail.com>
+ <20200102135335.GA13218@jeknote.loshitsa1.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iquki6qdoejfp2er"
+        protocol="application/pgp-signature"; boundary="wc3ztikgyf3eauw5"
 Content-Disposition: inline
-In-Reply-To: <20200115034048.24901-1-samuel@sholland.org>
+In-Reply-To: <20200102135335.GA13218@jeknote.loshitsa1.net>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---iquki6qdoejfp2er
+--wc3ztikgyf3eauw5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Thanks, all queued to power-supply's for-next branch.
+Thanks, queued to power-supply's for-next branch.
+
+On Thu, Jan 02, 2020 at 04:53:35PM +0300, Yauhen Kharuzhy wrote:
+> On Thu, Jan 02, 2020 at 01:46:25AM +0300, Yauhen Kharuzhy wrote:
+> > Support BQ25892 and BQ25896 chips by this driver. They shared one chip
+> > ID 0, so distinquish them by device revisions (2 for 25896 and 1 for
+> > 25892).
+> >=20
+> > Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
+> > ---
+> >  drivers/power/supply/bq25890_charger.c | 97 ++++++++++++++++++++------
+> >  1 file changed, 76 insertions(+), 21 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/sup=
+ply/bq25890_charger.c
+> > index 9d1ec8d677de..a3dcd4eb1287 100644
+> > --- a/drivers/power/supply/bq25890_charger.c
+> > +++ b/drivers/power/supply/bq25890_charger.c
+> > @@ -25,12 +25,20 @@
+> >  #define BQ25895_ID			7
+> >  #define BQ25896_ID			0
+> > =20
+> > +enum bq25890_chip_version {
+> > +	BQ25890,
+> > +	BQ25892,
+> > +	BQ25895,
+> > +	BQ25896,
+> > +};
+> > +
+> ...
+> > +static int bq25890_get_chip_version(struct bq25890_device *bq)
+> > +{
+> > +	int id, rev;
+> > +
+> > +	id =3D bq25890_field_read(bq, F_PN);
+> > +	if (id < 0) {
+> > +		dev_err(bq->dev, "Cannot read chip ID.\n");
+> > +		return id;
+> > +	}
+> > +
+> > +	rev =3D bq25890_field_read(bq, F_DEV_REV);
+> > +	if (rev < 0) {
+> > +		dev_err(bq->dev, "Cannot read chip revision.\n");
+> > +		return id;
+> > +	}
+> > +
+> > +	switch (id) {
+> > +	case BQ25890_ID:
+> > +		bq->chip_version =3D BQ25890;
+> > +		break;
+> > +
+> > +	/* BQ25892 and BQ25896 share same ID 0 */
+> > +	case BQ25896_ID:
+> > +		switch (rev) {
+> > +		case 0:
+> Sorry, typo here: should be 2 for 25896, I will fix this in v2.
+
+I fixed this while applying.
 
 -- Sebastian
 
-On Tue, Jan 14, 2020 at 09:40:44PM -0600, Samuel Holland wrote:
-> This series adds some improvements to the axp20x_usb_power power supply
-> driver to better support suspend/resume and use on mobile devices.
->=20
-> Patch 1 is preparation for changes in following patches.
-> Patch 2 allows userspace to take the power supply offline.
-> Patch 3 allows userspace to control the wakeup behavior.
-> Patch 4 avoids polling USB VBUS presence when possible.
->=20
-> Changes since v3:
->  - Rebase on power-supply/for-next
->  - Add Reviewed-by (1-2)
->=20
-> Changes since v2:
->  - Patch 1 was merged
->  - Only check ACIN_PATH_SEL when necessary (1)
->  - Update commit message (5)
->  - Avoided reordering lines until/unless necessary (5, 7)
->  - Update comment and add ID check in axp20x_usb_power_set_property
->    (it seemed more correct than adding another comment) (6)
->  - Add Reviewed-by where there were no comments (2-4, 7-8)
->=20
-> Changes since v1:
->  - Add patches 1-2
->  - Shift value properly in calls to regmap_update_bits (3, 7)
->  - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
->  - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
->  - Poll once on resume, in case the state changed during suspend (9)
->=20
-> Samuel Holland (4):
->   power: supply: axp20x_usb_power: Use a match structure
->   power: supply: axp20x_usb_power: Allow offlining
->   power: supply: axp20x_usb_power: Add wakeup control
->   power: supply: axp20x_usb_power: Only poll while offline
->=20
->  drivers/power/supply/axp20x_usb_power.c | 217 ++++++++++++++++++------
->  1 file changed, 169 insertions(+), 48 deletions(-)
+> > +			bq->chip_version =3D BQ25896;
+> > +			break;
+> > +		case 1:
+> > +			bq->chip_version =3D BQ25892;
+> > +			break;
+> > +		default:
+> > +			dev_err(bq->dev,
+> > +				"Unknown device revision %d, assume BQ25892\n",
+> > +				rev);
+> > +			bq->chip_version =3D BQ25892;
+> > +		}
+> > +		break;
+> > +
+> > +	case BQ25895_ID:
+> > +		bq->chip_version =3D BQ25895;
+> > +		break;
+> > +
+> > +	default:
+> > +		dev_err(bq->dev, "Unknown chip ID %d\n", id);
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> ...
 >=20
 > --=20
-> 2.23.0
->=20
+> Yauhen Kharuzhy
 
---iquki6qdoejfp2er
+--wc3ztikgyf3eauw5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4feqkACgkQ2O7X88g7
-+pozAQ//f7qy+dV6jSnUkT7cC7r6FNKsMxHlcEYcsaWK2kJZRNthTFUbc57S2vlj
-WQs2lDGLIy4CuP6kdJg3HjfZlMoE8GFf0Ta2yWK57B9aGu5aO5jkbZBt7y1u22An
-h0DtToT+WzaQCVa14fXfYITJTJluTvzoCV8ejX4WM3yuiq7rRmWzyadthVbvb2h6
-1PfGO+JEZtcWH+q/wP6LD6hg2gmjuvM00R/sEL02i3N9OCm60t1Lg6sq9nHzf0o8
-Z09wZnK09V2X0q+Pp3IJ3A1NIDYRXJIGQ3bHHjAFq9xnAta3ED33yrlVvhx0DiOh
-6o13ouCV0gfQFj4//ckKAsX5lP21hZQWYhZTN6LtHj14LD1aULJpTZH4+v81eWw9
-emb6dVthMIpImp6GBtuM3SH0TGatk39y/MZocegWmSr43/Gx9rC337sBnXdV5pxS
-Yi5mmBavJe4899PSBoexvfrzcvKjLVMrY10xVrPrv3WM0m11UANpPGulUs6cO+jr
-CzZUPTVYpRW4gt/2Jnm2i+yeNldOwf2eUHu4wql9G4+D9a//QLX+5tkLmtkhsQFc
-rdyK9fr8UnUPGUVf8wv9oWgq+SCLsaKAPZPS2uDcHWNbxvHKDq92lwMRF8elkVUE
-StEy7hT2BImfyvwBzh5qrOQU1xGsVjKCXQ4hsYy/ENd7J+ytt9A=
-=7sqy
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4fey8ACgkQ2O7X88g7
++ppMihAAlbu7Cj5kznupKUuThBs3gO5ztHxbvrKZFRByg+VOKZrlZiSsRBW4xiBP
+uRVBNauM9UIxTb3pCtIuC4goV2sL0v6vBW21+xChmvFXkk0y9DBTpuw5w7mNVPRt
+tGo6kdZ4qrbqUt0yzumysR3XA5OFgKwH4QeDuw/VciSUS15TFLEViC8kEc5PMhtr
+J8FGh1RPDVPKJ1plggE7aJBKWB2cXG1Z/BPISVc/eoDdUKUCF6dc4aF6x2l1E6BQ
+eiZCI0m/62dF7f9hXUxtHO+w3UL0SlF94Q2GjutD4WDLQp0tymtI7bZmlIJ6C8KA
+BirDA6DUzllAsjUuDvaLYzoqIG9VA2ew9OAreYadOxopZgTZgozLMt4Y181RxJ9R
+TMvzsJgZa0+aWcETPCzX9v1UNvdYFig5Fsd5OBM1ntV4ddqNkqleG01BjRCFi4zs
+KfpAZFCgl/n7VGR04NSjCq+7pXDawpkkme3K61Jf65zfoYmb3sedZWy7UuKArAep
+R3iWBHPp/+Z8Lw7cdurykYodwd8+9AN3N2YT3Efzmf+0JHwUvsgpzMcjF+jcS11x
++RTYDvpuBxHoztwAhm03KBBbTmpTOe5O3BAaIC7zQRI0E/0d9QXX6KWVYVfNJvsD
+8oI/F7xnYqEs7/tZziiUAU1Arzt5XRFqedX2SMAs9NGXtpjmZUQ=
+=zGq6
 -----END PGP SIGNATURE-----
 
---iquki6qdoejfp2er--
+--wc3ztikgyf3eauw5--
