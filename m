@@ -2,152 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F14EF13B9F4
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 07:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7B113BA71
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 08:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726085AbgAOGyC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 01:54:02 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:37852 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725962AbgAOGyC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 01:54:02 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1579071241; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=s37LLIPYFReLdb0u97Mk+1cz4+bjCaaV9gp2iuq6M2Q=;
- b=FRROdTi6ZsUIAcih1sbvGK+5AEowGCbzXyxQQAJ64ggdcAW3t3oiigbrxuVINDqtgRnwMnTF
- 4LhFOdCP/RA/UXDQX3CysvdlrlmEwzYvPF+ZpB9aqHoIlN5zc5UECeVUg7NuNHjFVPrPva7d
- d8b4jqNeAnxc0VaO8DtY0el7knA=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e1eb707.7f0b1c4a9030-smtp-out-n02;
- Wed, 15 Jan 2020 06:53:59 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4A89EC447A1; Wed, 15 Jan 2020 06:53:58 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 90F2BC433A2;
-        Wed, 15 Jan 2020 06:53:57 +0000 (UTC)
+        id S1726018AbgAOHow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 02:44:52 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:33327 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726088AbgAOHow (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 02:44:52 -0500
+Received: by mail-qk1-f196.google.com with SMTP id d71so14850278qkc.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 23:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LTVIYeQ6AAaOMzE6Dr4mFcbzclaVh9FA4XP4/GSMGwo=;
+        b=TAhdPkwdP+lOPnPQhyn6iJBFNZ4wBz8+zXiyysfz1KEJoDMd8LosaF14Eqgwle9Wvh
+         /tYpzFKHdXMc3D+g96wMtv5pAv832YmU3YDFTIACU8Dc4qVMpbnV0cYIKkbRkzqqhkYF
+         QE5ItFnyXfS0OBMjn0ypeGfDpP9kgJKcgmCcUJCsSFBeWtoG3AlLI68AminHhFwysxiP
+         gHywwAvbjJfgjCBUKjLa01odKz7fc5uZUkUGDJM5tGRcN9X48V05EH1WeiTLDDooCSWj
+         Bj++DInpQqRbYvRZPT4y2rxul5CzpnKF2xuAP8prwCcbXaSlUPUwU4UrIZZ96WRASX2T
+         qdeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LTVIYeQ6AAaOMzE6Dr4mFcbzclaVh9FA4XP4/GSMGwo=;
+        b=azh2lJG/8L0yYDaPddHFjk1SatTxJ1LvcfKvA6i280rXScIhkQ8cioL7zinvFlAqzy
+         ZAnOqU8lOvtcNEZAZPhg1i3ykZoQyV2bMD/M4a22OhNLO5h15rgdEtpNMin5asnWB+HR
+         hu1tQ4ViSm20p8+JM8SJH1eAALLRgaixKJhF9iMF/T0TDiA/IcXFKmwk89vxsrOwqqC4
+         gsyiWuadvnQ/l5RmkyjJvFHITOYqozFr05bX1gvxyjWZJg7owoKACCD50FvaDLVhnLgp
+         PltWl6ph3Rls67OMdEtcX8DOHR3lffy6F/kdgyOmFvPZ9FZMUxPtWkToMueXdm4QvXrJ
+         PZLg==
+X-Gm-Message-State: APjAAAXtbwSgquXOg5KzZn7GUjg6dYB0/y2+s3T3l+ZKWEHCJI/s+/fy
+        in48jQqXxXefr8p9XZE1uc4H1rOugM6eR8V2iwSk4g==
+X-Google-Smtp-Source: APXvYqwrUfbScoyVZBBbQjT7My45ZO3JYPfT0OQJZ0tiAMVJJkFQNgCiI1RYTDY1ZGHFHLvLSkzKWpV9AvEJ96llcck=
+X-Received: by 2002:a37:9ec2:: with SMTP id h185mr25663168qke.14.1579074290928;
+ Tue, 14 Jan 2020 23:44:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 15 Jan 2020 12:23:57 +0530
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH] drivers: qcom: rpmh-rsc: Use rcuidle tracepoints for rpmh
-In-Reply-To: <20200115013751.249588-1-swboyd@chromium.org>
-References: <20200115013751.249588-1-swboyd@chromium.org>
-Message-ID: <00798be85df85beff8edcf26767dddc2@codeaurora.org>
-X-Sender: saiprakash.ranjan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+ <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
+ <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
+ <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com>
+ <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com> <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
+In-Reply-To: <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Wed, 15 Jan 2020 15:44:39 +0800
+Message-ID: <CAD8Lp44FKuEsmdK+zDX_-ZYQEnqjQM-z6nnfE-CJ62mutd+scA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chunming Zhou <David1.Zhou@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-01-15 07:07, Stephen Boyd wrote:
-> This tracepoint is hit now that we call into the rpmh code from the cpu
-> idle path. Let's move this to be an rcuidle tracepoint so that we avoid
-> the RCU idle splat below
-> 
->  =============================
->  WARNING: suspicious RCU usage
->  5.4.10 #68 Tainted: G S
->  -----------------------------
->  drivers/soc/qcom/trace-rpmh.h:72 suspicious rcu_dereference_check() 
-> usage!
-> 
->  other info that might help us debug this:
-> 
->  RCU used illegally from idle CPU!
->  rcu_scheduler_active = 2, debug_locks = 1
->  RCU used illegally from extended quiescent state!
->  5 locks held by swapper/2/0:
->   #0: ffffff81745d6ee8 (&(&genpd->slock)->rlock){+.+.}, at:
-> genpd_lock_spin+0x1c/0x2c
->   #1: ffffff81745da6e8 (&(&genpd->slock)->rlock/1){....}, at:
-> genpd_lock_nested_spin+0x24/0x34
->   #2: ffffff8174f2ca20 (&(&genpd->slock)->rlock/2){....}, at:
-> genpd_lock_nested_spin+0x24/0x34
->   #3: ffffff8174f2c300 (&(&drv->client.cache_lock)->rlock){....}, at:
-> rpmh_flush+0x48/0x24c
->   #4: ffffff8174f2c150 (&(&tcs->lock)->rlock){+.+.}, at:
-> rpmh_rsc_write_ctrl_data+0x74/0x270
-> 
->  stack backtrace:
->  CPU: 2 PID: 0 Comm: swapper/2 Tainted: G S                5.4.10 #68
->  Call trace:
->   dump_backtrace+0x0/0x174
->   show_stack+0x20/0x2c
->   dump_stack+0xc8/0x124
->   lockdep_rcu_suspicious+0xe4/0x104
->   __tcs_buffer_write+0x230/0x2d0
->   rpmh_rsc_write_ctrl_data+0x210/0x270
->   rpmh_flush+0x84/0x24c
->   rpmh_domain_power_off+0x78/0x98
->   _genpd_power_off+0x40/0xc0
->   genpd_power_off+0x168/0x208
->   genpd_power_off+0x1e0/0x208
->   genpd_power_off+0x1e0/0x208
->   genpd_runtime_suspend+0x1ac/0x220
->   __rpm_callback+0x70/0xfc
->   rpm_callback+0x34/0x8c
->   rpm_suspend+0x218/0x4a4
->   __pm_runtime_suspend+0x88/0xac
->   psci_enter_domain_idle_state+0x3c/0xb4
->   cpuidle_enter_state+0xb8/0x284
->   cpuidle_enter+0x38/0x4c
->   call_cpuidle+0x3c/0x68
->   do_idle+0x194/0x260
->   cpu_startup_entry+0x24/0x28
->   secondary_start_kernel+0x150/0x15c
-> 
-> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by 
-> using genpd")
-> Reported-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
-> 
-> I think the commit that this is "Fixes"ing is a stable commit, but I'm
-> not positive.
-> 
->  drivers/soc/qcom/rpmh-rsc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index e278fc11fe5c..b71822131f59 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -277,7 +277,7 @@ static void __tcs_buffer_write(struct rsc_drv
-> *drv, int tcs_id, int cmd_id,
->  		write_tcs_cmd(drv, RSC_DRV_CMD_MSGID, tcs_id, j, msgid);
->  		write_tcs_cmd(drv, RSC_DRV_CMD_ADDR, tcs_id, j, cmd->addr);
->  		write_tcs_cmd(drv, RSC_DRV_CMD_DATA, tcs_id, j, cmd->data);
-> -		trace_rpmh_send_msg(drv, tcs_id, j, msgid, cmd);
-> +		trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
->  	}
-> 
->  	write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, tcs_id, cmd_complete);
+On Thu, Dec 19, 2019 at 10:08 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+> I think there may be some AMD specific handling needed in
+> drivers/acpi/sleep.c.  My understanding from reading the modern
+> standby documents from MS is that each vendor needs to provide a
+> platform specific PEP driver.  I'm not sure how much of that current
+> code is Intel specific or not.
 
-Thanks Stephen,
+I don't think there is anything Intel-specific in drivers/acpi/sleep.c.
 
-Tested-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Reading more about PEP, I see that Linux supports PEP devices with
+ACPI ID INT33A1 or PNP0D80. Indeed the Intel platforms we work with
+have INT33A1 devices in their ACPI tables.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member
-of Code Aurora Forum, hosted by The Linux Foundation
+This product has a \_SB.PEP ACPI device with _HID AMD0004 and _CID
+PNP0D80. Full acpidump:
+https://gist.github.com/dsd/ff3dfc0f63cdd9eba4a0fbd9e776e8be (see
+ssdt7)
+
+This PEP device responds to a _DSM with UUID argument
+"e3f32452-febc-43ce-9039-932122d37721", which is not the one
+documented at https://uefi.org/sites/default/files/resources/Intel_ACPI_Low_Power_S0_Idle.pdf
+
+Nevertheless, there is some data about the GPU:
+                    Package (0x04)
+                    {
+                        One,
+                        "\\_SB.PCI0.GP17.VGA",
+                        Zero,
+                        0x03
+                    },
+
+However since this data is identical to many other devices that
+suspend and resume just fine, I wonder if it is really important.
+
+The one supported method does offer two calls which may mirror the
+Display Off/On Notifications in the above spec:
+                        Case (0x02)
+                        {
+                            \_SB.PCI0.SBRG.EC0.CSEE (0xB7)
+                            Return (Zero)
+                        }
+                        Case (0x03)
+                        {
+                            \_SB.PCI0.SBRG.EC0.CSEE (0xB8)
+                            Notify (\_SB.PCI0.SBRG.EC0.LID, 0x80) //
+Status Change
+                            Return (Zero)
+                        }
+
+but I tried executing this code after suspending amdgpu, and the
+problem still stands, amdgpu cannot wakeup correctly.
+
+There's nothing else really interesting in the PEP device as far as I can see.
+
+PEP things aside, I am still quite suspicious about the fact that
+calling amdgpu_device_suspend() then amdgpu_device_resume() on
+multiple products (not just this one) fails. It seems that this code
+flow is relying on the BIOS doing something in the S3 suspend/resume
+path in order to make the device resumable by amdgpu_device_resume(),
+which is why we have only encountered this issue for the first time on
+our first AMD platform that does not support S3 suspend.
+
+With that in mind, and lacking any better info, wouldn't it make sense
+for amdgpu_device_resume() to always call reset? Maybe it's not
+necessary in the S3 case, but it shouldn't harm anything. Or perhaps
+it could check if the device is alive and reset it if it's not?
+
+Alternatively do you have any other contacts within AMD that could
+help us figure out the underlying question of how to correctly suspend
+and resume these devices? Happy to ship an affected product sample
+your way.
+
+Thanks
+Daniel
