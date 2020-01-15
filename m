@@ -2,138 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1C713B70D
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 02:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ADB13B764
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 03:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbgAOBhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 20:37:53 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33536 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728848AbgAOBhx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 20:37:53 -0500
-Received: by mail-pl1-f195.google.com with SMTP id ay11so6068903plb.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 17:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zdsjxjvH/tUzmnwmoZCV321rPDTpQdI6rQfaTbsVcek=;
-        b=QtF3py1rm3eu6XA5nji+v+VyJkcjLjIc3YXtcyDs5jPzHYtKdo+D4Ih/7ihMTj17pA
-         ByVQfA4PTcgJVCJAg6UrUwuzDis4Ls9IjBJF/FTJyZQpAsyFwAAjPtz+NME9DIVzStb5
-         b1Vr3ZrPcqLk2YVpSdY91aK8x+hpToNe5mfhQ=
+        id S1728879AbgAOCCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 21:02:01 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:42574 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728834AbgAOCB6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 21:01:58 -0500
+Received: by mail-oi1-f195.google.com with SMTP id 18so13923731oin.9
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 18:01:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zdsjxjvH/tUzmnwmoZCV321rPDTpQdI6rQfaTbsVcek=;
-        b=U0Zik/Ns369ngT7U0eE3Z9qtzse7Rt+D/VIUtq4cxkis10h/qojj/GmkeEoO9GTsfi
-         xNaITlaOHHIRPBNXix7HtDyhy5YATFNQsvbpGw37XALnIFTIhIsNdL23pZDrw++yS8oJ
-         AxhiL7wJZp8gmJOLf4Ifod/NHCJyeAD2vS7WFbUYcMd0zY1rqY4I2uSzu2g4jJDOy2Dp
-         6hcMLv/Pyo33/UjWpiqifV9MYcB8xsFfcs0YtsCsXqmiWGsbnD6kODgbbsfUiPhvXQMV
-         lME3RYz9Lvp3/2RM3Ss00SNH0QggD6DCDaDSvBBEWyD7J2seeV0dwqPtkzxJCnmkC+Q9
-         go4Q==
-X-Gm-Message-State: APjAAAUxzf6M+GHD27p72nJvD8wNmSAnF/qgygkfQSyyb7vyZDmB0BDy
-        w/mDtjIyGr1AnKvXbxtBYBXLoA==
-X-Google-Smtp-Source: APXvYqz28WpmXl65RH3fAV23Fy7l4mAowqzKZ18QFkXC1WuOSJjgmtIlb3J9Cy51syq+QYmwbMGRLQ==
-X-Received: by 2002:a17:902:b087:: with SMTP id p7mr30291576plr.10.1579052272503;
-        Tue, 14 Jan 2020 17:37:52 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id y76sm19949275pfc.87.2020.01.14.17.37.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TXUKuJW35exIxCuuFGP0F9ChBxkOTZKYHQSXMibvkgw=;
+        b=nUkyT/ijOi3VK9e1RQyZAzvs5JUJ6L1GCDq4twHqMeCzz6UlppHsU340j+ezcJISSY
+         un9aWNDzMn3esKJLFuMFHQuOQz5BTyoZBmzbK7AdgPdlrGh2flo9Qj/PhmVBDuQsm42H
+         izTrDks/qEbQQitPxJqtVmtGntnfgwBVNutmF3SPos1nU2FugN81V/src+9YCW1oWJMo
+         qMGvCadC2hRdm4ruMxPCiJO6JZWjW4HH+tp/L8XQhnroclZvQD/+ARDKAjo0U/vSl+jz
+         GAvdNc6kefCvG1yGqVQmpDhww3kBzaABdepmgMvqDovlhAN7O6ptOay3xz3yhtNhwh43
+         +YMw==
+X-Gm-Message-State: APjAAAXtZOKWyuk1pcofPYCGeONALXADYFD9li5dRdW+Suea0LBp9s+G
+        KYkJJFLnWbzX4PhHf1867OT+tWY=
+X-Google-Smtp-Source: APXvYqyucWFFBLFhaJFYVvJ5RXdndfU+JCYMCSsBC0LpcU1W73LhFGpimlHOSUcit0DOkISne7VCXw==
+X-Received: by 2002:aca:2b0a:: with SMTP id i10mr19628724oik.137.1579053717329;
+        Tue, 14 Jan 2020 18:01:57 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id p24sm6038221oth.28.2020.01.14.18.01.56
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 17:37:52 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH] drivers: qcom: rpmh-rsc: Use rcuidle tracepoints for rpmh
-Date:   Tue, 14 Jan 2020 17:37:51 -0800
-Message-Id: <20200115013751.249588-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
+        Tue, 14 Jan 2020 18:01:56 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 220a2e
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Tue, 14 Jan 2020 20:01:55 -0600
+Date:   Tue, 14 Jan 2020 20:01:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tobias Schramm <t.schramm@manjaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND 2/2] dt-bindings: power: supply: cw2015_battery: add
+ device tree binding documentation
+Message-ID: <20200115020155.GA7802@bogus>
+References: <20200109113955.2882-1-t.schramm@manjaro.org>
+ <20200109113955.2882-3-t.schramm@manjaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200109113955.2882-3-t.schramm@manjaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This tracepoint is hit now that we call into the rpmh code from the cpu
-idle path. Let's move this to be an rcuidle tracepoint so that we avoid
-the RCU idle splat below
+On Thu, Jan 09, 2020 at 12:39:55PM +0100, Tobias Schramm wrote:
+> This patch adds the ds binding document for the cw2015 Fuel Gauge.
 
- =============================
- WARNING: suspicious RCU usage
- 5.4.10 #68 Tainted: G S
- -----------------------------
- drivers/soc/qcom/trace-rpmh.h:72 suspicious rcu_dereference_check() usage!
+ds?
 
- other info that might help us debug this:
+> 
+> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+> ---
+>  .../bindings/power/supply/cw2015_battery.txt  | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
 
- RCU used illegally from idle CPU!
- rcu_scheduler_active = 2, debug_locks = 1
- RCU used illegally from extended quiescent state!
- 5 locks held by swapper/2/0:
-  #0: ffffff81745d6ee8 (&(&genpd->slock)->rlock){+.+.}, at: genpd_lock_spin+0x1c/0x2c
-  #1: ffffff81745da6e8 (&(&genpd->slock)->rlock/1){....}, at: genpd_lock_nested_spin+0x24/0x34
-  #2: ffffff8174f2ca20 (&(&genpd->slock)->rlock/2){....}, at: genpd_lock_nested_spin+0x24/0x34
-  #3: ffffff8174f2c300 (&(&drv->client.cache_lock)->rlock){....}, at: rpmh_flush+0x48/0x24c
-  #4: ffffff8174f2c150 (&(&tcs->lock)->rlock){+.+.}, at: rpmh_rsc_write_ctrl_data+0x74/0x270
+Please make this a DT schema. See 
+Documentation/devicetree/writing-schema.rst.
 
- stack backtrace:
- CPU: 2 PID: 0 Comm: swapper/2 Tainted: G S                5.4.10 #68
- Call trace:
-  dump_backtrace+0x0/0x174
-  show_stack+0x20/0x2c
-  dump_stack+0xc8/0x124
-  lockdep_rcu_suspicious+0xe4/0x104
-  __tcs_buffer_write+0x230/0x2d0
-  rpmh_rsc_write_ctrl_data+0x210/0x270
-  rpmh_flush+0x84/0x24c
-  rpmh_domain_power_off+0x78/0x98
-  _genpd_power_off+0x40/0xc0
-  genpd_power_off+0x168/0x208
-  genpd_power_off+0x1e0/0x208
-  genpd_power_off+0x1e0/0x208
-  genpd_runtime_suspend+0x1ac/0x220
-  __rpm_callback+0x70/0xfc
-  rpm_callback+0x34/0x8c
-  rpm_suspend+0x218/0x4a4
-  __pm_runtime_suspend+0x88/0xac
-  psci_enter_domain_idle_state+0x3c/0xb4
-  cpuidle_enter_state+0xb8/0x284
-  cpuidle_enter+0x38/0x4c
-  call_cpuidle+0x3c/0x68
-  do_idle+0x194/0x260
-  cpu_startup_entry+0x24/0x28
-  secondary_start_kernel+0x150/0x15c
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt b/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
+> new file mode 100644
+> index 000000000000..e847391268f3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
+> @@ -0,0 +1,37 @@
+> +cw2015_battery
+> +~~~~~~~~~~~~~~~~
+> +
+> +The cellwise CW2015 is a shuntless single/multi-cell battery fuel gauge.
+> +
+> +Required properties :
+> + - compatible : "cellwise,cw2015"
+> + - cellwise,bat-config-info : Binary battery info blob
+> +
+> +Optional properties :
+> + - cellwise,monitor-interval : Measurement interval in seconds
 
-Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-Reported-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+Use standard unit suffix.
 
-I think the commit that this is "Fixes"ing is a stable commit, but I'm
-not positive.
+> + - cellwise,voltage-divider : Voltage divider for multi-cell packs,
+> +   specified as two integer values <high side>, <low side> in ohms.
 
- drivers/soc/qcom/rpmh-rsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Use standard unit suffix (-ohms).
 
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index e278fc11fe5c..b71822131f59 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -277,7 +277,7 @@ static void __tcs_buffer_write(struct rsc_drv *drv, int tcs_id, int cmd_id,
- 		write_tcs_cmd(drv, RSC_DRV_CMD_MSGID, tcs_id, j, msgid);
- 		write_tcs_cmd(drv, RSC_DRV_CMD_ADDR, tcs_id, j, cmd->addr);
- 		write_tcs_cmd(drv, RSC_DRV_CMD_DATA, tcs_id, j, cmd->data);
--		trace_rpmh_send_msg(drv, tcs_id, j, msgid, cmd);
-+		trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
- 	}
- 
- 	write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, tcs_id, cmd_complete);
--- 
-Sent by a computer, using git, on the internet
+> + - cellwise,virtual-power : Default to disconnected battery state (gauge in pack mode)
+> + - cellwise,design-capacity : Design capacity of the battery cell in milliampere hours
 
+I think we have a standard property for this. Properties of the battery 
+should be in a battery node.
+
+> + - cellwise,alert-level : Low battery alarm level in percent
+> +
+> +Example:
+> +	cw2015@62 {
+> +		status = "okay";
+
+Don't show status in examples.
+
+> +		compatible = "cellwise,cw201x";
+> +		reg = <0x62>;
+> +		cellwise,bat-config-info = <
+> +			0x17 0x67 0x80 0x73 0x6E 0x6C 0x6B 0x63
+> +			0x77 0x51 0x5C 0x58 0x50 0x4C 0x48 0x36
+> +			0x15 0x0C 0x0C 0x19 0x5B 0x7D 0x6F 0x69
+> +			0x69 0x5B 0x0C 0x29 0x20 0x40 0x52 0x59
+> +			0x57 0x56 0x54 0x4F 0x3B 0x1F 0x7F 0x17
+> +			0x06 0x1A 0x30 0x5A 0x85 0x93 0x96 0x2D
+> +			0x48 0x77 0x9C 0xB3 0x80 0x52 0x94 0xCB
+> +			0x2F 0x00 0x64 0xA5 0xB5 0x11 0xF0 0x11
+> +		>;
+> +		cellwise,monitor-interval = <5>;
+> +		cellwise,virtual-power;
+> +		cellwise,design-capacity = <9800>;
+> +		power-supplies = <&mains_charger>, <&usb_charger>;
+
+Not documented.
+
+> +	}
+> -- 
+> 2.24.1
+> 
