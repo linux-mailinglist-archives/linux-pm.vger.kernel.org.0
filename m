@@ -2,128 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 780EE13CE05
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A72313CE3B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgAOUUw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 15:20:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:42190 "EHLO foss.arm.com"
+        id S1729441AbgAOUsx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 15:48:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726220AbgAOUUv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jan 2020 15:20:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFC48328;
-        Wed, 15 Jan 2020 12:20:50 -0800 (PST)
-Received: from [192.168.0.17] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 27B583F718;
-        Wed, 15 Jan 2020 12:20:49 -0800 (PST)
-Subject: Re: [PATCH] sched/fair: remove redundant call to cpufreq_update_util
-To:     Vincent Guittot <vincent.guittot@linaro.org>, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <1579083620-24943-1-git-send-email-vincent.guittot@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <dd966dc1-db11-dd64-6b88-13e0dcf45fd7@arm.com>
-Date:   Wed, 15 Jan 2020 21:20:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728939AbgAOUsx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jan 2020 15:48:53 -0500
+Received: from earth.universe (dyndsl-095-033-170-011.ewe-ip-backbone.de [95.33.170.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3001E2081E;
+        Wed, 15 Jan 2020 20:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579121332;
+        bh=nwKS0zW1NjzVj+K/jTMff6/lN/RQqdLUaC940w/PiHc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvLE67+tXTbGZAkxNOFcfvVDgYRMHBam2zj35egGoSJ/t7FE6jfYIlNZN0KJPUcI5
+         RmRaWoPN9ZlzSpwemZeH62eV12863YhMl2rxfwFpT77gLYAIZbgNVrAA9AQQsTTuEx
+         cWLhcn5iKhz3aeUccSabMjFYxWLlSehq9zR9YEpM=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 59E763C0C7C; Wed, 15 Jan 2020 21:48:50 +0100 (CET)
+Date:   Wed, 15 Jan 2020 21:48:50 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Oskari Lemmela <oskari@lemmela.net>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 0/4] X-Powers Power Supply Improvements
+Message-ID: <20200115204850.7innme3d4agbay2r@earth.universe>
+References: <20200115034048.24901-1-samuel@sholland.org>
 MIME-Version: 1.0
-In-Reply-To: <1579083620-24943-1-git-send-email-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iquki6qdoejfp2er"
+Content-Disposition: inline
+In-Reply-To: <20200115034048.24901-1-samuel@sholland.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/01/2020 11:20, Vincent Guittot wrote:
-> With commit bef69dd87828 ("sched/cpufreq: Move the cfs_rq_util_change() call to cpufreq_update_util()")
-> update_load_avg() has become the central point for calling cpufreq (not
-> including the update of blocked load). This change helps to simplify
-> further the number of call to cpufreq_update_util() and to remove last
-> redundant ones. With update_load_avg(), we are now sure that
-> cpufreq_update_util() will be called after every task attachment to a
-> cfs_rq and especially after propagating this event down to the util_avg of
-> the root cfs_rq, which is the level that is used by cpufreq governors like
-> schedutil to set the frequency of a CPU.
-> 
-> The SCHED_CPUFREQ_MIGRATION flag forces an early call to cpufreq when the
-> migration happens in a cgroup whereas util_avg of root cfs_rq is not yet
-> updated and this call is duplicated with the one that happens immediately
-> after when the migration event reaches the root cfs_rq. The dedicated flag
-> SCHED_CPUFREQ_MIGRATION is now useless and can be removed. The interface of
-> attach_entity_load_avg() can also be simplified accordingly.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-LGTM. Doesn't this allow to get rid of the 'int flags' in
-cfs_rq_util_change() as well?
+--iquki6qdoejfp2er
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-8<---
+Hi,
 
- kernel/sched/fair.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Thanks, all queued to power-supply's for-next branch.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 328d59e8afba..f82f4fde0cd3 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3110,7 +3110,7 @@ static inline void update_cfs_group(struct sched_entity *se)
- }
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- 
--static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
-+static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq)
- {
- 	struct rq *rq = rq_of(cfs_rq);
- 
-@@ -3129,7 +3129,7 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
- 		 *
- 		 * See cpu_util().
- 		 */
--		cpufreq_update_util(rq, flags);
-+		cpufreq_update_util(rq, 0);
- 	}
- }
- 
-@@ -3556,7 +3556,7 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 
- 	add_tg_cfs_propagate(cfs_rq, se->avg.load_sum);
- 
--	cfs_rq_util_change(cfs_rq, 0);
-+	cfs_rq_util_change(cfs_rq);
- 
- 	trace_pelt_cfs_tp(cfs_rq);
- }
-@@ -3577,7 +3577,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 
- 	add_tg_cfs_propagate(cfs_rq, -se->avg.load_sum);
- 
--	cfs_rq_util_change(cfs_rq, 0);
-+	cfs_rq_util_change(cfs_rq);
- 
- 	trace_pelt_cfs_tp(cfs_rq);
- }
-@@ -3618,7 +3618,7 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 		update_tg_load_avg(cfs_rq, 0);
- 
- 	} else if (decayed) {
--		cfs_rq_util_change(cfs_rq, 0);
-+		cfs_rq_util_change(cfs_rq);
- 
- 		if (flags & UPDATE_TG)
- 			update_tg_load_avg(cfs_rq, 0);
-@@ -3851,7 +3851,7 @@ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
- 
- static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
- {
--	cfs_rq_util_change(cfs_rq, 0);
-+	cfs_rq_util_change(cfs_rq);
- }
- 
- static inline void remove_entity_load_avg(struct sched_entity *se) {}
--- 
-2.17.1
+-- Sebastian
+
+On Tue, Jan 14, 2020 at 09:40:44PM -0600, Samuel Holland wrote:
+> This series adds some improvements to the axp20x_usb_power power supply
+> driver to better support suspend/resume and use on mobile devices.
+>=20
+> Patch 1 is preparation for changes in following patches.
+> Patch 2 allows userspace to take the power supply offline.
+> Patch 3 allows userspace to control the wakeup behavior.
+> Patch 4 avoids polling USB VBUS presence when possible.
+>=20
+> Changes since v3:
+>  - Rebase on power-supply/for-next
+>  - Add Reviewed-by (1-2)
+>=20
+> Changes since v2:
+>  - Patch 1 was merged
+>  - Only check ACIN_PATH_SEL when necessary (1)
+>  - Update commit message (5)
+>  - Avoided reordering lines until/unless necessary (5, 7)
+>  - Update comment and add ID check in axp20x_usb_power_set_property
+>    (it seemed more correct than adding another comment) (6)
+>  - Add Reviewed-by where there were no comments (2-4, 7-8)
+>=20
+> Changes since v1:
+>  - Add patches 1-2
+>  - Shift value properly in calls to regmap_update_bits (3, 7)
+>  - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
+>  - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
+>  - Poll once on resume, in case the state changed during suspend (9)
+>=20
+> Samuel Holland (4):
+>   power: supply: axp20x_usb_power: Use a match structure
+>   power: supply: axp20x_usb_power: Allow offlining
+>   power: supply: axp20x_usb_power: Add wakeup control
+>   power: supply: axp20x_usb_power: Only poll while offline
+>=20
+>  drivers/power/supply/axp20x_usb_power.c | 217 ++++++++++++++++++------
+>  1 file changed, 169 insertions(+), 48 deletions(-)
+>=20
+> --=20
+> 2.23.0
+>=20
+
+--iquki6qdoejfp2er
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4feqkACgkQ2O7X88g7
++pozAQ//f7qy+dV6jSnUkT7cC7r6FNKsMxHlcEYcsaWK2kJZRNthTFUbc57S2vlj
+WQs2lDGLIy4CuP6kdJg3HjfZlMoE8GFf0Ta2yWK57B9aGu5aO5jkbZBt7y1u22An
+h0DtToT+WzaQCVa14fXfYITJTJluTvzoCV8ejX4WM3yuiq7rRmWzyadthVbvb2h6
+1PfGO+JEZtcWH+q/wP6LD6hg2gmjuvM00R/sEL02i3N9OCm60t1Lg6sq9nHzf0o8
+Z09wZnK09V2X0q+Pp3IJ3A1NIDYRXJIGQ3bHHjAFq9xnAta3ED33yrlVvhx0DiOh
+6o13ouCV0gfQFj4//ckKAsX5lP21hZQWYhZTN6LtHj14LD1aULJpTZH4+v81eWw9
+emb6dVthMIpImp6GBtuM3SH0TGatk39y/MZocegWmSr43/Gx9rC337sBnXdV5pxS
+Yi5mmBavJe4899PSBoexvfrzcvKjLVMrY10xVrPrv3WM0m11UANpPGulUs6cO+jr
+CzZUPTVYpRW4gt/2Jnm2i+yeNldOwf2eUHu4wql9G4+D9a//QLX+5tkLmtkhsQFc
+rdyK9fr8UnUPGUVf8wv9oWgq+SCLsaKAPZPS2uDcHWNbxvHKDq92lwMRF8elkVUE
+StEy7hT2BImfyvwBzh5qrOQU1xGsVjKCXQ4hsYy/ENd7J+ytt9A=
+=7sqy
+-----END PGP SIGNATURE-----
+
+--iquki6qdoejfp2er--
