@@ -2,116 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8394113CE4D
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C6113CE4F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 21:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729697AbgAOUwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 15:52:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728596AbgAOUwV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jan 2020 15:52:21 -0500
-Received: from earth.universe (dyndsl-095-033-170-011.ewe-ip-backbone.de [95.33.170.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C1AE2077B;
-        Wed, 15 Jan 2020 20:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579121540;
-        bh=YAMT4GqllrslSkD9BR0wa3v1n8fnVFdaxgMWcQCGiFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KR2jHDWtMzKMC7+luRtgc6uzI7E6RL2RYXkwvgtrQ/OrPejSuosrT52kbz/rj3h7x
-         H9tGv4hgT3iLXADTCVU2fbGkm4lfGc7FrLM7D2TM9dT8btIuWYCs5MAzLvx99Ddg0N
-         MfRSPDhyfWchBxm2p04Pi62WjWw3G2SuLTo4yUw8=
+        id S1729025AbgAOUws (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 15:52:48 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48750 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728596AbgAOUws (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 15:52:48 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 8FBA828EAC8
 Received: by earth.universe (Postfix, from userid 1000)
-        id 8BE583C0C7C; Wed, 15 Jan 2020 21:52:18 +0100 (CET)
-Date:   Wed, 15 Jan 2020 21:52:18 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Claudiu.Beznea@microchip.com
-Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id C2D3C3C0C7C; Wed, 15 Jan 2020 21:52:43 +0100 (CET)
+Date:   Wed, 15 Jan 2020 21:52:43 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Chen Wandun <chenwandun@huawei.com>
+Cc:     l.stach@pengutronix.de, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] at91-sama5d2_shdwc shutdown controller
-Message-ID: <20200115205218.wudf5dai2sj6pvvk@earth.universe>
-References: <1576855878-13213-1-git-send-email-claudiu.beznea@microchip.com>
- <3d0c5a04-25fb-5ae6-fd3a-4049e293eab1@microchip.com>
+Subject: Re: [PATCH next] power: suppy: ucs1002: Make the symbol
+ 'ucs1002_regulator_enable' static
+Message-ID: <20200115205243.mqhlgwxazdz4n3ob@earth.universe>
+References: <20191220094144.41142-1-chenwandun@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yd3evbzfobjk36fk"
+        protocol="application/pgp-signature"; boundary="hnlpxa6gspkazlpn"
 Content-Disposition: inline
-In-Reply-To: <3d0c5a04-25fb-5ae6-fd3a-4049e293eab1@microchip.com>
+In-Reply-To: <20191220094144.41142-1-chenwandun@huawei.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---yd3evbzfobjk36fk
+--hnlpxa6gspkazlpn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi
+Hi,
 
-It wasn't lost, I just did not yet collect patches for the next
-merge window. I queued the complete patchset to my for-next branch
-now.
+Thanks, queued.
 
 -- Sebastian
 
-On Tue, Jan 14, 2020 at 10:34:55AM +0000, Claudiu.Beznea@microchip.com wrot=
-e:
-> Hi Sebastian,
+On Fri, Dec 20, 2019 at 05:41:44PM +0800, Chen Wandun wrote:
+> Fix the following sparse warning:
 >=20
-> I know you may busy, I just want to be sure that you didn't forgot this s=
-eries.
+> drivers/power/supply/ucs1002_power.c:492:5: warning: symbol 'ucs1002_regu=
+lator_enable' was not declared. Should it be static?
 >=20
-> Thank you,
-> Claudiu Beznea
+> Fixes: a3d70dacc727 ("power: suppy: ucs1002: disable power when maxcurren=
+t is 0")
+> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+> ---
+>  drivers/power/supply/ucs1002_power.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> On 20.12.2019 17:31, Claudiu Beznea wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >=20
-> > PMC master clock register offset is different b/w sam9x60 and
-> > other SoCs. Since there is a need of this register offset in
-> > shutdown procedure we need to have it per SoC. This is what
-> > this series does.
-> >=20
-> > Changes in v2:
-> > - do not use r5 as intermediary registers in at91_poweroff
-> >=20
-> > Claudiu Beznea (2):
-> >   power: reset: at91-poweroff: introduce struct shdwc_reg_config
-> >   power: reset: at91-poweroff: use proper master clock register offset
-> >=20
-> >  drivers/power/reset/at91-sama5d2_shdwc.c | 72 +++++++++++++++++++++---=
---------
-> >  1 file changed, 47 insertions(+), 25 deletions(-)
-> >=20
-> > --
-> > 2.7.4
-> >=20
-> >=20
+> diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/=
+ucs1002_power.c
+> index 0ca80d00b80a..cdb9a23d825f 100644
+> --- a/drivers/power/supply/ucs1002_power.c
+> +++ b/drivers/power/supply/ucs1002_power.c
+> @@ -489,7 +489,7 @@ static irqreturn_t ucs1002_alert_irq(int irq, void *d=
+ata)
+>  	return IRQ_HANDLED;
+>  }
+> =20
+> -int ucs1002_regulator_enable(struct regulator_dev *rdev)
+> +static int ucs1002_regulator_enable(struct regulator_dev *rdev)
+>  {
+>  	struct ucs1002_info *info =3D rdev_get_drvdata(rdev);
+> =20
+> --=20
+> 2.17.1
+>=20
 
---yd3evbzfobjk36fk
+--hnlpxa6gspkazlpn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4fe4IACgkQ2O7X88g7
-+pop7w//bJTENOImq1Uw2WD17tRxI1UogZR6C7G3iQuBCimiyvw+QTNFwOzSmIkp
-P6zhrTeWBvyfYHWOFGynGfA99ISNYf8Ok3mFxLI7ov44JIHJkSoHOcIW6OFjloDz
-0G9Udiz88HCZ11gPIidfmhCdS5dLXmic0XCC/C1wiaVs1taJ358wQMStq5c4S7CE
-7E+sM/TUvC4/Zx9g3zrW/bitFaqbWVPk80V3odBhl9FFh8i640xbiU+U8uQ/Leak
-+J6K/BqO1uI2CVwU9d+NaADCUjSzQJelWM06PG21OkaFq8VFeFiRyxOtvStmQpDd
-BXByY4HxHPlGdvhVwSE1+VBSxK+r+NbN3MESBK4rE9jisfPvxvWK8osx8jmoivDM
-2VAHluRnUI4OS5Ab/HyxwcecX8tczdrTkmgCvK+EYthhqHZx5GPAKz2k4/qKq6Jo
-6+SLbKg2l2tT7vxR+dGLRD4uie8QtQvxHwIReCT1oLXB3qDoWMRc7iqfx5TOQpm6
-hYDjshmM2FhqU9+zJpxwXUC1KZUkiccvRpAPPfCyGN9vOEeaD2PLRRTGFrKBGTOd
-sA0uh55hfIlwWVh/qNBL6CQs58VeHUgznbDX1C8B9zX3QGmEX0grP7n/Z933d8ZC
-o/glSnVJ/+r0L0goB5p+J1PEv7WLs6jbplZXlngyP12Dg4+KZGw=
-=F7P+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4fe5sACgkQ2O7X88g7
++po6jQ/+Irt0N8MOKBe+boPgXjEaA6LsQ9Ua1tMtYTjeX/ZJq3Vd+yJoPTzpxn5L
+sf2Xpa9c8qc69XrJwXcJ32FNjkTLYjooC8aWjNcQOtE6hHcpW0hGITVCsImt+Chr
+xbumKUl7hrX2h1eSTtNsU2r0okxk5Ct0MMIb7KmMdoiwO+Vq4l2CFjdh0N2Qw7V3
+hGNaEw2DjYCt8WKEe7+owFeaEnFxedxOZYMYoQSNya/SOOgWKaufKI3BkMqhMQFG
+3mqrL2BN/BAzV1flRK7BIDMpMtrTiskKfaYQW++AOI3Jmab9zyOu5hhie/WWcXwh
+uUdxYWRh3UDRIyA4rHvxE9dkawWYmKmZeX2aVRalywE5zo2/dzMoBSd8kENM01Q6
+8ocnp44v9elSwtB+UZKNGZLZWTCbdmyFAkMfq4hCCkIBGxNIXihwbFB+IHrTMuJi
+v9qS+qJhTvO/uidA9lnrq8GsKy6lRU9KJNXngZG2oWinU4G+6flrTvJ+Hc2OsXwx
+dr7xUBDwJaAKiNOQqeDwS9x8LKJ3Wh42DCNboOykLRzy6dFBYlkRaz9rmVimP7EG
+yOk68F7C9PIXeOsjV3Ovz9egMqYQY9hhg746x157OY9M6RZP6xPwSNbxvWJOZLSm
+zBIFVnTa5O3UjAqQn5yktnWnCANf2EY7NTXGQQ/n05IwSCsQPhg=
+=8Odx
 -----END PGP SIGNATURE-----
 
---yd3evbzfobjk36fk--
+--hnlpxa6gspkazlpn--
