@@ -2,139 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ADB13B764
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 03:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5813B82F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 04:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbgAOCCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jan 2020 21:02:01 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:42574 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728834AbgAOCB6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 21:01:58 -0500
-Received: by mail-oi1-f195.google.com with SMTP id 18so13923731oin.9
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 18:01:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TXUKuJW35exIxCuuFGP0F9ChBxkOTZKYHQSXMibvkgw=;
-        b=nUkyT/ijOi3VK9e1RQyZAzvs5JUJ6L1GCDq4twHqMeCzz6UlppHsU340j+ezcJISSY
-         un9aWNDzMn3esKJLFuMFHQuOQz5BTyoZBmzbK7AdgPdlrGh2flo9Qj/PhmVBDuQsm42H
-         izTrDks/qEbQQitPxJqtVmtGntnfgwBVNutmF3SPos1nU2FugN81V/src+9YCW1oWJMo
-         qMGvCadC2hRdm4ruMxPCiJO6JZWjW4HH+tp/L8XQhnroclZvQD/+ARDKAjo0U/vSl+jz
-         GAvdNc6kefCvG1yGqVQmpDhww3kBzaABdepmgMvqDovlhAN7O6ptOay3xz3yhtNhwh43
-         +YMw==
-X-Gm-Message-State: APjAAAXtZOKWyuk1pcofPYCGeONALXADYFD9li5dRdW+Suea0LBp9s+G
-        KYkJJFLnWbzX4PhHf1867OT+tWY=
-X-Google-Smtp-Source: APXvYqyucWFFBLFhaJFYVvJ5RXdndfU+JCYMCSsBC0LpcU1W73LhFGpimlHOSUcit0DOkISne7VCXw==
-X-Received: by 2002:aca:2b0a:: with SMTP id i10mr19628724oik.137.1579053717329;
-        Tue, 14 Jan 2020 18:01:57 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p24sm6038221oth.28.2020.01.14.18.01.56
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 18:01:56 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 220a2e
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Tue, 14 Jan 2020 20:01:55 -0600
-Date:   Tue, 14 Jan 2020 20:01:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND 2/2] dt-bindings: power: supply: cw2015_battery: add
- device tree binding documentation
-Message-ID: <20200115020155.GA7802@bogus>
-References: <20200109113955.2882-1-t.schramm@manjaro.org>
- <20200109113955.2882-3-t.schramm@manjaro.org>
+        id S1729049AbgAODkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jan 2020 22:40:51 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:39135 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728879AbgAODku (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jan 2020 22:40:50 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 35B3C2213D;
+        Tue, 14 Jan 2020 22:40:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 14 Jan 2020 22:40:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=RrgydXjzryvsT0baMy3pjy0e7s
+        fLWEp3zx91v4rk8Kc=; b=odMM3ACvUNQ3DfAJebxF4yBz2RyD9enltEfZnL7exp
+        6N6++Ti9G6+t6z0frrlEnSgR+g6zaEEzBSB+A9fhW2fd0B7OriLBST4ZlXZySWGX
+        AjTkSR2M7NSSS0Wg2pBxqUhxRtbnz5t0r51xhA0Hk7ynqNPxV9yENmK8ItMHLKIS
+        Cl9EQ4niTuqj77b3MsmveiesY5C95AxOcsVwqm9HfIDSaSFEZ5zi2SDSJgSpFAVz
+        3D6HLpBaRkVaE/mfBk8i68Gc7vYfFuspnMPL0Ohmmof2gZnYYBlhfhgZ1WA7FmZU
+        FIkIgAb0on6dzBwfMjMfCn34706l/tbiuCXIkzOqwthA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=RrgydXjzryvsT0baM
+        y3pjy0e7sfLWEp3zx91v4rk8Kc=; b=FmrFlWnHD/9gvAHbizIAHNlp6PuW68wWZ
+        v7TtXZCWhjf68zqGSA6dWcmT+GxHsj8kKM8zt4IlcAQkUYZ6+z4tOahAPk7MOniL
+        ShyGAjIMt/ougC3kFKmhtV9QjxYC/s0qTWvLoQROP59FWd5qylb2D1m2qLmk1i/3
+        ReuRY1vGVM8prrNGwEqS1B3wUNmLu6KUmg5f8PwzX/K51iXrDPbLUHtv9SYSb+Qq
+        ruyztiT0LXuOVluH3bq2USj0d1/X1/4OycriNnGZGsKNxDZDQ+ZmbXhipA2HmUXn
+        5zWJO5LnIaRYK6caLA+moaYAx7dQEzBDSh1v2ODZ9GqAGbhuQ24rw==
+X-ME-Sender: <xms:wYkeXkuQ5UYKGE5zQz7osvQcXUz_DlKGbialkBce6iJMWwMwnG1Hhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtddvgdeitdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecukfhppeejtd
+    drudefhedrudegkedrudehudenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghl
+    sehshhholhhlrghnugdrohhrghenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:wYkeXnwa7xE63m_2A0v9m3INthDutYBqVYOMrbA3WeLlBwIcGiXxfA>
+    <xmx:wYkeXlwkdlie93T90lFGzaQJ2kuW8T1EvOE-4HV2f8PmH9o-bQibnw>
+    <xmx:wYkeXkjExHoyfk9yGp5bodHvl-Sw6bHIThkWAfvJLLe6KKALmYf4Xw>
+    <xmx:wokeXkdV5GkVqne3CpotvjeXEIm0jwwNzYtGDE7ymHzgrW1rUZcodA>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 700DD30607B4;
+        Tue, 14 Jan 2020 22:40:49 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc:     Oskari Lemmela <oskari@lemmela.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v4 0/4] X-Powers Power Supply Improvements
+Date:   Tue, 14 Jan 2020 21:40:44 -0600
+Message-Id: <20200115034048.24901-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200109113955.2882-3-t.schramm@manjaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 12:39:55PM +0100, Tobias Schramm wrote:
-> This patch adds the ds binding document for the cw2015 Fuel Gauge.
+This series adds some improvements to the axp20x_usb_power power supply
+driver to better support suspend/resume and use on mobile devices.
 
-ds?
+Patch 1 is preparation for changes in following patches.
+Patch 2 allows userspace to take the power supply offline.
+Patch 3 allows userspace to control the wakeup behavior.
+Patch 4 avoids polling USB VBUS presence when possible.
 
-> 
-> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
-> ---
->  .../bindings/power/supply/cw2015_battery.txt  | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
+Changes since v3:
+ - Rebase on power-supply/for-next
+ - Add Reviewed-by (1-2)
 
-Please make this a DT schema. See 
-Documentation/devicetree/writing-schema.rst.
+Changes since v2:
+ - Patch 1 was merged
+ - Only check ACIN_PATH_SEL when necessary (1)
+ - Update commit message (5)
+ - Avoided reordering lines until/unless necessary (5, 7)
+ - Update comment and add ID check in axp20x_usb_power_set_property
+   (it seemed more correct than adding another comment) (6)
+ - Add Reviewed-by where there were no comments (2-4, 7-8)
 
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt b/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
-> new file mode 100644
-> index 000000000000..e847391268f3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.txt
-> @@ -0,0 +1,37 @@
-> +cw2015_battery
-> +~~~~~~~~~~~~~~~~
-> +
-> +The cellwise CW2015 is a shuntless single/multi-cell battery fuel gauge.
-> +
-> +Required properties :
-> + - compatible : "cellwise,cw2015"
-> + - cellwise,bat-config-info : Binary battery info blob
-> +
-> +Optional properties :
-> + - cellwise,monitor-interval : Measurement interval in seconds
+Changes since v1:
+ - Add patches 1-2
+ - Shift value properly in calls to regmap_update_bits (3, 7)
+ - Use #ifdef instead of #if to avoid -Wundef warnings (4, 8)
+ - Poll once after an IRQ, instead of setting power->online in the IRQ (9)
+ - Poll once on resume, in case the state changed during suspend (9)
 
-Use standard unit suffix.
+Samuel Holland (4):
+  power: supply: axp20x_usb_power: Use a match structure
+  power: supply: axp20x_usb_power: Allow offlining
+  power: supply: axp20x_usb_power: Add wakeup control
+  power: supply: axp20x_usb_power: Only poll while offline
 
-> + - cellwise,voltage-divider : Voltage divider for multi-cell packs,
-> +   specified as two integer values <high side>, <low side> in ohms.
+ drivers/power/supply/axp20x_usb_power.c | 217 ++++++++++++++++++------
+ 1 file changed, 169 insertions(+), 48 deletions(-)
 
-Use standard unit suffix (-ohms).
+-- 
+2.23.0
 
-> + - cellwise,virtual-power : Default to disconnected battery state (gauge in pack mode)
-> + - cellwise,design-capacity : Design capacity of the battery cell in milliampere hours
-
-I think we have a standard property for this. Properties of the battery 
-should be in a battery node.
-
-> + - cellwise,alert-level : Low battery alarm level in percent
-> +
-> +Example:
-> +	cw2015@62 {
-> +		status = "okay";
-
-Don't show status in examples.
-
-> +		compatible = "cellwise,cw201x";
-> +		reg = <0x62>;
-> +		cellwise,bat-config-info = <
-> +			0x17 0x67 0x80 0x73 0x6E 0x6C 0x6B 0x63
-> +			0x77 0x51 0x5C 0x58 0x50 0x4C 0x48 0x36
-> +			0x15 0x0C 0x0C 0x19 0x5B 0x7D 0x6F 0x69
-> +			0x69 0x5B 0x0C 0x29 0x20 0x40 0x52 0x59
-> +			0x57 0x56 0x54 0x4F 0x3B 0x1F 0x7F 0x17
-> +			0x06 0x1A 0x30 0x5A 0x85 0x93 0x96 0x2D
-> +			0x48 0x77 0x9C 0xB3 0x80 0x52 0x94 0xCB
-> +			0x2F 0x00 0x64 0xA5 0xB5 0x11 0xF0 0x11
-> +		>;
-> +		cellwise,monitor-interval = <5>;
-> +		cellwise,virtual-power;
-> +		cellwise,design-capacity = <9800>;
-> +		power-supplies = <&mains_charger>, <&usb_charger>;
-
-Not documented.
-
-> +	}
-> -- 
-> 2.24.1
-> 
