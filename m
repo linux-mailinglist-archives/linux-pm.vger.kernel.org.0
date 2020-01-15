@@ -2,422 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E19AE13B9A3
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 07:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14EF13B9F4
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 07:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgAOGe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 01:34:58 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41193 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbgAOGe6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 01:34:58 -0500
-Received: by mail-pl1-f194.google.com with SMTP id bd4so6411781plb.8
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2020 22:34:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D5GhYRvIOMA2/+JR2nlwsRzLbhoIpTMGVMbFCi3UIBs=;
-        b=dp7vX0gOdOjgraCjH15ptRBASWxHx8vH5UM+gs/puGayIsIclEQNcCpMBvIghfJC6n
-         qH1U/GTtuBRvX+dqpoA19+aZ/BbAln47bDfj6kMogmJiYGZh18zbm0NTVrR1a/3lL/yu
-         Q3c+s0w6F9c8trBg4NeJOfLvHwQKeYx3uet9k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D5GhYRvIOMA2/+JR2nlwsRzLbhoIpTMGVMbFCi3UIBs=;
-        b=kOTlgjCHFoUpkjMfuGfqG/sqmg01aA4LNKrkUkr4qSo2nyaLgx9HthfTB3j7pgL/r2
-         mghljUls5NS+saqIOR0fxPb6en1KgGGLE86JMnYBQO5uIkX1291sP/mhx9xNPVCVaiLW
-         jzvEwzqPJts52hzukke/xcO3V23JgTlK9dLMnK2heCJLscVjRbmXss+sybixYi/65a1e
-         s80A8wF7yOYKw9wYrx8WDaWBGcPcgFqf9y8PuDrY0Tx9bkgLYDe6eSJYiwAX65v1bfuQ
-         dn9xXcaan1AnLLXDngH/p4dr/ezKsrO8HAOTntgfnbkOUXwANgJ17h7VE08qp2zZifJL
-         lvXw==
-X-Gm-Message-State: APjAAAXum1oulr8acURzyNKG/IrBbD+q7z8TZXQNKWv+MbbIPGuCYNHB
-        YFAOa6d0u69KPp9d99cwHr+f0g==
-X-Google-Smtp-Source: APXvYqwKI/7dzhC8e0EuYYRYvjO/GqzP0ubI3Fm+dXZK9GjZqUdAHWerWKeczCJxHqoop4QP9ulajw==
-X-Received: by 2002:a17:902:7d95:: with SMTP id a21mr24721972plm.198.1579070097312;
-        Tue, 14 Jan 2020 22:34:57 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b852:bd51:9305:4261])
-        by smtp.gmail.com with ESMTPSA id v15sm4848146pju.15.2020.01.14.22.34.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 22:34:56 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Aaro Koskinen <aaro.koskinen@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-pm@vger.kernel.org
-Subject: [PATCH v5] reboot: support offline CPUs before reboot
-Date:   Wed, 15 Jan 2020 14:34:10 +0800
-Message-Id: <20200115063410.131692-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
+        id S1726085AbgAOGyC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 01:54:02 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:37852 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725962AbgAOGyC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 01:54:02 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579071241; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=s37LLIPYFReLdb0u97Mk+1cz4+bjCaaV9gp2iuq6M2Q=;
+ b=FRROdTi6ZsUIAcih1sbvGK+5AEowGCbzXyxQQAJ64ggdcAW3t3oiigbrxuVINDqtgRnwMnTF
+ 4LhFOdCP/RA/UXDQX3CysvdlrlmEwzYvPF+ZpB9aqHoIlN5zc5UECeVUg7NuNHjFVPrPva7d
+ d8b4jqNeAnxc0VaO8DtY0el7knA=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e1eb707.7f0b1c4a9030-smtp-out-n02;
+ Wed, 15 Jan 2020 06:53:59 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4A89EC447A1; Wed, 15 Jan 2020 06:53:58 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 90F2BC433A2;
+        Wed, 15 Jan 2020 06:53:57 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 15 Jan 2020 12:23:57 +0530
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH] drivers: qcom: rpmh-rsc: Use rcuidle tracepoints for rpmh
+In-Reply-To: <20200115013751.249588-1-swboyd@chromium.org>
+References: <20200115013751.249588-1-swboyd@chromium.org>
+Message-ID: <00798be85df85beff8edcf26767dddc2@codeaurora.org>
+X-Sender: saiprakash.ranjan@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently system reboots uses architecture specific codes (smp_send_stop)
-to offline non reboot CPUs. Most architecture's implementation is looping
-through all non reboot online CPUs and call ipi function to each of them. Some
-architecture like arm64, arm, and x86... would set offline masks to cpu without
-really offline them. This causes some race condition and kernel warning comes
-out sometimes when system reboots.
+On 2020-01-15 07:07, Stephen Boyd wrote:
+> This tracepoint is hit now that we call into the rpmh code from the cpu
+> idle path. Let's move this to be an rcuidle tracepoint so that we avoid
+> the RCU idle splat below
+> 
+>  =============================
+>  WARNING: suspicious RCU usage
+>  5.4.10 #68 Tainted: G S
+>  -----------------------------
+>  drivers/soc/qcom/trace-rpmh.h:72 suspicious rcu_dereference_check() 
+> usage!
+> 
+>  other info that might help us debug this:
+> 
+>  RCU used illegally from idle CPU!
+>  rcu_scheduler_active = 2, debug_locks = 1
+>  RCU used illegally from extended quiescent state!
+>  5 locks held by swapper/2/0:
+>   #0: ffffff81745d6ee8 (&(&genpd->slock)->rlock){+.+.}, at:
+> genpd_lock_spin+0x1c/0x2c
+>   #1: ffffff81745da6e8 (&(&genpd->slock)->rlock/1){....}, at:
+> genpd_lock_nested_spin+0x24/0x34
+>   #2: ffffff8174f2ca20 (&(&genpd->slock)->rlock/2){....}, at:
+> genpd_lock_nested_spin+0x24/0x34
+>   #3: ffffff8174f2c300 (&(&drv->client.cache_lock)->rlock){....}, at:
+> rpmh_flush+0x48/0x24c
+>   #4: ffffff8174f2c150 (&(&tcs->lock)->rlock){+.+.}, at:
+> rpmh_rsc_write_ctrl_data+0x74/0x270
+> 
+>  stack backtrace:
+>  CPU: 2 PID: 0 Comm: swapper/2 Tainted: G S                5.4.10 #68
+>  Call trace:
+>   dump_backtrace+0x0/0x174
+>   show_stack+0x20/0x2c
+>   dump_stack+0xc8/0x124
+>   lockdep_rcu_suspicious+0xe4/0x104
+>   __tcs_buffer_write+0x230/0x2d0
+>   rpmh_rsc_write_ctrl_data+0x210/0x270
+>   rpmh_flush+0x84/0x24c
+>   rpmh_domain_power_off+0x78/0x98
+>   _genpd_power_off+0x40/0xc0
+>   genpd_power_off+0x168/0x208
+>   genpd_power_off+0x1e0/0x208
+>   genpd_power_off+0x1e0/0x208
+>   genpd_runtime_suspend+0x1ac/0x220
+>   __rpm_callback+0x70/0xfc
+>   rpm_callback+0x34/0x8c
+>   rpm_suspend+0x218/0x4a4
+>   __pm_runtime_suspend+0x88/0xac
+>   psci_enter_domain_idle_state+0x3c/0xb4
+>   cpuidle_enter_state+0xb8/0x284
+>   cpuidle_enter+0x38/0x4c
+>   call_cpuidle+0x3c/0x68
+>   do_idle+0x194/0x260
+>   cpu_startup_entry+0x24/0x28
+>   secondary_start_kernel+0x150/0x15c
+> 
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by 
+> using genpd")
+> Reported-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> I think the commit that this is "Fixes"ing is a stable commit, but I'm
+> not positive.
+> 
+>  drivers/soc/qcom/rpmh-rsc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> index e278fc11fe5c..b71822131f59 100644
+> --- a/drivers/soc/qcom/rpmh-rsc.c
+> +++ b/drivers/soc/qcom/rpmh-rsc.c
+> @@ -277,7 +277,7 @@ static void __tcs_buffer_write(struct rsc_drv
+> *drv, int tcs_id, int cmd_id,
+>  		write_tcs_cmd(drv, RSC_DRV_CMD_MSGID, tcs_id, j, msgid);
+>  		write_tcs_cmd(drv, RSC_DRV_CMD_ADDR, tcs_id, j, cmd->addr);
+>  		write_tcs_cmd(drv, RSC_DRV_CMD_DATA, tcs_id, j, cmd->data);
+> -		trace_rpmh_send_msg(drv, tcs_id, j, msgid, cmd);
+> +		trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
+>  	}
+> 
+>  	write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, tcs_id, cmd_complete);
 
-This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
-migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
-checking online cpus would be an empty loop. If architecture don't enable this
-config, or some cpus somehow fails to offline, it would fallback to ipi
-function.
+Thanks Stephen,
 
-Opt in this config for architectures that support CONFIG_HOTPLUG_CPU.
+Tested-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
-Change from v4:
-* fix a few nits: naming, comments, remove Kconfig text...
-
-Change from v3:
-* Opt in config for architectures that support CONFIG_HOTPLUG_CPU
-* Merge function offline_secondary_cpus() and freeze_secondary_cpus()
-  with an additional flag.
-
-Change from v2:
-* Add another config instead of configed by CONFIG_HOTPLUG_CPU
-
-Previous related discussion on list:
-https://lore.kernel.org/lkml/20190727164450.GA11726@roeck-us.net/
-https://lore.kernel.org/patchwork/patch/1117201/
----
- arch/Kconfig                          |  5 +++++
- arch/arm/Kconfig                      |  1 +
- arch/arm64/Kconfig                    |  1 +
- arch/arm64/kernel/hibernate.c         |  2 +-
- arch/csky/Kconfig                     |  1 +
- arch/ia64/Kconfig                     |  1 +
- arch/mips/Kconfig                     |  1 +
- arch/parisc/Kconfig                   |  1 +
- arch/powerpc/Kconfig                  |  1 +
- arch/s390/Kconfig                     |  1 +
- arch/sh/Kconfig                       |  1 +
- arch/sparc/Kconfig                    |  1 +
- arch/x86/Kconfig                      |  1 +
- arch/xtensa/Kconfig                   |  1 +
- drivers/power/reset/sc27xx-poweroff.c |  2 +-
- include/linux/cpu.h                   |  9 ++++++---
- kernel/cpu.c                          | 12 ++++++++----
- kernel/reboot.c                       |  8 ++++++++
- 18 files changed, 41 insertions(+), 9 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 48b5e103bdb0..a8db7999cd4c 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -255,6 +255,11 @@ config ARCH_HAS_UNCACHED_SEGMENT
- 	select ARCH_HAS_DMA_PREP_COHERENT
- 	bool
- 
-+# Select to do a full offline on secondary CPUs before reboot.
-+config ARCH_OFFLINE_CPUS_ON_REBOOT
-+	bool
-+	depends on HOTPLUG_CPU
-+
- # Select if arch init_task must go in the __init_task_data section
- config ARCH_TASK_STRUCT_ON_STACK
- 	bool
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 69950fb5be64..d53cc8cb47e3 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -28,6 +28,7 @@ config ARM
- 	select ARCH_KEEP_MEMBLOCK if HAVE_ARCH_PFN_VALID || KEXEC
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_NO_SG_CHAIN if !ARM_HAS_SG_CHAIN
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 9af26ac75d19..9f913bc5c1f6 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -61,6 +61,7 @@ config ARM64
- 	select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
- 	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
- 	select ARCH_KEEP_MEMBLOCK
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/arch/arm64/kernel/hibernate.c b/arch/arm64/kernel/hibernate.c
-index 590963c9c609..f7245dfa09d9 100644
---- a/arch/arm64/kernel/hibernate.c
-+++ b/arch/arm64/kernel/hibernate.c
-@@ -581,5 +581,5 @@ int hibernate_resume_nonboot_cpu_disable(void)
- 		return -ENODEV;
- 	}
- 
--	return freeze_secondary_cpus(sleep_cpu);
-+	return freeze_secondary_cpus(sleep_cpu, false);
- }
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 4acef4088de7..0f03e5c3f2fc 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -5,6 +5,7 @@ config CSKY
- 	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
- 	select COMMON_CLK
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index bab7cd878464..f12b4b11ee98 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -10,6 +10,7 @@ config IA64
- 	bool
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ACPI
- 	select ACPI_NUMA if NUMA
- 	select ARCH_SUPPORTS_ACPI
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index b6b5f83af169..9bb2556d21fc 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -8,6 +8,7 @@ config MIPS
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_FORTIFY_SOURCE
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_SUPPORTS_UPROBES
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 71034b54d74e..41609f00b057 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -13,6 +13,7 @@ config PARISC
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_NO_SG_CHAIN
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_SUPPORTS_MEMORY_FAILURE
- 	select RTC_CLASS
- 	select RTC_DRV_GENERIC
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 658e0324d256..a6b76dd82a2d 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -142,6 +142,7 @@ config PPC
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT	if HOTPLUG_CPU
- 	select ARCH_OPTIONAL_KERNEL_RWX		if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_USE_BUILTIN_BSWAP
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 287714d51b47..19eec37b1682 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -102,6 +102,7 @@ config S390
- 	select ARCH_INLINE_WRITE_UNLOCK_IRQ
- 	select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE
- 	select ARCH_KEEP_MEMBLOCK
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_SAVE_PAGE_KEYS if HIBERNATION
- 	select ARCH_STACKWALK
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 9ece111b0254..4ed1e0ca83a2 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -18,6 +18,7 @@ config SUPERH
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select PERF_USE_VMALLOC
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_KERNEL_GZIP
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index e8c3ea01c12f..f31700309621 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -30,6 +30,7 @@ config SPARC
- 	select RTC_SYSTOHC
- 	select HAVE_ARCH_JUMP_LABEL if SPARC64
- 	select GENERIC_IRQ_SHOW
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select GENERIC_PCI_IOMAP
- 	select HAVE_NMI_WATCHDOG if SPARC64
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b595ecb21a0f..e8edab974f67 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -85,6 +85,7 @@ config X86
- 	select ARCH_MIGHT_HAVE_ACPI_PDC		if ACPI
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT	if HOTPLUG_CPU
- 	select ARCH_STACKWALK
- 	select ARCH_SUPPORTS_ACPI
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 1c645172b4b5..c862dfa69ed9 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -7,6 +7,7 @@ config XTENSA
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
- 	select ARCH_HAS_UNCACHED_SEGMENT if MMU
-+	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_FRAME_POINTERS
-diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc27xx-poweroff.c
-index 29fb08b8faa0..d6cdf837235c 100644
---- a/drivers/power/reset/sc27xx-poweroff.c
-+++ b/drivers/power/reset/sc27xx-poweroff.c
-@@ -30,7 +30,7 @@ static void sc27xx_poweroff_shutdown(void)
- #ifdef CONFIG_PM_SLEEP_SMP
- 	int cpu = smp_processor_id();
- 
--	freeze_secondary_cpus(cpu);
-+	freeze_secondary_cpus(cpu, false);
- #endif
- }
- 
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 1ca2baf817ed..9c62274a4db9 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -137,11 +137,14 @@ static inline void cpu_hotplug_done(void) { cpus_write_unlock(); }
- static inline void get_online_cpus(void) { cpus_read_lock(); }
- static inline void put_online_cpus(void) { cpus_read_unlock(); }
- 
-+#if defined(CONFIG_PM_SLEEP_SMP) || defined(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
-+extern int freeze_secondary_cpus(int primary, bool reboot);
-+#endif
-+
- #ifdef CONFIG_PM_SLEEP_SMP
--extern int freeze_secondary_cpus(int primary);
- static inline int disable_nonboot_cpus(void)
- {
--	return freeze_secondary_cpus(0);
-+	return freeze_secondary_cpus(0, false);
- }
- extern void enable_nonboot_cpus(void);
- 
-@@ -152,7 +155,7 @@ static inline int suspend_disable_secondary_cpus(void)
- 	if (IS_ENABLED(CONFIG_PM_SLEEP_SMP_NONZERO_CPU))
- 		cpu = -1;
- 
--	return freeze_secondary_cpus(cpu);
-+	return freeze_secondary_cpus(cpu, false);
- }
- static inline void suspend_enable_secondary_cpus(void)
- {
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 9c706af713fb..52d04e4e1aab 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1209,10 +1209,10 @@ int cpu_up(unsigned int cpu)
- }
- EXPORT_SYMBOL_GPL(cpu_up);
- 
--#ifdef CONFIG_PM_SLEEP_SMP
-+#if defined(CONFIG_PM_SLEEP_SMP) || defined(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
- static cpumask_var_t frozen_cpus;
- 
--int freeze_secondary_cpus(int primary)
-+int freeze_secondary_cpus(int primary, bool reboot)
- {
- 	int cpu, error = 0;
- 
-@@ -1237,11 +1237,13 @@ int freeze_secondary_cpus(int primary)
- 		if (cpu == primary)
- 			continue;
- 
--		if (pm_wakeup_pending()) {
-+#ifdef CONFIG_PM_SLEEP
-+		if (!reboot && pm_wakeup_pending()) {
- 			pr_info("Wakeup pending. Abort CPU freeze\n");
- 			error = -EBUSY;
- 			break;
- 		}
-+#endif
- 
- 		trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
- 		error = _cpu_down(cpu, 1, CPUHP_OFFLINE);
-@@ -1250,7 +1252,9 @@ int freeze_secondary_cpus(int primary)
- 			cpumask_set_cpu(cpu, frozen_cpus);
- 		else {
- 			pr_err("Error taking CPU%d down: %d\n", cpu, error);
--			break;
-+			/* When rebooting, offline as many CPUs as possible. */
-+			if (!reboot)
-+				break;
- 		}
- 	}
- 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index c4d472b7f1b4..12f643b66e57 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -7,6 +7,7 @@
- 
- #define pr_fmt(fmt)	"reboot: " fmt
- 
-+#include <linux/cpu.h>
- #include <linux/ctype.h>
- #include <linux/export.h>
- #include <linux/kexec.h>
-@@ -220,7 +221,9 @@ void migrate_to_reboot_cpu(void)
- 	/* The boot cpu is always logical cpu 0 */
- 	int cpu = reboot_cpu;
- 
-+#if !IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
- 	cpu_hotplug_disable();
-+#endif
- 
- 	/* Make certain the cpu I'm about to reboot on is online */
- 	if (!cpu_online(cpu))
-@@ -231,6 +234,11 @@ void migrate_to_reboot_cpu(void)
- 
- 	/* Make certain I only run on the appropriate processor */
- 	set_cpus_allowed_ptr(current, cpumask_of(cpu));
-+
-+#if IS_ENABLED(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
-+	/* Offline other cpus if possible */
-+	freeze_secondary_cpus(cpu, true);
-+#endif
- }
- 
- /**
 -- 
-2.25.0.rc1.283.g88dfdc4193-goog
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member
+of Code Aurora Forum, hosted by The Linux Foundation
