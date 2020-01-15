@@ -2,150 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC3813BD61
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 11:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B0D13BE6B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 12:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729727AbgAOK2Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 05:28:24 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55103 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729693AbgAOK2Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 05:28:24 -0500
-Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
- id a19f27fe6dcc38b1; Wed, 15 Jan 2020 11:28:22 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] sched/fair: remove redundant call to cpufreq_update_util
-Date:   Wed, 15 Jan 2020 11:28:21 +0100
-Message-ID: <1877134.NLrey8JjuQ@kreacher>
-In-Reply-To: <1579083620-24943-1-git-send-email-vincent.guittot@linaro.org>
-References: <1579083620-24943-1-git-send-email-vincent.guittot@linaro.org>
+        id S1730003AbgAOLah (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 06:30:37 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:38651 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729758AbgAOLag (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 06:30:36 -0500
+Received: from droid13.amlogic.com (116.236.93.172) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 15 Jan 2020
+ 19:31:02 +0800
+From:   Jianxin Pan <jianxin.pan@amlogic.com>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        <linux-amlogic@lists.infradead.org>
+CC:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: [PATCH v6 0/4] arm64: meson: add support for A1 Power Domains
+Date:   Wed, 15 Jan 2020 19:30:27 +0800
+Message-ID: <1579087831-94965-1-git-send-email-jianxin.pan@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
+X-Originating-IP: [116.236.93.172]
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, January 15, 2020 11:20:20 AM CET Vincent Guittot wrote:
-> With commit bef69dd87828 ("sched/cpufreq: Move the cfs_rq_util_change() call to cpufreq_update_util()")
-> update_load_avg() has become the central point for calling cpufreq (not
-> including the update of blocked load). This change helps to simplify
-> further the number of call to cpufreq_update_util() and to remove last
+This patchset introduces a "Secure Power Doamin Controller". In A1/C1, power
+controller registers such as PWRCTRL_FOCRSTN, PWRCTRL_PWR_OFF, PWRCTRL_MEM_PD
+and PWRCTRL_ISO_EN, are in the secure domain, and should be accessed from ATF
+by smc.
 
-s/call/calls/
+The secure-pwrc will not be probed before the secure watchdog patchset is merged 
+at [6], which adds of_platform_default_populate() in meson_sm_probe(). 
 
-And the patch looks reasonable to me.
+Changes since v5 at [4]:                                                         
+ - Move sec-pwrc to child node of secure-monitor according to Rob's suggestion
+   at [5]
 
-> redundant ones. With update_load_avg(), we are now sure that
-> cpufreq_update_util() will be called after every task attachment to a
-> cfs_rq and especially after propagating this event down to the util_avg of
-> the root cfs_rq, which is the level that is used by cpufreq governors like
-> schedutil to set the frequency of a CPU.
-> 
-> The SCHED_CPUFREQ_MIGRATION flag forces an early call to cpufreq when the
-> migration happens in a cgroup whereas util_avg of root cfs_rq is not yet
-> updated and this call is duplicated with the one that happens immediately
-> after when the migration event reaches the root cfs_rq. The dedicated flag
-> SCHED_CPUFREQ_MIGRATION is now useless and can be removed. The interface of
-> attach_entity_load_avg() can also be simplified accordingly.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Changes since v4 at [3]:                                                         
+ - add SM_A1_ prefix for PWRC_SET/GET
+ - rename variable and update comments
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Changes since v3 at [2]:                                                         
+ - remove phandle to secure-monitor node
 
-> ---
->  include/linux/sched/cpufreq.h |  1 -
->  kernel/sched/fair.c           | 14 +++++++-------
->  2 files changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
-> index cc6bcc1e96bc..3ed5aa18593f 100644
-> --- a/include/linux/sched/cpufreq.h
-> +++ b/include/linux/sched/cpufreq.h
-> @@ -9,7 +9,6 @@
->   */
->  
->  #define SCHED_CPUFREQ_IOWAIT	(1U << 0)
-> -#define SCHED_CPUFREQ_MIGRATION	(1U << 1)
->  
->  #ifdef CONFIG_CPU_FREQ
->  struct cpufreq_policy;
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 2d170b5da0e3..023aa42aaac7 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -801,7 +801,7 @@ void post_init_entity_util_avg(struct task_struct *p)
->  		 * For !fair tasks do:
->  		 *
->  		update_cfs_rq_load_avg(now, cfs_rq);
-> -		attach_entity_load_avg(cfs_rq, se, 0);
-> +		attach_entity_load_avg(cfs_rq, se);
->  		switched_from_fair(rq, p);
->  		 *
->  		 * such that the next switched_to_fair() has the
-> @@ -3114,7 +3114,7 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
->  {
->  	struct rq *rq = rq_of(cfs_rq);
->  
-> -	if (&rq->cfs == cfs_rq || (flags & SCHED_CPUFREQ_MIGRATION)) {
-> +	if (&rq->cfs == cfs_rq) {
->  		/*
->  		 * There are a few boundary cases this might miss but it should
->  		 * get called often enough that that should (hopefully) not be
-> @@ -3520,7 +3520,7 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
->   * Must call update_cfs_rq_load_avg() before this, since we rely on
->   * cfs_rq->avg.last_update_time being current.
->   */
-> -static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> +static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
->  {
->  	u32 divider = LOAD_AVG_MAX - 1024 + cfs_rq->avg.period_contrib;
->  
-> @@ -3556,7 +3556,7 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->  
->  	add_tg_cfs_propagate(cfs_rq, se->avg.load_sum);
->  
-> -	cfs_rq_util_change(cfs_rq, flags);
-> +	cfs_rq_util_change(cfs_rq, 0);
->  
->  	trace_pelt_cfs_tp(cfs_rq);
->  }
-> @@ -3614,7 +3614,7 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->  		 *
->  		 * IOW we're enqueueing a task on a new CPU.
->  		 */
-> -		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
-> +		attach_entity_load_avg(cfs_rq, se);
->  		update_tg_load_avg(cfs_rq, 0);
->  
->  	} else if (decayed) {
-> @@ -3871,7 +3871,7 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->  static inline void remove_entity_load_avg(struct sched_entity *se) {}
->  
->  static inline void
-> -attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags) {}
-> +attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
->  static inline void
->  detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}
->  
-> @@ -10439,7 +10439,7 @@ static void attach_entity_cfs_rq(struct sched_entity *se)
->  
->  	/* Synchronize entity with its cfs_rq */
->  	update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
-> -	attach_entity_load_avg(cfs_rq, se, 0);
-> +	attach_entity_load_avg(cfs_rq, se);
->  	update_tg_load_avg(cfs_rq, false);
->  	propagate_entity_cfs_rq(se);
->  }
-> 
+Changes since v2 at [1]:
+- update domain id
+- include dt-bindings in dts
 
+Changes since v1 at [0]:
+- use APIs from sm driver
+- rename pwrc_secure_get_power as Kevin suggested
+- add comments for always on domains
+- replace arch_initcall_sync with builtin_platform_driver
+- fix coding style
 
+[0]  https://lore.kernel.org/linux-amlogic/1568895064-4116-1-git-send-email-jianxin.pan@amlogic.com
+[1]  https://lore.kernel.org/linux-amlogic/1570695678-42623-1-git-send-email-jianxin.pan@amlogic.com
+[2]  https://lore.kernel.org/linux-amlogic/1571391167-79679-1-git-send-email-jianxin.pan@amlogic.com
+[3]  https://lore.kernel.org/linux-amlogic/1572868028-73076-1-git-send-email-jianxin.pan@amlogic.com
+[4]  https://lore.kernel.org/linux-amlogic/1573532930-39505-2-git-send-email-jianxin.pan@amlogic.com
+[5]  https://lore.kernel.org/linux-amlogic/07f0ed9d-0b1a-d84f-de8b-1967e56bbd21@amlogic.com/
+[6]  https://lore.kernel.org/linux-amlogic/1578973527-4759-3-git-send-email-xingyu.chen@amlogic.com
 
+Jianxin Pan (4):
+  firmware: meson_sm: Add secure power domain support
+  dt-bindings: power: add Amlogic secure power domains bindings
+  soc: amlogic: Add support for Secure power domains controller
+  arm64: dts: meson: a1: add secure power domain controller
+
+ .../bindings/power/amlogic,meson-sec-pwrc.yaml     |  40 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   6 +
+ drivers/firmware/meson/meson_sm.c                  |   2 +
+ drivers/soc/amlogic/Kconfig                        |  13 ++
+ drivers/soc/amlogic/Makefile                       |   1 +
+ drivers/soc/amlogic/meson-secure-pwrc.c            | 204 +++++++++++++++++++++
+ include/dt-bindings/power/meson-a1-power.h         |  32 ++++
+ include/linux/firmware/meson/meson_sm.h            |   2 +
+ 8 files changed, 300 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+ create mode 100644 drivers/soc/amlogic/meson-secure-pwrc.c
+ create mode 100644 include/dt-bindings/power/meson-a1-power.h
+
+-- 
+2.7.4
 
