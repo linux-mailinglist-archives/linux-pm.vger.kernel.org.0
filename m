@@ -2,118 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C4913CC3F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 19:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBD013CC6A
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 19:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729028AbgAOSjo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 13:39:44 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:37350 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728993AbgAOSjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 13:39:44 -0500
-Received: by mail-lf1-f67.google.com with SMTP id b15so13504017lfc.4
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 10:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zXVPagk9qy6y1pvhnWsVit2PeslU4wNbSMADm371SMA=;
-        b=aj7b4wZMsmzA/j5jJk0eKoPAbxmen1HlcPaI3zqGFb7zqb4T4zPXtek0Iv/FvRVEuw
-         V0H2lPqNZptjw+8JXVznLeuYNHDqg6lIviGqr61W/bW5YlVA+yI1UVVfIpShh/OtQOVl
-         Zp9XicUCnP8CdkU8cQED9Q0QP/np6sYi7HSTu/XG7IDjj6OMQ5xfPxKdBnctdOCNL4PX
-         VOr11WEvexBioKDMriayxGNH2V6r5aVn5JHD843MjMtt9JbGGNmfdQ2XyaJSLxyc6XcW
-         9pag2DjD43LS9hpmMaqvQ15QN7QKQD5EtAJHWP44YrPxpDrj6WTMCMkfPweR5VoP096T
-         tqDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zXVPagk9qy6y1pvhnWsVit2PeslU4wNbSMADm371SMA=;
-        b=Xn9ucr47sf+1PdEwNKVsAepatbCi182q2CYpPxrt+AGkVO2KDThL/T8xmY16eSvxbF
-         SHtiEJDJGNPIXyScGjyCMli+UAZ+gGU6jxEN2vq/cMQqJP7giyOUXtyhVut9Rzd7PVV6
-         wlfFod9hMx2tfvsY9TpKgxcVcN33czrLli4hBawPBiYF1LMMpXSyghEebkP6NF61p824
-         L7tbayKdvqM8Sljj+zPK7U9hpk/WeDLx8TrXosM+cyIkRl/6tGC9RejGw0S2ziqR5Hh3
-         UeY8sDoFR80NzF7MNYPf9ZaeMNe1cIniReUJljJ0BSEMG+q52gq4QgRpYbr2K4Dl7IfL
-         +5Ug==
-X-Gm-Message-State: APjAAAX1bRVCCkz/NGjQzbrbzXR7A/jmIhfseNznnxLDDk8r4+4ZjF9o
-        uhgfWOSM/lT40uDShDkSTUFM5EKIB88=
-X-Google-Smtp-Source: APXvYqx3o1geG9DVN0+yWVxPH0U1oYe+kMH4w2sGpk9818GWZ5uKiP2U9GaNpKvS32E35/1CF+eZVg==
-X-Received: by 2002:ac2:544f:: with SMTP id d15mr172788lfn.126.1579113582544;
-        Wed, 15 Jan 2020 10:39:42 -0800 (PST)
-Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
-        by smtp.gmail.com with ESMTPSA id 140sm9469856lfk.78.2020.01.15.10.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 10:39:41 -0800 (PST)
-Date:   Wed, 15 Jan 2020 19:39:40 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: rcar_thermal: Remove temperature bound
-Message-ID: <20200115183940.GA979534@oden.dyn.berto.se>
-References: <20200114222945.3128250-1-niklas.soderlund+renesas@ragnatech.se>
- <20200114222945.3128250-2-niklas.soderlund+renesas@ragnatech.se>
- <a98baf8f-e2ef-d77d-ff3c-f5838e268dd7@linaro.org>
- <20200115134559.GA945270@oden.dyn.berto.se>
- <d7c7bb44-897d-a3a3-c203-d87ffb7de9be@linaro.org>
+        id S1728992AbgAOSo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 13:44:26 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:48779 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729279AbgAOSo0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 13:44:26 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6CE0B21F69;
+        Wed, 15 Jan 2020 13:44:25 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 15 Jan 2020 13:44:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=3KlDlXJYP55FN2KlL735TAQHph
+        ecdn0T19PaZ/sz2EU=; b=O3qUU/HHgvK3c+ZwrOSrkOkV3J3HowBFw2ezurVez2
+        P8BlsjXTKg1/SM4s4FLgaI8M1zZIUsOMRBzh7KiwLRdME9FxF5AmGvsUOxTjQth6
+        rLnQgpzhWv1vIOB51po0CAt+AhiOP7hzSulWXznXHt9yghnoKHp8ZGGhX49SW/Vv
+        oEXwAEZ1LySG7HJD1pUFifFYULgIQ8YHzj1trvJnmNYYDkKOVScRWr5tVTAy7jaq
+        +XHbEe5boyv/wFKonXlhN5y9675YVPy275yKUYvTe1qNBdxqfitHjou5XAsy8DyY
+        cxGyEjY/CKSy+Qc5P8UGykw1/Z1E59nXLFxXF49e7QVw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=3KlDlXJYP55FN2KlL
+        735TAQHphecdn0T19PaZ/sz2EU=; b=O5yLqWdKDUsbaAgoQdIT/vCuJogO+OSxU
+        pwvWeFOKYgL9g5LwJvc0hUXhYCA9S6229D9ud5gKUT/Aw5/mLnkAtjIR19l8evxU
+        ayFMTp070Sn5M2ePB+9qb1SCctpng00ewKAkIZjnb5FbF1Lgy52uGjFl5J9fOZlr
+        pbhwrQudQHyhSuaJWt9XD1YXwIIaCZruMGOT4kAgYu6lxSKiHCtkeDRXJrlBdohD
+        Kl0uFwqh8u6Xc6RYwIzhsMa+SsxjkyPeznD2B1E5fS3o0D+1ZvmlhBilfH+4YybW
+        my/FdnbCBaCV7H7cjJV3fE72uwEuiRqqLeKNdtPI+6yiHpFcDY/5g==
+X-ME-Sender: <xms:iF0fXngrJ6eBGGMJwsIT1N_BNGXy5bunTjNGd53wSM0zu340QSRxdw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtdefgdduudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeetnhgurhgvshcu
+    hfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucfkphepieejrd
+    duiedtrddvudejrddvhedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshes
+    rghnrghrrgiivghlrdguvgenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:iF0fXutXCF4QMqZj6RtX2jAD3QtOVVeiJqzpUW8SegJeDZC-GD-SVQ>
+    <xmx:iF0fXvxasAxVE3gOorzDDGZqjiTLt632KpbsQdsGIJv6O1iGo1xPew>
+    <xmx:iF0fXrbHGvviZpBbB_9O6kbdXBqjl4eOx8M6FWDwEm_EO3LCJTfGYQ>
+    <xmx:iV0fXoABTEroMU1B3inWaYEDHRzIRKa_VUrEi8wLF0fnIoPaFwYMJA>
+Received: from intern.anarazel.de (c-67-160-217-250.hsd1.ca.comcast.net [67.160.217.250])
+        by mail.messagingengine.com (Postfix) with ESMTPA id AA11130602DE;
+        Wed, 15 Jan 2020 13:44:24 -0500 (EST)
+From:   Andres Freund <andres@anarazel.de>
+To:     Tushar Dave <tushar.n.dave@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andres Freund <andres@anarazel.de>
+Subject: [PATCH] thermal: intel_pch_thermal: Add PCI ids for Lewisburg PCH.
+Date:   Wed, 15 Jan 2020 10:44:15 -0800
+Message-Id: <20200115184415.1726953-1-andres@anarazel.de>
+X-Mailer: git-send-email 2.25.0.rc1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d7c7bb44-897d-a3a3-c203-d87ffb7de9be@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+I noticed that I couldn't read the PCH temperature on my workstation
+(C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but had to go
+through IPMI. Looking at the data sheet, it looks to me like the
+existing intel PCH thermal driver should work without changes for
+Lewisburg.
 
-On 2020-01-15 19:15:11 +0100, Daniel Lezcano wrote:
-> On 15/01/2020 14:45, Niklas Söderlund wrote:
-> > Hi Daniel,
-> > 
-> > Thanks for your feedback.
-> > 
-> > On 2020-01-15 14:24:30 +0100, Daniel Lezcano wrote:
-> >> On 14/01/2020 23:29, Niklas Söderlund wrote:
-> >>> The hardware manual states that the operation of the sensor is not
-> >>> guaranteed outside the range of -40°C to 125°C, not that the readings
-> >>> are invalid. Remove the bound check and try to deliver temperature
-> >>> readings even if we are outside the guaranteed operation range.
-> >>
-> >> And what if the sensor is returning crap in this out-of-range operation?
-> > 
-> > I'm not sure what is worse, reporting an untrue (but still outside the 
-> > guaranteed operation range) extreme temperature or failing with -EIO.  
-> > The view of the hardware guys is that it's better to report what the 
-> > sensor indicates then to return -EIO.
-> 
-> I don't get the point.
-> 
-> What happens if we read the sensor while it is above or below the limits?
+I suspect there's some other PCI id's missing. But I hope somebody at
+Intel would have an easier time figuring that out than I...
 
-The manual describes the read outs as being +/- 2°C from the true 
-temperature for the guaranteed operating range. Outside this range the 
-difference between the true temperature and the read out temperature 
-might be larger than 2°C.
+Signed-off-by: Andres Freund <andres@anarazel.de>
+---
+ drivers/thermal/intel/intel_pch_thermal.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> 
-> 
-> [ ... ]
-> 
-> 
-> 
-> -- 
->  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
-
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index 4f0bb8f502e1..1f3ff0d489ef 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -23,6 +23,7 @@
+ #define PCH_THERMAL_DID_SKL_H	0xA131 /* Skylake PCH 100 series */
+ #define PCH_THERMAL_DID_CNL	0x9Df9 /* CNL PCH */
+ #define PCH_THERMAL_DID_CNL_H	0xA379 /* CNL-H PCH */
++#define PCH_THERMAL_DID_LWB	0xA1B1 /* Lewisburg PCH */
+ 
+ /* Wildcat Point-LP  PCH Thermal registers */
+ #define WPT_TEMP	0x0000	/* Temperature */
+@@ -272,6 +273,7 @@ enum board_ids {
+ 	board_wpt,
+ 	board_skl,
+ 	board_cnl,
++	board_lwb,
+ };
+ 
+ static const struct board_info {
+@@ -294,6 +296,10 @@ static const struct board_info {
+ 		.name = "pch_cannonlake",
+ 		.ops = &pch_dev_ops_wpt,
+ 	},
++	[board_lwb] = {
++		.name = "pch_lewisburg",
++		.ops = &pch_dev_ops_wpt,
++	},
+ };
+ 
+ static int intel_pch_thermal_probe(struct pci_dev *pdev,
+@@ -398,6 +404,8 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
+ 		.driver_data = board_cnl, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_CNL_H),
+ 		.driver_data = board_cnl, },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_LWB),
++		.driver_data = board_lwb, },
+ 	{ 0, },
+ };
+ MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
 -- 
-Regards,
-Niklas Söderlund
+2.25.0.rc1
+
