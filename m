@@ -2,59 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E35213C270
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 14:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA6313C296
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2020 14:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbgAONRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jan 2020 08:17:18 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42155 "EHLO
+        id S1729030AbgAONYe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jan 2020 08:24:34 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38579 "EHLO
         mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726555AbgAONRR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 08:17:17 -0500
-Received: by mail-wr1-f65.google.com with SMTP id q6so15638032wro.9
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 05:17:16 -0800 (PST)
+        with ESMTP id S1726483AbgAONYd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jan 2020 08:24:33 -0500
+Received: by mail-wr1-f65.google.com with SMTP id y17so15745380wrh.5
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2020 05:24:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=47hCYL70WTpNP7Akm85PDFCwata8ahjVYsDrpIntcWE=;
-        b=qd3uTQ1T83OFbtoQnVV+IV6ZDGMFyymqNr2oMcSseX8vVi9cSJmW0PHP8p+cbBFgfK
-         Tlq2asGySjyuBzsuUkt2TasDhsjLfiqNQhuEi2VLGS16rMUCjkUSXSFLuQoibjvYGiUx
-         nBei54/f75wpBdRDYfEO+ynfxHfGHe+cq8Y8uoNL1TEenlD3tFpzGCXzTZmiag6pmDCP
-         DMxoMqEMj5afTYj8SxvrocJXVKcjzjykiiDHqbHhtqTpoLJjlZefH1SYociI33bcUjaF
-         EKKjRC5NwViCk2yYRcxSDTby03wquDHmr3eGKoChnpWIC3r8pv46t3WAL0x8je6rSU+r
-         oHXw==
+        bh=JsvRFeZTSxx4IhkKCkxMAyHUCU//g+Amnz90sfp1xWo=;
+        b=Hh1AMvL75wEnfb8m96DvWC87saYu14hAK7eeq2qjm3ebz5zaBn0plTMzfxtP9fHJTY
+         LSbN6BqvfPmnzF1i6dVLJyuZ9fDO0fwaKWPet4dPzMpQMI6g2TxYjTHBXpw3OphnF37O
+         luymqctEQHBWtgJwpQOl6bJnlvVTOuCbxRQPUlxaHsNTzGHxWOwmbLu8fuVRbFjObQL7
+         c3M4TYWTx9EjCBBkgatHLzTjfPBkciUMef3rygflvcORSXR6NMj3OAdFuKbCjFEj91Rk
+         TPb+z4f2R+oQoghHRQUUgX1Lf9NQ+zqNxg+nNmWZGcuA2yDLDG621UX8bZQWJw2VWBqB
+         8Sjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=47hCYL70WTpNP7Akm85PDFCwata8ahjVYsDrpIntcWE=;
-        b=mjdI/Ha/km4VRVymesrb5wVcWockXY9pfDoON8A7vaHBgV/d9q1oOp3NpQ3ZN8GYdn
-         9pLauyIc5K64+wXgMp2ZxgnTnvPY7w4yXSEfYcM5hpJ3O6+eIcst9uWaLX8aOJZiQjzH
-         qSHavxYQjIrI455NXc2v3t1gp+WvoOCwGrgk4J3wpzGPj2xwW7Qc5G5V4UzbULkulNxi
-         PdUOTlABbxz6HLUFcYHHCJ1goUCpEiSYCoRYJqlfMwrQ9gMaS8fuxHy1o3xJuB3LseW0
-         Axs1hYZ7U2U4h/tI3PXU/T79IMd+g3dq2BAiWJmuL3uqfQyiUVJrEa0vOZoyjkcfozJq
-         wT+g==
-X-Gm-Message-State: APjAAAXAuPaalaz96FoMMGyDK4m43YJDbFgbUjv1OpHi5sT6USkUul5g
-        tKgyI9g+W5kCyTrobeJNoVm+Pg==
-X-Google-Smtp-Source: APXvYqzGkd7OWJa2tDkeMu9YeeEjZwvNadbTG5GzFgmm/KAxBLlFoPbgA7VGXtyC0jQmxltswYp7nA==
-X-Received: by 2002:a5d:50cf:: with SMTP id f15mr28994855wrt.381.1579094235856;
-        Wed, 15 Jan 2020 05:17:15 -0800 (PST)
+        bh=JsvRFeZTSxx4IhkKCkxMAyHUCU//g+Amnz90sfp1xWo=;
+        b=cg+PtRC5/5q7gMW/TREeV7xAKFlXsXM0hRGp7ZDlLkP7Z8duC7EXJ1gl1nBf4Lkaw6
+         QerCKyrnYusViCiTojD/1vHx8h9r/rBp1shLzR6K/UloapMoJhbE6AYK+hZw5wkLAJCD
+         TxFhmvZnRQVM1yJ9LzW6kaNa6tZy8VatO2XBbS1vdyMTIKRY21L6MxD+3WRJu6ckrVJ9
+         cskdSkjy1z7KmYSCoUWXTLxms7MHhDLoFlkHxEUhpqUxzkvPQOuBIvtIcY7wxtOmWT9O
+         emde4mLKajTslq0sfm65X0SPDBwR+UP1Z28oyNXwk5d6aazwMevmnSuIddsAjtOodMuf
+         VqqQ==
+X-Gm-Message-State: APjAAAWT0bnzAzgeCUmNa8BP8lEw9XAB3HjkRWQgm6aLfUqn/iiPWh6h
+        ixhhmQJAMQGntsD286KFaMvFDQ==
+X-Google-Smtp-Source: APXvYqx/wIC2dSGgUP5t2WVyxBBLnAyIc2gBpTovj0kWkTZEQbRq5yCmjWk5FgM6hZo3q3ebegvy6Q==
+X-Received: by 2002:a5d:6a83:: with SMTP id s3mr30135180wru.99.1579094671493;
+        Wed, 15 Jan 2020 05:24:31 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:ac8b:fcee:b80:ebae? ([2a01:e34:ed2f:f020:ac8b:fcee:b80:ebae])
-        by smtp.googlemail.com with ESMTPSA id w13sm24302200wru.38.2020.01.15.05.17.14
+        by smtp.googlemail.com with ESMTPSA id e18sm24210697wrw.70.2020.01.15.05.24.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2020 05:17:15 -0800 (PST)
-Subject: Re: [PATCH] thermal: rcar_thermal: Use usleep_range() instead of
- udelay()
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        Wed, 15 Jan 2020 05:24:30 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: rcar_thermal: Remove temperature bound
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20200115125417.5263-1-geert+renesas@glider.be>
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org
+References: <20200114222945.3128250-1-niklas.soderlund+renesas@ragnatech.se>
+ <20200114222945.3128250-2-niklas.soderlund+renesas@ragnatech.se>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -110,12 +107,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <09365ed8-6fcc-cd9a-c2b7-2e12a2a12017@linaro.org>
-Date:   Wed, 15 Jan 2020 14:17:14 +0100
+Message-ID: <a98baf8f-e2ef-d77d-ff3c-f5838e268dd7@linaro.org>
+Date:   Wed, 15 Jan 2020 14:24:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200115125417.5263-1-geert+renesas@glider.be>
+In-Reply-To: <20200114222945.3128250-2-niklas.soderlund+renesas@ragnatech.se>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -124,35 +121,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/01/2020 13:54, Geert Uytterhoeven wrote:
-> rcar_thermal_update_temp() takes a mutex, so it is always called in a
-> context that can sleep.  Hence replace the 300 µs busy loop by a call to
-> usleep_range(), to allow other threads to run.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 14/01/2020 23:29, Niklas Söderlund wrote:
+> The hardware manual states that the operation of the sensor is not
+> guaranteed outside the range of -40°C to 125°C, not that the readings
+> are invalid. Remove the bound check and try to deliver temperature
+> readings even if we are outside the guaranteed operation range.
+
+And what if the sensor is returning crap in this out-of-range operation?
+
+
+
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 > ---
->  drivers/thermal/rcar_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/thermal/rcar_thermal.c | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
 > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index d0873de718da9218..a8dd96d2d24c4ce5 100644
+> index d0873de718da9218..2ae60b27a0183db1 100644
 > --- a/drivers/thermal/rcar_thermal.c
 > +++ b/drivers/thermal/rcar_thermal.c
-> @@ -219,7 +219,7 @@ static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
->  		 * to get stable temperature.
->  		 * see "Usage Notes" on datasheet
->  		 */
-> -		udelay(300);
-> +		usleep_range(300, 400);
+> @@ -275,13 +275,6 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
+>  		tmp = MCELSIUS((priv->ctemp * 5) - 60);
+>  	mutex_unlock(&priv->lock);
 >  
->  		new = rcar_thermal_read(priv, THSSR) & CTEMP;
->  		if (new == old) {
+> -	if ((tmp < MCELSIUS(-45)) || (tmp > MCELSIUS(125))) {
+> -		struct device *dev = rcar_priv_to_dev(priv);
+> -
+> -		dev_err(dev, "it couldn't measure temperature correctly\n");
+> -		return -EIO;
+> -	}
+> -
+>  	*temp = tmp;
+>  
+>  	return 0;
 > 
 
-Applied to the testing branch. If there is no problem it will be merged
-to the linux-next branch.
-
-  -- Daniel
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
