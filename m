@@ -2,203 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB83913FC01
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 23:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 996DD13FC78
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 23:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389756AbgAPWJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 17:09:15 -0500
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:42684 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728904AbgAPWJP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 17:09:15 -0500
-Received: by mail-qv1-f67.google.com with SMTP id dc14so9830496qvb.9
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 14:09:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NUb8ilLBAhUZ6/jWBRcP+4R7/8UlPkVpgXywFwbpI6U=;
-        b=TYC/GqZ5SQrKgEdAAYYA9Wut1vr7vwQzUWfzcrfJ2CSuF+xvvIw7qNNmJQ4xTwesfM
-         e3VyuCwNqv57wZoT7JPmfyoeilP1kSDk3rvXlnK0W8N0gJsZCmu6A76umz/I9HhPoQiM
-         LkhvhsaENVh/dt2wy9RTxLdRxZ2xvim6+8lVA=
+        id S2388424AbgAPW4K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 17:56:10 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39352 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729638AbgAPW4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 17:56:10 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 77so20969584oty.6
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 14:56:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NUb8ilLBAhUZ6/jWBRcP+4R7/8UlPkVpgXywFwbpI6U=;
-        b=UzUxcaXKUJArOePuh23SRQv3xlL8aah/EH/YYsGT9eOcpV0wk7CuRx5DbzoxHHSI49
-         oaVCd/hLNtxUpX2BKTeYhdZIfmAeqg3bibqzeVX/QlaMHJwoWjaORp9RAcum19q4ztkD
-         D8ILtRBhNlBGDi99IS9elfSJYPZR4kw4cerjnp07oCpwwMtSr+dybf1P01QSj9gb2kM5
-         A5J5/35FS9zylBM2ZjJky8piopPpPkmnmP5AmlCg0lC8A61HXhXmKaLiMIIKE2E9lR7N
-         HAD1TsU8pzRCXa42o+cTev8qhRD697nBMcjnd0DYxO1F5wjF+R1/CRweY1RVmDUWDpBX
-         pqhA==
-X-Gm-Message-State: APjAAAXZ0H3TugO52qIrRe7X41IqFLLJoiagz1AViSEsbWglw6KLCl+B
-        z7dFFHxc5vJ6Z3TORktoARB/k2R8R2vzqCCQpVI06g==
-X-Google-Smtp-Source: APXvYqzXGRlWrfImjI5+ICjTTTiaWsfN0EkDJEtf2hE3RMf7K345toyyMRu3pnzUIZ1iBKJVlU2ezfP3BVKWbra3njY=
-X-Received: by 2002:a0c:e790:: with SMTP id x16mr1240023qvn.18.1579212554458;
- Thu, 16 Jan 2020 14:09:14 -0800 (PST)
+        bh=b+RsdozmG9oAorRpMDSv2lpVMaBdsCUmAl0Rx9qh4kI=;
+        b=Rslu8lBAJRm1nuB/mjY/s2pVIGY59dJJ1TbFZGxCOWickmK81LwN4xyqRDayAXnIGr
+         Edf8wAj1AqTZ723c+Kk/GIG3Yml7ICb9LJ9Jiyso92PE9fPQ24ntGTr+TEVrWvng1Lhw
+         AWDp+jt2UjWPBflznjTc2YzNNm5gpNm2Izn5LvK7oleIiYwbwimoFPd/+LF+6s2A8y/I
+         vm7KYMS3dgz7WX57b4S+YkODsHZgpDHgpvg7SSGP4WkzxUYb3Fo29CBfYLkv/EHVmmSO
+         MCs2/MaYW3Ffq6J6M5yLTdErXVtTXzjz1DLlNdqgFS+W9eJLzLFQ0Ua2qFUQcEt0QI0o
+         OlIg==
+X-Gm-Message-State: APjAAAXm+v6iyAB2Hc0BjFA6PPQVBJhRrvcdJ1YS1pfmFm9bcCUe576J
+        B3wRvNNqGMj0fGHizGCoE7GbtrK+wzvY48WYeow=
+X-Google-Smtp-Source: APXvYqy7JctXWcKMr2oxpt/OKC4TQqL5eUG45rHdFhHGC3S8ypYHKzObF7NIuJmB+CPZGNstHl3r8HLpwRNm5CNW1UA=
+X-Received: by 2002:a9d:62c7:: with SMTP id z7mr3921162otk.189.1579215369683;
+ Thu, 16 Jan 2020 14:56:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20200114232219.93171-1-pmalani@chromium.org> <20200114232219.93171-3-pmalani@chromium.org>
- <20200116194556.GB208460@google.com>
-In-Reply-To: <20200116194556.GB208460@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 16 Jan 2020 14:09:04 -0800
-Message-ID: <CACeCKafnm-NQrzNs7hpMRiYDuhQ-t_mdNaevCqEpefnxaZkNYw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] power: supply: cros-ec-usbpd-charger: Fix host events
-To:     Benson Leung <bleung@google.com>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, sre@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Jon Flatley <jflat@chromium.org>
+References: <20200116110934.90531-1-glider@google.com>
+In-Reply-To: <20200116110934.90531-1-glider@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Jan 2020 23:55:58 +0100
+Message-ID: <CAJZ5v0gcKk1eNDy1MM+MjgkHOJ9hFL7O0N2iyNwf8jJcw50waw@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: fix crashes with init_on_free=1
+To:     Alexander Potapenko <glider@google.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Johannes Stezenbach <js@sig21.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 11:46 AM Benson Leung <bleung@google.com> wrote:
+On Thu, Jan 16, 2020 at 12:10 PM <glider@google.com> wrote:
 >
-> On Tue, Jan 14, 2020 at 03:22:22PM -0800, Prashant Malani wrote:
-> > From: Jon Flatley <jflat@chromium.org>
-> >
-> > There's a bug on ACPI platforms where host events from the ECPD ACPI
-> > device never make their way to the cros-ec-usbpd-charger driver. This
-> > makes it so the only time the charger driver updates its state is when
-> > user space accesses its sysfs attributes.
-> >
-> > Now that these events have been unified into a single notifier chain on
-> > both ACPI and non-ACPI platforms, update the charger driver to use this
-> > new notifier.
-> >
-> > Signed-off-by: Jon Flatley <jflat@chromium.org>
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Upon resuming from hibernation, free pages may contain stale data from
+> the kernel that initiated the resume. This breaks the invariant
+> inflicted by init_on_free=1 that freed pages must be zeroed.
 >
-> Only a minor nit. Otherwise,
-> Reviewed-by: Benson Leung <bleung@chromium.org>
+> To deal with this problem, make clear_free_pages() also clear the free
+> pages when init_on_free is enabled.
 >
+> Reported-by: Johannes Stezenbach <js@sig21.net>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
+> ---
+>  kernel/power/snapshot.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 >
-> > ---
-> >
-> > Changes in v6(pmalani@chromium.org):
-> > - Patch first introduced into the series in v6.
-> >
-> >  drivers/power/supply/Kconfig              |  2 +-
-> >  drivers/power/supply/cros_usbpd-charger.c | 50 ++++++++---------------
-> >  2 files changed, 19 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> > index 27164a1d3c7c4..ba74ddd793c3d 100644
-> > --- a/drivers/power/supply/Kconfig
-> > +++ b/drivers/power/supply/Kconfig
-> > @@ -659,7 +659,7 @@ config CHARGER_RT9455
-> >
-> >  config CHARGER_CROS_USBPD
-> >       tristate "ChromeOS EC based USBPD charger"
-> > -     depends on CROS_EC
-> > +     depends on CROS_USBPD_NOTIFY
-> >       default n
-> >       help
-> >         Say Y here to enable ChromeOS EC based USBPD charger
-> > diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-> > index 6cc7c3910e098..7f7e051262170 100644
-> > --- a/drivers/power/supply/cros_usbpd-charger.c
-> > +++ b/drivers/power/supply/cros_usbpd-charger.c
-> > @@ -8,6 +8,7 @@
-> >  #include <linux/mfd/cros_ec.h>
-> >  #include <linux/module.h>
-> >  #include <linux/platform_data/cros_ec_commands.h>
-> > +#include <linux/platform_data/cros_usbpd_notify.h>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 26b9168321e7..d65f2d5ab694 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1147,24 +1147,24 @@ void free_basic_memory_bitmaps(void)
 >
-> Really minor nit. Alphabetize this #include. This insertion should
-> be one line below.
-Done. Thanks.
+>  void clear_free_pages(void)
+>  {
+> -#ifdef CONFIG_PAGE_POISONING_ZERO
+>         struct memory_bitmap *bm = free_pages_map;
+>         unsigned long pfn;
 >
-> >  #include <linux/platform_data/cros_ec_proto.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/power_supply.h>
-> > @@ -524,32 +525,21 @@ static int cros_usbpd_charger_property_is_writeable(struct power_supply *psy,
-> >  }
-> >
-> >  static int cros_usbpd_charger_ec_event(struct notifier_block *nb,
-> > -                                    unsigned long queued_during_suspend,
-> > +                                    unsigned long host_event,
-> >                                      void *_notify)
-> >  {
-> > -     struct cros_ec_device *ec_device;
-> > -     struct charger_data *charger;
-> > -     u32 host_event;
-> > +     struct charger_data *charger = container_of(nb, struct charger_data,
-> > +                                                 notifier);
-> >
-> > -     charger = container_of(nb, struct charger_data, notifier);
-> > -     ec_device = charger->ec_device;
-> > -
-> > -     host_event = cros_ec_get_host_event(ec_device);
-> > -     if (host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU)) {
-> > -             cros_usbpd_charger_power_changed(charger->ports[0]->psy);
-> > -             return NOTIFY_OK;
-> > -     } else {
-> > -             return NOTIFY_DONE;
-> > -     }
-> > +     cros_usbpd_charger_power_changed(charger->ports[0]->psy);
-> > +     return NOTIFY_OK;
-> >  }
-> >
-> >  static void cros_usbpd_charger_unregister_notifier(void *data)
-> >  {
-> >       struct charger_data *charger = data;
-> > -     struct cros_ec_device *ec_device = charger->ec_device;
-> >
-> > -     blocking_notifier_chain_unregister(&ec_device->event_notifier,
-> > -                                        &charger->notifier);
-> > +     cros_usbpd_unregister_notify(&charger->notifier);
-> >  }
-> >
-> >  static int cros_usbpd_charger_probe(struct platform_device *pd)
-> > @@ -683,21 +673,17 @@ static int cros_usbpd_charger_probe(struct platform_device *pd)
-> >               goto fail;
-> >       }
-> >
-> > -     if (ec_device->mkbp_event_supported) {
-> > -             /* Get PD events from the EC */
-> > -             charger->notifier.notifier_call = cros_usbpd_charger_ec_event;
-> > -             ret = blocking_notifier_chain_register(
-> > -                                             &ec_device->event_notifier,
-> > -                                             &charger->notifier);
-> > -             if (ret < 0) {
-> > -                     dev_warn(dev, "failed to register notifier\n");
-> > -             } else {
-> > -                     ret = devm_add_action_or_reset(dev,
-> > -                                     cros_usbpd_charger_unregister_notifier,
-> > -                                     charger);
-> > -                     if (ret < 0)
-> > -                             goto fail;
-> > -             }
-> > +     /* Get PD events from the EC */
-> > +     charger->notifier.notifier_call = cros_usbpd_charger_ec_event;
-> > +     ret = cros_usbpd_register_notify(&charger->notifier);
-> > +     if (ret < 0) {
-> > +             dev_warn(dev, "failed to register notifier\n");
-> > +     } else {
-> > +             ret = devm_add_action_or_reset(dev,
-> > +                             cros_usbpd_charger_unregister_notifier,
-> > +                             charger);
-> > +             if (ret < 0)
-> > +                     goto fail;
-> >       }
-> >
-> >       return 0;
-> > --
-> > 2.25.0.341.g760bfbb309-goog
-> >
+>         if (WARN_ON(!(free_pages_map)))
+>                 return;
 >
+> -       memory_bm_position_reset(bm);
+> -       pfn = memory_bm_next_pfn(bm);
+> -       while (pfn != BM_END_OF_MAP) {
+> -               if (pfn_valid(pfn))
+> -                       clear_highpage(pfn_to_page(pfn));
+> -
+> +       if (IS_ENABLED(CONFIG_PAGE_POISONING_ZERO) || want_init_on_free()) {
+> +               memory_bm_position_reset(bm);
+>                 pfn = memory_bm_next_pfn(bm);
+> +               while (pfn != BM_END_OF_MAP) {
+> +                       if (pfn_valid(pfn))
+> +                               clear_highpage(pfn_to_page(pfn));
+> +
+> +                       pfn = memory_bm_next_pfn(bm);
+> +               }
+> +               memory_bm_position_reset(bm);
+> +               pr_info("free pages cleared after restore\n");
+>         }
+> -       memory_bm_position_reset(bm);
+> -       pr_info("free pages cleared after restore\n");
+> -#endif /* PAGE_POISONING_ZERO */
+>  }
+>
+>  /**
 > --
-> Benson Leung
-> Staff Software Engineer
-> Chrome OS Kernel
-> Google Inc.
-> bleung@google.com
-> Chromium OS Project
-> bleung@chromium.org
+
+Queued up as a fix for 5.5-rc and "stable", thanks!
