@@ -2,390 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AE813F9F9
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 20:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960C613FADA
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 21:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730664AbgAPTvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 14:51:37 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42598 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729331AbgAPTvg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 14:51:36 -0500
-Received: by mail-pg1-f193.google.com with SMTP id s64so10420439pgb.9
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 11:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wu+I8aE11hoRgbOsBs0FtKqpK+C2bZSgRMmLwWFZIRw=;
-        b=r5O/F1alUl7CBjpQdp0GZXx4v1NXnzhtUe6P/VPfC6ZasmBJRUUI09knkDD2oHGrn/
-         yDxzA0e1yhYyussa/w9yGeprzDlaMXL1WC7B6ynovLgsxvz54xfg0W+uQ3uAJqIpYz9o
-         H9zlD+evVptsKTVKN7F3TO68ts/QGrat3Mli3A3+SXkpnWE+REq+0ECXE3Nkr4el/kRR
-         4Ueap7wvqXdOnA6Lfmq11MsnSifCVJtw+zUhQcQAL4uiQrdqDz9UKWEuevnVt17CJhJF
-         Kem/H9vhlG7mlYV+0z02Yx1R3DirrPYgE8uwzF0VeYq4FZXyxEFu4gtbbaqzEpKkCevG
-         pSGQ==
+        id S1732532AbgAPUtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 15:49:17 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:39822 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726994AbgAPUtR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 15:49:17 -0500
+Received: by mail-ot1-f67.google.com with SMTP id 77so20669303oty.6;
+        Thu, 16 Jan 2020 12:49:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wu+I8aE11hoRgbOsBs0FtKqpK+C2bZSgRMmLwWFZIRw=;
-        b=fVWQTIJ3VD535EWfIGu8vqdGrocJw3YRMrYS0jGsznoyExvOjlEMHTHTpQFYZPLoZK
-         385U/CAFr6loTz10s3Wi0zxFBUnXNJjLpJfOaP6poOsYyXV51WT68BypnYPiCT07Ouu2
-         rZXwOhLJynRzcoOByO7IAImSQrOwK7h+iKojKhUf2VvIqn7k5oL0kQ+nVBd6twvHC6k5
-         ST+CprQgsRL7DngAzI2Po/ziAhIpcGFD7ECHQLSh1fPy1WbFC0QeoMUCuAnSXj6q/OYA
-         bCMxn5RyaEXsjadEy50nCZlKazWsPaxbM7lw8BwEm/DCv1e+8rTl0CaJFRFeQOt1HJed
-         JuLg==
-X-Gm-Message-State: APjAAAXe6pROJ2UUEGU3bUoVdJTOYdskssgGGOH1k/7sgDj5KdRVzV/B
-        81AWTqqHw42JbRkPZxmnxL7dxA==
-X-Google-Smtp-Source: APXvYqykIHiICYqDETHsqr98rlEaUSUjEQi/PLKCwnevGFD6S6IIr365ComFOM8ZRnUCLO1NSwgH5A==
-X-Received: by 2002:a63:3e03:: with SMTP id l3mr41344370pga.118.1579204295555;
-        Thu, 16 Jan 2020 11:51:35 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:bc61:d85d:eb16:9036])
-        by smtp.gmail.com with ESMTPSA id fa21sm4571804pjb.17.2020.01.16.11.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 11:51:34 -0800 (PST)
-Date:   Thu, 16 Jan 2020 11:51:29 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     enric.balletbo@collabora.com, groeck@chromium.org,
-        bleung@chromium.org, lee.jones@linaro.org, sre@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jon Flatley <jflat@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>
-Subject: Re: [PATCH v6 1/3] platform: chrome: Add cros-usbpd-notify driver
-Message-ID: <20200116195129.GD208460@google.com>
-References: <20200114232219.93171-1-pmalani@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vKWl+i3G1M08ggLIoH2gqIF2689K3Ew0LiOCmwmp/BI=;
+        b=V9DyBpcccxtdBuEvMM+gi23TlnE/zd39fu6tgJhBHxAETFCwGAz/26cvswfCC/udCm
+         PlA5tl5ZZ45FUzLuR1OdnQ5Fwh3OqHgsfF4evsa9JaUiUlEGO6HLPPj/G/WxA0OMM6f4
+         vtJDEOB7cRNB1jTKFdHJPoliy1221zn5LuwOqsTUKzmfYh/OFA7YNeJc2oHuWRFnJOIG
+         uOJA0BlJUeI+IExCQHsc9oSThntENzckiNuUB080n662LC/BsyWbDf9SpKaYnGzG5Gcc
+         CpUlFcgpi8Cchjhk97ARSPExjfdXCwtKnXh0UPanM4zkVSg/dT43Cm+U4MjqV2UBIRtL
+         XB7g==
+X-Gm-Message-State: APjAAAUp1fkcnVTic37ZgZpSbeBcA+ixLmoORz/YbcGe57KGZQwV292T
+        PFoCTxCqCVcZx3wMY/O/aGOfikiM8fIFfwIDzwgF+g==
+X-Google-Smtp-Source: APXvYqzOLGos6s7Y71H1AklWTE2f09vz51ZGotacxjlP/Wsz27QuqtXTiEwUKaZ5USsXu+cAuD5Ns2IP/BanfxOXYCQ=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr3602980otd.266.1579207755629;
+ Thu, 16 Jan 2020 12:49:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="osDK9TLjxFScVI/L"
-Content-Disposition: inline
-In-Reply-To: <20200114232219.93171-1-pmalani@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
+In-Reply-To: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Jan 2020 21:49:05 +0100
+Message-ID: <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: suspend: Add sysfs attribute to control the "sync
+ on suspend" behavior
+To:     Jonas Meurer <jonas@freesources.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>,
+        Yannik Sembritzki <yannik@sembritzki.me>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jan 16, 2020 at 12:53 PM Jonas Meurer <jonas@freesources.org> wrote:
+>
+> The sysfs attribute `/sys/power/sync_on_suspend` controls, whether or not
+> filesystems are synced by the kernel before system suspend.
+>
+> Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
+> is slightly changed: It now defines the run-tim default for the new sysfs
+> attribute `/sys/power/sync_on_suspend`.
+>
+> The run-time attribute is added because the existing corresponding
+> build-time Kconfig flag for (`CONFIG_SUSPEND_SKIP_SYNC`) is not flexible
+> enough. E.g. Linux distributions that provide pre-compiled kernels
+> usually want to stick with the default (sync filesystems before suspend)
+> but under special conditions this needs to be changed.
+>
+> One example for such a special condition is user-space handling of
+> suspending block devices (e.g. using `cryptsetup luksSuspend` or `dmsetup
+> suspend`) before system suspend. The Kernel trying to sync filesystems
+> after the underlying block device already got suspended obviously leads
+> to dead-locks. Be aware that you have to take care of the filesystem sync
+> yourself before suspending the system in those scenarios.
+>
+> Signed-off-by: Jonas Meurer <jonas@freesources.org>
 
---osDK9TLjxFScVI/L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jan 14, 2020 at 03:22:18PM -0800, Prashant Malani wrote:
-> From: Jon Flatley <jflat@chromium.org>
->=20
-> ChromiumOS uses ACPI device with HID "GOOG0003" for power delivery
-> related events. The existing cros-usbpd-charger driver relies on these
-> events without ever actually receiving them on ACPI platforms. This is
-> because in the ChromeOS kernel trees, the GOOG0003 device is owned by an
-> ACPI driver that offers firmware updates to USB-C chargers.
->=20
-> Introduce a new platform driver under cros-ec, the ChromeOS embedded
-> controller, that handles these PD events and dispatches them
-> appropriately over a notifier chain to all drivers that use them.
->=20
-> On platforms that don't have the ACPI device defined, the driver gets
-> instantiated for ECs which support the EC_FEATURE_USB_PD feature bit,
-> and the notification events will get delivered using the MKBP event
-> handling mechanism.
->=20
-> Co-Developed-by: Prashant Malani <pmalani@chromium.org>
-> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-> Signed-off-by: Jon Flatley <jflat@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-
-Minor nit, otherwise,
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
+Applied as 5.6 material with minor changes in the ABI document, thanks!
 
 > ---
->=20
-> Changes in v6(pmalani@chromium.org):
-> - Fix build error from typo in cros_usbpd_notify_acpi_device_ids
->   variable name.
->=20
-> Changes in v5(pmalani@chromium.org):
-> - Split the driver into platform and ACPI variants, each enclosed by
->   CONFIG_OF and CONFIG_ACPI #ifdefs respectively.
-> - Updated the copyright year to 2020.
-> - Reworded the commit message and Kconfig description to incorporate
->   the modified driver structure.
->=20
-> Changes in v4(pmalani@chromium.org):
-> - No code changes, but added new version so that versioning is
->   consistent with the next patch in the series.
->=20
-> Changes in v3 (pmalani@chromium.org):
-> - Renamed driver and files from "cros_ec_pd_notify" to
->   "cros_usbpd_notify" to be more consistent with other naming.
-> - Moved the change to include cros-usbpd-notify in the charger MFD
->   into a separate follow-on patch.
->=20
-> Changes in v2 (pmalani@chromium.org):
-> - Removed dependency on DT entry; instead, we will instantiate
->   the driver on detecting EC_FEATURE_USB_PD for non-ACPI platforms.
-> - Modified the cros-ec-pd-notify device to be an mfd_cell under
->   usbpdcharger for non-ACPI platforms. Altered the platform_probe() call
->   to derive the cros EC structs appropriately.
-> - Replaced "usbpd_notify" with "pd_notify" in functions and structures.
-> - Addressed comments from upstream maintainer.
->=20
->  drivers/platform/chrome/Kconfig               |  10 ++
->  drivers/platform/chrome/Makefile              |   1 +
->  drivers/platform/chrome/cros_usbpd_notify.c   | 153 ++++++++++++++++++
->  .../linux/platform_data/cros_usbpd_notify.h   |  17 ++
->  4 files changed, 181 insertions(+)
->  create mode 100644 drivers/platform/chrome/cros_usbpd_notify.c
->  create mode 100644 include/linux/platform_data/cros_usbpd_notify.h
->=20
-> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kc=
-onfig
-> index 5f57282a28da0..89df6c991089d 100644
-> --- a/drivers/platform/chrome/Kconfig
-> +++ b/drivers/platform/chrome/Kconfig
-> @@ -226,6 +226,16 @@ config CROS_USBPD_LOGGER
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called cros_usbpd_logger.
-> =20
-> +config CROS_USBPD_NOTIFY
-> +	tristate "ChromeOS Type-C power delivery event notifier"
-> +	depends on CROS_EC
-> +	help
-> +	  If you say Y here, you get support for Type-C PD event notifications
-> +	  from the ChromeOS EC. On ACPI platorms this driver will bind to the
-> +	  GOOG0003 ACPI device, and on platforms which don't have this device it
-> +	  will get initialized on ECs which support the feature
-> +	  EC_FEATURE_USB_PD.
+>  Documentation/ABI/testing/sysfs-power | 13 +++++++++++
+>  include/linux/suspend.h               |  2 ++
+>  kernel/power/Kconfig                  |  5 +++-
+>  kernel/power/main.c                   | 33 +++++++++++++++++++++++++++
+>  kernel/power/suspend.c                |  2 +-
+>  5 files changed, 53 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index 6f87b9dd384b..9392a83afce8 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -407,3 +407,16 @@ Contact:   Kalesh Singh <kaleshsingh96@gmail.com>
+>  Description:
+>                 The /sys/power/suspend_stats/last_failed_step file contains
+>                 the last failed step in the suspend/resume path.
 > +
->  source "drivers/platform/chrome/wilco_ec/Kconfig"
-> =20
->  endif # CHROMEOS_PLATFORMS
-> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/M=
-akefile
-> index aacd5920d8a18..f6465f8ef0b5e 100644
-> --- a/drivers/platform/chrome/Makefile
-> +++ b/drivers/platform/chrome/Makefile
-> @@ -22,5 +22,6 @@ obj-$(CONFIG_CROS_EC_DEBUGFS)		+=3D cros_ec_debugfs.o
->  obj-$(CONFIG_CROS_EC_SENSORHUB)		+=3D cros_ec_sensorhub.o
->  obj-$(CONFIG_CROS_EC_SYSFS)		+=3D cros_ec_sysfs.o
->  obj-$(CONFIG_CROS_USBPD_LOGGER)		+=3D cros_usbpd_logger.o
-> +obj-$(CONFIG_CROS_USBPD_NOTIFY)		+=3D cros_usbpd_notify.o
-> =20
->  obj-$(CONFIG_WILCO_EC)			+=3D wilco_ec/
-> diff --git a/drivers/platform/chrome/cros_usbpd_notify.c b/drivers/platfo=
-rm/chrome/cros_usbpd_notify.c
-> new file mode 100644
-> index 0000000000000..858e494995843
-> --- /dev/null
-> +++ b/drivers/platform/chrome/cros_usbpd_notify.c
-> @@ -0,0 +1,153 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +What:          /sys/power/sync_on_suspend
+> +Date:          October 2019
+> +Contact:       Jonas Meurer <jonas@freesources.org>
+> +Description:
+> +               This file controls whether or not the kernel will sync()
+> +               filesystems during system suspend (after freezing user space
+> +               and before suspending devices).
+> +
+> +               Writing a "1" to this file enables the sync() and writing a
+> +               "0" disables it.  Reads from the file return the current value.
+> +               The default is "1" but can be configured with the build-time
+> +               config flag "SUSPEND_SKIP_SYNC".
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 6fc8843f1c9e..4a230c2f1c31 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -329,6 +329,7 @@ extern void arch_suspend_disable_irqs(void);
+>  extern void arch_suspend_enable_irqs(void);
+>
+>  extern int pm_suspend(suspend_state_t state);
+> +extern bool sync_on_suspend_enabled;
+>  #else /* !CONFIG_SUSPEND */
+>  #define suspend_valid_only_mem NULL
+>
+> @@ -342,6 +343,7 @@ static inline bool pm_suspend_default_s2idle(void) { return false; }
+>
+>  static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
+>  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
+> +static inline bool sync_on_suspend_enabled(void) { return true; }
+>  static inline bool idle_should_enter_s2idle(void) { return false; }
+>  static inline void __init pm_states_init(void) {}
+>  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
+> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> index d3667b4075c1..7cbfbeacd68a 100644
+> --- a/kernel/power/Kconfig
+> +++ b/kernel/power/Kconfig
+> @@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
+>           Skip the kernel sys_sync() before freezing user processes.
+>           Some systems prefer not to pay this cost on every invocation
+>           of suspend, or they are content with invoking sync() from
+> -         user-space before invoking suspend.  Say Y if that's your case.
+> +         user-space before invoking suspend.  There's a run-time switch
+> +         at '/sys/power/sync_on_suspend' to configure this behaviour.
+> +         This setting changes the default for the run-tim switch. Say Y
+> +         to change the default to disable the kernel sys_sync().
+>
+>  config HIBERNATE_CALLBACKS
+>         bool
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index e26de7af520b..69b7a8aeca3b 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -190,6 +190,38 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
+>  }
+>
+>  power_attr(mem_sleep);
+> +
 > +/*
-> + * Copyright 2020 Google LLC
+> + * sync_on_suspend: invoke ksys_sync_helper() before suspend.
 > + *
-> + * This driver serves as the receiver of cros_ec PD host events.
+> + * show() returns whether ksys_sync_helper() is invoked before suspend.
+> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
 > + */
+> +bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
 > +
-> +#include <linux/acpi.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/cros_ec.h>
-> +#include <linux/platform_data/cros_ec_commands.h>
-> +#include <linux/platform_data/cros_usbpd_notify.h>
-
-Same nit as other: Alphabetize #include list.
-
-> +#include <linux/platform_data/cros_ec_proto.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define DRV_NAME "cros-usbpd-notify"
-> +#define ACPI_DRV_NAME "GOOG0003"
-> +
-> +static BLOCKING_NOTIFIER_HEAD(cros_usbpd_notifier_list);
-> +
-> +/**
-> + * cros_usbpd_register_notify - Register a notifier callback for PD even=
-ts.
-> + * @nb: Notifier block pointer to register
-> + *
-> + * On ACPI platforms this corresponds to host events on the ECPD
-> + * "GOOG0003" ACPI device. On non-ACPI platforms this will filter mkbp e=
-vents
-> + * for USB PD events.
-> + *
-> + * Return: 0 on success or negative error code.
-> + */
-> +int cros_usbpd_register_notify(struct notifier_block *nb)
+> +static ssize_t sync_on_suspend_show(struct kobject *kobj,
+> +                                  struct kobj_attribute *attr, char *buf)
 > +{
-> +	return blocking_notifier_chain_register(
-> +			&cros_usbpd_notifier_list, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(cros_usbpd_register_notify);
-> +
-> +
-> +/**
-> + * cros_usbpd_unregister_notify - Unregister notifier callback for PD ev=
-ents.
-> + * @nb: Notifier block pointer to unregister
-> + *
-> + * Unregister a notifier callback that was previously registered with
-> + * cros_usbpd_register_notify().
-> + */
-> +void cros_usbpd_unregister_notify(struct notifier_block *nb)
-> +{
-> +	blocking_notifier_chain_unregister(&cros_usbpd_notifier_list, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(cros_usbpd_unregister_notify);
-> +
-> +#ifdef CONFIG_ACPI
-> +
-> +static int cros_usbpd_notify_add_acpi(struct acpi_device *adev)
-> +{
-> +	return 0;
+> +       return sprintf(buf, "%d\n", sync_on_suspend_enabled);
 > +}
 > +
-> +static void cros_usbpd_notify_acpi(struct acpi_device *adev, u32 event)
+> +static ssize_t sync_on_suspend_store(struct kobject *kobj,
+> +                                   struct kobj_attribute *attr,
+> +                                   const char *buf, size_t n)
 > +{
-> +	blocking_notifier_call_chain(&cros_usbpd_notifier_list, event, NULL);
+> +       unsigned long val;
+> +
+> +       if (kstrtoul(buf, 10, &val))
+> +               return -EINVAL;
+> +
+> +       if (val > 1)
+> +               return -EINVAL;
+> +
+> +       sync_on_suspend_enabled = !!val;
+> +       return n;
 > +}
 > +
-> +static const struct acpi_device_id cros_usbpd_notify_acpi_device_ids[] =
-=3D {
-> +	{ ACPI_DRV_NAME, 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, cros_usbpd_notify_acpi_device_ids);
-> +
-> +static struct acpi_driver cros_usbpd_notify_acpi_driver =3D {
-> +	.name =3D DRV_NAME,
-> +	.class =3D DRV_NAME,
-> +	.ids =3D cros_usbpd_notify_acpi_device_ids,
-> +	.ops =3D {
-> +		.add =3D cros_usbpd_notify_add_acpi,
-> +		.notify =3D cros_usbpd_notify_acpi,
-> +	},
-> +};
-> +module_acpi_driver(cros_usbpd_notify_acpi_driver);
-> +
-> +#endif /* CONFIG_ACPI */
-> +
-> +#ifdef CONFIG_OF
-> +
-> +static int cros_usbpd_notify_plat(struct notifier_block *nb,
-> +		unsigned long queued_during_suspend, void *data)
-> +{
-> +	struct cros_ec_device *ec_dev =3D (struct cros_ec_device *)data;
-> +	u32 host_event =3D cros_ec_get_host_event(ec_dev);
-> +
-> +	if (!host_event)
-> +		return NOTIFY_BAD;
-> +
-> +	if (host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU)) {
-> +		blocking_notifier_call_chain(&cros_usbpd_notifier_list,
-> +				host_event, NULL);
-> +		return NOTIFY_OK;
-> +	}
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int cros_usbpd_notify_probe_plat(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct cros_ec_dev *ecdev =3D dev_get_drvdata(dev->parent);
-> +	struct notifier_block *nb;
-> +	int ret;
-> +
-> +	nb =3D devm_kzalloc(dev, sizeof(*nb), GFP_KERNEL);
-> +	if (!nb)
-> +		return -ENOMEM;
-> +
-> +	nb->notifier_call =3D cros_usbpd_notify_plat;
-> +	dev_set_drvdata(dev, nb);
-> +
-> +	ret =3D blocking_notifier_chain_register(&ecdev->ec_dev->event_notifier,
-> +						nb);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to register notifier\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int cros_usbpd_notify_remove_plat(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct cros_ec_dev *ecdev =3D dev_get_drvdata(dev->parent);
-> +	struct notifier_block *nb =3D
-> +		(struct notifier_block *)dev_get_drvdata(dev);
-> +
-> +	blocking_notifier_chain_unregister(&ecdev->ec_dev->event_notifier,
-> +			nb);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver cros_usbpd_notify_plat_driver =3D {
-> +	.driver =3D {
-> +		.name =3D DRV_NAME,
-> +	},
-> +	.probe =3D cros_usbpd_notify_probe_plat,
-> +	.remove =3D cros_usbpd_notify_remove_plat,
-> +};
-> +module_platform_driver(cros_usbpd_notify_plat_driver);
-> +
-> +#endif /* CONFIG_OF */
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("ChromeOS power delivery notifier device");
-> +MODULE_AUTHOR("Jon Flatley <jflat@chromium.org>");
-> +MODULE_ALIAS("platform:" DRV_NAME);
-> diff --git a/include/linux/platform_data/cros_usbpd_notify.h b/include/li=
-nux/platform_data/cros_usbpd_notify.h
-> new file mode 100644
-> index 0000000000000..4f2791722b6d3
-> --- /dev/null
-> +++ b/include/linux/platform_data/cros_usbpd_notify.h
-> @@ -0,0 +1,17 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ChromeOS EC Power Delivery Notifier Driver
-> + *
-> + * Copyright 2020 Google LLC
-> + */
-> +
-> +#ifndef __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
-> +#define __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
-> +
-> +#include <linux/notifier.h>
-> +
-> +int cros_usbpd_register_notify(struct notifier_block *nb);
-> +
-> +void cros_usbpd_unregister_notify(struct notifier_block *nb);
-> +
-> +#endif  /* __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H */
-> --=20
-> 2.25.0.341.g760bfbb309-goog
->=20
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---osDK9TLjxFScVI/L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCXiC+wQAKCRBzbaomhzOw
-wuN3AQDB4Q1NmuP+t8X4OizjnyRzUk9VBJVkoynrO5XKn7/SqgD/YZ3TvXxhLxNq
-d7qveRMcSkrAreryhqfg9GlJQJRagA8=
-=gH1s
------END PGP SIGNATURE-----
-
---osDK9TLjxFScVI/L--
+> +power_attr(sync_on_suspend);
+>  #endif /* CONFIG_SUSPEND */
+>
+>  #ifdef CONFIG_PM_SLEEP_DEBUG
+> @@ -855,6 +887,7 @@ static struct attribute * g[] = {
+>         &wakeup_count_attr.attr,
+>  #ifdef CONFIG_SUSPEND
+>         &mem_sleep_attr.attr,
+> +       &sync_on_suspend_attr.attr,
+>  #endif
+>  #ifdef CONFIG_PM_AUTOSLEEP
+>         &autosleep_attr.attr,
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index f3b7239f1892..2c47280fbfc7 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
+>         if (state == PM_SUSPEND_TO_IDLE)
+>                 s2idle_begin();
+>
+> -       if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
+> +       if (sync_on_suspend_enabled) {
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+>                 ksys_sync_helper();
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+> --
+> 2.20.1
+>
