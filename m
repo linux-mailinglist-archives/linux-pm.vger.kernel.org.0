@@ -2,174 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 736BF13DDB7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 15:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D714A13DE66
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 16:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgAPOmp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 09:42:45 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:58997 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726876AbgAPOmo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 09:42:44 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200116144243euoutp0285d73dc9bb8e4025c4c1e53a742e77b5~qZRXKBH3_2980429804euoutp02G
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 14:42:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200116144243euoutp0285d73dc9bb8e4025c4c1e53a742e77b5~qZRXKBH3_2980429804euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1579185763;
-        bh=Lium7TTZwjTEPgh49ryz56emZXTsJeqKBjeesI4GlDs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cfV4eWn5jVqqt/+Sd+GHNeeWVJw7BSg+dJfIXFNhPyW1QXBZWY1zPv96PJxl+4JD/
-         DwxvfN6Nu6Fsqv2wM+B8ynXpxe602kBOXZ+BQjuEtykT74pAul+WhwnO/qwTuB48X9
-         838aq6cgNnfPlEKdMAnK9CwwwxK8d/zzmWIVSFfc=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200116144243eucas1p1c137e737a96f07880a7c80a3c09ff20a~qZRW7VUje0497404974eucas1p1E;
-        Thu, 16 Jan 2020 14:42:43 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 68.F2.60679.366702E5; Thu, 16
-        Jan 2020 14:42:43 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200116144242eucas1p1b66d8ca0d111f140c48b80c5064ca4ff~qZRWhbFD40497404974eucas1p1D;
-        Thu, 16 Jan 2020 14:42:42 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200116144242eusmtrp13d1f7f04c02b7845a9b11ee6195b4f44~qZRWgrfuS0584505845eusmtrp1Z;
-        Thu, 16 Jan 2020 14:42:42 +0000 (GMT)
-X-AuditID: cbfec7f4-0e5ff7000001ed07-46-5e20766382e1
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 8A.E4.07950.266702E5; Thu, 16
-        Jan 2020 14:42:42 +0000 (GMT)
-Received: from AMDC3555.digital.local (unknown [106.120.51.67]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200116144242eusmtip2bc90f6c9b952b9436eed055b20fd4699~qZRV4a8Ie2554125541eusmtip2e;
-        Thu, 16 Jan 2020 14:42:42 +0000 (GMT)
-From:   =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        georgi.djakov@linaro.org, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com, krzk@kernel.org
-Subject: [PATCH v4 3/3] interconnect: Allow inter-provider pairs to be
- configured
-Date:   Thu, 16 Jan 2020 15:42:02 +0100
-Message-Id: <20200116144202.12116-4-a.swigon@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200116144202.12116-1-a.swigon@samsung.com>
+        id S1726812AbgAPPPF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 10:15:05 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:56177 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbgAPPPF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 10:15:05 -0500
+Received: by mail-wm1-f67.google.com with SMTP id q9so4127170wmj.5
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 07:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dcl4UWfwgHtLs/lgK4pT0D4Mt03++vm5tf12mbGu0xs=;
+        b=vStNgSmrMLGS7lullHFZJ4mszFBlfG9oRk3sJBx4adfSwy4pLS1/ZH+eGZxRuZTC3u
+         mOAHizA2D3yxxFamFt2q2AtZ0uYLsEjYYlmU0W7E6FyIIKHHeG6RJj+2rOLXggaZ2S/A
+         fr/d0Xcy6H3352EwsFFCMXuXFw9PG5kPq/j+YAe5TKGDyc0NtQG/1l8ML0lL3vB5RSPR
+         O6/HJ827LVcDvMAaRJc+KiP46QDqCr1s3JyIs17mEF07MLG71+3gT/9WZ09AEPFrQeEV
+         pcG85pYqAzyfPBnJh6L5dea/h+Mv0eTSJxYf/aYb7mAoh8RQP+6O9HnO2tqs07HJCj87
+         LxjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dcl4UWfwgHtLs/lgK4pT0D4Mt03++vm5tf12mbGu0xs=;
+        b=FxUWLcbJ2HWtULAcStrbocZT1/mJ0zm211Mn1+xl/BM+Vo7uP57gpzITpUK/q/dwWP
+         WE7kZBKnVGok+xpPO5RnCFCPqGoKhCPk5V1P1EzXTUDD+Bm3qVp9WaBkb4WVR0DrLnEj
+         fIqDwlhAhjJ5BTYxburAHvFRmfWAAmXOfyxxiMbogsRk6dH4L1qStdfflJAqEXRbL2Ev
+         Mkm0Eypuv901QEJhNYKASb4SUzgzTUoKFrOC8ARGwMQxiFuf+0lIkgY6ax9tyqL6p4C9
+         uOG/QMm98bjvMLk4eM3j5SUh8XQRsrT3x6zBw1B6n9k9HkZvRJKnONOQKYDutZ8k0j0z
+         gZDw==
+X-Gm-Message-State: APjAAAWH6IXJJVEUewwHX9BE77xcJyCCqTXwxA9+jc22uidqgUeAGSFl
+        s7idLFkA2TeBUNPgG5ybHeSU+AWrFUYFjwZ/ftw=
+X-Google-Smtp-Source: APXvYqydd32jTkNrJfMblX4hCLRewlE2tvVwHRRjYQWceAfkd/fp+hJmsjVJhSxR+0SPsMsEfv1v+dWTcLBDSuFvu1A=
+X-Received: by 2002:a7b:ca4b:: with SMTP id m11mr6734923wml.164.1579187702280;
+ Thu, 16 Jan 2020 07:15:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRmVeSWpSXmKPExsWy7djP87rJZQpxBh/ui1jcn9fKaLFxxnpW
-        i+tfnrNaTN+7ic3i/PkN7BaXd81hs/jce4TRYsb5fUwWa4/cZXfg9Ni0qpPN4861PWwefVtW
-        MXp83iQXwBLFZZOSmpNZllqkb5fAlTHl4W7mgkMiFQ+mLWZqYDwp0MXIwSEhYCKxbKpEFyMn
-        h5DACkaJ5jv5XYxcQPYXRom9e2YyQTifGSUmLuxmhmmYe8QcIr6cUWLX6rNMcB0X729lBBnF
-        JuAoMWnqA3YQW0QgXuLjtn8sIEXMAjsZJY78/cMEMklYIFii9YIYSA2LgKrEnsVHwHp5BSwl
-        dk1vAuuVEJCXWL3hANhiTgEric+PVSFKBCVOznzCAmIzA5U0b53NDDJeQmAdu8S3hmagBDuQ
-        4yKxPgJiirDEq+NboCbKSJye3MMCYRdLPN15nxWitYFRYtOyI8wQCWuJO+d+sYGsZRbQlFi/
-        Sx8i7Cixb+t6Fkgw8EnceCsIcQGfxKRt06GhwyvR0SYEYSpJ7JrJB9EoIdG0+hrUbA+J9wc7
-        2SYwKs5C8sosJK/MQli7gJF5FaN4amlxbnpqsVFearlecWJucWleul5yfu4mRmCiOf3v+Jcd
-        jLv+JB1iFOBgVOLhnRGkECfEmlhWXJl7iFGCg1lJhPfkDNk4Id6UxMqq1KL8+KLSnNTiQ4zS
-        HCxK4rzGi17GCgmkJ5akZqemFqQWwWSZODilGhhlHeNFLKotv9T9XMIYcSerPsp8vrCc172n
-        6z799lR+0dvPpuzxb3Py4xWOs6SEdsXddP9016vCXMLl49ycA+enrQt8Gv1xWvyFcGNT7d9M
-        3u8/9JvuzDjcO6eyQUnLY88bx4lb5Y9su8t75em1Uy++zkr2fn2a++v9B4eL5l/J8alW+X8x
-        ZrGlEktxRqKhFnNRcSIA+8imlzADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOIsWRmVeSWpSXmKPExsVy+t/xe7pJZQpxBt9/G1vcn9fKaLFxxnpW
-        i+tfnrNaTN+7ic3i/PkN7BaXd81hs/jce4TRYsb5fUwWa4/cZXfg9Ni0qpPN4861PWwefVtW
-        MXp83iQXwBKlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqk
-        b5eglzHl4W7mgkMiFQ+mLWZqYDwp0MXIwSEhYCIx94h5FyMXh5DAUkaJySv3s3UxcgLFJSQ+
-        rr/BCmELS/y51sUGUfSJUeL9/vNgCTYBR4lJUx+wg9giAokStx49ZgYpYhbYzyjx8k4b2CRh
-        gUCJzTsPgtksAqoSexYfYQSxeQUsJXZNb2KH2CAvsXrDAWaQizgFrCQ+P1YFCQsBldze2M0K
-        US4ocXLmExaQEmYBdYn184RAwsxAnc1bZzNPYBSchaRqFkLVLCRVCxiZVzGKpJYW56bnFhvp
-        FSfmFpfmpesl5+duYgRG0rZjP7fsYOx6F3yIUYCDUYmHd0aQQpwQa2JZcWXuIUYJDmYlEd6T
-        M2TjhHhTEiurUovy44tKc1KLDzGaAn02kVlKNDkfGOV5JfGGpobmFpaG5sbmxmYWSuK8HQIH
-        Y4QE0hNLUrNTUwtSi2D6mDg4pRoYI3d2/E7Ya91760jclcqwSfxrvNYVpYoKZEXmR98tLU/U
-        /nTSVneBjdyMxbnMOVqx1ybdsPUuiW+NvNY047e8qK935aQH8x+bFB+R51Z+/n3vUZek6QZt
-        nwR2PzyaoHX+ZET+/TOhGnY7bq7cuzeq6ATPPK3JK6oinmzKvcTR3r6zcs1eJ6UVSizFGYmG
-        WsxFxYkALfUZGboCAAA=
-X-CMS-MailID: 20200116144242eucas1p1b66d8ca0d111f140c48b80c5064ca4ff
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200116144242eucas1p1b66d8ca0d111f140c48b80c5064ca4ff
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200116144242eucas1p1b66d8ca0d111f140c48b80c5064ca4ff
-References: <20200116144202.12116-1-a.swigon@samsung.com>
-        <CGME20200116144242eucas1p1b66d8ca0d111f140c48b80c5064ca4ff@eucas1p1.samsung.com>
+References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
+ <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
+ <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
+ <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com>
+ <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com>
+ <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com> <CAD8Lp44FKuEsmdK+zDX_-ZYQEnqjQM-z6nnfE-CJ62mutd+scA@mail.gmail.com>
+In-Reply-To: <CAD8Lp44FKuEsmdK+zDX_-ZYQEnqjQM-z6nnfE-CJ62mutd+scA@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 16 Jan 2020 10:14:49 -0500
+Message-ID: <CADnq5_PNGr4=MqpBeKbhxJ-gpniSCj7L0wO5_V6mjuwpKoaCAg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Chunming Zhou <David1.Zhou@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds support for a new boolean 'inter_set' field in struct
-icc_provider. Setting it to 'true' enables calling '->set' for
-inter-provider node pairs. All existing users of the interconnect
-framework allocate this structure with kzalloc, and are therefore
-unaffected by this change.
+On Wed, Jan 15, 2020 at 2:44 AM Daniel Drake <drake@endlessm.com> wrote:
+>
+> On Thu, Dec 19, 2019 at 10:08 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+> > I think there may be some AMD specific handling needed in
+> > drivers/acpi/sleep.c.  My understanding from reading the modern
+> > standby documents from MS is that each vendor needs to provide a
+> > platform specific PEP driver.  I'm not sure how much of that current
+> > code is Intel specific or not.
+>
+> I don't think there is anything Intel-specific in drivers/acpi/sleep.c.
+>
+> Reading more about PEP, I see that Linux supports PEP devices with
+> ACPI ID INT33A1 or PNP0D80. Indeed the Intel platforms we work with
+> have INT33A1 devices in their ACPI tables.
+>
+> This product has a \_SB.PEP ACPI device with _HID AMD0004 and _CID
+> PNP0D80. Full acpidump:
+> https://gist.github.com/dsd/ff3dfc0f63cdd9eba4a0fbd9e776e8be (see
+> ssdt7)
+>
+> This PEP device responds to a _DSM with UUID argument
+> "e3f32452-febc-43ce-9039-932122d37721", which is not the one
+> documented at https://uefi.org/sites/default/files/resources/Intel_ACPI_Low_Power_S0_Idle.pdf
+>
+> Nevertheless, there is some data about the GPU:
+>                     Package (0x04)
+>                     {
+>                         One,
+>                         "\\_SB.PCI0.GP17.VGA",
+>                         Zero,
+>                         0x03
+>                     },
+>
+> However since this data is identical to many other devices that
+> suspend and resume just fine, I wonder if it is really important.
+>
+> The one supported method does offer two calls which may mirror the
+> Display Off/On Notifications in the above spec:
+>                         Case (0x02)
+>                         {
+>                             \_SB.PCI0.SBRG.EC0.CSEE (0xB7)
+>                             Return (Zero)
+>                         }
+>                         Case (0x03)
+>                         {
+>                             \_SB.PCI0.SBRG.EC0.CSEE (0xB8)
+>                             Notify (\_SB.PCI0.SBRG.EC0.LID, 0x80) //
+> Status Change
+>                             Return (Zero)
+>                         }
+>
+> but I tried executing this code after suspending amdgpu, and the
+> problem still stands, amdgpu cannot wakeup correctly.
+>
+> There's nothing else really interesting in the PEP device as far as I can see.
+>
+> PEP things aside, I am still quite suspicious about the fact that
+> calling amdgpu_device_suspend() then amdgpu_device_resume() on
+> multiple products (not just this one) fails. It seems that this code
+> flow is relying on the BIOS doing something in the S3 suspend/resume
+> path in order to make the device resumable by amdgpu_device_resume(),
+> which is why we have only encountered this issue for the first time on
+> our first AMD platform that does not support S3 suspend.
+>
 
-This makes it easier for hierarchies like exynos-bus, where every bus
-is probed separately and registers a separate interconnect provider, to
-model constraints between buses (or between buses and DMC, handled by
-two separate drivers in case of Exynos5422).
+It makes sense.  This is an SOC, not a collection of individual
+devices.  There are more devices than power rails so the sbios (via
+ACPI) has to handle the power rail.  All of the devices using that
+power rail have to suspend and tell the sbios before the platform
+microcontroller can turn off the power rail.  Presumably there is
+something missing that prevents the microcontroller for powering down
+the rail.  If the power rail is kept on, the device is never powered
+off and still retains its current state.
 
-Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
----
- drivers/interconnect/core.c           | 11 +++++------
- include/linux/interconnect-provider.h |  2 ++
- 2 files changed, 7 insertions(+), 6 deletions(-)
+> With that in mind, and lacking any better info, wouldn't it make sense
+> for amdgpu_device_resume() to always call reset? Maybe it's not
+> necessary in the S3 case, but it shouldn't harm anything. Or perhaps
+> it could check if the device is alive and reset it if it's not?
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 5ea270af5ff4..caa9e35f06a3 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -259,23 +259,22 @@ static int aggregate_requests(struct icc_node *node)
- static int apply_constraints(struct icc_path *path)
- {
- 	struct icc_node *next, *prev = NULL;
-+	struct icc_provider *p;
- 	int ret = -EINVAL;
- 	int i;
- 
- 	for (i = 0; i < path->num_nodes; i++) {
- 		next = path->reqs[i].node;
-+		p = next->provider;
- 
--		/*
--		 * Both endpoints should be valid master-slave pairs of the
--		 * same interconnect provider that will be configured.
--		 */
--		if (!prev || next->provider != prev->provider) {
-+		/* both endpoints should be valid master-slave pairs */
-+		if (!prev || (p != prev->provider && !p->inter_set)) {
- 			prev = next;
- 			continue;
- 		}
- 
- 		/* set the constraints */
--		ret = next->provider->set(prev, next);
-+		ret = p->set(prev, next);
- 		if (ret)
- 			goto out;
- 
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index cc965b8fab53..b6ae0ee686c5 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -41,6 +41,7 @@ struct icc_node *of_icc_xlate_onecell(struct of_phandle_args *spec,
-  * @xlate: provider-specific callback for mapping nodes from phandle arguments
-  * @dev: the device this interconnect provider belongs to
-  * @users: count of active users
-+ * @inter_set: whether inter-provider pairs will be configured with @set
-  * @data: pointer to private data
-  */
- struct icc_provider {
-@@ -53,6 +54,7 @@ struct icc_provider {
- 	struct icc_node* (*xlate)(struct of_phandle_args *spec, void *data);
- 	struct device		*dev;
- 	int			users;
-+	bool			inter_set;
- 	void			*data;
- };
- 
--- 
-2.17.1
+It's just papering over the problem.  It would be better from a power
+perspective for the driver to just not suspend and keep running like
+normal.  When the driver is not suspended runtime things like clock
+and power gating are active which keep the GPU power at a minimum.
 
+>
+> Alternatively do you have any other contacts within AMD that could
+> help us figure out the underlying question of how to correctly suspend
+> and resume these devices? Happy to ship an affected product sample
+> your way.
+>
+
+I talked to our sbios team and they seem to think our S0ix
+implementation works pretty differently from Intel's.  I'm not really
+an expert on this area however.  We have a new team ramping on up this
+for Linux however.
+
+Alex
