@@ -2,210 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 960C613FADA
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 21:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFA613FBA8
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 22:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732532AbgAPUtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 15:49:17 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:39822 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726994AbgAPUtR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 15:49:17 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 77so20669303oty.6;
-        Thu, 16 Jan 2020 12:49:16 -0800 (PST)
+        id S1730333AbgAPVlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 16:41:07 -0500
+Received: from mail-wr1-f45.google.com ([209.85.221.45]:38994 "EHLO
+        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730107AbgAPVlH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 16:41:07 -0500
+Received: by mail-wr1-f45.google.com with SMTP id y11so20674707wrt.6
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 13:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0aIJw/EJB/nlLQXs7iIn0xmTpXrtxi7CPxwm9YIYHK4=;
+        b=GOygiJ7KFkipQq0EUGjHM+N2PG+t72K/6T1+QUjZ2Pe+zQ+nKmW1ilK399XgOwP8Jw
+         jeR1YtGK6n08zt5o4PJitGjoTnZxfrdGrlYW6iAahSpTlml4Re1fbp4kDqypWDOCbomV
+         FKq/gZRmMkBSKUe6VFBEavLp9k2dN5qocjaPXdxo0qYQCWSkfLjmmFkltDICJqqXZ72f
+         P9GgqKvRS5+Ihz4jWAbKvc/mEU61hqxpASSD5FegE6aZv9TtiHldRIyIaEYfCDg1qF2A
+         McEdbX3V/aDPbWVQSGvTzknw54lsFwrT0d6lBSuAMW4QjwdHqfL9kPVFbBj7Kmwd2ZfO
+         zohA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vKWl+i3G1M08ggLIoH2gqIF2689K3Ew0LiOCmwmp/BI=;
-        b=V9DyBpcccxtdBuEvMM+gi23TlnE/zd39fu6tgJhBHxAETFCwGAz/26cvswfCC/udCm
-         PlA5tl5ZZ45FUzLuR1OdnQ5Fwh3OqHgsfF4evsa9JaUiUlEGO6HLPPj/G/WxA0OMM6f4
-         vtJDEOB7cRNB1jTKFdHJPoliy1221zn5LuwOqsTUKzmfYh/OFA7YNeJc2oHuWRFnJOIG
-         uOJA0BlJUeI+IExCQHsc9oSThntENzckiNuUB080n662LC/BsyWbDf9SpKaYnGzG5Gcc
-         CpUlFcgpi8Cchjhk97ARSPExjfdXCwtKnXh0UPanM4zkVSg/dT43Cm+U4MjqV2UBIRtL
-         XB7g==
-X-Gm-Message-State: APjAAAUp1fkcnVTic37ZgZpSbeBcA+ixLmoORz/YbcGe57KGZQwV292T
-        PFoCTxCqCVcZx3wMY/O/aGOfikiM8fIFfwIDzwgF+g==
-X-Google-Smtp-Source: APXvYqzOLGos6s7Y71H1AklWTE2f09vz51ZGotacxjlP/Wsz27QuqtXTiEwUKaZ5USsXu+cAuD5Ns2IP/BanfxOXYCQ=
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr3602980otd.266.1579207755629;
- Thu, 16 Jan 2020 12:49:15 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0aIJw/EJB/nlLQXs7iIn0xmTpXrtxi7CPxwm9YIYHK4=;
+        b=Z9VyUIkKsZkaORtpCA4gbUJa+Ep9mcdSVCM0AZeKZQMmjAQC0bf8ZPhnL9XBSwamyt
+         /xEaU1uf7reDSHOX6u+iVT0c0Gnj3DBySFlLFI0BYRKseet9XSJEo6MOjYYJe+IbZj9E
+         eAfixGQ2HJHnnpq7bJDZCNKBJzBQ3TfXCHlHUUzuVZ+Y3gX+8rxgfkukMuBA7Mk+Df9X
+         C1j2CjvjWlqML/bVVWglySKYVQ3HFXXSdIlA7fHVtIAX2yrjKB0HA+hioZQ2pPbeBbrL
+         jVytaUAo76Wv5Y8/LuV2OTtvPZjfdAzJOesakSu4QZ4utQNpFFUOHgvz9cgQwe1txrer
+         NesA==
+X-Gm-Message-State: APjAAAXUGGB5KIyEz4fp4xH9gR4+RkCt0zQ9OQYIFMj+t3M5H1P3PTcg
+        gJSSsKzOieG8Sa8kUWRXgKmLag==
+X-Google-Smtp-Source: APXvYqzqcJ92F1npzVRU1NhwWwuYY1L1YMovLft7/PvSLw6VJrDaLLBPk/YS4s3bzYv2cuhYvsL5JA==
+X-Received: by 2002:a5d:49c7:: with SMTP id t7mr5232416wrs.369.1579210865690;
+        Thu, 16 Jan 2020 13:41:05 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6c63:1b50:1156:7f0f? ([2a01:e34:ed2f:f020:6c63:1b50:1156:7f0f])
+        by smtp.googlemail.com with ESMTPSA id e16sm30940450wrs.73.2020.01.16.13.41.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jan 2020 13:41:05 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] thermal: sprd: Add Spreadtrum thermal driver
+ support
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linaro.org>, freeman.liu@unisoc.com,
+        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
+ <dd3303a956e7dd5c065ac2b92b1dea7ee5d1df17.1575978484.git.baolin.wang7@gmail.com>
+ <CADBw62o3vW_hdFwcMdQFJqx2HpNhCEHOxADQO9LztzpqCVQBpg@mail.gmail.com>
+ <547d91fa-66c5-e3bb-4028-2578f070695c@linaro.org>
+ <CADBw62pcYZ_GR1OrS3VG-Y1T8CYOcL4pRzTwBt6of4ZmzhhNng@mail.gmail.com>
+ <CADBw62r5qBVt8LB+E5XoToB7FJJDH+exwzVqJ6+Eti-6eKtB-w@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <b59955fe-c6c4-4fde-4551-3ba09c7ac636@linaro.org>
+Date:   Thu, 16 Jan 2020 22:41:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
-In-Reply-To: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Jan 2020 21:49:05 +0100
-Message-ID: <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: suspend: Add sysfs attribute to control the "sync
- on suspend" behavior
-To:     Jonas Meurer <jonas@freesources.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>,
-        Yannik Sembritzki <yannik@sembritzki.me>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CADBw62r5qBVt8LB+E5XoToB7FJJDH+exwzVqJ6+Eti-6eKtB-w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 12:53 PM Jonas Meurer <jonas@freesources.org> wrote:
->
-> The sysfs attribute `/sys/power/sync_on_suspend` controls, whether or not
-> filesystems are synced by the kernel before system suspend.
->
-> Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
-> is slightly changed: It now defines the run-tim default for the new sysfs
-> attribute `/sys/power/sync_on_suspend`.
->
-> The run-time attribute is added because the existing corresponding
-> build-time Kconfig flag for (`CONFIG_SUSPEND_SKIP_SYNC`) is not flexible
-> enough. E.g. Linux distributions that provide pre-compiled kernels
-> usually want to stick with the default (sync filesystems before suspend)
-> but under special conditions this needs to be changed.
->
-> One example for such a special condition is user-space handling of
-> suspending block devices (e.g. using `cryptsetup luksSuspend` or `dmsetup
-> suspend`) before system suspend. The Kernel trying to sync filesystems
-> after the underlying block device already got suspended obviously leads
-> to dead-locks. Be aware that you have to take care of the filesystem sync
-> yourself before suspending the system in those scenarios.
->
-> Signed-off-by: Jonas Meurer <jonas@freesources.org>
 
-Applied as 5.6 material with minor changes in the ABI document, thanks!
+Hi Baolin,
 
-> ---
->  Documentation/ABI/testing/sysfs-power | 13 +++++++++++
->  include/linux/suspend.h               |  2 ++
->  kernel/power/Kconfig                  |  5 +++-
->  kernel/power/main.c                   | 33 +++++++++++++++++++++++++++
->  kernel/power/suspend.c                |  2 +-
->  5 files changed, 53 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index 6f87b9dd384b..9392a83afce8 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -407,3 +407,16 @@ Contact:   Kalesh Singh <kaleshsingh96@gmail.com>
->  Description:
->                 The /sys/power/suspend_stats/last_failed_step file contains
->                 the last failed step in the suspend/resume path.
-> +
-> +What:          /sys/power/sync_on_suspend
-> +Date:          October 2019
-> +Contact:       Jonas Meurer <jonas@freesources.org>
-> +Description:
-> +               This file controls whether or not the kernel will sync()
-> +               filesystems during system suspend (after freezing user space
-> +               and before suspending devices).
-> +
-> +               Writing a "1" to this file enables the sync() and writing a
-> +               "0" disables it.  Reads from the file return the current value.
-> +               The default is "1" but can be configured with the build-time
-> +               config flag "SUSPEND_SKIP_SYNC".
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 6fc8843f1c9e..4a230c2f1c31 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -329,6 +329,7 @@ extern void arch_suspend_disable_irqs(void);
->  extern void arch_suspend_enable_irqs(void);
->
->  extern int pm_suspend(suspend_state_t state);
-> +extern bool sync_on_suspend_enabled;
->  #else /* !CONFIG_SUSPEND */
->  #define suspend_valid_only_mem NULL
->
-> @@ -342,6 +343,7 @@ static inline bool pm_suspend_default_s2idle(void) { return false; }
->
->  static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
->  static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-> +static inline bool sync_on_suspend_enabled(void) { return true; }
->  static inline bool idle_should_enter_s2idle(void) { return false; }
->  static inline void __init pm_states_init(void) {}
->  static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index d3667b4075c1..7cbfbeacd68a 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -27,7 +27,10 @@ config SUSPEND_SKIP_SYNC
->           Skip the kernel sys_sync() before freezing user processes.
->           Some systems prefer not to pay this cost on every invocation
->           of suspend, or they are content with invoking sync() from
-> -         user-space before invoking suspend.  Say Y if that's your case.
-> +         user-space before invoking suspend.  There's a run-time switch
-> +         at '/sys/power/sync_on_suspend' to configure this behaviour.
-> +         This setting changes the default for the run-tim switch. Say Y
-> +         to change the default to disable the kernel sys_sync().
->
->  config HIBERNATE_CALLBACKS
->         bool
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index e26de7af520b..69b7a8aeca3b 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -190,6 +190,38 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
->  }
->
->  power_attr(mem_sleep);
-> +
-> +/*
-> + * sync_on_suspend: invoke ksys_sync_helper() before suspend.
-> + *
-> + * show() returns whether ksys_sync_helper() is invoked before suspend.
-> + * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
-> + */
-> +bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
-> +
-> +static ssize_t sync_on_suspend_show(struct kobject *kobj,
-> +                                  struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-> +}
-> +
-> +static ssize_t sync_on_suspend_store(struct kobject *kobj,
-> +                                   struct kobj_attribute *attr,
-> +                                   const char *buf, size_t n)
-> +{
-> +       unsigned long val;
-> +
-> +       if (kstrtoul(buf, 10, &val))
-> +               return -EINVAL;
-> +
-> +       if (val > 1)
-> +               return -EINVAL;
-> +
-> +       sync_on_suspend_enabled = !!val;
-> +       return n;
-> +}
-> +
-> +power_attr(sync_on_suspend);
->  #endif /* CONFIG_SUSPEND */
->
->  #ifdef CONFIG_PM_SLEEP_DEBUG
-> @@ -855,6 +887,7 @@ static struct attribute * g[] = {
->         &wakeup_count_attr.attr,
->  #ifdef CONFIG_SUSPEND
->         &mem_sleep_attr.attr,
-> +       &sync_on_suspend_attr.attr,
->  #endif
->  #ifdef CONFIG_PM_AUTOSLEEP
->         &autosleep_attr.attr,
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index f3b7239f1892..2c47280fbfc7 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -564,7 +564,7 @@ static int enter_state(suspend_state_t state)
->         if (state == PM_SUSPEND_TO_IDLE)
->                 s2idle_begin();
->
-> -       if (!IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC)) {
-> +       if (sync_on_suspend_enabled) {
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
->                 ksys_sync_helper();
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-> --
-> 2.20.1
->
+On 16/01/2020 09:52, Baolin Wang wrote:
+> Hi Daniel,
+> 
+> On Mon, Dec 23, 2019 at 3:48 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
+>>
+>> Hi Daniel,
+>>
+>> On Mon, Dec 23, 2019 at 3:42 PM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>>
+>>>
+>>> Hi Baolin,
+>>>
+>>> On 23/12/2019 07:31, Baolin Wang wrote:
+>>>> Hi Rui and Daniel,
+>>>>
+>>>> On Tue, Dec 10, 2019 at 8:08 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
+>>>>>
+>>>>> From: Freeman Liu <freeman.liu@unisoc.com>
+>>>>>
+>>>>> This patch adds the support for Spreadtrum thermal sensor controller,
+>>>>> which can support maximum 8 sensors.
+>>>>>
+>>>>> Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
+>>>>> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
+>>>>> ---
+>>>>> Changes from v1:
+>>>>>  - None.
+>>>>> ---
+>>>>
+>>>> Any comments for this patch? Thanks.
+>>>
+> 
+> Sorry for reminding you again, could you have a look about this patch
+> when you feel free? Thanks.
+
+Thanks for heads up and sorry for the delay. I began to review the
+patch, I'll send the review tomorrow.
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
