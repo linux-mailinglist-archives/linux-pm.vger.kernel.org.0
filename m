@@ -2,102 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9AA13F9A6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 20:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D2913F9AC
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 20:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgAPTi1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 14:38:27 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60582 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729076AbgAPTi1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 14:38:27 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id A047C294582
-Received: by earth.universe (Postfix, from userid 1000)
-        id 9E4203C0C7C; Thu, 16 Jan 2020 20:38:21 +0100 (CET)
-Date:   Thu, 16 Jan 2020 20:38:21 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Yauhen Kharuzhy <jekhor@gmail.com>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] power: supply: bq25890_charger: fix incorrect
- error return when bq25890_field_read fails
-Message-ID: <20200116193821.eahey33llmtmahhj@earth.universe>
-References: <20200116170900.86548-1-colin.king@canonical.com>
+        id S1728901AbgAPTlf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 14:41:35 -0500
+Received: from mga04.intel.com ([192.55.52.120]:2591 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727023AbgAPTlf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 14:41:35 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 11:41:34 -0800
+X-IronPort-AV: E=Sophos;i="5.70,327,1574150400"; 
+   d="scan'208";a="373433720"
+Received: from pkriegsm-mobl.amr.corp.intel.com ([10.251.131.105])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 11:41:34 -0800
+Message-ID: <2de70e961f24592d2d157b8586526df2eaf0ae6e.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: intel_pch_thermal: Add PCI ids for Lewisburg
+ PCH.
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Tushar Dave <tushar.n.dave@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 16 Jan 2020 11:41:34 -0800
+In-Reply-To: <20200116184250.qlvc3ilx2b42czqk@alap3.anarazel.de>
+References: <20200115184415.1726953-1-andres@anarazel.de>
+         <2a5e9df32e2df27297149a577512f6b1557de241.camel@linux.intel.com>
+         <20200116184250.qlvc3ilx2b42czqk@alap3.anarazel.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gsoxf3b5hpk7troz"
-Content-Disposition: inline
-In-Reply-To: <20200116170900.86548-1-colin.king@canonical.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 2020-01-16 at 10:42 -0800, Andres Freund wrote:
+> Hi,
+> 
+> On 2020-01-16 05:53:13 -0800, Srinivas Pandruvada wrote:
+> > On Wed, 2020-01-15 at 10:44 -0800, Andres Freund wrote:
+> > > I noticed that I couldn't read the PCH temperature on my
+> > > workstation
+> > > (C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but
+> > > had to
+> > > go
+> > > through IPMI. Looking at the data sheet, it looks to me like the
+> > > existing intel PCH thermal driver should work without changes for
+> > > Lewisburg.
+> > Does the temperature reading match with what you read via IPMI?
+> 
+> It does:
+> 
+> root@awork3:~# ipmitool sdr|grep ^PCH
+> PCH Temp         | 58 degrees C      | ok
+> 
+> andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/type
+> pch_lewisburg
+> andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
+> 58000
+> 
+> And if I generate some load, it rises for both:
+> root@awork3:~# ipmitool sdr|grep ^PCH
+> PCH Temp         | 60 degrees C      | ok
+> andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
+> 60000
+> 
+Thanks for the test.
 
---gsoxf3b5hpk7troz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Rui can add his ACK.
 
-Hi Colin,
 
-Thanks, queued.
+Thanks,
+Srinivas
 
--- Sebastian
-
-On Thu, Jan 16, 2020 at 05:09:00PM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->=20
-> Currently a read failure by bq25890_field_read on F_DEV_REV is returning
-> an error in id instead of rev. Fix this by returning the value in rev.
->=20
-> Addresses-Coverity: ("Copy-paste error")
-> Fixes: d20267c9a98e ("power: supply: bq25890_charger: Add support of BQ25=
-892 and BQ25896 chips")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/power/supply/bq25890_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
-y/bq25890_charger.c
-> index 785dbc6307b0..aebd1253dbc9 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -765,7 +765,7 @@ static int bq25890_get_chip_version(struct bq25890_de=
-vice *bq)
->  	rev =3D bq25890_field_read(bq, F_DEV_REV);
->  	if (rev < 0) {
->  		dev_err(bq->dev, "Cannot read chip revision.\n");
-> -		return id;
-> +		return rev;
->  	}
-> =20
->  	switch (id) {
-> --=20
-> 2.24.0
->=20
-
---gsoxf3b5hpk7troz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4gu6oACgkQ2O7X88g7
-+pr00w/+JvbtQgu/7hNLNnfksPXRdxDSAaS0OB0CPRvhxOqxunWKTkvZPZdj1RP3
-JZj97mi5SblDGr9qHbIzAVg/Sj0pn0vHlnkwSuqKsB7MgKtTMPRNud6Pk1FaSuMJ
-bWWLNTOwWG+yetuiMHGqT9QvVKdBNb3HaWQJN+I4JvRzpf69hp75fhV0A1Q7lIvw
-y3S8v1F2e/Y2o3f2ajdryRd1uYf+agfSeW7gZ+aQbY8gUICV6e5II27pvvxjylFn
-V1qgy0yDlCjvP9uifQ8yK74baZHDpyU0flSylHOPIV8/V16m5WLzCRW5Dxauzsx0
-3Ulqyg34JSd3eri/7oFzmHyWHEgxE7yBnXuc+ngroXF8ljR6cpz/xoBjczIbSsdc
-CZRlYZqGBnuXroUACy1oyR81ial3wPYt6zSs4uhE9+cl4YYeAZ/tKnq13Re75I5s
-h/tNfwR8007mEVHVpqxo1aUVfDfbYiQZkGrGSOgB58n6Ulhq+nmNJIF6/TSd54qb
-uR3uy2kHdBb9q7OtMiV/QQNiLzcf17VwJEzauRdSKng8zo5n65z7qPW2UlDwu345
-tnGiriKqwMJROFMoKaKTXDS8zdK2Ae/72ooLKH9qXfZDKfbaDnp/GAE6BAHBeJCs
-dMXbeDN9hwTMBBnl8Iwo4haNowWD/SvldJb6Ha/yOT7xg5sF14s=
-=RT7i
------END PGP SIGNATURE-----
-
---gsoxf3b5hpk7troz--
