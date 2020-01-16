@@ -2,180 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFA613FBA8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 22:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC9513FBF8
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 23:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730333AbgAPVlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 16:41:07 -0500
-Received: from mail-wr1-f45.google.com ([209.85.221.45]:38994 "EHLO
-        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730107AbgAPVlH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 16:41:07 -0500
-Received: by mail-wr1-f45.google.com with SMTP id y11so20674707wrt.6
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 13:41:06 -0800 (PST)
+        id S2389746AbgAPWG3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 17:06:29 -0500
+Received: from mail-qv1-f67.google.com ([209.85.219.67]:37225 "EHLO
+        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389709AbgAPWG2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 17:06:28 -0500
+Received: by mail-qv1-f67.google.com with SMTP id f16so9848757qvi.4
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2020 14:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0aIJw/EJB/nlLQXs7iIn0xmTpXrtxi7CPxwm9YIYHK4=;
-        b=GOygiJ7KFkipQq0EUGjHM+N2PG+t72K/6T1+QUjZ2Pe+zQ+nKmW1ilK399XgOwP8Jw
-         jeR1YtGK6n08zt5o4PJitGjoTnZxfrdGrlYW6iAahSpTlml4Re1fbp4kDqypWDOCbomV
-         FKq/gZRmMkBSKUe6VFBEavLp9k2dN5qocjaPXdxo0qYQCWSkfLjmmFkltDICJqqXZ72f
-         P9GgqKvRS5+Ihz4jWAbKvc/mEU61hqxpASSD5FegE6aZv9TtiHldRIyIaEYfCDg1qF2A
-         McEdbX3V/aDPbWVQSGvTzknw54lsFwrT0d6lBSuAMW4QjwdHqfL9kPVFbBj7Kmwd2ZfO
-         zohA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DTahV1GtMN4KybIOWmxhd6seRxPFIwEPBPYiQMgNktc=;
+        b=E9QaEx95aathN8Wz33qb3J0l0uaqUlb4hHoFlae249pHM7nLFU5Ukt/Llz+yugn3H0
+         R2j7fBAi+ZQehL+WpOwZNFDVi+AHeWRXTCbmPG5UF1ifspWvUWDuuPKg8RbkL50oorwG
+         3l015kb7WaiKhAtV5YqDIs2bCbqxjhPy/kAd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=0aIJw/EJB/nlLQXs7iIn0xmTpXrtxi7CPxwm9YIYHK4=;
-        b=Z9VyUIkKsZkaORtpCA4gbUJa+Ep9mcdSVCM0AZeKZQMmjAQC0bf8ZPhnL9XBSwamyt
-         /xEaU1uf7reDSHOX6u+iVT0c0Gnj3DBySFlLFI0BYRKseet9XSJEo6MOjYYJe+IbZj9E
-         eAfixGQ2HJHnnpq7bJDZCNKBJzBQ3TfXCHlHUUzuVZ+Y3gX+8rxgfkukMuBA7Mk+Df9X
-         C1j2CjvjWlqML/bVVWglySKYVQ3HFXXSdIlA7fHVtIAX2yrjKB0HA+hioZQ2pPbeBbrL
-         jVytaUAo76Wv5Y8/LuV2OTtvPZjfdAzJOesakSu4QZ4utQNpFFUOHgvz9cgQwe1txrer
-         NesA==
-X-Gm-Message-State: APjAAAXUGGB5KIyEz4fp4xH9gR4+RkCt0zQ9OQYIFMj+t3M5H1P3PTcg
-        gJSSsKzOieG8Sa8kUWRXgKmLag==
-X-Google-Smtp-Source: APXvYqzqcJ92F1npzVRU1NhwWwuYY1L1YMovLft7/PvSLw6VJrDaLLBPk/YS4s3bzYv2cuhYvsL5JA==
-X-Received: by 2002:a5d:49c7:: with SMTP id t7mr5232416wrs.369.1579210865690;
-        Thu, 16 Jan 2020 13:41:05 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:6c63:1b50:1156:7f0f? ([2a01:e34:ed2f:f020:6c63:1b50:1156:7f0f])
-        by smtp.googlemail.com with ESMTPSA id e16sm30940450wrs.73.2020.01.16.13.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jan 2020 13:41:05 -0800 (PST)
-Subject: Re: [PATCH v2 2/2] thermal: sprd: Add Spreadtrum thermal driver
- support
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>, freeman.liu@unisoc.com,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
- <dd3303a956e7dd5c065ac2b92b1dea7ee5d1df17.1575978484.git.baolin.wang7@gmail.com>
- <CADBw62o3vW_hdFwcMdQFJqx2HpNhCEHOxADQO9LztzpqCVQBpg@mail.gmail.com>
- <547d91fa-66c5-e3bb-4028-2578f070695c@linaro.org>
- <CADBw62pcYZ_GR1OrS3VG-Y1T8CYOcL4pRzTwBt6of4ZmzhhNng@mail.gmail.com>
- <CADBw62r5qBVt8LB+E5XoToB7FJJDH+exwzVqJ6+Eti-6eKtB-w@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <b59955fe-c6c4-4fde-4551-3ba09c7ac636@linaro.org>
-Date:   Thu, 16 Jan 2020 22:41:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DTahV1GtMN4KybIOWmxhd6seRxPFIwEPBPYiQMgNktc=;
+        b=XKNgFCLdTFse/LPcswi8+cPuVTsNk8oEIM9v9R2P44CCRLBgw871imgfxF/9mL6e3h
+         CIRvX4OJ6QZ0JyysjVfaccrNZOblOlj9TnGimy7QyPMWg9GApp3iIzoA5Hd5KFAJ+QN0
+         LA380L1XZuUFq4qdqZn/H86sYJDbJUMwm953eh+l5CiGsrRXgQf+ic70ADYVNTuP/J/X
+         CpSECH6BkXEHDKB9OBD7ZLnp8zuaEg52qba4tLz2fu1S0X9/Ug1QM/n3Ujk3LCu3uC1C
+         gc41UghoaXamdRvnZt3boyjltVDSFNzXCqLTl+kDAxocCcMOhOBMR8MAeki1gaFISjX6
+         9dlA==
+X-Gm-Message-State: APjAAAWYUdOkHL3meGFtot8MLyhtoOCs49QFtl3qGvFpOPROf24FI2OJ
+        rJPrJK0FZLH7ILtn1F4oyqJf2k1df26sFiX1IJOjgw==
+X-Google-Smtp-Source: APXvYqw2VoMKNnGQJcQw3R7LDZtFBy1XQhNRN7JUwCsrBtWrV/1SWU+9BOXTMNzpxhCo7z0/XaPLAX0EEWVdm0sDeH8=
+X-Received: by 2002:a05:6214:192f:: with SMTP id es15mr4937880qvb.219.1579212387126;
+ Thu, 16 Jan 2020 14:06:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CADBw62r5qBVt8LB+E5XoToB7FJJDH+exwzVqJ6+Eti-6eKtB-w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200114232219.93171-1-pmalani@chromium.org> <20200116195129.GD208460@google.com>
+In-Reply-To: <20200116195129.GD208460@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 16 Jan 2020 14:06:16 -0800
+Message-ID: <CACeCKacARUw6AE3yUs0j7duL8y2JtHhpyQfTErARFsFvWREaeg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] platform: chrome: Add cros-usbpd-notify driver
+To:     Benson Leung <bleung@google.com>
+Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, sre@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Jon Flatley <jflat@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Baolin,
-
-On 16/01/2020 09:52, Baolin Wang wrote:
-> Hi Daniel,
-> 
-> On Mon, Dec 23, 2019 at 3:48 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
->>
->> Hi Daniel,
->>
->> On Mon, Dec 23, 2019 at 3:42 PM Daniel Lezcano
->> <daniel.lezcano@linaro.org> wrote:
->>>
->>>
->>> Hi Baolin,
->>>
->>> On 23/12/2019 07:31, Baolin Wang wrote:
->>>> Hi Rui and Daniel,
->>>>
->>>> On Tue, Dec 10, 2019 at 8:08 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
->>>>>
->>>>> From: Freeman Liu <freeman.liu@unisoc.com>
->>>>>
->>>>> This patch adds the support for Spreadtrum thermal sensor controller,
->>>>> which can support maximum 8 sensors.
->>>>>
->>>>> Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
->>>>> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
->>>>> ---
->>>>> Changes from v1:
->>>>>  - None.
->>>>> ---
->>>>
->>>> Any comments for this patch? Thanks.
->>>
-> 
-> Sorry for reminding you again, could you have a look about this patch
-> when you feel free? Thanks.
-
-Thanks for heads up and sorry for the delay. I began to review the
-patch, I'll send the review tomorrow.
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+On Thu, Jan 16, 2020 at 11:51 AM Benson Leung <bleung@google.com> wrote:
+>
+> On Tue, Jan 14, 2020 at 03:22:18PM -0800, Prashant Malani wrote:
+> > From: Jon Flatley <jflat@chromium.org>
+> >
+> > ChromiumOS uses ACPI device with HID "GOOG0003" for power delivery
+> > related events. The existing cros-usbpd-charger driver relies on these
+> > events without ever actually receiving them on ACPI platforms. This is
+> > because in the ChromeOS kernel trees, the GOOG0003 device is owned by an
+> > ACPI driver that offers firmware updates to USB-C chargers.
+> >
+> > Introduce a new platform driver under cros-ec, the ChromeOS embedded
+> > controller, that handles these PD events and dispatches them
+> > appropriately over a notifier chain to all drivers that use them.
+> >
+> > On platforms that don't have the ACPI device defined, the driver gets
+> > instantiated for ECs which support the EC_FEATURE_USB_PD feature bit,
+> > and the notification events will get delivered using the MKBP event
+> > handling mechanism.
+> >
+> > Co-Developed-by: Prashant Malani <pmalani@chromium.org>
+> > Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
+> > Signed-off-by: Jon Flatley <jflat@chromium.org>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+>
+> Minor nit, otherwise,
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+Thanks, will add this in the next version.
+>
+>
+> > ---
+> > diff --git a/drivers/platform/chrome/cros_usbpd_notify.c b/drivers/platform/chrome/cros_usbpd_notify.c
+> > new file mode 100644
+> > index 0000000000000..858e494995843
+> > --- /dev/null
+> > +++ b/drivers/platform/chrome/cros_usbpd_notify.c
+> > @@ -0,0 +1,153 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright 2020 Google LLC
+> > + *
+> > + * This driver serves as the receiver of cros_ec PD host events.
+> > + */
+> > +
+> > +#include <linux/acpi.h>
+> > +#include <linux/module.h>
+> > +#include <linux/mfd/cros_ec.h>
+> > +#include <linux/platform_data/cros_ec_commands.h>
+> > +#include <linux/platform_data/cros_usbpd_notify.h>
+>
+> Same nit as other: Alphabetize #include list.
+Done
+>
+> > +#include <linux/platform_data/cros_ec_proto.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +#define DRV_NAME "cros-usbpd-notify"
+> > +#define ACPI_DRV_NAME "GOOG0003"
+> > +
+> > +static BLOCKING_NOTIFIER_HEAD(cros_usbpd_notifier_list);
+> > +
+> > +/**
+> > + * cros_usbpd_register_notify - Register a notifier callback for PD events.
+> > + * @nb: Notifier block pointer to register
+> > + *
+> > + * On ACPI platforms this corresponds to host events on the ECPD
+> > + * "GOOG0003" ACPI device. On non-ACPI platforms this will filter mkbp events
+> > + * for USB PD events.
+> > + *
+> > + * Return: 0 on success or negative error code.
+> > + */
+> > +int cros_usbpd_register_notify(struct notifier_block *nb)
+> > +{
+> > +     return blocking_notifier_chain_register(
+> > +                     &cros_usbpd_notifier_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(cros_usbpd_register_notify);
+> > +
+> > +
+> > +/**
+> > + * cros_usbpd_unregister_notify - Unregister notifier callback for PD events.
+> > + * @nb: Notifier block pointer to unregister
+> > + *
+> > + * Unregister a notifier callback that was previously registered with
+> > + * cros_usbpd_register_notify().
+> > + */
+> > +void cros_usbpd_unregister_notify(struct notifier_block *nb)
+> > +{
+> > +     blocking_notifier_chain_unregister(&cros_usbpd_notifier_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(cros_usbpd_unregister_notify);
+> > +
+> > +#ifdef CONFIG_ACPI
+> > +
+> > +static int cros_usbpd_notify_add_acpi(struct acpi_device *adev)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static void cros_usbpd_notify_acpi(struct acpi_device *adev, u32 event)
+> > +{
+> > +     blocking_notifier_call_chain(&cros_usbpd_notifier_list, event, NULL);
+> > +}
+> > +
+> > +static const struct acpi_device_id cros_usbpd_notify_acpi_device_ids[] = {
+> > +     { ACPI_DRV_NAME, 0 },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, cros_usbpd_notify_acpi_device_ids);
+> > +
+> > +static struct acpi_driver cros_usbpd_notify_acpi_driver = {
+> > +     .name = DRV_NAME,
+> > +     .class = DRV_NAME,
+> > +     .ids = cros_usbpd_notify_acpi_device_ids,
+> > +     .ops = {
+> > +             .add = cros_usbpd_notify_add_acpi,
+> > +             .notify = cros_usbpd_notify_acpi,
+> > +     },
+> > +};
+> > +module_acpi_driver(cros_usbpd_notify_acpi_driver);
+> > +
+> > +#endif /* CONFIG_ACPI */
+> > +
+> > +#ifdef CONFIG_OF
+> > +
+> > +static int cros_usbpd_notify_plat(struct notifier_block *nb,
+> > +             unsigned long queued_during_suspend, void *data)
+> > +{
+> > +     struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
+> > +     u32 host_event = cros_ec_get_host_event(ec_dev);
+> > +
+> > +     if (!host_event)
+> > +             return NOTIFY_BAD;
+> > +
+> > +     if (host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU)) {
+> > +             blocking_notifier_call_chain(&cros_usbpd_notifier_list,
+> > +                             host_event, NULL);
+> > +             return NOTIFY_OK;
+> > +     }
+> > +     return NOTIFY_DONE;
+> > +}
+> > +
+> > +static int cros_usbpd_notify_probe_plat(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct cros_ec_dev *ecdev = dev_get_drvdata(dev->parent);
+> > +     struct notifier_block *nb;
+> > +     int ret;
+> > +
+> > +     nb = devm_kzalloc(dev, sizeof(*nb), GFP_KERNEL);
+> > +     if (!nb)
+> > +             return -ENOMEM;
+> > +
+> > +     nb->notifier_call = cros_usbpd_notify_plat;
+> > +     dev_set_drvdata(dev, nb);
+> > +
+> > +     ret = blocking_notifier_chain_register(&ecdev->ec_dev->event_notifier,
+> > +                                             nb);
+> > +     if (ret < 0) {
+> > +             dev_err(dev, "Failed to register notifier\n");
+> > +             return ret;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int cros_usbpd_notify_remove_plat(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct cros_ec_dev *ecdev = dev_get_drvdata(dev->parent);
+> > +     struct notifier_block *nb =
+> > +             (struct notifier_block *)dev_get_drvdata(dev);
+> > +
+> > +     blocking_notifier_chain_unregister(&ecdev->ec_dev->event_notifier,
+> > +                     nb);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static struct platform_driver cros_usbpd_notify_plat_driver = {
+> > +     .driver = {
+> > +             .name = DRV_NAME,
+> > +     },
+> > +     .probe = cros_usbpd_notify_probe_plat,
+> > +     .remove = cros_usbpd_notify_remove_plat,
+> > +};
+> > +module_platform_driver(cros_usbpd_notify_plat_driver);
+> > +
+> > +#endif /* CONFIG_OF */
+> > +
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_DESCRIPTION("ChromeOS power delivery notifier device");
+> > +MODULE_AUTHOR("Jon Flatley <jflat@chromium.org>");
+> > +MODULE_ALIAS("platform:" DRV_NAME);
+> > diff --git a/include/linux/platform_data/cros_usbpd_notify.h b/include/linux/platform_data/cros_usbpd_notify.h
+> > new file mode 100644
+> > index 0000000000000..4f2791722b6d3
+> > --- /dev/null
+> > +++ b/include/linux/platform_data/cros_usbpd_notify.h
+> > @@ -0,0 +1,17 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * ChromeOS EC Power Delivery Notifier Driver
+> > + *
+> > + * Copyright 2020 Google LLC
+> > + */
+> > +
+> > +#ifndef __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
+> > +#define __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
+> > +
+> > +#include <linux/notifier.h>
+> > +
+> > +int cros_usbpd_register_notify(struct notifier_block *nb);
+> > +
+> > +void cros_usbpd_unregister_notify(struct notifier_block *nb);
+> > +
+> > +#endif  /* __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H */
+> > --
+> > 2.25.0.341.g760bfbb309-goog
+> >
+>
+> --
+> Benson Leung
+> Staff Software Engineer
+> Chrome OS Kernel
+> Google Inc.
+> bleung@google.com
+> Chromium OS Project
+> bleung@chromium.org
