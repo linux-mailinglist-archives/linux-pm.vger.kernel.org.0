@@ -2,44 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 578D113EFD6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0142E13EF03
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436515AbgAPSRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 13:17:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40780 "EHLO mail.kernel.org"
+        id S1730031AbgAPRhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 12:37:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404281AbgAPR3I (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:29:08 -0500
+        id S1729883AbgAPRhF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:37:05 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C03EF246F4;
-        Thu, 16 Jan 2020 17:29:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B046E246B1;
+        Thu, 16 Jan 2020 17:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195748;
-        bh=Gsd2aWs4bWJrcO2HurqTW8C6UED0ESDNK7HNRkyRefE=;
+        s=default; t=1579196225;
+        bh=SWROlE7V+AegruKAe7uxseBPi+wqjEPbe+ipJHpRFn4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1tY0tTv+kV7FGVTP4NfVZOFw1lVNGPhEzu8PgKyikd62RU82lQ2IdyGLtzxv9bi+R
-         44s3DJglWPR3CSlx3lbjagiAvkWos2d9iuub3WBVXm94toidTwdZLooh507IAh9IJi
-         RIpsB6cJpGP+4XjKOMLxyU+abuIyNXBJDR0gR7qc=
+        b=Wu4ltGHwjAPvNfya3teGxRbeVkaeubH1UGQNZCSVybMmf61K8BiFkpnuPykUBtUxX
+         TrBKVKKcj9PyNl+OB70BQTVOeO/o8XDitkxwJyJU5lJOdbl97HrCKMI7oeaDtwTGQi
+         V+oxdJYld7gCMsa+z1Jwx7PbaW42iwUDd89rpeOY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tri Vo <trong@android.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 281/371] power: supply: Init device wakeup after device_add()
-Date:   Thu, 16 Jan 2020 12:22:33 -0500
-Message-Id: <20200116172403.18149-224-sashal@kernel.org>
+Cc:     Michael Kao <michael.kao@mediatek.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.9 058/251] thermal: mediatek: fix register index error
+Date:   Thu, 16 Jan 2020 12:33:27 -0500
+Message-Id: <20200116173641.22137-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -49,67 +45,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Michael Kao <michael.kao@mediatek.com>
 
-[ Upstream commit 8288022284859acbcc3cf1a073a1e2692d6c2543 ]
+[ Upstream commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6 ]
 
-We may want to use the device pointer in device_init_wakeup() with
-functions that expect the device to already be added with device_add().
-For example, if we were to link the device initializing wakeup to
-something in sysfs such as a class for wakeups we'll run into an error.
-It looks like this code was written with the assumption that the device
-would be added before initializing wakeup due to the order of operations
-in power_supply_unregister().
+The index of msr and adcpnp should match the sensor
+which belongs to the selected bank in the for loop.
 
-Let's change the order of operations so we don't run into problems here.
-
-Fixes: 948dcf966228 ("power_supply: Prevent suspend until power supply events are processed")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Tri Vo <trong@android.com>
-Cc: Kalesh Singh <kaleshsingh@google.com>
-Cc: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: b7cf0053738c ("thermal: Add Mediatek thermal driver for mt2701.")
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_core.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/thermal/mtk_thermal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 3226faebe0a0..0f1a0efd5926 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -891,14 +891,14 @@ __power_supply_register(struct device *parent,
- 	}
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 34169c32d495..ea9558679634 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -348,7 +348,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 	u32 raw;
  
- 	spin_lock_init(&psy->changed_lock);
--	rc = device_init_wakeup(dev, ws);
--	if (rc)
--		goto wakeup_init_failed;
--
- 	rc = device_add(dev);
- 	if (rc)
- 		goto device_add_failed;
+ 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+-		raw = readl(mt->thermal_base + conf->msr[i]);
++		raw = readl(mt->thermal_base +
++			    conf->msr[conf->bank_data[bank->id].sensors[i]]);
  
-+	rc = device_init_wakeup(dev, ws);
-+	if (rc)
-+		goto wakeup_init_failed;
-+
- 	rc = psy_register_thermal(psy);
- 	if (rc)
- 		goto register_thermal_failed;
-@@ -935,8 +935,8 @@ __power_supply_register(struct device *parent,
- 	psy_unregister_thermal(psy);
- register_thermal_failed:
- 	device_del(dev);
--device_add_failed:
- wakeup_init_failed:
-+device_add_failed:
- check_supplies_failed:
- dev_set_name_failed:
- 	put_device(dev);
+ 		temp = raw_to_mcelsius(mt,
+ 				       conf->bank_data[bank->id].sensors[i],
+@@ -485,7 +486,8 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 
+ 	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
+ 		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
+-		       mt->thermal_base + conf->adcpnp[i]);
++		       mt->thermal_base +
++		       conf->adcpnp[conf->bank_data[num].sensors[i]]);
+ 
+ 	writel((1 << conf->bank_data[num].num_sensors) - 1,
+ 	       mt->thermal_base + TEMP_MONCTL0);
 -- 
 2.20.1
 
