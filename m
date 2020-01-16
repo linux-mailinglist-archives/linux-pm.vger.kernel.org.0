@@ -2,37 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0142E13EF03
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A350B13EEB0
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730031AbgAPRhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 12:37:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52132 "EHLO mail.kernel.org"
+        id S2405440AbgAPRhp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 12:37:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729883AbgAPRhF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:37:05 -0500
+        id S2404926AbgAPRhp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:37:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B046E246B1;
-        Thu, 16 Jan 2020 17:37:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B605E246CD;
+        Thu, 16 Jan 2020 17:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196225;
-        bh=SWROlE7V+AegruKAe7uxseBPi+wqjEPbe+ipJHpRFn4=;
+        s=default; t=1579196265;
+        bh=7Ib8Ng+ghXxuvkABsdz66tKXJ5t4d1VzFvS70GhBrfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wu4ltGHwjAPvNfya3teGxRbeVkaeubH1UGQNZCSVybMmf61K8BiFkpnuPykUBtUxX
-         TrBKVKKcj9PyNl+OB70BQTVOeO/o8XDitkxwJyJU5lJOdbl97HrCKMI7oeaDtwTGQi
-         V+oxdJYld7gCMsa+z1Jwx7PbaW42iwUDd89rpeOY=
+        b=G3wfLsuvuYRbGtAGYQOKQWeLo3rB9/HdBrUJRIm7XyTZC/1XPv7vDK8CQVfJ3oSrg
+         uR11SRWWgAeYd15fbAKqDaBv35fO9YmP4QXQgPHpG1XL1z1FVOecWh17tZIHQmIxOh
+         BgrflICL0Epabr4I3ezr65wqdy6psoLg7PxUKrus=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Kao <michael.kao@mediatek.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 058/251] thermal: mediatek: fix register index error
-Date:   Thu, 16 Jan 2020 12:33:27 -0500
-Message-Id: <20200116173641.22137-18-sashal@kernel.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nicolas Pitre <nico@linaro.org>,
+        Anand Moon <linux.amoon@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 088/251] ARM: 8847/1: pm: fix HYP/SVC mode mismatch when MCPM is used
+Date:   Thu, 16 Jan 2020 12:33:57 -0500
+Message-Id: <20200116173641.22137-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -45,45 +46,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+From: Marek Szyprowski <m.szyprowski@samsung.com>
 
-[ Upstream commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6 ]
+[ Upstream commit ca70ea43f80c98582f5ffbbd1e6f4da2742da0c4 ]
 
-The index of msr and adcpnp should match the sensor
-which belongs to the selected bank in the for loop.
+MCPM does a soft reset of the CPUs and uses common cpu_resume() routine to
+perform low-level platform initialization. This results in a try to install
+HYP stubs for the second time for each CPU and results in false HYP/SVC
+mode mismatch detection. The HYP stubs are already installed at the
+beginning of the kernel initialization on the boot CPU (head.S) or in the
+secondary_startup() for other CPUs. To fix this issue MCPM code should use
+a cpu_resume() routine without HYP stubs installation.
 
-Fixes: b7cf0053738c ("thermal: Add Mediatek thermal driver for mt2701.")
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
+This change fixes HYP/SVC mode mismatch on Samsung Exynos5422-based Odroid
+XU3/XU4/HC1 boards.
+
+Fixes: 3721924c8154 ("ARM: 8081/1: MCPM: provide infrastructure to allow for MCPM loopback")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Acked-by: Nicolas Pitre <nico@linaro.org>
+Tested-by: Anand Moon <linux.amoon@gmail.com>
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/mtk_thermal.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm/common/mcpm_entry.c   |  2 +-
+ arch/arm/include/asm/suspend.h |  1 +
+ arch/arm/kernel/sleep.S        | 12 ++++++++++++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 34169c32d495..ea9558679634 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -348,7 +348,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	u32 raw;
+diff --git a/arch/arm/common/mcpm_entry.c b/arch/arm/common/mcpm_entry.c
+index a923524d1040..8617323eb273 100644
+--- a/arch/arm/common/mcpm_entry.c
++++ b/arch/arm/common/mcpm_entry.c
+@@ -379,7 +379,7 @@ static int __init nocache_trampoline(unsigned long _arg)
+ 	unsigned int cluster = MPIDR_AFFINITY_LEVEL(mpidr, 1);
+ 	phys_reset_t phys_reset;
  
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
-+		raw = readl(mt->thermal_base +
-+			    conf->msr[conf->bank_data[bank->id].sensors[i]]);
+-	mcpm_set_entry_vector(cpu, cluster, cpu_resume);
++	mcpm_set_entry_vector(cpu, cluster, cpu_resume_no_hyp);
+ 	setup_mm_for_reboot();
  
- 		temp = raw_to_mcelsius(mt,
- 				       conf->bank_data[bank->id].sensors[i],
-@@ -485,7 +486,8 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 	__mcpm_cpu_going_down(cpu, cluster);
+diff --git a/arch/arm/include/asm/suspend.h b/arch/arm/include/asm/suspend.h
+index 6c7182f32cef..e6c2f426f8c8 100644
+--- a/arch/arm/include/asm/suspend.h
++++ b/arch/arm/include/asm/suspend.h
+@@ -7,6 +7,7 @@ struct sleep_save_sp {
+ };
  
- 	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
- 		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
--		       mt->thermal_base + conf->adcpnp[i]);
-+		       mt->thermal_base +
-+		       conf->adcpnp[conf->bank_data[num].sensors[i]]);
+ extern void cpu_resume(void);
++extern void cpu_resume_no_hyp(void);
+ extern void cpu_resume_arm(void);
+ extern int cpu_suspend(unsigned long, int (*)(unsigned long));
  
- 	writel((1 << conf->bank_data[num].num_sensors) - 1,
- 	       mt->thermal_base + TEMP_MONCTL0);
+diff --git a/arch/arm/kernel/sleep.S b/arch/arm/kernel/sleep.S
+index 0f6c1000582c..c8569390e7e7 100644
+--- a/arch/arm/kernel/sleep.S
++++ b/arch/arm/kernel/sleep.S
+@@ -119,6 +119,14 @@ ENDPROC(cpu_resume_after_mmu)
+ 	.text
+ 	.align
+ 
++#ifdef CONFIG_MCPM
++	.arm
++THUMB(	.thumb			)
++ENTRY(cpu_resume_no_hyp)
++ARM_BE8(setend be)			@ ensure we are in BE mode
++	b	no_hyp
++#endif
++
+ #ifdef CONFIG_MMU
+ 	.arm
+ ENTRY(cpu_resume_arm)
+@@ -134,6 +142,7 @@ ARM_BE8(setend be)			@ ensure we are in BE mode
+ 	bl	__hyp_stub_install_secondary
+ #endif
+ 	safe_svcmode_maskall r1
++no_hyp:
+ 	mov	r1, #0
+ 	ALT_SMP(mrc p15, 0, r0, c0, c0, 5)
+ 	ALT_UP_B(1f)
+@@ -162,6 +171,9 @@ ENDPROC(cpu_resume)
+ 
+ #ifdef CONFIG_MMU
+ ENDPROC(cpu_resume_arm)
++#endif
++#ifdef CONFIG_MCPM
++ENDPROC(cpu_resume_no_hyp)
+ #endif
+ 
+ 	.align 2
 -- 
 2.20.1
 
