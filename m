@@ -2,46 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AAA13F8E5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 20:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C6D13F809
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 20:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731076AbgAPQxi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 11:53:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37466 "EHLO mail.kernel.org"
+        id S1732894AbgAPTOg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 14:14:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42674 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731036AbgAPQxf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:53:35 -0500
+        id S1733224AbgAPQ4Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:56:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0370221582;
-        Thu, 16 Jan 2020 16:53:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C39012192A;
+        Thu, 16 Jan 2020 16:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193614;
-        bh=4iwDSIN54qmUTIOoeErXzHgKIYyWd+pZk8Z1tDh2i+o=;
+        s=default; t=1579193784;
+        bh=zCJhx8aCykMZid6FzQX63NfSmEobXGuI5e01qyBmf60=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OdIbYLb0SAivWADY/5V1N96MPIMxomJKTdzIqI3uGve203rOJ/Qse3II0f4Rn5OHB
-         /Fivn+ljkNn/dRaPyt9zNVcqimldWQfrUElL3nQxVispRVGzIUc+pNxX/dwsdzkjHh
-         /zl4FC7ky+nu1i2ANTj5eMEZhcEHMTsA2/4GUxcQ=
+        b=DpE5XwUgZnUhJTfiGq1KjJa5aWQwO1ghYjKti8FTg2re0Hej1LqvBW+I3VVZfxWqi
+         XfOMFf90Ol9F4DTd8QWbjEbNZ+EPPqm3y8IgTuX4VSXrPSKp+pTlakHu2tH7xandHU
+         yN6HK7+8iHLUroT1ZAV9LU5cAQ1WUF/AzmvMC0oc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        linux-pm@vger.kernel.org, mgorman@suse.de, rostedt@goodmis.org,
-        sargun@sargun.me, srinivas.pandruvada@linux.intel.com,
-        tj@kernel.org, xiexiuqi@huawei.com, xiezhipeng1@huawei.com,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 151/205] sched/cpufreq: Move the cfs_rq_util_change() call to cpufreq_update_util()
-Date:   Thu, 16 Jan 2020 11:42:06 -0500
-Message-Id: <20200116164300.6705-151-sashal@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 061/671] OPP: Fix missing debugfs supply directory for OPPs
+Date:   Thu, 16 Jan 2020 11:44:52 -0500
+Message-Id: <20200116165502.8838-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+In-Reply-To: <20200116165502.8838-1-sashal@kernel.org>
+References: <20200116165502.8838-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,244 +43,160 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Vincent Guittot <vincent.guittot@linaro.org>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit bef69dd87828ef5d8ecdab8d857cd3a33cf98675 ]
+[ Upstream commit 46f48aca2e5aef3f430e95d1a5fb68227ec8ec85 ]
 
-update_cfs_rq_load_avg() calls cfs_rq_util_change() every time PELT decays,
-which might be inefficient when the cpufreq driver has rate limitation.
+There is one case where we may end up with no "supply" directory for the
+OPPs in debugfs. That happens when the OPP core isn't managing the
+regulators for the device and the device's OPP do have microvolt
+property. It happens because the opp_table->regulator_count remains set
+to 0 and the debugfs routines don't add any supply directory in such a
+case.
 
-When a task is attached on a CPU, we have this call path:
+This commit fixes that by setting opp_table->regulator_count to 1 in
+that particular case. But to make everything work nicely and not break
+other parts of the core, regulator_count is defined as "int" now instead
+of "unsigned int" and it can have different special values now. It is
+set to -1 initially to mark it "uninitialized" and later only we set it
+to 0 or positive values after checking how many supplies are there.
 
-update_load_avg()
-  update_cfs_rq_load_avg()
-    cfs_rq_util_change -- > trig frequency update
-  attach_entity_load_avg()
-    cfs_rq_util_change -- > trig frequency update
+This also helps in finding the bugs where only few of the OPPs have the
+"opp-microvolt" property set and not all.
 
-The 1st frequency update will not take into account the utilization of the
-newly attached task and the 2nd one might be discarded because of rate
-limitation of the cpufreq driver.
-
-update_cfs_rq_load_avg() is only called by update_blocked_averages()
-and update_load_avg() so we can move the call to
-cfs_rq_util_change/cpufreq_update_util() into these two functions.
-
-It's also interesting to note that update_load_avg() already calls
-cfs_rq_util_change() directly for the !SMP case.
-
-This change will also ensure that cpufreq_update_util() is called even
-when there is no more CFS rq in the leaf_cfs_rq_list to update, but only
-IRQ, RT or DL PELT signals.
-
-[ mingo: Minor updates. ]
-
-Reported-by: Doug Smythies <dsmythies@telus.net>
-Tested-by: Doug Smythies <dsmythies@telus.net>
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: juri.lelli@redhat.com
-Cc: linux-pm@vger.kernel.org
-Cc: mgorman@suse.de
-Cc: rostedt@goodmis.org
-Cc: sargun@sargun.me
-Cc: srinivas.pandruvada@linux.intel.com
-Cc: tj@kernel.org
-Cc: xiexiuqi@huawei.com
-Cc: xiezhipeng1@huawei.com
-Fixes: 039ae8bcf7a5 ("sched/fair: Fix O(nr_cgroups) in the load balancing path")
-Link: https://lkml.kernel.org/r/1574083279-799-1-git-send-email-vincent.guittot@linaro.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Fixes: 1fae788ed640 ("PM / OPP: Don't create debugfs "supply-0" directory unnecessarily")
+Reported-by: Quentin Perret <quentin.perret@arm.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c | 111 +++++++++++++++++++++++++-------------------
- 1 file changed, 62 insertions(+), 49 deletions(-)
+ drivers/opp/core.c | 12 +++++++++---
+ drivers/opp/of.c   | 20 ++++++++++++++++----
+ drivers/opp/opp.h  |  6 ++++--
+ 3 files changed, 29 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 69a81a5709ff..989352861275 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3504,9 +3504,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 	cfs_rq->load_last_update_time_copy = sa->last_update_time;
- #endif
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 1e80f9ec1aa6..34515f432375 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -793,6 +793,9 @@ static struct opp_table *_allocate_opp_table(struct device *dev)
  
--	if (decayed)
--		cfs_rq_util_change(cfs_rq, 0);
--
- 	return decayed;
- }
+ 	INIT_LIST_HEAD(&opp_table->dev_list);
  
-@@ -3616,8 +3613,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
- 		update_tg_load_avg(cfs_rq, 0);
- 
--	} else if (decayed && (flags & UPDATE_TG))
--		update_tg_load_avg(cfs_rq, 0);
-+	} else if (decayed) {
-+		cfs_rq_util_change(cfs_rq, 0);
++	/* Mark regulator count uninitialized */
++	opp_table->regulator_count = -1;
 +
-+		if (flags & UPDATE_TG)
-+			update_tg_load_avg(cfs_rq, 0);
-+	}
- }
+ 	opp_dev = _add_opp_dev(dev, opp_table);
+ 	if (!opp_dev) {
+ 		kfree(opp_table);
+@@ -955,7 +958,7 @@ struct dev_pm_opp *_opp_allocate(struct opp_table *table)
+ 	int count, supply_size;
  
- #ifndef CONFIG_64BIT
-@@ -7517,6 +7518,28 @@ static inline bool others_have_blocked(struct rq *rq) { return false; }
- static inline void update_blocked_load_status(struct rq *rq, bool has_blocked) {}
- #endif
+ 	/* Allocate space for at least one supply */
+-	count = table->regulator_count ? table->regulator_count : 1;
++	count = table->regulator_count > 0 ? table->regulator_count : 1;
+ 	supply_size = sizeof(*opp->supplies) * count;
  
-+static bool __update_blocked_others(struct rq *rq, bool *done)
-+{
-+	const struct sched_class *curr_class;
-+	u64 now = rq_clock_pelt(rq);
-+	bool decayed;
-+
-+	/*
-+	 * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
-+	 * DL and IRQ signals have been updated before updating CFS.
-+	 */
-+	curr_class = rq->curr->sched_class;
-+
-+	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
-+		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
-+		  update_irq_load_avg(rq, 0);
-+
-+	if (others_have_blocked(rq))
-+		*done = false;
-+
-+	return decayed;
-+}
-+
- #ifdef CONFIG_FAIR_GROUP_SCHED
+ 	/* allocate new OPP node and supplies structures */
+@@ -1363,7 +1366,7 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
  
- static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-@@ -7536,29 +7559,11 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
- 	return true;
- }
+ 	kfree(opp_table->regulators);
+ 	opp_table->regulators = NULL;
+-	opp_table->regulator_count = 0;
++	opp_table->regulator_count = -1;
+ err:
+ 	dev_pm_opp_put_opp_table(opp_table);
  
--static void update_blocked_averages(int cpu)
-+static bool __update_blocked_fair(struct rq *rq, bool *done)
+@@ -1392,7 +1395,7 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+ 
+ 	kfree(opp_table->regulators);
+ 	opp_table->regulators = NULL;
+-	opp_table->regulator_count = 0;
++	opp_table->regulator_count = -1;
+ 
+ put_opp_table:
+ 	dev_pm_opp_put_opp_table(opp_table);
+@@ -1545,6 +1548,9 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+ 	if (!opp_table)
+ 		return -ENOMEM;
+ 
++	/* Fix regulator count for dynamic OPPs */
++	opp_table->regulator_count = 1;
++
+ 	ret = _opp_add_v1(opp_table, dev, freq, u_volt, true);
+ 
+ 	dev_pm_opp_put_opp_table(opp_table);
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 20988c426650..d64a13d7881b 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -113,12 +113,10 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+ 			      struct opp_table *opp_table)
  {
--	struct rq *rq = cpu_rq(cpu);
- 	struct cfs_rq *cfs_rq, *pos;
--	const struct sched_class *curr_class;
--	struct rq_flags rf;
--	bool done = true;
--
--	rq_lock_irqsave(rq, &rf);
--	update_rq_clock(rq);
--
--	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
--	 */
--	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
--
--	/* Don't need periodic decay once load/util_avg are null */
--	if (others_have_blocked(rq))
--		done = false;
-+	bool decayed = false;
-+	int cpu = cpu_of(rq);
+ 	u32 *microvolt, *microamp = NULL;
+-	int supplies, vcount, icount, ret, i, j;
++	int supplies = opp_table->regulator_count, vcount, icount, ret, i, j;
+ 	struct property *prop = NULL;
+ 	char name[NAME_MAX];
  
- 	/*
- 	 * Iterates the task_group tree in a bottom up fashion, see
-@@ -7567,9 +7572,13 @@ static void update_blocked_averages(int cpu)
- 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
- 		struct sched_entity *se;
+-	supplies = opp_table->regulator_count ? opp_table->regulator_count : 1;
+-
+ 	/* Search for "opp-microvolt-<name>" */
+ 	if (opp_table->prop_name) {
+ 		snprintf(name, sizeof(name), "opp-microvolt-%s",
+@@ -133,7 +131,13 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
  
--		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-+		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq, 0);
- 
-+			if (cfs_rq == &rq->cfs)
-+				decayed = true;
-+		}
+ 		/* Missing property isn't a problem, but an invalid entry is */
+ 		if (!prop) {
+-			if (!opp_table->regulator_count)
++			if (unlikely(supplies == -1)) {
++				/* Initialize regulator_count */
++				opp_table->regulator_count = 0;
++				return 0;
++			}
 +
- 		/* Propagate pending load changes to the parent, if any: */
- 		se = cfs_rq->tg->se[cpu];
- 		if (se && !skip_blocked_update(se))
-@@ -7584,11 +7593,10 @@ static void update_blocked_averages(int cpu)
++			if (!supplies)
+ 				return 0;
  
- 		/* Don't need periodic decay once load/util_avg are null */
- 		if (cfs_rq_has_blocked(cfs_rq))
--			done = false;
-+			*done = false;
+ 			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
+@@ -142,6 +146,14 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+ 		}
  	}
  
--	update_blocked_load_status(rq, !done);
--	rq_unlock_irqrestore(rq, &rf);
-+	return decayed;
- }
- 
- /*
-@@ -7638,29 +7646,16 @@ static unsigned long task_h_load(struct task_struct *p)
- 			cfs_rq_load_avg(cfs_rq) + 1);
- }
- #else
--static inline void update_blocked_averages(int cpu)
-+static bool __update_blocked_fair(struct rq *rq, bool *done)
- {
--	struct rq *rq = cpu_rq(cpu);
- 	struct cfs_rq *cfs_rq = &rq->cfs;
--	const struct sched_class *curr_class;
--	struct rq_flags rf;
--
--	rq_lock_irqsave(rq, &rf);
--	update_rq_clock(rq);
--
--	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
--	 */
--	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
-+	bool decayed;
- 
--	update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	if (cfs_rq_has_blocked(cfs_rq))
-+		*done = false;
- 
--	update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
--	rq_unlock_irqrestore(rq, &rf);
-+	return decayed;
- }
- 
- static unsigned long task_h_load(struct task_struct *p)
-@@ -7669,6 +7664,24 @@ static unsigned long task_h_load(struct task_struct *p)
- }
- #endif
- 
-+static void update_blocked_averages(int cpu)
-+{
-+	bool decayed = false, done = true;
-+	struct rq *rq = cpu_rq(cpu);
-+	struct rq_flags rf;
++	if (unlikely(supplies == -1)) {
++		/* Initialize regulator_count */
++		supplies = opp_table->regulator_count = 1;
++	} else if (unlikely(!supplies)) {
++		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
++		return -EINVAL;
++	}
 +
-+	rq_lock_irqsave(rq, &rf);
-+	update_rq_clock(rq);
-+
-+	decayed |= __update_blocked_others(rq, &done);
-+	decayed |= __update_blocked_fair(rq, &done);
-+
-+	update_blocked_load_status(rq, !done);
-+	if (decayed)
-+		cpufreq_update_util(rq, 0);
-+	rq_unlock_irqrestore(rq, &rf);
-+}
-+
- /********** Helpers for find_busiest_group ************************/
+ 	vcount = of_property_count_u32_elems(opp->np, name);
+ 	if (vcount < 0) {
+ 		dev_err(dev, "%s: Invalid %s property (%d)\n",
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 7c540fd063b2..c9e65964ed84 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -136,7 +136,9 @@ enum opp_table_access {
+  * @prop_name: A name to postfix to many DT properties, while parsing them.
+  * @clk: Device's clock handle
+  * @regulators: Supply regulators
+- * @regulator_count: Number of power supply regulators
++ * @regulator_count: Number of power supply regulators. Its value can be -1
++ * (uninitialized), 0 (no opp-microvolt property) or > 0 (has opp-microvolt
++ * property).
+  * @genpd_performance_state: Device's power domain support performance state.
+  * @set_opp: Platform specific set_opp callback
+  * @set_opp_data: Data to be passed to set_opp callback
+@@ -172,7 +174,7 @@ struct opp_table {
+ 	const char *prop_name;
+ 	struct clk *clk;
+ 	struct regulator **regulators;
+-	unsigned int regulator_count;
++	int regulator_count;
+ 	bool genpd_performance_state;
  
- /*
+ 	int (*set_opp)(struct dev_pm_set_opp_data *data);
 -- 
 2.20.1
 
