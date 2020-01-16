@@ -2,100 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 530E513EBE5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 18:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BC013EBF5
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 18:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406047AbgAPRpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 12:45:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406039AbgAPRpB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:45:01 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D3C192475E;
-        Thu, 16 Jan 2020 17:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196700;
-        bh=Qt4jd1fuYQukkTXACstAqazYGh2Nsco3xZj82oL/EFM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kvq4MFn8UM2Oi6LD2tWOiQcOLsEX1Ycfit535UrWhYxS1BkXP9n2TmwiUL+qxAKWR
-         4O1EXUcc/mZair9judEyZxowkwgVYTXiFJ4PghZ28jhHI1sQP0ZkLr6tYVi1qlAzIt
-         m2jIMVVgz3fv9QafY+IlUbomCN/4Of6hUd0i6E4U=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 093/174] thermal: cpu_cooling: Actually trace CPU load in thermal_power_cpu_get_power
-Date:   Thu, 16 Jan 2020 12:41:30 -0500
-Message-Id: <20200116174251.24326-93-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
-References: <20200116174251.24326-1-sashal@kernel.org>
+        id S2394454AbgAPRxo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 12:53:44 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:42730 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394443AbgAPRxo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 12:53:44 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00GHrebX029057;
+        Thu, 16 Jan 2020 11:53:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1579197220;
+        bh=t8orkGLdN+VEXtw9A9i1nVzcxXSIJKWT0HvQf4WRsYY=;
+        h=From:To:CC:Subject:Date;
+        b=N1igzSg8HbQMxuU4mta1clFA76Qk1XUzdinIySGWB+yb/Zux0quMvg80JWiaE9ayb
+         /5shhxzvWfPk4XkO+83lET+byiR7cu3XFaNKVueVt4+ay3muvxw+3LaYSUyAYXYKon
+         nKdeT6DSnxLA2o8qMd1Nv2e2aL9Se7Dmy4VX2oN8=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00GHreNl075932
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Jan 2020 11:53:40 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 16
+ Jan 2020 11:53:40 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 16 Jan 2020 11:53:40 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00GHresi040565;
+        Thu, 16 Jan 2020 11:53:40 -0600
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <sebastian.reichel@collabora.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: [PATCH v4 0/4] BQ25150/155 Driver introduction
+Date:   Thu, 16 Jan 2020 11:50:35 -0600
+Message-ID: <20200116175039.1317-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Matthias Kaehlcke <mka@chromium.org>
+Hello
 
-[ Upstream commit bf45ac18b78038e43af3c1a273cae4ab5704d2ce ]
+I am introducing the TI BQ25150/155 Charge driver.
+The driver also supports the JEITA spec for Thermal battery management. This
+support for Hot, Warm and Cool are being added to the power supply class.
 
-The CPU load values passed to the thermal_power_cpu_get_power
-tracepoint are zero for all CPUs, unless, unless the
-thermal_power_cpu_limit tracepoint is enabled too:
+Datasheets for these devices can be found at:
+http://www.ti.com/lit/ds/symlink/bq25150.pdf
+http://www.ti.com/lit/ds/symlink/bq25155.pdf
 
-  irq/41-rockchip-98    [000] ....   290.972410: thermal_power_cpu_get_power:
-  cpus=0000000f freq=1800000 load={{0x0,0x0,0x0,0x0}} dynamic_power=4815
+Dan
 
-vs
+Dan Murphy (4):
+  power: supply: core: Update sysfs-class-power ABI document
+  power_supply: Add additional health properties to the header
+  dt-bindings: power: Add the bq2515x family dt bindings
+  power: supply: bq2515x: Introduce the bq2515x family
 
-  irq/41-rockchip-96    [000] ....    95.773585: thermal_power_cpu_get_power:
-  cpus=0000000f freq=1800000 load={{0x56,0x64,0x64,0x5e}} dynamic_power=4959
-  irq/41-rockchip-96    [000] ....    95.773596: thermal_power_cpu_limit:
-  cpus=0000000f freq=408000 cdev_state=10 power=416
+ Documentation/ABI/testing/sysfs-class-power   |   3 +-
+ .../bindings/power/supply/bq2515x.yaml        |  85 ++
+ drivers/power/supply/Kconfig                  |   8 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/bq2515x_charger.c        | 739 ++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c     |   2 +-
+ include/linux/power_supply.h                  |   3 +
+ 7 files changed, 839 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+ create mode 100644 drivers/power/supply/bq2515x_charger.c
 
-There seems to be no good reason for omitting the CPU load information
-depending on another tracepoint. My guess is that the intention was to
-check whether thermal_power_cpu_get_power is (still) enabled, however
-'load_cpu != NULL' already indicates that it was at least enabled when
-cpufreq_get_requested_power() was entered, there seems little gain
-from omitting the assignment if the tracepoint was just disabled, so
-just remove the check.
-
-Fixes: 6828a4711f99 ("thermal: add trace events to the power allocator governor")
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Javi Merino <javi.merino@kernel.org>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/cpu_cooling.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-index 87d87ac1c8a0..96567b4a4f20 100644
---- a/drivers/thermal/cpu_cooling.c
-+++ b/drivers/thermal/cpu_cooling.c
-@@ -607,7 +607,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
- 			load = 0;
- 
- 		total_load += load;
--		if (trace_thermal_power_cpu_limit_enabled() && load_cpu)
-+		if (load_cpu)
- 			load_cpu[i] = load;
- 
- 		i++;
 -- 
-2.20.1
+2.25.0
 
