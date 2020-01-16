@@ -2,85 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BE713DEA3
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 16:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C0913E142
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 17:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgAPPVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 10:21:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:51164 "EHLO foss.arm.com"
+        id S1729144AbgAPQsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 11:48:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726535AbgAPPVq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 10:21:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E2E01424;
-        Thu, 16 Jan 2020 07:21:46 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.37.12.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D11EA3F68E;
-        Thu, 16 Jan 2020 07:21:35 -0800 (PST)
-From:   lukasz.luba@arm.com
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
-        Chris.Redpath@arm.com, ionela.voinescu@arm.com,
-        javi.merino@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
-        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, lukasz.luba@arm.com,
-        patrick.bellasi@matbug.net
-Subject: [PATCH 4/4] drm/panfrost: Register to the Energy Model with devfreq device
-Date:   Thu, 16 Jan 2020 15:20:32 +0000
-Message-Id: <20200116152032.11301-5-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200116152032.11301-1-lukasz.luba@arm.com>
-References: <20200116152032.11301-1-lukasz.luba@arm.com>
+        id S1729058AbgAPQsZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:48:25 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35C1220663;
+        Thu, 16 Jan 2020 16:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579193304;
+        bh=AmWo+liNG81NoGv2cQFWagdPVrvxxbqAsN7zg28/WJ8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BPofgXN6Ku9HHlw8K1MxchZVgJnUycv3uw60vmmpvHbIpLjo4BNfNoQw8oK1ByPxr
+         ZiIpkueyBpzHnhstgDVlVsRNt/8m4A3/qf+qXDcCH6hzQeqg/XkmMh3DeFjDSlwu2F
+         pqy0I+D4W/bB8DYd+gC2I25GhZirbvomwI+kIelk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 070/205] power: supply: bd70528: Add MODULE_ALIAS to allow module auto loading
+Date:   Thu, 16 Jan 2020 11:40:45 -0500
+Message-Id: <20200116164300.6705-70-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
+References: <20200116164300.6705-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Lukasz Luba <lukasz.luba@arm.com>
+From: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-Let Panfrost devfreq device use the Energy Model (EM). The EM can be used
-in thermal subsystem (devfreq_cooling) for calculating the used power.
+[ Upstream commit 9480029fe5c24d482efad38dc631bd555fc7afe2 ]
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+The bd70528 charger driver is probed by MFD driver. Add MODULE_ALIAS
+in order to allow udev to load the module when MFD sub-device cell for
+charger is added.
+
+Fixes: f8c7f7ddd8ef0 ("power: supply: Initial support for ROHM BD70528 PMIC charger block")
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/power/supply/bd70528-charger.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index 413987038fbf..8771782f67c6 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -105,6 +105,8 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	}
- 	pfdev->devfreq.devfreq = devfreq;
- 
-+	dev_pm_opp_of_register_em(dev);
-+
- 	cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
- 	if (IS_ERR(cooling))
- 		DRM_DEV_INFO(dev, "Failed to register cooling device\n");
-@@ -118,6 +120,7 @@ void panfrost_devfreq_fini(struct panfrost_device *pfdev)
- {
- 	if (pfdev->devfreq.cooling)
- 		devfreq_cooling_unregister(pfdev->devfreq.cooling);
-+	dev_pm_opp_of_unregister_em(&pfdev->pdev->dev);
- 	dev_pm_opp_of_remove_table(&pfdev->pdev->dev);
- }
- 
+diff --git a/drivers/power/supply/bd70528-charger.c b/drivers/power/supply/bd70528-charger.c
+index 1bb32b7226d7..b8e1ec106627 100644
+--- a/drivers/power/supply/bd70528-charger.c
++++ b/drivers/power/supply/bd70528-charger.c
+@@ -741,3 +741,4 @@ module_platform_driver(bd70528_power);
+ MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+ MODULE_DESCRIPTION("BD70528 power-supply driver");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:bd70528-power");
 -- 
-2.17.1
+2.20.1
 
