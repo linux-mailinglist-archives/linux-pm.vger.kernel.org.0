@@ -2,88 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5034313F244
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C7E13F382
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729188AbgAPRYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 12:24:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391791AbgAPRYi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:24:38 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58E72246BD;
-        Thu, 16 Jan 2020 17:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195478;
-        bh=irA/cM1vWOhJmBs2PD0tW5ZUlPA/Ji3OJu6aU8hDEuU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lfv7Lzr8ezbvpiBB+Zm+NGQFEIuZlcaX8Lxj90nmTjzYRXuo0Y4ZUv7ROBRDb9HGH
-         3g3ZnU3dzcCrMkH9kGSE+E7xSXnOLndynfKp0GWwNpP3LKRhN/Rkv0egqE1FiBkZzY
-         vu7XlzHoHJrFNCpxkk8s6wEBTOv/DAXmAMhHRevQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Kao <michael.kao@mediatek.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 083/371] thermal: mediatek: fix register index error
-Date:   Thu, 16 Jan 2020 12:19:15 -0500
-Message-Id: <20200116172403.18149-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S2390286AbgAPSmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 13:42:19 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:38257 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390300AbgAPSmS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 13:42:18 -0500
+Received: from localhost.localdomain ([37.4.249.101]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mleo0-1jIw7L3qrK-00ioZF; Thu, 16 Jan 2020 19:41:50 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] dt-bindings: brcm,avs-ro-thermal: Fix binding check issues
+Date:   Thu, 16 Jan 2020 19:41:17 +0100
+Message-Id: <1579200077-17496-1-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:+sPxTCFhphlG3yB/Vx1rT4zv4v7XQNBXEsZUG8nOQTMLN/8oNU1
+ cIQrMr4QLHa06BxUeULkTm8FrfWFhdn3mPaqN4tH3TBTXUdVufXlCUcTyj/PHhw6sgBcMTA
+ mZx6vCFItqhZnVkuio0WoafXGl9Rs68tikhSvXXdLUXjSDmuepTiEJYCEWJUZh7wwxSA0wr
+ w0LTrbo+7cE9tmdYbr1wQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+jcCjposBx0=:yyC7jsIe/of8jUKuHeITgu
+ aXK8OBpK/gxv+jhxC/xLDqrj+EQsV55PYLfzhgtNyOzU8bAqhW2KJj69StMrp/PPIExIcljYA
+ /NKnN584ptFLAUPLEZIJhzRTWYKErS7Qyy11PUlxJlAGWN4d9xpyU78LaeZIkzENnShU5gFP2
+ ABEV0+TqsHRWN9wRs4hW5b5Vr5JTsDMk59PpXMryJlxq1pAd+jXXbkAisQA0p692SObeeE2ZA
+ JCgwNiSoVO65Embq7fzXx206TuS1T6Ni1qYLdcnz2t6d540k0EX4Uznciz+quVmEOFIwpEje4
+ 5HYf1zDbeXdiQD2lElEQx3kiPDJIv3zUpGbvlEhG1aTm5yGYU+/gq3VrmhWHBIqRWVyyU8lqE
+ CKux+OgG9+C0CW/Ubh4Q6DJk0SDf+snQVYqBDj/i08YTK7XT9lB5YDbnLUF4+LMOF90pH2n4k
+ 5SJCuvNRluII63acZiMwR2R8JtD4MV1YcH+2saetnTwzVlOiwxrzjX8hF6fiOGJFS1Zq02HlD
+ 7AR7JfLd8mpG+8d/Fo+ysomcsyOekC72hYrcpXKCCEezDML1QXz+kyjpOUKBjtmbs7z/EEhZH
+ s0cZo5ImMqzAznfg55k0Dr9DqsEq27GiVRU2n3mjX3n2Zcn+FZWW8vZCIfFs6zpQn6dIKv1vN
+ dZbtEiCoNjvSG24HGs0lICT3VZrlSIkN073iDLF1p4ylHpgTeiX0fO+qo+9ccGUyW2sSa3PIV
+ a15ftUAtAGstL4K/uJ9V4E2VyDuLC3ZGp+FvsQrocWUUkI+lzqnEPEiY0oHcsFfers/JbzOSm
+ ygFJhwQotapC0SFx5vQjLaJboailcGKVIn9VXiHryFv8+GfLX4xyDm0LI+cjiAT7tiRmn8zFa
+ +cHIfWHSP0PRHTBAuWw3BAY62wsz7dl4364I1V+cs=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+Drop the reg property since this only necessary for the parent and
+add the missing thermal-sensor-cells property description.
 
-[ Upstream commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6 ]
-
-The index of msr and adcpnp should match the sensor
-which belongs to the selected bank in the for loop.
-
-Fixes: b7cf0053738c ("thermal: Add Mediatek thermal driver for mt2701.")
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Fixes: 3d4849897691 ("dt-bindings: Add Broadcom AVS RO thermal")
 ---
- drivers/thermal/mtk_thermal.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml         | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 1e61c09153c9..76b92083744c 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -407,7 +407,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	u32 raw;
+diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+index 98e7b57..d9fdf48 100644
+--- a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+@@ -23,12 +23,15 @@ properties:
+   compatible:
+     const: brcm,bcm2711-thermal
  
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base + conf->msr[i]);
-+		raw = readl(mt->thermal_base +
-+			    conf->msr[conf->bank_data[bank->id].sensors[i]]);
+-  reg:
+-    maxItems: 1
++  # See ./thermal.txt for details
++  "#thermal-sensor-cells":
++    const: 0
  
- 		temp = raw_to_mcelsius(mt,
- 				       conf->bank_data[bank->id].sensors[i],
-@@ -544,7 +545,8 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ required:
+   - compatible
+-  - reg
++  - '#thermal-sensor-cells'
++
++additionalProperties: false
  
- 	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
- 		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
--		       mt->thermal_base + conf->adcpnp[i]);
-+		       mt->thermal_base +
-+		       conf->adcpnp[conf->bank_data[num].sensors[i]]);
- 
- 	writel((1 << conf->bank_data[num].num_sensors) - 1,
- 	       mt->thermal_base + TEMP_MONCTL0);
+ examples:
+   - |
 -- 
-2.20.1
+2.7.4
 
