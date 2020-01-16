@@ -2,103 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D3113F397
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF9C13F5BA
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390227AbgAPSmy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 13:42:54 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:44557 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388922AbgAPSmx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 13:42:53 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8D4E6513;
-        Thu, 16 Jan 2020 13:42:52 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 16 Jan 2020 13:42:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=/7fhTR1f92cLpIrCbJ+2OWqkhpv
-        1kl/VUQPVVPmZgEc=; b=FeT3Zq8GQ8qzz7uwZ61cvMkHaF09X3eo/FpFVoHqOD3
-        fD2mUOt9ZN1aIwAIlALjLeieBa4NJV38bhYqf5lHt8/P6R0YWsGiFcsCGp8bjSUR
-        S5i+v2OLYpL3wN994Aa6eLnpfnxUUyTbZUvbUxqjSpfIq2LN8SjA06t3Aeurr63g
-        DFh3EId6sc4pd3ofGp0hCm2iQuuNFaFlTuOgifAF1YWmWiy9SJpZUZ4uCL+LTFOX
-        eJi4VkmRq21YTtPj0kWerE278gG75nGVd7DUOonrl86y4ie2zd97oESJkTDNTbbx
-        ZKDLTeMCZqgrvK4sgURIYvh0qyZLvgJjbQD3n62OZ1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=/7fhTR
-        1f92cLpIrCbJ+2OWqkhpv1kl/VUQPVVPmZgEc=; b=OGQecjOuzXXqPotapCj+I4
-        hCuvcE20Lyo2NHyxVzMaaw5u6fApAawM44/CZ8My+gEWIpAs+A1W7yTbIl7stc4U
-        ISwGutrvWf/fY6Wmt+BLTxJ1+sYJIxqNYL8oYFngXv80cCUmI4Kgyktp6E0jpCpR
-        la10h+G6XmMbRRwLVVdI+K608MXDXZR1CuY72vVELP2tkdq2bnqgTQFu+9eyv4ml
-        TWU4fhudiNebOAXbnIIuo3/9sIsJT7wmpFBg//qGKmdnYKIMlN5gZmtAGuVO2V8U
-        L/HMsBy9jcqt7dhf/7FTqH8wbhGNS9Se5wRDTTxSRZlT7FmI2E9/H6+Ubg5IZw1w
-        ==
-X-ME-Sender: <xms:q64gXs06QPv33nJkcPtUk0Ur3ju3En2cj8wJxS3uN-QreHvl4-Pwrg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtdehgdduudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgurhgv
-    shcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucfkphepie
-    ejrdduiedtrddvudejrddvhedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgv
-    shesrghnrghrrgiivghlrdguvgenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:q64gXtDAe7wB3ahvp589SNBrCT9khM1atZVGja4paJJTGI7rV0GEXQ>
-    <xmx:q64gXukD8ZZnxNDb3j7CjbDibL3L_2233B4CJth2LKaOHbZep9jdOA>
-    <xmx:q64gXmokCmoSG3Z4Djh47-T19UppDuXU2so7VC1b9R8rhdFOalZlKw>
-    <xmx:rK4gXuY4u1yVTdjBmqiSUv6UekfymvvUZDtRPdiw9i8O_zgjZHdeEw>
-Received: from intern.anarazel.de (c-67-160-217-250.hsd1.ca.comcast.net [67.160.217.250])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A8DE13060840;
-        Thu, 16 Jan 2020 13:42:51 -0500 (EST)
-Date:   Thu, 16 Jan 2020 10:42:50 -0800
-From:   Andres Freund <andres@anarazel.de>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Tushar Dave <tushar.n.dave@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: intel_pch_thermal: Add PCI ids for Lewisburg
- PCH.
-Message-ID: <20200116184250.qlvc3ilx2b42czqk@alap3.anarazel.de>
-References: <20200115184415.1726953-1-andres@anarazel.de>
- <2a5e9df32e2df27297149a577512f6b1557de241.camel@linux.intel.com>
+        id S2389001AbgAPS62 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 13:58:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38264 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389538AbgAPS62 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 13:58:28 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 83AE121D56;
+        Thu, 16 Jan 2020 18:58:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579201107;
+        bh=xQHaMmW5+OUanOpzT3F10iGg7VHntvomNgGXkgpU0/4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pW1ad/mr9lv4mjG0KEHhw15B0zLcU7PWxrVIHtozNIlIefsGUj+3aY68lA0al2hhz
+         oWtE//Q1g1pAS6w0SBmCk64FIpGJjxgsQAswNY8yo9mAkJeDp4c/olz+VXoP3Kme05
+         TC1GjKQjhsUfwbm5bhgzsLb7A7y6H9uLiQgNebmM=
+Received: by mail-qk1-f174.google.com with SMTP id a203so20225382qkc.3;
+        Thu, 16 Jan 2020 10:58:27 -0800 (PST)
+X-Gm-Message-State: APjAAAX7EBSkaL+2UN0vHHUSOPaWAykL58uzba7Sdl55VtITmLMHVai7
+        7nddZv4d5aJCXwXX1c7AtfQlKWE22hP4xROPJw==
+X-Google-Smtp-Source: APXvYqz7Jds+/Z0T2jKmrW9vc4gPA0ja7tR3DL5ZNZX7bEiGSGPBQq4mA+KAyBwwQDFM1HxCAgDqUAjb3yEtcnqqaag=
+X-Received: by 2002:a05:620a:1eb:: with SMTP id x11mr35416430qkn.254.1579201106608;
+ Thu, 16 Jan 2020 10:58:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a5e9df32e2df27297149a577512f6b1557de241.camel@linux.intel.com>
+References: <1579200077-17496-1-git-send-email-stefan.wahren@i2se.com>
+In-Reply-To: <1579200077-17496-1-git-send-email-stefan.wahren@i2se.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 16 Jan 2020 12:58:15 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+51A_wKBzxwihkQd=eo_AEQ-wo4pK_GthO5b8WT=6oKw@mail.gmail.com>
+Message-ID: <CAL_Jsq+51A_wKBzxwihkQd=eo_AEQ-wo4pK_GthO5b8WT=6oKw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: brcm,avs-ro-thermal: Fix binding check issues
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, Jan 16, 2020 at 12:42 PM Stefan Wahren <stefan.wahren@i2se.com> wrote:
+>
+> Drop the reg property since this only necessary for the parent and
+> add the missing thermal-sensor-cells property description.
+>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Fixes: 3d4849897691 ("dt-bindings: Add Broadcom AVS RO thermal")
+> ---
+>  .../devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml         | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 
-On 2020-01-16 05:53:13 -0800, Srinivas Pandruvada wrote:
-> On Wed, 2020-01-15 at 10:44 -0800, Andres Freund wrote:
-> > I noticed that I couldn't read the PCH temperature on my workstation
-> > (C620 series chipset, w/ 2x Xeon Gold 5215 CPUs) directly, but had to
-> > go
-> > through IPMI. Looking at the data sheet, it looks to me like the
-> > existing intel PCH thermal driver should work without changes for
-> > Lewisburg.
-> Does the temperature reading match with what you read via IPMI?
+Thanks for the quick fix.
 
-It does:
-
-root@awork3:~# ipmitool sdr|grep ^PCH
-PCH Temp         | 58 degrees C      | ok
-
-andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/type
-pch_lewisburg
-andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
-58000
-
-And if I generate some load, it rises for both:
-root@awork3:~# ipmitool sdr|grep ^PCH
-PCH Temp         | 60 degrees C      | ok
-andres@awork3:~$ cat /sys/class/thermal/thermal_zone0/temp
-60000
-
-Regards,
-
-Andres
+Reviewed-by: Rob Herring <robh@kernel.org>
