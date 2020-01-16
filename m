@@ -2,61 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 372AD13F4C4
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5034313F244
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389265AbgAPSva (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 13:51:30 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:45870 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389571AbgAPRJD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 12:09:03 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1is8dh-0001uN-1q; Thu, 16 Jan 2020 17:09:01 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Yauhen Kharuzhy <jekhor@gmail.com>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] power: supply: bq25890_charger: fix incorrect error return when bq25890_field_read fails
-Date:   Thu, 16 Jan 2020 17:09:00 +0000
-Message-Id: <20200116170900.86548-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.24.0
+        id S1729188AbgAPRYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 12:24:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59518 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391791AbgAPRYi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:24:38 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58E72246BD;
+        Thu, 16 Jan 2020 17:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579195478;
+        bh=irA/cM1vWOhJmBs2PD0tW5ZUlPA/Ji3OJu6aU8hDEuU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lfv7Lzr8ezbvpiBB+Zm+NGQFEIuZlcaX8Lxj90nmTjzYRXuo0Y4ZUv7ROBRDb9HGH
+         3g3ZnU3dzcCrMkH9kGSE+E7xSXnOLndynfKp0GWwNpP3LKRhN/Rkv0egqE1FiBkZzY
+         vu7XlzHoHJrFNCpxkk8s6wEBTOv/DAXmAMhHRevQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Michael Kao <michael.kao@mediatek.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.14 083/371] thermal: mediatek: fix register index error
+Date:   Thu, 16 Jan 2020 12:19:15 -0500
+Message-Id: <20200116172403.18149-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Michael Kao <michael.kao@mediatek.com>
 
-Currently a read failure by bq25890_field_read on F_DEV_REV is returning
-an error in id instead of rev. Fix this by returning the value in rev.
+[ Upstream commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6 ]
 
-Addresses-Coverity: ("Copy-paste error")
-Fixes: d20267c9a98e ("power: supply: bq25890_charger: Add support of BQ25892 and BQ25896 chips")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+The index of msr and adcpnp should match the sensor
+which belongs to the selected bank in the for loop.
+
+Fixes: b7cf0053738c ("thermal: Add Mediatek thermal driver for mt2701.")
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/bq25890_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/mtk_thermal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 785dbc6307b0..aebd1253dbc9 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -765,7 +765,7 @@ static int bq25890_get_chip_version(struct bq25890_device *bq)
- 	rev = bq25890_field_read(bq, F_DEV_REV);
- 	if (rev < 0) {
- 		dev_err(bq->dev, "Cannot read chip revision.\n");
--		return id;
-+		return rev;
- 	}
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 1e61c09153c9..76b92083744c 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -407,7 +407,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 	u32 raw;
  
- 	switch (id) {
+ 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+-		raw = readl(mt->thermal_base + conf->msr[i]);
++		raw = readl(mt->thermal_base +
++			    conf->msr[conf->bank_data[bank->id].sensors[i]]);
+ 
+ 		temp = raw_to_mcelsius(mt,
+ 				       conf->bank_data[bank->id].sensors[i],
+@@ -544,7 +545,8 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 
+ 	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
+ 		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
+-		       mt->thermal_base + conf->adcpnp[i]);
++		       mt->thermal_base +
++		       conf->adcpnp[conf->bank_data[num].sensors[i]]);
+ 
+ 	writel((1 << conf->bank_data[num].num_sensors) - 1,
+ 	       mt->thermal_base + TEMP_MONCTL0);
 -- 
-2.24.0
+2.20.1
 
