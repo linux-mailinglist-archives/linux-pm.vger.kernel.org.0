@@ -2,262 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CD913F042
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0647A13F0B9
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2020 19:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395289AbgAPSTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jan 2020 13:19:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35710 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729567AbgAPSTk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jan 2020 13:19:40 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7ACE920730;
-        Thu, 16 Jan 2020 18:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579198779;
-        bh=FbsZ0/SErF2ACVNYz0E0ittdmPkIEVqQMLPm/a1nnOs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qRbfjgutZ+me9IhtL7pTaw6/Pkvpm8fZPk33PyLELtiIfXTnWLxkzgwT8N42MF75z
-         JYk+3G2nW7URzZvnzziSNBju2wP4+teeyy7rpEnZpZtDPL9HuH+u2PNdr1A53HkACL
-         y7xDrCnAUzuigR1/bGMhKY/e7CaGNLJSDCaGyE3Q=
-Received: by mail-qt1-f169.google.com with SMTP id e12so19674417qto.2;
-        Thu, 16 Jan 2020 10:19:39 -0800 (PST)
-X-Gm-Message-State: APjAAAXSny8OW5VDhzDMg3raqETp3PrpuA9XEBTGQcsfTi7oknhOWQZ8
-        lEe0W5OT76uspD022/T0CLYZKW5C1lcw1hRz6A==
-X-Google-Smtp-Source: APXvYqxWNn7kYxyGzj+kt6DlR20uI18OuWT7JlUj/1abGnmEtEDhdDbV9AJ0rgV0W/pwGJ54BXmTkotnf+ixVRZyAzc=
-X-Received: by 2002:ac8:1415:: with SMTP id k21mr3734145qtj.300.1579198778476;
- Thu, 16 Jan 2020 10:19:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20191230144402.30195-1-ulf.hansson@linaro.org>
- <20191230144402.30195-3-ulf.hansson@linaro.org> <CAL_Jsq+cAKEGOMnBwwvLt03zx8Gcxh4ijziaBnnY5TPEG0Mekg@mail.gmail.com>
- <CAPDyKFr_7qmKjpWcFegVBsfKBJePtukuriwW-8KX6c2a24ojEA@mail.gmail.com>
-In-Reply-To: <CAPDyKFr_7qmKjpWcFegVBsfKBJePtukuriwW-8KX6c2a24ojEA@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 16 Jan 2020 12:19:27 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJN3UtM9T2D71j+2CORxWjL3s7cjkFX579p85WQuKgPNA@mail.gmail.com>
-Message-ID: <CAL_JsqJN3UtM9T2D71j+2CORxWjL3s7cjkFX579p85WQuKgPNA@mail.gmail.com>
-Subject: Re: [PATCH v5 02/15] dt: psci: Update DT bindings to support
- hierarchical PSCI states
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S2392480AbgAPSXr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jan 2020 13:23:47 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:48191 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436593AbgAPSXp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jan 2020 13:23:45 -0500
+Received: from [192.168.1.176] ([37.4.249.101]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N5G1T-1jbQrp2DRt-011Arw; Thu, 16 Jan 2020 19:23:24 +0100
+Subject: Re: [PATCH V5 1/4] dt-bindings: Add Broadcom AVS RO thermal
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Lina Iyer <lina.iyer@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>, devicetree@vger.kernel.org
+References: <1578941778-23321-1-git-send-email-stefan.wahren@i2se.com>
+ <1578941778-23321-2-git-send-email-stefan.wahren@i2se.com>
+ <CAL_Jsq+w0KGE-=XkAwpdqh67pH=V34ETCy8X92L_u1=_8xuKCg@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ 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 AQ==
+Message-ID: <ca02714a-538e-3057-3fc6-70fb453b411c@i2se.com>
+Date:   Thu, 16 Jan 2020 19:23:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_Jsq+w0KGE-=XkAwpdqh67pH=V34ETCy8X92L_u1=_8xuKCg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:9Vjz6FFurzI9PFAe4jG8EbOWh/kFLMdLh4diVZ9YcuDZWiR/lQp
+ cLeVq5Kw9rn6HSENvz62R+cKi9K5rRo7dXKY0PvBHlUmO+mKa6MJDrHIWiMZo9xeyDtY815
+ ueHWz9DCmP2Plt4VQLBgrC2cbwVVljKvh2fmb0jlfnMgw6Brsv4jlyUrtfU4IvuIwYjE1YL
+ sW6FtJXPQ0XPg2jcfXtUw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J4hVp3gooWA=:/holuA9SH0TcrEUOsjYe3v
+ CI7/F7YCDkSMr1MiM81G0o6cxfw47kfS/wGz2if3jyPMVaNggWpwZWSPiLSnqK5pTE04tEqXK
+ 0dTwHMll3onWKw6yPl/5nXMre5ailVWjKOR/uNPTTXB+hWa8H3ocMUUpuMSAa2Vd8h/0rkdb9
+ ohLtdvsOulDSYS+VQV+aOFb7UDTPxa2uGvu7110lWkGuEaiIjjZ3Dtq5NJf35Jal76pO32L5y
+ 0wWtjKvrgReeJtj1cFol25prc07OJ02BPfW1lHLkut4TwD3hNdG2XAqbHwJgcl3aBtrJ3vDxE
+ 91lg44nZcGAtTIIUIbpi+QUCiwE8JhZxPpwrUZqh+KMjj79qurW4/FgaBdpXkVQcZQsRDTAyi
+ iZ3FZL2XIP9T3+hMCq7bFNWaB3DM3stLeerT9ruFdVzNddMaT4U59gltFo6Nfd2lVz+S3Z8bn
+ vg3VP03OzpYHTBaTdba1DsLRmu/2CxSNaZba23DgWU0xPYAgIvPHQE/oxPy7D3zn1n03oBJdv
+ 9VLeKiF77PYiGs/J+8xZxFrBYQWmbFCWJZx2jbOeS8TsXC5YWuZAc1IpExiClNBN3yHeRfNnB
+ 5rkTAmUu+mGKNeyyewXszQjZC6zzq3QZ2w6hyM+pru1g1OECtbMCOEsVnGFsi0Qd6GPPAbwlQ
+ NXg/BXpaGCLrk9vNWfIdniCTS+n+eBxTbgIsuuP2EIPkGRFwbw89mBwuozkoJEkRQkV2xezYk
+ RwG6Ji54AbpdR8NnhnwDgRV7jTofv1qLGtPJJJDsa10+eaJAipaAooFYU/AjDVvIJPcw+eFe3
+ +PD+rZM/YX2XjwkQpSp1N14zAJ9j+ILHvGrgj++m4r4rUUIi1dUQmZUyCWq/iUnM2K0hn3573
+ oAbeV7iBgEc4hc8n1y+BYqzY9pFzCcyhEInfdQbf8=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 11:55 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+Hi Rob,
+
+Am 16.01.20 um 18:33 schrieb Rob Herring:
+> On Mon, Jan 13, 2020 at 12:56 PM Stefan Wahren <stefan.wahren@i2se.com> wrote:
+>> Since the BCM2711 doesn't have a AVS TMON block, the thermal information
+>> must be retrieved from the AVS ring oscillator block. This block is part
+>> of the AVS monitor which contains a bunch of raw sensors.
+>>
+>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>> ---
+>>  .../bindings/thermal/brcm,avs-ro-thermal.yaml      | 45 ++++++++++++++++++++++
+>>  1 file changed, 45 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> The example fails 'make dt_binding_check':
 >
-> On Mon, 13 Jan 2020 at 20:53, Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Mon, Dec 30, 2019 at 8:44 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > Update PSCI DT bindings to allow to represent idle states for CPUs and the
-> > > CPU topology, by using a hierarchical layout. Primarily this is done by
-> > > re-using the existing DT bindings for PM domains [1] and for PM domain idle
-> > > states [2].
-> > >
-> > > Let's also add an example into the document for the PSCI DT bindings, to
-> > > clearly show the new hierarchical based layout. The currently supported
-> > > flattened layout, is already described in the ARM idle states bindings [3],
-> > > so let's leave that as is.
-> > >
-> > > [1] Documentation/devicetree/bindings/power/power_domain.txt
-> > > [2] Documentation/devicetree/bindings/power/domain-idle-state.txt
-> > > [3] Documentation/devicetree/bindings/arm/idle-states.txt
-> > >
-> > > Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-> > > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
-> > > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >
-> > > Changes in v5:
-> > >         - None.
-> >
-> > First I'm seeing this as the DT list was not copied. The example has
-> > problems when running 'make dt_binding_check':
-> >
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@0:
-> > compatible: Additional items are not allowed ('arm,armv8' was
-> > unexpected)
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@0:
-> > compatible: ['arm,cortex-a53', 'arm,armv8'] is too long
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@1:
-> > compatible: Additional items are not allowed ('arm,armv8' was
-> > unexpected)
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml: cpu@1:
-> > compatible: ['arm,cortex-a57', 'arm,armv8'] is too long
-> >
-> > 'arm,armv8' is only valid for s/w models.
->
-> Perhaps you have a different version of the tools than I have (I have
-> tried both on v.5.5-rc5 and todays linux-next), because I can't
-> reproduce these errors at my side when running "make
-> dt_binding_check".
->
-> Can you please check again?
+> /builds/robherring/linux-dt-bindings/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dt.yaml:
+> thermal: 'reg' is a required property
 
-Are you setting DT_SCHEMA_FILES? If so, then arm/cpus.yaml (or any
-other schema) isn't loaded and used for validation. That schema is the
-source of this error.
+can you please explain what is the reason for this? The example below
+has a reg property. I'm confused.
 
-It is failing in my CI job:
-https://gitlab.com/robherring/linux-dt-bindings/-/jobs/405298185
-
-Is dt-schema up to date? Though I can't think of any recent changes
-that would impact this. This check has been there a while and I fixed
-all the dts files.
-
-Do you see psci.example.dt.yaml getting built?
-
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml:
-> > idle-states: cluster-retention:compatible:0: 'arm,idle-state' was
-> > expected
-> > Documentation/devicetree/bindings/arm/psci.example.dt.yaml:
-> > idle-states: cluster-power-down:compatible:0: 'arm,idle-state' was
-> > expected
-> >
-> > The last 2 are due to my conversion of the idle-states binding which
-> > is in my tree now. Probably need to add 'domain-idle-state' as a
-> > compatible at a minimum. It looks like domain-idle-state.txt is pretty
-> > much the same as arm/idle-state.txt, so we should perhaps merge them.
->
-> Ahh, so maybe *all* of the above problems are caused by conflicts in
-> the arm-soc tree with changes from your tree!?
-
-Shouldn't be. arm/cpus.yaml has been in place for a few cycles now.
+Best regards
+Stefan
 
 >
-> In regards to merging files, I am fine by that if that helps.
+>> diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+>> new file mode 100644
+>> index 0000000..98e7b57
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+>> @@ -0,0 +1,45 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/thermal/brcm,avs-ro-thermal.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom AVS ring oscillator thermal
+>> +
+>> +maintainers:
+>> +  - Stefan Wahren <wahrenst@gmx.net>
+>> +
+>> +description: |+
+>> +  The thermal node should be the child of a syscon node with the
+>> +  required property:
+>> +
+>> +  - compatible: Should be one of the following:
+>> +                "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
+>> +
+>> +  Refer to the the bindings described in
+>> +  Documentation/devicetree/bindings/mfd/syscon.txt
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: brcm,bcm2711-thermal
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +examples:
+>> +  - |
+>> +        avs-monitor@7d5d2000 {
+>> +                compatible = "brcm,bcm2711-avs-monitor",
+>> +                             "syscon", "simple-mfd";
+>> +                reg = <0x7d5d2000 0xf00>;
+>> +
+>> +                thermal: thermal {
+>> +                        compatible = "brcm,bcm2711-thermal";
+>> +                        #thermal-sensor-cells = <0>;
+> Also this is not documented. That's not caught because
+> 'additionalProperties: false' is also needed.
 >
-> >
-> > There's some bigger issues though.
-> >
-> > > ---
-> > >  .../devicetree/bindings/arm/cpus.yaml         |  15 +++
-> > >  .../devicetree/bindings/arm/psci.yaml         | 104 ++++++++++++++++++
-> > >  2 files changed, 119 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > index c23c24ff7575..7a9c3ce2dbef 100644
-> > > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > @@ -242,6 +242,21 @@ properties:
-> > >
-> > >        where voltage is in V, frequency is in MHz.
-> > >
-> > > +  power-domains:
-> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > +    description:
-> > > +      List of phandles and PM domain specifiers, as defined by bindings of the
-> > > +      PM domain provider (see also ../power_domain.txt).
-> > > +
-> > > +  power-domain-names:
-> > > +    $ref: '/schemas/types.yaml#/definitions/string-array'
-> > > +    description:
-> > > +      A list of power domain name strings sorted in the same order as the
-> > > +      power-domains property.
-> > > +
-> > > +      For PSCI based platforms, the name corresponding to the index of the PSCI
-> > > +      PM domain provider, must be "psci".
-> > > +
-> > >    qcom,saw:
-> > >      $ref: '/schemas/types.yaml#/definitions/phandle'
-> > >      description: |
-> > > diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-> > > index 7abdf58b335e..8ef85420b2ab 100644
-> > > --- a/Documentation/devicetree/bindings/arm/psci.yaml
-> > > +++ b/Documentation/devicetree/bindings/arm/psci.yaml
-> > > @@ -102,6 +102,34 @@ properties:
-> > >        [1] Kernel documentation - ARM idle states bindings
-> > >          Documentation/devicetree/bindings/arm/idle-states.txt
-> > >
-> > > +  "#power-domain-cells":
-> >
-> > This is wrong because you are saying the /psci node should have these
-> > properties. You need to define the child nodes (at least a pattern you
-> > can match on) and put these properties there.
->
-> Right, good point.
->
-> I searched for some similar examples for how to encode this, but
-> couldn't really find something useful.
-
-You need something like:
-
-patternProperties:
-  '^(cluster|cpu)-pd[0-9a-f]+$':
-    type: object
-    properties:
-      ... and then the properties in the child nodes
-
-Note that its going to look weird for the 10th PD with 'cpu-pda'. So
-maybe add a '-'.
-
-> One more thing, it seems like
-> this change is also needed for the common power-domain bindings, as
-> that also specifies parent/childs domains.
-
-Normally, we'd have a $ref to power-domain.yaml, but for that to work
-here, you'll have to expand the node names ($nodename).
-
->
-> Anyway, I would really appreciate if you can suggest something more
-> detailed for you think this should be done!?
->
-> >
-> > > +    description:
-> > > +      The number of cells in a PM domain specifier as per binding in [3].
-> > > +      Must be 0 as to represent a single PM domain.
-> > > +
-> > > +      ARM systems can have multiple cores, sometimes in an hierarchical
-> > > +      arrangement. This often, but not always, maps directly to the processor
-> > > +      power topology of the system. Individual nodes in a topology have their
-> > > +      own specific power states and can be better represented hierarchically.
-> > > +
-> > > +      For these cases, the definitions of the idle states for the CPUs and the
-> > > +      CPU topology, must conform to the binding in [3]. The idle states
-> > > +      themselves must conform to the binding in [4] and must specify the
-> > > +      arm,psci-suspend-param property.
-> > > +
-> > > +      It should also be noted that, in PSCI firmware v1.0 the OS-Initiated
-> > > +      (OSI) CPU suspend mode is introduced. Using a hierarchical representation
-> > > +      helps to implement support for OSI mode and OS implementations may choose
-> > > +      to mandate it.
-> > > +
-> > > +      [3] Documentation/devicetree/bindings/power/power_domain.txt
-> > > +      [4] Documentation/devicetree/bindings/power/domain-idle-state.txt
-> > > +
-> > > +  power-domains:
-> > > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > > +    description:
-> > > +      List of phandles and PM domain specifiers, as defined by bindings of the
-> > > +      PM domain provider.
-> >
-> > A schema for 'domain-idle-states' property is missing.
->
-> Right, let's figure out the best way for how to add that.
-
-If power-domain.yaml is referenced, then don't need anything else
-unless you can define the number of phandles (looks like you can't?).
-
-Rob
+> Rob
