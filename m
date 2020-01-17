@@ -2,276 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D27140339
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 06:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CE414033F
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 06:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbgAQFOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jan 2020 00:14:49 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:46577 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbgAQFOt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 00:14:49 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200117051445epoutp01e7edf88c65eb9ef8ccac345c53fe3385~qlKv801yH0265602656epoutp01-
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 05:14:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200117051445epoutp01e7edf88c65eb9ef8ccac345c53fe3385~qlKv801yH0265602656epoutp01-
+        id S1727804AbgAQFQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jan 2020 00:16:48 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:31074 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726741AbgAQFQs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 00:16:48 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200117051644epoutp03692da50bbaf3439db9002fc9ea4a2f50~qlMemFoZe2916529165epoutp03N
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 05:16:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200117051644epoutp03692da50bbaf3439db9002fc9ea4a2f50~qlMemFoZe2916529165epoutp03N
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1579238085;
-        bh=4rDyvrwiqEvZkgB0cIZA1l+ZQ9LZ9qrA3Ngps1EaEAw=;
+        s=mail20170921; t=1579238204;
+        bh=Ve31F81RB+5f/YLj18CBdno2GZbuJKN9KNxty6tK3wc=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=QpvvqpMmhrIDcPwimSko7sHtB5tKMVWh8YvqBYzBHQuXW6ehSdw0biqan+W3jPblU
-         Qj/ST6fseP23e7wwGknDlHafcmk9gxAdFCFZEhev692UvwWMdtjKc4p2hququttxdB
-         RevXkxhV1WnCdmlbrNmsNxE2hy1SzK7YIeFG58MY=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        b=lhQdzzwywXnkRC705BVL0YsW8W1apcEO9/0X39uolXtPT7PnZ+wT6Pnsj78GncKoG
+         YOjBOm3A+tmLY+Nyb2T82usjzwP8RcQ2rVgDd0U5i5NDyQ38D2z3IuhFeKJAHFAkfT
+         0KmLspe7MV0o4DwHlMTVU/bjln9lbuKSxx2Z5QwU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
         epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200117051445epcas1p2f7aa54665780213e0311479ef3015c20~qlKvU6LJT0464204642epcas1p2N;
-        Fri, 17 Jan 2020 05:14:45 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 47zTl65pRYzMqYkc; Fri, 17 Jan
-        2020 05:14:42 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.E3.48019.2C2412E5; Fri, 17 Jan 2020 14:14:42 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200117051442epcas1p2bbaf74e1f4d89be0015356be1d387f78~qlKsxOuEm0464204642epcas1p2I;
-        Fri, 17 Jan 2020 05:14:42 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200117051442epsmtrp1d53e1aef5cca29871ae1b2997edb167e~qlKswgMob1370613706epsmtrp1R;
-        Fri, 17 Jan 2020 05:14:42 +0000 (GMT)
-X-AuditID: b6c32a38-23fff7000001bb93-3e-5e2142c2b43c
+        20200117051644epcas1p2cd702f26b18450c9e51ff28076316a8a~qlMeUe97W2278422784epcas1p2B;
+        Fri, 17 Jan 2020 05:16:44 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 47zTnQ00WwzMqYlm; Fri, 17 Jan
+        2020 05:16:42 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8D.15.48498.833412E5; Fri, 17 Jan 2020 14:16:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200117051640epcas1p3c34eb80a85f094bc40328680ac2e414d~qlMahij2T0513605136epcas1p30;
+        Fri, 17 Jan 2020 05:16:40 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200117051640epsmtrp29988ed15b6b2c469e9bf678aee37731b~qlMag2TTI1927919279epsmtrp2H;
+        Fri, 17 Jan 2020 05:16:40 +0000 (GMT)
+X-AuditID: b6c32a36-a3dff7000001bd72-9d-5e214338f446
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        54.B8.06569.2C2412E5; Fri, 17 Jan 2020 14:14:42 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        48.38.10238.833412E5; Fri, 17 Jan 2020 14:16:40 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200117051442epsmtip250cbf02491a6ec89bbff6f81d6410333~qlKsjapqP2225922259epsmtip2M;
-        Fri, 17 Jan 2020 05:14:42 +0000 (GMT)
-Subject: Re: [PATCH v2] thermal: devfreq_cooling: Use PM QoS to set
- frequency limits
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Eduardo Valentin <edubezval@gmail.com>
+        20200117051639epsmtip2d881e0424acf8def4ad95e60ae18cf57~qlMaUeOz92252822528epsmtip2Z;
+        Fri, 17 Jan 2020 05:16:39 +0000 (GMT)
+Subject: Re: [PATCH v4 2/3] interconnect: Relax requirement in
+ of_icc_get_from_provider()
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     georgi.djakov@linaro.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com, krzk@kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <d73e67eb-4f2d-dc4b-c718-929a964d3640@samsung.com>
-Date:   Fri, 17 Jan 2020 14:22:02 +0900
+Message-ID: <a4068452-0de0-dc5d-a7a9-3312723a9163@samsung.com>
+Date:   Fri, 17 Jan 2020 14:24:00 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20200116151219.v2.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
+In-Reply-To: <20200116144202.12116-3-a.swigon@samsung.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmnu4hJ8U4g9dndSy+n/vJZDHvs6zF
-        /CvXWC3ONr1ht1hx9yOrxeVdc9gsPvceYbT4vOExo8XtxhVsFk8e9rE5cHnMbrjI4rFz1l12
-        j8V7XjJ53Lm2h81j47sdTB59W1YxenQcr/T4vEkugCMq2yYjNTEltUghNS85PyUzL91WyTs4
-        3jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6EQlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5x
-        ia1SakFKToFlgV5xYm5xaV66XnJ+rpWhgYGRKVBhQnbGzOajTAUbtSpuXWxnamD8qdjFyMkh
-        IWAi8fjwSuYuRi4OIYEdjBJ3929gBEkICXxilLh+SgEi8Y1RYsmNJ0wwHRtW/WKCSOxllFj6
-        p5EVwnnPKPH90i+wKmGBMIlHVzaygCREBP4wSrS+/8cMkmAW6GeUmHE6EcRmE9CS2P/iBhuI
-        zS+gKHH1x2Ow3bwCdhL79p5mAbFZBFQl2o5/B+sVBRp6clsLVI2gxMmZT8BqOAVCJU7OboOa
-        Ly5x68l8JghbXmL72zlgz0kIzGOX2HNkBTvEDy4SN9fNZIWwhSVeHd8CFZeSeNnfBmVXS6w8
-        eYQNormDUWLL/gtQDcYS+5dOBtrAAbRBU2L9Ln2IsKLEzt9zGSEW80m8+9rDClIiIcAr0dEm
-        BFGiLHH5wV1oMEpKLG7vZJvAqDQLyTuzkLwwC8kLsxCWLWBkWcUollpQnJueWmxYYIIc3ZsY
-        welXy2IH455zPocYBTgYlXh4ZwQpxAmxJpYVV+YeYpTgYFYS4T05QzZOiDclsbIqtSg/vqg0
-        J7X4EKMpMLQnMkuJJucDc0NeSbyhqZGxsbGFiaGZqaGhkjjvdBegOQLpiSWp2ampBalFMH1M
-        HJxSDYxh1od60lmedydffcCTPt/2VvWZ6n1HhdQsFWJX+7f0H5udrPHCf3G47+Tly65t4r3+
-        023/pJ+FPjFMiftYpGYxCq940lAj+cdPOuFWv6ODOVPI2omWR/mKngqGlT8/Fvz8/fWAu5Pn
-        1D1eJbTwkdv9mO1PeJKqdugXxR/47twdJFlvfPzCq6dKLMUZiYZazEXFiQBxR+8H1QMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsWy7bCSvO4hJ8U4g2Uf+Cy+n/vJZDHvs6zF
-        /CvXWC3ONr1ht1hx9yOrxeVdc9gsPvceYbT4vOExo8XtxhVsFk8e9rE5cHnMbrjI4rFz1l12
-        j8V7XjJ53Lm2h81j47sdTB59W1YxenQcr/T4vEkugCOKyyYlNSezLLVI3y6BK2Nm81Gmgo1a
-        FbcutjM1MP5U7GLk5JAQMJHYsOoXUxcjF4eQwG5Giaff1rJDJCQlpl08ytzFyAFkC0scPlwM
-        UfOWUeL93F5WkBphgTCJhUf62EESIgL/GCWab25hA3GYBfqBqp71M0K0rGCUuPHvM9hYNgEt
-        if0vbrCB2PwCihJXfzxmBLF5Bewk9u09zQJiswioSrQd/84MYosCrdi55DETRI2gxMmZT8Bq
-        OAVCJU7ObgOrYRZQl/gz7xKULS5x68l8JghbXmL72znMExiFZyFpn4WkZRaSlllIWhYwsqxi
-        lEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiORS2tHYwnTsQfYhTgYFTi4Z0RpBAnxJpY
-        VlyZe4hRgoNZSYT35AzZOCHelMTKqtSi/Pii0pzU4kOM0hwsSuK88vnHIoUE0hNLUrNTUwtS
-        i2CyTBycUg2MvFp17jpHRRlqPsxP2HLN+anmy1zJ6d+3bPnvyrvnmmy/cu5jg9X7DQ7qvNj1
-        IS3t0O7b3OW1URVb9Z592sB2as1lqfSbE9i7Cu/Yr1W7OTlN2ZW9bOnr3ivXBRrbnj82dndf
-        yWm3Y9pTnuiaGIn4f3xtujtnL1Crd76lcnoRu/Sriw+uBMtPU2Ipzkg01GIuKk4EAO0SppXB
-        AgAA
-X-CMS-MailID: 20200117051442epcas1p2bbaf74e1f4d89be0015356be1d387f78
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTYRTn293uruLqa2adhGpeC1JQd7emN9EKkhSSsKKICtdluzhxL3Y3
+        yaQHPW3YC5faTIsiSDPMJ2Yty6ywqGX2sEiMMhpBz/UQpGjbNfK/3/nO73fO+Z3vUITyPBlP
+        FVudvMPKmWkyWtp1KykthV2RUKiuPrKIHW3Yj9jW2hYZW+NrI1m//7KcHeo5RbLBw/2IrfVf
+        l7CX+kfky6m8tqZDZN6rZ9fIvCMdTSgv2DavQLqpJMvEc0beoeKtBpux2FqUTa9ap1+h16Wr
+        mRRmCZtBq6ychc+mc/ILUlYWm0Nj0KpSzuwKPRVwgkCnLc1y2FxOXmWyCc5smrcbzfYl9lSB
+        swgua1GqwWbJZNRqjS5E3FpiejtxjLDfiN72vesCsRsNUW5EUYAXQ2C03I2iKSXuRhDwNiMx
+        +Ibgzni1TAx+IvCdeE+4UVREcfXsczKMldiHoCeQL5I+I2j21KFwIhZvhv2XPJJwYib2Ihge
+        PBhRE9gAnfWD0jAmcTL0BoYjlabjBHg6/jYiVuClMPykPYKleCH88j+IcOLwBhjo2jfJmQED
+        J8cidaJwJtyq+i0X68+Gl2OnJSKeD3s764jwEICDJIzXuyct5MCEp0Yu4lj4cLdjEsdD8JOP
+        FHE5NA70k6K4AkFH7yOZmNBC7/kqSXh7BE6Clp408TkBrkzUI7HxNPj0o1ImLlgBFQeUIiUR
+        hl6PSEQ8B84dPEQeQ7R3ih3vFAveKRa8/5udQdImNIu3C5YiXmDsmqm/3YYiJ5qc3o3OPszv
+        Q5hCdIyidq2qUCnjSoUySx8CiqBnKgZq5xYqFUaubDvvsOkdLjMv9CFdaNvHifg4gy108Fan
+        ntFptFotu5hJ1zEMPVtRkxOqg4s4J1/C83be8U8noaLidyO10vB9R8Y8tiT3c7k/5sVt3aby
+        yqSyxtaMHqN+cE+xP3X0eGN0u29083J9/4mdb1wNRvmdK+tvLqve0t7tLOUFaWxiq6ni/tCY
+        69m7m54Rz+DGjK9Hg+7cuF11H7/c0ERVcR8rW9aszg0Y8MXmA9KGLHdMkyHzokMz/96Cx386
+        tbRUMHFMMuEQuL+sSlePuAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSvK6Fs2KcwZMeNov781oZLTbOWM9q
+        MX3vJjaL8+c3sFtc3jWHzeJz7xFGixnn9zFZrD1yl92Bw2PTqk42jzvX9rB59G1ZxejxeZNc
+        AEsUl01Kak5mWWqRvl0CV8bj3xOYCw5wVXzZtoK5gfEyRxcjJ4eEgInE7kXX2boYuTiEBHYz
+        Stz+P50NIiEpMe3iUeYuRg4gW1ji8OFiiJq3jBI7J75jBqkRFoiWaF07hQkkISIwi1Hi4I8+
+        sAZmgWSJO7NyIBr2MkqcetIBNpRNQEti/4sbYDa/gKLE1R+PGUFsXgE7iRtXNoPZLAKqEt/P
+        nwWrERUIk9i55DETRI2gxMmZT1hAbE4BK4nDk/+yg9jMAuoSf+ZdYoawxSVuPZnPBGHLSzRv
+        nc08gVF4FpL2WUhaZiFpmYWkZQEjyypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOB4
+        0tLcwXh5SfwhRgEORiUe3hlBCnFCrIllxZW5hxglOJiVRHhPzpCNE+JNSaysSi3Kjy8qzUkt
+        PsQozcGiJM77NO9YpJBAemJJanZqakFqEUyWiYNTqoGx/fhDx6d5ffG9rn7SaZ2H0laeXhrl
+        9PDdFb8Q1gz55TZHpj90edsgnBeyjPNQ6QPhW9f33/hkXcO4Q4Bx65qniTdez547VeSk5Mqk
+        QzNWcLPU+5gWaJzjE3qr26qyOuqwmam3hu/xy0XmF/RuT7+alTor7KjXLWdnyfLLfQyyTwU1
+        QkM5/+cpsRRnJBpqMRcVJwIAF5plkqMCAAA=
+X-CMS-MailID: 20200117051640epcas1p3c34eb80a85f094bc40328680ac2e414d
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200116231233epcas1p363ab7e3ad2966d0ae7bac11e33aa6b83
-References: <CGME20200116231233epcas1p363ab7e3ad2966d0ae7bac11e33aa6b83@epcas1p3.samsung.com>
-        <20200116151219.v2.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
+X-CMS-RootMailID: 20200116144242eucas1p2bf8b4df91355974c8c96778f4ec117f7
+References: <20200116144202.12116-1-a.swigon@samsung.com>
+        <CGME20200116144242eucas1p2bf8b4df91355974c8c96778f4ec117f7@eucas1p2.samsung.com>
+        <20200116144202.12116-3-a.swigon@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/17/20 8:12 AM, Matthias Kaehlcke wrote:
-> Now that devfreq supports limiting the frequency range of a device
-> through PM QoS make use of it instead of disabling OPPs that should
-> not be used.
+Hi,
+
+On 1/16/20 11:42 PM, Artur Świgoń wrote:
+> This patch relaxes the condition in of_icc_get_from_provider() so that
+> it is no longer required to set '#interconnect-cells' to <1> in the DT,
+> and therefore it is not required to supply dummy node IDs in the
+> 'interconnects' property when node IDs are dynamically generated rather
+> than hardcoded (statically allocated).
 > 
-> The switch from disabling OPPs to PM QoS introduces a subtle behavioral
-> change in case of conflicting requests (min > max): PM QoS gives
-> precedence to the MIN_FREQUENCY request, while higher OPPs disabled
-> with dev_pm_opp_disable() would override MIN_FREQUENCY.
+> In case of the devfreq driver for exynos-bus, node IDs are dynamically
+> allocated and '#interconnect-cells' is always zero.
 > 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
+>  drivers/interconnect/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Changes in v2:
-> - added documentation for 'req_max_freq'
-> - fixed jumps in of_devfreq_cooling_register_power() unwind
-> - added comment about behavioral change to the commit message
-> 
->  drivers/thermal/devfreq_cooling.c | 70 ++++++++++---------------------
->  1 file changed, 23 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> index ef59256887ff63..cbbaf5bc425d1a 100644
-> --- a/drivers/thermal/devfreq_cooling.c
-> +++ b/drivers/thermal/devfreq_cooling.c
-> @@ -24,11 +24,13 @@
->  #include <linux/idr.h>
->  #include <linux/slab.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_qos.h>
->  #include <linux/thermal.h>
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 0be1764d3528..5ea270af5ff4 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -335,7 +335,7 @@ struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
+>  	struct icc_node *node = ERR_PTR(-EPROBE_DEFER);
+>  	struct icc_provider *provider;
 >  
->  #include <trace/events/thermal.h>
+> -	if (!spec || spec->args_count != 1)
+> +	if (!spec)
+>  		return ERR_PTR(-EINVAL);
 >  
-> -#define SCALE_ERROR_MITIGATION 100
-> +#define HZ_PER_KHZ		1000
-> +#define SCALE_ERROR_MITIGATION	100
->  
->  static DEFINE_IDA(devfreq_ida);
->  
-> @@ -53,6 +55,8 @@ static DEFINE_IDA(devfreq_ida);
->   *		'utilization' (which is	'busy_time / 'total_time').
->   *		The 'res_util' range is from 100 to (power_table[state] * 100)
->   *		for the corresponding 'state'.
-> + * @req_max_freq:	PM QoS request for limiting the maximum frequency
-> + *			of the devfreq device.
->   */
->  struct devfreq_cooling_device {
->  	int id;
-> @@ -65,49 +69,9 @@ struct devfreq_cooling_device {
->  	struct devfreq_cooling_power *power_ops;
->  	u32 res_util;
->  	int capped_state;
-> +	struct dev_pm_qos_request req_max_freq;
->  };
->  
-> -/**
-> - * partition_enable_opps() - disable all opps above a given state
-> - * @dfc:	Pointer to devfreq we are operating on
-> - * @cdev_state:	cooling device state we're setting
-> - *
-> - * Go through the OPPs of the device, enabling all OPPs until
-> - * @cdev_state and disabling those frequencies above it.
-> - */
-> -static int partition_enable_opps(struct devfreq_cooling_device *dfc,
-> -				 unsigned long cdev_state)
-> -{
-> -	int i;
-> -	struct device *dev = dfc->devfreq->dev.parent;
-> -
-> -	for (i = 0; i < dfc->freq_table_size; i++) {
-> -		struct dev_pm_opp *opp;
-> -		int ret = 0;
-> -		unsigned int freq = dfc->freq_table[i];
-> -		bool want_enable = i >= cdev_state ? true : false;
-> -
-> -		opp = dev_pm_opp_find_freq_exact(dev, freq, !want_enable);
-> -
-> -		if (PTR_ERR(opp) == -ERANGE)
-> -			continue;
-> -		else if (IS_ERR(opp))
-> -			return PTR_ERR(opp);
-> -
-> -		dev_pm_opp_put(opp);
-> -
-> -		if (want_enable)
-> -			ret = dev_pm_opp_enable(dev, freq);
-> -		else
-> -			ret = dev_pm_opp_disable(dev, freq);
-> -
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static int devfreq_cooling_get_max_state(struct thermal_cooling_device *cdev,
->  					 unsigned long *state)
->  {
-> @@ -134,7 +98,7 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->  	struct devfreq_cooling_device *dfc = cdev->devdata;
->  	struct devfreq *df = dfc->devfreq;
->  	struct device *dev = df->dev.parent;
-> -	int ret;
-> +	unsigned long freq;
->  
->  	if (state == dfc->cooling_state)
->  		return 0;
-> @@ -144,9 +108,10 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->  	if (state >= dfc->freq_table_size)
->  		return -EINVAL;
->  
-> -	ret = partition_enable_opps(dfc, state);
-> -	if (ret)
-> -		return ret;
-> +	freq = dfc->freq_table[state];
-> +
-> +	dev_pm_qos_update_request(&dfc->req_max_freq,
-> +				  DIV_ROUND_UP(freq, HZ_PER_KHZ));
->  
->  	dfc->cooling_state = state;
->  
-> @@ -529,9 +494,15 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
->  	if (err)
->  		goto free_dfc;
->  
-> -	err = ida_simple_get(&devfreq_ida, 0, 0, GFP_KERNEL);
-> +	err = dev_pm_qos_add_request(df->dev.parent, &dfc->req_max_freq,
-> +				     DEV_PM_QOS_MAX_FREQUENCY,
-> +				     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
->  	if (err < 0)
->  		goto free_tables;
-> +
-> +	err = ida_simple_get(&devfreq_ida, 0, 0, GFP_KERNEL);
-> +	if (err < 0)
-> +		goto remove_qos_req;
->  	dfc->id = err;
->  
->  	snprintf(dev_name, sizeof(dev_name), "thermal-devfreq-%d", dfc->id);
-> @@ -552,6 +523,10 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
->  
->  release_ida:
->  	ida_simple_remove(&devfreq_ida, dfc->id);
-> +
-> +remove_qos_req:
-> +	dev_pm_qos_remove_request(&dfc->req_max_freq);
-> +
->  free_tables:
->  	kfree(dfc->power_table);
->  	kfree(dfc->freq_table);
-> @@ -600,6 +575,7 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
->  
->  	thermal_cooling_device_unregister(dfc->cdev);
->  	ida_simple_remove(&devfreq_ida, dfc->id);
-> +	dev_pm_qos_remove_request(&dfc->req_max_freq);
->  	kfree(dfc->power_table);
->  	kfree(dfc->freq_table);
->  
+>  	mutex_lock(&icc_lock);
 > 
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
