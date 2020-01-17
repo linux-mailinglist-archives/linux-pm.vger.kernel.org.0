@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A4D14072A
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 10:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C100140725
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 10:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729027AbgAQJ7D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jan 2020 04:59:03 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:54986 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728998AbgAQJ6d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 04:58:33 -0500
-Received: by mail-wm1-f66.google.com with SMTP id b19so6763893wmj.4
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 01:58:32 -0800 (PST)
+        id S1728816AbgAQJ64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jan 2020 04:58:56 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:45814 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729031AbgAQJ6f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 04:58:35 -0500
+Received: by mail-wr1-f66.google.com with SMTP id j42so22014300wrj.12
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 01:58:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qs32CPE+6w8H62hd9kXr/ee/9U4Omu1sZciOmm+hYl8=;
-        b=F2avq/WjQTkOblM6OBaohDkNkFC/G/rzHjdCB9gkWGztwFXHHLMQAEUFo437ob2btR
-         kbj0Oj3lHdUxPFsEo+CaW1ACvtXvJl2EkqR0VpSmKR0sRe/ImmNVEUpVre4OnXYM99Dq
-         magfKT++abV11SaIJD+AYaG245Qw5xjCzho73AwemJ9Fahz3jpPy1PcHaCWITjNYxMn5
-         vWs0O9wGbzSCm5biNcq5AlR9vyIynXA5ZO3E9m6H7IsTKX2WSuZtXITmJc4HII84tm+5
-         GsHAuhK07k1QXb6MwT9SEEr3kBzbO7JEZYuzojx2szjPkmbzNcGWHuprwGaqWFLbrJW4
-         CbIw==
+        bh=O5CKnxBPyh6lWIgILUFSDA2osEdYf21WQdUAZp/aFck=;
+        b=wakchtKvileTvklgLRyoie2dWce48tltV9J/dKopx+siHZapWmai5o0B8zLYMmsAib
+         5URaUe9LYTguzzkYvRCh5Js9/0T5sXtAyAsXJAaZr8N2HgAJi/Lwjcsz0kBAZZ9RwTJy
+         Tfca0BJ3EYO2bpK9oVXXxPwDo6Ij35siyu4ZbEBN/xBYWR190acqpBRY3rcGEVh/JuTt
+         bwU6sDzVWecQAlYXdoADAmaQh7QLdqrwQOF9vlxfZD+wj0wnQYpLGw62Jw582ixnhw2e
+         /kYd2co38tDyZeJlLy4zIPyunwf47ADVXS4NH0KqDj2VaLLc75WokYSKyj8/BSnYt0bI
+         zvQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qs32CPE+6w8H62hd9kXr/ee/9U4Omu1sZciOmm+hYl8=;
-        b=KQijmd5e15v1L7ZlOkhrxK4MLos9RiAx0t6YzG8pXFOiyvSj16fG/RC1m1DIg0bfBp
-         0k5yp1EIWnJITkK683EfwxBdzNnOJubyjVaJm30wFiV/lXxD4hMzRFYwmjweGWlzBYrY
-         OzWylzJmlWv8c1Fvkuy+GTyJkARvwNyNVN1E1GvgZ4wByqDq4u++m0oljuMyn4qJ4hKC
-         ifChZD31jxRLsKYZJbkiSmsyy5o1JlEXyY9TAxtqGMdGRA1Ht8l3zHfTsuz7NC/Jd5D8
-         XFXZ+NTZdGFZQRKx36dJ+bs4FpMZl/hb2JRKTcHf35wCHksExED8GOa0XXzahdKoZXVM
-         t1Mw==
-X-Gm-Message-State: APjAAAX8c8Xh0r0uyWBk/ZJKaACM5u7hTXFyLUd2PEPCWuWrG8sASbwC
-        Y58UrocEDfTlH+ml8o+4MdO21Q==
-X-Google-Smtp-Source: APXvYqyd8UlYY4DGVzaOxKU/U/u//HxKkMgytc4CTZO/eE/zbcYiEzSU/sWZAbV5hhhv1BsLkwtrVA==
-X-Received: by 2002:a05:600c:2c06:: with SMTP id q6mr3880069wmg.154.1579255111881;
-        Fri, 17 Jan 2020 01:58:31 -0800 (PST)
+        bh=O5CKnxBPyh6lWIgILUFSDA2osEdYf21WQdUAZp/aFck=;
+        b=GrcJeckoOOcL5gkX+Bivy9r+4A/uIMsoXehEgARN/At/eVf4MTXU5kTMN8D4EkT3p6
+         /1xmb52VMtYzmO0bQ5wWt9TdyoVt6X4LYWnfOw7U6h5/gdkO+tHJXSsykBvA2omhse6J
+         cfajofG3IF5sIiKJcmsq3VKMf29xfzF/5LVP5pXljHqGqyh/TfDRlWS4tXhWV6uPQQBC
+         pE08aYC39DMK8opazvR8Jyali8A9G03k/s/I2XhHoVHVbtfcSwiVZHGJO2pf5CV0YRca
+         AdeVG9xkMgVQMM1vnMRp2fP7aNvi47IRoY/6V0JkaKsCyTwaVUCRs9viq6uN/RKn7QiV
+         HM0w==
+X-Gm-Message-State: APjAAAWNELtE1Y8Mo92xYI/UuYqzf/LuJMS53so1Dur7NZA3/fgYyKz5
+        K0ZRiOzfaQqRNA8oaD1KGdvmgA==
+X-Google-Smtp-Source: APXvYqyXyKpF2sbfFQHjqIqFuszkga3DBasWdf2GABxEJFPnnhZdT9t4pDOpBopNZr2igEQHsvspIw==
+X-Received: by 2002:adf:f28c:: with SMTP id k12mr2227372wro.360.1579255113012;
+        Fri, 17 Jan 2020 01:58:33 -0800 (PST)
 Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id r62sm9967007wma.32.2020.01.17.01.58.30
+        by smtp.googlemail.com with ESMTPSA id r62sm9967007wma.32.2020.01.17.01.58.31
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 17 Jan 2020 01:58:31 -0800 (PST)
+        Fri, 17 Jan 2020 01:58:32 -0800 (PST)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Georgi Djakov <georgi.djakov@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 10/12] interconnect: Check for valid path in icc_set_bw()
-Date:   Fri, 17 Jan 2020 11:58:14 +0200
-Message-Id: <20200117095816.23575-11-georgi.djakov@linaro.org>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 11/12] dt-bindings: interconnect: Add Qualcomm MSM8916 DT bindings
+Date:   Fri, 17 Jan 2020 11:58:15 +0200
+Message-Id: <20200117095816.23575-12-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200117095816.23575-1-georgi.djakov@linaro.org>
 References: <20200117095816.23575-1-georgi.djakov@linaro.org>
@@ -63,30 +62,204 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use IS_ERR() to ensure that the path passed to icc_set_bw() is valid.
+The Qualcomm MSM8916 platform has several bus fabrics that could be
+controlled and tuned dynamically according to the bandwidth demand.
 
-Reviewed-by: Evan Green <evgreen@chromium.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- drivers/interconnect/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../bindings/interconnect/qcom,msm8916.yaml   |  77 ++++++++++++++
+ .../dt-bindings/interconnect/qcom,msm8916.h   | 100 ++++++++++++++++++
+ 2 files changed, 177 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8916.h
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 10dde5df9251..f277e467156f 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -495,9 +495,12 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 	size_t i;
- 	int ret;
- 
--	if (!path || !path->num_nodes)
-+	if (!path)
- 		return 0;
- 
-+	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
-+		return -EINVAL;
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml
+new file mode 100644
+index 000000000000..4107e60cab12
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,msm8916.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	mutex_lock(&icc_lock);
- 
- 	old_avg = path->reqs[0].avg_bw;
++title: Qualcomm MSM8916 Network-On-Chip interconnect
++
++maintainers:
++  - Georgi Djakov <georgi.djakov@linaro.org>
++
++description: |
++   The Qualcomm MSM8916 interconnect providers support adjusting the
++   bandwidth requirements between the various NoC fabrics.
++
++properties:
++  compatible:
++    enum:
++      - qcom,msm8916-bimc
++      - qcom,msm8916-pcnoc
++      - qcom,msm8916-snoc
++
++  reg:
++    maxItems: 1
++
++  '#interconnect-cells':
++    const: 1
++
++  clock-names:
++    items:
++      - const: bus
++      - const: bus_a
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Bus A Clock
++
++required:
++  - compatible
++  - reg
++  - '#interconnect-cells'
++  - clock-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++      #include <dt-bindings/clock/qcom,rpmcc.h>
++
++      bimc: interconnect@400000 {
++              compatible = "qcom,msm8916-bimc";
++              reg = <0x00400000 0x62000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
++                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
++      };
++
++      pcnoc: interconnect@500000 {
++              compatible = "qcom,msm8916-pcnoc";
++              reg = <0x00500000 0x11000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_PCNOC_CLK>,
++                       <&rpmcc RPM_SMD_PCNOC_A_CLK>;
++      };
++
++      snoc: interconnect@580000 {
++              compatible = "qcom,msm8916-snoc";
++              reg = <0x00580000 0x14000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
++                       <&rpmcc RPM_SMD_SNOC_A_CLK>;
++      };
+diff --git a/include/dt-bindings/interconnect/qcom,msm8916.h b/include/dt-bindings/interconnect/qcom,msm8916.h
+new file mode 100644
+index 000000000000..359a75feb198
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,msm8916.h
+@@ -0,0 +1,100 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Qualcomm interconnect IDs
++ *
++ * Copyright (c) 2019, Linaro Ltd.
++ * Author: Georgi Djakov <georgi.djakov@linaro.org>
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_MSM8916_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_MSM8916_H
++
++#define BIMC_SNOC_SLV			0
++#define MASTER_JPEG			1
++#define MASTER_MDP_PORT0		2
++#define MASTER_QDSS_BAM			3
++#define MASTER_QDSS_ETR			4
++#define MASTER_SNOC_CFG			5
++#define MASTER_VFE			6
++#define MASTER_VIDEO_P0			7
++#define SNOC_MM_INT_0			8
++#define SNOC_MM_INT_1			9
++#define SNOC_MM_INT_2			10
++#define SNOC_MM_INT_BIMC		11
++#define PCNOC_SNOC_SLV			12
++#define SLAVE_APSS			13
++#define SLAVE_CATS_128			14
++#define SLAVE_OCMEM_64			15
++#define SLAVE_IMEM			16
++#define SLAVE_QDSS_STM			17
++#define SLAVE_SRVC_SNOC			18
++#define SNOC_BIMC_0_MAS			19
++#define SNOC_BIMC_1_MAS			20
++#define SNOC_INT_0			21
++#define SNOC_INT_1			22
++#define SNOC_INT_BIMC			23
++#define SNOC_PCNOC_MAS			24
++#define SNOC_QDSS_INT			25
++
++#define BIMC_SNOC_MAS			0
++#define MASTER_AMPSS_M0			1
++#define MASTER_GRAPHICS_3D		2
++#define MASTER_TCU0			3
++#define MASTER_TCU1			4
++#define SLAVE_AMPSS_L2			5
++#define SLAVE_EBI_CH0			6
++#define SNOC_BIMC_0_SLV			7
++#define SNOC_BIMC_1_SLV			8
++
++#define MASTER_BLSP_1			0
++#define MASTER_DEHR			1
++#define MASTER_LPASS			2
++#define MASTER_CRYPTO_CORE0		3
++#define MASTER_SDCC_1			4
++#define MASTER_SDCC_2			5
++#define MASTER_SPDM			6
++#define MASTER_USB_HS			7
++#define PCNOC_INT_0			8
++#define PCNOC_INT_1			9
++#define PCNOC_MAS_0			10
++#define PCNOC_MAS_1			11
++#define PCNOC_SLV_0			12
++#define PCNOC_SLV_1			13
++#define PCNOC_SLV_2			14
++#define PCNOC_SLV_3			15
++#define PCNOC_SLV_4			16
++#define PCNOC_SLV_8			17
++#define PCNOC_SLV_9			18
++#define PCNOC_SNOC_MAS			19
++#define SLAVE_BIMC_CFG			20
++#define SLAVE_BLSP_1			21
++#define SLAVE_BOOT_ROM			22
++#define SLAVE_CAMERA_CFG		23
++#define SLAVE_CLK_CTL			24
++#define SLAVE_CRYPTO_0_CFG		25
++#define SLAVE_DEHR_CFG			26
++#define SLAVE_DISPLAY_CFG		27
++#define SLAVE_GRAPHICS_3D_CFG		28
++#define SLAVE_IMEM_CFG			29
++#define SLAVE_LPASS			30
++#define SLAVE_MPM			31
++#define SLAVE_MSG_RAM			32
++#define SLAVE_MSS			33
++#define SLAVE_PDM			34
++#define SLAVE_PMIC_ARB			35
++#define SLAVE_PCNOC_CFG			36
++#define SLAVE_PRNG			37
++#define SLAVE_QDSS_CFG			38
++#define SLAVE_RBCPR_CFG			39
++#define SLAVE_SDCC_1			40
++#define SLAVE_SDCC_2			41
++#define SLAVE_SECURITY			42
++#define SLAVE_SNOC_CFG			43
++#define SLAVE_SPDM			44
++#define SLAVE_TCSR			45
++#define SLAVE_TLMM			46
++#define SLAVE_USB_HS			47
++#define SLAVE_VENUS_CFG			48
++#define SNOC_PCNOC_SLV			49
++
++#endif
