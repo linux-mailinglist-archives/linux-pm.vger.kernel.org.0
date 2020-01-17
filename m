@@ -2,72 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 902741407EE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 11:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E42140870
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 11:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbgAQK2y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jan 2020 05:28:54 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:44970 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgAQK2y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 05:28:54 -0500
-Received: by mail-oi1-f196.google.com with SMTP id d62so21691772oia.11;
-        Fri, 17 Jan 2020 02:28:54 -0800 (PST)
+        id S1726896AbgAQKyp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jan 2020 05:54:45 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:41902 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726864AbgAQKyp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 05:54:45 -0500
+Received: by mail-wr1-f66.google.com with SMTP id c9so22243381wrw.8
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 02:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZIor9gKMoZIiatH4TckXR6kw5rMM1XpWfkSuSCSgKXE=;
+        b=OWTd1xPAQY9tXJXOZoWIjFDzF/j5k4C12aIyvlJSkkdhXlVbD45jelTm6GVI3uVYL7
+         n9xkBrIBsIRyofHDfGxI/l2E5DARRbN+kNYjfXDlt0D2NMz3tS9otMH27qG8unAMXkVK
+         vbv+o0soDwEv+wngnnE6P2hSuYjaWEszgXFVB2E8sY/8BNNmwio0HXgTBeM5ojO90Xqz
+         eXsC84eVsPLNozUlGBGgx1RDyImJeajA48zW6/mFqj9bm+S8xvtQCF24bQIklM7kmSQd
+         UX9n+G82Jt0cw5vAEM+XOAz116BMbTc1FuSDri3NMDqzY9VqQE8QDk2hGTzsWxJxyW1O
+         /sRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EDb4Q0+hZEmpUHyJ58sIFBV1rQVFKf0GHq7e/+qq/Ec=;
-        b=qJVCj+ywAmzeBAniebpB+ISn7j605qY8oOXqkiQuCvQQ3tmIbt6V9N1snu6peaYKoy
-         nQ+vd04ihQ6d+bocrm2VuUsEF4lwJpXQrgELYKvo3d0fgum4VPg17MbO94EUTM5gdUIZ
-         JYx5GKdbhFpf/1ln7U+9WP8KqWAcwsuiWjbdpzYUbIruQdvlZLONfhqsAXGKvVw8q7Ln
-         TYOcWfPkKbmZqN5q/l8UubmX1/O71ZGU0gqBMflPOGCDDPYl7a8Iu0FL4BoBdS1iFx3q
-         lxwGargjdL+3wGicJBkdTufX2BnUUXEo6qVyZnPsEcF6bpn5H32PlrkWYrlIiUN/r46/
-         LmGw==
-X-Gm-Message-State: APjAAAVWwMsZYPol4g0uwhrOpa568qlbfYqy8pM/Ny5szbm4TRRfli5P
-        0L4MtGJFndXQoUHVPPdY/33Gag7M0r5M3+cNbJ4tIw==
-X-Google-Smtp-Source: APXvYqziaLNisKwzuXE+4sPDjNUgpRCnJvjyKkzuhA7eI8Oll8NfuogDFcMFUusVtm44RvTNW++hHwmHsUtA9C2X3OI=
-X-Received: by 2002:a54:488d:: with SMTP id r13mr2770861oic.115.1579256933826;
- Fri, 17 Jan 2020 02:28:53 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZIor9gKMoZIiatH4TckXR6kw5rMM1XpWfkSuSCSgKXE=;
+        b=CxAM+Jhafk3Ur5cuzVlgHcq3mK1ZpPXwtUlY1h+YT1j+tn9DwVRFYfqXbiJlQmWe7G
+         i1uj/TxkoOgZ8/fEJMv7KbytmwoVRcDXEd6OclnR/+Stv2UDMy6swWJ43EElmjzNg03a
+         zJQTBxJreHXCvFMSTKJa74kZiOTu3rOfyDQAnY3rajxWsEArTnf0gx2775hmqAP8b1et
+         hgWJJJbE04PVIHx+nOdznpImBrS7aDNlZEeJRPeiSO922NQzWXX3AOXnFDH/tt0pVj/Q
+         goJ37BV2Bj//wN9gUS3rVqiOF7WfR+QqRbQlNpt0QrXWyxX49YgKR68nsuNpBKaih3Ig
+         5swA==
+X-Gm-Message-State: APjAAAXPtBNEaWtkvOrWsC/leC6upkkJb570iP7v1ZCiNaWuf58aJcGj
+        Wyhw4ic3Li0pshG6wuldrxg5pQ==
+X-Google-Smtp-Source: APXvYqxFsuT0KTxqOuP7M5Z4+OnjHn0WdKusB9YxUQXSRSUEjOMXSk8sV+Vlqk3Ea2XuYbdpzPevfg==
+X-Received: by 2002:a05:6000:1288:: with SMTP id f8mr2534273wrx.66.1579258481679;
+        Fri, 17 Jan 2020 02:54:41 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id b17sm33252857wrp.49.2020.01.17.02.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 02:54:40 -0800 (PST)
+Date:   Fri, 17 Jan 2020 10:54:37 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     lukasz.luba@arm.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, Chris.Redpath@arm.com,
+        ionela.voinescu@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, kernel-team@android.com
+Subject: Re: [PATCH 1/4] PM / EM: and devices to Energy Model
+Message-ID: <20200117105437.GA211774@google.com>
+References: <20200116152032.11301-1-lukasz.luba@arm.com>
+ <20200116152032.11301-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-References: <CGME20200117045233epcas1p4ec7b610173ad1536e340fd83aea3e4ed@epcas1p4.samsung.com>
- <ddb60cb0-5e54-3ed9-4d61-3098cc2d71d9@samsung.com>
-In-Reply-To: <ddb60cb0-5e54-3ed9-4d61-3098cc2d71d9@samsung.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Jan 2020 11:28:42 +0100
-Message-ID: <CAJZ5v0jh-Vap=m09AcRVY1EyMjb-Q-Kt69Wk-jUCga2qg7=EBg@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for v5.6
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200116152032.11301-2-lukasz.luba@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 17, 2020 at 5:52 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request for v5.6-rc1. I add detailed description of
-> this pull request on the following tag. Please pull devfreq with following updates.
-> - tag name : devfreq-next-for-5.6
->
-> Best Regards,
-> Chanwoo Choi
->
->
-> The following changes since commit fd6988496e79a6a4bdb514a4655d2920209eb85d:
->
->   Linux 5.5-rc4 (2019-12-29 15:29:16 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.6
+Hey Lukasz,
 
-Pulled, thanks!
+Still reading through this, but with small changes, this looks pretty
+good to me.
+
+On Thursday 16 Jan 2020 at 15:20:29 (+0000), lukasz.luba@arm.com wrote:
+> +int em_register_perf_domain(struct device *dev, unsigned int nr_states,
+> +			struct em_data_callback *cb)
+>  {
+>  	unsigned long cap, prev_cap = 0;
+>  	struct em_perf_domain *pd;
+> -	int cpu, ret = 0;
+> +	struct em_device *em_dev;
+> +	cpumask_t *span = NULL;
+> +	int cpu, ret;
+>  
+> -	if (!span || !nr_states || !cb)
+> +	if (!dev || !nr_states || !cb || !cb->active_power)
+
+Nit: you check !cb->active_power in em_create_pd() too I think, so only
+one of the two is needed.
+
+>  		return -EINVAL;
+>  
+> -	/*
+> -	 * Use a mutex to serialize the registration of performance domains and
+> -	 * let the driver-defined callback functions sleep.
+> -	 */
+>  	mutex_lock(&em_pd_mutex);
+>  
+> -	for_each_cpu(cpu, span) {
+> -		/* Make sure we don't register again an existing domain. */
+> -		if (READ_ONCE(per_cpu(em_data, cpu))) {
+> +	if (_is_cpu_device(dev)) {
+> +		span = kzalloc(cpumask_size(), GFP_KERNEL);
+> +		if (!span) {
+> +			mutex_unlock(&em_pd_mutex);
+> +			return -ENOMEM;
+> +		}
+> +
+> +		ret = dev_pm_opp_get_sharing_cpus(dev, span);
+> +		if (ret)
+> +			goto free_cpumask;
+
+That I think should be changed. This creates some dependency on PM_OPP
+for the EM framework. And in fact, the reason we came up with PM_EM was
+precisely to not depend on PM_OPP which was deemed too Arm-specific.
+
+Suggested alternative: have two registration functions like so:
+
+	int em_register_dev_pd(struct device *dev, unsigned int nr_states,
+			       struct em_data_callback *cb);
+	int em_register_cpu_pd(cpumask_t *span, unsigned int nr_states,
+			       struct em_data_callback *cb);
+
+where em_register_cpu_pd() does the CPU-specific work and then calls
+em_register_dev_pd() (instead of having that big if (_is_cpu_device(dev))
+as you currently have). Would that work ?
+
+Another possibility would be to query CPUFreq instead of PM_OPP to get
+the mask, but I'd need to look again at the driver registration path in
+CPUFreq to see if the policy masks have been populated when we enter
+PM_EM ... I am not sure if this is the case, but it's worth having a
+look too.
+
+Thanks,
+Quentin
