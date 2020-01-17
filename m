@@ -2,123 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7548A1403B5
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 06:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E001403D4
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 07:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgAQFwJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jan 2020 00:52:09 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:30749 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgAQFwI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 00:52:08 -0500
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200117055205epoutp04d7f3c85f933cff5876cb4e84de25f77f~qlrWJyr1P0190601906epoutp04O
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 05:52:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200117055205epoutp04d7f3c85f933cff5876cb4e84de25f77f~qlrWJyr1P0190601906epoutp04O
+        id S1727126AbgAQGKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jan 2020 01:10:46 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:59481 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgAQGKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jan 2020 01:10:45 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200117061044euoutp028046dc51088b504518a3035392945c2d~ql7noAKVF0353603536euoutp02f
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2020 06:10:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200117061044euoutp028046dc51088b504518a3035392945c2d~ql7noAKVF0353603536euoutp02f
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1579240325;
-        bh=pL9w1KAw9HjHZTaEzQOzdBlBCswZ4N9iJrQbbkHjEac=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=mpe++tUdsKb0I+gum5KSA1thsS9Qc2YTWHJiXxABhPIkEdJcTN9LT0wauH6wCj0yB
-         JT4rt2JeYI0O/V8vQ4twcuGO/h98NPU0qYPdkLoHvQWmZF5hYUd9JhARouBD/dl3sE
-         0FgHY7pKm5kJrq8be3eVzjQODGDl0I9A7/YWnYkk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20200117055205epcas1p3db9389138b312197303b3c7ebbc09e94~qlrVqC2tn2139621396epcas1p3o;
-        Fri, 17 Jan 2020 05:52:05 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 47zVZB6ndVzMqYkw; Fri, 17 Jan
-        2020 05:52:02 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A8.4D.48498.28B412E5; Fri, 17 Jan 2020 14:52:02 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200117055202epcas1p13550813b01bb497ca79c8d31e45584c9~qlrS-fXzq2741527415epcas1p1o;
-        Fri, 17 Jan 2020 05:52:02 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200117055202epsmtrp27e5d328863ccefe8f53fb849727b81e1~qlrS_2dNl0834908349epsmtrp2C;
-        Fri, 17 Jan 2020 05:52:02 +0000 (GMT)
-X-AuditID: b6c32a36-a3dff7000001bd72-98-5e214b825da5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        54.CB.06569.28B412E5; Fri, 17 Jan 2020 14:52:02 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200117055202epsmtip142f10c612090f7b8befdbadd21c4e795~qlrS02bs62205422054epsmtip1q;
-        Fri, 17 Jan 2020 05:52:02 +0000 (GMT)
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [PATCH] thermal: Drop explicit PM_OPP dependency from
- DEVFREQ_THERMAL
-Date:   Fri, 17 Jan 2020 14:59:14 +0900
-Message-Id: <20200117055914.14584-1-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsWy7bCmvm6Tt2KcwbsnFhbfz/1ksrj+5Tmr
-        xbzPshaXd81hs/jce4TR4snDPjYHNo/Fe14yedy5tofNo2/LKkaPjuOVHp83yQWwRmXbZKQm
-        pqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDtV1IoS8wpBQoF
-        JBYXK+nb2RTll5akKmTkF5fYKqUWpOQUWBboFSfmFpfmpesl5+daGRoYGJkCFSZkZ7x9V1zw
-        lK3iwrzYBsaLrF2MnBwSAiYSh+e8ZOti5OIQEtjBKDFn7gRGCOcTo8SxL/+YIJxvjBJvF/xl
-        gmn5fBumai+jxOqVx6GqvjBKTLzfwQ5SxSagJbH/xQ02EFtEIFCidd4TsIXMAkkSd1ofgMWF
-        BQIkur7fA5vKIqAqsePNfkYQm1fASmJW70VGiG3yEqs3HGAGWSAh8JNV4v3k31BnuEj8WvCa
-        GcIWlnh1fAs7hC0l8fndXjYIu1pi5ckjbBDNHYwSW/ZfgHrbWGL/0slAgziALtKUWL9LHyKs
-        KLHz91xGiEP5JN597WEFKZEQ4JXoaBOCKFGWuPzgLtQJkhKL2zuhVnlIfJo5CywuJBAr8a1v
-        J8sERtlZCAsWMDKuYhRLLSjOTU8tNiwwQo6kTYzgJKVltoNx0TmfQ4wCHIxKPLwzghTihFgT
-        y4orcw8xSnAwK4nwnpwhGyfEm5JYWZValB9fVJqTWnyI0RQYehOZpUST84EJNK8k3tDUyNjY
-        2MLE0MzU0FBJnHe6C9AcgfTEktTs1NSC1CKYPiYOTqkGRj77nbbGCpM1JA/Ylb5+Gv4mrE4o
-        y7o09s48xeQVEzdO1rC42HRcp0Y7RqdkWoynxlqvbje+drUlmw49esQXZym94PRL486WFRH2
-        lUdem0hXTOStvRE6OfmPy1oloeuvW352h9bGmWWp7XwoLFE7gbmFY9JfkRKXDrkbXhNaK30O
-        LVB6qhuvxFKckWioxVxUnAgAD2oK4GgDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpiluLIzCtJLcpLzFFi42LZdlhJTrfJWzHOYPYjUYvv534yWVz/8pzV
-        Yt5nWYvLu+awWXzuPcJo8eRhH5sDm8fiPS+ZPO5c28Pm0bdlFaNHx/FKj8+b5AJYo7hsUlJz
-        MstSi/TtErgy3r4rLnjKVnFhXmwD40XWLkZODgkBE4nPtycwdjFycQgJ7GaUuLPrNFRCUmLa
-        xaPMXYwcQLawxOHDxRA1nxgl1p/czgRSwyagJbH/xQ02EFtEIFjiwop2sDizQIrEmXdH2EFs
-        YQE/if6n7WA1LAKqEjve7GcEsXkFrCRm9V5khNglL7F6wwHmCYw8CxgZVjFKphYU56bnFhsW
-        GOWllusVJ+YWl+al6yXn525iBIeMltYOxhMn4g8xCnAwKvHwzghSiBNiTSwrrsw9xCjBwawk
-        wntyhmycEG9KYmVValF+fFFpTmrxIUZpDhYlcV75/GORQgLpiSWp2ampBalFMFkmDk6pBkYd
-        xX19Yppzpfe0qfQfy2XUnvGz9uKrWbMzj8Zn+e4VD5dT93mgtCt45kS2O6e0057s4V/gISrm
-        0iIeoj0peeYEUe1Dup8sRS37z/Jv2tiosPUSH2+utbD6wS9S327Pm31RuKHo84lZXI3TXpzK
-        knx08xkj42N7cwWl85tPpzS7bVt+tiaw87oSS3FGoqEWc1FxIgAv8VFKFQIAAA==
-X-CMS-MailID: 20200117055202epcas1p13550813b01bb497ca79c8d31e45584c9
+        s=mail20170921; t=1579241444;
+        bh=Z9fFgcC2NnU134JInpRdOeaMJ6lEBQzGoW5uJcvMW/U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lZ41PadGlYGqApUjwlgpAoL85dsAVu8cZqohL2AMAJuoIj01UqafdsiJ/oPfAL3VV
+         rDGVKZ8dZvLurv6vJUJgR7Up22+6Rg77cDwMY0QkM7GqbQHDBXA+byYjRBes1QbIEz
+         6xcULKJoX618oxUmb0iCkR0SbYwB9HQD1eFqvVus=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200117061043eucas1p2c09d4396ff10f6dbc79c96f34208c712~ql7nORAld0919209192eucas1p2M;
+        Fri, 17 Jan 2020 06:10:43 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id A0.00.60679.3EF412E5; Fri, 17
+        Jan 2020 06:10:43 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200117061043eucas1p1783321b0e0c1447350bed76aa13e06db~ql7mr71v80895908959eucas1p1k;
+        Fri, 17 Jan 2020 06:10:43 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200117061043eusmtrp2e53fd1060d6415ffaf5ffed2443b11fc~ql7mrVnCk3019830198eusmtrp2V;
+        Fri, 17 Jan 2020 06:10:43 +0000 (GMT)
+X-AuditID: cbfec7f4-0e5ff7000001ed07-31-5e214fe37512
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 28.9D.07950.2EF412E5; Fri, 17
+        Jan 2020 06:10:42 +0000 (GMT)
+Received: from AMDC3555 (unknown [106.120.51.67]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20200117061042eusmtip15f3a7df5ef6055c40f4eb694d69c48d4~ql7mRvz8q3055330553eusmtip1Q;
+        Fri, 17 Jan 2020 06:10:42 +0000 (GMT)
+Message-ID: <7037771c6aaa7b72a41e33c621d4e0c6db7758ca.camel@samsung.com>
+Subject: Re: [PATCH v4 0/3] interconnect: Support Samsung Exynos use-case
+From:   Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     georgi.djakov@linaro.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com, krzk@kernel.org
+Date:   Fri, 17 Jan 2020 07:10:41 +0100
+In-Reply-To: <95ac808c-aacf-8ca8-94a7-98bbdb37b39d@samsung.com>
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsWy7djPc7qP/RXjDB4tVbbYOGM9q8X1L89Z
+        Labv3cRmcf78BnaLy7vmsFl87j3CaDHj/D4mi7VH7rI7cHhsWtXJ5nHn2h42j74tqxg9Pm+S
+        C2CJ4rJJSc3JLEst0rdL4Mro/7KJteC0RMWh3ZeZGhj3C3cxcnJICJhInD/2iqmLkYtDSGAF
+        o0TT2jPMEM4XRokP99ZAOZ8ZJc7/XsUO03LkVhM7RGI5o8SR089YQRJCAs8YJfpviIDYvAIe
+        Ejt/L2MEsYUFPCW+/7vABmKzCdhLnL39DWyfiEAro0TvqydgU5kFkiW2zr3IAmKzCKhKdK77
+        DxbnBGp4vOw4I8RmHYm3p/qAajiAFghK/N0hDNEqL9G8dTbYpRICy9glJt85AnWpi8SDf4+Y
+        IGxhiVfHt0DFZST+75wPFS+WeLrzPitEcwOjxKZlR5ghEtYSd879YgNZxiygKbF+lz6IKSHg
+        KLF9XRCEySdx460gxAl8EpO2TWeGCPNKdLQJQZhKErtm8kGMk5BoWn0NarSHxJ4bi1kmMCrO
+        QnhlFpJXZiEsXcDIvIpRPLW0ODc9tdgoL7Vcrzgxt7g0L10vOT93EyMwyZz+d/zLDsZdf5IO
+        MQpwMCrx8M4IUogTYk0sK67MPcQowcGsJMJ7coZsnBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe
+        40UvY4UE0hNLUrNTUwtSi2CyTBycUg2MmyNnFJtfPR1QJjZVwOig/PHVM4qCdz8/3j7vQWjR
+        9IAF4ooP7r1hXZr5zPjXxOa4Hjmro3u7pDZ75DDaWp9fcUk8wyZslarsZpnTK7sP87q8t0vZ
+        qh1t2beW9dty3udPz04IuLLiXPaR19Khh5tf9U6a8iTyZk286HzeY9o3Z+s/X39061Y5DyWW
+        4oxEQy3mouJEACh8WeQuAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCIsWRmVeSWpSXmKPExsVy+t/xu7qP/BXjDE48tLHYOGM9q8X1L89Z
+        Labv3cRmcf78BnaLy7vmsFl87j3CaDHj/D4mi7VH7rI7cHhsWtXJ5nHn2h42j74tqxg9Pm+S
+        C2CJ0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Mvo
+        /7KJteC0RMWh3ZeZGhj3C3cxcnJICJhIHLnVxN7FyMUhJLCUUaL7zCFGiISExMf1N1ghbGGJ
+        P9e62CCKnjBKPJw4HSzBK+AhsfP3MrAGYQFPie//LrCB2GwC9hJnb39jArFFBNoYJU5u0gKx
+        mQVSJO72zGIGsVkEVCU61/1nB7E5geofLzvOCLHgOKPEop1XmCAaNCVat/9mh7hCR+LtqT6W
+        LkYOoMWCEn93CEOUyEs0b53NPIFRcBaSjlkIVbOQVC1gZF7FKJJaWpybnltspFecmFtcmpeu
+        l5yfu4kRGEPbjv3csoOx613wIUYBDkYlHt4ZQQpxQqyJZcWVuYcYJTiYlUR4T86QjRPiTUms
+        rEotyo8vKs1JLT7EaAr0z0RmKdHkfGB855XEG5oamltYGpobmxubWSiJ83YIHIwREkhPLEnN
+        Tk0tSC2C6WPi4JRqYDzxc4f6N05hdZ9sbeWtB88/Oma5+Nnlq+orJ9xc+qb3Zaiv65yknB9p
+        7g+C5r2wClNq0k+WFTUQOrfh7G9G1/8GCmznPneclbwc3nRHbuLdNba7RVYen71MeVZhTt3p
+        89P6N6XJ1d83ZRM782+/yG69oP3y1pczrzs/nfGIQ2aCQC1Lzmuec7xKLMUZiYZazEXFiQBB
+        xFQltwIAAA==
+X-CMS-MailID: 20200117061043eucas1p1783321b0e0c1447350bed76aa13e06db
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200117055202epcas1p13550813b01bb497ca79c8d31e45584c9
-References: <CGME20200117055202epcas1p13550813b01bb497ca79c8d31e45584c9@epcas1p1.samsung.com>
+X-RootMTR: 20200116144241eucas1p226c1d7fc2fad5bd1b9fb6d0fb1b22bff
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200116144241eucas1p226c1d7fc2fad5bd1b9fb6d0fb1b22bff
+References: <CGME20200116144241eucas1p226c1d7fc2fad5bd1b9fb6d0fb1b22bff@eucas1p2.samsung.com>
+        <20200116144202.12116-1-a.swigon@samsung.com>
+        <95ac808c-aacf-8ca8-94a7-98bbdb37b39d@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The commit b9c69e043266 ("PM / devfreq: Add dependency on PM_OPP")
-has selected PM_OPP always to use it as the mandatory interface. So that
-CONFIG_DEVFREQ_THERMAL doesn't need to specify the PM_OPP dependency
-because if CONFIG_PM_DEVFREQ is enabled, PM_OPP is always enabled.
+Hi Chanwoo,
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/thermal/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+On Fri, 2020-01-17 at 14:31 +0900, Chanwoo Choi wrote:
+> Hi Artur,
+> 
+> I'm concerned about that make it the separate series
+> without use-case like exynos-bus, exynos-drm.
+> If this series is applied to v5.6, it doesn't make
+> the problem and the patches for exynos-bus/exynos-drm
+> will be reviewed and then merged on later kernel version.
+> 
+> But, if not, the interconnect, exynos-bus and exynos-drm
+> patches should be merged into the same kernel version,
+> it must require the immutable branch among interconnect,
+> devfreq and exynos-drm. I think that you need to consider
+> it between different subsystems.
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 79b27865c6f4..9c3acd715428 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -175,7 +175,6 @@ config CLOCK_THERMAL
- config DEVFREQ_THERMAL
- 	bool "Generic device cooling support"
- 	depends on PM_DEVFREQ
--	depends on PM_OPP
- 	help
- 	  This implements the generic devfreq cooling mechanism through
- 	  frequency reduction for devices using devfreq.
+Thanks for the feedback. Due to the fact that the RFC depends
+on the proposed changes to the interconnect framework, I need
+to ensure that these three patches come first.
+
+If there is any disagreement over any of these three patches,
+the rest of the RFC might need to be modified. In such case,
+I will update the RFC and send the rest of v4 patches (for
+exynos-bus, exynos-mixer, and probably also exynos5-dmc).
+
+> On 1/16/20 11:41 PM, Artur Świgoń wrote:
+> > Previously posted as a part of a larger RFC: [1].
+> > 
+> > The Exynos SoC family relies on the devfreq driver for frequency
+> > scaling. However, a way to programmatically enforce QoS contraints
+> > (i.e., minimum frequency) is desired. A solution which uses the
+> > interconnect framework to ensure QoS is currently being developed[1].
+> > 
+> > The exynos-bus hierarchy is composed of multiple buses which are probed
+> > separately. Sometimes the DMC is even handled by a different driver.
+> > Since the exynos-bus driver is generic and supports multiple differing
+> > bus hierarchies, IDs for nodes (i.e. buses) are assigned dynamically. Due
+> > to the unspecified relative probing order, every bus registers its own
+> > interconnect provider.
+> > 
+> > Rationale for each patch in this series:
+> > * Patch 01 (exporting of_icc_get_from_provider()) makes it easy to
+> >   retrieve the parent node from the DT (cf. patch 05 in [1]).
+> > * Patch 02 (allowing #interconnect-cells = <0>) allows to remove dummy
+> >   node IDs from the DT.
+> > * Patch 03 (allowing inter-provider node pairs) is necessary to make
+> >   such multi-provider hierarchy work. A new approach implemented in v3
+> >   ensures not to break any existing drivers.
+> > 
+> > ---
+> > Changes since v3 (to patches in this series):
+> > * Improve commit messages.
+> > 
+> > ---
+> > Artur Świgoń
+> > Samsung R&D Institute Poland
+> > Samsung Electronics
+> > 
+> > ---
+> > References:
+> > [1] https://patchwork.kernel.org/patch/11305287/
+> > 
+> > Artur Świgoń (3):
+> >   interconnect: Export of_icc_get_from_provider()
+> >   interconnect: Relax requirement in of_icc_get_from_provider()
+> >   interconnect: Allow inter-provider pairs to be configured
+> > 
+> >  drivers/interconnect/core.c           | 16 ++++++++--------
+> >  include/linux/interconnect-provider.h |  8 ++++++++
+> >  2 files changed, 16 insertions(+), 8 deletions(-)
+> > 
+> 
+> 
 -- 
-2.17.1
+Artur Świgoń
+Samsung R&D Institute Poland
+Samsung Electronics
+
 
