@@ -2,100 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 664F2141421
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2020 23:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3D91416EB
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jan 2020 10:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbgAQWag (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jan 2020 17:30:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33998 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728760AbgAQWaf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Jan 2020 17:30:35 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AAD842072B;
-        Fri, 17 Jan 2020 22:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579300235;
-        bh=og/YFyt537egSptixheev7EftOvsv54ApMpBX5xX5GY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=TItraTI1e79l3S7N20Yfi4Pff6u1MWR1PlK4ZUloA0q8rl6UOuiezq36vB93EvSc9
-         69qzXigyO8JzcZYSvpGdbQBEfLL1VLl5bgTAcmF06RBXVNahV7QqMkquV6TvdinqE0
-         aeyyO4RS2XqCdIoB6/gofdDaTPLPIiwU7GxLWROs=
-Subject: Re: [PATCH v3] cpupower: Revert library ABI changes from commit
- ae2917093fb60bdc1ed3e
-To:     Thomas Renninger <trenn@suse.de>
-Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <1835520.PWyA4J24ZB@skinner.arch.suse.de>
-From:   shuah <shuah@kernel.org>
-Message-ID: <ea49dbb2-6c57-08fc-472d-46055166de30@kernel.org>
-Date:   Fri, 17 Jan 2020 15:30:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726811AbgARJxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Jan 2020 04:53:43 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:40045 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726709AbgARJxn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jan 2020 04:53:43 -0500
+Received: by mail-il1-f195.google.com with SMTP id c4so23410578ilo.7
+        for <linux-pm@vger.kernel.org>; Sat, 18 Jan 2020 01:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NvAZUv5ZGB55ThY+bLBf8tvOip6guzklAz3av6cc2wU=;
+        b=tvbBN5bJntctomxBHyL3qiJZiOJtbcF4+FMMdbSkX5NDNsXhgAjppGYkGS/CttAsuS
+         xn+HqBVEpulljymwBA8qev5LiPUsBYlbCxzGtST93uAFgDDqGVqYQxhmymC+TFi2HE5v
+         fCNPouNEOgb7BVixB8Uh8FG6DjqY17aNonlw5yFdVkGZ4XVg0u6gUJmZ2zRf96rA5256
+         Z0x5dseZQ448D/4muKunr3aRVSpv2CDyESQTQ4xw+GwVH67ebyaQL1m8Uh4s3PAemfQa
+         7hooImNwxEsdb8xU4o2QnJ8DmDcV58F4aFvbLejcg6ZPiQ1NeXBnsV2UKJFruaKm82uJ
+         xWbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=NvAZUv5ZGB55ThY+bLBf8tvOip6guzklAz3av6cc2wU=;
+        b=qn7T4/62z8cxfM6hGyteronM06e4+0/qaAtt+NEchvPfwYABz0efLbgbqaF2hoQ2md
+         2Iv/2Eke9lTEQHj3DeUWrhQVpxEeGe215jvaH0bushcMtnpgGyTvzIrzcOBWPgaaQAvG
+         +6zMjiQPOaQtvY87/BajF/IrHDJfEnD4fyVeViqGmDIQD5c5TLLPOXikkoXuBw8ZLK8P
+         bgjM3uvAvU6JlbnPXGG08qr1/dujDbR8uiDgf9rna8oV+UTzJcfpfWlTfALIDdKL+I7q
+         kypKbhaB5tGfFqWeGVnmz4VLDY9VmWl8P3pK+GhpF4nU+Jf12cc0i/7yrT2nxYR0M14O
+         35Xg==
+X-Gm-Message-State: APjAAAVXY5ruGOQnPWBzV/Tsew/3IETCi35oJjieXH7PKvNaidinhW8j
+        EfAoAQpL+QNZzRhLeCWKRGKkq/Z8jSvHZ6M4bb4=
+X-Google-Smtp-Source: APXvYqyL+f/7qSuHGrCcFeqcNcxvy/qLkv15a/F31Ai5P5I/wOzBQYAwVNZnRf0PckP21YpE98P3yvKuPqOxnj+Uypg=
+X-Received: by 2002:a92:8c54:: with SMTP id o81mr2456212ild.163.1579341222521;
+ Sat, 18 Jan 2020 01:53:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1835520.PWyA4J24ZB@skinner.arch.suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a02:690c:0:0:0:0:0 with HTTP; Sat, 18 Jan 2020 01:53:42
+ -0800 (PST)
+Reply-To: mr.mahmouda@yahoo.com
+From:   "Mr.Mahmoud Abbas" <drfazlqparray@gmail.com>
+Date:   Sat, 18 Jan 2020 09:53:42 +0000
+Message-ID: <CAGoVpqUw=XuW6BhnrGDu=yzfqAJB1Qhw5+H-Fg+B31GGehRfow@mail.gmail.com>
+Subject: The amount involved is (USD 10,500,000.00)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/17/20 12:55 AM, Thomas Renninger wrote:
-> Commit ae2917093fb60bdc1ed3e modified the library function:
->      
-> struct cpufreq_available_frequencies
-> *cpufreq_get_available_frequencies(unsigned int cpu)
-> 
-> to
-> struct cpufreq_frequencies
-> *cpufreq_get_frequencies(const char *type, unsigned int cpu)
-> 
-> This patch recovers the old API and implements the new functionality
-> in a newly introduce method:
-> struct cpufreq_boost_frequencies
-> *cpufreq_get_available_frequencies(unsigned int cpu)
-> 
-> 
-> This one should get merged into stable kernels back to 5.0 when
-> commit ae2917093fb60bdc1ed3e had been introduced.
-> 
-> Fixes: ae2917093fb6 ("tools/power/cpupower: Display boost frequency
-> separately")
-> 
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: Thomas Renninger <trenn@suse.de>
-> 
-> v3: - Add Signed-off tag
-> v2: - Add fixes: tag
->      - Add [PATCH] and cpupower in title
-> 
+--=20
+Dear Friend,
 
-Applied to
+I am Mr.Mahmoud Abbas, the accountant personal confident to Dr. S=C3=B2ng W=
+=C3=A1ng
+who died together with his wife Dr. Mrs. Lee W=C3=A1ng in a plane crash on =
+the
+1st Oct. 2003 on their way to attend wedding in Boston. Dr. S=C3=B2ng W=C3=
+=A1ng, is
+an Chinese, a physician and industrialist, he died without having any
+beneficiary to his assets including his account here in Burkina Faso which
+he opened in one of the Bank in the year 2000 as his personal savings for
+the purpose of expansion and development of his company before his untimely
+death in 2003.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower
+The amount involved is (USD 10,500,000.00) Ten Million Five Hundred
+Thousand USD, no other person knows about this account, I am contacting you
+for us to transfer this funds to your account as the beneficiary,) but I
+don't know any foreigner, I am only contacting you as a foreigner because
+this money can not be approved to a local person here.
 
-for 5.6-rc1 pull request to Rafael.
+Reply urgently so that I will inform you the next step to take urgently.
 
-I fixed up the changelog to get around the following checkpatch
-errors.
+Sincerely,
 
-ERROR: Please use git commit description style 'commit <12+ chars of 
-sha1> ("<title line>")' - ie: 'Commit ae2917093fb6 
-("tools/power/cpupower: Display boost frequency separately")'
-#44:
+Mr.Mahmoud Abbas.
 
-
-ERROR: Please use git commit description style 'commit <12+ chars of 
-sha1> ("<title line>")' - ie: 'commit ae2917093fb6 
-("tools/power/cpupower: Display boost frequency separately")'
-#60:
-commit ae2917093fb6 had been introduced.
-
-thanks,
--- Shuah
+Reply to this e-mail addess:mr.mahmouda@yahoo.com
