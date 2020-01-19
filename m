@@ -2,148 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83998141BEC
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 05:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBC6141CB0
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 08:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbgASEMq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Jan 2020 23:12:46 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38788 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725980AbgASEMq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jan 2020 23:12:46 -0500
-Received: by mail-pl1-f193.google.com with SMTP id f20so11639613plj.5
-        for <linux-pm@vger.kernel.org>; Sat, 18 Jan 2020 20:12:45 -0800 (PST)
+        id S1726425AbgASHJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jan 2020 02:09:16 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:53292 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbgASHJQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jan 2020 02:09:16 -0500
+Received: by mail-pj1-f65.google.com with SMTP id n96so5201094pjc.3;
+        Sat, 18 Jan 2020 23:09:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1UGFOGT1eEmR//uqOTuGOpTXVyCpwEvAHHcIsI9cANI=;
-        b=TyVM9g0g5LuPkrUC9l3Gwg8pDagu9q8dLAUIvRgFWoBi2XDqzjU+qWuItE8XZgbjAN
-         DQgjCEuB29Sq8V60NjR5BCOr3yIt4jmnz7vm0axGchql/zQsbBInV2UT6WThEm+4NLPy
-         LCdhpZkPCaNtybpek6J+9dHbFkrs2ayMPN6ZwHpiN4J6YG+BnOFsIYLojWoAOcbjwWEL
-         tpDqbEPEkZ5vQBEdCB1mcGgMavTZ8NVTL7nBeiC1XDNF14VZUEcFAirmK8Ctm66x1eAN
-         wCWfOe3PlJVgBtzIFlnrADdJlcpT6kA9gjib0WF2iFj2XSBKgBeBpSnWzyJlizoJ6PG/
-         fACA==
+        h=from:to:cc:subject:date:message-id;
+        bh=sbvECZSSaHMAVDSY442RQUtEQVv5nwhO7gX5LMPOXE8=;
+        b=qPhDIkwPUi53pqaoMKRqIfieeqj1ieqrpyJEMQPUUMScs48YcTxa7ImvmRv3k7/AMi
+         doIoxyETRKZEkj6NCki5WqfOCBvcRRzaBP3ysRi29m8PlKmdNY5hfO/afpv/uQKyYaWu
+         QW8Mm8XJjO8WYObFpBZwFUpXm+8Pnf2Jp1kdRZCdFWch7kFbe2hZDa0yfZIgcvYZelWW
+         LRj7jwDUQi4ryg/+zDUrpKhX2dGGMkejfsU4SqMGMxiLrBBJppdmanqIHHC2Bgbp/J/+
+         52MDikL4ufrTNtXDq3iZY2MsHGBDwKnbRAxoFRY6gf2uMW8OSev4BW00KWiPDsQ+NZqm
+         Vbtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=1UGFOGT1eEmR//uqOTuGOpTXVyCpwEvAHHcIsI9cANI=;
-        b=KgzZE7quZ7Y6jbk3B+3xbTxbOMureugWUtzZWgNJZuOaiS8phNN1haYPNTBoxjC+KF
-         5TFQy9/mGOTNInfEVEHMPVMAtSTIRpOfGbeB/Jpz8xVOmVWhx/cPgcYKMxak5e6FVIjD
-         Vue2rB4+AJ0o1uDfZIBY1giIkQTWPLhpd+ybw9Kzts76Zq57cnQJR14FjsLQiUyS7YKh
-         qdDhSr5X5qfM+kTgpfMII1y+3L9menRkpR8m/n9u9Mgu1lHPnQVL20rwpnjbin36FIja
-         QQ4YPAQP1Le3ZO10JDiO/2VtYWhVxJThZPDaooR/KnlNQzzrfEJh91n1P/QQI62gTqBb
-         n8Tw==
-X-Gm-Message-State: APjAAAWazXcbFVU0/gSZIRmemDxbqKME5yng8r+V0zhJ7NTAtmCv71yp
-        GyD/st7ksNzq79HqkTQhPEg=
-X-Google-Smtp-Source: APXvYqzzoIPvlODuBh4zkGhRNZzl6z96s/19B3GAaGQb9dSlTT15iql0hqZg2OoysSIUiTPEnLfivw==
-X-Received: by 2002:a17:90a:8545:: with SMTP id a5mr15387166pjw.3.1579407165168;
-        Sat, 18 Jan 2020 20:12:45 -0800 (PST)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id y20sm34330795pfe.107.2020.01.18.20.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jan 2020 20:12:44 -0800 (PST)
-Subject: Re: [PATCH v2] cpufreq: brcmstb-avs-cpufreq: avoid potential stuck
- and UAF risk
-To:     chenqiwu <qiwuchen55@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1578228650-17157-1-git-send-email-qiwuchen55@gmail.com>
- <20200106055637.zq4icl5klg4wpvkx@vireshk-i7>
- <20200106070910.GA17897@cqw-OptiPlex-7050>
- <20200106073109.ndm7enzyznquqps5@vireshk-i7>
- <20200119022513.GA21407@cqw-OptiPlex-7050>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Autocrypt: addr=f.fainelli@gmail.com; keydata=
- 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
- a9BQwACgnzGuH1BVeT2J0Ra+ZYgkx7DaPR0=
-Message-ID: <fff918f6-a2e2-3789-2fed-8962dc441e4c@gmail.com>
-Date:   Sat, 18 Jan 2020 20:12:43 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200119022513.GA21407@cqw-OptiPlex-7050>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sbvECZSSaHMAVDSY442RQUtEQVv5nwhO7gX5LMPOXE8=;
+        b=FWaRwqRRf5/yUgTuncqRbyPALls7fntQqLXxU4jcf+jWQdKrXI8w54dA4OY+U1rDpl
+         wmD3iVzayIV742rynsR3+umrWTvj+SHmI1NjqA8+IN44cxAwXU00P08V9UcH8IBLzogw
+         osJ8iELTgz6LIUDs6G4DR9iYYuTsP50sP6KqdHndtxMAkmTg6Bd87zgCAYtzAPfNqpx+
+         ieAWNlmb/DSiA9opv1vzuipq8mU1Niwq6zUolIL8k1hz7Emn/aQ7ryg1hOvVndlPKoZ3
+         DfvBHLQ1VX+vTLohpgliZCd9MxUEXNFNCk3ngnPN/0SHujrzEt+l4H4RWqYlwBvoK8Lh
+         ufTQ==
+X-Gm-Message-State: APjAAAWNs4tjP6ugTQ2uwtWGgGTZl3uYqJa6iTrHJxP96miTUdX3FPAK
+        sFZithDbt3E/T+xpERVi9y4=
+X-Google-Smtp-Source: APXvYqylvUE9U5kKGJKKCtFF5R4wOSj4PgYC36wH2joJSvO8f1bw+0REf9K1UBn1pMFr84tkV4BQrA==
+X-Received: by 2002:a17:902:6805:: with SMTP id h5mr8058684plk.275.1579417755652;
+        Sat, 18 Jan 2020 23:09:15 -0800 (PST)
+Received: from localhost ([43.224.245.179])
+        by smtp.gmail.com with ESMTPSA id c184sm34015130pfa.39.2020.01.18.23.09.14
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sat, 18 Jan 2020 23:09:15 -0800 (PST)
+From:   qiwuchen55@gmail.com
+To:     mmayer@broadcom.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        f.fainelli@gmail.com
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        chenqiwu <chenqiwu@xiaomi.com>
+Subject: [PATCH v3] cpufreq: brcmstb-avs: fix imbalance of cpufreq policy refcount
+Date:   Sun, 19 Jan 2020 15:09:10 +0800
+Message-Id: <1579417750-21984-1-git-send-email-qiwuchen55@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: chenqiwu <chenqiwu@xiaomi.com>
 
+brcm_avs_cpufreq_get() calls cpufreq_cpu_get() to get the cpufreq policy,
+meanwhile, it also increments the kobject reference count to mark it busy.
+However, a corresponding call of cpufreq_cpu_put() is ignored to decrement
+the kobject reference count back, which may lead to a potential stuck risk
+that the cpuhp thread deadly waits for dropping of kobject refcount when
+cpufreq policy free.
 
-On 1/18/2020 6:25 PM, chenqiwu wrote:
-> On Mon, Jan 06, 2020 at 01:01:09PM +0530, Viresh Kumar wrote:
->> On 06-01-20, 15:09, chenqiwu wrote:
->>> There could be a case as the description of this patch besides
->>> brcm_avs_driver unloads. Since cpufreq_policy_free() will free
->>> the mm of cpufreq_policy at the last moment.
->>
->> Ahh, right. Please fix the other "policy" thing I reported and resend
->> the patch then.
->>
->> -- 
->> viresh
-> Hi,
-> Any progress about this patch?
+For fixing this bug, cpufreq_get_policy() is referenced to do a proper
+cpufreq_cpu_get()/cpufreq_cpu_put() and fill a policy copy for the user.
+If the policy return NULL, we just return 0 to hit the code path of
+cpufreq_driver->get.
 
-Viresh gave you some feedback to address, so my understanding is that we
-should see a v3.
+Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
+---
+ drivers/cpufreq/brcmstb-avs-cpufreq.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+index 77b0e5d..ee0d404 100644
+--- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
++++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
+@@ -452,8 +452,16 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
+ 
+ static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+-	struct private_data *priv = policy->driver_data;
++	struct cpufreq_policy policy;
++	struct private_data *priv;
++
++	/*
++	 * In case cpufreq policy has been released, just return 0.
++	 */
++	if (cpufreq_get_policy(&policy, cpu))
++		return 0;
++
++	priv = policy.driver_data;
+ 
+ 	return brcm_avs_get_frequency(priv->base);
+ }
 -- 
-Florian
+1.9.1
+
