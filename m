@@ -2,62 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E038141F5B
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 19:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3A6141FE5
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 21:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727138AbgASSoU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:20 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:37499 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbgASSoT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jan 2020 13:44:19 -0500
-Received: by mail-il1-f194.google.com with SMTP id t8so25514072iln.4
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=YZbQ063/9WWn0WWgx0GyD/Z09YtMOLPxoixGC/LJapoHWWUOgmVtrTRd/SA5TN0Cc5
-         NO6kCdkdqKaRv5UXfeKAQsUAtGQjFnSGkKzEvV7AY+htnaRSXlsCh0nPbbLDGtOA/U3s
-         SRVdXwhPc+PmnSwV1BdGWOG80DbU87opiAF6WJmI4bsjYtP19vD2WHsZfS8KGbRwkHff
-         xQwRxzcat+ypsv2VEsUhsemBSLW7UcoYK5Svpwv0e0UdYoCE0GgtVGEOFylI1853Lhys
-         m9JqpyDc+dcZyeZRTu+f8c1d8KylLa5n/fpN0M5D4h51WfxDx4PRcG9vny6ElC95lM9z
-         DdBA==
-X-Gm-Message-State: APjAAAV7kseAD+9kOGwmsCF9gQiBki2wnwUOPr8fysHk3r3jpLQw9pPU
-        94AWfDViYX5PyiJ3MbxzouAgWUUvccdpBTWsz3Y=
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        id S1728682AbgASULe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jan 2020 15:11:34 -0500
+Received: from muru.com ([72.249.23.125]:51782 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727138AbgASULe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 19 Jan 2020 15:11:34 -0500
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 8E361804F;
+        Sun, 19 Jan 2020 20:12:15 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH 1/3] RFC: power: supply: cpcap-battery: Add helper for rough capacity
+Date:   Sun, 19 Jan 2020 12:11:22 -0800
+Message-Id: <20200119201124.29620-1-tony@atomide.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+Get a rough battery charge estimate until we've seen a high or low
+battery level. After that we can use the coulomb counter to calculate
+the battery capacity.
+
+Note that I should probably update this to support ocv-capacity-table
+before this makes sense to apply. With ocv-capacity-table we should be
+able to estimate battery state as described in the documentation for
+Documentation/devicetree/bindings/power/supply/battery.txt.
+
+We do have some unknown battery data available over 1-wire, but the
+format is unkonwn. If somebody ever figures out that format, we can
+then switch to use the real battery data instead of ocv-capacity-table.
+
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Not-yet-Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/power/supply/cpcap-battery.c | 70 +++++++++++++++++++++++-----
+ 1 file changed, 58 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -136,6 +136,29 @@ struct cpcap_battery_ddata {
+ 	u16 vendor;
+ };
+ 
++struct cpcap_battery_capacity {
++	int capacity;
++	int voltage;
++	int percentage;
++};
++
++#define CPCAP_CAP(l, v, p)			\
++{						\
++	.capacity = (l),			\
++	.voltage = (v),				\
++	.percentage = (p),			\
++},
++
++/* Pessimistic battery capacity mapping before high or low value is seen */
++static const struct cpcap_battery_capacity cpcap_battery_cap[] = {
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_UNKNOWN,        0,   0)
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL, 3100000,   0)
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_LOW,      3300000,   2)
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_NORMAL,   3700000,  50)
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_HIGH,     4000000,  75)
++	CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_FULL,     4200000 - 18000, 100)
++};
++
+ #define CPCAP_NO_BATTERY	-400
+ 
+ static struct cpcap_battery_state_data *
+@@ -411,6 +434,40 @@ static int cpcap_battery_update_status(struct cpcap_battery_ddata *ddata)
+ 	return 0;
+ }
+ 
++static void cpcap_battery_get_rough(struct cpcap_battery_ddata *ddata,
++				    int *level, int *percentage)
++{
++	struct cpcap_battery_state_data *latest;
++	const struct cpcap_battery_capacity *cap = NULL;
++	int voltage, i;
++
++	latest = cpcap_battery_latest(ddata);
++	voltage = latest->voltage;
++
++	for (i = ARRAY_SIZE(cpcap_battery_cap) - 1; i >=0; i--) {
++		cap = &cpcap_battery_cap[i];
++		if (voltage >= cap->voltage)
++			break;
++	}
++
++	if (!cap)
++		return;
++
++	if (level)
++		*level = cap->capacity;
++	if (percentage)
++		*percentage = cap->percentage;
++}
++
++static int cpcap_battery_get_rough_capacity(struct cpcap_battery_ddata *ddata)
++{
++	int capacity = 0;
++
++	cpcap_battery_get_rough(ddata, &capacity, NULL);
++
++	return capacity;
++}
++
+ static enum power_supply_property cpcap_battery_props[] = {
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_PRESENT,
+@@ -516,18 +573,7 @@ static int cpcap_battery_get_property(struct power_supply *psy,
+ 		val->intval = div64_s64(tmp, 100);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CAPACITY_LEVEL:
+-		if (cpcap_battery_full(ddata))
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+-		else if (latest->voltage >= 3750000)
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_HIGH;
+-		else if (latest->voltage >= 3300000)
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+-		else if (latest->voltage > 3100000)
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+-		else if (latest->voltage <= 3100000)
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
+-		else
+-			val->intval = POWER_SUPPLY_CAPACITY_LEVEL_UNKNOWN;
++		val->intval = cpcap_battery_get_rough_capacity(ddata);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+ 		val->intval = ddata->config.info.charge_full_design;
+-- 
+2.24.1
