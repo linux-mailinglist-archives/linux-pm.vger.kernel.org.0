@@ -2,181 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8854141E79
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 15:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E038141F5B
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 19:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbgASOTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jan 2020 09:19:05 -0500
-Received: from mga02.intel.com ([134.134.136.20]:59641 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726860AbgASOTF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 19 Jan 2020 09:19:05 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jan 2020 06:19:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,338,1574150400"; 
-   d="scan'208";a="426499868"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Jan 2020 06:19:03 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1itBPr-000Ao2-3A; Sun, 19 Jan 2020 22:19:03 +0800
-Date:   Sun, 19 Jan 2020 22:18:44 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD INCOMPLETE
- 9b06ed497be3dc27f0d78dab0643f4cdb059577b
-Message-ID: <5e246544.SWpo1wlxetD90lo8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727138AbgASSoU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jan 2020 13:44:20 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:37499 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727123AbgASSoT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jan 2020 13:44:19 -0500
+Received: by mail-il1-f194.google.com with SMTP id t8so25514072iln.4
+        for <linux-pm@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
+         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
+         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
+         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
+         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
+         Gp1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=YZbQ063/9WWn0WWgx0GyD/Z09YtMOLPxoixGC/LJapoHWWUOgmVtrTRd/SA5TN0Cc5
+         NO6kCdkdqKaRv5UXfeKAQsUAtGQjFnSGkKzEvV7AY+htnaRSXlsCh0nPbbLDGtOA/U3s
+         SRVdXwhPc+PmnSwV1BdGWOG80DbU87opiAF6WJmI4bsjYtP19vD2WHsZfS8KGbRwkHff
+         xQwRxzcat+ypsv2VEsUhsemBSLW7UcoYK5Svpwv0e0UdYoCE0GgtVGEOFylI1853Lhys
+         m9JqpyDc+dcZyeZRTu+f8c1d8KylLa5n/fpN0M5D4h51WfxDx4PRcG9vny6ElC95lM9z
+         DdBA==
+X-Gm-Message-State: APjAAAV7kseAD+9kOGwmsCF9gQiBki2wnwUOPr8fysHk3r3jpLQw9pPU
+        94AWfDViYX5PyiJ3MbxzouAgWUUvccdpBTWsz3Y=
+X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
+X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
+ Sun, 19 Jan 2020 10:44:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
+ -0800 (PST)
+Reply-To: favordens@email.com
+From:   Favor Desmond <contecindy5@gmail.com>
+Date:   Sun, 19 Jan 2020 18:44:18 +0000
+Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 9b06ed497be3dc27f0d78dab0643f4cdb059577b  Merge branch 'pm-cpuidle-next' into bleeding-edge
-
-TIMEOUT after 2880m
-
-
-Sorry we cannot finish the testset for your branch within a reasonable time.
-It's our fault -- either some build server is down or some build worker is busy
-doing bisects for _other_ trees. The branch will get more complete coverage and
-possible error reports when our build infrastructure is restored or catches up.
-There will be no more build success notification for this branch head, but you
-can expect reasonably good test coverage after waiting for 1 day.
-
-configs timed out: 28
-
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                            allyesconfig
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-
-configs tested: 89
-configs skipped: 1
-
-sh                               allmodconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sh                            titan_defconfig
-sparc                randconfig-a001-20200118
-arm                  randconfig-a001-20200118
-arm64                randconfig-a001-20200118
-ia64                 randconfig-a001-20200118
-arc                  randconfig-a001-20200118
-m68k                          multi_defconfig
-m68k                       m5475evb_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                           sun3_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-s390                 randconfig-a001-20200118
-sh                   randconfig-a001-20200118
-csky                 randconfig-a001-20200118
-xtensa               randconfig-a001-20200118
-openrisc             randconfig-a001-20200118
-parisc               randconfig-a001-20200118
-riscv                randconfig-a001-20200118
-alpha                randconfig-a001-20200118
-m68k                 randconfig-a001-20200118
-nds32                randconfig-a001-20200118
-xtensa                       common_defconfig
-openrisc                    or1ksim_defconfig
-nios2                         3c120_defconfig
-xtensa                          iss_defconfig
-c6x                        evmc6678_defconfig
-c6x                              allyesconfig
-nios2                         10m50_defconfig
-openrisc                 simple_smp_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-arm                         at91_dt_defconfig
-arm64                               defconfig
-arm                        multi_v5_defconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                           sunxi_defconfig
-arm64                             allnoconfig
-arm                          exynos_defconfig
-arm                        shmobile_defconfig
-arm                        multi_v7_defconfig
-i386                 randconfig-d002-20200118
-x86_64               randconfig-d002-20200118
-x86_64               randconfig-d003-20200118
-i386                 randconfig-d003-20200118
-i386                 randconfig-d001-20200118
-x86_64               randconfig-d001-20200118
-s390                              allnoconfig
-s390                             alldefconfig
-s390                          debug_defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-s390                             allyesconfig
-nds32                               defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-sparc64              randconfig-a001-20200118
-microblaze           randconfig-a001-20200118
-nios2                randconfig-a001-20200118
-h8300                randconfig-a001-20200118
-c6x                  randconfig-a001-20200118
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                              fedora-25
-x86_64                                  kexec
-mips                           32r2_defconfig
-mips                              allnoconfig
-parisc                        c3000_defconfig
-parisc                         b180_defconfig
-parisc                              defconfig
-parisc                            allnoconfig
-arc                              allyesconfig
-powerpc                             defconfig
-microblaze                    nommu_defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-arc                                 defconfig
-powerpc                           allnoconfig
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+Hello Dear
+Greetings to you,I am Favor Desmond from Ivory coast currently living
+in  Togo Republic,I would like to know you more, so that i can tell
+you little amount myself and my photo, email address is
+favordens@email.com
+Thanks
+Favor
