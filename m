@@ -2,512 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD33141CDC
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 08:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B91141DDC
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2020 13:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbgASHhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jan 2020 02:37:40 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34644 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbgASHhk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jan 2020 02:37:40 -0500
-Received: by mail-qk1-f193.google.com with SMTP id j9so27165291qkk.1;
-        Sat, 18 Jan 2020 23:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/sQlkgm79WGoIWETmPQFCd9M6iRMmjRgwgIkAakW/+c=;
-        b=h1cn4v3VVndWVOkwr+/WfQHckHgOClCe0TFEuCNrEn0Me4pdBT+BMa2oDc+PNhCNqu
-         iYAVZ9gLmXjCMgg0gtE/xgMrYXv2N8JdqkZ0IhEAN7nasKILmc/TrYekYAbxRuQORZNR
-         4I7jGB/lqZYJOL+EgrxPx3vLMomyU6Q0kuyXG2HU11BzTBl166omNkC7sStsquzDwAfy
-         U7suNKbF2fmYV2XbE4UelnXaCFmAk4MI8dmIN4b6j31s9UGhLrTOYXCUEBgMI74UzKy8
-         RvncQ/jeAmLZ2UDN3fBgaASQK/LHdJUrWvV+TJClvDrzB5jkGTJK85ciXFYqSsdXFSR6
-         mrcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/sQlkgm79WGoIWETmPQFCd9M6iRMmjRgwgIkAakW/+c=;
-        b=CC51qyEL76g6gP4jftciXUt0Yt/vBzJ+sTZ0r8AoHJcDiPH8qdaH2Ve3T/9itu8+3z
-         TEFJ1LogR4VjvGaeJyZywSUpQ8C3fSnrY6H7h7DRBkn1819+ViNC1kSvmAM7FonDvEyj
-         SWIPHvWclLHVDL5OfqnXQ+Xix71gskIH43KMwCqnj0U/WktQmlQsp50T83RdEWZEBiVO
-         aDZDGzhSg0ga9bgi57LYj/L4Y92l7l5a586vj7Z5ZBnc8AbRveI1UcRpPkidtzTLrNBX
-         m1Clj8nAo7EZjqOOddATCducnDMH2G7I5OCNXpY4+hvyzTW1u+vR/glRmXI2gNyxfNGu
-         4REQ==
-X-Gm-Message-State: APjAAAVbBXaQvAq8sASPoeB9xXeeSp7ogNjO2Mj6wbKGVdd12BA22RD+
-        tG5VVJg6187a3nkK2glxSBENAFAhi/f92HuIa3A=
-X-Google-Smtp-Source: APXvYqzyh/qFVp9njLbzx0sFowOdZZeFjHQN6WIAlqdEsGSEp8/Hr19ghP+ad3tyBEd7OwhHO6ar27Q99WeyAsKk0PY=
-X-Received: by 2002:a05:620a:1298:: with SMTP id w24mr45415455qki.170.1579419458776;
- Sat, 18 Jan 2020 23:37:38 -0800 (PST)
+        id S1726843AbgASM4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jan 2020 07:56:08 -0500
+Received: from mx3.freesources.org ([195.34.172.217]:38366 "EHLO
+        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726816AbgASM4I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jan 2020 07:56:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=freesources.org; s=20160526; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RDwkT16f4BTGNZWIgoJRcBzp0A3cT69/W17cKcdQkqY=; b=jgifXcMyGv58JH76XadtVK9s1H
+        4TgA/0TkCJlKEZWFvDIW+SBO9p2N03mO9r8cE4786+2ksiuNsDu7BZ4bDm2+Fl9ViOrrm76MgZ924
+        +Kr//HmmC91cXQFQ/gK3wEnbCVcFU88fVVPikSb6LXxhnjgF937y4YDGFmL0lmeHI0hQ=;
+Received: from anon-43-243.vpn.ipredator.se ([46.246.43.243])
+        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <jonas@freesources.org>)
+        id 1itA7V-0000pz-4i; Sun, 19 Jan 2020 12:56:01 +0000
+Subject: Re: [PATCH v3] PM: suspend: Add sysfs attribute to control the "sync
+ on suspend" behavior
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Tim Dittler <tim.dittler@systemli.org>,
+        Yannik Sembritzki <yannik@sembritzki.me>
+References: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
+ <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
+From:   Jonas Meurer <jonas@freesources.org>
+Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
+ mQINBEqFXAEBEAC+7gfLht8lDqGH1EPYoctDHvWQ4nk60UFDLfjqHmBGReL/9C7CyxYaqgY4
+ V1/DXPCmsO5PvHMSi6VPn3B81alPKMT6syQhxDN6CXETh/mrxRbTPyQVSKYdD/BvA94vgwfy
+ iInR0N7K6J/mRxqKug14vXlABvfmyWBnW89d15OWs9qy1Ge1mHaA8UgIoUInR2mMqNHQf0nF
+ /TtClN2uPmtv/GeGHfSSCQEjYq9Ih2Z1Re2hnwW1peEc0x7piKUXCXHGyrQdz5IE69SqV1gg
+ vafUrWHNPWz5ZtXsihYioNi3ISuoHUjkKdn+t55en5tvWvi+2JQnMCGa/Wr7iA2EOxallR+z
+ rQRBDe/6wp1XEz6vN1LqCeaRyVOR6q00PtN/Ot0tzPswrHKE6binqG6FBRbu+zeo87cNbMmH
+ IAdIT3ysZCAwA2g310fBByCSiNnfhHg2GyqfC4eDtL/K7uVNqQQEon0yv8lzyUloofKER8eA
+ W4PtahGcLLbREnekAwQMpU8y1a++QXdk1ckLoyGuBVpBX8PiRirzYVmYsGRMK2u0yIy73YYM
+ gYpt6h+Vaoj5EyPbYuJRm3RItByzE84YBbKfA81Xn8FZWc2qTyTeKRMioTu37E/z46wSHCt9
+ UM89/lSz5iplUhnmdrN+u606MDbAdgxR5Lk+1UuhpPgLxIIdPwARAQABtCRKb25hcyBNZXVy
+ ZXIgPGpvbmFzQGZyZWVzb3VyY2VzLm9yZz6JAlcEEwEKAEECGwMCHgECF4AFCwkIBwMFFQoJ
+ CAsFFgIDAQACGQEWIQQsjNKD0+/fQziQ54NSYuf/SRBJ/gUCXP1HQwUJGBuFwgAKCRBSYuf/
+ SRBJ/leqD/wKZ2ltjNmwQ7Mf+F0dATcBoX6dh+0HbgHXbsgZSA6WiVn6qrAYiCgtN0ZLtUeI
+ oFpthum/Fi4XRt29067hx5pt81JJtsRg813PETeBQbrr9whpupcgw4z6rjHT9EuACsWLBBbg
+ hrWPgYMfe9GQupS6nv+kBEotr1v/L+umLFO8q7sbXaXFnxgxV/h6vvMqTK5nWg9MBjTr3ZwH
+ 0k4yGq93mC5Zms921OU8PU1JlPdPnKmU2jaXfReHUDg1fS0NaCapIGksX+ysI4u+NIfujK4T
+ eN5RMWtixoFjaPbLJ65kT3XXcp3dzioPTGEaLWQwBkMJtKXAZ5FJols9t3XySYzDYs2hrDny
+ ADZIkbI/NeIu2hfo6410Nzh6ztevNbYnL7oUS8yHD38ZNBmA3y03KHlbuEf7K6BUq2CrWxTx
+ GhFGNaPk/aDYNb6oYQmllw2m0peCbiCOC1HxYxYznANC//8qh5qgSBy97nLyzP8uJcQINTlS
+ G1hQ4JMVE5XLNRdIZm3HOjyr8Kma3i7C2MlFOtdpYxHhzDQS5qZWPlYm5h0JLpIctyzbyXwP
+ ta2TVqCv59IR64ClYKXP4OGfp0IzUCynWZTOEpwl4IBaPFh40zSXUpuzXHF5yuL8yFOg01fD
+ JGaatwBE+uygh8tndhNvKpRaRXnkbiQkwuaFnCEGR/rjmLkCDQRKhV7yARAAonTShxRdyza6
+ 3jK3Jae2js8IPBid/VAMK8qyqZoLCRsDoWzKGkJ+8/yNavvkD0mD9AEdJQySk5CmNV/PZB6W
+ 3vDpuWYkJ/wbM8g+NTTNVZnnvTirozlu9ZjJmTZL8JAaY2o3Kp6tgPO6924VSwYNIvs1UM4x
+ J+7TjTKqLuUdEgsS2IFnbHWsE5XXS+5pbmzWs+UHCVmkXfbb5yx2aV+rUQSkSDooxcRwLKEf
+ eDbGdNjsW4qBQ6mFx9gYtCSWnvvCck0mTAdD0n7CxRwdhLKTDRy5CsBN4cuL6N05wOnZojv3
+ v6dXctx55EooSFiiDfmwGgu1qdsGDbGLDHC1QRIbouOWiM/4Nf+qfW+8uL+T21wj2Cfb0MaR
+ +TZEJSBSLvoPHavUHUy4/td3lGBE+enhZEyd2kfQIR9Zm/EXty7tBj8CGT+ewzDsb1t8Hovt
+ DpK7Eo04XkQoCeAAdhfa+f5/X/mCBadflnHkn2rpL/noj+pItFZLbFwoL+meRURcuNfIhpIN
+ GaG3j8QJVLIvimdWSSJgmnQJ40Ym7H55EVslHH9cpIzfDUVxMYLVo047QTgfx7Ju1Jdfx8Pf
+ 8nAeXSo+9WpOSZJCMqLp/l9e24zFAjX5bXEnXPhRc8cpCrfPvPUdx+OwtBSp2w69UWJBRdOx
+ sTAwifXNlXxtaUxaM9WKKr8AEQEAAYkCPAQYAQoAJgIbDBYhBCyM0oPT799DOJDng1Ji5/9J
+ EEn+BQJc/UdrBQkYG4L5AAoJEFJi5/9JEEn+tVEP/i/tFQWivHWQuQANoaCs6CAMVslWZhzc
+ +v7Lo4pz0kkA/OI7Hgbgz3gE6O9BDScooPqONyR9Ls7iv3NdvbyxJq7IR3PMb5lTncSlOnR0
+ gIvJ0pT+nHWW14mJ44sd4jF6CdehoTS1IEpsEDKBL5j89z9URmmdPHT0ph2OTtvil8uuYdvl
+ 8mDiQh2RGz/zDNHz+UulgQpercjQyMw+dijnwZZhONQ1wNdFl41SaZyrqbKIxaqHI7Hg0j5j
+ dRTSxUCn8BLicIOmSy9G3mOJdTEu2ChQkz+XdOwUf7Kj5ow+18cWrtjcKeL1JEAVbZyGEZNj
+ eEWthr6/P9q6VCaogTUkODoXUfTWaHOE2NOY0WK13iQ3/oJlW38/LPoEeeiSJWa7gY/2xNXY
+ Zh8SqVGtwdzPzbFga0Vgwaln7vGmMMr6OYsWweqCh9eedAAjOZuJ7pPfvK/w48ylLia7uVPt
+ ClSYWhrlqv5YBNLo029MKn9aXAhDvZ7tN+an4DWNVjwZ3r21b+iXWBMcWcIeIc1ssbj0xMur
+ UUCosSYLy+zSr4+M+H82YexoOSmbYRKUn6pgAMsH7jXYJou70OAqF7vgQ7+dj6qU7zJOD+DF
+ emCqYSyB99fxsxq9SmnB/UfTtBQQk7pkTTZ3TSQiE2u/ZcGVDDAOs5iuW85NbSRxQ499SoyV
+ GrTIuQINBFJzgSIBEADNIxHBVTWw+fyCseGCOjy0NmzCOu5BFmppxeqls9Wu8MmEX06DeBBC
+ DfXpDrDOP7tX3wYdSVElMgqlL9tMCWnY5S5akONn4+dcex0yo0fIM1pZSl0vcVj5xmI+RRkD
+ Sh+0GL69cl2POiEKeXFIbwDIjE5txio5iKIABMQxQHLsKbJmxGPQKdJvXvp5MUhlMikBws4I
+ aihum6/sLZ8vqDn5/OMkzyQBgRhuis9RBaTJy7kvPxqtOXaNO/cvONUODjGhAg0VWejX5yeE
+ auzCg/ZWZeZOgwVLd9/NyCqii1+JHMYz85lk4bLF6rYNXlaXB2UGXnlF5MJ3owek4sgV0H5V
+ /y/8ddi7tTQTXUhbVX5LHq5x8BFKY7UINjOeZ61cMeA7u/bi4EKxx2bj80rbHFw8NmVdMnOa
+ Wklq9kCcizMSkZ3szFLtviY2CQ8UW/VImSJtypqKwkfFJnQTlRWuWl7U1r1MJa6QrmJSlYgw
+ DWcEa2JqAGa+NyTCOrt013GDp9BCWGlOV46sEWflxo0f6J8ebfivY0w91knZE5xbmWm9CG+M
+ g6Yt0K3dLGoBT27c2M7Wynywot4+MKJagmxUC3UDBQbd0BVJQY+UB0eer3RgS+PJcquTGhon
+ rjCHtotZ60IyqNZmnOFr/hEJC6YhmWwyzvokv7GX2Duvpo+Pj957KwARAQABiQIfBCgBCAAJ
+ BQJXtGqxAh0DAAoJEFJi5/9JEEn+3D0QAJn9amcJYUmNJkpUesn56/5uec+Jfhknkun1rrbM
+ Ufx8Jn8hyiX1jqpU3fdVRy6VGTX4o2O9nM/gx7DfwIhYIclJjn6egJ3WloGO3IVP6z38Qvj0
+ BkEJOdyrvHLRyO+dSIQ3ngl0lPFqRqBeieO7O77po3O3iKxZxHqcyeKZvElXTAUWzomXtyVq
+ Lub2UIZDqrtff0gYzTRp5Bt5vHF9k7/DvWl163WxNETMvXIHbAeSybGxHZmdZIJpjfXcjaQJ
+ LKM5S0Kpb2PEHBJlBvYY1JhlA2tYe/KdgsbnPMPFQ6A7ldn8fvIIiI9vZ4HIhlzclTrte8kx
+ VbLR66+g5wu6l30EpX+ONMrDfZM6p+SYukbKJVBH45aPaSJhqyJ5MGqq/AGTHMcS3+vjLHMz
+ Iz4xlgpGNM2uN3crFyjdoIFviJH5uLzLSdI6RzfuHBnFUb/aoFePNmWuV/Rk/KoVHGZme3m7
+ Q7lqpzLTAga6L/UFIUFfnNRbJkADyfxFhIT31FgadDwv+wYc/l8bjra5MjgYmF5aANivt73N
+ L0p3z2fY4N/If9JQljcue1d6C+7SgBwX7uhO9jSzK9pA0q4llanYAgxjtUYudmeBeYRrqS2v
+ KLVmnS2f2SuRMa4dkrZG4VIEVddNuuezSv0XpEFJtNXyzylAeHsYRt0bhxj+9k3wW6RliQRE
+ BBgBAgAPBQJSc4EiAhsCBQkJZgGAAikJEFJi5/9JEEn+wV0gBBkBAgAGBQJSc4EiAAoJEBvz
+ c5c7ZRqnI1UP/0d4D6H2QYgE0O7U3NbS73LG3QHo1uV6BQe1WaZYmiI6P73Q54FZ3Xl/bqdI
+ pMsnFGYpKKxPogWh8Izwf/04cr5obXw4XhfWfXfOv/yLRiYr2lsBzWX8Z4OrgzNSJ69E4ECj
+ FW05WkoBvF7LmtVD95ruUhPwivu52PzAfIy0L8pxTW5uDDttoBsw465kB+nrQrJwIPj46aLP
+ FXX0VhIjWC+yzomQNIaVxgPrhRs3PzhPB17vlggrk2W5awoXgL/gF4ddyJetEt00LHc6ysSC
+ Wzh4WNgwFTUL/XC9OSw/Qf7Z+UbdGUSVAyFzFkP0s8tOlXp2EWMUhep/rap7/G7lBLAyLA5E
+ QtOYzInFV4KXD8spB5WTHsh/QA30RDpEhq2imAa1F5qTnTbwm3Gh3qbXLv7PI7R/WmqHr43m
+ SI+AdJHQsogf8ukdCQhhzDuIUkpa3KFA9ZC8zVyf2IBPqWLkiloOyKvzFSmuF24ooNHEqjAv
+ EwbfNUVefKdeen8A7ipDTXQREjowLRBujOxMedWbjBJWjapKBOMep7NbuQ8/0vrDryuJxwQi
+ JxYr+q/raDRII/sb9NkUWj4jzDI9NgTlt33c+5ne4dpv++msdxL0rsQ64CFqlpx9nVlsep+I
+ 4zTN7+/NsUUbdrBs885gWoc17sZogAWeT9ldsDXzX0S+JFgQTvYP/0/Cwa6eBbw/XlLoHzMs
+ 6POlgQy3M27zUfhWWs8p1lN5lahKlxcFjudMtdH66mhpYlQlSjEjUwHIs5vXxckZt2HfSYyg
+ hg3Z5yZ8X14NFWbR0J++0G5os1vLFQ+nRM4kwSvn9KnL1txDQ0MwekZ/7VuB5GThYkEiOvgZ
+ X7C06ieTtQXoIk3dO+XwnsLl5NcwMlga1sdbM0OQARMKbtKCXRkwWyCaHQI0ei756kUsNCK6
+ ZLe3s705sJ77gVwVdUE6Y5255z2r9MH00QdJk7p/5Axa22qda59Vo/7wxXO9M1tI1WUunWQ+
+ /xNvnLsCvwVnprx9YDsQ18FaKEX+mc0yOzwKhWpT1IVShck8o1kshaaTmB1u/ZbZBgoFYcrS
+ 30kvqVaabEbcuKmkUNTP0h4ewXdpFlx8HoUn/D+etqFR/sdZtzaSYo7F7NAf5ORb5NIyZQTf
+ j5MR0b5PT03y/FxsG+LYDhQGxL3ZWtmPYiDT8W3BExwRg4VkRKuPVM/qDhur45CuqwNZXDQX
+ ucOyOCxbGK0rfZasgPXkzxTWohgQwhBvw+eZ+VXzjHiRyGQ4x1Jay9eYiw7QeOiLDQxQcxLI
+ tAzfoD+TN75zyJrLjknLC+udmMVZMcserZHCUnb9WBW4qMNyy9PI53Ha6bvfZXbZCeS3PjTo
+ 2SCIHpzHfm/mpRL2
+Message-ID: <a75f2426-21e3-06b0-9aa1-a4bc9d8368f3@freesources.org>
+Date:   Sun, 19 Jan 2020 13:55:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <8d5358a67746b2aff5f6995cabd11d0d7c9e579e.1575978484.git.baolin.wang7@gmail.com>
- <dd3303a956e7dd5c065ac2b92b1dea7ee5d1df17.1575978484.git.baolin.wang7@gmail.com>
- <b653521a-0296-786c-072d-7f1962f3021a@linaro.org>
-In-Reply-To: <b653521a-0296-786c-072d-7f1962f3021a@linaro.org>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Sun, 19 Jan 2020 15:37:26 +0800
-Message-ID: <CADBw62pz7bYO7scSnO35QX2x7NPZ69o6=_zX-rSHAKprbZMbvg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: sprd: Add Spreadtrum thermal driver support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>, freeman.liu@unisoc.com,
-        Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hey Rafael,
 
-On Fri, Jan 17, 2020 at 7:52 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 10/12/2019 13:07, Baolin Wang wrote:
-> > From: Freeman Liu <freeman.liu@unisoc.com>
-> >
-> > This patch adds the support for Spreadtrum thermal sensor controller,
-> > which can support maximum 8 sensors.
-> >
-> > Signed-off-by: Freeman Liu <freeman.liu@unisoc.com>
-> > Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
-> > ---
-> > Changes from v1:
-> >  - None.
-> > ---
+Rafael J. Wysocki:
+> On Thu, Jan 16, 2020 at 12:53 PM Jonas Meurer <jonas@freesources.org> wrote:
+>>
+>> The sysfs attribute `/sys/power/sync_on_suspend` controls, whether or not
+>> filesystems are synced by the kernel before system suspend.
+>>
+>> Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
+>> is slightly changed: It now defines the run-tim default for the new sysfs
+>> attribute `/sys/power/sync_on_suspend`.
+>>
+>> The run-time attribute is added because the existing corresponding
+>> build-time Kconfig flag for (`CONFIG_SUSPEND_SKIP_SYNC`) is not flexible
+>> enough. E.g. Linux distributions that provide pre-compiled kernels
+>> usually want to stick with the default (sync filesystems before suspend)
+>> but under special conditions this needs to be changed.
+>>
+>> One example for such a special condition is user-space handling of
+>> suspending block devices (e.g. using `cryptsetup luksSuspend` or `dmsetup
+>> suspend`) before system suspend. The Kernel trying to sync filesystems
+>> after the underlying block device already got suspended obviously leads
+>> to dead-locks. Be aware that you have to take care of the filesystem sync
+>> yourself before suspending the system in those scenarios.
+>>
+>> Signed-off-by: Jonas Meurer <jonas@freesources.org>
+> 
+> Applied as 5.6 material with minor changes in the ABI document, thanks!
 
-> > +
-> > +struct sprd_thermal_sensor {
-> > +     struct thermal_zone_device *thmzone_dev;
-> > +     struct sprd_thermal_data *data;
-> > +     struct device *dev;
-> > +     bool ready;
-> > +     int cal_slope;
-> > +     int cal_offset;
-> > +     int last_temp;
-> > +     int id;
-> > +};
-> > +
-> > +struct sprd_thermal_data {
-> > +     const struct sprd_thm_variant_data *var_data;
-> > +     struct sprd_thermal_sensor *sensor[SPRD_THM_MAX_SENSOR];
-> > +     struct clk *clk;
-> > +     void __iomem *base;
-> > +     u32 ratio_off;
-> > +     u32 ratio_sign;
-> > +     int nr_sensors;
-> > +};
-> > +
-> > +/*
-> > + * The conversion between ADC and temperature is based on linear relationship,
-> > + * and use idea_k to specify the slope and ideal_b to specify the offset.
-> > + *
-> > + * Since different Spreadtrum SoCs have different ideal_k and ideal_b,
-> > + * we should save ideal_k and ideal_b in the device data structure.
-> > + */
-> > +struct sprd_thm_variant_data {
-> > +     u32 ideal_k;
-> > +     u32 ideal_b;
-> > +};
-> > +
-> > +static const struct sprd_thm_variant_data ums512_data = {
-> > +     .ideal_k = 262,
-> > +     .ideal_b = 66400,
-> > +};
-> > +
-> > +static inline void sprd_thm_update_bits(void __iomem *reg, u32 mask, u32 val)
-> > +{
-> > +     u32 tmp, orig;
-> > +
-> > +     orig = readl(reg);
-> > +     tmp = orig & ~mask;
-> > +     tmp |= val & mask;
-> > +     writel(tmp, reg);
->
-> Please have a look at linux/bitops.h and check if a macro does not fit
-> your need (eg. set_mask_bits and set_bit). AFAICT, most of the operation
-> are clear/set bits.
+Wow, that's great news. I'm excited to read that the patch finally will
+enter the Linux kernel \o/
 
-We are updating a register here, not updating a vriable. So I think it
-is not helpful with using set_mask_bits or set_bit.
+Thanks a lot for guiding me through my first Linux kernel patch
+contribution.
 
->
-> > +}
-> > +
-> > +static int sprd_thm_cal_read(struct device_node *np, const char *cell_id,
-> > +                          u32 *val)
-> > +{
-> > +     struct nvmem_cell *cell;
-> > +     void *buf;
-> > +     size_t len;
-> > +
-> > +     cell = of_nvmem_cell_get(np, cell_id);
-> > +     if (IS_ERR(cell))
-> > +             return PTR_ERR(cell);
-> > +
-> > +     buf = nvmem_cell_read(cell, &len);
-> > +     nvmem_cell_put(cell);
-> > +     if (IS_ERR(buf))
-> > +             return PTR_ERR(buf);
-> > +
-> > +     memcpy(val, buf, min(len, sizeof(u32)));
->
-> I'm probably nitpicking but what if the len is different from the u32,
-> the result will be inconsistent. If that can happen, wouldn't make sense
-> to bail out before with an error ?
+Cheers
+ jonas
 
-OK. Will change to give some error.
-
->
-> > +     kfree(buf);
-> > +     return 0;
-> > +}
-> > +
-> > +static int sprd_thm_senor_calibration(struct device_node *np,
-> > +                                   struct sprd_thermal_data *thm,
-> > +                                   struct sprd_thermal_sensor *sen)
->
-> "senor_calibration" or "sensor_calibration" ?
-
-Sure.
-
->
-> > +{
-> > +     int ret;
-> > +     /*
-> > +      * According to thermal datasheet, the default calibration offset is 64,
-> > +      * and the default ratio is 1000.
-> > +      */
-> > +     int dt_offset = 64, ratio = 1000;
-> > +
-> > +     ret = sprd_thm_cal_read(np, "sen_delta_cal", &dt_offset);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (thm->ratio_sign == 1)
-> > +             ratio = 1000 - thm->ratio_off;
-> > +     else
-> > +             ratio = 1000 + thm->ratio_off;
->
-> Store ratio_sign = -1 | 1 at init time, then :
->
->   ratio += ratio_sign * thm->ratio_off
-
-OK.
-
->
-> > +     /*
-> > +      * According to the ideal slope K and ideal offset B, combined with
-> > +      * calibration value of thermal from efuse, then calibrate the real
-> > +      * slope k and offset b:
-> > +      * k_cal = (k * ratio) / 1000.
-> > +      * b_cal = b + (dt_offset - 64) * 500.
-> > +      */
-> > +     sen->cal_slope = (thm->var_data->ideal_k * ratio) / 1000;
-> > +     sen->cal_offset = thm->var_data->ideal_b + (dt_offset - 128) * 250;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int sprd_thm_rawdata_to_temp(struct sprd_thermal_sensor *sen,
-> > +                                 u32 rawdata)
-> > +{
-> > +     if (rawdata < SPRD_THM_RAW_DATA_LOW)
-> > +             rawdata = SPRD_THM_RAW_DATA_LOW;
-> > +     else if (rawdata > SPRD_THM_RAW_DATA_HIGH)
-> > +             rawdata = SPRD_THM_RAW_DATA_HIGH;
->
-> check clamp() macro in kernel.h
-
-Yes, will do.
-
->
-> > +     /*
-> > +      * According to the thermal datasheet, the formula of converting
-> > +      * adc value to the temperature value should be:
-> > +      * T_final = k_cal * x - b_cal.
-> > +      */
-> > +     return sen->cal_slope * rawdata - sen->cal_offset;
-> > +}
-> > +
-> > +static int sprd_thm_temp_to_rawdata(int temp, struct sprd_thermal_sensor *sen)
-> > +{
-> > +     u32 val;
-> > +
-> > +     if (temp < SPRD_THM_TEMP_LOW)
-> > +             temp = SPRD_THM_TEMP_LOW;
-> > +     else if (temp > SPRD_THM_TEMP_HIGH)
-> > +             temp = SPRD_THM_TEMP_HIGH;
->
-> check clamp() macro in kernel.h
-
-OK.
-
->
-> > +     /*
-> > +      * According to the thermal datasheet, the formula of converting
-> > +      * adc value to the temperature value should be:
-> > +      * T_final = k_cal * x - b_cal.
-> > +      */
-> > +     val = (temp + sen->cal_offset) / sen->cal_slope;
-> > +
-> > +     return val >= SPRD_THM_RAW_DATA_HIGH ? (SPRD_THM_RAW_DATA_HIGH - 1) : val;
->
-> check clamp() macro in kernel.h
-
-OK.
-
->
-> > +}
-> > +
-> > +static int sprd_thm_read_temp(void *devdata, int *temp)
-> > +{
-> > +     struct sprd_thermal_sensor *sen = devdata;
-> > +     int sensor_temp;
-> > +     u32 data;
-> > +
-> > +     data = readl(sen->data->base + SPRD_THM_TEMP(sen->id)) &
-> > +             SPRD_THM_RAW_READ_MSK;
-> > +
-> > +     if (sen->ready) {
-> > +             sensor_temp = sprd_thm_rawdata_to_temp(sen, data);
-> > +             sen->last_temp = sensor_temp;
-> > +             *temp = sensor_temp;
->
-> If the initialization is done in the right order and using the
-> THERMAL_DEVICE_DISABLED, this test should not be needed. And de facto,
-> neither the last_temp.
->
-> As a side note, if the sensor is not ready it should return an error
-> like -EBUSY instead of the previous value.
-
-OK. Will use THERMAL_DEVICE_DISABLED and remove 'last_temp'.
-
->
-> > +     } else {
-> > +             /*
-> > +              * If the sensor is not ready, then just return last
-> > +              * temperature value.
-> > +              */
-> > +             *temp = sen->last_temp;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct thermal_zone_of_device_ops sprd_thm_ops = {
-> > +     .get_temp = sprd_thm_read_temp,
-> > +};
-> > +
-> > +static int sprd_thm_poll_ready_status(struct sprd_thermal_data *thm)
-> > +{
-> > +     u32 val;
-> > +     int ret;
-> > +
-> > +     /*
-> > +      * Wait for thermal ready status before configuring thermal parameters.
-> > +      */
-> > +     ret = readl_poll_timeout(thm->base + SPRD_THM_CTL, val,
-> > +                              !(val & SPRD_THM_SET_RDY_ST),
-> > +                              SPRD_THM_RDYST_POLLING_TIME,
-> > +                              SPRD_THM_RDYST_TIMEOUT);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_MON_EN,
-> > +                          SPRD_THM_MON_EN);
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_SET_RDY,
-> > +                          SPRD_THM_SET_RDY);
-> > +     return 0;
-> > +}
-> > +
-> > +static int sprd_thm_wait_temp_ready(struct sprd_thermal_data *thm)
-> > +{
-> > +     u32 val;
-> > +
-> > +     /* Wait for first temperature data ready before reading temperature */
-> > +     return readl_poll_timeout(thm->base + SPRD_THM_INTERNAL_STS1, val,
-> > +                               !(val & SPRD_THM_TEMPER_RDY),
-> > +                               SPRD_THM_TEMP_READY_POLL_TIME,
-> > +                               SPRD_THM_TEMP_READY_TIMEOUT);
-> > +}
-> > +
-> > +static int sprd_thm_set_ready(struct sprd_thermal_data *thm)
-> > +{
-> > +     int ret;
-> > +
-> > +     ret = sprd_thm_poll_ready_status(thm);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /*
-> > +      * Clear interrupt status, enable thermal interrupt and enable thermal.
-> > +      */
-> > +     writel(SPRD_THM_INT_CLR_MASK, thm->base + SPRD_THM_INT_CLR);
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_INT_EN,
-> > +                          SPRD_THM_BIT_INT_EN, SPRD_THM_BIT_INT_EN);
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_CTL,
-> > +                          SPRD_THM_EN, SPRD_THM_EN);
->
-> Why enabling the interrupt while there is no handler for it?
-
-Our thermal controller integrates a hardware interrupt signal, which
-means if the temperature is overheat, it will generate an interrupt
-and notify the event to PMIC automatically to shutdown the system. So
-we should enable the interrupt bits, but no need to register handler.
-
-I will add some comments to explain this in next verison.
-
->
-> > +     return 0;
-> > +}
-> > +
-> > +static void sprd_thm_sensor_init(struct sprd_thermal_data *thm,
-> > +                              struct sprd_thermal_sensor *sen)
-> > +{
-> > +     u32 otp_rawdata, hot_rawdata;
-> > +
-> > +     otp_rawdata = sprd_thm_temp_to_rawdata(SPRD_THM_OTP_TEMP, sen);
-> > +     hot_rawdata = sprd_thm_temp_to_rawdata(SPRD_THM_HOT_TEMP, sen);
-> > +
-> > +     /* Enable the sensor' overheat temperature protection interrupt */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_INT_EN,
-> > +                          SPRD_THM_SEN_OVERHEAT_ALARM_EN(sen->id),
-> > +                          SPRD_THM_SEN_OVERHEAT_ALARM_EN(sen->id));
-> > +
-> > +     /* Set the sensor' overheat and hot threshold temperature */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_THRES(sen->id),
-> > +                          SPRD_THM_THRES_MASK,
-> > +                          (otp_rawdata << SPRD_THM_OTP_TRIP_SHIFT) |
-> > +                          hot_rawdata);
-> > +
-> > +     /* Enable the corresponding sensor */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_CTL, SPRD_THM_SEN(sen->id),
-> > +                          SPRD_THM_SEN(sen->id));
-> > +}
-> > +
-> > +static void sprd_thm_para_config(struct sprd_thermal_data *thm)
-> > +{
-> > +     /* Set the period of two valid temperature detection action */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_DET_PERIOD,
-> > +                          SPRD_THM_DET_PERIOD_MASK, SPRD_THM_DET_PERIOD);
-> > +
-> > +     /* Set the sensors' monitor mode */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_MON_CTL,
-> > +                          SPRD_THM_MON_MODE_MASK, SPRD_THM_MON_MODE);
-> > +
-> > +     /* Set the sensors' monitor period */
-> > +     sprd_thm_update_bits(thm->base + SPRD_THM_MON_PERIOD,
-> > +                          SPRD_THM_MON_PERIOD_MASK, SPRD_THM_MON_PERIOD);
-> > +}
-> > +
-> > +static int sprd_thm_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device_node *np = pdev->dev.of_node;
-> > +     struct device_node *sen_child;
-> > +     struct sprd_thermal_data *thm;
-> > +     struct sprd_thermal_sensor *sen;
-> > +     const struct sprd_thm_variant_data *pdata;
-> > +     int ret, i;
-> > +
-> > +     pdata = of_device_get_match_data(&pdev->dev);
-> > +     if (!pdata) {
-> > +             dev_err(&pdev->dev, "No matching driver data found\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     thm = devm_kzalloc(&pdev->dev, sizeof(*thm), GFP_KERNEL);
-> > +     if (!thm)
-> > +             return -ENOMEM;
-> > +
-> > +     thm->var_data = pdata;
-> > +     thm->base = devm_platform_ioremap_resource(pdev, 0);
-> > +     if (!thm->base)
-> > +             return -ENOMEM;
-> > +
-> > +     thm->nr_sensors = of_get_child_count(np);
-> > +     if (thm->nr_sensors == 0 || thm->nr_sensors > SPRD_THM_MAX_SENSOR) {
-> > +             dev_err(&pdev->dev, "incorrect sensor count\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     thm->clk = devm_clk_get(&pdev->dev, "enable");
-> > +     if (IS_ERR(thm->clk)) {
-> > +             dev_err(&pdev->dev, "failed to get enable clock\n");
-> > +             return PTR_ERR(thm->clk);
-> > +     }
-> > +
-> > +     ret = clk_prepare_enable(thm->clk);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     sprd_thm_para_config(thm);
-> > +
-> > +     ret = sprd_thm_cal_read(np, "thm_sign_cal", &thm->ratio_sign);
-> > +     if (ret)
-> > +             goto disable_clk;
-> > +
-> > +     ret = sprd_thm_cal_read(np, "thm_ratio_cal", &thm->ratio_off);
-> > +     if (ret)
-> > +             goto disable_clk;
-> > +
-> > +     for_each_child_of_node(np, sen_child) {
-> > +             sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
-> > +             if (!sen) {
-> > +                     ret = -ENOMEM;
-> > +                     goto disable_clk;
-> > +             }
-> > +
-> > +             sen->ready = false;
-> > +             sen->data = thm;
-> > +             sen->dev = &pdev->dev;
-> > +
-> > +             ret = of_property_read_u32(sen_child, "reg", &sen->id);
-> > +             if (ret) {
-> > +                     dev_err(&pdev->dev, "get sensor reg failed");
-> > +                     goto disable_clk;
-> > +             }
-> > +
-> > +             ret = sprd_thm_senor_calibration(sen_child, thm, sen);
-> > +             if (ret) {
-> > +                     dev_err(&pdev->dev, "efuse cal analysis failed");
-> > +                     goto disable_clk;
-> > +             }
-> > +
-> > +             sprd_thm_sensor_init(thm, sen);
-> > +
-> > +             sen->thmzone_dev =
-> > +                     devm_thermal_zone_of_sensor_register(sen->dev, sen->id,
-> > +                                                          sen, &sprd_thm_ops);
-> > +             if (IS_ERR(sen->thmzone_dev)) {
-> > +                     dev_err(&pdev->dev, "register thermal zone failed %d\n",
-> > +                             sen->id);
-> > +                     ret = PTR_ERR(sen->thmzone_dev);
-> > +                     goto disable_clk;
-> > +             }
-> > +
-> > +             thm->sensor[sen->id] = sen;
-> > +     }
-> > +
-> > +     ret = sprd_thm_set_ready(thm);
-> > +     if (ret)
-> > +             goto disable_clk;
-> > +
-> > +     ret = sprd_thm_wait_temp_ready(thm);
-> > +     if (ret)
-> > +             goto disable_clk;
-> > +
-> > +     for (i = 0; i < thm->nr_sensors; i++)
-> > +             thm->sensor[i]->ready = true;
->
-> You should replace 'ready' by the THERMAL_DEVICE_ENABLED/DISABLED (grep
-> it on the other drivers for reference) and/or call
-> devm_thermal_zone_of_sensor_register() here.
-
-Sure. I think we missed THERMAL_DEVICE_ENABLED/DISABLED flag.
-
-Thanks for your comments.
