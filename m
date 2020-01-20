@@ -2,94 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB01414325E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 20:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9E11433F4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 23:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgATTcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jan 2020 14:32:43 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:44773 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728205AbgATTcn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jan 2020 14:32:43 -0500
-Received: by mail-ed1-f66.google.com with SMTP id bx28so559132edb.11
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2020 11:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=I1roYPqxBJzWtUK/EbeI6Kt4sZi+JdSJm6qJbGHrPRZYvHUSh5jIrCeNC6L/G/f0o1
-         SOUBr7y32ZptFoyqXLV46mqkCVXIPksz6dHNenBfKH5ZmZaxgtbXfnD4DPiQngFU9XCO
-         yyR3xavKr41v/xLWwuSw91WJb2uX+wjZFxyyrAuDZ+hvXvCheAMdiLqD+HrlaysRfXCL
-         GNNQRcxyOsqzXo4wRH2J/upuPpeDO5ZRhzNY4HfuYgHfElCshp5fZYHSWkrBX0jAzQvX
-         wM9NfRj8QHz6JxUFOI+rZ3wcUi7Ikp+pHr28kaxr4n7py/KC1H5pYclpR4JTvoTIZ7Jv
-         h8rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=c87XKWAYoFM0zYZ5H61QH5Sce4FrzLanlERvZ4r771ORb5XvowdbUOLM1OCaU1TTkO
-         Xewms+eovVYnh5vBGeKDXtyuY7Mz1PW5PIjt5wO2yrmaCNErySpT3aRhB3HA2OR7wSLl
-         rPeHs8x/bmNRPeBCnIO/ZHRRGL/6RV/pJa/9w2XpC4GSjEvOzpguNhPRTshL4rnZw1xq
-         21t/YGm6ha07rINE68S6tajNgwyYS58epRdPVjlNSEc1aK4ZmMmsU5rq/8VOFNWu6aw2
-         IlqKlgluw++E7KOaMXvoqsiPWOz/H8DCf8pkTY/8jn7cJj+ADGdib6SmN48o7ESus8Eb
-         qJkw==
-X-Gm-Message-State: APjAAAW8eMzJln6bXkPQ03usxdnCW/R1AyCuUatNqu5MDxEcXCgpA5Pr
-        xTFuoUb4I8Pw0ZzD/Uk8LawUHInvB6UCtMwdVW8=
-X-Google-Smtp-Source: APXvYqwKjCT5QnfvXWtJkO29cRmoOGR1uhIhw9Ol6eYz9VuYzVaqX/o8Ejt2WLDxZ+bl2CebXLO8AWZ4Emn93SBTQws=
-X-Received: by 2002:a17:906:1fcd:: with SMTP id e13mr898516ejt.333.1579548761316;
- Mon, 20 Jan 2020 11:32:41 -0800 (PST)
+        id S1726894AbgATWdT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jan 2020 17:33:19 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37684 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726607AbgATWdT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jan 2020 17:33:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6395EwuwLp7BSh0SHkkcV4mhJoN9KeSV8+Z7AuG+fu8=; b=qdGAVTw11fJXgxBM+eQAMaXxy
+        1D5Rtb7kkwChm7QKLWThgRIslj0MkAT3Nh8tdZnzBKf04NAnn023dCn3v4MReCFJcqiFJ9lpsrulq
+        VBGBFcwGMtRCWq/IsPbNktlx8xHUsz9OTJNoOqMnPVdVOZksbUynpdqa8Y4wtdhhSlD/hb2c+Q7gt
+        XVfiwdUli55oTSiwOJghgXCNnlZK+E9t/Yzz3Wp0pOKizHheqUVEKHOi5kF/fb6/3eN2gTN2nvIaz
+        Q0naYmLro/AwhffJm81aofZHsBgwwKAyliBny3UxLvmPjQUTrSAppabTsRFXSPcYd9I81TnMJmHDf
+        kfs0VGvYQ==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1itfbi-0006nI-IH; Mon, 20 Jan 2020 22:33:18 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH -next] Documentation: cpu-idle-cooling: fix a SEVERE docs
+ build failure
+Message-ID: <712c1152-56b5-307f-b3f3-ed03a30b804a@infradead.org>
+Date:   Mon, 20 Jan 2020 14:33:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:32:40
- -0800 (PST)
-Reply-To: mcclainejohn.13@gmail.com
-From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
-Date:   Mon, 20 Jan 2020 20:32:40 +0100
-Message-ID: <CAOE+jABpcHQWZWhtskhDFbtTqfBe7h065WE2kC1G+jQD+tQiTA@mail.gmail.com>
-Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
- valued the sum of $12.8Million United States Dollars
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attn: Dear Beneficiary,
+From: Randy Dunlap <rdunlap@infradead.org>
 
-I wish to inform you that the diplomatic agent conveying your ATM CARD
-valued the sum of $12.8Million United States Dollars has misplaced
-your address and he is currently stranded at (George Bush
-International Airport) Houston Texas USA now
-We required you to reconfirm the following information's below to him
-so that he can deliver your Payment CARD to you today or tomorrow
-morning as information provided with open communications via email and
-telephone for security reasons.
-HERE IS THE DETAILS  HE NEED FROM YOU URGENT
-YOUR FULL NAME:========
-ADDRESS:========
-MOBILE NO:========
-NAME OF YOUR NEAREST AIRPORT:========
-A COPY OF YOUR IDENTIFICATION :========
+Sphinx ('make htmldocs') stops with a SEVERE error:
 
-Note; do contact the diplomatic agent immediately through the
-information's listed below
-Contact Person: Diplomatic Agent, Mr. Mcclaine John
-EMAIL: mcclainejohn.13@gmail.com
-Tel:(223) 777-7518
 
-Contact the diplomatic agent immediately
-because he is waiting to hear from you today with the needed information's.
+Sphinx parallel build error:
+SystemMessage: /home/rdunlap/lnx/next/linux-next-20200120/Documentation/driver-api/thermal/cpu-idle-cooling.rst:69: (SEVERE/4) Unexpected section title.
 
-NOTE: The Diplomatic agent does not know that the content of the
-consignment box is $12.800,000,00 Million United States Dollars and on
-no circumstances should you let him know the content. The consignment
-was moved from here as family treasures, so never allow him to open
-the box. Please I have paid delivery fees for you but the only money
-you must send to Mcclaine John is your ATM CARD delivery fee $25.00
-only. text Him as you contact Him Immediately
+^
+|
 
-Thanks,
-with Regards.
-Prof, William Roberts
-Director DHL COURIER SERVICES-Benin
+so fix the .rst file so that the SEVERE build error does not happen.
+Also fix another minor formatting warning (unexpected unindent).
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+Cc: linux-pm@vger.kernel.org
+
+---
+ Documentation/driver-api/thermal/cpu-idle-cooling.rst |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- linux-next-20200120.orig/Documentation/driver-api/thermal/cpu-idle-cooling.rst
++++ linux-next-20200120/Documentation/driver-api/thermal/cpu-idle-cooling.rst
+@@ -65,6 +65,8 @@ We use a fixed duration of idle injectio
+ performance penalty and a fixed latency. Mitigation can be increased
+ or decreased by modulating the duty cycle of the idle injection.
+ 
++::
++
+      ^
+      |
+      |
+@@ -91,6 +93,8 @@ computed.
+ The governor will change the cooling device state thus the duty cycle
+ and this variation will modulate the cooling effect.
+ 
++::
++
+      ^
+      |
+      |
+@@ -154,6 +158,7 @@ equation:
+ 
+  P(opp)target = ((Trunning x (P(opp)running) + (Tidle x P(opp)idle)) /
+ 			(Trunning + Tidle)
++
+   ...
+ 
+  Tidle = Trunning x ((P(opp)running / P(opp)target) - 1)
+
