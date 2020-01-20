@@ -2,219 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A5F143154
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 19:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B7714316E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 19:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgATSOC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jan 2020 13:14:02 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6625 "EHLO mga07.intel.com"
+        id S1727011AbgATS1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jan 2020 13:27:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:35484 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726876AbgATSOC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 20 Jan 2020 13:14:02 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jan 2020 10:14:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,342,1574150400"; 
-   d="scan'208";a="374382959"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2020 10:14:00 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1itbYl-000Hb6-H5; Tue, 21 Jan 2020 02:13:59 +0800
-Date:   Tue, 21 Jan 2020 02:13:35 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 971a12f8e68bf3b19eb1161e1fcefdf3b0573907
-Message-ID: <5e25edcf.kO1auxAqDHJDghhQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726642AbgATS1f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 20 Jan 2020 13:27:35 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A249731B;
+        Mon, 20 Jan 2020 10:27:34 -0800 (PST)
+Received: from [192.168.0.7] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2843F3F68E;
+        Mon, 20 Jan 2020 10:27:28 -0800 (PST)
+Subject: Re: [PATCH 1/4] PM / EM: and devices to Energy Model
+To:     Quentin Perret <qperret@google.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Morten.Rasmussen@arm.com, Chris.Redpath@arm.com,
+        ionela.voinescu@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, kernel-team@android.com
+References: <20200116152032.11301-1-lukasz.luba@arm.com>
+ <20200116152032.11301-2-lukasz.luba@arm.com>
+ <20200117105437.GA211774@google.com>
+ <40587d98-0e8d-cbac-dbf5-d26501d47a8c@arm.com>
+ <20200120150918.GA164543@google.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <8332c4ac-2a7d-1e2d-76e9-7c979a666257@arm.com>
+Date:   Mon, 20 Jan 2020 19:27:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20200120150918.GA164543@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 971a12f8e68bf3b19eb1161e1fcefdf3b0573907  Merge branch 'pm-cpuidle-next' into testing
+On 20/01/2020 16:09, Quentin Perret wrote:
+> Hey Lukasz,
+> 
+> On Monday 20 Jan 2020 at 14:52:07 (+0000), Lukasz Luba wrote:
+>> On 1/17/20 10:54 AM, Quentin Perret wrote:
+>>> Suggested alternative: have two registration functions like so:
+>>>
+>>> 	int em_register_dev_pd(struct device *dev, unsigned int nr_states,
+>>> 			       struct em_data_callback *cb);
+>>> 	int em_register_cpu_pd(cpumask_t *span, unsigned int nr_states,
+>>> 			       struct em_data_callback *cb);
+>>
+>> Interesting, in the internal review Dietmar asked me to remove these two
+>> functions. I had the same idea, which would simplify a bit the
+>> registration and it does not need to check the dev->bus if it is CPU.
+>>
+>> Unfortunately, we would need also two function in drivers/opp/of.c:
+>> dev_pm_opp_of_register_cpu_em(policy->cpus);
+>> and
+>> dev_pm_opp_of_register_dev_em(dev);
+>>
+>> Thus, I have created only one registration function, which you can see
+>> in this patch set.
+> 
+> Right, I can see how having a unified API would be appealing, but the
+> OPP dependency is a nono, so we'll need to work around one way or
+> another.
+> 
+> FWIW, I don't think having separate APIs for CPUs and other devices is
+> that bad given that we already have entirely different frameworks to
+> drive their respective frequencies. And the _cpu variants are basically
+> just wrappers around the _dev ones, so not too bad either IMO :).
 
-elapsed time: 400m
+It's true that we need the policy->cpus cpumask only for cpu devices and
+we have it available when we call em_register_perf_domain()
+[scmi-cpufreq.c driver] or the OPP wrapper dev_pm_opp_of_register_em()
+[e.g. cpufreq-dt.c driver].
 
-configs tested: 163
-configs skipped: 1
+And we shouldn't make EM code dependent on OPP.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+But can't we add 'struct cpumask *mask' as an additional argument to
+both which can be set to NULL for (devfreq) devices?
 
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-x86_64               randconfig-e001-20200120
-x86_64               randconfig-e002-20200120
-x86_64               randconfig-e003-20200120
-i386                 randconfig-e001-20200120
-i386                 randconfig-e002-20200120
-i386                 randconfig-e003-20200120
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                 randconfig-a001-20200120
-openrisc             randconfig-a001-20200120
-s390                 randconfig-a001-20200120
-sh                   randconfig-a001-20200120
-xtensa               randconfig-a001-20200120
-xtensa                       common_defconfig
-openrisc                    or1ksim_defconfig
-nios2                         3c120_defconfig
-xtensa                          iss_defconfig
-c6x                        evmc6678_defconfig
-c6x                              allyesconfig
-nios2                         10m50_defconfig
-openrisc                 simple_smp_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-x86_64               randconfig-g001-20200120
-x86_64               randconfig-g002-20200120
-x86_64               randconfig-g003-20200120
-i386                 randconfig-g001-20200120
-i386                 randconfig-g002-20200120
-i386                 randconfig-g003-20200120
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-x86_64               randconfig-d001-20200120
-x86_64               randconfig-d002-20200120
-x86_64               randconfig-d003-20200120
-i386                 randconfig-d001-20200120
-i386                 randconfig-d002-20200120
-i386                 randconfig-d003-20200120
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64               randconfig-c001-20200120
-x86_64               randconfig-c002-20200120
-x86_64               randconfig-c003-20200120
-i386                 randconfig-c001-20200120
-i386                 randconfig-c002-20200120
-i386                 randconfig-c003-20200120
-x86_64               randconfig-f001-20200120
-x86_64               randconfig-f002-20200120
-x86_64               randconfig-f003-20200120
-i386                 randconfig-f001-20200120
-i386                 randconfig-f002-20200120
-i386                 randconfig-f003-20200120
-ia64                                defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-c6x                  randconfig-a001-20200120
-h8300                randconfig-a001-20200120
-microblaze           randconfig-a001-20200120
-nios2                randconfig-a001-20200120
-sparc64              randconfig-a001-20200120
-x86_64               randconfig-a001-20200120
-x86_64               randconfig-a002-20200120
-x86_64               randconfig-a003-20200120
-i386                 randconfig-a001-20200120
-i386                 randconfig-a002-20200120
-i386                 randconfig-a003-20200120
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-arc                  randconfig-a001-20200120
-arm                  randconfig-a001-20200120
-arm64                randconfig-a001-20200120
-ia64                 randconfig-a001-20200120
-powerpc              randconfig-a001-20200120
-sparc                randconfig-a001-20200120
-x86_64               randconfig-b001-20200120
-x86_64               randconfig-b002-20200120
-x86_64               randconfig-b003-20200120
-i386                 randconfig-b001-20200120
-i386                 randconfig-b002-20200120
-i386                 randconfig-b003-20200120
-x86_64               randconfig-h001-20200120
-x86_64               randconfig-h002-20200120
-x86_64               randconfig-h003-20200120
-i386                 randconfig-h001-20200120
-i386                 randconfig-h002-20200120
-i386                 randconfig-h003-20200120
-c6x                  randconfig-a001-20200121
-h8300                randconfig-a001-20200121
-microblaze           randconfig-a001-20200121
-nios2                randconfig-a001-20200121
-sparc64              randconfig-a001-20200121
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+We can check in em_register_perf_domain() that we got a valid cpumask
+for a cpu device and ignore it for (devfreq) devices.
