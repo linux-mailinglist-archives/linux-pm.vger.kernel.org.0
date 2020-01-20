@@ -2,130 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D9514248A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 08:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0327F142801
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2020 11:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbgATHyl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jan 2020 02:54:41 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43139 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbgATHyl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jan 2020 02:54:41 -0500
-Received: by mail-pf1-f195.google.com with SMTP id x6so15428764pfo.10
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jan 2020 23:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CYF/yMkazN9ohF5HZpnUVmWUgzjjynUM6B5AyQbQ8DI=;
-        b=kMzHT4itIyuiyHK4KucdNwb5BjZ/PBbwK1c/kCgSQCMGcBggTbo32cDHbcBOvdfO5j
-         nKzWGPlunjzanj6kEoeBXsowUHJ9ddDOQKyXqK1jlUzruiof9Cf9gNurbsrsvI8CRM7N
-         rfNdvVJZk3TNLWQ04X37lKXtdDlbk8Gu/858sfS2ekEUn33RB/C0LH1rnxvCelKyzhU4
-         x8gTdW0PMOnT0yvJqs/mv1LWqWKRnC5goN9L/LOUzt7lVLORdOiMkH/cdZzQpSEPuW6y
-         meWHZNqLBsEMDf0MGxRKzBVb5B6xvtMSyvAjDgj4F0Zq3+19Hmc0jXE5zCkcqLhDnze4
-         I9qw==
+        id S1726148AbgATKQZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jan 2020 05:16:25 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44347 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgATKQY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jan 2020 05:16:24 -0500
+Received: by mail-ot1-f65.google.com with SMTP id h9so28126436otj.11;
+        Mon, 20 Jan 2020 02:16:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CYF/yMkazN9ohF5HZpnUVmWUgzjjynUM6B5AyQbQ8DI=;
-        b=ogzpYhkWUt1L8UqjnMLcaO2UbCs+un5Zfjput51QKP7q6PHpCxSX6cX+MK4u+6ZcuT
-         n4JfM78MOD4lYX22UreW71msqg+bmYqDCrlSZCZaPT9Ya5KhxQyGh8zcjJ6/KTN6ZFqP
-         qdWgSgSR750y86drUlizDqCE7+bTi3Qe+JuB+lY+i7K23xOUH4GS6JWwb2sObwN2UER+
-         juJCgd7mqnrulwntUA+xyd1hNP2GkfHvjczRdTtRyvA+roOWs2Kg/2U4u+WyxnDC2w90
-         1qtRsCZWJ1bCQhOOhqTeGKmToDTWU1Lec8qHXpkFpMW0bE1GocCw+RaVTyOl4SSJBuIN
-         OSHw==
-X-Gm-Message-State: APjAAAUuCslo4ncQLQtsFrreMn7jI7/6RGaWdOibLUK6LrW3DzML5Dgf
-        EZeJH4vF7twJie7suwnLXZgjTw==
-X-Google-Smtp-Source: APXvYqx4SGtEY07w4qJsswx2A9cg0+WMOfmB+F+8W25rXwbomSSyhlIueXer3aOIFxvjWZHU2MzFLw==
-X-Received: by 2002:a63:5d03:: with SMTP id r3mr58649765pgb.306.1579506880543;
-        Sun, 19 Jan 2020 23:54:40 -0800 (PST)
-Received: from localhost ([122.172.71.156])
-        by smtp.gmail.com with ESMTPSA id h3sm38524824pfr.15.2020.01.19.23.54.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 Jan 2020 23:54:39 -0800 (PST)
-Date:   Mon, 20 Jan 2020 13:24:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     qiwuchen55@gmail.com
-Cc:     mmayer@broadcom.com, rjw@rjwysocki.net, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chenqiwu <chenqiwu@xiaomi.com>
-Subject: Re: [PATCH v4] cpufreq: brcmstb-avs: fix imbalance of cpufreq policy
- refcount
-Message-ID: <20200120075438.pxscoeluf4qwblag@vireshk-i7>
-References: <1579506088-6736-1-git-send-email-qiwuchen55@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u5bfxqdMUxSLxjM/r63YRuvggOpa5byidD0DwyaZom4=;
+        b=BJw11PzLeRkKzO/CHRO8sze+GG7+j9Be0HQtfPyl0qgvAv5+vvfXHqPx7TrjzRHFbI
+         Q80LNt1tJOi2MQy+bEeyq0yEk4QqQUPrFme401ywrTggdsThTOYJEAEM1kpUAjTVodVA
+         tHq5xi9rgwEJ6QGWdbatxaVuJrOcmDRuSqNf76taYooDeNTKifesV09mcyJIz0J8VeYp
+         djlaj16F05ki93VU56VeuJW55KLDtC9+r7X18yc4n+YxmNPWHZ9YjUssnKTWTwwBzi63
+         pmeABfAD/aYVTTF6pyq63bh6zFs4PaPM5QL+Y+aUdO3qKX01pIOzqzu+d3XZ8x8dHfTk
+         0APw==
+X-Gm-Message-State: APjAAAUyEAkm7iVUV8hL1e8eE9qAH9iOTjWKThntY3qEC/AUxXVj7RWN
+        5pWmf4umuhJrkOoWliUNn1MNftRAAF72fpUbXfI=
+X-Google-Smtp-Source: APXvYqxrwVFJWvVYhz0+b+fpElzaDaCSySYGJ7rKzf41+oOEN1Oq5O54xFDy9zfFdwaqOiO/kBtXrBYBLdJPrZgt+wY=
+X-Received: by 2002:a05:6830:1651:: with SMTP id h17mr14630787otr.167.1579515383764;
+ Mon, 20 Jan 2020 02:16:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579506088-6736-1-git-send-email-qiwuchen55@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <201911151357.A9MjGImg%lkp@intel.com> <CAMuHMdX6-jb1W8uC2_237m8ctCpsnGp=JCxqt8pCWVqNXHmkVg@mail.gmail.com>
+In-Reply-To: <CAMuHMdX6-jb1W8uC2_237m8ctCpsnGp=JCxqt8pCWVqNXHmkVg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 20 Jan 2020 11:16:12 +0100
+Message-ID: <CAJZ5v0i4nezntZJRSpv-LOwE_ZkE5Vr+YHkwJ8tX5GgG64gB=Q@mail.gmail.com>
+Subject: Re: drivers/acpi/processor_thermal.c:66:1: warning: the frame size of
+ 2160 bytes is larger than 2048 bytes
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-01-20, 15:41, qiwuchen55@gmail.com wrote:
-> From: chenqiwu <chenqiwu@xiaomi.com>
-> 
-> brcm_avs_cpufreq_get() calls cpufreq_cpu_get() to get the cpufreq
-> policy, meanwhile, it also increments the kobject reference count
-> to mark it busy. However, a corresponding call of cpufreq_cpu_put()
-> is ignored to decrement the kobject reference count back, which may
-> lead to a potential stuck risk that the cpuhp thread deadly waits
-> for dropping of kobject refcount when cpufreq policy free.
-> 
-> With this patch, the cpuhp thread can be easily exercised by
-> attempting to force an unbind of the CPUfreq driver.
-> 
-> Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
-> ---
-> changes in v4:
->  - Rewrit commit message.
->  - Use cpufreq_cpu_get() and a corresponding cpufreq_cpu_put()
->    instead of cpufreq_get_policy() for promoting efficiency.
-> ---
->  drivers/cpufreq/brcmstb-avs-cpufreq.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> index 77b0e5d..0767206 100644
-> --- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> +++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> @@ -453,7 +453,13 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
->  static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
->  {
->  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> -	struct private_data *priv = policy->driver_data;
-> +	struct private_data *priv;
-> +
-> +	if (!policy)
-> +		return 0;
-> +
+On Fri, Jan 17, 2020 at 4:51 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Rafael, Viresh,
+>
+> On Fri, Nov 15, 2019 at 6:23 AM kbuild test robot <lkp@intel.com> wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   96b95eff4a591dbac582c2590d067e356a18aacb
+> > commit: 3000ce3c52f8b8db093e4dc649cd172390f71137 cpufreq: Use per-policy frequency QoS
+> > date:   4 weeks ago
+> > config: ia64-randconfig-a001-20191115 (attached as .config)
+> > compiler: ia64-linux-gcc (GCC) 7.4.0
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         git checkout 3000ce3c52f8b8db093e4dc649cd172390f71137
+> >         # save the attached .config to linux build tree
+> >         GCC_VERSION=7.4.0 make.cross ARCH=ia64
+> >
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kbuild test robot <lkp@intel.com>
+>
+> Seeing similar warnings on arm64, so this triggered my attention.
+>
+> > --
+> >    drivers/cpufreq/cpufreq.c: In function 'refresh_frequency_limits.part.33':
+> > >> drivers/cpufreq/cpufreq.c:1116:1: warning: the frame size of 2160 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+>
+> |       struct cpufreq_policy new_policy;
+>
+> That's a large struct on the stack...
+>
+> |       if (!policy_is_inactive(policy)) {
+> |               new_policy = *policy;
+>
+> Let's make a copy?
+> How well does this work, given struct cpufreq_policy contains a
+> work_struct, list_head, kobject, completion, semaphore, spinlock_t,
+> wait_queue_head_t, and two notifier_blocks, which are all objects you
+> cannot just copy and reuse?
+>
+> |               pr_debug("updating policy for CPU %u\n", policy->cpu);
+> |
+> |               cpufreq_set_policy(policy, &new_policy);
+>
+> If cpufreq_set_policy() uses only a few fields from new_policy,
 
-As I told you earlier, this isn't required as policy can't be NULL here.
+That's really the case.
 
-> +	priv = policy->driver_data;
-> +	cpufreq_cpu_put(policy);
->  
->  	return brcm_avs_get_frequency(priv->base);
->  }
+> it might be a good idea to extract those into its own structure.
 
-Applied the patch with following diff:
+Or organize the code differently.
 
-req/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-index 77b0e5d0fb13..4f86ce2db34f 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -455,6 +455,8 @@ static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
-        struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-        struct private_data *priv = policy->driver_data;
- 
-+       cpufreq_cpu_put(policy);
-+
-        return brcm_avs_get_frequency(priv->base);
- }
- 
+This is old code that hasn't been change, but I'll look at it since it
+is problematic.
 
--- 
-viresh
+Thanks!
