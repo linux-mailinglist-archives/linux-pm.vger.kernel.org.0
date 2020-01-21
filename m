@@ -2,98 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4DA144748
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 23:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CFC14474D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 23:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbgAUWZu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jan 2020 17:25:50 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:59562 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728139AbgAUWZu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 17:25:50 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 298681C013F; Tue, 21 Jan 2020 23:25:48 +0100 (CET)
-Date:   Tue, 21 Jan 2020 23:25:47 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Merlijn Wajer <merlijn@wizzup.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, "Arthur D." <spinal.by@gmail.com>
-Subject: Re: [PATCH 1/3] RFC: power: supply: cpcap-battery: Add helper for
- rough capacity
-Message-ID: <20200121222547.GA17712@duo.ucw.cz>
-References: <20200119201124.29620-1-tony@atomide.com>
- <20200121095712.GC6934@amd>
- <db73a651-afc4-5c3d-0610-ccb13b8cc0d3@wizzup.org>
+        id S1725933AbgAUW3R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jan 2020 17:29:17 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:35748 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725876AbgAUW3R (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Jan 2020 17:29:17 -0500
+Received: from mail.linser.at ([80.109.168.170] helo=phil.Hitronhub.home)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1iu21I-0005qo-Hh; Tue, 21 Jan 2020 23:29:12 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     khilman@kernel.org, nm@ti.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        christoph.muellner@theobroma-systems.com, heiko@sntech.de,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Subject: [PATCH] PM / AVS: rockchip-io: fix the supply naming for the emmc supply on px30
+Date:   Tue, 21 Jan 2020 23:28:59 +0100
+Message-Id: <20200121222859.4069263-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
-Content-Disposition: inline
-In-Reply-To: <db73a651-afc4-5c3d-0610-ccb13b8cc0d3@wizzup.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
---/04w6evG8XlLl3ft
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The supply going to the emmc/flash is named vccio6, not vccio0 and while
+the code does this correctly already, the comments and error output do not.
 
-Hi!
+So just change these values to the correct ones.
 
-> >> Get a rough battery charge estimate until we've seen a high or low
-> >> battery level. After that we can use the coulomb counter to calculate
-> >> the battery capacity.
-> >>
-> >> Note that I should probably update this to support ocv-capacity-table
-> >> before this makes sense to apply. With ocv-capacity-table we should be
-> >> able to estimate battery state as described in the documentation for
-> >> Documentation/devicetree/bindings/power/supply/battery.txt.
-> >=20
-> > Maybe we should let userspace do that?
-> >=20
-> > https://github.com/pavelmachek/libbattery
->=20
-> Unless this gets integrated in UPower, My point of view is that
-> userspace probably wants some uniform approach. Kernel interface
-> definitely is one uniform interface that would also get picked up by UPow=
-er.
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+---
+ drivers/power/avs/rockchip-io-domain.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I see that it is convenient to have it in kernel. I just assumed
-Sebastian would not take that, because it does not _need_ to be in
-kernel...
+diff --git a/drivers/power/avs/rockchip-io-domain.c b/drivers/power/avs/rockchip-io-domain.c
+index 398fc954419e..eece97f97ef8 100644
+--- a/drivers/power/avs/rockchip-io-domain.c
++++ b/drivers/power/avs/rockchip-io-domain.c
+@@ -152,18 +152,18 @@ static void px30_iodomain_init(struct rockchip_iodomain *iod)
+ 	int ret;
+ 	u32 val;
+ 
+-	/* if no VCCIO0 supply we should leave things alone */
++	/* if no VCCIO6 supply we should leave things alone */
+ 	if (!iod->supplies[PX30_IO_VSEL_VCCIO6_SUPPLY_NUM].reg)
+ 		return;
+ 
+ 	/*
+-	 * set vccio0 iodomain to also use this framework
++	 * set vccio6 iodomain to also use this framework
+ 	 * instead of a special gpio.
+ 	 */
+ 	val = PX30_IO_VSEL_VCCIO6_SRC | (PX30_IO_VSEL_VCCIO6_SRC << 16);
+ 	ret = regmap_write(iod->grf, PX30_IO_VSEL, val);
+ 	if (ret < 0)
+-		dev_warn(iod->dev, "couldn't update vccio0 ctrl\n");
++		dev_warn(iod->dev, "couldn't update vccio6 ctrl\n");
+ }
+ 
+ static void rk3288_iodomain_init(struct rockchip_iodomain *iod)
+-- 
+2.24.1
 
-And maybe it is easier in userspace, since userspace has access to
-persistent storage, so it can store detailed battery calibration
-parameters? (And Gnome/Mate even does something like that, see
-mate-power-statistics).
-
-So... not my decision. Don't care too much either way. I have been
-doing this in userspace, but...
-
-What I'd like to see is some kind of indication that "this attribute
-is not from hardware, kernel computed it for you" so clever userspace
-can ignore it/compute it in more advanced way.
-
-Best regards,
-
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---/04w6evG8XlLl3ft
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXid6awAKCRAw5/Bqldv6
-8hiVAJoCECzK3dmkjV9JCaZ/ZaxxL6XJLgCfbj/EfZum9xpiGvFPw9zLtlbf2nU=
-=e/PU
------END PGP SIGNATURE-----
-
---/04w6evG8XlLl3ft--
