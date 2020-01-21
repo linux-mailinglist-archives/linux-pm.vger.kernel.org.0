@@ -2,83 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 569A4144098
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 16:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB9114428E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 17:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729096AbgAUPg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jan 2020 10:36:57 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59042 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727817AbgAUPg5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 10:36:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=A2Jl2bLHZhl7wIlCaLkS8vYGcnAwtZe/zKKDWk316Z0=; b=O8ypNryAqkVOOcR5KkTRtyOQ0
-        MCrTL2KY6noTexMRlTYtRKHeguvWokumk4A7tO8qrdo1y5cOonXRgPEzrzcysvD6CSyc62hJ5sdEb
-        KQbuDKOv3jA3W1Rta99+2+Udf2uU+B1HHk3+kMvAoPIuzcL5La8dCvzACWGwVIxzDbu0krATbH5XL
-        bufhzWJ48Bwjr8H/6pBlcuQBlZWdaLx8oA1QQvT1aZoSNk8XkH/9tMsgjg/WAgz40VFKsb38Biywj
-        8fvE/zKO7azHt08wvmIbi7/jdzGDEuFxT1HSVgtqiYtfz6oi3ornGddMAfoQ3AbYgKgAvA3kEiCwh
-        DDeXmC2ag==;
-Received: from [2601:1c0:6280:3f0::ed68]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1itvaK-0000MG-MK; Tue, 21 Jan 2020 15:36:56 +0000
-Subject: Re: [PATCH v2] cpuidle: fix kernel doc warnings
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200121082758.8808-1-benjamin.gaignard@st.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4c2b0c6f-c0d7-5866-44cf-e32d84c4261a@infradead.org>
-Date:   Tue, 21 Jan 2020 07:36:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726968AbgAUQzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jan 2020 11:55:11 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39161 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbgAUQzL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 11:55:11 -0500
+Received: by mail-oi1-f196.google.com with SMTP id z2so3206748oih.6;
+        Tue, 21 Jan 2020 08:55:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YOvmrPQfd4U+qe0npdLRSLPDRxtxwmXyCEJF2rCC57c=;
+        b=aUxl7/f2Y7WmzIKKQfxr4ej+2RjkUStKIU4kvQVes/B7NkbmszbBOTJgdIT5831egG
+         DSe5MIEWNhF131GVHqa8BOd149pxnFgyOZQLJQe3FgddWCtAI131nhIZnqLfNNY5eBqq
+         k1mNEQwK+BwBxZs/dvZCrcCe8lUp5Dojw4APd/7mcBUYoJRYZq4RQM28f691wtrAtLhT
+         4PXtgvPE7wpgxbBiHsTisSf12/iTj73V3c764gUcotjnIdZ4KDlqhF0wTxZBi9zoZ4vk
+         jDii8kwmHiwcrLhaMhPJ2j/58RXhJnaBm8fi3fOq/ZCpOsj9K2wz8nEiCyCgXQyYeuJ3
+         lIcg==
+X-Gm-Message-State: APjAAAXDMG7a1CKZsznlJo6sl4McUtnTTwzCQB47F0UsxwBnms6YkwhN
+        mJ4zrTjQ7mpB2vTqNOVHCJPFashrcZzrdt+KOH4hIj9Q
+X-Google-Smtp-Source: APXvYqzxhaTNpRA+5QY5lrzk0qTtFHFllDefpDwTO21p0OhCoMM91mHZwlny6DTxv1uDaOC3GQXhW9wqrgPPbogY/54=
+X-Received: by 2002:a54:4e96:: with SMTP id c22mr3770244oiy.110.1579625710490;
+ Tue, 21 Jan 2020 08:55:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200121082758.8808-1-benjamin.gaignard@st.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1579568452-27253-1-git-send-email-chanho.min@lge.com>
+In-Reply-To: <1579568452-27253-1-git-send-email-chanho.min@lge.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Jan 2020 17:54:58 +0100
+Message-ID: <CAJZ5v0hP4S3+8yNZkbWAUaQof_ikar+w3F8Li6zvPSJcKif3NQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / sleep: fix use-after-free on async resume
+To:     Chanho Min <chanho.min@lge.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daewoong Kim <daewoong00.kim@lge.com>,
+        Seokjoo Lee <seokjoo.lee@lge.com>,
+        Lee Gunho <gunho.lee@lge.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/21/20 12:27 AM, Benjamin Gaignard wrote:
-> Fix cpuidle_find_deepest_state() kernel documentation to avoid warnings when compiling with W=1.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+On Tue, Jan 21, 2020 at 2:31 AM Chanho Min <chanho.min@lge.com> wrote:
+>
+> Some device can be released during suspend (e.g. usb disconnection).
+> But, Its child device still use dev->parent's lock in dpm_wait().
+> It can be ocurred use-after-free as bellows. This is happened during
+> usb resume in practice.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+In that case the resume of the child is going to be carried out after
+its parent has gone away, which is generally incorrect..
 
-Thanks.
-
+> device hierarchy: "1-1" <- "1-1:1.2" <- "ep83"
+>
+> <parent>                <child>
+> device_resume("1-1:1.2")
+> dpm_wait("1-1")
+>                         device_resume("ep_83");
+>                         dpm_wait("1-1:1.2");
+>  usb_disconnect
+>   put_device("1-1:1.2")
+>
+> put_device("1-1:1.2")
+>  usb_release_interface
+>  kfree(intf) <- "1-1:1.2"'s struct device is freed
+>
+>                          wait_for_common
+>                          do {
+>                          ...
+>                          spin_lock_irq(&x->wait.lock); <- "1-1:1-2"'s lock
+>                          } while (!x->done && timeout);
+>
+> This is call stack of the system hang caused by freed lock value in practice.
+>
+> Call trace:
+> [<ffffffc000ef59a8>] _raw_spin_lock_irq+0x38/0x80
+> [<ffffffc000ef2dac>] wait_for_common+0x12c/0x140
+> [<ffffffc000ef2dd4>] wait_for_completion+0x14/0x20
+> [<ffffffc000480c1c>] dpm_wait+0x5c/0xb0
+> [<ffffffc0004813d8>] device_resume+0x78/0x320
+> [<ffffffc000481ed4>] async_resume+0x24/0xe0
+> [<ffffffc0000c671c>] async_run_entry_fn+0x54/0x158
+> [<ffffffc0000bd720>] process_one_work+0x1e8/0x4b0
+> [<ffffffc0000bdb10>] worker_thread+0x128/0x4b8
+> [<ffffffc0000c3a14>] kthread+0x10c/0x110
+> [<ffffffc00008ddd0>] ret_from_fork+0x10/0x40
+>
+> To prevent such use-after-free, dpm_wait_for_parent() keeps parent's reference
+> using get/put_device even if it is disconnected.
+>
+> Signed-off-by: Chanho Min <chanho.min@lge.com>
+> Signed-off-by: Daewoong Kim <daewoong00.kim@lge.com>
 > ---
-> CC: rdunlap@infradead.org
-> version 2:
-> - fix the comment done by Randy
->  drivers/cpuidle/cpuidle.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 33d19c8eb027..19c6dee88921 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -121,6 +121,9 @@ void cpuidle_use_deepest_state(u64 latency_limit_ns)
->   * cpuidle_find_deepest_state - Find the deepest available idle state.
->   * @drv: cpuidle driver for the given CPU.
->   * @dev: cpuidle device for the given CPU.
-> + * @latency_limit_ns: Idle state exit latency limit
-> + *
-> + * Return: the index of the deepest available idle state.
+>  drivers/base/power/main.c | 22 +++++++++++++++++++---
+>  1 file changed, 19 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index f946511..95a7499 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -234,13 +234,29 @@ static void initcall_debug_report(struct device *dev, ktime_t calltime,
+>   * @dev: Device to wait for.
+>   * @async: If unset, wait only if the device's power.async_suspend flag is set.
 >   */
->  int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  			       struct cpuidle_device *dev,
-> 
+> +static void _dpm_wait(struct device *dev, bool async)
+> +{
+> +       if (async || (pm_async_enabled && dev->power.async_suspend))
+> +               wait_for_completion(&dev->power.completion);
+> +}
+> +
+>  static void dpm_wait(struct device *dev, bool async)
+>  {
+>         if (!dev)
+>                 return;
+>
+> -       if (async || (pm_async_enabled && dev->power.async_suspend))
+> -               wait_for_completion(&dev->power.completion);
+> +       _dpm_wait(dev, async);
+> +}
+> +
+> +static void dpm_wait_for_parent(struct device *dev, bool async)
+> +{
+> +       if (dev && dev->parent) {
+> +               struct device *dev_p = dev->parent;
+> +
 
+This is racy, because the parent may have gone away already before the
+get_device() below.
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> +               get_device(dev_p);
+> +               _dpm_wait(dev_p, async);
+> +               put_device(dev_p);
+> +       }
+>  }
+>
+>  static int dpm_wait_fn(struct device *dev, void *async_ptr)
+> @@ -277,7 +293,7 @@ static void dpm_wait_for_suppliers(struct device *dev, bool async)
+>
+>  static void dpm_wait_for_superior(struct device *dev, bool async)
+>  {
+> -       dpm_wait(dev->parent, async);
+> +       dpm_wait_for_parent(dev, async);
+>         dpm_wait_for_suppliers(dev, async);
+>  }
+>
+> --
+
+Something a bit more sophisticated is needed here, let me think about that.
