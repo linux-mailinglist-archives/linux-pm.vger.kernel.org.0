@@ -2,109 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0B71442DA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 18:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104251444C8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 20:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgAURLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jan 2020 12:11:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41048 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728829AbgAURLa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 Jan 2020 12:11:30 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 457E2206A2;
-        Tue, 21 Jan 2020 17:11:26 +0000 (UTC)
-Date:   Tue, 21 Jan 2020 12:11:24 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     lukasz.luba@arm.com
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com, Morten.Rasmussen@arm.com,
-        Dietmar.Eggemann@arm.com, Chris.Redpath@arm.com,
-        ionela.voinescu@arm.com, javi.merino@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
-        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
-        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, patrick.bellasi@matbug.net
-Subject: Re: [PATCH 3/4] thermal: devfreq_cooling: Refactor code and switch
- to use Energy Model
-Message-ID: <20200121121124.1a1f3175@gandalf.local.home>
-In-Reply-To: <20200116152032.11301-4-lukasz.luba@arm.com>
-References: <20200116152032.11301-1-lukasz.luba@arm.com>
-        <20200116152032.11301-4-lukasz.luba@arm.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1729134AbgAUTFZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jan 2020 14:05:25 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40069 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729099AbgAUTFY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 14:05:24 -0500
+Received: by mail-pf1-f195.google.com with SMTP id q8so1957479pfh.7
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2020 11:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Pa59fYCDlAe6Tpwao7wMVi6YpE63nP24dCm06l2iicc=;
+        b=ImkOggh07bXyDGZ5/RZe49clFsRhDpDFfmsQ2CJ63cUE/5jBCzcy5pNKeRTQ8ES55B
+         mM3tBSmTjGO/z562nUCoeaJZaBO3v1e/uEoLtxVhRzIaWkx1FqFQcKBqVZXeTr1lrl5K
+         mPR+YrzSRr0zPuKGgzTgzxboWVJ+td5/fYjJE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Pa59fYCDlAe6Tpwao7wMVi6YpE63nP24dCm06l2iicc=;
+        b=H0wwsjwqC8vquMx65iMmkrEpLLJ9je2JRz3BXPPnxp139jnsb9EvTRPUAO270yWuBZ
+         pItjKdFNI9S3UJeJ3zR8kjLLJcFT6t2HjSWn9jKD9TiVmaEJOOmQ37TkPaDIHAmYMZX3
+         u97gFV+9Yr7F87sB0Vda/RtPk9TqR0/dEriYOFW4M7iSliLi+Z7bhLs28dLlkuProNFv
+         Dim+7d8q1KDb11TCTsKif1RioDsedgfUmA+8VVMDVohcAwaTkitbXCXeJDOqPTwGo5QO
+         102MdmJNypECcBh8C8Ttw4odiwpk73ByhgHLlXW5eBGH35NCvLkhGzC76SBknT5hG1Lb
+         2TUw==
+X-Gm-Message-State: APjAAAWiwvm5gOdeWmCbcz+1GMcO+uu4XOMR4YnpouJw5ETftEDZxEj4
+        8OQxhqEolXJXeAQxXjLd5/Uuew==
+X-Google-Smtp-Source: APXvYqxm51yEBdJrV3LGqLaPvhqBlzgHVrjIRyZodBwEGeiX8FCB2IV12uXzvx5oAHAAFK+2KrrOPQ==
+X-Received: by 2002:a63:4850:: with SMTP id x16mr7279208pgk.334.1579633524281;
+        Tue, 21 Jan 2020 11:05:24 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id 80sm44717385pfw.123.2020.01.21.11.05.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jan 2020 11:05:23 -0800 (PST)
+Date:   Tue, 21 Jan 2020 11:05:21 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Maulik Shah <mkshah@codeaurora.org>
+Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, bjorn.andersson@linaro.org,
+        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
+        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org
+Subject: Re: [PATCH v2 0/6] Add RSC power domain support
+Message-ID: <20200121190521.GT89495@google.com>
+References: <20190823081703.17325-1-mkshah@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190823081703.17325-1-mkshah@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 16 Jan 2020 15:20:31 +0000
-lukasz.luba@arm.com wrote:
+Hi Maulik,
 
-> diff --git a/include/trace/events/thermal.h b/include/trace/events/thermal.h
-> index 135e5421f003..8a5f04888abd 100644
-> --- a/include/trace/events/thermal.h
-> +++ b/include/trace/events/thermal.h
-> @@ -153,31 +153,30 @@ TRACE_EVENT(thermal_power_cpu_limit,
->  TRACE_EVENT(thermal_power_devfreq_get_power,
->  	TP_PROTO(struct thermal_cooling_device *cdev,
->  		 struct devfreq_dev_status *status, unsigned long freq,
-> -		u32 dynamic_power, u32 static_power, u32 power),
-> +		u32 power),
->  
-> -	TP_ARGS(cdev, status,  freq, dynamic_power, static_power, power),
-> +	TP_ARGS(cdev, status,  freq, power),
->  
->  	TP_STRUCT__entry(
->  		__string(type,         cdev->type    )
->  		__field(unsigned long, freq          )
-> -		__field(u32,           load          )
-> -		__field(u32,           dynamic_power )
-> -		__field(u32,           static_power  )
-> +		__field(u32,           busy_time)
-> +		__field(u32,           total_time)
->  		__field(u32,           power)
->  	),
->  
->  	TP_fast_assign(
->  		__assign_str(type, cdev->type);
->  		__entry->freq = freq;
-> -		__entry->load = (100 * status->busy_time) / status->total_time;
-> -		__entry->dynamic_power = dynamic_power;
-> -		__entry->static_power = static_power;
-> +		__entry->busy_time = status->busy_time;
-> +		__entry->total_time = status->total_time;
->  		__entry->power = power;
->  	),
->  
-> -	TP_printk("type=%s freq=%lu load=%u dynamic_power=%u static_power=%u power=%u",
-> +	TP_printk("type=%s freq=%lu load=%u power=%u",
->  		__get_str(type), __entry->freq,
-> -		__entry->load, __entry->dynamic_power, __entry->static_power,
-> +		__entry->total_time == 0 ? 0 :
-> +			(100 * __entry->busy_time) / __entry->total_time,
->  		__entry->power)
->  );
->  
+What is the status of this series? It seems it hasn't been updated since
+you sent it in August last year. Do you plan to send a v3 in the near future
+to address the outstanding comments?
 
-Tracing updates look fine to me. Having the division on the output
-makes more sense.
+Thanks
 
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org> # for tracing code
+Matthias
 
--- Steve
+On Fri, Aug 23, 2019 at 01:46:57PM +0530, Maulik Shah wrote:
+> Changes in v2:
+> - Add Stephen's Reviewed-By to the first three patches
+> - Addressed Stephen's comments on fourth patch
+> - Include changes to connect rpmh domain to cpuidle and genpds
+> 
+> Resource State Coordinator (RSC) is responsible for powering off/lowering
+> the requirements from CPU subsystem for the associated hardware like buses,
+> clocks, and regulators when all CPUs and cluster is powered down.
+> 
+> RSC power domain uses last-man activities provided by genpd framework based on
+> Ulf Hansoon's patch series[1], when the cluster of CPUs enter deepest idle
+> states. As a part of domain poweroff, RSC can lower resource state requirements
+> by flushing the cached sleep and wake state votes for resources.
+> 
+> Dependencies:
+> 
+> [1] https://lkml.org/lkml/2019/5/13/839
+> 
+> Maulik Shah (6):
+>   drivers: qcom: rpmh: fix macro to accept NULL argument
+>   drivers: qcom: rpmh: remove rpmh_flush export
+>   dt-bindings: soc: qcom: Add RSC power domain specifier
+>   drivers: qcom: rpmh-rsc: Add RSC power domain support
+>   arm64: dts: Convert to the hierarchical CPU topology layout for sdm845
+>   arm64: dts: Add rsc power domain for sdm845
+> 
+>  .../devicetree/bindings/soc/qcom/rpmh-rsc.txt |   8 ++
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          | 105 +++++++++++++-----
+>  drivers/soc/qcom/rpmh-internal.h              |   3 +
+>  drivers/soc/qcom/rpmh-rsc.c                   |  84 ++++++++++++++
+>  drivers/soc/qcom/rpmh.c                       |  22 ++--
+>  include/soc/qcom/rpmh.h                       |   5 -
+>  6 files changed, 185 insertions(+), 42 deletions(-)
+> 
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
+> 
