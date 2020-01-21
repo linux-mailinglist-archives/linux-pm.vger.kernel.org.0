@@ -2,88 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26729143D02
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 13:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569A4144098
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 16:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbgAUMjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jan 2020 07:39:09 -0500
-Received: from fsfla.org ([217.69.89.142]:58568 "EHLO fsfla.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727059AbgAUMjJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 Jan 2020 07:39:09 -0500
-X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Jan 2020 07:39:08 EST
-Received: from free.home (177.205.27.213.dynamic.adsl.gvt.net.br [177.205.27.213])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by fsfla.org (Postfix) with ESMTPSA id 37620A2B7C;
-        Tue, 21 Jan 2020 12:31:13 +0000 (UTC)
-Received: from livre.home (livre.home [172.31.160.2])
-        by free.home (8.15.2/8.15.2) with ESMTPS id 00LCUjG21635112
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jan 2020 09:30:47 -0300
-From:   Alexandre Oliva <lxoliva@fsfla.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, paul.burton@mips.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: [PATCH] [Loongson2F] adjust cpufreq uses of LOONGSON_CHIPCFG
-Organization: Free thinker, not speaking for FSF Latin America
-References: <or5zh9l5ok.fsf@livre.home>
-        <20200120180612.gurkikzbh77stk4v@pburton-laptop>
-        <20200121045354.2ugc6u2p6j7k6kof@vireshk-i7>
-Date:   Tue, 21 Jan 2020 09:30:45 -0300
-In-Reply-To: <20200121045354.2ugc6u2p6j7k6kof@vireshk-i7> (Viresh Kumar's
-        message of "Tue, 21 Jan 2020 10:23:54 +0530")
-Message-ID: <oro8uxgfey.fsf@livre.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1729096AbgAUPg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jan 2020 10:36:57 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59042 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727817AbgAUPg5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 10:36:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=A2Jl2bLHZhl7wIlCaLkS8vYGcnAwtZe/zKKDWk316Z0=; b=O8ypNryAqkVOOcR5KkTRtyOQ0
+        MCrTL2KY6noTexMRlTYtRKHeguvWokumk4A7tO8qrdo1y5cOonXRgPEzrzcysvD6CSyc62hJ5sdEb
+        KQbuDKOv3jA3W1Rta99+2+Udf2uU+B1HHk3+kMvAoPIuzcL5La8dCvzACWGwVIxzDbu0krATbH5XL
+        bufhzWJ48Bwjr8H/6pBlcuQBlZWdaLx8oA1QQvT1aZoSNk8XkH/9tMsgjg/WAgz40VFKsb38Biywj
+        8fvE/zKO7azHt08wvmIbi7/jdzGDEuFxT1HSVgtqiYtfz6oi3ornGddMAfoQ3AbYgKgAvA3kEiCwh
+        DDeXmC2ag==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1itvaK-0000MG-MK; Tue, 21 Jan 2020 15:36:56 +0000
+Subject: Re: [PATCH v2] cpuidle: fix kernel doc warnings
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200121082758.8808-1-benjamin.gaignard@st.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <4c2b0c6f-c0d7-5866-44cf-e32d84c4261a@infradead.org>
+Date:   Tue, 21 Jan 2020 07:36:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84
+In-Reply-To: <20200121082758.8808-1-benjamin.gaignard@st.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The post-fork cleanup of loongson2ef from loongson64 changed
-LOONGSON_CHIPCFG from a single-argument functional macro to a
-non-functional macro with an mmio address in loongson2ef, but
-loongson2_cpufreq still uses the notation of a functional macro call
-expecting it to be an lvalue.  Fixed based on loongson_suspend_enter.
+On 1/21/20 12:27 AM, Benjamin Gaignard wrote:
+> Fix cpuidle_find_deepest_state() kernel documentation to avoid warnings when compiling with W=1.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
 
-Signed-off-by: Alexandre Oliva <lxoliva@fsfla.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
-Cc: paul.burton@mips.com
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/loongson2_cpufreq.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index 84f0eee..ace2d46 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -144,9 +144,11 @@ static void loongson2_cpu_wait(void)
- 	u32 cpu_freq;
- 
- 	spin_lock_irqsave(&loongson2_wait_lock, flags);
--	cpu_freq = LOONGSON_CHIPCFG(0);
--	LOONGSON_CHIPCFG(0) &= ~0x7;	/* Put CPU into wait mode */
--	LOONGSON_CHIPCFG(0) = cpu_freq;	/* Restore CPU state */
-+	cpu_freq = readl(LOONGSON_CHIPCFG);
-+	/* Put CPU into wait mode */
-+	writel(readl(LOONGSON_CHIPCFG) & ~0x7, LOONGSON_CHIPCFG);
-+	/* Restore CPU state */
-+	writel(cpu_freq, LOONGSON_CHIPCFG);
- 	spin_unlock_irqrestore(&loongson2_wait_lock, flags);
- 	local_irq_enable();
- }
--- 
-2.7.4
+Thanks.
+
+> ---
+> CC: rdunlap@infradead.org
+> version 2:
+> - fix the comment done by Randy
+>  drivers/cpuidle/cpuidle.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 33d19c8eb027..19c6dee88921 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -121,6 +121,9 @@ void cpuidle_use_deepest_state(u64 latency_limit_ns)
+>   * cpuidle_find_deepest_state - Find the deepest available idle state.
+>   * @drv: cpuidle driver for the given CPU.
+>   * @dev: cpuidle device for the given CPU.
+> + * @latency_limit_ns: Idle state exit latency limit
+> + *
+> + * Return: the index of the deepest available idle state.
+>   */
+>  int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+>  			       struct cpuidle_device *dev,
+> 
+
 
 -- 
-Alexandre Oliva, freedom fighter   he/him   https://FSFLA.org/blogs/lxo
-Free Software Evangelist           Stallman was right, but he's left :(
-GNU Toolchain Engineer    FSMatrix: It was he who freed the first of us
-FSF & FSFLA board member                The Savior shall return (true);
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
