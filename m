@@ -2,158 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 698DD143A54
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 11:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DDA143A84
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2020 11:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgAUKDw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jan 2020 05:03:52 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:14578 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729609AbgAUKDv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 05:03:51 -0500
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa6.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: jiRiUdriH6fooGUBe7iwl9WoBzf4bwWUEldyEi3ggEBjOQ+6ev9cGg3bD75OjmO7RIDUDCidr9
- 06SGTgNA6tOhpLqkLnHxZ/HbBq4tTgHbl8nc/G62BwDYb+/VN/ZL1mGbk2pQ6vw3zRkRozbYRf
- k1KotOvjcPaRJ6rT6oNsFGxa5iBIU/QW7nzBfgKlA9E71scW6lejHeEKWu2UpUPVoRPvu4hw2Z
- 1BUBLUuBaFvvzGORjyRQ4bq5+653dW/pbE8qV5wzSgK4Hpkz2+4Q2yuGfla583ALoXl48i0FQK
- V6Y=
-X-IronPort-AV: E=Sophos;i="5.70,345,1574146800"; 
-   d="scan'208";a="61482013"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jan 2020 03:03:50 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 21 Jan 2020 03:03:41 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Tue, 21 Jan 2020 03:03:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=egD5L33uChgUe9f2/fGWwAFJ+K+Wc1eT2q5z8clrlPc9o5nkyb3d03JjTiOYm0NoRhtuYQAg7JJVpZk3F4IJrcPDk2DRA9JYLJPDYKkjkbXiMXUWL0vFTxmeQJ1T+mH4Zz28GXzhVAy4NRzeBG91lQDPkxT6OShqEMy07shkoTKMDHYIHRriPTOAnOQ6GUVmcmw+8hHsJtCCav8TWIm90amwP3RgFSsTOBpCnNGCQ6j+FGAqzIliJPkDRxO8uBkMNFY9XyIgcZ4PkGet0FAWrWgLY6Oo66WnBMuz42NgyXPpSu46yNBEpvcJ2MKdMMtaERT+8cACcKUWffxA0VfV5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CTDz3/gEuQTOjIc8iOtlt7s25+PU0XWggdpv+NKrLBU=;
- b=j2nEUtxb1F+QpKiavi74JAQzLYz13VhJZKvvz/b2eY/Eua8ji6AxeqR6h6aa9YUwizlQmEzLQ1mM1cQy+QXWI4SLmPqSIstVfQ6GmlLIfgKjffNf8cA8pnnAfuFwfxI+aUGvblAcHqk0TrTNCPwkJt6NsilCEGWADZu3hlI0BGu9K2CmmHxtSj9IFQH3EP/HEPn5+7ckfiYlSobwF3CWmShtQYka5jCbwNa4uM2ep97Re/k6ILX8JzK/qAbIVCmRRDNPJpqdA2NaCC3xWvErlVbdkEucj/47QbPOU8KONNYRn9OwETb7uav6moS7+VzxkuKA/KrrD8HjnPwAE+HwCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        id S1729238AbgAUKJB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jan 2020 05:09:01 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39934 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728512AbgAUKJA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jan 2020 05:09:00 -0500
+Received: by mail-wr1-f66.google.com with SMTP id y11so2458048wrt.6
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2020 02:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CTDz3/gEuQTOjIc8iOtlt7s25+PU0XWggdpv+NKrLBU=;
- b=i8BXzg69OE70+mPTg2DaIbIYbeK/39KRTIuKTat6kBgX6j/bWqEnd1vuYWsyqxtIMHA34zEIs3jRPtq+/ye0w5t62oy8KRC4+oeN/je5Qj35Gf2+mNQ+/+Me0oz1WZBJibowu2tRIBLdgOchHlNrIS5iKk6/N5GpY1JyQdRL0Uc=
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com (20.176.120.224) by
- DM6PR11MB3195.namprd11.prod.outlook.com (20.176.121.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.23; Tue, 21 Jan 2020 10:03:39 +0000
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::dc6b:1191:3a76:8b6a]) by DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::dc6b:1191:3a76:8b6a%7]) with mapi id 15.20.2644.024; Tue, 21 Jan 2020
- 10:03:39 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <sre@kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Claudiu.Beznea@microchip.com>
-Subject: [PATCH 15/15] power: reset: at91-reset: handle nrst async for sam9x60
-Thread-Topic: [PATCH 15/15] power: reset: at91-reset: handle nrst async for
- sam9x60
-Thread-Index: AQHV0EINUPsFdrOD60ihk98/gadShw==
-Date:   Tue, 21 Jan 2020 10:03:39 +0000
-Message-ID: <1579601001-5711-16-git-send-email-claudiu.beznea@microchip.com>
-References: <1579601001-5711-1-git-send-email-claudiu.beznea@microchip.com>
-In-Reply-To: <1579601001-5711-1-git-send-email-claudiu.beznea@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cbcdb102-e729-47ce-17bc-08d79e59306f
-x-ms-traffictypediagnostic: DM6PR11MB3195:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB3195625509C5A1C2C5895160870D0@DM6PR11MB3195.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:530;
-x-forefront-prvs: 0289B6431E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(366004)(396003)(136003)(346002)(39860400002)(199004)(189003)(107886003)(26005)(186003)(36756003)(5660300002)(110136005)(54906003)(4326008)(66556008)(66476007)(6506007)(2906002)(76116006)(91956017)(6486002)(86362001)(64756008)(6512007)(66946007)(66446008)(8676002)(81156014)(2616005)(81166006)(8936002)(6636002)(71200400001)(316002)(478600001)(138113003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR11MB3195;H:DM6PR11MB3225.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vJ0QTMB2AAPZlb99tjCmIk+MkE9KZIfbWvu/+kq/c+RR/5SCrW2YEKEAvJl6ByI4P676SPXwHZW/+lCa2oiw4nQILxKkO/wYC4b2wHOx1oHNosJguSbRIX0i5kccPTj/gonGzEKrQ6QWRJ72iK04VpySkYQTu8BJ1uor/YZlyiGL3uHHqbarZZ0ItitFMU0HzwOe+xd0rJzwFidIPMEmFqsN9/SSntvCSa+44nXJCCqtrSEX8x55ov5uHzn3lwlnh+BfCUsQXzL7zEJU+57TqAsixUl9KgSr+I/V/3DmwMgV+1qayY0II4hVFNGpNii2IveKZ5lKChFu+mNhWWfir9c//kFHcnVatZY3X7ujV7mEP8qmVv5/HbV9vXatx3LI8i7DPUxl7oAamuU6zLL/KnE8Ua4bisaLd92US62n8zKCdvU5kJ9t7KpRcSmbYcd9ydr8dRAaNTSqRPZf4nG/LjCd3Sh3vreXoWfANRkPyS5slmG4YhwNBDV+xbyJ1B/o
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8os47Jh+iH/mWhGJOKaN0Ikowvgw7Dsg6piAesimf+8=;
+        b=iNHLk9Soh1BgMmomizmi4fIcor2oN/NsBEzYcXn39v8n4anlIoYM5pz+LSafgd8Spu
+         f+S7jCQINFEBJ4GDG4xVgihL44c++E/0Tg7Shs1Ps4QiMQ+Do8ke4XZtb91mtCCPSb17
+         8jgPfcy7ylRBXPBUjDLzy7qpdgFjobOdmL+AyehNXUbus45Wmkzcz9npQK6FoRh2lfld
+         RgloPfjLJuxfGsc3KMrRsmMDzHu36mcWyIeIyYDOEtja0RuhZt+1QHUg64Sy4nQtummn
+         SwblUn6R1sIWp1O85xu9BZGrKNkVu0yj2lUWmC2wFXq9newsw22roQLk7hwpoD5DrjFT
+         RJtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8os47Jh+iH/mWhGJOKaN0Ikowvgw7Dsg6piAesimf+8=;
+        b=DxnDDQ4CCObJ1boFbkN2mdaKJgXe1qEEBotEkRjpyRC4ImBKI2TIBNi0UhqJ2qwvhM
+         WLTeVP81JQ8lDrGo603+ULmkTfgnXesvYeHN9zqXOVjkw6f5JPAe6meQir7bTrAJeTl5
+         GOvvayPLMHrmdT5oknLzqBLIvK29bEjTBhhf2jcuHcO84YC4IUdfp4BQlgz1B3MHFr4k
+         2NGWOJGjVgm5YOLGi8oXd3nzWn/At4UU6d81vSR6JXg0YZD8C5+HwRopUMd3V4kP5U6O
+         A1pzjaUVZkg+flk5GueZfo0SMs+z7gJPfCQpJ5cYLa+icdPwdb2LfGUw90dFUbBzzJtj
+         bexQ==
+X-Gm-Message-State: APjAAAWOJY4714XWvCHEIyWLAPaHsCwCRQg0+x6qbs6XF8VH7YeMwV7r
+        sM4i9sTSyA24nAXMMQWhCYlU4Q==
+X-Google-Smtp-Source: APXvYqzMOzjFtDVGl6edwO/7tSb9RrQo9+Hb9CFGAJn1i1sGI47f1x+xTj047nTS+b5NOSYS7F4xnw==
+X-Received: by 2002:adf:fcc4:: with SMTP id f4mr4493720wrs.247.1579601338751;
+        Tue, 21 Jan 2020 02:08:58 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id u18sm51454016wrt.26.2020.01.21.02.08.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2020 02:08:58 -0800 (PST)
+Date:   Tue, 21 Jan 2020 10:08:54 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Morten.Rasmussen@arm.com, Chris.Redpath@arm.com,
+        ionela.voinescu@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, patrick.bellasi@matbug.net
+Subject: Re: [PATCH 1/4] PM / EM: and devices to Energy Model
+Message-ID: <20200121100854.GB157387@google.com>
+References: <20200116152032.11301-1-lukasz.luba@arm.com>
+ <20200116152032.11301-2-lukasz.luba@arm.com>
+ <17b77e0c-9455-0479-d37b-c57717c784c7@arm.com>
+ <20200120152804.GB164543@google.com>
+ <453034e5-f7b9-20f7-4e26-5d0d7164edd1@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbcdb102-e729-47ce-17bc-08d79e59306f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2020 10:03:39.5540
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /MVJzzMJjKdLdxT96bEgdMeS5DsAyDRqsD4f3IErNarbqClc3F6Yd5dwTt9Y9LCwli05nJS8NuqbnvflWBtSfttWsF7CFTfZEl+ERziwo24=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3195
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <453034e5-f7b9-20f7-4e26-5d0d7164edd1@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Handle NRST asynchronously for SAM9X60 to avoid problem with fast drop of
-VDDCORE on shutdown operations in the first 100 us after CPU is shutdown.
+On Monday 20 Jan 2020 at 16:20:49 (+0000), Lukasz Luba wrote:
+> On 1/20/20 3:28 PM, Quentin Perret wrote:
+> > Agreed, this looks a bit confusing. It should be trivial to make
+> > em_dev_get() (or whatever we end up calling it) work for CPUs too,
+> > though. And we could always have a em_cpu_get(int cpu) API that is a
+> > basically a wrapper around em_dev_get() for convenience.
+> 
+> The problem not only here is that we have a CPU index 'int cpu'
+> and if we ask for device like:
+> 
+> struct device *dev = get_cpu_device(cpu);
+> 
+> It might be not the same device that was used during the
+> registration, when we had i.e. 4 CPUs for the same policy:
+>
+> int cpu_id = cpumask_first(policy->cpus);
+> struct device *cpu_dev = get_cpu_device(cpu_id);
+> em_register_perf_domain(cpu_dev, nr_opp, &em_cb);
+> 
+> That's why the em_cpu_get() is different than em_get_pd(), mainly by:
+> if (cpumask_test_cpu(cpu, em_span_cpus(em_pd)))
+> 
+> It won't be simple wrapper, let me think how it could be handled
+> differently than it is now.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/power/reset/at91-reset.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Right so I suppose the easiest solution would be to do the opposite of
+my first suggestion. That is, make em_get_pd() call em_cpu_get() if the
+device is a CPU device, or proceed to the PD list iteration for other
+devices. And em_cpu_get() can remain as you originally suggested (that
+is, iterate over the PDs and test the mask).
 
-diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-re=
-set.c
-index 537ccb180568..3ff9d93a5226 100644
---- a/drivers/power/reset/at91-reset.c
-+++ b/drivers/power/reset/at91-reset.c
-@@ -35,6 +35,7 @@
-=20
- #define AT91_RSTC_MR	0x08		/* Reset Controller Mode Register */
- #define AT91_RSTC_URSTEN	BIT(0)		/* User Reset Enable */
-+#define AT91_RSTC_URSTASYNC	BIT(2)		/* User Reset Asynchronous Control */
- #define AT91_RSTC_URSTIEN	BIT(4)		/* User Reset Interrupt Enable */
- #define AT91_RSTC_ERSTL		GENMASK(11, 8)	/* External Reset Length */
-=20
-@@ -228,6 +229,13 @@ static int __init at91_reset_probe(struct platform_dev=
-ice *pdev)
-=20
- 	platform_set_drvdata(pdev, reset);
-=20
-+	if (of_device_is_compatible(pdev->dev.of_node, "microchip,sam9x60-rstc"))=
- {
-+		u32 val =3D readl(reset->rstc_base + AT91_RSTC_MR);
-+
-+		writel(AT91_RSTC_KEY | AT91_RSTC_URSTASYNC | val,
-+		       reset->rstc_base + AT91_RSTC_MR);
-+	}
-+
- 	ret =3D register_restart_handler(&reset->nb);
- 	if (ret) {
- 		clk_disable_unprepare(reset->sclk);
---=20
-2.7.4
+That should ensure em_get_pd() always works, em_cpu_get() is still there
+handy for the scheduler and such, and the two EM lookup functions (for
+CPUs or for devices) are kept cleanly separated.
+
+Thoughts ?
+
+Thanks,
+Quentin
