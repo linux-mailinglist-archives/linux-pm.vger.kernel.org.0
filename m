@@ -2,19 +2,19 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B8D14586E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 16:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2EC145878
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 16:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbgAVPKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jan 2020 10:10:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39552 "EHLO mx2.suse.de"
+        id S1726232AbgAVPKt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jan 2020 10:10:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39578 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726181AbgAVPKf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Jan 2020 10:10:35 -0500
+        id S1726191AbgAVPKg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 Jan 2020 10:10:36 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8C130AD03;
-        Wed, 22 Jan 2020 15:10:32 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 7EB35AD11;
+        Wed, 22 Jan 2020 15:10:33 +0000 (UTC)
 From:   Giovanni Gherdovich <ggherdovich@suse.cz>
 To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -35,9 +35,9 @@ Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
         Doug Smythies <dsmythies@telus.net>,
         Ionela Voinescu <ionela.voinescu@arm.com>,
         Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH v5 5/6] x86,sched: Add support for frequency invariance on ATOM
-Date:   Wed, 22 Jan 2020 16:16:16 +0100
-Message-Id: <20200122151617.531-6-ggherdovich@suse.cz>
+Subject: [PATCH v5 6/6] x86: intel_pstate: handle runtime turbo disablement/enablement in freq. invariance
+Date:   Wed, 22 Jan 2020 16:16:17 +0100
+Message-Id: <20200122151617.531-7-ggherdovich@suse.cz>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200122151617.531-1-ggherdovich@suse.cz>
 References: <20200122151617.531-1-ggherdovich@suse.cz>
@@ -46,117 +46,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The scheduler needs the ratio freq_curr/freq_max for frequency-invariant
-accounting. On all ATOM CPUs prior to Goldmont, set freq_max to the 1-core
-turbo ratio.
+On some platforms such as the Dell XPS 13 laptop the firmware disables turbo
+when the machine is disconnected from AC, and viceversa it enables it again
+when it's reconnected. In these cases a _PPC ACPI notification is issued.
 
-We intended to perform tests validating that this patch doesn't regress in
-terms of energy efficiency, given that this is the primary concern on Atom
-processors. Alas, we found out that turbostat doesn't support reading RAPL
-interfaces on our test machine (Airmont), and we don't have external equipment
-to measure power consumption; all we have is the performance results of the
-benchmarks we ran.
-
-Test machine:
-
-Platform    : Dell Wyse 3040 Thin Client[1]
-CPU Model   : Intel Atom x5-Z8350 (aka Cherry Trail, aka Airmont)
-Fam/Mod/Ste : 6:76:4
-Topology    : 1 socket, 4 cores / 4 threads
-Memory      : 2G
-Storage     : onboard flash, XFS filesystem
-
-[1] https://www.dell.com/en-us/work/shop/wyse-endpoints-and-software/wyse-3040-thin-client/spd/wyse-3040-thin-client
-
-Base frequency and available turbo levels (MHz):
-
-    Min Operating Freq   266 |***
-    Low Freq Mode        800 |********
-    Base Freq           2400 |************************
-    4 Cores             2800 |****************************
-    3 Cores             2800 |****************************
-    2 Cores             3200 |********************************
-    1 Core              3200 |********************************
-
-Tested kernels:
-
-Baseline      : v5.4-rc1,              intel_pstate passive,  schedutil
-Comparison #1 : v5.4-rc1,              intel_pstate active ,  powersave
-Comparison #2 : v5.4-rc1, this patch,  intel_pstate passive,  schedutil
-
-tbench, hackbench and kernbench performed the same under all three kernels;
-dbench ran faster with intel_pstate/powersave and the git unit tests were a
-lot faster with intel_pstate/powersave and invariant schedutil wrt the
-baseline. Not that any of this is terrbily interesting anyway, one doesn't buy
-an Atom system to go fast. Power consumption regressions aren't expected but
-we lack the equipment to make that measurement. Turbostat seems to think that
-reading RAPL on this machine isn't a good idea and we're trusting that
-decision.
-
-comparison ratio of performance with baseline; 1.00 means neutral,
-lower is better:
-
-                      I_PSTATE      FREQ-INV
-    ----------------------------------------
-    dbench                0.90             ~
-    kernbench             0.98          0.97
-    gitsource             0.63          0.43
+The scheduler needs to know freq_max for frequency-invariant calculations.
+To account for turbo availability to come and go, record freq_max at boot as
+if turbo was available and store it in a helper variable. Use a setter
+function to swap between freq_base and freq_max every time turbo goes off or on.
 
 Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
 ---
- arch/x86/kernel/smpboot.c | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/topology.h |  5 +++++
+ arch/x86/kernel/smpboot.c       | 15 ++++++++++-----
+ drivers/cpufreq/intel_pstate.c  |  1 +
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index 2ebf7b7b2126..79d8d5496330 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -211,6 +211,11 @@ static inline long arch_scale_freq_capacity(int cpu)
+ extern void arch_scale_freq_tick(void);
+ #define arch_scale_freq_tick arch_scale_freq_tick
+ 
++extern void arch_set_max_freq_ratio(bool turbo_disabled);
++#else
++static inline void arch_set_max_freq_ratio(bool turbo_disabled)
++{
++}
+ #endif
+ 
+ #endif /* _ASM_X86_TOPOLOGY_H */
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 3e32d620f1fb..5f04bf8419f9 100644
+index 5f04bf8419f9..467191e51196 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -1821,6 +1821,24 @@ static bool turbo_disabled(void)
- 	return (misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
- }
+@@ -1807,8 +1807,15 @@ DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
  
-+static bool slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+ static DEFINE_PER_CPU(u64, arch_prev_aperf);
+ static DEFINE_PER_CPU(u64, arch_prev_mperf);
++static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
+ static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
+ 
++void arch_set_max_freq_ratio(bool turbo_disabled)
 +{
-+	int err;
-+
-+	err = rdmsrl_safe(MSR_ATOM_CORE_RATIOS, base_freq);
-+	if (err)
-+		return false;
-+
-+	err = rdmsrl_safe(MSR_ATOM_CORE_TURBO_RATIOS, turbo_freq);
-+	if (err)
-+		return false;
-+
-+	*base_freq = (*base_freq >> 16) & 0x3F;     /* max P state */
-+	*turbo_freq = *turbo_freq & 0x3F;           /* 1C turbo    */
-+
-+	return true;
++	arch_max_freq_ratio = turbo_disabled ? SCHED_CAPACITY_SCALE :
++					arch_turbo_freq_ratio;
 +}
 +
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- 
-@@ -1938,17 +1956,14 @@ static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+ static bool turbo_disabled(void)
+ {
+ 	u64 misc_en;
+@@ -1956,10 +1963,7 @@ static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
  
  static bool intel_set_max_freq_ratio(void)
  {
--	/*
--	 * TODO: add support for:
--	 *
--	 * - Atom Silvermont
--	 */
+-	u64 base_freq = 1, turbo_freq = 1;
 -
- 	u64 base_freq = 1, turbo_freq = 1;
+-	if (turbo_disabled())
+-		goto out;
++	u64 base_freq, turbo_freq;
  
- 	if (turbo_disabled())
+ 	if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
  		goto out;
+@@ -1981,8 +1985,9 @@ static bool intel_set_max_freq_ratio(void)
+ 	return false;
  
-+	if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
-+		goto out;
-+
- 	if (x86_match_cpu(has_glm_turbo_ratio_limits) &&
- 	    skx_set_max_freq_ratio(&base_freq, &turbo_freq, 1))
- 		goto out;
+ out:
+-	arch_max_freq_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE,
++	arch_turbo_freq_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE,
+ 					base_freq);
++	arch_set_max_freq_ratio(turbo_disabled());
+ 	return true;
+ }
+ 
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index d2fa3e9ccd97..abbeeca8bb3b 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -922,6 +922,7 @@ static void intel_pstate_update_limits(unsigned int cpu)
+ 	 */
+ 	if (global.turbo_disabled_mf != global.turbo_disabled) {
+ 		global.turbo_disabled_mf = global.turbo_disabled;
++		arch_set_max_freq_ratio(global.turbo_disabled);
+ 		for_each_possible_cpu(cpu)
+ 			intel_pstate_update_max_freq(cpu);
+ 	} else {
 -- 
 2.16.4
 
