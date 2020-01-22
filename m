@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A889B145A52
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 17:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5627E145A7B
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 18:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbgAVQzA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jan 2020 11:55:00 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45436 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgAVQy7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jan 2020 11:54:59 -0500
-Received: by mail-wr1-f65.google.com with SMTP id j42so8041298wrj.12
-        for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2020 08:54:58 -0800 (PST)
+        id S1726004AbgAVRCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jan 2020 12:02:07 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36359 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgAVRCH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jan 2020 12:02:07 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z3so8152448wru.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2020 09:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DM1d73/VoF6vIcU47F5e8EsG7Wr6ebQt+4pVusl9w1Y=;
-        b=vMRe/fAEtTSfL2cR5LPkRGc+1SQszNAIpIQ4UnKHnDnqxHeGVelwMucGC4rrO7n4db
-         R5c1YaczIfS0lC8A6/4Xox1jdfI0LDiLfWukgKL2yVP6qKJDnGmpgv2F91PCauFNjNI2
-         t0T7ZWqStLxb6dAS2Ni37KgdYqkmhXO8wZ5KSy5bAqnE5/RKRHyeDhoO1lhEqm94wXws
-         UtaHkVzggIlZoc+chhb5jinfYgICgzEir+dJ8I4PGh+Sk4ZhAE9sjX54aTS7u7JHbXK/
-         vUvlqgIPwucpfrz5/99La2K2aJqLzYCMrDDxlFrLbzhsJ05cMvpDZoQFOGFJXIRrpAR6
-         /1AA==
+        bh=6yEZAxxxHYV12v4fDlL+top5CchSxDt3hhEnOERCk/E=;
+        b=K4mkXA6RgYkzeT0Rv8x5ic+MSLWPsJ7lETAUabyHh3rHjaPGJELBZ9PX1MqEIOcRl2
+         xgoijdQBfTc2c/mQ02IdBAlbPWmbhx7SFUUATxOrjR31DCwkFfOf7e73siKqTDQTh91L
+         kGXLqXpw9FMfSYgL2xVxXezDir3rCVARbBKhrnz8cJxZozn60+TEBAu5QqIQpZ2PIZVx
+         J0+yi66sRk8Xxe9yLIkTyVJoRY9X3KT+HolvND3rY6E+4+KVnVSON/TsKBQ+HjznXAO8
+         0epTiXE7u4IGJJmOKQ8J+9gRPCVyCP3BMNd9ZJGwaEuPL4BwqaCDitW/k7xsc0d4+txN
+         hCKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=DM1d73/VoF6vIcU47F5e8EsG7Wr6ebQt+4pVusl9w1Y=;
-        b=U/Lg9eTQCf2g/cBRIr3NiNc1UyeCj4Lc5vJe6+GgenPr/v6c7q5sZZjWJJRxfNoJLD
-         89uCvrudCNOfXArlOA9UM+sRLenwREBYrqxXeHkLnbrY5vvp7eC8ptXOpVX/8XQRiGiF
-         1BqOixpuPb3cz3TrF0H5rqxnu5ENpweheGW+b6NzQBuU9VpmwZw4BVP76Rw6oAkz6bCE
-         QYglr2huv0FIfq92fQQudzz+bAPFfk/h2avL16Gayshx7cdxXJnVaGo2bZ5HhGtOvRsv
-         +x756ww+Klcn3gQimeonoJ875uw2ysWAGOmoewZROhVi7rXjWkwAy/pa5HIrPS/gkkty
-         wWUA==
-X-Gm-Message-State: APjAAAUQXJwm8wKHtY0OnC8zpCTrqwUHxp3kb5nr9tNsAFMIgRkrfS4J
-        BrQHTG8Sz6flY+521uvG9pgLUw==
-X-Google-Smtp-Source: APXvYqx83qjv8lgIRz1T8W3VPyOCHXAj3czhH4MS6m3/mkUBnDcXqw3qig4Pczf6oz2NuqtJJW9X8A==
-X-Received: by 2002:a5d:5234:: with SMTP id i20mr12869805wra.403.1579712097436;
-        Wed, 22 Jan 2020 08:54:57 -0800 (PST)
+        bh=6yEZAxxxHYV12v4fDlL+top5CchSxDt3hhEnOERCk/E=;
+        b=Yw9BejAr4PHVh5cibOv3SOuZuXp5niaIHbmZ1URLdsfvmPn7DlIFFF4saYrNnJBww1
+         0iSjO/Ek0+963CEVSJsOKq4Qwi/uZdZQ6EJdyTPsrhWJ4xTbVf3nQ6iSJJKu5R7efQSp
+         GBiQKbT/WFmA3RUOyCsLCvBg3GccXME0Emobo7ZYMgm+8owETsQx+OTmYjvlHxeJ6m3w
+         k6ox4O6qoB0/vC0/W0TRf/cNvqosl7B+6gJSR9sLTDkAX13r4+azbbwEEgv8jHs2xOy+
+         zSZvlvRMEJ6j96vONGLalIcB6rluG/4bP5js0hvKpXgsB9UwylLT4Y0t1jsqXJsjbMno
+         n8pw==
+X-Gm-Message-State: APjAAAWWjeew39Dbtomu9DcT3lRKXnMYrZGLrljjAszHXFAPLkJKCtol
+        RTG/J9nCeui6OuWOwH/aTlLvmw==
+X-Google-Smtp-Source: APXvYqxxw4sc6b+/uxE67ifj04r32qOp0umTqsdEYgouYvEcOhvyB7Xp1KIQ1mI8TAaAZ/SmGSMRFw==
+X-Received: by 2002:a5d:4602:: with SMTP id t2mr11748574wrq.37.1579712522950;
+        Wed, 22 Jan 2020 09:02:02 -0800 (PST)
 Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id w8sm5276922wmm.0.2020.01.22.08.54.56
+        by smtp.googlemail.com with ESMTPSA id x16sm4775064wmk.35.2020.01.22.09.02.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Jan 2020 08:54:56 -0800 (PST)
-Subject: Re: [RFC PATCH v3 4/7] arm: dts: exynos: Add interconnect bindings
- for Exynos4412
+        Wed, 22 Jan 2020 09:02:02 -0800 (PST)
+Subject: Re: [RFC PATCH v3 5/7] devfreq: exynos-bus: Add interconnect
+ functionality to exynos-bus
 To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -56,8 +56,8 @@ Cc:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
         leonard.crestez@nxp.com, m.szyprowski@samsung.com,
         b.zolnierkie@samsung.com, krzk@kernel.org
 References: <20191220115653.6487-1-a.swigon@samsung.com>
- <CGME20191220120144eucas1p119ececf161a6d45a6a194e432bbbd1f9@eucas1p1.samsung.com>
- <20191220115653.6487-5-a.swigon@samsung.com>
+ <CGME20191220120145eucas1p295af63eed7b23982d8c49fcf875cec8c@eucas1p2.samsung.com>
+ <20191220115653.6487-6-a.swigon@samsung.com>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
@@ -103,10 +103,10 @@ Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
  7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
  E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
  KEmKjLDvB0pePJkdTw==
-Message-ID: <747a1c94-8eee-f46a-fcc7-d111cd9df70d@linaro.org>
-Date:   Wed, 22 Jan 2020 18:54:54 +0200
+Message-ID: <15795421-db12-8466-bb7e-688e6625cf4a@linaro.org>
+Date:   Wed, 22 Jan 2020 19:02:00 +0200
 MIME-Version: 1.0
-In-Reply-To: <20191220115653.6487-5-a.swigon@samsung.com>
+In-Reply-To: <20191220115653.6487-6-a.swigon@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -117,57 +117,241 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Artur,
 
-Thank you for your continuous work on this.
-
 On 12/20/19 13:56, Artur Świgoń wrote:
-> This patch adds the following properties to the Exynos4412 DT:
->   - exynos,interconnect-parent-node: to declare connections between
->     nodes in order to guarantee PM QoS requirements between nodes;
+> This patch adds interconnect functionality to the exynos-bus devfreq
+> driver.
+> 
+> The SoC topology is a graph (or, more specifically, a tree) and its
+> edges are specified using the 'exynos,interconnect-parent-node' in the
+> DT. Due to unspecified relative probing order, -EPROBE_DEFER may be
+> propagated to ensure that the parent is probed before its children.
+> 
+> Each bus is now an interconnect provider and an interconnect node as well
+> (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registers
+> itself as a node. Node IDs are not hardcoded but rather assigned at
 
-Is this DT property documented somewhere? I believe that there should be a patch
-to document it somewhere in Documentation/devicetree/bindings/ before using it.
+Just to note that usually the provider consists of multiple nodes and each node
+represents a single master or slave port on the AXI bus for example. I am not
+sure whether this represents correctly the Exynos hardware, so it's up to
+you.
+
+> runtime, in probing order (subject to the above-mentioned exception
+> regarding relative order). This approach allows for using this driver with
+> various Exynos SoCs.
+
+This sounds good. I am wondering whether such dynamic probing would be useful
+for other platforms too. Then maybe it would make sense to even have a common DT
+property, but we will see.
+
+Is this going to be used only together with devfreq?
+
+> Frequencies requested via the interconnect API for a given node are
+> propagated to devfreq using dev_pm_qos_update_request(). Please note that
+> it is not an error when CONFIG_INTERCONNECT is 'n', in which case all
+> interconnect API functions are no-op.
+
+How about the case where CONFIG_INTERCONNECT=m. Looks like the build will fail
+if CONFIG_ARM_EXYNOS_BUS_DEVFREQ=y, so this dependency should be expressed in
+Kconfig.
 
 Thanks,
 Georgi
 
->   - #interconnect-cells: required by the interconnect framework.
-> 
-> Note that #interconnect-cells is always zero and node IDs are not
-> hardcoded anywhere.
 > 
 > Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
 > ---
->  arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 5 +++++
->  1 file changed, 5 insertions(+)
+>  drivers/devfreq/exynos-bus.c | 144 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 144 insertions(+)
 > 
-> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> index 4ce3d77a6704..d9d70eacfcaf 100644
-> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> @@ -90,6 +90,7 @@
->  &bus_dmc {
->  	exynos,ppmu-device = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
->  	vdd-supply = <&buck1_reg>;
-> +	#interconnect-cells = <0>;
->  	status = "okay";
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 9fdb188915e8..694a9581dcdb 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -14,14 +14,19 @@
+>  #include <linux/devfreq-event.h>
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+> +#include <linux/idr.h>
+> +#include <linux/interconnect-provider.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/pm_opp.h>
+> +#include <linux/pm_qos.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regulator/consumer.h>
+>  
+>  #define DEFAULT_SATURATION_RATIO	40
+>  
+> +#define kbps_to_khz(x) ((x) / 8)
+> +
+>  struct exynos_bus {
+>  	struct device *dev;
+>  
+> @@ -35,6 +40,12 @@ struct exynos_bus {
+>  	struct opp_table *opp_table;
+>  	struct clk *clk;
+>  	unsigned int ratio;
+> +
+> +	/* One provider per bus, one node per provider */
+> +	struct icc_provider provider;
+> +	struct icc_node *node;
+> +
+> +	struct dev_pm_qos_request qos_req;
 >  };
 >  
-> @@ -106,6 +107,8 @@
->  &bus_leftbus {
->  	exynos,ppmu-device = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
->  	vdd-supply = <&buck3_reg>;
-> +	exynos,interconnect-parent-node = <&bus_dmc>;
-> +	#interconnect-cells = <0>;
->  	status = "okay";
->  };
+>  /*
+> @@ -205,6 +216,39 @@ static void exynos_bus_passive_exit(struct device *dev)
+>  	clk_disable_unprepare(bus->clk);
+>  }
 >  
-> @@ -116,6 +119,8 @@
+> +static int exynos_bus_icc_set(struct icc_node *src, struct icc_node *dst)
+> +{
+> +	struct exynos_bus *src_bus = src->data, *dst_bus = dst->data;
+> +	s32 src_freq = kbps_to_khz(src->avg_bw);
+> +	s32 dst_freq = kbps_to_khz(dst->avg_bw);
+> +	int ret;
+> +
+> +	ret = dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
+> +	if (ret < 0) {
+> +		dev_err(src_bus->dev, "failed to update PM QoS request");
+> +		return ret;
+> +	}
+> +
+> +	ret = dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
+> +	if (ret < 0) {
+> +		dev_err(dst_bus->dev, "failed to update PM QoS request");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_args *spec,
+> +					     void *data)
+> +{
+> +	struct exynos_bus *bus = data;
+> +
+> +	if (spec->np != bus->dev->of_node)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	return bus->node;
+> +}
+> +
+>  static int exynos_bus_parent_parse_of(struct device_node *np,
+>  					struct exynos_bus *bus)
+>  {
+> @@ -419,6 +463,96 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+>  	return 0;
+>  }
 >  
->  &bus_display {
->  	exynos,parent-bus = <&bus_leftbus>;
-> +	exynos,interconnect-parent-node = <&bus_leftbus>;
-> +	#interconnect-cells = <0>;
->  	status = "okay";
->  };
+> +static struct icc_node *exynos_bus_icc_get_parent(struct exynos_bus *bus)
+> +{
+> +	struct device_node *np = bus->dev->of_node;
+> +	struct of_phandle_args args;
+> +	int num, ret;
+> +
+> +	num = of_count_phandle_with_args(np, "exynos,interconnect-parent-node",
+> +					"#interconnect-cells");
+> +	if (num != 1)
+> +		return NULL; /* parent nodes are optional */
+> +
+> +	ret = of_parse_phandle_with_args(np, "exynos,interconnect-parent-node",
+> +					"#interconnect-cells", 0, &args);
+> +	if (ret < 0)
+> +		return ERR_PTR(ret);
+> +
+> +	of_node_put(args.np);
+> +
+> +	return of_icc_get_from_provider(&args);
+> +}
+> +
+> +static int exynos_bus_icc_init(struct exynos_bus *bus)
+> +{
+> +	static DEFINE_IDA(ida);
+> +
+> +	struct device *dev = bus->dev;
+> +	struct icc_provider *provider = &bus->provider;
+> +	struct icc_node *node, *parent_node;
+> +	int id, ret;
+> +
+> +	/* Initialize the interconnect provider */
+> +	provider->set = exynos_bus_icc_set;
+> +	provider->aggregate = icc_std_aggregate;
+> +	provider->xlate = exynos_bus_icc_xlate;
+> +	provider->dev = dev;
+> +	provider->inter_set = true;
+> +	provider->data = bus;
+> +
+> +	ret = icc_provider_add(provider);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = id = ida_alloc(&ida, GFP_KERNEL);
+> +	if (ret < 0)
+> +		goto err_id;
+> +
+> +	node = icc_node_create(id);
+> +	if (IS_ERR(node)) {
+> +		ret = PTR_ERR(node);
+> +		goto err_node;
+> +	}
+> +
+> +	bus->node = node;
+> +	node->name = dev->of_node->name;
+> +	node->data = bus;
+> +	icc_node_add(node, provider);
+> +
+> +	parent_node = exynos_bus_icc_get_parent(bus);
+> +	if (IS_ERR(parent_node)) {
+> +		ret = PTR_ERR(parent_node);
+> +		goto err_parent;
+> +	}
+> +
+> +	if (parent_node) {
+> +		ret = icc_link_create(node, parent_node->id);
+> +		if (ret < 0)
+> +			goto err_parent;
+> +	}
+> +
+> +	ret = dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus->qos_req,
+> +					DEV_PM_QOS_MIN_FREQUENCY, 0);
+> +	if (ret < 0)
+> +		goto err_request;
+> +
+> +	return 0;
+> +
+> +err_request:
+> +	if (parent_node)
+> +		icc_link_destroy(node, parent_node);
+> +err_parent:
+> +	icc_node_del(node);
+> +	icc_node_destroy(id);
+> +err_node:
+> +	ida_free(&ida, id);
+> +err_id:
+> +	icc_provider_del(provider);
+> +
+> +	return ret;
+> +}
+> +
+>  static int exynos_bus_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -468,6 +602,16 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>  	if (ret < 0)
+>  		goto err;
 >  
+> +	/*
+> +	 * Initialize interconnect provider. A return value of -ENOTSUPP means
+> +	 * that CONFIG_INTERCONNECT is disabled.
+> +	 */
+> +	ret = exynos_bus_icc_init(bus);
+> +	if (ret < 0 && ret != -ENOTSUPP) {
+> +		dev_err(dev, "failed to initialize the interconnect provider");
+> +		goto err;
+> +	}
+> +
+>  	max_state = bus->devfreq->profile->max_state;
+>  	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
+>  	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
 > 
