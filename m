@@ -2,41 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E12E0145F45
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 00:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA0D145F4E
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 00:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgAVXnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jan 2020 18:43:16 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40321 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgAVXnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jan 2020 18:43:15 -0500
-Received: by mail-ot1-f66.google.com with SMTP id w21so1058650otj.7;
-        Wed, 22 Jan 2020 15:43:15 -0800 (PST)
+        id S1726590AbgAVXo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jan 2020 18:44:58 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:34334 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgAVXo6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jan 2020 18:44:58 -0500
+Received: by mail-oi1-f194.google.com with SMTP id l136so1235160oig.1;
+        Wed, 22 Jan 2020 15:44:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rg2sJY9T4OUkKUiiUMINOLh/A2PlIFpIRvK2N4+oA0g=;
-        b=d6Wd7h5iczotLNZBfv9/rn+1XBQ0omRbNJOs0icBRWeogE7rd8NpPtqOc8omgyvguv
-         xVRSP2zixFeclDrreSg7bCPGvnuvsONmpW1yRL0uEz0gWIk+g3mCJHIjBsuiDtYNS/3q
-         OKopS8L09IEC2EI0dCRlULXQDZqsRhIYo+fvNsva68uLZOI0Uiu0aQjLVPI1twbQj+v8
-         QZZGwAD3DfdxFtrsddVe901850auNm18BMYlhEAwU3eZzKVDEOMMVn9rdYs0dyO92mnf
-         rjwFERIX+nYAcGMDNc8+ZVwmSTWpyFcdMrs4UIkolSIBRtYxFpniPHIdV2EGriW0UFu5
-         hHuw==
-X-Gm-Message-State: APjAAAXbVuD6JQ/p7io+xdmAwEgkPMD2/GCpy9aAXmTf6YYttQXvNqlU
-        UScRcJfg6kTMbztEgG+KYaZFlbo0xPCrcJwu3To=
-X-Google-Smtp-Source: APXvYqz6qzUjXWXO6gWRvzrGGlHgE0zXKCMAkk5lqmmx1NMk+/7gsSn+Rz7gMuL0HtE+vyi6W8CmIWSAbx/9bubQpRA=
-X-Received: by 2002:a05:6830:1e67:: with SMTP id m7mr9285079otr.262.1579736594807;
- Wed, 22 Jan 2020 15:43:14 -0800 (PST)
+        bh=ed4zI+jSgC6xCI/xfGInzht5Wa+I4nWsmMe8EzbF7SM=;
+        b=k7Cz+Reuhb23OzsDeP6AIYB/1Evlr7BNJ6rOHvLbBtDnbX+ViPuKtxTVvYUglFqKgT
+         tvjv5SuNoGsl219i+MkjmpFgVPki4KDdxzR8Hr92tYs83osC6w+2gZMsmrkIrPdmaPNe
+         iz5NjvdUQKJ19XrYhn/73JMRgv97l1gbSHDtGFMGKdkoUMLqr/qGpyz02ndVedcF6HUP
+         y+OWR7I++jzGOm4hnXZY3Qlz6KRtvKj3aMbJ3Qnmfzdpa1GYpZZ7DNodSObDdl4smOlc
+         yzBkFUzNYKxmvmRTrJACGE1Q4fbKcQQyhRdtYJxM1xdQNOcvbqLlq2UNdadiggByYhq9
+         6j5A==
+X-Gm-Message-State: APjAAAVJlusopU/hGeETwinswUFw7m/HopkDfIioEtsFPLzHYEW8JDyC
+        Z501aX5j/emVuzoPCUkHNOn62sQZCVVnKTzwXJkWMF6p
+X-Google-Smtp-Source: APXvYqxNgvuZUQA8M1G4TAe27SPJKfXoGK9QcwiGPOzUhAUt/2pusrEPBix6/ucvjY4XDCZhrMOrfhSnJXIkob8iGaI=
+X-Received: by 2002:a05:6808:1c5:: with SMTP id x5mr8823910oic.57.1579736697527;
+ Wed, 22 Jan 2020 15:44:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20200120133359.1672-1-benjamin.gaignard@st.com>
-In-Reply-To: <20200120133359.1672-1-benjamin.gaignard@st.com>
+References: <20200121082758.8808-1-benjamin.gaignard@st.com> <4c2b0c6f-c0d7-5866-44cf-e32d84c4261a@infradead.org>
+In-Reply-To: <4c2b0c6f-c0d7-5866-44cf-e32d84c4261a@infradead.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Jan 2020 00:43:03 +0100
-Message-ID: <CAJZ5v0gOq_gP3ghyJ80MSLSrDbqRGQRpMfQ=TLv78wZ4fDKeuw@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: sysfs: fix warning when compiling with W=1
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Date:   Thu, 23 Jan 2020 00:44:46 +0100
+Message-ID: <CAJZ5v0hPNx9iOm+nWcYfs+qPyuFj63xp2ieAWRMKb9AOnrming@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: fix kernel doc warnings
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -47,55 +48,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 2:34 PM Benjamin Gaignard
-<benjamin.gaignard@st.com> wrote:
+On Tue, Jan 21, 2020 at 4:36 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> Fix kernel documentation comments to remove the warnings when
-> compiling with W=1.
+> On 1/21/20 12:27 AM, Benjamin Gaignard wrote:
+> > Fix cpuidle_find_deepest_state() kernel documentation to avoid warnings when compiling with W=1.
+> >
+> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
 >
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
->  drivers/cpuidle/sysfs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-> index 38ef770be90d..1909584e1e50 100644
-> --- a/drivers/cpuidle/sysfs.c
-> +++ b/drivers/cpuidle/sysfs.c
-> @@ -142,6 +142,7 @@ static struct attribute_group cpuidle_attr_group = {
->
->  /**
->   * cpuidle_add_interface - add CPU global sysfs attributes
-> + * @dev: the target device
->   */
->  int cpuidle_add_interface(struct device *dev)
->  {
-> @@ -153,6 +154,7 @@ int cpuidle_add_interface(struct device *dev)
->
->  /**
->   * cpuidle_remove_interface - remove CPU global sysfs attributes
-> + * @dev: the target device
->   */
->  void cpuidle_remove_interface(struct device *dev)
->  {
-> @@ -615,7 +617,7 @@ static struct kobj_type ktype_driver_cpuidle = {
->
->  /**
->   * cpuidle_add_driver_sysfs - adds the driver name sysfs attribute
-> - * @device: the target device
-> + * @dev: the target device
->   */
->  static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
->  {
-> @@ -646,7 +648,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
->
->  /**
->   * cpuidle_remove_driver_sysfs - removes the driver name sysfs attribute
-> - * @device: the target device
-> + * @dev: the target device
->   */
->  static void cpuidle_remove_driver_sysfs(struct cpuidle_device *dev)
->  {
-> --
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Queued up as 5.6 material, thanks!
+The patch has been queued up as 5.6 material under modified subject
+("cpuidle: fix cpuidle_find_deepest_state() kerneldoc warnings"),
+thanks!
+
+> > ---
+> > CC: rdunlap@infradead.org
+> > version 2:
+> > - fix the comment done by Randy
+> >  drivers/cpuidle/cpuidle.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> > index 33d19c8eb027..19c6dee88921 100644
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -121,6 +121,9 @@ void cpuidle_use_deepest_state(u64 latency_limit_ns)
+> >   * cpuidle_find_deepest_state - Find the deepest available idle state.
+> >   * @drv: cpuidle driver for the given CPU.
+> >   * @dev: cpuidle device for the given CPU.
+> > + * @latency_limit_ns: Idle state exit latency limit
+> > + *
+> > + * Return: the index of the deepest available idle state.
+> >   */
+> >  int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+> >                              struct cpuidle_device *dev,
+> >
+>
+>
+> --
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
