@@ -2,31 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E17A6145AE2
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 18:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B67A145AE4
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2020 18:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgAVRgH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jan 2020 12:36:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:58962 "EHLO foss.arm.com"
+        id S1726135AbgAVRgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Jan 2020 12:36:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:58982 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725802AbgAVRgG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Jan 2020 12:36:06 -0500
+        id S1725802AbgAVRgK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 Jan 2020 12:36:10 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55FE71FB;
-        Wed, 22 Jan 2020 09:36:06 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E65781007;
+        Wed, 22 Jan 2020 09:36:09 -0800 (PST)
 Received: from e107049-lin.arm.com (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 06B633F6C4;
-        Wed, 22 Jan 2020 09:36:04 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 978323F6C4;
+        Wed, 22 Jan 2020 09:36:08 -0800 (PST)
 From:   Douglas RAILLARD <douglas.raillard@arm.com>
 To:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, peterz@infradead.org,
         juri.lelli@redhat.com, vincent.guittot@linaro.org
 Cc:     douglas.raillard@arm.com, dietmar.eggemann@arm.com,
         qperret@google.com, linux-pm@vger.kernel.org
-Subject: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
-Date:   Wed, 22 Jan 2020 17:35:32 +0000
-Message-Id: <20200122173538.1142069-1-douglas.raillard@arm.com>
+Subject: [RFC PATCH v4 1/6] PM: Introduce em_pd_get_higher_freq()
+Date:   Wed, 22 Jan 2020 17:35:33 +0000
+Message-Id: <20200122173538.1142069-2-douglas.raillard@arm.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200122173538.1142069-1-douglas.raillard@arm.com>
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -34,98 +36,97 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make schedutil cpufreq governor energy-aware.
+em_pd_get_higher_freq() returns a frequency greater or equal to the
+provided one while taking into account a given cost margin. It also
+skips inefficient OPPs that have a higher cost than another one with a
+higher frequency (ordering OPPs by cost or efficiency leads to the same
+result within a given CPU).
 
-- patch 1 introduces a function to retrieve a frequency given a base
-  frequency and an energy cost margin.
-- patch 2 links Energy Model perf_domain to sugov_policy.
-- patch 3 updates get_next_freq() to make use of the Energy Model.
-- patch 4 adds sugov_cpu_ramp_boost() function.
-- patch 5 updates sugov_update_(single|shared)() to make use of
-  sugov_cpu_ramp_boost().
-- patch 6 introduces a tracepoint in get_next_freq() for
-  testing/debugging. Since it's not a trace event, it's not exposed to
-  userspace in a directly usable way, allowing for painless future
-  updates/removal.
+The efficiency of an OPP is measured as efficiency=capacity/power.  OPPs
+with the same efficiency are assumed to be equivalent, since they will
+consume as much energy for a given amount of work to do. That may take
+more or less time depending on the frequency, but will consume the same
+energy.
 
-The benefits of using the EM in schedutil are twofold:
+Signed-off-by: Douglas RAILLARD <douglas.raillard@arm.com>
+---
+ include/linux/energy_model.h | 56 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-1) Selecting the highest possible frequency for a given cost. Some
-   platforms can have lower frequencies that are less efficient than
-   higher ones, in which case they should be skipped for most purposes.
-   They can still be useful to give more freedom to thermal throttling
-   mechanisms, but not under normal circumstances.
-   note: the EM framework will warn about such OPPs "hertz/watts ratio
-   non-monotonically decreasing"
-
-2) Driving the frequency selection with power in mind, in addition to
-   maximizing the utilization of the non-idle CPUs in the system.
-
-Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
-enabled in schedutil by
-"sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
-
-Point 2) is enabled in
-"sched/cpufreq: Boost schedutil frequency ramp up". It allows using
-higher frequencies when it is known that the true utilization of
-currently running tasks is exceeding their previous stable point.
-The benefits are:
-
-* Boosting the frequency when the behavior of a runnable task changes,
-  leading to an increase in utilization. That shortens the frequency
-  ramp up duration, which in turns allows the utilization signal to
-  reach stable values quicker.  Since the allowed frequency boost is
-  bounded in energy, it will behave consistently across platforms,
-  regardless of the OPP cost range.
-
-* The boost is only transient, and should not impact a lot the energy
-  consumed of workloads with very stable utilization signals.
-
-This has been ligthly tested with a rtapp task ramping from 10% to 75%
-utilisation on a big core.
-
-v1 -> v2:
-
-  * Split the new sugov_cpu_ramp_boost() from the existing
-    sugov_cpu_is_busy() as they seem to seek a different goal.
-
-  * Implement sugov_cpu_ramp_boost() based on CFS util_avg and
-    util_est_enqueued signals, rather than using idle calls count.
-    This makes the ramp boost much more accurate in finding boost
-    opportunities, and give a "continuous" output rather than a boolean.
-
-  * Add EM_COST_MARGIN_SCALE=1024 to represent the
-    margin values of em_pd_get_higher_freq().
-
-v2 -> v3:
-
-  * Check util_avg >= sg_cpu->util_avg in sugov_cpu_ramp_boost_update()
-    to avoid boosting when the utilization is decreasing.
-
-  * Add a tracepoint for testing. 
-
-v3 -> v4:
-
-  * em_pd_get_higher_freq() now interprets the margin as absolute,
-    rather than relative to the cost of the base frequency.
-
-  * Modify misleading comment in em_pd_get_higher_freq() since min_freq
-    can actually be higher than the max available frequency in normal
-    operations.
-
-Douglas RAILLARD (6):
-  PM: Introduce em_pd_get_higher_freq()
-  sched/cpufreq: Attach perf domain to sugov policy
-  sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()
-  sched/cpufreq: Introduce sugov_cpu_ramp_boost
-  sched/cpufreq: Boost schedutil frequency ramp up
-  sched/cpufreq: Add schedutil_em_tp tracepoint
-
- include/linux/energy_model.h     |  56 ++++++++++++++
- include/trace/events/power.h     |   9 +++
- kernel/sched/cpufreq_schedutil.c | 124 +++++++++++++++++++++++++++++--
- 3 files changed, 182 insertions(+), 7 deletions(-)
-
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index d249b88a4d5a..8855e6892724 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -159,6 +159,56 @@ static inline int em_pd_nr_cap_states(struct em_perf_domain *pd)
+ 	return pd->nr_cap_states;
+ }
+ 
++#define EM_COST_MARGIN_SCALE 1024U
++
++/**
++ * em_pd_get_higher_freq() - Get the highest frequency that does not exceed the
++ * given cost margin compared to min_freq
++ * @pd		: performance domain for which this must be done
++ * @min_freq	: minimum frequency to return
++ * @cost_margin : allowed cost margin on the EM_COST_MARGIN_SCALE scale. The
++ * maximum value of the scale maps to the highest cost in that perf domain.
++ *
++ * Return: the chosen frequency, guaranteed to be at least as high as min_freq.
++ */
++static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
++	unsigned long min_freq, unsigned long cost_margin)
++{
++	unsigned long max_cost;
++	unsigned long max_allowed_cost = 0;
++	struct em_cap_state *cs;
++	int i;
++
++	if (!pd)
++		return min_freq;
++
++	max_cost = pd->table[pd->nr_cap_states - 1].cost;
++	cost_margin = (cost_margin * max_cost) / EM_COST_MARGIN_SCALE;
++
++	/* Compute the maximum allowed cost */
++	for (i = 0; i < pd->nr_cap_states; i++) {
++		cs = &pd->table[i];
++		if (cs->frequency >= min_freq) {
++			max_allowed_cost = cs->cost + cost_margin;
++			break;
++		}
++	}
++
++	/* Find the highest frequency that will not exceed the cost margin */
++	for (i = pd->nr_cap_states-1; i >= 0; i--) {
++		cs = &pd->table[i];
++		if (cs->cost <= max_allowed_cost)
++			return cs->frequency;
++	}
++
++	/*
++	 * min_freq can be higher than the highest available frequency since
++	 * map_util_freq() will multiply the minimum frequency by some amount.
++	 * This can allow it to be higher than the maximum achievable frequency.
++	 */
++	return min_freq;
++}
++
+ #else
+ struct em_data_callback {};
+ #define EM_DATA_CB(_active_power_cb) { }
+@@ -181,6 +231,12 @@ static inline int em_pd_nr_cap_states(struct em_perf_domain *pd)
+ {
+ 	return 0;
+ }
++
++static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
++	unsigned long min_freq, unsigned long cost_margin)
++{
++	return min_freq;
++}
+ #endif
+ 
+ #endif
 -- 
 2.24.1
 
