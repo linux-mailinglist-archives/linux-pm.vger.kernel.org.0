@@ -2,94 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F73147013
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 18:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEAF1471C4
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 20:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727296AbgAWRw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 12:52:56 -0500
-Received: from foss.arm.com ([217.140.110.172]:42864 "EHLO foss.arm.com"
+        id S1729126AbgAWTaK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 14:30:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39542 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727022AbgAWRw4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 Jan 2020 12:52:56 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49B711FB;
-        Thu, 23 Jan 2020 09:52:55 -0800 (PST)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B0673F52E;
-        Thu, 23 Jan 2020 09:52:54 -0800 (PST)
-Subject: Re: [RFC PATCH v4 3/6] sched/cpufreq: Hook em_pd_get_higher_power()
- into get_next_freq()
-To:     Quentin Perret <qperret@google.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, linux-pm@vger.kernel.org
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <20200122173538.1142069-4-douglas.raillard@arm.com>
- <20200123161644.GA144523@google.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <5a2af4e7-f9eb-4f23-908a-fab2c7395a99@arm.com>
-Date:   Thu, 23 Jan 2020 17:52:53 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
-MIME-Version: 1.0
-In-Reply-To: <20200123161644.GA144523@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+        id S1728731AbgAWTaE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Jan 2020 14:30:04 -0500
+Subject: Re: [GIT PULL] Power management fix for v5.5-rc8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579807804;
+        bh=xu83yQGo2Fgf0V06kPl1ib0ub6ap7wozrd+fmj0dwnQ=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=mOaJ9Oj8wMsD4ztLcp4tCLe5AIfoQO8pY9w2lEkV23B7FasfByAf1YGnKB/r0oPxp
+         q/r8GLL2OwYqWvhG40gMaELabUCymv/nMV2JDdz0Bbi+BeHdcfyPtBP8kjUyAIzr3o
+         0MCCI8w8icndJZawK1lvNu9wwAdds85yXbDLSvTY=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0g1n2ncCOe-y5dOHS3pGDLQ9e92Z761S86XV8GPKkG4iA@mail.gmail.com>
+References: <CAJZ5v0g1n2ncCOe-y5dOHS3pGDLQ9e92Z761S86XV8GPKkG4iA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0g1n2ncCOe-y5dOHS3pGDLQ9e92Z761S86XV8GPKkG4iA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc8
+X-PR-Tracked-Commit-Id: 18451f9f9e5810b8bd1245c5ae166f257e0e2b9d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3a83c8c81c91fe10e7002c2c0e74b23e80f41f28
+Message-Id: <157980780423.24133.7675563886623809686.pr-tracker-bot@kernel.org>
+Date:   Thu, 23 Jan 2020 19:30:04 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Thu, 23 Jan 2020 15:55:47 +0100:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.5-rc8
 
-On 1/23/20 4:16 PM, Quentin Perret wrote:
-> On Wednesday 22 Jan 2020 at 17:35:35 (+0000), Douglas RAILLARD wrote:
->> @@ -210,9 +211,16 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
->>  	struct cpufreq_policy *policy = sg_policy->policy;
->>  	unsigned int freq = arch_scale_freq_invariant() ?
->>  				policy->cpuinfo.max_freq : policy->cur;
->> +	struct em_perf_domain *pd = sugov_policy_get_pd(sg_policy);
->>  
->>  	freq = map_util_freq(util, freq, max);
->>  
->> +	/*
->> +	 * Try to get a higher frequency if one is available, given the extra
->> +	 * power we are ready to spend.
->> +	 */
->> +	freq = em_pd_get_higher_freq(pd, freq, 0);
-> 
-> I find it sad that the call just below to cpufreq_driver_resolve_freq()
-> and cpufreq_frequency_table_target() iterates the OPPs all over again.
-> It's especially a shame since most existing users of the EM stuff do
-> have a cpufreq frequency table.
-> 
-> Have you looked at hooking this inside cpufreq_driver_resolve_freq()
-> instead ? If we have a well-formed EM available, the call to
-> cpufreq_frequency_table_target() feels redundant, so we might want to
-> skip it.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3a83c8c81c91fe10e7002c2c0e74b23e80f41f28
 
-We can't really move the call to em_pd_get_higher_freq() into
-cpufreq_driver_resolve_freq() since that's a schedutil-specific feature,
-and we would loose the !sg_policy->need_freq_update optimization.
+Thank you!
 
-Maybe we can add a flag to cpufreq_driver_resolve_freq() that promises
-that the frequency is already a valid one. We have to be careful though,
-since a number of things can make that untrue:
- - em_pd_get_higher_freq() will return the passed freq verbatim if it's
-higher than the max freq, so em_pd_get_higher_freq() will have to set
-the flag itself in case that logic changes.
- - policy limits can change the value
- - future things could tinker with the freq and forget to reset the flag.
-
-If you think it's worth it I can make these changes.
-
-> Thoughts ?
-> 
-> Quentin
-> 
-
-Cheers,
-Douglas
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
