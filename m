@@ -2,122 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C08C146D23
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 16:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3217146D29
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 16:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgAWPnT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 10:43:19 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46546 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgAWPnT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 10:43:19 -0500
-Received: by mail-oi1-f196.google.com with SMTP id 13so3250827oij.13;
-        Thu, 23 Jan 2020 07:43:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jvg7wSBuSfnR+jPryCZqogmG0U1OOdgKNdgdT9M+CAQ=;
-        b=lyWkAB5M+lsG763lNA/3NM/KSFbKu0um0ESVtRBeilYaV0ybr2O+JzwuzCwsQ55HKL
-         tDzRUFuFCY5OJ4gHN0hiVpnknpWgKjpkGfYQEM7O4VtoNggNMDtWR697MA6mVHXiVI00
-         EgY9ke4n03QPLrs7IgSoSjxxW1Zj9JYfxFIZDODxpFM0jQPI115grrYroi08ktOXU3GK
-         CbLiCSPCxQ+OG4fl22dg7SOqpy2+KNrF8QfWnV1nooHChigqnEX4UbzRvilJdvNpc7Kg
-         UPFdOzghVMvbLv4zhGrKaVOMfZ4bk9pf4ioC7CGlumu2Jq4gx4UvljZgtMHxhON/dFqe
-         e5gg==
-X-Gm-Message-State: APjAAAVdVSqIPfFOVrasKvOUtStK/SZ6bFcq5pWnDkDiDLewCuIMj1En
-        CWNqhg0XUlCbiHhqDLOqOr92XFPFJO+7PsjDJZw=
-X-Google-Smtp-Source: APXvYqxCsrAW1z//6Pb/k1EDcWu7Q4HQzQvh5jIFIL3idRGPe6BEtYDcgbdULAUMwc/yPusaeuzyWoPhbY5Whd8XrR8=
-X-Received: by 2002:a54:4e96:: with SMTP id c22mr11231161oiy.110.1579794198623;
- Thu, 23 Jan 2020 07:43:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
-In-Reply-To: <20200122173538.1142069-1-douglas.raillard@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Jan 2020 16:43:07 +0100
-Message-ID: <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1726703AbgAWPpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 10:45:16 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:34888 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbgAWPpQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 10:45:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=CfGynnt/xKdfIoX3WMfV+TOt1SzqpkEnFYHQojJ4eyw=; b=McLHS2v0m0LRF8+Wgk153BavG
+        1x0mpFvtr0BM2TLBd5GHvUOOmNcQ6c6eeCzhBn9NkfN6Z42mE1te7qDQiOlXcKUAinXGOFV7oLZ8m
+        BRNE2Q5QW8deuAFp6aWaeJamLrDdM8xbWb5YkzYIcVYMR23KDhlUBf8NFLfrEYfPWF3g6UQKkRVq2
+        Bx2S5CHsIwA953Tj/c8T2AP2OowZVDZqg8btcoK81EEuFFe9fohz4GNWYd7HYYjN2t57xZO2RdeQy
+        w7kEMDLLy6uRPpf1WxwVnRKaKjKTlf7Z66+qfhos83Y5N0cQ5WYUkQtU3CR6zAZv1UPJQCf3r7qhq
+        dV2rCZWSg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iuef2-0007oi-9n; Thu, 23 Jan 2020 15:44:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CD64130067C;
+        Thu, 23 Jan 2020 16:43:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D7BE42B714F6E; Thu, 23 Jan 2020 16:44:45 +0100 (CET)
+Date:   Thu, 23 Jan 2020 16:44:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
+        Paul Turner <pjt@google.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@qperret.net>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Doug Smythies <dsmythies@telus.net>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Subject: Re: [PATCH v5 0/6] Add support for frequency invariance for (some)
+ x86
+Message-ID: <20200123154445.GW14914@hirez.programming.kicks-ass.net>
+References: <20200122151617.531-1-ggherdovich@suse.cz>
+ <CAJZ5v0gO18Oz4qvf3L9LfAX+1ww2XTeP_o_3WixYixB9d=s8Wg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gO18Oz4qvf3L9LfAX+1ww2XTeP_o_3WixYixB9d=s8Wg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 6:36 PM Douglas RAILLARD
-<douglas.raillard@arm.com> wrote:
->
-> Make schedutil cpufreq governor energy-aware.
+On Thu, Jan 23, 2020 at 04:30:36PM +0100, Rafael J. Wysocki wrote:
+> All looks good to me, so
+> 
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> for the whole series (and I'm assuming that it will go it through the tip tree).
 
-I have to say that your terminology is confusing to me, like what
-exactly does "energy-aware" mean in the first place?
-
-> - patch 1 introduces a function to retrieve a frequency given a base
->   frequency and an energy cost margin.
-> - patch 2 links Energy Model perf_domain to sugov_policy.
-> - patch 3 updates get_next_freq() to make use of the Energy Model.
-> - patch 4 adds sugov_cpu_ramp_boost() function.
-> - patch 5 updates sugov_update_(single|shared)() to make use of
->   sugov_cpu_ramp_boost().
-> - patch 6 introduces a tracepoint in get_next_freq() for
->   testing/debugging. Since it's not a trace event, it's not exposed to
->   userspace in a directly usable way, allowing for painless future
->   updates/removal.
->
-> The benefits of using the EM in schedutil are twofold:
-
-I guess you mean using the EM directly in schedutil (note that it is
-used indirectly already, because of EAS), but that needs to be clearly
-stated.
-
-> 1) Selecting the highest possible frequency for a given cost. Some
->    platforms can have lower frequencies that are less efficient than
->    higher ones, in which case they should be skipped for most purposes.
->    They can still be useful to give more freedom to thermal throttling
->    mechanisms, but not under normal circumstances.
->    note: the EM framework will warn about such OPPs "hertz/watts ratio
->    non-monotonically decreasing"
-
-While all of that is fair enough for platforms using the EM, do you
-realize that the EM is not available on the majority of architectures
-(including some fairly significant ones) and so adding overhead
-related to it for all of them is quite less than welcome?
-
-> 2) Driving the frequency selection with power in mind, in addition to
->    maximizing the utilization of the non-idle CPUs in the system.
-
-Care to explain this?  I'm totally unsure what you mean here.
-
-> Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
-> enabled in schedutil by
-> "sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
->
-> Point 2) is enabled in
-> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
-> higher frequencies when it is known that the true utilization of
-> currently running tasks is exceeding their previous stable point.
-
-Please explain "true utilization" and "stable point".
-
-> The benefits are:
->
-> * Boosting the frequency when the behavior of a runnable task changes,
->   leading to an increase in utilization. That shortens the frequency
->   ramp up duration, which in turns allows the utilization signal to
->   reach stable values quicker.  Since the allowed frequency boost is
->   bounded in energy, it will behave consistently across platforms,
->   regardless of the OPP cost range.
-
-Sounds good.
-
-Can you please describe the algorithm applied to achieve that?
-
-> * The boost is only transient, and should not impact a lot the energy
->   consumed of workloads with very stable utilization signals.
+Thanks, and yes, I've picked them up and will push them to tip if
+nothing falls out.
