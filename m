@@ -2,203 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0688D146CDB
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 16:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C08C146D23
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 16:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728668AbgAWPat (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 10:30:49 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39440 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbgAWPas (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 10:30:48 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 77so3095969oty.6;
-        Thu, 23 Jan 2020 07:30:48 -0800 (PST)
+        id S1726771AbgAWPnT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 10:43:19 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46546 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726703AbgAWPnT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 10:43:19 -0500
+Received: by mail-oi1-f196.google.com with SMTP id 13so3250827oij.13;
+        Thu, 23 Jan 2020 07:43:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dJBGS4e0jWaAWLLcuuHxgK6M1UmjccQT8Vf0obsUZeE=;
-        b=Y9yFrQ9PyknN7p4NsknuKCrrfpYSDR+Zh0lFxOVz2yG7Om5A0Kj/VWxWzH6jQxO9oG
-         UsCpKRTzBmzz/CPGVStPWJDnVYsEhleBaKSqzM4egLuFnX1alArFvhDLE8e0zKlvcQHV
-         g4dYV31ZIeIn2qKQae3HJKqiA0ovAWmILIGlZyv2E0PIInZ3ixwXyD14oVFT7kAvnVIZ
-         DdcEICmv+GWfXyku8BrnAvsoJytM+eF4CyD5IwgUGykeFHpX/FemNZM/rW5rss+D0kTL
-         0BBqNrmpuZIc3zKDL2c1NEcUao/kEoPaFaH9YCMEkqYW4w4qyQyxrbgjkv2MhzeQEScq
-         hmCA==
-X-Gm-Message-State: APjAAAUCDdG4VFagodb9UERtUkoY4B2jKrR8InBnnRN3AMAbpCgMzjkj
-        lyMdQDAyFfWGhjMn+XRFLC48a+kS3bLcIBFHK0c=
-X-Google-Smtp-Source: APXvYqw6IP+WgUGRKWpK62i5avBtF0C6itxi/KoBk1PUkIzbGmaBwLHz4G94k4M9YBc6eq2FJByHi9fUpk84qYEfUy8=
-X-Received: by 2002:a05:6830:1e67:: with SMTP id m7mr11717398otr.262.1579793447589;
- Thu, 23 Jan 2020 07:30:47 -0800 (PST)
+        bh=jvg7wSBuSfnR+jPryCZqogmG0U1OOdgKNdgdT9M+CAQ=;
+        b=lyWkAB5M+lsG763lNA/3NM/KSFbKu0um0ESVtRBeilYaV0ybr2O+JzwuzCwsQ55HKL
+         tDzRUFuFCY5OJ4gHN0hiVpnknpWgKjpkGfYQEM7O4VtoNggNMDtWR697MA6mVHXiVI00
+         EgY9ke4n03QPLrs7IgSoSjxxW1Zj9JYfxFIZDODxpFM0jQPI115grrYroi08ktOXU3GK
+         CbLiCSPCxQ+OG4fl22dg7SOqpy2+KNrF8QfWnV1nooHChigqnEX4UbzRvilJdvNpc7Kg
+         UPFdOzghVMvbLv4zhGrKaVOMfZ4bk9pf4ioC7CGlumu2Jq4gx4UvljZgtMHxhON/dFqe
+         e5gg==
+X-Gm-Message-State: APjAAAVdVSqIPfFOVrasKvOUtStK/SZ6bFcq5pWnDkDiDLewCuIMj1En
+        CWNqhg0XUlCbiHhqDLOqOr92XFPFJO+7PsjDJZw=
+X-Google-Smtp-Source: APXvYqxCsrAW1z//6Pb/k1EDcWu7Q4HQzQvh5jIFIL3idRGPe6BEtYDcgbdULAUMwc/yPusaeuzyWoPhbY5Whd8XrR8=
+X-Received: by 2002:a54:4e96:: with SMTP id c22mr11231161oiy.110.1579794198623;
+ Thu, 23 Jan 2020 07:43:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20200122151617.531-1-ggherdovich@suse.cz>
-In-Reply-To: <20200122151617.531-1-ggherdovich@suse.cz>
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
+In-Reply-To: <20200122173538.1142069-1-douglas.raillard@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 23 Jan 2020 16:30:36 +0100
-Message-ID: <CAJZ5v0gO18Oz4qvf3L9LfAX+1ww2XTeP_o_3WixYixB9d=s8Wg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] Add support for frequency invariance for (some) x86
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
+Date:   Thu, 23 Jan 2020 16:43:07 +0100
+Message-ID: <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Douglas RAILLARD <douglas.raillard@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Paul Turner <pjt@google.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@qperret.net>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
+        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 4:10 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+On Wed, Jan 22, 2020 at 6:36 PM Douglas RAILLARD
+<douglas.raillard@arm.com> wrote:
 >
-> v4 at https://lore.kernel.org/lkml/20191113124654.18122-1-ggherdovich@suse.cz/
->
-> Changes wrt v4:
->
-> - Removing conditional access in the function arch_scale_freq_capacity()
->   and initialize arch_freq_scale to 1024 to account for when freq
->   invariance isn't enabled (Ionela V.)
-> - In case the max frequency can't be read in MSRs, do not enable frequency
->   invariance at all (Ionela V., Peter Z.).
-> - Renames:
->     variables:
->       arch_cpu_freq  -> arch_freq_scale
->       arch_max_freq  -> arch_max_freq_ratio
->       ... and others
->     functions:
->       init_scale_freq  -> init_counter_refs
->       set_cpu_max_freq -> init_freq_invariance
->       {core,skx,knl...}_set_cpu_max_freq  -> {core,skx,knl...}_set_max_freq_ratio
->       ... and others
-> - Use the same function for parsing SKX and GLM registers (Peter Z.)
-> - Pass a parameter to the function parsing KNL registers (Peter Z.)
-> - Fix a bug whereby refs to [am]perf were initialized only on cpu #0
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> Cover Letter from v4:
->
-> v3 at https://lore.kernel.org/lkml/20191111180549.12166-1-ggherdovich@suse.cz/
->
-> Changes wrt v3:
->
-> - Add definition of function set_arch_max_freq if !CONFIG_SMP
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> Cover Letter from v3:
->
-> v2 at https://lore.kernel.org/lkml/20191002122926.385-1-ggherdovich@suse.cz/
->
-> Changes wrt v2:
->
-> - Removing the tick_disable mechanism. Frequency scale-invariance isn't
->   just about helping schedutil choose better frequencies, but also
->   providing the scheduler load balancer with better metrics. All users of
->   PELT signals benefit from this feature. The tick_disable patch disabled
->   frequency invariant calculation when a specific driver is in use
->   (intel_pstate in active mode).
->
-> - static_branch_enable(&arch_scale_freq_key) is now called earlier, right
->   after we learn that X86_FEATURE_APERFMPERF is available. Previously Peter
->   Z. commented "if we can't tell the max_freq we don't want to use the
->   invariant stuff.". I've decided to do it differently: if we can't tell
->   the max_freq, then it's because the CPU encodes max_freq in MSRs in a way
->   this patch doesn't understand, and we assume max_p is the max_freq which
->   seems like a safe bet. As a reminder, max_freq=max_p is encoded by
->   setting arch_max_freq=1024 as default value. I'm open to feedback.
->
-> - Refactoring the switch case statement in set_cpu_max_freq() as Rafael
->   W. Now the first patch doesn't hint at what the following patch will
->   bring along.
->
-> - Handling the case were turbo is disabled at runtime and a _PPC ACPI
->   notification is issued, as requested by Rafael W. This happens eg. when
->   some laptop model is disconnected from AC. (Patch #6)
->
-> - Handling all Intel x86_64 micro-arches.
->
-> - A note for Srinivas P., who expressed concern for Atoms: on Atom CPUs the
->   max_freq is set to the highest turbo level, as a power-efficiency
->   oriented measure. In this way the ratio curr_freq/max_freq tends to be
->   lower, PELT signals are consequently lower, and schedutil doesn't push
->   too hard on speed. (Patches #4 and #5).
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> Cover Letter from v2:
->
-> v1 at https://lore.kernel.org/lkml/20190909024216.5942-1-ggherdovich@suse.cz/
->
-> Changes wrt v1:
->
-> - add x86-specific implementation of arch_scale_freq_invariant() using a
->   static key that checks for the availability of APERF and MPERF
-> - refer to GOLDMONT_D instead of GOLDMONT_X, according to recent rename
-> - set arch_cpu_freq to 1024 from x86_arch_scale_freq_tick_disable() to prevent
->   PELT from being fed stale data
->
-> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-> Cover Letter from v1:
->
-> This is a resend with of Peter Zijlstra's patch to support frequency
-> scale-invariance on x86 from May 2018 [see 1]. I've added some modifications
-> and included performance test results. If Peter doesn't mind, I'm slapping my
-> name on it :)
->
-> The changes from Peter's original implementation are:
->
-> 1) normalizing against the 4-cores turbo level instead or 1-core turbo
-> 2) removing the run-time search for when the above value isn't found in the
->    various Intel MSRs -- the base frequency value is taken in that case.
->
-> The section "4. KNOWN LIMITATIONS" in the first patch commit message addresses
-> the reason why this approach was dropped back in 2018, and explains that the
-> performance gains outweight that issue.
->
-> The second patch from Srinivas is taken verbatim from the May 2018 submission
-> as it still applies.
->
-> I apologies for the length of patch #1 commit message; I've made a table of
-> contents with summaries of each section that should make easier to skim
-> through the content.
->
-> This submission incorporates the feedback and requests for additional tests
-> received during the presentation made at OSPM 2019 in Pisa three months ago.
->
-> [1] https://lore.kernel.org/lkml/20180516044911.28797-2-srinivas.pandruvada@linux.intel.com/
->
-> Giovanni Gherdovich (6):
->   x86,sched: Add support for frequency invariance
->   x86,sched: Add support for frequency invariance on SKYLAKE_X
->   x86,sched: Add support for frequency invariance on XEON_PHI_KNL/KNM
->   x86,sched: Add support for frequency invariance on ATOM_GOLDMONT*
->   x86,sched: Add support for frequency invariance on ATOM
->   x86: intel_pstate: handle runtime turbo disablement/enablement in
->     freq. invariance
->
->  arch/x86/include/asm/topology.h |  25 ++++
->  arch/x86/kernel/smpboot.c       | 290 +++++++++++++++++++++++++++++++++++++++-
->  drivers/cpufreq/intel_pstate.c  |   1 +
->  kernel/sched/core.c             |   1 +
->  kernel/sched/sched.h            |   7 +
->  5 files changed, 323 insertions(+), 1 deletion(-)
->
+> Make schedutil cpufreq governor energy-aware.
 
-All looks good to me, so
+I have to say that your terminology is confusing to me, like what
+exactly does "energy-aware" mean in the first place?
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> - patch 1 introduces a function to retrieve a frequency given a base
+>   frequency and an energy cost margin.
+> - patch 2 links Energy Model perf_domain to sugov_policy.
+> - patch 3 updates get_next_freq() to make use of the Energy Model.
+> - patch 4 adds sugov_cpu_ramp_boost() function.
+> - patch 5 updates sugov_update_(single|shared)() to make use of
+>   sugov_cpu_ramp_boost().
+> - patch 6 introduces a tracepoint in get_next_freq() for
+>   testing/debugging. Since it's not a trace event, it's not exposed to
+>   userspace in a directly usable way, allowing for painless future
+>   updates/removal.
+>
+> The benefits of using the EM in schedutil are twofold:
 
-for the whole series (and I'm assuming that it will go it through the tip tree).
+I guess you mean using the EM directly in schedutil (note that it is
+used indirectly already, because of EAS), but that needs to be clearly
+stated.
 
-Thanks!
+> 1) Selecting the highest possible frequency for a given cost. Some
+>    platforms can have lower frequencies that are less efficient than
+>    higher ones, in which case they should be skipped for most purposes.
+>    They can still be useful to give more freedom to thermal throttling
+>    mechanisms, but not under normal circumstances.
+>    note: the EM framework will warn about such OPPs "hertz/watts ratio
+>    non-monotonically decreasing"
+
+While all of that is fair enough for platforms using the EM, do you
+realize that the EM is not available on the majority of architectures
+(including some fairly significant ones) and so adding overhead
+related to it for all of them is quite less than welcome?
+
+> 2) Driving the frequency selection with power in mind, in addition to
+>    maximizing the utilization of the non-idle CPUs in the system.
+
+Care to explain this?  I'm totally unsure what you mean here.
+
+> Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
+> enabled in schedutil by
+> "sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
+>
+> Point 2) is enabled in
+> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
+> higher frequencies when it is known that the true utilization of
+> currently running tasks is exceeding their previous stable point.
+
+Please explain "true utilization" and "stable point".
+
+> The benefits are:
+>
+> * Boosting the frequency when the behavior of a runnable task changes,
+>   leading to an increase in utilization. That shortens the frequency
+>   ramp up duration, which in turns allows the utilization signal to
+>   reach stable values quicker.  Since the allowed frequency boost is
+>   bounded in energy, it will behave consistently across platforms,
+>   regardless of the OPP cost range.
+
+Sounds good.
+
+Can you please describe the algorithm applied to achieve that?
+
+> * The boost is only transient, and should not impact a lot the energy
+>   consumed of workloads with very stable utilization signals.
