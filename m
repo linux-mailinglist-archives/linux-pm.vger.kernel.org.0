@@ -2,162 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4321460A6
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 03:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370AE14618D
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 06:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726164AbgAWCOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Jan 2020 21:14:08 -0500
-Received: from lgeamrelo11.lge.com ([156.147.23.51]:36455 "EHLO
-        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgAWCOI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Jan 2020 21:14:08 -0500
-Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
-        by 156.147.23.51 with ESMTP; 23 Jan 2020 11:14:05 +0900
-X-Original-SENDERIP: 156.147.1.121
-X-Original-MAILFROM: chanho.min@lge.com
-Received: from unknown (HELO ?10.178.36.63?) (10.178.36.63)
-        by 156.147.1.121 with ESMTP; 23 Jan 2020 11:14:05 +0900
-X-Original-SENDERIP: 10.178.36.63
-X-Original-MAILFROM: chanho.min@lge.com
-Subject: Re: [PATCH] PM: core: Fix handling of devices deleted during
- system-wide resume
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daewoong Kim <daewoong00.kim@lge.com>,
-        Lee Gunho <gunho.lee@lge.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <2601275.1tEomSadG4@kreacher>
-From:   Chanho Min <chanho.min@lge.com>
-Message-ID: <c5a2d11f-86fe-663d-f0ad-ed6ea0da871e@lge.com>
-Date:   Thu, 23 Jan 2020 11:14:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725818AbgAWFcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 00:32:55 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46369 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725535AbgAWFcz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 00:32:55 -0500
+Received: by mail-pf1-f193.google.com with SMTP id n9so964835pff.13
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2020 21:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=olcNFoFN1XXIUl/h/J5YSDSjEz+dlCu/0pWI28fy02Q=;
+        b=jUpnAm84r9pUqF9Xu8lwVDVPb4Q0SRJNzxeioAK4yHXPnfOFRa4nbDsIBTKpJcwpTw
+         QDRaIHb/x/1Zyn4ln6/aVpRJkeEofXoM2wSl+O9ohWWiokIwMyN80801O1e0QUtEwe5K
+         +Atis93gqDMRkvdkZual5xlzaxtqFqYsvFcieb9OJU/u0t17jjC+lX+8QlrR5bcYAZmL
+         2ESd1GLTk7Pe8jUBxGQXEDLgB153BNv63Kicx/zshBi27Q4b7QyYWxTtyYl5QqEbXxDZ
+         uJ+F1NEM3dY+rCHfb/rTZYvfQ4lIMWr75mreOXm3PaYqdVmNfXQC6CweIH2AR5KYf9m4
+         1b6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=olcNFoFN1XXIUl/h/J5YSDSjEz+dlCu/0pWI28fy02Q=;
+        b=YW1JYtS8w3eM75+cCvu7W1uPJTP352lyUpfCiYQQyDDEvDul1OBKagiehiwT6OucFh
+         oK3yuMkNo9QmFQlZMpHJl6czZVOqPOOBoD+gPSCV+LhnFW+ZXQ2bWUjUkqOWA2EXqqDp
+         z0mn7B5ZDT8hgGLqMVzxjYOcFqAUNZVqjadTZilYpYXXtZSNkFJirquVua8CIdrmnvGJ
+         UloTdrW35XtVaQFYinfmdTvW/zFe9ZTOVrYwtp3JfyoBnQ7i2gQC1oVzdXPWBj2ILnhh
+         qemO/yMcoyHe+4d7Hu/2M7eFn2PkqMkye3oFfTb5D2nYO3BROIkWT9NlMSdpj6HHiQ2p
+         iMPA==
+X-Gm-Message-State: APjAAAWY5lQ+wLkRwaHNyT1IWDV1nE+rlnbEHIWWWuXH2gtH9B59jr9O
+        Zius606BDWEBkln6J0dUxo+e0w==
+X-Google-Smtp-Source: APXvYqxL6WeD/cuMHW0iO6kFFQhDXGmz4F/jTs8JqzJ4Mhlg1nQXubIy+ed4mw7b90/EdBb5r7BReQ==
+X-Received: by 2002:a63:447:: with SMTP id 68mr2206538pge.364.1579757574804;
+        Wed, 22 Jan 2020 21:32:54 -0800 (PST)
+Received: from localhost ([122.167.18.14])
+        by smtp.gmail.com with ESMTPSA id j5sm772505pfn.180.2020.01.22.21.32.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Jan 2020 21:32:53 -0800 (PST)
+Date:   Thu, 23 Jan 2020 11:02:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH] cpufreq: Avoid creating excessively large stack frames
+Message-ID: <20200123053251.3j7muofewhfidplw@vireshk-i7>
+References: <2523300.pfpGjzY74h@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <2601275.1tEomSadG4@kreacher>
-Content-Type: text/plain; charset=euc-kr; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2523300.pfpGjzY74h@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 23-01-20, 00:16, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> If a device is deleted by one of its system-wide resume callbacks
-> (for example, because it does not appear to be present or accessible
-> any more) along with its children, the resume of the children may
-> continue leading to use-after-free errors and other issues
-> (potentially).
+> In the process of modifying a cpufreq policy, the cpufreq core makes
+> a copy of it including all of the internals which is stored on the
+> CPU stack.  Because struct cpufreq_policy is relatively large, this
+> may cause the size of the stack frame to exceed the 2 KB limit and
+> so the GCC complains when -Wframe-larger-than= is used.
 > 
-> Namely, if the device's children are resumed asynchronously, their
-> resume may have been scheduled already before the device's callback
-> runs and so the device may be deleted while dpm_wait_for_superior()
-> is being executed for them.  The memory taken up by the parent device
-> object may be freed then while dpm_wait() is waiting for the parent's
-> resume callback to complete, which leads to a use-after-free.
-> Moreover, the resume of the children is really not expected to
-> continue after they have been unregistered, so it must be terminated
-> right away in that case.Seokjoo Lee <seokjoo.lee@lge.com>
+> In fact, it is not necessary to copy the entire policy structure
+> in order to modify it, however.
 > 
-> To address this problem, modify dpm_wait_for_superior() to check
-> if the target device is still there in the system-wide PM list of
-> devices and if so, to increment its parent's reference counter, both
-> under dpm_list_mtx which prevents device_del() running for the child
-> from dropping the parent's reference counter prematurely.
+> First, because cpufreq_set_policy() obtains the min and max policy
+> limits from frequency QoS now, it is not necessary to pass the limits
+> to it from the callers.  The only things that need to be passed to it
+> from there are the new governor pointer or (if there is a built-in
+> governor in the driver) the "policy" value representing the governor
+> choice.  They both can be passed as individual arguments, though, so
+> make cpufreq_set_policy() take them this way and rework its callers
+> accordingly.  This avoids making copies of cpufreq policies in the
+> callers of cpufreq_set_policy().
 > 
-> If the device is not present in the system-wide PM list of devices
-> any more, the resume of it cannot continue, so check that again after
-> dpm_wait() returns, which means that the parent's callback has been
-> completed, and pass the result of that check to the caller of
-> dpm_wait_for_superior() to allow it to abort the device's resume
-> if it is not there any more.
+> Second, cpufreq_set_policy() still needs to pass the new policy
+> data to the ->verify() callback of the cpufreq driver whose task
+> is to sanitize the min and max policy limits.  It still does not
+> need to make a full copy of struct cpufreq_policy for this purpose,
+> but it needs to pass a few items from it to the driver in case they
+> are needed (different drivers have different needs in that respect
+> and all of them have to be covered).  For this reason, introduce
+> struct cpufreq_policy_data to hold copies of the members of
+> struct cpufreq_policy used by the existing ->verify() driver
+> callbacks and pass a pointer to a temporary structure of that
+> type to ->verify() (instead of passing a pointer to full struct
+> cpufreq_policy to it).
 > 
-> Link: https://lore.kernel.org/linux-pm/1579568452-27253-1-git-send-email-chanho.min@lge.com
-> Reported-by: Chanho Min <chanho.min@lge.com>
+> While at it, notice that intel_pstate doesn't really need to verify
+> the "policy" value in struct cpufreq_policy, so drop that check from
+> it to avoid copying "policy" into struct cpufreq_policy_data (which
+> allows it to be slightly smaller).
+> 
+> Also while at it fix up white space in a couple of places and make
+> cpufreq_set_policy() static (as it can be so).
+> 
+> Fixes: 3000ce3c52f8 ("cpufreq: Use per-policy frequency QoS")
+> Link: https://lore.kernel.org/linux-pm/CAMuHMdX6-jb1W8uC2_237m8ctCpsnGp=JCxqt8pCWVqNXHmkVg@mail.gmail.com
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/base/power/main.c |   42 +++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 37 insertions(+), 5 deletions(-)
-> 
-> Index: linux-pm/drivers/base/power/main.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/main.cSeokjoo Lee <seokjoo.lee@lge.com>
-> +++ linux-pm/drivers/base/power/main.c20. 1. 23. 오전 8:11에 Rafael J. Wysocki 이(가) 쓴 글:
-> @@ -273,10 +273,38 @@ static void dpm_wait_for_suppliers(struc
->   	device_links_read_unlock(idx);
->   }
->   
-> -static void dpm_wait_for_superior(struct device *dev, bool async)
-> +static bool dpm_wait_for_superior(struct device *dev, bool async)
->   {
-> -	dpm_wait(dev->parent, async);
-> +	struct device *parent;board
-> +
-> +	/*
-> +	 * If the device is resumed asynchronously and the parent's callback
-> +	 * deletes both the device and the parent itself, the parent object may
-> +	 * be freed while this function is running, so avoid that by reference
-> +	 * counting the parent once more unless the device has been deleted
-> +	 * already (in which case return right away).
-> +	 */
-> +	mutex_lock(&dpm_list_mtx);
-> +
-> +	if (!device_pm_initialized(dev)) {20. 1. 23. 오전 8:11에 Rafael J. Wysocki 이(가) 쓴 글:
-> +		mutex_unlock(&dpm_list_mtx);
-> +		return false;
-> +	}
-> +
-> +	parent = get_device(dev->parent);
-> +
-> +	mutex_unlock(&dpm_list_mtx);
-> +
-> +	dpm_wait(parent, async);
-> +	put_device(parent);
-> +
->   	dpm_wait_for_suppliers(dev, async);
-> +
-> +	/*
-> +	 * If the parent's callback has deleted the device, attempting to resume
-> +	 * it would be invalid, so avoid doing that then.
-> +	 */
-> +	return device_pm_initialized(dev);20. 1. 23. 오전 8:11에 Rafael J. Wysocki 이(가) 쓴 글:
->   }
->   
->   static void dpm_wait_for_consumers(struct device *dev, bool async)
-> @@ -621,7 +649,8 @@ static int device_resume_noirq(struct de
->   	if (!dev->power.is_noirq_suspended)
->   		goto Out;
->   
-> -	dpm_wait_for_superior(dev, async);
-> +	if (!dpm_wait_for_superior(dev, async))
-> +		goto Out;
->   
->   	skip_resume = dev_pm_may_skip_resume(dev);
->   
-> @@ -829,7 +858,8 @@ static int device_resume_early(struct de
->   	if (!dev->power.is_late_suspended)
->   		goto Out;
->   
-> -	dpm_wait_for_superior(dev, async);Seokjoo Lee <seokjoo.lee@lge.com>
-> +	if (!dpm_wait_for_superior(dev, async))
-> +		goto Out;
->   
->   	callback = dpm_subsys_resume_early_cb(dev, state, &info);
->   
-> @@ -944,7 +974,9 @@ static int device_resume(struct device *
->   		goto Complete;
->   	}
->   
-> -	dpm_wait_for_superior(dev, async);
-> +	if (!dpm_wait_for_superior(dev, async))
-> +		goto Complete;
-> +
->   	dpm_watchdog_set(&wd, dev);
->   	device_lock(dev);Thanks, This seems to solve the rare hang on our target.
-Actually, the problem is occurred in v4.4.
-Shouldn't it apply to -stable?
+>  drivers/cpufreq/cppc_cpufreq.c     |    2 
+>  drivers/cpufreq/cpufreq-nforce2.c  |    2 
+>  drivers/cpufreq/cpufreq.c          |  147 +++++++++++++++++--------------------
+>  drivers/cpufreq/freq_table.c       |    4 -
+>  drivers/cpufreq/gx-suspmod.c       |    2 
+>  drivers/cpufreq/intel_pstate.c     |   38 ++++-----
+>  drivers/cpufreq/longrun.c          |    2 
+>  drivers/cpufreq/pcc-cpufreq.c      |    2 
+>  drivers/cpufreq/sh-cpufreq.c       |    2 
+>  drivers/cpufreq/unicore2-cpufreq.c |    2 
+>  include/linux/cpufreq.h            |   32 +++++---
+>  11 files changed, 119 insertions(+), 116 deletions(-)
 
-Chanho
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
