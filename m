@@ -2,167 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A77146E52
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 17:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5630D146F5D
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 18:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgAWQ2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 11:28:33 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:43812 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727312AbgAWQ2d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 11:28:33 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NGIdeQ028190;
-        Thu, 23 Jan 2020 16:27:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=SEWGmpj+C0GP5tdPocK684KKu6ngmTY1W8H/vmTd0A0=;
- b=pXeftWy8HiCzIEKg+sR2wmeh1TvnQWox+DKmb4s4OearFpwdo8Lv08wnT78PWw6gn5IN
- mUMIgfndfmOTwrSjHUhBjAlaHAyUVpo9UpSgC9xx2rB+zPWdIoGnDOKBmcnh2jN7YYu5
- TbvTJLfxoWapvsfAbzFABhZz9KeJtqxsJu92WD/9/eUWk/3fTpglMFVNVCkNj8Mh7+b+
- Q8XHYWQMkqJGCL24vT9ey02e5/dUkEOIQBVtw9tWPmWqnAyMeEGRH6MAzw61jd8VvAsA
- tRG74cw1j6oIK0NNvilcn+ns1MbF3LnKpsvrJ5y1iYUf9IXhAloyENRwdfGt9UzHRGvy 9g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2xkseuuhkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jan 2020 16:27:34 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NGJ2YX170407;
-        Thu, 23 Jan 2020 16:27:34 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2xpq0wutwt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jan 2020 16:27:33 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00NGRTQl025960;
-        Thu, 23 Jan 2020 16:27:29 GMT
-Received: from bostrovs-us.us.oracle.com (/10.152.32.65)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 23 Jan 2020 08:27:29 -0800
-Subject: Re: [RFC PATCH V2 11/11] x86: tsc: avoid system instability in
- hibernation
-To:     Anchal Agarwal <anchalag@amazon.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "axboe@kernel.dk" <axboe@kernel.dk>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "konrad.wilk@oracle.co" <konrad.wilk@oracle.com>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "fllinden@amaozn.com" <fllinden@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <20200107234526.GA19034@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200108105011.GY2827@hirez.programming.kicks-ass.net>
- <20200110153520.GC8214@u40b0340c692b58f6553c.ant.amazon.com>
- <20200113101609.GT2844@hirez.programming.kicks-ass.net>
- <857b42b2e86b2ae09a23f488daada3b1b2836116.camel@amazon.com>
- <20200113124247.GG2827@hirez.programming.kicks-ass.net>
- <CAJZ5v0jv+5aLY3N4wFSitu61o9S8tJWEWGGn1Xyw-P82_TwFdQ@mail.gmail.com>
- <CAJZ5v0imNbbch=NWAdgVKf_hjwRrEiWAL8SFNwe6rW_SjgYzrw@mail.gmail.com>
- <20200114192952.GA26755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200122200710.GA3071@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
- 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
- Jg6OxFYd01z+a+oL
-Message-ID: <65ae1560-241e-de68-a68a-ffea071f5cc4@oracle.com>
-Date:   Thu, 23 Jan 2020 11:27:15 -0500
+        id S1729261AbgAWRQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 12:16:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:42552 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728731AbgAWRQ4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Jan 2020 12:16:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1227D1FB;
+        Thu, 23 Jan 2020 09:16:55 -0800 (PST)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C37633F52E;
+        Thu, 23 Jan 2020 09:16:53 -0800 (PST)
+Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
+ <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <d0155018-52e6-e1c9-a03d-1b9703b7a28a@arm.com>
+Date:   Thu, 23 Jan 2020 17:16:52 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-In-Reply-To: <20200122200710.GA3071@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+In-Reply-To: <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9509 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=800
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001230131
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9509 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=862 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001230131
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
+
+On 1/23/20 3:43 PM, Rafael J. Wysocki wrote:
+> On Wed, Jan 22, 2020 at 6:36 PM Douglas RAILLARD
+> <douglas.raillard@arm.com> wrote:
+>>
+>> Make schedutil cpufreq governor energy-aware.
+> 
+> I have to say that your terminology is confusing to me, like what
+> exactly does "energy-aware" mean in the first place?
+
+Should be better rephrased as "Make schedutil cpufreq governor use the
+energy model" I guess. Schedutil is indeed already energy aware since it
+tries to use the lowest frequency possible for the job to be done (kind of).
+
+> 
+>> - patch 1 introduces a function to retrieve a frequency given a base
+>>   frequency and an energy cost margin.
+>> - patch 2 links Energy Model perf_domain to sugov_policy.
+>> - patch 3 updates get_next_freq() to make use of the Energy Model.
+>> - patch 4 adds sugov_cpu_ramp_boost() function.
+>> - patch 5 updates sugov_update_(single|shared)() to make use of
+>>   sugov_cpu_ramp_boost().
+>> - patch 6 introduces a tracepoint in get_next_freq() for
+>>   testing/debugging. Since it's not a trace event, it's not exposed to
+>>   userspace in a directly usable way, allowing for painless future
+>>   updates/removal.
+>>
+>> The benefits of using the EM in schedutil are twofold:
+> 
+> I guess you mean using the EM directly in schedutil (note that it is
+> used indirectly already, because of EAS), but that needs to be clearly
+> stated.
+
+In the current state (of the code and my knowledge), the EM "leaks" into
+schedutil only by the fact that tasks are moved around by EAS, so the
+CPU util seen by schedutil is impacted compared to the same workload on
+non-EAS setup.
+
+Other than that, the only energy-related information schedutil uses is
+the assumption that lower freq == better efficiency. Explicit use of the
+EM allows to refine this assumption.
+
+> 
+>> 1) Selecting the highest possible frequency for a given cost. Some
+>>    platforms can have lower frequencies that are less efficient than
+>>    higher ones, in which case they should be skipped for most purposes.
+>>    They can still be useful to give more freedom to thermal throttling
+>>    mechanisms, but not under normal circumstances.
+>>    note: the EM framework will warn about such OPPs "hertz/watts ratio
+>>    non-monotonically decreasing"
+> 
+> While all of that is fair enough for platforms using the EM, do you
+> realize that the EM is not available on the majority of architectures
+> (including some fairly significant ones) and so adding overhead
+> related to it for all of them is quite less than welcome?
+
+When CONFIG_ENERGY_MODEL is not defined, em_pd_get_higher_freq() is
+defined to a static inline no-op function, so that feature won't incur
+overhead (patch 1+2+3).
+
+Patch 4 and 5 do add some new logic that could be used on any platform.
+Current code will use the boost as an energy margin, but it would be
+straightforward to make a util-based version (like iowait boost) on
+non-EM platforms.
+
+>> 2) Driving the frequency selection with power in mind, in addition to
+>>    maximizing the utilization of the non-idle CPUs in the system.
+> 
+> Care to explain this?  I'm totally unsure what you mean here.
+
+Currently, schedutil is basically tailoring the CPU capacity to the util
+of the tasks on it. That's all good for periodic tasks, but there are
+situations where we can do better than assuming the task is periodic
+with a fixed duty cycle.
+
+The case improved by that series is when a task increases its duty
+cycle. In that specific case, it can be a good idea to increase the
+frequency until the util stabilizes again. We don't have a crystal ball
+so we can't adjust the freq right away. However, we do want to avoid the
+task to crave for speed until schedutil realizes it needs it. Using the
+EM here allows to boost within reasonable limits, without destroying the
+average energy consumption.
+
+> 
+>> Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
+>> enabled in schedutil by
+>> "sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
+>>
+>> Point 2) is enabled in
+>> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
+>> higher frequencies when it is known that the true utilization of
+>> currently running tasks is exceeding their previous stable point.
+> 
+> Please explain "true utilization" and "stable point".
+
+"true utilization" would be an instantaneous duty cycle. If a task
+suddenly starts doing twice as much work, its "true utilization" will
+double instantly. "stable point" would be util est enqueued here. If a
+task is periodic, util est enqueued will be constant once it reaches a
+steady state. As soon as the duty cycle of the task changes, util est
+enqueued will change.
+
+> 
+>> The benefits are:
+>>
+>> * Boosting the frequency when the behavior of a runnable task changes,
+>>   leading to an increase in utilization. That shortens the frequency
+>>   ramp up duration, which in turns allows the utilization signal to
+>>   reach stable values quicker.  Since the allowed frequency boost is
+>>   bounded in energy, it will behave consistently across platforms,
+>>   regardless of the OPP cost range.
+> 
+> Sounds good.
+> 
+> Can you please describe the algorithm applied to achieve that?
+
+The util est enqueued of a task is basically a snapshot of the util of
+the task just before it's dequeued. This means that when the util has
+stabilized, util est enqueued will be a constant signal. Specifically,
+util est enqueued will be an upper bound of the swing of util avg.
+
+When the task starts doing more work than at the previous activation,
+its util avg will rise above the current util est enqueued. This means
+we cannot assume anymore that util est enqueued represents an upper
+bound of the duty cycle, so we can decide to boost until util avg
+"stabilizes" again [note].
+
+At the CPU level, we can track that in the rq aggregated signals:
+  - "stable rq's util est enqueued" is assumed to mean "same set of
+enqueued tasks as the last time we looked at that rq".
+
+  - task util est enqueued and util avg can be replaced by the rq
+signal. This will hide cases where a task's util increases while another
+one decreases by the same amount.
+
+The limitations of both assumptions can be fixed by more invasive
+changes (a rq cookie to know the set of enqueued tasks and an
+OR-aggregated per-task flag to ask for boosting), but these heuristics
+allow using the existing signals with changes limited to schedutil.
+
+Once we detected this situation, we can decide to boost. We don't want
+black&white boosting, since a tiny increase in util should lead to a
+tiny boost. Here, we use (util - util_est_enqueued). If the increase is
+small, that boost will be small.
 
 
-On 1/22/20 3:07 PM, Anchal Agarwal wrote:
->> In this case tsc_verify_tsc_adjust(true) this does nothing as
->> feature bit X86_FEATURE_TSC_ADJUST is not available to guest.=20
+[note]:
+util avg of a periodic task never actually stabilizes, it just enters an
+interval and never leaves it. When the duty cycle changes, it will leave
+that interval to enter another one. The centre of that interval is the
+task's duty cycle.
 
 
-Is it not available to your specific guest? Because AFAICT it is
-available in general (to HVM/PVH guests).
+>> * The boost is only transient, and should not impact a lot the energy
+>>   consumed of workloads with very stable utilization signals.
 
-
-> 4. Also, the instances do not have InvariantTSC exposed.
-
-If you specify "nomigrate=3Dtrue" in your configuration file you should
-have that feature enabled.
-
-
--boris
-
+Thanks,
+Douglas
