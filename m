@@ -2,126 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BDA146BDA
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 15:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B6C146BDF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2020 15:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729121AbgAWOxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 09:53:33 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:50645 "EHLO
+        id S1729137AbgAWOxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jan 2020 09:53:41 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:50650 "EHLO
         mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728921AbgAWOxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 09:53:33 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200123145332euoutp0128d02161b48aa150c636e019c8ba3ef2~si7zJj1SB2779027790euoutp01X
+        with ESMTP id S1729096AbgAWOxf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jan 2020 09:53:35 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200123145332euoutp01e80c83ab06dab7bb40bd2bf0ac0c5e1b~si7zXHIyo2816728167euoutp01P
         for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2020 14:53:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200123145332euoutp0128d02161b48aa150c636e019c8ba3ef2~si7zJj1SB2779027790euoutp01X
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200123145332euoutp01e80c83ab06dab7bb40bd2bf0ac0c5e1b~si7zXHIyo2816728167euoutp01P
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1579791212;
-        bh=gUt0xdJYsjZMQC8Hykq0BgkZD7XebHRDKl7WMh5ImJE=;
+        bh=SyUER5XtPQaR5PqGkKYS+jSgkqDS6pK5BSu+qlUCJYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JI3RP/gVkaD9dJ5vvzp3vwzH2hWE7OgIkkFQISse6n+pYfzH05A764Xe7zbk4TSNM
-         2TvKwddGOvIYQzpfcJMmCCfZfHxOs+A6js6wMHTy9euICWmsTU8nR67oXL2zw5Fuzo
-         iB6HGFRl2d/WrzOwRwi3vYsq39MSJXJ3dVeiaRro=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200123145331eucas1p102fdaf977d34988fb2e95a98d113170b~si7y6Co_j2151721517eucas1p10;
-        Thu, 23 Jan 2020 14:53:31 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 72.8B.61286.B63B92E5; Thu, 23
-        Jan 2020 14:53:31 +0000 (GMT)
+        b=ob6VQ1S8rJ7P4DYyTZEhL8EbgqXdkUtf9eulBuV1UkPNLymD6YuDQhhrE1GyAOOhi
+         L4EampRN1MQgYk1gz4RLthi3ijJhKLVk0TA6EqjBo/vglcY8RCdypnyF45WIsC3XAi
+         aka7tMtwdTgcr6D7uWaUEpsH9YkHiIz+bRlA/ma8=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200123145332eucas1p2606cd936f36ce1f56049ab637b69a2d2~si7zKRhYA1403614036eucas1p2b;
+        Thu, 23 Jan 2020 14:53:32 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 2F.C5.60679.C63B92E5; Thu, 23
+        Jan 2020 14:53:32 +0000 (GMT)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200123145331eucas1p2aaf6eccd724af9edc25a547b6fde7961~si7yKabuE3021030210eucas1p2J;
+        20200123145331eucas1p29464e7f22e1e775cc8c4fc1e330f8eee~si7y1Gz1K1422014220eucas1p2c;
         Thu, 23 Jan 2020 14:53:31 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200123145331eusmtrp1a63db195c5616fa163544891c9764d3a~si7yJxBfb2757227572eusmtrp1P;
+        20200123145331eusmtrp10bcd5d98a5e5ae8e69a9052e3740b3f5~si7y0aCZB2757127571eusmtrp1T;
         Thu, 23 Jan 2020 14:53:31 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-1e-5e29b36b5107
+X-AuditID: cbfec7f4-0e5ff7000001ed07-14-5e29b36cd0a8
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 4A.43.07950.B63B92E5; Thu, 23
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id EA.43.07950.B63B92E5; Thu, 23
         Jan 2020 14:53:31 +0000 (GMT)
 Received: from AMDC3218.digital.local (unknown [106.120.51.18]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200123145330eusmtip2f4c1ce251dd8ada3925cc44767e7f33a~si7xlJ5TV1862618626eusmtip2M;
-        Thu, 23 Jan 2020 14:53:30 +0000 (GMT)
+        20200123145331eusmtip2fe5b4288716d44cd5b7278e98aabf150~si7yHF-tL1688616886eusmtip2Y;
+        Thu, 23 Jan 2020 14:53:31 +0000 (GMT)
 From:   Kamil Konieczny <k.konieczny@samsung.com>
 To:     k.konieczny@samsung.com
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Kukjin Kim <kgene@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: [PATCH 1/3] PM / devfreq: exynos-nocp: fix debug print type
-Date:   Thu, 23 Jan 2020 15:53:11 +0100
-Message-Id: <20200123145313.27539-2-k.konieczny@samsung.com>
+Subject: [PATCH 2/3] PM / devfreq: exynos-bus: prepare for change in load
+ calc in exynos-nocp
+Date:   Thu, 23 Jan 2020 15:53:12 +0100
+Message-Id: <20200123145313.27539-3-k.konieczny@samsung.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200123145313.27539-1-k.konieczny@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPKsWRmVeSWpSXmKPExsWy7djP87rZmzXjDO7sMbXYOGM9q8WCTzNY
-        Lfofv2a2OH9+A7vF2aY37BaXd81hs/jce4TRYu2Ru+wWtxtXsDlwemxa1cnm0bdlFaPH501y
-        AcxRXDYpqTmZZalF+nYJXBkLGg6zF/SxV5yfvJGlgbGTrYuRk0NCwERi8arrrF2MXBxCAisY
-        JRpvzmOBcL4wSsxs7WKGcD4zSmw4087UxcgB1nJnbjpEfDmjxLwle5nhOia+/MACMpdNQF/i
-        4NmTYLaIgLRE56KJTCBFzAL7mSQ2XXrDDJIQFnCROPF0LTuIzSKgKvFi32FGEJtXwEbi8dvH
-        rBAHykvMbjwNdiyngK3E1AcL2SBqBCVOznwCtoAZqKZ562ywKyQE+tkles88hGp2kVjU3cwI
-        YQtLvDq+hR3ClpE4PbmHBcIul3i6sI8dormFUeJB+0eohLXEnXO/2EB+ZhbQlFi/Sx8i7Cgx
-        f/VqFkhQ8EnceCsIcQOfxKRt05khwrwSHW1CENWqEs9P9TBB2NISXf/XQV3mIfGt6zrjBEbF
-        WUi+mYXkm1kIexcwMq9iFE8tLc5NTy02zEst1ytOzC0uzUvXS87P3cQITDan/x3/tIPx66Wk
-        Q4wCHIxKPLwSvZpxQqyJZcWVuYcYJTiYlUR4GcOAQrwpiZVVqUX58UWlOanFhxilOViUxHmN
-        F72MFRJITyxJzU5NLUgtgskycXBKNTDu3qoxcU/whzuK14s23nvHfkf4cMjbgm2qJ0syS61Z
-        u3MqHyy4aDN93jIW7gULjGd1VH0/97ImorXl6OW36ufPLO/KvvHOLuuOsbx38eeDM1qvbHlm
-        rCxRl2H/obTim2LwEVFhQcXNtu4OG0pj49fMt3gu1cJ6eyH7geAr/dOvSBQ4WV5b9N9ciaU4
-        I9FQi7moOBEAE89eFzIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42I5/e/4Pd3szZpxBt/es1psnLGe1WLBpxms
-        Fv2PXzNbnD+/gd3ibNMbdovLu+awWXzuPcJosfbIXXaL240r2Bw4PTat6mTz6NuyitHj8ya5
-        AOYoPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYwF
-        DYfZC/rYK85P3sjSwNjJ1sXIwSEhYCJxZ256FyMXh5DAUkaJR28+s3QxcgLFpSUaT69mgrCF
-        Jf5c62KDKPrEKHGy4QA7SIJNQF/i4NmTYA0iQA2diyYygRQxCxxlklhy5ARYQljAReLE07Vg
-        DSwCqhIv9h1mBLF5BWwkHr99zAqxQV5iduNpNhCbU8BWYuqDhWC2EFDN513HWSHqBSVOznwC
-        NpMZqL5562zmCYwCs5CkZiFJLWBkWsUoklpanJueW2ykV5yYW1yal66XnJ+7iREYFduO/dyy
-        g7HrXfAhRgEORiUeXolezTgh1sSy4srcQ4wSHMxKIryMYUAh3pTEyqrUovz4otKc1OJDjKZA
-        T0xklhJNzgdGbF5JvKGpobmFpaG5sbmxmYWSOG+HwMEYIYH0xJLU7NTUgtQimD4mDk6pBsae
-        8h6GmRJ8q22El2frzxe4/DustvD977Nyxt9Sjs35yyZw6uJGzhsPDmw+9LH7XNhz3RlrF7PP
-        NK+NMu9rXTFvkh33u/LcsqPyis3bcptY+zT2qLrwsJ2TiyprlZroyqxVv+9oe9oXp9C5uSdC
-        rlRuvMpoKMNyT/rotb7Py6buyd7a8Uz+iokSS3FGoqEWc1FxIgA/ZYrKoAIAAA==
-X-CMS-MailID: 20200123145331eucas1p2aaf6eccd724af9edc25a547b6fde7961
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsWy7djPc7o5mzXjDCbc5bDYOGM9q8X1L89Z
+        LRZ8msFq0f/4NbPF+fMb2C3ONr1ht7i8aw6bxefeI4wWM87vY7JYe+Quu8XtxhVsDtwem1Z1
+        snn0bVnF6PF5k1wAcxSXTUpqTmZZapG+XQJXxsWO2cwF/0Qq9qxYwdjAOE2wi5GTQ0LAROLC
+        wk2MILaQwApGiTtTEroYuYDsL4wSy299YIRwPjNKvN7yjA2mY83WM2wQieWMEv9ndrHCtWz8
+        +5UdpIpNQF/i4NmTLCC2iIC0ROeiiUwgNrNAF7PE+a+mILawQLzEuxltzCA2i4CqxLfWXWB3
+        8ArYSOyaP5UZYpu8xOzG02CbOQVsJaY+WMgGUSMocXLmExaImfISzVtnQ9VPZ5f4/tkYwnaR
+        uHvgFQuELSzx6vgWdghbRuL05B6oeLnE04V97CAPSAi0MEo8aP8IlbCWuHPuF9AyDqAFmhLr
+        d+lDhB0l3q2bxQISlhDgk7jxVhDiBD6JSdumM0OEeSU62oQgqlUlnp/qYYKwpSW6/q9jhbA9
+        JHZ9+8k+gVFxFpJnZiF5ZhbC3gWMzKsYxVNLi3PTU4uN8lLL9YoTc4tL89L1kvNzNzECk8/p
+        f8e/7GDc9SfpEKMAB6MSD69Er2acEGtiWXFl7iFGCQ5mJRFexjCgEG9KYmVValF+fFFpTmrx
+        IUZpDhYlcV7jRS9jhQTSE0tSs1NTC1KLYLJMHJxSDYzmj3Pqol9P3R3tap138dAELqZ7Fd/q
+        5eY8mvtkU5v/J7tqoR/dP0/P+5trwMi06NeVSTOn8JV3zomVuqixRyRwXe3znVXX3vCyzOhV
+        ex8T8Gud6enU7G9vddbyHb82gXnTzTf5ZQmf55sc1k44wukWKulpePxWSM/D/hMabWLLwsp2
+        iHR8tFqvxFKckWioxVxUnAgAARTEyjoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsVy+t/xe7rZmzXjDB6e0bXYOGM9q8X1L89Z
+        LRZ8msFq0f/4NbPF+fMb2C3ONr1ht7i8aw6bxefeI4wWM87vY7JYe+Quu8XtxhVsDtwem1Z1
+        snn0bVnF6PF5k1wAc5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpq
+        TmZZapG+XYJexsWO2cwF/0Qq9qxYwdjAOE2wi5GTQ0LARGLN1jNsXYxcHEICSxkljh2ZxwSR
+        kJZoPL0ayhaW+HOtC6roE6PE0+m3WUASbAL6EgfPngSzRYAaOhdNZAIpYhaYxCyx58UzNpCE
+        sECsxL33f8BsFgFViW+tuxhBbF4BG4ld86cyQ2yQl5jdeBqshlPAVmLqg4VgthBQzeddx1kh
+        6gUlTs58AraMGai+eets5gmMArOQpGYhSS1gZFrFKJJaWpybnltspFecmFtcmpeul5yfu4kR
+        GCvbjv3csoOx613wIUYBDkYlHl6JXs04IdbEsuLK3EOMEhzMSiK8jGFAId6UxMqq1KL8+KLS
+        nNTiQ4ymQE9MZJYSTc4HxnFeSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+
+        Jg5OqQbGs8cebX/EEiNz5d2K2p+Me004xRO5tKb8s1sfzsM/nfv2yftz3cN95sZu9f/Fbbz3
+        D0ORJ8OxjxIqPU9kWhaFtHXJOFlNlDhwZuqK5oJvTgdLYoMXaDUzX2Pd0nx9wgSPj0msZyKn
+        GxbP8We/9Xbqju+ZtwKzE3iqdaM81Jyv3J0rPJ1FTe2GEktxRqKhFnNRcSIAZZdxJqsCAAA=
+X-CMS-MailID: 20200123145331eucas1p29464e7f22e1e775cc8c4fc1e330f8eee
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200123145331eucas1p2aaf6eccd724af9edc25a547b6fde7961
+X-RootMTR: 20200123145331eucas1p29464e7f22e1e775cc8c4fc1e330f8eee
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200123145331eucas1p2aaf6eccd724af9edc25a547b6fde7961
+X-CMS-RootMailID: 20200123145331eucas1p29464e7f22e1e775cc8c4fc1e330f8eee
 References: <20200123145313.27539-1-k.konieczny@samsung.com>
-        <CGME20200123145331eucas1p2aaf6eccd724af9edc25a547b6fde7961@eucas1p2.samsung.com>
+        <CGME20200123145331eucas1p29464e7f22e1e775cc8c4fc1e330f8eee@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Values printed in dev_dbg are both unsigned long, but were
-printed as signed decimals. Change this to unsigned long.
+Add time to struct exynos_bus and time and current frequency to
+struct devfreq_event_data. This will allow to calculate load and
+max bandwidth in exynos-nocp driver.
 
 Signed-off-by: Kamil Konieczny <k.konieczny@samsung.com>
 ---
- drivers/devfreq/event/exynos-nocp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/devfreq/exynos-bus.c  | 21 ++++++++++++++++++++-
+ include/linux/devfreq-event.h |  4 ++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/devfreq/event/exynos-nocp.c b/drivers/devfreq/event/exynos-nocp.c
-index ccc531ee6938..ebe9cdf94f54 100644
---- a/drivers/devfreq/event/exynos-nocp.c
-+++ b/drivers/devfreq/event/exynos-nocp.c
-@@ -167,7 +167,7 @@ static int exynos_nocp_get_event(struct devfreq_event_dev *edev,
- 	edata->load_count = ((counter[1] << 16) | counter[0]);
- 	edata->total_count = ((counter[3] << 16) | counter[2]);
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index 8fa8eb541373..f04ce5b84e75 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -14,6 +14,7 @@
+ #include <linux/devfreq-event.h>
+ #include <linux/device.h>
+ #include <linux/export.h>
++#include <linux/jiffies.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/pm_opp.h>
+@@ -31,6 +32,7 @@ struct exynos_bus {
+ 	struct mutex lock;
  
--	dev_dbg(&edev->dev, "%s (event: %ld/%ld)\n", edev->desc->name,
-+	dev_dbg(&edev->dev, "%s (event: %lu/%lu)\n", edev->desc->name,
- 					edata->load_count, edata->total_count);
+ 	unsigned long curr_freq;
++	unsigned long prev_time;
  
- 	return 0;
+ 	struct opp_table *opp_table;
+ 	struct clk *clk;
+@@ -57,7 +59,22 @@ static int exynos_bus_##ops(struct exynos_bus *bus)		\
+ }
+ exynos_bus_ops_edev(enable_edev);
+ exynos_bus_ops_edev(disable_edev);
+-exynos_bus_ops_edev(set_event);
++
++static int exynos_bus_set_event(struct exynos_bus *bus)
++{
++	int i, ret;
++
++	bus->prev_time = jiffies;
++	for (i = 0; i < bus->edev_count; i++) {
++		if (!bus->edev[i])
++			continue;
++		ret = devfreq_event_set_event(bus->edev[i]);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
+ 
+ static int exynos_bus_get_event(struct exynos_bus *bus,
+ 				struct devfreq_event_data *edata)
+@@ -66,6 +83,8 @@ static int exynos_bus_get_event(struct exynos_bus *bus,
+ 	unsigned long load_count = 0, total_count = 0;
+ 	int i, ret = 0;
+ 
++	event_data.curr_freq = bus->curr_freq;
++	event_data.prev_time = bus->prev_time;
+ 	for (i = 0; i < bus->edev_count; i++) {
+ 		if (!bus->edev[i])
+ 			continue;
+diff --git a/include/linux/devfreq-event.h b/include/linux/devfreq-event.h
+index f14f17f8cb7f..b57ccfcb775b 100644
+--- a/include/linux/devfreq-event.h
++++ b/include/linux/devfreq-event.h
+@@ -41,12 +41,16 @@ struct devfreq_event_dev {
+  *		  each count may represent a clock cycle, a time unit
+  *		  (ns/us/...), or anything the device driver wants.
+  *		  Generally, utilization is load_count / total_count.
++ * @prev_time	: jiffies for interval calculations with polling.
++ * @curr_freq	: current frequency for calculating max bandwidth.
+  *
+  * This structure contains the data of devfreq-event device for polling period.
+  */
+ struct devfreq_event_data {
+ 	unsigned long load_count;
+ 	unsigned long total_count;
++	unsigned long prev_time;
++	unsigned long curr_freq;
+ };
+ 
+ /**
 -- 
 2.25.0
 
